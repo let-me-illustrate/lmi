@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: workhorse.make,v 1.12 2005-03-18 00:17:06 chicares Exp $
+# $Id: workhorse.make,v 1.13 2005-03-19 13:23:10 chicares Exp $
 
 ###############################################################################
 
@@ -439,6 +439,28 @@ wx_new$(SHREXT): wx_new.o
 
 # TODO ?? This needs a corresponding test target.
 lmi_cgi$(EXEEXT): $(antediluvian_cgi_objects) $(lmi_common_objects)
+
+################################################################################
+
+# Install.
+
+# The third paragraph of the rationale for FHS-2.2final section 3.12.2
+# seems to require copies of binaries in opt/<package>, even though
+# they must be copied to opt/<package>/bin .
+
+# TODO ?? Should static data files reside in cvs so that this makefile
+# can install them?
+
+install_dir := /opt/lmi
+
+data_files := \
+  $(wildcard $(addprefix $(src_dir)/,*.xrc *.xpm)) \
+
+.PHONY: install
+install: wx_new$(SHREXT) lmi_wx$(EXEEXT)
+	@-$(CP) --preserve $^ $(install_dir)
+	@-$(CP) --preserve $^ $(install_dir)/bin
+	@-$(CP) --preserve $(data_files) $(install_dir)
 
 ################################################################################
 
