@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mc_enum.tpp,v 1.3 2005-03-10 04:38:42 chicares Exp $
+// $Id: mc_enum.tpp,v 1.4 2005-03-17 02:34:19 chicares Exp $
 
 #include "config.hpp"
 
@@ -101,6 +101,24 @@ std::ostream& mc_enum<T,n,e,c>::write(std::ostream& os) const
     return os << str();
 }
 
+// TODO ?? Document this in the header?
+//
+// The 'ordinal' is the index in the array 'e' of conceivable values
+// at which the current value is found.
+// TODO ?? Should there be a runtime check that each element is unique?
+//
+// Not all conceivable values are actually permitted in every context;
+// is_allowed(ordinal_number) returns true iff 'ordinal_number' is
+// permitted.
+//
+// If the current value is permissible, then return its ordinal.
+// Else, return the first ordinal that is permissible. But if no
+// value is permissible, then return the ordinal of the current value.
+//
+// TODO ?? Explain how this is intended to be used, resolve the issues
+// noted below, and make the above comments agree with the code by
+// changing one or both--and add unit tests.
+//
 template<typename T, std::size_t n, T const (&e)[n], char const*const (&c)[n]>
 std::size_t mc_enum<T,n,e,c>::allowed_ordinal() const
 {
@@ -111,12 +129,18 @@ std::size_t mc_enum<T,n,e,c>::allowed_ordinal() const
             {
             if(is_allowed(i))
                 {
-//                value_ = e[i]; // TODO ?? no...leave it const
                 break;
                 }
             }
         // TODO ?? Else is there really an error?
         }
+
+    if(!is_allowed(i))
+        {
+        i = ordinal();
+        }
+
+    // TODO ?? Isn't this impossible? Doesn't ordinal() detect this problem?
     if(i < static_cast<int>(n))
         {
         return i;
@@ -151,7 +175,6 @@ std::size_t mc_enum<T,n,e,c>::ordinal() const
         }
     return i;
 }
-
 
 template<typename T, std::size_t n, T const (&e)[n], char const*const (&c)[n]>
 std::string mc_enum<T,n,e,c>::str(int j) const

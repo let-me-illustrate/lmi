@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_harmonization.cpp,v 1.1 2005-03-12 03:01:08 chicares Exp $
+// $Id: input_harmonization.cpp,v 1.2 2005-03-17 02:34:19 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -94,9 +94,10 @@ void Input::Harmonize()
     bool home_office_only = global_settings::instance().mellon;
 
     bool allow_sep_acct = database->Query(DB_AllowSepAcct);
+    bool allow_gen_acct = database->Query(DB_AllowGenAcct);
 
-//    bool sepacct_only = !database->Query(DB_AllowGenAcct); // TODO ?? Never useful?
-    bool genacct_only = !allow_sep_acct;
+    bool sepacct_only = allow_sep_acct && !allow_gen_acct;
+    bool genacct_only = allow_gen_acct && !allow_sep_acct;
 
     bool wd_allowed = database->Query(DB_AllowWD);
     bool loan_allowed = database->Query(DB_AllowLoan);
@@ -224,9 +225,8 @@ void Input::Harmonize()
 
     SurviveToType             .enable(part_mort_used);
 
-// TODO ?? Not yet tested, so require secret password for now.
-    SurviveToYear             .enable(anything_goes && part_mort_used && mce_survive_to_year == SurviveToType);
-    SurviveToAge              .enable(anything_goes && part_mort_used && mce_survive_to_age == SurviveToType);
+    SurviveToYear             .enable(part_mort_used && mce_survive_to_year == SurviveToType);
+    SurviveToAge              .enable(part_mort_used && mce_survive_to_age  == SurviveToType);
 
     UseExperienceRating.enable
         (
@@ -516,10 +516,31 @@ false // Silly workaround for now.
         MODE_MONTHLY    ->EnableWindow(false);
         }
 */
-    GeneralAccountRateType .allow(mce_net_rate , false);
-    GeneralAccountRateType .allow(mce_cred_rate, anything_goes);
-    SeparateAccountRateType.allow(mce_net_rate , anything_goes);
-    SeparateAccountRateType.allow(mce_cred_rate, false);
+
+// TODO ?? Change the legacy enumerators in the calculations dll.
+// They conflate disparate concepts. Here's what is really meant:
+//
+// genacct: owl system offered only credited
+//   earned and credited are conceivable
+//   but earned is suppressed for compliance reasons
+//   and earned is defectively called gross
+//   net is absurd because it's called credited
+//
+// sepacct: owl system offered only gross
+//   gross and net are conceivable
+//   but net is suppressed for compliance reasons
+//   credited is absurd because it's called net
+//
+// The compliance reasons don't seem sensible, but that's another
+// matter; at any rate, they belong in the product database.
+
+    GeneralAccountRateType .allow(mce_gross_rate, anything_goes);
+    GeneralAccountRateType .allow(mce_cred_rate , true);
+    GeneralAccountRateType .allow(mce_net_rate  , false);
+
+    SeparateAccountRateType.allow(mce_gross_rate, true);
+    SeparateAccountRateType.allow(mce_cred_rate , false);
+    SeparateAccountRateType.allow(mce_net_rate  , anything_goes);
 
     bool CurrIntRateSolve = false; // May be useful someday.
     GeneralAccountRate .enable(!CurrIntRateSolve);
@@ -549,9 +570,27 @@ false // Silly workaround for now.
 // TODO ?? WX PORT !! There seems to be some confusion here. We seem to have
 // checkboxes 'OverrideFundManagementFee' and 'UseAverageOfAllFunds'
 // that duplicate enumerative control 'FundChoiceType'.
+//
+//    mce_yes_or_no            UseAverageOfAllFunds            ;
+//    mce_yes_or_no            OverrideFundManagementFee       ;
+//    mce_fund_input_method    FundChoiceType                  ;
+// The last duplicates the information borne by the first two.
+//    {mce_fund_average
+//    ,mce_fund_override
+//    ,mce_fund_selection
+//
     FundChoiceType.allow(mce_fund_average  , !genacct_only);
     FundChoiceType.allow(mce_fund_override , enable_custom_fund);
-    FundChoiceType.allow(mce_fund_selection, !genacct_only);
+
+// Always true, even for genacct-only products, which do offer one 'choice';
+// though perhaps not for products that offer no general account and offer
+// only 'custom' separate accounts.
+//
+// TODO ?? WX PORT !! But for now, use this workaround: products that have no
+// general account can't select non-custom funds--there's no GUI for
+// that anyway. DATABASE !! Consider adding an 'allow fund choice' entity.
+//
+    FundChoiceType.allow(mce_fund_selection, !sepacct_only);
 
 /* TODO ?? WX PORT !! Not ported:
     SELECTED_FUND_ALLOC->EnableWindow
