@@ -1,4 +1,4 @@
-// IRC7702A.
+// Internal Revenue Code section 7702A (MEC testing).
 //
 // Copyright (C) 1998, 2001, 2002, 2003, 2004, 2005 Gregory W. Chicares.
 //
@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_irc7702a.cpp,v 1.1 2005-01-14 19:47:45 chicares Exp $
+// $Id: ihs_irc7702a.cpp,v 1.2 2005-02-14 04:35:18 chicares Exp $
 
 // TODO ?? Make this a server app. Consider where to store DB, SA history.
 
@@ -54,7 +54,7 @@ static int const         usual_test_period_length     = 7           ;
 }
 
 //============================================================================
-TIRC7702A::TIRC7702A
+Irc7702A::Irc7702A
     (int                        a_magic
     ,enum_defn_life_ins         a_DefnLifeIns
     ,enum_defn_material_change  a_DefnMaterialChange
@@ -191,13 +191,13 @@ TIRC7702A::TIRC7702A
 }
 
 //============================================================================
-TIRC7702A::~TIRC7702A()
+Irc7702A::~Irc7702A()
 {
 }
 
 //============================================================================
 // Set initial values on issue or inforce date.
-void TIRC7702A::Initialize7702A
+void Irc7702A::Initialize7702A
     (bool   a_Ignore
     ,bool   a_MecAtIssue
     ,int    a_IssueAge
@@ -324,7 +324,7 @@ void TIRC7702A::Initialize7702A
 
 //============================================================================
 // interpolate NSP; update cum 7pp
-void TIRC7702A::UpdateBOY7702A(int a_PolicyYear)
+void Irc7702A::UpdateBOY7702A(int a_PolicyYear)
 {
     if(Ignore || IsMec)
         {
@@ -397,7 +397,7 @@ void TIRC7702A::UpdateBOY7702A(int a_PolicyYear)
 }
 
 //============================================================================
-void TIRC7702A::UpdateBOM7702A(int a_PolicyMonth)
+void Irc7702A::UpdateBOM7702A(int a_PolicyMonth)
 {
     if(Ignore || IsMec)
         {
@@ -412,7 +412,7 @@ void TIRC7702A::UpdateBOM7702A(int a_PolicyMonth)
 
 //============================================================================
 // Increment policy month; return MEC status.
-bool TIRC7702A::UpdateEOM7702A()
+bool Irc7702A::UpdateEOM7702A()
 {
     if(!(Ignore || IsMec))
         {
@@ -425,7 +425,7 @@ bool TIRC7702A::UpdateEOM7702A()
 // Process 1035 exchange as material change
 // TODO ?? Unnecessary premium tested later, not here?
 // TODO ?? Seccond argument won't be needed after we redo class AccountValue?
-void TIRC7702A::Update1035Exch7702A
+void Irc7702A::Update1035Exch7702A
     (double& a_DeemedCashValue
     ,double  a_Net1035Amount
     ,double  a_Bft
@@ -478,7 +478,7 @@ LMI_ASSERT(0 == PolicyYear && 0 == PolicyMonth);
 }
 
 //============================================================================
-bool TIRC7702A::IsMaterialChangeInQueue() const
+bool Irc7702A::IsMaterialChangeInQueue() const
 {
     return IsMatChg;
 }
@@ -541,7 +541,7 @@ bool TIRC7702A::IsMaterialChangeInQueue() const
 // This implementation assumes that "death benefit" for 7702A is
 // defined as specamt.
 //
-double TIRC7702A::MaxNonMecPremium
+double Irc7702A::MaxNonMecPremium
     (double a_DeemedCashValue
     ,double a_TargetPrem
     ,double a_LoadTarget
@@ -618,7 +618,7 @@ double TIRC7702A::MaxNonMecPremium
 }
 
 //============================================================================
-double TIRC7702A::MaxNecessaryPremium
+double Irc7702A::MaxNecessaryPremium
     (double a_DeemedCashValue
     ,double a_TargetPrem
     ,double a_LoadTarget
@@ -658,7 +658,7 @@ double TIRC7702A::MaxNecessaryPremium
 
 //============================================================================
 // record and test monthly Pmts
-double TIRC7702A::UpdatePmt7702A
+double Irc7702A::UpdatePmt7702A
     (double // a_DeemedCashValue
     ,double a_Payment
     ,bool   a_ThisPaymentIsUnnecessary
@@ -787,7 +787,7 @@ double TIRC7702A::UpdatePmt7702A
 
 //============================================================================
 // record and test monthly Bfts
-double TIRC7702A::UpdateBft7702A
+double Irc7702A::UpdateBft7702A
     (double // a_DeemedCashValue // TODO ?? not used
     ,double  a_NewDB
     ,double  a_OldDB
@@ -884,7 +884,7 @@ double TIRC7702A::UpdateBft7702A
 //============================================================================
 // if within a test period:
 // recalculate 7pp and apply retroactively to beginning of 7 yr period
-void TIRC7702A::TestBftDecrease(double a_NewBft)
+void Irc7702A::TestBftDecrease(double a_NewBft)
 {
     // TODO ?? Is AssumedBft always = LowestBft?
 
@@ -972,7 +972,7 @@ void TIRC7702A::TestBftDecrease(double a_NewBft)
 }
 
 //============================================================================
-void TIRC7702A::InduceMaterialChange()
+void Irc7702A::InduceMaterialChange()
 {
     IsMatChg = true;
 }
@@ -982,7 +982,7 @@ void TIRC7702A::InduceMaterialChange()
 // recalculate 7pp
 // determine whether MEC
 // start new 7 pay period; terminate old one
-void TIRC7702A::RedressMatChg
+void Irc7702A::RedressMatChg
     (double& a_DeemedCashValue
     ,double  a_UnnecPrem
     ,double  a_NecPrem
@@ -1048,7 +1048,7 @@ void TIRC7702A::RedressMatChg
 //============================================================================
 // update 7pp
 // Restructure this--too many TriggeredBy's
-void TIRC7702A::Determine7PP
+void Irc7702A::Determine7PP
     (double a_Bft
     ,bool   // a_TriggeredByBftDecrease
     ,bool   a_TriggeredByMatChg
@@ -1174,7 +1174,7 @@ tries running an inforce case as of month 0, year 0.
 
 //============================================================================
 // update LowestBft dynamically
-double TIRC7702A::DetermineLowestBft() const
+double Irc7702A::DetermineLowestBft() const
 {
     std::vector<double>::const_iterator last_bft_in_test_period
         = std::min
@@ -1193,7 +1193,7 @@ double TIRC7702A::DetermineLowestBft() const
 
 //============================================================================
 // determine lowest non-MEC spec amt
-double TIRC7702A::SAIncreaseToAvoidMec(bool a_TriggeredByUnnecPrem)
+double Irc7702A::SAIncreaseToAvoidMec(bool a_TriggeredByUnnecPrem)
 {
 // TODO ?? Specs say DB, but isn't this SA?
     double av = SavedAVBeforeMatChg;

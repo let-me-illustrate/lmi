@@ -1,4 +1,4 @@
-// IRC7702.
+// Internal Revenue Code section 7702A (definition of life insurance).
 //
 // Copyright (C) 1998, 2001, 2002, 2003, 2004, 2005 Gregory W. Chicares.
 //
@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_irc7702.hpp,v 1.2 2005-01-31 13:12:48 chicares Exp $
+// $Id: ihs_irc7702.hpp,v 1.3 2005-02-14 04:35:18 chicares Exp $
 
 #ifndef irc7702_hpp
 #define irc7702_hpp
@@ -45,20 +45,24 @@
 
 #include "ihs_commfns.hpp"
 #include "round_to.hpp"
+#include "obstruct_slicing.hpp"
 #include "xenumtypes.hpp"    // e_defn_life_ins, e_dbopt
 
 #include <memory>
 #include <vector>
 
-class TULCommFns;
 class BasicValues;
+class ULCommFns;
 
-class TIRC7702
+// Implicitly-declared special member functions do the right thing.
+
+class Irc7702
+    :virtual private obstruct_slicing<Irc7702>
 {
     friend class FindSpecAmt;
 
   public:
-    TIRC7702
+    Irc7702
         (BasicValues         const& a_Values
         ,e_defn_life_ins     const& a_Test7702
         ,int                        a_IssueAge
@@ -94,7 +98,7 @@ class TIRC7702
         ,e_dbopt_7702        const& a_PriorDBOpt = e_dbopt_7702(e_option1_for_7702)
         // TODO ?? Perhaps other arguments are needed for inforce.
         );
-    virtual ~TIRC7702();
+    ~Irc7702();
 
     // TODO ?? Not sure why we need this non-const variant.
     void Initialize7702
@@ -152,8 +156,6 @@ class TIRC7702
     double RoundedGSP() const;
 
   private:
-    TIRC7702();
-
     // Interest and DB Option basis
     enum EIOBasis
         {Opt1Int4Pct
@@ -241,9 +243,9 @@ class TIRC7702
     mutable double             CumPmts;    // Cumulative payments
 
     // Commutation functions
-    std::auto_ptr<TULCommFns>  CommFns     [NumIOBases];
+    std::auto_ptr<ULCommFns>  CommFns     [NumIOBases];
     // After the Init- functions have executed, we can delete the
-    // rather sizeable TULCommFns objects, as long as we keep the
+    // rather sizeable ULCommFns objects, as long as we keep the
     // endowment-year value of D for each basis.
     double                     DEndt       [NumIOBases];
 

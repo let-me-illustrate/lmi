@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_database.cpp,v 1.1 2005-01-14 19:47:44 chicares Exp $
+// $Id: ihs_database.cpp,v 1.2 2005-02-14 04:35:18 chicares Exp $
 
 // TODO ?? Should length_ be dynamically reset when IssueAge is?
 // TODO ?? Should State be dynamically reset?
@@ -75,7 +75,7 @@ TDatabase::TDatabase
     ,UWBasis    (a_UWBasis)
     ,State      (a_State)
 {
-    Alloc(Filename);
+    DBDictionary::instance().Init(Filename);
     Init();
 }
 
@@ -94,7 +94,7 @@ TDatabase::TDatabase(InputParms const& input)
     UWBasis     = input.GroupUWType;
     State       = e_s_CT; // dummy init
 
-    Alloc(Filename);
+    DBDictionary::instance().Init(Filename);
     Init();
 
     // State of jurisdiction is governed by database item DB_PremTaxState.
@@ -140,56 +140,8 @@ TDatabase::TDatabase(InputParms const& input)
 }
 
 //============================================================================
-TDatabase::TDatabase(TDatabase const& obj)
-    :Filename(obj.Filename)
-{
-    Alloc(Filename);
-    Copy(obj);
-    Init();
-}
-
-//============================================================================
-TDatabase& TDatabase::operator=(TDatabase const& obj)
-{
-    if(this != &obj)
-        {
-        Destroy();
-        Filename = obj.Filename;
-        Alloc(obj.Filename);
-        Copy(obj);
-        Init();
-        }
-    return *this;
-}
-
-//============================================================================
 TDatabase::~TDatabase()
 {
-    Destroy();
-}
-
-//============================================================================
-void TDatabase::Alloc(std::string const& NewFilename)
-{
-    DBDictionary::instance().Init(NewFilename);
-}
-
-//============================================================================
-void TDatabase::Copy(TDatabase const& obj)
-{
-    length_     = obj.length_;
-    Gender      = obj.Gender;
-    Class       = obj.Class;
-    Smoker      = obj.Smoker;
-    IssueAge    = obj.IssueAge;
-    UWBasis     = obj.UWBasis;
-    State       = obj.State;
-}
-
-//============================================================================
-void TDatabase::Destroy()
-{
-    // TODO ?? Erase the dictionary?
 }
 
 //============================================================================

@@ -1,4 +1,4 @@
-// IRC7702A.
+// Internal Revenue Code section 7702A (MEC testing).
 //
 // Copyright (C) 1998, 2001, 2002, 2003, 2004, 2005 Gregory W. Chicares.
 //
@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_irc7702a.hpp,v 1.1 2005-01-14 19:47:45 chicares Exp $
+// $Id: ihs_irc7702a.hpp,v 1.2 2005-02-14 04:35:18 chicares Exp $
 
 #ifndef irc7702a_hpp
 #define irc7702a_hpp
@@ -28,24 +28,27 @@
 
 #include "enums7702.hpp"
 #include "expimp.hpp"
+#include "obstruct_slicing.hpp"
 #include "round_to.hpp"
 
 #include <vector>
 
-void LMI_EXPIMP TestTIRC7702A();
+void LMI_EXPIMP TestIrc7702A();
 
-// Known defects:
-// need to handle withdrawals correctly
-// 7-pay premium strategy changes premium when spec amt changes
-// should optionally calculate factors e.g. 7pp, NSP from first principles
+// TODO ?? Known defects:
+//   need to handle withdrawals correctly;
+//   7-pay premium strategy changes premium when spec amt changes;
+//   should optionally calculate factors e.g. 7pp, NSP from first principles.
 
-class TIRC7702A
-// Internal Revenue Code section 7702A ("TAMRA"): MEC testing
+// Implicitly-declared special member functions do the right thing.
+
+class Irc7702A
+    :virtual private obstruct_slicing<Irc7702A>
 {
-public:
+  public:
     enum e_death_benefit_definition {e_death_benefit_7702A, e_specamt_7702A};
 
-    TIRC7702A
+    Irc7702A
         (int                        a_magic
         ,enum_defn_life_ins         a_DefnLifeIns
         ,enum_defn_material_change  a_DefnMaterialChange
@@ -66,7 +69,7 @@ public:
 //      ,std::vector<double> const& a_PolFee
 // probably other arguments are needed for reproposals
         );
-    virtual ~TIRC7702A();
+    ~Irc7702A();
 
     // This is notionally called once per *current-basis* run
     // and actually called once per run, with calculations suppressed
@@ -197,9 +200,7 @@ public:
     bool    DebugGetIsMatChg        () const
         {return IsMatChg;}
 
-private:
-    TIRC7702A();    // private to prevent accidental use
-
+  private:
     void    TestBftDecrease         // recalculate 7pp; perform 7 pay test
         (double a_NewBft
         );

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: database.cpp,v 1.1 2005-01-14 19:47:44 chicares Exp $
+// $Id: database.cpp,v 1.2 2005-02-14 04:35:18 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -55,7 +55,7 @@ TDatabase::TDatabase
     ,UWBasis    (a_UWBasis)
     ,State      (a_State)
 {
-    Alloc(Filename);
+    DBDictionary::instance().Init(Filename);
     Init();
     length_ = 100 - IssueAge;
 // TODO ?? This is better...once we implement DB_EndtAge.
@@ -63,58 +63,7 @@ TDatabase::TDatabase
 }
 
 //============================================================================
-TDatabase::TDatabase(TDatabase const& rhs)
-    :Filename   (rhs.Filename)
-    ,length_    (rhs.length_)
-    ,Gender     (rhs.Gender)
-    ,Class      (rhs.Class)
-    ,Smoker     (rhs.Smoker)
-    ,IssueAge   (rhs.IssueAge)
-    ,UWBasis    (rhs.UWBasis)
-    ,State      (rhs.State)
-{
-    Alloc(Filename);
-    Copy(rhs);
-}
-
-//============================================================================
-TDatabase& TDatabase::operator=(TDatabase const& obj)
-{
-    if(this != &obj)
-        {
-        Destroy();
-        Alloc(obj.Filename);
-        Copy(obj);
-        }
-    return *this;
-}
-
-//============================================================================
 TDatabase::~TDatabase()
-{
-    Destroy();
-}
-
-//============================================================================
-void TDatabase::Alloc(std::string const& NewFilename)
-{
-    DBDictionary::instance().Init(NewFilename);
-}
-
-//============================================================================
-void TDatabase::Copy(TDatabase const& obj)
-{
-    length_     = obj.length_;
-    Gender      = obj.Gender;
-    Class       = obj.Class;
-    Smoker      = obj.Smoker;
-    IssueAge    = obj.IssueAge;
-    UWBasis     = obj.UWBasis;
-    State       = obj.State;
-}
-
-//============================================================================
-void TDatabase::Destroy()
 {
 }
 

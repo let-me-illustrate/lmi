@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_commfns.hpp,v 1.1 2005-01-14 19:47:44 chicares Exp $
+// $Id: ihs_commfns.hpp,v 1.2 2005-02-14 04:35:18 chicares Exp $
 
 #ifndef commfns_hpp
 #define commfns_hpp
@@ -32,56 +32,58 @@
 // Can be reused for reserves
 // Can be reused for nonforfeiture
 
-// TODO ?? Should we split these two classes into two files?
-// Or inherit both from an abstract interface class? Not enough in common.
+// TODO ?? Should these two classes be factored into separate files?
+// Should they share an abstract base?
 
 #include "expimp.hpp"
+#include "obstruct_slicing.hpp"
 #include "xenumtypes.hpp"    // e_defn_life_ins, e_dbopt
+
+#include <boost/utility.hpp>
 
 #include <vector>
 
-// Ordinary life commutation functions
+// Ordinary life commutation functions.
 
-class LMI_EXPIMP TOLCommFns
+class LMI_EXPIMP OLCommFns
+    :private boost::noncopyable
+    ,virtual private obstruct_slicing<OLCommFns>
 {
-public:
-    TOLCommFns
+  public:
+    OLCommFns
         (std::vector<double> const& a_q
         ,std::vector<double> const& a_i
         );
 
-    virtual ~TOLCommFns(){}
+    ~OLCommFns();
 
-    std::vector<double> const&  C() {return c;}
-    std::vector<double> const&  D() {return d;}
-    std::vector<double> const&  M() {return m;}
-    std::vector<double> const&  N() {return n;}
+    std::vector<double> const& C() {return c;}
+    std::vector<double> const& D() {return d;}
+    std::vector<double> const& M() {return m;}
+    std::vector<double> const& N() {return n;}
 
-    static void             SelfTest();
+    static void SelfTest();
 
-private:
-    // private to prevent accidental use
-    TOLCommFns();
-    TOLCommFns(TOLCommFns const&);
-    TOLCommFns& operator=(TOLCommFns const&);
+  private:
+    int Length;
 
-    std::vector<double> const&  q;
-    std::vector<double> const&  i;
+    std::vector<double> const& q;
+    std::vector<double> const& i;
 
-    int                     Length;
-
-    std::vector<double>         c;
-    std::vector<double>         d;
-    std::vector<double>         m;
-    std::vector<double>         n;
+    std::vector<double>        c;
+    std::vector<double>        d;
+    std::vector<double>        m;
+    std::vector<double>        n;
 };
 
 // UL commutation functions: see Eckley, TSA XXXIX, page 18
 
-class LMI_EXPIMP TULCommFns
+class LMI_EXPIMP ULCommFns
+    :private boost::noncopyable
+    ,virtual private obstruct_slicing<ULCommFns>
 {
-public:
-    TULCommFns
+  public:
+    ULCommFns
         (std::vector<double> const& a_q
         ,std::vector<double> const& a_ic
         ,std::vector<double> const& a_ig
@@ -123,7 +125,7 @@ public:
     // how often UL n-iversary processing is done. This is most
     // commonly performed monthly, but need not be.
 
-    virtual ~TULCommFns(){}
+    ~ULCommFns();
 
     std::vector<double> const&  aD() const {return ad;}
     std::vector<double> const&  kD() const {return kd;}
@@ -131,41 +133,36 @@ public:
     std::vector<double> const&  aN() const {return an;}
     std::vector<double> const&  kM() const {return km;}
 
-    static void             SelfTest();
+    static void SelfTest();
 
-private:
-//  // TODO ?? Private to prevent accidental use.
-//  TULCommFns();
-//  TULCommFns(TULCommFns const&);
-//  TULCommFns& operator=(TULCommFns const&);
+  private:
+//  std::vector<double> const& qc;
+//  std::vector<double> const& ic;
+//  std::vector<double> const& ig;
+    std::vector<double>        qc;
+    std::vector<double>        ic;
+    std::vector<double>        ig;
 
-//  std::vector<double> const&  qc;
-//  std::vector<double> const&  ic;
-//  std::vector<double> const&  ig;
-    std::vector<double>         qc;
-    std::vector<double>         ic;
-    std::vector<double>         ig;
+//  std::vector<double>        q;
+//  std::vector<double>        i;
 
-//  std::vector<double>         q;
-//  std::vector<double>         i;
-
-    e_dbopt const&          DBOption;
+    e_dbopt const& DBOption;
     // Assumption mode indicates the mode of input mortality and
     // interest assumptions.
-    e_mode const&           AssptMode;
+    e_mode const&  AssptMode;
     // Should we keep this??
-    e_mode const&           CommfnMode;
+    e_mode const&  CommfnMode;
     // Processing mode--usually monthly--governs how frequently
     // COIs and expense charges are deducted.
-    e_mode const&           ProcessMode;
+    e_mode const&  ProcessMode;
 
-    int                     Length;
+    int Length;
 
-    std::vector<double>         ad;
-    std::vector<double>         kd;
-    std::vector<double>         kc;
-    std::vector<double>         an;
-    std::vector<double>         km;
+    std::vector<double>        ad;
+    std::vector<double>        kd;
+    std::vector<double>        kc;
+    std::vector<double>        an;
+    std::vector<double>        km;
 };
 
 #endif

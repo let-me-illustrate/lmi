@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: dbdict.hpp,v 1.1 2005-01-14 19:47:44 chicares Exp $
+// $Id: dbdict.hpp,v 1.2 2005-02-14 04:35:18 chicares Exp $
 
 #ifndef dbdict_hpp
 #define dbdict_hpp
@@ -28,6 +28,9 @@
 
 #include "database.hpp"
 #include "dbvalue.hpp"
+#include "obstruct_slicing.hpp"
+
+#include <boost/utility.hpp>
 
 #include <map>
 #include <string>
@@ -36,18 +39,18 @@ typedef std::map<int, TDBValue, std::less<int> > TDBDictionary;
 typedef TDBDictionary::value_type TDBEntry;
 
 class DBDictionary
+    :private boost::noncopyable
+    ,virtual private obstruct_slicing<DBDictionary>
 {
   public:
     static DBDictionary& instance();
-    virtual ~DBDictionary();
+    ~DBDictionary();
     void Init(std::string const& NewFilename);
     TDBEntry* Find(TDBEntry const& t);
     TDBDictionary const& GetDictionary() {return *dictionary;}
 
   private:
     DBDictionary();
-    DBDictionary(DBDictionary const&);
-    DBDictionary& operator=(DBDictionary const&);
 
     static std::string CachedFilename;
     void Init();
