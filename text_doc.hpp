@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: text_doc.hpp,v 1.1 2005-03-11 03:09:22 chicares Exp $
+// $Id: text_doc.hpp,v 1.2 2005-03-12 16:46:03 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/doc.h (C) 1998 Julian Smart and Markus Holzem
@@ -51,10 +51,10 @@ class TextEditDocument
 
   private:
     // wxDocument overrides.
-    bool IsModified() const;
-    void Modify(bool);
-    bool OnOpenDocument(wxString const& filename);
-    bool OnSaveDocument(wxString const& filename);
+    virtual bool IsModified() const;
+    virtual void Modify(bool);
+    virtual bool OnOpenDocument(wxString const& filename);
+    virtual bool OnSaveDocument(wxString const& filename);
 
     wxTextCtrl* DominantViewWindow() const;
 
