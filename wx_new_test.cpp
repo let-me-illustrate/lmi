@@ -19,15 +19,14 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: wx_new_test.cpp,v 1.1 2005-02-23 12:37:20 chicares Exp $
+// $Id: wx_new_test.cpp,v 1.2 2005-03-07 11:47:27 chicares Exp $
 
 // This unit test proves little, but including it in the unit-test
 // suite ensures that it'll be compiled with stronger warning options
 // than wx would permit.
 
-#include "pchfile.hpp"
-
 #ifdef __BORLANDC__
+#   include "pchfile.hpp"
 #   pragma hdrstop
 #endif
 

@@ -19,11 +19,10 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: wx_new.cpp,v 1.1 2005-02-23 12:37:20 chicares Exp $
-
-#include "pchfile.hpp"
+// $Id: wx_new.cpp,v 1.2 2005-03-07 11:47:27 chicares Exp $
 
 #ifdef __BORLANDC__
+#   include "pchfile.hpp"
 #   pragma hdrstop
 #endif
 
