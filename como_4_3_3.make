@@ -1,4 +1,4 @@
-# Limited support for a particular non-free compiler.
+# Limited support for a particular non-free compiler under msw only.
 
 # Copyright (C) 2004, 2005 Gregory W. Chicares.
 #
@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: como_4_3_3.make,v 1.1 2005-02-23 12:37:20 chicares Exp $
+# $Id: como_4_3_3.make,v 1.2 2005-03-23 17:35:08 chicares Exp $
 
 toolset := como
 
