@@ -1,0 +1,67 @@
+// README for "Let me illustrate...".
+//
+// Copyright (C) 2005 Gregory W. Chicares.
+//
+// This program is free software; you can redistribute it and/or modify
+// it under the terms of the GNU General Public License version 2 as
+// published by the Free Software Foundation.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program; if not, write to the Free Software
+// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+//
+// http://savannah.nongnu.org/projects/lmi
+// email: <chicares@cox.net>
+// snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
+
+// $Id: README,v 1.1 2005-03-15 14:30:16 chicares Exp $
+
+* Copyright and license notices for graphics files
+
+The following graphics files (*.ico *.xpm) in this directory are
+  Copyright (C) 2005 Gregory W. Chicares
+and subject to the
+  GNU General Public License version 2
+as stated at the top of this file. They are original works except for
+the derived works noted below.
+
+Derived from the gnome-icon-theme/24x24 icon set:
+
+  about.xpm             from stock_about.png
+  close.xpm             from stock_close.png
+  delete-row.xpm        from stock_delete-row.png
+  edit-case.xpm         from stock_zoom.png
+  edit-cell.xpm         from stock_zoom.png
+  edit-class.xpm        from stock_zoom.png
+  exit.xpm              from stock_exit.png
+  fixed-width.xpm       from stock_insert-rows.png
+  help.xpm              from stock_help.png
+  insert-rows.xpm       from stock_insert-rows.png
+  new.xpm               from stock_new.png
+  open.xpm              from stock_open.png
+  paste-case.xpm        from stock_paste.png
+  print-case.xpm        from stock_print.png
+  print-cell.xpm        from stock_print.png
+  print-options.xpm     from stock_print-options.png
+  print-preview.xpm     from stock_print-preview.png
+  print.xpm             from stock_print.png
+  run-case.xpm          from stock_print-layout.png
+  run-cell.xpm          from stock_print-layout.png
+  save.xpm              from stock_save.png
+  saveas.xpm            from stock_save-as.png
+  varying-width.xpm     from stock_insert-rows.png
+  write_spreadsheet.xpm from stock_insert-rows.png
+
+Many of these icons are used by GNU emacs, and are in the emacs cvs at
+savannah.gnu.org . The original author of this gnome icon set is Jakub
+Steiner, and here
+  http://www.novell.com/coolsolutions/feature/1637.html
+is his employer's LGPL notice. The original files adapted here were
+retrieved from the gnome cvs (gnome is GPL), and converted or modified
+with the GIMP.
+
