@@ -1,0 +1,61 @@
+I've uploaded 'member_names.zip' to the Files area for comments.
+
+Since I may have overlooked some obvious things in this first draft,
+I'd rather defer writing fancy HTML documentation that might need to
+be discarded; but the following sketch explains my present line of
+thought.
+
+A pointer to member data T S::*pmd bears two types. Typically a class
+has various data member types, so we may have U S::*, V S::*, etc.
+
+It is natural to hold the named members in a map for each class S.
+boost::any lets us "flatten" the data type so that a map can hold
+pointers to T, U, V... members of S. But once that's done, we can
+never get back a typed reference to the original data type without
+specifying that type explicitly[1]--in which case we've gained little.
+
+To achieve the desired syntax
+  s["pmd-name"] = string-value
+requires an object s (known to be of type S) and knowledge of type T
+so that we can use boost::lexical_cast to convert the string-value.
+Type T is knowable only inside boost::any::holder<T>, so we add an
+operator=(std::string const&) to a customized boost::any (renamed
+any_member). To make type S available for this operator=, we make it
+a template parameter of any_member, and hold a pointer [2] to s.
+
+Then we create a class MemberSymbolTable to hold the map and provide
+an operator[], derive S from MemberSymbolTable<S>, and add statements
+to S::S() to populate the map with members of S or its base classes.
+
+Future directions:
+
+Support assigment to pointer members, and perhaps to UDT members that
+have their own operator=(std::string const&).
+
+Offering operator=() suggests supporting other things like
+operator==(), stream insertion and extraction operators, and perhaps
+functors.
+
+An accessor for the map may permit other useful idioms. For instance,
+if S has pointer members, the default operator= etc. generally won't
+suffice; instead of writing one that assigns each member by name, we
+might iterate assignment across the map.
+
+Toon Knapen asked whether this technique might work for the tuples
+library. I'll try to explore that this weekend.
+
+I acknowlege a major debt to Kevlin Henney whose work I have
+mangled here.
+
+[1] Actually, we can create collections of types via template
+metaprogramming, but those collections can be indexed only by
+compile-time constants--though not by string literals. This direction
+is not followed because, given input e.g. from cgi-bin like
+  ("int0", "42")
+we want to execute 'int0 = 42;', but the particular data member here
+is known only at run time.
+
+[2] If we didn't make any_member contain the object of type S, then
+we could save some storage by making the map static. But then we'd
+have to pass the identity of the object when performing operator=(),
+making the syntax ugly, and that overrides space efficiency.
