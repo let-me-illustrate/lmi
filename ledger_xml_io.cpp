@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xml_io.cpp,v 1.4 2005-03-07 11:46:46 chicares Exp $
+// $Id: ledger_xml_io.cpp,v 1.5 2005-03-26 02:10:46 chicares Exp $
 
 #include "config.hpp"
 
@@ -182,7 +182,6 @@ typedef std::map<std::string, std::string> title_map_t;
 // Look at that 'missing_formats' file. Not only does it list
 // everything you consciously decided you didn't want, like
 //   EffDateJdn
-//   ExpRatRfdForborne_Midpoint
 // it also shows stuff that I think we never had, but need, like
 //   AllowDbo3
 // which I think is used for some purpose that was important to
@@ -461,7 +460,6 @@ void Ledger::write(xml::node& x) const
 // F4: scaled by 100, two decimals, with '%' at end:
 // > Format as percentage "0.00%"
 // >
-    format_map["ExpRatRfdForborne"                 ] = f4;
     format_map["ExpRatRsvCash"                     ] = f4;
     format_map["GuarMaxMandE"                      ] = f4;
     format_map["InitAnnGenAcctInt"                 ] = f4;
@@ -646,7 +644,6 @@ void Ledger::write(xml::node& x) const
     format_map["ErPmt"                             ] = f1;
     format_map["ExcessLoan"                        ] = f1;
     format_map["ExpenseCharges"                    ] = f1;
-    format_map["ExpRatRfdCash"                     ] = f1;
     format_map["ExpRatRsvForborne"                 ] = f1;
     format_map["ExpRfd"                            ] = f1;
     format_map["ExpRsv"                            ] = f1;

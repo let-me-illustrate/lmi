@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_variant.hpp,v 1.1 2005-02-12 12:59:31 chicares Exp $
+// $Id: ledger_variant.hpp,v 1.2 2005-03-26 02:10:46 chicares Exp $
 
 #ifndef ledger_variant_hpp
 #define ledger_variant_hpp
@@ -102,7 +102,6 @@ public:
     std::vector<double> ExpRsvInt;
     std::vector<double> NetCOICharge;
     std::vector<double> ExpRatRsvForborne;
-    std::vector<double> ExpRatRfdForborne;
     std::vector<double> MlyPolFee;
     std::vector<double> AnnPolFee;
     std::vector<double> PolFee;
@@ -135,7 +134,6 @@ public:
 
     // Forborne vectors
     std::vector<double> ExpRatRsvCash;
-    std::vector<double> ExpRatRfdCash;
 
     // Nonscalable vectors
     std::vector<double> MlySAIntRate;
