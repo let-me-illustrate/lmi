@@ -24,7 +24,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: xml_notebook.xrc,v 1.4 2005-03-30 05:15:31 chicares Exp $
+    $Id: xml_notebook.xrc,v 1.5 2005-03-30 05:41:54 chicares Exp $
 -->
 
 <object class="wxPanel" name="plan_panel">
@@ -2405,6 +2405,9 @@ looks weird if we don't make this look like its siblings.
                         <label>General</label>
                     </object>
                 </object>
+<!-- TODO ?? Is there a convenient way to make this control grow
+only in the horizontal and not in the vertical direction?
+-->                
                 <object class="sizeritem">
                     <flag>wxGROW|wxALIGN_CENTER_VERTICAL</flag>
                     <object class="wxTextCtrl" name="GeneralAccountRate">
@@ -2896,6 +2899,186 @@ looks weird if we don't make this look like its siblings.
     </object>
 </object>
 
+<object class="wxPanel" name="reports_panel">
+    <object class="wxFlexGridSizer">
+        <cols>1</cols>
+        <growablerows>1</growablerows>
+
+        <object class="sizeritem">
+            <flag>wxALIGN_LEFT</flag>
+            <object class="wxCheckBox" name="CreateSupplementalReport">
+                <label>Create supplemental report</label>
+            </object>
+        </object>
+
+        <object class="sizeritem">
+            <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+            <border>4</border>
+            <object class="wxFlexGridSizer">
+                <cols>2</cols>
+                <growablecols>0,1</growablecols>
+                <object class="sizeritem">
+                    <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                    <border>4</border>
+                    <object class="wxStaticText">
+                        <label>Column 0</label>
+                    </object>
+                </object>
+                <object class="sizeritem">
+                    <flag>wxGROW</flag>
+                    <object class="wxComboBox" name="SupplementalReportColumn00">
+                        <style>wxCB_DROPDOWN|wxCB_READONLY</style>
+                    </object>
+                </object>
+                <object class="sizeritem">
+                    <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                    <border>4</border>
+                    <object class="wxStaticText">
+                        <label>Column 1</label>
+                    </object>
+                </object>
+                <object class="sizeritem">
+                    <flag>wxGROW</flag>
+                    <object class="wxComboBox" name="SupplementalReportColumn01">
+                        <style>wxCB_DROPDOWN|wxCB_READONLY</style>
+                    </object>
+                </object>
+                <object class="sizeritem">
+                    <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                    <border>4</border>
+                    <object class="wxStaticText">
+                        <label>Column 2</label>
+                    </object>
+                </object>
+                <object class="sizeritem">
+                    <flag>wxGROW</flag>
+                    <object class="wxComboBox" name="SupplementalReportColumn02">
+                        <style>wxCB_DROPDOWN|wxCB_READONLY</style>
+                    </object>
+                </object>
+                <object class="sizeritem">
+                    <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                    <border>4</border>
+                    <object class="wxStaticText">
+                        <label>Column 3</label>
+                    </object>
+                </object>
+                <object class="sizeritem">
+                    <flag>wxGROW</flag>
+                    <object class="wxComboBox" name="SupplementalReportColumn03">
+                        <style>wxCB_DROPDOWN|wxCB_READONLY</style>
+                    </object>
+                </object>
+                <object class="sizeritem">
+                    <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                    <border>4</border>
+                    <object class="wxStaticText">
+                        <label>Column 4</label>
+                    </object>
+                </object>
+                <object class="sizeritem">
+                    <flag>wxGROW</flag>
+                    <object class="wxComboBox" name="SupplementalReportColumn04">
+                        <style>wxCB_DROPDOWN|wxCB_READONLY</style>
+                    </object>
+                </object>
+                <object class="sizeritem">
+                    <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                    <border>4</border>
+                    <object class="wxStaticText">
+                        <label>Column 5</label>
+                    </object>
+                </object>
+                <object class="sizeritem">
+                    <flag>wxGROW</flag>
+                    <object class="wxComboBox" name="SupplementalReportColumn05">
+                        <style>wxCB_DROPDOWN|wxCB_READONLY</style>
+                    </object>
+                </object>
+                <object class="sizeritem">
+                    <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                    <border>4</border>
+                    <object class="wxStaticText">
+                        <label>Column 6</label>
+                    </object>
+                </object>
+                <object class="sizeritem">
+                    <flag>wxGROW</flag>
+                    <object class="wxComboBox" name="SupplementalReportColumn06">
+                        <style>wxCB_DROPDOWN|wxCB_READONLY</style>
+                    </object>
+                </object>
+                <object class="sizeritem">
+                    <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                    <border>4</border>
+                    <object class="wxStaticText">
+                        <label>Column 7</label>
+                    </object>
+                </object>
+                <object class="sizeritem">
+                    <flag>wxGROW</flag>
+                    <object class="wxComboBox" name="SupplementalReportColumn07">
+                        <style>wxCB_DROPDOWN|wxCB_READONLY</style>
+                    </object>
+                </object>
+                <object class="sizeritem">
+                    <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                    <border>4</border>
+                    <object class="wxStaticText">
+                        <label>Column 8</label>
+                    </object>
+                </object>
+                <object class="sizeritem">
+                    <flag>wxGROW</flag>
+                    <object class="wxComboBox" name="SupplementalReportColumn08">
+                        <style>wxCB_DROPDOWN|wxCB_READONLY</style>
+                    </object>
+                </object>
+                <object class="sizeritem">
+                    <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                    <border>4</border>
+                    <object class="wxStaticText">
+                        <label>Column 9</label>
+                    </object>
+                </object>
+                <object class="sizeritem">
+                    <flag>wxGROW</flag>
+                    <object class="wxComboBox" name="SupplementalReportColumn09">
+                        <style>wxCB_DROPDOWN|wxCB_READONLY</style>
+                    </object>
+                </object>
+                <object class="sizeritem">
+                    <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                    <border>4</border>
+                    <object class="wxStaticText">
+                        <label>Column 10</label>
+                    </object>
+                </object>
+                <object class="sizeritem">
+                    <flag>wxGROW</flag>
+                    <object class="wxComboBox" name="SupplementalReportColumn10">
+                        <style>wxCB_DROPDOWN|wxCB_READONLY</style>
+                    </object>
+                </object>
+                <object class="sizeritem">
+                    <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                    <border>4</border>
+                    <object class="wxStaticText">
+                        <label>Column 11</label>
+                    </object>
+                </object>
+                <object class="sizeritem">
+                    <flag>wxGROW</flag>
+                    <object class="wxComboBox" name="SupplementalReportColumn11">
+                        <style>wxCB_DROPDOWN|wxCB_READONLY</style>
+                    </object>
+                </object>
+
+            </object>
+        </object>
+    </object>
+</object>
+
 <object class="wxDialog" name="dialog_containing_notebook">
     <title>Xml input notebook demonstration</title>
     <style>wxCAPTION | wxRESIZE_BORDER | wxSYSTEM_MENU</style>
@@ -2962,6 +3145,10 @@ looks weird if we don't make this look like its siblings.
                 <object class="notebookpage">
                     <label>Riders</label>
                     <object_ref ref="rider_panel"/>
+                </object>
+                <object class="notebookpage">
+                    <label>Reports</label>
+                    <object_ref ref="reports_panel"/>
                 </object>
             </object>
         </object>
