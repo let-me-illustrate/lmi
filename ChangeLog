@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.33 2005-03-31 17:08:39 chicares Exp $
+// $Id: ChangeLog,v 1.34 2005-03-31 17:21:11 chicares Exp $
 
 2005-01-14
 
@@ -1042,4 +1042,7 @@ Add new supplemental-report columns for experience rating.
 
   ledger_invariant.cpp
 Show supplemental-report columns on composite.
+
+  ledger_xml_io.cpp
+Permit blank columns on supplemental report.
 
