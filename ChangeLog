@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.1 2005-01-16 08:00:07 chicares Exp $
+// $Id: ChangeLog,v 1.2 2005-01-28 01:34:43 chicares Exp $
 
 2005-01-14
 
@@ -51,4 +51,23 @@ Add copyright and license notices and RCS Ids to these files, no
 matter how trivial they seem. Now every single file in this cvs
 directory has these things, creating an invariant that can be
 confirmed automatically.
+
+2005-01-27 [1092]
+
+  quoted_gpl
+  quoted_gpl_html
+Add automatically-generated files for embedding the GPL in other
+source, as quoted C strings and html respectively.
+
+  GNUmakefile
+  autodependency.make
+  configuration.make
+  msw_common.make
+  msw_cygwin.make
+  msw_generic.make
+  msw_msys.make
+  objects.make
+  posix_fhs.make
+  workhorse.make
+Add makefiles.
 
