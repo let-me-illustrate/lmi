@@ -19,9 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mc_enum.cpp,v 1.2 2005-02-19 03:27:45 chicares Exp $
-
-#include "config.hpp"
+// $Id: mc_enum.cpp,v 1.3 2005-04-06 23:08:16 chicares Exp $
 
 #include "mc_enum.hpp"
 
