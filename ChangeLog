@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.17 2005-02-23 12:44:30 chicares Exp $
+// $Id: ChangeLog,v 1.18 2005-03-01 12:28:06 chicares Exp $
 
 2005-01-14
 
@@ -570,4 +570,29 @@ for some non-free compilers.
 
   msw_common.make
 Remove sections marked for expunction.
+
+2005-02-28 [1061]
+
+  test_tools.hpp
+Fix defective typeid comparison.
+
+  alert.cpp
+  alert.hpp
+  alert_test.cpp
+Clear stream buffer and iostate flags after an exception is caught, so
+that subsequent alerts are processed correctly. Improve documentation.
+
+  actuarial_table.cpp
+Read table length as unsigned. Formerly, tables of size [2^15, 2^16)
+bytes elicited a spurious diagnostic, though they were read correctly.
+
+  ihs_proddata.cpp
+Prepend directory to filename only once.
+
+  accountvalue.cpp
+Implement a hitherto-unneeded member function, to make the production
+and antediluvian branches more interchangeable.
+
+  ihs_acctval.cpp
+Avoid catastrophic cancellation.
 
