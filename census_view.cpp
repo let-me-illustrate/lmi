@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: census_view.cpp,v 1.2 2005-03-22 03:40:18 chicares Exp $
+// $Id: census_view.cpp,v 1.3 2005-03-22 14:19:42 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -1740,7 +1740,7 @@ restart:
             // corridor factor is unity.
             if(0.0 == case_years_net_mortchgs)
                 {
-                case_k_factor = 1.0;
+                case_k_factor = 0.0;
                 }
             else
                 {
