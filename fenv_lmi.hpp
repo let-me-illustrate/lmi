@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: fenv_lmi.hpp,v 1.1 2005-01-14 19:47:44 chicares Exp $
+// $Id: fenv_lmi.hpp,v 1.2 2005-01-29 02:47:41 chicares Exp $
 
 // Manage the floating-point environment, using C99 7.6 facilities
 // where available. Otherwise, use compiler- and platform-specific
@@ -49,7 +49,8 @@
 inline void initialize_fpu()
 {
 #if defined __GNUC__ && defined _X86_
-    asm volatile("fldcw %0" : : "m" (0x037f));
+    volatile unsigned short int control_word = 0x037f;
+    asm volatile("fldcw %0" : : "m" (control_word));
 #elif defined __BORLANDC__
     _control87(0x037f, 0xffff);
 #elif defined _MSC_VER
@@ -73,8 +74,12 @@ inline void initialize_fpu()
 #   error Unknown compiler or platform. Please contribute an implementation.
 #endif // Unknown compiler or platform.
 
+// TODO ?? Duplicative and unclear. The code above should be unneeded
+// for a platform like MinGW that does everything in a standard way.
+// Need a unit test to prove that the code below works correctly.
+
     // The facilities offered by C99's <fenv.h> are useful, but not
-    // sufficient: they require no standard way to set hardware
+    // sufficient: they require no standard facility to set hardware
     // precision, although 7.6/9 provides for extensions like mingw's
     // FE_PC64_ENV.
 #ifdef __STDC_IEC_559__

@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: GNUmakefile,v 1.1 2005-01-28 01:34:43 chicares Exp $
+# $Id: GNUmakefile,v 1.2 2005-01-29 02:47:41 chicares Exp $
 
 ###############################################################################
 
@@ -207,7 +207,6 @@ never_source_files := \
   $(subdirectories) \
   $(expungible_files) \
   $(binary_graphics) \
-  ChangeLog \
   expected.cgi.out \
 
 # Files that are source in some restrictive sense only:
@@ -377,21 +376,32 @@ eat := pwd > /dev/null # Gobble unwanted grep exit codes.
 
 .PHONY: check_conformity
 check_conformity: mostlyclean
-	@$(ECHO) "Unexpected or oddly-named source files:"
+	@$(ECHO) "  Unexpected or oddly-named source files:"
 	@$(ECHO) $(filter-out $(wildcard *.?pp *.c *.h),$(prerequisite_files))
-	@$(ECHO) "Source files that don't point to savannah:"
+	@$(ECHO) "  Files that don't point to savannah:"
 	@-$(GREP) --files-without-match savannah $(licensed_files)     || $(eat)
-	@$(ECHO) "Source files that lack an RCS Id:"
+	@$(ECHO) "  Files that lack an RCS Id:"
 	@-$(GREP) --files-without-match '$$Id.*$$' $(licensed_files)   || $(eat)
-	@$(ECHO) "Source files that contain non-empty blank lines:"
+	@$(ECHO) "  Files that contain non-empty blank lines:"
 	@-$(GREP) --line-number '^ \+$$' $(licensed_files)             || $(eat)
-	@$(ECHO) "Source files that improperly contain physical tabs:"
+	@$(ECHO) "  Files that improperly contain physical tabs:"
 	@-$(GREP) -l '	' $(filter-out $(makefiles),$(licensed_files)) || $(eat)
-	@$(ECHO) "Source files that contain carriage returns:"
-	@for z in $(licensed_files); do \
+	@$(ECHO) "  Files that contain carriage returns:"
+	@for z in $(licensed_files); \
+	  do \
 	    $(ECHO) -n $$z; \
 	    <$$z $(TR) '\r' '\a' | $(SED) -e'/\a/!d' | $(WC) -l; \
 	  done | $(SED) -e'/ 0$$/d';
+	@$(ECHO) "  Headers that should include \"config.hpp\" first but don't:"
+	@for z in $(filter-out $(wildcard config*.hpp),$(wildcard *.hpp)); \
+	  do \
+	    $(SED) \
+	    -e'/^#include "config.hpp"/,$$d' \
+	    -e'/#.*include/!d' \
+	    -e'0,1!d' \
+	    -e"s/^.*$$/$$z/" $$z \
+	    ; \
+	  done;
 	@$(ECHO) "Total lines of code:"
 	@$(WC) -l $(prerequisite_files) | $(SED) -e'/[Tt]otal/!d' -e's/[^0-9]//'
 	@$(ECHO) "Number of source files:"

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: inputillus.cpp,v 1.1 2005-01-14 19:47:45 chicares Exp $
+// $Id: inputillus.cpp,v 1.2 2005-01-29 02:47:41 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -119,7 +119,8 @@ if(Status_Smoking != Status[0].Smoking)
 
 //============================================================================
 IllusInputParms::IllusInputParms(IllusInputParms const& z)
-    :InputParms(z)
+    :streamable(z)
+    ,InputParms(z)
 #ifndef BC_BEFORE_5_5
     ,MemberSymbolTable_ihs<IllusInputParms>()
 #endif // not old borland compiler

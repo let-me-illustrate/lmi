@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xml_io.cpp,v 1.1 2005-01-14 19:47:45 chicares Exp $
+// $Id: ledger_xml_io.cpp,v 1.2 2005-01-29 02:47:42 chicares Exp $
 
 #include "config.hpp"
 
@@ -83,7 +83,7 @@ std::vector<std::string> const suffixes
 std::vector<std::string> const suffixes; // COMPILER !! Not supported.
 #endif // old borland compiler
 
-template<typename EnumType, unsigned int N>
+template<typename EnumType, int N>
 std::vector<std::string> enum_vector_to_string_vector
     (std::vector<xenum<EnumType, N> > const& ve
     )

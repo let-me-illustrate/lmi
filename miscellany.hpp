@@ -19,10 +19,12 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: miscellany.hpp,v 1.1 2005-01-14 19:47:45 chicares Exp $
+// $Id: miscellany.hpp,v 1.2 2005-01-29 02:47:42 chicares Exp $
 
 #ifndef miscellany_hpp
 #define miscellany_hpp
+
+#include "config.hpp"
 
 #include <algorithm>
 #include <cctype>

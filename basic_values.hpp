@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: basic_values.hpp,v 1.1 2005-01-14 19:47:44 chicares Exp $
+// $Id: basic_values.hpp,v 1.2 2005-01-29 02:47:41 chicares Exp $
 
 #ifndef basic_values_hpp
 #define basic_values_hpp
@@ -77,7 +77,7 @@ enum EBlend
     MustBlend
     };
 
-class BasicValues
+class LMI_EXPIMP BasicValues
 {
   public:
     BasicValues();
