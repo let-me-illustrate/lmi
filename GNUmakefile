@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: GNUmakefile,v 1.10 2005-03-15 14:34:37 chicares Exp $
+# $Id: GNUmakefile,v 1.11 2005-03-17 22:32:29 chicares Exp $
 
 ###############################################################################
 
@@ -353,8 +353,11 @@ gpl_notices := \
 
 # Clean.
 
-# Almost all targets are built in a build directory. This makefile
-# has rules to build a few files in the source directory, viz.
+# Almost all targets are built in a build directory, so the 'clean'
+# target is run there: see 'workhorse.make'.
+#
+# This makefile has rules to build a few files in the source
+# directory, viz.
 #   quoted_gpl
 #   quoted_gpl_html
 # which should be updated only if the owner changes the license;
@@ -364,13 +367,12 @@ gpl_notices := \
 # which is updated automatically whenever make is run after any source
 # file has changed. These required files are all in cvs; no 'clean'
 # rule deletes them because they should never be deleted.
+#
+# TODO ?? Do those first two files really belong in cvs?
 
-.PHONY: clean distclean mostlyclean
-clean distclean mostlyclean:
+.PHONY: source_clean
+source_clean:
 	@-$(RM) --force $(expungible_files)
-
-.PHONY: maintainer-clean
-maintainer-clean: distclean
 
 .PHONY: clobber
 clobber: maintainer-clean
@@ -400,7 +402,7 @@ expected_source_files = $(wildcard *.?pp *.c *.h *.rc *.xrc)
 supplemental_test_makefile = ../forbidden.make
 
 .PHONY: check_conformity
-check_conformity: mostlyclean
+check_conformity: source_clean
 	@-[ ! -e $(supplemental_test_makefile) ] \
 	  || $(MAKE) --no-print-directory -f $(supplemental_test_makefile)
 	@$(ECHO) "  Unexpected or oddly-named source files:"
@@ -454,7 +456,7 @@ check_conformity: mostlyclean
 # Prepare to commit to cvs.
 
 .PHONY: cvs_ready
-cvs_ready: distclean set_version_datestamp
+cvs_ready: source_clean set_version_datestamp
 	-$(MAKE) check_conformity 2>&1 |$(SED) -e'/ermission.denied/d'
 	-$(MAKE) check_idempotence
 	-$(MAKE) all test
@@ -467,7 +469,7 @@ cvs_ready: distclean set_version_datestamp
 archname := lmi-$(yyyymmddhhmm)
 
 .PHONY: archive
-archive: distclean set_version_datestamp
+archive: source_clean set_version_datestamp
 	$(MKDIR) ../$(archname)
 	-$(CP) --force --preserve --recursive * ../$(archname)
 	$(TAR) --create --directory=.. --file=$(archname).tar $(archname)
