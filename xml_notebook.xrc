@@ -24,7 +24,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: xml_notebook.xrc,v 1.5 2005-03-30 05:41:54 chicares Exp $
+    $Id: xml_notebook.xrc,v 1.6 2005-03-30 19:27:30 chicares Exp $
 -->
 
 <object class="wxPanel" name="plan_panel">
@@ -492,6 +492,33 @@
             <object class="wxFlexGridSizer">
                 <cols>2</cols>
                 <growablecols>1</growablecols>
+
+                <object class="sizeritem">
+                    <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                    <border>4</border>
+                    <object class="wxStaticText">
+                        <label>Current COI multiplier</label>
+                    </object>
+                </object>
+                <object class="sizeritem">
+                    <flag>wxGROW</flag>
+                    <object class="wxTextCtrl" name="CurrentCoiMultiplier">
+                        <size>180,-1</size>
+                    </object>
+                </object>
+                <object class="sizeritem">
+                    <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                    <border>4</border>
+                    <object class="wxStaticText">
+                        <label>Current COI grading</label>
+                    </object>
+                </object>
+                <object class="sizeritem">
+                    <flag>wxGROW</flag>
+                    <object class="wxTextCtrl" name="CurrentCoiGrading">
+                        <size>180,-1</size>
+                    </object>
+                </object>
                 <object class="sizeritem">
                     <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
                     <border>4</border>
@@ -503,21 +530,6 @@
                     <flag>wxGROW</flag>
                     <object class="wxTextCtrl" name="PartialMortalityMultiplier">
                         <size>180,-1</size>
-                        <value>0</value>
-                    </object>
-                </object>
-                <object class="sizeritem">
-                    <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
-                    <border>4</border>
-                    <object class="wxStaticText">
-                        <label>Case assumed assets</label>
-                    </object>
-                </object>
-                <object class="sizeritem">
-                    <flag>wxGROW</flag>
-                    <object class="wxTextCtrl" name="CaseAssumedAssets">
-                        <size>180,-1</size>
-                        <value>0</value>
                     </object>
                 </object>
             </object>
@@ -2367,18 +2379,20 @@ looks weird if we don't make this look like its siblings.
                         <rows>1</rows>
                         <growablecols>1</growablecols>
                         <object class="sizeritem">
-                            <flag>wxALIGN_CENTER_VERTICAL</flag>
+                            <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                            <border>4</border>
                             <object class="wxStaticText">
                                 <label>fee</label>
                             </object>
                         </object>
                         <object class="sizeritem">
-                            <flag>wxGROW | wxALIGN_CENTER_VERTICAL</flag>
+                            <flag>wxGROW|wxALIGN_CENTER_VERTICAL</flag>
                             <object class="wxTextCtrl" name="InputFundManagementFee">
                             </object>
                         </object>
                         <object class="sizeritem">
-                            <flag>wxALIGN_CENTER_VERTICAL</flag>
+                            <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                            <border>4</border>
                             <object class="wxStaticText">
                                 <label>bp</label>
                             </object>
@@ -2388,7 +2402,7 @@ looks weird if we don't make this look like its siblings.
             </object>
         </object>
         <object class="sizeritem">
-            <flag>wxALIGN_LEFT | wxALIGN_BOTTOM</flag>
+            <flag>wxALIGN_LEFT|wxALIGN_BOTTOM</flag>
             <object class="wxStaticText">
                 <label>Rates by account</label>
             </object>
@@ -2405,12 +2419,17 @@ looks weird if we don't make this look like its siblings.
                         <label>General</label>
                     </object>
                 </object>
-<!-- TODO ?? Is there a convenient way to make this control grow
-only in the horizontal and not in the vertical direction?
--->                
                 <object class="sizeritem">
                     <flag>wxGROW|wxALIGN_CENTER_VERTICAL</flag>
-                    <object class="wxTextCtrl" name="GeneralAccountRate">
+                    <object class="wxFlexGridSizer">
+                        <rows>1</rows>
+                        <growablecols>0</growablecols>
+                        <object class="sizeritem">
+                            <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                            <border>8</border>
+                            <object class="wxTextCtrl" name="GeneralAccountRate">
+                            </object>
+                        </object>
                     </object>
                 </object>
                 <object class="sizeritem">
@@ -2433,7 +2452,15 @@ only in the horizontal and not in the vertical direction?
                 </object>
                 <object class="sizeritem">
                     <flag>wxGROW|wxALIGN_CENTER_VERTICAL</flag>
-                    <object class="wxTextCtrl" name="SeparateAccountRate">
+                    <object class="wxFlexGridSizer">
+                        <rows>1</rows>
+                        <growablecols>0</growablecols>
+                        <object class="sizeritem">
+                            <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                            <border>8</border>
+                            <object class="wxTextCtrl" name="SeparateAccountRate">
+                            </object>
+                        </object>
                     </object>
                 </object>
                 <object class="sizeritem">
@@ -2456,7 +2483,15 @@ only in the horizontal and not in the vertical direction?
                 </object>
                 <object class="sizeritem">
                     <flag>wxGROW|wxALIGN_CENTER_VERTICAL</flag>
-                    <object class="wxTextCtrl" name="LoanRate">
+                    <object class="wxFlexGridSizer">
+                        <rows>1</rows>
+                        <growablecols>0</growablecols>
+                        <object class="sizeritem">
+                            <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                            <border>8</border>
+                            <object class="wxTextCtrl" name="LoanRate">
+                            </object>
+                        </object>
                     </object>
                 </object>
                 <object class="sizeritem">
@@ -3081,7 +3116,7 @@ only in the horizontal and not in the vertical direction?
 
 <object class="wxDialog" name="dialog_containing_notebook">
     <title>Xml input notebook demonstration</title>
-    <style>wxCAPTION | wxRESIZE_BORDER | wxSYSTEM_MENU</style>
+    <style>wxCAPTION|wxRESIZE_BORDER|wxSYSTEM_MENU</style>
     <exstyle>wxWS_EX_VALIDATE_RECURSIVELY</exstyle>
 <!-- WX !! This style flag is unknown to wxxrc:
     <exstyle>wxDIALOG_EX_CONTEXTHELP</exstyle>
