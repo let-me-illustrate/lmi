@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_acctval.cpp,v 1.10 2005-03-22 03:40:18 chicares Exp $
+// $Id: ihs_acctval.cpp,v 1.11 2005-03-26 14:27:09 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -1698,13 +1698,6 @@ void AccountValue::FinalizeYear()
         / Input_->NumIdenticalLives
         ;
     VariantValues().ExpRatRsvForborne   [Year] = ExpRatReserve;
-    VariantValues().ExpRatRfdCash       [Year] =
-          ExpRatRfd
-        * (1.0 - GetPartMortQ(Year))
-        * InforceLives
-        / Input_->NumIdenticalLives
-        ;
-    VariantValues().ExpRatRfdForborne   [Year] = ExpRatRfd;
 
     if(e_run_curr_basis == RateBasis)
         {
