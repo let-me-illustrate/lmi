@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xml_io.cpp,v 1.7 2005-03-31 17:21:11 chicares Exp $
+// $Id: ledger_xml_io.cpp,v 1.8 2005-04-02 23:01:22 chicares Exp $
 
 #include "config.hpp"
 
@@ -652,6 +652,7 @@ void Ledger::write(xml::node& x) const
     format_map["GptForceout"                       ] = f1;
     format_map["GrossIntCredited"                  ] = f1;
     format_map["GrossPmt"                          ] = f1;
+// TODO ?? This precision is inadequate; are all the others OK?
     format_map["InforceLives"                      ] = f1;
     format_map["Loads"                             ] = f1;
     format_map["Loan"                              ] = f1;
