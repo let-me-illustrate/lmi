@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: tn_range_types.cpp,v 1.2 2005-02-19 03:27:45 chicares Exp $
+// $Id: tn_range_types.cpp,v 1.3 2005-03-10 04:44:06 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -33,6 +33,18 @@
 //   #include "tn_range_types.hpp"
 // because it merely declares typedefs that aren't needed here.
 
-template class tn_range<int,    percentage_trammel<int   > >;
+// TODO ?? Move these two to a 'test' file.
+
+template class tn_range<int   , percentage_trammel<int   > >;
 template class tn_range<double, percentage_trammel<double> >;
+
+template class tn_range<double, proportion_trammel     <double> >;
+template class tn_range<double, nonnegative_trammel    <double> >;
+template class tn_range<int   , nonnegative_trammel    <int   > >;
+template class tn_range<int   , issue_age_trammel      <int   > >;
+template class tn_range<int   , attained_age_trammel   <int   > >;
+template class tn_range<int   , duration_trammel       <int   > >;
+template class tn_range<int   , month_trammel          <int   > >;
+template class tn_range<double, corridor_factor_trammel<double> >;
+template class tn_range<int   , date_trammel           <int   > >;
 

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.20 2005-03-07 11:56:44 chicares Exp $
+// $Id: ChangeLog,v 1.21 2005-03-10 04:49:01 chicares Exp $
 
 2005-01-14
 
@@ -642,4 +642,35 @@ Fix defective placement of pch header.
   ihs_avdebug.cpp
   ihs_avmly.cpp
 Remove an unsupported report that projected values for twelve months.
+
+2005-03-09 [1065]
+
+  ihs_server7702io.hpp
+Fix an oversight in documentation.
+
+  copy_n_.hpp
+  is_sorted_.hpp
+Use uppercase 'C' in old copyright notices, as FSF recommends.
+
+  GNUmakefile
+Add a test for lowercase 'c' in copyright notices. Remove test for
+the author's old email address (which has been changed in all sources
+already) and add an optional, customizable facility to search for
+strings that any particular contributor may wish to prevent from
+appearing accidentally in files about to be committed to cvs.
+
+  mc_enum.hpp
+  mc_enum.tpp
+Make str() public. Add experimental member function allowed_ordinal().
+
+  mc_enum_type_enums.hpp
+  mc_enum_types.cpp
+  mc_enum_types.hpp
+  mc_enum_types.xpp [new file]
+Add enumerative types useful for life insurance.
+
+  tn_range_type_trammels.hpp
+  tn_range_types.cpp
+  tn_range_types.hpp
+Add range types useful for life insurance.
 
