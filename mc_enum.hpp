@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mc_enum.hpp,v 1.3 2005-03-10 04:38:42 chicares Exp $
+// $Id: mc_enum.hpp,v 1.4 2005-04-06 23:08:16 chicares Exp $
 
 // Acknowledgment
 //
@@ -121,11 +121,11 @@ class mc_enum_base
     void allow(int, bool);
     bool is_allowed(int) const;
 
-    bool is_valid(std::string const&) const;
+    // datum_base overrides.
+    virtual bool is_valid(std::string const&) const;
 
     virtual std::size_t allowed_ordinal() const = 0;
     virtual std::size_t cardinality() const = 0;
-    virtual std::size_t ordinal() const = 0;
     virtual std::string str(int) const = 0;
 
   private:
@@ -156,18 +156,22 @@ class mc_enum
     bool operator==(T) const;
     bool operator==(std::string const&) const;
 
-    std::istream& read (std::istream& is);
-    std::ostream& write(std::ostream& os) const;
+    // datum_base overrides. Consider moving the implementation into
+    // the base class.
+    virtual std::istream& read (std::istream& is);
+    virtual std::ostream& write(std::ostream& os) const;
 
-    std::size_t allowed_ordinal() const; // TODO ?? Add unit tests.
-    std::size_t cardinality() const;
-    std::size_t ordinal() const;
+    // mc_enum_base overrides.
+    virtual std::size_t allowed_ordinal() const; // TODO ?? Add unit tests.
+    virtual std::size_t cardinality() const;
+    virtual std::string str(int) const;
+
     std::string str() const; // TODO ?? Add unit tests.
-    std::string str(int) const;
     T value() const;
 
   private:
-    static std::size_t ordinal(std::string const&);
+    std::size_t ordinal() const;
+    std::size_t ordinal(std::string const&) const;
 
     T value_;
 };
