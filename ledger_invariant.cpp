@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_invariant.cpp,v 1.1 2005-02-12 12:59:31 chicares Exp $
+// $Id: ledger_invariant.cpp,v 1.2 2005-02-14 04:37:51 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -398,16 +398,16 @@ void LedgerInvariant::Init(BasicValues* b)
     TieredSepAcctLoadBands.resize(0);
     TieredSepAcctLoadRates.resize(0);
 
-    // The antediluvian branch has a null FundData object.
+    // The antediluvian branch has a null FundData_ object.
     int number_of_funds(0);
-    if(b->FundData)
+    if(b->FundData_)
         {
-        number_of_funds = b->FundData->GetNumberOfFunds();
+        number_of_funds = b->FundData_->GetNumberOfFunds();
         }
     for(int j = 0; j < number_of_funds; j++)
         {
         FundNumbers.push_back(j);
-        FundNames.push_back(b->FundData->GetFundInfo(j).LongName_);
+        FundNames.push_back(b->FundData_->GetFundInfo(j).LongName());
 
         // TODO ?? InputParms::NumberOfFunds is defectively hardcocded
         // as thirty as this is written, but we need to support a product

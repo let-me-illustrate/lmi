@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: basicvalues.cpp,v 1.2 2005-02-12 12:59:31 chicares Exp $
+// $Id: basicvalues.cpp,v 1.3 2005-02-14 04:37:51 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -141,7 +141,7 @@ void BasicValues::Init()
     WDFee      = Database->Query(DB_WDFee     );
     WDFeeRate  = Database->Query(DB_WDFeeRate );
 
-    FundData = 0;
+    FundData_ = 0;
     TieredCharges_ = 0;
     ProductData = 0;
 }

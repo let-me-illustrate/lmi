@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_standalone.hpp,v 1.1 2005-01-14 19:47:45 chicares Exp $
+// $Id: ihs_standalone.hpp,v 1.2 2005-02-14 04:37:51 chicares Exp $
 
 #ifndef standalone_hpp
 #define standalone_hpp
@@ -35,7 +35,7 @@
 // Special version of class BasicValues for standalone server.
 // The illustration system's class is much more elaborate.
 
-class TIRC7702;
+class Irc7702;
 
 // TODO ?? Is this used?
 enum EProduct
@@ -94,7 +94,7 @@ public:
         ,double        SpecAmt
         ) const;
 
-    TIRC7702*           IRC7702;
+    Irc7702*            Irc7702_;
 
 private:
     E_Product const&    ProductName;
