@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: value_cast.hpp,v 1.1 2005-03-11 03:09:22 chicares Exp $
+// $Id: value_cast.hpp,v 1.2 2005-03-12 16:45:03 chicares Exp $
 
 // Function template value_cast() converts between types, choosing a
 // conversion method in the following order of decreasing preference:
@@ -87,7 +87,7 @@ enum cast_method
 template<typename T>
 struct is_string
 {
-    // Determine whether 'T' is convertible to std::string.
+    // Here, is_convertible means 'T' is convertible to std::string.
     enum {value = boost::is_convertible<T,std::string>::value};
 };
 
@@ -96,7 +96,7 @@ struct value_cast_choice
 {
     enum
         {choice =
-            // Determine whether 'From' is convertible to 'To'.
+            // Here, is_convertible means 'From' is convertible to 'To'.
             boost::is_convertible<From,To>::value
             ?e_direct
             :   (
