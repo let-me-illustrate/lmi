@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: msw_generic.make,v 1.1 2005-01-28 01:34:43 chicares Exp $
+# $Id: msw_generic.make,v 1.2 2005-02-17 23:27:21 chicares Exp $
 
 ################################################################################
 
@@ -32,9 +32,6 @@
 ################################################################################
 
 system_root := C:
-
-platform_libxml2_libraries = \
-  -L $(libxml2_dir)/lib -lxml2_dll \
 
 ################################################################################
 
