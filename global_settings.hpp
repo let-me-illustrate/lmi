@@ -19,7 +19,52 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: global_settings.hpp,v 1.2 2005-03-11 13:40:41 chicares Exp $
+// $Id: global_settings.hpp,v 1.3 2005-04-06 23:11:11 chicares Exp $
+
+// TODO ?? This behaviorless aggregate is no longer appropriate.
+// File 'ce_product_name.cpp' does this:
+//
+//    std::string data_directory = global_settings::instance().data_directory;
+//    if(0 == data_directory.size())
+//        {
+//        data_directory = ".";
+//        }
+//
+// because an empty string can't be used as an initializer for class
+// boost::filesystem::path. It would be nice to do this too:
+//
+//    fs::path path(data_directory);
+//    if(!fs::exists(path) || !fs::is_directory(path))
+//        {
+//        hobsons_choice()
+//            << "Data directory '"
+//            << path.string()
+//            << "' not found."
+//            << LMI_FLUSH
+//            ;
+//        }
+//
+// (or perhaps to split the tests and report failures separately; note
+// that the test as written depends on short-circuit evaluation to
+// avoid throwing an exception--see the boost documentation), but that
+// other file isn't the right place. Such a condition should be tested
+// at startup, and this is the right place to do that. (Testing it in
+// the 'main' function isn't appropriate because there are several
+// 'main' functions.)
+//
+// What's wanted is something like:
+//
+//    void set_data_directory(std::string const&);
+// // implementation in '.cpp' file: data_directory_ = [argument name];
+//
+//    std::string const data_directory() const;
+// // implementation in '.cpp' file: return data_directory_;
+//
+//  private:
+//    std::string data_directory_;
+//
+// for all member variables, as a first step. Then the 'set_*'
+// functions can have validation code added to them.
 
 #ifndef global_settings_hpp
 #define global_settings_hpp
