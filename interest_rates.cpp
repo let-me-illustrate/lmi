@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: interest_rates.cpp,v 1.3 2005-02-17 04:40:03 chicares Exp $
+// $Id: interest_rates.cpp,v 1.4 2005-04-05 12:36:37 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -65,8 +65,8 @@
 namespace
 {
 // Some years have 366 days: but read the documentation below.
-    long double const days_per_year = 365.0L;
-    long double const years_per_day = 1.0L / days_per_year;
+
+    int const days_per_year = 365;
 
 // Transform annual gross rate to net, subtracting spread and
 // investment management fee either on an effective annual or a
@@ -127,7 +127,7 @@ double transform_annual_gross_rate_to_annual_net
     ,double fee
     )
 {
-    double i;
+    double i = annual_gross_rate;
     if(0.0 == spread && 0.0 == fee)
         {
         i = annual_gross_rate;
@@ -138,15 +138,11 @@ double transform_annual_gross_rate_to_annual_net
         }
     else if(e_spread_is_nominal_daily == spread_method)
         {
-        i =
-            std::pow(
-                1.0L
-                    + std::pow(1.0L + annual_gross_rate, years_per_day)
-                    - std::pow(1.0L + spread,            years_per_day)
-                    - fee * years_per_day
-                ,days_per_year
-                )
-            - 1.0;
+        i = net_i_from_gross<double,days_per_year>()
+            (annual_gross_rate
+            ,spread
+            ,fee
+            );
         }
     else
         {

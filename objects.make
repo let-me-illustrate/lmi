@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: objects.make,v 1.8 2005-03-15 14:35:12 chicares Exp $
+# $Id: objects.make,v 1.9 2005-04-05 12:36:37 chicares Exp $
 
 ################################################################################
 
@@ -115,6 +115,7 @@ antediluvian_common_objects := \
   dbnames.o \
   dbvalue.o \
   death_benefits.o \
+  expm1.o \
   getopt.o \
   global_settings.o \
   input_sequence.o \
@@ -172,6 +173,7 @@ lmi_common_objects := \
   data_directory.o \
   dbnames.o \
   death_benefits.o \
+  expm1.o \
   global_settings.o \
   ihs_acctval.o \
   ihs_avdebug.o \
@@ -303,6 +305,7 @@ gps_objects := \
   data_directory.o \
   dbnames.o \
   death_benefits.o \
+  expm1.o \
   ihs_basicval.o \
   ihs_commfns.o \
   ihs_database.o \
@@ -349,6 +352,7 @@ unit_test_targets := \
   kludges_test$(EXEEXT) \
   materially_equal_test$(EXEEXT) \
   mathmisc_test$(EXEEXT) \
+  math_functors_test$(EXEEXT) \
   mc_enum_test$(EXEEXT) \
   mpatrol_patch_test$(EXEEXT) \
   ncnnnpnn_test$(EXEEXT) \
@@ -409,6 +413,7 @@ commutation_functions_test$(EXEEXT): \
   alert.o \
   alert_cli.o \
   commutation_functions_test.o \
+  expm1.o \
   ihs_commfns.o \
   timer.o \
   xenumtypes.o \
@@ -484,10 +489,20 @@ mathmisc_test$(EXEEXT): \
   $(common_test_objects) \
   mathmisc_test.o \
 
-mc_enum_test$(EXEEXT): \
+math_functors_test$(EXEEXT): \
   $(common_test_objects) \
+  expm1.o \
+  math_functors_test.o \
+  timer.o \
+
+mc_enum_test$(EXEEXT): \
+  $(boost_filesystem_objects) \
+  $(common_test_objects) \
+  alert.o \
+  alert_cli.o \
   datum_base.o \
   facets.o \
+  global_settings.o \
   mc_enum.o \
   mc_enum_test.o \
   mc_enum_test_aux.o \

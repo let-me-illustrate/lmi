@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: config_all.hpp,v 1.1 2005-01-14 19:47:44 chicares Exp $
+// $Id: config_all.hpp,v 1.2 2005-04-05 12:36:37 chicares Exp $
 
 // Configuration header for compiler quirks--generic configuration.
 // Never include this file directly.
@@ -47,6 +47,10 @@
 #else // Neither gcc nor borland.
 #   error Unknown compiler
 #endif // Neither gcc nor borland.
+
+#if defined __MINGW32__ && defined __GNUC__ && __GNUC__ == 3 && 4 <= __GNUC_MINOR__ && !defined __COMO__
+#   define LMI_COMPILER_HAS_LOG1P
+#endif // Recent MinGW.
 
 #if defined BC_BEFORE_5_5 || defined GCC_BEFORE_2_96 && !defined __COMO__
 #   define LMI_LACK_BASIC_IOSTREAMS
