@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_proddata.cpp,v 1.4 2005-03-23 15:32:29 chicares Exp $
+// $Id: ihs_proddata.cpp,v 1.5 2005-04-06 23:11:32 chicares Exp $
 
 // This class contains names of files containing a product's tables as well
 // as strings that are the same for all instances of that product.
@@ -40,16 +40,11 @@
 
 #include "alert.hpp"
 #include "data_directory.hpp"
-#include "global_settings.hpp"
-#include "miscellany.hpp"
 #include "platform_dependent.hpp" // access()
 
 #include <boost/filesystem/convenience.hpp>
 #include <boost/filesystem/path.hpp>
 
-#include <algorithm>
-#include <cctype>
-#include <cstring>
 #include <fstream>
 #include <string>
 
@@ -241,7 +236,6 @@ void TProductData::WritePolFiles()
     foo.PolicyForm             = "UL32768-NY";
     foo.PolicyMktgName         = "UL Supreme";
     foo.PolicyLegalName  = "Flexible Premium Adjustable Life Insurance Policy";
-// TODO ?? Do we need PolicyName also?
     foo.InsCoShortName         = "Superior Life";
     foo.InsCoName              = "Superior Life Insurance Company";
     foo.InsCoAddr              = "Superior, WI 12345";
@@ -261,29 +255,5 @@ void TProductData::WritePolFiles()
     foo.Write(AddDataDir("sample.pol"));
 
     WriteProprietaryPolFiles();
-}
-
-//============================================================================
-void TProductData::GetProductFilenames(std::vector<std::string>& a_Names)
-{
-    LMI_ASSERT(0 == a_Names.size());
-
-    fs::directory_iterator i(global_settings::instance().data_directory);
-    fs::directory_iterator end_i;
-    for(; i != end_i; ++i)
-        {
-        if(is_directory(*i) || ".pol" != fs::extension(*i))
-            {
-            continue;
-            }
-        std::string name(i->leaf());
-        std::transform
-            (name.begin()
-            ,name.end()
-            ,name.begin()
-            ,lmi_tolower
-            );
-        a_Names.push_back(name);
-        }
 }
 
