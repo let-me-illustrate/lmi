@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_acctval.cpp,v 1.5 2005-02-12 12:59:31 chicares Exp $
+// $Id: ihs_acctval.cpp,v 1.6 2005-02-14 04:37:51 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -544,10 +544,10 @@ void AccountValue::InitializeLife(e_run_basis const& a_Basis)
             }
         }
 
-    // TODO ?? We need to reconsider where the IRC7702 object gets created.
+    // TODO ?? We need to reconsider where the Irc7702 object gets created.
     // Perhaps it should be when initial DB is first known? No, needed for
     // solves. Then maybe we only need to move the call to Initialize7702?
-    IRC7702->Initialize7702
+    Irc7702_->Initialize7702
         (InvariantValues().SpecAmt[0] + InvariantValues().TermSpecAmt[0]
         ,InvariantValues().SpecAmt[0] + InvariantValues().TermSpecAmt[0]
         ,Get7702EffectiveDBOpt(InvariantValues().DBOpt[0])
@@ -559,8 +559,8 @@ void AccountValue::InitializeLife(e_run_basis const& a_Basis)
     // this avoids recalculating GLP and GSP. And does your code calculate
     // guideline premiums correctly if specified amount is determined by
     // a strategy or a solve?
-    InvariantValues().InitGLP = IRC7702->RoundedGLP();
-    InvariantValues().InitGSP = IRC7702->RoundedGSP();
+    InvariantValues().InitGLP = Irc7702_->RoundedGLP();
+    InvariantValues().InitGSP = Irc7702_->RoundedGSP();
     // TODO ?? JOE--If you accept this modification, would you do the same sort
     // of thing for the initial seven-pay premium as well please?
 
@@ -622,7 +622,7 @@ void AccountValue::InitializeLife(e_run_basis const& a_Basis)
         {
         lowest_death_benefit = bfts_7702a.front();
         }
-    IRC7702A->Initialize7702A
+    Irc7702A_->Initialize7702A
         (e_run_curr_basis != RateBasis
         ,is_already_a_mec
         ,IssueAge
@@ -1277,8 +1277,8 @@ void AccountValue::InitializeYear()
 // MEC avoidance may require issuing a contract at a higher specamt than input.
 void AccountValue::InitializeSpecAmt()
 {
-    IRC7702->UpdateBOY7702();
-    IRC7702A->UpdateBOY7702A(Year);
+    Irc7702_->UpdateBOY7702();
+    Irc7702A_->UpdateBOY7702A(Year);
 
     YearsSpecAmt        = DeathBfts_->specamt()[Year];
 

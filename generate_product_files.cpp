@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: generate_product_files.cpp,v 1.2 2005-02-12 12:59:31 chicares Exp $
+// $Id: generate_product_files.cpp,v 1.3 2005-02-14 04:37:51 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -48,7 +48,7 @@ int main()
     TProductData::WritePolFiles();
     std::cout << ".pol " << std::flush;
 
-    TFundData::WriteFundFiles();
+    FundData::WriteFundFiles();
     std::cout << ".fnd " << std::flush;
 
     StreamableRoundingRules::WriteRndFiles();

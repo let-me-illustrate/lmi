@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.10 2005-02-13 23:17:18 chicares Exp $
+// $Id: ChangeLog,v 1.11 2005-02-14 04:37:51 chicares Exp $
 
 2005-01-14
 
@@ -364,7 +364,22 @@ table values makes solves about forty percent faster.
   obstruct_slicing_test.cpp [new file]
 Add mixin class to obstruct slicing.
 
+  database.cpp
+  database.hpp
   death_benefits.hpp
+  dbdict.hpp
+  dbvalue.cpp
+  dbvalue.hpp
+  ihs_commfns.cpp
+  ihs_commfns.hpp
+  ihs_database.cpp
+  ihs_dbdict.hpp
+  ihs_funddata.cpp
+  ihs_funddata.hpp
+  ihs_irc7702.cpp
+  ihs_irc7702.hpp
+  ihs_irc7702a.cpp
+  ihs_irc7702a.hpp
   inputstatus.hpp
   ledgervalues.hpp
   multiple_cell_document.hpp
@@ -374,4 +389,30 @@ Add mixin class to obstruct slicing.
 As appropriate: obstruct slicing, making the dtor nonvirtual; use
 boost::noncopyable, preferring it to writing a private copy ctor and
 assignment operator and documenting them as unimplemented.
+
+  basic_values.hpp
+  basicvalues.cpp
+  commutation_functions_test.cpp
+  generate_product_files.cpp
+  ihs_acctval.cpp
+  ihs_avdebug.cpp
+  ihs_avmly.cpp
+  ihs_basicval.cpp
+  ihs_commfns.cpp
+  ihs_commfns.hpp
+  ihs_funddata.cpp
+  ihs_funddata.hpp
+  ihs_irc7702.cpp
+  ihs_irc7702.hpp
+  ihs_irc7702a.cpp
+  ihs_irc7702a.hpp
+  ihs_server7702.cpp
+  ihs_standalone.cpp
+  ihs_standalone.hpp
+  irc7702a_test.cpp
+  ledger_invariant.cpp
+  objects.make
+  proprietary.cpp
+Revise and rename commutation-function, fund, and 7702 and 7702A
+classes.
 

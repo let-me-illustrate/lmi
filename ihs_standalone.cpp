@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_standalone.cpp,v 1.2 2005-02-12 12:59:31 chicares Exp $
+// $Id: ihs_standalone.cpp,v 1.3 2005-02-14 04:37:51 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -210,7 +210,7 @@ void GPT_BasicValues::Init()
             );
         }
 
-    IRC7702 = new TIRC7702
+    Irc7702_ = new Irc7702
             (*this
             ,e_gpt  // Input->DefnLifeIns
             ,IssueAge
@@ -260,7 +260,7 @@ GPT_BasicValues& GPT_BasicValues::operator=(GPT_BasicValues const& obj)
 GPT_BasicValues::~GPT_BasicValues()
 {
 // TODO ?? Use smart pointers instead?
-    delete IRC7702;
+    delete Irc7702_;
 }
 
 //============================================================================

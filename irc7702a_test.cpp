@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: irc7702a_test.cpp,v 1.1 2005-01-14 19:47:45 chicares Exp $
+// $Id: irc7702a_test.cpp,v 1.2 2005-02-14 04:37:51 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -35,7 +35,7 @@
 round_to<double> const RoundNonMecPrem(2, r_downward);
 
 // Test mec-at-issue argument.
-void test00(TIRC7702A z)
+void test00(Irc7702A z)
 {
     std::vector<double> pmt_history;
     std::vector<double> bft_history;
@@ -58,7 +58,7 @@ void test00(TIRC7702A z)
     BOOST_TEST(z.IsMecAlready());
 }
 
-void test01(TIRC7702A z)
+void test01(Irc7702A z)
 {
     z.UpdateBOY7702A(0);
     z.UpdateBOM7702A(0);
@@ -119,7 +119,7 @@ void test01(TIRC7702A z)
 }
 
 // Pay premium almost equal to specamt: expect MEC.
-void test02(TIRC7702A z)
+void test02(Irc7702A z)
 {
     z.UpdateBOY7702A(0);
     z.UpdateBOM7702A(0);
@@ -161,7 +161,7 @@ void test02(TIRC7702A z)
 }
 
 // Decrease Bfts then increase Bfts.
-void test03(TIRC7702A z)
+void test03(Irc7702A z)
 {
     z.UpdateBOY7702A(0);
     z.UpdateBOM7702A(0);
@@ -223,7 +223,7 @@ int test_main(int, char*[])
     nsp.push_back(.2);
     nsp.push_back(.3);
 
-    TIRC7702A z
+    Irc7702A z
         (0
         ,e_cvat
         ,e_earlier_of_increase_or_unnecessary_premium

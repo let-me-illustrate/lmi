@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avmly.cpp,v 1.3 2005-02-12 12:59:31 chicares Exp $
+// $Id: ihs_avmly.cpp,v 1.4 2005-02-14 04:37:51 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -129,7 +129,7 @@ void AccountValue::DoMonthDR()
 
     IncreaseSpecAmtToAvoidMec();
     // TODO ?? The increased specamt doesn't get propagated back to
-    // the IRC7702 object. This is an important defect and a test
+    // the Irc7702_ object. This is an important defect and a test
     // escape.
 
     TxSpecAmtChg();
@@ -138,7 +138,7 @@ void AccountValue::DoMonthDR()
     TxTestGPT();
     // TODO ?? Doesn't this mean dumpins and 1035s get ignored?
     LMI_ASSERT(0.0 <= Dcv);
-    IRC7702A->UpdateBft7702A
+    Irc7702A_->UpdateBft7702A
         (Dcv
         ,DBReflectingCorr + TermDB // DB7702A
         ,OldDB // prior_db_7702A
@@ -165,14 +165,14 @@ void AccountValue::DoMonthDR()
           + std::max(0.0, ExpRatReserve)
         );
 // TODO ?? Use CashValueFor7702() instead?
-    double max_necessary_premium = IRC7702A->MaxNecessaryPremium
+    double max_necessary_premium = Irc7702A_->MaxNecessaryPremium
         (Dcv
         ,AnnualTargetPrem
         ,YearsTotLoadTgtLowestPremtax
         ,YearsTotLoadExcLowestPremtax
         ,kludge_account_value
         );
-    double max_non_mec_premium = IRC7702A->MaxNonMecPremium
+    double max_non_mec_premium = Irc7702A_->MaxNonMecPremium
         (Dcv
         ,AnnualTargetPrem
         ,YearsTotLoadTgtLowestPremtax
@@ -181,8 +181,8 @@ void AccountValue::DoMonthDR()
         );
 
     // TODO ?? For debug output--there has to be a better way, though.
-    NetMaxNecessaryPremium   = IRC7702A->DebugGetNetMaxNecPm  ();
-    GrossMaxNecessaryPremium = IRC7702A->DebugGetGrossMaxNecPm();
+    NetMaxNecessaryPremium   = Irc7702A_->DebugGetNetMaxNecPm  ();
+    GrossMaxNecessaryPremium = Irc7702A_->DebugGetGrossMaxNecPm();
 
     TxAscertainDesiredPayment();
     TxLimitPayment(max_non_mec_premium);
@@ -208,7 +208,7 @@ void AccountValue::DoMonthDR()
     TxAcceptPayment(necessary_premium);
     if(0.0 < unnecessary_premium)
         {
-        IRC7702A->InduceMaterialChange();
+        Irc7702A_->InduceMaterialChange();
         }
 
     // Process any queued material change for this day. Illustrations
@@ -216,7 +216,7 @@ void AccountValue::DoMonthDR()
     // Material changes occurring on the same day (e.g. unnecessary
     // premium triggering a corridor DB increase, depending on the 7702A
     // interpretation chosen) are queued to be processed together.
-    IRC7702A->RedressMatChg
+    Irc7702A_->RedressMatChg
         (Dcv    // potentially modified
         ,unnecessary_premium
         ,necessary_premium
@@ -538,7 +538,7 @@ void AccountValue::TxExch1035()
         if(!SolvingForGuarPremium)
             {
             double fake_cum_pmt = 0.0; // TODO ?? Needs work.
-            IRC7702->ProcessGptPmt
+            Irc7702_->ProcessGptPmt
                 (Year
                 ,GrossPmts[Month]
                 ,fake_cum_pmt
@@ -588,7 +588,7 @@ void AccountValue::TxExch1035()
     TxSetTermAmt();
     // TODO ?? Should 1035 exchanges be handled somewhere else?
     LMI_ASSERT(0.0 == Dcv);
-    IRC7702A->Update1035Exch7702A
+    Irc7702A_->Update1035Exch7702A
         (Dcv
         ,NetPmts[Month]
         ,ActualSpecAmt + TermSpecAmt
@@ -621,7 +621,7 @@ void AccountValue::TxExch1035()
         // which by its nature occurs before a seven-pay premium
         // can be calculated.
         InvariantValues().InitSevenPayPrem = round_max_premium
-            (IRC7702A->GetPresent7pp()
+            (Irc7702A_->GetPresent7pp()
             );
         }
 
@@ -851,7 +851,7 @@ void AccountValue::InitializeMonth()
     OldDB = DBReflectingCorr + TermDB;
 
     // TODO ?? CVAT only?
-    IRC7702A->UpdateBOM7702A(Month);
+    Irc7702A_->UpdateBOM7702A(Month);
 }
 
 //============================================================================
@@ -972,7 +972,7 @@ void AccountValue::TxOptChg()
 void AccountValue::IncreaseSpecAmtToAvoidMec()
 {
     int contract_year_7702A = static_cast<int>
-        ((1 + IRC7702A->DebugGetTestDur()) / 12.0
+        ((1 + Irc7702A_->DebugGetTestDur()) / 12.0
         );
 
 #ifdef DEBUGGING_MEC_AVOIDANCE
@@ -989,7 +989,7 @@ void AccountValue::IncreaseSpecAmtToAvoidMec()
     if
         (  e_increase_specamt != Input->AvoidMec
         || 0 != Month
-        || IRC7702A->IsMecAlready()
+        || Irc7702A_->IsMecAlready()
         || e_run_curr_basis != RateBasis
         // We already looked ahead to the end of the current 7702A test period.
         || 0 < contract_year_7702A && contract_year_7702A < 7
@@ -1148,14 +1148,14 @@ void AccountValue::IncreaseSpecAmtToAvoidMec()
               )
           + std::max(0.0, ExpRatReserve)
         );
-    double gross_max_necessary_premium = IRC7702A->MaxNecessaryPremium
+    double gross_max_necessary_premium = Irc7702A_->MaxNecessaryPremium
         (PseudoDcv
         ,AnnualTargetPrem
         ,YearsTotLoadTgtLowestPremtax
         ,YearsTotLoadExcLowestPremtax
         ,kludge_account_value
         );
-    double net_max_necessary_premium = IRC7702A->DebugGetNetMaxNecPm();
+    double net_max_necessary_premium = Irc7702A_->DebugGetNetMaxNecPm();
 #ifdef DEBUGGING_MEC_AVOIDANCE
     os
         << "necessary premium limit:" << '\n'
@@ -1225,7 +1225,7 @@ void AccountValue::IncreaseSpecAmtToAvoidMec()
                              1 + corr x tgtpp x (Ltgt-Lexc)
 */
     double min_benefit =
-          max_avg_cum_gross_premium / IRC7702A->DebugGet7ppRate()
+          max_avg_cum_gross_premium / Irc7702A_->DebugGet7ppRate()
         +   YearsCorridorFactor
           * ( net_1035_less_target_premium_load
             + CashValueFor7702()
@@ -1263,7 +1263,7 @@ void AccountValue::IncreaseSpecAmtToAvoidMec()
 
             min_benefit =
                     (
-                      max_avg_cum_gross_premium / IRC7702A->DebugGet7ppRate()
+                      max_avg_cum_gross_premium / Irc7702A_->DebugGet7ppRate()
                     +   YearsCorridorFactor
                       * ( net_1035_less_excess_premium_load
                         + CashValueFor7702()
@@ -1311,7 +1311,7 @@ void AccountValue::IncreaseSpecAmtToAvoidMec()
     os << std::setiosflags(std::ios_base::fixed);
     os << "Rounded   min specamt = " << min_benefit << '\n';
     os
-        << "7pp rate  = " << IRC7702A->DebugGet7ppRate() << '\n'
+        << "7pp rate  = " << Irc7702A_->DebugGet7ppRate() << '\n'
         << "corridor  = " << YearsCorridorFactor << '\n'
         << "max avg pm= " << max_avg_cum_gross_premium << '\n'
         << "CSV       = " << CashValueFor7702() << '\n'
@@ -1346,8 +1346,8 @@ void AccountValue::IncreaseSpecAmtToAvoidMec()
             InitializeSpecAmt();
 // TODO ?? Nasty...changes things like:
 /*
-    IRC7702->UpdateBOY7702();
-    IRC7702A->UpdateBOY7702A(Year);
+    Irc7702_->UpdateBOY7702();
+    Irc7702A_->UpdateBOY7702A(Year);
 
 LedgerInvariant::Init(BasicValues* b)
             YearsSpecAmt        = DeathBfts_->GetSpecAmt()[Year];
@@ -1527,7 +1527,7 @@ but position could be reversed for variable policy with bad curr performance
     if(adj_event)
         {
         // TODO ?? Perhaps we should pass 'A' of 'A+B-C' for validation.
-        IRC7702->ProcessAdjustableEvent
+        Irc7702_->ProcessAdjustableEvent
             (Year
             ,DBReflectingCorr + TermDB
             ,OldDB
@@ -1538,12 +1538,12 @@ but position could be reversed for variable policy with bad curr performance
             );
         }
     // TODO ?? How should the forceout affect basis?
-    GptForceout = IRC7702->Forceout();
+    GptForceout = Irc7702_->Forceout();
     process_distribution(GptForceout);
     YearsTotalGptForceout += GptForceout;
     if(adj_event)
         {
-        IRC7702A->InduceMaterialChange();
+        Irc7702A_->InduceMaterialChange();
         }
 
     // TODO ?? GPT--perform only if current basis?
@@ -1611,7 +1611,7 @@ void AccountValue::TxAscertainDesiredPayment()
             if(!SolvingForGuarPremium)
                 {
                 double fake_cum_pmt = 0.0; // TODO ?? Needs work.
-                IRC7702->ProcessGptPmt
+                Irc7702_->ProcessGptPmt
                     (Year
                     ,eepmt
                     ,fake_cum_pmt
@@ -1628,7 +1628,7 @@ void AccountValue::TxAscertainDesiredPayment()
             if(!SolvingForGuarPremium)
                 {
                 double fake_cum_pmt = 0.0; // TODO ?? Needs work.
-                IRC7702->ProcessGptPmt
+                Irc7702_->ProcessGptPmt
                     (Year
                     ,erpmt
                     ,fake_cum_pmt
@@ -1668,7 +1668,7 @@ void AccountValue::TxAscertainDesiredPayment()
         if(!SolvingForGuarPremium)
             {
             double fake_cum_pmt = 0.0; // TODO ?? Needs work.
-            IRC7702->ProcessGptPmt
+            Irc7702_->ProcessGptPmt
                 (Year
                 ,Dumpin
                 ,fake_cum_pmt
@@ -1692,7 +1692,7 @@ void AccountValue::TxLimitPayment(double a_maxpmt)
 
     LMI_ASSERT(materially_equal(GrossPmts[Month], EeGrossPmts[Month] + ErGrossPmts[Month]));
 
-    if(e_reduce_prem == Input->AvoidMec && !IRC7702A->IsMecAlready())
+    if(e_reduce_prem == Input->AvoidMec && !Irc7702A_->IsMecAlready())
         {
         double gross_1035 = 0.0;
         if(0 == Year && 0 == Month)
@@ -1778,7 +1778,7 @@ void AccountValue::TxRecognizePaymentFor7702A
           + std::max(0.0, ExpRatReserve)
         );
     LMI_ASSERT(0.0 <= Dcv);
-    IRC7702A->UpdatePmt7702A
+    Irc7702A_->UpdatePmt7702A
         (Dcv
         ,amount_paid_7702A
         ,a_this_payment_is_unnecessary
@@ -2252,7 +2252,7 @@ void AccountValue::TxSetDeathBft()
     // If so, then this code may be useful:
 /*
     // Try moving this here...
-    IRC7702A->UpdateBft7702A(...);
+    Irc7702A_->UpdateBft7702A(...);
     LMI_ASSERT(0.0 <= Dcv);
 */
 
@@ -3500,7 +3500,7 @@ void AccountValue::FinalizeMonth()
             }
 
         // We could also capture MEC status on other bases here.
-        if(true == IRC7702A->UpdateEOM7702A())
+        if(true == Irc7702A_->UpdateEOM7702A())
             {
             if(!InvariantValues().IsMec)
                 {
