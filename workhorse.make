@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: workhorse.make,v 1.9 2005-03-02 04:42:38 chicares Exp $
+# $Id: workhorse.make,v 1.10 2005-03-15 14:35:12 chicares Exp $
 
 ###############################################################################
 
@@ -88,6 +88,7 @@ default_targets := \
   antediluvian_cgi$(EXEEXT) \
   antediluvian_cli$(EXEEXT) \
   lmi_cli$(EXEEXT) \
+  lmi_wx$(EXEEXT) \
 
 .PHONY: effective_default_target
 effective_default_target: $(default_targets)
@@ -180,7 +181,7 @@ gcc_warnings := \
 
 gcc_warnings += -Wno-long-long
 
-# WX!! The wx library triggers many warnings with these flags:
+# WX !! The wx library triggers many warnings with these flags:
 
 gcc_extra_warnings := \
   -W \
@@ -242,6 +243,22 @@ else
     optimization_flag := -O2
   endif
 endif
+
+################################################################################
+
+# Prevent license issues by providing dummy versions of problematic
+# libraries that wx builds by default.
+
+# TODO ?? Consider forcing this issue in case someone builds wx
+# without prescribed changes to prevent making these libraries,
+# in order to ensure that this application can never display any file
+# that would use GPL-incompatible code provided with wx.
+
+# C:/wx-lmi/lmi[0]$cp --preserve /lib/libm.a libregex.a
+# C:/wx-lmi/lmi[0]$cp --preserve /lib/libm.a libpng.a
+# C:/wx-lmi/lmi[0]$cp --preserve /lib/libm.a libjpeg.a
+# C:/wx-lmi/lmi[0]$cp --preserve /lib/libm.a libzlib.a
+# C:/wx-lmi/lmi[0]$cp --preserve /lib/libm.a libtiff.a
 
 ################################################################################
 
@@ -404,7 +421,7 @@ shared_demo$(EXEEXT): library_demo.o alert_cli.o liblmi$(SHREXT)
 
 static_demo$(EXEEXT): library_demo.o alert_cli.o $(lmi_common_objects)
 
-# TODO ?? 'lmi_cli' can be built either with a shared or a static
+# TODO ?? 'lmi*' targets can be built either with a shared or a static
 # 'lmi' library. Choose one, or support both--possibly expunging the
 # 'shared_demo' and 'static_demo' targets and the code that's unique
 # to them.
@@ -412,6 +429,10 @@ static_demo$(EXEEXT): library_demo.o alert_cli.o $(lmi_common_objects)
 #lmi_cli$(EXEEXT): $(lmi_cli_objects) liblmi$(SHREXT)
 
 lmi_cli$(EXEEXT): $(lmi_cli_objects) $(lmi_common_objects)
+
+#lmi_wx$(EXEEXT): $(lmi_wx_objects) liblmi$(SHREXT)
+
+lmi_wx$(EXEEXT): $(lmi_wx_objects) $(lmi_common_objects)
 
 antediluvian_cgi$(EXEEXT): $(antediluvian_cgi_objects) libantediluvian.a
 
