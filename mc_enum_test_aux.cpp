@@ -1,6 +1,6 @@
 // M C Enums: string-Mapped, value-Constrained Enumerations: unit test.
 //
-// Copyright (C) 2004 Gregory W. Chicares.
+// Copyright (C) 2004, 2005 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -16,10 +16,10 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 //
 // http://savannah.nongnu.org/projects/lmi
-// email: <chicares@mindspring.com>
+// email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mc_enum_test_aux.cpp,v 1.1 2005-02-03 16:03:37 chicares Exp $
+// $Id: mc_enum_test_aux.cpp,v 1.2 2005-02-19 03:27:45 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
