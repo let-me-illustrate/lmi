@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: dbnames.hpp,v 1.1 2005-01-14 19:47:44 chicares Exp $
+// $Id: dbnames.hpp,v 1.2 2005-02-08 14:11:57 chicares Exp $
 
 #ifndef dbnames_hpp
 #define dbnames_hpp
@@ -427,7 +427,7 @@ enum DatabaseNames
     // additions into categories when preparing a major release.
 
     // TODO ?? We ought to find a way to make this file change whenever
-    // dbnames.txt changes. See that file for definition of each entity.
+    // dbnames.xpp changes. See that file for definition of each entity.
     };
 
 struct db_names
