@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xml_io.cpp,v 1.3 2005-02-12 12:59:31 chicares Exp $
+// $Id: ledger_xml_io.cpp,v 1.4 2005-03-07 11:46:46 chicares Exp $
 
 #include "config.hpp"
 
@@ -401,7 +401,7 @@ void Ledger::write(xml::node& x) const
     title_map["PrefLoanBalance_Guaranteed"      ] = "Guar Preferred Loan Bal";
     title_map["PremTaxLoad_Current"             ] = "Curr Premium Tax Load";
     title_map["PremTaxLoad_Guaranteed"          ] = "Guar Premium Tax Load";
-// STEVEN Implemented only for SL10 and SL11 IIRC, and defectively at that.
+// STEVEN Implemented only for two products, and defectively at that.
 // Greg-- 1) Keep in and limit use in input interface? (ideal)
 //        2) Keep in and add for other products? 
 //        3) Keep in with obvious warts? (preferred given time constraints)
