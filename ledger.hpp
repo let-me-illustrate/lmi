@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger.hpp,v 1.4 2005-02-12 12:59:31 chicares Exp $
+// $Id: ledger.hpp,v 1.5 2005-02-17 05:00:11 chicares Exp $
 
 #ifndef ledger_hpp
 #define ledger_hpp
@@ -29,6 +29,8 @@
 #include "expimp.hpp"
 #include "streamable.hpp"
 #include "xenumtypes.hpp"
+
+#include <boost/shared_ptr.hpp>
 
 #include <iosfwd>
 #include <vector>
@@ -61,8 +63,6 @@ class LMI_EXPIMP Ledger
         ,int                  a_Length        = 100
         ,bool                 a_IsComposite   = false
         );
-    Ledger(Ledger const&);
-    Ledger& operator=(Ledger const&);
     virtual ~Ledger();
 
     void                ZeroInforceAfterLapse();
@@ -117,11 +117,10 @@ class LMI_EXPIMP Ledger
     // composites but not for all cells.
     double              composite_lapse_year_;
 
-    // TODO ?? Consider making this a smart ptr?
-    // but std::auto_ptr requires that the size be known...
-    ledger_map_holder*  ledger_map_;
-    LedgerInvariant*    ledger_invariant_;
     e_ledger_type       ledger_type_;
+    
+    boost::shared_ptr<ledger_map_holder> ledger_map_;
+    boost::shared_ptr<LedgerInvariant>   ledger_invariant_;
 
     // It is convenient to have a vector that holds just the run bases,
     // i.e. just the key_type members of ledger_map_. We can use this for
