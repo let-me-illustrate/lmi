@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: single_cell_document.hpp,v 1.3 2005-03-02 03:33:22 chicares Exp $
+// $Id: single_cell_document.hpp,v 1.4 2005-03-07 11:47:05 chicares Exp $
 
 #ifndef single_cell_document_hpp
 #define single_cell_document_hpp
@@ -54,10 +54,7 @@ class LMI_EXPIMP single_cell_document
     :private boost::noncopyable
     ,virtual private obstruct_slicing<single_cell_document>
 {
-// TODO ?? Too many long-distance friendships.
     friend class IllustrationDocument;
-    friend class IllustrationView;
-    friend class CensusView;
 
   public:
     single_cell_document();
