@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.30 2005-03-29 15:12:01 chicares Exp $
+// $Id: ChangeLog,v 1.31 2005-03-30 03:44:06 chicares Exp $
 
 2005-01-14
 
@@ -973,7 +973,7 @@ Remove references to expunged '.ico' files.
 Permit certain wx options with glibc. Clarify reasons for excluding
 certain graphics formats.
 
-2005-03-29 [1410]
+2005-03-29 [1415]
 
   account_value.hpp
   census_view.cpp
@@ -988,4 +988,26 @@ less exquisitely precise, this is consistent with the way claims are
 accumulated, and easier to reproduce from other available columns.
 Solves are now explicitly prevented with experience rating: they're
 inconsistent with the present parallel accumulation anyway.
+
+  account_value.hpp
+  census_view.cpp
+  ihs_acctval.cpp
+  ihs_avmly.cpp
+Display additional information on temporary experience-rating output.
+
+  ihs_acctval.cpp
+Suppress side effects of the obsolete experience-rating method.
+
+  xml_notebook.cpp
+Add a few lines of code to XmlNotebook::ConditionallyEnableItems(),
+as comments only. This represents the only known observable difference
+in behavior between cvs HEAD and an offline 20050105T1130Z snapshot
+that might have been a cvs branch but was never committed. It's
+commented out because it depends on speculative changes elsewhere.
+
+  dbnames.xpp
+Correct a database entity's description.
+
+  main_wx.cpp
+Improve the OnExceptionInMainLoop() handler, unmasking a wx defect.
 
