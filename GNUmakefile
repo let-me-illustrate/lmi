@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: GNUmakefile,v 1.9 2005-03-11 13:40:41 chicares Exp $
+# $Id: GNUmakefile,v 1.10 2005-03-15 14:34:37 chicares Exp $
 
 ###############################################################################
 
@@ -138,6 +138,11 @@ datestamp_files := \
   build.hpp \
   version.hpp \
 
+gpl_files := \
+  COPYING \
+  quoted_gpl \
+  quoted_gpl_html \
+
 MAKETARGET = \
   $(MAKE) \
     -C $@ \
@@ -150,7 +155,7 @@ MAKETARGET = \
   $(MAKECMDGOALS)
 
 .PHONY: $(build_directory)
-$(build_directory): $(datestamp_files)
+$(build_directory): $(gpl_files) $(datestamp_files)
 	+@[ -d $@ ] || $(MKDIR) --parents $@
 	+@$(MAKETARGET)
 
@@ -223,11 +228,6 @@ documentation_files := \
   $(wildcard ChangeLog*) \
   README \
 
-gpl_files := \
-  COPYING \
-  quoted_gpl \
-  quoted_gpl_html \
-
 makefiles := $(wildcard *make*)
 
 scripts := $(wildcard *.sed)
@@ -261,7 +261,12 @@ $(prerequisite_files): ;
 # that are tested automatically by another target. License files
 # themselves are excluded.
 
-licensed_files := $(filter-out $(gpl_files) $(never_source_files),$(wildcard *))
+unlicensed_files := \
+  $(gpl_files) \
+  $(never_source_files) \
+  $(xpm_files) \
+
+licensed_files := $(filter-out $(unlicensed_files),$(wildcard *))
 
 ################################################################################
 
@@ -303,6 +308,9 @@ version.hpp: $(filter-out $@,$(prerequisite_files))
 
 # These targets insert the GPL, its required notices, and datestamps
 # into files that it is best to generate automatically.
+
+COPYING:
+	$(error Cannot build because file $@ is missing)
 
 quoted_gpl: COPYING
 	<$(src_dir)/COPYING \
@@ -419,7 +427,7 @@ check_conformity: mostlyclean
 	@$(ECHO) "  Files that improperly contain physical tabs:"
 	@$(GREP) -l '	' $(filter-out $(makefiles),$(licensed_files)) || true
 	@$(ECHO) "  Files that contain carriage returns:"
-	@for z in $(licensed_files); \
+	@for z in $(licensed_files) $(xpm_files); \
 	  do \
 	    $(ECHO) -n $$z; \
 	    <$$z $(TR) '\r' '\a' | $(SED) -e'/\a/!d' | $(WC) -l; \
