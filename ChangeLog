@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.35 2005-04-05 12:42:02 chicares Exp $
+// $Id: ChangeLog,v 1.36 2005-04-06 23:21:39 chicares Exp $
 
 2005-01-14
 
@@ -1073,4 +1073,36 @@ Remove 'ExpRatRfd*' fields.
   math_functors_test.cpp [new file]
   objects.make
 More accurate, faster interest calculations.
+
+2005-04-06 [1427]
+
+  mc_enum.cpp
+  mc_enum.hpp
+  mc_enum.tpp
+Miscellaneous improvements.
+
+  ce_product_name.cpp [new file]
+  ce_product_name.hpp [new file]
+  objects.make
+Encapsulate product names.
+
+  mc_enum_type_enums.hpp
+  mc_enum_types.cpp
+  mc_enum_types.hpp
+  mc_enum_types.xpp
+Expunge old product-name enumeration.
+
+  input.hpp
+Replace old with new product-name type.
+
+  census_view.cpp
+Correct a latent defect: switch on enumerator's value instead of its
+index in a set of enumerators.
+
+  global_settings.hpp
+Document a defect.
+
+  ihs_proddata.cpp
+  ihs_proddata.hpp
+Remove disused member function.
 
