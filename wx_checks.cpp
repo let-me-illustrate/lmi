@@ -19,24 +19,49 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: wx_checks.cpp,v 1.1 2005-03-11 03:09:22 chicares Exp $
+// $Id: wx_checks.cpp,v 1.2 2005-03-18 00:17:21 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
 #   pragma hdrstop
 #endif
 
+// Require certain optional wx components.
+
 #include <wx/defs.h>
 
 #if !wxUSE_DOC_VIEW_ARCHITECTURE
 #   error Enable wxUSE_DOC_VIEW_ARCHITECTURE in wx/include/msw/wx/setup.h .
-#endif
+#endif // !wxUSE_DOC_VIEW_ARCHITECTURE
 
 #if !wxUSE_MDI_ARCHITECTURE
 #   error Enable wxUSE_MDI_ARCHITECTURE in wx/include/msw/wx/setup.h .
-#endif
+#endif // !wxUSE_MDI_ARCHITECTURE
 
 #if !wxUSE_PRINTING_ARCHITECTURE
 #   error Enable wxUSE_PRINTING_ARCHITECTURE in wx/include/msw/wx/setup.h .
-#endif
+#endif // !wxUSE_PRINTING_ARCHITECTURE
+
+// Ensure that certain inappropriate options aren't used.
+
+#if defined __GNUC__
+// Incompatible with gcc.
+#   if wxUSE_ON_FATAL_EXCEPTION
+#       error Disable wxUSE_ON_FATAL_EXCEPTION in wx/include/msw/wx/setup.h .
+#   endif // wxUSE_ON_FATAL_EXCEPTION
+
+// Incompatible with gcc.
+#   if wxUSE_STACKWALKER
+#       error Disable wxUSE_STACKWALKER in wx/include/msw/wx/setup.h .
+#   endif // wxUSE_STACKWALKER
+#endif // __GNUC__
+
+// This application is single threaded, and wasn't designed to be
+// thread safe. It might work perfectly well if compiled with thread
+// support enabled (but not used), but that has never been tested, and
+// presumably would require changes to the lmi makefiles.
+//
+#if wxUSE_THREADS
+#   error Disable wxUSE_THREADS in wx/include/msw/wx/setup.h .
+#endif // wxUSE_THREADS
 
