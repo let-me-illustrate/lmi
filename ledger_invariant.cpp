@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_invariant.cpp,v 1.3 2005-02-17 04:40:03 chicares Exp $
+// $Id: ledger_invariant.cpp,v 1.4 2005-03-31 17:08:39 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -871,18 +871,18 @@ LedgerInvariant& LedgerInvariant::PlusEq(LedgerInvariant const& a_Addend)
     // We can't take the union of all columns selected for any life,
     // because its cardinality might exceed the maximum.
     SupplementalReport  = SupplementalReport || a_Addend.SupplementalReport;
-    Strings         ["SupplementalReportColumn00" ] = &SupplementalReportColumn00;
-    Strings         ["SupplementalReportColumn01" ] = &SupplementalReportColumn01;
-    Strings         ["SupplementalReportColumn02" ] = &SupplementalReportColumn02;
-    Strings         ["SupplementalReportColumn03" ] = &SupplementalReportColumn03;
-    Strings         ["SupplementalReportColumn04" ] = &SupplementalReportColumn04;
-    Strings         ["SupplementalReportColumn05" ] = &SupplementalReportColumn05;
-    Strings         ["SupplementalReportColumn06" ] = &SupplementalReportColumn06;
-    Strings         ["SupplementalReportColumn07" ] = &SupplementalReportColumn07;
-    Strings         ["SupplementalReportColumn08" ] = &SupplementalReportColumn08;
-    Strings         ["SupplementalReportColumn09" ] = &SupplementalReportColumn09;
-    Strings         ["SupplementalReportColumn10" ] = &SupplementalReportColumn10;
-    Strings         ["SupplementalReportColumn11" ] = &SupplementalReportColumn11;
+    SupplementalReportColumn00 = a_Addend.SupplementalReportColumn00;
+    SupplementalReportColumn01 = a_Addend.SupplementalReportColumn01;
+    SupplementalReportColumn02 = a_Addend.SupplementalReportColumn02;
+    SupplementalReportColumn03 = a_Addend.SupplementalReportColumn03;
+    SupplementalReportColumn04 = a_Addend.SupplementalReportColumn04;
+    SupplementalReportColumn05 = a_Addend.SupplementalReportColumn05;
+    SupplementalReportColumn06 = a_Addend.SupplementalReportColumn06;
+    SupplementalReportColumn07 = a_Addend.SupplementalReportColumn07;
+    SupplementalReportColumn08 = a_Addend.SupplementalReportColumn08;
+    SupplementalReportColumn09 = a_Addend.SupplementalReportColumn09;
+    SupplementalReportColumn10 = a_Addend.SupplementalReportColumn10;
+    SupplementalReportColumn11 = a_Addend.SupplementalReportColumn11;
 
     return *this;
 }
