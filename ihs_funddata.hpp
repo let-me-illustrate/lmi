@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_funddata.hpp,v 1.3 2005-01-31 13:12:48 chicares Exp $
+// $Id: ihs_funddata.hpp,v 1.4 2005-02-14 04:35:18 chicares Exp $
 
 #ifndef funddata_hpp
 #define funddata_hpp
@@ -27,70 +27,87 @@
 #include "config.hpp"
 
 #include "expimp.hpp"
+#include "obstruct_slicing.hpp"
+
+#include <boost/utility.hpp>
 
 #include <string>
 #include <vector>
 
 // Separate account funds: their names and investment mgmt fees
 
-struct LMI_EXPIMP TFundInfo
+// Implicitly-declared special member functions do the right thing.
+//
+class LMI_EXPIMP FundInfo
+    :virtual private obstruct_slicing<FundInfo>
 {
-    TFundInfo()
-        :ScalarIMF_(0.0)
-        ,ShortName_("")
-        ,LongName_ ("")
-        {}
-    TFundInfo
+    friend class FundData;
+
+  public:
+    FundInfo();
+    FundInfo
         (double      ScalarIMF
         ,std::string ShortName
         ,std::string LongName
-        )
-        :ScalarIMF_(ScalarIMF)
-        ,ShortName_(ShortName)
-        ,LongName_ (LongName)
-        {}
+        );
+    ~FundInfo();
+
+    double ScalarIMF() const;
+    std::string const& ShortName() const;
+    std::string const& LongName() const;
+
+  private:
     double ScalarIMF_;
     std::string ShortName_;
     std::string LongName_;
 };
 
-class LMI_EXPIMP TFundData
+class LMI_EXPIMP FundData
+    :private boost::noncopyable
+    ,virtual private obstruct_slicing<FundData>
 {
-public:
-    TFundData(std::string const& a_Filename);
-    TFundData(TFundData const&);
-    TFundData& operator=(TFundData const&);
-    virtual ~TFundData();
+  public:
+    FundData(std::string const& a_Filename);
+    ~FundData();
 
     static void WriteFundFiles();
     static void WriteProprietaryFundFiles();
 
-    TFundInfo const& GetFundInfo(int j) const;
+    FundInfo const& GetFundInfo(int j) const;
     int GetNumberOfFunds() const;
 
-protected:
-    void Init(std::string const& a_Filename);
-    void Read(std::string const& a_Filename);
+  private:
+    FundData(); // Private, but implemented.
 
-private:
-    TFundData();
+    void Read (std::string const& a_Filename);
     void Write(std::string const& a_Filename);
 
-    void Alloc();
-    void Copy(TFundData const&);
-    void Destroy();
-
-    std::vector<TFundInfo> FundInfo;
+    std::vector<FundInfo> FundInfo_;
 };
 
-inline TFundInfo const& TFundData::GetFundInfo(int j) const
+inline double FundInfo::ScalarIMF() const
 {
-    return FundInfo[j];
+    return ScalarIMF_;
 }
 
-inline int TFundData::GetNumberOfFunds() const
+inline std::string const& FundInfo::ShortName() const
 {
-    return FundInfo.size();
+    return ShortName_;
+}
+
+inline std::string const& FundInfo::LongName() const
+{
+    return LongName_;
+}
+
+inline FundInfo const& FundData::GetFundInfo(int j) const
+{
+    return FundInfo_[j];
+}
+
+inline int FundData::GetNumberOfFunds() const
+{
+    return FundInfo_.size();
 }
 
 #endif // funddata_hpp

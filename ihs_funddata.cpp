@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_funddata.cpp,v 1.2 2005-01-31 13:12:48 chicares Exp $
+// $Id: ihs_funddata.cpp,v 1.3 2005-02-14 04:35:18 chicares Exp $
 
 // This class describes funds: their names and investment mgmt fees.
 // TODO ?? An extension other than .fnd would be preferable: msw uses
@@ -37,71 +37,50 @@
 #include "platform_dependent.hpp" // access()
 
 #include <fstream>
-#include <sstream>
-#include <string>
 
 //============================================================================
-TFundData::TFundData()
-{
-    Alloc();
-}
-
-//============================================================================
-TFundData::TFundData(std::string const& a_Filename)
-{
-    Alloc();
-    Init(a_Filename);
-}
-
-//============================================================================
-TFundData::TFundData(TFundData const& obj)
-{
-    Alloc();
-    Copy(obj);
-}
-
-//============================================================================
-TFundData& TFundData::operator=(TFundData const& obj)
-{
-    if(this != &obj)
-        {
-        Destroy();
-        Alloc();
-        Copy(obj);
-        }
-    return *this;
-}
-
-//============================================================================
-TFundData::~TFundData()
-{
-    Destroy();
-}
-
-//============================================================================
-void TFundData::Alloc()
+FundInfo::FundInfo()
+    :ScalarIMF_(0.0)
+    ,ShortName_("")
+    ,LongName_ ("")
 {
 }
 
 //============================================================================
-void TFundData::Copy(TFundData const& obj)
+FundInfo::FundInfo
+    (double      ScalarIMF
+    ,std::string ShortName
+    ,std::string LongName
+    )
+    :ScalarIMF_(ScalarIMF)
+    ,ShortName_(ShortName)
+    ,LongName_ (LongName)
 {
-    FundInfo = obj.FundInfo;
 }
 
 //============================================================================
-void TFundData::Destroy()
+FundInfo::~FundInfo()
 {
 }
 
 //============================================================================
-void TFundData::Init(std::string const& a_Filename)
+FundData::FundData()
+{
+}
+
+//============================================================================
+FundData::FundData(std::string const& a_Filename)
 {
     Read(a_Filename);
 }
 
 //============================================================================
-void TFundData::Read(std::string const& a_Filename)
+FundData::~FundData()
+{
+}
+
+//============================================================================
+void FundData::Read(std::string const& a_Filename)
 {
     if(access(a_Filename.c_str(), R_OK))
         {
@@ -114,16 +93,19 @@ void TFundData::Read(std::string const& a_Filename)
         }
     std::ifstream is(a_Filename.c_str());
 
-    LMI_ASSERT(0 == FundInfo.size());
+    LMI_ASSERT(0 == FundInfo_.size());
     for(;;)
         {
         if(EOF == is.peek())
+            {
             break;
+            }
 
-        TFundInfo f;
+        FundInfo f;
         is >> f.ScalarIMF_;
-        // First, a dummy call to eat the tab after the double
-        std::getline(is, f.ShortName_, '\t');
+        // First, a dummy call to eat the tab after the double.
+        std::string sink;
+        std::getline(is, sink, '\t');
         std::getline(is, f.ShortName_, '\t');
         std::getline(is, f.LongName_, '\n');
         if(!is.good())
@@ -135,12 +117,12 @@ void TFundData::Read(std::string const& a_Filename)
                 << LMI_FLUSH
                 ;
             }
-        FundInfo.push_back(f);
+        FundInfo_.push_back(f);
         }
 }
 
 //============================================================================
-void TFundData::Write(std::string const& a_Filename)
+void FundData::Write(std::string const& a_Filename)
 {
     std::ofstream os(a_Filename.c_str());
     if(!os.good())
@@ -153,15 +135,15 @@ void TFundData::Write(std::string const& a_Filename)
             ;
         }
 
-    std::vector<TFundInfo>::const_iterator I = FundInfo.begin();
-    for(;I != FundInfo.end(); I++)
+    std::vector<FundInfo>::const_iterator i = FundInfo_.begin();
+    for(;i != FundInfo_.end(); i++)
         {
         os
-            << I->ScalarIMF_
+            << i->ScalarIMF_
             << '\t'
-            << I->ShortName_
+            << i->ShortName_
             << '\t'
-            << I->LongName_
+            << i->LongName_
             << '\n'
             ;
         }
@@ -178,11 +160,16 @@ void TFundData::Write(std::string const& a_Filename)
 }
 
 //============================================================================
-void TFundData::WriteFundFiles()
+void FundData::WriteFundFiles()
 {
-    TFundData foo;
-    foo.FundInfo.push_back(TFundInfo
-        ( 50, "Money Market",        "Money Market Fund"));
+    FundData foo;
+    foo.FundInfo_.push_back
+        (FundInfo
+            (50
+            ,"Money Market"
+            ,"Money Market Fund"
+            )
+        );
     foo.Write(AddDataDir("sample.fnd"));
 
     WriteProprietaryFundFiles();

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: dbvalue.hpp,v 1.1 2005-01-14 19:47:44 chicares Exp $
+// $Id: dbvalue.hpp,v 1.2 2005-02-14 04:35:18 chicares Exp $
 
 #ifndef dbvalue_hpp
 #define dbvalue_hpp
@@ -27,12 +27,14 @@
 #include "config.hpp"
 
 #include "dbindex.hpp"
+#include "obstruct_slicing.hpp"
 
 #include <vector>
 
-// Value of an entry in the database dictionary
+// Value of an entry in the database dictionary.
 
 class TDBValue
+    :virtual private obstruct_slicing<TDBValue>
 {
   public:
     TDBValue();
@@ -44,7 +46,7 @@ class TDBValue
         );
     TDBValue(TDBValue const&);
     TDBValue& operator=(TDBValue const&);
-    virtual ~TDBValue();
+    ~TDBValue();
 
     double* operator[](int const* idx) const;
     int GetKey()    const {return key;}
