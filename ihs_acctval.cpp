@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_acctval.cpp,v 1.8 2005-02-28 12:58:58 chicares Exp $
+// $Id: ihs_acctval.cpp,v 1.9 2005-03-07 11:48:58 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -98,7 +98,6 @@ showing {accesses, modifies current year, modifies future years}
 AccountValue::AccountValue(InputParms const& input)
     :BasicValues           (&input)
     ,Debugging             (false)
-    ,Projecting12Mos       (false)
     ,Solving               (e_solve_none != Input_->SolveType)
     ,SolvingForGuarPremium (false)
     ,ItLapsed              (false)
@@ -640,22 +639,6 @@ void AccountValue::InitializeLife(e_run_basis const& a_Basis)
     InforceFactor = 1.0;
     InforceLives = Input_->NumIdenticalLives;
 
-// TODO ?? This is a mess. I had to move this here from RunAV().
-// That function doesn't get called every time we run an account value.
-// It certainly doesn't get called if we highlight the case exemplar
-// in a census and hit the Run button. Bizarrely enough, it does get
-// called in cnsview.cpp, and only in function CmRunallLives(), but
-// that function appears not to be invoked by the Run button. Its name
-// begins with "Cm", suggesting that it is a WM_COMMAND handler, but
-// that would require a response-table entry, which doesn't exist.
-    if(std::string::npos != Input_->Comments.find("idiosyncrasyX"))
-        {
-        if(e_run_curr_basis == RateBasis)
-            {
-            Projecting12Mos = true;
-            Project12MosPrintInit();
-            }
-        }
     daily_interest_accounting =
             std::string::npos
         !=  Input_->Comments.find("idiosyncrasy_daily_interest_accounting")
@@ -676,7 +659,6 @@ void AccountValue::FinalizeLife(e_run_basis const& a_Basis)
     InforceFactor = 0.0;
     InforceLives = 0.0;
     DebugEndBasis();
-    Project12MosPrintEnd();
 
     if(SolvingForGuarPremium)
         {
