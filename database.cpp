@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: database.cpp,v 1.2 2005-02-14 04:35:18 chicares Exp $
+// $Id: database.cpp,v 1.3 2005-03-02 03:34:27 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -31,6 +31,8 @@
 #include "alert.hpp"
 #include "dbdict.hpp"
 #include "dbnames.hpp"
+#include "inputs.hpp"
+#include "inputstatus.hpp"
 
 #include <algorithm>    // std::min()
 #include <iterator>
@@ -60,6 +62,28 @@ TDatabase::TDatabase
     length_ = 100 - IssueAge;
 // TODO ?? This is better...once we implement DB_EndtAge.
 //    length_ = static_cast<int>(Query(DB_EndtAge)) - IssueAge;
+}
+
+//============================================================================
+// TODO ?? This function is mostly copied and pasted from the production
+// branch's implementation, and duplicates its shortcomings. It would
+// seem better to factor out what's common between the two branches, but
+// eventually the two implementations must be completely merged--and
+// this expedient doesn't make that harder.
+//
+TDatabase::TDatabase(InputParms const& input)
+    :Filename("Irrelevant in antediluvian branch for now")
+{
+    Gender      = input.Status[0].Gender;
+    Class       = input.Status[0].Class;
+    Smoker      = input.Status[0].Smoking;
+    IssueAge    = input.Status[0].IssueAge;
+    UWBasis     = input.GroupUWType;
+    State       = input.InsdState;
+
+    DBDictionary::instance().Init(Filename);
+    Init();
+    length_ = 100 - IssueAge;
 }
 
 //============================================================================
