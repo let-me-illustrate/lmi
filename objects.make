@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: objects.make,v 1.2 2005-02-03 16:03:37 chicares Exp $
+# $Id: objects.make,v 1.3 2005-02-12 12:59:31 chicares Exp $
 
 ################################################################################
 
@@ -103,6 +103,7 @@ antediluvian_common_objects := \
   accountvalue.o \
   actuarial_table.o \
   alert.o \
+  antediluvian_stubs.o \
   avdebug.o \
   basicvalues.o \
   calendar_date.o \
@@ -113,7 +114,7 @@ antediluvian_common_objects := \
   dbdict.o \
   dbnames.o \
   dbvalue.o \
-  deathbenefits.o \
+  death_benefits.o \
   getopt.o \
   global_settings.o \
   input_sequence.o \
@@ -127,6 +128,10 @@ antediluvian_common_objects := \
   interest_rates.o \
   kludges.o \
   ledger.o \
+  ledger_base.o \
+  ledger_invariant.o \
+  ledger_variant.o \
+  ledger_xml_io.o \
   ledgervalues.o \
   license.o \
   loads.o \
@@ -166,6 +171,7 @@ lmi_common_objects := \
   crc32.o \
   data_directory.o \
   dbnames.o \
+  death_benefits.o \
   global_settings.o \
   ihs_acctval.o \
   ihs_avdebug.o \
@@ -177,23 +183,16 @@ lmi_common_objects := \
   ihs_database.o \
   ihs_dbdict.o \
   ihs_dbvalue.o \
-  ihs_deathbft.o \
   ihs_fpios.o \
   ihs_funddata.o \
   ihs_inputillus_term_rider.o \
-  interest_rates.o \
   ihs_irc7702.o \
   ihs_irc7702a.o \
-  ihs_ldgbase.o \
-  ihs_ldginvar.o \
-  ihs_ldgvar.o \
-  ihs_ledger.o \
   ihs_loads.o \
   ihs_mortal.o \
   ihs_pios.o \
   ihs_proddata.o \
   ihs_rnddata.o \
-  ihs_tierdata.o \
   input_sequence.o \
   input_seq_helpers.o \
   inputillus.o \
@@ -201,7 +200,12 @@ lmi_common_objects := \
   inputillus_xml_io.o \
   inputs.o \
   inputstatus.o \
+  interest_rates.o \
   kludges.o \
+  ledger.o \
+  ledger_base.o \
+  ledger_invariant.o \
+  ledger_variant.o \
   ledger_xml_io.o \
   license.o \
   mathmisc.o \
@@ -217,6 +221,7 @@ lmi_common_objects := \
   single_cell_document.o \
   surrchg_rates.o \
   system_command.o \
+  tiered_charges.o \
   timer.o \
   xenumtypes.o \
   xrange.o \
@@ -261,23 +266,22 @@ gps_objects := \
   crc32.o \
   data_directory.o \
   dbnames.o \
+  death_benefits.o \
   ihs_basicval.o \
   ihs_commfns.o \
   ihs_database.o \
   ihs_dbdict.o \
   ihs_dbvalue.o \
-  ihs_deathbft.o \
   ihs_fpios.o \
   ihs_funddata.o \
-  interest_rates.o \
   ihs_loads.o \
   ihs_mortal.o \
   ihs_pios.o \
   ihs_proddata.o \
   ihs_rnddata.o \
-  ihs_tierdata.o \
   inputs.o \
   inputstatus.o \
+  interest_rates.o \
   kludges.o \
   mathmisc.o \
   miscellany.o \
@@ -285,6 +289,7 @@ gps_objects := \
   proprietary.o \
   rounding_rules.o \
   surrchg_rates.o \
+  tiered_charges.o \
   timer.o \
   xenumtypes.o \
   xrange.o \

@@ -19,14 +19,14 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_ldgbase.cpp,v 1.1 2005-01-14 19:47:45 chicares Exp $
+// $Id: ledger_base.cpp,v 1.1 2005-02-12 12:59:31 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
 #   pragma hdrstop
 #endif // __BORLANDC__
 
-#include "ihs_ldgbase.hpp"
+#include "ledger_base.hpp"
 
 #include "alert.hpp"
 #include "crc32.hpp"

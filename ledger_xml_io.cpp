@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xml_io.cpp,v 1.2 2005-01-29 02:47:42 chicares Exp $
+// $Id: ledger_xml_io.cpp,v 1.3 2005-02-12 12:59:31 chicares Exp $
 
 #include "config.hpp"
 
@@ -28,10 +28,10 @@
 #include "build.hpp"
 #include "calendar_date.hpp"
 #include "global_settings.hpp"
-#include "ihs_ldgbase.hpp"
-#include "ihs_ldginvar.hpp"
-#include "ihs_ldgvar.hpp"
-#include "ihs_ledger.hpp"
+#include "ledger.hpp"
+#include "ledger_base.hpp"
+#include "ledger_invariant.hpp"
+#include "ledger_variant.hpp"
 #include "miscellany.hpp"
 #include "security.hpp"
 #include "value_cast_ihs.hpp"
@@ -51,7 +51,7 @@
 #include <string>
 #include <utility>
 
-void TLedger::read(xml::node&)
+void Ledger::read(xml::node&)
 {
     // TODO ?? Not yet implemented.
 }
@@ -252,7 +252,7 @@ bool format_exists(std::string const& s, std::string const& suffix, format_map_t
 
 } // Unnamed namespace.
 
-void TLedger::write(xml::node& x) const
+void Ledger::write(xml::node& x) const
 {
 #if !defined BC_BEFORE_5_5
 
@@ -701,9 +701,9 @@ void TLedger::write(xml::node& x) const
     //
     // First we make a copy of the invariant ledger:
 
-    double_vector_map   vectors = LedgerInvariant->AllVectors;
-    scalar_map          scalars = LedgerInvariant->AllScalars;
-    string_map          strings = LedgerInvariant->Strings;
+    double_vector_map   vectors = ledger_invariant_->AllVectors;
+    scalar_map          scalars = ledger_invariant_->AllScalars;
+    string_map          strings = ledger_invariant_->Strings;
 
     // Now we add the stuff that wasn't in the invariant
     // ledger's class's maps (indexable by name). Because we're
@@ -711,22 +711,22 @@ void TLedger::write(xml::node& x) const
     //
     // The IRRs are the worst of all.
 
-    if(!LedgerInvariant->IsInforce)
+    if(!ledger_invariant_->IsInforce)
         {
-        LedgerInvariant->CalculateIrrs(*this);
+        ledger_invariant_->CalculateIrrs(*this);
         }
-    vectors["IrrCsv_GuaranteedZero" ] = &LedgerInvariant->IrrCsvGuar0    ;
-    vectors["IrrDb_GuaranteedZero"  ] = &LedgerInvariant->IrrDbGuar0     ;
-    vectors["IrrCsv_CurrentZero"    ] = &LedgerInvariant->IrrCsvCurr0    ;
-    vectors["IrrDb_CurrentZero"     ] = &LedgerInvariant->IrrDbCurr0     ;
-    vectors["IrrCsv_Guaranteed"     ] = &LedgerInvariant->IrrCsvGuarInput;
-    vectors["IrrDb_Guaranteed"      ] = &LedgerInvariant->IrrDbGuarInput ;
-    vectors["IrrCsv_Current"        ] = &LedgerInvariant->IrrCsvCurrInput;
-    vectors["IrrDb_Current"         ] = &LedgerInvariant->IrrDbCurrInput ;
+    vectors["IrrCsv_GuaranteedZero" ] = &ledger_invariant_->IrrCsvGuar0    ;
+    vectors["IrrDb_GuaranteedZero"  ] = &ledger_invariant_->IrrDbGuar0     ;
+    vectors["IrrCsv_CurrentZero"    ] = &ledger_invariant_->IrrCsvCurr0    ;
+    vectors["IrrDb_CurrentZero"     ] = &ledger_invariant_->IrrDbCurr0     ;
+    vectors["IrrCsv_Guaranteed"     ] = &ledger_invariant_->IrrCsvGuarInput;
+    vectors["IrrDb_Guaranteed"      ] = &ledger_invariant_->IrrDbGuarInput ;
+    vectors["IrrCsv_Current"        ] = &ledger_invariant_->IrrCsvCurrInput;
+    vectors["IrrDb_Current"         ] = &ledger_invariant_->IrrDbCurrInput ;
 
 // GetMaxLength() is max *composite* length.
 //    int max_length = GetMaxLength();
-    double MaxDuration = LedgerInvariant->EndtAge - LedgerInvariant->Age;
+    double MaxDuration = ledger_invariant_->EndtAge - ledger_invariant_->Age;
     scalars["MaxDuration"] = &MaxDuration;
     int max_duration = static_cast<int>(MaxDuration);
 
@@ -736,7 +736,7 @@ void TLedger::write(xml::node& x) const
     PolicyYear .resize(max_duration);
     AttainedAge.resize(max_duration);
 
-    int issue_age = static_cast<int>(LedgerInvariant->Age);
+    int issue_age = static_cast<int>(ledger_invariant_->Age);
     for(int j = 0; j < max_duration; ++j)
         {
         PolicyYear[j]  = 1 + j;
@@ -748,21 +748,21 @@ void TLedger::write(xml::node& x) const
     vectors["AttainedAge"] = &AttainedAge;
     vectors["PolicyYear" ] = &PolicyYear ;
 
-    vectors["InforceLives"] = &LedgerInvariant->InforceLives;
+    vectors["InforceLives"] = &ledger_invariant_->InforceLives;
 
-    vectors["FundNumbers"    ] = &LedgerInvariant->FundNumbers    ;
-    vectors["FundAllocations"] = &LedgerInvariant->FundAllocations;
+    vectors["FundNumbers"    ] = &ledger_invariant_->FundNumbers    ;
+    vectors["FundAllocations"] = &ledger_invariant_->FundAllocations;
 
     double Composite = GetIsComposite();
     scalars["Composite"] = &Composite;
 
     double NoLapse =
-            0 != LedgerInvariant->NoLapseMinDur
-        ||  0 != LedgerInvariant->NoLapseMinAge
+            0 != ledger_invariant_->NoLapseMinDur
+        ||  0 != ledger_invariant_->NoLapseMinAge
         ;
     scalars["NoLapse"] = &NoLapse;
 
-    double OffersRiders = LedgerInvariant->OffersRiders();
+    double OffersRiders = ledger_invariant_->OffersRiders();
     scalars["OffersRiders"] = &OffersRiders;
 
     calendar_date prep_date;
@@ -778,7 +778,7 @@ void TLedger::write(xml::node& x) const
         {
         // For regression tests, use EffDate as date prepared,
         // in order to avoid gratuitous failures.
-        prep_date.julian_day_number(static_cast<int>(LedgerInvariant->EffDateJdn));
+        prep_date.julian_day_number(static_cast<int>(ledger_invariant_->EffDateJdn));
         }
 
     std::string PrepYear  = value_cast_ihs<std::string>(prep_date.year());
@@ -791,30 +791,30 @@ void TLedger::write(xml::node& x) const
 
     double SalesLoadRefund =
         !each_equal
-            (LedgerInvariant->RefundableSalesLoad.begin()
-            ,LedgerInvariant->RefundableSalesLoad.end()
+            (ledger_invariant_->RefundableSalesLoad.begin()
+            ,ledger_invariant_->RefundableSalesLoad.end()
             ,0.0
             );
-    double SalesLoadRefundRate0 = LedgerInvariant->RefundableSalesLoad[0];
-    double SalesLoadRefundRate1 = LedgerInvariant->RefundableSalesLoad[1];
+    double SalesLoadRefundRate0 = ledger_invariant_->RefundableSalesLoad[0];
+    double SalesLoadRefundRate1 = ledger_invariant_->RefundableSalesLoad[1];
 
     scalars["SalesLoadRefund"     ] = &SalesLoadRefund     ;
     scalars["SalesLoadRefundRate0"] = &SalesLoadRefundRate0;
     scalars["SalesLoadRefundRate1"] = &SalesLoadRefundRate1;
 
-    std::string ScaleUnit = LedgerInvariant->ScaleUnit();
+    std::string ScaleUnit = ledger_invariant_->ScaleUnit();
     strings["ScaleUnit"] = &ScaleUnit;
 
     // STEVEN Presumably you're translating this to a string in xsl;
     // why not use the first element of <DbOpt>, which is already
     // so formatted? Wouldn't that rule out any possibility of
     // inconsistency between xsl's and the program's translations?
-    double DBOptInitInteger = LedgerInvariant->DBOpt[0].value();
+    double DBOptInitInteger = ledger_invariant_->DBOpt[0].value();
     scalars["DBOptInitInteger"] = &DBOptInitInteger;
 
     double InitTotalSA =
-            LedgerInvariant->InitBaseSpecAmt
-        +   LedgerInvariant->InitTermSpecAmt
+            ledger_invariant_->InitBaseSpecAmt
+        +   ledger_invariant_->InitTermSpecAmt
         ;
     scalars["InitTotalSA"] = &InitTotalSA;
 
@@ -827,7 +827,7 @@ void TLedger::write(xml::node& x) const
     std::map<std::string, std::string> stringscalars;
     std::map<std::string, std::vector<std::string> > stringvectors;
 
-    stringvectors["FundNames"] = LedgerInvariant->FundNames;
+    stringvectors["FundNames"] = ledger_invariant_->FundNames;
 
     // Map the data, formatting it as necessary.
 
@@ -868,7 +868,7 @@ void TLedger::write(xml::node& x) const
 
     // That was the tricky part. Now it's all downhill.
 
-    ledger_map& l_map_rep = LedgerMap->LedgerMapRep;
+    ledger_map const& l_map_rep = ledger_map_->held();
     ledger_map::const_iterator i = l_map_rep.begin();
     for(;i != l_map_rep.end(); i++)
         {
@@ -903,9 +903,9 @@ void TLedger::write(xml::node& x) const
             }
         }
 
-    stringvectors["EeMode"] = enum_vector_to_string_vector(LedgerInvariant->EeMode);
-    stringvectors["ErMode"] = enum_vector_to_string_vector(LedgerInvariant->ErMode);
-    stringvectors["DBOpt"]  = enum_vector_to_string_vector(LedgerInvariant->DBOpt );
+    stringvectors["EeMode"] = enum_vector_to_string_vector(ledger_invariant_->EeMode);
+    stringvectors["ErMode"] = enum_vector_to_string_vector(ledger_invariant_->ErMode);
+    stringvectors["DBOpt"]  = enum_vector_to_string_vector(ledger_invariant_->DBOpt );
 
 // STEVEN Here I copied some stuff from the ledger class files: the
 // parts that speak of odd members that aren't in those class's
@@ -1026,40 +1026,40 @@ void TLedger::write(xml::node& x) const
         }
 
     std::vector<std::string> SupplementalReportColumns;
-    if(LedgerInvariant->SupplementalReport)
+    if(ledger_invariant_->SupplementalReport)
         {
-        if("[none]" != LedgerInvariant->SupplementalReportColumn00)
-            SupplementalReportColumns.push_back(LedgerInvariant->SupplementalReportColumn00);
-        if("[none]" != LedgerInvariant->SupplementalReportColumn01)
-            SupplementalReportColumns.push_back(LedgerInvariant->SupplementalReportColumn01);
-        if("[none]" != LedgerInvariant->SupplementalReportColumn02)
-            SupplementalReportColumns.push_back(LedgerInvariant->SupplementalReportColumn02);
-        if("[none]" != LedgerInvariant->SupplementalReportColumn03)
-            SupplementalReportColumns.push_back(LedgerInvariant->SupplementalReportColumn03);
-        if("[none]" != LedgerInvariant->SupplementalReportColumn04)
-            SupplementalReportColumns.push_back(LedgerInvariant->SupplementalReportColumn04);
-        if("[none]" != LedgerInvariant->SupplementalReportColumn05)
-            SupplementalReportColumns.push_back(LedgerInvariant->SupplementalReportColumn05);
-        if("[none]" != LedgerInvariant->SupplementalReportColumn06)
-            SupplementalReportColumns.push_back(LedgerInvariant->SupplementalReportColumn06);
-        if("[none]" != LedgerInvariant->SupplementalReportColumn07)
-            SupplementalReportColumns.push_back(LedgerInvariant->SupplementalReportColumn07);
-        if("[none]" != LedgerInvariant->SupplementalReportColumn08)
-            SupplementalReportColumns.push_back(LedgerInvariant->SupplementalReportColumn08);
-        if("[none]" != LedgerInvariant->SupplementalReportColumn09)
-            SupplementalReportColumns.push_back(LedgerInvariant->SupplementalReportColumn09);
-        if("[none]" != LedgerInvariant->SupplementalReportColumn10)
-            SupplementalReportColumns.push_back(LedgerInvariant->SupplementalReportColumn10);
-        if("[none]" != LedgerInvariant->SupplementalReportColumn11)
-            SupplementalReportColumns.push_back(LedgerInvariant->SupplementalReportColumn11);
+        if("[none]" != ledger_invariant_->SupplementalReportColumn00)
+            SupplementalReportColumns.push_back(ledger_invariant_->SupplementalReportColumn00);
+        if("[none]" != ledger_invariant_->SupplementalReportColumn01)
+            SupplementalReportColumns.push_back(ledger_invariant_->SupplementalReportColumn01);
+        if("[none]" != ledger_invariant_->SupplementalReportColumn02)
+            SupplementalReportColumns.push_back(ledger_invariant_->SupplementalReportColumn02);
+        if("[none]" != ledger_invariant_->SupplementalReportColumn03)
+            SupplementalReportColumns.push_back(ledger_invariant_->SupplementalReportColumn03);
+        if("[none]" != ledger_invariant_->SupplementalReportColumn04)
+            SupplementalReportColumns.push_back(ledger_invariant_->SupplementalReportColumn04);
+        if("[none]" != ledger_invariant_->SupplementalReportColumn05)
+            SupplementalReportColumns.push_back(ledger_invariant_->SupplementalReportColumn05);
+        if("[none]" != ledger_invariant_->SupplementalReportColumn06)
+            SupplementalReportColumns.push_back(ledger_invariant_->SupplementalReportColumn06);
+        if("[none]" != ledger_invariant_->SupplementalReportColumn07)
+            SupplementalReportColumns.push_back(ledger_invariant_->SupplementalReportColumn07);
+        if("[none]" != ledger_invariant_->SupplementalReportColumn08)
+            SupplementalReportColumns.push_back(ledger_invariant_->SupplementalReportColumn08);
+        if("[none]" != ledger_invariant_->SupplementalReportColumn09)
+            SupplementalReportColumns.push_back(ledger_invariant_->SupplementalReportColumn09);
+        if("[none]" != ledger_invariant_->SupplementalReportColumn10)
+            SupplementalReportColumns.push_back(ledger_invariant_->SupplementalReportColumn10);
+        if("[none]" != ledger_invariant_->SupplementalReportColumn11)
+            SupplementalReportColumns.push_back(ledger_invariant_->SupplementalReportColumn11);
         }
 
     xml::node supplementalreport("supplementalreport");
-    if(LedgerInvariant->SupplementalReport)
+    if(ledger_invariant_->SupplementalReport)
         {
         // Eventually customize the report name.
         supplementalreport.push_back(xml::node("title", "Supplemental Report"));
-//warning() << "size " << LedgerInvariant->SupplementalReportColumns.size() << LMI_FLUSH;
+//warning() << "size " << ledger_invariant_->SupplementalReportColumns.size() << LMI_FLUSH;
 
         std::vector<std::string>::const_iterator j;
         for
@@ -1098,17 +1098,17 @@ void TLedger::write(xml::node& x) const
 #endif // old borland compiler
 }
 
-int TLedger::class_version() const
+int Ledger::class_version() const
 {
     return 0;
 }
 
-std::string TLedger::xml_root_name() const
+std::string Ledger::xml_root_name() const
 {
     return "illustration";
 }
 
-void TLedger::write(std::ostream& os) const
+void Ledger::write(std::ostream& os) const
 {
     xml::init init;
     xml::node root(xml_root_name().c_str());

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mortality_rates.cpp,v 1.1 2005-01-14 19:47:45 chicares Exp $
+// $Id: mortality_rates.cpp,v 1.2 2005-02-12 12:59:31 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -93,6 +93,27 @@ void MortalityRates::Init(BasicValues const& basic_values)
         ,MonthlyGuaranteedCoiRates_.begin()
         ,MonthlyMidpointCoiRatesBand0_.begin()
         ,mean<double>()
+        );
+
+    CvatCorridorFactors_ = actuarial_table
+        (CurrentTableFile()
+        ,static_cast<long int>(basic_values.Database->Query(DB_CorridorTable))
+        ,issue_age
+        ,length
+        );
+
+    ADDRates_ = actuarial_table
+        (CurrentTableFile()
+        ,static_cast<long int>(basic_values.Database->Query(DB_ADDTable))
+        ,issue_age
+        ,length
+        );
+
+    WPRates_ = actuarial_table
+        (CurrentTableFile()
+        ,static_cast<long int>(basic_values.Database->Query(DB_WPTable))
+        ,issue_age
+        ,length
         );
 }
 

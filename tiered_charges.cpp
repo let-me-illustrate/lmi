@@ -19,14 +19,14 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_tierdata.cpp,v 1.2 2005-01-31 13:12:48 chicares Exp $
+// $Id: tiered_charges.cpp,v 1.1 2005-02-12 12:59:31 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
 #   pragma hdrstop
 #endif // __BORLANDC__
 
-#include "ihs_tierdata.hpp"
+#include "tiered_charges.hpp"
 
 #include "alert.hpp"
 #include "data_directory.hpp"
@@ -35,10 +35,15 @@
 
 #include <algorithm>
 #include <cfloat>                 // DBL_MAX
+#include <istream>
 #include <fstream>
+#include <ostream>
 #include <stdexcept>
 
-// Shortcomings:
+// TODO ?? Shortcomings:
+//
+// Actual tax-accounting practice may use a simple approximation for
+// AK and SD premium tax.
 //
 // DE tiered premium tax not used. Premium tax is tiered in AK and SD
 // by policy-year premium for each contract separately, but in DE
@@ -49,13 +54,6 @@
 // any other state.
 //
 // File representation should be xml.
-//
-// Perhaps minimum_tiered_spread() should reflect tiered comp.
-
-namespace
-{
-    static std::vector<double> empty_vector;
-} // Unnamed namespace.
 
 // Class tiered_item_rep implementation.
 
@@ -78,11 +76,11 @@ tiered_item_rep::tiered_item_rep
         }
 }
 
-// When reading or writing the data, we assert that the last band is
+// When reading or writing the data, assert that the last band is
 // greater than (.999 * DBL_MAX): in effect, the highest representable
-// number. We don't assert equality with DBL_MAX because we haven't
-// changed the default precision of the stream >> and << operators
-// for doubles, so exact equality will not obtain.
+// number. Don't assert equality with DBL_MAX because the default
+// precision of the stream >> and << operators for doubles hasn't been
+// changed, so exact equality will not obtain.
 
 //============================================================================
 void tiered_item_rep::read(std::istream& is)
@@ -137,7 +135,7 @@ void tiered_item_rep::write(std::ostream& os) const
     os << '\n';
 }
 
-// We put these inline functions here because no other translation
+// Put these inline functions here because no other translation
 // unit has any business using them.
 
 //============================================================================
@@ -160,28 +158,28 @@ inline std::ostream& operator<<
     return os;
 }
 
-// Class tiered_data implementation.
+// Class tiered_charges implementation.
 
 //============================================================================
-tiered_data::tiered_data()
+tiered_charges::tiered_charges()
 {
     initialize_dictionary();
 }
 
 //============================================================================
-tiered_data::tiered_data(std::string const& filename)
+tiered_charges::tiered_charges(std::string const& filename)
 {
     initialize_dictionary();
     read(filename);
 }
 
 //============================================================================
-tiered_data::~tiered_data()
+tiered_charges::~tiered_charges()
 {
 }
 
 //============================================================================
-void tiered_data::initialize_dictionary()
+void tiered_charges::initialize_dictionary()
 {
     // Dummy nodes: root and topic headers
     dictionary[e_tier_first                            ] = tiered_item_rep();
@@ -206,7 +204,7 @@ void tiered_data::initialize_dictionary()
 }
 
 //============================================================================
-double tiered_data::stabilization_reserve(double number_of_lives_inforce) const
+double tiered_charges::stabilization_reserve(double number_of_lives_inforce) const
 {
     tiered_item_rep const& z = tiered_item(e_tier_stabilization_reserve);
     std::vector<double>::const_iterator band = std::upper_bound
@@ -218,7 +216,7 @@ double tiered_data::stabilization_reserve(double number_of_lives_inforce) const
 }
 
 //============================================================================
-double tiered_data::coi_retention(double number_of_lives_at_issue) const
+double tiered_charges::coi_retention(double number_of_lives_at_issue) const
 {
     tiered_item_rep const& z = tiered_item(e_tier_coi_retention);
     std::vector<double>::const_iterator band = std::upper_bound
@@ -230,85 +228,92 @@ double tiered_data::coi_retention(double number_of_lives_at_issue) const
 }
 
 //============================================================================
-double tiered_data::tiered_current_m_and_e(double assets) const
+double tiered_charges::tiered_current_m_and_e(double assets) const
 {
     tiered_item_rep const& z = tiered_item(e_tier_current_m_and_e);
     return tiered_rate<double>() (assets, z.bands(), z.data());
 }
 
 //============================================================================
-double tiered_data::tiered_guaranteed_m_and_e(double assets) const
+double tiered_charges::tiered_guaranteed_m_and_e(double assets) const
 {
     tiered_item_rep const& z = tiered_item(e_tier_guaranteed_m_and_e);
     return tiered_rate<double>() (assets, z.bands(), z.data());
 }
 
 //============================================================================
-double tiered_data::tiered_asset_based_compensation(double assets) const
+double tiered_charges::tiered_asset_based_compensation(double assets) const
 {
     tiered_item_rep const& z = tiered_item(e_tier_asset_based_compensation);
     return tiered_rate<double>() (assets, z.bands(), z.data());
 }
 
 //============================================================================
-double tiered_data::tiered_investment_management_fee(double assets) const
+double tiered_charges::tiered_investment_management_fee(double assets) const
 {
     tiered_item_rep const& z = tiered_item(e_tier_investment_management_fee);
     return tiered_rate<double>() (assets, z.bands(), z.data());
 }
 
 //============================================================================
-double tiered_data::tiered_current_separate_account_load(double assets) const
+double tiered_charges::tiered_current_separate_account_load(double assets) const
 {
     tiered_item_rep const& z = tiered_item(e_tier_current_separate_account_load);
     return tiered_rate<double>() (assets, z.bands(), z.data());
 }
 
 //============================================================================
-double tiered_data::tiered_guaranteed_separate_account_load(double assets) const
+double tiered_charges::tiered_guaranteed_separate_account_load(double assets) const
 {
     tiered_item_rep const& z = tiered_item(e_tier_guaranteed_separate_account_load);
     return tiered_rate<double>() (assets, z.bands(), z.data());
 }
 
 //============================================================================
-double tiered_data::minimum_tiered_spread() const
+// Tiered compensation is not reflected here in order to forestall
+// an adjustment event if compensation decreases in the future.
+// Although producers may generally be expected to resist decreases,
+// it is conceivable that the incidence of compensation might be
+// changed on a block of business to produce a more front-loaded
+// pattern in general, with the inadvertent effect of reducing future
+// compensation on a particular contract.
+//
+double tiered_charges::minimum_tiered_spread_for_7702() const
 {
-    // TODO ?? Should tiered comp be reflected too?
     tiered_item_rep const& z = tiered_item(e_tier_current_separate_account_load);
     return *std::min_element(z.data().begin(), z.data().end());
 }
 
 namespace
 {
-    tiered_data::tiered_enumerator premium_tax_table(e_state const& state)
+    tiered_charges::tiered_enumerator premium_tax_table(e_state const& state)
         {
         enum_state const z = state.value();
         if(e_s_AK == z)
             {
-            return tiered_data::e_tier_ak_premium_tax;
+            return tiered_charges::e_tier_ak_premium_tax;
             }
         else if(e_s_DE == z)
             {
             // TRICKY !! We'll eventually implement DE like this:
-            //   return tiered_data::e_tier_de_premium_tax;
+            //   return tiered_charges::e_tier_de_premium_tax;
             // But we haven't implemented DE's tiered premium tax yet,
             // so we treat it as any other state for now:
-            return tiered_data::e_tier_last;
+            return tiered_charges::e_tier_last;
             }
         else if(e_s_SD == z)
             {
-            return tiered_data::e_tier_sd_premium_tax;
+            return tiered_charges::e_tier_sd_premium_tax;
             }
         else
             {
-            return tiered_data::e_tier_last;
+            return tiered_charges::e_tier_last;
             }
         }
 } // Unnamed namespace.
 
 //============================================================================
-double tiered_data::tiered_premium_tax
+double tiered_charges::tiered_premium_tax
     (e_state const& state
     ,double         payment
     ,double         aggregate_payment
@@ -331,13 +336,14 @@ double tiered_data::tiered_premium_tax
         }
 }
 
-bool tiered_data::premium_tax_is_tiered(e_state const& state) const
+//============================================================================
+bool tiered_charges::premium_tax_is_tiered(e_state const& state) const
 {
     return e_tier_last != premium_tax_table(state);
 }
 
 //============================================================================
-double tiered_data::minimum_tiered_premium_tax_rate(e_state const& state) const
+double tiered_charges::minimum_tiered_premium_tax_rate(e_state const& state) const
 {
     tiered_enumerator table = premium_tax_table(state);
     if(e_tier_last == table)
@@ -347,13 +353,13 @@ double tiered_data::minimum_tiered_premium_tax_rate(e_state const& state) const
     else
         {
         tiered_item_rep const& z = tiered_item(table);
-        // TODO ?? Obviously we should assert that the vector is not empty.
+        LMI_ASSERT(!z.data().empty());
         return *std::min_element(z.data().begin(), z.data().end());
         }
 }
 
 //============================================================================
-void tiered_data::read(std::string const& filename)
+void tiered_charges::read(std::string const& filename)
 {
     if(access(filename.c_str(), R_OK))
         {
@@ -401,7 +407,7 @@ void tiered_data::read(std::string const& filename)
 }
 
 //============================================================================
-void tiered_data::write(std::string const& filename) const
+void tiered_charges::write(std::string const& filename) const
 {
     std::ofstream os(filename.c_str());
     if(!os.good())
@@ -438,9 +444,9 @@ void tiered_data::write(std::string const& filename) const
 }
 
 //============================================================================
-void tiered_data::write_tier_files()
+void tiered_charges::write_tier_files()
 {
-    tiered_data foo;
+    tiered_charges foo;
 
     foo.tiered_item(e_tier_stabilization_reserve           ).data_.push_back(5.0);
     foo.tiered_item(e_tier_stabilization_reserve           ).data_.push_back(3.0);

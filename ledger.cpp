@@ -1,6 +1,6 @@
 // Ledger data.
 //
-// Copyright (C) 1998, 2001, 2002, 2004, 2005 Gregory W. Chicares.
+// Copyright (C) 1998, 2001, 2002, 2003, 2004, 2005 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger.cpp,v 1.1 2005-01-14 19:47:45 chicares Exp $
+// $Id: ledger.cpp,v 1.2 2005-02-12 12:59:31 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -29,298 +29,393 @@
 #include "ledger.hpp"
 
 #include "alert.hpp"
-#include "basic_values.hpp"
-#include "deathbenefits.hpp"
-#include "inputs.hpp"
-#include "outlay.hpp"
+#include "crc32.hpp"
+#include "ledger_invariant.hpp"
+#include "ledger_variant.hpp"
 
-#include <algorithm>    // std::min(), std::max()
+#include <algorithm>
+#include <ostream>
 
 //============================================================================
-TLedger::TLedger(int len)
+Ledger::Ledger
+    (e_ledger_type const& a_LedgerType
+    ,int                  a_Length
+    ,bool                 a_IsComposite
+    )
+    :is_composite_         (a_IsComposite)
+    ,composite_lapse_year_ (0.0)
+    ,ledger_type_          (a_LedgerType)
 {
-    Alloc(len);
+    ledger_map_ = new ledger_map_holder;
+    ledger_invariant_ = new LedgerInvariant;
+    SetRunBases(a_Length);
 }
 
+// TODO ?? Obviate this with scoped_ptr.
 //============================================================================
-TLedger::TLedger(TLedger const& obj)
+Ledger::Ledger(Ledger const& z)
+    :streamable()
 {
-    Alloc(obj.GetLength());
-    Copy(obj);
+    ledger_map_ = new ledger_map_holder;
+    ledger_invariant_ = new LedgerInvariant;
+
+    is_composite_         = z.is_composite_        ;
+    composite_lapse_year_ = z.composite_lapse_year_;
+    ledger_type_          = z.ledger_type_         ;
+    *ledger_map_          = *z.ledger_map_         ;
+    *ledger_invariant_    = *z.ledger_invariant_   ;
 }
 
+// TODO ?? Obviate this with scoped_ptr.
 //============================================================================
-TLedger& TLedger::operator=(TLedger const& obj)
+Ledger& Ledger::operator=(Ledger const& z)
 {
-    if(this != &obj)
+    if(&z == this)
         {
-        Destroy();
-        Alloc(obj.Length);
-        Copy(obj);
+        return *this;
         }
+
+    is_composite_         = z.is_composite_        ;
+    composite_lapse_year_ = z.composite_lapse_year_;
+    ledger_type_          = z.ledger_type_         ;
+    *ledger_map_          = *z.ledger_map_         ;
+    *ledger_invariant_    = *z.ledger_invariant_   ;
+    return *this;
+}
+
+// TODO ?? Obviate this with scoped_ptr.
+//============================================================================
+Ledger::~Ledger()
+{
+    delete ledger_invariant_;
+    delete ledger_map_;
+}
+
+//============================================================================
+void Ledger::SetRunBases(int a_Length)
+{
+    ledger_map& l_map_rep = ledger_map_->held_;
+    switch(ledger_type_)
+        {
+        case e_ill_reg:     // {current, midpoint, guaranteed}
+        case e_ill_reg_private_placement:
+            {
+            l_map_rep[e_run_basis(e_run_curr_basis)]         = LedgerVariant(a_Length);
+            l_map_rep[e_run_basis(e_run_guar_basis)]         = LedgerVariant(a_Length);
+            l_map_rep[e_run_basis(e_run_mdpt_basis)]         = LedgerVariant(a_Length);
+            }
+            break;
+        case e_group_private_placement:          // [format not yet final]
+        case e_offshore_private_placement:       // [format not yet final]
+        case e_individual_private_placement:     // [format not yet final]
+                            // fall through: same as NASD for now
+        case e_nasd:        // {current, 0% int} X {guar charges, curr charges}
+            {
+            l_map_rep[e_run_basis(e_run_curr_basis)]         = LedgerVariant(a_Length);
+            l_map_rep[e_run_basis(e_run_guar_basis)]         = LedgerVariant(a_Length);
+            l_map_rep[e_run_basis(e_run_curr_basis_sa_zero)] = LedgerVariant(a_Length);
+            l_map_rep[e_run_basis(e_run_guar_basis_sa_zero)] = LedgerVariant(a_Length);
+            }
+            break;
+        case e_prospectus:  // {current, 0% int, 1/2 int%} X {guar, curr}
+            {
+            l_map_rep[e_run_basis(e_run_curr_basis)]         = LedgerVariant(a_Length);
+            l_map_rep[e_run_basis(e_run_guar_basis)]         = LedgerVariant(a_Length);
+            l_map_rep[e_run_basis(e_run_curr_basis_sa_zero)] = LedgerVariant(a_Length);
+            l_map_rep[e_run_basis(e_run_guar_basis_sa_zero)] = LedgerVariant(a_Length);
+            l_map_rep[e_run_basis(e_run_curr_basis_sa_half)] = LedgerVariant(a_Length);
+            l_map_rep[e_run_basis(e_run_guar_basis_sa_half)] = LedgerVariant(a_Length);
+            }
+            break;
+        default:
+            {
+            fatal_error()
+                << "Case '"
+                << ledger_type_
+                << "' not found."
+                << LMI_FLUSH
+                ;
+            }
+        }
+
+    for
+        (ledger_map::iterator p = l_map_rep.begin()
+        ;p != l_map_rep.end()
+        ;++p
+        )
+        {
+        ledger_map::key_type const& key = (*p).first;
+        ledger_map::mapped_type& data = (*p).second;
+
+        run_bases_.push_back(key);
+
+        e_basis exp_and_ga_basis;
+        e_sep_acct_basis sa_basis;
+        set_separate_bases_from_run_basis(key, exp_and_ga_basis, sa_basis);
+
+        data.SetExpAndGABasis(exp_and_ga_basis);
+        data.SetSABasis(sa_basis);
+
+        if(is_composite_)
+            {
+            // Lapse year is initialized to omega and set to a lower
+            // value only upon lapse during account value accumulation.
+            // That is inappropriate for a composite, which has no
+            // such accumulation process.
+            //
+            // TODO ?? Perhaps default initial values for some other
+            // members are also inappropriate for composites.
+            data.LapseYear = 0;
+            }
+        }
+}
+
+//============================================================================
+void Ledger::ZeroInforceAfterLapse()
+{
+    ledger_map const& l_map_rep = ledger_map_->held();
+    ledger_map::const_iterator this_i = l_map_rep.begin();
+
+    // Pick the highest lapse year of any basis (i.e. any LedgerVariant).
+    // Set inforce lives to zero at the end of that year and thereafter.
+    // This is extremely likely to mean the lapse year on the current
+    // basis; but if it's the lapse year on some other basis, we don't
+    // want to truncate values on that other basis, even if it means
+    // that the vector of inforce lives does not correspond to the
+    // current values.
+    int lapse_year = 0;
+    while(this_i != l_map_rep.end())
+        {
+        lapse_year = std::max
+            (lapse_year
+            ,static_cast<int>((*this_i).second.LapseYear)
+            );
+        ++this_i;
+        }
+    std::vector<double>::iterator b =
+            ledger_invariant_->InforceLives.begin()
+        +   1
+        +   lapse_year
+        ;
+    std::vector<double>::iterator e = ledger_invariant_->InforceLives.end();
+    if(b < e)
+        {
+        std::fill(b, e, 0.0);
+        }
+}
+
+//============================================================================
+Ledger& Ledger::PlusEq(Ledger const& a_Addend)
+{
+    // TODO ?? We should look at other things like Smoker and handle
+    // them in some appropriate manner if they differ across
+    // lives in a composite.
+    if(ledger_type_ != a_Addend.GetLedgerType())
+        {
+        fatal_error()
+            << "Cannot add ledgers for products with different"
+            << " formatting requirements."
+            << LMI_FLUSH
+            ;
+        }
+
+    ledger_map& l_map_rep = ledger_map_->held_;
+    ledger_map::iterator this_i = l_map_rep.begin();
+
+    ledger_map const& lm_addend = a_Addend.GetLedgerMap().held();
+    ledger_map::const_iterator addend_i = lm_addend.begin();
+
+    ledger_invariant_->PlusEq(*a_Addend.ledger_invariant_);
+
+    LMI_ASSERT(GetIsComposite());
+    LMI_ASSERT(!a_Addend.GetIsComposite());
+
+    while(this_i != l_map_rep.end() || addend_i != lm_addend.end())
+        {
+        LMI_ASSERT((*this_i).first == (*addend_i).first);
+        (*this_i).second.PlusEq
+            ((*addend_i).second
+            ,a_Addend.ledger_invariant_->GetInforceLives()
+            );
+        composite_lapse_year_ = std::max
+            (composite_lapse_year_
+            ,(*addend_i).second.LapseYear
+            );
+        (*this_i).second.LapseYear = std::max
+            ((*this_i).second.LapseYear
+            ,(*addend_i).second.LapseYear
+            );
+        ++this_i, ++addend_i;
+        }
+
+    LMI_ASSERT(this_i == l_map_rep.end() && addend_i == lm_addend.end());
+
     return *this;
 }
 
 //============================================================================
-TLedger::~TLedger()
+void Ledger::SetLedgerInvariant(LedgerInvariant const& a_Invariant)
 {
-    Destroy();
+    *ledger_invariant_ = a_Invariant;
 }
 
 //============================================================================
-void TLedger::Alloc(int len)
+void Ledger::SetGuarPremium(double a_GuarPrem)
 {
-    Length = len;
-    Init();
+    ledger_invariant_->GuarPrem = a_GuarPrem;
 }
 
 //============================================================================
-void TLedger::Copy(TLedger const& obj)
+void Ledger::SetOneLedgerVariant
+    (e_run_basis const& a_Basis
+    ,LedgerVariant const& a_Variant
+    )
 {
-    Duration          = obj.Duration         ;
-    Pmt               = obj.Pmt              ;
-    Mode              = obj.Mode             ;
-    TgtPrem           = obj.TgtPrem          ;
-    GrossPmt          = obj.GrossPmt         ;
-    NegativePmt       = obj.NegativePmt      ;
-    ForcedPmt         = obj.ForcedPmt        ;
-    EOYDeathBft       = obj.EOYDeathBft      ;
-    AcctVal           = obj.AcctVal          ;
-    CSV               = obj.CSV              ;
-    COI               = obj.COI              ;
-    Charges           = obj.Charges          ;
-    IntCredited       = obj.IntCredited      ;
-    WD                = obj.WD               ;
-    Loan              = obj.Loan             ;
-    BOYPrefLoan       = obj.BOYPrefLoan      ;
-    PrefLoanBalance   = obj.PrefLoanBalance  ;
-    TotalLoanBalance  = obj.TotalLoanBalance ;
-    ExcessLoan        = obj.ExcessLoan       ;
-    SpecAmt           = obj.SpecAmt          ;
-    NetDeathBft       = obj.NetDeathBft      ;
-    AvgDeathBft       = obj.AvgDeathBft      ;
-    SurrChg           = obj.SurrChg          ;
-    DBOpt             = obj.DBOpt            ;
-
-    CompanyName       = obj.CompanyName      ;
-    ProductName       = obj.ProductName      ;
-    PolicyForm        = obj.PolicyForm       ;
-    ProducerName      = obj.ProducerName     ;
-    ProducerStreet    = obj.ProducerStreet   ;
-    ProducerCity      = obj.ProducerCity     ;
-    ClientName        = obj.ClientName       ;
-    Pages             = obj.Pages            ;
-    CertificateNumber = obj.CertificateNumber;
-    Insured1          = obj.Insured1         ;
-    Gender            = obj.Gender           ;
-
-    GenderDistinct    = obj.GenderDistinct   ;
-    Smoker            = obj.Smoker           ;
-    SmokerDistinct    = obj.SmokerDistinct   ;
-    Preferred         = obj.Preferred        ;
-    EffDate           = obj.EffDate          ;
-    CurrentPolicyYear = obj.CurrentPolicyYear;
-    Age               = obj.Age              ;
-    RetAge            = obj.RetAge           ;
-    EndtAge           = obj.EndtAge          ;
-    BaseFace          = obj.BaseFace         ;
-    DBOptInit         = obj.DBOptInit        ;
-    DBOptPostRet      = obj.DBOptPostRet     ;
-    InitPrem          = obj.InitPrem         ;
-    GuarPremium       = obj.GuarPremium      ;
-    CredRate          = obj.CredRate         ; // TODO ?? Apparently unused.
-    GuarRate          = obj.GuarRate         ;
-}
-
-//============================================================================
-void TLedger::Destroy()
-{
-}
-
-//============================================================================
-void TLedger::Init()
-{
-    Duration.resize(Length);
-    for(int j = 0; j < Length; ++j)
+    ledger_map& l_map_rep = ledger_map_->held_;
+    if(l_map_rep.count(a_Basis))
         {
-        Duration[j] = j;
+        l_map_rep[a_Basis] = a_Variant;
+        }
+    else
+        {
+        hobsons_choice() << "Setting ledger for unused basis." << LMI_FLUSH;
+        }
+}
+
+//============================================================================
+int Ledger::GetMaxLength() const
+{
+    if(is_composite_)
+        {
+        // TODO ?? The rationale for this special case is not evident.
+        // This variable is initialized to zero in the ctor. If it has
+        // acquired a value that's actually meaningful, then it looks
+        // like the variables used in the general case would have, too,
+        // which would reduce this special case to mere caching, which
+        // seems like a premature optimization and a needless
+        // complication.
+        return static_cast<int>(composite_lapse_year_);
         }
 
-    Pmt              .assign(Length, 0.0);
-    Mode             .assign(Length, e_mode(e_annual));
-    TgtPrem          .assign(Length, 0.0);
-    GrossPmt         .assign(Length, 0.0);
-    NegativePmt      .assign(Length, 0.0);
-    ForcedPmt        .assign(Length, 0.0);
-    EOYDeathBft      .assign(Length, 0.0);
-    AcctVal          .assign(Length, 0.0);
-    CSV              .assign(Length, 0.0);
-    COI              .assign(Length, 0.0);
-    Charges          .assign(Length, 0.0);
-    IntCredited      .assign(Length, 0.0);
-    WD               .assign(Length, 0.0);
-    Loan             .assign(Length, 0.0);
-    BOYPrefLoan      .assign(Length, 0.0);
-    PrefLoanBalance  .assign(Length, 0.0);
-    TotalLoanBalance .assign(Length, 0.0);
-    ExcessLoan       .assign(Length, 0.0);
-    SpecAmt          .assign(Length, 0.0);
-    NetDeathBft      .assign(Length, 0.0);
-    AvgDeathBft      .assign(Length, 0.0);
-    SurrChg          .assign(Length, 0.0);
-    DBOpt            .assign(Length, e_dbopt(e_option1));
+    // For all ledgers in the map:
+    //   find the longest duration we need to print (until the last one lapses)
+    ledger_map const& l_map_rep = ledger_map_->held();
+    double max_length = 0.0;
 
-    Pages                   = 0;
-
-    GenderDistinct          = 0;
-    Smoker                  = 0;
-    SmokerDistinct          = 0;
-    Preferred               = 0;
-    EffDate                 = 0L;
-    CurrentPolicyYear       = 0;
-    Age                     = 0;
-    RetAge                  = 0;
-    EndtAge                 = 0;
-    BaseFace                = 0.0;
-    DBOptInit               = e_option1;
-    DBOptPostRet            = e_option1;
-    InitPrem                = 0.0;
-    GuarPremium             = 0.0;
-    CredRate                = 0.0;
-    GuarRate                = 0.0;
-}
-
-//============================================================================
-void TLedger::Init(BasicValues* b)
-{
-// TODO ?? Reconsider the many commented-out lines here.
-    Init();    // zero out (almost) everything to start
-
-//    Duration         .assign(Length, p);
-    Pmt              = b->Outlay_->ee_modal_premiums();
-    Mode             = b->Outlay_->ee_premium_modes();
-//    TgtPrem          .assign(Length, p);
-//    GrossPmt         .assign(Length, p);
-//    NegativePmt      .assign(Length, p);
-//    ForcedPmt        .assign(Length, p);
-//    EOYDeathBft      .assign(Length, p);
-//    AcctVal          .assign(Length, p);
-//    CSV              .assign(Length, p);
-//    COI              .assign(Length, p);
-//    Charges          .assign(Length, p);
-//    IntCredited      .assign(Length, p);
-    Loan             = b->Outlay_->new_cash_loans();
-    WD               = b->Outlay_->withdrawals();
-//    BOYPrefLoan      .assign(Length, p);
-//    PrefLoanBalance  .assign(Length, p);
-//    TotalLoanBalance .assign(Length, p);
-//    ExcessLoan       .assign(Length, p);
-    SpecAmt          = b->DeathBfts->GetSpecAmt();
-//    NetDeathBft      .assign(Length, p);
-//    AvgDeathBft      .assign(Length, p);
-//    SurrChg          .assign(Length, p);
-    DBOpt            = b->DeathBfts->GetDBOpt();
-
-    CompanyName             = b->Input->SponsorFirstName;
-//           ProductName      = obj.ProductName;
-//           PolicyForm       = obj.PolicyForm;
-
-    ProducerName            = b->Input->AgentFullName();
-    ProducerStreet =
-          b->Input->AgentAddr1
-        + ", "
-        + b->Input->AgentAddr2
-        ;
-    ProducerCity =
-          b->Input->AgentCity
-        + ", "
-        + b->Input->AgentState.str()
-        + " "
-        + b->Input->AgentZipCode
-        ;
-
-    ClientName            = b->Input->SponsorFirstName;
-
-//    Pages                 = ?;
-//    CertificateNumber     = obj.CertificateNumber);
-
-    Insured1                = b->Input->InsdFullName();
-
-    InputStatus const& S = b->Input->Status[0]; // TODO ?? DB based on first life only.
-
-    Gender = S.Gender.str();
-
-//    GenderDistinct          = 0;
-// TODO ?? Why are we using the int value rather than the string?
-    Smoker                  = S.Smoking.value();
-//    SmokerDistinct          = 0;
-// TODO ?? Why are we using the int value rather than the string?
-    Preferred               = S.Class.value();
-//    EffDate                 = 0;
-//    CurrentPolicyYear       = 0;
-    Age                     = S.IssueAge.value();
-    RetAge                  = S.RetAge.value();
-    EndtAge                 = S.IssueAge.value() + b->GetLength();
-//    BaseFace                = 0;
-//    DBOptInit               = 0;
-//    DBOptPostRet            = 0;
-//    InitPrem                = 0;
-//    GuarPremium             = 0;
-//    CredRate                = 0;
-//    GuarRate                = 0;
-}
-
-//============================================================================
-TLedger& TLedger::operator+=(TLedger const& obj)
-{
-// TODO ?? Reconsider the many commented-out lines here.
-    int max_idx = std::min(Length, obj.Length);
-    LMI_ASSERT(obj.Length <= Length);
-    for(int j = 0; j < max_idx; j++)
+    for
+        (ledger_map::const_iterator lmci = l_map_rep.begin()
+        ;lmci != l_map_rep.end()
+        ;++lmci
+        )
         {
-//        Duration            [j] += obj.Duration         [j];
-        Pmt                 [j] += obj.Pmt              [j];
-//        Mode                [j] += obj.Mode             [j];
-        TgtPrem             [j] += obj.TgtPrem          [j];
-        GrossPmt            [j] += obj.GrossPmt         [j];
-        NegativePmt         [j] += obj.NegativePmt      [j];
-        ForcedPmt           [j] += obj.ForcedPmt        [j];
-        EOYDeathBft         [j] += obj.EOYDeathBft      [j];
-        AcctVal             [j] += obj.AcctVal          [j];
-        CSV                 [j] += obj.CSV              [j];
-        COI                 [j] += obj.COI              [j];
-        Charges             [j] += obj.Charges          [j];
-        IntCredited         [j] += obj.IntCredited      [j];
-        WD                  [j] += obj.WD               [j];
-        Loan                [j] += obj.Loan             [j];
-        BOYPrefLoan         [j] += obj.BOYPrefLoan      [j];
-        PrefLoanBalance     [j] += obj.PrefLoanBalance  [j];
-        TotalLoanBalance    [j] += obj.TotalLoanBalance [j];
-        ExcessLoan          [j] += obj.ExcessLoan       [j];
-        SpecAmt             [j] += obj.SpecAmt          [j];
-        NetDeathBft         [j] += obj.NetDeathBft      [j];
-        AvgDeathBft         [j] += obj.AvgDeathBft      [j];
-        SurrChg             [j] += obj.SurrChg          [j];
-//        DBOpt               [j] += obj.DBOpt            [j];
+        max_length = std::max(max_length, (*lmci).second.LapseYear);
+        }
+    return static_cast<int>(max_length);
+}
+
+//============================================================================
+void Ledger::AutoScale()
+{
+    // For the invariant ledger and all variant ledgers in the map:
+
+    // First find the largest number in any ledger
+    double mult = ledger_invariant_->DetermineScaleFactor();
+
+    ledger_map& l_map_rep = ledger_map_->held_;
+    ledger_map::const_iterator lmci = l_map_rep.begin();
+    for(;lmci != l_map_rep.end(); ++lmci)
+        {
+        mult = std::min(mult, (*lmci).second.DetermineScaleFactor());
         }
 
-//    GenderDistinct          = 0;
-//    Smoker                  = obj.Smoking;
-//    SmokerDistinct          = 0;
-//    Preferred               = obj.Class;
-//    EffDate                 = 0;
-//    CurrentPolicyYear       = 0;
-    Age                     = std::min(Age, obj.Age);
-    RetAge                  = std::min(RetAge, obj.RetAge); // TODO ?? does this make sense?
-    EndtAge                 = std::max(EndtAge, obj.EndtAge);
-//    BaseFace                = 0;
-//    DBOptInit               = 0;
-//    DBOptPostRet            = 0;
-//    InitPrem                = 0;
-//    GuarPremium             = 0;
-//    CredRate                = 0;
-//    GuarRate                = 0;
+    // Now that we have the scale factor, apply it to all:
+    // scale all according to the biggest number in any
+    ledger_invariant_->ApplyScaleFactor(mult);
 
-    return *this;
+    ledger_map::iterator lmi = l_map_rep.begin();
+    for(;lmi != l_map_rep.end(); ++lmi)
+        {
+        (*lmi).second.ApplyScaleFactor(mult);
+        }
 }
+
+//============================================================================
+unsigned int Ledger::CalculateCRC() const
+{
+    CRC crc;
+    ledger_invariant_->UpdateCRC(crc);
+    ledger_map const& l_map_rep = ledger_map_->held();
+    ledger_map::const_iterator lmci = l_map_rep.begin();
+    for(;lmci != l_map_rep.end(); ++lmci)
+        {
+        (*lmci).second.UpdateCRC(crc);
+        }
+
+    return crc.value();
+}
+
+//============================================================================
+void Ledger::Spew(std::ostream& os) const
+{
+    ledger_invariant_->Spew(os);
+    ledger_map const& l_map_rep = ledger_map_->held();
+    ledger_map::const_iterator lmci = l_map_rep.begin();
+    for(;lmci != l_map_rep.end(); ++lmci)
+        {
+        (*lmci).second.Spew(os);
+        }
+}
+
+//============================================================================
+LedgerVariant const& Ledger::GetCurrFull() const
+{
+    return (*GetLedgerMap().held().find(e_run_basis(e_run_curr_basis))).second;
+}
+
+//============================================================================
+LedgerVariant const& Ledger::GetGuarFull() const
+{
+    return (*GetLedgerMap().held().find(e_run_basis(e_run_guar_basis))).second;
+}
+
+//============================================================================
+LedgerVariant const& Ledger::GetMdptFull() const
+{
+    return (*GetLedgerMap().held().find(e_run_basis(e_run_mdpt_basis))).second;
+}
+
+//============================================================================
+LedgerVariant const& Ledger::GetCurrZero() const
+{
+    return (*GetLedgerMap().held().find(e_run_basis(e_run_curr_basis_sa_zero))).second;
+}
+
+//============================================================================
+LedgerVariant const& Ledger::GetGuarZero() const
+{
+    return (*GetLedgerMap().held().find(e_run_basis(e_run_guar_basis_sa_zero))).second;
+}
+
+//============================================================================
+LedgerVariant const& Ledger::GetCurrHalf() const
+{
+    return (*GetLedgerMap().held().find(e_run_basis(e_run_curr_basis_sa_half))).second;
+}
+
+//============================================================================
+LedgerVariant const& Ledger::GetGuarHalf() const
+{
+    return (*GetLedgerMap().held().find(e_run_basis(e_run_guar_basis_sa_half))).second;
+}
+
+#if 0
+#   if !defined BC_BEFORE_5_5 && !defined GCC_BEFORE_2_96
+#      include "ledger_xml_io.cpp"
+#   else // Using obsolete tools that can't cope with standard C++.
+    int Ledger::class_version() const {return 0;}
+    void Ledger::read(xml::node&) {}
+    void Ledger::write(xml::node& x) const {}
+    std::string Ledger::xml_root_name() const {return "";}
+#   endif // Using obsolete tools that can't cope with standard C++.
+#endif // 0
 

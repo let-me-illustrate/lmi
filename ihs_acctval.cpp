@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_acctval.cpp,v 1.4 2005-02-05 03:02:41 chicares Exp $
+// $Id: ihs_acctval.cpp,v 1.5 2005-02-12 12:59:31 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -35,20 +35,19 @@
 #include "copy_n_.hpp"
 #include "database.hpp"
 #include "dbnames.hpp"
+#include "death_benefits.hpp"
 #include "global_settings.hpp"
-#include "ihs_deathbft.hpp"
 #include "ihs_funddata.hpp" // TODO ?? This is a crock.
 #include "ihs_irc7702.hpp"
 #include "ihs_irc7702a.hpp"
-#include "ihs_ldginvar.hpp"
-#include "ihs_ldgvar.hpp"
-#include "ihs_ledger.hpp"
 #include "ihs_rnddata.hpp"
 #include "ihs_proddata.hpp"
-#include "ihs_tierdata.hpp"
 #include "inputs.hpp"
 #include "inputstatus.hpp"
 #include "interest_rates.hpp"
+#include "ledger.hpp"
+#include "ledger_invariant.hpp"
+#include "ledger_variant.hpp"
 #include "loads.hpp"
 #include "materially_equal.hpp"
 #include "math_functors.hpp"
@@ -56,6 +55,7 @@
 #include "mortality_rates.hpp"
 #include "outlay.hpp"
 #include "surrchg_rates.hpp"
+#include "tiered_charges.hpp"
 
 #include <boost/compose.hpp>
 
@@ -102,16 +102,16 @@ AccountValue::AccountValue(InputParms const& input)
     ,Solving               (e_solve_none != Input->SolveType)
     ,SolvingForGuarPremium (false)
     ,ItLapsed              (false)
-    ,LedgerValues    (new TLedger(BasicValues::GetLedgerType(), BasicValues::GetLength()))
-    ,LedgerInvariant       (new TLedgerInvariant(BasicValues::GetLength()))
-    ,LedgerVariant         (new TLedgerVariant  (BasicValues::GetLength()))
+    ,ledger_(new Ledger(BasicValues::GetLedgerType(), BasicValues::GetLength()))
+    ,ledger_invariant_     (new LedgerInvariant(BasicValues::GetLength()))
+    ,ledger_variant_       (new LedgerVariant  (BasicValues::GetLength()))
     ,FirstYearPremiumExceedsRetaliationLimit(true)
 {
     InvariantValues().Init(this);
 // TODO ?? What are the values of the last two arguments here?
     VariantValues().Init(this, ExpAndGABasis, SABasis);
     // TODO ?? There are several variants. We have to initialize all of them.
-    // This is probably best done through a function in class TLedger.
+    // This is probably best done through a function in class Ledger.
     // We haven't yet laid the groundwork for that, though.
     // If BasicValues changes, then this init becomes invalid
     //   e.g. solves change BasicValues
@@ -192,7 +192,7 @@ Then run other bases.
             ("spewage"
             ,std::ios_base::out | std::ios_base::trunc
             );
-        LedgerValues->Spew(os);
+        ledger_->Spew(os);
         }
 
     return z;
@@ -209,7 +209,7 @@ void AccountValue::SetGuarPrem()
         GuarPremium = SolveGuarPremium();
         }
     LMI_ASSERT(GuarPremium < 1.0e100);
-    LedgerValues->SetGuarPremium(GuarPremium);
+    ledger_->SetGuarPremium(GuarPremium);
 }
 
 //============================================================================
@@ -299,7 +299,7 @@ double AccountValue::RunAllApplicableBases()
             );
         }
     // Run all bases, current first.
-    std::vector<e_run_basis> const& run_bases = LedgerValues->GetRunBases();
+    std::vector<e_run_basis> const& run_bases = ledger_->GetRunBases();
     for
         (std::vector<e_run_basis>::const_iterator b = run_bases.begin()
         ;b != run_bases.end()
@@ -462,8 +462,8 @@ restart:
 
     // Do partial mortality. This approach would appear unseemly.
     // TODO ?? Furthermore, it no longer works because 0.0 is not a valid arg.
-//  LedgerValues[a_Basis].ApplyScaleFactor(0.0);
-//  LedgerValues[a_Basis] += *this;
+//  ledger_[a_Basis].ApplyScaleFactor(0.0);
+//  ledger_[a_Basis] += *this;
 
     return TotalAccountValue();
 }
@@ -485,8 +485,8 @@ void AccountValue::InitializeLife(e_run_basis const& a_Basis)
 // then we call OldPerformSpecAmtStrategy(), which assigns values to
 // InvariantValues().SpecAmt; then we call InvariantValues().Init() again.
 // But calling InvariantValues().Init() again wiped out the SpecAmt, because
-// it reinitialized it based on DeathBfts::SpecAmt, so I called
-// DeathBfts->SetSpecAmt() in AccountValue::OldPerformSpecAmtStrategy().
+// it reinitialized it based on DeathBfts_::SpecAmt, so I called
+// DeathBfts_->SetSpecAmt() in AccountValue::OldPerformSpecAmtStrategy().
 
     SetInitialValues();
 
@@ -516,11 +516,7 @@ void AccountValue::InitializeLife(e_run_basis const& a_Basis)
     // manipulate the state of just those elements of the ledgers
     // that it needs to, to avoid the massive overhead of
     // unconditionally reinitializing all elements.
-    VariantValues().Init
-        (this
-        ,ExpAndGABasis
-        ,SABasis
-        );
+    VariantValues().Init(this, ExpAndGABasis, SABasis);
     InvariantValues().Init(this);
 
     OldDBOpt = InvariantValues().DBOpt[0];
@@ -689,15 +685,15 @@ void AccountValue::FinalizeLife(e_run_basis const& a_Basis)
 
     if(e_run_curr_basis == RateBasis)
         {
-        LedgerValues->SetLedgerInvariant(InvariantValues());
+        ledger_->SetLedgerInvariant(InvariantValues());
         }
-    LedgerValues->SetOneLedgerVariant(a_Basis, VariantValues());
+    ledger_->SetOneLedgerVariant(a_Basis, VariantValues());
 }
 
 //============================================================================
 void AccountValue::FinalizeLifeAllBases()
 {
-    LedgerValues->ZeroInforceAfterLapse();
+    ledger_->ZeroInforceAfterLapse();
     SetGuarPrem();
 }
 
@@ -776,7 +772,7 @@ void AccountValue::SetInitialValues()
 
     YearlyNoLapseActive.assign(BasicValues::GetLength(), true);
     NoLapseActive               = true;
-    if(NoLapseOpt1Only && e_option1 != DeathBfts->GetDBOpt()[0])
+    if(NoLapseOpt1Only && e_option1 != DeathBfts_->dbopt()[0])
         {
         NoLapseActive           = false;
         }
@@ -1101,9 +1097,9 @@ void AccountValue::ApplyDynamicMandE(double assets)
 // TODO ?? Dynamic M&E should be different for guar vs. curr.
 
     // Annual rates
-//  double guar_m_and_e = TierData->tiered_guaranteed_m_and_e(assets);
-    YearsSepAcctMandERate = TierData->tiered_current_m_and_e(assets);
-    YearsSepAcctIMFRate   = TierData->tiered_investment_management_fee(assets);
+//  double guar_m_and_e = TieredCharges_->tiered_guaranteed_m_and_e(assets);
+    YearsSepAcctMandERate = TieredCharges_->tiered_current_m_and_e(assets);
+    YearsSepAcctIMFRate   = TieredCharges_->tiered_investment_management_fee(assets);
     if(0.0 != YearsSepAcctIMFRate)
         {
         hobsons_choice()
@@ -1114,7 +1110,7 @@ void AccountValue::ApplyDynamicMandE(double assets)
         }
     YearsSepAcctABCRate   =
         (e_asset_charge_spread == Database->Query(DB_AssetChargeType))
-            ? TierData->tiered_asset_based_compensation(assets)
+            ? TieredCharges_->tiered_asset_based_compensation(assets)
             : 0
             ;
 
@@ -1157,12 +1153,12 @@ void AccountValue::ApplyDynamicSepAcctLoadAMD(double assets)
         case e_currbasis:
             {
             // do nothing here; what follows will be correct
-            tiered_load_amd = TierData->tiered_current_separate_account_load(assets);
+            tiered_load_amd = TieredCharges_->tiered_current_separate_account_load(assets);
             }
             break;
         case e_guarbasis:
             {
-            tiered_load_amd = TierData->tiered_guaranteed_separate_account_load(assets);
+            tiered_load_amd = TieredCharges_->tiered_guaranteed_separate_account_load(assets);
             }
             break;
         case e_mdptbasis:
@@ -1205,7 +1201,7 @@ void AccountValue::ApplyDynamicSepAcctLoadAMD(double assets)
 //      double extra_asset_comp = Input->ExtraAssetComp / 10000.0L;
 //      extra_asset_comp =   m = i_upper_12_over_12_from_i<double>()(extra_asset_comp);
 //      YearsAcctValLoadAMD += extra_asset_comp;
-        tiered_comp = TierData->tiered_asset_based_compensation(assets);
+        tiered_comp = TieredCharges_->tiered_asset_based_compensation(assets);
         // convert tiered comp from annual to monthly effective rate
         tiered_comp = i_upper_12_over_12_from_i<double>()(tiered_comp);
         // TODO ?? want rounding here?
@@ -1284,7 +1280,7 @@ void AccountValue::InitializeSpecAmt()
     IRC7702->UpdateBOY7702();
     IRC7702A->UpdateBOY7702A(Year);
 
-    YearsSpecAmt        = DeathBfts->GetSpecAmt()[Year];
+    YearsSpecAmt        = DeathBfts_->specamt()[Year];
 
     // TODO ?? These variables are set in current run and used in guar and midpt.
     ActualSpecAmt       = InvariantValues().SpecAmt[Year];
@@ -1613,7 +1609,7 @@ void AccountValue::FinalizeYear()
     // Death benefit also reflects any experience refund credited to AV.
     TxSetDeathBft();
     TxSetTermAmt();
-    // post values to TLedgerVariant
+    // post values to LedgerVariant
     InvariantValues().TermSpecAmt   [Year] = TermSpecAmt;
     VariantValues().TermPurchased   [Year] = TermDB;
     // Add term rider DB
@@ -1782,7 +1778,7 @@ void AccountValue::FinalizeYear()
 void AccountValue::SetAnnualInvariants()
 {
     YearsCorridorFactor     = GetCorridorFactor()[Year];
-    YearsDBOpt              = DeathBfts->GetDBOpt()[Year];
+    YearsDBOpt              = DeathBfts_->dbopt()[Year];
     YearsMlyPolFee          = Loads_->monthly_policy_fee(ExpAndGABasis)[Year];
     YearsAnnPolFee          = Loads_->annual_policy_fee(ExpAndGABasis)[Year];
 
@@ -1987,7 +1983,7 @@ double AccountValue::GetNetCOI() const
     // expressed as an addition to q.
     // It is a constant retrieved from the database.
     double coi_ret_multiplicative
-        = TierData->coi_retention(Input->AssumedCaseNumLives);
+        = TieredCharges_->coi_retention(Input->AssumedCaseNumLives);
     LMI_ASSERT(0.0 < coi_ret_multiplicative);
 
     // TODO ?? Do this once per year?
@@ -2222,7 +2218,7 @@ double AccountValue::GetStabResContrib()
     double z = SpecialNAAR * (1.0 - GetPartMortQ(Year));    // Not NextYear
     // assumes std dev mult is scalar
 // TODO ?? This does not reflect our original intention.
-    z *= TierData->stabilization_reserve(InforceLives);
+    z *= TieredCharges_->stabilization_reserve(InforceLives);
 
     return
             InforceLives
@@ -2332,7 +2328,7 @@ Coherence?
 /*
 // Here's how overrides (as above) were actually implemented.
 
-EePmt, ErPmt, SpecAmt, SurrChg are set from TLedgerVariant in override fn (ever called?)
+EePmt, ErPmt, SpecAmt, SurrChg are set from LedgerVariant in override fn (ever called?)
 
 what about loan and WD?
 

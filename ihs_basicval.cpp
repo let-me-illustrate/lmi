@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_basicval.cpp,v 1.3 2005-01-31 13:12:48 chicares Exp $
+// $Id: ihs_basicval.cpp,v 1.4 2005-02-12 12:59:31 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -35,15 +35,14 @@
 #include "data_directory.hpp"
 #include "database.hpp"
 #include "dbnames.hpp"
+#include "death_benefits.hpp"
 #include "global_settings.hpp"
 #include "ihs_dbdict.hpp"
-#include "ihs_deathbft.hpp"
 #include "ihs_funddata.hpp"
 #include "ihs_irc7702.hpp"
 #include "ihs_irc7702a.hpp"
 #include "ihs_proddata.hpp"
 #include "ihs_rnddata.hpp"
-#include "ihs_tierdata.hpp"
 #include "ihs_x_type.hpp"
 #include "inputs.hpp"
 #include "inputstatus.hpp"
@@ -54,6 +53,7 @@
 #include "mortality_rates.hpp"
 #include "outlay.hpp"
 #include "surrchg_rates.hpp"
+#include "tiered_charges.hpp"
 
 #include <algorithm>
 #include <cmath>        // std::pow()
@@ -194,11 +194,11 @@ BasicValues::~BasicValues()
     delete Database;
     delete FundData;
     delete RoundingRules_;
-    delete TierData;
+    delete TieredCharges_;
     delete MortalityRates_;
     delete InterestRates_;
     delete SurrChgRates_;
-    delete DeathBfts;
+    delete DeathBfts_;
     delete Outlay_;
     delete Loads_;
 }
@@ -278,15 +278,15 @@ void BasicValues::Init()
     FundData        = new TFundData
         (AddDataDir(ProductData->GetFundFilename())
         );
-    RoundingRules_ = new rounding_rules
+    RoundingRules_  = new rounding_rules
         (StreamableRoundingRules
             (AddDataDir(ProductData->GetRoundingFilename())
             ).get_rounding_rules()
         );
-    TierData        = new tiered_data
+    TieredCharges_  = new tiered_charges
         (AddDataDir(ProductData->GetTierFilename())
         );
-    SpreadFor7702_.assign(Length, TierData->minimum_tiered_spread());
+    SpreadFor7702_.assign(Length, TieredCharges_->minimum_tiered_spread_for_7702());
 
     // Multilife contracts will need a vector of mortality-rate objects.
 
@@ -296,7 +296,7 @@ void BasicValues::Init()
     InterestRates_  = new InterestRates  (*this);
     // Surrender-charge rates will eventually require mortality rates.
     SurrChgRates_   = new SurrChgRates   (*Database);
-    DeathBfts       = new TDeathBfts     (*this);
+    DeathBfts_      = new death_benefits (*this);
     // Outlay requires interest rates.
     Outlay_         = new Outlay         (*this);
     SetLowestPremTaxRate();
@@ -354,12 +354,12 @@ void BasicValues::GPTServerInit()
 //  FundData        = new TFundData
 //      (AddDataDir(ProductData->GetFundFilename())
 //      );
-    RoundingRules_ = new rounding_rules
+    RoundingRules_  = new rounding_rules
         (StreamableRoundingRules
             (AddDataDir(ProductData->GetRoundingFilename())
             ).get_rounding_rules()
         );
-    TierData        = new tiered_data
+    TieredCharges_  = new tiered_charges
         (AddDataDir(ProductData->GetTierFilename())
         );
 
@@ -368,7 +368,7 @@ void BasicValues::GPTServerInit()
 //  InterestRates_  = new InterestRates  (*this);
     // Will require mortality rates eventually.
 //  SurrChgRates_   = new SurrChgRates   (Database);
-//  DeathBfts       = new TDeathBfts     (*this);
+//  DeathBfts_      = new death_benefits (*this);
     // Requires interest rates.
 //  Outlay_         = new Outlay         (*this);
     SetLowestPremTaxRate();
@@ -900,7 +900,7 @@ void BasicValues::SetLowestPremTaxRate()
             ;
         }
 
-    if(TierData->premium_tax_is_tiered(StateOfJurisdiction))
+    if(TieredCharges_->premium_tax_is_tiered(StateOfJurisdiction))
         {
         // TODO ?? TestPremiumTaxLoadConsistency() repeats this test.
         // Probably all the consistency testing should be moved to
@@ -917,7 +917,7 @@ void BasicValues::SetLowestPremTaxRate()
                 << LMI_FLUSH
                 ;
             }
-        LowestPremTaxRate = TierData->minimum_tiered_premium_tax_rate
+        LowestPremTaxRate = TieredCharges_->minimum_tiered_premium_tax_rate
             (StateOfJurisdiction
             );
         }
@@ -937,7 +937,7 @@ void BasicValues::TestPremiumTaxLoadConsistency()
         return;
         }
 
-    if(TierData->premium_tax_is_tiered(GetStateOfJurisdiction()))
+    if(TieredCharges_->premium_tax_is_tiered(GetStateOfJurisdiction()))
         {
         PremiumTaxLoadIsTieredInStateOfJurisdiction = true;
         if(0.0 != Database->Query(DB_PremTaxLoad))
@@ -954,7 +954,7 @@ void BasicValues::TestPremiumTaxLoadConsistency()
             }
         }
 
-    if(TierData->premium_tax_is_tiered(GetStateOfDomicile()))
+    if(TieredCharges_->premium_tax_is_tiered(GetStateOfDomicile()))
         {
         PremiumTaxLoadIsTieredInStateOfDomicile = true;
         if(0.0 != GetDomiciliaryPremTaxRate())
@@ -1203,7 +1203,7 @@ double BasicValues::GetModalPremGLP
         ,a_BftAmt
         ,a_SpecAmt
         ,IRC7702->GetLeastBftAmtEver()
-        ,Get7702EffectiveDBOpt(DeathBfts->GetDBOpt()[0])
+        ,Get7702EffectiveDBOpt(DeathBfts_->dbopt()[0])
         );
 
 // TODO ?? PROBLEMS HERE
@@ -1412,7 +1412,7 @@ double BasicValues::GetModalSpecAmtGLP
     return IRC7702->CalculateGLPSpecAmt
         (0
         ,annualized_pmt
-        ,Get7702EffectiveDBOpt(DeathBfts->GetDBOpt()[0])
+        ,Get7702EffectiveDBOpt(DeathBfts_->dbopt()[0])
         );
 // TODO ?? This should already be rounded, and rounding it again should
 // only be harmful. Expunge after testing and after reconsidering all

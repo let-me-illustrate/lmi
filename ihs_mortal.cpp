@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_mortal.cpp,v 1.2 2005-01-31 13:12:48 chicares Exp $
+// $Id: ihs_mortal.cpp,v 1.3 2005-02-12 12:59:31 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -36,11 +36,11 @@
 #include "dbnames.hpp"
 #include "ihs_proddata.hpp"
 #include "ihs_rnddata.hpp"
-#include "ihs_tierdata.hpp"
 #include "inputs.hpp"
 #include "inputstatus.hpp"
 #include "math_functors.hpp"
 #include "miscellany.hpp"
+#include "tiered_charges.hpp"
 
 #include <algorithm>
 #include <cstdlib>      // std::min()
@@ -87,7 +87,7 @@ void MortalityRates::Init(BasicValues const& basic_values)
     // This is the multiplicative part of COI retention,
     // expressed as 1 + constant: e.g. 1.05 for 5% retention.
     // It is tiered by initial "assumed" number of lives.
-    MultiplicativeCoiRetention_ = basic_values.TierData->coi_retention
+    MultiplicativeCoiRetention_ = basic_values.TieredCharges_->coi_retention
         (basic_values.Input->AssumedCaseNumLives
         );
 

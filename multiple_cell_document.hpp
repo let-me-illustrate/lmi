@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: multiple_cell_document.hpp,v 1.1 2005-01-14 19:47:45 chicares Exp $
+// $Id: multiple_cell_document.hpp,v 1.2 2005-02-12 12:59:31 chicares Exp $
 
 #ifndef multiple_cell_document_hpp
 #define multiple_cell_document_hpp
@@ -50,10 +50,10 @@ namespace xml
 
 class multiple_cell_document
 {
+// TODO ?? Too many long-distance friendships.
     friend class CensusDocument;
     friend class CensusView;
     friend class RosterView;
-    friend struct RunCensusDeprecated;
     friend class AdminExtractDocument;
 
   public:
@@ -61,8 +61,10 @@ class multiple_cell_document
     multiple_cell_document(std::string const& filename);
     virtual ~multiple_cell_document();
 
+    std::vector<IllusInputParms> const& individual_parms() const;
+
     void read(std::istream& is);
-    void write(std::ostream& os);
+    void write(std::ostream& os) const;
 
   private:
     // XMLWRAPP !! We'd like the argument to be const, but that
@@ -100,6 +102,11 @@ inline std::ostream& operator<<
 {
     doc.write(os);
     return os;
+}
+
+inline std::vector<IllusInputParms> const& multiple_cell_document::individual_parms() const
+{
+    return IndividualParms;
 }
 
 #endif // multiple_cell_document_hpp
