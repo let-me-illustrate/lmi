@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.14 2005-02-18 01:09:22 chicares Exp $
+// $Id: ChangeLog,v 1.15 2005-02-19 03:28:26 chicares Exp $
 
 2005-01-14
 
@@ -192,7 +192,7 @@ documented as standard conforming.
   GNUmakefile
   workhorse.make
 Use '-g' instead of '-ggdb' because of a MinGW problem documented
-inline.  
+inline.
 
   materially_equal.hpp
 Reformat for clarity.
@@ -503,4 +503,47 @@ Strengthen warning $(CFLAGS) for unit tests.
 Prevent 'check_conformity' target from complaining that patches and
 testing touchstones don't follow source-code conventions: they
 shouldn't.
+
+2005-02-18 [1059]
+
+  GNUmakefile
+Add test for current copyright date.
+
+  getopt.cpp
+  getopt.hpp
+Rewrite copyright statement as 'GNUmakefile' now expects.
+
+  mpatrol-mingw-GNUmakefile
+Insert copyright statement for revisions.  
+
+  datum_base.cpp
+  datum_base.hpp
+  mc_enum.cpp
+  mc_enum.hpp
+  mc_enum.tpp
+  mc_enum_fwd.hpp
+  mc_enum_test.cpp
+  mc_enum_test_aux.cpp
+  mc_enum_test_aux.hpp
+  mc_enum_test_aux_enums.hpp
+  mc_enum_type_enums.hpp
+  mc_enum_types.cpp
+  mc_enum_types.hpp
+  numeric_io_cast.hpp
+  numeric_io_test.cpp
+  numeric_io_traits.hpp
+  snprintf_test.cpp
+  stream_cast.hpp
+  stream_cast_test.cpp
+  test_tools_test.cpp
+  tn_range.hpp
+  tn_range.tpp
+  tn_range_fwd.hpp
+  tn_range_test.cpp
+  tn_range_test_aux.cpp
+  tn_range_test_aux.hpp
+  tn_range_type_trammels.hpp
+  tn_range_types.cpp
+  tn_range_types.hpp
+Update email address for files imported 2005-02-03.
 
