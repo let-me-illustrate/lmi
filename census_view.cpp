@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: census_view.cpp,v 1.8 2005-03-30 19:29:24 chicares Exp $
+// $Id: census_view.cpp,v 1.9 2005-04-06 23:10:31 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -1088,10 +1088,8 @@ bool CensusView::DoAllCells(e_output_dest a_OutputDest)
 // conflicting input and signal an error? It would probably be cleaner
 // to offer this input item (and a few similar ones) only at the case
 // level. TODO ?? Fix this.
-mce_run_order order = (case_parms()[0]["RunOrder"]).cast<mce_run_order>();
-switch(order.ordinal())
-// TODO ?? expunge
-//    switch((case_parms()[0]["RunOrder"]).cast<mce_run_order>().ordinal())
+    mce_run_order order = (case_parms()[0]["RunOrder"]).cast<mce_run_order>();
+    switch(order.value())
         {
         // Perhaps this function should be run only in the month by month
         // case, but it does no harm to generalize it this way.
