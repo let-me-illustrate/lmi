@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: workhorse.make,v 1.10 2005-03-15 14:35:12 chicares Exp $
+# $Id: workhorse.make,v 1.11 2005-03-17 22:32:29 chicares Exp $
 
 ###############################################################################
 
@@ -562,6 +562,29 @@ check_idempotence: $(idempotent_files)
 	  $(ALL_CPPFLAGS) $(ALL_CXXFLAGS) \
 	  -x c++ -w -O0 -fsyntax-only $<
 	@$(TOUCH) $@
+
+################################################################################
+
+# Clean.
+
+files_normally_created_by_running_make := \
+  $(wildcard lib*.a) \
+  $(wildcard *$(EXEEXT)) \
+  $(wildcard *$(SHREXT)) \
+  $(wildcard *.d) \
+  $(wildcard *.map) \
+  $(wildcard *.o) \
+  cgi.test.in \
+  cgi_touchstone \
+  mpatrol.log \
+  spew_touchstone \
+
+.PHONY: clean distclean mostlyclean
+clean distclean mostlyclean:
+	@-$(RM) --force $(files_normally_created_by_running_make)
+
+.PHONY: maintainer-clean
+maintainer-clean: distclean
 
 ################################################################################
 
