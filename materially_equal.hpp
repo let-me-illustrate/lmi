@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: materially_equal.hpp,v 1.1 2005-01-14 19:47:45 chicares Exp $
+// $Id: materially_equal.hpp,v 1.2 2005-02-03 16:01:27 chicares Exp $
 
 #ifndef materially_equal_hpp
 #define materially_equal_hpp
@@ -46,10 +46,9 @@ inline bool materially_equal
     )
 {
     return
-           t == u
-        || (  std::fabs(t - u)
-           <= tolerance * std::min(std::fabs(t), std::fabs(u))
-           );
+            t == u
+        ||  std::fabs(t - u) <= tolerance * std::min(std::fabs(t), std::fabs(u))
+        ;
 }
 
 #endif // materially_equal_hpp
