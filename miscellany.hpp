@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: miscellany.hpp,v 1.2 2005-01-29 02:47:42 chicares Exp $
+// $Id: miscellany.hpp,v 1.3 2005-03-11 04:14:33 chicares Exp $
 
 #ifndef miscellany_hpp
 #define miscellany_hpp
@@ -29,10 +29,10 @@
 #include <algorithm>
 #include <cctype>
 #include <cstddef>
-#include <ctime>
 #include <iterator>
 #include <string>
-#include <stdexcept>
+
+// TODO ?? Unit tests are needed.
 
 // TODO ?? Remove this header along with the old implentation after testing:
 #include "alert.hpp"
@@ -43,8 +43,12 @@ bool each_equal(InputIterator first, InputIterator last, T const& t)
 // TODO ?? Remove this old implentation after testing:
     bool rc = true;
     for(InputIterator i = first; i != last; ++i)
+        {
         if(!(t == *i))
+            {
             rc = false;
+            }
+        }
 
     bool new_answer = std::distance(first, last) == std::count(first, last, t);
     LMI_ASSERT(rc == new_answer);
@@ -52,10 +56,10 @@ bool each_equal(InputIterator first, InputIterator last, T const& t)
     return std::distance(first, last) == std::count(first, last, t);
 }
 
-// No colons: works as a posix filename.
+// Omitting colons yields a valid posix path.
 std::string iso_8601_datestamp_terse();
 
-// Colons separate HH:MM:SS .
+// Colons separate HH:MM:SS, so result is not a valid posix path.
 std::string iso_8601_datestamp_verbose();
 
 template <typename T, std::size_t n>

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: miscellany.cpp,v 1.1 2005-01-14 19:47:45 chicares Exp $
+// $Id: miscellany.cpp,v 1.2 2005-03-11 04:14:33 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -28,9 +28,12 @@
 
 #include "miscellany.hpp"
 
+#include <ctime>
+#include <stdexcept>
+
 // http://groups-beta.google.com/group/borland.public.cpp.borlandcpp/msg/638d1f25e66472d9
 // 18 Jul 2001 18:25:15 -0400
-inline std::string iso_8601_datestamp_verbose()
+std::string iso_8601_datestamp_verbose()
 {
    std::size_t const len = sizeof "CCYY-MM-DDTHH:MM:SSZ";
    std::time_t t = std::time(0);
