@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.23 2005-03-12 04:53:29 chicares Exp $
+// $Id: ChangeLog,v 1.24 2005-03-15 14:58:19 chicares Exp $
 
 2005-01-14
 
@@ -765,4 +765,72 @@ Rename 'cgimain.cpp' to 'main_cgi.cpp'.
 
   view_ex.cpp
 Change main application header.
+
+2005-03-12 [1395]
+
+  text_doc.hpp
+Mark overrides as virtual.
+
+  value_cast.hpp
+Improve documentation.
+
+  workhorse.make
+Add untested target to prevent accidental license problems.
+
+2005-03-15 [1398]
+
+  illustration_view.cpp
+Remove obsolete comments. Improve 'calculation summary'.
+
+  xml_notebook.xrc
+Numerous improvements.
+
+  about.xpm             [new file]
+  close.xpm             [new file]
+  delete-row.xpm        [new file]
+  edit-case.xpm         [new file]
+  edit-cell.xpm         [new file]
+  edit-class.xpm        [new file]
+  exit.xpm              [new file]
+  fixed-width.xpm       [new file]
+  help.xpm              [new file]
+  insert-rows.xpm       [new file]
+  new.xpm               [new file]
+  open.xpm              [new file]
+  paste-case.xpm        [new file]
+  print-case.xpm        [new file]
+  print-cell.xpm        [new file]
+  print-options.xpm     [new file]
+  print-preview.xpm     [new file]
+  print.xpm             [new file]
+  run-case.xpm          [new file]
+  run-cell.xpm          [new file]
+  save.xpm              [new file]
+  saveas.xpm            [new file]
+  varying-width.xpm     [new file]
+  write_spreadsheet.xpm [new file]
+Add pixmaps.
+
+  census_view.ico       [new file]
+  illustration_view.ico [new file]
+  lmi.ico               [new file]
+  text_view.ico         [new file]
+Add icons.
+
+  README [new file]
+Add copyright, license, and derived-work notices for new graphics.
+
+  menus.xrc
+  toolbar.xrc
+Use new pixmaps.
+
+  GNUmakefile
+Make sure that files embodying the GPL are created as prerequisites.
+Check pixmaps for carriage returns; the documented 'xpm' format
+doesn't permit embedding copyright and license notices or RCS Ids, and
+they typically include tabs, so those things are not checked for.
+
+  objects.make
+  workhorse.make
+Add wx target.
 
