@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_acctval.cpp,v 1.6 2005-02-14 04:37:51 chicares Exp $
+// $Id: ihs_acctval.cpp,v 1.7 2005-02-17 04:40:02 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -99,7 +99,7 @@ AccountValue::AccountValue(InputParms const& input)
     :BasicValues           (&input)
     ,Debugging             (false)
     ,Projecting12Mos       (false)
-    ,Solving               (e_solve_none != Input->SolveType)
+    ,Solving               (e_solve_none != Input_->SolveType)
     ,SolvingForGuarPremium (false)
     ,ItLapsed              (false)
     ,ledger_(new Ledger(BasicValues::GetLedgerType(), BasicValues::GetLength()))
@@ -118,12 +118,12 @@ AccountValue::AccountValue(InputParms const& input)
 
     // Get vector of inforce lives assuming no one ever lapses.
     // Store this in the invariant ledger value object.
-    double inforce_lives = Input->NumIdenticalLives;
+    double inforce_lives = Input_->NumIdenticalLives;
 //    for(int j = 0; j < BasicValues::GetLength(); ++j)
 // TODO ?? Prefer a standard algorithm.
     for(int j = 0; j < 1 + BasicValues::GetLength(); ++j)
         {
-        if(Input->UsePartialMort && 0 < j)
+        if(Input_->UsePartialMort && 0 < j)
             {
             inforce_lives *= 1.0 - GetPartMortQ(j - 1);
             }
@@ -172,7 +172,7 @@ Then run other bases.
         it should also be possible to solve on a midpt basis as well
 */
     if
-        (   std::string::npos != Input->Comments.find("idiosyncrasyZ")
+        (   std::string::npos != Input_->Comments.find("idiosyncrasyZ")
         &&
             (  !global_settings::instance().regression_testing()
             ||  global_settings::instance().regression_test_full
@@ -186,7 +186,7 @@ Then run other bases.
     double z = RunAllApplicableBases();
 
     FinalizeLifeAllBases();
-    if(std::string::npos != Input->Comments.find("idiosyncrasy_spew"))
+    if(std::string::npos != Input_->Comments.find("idiosyncrasy_spew"))
         {
         std::ofstream os
             ("spewage"
@@ -232,7 +232,7 @@ double AccountValue::RunOneBasis(e_run_basis const& a_Basis)
 // Apparently this should never be done because Solve() is called in
 //   RunAllApplicableBases() .
 // TODO ?? Do something more flexible.
-//      LMI_ASSERT(a_Basis == Input->SolveBasis);
+//      LMI_ASSERT(a_Basis == Input_->SolveBasis);
 //      z = Solve();
         }
     else
@@ -270,7 +270,7 @@ double AccountValue::RunAllApplicableBases()
         {
         // TODO ?? It seems odd to call a function of class InputParms
         // here--why isn't that done only during input?
-        Input->SetSolveDurations();
+        Input_->SetSolveDurations();
 
         if(e_run_curr_basis != SolveBasis)
             {
@@ -278,14 +278,14 @@ double AccountValue::RunAllApplicableBases()
             }
 
         z = Solve
-            (Input->SolveType
-            ,Input->SolveBegYear
-            ,Input->SolveEndYear
-            ,Input->SolveTarget
-            ,Input->SolveTgtCSV
-            ,Input->SolveTgtYear
-            ,Input->SolveBasis
-            ,Input->SolveSABasis
+            (Input_->SolveType
+            ,Input_->SolveBegYear
+            ,Input_->SolveEndYear
+            ,Input_->SolveTarget
+            ,Input_->SolveTgtCSV
+            ,Input_->SolveTgtYear
+            ,Input_->SolveBasis
+            ,Input_->SolveSABasis
             );
         Solving = false;
         // TODO ?? Here we might save overriding parameters determined
@@ -314,7 +314,7 @@ double AccountValue::RunAllApplicableBases()
 //============================================================================
 double AccountValue::PerformRun(e_run_basis const& a_Basis)
 {
-    switch(Input->RunOrder)
+    switch(Input_->RunOrder)
         {
         // TODO ?? Perhaps this function should be run only in the
         // month-by-month case, but it does no harm to generalize it
@@ -331,7 +331,7 @@ double AccountValue::PerformRun(e_run_basis const& a_Basis)
             {
             fatal_error()
                 << "Case '"
-                << Input->RunOrder
+                << Input_->RunOrder
                 << "' not found."
                 << LMI_FLUSH
                 ;
@@ -343,7 +343,7 @@ double AccountValue::PerformRun(e_run_basis const& a_Basis)
 //============================================================================
 double AccountValue::PerformRunLifeByLife(e_run_basis const& a_Basis)
 {
-    LMI_ASSERT(e_life_by_life == Input->RunOrder);
+    LMI_ASSERT(e_life_by_life == Input_->RunOrder);
 
     GuessWhetherFirstYearPremiumExceedsRetaliationLimit();
 restart:
@@ -376,7 +376,7 @@ restart:
 //============================================================================
 double AccountValue::PerformRunMonthByMonth(e_run_basis const& a_Basis)
 {
-    LMI_ASSERT(e_month_by_month == Input->RunOrder);
+    LMI_ASSERT(e_month_by_month == Input_->RunOrder);
 
     GuessWhetherFirstYearPremiumExceedsRetaliationLimit();
 restart:
@@ -393,10 +393,10 @@ restart:
         // object, so it gets the interest rate this way. We do the
         // same to match exactly.
         double ExpRatMlyInt = 0.0;
-        if(Input->UseExperienceRating)
+        if(Input_->UseExperienceRating)
             {
             ExpRatMlyInt = 1.0 + i_upper_12_over_12_from_i<double>()
-                (Input->GenAcctRate[year]
+                (Input_->GenAcctRate[year]
                 );
             }
 
@@ -538,9 +538,9 @@ void AccountValue::InitializeLife(e_run_basis const& a_Basis)
             {
             AddSurrChgLayer
                 (j
-                ,std::max(0.0, Input->VectorSpecamtHistory[j] - prior_specamt)
+                ,std::max(0.0, Input_->VectorSpecamtHistory[j] - prior_specamt)
                 );
-            prior_specamt = Input->VectorSpecamtHistory[j];
+            prior_specamt = Input_->VectorSpecamtHistory[j];
             }
         }
 
@@ -571,16 +571,16 @@ void AccountValue::InitializeLife(e_run_basis const& a_Basis)
 
     bool inforce_is_mec =
            (
-              0 != Input->InforceYear
-           || 0 != Input->InforceMonth
+              0 != Input_->InforceYear
+           || 0 != Input_->InforceMonth
            )
-        && Input->InforceIsMec
+        && Input_->InforceIsMec
         ;
     InvariantValues().InforceIsMec = inforce_is_mec;
     bool mec_1035 =
-              Input->External1035ExchangeFromMec
+              Input_->External1035ExchangeFromMec
            && 0.0 != Outlay_->external_1035_amount()
-        ||    Input->Internal1035ExchangeFromMec
+        ||    Input_->Internal1035ExchangeFromMec
            && 0.0 != Outlay_->internal_1035_amount()
         ;
     bool is_already_a_mec = inforce_is_mec || mec_1035;
@@ -606,18 +606,18 @@ void AccountValue::InitializeLife(e_run_basis const& a_Basis)
         {
         // Premium history starts at contract year zero.
         nonstd::copy_n_
-            (Input->VectorPremiumHistory.begin()
+            (Input_->VectorPremiumHistory.begin()
             ,length_7702a
             ,std::back_inserter(pmts_7702a)
             );
         // Specamt history starts at policy year zero.
         nonstd::copy_n_
-            (Input->VectorSpecamtHistory.begin() + Input->InforceContractYear.operator int const&()
+            (Input_->VectorSpecamtHistory.begin() + Input_->InforceContractYear.operator int const&()
             ,length_7702a
             ,std::back_inserter(bfts_7702a)
             );
         }
-    double lowest_death_benefit = Input->InforceLeastDeathBenefit;
+    double lowest_death_benefit = Input_->InforceLeastDeathBenefit;
     if(0 == InforceYear && 0 == InforceMonth)
         {
         lowest_death_benefit = bfts_7702a.front();
@@ -629,16 +629,16 @@ void AccountValue::InitializeLife(e_run_basis const& a_Basis)
         ,BasicValues::EndtAge
         ,InforceYear
         ,InforceMonth
-        ,Input->InforceContractYear
-        ,Input->InforceContractMonth
-        ,Input->InforceAvBeforeLastMc
+        ,Input_->InforceContractYear
+        ,Input_->InforceContractMonth
+        ,Input_->InforceAvBeforeLastMc
         ,lowest_death_benefit
         ,pmts_7702a
         ,bfts_7702a
         );
 
     InforceFactor = 1.0;
-    InforceLives = Input->NumIdenticalLives;
+    InforceLives = Input_->NumIdenticalLives;
 
 // TODO ?? This is a mess. I had to move this here from RunAV().
 // That function doesn't get called every time we run an account value.
@@ -648,7 +648,7 @@ void AccountValue::InitializeLife(e_run_basis const& a_Basis)
 // that function appears not to be invoked by the Run button. Its name
 // begins with "Cm", suggesting that it is a WM_COMMAND handler, but
 // that would require a response-table entry, which doesn't exist.
-    if(std::string::npos != Input->Comments.find("idiosyncrasyX"))
+    if(std::string::npos != Input_->Comments.find("idiosyncrasyX"))
         {
         if(e_run_curr_basis == RateBasis)
             {
@@ -658,7 +658,7 @@ void AccountValue::InitializeLife(e_run_basis const& a_Basis)
         }
     daily_interest_accounting =
             std::string::npos
-        !=  Input->Comments.find("idiosyncrasy_daily_interest_accounting")
+        !=  Input_->Comments.find("idiosyncrasy_daily_interest_accounting")
         ;
 
 /* TODO expunge?
@@ -703,17 +703,17 @@ void AccountValue::SetInitialValues()
     // These inforce things belong in input struct.
     // TODO ?? The list is not complete; others will be required:
     // payment history; surrender charges; DCV history?
-    InforceYear                 = Input->InforceYear            ;
-    InforceMonth                = Input->InforceMonth           ;
-    InforceAVGenAcct            = Input->InforceAVGenAcct       ;
-    InforceAVSepAcct            = Input->InforceAVSepAcct       ;
-    InforceAVRegLn              = Input->InforceAVRegLn         ;
-    InforceAVPrfLn              = Input->InforceAVPrfLn         ;
-    InforceRegLnBal             = Input->InforceRegLnBal        ;
-    InforcePrfLnBal             = Input->InforcePrfLnBal        ;
-    InforceCumNoLapsePrem       = Input->InforceCumNoLapsePrem  ;
-    InforceCumPmts              = Input->InforceCumPmts         ;
-    InforceTaxBasis             = Input->InforceTaxBasis        ;
+    InforceYear                 = Input_->InforceYear            ;
+    InforceMonth                = Input_->InforceMonth           ;
+    InforceAVGenAcct            = Input_->InforceAVGenAcct       ;
+    InforceAVSepAcct            = Input_->InforceAVSepAcct       ;
+    InforceAVRegLn              = Input_->InforceAVRegLn         ;
+    InforceAVPrfLn              = Input_->InforceAVPrfLn         ;
+    InforceRegLnBal             = Input_->InforceRegLnBal        ;
+    InforcePrfLnBal             = Input_->InforcePrfLnBal        ;
+    InforceCumNoLapsePrem       = Input_->InforceCumNoLapsePrem  ;
+    InforceCumPmts              = Input_->InforceCumPmts         ;
+    InforceTaxBasis             = Input_->InforceTaxBasis        ;
 
     Year                        = InforceYear;
     Month                       = InforceMonth;
@@ -728,17 +728,17 @@ void AccountValue::SetInitialValues()
     AVGenAcct                   = InforceAVGenAcct;
     AVSepAcct                   = InforceAVSepAcct;
 
-    if(Input->AvgFund || Input->OverrideFundMgmtFee)
+    if(Input_->AvgFund || Input_->OverrideFundMgmtFee)
         {
         SepAcctAlloc            = 1.0;
         }
     else
         {
         // TODO ?? What if no GA?
-        SepAcctAlloc            = .01 * Input->SumOfSepAcctFundAllocs();
+        SepAcctAlloc            = .01 * Input_->SumOfSepAcctFundAllocs();
         }
     GenAcctAlloc                = 1.0 - SepAcctAlloc;
-    if(!Database->Query(DB_AllowGenAcct))
+    if(!Database_->Query(DB_AllowGenAcct))
         {
         if(0.0 != GenAcctAlloc)
             {
@@ -776,7 +776,7 @@ void AccountValue::SetInitialValues()
         {
         NoLapseActive           = false;
         }
-    if(NoLapseUnratedOnly && Input->Status[0].IsPolicyRated())
+    if(NoLapseUnratedOnly && Input_->Status[0].IsPolicyRated())
         {
         NoLapseActive           = false;
         }
@@ -793,12 +793,12 @@ void AccountValue::SetInitialValues()
     ItLapsed                    = false;
     VariantValues().LapseMonth  = 11;
     VariantValues().LapseYear   = BasicValues::GetLength();
-// TODO ?? Length should be Database->Query(DB_EndtAge);
+// TODO ?? Length should be Database_->Query(DB_EndtAge);
 
     InvariantValues().IsMec     = false;
     InvariantValues().MecMonth  = 11;
     InvariantValues().MecYear   = BasicValues::GetLength();
-    Dcv                         = Input->InforceDcv;
+    Dcv                         = Input_->InforceDcv;
     DcvDeathBft                 = 0.0;
     DcvNaar                     = 0.0;
     DcvCoi                      = 0.0;
@@ -809,17 +809,17 @@ void AccountValue::SetInitialValues()
     HoneymoonValue              = -std::numeric_limits<double>::max();
     if(e_currbasis == ExpAndGABasis)
         {
-        HoneymoonActive = Input->HasHoneymoon;
+        HoneymoonActive = Input_->HasHoneymoon;
         if(0 != Year || 0 != Month)
             {
             HoneymoonActive =
                    HoneymoonActive
-                && 0.0 < Input->InforceHoneymoonValue
+                && 0.0 < Input_->InforceHoneymoonValue
                 ;
             }
         if(HoneymoonActive)
             {
-            HoneymoonValue = Input->InforceHoneymoonValue;
+            HoneymoonValue = Input_->InforceHoneymoonValue;
             }
         }
 
@@ -835,28 +835,28 @@ void AccountValue::SetInitialValues()
     Internal1035Amount = Outlay_->internal_1035_amount();
 
     ee_premium_allocation_method   = static_cast<e_allocation_method>
-        (static_cast<int>(Database->Query(DB_EePremMethod))
+        (static_cast<int>(Database_->Query(DB_EePremMethod))
         );
     ee_premium_preferred_account   = static_cast<e_increment_account_preference>
-        (static_cast<int>(Database->Query(DB_EePremAcct))
+        (static_cast<int>(Database_->Query(DB_EePremAcct))
         );
     er_premium_allocation_method   = static_cast<e_allocation_method>
-        (static_cast<int>(Database->Query(DB_ErPremMethod))
+        (static_cast<int>(Database_->Query(DB_ErPremMethod))
         );
     er_premium_preferred_account   = static_cast<e_increment_account_preference>
-        (static_cast<int>(Database->Query(DB_ErPremAcct))
+        (static_cast<int>(Database_->Query(DB_ErPremAcct))
         );
     deduction_method               = static_cast<e_increment_method>
-        (static_cast<int>(Database->Query(DB_DeductionMethod))
+        (static_cast<int>(Database_->Query(DB_DeductionMethod))
         );
     deduction_preferred_account    = static_cast<e_increment_account_preference>
-        (static_cast<int>(Database->Query(DB_DeductionAcct))
+        (static_cast<int>(Database_->Query(DB_DeductionAcct))
         );
     distribution_method            = static_cast<e_increment_method>
-        (static_cast<int>(Database->Query(DB_DistributionMethod))
+        (static_cast<int>(Database_->Query(DB_DistributionMethod))
         );
     distribution_preferred_account = static_cast<e_increment_account_preference>
-        (static_cast<int>(Database->Query(DB_DistributionAcct))
+        (static_cast<int>(Database_->Query(DB_DistributionAcct))
         );
 
     // If any account preference is the separate account, then a
@@ -868,7 +868,7 @@ void AccountValue::SetInitialValues()
         ||   e_prefer_separate_account == distribution_preferred_account
         )
         {
-        LMI_ASSERT(Database->Query(DB_AllowSepAcct));
+        LMI_ASSERT(Database_->Query(DB_AllowSepAcct));
         }
     // If any account preference for premium is the general account,
     // then payment into the separate account must be permitted; but
@@ -879,7 +879,7 @@ void AccountValue::SetInitialValues()
         ||   e_prefer_separate_account == er_premium_preferred_account
         )
         {
-        LMI_ASSERT(Database->Query(DB_AllowSepAcct));
+        LMI_ASSERT(Database_->Query(DB_AllowSepAcct));
         }
 }
 
@@ -888,7 +888,7 @@ void AccountValue::DoYear(int inforce_month)
 {
     // TODO ?? Designed to be called only this way:
     // NO: should be life by life only for census run.
-//  LMI_ASSERT(e_life_by_life == Input->RunOrder);
+//  LMI_ASSERT(e_life_by_life == Input_->RunOrder);
 
     InitializeYear();
 
@@ -897,8 +897,8 @@ void AccountValue::DoYear(int inforce_month)
         CoordinateCounters();
         DoMonthDR();
 
-        ApplyDynamicSepAcctLoadAMD  (Input->VectorCaseAssumedAssets[Year]);
-        ApplyDynamicMandE           (Input->VectorCaseAssumedAssets[Year]);
+        ApplyDynamicSepAcctLoadAMD  (Input_->VectorCaseAssumedAssets[Year]);
+        ApplyDynamicMandE           (Input_->VectorCaseAssumedAssets[Year]);
 
         DoMonthCR();
 
@@ -965,7 +965,7 @@ double AccountValue::IncrementBOM
         InitializeYear();
         }
 // TODO ?? Also need this in the alternate path?
-    if(COIIsDynamic && Input->UseExperienceRating)
+    if(COIIsDynamic && Input_->UseExperienceRating)
         {
         LMI_ASSERT(!UseUnusualCOIBanding);
         MortalityRates_->SetDynamicCOIRate
@@ -989,7 +989,7 @@ double AccountValue::IncrementEOM
     )
 {
     // designed to be called only this way:
-    LMI_ASSERT(e_month_by_month == Input->RunOrder);
+    LMI_ASSERT(e_month_by_month == Input_->RunOrder);
     // TODO ?? IS THIS THE PLACE TO GUARD IT? WHY NOT IN SIBLINGS TOO?
 
     if(ItLapsed || BasicValues::GetLength() <= Year)
@@ -1108,8 +1108,8 @@ void AccountValue::ApplyDynamicMandE(double assets)
             << LMI_FLUSH
             ;
         }
-    YearsSepAcctABCRate   =
-        (e_asset_charge_spread == Database->Query(DB_AssetChargeType))
+    YearsSepAcctABCRate =
+        (e_asset_charge_spread == Database_->Query(DB_AssetChargeType))
             ? TieredCharges_->tiered_asset_based_compensation(assets)
             : 0
             ;
@@ -1195,10 +1195,10 @@ void AccountValue::ApplyDynamicSepAcctLoadAMD(double assets)
     // Are you ignoring that input item altogether?
     // Or does the interest class truly take care of that?
     //   (I think it does only for 'e_asset_charge_spread', unless you changed that.)
-    if(e_asset_charge_load_after_ded == Database->Query(DB_AssetChargeType))
+    if(e_asset_charge_load_after_ded == Database_->Query(DB_AssetChargeType))
         {
 // Authors of this block: GWC and JLM.
-//      double extra_asset_comp = Input->ExtraAssetComp / 10000.0L;
+//      double extra_asset_comp = Input_->ExtraAssetComp / 10000.0L;
 //      extra_asset_comp =   m = i_upper_12_over_12_from_i<double>()(extra_asset_comp);
 //      YearsAcctValLoadAMD += extra_asset_comp;
         tiered_comp = TieredCharges_->tiered_asset_based_compensation(assets);
@@ -1224,7 +1224,7 @@ void AccountValue::ApplyDynamicSepAcctLoadAMD(double assets)
 //============================================================================
 void AccountValue::InitializeYear()
 {
-    if(Input->UsePartialMort && 0 < Year)
+    if(Input_->UsePartialMort && 0 < Year)
         {
         InforceFactor *= 1.0 - GetPartMortQ(Year - 1);
         InforceLives *= 1.0 - GetPartMortQ(Year - 1);
@@ -1287,7 +1287,7 @@ void AccountValue::InitializeSpecAmt()
     TermSpecAmt         = InvariantValues().TermSpecAmt[Year];
 
     int target_year = Year;
-    if(Database->Query(DB_TgtPmFixedAtIssue))
+    if(Database_->Query(DB_TgtPmFixedAtIssue))
         {
         target_year = 0;
         }
@@ -1503,7 +1503,7 @@ double AccountValue::SurrChg()
         +   SurrChg_[Year]
 // TODO ?? expunge this and its antecedents:
 //        +   YearsSurrChgSAMult      * InvariantValues().SpecAmt[0]
-        -   Input->VectorCashValueEnhancementRate[Year] * std::max(0.0, TotalAccountValue())
+        -   Input_->VectorCashValueEnhancementRate[Year] * std::max(0.0, TotalAccountValue())
         ;
 }
 
@@ -1525,7 +1525,7 @@ void AccountValue::SetClaims()
     TxSetDeathBft();
     TxSetTermAmt();
 
-    if(Input->UsePartialMort)
+    if(Input_->UsePartialMort)
         {
         // TODO ?? Replace with calls to GetCurtateNetClaimsInforce() e.g.
         // and move the comment into that function.
@@ -1689,19 +1689,19 @@ void AccountValue::FinalizeYear()
             );
         }
 
-    LMI_ASSERT(0 != Input->NumIdenticalLives); // Make sure division is safe.
+    LMI_ASSERT(0 != Input_->NumIdenticalLives); // Make sure division is safe.
     VariantValues().ExpRatRsvCash       [Year] =
           ExpRatReserve
         * (1.0 - GetPartMortQ(Year))
         * InforceLives
-        / Input->NumIdenticalLives
+        / Input_->NumIdenticalLives
         ;
     VariantValues().ExpRatRsvForborne   [Year] = ExpRatReserve;
     VariantValues().ExpRatRfdCash       [Year] =
           ExpRatRfd
         * (1.0 - GetPartMortQ(Year))
         * InforceLives
-        / Input->NumIdenticalLives
+        / Input_->NumIdenticalLives
         ;
     VariantValues().ExpRatRfdForborne   [Year] = ExpRatRfd;
 
@@ -1907,8 +1907,8 @@ void AccountValue::GuessWhetherFirstYearPremiumExceedsRetaliationLimit()
     //   - how much premium has already been paid for inforce
     //       contracts that are still in the first policy year.
 
-    Year  = Input->InforceYear;
-    Month = Input->InforceMonth;
+    Year  = Input_->InforceYear;
+    Month = Input_->InforceMonth;
     CoordinateCounters();
     FirstYearPremiumExceedsRetaliationLimit =
            FirstYearPremiumRetaliationLimit
@@ -1941,9 +1941,9 @@ double AccountValue::GetPartMortQ(int a_year) const
 {
     LMI_ASSERT(a_year <= BasicValues::GetLength());
     if
-        (   !Input->UsePartialMort
+        (   !Input_->UsePartialMort
         ||  ItLapsed
-        ||  a_year < Input->YrsPartMortYrsEqZero
+        ||  a_year < Input_->YrsPartMortYrsEqZero
         )
         {
         return 0.0;
@@ -1958,7 +1958,7 @@ double AccountValue::GetPartMortQ(int a_year) const
 
     double z =
           MortalityRates_->PartialMortalityQ()[a_year]
-        * Input->VectorPartialMortalityMultiplier[a_year]
+        * Input_->VectorPartialMortalityMultiplier[a_year]
         ;
     return std::max(0.0, std::min(1.0, z));
 }
@@ -1977,13 +1977,13 @@ double AccountValue::GetNetCOI() const
     // This is the multiplicative part of COI retention,
     // expressed as 1 + constant: e.g. 1.05 for 5% retention.
     // It is tiered by initial "assumed" number of lives.
-    double coi_ret_additive = Database->Query(DB_ExpRatCOIRetention);
+    double coi_ret_additive = Database_->Query(DB_ExpRatCOIRetention);
 
     // This is the additive part of COI retention,
     // expressed as an addition to q.
     // It is a constant retrieved from the database.
     double coi_ret_multiplicative
-        = TieredCharges_->coi_retention(Input->AssumedCaseNumLives);
+        = TieredCharges_->coi_retention(Input_->AssumedCaseNumLives);
     LMI_ASSERT(0.0 < coi_ret_multiplicative);
 
     // TODO ?? Do this once per year?
@@ -2027,14 +2027,14 @@ double AccountValue::GetIBNRContrib() const
 
     // JOE This lets IBNR factor vary by database axes--e.g. we
     // might want a higher factor for smokers someday
-    return GetNetCOI() * InforceLives * Database->Query(DB_ExpRatIBNRMult);
+    return GetNetCOI() * InforceLives * Database_->Query(DB_ExpRatIBNRMult);
 }
 
 //============================================================================
 // Authors: GWC and JLM.
 double AccountValue::UpdateExpRatReserveBOM(double CaseExpRatMlyIntRate)
 {
-    if(!Input->UseExperienceRating)
+    if(!Input_->UseExperienceRating)
         {
         return 0.0;
         }
@@ -2073,7 +2073,7 @@ void AccountValue::UpdateExpRatReserveEOM
 {
     if
         (
-           !Input->UseExperienceRating
+           !Input_->UseExperienceRating
         || 0.0 == InforceLives
         || 0.0 == CaseMonthsClaims
         || 0.0 == CaseYearsCOICharges
@@ -2106,7 +2106,7 @@ double AccountValue::UpdateExpRatReserveForPersistency
 {
     if
         (
-            !Input->UseExperienceRating
+            !Input_->UseExperienceRating
         ||  ItLapsed
         ||  BasicValues::GetLength() <= Year
         ||  0.0 == InforceLives
@@ -2114,7 +2114,7 @@ double AccountValue::UpdateExpRatReserveForPersistency
         {
         return 0.0;
         }
-    if(std::string::npos != Input->Comments.find("idiosyncrasy7"))
+    if(std::string::npos != Input_->Comments.find("idiosyncrasy7"))
         {
         ExpRatReserve *= a_PersistencyAdjustment;
         }
@@ -2127,7 +2127,7 @@ double AccountValue::GetCurtateNetClaimsInforce()
 {
     // if not using partial mortality, then claims must be zero
     // if not using experience rating, then this function doesn't matter
-    if(!Input->UseExperienceRating || !Input->UsePartialMort)
+    if(!Input_->UseExperienceRating || !Input_->UsePartialMort)
         {
         return 0.0;
         }
@@ -2188,13 +2188,13 @@ double AccountValue::GetStabResContrib()
     else
         {
         double MortMult;
-        if(Input->UseExperienceRating)
+        if(Input_->UseExperienceRating)
             {
-            MortMult = Database->Query(DB_ExpRatCoiMultCurr1); // if experience rated
+            MortMult = Database_->Query(DB_ExpRatCoiMultCurr1);
             }
         else
             {
-            MortMult = Database->Query(DB_ExpRatCoiMultCurr0); // if not experience rated
+            MortMult = Database_->Query(DB_ExpRatCoiMultCurr0);
             }
 
         LMI_ASSERT(!UseUnusualCOIBanding);
@@ -2237,7 +2237,7 @@ void AccountValue::SetExpRatRfd
 {
     if
         (
-          !Input->UseExperienceRating
+          !Input_->UseExperienceRating
         || 0.0 == InforceLives
         // perhaps it would be better to assert that this is zero
         //   if YearsTotalNetCOIs is zero
@@ -2305,7 +2305,7 @@ double AccountValue::GetExpRatReserveNonforborne() const
         Forbearance = (1.0 - GetPartMortQ(Year));
         }
 
-    if(Input->UseExperienceRating)
+    if(Input_->UseExperienceRating)
         {
         return ExpRatReserve * Forbearance * InforceLives;
         }
@@ -2341,9 +2341,9 @@ void AccountValue::CoordinateCounters()
 
     if(daily_interest_accounting)
         {
-        calendar_date current_anniversary = Input->EffDate;
+        calendar_date current_anniversary = Input_->EffDate;
         current_anniversary.add_years(Year, true);
-        calendar_date next_anniversary = Input->EffDate;
+        calendar_date next_anniversary = Input_->EffDate;
         next_anniversary.add_years(1 + Year, true);
         // This alternative
         //   days_in_policy_year = current_anniversary.days_in_year();
@@ -2356,9 +2356,9 @@ void AccountValue::CoordinateCounters()
             ;
         LMI_ASSERT(365 <= days_in_policy_year && days_in_policy_year <= 366);
 
-        calendar_date current_monthiversary = Input->EffDate;
+        calendar_date current_monthiversary = Input_->EffDate;
         current_monthiversary.add_years_and_months(Year, Month, true);
-        calendar_date next_monthiversary = Input->EffDate;
+        calendar_date next_monthiversary = Input_->EffDate;
         next_monthiversary.add_years_and_months(Year, 1 + Month, true);
         days_in_policy_month =
                 next_monthiversary.julian_day_number()

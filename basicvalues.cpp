@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: basicvalues.cpp,v 1.3 2005-02-14 04:37:51 chicares Exp $
+// $Id: basicvalues.cpp,v 1.4 2005-02-17 04:40:02 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -55,49 +55,21 @@ char const* GuaranteedTableFile() {return "/lmi-data/qx_cso";}
 
 //============================================================================
 BasicValues::BasicValues()
+    :Input_(new InputParms)
 {
-    Input = new InputParms;
     Init();
 }
 
 //============================================================================
 BasicValues::BasicValues(InputParms const& input)
+    :Input_(new InputParms(input))
 {
-    Input = new InputParms(input);
     Init();
-}
-
-//============================================================================
-BasicValues::BasicValues(BasicValues const& obj)
-{
-    Input = new InputParms(*obj.Input);
-    Init();
-}
-
-//============================================================================
-BasicValues& BasicValues::operator=(BasicValues const& obj)
-{
-    if(this != &obj)
-        {
-        delete Input;
-        Input = new InputParms(*obj.Input);
-        Init();
-        }
-    return *this;
 }
 
 //============================================================================
 BasicValues::~BasicValues()
 {
-    delete Input;
-
-    delete Database;
-    delete MortalityRates_;
-    delete InterestRates_;
-    delete SurrChgRates_;
-    delete DeathBfts_;
-    delete Outlay_;
-    delete Loads_;
 }
 
 //============================================================================
@@ -105,45 +77,46 @@ void BasicValues::Init()
 {
     // Bind to input and database representing policy form.
 
-    InputStatus const& S = Input->Status[0]; // TODO ?? Database based on first life only?
-    Length = Input->YearsToMaturity();
+    InputStatus const& S = Input_->Status[0]; // TODO ?? Database based on first life only?
+    Length = Input_->YearsToMaturity();
     IssueAge = S.IssueAge.value();
     RetAge = S.RetAge.value();
     LMI_ASSERT(IssueAge <= RetAge);
 
-    Database = new TDatabase
-        ("empty for now" // filename
-        ,S.Gender
-        ,S.Class
-        ,S.Smoking
-        ,S.IssueAge
-        ,Input->GroupUWType
-        ,Input->InsdState
+    Database_.reset
+        (new TDatabase
+            ("empty for now" // filename
+            ,S.Gender
+            ,S.Class
+            ,S.Smoking
+            ,S.IssueAge
+            ,Input_->GroupUWType
+            ,Input_->InsdState
+            )
         );
 
     LedgerType = e_ledger_type(e_ill_reg);
 
-    RoundingRules_ = new rounding_rules;
+    RoundingRules_.reset(new rounding_rules);
 
     // TODO ?? Just a dummy initialization for now.
     SpreadFor7702_.assign(Length, 0.0);
 
     // Multilife contracts will need a vector of mortality-rate objects.
-    MortalityRates_ = new MortalityRates (*this);
-    InterestRates_  = new InterestRates  (*this);
-    SurrChgRates_   = new SurrChgRates   (*Database);
-    DeathBfts_      = new death_benefits (*this);
-    Outlay_         = new Outlay         (*this);
-    Loads_          = new Loads          (*Database);
+    MortalityRates_.reset(new MortalityRates (*this));
+    InterestRates_ .reset(new InterestRates  (*this));
+    SurrChgRates_  .reset(new SurrChgRates   (*Database_));
+    DeathBfts_     .reset(new death_benefits (*this));
+    Outlay_        .reset(new Outlay         (*this));
+    Loads_         .reset(new Loads          (*Database_));
 
-    MinSpecAmt = Database->Query(DB_MinSpecAmt);
-    MinWD      = Database->Query(DB_MinWD     );
-    WDFee      = Database->Query(DB_WDFee     );
-    WDFeeRate  = Database->Query(DB_WDFeeRate );
+    MinSpecAmt = Database_->Query(DB_MinSpecAmt);
+    MinWD      = Database_->Query(DB_MinWD     );
+    WDFee      = Database_->Query(DB_WDFee     );
+    WDFeeRate  = Database_->Query(DB_WDFeeRate );
 
-    FundData_ = 0;
-    TieredCharges_ = 0;
-    ProductData = 0;
+// The antediluvian branch leaves FundData_, TieredCharges_, and
+// ProductData initialized to null pointers.
 }
 
 //============================================================================

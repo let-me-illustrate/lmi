@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avdebug.cpp,v 1.4 2005-02-14 04:37:51 chicares Exp $
+// $Id: ihs_avdebug.cpp,v 1.5 2005-02-17 04:40:02 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -394,7 +394,7 @@ void AccountValue::Project12MosPrintInit()
         }
 
     // General account only.
-    if(Database->Query(DB_AllowSepAcct))
+    if(Database_->Query(DB_AllowSepAcct))
         {
         throw std::runtime_error("Separate account not allowed.");
         }
@@ -409,7 +409,7 @@ void AccountValue::Project12MosPrintInit()
     }
 
     std::ostringstream os2;
-    os2 << Input->PolicyNumber;
+    os2 << Input_->PolicyNumber;
     std::string number_str("Policy Number: ");
     number_str += os2.str();
     {
@@ -419,7 +419,7 @@ void AccountValue::Project12MosPrintInit()
 
     std::string date_str =
           "Policy Date: "
-        + calendar_date(Input->PolicyDate).str()
+        + calendar_date(Input_->PolicyDate).str()
         ;
     {
     std::string pad(tab_stop - date_str.size(), ' ');
@@ -431,7 +431,7 @@ void AccountValue::Project12MosPrintInit()
     // some consistency to the numbering.
     // But use value_cast_ihs instead.
     std::ostringstream os;
-    os << Input->Status[0].IssueAge;
+    os << Input_->Status[0].IssueAge;
     std::string age_str("Age at Issue: ");
     age_str += os.str();
     {
@@ -439,13 +439,13 @@ void AccountValue::Project12MosPrintInit()
     age_str += pad;
     }
 
-    std::string gender_str = "Gender: " + Input->Status[0].Gender.str();
+    std::string gender_str = "Gender: " + Input_->Status[0].Gender.str();
     {
     std::string pad(tab_stop - gender_str.size(), ' ');
     gender_str += pad;
     }
 
-    calendar_date as_of_date(Input->EffDate);
+    calendar_date as_of_date(Input_->EffDate);
     as_of_date.add_years_and_months(InforceYear, InforceMonth, true);
 
     double init_value =
@@ -470,7 +470,7 @@ void AccountValue::Project12MosPrintInit()
         << InvariantValues().CorpName << '\n'
 
         << "Franchise Number: "
-        << Input->Franchise << '\n'
+        << Input_->Franchise << '\n'
         ;
 
     if(0 == InforceYear && 0 == InforceMonth)
@@ -605,7 +605,7 @@ void AccountValue::Project12MosPrintMonth()
         // contract effective date is 2002-03-31, the eleventh
         // monthiversary is 2003-02-28, but the twelfth is not the
         // twenty-eighth of 2003-03 but rather the thirty-first.
-        calendar_date end_of_contract_month(Input->EffDate);
+        calendar_date end_of_contract_month(Input_->EffDate);
         end_of_contract_month.add_years_and_months(Year, 1 + Month, true);
         --end_of_contract_month;
 

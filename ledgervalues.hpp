@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledgervalues.hpp,v 1.3 2005-02-13 23:17:18 chicares Exp $
+// $Id: ledgervalues.hpp,v 1.4 2005-02-17 04:40:03 chicares Exp $
 
 #ifndef ledgervalues_hpp
 #define ledgervalues_hpp
@@ -62,8 +62,7 @@ class IllusVal
     void PrintTabularDetailHeader (std::ostream& os) const;
     void PrintTabularDetail       (std::ostream& os) const;
 
-////    boost::scoped_ptr<Ledger> ledger_;
-    Ledger* ledger_;
+    boost::scoped_ptr<Ledger> ledger_;
 };
 
 #endif // ledgervalues_hpp
