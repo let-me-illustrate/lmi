@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_dbughdr.hpp,v 1.1 2005-01-14 19:47:44 chicares Exp $
+// $Id: ihs_dbughdr.hpp,v 1.2 2005-03-26 02:10:46 chicares Exp $
 
 #ifndef dbughdr_hpp
 #define dbughdr_hpp
@@ -103,10 +103,6 @@ enum DebugColNames
     ,eEOMCSVNet
     ,eEOMCV7702
     ,eInforceFactor
-    ,eExpRatReserve
-    ,eExpRatStabReserve
-    ,eExpRatIBNRReserve
-    ,eExpRatRfd
     ,eClaimsPaid
     ,e7702ATestDur
     ,e7702A7ppRate
@@ -197,10 +193,6 @@ inline std::vector<std::string> const& DebugColHeadersHelper()
     v[eEOMCSVNet]           = "EOM CSV net";
     v[eEOMCV7702]           = "EOM CV for 7702";
     v[eInforceFactor]       = "Inforce factor";
-    v[eExpRatReserve]       = "Exp rating reserve";
-    v[eExpRatStabReserve]   = "Exp rating stabilization reserve";
-    v[eExpRatIBNRReserve]   = "Exp rating IBNR reserve";
-    v[eExpRatRfd]           = "Exp rating refund";
     v[eClaimsPaid]          = "Partial mort claims paid";
     v[e7702ATestDur]        = "7702A test duration";
     v[e7702A7ppRate]        = "7702A 7pp rate";

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_variant.cpp,v 1.1 2005-02-12 12:59:31 chicares Exp $
+// $Id: ledger_variant.cpp,v 1.2 2005-03-26 02:10:46 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -114,8 +114,6 @@ void LedgerVariant::Alloc(int len)
     // TODO ?? THE ABOVE COMMENTS MAY BE WRONG.
     ForborneVectors ["ExpRatRsvCash"        ] = &ExpRatRsvCash          ;
     BegYearVectors  ["ExpRatRsvForborne"    ] = &ExpRatRsvForborne      ;
-    ForborneVectors ["ExpRatRfdCash"        ] = &ExpRatRfdCash          ;
-    BegYearVectors  ["ExpRatRfdForborne"    ] = &ExpRatRfdForborne      ;
     // TODO ?? Do any other vectors need to be forborne? AVRelDeath, e.g.?
 
     BegYearVectors  ["MlyPolFee"            ] = &MlyPolFee              ;
