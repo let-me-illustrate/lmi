@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: workhorse.make,v 1.7 2005-02-18 01:05:38 chicares Exp $
+# $Id: workhorse.make,v 1.8 2005-02-23 12:37:20 chicares Exp $
 
 ###############################################################################
 
@@ -82,6 +82,7 @@ $(src_dir)/objects.make:: ;
 # Effective default target (described above under "Default target").
 
 default_targets := \
+  wx_new$(SHREXT) \
   shared_demo$(EXEEXT) \
   static_demo$(EXEEXT) \
   antediluvian_cgi$(EXEEXT) \
@@ -128,6 +129,7 @@ all_source_directories := \
 
 vpath lib%.a          $(CURDIR)
 vpath %.o             $(CURDIR)
+
 vpath %.c             $(all_source_directories)
 vpath %.cpp           $(all_source_directories)
 vpath %.cxx           $(all_source_directories)
@@ -135,8 +137,16 @@ vpath %.h             $(all_source_directories)
 vpath %.hpp           $(all_source_directories)
 vpath %.tpp           $(all_source_directories)
 vpath %.xpp           $(all_source_directories)
+
+vpath %.rc            $(all_source_directories)
+
 vpath quoted_gpl      $(src_dir)
 vpath quoted_gpl_html $(src_dir)
+
+# This rule must exist for the parent makefile to make these targets,
+# apparently; TODO ?? but why?
+
+quoted_gpl quoted_gpl_html:
 
 ################################################################################
 
@@ -147,10 +157,17 @@ gcc_warnings := \
   -Wall \
   -Wcast-align \
   -Wconversion \
+  -Wctor-dtor-privacy \
   -Wdeprecated \
+  -Wdeprecated-declarations \
+  -Wdisabled-optimization \
+  -Wendif-labels \
   -Wimport \
+  -Winvalid-offsetof \
+  -Wmultichar \
   -Wnon-template-friend \
   -Woverloaded-virtual \
+  -Wpacked \
   -Wpmf-conversions \
   -Wpointer-arith \
   -Wsign-compare \
@@ -163,19 +180,10 @@ gcc_warnings := \
 gcc_warnings += -Wno-long-long
 
 # WX!! The wx library triggers many warnings with these flags:
-#  -W \
-#  -Wcast-qual \
 
 gcc_extra_warnings := \
   -W \
   -Wcast-qual \
-  -Wctor-dtor-privacy \
-  -Wdeprecated-declarations \
-  -Wdisabled-optimization \
-  -Wendif-labels \
-  -Winvalid-offsetof \
-  -Wmultichar \
-  -Wpacked \
   -Wredundant-decls \
 
 # Too many warnings on correct code, e.g. exact comparison to zero:
@@ -196,9 +204,8 @@ gcc_extra_warnings := \
 # Since at least gcc-3.4.2, -Wmissing-prototypes is deprecated as
 # being redundant for C++.
 
-# At least until we integrate wx, all these warnings are OK:
-
-gcc_warnings += $(gcc_extra_warnings)
+# TODO ?? How can these best be enabled for non-wx code?
+# gcc_warnings += $(gcc_extra_warnings)
 
 C_WARNINGS         := $(gcc_warnings) -std=c99 -Wmissing-prototypes
 CXX_WARNINGS       := $(gcc_warnings) -std=c++98
@@ -239,8 +246,9 @@ endif
 
 # Required libraries.
 
-LIBXML2_LIBS := \
-  $(platform_libxml2_libraries)
+REQUIRED_LIBS := \
+  $(platform_libxml2_libraries) \
+  $(platform_wx_libraries) \
 
 ################################################################################
 
@@ -262,14 +270,20 @@ CXXFLAGS = \
 
 LDFLAGS = \
   $(gprof_flag) \
+  -Wl,-Map,$@.map \
 
 # INELEGANT !! Define BOOST_DEPRECATED until code that uses the
 # deprecated boost::bind library is rewritten.
 
+# TODO ?? Is there a better way to handle __WXDEBUG__, such as
+# #including some wx configuration header?
+
 REQUIRED_CPPFLAGS = \
   $(addprefix -I , $(all_include_directories)) \
+  $(lmi_wx_new_dllflag) \
   $(platform_defines) \
   -DBOOST_DEPRECATED \
+  -D__WXDEBUG__ \
 
 REQUIRED_CFLAGS = \
   $(C_WARNINGS) \
@@ -292,9 +306,8 @@ REQUIRED_ARFLAGS = \
 REQUIRED_LDFLAGS = \
   -L . \
   -L /usr/local/lib \
-  $(LIBXML2_LIBS) \
+  $(REQUIRED_LIBS) \
   $(MPATROL_LIBS) \
-  -Wl,-Map,$@.map \
 
 # The '--use-temp-file' windres option seems to be often helpful and
 # never harmful.
@@ -345,23 +358,43 @@ ALL_RCFLAGS  = $(REQUIRED_RCFLAGS)  $(RCFLAGS)
 # TODO ?? Should target-specific dependencies reside in 'objects.make'
 # instead?
 
-# TODO ?? Replace 'DLL_NEW_BUILDING_DLL' e.g. with something like
-# 'LMI_WXNEW_DLLFLAG': 'LMI' should be a lexical element, and it
-# ought to come first.
+# Reconsider writing $(lmi_dllflag) in $(REQUIRED_CPPFLAGS), in order
+# to use dll import and export attributes.
+#
+# Such attributes are no longer needed for gcc-3.something. Omitting
+# them makes building slightly more efficient--see
+#   http://sourceforge.net/mailarchive/message.php?msg_id=10584510
+# The most important benefit of omitting them is that static and
+# shared libraries can then be built from the same object files.
+#
+# On the other hand, gcc-4.x uses a deliberately similar method for
+# ELF symbol visibility, a feature for which significant benefits are
+# claimed:
+#   http://www.nedprod.com/programs/gccvisibility.html
+# And dll attributes would still be necessary for other toolsets,
+# which therefore aren't fully supported yet.
+#
+# However, 'libwx_new.a' continues to use classic dll attributes,
+# because there's never a reason to build it as a static library.
 
-wx_new$(SHREXT): REQUIRED_CPPFLAGS += -DDLL_NEW_BUILDING_DLL
-wx_new$(SHREXT): wx_new.o
+lib%.a              : lmi_dllflag :=
+lib%$(SHREXT)       : lmi_dllflag := -DLMI_BUILD_DLL
+shared_demo$(EXEEXT): lmi_dllflag := -DLMI_USE_DLL
 
-# TODO ?? Reconsider writing $(LMI_DLLFLAG) in $(ALL_CPPFLAGS). It's
-# no longer needed for gcc-3.x, but remains useful for other toolsets;
-# and gcc-4.x can use it for the new ELF 'visibility' support. Oddly
-# enough, though, it's harmful for msw, the platform for which that
-# feature was originally defined: if it's never used on msw, then
-# static and shared libraries can be built from the same object files.
+skeleton$(EXEEXT)   : lmi_wx_new_dllflag := -DLMI_WX_NEW_USING_DLL
+wx_new$(SHREXT)     : lmi_wx_new_dllflag := -DLMI_WX_NEW_BUILDING_DLL
 
-lib%.a              : LMI_DLLFLAG :=
-lib%$(SHREXT)       : LMI_DLLFLAG := -DLMI_BUILD_DLL
-shared_demo$(EXEEXT): LMI_DLLFLAG := -DLMI_USE_DLL
+# This library is included in $(REQUIRED_LIBS) because it's required
+# for any target that uses wx. It's harmless to require it for other
+# targets that don't use wx: they simply ignore it, and measurements
+#   http://sourceforge.net/mailarchive/message.php?msg_id=10584510
+# show that the overhead for such a small library is negligible.
+# However, it must not have itself as a prerequisite; because it is a
+# standalone library that depends on nothing else, it seems easiest to
+# prevent circularity with this target-specific definition of
+# $(REQUIRED_LIBS).
+
+wx_new$(SHREXT): REQUIRED_LIBS :=
 
 liblmi.a liblmi$(SHREXT): $(lmi_common_objects)
 libantediluvian.a libantediluvian$(SHREXT): $(antediluvian_common_objects)
@@ -373,6 +406,8 @@ static_demo$(EXEEXT): library_demo.o alert_cli.o $(lmi_common_objects)
 antediluvian_cgi$(EXEEXT): $(antediluvian_cgi_objects) libantediluvian.a
 
 antediluvian_cli$(EXEEXT): $(antediluvian_cli_objects) libantediluvian.a
+
+wx_new$(SHREXT): wx_new.o
 
 ################################################################################
 
@@ -407,7 +442,7 @@ run_unit_tests: unit_tests_not_built $(addsuffix -run,$(unit_test_targets))
 # parsed for diagnostics unconditionally when unit tests are run.
 
 mpatrol.log:
-	$(TOUCH) $@
+	@$(TOUCH) $@
 
 %$(EXEEXT)-run: mpatrol.log
 	@$(ECHO) "\nRunning $*:"

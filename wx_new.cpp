@@ -1,4 +1,4 @@
-// Precompiled header file.
+// Overloaded operator new to work around a wx and mpatrol problem.
 //
 // Copyright (C) 2004, 2005 Gregory W. Chicares.
 //
@@ -19,20 +19,33 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: pchfile.hpp,v 1.2 2005-02-23 12:37:20 chicares Exp $
+// $Id: wx_new.cpp,v 1.1 2005-02-23 12:37:20 chicares Exp $
 
-// Always include this header first in every '.cpp' file, before
-// anything else except comments and whitespace. Never include it in
-// any header file. Include any headers to be precompiled here.
+#include "pchfile.hpp"
 
-#ifndef pchfile_hpp
-#define pchfile_hpp
-
-#include "config.hpp"
-
-#if defined LMI_COMPILER_USES_PCH && !defined LMI_IGNORE_PCH
-#   include <wx/wxprec.h>
+#ifdef __BORLANDC__
+#   pragma hdrstop
 #endif
 
-#endif // pchfile_hpp
+#include "wx_new.hpp"
+
+void* operator new(std::size_t bytes, wx_allocator)
+{
+    return operator new(bytes);
+}
+
+void* operator new[](std::size_t bytes, wx_allocator)
+{
+    return operator new(bytes);
+}
+
+void operator delete(void* pointer, wx_allocator)
+{
+    operator delete(pointer);
+}
+
+void operator delete[](void* pointer, wx_allocator)
+{
+    operator delete(pointer);
+}
 
