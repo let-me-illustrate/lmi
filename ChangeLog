@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.5 2005-02-03 16:03:37 chicares Exp $
+// $Id: ChangeLog,v 1.6 2005-02-05 03:02:41 chicares Exp $
 
 2005-01-14
 
@@ -250,4 +250,26 @@ testing for now.
 
   mpatrol-mingw-GNUmakefile
 Add 'install' target.
+
+2005-02-04 [1085]
+
+  accountvalue.cpp
+  accountvalue.hpp  [expunged]
+  account_value.hpp [new file]
+  avdebug.cpp
+  ihs_acctval.cpp
+  ihs_acctval.hpp   [expunged]
+  ihs_avdebug.cpp
+  ihs_avmly.cpp
+  ihs_avsolve.cpp
+  ihs_avstrtgy.cpp
+  ledger.hpp
+  ledgervalues.cpp
+  library_demo.cpp
+  solve.cpp
+Merge account-value headers for the antediluvian and production
+branches.
+
+  library_demo.cpp
+Write crc32 output to a separate file.
 

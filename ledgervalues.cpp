@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledgervalues.cpp,v 1.1 2005-01-14 19:47:45 chicares Exp $
+// $Id: ledgervalues.cpp,v 1.2 2005-02-05 03:02:41 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -28,7 +28,7 @@
 
 #include "ledgervalues.hpp"
 
-#include "accountvalue.hpp"
+#include "account_value.hpp"
 #include "alert.hpp"
 #include "inputs.hpp"
 #include "miscellany.hpp" // iso_8601_datestamp_terse
@@ -110,10 +110,10 @@ void IllusVal::Init
 double IllusVal::Run(InputParms const& IP) const
 {
     AccountValue* AV = new AccountValue(IP);
-    double z = AV->Run(AccountValue::AllBases);
-    *CurrValues = *AV->CurrValues;
-    *GuarValues = *AV->GuarValues;
-    *MdptValues = *AV->MdptValues;
+    double z = AV->RunAV();
+    *CurrValues = AV->CurrValues();
+    *GuarValues = AV->GuarValues();
+    *MdptValues = AV->MdptValues();
     delete AV;
 
     for(int j = 0; j < CurrValues->GetLength(); j++)
@@ -169,9 +169,9 @@ namespace
 //============================================================================
 void IllusVal::Print(std::ostream& os) const
 {
-    // TODO ?? check os state
+    // TODO ?? Check os state.
 
-    // TODO ?? page number in footers
+    // TODO ?? Page number in footers.
     PrintHeader              (os);
     PrintNarrativeSummary    (os);
     PrintKeyTerms            (os);
@@ -182,9 +182,9 @@ void IllusVal::Print(std::ostream& os) const
     PrintTabularDetailHeader (os);
     PrintTabularDetail       (os);
     PrintFooter              (os);
-    // TODO ?? Split into pages and paginate
+    // TODO ?? Split into pages and paginate.
 
-    // TODO ?? check os state
+    // TODO ?? Check os state.
 }
 
 //============================================================================
@@ -215,9 +215,9 @@ void IllusVal::PrintHeader(std::ostream& os) const
 //============================================================================
 void IllusVal::PrintFooter(std::ostream& os) const
 {
-// TODO ?? Page numbers
+// TODO ?? Add page numbers.
     os << "\f";
-// TODO ?? Page breaks for HTML (CSS2 browsers only)
+// TODO ?? Add page breaks for HTML (CSS2 browsers only).
 /*
  <div style="page-break-before:always">
  stuff on a new page
@@ -324,8 +324,8 @@ void IllusVal::PrintNumericalSummary(std::ostream& os) const
         os << endrow;
         }
 
-// TODO ?? Print "Age  70" instead of duration for last row.
-// TODO ?? Does the reg require any other ages?
+// TODO ?? Print "Age  70" instead of duration for last row. Does the
+// illustration reg require any other ages?
     os << endrow;
 }
 

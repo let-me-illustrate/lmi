@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger.hpp,v 1.2 2005-01-31 13:12:48 chicares Exp $
+// $Id: ledger.hpp,v 1.3 2005-02-05 03:02:41 chicares Exp $
 
 #ifndef ledger_hpp
 #define ledger_hpp
@@ -40,9 +40,12 @@ class TLedger
   public:
     TLedger(int len = 0);
     TLedger(TLedger const&);
+    virtual ~TLedger();
+
     TLedger& operator=(TLedger const&);
     TLedger& operator+=(TLedger const&);
-    virtual ~TLedger();
+
+    void Init(BasicValues*);
 
     int GetLength() const {return Length;}
 
@@ -87,7 +90,7 @@ class TLedger
     int     Smoker;
     int     SmokerDistinct;
     int     Preferred;
-    // TODO ?? flats, ratings omitted
+    // TODO ?? Flat extras and ratings omitted.
     long int EffDate;
     int     CurrentPolicyYear;
     int     Age;
@@ -100,9 +103,6 @@ class TLedger
     double  GuarPremium;
     double  CredRate;
     double  GuarRate;
-
-  protected:
-    void Init(BasicValues*);
 
   private:
     void Alloc(int len);

@@ -19,14 +19,14 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avstrtgy.cpp,v 1.1 2005-01-14 19:47:44 chicares Exp $
+// $Id: ihs_avstrtgy.cpp,v 1.2 2005-02-05 03:02:41 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
 #   pragma hdrstop
 #endif // __BORLANDC__
 
-#include "ihs_acctval.hpp"
+#include "account_value.hpp"
 
 #include "alert.hpp"
 #include "ihs_deathbft.hpp"
@@ -87,7 +87,7 @@ double AccountValue::CalculateSpecAmtFromStrategy
             {
             // TODO ?? It's somewhat frightening that this warning is
             // never displayed, even though the test deck contains
-            // cases with yearly varying spec amt
+            // cases with yearly varying spec amt.
             fatal_error()
                 << "Varying specified amount not implemented."
                 << " Specified amount set to scalar input value."
@@ -193,7 +193,7 @@ void AccountValue::OldPerformSpecAmtStrategy()
         return;
         }
 
-    // TODO ?? Needs work for post retirement strategy.
+    // TODO ?? Needs work for post-retirement strategy.
     double SA = CalculateSpecAmtFromStrategy(0, 0);
 
     // Done if no strategy to apply
