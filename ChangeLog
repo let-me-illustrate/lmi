@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.15 2005-02-19 03:28:26 chicares Exp $
+// $Id: ChangeLog,v 1.16 2005-02-19 04:25:42 chicares Exp $
 
 2005-01-14
 
@@ -546,4 +546,8 @@ Insert copyright statement for revisions.
   tn_range_types.cpp
   tn_range_types.hpp
 Update email address for files imported 2005-02-03.
+
+  GNUmakefile
+Fix defect: datestamp headers not correctly updated because a simply-
+expanded variable's definition did not precede its every use.
 
