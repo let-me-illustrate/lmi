@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avdebug.cpp,v 1.6 2005-03-07 11:48:58 chicares Exp $
+// $Id: ihs_avdebug.cpp,v 1.7 2005-03-26 02:10:46 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -255,7 +255,6 @@ void AccountValue::DebugPrint()
     SetMonthlyDetail(eSurrChg            ,SurrChg()                        );
 
 // TODO ?? Unfortunately duplicated from AccountValue::FinalizeYear().
-    // AV already includes any experience refund credited.
     double total_av = TotalAccountValue();
     double csv_net =
             total_av
@@ -270,10 +269,6 @@ void AccountValue::DebugPrint()
     SetMonthlyDetail(eEOMCV7702          ,CashValueFor7702()               );
 
     SetMonthlyDetail(eInforceFactor      ,InforceFactor                    );
-    SetMonthlyDetail(eExpRatReserve      ,ExpRatReserve                    );
-    SetMonthlyDetail(eExpRatStabReserve  ,ExpRatStabReserve                );
-    SetMonthlyDetail(eExpRatIBNRReserve  ,ExpRatIBNRReserve                );
-    SetMonthlyDetail(eExpRatRfd          ,ExpRatRfd                        );
     SetMonthlyDetail
         (   eClaimsPaid
         ,   GetPartMortQ(Year) * InvariantValues().SpecAmt[Year]
