@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: round_to_test.cpp,v 1.3 2005-01-31 13:12:48 chicares Exp $
+// $Id: round_to_test.cpp,v 1.4 2005-03-23 15:32:29 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -143,7 +143,7 @@ void set_hardware_rounding_mode(int mode, bool synchronize)
 {
 #ifdef __STDC_IEC_559__
     fesetround(mode);
-#elif defined __GNUC__ && defined _X86_
+#elif defined __GNUC__ && defined LMI_X86
     volatile unsigned short int control_word;
     asm volatile ("fnstcw %0" : "=m" (*&control_word));
     control_word = mode | (control_word & ~0xc00);
@@ -214,10 +214,10 @@ void print_hex_val(T t, char const* name)
   // My principal compiler, mingw gcc, has sizeof(long double) == 12,
   // but only ten bytes are significant; the other two are padding.
   std::size_t size_of_T = sizeof(T);
-#if defined __GNUC__ && defined _X86_
+#if defined __GNUC__ && defined LMI_X86
   if(12 == size_of_T)
     size_of_T = 10;
-#endif // defined __GNUC__ && defined _X86_
+#endif // defined __GNUC__ && defined LMI_X86
 // GWC modifications end
 
   for (unsigned int i = 0; i < size_of_T; ++i) { // modified by GWC

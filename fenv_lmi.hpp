@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: fenv_lmi.hpp,v 1.2 2005-01-29 02:47:41 chicares Exp $
+// $Id: fenv_lmi.hpp,v 1.3 2005-03-23 15:32:29 chicares Exp $
 
 // Manage the floating-point environment, using C99 7.6 facilities
 // where available. Otherwise, use compiler- and platform-specific
@@ -38,6 +38,10 @@
     // In case the C++ compiler supports C99 7.6 facilities, assume
     // that it sets __STDC_IEC_559__ and puts prototypes in <fenv.h>
     // but not in namespace std.
+    //
+    // TODO ?? In 2005-03, VZ reported that g++-3.3.5 gives
+    //   "warning: ignoring #pragma STDC FENV_ACCESS"
+    // here; research and resolve that someday.
 #   pragma STDC FENV_ACCESS ON
 #   include <fenv.h>
 #endif // __STDC_IEC_559__
@@ -48,7 +52,7 @@
 
 inline void initialize_fpu()
 {
-#if defined __GNUC__ && defined _X86_
+#if defined __GNUC__ && defined LMI_X86
     volatile unsigned short int control_word = 0x037f;
     asm volatile("fldcw %0" : : "m" (control_word));
 #elif defined __BORLANDC__

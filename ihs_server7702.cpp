@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_server7702.cpp,v 1.2 2005-02-14 04:37:51 chicares Exp $
+// $Id: ihs_server7702.cpp,v 1.3 2005-03-23 15:32:29 chicares Exp $
 
 // Known defects:
 // grep for "NEED DECISION"
@@ -488,7 +488,7 @@ void Server7702::DecideWhatToCalculate()
 // Set GLP and GSP at issue afer validating input.
 void Server7702::ProcessNewIssue()
 {
-    bool OK =
+    bool okay =
             Input.Duration                  == 0
         &&  Input.OldGuidelineLevelPremium  == 0.0
         &&  Input.OldGuidelineSinglePremium == 0.0
@@ -502,7 +502,7 @@ void Server7702::ProcessNewIssue()
         ;
 
     // TODO ?? It would be better to spell them all out.
-    if(!OK)
+    if(!okay)
         {
         throw server7702_inconsistent_input
             ("A precondition for issuing a new contract was not satisfied"

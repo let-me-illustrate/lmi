@@ -20,7 +20,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: posix_fhs.make,v 1.2 2005-03-18 00:17:06 chicares Exp $
+# $Id: posix_fhs.make,v 1.3 2005-03-23 15:32:29 chicares Exp $
 
 ################################################################################
 
@@ -28,9 +28,40 @@ system_root := /
 EXEEXT :=
 SHREXT := .so
 
-platform_libxml2_libraries = \
-  -lxml2 \
+platform_libxml2_libraries = $(shell xml2-config --libs)
 
-platform_wx_libraries := \
-  -lwx_new -lwx25d \
+# Let the user override this on the make command line to use a
+# non-default wx configuration.
+WXCONFIG := wx-config
+
+platform_wx_libraries := $(shell $(WXCONFIG) --libs)
+wx_cxxflags := $(shell $(WXCONFIG) --cxxflags) -DwxUSE_STD_STRING
+
+AR     := ar
+CC     := gcc
+CPP    := cpp
+CXX    := g++
+LD     := g++
+
+# TODO ?? Seems unnecessary, but do any make rules require it?
+RC     := windres
+
+CP     := cp
+DATE   := date
+ECHO   := echo
+LS     := ls
+MKDIR  := mkdir
+MV     := mv
+RM     := rm
+SED    := sed
+TAR    := tar
+
+BZIP2  := bzip2
+DIFF   := diff
+GREP   := grep
+MD5SUM := md5sum
+PATCH  := patch
+TOUCH  := touch
+TR     := tr
+WC     := wc
 

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: actuarial_table_test.cpp,v 1.2 2005-01-31 13:12:48 chicares Exp $
+// $Id: actuarial_table_test.cpp,v 1.3 2005-03-23 15:32:29 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -72,7 +72,7 @@ std::vector<double> table_47_age_89()
 int test_main(int, char*[])
 {
 // TODO ?? Use whatever directory FHS would suggest instead.
-    std::string const table_name("/lmi-data/qx_cso");
+    std::string const table_name("/opt/lmi/qx_cso");
 
 // TODO ?? Also test a 'duration' table--has SOA published any?
 
