@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: census_view.hpp,v 1.1 2005-03-12 03:01:08 chicares Exp $
+// $Id: census_view.hpp,v 1.2 2005-03-24 15:53:32 chicares Exp $
 
 #ifndef census_view_hpp
 #define census_view_hpp
@@ -73,7 +73,7 @@ class CensusView
 
     // ViewEx required implementation.
     virtual wxWindow* CreateChildWindow();
-    virtual wxIcon const& Icon() const;
+    virtual wxIcon Icon() const;
     virtual wxMenuBar* MenuBar() const;
 
 // TODO ?? expunge the first:

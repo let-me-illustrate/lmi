@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: view_ex.cpp,v 1.2 2005-03-12 04:40:22 chicares Exp $
+// $Id: view_ex.cpp,v 1.3 2005-03-24 15:53:32 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -36,6 +36,7 @@
 
 #include "view_ex.hpp"
 
+#include "alert.hpp"
 #include "docmanager_ex.hpp"
 
 // WX !! Application object's header must be included here because
@@ -49,7 +50,6 @@
 #include "main_wx.hpp" // wxGetApp()
 
 #include <wx/dc.h>
-#include <wx/log.h>
 #include <wx/menu.h>
 #include <wx/xrc/xmlres.h>
 
@@ -81,7 +81,15 @@ wxFrame& ViewEx::FrameWindow() const
 // resources such as menubars and toolbars are treated.
 wxIcon ViewEx::IconFromXmlResource(char const* z) const
 {
-    return wxXmlResource::Get()->LoadIcon(z);
+    wxIcon icon = wxXmlResource::Get()->LoadIcon(z);
+    if(!icon.Ok())
+        {
+        warning()
+            << "IconFromXmlResource(): invalid icon; using default."
+            << LMI_FLUSH
+            ;
+        }
+    return icon;
 }
 
 wxMenuBar* ViewEx::MenuBarFromXmlResource(char const* z) const
@@ -89,8 +97,10 @@ wxMenuBar* ViewEx::MenuBarFromXmlResource(char const* z) const
     wxMenuBar* menubar = wxXmlResource::Get()->LoadMenuBar(z);
     if(!menubar)
         {
-// WX !! When wx handles exceptions more gracefully, throw here:
-        wxLogError("MenuBarFromXmlResource(): null pointer.");
+        warning()
+            << "MenuBarFromXmlResource(): null menubar pointer."
+            << LMI_FLUSH
+            ;
         }
     return menubar;
 }

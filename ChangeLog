@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.28 2005-03-22 03:40:17 chicares Exp $
+// $Id: ChangeLog,v 1.29 2005-03-24 15:53:54 chicares Exp $
 
 2005-01-14
 
@@ -885,4 +885,60 @@ Fix prerequisite of 'clobber' target.
   ihs_mortal.cpp
   mortality_rates.hpp
 Initial implementation of new experience-rating algorithm.
+
+2005-03-22 [1405]
+
+  census_view.cpp
+Set experience-rating k factor to zero (not unity) when NAAR is zero.
+
+  ihs_avmly.cpp
+Remove a leftover line of debugging code.
+
+2005-03-23 [1411]
+
+  actuarial_table_test.cpp
+  basicvalues.cpp
+  como_4_3_3.make
+  config.hpp
+  fenv_lmi.hpp
+  GNUmakefile
+  ihs_fpios.cpp
+  ihs_fpios.hpp
+  ihs_proddata.cpp
+  ihs_rnddata.cpp
+  ihs_server7702.cpp
+  posix_fhs.make
+  round_to.hpp
+  round_to_test.cpp
+  workhorse.make
+Improve platform independence.
+
+  bcc_5_5_1.make
+  input_harmonization.cpp
+  xml_notebook.hpp
+  wx_new.hpp
+Avoid proprietary or platform-specific terms.
+
+2005-03-24 [????]
+
+  census_view.cpp
+Make IBNR a multiple of mortality charges, not of claims.
+
+  census_view.cpp
+  census_view.hpp
+  census_view.ico       [expunged]
+  census_view.xpm       [new file]
+  illustration_view.cpp
+  illustration_view.hpp
+  illustration_view.ico [expunged]
+  illustration_view.xpm [new file]
+  menus.xrc
+  text_view.cpp
+  text_view.hpp
+  text_view.ico         [expunged]
+  text_view.xpm         [new file]
+  view_ex.cpp
+  view_ex.hpp
+Replace msw icons with pixmaps, except for the main application icon,
+which must be an '.ico' file.
 

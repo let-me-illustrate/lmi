@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: text_view.cpp,v 1.1 2005-03-11 03:09:22 chicares Exp $
+// $Id: text_view.cpp,v 1.2 2005-03-24 15:53:32 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -70,10 +70,9 @@ wxWindow* TextEditView::CreateChildWindow()
         );
 }
 
-wxIcon const& TextEditView::Icon() const
+wxIcon TextEditView::Icon() const
 {
-    static wxIcon const icon = wxICON(IDI_TEXT_VIEW);
-    return icon;
+    return IconFromXmlResource("text_view_icon");
 }
 
 wxMenuBar* TextEditView::MenuBar() const
