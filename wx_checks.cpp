@@ -19,12 +19,14 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: wx_checks.cpp,v 1.3 2005-03-19 13:21:58 chicares Exp $
+// $Id: wx_checks.cpp,v 1.4 2005-03-26 23:08:23 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
 #   pragma hdrstop
 #endif
+
+#include "config.hpp" // LMI_MSW
 
 #include <wx/defs.h>
 
@@ -49,12 +51,12 @@
 #   error Disable wxUSE_APPLE_IEEE in wx setup.
 #endif // wxUSE_APPLE_IEEE
 
-// Graphics format not known to be compatible with GPL.
+// Graphics format with potential patent issues.
 #if wxUSE_LIBJPEG
 #   error Disable wxUSE_LIBJPEG in wx setup.
 #endif // wxUSE_LIBJPEG
 
-// Graphics format not known to be compatible with GPL.
+// Graphics format with potential patent issues.
 #if wxUSE_LIBTIFF
 #   error Disable wxUSE_LIBTIFF in wx setup.
 #endif // wxUSE_LIBTIFF
@@ -64,17 +66,17 @@
 #   error Disable wxUSE_GIF in wx setup.
 #endif // wxUSE_GIF
 
-#if defined __GNUC__
-// Incompatible with gcc.
+#if defined __GNUC__ && defined LMI_MSW
+// Not yet implemented for gcc on the msw platform.
 #   if wxUSE_ON_FATAL_EXCEPTION
 #       error Disable wxUSE_ON_FATAL_EXCEPTION in wx setup.
 #   endif // wxUSE_ON_FATAL_EXCEPTION
 
-// Incompatible with gcc.
+// Not yet implemented for gcc on the msw platform.
 #   if wxUSE_STACKWALKER
 #       error Disable wxUSE_STACKWALKER in wx setup.
 #   endif // wxUSE_STACKWALKER
-#endif // __GNUC__
+#endif // defined __GNUC__ && defined LMI_MSW
 
 // This application is single threaded, and wasn't designed to be
 // thread safe. It might work perfectly well if compiled with thread
