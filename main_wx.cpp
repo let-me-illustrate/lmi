@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_wx.cpp,v 1.1 2005-03-12 03:01:08 chicares Exp $
+// $Id: main_wx.cpp,v 1.2 2005-03-26 01:34:18 chicares Exp $
 
 // Portions of this file are derived from wxWindows files
 //   samples/docvwmdi/docview.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -511,9 +511,7 @@ void lmi_wx_app::InitIcon()
     // '.ico' file; but this shows the color icon:
     frame_->SetIcons(wxICON(AAAAAAAA));
 #else // Not defined __WXMSW__.
-    // WX !! Macro 'wxICON' would be more useful if it supplied file
-    // extensions: '.ico' for msw, and '.xpm' for other platforms.
-    frame_->SetIcon(wxICON("lmi.xpm"));
+    frame_->SetIcon(wxICON(lmi));
 #endif // Not defined __WXMSW__.
 }
 
@@ -682,7 +680,10 @@ bool lmi_wx_app::OnInit()
     InitMenuBar();
     InitToolBar();
     frame_->CreateStatusBar();
+// FSF !! Need to implement this in a generic way for GNU/linux.
+#ifdef __WXMSW__
     frame_->DragAcceptFiles(true);
+#endif // __WXMSW__ defined.
     frame_->Centre(wxBOTH);
     frame_->Maximize(true);
     frame_->Show(true);
