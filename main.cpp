@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main.cpp,v 1.2 2005-01-31 13:12:48 chicares Exp $
+// $Id: main.cpp,v 1.3 2005-02-03 16:01:34 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -38,6 +38,7 @@
 #include "value_cast_ihs.hpp"
 
 #include <algorithm>
+#include <cmath>
 #include <csignal>
 #include <cstdlib> // std::free()
 #include <exception>
@@ -47,7 +48,13 @@
 #include <sstream>
 #include <stdexcept>
 #include <string>
+#include <utility>
 #include <vector>
+
+void RegressionTest()
+{
+    std::cout << "regression test" << std::endl;
+}
 
 //============================================================================
 void SelfTest()
@@ -60,12 +67,7 @@ void SelfTest()
     IP.SpecAmt.assign(IP.SpecAmt.size(), r_spec_amt(1000000.0));
 
     Timer timer;
-    int const n = 100;
-    double z = 0.0;
-    for(int j = 0; j < n; j++)
-        {
-        z = IV.Run(IP);
-        }
+    double z = IV.Run(IP);
     timer.Stop();
     double const expected_value = 5498.99;
     if(.005 < std::fabs(expected_value - z))
@@ -80,6 +82,17 @@ void SelfTest()
             ;
         throw std::runtime_error(error.str());
         }
+
+    // Set number of iterations to a power of ten that can be run in
+    // five seconds, but not less than one iteration.
+    int const m = static_cast<int>(std::log10(5.0 / timer.Result()));
+    int const n = static_cast<int>(std::pow(10.0, std::max(0, m)));
+    timer.Reset().Start();
+    for(int j = 0; j < n; j++)
+        {
+        z = IV.Run(IP);
+        }
+    timer.Stop();
     std::cout << "    Time for " << n << " solves: " << timer.Report() << '\n';
 
     // These run times are measured at the command line. Timings in file
@@ -169,15 +182,20 @@ int main(int argc, char* argv[])
 //    static char const* vopt[] = {"optional", "alternative", 0};
     static struct Option long_options[] =
       {
-//        {"do"      ,REQD_ARG, 0,   0, 0    , "do something"},
-        {"help"    ,NO_ARG,   0, 'h', 0    , "display this help and exit"},
-//        {"delete"  ,REQD_ARG, 0,   0, 0    , "delete something"},
-        {"license" ,NO_ARG,   0, 'l', 0    , "display license and exit"},
-        {"accept"  ,NO_ARG,   0, 'a', 0    , "accept license (-l to display)"},
-        {"selftest",NO_ARG,   0, 's', 0    , "perform self test and exit"},
-        {"profile" ,NO_ARG,   0, 'p', 0    , "set up for profiling and exit"},
-        {"illfile" ,REQD_ARG, 0, 'i', 0    , "run illustration"},
-        {"cnsfile" ,REQD_ARG, 0, 'c', 0    , "run census"},
+        {"ash_nazg"  ,NO_ARG   ,0 ,001 ,0 ,"ash nazg durbatulûk"},
+        {"ash_naz"   ,NO_ARG   ,0 ,003 ,0 ,"fraud"},
+        {"mellon"    ,NO_ARG   ,0 ,002 ,0 ,"pedo mellon a minno"},
+        {"mello"     ,NO_ARG   ,0 ,003 ,0 ,"fraud"},
+        {"help"      ,NO_ARG   ,0 ,'h' ,0 ,"display this help and exit"},
+        {"license"   ,NO_ARG   ,0 ,'l' ,0 ,"display license and exit"},
+        {"accept"    ,NO_ARG   ,0 ,'a' ,0 ,"accept license (-l to display)"},
+        {"selftest"  ,NO_ARG   ,0 ,'s' ,0 ,"perform self test and exit"},
+        {"profile"   ,NO_ARG   ,0 ,'p' ,0 ,"set up for profiling and exit"},
+        {"illfile"   ,REQD_ARG ,0 ,'i' ,0 ,"run illustration"},
+        {"cnsfile"   ,REQD_ARG ,0 ,'c' ,0 ,"run census"},
+        {"data_path" ,REQD_ARG ,0 ,'d' ,0 ,"path to data files"},
+        {"regress  " ,NO_ARG   ,0 ,'r' ,0 ,"run regression test"},
+        {"test_path" ,REQD_ARG ,0 ,'t' ,0 ,"path to test files"},
 //        {"list"    ,LIST_ARG, 0,   0, 0    , "list"},
 //        {"opt"     ,OPT_ARG,  0,   0, 0    , "optional"},
 //        {"alt"     ,ALT_ARG,  0,   0, 0    , "alternative"},
@@ -187,13 +205,14 @@ int main(int argc, char* argv[])
 //        {"valt"    ,ALT_ARG,  0,   0, vopt , "alternative"},
         {0         ,NO_ARG,   0,   0, 0    , ""}
       };
-    bool license_accepted = false;
-    bool show_license     = false;
-    bool show_help        = false;
-    bool run_selftest     = false;
-    bool run_profile      = false;
-    bool run_illustration = false;
-    bool run_census       = false;
+    bool license_accepted    = false;
+    bool show_license        = false;
+    bool show_help           = false;
+    bool run_regression_test = false;
+    bool run_selftest        = false;
+    bool run_profile         = false;
+    bool run_illustration    = false;
+    bool run_census          = false;
 
     std::vector<std::string> ill_names;
     std::vector<std::string> cns_names;
@@ -219,6 +238,19 @@ int main(int argc, char* argv[])
                     std::printf (" with arg %s", getopt_long.optarg);
                     }
                 std::printf ("\n");
+                }
+                break;
+
+              case 001:
+                {
+                global_settings::instance().ash_nazg = true;
+                global_settings::instance().mellon = true;
+                }
+                break;
+
+              case 002:
+                {
+                global_settings::instance().mellon = true;
                 }
                 break;
 
@@ -263,7 +295,7 @@ int main(int argc, char* argv[])
 
               case 'd':
                 {
-                std::printf ("option d with value '%s'\n", getopt_long.optarg);
+                global_settings::instance().data_directory = getopt_long.optarg;
                 }
                 break;
 
@@ -286,9 +318,21 @@ int main(int argc, char* argv[])
                 }
                 break;
 
+              case 'r':
+                {
+                run_regression_test = true;
+                }
+                break;
+
               case 's':
                 {
                 run_selftest = true;
+                }
+                break;
+
+              case 't':
+                {
+                global_settings::instance().regression_test_directory = getopt_long.optarg;
                 }
                 break;
 
@@ -345,6 +389,12 @@ int main(int argc, char* argv[])
         if(run_selftest)
             {
             SelfTest();
+            return EXIT_SUCCESS;
+            }
+
+        if(run_regression_test)
+            {
+            RegressionTest();
             return EXIT_SUCCESS;
             }
 
