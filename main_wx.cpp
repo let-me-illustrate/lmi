@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_wx.cpp,v 1.2 2005-03-26 01:34:18 chicares Exp $
+// $Id: main_wx.cpp,v 1.3 2005-03-30 03:40:52 chicares Exp $
 
 // Portions of this file are derived from wxWindows files
 //   samples/docvwmdi/docview.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -565,27 +565,11 @@ void lmi_wx_app::OnDropFiles(wxDropFilesEvent& event)
 // INELEGANT !! "Unhandled exception" occurs in msw system messages,
 // so a distinct alternative here might be better.
 //
-bool lmi_wx_app::OnExceptionInMainLoop()
-{
-    wxLog::FlushActive();
-
-    int z = wxMessageBox
-        ("Try to resume?"
-        ,"Unhandled exception"
-        ,wxYES_NO | wxICON_QUESTION
-        );
-    return wxYES == z;
-}
-
-/*
-// Experimental: suggested by Vadim Zeitlin 6/17/2004 6:01 AM.
+// WX !! The dialog wx presents is confusing: "Abort" actually seems
+// to be the choice that means 'try to resume', although probably
+// that should be the meaning of "Fail".
 //
-// TODO ?? This seems to terminate whenever an exception is caught. It
-// looks like it can report only that an exception occurred, but can't
-// determine the exception's nature, e.g. by displaying what() for a
-// std::exception--isn't that information lost? And it would be useful
-// to resume from the unwound-to point when an exception is caught
-// here, instead of terminating the application.
+// Experimental: suggested by Vadim Zeitlin 6/17/2004 6:01 AM.
 //
 bool lmi_wx_app::OnExceptionInMainLoop()
 {
@@ -595,17 +579,14 @@ bool lmi_wx_app::OnExceptionInMainLoop()
         // better practice to call it instead of doing
         // it directly here in case the base class
         // behaviour changes later
-        wxSafeShowMessage("", "lmi_wx_app::OnExceptionInMainLoop(): Rethrowing.");
-        // Overridden function is simply
-        //   virtual bool OnExceptionInMainLoop() { throw; }
-        // so what VZ suggests here:
-        //   return wxApp::OnExceptionInMainLoop();
-        // is equivalent to:
-        throw;
+        return wxApp::OnExceptionInMainLoop();
         }
     catch(std::exception& e)
         {
-        wxSafeShowMessage(e.what(), "lmi_wx_app::OnExceptionInMainLoop(): Fatal error.");
+// TODO ?? Does wxSafeShowMessage() have any advantage once the main
+// loop has begun? Using it here seems to duplicate messages pending
+// in the wxLog facility.
+//        wxSafeShowMessage("Error caught in OnExceptionInMainLoop().", e.what());
         wxLog::FlushActive();
         int z = wxMessageBox
             ("Try to resume?"
@@ -616,11 +597,11 @@ bool lmi_wx_app::OnExceptionInMainLoop()
         }
     catch(...)
         {
-        wxSafeShowMessage("Unknown error", "lmi_wx_app::OnExceptionInMainLoop(): Fatal error");
+        wxSafeShowMessage("Error caught in OnExceptionInMainLoop().", "Unknown error");
         wxLog::FlushActive();
+        return false;
         }
 }
-*/
 
 int lmi_wx_app::OnExit()
 {
