@@ -1,0 +1,180 @@
+// Unit-test framework based on Beman Dawes's boost library.
+//
+// Copyright (C) 2004, 2005 Gregory W. Chicares.
+//
+// This program is free software; you can redistribute it and/or modify
+// it under the terms of the GNU General Public License version 2 as
+// published by the Free Software Foundation.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program; if not, write to the Free Software
+// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+//
+// http://savannah.nongnu.org/projects/lmi
+// email: <chicares@cox.net>
+// snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
+
+// $Id: test_main.cpp,v 1.1 2005-01-14 19:47:45 chicares Exp $
+
+// This is a derived work based on Beman Dawes's boost test library
+// that bears the following copyright and license statement:
+// [Beman Dawes's copyright and license statement begins]
+// (C) Copyright Beman Dawes 1995-2001. Permission to copy, use, modify, sell
+// and distribute this software is granted provided this copyright notice
+// appears in all copies. This software is provided "as is" without express or
+// implied warranty, and with no claim as to its suitability for any purpose.
+//
+// See http://www.boost.org for updates, documentation, and revision history.
+// [end Beman Dawes's copyright and license statement]
+//
+// Gregory W. Chicares modified it in 2004 to make it independent of
+// the boost directory structure, and in any other ways indicated
+// below, and in any later years shown above. Any defect in it should
+// not reflect on Beman Dawes's reputation.
+
+// The original boost.org test library upon which this derived work is
+// based was later replaced by a very different library. That new test
+// library has more features but is less transparent; it is not
+// strictly compatible with tests written for the original library;
+// and, for boost-1.31.0 at least, it didn't work out of the box with
+// the latest como compiler. The extra features don't seem to be worth
+// the cost.
+//
+// It seems unwise to mix boost versions, and better to extract this
+// library from boost-1.23.0 and remove its dependencies on other
+// parts of boost, which is easy to do because, as Beman Dawes says:
+// Header dependencies are deliberately restricted to reduce coupling.
+
+// boost/test_main.cpp (header or not, as you like it) ----------------------//
+//
+// This file may be included as a header file, or may be compiled and placed
+// in a library for traditional linking. It is unusual for non-template
+// non-inline implementation code to be used as a header file, but the user
+// may elect to do so because header-only implementation requires no library
+// build support. (Suggested by Ed Brey)
+
+#ifdef __BORLANDC__
+#   include "pchfile.hpp"
+#   pragma hdrstop
+#endif // __BORLANDC__
+
+#include "exit_codes.hpp"
+#include "fenv_lmi.hpp"
+#include "test_tools.hpp"
+
+#include <iostream>
+#include <stdexcept>
+
+// GWC changed namespace 'boost' to prevent any conflict with code in
+// a later version of boost.
+namespace lmi_test
+{
+  namespace test
+  {
+    int test_tools_errors = 0;  // Count of errors detected.
+    int test_tools_successes = 0;  // Count of successful tests.
+
+    class test_tools_exception : public std::runtime_error
+    {
+      public:
+        test_tools_exception() : std::runtime_error("fatal test error") {};
+    };
+  } // Namespace test.
+
+    std::ostream& error_stream()
+    {
+        return std::cout << "\n**** test failed: ";
+    }
+
+    void record_error()
+    {
+        ++test::test_tools_errors;
+    }
+
+    void record_success()
+    {
+        ++test::test_tools_successes;
+    }
+} // Namespace lmi_test.
+
+// cpp_main()  --------------------------------------------------------------//
+
+// See the cpp_main.cpp comments; they apply to cpp_main and test_main.
+
+int test_main(int argc, char* argv[]);  // Prototype for user's test_main().
+
+int cpp_main(int argc, char* argv[])
+{
+    initialize_fpu();
+
+    int result;
+// GWC suppressed this because the borland compiler correcly warns
+// that the initializing value is unused.
+//    int result = 0;               // quiet compiler warnings
+
+    try
+        {
+        result = test_main( argc, argv );
+        }
+
+    // The rules for catch & arguments are a bit different from function
+    // arguments (ISO 15.3 paragraphs 18 & 19). Apparently const isn't
+    // required, but it doesn't hurt and some programmers ask for it.
+
+    catch(lmi_test::test::test_tools_exception const&)
+        {
+        std::cout << "\n**** previous test error is fatal" << std::endl;
+        // Reset so we don't get two messages.
+        lmi_test::test::test_tools_errors = 0;
+        result = lmi_test::exit_test_failure;
+        }
+
+    if(lmi_test::test::test_tools_errors)
+        {
+        std::cout
+            << "\n**** "
+            << lmi_test::test::test_tools_errors
+            << " test errors detected; "
+            << lmi_test::test::test_tools_successes
+            << " tests succeeded"
+            << std::endl
+            ;
+        result = lmi_test::exit_test_failure;
+        }
+    else
+        {
+        std::cout
+            << "\n.... "
+            << lmi_test::test::test_tools_successes
+            << " tests succeeded"
+            << std::endl
+            ;
+        }
+
+    return result;
+}
+
+// Revision History
+//  2005-01-09 GWC Update email address
+//  2004-11-15 GWC Call initialize_fpu() at startup, in order to get a
+//    consistent floating-point configuration.
+//  2004-10-20 GWC Add error_stream() to improve versatility; remove
+//    former error-reporting functions. Include the header that gives
+//    prototypes for functions implemented here. Revise documentation.
+//    Rename namespace.
+//  2004-10-05 GWC Report number of successful tests.
+//  2004-10-04 GWC Add record_error().
+//  2004-08-03 GWC Prevent a warning that had been engendered by an
+//    attempt to prevent a warning.
+//  2004-05-05 GWC Remove carriage returns.
+//  2004-05-05 GWC Extract original library from boost-1.23.0, remove
+//    dependencies on other parts of boost, and adapt to lmi conventions.
+//  26 Feb 01  Numerous changes suggested during formal review. (Beman)
+//  22 Jan 01 Use boost/cpp_main.hpp as framework. (Beman)
+//   5 Nov 00 Initial boost version (Beman Dawes)
+
