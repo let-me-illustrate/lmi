@@ -24,13 +24,13 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: toolbar.xrc,v 1.1 2005-03-11 03:19:31 chicares Exp $
+    $Id: toolbar.xrc,v 1.2 2005-03-15 14:33:51 chicares Exp $
 -->
 
 <object class="wxToolBar" name="toolbar">
     <style>wxTB_DOCKABLE</style>
     <margins>2,2</margins>
-    <bitmapsize>20,20</bitmapsize>
+    <bitmapsize>24,24</bitmapsize>
 <!--
 WX !! The 'separation' and 'packing' tags seem to have no effect.
 -->
@@ -38,37 +38,37 @@ WX !! The 'separation' and 'packing' tags seem to have no effect.
     <packing>10</packing>
     <object class="tool" name="wxID_NEW">
         <tooltip>New</tooltip>
-        <bitmap>new.bmp</bitmap>
+        <bitmap>new.xpm</bitmap>
         <longhelp>Open a new file</longhelp>
     </object>
     <object class="tool" name="wxID_OPEN">
         <tooltip>Open</tooltip>
-        <bitmap>open.bmp</bitmap>
+        <bitmap>open.xpm</bitmap>
         <longhelp>Open a file</longhelp>
     </object>
     <object class="tool" name="wxID_SAVE">
         <tooltip>Save</tooltip>
-        <bitmap>save.bmp</bitmap>
+        <bitmap>save.xpm</bitmap>
         <longhelp>Save file</longhelp>
     </object>
     <object class="tool" name="wxID_PRINT">
         <tooltip>Print</tooltip>
-        <bitmap>print.bmp</bitmap>
+        <bitmap>print.xpm</bitmap>
         <longhelp>Print</longhelp>
     </object>
     <object class="tool" name="edit_cell">
         <tooltip>Edit cell</tooltip>
-        <bitmap>edit_cell.bmp</bitmap>
+        <bitmap>edit-cell.xpm</bitmap>
         <longhelp>Edit selected cell</longhelp>
     </object>
     <object class="tool" name="edit_class">
         <tooltip>Edit class defaults</tooltip>
-        <bitmap>edit_class.bmp</bitmap>
+        <bitmap>edit-class.xpm</bitmap>
         <longhelp>Edit selected cell's class defaults</longhelp>
     </object>
     <object class="tool" name="edit_case">
         <tooltip>Edit case defaults</tooltip>
-        <bitmap>edit_case.bmp</bitmap>
+        <bitmap>edit-case.xpm</bitmap>
         <longhelp>Edit case defaults</longhelp>
     </object>
 <!--
@@ -79,75 +79,75 @@ but it seems to have no effect.
     <separator/>
     <object class="tool" name="run_cell">
         <tooltip>Run cell</tooltip>
-        <bitmap>run_cell.bmp</bitmap>
+        <bitmap>run-cell.xpm</bitmap>
         <longhelp>Run selected cell</longhelp>
     </object>
 <!-- TODO ?? Either implement this, or expunge it.
     <object class="tool" name="run_class">
         <tooltip>Run class</tooltip>
-        <bitmap>run_class.bmp</bitmap>
+        <bitmap>run-class.xpm</bitmap>
         <longhelp>Run all cells in selected cell's class</longhelp>
     </object>
 -->
     <object class="tool" name="run_case">
         <tooltip>Run case</tooltip>
-        <bitmap>run_case.bmp</bitmap>
+        <bitmap>run-case.xpm</bitmap>
         <longhelp>Run all cells</longhelp>
     </object>
     <separator/>
     <object class="tool" name="print_cell">
         <tooltip>Print cell</tooltip>
-        <bitmap>print_cell.bmp</bitmap>
+        <bitmap>print-cell.xpm</bitmap>
         <longhelp>Run and print selected cell</longhelp>
     </object>
 <!-- TODO ?? Either implement this, or expunge it.
     <object class="tool" name="print_class">
         <tooltip>Print class</tooltip>
-        <bitmap>print_class.bmp</bitmap>
+        <bitmap>print-class.xpm</bitmap>
         <longhelp>Run and print all cells in selected cell's class</longhelp>
     </object>
 -->
     <object class="tool" name="print_case">
         <tooltip>Print case</tooltip>
-        <bitmap>print_case.bmp</bitmap>
+        <bitmap>print-case.xpm</bitmap>
         <longhelp>Run and print all cells</longhelp>
     </object>
     <object class="tool" name="print_spreadsheet">
         <tooltip>Print case to spreadsheet</tooltip>
-        <bitmap>print_spreadsheet.bmp</bitmap>
+        <bitmap>write_spreadsheet.xpm</bitmap>
         <longhelp>Run and print all cells to a spreadsheet file</longhelp>
     </object>
     <separator/>
     <object class="tool" name="paste_census">
         <tooltip>Paste census</tooltip>
-        <bitmap>paste_census.bmp</bitmap>
+        <bitmap>paste-case.xpm</bitmap>
         <longhelp>Paste census data from clipboard</longhelp>
     </object>
     <object class="tool" name="add_cell">
         <tooltip>Add cell</tooltip>
-        <bitmap>add_cell.bmp</bitmap>
+        <bitmap>insert-rows.xpm</bitmap>
         <longhelp>Add a new cell with case default parameters</longhelp>
     </object>
     <object class="tool" name="delete_cells">
         <tooltip>Delete selected cell(s)</tooltip>
-        <bitmap>delete_cells.bmp</bitmap>
+        <bitmap>delete-row.xpm</bitmap>
         <longhelp>Delete selected cell(s)</longhelp>
     </object>
     <separator/>
     <object class="tool" name="expand_columns">
         <tooltip>Vary column width</tooltip>
-        <bitmap>expand_columns.bmp</bitmap>
+        <bitmap>varying-width.xpm</bitmap>
         <longhelp>Vary each column's width to show all contents</longhelp>
     </object>
     <object class="tool" name="shrink_columns">
         <tooltip>_Use fixed column widths</tooltip>
-        <bitmap>shrink_columns.bmp</bitmap>
+        <bitmap>fixed-width.xpm</bitmap>
         <longhelp>Display all columns with the same fixed width</longhelp>
     </object>
     <separator/>
     <object class="tool" name="wxID_HELP">
         <tooltip>Help</tooltip>
-        <bitmap>help.bmp</bitmap>
+        <bitmap>help.xpm</bitmap>
         <longhelp>Help</longhelp>
     </object>
 </object>
