@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: accountvalue.cpp,v 1.4 2005-02-17 04:40:02 chicares Exp $
+// $Id: accountvalue.cpp,v 1.5 2005-02-28 12:58:40 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -1049,5 +1049,11 @@ void AccountValue::TxTestLapse()
 void AccountValue::TxDebug()
 {
 // TODO ?? Not yet implemented.
+}
+
+//============================================================================
+void AccountValue::SetDebugFilename(std::string const& s)
+{
+    DebugFilename = s;
 }
 
