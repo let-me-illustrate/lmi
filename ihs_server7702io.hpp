@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_server7702io.hpp,v 1.1 2005-01-14 19:47:45 chicares Exp $
+// $Id: ihs_server7702io.hpp,v 1.2 2005-03-10 04:36:42 chicares Exp $
 
 #ifndef server7702io_hpp
 #define server7702io_hpp
@@ -38,7 +38,7 @@ struct Server7702Input
     int         Duration; // number of policy years completed since issue (so it starts at 0).
     double      GrossNontaxableWithdrawal; // the nontaxable portion of partial surrenders, including any withdrawal fees, plus involuntary withdrawals to restrict NAAR for reinsurance, plus amounts returned to preserve §7702A status.
     double      Premium; // gross payments, including those paid by a waiver benefit, before subtracting any "GrossNontaxableWithdrawal" on the same date, but net of any charges for non-qualified additional benefits that are not prefunded.
-    double      DecreaseRequiredByContract; // amount of decrease in specified amount required by the contract's terms, as for example in a decreasing term contract. This will be 0.0 for all current LCM products I know of.
+    double      DecreaseRequiredByContract; // amount of decrease in specified amount required by the contract's terms, as for example in a decreasing term contract: unsupported, so use 0.0 for now.
     std::string ProductName; // the only permissible values are those for which data files exist.
     e_uw_basis  UnderwritingBasis; // permissible values are Medical, Paramedical, Nonmedical, Simplified_issue, and Guaranteed_issue, and I assume this is set at issue and can never change.
     double      PremTaxLoadRate; // the rate actually charged as a premium load. Example: 0.02 means a 2% load. Used to determine whether any load reflected in §7702 calculations has changed.
