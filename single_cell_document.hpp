@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: single_cell_document.hpp,v 1.1 2005-01-14 19:47:45 chicares Exp $
+// $Id: single_cell_document.hpp,v 1.2 2005-02-13 23:17:18 chicares Exp $
 
 #ifndef single_cell_document_hpp
 #define single_cell_document_hpp
@@ -28,17 +28,16 @@
 
 #include "expimp.hpp"
 
-#ifndef BC_BEFORE_5_5
-    class IllusInputParms;
-#else
-// COMPILER !! bc++5.02 requires class definition for std::auto_ptr<class>.
-#   include "inputillus.hpp"
-#endif // old borland compiler
+#include "obstruct_slicing.hpp"
+
+#include <boost/utility.hpp>
 
 #include <istream>
 #include <memory>
 #include <ostream>
 #include <string>
+
+class IllusInputParms;
 
 // XMLWRAPP !! Recommend an xmlwrapp_fwd header to Peter. It might
 // contain all of the following (we don't use them all here):
@@ -51,7 +50,10 @@ namespace xml
 }
 
 class LMI_EXPIMP single_cell_document
+    :private boost::noncopyable
+    ,virtual private obstruct_slicing<single_cell_document>
 {
+// TODO ?? Too many long-distance friendships.
     friend class IllustrationDocument;
     friend class IllustrationView;
     friend class CensusView;
@@ -61,7 +63,7 @@ class LMI_EXPIMP single_cell_document
     single_cell_document();
     single_cell_document(IllusInputParms const&);
     single_cell_document(std::string const& filename);
-    virtual ~single_cell_document();
+    ~single_cell_document();
 
     void read(std::istream& is);
     void write(std::ostream& os);

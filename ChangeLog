@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.9 2005-02-13 22:01:26 chicares Exp $
+// $Id: ChangeLog,v 1.10 2005-02-13 23:17:18 chicares Exp $
 
 2005-01-14
 
@@ -357,10 +357,21 @@ self test in 'main.cpp'. Improve antediluvian branch's run time: even
 though the production branch's ledger classes are slower, caching
 table values makes solves about forty percent faster.
 
-2005-02-13 [1071]
+2005-02-13 [1072]
 
   objects.make
   obstruct_slicing.hpp      [new file]
   obstruct_slicing_test.cpp [new file]
 Add mixin class to obstruct slicing.
+
+  death_benefits.hpp
+  inputstatus.hpp
+  ledgervalues.hpp
+  multiple_cell_document.hpp
+  single_cell_document.hpp
+  tiered_charges.cpp
+  tiered_charges.hpp
+As appropriate: obstruct slicing, making the dtor nonvirtual; use
+boost::noncopyable, preferring it to writing a private copy ctor and
+assignment operator and documenting them as unimplemented.
 

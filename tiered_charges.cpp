@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: tiered_charges.cpp,v 1.1 2005-02-12 12:59:31 chicares Exp $
+// $Id: tiered_charges.cpp,v 1.2 2005-02-13 23:17:18 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -74,6 +74,11 @@ tiered_item_rep::tiered_item_rep
         {
         throw std::logic_error("Tiered data and bands of unequal length.");
         }
+}
+
+//============================================================================
+tiered_item_rep::~tiered_item_rep()
+{
 }
 
 // When reading or writing the data, assert that the last band is

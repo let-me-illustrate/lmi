@@ -19,14 +19,17 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledgervalues.hpp,v 1.2 2005-02-12 12:59:31 chicares Exp $
+// $Id: ledgervalues.hpp,v 1.3 2005-02-13 23:17:18 chicares Exp $
 
 #ifndef ledgervalues_hpp
 #define ledgervalues_hpp
 
 #include "config.hpp"
 
+#include "obstruct_slicing.hpp"
+
 #include <boost/scoped_ptr.hpp>
+#include <boost/utility.hpp>
 
 #include <iosfwd>
 
@@ -34,6 +37,8 @@ class InputParms;
 class Ledger;
 
 class IllusVal
+    :private boost::noncopyable
+    ,virtual private obstruct_slicing<IllusVal>
 {
   public:
     IllusVal();
@@ -48,9 +53,6 @@ class IllusVal
     Ledger const& ledger() const {return *ledger_;}
 
   private:
-    IllusVal(IllusVal const&);
-    IllusVal& operator=(IllusVal const&);
-
     void PrintHeader              (std::ostream& os) const;
     void PrintFooter              (std::ostream& os) const;
     void PrintNarrativeSummary    (std::ostream& os) const;
