@@ -19,40 +19,60 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: wx_checks.cpp,v 1.2 2005-03-18 00:17:21 chicares Exp $
+// $Id: wx_checks.cpp,v 1.3 2005-03-19 13:21:58 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
 #   pragma hdrstop
 #endif
 
-// Require certain optional wx components.
-
 #include <wx/defs.h>
 
+// Require certain optional wx components.
+
 #if !wxUSE_DOC_VIEW_ARCHITECTURE
-#   error Enable wxUSE_DOC_VIEW_ARCHITECTURE in wx/include/msw/wx/setup.h .
+#   error Enable wxUSE_DOC_VIEW_ARCHITECTURE in wx setup.
 #endif // !wxUSE_DOC_VIEW_ARCHITECTURE
 
 #if !wxUSE_MDI_ARCHITECTURE
-#   error Enable wxUSE_MDI_ARCHITECTURE in wx/include/msw/wx/setup.h .
+#   error Enable wxUSE_MDI_ARCHITECTURE in wx setup.
 #endif // !wxUSE_MDI_ARCHITECTURE
 
 #if !wxUSE_PRINTING_ARCHITECTURE
-#   error Enable wxUSE_PRINTING_ARCHITECTURE in wx/include/msw/wx/setup.h .
+#   error Enable wxUSE_PRINTING_ARCHITECTURE in wx setup.
 #endif // !wxUSE_PRINTING_ARCHITECTURE
 
 // Ensure that certain inappropriate options aren't used.
 
+// License not obviously compatible with GPL.
+#if wxUSE_APPLE_IEEE
+#   error Disable wxUSE_APPLE_IEEE in wx setup.
+#endif // wxUSE_APPLE_IEEE
+
+// Graphics format not known to be compatible with GPL.
+#if wxUSE_LIBJPEG
+#   error Disable wxUSE_LIBJPEG in wx setup.
+#endif // wxUSE_LIBJPEG
+
+// Graphics format not known to be compatible with GPL.
+#if wxUSE_LIBTIFF
+#   error Disable wxUSE_LIBTIFF in wx setup.
+#endif // wxUSE_LIBTIFF
+
+// Patented: incompatible with software freedom.
+#if wxUSE_GIF
+#   error Disable wxUSE_GIF in wx setup.
+#endif // wxUSE_GIF
+
 #if defined __GNUC__
 // Incompatible with gcc.
 #   if wxUSE_ON_FATAL_EXCEPTION
-#       error Disable wxUSE_ON_FATAL_EXCEPTION in wx/include/msw/wx/setup.h .
+#       error Disable wxUSE_ON_FATAL_EXCEPTION in wx setup.
 #   endif // wxUSE_ON_FATAL_EXCEPTION
 
 // Incompatible with gcc.
 #   if wxUSE_STACKWALKER
-#       error Disable wxUSE_STACKWALKER in wx/include/msw/wx/setup.h .
+#       error Disable wxUSE_STACKWALKER in wx setup.
 #   endif // wxUSE_STACKWALKER
 #endif // __GNUC__
 
@@ -62,6 +82,6 @@
 // presumably would require changes to the lmi makefiles.
 //
 #if wxUSE_THREADS
-#   error Disable wxUSE_THREADS in wx/include/msw/wx/setup.h .
+#   error Disable wxUSE_THREADS in wx setup.
 #endif // wxUSE_THREADS
 
