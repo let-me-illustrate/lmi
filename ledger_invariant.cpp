@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_invariant.cpp,v 1.4 2005-03-31 17:08:39 chicares Exp $
+// $Id: ledger_invariant.cpp,v 1.5 2005-04-02 22:55:01 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -249,8 +249,13 @@ void LedgerInvariant::Alloc(int len)
     // know what their lengths will be.
 
     // 'InforceLives' must be one longer than most vectors, so that
-    // it can hold both BOY and EOY values for all years.
-    InforceLives        .assign(1 + Length, 1.0);
+    // it can hold both BOY and EOY values for all years. It might
+    // seem more natural to initialize it to unity here because it's
+    // used as a multiplier, but the composite when constructed must
+    // have zeroes, so that adding each cell to it produces the
+    // correct total. For each actual non-composite cell, it's
+    // initialized correctly by the account-value class.
+    InforceLives        .assign(1 + Length, 0.0);
 
     // Data excluded from the maps above must be copied explicitly in
     // Copy(), which is called by the copy ctor and assignment operator.
@@ -447,10 +452,6 @@ void LedgerInvariant::Init(BasicValues* b)
         ,FundAllocations.end()
         ,0.0
         );
-
-    // Default initialization to 1.0 is OK: class AccountValue assigns
-    // yearly values reflecting partial mortality.
-//  InforceLives =
 
     // TODO ?? It is somewhat unusual that this 'invariant' class
     // includes this item that varies by basis. Perhaps it should be
