@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: crc32_test.cpp,v 1.1 2005-01-14 19:47:44 chicares Exp $
+// $Id: crc32_test.cpp,v 1.2 2005-01-15 20:17:16 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
