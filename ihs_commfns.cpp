@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_commfns.cpp,v 1.1 2005-01-14 19:47:44 chicares Exp $
+// $Id: ihs_commfns.cpp,v 1.2 2005-02-14 04:35:18 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -39,7 +39,7 @@
 // treating it as a special case, but this will always work.
 
 //============================================================================
-TOLCommFns::TOLCommFns
+OLCommFns::OLCommFns
     (std::vector<double> const& a_q
     ,std::vector<double> const& a_i
     )
@@ -80,7 +80,12 @@ TOLCommFns::TOLCommFns
 }
 
 //============================================================================
-TULCommFns::TULCommFns
+OLCommFns::~OLCommFns()
+{
+}
+
+//============================================================================
+ULCommFns::ULCommFns
     (std::vector<double> const& a_q
     ,std::vector<double> const& a_ic
     ,std::vector<double> const& a_ig
@@ -192,12 +197,17 @@ TULCommFns::TULCommFns
 */
 }
 
+//============================================================================
+ULCommFns::~ULCommFns()
+{
+}
+
 /*
 //============================================================================
 // The algorithm can be expressed so concisely in APL that I tried
 // an STL approach; but the balkiness of the notation makes it
 // harder to read than the C approach. This is untested.
-void TOLCommFns::TOLCommFns()
+void OLCommFns::OLCommFns()
 {
     std::vector<double>         c_;
     std::vector<double>         m_;
@@ -262,7 +272,7 @@ void TOLCommFns::TOLCommFns()
 #include <memory>
 
 //============================================================================
-void LMI_EXPIMP TULCommFns::SelfTest()
+void LMI_EXPIMP ULCommFns::SelfTest()
 {
     std::ofstream os("ulcf.txt", std::ios_base::out | std::ios_base::trunc);
     static double const COI[30] =   // TSA XXIX, page 32, table 5
@@ -277,8 +287,8 @@ void LMI_EXPIMP TULCommFns::SelfTest()
     std::vector<double>ic           (coi.size(), i_upper_12_over_12_from_i<double>()(0.10));
     std::vector<double>ig           (coi.size(), i_upper_12_over_12_from_i<double>()(0.04));
 
-    std::auto_ptr<TULCommFns> CF
-        (new TULCommFns
+    std::auto_ptr<ULCommFns> CF
+        (new ULCommFns
             (coi
             ,ic
             ,ig
@@ -303,7 +313,7 @@ void LMI_EXPIMP TULCommFns::SelfTest()
     int const trials = 1000;
     for(int j = 0; j < trials; j++)
         {
-        TULCommFns
+        ULCommFns
             (coi
             ,ic
             ,ig
@@ -328,8 +338,8 @@ void LMI_EXPIMP TULCommFns::SelfTest()
         ;
 
 // 1 extra leak if #ifdef out remainder of fn
-    std::auto_ptr<TULCommFns> CF
-        (new TULCommFns
+    std::auto_ptr<ULCommFns> CF
+        (new ULCommFns
             (coi
             ,ic
             ,ig
@@ -373,7 +383,7 @@ void LMI_EXPIMP TULCommFns::SelfTest()
 }
 
 //============================================================================
-void LMI_EXPIMP TOLCommFns::SelfTest()
+void LMI_EXPIMP OLCommFns::SelfTest()
 {
     std::ofstream os("olcf.txt", std::ios_base::out | std::ios_base::trunc);
 
@@ -394,7 +404,7 @@ void LMI_EXPIMP TOLCommFns::SelfTest()
     std::vector<double>q                (Q, Q + lmi_array_size(Q));
     std::vector<double>i                (100, 0.04);
 
-    std::auto_ptr<TOLCommFns> CF(new TOLCommFns(q, i));
+    std::auto_ptr<OLCommFns> CF(new OLCommFns(q, i));
 
     os << "Ordinary life commutation functions\n";
     os

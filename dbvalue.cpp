@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: dbvalue.cpp,v 1.1 2005-01-14 19:47:44 chicares Exp $
+// $Id: dbvalue.cpp,v 1.2 2005-02-14 04:35:18 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -74,7 +74,8 @@ TDBValue::TDBValue
 
 //============================================================================
 TDBValue::TDBValue(TDBValue const& rhs)
-    :key   (rhs.key)
+    :obstruct_slicing<TDBValue>()
+    ,key   (rhs.key)
     ,ndims (rhs.ndims)
     ,ndata (rhs.ndata)
 {

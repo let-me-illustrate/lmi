@@ -1,4 +1,4 @@
-// IRC7702.
+// Internal Revenue Code section 7702A (definition of life insurance).
 //
 // Copyright (C) 1998, 2001, 2002, 2003, 2004, 2005 Gregory W. Chicares.
 //
@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_irc7702.cpp,v 1.2 2005-01-31 13:12:48 chicares Exp $
+// $Id: ihs_irc7702.cpp,v 1.3 2005-02-14 04:35:18 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -114,7 +114,7 @@ namespace
 // fractional duration? --admin system does that
 
 //============================================================================
-TIRC7702::TIRC7702
+Irc7702::Irc7702
     (BasicValues         const& a_Values
     ,e_defn_life_ins     const& a_Test7702
     ,int                        a_IssueAge
@@ -223,12 +223,12 @@ TIRC7702::TIRC7702
 }
 
 //============================================================================
-TIRC7702::~TIRC7702()
+Irc7702::~Irc7702()
 {
 }
 
 //============================================================================
-void TIRC7702::ProcessGptPmt
+void Irc7702::ProcessGptPmt
     (int     // a_Duration
     ,double& a_Pmt
     ,double& // a_CumPmt
@@ -270,7 +270,7 @@ void TIRC7702::ProcessGptPmt
 //  C = guideline premium at attained age for old SA and old DBO
 //  New guideline premium = A + B - C
 //
-void TIRC7702::ProcessAdjustableEvent
+void Irc7702::ProcessAdjustableEvent
     (int                 a_Duration
     ,double              a_NewBftAmt
     ,double              a_PriorBftAmt
@@ -358,7 +358,7 @@ void TIRC7702::ProcessAdjustableEvent
 }
 
 //============================================================================
-double TIRC7702::Forceout()
+double Irc7702::Forceout()
 {
     // Return forceout amount, if any, and assume that the caller
     // disburses it to maintain compliance with the guideline limit.
@@ -375,7 +375,7 @@ double TIRC7702::Forceout()
 }
 
 //============================================================================
-void TIRC7702::Init()
+void Irc7702::Init()
 {
     Length = Qc.size();
     // TODO ?? Assumes that endowment age is always 100--should pass as arg instead.
@@ -396,7 +396,7 @@ void TIRC7702::Init()
 }
 
 //============================================================================
-void TIRC7702::InitCommFns()
+void Irc7702::InitCommFns()
 {
     std::vector<double> glp_naar_disc_rate;
     std::vector<double> gsp_naar_disc_rate;
@@ -428,7 +428,7 @@ void TIRC7702::InitCommFns()
 
     // Commutation functions using 4% min i: both options 1 and 2
     CommFns[Opt1Int4Pct].reset
-        (new TULCommFns
+        (new ULCommFns
             (Qc
             ,GLPic
             ,glp_naar_disc_rate
@@ -441,7 +441,7 @@ void TIRC7702::InitCommFns()
     DEndt[Opt1Int4Pct] = CommFns[Opt1Int4Pct]->aD()[Length];
 
     CommFns[Opt2Int4Pct].reset
-        (new TULCommFns
+        (new ULCommFns
             (Qc
             ,GLPic
             ,glp_naar_disc_rate
@@ -455,7 +455,7 @@ void TIRC7702::InitCommFns()
 
     // Commutation functions using 6% min i: always option 1
     CommFns[Opt1Int6Pct].reset
-        (new TULCommFns
+        (new ULCommFns
             (Qc
             ,GSPic
             ,gsp_naar_disc_rate
@@ -469,7 +469,7 @@ void TIRC7702::InitCommFns()
 }
 
 //============================================================================
-void TIRC7702::InitCorridor()
+void Irc7702::InitCorridor()
 {
     // CVAT corridor
     // TODO ?? Substandard: set last NSP to 1.0? ignore flats? set NSP[omega] to 1?
@@ -494,13 +494,13 @@ void TIRC7702::InitCorridor()
 }
 
 //============================================================================
-void TIRC7702::InitPvVectors(EIOBasis const& a_EIOBasis)
+void Irc7702::InitPvVectors(EIOBasis const& a_EIOBasis)
 {
     // We may need to recalculate these every year for a
     // survivorship policy, depending on how its account
     // value accumulation is specified.
 
-    TULCommFns const& comm_fns = *CommFns[a_EIOBasis];
+    ULCommFns const& comm_fns = *CommFns[a_EIOBasis];
 
     // Present value of charges per policy
 
@@ -692,7 +692,7 @@ void TIRC7702::InitPvVectors(EIOBasis const& a_EIOBasis)
 //============================================================================
 // TODO ?? Is there any reason why dbopt would change?
 // --not used by server
-void TIRC7702::Initialize7702
+void Irc7702::Initialize7702
     (double              a_BftAmt
     ,double              a_SpecAmt
     ,e_dbopt_7702 const& a_DBOpt
@@ -725,7 +725,7 @@ void TIRC7702::Initialize7702
 
 //============================================================================
 // Designed for use by FindSpecAmt, which treats specamt and bftamt as equal.
-void TIRC7702::Initialize7702
+void Irc7702::Initialize7702
     (double a_SpecAmt
     ) const
 {
@@ -747,7 +747,7 @@ void TIRC7702::Initialize7702
 }
 
 //============================================================================
-void TIRC7702::UpdateBOY7702()
+void Irc7702::UpdateBOY7702()
 {
     // Update guideline limits.
     // TODO ?? This assumes no off-anniversary change. That will probably
@@ -759,7 +759,7 @@ void TIRC7702::UpdateBOY7702()
 }
 
 //============================================================================
-std::vector<double> const& TIRC7702::Corridor() const
+std::vector<double> const& Irc7702::Corridor() const
 {
     if(e_gpt == Test7702)
         {
@@ -784,7 +784,7 @@ std::vector<double> const& TIRC7702::Corridor() const
 }
 
 //============================================================================
-TIRC7702::EIOBasis TIRC7702::Get4PctBasis
+Irc7702::EIOBasis Irc7702::Get4PctBasis
     (e_dbopt_7702 const& a_DBOpt
     ) const
 {
@@ -827,7 +827,7 @@ TIRC7702::EIOBasis TIRC7702::Get4PctBasis
 }
 
 //============================================================================
-double TIRC7702::CalculateGLP
+double Irc7702::CalculateGLP
     (int                 a_Duration
     ,double              a_BftAmt
     ,double              a_SpecAmt
@@ -848,7 +848,7 @@ double TIRC7702::CalculateGLP
 }
 
 //============================================================================
-double TIRC7702::CalculateGSP
+double Irc7702::CalculateGSP
     (int    a_Duration
     ,double a_BftAmt
     ,double a_SpecAmt
@@ -868,7 +868,7 @@ double TIRC7702::CalculateGSP
 }
 
 //============================================================================
-double TIRC7702::CalculatePremium
+double Irc7702::CalculatePremium
     (EIOBasis const& a_EIOBasis
     ,int             a_Duration
     ,double          a_BftAmt
@@ -944,7 +944,7 @@ double TIRC7702::CalculatePremium
 
 /*
 //============================================================================
-void TIRC7702::InitSevenPayPrem()
+void Irc7702::InitSevenPayPrem()
 {
         // 7PP = MO / (N0-N7) (limit 7 to maturity year)
         // add flat extras to 7PP?
@@ -963,7 +963,7 @@ void TIRC7702::InitSevenPayPrem()
 */
 
 //============================================================================
-double TIRC7702::CalculateGLPSpecAmt
+double Irc7702::CalculateGLPSpecAmt
     (int                 a_Duration
     ,double              a_Premium
     ,e_dbopt_7702 const& a_DBOpt
@@ -979,7 +979,7 @@ double TIRC7702::CalculateGLPSpecAmt
 }
 
 //============================================================================
-double TIRC7702::CalculateGSPSpecAmt
+double Irc7702::CalculateGSPSpecAmt
     (int    a_Duration
     ,double a_Premium
     ) const
@@ -997,8 +997,8 @@ double TIRC7702::CalculateGSPSpecAmt
 //{
     class FindSpecAmt
     {
-        typedef TIRC7702::EIOBasis EIOBasis;
-        TIRC7702 const&     IRC7702;
+        typedef Irc7702::EIOBasis EIOBasis;
+        Irc7702 const&      Irc7702_;
         EIOBasis const&     EIOBasis_;
         int const           Duration;
         double const        Premium;
@@ -1007,14 +1007,14 @@ double TIRC7702::CalculateGSPSpecAmt
         double              SpecAmt;
       public:
         FindSpecAmt
-            (TIRC7702 const& a_IRC7702
+            (Irc7702 const&  a_IRC7702
             ,EIOBasis const& a_EIOBasis
             ,int             a_Duration
             ,double          a_Premium
             ,double          a_NetPmtFactorTgt
             ,double          a_NetPmtFactorExc
             )
-            :IRC7702         (a_IRC7702)
+            :Irc7702_        (a_IRC7702)
             ,EIOBasis_       (a_EIOBasis)
             ,Duration        (a_Duration)
             ,Premium         (a_Premium)
@@ -1026,9 +1026,9 @@ double TIRC7702::CalculateGSPSpecAmt
         double operator()(double a_Trial)
             {
             SpecAmt = a_Trial;
-            IRC7702.Initialize7702(a_Trial);
+            Irc7702_.Initialize7702(a_Trial);
             return
-                    IRC7702.CalculatePremium
+                    Irc7702_.CalculatePremium
                         (EIOBasis_
                         ,Duration
                         ,a_Trial
@@ -1055,7 +1055,7 @@ double TIRC7702::CalculateGSPSpecAmt
 // specified-amount (underwriting) or ADD charge if they apply only up to some
 // maximum, or the target. So here we have eight special cases rather than
 // two, and adding another QAB like ADD could double the eight cases.
-double TIRC7702::CalculateSpecAmt
+double Irc7702::CalculateSpecAmt
     (EIOBasis const& a_EIOBasis
     ,int             a_Duration
     ,double          a_Premium
@@ -1090,19 +1090,19 @@ double TIRC7702::CalculateSpecAmt
 }
 
 //============================================================================
-double TIRC7702::GetLeastBftAmtEver() const
+double Irc7702::GetLeastBftAmtEver() const
 {
     return LeastBftAmtEver;
 }
 
 //============================================================================
-double TIRC7702::RoundedGLP() const
+double Irc7702::RoundedGLP() const
 {
     return round_max_premium(PresentGLP);
 }
 
 //============================================================================
-double TIRC7702::RoundedGSP() const
+double Irc7702::RoundedGSP() const
 {
     return round_max_premium(PresentGSP);
 }
@@ -1131,7 +1131,7 @@ static double const Q[100] =    // I think this is unisex unismoke ANB 80CSO
 
 int main()
 {
-// timing to construct TIRC7702:
+// timing to construct Irc7702:
 // RW: about 37 msec
 // OS: about 93 msec; about 41 if we disable index checking
 //   in std::vector operator []
@@ -1144,7 +1144,7 @@ int main()
 
     std::auto_ptr<Timer> timer(new Timer);
 
-    TIRC7702* IRC7702 = new TIRC7702
+    Irc7702* Irc7702_ = new Irc7702
         (CVAT
         ,45
         ,100000.0
@@ -1159,7 +1159,7 @@ int main()
         ,PolFee
         );
     cout << timer->Stop().Report();
-    delete IRC7702;
+    delete Irc7702_;
 }
 #endif  // TESTING
 

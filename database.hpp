@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: database.hpp,v 1.1 2005-01-14 19:47:44 chicares Exp $
+// $Id: database.hpp,v 1.2 2005-02-14 04:35:18 chicares Exp $
 
 #ifndef database_hpp
 #define database_hpp
@@ -28,7 +28,10 @@
 
 #include "dbindex.hpp"
 #include "expimp.hpp"
+#include "obstruct_slicing.hpp"
 #include "xenumtypes.hpp"
+
+#include <boost/utility.hpp>
 
 #include <string>
 #include <vector>
@@ -39,6 +42,8 @@ class TDBValue;
 class InputParms;
 
 class LMI_EXPIMP TDatabase
+    :private boost::noncopyable
+    ,virtual private obstruct_slicing<TDatabase>
 {
   public:
     TDatabase
@@ -50,11 +55,8 @@ class LMI_EXPIMP TDatabase
         ,e_uw_basis  const& a_UWBasis
         ,e_state     const& a_State
         );
-    TDatabase(TDatabase const&);
     explicit TDatabase(InputParms const&);
-    virtual ~TDatabase();
-
-    TDatabase& operator=(TDatabase const&);
+    ~TDatabase();
 
     e_state const& GetStateOfJurisdiction() const {return State;}
     int length() const {return length_;}
@@ -74,11 +76,9 @@ class LMI_EXPIMP TDatabase
 
   private:
     TDatabase();
-    void Alloc(std::string const& NewFilename);
+
     void Init();
     void Init(std::string const& NewFilename);
-    void Copy(TDatabase const&);
-    void Destroy();
 
     int           Index[TDBIndex::MaxIndex];
     TDBIndex      Idx;
