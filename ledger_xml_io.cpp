@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xml_io.cpp,v 1.6 2005-03-30 19:30:05 chicares Exp $
+// $Id: ledger_xml_io.cpp,v 1.7 2005-03-31 17:21:11 chicares Exp $
 
 #include "config.hpp"
 
@@ -1025,30 +1025,18 @@ void Ledger::write(xml::node& x) const
     std::vector<std::string> SupplementalReportColumns;
     if(ledger_invariant_->SupplementalReport)
         {
-        if("[none]" != ledger_invariant_->SupplementalReportColumn00)
-            SupplementalReportColumns.push_back(ledger_invariant_->SupplementalReportColumn00);
-        if("[none]" != ledger_invariant_->SupplementalReportColumn01)
-            SupplementalReportColumns.push_back(ledger_invariant_->SupplementalReportColumn01);
-        if("[none]" != ledger_invariant_->SupplementalReportColumn02)
-            SupplementalReportColumns.push_back(ledger_invariant_->SupplementalReportColumn02);
-        if("[none]" != ledger_invariant_->SupplementalReportColumn03)
-            SupplementalReportColumns.push_back(ledger_invariant_->SupplementalReportColumn03);
-        if("[none]" != ledger_invariant_->SupplementalReportColumn04)
-            SupplementalReportColumns.push_back(ledger_invariant_->SupplementalReportColumn04);
-        if("[none]" != ledger_invariant_->SupplementalReportColumn05)
-            SupplementalReportColumns.push_back(ledger_invariant_->SupplementalReportColumn05);
-        if("[none]" != ledger_invariant_->SupplementalReportColumn06)
-            SupplementalReportColumns.push_back(ledger_invariant_->SupplementalReportColumn06);
-        if("[none]" != ledger_invariant_->SupplementalReportColumn07)
-            SupplementalReportColumns.push_back(ledger_invariant_->SupplementalReportColumn07);
-        if("[none]" != ledger_invariant_->SupplementalReportColumn08)
-            SupplementalReportColumns.push_back(ledger_invariant_->SupplementalReportColumn08);
-        if("[none]" != ledger_invariant_->SupplementalReportColumn09)
-            SupplementalReportColumns.push_back(ledger_invariant_->SupplementalReportColumn09);
-        if("[none]" != ledger_invariant_->SupplementalReportColumn10)
-            SupplementalReportColumns.push_back(ledger_invariant_->SupplementalReportColumn10);
-        if("[none]" != ledger_invariant_->SupplementalReportColumn11)
-            SupplementalReportColumns.push_back(ledger_invariant_->SupplementalReportColumn11);
+        SupplementalReportColumns.push_back(ledger_invariant_->SupplementalReportColumn00);
+        SupplementalReportColumns.push_back(ledger_invariant_->SupplementalReportColumn01);
+        SupplementalReportColumns.push_back(ledger_invariant_->SupplementalReportColumn02);
+        SupplementalReportColumns.push_back(ledger_invariant_->SupplementalReportColumn03);
+        SupplementalReportColumns.push_back(ledger_invariant_->SupplementalReportColumn04);
+        SupplementalReportColumns.push_back(ledger_invariant_->SupplementalReportColumn05);
+        SupplementalReportColumns.push_back(ledger_invariant_->SupplementalReportColumn06);
+        SupplementalReportColumns.push_back(ledger_invariant_->SupplementalReportColumn07);
+        SupplementalReportColumns.push_back(ledger_invariant_->SupplementalReportColumn08);
+        SupplementalReportColumns.push_back(ledger_invariant_->SupplementalReportColumn09);
+        SupplementalReportColumns.push_back(ledger_invariant_->SupplementalReportColumn10);
+        SupplementalReportColumns.push_back(ledger_invariant_->SupplementalReportColumn11);
         }
 
     xml::node supplementalreport("supplementalreport");
