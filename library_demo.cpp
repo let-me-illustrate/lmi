@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: library_demo.cpp,v 1.4 2005-02-12 12:59:31 chicares Exp $
+// $Id: library_demo.cpp,v 1.5 2005-03-02 03:33:22 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -77,7 +77,7 @@ std::cout << s.size() << std::endl;
 
 IllusInputParms* IllustrationDocument::input_parameters() const
 {
-    return doc.input_data.get();
+    return doc.input_data_.get();
 }
 
 void test()

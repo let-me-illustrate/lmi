@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: single_cell_document.cpp,v 1.1 2005-01-14 19:47:45 chicares Exp $
+// $Id: single_cell_document.cpp,v 1.2 2005-03-02 03:33:22 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -40,19 +40,19 @@
 
 //============================================================================
 single_cell_document::single_cell_document()
-    :input_data(new IllusInputParms())
+    :input_data_(new IllusInputParms())
 {
 }
 
 //============================================================================
 single_cell_document::single_cell_document(IllusInputParms const& parms)
-    :input_data(new IllusInputParms(parms))
+    :input_data_(new IllusInputParms(parms))
 {
 }
 
 //============================================================================
 single_cell_document::single_cell_document(std::string const& filename)
-    :input_data(new IllusInputParms())
+    :input_data_(new IllusInputParms())
 {
     xml::init init;
 // XMLWRAPP !! See comment on parse() in header.
@@ -110,7 +110,7 @@ using namespace xml;
         }
     if(!child->is_text())
         {
-        *child >> *input_data;
+        *child >> *input_data_;
         }
 }
 
@@ -134,7 +134,7 @@ void single_cell_document::write(std::ostream& os)
 {
     xml::init init;
     xml::node root(xml_root_name().c_str());
-    root << *input_data;
+    root << *input_data_;
     os << root;
 }
 
