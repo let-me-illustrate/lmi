@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mortality_rates.hpp,v 1.1 2005-01-14 19:47:45 chicares Exp $
+// $Id: mortality_rates.hpp,v 1.2 2005-03-22 03:40:18 chicares Exp $
 
 #ifndef mortality_rates_hpp
 #define mortality_rates_hpp
@@ -53,13 +53,6 @@ class MortalityRates
 {
   public:
     MortalityRates(BasicValues const&);
-
-    void SetDynamicCOIRate
-        (double*        YearsCOIRate
-        ,e_basis const& Basis
-        ,int            Year
-        ,double         CaseExpRatReserve
-        ) const;
 
     std::vector<double> const& MonthlyCoiRates(enum_basis)                const;
     std::vector<double> const& MonthlyCoiRatesBand0(e_basis const& Basis) const;

@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_mortal.cpp,v 1.4 2005-02-17 04:40:03 chicares Exp $
+// $Id: ihs_mortal.cpp,v 1.5 2005-03-22 03:40:18 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -255,12 +255,6 @@ void MortalityRates::Init(BasicValues const& basic_values)
             (  0.5
             * (MonthlyCurrentCoiRatesBand2_[j] + MonthlyGuaranteedCoiRates_[j])
             );
-        // For experience rated products that use the alternative
-        // COI, this is calculated dynamically in GetDynamicCOIRate().
-        // But we have no such product at this time that requires
-        // a midpoint COI.
-        // TODO ?? So where's the assertion that breaks if someone
-        // adds such a product?
         }
 
 /*
@@ -801,55 +795,5 @@ std::vector<double> const& MortalityRates::TargetPremiumRates() const
 {
     LMI_ASSERT(0 != TargetPremiumRates_.size());
     return TargetPremiumRates_;
-}
-
-//============================================================================
-void MortalityRates::SetDynamicCOIRate
-    (double*        YearsCOIRate
-    ,e_basis const& ExpAndGABasis
-    ,int            year
-    ,double         CaseExpRatReserve
-    ) const
-{
-    // Only current monthly COI varies dynamically
-    switch(ExpAndGABasis)
-        {
-        case e_currbasis:
-            {
-            // Do nothing here--handle below instead.
-            }
-            break;
-        case e_guarbasis:
-            {
-            return;
-            }
-            // break;
-        case e_mdptbasis:
-            {
-            // Fall through to default: not implemented for
-            // illustration-reg products.
-            }
-            break;
-        default:
-            {
-            fatal_error()
-                << "Case '"
-                << ExpAndGABasis
-                << "' not found."
-                << LMI_FLUSH
-                ;
-            }
-        }
-
-    // No adjustment if case experience rating reserve is nonnegative.
-    // Not designed to work with COI banding.
-    if(0.0 <= CaseExpRatReserve)
-        {
-        *YearsCOIRate = MonthlyCurrentCoiRatesBand0_[year];
-        }
-    else
-        {
-        *YearsCOIRate = AlternativeMonthlyCoiRates_[year];
-        }
 }
 

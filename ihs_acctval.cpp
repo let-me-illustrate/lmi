@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_acctval.cpp,v 1.9 2005-03-07 11:48:58 chicares Exp $
+// $Id: ihs_acctval.cpp,v 1.10 2005-03-22 03:40:18 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -402,7 +402,8 @@ restart:
         for(int month = InforceMonth; month < 12; ++month)
             {
             CoordinateCounters();
-            IncrementBOM(year, month, CaseExpRatReserve);
+            // Individual run: case-level k factor is zero.
+            IncrementBOM(year, month, 0.0);
 
             // Add assets and COI charges to case totals
             Assets = GetSepAcctAssetsInforce();
@@ -913,9 +914,9 @@ void AccountValue::DoYear(int inforce_month)
 //============================================================================
 // Process monthly transactions up to but excluding interest credit
 double AccountValue::IncrementBOM
-    (int year
-    ,int month
-    ,double CaseExpRatReserve
+    (int    year
+    ,int    month
+    ,double a_case_k_factor
     )
 {
     // TODO ?? We don't start at InforceYear, because issue years may differ
@@ -965,12 +966,15 @@ double AccountValue::IncrementBOM
     if(COIIsDynamic && Input_->UseExperienceRating)
         {
         LMI_ASSERT(!UseUnusualCOIBanding);
-        MortalityRates_->SetDynamicCOIRate
-            (&YearsCOIRate0
-            ,ExpAndGABasis
+        case_k_factor = a_case_k_factor;
+
+/* TODO ?? 'YearsCOIRate0' is unused.
+        YearsCOIRate0 = MortalityRates_->DynamicCOIRate
+            (ExpAndGABasis
             ,Year
-            ,CaseExpRatReserve
+            ,case_k_factor
             );
+*/
         }
 
     DoMonthDR();
@@ -1971,6 +1975,9 @@ double AccountValue::GetNetCOI() const
 
     // TODO ?? Do this once per cell?
 
+    // TODO ?? Compare comments to code: are 'additive' and 'multiplicative'
+    // mixed up?
+
     // This is the multiplicative part of COI retention,
     // expressed as 1 + constant: e.g. 1.05 for 5% retention.
     // It is tiered by initial "assumed" number of lives.
@@ -2010,7 +2017,9 @@ double AccountValue::GetLastCOIChargeInforce() const
         return 0.0;
         }
 
-    return GetNetCOI() * InforceLives;
+// TODO ?? Fix problems in GetNetCOI() before using it.
+//    return GetNetCOI() * InforceLives;
+    return COI * InforceLives;
 }
 
 //============================================================================
