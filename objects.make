@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: objects.make,v 1.7 2005-03-02 04:42:38 chicares Exp $
+# $Id: objects.make,v 1.8 2005-03-15 14:35:12 chicares Exp $
 
 ################################################################################
 
@@ -155,7 +155,7 @@ antediluvian_cli_objects := \
 antediluvian_cgi_objects := \
   $(cgicc_objects) \
   alert_cgi.o \
-  cgimain.o \
+  main_cgi.o \
 
 ################################################################################
 
@@ -231,6 +231,36 @@ lmi_cli_objects := \
   alert_cli.o \
   getopt.o \
   main.o \
+
+lmi_wx_objects := \
+  about_dialog.o \
+  alert_wx.o \
+  census_document.o \
+  census_view.o \
+  date_control.o \
+  datum_base.o \
+  datum_boolean.o \
+  datum_string.o \
+  docmanager_ex.o \
+  docmdichildframe_ex.o \
+  facets.o \
+  getopt.o \
+  illustration_document.o \
+  illustration_view.o \
+  input.o \
+  input_harmonization.o \
+  lmi.rc.o \
+  main_wx.o \
+  mc_enum.o \
+  mc_enum_types.o \
+  previewframe_ex.o \
+  text_doc.o \
+  text_view.o \
+  tn_range_types.o \
+  transferor.o \
+  view_ex.o \
+  wx_checks.o \
+  xml_notebook.o \
 
 product_files_objects := \
   alert_cli.o \
@@ -308,6 +338,7 @@ unit_test_targets := \
   actuarial_table_test$(EXEEXT) \
   alert_test$(EXEEXT) \
   any_member_test$(EXEEXT) \
+  argv0_test$(EXEEXT) \
   calendar_date_test$(EXEEXT) \
   commutation_functions_test$(EXEEXT) \
   crc32_test$(EXEEXT) \
@@ -343,8 +374,8 @@ common_test_objects := \
   license.o \
 
 actuarial_table_test$(EXEEXT): \
-  $(common_test_objects) \
   $(boost_filesystem_objects) \
+  $(common_test_objects) \
   alert.o \
   alert_cli.o \
   actuarial_table.o \
@@ -360,6 +391,11 @@ alert_test$(EXEEXT): \
 any_member_test$(EXEEXT): \
   $(common_test_objects) \
   any_member_test.o \
+
+argv0_test$(EXEEXT): \
+  $(boost_filesystem_objects) \
+  $(common_test_objects) \
+  argv0_test.o \
 
 calendar_date_test$(EXEEXT): \
   $(common_test_objects) \
@@ -398,8 +434,8 @@ input_seq_test$(EXEEXT): \
 input_test$(EXEEXT): LIBS = $(LIBXML2_LIBS)
 input_test$(EXEEXT): \
   $(LIBXML2_LIBS) \
-  $(common_test_objects) \
   $(boost_filesystem_objects) \
+  $(common_test_objects) \
   $(xmlwrapp_objects) \
   alert.o \
   alert_cli.o \
