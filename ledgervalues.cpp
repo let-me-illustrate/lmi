@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledgervalues.cpp,v 1.4 2005-02-17 04:40:03 chicares Exp $
+// $Id: ledgervalues.cpp,v 1.5 2005-03-02 03:33:59 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -71,6 +71,10 @@ IllusVal& IllusVal::operator+=(Ledger const& addend)
 double IllusVal::Run(InputParms const& IP)
 {
     AccountValue av(IP);
+// TODO ?? Reconsider this. Even if no better naming convention can be
+// imagined, class AccountValue would be a better place to assign a
+// default name.
+    av.SetDebugFilename("anonymous.debug");
     double z = av.RunAV();
 // TODO ?? Consider using boost::shared_ptr to avoid copying.
     ledger_.reset(new Ledger(av.LedgerValues()));
