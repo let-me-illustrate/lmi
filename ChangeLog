@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.24 2005-03-15 14:58:19 chicares Exp $
+// $Id: ChangeLog,v 1.25 2005-03-17 04:30:32 chicares Exp $
 
 2005-01-14
 
@@ -766,7 +766,7 @@ Rename 'cgimain.cpp' to 'main_cgi.cpp'.
   view_ex.cpp
 Change main application header.
 
-2005-03-12 [1395]
+2005-03-12 [1397]
 
   text_doc.hpp
 Mark overrides as virtual.
@@ -777,7 +777,7 @@ Improve documentation.
   workhorse.make
 Add untested target to prevent accidental license problems.
 
-2005-03-15 [1398]
+2005-03-15 [1397]
 
   illustration_view.cpp
 Remove obsolete comments. Improve 'calculation summary'.
@@ -833,4 +833,13 @@ they typically include tabs, so those things are not checked for.
   objects.make
   workhorse.make
 Add wx target.
+
+2005-03-16 [1403]
+
+  input.cpp
+  input_harmonization.cpp
+  mc_enum.tpp
+  xml_notebook.cpp
+  xml_notebook.hpp
+Import previously-tested GUI changes from sandbox.
 
