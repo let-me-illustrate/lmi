@@ -24,7 +24,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: xml_notebook.xrc,v 1.3 2005-03-19 13:22:46 chicares Exp $
+    $Id: xml_notebook.xrc,v 1.4 2005-03-30 05:15:31 chicares Exp $
 -->
 
 <object class="wxPanel" name="plan_panel">
@@ -2344,62 +2344,129 @@ looks weird if we don't make this look like its siblings.
     <object class="wxFlexGridSizer">
         <cols>1</cols>
         <growablecols>0</growablecols>
-        <growablerows>0,1</growablerows>
+        <growablerows>1</growablerows>
         <object class="sizeritem">
-            <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
-            <border>4</border>
+            <flag>wxALIGN_CENTER_VERTICAL</flag>
+            <object class="wxStaticBoxSizer">
+                <flag>wxALIGN_CENTER_VERTICAL</flag>
+                <orient>wxVERTICAL</orient>
+                <label>Funds</label>
+                <object class="sizeritem">
+                    <flag>wxALIGN_CENTER_VERTICAL</flag>
+                    <object class="wxRadioBox" name="FundChoiceType">
+                        <content>
+                            <item>Average fund</item>
+                            <item>Override fund</item>
+                            <item>Choose funds</item>
+                        </content>
+                    </object>
+                </object>
+                <object class="sizeritem">
+                    <flag>wxALIGN_CENTER_VERTICAL</flag>
+                    <object class="wxFlexGridSizer">
+                        <rows>1</rows>
+                        <growablecols>1</growablecols>
+                        <object class="sizeritem">
+                            <flag>wxALIGN_CENTER_VERTICAL</flag>
+                            <object class="wxStaticText">
+                                <label>fee</label>
+                            </object>
+                        </object>
+                        <object class="sizeritem">
+                            <flag>wxGROW | wxALIGN_CENTER_VERTICAL</flag>
+                            <object class="wxTextCtrl" name="InputFundManagementFee">
+                            </object>
+                        </object>
+                        <object class="sizeritem">
+                            <flag>wxALIGN_CENTER_VERTICAL</flag>
+                            <object class="wxStaticText">
+                                <label>bp</label>
+                            </object>
+                        </object>
+                    </object>
+                </object>
+            </object>
+        </object>
+        <object class="sizeritem">
+            <flag>wxALIGN_LEFT | wxALIGN_BOTTOM</flag>
+            <object class="wxStaticText">
+                <label>Rates by account</label>
+            </object>
+        </object>
+        <object class="sizeritem">
+            <flag>wxGROW|wxALIGN_CENTER_VERTICAL</flag>
             <object class="wxFlexGridSizer">
-                <cols>2</cols>
+                <cols>3</cols>
                 <growablecols>1</growablecols>
+                <!-- General account rate. -->
                 <object class="sizeritem">
-                    <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
-                    <border>4</border>
+                    <flag>wxALIGN_CENTER_VERTICAL</flag>
                     <object class="wxStaticText">
-                        <label>General account rate</label>
+                        <label>General</label>
                     </object>
                 </object>
                 <object class="sizeritem">
-                    <flag>wxGROW</flag>
+                    <flag>wxGROW|wxALIGN_CENTER_VERTICAL</flag>
                     <object class="wxTextCtrl" name="GeneralAccountRate">
-                        <size>180,-1</size>
-                        <value>0</value>
                     </object>
                 </object>
                 <object class="sizeritem">
-                    <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
-                    <border>4</border>
+                    <flag>wxGROW|wxALIGN_CENTER_VERTICAL</flag>
+                    <object class="wxRadioBox" name="GeneralAccountRateType">
+                        <style>wxRA_SPECIFY_ROWS</style>
+                        <content>
+                            <item>CredRate</item>
+                            <item>GrossRate</item>
+                            <item>NetRate</item>
+                        </content>
+                    </object>
+                </object>
+                <!-- Separate account rate. -->
+                <object class="sizeritem">
+                    <flag>wxALIGN_CENTER_VERTICAL</flag>
                     <object class="wxStaticText">
-                        <label>Separate account rate</label>
+                        <label>Separate</label>
                     </object>
                 </object>
                 <object class="sizeritem">
-                    <flag>wxGROW</flag>
+                    <flag>wxGROW|wxALIGN_CENTER_VERTICAL</flag>
                     <object class="wxTextCtrl" name="SeparateAccountRate">
-                        <size>180,-1</size>
-                        <value>0</value>
                     </object>
                 </object>
                 <object class="sizeritem">
-                    <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
-                    <border>4</border>
+                    <flag>wxGROW|wxALIGN_CENTER_VERTICAL</flag>
+                    <object class="wxRadioBox" name="SeparateAccountRateType">
+                        <style>wxRA_SPECIFY_ROWS</style>
+                        <content>
+                            <item>CredRate</item>
+                            <item>GrossRate</item>
+                            <item>NetRate</item>
+                        </content>
+                    </object>
+                </object>
+                <!-- Loan rate. -->
+                <object class="sizeritem">
+                    <flag>wxALIGN_CENTER_VERTICAL</flag>
                     <object class="wxStaticText">
-                        <label>Loan rate</label>
+                        <label>Loan</label>
                     </object>
                 </object>
                 <object class="sizeritem">
-                    <flag>wxGROW</flag>
+                    <flag>wxGROW|wxALIGN_CENTER_VERTICAL</flag>
                     <object class="wxTextCtrl" name="LoanRate">
-                        <size>180,-1</size>
-                        <value>0</value>
                     </object>
                 </object>
                 <object class="sizeritem">
-                    <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
-                    <border>4</border>
-                    <object class="wxStaticText">
-                        <label>[NEEDS WORK]</label>
+                    <flag>wxGROW|wxALIGN_CENTER_VERTICAL</flag>
+                    <object class="wxRadioBox" name="LoanRateType">
+                        <style>wxRA_SPECIFY_ROWS</style>
+                        <content>
+                            <item>Fixed</item>
+                            <item>VLR</item>
+                        </content>
                     </object>
                 </object>
+
             </object>
         </object>
     </object>
