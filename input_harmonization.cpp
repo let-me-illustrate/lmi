@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_harmonization.cpp,v 1.2 2005-03-17 02:34:19 chicares Exp $
+// $Id: input_harmonization.cpp,v 1.3 2005-03-23 17:36:44 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -517,16 +517,16 @@ false // Silly workaround for now.
         }
 */
 
-// TODO ?? Change the legacy enumerators in the calculations dll.
+// TODO ?? Change the legacy enumerators in the calculations library.
 // They conflate disparate concepts. Here's what is really meant:
 //
-// genacct: owl system offered only credited
+// genacct: legacy system offered only credited
 //   earned and credited are conceivable
 //   but earned is suppressed for compliance reasons
 //   and earned is defectively called gross
 //   net is absurd because it's called credited
 //
-// sepacct: owl system offered only gross
+// sepacct: legacy system offered only gross
 //   gross and net are conceivable
 //   but net is suppressed for compliance reasons
 //   credited is absurd because it's called net

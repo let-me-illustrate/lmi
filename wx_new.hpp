@@ -19,16 +19,16 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: wx_new.hpp,v 1.1 2005-02-23 12:37:20 chicares Exp $
+// $Id: wx_new.hpp,v 1.2 2005-03-23 17:36:44 chicares Exp $
 
 // When wx is used as a dll, memory is allocated and freed across dll
 // boundaries, and that causes mpatrol to emit spurious diagnostics.
 // To work around that problem, use 'new(wx)' (implemented in another
 // dll) to allocate memory that will be freed by wx--for instance, a
-// frame window that's created in an exe but (unavoidably) freed by a
-// wx dll. The purpose of this workaround is solely to avoid spurious
-// diagnostics; it is not suggested that this is a good way to manage
-// memory.
+// frame window that's created in an application but (unavoidably)
+// freed by a wx dll. The purpose of this workaround is solely to
+// avoid spurious diagnostics; it is not suggested that this is a good
+// way to manage memory.
 
 #ifndef wx_new_hpp
 #define wx_new_hpp
