@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: dbnames.cpp,v 1.1 2005-01-14 19:47:44 chicares Exp $
+// $Id: dbnames.cpp,v 1.2 2005-02-08 14:11:57 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -27,6 +27,7 @@
 #endif // __BORLANDC__
 
 #include "dbnames.hpp"
+#include "dbnames.xpp"
 
 namespace
 {
@@ -34,10 +35,7 @@ namespace
         {
         static int const n = DB_LAST;
 
-        static db_names const static_DBNames[n] =
-            {
-#           include "dbnames.txt"
-            };
+        static db_names const static_DBNames[n] = {DB_NAMES};
 
         static std::vector<db_names> const v(static_DBNames, static_DBNames + n);
         return v;
