@@ -1,3 +1,5 @@
+// 2005 ChangeLog for "Let me illustrate...".
+//
 // Copyright (C) 2005 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
@@ -17,6 +19,36 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: build.hpp,v 1.2 2005-01-16 08:00:07 chicares Exp $
+// $Id: ChangeLog,v 1.1 2005-01-16 08:00:07 chicares Exp $
 
-#define LMI_BUILD "20050116T0734Z"
+2005-01-14
+
+Original checkin.
+
+2005-01-15
+
+  actuarial_table.cpp
+  crc32.cpp
+  crc32_test.cpp
+  data_directory.cpp
+  ihs_proddata.cpp
+Remove carriage returns.
+
+  elapsed_time.cpp
+  system_command.cpp
+  system_command.hpp
+Add missing RCS Id.
+
+2005-01-16
+
+  sample_cgi_census
+Expunge this file, which was a disused artifact.
+
+  build.hpp
+  expected.cgi.out
+  version.hpp
+Add copyright and license notices and RCS Ids to these files, no
+matter how trivial they seem. Now every single file in this cvs
+directory has these things, creating an invariant that can be
+confirmed automatically.
+

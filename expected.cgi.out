@@ -1,3 +1,26 @@
+// Expected output for cgi-bin unit test.
+//
+// Copyright (C) 2005 Gregory W. Chicares.
+//
+// This program is free software; you can redistribute it and/or modify
+// it under the terms of the GNU General Public License version 2 as
+// published by the Free Software Foundation.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program; if not, write to the Free Software
+// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+//
+// http://savannah.nongnu.org/projects/lmi
+// email: <chicares@cox.net>
+// snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
+
+// $Id: expected.cgi.out,v 1.2 2005-01-16 08:00:07 chicares Exp $
+
       5    45967.36   210057.09   210057.09  1000000.00   233182.01   233182.01  1000000.00   257167.55   257167.55  1000000.00
      10    45967.36   449016.03   449016.03  1000000.00   519025.11   519025.11  1000000.00   593477.43   593477.43  1000000.00
      20        0.00   469942.22   469942.22  1000000.00   727988.95   727988.95  1000000.00  1000000.24  1000000.24  1220000.29
