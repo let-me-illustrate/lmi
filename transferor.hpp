@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: transferor.hpp,v 1.1 2005-03-11 03:09:22 chicares Exp $
+// $Id: transferor.hpp,v 1.2 2005-03-11 03:39:32 chicares Exp $
 
 // Acknowledgment
 
@@ -128,7 +128,7 @@ class Transferor
     virtual bool TransferToWindow();
     virtual bool Validate(wxWindow*);
     virtual wxObject* Clone() const;
-    
+
     std::string const& name() const;
 
   private:
