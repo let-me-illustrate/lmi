@@ -24,7 +24,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: xml_notebook.xrc,v 1.2 2005-03-15 14:33:25 chicares Exp $
+    $Id: xml_notebook.xrc,v 1.3 2005-03-19 13:22:46 chicares Exp $
 -->
 
 <object class="wxPanel" name="plan_panel">
@@ -212,9 +212,8 @@
                                         </object>
                                         <object class="sizeritem">
                                             <flag>wxGROW</flag>
-                                            <object class="wxTextCtrl" name="EffectiveDate">
-                                                <size>10,-1</size>
-                                                <value>needs work</value>
+                                            <object class="wxDatePickerCtrl" name="EffectiveDate">
+                                                <size>80,-1</size>
                                             </object>
                                         </object>
                                     </object>
@@ -918,8 +917,8 @@
                                 </object>
                                 <object class="sizeritem">
                                     <flag>wxGROW</flag>
-                                    <object class="wxTextCtrl" name="DateOfBirth">
-                                        <size>10,-1</size>
+                                    <object class="wxDatePickerCtrl" name="DateOfBirth">
+                                        <size>80,-1</size>
                                     </object>
                                 </object>
                             </object>
@@ -1090,9 +1089,8 @@
                         </object>
                         <object class="sizeritem">
                             <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
-                            <object class="wxTextCtrl" name="PolicyDate">
-                                <size>70,-1</size>
-                                <value>0</value>
+                            <object class="wxDatePickerCtrl" name="PolicyDate">
+                                <size>80,-1</size>
                             </object>
                         </object>
                         <object class="sizeritem">
@@ -1337,9 +1335,8 @@ looks weird if we don't make this look like its siblings.
                         </object>
                         <object class="sizeritem">
                             <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
-                            <object class="wxTextCtrl" name="LastMaterialChangeDate">
-                                <size>70,-1</size>
-                                <value>0</value>
+                            <object class="wxDatePickerCtrl" name="LastMaterialChangeDate">
+                                <size>80,-1</size>
                             </object>
                         </object>
                         <object class="sizeritem">
