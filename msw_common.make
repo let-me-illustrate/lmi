@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: msw_common.make,v 1.4 2005-02-23 12:41:23 chicares Exp $
+# $Id: msw_common.make,v 1.5 2005-03-18 00:17:06 chicares Exp $
 
 ################################################################################
 
@@ -31,68 +31,54 @@ SHREXT := .dll
 # Libraries.
 
 # There is no universal standard way to install free software on this
-# platform; the directories given here merely reflect locations chosen
-# haphazardly by GWC. TODO ?? Make better choices where possible, and
-# eliminate the corresponding workarounds here.
+# platform, so copy libraries and their headers to /usr/local as FHS
+# prescribes.
+
+# TODO ?? At least as a temporary expedient, I copied setup.h to
+# /usr/local/include/wx from /wxXXX/lib/.../mswd; is that kosher?
 
 # Prefer to use shared-library versions of libxml2 and wx: they link
 # faster and rarely need to be changed.
-
-# Path to wxWindows.
-# TODO ?? Probably the wx version should be a separate variable,
-# defined elsewhere for all platforms.
-
-wx_dir := /wx-cvs-20050216/wxWidgets
-
-wx_platform_dir = \
-  $(wx_dir)/lib/gcc_dll/mswd \
 
 platform_defines := \
   -DLIBXML_USE_DLL \
   -DSTRICT \
   -DWXUSINGDLL \
 
-# TODO ?? If this is just the FHS location, then define it globally.
 platform_libxml2_libraries = \
-  -L $(system_root)/usr/local/lib -lxml2_dll \
+  -lxml2_dll \
 
 platform_mpatrol_libraries := \
   -limagehlp \
 
-# TODO ?? Can the 'msw' part be factored out regularly? Else need to
-# do something for GNU/Linux: e.g. copy everything to /usr/local ?
-#
 platform_wx_libraries := \
   -lwx_new \
-  -L $(wx_dir)/lib/gcc_dll -lwxmsw25d \
+  -lwxmsw25d \
 
 ################################################################################
 
 # Paths to external libraries.
 
-# TODO ?? Instead, try to use whatever locations FHS prescribes, and
-# write subplatform-specific workarounds for any locations that can't
-# conform for some good reason.
-
 # Path to libraries from www.boost.org . Most required boost libraries
 # are implemented exclusively in headers. It seems common in the *nix
 # world to leave those headers in the subdirectory of /usr/local/src/
 # to which the boost distribution is extracted, probably because boost
-# does not put all its headers in an include/ subdirectory and it
-# would be tedious to find and copy them all to /usr/local/include .
+# does not put all its headers in an include/ subdirectory. But that
+# seems broken, so instead copy those headers to /usr/local/include .
+#
+# TODO ?? If the "common" practice above turns out to be universal,
+# then conform to it.
+#
 boost_dir    := $(system_root)/usr/local/src/boost_1_31_0
 
 # Path to GNU cgicc.
-cgicc_include_dir := $(system_root)/usr/local/include
 cgicc_source_dir  := $(system_root)/usr/local/src/cgicc
 
-# Path to libxml2.
-libxml2_include_dir  := $(system_root)/usr/local/include/libxml2
-
 # Path to xmlwrapp.
-xmlwrapp_include_dir := $(system_root)/usr/local/include
 xmlwrapp_source_dir  := $(system_root)/usr/local/src/libxml
 
-# HTML server's cgi-bin directory.
+# HTML server's cgi-bin directory. Not used yet. Eventually, an
+# 'install' target might copy cgi-bin binaries thither.
+#
 #cgi_bin_dir := $(system_root)/unspecified/cgi-bin
 

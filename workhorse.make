@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: workhorse.make,v 1.11 2005-03-17 22:32:29 chicares Exp $
+# $Id: workhorse.make,v 1.12 2005-03-18 00:17:06 chicares Exp $
 
 ###############################################################################
 
@@ -114,13 +114,7 @@ effective_default_target: $(default_targets)
 
 all_include_directories := \
   $(src_dir) \
-  $(boost_dir) \
-  $(cgicc_include_dir) \
-  $(libxml2_include_dir) \
-  $(wx_platform_dir) \
-  $(wx_dir)/include \
-  $(wx_dir)/contrib/include \
-  $(xmlwrapp_include_dir) \
+  $(system_root)/usr/local/include \
 
 all_source_directories := \
   $(src_dir) \
@@ -263,10 +257,17 @@ endif
 ################################################################################
 
 # Required libraries.
+#
+# The link command promiscuously mentions libxml2 for all targets.
+# Measurements show that this costs one-tenth of a second on
+# reasonable hardware, and it saves the trouble of maintaining a list
+# of which targets require which libraries.
+#
+# TODO ?? Consider refining it anyway, because it's unclean: libxml2
+# isn't actually required for all targets.
 
 REQUIRED_LIBS := \
   $(platform_libxml2_libraries) \
-  $(platform_wx_libraries) \
 
 ################################################################################
 
@@ -316,14 +317,20 @@ REQUIRED_ARFLAGS = \
 # 'g++' because that takes care of linking the required libraries for
 # each language. Accordingly, pass GNU 'ld' options with '-Wl,'.
 
-# The link command promiscuously mentions every library that might be
-# wanted for any target. Measurements show that this costs one-tenth
-# of a second on reasonable hardware, and it saves the trouble of
-# maintaining a list of which targets require which libraries.
+# Two subdirectories of /usr/local
+#   /usr/local/bin
+#   /usr/local/lib
+# are placed on the link path in order to accommodate msw dlls, for
+# which no canonical location is clearly specified by FHS, because
+# they're both binaries and libraries in a sense. These two
+# subdirectories seem to be the most popular choices; wx uses the
+# first, treating a dll as a binary, while mpatrol uses the second,
+# treating a dll as a library.
 
 REQUIRED_LDFLAGS = \
   -L . \
-  -L /usr/local/lib \
+  -L $(system_root)/usr/local/bin \
+  -L $(system_root)/usr/local/lib \
   $(REQUIRED_LIBS) \
   $(MPATROL_LIBS) \
 
@@ -402,18 +409,6 @@ shared_demo$(EXEEXT): lmi_dllflag := -DLMI_USE_DLL
 skeleton$(EXEEXT)   : lmi_wx_new_dllflag := -DLMI_WX_NEW_USING_DLL
 wx_new$(SHREXT)     : lmi_wx_new_dllflag := -DLMI_WX_NEW_BUILDING_DLL
 
-# This library is included in $(REQUIRED_LIBS) because it's required
-# for any target that uses wx. It's harmless to require it for other
-# targets that don't use wx: they simply ignore it, and measurements
-#   http://sourceforge.net/mailarchive/message.php?msg_id=10584510
-# show that the overhead for such a small library is negligible.
-# However, it must not have itself as a prerequisite; because it is a
-# standalone library that depends on nothing else, it seems easiest to
-# prevent circularity with this target-specific definition of
-# $(REQUIRED_LIBS).
-
-wx_new$(SHREXT): REQUIRED_LIBS :=
-
 liblmi.a liblmi$(SHREXT): $(lmi_common_objects)
 libantediluvian.a libantediluvian$(SHREXT): $(antediluvian_common_objects)
 
@@ -430,15 +425,20 @@ static_demo$(EXEEXT): library_demo.o alert_cli.o $(lmi_common_objects)
 
 lmi_cli$(EXEEXT): $(lmi_cli_objects) $(lmi_common_objects)
 
-#lmi_wx$(EXEEXT): $(lmi_wx_objects) liblmi$(SHREXT)
+#lmi_wx$(EXEEXT): REQUIRED_LDFLAGS += $(platform_wx_libraries)
+#lmi_wx$(EXEEXT): $(lmi_wx_objects) liblmi$(SHREXT) wx_new$(SHREXT)
 
-lmi_wx$(EXEEXT): $(lmi_wx_objects) $(lmi_common_objects)
+lmi_wx$(EXEEXT): REQUIRED_LDFLAGS += $(platform_wx_libraries)
+lmi_wx$(EXEEXT): $(lmi_wx_objects) $(lmi_common_objects) wx_new$(SHREXT)
 
 antediluvian_cgi$(EXEEXT): $(antediluvian_cgi_objects) libantediluvian.a
 
 antediluvian_cli$(EXEEXT): $(antediluvian_cli_objects) libantediluvian.a
 
 wx_new$(SHREXT): wx_new.o
+
+# TODO ?? This needs a corresponding test target.
+lmi_cgi$(EXEEXT): $(antediluvian_cgi_objects) $(lmi_common_objects)
 
 ################################################################################
 
