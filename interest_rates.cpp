@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: interest_rates.cpp,v 1.2 2005-01-29 02:47:41 chicares Exp $
+// $Id: interest_rates.cpp,v 1.3 2005-02-17 04:40:03 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -248,35 +248,35 @@ InterestRates::~InterestRates()
 // Always calculate loan rates because they're always needed for 7702.
 // Yet there is tested logic in place to suppress their calculation
 // if no loans are taken. It can be enabled with
-//    ,NeedLoanRates_     (v.Input->NeedLoanRates())
+//    ,NeedLoanRates_     (v.Input_->NeedLoanRates())
 // in the ctor-initializer. For now at least, this logic is not
 // removed because it might be useful someday for some purpose not
 // yet contemplated.
 //
 InterestRates::InterestRates(BasicValues const& v)
     :Length_             (v.GetLength())
-    ,LedgerType_         (static_cast<enum_ledger_type>(static_cast<int>(v.Database->Query(DB_LedgerType))))
+    ,LedgerType_         (static_cast<enum_ledger_type>(static_cast<int>(v.Database_->Query(DB_LedgerType))))
     ,RoundIntRate_       (v.GetRoundingRules().round_interest_rate())
     ,Round7702Rate_      (v.GetRoundingRules().round_interest_rate_7702())
     ,Zero_               (Length_)
     ,NeedMidpointRates_  (is_subject_to_ill_reg(LedgerType_))
-    ,GenAcctRateType_    (v.Input->IntRateTypeGA)
-    ,NeedSepAcctRates_   (v.Database->Query(DB_AllowSepAcct))
-    ,SepAcctRateType_    (v.Input->IntRateTypeSA)
-    ,SepAcctSpreadMethod_(static_cast<enum_spread_method>(static_cast<int>(v.Database->Query(DB_SepAcctSpreadMethod))))
+    ,GenAcctRateType_    (v.Input_->IntRateTypeGA)
+    ,NeedSepAcctRates_   (v.Database_->Query(DB_AllowSepAcct))
+    ,SepAcctRateType_    (v.Input_->IntRateTypeSA)
+    ,SepAcctSpreadMethod_(static_cast<enum_spread_method>(static_cast<int>(v.Database_->Query(DB_SepAcctSpreadMethod))))
     ,AmortLoad_          (Zero_)
     ,MiscFundCharge_     (Zero_)
     ,NeedLoanRates_      (true)
-    ,LoanRateType_       (v.Input->LoanRateType)
-    ,NeedPrefLoanRates_  (v.Database->Query(DB_AllowPrefLoan))
-    ,NeedHoneymoonRates_ (v.Input->HasHoneymoon)
+    ,LoanRateType_       (v.Input_->LoanRateType)
+    ,NeedPrefLoanRates_  (v.Database_->Query(DB_AllowPrefLoan))
+    ,NeedHoneymoonRates_ (v.Input_->HasHoneymoon)
     ,SpreadFor7702_      (v.SpreadFor7702())
 {
     // For now at least, we use a third separate-account rate
     // (half of input) in one exceptional circumstance only
     // (prospectus illustrations, which NASD no longer requires)
     // and the GUI provides no friendly way to enable it.
-    if(std::string::npos != v.Input->Comments.find("idiosyncrasy9"))
+    if(std::string::npos != v.Input_->Comments.find("idiosyncrasy9"))
         {
         LedgerType_ = e_prospectus;
         }
@@ -287,11 +287,11 @@ void InterestRates::Initialize(BasicValues const& v)
 {
     // Retrieve general-account data from class BasicValues.
 
-    v.Database->Query(GenAcctGrossRate_[e_guarbasis], DB_GuarInt);
+    v.Database_->Query(GenAcctGrossRate_[e_guarbasis], DB_GuarInt);
 
     std::copy
-        (v.Input->GenAcctRate.begin()
-        ,v.Input->GenAcctRate.end()
+        (v.Input_->GenAcctRate.begin()
+        ,v.Input_->GenAcctRate.end()
         ,std::back_inserter(GenAcctGrossRate_[e_currbasis])
         );
     // TODO ?? At least for the lmi branch, the vector in the input
@@ -305,7 +305,7 @@ void InterestRates::Initialize(BasicValues const& v)
     // almost certainly quoted as an APR. It is assumed that the
     // interest bonus is not guaranteed.
     std::vector<double> general_account_interest_bonus;
-    v.Database->Query(general_account_interest_bonus, DB_GAIntBonus);
+    v.Database_->Query(general_account_interest_bonus, DB_GAIntBonus);
     std::transform
         (GenAcctGrossRate_[e_currbasis].begin()
         ,GenAcctGrossRate_[e_currbasis].end()
@@ -314,43 +314,43 @@ void InterestRates::Initialize(BasicValues const& v)
         ,std::plus<double>()
         );
 
-    v.Database->Query(GenAcctSpread_, DB_CurrIntSpread);
+    v.Database_->Query(GenAcctSpread_, DB_CurrIntSpread);
 
     // Retrieve separate-account data from class BasicValues.
 
     std::copy
-        (v.Input->SepAcctRate.begin()
-        ,v.Input->SepAcctRate.end()
+        (v.Input_->SepAcctRate.begin()
+        ,v.Input_->SepAcctRate.end()
         ,std::back_inserter(SepAcctGrossRate_[e_sep_acct_full])
         );
     // TODO ?? At least for the lmi branch, the vector in the input
     // class has an inappropriate size.
     SepAcctGrossRate_[e_sep_acct_full].resize(Length_);
 
-    v.Database->Query(MAndERate_[e_guarbasis], DB_GuarMandE            );
-    v.Database->Query(MAndERate_[e_currbasis], DB_CurrMandE            );
+    v.Database_->Query(MAndERate_[e_guarbasis], DB_GuarMandE            );
+    v.Database_->Query(MAndERate_[e_currbasis], DB_CurrMandE            );
 
-    v.Database->Query(Stabilizer_,             DB_StableValFundCharge  );
+    v.Database_->Query(Stabilizer_,             DB_StableValFundCharge  );
 
     // Deduct miscellaneous fund charges and input extra asset comp in
     // the same way as M&E, iff database entity DB_AssetChargeType has
     // the value 'e_asset_charge_spread'; otherwise, reflect them
     // elsewhere as an account-value load.
-    if(e_asset_charge_spread == v.Database->Query(DB_AssetChargeType))
+    if(e_asset_charge_spread == v.Database_->Query(DB_AssetChargeType))
         {
-        v.Database->Query(MiscFundCharge_, DB_MiscFundCharge);
+        v.Database_->Query(MiscFundCharge_, DB_MiscFundCharge);
         std::transform
             (MiscFundCharge_.begin()
             ,MiscFundCharge_.end()
-            ,v.Input->VectorAddonCompOnAssets.begin()
+            ,v.Input_->VectorAddonCompOnAssets.begin()
             ,MiscFundCharge_.begin()
             ,std::plus<double>()
             );
         }
 
-    if(v.Input->AmortizePremLoad)
+    if(v.Input_->AmortizePremLoad)
         {
-        v.Database->Query(AmortLoad_, DB_AmortPmLdFundCharge);
+        v.Database_->Query(AmortLoad_, DB_AmortPmLdFundCharge);
         }
 
     // TODO ?? This might be initialized with 'DB_MgmtFeeFundCharge',
@@ -367,12 +367,12 @@ void InterestRates::Initialize(BasicValues const& v)
         {
         case e_fixed_loan_rate:
             {
-            v.Database->Query(PublishedLoanRate_, DB_FixedLoanRate);
+            v.Database_->Query(PublishedLoanRate_, DB_FixedLoanRate);
             }
             break;
         case e_variable_loan_rate:
             {
-            PublishedLoanRate_.assign(Length_, v.Input->LoanIntRate);
+            PublishedLoanRate_.assign(Length_, v.Input_->LoanIntRate);
             }
             break;
         default:
@@ -386,17 +386,17 @@ void InterestRates::Initialize(BasicValues const& v)
             }
         }
 
-    v.Database->Query(RegLoanSpread_[e_guarbasis], DB_GuarRegLoanSpread);
-    v.Database->Query(RegLoanSpread_[e_currbasis], DB_CurrRegLoanSpread);
-    v.Database->Query(PrfLoanSpread_[e_guarbasis], DB_GuarPrefLoanSpread);
-    v.Database->Query(PrfLoanSpread_[e_currbasis], DB_CurrPrefLoanSpread);
+    v.Database_->Query(RegLoanSpread_[e_guarbasis], DB_GuarRegLoanSpread);
+    v.Database_->Query(RegLoanSpread_[e_currbasis], DB_CurrRegLoanSpread);
+    v.Database_->Query(PrfLoanSpread_[e_guarbasis], DB_GuarPrefLoanSpread);
+    v.Database_->Query(PrfLoanSpread_[e_currbasis], DB_CurrPrefLoanSpread);
 
     if(NeedHoneymoonRates_)
         {
-        HoneymoonValueSpread_ = v.Input->VectorHoneymoonValueSpread;
+        HoneymoonValueSpread_ = v.Input_->VectorHoneymoonValueSpread;
         PostHoneymoonSpread_.assign
             (Length_
-            ,v.Input->PostHoneymoonSpread
+            ,v.Input_->PostHoneymoonSpread
             );
         }
 
@@ -1050,7 +1050,7 @@ void InterestRates::Initialize7702Rates()
             {
             fatal_error()
                 << "Case '"
-                << Input.LoanRateType
+                << Input_.LoanRateType
                 << "' not found."
                 << LMI_FLUSH
                 ;

@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_loads.cpp,v 1.2 2005-01-31 13:12:48 chicares Exp $
+// $Id: ihs_loads.cpp,v 1.3 2005-02-17 04:40:03 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -75,20 +75,20 @@ class load_details
 Loads::Loads(BasicValues& V)
 {
     load_details details
-        (V.Input->AmortizePremLoad
+        (V.Input_->AmortizePremLoad
         ,V.GetLowestPremTaxRate()
         ,V.GetRoundingRules().round_interest_rate()
-        ,V.Input->VectorAddonCompOnPremium
-        ,V.Input->VectorAddonCompOnAssets
-        ,V.Input->VectorAddonMonthlyCustodialFee
+        ,V.Input_->VectorAddonCompOnPremium
+        ,V.Input_->VectorAddonCompOnAssets
+        ,V.Input_->VectorAddonMonthlyCustodialFee
         );
-    Init(*V.Database, details);
+    Init(*V.Database_, details);
 }
 
 //============================================================================
 Loads::Loads
     (bool                       AmortizePremLoad
-    ,TDatabase           const& Database
+    ,TDatabase           const& database
     ,round_to<double>    const& round_interest_rate
     ,std::vector<double> const& VectorExtraCompLoad
     ,std::vector<double> const& VectorExtraAssetComp
@@ -104,7 +104,7 @@ Loads::Loads
         ,VectorExtraAssetComp
         ,VectorExtraPolFee
         );
-    Init(Database, details);
+    Init(database, details);
 }
 
 //============================================================================

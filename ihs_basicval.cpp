@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_basicval.cpp,v 1.5 2005-02-14 04:37:51 chicares Exp $
+// $Id: ihs_basicval.cpp,v 1.6 2005-02-17 04:40:03 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -86,15 +86,15 @@ namespace
 
 //============================================================================
 BasicValues::BasicValues()
+    :Input_(new InputParms)
 {
-    Input = new InputParms;
     Init();
 }
 
 //============================================================================
 BasicValues::BasicValues(InputParms const* input)
+    :Input_(new InputParms(*input))
 {
-    Input = new InputParms(*input);
     Init();
 }
 
@@ -159,65 +159,26 @@ else
         );
 
     // TODO ?? EGREGIOUS_DEFECT Redesign this function instead.
-    const_cast<InputParms&>(*Input) = *kludge_input;
+    const_cast<InputParms&>(*Input_) = *kludge_input;
 
     GPTServerInit();
 }
 
 //============================================================================
-BasicValues::BasicValues(BasicValues const& obj)
-{
-    Input = new InputParms(*obj.Input);
-    Init(); // TODO ??
-}
-
-//============================================================================
-BasicValues& BasicValues::operator=(BasicValues const& obj)
-{
-    if(this != &obj)
-        {
-        delete Input;
-        Input = new InputParms(*obj.Input);
-        Init(); // TODO ??
-        }
-    return *this;
-}
-
-//============================================================================
 BasicValues::~BasicValues()
 {
-// TODO ?? Use smart pointers instead?
-    delete Irc7702A_;
-    delete Irc7702_;
-    delete Input;
-    delete ProductData;
-    delete Database;
-    delete FundData_;
-    delete RoundingRules_;
-    delete TieredCharges_;
-    delete MortalityRates_;
-    delete InterestRates_;
-    delete SurrChgRates_;
-    delete DeathBfts_;
-    delete Outlay_;
-    delete Loads_;
 }
-
-//============================================================================
-// Note: input from other software prolly goes here...ctor arg?
-//============================================================================
-
 
 //============================================================================
 void BasicValues::Init()
 {
-    ProductData = new TProductData(Input->ProductName);
+    ProductData_.reset(new TProductData(Input_->ProductName));
     // bind to policy form
     //      one filename that brings in all the rest incl database?
     // controls as ctor arg?
     // validate input in context of this policy form
 
-    InputStatus const& S = Input->Status[0]; // TODO ?? Database based on first life only.
+    InputStatus const& S = Input_->Status[0]; // TODO ?? Database based on first life only.
 
     // TRICKY !! We need the database to look up whether ALB or ANB should
     // be used, in case we need to determine issue age from DOB. But issue
@@ -229,24 +190,23 @@ void BasicValues::Init()
     // looked-up values to scalars that vary across no database axis.
 
     // TODO ?? Does this even belong here?
-    S.MakeAgesAndDatesConsistent(Input->EffDate, 0);
-    Database = new TDatabase(*Input);
-    bool use_anb = Database->Query(DB_AgeLastOrNearest);
-    S.MakeAgesAndDatesConsistent(Input->EffDate, use_anb);
+    S.MakeAgesAndDatesConsistent(Input_->EffDate, 0);
+    Database_.reset(new TDatabase(*Input_));
+    bool use_anb = Database_->Query(DB_AgeLastOrNearest);
+    S.MakeAgesAndDatesConsistent(Input_->EffDate, use_anb);
     // Now that we have the right issue age, we need to reinitialize
     // the database with that age.
-    delete Database;
-    Database = new TDatabase(*Input);
-    StateOfJurisdiction = Database->GetStateOfJurisdiction();
+    Database_.reset(new TDatabase(*Input_));
+    StateOfJurisdiction = Database_->GetStateOfJurisdiction();
 
     if
-        (   !Database->Query(DB_StateApproved)
+        (   !Database_->Query(DB_StateApproved)
         &&  !global_settings::instance().ash_nazg
         &&  !global_settings::instance().regression_testing()
         )
         {
         throw std::runtime_error
-            (    Input->ProductName
+            (    Input_->ProductName
             +    " not approved in state "
             +    GetStateOfJurisdiction().str()
             );
@@ -256,35 +216,35 @@ void BasicValues::Init()
     RetAge = S.RetAge;
     LMI_ASSERT(IssueAge < 100);
     LMI_ASSERT(RetAge <= 100);
-    LMI_ASSERT(Input->RetireesCanEnroll || IssueAge <= RetAge);
+    LMI_ASSERT(Input_->RetireesCanEnroll || IssueAge <= RetAge);
 
-    int endt_age = static_cast<int>(Database->Query(DB_EndtAge));
+    int endt_age = static_cast<int>(Database_->Query(DB_EndtAge));
     Length = endt_age - IssueAge;
 
-    if(IssueAge < Database->Query(DB_MinIssAge))
+    if(IssueAge < Database_->Query(DB_MinIssAge))
         {
         throw x_product_rule_violated
             (
             std::string("Issue age less than minimum")
             );
         }
-    if(Database->Query(DB_MaxIssAge) < IssueAge)
+    if(Database_->Query(DB_MaxIssAge) < IssueAge)
         {
         throw x_product_rule_violated
             (
             std::string("Issue age greater than maximum")
             );
         }
-    FundData_        = new FundData
-        (AddDataDir(ProductData->GetFundFilename())
+    FundData_.reset(new FundData(AddDataDir(ProductData_->GetFundFilename())));
+    RoundingRules_.reset
+        (new rounding_rules
+            (StreamableRoundingRules
+                (AddDataDir(ProductData_->GetRoundingFilename())
+                ).get_rounding_rules()
+            )
         );
-    RoundingRules_  = new rounding_rules
-        (StreamableRoundingRules
-            (AddDataDir(ProductData->GetRoundingFilename())
-            ).get_rounding_rules()
-        );
-    TieredCharges_  = new tiered_charges
-        (AddDataDir(ProductData->GetTierFilename())
+    TieredCharges_.reset
+        (new tiered_charges(AddDataDir(ProductData_->GetTierFilename()))
         );
     SpreadFor7702_.assign(Length, TieredCharges_->minimum_tiered_spread_for_7702());
 
@@ -292,15 +252,15 @@ void BasicValues::Init()
 
     // Mortality and interest rates require database.
     // Interest rates require tiered data and 7702 spread.
-    MortalityRates_ = new MortalityRates (*this);
-    InterestRates_  = new InterestRates  (*this);
+    MortalityRates_.reset(new MortalityRates (*this));
+    InterestRates_ .reset(new InterestRates  (*this));
     // Surrender-charge rates will eventually require mortality rates.
-    SurrChgRates_   = new SurrChgRates   (*Database);
-    DeathBfts_      = new death_benefits (*this);
+    SurrChgRates_  .reset(new SurrChgRates   (*Database_));
+    DeathBfts_     .reset(new death_benefits (*this));
     // Outlay requires interest rates.
-    Outlay_         = new Outlay         (*this);
+    Outlay_        .reset(new Outlay         (*this));
     SetLowestPremTaxRate();
-    Loads_          = new Loads          (*this);
+    Loads_         .reset(new Loads          (*this));
 
     // The target premium can't be ascertained yet if specamt is
     // determined by a strategy.
@@ -319,32 +279,32 @@ void BasicValues::Init()
 // TODO ??  Not for general use--use for GPT server only, for now--refactor later
 void BasicValues::GPTServerInit()
 {
-    ProductData = new TProductData(Input->ProductName);
+    ProductData_.reset(new TProductData(Input_->ProductName));
 
-    InputStatus const& S = Input->Status[0]; // TODO ?? Database based on first life only.
-    bool use_anb = Database->Query(DB_AgeLastOrNearest);
+    InputStatus const& S = Input_->Status[0]; // TODO ?? Database based on first life only.
+    bool use_anb = Database_->Query(DB_AgeLastOrNearest);
     // TODO ?? Does this even belong here?
-    Input->Status[0].MakeAgesAndDatesConsistent(Input->EffDate, use_anb);
+    Input_->Status[0].MakeAgesAndDatesConsistent(Input_->EffDate, use_anb);
     IssueAge = S.IssueAge;
     RetAge = S.RetAge;
     LMI_ASSERT(IssueAge < 100);
     LMI_ASSERT(RetAge <= 100);
-    LMI_ASSERT(Input->RetireesCanEnroll || IssueAge <= RetAge);
+    LMI_ASSERT(Input_->RetireesCanEnroll || IssueAge <= RetAge);
 
-    Database        = new TDatabase(*Input);
-    StateOfJurisdiction = Database->GetStateOfJurisdiction();
+    Database_.reset(new TDatabase(*Input_));
+    StateOfJurisdiction = Database_->GetStateOfJurisdiction();
 
-    int endt_age = static_cast<int>(Database->Query(DB_EndtAge));
+    int endt_age = static_cast<int>(Database_->Query(DB_EndtAge));
     Length = endt_age - IssueAge;
 
-    if(IssueAge < Database->Query(DB_MinIssAge))
+    if(IssueAge < Database_->Query(DB_MinIssAge))
         {
         throw x_product_rule_violated
             (
             std::string("Issue age less than minimum")
             );
         }
-    if(Database->Query(DB_MaxIssAge) < IssueAge)
+    if(Database_->Query(DB_MaxIssAge) < IssueAge)
         {
         throw x_product_rule_violated
             (
@@ -352,27 +312,29 @@ void BasicValues::GPTServerInit()
             );
         }
 //  FundData_       = new FundData
-//      (AddDataDir(ProductData->GetFundFilename())
+//      (AddDataDir(ProductData_->GetFundFilename())
 //      );
-    RoundingRules_  = new rounding_rules
-        (StreamableRoundingRules
-            (AddDataDir(ProductData->GetRoundingFilename())
-            ).get_rounding_rules()
+    RoundingRules_.reset
+        (new rounding_rules
+            (StreamableRoundingRules
+                (AddDataDir(ProductData_->GetRoundingFilename())
+                ).get_rounding_rules()
+            )
         );
-    TieredCharges_  = new tiered_charges
-        (AddDataDir(ProductData->GetTierFilename())
+    TieredCharges_.reset
+        (new tiered_charges(AddDataDir(ProductData_->GetTierFilename()))
         );
 
     // Requires database.
-//  MortalityRates_ = new MortalityRates (*this);
-//  InterestRates_  = new InterestRates  (*this);
+//  MortalityRates_.reset(new MortalityRates (*this));
+//  InterestRates_ .reset(new InterestRates  (*this));
     // Will require mortality rates eventually.
-//  SurrChgRates_   = new SurrChgRates   (Database);
-//  DeathBfts_      = new death_benefits (*this);
+//  SurrChgRates_  .reset(new SurrChgRates   (Database_));
+//  DeathBfts_     .reset(new death_benefits (*this));
     // Requires interest rates.
-//  Outlay_         = new Outlay         (*this);
+//  Outlay_        .reset(new Outlay         (*this));
     SetLowestPremTaxRate();
-    Loads_          = new Loads          (*this);
+    Loads_         .reset(new Loads          (*this));
 
     SetPermanentInvariants();
 
@@ -383,14 +345,14 @@ void BasicValues::GPTServerInit()
 // TODO ?? Does this belong in the funds class?
 double BasicValues::InvestmentManagementFee() const
 {
-    if(!Database->Query(DB_AllowSepAcct))
+    if(!Database_->Query(DB_AllowSepAcct))
         {
         return 0.0;
         }
 
-    if(Input->OverrideFundMgmtFee)
+    if(Input_->OverrideFundMgmtFee)
         {
-        return Input->InputFundMgmtFee / 10000.0L;
+        return Input_->InputFundMgmtFee / 10000.0L;
         }
 
     double z = 0.0;
@@ -405,7 +367,7 @@ double BasicValues::InvestmentManagementFee() const
         // zero. Custom funds are those whose name begins with "Custom".
         // Reason: "average" means average of the normally-available
         // funds only.
-        if(Input->AvgFund)
+        if(Input_->AvgFund)
             {
             char const s[] = "Custom";
             std::size_t n = std::strlen(s);
@@ -421,27 +383,27 @@ double BasicValues::InvestmentManagementFee() const
 /*
         else
             {
-            // We allow Input->NumberOfFunds < Funds.GetNumberOfFunds
+            // We allow Input_->NumberOfFunds < Funds.GetNumberOfFunds
             // so an accurate fund average can be calculated (based
             // on the funds in the *.fnd file), even though the inputs
             // class may not accommodate that many funds. If j falls
-            // outside the range of Input->FundAllocs, use a weight of zero.
-            bool legal_storage = j < Input->FundAllocs.size();
-            double fund_alloc = Input->FundAllocs[j];
+            // outside the range of Input_->FundAllocs, use a weight of zero.
+            bool legal_storage = j < Input_->FundAllocs.size();
+            double fund_alloc = Input_->FundAllocs[j];
             weight = legal_storage ? fund_alloc : 0.0;
             }
 */
-        else if(j < static_cast<int>(Input->FundAllocs.size()))
+        else if(j < static_cast<int>(Input_->FundAllocs.size()))
             {
             // TODO ?? Can this be correct? Shouldn't we be looking to
             // the .fnd file rather than the input class?
             //
-            // We allow Input->NumberOfFunds < Funds.GetNumberOfFunds
+            // We allow Input_->NumberOfFunds < Funds.GetNumberOfFunds
             // so an accurate fund average can be calculated (based
             // on the funds in the *.fnd file), even though the inputs
             // class may not accommodate that many funds. If j falls
-            // outside the range of Input->FundAllocs, use a weight of zero.
-            weight = Input->FundAllocs[j];
+            // outside the range of Input_->FundAllocs, use a weight of zero.
+            weight = Input_->FundAllocs[j];
             }
         else
             {
@@ -476,7 +438,7 @@ void BasicValues::Init7702()
         ,Mly7702qc.begin()
         ,std::bind2nd
             (coi_rate_from_q<double>()
-            ,Database->Query(DB_MaxMonthlyCoiRate)
+            ,Database_->Query(DB_MaxMonthlyCoiRate)
             )
         );
 
@@ -490,17 +452,17 @@ void BasicValues::Init7702()
     // GPT calculations in the 7702 class.
 
     std::vector<double> guar_int;
-    Database->Query(guar_int, DB_GuarInt);
+    Database_->Query(guar_int, DB_GuarInt);
 /*
-    switch(Input.LoanRateType)
+    switch(Input_.LoanRateType)
         {
         case e_fixed_loan_rate:
         // APL: guar_int gets guar_int max gross_loan_rate - guar_loan_spread
             {
             std::vector<double> gross_loan_rate;
-            Database->Query(gross_loan_rate, DB_FixedLoanRate);
+            Database_->Query(gross_loan_rate, DB_FixedLoanRate);
             std::vector<double> guar_loan_spread;
-            Database->Query(guar_loan_spread, DB_GuarRegLoanSpread);
+            Database_->Query(guar_loan_spread, DB_GuarRegLoanSpread);
             std::vector<double> guar_loan_rate(Length);
             std::transform
                 (gross_loan_rate.begin()
@@ -527,7 +489,7 @@ void BasicValues::Init7702()
             {
             fatal_error()
                 << "Case '"
-                << Input.LoanRateType
+                << Input_.LoanRateType
                 << "' not found."
                 << LMI_FLUSH
                 ;
@@ -591,58 +553,61 @@ void BasicValues::Init7702()
     // the GPT server doesn't initialize a MortalityRates object
     // that would hold those rates.
     std::vector<double> local_mly_charge_add(Length, 0.0);
-    if(Input->Status[0].HasADD)
+    if(Input_->Status[0].HasADD)
         {
         local_mly_charge_add = GetADDRates();
         }
 
-    Irc7702_ = new Irc7702
-        (*this
-        ,Input->DefnLifeIns
-        ,Input->Status[0].IssueAge
-        ,EndtAge
-        ,Mly7702qc  // MortalityRates_->GetaCoi7702() // TODO ?? This is monthly?
-        ,Mly7702iGlp
-        ,Mly7702iGsp
-        ,Mly7702ig
-        ,SpreadFor7702_
-        ,Input->SpecAmt[0] + Input->Status[0].TermAmt
-        ,Input->SpecAmt[0] + Input->Status[0].TermAmt
-        ,Get7702EffectiveDBOpt(Input->DBOpt[0])
-        // TODO ?? Using the guaranteed basis for all the following should
-        // be an optional behavior.
-        ,Loads_->annual_policy_fee(e_basis(e_currbasis))
-        ,Loads_->monthly_policy_fee(e_basis(e_currbasis))
-        ,Loads_->specified_amount_load(e_basis(e_currbasis))
-        ,SpecAmtLoadLimit
-        ,local_mly_charge_add
-        ,ADDLimit
-        ,Loads_->target_premium_load_7702_excluding_premium_tax()
-        ,Loads_->excess_premium_load_7702_excluding_premium_tax()
-        ,InitialTargetPremium
-        ,round_min_premium
-        ,round_max_premium
-        ,round_min_specamt
-        ,round_max_specamt
+    Irc7702_.reset
+        (new Irc7702
+            (*this
+            ,Input_->DefnLifeIns
+            ,Input_->Status[0].IssueAge
+            ,EndtAge
+            ,Mly7702qc  // MortalityRates_->GetaCoi7702() // TODO ?? This is monthly?
+            ,Mly7702iGlp
+            ,Mly7702iGsp
+            ,Mly7702ig
+            ,SpreadFor7702_
+            ,Input_->SpecAmt[0] + Input_->Status[0].TermAmt
+            ,Input_->SpecAmt[0] + Input_->Status[0].TermAmt
+            ,Get7702EffectiveDBOpt(Input_->DBOpt[0])
+            // TODO ?? Using the guaranteed basis for all the following should
+            // be an optional behavior.
+            ,Loads_->annual_policy_fee(e_basis(e_currbasis))
+            ,Loads_->monthly_policy_fee(e_basis(e_currbasis))
+            ,Loads_->specified_amount_load(e_basis(e_currbasis))
+            ,SpecAmtLoadLimit
+            ,local_mly_charge_add
+            ,ADDLimit
+            ,Loads_->target_premium_load_7702_excluding_premium_tax()
+            ,Loads_->excess_premium_load_7702_excluding_premium_tax()
+            ,InitialTargetPremium
+            ,round_min_premium
+            ,round_max_premium
+            ,round_min_specamt
+            ,round_max_specamt
+            )
         );
 }
 
 //============================================================================
 void BasicValues::Init7702A()
 {
-    // TODO ?? Temporary kludge.
-    int magic = 0;
-    Irc7702A_ = new Irc7702A
-        (magic
-        ,DefnLifeIns.value()
-        ,DefnMaterialChange.value()
-        ,false  // joint life: hardcoded for now??
-        ,Input->AvoidMec.value()
-        ,true   // use table for 7pp: hardcoded for now??
-        ,true   // use table for NSP: hardcoded for now??
-        ,MortalityRates_->SevenPayRates()
-        ,MortalityRates_->CvatNspRates()
-        ,round_max_premium
+    int magic = 0; // TODO ?? A kludge.
+    Irc7702A_.reset
+        (new Irc7702A
+            (magic
+            ,DefnLifeIns.value()
+            ,DefnMaterialChange.value()
+            ,false  // joint life: hardcoded for now??
+            ,Input_->AvoidMec.value()
+            ,true   // use table for 7pp: hardcoded for now??
+            ,true   // use table for NSP: hardcoded for now??
+            ,MortalityRates_->SevenPayRates()
+            ,MortalityRates_->CvatNspRates()
+            ,round_max_premium
+            )
         );
 }
 
@@ -656,7 +621,7 @@ double BasicValues::GetTgtPrem
     ,e_mode  const& Mode
     ) const
 {
-    if(Database->Query(DB_TgtPmFixedAtIssue))
+    if(Database_->Query(DB_TgtPmFixedAtIssue))
         {
         if(0 == Year)
             {
@@ -683,88 +648,84 @@ void BasicValues::SetPermanentInvariants()
 {
     // TODO ?? It would be better not to constrain so many things
     // not to vary by duration by using Query(enumerator).
-    StateOfDomicile     = e_state(ProductData->GetInsCoDomicile());
-    EndtAge             = static_cast<int>(Database->Query(DB_EndtAge));
+    StateOfDomicile     = e_state(ProductData_->GetInsCoDomicile());
+    EndtAge             = static_cast<int>(Database_->Query(DB_EndtAge));
 
     // TODO ?? Perhaps we want the premium-tax load instead of the
     // premium-tax rate here; or maybe we want neither as a member
     // variable, since the premium-tax load is in the loads class.
-    PremTaxRate         = Database->Query(DB_PremTaxRate);
+    PremTaxRate         = Database_->Query(DB_PremTaxRate);
 
     {
-    InputParms IP(*Input);
+    InputParms IP(*Input_);
     IP.InsdState    = GetStateOfDomicile();
     IP.SponsorState = GetStateOfDomicile();
     TDatabase TempDatabase(IP);
     DomiciliaryPremTaxRate = 0.0;
-    if(!Input->AmortizePremLoad)
+    if(!Input_->AmortizePremLoad)
         {
         DomiciliaryPremTaxRate = TempDatabase.Query(DB_PremTaxLoad);
         }
     }
     TestPremiumTaxLoadConsistency();
 
-    MinRenlBaseFace     = Database->Query(DB_MinRenlBaseFace      );
-    MinRenlFace         = Database->Query(DB_MinRenlFace          );
-    NoLapseOpt1Only     = Database->Query(DB_NoLapseOpt1Only      );
-    NoLapseUnratedOnly  = Database->Query(DB_NoLapseUnratedOnly   );
-    OptChgCanIncrSA     = Database->Query(DB_OptChgCanIncrSA      );
-    OptChgCanDecrSA     = Database->Query(DB_OptChgCanDecrSA      );
-    WDCanDecrSADBO1     = Database->Query(DB_WDCanDecrSADBO1      );
-    WDCanDecrSADBO2     = Database->Query(DB_WDCanDecrSADBO2      );
-    WDCanDecrSADBO3     = Database->Query(DB_WDCanDecrSADBO3      );
-    MaxIncrAge          = static_cast<int>(Database->Query(DB_MaxIncrAge));
-    WaivePmTxInt1035    = Database->Query(DB_WaivePmTxInt1035     );
-    AllowTerm           = Database->Query(DB_AllowTerm            );
-    ExpPerKLimit        = Database->Query(DB_ExpPerKLimit         );
-    MaxWDDed            = static_cast<enum_anticipated_deduction>(static_cast<int>(Database->Query(DB_MaxWDDed)));
-    MaxWDAVMult         = Database->Query(DB_MaxWDAVMult          );
-    MaxLoanDed          = static_cast<enum_anticipated_deduction>(static_cast<int>(Database->Query(DB_MaxLoanDed)));
-    MaxLoanAVMult       = Database->Query(DB_MaxLoanAVMult        );
-    NoLapseMinDur       = static_cast<int>(Database->Query(DB_NoLapseMinDur));
-    NoLapseMinAge       = static_cast<int>(Database->Query(DB_NoLapseMinAge));
-    MinSpecAmt          = Database->Query(DB_MinSpecAmt           );
-    ADDLimit            = Database->Query(DB_ADDLimit             );
-    WPLimit             = Database->Query(DB_WPMax                );
-    SpecAmtLoadLimit    = Database->Query(DB_SpecAmtLoadLimit     );
-    MinWD               = Database->Query(DB_MinWD                );
-    WDFee               = Database->Query(DB_WDFee                );
-    WDFeeRate           = Database->Query(DB_WDFeeRate            );
-    AllowChangeToDBO2   = Database->Query(DB_AllowChangeToDBO2    );
-    AllowSAIncr         = Database->Query(DB_AllowSAIncr          );
-    NoLapseAlwaysActive = Database->Query(DB_NoLapseAlwaysActive  );
-    WaiverChargeMethod  = static_cast<e_waiver_charge_method>(static_cast<int>(Database->Query(DB_WPChargeMethod)));
-    LapseIgnoresSurrChg = Database->Query(DB_LapseIgnoresSurrChg  );
-    SurrChgOnIncr       = Database->Query(DB_SurrChgOnIncr        );
-    SurrChgOnDecr       = Database->Query(DB_SurrChgOnDecr        );
+    MinRenlBaseFace     = Database_->Query(DB_MinRenlBaseFace      );
+    MinRenlFace         = Database_->Query(DB_MinRenlFace          );
+    NoLapseOpt1Only     = Database_->Query(DB_NoLapseOpt1Only      );
+    NoLapseUnratedOnly  = Database_->Query(DB_NoLapseUnratedOnly   );
+    OptChgCanIncrSA     = Database_->Query(DB_OptChgCanIncrSA      );
+    OptChgCanDecrSA     = Database_->Query(DB_OptChgCanDecrSA      );
+    WDCanDecrSADBO1     = Database_->Query(DB_WDCanDecrSADBO1      );
+    WDCanDecrSADBO2     = Database_->Query(DB_WDCanDecrSADBO2      );
+    WDCanDecrSADBO3     = Database_->Query(DB_WDCanDecrSADBO3      );
+    MaxIncrAge          = static_cast<int>(Database_->Query(DB_MaxIncrAge));
+    WaivePmTxInt1035    = Database_->Query(DB_WaivePmTxInt1035     );
+    AllowTerm           = Database_->Query(DB_AllowTerm            );
+    ExpPerKLimit        = Database_->Query(DB_ExpPerKLimit         );
+    MaxWDDed            = static_cast<enum_anticipated_deduction>(static_cast<int>(Database_->Query(DB_MaxWDDed)));
+    MaxWDAVMult         = Database_->Query(DB_MaxWDAVMult          );
+    MaxLoanDed          = static_cast<enum_anticipated_deduction>(static_cast<int>(Database_->Query(DB_MaxLoanDed)));
+    MaxLoanAVMult       = Database_->Query(DB_MaxLoanAVMult        );
+    NoLapseMinDur       = static_cast<int>(Database_->Query(DB_NoLapseMinDur));
+    NoLapseMinAge       = static_cast<int>(Database_->Query(DB_NoLapseMinAge));
+    MinSpecAmt          = Database_->Query(DB_MinSpecAmt           );
+    ADDLimit            = Database_->Query(DB_ADDLimit             );
+    WPLimit             = Database_->Query(DB_WPMax                );
+    SpecAmtLoadLimit    = Database_->Query(DB_SpecAmtLoadLimit     );
+    MinWD               = Database_->Query(DB_MinWD                );
+    WDFee               = Database_->Query(DB_WDFee                );
+    WDFeeRate           = Database_->Query(DB_WDFeeRate            );
+    AllowChangeToDBO2   = Database_->Query(DB_AllowChangeToDBO2    );
+    AllowSAIncr         = Database_->Query(DB_AllowSAIncr          );
+    NoLapseAlwaysActive = Database_->Query(DB_NoLapseAlwaysActive  );
+    WaiverChargeMethod  = static_cast<e_waiver_charge_method>(static_cast<int>(Database_->Query(DB_WPChargeMethod)));
+    LapseIgnoresSurrChg = Database_->Query(DB_LapseIgnoresSurrChg  );
+    SurrChgOnIncr       = Database_->Query(DB_SurrChgOnIncr        );
+    SurrChgOnDecr       = Database_->Query(DB_SurrChgOnDecr        );
     LMI_ASSERT(!SurrChgOnDecr); // Surrchg change on decrease not supported.
 
-    Database->Query(FreeWDProportion, DB_FreeWDProportion);
+    Database_->Query(FreeWDProportion, DB_FreeWDProportion);
 
-    Database->Query(DBDiscountRate, DB_NAARDiscount);
+    Database_->Query(DBDiscountRate, DB_NAARDiscount);
 
-    Database->Query(AssetComp , DB_AssetComp);
-    Database->Query(CompTarget, DB_CompTarget);
-    Database->Query(CompExcess, DB_CompExcess);
+    Database_->Query(AssetComp , DB_AssetComp);
+    Database_->Query(CompTarget, DB_CompTarget);
+    Database_->Query(CompExcess, DB_CompExcess);
 
-    LedgerType = static_cast<enum_ledger_type>(static_cast<int>(Database->Query(DB_LedgerType)));
+    LedgerType = static_cast<enum_ledger_type>(static_cast<int>(Database_->Query(DB_LedgerType)));
 
-    FirstYearPremiumRetaliationLimit = Database->Query(DB_PremTaxRetalLimit);
+    FirstYearPremiumRetaliationLimit = Database_->Query(DB_PremTaxRetalLimit);
 
-    // TODO ?? Comments that refer to line numbers that may change,
-    // in source files whose names may change, are not helpful.
-    // "Workaround for prospectus illustrations.  Also occurs on line 80 of interest.cpp"
-
-    if(std::string::npos != Input->Comments.find("idiosyncrasy9"))
+    if(std::string::npos != Input_->Comments.find("idiosyncrasy9"))
         {
         LedgerType = e_ledger_type(e_prospectus);
         }
 
-    COIIsDynamic        = Database->Query(DB_DynamicCOI             );
-    MandEIsDynamic      = Database->Query(DB_DynamicMandE           );
-    SepAcctLoadIsDynamic= Database->Query(DB_DynamicSepAcctLoad     );
+    COIIsDynamic        = Database_->Query(DB_DynamicCOI             );
+    MandEIsDynamic      = Database_->Query(DB_DynamicMandE           );
+    SepAcctLoadIsDynamic= Database_->Query(DB_DynamicSepAcctLoad     );
 
-    UseUnusualCOIBanding= Database->Query(DB_UnusualCOIBanding      );
+    UseUnusualCOIBanding= Database_->Query(DB_UnusualCOIBanding      );
 
     // 'Unusual' COI banding accommodates a particular idiosyncratic
     // product which has no term rider and doesn't permit experience
@@ -784,9 +745,9 @@ void BasicValues::SetPermanentInvariants()
     // However, flat extras could be added even with guaranteed issue,
     // e.g. for aviation, occupation, avocation, or foreign travel.
     if
-        (e_table_none != Input->Status[0].SubstdTable
-        && (  e_simplifiedissue == Input->GroupUWType
-           || e_guaranteedissue == Input->GroupUWType
+        (e_table_none != Input_->Status[0].SubstdTable
+        && (  e_simplifiedissue == Input_->GroupUWType
+           || e_guaranteedissue == Input_->GroupUWType
            )
         )
         {
@@ -797,7 +758,7 @@ if(!global_settings::instance().ash_nazg)
             << LMI_FLUSH
             ;
         }
-    if(Input->Status[0].IsPolicyRated() && Input->Status[0].HasWP)
+    if(Input_->Status[0].IsPolicyRated() && Input_->Status[0].HasWP)
         {
 // TODO ?? For now, permit flawed testdecks to run.
 if(!global_settings::instance().ash_nazg)
@@ -806,7 +767,7 @@ if(!global_settings::instance().ash_nazg)
             << LMI_FLUSH
             ;
         }
-    if(Input->Status[0].IsPolicyRated() && Input->Status[0].HasADD)
+    if(Input_->Status[0].IsPolicyRated() && Input_->Status[0].HasADD)
         {
 // TODO ?? For now, permit flawed testdecks to run.
 if(!global_settings::instance().ash_nazg)
@@ -818,12 +779,12 @@ if(!global_settings::instance().ash_nazg)
     // Spouse and child riders are not similarly tested because
     // their rates shouldn't depend on the main insured's health.
 
-    DefnLifeIns         = Input->DefnLifeIns;
-    DefnMaterialChange  = Input->DefnMaterialChange;
-    Equiv7702DBO3       = static_cast<enum_dbopt_7702>(static_cast<int>(Database->Query(DB_Equiv7702DBO3)));
-    MaxNAAR             = Input->MaxNAAR;
+    DefnLifeIns         = Input_->DefnLifeIns;
+    DefnMaterialChange  = Input_->DefnMaterialChange;
+    Equiv7702DBO3       = static_cast<enum_dbopt_7702>(static_cast<int>(Database_->Query(DB_Equiv7702DBO3)));
+    MaxNAAR             = Input_->MaxNAAR;
 
-    Database->Query(MinPremIntSpread_, DB_MinPremIntSpread);
+    Database_->Query(MinPremIntSpread_, DB_MinPremIntSpread);
 
     round_specamt            = RoundingRules_->round_specamt           ();
     round_death_benefit      = RoundingRules_->round_death_benefit     ();
@@ -870,14 +831,14 @@ void BasicValues::SetLowestPremTaxRate()
     // so the tax rate equals the tax load.
 
     LowestPremTaxRate = 0.0;
-    if(Input->AmortizePremLoad)
+    if(Input_->AmortizePremLoad)
         {
         return;
         }
 
-    LowestPremTaxRate = Database->Query(DB_PremTaxLoad);
+    LowestPremTaxRate = Database_->Query(DB_PremTaxLoad);
 
-    TDBValue const& premium_tax_loads = Database->GetEntry(DB_PremTaxLoad);
+    TDBValue const& premium_tax_loads = Database_->GetEntry(DB_PremTaxLoad);
     if(!TDBValue::VariesByState(premium_tax_loads))
         {
         return;
@@ -887,7 +848,7 @@ void BasicValues::SetLowestPremTaxRate()
     // it equals premium-tax rate--i.e. that premium tax is passed
     // through exactly--and that therefore tiered tax rates determine
     // loads where applicable and implemented.
-    TDBValue const& premium_tax_rates = Database->GetEntry(DB_PremTaxRate);
+    TDBValue const& premium_tax_rates = Database_->GetEntry(DB_PremTaxRate);
     if(!TDBValue::Equivalent(premium_tax_loads, premium_tax_rates))
         {
         hobsons_choice()
@@ -931,7 +892,7 @@ void BasicValues::TestPremiumTaxLoadConsistency()
     // states that have tiered premium-tax rates. For instance, if
     // a flat two percent is coded for every state, then it is
     // probably desired to ignore all state variations and nuances.
-    TDBValue const& premium_tax_loads = Database->GetEntry(DB_PremTaxLoad);
+    TDBValue const& premium_tax_loads = Database_->GetEntry(DB_PremTaxLoad);
     if(!TDBValue::VariesByState(premium_tax_loads))
         {
         return;
@@ -940,13 +901,13 @@ void BasicValues::TestPremiumTaxLoadConsistency()
     if(TieredCharges_->premium_tax_is_tiered(GetStateOfJurisdiction()))
         {
         PremiumTaxLoadIsTieredInStateOfJurisdiction = true;
-        if(0.0 != Database->Query(DB_PremTaxLoad))
+        if(0.0 != Database_->Query(DB_PremTaxLoad))
             {
             hobsons_choice()
                 << "Premium-tax rate is tiered in state of jurisdiction "
                 << GetStateOfJurisdiction()
                 << ", but the product database specifies a scalar rate of "
-                << Database->Query(DB_PremTaxLoad)
+                << Database_->Query(DB_PremTaxLoad)
                 << " instead of zero as expected. Probably the database"
                 << " is incorrect."
                 << LMI_FLUSH
@@ -983,7 +944,7 @@ void BasicValues::TestPremiumTaxLoadConsistency()
 //============================================================================
 void BasicValues::SetMaxSurvivalDur()
 {
-    switch(Input->SurviveToType)
+    switch(Input_->SurviveToType)
         {
         case e_no_survival_limit:
             {
@@ -992,12 +953,12 @@ void BasicValues::SetMaxSurvivalDur()
             break;
         case e_survive_to_age:
             {
-            MaxSurvivalDur  = Input->SurviveToAge - Input->Status[0].IssueAge;
+            MaxSurvivalDur  = Input_->SurviveToAge - Input_->Status[0].IssueAge;
             }
             break;
         case e_survive_to_year:
             {
-            MaxSurvivalDur  = Input->SurviveToYear;
+            MaxSurvivalDur  = Input_->SurviveToYear;
             }
             break;
         case e_survive_to_ex:
@@ -1017,7 +978,7 @@ void BasicValues::SetMaxSurvivalDur()
             {
             fatal_error()
                 << "Case '"
-                << Input->SurviveToType
+                << Input_->SurviveToType
                 << "' not found."
                 << LMI_FLUSH
                 ;
@@ -1035,7 +996,7 @@ double BasicValues::GetModalMinPrem
     ) const
 {
     e_modal_prem_type const PremType =
-        static_cast<e_modal_prem_type>(static_cast<int>(Database->Query(DB_MinPremType)));
+        static_cast<e_modal_prem_type>(static_cast<int>(Database_->Query(DB_MinPremType)));
     return GetModalPrem(Year, Mode, SpecAmt, PremType);
 }
 
@@ -1047,10 +1008,10 @@ double BasicValues::GetModalTgtPrem
     ) const
 {
     e_modal_prem_type const PremType =
-        static_cast<e_modal_prem_type>(static_cast<int>(Database->Query(DB_TgtPremType)));
+        static_cast<e_modal_prem_type>(static_cast<int>(Database_->Query(DB_TgtPremType)));
     double modal_prem = GetModalPrem(Year, Mode, SpecAmt, PremType);
 
-    if(std::string::npos != Input->Comments.find("idiosyncrasy6"))
+    if(std::string::npos != Input_->Comments.find("idiosyncrasy6"))
         {
 // Authors of this block: GWC and JLM.
 // TODO ?? JOE--Please see comments
@@ -1168,7 +1129,7 @@ double BasicValues::GetModalPremTgtFromTable
 {
     return round_max_premium
         (
-            (   Database->Query(DB_TgtPremPolFee)
+            (   Database_->Query(DB_TgtPremPolFee)
             +       SpecAmt
                 *   epsilon_plus_one
                 *   MortalityRates_->TargetPremiumRates()[0]
@@ -1255,17 +1216,8 @@ double BasicValues::GetModalPremMlyDed
     z *= GetBandedCoiRates(e_basis(e_currbasis), SpecAmt)[Year];
     z += Loads_->monthly_policy_fee(e_basis(e_currbasis))[Year];
 
-    if(Input->Status[0].HasADD)
+    if(Input_->Status[0].HasADD)
         {
-/* TODO ?? expunge
-        // TODO ?? Remove inefficient code if assertion never fires.
-        double r = GetADDRates()[Year];
-        LMI_ASSERT(MortalityRates_->ADDRates()[Year] == r);
-        z +=
-                r
-            *   std::min(SpecAmt, ADDLimit)
-            ;
-*/
         z +=
                 MortalityRates_->ADDRates()[Year]
             *   std::min(SpecAmt, ADDLimit)
@@ -1275,14 +1227,9 @@ double BasicValues::GetModalPremMlyDed
 
     double annual_charge = Loads_->annual_policy_fee(e_basis(e_currbasis))[Year];
 
-    if(Input->Status[0].HasWP)
+    if(Input_->Status[0].HasWP)
         {
-/* TODO ?? expunge
-        // TODO ?? Remove inefficient code if assertion never fires.
-        double r = GetWPRates()[Year];
-        LMI_ASSERT(r == MortalityRates_->WPRates()[Year]);
-*/
-        // TODO ?? For simplicity, ignore Database->Query(DB_WPMax)
+        // TODO ?? For simplicity, ignore Database_->Query(DB_WPMax)
         double r = MortalityRates_->WPRates()[Year];
         z *= 1.0 + r;
         annual_charge *= 1.0 + r;
@@ -1306,7 +1253,7 @@ double BasicValues::GetModalSpecAmtMax
     ) const
 {
     e_modal_prem_type const prem_type = static_cast<e_modal_prem_type>
-        (static_cast<int>(Database->Query(DB_MinPremType))
+        (static_cast<int>(Database_->Query(DB_MinPremType))
         );
     return GetModalSpecAmt
             (a_EeMode
@@ -1326,7 +1273,7 @@ double BasicValues::GetModalSpecAmtTgt
     ) const
 {
     e_modal_prem_type const prem_type = static_cast<e_modal_prem_type>
-        (static_cast<int>(Database->Query(DB_TgtPremType))
+        (static_cast<int>(Database_->Query(DB_TgtPremType))
         );
     return GetModalSpecAmt
             (a_EeMode
@@ -1473,9 +1420,9 @@ double BasicValues::GetModalSpecAmtMlyDed
     double annual_charge = Loads_->annual_policy_fee(e_basis(e_currbasis))[0];
 
     double wp_rate = 0.0;
-    if(Input->Status[0].HasWP)
+    if(Input_->Status[0].HasWP)
         {
-        // For simplicity, ignore Database->Query(DB_WPMax)
+        // For simplicity, ignore Database_->Query(DB_WPMax)
         wp_rate = MortalityRates_->WPRates()[0];
         if(0.0 != 1.0 + wp_rate)
             {
@@ -1492,13 +1439,13 @@ double BasicValues::GetModalSpecAmtMlyDed
     z *= 1.0 - Loads_->target_total_load(e_basis(e_currbasis))[0];
 
     // Is this correct now??
-    if(Input->Status[0].HasWP && 0.0 != 1.0 + wp_rate)
+    if(Input_->Status[0].HasWP && 0.0 != 1.0 + wp_rate)
         {
-        // For simplicity, ignore Database->Query(DB_WPMax)
+        // For simplicity, ignore Database_->Query(DB_WPMax)
         z /= (1.0 + wp_rate);
         }
 
-    if(Input->Status[0].HasADD)
+    if(Input_->Status[0].HasADD)
         {
 /* TODO ?? expunge
         // TODO ?? Remove inefficient code if assertion never fires.
@@ -1506,7 +1453,7 @@ double BasicValues::GetModalSpecAmtMlyDed
         LMI_ASSERT(MortalityRates_->ADDRates()[0] == r);
         z -= r;
 */
-        // TODO ?? For simplicity, ignore Database->Query(DB_ADDMax)
+        // TODO ?? For simplicity, ignore Database_->Query(DB_ADDMax)
         z -= MortalityRates_->ADDRates()[0];
         }
     // TODO ?? Other riders should be considered here.
@@ -1537,8 +1484,8 @@ std::vector<double> const& BasicValues::GetBandedCoiRates
 {
     if(UseUnusualCOIBanding && e_guarbasis != rate_basis)
         {
-        double band_0_limit = Database->Query(DB_CurrCOITable0Limit);
-        double band_1_limit = Database->Query(DB_CurrCOITable1Limit);
+        double band_0_limit = Database_->Query(DB_CurrCOITable0Limit);
+        double band_1_limit = Database_->Query(DB_CurrCOITable1Limit);
         LMI_ASSERT(0.0 <= band_0_limit);
         LMI_ASSERT(band_0_limit <= band_1_limit);
         if(band_0_limit <= specamt && specamt < band_1_limit)
@@ -1573,7 +1520,7 @@ double BasicValues::GetAnnuityValueMlyDed
         spread = MinPremIntSpread_[Year] * 1.0 / Mode;
         }
     double z = i_upper_12_over_12_from_i<double>()
-        (   Input->GenAcctRate[Year]
+        (   Input_->GenAcctRate[Year]
         -   spread
         );
 // TODO ?? What do we do if SA and GA current rates differ?
@@ -1595,9 +1542,9 @@ std::vector<double> BasicValues::GetInforceAdjustedTable
     ,long int           TableNumber
     ) const
 {
-    if(DB_CurrCOITable == TableID && Database->Query(DB_CoiInforceReentry))
+    if(DB_CurrCOITable == TableID && Database_->Query(DB_CoiInforceReentry))
         {
-        int inforce_year = Input->InforceYear;
+        int inforce_year = Input_->InforceYear;
         std::vector<double> v = actuarial_table
             (TableFile
             ,TableNumber
@@ -1627,7 +1574,7 @@ std::vector<double> BasicValues::GetUnblendedTable
     return GetInforceAdjustedTable
         (TableFile
         ,TableID
-        ,static_cast<long int>(Database->Query(TableID))
+        ,static_cast<long int>(Database_->Query(TableID))
         );
 }
 
@@ -1639,7 +1586,7 @@ std::vector<double> BasicValues::GetUnblendedTable
     ,e_smoking   const& smoking
     ) const
 {
-    InputParms IP(*Input);
+    InputParms IP(*Input_);
     IP.Status[0].Gender = e_gender(gender);
     IP.Status[0].Smoking = e_smoking(smoking);
 
@@ -1682,7 +1629,7 @@ std::vector<double> BasicValues::GetTable
     std::string const file_name = AddDataDir(TableFile);
 
     // To blend by either smoking or gender, both the input must allow
-    // it (Input member), and the table must allow it (arg: CanBlend);
+    // it (Input_ member), and the table must allow it (arg: CanBlend);
     // or it must be required by (arg: MustBlend).
     bool BlendSmoking = false;
     switch(CanBlendSmoking)
@@ -1694,7 +1641,7 @@ std::vector<double> BasicValues::GetTable
             break;
         case CanBlend:
             {
-            BlendSmoking = Input->BlendMortSmoking;
+            BlendSmoking = Input_->BlendMortSmoking;
             }
             break;
         case MustBlend:
@@ -1723,7 +1670,7 @@ std::vector<double> BasicValues::GetTable
             break;
         case CanBlend:
             {
-            BlendGender = Input->BlendMortGender;
+            BlendGender = Input_->BlendMortGender;
             }
             break;
         case MustBlend:
@@ -1751,8 +1698,8 @@ std::vector<double> BasicValues::GetTable
 /*
             !CanBlend
         ||  (
-                !Input->BlendMortSmoking
-            &&  !Input->BlendMortGender
+                !Input_->BlendMortSmoking
+            &&  !Input_->BlendMortGender
             )
 */
         )
@@ -1767,23 +1714,23 @@ std::vector<double> BasicValues::GetTable
     // no else because above if returned
     if
         (
-            BlendSmoking // Input->BlendMortSmoking
-        &&  !BlendGender // Input->BlendMortGender
+            BlendSmoking // Input_->BlendMortSmoking
+        &&  !BlendGender // Input_->BlendMortGender
         )
         {
         std::vector<double> S = GetUnblendedTable
             (file_name
             ,TableID
-            ,Input->Status[0].Gender
+            ,Input_->Status[0].Gender
             ,e_smoking(e_smoker)
             );
         std::vector<double> N = GetUnblendedTable
             (file_name
             ,TableID
-            ,Input->Status[0].Gender
+            ,Input_->Status[0].Gender
             ,e_smoking(e_nonsmoker)
             );
-        double n = Input->NonsmokerProportion;
+        double n = Input_->NonsmokerProportion;
         double s = 1.0 - n;
         for(int j = 0; j < GetLength(); j++)
             {
@@ -1794,23 +1741,23 @@ std::vector<double> BasicValues::GetTable
     // Case 3: blend by gender only
     else if
         (
-            !BlendSmoking // Input->BlendMortSmoking
-        &&  BlendGender // Input->BlendMortGender
+            !BlendSmoking // Input_->BlendMortSmoking
+        &&  BlendGender // Input_->BlendMortGender
         )
         {
         std::vector<double> F = GetUnblendedTable
             (file_name
             ,TableID
             ,e_gender(e_female)
-            ,Input->Status[0].Smoking
+            ,Input_->Status[0].Smoking
             );
         std::vector<double> M = GetUnblendedTable
             (file_name
             ,TableID
             ,e_gender(e_male)
-            ,Input->Status[0].Smoking
+            ,Input_->Status[0].Smoking
             );
-        double m = Input->MaleProportion;
+        double m = Input_->MaleProportion;
         double f = 1.0 - m;
 
 /*
@@ -1842,8 +1789,8 @@ std::vector<double> BasicValues::GetTable
     // Case 4: blend by both smoking and gender
     else if
         (
-            BlendSmoking // Input->BlendMortSmoking
-        &&  BlendGender // Input->BlendMortGender
+            BlendSmoking // Input_->BlendMortSmoking
+        &&  BlendGender // Input_->BlendMortGender
         )
         {
         std::vector<double> FS = GetUnblendedTable
@@ -1870,9 +1817,9 @@ std::vector<double> BasicValues::GetTable
             ,e_gender(e_male)
             ,e_smoking(e_nonsmoker)
             );
-        double n = Input->NonsmokerProportion;
+        double n = Input_->NonsmokerProportion;
         double s = 1.0 - n;
-        double m = Input->MaleProportion;
+        double m = Input_->MaleProportion;
         double f = 1.0 - m;
         for(int j = 0; j < GetLength(); j++)
             {
@@ -1900,7 +1847,7 @@ std::vector<double> BasicValues::GetTable
 // TODO ?? The profusion of similar names should be trimmed.
 std::vector<double> const& BasicValues::GetCorridorFactor() const
 {
-    switch(Input->DefnLifeIns)
+    switch(Input_->DefnLifeIns)
         {
         case e_cvat:
             {
@@ -1923,7 +1870,7 @@ std::vector<double> const& BasicValues::GetCorridorFactor() const
             {
             fatal_error()
                 << "Case '"
-                << Input->DefnLifeIns
+                << Input_->DefnLifeIns
                 << "' not found."
                 << LMI_FLUSH
                 ;
@@ -1950,13 +1897,13 @@ void BasicValues::CalculateNon7702CompliantCorridor() const
     // age 95. This notion is based on GPT corridor factors.
     Non7702CompliantCorridor.resize(Length);
 
-    double pivot_age = Database->Query(DB_NonUSCorridorPivot);
+    double pivot_age = Database_->Query(DB_NonUSCorridorPivot);
 
     LMI_ASSERT( (pivot_age >= 0.0)
             &&(pivot_age < 95.0)
             );
 
-    double non_us_corr = Input->NonUSCorridor;
+    double non_us_corr = Input_->NonUSCorridor;
     double increment = (non_us_corr - 1.0)
                      / (95.0 - pivot_age)
                      ;
@@ -2079,26 +2026,26 @@ std::vector<double> const& BasicValues::GetMly7702qc() const
 std::vector<double> BasicValues::GetCvatCorridorFactors() const
 {
     return GetTable
-        (ProductData->GetCorridorFilename()
+        (ProductData_->GetCorridorFilename()
         ,DB_CorridorTable
         );
 }
 std::vector<double> BasicValues::GetCurrCOIRates0() const
 {
     return GetTable
-        (ProductData->GetCurrCOIFilename()
+        (ProductData_->GetCurrCOIFilename()
         ,DB_CurrCOITable, CanBlend, CanBlend
         );
 }
 std::vector<double> BasicValues::GetCurrCOIRates1() const
 {
     if
-        ( Database->Query(DB_CurrCOITable0Limit)
+        ( Database_->Query(DB_CurrCOITable0Limit)
         < std::numeric_limits<double>::max()
         )
         {
         return GetTable
-            (ProductData->GetCurrCOIFilename()
+            (ProductData_->GetCurrCOIFilename()
             ,DB_CurrCOITable1, CanBlend, CanBlend
             );
         }
@@ -2110,12 +2057,12 @@ std::vector<double> BasicValues::GetCurrCOIRates1() const
 std::vector<double> BasicValues::GetCurrCOIRates2() const
 {
     if
-        ( Database->Query(DB_CurrCOITable1Limit)
+        ( Database_->Query(DB_CurrCOITable1Limit)
         < std::numeric_limits<double>::max()
         )
         {
         return GetTable
-            (ProductData->GetCurrCOIFilename()
+            (ProductData_->GetCurrCOIFilename()
             ,DB_CurrCOITable2, CanBlend, CanBlend
             );
         }
@@ -2127,45 +2074,45 @@ std::vector<double> BasicValues::GetCurrCOIRates2() const
 std::vector<double> BasicValues::GetGuarCOIRates() const
 {
     return GetTable
-        (ProductData->GetGuarCOIFilename()
+        (ProductData_->GetGuarCOIFilename()
         ,DB_GuarCOITable
         );
 }
 std::vector<double> BasicValues::GetSmokerBlendedGuarCOIRates() const
 {
     return GetTable
-        (ProductData->GetGuarCOIFilename()
+        (ProductData_->GetGuarCOIFilename()
         ,DB_GuarCOITable, CanBlend, CanBlend
         );
 }
 std::vector<double> BasicValues::GetWPRates() const
 {
     return GetTable
-        (ProductData->GetWPFilename()
+        (ProductData_->GetWPFilename()
         ,DB_WPTable
         );
 }
 std::vector<double> BasicValues::GetADDRates() const
 {
     return GetTable
-        (ProductData->GetADDFilename()
+        (ProductData_->GetADDFilename()
         ,DB_ADDTable
         );
 }
 std::vector<double> BasicValues::GetChildRiderRates() const
 {
     return GetTable
-        (ProductData->GetChildRiderFilename()
+        (ProductData_->GetChildRiderFilename()
         ,DB_ChildRiderTable
         );
 }
 std::vector<double> BasicValues::GetCurrentSpouseRiderRates() const
 {
     std::vector<double> z = actuarial_table
-        (AddDataDir(ProductData->GetCurrSpouseRiderFilename())
-        ,static_cast<long int>(Database->Query(DB_SpouseRiderTable))
-        ,Input->SpouseIssueAge
-        ,static_cast<int>(Database->Query(DB_EndtAge)) - Input->SpouseIssueAge
+        (AddDataDir(ProductData_->GetCurrSpouseRiderFilename())
+        ,static_cast<long int>(Database_->Query(DB_SpouseRiderTable))
+        ,Input_->SpouseIssueAge
+        ,static_cast<int>(Database_->Query(DB_EndtAge)) - Input_->SpouseIssueAge
         );
     z.resize(Length);
     return z;
@@ -2173,10 +2120,10 @@ std::vector<double> BasicValues::GetCurrentSpouseRiderRates() const
 std::vector<double> BasicValues::GetGuaranteedSpouseRiderRates() const
 {
     std::vector<double> z = actuarial_table
-        (AddDataDir(ProductData->GetGuarSpouseRiderFilename())
-        ,static_cast<long int>(Database->Query(DB_SpousRiderGuarTable))
-        ,Input->SpouseIssueAge
-        ,static_cast<int>(Database->Query(DB_EndtAge)) - Input->SpouseIssueAge
+        (AddDataDir(ProductData_->GetGuarSpouseRiderFilename())
+        ,static_cast<long int>(Database_->Query(DB_SpousRiderGuarTable))
+        ,Input_->SpouseIssueAge
+        ,static_cast<int>(Database_->Query(DB_EndtAge)) - Input_->SpouseIssueAge
         );
     z.resize(Length);
     return z;
@@ -2184,59 +2131,50 @@ std::vector<double> BasicValues::GetGuaranteedSpouseRiderRates() const
 std::vector<double> BasicValues::GetCurrentTermRates() const
 {
     return GetTable
-        (ProductData->GetCurrTermFilename()
+        (ProductData_->GetCurrTermFilename()
         ,DB_TermTable, CanBlend, CanBlend
         );
 }
 std::vector<double> BasicValues::GetGuaranteedTermRates() const
 {
     return GetTable
-        (ProductData->GetGuarTermFilename()
+        (ProductData_->GetGuarTermFilename()
         ,DB_GuarTermTable, CanBlend, CanBlend
         );
 }
 std::vector<double> BasicValues::GetTableYRates() const
 {
     return GetTable
-        (ProductData->GetTableYFilename()
+        (ProductData_->GetTableYFilename()
         ,DB_TableYTable
         );
 }
 std::vector<double> BasicValues::GetTAMRA7PayRates() const
 {
     return GetTable
-        (ProductData->GetTAMRA7PayFilename()
+        (ProductData_->GetTAMRA7PayFilename()
         ,DB_TAMRA7PayTable
         );
 }
 std::vector<double> BasicValues::GetTgtPremRates() const
 {
     return GetTable
-        (ProductData->GetTgtPremFilename()
+        (ProductData_->GetTgtPremFilename()
         ,DB_TgtPremTable
         );
 }
 std::vector<double> BasicValues::GetIRC7702Rates() const
 {
     return GetTable
-        (ProductData->GetIRC7702Filename()
+        (ProductData_->GetIRC7702Filename()
         ,DB_IRC7702QTable
         );
 }
 std::vector<double> BasicValues::Get83GamRates() const
 {
     return GetTable
-        (ProductData->GetGam83Filename()
+        (ProductData_->GetGam83Filename()
         ,DB_83GamTable, CannotBlend, CanBlend
         );
 }
-
-/*
-Why Cmds?
-    overrides--questionable...use database overrides
-    iteration--separate type?
-    amt type: face, prem...put in Input
-    int type: gross, net...put in Input
-    compatibility mode
-*/
 

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: basic_values.hpp,v 1.4 2005-02-14 04:37:51 chicares Exp $
+// $Id: basic_values.hpp,v 1.5 2005-02-17 04:40:02 chicares Exp $
 
 #ifndef basic_values_hpp
 #define basic_values_hpp
@@ -30,6 +30,8 @@
 #include "round_to.hpp"
 #include "xenumtypes.hpp"
 #include "xrangetypes.hpp"
+
+#include <boost/shared_ptr.hpp>
 
 #include <string>
 #include <vector>
@@ -95,8 +97,6 @@ class LMI_EXPIMP BasicValues
         ,bool                a_ADDInForce
         ,double              a_TargetPremium
         );
-    BasicValues(BasicValues const&);
-    BasicValues& operator=(BasicValues const&);
     virtual ~BasicValues();
 
     void Init();
@@ -114,25 +114,20 @@ class LMI_EXPIMP BasicValues
     rounding_rules const& GetRoundingRules()          const;
     double                InvestmentManagementFee()   const;
 
-    // TODO ?? Eventually reconsider this. Const members should
-    // generally be avoided. But making this member const, at least
-    // for now, prevents this class, and others that use this member,
-    // from modifying it, which is more emphatically to be avoided.
-    InputParms const*     Input;
-    TProductData*         ProductData;
-    TDatabase*            Database;
-    FundData*             FundData_;
-    rounding_rules*       RoundingRules_;
-    tiered_charges*       TieredCharges_;
-
-    MortalityRates*       MortalityRates_;
-    InterestRates*        InterestRates_;
-    Loads*                Loads_;
-    death_benefits*       DeathBfts_;
-    SurrChgRates*         SurrChgRates_;
-    Outlay*               Outlay_;
-    Irc7702*              Irc7702_;
-    Irc7702A*             Irc7702A_;
+    boost::shared_ptr<InputParms const> Input_;
+    boost::shared_ptr<TProductData>     ProductData_;
+    boost::shared_ptr<TDatabase>        Database_;
+    boost::shared_ptr<FundData>         FundData_;
+    boost::shared_ptr<rounding_rules>   RoundingRules_;
+    boost::shared_ptr<tiered_charges>   TieredCharges_;
+    boost::shared_ptr<MortalityRates>   MortalityRates_;
+    boost::shared_ptr<InterestRates>    InterestRates_;
+    boost::shared_ptr<SurrChgRates>     SurrChgRates_;
+    boost::shared_ptr<death_benefits>   DeathBfts_;
+    boost::shared_ptr<Outlay>           Outlay_;
+    boost::shared_ptr<Loads>            Loads_;
+    boost::shared_ptr<Irc7702>          Irc7702_;
+    boost::shared_ptr<Irc7702A>         Irc7702A_;
 
     double GetTgtPrem
         (int            Year
@@ -148,18 +143,20 @@ class LMI_EXPIMP BasicValues
     std::vector<double> const& GetMly7702iGlp() const;
     std::vector<double> const& GetMly7702qc() const;
 
-// Only current (hence midpoint) COI and term rates are blended
+    // COI and term rates are blended on the current basis, but not
+    // the guaranteed basis. Midpoint rates reflect blending, as a
+    // consequence.
 
     std::vector<double> GetCvatCorridorFactors() const;
     std::vector<double> GetCurrCOIRates0()   const;
     std::vector<double> GetCurrCOIRates1()   const;
     std::vector<double> GetCurrCOIRates2()   const;
-    // Guar COI rates usually use
-    //   non-smoker-differentiated table for unismoke
-    //   a published table (e.g. table D) for unisex
+    // Guar COI rates usually use;
+    //   non-smoker-differentiated table for unismoke;
+    //   a published table (e.g. table D) for unisex.
     std::vector<double> GetGuarCOIRates()    const;
     // This function custom blends unismoke and unisex rates, using
-    //   the same table as guaranteed COIs
+    //   the same table as guaranteed COI rates.
     std::vector<double> GetSmokerBlendedGuarCOIRates()   const;
     std::vector<double> GetWPRates()                     const;
     std::vector<double> GetADDRates()                    const;
@@ -274,12 +271,13 @@ class LMI_EXPIMP BasicValues
 
     void CalculateNon7702CompliantCorridor() const;
 
+    // TODO ?? A priori, protected data is a defect.
     int                     Length;
     int                     IssueAge;
     int                     SpouseIssueAge;
     int                     RetAge;
 
-    // permanent invariants
+    // Invariant data.
     void                    SetPermanentInvariants();
     void                    SetLowestPremTaxRate();
     void                    TestPremiumTaxLoadConsistency();
@@ -395,14 +393,6 @@ class LMI_EXPIMP BasicValues
         (int           Year
         ,e_mode const& Mode
         ) const;
-
-//  void Set7702();
-//  void SetFace();
-//  void SetPrem();
-//  void SetWD();
-//  void SetLoan();
-//  void SetSurrChg();
-//  void SetScenarios();
 
     std::vector<double> GetInforceAdjustedTable
         (std::string const& TableFile

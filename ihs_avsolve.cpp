@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avsolve.cpp,v 1.3 2005-02-12 12:59:31 chicares Exp $
+// $Id: ihs_avsolve.cpp,v 1.4 2005-02-17 04:40:02 chicares Exp $
 
 // All iterative illustration solves are performed in this file.
 // We use Brent's algorithm because it is guaranteed to converge
@@ -273,8 +273,7 @@ void AccountValue::SolveSetWD(double a_CandidateValue)
 void AccountValue::SolveSetWDThenLoan(double a_CandidateValue)
 {
     Outlay_->set_withdrawals(a_CandidateValue, SolveBegYear, SolveEndYear);
-    // TODO ?? EGREGIOUS_DEFECT Do this in the input class instead.
-    const_cast<InputParms*>(Input)->WDToBasisThenLoan = "Yes";
+    LMI_ASSERT(e_yes == Input_->WDToBasisThenLoan);
 }
 
 //============================================================================
@@ -360,7 +359,7 @@ double AccountValue::Solve
             (upper_bound
 // TODO ?? This is probably wrong. I think there are two term amounts, only
 // one of which is in Status. But I could be wrong.
-            ,DeathBfts_->specamt()[j] + Input->Status[0].TermAmt
+            ,DeathBfts_->specamt()[j] + Input_->Status[0].TermAmt
             );
         }
     // TODO ?? Wait--initial premium may exceed input face, so

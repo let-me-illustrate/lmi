@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avmly.cpp,v 1.4 2005-02-14 04:37:51 chicares Exp $
+// $Id: ihs_avmly.cpp,v 1.5 2005-02-17 04:40:02 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -120,7 +120,7 @@ void AccountValue::DoMonthDR()
 /*
     PerformSpecAmtStrategy
         (&ActualSpecAmt
-        ,Input->SAStrategy
+        ,Input_->SAStrategy
         ,e_solve_specamt
         ,VariantValues()->Mode[Year]
         ,VariantValues()->SpecAmt
@@ -602,8 +602,8 @@ void AccountValue::TxExch1035()
 
     CumPmts += GrossPmts[Month];
     TaxBasis +=
-          Input->External1035ExchangeBasis
-        + Input->Internal1035ExchangeBasis
+          Input_->External1035ExchangeBasis
+        + Input_->Internal1035ExchangeBasis
         ;
 
     // TODO ?? Save ee and er bases separately e.g. for split dollar;
@@ -698,7 +698,7 @@ void AccountValue::ChangeSpecAmtBy(double delta)
     double prior_specamt = ActualSpecAmt;
     if(TermRiderActive)
         {
-        switch(Input->TermAdj)
+        switch(Input_->TermAdj)
             {
             case e_adjust_term:
                 {
@@ -721,14 +721,14 @@ void AccountValue::ChangeSpecAmtBy(double delta)
                 {
                 fatal_error()
                     << "Case '"
-                    << Input->TermAdj
+                    << Input_->TermAdj
                     << "' not found."
                     << LMI_FLUSH
                     ;
                 }
             }
 
-        if(!AllowTerm || !Input->Status[0].HasTerm || !TermRiderActive)
+        if(!AllowTerm || !Input_->Status[0].HasTerm || !TermRiderActive)
             {
             TermSpecAmt = 0.0;
             ProportionAppliedToTerm = 0.0;
@@ -784,7 +784,7 @@ void AccountValue::ChangeSpecAmtBy(double delta)
         InvariantValues().TermSpecAmt[j] = TermSpecAmt;
 // We have term SA in class Inputs, in anticipation of differing
 // rider amounts on a multilife policy. It's scalar now:
-//   Input->Status[0].TermAmt
+//   Input_->Status[0].TermAmt
 // TODO ?? Should it be a std::vector?
 // Probably this term rider deserves special treatment
 //   maybe even a class of its own (7702-integrated term).
@@ -987,7 +987,7 @@ void AccountValue::IncreaseSpecAmtToAvoidMec()
 #endif // DEBUGGING_MEC_AVOIDANCE
 
     if
-        (  e_increase_specamt != Input->AvoidMec
+        (  e_increase_specamt != Input_->AvoidMec
         || 0 != Month
         || Irc7702A_->IsMecAlready()
         || e_run_curr_basis != RateBasis
@@ -1242,7 +1242,7 @@ void AccountValue::IncreaseSpecAmtToAvoidMec()
             );
 
         double target_premium_rate = 0.01; // TODO ?? Arbitrary.
-        if(e_modal_nonmec == Database->Query(DB_TgtPremType))
+        if(e_modal_nonmec == Database_->Query(DB_TgtPremType))
             {
             target_premium_rate = MortalityRates_->SevenPayRates()[0];
             }
@@ -1692,7 +1692,7 @@ void AccountValue::TxLimitPayment(double a_maxpmt)
 
     LMI_ASSERT(materially_equal(GrossPmts[Month], EeGrossPmts[Month] + ErGrossPmts[Month]));
 
-    if(e_reduce_prem == Input->AvoidMec && !Irc7702A_->IsMecAlready())
+    if(e_reduce_prem == Input_->AvoidMec && !Irc7702A_->IsMecAlready())
         {
         double gross_1035 = 0.0;
         if(0 == Year && 0 == Month)
@@ -2112,7 +2112,7 @@ void AccountValue::TxSetBOMAV()
     // Set base for per K load at issue. Other approaches could be imagined.
     if(Year == InforceYear && Month == InforceMonth)
         {
-        if(!Input->Status[0].HasTerm)
+        if(!Input_->Status[0].HasTerm)
             {
             LMI_ASSERT(0.0 == InvariantValues().TermSpecAmt[0]);
             }
@@ -2124,7 +2124,7 @@ void AccountValue::TxSetBOMAV()
         else
             {
             // TODO ?? For inforce, we need term rider amount as of issue date.
-            z = Input->VectorSpecamtHistory.front().operator double const&();
+            z = Input_->VectorSpecamtHistory.front().operator double const&();
             }
         SpecAmtLoadBase = std::max(z, NetPmts[Month] * YearsCorridorFactor);
         SpecAmtLoadBase = std::min(SpecAmtLoadBase, SpecAmtLoadLimit);
@@ -2219,7 +2219,7 @@ void AccountValue::TxSetDeathBft()
         + std::max(0.0, ExpRatReserve)
         ;
 
-    if(12 == Month || std::string::npos != Input->Comments.find("idiosyncrasyV"))
+    if(12 == Month || std::string::npos != Input_->Comments.find("idiosyncrasyV"))
         {
         // This is really the correct behavior, but without this
         // idiosyncrasy we want to match an admin system that
@@ -2266,15 +2266,15 @@ void AccountValue::TxSetTermAmt()
         {
         return;
         }
-    if(!AllowTerm || !Input->Status[0].HasTerm)
+    if(!AllowTerm || !Input_->Status[0].HasTerm)
         {
         TermRiderActive = false;
         return;
         }
 
     // TODO ?? Assumes that term rider lasts exactly as long as no-lapse guarantee.
-    LMI_ASSERT(BasicValues::NoLapseMinDur == Database->Query(DB_NoLapseMinDur));
-    LMI_ASSERT(BasicValues::NoLapseMinAge == Database->Query(DB_NoLapseMinAge));
+    LMI_ASSERT(BasicValues::NoLapseMinDur == Database_->Query(DB_NoLapseMinDur));
+    LMI_ASSERT(BasicValues::NoLapseMinAge == Database_->Query(DB_NoLapseMinAge));
 
     if
         (  (BasicValues::NoLapseMinDur <= Year)
@@ -2380,7 +2380,7 @@ double AccountValue::DetermineAcctValLoadAMD()
 void AccountValue::TxSetRiderDed()
 {
     ADDChg = 0.0;
-    if(Input->Status[0].HasADD)
+    if(Input_->Status[0].HasADD)
         {
         ADDChg =
                 YearsADDRate
@@ -2389,25 +2389,25 @@ void AccountValue::TxSetRiderDed()
         }
 
     SpouseRiderChg = 0.0;
-    if(Input->HasSpouseRider)
+    if(Input_->HasSpouseRider)
         {
         SpouseRiderChg =
                 YearsSpouseRiderRate
-            *   Input->SpouseRiderAmount
+            *   Input_->SpouseRiderAmount
             ;
         }
     ChildRiderChg = 0.0;
-    if(Input->HasChildRider)
+    if(Input_->HasChildRider)
         {
         ChildRiderChg =
                 YearsChildRiderRate
-            *   Input->ChildRiderAmount
+            *   Input_->ChildRiderAmount
             ;
         }
 
     TermChg = 0.0;
     DcvTermChg = 0.0;
-    if(TermRiderActive && Input->Status[0].HasTerm)
+    if(TermRiderActive && Input_->Status[0].HasTerm)
         {
         TermChg =
             YearsTermRate
@@ -2423,7 +2423,7 @@ void AccountValue::TxSetRiderDed()
 
     WPChg = 0.0;
     DcvWpChg = 0.0;
-    if(Input->Status[0].HasWP)
+    if(Input_->Status[0].HasWP)
         {
         switch(WaiverChargeMethod)
             {
@@ -2575,7 +2575,7 @@ void AccountValue::TxTakeSepAcctLoad()
 void AccountValue::TxCreditInt()
 {
     // Deduct amortized premium tax load as dollar amount
-    if(std::string::npos != Input->Comments.find("idiosyncrasy2"))
+    if(std::string::npos != Input_->Comments.find("idiosyncrasy2"))
         {
 // Authors of this block: GWC and JLM.
         // JOE Take care that we neither subtract an amortization
@@ -2584,8 +2584,8 @@ void AccountValue::TxCreditInt()
 
         // loads class only calculates the dollar-certain charge if
         // AmortizePemLoad is chosen
-        LMI_ASSERT(Input->AmortizePremLoad);
-        if(Year < Database->Query(DB_PmTxAmortPeriod))
+        LMI_ASSERT(Input_->AmortizePremLoad);
+        if(Year < Database_->Query(DB_PmTxAmortPeriod))
             {
             // Valid only for single premium
             LMI_ASSERT(0 == Year || 0.0 == InvariantValues().GrossPmt[Year]);
@@ -2650,7 +2650,7 @@ void AccountValue::TxCreditInt()
         }
 
     // Deduct interest on DAC tax balance as a dollar amount
-    if(std::string::npos != Input->Comments.find("idiosyncrasy3"))
+    if(std::string::npos != Input_->Comments.find("idiosyncrasy3"))
         {
 // Authors of this block: GWC and JLM.
 // TODO ?? JOE--please see comments
@@ -2669,8 +2669,8 @@ void AccountValue::TxCreditInt()
             double const dac_schedule[10] =
                 {0.95, 0.85, 0.75, 0.65, 0.55, 0.45, 0.35, 0.25, 0.15, 0.05
                 };
-            double lic_dac_tax_rate = Database->Query(DB_LicDacTaxRate);
-            double lic_fit_rate     = Database->Query(DB_LICFitRate);
+            double lic_dac_tax_rate = Database_->Query(DB_LicDacTaxRate);
+            double lic_fit_rate     = Database_->Query(DB_LICFitRate);
             double const dac_factor =
                     lic_dac_tax_rate
                 *   lic_fit_rate
@@ -2708,7 +2708,7 @@ void AccountValue::TxCreditInt()
         // Each interest increment is rounded separately.
         double effective_general_account_interest_factor = YearsGenAcctIntRate;
         if
-            (  Input->HasHoneymoon
+            (  Input_->HasHoneymoon
             && !HoneymoonActive
             && e_currbasis == ExpAndGABasis
             )
@@ -2754,7 +2754,7 @@ void AccountValue::TxCreditInt()
 
 
     // TODO ?? This can work only for SA products.
-    if(std::string::npos != Input->Comments.find("idiosyncrasy3"))
+    if(std::string::npos != Input_->Comments.find("idiosyncrasy3"))
         {
 // Authors of this block and its else-if block: GWC and JLM.
 // TODO ?? We have to get rid of this workaround.
@@ -2971,8 +2971,8 @@ void AccountValue::TxTakeWD()
     // order dependency: after prem pmt, before loan
     if
         (
-        Input->WDToBasisThenLoan
-//      && Input->SolveBegYear <= Year && Year < Input->SolveEndYear
+        Input_->WDToBasisThenLoan
+//      && Input_->SolveBegYear <= Year && Year < Input_->SolveEndYear
 // TODO ?? What about guar prem solve?
         )
         {
@@ -2997,9 +2997,9 @@ void AccountValue::TxTakeWD()
 // we should fix? TODO ?? Investigate.
 //
 // It appears that we need to do this even when not solving
-// i.e. if Input->WDToBasisThenLoan means to take loans after WDs stop...
+// i.e. if Input_->WDToBasisThenLoan means to take loans after WDs stop...
 // TODO ?? Should the next line be suppressed?
-//      if(e_solve_wd_then_loan == Input->SolveType)
+//      if(e_solve_wd_then_loan == Input_->SolveType)
 //          {
             RequestedLoan += RequestedWD - NetWD;
 //          }
@@ -3178,7 +3178,7 @@ void AccountValue::TxTakeWD()
     CumPmts     -= NetWD;
     TaxBasis    -= NetWD;
     CumWD       += NetWD;
-//  if(Input->WDToBasisThenLoan)
+//  if(Input_->WDToBasisThenLoan)
 //      LMI_ASSERT(CumWD <= TaxBasis);    // TODO ?? no-- <= CumPmts or something like that?
 
 // This seems wrong. If we're changing something that's invariant among
@@ -3403,7 +3403,7 @@ void AccountValue::TxTestLapse()
         {
         CumNoLapsePrem += MlyNoLapsePrem + RiderDeductions;
         if
-            (       NoLapseMinAge <= Year + Input->Status[0].IssueAge
+            (       NoLapseMinAge <= Year + Input_->Status[0].IssueAge
                 &&  NoLapseMinDur <= Year
             ||      CumPmts < CumNoLapsePrem
                 &&  !materially_equal(CumPmts, CumNoLapsePrem)
@@ -3529,7 +3529,7 @@ void AccountValue::TxDebitExpRatRsvChg()
 // not currently used anywhere
 {
     if
-        (   std::string::npos == Input->Comments.find("idiosyncrasy5")
+        (   std::string::npos == Input_->Comments.find("idiosyncrasy5")
         ||  Month != 11
         )
         {
@@ -3546,12 +3546,12 @@ void AccountValue::TxDebitExpRatRsvChg()
             break;
         case e_guarbasis:
             {
-            multiplier = Database->Query(DB_ExpRatRiskCOIMult);
+            multiplier = Database_->Query(DB_ExpRatRiskCOIMult);
             }
             break;
         case e_mdptbasis:
             {
-            multiplier = Database->Query(DB_ExpRatRiskCOIMult) * .5;
+            multiplier = Database_->Query(DB_ExpRatRiskCOIMult) * .5;
             }
             break;
         default:
