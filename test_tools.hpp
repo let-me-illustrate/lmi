@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: test_tools.hpp,v 1.2 2005-01-31 13:12:48 chicares Exp $
+// $Id: test_tools.hpp,v 1.3 2005-02-28 12:57:47 chicares Exp $
 
 // This is a derived work based on Beman Dawes's boost test library
 // that bears the following copyright and license statement:
@@ -126,8 +126,8 @@
     catch(std::exception const& e)                      \
         {                                               \
         if                                              \
-            (   std::string(typeid(e).name())           \
-            !=  std::string(typeid(TYPE).name())        \
+            (   typeid(e)                               \
+            !=  typeid(TYPE)                            \
             )                                           \
             {                                           \
             lmi_test::error_stream()                    \
@@ -298,6 +298,7 @@ namespace lmi_test
         throw lmi_test::test::test_tools_exception() \
 
 // Revision History
+//  2005-02-28 GWC Fix defective typeid comparison.
 //  2005-01-29 GWC Move #included '.cpp' files after declarations that
 //    were otherwise redundant, resolving a gcc warning.
 //  2005-01-09 GWC Update email address
