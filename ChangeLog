@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.12 2005-02-17 04:40:02 chicares Exp $
+// $Id: ChangeLog,v 1.13 2005-02-17 05:00:11 chicares Exp $
 
 2005-01-14
 
@@ -446,4 +446,13 @@ copy ctor in class BasicValues. The tradeoff is acceptable because
 the removed code was not clearly correct, and the implicitly-defined
 special member functions bring the system a step closer to exception
 safety.
+
+2005-02-16 [1059]
+
+  ledger.cpp
+  ledger.hpp
+Use smart instead of raw pointers to hold resources in another class,
+eliminating hand-written special member functions as above. This
+change makes the antediluvian command-line test run twelve percent
+faster.
 
