@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: msw_common.make,v 1.1 2005-01-28 01:34:43 chicares Exp $
+# $Id: msw_common.make,v 1.2 2005-02-17 23:27:21 chicares Exp $
 
 ################################################################################
 
@@ -57,7 +57,7 @@ platform_defines := \
   -DLIBXML_USE_DLL \
 
 platform_libxml2_libraries = \
-  -L $(libxml2_dir)/lib -lxml2_dll \
+  -L $(system_root)/usr/local/lib -lxml2_dll \
 
 platform_mpatrol_libraries := \
   -limagehlp
@@ -92,25 +92,24 @@ SUSPICIOUS_LIBS := \
 # write subplatform-specific workarounds for any locations that can't
 # conform for some good reason.
 
-# Path to libraries from www.boost.org .
-boost_dir    := $(system_root)/boost/boost_1_31_0
+# Path to libraries from www.boost.org . Most required boost libraries
+# are implemented exclusively in headers. It seems common in the *nix
+# world to leave those headers in the subdirectory of /usr/local/src/
+# to which the boost distribution is extracted, probably because boost
+# does not put all its headers in an include/ subdirectory and it
+# would be tedious to find and copy them all to /usr/local/include .
+boost_dir    := $(system_root)/usr/local/src/boost_1_31_0
 
 # Path to GNU cgicc.
-cgicc_dir    := $(system_root)/cgicc/cgicc-3.1.4
+cgicc_include_dir := $(system_root)/usr/local/include
+cgicc_source_dir  := $(system_root)/usr/local/src/cgicc
 
 # Path to libxml2.
-libxml2_dir  := $(system_root)/msys/1.0/local
+libxml2_include_dir  := $(system_root)/usr/local/include/libxml2
 
 # Path to xmlwrapp.
-xmlwrapp_dir := $(system_root)/xmlwrapp/xmlwrapp-0.2.0-gwc
-
-# Path to miscellaneous installed libraries.
-misc_include_dirs := \
-  $(boost_dir) \
-  $(libxml2_dir) \
-
-# Path to gnu cgicc distribution.
-cgicc_source_dir := $(system_root)/cgicc/cgicc-3.1.5/cgicc
+xmlwrapp_include_dir := $(system_root)/usr/local/include
+xmlwrapp_source_dir  := $(system_root)/usr/local/src/libxml
 
 # HTML server's cgi-bin directory.
 #cgi_bin_dir := $(system_root)/unspecified/cgi-bin

@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: workhorse.make,v 1.3 2005-02-03 16:03:37 chicares Exp $
+# $Id: workhorse.make,v 1.4 2005-02-17 23:27:21 chicares Exp $
 
 ###############################################################################
 
@@ -112,20 +112,19 @@ effective_default_target: $(default_targets)
 all_include_directories := \
   $(src_dir) \
   $(boost_dir) \
-  $(cgicc_dir) \
-  $(libxml2_dir)/include/libxml2 \
+  $(cgicc_include_dir) \
+  $(libxml2_include_dir) \
   $(wx_platform_dir) \
   $(wx_dir)/include \
   $(wx_dir)/contrib/include \
-  $(xmlwrapp_dir)/src/libxml \
-  $(xmlwrapp_dir)/include \
+  $(xmlwrapp_include_dir) \
 
 all_source_directories := \
   $(src_dir) \
   $(src_dir)/products \
   $(boost_dir)/libs/filesystem/src \
-  $(cgicc_dir)/cgicc \
-  $(xmlwrapp_dir)/src/libxml \
+  $(cgicc_source_dir) \
+  $(xmlwrapp_source_dir) \
 
 vpath lib%.a          $(CURDIR)
 vpath %.o             $(CURDIR)
@@ -412,9 +411,9 @@ mpatrol.log:
 # results.
 
 .PHONY: cli_tests
-cli_tests:
+cli_tests: antediluvian_cli$(EXEEXT)
 	@$(ECHO) Test command line interface:
-	@./antediluvian_cli$(EXEEXT) --accept --selftest > /dev/null;
+	@./antediluvian_cli$(EXEEXT) --accept --selftest > /dev/null
 	@./antediluvian_cli$(EXEEXT) --accept --selftest
 
 ################################################################################
@@ -428,7 +427,7 @@ cgi_tests: antediluvian_cgi$(EXEEXT)
 	@$(ECHO) Test common gateway interface:
 	@./antediluvian_cgi$(EXEEXT) --write_content_string > /dev/null
 	@<$(src_dir)/expected.cgi.out \
-	  $(SED)  -e'/^[0-9. ]*$$/!d' -e'/[0-9]/!d' \
+	  $(SED)    -e'/^[0-9. ]*$$/!d' -e'/[0-9]/!d' \
 	  > cgi_touchstone
 	@./antediluvian_cgi$(EXEEXT) --enable_test <cgi.test.in \
 	  | $(SED)  -e'/^[0-9. ]*$$/!d' -e'/[0-9]/!d' \
@@ -478,9 +477,11 @@ show_flags:
 	@$(ECHO) ALL_RCFLAGS             = '$(ALL_RCFLAGS)'
 	@$(ECHO) src_dir                 = '$(src_dir)'
 	@$(ECHO) boost_dir               = '$(boost_dir)'
-	@$(ECHO) cgicc_dir               = '$(cgicc_dir)'
-	@$(ECHO) libxml2_dir             = '$(libxml2_dir)'
-	@$(ECHO) xmlwrapp_dir            = '$(xmlwrapp_dir)'
+	@$(ECHO) cgicc_include_dir       = '$(cgicc_include_dir)'
+	@$(ECHO) cgicc_source_dir        = '$(cgicc_source_dir)'
+	@$(ECHO) libxml2_include_dir     = '$(libxml2_include_dir)'
+	@$(ECHO) xmlwrapp_include_dir    = '$(xmlwrapp_include_dir)'
+	@$(ECHO) xmlwrapp_source_dir     = '$(xmlwrapp_source_dir)'
 	@$(ECHO) all_include_directories = '$(all_include_directories)'
 	@$(ECHO) all_source_directories  = '$(all_source_directories)'
 
