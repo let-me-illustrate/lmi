@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xml_notebook.cpp,v 1.2 2005-03-17 02:34:19 chicares Exp $
+// $Id: xml_notebook.cpp,v 1.3 2005-03-30 03:40:16 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -263,6 +263,10 @@ void XmlNotebook::ConditionallyEnableItems
         radiobox->SetSelection(base_datum->allowed_ordinal());
         // TODO ?? ...but this (alone) lets a disabled radiobutton be selected:
         // base_datum->force_to_allowable_value();
+
+        // TODO ?? Need to do something like this:
+        // input_["FundChoiceType"].cast_blithely<mc_enum_base>()->force_to_allowable_value();
+        // transfer_data_["FundChoiceType"] = input_["FundChoiceType"].str();
         }
     else if(itembox)
         {
