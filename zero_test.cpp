@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: zero_test.cpp,v 1.1 2005-01-14 19:47:45 chicares Exp $
+// $Id: zero_test.cpp,v 1.2 2005-01-29 02:47:42 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -36,7 +36,7 @@
 namespace
 {
     static double const epsilon = std::numeric_limits<double>::epsilon();
-}; // Unnamed namespace.
+} // Unnamed namespace.
 
 #define TEST_ZERO(bound0, bound1, dec, f, exact_root)                         \
 {                                                                             \

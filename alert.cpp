@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: alert.cpp,v 1.1 2005-01-14 19:47:44 chicares Exp $
+// $Id: alert.cpp,v 1.2 2005-01-29 02:47:41 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -31,10 +31,6 @@
 #include <ios>
 #include <sstream>   // std::stringbuf
 #include <stdexcept>
-
-// TODO ?? Track down this problem:
-//   Caught exception: basic_ios::clear(iostate) caused exception
-// from test_exception().
 
 namespace
 {

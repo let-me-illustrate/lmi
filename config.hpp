@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: config.hpp,v 1.1 2005-01-14 19:47:44 chicares Exp $
+// $Id: config.hpp,v 1.2 2005-01-29 02:47:41 chicares Exp $
 
 // Configuration header for compiler quirks. Include at the beginning of
 // every .hpp file (and nowhere else).
@@ -54,11 +54,16 @@ namespace fs = boost::filesystem;
 // INELEGANT !! Either the foregoing belongs in 'config_all.hpp',
 // or 'config_all.hpp' should not exist.
 
+// This header #includes standard headers in an unusual way, and must
+// be #included before any standard headers are seen.
+//
+#include "platform_dependent.hpp"
+
 #define OK_TO_INCLUDE_CONFIG_ALL_HPP
 #include "config_all.hpp"
 #undef OK_TO_INCLUDE_CONFIG_ALL_HPP
 
-// Redundant include guards are passe: with modern tools, the benefit
+// Redundant include guards are passé: with modern tools, the benefit
 // is not worth the ugliness. The guards here, however, are intended
 // not to speed up compilation with antique tools that don't recognize
 // normal include guards, but rather to insulate compiler-specific

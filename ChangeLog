@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.2 2005-01-28 01:34:43 chicares Exp $
+// $Id: ChangeLog,v 1.3 2005-01-29 02:47:41 chicares Exp $
 
 2005-01-14
 
@@ -70,4 +70,68 @@ source, as quoted C strings and html respectively.
   posix_fhs.make
   workhorse.make
 Add makefiles.
+
+2005-01-28 [1104]
+
+Changes necessary to compile with gcc-3.4.2 with no diagnostics:
+
+  config.hpp
+  platform_dependent.hpp
+Make prototypes of nonstandard functions like putenv() available even
+in strict standard-conformance mode.
+
+  GNUmakefile
+  argv0.hpp
+  diagnostics.sed
+  miscellany.hpp
+  quiet_nan.hpp
+  zero.hpp
+All non-configuration headers must include "config.hpp" first. Fix
+those that didn't. Add a makefile test for this invariant; refine
+other such tests slightly, and improve the sed script that parses
+makefile output for diagnostics.
+
+  alert.cpp
+Remove a defect marker that called for investigation into a problem
+whose cause has been tracked to a libstdc++ defect.
+
+  library_demo.cpp
+Don't enforce production-grade security for this mere demo.
+
+  financial_test.cpp
+Run timing test once only: it took too long with mpatrol.
+
+  security.cpp
+Flush message log on passkey validation failure.
+
+  actuarial_table.cpp
+  alert.hpp
+  basic_values.hpp
+  fenv_lmi.hpp
+  ihs_acctval.cpp
+  ihs_basicval.cpp
+  ihs_funddata.hpp
+  ihs_ldginvar.cpp
+  input_test.cpp
+  inputillus.cpp
+  inputillus.hpp
+  interest_rates.cpp
+  ledger_xml_io.cpp
+  round_to_test.cpp
+  rounding_rules.hpp
+  streamable.hpp
+  system_command.hpp
+  zero.hpp
+  zero_test.cpp
+Fix other problems diagnosed by gcc-3.4.2, which is stricter than
+earlier versions. Use import and export declspec attributes wherever
+they make sense: even though it's better not to use them with msw,
+they may be useful with gcc-4.x's ELF 'visibility' feature. Remove
+superfluous class-name qualifiers from members defined in class
+bodies. Factor out duplicative code to manage the floating-point
+environment. Other minor changes to improve conformance.
+
+Unit tests do not yet run properly with gcc-3.4.2 and mpatrol, so that
+newer compiler version can't yet replace gcc-3.2.3 for production.
+However, these changes affect no gcc-3.2.3 test results.
 

@@ -19,13 +19,14 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: rounding_rules.hpp,v 1.1 2005-01-14 19:47:45 chicares Exp $
+// $Id: rounding_rules.hpp,v 1.2 2005-01-29 02:47:42 chicares Exp $
 
 #ifndef rounding_rules_hpp
 #define rounding_rules_hpp
 
 #include "config.hpp"
 
+#include "expimp.hpp"
 #include "round_to.hpp"
 
 // Design principle: round transactional changes to account value,
@@ -35,7 +36,7 @@
 // Rounding is a property of the transaction, and not of the
 // variable it ultimatedly affects.
 
-class rounding_rules
+class LMI_EXPIMP rounding_rules
 {
     friend class StreamableRoundingRules;
     friend class RoundingDocument;
@@ -44,25 +45,25 @@ class rounding_rules
   public:
     rounding_rules();
 
-    round_to<double> const& rounding_rules::round_specamt           () const;
-    round_to<double> const& rounding_rules::round_death_benefit     () const;
-    round_to<double> const& rounding_rules::round_naar              () const;
-    round_to<double> const& rounding_rules::round_coi_rate          () const;
-    round_to<double> const& rounding_rules::round_coi_charge        () const;
-    round_to<double> const& rounding_rules::round_gross_premium     () const;
-    round_to<double> const& rounding_rules::round_net_premium       () const;
-    round_to<double> const& rounding_rules::round_interest_rate     () const;
-    round_to<double> const& rounding_rules::round_interest_credit   () const;
-    round_to<double> const& rounding_rules::round_withdrawal        () const;
-    round_to<double> const& rounding_rules::round_loan              () const;
-    round_to<double> const& rounding_rules::round_corridor_factor   () const;
-    round_to<double> const& rounding_rules::round_surrender_charge  () const;
-    round_to<double> const& rounding_rules::round_irr               () const;
-    round_to<double> const& rounding_rules::round_min_specamt       () const;
-    round_to<double> const& rounding_rules::round_max_specamt       () const;
-    round_to<double> const& rounding_rules::round_min_premium       () const;
-    round_to<double> const& rounding_rules::round_max_premium       () const;
-    round_to<double> const& rounding_rules::round_interest_rate_7702() const;
+    round_to<double> const& round_specamt           () const;
+    round_to<double> const& round_death_benefit     () const;
+    round_to<double> const& round_naar              () const;
+    round_to<double> const& round_coi_rate          () const;
+    round_to<double> const& round_coi_charge        () const;
+    round_to<double> const& round_gross_premium     () const;
+    round_to<double> const& round_net_premium       () const;
+    round_to<double> const& round_interest_rate     () const;
+    round_to<double> const& round_interest_credit   () const;
+    round_to<double> const& round_withdrawal        () const;
+    round_to<double> const& round_loan              () const;
+    round_to<double> const& round_corridor_factor   () const;
+    round_to<double> const& round_surrender_charge  () const;
+    round_to<double> const& round_irr               () const;
+    round_to<double> const& round_min_specamt       () const;
+    round_to<double> const& round_max_specamt       () const;
+    round_to<double> const& round_min_premium       () const;
+    round_to<double> const& round_max_premium       () const;
+    round_to<double> const& round_interest_rate_7702() const;
 
   private:
     round_to<double> round_specamt_;

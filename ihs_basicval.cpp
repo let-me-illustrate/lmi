@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_basicval.cpp,v 1.1 2005-01-14 19:47:44 chicares Exp $
+// $Id: ihs_basicval.cpp,v 1.2 2005-01-29 02:47:41 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -158,7 +158,7 @@ else
         );
 
     // TODO ?? EGREGIOUS_DEFECT Redesign this function instead.
-    const_cast<InputParms*>(Input) = kludge_input;
+    const_cast<InputParms&>(*Input) = *kludge_input;
 
     GPTServerInit();
 }
@@ -716,9 +716,9 @@ void BasicValues::SetPermanentInvariants()
     WaivePmTxInt1035    = Database->Query(DB_WaivePmTxInt1035     );
     AllowTerm           = Database->Query(DB_AllowTerm            );
     ExpPerKLimit        = Database->Query(DB_ExpPerKLimit         );
-    MaxWDDed            = static_cast<enum_anticipated_deduction>(Database->Query(DB_MaxWDDed));
+    MaxWDDed            = static_cast<enum_anticipated_deduction>(static_cast<int>(Database->Query(DB_MaxWDDed)));
     MaxWDAVMult         = Database->Query(DB_MaxWDAVMult          );
-    MaxLoanDed          = static_cast<enum_anticipated_deduction>(Database->Query(DB_MaxLoanDed));
+    MaxLoanDed          = static_cast<enum_anticipated_deduction>(static_cast<int>(Database->Query(DB_MaxLoanDed)));
     MaxLoanAVMult       = Database->Query(DB_MaxLoanAVMult        );
     NoLapseMinDur       = static_cast<int>(Database->Query(DB_NoLapseMinDur));
     NoLapseMinAge       = static_cast<int>(Database->Query(DB_NoLapseMinAge));
@@ -732,7 +732,7 @@ void BasicValues::SetPermanentInvariants()
     AllowChangeToDBO2   = Database->Query(DB_AllowChangeToDBO2    );
     AllowSAIncr         = Database->Query(DB_AllowSAIncr          );
     NoLapseAlwaysActive = Database->Query(DB_NoLapseAlwaysActive  );
-    WaiverChargeMethod  = static_cast<e_waiver_charge_method>(Database->Query(DB_WPChargeMethod));
+    WaiverChargeMethod  = static_cast<e_waiver_charge_method>(static_cast<int>(Database->Query(DB_WPChargeMethod)));
     LapseIgnoresSurrChg = Database->Query(DB_LapseIgnoresSurrChg  );
     SurrChgOnIncr       = Database->Query(DB_SurrChgOnIncr        );
     SurrChgOnDecr       = Database->Query(DB_SurrChgOnDecr        );
@@ -746,7 +746,7 @@ void BasicValues::SetPermanentInvariants()
     Database->Query(CompTarget, DB_CompTarget);
     Database->Query(CompExcess, DB_CompExcess);
 
-    LedgerType = static_cast<enum_ledger_type>(Database->Query(DB_LedgerType));
+    LedgerType = static_cast<enum_ledger_type>(static_cast<int>(Database->Query(DB_LedgerType)));
 
     FirstYearPremiumRetaliationLimit = Database->Query(DB_PremTaxRetalLimit);
 
@@ -819,7 +819,7 @@ if(!global_settings::instance().ash_nazg)
 
     DefnLifeIns         = Input->DefnLifeIns;
     DefnMaterialChange  = Input->DefnMaterialChange;
-    Equiv7702DBO3       = static_cast<enum_dbopt_7702>(Database->Query(DB_Equiv7702DBO3));
+    Equiv7702DBO3       = static_cast<enum_dbopt_7702>(static_cast<int>(Database->Query(DB_Equiv7702DBO3)));
     MaxNAAR             = Input->MaxNAAR;
 
     Database->Query(MinPremIntSpread_, DB_MinPremIntSpread);
@@ -1034,7 +1034,7 @@ double BasicValues::GetModalMinPrem
     ) const
 {
     e_modal_prem_type const PremType =
-        static_cast<e_modal_prem_type>(Database->Query(DB_MinPremType));
+        static_cast<e_modal_prem_type>(static_cast<int>(Database->Query(DB_MinPremType)));
     return GetModalPrem(Year, Mode, SpecAmt, PremType);
 }
 
@@ -1046,7 +1046,7 @@ double BasicValues::GetModalTgtPrem
     ) const
 {
     e_modal_prem_type const PremType =
-        static_cast<e_modal_prem_type>(Database->Query(DB_TgtPremType));
+        static_cast<e_modal_prem_type>(static_cast<int>(Database->Query(DB_TgtPremType)));
     double modal_prem = GetModalPrem(Year, Mode, SpecAmt, PremType);
 
     if(std::string::npos != Input->Comments.find("idiosyncrasy6"))
@@ -1304,8 +1304,9 @@ double BasicValues::GetModalSpecAmtMax
     ,double        a_ErPmt
     ) const
 {
-    e_modal_prem_type const prem_type =
-        static_cast<e_modal_prem_type>(Database->Query(DB_MinPremType));
+    e_modal_prem_type const prem_type = static_cast<e_modal_prem_type>
+        (static_cast<int>(Database->Query(DB_MinPremType))
+        );
     return GetModalSpecAmt
             (a_EeMode
             ,a_EePmt
@@ -1323,8 +1324,9 @@ double BasicValues::GetModalSpecAmtTgt
     ,double        a_ErPmt
     ) const
 {
-    e_modal_prem_type const prem_type =
-        static_cast<e_modal_prem_type>(Database->Query(DB_TgtPremType));
+    e_modal_prem_type const prem_type = static_cast<e_modal_prem_type>
+        (static_cast<int>(Database->Query(DB_TgtPremType))
+        );
     return GetModalSpecAmt
             (a_EeMode
             ,a_EePmt

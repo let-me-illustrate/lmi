@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: actuarial_table.cpp,v 1.2 2005-01-15 20:17:16 chicares Exp $
+// $Id: actuarial_table.cpp,v 1.3 2005-01-29 02:47:41 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -124,12 +124,15 @@ namespace
             }
     }
 
+    // TODO ?? This function has too many arguments. Consider making
+    // it a member of a new class.
+    //
     std::vector<double> particular_values
         (std::vector<double> const& values
-        ,std::istream&        is
+        ,std::istream&        // is
         ,int                  // nominal_length
         ,int                  min_age
-        ,int                  max_age
+        ,int                  // max_age
         ,unsigned char        table_type
         ,int                  max_select_age
         ,int                  select_period

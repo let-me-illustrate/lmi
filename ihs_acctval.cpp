@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_acctval.cpp,v 1.1 2005-01-14 19:47:44 chicares Exp $
+// $Id: ihs_acctval.cpp,v 1.2 2005-01-29 02:47:41 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -864,28 +864,28 @@ void AccountValue::SetInitialValues()
     Internal1035Amount = Outlay_->internal_1035_amount();
 
     ee_premium_allocation_method   = static_cast<e_allocation_method>
-        (Database->Query(DB_EePremMethod)
+        (static_cast<int>(Database->Query(DB_EePremMethod))
         );
     ee_premium_preferred_account   = static_cast<e_increment_account_preference>
-        (Database->Query(DB_EePremAcct)
+        (static_cast<int>(Database->Query(DB_EePremAcct))
         );
     er_premium_allocation_method   = static_cast<e_allocation_method>
-        (Database->Query(DB_ErPremMethod)
+        (static_cast<int>(Database->Query(DB_ErPremMethod))
         );
     er_premium_preferred_account   = static_cast<e_increment_account_preference>
-        (Database->Query(DB_ErPremAcct)
+        (static_cast<int>(Database->Query(DB_ErPremAcct))
         );
     deduction_method               = static_cast<e_increment_method>
-        (Database->Query(DB_DeductionMethod)
+        (static_cast<int>(Database->Query(DB_DeductionMethod))
         );
     deduction_preferred_account    = static_cast<e_increment_account_preference>
-        (Database->Query(DB_DeductionAcct)
+        (static_cast<int>(Database->Query(DB_DeductionAcct))
         );
     distribution_method            = static_cast<e_increment_method>
-        (Database->Query(DB_DistributionMethod)
+        (static_cast<int>(Database->Query(DB_DistributionMethod))
         );
     distribution_preferred_account = static_cast<e_increment_account_preference>
-        (Database->Query(DB_DistributionAcct)
+        (static_cast<int>(Database->Query(DB_DistributionAcct))
         );
 
     // If any account preference is the separate account, then a

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_ldginvar.cpp,v 1.1 2005-01-14 19:47:45 chicares Exp $
+// $Id: ihs_ldginvar.cpp,v 1.2 2005-01-29 02:47:41 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -563,7 +563,8 @@ void TLedgerInvariant::Init(BasicValues* b)
 
     e_smoking_or_tobacco smoke_or_tobacco =
         static_cast<e_smoking_or_tobacco>
-            (b->Database->Query(DB_SmokeOrTobacco));
+            (static_cast<int>(b->Database->Query(DB_SmokeOrTobacco))
+            );
     if(e_tobacco_nontobacco == smoke_or_tobacco)
         {
             switch(e_smoking(Status.Smoking))

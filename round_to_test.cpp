@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: round_to_test.cpp,v 1.1 2005-01-14 19:47:45 chicares Exp $
+// $Id: round_to_test.cpp,v 1.2 2005-01-29 02:47:42 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -27,6 +27,8 @@
 #endif // __BORLANDC__
 
 #include "round_to.hpp"
+
+#include "fenv_lmi.hpp"
 
 #define BOOST_INCLUDE_MAIN
 #include "test_tools.hpp"
@@ -581,24 +583,7 @@ int test_all_modes(bool synchronize)
     // but by default initializes the floating-point hardware to use
     // only a 53-bit mantissa. Until we have facilities like C99's
     // <fenv.h>, we have to fix that in a nonstandard way.
-#if defined __GNUC__ && defined _X86_
-    // Set floating-point control word to intel default.
-    asm volatile ("fldcw %0" : : "m" (0x037f));
-#elif defined __BORLANDC__
-    _control87(0x037f,  0xffff);
-#elif defined BOOST_MSVC
-    // Untested, but this appears to be the right nonstandard function.
-    _control87(0x001f,   _MCW_EM);
-    _control87(_RC_NEAR, _MCW_RC);
-    _control87(_PC_64,   _MCW_PC);
-#else // No known way to set rounding style.
-    std::cerr
-        << "\nCannot set floating-point hardware control word.\n"
-        << "Results may be invalid.\n"
-        << "Please consider contributing an implementation\n"
-        << "for your compiler and platform.\n"
-        ;
-#endif // No known way to set rounding style.
+    initialize_fpu();
 
     // It is anticipated that a rounding functor will typically be
     // created once and used many times, like this:
