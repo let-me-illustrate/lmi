@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustration_view.hpp,v 1.1 2005-03-12 03:01:08 chicares Exp $
+// $Id: illustration_view.hpp,v 1.2 2005-03-24 15:53:32 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -71,7 +71,7 @@ class IllustrationView
 
     // ViewEx required implementation.
     wxWindow* CreateChildWindow();
-    wxIcon const& Icon() const;
+    wxIcon Icon() const;
     wxMenuBar* MenuBar() const;
 
   public: // TODO ?? Or make class CensusView a friend; or make these free functions.

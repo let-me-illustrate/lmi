@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: view_ex.hpp,v 1.1 2005-03-11 03:09:22 chicares Exp $
+// $Id: view_ex.hpp,v 1.2 2005-03-24 15:53:32 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -49,10 +49,7 @@
 // functions they call. The public functions are pure to allow
 // implementation flexibility. For instance, an overrider may contain
 // a static variable to cache xml resources for better responsiveness,
-// or it may use a different approach altogether. It seems that wx
-// wants icons to be in resource files on the msw platform, and indeed
-// the wxxrc sample program doesn't use xml resources for icons, so
-// IconFromXmlResource() may be of little use.
+// or it may use a different approach altogether.
 
 // OnCreate() and OnClose() are implemented here because it is not
 // anticipated that their essential behavior would differ in client
@@ -115,7 +112,7 @@ class ViewEx
 
     virtual wxWindow* CreateChildWindow() = 0;
 
-    virtual wxIcon const& Icon() const = 0;
+    virtual wxIcon Icon() const = 0;
     virtual wxMenuBar* MenuBar() const = 0;
 
   protected:
