@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.25 2005-03-17 04:30:32 chicares Exp $
+// $Id: ChangeLog,v 1.26 2005-03-18 00:21:22 chicares Exp $
 
 2005-01-14
 
@@ -842,4 +842,18 @@ Add wx target.
   xml_notebook.cpp
   xml_notebook.hpp
 Import previously-tested GUI changes from sandbox.
+
+2005-03-17 [1403]
+
+  GNUmakefile
+  workhorse.make
+Improve 'clean' target.
+
+  msw_common.make
+  posix_fhs.make
+  workhorse.make
+Simplify msw builds by assuming FHS is followed.
+
+  wx_checks.cpp
+Check more wx build options.
 
