@@ -30,7 +30,7 @@
 // it to the life-insurance-illustrations problem domain. Any defect
 // should not reflect on Stephen F. Booth's reputation.
 
-// $Id: main_cgi.cpp,v 1.1 2005-03-12 03:02:54 chicares Exp $
+// $Id: main_cgi.cpp,v 1.2 2005-03-26 01:34:18 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -51,8 +51,11 @@
 #include <cgicc/CgiEnvironment.h>
 #include <cgicc/CgiUtils.h> // gLogFile
 #include <cgicc/HTMLClasses.h>
-//#include <cgicc/HTTPHTMLHeader.h> // cgicc-3.2.3
-#include <cgicc/HTTPHeaders.h>
+#ifdef USING_CURRENT_CGICC
+#   include <cgicc/HTTPHTMLHeader.h> // cgicc-3.2.3
+#else // USING_CURRENT_CGICC not defined.
+#   include <cgicc/HTTPHeaders.h>
+#endif // USING_CURRENT_CGICC not defined.
 
 #include <csignal>
 #include <cstdlib>
@@ -144,7 +147,7 @@ int main(int argc, char* argv[])
         // just exit.
         return EXIT_SUCCESS;
         }
-    char const content_string[] =
+    static char const content_string[] =
         "ProductName=sample"
         "&IssueAge=45"
         "&RetirementAge=65"
@@ -196,8 +199,10 @@ int main(int argc, char* argv[])
         {
         std::string s("CONTENT_LENGTH=");
         s += value_cast_ihs<std::string>(std::strlen(content_string));
-        putenv(s.c_str());
-        putenv("REQUEST_METHOD=POST");
+        static char content_length_string[sizeof "CONTENT_LENGTH=FFFFFFFFFFFFFFFF\0"];
+        std::strcpy(content_length_string, s.c_str());
+        putenv(content_length_string);
+        putenv(const_cast<char*>("REQUEST_METHOD=POST"));
         }
 
   try {
@@ -228,7 +233,7 @@ int main(int argc, char* argv[])
     std::cout << "TD.grayspecial { background-color: #DDD; text-align: left; }\n";
     std::cout << "TD.ltgray, TR.ltgray { background-color: #DDD; }\n";
     std::cout << "TD.dkgray, TR.dkgray { background-color: #BBB; }\n";
-    std::cout << "COL.black, TD.black, TD.title, TR.title { color: white; " 
+    std::cout << "COL.black, TD.black, TD.title, TR.title { color: white; "
          << "background-color: black; font-weight: bold; text-align: center; }\n";
     std::cout << "COL.gray, TD.gray { background-color: #DDD; text-align: center; }\n";
     std::cout << "TABLE.cgi { left-margin: auto; right-margin: auto; width: 90%; }\n";
@@ -289,7 +294,7 @@ int main(int argc, char* argv[])
     // the vector of FormEntries.  This will contain every
     // element in the list.
     // This is one of two ways to get at form data, the other
-    // being the use of cgicc::Cgicc's getElement() methods.  
+    // being the use of cgicc::Cgicc's getElement() methods.
     if(cgi.queryCheckbox("ShowInput"))
       ShowInput(cgi);
 

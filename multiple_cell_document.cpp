@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: multiple_cell_document.cpp,v 1.2 2005-02-12 12:59:31 chicares Exp $
+// $Id: multiple_cell_document.cpp,v 1.3 2005-03-26 01:34:18 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -33,6 +33,9 @@
 #include "value_cast_ihs.hpp"
 #include "xmlwrapp_ex.hpp"
 
+#ifdef USING_CURRENT_XMLWRAPP
+#   include <xmlwrapp/document.h>
+#endif // USING_CURRENT_XMLWRAPP defined.
 #include <xmlwrapp/init.h>
 #include <xmlwrapp/tree_parser.h>
 
@@ -77,7 +80,11 @@ void multiple_cell_document::parse(xml::tree_parser& parser)
         throw std::runtime_error("Error parsing XML file.");
         }
 
+#ifdef USING_CURRENT_XMLWRAPP
+    xml::node& root = parser.get_document().get_root_node();
+#else // USING_CURRENT_XMLWRAPP not defined.
     xml::node& root = parser.get_root_node();
+#endif // USING_CURRENT_XMLWRAPP not defined.
     if(xml_root_name() != root.get_name())
         {
         std::ostringstream msg;
