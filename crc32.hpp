@@ -1,0 +1,132 @@
+// 32-bit cyclic redundancy check.
+//
+// Copyright (C) 2005 Gregory W. Chicares.
+//
+// This program is free software; you can redistribute it and/or modify
+// it under the terms of the GNU General Public License version 2 as
+// published by the Free Software Foundation.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program; if not, write to the Free Software
+// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+//
+// http://savannah.nongnu.org/projects/lmi
+// email: <chicares@cox.net>
+// snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
+
+// $Id: crc32.hpp,v 1.1 2005-01-14 19:47:44 chicares Exp $
+
+#ifndef crc32_hpp
+#define crc32_hpp
+
+#include "config.hpp"
+
+#include "expimp.hpp"
+
+#include <cstring> // std::strlen()
+#include <string>
+#include <vector>
+
+class LMI_EXPIMP CRC
+{
+public:
+    CRC();
+
+    unsigned int const value() const;
+
+    CRC& operator+=(                    bool    );
+    CRC& operator+=(                    char    );
+    CRC& operator+=(  signed            char    );
+    CRC& operator+=(unsigned            char    );
+    CRC& operator+=(            short   int     );
+    CRC& operator+=(unsigned    short   int     );
+    CRC& operator+=(                    int     );
+    CRC& operator+=(unsigned            int     );
+    CRC& operator+=(            long    int     );
+    CRC& operator+=(unsigned    long    int     );
+    CRC& operator+=(                    float   );
+    CRC& operator+=(                    double  );
+    CRC& operator+=(            long    double  );
+
+    CRC& operator+=(                    char const*);
+    CRC& operator+=(  signed            char const*);
+    CRC& operator+=(unsigned            char const*);
+
+    CRC& operator+=(std::string const&);
+
+private:
+    CRC& update
+        (unsigned char const*  buf
+        ,int                   len
+        );
+
+    unsigned int value_;
+};
+
+// operator+=() inline implementations.
+// TODO ?? Try to use one template for the bodies of these implementations.
+
+inline CRC& CRC::operator+=(                    bool    z)
+    {return update(reinterpret_cast<unsigned char const*>(&z), sizeof(z));}
+inline CRC& CRC::operator+=(                    char    z)
+    {return update(reinterpret_cast<unsigned char const*>(&z), sizeof(z));}
+inline CRC& CRC::operator+=(signed              char    z)
+    {return update(reinterpret_cast<unsigned char const*>(&z), sizeof(z));}
+inline CRC& CRC::operator+=(unsigned            char    z)
+    {return update(reinterpret_cast<unsigned char const*>(&z), sizeof(z));}
+inline CRC& CRC::operator+=(            short   int     z)
+    {return update(reinterpret_cast<unsigned char const*>(&z), sizeof(z));}
+inline CRC& CRC::operator+=(unsigned    short   int     z)
+    {return update(reinterpret_cast<unsigned char const*>(&z), sizeof(z));}
+inline CRC& CRC::operator+=(                    int     z)
+    {return update(reinterpret_cast<unsigned char const*>(&z), sizeof(z));}
+inline CRC& CRC::operator+=(unsigned            int     z)
+    {return update(reinterpret_cast<unsigned char const*>(&z), sizeof(z));}
+inline CRC& CRC::operator+=(            long    int     z)
+    {return update(reinterpret_cast<unsigned char const*>(&z), sizeof(z));}
+inline CRC& CRC::operator+=(unsigned    long    int     z)
+    {return update(reinterpret_cast<unsigned char const*>(&z), sizeof(z));}
+inline CRC& CRC::operator+=(                    float   z)
+    {return update(reinterpret_cast<unsigned char const*>(&z), sizeof(z));}
+inline CRC& CRC::operator+=(                    double  z)
+    {return update(reinterpret_cast<unsigned char const*>(&z), sizeof(z));}
+inline CRC& CRC::operator+=(            long    double  z)
+    {return update(reinterpret_cast<unsigned char const*>(&z), sizeof(z));}
+
+// Forward char const* and signed char const* to the unsigned char const* function.    
+inline CRC& CRC::operator+=(                    char const* z)
+    {
+    return operator+=(reinterpret_cast<unsigned char const*>(z));
+    }
+inline CRC& CRC::operator+=(signed              char const* z)
+    {
+    return operator+=(reinterpret_cast<unsigned char const*>(z));
+    }
+inline CRC& CRC::operator+=(unsigned            char const* z)
+    {
+    // TODO ?? std::strlen() is defined only for char const* arguments;
+    // does that mean that this reinterpret_cast is required?
+    return update(z, std::strlen(reinterpret_cast<char const*>(z)));
+    }
+
+template <typename T>
+CRC& operator+=
+    (CRC&                   crc
+    ,std::vector<T> const&  v
+    )
+{
+    typename std::vector<T>::const_iterator i = v.begin();
+    while(i != v.end())
+        {
+        crc += *i++;
+        }
+    return crc;
+}
+
+#endif // crc32_hpp
+

@@ -1,0 +1,624 @@
+// Rounding.
+//
+// Copyright (C) 2001, 2002, 2003, 2004, 2005 Gregory W. Chicares.
+//
+// This program is free software; you can redistribute it and/or modify
+// it under the terms of the GNU General Public License version 2 as
+// published by the Free Software Foundation.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program; if not, write to the Free Software
+// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+//
+// http://savannah.nongnu.org/projects/lmi
+// email: <chicares@cox.net>
+// snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
+
+// $Id: round_to.hpp,v 1.1 2005-01-14 19:47:45 chicares Exp $
+
+#ifndef round_to_hpp
+#define round_to_hpp
+
+#include "config.hpp"
+
+#ifndef BC_BEFORE_5_5
+#   include <boost/static_assert.hpp>
+#   include <boost/type_traits/arithmetic_traits.hpp>
+#endif // Old borland compiler.
+
+#include <cmath>
+#include <functional>
+#include <limits>
+#include <stdexcept>
+
+// Round a floating-point number to a given number of decimal places,
+// following a given rounding style. Read the accompanying html
+// documentation.
+
+// As the html documentation explains, power-of-ten scaling factors
+// are best represented in the maximum available precision, which
+// is indicated by type 'max_prec_real'.
+//
+// Changing this typedef lets you use a nonstandard type or class with
+// greater precision if desired.
+//
+// Alternatively, suppose your hardware offers an extended format,
+// but you can't or don't take advantage of it--either your compiler
+// uses the same representation for double and long double, or you
+// set the hardware not to do calculations in extended precision.
+// If the compiler nonetheless treats double and long double as
+// distinct types, then it might generate extra machine code to
+// convert between those types. You could prevent that by changing
+// this typedef to double.
+typedef long double max_prec_real;
+
+namespace detail
+{
+// 26.5/6 requires float and long double versions of std::fabs() and
+// std::pow(), but neither mingw gcc-3.3 or earlier (which uses the
+// msvc runtime library) nor bc++5.5.1 implements them: they provide
+// only double versions. For those compilers, these workarounds are
+// provided; the names are intentionally ugly.
+//
+// If your compiler is broken in this respect, define the following
+// macro (which might be generally useful in a config header) to use
+// workarounds for the missing functions we need. It would perhaps be
+// better to provide specializations of these workarounds for double,
+// which would just call the appropriate standard C function, but it's
+// better still to tell the implementor to conform to the standard.
+
+// The template parameter of each function template in namespace
+// 'detail' is restricted to floating point types [3.9.1/8]. Those
+// functions use only operations that the standard requires to be
+// defined for those types.
+
+#if defined __MINGW32__ || defined __BORLANDC__
+#   define BROKEN_FLOAT_AND_LONG_DOUBLE_CMATH_FNS
+#endif // defined __MINGW32__ || defined __BORLANDC__
+
+#ifdef BROKEN_FLOAT_AND_LONG_DOUBLE_CMATH_FNS
+
+// Returns the absolute value of 'r'. Somewhat defectively, assumes
+// that the negative of a negative argument is representable, which is
+// not guaranteed by C++98--but is OK for IEC 60559 floating-point
+// types, which can be negated by flipping the sign bit. However, it
+// might not be OK for non-IEC 60559 floating-point types. We might
+// assert std::numeric_limits<RealType>::is_iec559, but some compilers
+// (e.g. bc++5.5.1) would fail, perhaps properly, even though they run
+// on the same hardware as other compilers that would pass that test;
+// yet this is a property of the hardware, not of the compiler.
+
+template<typename RealType>
+RealType perform_fabs(RealType r)
+{
+    if(r < RealType(0))
+        {
+        return -r;
+        }
+    else
+        {
+        return r;
+        }
+}
+
+// Returns 'r' raised to the 'n'th power. The sgi stl provides a faster
+// implementation as an extension (although it does not seem to work
+// with negative powers). Because this template function is called only
+// by the round_to constructor, efficiency here is not important in the
+// contemplated typical case where a round_to object is created once
+// and used to round many numbers. Defectively fails to check for
+// overflow or undeflow, but the round_to ctor does do that check.
+template<typename RealType>
+RealType perform_pow(RealType r, int n)
+{
+    if(0 == n)
+        {
+        return RealType(1.0);
+        }
+    if(n < 0)
+        {
+        // Successive division by 'r' would lose precision at each step
+        // when 'r' is exactly representable but its reciprocal is not,
+        // and division is much slower than multiplication on some
+        // machines, so instead calculate the positive power and take
+        // its reciprocal.
+        return RealType(1.0) / perform_pow(r, -n);
+        }
+    else
+        {
+        RealType z = r;
+        while(--n)
+            {
+            z *= r;
+            }
+        return z;
+        }
+}
+
+// Returns largest integer-valued RealType value that does not exceed
+// its argument.
+template<typename RealType>
+RealType perform_floor(RealType r)
+{
+    // Use std::floor() when we know it'll work; else just return
+    // the argument. TODO ?? Isn't that incorrect for long double?
+    static double const max_integral_double = perform_pow
+        (2.0
+        ,std::numeric_limits<double>::digits
+        );
+    if
+        (  r < -max_integral_double
+        ||      max_integral_double < r
+        )
+        {
+        return r;
+        }
+    else
+        {
+        return std::floor(r);
+        }
+}
+
+#else // not defined BROKEN_FLOAT_AND_LONG_DOUBLE_CMATH_FNS
+
+// Unlike the kludges above, these are defined inline to avoid
+// penalizing compliant compilers.
+
+template<typename RealType>
+inline RealType perform_fabs(RealType r)
+{
+    return std::fabs(r);
+}
+
+template<typename RealType>
+inline RealType perform_pow(RealType r, int n)
+{
+    return std::pow(r, n);
+}
+
+template<typename RealType>
+inline RealType perform_floor(RealType r)
+{
+    return std::floor(r);
+}
+
+#endif // not defined BROKEN_FLOAT_AND_LONG_DOUBLE_CMATH_FNS
+
+// Returns largest integer-valued max_prec_real that does not exceed
+// its argument. Used as a last resort by perform_rint(), as documented
+// where that function is declared below.
+inline max_prec_real max_prec_floor(max_prec_real z)
+{
+    return perform_floor<max_prec_real>(z);
+}
+} // namespace detail
+
+// See HTML documentation.
+enum rounding_style
+    {r_indeterminate = -1
+    ,r_toward_zero   =  0
+    ,r_to_nearest    =  1 // See note below.
+    ,r_upward        =  2
+    ,r_downward      =  3
+    ,r_current       =  4
+    ,r_not_at_all    =  5
+
+    // Note: 'r_to_nearest' means bankers rounding, which
+    // rounds halfway cases to even:
+    //   x - (x REM 1.0)
+    // as in the C99 remainder() function [7.12.10.2/2], instead of
+    // rounding halfway cases away from zero, as the C99 round()
+    // function does [7.12.9.6/2]. See the HTML documentation.
+};
+
+// See HTML documentation.
+inline rounding_style& default_rounding_style()
+{
+    static rounding_style default_style = r_to_nearest;
+    return default_style;
+}
+
+namespace detail
+{
+// perform_rint() rounds argument to an integer value in floating-point
+// format, using the current rounding direction if possible, in which
+// case it's the same as the C99 rint() function. Not named rint()
+// because some C++ compilers already provide that function.
+
+#ifdef MAINTAINER_TEST_WITHOUT_ASM
+
+// This implementation lets you test the last-resort behavior for a
+// system where we lack rint() and don't know how to implement it.
+template<typename RealType>
+inline RealType perform_rint(RealType r)
+{
+    return max_prec_floor(r);
+}
+
+#elif defined __GNUC__ && defined _X86_
+
+// Profiling suggests that inlining this template function makes a
+// realistic application that performs a lot of rounding run about
+// half a percent faster with gcc. That may be measurement error,
+// but it seems a reasonable outcome because some calls to this
+// function, in other auxiliary functions, really can be inlined, as
+// opposed to calling it through a pointer, which cannot.
+template<typename RealType>
+inline RealType perform_rint(RealType r)
+{
+    __asm__ ("frndint" : "=t" (r) : "0" (r));
+    return r;
+}
+
+#elif defined __BORLANDC__
+
+// The borland compiler is a gratis download, but allows inline asm
+// only with the non-gratis borland assembler, which not everyone has.
+// It can "emit" inline machine code without extra tools, even in an
+// inline or template function, but it cannot inline the undocumented
+// 'noretval' pragma, which prevents a superfluous and costly store
+// and pop of the result, so this function is written out of line.
+// This compiler's documented 'warn' pragma prevents a warning (which
+// would here be incorrect) that no value is returned.
+
+float perform_rint(float)
+{
+    __emit__(0x0d9, 0x045, 0x008); // FLD short-real ptr[ebp+08]
+    __emit__(0x0d9, 0x0fc);        // FRNDINT
+#   pragma noretval
+    return;
+#pragma warn -rvl
+}
+#pragma warn .rvl
+
+double perform_rint(double)
+{
+    __emit__(0x0dd, 0x045, 0x008); // FLD qword ptr[ebp+08]
+    __emit__(0x0d9, 0x0fc);        // FRNDINT
+#   pragma noretval
+    return;
+#pragma warn -rvl
+}
+#pragma warn .rvl
+
+long double perform_rint(long double)
+{
+    __emit__(0x0db, 0x06d, 0x008); // FLD tbyte ptr[ebp+08]
+    __emit__(0x0d9, 0x0fc);        // FRNDINT
+#   pragma noretval
+    return;
+#pragma warn -rvl
+}
+#pragma warn .rvl
+
+#else // neither (__GNUC__ && _X86_) nor __BORLANDC__
+
+// The round_X functions below work with any real_type-to-integer_type
+// Compilers that provide rint() may have optimized it (or you can
+// provide a fast implementation yourself); otherwise, max_prec_floor()
+// will do--see documentation of 'auxiliary rounding functions' below.
+
+#if defined __GNUC__ && !defined __MINGW32__
+#   define RINT_AVAILABLE
+#endif // defined __GNUC__ && !defined __MINGW32__
+
+template<typename RealType>
+inline RealType perform_rint(RealType r)
+{
+#ifdef RINT_AVAILABLE
+    return rint(r);
+#else // not defined RINT_AVAILABLE
+    return max_prec_floor(r); // TODO ?? Is this correct?
+#endif // not defined RINT_AVAILABLE
+}
+
+#endif // neither (__GNUC__ && _X86_) nor __BORLANDC__
+
+// Auxiliary rounding functions: one for each supported rounding style.
+// Naive implementations for type double are given in comments.
+// These functions avoid switching the hardware rounding mode as long
+// as perform_rint() does. They use perform_rint() but do not require
+// it to follow any particular style.
+
+// Perform no rounding at all.
+template<typename RealType>
+RealType round_not(RealType r)
+{
+    return r;
+}
+
+// Round up.
+template<typename RealType>
+RealType round_up(RealType r)
+{
+// return std::ceil(r); // Naive equivalent.
+    RealType i_part = perform_rint(r);
+    if(i_part < r)
+        {
+        // Suppose the value of 'i_part' is not exactly representable
+        // in type 'RealType'. Then '++' doesn't increment it; it adds
+        // unity, which doesn't change the value. That's OK though: in
+        // that case, this code is unreachable.
+        i_part++;
+        }
+    return i_part;
+}
+
+// Round down.
+template<typename RealType>
+RealType round_down(RealType r)
+{
+// return std::floor(r); // Naive equivalent.
+    RealType i_part = perform_rint(r);
+    if(r < i_part)
+        {
+        i_part--;
+        }
+    return i_part;
+}
+
+// Truncate.
+template<typename RealType>
+RealType round_trunc(RealType r)
+{
+// Naive equivalent:
+//   double x = std::floor(std::fabs(r)); return (0.0 <= r) ? x : -x;
+    RealType i_part = perform_rint(r);
+    RealType f_part = r - i_part;
+    // Consider the integer part 'i_part' and the fractional part
+    // 'f_part': the integer part is the final answer if
+    //   both parts have the same sign (drop the fractional part), or
+    //   the fractional part is zero (it doesn't matter), or
+    //   the integer part is zero (so ignore the fractional part).
+    // If integer and fractional parts have opposite signs
+    //   (one positive and one negative) then add or subtract unity to
+    //   get the next integer in the direction of zero.
+    if(RealType(0) < i_part && f_part < RealType(0))
+        {
+        i_part--;
+        }
+    else if(RealType(0) < f_part && i_part < RealType(0))
+        {
+        i_part++;
+        }
+    return i_part;
+}
+
+// Round to nearest using bankers method.
+template<typename RealType>
+RealType round_near(RealType r)
+{
+// Naive equivalent: something like this
+//    return (RealType(0) < r) ? std::floor(r + 0.5) : std::ceil(r -0.5);
+// except that halfway cases are rounded to even.
+    RealType i_part = perform_rint(r);
+    RealType f_part = r - i_part;
+    RealType abs_f_part = perform_fabs(f_part);
+
+    // If |fractional part| < .5, ignore it;
+    // if |fractional part| == .5, ignore it if integer part is even;
+    // else add sgn(fractional part).
+    if
+        (
+           (RealType(0.5) < abs_f_part)
+        || (
+              RealType(0.5) == abs_f_part
+           && i_part
+                  != RealType(2)
+                  *  detail::perform_floor(RealType(0.5) * i_part)
+           )
+        )
+        {
+        if(f_part < RealType(0))
+            {
+            i_part--;
+            }
+        else if(RealType(0) < f_part)
+            {
+            i_part++;
+            }
+        }
+    return i_part;
+}
+} // namespace detail
+
+// See HTML documentation.
+template<typename RealType>
+class round_to
+    :public std::unary_function<RealType, RealType>
+{
+#ifndef BC_BEFORE_5_5
+    BOOST_STATIC_ASSERT(boost::is_float<RealType>::value);
+#endif // Old borland compiler.
+
+  public:
+    round_to();
+    round_to(int decimals, rounding_style style);
+    round_to(round_to const&);
+
+    round_to& operator=(round_to const&);
+
+    bool operator==(round_to const&) const;
+    RealType operator()(RealType r) const;
+
+    int decimals() const;
+    rounding_style style() const;
+
+  protected:
+    // Boost coding standards 8.1 implicitly forbid private typedefs.
+    // This typedef may be wanted if this class is ever derived from,
+    // even though it's not obvious to the author how such inheritance
+    // would be useful.
+    typedef RealType (*rounding_function_t)(RealType);
+
+  private:
+    rounding_function_t select_rounding_function(rounding_style style) const;
+
+    int decimals_;
+    rounding_style style_;
+    max_prec_real scale_fwd_;
+    max_prec_real scale_back_;
+    rounding_function_t rounding_function;
+};
+
+// This default ctor only renders the class DefaultConstructible.
+// The object it creates is intentionally not usable.
+template<typename RealType>
+round_to<RealType>::round_to()
+    :decimals_(0)
+    ,style_(r_indeterminate)
+    ,scale_fwd_(1.0)
+    ,scale_back_(1.0)
+    ,rounding_function(0)
+{
+}
+
+// Naran used const data members, reasoning that a highly optimizing
+// compiler could then calculate std::pow(10.0, n) at compile time.
+// Not all compilers do this. None available to the author do.
+//
+// Is this a design flaw? Const data members require initialization in
+// the initializer-list, so this test detects a domain error only after
+// it has produced the side effect of setting 'errno'. Thus, the strong
+// guarantee is lost, and only the basic guarantee is provided.
+//
+// The guarantee could be strengthened by not throwing at all. That
+// would be consistent with other math functions. But it's a shame to
+// write new code that forces the user to check 'errno'.
+//
+// TODO ?? The data members were made non-cost after profiling showed
+// no penalty on four available compilers (not including Naran's).
+// The code should now be reworked to provide the strong guarantee.
+
+// Division by an exact integer value should have slightly better
+// accuracy in some cases. But profiling shows that multiplication by
+// the reciprocal stored in scale_back_ makes a realistic application
+// that performs a lot of rounding run about four percent faster with
+// all compilers tested. TODO ?? The best design decision would be
+// clearer if we quantified the effect on accuracy.
+
+template<typename RealType>
+round_to<RealType>::round_to(int decimals, rounding_style style)
+    :decimals_(decimals)
+    ,style_(style)
+    ,scale_fwd_(detail::perform_pow(max_prec_real(10.0), decimals))
+    ,scale_back_(max_prec_real(1.0) / scale_fwd_)
+    ,rounding_function(select_rounding_function(style))
+{
+    // This throws only if all use of the function object is invalid.
+    // Even if it doesn't throw, there are numbers that it cannot round
+    // without overflow, for instance
+    //    std::numeric_limits<RealType>::max()
+    // rounded to
+    //    std::numeric_limits<RealType>::max_exponent10
+    // decimals.
+    if
+        (  decimals < std::numeric_limits<RealType>::min_exponent10
+        ||            std::numeric_limits<RealType>::max_exponent10 < decimals
+        )
+        {
+        throw std::domain_error("Invalid number of decimals.");
+        }
+}
+
+template<typename RealType>
+round_to<RealType>::round_to(round_to const& z)
+    :decimals_        (z.decimals_        )
+    ,style_           (z.style_           )
+    ,scale_fwd_       (z.scale_fwd_       )
+    ,scale_back_      (z.scale_back_      )
+    ,rounding_function(z.rounding_function)
+{
+}
+
+template<typename RealType>
+round_to<RealType>& round_to<RealType>::operator=(round_to const& z)
+{
+    decimals_         = z.decimals_        ;
+    style_            = z.style_           ;
+    scale_fwd_        = z.scale_fwd_       ;
+    scale_back_       = z.scale_back_      ;
+    rounding_function = z.rounding_function;
+    return *this;
+}
+
+template<typename RealType>
+bool round_to<RealType>::operator==(round_to const& z) const
+{
+    return decimals() == z.decimals() && style() == z.style();
+}
+
+// Profiling shows that inlining this member function makes a
+// realistic application that performs a lot of rounding run about
+// five percent faster with gcc.
+template<typename RealType>
+inline RealType round_to<RealType>::operator()(RealType r) const
+{
+    return rounding_function(r * scale_fwd_) * scale_back_;
+}
+
+template<typename RealType>
+int round_to<RealType>::decimals() const
+{
+    return decimals_;
+}
+
+template<typename RealType>
+rounding_style round_to<RealType>::style() const
+{
+    return style_;
+}
+
+// Choose the auxiliary rounding function indicated by the argument.
+template<typename RealType>
+typename round_to<RealType>::rounding_function_t
+round_to<RealType>::select_rounding_function(rounding_style style) const
+{
+    if
+        (  style == default_rounding_style()
+        && style != r_indeterminate
+        )
+        {
+        return detail::perform_rint;
+        }
+
+    switch(style)
+        {
+        case r_toward_zero:
+            {
+            return detail::round_trunc;
+            }
+        case r_to_nearest:
+            {
+            return detail::round_near;
+            }
+        case r_upward:
+            {
+            return detail::round_up;
+            }
+        case r_downward:
+            {
+            return detail::round_down;
+            }
+        case r_current:
+            {
+            return detail::perform_rint;
+            }
+        case r_not_at_all:
+            {
+            return detail::round_not;
+            }
+        default:
+            {
+            throw std::domain_error("Invalid rounding style.");
+            }
+        }
+}
+
+#endif // round_to_hpp
+

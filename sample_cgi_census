@@ -1,0 +1,9 @@
+IssueAge	Gender	Class	Smoking	sPremium
+30	Female	Preferred	Smoker	10000
+35	Female	Preferred	Nonsmoker	10001
+40	Female	Standard	Smoker	10010
+45	Female	Standard	Nonsmoker	10011
+50	Male	Preferred	Smoker	10100
+55	Male	Preferred	Nonsmoker	10101
+60	Male	Standard	Smoker	10110
+65	Male	Standard	Nonsmoker	10111
