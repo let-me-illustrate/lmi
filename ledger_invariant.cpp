@@ -19,41 +19,41 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_ldginvar.cpp,v 1.3 2005-01-31 13:12:48 chicares Exp $
+// $Id: ledger_invariant.cpp,v 1.1 2005-02-12 12:59:31 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
 #   pragma hdrstop
 #endif // __BORLANDC__
 
-#include "ihs_ldginvar.hpp"
+#include "ledger_invariant.hpp"
 
 #include "alert.hpp"
 #include "basic_values.hpp"
 #include "crc32.hpp"
 #include "database.hpp"
 #include "dbnames.hpp"
+#include "death_benefits.hpp"
 #include "financial.hpp"  // TODO ?? For IRRs--prolly don't blong here.
-#include "ihs_deathbft.hpp"
 #include "ihs_funddata.hpp"
-#include "ihs_ldgvar.hpp" // TODO ?? For IRRs--prolly don't blong here.
-#include "ihs_ledger.hpp" // TODO ?? For IRRs--prolly don't blong here.
 #include "ihs_proddata.hpp"
-#include "ihs_tierdata.hpp"
 #include "inputs.hpp"
 #include "inputstatus.hpp"
 #include "interest_rates.hpp"
+#include "ledger.hpp" // TODO ?? For IRRs--prolly don't blong here.
+#include "ledger_variant.hpp" // TODO ?? For IRRs--prolly don't blong here.
 #include "loads.hpp"
 #include "miscellany.hpp"
 #include "outlay.hpp"
 #include "rounding_rules.hpp"
+#include "tiered_charges.hpp"
 
 #include <algorithm>
 #include <numeric>   // std::accumulate()
 #include <ostream>
 
 //============================================================================
-TLedgerInvariant::TLedgerInvariant(int len)
+LedgerInvariant::LedgerInvariant(int len)
     :LedgerBase(len)
     ,FullyInitialized(false)
 {
@@ -61,7 +61,7 @@ TLedgerInvariant::TLedgerInvariant(int len)
 }
 
 //============================================================================
-TLedgerInvariant::TLedgerInvariant(TLedgerInvariant const& obj)
+LedgerInvariant::LedgerInvariant(LedgerInvariant const& obj)
     :LedgerBase(obj)
     ,FullyInitialized(false)
 {
@@ -70,7 +70,7 @@ TLedgerInvariant::TLedgerInvariant(TLedgerInvariant const& obj)
 }
 
 //============================================================================
-TLedgerInvariant& TLedgerInvariant::operator=(TLedgerInvariant const& obj)
+LedgerInvariant& LedgerInvariant::operator=(LedgerInvariant const& obj)
 {
     if(this != &obj)
         {
@@ -83,13 +83,13 @@ TLedgerInvariant& TLedgerInvariant::operator=(TLedgerInvariant const& obj)
 }
 
 //============================================================================
-TLedgerInvariant::~TLedgerInvariant()
+LedgerInvariant::~LedgerInvariant()
 {
     Destroy();
 }
 
 //============================================================================
-void TLedgerInvariant::Alloc(int len)
+void LedgerInvariant::Alloc(int len)
 {
     Length  = len;
 
@@ -250,7 +250,7 @@ void TLedgerInvariant::Alloc(int len)
 
     // 'InforceLives' must be one longer than most vectors, so that
     // it can hold both BOY and EOY values for all years.
-    InforceLives        .assign(1 + Length, 0.0);
+    InforceLives        .assign(1 + Length, 1.0);
 
     // Data excluded from the maps above must be copied explicitly in
     // Copy(), which is called by the copy ctor and assignment operator.
@@ -259,7 +259,7 @@ void TLedgerInvariant::Alloc(int len)
 }
 
 //============================================================================
-void TLedgerInvariant::Copy(TLedgerInvariant const& obj)
+void LedgerInvariant::Copy(LedgerInvariant const& obj)
 {
     LedgerBase::Copy(obj);
 
@@ -289,13 +289,13 @@ void TLedgerInvariant::Copy(TLedgerInvariant const& obj)
 }
 
 //============================================================================
-void TLedgerInvariant::Destroy()
+void LedgerInvariant::Destroy()
 {
     FullyInitialized = false;
 }
 
 //============================================================================
-void TLedgerInvariant::Init()
+void LedgerInvariant::Init()
 {
     // Zero-initialize elements of AllVectors and AllScalars.
     LedgerBase::Initialize(GetLength());
@@ -324,7 +324,7 @@ void TLedgerInvariant::Init()
 }
 
 //============================================================================
-void TLedgerInvariant::Init(BasicValues* b)
+void LedgerInvariant::Init(BasicValues* b)
 {
     // Zero-initialize almost everything.
     Init();
@@ -367,10 +367,10 @@ void TLedgerInvariant::Init(BasicValues* b)
         {
         TermSpecAmt     .assign(Length, 0.0);
         }
-    SpecAmt         = b->DeathBfts->GetSpecAmt();
+    SpecAmt         = b->DeathBfts_->specamt();
     EeMode          = b->Outlay_->ee_premium_modes();
     ErMode          = b->Outlay_->er_premium_modes();
-    DBOpt           = b->DeathBfts->GetDBOpt();
+    DBOpt           = b->DeathBfts_->dbopt();
 
     IndvTaxBracket       = Input.VectorIndvTaxBracket       ;
     CorpTaxBracket       = Input.VectorCorpTaxBracket       ;
@@ -398,7 +398,13 @@ void TLedgerInvariant::Init(BasicValues* b)
     TieredSepAcctLoadBands.resize(0);
     TieredSepAcctLoadRates.resize(0);
 
-    for(int j = 0; j < b->FundData->GetNumberOfFunds(); j++)
+    // The antediluvian branch has a null FundData object.
+    int number_of_funds(0);
+    if(b->FundData)
+        {
+        number_of_funds = b->FundData->GetNumberOfFunds();
+        }
+    for(int j = 0; j < number_of_funds; j++)
         {
         FundNumbers.push_back(j);
         FundNames.push_back(b->FundData->GetFundInfo(j).LongName_);
@@ -443,24 +449,35 @@ void TLedgerInvariant::Init(BasicValues* b)
         ,0.0
         );
 
-//  InforceLives    // default init to 0.0 is OK; AccountValue will assign
+    // Default initialization to 1.0 is OK: class AccountValue assigns
+    // yearly values reflecting partial mortality.
+//  InforceLives =
 
     // TODO ?? It is somewhat unusual that this 'invariant' class
     // includes this item that varies by basis. Perhaps it should be
     // in the complementary 'variant' class. But apparently the
     // guaranteed version of this load isn't implemented.
 
-    // TODO ?? We have to work through a const& in order to get the
-    // const version of tiered_data::tiered_item(), at least with some
-    // compilers we use. Does the language really require this though?
-    tiered_data const& x(*b->TierData);
-    tiered_item_rep const& tiered_sep_acct_load
-        (x.tiered_item(tiered_data::e_tier_current_separate_account_load));
+    // The antediluvian branch has a null TieredCharges_ object.
+    if(b->TieredCharges_)
+        {
+        // TRICKY !! This const reference is required for overload
+        // resolution to choose the const version of
+        // tiered_charges::tiered_item().
+        //
+        tiered_charges const& x(*b->TieredCharges_);
+        tiered_item_rep const& tiered_sep_acct_load
+            (x.tiered_item(tiered_charges::e_tier_current_separate_account_load));
 
-    TieredSepAcctLoadBands = tiered_sep_acct_load.bands();
-    TieredSepAcctLoadRates = tiered_sep_acct_load.data();
+        TieredSepAcctLoadBands = tiered_sep_acct_load.bands();
+        TieredSepAcctLoadRates = tiered_sep_acct_load.data();
 
-    PremiumTaxIsTiered = x.premium_tax_is_tiered(b->GetStateOfJurisdiction());
+        PremiumTaxIsTiered = x.premium_tax_is_tiered(b->GetStateOfJurisdiction());
+        }
+    else
+        {
+        PremiumTaxIsTiered = false;
+        }
 
     NoLapseAlwaysActive     = b->Database->Query(DB_NoLapseAlwaysActive);
     NoLapseMinDur           = b->Database->Query(DB_NoLapseMinDur);
@@ -468,7 +485,7 @@ void TLedgerInvariant::Init(BasicValues* b)
     NominallyPar            = b->Database->Query(DB_NominallyPar);
     Has1035ExchCharge       = b->Database->Query(DB_Has1035ExchCharge);
 
-    InitBaseSpecAmt         = b->DeathBfts->GetSpecAmt()[0];
+    InitBaseSpecAmt         = b->DeathBfts_->specamt()[0];
     InitTermSpecAmt         = TermSpecAmt[0];
     ChildRiderAmount        = Input.ChildRiderAmount;
     SpouseRiderAmount       = Input.SpouseRiderAmount;
@@ -522,24 +539,28 @@ void TLedgerInvariant::Init(BasicValues* b)
     AllowDbo3               = b->Database->Query(DB_AllowDBO3);
     PostHoneymoonSpread     = Input.PostHoneymoonSpread;
 
-    PolicyMktgName         = b->ProductData->GetPolicyMktgName();
-    PolicyLegalName        = b->ProductData->GetPolicyLegalName();
-    PolicyForm             = b->ProductData->GetPolicyForm();
-    InsCoShortName         = b->ProductData->GetInsCoShortName();
-    InsCoName              = b->ProductData->GetInsCoName();
-    InsCoAddr              = b->ProductData->GetInsCoAddr();
-    InsCoStreet            = b->ProductData->GetInsCoStreet();
-    InsCoPhone             = b->ProductData->GetInsCoPhone();
-    MainUnderwriter        = b->ProductData->GetMainUnderwriter();
-    MainUnderwriterAddress = b->ProductData->GetMainUnderwriterAddress();
-    CoUnderwriter          = b->ProductData->GetCoUnderwriter();
-    CoUnderwriterAddress   = b->ProductData->GetCoUnderwriterAddress();
+    // The antediluvian branch has a null ProductData object.
+    if(b->ProductData)
+        {
+        PolicyMktgName         = b->ProductData->GetPolicyMktgName();
+        PolicyLegalName        = b->ProductData->GetPolicyLegalName();
+        PolicyForm             = b->ProductData->GetPolicyForm();
+        InsCoShortName         = b->ProductData->GetInsCoShortName();
+        InsCoName              = b->ProductData->GetInsCoName();
+        InsCoAddr              = b->ProductData->GetInsCoAddr();
+        InsCoStreet            = b->ProductData->GetInsCoStreet();
+        InsCoPhone             = b->ProductData->GetInsCoPhone();
+        MainUnderwriter        = b->ProductData->GetMainUnderwriter();
+        MainUnderwriterAddress = b->ProductData->GetMainUnderwriterAddress();
+        CoUnderwriter          = b->ProductData->GetCoUnderwriter();
+        CoUnderwriterAddress   = b->ProductData->GetCoUnderwriterAddress();
 
-    AvName                 = b->ProductData->GetAvName();
-    CsvName                = b->ProductData->GetCsvName();
-    CsvHeaderName          = b->ProductData->GetCsvHeaderName();
-    NoLapseProvisionName   = b->ProductData->GetNoLapseProvisionName();
-    InterestDisclaimer     = b->ProductData->GetInterestDisclaimer();
+        AvName                 = b->ProductData->GetAvName();
+        CsvName                = b->ProductData->GetCsvName();
+        CsvHeaderName          = b->ProductData->GetCsvHeaderName();
+        NoLapseProvisionName   = b->ProductData->GetNoLapseProvisionName();
+        InterestDisclaimer     = b->ProductData->GetInterestDisclaimer();
+        }
 
     ProducerName            = Input.AgentFullName();
 
@@ -681,7 +702,7 @@ void TLedgerInvariant::Init(BasicValues* b)
 }
 
 //============================================================================
-TLedgerInvariant& TLedgerInvariant::PlusEq(TLedgerInvariant const& a_Addend)
+LedgerInvariant& LedgerInvariant::PlusEq(LedgerInvariant const& a_Addend)
 {
     LedgerBase::PlusEq(a_Addend, a_Addend.InforceLives);
 
@@ -868,13 +889,13 @@ TLedgerInvariant& TLedgerInvariant::PlusEq(TLedgerInvariant const& a_Addend)
 }
 
 //============================================================================
-// GWC Prolly don't blong here.
-void TLedgerInvariant::CalculateIrrs(TLedger const& LedgerValues)
+// TODO ?? Prolly don't blong here.
+void LedgerInvariant::CalculateIrrs(Ledger const& LedgerValues)
 {
     int max_length = LedgerValues.GetMaxLength();
 
-    TLedgerVariant const& Curr_ = LedgerValues.GetCurrFull();
-    TLedgerVariant const& Guar_ = LedgerValues.GetGuarFull();
+    LedgerVariant const& Curr_ = LedgerValues.GetCurrFull();
+    LedgerVariant const& Guar_ = LedgerValues.GetGuarFull();
     irr
         (Outlay
         ,Guar_.CSVNet
@@ -911,24 +932,29 @@ void TLedgerInvariant::CalculateIrrs(TLedger const& LedgerValues)
         ,irr_precision
         );
 
+    // Calculate these IRRs only for ledger types that actually use a
+    // basis with a zero percent separate-account rate. This is a
+    // matter not of efficiency but of validity: values for unused
+    // bases are not dependably initialized.
+    //
+    // TODO ?? This calculation really needs to be distributed among
+    // the variant ledgers, so that it gets run for every basis
+    // actually used.
+    //
     if
         (0 == std::count
             (LedgerValues.GetRunBases().begin()
             ,LedgerValues.GetRunBases().end()
             ,e_run_curr_basis_sa_zero
-            // proxy for e_run_guar_basis_sa_zero too
+            // Proxy for e_run_guar_basis_sa_zero too.
             )
         )
         {
-// TODO ?? The idea here was to calculate these IRRs only for ledger
-// types that actually use a current-zero or guaranteed-zero bases.
-// But this calculation really needs to be distributed among the
-// variant ledgers.
-//        return;
+        return;
         }
 
-    TLedgerVariant const& Curr0 = LedgerValues.GetCurrZero();
-    TLedgerVariant const& Guar0 = LedgerValues.GetGuarZero();
+    LedgerVariant const& Curr0 = LedgerValues.GetCurrZero();
+    LedgerVariant const& Guar0 = LedgerValues.GetGuarZero();
 
     irr
         (Outlay
@@ -968,7 +994,7 @@ void TLedgerInvariant::CalculateIrrs(TLedger const& LedgerValues)
 }
 
 //============================================================================
-void TLedgerInvariant::UpdateCRC(CRC& a_crc) const
+void LedgerInvariant::UpdateCRC(CRC& a_crc) const
 {
     LedgerBase::UpdateCRC(a_crc);
 
@@ -985,7 +1011,7 @@ void TLedgerInvariant::UpdateCRC(CRC& a_crc) const
 }
 
 //============================================================================
-void TLedgerInvariant::Spew(std::ostream& os) const
+void LedgerInvariant::Spew(std::ostream& os) const
 {
     LedgerBase::Spew(os);
 

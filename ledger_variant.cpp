@@ -19,21 +19,19 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_ldgvar.cpp,v 1.1 2005-01-14 19:47:45 chicares Exp $
+// $Id: ledger_variant.cpp,v 1.1 2005-02-12 12:59:31 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
 #   pragma hdrstop
 #endif // __BORLANDC__
 
-#include "ihs_ldgvar.hpp"
+#include "ledger_variant.hpp"
 
 #include "alert.hpp"
 #include "basic_values.hpp"
 #include "database.hpp" // Used only for initial loan rate.
 #include "dbnames.hpp"  // Used only for initial loan rate.
-#include "ihs_deathbft.hpp"
-#include "ihs_funddata.hpp"
 #include "inputs.hpp"
 #include "inputstatus.hpp"
 #include "interest_rates.hpp"
@@ -43,7 +41,7 @@
 #include <ostream>
 
 //============================================================================
-TLedgerVariant::TLedgerVariant(int len)
+LedgerVariant::LedgerVariant(int len)
     :LedgerBase(len)
     ,FullyInitialized(false)
 {
@@ -51,7 +49,7 @@ TLedgerVariant::TLedgerVariant(int len)
 }
 
 //============================================================================
-TLedgerVariant::TLedgerVariant(TLedgerVariant const& obj)
+LedgerVariant::LedgerVariant(LedgerVariant const& obj)
     :LedgerBase(obj)
     ,FullyInitialized(false)
 {
@@ -60,7 +58,7 @@ TLedgerVariant::TLedgerVariant(TLedgerVariant const& obj)
 }
 
 //============================================================================
-TLedgerVariant& TLedgerVariant::operator=(TLedgerVariant const& obj)
+LedgerVariant& LedgerVariant::operator=(LedgerVariant const& obj)
 {
     if(this != &obj)
         {
@@ -73,13 +71,13 @@ TLedgerVariant& TLedgerVariant::operator=(TLedgerVariant const& obj)
 }
 
 //============================================================================
-TLedgerVariant::~TLedgerVariant()
+LedgerVariant::~LedgerVariant()
 {
     Destroy();
 }
 
 //============================================================================
-void TLedgerVariant::Alloc(int len)
+void LedgerVariant::Alloc(int len)
 {
     Length  = len;
 
@@ -175,7 +173,7 @@ void TLedgerVariant::Alloc(int len)
 }
 
 //============================================================================
-void TLedgerVariant::Copy(TLedgerVariant const& obj)
+void LedgerVariant::Copy(LedgerVariant const& obj)
 {
     LedgerBase::Copy(obj);
 
@@ -185,13 +183,13 @@ void TLedgerVariant::Copy(TLedgerVariant const& obj)
 }
 
 //============================================================================
-void TLedgerVariant::Destroy()
+void LedgerVariant::Destroy()
 {
     FullyInitialized = false;
 }
 
 //============================================================================
-void TLedgerVariant::Init()
+void LedgerVariant::Init()
 {
     // Initializes (almost) everything with zeroes
     LedgerBase::Initialize(GetLength());
@@ -217,7 +215,7 @@ void TLedgerVariant::Init()
 }
 
 //============================================================================
-void TLedgerVariant::Init
+void LedgerVariant::Init
     (BasicValues*     a_BV
     ,e_basis          a_ExpAndGABasis
     ,e_sep_acct_basis a_SABasis
@@ -313,8 +311,8 @@ void TLedgerVariant::Init
 }
 
 //============================================================================
-TLedgerVariant& TLedgerVariant::PlusEq
-    (TLedgerVariant const&      a_Addend
+LedgerVariant& LedgerVariant::PlusEq
+    (LedgerVariant const&      a_Addend
     ,std::vector<double> const& a_Inforce
     )
 {
@@ -358,7 +356,7 @@ TLedgerVariant& TLedgerVariant::PlusEq
 }
 
 //============================================================================
-void TLedgerVariant::RecordDynamicSepAcctRate
+void LedgerVariant::RecordDynamicSepAcctRate
     (double annual_rate
     ,double monthly_rate
     ,int year
@@ -373,13 +371,13 @@ void TLedgerVariant::RecordDynamicSepAcctRate
 }
 
 //============================================================================
-void TLedgerVariant::UpdateCRC(CRC& a_crc) const
+void LedgerVariant::UpdateCRC(CRC& a_crc) const
 {
     LedgerBase::UpdateCRC(a_crc);
 }
 
 //============================================================================
-void TLedgerVariant::Spew(std::ostream& os) const
+void LedgerVariant::Spew(std::ostream& os) const
 {
     os
         << "ExpAndGABasis"
@@ -395,5 +393,34 @@ void TLedgerVariant::Spew(std::ostream& os) const
         ;
 
     LedgerBase::Spew(os);
+}
+
+ledger_map_holder::ledger_map_holder()
+{
+}
+
+ledger_map_holder::ledger_map_holder(ledger_map const& z)
+    :held_(z)
+{
+}
+
+ledger_map_holder::ledger_map_holder(ledger_map_holder const& z)
+    :held_(z.held())
+{
+}
+
+ledger_map_holder& ledger_map_holder::operator=(ledger_map_holder const& z)
+{
+    held_ = z.held();
+    return *this;
+}
+
+ledger_map_holder::~ledger_map_holder()
+{
+}
+
+ledger_map const& ledger_map_holder::held() const
+{
+    return held_;
 }
 

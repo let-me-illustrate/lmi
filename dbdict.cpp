@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: dbdict.cpp,v 1.1 2005-01-14 19:47:44 chicares Exp $
+// $Id: dbdict.cpp,v 1.2 2005-02-12 12:59:31 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -221,6 +221,22 @@ void DBDictionary::Init()
 
     double ledger_type[1] = {e_ill_reg};
     AddEntry(TDBEntry(DB_LedgerType, TDBValue(DB_LedgerType, n, dims, ledger_type)));
+
+    double no_lapse_always_active[1] = {0.0};
+    AddEntry(TDBEntry(DB_NoLapseAlwaysActive, TDBValue(DB_NoLapseAlwaysActive, n, dims, no_lapse_always_active)));
+    double no_lapse_min_dur[1] = {0.0};
+    AddEntry(TDBEntry(DB_NoLapseMinDur, TDBValue(DB_NoLapseMinDur, n, dims, no_lapse_min_dur)));
+    double no_lapse_min_age[1] = {0.0};
+    AddEntry(TDBEntry(DB_NoLapseMinAge, TDBValue(DB_NoLapseMinAge, n, dims, no_lapse_min_age)));
+
+    AddEntry(TDBEntry(DB_NominallyPar, TDBValue(DB_NominallyPar, n, dims, zero)));
+    AddEntry(TDBEntry(DB_Has1035ExchCharge, TDBValue(DB_Has1035ExchCharge, n, dims, zero)));
+    AddEntry(TDBEntry(DB_SmokeOrTobacco, TDBValue(DB_SmokeOrTobacco, n, dims, zero)));
+    AddEntry(TDBEntry(DB_DACTaxFundCharge, TDBValue(DB_DACTaxFundCharge, n, dims, zero)));
+    AddEntry(TDBEntry(DB_AllowWP, TDBValue(DB_AllowWP, n, dims, zero)));
+    AddEntry(TDBEntry(DB_AllowADD, TDBValue(DB_AllowADD, n, dims, zero)));
+    AddEntry(TDBEntry(DB_AllowSpouse, TDBValue(DB_AllowSpouse, n, dims, zero)));
+    AddEntry(TDBEntry(DB_AllowChild, TDBValue(DB_AllowChild, n, dims, zero)));
 }
 
 //===========================================================================

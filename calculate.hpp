@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: calculate.hpp,v 1.1 2005-01-14 19:47:44 chicares Exp $
+// $Id: calculate.hpp,v 1.2 2005-02-12 12:59:31 chicares Exp $
 
 #ifndef calculate_hpp
 #define calculate_hpp
@@ -29,6 +29,9 @@
 #include "alert.hpp"
 #include "inputillus.hpp"
 #include "inputs.hpp"
+#include "ledger.hpp"
+#include "ledger_invariant.hpp"
+#include "ledger_variant.hpp"
 #include "ledgervalues.hpp"
 #include "multiple_cell_document.hpp"
 #include "single_cell_document.hpp"
@@ -42,8 +45,6 @@
 #include <stdexcept>
 #include <string>
 #include <vector>
-
-// TODO ?? Consider returning a composite.
 
 struct RunIllustration
     :public std::unary_function<IllusInputParms, void>
@@ -109,6 +110,8 @@ struct RunCensus
 {
     explicit RunCensus(std::ostream& aOutputDest)
         :OutputDest           (aOutputDest)
+// TODO ?? Hardcoded ledger type must be changed.
+        ,XXXComposite         (e_ledger_type(e_ill_reg), 100, true)
         ,time_for_calculations(0.0)
         ,time_for_output      (0.0)
         {}
@@ -121,12 +124,6 @@ struct RunCensus
             }
 
         Timer timer;
-
-        std::auto_ptr<IllusVal> Totals(new IllusVal());
-        std::auto_ptr<TLedger> TotCurrValues(new TLedger(100));
-        std::auto_ptr<TLedger> TotMdptValues(new TLedger(100));
-        std::auto_ptr<TLedger> TotGuarValues(new TLedger(100));
-
         for
             (std::vector<IllusInputParms>::iterator lives_it = a_input.begin()
             ;lives_it != a_input.end()
@@ -135,25 +132,23 @@ struct RunCensus
             {
             std::auto_ptr<IllusVal> IV(new IllusVal());
             IV->Run(*lives_it);
-            *TotCurrValues += IV->GetCurrValues();
-            *TotMdptValues += IV->GetMdptValues();
-            *TotGuarValues += IV->GetGuarValues();
+// TODO ?? Pick one:            
+//            Composite.operator+=(IV->ledger());
+            XXXComposite.PlusEq(IV->ledger());
             }
-
-        Totals->Init
-            (TotCurrValues.get()
-            ,TotMdptValues.get()
-            ,TotGuarValues.get()
-            );
 
         time_for_calculations += timer.Stop().Result();
 
         timer.Reset().Start();
-        Totals->Print(OutputDest);
+        IllusVal Composite(&XXXComposite);
+        Composite.Print(OutputDest);
+
         time_for_output       += timer.Stop().Result();
         }
 
     std::ostream& OutputDest;
+
+    Ledger XXXComposite;
 
     double time_for_calculations;
     double time_for_output;
@@ -219,13 +214,12 @@ struct RunCensusDeprecated
         std::cerr << "    Input:        " << timer.Stop().Report() << '\n';
 
         // TODO ?? Why copy?
-        std::vector<IllusInputParms> lives(doc.IndividualParms);
+        std::vector<IllusInputParms> lives(doc.individual_parms());
 
         timer.Reset().Start();
-        std::auto_ptr<IllusVal> Totals(new IllusVal());
-        std::auto_ptr<TLedger> TotCurrValues(new TLedger(100));
-        std::auto_ptr<TLedger> TotMdptValues(new TLedger(100));
-        std::auto_ptr<TLedger> TotGuarValues(new TLedger(100));
+
+// TODO ?? Use the stack instead of the heap.
+        std::auto_ptr<IllusVal> Composite(new IllusVal(new Ledger(e_ledger_type(e_ill_reg), 100, true)));
 
         for
             (std::vector<IllusInputParms>::iterator lives_it = lives.begin()
@@ -235,21 +229,13 @@ struct RunCensusDeprecated
             {
             std::auto_ptr<IllusVal> IV(new IllusVal());
             IV->Run(*lives_it);
-            *TotCurrValues += IV->GetCurrValues();
-            *TotMdptValues += IV->GetMdptValues();
-            *TotGuarValues += IV->GetGuarValues();
+            Composite->operator+=(IV->ledger());
             }
-
-        Totals->Init
-            (TotCurrValues.get()
-            ,TotMdptValues.get()
-            ,TotGuarValues.get()
-            );
 
         std::cerr << "    Calculations: " << timer.Stop().Report() << '\n';
 
         timer.Reset().Start();
-        Totals->Print(std::cout);
+        Composite->Print(std::cout);
         std::cerr << "    Output:       " << timer.Stop().Report() << '\n';
         }
 };

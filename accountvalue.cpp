@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: accountvalue.cpp,v 1.2 2005-02-05 03:02:41 chicares Exp $
+// $Id: accountvalue.cpp,v 1.3 2005-02-12 12:59:31 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -32,10 +32,12 @@
 #include "alert.hpp"
 #include "database.hpp"
 #include "dbnames.hpp"
-#include "deathbenefits.hpp"
+#include "death_benefits.hpp"
 #include "inputs.hpp"
 #include "interest_rates.hpp"
 #include "ledger.hpp"
+#include "ledger_invariant.hpp"
+#include "ledger_variant.hpp"
 #include "loads.hpp"
 #include "mortality_rates.hpp"
 #include "outlay.hpp"
@@ -45,9 +47,6 @@
 #include <algorithm> // std::max(), std::min()
 #include <cmath>     // std::pow()
 #include <numeric>   // std::accumulate()
-
-class TLedgerInvariant {};
-class TLedgerVariant   {};
 
 namespace
 {
@@ -125,14 +124,12 @@ showing {accesses, modifies current year, modifies future years}
 //============================================================================
 AccountValue::AccountValue(InputParms const& input)
     :BasicValues(input)
-    ,WorkingValues_(new TLedger(BasicValues::GetLength()))
-    ,CurrValues_   (new TLedger(BasicValues::GetLength()))
-    ,MdptValues_   (new TLedger(BasicValues::GetLength()))
-    ,GuarValues_   (new TLedger(BasicValues::GetLength()))
+    ,ledger_(new Ledger(BasicValues::GetLedgerType(), BasicValues::GetLength()))
+    ,ledger_invariant_     (new LedgerInvariant(BasicValues::GetLength()))
+    ,ledger_variant_       (new LedgerVariant  (BasicValues::GetLength()))
 {
     GrossPmts  .resize(12);
     NetPmts    .resize(12);
-    Corridor   .reserve(BasicValues::GetLength());
 }
 
 //============================================================================
@@ -143,8 +140,8 @@ AccountValue::~AccountValue()
 //============================================================================
 double AccountValue::RunAV()
 {
-    WorkingValues_->Init(this);
-    OverridingPmts = WorkingValues_->Pmt;
+    InvariantValues().Init(this);
+    OverridingPmts = InvariantValues().EePmt;
     Solving = e_solve_none != Input->SolveType.value();
     return RunAllApplicableBases();
 }
@@ -156,6 +153,8 @@ double AccountValue::RunOneBasis(e_run_basis const& TheBasis)
     if(Solving)
         {
         // TODO ?? Do something more flexible?
+        // TODO ?? Isn't this unreachable?
+        throw std::logic_error("This line had seemed to be unreachable.");
         LMI_ASSERT(TheBasis == Input->SolveBasis.value());
         z = Solve();
         }
@@ -176,50 +175,36 @@ double AccountValue::RunOneBasis(e_run_basis const& TheBasis)
 double AccountValue::RunAllApplicableBases()
 {
     // set pmts, specamt, surrchg
-    double z = 0.0;
-    if(Solving) switch(Input->SolveBasis.value())
-        {
-        case e_currbasis:
-            {
-            z = Solve();
-            OverridingPmts = WorkingValues_->Pmt;
-            *CurrValues_ = *WorkingValues_;
-            Solving = false;
-            }
-            break;
-        case e_guarbasis:
-            {
-            z = Solve();
-            OverridingPmts = WorkingValues_->Pmt;
-            *GuarValues_ = *WorkingValues_;
-            Solving = false;
-            }
-            break;
-        case e_mdptbasis:
-            {
-            z = Solve();
-            OverridingPmts = WorkingValues_->Pmt;
-            *MdptValues_ = *WorkingValues_;
-            Solving = false;
-            }
-            break;
-        default:
-            {
-            fatal_error()
-                << "Case '"
-                << Input->SolveBasis.value()
-                << "' not found."
-                << LMI_FLUSH
-                ;
-            }
-        }
 
-    RunOneBasis(e_run_basis(e_run_curr_basis));
-    *CurrValues_ = *WorkingValues_;
-    RunOneBasis(e_run_basis(e_run_guar_basis));
-    *GuarValues_ = *WorkingValues_;
-    RunOneBasis(e_run_basis(e_run_mdpt_basis));
-    *MdptValues_ = *WorkingValues_;
+    // Separate-account basis hardcoded because separate account not supported.
+    e_run_basis run_basis;
+    set_run_basis_from_separate_bases
+        (run_basis
+        ,e_basis(Input->SolveBasis.value())
+        ,e_sep_acct_basis(e_sep_acct_full)
+        );
+
+    double z = 0.0;
+    if(Solving)
+        {
+        z = Solve();
+        OverridingPmts = InvariantValues().EePmt;
+        ledger_->SetOneLedgerVariant(run_basis, VariantValues());
+        Solving = false;
+        }
+    ledger_->SetLedgerInvariant(InvariantValues());
+
+    run_basis = e_run_basis(e_run_curr_basis);
+    RunOneBasis(run_basis);
+    ledger_->SetOneLedgerVariant(run_basis, VariantValues());
+
+    run_basis = e_run_basis(e_run_guar_basis);
+    RunOneBasis(run_basis);
+    ledger_->SetOneLedgerVariant(run_basis, VariantValues());
+
+    run_basis = e_run_basis(e_run_mdpt_basis);
+    RunOneBasis(run_basis);
+    ledger_->SetOneLedgerVariant(run_basis, VariantValues());
 
     return z;
 }
@@ -227,7 +212,13 @@ double AccountValue::RunAllApplicableBases()
 //============================================================================
 double AccountValue::PerformRun(e_run_basis const& TheBasis)
 {
-    WorkingValues_->Init(this); // TODO ?? Shouldn't be here.
+    if(Solving)
+        {
+        // TODO ?? This seems wasteful. Track down the reason for doing it.
+        InvariantValues().Init(this);
+        }
+    set_separate_bases_from_run_basis(TheBasis, ExpAndGABasis, SABasis);
+    VariantValues().Init(this, ExpAndGABasis, SABasis);
 
     Debugging       = false;
 
@@ -248,28 +239,6 @@ double AccountValue::PerformRun(e_run_basis const& TheBasis)
     AVPrfLn          = 0.0;
 
     AVUnloaned = InforceAVGenAcct - (AVRegLn + AVPrfLn);
-
-    // TODO ?? Instead, call BasicValues::GetCorridorFactor().
-    Corridor = actuarial_table
-        (CurrentTableFile()
-        ,static_cast<long int>(Database->Query(DB_CorridorTable))
-        ,Input->Status[0].IssueAge.value()
-        ,BasicValues::GetLength()
-        );
-
-    WPRates = actuarial_table
-        (CurrentTableFile()
-        ,static_cast<long int>(Database->Query(DB_WPTable))
-        ,Input->Status[0].IssueAge.value()
-        ,BasicValues::GetLength()
-        );
-
-    ADDRates = actuarial_table
-        (CurrentTableFile()
-        ,static_cast<long int>(Database->Query(DB_ADDTable))
-        ,Input->Status[0].IssueAge.value()
-        ,BasicValues::GetLength()
-        );
 
     PerformSpecAmtStrategy();
 
@@ -299,8 +268,8 @@ void AccountValue::DoYear
     // TODO ?? These variables are set in current run and used in guar and midpt
     YearsCOIRate0   = MortalityRates_->MonthlyCoiRates(ExpAndGABasis)[Year];
 
-    YearsWPRate     = WPRates[Year];
-    YearsADDRate    = ADDRates[Year];
+    YearsWPRate     = MortalityRates_->WPRates()[Year];
+    YearsADDRate    = MortalityRates_->ADDRates()[Year];
     haswp           = Input->Status[0].HasWP.value();
     hasadd          = Input->Status[0].HasADD.value();
 
@@ -310,13 +279,13 @@ void AccountValue::DoYear
         )[Year]
         ;
 
-    pmt             = WorkingValues_->Pmt[Year];
+    pmt             = InvariantValues().EePmt[Year];
     YearsPremLoadTgt= Loads_->target_premium_load(ExpAndGABasis)[Year];
     YearsMlyPolFee  = Loads_->monthly_policy_fee(ExpAndGABasis)[Year];
-    ActualSpecAmt   = WorkingValues_->SpecAmt[Year];
+    ActualSpecAmt   = InvariantValues().SpecAmt[Year];
 
     // These variables are set for each pass independently
-    mode            = WorkingValues_->Mode[Year];
+    mode            = InvariantValues().EeMode[Year];
     ModeIndex       = get_mode_index(mode);
     RequestedLoan   = Outlay_->new_cash_loans()[Year];
     wd              = Outlay_->withdrawals()[Year];
@@ -327,8 +296,8 @@ void AccountValue::DoYear
                 ,e_rate_period(e_monthly_rate)
                 )[Year]
             );
-    YearsSpecAmt    = DeathBfts->GetSpecAmt()[Year];
-    YearsDBOpt      = DeathBfts->GetDBOpt()[Year];
+    YearsSpecAmt    = DeathBfts_->specamt()[Year];
+    YearsDBOpt      = DeathBfts_->dbopt()[Year];
 
     // for guar basis run, what loan rates do we use?
     YearsRegLnIntCredRate = InterestRates_->RegLnCredRate
@@ -352,7 +321,7 @@ void AccountValue::DoYear
         )[Year]
         ;
 
-    YearsCorridorFactor = Corridor[Year];
+    YearsCorridorFactor = BasicValues::GetCorridorFactor()[Year];
 
     GrossPmts  .assign(12, 0.0);
     NetPmts    .assign(12, 0.0);
@@ -368,17 +337,17 @@ void AccountValue::DoYear
             }
         }
 
-    WorkingValues_->AcctVal[Year] = AVUnloaned + AVRegLn + AVPrfLn;
-    WorkingValues_->CSV[Year] = WorkingValues_->AcctVal[Year] - WorkingValues_->SurrChg[Year];
+    VariantValues().AcctVal[Year] = AVUnloaned + AVRegLn + AVPrfLn;
+    VariantValues().CSVNet[Year] = VariantValues().AcctVal[Year] - VariantValues().SurrChg[Year];
     // Update death benefit: "deathbft" currently holds benefit as of the
     //   beginning of month 12, but we want it as of the end of that month,
     //   in case the corridor or option 2 drove it up during the last month.
     //   TODO ?? needs end of year corridor factor, if it varies monthly?
     TxSetDeathBft();
-    WorkingValues_->EOYDeathBft[Year] = deathbft;
+    VariantValues().EOYDeathBft[Year] = deathbft;
 
     // TODO ?? Change one of these names, which differ only in the terminal 's'.
-    WorkingValues_->GrossPmt[Year] += std::accumulate(GrossPmts.begin(), GrossPmts.end(), 0.0);
+    InvariantValues().GrossPmt[Year] += std::accumulate(GrossPmts.begin(), GrossPmts.end(), 0.0);
 
     if(Debugging)
         {
@@ -465,7 +434,7 @@ void AccountValue::PerformSpecAmtStrategy()
         {
         case e_sainputscalar:
             {
-            SA = WorkingValues_->SpecAmt[0];
+            SA = InvariantValues().SpecAmt[0];
             }
             break;
         case e_sainputvector: // Obsolete.
@@ -475,17 +444,17 @@ void AccountValue::PerformSpecAmtStrategy()
                 << " Specified amount set to scalar input value."
                 << LMI_FLUSH
                 ;
-            SA = WorkingValues_->SpecAmt[0];
+            SA = InvariantValues().SpecAmt[0];
             }
             break;
         case e_samaximum:
             {
-            SA = GetModalMaxSpecAmt(WorkingValues_->Mode[0], WorkingValues_->Pmt[0]);
+            SA = GetModalMaxSpecAmt(InvariantValues().EeMode[0], InvariantValues().EePmt[0]);
             }
             break;
         case e_satarget:
             {
-            SA = GetModalTgtSpecAmt(WorkingValues_->Mode[0], WorkingValues_->Pmt[0]);
+            SA = GetModalTgtSpecAmt(InvariantValues().EeMode[0], InvariantValues().EePmt[0]);
             }
             break;
         case e_samep:
@@ -495,7 +464,7 @@ void AccountValue::PerformSpecAmtStrategy()
                 << " Payment set to scalar input value."
                 << LMI_FLUSH
                 ;
-            SA = WorkingValues_->SpecAmt[0];
+            SA = InvariantValues().SpecAmt[0];
             }
             break;
         case e_saglp:
@@ -505,7 +474,7 @@ void AccountValue::PerformSpecAmtStrategy()
                 << " Payment set to scalar input value."
                 << LMI_FLUSH
                 ;
-            SA = WorkingValues_->SpecAmt[0];
+            SA = InvariantValues().SpecAmt[0];
             }
             break;
         default:
@@ -523,7 +492,7 @@ void AccountValue::PerformSpecAmtStrategy()
 
     for(int j = 0; j < BasicValues::GetLength(); j++)
         {
-        WorkingValues_->SpecAmt[j] = SA;
+        InvariantValues().SpecAmt[j] = SA;
         }
 }
 
@@ -542,7 +511,7 @@ void AccountValue::TxOptChg()
         }
 
     // Nothing to do if no option change requested
-    if(YearsDBOpt.value() == DeathBfts->GetDBOpt()[Year - 1].value())
+    if(YearsDBOpt.value() == DeathBfts_->dbopt()[Year - 1].value())
         {
         return;
         }
@@ -586,7 +555,7 @@ void AccountValue::TxOptChg()
     // Carry the new spec amt forward into all future years
     for(int j = Year; j < BasicValues::GetLength(); j++)
         {
-        WorkingValues_->SpecAmt[j] = ActualSpecAmt;
+        InvariantValues().SpecAmt[j] = ActualSpecAmt;
         }
 }
 
@@ -605,18 +574,18 @@ void AccountValue::TxSpecAmtChg()
         }
 
     // Nothing to do if no increase or decrease requested
-    if(DeathBfts->GetSpecAmt()[Year] == DeathBfts->GetSpecAmt()[Year - 1])
+    if(DeathBfts_->specamt()[Year] == DeathBfts_->specamt()[Year - 1])
         {
         return;
         }
 
     // Change specified amount
-    ActualSpecAmt = std::max(MinSpecAmt, DeathBfts->GetSpecAmt()[Year]);
+    ActualSpecAmt = std::max(MinSpecAmt, DeathBfts_->specamt()[Year]);
 
     // Carry the new spec amt forward into all future years
     for(int j = Year; j < BasicValues::GetLength(); j++)
         {
-        WorkingValues_->SpecAmt[j] = ActualSpecAmt;
+        InvariantValues().SpecAmt[j] = ActualSpecAmt;
         }
 }
 
@@ -640,7 +609,7 @@ void AccountValue::PerformPmtStrategy(double* a_Pmt)
         {
         case e_pmtinputscalar:
             {
-            *a_Pmt = WorkingValues_->Pmt[Year];
+            *a_Pmt = InvariantValues().EePmt[Year];
             }
             break;
         case e_pmtinputvector:
@@ -650,7 +619,7 @@ void AccountValue::PerformPmtStrategy(double* a_Pmt)
                 << " Payment set to scalar input value"
                 << LMI_FLUSH
                 ;
-            *a_Pmt = WorkingValues_->Pmt[Year];
+            *a_Pmt = InvariantValues().EePmt[Year];
             }
             break;
         case e_pmtminimum:
@@ -678,7 +647,7 @@ void AccountValue::PerformPmtStrategy(double* a_Pmt)
                 << " Payment set to scalar input value."
                 << LMI_FLUSH
                 ;
-            *a_Pmt = WorkingValues_->Pmt[Year];
+            *a_Pmt = InvariantValues().EePmt[Year];
             }
             break;
         case e_pmtglp:
@@ -688,7 +657,7 @@ void AccountValue::PerformPmtStrategy(double* a_Pmt)
                 << " Payment set to scalar input value."
                 << LMI_FLUSH
                 ;
-            *a_Pmt = WorkingValues_->Pmt[Year];
+            *a_Pmt = InvariantValues().EePmt[Year];
             }
             break;
         default:
@@ -767,7 +736,7 @@ void AccountValue::TxLoanRepay()
 
     AVUnloaned -= RequestedLoan;
     AVRegLn += RequestedLoan;    // TODO ?? also preferred...
-    WorkingValues_->Loan[Year] = RequestedLoan;
+    InvariantValues().Loan[Year] = RequestedLoan;
 }
 
 //============================================================================
@@ -976,7 +945,7 @@ void AccountValue::TxTakeWD()
             // Carry the new spec amt forward into all future years
             for(int j = Year; j < BasicValues::GetLength(); j++)
                 {
-                WorkingValues_->SpecAmt[j] = ActualSpecAmt;
+                InvariantValues().SpecAmt[j] = ActualSpecAmt;
                 }
             }
             break;
@@ -998,7 +967,7 @@ void AccountValue::TxTakeWD()
     wd -= std::min(WDFee, wd * WDFeeRate);
     // TODO ?? This treats input WD as gross; it prolly should be net
 
-    WorkingValues_->WD[Year] = wd;
+    InvariantValues().NetWD[Year] = wd;
 // TODO ??    TaxBasis -= wd;
 }
 
@@ -1047,7 +1016,7 @@ void AccountValue::TxTakeLoan()
 
     AVUnloaned -= RequestedLoan;
     AVRegLn += RequestedLoan;    // TODO ?? also preferred...
-    WorkingValues_->Loan[Year] = RequestedLoan;
+    InvariantValues().Loan[Year] = RequestedLoan;
 }
 
 //============================================================================
@@ -1080,29 +1049,5 @@ void AccountValue::TxTestLapse()
 void AccountValue::TxDebug()
 {
 // TODO ?? Not yet implemented.
-}
-
-//============================================================================
-TLedger const& AccountValue::WorkingValues()
-{
-    return *WorkingValues_;
-}
-
-//============================================================================
-TLedger const& AccountValue::CurrValues()
-{
-    return *CurrValues_;
-}
-
-//============================================================================
-TLedger const& AccountValue::MdptValues()
-{
-    return *MdptValues_;
-}
-
-//============================================================================
-TLedger const& AccountValue::GuarValues()
-{
-    return *GuarValues_;
 }
 

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avdebug.cpp,v 1.2 2005-02-05 03:02:41 chicares Exp $
+// $Id: ihs_avdebug.cpp,v 1.3 2005-02-12 12:59:31 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -31,17 +31,17 @@
 #include "calendar_date.hpp"
 #include "database.hpp"
 #include "dbnames.hpp"
+#include "death_benefits.hpp"
 #include "ihs_dbughdr.hpp"
-#include "ihs_deathbft.hpp"
 #include "ihs_irc7702.hpp"
 #include "ihs_irc7702a.hpp"
-#include "ihs_ldginvar.hpp"
-#include "ihs_ldgvar.hpp"
 #include "ihs_proddata.hpp"
 #include "ihs_rnddata.hpp"
 #include "inputs.hpp"
 #include "inputstatus.hpp"
 #include "interest_rates.hpp"
+#include "ledger_invariant.hpp"
+#include "ledger_variant.hpp"
 #include "loads.hpp"
 #include "math_functors.hpp"
 #include "ncnnnpnn.hpp"
@@ -509,7 +509,7 @@ void AccountValue::Project12MosPrintInit()
 
         << age_str
         << "Death Benefit Option: "
-        << DeathBfts->GetDBOpt()[Year] << '\n'
+        << DeathBfts_->dbopt()[Year] << '\n'
 
         << gender_str
         << "Tobacco Status: "

@@ -1,3 +1,5 @@
+// Stubs for the antediluvian branch.
+//
 // Copyright (C) 2005 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
@@ -17,6 +19,22 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: version.hpp,v 1.7 2005-02-12 12:59:31 chicares Exp $
+// $Id: antediluvian_stubs.cpp,v 1.1 2005-02-12 12:59:31 chicares Exp $
 
-#define LMI_VERSION "20050212T1140Z"
+#ifdef __BORLANDC__
+#   include "pchfile.hpp"
+#   pragma hdrstop
+#endif // __BORLANDC__
+
+#include "security.hpp"
+#include "tiered_charges.hpp"
+
+bool tiered_charges::premium_tax_is_tiered(e_state const&) const
+{
+    return false;
+}
+
+void validate_security(bool)
+{
+}
+

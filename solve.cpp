@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: solve.cpp,v 1.3 2005-02-05 03:02:41 chicares Exp $
+// $Id: solve.cpp,v 1.4 2005-02-12 12:59:31 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -29,9 +29,10 @@
 #include "account_value.hpp"
 
 #include "alert.hpp"
-#include "deathbenefits.hpp"
+#include "death_benefits.hpp"
 #include "inputs.hpp"
-#include "ledger.hpp"
+#include "ledger_invariant.hpp"
+#include "ledger_variant.hpp"
 #include "outlay.hpp"
 #include "xenumtypes.hpp"
 #include "zero.hpp"
@@ -75,6 +76,9 @@ static double SolveTest()
         ,e_sep_acct_basis(e_sep_acct_full)
         );
     That->PerformRun(temp);
+    // TRICKY !! This const reference is required for overload
+    // resolution to choose the const versions of various functions.
+    AccountValue const* ConstThat = const_cast<AccountValue const*>(That);
 
     // Return least of
     //   CSV at target duration
@@ -87,11 +91,11 @@ static double SolveTest()
         {
         Negative = std::min
             (Negative
-            ,std::min(That->WorkingValues().CSV[j], That->WorkingValues().ExcessLoan[j])
+            ,std::min(ConstThat->VariantValues().CSVNet[j], ConstThat->VariantValues().ExcessLoan[j])
             );
         }
 
-    double z = That->WorkingValues().CSV[ThatSolveTgtYear - 1];
+    double z = ConstThat->VariantValues().CSVNet[ThatSolveTgtYear - 1];
     if(Negative < 0.0)
         z = std::min(z, Negative);
     // TODO ?? If SolveTgtYr within no-lapse period...
@@ -103,16 +107,16 @@ static double SolveTest()
             {
             // We take endowment to mean for spec amt, so it's the
             // same for options A and B.
-            switch(That->WorkingValues().DBOpt[ThatSolveTgtYear - 1].value())
+            switch(ConstThat->InvariantValues().DBOpt[ThatSolveTgtYear - 1].value())
                 {
                 case e_option1:
                     {
-                    y = That->WorkingValues().SpecAmt[ThatSolveTgtYear - 1];
+                    y = ConstThat->InvariantValues().SpecAmt[ThatSolveTgtYear - 1];
                     }
                     break;
                 case e_option2:
                     {
-                    y = That->WorkingValues().SpecAmt[ThatSolveTgtYear - 1];
+                    y = ConstThat->InvariantValues().SpecAmt[ThatSolveTgtYear - 1];
                     }
                     break;
                 case e_rop:
@@ -195,7 +199,7 @@ void AccountValue::SolveSetSpecAmt
     ,int    ThatSolveEndYear
     )
 {
-    DeathBfts->SetSpecAmt(a_Bft, ThatSolveBegYear, ThatSolveEndYear);
+    DeathBfts_->set_specamt(a_Bft, ThatSolveBegYear, ThatSolveEndYear);
 }
 
 //============================================================================
@@ -278,7 +282,7 @@ double AccountValue::Solve()
             LowerBound = 0.0;
             // If solved premium exceeds specified amount, there's a problem.
             // TODO ?? Better to use the maximum SA, not the first SA?
-            UpperBound = DeathBfts->GetSpecAmt()[0];
+            UpperBound = DeathBfts_->specamt()[0];
             Decimals   = 2;
             SolveFn    = SolvePrem;
             }

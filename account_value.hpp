@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: account_value.hpp,v 1.1 2005-02-05 03:02:41 chicares Exp $
+// $Id: account_value.hpp,v 1.2 2005-02-12 12:59:31 chicares Exp $
 
 #ifndef account_value_hpp
 #define account_value_hpp
@@ -43,9 +43,9 @@
 //   preferred loans
 
 class InputParms;
-class TLedger;
-class TLedgerInvariant;
-class TLedgerVariant;
+class Ledger;
+class LedgerInvariant;
+class LedgerVariant;
 class DebugView;
 
 class LMI_EXPIMP AccountValue
@@ -70,54 +70,50 @@ class LMI_EXPIMP AccountValue
     void SetDebugFilename    (std::string const&);
     void SetProject12Filename(std::string const&);
 
-    TLedger const&       GetLedgerValues () const;
-    int                  GetLength       () const;
-    e_ledger_type const& GetLedgerType   () const;
-
-    double GetInforceLives         () const;
-
     void   GuessWhetherFirstYearPremiumExceedsRetaliationLimit();
     bool   TestWhetherFirstYearPremiumExceededRetaliationLimit();
 
-    double GetSepAcctAssetsInforce () const;
-    double GetNetCOI               () const;
-    double GetLastCOIChargeInforce () const;
-    double GetIBNRContrib          () const;
-    double GetExpRatReserve        () const;
-    double GetExpRatReserveNonforborne() const;
-
-    // Antediluvian.
-    double Solve();
-    void SolveSetPmts
+    double Solve(); // Antediluvian.
+    void SolveSetPmts // Antediluvian.
         (double a_Pmt
         ,int    ThatSolveBegYear
         ,int    ThatSolveEndYear
         );
-    void SolveSetSpecAmt
+    void SolveSetSpecAmt // Antediluvian.
         (double a_Bft
         ,int    ThatSolveBegYear
         ,int    ThatSolveEndYear
         );
-    void SolveSetLoans
+    void SolveSetLoans // Antediluvian.
         (double a_Loan
         ,int    ThatSolveBegYear
         ,int    ThatSolveEndYear
         );
-    void SolveSetWDs
+    void SolveSetWDs // Antediluvian.
         (double a_WD
         ,int    ThatSolveBegYear
         ,int    ThatSolveEndYear
         );
-    void SolveSetLoanThenWD
+    void SolveSetLoanThenWD // Antediluvian.
         (double a_Amt
         ,int    ThatSolveBegYear
         ,int    ThatSolveEndYear
         );
 
-    TLedger const& WorkingValues();
-    TLedger const& CurrValues();
-    TLedger const& MdptValues();
-    TLedger const& GuarValues();
+    Ledger const&          LedgerValues   () const;
+    LedgerInvariant const& InvariantValues() const;
+    LedgerVariant   const& VariantValues  () const;
+
+    int                    GetLength     () const;
+    e_ledger_type const&   GetLedgerType () const;
+
+    double GetInforceLives            () const;
+    double GetSepAcctAssetsInforce    () const;
+    double GetNetCOI                  () const;
+    double GetLastCOIChargeInforce    () const;
+    double GetIBNRContrib             () const;
+    double GetExpRatReserve           () const;
+    double GetExpRatReserveNonforborne() const;
 
   private:
     AccountValue(AccountValue const&);
@@ -135,16 +131,14 @@ class LMI_EXPIMP AccountValue
     double CashValueFor7702() const;
 
     // We're not yet entirely sure how to handle ledger values. Right now,
-    // we have pointers to a TLedger and also to its variant and invariant
+    // we have pointers to a Ledger and also to its variant and invariant
     // parts. We put data into the parts, and then insert the parts into
-    // the TLedger. At this moment it seems best to work not through these
-    // "parts" but rather through references to components of the TLedger.
+    // the Ledger. At this moment it seems best to work not through these
+    // "parts" but rather through references to components of the Ledger.
     // While we gather more information and consider this, all access comes
     // through the following functions.
-    TLedgerInvariant&       InvariantValues();
-    TLedgerInvariant const& InvariantValues() const;
-    TLedgerVariant&         VariantValues  ();
-    TLedgerVariant const&   VariantValues  () const;
+    LedgerInvariant& InvariantValues();
+    LedgerVariant  & VariantValues  ();
 
     double PerformRunMonthByMonth  (e_run_basis const&);
     double PerformRunLifeByLife    (e_run_basis const&);
@@ -384,21 +378,16 @@ class LMI_EXPIMP AccountValue
     double          PriorRegLnBal;
     double          PriorPrfLnBal;
 
-    // mode flags
+    // Mode flags.
     bool            Debugging;
     bool            Projecting12Mos;
     bool            Solving;
     bool            SolvingForGuarPremium;
     bool            ItLapsed;
 
-    boost::scoped_ptr<TLedger         > LedgerValues;
-    boost::scoped_ptr<TLedgerInvariant> LedgerInvariant;
-    boost::scoped_ptr<TLedgerVariant  > LedgerVariant;
-
-    boost::scoped_ptr<TLedger> WorkingValues_; // Antediluvian.
-    boost::scoped_ptr<TLedger> CurrValues_;    // Antediluvian.
-    boost::scoped_ptr<TLedger> MdptValues_;    // Antediluvian.
-    boost::scoped_ptr<TLedger> GuarValues_;    // Antediluvian.
+    boost::scoped_ptr<Ledger         > ledger_;
+    boost::scoped_ptr<LedgerInvariant> ledger_invariant_;
+    boost::scoped_ptr<LedgerVariant  > ledger_variant_;
 
     e_increment_method             deduction_method;
     e_increment_account_preference deduction_preferred_account;
@@ -455,9 +444,6 @@ class LMI_EXPIMP AccountValue
     std::vector<double> EeGrossPmts;
     std::vector<double> ErGrossPmts;
     std::vector<double> NetPmts;
-    std::vector<double> Corridor; // Antediluvian.
-    std::vector<double> WPRates;  // Antediluvian.
-    std::vector<double> ADDRates; // Antediluvian.
 
     // Reproposal input.
     int     InforceYear;
@@ -689,33 +675,33 @@ inline double AccountValue::TotalAccountValue() const
 }
 
 //============================================================================
-inline TLedgerVariant& AccountValue::VariantValues()    // temporary artifact
+inline LedgerVariant& AccountValue::VariantValues() // Temporary artifact?
 {
-    return *LedgerVariant;
+    return *ledger_variant_;
 }
 
 //============================================================================
-inline TLedgerVariant const& AccountValue::VariantValues() const
+inline LedgerVariant const& AccountValue::VariantValues() const
 {
-    return *LedgerVariant;
+    return *ledger_variant_;
 }
 
 //============================================================================
-inline TLedgerInvariant& AccountValue::InvariantValues()    // temporary artifact
+inline LedgerInvariant& AccountValue::InvariantValues() // Temporary artifact?
 {
-    return *LedgerInvariant;
+    return *ledger_invariant_;
 }
 
 //============================================================================
-inline TLedgerInvariant const& AccountValue::InvariantValues() const
+inline LedgerInvariant const& AccountValue::InvariantValues() const
 {
-    return *LedgerInvariant;
+    return *ledger_invariant_;
 }
 
 //============================================================================
-inline TLedger const& AccountValue::GetLedgerValues() const
+inline Ledger const& AccountValue::LedgerValues() const
 {
-    return *LedgerValues;
+    return *ledger_;
 }
 
 //============================================================================

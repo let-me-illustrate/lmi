@@ -19,15 +19,15 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_ldgvar.hpp,v 1.2 2005-01-31 13:12:48 chicares Exp $
+// $Id: ledger_variant.hpp,v 1.1 2005-02-12 12:59:31 chicares Exp $
 
-#ifndef ldgvar_hpp
-#define ldgvar_hpp
+#ifndef ledger_variant_hpp
+#define ledger_variant_hpp
 
 #include "config.hpp"
 
 #include "expimp.hpp"
-#include "ihs_ldgbase.hpp"
+#include "ledger_base.hpp"
 #include "xenumtypes.hpp"
 
 #include <functional>
@@ -35,24 +35,27 @@
 #include <map>
 #include <vector>
 
-// This class holds all the output values calculated by class AccountValue
-// that vary by basis.
+// This class holds all the output values calculated by class
+// AccountValue that vary by basis.
 
 class BasicValues;
 
-class LMI_EXPIMP TLedgerVariant
+class LMI_EXPIMP LedgerVariant
     :public LedgerBase
 {
 public:
-    // Need default ctor to put this thing in a map
-    // TODO ?? See comments on class TLedger's default ctor.
-    TLedgerVariant(int len = 100);
-    TLedgerVariant(TLedgerVariant const&);
-    TLedgerVariant& operator=(TLedgerVariant const&);
-    virtual ~TLedgerVariant();
+    // A default ctor is required because this class is used as a
+    // std::map's value_type.
+    //
+    // TODO ?? '100' here is poor. See inline comments on class
+    // Ledger's default ctor.
+    LedgerVariant(int len = 100);
+    LedgerVariant(LedgerVariant const&);
+    LedgerVariant& operator=(LedgerVariant const&);
+    virtual ~LedgerVariant();
 
-    TLedgerVariant& PlusEq
-        (TLedgerVariant const&  a_Addend
+    LedgerVariant& PlusEq
+        (LedgerVariant const&  a_Addend
         ,std::vector<double> const& a_Inforce
         );
 
@@ -150,7 +153,7 @@ public:
 
 private:
     void Alloc(int len);
-    void Copy(TLedgerVariant const&);
+    void Copy(LedgerVariant const&);
     void Destroy();
     void Init();
 
@@ -167,25 +170,28 @@ private:
     bool             FullyInitialized;   // i.e. by Init(BasicValues* b)
 };
 
-typedef std::map<e_run_basis, TLedgerVariant, std::less<e_run_basis> > ledger_map;
-typedef ledger_map::value_type ledger_map_val;
+// C++98 17.4.3.6 forbids declaring std::map<S,T> where S or T is
+// incomplete. But class ledger_map_holder can be forward declared
+// even when class LedgerVariant is forward declared.
 
-// The STL implementation used in designing this code doesn't allow a
-// map<S,T> or even a map<S,T> unless the definitions of S and T are
-// visible. That creates an undesirable coupling. And there's no portable
-// way to forward declare a map. But here's a class we can forward declare:
-class LMap
+typedef std::map<e_run_basis, LedgerVariant> ledger_map;
+
+class ledger_map_holder
 {
-    // No virtual dtor--don't derive from this class.
-    // We could enforce that constraint in code, by making the ctor private,
-    // but that makes the syntax for object creation unnatural.
-public:
-    LMap(){}
-    LMap(ledger_map a_map):LedgerMapRep(a_map){}
-    ledger_map LedgerMapRep;
-};
-// We have a pointer to a forward-declared LMap in class TLedger. That hides
-// the details of this class and its base from other classes that use TLedger.
+    friend class Ledger;
 
-#endif
+  public:
+    ledger_map_holder();
+    explicit ledger_map_holder(ledger_map const&);
+    ledger_map_holder(ledger_map_holder const&);
+    ledger_map_holder& operator=(ledger_map_holder const&);
+    ~ledger_map_holder();
+
+    ledger_map const& held() const;
+
+  private:
+    ledger_map held_;
+};
+
+#endif // ledger_variant_hpp
 
