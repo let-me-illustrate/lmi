@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.31 2005-03-30 03:44:06 chicares Exp $
+// $Id: ChangeLog,v 1.32 2005-03-30 19:30:48 chicares Exp $
 
 2005-01-14
 
@@ -1010,4 +1010,31 @@ Correct a database entity's description.
 
   main_wx.cpp
 Improve the OnExceptionInMainLoop() handler, unmasking a wx defect.
+
+2005-03-30 [1415]
+
+  xml_notebook.xrc
+Enhance 'Funds' tab. Add 'Reports' tab. Revise 'Group' tab.
+
+  dbnames.xpp
+Correct a database entity's description.
+
+  main_wx.cpp
+Revert yesterday's change, which now seems to work, possibly due to
+some unknown change in wx-2.5.4 . More testing is needed.
+
+  account_value.hpp
+  census_view.cpp
+  ihs_acctval.cpp
+Apportion experience reserve among individuals: even though this is
+not the way it's intended to work, it's a precondition of the present
+ledger classes that a composite is the weighted sum of individuals.
+Suppress the test scaffolding for now unless a particular string
+appears in the 'Comments' field; eventually, it'll be removed.
+
+  ledger_xml_io.cpp
+  mc_enum_types.cpp
+  mc_enum_types.hpp
+  mc_enum_types.xpp
+Add new supplemental-report columns for experience rating.
 
