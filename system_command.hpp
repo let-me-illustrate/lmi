@@ -19,6 +19,8 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
+// $Id: system_command.hpp,v 1.2 2005-01-15 20:17:29 chicares Exp $
+
 // This is a cover function for std::system(). It simply forwards its
 // argument to std::system() on posix platforms. The msw implementation
 // works around a problem on that platform, where the standard function

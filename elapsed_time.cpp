@@ -19,6 +19,8 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
+// $Id: elapsed_time.cpp,v 1.2 2005-01-15 20:17:29 chicares Exp $
+
 #include "system_command.hpp"
 #include "timer.hpp"
 
