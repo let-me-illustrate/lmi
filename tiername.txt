@@ -1,0 +1,39 @@
+// Life insurance illustrations: tiered rates.
+//
+// Copyright (C) 2003, 2005 Gregory W. Chicares.
+//
+// This program is free software; you can redistribute it and/or modify
+// it under the terms of the GNU General Public License version 2 as
+// published by the Free Software Foundation.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program; if not, write to the Free Software
+// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+//
+// http://savannah.nongnu.org/projects/lmi
+// email: <chicares@cox.net>
+// snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
+
+// $Id: tiername.txt,v 1.1 2005-01-14 19:47:45 chicares Exp $
+
+{tiered_data::e_tier_first,tiered_data::e_tier_first,"dummy","dummy",},
+{tiered_data::e_tier_topic_experience_rating,tiered_data::e_tier_first,"Experience rating","Experience rating items that vary by case size.",},
+{tiered_data::e_tier_stabilization_reserve,tiered_data::e_tier_topic_experience_rating,"Stabilization reserve","Stabilization reserve as a function of number of lives in force. Enter bands as increasing numbers of total lives.",},
+{tiered_data::e_tier_coi_retention,tiered_data::e_tier_topic_experience_rating,"COI retention","COI retention as a function of number of lives at issue. Enter bands as increasing numbers of total lives.",},
+{tiered_data::e_tier_topic_asset_based,tiered_data::e_tier_first,"Asset based charges","Charges that are tiered by assets.",},
+{tiered_data::e_tier_current_m_and_e,tiered_data::e_tier_topic_asset_based,"Current M&E","Current M&&E, tiered by current assets. Enter bands as as increments, e.g. first 50,000,000, next 50,000,000, and so on.",},
+{tiered_data::e_tier_guaranteed_m_and_e,tiered_data::e_tier_topic_asset_based,"Guaranteed M&E","Guaranteed M&&E, tiered by current assets. Enter bands as as increments, e.g. first 50,000,000, next 50,000,000, and so on.",},
+{tiered_data::e_tier_asset_based_compensation,tiered_data::e_tier_topic_asset_based,"Compensation","Compensation, tiered by current assets. Enter bands as as increments, e.g. first 50,000,000, next 50,000,000, and so on.",},
+{tiered_data::e_tier_investment_management_fee,tiered_data::e_tier_topic_asset_based,"Investment management","Investment management, tiered by current assets. Enter bands as as increments, e.g. first 50,000,000, next 50,000,000, and so on.",},
+{tiered_data::e_tier_current_separate_account_load,tiered_data::e_tier_topic_asset_based,"Current sep acct load","Current separate account load, tiered by current separate account assets. Enter bands as as increments, e.g. first 50,000,000, next 50,000,000, and so on.",},
+{tiered_data::e_tier_guaranteed_separate_account_load,tiered_data::e_tier_topic_asset_based,"Guaranteed sep acct load","Guaranteed separate account load, tiered by current separate account assets. Enter bands as as increments, e.g. first 50,000,000, next 50,000,000, and so on.",},
+{tiered_data::e_tier_topic_premium_tax,tiered_data::e_tier_first,"Premium tax","Tiered premium tax.",},
+{tiered_data::e_tier_ak_premium_tax,tiered_data::e_tier_topic_premium_tax,"Alaska","Alaska premium tax, tiered by policy-year individual-contract premium. Enter bands as as increments, e.g. first 50,000,000, next 50,000,000, and so on.",},
+{tiered_data::e_tier_de_premium_tax,tiered_data::e_tier_topic_premium_tax,"Delaware","Delaware premium tax, tiered by calendar-year total-case premium (NOT YET IMPLEMENTED). Enter bands as as increments, e.g. first 50,000,000, next 50,000,000, and so on.",},
+{tiered_data::e_tier_sd_premium_tax,tiered_data::e_tier_topic_premium_tax,"South Dakota","South Dakota premium tax, tiered by policy-year individual-contract premium. Enter bands as as increments, e.g. first 50,000,000, next 50,000,000, and so on.",},
+
