@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: GNUmakefile,v 1.11 2005-03-17 22:32:29 chicares Exp $
+# $Id: GNUmakefile,v 1.12 2005-03-22 03:38:06 chicares Exp $
 
 ###############################################################################
 
@@ -375,7 +375,7 @@ source_clean:
 	@-$(RM) --force $(expungible_files)
 
 .PHONY: clobber
-clobber: maintainer-clean
+clobber: source_clean
 	@-$(RM) --force --recursive ../build
 
 ################################################################################
