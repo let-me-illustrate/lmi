@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: alert_test.cpp,v 1.1 2005-01-14 19:47:44 chicares Exp $
+// $Id: alert_test.cpp,v 1.2 2005-02-28 12:58:01 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -67,44 +67,25 @@ int test_main(int, char*[])
         );
     warning() << LMI_FLUSH;
 
-    int return_value = -1;
-    try
-        {
-        // This should throw:
-        fatal_error() <<  "Simulated fatal error--location: " << LMI_FLUSH;
-        std::cout << "This line shouldn't be reached." << std::endl;
-        BOOST_TEST(false);
-        }
-    catch(std::exception const& e)
-        {
-        std::cout
-            << "Caught exception '"
-            << e.what()
-            << "' of type '" << typeid(e).name()
-            << "'." << std::endl
-            ;
-        if(typeid(e).name() == typeid(std::runtime_error).name())
-            {
-            return_value = 0;
-            }
-        else
-            {
-            std::cout
-                << "\nHowever, type '" << typeid(std::runtime_error).name()
-                << "' was expected." << std::endl
-                ;
-#if defined __GLIBCPP__ && __GLIBCPP__==20030426
-            std::cout
-                << "This is due to a defect in libstdc++-v3\n"
-                << "that appears to have been fixed in CVS.\n"
-                << "Try using ostream.tcc version 1.30.2.14,\n"
-                << "dated 2003-12-01T19:39:49 .\n"
-                << std::endl
-                ;
-#endif // Not defective libstdc++-v3.
-            }
-        }
+    // Run this 'fatal_error' test twice in order to ensure that the
+    // stream state is cleared after an exception is thrown; if it is
+    // not, then getting a reference to the stream again, e.g., by
+    // calling fatal_error(), fails with an exception inside the
+    // standard library, probably in std::ios_base::clear().
 
-    return return_value;
+    std::string s("First simulated fatal error.");
+    BOOST_TEST_THROW(fatal_error() << s << std::flush, std::runtime_error, s);
+
+    s = "Second simulated fatal error.";
+    BOOST_TEST_THROW(fatal_error() << s << std::flush, std::runtime_error, s);
+
+#if defined __GLIBCPP__ && __GLIBCPP__==20030426
+    std::cout
+        << "This test fails with libstdc++-v3 if ostream.tcc is\n"
+        << "older than version 1.30.2.14 of 2003-12-01T19:39:49 .\n"
+        ;
+#endif // Defective version of libstdc++-v3.
+
+    return 0;
 }
 

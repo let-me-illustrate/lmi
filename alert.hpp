@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: alert.hpp,v 1.2 2005-01-29 02:47:41 chicares Exp $
+// $Id: alert.hpp,v 1.3 2005-02-28 12:58:01 chicares Exp $
 
 #ifndef alert_hpp
 #define alert_hpp
@@ -49,12 +49,16 @@
 // them at all.
 //
 // warning: Significant runtime problems that should be brought to the
-// user's attention: the program works, but not in exactly the way the
-// user wanted. A gui would probably use a messagebox here.
+// user's attention: the program may work, but not in exactly the way
+// the user wanted. A gui would probably use a messagebox here.
 //
 // hobsons_choice: Serious runtime problems that users may be allowed
-// to bypass, though at their own peril. Perhaps a gui would offer
-// that option where a cgi-bin or command-line interface would not.
+// to bypass, though at their own peril. The particular implementation
+// provided for all interfaces happens to offer such an option, but a
+// different implementation might not. For instance, a cgi-bin program
+// used only by customers might treat all diagnostics as fatal, while
+// a command-line interface used for regression testing might instead
+// bypass all runtime problems.
 //
 // fatal_error: Dire runtime problems that prevent the system from
 // performing a requested action running in any reasonable manner.
@@ -102,10 +106,11 @@
 // effort required for customization.
 //
 // There must be one stream object for each output type in order to
-// preserve state, accumulating successive data in a std::stringbuf.
-// This means that these streams must be initialized as some sort of
-// singleton, and therefore should not be used in the destructor of a
-// dynamically-initialized object of static storage duration.
+// preserve state, accumulating successive data in a std::stringbuf
+// until it is eventually flushed. This means that these streams must
+// be initialized as some sort of singleton [but see Alexandrescu,
+// MC++D, 6.1], so cyclic initialization and destruction dependencies
+// must be avoided.
 //
 // One could imagine using an optional trace file to log gui alert
 // messages. If desired, that could be an implementation detail of the
@@ -124,13 +129,25 @@ std::ostream& LMI_EXPIMP warning();
 std::ostream& LMI_EXPIMP hobsons_choice();
 std::ostream& LMI_EXPIMP fatal_error();
 
-// Implement these functions for each platform.
+// Implement these functions for each platform. Any might throw an
+// exception, which normally would be caught by the standard library
+// [27.6.2.1/3], so the associated streams' exception masks must be
+// set to rethrow. As a consequence, none of them should be used in
+// any destructor.
+
 void status_alert         (std::string const&);
 void warning_alert        (std::string const&);
 void hobsons_choice_alert (std::string const&);
 void fatal_error_alert    (std::string const&);
-// This must be called exactly once. See platform-specific implementations.
-// unused ret val--so we can assign--singleton
+
+// This function must be called exactly once. See platform-specific
+// implementations.
+//
+// TODO ?? This function's actual return value doesn't matter, but it
+// must exist because the implementation provided uses it to
+// initialize a non-local object, thus ensuring that the pointers are
+// initialized. This technique should be rethought.
+//
 bool LMI_EXPIMP set_alert_functions
     (void(*status_alert_function_pointer        )(std::string const&)
     ,void(*warning_alert_function_pointer       )(std::string const&)
