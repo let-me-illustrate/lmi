@@ -19,42 +19,37 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledgervalues.hpp,v 1.1 2005-01-14 19:47:45 chicares Exp $
+// $Id: ledgervalues.hpp,v 1.2 2005-02-12 12:59:31 chicares Exp $
 
 #ifndef ledgervalues_hpp
 #define ledgervalues_hpp
 
 #include "config.hpp"
 
-#include "ledger.hpp"
+#include <boost/scoped_ptr.hpp>
 
 #include <iosfwd>
 
 class InputParms;
+class Ledger;
 
 class IllusVal
 {
   public:
     IllusVal();
-    IllusVal(IllusVal const&);
-    IllusVal& operator=(IllusVal const&);
-    virtual ~IllusVal();
+    explicit IllusVal(Ledger*);
+    ~IllusVal();
 
-    void Init
-        (TLedger* a_CurrValues
-        ,TLedger* a_MdptValues
-        ,TLedger* a_GuarValues
-        );
-    double Run(InputParms const&) const;
+    IllusVal& operator+=(Ledger const&);
+
+    double Run(InputParms const&);
     void Print(std::ostream&) const;
-    TLedger const& GetCurrValues() const {return *CurrValues;}
-    TLedger const& GetMdptValues() const {return *MdptValues;}
-    TLedger const& GetGuarValues() const {return *GuarValues;}
+
+    Ledger const& ledger() const {return *ledger_;}
 
   private:
-    void Alloc();
-    void Copy(IllusVal const&);
-    void Destroy();
+    IllusVal(IllusVal const&);
+    IllusVal& operator=(IllusVal const&);
 
     void PrintHeader              (std::ostream& os) const;
     void PrintFooter              (std::ostream& os) const;
@@ -65,9 +60,8 @@ class IllusVal
     void PrintTabularDetailHeader (std::ostream& os) const;
     void PrintTabularDetail       (std::ostream& os) const;
 
-    TLedger* CurrValues;
-    TLedger* MdptValues;
-    TLedger* GuarValues;
+////    boost::scoped_ptr<Ledger> ledger_;
+    Ledger* ledger_;
 };
 
 #endif // ledgervalues_hpp

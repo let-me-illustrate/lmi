@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: generate_product_files.cpp,v 1.1 2005-01-14 19:47:44 chicares Exp $
+// $Id: generate_product_files.cpp,v 1.2 2005-02-12 12:59:31 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -31,7 +31,7 @@
 #include "ihs_proddata.hpp"
 #include "ihs_resetfpu.hpp"
 #include "ihs_rnddata.hpp"
-#include "ihs_tierdata.hpp"
+#include "tiered_charges.hpp"
 
 #include <iostream>
 #include <ostream>
@@ -54,7 +54,7 @@ int main()
     StreamableRoundingRules::WriteRndFiles();
     std::cout << ".rnd " << std::flush;
 
-    tiered_data::write_tier_files();
+    tiered_charges::write_tier_files();
     std::cout << ".tir " << std::flush;
 
     std::cout << "\nAll product files written." << std::endl;

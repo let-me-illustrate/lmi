@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: basic_values.hpp,v 1.2 2005-01-29 02:47:41 chicares Exp $
+// $Id: basic_values.hpp,v 1.3 2005-02-12 12:59:31 chicares Exp $
 
 #ifndef basic_values_hpp
 #define basic_values_hpp
@@ -46,6 +46,7 @@
 // we could specify what collection of objects we want, and let the compiler
 // build the class for us.
 
+class death_benefits;
 class InputParms;
 class InterestRates;
 class Loads;
@@ -53,9 +54,8 @@ class MortalityRates;
 class Outlay;
 class SurrChgRates;
 class TDatabase;
-class TDeathBfts;
 class TFundData;
-class LMI_EXPIMP tiered_data;
+class tiered_charges;
 class TIRC7702;
 class TIRC7702A;
 class TIRC7702Rates;
@@ -126,12 +126,12 @@ class LMI_EXPIMP BasicValues
     TDatabase*            Database;
     TFundData*            FundData;
     rounding_rules*       RoundingRules_;
-    tiered_data*          TierData;
+    tiered_charges*       TieredCharges_;
 
     MortalityRates*       MortalityRates_;
     InterestRates*        InterestRates_;
     Loads*                Loads_;
-    TDeathBfts*           DeathBfts;
+    death_benefits*       DeathBfts_;
     SurrChgRates*         SurrChgRates_;
     TIRC7702Rates*        IRC7702Rates;
     TScenarioParms*       Scenario;

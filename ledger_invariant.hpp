@@ -19,15 +19,15 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_ldginvar.hpp,v 1.1 2005-01-14 19:47:45 chicares Exp $
+// $Id: ledger_invariant.hpp,v 1.1 2005-02-12 12:59:31 chicares Exp $
 
-#ifndef ldginvar_hpp
-#define ldginvar_hpp
+#ifndef ledger_invariant_hpp
+#define ledger_invariant_hpp
 
 #include "config.hpp"
 
 #include "expimp.hpp"
-#include "ihs_ldgbase.hpp"
+#include "ledger_base.hpp"
 #include "xenumtypes.hpp"
 
 #include <map>
@@ -39,22 +39,23 @@
 // that don't vary by basis.
 
 class BasicValues;
-class TLedger;
+class Ledger;
 
-class LMI_EXPIMP TLedgerInvariant
+class LMI_EXPIMP LedgerInvariant
     :public LedgerBase
 {
   public:
     // Need default ctor to put this thing in a map.
-    // See comments on class TLedger's default ctor.
-    TLedgerInvariant(int len = 100);
-    TLedgerInvariant(TLedgerInvariant const&);
-    TLedgerInvariant& operator=(TLedgerInvariant const&);
-    virtual ~TLedgerInvariant();
+    // See comments on class Ledger's default ctor.
+    // TODO ?? Is that so? This doesn't appear to be in that map.
+    explicit LedgerInvariant(int len = 100);
+    LedgerInvariant(LedgerInvariant const&);
+    LedgerInvariant& operator=(LedgerInvariant const&);
+    virtual ~LedgerInvariant();
 
     void Init(BasicValues*);
 
-    TLedgerInvariant& PlusEq(TLedgerInvariant const& a_Addend);
+    LedgerInvariant& PlusEq(LedgerInvariant const& a_Addend);
 
     bool                         IsFullyInitialized()    const;
     virtual int                  GetLength()             const;
@@ -73,7 +74,7 @@ class LMI_EXPIMP TLedgerInvariant
     // No: its purpose is to push IRR calculations into formatting
     //   routines, which ought not to do any serious calculations.
     int irr_precision;
-    void CalculateIrrs(TLedger const&);
+    void CalculateIrrs(Ledger const&);
 
     void UpdateCRC(CRC& a_crc) const;
     void Spew(std::ostream& os) const;
@@ -262,7 +263,7 @@ class LMI_EXPIMP TLedgerInvariant
 
   private:
     void Alloc(int len);
-    void Copy(TLedgerInvariant const&);
+    void Copy(LedgerInvariant const&);
     void Destroy();
     void Init();
 
@@ -282,51 +283,51 @@ class LMI_EXPIMP TLedgerInvariant
     bool OffersRiders_; // TODO ?? Kludge to meet a meaningless requirement.
 };
 
-inline bool TLedgerInvariant::IsFullyInitialized() const
+inline bool LedgerInvariant::IsFullyInitialized() const
 {
     return FullyInitialized;
 }
 
-inline int TLedgerInvariant::GetLength() const
+inline int LedgerInvariant::GetLength() const
 {
     return Length;
 }
 
-inline std::vector<double> const& TLedgerInvariant::GetInforceLives() const
+inline std::vector<double> const& LedgerInvariant::GetInforceLives() const
 {
     return InforceLives;
 }
 
-inline double TLedgerInvariant::GetInitAnnLoanDueRate() const
+inline double LedgerInvariant::GetInitAnnLoanDueRate() const
 {
     return InitAnnLoanDueRate;
 }
 
-inline std::string const& TLedgerInvariant::GetStatePostalAbbrev() const
+inline std::string const& LedgerInvariant::GetStatePostalAbbrev() const
 {
     return StatePostalAbbrev;
 }
 
-inline double const& TLedgerInvariant::GetStatePremTaxLoad() const
+inline double const& LedgerInvariant::GetStatePremTaxLoad() const
 {
     return StatePremTaxLoad;
 }
 
-inline double const& TLedgerInvariant::GetStatePremTaxRate() const
+inline double const& LedgerInvariant::GetStatePremTaxRate() const
 {
     return StatePremTaxRate;
 }
 
-inline double const& TLedgerInvariant::GetDacTaxPremLoadRate() const
+inline double const& LedgerInvariant::GetDacTaxPremLoadRate() const
 {
     return DacTaxPremLoadRate;
 }
 
 // TODO ?? Kludge to meet a meaningless requirement.
-inline bool TLedgerInvariant::OffersRiders() const
+inline bool LedgerInvariant::OffersRiders() const
 {
     return OffersRiders_;
 }
 
-#endif // ldginvar_hpp
+#endif // ledger_invariant_hpp
 

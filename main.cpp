@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main.cpp,v 1.3 2005-02-03 16:01:34 chicares Exp $
+// $Id: main.cpp,v 1.4 2005-02-12 12:59:31 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -64,20 +64,77 @@ void SelfTest()
     IP.Status[0].Gender  = e_male;
     IP.Status[0].Smoking = e_nonsmoker;
     IP.Status[0].Class = e_preferred;
+    IP.EePremium.assign(IP.SpecAmt.size(), r_pmt(10000.0));
     IP.SpecAmt.assign(IP.SpecAmt.size(), r_spec_amt(1000000.0));
+    double expected_value = 0.0;
+    double observed_value = 0.0;
 
-    Timer timer;
-    double z = IV.Run(IP);
-    timer.Stop();
-    double const expected_value = 5498.99;
-    if(.005 < std::fabs(expected_value - z))
+    IP.SolveType = e_solve_none;
+    expected_value = 29206514.78;
+    IV.Run(IP);
+    observed_value = IV.ledger().GetCurrFull().AcctVal.back();
+    if(.005 < std::fabs(expected_value - observed_value))
         {
         std::ostringstream error;
         error
             << "Value should be "
-            << expected_value
+            << value_cast_ihs<std::string>(expected_value)
             << ", but is "
-            << value_cast_ihs<std::string>(z)
+            << value_cast_ihs<std::string>(observed_value)
+            << " .\n"
+            ;
+        throw std::runtime_error(error.str());
+        }
+
+    IP.SolveType = e_solve_specamt;
+    expected_value = 1827289;
+    observed_value = IV.Run(IP);
+    if(.005 < std::fabs(expected_value - observed_value))
+        {
+        std::ostringstream error;
+        error
+            << "Value should be "
+            << value_cast_ihs<std::string>(expected_value)
+            << ", but is "
+            << value_cast_ihs<std::string>(observed_value)
+            << " .\n"
+            ;
+        throw std::runtime_error(error.str());
+        }
+
+    IP.SolveType = e_solve_ee_prem;
+    expected_value = 5498.99;
+    observed_value = IV.Run(IP);
+    if(.005 < std::fabs(expected_value - observed_value))
+        {
+        std::ostringstream error;
+        error
+            << "Value should be "
+            << value_cast_ihs<std::string>(expected_value)
+            << ", but is "
+            << value_cast_ihs<std::string>(observed_value)
+            << " .\n"
+            ;
+        throw std::runtime_error(error.str());
+        }
+
+    multiple_cell_document census;
+    std::vector<IllusInputParms> input_vector = census.individual_parms();
+    input_vector.push_back(input_vector.front());
+    std::ostream dev_null_os(0);
+    RunCensus runner(dev_null_os);
+    runner(input_vector);
+
+    observed_value = runner.XXXComposite.GetLedgerInvariant().GrossPmt[0];
+    expected_value = 12819.32;
+    if(.005 < std::fabs(expected_value - observed_value))
+        {
+        std::ostringstream error;
+        error
+            << "Value should be "
+            << value_cast_ihs<std::string>(expected_value)
+            << ", but is "
+            << value_cast_ihs<std::string>(observed_value)
             << " .\n"
             ;
         throw std::runtime_error(error.str());
@@ -85,12 +142,15 @@ void SelfTest()
 
     // Set number of iterations to a power of ten that can be run in
     // five seconds, but not less than one iteration.
+    Timer timer;
+    observed_value = IV.Run(IP);
+    timer.Stop();
     int const m = static_cast<int>(std::log10(5.0 / timer.Result()));
     int const n = static_cast<int>(std::pow(10.0, std::max(0, m)));
     timer.Reset().Start();
     for(int j = 0; j < n; j++)
         {
-        z = IV.Run(IP);
+        observed_value = IV.Run(IP);
         }
     timer.Stop();
     std::cout << "    Time for " << n << " solves: " << timer.Report() << '\n';
@@ -441,8 +501,8 @@ int main(int argc, char* argv[])
         if(run_census)
             {
             std::for_each
-                (ill_names.begin()
-                ,ill_names.end()
+                (cns_names.begin()
+                ,cns_names.end()
 // TODO ?? expunge                ,RunCensusDeprecated<std::string>()
                 ,RunCensusDeprecated()
                 );

@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avmly.cpp,v 1.2 2005-02-05 03:02:41 chicares Exp $
+// $Id: ihs_avmly.cpp,v 1.3 2005-02-12 12:59:31 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -33,23 +33,23 @@
 #include "alert.hpp"
 #include "database.hpp"
 #include "dbnames.hpp"
-#include "ihs_deathbft.hpp"
+#include "death_benefits.hpp"
 #include "ihs_irc7702.hpp"
 #include "ihs_irc7702a.hpp"
-#include "ihs_ldginvar.hpp"
-#include "ihs_ldgvar.hpp"
 #include "ihs_proddata.hpp"
 #include "ihs_rnddata.hpp"
-#include "ihs_tierdata.hpp"
 #include "inputs.hpp"
 #include "inputstatus.hpp"
 #include "interest_rates.hpp"
+#include "ledger_invariant.hpp"
+#include "ledger_variant.hpp"
 #include "loads.hpp"
 #include "materially_equal.hpp"
 #include "math_functors.hpp"
 #include "mathmisc.hpp"
 #include "mortality_rates.hpp"
 #include "outlay.hpp"
+#include "tiered_charges.hpp"
 
 #include <cmath>   // std::pow()
 #include <limits>
@@ -787,8 +787,8 @@ void AccountValue::ChangeSpecAmtBy(double delta)
 //   Input->Status[0].TermAmt
 // TODO ?? Should it be a std::vector?
 // Probably this term rider deserves special treatment
-//   maybe even a class of its own (7702-integrated term)
-// Anyway, we have a place for vector values already in TLedgerVariant for now
+//   maybe even a class of its own (7702-integrated term).
+// Anyway, we have a place for vector values already in LedgerVariant for now.
         }
     TxSetDeathBft(); // Reset DB whenever SA changes.
 }
@@ -870,7 +870,7 @@ void AccountValue::TxOptChg()
 
     // It's OK to index by [Year - 1] because above we return early
     //   if 0 == Year.
-    e_dbopt const& old_option = DeathBfts->GetDBOpt()[Year - 1];
+    e_dbopt const& old_option = DeathBfts_->dbopt()[Year - 1];
 
     // Nothing to do if no option change requested
     if(YearsDBOpt == old_option)
@@ -1340,7 +1340,7 @@ void AccountValue::IncreaseSpecAmtToAvoidMec()
             // do not allow specamt strategies with increase-to-avoid.
 
 // TODO ?? TEMPORARILY SUPPRESSED FOR REGRESSION TEST            
-//            DeathBfts->SetSpecAmt(min_benefit, 0, 7);
+//            DeathBfts_->SetSpecAmt(min_benefit, 0, 7);
 
             InitializeLife(RateBasis);
             InitializeSpecAmt();
@@ -1349,8 +1349,8 @@ void AccountValue::IncreaseSpecAmtToAvoidMec()
     IRC7702->UpdateBOY7702();
     IRC7702A->UpdateBOY7702A(Year);
 
-TLedgerInvariant::Init(BasicValues* b)
-            YearsSpecAmt        = DeathBfts->GetSpecAmt()[Year];
+LedgerInvariant::Init(BasicValues* b)
+            YearsSpecAmt        = DeathBfts_->GetSpecAmt()[Year];
             ActualSpecAmt       = InvariantValues().SpecAmt[Year];
             InitializeSpecAmt()
 */
@@ -1409,7 +1409,7 @@ void AccountValue::TxSpecAmtChg()
         }
 
     LMI_ASSERT(0 < Year);
-    double const old_specamt = DeathBfts->GetSpecAmt()[Year - 1];
+    double const old_specamt = DeathBfts_->specamt()[Year - 1];
 
     // Nothing to do if no increase or decrease requested.
 // TODO ?? Minimum specified amount not completely enforced.
@@ -1942,11 +1942,11 @@ double AccountValue::GetPremLoad
             ;
         }
 //    LMI_ASSERT
-//        (   TierData->premium_tax_is_tiered(GetStateOfJurisdiction())
+//        (   TieredCharges_->premium_tax_is_tiered(GetStateOfJurisdiction())
 //        ||  materially_equal(total_load, sum_of_separate_loads)
 //        );
     if
-        (   !TierData->premium_tax_is_tiered(GetStateOfJurisdiction())
+        (   !TieredCharges_->premium_tax_is_tiered(GetStateOfJurisdiction())
         &&  !materially_equal(total_load, sum_of_separate_loads)
         )
         {
@@ -1976,11 +1976,11 @@ double AccountValue::GetPremLoad
             << " State of jurisdiction is "
             << GetStateOfJurisdiction()
             << " with tiering '"
-            << TierData->premium_tax_is_tiered(GetStateOfJurisdiction())
+            << TieredCharges_->premium_tax_is_tiered(GetStateOfJurisdiction())
             << "'; state of domicile is "
             << GetStateOfDomicile()
             << " with tiering '"
-            << TierData->premium_tax_is_tiered(GetStateOfDomicile())
+            << TieredCharges_->premium_tax_is_tiered(GetStateOfDomicile())
             << "'. Year-to-date premium-tax-load totals: "
             << YearsTotalPremTaxLoadInStateOfJurisdiction
             << " in state of juristiction and "
@@ -1999,7 +1999,7 @@ double AccountValue::GetPremTaxLoad(double payment)
     double tax_in_state_of_jurisdiction = YearsPremTaxLoadRate * payment;
     if(PremiumTaxLoadIsTieredInStateOfJurisdiction)
         {
-        tax_in_state_of_jurisdiction = TierData->tiered_premium_tax
+        tax_in_state_of_jurisdiction = TieredCharges_->tiered_premium_tax
             (GetStateOfJurisdiction()
             ,payment
             ,PolicyYearRunningTotalPremiumSubjectToPremiumTax
@@ -2013,7 +2013,7 @@ double AccountValue::GetPremTaxLoad(double payment)
         tax_in_state_of_domicile = GetDomiciliaryPremTaxRate() * payment;
         if(PremiumTaxLoadIsTieredInStateOfDomicile)
             {
-            tax_in_state_of_domicile = TierData->tiered_premium_tax
+            tax_in_state_of_domicile = TieredCharges_->tiered_premium_tax
                 (GetStateOfDomicile()
                 ,payment
                 ,PolicyYearRunningTotalPremiumSubjectToPremiumTax

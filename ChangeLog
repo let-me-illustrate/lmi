@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.7 2005-02-08 14:11:57 chicares Exp $
+// $Id: ChangeLog,v 1.8 2005-02-12 12:59:31 chicares Exp $
 
 2005-01-14
 
@@ -282,4 +282,78 @@ Write crc32 output to a separate file.
   tiername.txt       [expunged]
   tiered_charges.xpp [new file]
 Replace oddly-named source files.
+
+2005-02-12 [1070]
+
+  cgimain.cpp
+Add default catch-anything clause.
+
+  dbdict.cpp
+Add several database entities.
+
+  expected.cgi.out
+Accept changes of less than one part per million on without further
+investigation, because they are observed only on a non-production
+branch.
+
+  account_value.hpp
+  accountvalue.cpp
+  antediluvian_stubs.cpp [new file]
+  basic_values.hpp
+  basicvalues.cpp
+  calculate.hpp
+  death_benefits.cpp     [new file]
+  death_benefits.hpp     [new file]
+  deathbenefits.cpp      [expunged]
+  deathbenefits.hpp      [expunged]
+  generate_product_files.cpp
+  ihs_acctval.cpp
+  ihs_avdebug.cpp
+  ihs_avmly.cpp
+  ihs_avsolve.cpp
+  ihs_avstrtgy.cpp
+  ihs_basicval.cpp
+  ihs_deathbft.cpp       [expunged]
+  ihs_deathbft.hpp       [expunged]
+  ihs_ldgbase.cpp        [renamed to ledger_base.cpp]
+  ihs_ldgbase.hpp        [renamed to ledger_base.hpp]
+  ihs_ldginvar.cpp       [renamed to ledger_invariant.cpp]
+  ihs_ldginvar.hpp       [renamed to ledger_invariant.hpp]
+  ihs_ldgvar.cpp         [renamed to ledger_variant.cpp]
+  ihs_ldgvar.hpp         [renamed to ledger_variant.hpp]
+  ihs_ledger.cpp         [renamed to ledger.cpp]
+  ihs_ledger.hpp         [renamed to ledger.hpp]
+  ihs_mortal.cpp
+  ihs_standalone.cpp
+  ihs_tierdata.cpp       [renamed to tiered_charges.cpp]
+  ihs_tierdata.hpp       [renamed to tiered_charges.hpp]
+  ledger.cpp             [expunged old contents, then reused name]
+  ledger.hpp             [expunged old contents, then reused name]
+  ledger_base.cpp        [new file]
+  ledger_base.hpp        [new file]
+  ledger_invariant.cpp   [new file]
+  ledger_invariant.hpp   [new file]
+  ledger_variant.cpp     [new file]
+  ledger_variant.hpp     [new file]
+  ledger_xml_io.cpp
+  ledgervalues.cpp
+  ledgervalues.hpp
+  library_demo.cpp
+  loads.cpp
+  main.cpp
+  mortality_rates.cpp
+  multiple_cell_document.cpp
+  multiple_cell_document.hpp
+  objects.make
+  proprietary.cpp
+  solve.cpp
+  tiered_charges.cpp     [new file]
+  tiered_charges.hpp     [new file]
+Rename ledger classes and files. Merge production branch's ledger
+classes into the antediluvian branch. Rename tiered-charge classes and
+files. Remove some gratuitous differences between account-value class
+branches. Merge, rewrite, and rename death-benefit classes. Extend
+self test in 'main.cpp'. Improve antediluvian branch's run time: even
+though the production branch's ledger classes are slower, caching
+table values makes solves about forty percent faster.
 

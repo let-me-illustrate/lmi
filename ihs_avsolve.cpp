@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avsolve.cpp,v 1.2 2005-02-05 03:02:41 chicares Exp $
+// $Id: ihs_avsolve.cpp,v 1.3 2005-02-12 12:59:31 chicares Exp $
 
 // All iterative illustration solves are performed in this file.
 // We use Brent's algorithm because it is guaranteed to converge
@@ -36,11 +36,11 @@
 #include "account_value.hpp"
 
 #include "alert.hpp"
-#include "ihs_deathbft.hpp"
-#include "ihs_ldginvar.hpp"
-#include "ihs_ldgvar.hpp"
+#include "death_benefits.hpp"
 #include "inputs.hpp"
 #include "inputstatus.hpp"
+#include "ledger_invariant.hpp"
+#include "ledger_variant.hpp"
 #include "outlay.hpp"
 #include "zero.hpp"
 
@@ -238,7 +238,7 @@ double AccountValue::SolveTest(double a_CandidateValue)
 void AccountValue::SolveSetSpecAmt(double a_CandidateValue)
 {
 // TODO ?? Does this change the surrchg when specamt changes?
-    DeathBfts->SetSpecAmt
+    DeathBfts_->set_specamt
         (a_CandidateValue
         ,SolveBegYear
         ,SolveEndYear
@@ -286,7 +286,7 @@ double AccountValue::SolveGuarPremium()
     Outlay_->set_er_modal_premiums
         (0.0
         ,0
-        ,static_cast<int>(LedgerInvariant->EndtAge - LedgerInvariant->Age)
+        ,static_cast<int>(InvariantValues().EndtAge - InvariantValues().Age)
         );
 
     bool temp_solving       = Solving;
@@ -297,10 +297,10 @@ double AccountValue::SolveGuarPremium()
     double guar_premium = Solve
         (e_solve_type(e_solve_ee_prem)
         ,0
-        ,static_cast<int>(LedgerInvariant->EndtAge - LedgerInvariant->Age)
+        ,static_cast<int>(InvariantValues().EndtAge - InvariantValues().Age)
         ,e_solve_target(e_solve_for_endt)
         ,0
-        ,static_cast<int>(LedgerInvariant->EndtAge - LedgerInvariant->Age)
+        ,static_cast<int>(InvariantValues().EndtAge - InvariantValues().Age)
         ,e_basis(e_guarbasis)
         ,e_sep_acct_basis(e_sep_acct_full)
         );
@@ -360,7 +360,7 @@ double AccountValue::Solve
             (upper_bound
 // TODO ?? This is probably wrong. I think there are two term amounts, only
 // one of which is in Status. But I could be wrong.
-            ,DeathBfts->GetSpecAmt()[j] + Input->Status[0].TermAmt
+            ,DeathBfts_->specamt()[j] + Input->Status[0].TermAmt
             );
         }
     // TODO ?? Wait--initial premium may exceed input face, so

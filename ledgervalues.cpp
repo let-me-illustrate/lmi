@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledgervalues.cpp,v 1.2 2005-02-05 03:02:41 chicares Exp $
+// $Id: ledgervalues.cpp,v 1.3 2005-02-12 12:59:31 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -31,6 +31,9 @@
 #include "account_value.hpp"
 #include "alert.hpp"
 #include "inputs.hpp"
+#include "ledger.hpp"
+#include "ledger_invariant.hpp"
+#include "ledger_variant.hpp"
 #include "miscellany.hpp" // iso_8601_datestamp_terse
 
 #include <algorithm>      // std::max(), std::min()
@@ -38,104 +41,38 @@
 #include <ios>
 #include <ostream>
 #include <string>
+#include <utility>
 
 //============================================================================
 IllusVal::IllusVal()
+    :ledger_(0)
 {
-    Alloc();
 }
 
 //============================================================================
-IllusVal::IllusVal(IllusVal const& obj)
+IllusVal::IllusVal(Ledger* ledger)
+    :ledger_(ledger)
 {
-    Alloc();
-    Copy(obj);
-}
-
-//============================================================================
-IllusVal& IllusVal::operator=(IllusVal const& obj)
-{
-    if(this != &obj)
-        {
-        Destroy();
-        Alloc();
-        Copy(obj);
-        }
-    return *this;
 }
 
 //============================================================================
 IllusVal::~IllusVal()
 {
-    Destroy();
 }
 
 //============================================================================
-void IllusVal::Alloc()
+IllusVal& IllusVal::operator+=(Ledger const& addend)
 {
-    CurrValues = new TLedger(0);
-    MdptValues = new TLedger(0);
-    GuarValues = new TLedger(0);
+    ledger_->PlusEq(addend);
+    return *this;
 }
 
 //============================================================================
-void IllusVal::Copy(IllusVal const& obj)
+double IllusVal::Run(InputParms const& IP)
 {
-    CurrValues = obj.CurrValues;
-    MdptValues = obj.MdptValues;
-    GuarValues = obj.GuarValues;
-}
-
-//============================================================================
-void IllusVal::Destroy()
-{
-    delete CurrValues;
-    delete MdptValues;
-    delete GuarValues;
-}
-
-//============================================================================
-void IllusVal::Init
-    (TLedger* a_CurrValues
-    ,TLedger* a_MdptValues
-    ,TLedger* a_GuarValues
-    )
-{
-    *CurrValues = *a_CurrValues;
-    *MdptValues = *a_MdptValues;
-    *GuarValues = *a_GuarValues;
-}
-
-//============================================================================
-double IllusVal::Run(InputParms const& IP) const
-{
-    AccountValue* AV = new AccountValue(IP);
-    double z = AV->RunAV();
-    *CurrValues = AV->CurrValues();
-    *GuarValues = AV->GuarValues();
-    *MdptValues = AV->MdptValues();
-    delete AV;
-
-    for(int j = 0; j < CurrValues->GetLength(); j++)
-        {
-        // I realize that the assertion as coded here must always fire.
-        // I did it this way temporarily so that I could put a stop on
-        // the assertion. The extra work doesn't belong in production code.
-        // On the other hand, it affects speed very little and accuracy not at all.
-        if
-            (
-                GuarValues->GrossPmt[j] != 0.0
-            &&  GuarValues->GrossPmt[j] != CurrValues->GrossPmt[j]
-            )
-            LMI_ASSERT(GuarValues->GrossPmt[j] == CurrValues->GrossPmt[j]);
-        if
-            (
-                MdptValues->GrossPmt[j] != 0.0
-            &&  MdptValues->GrossPmt[j] != CurrValues->GrossPmt[j]
-            )
-            LMI_ASSERT(MdptValues->GrossPmt[j] == CurrValues->GrossPmt[j]);
-        }
-
+    AccountValue av(IP);
+    double z = av.RunAV();
+    ledger_ = new Ledger(av.LedgerValues());
     return z;
 }
 
@@ -190,26 +127,19 @@ void IllusVal::Print(std::ostream& os) const
 //============================================================================
 void IllusVal::PrintHeader(std::ostream& os) const
 {
+// TODO ?? Members instead:
+    LedgerInvariant const& Invar = ledger_->GetLedgerInvariant();
+
     os << center("Life Insurance Basic Illustration") << endrow;
     os << endrow;
     os << center("Prepared on " + iso_8601_datestamp_terse() + " by") << endrow;
-    os << center(CurrValues->ProducerName) << endrow;
-    os << center(CurrValues->ProducerStreet) << endrow;
-    os << center(CurrValues->ProducerCity) << endrow;
-    os << "Insured: " << CurrValues->Insured1 << endrow;
-    os << "Issue age: " << CurrValues->Age << endrow;
-    os << CurrValues->Gender << endrow;
-// TODO ?? Add these things:
-// =Gender&" "
-// &IF(Preferred=0,"Preferred","Standard")&" "
-// &IF(Smoker=0,"Smoker","")
-// &IF(Smoker=1,"Nonsmoker","")
-// &IF(Smoker=2,"Unismoke","")
-//
-//    CurrValues->Smoker
-//    CurrValues->Preferred
-//    CurrValues->RetAge
-//    CurrValues->EndtAge
+    os << center(Invar.ProducerName) << endrow;
+    os << center(Invar.ProducerStreet) << endrow;
+    os << center(Invar.ProducerCity) << endrow;
+    os << "Insured: " << Invar.Insured1 << endrow;
+    os << "Issue age: " << Invar.Age << endrow;
+    os << Invar.Gender << endrow;
+// TODO ?? Add gender, smoker, and underwriting class.
 }
 
 //============================================================================
@@ -280,6 +210,12 @@ void IllusVal::PrintKeyTerms(std::ostream& os) const
 //--+----1----+----2----+----3----+----4----+----5----+----6----+----7----+---
 void IllusVal::PrintNumericalSummary(std::ostream& os) const
 {
+// TODO ?? Members instead:
+    LedgerInvariant const& Invar = ledger_->GetLedgerInvariant();
+    LedgerVariant   const& Curr_ = ledger_->GetCurrFull();
+    LedgerVariant   const& Guar_ = ledger_->GetGuarFull();
+    LedgerVariant   const& Mdpt_ = ledger_->GetMdptFull();
+
     os << center("Numerical summary") << endrow;
     os << endrow;
     os << "                    ------------Guaranteed------------- -------------Midpoint-------------- ----------Non-guaranteed-----------" << endrow;
@@ -287,14 +223,14 @@ void IllusVal::PrintNumericalSummary(std::ostream& os) const
     os << "   Year      Outlay       Value       Value     Benefit       Value       Value     Benefit       Value       Value     Benefit" << endrow;
     os << endrow;
 
-    int summary_rows[] = {4, 9, 19, std::min(99, 69 - CurrValues->Age)};
+    int summary_rows[] = {4, 9, 19, std::min(99, 69 - static_cast<int>(Invar.Age))};
 
     for(int j = 0; j < static_cast<int>(sizeof summary_rows / sizeof(int)); j++)
         {
         int row = summary_rows[j];
         // Skip row if it doesn't exist. For instance, if issue age is
         // 85 and maturity age is 100, then there is no twentieth duration.
-        if(CurrValues->GetLength() < 1 + row)
+        if(ledger_->GetMaxLength() < 1 + row)
             {
             continue;
             }
@@ -307,19 +243,19 @@ void IllusVal::PrintNumericalSummary(std::ostream& os) const
 
         os.precision(2);
 
-        os << std::setw(12) << CurrValues->GrossPmt[row]    ;
+        os << std::setw(12) << Invar.GrossPmt[row]    ;
 
-        os << std::setw(12) << GuarValues->AcctVal[row]     ;
-        os << std::setw(12) << GuarValues->CSV[row]         ;
-        os << std::setw(12) << GuarValues->EOYDeathBft[row] ;
+        os << std::setw(12) << Guar_.AcctVal[row]     ;
+        os << std::setw(12) << Guar_.CSVNet[row]      ;
+        os << std::setw(12) << Guar_.EOYDeathBft[row] ;
 
-        os << std::setw(12) << MdptValues->AcctVal[row]     ;
-        os << std::setw(12) << MdptValues->CSV[row]         ;
-        os << std::setw(12) << MdptValues->EOYDeathBft[row] ;
+        os << std::setw(12) << Mdpt_.AcctVal[row]     ;
+        os << std::setw(12) << Mdpt_.CSVNet[row]      ;
+        os << std::setw(12) << Mdpt_.EOYDeathBft[row] ;
 
-        os << std::setw(12) << CurrValues->AcctVal[row]     ;
-        os << std::setw(12) << CurrValues->CSV[row]         ;
-        os << std::setw(12) << CurrValues->EOYDeathBft[row] ;
+        os << std::setw(12) << Curr_.AcctVal[row]     ;
+        os << std::setw(12) << Curr_.CSVNet[row]      ;
+        os << std::setw(12) << Curr_.EOYDeathBft[row] ;
 
         os << endrow;
         }
@@ -368,34 +304,39 @@ void IllusVal::PrintTabularDetailHeader(std::ostream& os) const
 //============================================================================
 void IllusVal::PrintTabularDetail(std::ostream& os) const
 {
-    for(int j = 0; j < CurrValues->GetLength(); j++)
+// TODO ?? Members instead:
+    LedgerInvariant const& Invar = ledger_->GetLedgerInvariant();
+    LedgerVariant   const& Curr_ = ledger_->GetCurrFull();
+    LedgerVariant   const& Guar_ = ledger_->GetGuarFull();
+
+    for(int j = 0; j < ledger_->GetMaxLength(); j++)
         {
         os.setf(std::ios_base::fixed, std::ios_base::floatfield);
         os.precision(0);
         os.width(7);
 
         os << std::setw( 7) << (1 + j)                    ;
-        os << std::setw(12) << (1 + j + CurrValues->Age)  ;
+        os << std::setw(12) << (1 + j + Invar.Age)  ;
 
         os.precision(2);
 
-        os << std::setw(12) << CurrValues->GrossPmt[j]    ;
-//        os << std::setw(12) << CurrValues->WD[j]          ;
-//        os << std::setw(12) << CurrValues->Loan[j]        ;
+        os << std::setw(12) << Invar.GrossPmt[j]    ;
+//        os << std::setw(12) << Invar.WD[j]          ;
+//        os << std::setw(12) << Invar.Loan[j]        ;
 //        double net_pmt =
-//                CurrValues->GrossPmt[j]
-//            -   CurrValues->WD[j]
-//            -   CurrValues->Loan[j]
+//                Invar.GrossPmt[j]
+//            -   Invar.WD[j]
+//            -   Invar.Loan[j]
 //            ;
 //        os << std::setw(12) << net_pmt                    ;
 
-        os << std::setw(12) << GuarValues->AcctVal[j]     ;
-        os << std::setw(12) << GuarValues->CSV[j]         ;
-        os << std::setw(12) << GuarValues->EOYDeathBft[j] ;
+        os << std::setw(12) << Guar_.AcctVal[j]     ;
+        os << std::setw(12) << Guar_.CSVNet[j]      ;
+        os << std::setw(12) << Guar_.EOYDeathBft[j] ;
 
-        os << std::setw(12) << CurrValues->AcctVal[j]     ;
-        os << std::setw(12) << CurrValues->CSV[j]         ;
-        os << std::setw(12) << CurrValues->EOYDeathBft[j] ;
+        os << std::setw(12) << Curr_.AcctVal[j]     ;
+        os << std::setw(12) << Curr_.CSVNet[j]      ;
+        os << std::setw(12) << Curr_.EOYDeathBft[j] ;
 
         os << endrow;
         }

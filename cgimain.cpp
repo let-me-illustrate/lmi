@@ -30,7 +30,7 @@
 // it to the life-insurance-illustrations problem domain. Any defect
 // should not reflect on Stephen F. Booth's reputation.
 
-// $Id: cgimain.cpp,v 1.2 2005-01-31 13:12:48 chicares Exp $
+// $Id: cgimain.cpp,v 1.3 2005-02-12 12:59:31 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -335,7 +335,7 @@ int main(int argc, char* argv[])
     cgicc::html::reset();    cgicc::head::reset();        cgicc::body::reset();
     cgicc::title::reset();   cgicc::h1::reset();          cgicc::h4::reset();
     cgicc::comment::reset(); cgicc::td::reset();          cgicc::tr::reset();
-    cgicc::table::reset();   cgicc::div::reset(); cgicc::p::reset();
+    cgicc::table::reset();   cgicc::div::reset();         cgicc::p::reset();
     cgicc::a::reset();       cgicc::h2::reset();          cgicc::colgroup::reset();
 
     // Output the HTTP headers for an HTML document, and the HTML 4.0 DTD info
@@ -376,6 +376,9 @@ int main(int argc, char* argv[])
     std::cout << cgicc::body() << cgicc::html() << '\n';
 
     return EXIT_SUCCESS;
+  }
+  catch(...) {
+    std::cerr << "Unknown exception;";
   }
 }
 
@@ -591,7 +594,6 @@ void ShowOutput(cgicc::Cgicc const& data)
         << " milliseconds\n"
         << "<BR>"
         ;
-
     if("" == census_data)
         {
         ShowIllusOutput(input);

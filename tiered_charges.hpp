@@ -20,7 +20,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_tierdata.hpp,v 1.1 2005-01-14 19:47:45 chicares Exp $
+// $Id: tiered_charges.hpp,v 1.1 2005-02-12 12:59:31 chicares Exp $
 
 #ifndef tierdata_hpp
 #define tierdata_hpp
@@ -30,17 +30,15 @@
 #include "expimp.hpp"
 #include "xenumtypes.hpp"
 
-#include <functional> // std::less
-#include <istream>
+#include <iosfwd>
 #include <map>
-#include <ostream>
 #include <string>
 #include <vector>
 
 class LMI_EXPIMP tiered_item_rep
 {
     friend class TierView;
-    friend class tiered_data;
+    friend class tiered_charges;
 
   public:
     tiered_item_rep();
@@ -70,7 +68,7 @@ inline std::vector<double> const& tiered_item_rep::data () const
     return data_ ;
 }
 
-class LMI_EXPIMP tiered_data
+class LMI_EXPIMP tiered_charges
 {
     friend class TierDocument;
     friend class TierView;
@@ -95,8 +93,8 @@ class LMI_EXPIMP tiered_data
         ,e_tier_last
         };
 
-    tiered_data(std::string const& filename);
-    virtual ~tiered_data();
+    tiered_charges(std::string const& filename);
+    virtual ~tiered_charges();
 
     tiered_item_rep const& tiered_item(tiered_enumerator) const;
 
@@ -113,7 +111,7 @@ class LMI_EXPIMP tiered_data
     double tiered_current_separate_account_load    (double assets) const;
     double tiered_guaranteed_separate_account_load (double assets) const;
 
-    double minimum_tiered_spread() const;
+    double minimum_tiered_spread_for_7702() const;
 
     // Tiered premium tax in certain states.
     double tiered_premium_tax
@@ -131,13 +129,7 @@ class LMI_EXPIMP tiered_data
     static void write_proprietary_tier_files();
 
   private:
-    typedef std::map
-        <tiered_enumerator
-        ,tiered_item_rep
-        ,std::less<tiered_enumerator>
-        > tier_dictionary_type;
-
-    tiered_data(); // Private, but implemented: needed by std::map.
+    tiered_charges(); // Private, but implemented: needed by std::map.
 
     tiered_item_rep& tiered_item(tiered_enumerator);
 
@@ -146,15 +138,16 @@ class LMI_EXPIMP tiered_data
     void read (std::string const& filename);
     void write(std::string const& filename) const;
 
+    typedef std::map<tiered_enumerator, tiered_item_rep> tier_dictionary_type;
     tier_dictionary_type dictionary;
 };
 
-inline tiered_item_rep const& tiered_data::tiered_item(tiered_enumerator e) const
+inline tiered_item_rep const& tiered_charges::tiered_item(tiered_enumerator e) const
 {
     return (*dictionary.find(e)).second;
 }
 
-inline tiered_item_rep& tiered_data::tiered_item(tiered_enumerator e)
+inline tiered_item_rep& tiered_charges::tiered_item(tiered_enumerator e)
 {
     return (*dictionary.find(e)).second;
 }

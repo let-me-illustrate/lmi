@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: loads.cpp,v 1.1 2005-01-14 19:47:45 chicares Exp $
+// $Id: loads.cpp,v 1.2 2005-02-12 12:59:31 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -96,5 +96,8 @@ void Loads::Init(TDatabase const& database)
             ,mean<double>()
             );
         }
+
+    premium_tax_load_.push_back(0.0);
+    dac_tax_load_    .push_back(0.0);
 }
 

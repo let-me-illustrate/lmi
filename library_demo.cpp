@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: library_demo.cpp,v 1.3 2005-02-05 03:02:41 chicares Exp $
+// $Id: library_demo.cpp,v 1.4 2005-02-12 12:59:31 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -30,8 +30,8 @@
 #include "alert.hpp"
 #include "calendar_date.hpp"
 #include "global_settings.hpp"
-#include "ihs_ledger.hpp"
 #include "inputillus.hpp"
+#include "ledger.hpp"
 #include "single_cell_document.hpp"
 #include "timer.hpp"
 
@@ -110,7 +110,7 @@ void test()
     warning() << "Calculate: " << timer.Stop().Report() << std::flush;
     timer.Reset().Start();
 
-    TLedger ledger = av.GetLedgerValues();
+    Ledger const& ledger = av.LedgerValues();
     std::ofstream ofs0("eraseme.xml", std::ios_base::out | std::ios_base::trunc);
     ledger.write(ofs0);
     warning() << "Generate and write xml output: " << timer.Stop().Report() << std::flush;

@@ -19,10 +19,10 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_ldgbase.hpp,v 1.1 2005-01-14 19:47:45 chicares Exp $
+// $Id: ledger_base.hpp,v 1.1 2005-02-12 12:59:31 chicares Exp $
 
-#ifndef ldgbase_hpp
-#define ldgbase_hpp
+#ifndef ledger_base_hpp
+#define ledger_base_hpp
 
 #include "config.hpp"
 
@@ -86,7 +86,7 @@ typedef std::map<std::string, double*, std::less<std::string> > scalar_map;
 
 class LMI_EXPIMP LedgerBase
 {
-    friend class TLedger;
+    friend class Ledger;
 
   public:
     virtual ~LedgerBase();
@@ -169,5 +169,5 @@ template<typename T> void SpewVector
     std::copy(elements.begin(), elements.end(), osi);
 }
 
-#endif
+#endif // ledger_base_hpp
 

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avstrtgy.cpp,v 1.2 2005-02-05 03:02:41 chicares Exp $
+// $Id: ihs_avstrtgy.cpp,v 1.3 2005-02-12 12:59:31 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -29,12 +29,12 @@
 #include "account_value.hpp"
 
 #include "alert.hpp"
-#include "ihs_deathbft.hpp"
-#include "ihs_ldginvar.hpp"
-#include "ihs_ldgvar.hpp"
+#include "death_benefits.hpp"
 #include "ihs_rnddata.hpp"
 #include "inputs.hpp"
 #include "inputstatus.hpp"
+#include "ledger_invariant.hpp"
+#include "ledger_variant.hpp"
 #include "mortality_rates.hpp"
 
 #include <algorithm>
@@ -80,7 +80,7 @@ double AccountValue::CalculateSpecAmtFromStrategy
             break;
         case e_sainputscalar:
             {
-            z = DeathBfts->GetSpecAmt()[actual_year];
+            z = DeathBfts_->specamt()[actual_year];
             }
             break;
         case e_sainputvector:
@@ -93,7 +93,7 @@ double AccountValue::CalculateSpecAmtFromStrategy
                 << " Specified amount set to scalar input value."
                 << LMI_FLUSH
                 ;
-            z = DeathBfts->GetSpecAmt()[actual_year];
+            z = DeathBfts_->specamt()[actual_year];
             }
             break;
         case e_samaximum:
@@ -177,7 +177,7 @@ void AccountValue::NewPerformSpecAmtStrategy()
         (int j = 0; j < Input->YearsToMaturity(); ++j)
         {
         double z = round_specamt(CalculateSpecAmtFromStrategy(j, 0));
-        DeathBfts->SetSpecAmt(z, j, 1 + j);
+        DeathBfts_->set_specamt(z, j, 1 + j);
         }
 }
 
@@ -213,8 +213,8 @@ void AccountValue::OldPerformSpecAmtStrategy()
 
     // I think we really need to do this here, because
     // DeathBenefits::SpecAmt is used downstream
-//  DeathBfts->SetSpecAmt(SA, 0, BasicValues::Length);
-    DeathBfts->SetSpecAmt(SA, 0, RetDur);
+//  DeathBfts_->set_specamt(SA, 0, BasicValues::Length);
+    DeathBfts_->set_specamt(SA, 0, RetDur);
 // TODO ?? Error if post-ret is same as pre-ret strategy.
 
     double postret_spec_amt = 0.0;
@@ -254,7 +254,7 @@ void AccountValue::OldPerformSpecAmtStrategy()
                 ;
             }
         }
-    DeathBfts->SetSpecAmt(postret_spec_amt, RetDur, BasicValues::GetLength());
+    DeathBfts_->set_specamt(postret_spec_amt, RetDur, BasicValues::GetLength());
 }
 
 //============================================================================

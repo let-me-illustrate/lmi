@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: basicvalues.cpp,v 1.1 2005-01-14 19:47:44 chicares Exp $
+// $Id: basicvalues.cpp,v 1.2 2005-02-12 12:59:31 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -31,7 +31,7 @@
 #include "alert.hpp"
 #include "database.hpp"
 #include "dbnames.hpp"
-#include "deathbenefits.hpp"
+#include "death_benefits.hpp"
 #include "inputs.hpp"
 #include "inputstatus.hpp"
 #include "interest_rates.hpp"
@@ -44,12 +44,14 @@
 #include <algorithm> // std::max()
 #include <cmath>     // std::pow()
 
-// INELEGANT !! Many member variables are initialized not in ctors,
-// but rather in common initialization functions.
-
-// TODO ?? Use a configuration file for paths instead of hardcoded directory.
+// TODO ??  Instead of this hardcoded path, use either the location
+// FHS would recommend, or a configuration file.
+//
 char const* CurrentTableFile()    {return "/lmi-data/sample";}
 char const* GuaranteedTableFile() {return "/lmi-data/qx_cso";}
+
+// INELEGANT !! Many member variables are initialized not in ctors,
+// but rather in common initialization functions.
 
 //============================================================================
 BasicValues::BasicValues()
@@ -93,7 +95,7 @@ BasicValues::~BasicValues()
     delete MortalityRates_;
     delete InterestRates_;
     delete SurrChgRates_;
-    delete DeathBfts;
+    delete DeathBfts_;
     delete Outlay_;
     delete Loads_;
 }
@@ -107,15 +109,7 @@ void BasicValues::Init()
     Length = Input->YearsToMaturity();
     IssueAge = S.IssueAge.value();
     RetAge = S.RetAge.value();
-// TODO ?? Make this an assertion instead?
-    if(RetAge < IssueAge)
-        {
-        RetAge = IssueAge;
-        warning()
-            << "Retirement age cannot precede issue age: changed to issue age."
-            << LMI_FLUSH
-            ;
-        }
+    LMI_ASSERT(IssueAge <= RetAge);
 
     Database = new TDatabase
         ("empty for now" // filename
@@ -127,6 +121,8 @@ void BasicValues::Init()
         ,Input->InsdState
         );
 
+    LedgerType = e_ledger_type(e_ill_reg);
+
     RoundingRules_ = new rounding_rules;
 
     // TODO ?? Just a dummy initialization for now.
@@ -136,7 +132,7 @@ void BasicValues::Init()
     MortalityRates_ = new MortalityRates (*this);
     InterestRates_  = new InterestRates  (*this);
     SurrChgRates_   = new SurrChgRates   (*Database);
-    DeathBfts       = new TDeathBfts     (*this);
+    DeathBfts_      = new death_benefits (*this);
     Outlay_         = new Outlay         (*this);
     Loads_          = new Loads          (*Database);
 
@@ -145,19 +141,9 @@ void BasicValues::Init()
     WDFee      = Database->Query(DB_WDFee     );
     WDFeeRate  = Database->Query(DB_WDFeeRate );
 
-// TODO ?? Better thus?
-//    SetMortality();
-//    SetInterest();
-//    Set7702();
-
-    // TODO ?? Strategies
-//    SetFace();
-//    SetPrem();
-//    SetWD();
-//    SetLoan();
-//    SetSurrChg();
-//    SetScenarios();
-    // TODO ?? tables?
+    FundData = 0;
+    TieredCharges_ = 0;
+    ProductData = 0;
 }
 
 //============================================================================
@@ -168,7 +154,7 @@ double BasicValues::InvestmentManagementFee() const
 }
 
 //============================================================================
-// TODO ?? Simply calls the target prem routine for now.
+// TODO ?? Simply calls the target-premium routine for now.
 double BasicValues::GetModalMinPrem
     (int           a_Year
     ,e_mode const& a_Mode
@@ -185,12 +171,12 @@ double BasicValues::GetModalTgtPrem
     ,double        a_SpecAmt
     ) const
 {
-    // TODO ?? table ratings, flat extras?
-    // TODO ?? WP, ADD?
+    // TODO ?? Simplistic. Ignores table ratings, flat extras, and
+    // riders. The interest rates are arbitrary, and given as repeated
+    // floating literals; they should come from the database instead.
+
     double spread = 0.0;
 
-    // TODO ?? Arbitrary interest rates just for demonstration
-    // TODO ?? Manifest constants here are repeated below
     switch(a_Mode.value())
         {
         case e_annual:
@@ -245,8 +231,9 @@ double BasicValues::GetModalTgtPrem
         );
     z *= MortalityRates_->MonthlyCoiRates(e_currbasis)[a_Year];
     z += Loads_->monthly_policy_fee(e_currbasis)[a_Year];
-//    z += ADDrate;         // TODO ?? Does this depend on month?
-//    z *= 1.0 + WPrate;    // TODO ?? Does this depend on month?
+// TODO ?? Would rider charges depend on month?
+//    z += ADDrate;
+//    z *= 1.0 + WPrate;
     z /= 1.0 - Loads_->target_premium_load(e_currbasis)[a_Year];
     z *= Annuity;
 
@@ -256,7 +243,7 @@ double BasicValues::GetModalTgtPrem
 }
 
 //============================================================================
-// Simply calls the target prem routine for now
+// Simply calls the target-specamt routine for now.
 double BasicValues::GetModalMaxSpecAmt
     (e_mode const& Mode
     ,double Pmt
@@ -271,8 +258,8 @@ double BasicValues::GetModalTgtSpecAmt
     ,double Pmt
     ) const
 {
-    // TODO ?? table ratings, flat extras?
-    // TODO ?? WP, ADD?
+    // TODO ?? Factor out the (defectively simplistic) code this
+    // shares with GetModalTgtPrem().
     double spread = 0.0;
 
     switch(Mode.value())
@@ -321,8 +308,8 @@ double BasicValues::GetModalTgtSpecAmt
     double z = Pmt;
     z /= Annuity;
     z *= 1.0 - Loads_->target_premium_load(e_currbasis)[0];
-//    z /= WPRate;  // TODO ??
-//    z -= ADDRate; // TODO ??
+//    z /= WPRate;
+//    z -= ADDRate;
     z -= Loads_->monthly_policy_fee(e_currbasis)[0];
     z /= MortalityRates_->MonthlyCoiRates(e_currbasis)[0];
     z *=
@@ -338,8 +325,15 @@ double BasicValues::GetModalTgtSpecAmt
     return round_it(z);
 }
 
+//============================================================================
 std::vector<double> const& BasicValues::SpreadFor7702() const
 {
     return SpreadFor7702_;
+}
+
+//============================================================================
+std::vector<double> const& BasicValues::GetCorridorFactor() const
+{
+    return MortalityRates_->CvatCorridorFactors();
 }
 
