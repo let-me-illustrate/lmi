@@ -17,12 +17,15 @@
 # Software Foundation, Inc., 59 Temple Place, Suite 330, Boston,
 # MA 02111-1307, USA.
 
-# Modified 2003-04-24 Gregory W. Chicares <chicares@cox.net> for
+# 2003-04-24 Gregory W. Chicares <chicares@cox.net> modified for
 # mingw gcc and released under the same terms as Graeme S. Roy's
 # original, as quoted above. Modifications are extensive and
 # pervasive. Consult the original version in
 #   mpatrol/build/windows/Makefile
 # Any defect here should not reflect on Graeme S. Roy's reputation.
+#
+# 2005-01-29 Gregory W. Chicares <chicares@cox.net> added an 'install'
+# target.
 #
 # http://savannah.nongnu.org/projects/lmi
 # email: <chicares@cox.net>
@@ -32,7 +35,7 @@
 # GNU Makefile to compile on msw with mingw gcc.
 
 
-# $Id: mpatrol-mingw-GNUmakefile,v 1.1 2005-01-30 01:01:34 chicares Exp $
+# $Id: mpatrol-mingw-GNUmakefile,v 1.2 2005-02-03 16:01:45 chicares Exp $
 
 # Definitions
 
@@ -425,3 +428,10 @@ mgauge.o: $(TOOLS)/mgauge.c $(TOOLS)/mgauge.h $(SOURCE)/mpatrol.h \
 	$(SOURCE)/config.h $(SOURCE)/target.h
 mtrace.o: $(TOOLS)/mtrace.c $(TOOLS)/mtrace.h $(SOURCE)/mpatrol.h \
 	$(SOURCE)/config.h $(SOURCE)/target.h
+
+install:
+	@mkdir --parents /usr/local/lib
+	@cp --force --preserve lib*.a /usr/local/lib
+	@mkdir --parents /usr/local/bin
+	@cp --force --preserve *.dll /usr/local/bin
+
