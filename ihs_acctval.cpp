@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_acctval.cpp,v 1.12 2005-03-29 15:08:42 chicares Exp $
+// $Id: ihs_acctval.cpp,v 1.13 2005-03-30 03:39:05 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -2012,6 +2012,29 @@ double AccountValue::GetLastCOIChargeInforce() const
 
 // TODO ?? Fix problems in GetNetCOI() before using it.
 //    return GetNetCOI() * InforceLives;
+
+// TODO ?? Temporary--erase after validation.
+if(std::string::npos != Input_->Comments.find("idiosyncrasyZ0"))
+    {
+    std::ofstream ofs
+        ("experience_rating"
+        ,std::ios_base::out | std::ios_base::ate | std::ios_base::app
+        );
+    ofs
+        << "\tYear\t"                 << std::setprecision(20) << Year
+        << "\tMonth\t"                << std::setprecision(20) << Month
+        << "\tCOI\t"                  << std::setprecision(20) << COI
+        << "\tInforceLives\t"         << std::setprecision(20) << InforceLives
+        << "\tCOI\t"                  << std::setprecision(20) << COI
+        << "\tActualCoiRate\t"        << std::setprecision(20) << ActualCoiRate
+        << "\tNAAR\t"                 << std::setprecision(20) << NAAR
+        << "\tDBReflectingCorr\t"     << std::setprecision(20) << DBReflectingCorr
+        << "\tDBDiscountRate[Year]\t" << std::setprecision(20) << DBDiscountRate[Year]
+        << "\tTotalAccountValue()\t"  << std::setprecision(20) << TotalAccountValue()
+        << "\n"
+        ;
+    }
+
     return COI * InforceLives;
 }
 
@@ -2033,6 +2056,7 @@ double AccountValue::GetIBNRContrib() const
 // Authors: GWC and JLM.
 double AccountValue::UpdateExpRatReserveBOM(double CaseExpRatMlyIntRate)
 {
+return 0.0;
     if(!Input_->UseExperienceRating)
         {
         return 0.0;
@@ -2070,6 +2094,7 @@ void AccountValue::UpdateExpRatReserveEOM
     ,double CaseMonthsClaims
     )
 {
+return;
     if
         (
            !Input_->UseExperienceRating
@@ -2103,6 +2128,7 @@ double AccountValue::UpdateExpRatReserveForPersistency
     (double a_PersistencyAdjustment
     )
 {
+return 0.0;
     if
         (
             !Input_->UseExperienceRating
@@ -2170,25 +2196,23 @@ double AccountValue::GetCurtateNetClaimsInforce()
 
 //============================================================================
 // Proxy for next year's COI charge, to be used only for experience rating.
-double AccountValue::GetInforceProjectedCoiCharge()
+double AccountValue::GetInforceProjectedCoiCharge
+    (double& this_years_coi_rate
+    ,double& this_years_part_mort_rate
+    ,double& eoy_naar
+    )
 {
-//std::ofstream ofs("experience_rating",std::ios_base::out | std::ios_base::ate | std::ios_base::app);
-std::ofstream ofs("nowhere",std::ios_base::out | std::ios_base::ate | std::ios_base::app);
-
     if(!Input_->UsePartialMort || ItLapsed || BasicValues::GetLength() <= Year)
         {
         return 0.0;
-ofs << "...early exit 0\n";
         }
     // Project zero charge if next year has no COI rate due to maturity.
     if(BasicValues::GetLength() == 1 + Year)
         {
         return 0.0;
-ofs << "...early exit 0\n";
         }
 
     LMI_ASSERT(11 == Month);
-ofs << "Year " << Year << "; Month " << Month << '\n';    
 
     TxSetDeathBft();
     TxSetTermAmt();
@@ -2198,18 +2222,11 @@ ofs << "Year " << Year << "; Month " << Month << '\n';
         ;
     this_years_terminal_naar = std::max(0.0, this_years_terminal_naar);
     double next_years_coi_rate = GetBandedCoiRates(ExpAndGABasis, ActualSpecAmt)[1 + Year];
-ofs
-  << "VariantValues().EOYDeathBft[Year] = " << VariantValues().EOYDeathBft[Year] << '\n'
-  << "VariantValues().AcctVal[Year] = " << VariantValues().AcctVal[Year] << '\n'
-  << "VariantValues().AcctVal[Year] = " << VariantValues().AcctVal[Year] << '\n'
-  << "difference = " << VariantValues().EOYDeathBft[Year] - VariantValues().AcctVal[Year] << '\n'
 
+    this_years_coi_rate = GetBandedCoiRates(ExpAndGABasis, ActualSpecAmt)[Year];
+    this_years_part_mort_rate = GetPartMortQ(Year);
+    eoy_naar = this_years_terminal_naar;
 
-  << "this_years_terminal_naar = " << this_years_terminal_naar << '\n'
-  << "next_years_coi_rate = " << next_years_coi_rate << '\n'
-  << "InforceLives = " << InforceLives << '\n'
-  << "return = " << InforceLives * this_years_terminal_naar * next_years_coi_rate << '\n'
-  ;
     return 12.0 * InforceLives * this_years_terminal_naar * next_years_coi_rate;
 }
 
@@ -2279,6 +2296,7 @@ void AccountValue::SetExpRatRfd
     ,double CaseExpRfd
     )
 {
+return;
     if
         (
           !Input_->UseExperienceRating
@@ -2325,7 +2343,7 @@ void AccountValue::SetExpRatRfd
 //============================================================================
 double AccountValue::GetExpRatReserve() const
 {
-    return ExpRatReserve * InforceLives;
+    return 0.0 * ExpRatReserve * InforceLives;
 }
 
 //============================================================================
@@ -2351,7 +2369,7 @@ double AccountValue::GetExpRatReserveNonforborne() const
 
     if(Input_->UseExperienceRating)
         {
-        return ExpRatReserve * Forbearance * InforceLives;
+        return 0.0 * ExpRatReserve * Forbearance * InforceLives;
         }
     else
         {

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: account_value.hpp,v 1.5 2005-03-29 15:08:42 chicares Exp $
+// $Id: account_value.hpp,v 1.6 2005-03-30 03:39:05 chicares Exp $
 
 #ifndef account_value_hpp
 #define account_value_hpp
@@ -182,7 +182,11 @@ class LMI_EXPIMP AccountValue
     // death before adjusting the experience fund for deaths.
     void   SetClaims();
     double GetCurtateNetClaimsInforce();
-    double GetInforceProjectedCoiCharge();
+    double GetInforceProjectedCoiCharge
+        (double& this_years_coi_rate
+        ,double& this_years_part_mort_rate
+        ,double& eoy_naar
+        );
     double GetStabResContrib();
     void SetExpRatRfd
         (double CaseYearsCOICharges
