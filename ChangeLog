@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.29 2005-03-24 15:53:54 chicares Exp $
+// $Id: ChangeLog,v 1.30 2005-03-29 15:12:01 chicares Exp $
 
 2005-01-14
 
@@ -919,7 +919,7 @@ Improve platform independence.
   wx_new.hpp
 Avoid proprietary or platform-specific terms.
 
-2005-03-24 [????]
+2005-03-24 [1411]
 
   census_view.cpp
 Make IBNR a multiple of mortality charges, not of claims.
@@ -941,4 +941,51 @@ Make IBNR a multiple of mortality charges, not of claims.
   view_ex.hpp
 Replace msw icons with pixmaps, except for the main application icon,
 which must be an '.ico' file.
+
+2005-03-25 [1411]
+
+  configurable_settings.cpp
+  lmi.xpm [new file]
+  main_cgi.cpp
+  main_wx.cpp
+  multiple_cell_document.cpp
+  single_cell_document.cpp
+Improve platform independence. Define 'USING_CURRENT_XMLWRAPP' or
+'USING_CURRENT_CGICC' to use the current versions of xmlwrapp of cgicc
+respectively, noting that neither has been tested with lmi yet.
+
+  ihs_avdebug.cpp
+  ihs_dbughdr.hpp
+  ledger_xml_io.cpp
+  ledger_variant.cpp
+  ledger_variant.hpp
+Remove some vestiges of the obsolete experience-rating method.
+
+2005-03-26 [1400]
+
+  ihs_acctval.cpp
+Remove some vestiges of the obsolete experience-rating method.
+
+  lmi.rc
+Remove references to expunged '.ico' files.
+
+  wx_checks.cpp
+Permit certain wx options with glibc. Clarify reasons for excluding
+certain graphics formats.
+
+2005-03-29 [1410]
+
+  account_value.hpp
+  census_view.cpp
+  ihs_acctval.cpp
+Experience rating refinements. Numerator of next year's k factor is
+next year's naively-projected COI charge (this year's terminal NAAR
+times next year's COI rate) instead of this year's COI charges divided
+by one plus this year's k factor. COI charges for experience rating
+are yearly totals (without monthly interest), accumulated at an annual
+interest rate, instead of a total reflecting monthly interest; while
+less exquisitely precise, this is consistent with the way claims are
+accumulated, and easier to reproduce from other available columns.
+Solves are now explicitly prevented with experience rating: they're
+inconsistent with the present parallel accumulation anyway.
 
