@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_proddata.hpp,v 1.1 2005-01-14 19:47:45 chicares Exp $
+// $Id: ihs_proddata.hpp,v 1.2 2005-04-06 23:11:32 chicares Exp $
 
 #ifndef proddata_hpp
 #define proddata_hpp
@@ -29,9 +29,8 @@
 #include "expimp.hpp"
 
 #include <string>
-#include <vector>
 
-// Filenames and other free-form offline data that varies by product
+// Filenames and other free-form offline data that vary by product.
 
 class LMI_EXPIMP TProductData
 {
@@ -41,7 +40,6 @@ class LMI_EXPIMP TProductData
   public:
     explicit TProductData(std::string const& a_Filename);
 
-    static void GetProductFilenames(std::vector<std::string>& a_Names);
     static void WritePolFiles();
     static void WriteProprietaryPolFiles();
 
