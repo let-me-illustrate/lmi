@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: alert.cpp,v 1.2 2005-01-29 02:47:41 chicares Exp $
+// $Id: alert.cpp,v 1.3 2005-02-28 12:58:01 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -27,6 +27,9 @@
 #endif // __BORLANDC__
 
 #include "alert.hpp"
+
+#include <boost/static_assert.hpp>
+#include <boost/type_traits.hpp>
 
 #include <ios>
 #include <sstream>   // std::stringbuf
@@ -81,6 +84,14 @@ bool set_alert_functions
     return true;
 }
 
+// Member function alert_buf::alert_string() provides get-reset-use
+// semantics to ensure that the std::stringbuf is reset even if an
+// exception is thrown by alert_buf::raise_alert(). Performing the
+// reset in alert_buf::sync() after calling alert_buf::raise_alert()
+// would give get-use-[throw]-reset semantics, which wouldn't work
+// correctly: in the event of an exception, the std::stringbuf would
+// not be cleared of its former contents.
+
 class alert_buf
     :public std::stringbuf
 {
@@ -98,12 +109,21 @@ class alert_buf
     int sync()
         {
         raise_alert();
-        str("");
         return 0;
+        }
+
+  protected:
+    std::string const& alert_string()
+        {
+        alert_string_ = str();
+        str("");
+        return alert_string_;
         }
 
   private:
     virtual void raise_alert() = 0;
+
+    std::string alert_string_;
 };
 
 class status_buf
@@ -111,7 +131,7 @@ class status_buf
 {
     void raise_alert()
         {
-        status_alert_function(str());
+        status_alert_function(alert_string());
         }
 };
 
@@ -120,7 +140,7 @@ class warning_buf
 {
     void raise_alert()
         {
-        warning_alert_function(str());
+        warning_alert_function(alert_string());
         }
 };
 
@@ -129,7 +149,7 @@ class hobsons_choice_buf
 {
     void raise_alert()
         {
-        hobsons_choice_alert_function(str());
+        hobsons_choice_alert_function(alert_string());
         }
 };
 
@@ -138,42 +158,46 @@ class fatal_error_buf
 {
     void raise_alert()
         {
-        fatal_error_alert_function(str());
+        fatal_error_alert_function(alert_string());
         }
 };
 
+// Exceptions must be cleared here: otherwise, any prior exception
+// would cause this function to fail when it calls exceptions().
+//
+// Both 'failbit' [27.6.2.5.3/8] and 'badbit' [27.6.2.1/3] must be
+// specified in the call to exceptions().
+//
+template<typename T>
+inline std::ostream& alert_stream()
+{
+    // Double parentheses: don't parse comma as a macro parameter separator.
+    BOOST_STATIC_ASSERT((boost::is_base_and_derived<alert_buf,T>::value));
+    static T buffer_;
+    static std::ostream stream_(&buffer_);
+    stream_.clear();
+    stream_.exceptions(std::ios_base::failbit | std::ios_base::badbit);
+    return stream_;
+}
+
 std::ostream& status()
 {
-    static status_buf buffer_;
-    static std::ostream stream_(&buffer_);
-    return stream_;
+    return alert_stream<status_buf>();
 }
 
 std::ostream& warning()
 {
-    static warning_buf buffer_;
-    static std::ostream stream_(&buffer_);
-    return stream_;
+    return alert_stream<warning_buf>();
 }
 
 std::ostream& hobsons_choice()
 {
-    static hobsons_choice_buf buffer_;
-    static std::ostream stream_(&buffer_);
-#ifndef BC_BEFORE_5_5
-    stream_.exceptions(std::ios_base::failbit | std::ios_base::badbit);
-#endif // Not old borland compiler.
-    return stream_;
+    return alert_stream<hobsons_choice_buf>();
 }
 
 std::ostream& fatal_error()
 {
-    static fatal_error_buf buffer_;
-    static std::ostream stream_(&buffer_);
-#ifndef BC_BEFORE_5_5
-    stream_.exceptions(std::ios_base::failbit | std::ios_base::badbit);
-#endif // Not old borland compiler.
-    return stream_;
+    return alert_stream<fatal_error_buf>();
 }
 
 std::string const& hobsons_prompt()
