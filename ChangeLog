@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.22 2005-03-11 04:41:59 chicares Exp $
+// $Id: ChangeLog,v 1.23 2005-03-12 04:53:29 chicares Exp $
 
 2005-01-14
 
@@ -726,4 +726,43 @@ Improve documentation.
   miscellany.hpp
   miscellany_lmi.hpp [expunged]
 Merge.
+
+2005-03-11 [1395]
+
+  GNUmakefile
+  any_member_ihs.hpp
+  calculate.hpp
+  configurable_settings.hpp
+  docmanager_ex.hpp
+  docmdichildframe_ex.hpp
+  getopt.cpp
+  global_settings.hpp
+  ihs_avsolve.cpp
+  ihs_basicval.cpp
+  ihs_commfns.hpp
+  ihs_irc7702.cpp
+  ihs_irc7702a.cpp
+  ihs_irc7702a.hpp
+  irc7702a_test.cpp
+  ncnnnpnn_test.cpp
+Fix malformed comment markers. Add test to detect them.
+
+  census_view.cpp
+  census_view.hpp
+  illustration_view.cpp
+  illustration_view.hpp
+  input_harmonization.cpp
+  main_wx.cpp
+  main_wx.hpp
+  xml_notebook.cpp
+  xml_notebook.hpp
+  xml_notebook.xrc
+Add new GUI files.
+
+  cgimain.cpp [expunged]
+  main_cgi.cpp [new file]
+Rename 'cgimain.cpp' to 'main_cgi.cpp'.
+
+  view_ex.cpp
+Change main application header.
 
