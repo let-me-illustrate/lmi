@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: transferor.cpp,v 1.1 2005-03-11 03:09:22 chicares Exp $
+// $Id: transferor.cpp,v 1.2 2005-03-19 13:22:46 chicares Exp $
 
 // Acknowledgment
 
@@ -36,6 +36,7 @@
 
 #include "transferor.hpp"
 
+#include "alert.hpp"
 #include "numeric_io_cast.hpp"
 
 #include <wx/button.h>
@@ -43,12 +44,11 @@
 #include <wx/checklst.h>
 #include <wx/choice.h>
 #include <wx/combobox.h>
+#include <wx/datectrl.h>
 #include <wx/dynarray.h>
 #include <wx/gauge.h>
 #include <wx/intl.h>
 #include <wx/listbox.h>
-#include <wx/log.h>
-#include <wx/msgdlg.h>
 #include <wx/radiobox.h>
 #include <wx/radiobut.h>
 #include <wx/scrolbar.h>
@@ -68,21 +68,22 @@ IMPLEMENT_CLASS(Transferor, wxValidator)
 
 namespace
 {
-    bool Transfer(transfer_direction, std::string&, wxButton&      );
-    bool Transfer(transfer_direction, std::string&, wxCheckBox&    );
-    bool Transfer(transfer_direction, std::string&, wxCheckListBox&);
-    bool Transfer(transfer_direction, std::string&, wxChoice&      );
-    bool Transfer(transfer_direction, std::string&, wxComboBox&    );
-    bool Transfer(transfer_direction, std::string&, wxGauge&       );
-    bool Transfer(transfer_direction, std::string&, wxListBox&     );
-    bool Transfer(transfer_direction, std::string&, wxRadioBox&    );
-    bool Transfer(transfer_direction, std::string&, wxRadioButton& );
-    bool Transfer(transfer_direction, std::string&, wxScrollBar&   );
-    bool Transfer(transfer_direction, std::string&, wxSlider&      );
-    bool Transfer(transfer_direction, std::string&, wxSpinButton&  );
-    bool Transfer(transfer_direction, std::string&, wxSpinCtrl&    );
-    bool Transfer(transfer_direction, std::string&, wxStaticText&  );
-    bool Transfer(transfer_direction, std::string&, wxTextCtrl&    );
+    bool Transfer(transfer_direction, std::string&, wxButton&        );
+    bool Transfer(transfer_direction, std::string&, wxCheckBox&      );
+    bool Transfer(transfer_direction, std::string&, wxCheckListBox&  );
+    bool Transfer(transfer_direction, std::string&, wxChoice&        );
+    bool Transfer(transfer_direction, std::string&, wxComboBox&      );
+    bool Transfer(transfer_direction, std::string&, wxGauge&         );
+    bool Transfer(transfer_direction, std::string&, wxListBox&       );
+    bool Transfer(transfer_direction, std::string&, wxRadioBox&      );
+    bool Transfer(transfer_direction, std::string&, wxRadioButton&   );
+    bool Transfer(transfer_direction, std::string&, wxScrollBar&     );
+    bool Transfer(transfer_direction, std::string&, wxSlider&        );
+    bool Transfer(transfer_direction, std::string&, wxSpinButton&    );
+    bool Transfer(transfer_direction, std::string&, wxSpinCtrl&      );
+    bool Transfer(transfer_direction, std::string&, wxStaticText&    );
+    bool Transfer(transfer_direction, std::string&, wxTextCtrl&      );
+    bool Transfer(transfer_direction, std::string&, wxDatePickerCtrl&);
 } // Unnamed namespace.
 
 Transferor::Transferor(std::string& data, std::string const& name)
@@ -128,75 +129,86 @@ bool Transferor::Validate(wxWindow*)
 //   wxComboBox     is derived from wxChoice
 // and test derived classes first.
 
-// INELEGANT !! Could boost::any be used instead of this switch on type?
+// INELEGANT !! Avoid this switch on type.
 
 bool Transferor::PerformTransfer(transfer_direction td)
 {
     if(!m_validatorWindow)
         {
-        // TODO ?? Improve this message--use alert class.
-        wxMessageBox("Validator not bound to any control.");
+        warning()
+            << "Validator for '"
+            << name()
+            << "' not bound to any control."
+            << LMI_FLUSH
+            ;
         return false;
         }
     wxWindowBase* control = m_validatorWindow;
 
-    wxButton      * button      ;
-    wxCheckBox    * checkbox    ;
-    wxCheckListBox* checklistbox;
-    wxComboBox    * combobox    ;
-    wxChoice      * choice      ;
-    wxGauge       * gauge       ;
-    wxListBox     * listbox     ;
-    wxRadioBox    * radiobox    ;
-    wxRadioButton * radiobutton ;
-    wxScrollBar   * scrollbar   ;
-    wxSlider      * slider      ;
-    wxSpinButton  * spinbutton  ;
-    wxSpinCtrl    * spinctrl    ;
-    wxStaticText  * statictext  ;
-    wxTextCtrl    * textctrl    ;
+    wxButton         * button        ;
+    wxCheckBox       * checkbox      ;
+    wxCheckListBox   * checklistbox  ;
+    wxComboBox       * combobox      ;
+    wxChoice         * choice        ;
+    wxGauge          * gauge         ;
+    wxListBox        * listbox       ;
+    wxRadioBox       * radiobox      ;
+    wxRadioButton    * radiobutton   ;
+    wxScrollBar      * scrollbar     ;
+    wxSlider         * slider        ;
+    wxSpinButton     * spinbutton    ;
+    wxSpinCtrl       * spinctrl      ;
+    wxStaticText     * statictext    ;
+    wxTextCtrl       * textctrl      ;
+    wxDatePickerCtrl * datepickerctrl;
 
-    if     (0 != (button       = dynamic_cast<wxButton      *>(control)))
-        return Transfer(td, data_,             *button      );
-    else if(0 != (checkbox     = dynamic_cast<wxCheckBox    *>(control)))
-        return Transfer(td, data_,             *checkbox    );
-    else if(0 != (checklistbox = dynamic_cast<wxCheckListBox*>(control)))
-        return Transfer(td, data_,             *checklistbox);
-    else if(0 != (combobox     = dynamic_cast<wxComboBox    *>(control)))
-        return Transfer(td, data_,             *combobox    );
-    else if(0 != (choice       = dynamic_cast<wxChoice      *>(control)))
-        return Transfer(td, data_,             *choice      );
-    else if(0 != (gauge        = dynamic_cast<wxGauge       *>(control)))
-        return Transfer(td, data_,             *gauge       );
-    else if(0 != (listbox      = dynamic_cast<wxListBox     *>(control)))
-        return Transfer(td, data_,             *listbox     );
-    else if(0 != (radiobox     = dynamic_cast<wxRadioBox    *>(control)))
-        return Transfer(td, data_,             *radiobox    );
-    else if(0 != (radiobutton  = dynamic_cast<wxRadioButton *>(control)))
-        return Transfer(td, data_,             *radiobutton );
-    else if(0 != (scrollbar    = dynamic_cast<wxScrollBar   *>(control)))
-        return Transfer(td, data_,             *scrollbar   );
-    else if(0 != (slider       = dynamic_cast<wxSlider      *>(control)))
-        return Transfer(td, data_,             *slider      );
-    else if(0 != (spinbutton   = dynamic_cast<wxSpinButton  *>(control)))
-        return Transfer(td, data_,             *spinbutton  );
-    else if(0 != (spinctrl     = dynamic_cast<wxSpinCtrl    *>(control)))
-        return Transfer(td, data_,             *spinctrl    );
-    else if(0 != (statictext   = dynamic_cast<wxStaticText  *>(control)))
-        return Transfer(td, data_,             *statictext  );
-    else if(0 != (textctrl     = dynamic_cast<wxTextCtrl    *>(control)))
-        return Transfer(td, data_,             *textctrl    );
+    if     (0 != (button         = dynamic_cast<wxButton        *>(control)))
+        return Transfer(td,   data_,             *button        );
+    else if(0 != (checkbox       = dynamic_cast<wxCheckBox      *>(control)))
+        return Transfer(td,   data_,             *checkbox      );
+    else if(0 != (checklistbox   = dynamic_cast<wxCheckListBox  *>(control)))
+        return Transfer(td,   data_,             *checklistbox  );
+    else if(0 != (combobox       = dynamic_cast<wxComboBox      *>(control)))
+        return Transfer(td,   data_,             *combobox      );
+    else if(0 != (choice         = dynamic_cast<wxChoice        *>(control)))
+        return Transfer(td,   data_,             *choice        );
+    else if(0 != (gauge          = dynamic_cast<wxGauge         *>(control)))
+        return Transfer(td,   data_,             *gauge         );
+    else if(0 != (listbox        = dynamic_cast<wxListBox       *>(control)))
+        return Transfer(td,   data_,             *listbox       );
+    else if(0 != (radiobox       = dynamic_cast<wxRadioBox      *>(control)))
+        return Transfer(td,   data_,             *radiobox      );
+    else if(0 != (radiobutton    = dynamic_cast<wxRadioButton   *>(control)))
+        return Transfer(td,   data_,             *radiobutton   );
+    else if(0 != (scrollbar      = dynamic_cast<wxScrollBar     *>(control)))
+        return Transfer(td,   data_,             *scrollbar     );
+    else if(0 != (slider         = dynamic_cast<wxSlider        *>(control)))
+        return Transfer(td,   data_,             *slider        );
+    else if(0 != (spinbutton     = dynamic_cast<wxSpinButton    *>(control)))
+        return Transfer(td,   data_,             *spinbutton    );
+    else if(0 != (spinctrl       = dynamic_cast<wxSpinCtrl      *>(control)))
+        return Transfer(td,   data_,             *spinctrl      );
+    else if(0 != (statictext     = dynamic_cast<wxStaticText    *>(control)))
+        return Transfer(td,   data_,             *statictext    );
+    else if(0 != (textctrl       = dynamic_cast<wxTextCtrl      *>(control)))
+        return Transfer(td,   data_,             *textctrl      );
+    else if(0 != (datepickerctrl = dynamic_cast<wxDatePickerCtrl*>(control)))
+        return Transfer(td,   data_,             *datepickerctrl);
     else
         {
-        // TODO ?? Improve this message--use alert class.
-        wxMessageBox(("Unrecognized control " + name()).c_str());
+        warning()
+            << "Unrecognized control '"
+            << name()
+            << "'."
+            << LMI_FLUSH
+            ;
         return false;
         }
 }
 
-// WX !! Use TransferString() with class wxControlWithItems instead
-// of its derived classes, if the library can be changed to implement
-// documented but missing wxControlWithItems::SetSelection().
+// TODO ?? Use TransferString() with class wxControlWithItems instead
+// of its derived classes, now that wx has been changed to implement
+// wxControlWithItems::SetSelection().
 
 namespace
 {
@@ -213,6 +225,11 @@ namespace
         return true;
     }
 
+    // TODO ?? Explain why this uses "Yes" and "No" instead of
+    // true and false, or change it to support bool, e.g.
+    //   control.SetValue(numeric_io_cast<bool>(data));
+    //   data = numeric_io_cast<std::string>(control.GetValue());
+    //
     template<typename T>
     bool TransferBool(transfer_direction td, std::string& data, T& control)
     {
@@ -228,14 +245,18 @@ namespace
                 }
             else
                 {
-                wxLogMessage("Boolean data is unexpectedly numeric.");
-                wxLog::FlushActive();
-                control.SetValue(numeric_io_cast<bool>(data));
+                warning()
+                    << "Boolean data is unexpectedly numeric"
+// TODO ?? Show the offending control's name (unavailable for now).                    
+//                    << " for control '" << name() << "'"
+                    << "."
+                    << LMI_FLUSH
+                    ;
+                return false;
                 }
             }
         else
             {
-// TODO ?? expunge            data = numeric_io_cast<std::string>(control.GetValue());
             data = control.GetValue() ? "Yes" : "No";
             }
         return true;
@@ -266,8 +287,15 @@ namespace
                 }
             else
                 {
-                // TODO ?? Improve this message--use alert class.
-                wxMessageBox(("String '" + data + "' not found.").c_str());
+                warning()
+                    << "String '"
+                    << data
+                    << "' not found"
+// TODO ?? Show the offending control's name (unavailable for now).
+//                    << " for control '" << name() << "'"
+                    << "."
+                    << LMI_FLUSH
+                    ;
                 return false;
                 }
             }
@@ -309,8 +337,14 @@ if(!dropped)
     {
         if(!(wxLB_SINGLE & control.GetWindowStyle()))
             {
-            // TODO ?? Name the offending control.
-            wxMessageBox("Only single-selection checklistboxes supported.");
+            warning()
+                << "CheckListBox"
+// TODO ?? Show the offending control's name (unavailable for now).
+//                << "Control '" << name() << "'"
+                << " must be constrained to a single selection."
+                << LMI_FLUSH
+                ;
+            return false;
             }
         return TransferString(td, data, control);
     }
@@ -324,8 +358,14 @@ if(!dropped)
     {
         if(!(wxCB_READONLY & control.GetWindowStyle()))
             {
-            // TODO ?? Name the offending control.
-            wxMessageBox("Only read-only comboboxes supported.");
+            warning()
+                << "ComboBox"
+// TODO ?? Show the offending control's name (unavailable for now).
+//                << "Control '" << name() << "'"
+                << " must be read only."
+                << LMI_FLUSH
+                ;
+            return false;
             }
         return TransferString(td, data, control);
     }
@@ -339,8 +379,14 @@ if(!dropped)
     {
         if(!(wxLB_SINGLE & control.GetWindowStyle()))
             {
-            // TODO ?? Name the offending control.
-            wxMessageBox("Only single-selection listboxes supported.");
+            warning()
+                << "ListBox"
+// TODO ?? Show the offending control's name (unavailable for now).
+//                << "Control '" << name() << "'"
+                << " must be constrained to a single selection."
+                << LMI_FLUSH
+                ;
+            return false;
             }
         return TransferString(td, data, control);
     }
@@ -397,6 +443,24 @@ if(!dropped)
         else
             {
             data = control.GetValue().c_str();
+            }
+        return true;
+    }
+
+    bool Transfer(transfer_direction td, std::string& data, wxDatePickerCtrl& control)
+    {
+        if(td == from_string_to_control)
+            {
+            // Remove wxDateTime's half-day noon adjustment.
+            wxDateTime jdn(numeric_io_cast<double>(data) - 0.5);
+            control.SetValue(jdn);
+            }
+        else
+            {
+            data = numeric_io_cast<std::string>
+                (static_cast<long int>
+                    (control.GetValue().GetJDN())
+                );
             }
         return true;
     }
