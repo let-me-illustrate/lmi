@@ -1,0 +1,156 @@
+<?xml version="1.0"?>
+
+<resource xmlns="http://www.wxwindows.org/wxxrc" version="2.3.0.1">
+
+<!--
+    Life insurance illustrations: wxWindows xml resources.
+
+    Copyright (C) 2003, 2004, 2005 Gregory W. Chicares.
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License version 2 as
+    published by the Free Software Foundation.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+
+    http://savannah.nongnu.org/projects/lmi
+    email: <chicares@cox.net>
+    snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
+
+    $Id: toolbar.xrc,v 1.1 2005-03-11 03:19:31 chicares Exp $
+-->
+
+<object class="wxToolBar" name="toolbar">
+    <style>wxTB_DOCKABLE</style>
+    <margins>2,2</margins>
+    <bitmapsize>20,20</bitmapsize>
+<!--
+WX !! The 'separation' and 'packing' tags seem to have no effect.
+-->
+    <separation>50</separation>
+    <packing>10</packing>
+    <object class="tool" name="wxID_NEW">
+        <tooltip>New</tooltip>
+        <bitmap>new.bmp</bitmap>
+        <longhelp>Open a new file</longhelp>
+    </object>
+    <object class="tool" name="wxID_OPEN">
+        <tooltip>Open</tooltip>
+        <bitmap>open.bmp</bitmap>
+        <longhelp>Open a file</longhelp>
+    </object>
+    <object class="tool" name="wxID_SAVE">
+        <tooltip>Save</tooltip>
+        <bitmap>save.bmp</bitmap>
+        <longhelp>Save file</longhelp>
+    </object>
+    <object class="tool" name="wxID_PRINT">
+        <tooltip>Print</tooltip>
+        <bitmap>print.bmp</bitmap>
+        <longhelp>Print</longhelp>
+    </object>
+    <object class="tool" name="edit_cell">
+        <tooltip>Edit cell</tooltip>
+        <bitmap>edit_cell.bmp</bitmap>
+        <longhelp>Edit selected cell</longhelp>
+    </object>
+    <object class="tool" name="edit_class">
+        <tooltip>Edit class defaults</tooltip>
+        <bitmap>edit_class.bmp</bitmap>
+        <longhelp>Edit selected cell's class defaults</longhelp>
+    </object>
+    <object class="tool" name="edit_case">
+        <tooltip>Edit case defaults</tooltip>
+        <bitmap>edit_case.bmp</bitmap>
+        <longhelp>Edit case defaults</longhelp>
+    </object>
+<!--
+WX !! Shouldn't the 'separator' tag work here? It's used in
+  contrib/samples/xrc/rc/toolbar.xrc
+but it seems to have no effect.
+-->
+    <separator/>
+    <object class="tool" name="run_cell">
+        <tooltip>Run cell</tooltip>
+        <bitmap>run_cell.bmp</bitmap>
+        <longhelp>Run selected cell</longhelp>
+    </object>
+<!-- TODO ?? Either implement this, or expunge it.
+    <object class="tool" name="run_class">
+        <tooltip>Run class</tooltip>
+        <bitmap>run_class.bmp</bitmap>
+        <longhelp>Run all cells in selected cell's class</longhelp>
+    </object>
+-->
+    <object class="tool" name="run_case">
+        <tooltip>Run case</tooltip>
+        <bitmap>run_case.bmp</bitmap>
+        <longhelp>Run all cells</longhelp>
+    </object>
+    <separator/>
+    <object class="tool" name="print_cell">
+        <tooltip>Print cell</tooltip>
+        <bitmap>print_cell.bmp</bitmap>
+        <longhelp>Run and print selected cell</longhelp>
+    </object>
+<!-- TODO ?? Either implement this, or expunge it.
+    <object class="tool" name="print_class">
+        <tooltip>Print class</tooltip>
+        <bitmap>print_class.bmp</bitmap>
+        <longhelp>Run and print all cells in selected cell's class</longhelp>
+    </object>
+-->
+    <object class="tool" name="print_case">
+        <tooltip>Print case</tooltip>
+        <bitmap>print_case.bmp</bitmap>
+        <longhelp>Run and print all cells</longhelp>
+    </object>
+    <object class="tool" name="print_spreadsheet">
+        <tooltip>Print case to spreadsheet</tooltip>
+        <bitmap>print_spreadsheet.bmp</bitmap>
+        <longhelp>Run and print all cells to a spreadsheet file</longhelp>
+    </object>
+    <separator/>
+    <object class="tool" name="paste_census">
+        <tooltip>Paste census</tooltip>
+        <bitmap>paste_census.bmp</bitmap>
+        <longhelp>Paste census data from clipboard</longhelp>
+    </object>
+    <object class="tool" name="add_cell">
+        <tooltip>Add cell</tooltip>
+        <bitmap>add_cell.bmp</bitmap>
+        <longhelp>Add a new cell with case default parameters</longhelp>
+    </object>
+    <object class="tool" name="delete_cells">
+        <tooltip>Delete selected cell(s)</tooltip>
+        <bitmap>delete_cells.bmp</bitmap>
+        <longhelp>Delete selected cell(s)</longhelp>
+    </object>
+    <separator/>
+    <object class="tool" name="expand_columns">
+        <tooltip>Vary column width</tooltip>
+        <bitmap>expand_columns.bmp</bitmap>
+        <longhelp>Vary each column's width to show all contents</longhelp>
+    </object>
+    <object class="tool" name="shrink_columns">
+        <tooltip>_Use fixed column widths</tooltip>
+        <bitmap>shrink_columns.bmp</bitmap>
+        <longhelp>Display all columns with the same fixed width</longhelp>
+    </object>
+    <separator/>
+    <object class="tool" name="wxID_HELP">
+        <tooltip>Help</tooltip>
+        <bitmap>help.bmp</bitmap>
+        <longhelp>Help</longhelp>
+    </object>
+</object>
+
+</resource>
+
