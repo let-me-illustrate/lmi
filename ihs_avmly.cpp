@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avmly.cpp,v 1.7 2005-03-22 03:40:18 chicares Exp $
+// $Id: ihs_avmly.cpp,v 1.8 2005-03-22 14:20:16 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -2352,7 +2352,6 @@ void AccountValue::TxSetCOI()
         double guaranteed_coi_rate = GetBandedCoiRates(e_basis(e_guarbasis), ActualSpecAmt)[Year];
         ActualCoiRate = std::min(guaranteed_coi_rate, ActualCoiRate * (1.0 + case_k_factor));
         }
-    else warning() << "COIIsDynamic: " << COIIsDynamic << "; Input_->UseExperienceRating: " << Input_->UseExperienceRating << LMI_FLUSH;
 
     COI = round_coi_charge(NAAR * ActualCoiRate);
     YearsTotalCOICharge += COI;
