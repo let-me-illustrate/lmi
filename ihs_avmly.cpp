@@ -21,14 +21,14 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avmly.cpp,v 1.1 2005-01-14 19:47:44 chicares Exp $
+// $Id: ihs_avmly.cpp,v 1.2 2005-02-05 03:02:41 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
 #   pragma hdrstop
 #endif // __BORLANDC__
 
-#include "ihs_acctval.hpp"
+#include "account_value.hpp"
 
 #include "alert.hpp"
 #include "database.hpp"
@@ -682,8 +682,8 @@ bool AccountValue::IsModalPmtDate(e_mode const& m) const
 //============================================================================
 int AccountValue::MonthsToNextModalPmtDate() const
 {
-    // TODO ?? Answer is in terms of *ee* mode only.
-    // TODO ?? Maybe it should be *er* instead.
+    // TODO ?? Answer is in terms of *ee* mode only, but it seems
+    // wrong to ignore *er* mode.
     return 1 + (11 - Month) % (12 / InvariantValues().EeMode[Year]);
 }
 
@@ -1380,7 +1380,7 @@ TLedgerInvariant::Init(BasicValues* b)
 // Ignores multiple layers of coverage: not correct for sel & ult COIs
 //   if select period restarts on increase
 // Assumes target premium rate is not affected by increases or decreases
-// Is this the right place to change target premium??
+// TODO ?? Is this the right place to change target premium?
 void AccountValue::TxSpecAmtChg()
 {
     // Illustrations allow increases and decreases only on anniversary
@@ -1394,7 +1394,7 @@ void AccountValue::TxSpecAmtChg()
 // > post-1035 exchange calculation of the seven pay will have a death benefit
 // > amount to base its calculations on.
 //
-// TODO ?? We really should find a better way. The original intention of this block
+// TODO ?? We should find a better way. The original intention of this block
 // was to return immediately without doing anything at all except on renewal
 // anniversaries, because elective spec amt changes are not allowed at the
 // issue date or in any off-anniversary month. The line added to change the
@@ -1581,8 +1581,8 @@ Update cum pmts, tax basis, DCV
 //============================================================================
 void AccountValue::TxAscertainDesiredPayment()
 {
-    // Do nothing if this is not a modal payment date
-    // TODO ?? there has to be a better criterion for early termination
+    // Do nothing if this is not a modal payment date.
+    // TODO ?? There has to be a better criterion for early termination.
     bool ee_pay_this_month  = IsModalPmtDate(InvariantValues().EeMode[Year]);
     bool er_pay_this_month  = IsModalPmtDate(InvariantValues().ErMode[Year]);
 
@@ -1594,7 +1594,7 @@ void AccountValue::TxAscertainDesiredPayment()
     //  ForceOut = 0.0;
     //  double GuidelinePremLimit = 0.0;
 
-    // Pay premium--current basis determines premium for all bases
+    // Pay premium--current basis determines premium for all bases.
 
     LMI_ASSERT(materially_equal(GrossPmts[Month], EeGrossPmts[Month] + ErGrossPmts[Month]));
 
@@ -2063,10 +2063,8 @@ double AccountValue::GetRefundableSalesLoad() const
 }
 
 //============================================================================
-// loan repayment
 void AccountValue::TxLoanRepay()
 {
-//#ifdef THIS_IS_RIGHT___NOT
     // Illustrations allow loan repayment only on anniversary
     if(0 != Month)
         {
@@ -2082,8 +2080,8 @@ void AccountValue::TxLoanRepay()
 // TODO ?? ActualLoan should be eliminated. It's used only in two functions,
 // one that takes a loan, and one that repays a loan.
 
-//  ActualLoan = RequestedLoan; // NO
-    ActualLoan = -std::min(-RequestedLoan, RegLnBal); // Max repay is debt
+    // TODO ?? This idiom seems too cute.
+    ActualLoan = -std::min(-RequestedLoan, RegLnBal); // Max repayment is debt.
 
     process_distribution(ActualLoan);
     AVRegLn  += ActualLoan;
@@ -2097,7 +2095,6 @@ void AccountValue::TxLoanRepay()
 // TODO ?? Shouldn't this be moved to FinalizeMonth()?
     InvariantValues().Loan[Year] = ActualLoan;
     // TODO ?? Do we need to change VariantValues().ExcessLoan[Year]?
-//#endif
 }
 
 //============================================================================
@@ -2598,8 +2595,8 @@ void AccountValue::TxCreditInt()
             // in renewal years, because GrossPmts is a std::vector of monthly
             // (not annual) values.
             //
-            // TODO ?? But for now this code works only for single premium paid.
-            // annually.
+            // TODO ?? But for now this code works only for single
+            // premium paid annually.
             if(0 != Year || 0 != Month)
                 {
                 LMI_ASSERT(0.0 == GrossPmts[Month]);
@@ -2929,7 +2926,7 @@ void AccountValue::TxTakeWD()
         return;
         }
 
-    // TODO ?? Maximum withdrawal-- is it gross or net?
+    // TODO ?? Maximum withdrawal--is it gross or net?
     // If maximum exceeded...limit it, rather than letting it lapse, on
     // the current basis--but on other bases, let it lapse
     NetWD = RequestedWD;
@@ -2983,7 +2980,7 @@ void AccountValue::TxTakeWD()
         // solve objective fn now not monotone; may introduce multiple roots
         // Even after the entire basis has been withdrawn, we still
         // take withdrawals if payments since have increased the basis
-        // Should RequestedWD be constrained by MaxWD and MinWD here??
+        // TODO ?? Should RequestedWD be constrained by MaxWD and MinWD here?
         if(0.0 == TaxBasis || std::min(TaxBasis, RequestedWD) < MinWD) // All loan
             {
             NetWD = 0.0;
@@ -2997,11 +2994,11 @@ void AccountValue::TxTakeWD()
             }
 // The code below switches to loans even if the basis has not yet been
 // recovered through withdrawals. Is this a good thing, or a problem
-// we should fix? TODO ??
+// we should fix? TODO ?? Investigate.
 //
 // It appears that we need to do this even when not solving
 // i.e. if Input->WDToBasisThenLoan means to take loans after WDs stop...
-// TODO ?? Wo should the next line be suppressed?
+// TODO ?? Should the next line be suppressed?
 //      if(e_solve_wd_then_loan == Input->SolveType)
 //          {
             RequestedLoan += RequestedWD - NetWD;
@@ -3465,7 +3462,7 @@ void AccountValue::TxTestLapse()
 
         // We need to set VariantValues().CSVPayable here
         // (else it would print as a negative number)
-        // TODO ?? can't this be done elsewhere?
+        // TODO ?? Can't this be done elsewhere?
         VariantValues().CSVNet[Year] = 0.0;
         }
     else
@@ -3474,7 +3471,7 @@ void AccountValue::TxTestLapse()
             {
             AVGenAcct = 0.0;
             AVSepAcct = 0.0;
-            // TODO ?? can't this be done elsewhere?
+            // TODO ?? Can't this be done elsewhere?
             VariantValues().CSVNet[Year] = 0.0;
             }
         // Logic error if unloaned AV < 0 at end of monthly processing.

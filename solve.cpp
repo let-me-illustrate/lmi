@@ -19,18 +19,19 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: solve.cpp,v 1.2 2005-01-31 13:12:48 chicares Exp $
+// $Id: solve.cpp,v 1.3 2005-02-05 03:02:41 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
 #   pragma hdrstop
 #endif // __BORLANDC__
 
-#include "accountvalue.hpp"
+#include "account_value.hpp"
 
 #include "alert.hpp"
 #include "deathbenefits.hpp"
 #include "inputs.hpp"
+#include "ledger.hpp"
 #include "outlay.hpp"
 #include "xenumtypes.hpp"
 #include "zero.hpp"
@@ -38,21 +39,22 @@
 #include <algorithm>     // std::min(), std::max()
 
 /*
-TODO ?? Restrict targetyear to Length
+TODO ?? Restrict targetyear to Length.
 
-TODO ?? Some solves happen other than in the first year; need input and calculations
+TODO ?? Some solves happen other than in the first year; need input
+and calculations.
 
-TODO ?? Multiple solves may be incompatible
+TODO ?? Multiple solves may be incompatible.
 
-TODO ?? Solve basis: curr, guar
+TODO ?? Solve basis: curr, guar.
 
-TODO ?? no lapse period
+TODO ?? no lapse period.
 */
 
 namespace
 {
     AccountValue*  That;
-    // TODO ?? use a struct for these??
+    // TODO ?? Use a struct for these?
     double         ThatSolveTargetCSV;
     e_solve_target ThatSolveTarget;
     int            ThatSolveTgtYear;
@@ -65,8 +67,16 @@ namespace
 //============================================================================
 static double SolveTest()
 {
-    That->PerformRun(ThatSolveBasis);
-    // return least of
+    // Separate-account basis hardcoded because separate account not supported.
+    e_run_basis temp;
+    set_run_basis_from_separate_bases
+        (temp
+        ,e_basis(ThatSolveBasis)
+        ,e_sep_acct_basis(e_sep_acct_full)
+        );
+    That->PerformRun(temp);
+
+    // Return least of
     //   CSV at target duration
     //   lowest negative CSV through target duration
     //   amount of loan in excess of maximum loan through target duration
@@ -77,11 +87,11 @@ static double SolveTest()
         {
         Negative = std::min
             (Negative
-            ,std::min(That->CSV[j], That->ExcessLoan[j])
+            ,std::min(That->WorkingValues().CSV[j], That->WorkingValues().ExcessLoan[j])
             );
         }
 
-    double z = That->CSV[ThatSolveTgtYear - 1];
+    double z = That->WorkingValues().CSV[ThatSolveTgtYear - 1];
     if(Negative < 0.0)
         z = std::min(z, Negative);
     // TODO ?? If SolveTgtYr within no-lapse period...
@@ -91,22 +101,23 @@ static double SolveTest()
         {
         case e_solve_for_endt:
             {
-            // We take endowment to mean for spec amt
-            switch(That->DBOpt[ThatSolveTgtYear - 1].value())
+            // We take endowment to mean for spec amt, so it's the
+            // same for options A and B.
+            switch(That->WorkingValues().DBOpt[ThatSolveTgtYear - 1].value())
                 {
                 case e_option1:
                     {
-                    y = That->SpecAmt[ThatSolveTgtYear - 1];
+                    y = That->WorkingValues().SpecAmt[ThatSolveTgtYear - 1];
                     }
                     break;
                 case e_option2:
                     {
-// same!
-                    y = That->SpecAmt[ThatSolveTgtYear - 1];
+                    y = That->WorkingValues().SpecAmt[ThatSolveTgtYear - 1];
                     }
                     break;
                 case e_rop:
                     {
+                    // TODO ?? What should be done here?
                     }
 // TODO ?? fall through...    break;
                 default:
@@ -134,7 +145,7 @@ static double SolveTest()
 //============================================================================
 inline static double SolveSpecAmt(double CandidateValue)
 {
-// TODO ?? change surrchg when SA changes?
+// TODO ?? Change surrchg when SA changes?
     That->SolveSetSpecAmt(CandidateValue, ThatSolveBegYear, ThatSolveEndYear);
     return only_set_values ? 0.0 : SolveTest();
 }
@@ -164,7 +175,7 @@ inline static double SolveWD(double CandidateValue)
 // TODO ?? Never used.
 inline static double SolveWDThenLoan(double /* CandidateValue */)
 {
-    return 0.0;    // TODO ?? stub
+    return 0.0;
 }
 
 //============================================================================
@@ -213,8 +224,9 @@ void AccountValue::SolveSetLoanThenWD
     ,int    // ThatSolveBegYear
     ,int    // ThatSolveEndYear
     )
-// TODO ?? This one needs work.
-{}
+{
+    // TODO ?? Needs an implementation.
+}
 
 //============================================================================
 double AccountValue::Solve()
@@ -225,7 +237,7 @@ double AccountValue::Solve()
     ThatSolveBasis      = Input->SolveBasis.value();
     only_set_values = !Solving;
 
-    // We mustn't solve for a target at a duration beyond the end...
+    // We mustn't solve for a target at a duration beyond the end.
     ThatSolveTgtYear = Input->SolveTgtYear.value();
     ThatSolveTgtYear = std::min(ThatSolveTgtYear, BasicValues::GetLength());
     // ... or before the beginning
@@ -236,7 +248,7 @@ double AccountValue::Solve()
 
     if(e_solve_for_endt == ThatSolveTarget.value())
         {
-        // We take endowment to mean at normal maturity
+        // We take endowment to mean at normal maturity.
         ThatSolveTgtYear = BasicValues::GetLength();
         ThatSolveEndYear = BasicValues::GetLength();
         }
@@ -251,18 +263,18 @@ double AccountValue::Solve()
         {
         case e_solve_specamt:
             {
-            // We aren't interested in negative specified amounts
+            // We aren't interested in negative specified amounts.
             LowerBound = 0.0;
-            // TODO ?? Not satisfactory
+            // TODO ?? Not satisfactory.
             UpperBound = 1000000.0 * Outlay_->ee_modal_premiums()[0];
             Decimals   = 0;
             SolveFn    = SolveSpecAmt;
-            // TODO ?? respect a min prem?
+            // TODO ?? Respect minimum premium?
             }
             break;
         case e_solve_ee_prem:
             {
-            // We aren't interested in negative premiums
+            // We aren't interested in negative premiums.
             LowerBound = 0.0;
             // If solved premium exceeds specified amount, there's a problem.
             // TODO ?? Better to use the maximum SA, not the first SA?
@@ -273,7 +285,7 @@ double AccountValue::Solve()
             break;
         case e_solve_loan:
             {
-            // We aren't interested in negative loans
+            // We aren't interested in negative loans.
             LowerBound = 0.0;
             // TODO ?? Not satisfactory.
             UpperBound = 1000000.0 * Outlay_->ee_modal_premiums()[0];
@@ -283,7 +295,7 @@ double AccountValue::Solve()
             break;
         case e_solve_wd:
             {
-            // We aren't interested in negative withdrawals
+            // We aren't interested in negative withdrawals.
             LowerBound = 0.0;
             // TODO ?? Not satisfactory.
             UpperBound = 1000000.0 * Outlay_->ee_modal_premiums()[0];

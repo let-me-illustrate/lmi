@@ -19,17 +19,17 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: library_demo.cpp,v 1.2 2005-01-29 02:47:42 chicares Exp $
+// $Id: library_demo.cpp,v 1.3 2005-02-05 03:02:41 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
 #   pragma hdrstop
 #endif // __BORLANDC__
 
+#include "account_value.hpp"
 #include "alert.hpp"
 #include "calendar_date.hpp"
 #include "global_settings.hpp"
-#include "ihs_acctval.hpp"
 #include "ihs_ledger.hpp"
 #include "inputillus.hpp"
 #include "single_cell_document.hpp"
@@ -103,7 +103,7 @@ void test()
     timer.Reset().Start();
 
     IllusInputParms input = *document.input_parameters();
-    AccountValue av(&input);
+    AccountValue av(input);
     av.SetDebugFilename("foo.debug");
     av.RunAV();
 
@@ -111,11 +111,12 @@ void test()
     timer.Reset().Start();
 
     TLedger ledger = av.GetLedgerValues();
-    std::ofstream ofs("eraseme.xml", std::ios_base::out | std::ios_base::trunc);
-    ledger.write(ofs);
+    std::ofstream ofs0("eraseme.xml", std::ios_base::out | std::ios_base::trunc);
+    ledger.write(ofs0);
     warning() << "Generate and write xml output: " << timer.Stop().Report() << std::flush;
 
-    ledger.Spew(std::cerr);
+    std::ofstream ofs1("eraseme.crc", std::ios_base::out | std::ios_base::trunc);
+    ledger.Spew(ofs1);
 }
 
 int main()
