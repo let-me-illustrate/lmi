@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mc_enum.tpp,v 1.4 2005-03-17 02:34:19 chicares Exp $
+// $Id: mc_enum.tpp,v 1.5 2005-04-06 23:17:24 chicares Exp $
 
 #include "config.hpp"
 
@@ -158,8 +158,27 @@ std::size_t mc_enum<T,n,e,c>::cardinality() const
 }
 
 template<typename T, std::size_t n, T const (&e)[n], char const*const (&c)[n]>
+std::string mc_enum<T,n,e,c>::str(int j) const
+{
+    return c[j];
+}
+
+template<typename T, std::size_t n, T const (&e)[n], char const*const (&c)[n]>
+std::string mc_enum<T,n,e,c>::str() const
+{
+    return c[ordinal()];
+}
+
+template<typename T, std::size_t n, T const (&e)[n], char const*const (&c)[n]>
+T mc_enum<T,n,e,c>::value() const
+{
+    return value_;
+}
+
+template<typename T, std::size_t n, T const (&e)[n], char const*const (&c)[n]>
 std::size_t mc_enum<T,n,e,c>::ordinal() const
 {
+// TODO ?? Shouldn't this be ptrdiff_t?
     std::size_t i = std::find(e, e + n, value_) - e;
     if(i == n)
         {
@@ -177,20 +196,9 @@ std::size_t mc_enum<T,n,e,c>::ordinal() const
 }
 
 template<typename T, std::size_t n, T const (&e)[n], char const*const (&c)[n]>
-std::string mc_enum<T,n,e,c>::str(int j) const
+std::size_t mc_enum<T,n,e,c>::ordinal(std::string const& s) const
 {
-    return c[j];
-}
-
-template<typename T, std::size_t n, T const (&e)[n], char const*const (&c)[n]>
-T mc_enum<T,n,e,c>::value() const
-{
-    return value_;
-}
-
-template<typename T, std::size_t n, T const (&e)[n], char const*const (&c)[n]>
-std::size_t mc_enum<T,n,e,c>::ordinal(std::string const& s)
-{
+// TODO ?? Shouldn't this be ptrdiff_t?
     std::size_t v = std::find(c, c + n, s) - c;
     if(v == n)
         {
@@ -205,11 +213,5 @@ std::size_t mc_enum<T,n,e,c>::ordinal(std::string const& s)
         throw std::runtime_error(oss.str());
         }
     return v;
-}
-
-template<typename T, std::size_t n, T const (&e)[n], char const*const (&c)[n]>
-std::string mc_enum<T,n,e,c>::str() const
-{
-    return c[ordinal()];
 }
 
