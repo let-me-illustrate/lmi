@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.13 2005-02-17 05:00:11 chicares Exp $
+// $Id: ChangeLog,v 1.14 2005-02-18 01:09:22 chicares Exp $
 
 2005-01-14
 
@@ -455,4 +455,52 @@ Use smart instead of raw pointers to hold resources in another class,
 eliminating hand-written special member functions as above. This
 change makes the antediluvian command-line test run twelve percent
 faster.
+
+2005-02-17 [1059]
+
+  ledger.hpp
+Improve documentation.
+
+  mpatrol_patch_test.cpp
+  objects.make
+Demonstrate the purpose of a patch submitted to mpatrol, and verify
+that it has been applied.
+
+  cgicc-patch-gwc-20050217
+Workaround to make cgicc-3.1.4 work with the free, gcc-based MinGW
+toolchain on the msw platform. Oddly enough, this GNU package appears
+to support that platform only with non-free tools, which lmi users
+must not be required to use; the same seems to be true even of the
+current release, which however seems even more difficult to compile
+with the MinGW toolchain. This casual workaround is not of sufficient
+quality to propose as a patch to the maintainer.
+
+  xmlwrapp-patch-gwc-20050217
+Fix some oversights and frank errors in xmlwrapp-0.2.0 . It would seem
+pointless to submit this patch to the maintainer because several later
+versions have been released. It will become obsolete once a later
+version of xmlwrapp has been tested.
+
+  msw_common.make
+  msw_generic.make
+  workhorse.make
+Expect to find third-party libraries where the File Hierarchy Standard
+would suggest, in /usr/local . On posix systems like GNU/Linux, this
+should just work. For msw, it encourages users to adopt a rational
+file hierarchy.
+
+  workhorse.make
+Add a separate build directory for gprof.
+
+  spew_touchstone
+  workhorse.make
+Add a test of production-branch account values.
+
+  workhorse.make
+Strengthen warning $(CFLAGS) for unit tests.
+
+  GNUmakefile
+Prevent 'check_conformity' target from complaining that patches and
+testing touchstones don't follow source-code conventions: they
+shouldn't.
 
