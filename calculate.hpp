@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: calculate.hpp,v 1.2 2005-02-12 12:59:31 chicares Exp $
+// $Id: calculate.hpp,v 1.3 2005-03-02 03:33:22 chicares Exp $
 
 #ifndef calculate_hpp
 #define calculate_hpp
@@ -98,7 +98,7 @@ struct RunIllustrationFromFile
             }
         single_cell_document doc;
         is >> doc;
-        IllusInputParms input(*doc.input_data);
+        IllusInputParms input(doc.input_data());
         time_for_input += timer.Stop().Result();
         RunIllustration::operator()(input);
         }
