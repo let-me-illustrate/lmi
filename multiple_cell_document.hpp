@@ -19,24 +19,23 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: multiple_cell_document.hpp,v 1.2 2005-02-12 12:59:31 chicares Exp $
+// $Id: multiple_cell_document.hpp,v 1.3 2005-02-13 23:17:18 chicares Exp $
 
 #ifndef multiple_cell_document_hpp
 #define multiple_cell_document_hpp
 
 #include "config.hpp"
 
-#ifndef BC_BEFORE_5_5
-    class IllusInputParms;
-#else
-// COMPILER !! bc++5.02 requires class definition for std::vector<class>.
-#   include "inputillus.hpp"
-#endif // old borland compiler
+#include "obstruct_slicing.hpp"
+
+#include <boost/utility.hpp>
 
 #include <istream>
 #include <ostream>
 #include <string>
 #include <vector>
+
+class IllusInputParms;
 
 // XMLWRAPP !! Recommend an xmlwrapp_fwd header to Peter. It might
 // contain all of the following (we don't use them all here):
@@ -49,6 +48,8 @@ namespace xml
 }
 
 class multiple_cell_document
+    :private boost::noncopyable
+    ,virtual private obstruct_slicing<multiple_cell_document>
 {
 // TODO ?? Too many long-distance friendships.
     friend class CensusDocument;
@@ -59,7 +60,7 @@ class multiple_cell_document
   public:
     multiple_cell_document();
     multiple_cell_document(std::string const& filename);
-    virtual ~multiple_cell_document();
+    ~multiple_cell_document();
 
     std::vector<IllusInputParms> const& individual_parms() const;
 

@@ -20,7 +20,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: tiered_charges.hpp,v 1.1 2005-02-12 12:59:31 chicares Exp $
+// $Id: tiered_charges.hpp,v 1.2 2005-02-13 23:17:18 chicares Exp $
 
 #ifndef tierdata_hpp
 #define tierdata_hpp
@@ -28,6 +28,7 @@
 #include "config.hpp"
 
 #include "expimp.hpp"
+#include "obstruct_slicing.hpp"
 #include "xenumtypes.hpp"
 
 #include <iosfwd>
@@ -35,7 +36,10 @@
 #include <string>
 #include <vector>
 
+// Implicitly-declared special member functions do the right thing.
+
 class LMI_EXPIMP tiered_item_rep
+    :virtual private obstruct_slicing<tiered_item_rep>
 {
     friend class TierView;
     friend class tiered_charges;
@@ -46,6 +50,7 @@ class LMI_EXPIMP tiered_item_rep
         (std::vector<double> const& bands
         ,std::vector<double> const& data
         );
+    ~tiered_item_rep();
 
     std::vector<double> const& bands() const;
     std::vector<double> const& data () const;
@@ -68,7 +73,10 @@ inline std::vector<double> const& tiered_item_rep::data () const
     return data_ ;
 }
 
+// Implicitly-declared special member functions do the right thing.
+
 class LMI_EXPIMP tiered_charges
+    :virtual private obstruct_slicing<tiered_charges>
 {
     friend class TierDocument;
     friend class TierView;
@@ -94,7 +102,7 @@ class LMI_EXPIMP tiered_charges
         };
 
     tiered_charges(std::string const& filename);
-    virtual ~tiered_charges();
+    ~tiered_charges();
 
     tiered_item_rep const& tiered_item(tiered_enumerator) const;
 
