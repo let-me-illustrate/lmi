@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger.cpp,v 1.2 2005-02-12 12:59:31 chicares Exp $
+// $Id: ledger.cpp,v 1.3 2005-02-17 05:00:11 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -45,50 +45,15 @@ Ledger::Ledger
     :is_composite_         (a_IsComposite)
     ,composite_lapse_year_ (0.0)
     ,ledger_type_          (a_LedgerType)
+    ,ledger_map_           (new ledger_map_holder)
+    ,ledger_invariant_     (new LedgerInvariant)
 {
-    ledger_map_ = new ledger_map_holder;
-    ledger_invariant_ = new LedgerInvariant;
     SetRunBases(a_Length);
 }
 
-// TODO ?? Obviate this with scoped_ptr.
-//============================================================================
-Ledger::Ledger(Ledger const& z)
-    :streamable()
-{
-    ledger_map_ = new ledger_map_holder;
-    ledger_invariant_ = new LedgerInvariant;
-
-    is_composite_         = z.is_composite_        ;
-    composite_lapse_year_ = z.composite_lapse_year_;
-    ledger_type_          = z.ledger_type_         ;
-    *ledger_map_          = *z.ledger_map_         ;
-    *ledger_invariant_    = *z.ledger_invariant_   ;
-}
-
-// TODO ?? Obviate this with scoped_ptr.
-//============================================================================
-Ledger& Ledger::operator=(Ledger const& z)
-{
-    if(&z == this)
-        {
-        return *this;
-        }
-
-    is_composite_         = z.is_composite_        ;
-    composite_lapse_year_ = z.composite_lapse_year_;
-    ledger_type_          = z.ledger_type_         ;
-    *ledger_map_          = *z.ledger_map_         ;
-    *ledger_invariant_    = *z.ledger_invariant_   ;
-    return *this;
-}
-
-// TODO ?? Obviate this with scoped_ptr.
 //============================================================================
 Ledger::~Ledger()
 {
-    delete ledger_invariant_;
-    delete ledger_map_;
 }
 
 //============================================================================
