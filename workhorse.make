@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: workhorse.make,v 1.4 2005-02-17 23:27:21 chicares Exp $
+# $Id: workhorse.make,v 1.5 2005-02-17 23:31:24 chicares Exp $
 
 ###############################################################################
 
@@ -219,8 +219,14 @@ ifeq (mpatrol,$(findstring mpatrol,$(build_type)))
   optimization_flag := -O0
   MPATROL_LIBS := -lmpatrol -lbfd -liberty $(platform_mpatrol_libraries)
 else
-  optimization_flag := -O2
-  MPATROL_LIBS :=
+  ifeq (gprof,$(findstring gprof,$(build_type)))
+    optimization_flag := -O0
+    gprof_flag := -pg
+    MPATROL_LIBS :=
+  else
+    optimization_flag := -O2
+    MPATROL_LIBS :=
+  endif
 endif
 
 ################################################################################
@@ -243,10 +249,13 @@ LIBXML2_LIBS := \
 # with it expects stabs format.
 
 CFLAGS = \
-  -g $(optimization_flag) \
+  -g $(optimization_flag) $(gprof_flag) \
 
 CXXFLAGS = \
-  -g $(optimization_flag) \
+  -g $(optimization_flag) $(gprof_flag) \
+
+LDFLAGS = \
+  $(gprof_flag) \
 
 # INELEGANT !! Define BOOST_DEPRECATED until code that uses the
 # deprecated boost::bind library is rewritten.
