@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: config.hpp,v 1.2 2005-01-29 02:47:41 chicares Exp $
+// $Id: config.hpp,v 1.3 2005-03-23 15:32:29 chicares Exp $
 
 // Configuration header for compiler quirks. Include at the beginning of
 // every .hpp file (and nowhere else).
@@ -40,16 +40,25 @@ namespace fs = boost::filesystem;
 // which you can test subsequently."
 //
 // I define macro LMI_POSIX not to avoid saying "POSIX", but because
-// someone might point out a better way to detect POSIX, and a
-// macro defined in only one place can easily be modified.
+// someone might point out a better way to detect POSIX, and a macro
+// defined in only one place can easily be modified. There seems to be
+// no direct way to detect POSIX, though, so I look for common macros
+// that regrettably use four characters that could be taken as naming
+// name a non-free operating system.
 
-#if defined __POSIX_SOURCE // Detected POSIX.
+#if defined unix || defined __unix__ || defined __unix // Detected POSIX.
 #   define LMI_POSIX
 #elif defined __WIN32__    // Detected msw.
 #   define LMI_MSW
-#else  // Unknown platform.
-#   error "Unknown platform. Consider contributing support."
-#endif // Unknown platform.
+#else  // Unknown OS.
+#   error "Unknown operating system. Consider contributing support."
+#endif // Unknown OS.
+
+#if defined _X86_ || defined i386 || defined __i386
+#   define LMI_X86
+#else  // Unknown hardware.
+#   error "Unknown hardware. Consider contributing support."
+#endif // Unknown hardware.
 
 // INELEGANT !! Either the foregoing belongs in 'config_all.hpp',
 // or 'config_all.hpp' should not exist.

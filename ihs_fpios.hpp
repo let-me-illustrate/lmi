@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_fpios.hpp,v 1.1 2005-01-14 19:47:45 chicares Exp $
+// $Id: ihs_fpios.hpp,v 1.2 2005-03-23 15:32:29 chicares Exp $
 
 // This is a derived work based on Joshua Rowe's
 //   "Really cool persistent object stream library"
@@ -52,7 +52,11 @@
 #include "expimp.hpp"
 
 #include <fcntl.h>
-#include <io.h>
+#ifdef LMI_MSW
+#   include <io.h>
+#elif defined(LMI_POSIX)
+#   include <sys/types.h>
+#endif // LMI_ platform
 #include <sys/stat.h>
 
 namespace JOSHUA_ROWE_PERSISTENT_STREAMS

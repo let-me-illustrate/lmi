@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xml_notebook.hpp,v 1.2 2005-03-17 02:34:19 chicares Exp $
+// $Id: xml_notebook.hpp,v 1.3 2005-03-23 15:34:21 chicares Exp $
 
 #ifndef xml_notebook_hpp
 #define xml_notebook_hpp
@@ -129,7 +129,7 @@ class XmlNotebook
     // that function be virtual in the base class? Should a different
     // name be used here?
     void OnOK                    (wxCommandEvent&   );
-    
+
     void OnPageChanged           (wxNotebookEvent  &);
     void OnPageChanging          (wxNotebookEvent  &);
     void OnRefocusInvalidControl (wxCommandEvent   &);

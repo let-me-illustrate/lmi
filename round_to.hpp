@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: round_to.hpp,v 1.2 2005-01-31 13:12:48 chicares Exp $
+// $Id: round_to.hpp,v 1.3 2005-03-23 15:32:29 chicares Exp $
 
 #ifndef round_to_hpp
 #define round_to_hpp
@@ -240,7 +240,7 @@ inline RealType perform_rint(RealType r)
     return max_prec_floor(r);
 }
 
-#elif defined __GNUC__ && defined _X86_
+#elif defined __GNUC__ && defined LMI_X86
 
 // Profiling suggests that inlining this template function makes a
 // realistic application that performs a lot of rounding run about
@@ -296,7 +296,7 @@ long double perform_rint(long double)
 }
 #pragma warn .rvl
 
-#else // neither (__GNUC__ && _X86_) nor __BORLANDC__
+#else // neither (__GNUC__ && LMI_X86) nor __BORLANDC__
 
 // The round_X functions below work with any real_type-to-integer_type
 // Compilers that provide rint() may have optimized it (or you can
@@ -317,7 +317,7 @@ inline RealType perform_rint(RealType r)
 #endif // not defined RINT_AVAILABLE
 }
 
-#endif // neither (__GNUC__ && _X86_) nor __BORLANDC__
+#endif // neither (__GNUC__ && LMI_X86) nor __BORLANDC__
 
 // Auxiliary rounding functions: one for each supported rounding style.
 // Naive implementations for type double are given in comments.

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_rnddata.cpp,v 1.1 2005-01-14 19:47:45 chicares Exp $
+// $Id: ihs_rnddata.cpp,v 1.2 2005-03-23 15:32:29 chicares Exp $
 
 // Rounding rules for a policy form
 
@@ -113,8 +113,8 @@ void StreamableRoundingRules::Read(std::string const& a_Filename)
     is >> round_surrender_charge_;
     is >> round_irr_;
 
-    bool OK = is.good();
-    if(!OK)
+    bool okay = is.good();
+    if(!okay)
         {
         hobsons_choice()
             << "Unexpected end of rounding file '"
@@ -125,8 +125,8 @@ void StreamableRoundingRules::Read(std::string const& a_Filename)
         }
     std::string dummy;
     is >> dummy;
-    OK = is.eof();
-    if(!OK)
+    okay = is.eof();
+    if(!okay)
         {
         hobsons_choice()
             << "Data past expected end of rounding file '"

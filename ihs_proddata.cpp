@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_proddata.cpp,v 1.3 2005-02-28 12:58:27 chicares Exp $
+// $Id: ihs_proddata.cpp,v 1.4 2005-03-23 15:32:29 chicares Exp $
 
 // This class contains names of files containing a product's tables as well
 // as strings that are the same for all instances of that product.
@@ -50,8 +50,6 @@
 #include <algorithm>
 #include <cctype>
 #include <cstring>
-#include <dir.h>
-#include <dos.h>
 #include <fstream>
 #include <string>
 
@@ -128,8 +126,8 @@ void TProductData::Read(std::string const& a_Filename)
     std::getline(is, NoLapseProvisionName,   '\n');
     std::getline(is, InterestDisclaimer,     '\n');
 
-    bool OK = is.good();
-    if(!OK)
+    bool okay = is.good();
+    if(!okay)
         {
         fatal_error()
             << "Unexpected end of product data file '"
@@ -140,8 +138,8 @@ void TProductData::Read(std::string const& a_Filename)
         }
     std::string dummy;
     is >> dummy;
-    OK = is.eof();
-    if(!OK)
+    okay = is.eof();
+    if(!okay)
         {
         fatal_error()
             << "Data past expected end of product data file '"
