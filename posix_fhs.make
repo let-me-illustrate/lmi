@@ -20,7 +20,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: posix_fhs.make,v 1.1 2005-01-28 01:34:43 chicares Exp $
+# $Id: posix_fhs.make,v 1.2 2005-03-18 00:17:06 chicares Exp $
 
 ################################################################################
 
@@ -31,5 +31,6 @@ SHREXT := .so
 platform_libxml2_libraries = \
   -lxml2 \
 
-# On this platform, everything should just work.
+platform_wx_libraries := \
+  -lwx_new -lwx25d \
 
