@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: account_value.hpp,v 1.6 2005-03-30 03:39:05 chicares Exp $
+// $Id: account_value.hpp,v 1.7 2005-03-30 19:29:24 chicares Exp $
 
 #ifndef account_value_hpp
 #define account_value_hpp
@@ -186,6 +186,10 @@ class LMI_EXPIMP AccountValue
         (double& this_years_coi_rate
         ,double& this_years_part_mort_rate
         ,double& eoy_naar
+        );
+    void ApportionNetMortalityReserve
+        (double case_net_mortality_reserve
+        ,double case_years_net_mortchgs
         );
     double GetStabResContrib();
     void SetExpRatRfd
@@ -633,12 +637,13 @@ class LMI_EXPIMP AccountValue
     double  YearsTotalAcctValLoadBOM;
     double  YearsTotalAcctValLoadAMD;
 
-    // for experience rating
+    // For experience rating.
     double  YearsTotalNetCOIs;
     double  ExpRatReserve;
     double  ExpRatStabReserve;
     double  ExpRatIBNRReserve;
     double  ExpRatRfd;
+    double  apportioned_net_mortality_reserve;
 
     double  CumulativeSalesLoad;
     bool    FirstYearPremiumExceedsRetaliationLimit;
