@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: census_view.cpp,v 1.5 2005-03-24 15:53:32 chicares Exp $
+// $Id: census_view.cpp,v 1.6 2005-03-29 15:08:42 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -1254,7 +1254,6 @@ already_reported_error = false;
         int j = 0;
         int first_cell_inforce_year  = value_cast<int>((*cell_parms().begin())["InforceYear"].str());
         int first_cell_inforce_month = value_cast<int>((*cell_parms().begin())["InforceMonth"].str());
-        bool inforce_durations_differ = false;
         AVS.reserve(cell_parms().size());
         for(ip = cell_parms().begin(); ip != cell_parms().end(); ++ip, ++j)
             {
@@ -1275,13 +1274,23 @@ convert_to_ihs(Parms, *ip);
             AVS.push_back(AV);
 
             if
-                (   !global_settings::instance().ash_nazg
-                &&  (   first_cell_inforce_year  != value_cast<int>((*ip)["InforceYear"].str())
-                    ||  first_cell_inforce_month != value_cast<int>((*ip)["InforceMonth"].str())
-                    )
+                (   first_cell_inforce_year  != value_cast<int>((*ip)["InforceYear"].str())
+                ||  first_cell_inforce_month != value_cast<int>((*ip)["InforceMonth"].str())
                 )
                 {
-                inforce_durations_differ = true;
+                fatal_error()
+                    << "Running census by month untested for inforce"
+                    << " with inforce duration varying across cells."
+                    << LMI_FLUSH
+                    ;
+                }
+
+            if("SolveNone" != (*ip)["SolveType"].str())
+                {
+                fatal_error()
+                    << "Running census by month: solves not permitted."
+                    << LMI_FLUSH
+                    ;
                 }
 
             progress_message.str("");
@@ -1294,14 +1303,6 @@ convert_to_ihs(Parms, *ip);
                 {
                 break;
                 }
-            }
-        if(inforce_durations_differ)
-            {
-            hobsons_choice()
-                << "Running census by month untested for inforce"
-                << " with inforce duration varying across cells."
-                << LMI_FLUSH
-                ;
             }
         }
 //    catch([various exception types])
@@ -1357,7 +1358,7 @@ convert_to_ihs(ihs_input0, cell_parms()[0]);
         );
     ofs
         << '\t' << "year"
-        << '\t' << "1+i(12)/12"
+        << '\t' << "1+i"
         << '\t' << "inforce"
         << '\t' << "coi"
         << '\t' << "cum_coi"
@@ -1365,6 +1366,7 @@ convert_to_ihs(ihs_input0, cell_parms()[0]);
         << '\t' << "cum_claims"
         << '\t' << "ibnr_mos"
         << '\t' << "ibnr"
+        << '\t' << "proxy_coi"
         << '\t' << "k"
         << '\n'
         ;
@@ -1451,15 +1453,15 @@ restart:
             {
             double case_years_net_claims = 0.0;
             double case_years_net_mortchgs = 0.0;
+            double projected_net_mortchgs  = 0.0;
 
             double CaseYearsCOICharges = 0.0;
             double CaseYearsIBNR = 0.0;
 
             double ExpRatMlyInt = 0.0;
-            double experience_reserve_monthly_u =
-                1.0 + i_upper_12_over_12_from_i<double>()
-                    (experience_reserve_rate[year]
-                    );
+            double experience_reserve_annual_u = 1.0 + experience_reserve_rate[year];
+
+            double current_mortchg = 0.0;
 
             // Process one month at a time for all cells.
             for(int month = 0; month < 12; ++month)
@@ -1474,7 +1476,6 @@ restart:
 {
 ////std::ofstream ofs("experience_rating", std::ios_base::out | std::ios_base::ate | std::ios_base::app);
                 // Process transactions through monthly deduction.
-                double current_mortchg = 0.0;
                 for(i = AVS.begin(); i != AVS.end(); ++i)
                     {
                     (*i)->Year = year;
@@ -1492,12 +1493,6 @@ restart:
 ////ofs << current_mortchg << " = mortchg" << std::endl;
                     }
 ////ofs << current_mortchg << " = total mortchg" << std::endl;
-
-                case_accum_net_mortchgs *= experience_reserve_monthly_u;
-                case_accum_net_mortchgs += current_mortchg;
-
-                case_years_net_mortchgs *= experience_reserve_monthly_u;
-                case_years_net_mortchgs += current_mortchg;
 
 ////ofs << "Month " << month << "ytd mortchg: " << case_years_net_mortchgs;
 }
@@ -1554,14 +1549,21 @@ restart:
 // acctval.cpp, but not here.
                         current_claims += (*i)->GetCurtateNetClaimsInforce();
                         }
+
+                    case_accum_net_claims *= experience_reserve_annual_u;
+                    case_accum_net_claims += current_claims;
+
+//                    case_years_net_claims *= experience_reserve_annual_u;
+                    case_years_net_claims += current_claims;
+
+                    case_accum_net_mortchgs *= experience_reserve_annual_u;
+                    case_accum_net_mortchgs += current_mortchg;
+
+//                    case_years_net_mortchgs *= experience_reserve_annual_u;
+                    case_years_net_mortchgs += current_mortchg;
+
                     CaseExpRatReserve -= CaseMonthsClaims;
                     }
-
-                case_accum_net_claims *= experience_reserve_monthly_u;
-                case_accum_net_claims += current_claims;
-
-                case_years_net_claims *= experience_reserve_monthly_u;
-                case_years_net_claims += current_claims;
 
                 // Allocate claims by total net COI deds for pol yr.
                 for(i = AVS.begin(); i != AVS.end(); ++i)
@@ -1724,6 +1726,7 @@ restart:
             for(i = AVS.begin(); i != AVS.end(); ++i)
                 {
                 if((*i)->PrecedesInforceDuration(year, 11)) continue;
+                projected_net_mortchgs += (*i)->GetInforceProjectedCoiCharge();
                 (*i)->IncrementEOY(year);
                 }
 
@@ -1737,7 +1740,7 @@ restart:
 
             // Current COI charges can actually be zero, e.g. when the
             // corridor factor is unity.
-            if(0.0 == case_years_net_mortchgs)
+            if(0.0 == projected_net_mortchgs)
                 {
                 case_k_factor = 0.0;
                 }
@@ -1745,9 +1748,8 @@ restart:
                 {
                 case_k_factor = -
                         (case_accum_net_mortchgs - case_accum_net_claims - case_ibnr)
-                    *   (1.0 + case_k_factor)
 // TODO ?? '4.0' is an arbitrary factor that belongs in the database.
-                    /   (4.0 * case_years_net_mortchgs)
+                    /   (4.0 * projected_net_mortchgs)
                     ;
                 case_k_factor = std::max(-1.0, case_k_factor);
                 }
@@ -1757,16 +1759,17 @@ restart:
                 ,std::ios_base::out | std::ios_base::ate | std::ios_base::app
                 );
             ofs
-                << '\t' << year
-                << '\t' << experience_reserve_monthly_u
-                << '\t' << NumLivesInforce
-                << '\t' << case_years_net_mortchgs
-                << '\t' << case_accum_net_mortchgs
-                << '\t' << case_years_net_claims
-                << '\t' << case_accum_net_claims
-                << '\t' << case_ibnr_months
-                << '\t' << case_ibnr
-                << '\t' << case_k_factor
+                << '\t' << std::setprecision( 0) << year
+                << '\t' << std::setprecision(20) << experience_reserve_annual_u
+                << '\t' << std::setprecision(20) << NumLivesInforce
+                << '\t' << std::setprecision(20) << case_years_net_mortchgs
+                << '\t' << std::setprecision(20) << case_accum_net_mortchgs
+                << '\t' << std::setprecision(20) << case_years_net_claims
+                << '\t' << std::setprecision(20) << case_accum_net_claims
+                << '\t' << std::setprecision(20) << case_ibnr_months
+                << '\t' << std::setprecision(20) << case_ibnr
+                << '\t' << std::setprecision(20) << projected_net_mortchgs
+                << '\t' << std::setprecision(20) << case_k_factor
                 << '\n' << std::flush
                 ;
 
