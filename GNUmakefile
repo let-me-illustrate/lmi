@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: GNUmakefile,v 1.7 2005-02-23 12:37:20 chicares Exp $
+# $Id: GNUmakefile,v 1.8 2005-03-10 04:37:56 chicares Exp $
 
 ###############################################################################
 
@@ -379,22 +379,26 @@ clobber: maintainer-clean
 # In testing files modified this year for a current copyright notice,
 # it is assumed that the year appears on the same line as the word
 # "Copyright". That may become too strict in the future if more than
-# one line is required to show all the years. But it is necessary to
+# one line is required to show all the years, but it is useful to
 # avoid false positives that would arise when the current year appears
 # in an RCS Id but not in the copyright notice.
 
-eat := pwd > /dev/null # Gobble unwanted grep exit codes.
-
 expected_source_files = $(wildcard *.?pp *.c *.h *.rc *.xrc)
 
-old_email := $(join mind,spring)
+# Invoke a supplemental makefile, if it exists, to test things that
+# don't belong in the standard sources. For example, it might report
+# occurrences of proprietary names.
+
+supplemental_test_makefile = ../forbidden.make
 
 .PHONY: check_conformity
 check_conformity: mostlyclean
+	@-[ ! -e $(supplemental_test_makefile) ] \
+	  || $(MAKE) --no-print-directory -f $(supplemental_test_makefile)
 	@$(ECHO) "  Unexpected or oddly-named source files:"
 	@$(ECHO) $(filter-out $(expected_source_files),$(prerequisite_files))
-	@$(ECHO) "  Files with obsolete email address:"
-	@-$(GREP) --files-with-match $(old_email) $(licensed_files)    || $(eat)
+	@$(ECHO) "  Files with lowercase 'c' in copyright symbol:"
+	@$(GREP) --files-with-match '(c) *[12]' $(licensed_files)     || true
 	@$(TOUCH) BOY --date=$(yyyy)0101
 	@$(ECHO) "  Files lacking current copyright year:"
 	@for z in $(licensed_files); \
@@ -404,13 +408,13 @@ check_conformity: mostlyclean
 	  done;
 	@$(RM) --force BOY
 	@$(ECHO) "  Files that don't point to savannah:"
-	@-$(GREP) --files-without-match savannah $(licensed_files)     || $(eat)
+	@$(GREP) --files-without-match savannah $(licensed_files)      || true
 	@$(ECHO) "  Files that lack an RCS Id:"
-	@-$(GREP) --files-without-match '$$Id.*$$' $(licensed_files)   || $(eat)
+	@$(GREP) --files-without-match '$$Id.*$$' $(licensed_files)    || true
 	@$(ECHO) "  Files that contain non-empty blank lines:"
-	@-$(GREP) --line-number '^ \+$$' $(licensed_files)             || $(eat)
+	@$(GREP) --line-number '^ \+$$' $(licensed_files)              || true
 	@$(ECHO) "  Files that improperly contain physical tabs:"
-	@-$(GREP) -l '	' $(filter-out $(makefiles),$(licensed_files)) || $(eat)
+	@$(GREP) -l '	' $(filter-out $(makefiles),$(licensed_files)) || true
 	@$(ECHO) "  Files that contain carriage returns:"
 	@for z in $(licensed_files); \
 	  do \
