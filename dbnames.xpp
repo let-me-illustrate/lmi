@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: dbnames.xpp,v 1.3 2005-03-30 03:40:30 chicares Exp $
+// $Id: dbnames.xpp,v 1.4 2005-03-30 19:27:44 chicares Exp $
 
 #define DB_NAMES \
 {DB_FIRST,DB_FIRST,"dummy","dummy",}, \
@@ -242,7 +242,7 @@
 {DB_PrefOrSelect,DB_Topic_Issue_Rules,"PrefOrSelect","Underwriting class more restrictive than standard is called: 0=preferred, 1=select",}, \
 {DB_Topic_ExpRating,DB_FIRST,"Experience rating","Experience rating",}, \
 {DB_ExpRatStdDevMult,DB_Topic_ExpRating,"ExpRatStdDevMult","Experience rating reserve as multiple of standard deviation of expected claims net of account value released on death",}, \
-{DB_ExpRatIBNRMult,DB_Topic_ExpRating,"ExpRatIBNRMult","Experience rating IBNR reserve as multiple of net cost of insurance charges",}, \
+{DB_ExpRatIBNRMult,DB_Topic_ExpRating,"ExpRatIBNRMult","Experience rating IBNR reserve as number of months of net cost of insurance charges",}, \
 {DB_ExpRatCOIRetention,DB_Topic_ExpRating,"ExpRatCOIRetention","Experience rating retention as proportion of net cost of insurance charges",}, \
 {DB_UsePMQOnCurrCOI,DB_Topic_ExpRating,"UsePMQOnCurrCOI","Apply partial mortality multiplier to current cost of insurance charges for experience rating",}, \
 {DB_Topic_AssetCharges,DB_FIRST,"Asset charges","Charges deducted from separate account in proportion to assets",}, \
