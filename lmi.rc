@@ -1,0 +1,47 @@
+// Trivial msw resource file for wxWindows.
+//
+// Copyright (C) 2002, 2003, 2004, 2005 Gregory W. Chicares.
+//
+// This program is free software; you can redistribute it and/or modify
+// it under the terms of the GNU General Public License version 2 as
+// published by the Free Software Foundation.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program; if not, write to the Free Software
+// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+//
+// http://savannah.nongnu.org/projects/lmi
+// email: <chicares@cox.net>
+// snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
+
+// $Id: lmi.rc,v 1.1 2005-03-11 03:19:31 chicares Exp $
+
+// To make msw use this:
+AAAAAAAA ICON "lmi.ico"
+// as the application's icon e.g. for 'explorer', make sure it's both
+// the first icon alphabetically and the first defined in the resource
+// file, for reasons explained here:
+//   http://groups.google.com/groups?selm=a825ce%244iqj%241%40as201.hinet.hr
+// On the msw platform, this icon must be embedded in the application
+// binary. Other icons are treated the same way here, not because they
+// must be, but simply as a matter of consistency and convenience.
+
+// TODO ?? Consider removing the following icons and replacing them
+// with '.xpm' files.
+
+IDI_ILLUSTRATION_VIEW ICON "illustration_view.ico"
+IDI_CENSUS_VIEW       ICON "census_view.ico"
+IDI_TEXT_VIEW         ICON "text_view.ico"
+
+// Get stock cursors etc. Unconventionally, write this #include
+// directive at the end of this file, to prevent any ICON statements
+// in the included file from preceding the application's icon--which
+// would be bad for reasons explained above.
+//
+#include <wx/msw/wx.rc>
+

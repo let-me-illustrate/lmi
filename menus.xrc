@@ -1,0 +1,395 @@
+<?xml version="1.0"?>
+
+<resource xmlns="http://www.wxwindows.org/wxxrc" version="2.3.0.1">
+
+<!--
+    Life insurance illustrations: wxWindows xml resources.
+
+    Copyright (C) 2003, 2004, 2005 Gregory W. Chicares.
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License version 2 as
+    published by the Free Software Foundation.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+
+    http://savannah.nongnu.org/projects/lmi
+    email: <chicares@cox.net>
+    snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
+
+    $Id: menus.xrc,v 1.1 2005-03-11 03:19:31 chicares Exp $
+-->
+
+<!-- reusable menus -->
+
+<object class="wxMenu" name="help_menu_ref">
+    <label>_Help</label>
+    <help>Help</help>
+    <object class="wxMenuItem" name="wxID_ABOUT">
+        <label>_About...</label>
+        <help>About this program</help>
+    </object>
+</object>
+
+<object class="wxMenu" name="window_menu_ref">
+    <label>_Window</label>
+    <!-- "Arrange icons", though available, is silly. -->
+    <object class="wxMenuItem" name="window_cascade">
+        <label>_Cascade</label>
+        <help>Cascade windows</help>
+    </object>
+    <object class="wxMenuItem" name="window_next">
+        <label>_Next</label>
+        <help>Go to next window</help>
+    </object>
+    <object class="wxMenuItem" name="window_previous">
+        <label>_Previous</label>
+        <help>Go to previous window</help>
+    </object>
+    <object class="wxMenuItem" name="window_tile_horizontally">
+        <label>Tile _horizontally</label>
+        <help>Tile windows horizontally</help>
+    </object>
+    <object class="wxMenuItem" name="window_tile_vertically">
+        <label>Tile _vertically</label>
+        <help>Tile windows vertically</help>
+    </object>
+</object>
+
+<!-- main menu -->
+
+<object class="wxMenuBar" name="main_menu">
+<style>wxMB_DOCKABLE</style>
+    <object class="wxMenu" name="file_menu">
+        <label>_File</label>
+        <object class="wxMenuItem" name="wxID_NEW">
+            <label>_New</label>
+<!--
+            To add an accelerator, just do it here; no code change needed:
+            <label>_New...\tCtrl-N</label>
+-->
+            <help>Create a new document</help>
+            <bitmap>new.bmp</bitmap>
+        </object>
+        <object class="wxMenuItem" name="wxID_OPEN">
+            <label>_Open...</label>
+            <bitmap>open.bmp</bitmap>
+            <help>Open an existing document</help>
+        </object>
+        <object class="separator"/>
+        <object class="wxMenuItem" name="wxID_EXIT">
+            <label>E_xit</label>
+            <help>Exit this program</help>
+        </object>
+    </object>
+<!-- TODO ?? Eventually expunge this.
+    <object class="wxMenu" name="miscellaneous">
+        <label>_Miscellaneous</label>
+        <object class="wxMenuItem" name="test_standard_exception">
+            <label>_Test standard exception</label>
+        </object>
+    </object>
+-->
+    <object_ref name="wxID_HELP" ref="help_menu_ref"/>
+</object>
+
+<!-- census menu -->
+
+<object class="wxMenuBar" name="census_view_menu">
+<style>wxMB_DOCKABLE</style>
+    <object class="wxMenu" name="file_menu">
+        <label>_File</label>
+        <object class="wxMenuItem" name="wxID_NEW">
+            <label>_New</label>
+            <help>Create a new document</help>
+            <bitmap>new.bmp</bitmap>
+        </object>
+        <object class="wxMenuItem" name="wxID_OPEN">
+            <label>_Open...</label>
+            <bitmap>open.bmp</bitmap>
+            <help>Open an existing document</help>
+        </object>
+        <object class="wxMenuItem" name="wxID_CLOSE">
+            <label>_Close\tCtrl-X</label>
+            <help>Close this document</help>
+        </object>
+        <object class="separator"/>
+        <object class="wxMenuItem" name="wxID_SAVE">
+            <label>_Save</label>
+            <bitmap>save.bmp</bitmap>
+            <help>Save this document</help>
+        </object>
+        <object class="wxMenuItem" name="wxID_SAVEAS">
+            <label>Save _as...</label>
+            <help>Save this document under a new name</help>
+        </object>
+        <object class="separator"/>
+        <object class="wxMenuItem" name="wxID_PRINT">
+            <label>_Print</label>
+            <bitmap>print.bmp</bitmap>
+            <help>Print this document</help>
+        </object>
+        <!-- WX !! Propose adding wxID_PAGE_SETUP to the library.
+             In msw, 'Page setup' has superseded 'Print setup'. But wx
+             provides a builtin ID only for the former and not for the
+             latter. Yet wxxrc knows only builtin IDs. Therefore, to
+             make the modern 'Page setup' available with wxxrc,
+             wxID_PRINT_SETUP is hijacked and used for 'page setup'.
+        -->
+        <object class="wxMenuItem" name="wxID_PRINT_SETUP">
+            <label>Page set_up</label>
+            <help>Choose printing options for this document</help>
+        </object>
+        <object class="wxMenuItem" name="wxID_PREVIEW">
+            <label>Print pre_view</label>
+            <bitmap>preview.bmp</bitmap>
+            <help>See what this document will look like when printed</help>
+        </object>
+        <object class="separator"/>
+        <object class="wxMenuItem" name="wxID_EXIT">
+            <label>E_xit</label>
+            <help>Exit this program</help>
+        </object>
+    </object>
+    <object class="wxMenu" name="census_menu">
+        <label>_Census</label>
+<!--
+examples begin
+            To add an accelerator, just do it here; no code change needed:
+            <label>_New...\tCtrl-N</label>
+
+            To add status-line help text, use the <help> tag:
+
+        <object class="wxMenuItem" name="menu_command_with_help_text">
+            <label>Some menu command</label>
+            <help>This text appears on the status line.</help>
+        </object>
+examples end
+-->
+        <object class="wxMenuItem" name="edit_cell">
+            <label>_Edit cell\tCtrl-E</label>
+            <bitmap>edit_cell.bmp</bitmap>
+            <help>Edit selected cell</help>
+        </object>
+        <object class="wxMenuItem" name="edit_class">
+            <label>Edit class defaults\tCtrl-Alt-E</label>
+            <bitmap>edit_class.bmp</bitmap>
+            <help>Edit selected cell's class defaults</help>
+        </object>
+        <object class="wxMenuItem" name="edit_case">
+            <label>Edit case defaults\tCtrl-Shift-E</label>
+            <bitmap>edit_case.bmp</bitmap>
+            <help>Edit case defaults</help>
+        </object>
+        <object class="separator"/>
+        <object class="wxMenuItem" name="run_cell">
+            <label>_Run selected cell\tCtrl-R</label>
+            <bitmap>run_cell.bmp</bitmap>
+            <help>Run selected cell</help>
+        </object>
+<!-- TODO ?? Either implement this, or expunge it.
+        <object class="wxMenuItem" name="run_class">
+            <label>Run class of selected cell\tCtrl-Alt-R</label>
+            <bitmap>run_class.bmp</bitmap>
+            <help>Run all cells in selected cell's class</help>
+        </object>
+-->
+        <object class="wxMenuItem" name="run_case">
+            <label>Run case\tCtrl-Shift-R</label>
+            <bitmap>run_case.bmp</bitmap>
+            <help>Run all cells</help>
+        </object>
+        <object class="separator"/>
+        <object class="wxMenuItem" name="print_cell">
+            <label>Run and _print selected cell\tCtrl-P</label>
+            <bitmap>print_cell.bmp</bitmap>
+            <help>Run and print selected cell</help>
+        </object>
+<!-- TODO ?? Either implement this, or expunge it.
+        <object class="wxMenuItem" name="print_class">
+            <label>Run and print all cells in selected cell's class\tCtrl-Alt-P</label>
+            <bitmap>print_class.bmp</bitmap>
+            <help>Run and print all cells in selected cell's class</help>
+        </object>
+--> TODO ?? Either implement this, or expunge it.
+        <object class="wxMenuItem" name="print_case">
+            <label>Run and print all cells\tCtrl-Shift-P</label>
+            <bitmap>print_case.bmp</bitmap>
+            <help>Run and print all cells</help>
+        </object>
+<!-- TODO ?? TODO ?? Either implement this, or expunge it.
+Not supported yet: need to split columns into multiple pages.
+        <object class="wxMenuItem" name="wxID_PRINT">
+            <label>Print census input</label>
+        </object>
+-->
+        <object class="wxMenuItem" name="print_spreadsheet">
+            <label>Print case to spreadsheet\tCtrl+Shift+S</label>
+            <bitmap>print_spreadsheet.bmp</bitmap>
+            <help>Run and print all cells to a spreadsheet file</help>
+        </object>
+        <object class="separator"/>
+        <object class="wxMenuItem" name="paste_census">
+            <label>Pa_ste census data\tCtrl-S</label>
+            <bitmap>paste_census.bmp</bitmap>
+            <help>Paste census data from clipboard</help>
+        </object>
+        <object class="wxMenuItem" name="add_cell">
+            <label>_Add cell\tCtrl-A</label>
+            <bitmap>add_cell.bmp</bitmap>
+            <help>Add a new cell with case default parameters</help>
+        </object>
+        <object class="wxMenuItem" name="delete_cells">
+            <label>_Delete cell(s)\tCtrl-D</label>
+            <bitmap>delete_cells.bmp</bitmap>
+            <help>Delete selected cell(s)</help>
+        </object>
+        <object class="separator"/>
+<!-- TODO ?? Change the 'name' too. -->
+        <object class="wxMenuItem" name="expand_columns">
+            <label>_Vary column widths\tCtrl-V</label>
+            <bitmap>expand_columns.bmp</bitmap>
+            <help>Vary each column's width to show all contents</help>
+        </object>
+<!-- TODO ?? Change the 'name' too. -->
+        <object class="wxMenuItem" name="shrink_columns">
+            <label>_Use fixed column widths\tCtrl-U</label>
+            <bitmap>shrink_columns.bmp</bitmap>
+            <help>Display all columns with the same fixed width</help>
+        </object>
+    </object>
+    <object_ref name="window_menu" ref="window_menu_ref"/>
+    <object_ref name="wxID_HELP" ref="help_menu_ref"/>
+</object>
+
+<!-- illustration menu -->
+
+<object class="wxMenuBar" name="illustration_view_menu">
+<style>wxMB_DOCKABLE</style>
+    <object class="wxMenu" name="file_menu">
+        <label>_File</label>
+        <object class="wxMenuItem" name="wxID_NEW">
+            <label>_New</label>
+            <help>Create a new document</help>
+            <bitmap>new.bmp</bitmap>
+        </object>
+        <object class="wxMenuItem" name="wxID_OPEN">
+            <label>_Open...</label>
+            <bitmap>open.bmp</bitmap>
+            <help>Open an existing document</help>
+        </object>
+        <object class="wxMenuItem" name="wxID_CLOSE">
+            <label>_Close\tCtrl-X</label>
+            <help>Close this document</help>
+        </object>
+        <object class="separator"/>
+        <object class="wxMenuItem" name="wxID_SAVE">
+            <label>_Save</label>
+            <bitmap>save.bmp</bitmap>
+            <help>Save this document</help>
+        </object>
+        <object class="wxMenuItem" name="wxID_SAVEAS">
+            <label>Save _as...</label>
+            <help>Save this document under a new name</help>
+        </object>
+        <object class="separator"/>
+        <object class="wxMenuItem" name="wxID_PRINT">
+            <label>_Print</label>
+            <bitmap>print.bmp</bitmap>
+            <help>Print this document</help>
+        </object>
+        <!-- WX !! Propose adding wxID_PAGE_SETUP to the library.
+             In msw, 'Page setup' has superseded 'Print setup'. But wx
+             provides a builtin ID only for the former and not for the
+             latter. Yet wxxrc knows only builtin IDs. Therefore, to
+             make the modern 'Page setup' available with wxxrc,
+             wxID_PRINT_SETUP is hijacked and used for 'page setup'.
+        -->
+        <object class="wxMenuItem" name="wxID_PRINT_SETUP">
+            <label>Page set_up</label>
+            <help>Choose printing options for this document</help>
+        </object>
+        <object class="wxMenuItem" name="wxID_PREVIEW">
+            <label>Print pre_view</label>
+            <bitmap>preview.bmp</bitmap>
+            <help>See what this document will look like when printed</help>
+        </object>
+        <object class="separator"/>
+        <object class="wxMenuItem" name="wxID_EXIT">
+            <label>E_xit</label>
+            <help>Exit this program</help>
+        </object>
+    </object>
+    <object class="wxMenu" name="illustration">
+        <label>Illustration</label>
+        <object class="wxMenuItem" name="edit_cell">
+            <label>_Edit cell\tCtrl-E</label>
+            <bitmap>edit_cell.bmp</bitmap>
+            <help>Edit this cell</help>
+        </object>
+    </object>
+    <object_ref name="window_menu" ref="window_menu_ref"/>
+    <object_ref name="wxID_HELP" ref="help_menu_ref"/>
+</object>
+
+<!-- text-edit menu -->
+
+<object class="wxMenuBar" name="text_view_menu">
+<style>wxMB_DOCKABLE</style>
+    <object class="wxMenu" name="file_menu">
+        <label>_File</label>
+        <object class="wxMenuItem" name="wxID_NEW">
+            <label>_New</label>
+            <help>Create a new document</help>
+            <bitmap>new.bmp</bitmap>
+        </object>
+        <object class="wxMenuItem" name="wxID_OPEN">
+            <label>_Open...</label>
+            <bitmap>open.bmp</bitmap>
+            <help>Open an existing document</help>
+        </object>
+        <object class="wxMenuItem" name="wxID_CLOSE">
+            <label>_Close\tCtrl-X</label>
+            <help>Close this document</help>
+        </object>
+        <object class="separator"/>
+        <object class="wxMenuItem" name="wxID_SAVE">
+            <label>_Save</label>
+            <bitmap>save.bmp</bitmap>
+            <help>Save this document</help>
+        </object>
+        <object class="wxMenuItem" name="wxID_SAVEAS">
+            <label>Save _as...</label>
+            <help>Save this document under a new name</help>
+        </object>
+        <object class="separator"/>
+        <object class="wxMenuItem" name="wxID_EXIT">
+            <label>E_xit</label>
+            <help>Exit this program</help>
+        </object>
+    </object>
+<!--
+TODO ?? Why not expunge this?
+This temporary item just lets us see that a text_edit window is
+active and the appropriate menu is chosen. We could add any special
+menus for this type of window this way.
+-->
+    <object class="wxMenu" name="text_edit">
+        <label>text</label>
+        <object class="wxMenuItem" name="properties">
+            <label>text</label>
+        </object>
+    </object>
+    <object_ref name="window_menu" ref="window_menu_ref"/>
+    <object_ref name="wxID_HELP" ref="help_menu_ref"/>
+</object>
+
+</resource>
+
