@@ -1,0 +1,12 @@
+#!/usr/bin/sh
+# Written 2004 by Gregory W. Chicares and placed in the public domain.
+# zsh only!
+cmd="
+  ComSpec=$WindowsComSpec;
+  COMSPEC=$WindowsComSpec;
+  path=(/como433/bin /mingw-2.95.3-5/bin /usr/bin C:/WINNT/system32 C:/WINNT);
+  export COMO_MIN_INCLUDE=/mingw-2.95.3-5/include;
+  como $*
+  exit;"
+sh -c $cmd || print Error executing command: $cmd
+
