@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.34 2005-03-31 17:21:11 chicares Exp $
+// $Id: ChangeLog,v 1.35 2005-04-05 12:42:02 chicares Exp $
 
 2005-01-14
 
@@ -1045,4 +1045,32 @@ Show supplemental-report columns on composite.
 
   ledger_xml_io.cpp
 Permit blank columns on supplemental report.
+
+2005-04-02 [1420]
+
+  ledger_invariant.cpp
+Initialize 'InforceLives' to zero to correct a defect. This needs to
+be tested.
+
+  workhorse.make
+Improve 'install' target.
+
+  ledger_xml_io.cpp
+Document a defect that requires research.
+
+2005-04-05 [1421]
+
+  workhorse.make
+Distinguish C from C++ warnings.
+
+  spew_touchstone
+Remove 'ExpRatRfd*' fields.
+
+  config_all.hpp
+  expm1.c                [new file]
+  interest_rates.cpp
+  math_functors.hpp
+  math_functors_test.cpp [new file]
+  objects.make
+More accurate, faster interest calculations.
 
