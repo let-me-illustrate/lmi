@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.19 2005-03-02 04:58:48 chicares Exp $
+// $Id: ChangeLog,v 1.20 2005-03-07 11:56:44 chicares Exp $
 
 2005-01-14
 
@@ -619,4 +619,27 @@ Add regression testing.
   objects.make
   workhorse.make
 Add command-line interface for production branch.
+
+2005-03-02 [1060]
+
+  fancy.make
+Add experimental fancy unit-test makefile.
+
+2005-03-07 [1051]
+
+  ledger_xml_io.cpp
+Improve documentation.
+
+  single_cell_document.hpp
+Withdraw unnecessary friendship.
+
+  wx_new.cpp
+  wx_new_test.cpp
+Fix defective placement of pch header.
+
+  account_value.hpp
+  ihs_acctval.cpp
+  ihs_avdebug.cpp
+  ihs_avmly.cpp
+Remove an unsupported report that projected values for twelve months.
 
