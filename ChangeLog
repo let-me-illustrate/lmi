@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.21 2005-03-10 04:49:01 chicares Exp $
+// $Id: ChangeLog,v 1.22 2005-03-11 04:41:59 chicares Exp $
 
 2005-01-14
 
@@ -673,4 +673,57 @@ Add enumerative types useful for life insurance.
   tn_range_types.cpp
   tn_range_types.hpp
 Add range types useful for life insurance.
+
+2005-03-10 [1165]
+
+  about_dialog.cpp          [new file]
+  about_dialog.hpp          [new file]
+  alert_wx.cpp              [new file]
+  any_member.hpp            [new file]
+  argv0_test.cpp            [new file]
+  census_document.cpp       [new file]
+  census_document.hpp       [new file]
+  date_control.cpp          [new file]
+  date_control.hpp          [new file]
+  datum_boolean.cpp         [new file]
+  datum_boolean.hpp         [new file]
+  datum_string.cpp          [new file]
+  datum_string.hpp          [new file]
+  docmanager_ex.cpp         [new file]
+  docmanager_ex.hpp         [new file]
+  docmdichildframe_ex.cpp   [new file]
+  docmdichildframe_ex.hpp   [new file]
+  illustration_document.cpp [new file]
+  illustration_document.hpp [new file]
+  input.cpp                 [new file]
+  input.hpp                 [new file]
+  lmi.rc                    [new file]
+  mc_enum_types.xpp         [new file]
+  menus.xrc                 [new file]
+  miscellany_lmi.hpp        [new file]
+  previewframe_ex.cpp       [new file]
+  previewframe_ex.hpp       [new file]
+  text_doc.cpp              [new file]
+  text_doc.hpp              [new file]
+  text_view.cpp             [new file]
+  text_view.hpp             [new file]
+  toolbar.xrc               [new file]
+  transferor.cpp            [new file]
+  transferor.hpp            [new file]
+  value_cast.hpp            [new file]
+  view_ex.cpp               [new file]
+  view_ex.hpp               [new file]
+  wx_checks.cpp             [new file]
+  wx_workarounds.hpp        [new file]
+Import and adapt files from skeleton branch. Add new GUI files.
+
+  datum_base.hpp
+  ihs_funddata.hpp
+  mc_enum_types.xpp
+Improve documentation.
+
+  miscellany.cpp
+  miscellany.hpp
+  miscellany_lmi.hpp [expunged]
+Merge.
 
