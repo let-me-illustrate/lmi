@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.6 2005-02-05 03:02:41 chicares Exp $
+// $Id: ChangeLog,v 1.7 2005-02-08 14:11:57 chicares Exp $
 
 2005-01-14
 
@@ -272,4 +272,14 @@ branches.
 
   library_demo.cpp
 Write crc32 output to a separate file.
+
+2005-02-08
+
+  dbnames.cpp
+  dbnames.hpp
+  dbnames.txt        [expunged]
+  dbnames.xpp        [new file]
+  tiername.txt       [expunged]
+  tiered_charges.xpp [new file]
+Replace oddly-named source files.
 
