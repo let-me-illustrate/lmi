@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: inputillus.cpp,v 1.2 2005-01-29 02:47:41 chicares Exp $
+// $Id: inputillus.cpp,v 1.3 2005-01-31 13:12:48 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -37,11 +37,6 @@
 #include <ostream>
 #include <sstream>
 #include <stdexcept>
-
-namespace
-{
-    int KludgeLength = 100; // TODO ?? KLUDGE
-}
 
 //============================================================================
 IllusInputParms::IllusInputParms()
@@ -118,6 +113,7 @@ if(Status_Smoking != Status[0].Smoking)
 }
 
 //============================================================================
+// TODO ?? Class 'streamable' seems to have no such ctor:
 IllusInputParms::IllusInputParms(IllusInputParms const& z)
     :streamable(z)
     ,InputParms(z)
@@ -518,6 +514,17 @@ void IllusInputParms::propagate_status_to_alii()
 void IllusInputParms::propagate_fund_allocations_from_string()
 {
     std::istringstream iss(FundAllocations);
+    std::vector<r_fund> v;
+    while(!!iss && !iss.eof())
+        {
+        int i;
+        iss >> i;
+        v.push_back(r_fund(i));
+        }
+    FundAllocs = v;
+
+// TODO ?? The mainline code fails with gcc-3.4.2 and mpatrol.
+#if 0
 #ifndef BC_BEFORE_5_5
     // TODO ?? Here bc++5.5.1 warns:
     // template argument InputIterator passed to 'uninitialized_copy'
@@ -527,10 +534,20 @@ void IllusInputParms::propagate_fund_allocations_from_string()
     //  ,istream_iterator<r_fund,char,char_traits<char>,int>
     //  ,_RW_is_not_integer)
     // Is borland right--is an istringstream not an InputIterator?
+warning() << "FundAllocations: " << FundAllocations << LMI_FLUSH;
     FundAllocs = std::vector<r_fund>
         ((std::istream_iterator<r_fund>(iss))
         ,std::istream_iterator<r_fund>()
         );
+std::ostringstream oss;
+//std::ostream_iterator<std::string> osi(oss, "\r\n");
+std::copy
+        (FundAllocs.begin()
+        ,FundAllocs.end()
+        ,std::ostream_iterator<r_fund>(oss, " ")
+        );
+//std::copy(member_names.begin(), member_names.end(), osi);
+warning() << "values: " << oss.str() << LMI_FLUSH;
 #else // BC_BEFORE_5_5
 /* Even this doesn't work with bc++5.02:
     FundAllocs = std::vector<r_fund>
@@ -569,6 +586,7 @@ void IllusInputParms::propagate_fund_allocations_from_string()
         }
     FundAllocs = v;
 #endif // BC_BEFORE_5_5
+#endif // 0
 }
 
 //============================================================================

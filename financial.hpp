@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: financial.hpp,v 1.1 2005-01-14 19:47:44 chicares Exp $
+// $Id: financial.hpp,v 1.2 2005-01-31 13:12:48 chicares Exp $
 
 #ifndef financial_hpp
 #define financial_hpp
@@ -45,7 +45,7 @@
 // template type argument instead?
 
 template<typename InputIterator>
-long double const fv
+long double fv
     (InputIterator first
     ,InputIterator last
     ,long double i
@@ -137,7 +137,7 @@ class irr_helper
 };
 
 template<typename InputIterator>
-long double const irr
+long double irr
     (InputIterator first
     ,InputIterator last
     ,long double x
@@ -148,7 +148,7 @@ long double const irr
 }
 
 template<typename InputIterator>
-long double const irr
+long double irr
     (InputIterator first
     ,InputIterator last
     ,int decimals

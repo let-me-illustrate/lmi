@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_irc7702.cpp,v 1.1 2005-01-14 19:47:45 chicares Exp $
+// $Id: ihs_irc7702.cpp,v 1.2 2005-01-31 13:12:48 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -784,7 +784,7 @@ std::vector<double> const& TIRC7702::Corridor() const
 }
 
 //============================================================================
-TIRC7702::EIOBasis const TIRC7702::Get4PctBasis
+TIRC7702::EIOBasis TIRC7702::Get4PctBasis
     (e_dbopt_7702 const& a_DBOpt
     ) const
 {

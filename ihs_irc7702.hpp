@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_irc7702.hpp,v 1.1 2005-01-14 19:47:45 chicares Exp $
+// $Id: ihs_irc7702.hpp,v 1.2 2005-01-31 13:12:48 chicares Exp $
 
 #ifndef irc7702_hpp
 #define irc7702_hpp
@@ -186,7 +186,7 @@ class TIRC7702
         ,double                     a_NetPmtFactorTgt
         ,double                     a_NetPmtFactorExc
         ) const;
-    EIOBasis const Get4PctBasis
+    EIOBasis Get4PctBasis
         (e_dbopt_7702 const&        a_DBOpt
         ) const;
 

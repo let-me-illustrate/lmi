@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_dbvalue.hpp,v 1.1 2005-01-14 19:47:44 chicares Exp $
+// $Id: ihs_dbvalue.hpp,v 1.2 2005-01-31 13:12:48 chicares Exp $
 
 #ifndef ihs_dbvalue_hpp
 #define ihs_dbvalue_hpp
@@ -51,7 +51,6 @@ enum e_IdxType
 
 class LMI_EXPIMP TDBValue
     :private JRPS::JrPs_pstreamable
-//  ,virtual public TStreamableBase
 {
   public:
     friend std::istream& LMI_EXPIMP operator>>(std::istream&, TDBValue&);

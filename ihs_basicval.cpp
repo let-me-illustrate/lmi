@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_basicval.cpp,v 1.2 2005-01-29 02:47:41 chicares Exp $
+// $Id: ihs_basicval.cpp,v 1.3 2005-01-31 13:12:48 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -57,6 +57,7 @@
 
 #include <algorithm>
 #include <cmath>        // std::pow()
+#include <cstring>      // std::strlen()
 #include <functional>
 #include <limits>
 #include <numeric>
@@ -410,7 +411,7 @@ double BasicValues::InvestmentManagementFee() const
             std::size_t n = std::strlen(s);
             bool ignore = 0 == strncmp
                 (s
-                ,Funds.GetFundInfo(j).ShortName.c_str()
+                ,Funds.GetFundInfo(j).ShortName_.c_str()
                 ,n
                 );
             weight = ignore ? 0.0 : 1.0;
@@ -449,7 +450,7 @@ double BasicValues::InvestmentManagementFee() const
 
         if(0.0 != weight)
             {
-            z += weight * Funds.GetFundInfo(j).ScalarIMF;
+            z += weight * Funds.GetFundInfo(j).ScalarIMF_;
             TotalSepAcctAllocations += weight;
             }
         }
@@ -1474,13 +1475,8 @@ double BasicValues::GetModalSpecAmtMlyDed
     double wp_rate = 0.0;
     if(Input->Status[0].HasWP)
         {
-/* TODO ?? expunge
-        // TODO ?? Remove inefficient code if assertion never fires.
-        wp_rate = GetWPRates()[0];
-        LMI_ASSERT(wp_rate == MortalityRates_->WPRates()[0]);
-*/
         // For simplicity, ignore Database->Query(DB_WPMax)
-        double wp_rate = MortalityRates_->WPRates()[0];
+        wp_rate = MortalityRates_->WPRates()[0];
         if(0.0 != 1.0 + wp_rate)
             {
             annual_charge /= (1.0 + wp_rate);

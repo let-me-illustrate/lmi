@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: inputstatus.hpp,v 1.1 2005-01-14 19:47:45 chicares Exp $
+// $Id: inputstatus.hpp,v 1.2 2005-01-31 13:12:48 chicares Exp $
 
 #ifndef inputstatus_hpp
 #define inputstatus_hpp
@@ -43,6 +43,7 @@ class LMI_EXPIMP InputStatus
     virtual ~InputStatus();
 
     bool operator==(InputStatus const&) const;
+    bool operator!=(InputStatus const&) const;
 
     int YearsToRetirement() const;
     // TODO ?? This shouldn't be const. The

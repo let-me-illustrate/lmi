@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_ldgvar.hpp,v 1.1 2005-01-14 19:47:45 chicares Exp $
+// $Id: ihs_ldgvar.hpp,v 1.2 2005-01-31 13:12:48 chicares Exp $
 
 #ifndef ldgvar_hpp
 #define ldgvar_hpp
@@ -62,7 +62,7 @@ public:
         ,e_sep_acct_basis a_SABasis
         );
 
-    bool const          IsFullyInitialized() const {return FullyInitialized;}
+    bool                IsFullyInitialized() const {return FullyInitialized;}
 
     virtual int         GetLength() const {return Length;}
 
@@ -76,13 +76,13 @@ public:
         ,int year
         );
 
-    inline double const GetInitAnnLoanCredRate() const
+    inline double GetInitAnnLoanCredRate() const
         {return InitAnnLoanCredRate;}
-    inline double const InitAnnGenAcctRate() const
+    inline double InitAnnGenAcctRate() const
         {return InitAnnGenAcctInt;}
-    inline double const InitAnnSepAcctGrossRate() const
+    inline double InitAnnSepAcctGrossRate() const
         {return InitAnnSepAcctGrossInt;}
-    inline double const InitAnnSepAcctNetRate() const
+    inline double InitAnnSepAcctNetRate() const
         {return InitAnnSepAcctNetInt;}
 
     void UpdateCRC(CRC& a_crc) const;

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mathmisc.hpp,v 1.1 2005-01-14 19:47:45 chicares Exp $
+// $Id: mathmisc.hpp,v 1.2 2005-01-31 13:12:48 chicares Exp $
 
 #ifndef mathmisc_hpp
 #define mathmisc_hpp
@@ -310,14 +310,14 @@ T progressively_reduce(T& a, T& b, T const& delta)
         }
     else
         {
-        T z(std::min(std::max(zero, a), r));
-        a -= z;
-        r -= z;
+        T za(std::min(std::max(zero, a), r));
+        a -= za;
+        r -= za;
         if(zero < r)
             {
-            T z(std::min(std::max(zero, b), r));
-            b -= z;
-            r -= z;
+            T zb(std::min(std::max(zero, b), r));
+            b -= zb;
+            r -= zb;
             }
         }
 

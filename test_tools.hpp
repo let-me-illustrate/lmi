@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: test_tools.hpp,v 1.1 2005-01-14 19:47:45 chicares Exp $
+// $Id: test_tools.hpp,v 1.2 2005-01-31 13:12:48 chicares Exp $
 
 // This is a derived work based on Beman Dawes's boost test library
 // that bears the following copyright and license statement:
@@ -62,12 +62,6 @@
 #define test_tools_hpp
 
 #include "config.hpp"
-
-// For convenience, allow the user to request inclusion of lower-level layers.
-#ifdef BOOST_INCLUDE_MAIN
-#   include "cpp_main.cpp"
-#   include "test_main.cpp"
-#endif // BOOST_INCLUDE_MAIN
 
 #include <exception>
 #include <ostream>
@@ -247,6 +241,12 @@ namespace lmi_test
     // Effect: increment test_tools_errors counter.
 } // Namespace lmi_test.
 
+// For convenience, allow the user to request inclusion of lower-level layers.
+#ifdef BOOST_INCLUDE_MAIN
+#   include "cpp_main.cpp"
+#   include "test_main.cpp"
+#endif // BOOST_INCLUDE_MAIN
+
 // Deprecated macros.
 //
 // Macros BOOST_ERROR, BOOST_CRITICAL_ERROR, and BOOST_CRITICAL_TEST
@@ -298,6 +298,8 @@ namespace lmi_test
         throw lmi_test::test::test_tools_exception() \
 
 // Revision History
+//  2005-01-29 GWC Move #included '.cpp' files after declarations that
+//    were otherwise redundant, resolving a gcc warning.
 //  2005-01-09 GWC Update email address
 //  2004-10-20 GWC Add macros to test equality and exceptions, and to
 //    invoke tests through subfunctions. Add error_stream() to improve

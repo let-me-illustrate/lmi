@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_ldginvar.cpp,v 1.2 2005-01-29 02:47:41 chicares Exp $
+// $Id: ihs_ldginvar.cpp,v 1.3 2005-01-31 13:12:48 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -401,7 +401,7 @@ void TLedgerInvariant::Init(BasicValues* b)
     for(int j = 0; j < b->FundData->GetNumberOfFunds(); j++)
         {
         FundNumbers.push_back(j);
-        FundNames.push_back(b->FundData->GetFundInfo(j).LongName);
+        FundNames.push_back(b->FundData->GetFundInfo(j).LongName_);
 
         // TODO ?? InputParms::NumberOfFunds is defectively hardcocded
         // as thirty as this is written, but we need to support a product

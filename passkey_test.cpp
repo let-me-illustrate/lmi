@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: passkey_test.cpp,v 1.1 2005-01-14 19:47:45 chicares Exp $
+// $Id: passkey_test.cpp,v 1.2 2005-01-31 13:12:48 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -70,7 +70,7 @@ int test_main(int, char*[])
 
     unsigned char result[md5len];
     // We need '-1 +' to avoid the trailing null character.
-    md5_buffer(coleridge, -1 + sizeof coleridge, result);
+    md5_buffer(coleridge, -1 + static_cast<int>(sizeof coleridge), result);
 
     unsigned char expected[md5len];
     std::memcpy(expected, result, md5len);
@@ -96,7 +96,7 @@ int test_main(int, char*[])
         );
     }
 
-    std::FILE* in = std::fopen("coleridge", "rb");
+    FILE* in = std::fopen("coleridge", "rb");
     md5_stream(in, result);
     std::fclose(in);
     BOOST_TEST(0 == std::memcmp(expected, result, sizeof expected));
@@ -113,7 +113,7 @@ int test_main(int, char*[])
 
     BOOST_TEST(0 == system_command("md5sum --check --status validated.md5"));
 
-    std::FILE* md5 = std::fopen("validated.md5", "rb");
+    FILE* md5 = std::fopen("validated.md5", "rb");
     md5_stream(md5, result);
     std::fclose(md5);
 

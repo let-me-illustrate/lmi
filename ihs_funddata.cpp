@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_funddata.cpp,v 1.1 2005-01-14 19:47:45 chicares Exp $
+// $Id: ihs_funddata.cpp,v 1.2 2005-01-31 13:12:48 chicares Exp $
 
 // This class describes funds: their names and investment mgmt fees.
 // TODO ?? An extension other than .fnd would be preferable: msw uses
@@ -121,11 +121,11 @@ void TFundData::Read(std::string const& a_Filename)
             break;
 
         TFundInfo f;
-        is >> f.ScalarIMF;
+        is >> f.ScalarIMF_;
         // First, a dummy call to eat the tab after the double
-        std::getline(is, f.ShortName, '\t');
-        std::getline(is, f.ShortName, '\t');
-        std::getline(is, f.LongName, '\n');
+        std::getline(is, f.ShortName_, '\t');
+        std::getline(is, f.ShortName_, '\t');
+        std::getline(is, f.LongName_, '\n');
         if(!is.good())
             {
             fatal_error()
@@ -157,11 +157,11 @@ void TFundData::Write(std::string const& a_Filename)
     for(;I != FundInfo.end(); I++)
         {
         os
-            << I->ScalarIMF
+            << I->ScalarIMF_
             << '\t'
-            << I->ShortName
+            << I->ShortName_
             << '\t'
-            << I->LongName
+            << I->LongName_
             << '\n'
             ;
         }

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: inputstatus.cpp,v 1.1 2005-01-14 19:47:45 chicares Exp $
+// $Id: inputstatus.cpp,v 1.2 2005-01-31 13:12:48 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -87,6 +87,12 @@ bool InputStatus::operator==(InputStatus const& z) const
     if(VectorMonthlyFlatExtra != z.VectorMonthlyFlatExtra) return false;
 
     return true;
+}
+
+//============================================================================
+bool InputStatus::operator!=(InputStatus const& z) const
+{
+    return !operator==(z);
 }
 
 //============================================================================

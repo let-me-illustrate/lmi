@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: round_to.hpp,v 1.1 2005-01-14 19:47:45 chicares Exp $
+// $Id: round_to.hpp,v 1.2 2005-01-31 13:12:48 chicares Exp $
 
 #ifndef round_to_hpp
 #define round_to_hpp
@@ -457,7 +457,7 @@ class round_to
     typedef RealType (*rounding_function_t)(RealType);
 
   private:
-    rounding_function_t select_rounding_function(rounding_style style) const;
+    rounding_function_t select_rounding_function(rounding_style) const;
 
     int decimals_;
     rounding_style style_;
@@ -503,12 +503,12 @@ round_to<RealType>::round_to()
 // clearer if we quantified the effect on accuracy.
 
 template<typename RealType>
-round_to<RealType>::round_to(int decimals, rounding_style style)
+round_to<RealType>::round_to(int decimals, rounding_style a_style)
     :decimals_(decimals)
-    ,style_(style)
+    ,style_(a_style)
     ,scale_fwd_(detail::perform_pow(max_prec_real(10.0), decimals))
     ,scale_back_(max_prec_real(1.0) / scale_fwd_)
-    ,rounding_function(select_rounding_function(style))
+    ,rounding_function(select_rounding_function(a_style))
 {
     // This throws only if all use of the function object is invalid.
     // Even if it doesn't throw, there are numbers that it cannot round
@@ -577,17 +577,17 @@ rounding_style round_to<RealType>::style() const
 // Choose the auxiliary rounding function indicated by the argument.
 template<typename RealType>
 typename round_to<RealType>::rounding_function_t
-round_to<RealType>::select_rounding_function(rounding_style style) const
+round_to<RealType>::select_rounding_function(rounding_style const a_style) const
 {
     if
-        (  style == default_rounding_style()
-        && style != r_indeterminate
+        (  a_style == default_rounding_style()
+        && a_style != r_indeterminate
         )
         {
         return detail::perform_rint;
         }
 
-    switch(style)
+    switch(a_style)
         {
         case r_toward_zero:
             {

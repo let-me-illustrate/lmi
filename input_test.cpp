@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_test.cpp,v 1.2 2005-01-29 02:47:41 chicares Exp $
+// $Id: input_test.cpp,v 1.3 2005-01-31 13:12:48 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -156,10 +156,8 @@ int test_main(int, char*[])
 
     BOOST_TEST(0.03125 == original.SepAcctRate[0]);
     BOOST_TEST(0.03125 == replica.SepAcctRate[0]);
-//std::cout << "original.SepAcctRate[0] is " << original.SepAcctRate[0] << '\n';
-//std::cout << "replica.SepAcctRate[0] is " << replica.SepAcctRate[0] << '\n';
 
-/* The code this tests is defective--fix it someday.
+/* TODO ?? The code this tests is defective--fix it someday.
     BOOST_TEST(0.4 == original.FundAllocs[0]);
     BOOST_TEST(0.4 == replica.FundAllocs[0]);
 std::cout << "original.FundAllocs[0] is " << original.FundAllocs[0] << '\n';

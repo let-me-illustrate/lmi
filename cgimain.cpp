@@ -30,7 +30,7 @@
 // it to the life-insurance-illustrations problem domain. Any defect
 // should not reflect on Stephen F. Booth's reputation.
 
-// $Id: cgimain.cpp,v 1.1 2005-01-14 19:47:44 chicares Exp $
+// $Id: cgimain.cpp,v 1.2 2005-01-31 13:12:48 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -117,7 +117,7 @@ int main(int argc, char* argv[])
     // word upon destruction?
     initialize_fpu();
 
-    if(SIG_ERR == std::signal(SIGFPE, (void(*)(int))floating_point_error_handler))
+    if(SIG_ERR == std::signal(SIGFPE, floating_point_error_handler))
         {
         warning() << "Cannot install floating point error signal handler.\n";
         return EXIT_FAILURE;

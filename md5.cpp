@@ -33,7 +33,7 @@
    email: <chicares@cox.net>
    snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-   $Id: md5.cpp,v 1.1 2005-01-14 19:47:45 chicares Exp $
+   $Id: md5.cpp,v 1.2 2005-01-31 13:12:48 chicares Exp $
 
    GWC: File renamed md5.c --> md5.cpp .
    GWC: Put C rtl functions in namespace std.
@@ -53,7 +53,7 @@ preference is standard conformance. The C standard library has no
 function bcopy().
  */
 #if 1
-# include <cstdio>  // GWC added this to get FILE* etc. in ns std.
+# include <cstdio>  // GWC added this required header.
 # include <cstdlib> // GWC replaced <stdlib.h> .
 # include <cstring> // GWC replaced <string.h> .
 #else
@@ -176,7 +176,7 @@ md5_stream (stream, resblock)
      void *resblock;
  */
 int
-md5_stream (std::FILE* stream, void* resblock)
+md5_stream (FILE* stream, void* resblock)
 {
   /* Important: BLOCKSIZE must be a multiple of 64.  */
 #define BLOCKSIZE 4096

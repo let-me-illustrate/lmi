@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_loads.cpp,v 1.1 2005-01-14 19:47:45 chicares Exp $
+// $Id: ihs_loads.cpp,v 1.2 2005-01-31 13:12:48 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -224,15 +224,15 @@ void Loads::Init
                 ,account_value_load_after_deduction_[j].begin()
                 ,std::plus<double>()
                 );
-            std::vector<double>::iterator i;
+            std::vector<double>::iterator k;
             // TODO ?? Who wrote this, and did it ever work?
             for
-                (i = account_value_load_after_deduction_[j].begin()
-                ;i != account_value_load_after_deduction_[j].end()
-                ;++i
+                (k = account_value_load_after_deduction_[j].begin()
+                ;k != account_value_load_after_deduction_[j].end()
+                ;++k
                 )
                 {
-                *i = details.round_interest_rate(*i);
+                *k = details.round_interest_rate(*k);
                 }
             }
         }
@@ -504,7 +504,7 @@ void Loads::Init
 //   For now, correct only for scalar amortization rates
 void Loads::AmortizePremiumTax(TDatabase const& database)
 {
-    int const period = static_cast<int const>(
+    int const period = static_cast<int>(
         database.Query(DB_PmTxAmortPeriod)
         );
     double const i = database.Query(DB_PmTxAmortIntRate);
