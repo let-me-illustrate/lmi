@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: census_view.cpp,v 1.1 2005-03-12 03:01:08 chicares Exp $
+// $Id: census_view.cpp,v 1.2 2005-03-22 03:40:18 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -39,6 +39,7 @@
 #include "inputillus.hpp"
 #include "ledger.hpp"
 #include "materially_equal.hpp"
+#include "math_functors.hpp"
 #include "miscellany.hpp"
 #include "timer.hpp"
 #include "wx_new.hpp"
@@ -235,7 +236,7 @@ Input* CensusView::class_parms_from_class_name(std::string const& class_name)
             {
             return &*i;
             }
-        i++;
+        ++i;
         }
     return 0;
 }
@@ -484,7 +485,7 @@ void CensusView::update_class_names()
                     found = true;
                     break;
                     }
-                j++;
+                ++j;
                 }
             // It should not be possible for no cell to be found in the class.
             if(!found)
@@ -496,7 +497,7 @@ void CensusView::update_class_names()
                     ;
                 }
             }
-        n++;
+        ++n;
         }
 
     // Replace the vector of class parameters with the one we rebuilt.
@@ -1072,7 +1073,7 @@ bool CensusView::DoAllCells(e_output_dest a_OutputDest)
 {
     int number_of_cells = 0;
     std::vector<Input>::iterator ip;
-    for(ip = cell_parms().begin(); ip != cell_parms().end(); ip++)
+    for(ip = cell_parms().begin(); ip != cell_parms().end(); ++ip)
         {
         if("Yes" != (*ip)["IncludeInComposite"].str())
             continue;
@@ -1159,7 +1160,7 @@ convert_to_ihs(ihs_input0, cell_parms()[0]);
 
     Timer timer;
     was_canceled_ = false;
-    for(unsigned int j = 0; j < cell_parms().size(); j++)
+    for(unsigned int j = 0; j < cell_parms().size(); ++j)
         {
 IllusInputParms Parms;
 convert_to_ihs(Parms, cell_parms()[j]);
@@ -1351,11 +1352,31 @@ convert_to_ihs(ihs_input0, cell_parms()[0]);
 
     int year_average_age_first_exceeds_80 = 0;
 
+    {
+    std::ofstream ofs
+        ("experience_rating"
+        ,std::ios_base::out | std::ios_base::trunc
+        );
+    ofs
+        << '\t' << "year"
+        << '\t' << "1+i(12)/12"
+        << '\t' << "inforce"
+        << '\t' << "coi"
+        << '\t' << "cum_coi"
+        << '\t' << "claims"
+        << '\t' << "cum_claims"
+        << '\t' << "ibnr_mos"
+        << '\t' << "ibnr"
+        << '\t' << "k"
+        << '\n'
+        ;
+    }
+
     std::vector<e_run_basis> const& RunBases = Composite.GetRunBases();
     for
         (std::vector<e_run_basis>::const_iterator run_basis = RunBases.begin()
         ;run_basis != RunBases.end()
-        ;run_basis++
+        ;++run_basis
         )
 // TODO ?? expunge try-catch?
 //    try
@@ -1365,7 +1386,7 @@ convert_to_ihs(ihs_input0, cell_parms()[0]);
             break;
             }
 
-        for(i = AVS.begin(); i != AVS.end(); i++)
+        for(i = AVS.begin(); i != AVS.end(); ++i)
             {
             (*i)->GuessWhetherFirstYearPremiumExceedsRetaliationLimit();
             }
@@ -1373,7 +1394,7 @@ restart:
         // Initialize each cell.
         // Calculate duration when the youngest one ends.
         int MaxYr = 0;
-        for(i = AVS.begin(); i != AVS.end(); i++)
+        for(i = AVS.begin(); i != AVS.end(); ++i)
             {
             (*i)->InitializeLife(*run_basis);
             MaxYr = std::max(MaxYr, (*i)->GetLength());
@@ -1395,42 +1416,55 @@ restart:
 // TODO ?? expunge        Progress->Create(); // Modeless.
 
         // Experience rating mortality reserve.
+        double case_accum_net_mortchgs = 0.0;
+        double case_accum_net_claims   = 0.0;
+        double case_k_factor           = 0.0;
+
+        double case_ibnr_months = temp_db.Query(DB_ExpRatIBNRMult);
+
         double CaseExpRatReserve = 0.0;
         double check_;
+
+        {
+        std::ofstream ofs
+            ("experience_rating"
+            ,std::ios_base::out | std::ios_base::ate | std::ios_base::app
+            );
+        ofs << *run_basis << '\n';
+        }
 
         // Experience rating as implemented here requires a general-account
         // rate. Because that rate might vary across cells, the case-level
         // rate must be used. Extend its last element if it doesn't have
         // enough values.
-// TODO ?? expunge?
-/*
         std::vector<double> general_account_rate;
         std::copy
-            (case_parms()[0].GenAcctRate.begin()
-            ,case_parms()[0].GenAcctRate.end()
+            (ihs_input0.GenAcctRate.begin()
+            ,ihs_input0.GenAcctRate.end()
             ,std::back_inserter(general_account_rate)
             );
         general_account_rate.resize(MaxYr, general_account_rate.back());
-*/
+
+        std::vector<double> experience_reserve_rate = general_account_rate;
 
         // TODO ?? We don't start at InforceYear, because issue years may
         // differ between cells and we have not coded support for that yet.
-        for(int year = 0; year < MaxYr; year++)
+        for(int year = 0; year < MaxYr; ++year)
             {
+            double case_years_net_claims = 0.0;
+            double case_years_net_mortchgs = 0.0;
+
             double CaseYearsCOICharges = 0.0;
             double CaseYearsIBNR = 0.0;
 
             double ExpRatMlyInt = 0.0;
-// TODO ?? Is it too much work to figure out whether experience rating is needed?
-//            if(any cell has true == UseExperienceRating)
-                {
-//                ExpRatMlyInt = 1.0 + i_upper_12_over_12_from_i<double>()
-//                    (general_account_rate[year]
-//                    );
-                }
+            double experience_reserve_monthly_u =
+                1.0 + i_upper_12_over_12_from_i<double>()
+                    (experience_reserve_rate[year]
+                    );
 
             // Process one month at a time for all cells.
-            for(int month = 0; month < 12; month++)
+            for(int month = 0; month < 12; ++month)
                 {
                 // Initialize year's assets to zero.
                 // TODO ?? Uh--it already is, yearly...but this is monthly.
@@ -1439,35 +1473,48 @@ restart:
 
                 // Get total case assets prior to interest crediting because
                 // those assets determine the M&E charge.
-
+{
+////std::ofstream ofs("experience_rating", std::ios_base::out | std::ios_base::ate | std::ios_base::app);
                 // Process transactions through monthly deduction.
-                for(i = AVS.begin(); i != AVS.end(); i++)
+                double current_mortchg = 0.0;
+                for(i = AVS.begin(); i != AVS.end(); ++i)
                     {
                     (*i)->Year = year;
                     (*i)->Month = month;
                     (*i)->CoordinateCounters();
                     if((*i)->PrecedesInforceDuration(year, month)) continue;
-                    (*i)->IncrementBOM(year, month, CaseExpRatReserve);
+                    (*i)->IncrementBOM(year, month, case_k_factor);
 
                     // Add assets and COI charges to case totals.
                     Assets[year] += (*i)->GetSepAcctAssetsInforce();
                     CaseYearsCOICharges += (*i)->GetLastCOIChargeInforce();
                     CaseYearsIBNR += (*i)->GetIBNRContrib();
-                    }
 
+                    current_mortchg += (*i)->GetLastCOIChargeInforce();
+////ofs << current_mortchg << " = mortchg" << std::endl;
+                    }
+////ofs << current_mortchg << " = total mortchg" << std::endl;
+
+                case_accum_net_mortchgs *= experience_reserve_monthly_u;
+                case_accum_net_mortchgs += current_mortchg;
+
+                case_years_net_mortchgs *= experience_reserve_monthly_u;
+                case_years_net_mortchgs += current_mortchg;
+
+////ofs << "Month " << month << "ytd mortchg: " << case_years_net_mortchgs;
+}
                 check_ = 0.0;
 // TODO ?? composite is off when first cell dies.
 // Assertions are designed to ignore this.
 // TODO ?? Assertions would also fire if enabled for other bases than current.
-                for(i = AVS.begin(); i != AVS.end(); i++)
+                for(i = AVS.begin(); i != AVS.end(); ++i)
                     {
                     check_ += (*i)->GetExpRatReserve();
                     }
-                LMI_ASSERT((e_run_curr_basis != *run_basis) || (40 < year) || materially_equal(check_, CaseExpRatReserve) || already_reported_error++);
 
                 // Make experience rating reserve adjustments that
                 // depend only on this cell.
-                for(i = AVS.begin(); i != AVS.end(); i++)
+                for(i = AVS.begin(); i != AVS.end(); ++i)
                     {
                     CaseExpRatReserve +=
                         (*i)->UpdateExpRatReserveBOM(ExpRatMlyInt);
@@ -1476,14 +1523,13 @@ restart:
                 CaseExpRatReserve *= ExpRatMlyInt;
 
                 check_ = 0.0;
-                for(i = AVS.begin(); i != AVS.end(); i++)
+                for(i = AVS.begin(); i != AVS.end(); ++i)
                     {
                     check_ += (*i)->GetExpRatReserve();
                     }
-                LMI_ASSERT((e_run_curr_basis != *run_basis) || (40 < year) || materially_equal(check_, CaseExpRatReserve) || already_reported_error++);
 
                 // Process transactions from int credit through end of month.
-                for(i = AVS.begin(); i != AVS.end(); i++)
+                for(i = AVS.begin(); i != AVS.end(); ++i)
                     {
                     if((*i)->PrecedesInforceDuration(year, month)) continue;
                     (*i)->IncrementEOM(year, month, Assets[year]);
@@ -1499,20 +1545,28 @@ restart:
                 // So it would be quite a bit of work to offer any
                 // consistent alternative to curtate partial mortality.
                 double CaseMonthsClaims = 0.0;
+                double current_claims = 0.0;
                 if(month == 11)
                     {
-                    for(i = AVS.begin(); i != AVS.end(); i++)
+                    for(i = AVS.begin(); i != AVS.end(); ++i)
                         {
                         (*i)->SetClaims();
                         CaseMonthsClaims += (*i)->GetCurtateNetClaimsInforce();
 // TODO ?? AV released on death was added to the nearly-identical code in
 // acctval.cpp, but not here.
+                        current_claims += (*i)->GetCurtateNetClaimsInforce();
                         }
                     CaseExpRatReserve -= CaseMonthsClaims;
                     }
 
+                case_accum_net_claims *= experience_reserve_monthly_u;
+                case_accum_net_claims += current_claims;
+
+                case_years_net_claims *= experience_reserve_monthly_u;
+                case_years_net_claims += current_claims;
+
                 // Allocate claims by total net COI deds for pol yr.
-                for(i = AVS.begin(); i != AVS.end(); i++)
+                for(i = AVS.begin(); i != AVS.end(); ++i)
                     {
                     (*i)->UpdateExpRatReserveEOM
                         (CaseYearsCOICharges
@@ -1521,7 +1575,7 @@ restart:
                     }
 
                 check_ = 0.0;
-                for(i = AVS.begin(); i != AVS.end(); i++)
+                for(i = AVS.begin(); i != AVS.end(); ++i)
                     {
                     check_ += (*i)->GetExpRatReserve();
                     }
@@ -1531,19 +1585,17 @@ restart:
                     {
                     persistency_adjustment = CaseExpRatReserve / check_;
                     check_ = 0.0;
-                    for(i = AVS.begin(); i != AVS.end(); i++)
+                    for(i = AVS.begin(); i != AVS.end(); ++i)
                         {
                         check_ += (*i)->UpdateExpRatReserveForPersistency
                             (persistency_adjustment
                             );
                         }
                     }
-
-                LMI_ASSERT((e_run_curr_basis != *run_basis) || (40 < year) || materially_equal(check_, CaseExpRatReserve) || already_reported_error++);
                 }
 
             bool need_to_restart = false;
-            for(i = AVS.begin(); i != AVS.end(); i++)
+            for(i = AVS.begin(); i != AVS.end(); ++i)
                 {
                 if(!(*i)->TestWhetherFirstYearPremiumExceededRetaliationLimit())
                     {
@@ -1556,7 +1608,7 @@ restart:
                 // the goto statement, we could instead reinitialize
                 // everything explicitly and decrement the loop counter,
                 // but that would be more unnatural.
-                for(i = AVS.begin(); i != AVS.end(); i++)
+                for(i = AVS.begin(); i != AVS.end(); ++i)
                     {
                     (*i)->DebugRestart
                         ("First-year premium did not meet retaliation limit"
@@ -1572,7 +1624,7 @@ restart:
             // NumLivesInforce determines exp rating std dev multiplier.
             double NumLivesInforce = 0.0;
             double StabResVariance = 0.0;
-            for(i = AVS.begin(); i != AVS.end(); i++)
+            for(i = AVS.begin(); i != AVS.end(); ++i)
                 {
                 // Get total actual # lives for exp rating.
                 NumLivesInforce += (*i)->GetInforceLives();
@@ -1594,7 +1646,7 @@ restart:
             // SS does this *after* end of year,
             // but refund is *at* end of year and it should
             // affect the corridor DB e.g.
-            for(i = AVS.begin(); i != AVS.end(); i++)
+            for(i = AVS.begin(); i != AVS.end(); ++i)
                 {
                 (*i)->SetExpRatRfd
                     (CaseYearsCOICharges
@@ -1603,12 +1655,11 @@ restart:
                 }
 
             double check_ = 0.0;
-            for(i = AVS.begin(); i != AVS.end(); i++)
+            for(i = AVS.begin(); i != AVS.end(); ++i)
                 {
 // TODO ?? expunge? //                check_ += i->GetExpRatReserve();
                 check_ += (*i)->GetExpRatReserveNonforborne();
                 }
-            LMI_ASSERT((e_run_curr_basis != *run_basis) || (40 < year) || materially_equal(check_, CaseExpRatReserve) || already_reported_error++);
 
 // TODO ?? Resolve this.
 //
@@ -1651,7 +1702,7 @@ restart:
                         )
                 )
                 {
-                for(i = AVS.begin(); i != AVS.end(); i++)
+                for(i = AVS.begin(); i != AVS.end(); ++i)
                     {
                     lives_inforce += (*i)->GetInforceLives();
                     age_sum += lives_inforce * ((*i)->GetIssueAge() + year);
@@ -1672,11 +1723,53 @@ restart:
                 }
 
             // Increment year, update curtate inforce factor.
-            for(i = AVS.begin(); i != AVS.end(); i++)
+            for(i = AVS.begin(); i != AVS.end(); ++i)
                 {
                 if((*i)->PrecedesInforceDuration(year, 11)) continue;
                 (*i)->IncrementEOY(year);
                 }
+
+            // Calculate next year's k factor.
+            double case_ibnr =
+                    case_years_net_claims
+                *   case_ibnr_months
+                /   12.0
+                ;
+
+            // Current COI charges can actually be zero, e.g. when the
+            // corridor factor is unity.
+            if(0.0 == case_years_net_mortchgs)
+                {
+                case_k_factor = 1.0;
+                }
+            else
+                {
+                case_k_factor = -
+                        (case_accum_net_mortchgs - case_accum_net_claims - case_ibnr)
+                    *   (1.0 + case_k_factor)
+// TODO ?? '4.0' is an arbitrary factor that belongs in the database.
+                    /   (4.0 * case_years_net_mortchgs)
+                    ;
+                case_k_factor = std::max(-1.0, case_k_factor);
+                }
+
+            std::ofstream ofs
+                ("experience_rating"
+                ,std::ios_base::out | std::ios_base::ate | std::ios_base::app
+                );
+            ofs
+                << '\t' << year
+                << '\t' << experience_reserve_monthly_u
+                << '\t' << NumLivesInforce
+                << '\t' << case_years_net_mortchgs
+                << '\t' << case_accum_net_mortchgs
+                << '\t' << case_years_net_claims
+                << '\t' << case_accum_net_claims
+                << '\t' << case_ibnr_months
+                << '\t' << case_ibnr
+                << '\t' << case_k_factor
+                << '\n' << std::flush
+                ;
 
             progress_message.str("");
             progress_message << "Completed " << 1 + year << " of " << MaxYr;
@@ -1690,7 +1783,7 @@ restart:
                 }
             } // End for year.
 
-        for(i = AVS.begin(); i != AVS.end(); i++)
+        for(i = AVS.begin(); i != AVS.end(); ++i)
             {
             (*i)->FinalizeLife(*run_basis);
             }
@@ -1705,7 +1798,7 @@ restart:
 //        throw;
 //        }
 
-    for(i = AVS.begin(); i != AVS.end(); i++)
+    for(i = AVS.begin(); i != AVS.end(); ++i)
         {
         (*i)->FinalizeLifeAllBases();
         Composite.PlusEq((*i)->LedgerValues());
@@ -1716,9 +1809,9 @@ restart:
     if(!was_canceled_)
         {
         int j = 0;
-        for(i = AVS.begin(); i != AVS.end(); i++)
+        for(i = AVS.begin(); i != AVS.end(); ++i)
             {
-            EmitEveryone(a_OutputDest, (*i)->LedgerValues(), j++);
+            EmitEveryone(a_OutputDest, (*i)->LedgerValues(), ++j);
             }
 
         composite_ledger_ = Composite;

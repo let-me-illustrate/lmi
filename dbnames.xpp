@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: dbnames.xpp,v 1.1 2005-02-08 14:11:57 chicares Exp $
+// $Id: dbnames.xpp,v 1.2 2005-03-22 03:40:18 chicares Exp $
 
 #define DB_NAMES \
 {DB_FIRST,DB_FIRST,"dummy","dummy",}, \
@@ -78,7 +78,7 @@
 {DB_IntFloor,DB_Topic_Interest,"IntFloor","[not used]",}, \
 {DB_SepAcctSpreadMethod,DB_Topic_Interest,"SepAcctSpreadMethod","Separate-account spread and fee subtraction: 0 = annual (effective), 1 = daily (nominal)",}, \
 {DB_DynamicMandE,DB_Topic_Interest,"DynamicMandE","M&&E dynamically determined based on total case assets: 0=no, 1=yes",}, \
-{DB_DynamicCOI,DB_Topic_Interest,"DynamicCOI","Cost of insurance rates dynamically determined: 0=no, 1=based on algebraic sign of case experience rating reserve",}, \
+{DB_DynamicCOI,DB_Topic_Mortality,"DynamicCOI","Cost of insurance rates dynamically determined: 0=no, 1=based on algebraic sign of case experience rating reserve",}, \
 {DB_Topic_Mortality,DB_FIRST,"Mortality","Mortality (cost of insurance) charges",}, \
 {DB_CurrCOITable,DB_Topic_Mortality,"CurrCOITable","Current mortality charge table (index in mortality table database)",}, \
 {DB_MdptCOITable,DB_Topic_Mortality,"MdptCOITable","Midpoint mortality charge table (index in mortality table database) [not used--calculated as mean of current and guaranteed]",}, \
@@ -229,7 +229,7 @@
 {DB_PrimaryHurdle,DB_Topic_MiscAsspts,"PrimaryHurdle","Hurdle rate [not yet implemented]",}, \
 {DB_SecondaryHurdle,DB_Topic_MiscAsspts,"SecondaryHurdle","Secondary hurdle rate (TSA XL, Part I, page 61) [not yet implemented]",}, \
 {DB_LedgerType,DB_Topic_Misc,"LedgerType","Ledger type: 0=illustration reg, 1=NASD, 2=prospectus illustration, 3=group private placement, 4=offshore private placement, 5=private placement subject to illustration reg, 6=individual private placement",}, \
-{DB_AllowExpRating,DB_Topic_MiscAsspts,"AllowExpRating","Allow experience rating: 0=no, 1=yes",}, \
+{DB_AllowExpRating,DB_Topic_ExpRating,"AllowExpRating","Allow experience rating: 0=no, 1=yes",}, \
 {DB_Topic_Tables,DB_FIRST,"Tables","Miscellaneous tables stored externally in SOA standard format",}, \
 {DB_PremTaxTable,DB_Topic_Tables,"PremTaxTable","[not yet implemented]",}, \
 {DB_TableYTable,DB_Topic_Tables,"TableYTable","New York table Y (index in mortality table database)",}, \
