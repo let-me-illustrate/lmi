@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: account_value.hpp,v 1.2 2005-02-12 12:59:31 chicares Exp $
+// $Id: account_value.hpp,v 1.3 2005-03-07 11:48:58 chicares Exp $
 
 #ifndef account_value_hpp
 #define account_value_hpp
@@ -68,7 +68,6 @@ class LMI_EXPIMP AccountValue
     void   SetGuarPrem          ();
 
     void SetDebugFilename    (std::string const&);
-    void SetProject12Filename(std::string const&);
 
     void   GuessWhetherFirstYearPremiumExceedsRetaliationLimit();
     bool   TestWhetherFirstYearPremiumExceededRetaliationLimit();
@@ -343,10 +342,6 @@ class LMI_EXPIMP AccountValue
     void   DebugPrintInit();
     void   DebugEndBasis();
 
-    void   Project12MosPrintInit();
-    void   Project12MosPrintMonth();
-    void   Project12MosPrintEnd();
-
     void   EndTermRider();
 
     void   CoordinateCounters();
@@ -367,10 +362,6 @@ class LMI_EXPIMP AccountValue
     std::ofstream   DebugStream;
     std::vector<std::string> DebugRecord;
 
-    // 12-month projection (akin to annual report, but prospective).
-    std::string     Project12MosFilename;
-    std::ofstream   Project12MosStream;
-
     double          PriorAVGenAcct;
     double          PriorAVSepAcct;
     double          PriorAVRegLn;
@@ -380,7 +371,6 @@ class LMI_EXPIMP AccountValue
 
     // Mode flags.
     bool            Debugging;
-    bool            Projecting12Mos;
     bool            Solving;
     bool            SolvingForGuarPremium;
     bool            ItLapsed;
