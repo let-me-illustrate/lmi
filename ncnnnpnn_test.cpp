@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ncnnnpnn_test.cpp,v 1.1 2005-01-14 19:47:45 chicares Exp $
+// $Id: ncnnnpnn_test.cpp,v 1.2 2005-03-11 13:40:41 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -149,7 +149,7 @@ int test_main(int, char*[])
 #else
         // TODO ?? Try to find a way to make this rogue compiler behave.
         //
-        // COMPILER!! Problem with borland compiler: see
+        // COMPILER !! Problem with borland compiler: see
         // http://groups.yahoo.com/group/boost/message/12079
         // http://groups.yahoo.com/group/boost/message/12111
         // We choose to avoid the hardware exception here,

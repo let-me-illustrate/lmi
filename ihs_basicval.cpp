@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_basicval.cpp,v 1.6 2005-02-17 04:40:03 chicares Exp $
+// $Id: ihs_basicval.cpp,v 1.7 2005-03-11 13:40:41 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -600,10 +600,10 @@ void BasicValues::Init7702A()
             (magic
             ,DefnLifeIns.value()
             ,DefnMaterialChange.value()
-            ,false  // joint life: hardcoded for now??
+            ,false // TODO ?? Joint life: hardcoded for now.
             ,Input_->AvoidMec.value()
-            ,true   // use table for 7pp: hardcoded for now??
-            ,true   // use table for NSP: hardcoded for now??
+            ,true  // TODO ?? Use table for 7pp: hardcoded for now.
+            ,true  // TODO ?? Use table for NSP: hardcoded for now.
             ,MortalityRates_->SevenPayRates()
             ,MortalityRates_->CvatNspRates()
             ,round_max_premium
@@ -1438,7 +1438,7 @@ double BasicValues::GetModalSpecAmtMlyDed
 // TODO ?? Looks like none of our test decks exercise this line.
     z *= 1.0 - Loads_->target_total_load(e_basis(e_currbasis))[0];
 
-    // Is this correct now??
+    // TODO ?? Is this correct now?
     if(Input_->Status[0].HasWP && 0.0 != 1.0 + wp_rate)
         {
         // For simplicity, ignore Database_->Query(DB_WPMax)

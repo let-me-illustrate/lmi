@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_irc7702a.cpp,v 1.2 2005-02-14 04:35:18 chicares Exp $
+// $Id: ihs_irc7702a.cpp,v 1.3 2005-03-11 13:40:41 chicares Exp $
 
 // TODO ?? Make this a server app. Consider where to store DB, SA history.
 
@@ -681,7 +681,7 @@ double Irc7702A::UpdatePmt7702A
     // called, the payment for the current duration should have its default
     // value of zero.
     //
-    // But then how will we handle a WD?? Separate function?
+    // TODO ?? But then how will we handle a WD? Separate function?
     //
     // Changed anyway: called twice a month when there's a material change.
 //    LMI_ASSERT(0.0 == Pmts[TestPeriodDur]);
@@ -1025,7 +1025,7 @@ void Irc7702A::RedressMatChg
         (Pmts.begin()
         ,Pmts.begin() + TestPeriodDur
         );
-// Is the latest payment still there??
+// TODO ?? Is the latest payment still there?
 
     // Start new 7 pay period
     TestPeriodDur = 0;
@@ -1211,7 +1211,7 @@ double Irc7702A::SAIncreaseToAvoidMec(bool a_TriggeredByUnnecPrem)
 // Specs say this formula is for Bfts increase to avoid MEC when unnec prem
 // paid. Also need to handle case where prem exceeds 7pp. Also need to handle
 // dumpins. Also need to handle Bfts decrease (complicated). Also need to
-// reflect new 7pp upon MatChg. Where should we do all this??
+// reflect new 7pp upon MatChg. TODO ?? Where should we do all this?
 //
 // Events that are MatChgs:
 //   1035 exchange--but we treat that as a special case
@@ -1249,7 +1249,7 @@ redress MatChg
         GPT:
             whenever GP limit increases
             upon any ROP increase
-                doesn`t that increase the GP limit??
+                doesn`t that increase the GP limit?
         CVAT:
             whenever unnec prem paid
             upon any elected Bfts increase

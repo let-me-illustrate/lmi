@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: any_member_ihs.hpp,v 1.1 2005-01-14 19:47:44 chicares Exp $
+// $Id: any_member_ihs.hpp,v 1.2 2005-03-11 13:40:41 chicares Exp $
 
 // Refer to data members by symbolic names.
 
@@ -377,7 +377,7 @@ std::cout << "MemberSymbolTable_ihs::ascribe_members() called" << std::endl;
 
 #endif // BC_BEFORE_5_5
 
-// COMPILER!! bc++5.5.1 doesn't like a template at the end of a file, so...
+// COMPILER !! bc++5.5.1 doesn't like a template at the end of a file, so...
 #if defined __BORLANDC__ && __BORLANDC__ >= 0x0550
 extern int borland_workaround;
 #endif // bc++5.5.1 workaround

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: configurable_settings.hpp,v 1.1 2005-01-14 19:47:44 chicares Exp $
+// $Id: configurable_settings.hpp,v 1.2 2005-03-11 13:40:41 chicares Exp $
 
 #ifndef configurable_settings_hpp
 #define configurable_settings_hpp
@@ -53,7 +53,7 @@ class LMI_EXPIMP configurable_settings
     std::string default_product_;
 
 #ifdef __BORLANDC__
-// COMPILER!! Borland compilers defectively [11/5] require a public dtor; see:
+// COMPILER !! Borland compilers defectively [11/5] require a public dtor; see:
 // http://groups.google.com/groups?selm=7ei6fi%244me%241%40nnrp1.dejanews.com
 // http://groups.google.com/groups?hl=en&lr=&ie=UTF-8&selm=m3k9fc25dj.fsf%40gabi-soft.fr
   public:
