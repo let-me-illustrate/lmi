@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustration_view.cpp,v 1.1 2005-03-12 03:01:08 chicares Exp $
+// $Id: illustration_view.cpp,v 1.2 2005-03-15 14:32:58 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -59,19 +59,12 @@
 
 #include <wx/app.h> // wxTheApp
 #include <wx/html/htmlwin.h>
-// TODO ?? expunge #include <wx/html/htmprint.h>
 #include <wx/icon.h>
-#include <wx/log.h> // debugging only
+#include <wx/log.h> // TODO ?? Debugging only: consider removing.
 #include <wx/menu.h>
 #include <wx/msgdlg.h>
 #include <wx/toolbar.h>
 #include <wx/xrc/xmlres.h>
-
-// FSF !! Expunge this when we implement printing in a more general way.
-#include "system_command.hpp"
-#ifdef __WXMSW__
-#   include <wx/msw/wrapwin.h>
-#endif // __WXMSW__
 
 #include <cstdio>
 #include <fstream>
@@ -224,17 +217,6 @@ void IllustrationView::FormatSelectedValuesAsHtml()
         << "<head><title>Let me illustrate...</title></head>"
         << "<body text=\"#000000\" bgcolor=\"#B0B0B0\">"
 
-// TODO ?? expunge        
-//        << "<div align=left>"
-//        << "  <img src=\"your-logo-here.png\" alt=\"logo\" width=88 height=31>"
-//        << "</div>"
-//
-//        << "<p>"
-//        << "</p>"
-//
-//        << "<p>"
-//        << "</p>"
-
         << "<p>"
         << " <h5>"
         << "  <font color=\"#804040\">"
@@ -268,20 +250,17 @@ void IllustrationView::FormatSelectedValuesAsHtml()
 
         oss
             << std::setprecision(2)
-            << "<font color=\"#FFBEAF\">I think Rakesh and George wanted these:</font><br>"
+            << "<br>"
             << Invar.InitGLP          << "   initial guideline level premium<br>"
             << Invar.InitGSP          << "   initial guideline single premium<br>"
             << Invar.InitSevenPayPrem << "   initial seven-pay premium<br>"
+            << ((Invar.IsMec) ? "MEC" : "Non-MEC") << "<br>"
+            << "<br>"
             << Invar.InitTgtPrem      << "   initial target premium<br>"
-            << "<font color=\"#FFBEAF\">and Tom wanted these:</font><br>"
-            << Invar.IsMec            << "   MEC status<br>"
             << Invar.InitBaseSpecAmt  << "   initial base specified amount<br>"
             << Invar.InitTermSpecAmt  << "   initial term specified amount<br>"
             << Invar.InitBaseSpecAmt + Invar.InitTermSpecAmt << "   initial total specified amount<br>"
             << Invar.GetStatePostalAbbrev() << "   state of jurisdiction<br>"
-
-            << "<font color=\"#FFBEAF\">as well as commas in numbers (done)</font><br>"
-            << "<font color=\"#FFBEAF\">and 'composite' instead of a blank name for composites (done)</font><br>"
             ;
         }
 
@@ -297,7 +276,6 @@ void IllustrationView::FormatSelectedValuesAsHtml()
         << "    <th>GuarAV</th> <th>GuarCSV</th> <th>GuarDB</th>"
         << "    <th>CurrAV</th> <th>CurrCSV</th> <th>CurrDB</th>"
         << "  </tr>"
-// TODO ?? expunge        << std::fixed
         ;
 
     for(int j = 0; j < max_length; ++j)
