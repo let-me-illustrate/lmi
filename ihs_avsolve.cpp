@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avsolve.cpp,v 1.4 2005-02-17 04:40:02 chicares Exp $
+// $Id: ihs_avsolve.cpp,v 1.5 2005-03-12 02:59:13 chicares Exp $
 
 // All iterative illustration solves are performed in this file.
 // We use Brent's algorithm because it is guaranteed to converge
@@ -49,7 +49,7 @@
 #include <numeric>      // std::accumulate()
 
 /*
-?? Limitations
+TODO ?? Limitations
 
 Restrict targetyear to Length
 
