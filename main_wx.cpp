@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_wx.cpp,v 1.3 2005-03-30 03:40:52 chicares Exp $
+// $Id: main_wx.cpp,v 1.4 2005-03-30 19:28:31 chicares Exp $
 
 // Portions of this file are derived from wxWindows files
 //   samples/docvwmdi/docview.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -562,6 +562,21 @@ void lmi_wx_app::OnDropFiles(wxDropFilesEvent& event)
         }
 }
 
+// TODO ?? Confirm that wx-2.5.4 solved the underlying problem, so
+// that this now works as expected.
+#if 1
+bool lmi_wx_app::OnExceptionInMainLoop()
+{
+    wxLog::FlushActive();
+
+    int z = wxMessageBox
+        ("Try to resume?"
+        ,"Unhandled exception"
+        ,wxYES_NO | wxICON_QUESTION
+        );
+    return wxYES == z;
+}
+#else // not 1
 // INELEGANT !! "Unhandled exception" occurs in msw system messages,
 // so a distinct alternative here might be better.
 //
@@ -602,6 +617,7 @@ bool lmi_wx_app::OnExceptionInMainLoop()
         return false;
         }
 }
+#endif // not 1
 
 int lmi_wx_app::OnExit()
 {
