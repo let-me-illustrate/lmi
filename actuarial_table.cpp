@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: actuarial_table.cpp,v 1.4 2005-01-31 13:12:48 chicares Exp $
+// $Id: actuarial_table.cpp,v 1.5 2005-02-28 12:58:14 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -38,6 +38,7 @@
 #include <cctype>    // std::toupper()
 #include <climits>   // CHAR_BIT
 #include <ios>
+#include <limits>
 #include <memory>
 #include <sstream>
 #include <stdexcept>
@@ -59,6 +60,20 @@
 
 namespace
 {
+    // TODO ?? Add unit tests for tables with length
+    //   - more than 2^15 but less than 2^16; and
+    //   - exactly 2^16
+    //   - more than 2^16
+
+    // The binary format that the SOA uses for its published tables
+    // has only a sixteen-bit integer to represent a table's length
+    // in bytes. This length must be read as unsigned because it may
+    // be 2^15 or greater, but less than 2^16.
+    typedef boost::uint16_t soa_table_length_type;
+    int soa_table_length_max =
+        std::numeric_limits<soa_table_length_type>::max()
+        ;
+
     // The value -1 is invalid for all data fields except table name
     // and values.
     int invalid = -1;
@@ -114,8 +129,10 @@ namespace
               ;
             }
         int deduced_length = number_of_values * sizeof(double);
-        // TODO ?? Explain '65536'.
-        LMI_ASSERT(65536 < deduced_length || nominal_length == deduced_length);
+        LMI_ASSERT
+            (   soa_table_length_max < deduced_length
+            ||  nominal_length == deduced_length
+            );
         values.resize(number_of_values);
         char z[sizeof(double)];
         for(int j = 0; j < number_of_values; ++j)
@@ -327,7 +344,7 @@ std::vector<double> actuarial_table
         boost::int16_t record_type = invalid;
         read(data_ifs, record_type, sizeof(boost::int16_t));
 
-        boost::int16_t nominal_length = invalid;
+        soa_table_length_type nominal_length = invalid;
         read(data_ifs, nominal_length, sizeof(boost::int16_t));
 
         switch(record_type)
