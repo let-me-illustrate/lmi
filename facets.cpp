@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: facets.cpp,v 1.1 2005-01-14 19:47:44 chicares Exp $
+// $Id: facets.cpp,v 1.2 2005-02-03 16:01:19 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -40,6 +40,8 @@
 //   http://groups.google.com/groups?selm=3820A76F.3952E808%40ihug.co.nz
 // that ' ' can be used as an array index even if type 'char' is
 // signed, because 2.2/3 requires it to have a positive value.
+// However, gcc has a warning for 'char' array indexes that doesn't
+// recognize this exception, so a workaround for "[' ']" is used here.
 //
 // GWC modified this class
 //   in 2004 (see Motivation below)
@@ -81,8 +83,9 @@ namespace
             {
             static std::ctype_base::mask m_[table_size];
             std::copy(classic_table(), classic_table() + table_size, m_);
-            m_[' '] = static_cast<std::ctype_base::mask>
-                (m_[' '] & ~std::ctype_base::space
+            int const space = ' ';
+            m_[space] = static_cast<std::ctype_base::mask>
+                (m_[space] & ~std::ctype_base::space
                 );
             return m_;
             }
