@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input.hpp,v 1.1 2005-03-11 03:19:31 chicares Exp $
+// $Id: input.hpp,v 1.2 2005-04-06 23:10:13 chicares Exp $
 
 #ifndef input_hpp
 #define input_hpp
@@ -27,6 +27,7 @@
 #include "config.hpp"
 
 #include "any_member.hpp"
+#include "ce_product_name.hpp"
 #include "database.hpp"
 #include "datum_boolean.hpp"
 #include "datum_string.hpp"
@@ -135,7 +136,7 @@ class Input
     tnr_date                 DateOfBirth                     ;
     tnr_date                 DateOfRetirement                ;
     mce_table_rating         SubstandardTable                ;
-    mce_contract_name        ProductName                     ;
+    ce_product_name          ProductName                     ;
     tnr_nonnegative_double   Dumpin                          ;
     tnr_nonnegative_double   External1035ExchangeAmount      ;
     tnr_nonnegative_double   External1035ExchangeBasis       ;
@@ -330,7 +331,7 @@ class Input
     void reset_database();
 
     std::auto_ptr<TDatabase> database                        ;
-    mce_contract_name        CachedProductName               ;
+    ce_product_name          CachedProductName               ;
     mce_gender               CachedGender                    ;
     mce_class                CachedUnderwritingClass         ;
     mce_smoking              CachedSmoking                   ;
