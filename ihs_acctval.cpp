@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_acctval.cpp,v 1.7 2005-02-17 04:40:02 chicares Exp $
+// $Id: ihs_acctval.cpp,v 1.8 2005-02-28 12:58:58 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -730,28 +730,43 @@ void AccountValue::SetInitialValues()
 
     if(Input_->AvgFund || Input_->OverrideFundMgmtFee)
         {
-        SepAcctAlloc            = 1.0;
+        SepAcctAlloc = 1.0;
+        }
+    else if(100 == Input_->SumOfSepAcctFundAllocs())
+        {
+        // Because 100 * .01 does not exactly equal unity, treat 100%
+        // as a special case to avoid catastrophic cancellation when
+        // calculating general-account allocation as the difference
+        // between this quantity and unity.
+        SepAcctAlloc = 1.0;
         }
     else
         {
-        // TODO ?? What if no GA?
-        SepAcctAlloc            = .01 * Input_->SumOfSepAcctFundAllocs();
+        SepAcctAlloc = .01 * Input_->SumOfSepAcctFundAllocs();
         }
-    GenAcctAlloc                = 1.0 - SepAcctAlloc;
-    if(!Database_->Query(DB_AllowGenAcct))
+
+    GenAcctAlloc = 1.0 - SepAcctAlloc;
+
+    if(!Database_->Query(DB_AllowGenAcct) && 0.0 != GenAcctAlloc)
         {
-        if(0.0 != GenAcctAlloc)
-            {
-            fatal_error()
-                << "No general account is allowed for this product."
-                << " Total allocations to general accounts: "
-                << GenAcctAlloc
-                << " . Total allocations to separate accounts: "
-                << SepAcctAlloc
-                << " ."
-                << LMI_FLUSH
-                ;
-            }
+        fatal_error()
+            << "No general account is allowed for this product, but "
+            << "allocation to general account is "
+            << GenAcctAlloc
+            << " ."
+            << LMI_FLUSH
+            ;
+        }
+
+    if(!Database_->Query(DB_AllowSepAcct) && 0.0 != SepAcctAlloc)
+        {
+        fatal_error()
+            << "No separate account is allowed for this product, but "
+            << " total allocation to separate accounts is "
+            << SepAcctAlloc
+            << " ."
+            << LMI_FLUSH
+            ;
         }
 
     MaxLoan                     = 0.0;
