@@ -1,0 +1,50 @@
+Only in cgicc-3.1.4/cgicc: CgiDefs-original.h
+Only in cgicc-3.1.4/cgicc: CgiDefs.bak
+diff --recursive --context=2 scratch/cgicc/CgiDefs.h cgicc-3.1.4/cgicc/CgiDefs.h
+*** scratch/cgicc/CgiDefs.h	Sun Oct 15 12:03:07 2000
+--- cgicc-3.1.4/cgicc/CgiDefs.h	Thu Feb 17 08:04:00 2005
+***************
+*** 23,26 ****
+--- 23,29 ----
+  #define _CGIDEFS_H_ 1
+  
++ #  define HOST "Win32"
++ #  define VERSION "3.1.4"
++ 
+  // Include information from configure
+  #if HAVE_CONFIG_H
+Only in cgicc-3.1.4/cgicc: CgiEnvironment.bak
+diff --recursive --context=2 scratch/cgicc/CgiEnvironment.cpp cgicc-3.1.4/cgicc/CgiEnvironment.cpp
+*** scratch/cgicc/CgiEnvironment.cpp	Sun Oct 15 11:58:12 2000
+--- cgicc-3.1.4/cgicc/CgiEnvironment.cpp	Thu Feb 17 08:04:14 2005
+***************
+*** 59,63 ****
+      char *temp = new char[getContentLength()];
+      STDNS cin.read(temp, getContentLength());
+!     if(STDNS cin.gcount() != getContentLength()) {
+        delete [] temp;
+        throw STDNS runtime_error("I/O error");
+--- 59,64 ----
+      char *temp = new char[getContentLength()];
+      STDNS cin.read(temp, getContentLength());
+! 
+!     if(STDNS cin.gcount() != static_cast<long int>(getContentLength())) {
+        delete [] temp;
+        throw STDNS runtime_error("I/O error");
+Only in cgicc-3.1.4/cgicc: CgiUtils.bak
+diff --recursive --context=2 scratch/cgicc/CgiUtils.cpp cgicc-3.1.4/cgicc/CgiUtils.cpp
+*** scratch/cgicc/CgiUtils.cpp	Mon Aug 09 14:25:31 1999
+--- cgicc-3.1.4/cgicc/CgiUtils.cpp	Thu Feb 17 08:03:50 2005
+***************
+*** 184,188 ****
+    char *temp = new char[dataSize];
+    in.read(temp, dataSize);
+!   if(in.gcount() != dataSize) {
+      delete [] temp;
+      throw STDNS runtime_error("I/O error");
+--- 184,188 ----
+    char *temp = new char[dataSize];
+    in.read(temp, dataSize);
+!   if(in.gcount() != static_cast<long int>(dataSize)) {
+      delete [] temp;
+      throw STDNS runtime_error("I/O error");
