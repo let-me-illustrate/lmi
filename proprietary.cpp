@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: proprietary.cpp,v 1.2 2005-02-12 12:59:31 chicares Exp $
+// $Id: proprietary.cpp,v 1.3 2005-02-14 04:37:51 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -33,7 +33,7 @@
 #include "tiered_charges.hpp"
 
 void DBDictionary::WriteProprietaryDBFiles             () {}
-void TFundData::WriteProprietaryFundFiles              () {}
+void FundData::WriteProprietaryFundFiles               () {}
 void TProductData::WriteProprietaryPolFiles            () {}
 void StreamableRoundingRules::WriteProprietaryRndFiles () {}
 void tiered_charges::write_proprietary_tier_files      () {}

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avdebug.cpp,v 1.3 2005-02-12 12:59:31 chicares Exp $
+// $Id: ihs_avdebug.cpp,v 1.4 2005-02-14 04:37:51 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -288,10 +288,10 @@ void AccountValue::DebugPrint()
 
     if(!irc7702a_data_irrelevant)
         {
-        SetMonthlyDetail(e7702ATestDur       ,IRC7702A->DebugGetTestDur  ());
-        SetMonthlyDetail(e7702A7ppRate       ,IRC7702A->DebugGet7ppRate  ());
-        SetMonthlyDetail(e7702ANsp           ,IRC7702A->DebugGetNsp      ());
-        SetMonthlyDetail(e7702ALowestDb      ,IRC7702A->DebugGetLowestBft());
+        SetMonthlyDetail(e7702ATestDur       ,Irc7702A_->DebugGetTestDur  ());
+        SetMonthlyDetail(e7702A7ppRate       ,Irc7702A_->DebugGet7ppRate  ());
+        SetMonthlyDetail(e7702ANsp           ,Irc7702A_->DebugGetNsp      ());
+        SetMonthlyDetail(e7702ALowestDb      ,Irc7702A_->DebugGetLowestBft());
         // This one's a little tricky. We show the DCV actually used in
         // material change calculations, iff there is a material change
         // in the current month. Otherwise, we show the DCV at the end
@@ -301,19 +301,19 @@ void AccountValue::DebugPrint()
         // material change processing.
         SetMonthlyDetail
             (e7702ADeemedCv
-            ,IRC7702A->DebugGetIsMatChg()
-                ? IRC7702A->DebugGetSavedDCV()
+            ,Irc7702A_->DebugGetIsMatChg()
+                ? Irc7702A_->DebugGetSavedDCV()
                 : Dcv
             );
         SetMonthlyDetail(e7702ANetMaxNecPm   ,NetMaxNecessaryPremium       );
         SetMonthlyDetail(e7702AGrossMaxNecPm ,GrossMaxNecessaryPremium     );
 
         SetMonthlyDetail(e7702AUnnecPm       ,UnnecessaryPremium           );
-        SetMonthlyDetail(e7702ADbAdj         ,IRC7702A->DebugGetDbAdj    ());
-        SetMonthlyDetail(e7702A7pp           ,IRC7702A->DebugGet7pp      ());
-        SetMonthlyDetail(e7702ACumPmts       ,IRC7702A->DebugGetCumPmts  ());
-        SetMonthlyDetail(e7702ACum7pp        ,IRC7702A->DebugGetCum7pp   ());
-        SetMonthlyDetail(e7702AIsMatChg      ,IRC7702A->DebugGetIsMatChg ());
+        SetMonthlyDetail(e7702ADbAdj         ,Irc7702A_->DebugGetDbAdj   ());
+        SetMonthlyDetail(e7702A7pp           ,Irc7702A_->DebugGet7pp     ());
+        SetMonthlyDetail(e7702ACumPmts       ,Irc7702A_->DebugGetCumPmts ());
+        SetMonthlyDetail(e7702ACum7pp        ,Irc7702A_->DebugGetCum7pp  ());
+        SetMonthlyDetail(e7702AIsMatChg      ,Irc7702A_->DebugGetIsMatChg());
         }
     else
         {
@@ -333,8 +333,8 @@ void AccountValue::DebugPrint()
         }
     SetMonthlyDetail(e7702AIsMec         ,InvariantValues().IsMec          );
 
-    SetMonthlyDetail(eGSP                ,IRC7702->RoundedGSP            ());
-    SetMonthlyDetail(eGLP                ,IRC7702->RoundedGLP            ());
+    SetMonthlyDetail(eGSP                ,Irc7702_->RoundedGSP            ());
+    SetMonthlyDetail(eGLP                ,Irc7702_->RoundedGLP            ());
 
     std::copy
         (DebugRecord.begin()

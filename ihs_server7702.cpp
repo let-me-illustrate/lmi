@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_server7702.cpp,v 1.1 2005-01-14 19:47:45 chicares Exp $
+// $Id: ihs_server7702.cpp,v 1.2 2005-02-14 04:37:51 chicares Exp $
 
 // Known defects:
 // grep for "NEED DECISION"
@@ -574,7 +574,7 @@ void Server7702::SetDoleBentsenValuesA()
             )
         );
 
-    Output.GuidelineLevelPremiumPolicyA = basic_values_A->IRC7702->CalculateGLP
+    Output.GuidelineLevelPremiumPolicyA = basic_values_A->Irc7702_->CalculateGLP
         (0
         ,Input.OldBenefitAmount
         ,Input.OldSpecifiedAmount
@@ -582,7 +582,7 @@ void Server7702::SetDoleBentsenValuesA()
         ,Input.OldDeathBenefitOption
         );
 
-    Output.GuidelineSinglePremiumPolicyA = basic_values_A->IRC7702->CalculateGSP
+    Output.GuidelineSinglePremiumPolicyA = basic_values_A->Irc7702_->CalculateGSP
         (0
         ,Input.OldBenefitAmount
         ,Input.OldSpecifiedAmount
@@ -609,7 +609,7 @@ void Server7702::SetDoleBentsenValuesBC()
             )
         );
 
-    Output.GuidelineLevelPremiumPolicyB = basic_values_B->IRC7702->CalculateGLP
+    Output.GuidelineLevelPremiumPolicyB = basic_values_B->Irc7702_->CalculateGLP
         (Input.Duration
         ,Input.NewBenefitAmount
         ,Input.NewSpecifiedAmount
@@ -617,7 +617,7 @@ void Server7702::SetDoleBentsenValuesBC()
         ,Input.NewDeathBenefitOption
         );
 
-    Output.GuidelineSinglePremiumPolicyB = basic_values_B->IRC7702->CalculateGSP
+    Output.GuidelineSinglePremiumPolicyB = basic_values_B->Irc7702_->CalculateGSP
         (Input.Duration
         ,Input.NewBenefitAmount
         ,Input.NewSpecifiedAmount
@@ -640,7 +640,7 @@ void Server7702::SetDoleBentsenValuesBC()
             )
         );
 
-    Output.GuidelineLevelPremiumPolicyC = basic_values_C->IRC7702->CalculateGLP
+    Output.GuidelineLevelPremiumPolicyC = basic_values_C->Irc7702_->CalculateGLP
         (Input.Duration
         ,Input.OldBenefitAmount
         ,Input.OldSpecifiedAmount
@@ -648,7 +648,7 @@ void Server7702::SetDoleBentsenValuesBC()
         ,Input.OldDeathBenefitOption
         );
 
-    Output.GuidelineSinglePremiumPolicyC = basic_values_C->IRC7702->CalculateGSP
+    Output.GuidelineSinglePremiumPolicyC = basic_values_C->Irc7702_->CalculateGSP
         (Input.Duration
         ,Input.OldBenefitAmount
         ,Input.OldSpecifiedAmount

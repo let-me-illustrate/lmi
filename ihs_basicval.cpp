@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_basicval.cpp,v 1.4 2005-02-12 12:59:31 chicares Exp $
+// $Id: ihs_basicval.cpp,v 1.5 2005-02-14 04:37:51 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -187,12 +187,12 @@ BasicValues& BasicValues::operator=(BasicValues const& obj)
 BasicValues::~BasicValues()
 {
 // TODO ?? Use smart pointers instead?
-    delete IRC7702A;
-    delete IRC7702;
+    delete Irc7702A_;
+    delete Irc7702_;
     delete Input;
     delete ProductData;
     delete Database;
-    delete FundData;
+    delete FundData_;
     delete RoundingRules_;
     delete TieredCharges_;
     delete MortalityRates_;
@@ -275,7 +275,7 @@ void BasicValues::Init()
             std::string("Issue age greater than maximum")
             );
         }
-    FundData        = new TFundData
+    FundData_        = new FundData
         (AddDataDir(ProductData->GetFundFilename())
         );
     RoundingRules_  = new rounding_rules
@@ -351,7 +351,7 @@ void BasicValues::GPTServerInit()
             std::string("Issue age greater than maximum")
             );
         }
-//  FundData        = new TFundData
+//  FundData_       = new FundData
 //      (AddDataDir(ProductData->GetFundFilename())
 //      );
     RoundingRules_  = new rounding_rules
@@ -395,7 +395,7 @@ double BasicValues::InvestmentManagementFee() const
 
     double z = 0.0;
     double TotalSepAcctAllocations = 0.0;
-    TFundData const& Funds = *FundData;
+    FundData const& Funds = *FundData_;
 
     for(int j = 0; j < Funds.GetNumberOfFunds(); j++)
         {
@@ -411,7 +411,7 @@ double BasicValues::InvestmentManagementFee() const
             std::size_t n = std::strlen(s);
             bool ignore = 0 == strncmp
                 (s
-                ,Funds.GetFundInfo(j).ShortName_.c_str()
+                ,Funds.GetFundInfo(j).ShortName().c_str()
                 ,n
                 );
             weight = ignore ? 0.0 : 1.0;
@@ -450,7 +450,7 @@ double BasicValues::InvestmentManagementFee() const
 
         if(0.0 != weight)
             {
-            z += weight * Funds.GetFundInfo(j).ScalarIMF_;
+            z += weight * Funds.GetFundInfo(j).ScalarIMF();
             TotalSepAcctAllocations += weight;
             }
         }
@@ -596,7 +596,7 @@ void BasicValues::Init7702()
         local_mly_charge_add = GetADDRates();
         }
 
-    IRC7702 = new TIRC7702
+    Irc7702_ = new Irc7702
         (*this
         ,Input->DefnLifeIns
         ,Input->Status[0].IssueAge
@@ -632,7 +632,7 @@ void BasicValues::Init7702A()
 {
     // TODO ?? Temporary kludge.
     int magic = 0;
-    IRC7702A = new TIRC7702A
+    Irc7702A_ = new Irc7702A
         (magic
         ,DefnLifeIns.value()
         ,DefnMaterialChange.value()
@@ -1198,11 +1198,11 @@ double BasicValues::GetModalPremGLP
     ,double        a_SpecAmt
     ) const
 {
-    double z = IRC7702->CalculateGLP
+    double z = Irc7702_->CalculateGLP
         (a_Duration
         ,a_BftAmt
         ,a_SpecAmt
-        ,IRC7702->GetLeastBftAmtEver()
+        ,Irc7702_->GetLeastBftAmtEver()
         ,Get7702EffectiveDBOpt(DeathBfts_->dbopt()[0])
         );
 
@@ -1222,11 +1222,11 @@ double BasicValues::GetModalPremGSP
     ,double        a_SpecAmt
     ) const
 {
-    double z = IRC7702->CalculateGSP
+    double z = Irc7702_->CalculateGSP
         (a_Duration
         ,a_BftAmt
         ,a_SpecAmt
-        ,IRC7702->GetLeastBftAmtEver()
+        ,Irc7702_->GetLeastBftAmtEver()
         );
 
 // TODO ?? PROBLEMS HERE
@@ -1409,7 +1409,7 @@ double BasicValues::GetModalSpecAmtGLP
 {
     double annualized_pmt = a_EeMode * a_EePmt + a_ErMode * a_ErPmt;
 // TODO ?? Duration 0 hardcoded here, but prem functions use actual duration.
-    return IRC7702->CalculateGLPSpecAmt
+    return Irc7702_->CalculateGLPSpecAmt
         (0
         ,annualized_pmt
         ,Get7702EffectiveDBOpt(DeathBfts_->dbopt()[0])
@@ -1430,7 +1430,7 @@ double BasicValues::GetModalSpecAmtGSP
 {
     double annualized_pmt = a_EeMode * a_EePmt + a_ErMode * a_ErPmt;
 // TODO ?? Duration 0 hardcoded here, but prem functions use actual duration.
-    return IRC7702->CalculateGSPSpecAmt
+    return Irc7702_->CalculateGSPSpecAmt
         (0
         ,annualized_pmt
         );
@@ -1896,7 +1896,7 @@ std::vector<double> BasicValues::GetTable
 }
 
 //============================================================================
-// TODO ?? This might be reworked to go through class IRC7702 all the time.
+// TODO ?? This might be reworked to go through class Irc7702 all the time.
 // TODO ?? The profusion of similar names should be trimmed.
 std::vector<double> const& BasicValues::GetCorridorFactor() const
 {
@@ -1909,7 +1909,7 @@ std::vector<double> const& BasicValues::GetCorridorFactor() const
             // break;
         case e_gpt:
             {
-            return IRC7702->Corridor();
+            return Irc7702_->Corridor();
             }
             // break;
         case e_noncompliant:

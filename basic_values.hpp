@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: basic_values.hpp,v 1.3 2005-02-12 12:59:31 chicares Exp $
+// $Id: basic_values.hpp,v 1.4 2005-02-14 04:37:51 chicares Exp $
 
 #ifndef basic_values_hpp
 #define basic_values_hpp
@@ -47,21 +47,18 @@
 // build the class for us.
 
 class death_benefits;
+class FundData;
 class InputParms;
 class InterestRates;
+class Irc7702;
+class Irc7702A;
 class Loads;
 class MortalityRates;
 class Outlay;
 class SurrChgRates;
 class TDatabase;
-class TFundData;
 class tiered_charges;
-class TIRC7702;
-class TIRC7702A;
-class TIRC7702Rates;
 class TProductData;
-class TScenarioParms;
-class TStrategyParms;
 class rounding_rules;
 
 // See GetTable(). This idea may be poor, but we're OK as long as we
@@ -124,7 +121,7 @@ class LMI_EXPIMP BasicValues
     InputParms const*     Input;
     TProductData*         ProductData;
     TDatabase*            Database;
-    TFundData*            FundData;
+    FundData*             FundData_;
     rounding_rules*       RoundingRules_;
     tiered_charges*       TieredCharges_;
 
@@ -133,12 +130,9 @@ class LMI_EXPIMP BasicValues
     Loads*                Loads_;
     death_benefits*       DeathBfts_;
     SurrChgRates*         SurrChgRates_;
-    TIRC7702Rates*        IRC7702Rates;
-    TScenarioParms*       Scenario;
-    TStrategyParms*       Strategy;
     Outlay*               Outlay_;
-    TIRC7702*             IRC7702;
-    TIRC7702A*            IRC7702A;
+    Irc7702*              Irc7702_;
+    Irc7702A*             Irc7702A_;
 
     double GetTgtPrem
         (int            Year
