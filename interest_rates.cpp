@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: interest_rates.cpp,v 1.1 2005-01-14 19:47:45 chicares Exp $
+// $Id: interest_rates.cpp,v 1.2 2005-01-29 02:47:41 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -255,7 +255,7 @@ InterestRates::~InterestRates()
 //
 InterestRates::InterestRates(BasicValues const& v)
     :Length_             (v.GetLength())
-    ,LedgerType_         (static_cast<enum_ledger_type>(v.Database->Query(DB_LedgerType)))
+    ,LedgerType_         (static_cast<enum_ledger_type>(static_cast<int>(v.Database->Query(DB_LedgerType))))
     ,RoundIntRate_       (v.GetRoundingRules().round_interest_rate())
     ,Round7702Rate_      (v.GetRoundingRules().round_interest_rate_7702())
     ,Zero_               (Length_)
@@ -263,7 +263,7 @@ InterestRates::InterestRates(BasicValues const& v)
     ,GenAcctRateType_    (v.Input->IntRateTypeGA)
     ,NeedSepAcctRates_   (v.Database->Query(DB_AllowSepAcct))
     ,SepAcctRateType_    (v.Input->IntRateTypeSA)
-    ,SepAcctSpreadMethod_(static_cast<enum_spread_method>(v.Database->Query(DB_SepAcctSpreadMethod)))
+    ,SepAcctSpreadMethod_(static_cast<enum_spread_method>(static_cast<int>(v.Database->Query(DB_SepAcctSpreadMethod))))
     ,AmortLoad_          (Zero_)
     ,MiscFundCharge_     (Zero_)
     ,NeedLoanRates_      (true)

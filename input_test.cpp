@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_test.cpp,v 1.1 2005-01-14 19:47:45 chicares Exp $
+// $Id: input_test.cpp,v 1.2 2005-01-29 02:47:41 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -28,6 +28,7 @@
 
 #include "inputillus.hpp"
 
+#include "fenv_lmi.hpp"
 #define BOOST_INCLUDE_MAIN
 #include "test_tools.hpp"
 
@@ -77,25 +78,7 @@ bool files_are_identical(std::string const& file0, std::string const& file1)
 
 int test_main(int, char*[])
 {
-// TODO ?? Copied from round_to_test.cpp; abstract this into a header.
-#if defined __GNUC__ && defined _X86_
-    // Set floating-point control word to intel default.
-    asm volatile ("fldcw %0" : : "m" (0x037f));
-#elif defined __BORLANDC__
-    _control87(0x037f,  0xffff);
-#elif defined BOOST_MSVC
-    // Untested, but this appears to be the right nonstandard function.
-    _control87(0x001f,   _MCW_EM);
-    _control87(_RC_NEAR, _MCW_RC);
-    _control87(_PC_64,   _MCW_PC);
-#else // No known way to set rounding style.
-    std::cerr
-        << "\nCannot set floating-point precision.\n"
-        << "Results may be invalid.\n"
-        << "Please consider contributing an implementation \n"
-        << "for your compiler.\n"
-        ;
-#endif // No known way to set rounding style.
+    initialize_fpu();
 
     // Test IllusInputParms << and >> operators.
     IllusInputParms original;

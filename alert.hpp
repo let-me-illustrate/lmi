@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: alert.hpp,v 1.1 2005-01-14 19:47:44 chicares Exp $
+// $Id: alert.hpp,v 1.2 2005-01-29 02:47:41 chicares Exp $
 
 #ifndef alert_hpp
 #define alert_hpp
@@ -142,8 +142,8 @@ bool LMI_EXPIMP set_alert_functions
 // Making this a function eliminates duplication and ensures that the
 // question is always posed in the same terms.
 
-std::string const& hobsons_prompt();
-std::ostream& hobsons_prompt(std::ostream&);
+std::string const& LMI_EXPIMP hobsons_prompt();
+std::ostream& LMI_EXPIMP hobsons_prompt(std::ostream&);
 
 #define LMI_ALERT_LOCATION            \
        "\n[file "  << __FILE__        \

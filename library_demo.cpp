@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: library_demo.cpp,v 1.1 2005-01-14 19:47:45 chicares Exp $
+// $Id: library_demo.cpp,v 1.2 2005-01-29 02:47:42 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -28,6 +28,7 @@
 
 #include "alert.hpp"
 #include "calendar_date.hpp"
+#include "global_settings.hpp"
 #include "ihs_acctval.hpp"
 #include "ihs_ledger.hpp"
 #include "inputillus.hpp"
@@ -81,6 +82,8 @@ IllusInputParms* IllustrationDocument::input_parameters() const
 
 void test()
 {
+    global_settings::instance().ash_nazg = true;
+
     warning() << "Warning from main()." << LMI_FLUSH;
 
     std::cout

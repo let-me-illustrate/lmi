@@ -19,10 +19,12 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: zero.hpp,v 1.1 2005-01-14 19:47:45 chicares Exp $
+// $Id: zero.hpp,v 1.2 2005-01-29 02:47:42 chicares Exp $
 
 // R. P. Brent, _Algorithms for Minization without Derivatives_
 // ISBN 0-13-022335-2
+
+#include "config.hpp"
 
 #include "alert.hpp"
 #include "round_to.hpp"
@@ -369,7 +371,7 @@ double brent_zero
         double m = 0.5 * (c - b);
         if(0.0 == fb || std::fabs(m) <= tol)
             {
-            return std::make_pair(b, root_is_valid);
+            return b;
             }
         if(std::fabs(e) < tol || std::fabs(fa) <= std::fabs(fb))
             {

@@ -19,10 +19,12 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: argv0.hpp,v 1.1 2005-01-14 19:47:44 chicares Exp $
+// $Id: argv0.hpp,v 1.2 2005-01-29 02:47:41 chicares Exp $
 
 #ifndef argv0_hpp
 #define argv0_hpp
+
+#include "config.hpp"
 
 #include <boost/filesystem/operations.hpp>
 #include <boost/filesystem/path.hpp>
