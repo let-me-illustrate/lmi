@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main.cpp,v 1.1 2005-01-14 19:47:45 chicares Exp $
+// $Id: main.cpp,v 1.2 2005-01-31 13:12:48 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -151,7 +151,7 @@ int main(int argc, char* argv[])
     // word upon destruction?
     initialize_fpu();
 
-    if(SIG_ERR == std::signal(SIGFPE, (void(*)(int))floating_point_error_handler))
+    if(SIG_ERR == std::signal(SIGFPE, floating_point_error_handler))
         {
         warning() << "Cannot install floating point error signal handler.\n";
         return EXIT_FAILURE;
@@ -200,7 +200,7 @@ int main(int argc, char* argv[])
 
     try
         {
-        std::signal(SIGFPE, (void(*)(int))floating_point_error_handler);
+        std::signal(SIGFPE, floating_point_error_handler);
 
 //        GetOpt  getopt_long (argc, argv, "abc:d:o::0123456789",
         GetOpt  getopt_long (argc, argv, "ac:hi:ls",

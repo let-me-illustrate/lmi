@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: sigfpe.cpp,v 1.1 2005-01-14 19:47:45 chicares Exp $
+// $Id: sigfpe.cpp,v 1.2 2005-01-31 13:12:48 chicares Exp $
 
 // This is not portable because a signal handler isn't guaranteed to
 // work if it does anything other than set a volatile global or static
@@ -43,7 +43,7 @@ void LMI_EXPIMP floating_point_error_handler(int)
 {
     hobsons_choice() << "Floating point error." << LMI_FLUSH;
 
-    if(SIG_ERR == std::signal(SIGFPE, (void(*)(int))floating_point_error_handler))
+    if(SIG_ERR == std::signal(SIGFPE, floating_point_error_handler))
         {
         fatal_error()
             << "Cannot reinstall floating point error signal handler."

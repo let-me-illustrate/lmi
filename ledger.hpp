@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger.hpp,v 1.1 2005-01-14 19:47:45 chicares Exp $
+// $Id: ledger.hpp,v 1.2 2005-01-31 13:12:48 chicares Exp $
 
 #ifndef ledger_hpp
 #define ledger_hpp
@@ -44,7 +44,7 @@ class TLedger
     TLedger& operator+=(TLedger const&);
     virtual ~TLedger();
 
-    int const GetLength() const {return Length;}
+    int GetLength() const {return Length;}
 
     std::vector<int>     Duration;
     std::vector<double>  Pmt;

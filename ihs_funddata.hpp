@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_funddata.hpp,v 1.2 2005-01-29 02:47:41 chicares Exp $
+// $Id: ihs_funddata.hpp,v 1.3 2005-01-31 13:12:48 chicares Exp $
 
 #ifndef funddata_hpp
 #define funddata_hpp
@@ -36,22 +36,22 @@
 struct LMI_EXPIMP TFundInfo
 {
     TFundInfo()
-        :ScalarIMF(0.0)
-        ,ShortName("")
-        ,LongName("")
+        :ScalarIMF_(0.0)
+        ,ShortName_("")
+        ,LongName_ ("")
         {}
     TFundInfo
-        (double ScalarIMF
+        (double      ScalarIMF
         ,std::string ShortName
         ,std::string LongName
         )
-        :ScalarIMF(ScalarIMF)
-        ,ShortName(ShortName)
-        ,LongName(LongName)
+        :ScalarIMF_(ScalarIMF)
+        ,ShortName_(ShortName)
+        ,LongName_ (LongName)
         {}
-    double ScalarIMF;
-    std::string ShortName;
-    std::string LongName;
+    double ScalarIMF_;
+    std::string ShortName_;
+    std::string LongName_;
 };
 
 class LMI_EXPIMP TFundData
