@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: view_ex.cpp,v 1.1 2005-03-11 03:09:22 chicares Exp $
+// $Id: view_ex.cpp,v 1.2 2005-03-12 04:40:22 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -37,6 +37,7 @@
 #include "view_ex.hpp"
 
 #include "docmanager_ex.hpp"
+
 // WX !! Application object's header must be included here because
 // view creation is not performed by the framework--instead, wxWindows
 // treats that as the user's responsibility. The framework defines
@@ -45,7 +46,7 @@
 // mean that a view class cannot be physically decoupled from the main
 // application header, and indeed there are no wxView derivatives in
 // the framework.
-#include "lmi.hpp" // wxGetApp()
+#include "main_wx.hpp" // wxGetApp()
 
 #include <wx/dc.h>
 #include <wx/log.h>
