@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_mortal.cpp,v 1.1 2005-01-14 19:47:45 chicares Exp $
+// $Id: ihs_mortal.cpp,v 1.2 2005-01-31 13:12:48 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -603,8 +603,7 @@ void MortalityRates::SetOtherRates(BasicValues const& basic_values)
 
     // TODO ?? Temporary stuff to support NSP for 7702A
     // TODO ?? Incorrect if GPT
-    // TODO ?? C-style cast; length should be signed anyway?
-    for(int j = 0; j < (int)Length_; j++)
+    for(int j = 0; j < Length_; j++)
         {
         LMI_ASSERT(0.0 < CvatCorridorFactors_[j]);
         CvatNspRates_.push_back(1.0 / CvatCorridorFactors_[j]);

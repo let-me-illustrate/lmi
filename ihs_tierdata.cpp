@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_tierdata.cpp,v 1.1 2005-01-14 19:47:45 chicares Exp $
+// $Id: ihs_tierdata.cpp,v 1.2 2005-01-31 13:12:48 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -66,11 +66,11 @@ tiered_item_rep::tiered_item_rep()
 
 //============================================================================
 tiered_item_rep::tiered_item_rep
-    (std::vector<double> const& bands
-    ,std::vector<double> const& data
+    (std::vector<double> const& a_bands
+    ,std::vector<double> const& a_data
     )
-    :bands_ (bands)
-    ,data_  (data)
+    :bands_ (a_bands)
+    ,data_  (a_data)
 {
     if(bands_.size() != data_.size())
         {

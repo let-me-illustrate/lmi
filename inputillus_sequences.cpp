@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: inputillus_sequences.cpp,v 1.1 2005-01-14 19:47:45 chicares Exp $
+// $Id: inputillus_sequences.cpp,v 1.2 2005-01-31 13:12:48 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -1042,8 +1042,8 @@ std::string IllusInputParms::current_credited_rate()
         ,GroupUWType
         ,InsdState
         );
-    std::vector<double> current_credited_rate;
-    temp_database.Query(current_credited_rate, DB_MaxGenAcctRate);
-    return InputSequence(current_credited_rate).mathematical_representation();
+    std::vector<double> z;
+    temp_database.Query(z, DB_MaxGenAcctRate);
+    return InputSequence(z).mathematical_representation();
 }
 

@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: workhorse.make,v 1.1 2005-01-28 01:34:43 chicares Exp $
+# $Id: workhorse.make,v 1.2 2005-01-31 13:12:48 chicares Exp $
 
 ###############################################################################
 
@@ -162,18 +162,42 @@ gcc_warnings := \
 gcc_warnings += -Wno-long-long
 
 # WX!! The wx library triggers many warnings with these flags:
+#  -W \
+#  -Wcast-qual \
 
 gcc_extra_warnings := \
   -W \
   -Wcast-qual \
+  -Wctor-dtor-privacy \
+  -Wdeprecated-declarations \
+  -Wdisabled-optimization \
+  -Wendif-labels \
+  -Winvalid-offsetof \
+  -Wmultichar \
+  -Wpacked \
+  -Wredundant-decls \
+
+# Too many warnings on correct code, e.g. exact comparison to zero:
+#  -Wfloat-equal \
+
+# Too many warnings for various boost libraries:
+#  -Wold-style-cast \
+#  -Wshadow \
 
 # Boost deems that no one should use this warning flag:
 #   http://aspn.activestate.com/ASPN/Mail/Message/boost/1822550
 
 #  -Wundef \
 
+# Too many warnings for libstdc++:
+#  -Wunreachable-code \
+
 # Since at least gcc-3.4.2, -Wmissing-prototypes is deprecated as
 # being redundant for C++.
+
+# At least until we integrate wx, all these warnings are OK:
+
+gcc_warnings += $(gcc_extra_warnings)
 
 C_WARNINGS         := $(gcc_warnings) -std=c99 -Wmissing-prototypes
 CXX_WARNINGS       := $(gcc_warnings) -std=c++98
@@ -247,7 +271,7 @@ REQUIRED_ARFLAGS = \
 
 REQUIRED_LDFLAGS = \
   -L . \
-  -L /local/lib \
+  -L /usr/local/lib \
   $(LIBXML2_LIBS) \
   $(MPATROL_LIBS) \
   -Wl,-Map,$@.map \

@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_acctval.cpp,v 1.2 2005-01-29 02:47:41 chicares Exp $
+// $Id: ihs_acctval.cpp,v 1.3 2005-01-31 13:12:48 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -913,7 +913,7 @@ void AccountValue::SetInitialValues()
 }
 
 //============================================================================
-void AccountValue::DoYear(int InforceMonth)
+void AccountValue::DoYear(int inforce_month)
 {
     // TODO ?? Designed to be called only this way:
     // NO: should be life by life only for census run.
@@ -921,7 +921,7 @@ void AccountValue::DoYear(int InforceMonth)
 
     InitializeYear();
 
-    for(Month = InforceMonth; Month < 12; ++Month)
+    for(Month = inforce_month; Month < 12; ++Month)
         {
         CoordinateCounters();
         DoMonthDR();

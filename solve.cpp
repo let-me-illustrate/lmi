@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: solve.cpp,v 1.1 2005-01-14 19:47:45 chicares Exp $
+// $Id: solve.cpp,v 1.2 2005-01-31 13:12:48 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -161,6 +161,7 @@ inline static double SolveWD(double CandidateValue)
 }
 
 //============================================================================
+// TODO ?? Never used.
 inline static double SolveWDThenLoan(double /* CandidateValue */)
 {
     return 0.0;    // TODO ?? stub

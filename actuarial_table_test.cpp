@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: actuarial_table_test.cpp,v 1.1 2005-01-14 19:47:44 chicares Exp $
+// $Id: actuarial_table_test.cpp,v 1.2 2005-01-31 13:12:48 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -71,6 +71,7 @@ std::vector<double> table_47_age_89()
 
 int test_main(int, char*[])
 {
+// TODO ?? Use whatever directory FHS would suggest instead.
     std::string const table_name("/lmi-data/qx_cso");
 
 // TODO ?? Also test a 'duration' table--has SOA published any?
@@ -84,17 +85,17 @@ int test_main(int, char*[])
     std::vector<double> rates2 = actuarial_table(table_name, 47, 89,  17);
     BOOST_TEST(rates2 == table_47_age_89());
 
-    int const iterations = 1000;
+    int const iterations = 10;
 
     Timer timer0;
     for(int j = 0; j < iterations; ++j)
         {
-        std::vector<double> rates0 = actuarial_table(table_name, 42,  0, 100);
-        std::vector<double> rates1 = actuarial_table(table_name, 42, 35,  65);
-        std::vector<double> rates2 = actuarial_table(table_name, 47, 89,  17);
-        std::vector<double> rates3 = actuarial_table(table_name, 47, 80,  26);
-        std::vector<double> rates4 = actuarial_table(table_name, 47, 80,  20);
-        std::vector<double> rates5 = actuarial_table(table_name, 47, 20,  20);
+        std::vector<double> rates00 = actuarial_table(table_name, 42,  0, 100);
+        std::vector<double> rates01 = actuarial_table(table_name, 42, 35,  65);
+        std::vector<double> rates02 = actuarial_table(table_name, 47, 89,  17);
+        std::vector<double> rates03 = actuarial_table(table_name, 47, 80,  26);
+        std::vector<double> rates04 = actuarial_table(table_name, 47, 80,  20);
+        std::vector<double> rates05 = actuarial_table(table_name, 47, 20,  20);
         }
     timer0.Stop();
     std::cout << "Reading actuarial table--time for " << iterations << " runs: ";

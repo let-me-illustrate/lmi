@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: round_to_test.cpp,v 1.2 2005-01-29 02:47:42 chicares Exp $
+// $Id: round_to_test.cpp,v 1.3 2005-01-31 13:12:48 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -231,7 +231,7 @@ void print_hex_val(T t, char const* name)
   for (int i = size_of_T - 1; 0 <= i; --i) {
     if(p[i] <= 0xF)
       std::cout << "0";
-    std::cout << std::hex << (int)p[i];
+    std::cout << std::hex << static_cast<int>(p[i]);
   }
   std::cout << std::dec << std::endl;
 // GWC modifications end
@@ -390,9 +390,9 @@ void test_various_float_types
     long double u = unrounded * factor;
     long double e = expected  * factor;
     // TODO ?? static_cast?
-    BOOST_TEST((test_one_case((float      )u, (float      )e, decimals, style)));
-    BOOST_TEST((test_one_case((double     )u, (double     )e, decimals, style)));
-    BOOST_TEST((test_one_case((long double)u, (long double)e, decimals, style)));
+    BOOST_TEST((test_one_case(static_cast<float      >(u), static_cast<float      >(e), decimals, style)));
+    BOOST_TEST((test_one_case(static_cast<double     >(u), static_cast<double     >(e), decimals, style)));
+    BOOST_TEST((test_one_case(static_cast<long double>(u), static_cast<long double>(e), decimals, style)));
 }
 
 // Test rounding to various numbers of decimal places.

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: crc32.cpp,v 1.2 2005-01-15 20:17:16 chicares Exp $
+// $Id: crc32.cpp,v 1.3 2005-01-31 13:12:48 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -148,7 +148,7 @@ CRC& CRC::update
 }
 
 //============================================================================
-unsigned int const CRC::value() const
+unsigned int CRC::value() const
 {
     return value_ ^ 0xffffffffU;
 }

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: actuarial_table.cpp,v 1.3 2005-01-29 02:47:41 chicares Exp $
+// $Id: actuarial_table.cpp,v 1.4 2005-01-31 13:12:48 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -114,6 +114,7 @@ namespace
               ;
             }
         int deduced_length = number_of_values * sizeof(double);
+        // TODO ?? Explain '65536'.
         LMI_ASSERT(65536 < deduced_length || nominal_length == deduced_length);
         values.resize(number_of_values);
         char z[sizeof(double)];
@@ -223,17 +224,23 @@ std::vector<double> actuarial_table
     LMI_ASSERT(4 == sizeof(int));
     LMI_ASSERT(2 == sizeof(short int));
 
-    int table_offset = invalid; // TODO ?? Reconsider type and initial value.
+    // 27.4.3.2/2 requires that this be interpreted as invalid. The
+    // variable 'invalid' is not used here, because its value might
+    // change someday, but only '-1' is mentioned in the standard.
+    std::streampos table_offset(-1);
 
     int const index_record_length(58);
     char index_record[index_record_length] = {0};
 
+    LMI_ASSERT(sizeof (boost::int32_t) <= sizeof(int));
     while(index_ifs)
         {
         int index_table_number = *reinterpret_cast<boost::int32_t*>(index_record);
         if(a_table_number == index_table_number)
             {
-            table_offset = *reinterpret_cast<boost::int32_t*>(54 + index_record);
+            char* p = 54 + index_record;
+            boost::int32_t z = *reinterpret_cast<boost::int32_t*>(p);
+            table_offset = std::streampos(static_cast<int>(z));
             break;
             }
         index_ifs.read(index_record, index_record_length);
@@ -249,6 +256,16 @@ std::vector<double> actuarial_table
                 ;
             hobsons_choice() << oss.str() << LMI_FLUSH;
             }
+        }
+
+    if(table_offset == std::streampos(-1))
+        {
+        fatal_error()
+            << "Table offset '"
+            << table_offset
+            << "' is invalid."
+            << LMI_FLUSH
+            ;
         }
 
     // Data records have variable length:
@@ -372,7 +389,6 @@ std::vector<double> actuarial_table
                 {
                 goto done;
                 }
-                break;
             default:
                 {
                 char skipped[65536];

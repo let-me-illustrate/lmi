@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_ledger.cpp,v 1.1 2005-01-14 19:47:45 chicares Exp $
+// $Id: ihs_ledger.cpp,v 1.2 2005-01-31 13:12:48 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -53,6 +53,7 @@ TLedger::TLedger
 
 //============================================================================
 TLedger::TLedger(TLedger const& obj)
+    :streamable()
 {
     Alloc();
     Copy(obj);

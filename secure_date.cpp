@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: secure_date.cpp,v 1.1 2005-01-14 19:47:45 chicares Exp $
+// $Id: secure_date.cpp,v 1.2 2005-01-31 13:12:48 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -136,7 +136,7 @@ int secure_date::validate
 
     char c_passkey[md5len];
     unsigned char u_passkey[md5len];
-    std::FILE* md5sums_file = std::fopen
+    FILE* md5sums_file = std::fopen
         ((path + "validated.md5").c_str()
         ,"rb"
         );
