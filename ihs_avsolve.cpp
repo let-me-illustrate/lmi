@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avsolve.cpp,v 1.1 2005-01-14 19:47:44 chicares Exp $
+// $Id: ihs_avsolve.cpp,v 1.2 2005-02-05 03:02:41 chicares Exp $
 
 // All iterative illustration solves are performed in this file.
 // We use Brent's algorithm because it is guaranteed to converge
@@ -33,7 +33,7 @@
 #   pragma hdrstop
 #endif // __BORLANDC__
 
-#include "ihs_acctval.hpp"
+#include "account_value.hpp"
 
 #include "alert.hpp"
 #include "ihs_deathbft.hpp"
@@ -91,7 +91,7 @@ void AccountValue::SolveSetTargetValueAndDuration
     // bad for indexing. Should we change it to origin zero?
 
     // TODO ?? EffectiveSolveTargetYear and SolveTargetValue are copies of
-    //    SolveTgtYear and SolveTgtCSV -- however I see instances where
+    //    SolveTgtYear and SolveTgtCSV--however I see instances where
     //    one of these copies gets changed during the Solve routine.
 // if solve for endt
 //      EffectiveSolveTargetYear = BasicValues::GetLength();
@@ -207,7 +207,7 @@ double AccountValue::SolveTest(double a_CandidateValue)
 
     // Start at year 0--assume no-lapse provision doesn't allow overloan.
     // TODO ?? Assert that.
-    // TODO ?? If ExcessLoan is negative, then its name is confusing
+    // TODO ?? If ExcessLoan is negative, then its name is confusing.
     double most_negative_loan_deficit = 0.0;
     if(0 < (EffectiveSolveTargetYear - 1))  // TODO ?? "-1" ?
         {

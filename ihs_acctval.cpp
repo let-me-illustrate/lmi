@@ -21,14 +21,14 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_acctval.cpp,v 1.3 2005-01-31 13:12:48 chicares Exp $
+// $Id: ihs_acctval.cpp,v 1.4 2005-02-05 03:02:41 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
 #   pragma hdrstop
 #endif // __BORLANDC__
 
-#include "ihs_acctval.hpp"
+#include "account_value.hpp"
 
 #include "alert.hpp"
 #include "calendar_date.hpp"
@@ -95,36 +95,21 @@ showing {accesses, modifies current year, modifies future years}
 */
 
 //============================================================================
-AccountValue::AccountValue(InputParms const* input)
-    :BasicValues(input)
+AccountValue::AccountValue(InputParms const& input)
+    :BasicValues           (&input)
     ,Debugging             (false)
     ,Projecting12Mos       (false)
+    ,Solving               (e_solve_none != Input->SolveType)
     ,SolvingForGuarPremium (false)
     ,ItLapsed              (false)
+    ,LedgerValues    (new TLedger(BasicValues::GetLedgerType(), BasicValues::GetLength()))
+    ,LedgerInvariant       (new TLedgerInvariant(BasicValues::GetLength()))
+    ,LedgerVariant         (new TLedgerVariant  (BasicValues::GetLength()))
     ,FirstYearPremiumExceedsRetaliationLimit(true)
 {
-    Alloc(BasicValues::GetLength());
-    Init();
-}
-
-//============================================================================
-AccountValue::~AccountValue()
-{
-    Destroy();
-}
-
-//============================================================================
-void AccountValue::Alloc(int len)
-{
-    LedgerValues = new TLedger(BasicValues::GetLedgerType(), len);
-    LedgerInvariant = new TLedgerInvariant(BasicValues::GetLength());
-    LedgerVariant = new TLedgerVariant(BasicValues::GetLength());
     InvariantValues().Init(this);
-    VariantValues().Init
-        (this
-        ,ExpAndGABasis
-        ,SABasis
-        );
+// TODO ?? What are the values of the last two arguments here?
+    VariantValues().Init(this, ExpAndGABasis, SABasis);
     // TODO ?? There are several variants. We have to initialize all of them.
     // This is probably best done through a function in class TLedger.
     // We haven't yet laid the groundwork for that, though.
@@ -135,7 +120,7 @@ void AccountValue::Alloc(int len)
     // Store this in the invariant ledger value object.
     double inforce_lives = Input->NumIdenticalLives;
 //    for(int j = 0; j < BasicValues::GetLength(); ++j)
-// TODO ?? Test this:
+// TODO ?? Prefer a standard algorithm.
     for(int j = 0; j < 1 + BasicValues::GetLength(); ++j)
         {
         if(Input->UsePartialMort && 0 < j)
@@ -151,9 +136,6 @@ void AccountValue::Alloc(int len)
 //    InvariantValues().InforceLives[BasicValues::GetLength()] = 0.0;
 // TODO ?? But that would make EOY values zero for endowment year.
 
-    // TODO ?? Wouldn't these be better in the initializer-list?
-    Solving = e_solve_none != Input->SolveType;
-
     OverridingEePmts    .resize(12 * BasicValues::GetLength());
     OverridingErPmts    .resize(12 * BasicValues::GetLength());
 
@@ -166,15 +148,7 @@ void AccountValue::Alloc(int len)
 }
 
 //============================================================================
-void AccountValue::Destroy()
-{
-    delete LedgerVariant;
-    delete LedgerInvariant;
-    delete LedgerValues;
-}
-
-//============================================================================
-void AccountValue::Init()
+AccountValue::~AccountValue()
 {
 }
 
@@ -224,14 +198,6 @@ Then run other bases.
     return z;
 }
 
-/*
-If not solving
-    if running one basis
-        just do that basis
-    if running all bases
-        run all bases
-*/
-
 //============================================================================
 // TODO ?? Perhaps commutation functions could be used to speed up
 // this rather expensive function.
@@ -265,7 +231,8 @@ double AccountValue::RunOneBasis(e_run_basis const& a_Basis)
         {
 // Apparently this should never be done because Solve() is called in
 //   RunAllApplicableBases() .
-//      LMI_ASSERT(a_Basis == Input->SolveBasis); // TODO ?? Do something more flexible.
+// TODO ?? Do something more flexible.
+//      LMI_ASSERT(a_Basis == Input->SolveBasis);
 //      z = Solve();
         }
     else
@@ -276,6 +243,12 @@ double AccountValue::RunOneBasis(e_run_basis const& a_Basis)
 }
 
 //============================================================================
+// If not solving
+//   if running one basis
+//     just do that basis
+//   if running all bases
+//     run all bases
+//
 double AccountValue::RunAllApplicableBases()
 {
     // LedgerType determines the set of bases required (enum e_run_basis).
@@ -343,8 +316,9 @@ double AccountValue::PerformRun(e_run_basis const& a_Basis)
 {
     switch(Input->RunOrder)
         {
-        // TODO ?? Perhaps this function should be run only in the month by month
-        // case, but it does no harm to generalize it this way.
+        // TODO ?? Perhaps this function should be run only in the
+        // month-by-month case, but it does no harm to generalize it
+        // this way.
         case e_life_by_life:
             {
             return PerformRunLifeByLife(a_Basis);
@@ -444,7 +418,7 @@ restart:
                 {
                 SetClaims();
                 CaseMonthsClaims += GetCurtateNetClaimsInforce();
-                YearsAVRelOnDeath += InforceLives   // TODO ?? Validate.
+                YearsAVRelOnDeath += InforceLives // TODO ?? Validate.
                     *   GetPartMortQ(Year)
                     *   TotalAccountValue()
                     ;
@@ -507,7 +481,7 @@ void AccountValue::InitializeLife(e_run_basis const& a_Basis)
 // before the specamt strategy was applied.
 //
 // The situation is really unsatisfactory.
-// InvariantValues().Init() is called earlier in AccountValue::Alloc();
+// InvariantValues().Init() is called earlier in the ctor;
 // then we call OldPerformSpecAmtStrategy(), which assigns values to
 // InvariantValues().SpecAmt; then we call InvariantValues().Init() again.
 // But calling InvariantValues().Init() again wiped out the SpecAmt, because
@@ -552,7 +526,7 @@ void AccountValue::InitializeLife(e_run_basis const& a_Basis)
     OldDBOpt = InvariantValues().DBOpt[0];
     OldSA = InvariantValues().SpecAmt[0] + InvariantValues().TermSpecAmt[0];
     // TODO ?? Shouldn't we increase initial SA if contract in corridor at issue?
-    OldDB = OldSA;  // TODO ?? What if in corridor?
+    OldDB = OldSA;
 
     SurrChg_.assign(BasicValues::GetLength(), 0.0);
 
@@ -731,7 +705,8 @@ void AccountValue::FinalizeLifeAllBases()
 void AccountValue::SetInitialValues()
 {
     // These inforce things belong in input struct.
-    // TODO ?? The list is not complete; others will be required.
+    // TODO ?? The list is not complete; others will be required:
+    // payment history; surrender charges; DCV history?
     InforceYear                 = Input->InforceYear            ;
     InforceMonth                = Input->InforceMonth           ;
     InforceAVGenAcct            = Input->InforceAVGenAcct       ;
@@ -1036,7 +1011,7 @@ double AccountValue::IncrementEOM
         LMI_ASSERT(28 <= days_in_policy_month && days_in_policy_month <= 31);
         }
 
-// TODO ?? Also need on other path?
+    // TODO ?? Also need on other path?
     ApplyDynamicSepAcctLoadAMD(TotalCaseAssets);
     ApplyDynamicMandE         (TotalCaseAssets);
 
@@ -1292,7 +1267,7 @@ void AccountValue::InitializeYear()
     YearsSepAcctSVRate          = 0.0;
 
     RequestedLoan       = Outlay_->new_cash_loans()[Year];
-    ActualLoan          = RequestedLoan;    // TODO ?? Why not zero?
+    ActualLoan          = RequestedLoan; // TODO ?? Why not zero?
 
     GrossPmts   .assign(12, 0.0);
     EeGrossPmts .assign(12, 0.0);
@@ -2114,6 +2089,7 @@ void AccountValue::UpdateExpRatReserveEOM
     if(ItLapsed || BasicValues::GetLength() <= Year)
         {
         // TODO ?? What happens to the reserve on a matured or lapsed life?
+        // Answer: it vanishes into insurance company profit; that's wrong.
         return;
         }
 

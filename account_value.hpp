@@ -19,20 +19,19 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_acctval.hpp,v 1.1 2005-01-14 19:47:44 chicares Exp $
+// $Id: account_value.hpp,v 1.1 2005-02-05 03:02:41 chicares Exp $
 
-#ifndef ihs_acctval_hpp
-#define ihs_acctval_hpp
-
-#ifdef acctval_hpp
-#   error Probable lmi/ihs header conflict.
-#endif // acctval_hpp
+#ifndef account_value_hpp
+#define account_value_hpp
 
 #include "config.hpp"
 
 #include "basic_values.hpp"
 #include "expimp.hpp"
 
+#include <boost/scoped_ptr.hpp>
+
+#include <iosfwd>
 #include <fstream>
 #include <string>
 #include <vector>
@@ -58,14 +57,14 @@ class LMI_EXPIMP AccountValue
   public:
     enum {months_per_year = 12};
 
-    AccountValue(InputParms const* input);
-    virtual ~AccountValue();
+    explicit AccountValue(InputParms const& input);
+    ~AccountValue();
 
-    double PerformRun           (e_run_basis const& a_Basis);
-    void   InitializeLife       (e_run_basis const& a_Basis);
-    void   FinalizeLife         (e_run_basis const& a_Basis);
-    void   FinalizeLifeAllBases ();
     double RunAV                ();
+    double PerformRun           (e_run_basis const&);
+    void   InitializeLife       (e_run_basis const&);
+    void   FinalizeLife         (e_run_basis const&);
+    void   FinalizeLifeAllBases ();
     void   SetGuarPrem          ();
 
     void SetDebugFilename    (std::string const&);
@@ -87,14 +86,42 @@ class LMI_EXPIMP AccountValue
     double GetExpRatReserve        () const;
     double GetExpRatReserveNonforborne() const;
 
+    // Antediluvian.
+    double Solve();
+    void SolveSetPmts
+        (double a_Pmt
+        ,int    ThatSolveBegYear
+        ,int    ThatSolveEndYear
+        );
+    void SolveSetSpecAmt
+        (double a_Bft
+        ,int    ThatSolveBegYear
+        ,int    ThatSolveEndYear
+        );
+    void SolveSetLoans
+        (double a_Loan
+        ,int    ThatSolveBegYear
+        ,int    ThatSolveEndYear
+        );
+    void SolveSetWDs
+        (double a_WD
+        ,int    ThatSolveBegYear
+        ,int    ThatSolveEndYear
+        );
+    void SolveSetLoanThenWD
+        (double a_Amt
+        ,int    ThatSolveBegYear
+        ,int    ThatSolveEndYear
+        );
+
+    TLedger const& WorkingValues();
+    TLedger const& CurrValues();
+    TLedger const& MdptValues();
+    TLedger const& GuarValues();
+
   private:
-    AccountValue();
     AccountValue(AccountValue const&);
     AccountValue& operator=(AccountValue const&);
-
-    void Alloc   (int len);
-    void Init    ();
-    void Destroy ();
 
     void process_payment          (double);
     void IncrementAVProportionally(double);
@@ -119,20 +146,26 @@ class LMI_EXPIMP AccountValue
     TLedgerVariant&         VariantValues  ();
     TLedgerVariant const&   VariantValues  () const;
 
-    double PerformRunMonthByMonth  (e_run_basis const& a_Basis);
-    double PerformRunLifeByLife    (e_run_basis const& a_Basis);
-    double RunOneBasis             (e_run_basis const& a_Basis);
+    double PerformRunMonthByMonth  (e_run_basis const&);
+    double PerformRunLifeByLife    (e_run_basis const&);
+    double RunOneBasis             (e_run_basis const&);
     double RunAllApplicableBases   ();
     void   DoYear                  (int InforceMonth = 0);
     void   InitializeYear          ();
     void   InitializeSpecAmt       ();
     void   FinalizeYear            ();
+    void   DoMonth(); // Antediluvian.
     void   DoMonthDR               ();
     void   DoMonthCR               ();
     void   SetInitialValues        ();
     void   SetAnnualInvariants     ();
 
-  private:
+    void DoYear // Antediluvian.
+        (e_run_basis const& a_TheBasis
+        ,int                a_Year
+        ,int                a_InforceMonth = 0
+        );
+
     void   SolveSetSpecAmt      (double a_CandidateValue);
     void   SolveSetEePrem       (double a_CandidateValue);
     void   SolveSetErPrem       (double a_CandidateValue);
@@ -140,6 +173,7 @@ class LMI_EXPIMP AccountValue
     void   SolveSetWD           (double a_CandidateValue);
     void   SolveSetWDThenLoan   (double a_CandidateValue);
 
+    void   DebugPrint(std::ostream& os) const; // Antediluvian.
     void   DebugPrint           ();
     void   DebugRestart         (std::string const& reason);
 
@@ -211,6 +245,7 @@ class LMI_EXPIMP AccountValue
     // want to put that class's full declaration in the header.
     double GetPartMortQ            (int year) const;
 
+    void PerformSpecAmtStrategy(); // Antediluvian.
     double CalculateSpecAmtFromStrategy
         (int actual_year
         ,int reference_year
@@ -224,6 +259,8 @@ class LMI_EXPIMP AccountValue
         ,e_mode const&              m
         ,std::vector<double> const& SAVector
         );
+
+    void PerformPmtStrategy(double* a_Pmt); // Antediluvian.
     double PerformEePmtStrategy       () const;
     double PerformErPmtStrategy       () const;
     double DoPerformPmtStrategy
@@ -241,6 +278,7 @@ class LMI_EXPIMP AccountValue
     void TxOptChg                   ();
     void TxSpecAmtChg               ();
     void TxTestGPT                  ();
+    void TxPmt(); // Antediluvian.
     void TxAscertainDesiredPayment  ();
     void TxLimitPayment             (double a_maxpmt);
     void TxRecognizePaymentFor7702A
@@ -253,28 +291,29 @@ class LMI_EXPIMP AccountValue
         ,double a_portion_exempt_from_premium_tax
         );
     double GetPremTaxLoad(double payment);
-    void   TxLoanRepay             ();
+    void TxLoanRepay             ();
 
-    void   TxSetBOMAV              ();
-    void   TxTestHoneymoonForExpiration();
-    void   TxSetTermAmt            ();
-    void   TxSetDeathBft           ();
-    void   TxSetCOI                ();
-    void   TxSetRiderDed           ();
-    void   TxDoMlyDed              ();
+    void TxSetBOMAV              ();
+    void TxTestHoneymoonForExpiration();
+    void TxSetTermAmt            ();
+    void TxSetDeathBft           ();
+    void TxSetCOI                ();
+    void TxSetRiderDed           ();
+    void TxDoMlyDed              ();
 
-    void   TxTakeSepAcctLoad       ();
-    void   TxCreditInt             ();
-    void   TxLoanInt               ();
-    void   TxTakeWD                ();
-    void   TxTakeLoan              ();
-    void   TxCapitalizeLoan        ();
+    void TxTakeSepAcctLoad       ();
+    void TxCreditInt             ();
+    void TxLoanInt               ();
+    void TxTakeWD                ();
+    void TxTakeLoan              ();
+    void TxCapitalizeLoan        ();
 
-    void   TxDebitExpRatRsvChg     ();
+    void TxDebitExpRatRsvChg     ();
 
-    void   TxTestLapse             ();
-    void   TxDebug                 ();
-    void   FinalizeMonth           ();
+    void TxTestLapse             ();
+    void TxDebug                 ();
+
+    void FinalizeMonth           ();
 
     // Reflects optional daily interest accounting.
     double ActualMonthlyRate    (double monthly_rate) const;
@@ -284,6 +323,7 @@ class LMI_EXPIMP AccountValue
         ) const;
 
     bool   IsModalPmtDate          (e_mode const& m) const;
+    bool   IsModalPmtDate          (); // Antediluvian.
     int    MonthsToNextModalPmtDate() const;
     double anticipated_deduction   (e_anticipated_deduction const&);
 
@@ -351,9 +391,14 @@ class LMI_EXPIMP AccountValue
     bool            SolvingForGuarPremium;
     bool            ItLapsed;
 
-    TLedger*            LedgerValues;
-    TLedgerInvariant*   LedgerInvariant;
-    TLedgerVariant*     LedgerVariant;
+    boost::scoped_ptr<TLedger         > LedgerValues;
+    boost::scoped_ptr<TLedgerInvariant> LedgerInvariant;
+    boost::scoped_ptr<TLedgerVariant  > LedgerVariant;
+
+    boost::scoped_ptr<TLedger> WorkingValues_; // Antediluvian.
+    boost::scoped_ptr<TLedger> CurrValues_;    // Antediluvian.
+    boost::scoped_ptr<TLedger> MdptValues_;    // Antediluvian.
+    boost::scoped_ptr<TLedger> GuarValues_;    // Antediluvian.
 
     e_increment_method             deduction_method;
     e_increment_account_preference deduction_preferred_account;
@@ -383,6 +428,9 @@ class LMI_EXPIMP AccountValue
     e_basis          ExpAndGABasis;
     e_sep_acct_basis SABasis;
 
+    int         LapseMonth; // Antediluvian.
+    int         LapseYear;  // Antediluvian.
+
     double External1035Amount;
     double Internal1035Amount;
     double Dumpin;
@@ -407,6 +455,9 @@ class LMI_EXPIMP AccountValue
     std::vector<double> EeGrossPmts;
     std::vector<double> ErGrossPmts;
     std::vector<double> NetPmts;
+    std::vector<double> Corridor; // Antediluvian.
+    std::vector<double> WPRates;  // Antediluvian.
+    std::vector<double> ADDRates; // Antediluvian.
 
     // Reproposal input.
     int     InforceYear;
@@ -440,9 +491,12 @@ class LMI_EXPIMP AccountValue
     double  NAAR;
     double  COI;    // TODO ?? Call it COIChg instead?
     double  SpecAmtLoadBase;
-    double  AVSepAcctLoadBaseBOM; // TODO ?? Needed?
-    double  AVSepAcctLoadBaseAMD; // TODO ?? Needed?
+    // TODO ?? Separating different types of sepacct load is probably unneeded.
+    double  AVSepAcctLoadBaseBOM;
+    double  AVSepAcctLoadBaseAMD;
     double  DacTaxRsv;
+
+    double  AVUnloaned; // Antediluvian.
 
     double  NetMaxNecessaryPremium;
     double  GrossMaxNecessaryPremium;
@@ -467,6 +521,10 @@ class LMI_EXPIMP AccountValue
     double  YearsTotalGptForceout;
 
     // Intermediate values within annual or monthly loop only.
+    double      pmt;       // Antediluvian.
+    e_mode      mode;      // Antediluvian.
+    int         ModeIndex; // Antediluvian.
+
     double  GenAcctIntCred;
     double  SepAcctIntCred;
     double  RegLnIntCred;
@@ -483,6 +541,9 @@ class LMI_EXPIMP AccountValue
     double  GrossWD;
     double  NetWD;
     double  CumWD;
+
+    double      wd;           // Antediluvian.
+    double      mlyguarv;     // Antediluvian.
 
     // For GPT: SA, DB, and DBOpt before the day's transactions are applied.
     double  OldSA;
@@ -553,6 +614,10 @@ class LMI_EXPIMP AccountValue
     double  DBIgnoringCorr;
     double  DBReflectingCorr;
 
+    double      deathbft; // Antediluvian.
+    bool        haswp;    // Antediluvian.
+    bool        hasadd;   // Antediluvian.
+
     // The spec amt used as the basis for surrender charges is not
     // always the current spec amt, but rather the original spec amt
     // adjusted for withdrawals only.
@@ -569,6 +634,7 @@ class LMI_EXPIMP AccountValue
     double  TermChg;
 
     double  MlyDed;
+    double  mlydedtonextmodalpmtdate; // Antediluvian.
 
     double  YearsTotalCOICharge;
     double  YearsAVRelOnDeath;
@@ -599,6 +665,8 @@ class LMI_EXPIMP AccountValue
     // and all other bases. Outlay components are set on whichever
     // basis governs, usually current, then stored for use with all
     // other bases.
+
+    std::vector<double> OverridingPmts; // Antediluvian.
 
     std::vector<double> OverridingEePmts;
     std::vector<double> OverridingErPmts;
@@ -668,5 +736,5 @@ inline double AccountValue::GetInforceLives() const
     return InforceLives;
 }
 
-#endif // ihs_acctval_hpp
+#endif // account_value_hpp
 
