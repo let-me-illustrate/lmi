@@ -37,7 +37,7 @@
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
 // GWC added this RCS Id:
-// $Id: getopt.cpp,v 1.2 2005-02-19 03:28:18 chicares Exp $
+// $Id: getopt.cpp,v 1.3 2005-03-11 13:40:41 chicares Exp $
 
 // GWC conditionalized gcc-specific pragma to avoid a warning when
 // compiling with como C++ using a gcc backend.
@@ -159,7 +159,7 @@ GetOpt::GetOpt (int argc, char** argv, char const* optstring,
             {
             return;
             }
-        // THIRD_PARTY!! It appears that 'val' really should be a char.
+        // THIRD_PARTY !! It appears that 'val' really should be a char.
         noptstring += static_cast<char>(i->val);
         if(NO_ARG != i->has_arg)
             {
@@ -727,7 +727,7 @@ TRY_TO_GET_A_VALUE:
               print_expanding (nextchar);
               std::fprintf (stderr, "'\n");
             }
-          // THIRD_PARTY!! Does the rhs mean '0'?
+          // THIRD_PARTY !! Does the rhs mean '0'?
           nextchar = const_cast<char*>("");
           optind++;
           return '?';

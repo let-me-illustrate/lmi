@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_irc7702.cpp,v 1.3 2005-02-14 04:35:18 chicares Exp $
+// $Id: ihs_irc7702.cpp,v 1.4 2005-03-11 13:40:41 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -106,9 +106,10 @@ namespace
 //  ,double     a_CumPmtSinceIssue
 //
 
+// Server questions and answers:
 // check each pmt? --no, admin system does that
 // maintain current and last GSP, GLP --no, admin system does that
-// who tracks cum pmt during year?? --admin system
+// who tracks cum pmt during year? --admin system
 // who tracks cum pmt for prior years? --admin system
 // return forceout; ... or return remaining GP limit? --admin system does that
 // fractional duration? --admin system does that

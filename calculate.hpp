@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: calculate.hpp,v 1.3 2005-03-02 03:33:22 chicares Exp $
+// $Id: calculate.hpp,v 1.4 2005-03-11 13:40:41 chicares Exp $
 
 #ifndef calculate_hpp
 #define calculate_hpp
@@ -240,7 +240,7 @@ struct RunCensusDeprecated
         }
 };
 
-// COMPILER!! bc++5.5.1 doesn't like a template at the end of a file, so...
+// COMPILER !! bc++5.5.1 doesn't like a template at the end of a file, so...
 #if defined __BORLANDC__ && __BORLANDC__ >= 0x0550
 extern int borland_workaround;
 #endif

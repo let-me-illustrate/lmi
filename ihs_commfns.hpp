@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_commfns.hpp,v 1.2 2005-02-14 04:35:18 chicares Exp $
+// $Id: ihs_commfns.hpp,v 1.3 2005-03-11 13:40:41 chicares Exp $
 
 #ifndef commfns_hpp
 #define commfns_hpp
@@ -150,7 +150,7 @@ class LMI_EXPIMP ULCommFns
     // Assumption mode indicates the mode of input mortality and
     // interest assumptions.
     e_mode const&  AssptMode;
-    // Should we keep this??
+    // TODO ?? Should we keep this?
     e_mode const&  CommfnMode;
     // Processing mode--usually monthly--governs how frequently
     // COIs and expense charges are deducted.
