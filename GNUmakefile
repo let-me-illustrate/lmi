@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: GNUmakefile,v 1.3 2005-02-03 16:03:37 chicares Exp $
+# $Id: GNUmakefile,v 1.4 2005-02-17 23:59:25 chicares Exp $
 
 ###############################################################################
 
@@ -193,20 +193,23 @@ date:
 
 # Files that can't be source in any useful sense:
 
-subdirectories := $(shell $(LS) --classify | $(SED) -e'/\//!d' -e's/\/$$//')
-
-expungible_files := $(wildcard *~ *.bak *eraseme*)
-
 # Graphics files whose format doesn't permit embedding copyright and
 # license notices (TODO ?? can these be replaced by xpm?):
 
 binary_graphics := $(wildcard *.bmp *.ico *.png)
 
+expungible_files := $(wildcard *~ *.bak *eraseme*)
+
+subdirectories := $(shell $(LS) --classify | $(SED) -e'/\//!d' -e's/\/$$//')
+
+testing_files := expected.cgi.out $(wildcard *touchstone*)
+
 never_source_files := \
-  $(subdirectories) \
-  $(expungible_files) \
   $(binary_graphics) \
-  expected.cgi.out \
+  $(expungible_files) \
+  $(subdirectories) \
+  $(testing_files) \
+  $(wildcard *-patch-*) \
 
 # Files that are source in some restrictive sense only:
 
