@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: workhorse.make,v 1.15 2005-04-02 22:59:27 chicares Exp $
+# $Id: workhorse.make,v 1.16 2005-04-05 12:34:29 chicares Exp $
 
 ###############################################################################
 
@@ -148,26 +148,40 @@ quoted_gpl quoted_gpl_html:
 
 # Warning options for gcc.
 
-gcc_warnings := \
+gcc_common_warnings := \
   -pedantic \
   -Wall \
   -Wcast-align \
   -Wconversion \
-  -Wctor-dtor-privacy \
-  -Wdeprecated \
   -Wdeprecated-declarations \
   -Wdisabled-optimization \
   -Wendif-labels \
   -Wimport \
   -Wmultichar \
-  -Wnon-template-friend \
-  -Woverloaded-virtual \
   -Wpacked \
-  -Wpmf-conversions \
   -Wpointer-arith \
   -Wsign-compare \
-  -Wsynth \
   -Wwrite-strings \
+
+# Some boost libraries treat 'long long' as part of the language,
+# which it probably soon will be, so permit it now.
+
+gcc_common_warnings += -Wno-long-long
+
+gcc_c_warnings := \
+  $(gcc_common_warnings) \
+  -std=c99 \
+  -Wmissing-prototypes \
+
+gcc_cxx_warnings := \
+  $(gcc_common_warnings) \
+  -std=c++98 \
+  -Wctor-dtor-privacy \
+  -Wdeprecated \
+  -Wnon-template-friend \
+  -Woverloaded-virtual \
+  -Wpmf-conversions \
+  -Wsynth \
 
 # TODO ?? VZ reports that
 #  -Winvalid-offsetof \
@@ -175,14 +189,9 @@ gcc_warnings := \
 # to contradict the gcc manual. This should be investigated and
 # possibly reported on gcc bugzilla.
 
-# Some boost libraries treat 'long long' as part of the language,
-# which it probably soon will be, so permit it now.
-
-gcc_warnings += -Wno-long-long
-
 # WX !! The wx library triggers many warnings with these flags:
 
-gcc_extra_warnings := \
+gcc_common_extra_warnings := \
   -W \
   -Wcast-qual \
   -Wredundant-decls \
@@ -206,13 +215,13 @@ gcc_extra_warnings := \
 # being redundant for C++.
 
 # TODO ?? How can these best be enabled for non-wx code?
-# gcc_warnings += $(gcc_extra_warnings)
+# gcc_warnings += $(gcc_common_extra_warnings)
 
-C_WARNINGS         := $(gcc_warnings) -std=c99 -Wmissing-prototypes
-CXX_WARNINGS       := $(gcc_warnings) -std=c++98
+C_WARNINGS         := $(gcc_c_warnings)
+CXX_WARNINGS       := $(gcc_cxx_warnings)
 
-C_EXTRA_WARNINGS   := $(gcc_extra_warnings)
-CXX_EXTRA_WARNINGS := $(gcc_extra_warnings)
+C_EXTRA_WARNINGS   := $(gcc_common_extra_warnings)
+CXX_EXTRA_WARNINGS := $(gcc_common_extra_warnings)
 
 ################################################################################
 
