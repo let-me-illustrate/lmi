@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_acctval.cpp,v 1.13 2005-03-30 03:39:05 chicares Exp $
+// $Id: ihs_acctval.cpp,v 1.14 2005-03-30 19:29:24 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -827,6 +827,7 @@ void AccountValue::SetInitialValues()
     ExpRatReserve               = 0.0;
     ExpRatStabReserve           = 0.0;
     ExpRatIBNRReserve           = 0.0;
+    apportioned_net_mortality_reserve = 0.0;
 
     Dumpin             = Outlay_->dumpin();
     External1035Amount = Outlay_->external_1035_amount();
@@ -1026,9 +1027,7 @@ double AccountValue::IncrementEOM
 
 //============================================================================
 // Increment year, update curtate inforce factor
-double AccountValue::IncrementEOY
-    (int year
-    )
+double AccountValue::IncrementEOY(int year)
 {
     if(ItLapsed || BasicValues::GetLength() <= Year)
         {
@@ -1691,12 +1690,14 @@ void AccountValue::FinalizeYear()
         }
 
     LMI_ASSERT(0 != Input_->NumIdenticalLives); // Make sure division is safe.
+/* TODO ?? Probably belongs here, but done elsewhere for now.
     VariantValues().ExpRatRsvCash       [Year] =
           ExpRatReserve
         * (1.0 - GetPartMortQ(Year))
         * InforceLives
         / Input_->NumIdenticalLives
         ;
+*/
     VariantValues().ExpRatRsvForborne   [Year] = ExpRatReserve;
 
     if(e_run_curr_basis == RateBasis)
@@ -2228,6 +2229,35 @@ double AccountValue::GetInforceProjectedCoiCharge
     eoy_naar = this_years_terminal_naar;
 
     return 12.0 * InforceLives * this_years_terminal_naar * next_years_coi_rate;
+}
+
+//============================================================================
+// TODO ?? The experience-rating mortality reserve isn't actually held
+// in individual certificates: it really exists only at the case level.
+// This is a workaround to make composites equal the sum of individuals.
+void AccountValue::ApportionNetMortalityReserve
+    (double case_net_mortality_reserve
+    ,double case_years_net_mortchgs
+    )
+{
+// TODO ?? This is called after resetting the 'Year' counter, but it
+// shouldn't be that way.
+    LMI_ASSERT(0 < Year);
+
+    if(0.0 != YearsTotalCOICharge)
+        {
+        apportioned_net_mortality_reserve =
+                case_net_mortality_reserve
+            *   case_years_net_mortchgs
+            /   YearsTotalCOICharge
+            ;
+        }
+    else
+        {
+        apportioned_net_mortality_reserve = 0.0;
+        }
+
+    VariantValues().ExpRatRsvCash[Year - 1] = apportioned_net_mortality_reserve;
 }
 
 //============================================================================
