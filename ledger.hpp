@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger.hpp,v 1.5 2005-02-17 05:00:11 chicares Exp $
+// $Id: ledger.hpp,v 1.6 2005-02-17 22:28:08 chicares Exp $
 
 #ifndef ledger_hpp
 #define ledger_hpp
@@ -35,13 +35,19 @@
 #include <iosfwd>
 #include <vector>
 
-// This class holds all the output values calculated by class AccountValue.
-// Values that vary by basis (curr, guar, etc.) are in a map of LedgerVariant.
-// Values that do not vary by basis are in a LedgerInvariant member.
+// This class holds all the data needed to print an illustration.
+// Class AccountValue generates the data held here, but also stores a
+// great deal of input and intermediate data that can be discarded to
+// save space. This class's data could be saved to permit deferred
+// generation of originally-unforeseen reports without repeating
+// monthiversary processing; that might be a useful enhancement
+// someday, but the calculations are fast enough that no user has
+// asked for it.
 //
-// Motivation: this class holds all the information needed to print an
-// illustration. This lets us discard the sizeable overhead of AccountValue
-// and keep only the output values after calculations are done for one life.
+// Some values vary by calculation basis (current, guaranteed, etc.)
+// and are stored in a map whose key_type represents that basis. Other
+// values do not vary by basis, and accordingly are stored in a single
+// data structure.
 
 class LedgerInvariant;
 class LedgerVariant;
@@ -118,7 +124,7 @@ class LMI_EXPIMP Ledger
     double              composite_lapse_year_;
 
     e_ledger_type       ledger_type_;
-    
+
     boost::shared_ptr<ledger_map_holder> ledger_map_;
     boost::shared_ptr<LedgerInvariant>   ledger_invariant_;
 
