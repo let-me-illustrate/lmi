@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: workhorse.make,v 1.6 2005-02-17 23:57:14 chicares Exp $
+# $Id: workhorse.make,v 1.7 2005-02-18 01:05:38 chicares Exp $
 
 ###############################################################################
 
@@ -387,7 +387,7 @@ test: $(test_targets)
 
 # Add extra warnings for unit tests.
 
-# TODO ?? Treat C the same way here as C++.
+$(unit_test_targets): REQUIRED_CFLAGS   += $(C_EXTRA_WARNINGS)
 
 $(unit_test_targets): REQUIRED_CXXFLAGS += $(CXX_EXTRA_WARNINGS)
 
@@ -465,8 +465,8 @@ av_tests: static_demo$(EXEEXT)
 	<$(src_dir)/spew_touchstone $(SED) -e'1s/^/0\t0\n/' >spew_touchstone
 	<eraseme.crc                $(SED) -e'1s/^/0\t0\n/' >spew_test
 	@/unified/bin/tools/ihs_crc_comp \
-	  spewage_touchstone \
-	  spewage_test \
+	  spew_touchstone \
+	  spew_test \
 	  | $(SED) -e '/Summary/!d' -e"s/^ /$z/"
 
 ################################################################################
