@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.32 2005-03-30 19:30:48 chicares Exp $
+// $Id: ChangeLog,v 1.33 2005-03-31 17:08:39 chicares Exp $
 
 2005-01-14
 
@@ -1037,4 +1037,9 @@ appears in the 'Comments' field; eventually, it'll be removed.
   mc_enum_types.hpp
   mc_enum_types.xpp
 Add new supplemental-report columns for experience rating.
+
+2005-03-31 [1415]
+
+  ledger_invariant.cpp
+Show supplemental-report columns on composite.
 
