@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: configurable_settings.cpp,v 1.1 2005-01-14 19:47:44 chicares Exp $
+// $Id: configurable_settings.cpp,v 1.2 2005-03-26 01:34:18 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -32,6 +32,9 @@
 #include "miscellany.hpp"
 #include "platform_dependent.hpp" // access()
 
+#ifdef USING_CURRENT_XMLWRAPP
+#   include <xmlwrapp/document.h>
+#endif // USING_CURRENT_XMLWRAPP defined.
 #include <xmlwrapp/init.h>
 #include <xmlwrapp/node.h>
 #include <xmlwrapp/tree_parser.h>
@@ -81,7 +84,11 @@ configurable_settings::configurable_settings()
         {
         throw std::runtime_error("Error parsing 'configurable_settings.xml'.");
         }
+#ifdef USING_CURRENT_XMLWRAPP
+    xml::node& root = parser.get_document().get_root_node();
+#else // USING_CURRENT_XMLWRAPP not defined.
     xml::node& root = parser.get_root_node();
+#endif // USING_CURRENT_XMLWRAPP not defined.
     if(xml_root_name() != root.get_name())
         {
         std::ostringstream msg;
