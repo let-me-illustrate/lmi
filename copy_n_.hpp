@@ -19,9 +19,9 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: copy_n_.hpp,v 1.1 2005-01-14 19:47:44 chicares Exp $
+// $Id: copy_n_.hpp,v 1.2 2005-03-10 04:37:17 chicares Exp $
 
-// Copyright (c) 1994
+// Copyright (C) 1994
 // Hewlett-Packard Company
 //
 // Permission to use, copy, modify, distribute and sell this software
@@ -32,7 +32,7 @@
 // representations about the suitability of this software for any
 // purpose.  It is provided "as is" without express or implied warranty.
 //
-// Copyright (c) 1996-1998
+// Copyright (C) 1996-1998
 // Silicon Graphics Computer Systems, Inc.
 //
 // Permission to use, copy, modify, distribute and sell this software
