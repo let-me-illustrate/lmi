@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avmly.cpp,v 1.5 2005-02-17 04:40:02 chicares Exp $
+// $Id: ihs_avmly.cpp,v 1.6 2005-03-07 11:48:58 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -3516,9 +3516,7 @@ void AccountValue::FinalizeMonth()
 void AccountValue::TxDebug()
 {
     DebugPrint();
-    // Show EOM death benefit on projection letter.
-    TxSetDeathBft();
-    Project12MosPrintMonth();
+    TxSetDeathBft(); // TODO ?? Unnecessary?
 }
 
 //============================================================================
