@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: bcc_5_5_1.make,v 1.1 2005-02-23 12:37:20 chicares Exp $
+# $Id: bcc_5_5_1.make,v 1.2 2005-03-23 17:36:44 chicares Exp $
 
 toolset := bcc
 
@@ -103,8 +103,8 @@ platform_wx_libraries :=
 # The borland compiler rejects some conforming code, generating many
 # spurious and distracting diagnostics. It fails to compile these
 # tests as of 2005-02-21:
-#   mc_enum_test.exe
-#   value_cast_test.exe
+#   mc_enum_test$(EXEEXT)
+#   value_cast_test$(EXEEXT)
 
 all:
 
