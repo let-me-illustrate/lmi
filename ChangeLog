@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.18 2005-03-01 12:28:06 chicares Exp $
+// $Id: ChangeLog,v 1.19 2005-03-02 04:58:48 chicares Exp $
 
 2005-01-14
 
@@ -595,4 +595,28 @@ and antediluvian branches more interchangeable.
 
   ihs_acctval.cpp
 Avoid catastrophic cancellation.
+
+2005-03-01 [1067]
+
+  argv0.hpp
+Improve documentation.
+
+  calculate.hpp
+  library_demo.cpp
+  single_cell_document.cpp
+  single_cell_document.hpp
+Refactor class 'single_cell_document'.
+
+  ledgervalues.cpp
+Assign default filename for monthly output.
+
+  database.cpp
+Implement a hitherto-unneeded ctor to support regression testing.
+
+  main.cpp
+Add regression testing.
+
+  objects.make
+  workhorse.make
+Add command-line interface for production branch.
 
