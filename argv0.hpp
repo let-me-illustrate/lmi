@@ -1,4 +1,4 @@
-// Get startup path from argv[0] (not guaranteed to work portably).
+// Get startup path from argv[0] if available.
 //
 // Copyright (C) 2004, 2005 Gregory W. Chicares.
 //
@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: argv0.hpp,v 1.2 2005-01-29 02:47:41 chicares Exp $
+// $Id: argv0.hpp,v 1.3 2005-03-02 03:32:39 chicares Exp $
 
 #ifndef argv0_hpp
 #define argv0_hpp
@@ -29,22 +29,35 @@
 #include <boost/filesystem/operations.hpp>
 #include <boost/filesystem/path.hpp>
 
-// TODO ?? Consider adding streaming operators.
+// TODO ?? Some platforms provide the startup path in argv[0], and
+// favor placing configuration or data files in the same directory.
+// This behavior is not portable; the program's files should instead
+// reside in locations sanctioned by FHS, such as
+//   /etc/opt/lmi
+//   /var/opt/lmi
+//   /usr/local/share
+//   /usr/share/sgml
+// or at least their placement should be a configurable option.
+
+// THIRD_PARTY !! Consider adding streaming operators to the filesystem
+// library. It seems odd that boost didn't do that already. This file,
+// of course, wouldn't be the right place to do that; they'd belong in
+// a separate file for general extensions to that library.
 
 namespace boost
 {
 namespace filesystem
 {
 
-// Fails nicely if no argv
+// TODO ?? The default argument seems to engender undefined behavior.
 
 inline path const& startup_path(char const* argv0 = 0)
 {
     static path p;
     if(p.empty())
         {
-        // BOOST !! It appears that complete() might be less zany,
-        // yet this is boost's recommended usage.
+        // THIRD_PARTY !! It appears that complete() might be less
+        // zany, yet this is what boost's 'simple_ls.cpp' does.
         boost::filesystem::path z(argv0);
         p = boost::filesystem::system_complete(z).branch_path();
         }
