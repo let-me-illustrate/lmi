@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: census_view.cpp,v 1.3 2005-03-22 14:19:42 chicares Exp $
+// $Id: census_view.cpp,v 1.4 2005-03-24 15:51:25 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -1730,8 +1730,9 @@ restart:
                 }
 
             // Calculate next year's k factor.
+
             double case_ibnr =
-                    case_years_net_claims
+                    case_years_net_mortchgs
                 *   case_ibnr_months
                 /   12.0
                 ;
