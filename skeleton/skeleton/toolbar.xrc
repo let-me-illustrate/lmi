@@ -1,0 +1,68 @@
+<?xml version="1.0"?>
+
+<resource xmlns="http://www.wxwindows.org/wxxrc" version="2.3.0.1">
+
+<!--
+    Life insurance illustrations: wxWindows xml resources.
+
+    Copyright (C) 2003, 2004 Gregory W. Chicares.
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License version 2 as
+    published by the Free Software Foundation.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+
+    http://groups.yahoo.com/group/actuarialsoftware
+    email: <chicares@mindspring.com>
+    snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
+
+    $Id: toolbar.xrc,v 1.1.1.1 2004-05-15 19:59:25 chicares Exp $
+-->
+
+<object class="wxToolBar" name="toolbar">
+    <style>wxTB_DOCKABLE</style>
+    <margins>2,2</margins>
+    <bitmapsize>20,20</bitmapsize>
+    <object class="tool" name="wxID_NEW">
+        <tooltip>New</tooltip>
+        <bitmap>new.bmp</bitmap>
+        <longhelp>Open a new file</longhelp>
+    </object>
+    <object class="tool" name="wxID_OPEN">
+        <tooltip>Open</tooltip>
+        <bitmap>open.bmp</bitmap>
+        <longhelp>Open a file</longhelp>
+    </object>
+    <object class="tool" name="wxID_SAVE">
+        <tooltip>Save</tooltip>
+        <bitmap>save.bmp</bitmap>
+        <longhelp>Save file</longhelp>
+    </object>
+    <object class="tool" name="wxID_PRINT">
+        <tooltip>Print</tooltip>
+        <bitmap>print.bmp</bitmap>
+        <longhelp>Print</longhelp>
+    </object>
+    <object class="tool" name="properties">
+        <tooltip>Properties</tooltip>
+        <bitmap>cell_properties.bmp</bitmap>
+        <longhelp>Properties</longhelp>
+    </object>
+    <separator/>
+    <object class="tool" name="wxID_HELP">
+        <tooltip>Help</tooltip>
+        <bitmap>help.bmp</bitmap>
+        <longhelp>Help</longhelp>
+    </object>        
+</object>
+ 
+</resource>
+

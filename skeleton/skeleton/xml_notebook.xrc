@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<resource xmlns="http://www.wxwindows.org/wxxrc" version="2.3.0.1">
+
+<!--
+    Xml input notebook demonstration.
+
+    Copyright (C) 2004 Gregory W. Chicares.
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License version 2 as
+    published by the Free Software Foundation.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+
+    http://groups.yahoo.com/group/actuarialsoftware
+    email: <chicares@mindspring.com>
+    snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
+
+    $Id: xml_notebook.xrc,v 1.1.1.1 2004-05-15 19:59:50 chicares Exp $
+-->
+
+<object class="wxPanel" name="ignore_panel">
+    <object class="wxFlexGridSizer">
+        <cols>1</cols>
+        <growablecols>0</growablecols>
+        <growablerows>0,1,2</growablerows>
+        <object class="sizeritem">
+            <flag>wxGROW | wxALIGN_CENTER_VERTICAL | wxALL</flag>
+            <border>20</border>
+            <object class="wxCheckBox" name="check0">
+                <label>checkbox 0</label>
+            </object>
+        </object>
+        <object class="sizeritem">
+            <flag>wxGROW | wxALIGN_CENTER_VERTICAL | wxALL</flag>
+            <border>20</border>
+            <object class="wxCheckBox" name="check1">
+                <label>checkbox 1</label>
+            </object>
+        </object>
+        <object class="sizeritem">
+            <flag>wxGROW | wxALIGN_CENTER_VERTICAL | wxALL</flag>
+            <border>20</border>
+            <object class="wxCheckBox" name="check2">
+                <label>checkbox 2</label>
+            </object>
+        </object>
+    </object>
+</object>
+
+<object class="wxPanel" name="proscribe_panel0">
+    <object class="wxFlexGridSizer">
+        <cols>1</cols>
+        <growablecols>0</growablecols>
+        <growablerows>0,1</growablerows>
+        <object class="sizeritem">
+            <flag>wxALIGN_LEFT|wxALIGN_TOP|wxALL</flag>
+            <border>2</border>
+            <object class="wxRadioBox" name="option0">
+                <style>wxRA_SPECIFY_ROWS</style>
+                <label>before</label>
+                <dimension>1</dimension>
+                <content>
+                    <item>A</item>
+                    <item>B</item>
+                    <item>C</item>
+                </content>
+            </object>
+        </object>
+        <object class="sizeritem">
+            <flag>wxALIGN_LEFT|wxALIGN_TOP|wxALL</flag>
+            <border>2</border>
+            <object class="wxRadioBox" name="option1">
+                <style>wxRA_SPECIFY_ROWS</style>
+                <label>after</label>
+                <dimension>1</dimension>
+                <content>
+                    <item>A</item>
+                    <item>B</item>
+                    <item>C</item>
+                </content>
+            </object>
+        </object>
+    </object>
+</object>
+
+<object class="wxPanel" name="proscribe_panel1">
+    <object class="wxFlexGridSizer">
+        <cols>1</cols>
+        <growablecols>0</growablecols>
+        <growablerows>0,1</growablerows>
+        <object class="sizeritem">
+            <flag>wxALIGN_LEFT|wxALIGN_TOP|wxALL</flag>
+            <border>2</border>
+            <object class="wxComboBox" name="option2">
+                <style>wxCB_READONLY</style>
+                <label>before</label>
+                <dimension>1</dimension>
+                <content>
+                    <item>A</item>
+                    <item>B</item>
+                    <item>C</item>
+                </content>
+            </object>
+        </object>
+        <object class="sizeritem">
+            <flag>wxALIGN_LEFT|wxALIGN_TOP|wxALL</flag>
+            <border>2</border>
+            <object class="wxListBox" name="option3">
+                <style>wxLB_SINGLE</style>
+                <label>after</label>
+                <dimension>1</dimension>
+                <content>
+                    <item>A</item>
+                    <item>B</item>
+                    <item>C</item>
+                </content>
+            </object>
+        </object>
+    </object>
+</object>
+
+<object class="wxPanel" name="validate_panel">
+    <object class="wxFlexGridSizer">
+        <cols>2</cols>
+        <growablecols>1</growablecols>
+        <object class="sizeritem">
+            <flag>wxALIGN_RIGHT | wxALIGN_CENTER_VERTICAL | wxRIGHT</flag>
+            <border>4</border>
+            <object class="wxStaticText" name="comments_label">
+                <label>Comments</label>
+            </object>
+        </object>
+        <object class="sizeritem">
+            <flag>wxGROW | wxALL</flag>
+            <border>4</border>
+            <object class="wxTextCtrl" name="comments">
+                <size>200,-1</size>
+                <value>Alpha only (blanks are invalid)</value>
+<!-- WX!! It would be nice to add validator attributes to wxxrc, e.g.
+                <text_validator name="comments">
+                    <flag>wxFILTER_ALPHA</flag>
+                    <flag>wxFILTER_ALPHA</flag>
+                </text_validator>
+-->
+            </object>
+        </object>
+    </object>
+</object>
+
+<object class="wxDialog" name="dialog_containing_notebook">
+    <title>Xml input notebook demonstration</title>
+    <style>wxCAPTION | wxRESIZE_BORDER | wxSYSTEM_MENU</style>
+    <exstyle>wxWS_EX_VALIDATE_RECURSIVELY</exstyle>
+<!-- WX!! This style flag is unknown to wxxrc:
+    <exstyle>wxDIALOG_EX_CONTEXTHELP</exstyle>
+-->
+    <centered>1</centered>
+    <object class="wxFlexGridSizer">
+        <cols>1</cols>
+        <rows>0</rows>
+        <vgap>0</vgap>
+        <hgap>0</hgap>
+        <growablecols>0</growablecols>
+        <growablerows>0</growablerows>
+        <object class="sizeritem">
+            <flag>wxGROW | wxALIGN_CENTER_VERTICAL | wxALL</flag>
+            <border>4</border>
+            <object class="wxNotebook" name="input_notebook">
+                <usenotebooksizer>1</usenotebooksizer>
+                <object class="notebookpage">
+                    <label>Ignore</label>
+                    <object_ref ref="ignore_panel"/>
+                </object>
+                <object class="notebookpage">
+                    <label>Proscribe0</label>
+                    <object_ref ref="proscribe_panel0"/>
+                </object>
+                <object class="notebookpage">
+                    <label>Proscribe1</label>
+                    <object_ref ref="proscribe_panel1"/>
+                </object>
+                <object class="notebookpage">
+                    <label>Validate</label>
+                    <object_ref ref="validate_panel"/>
+                </object>
+            </object>
+        </object>
+        <object class="sizeritem">
+            <flag>wxGROW|wxALL</flag>
+            <border>4</border>
+            <object class="wxFlexGridSizer">
+                <cols>2</cols>
+                <growablecols>0</growablecols>
+                <growablerows>0</growablerows>
+                <object class="sizeritem">
+                    <border>4</border>
+                    <flag>wxGROW|wxRIGHT</flag>
+                    <object class="wxStaticText" name="diagnostics">
+<!--
+TODO ?? wxSTATIC_BORDER works only for the msw platform.
+Perhaps we should switch on platform at run time.
+                        <style>wxSTATIC_BORDER</style>
+                        <style>wxSUNKEN_BORDER</style>
+-->
+                        <style>wxSTATIC_BORDER|wxST_NO_AUTORESIZE</style>
+                        <label>[diagnostics]</label>
+                    </object>
+                </object>
+                <object class="sizeritem">
+                    <flag>wxALIGN_RIGHT</flag>
+                    <object class="wxBoxSizer">
+                        <orient>wxVERTICAL</orient>
+                        <object class="sizeritem">
+                            <flag>wxALL</flag>
+                            <object class="wxButton" name="wxID_OK">
+                                <label>OK</label>
+                                <default>1</default>
+<!-- WX!! 'default' seems not to work all the time, e.g. when a
+notebook panel contains only checkboxes.
+-->
+                            </object>
+                        </object>
+                        <object class="sizeritem">
+                            <flag>wxALL</flag>
+                            <object class="wxButton" name="wxID_CANCEL">
+                                <label>Cancel</label>
+                            </object>
+                        </object>
+                        <object class="sizeritem">
+                            <flag>wxALL</flag>
+                            <object class="wxButton" name="wxID_HELP">
+                                <label>Help</label>
+                            </object>
+                        </object>
+                    </object>
+                </object>
+            </object>
+        </object>
+    </object>
+</object>
+
+</resource>
+

@@ -1,0 +1,770 @@
+[earlier work]
+
+Previous archives in this series show the evolution of my ideas on
+using wxWindows for MDI, and particularly on adding an html view
+class. That history is best read in wxWindows patch 660293. Now I
+imagine that patch will be acceptable, so I've moved my changes to
+wxHtml from this project into my local copy of wx. It's time to
+preserve a snapshot that focuses on MDI issues, and then forge ahead
+to add other wx capabilities to this program.
+
+2003-01-27
+
+Archive wx-lmi016.tar.bz2 contains a modified version of wxWindows
+samples/docvmdi with an html-view class in place of the original's
+drawing-view, and makes useful changes to the docview architecture.
+Someday the changes described below might be proposed as patches to
+the wxWindows library; on 2003-01-013T08:41:22-0500 I discussed some
+of them on the wx-dev mailing list.
+
+  wx/include/wx/docview.h
+
+Not changed here, but suggest adding
+  void wxDocManager::OnPrintSetup(wxCommandEvent& event);
+and, for page setup, an appropriate event ID too, akin to
+wxID_PRINT_SETUP. The contemporary style for w32 apps puts Page Setup
+on the File menu, but omits the formerly popular Printer Setup.
+
+wxView::OnCreate() may as well be a pure virtual.
+
+  view.?pp
+
+We'll want separate header and implementation files for each view
+class. General shortcoming: application's main header included in view
+TU because the framework doesn't perform view creation automatically.
+Thus, there are no wxView derivatives in the framework.
+
+  doc.?pp
+
+Nothing very remarkable.
+
+  lmi.?pp
+
+These files correspond to docview.* in the original.
+
+This isn't used anywhere:
+  extern bool singleWindowMode();
+This is dislikable:
+  extern MyFrame* GetMainFrame();
+
+Much of this stuff would be better implemented in the framework. E.g.
+OWL's 'MainWindow' is tightly integrated into the application
+framework, but wx leaves it up to the user to implement it--so that
+any module (e.g. a wxView derivative) that wants access to the main
+framewin needs to include the specific application's master header.
+
+A custom document manager is implemented:
+  add Page Setup to event table and OnPageSetup() handler
+  add wxPrintData and wxPageSetupDialogData to ctor
+  OnPrint(), OnPreview(): uses wxPrintData and wxPageSetupDialogData
+    and checks results (move this code from sample to library)
+    match preview window size to parent size
+  OnPrintSetup(): uses wxPrintData and wxPageSetupDialogData
+
+CreateChildFrame() in this example is like OWL's EvNewView()
+    wxFrame frame = wxGetApp().CreateChildFrame(...);
+except that it's not an event.
+
+Is the wxConfig object required for MRU? More research needed.
+
+We'd like Help|About to use resources. It is not yet clear whether
+we should use wxXRC (xml) resources or win32 resources. Perhaps we
+should do both, using a win32 .rc file only to hold a VERSIONINFO
+resource.
+
+2004-03-13
+
+Added copyright and license notices, and appropriate acknowledgments
+of wx code used. Factored some monolithic files into logical
+components. Made html files conform to a later standard, and replaced
+w3c validation graphic accordingly. Minor makefile changes e.g. for
+compatibility with wx-2.4.1 .
+
+Saved snapshot 'wx-lmi-20040314T0035Z.tar.bz2'.
+
+2004-03-13
+
+Eliminated carriage returns from old source. Preserving the results
+of this one change as a separate step makes it easier to track the
+history of other changes.
+
+Saved snapshot 'wx-lmi-20040314T0340.tar.bz2'.
+
+2004-03-14
+
+Rearranged these notes in chronological order.
+
+Assert that the wx library was built with certain required options, in
+new file 'wx_checks.cpp'; remove such assertions elsewhere.
+
+Expunge unneeded #include directives, especially <wx/wx.h> and
+<wx/wxprec.h>, which include too much. Instead, include only necessary
+headers. Use h- rather than q- header names in the sense of 2.8 .
+Use forward declarations where possible.
+
+Make event handlers private, and alphabetize them.
+
+Move initializations from ctors to ctor-initializers.
+
+Make ctors 'explicit' where appropriate.
+
+Move inline functions out of headers.
+
+Expunge empty OnUpdate() handlers in view classes, but leave OnDraw()
+handlers--only the latter are needed, as being abstract.
+
+Make indentation and spacing consistent with lmi standards.
+
+Surround the bodies of selection and iteration statements in braces.
+
+Remove 'virtual' keyword from virtual-function overriders.
+
+Rename member variables: lose 'm_' prefix; add '_' suffix.
+
+Replace wx 'TRUE' and 'FALSE' macros with the corresponding C++
+keywords.
+
+Increase g++ warning options.
+
+Link with mpatrol. Resolve a couple of problems mpatrol finds,
+deferring others.
+
+Add various dummy libraries to shadow things wx provides that we don't
+want because they have license problems.
+
+Remove all calls to wx's _() function.
+
+Remove the Moria-gate inscription due to unknown copyright.
+
+Saved snapshot 'wx-lmi-20040314T2338Z.tar.bz2'.
+
+2004-03-15
+
+Initialize .png handler in main module. Formerly, .png graphics simply
+did not work.
+
+Remove dummy libpng.a: we want to use .png graphics, which are free of
+copyright and patent problems, and libpng.a is provided by wx. Same
+for libzlib.a, which png seems to require. But retain the other dummy
+libraries, which mask the libregex.a that wx provides (its license
+appears to have the same sort of problem as the original BSD license)
+and the libjpeg.a and libtiff.a that wx doesn't provide by default,
+which have other problems.
+
+Change linker flags in makefile so that libpng.a and libzlib.a can
+be found in the wx libraries directory, but local dummy libraries
+override anything in /wx/lib/ that we want to exclude.
+
+Fix mpatrol NOTALL problems, using new file 'wx_workarounds.hpp'. This
+command
+  /MinGW/bin/addr2line -C -e lmi.exe
+is useful for translating hex addresses in mpatrol reports.
+
+Saved snapshot 'wx-lmi-20040316T1419Z.tar.bz2'.
+
+2004-03-16
+
+Replaced global frame object with application-class data member.
+
+Changed frame class ctor signature: the parent parameter need not be
+passed because it is always a null pointer.
+
+Removed "cut last segment" menu item: it was a useless vestige of the
+original wx sample.
+
+Replaced view icons with those that I designed last April. Fixed the
+icon-workaround macro so that icons display.
+
+Added enhanced wxView class to hold each concrete class's icon. It
+also provides a empty implementation of pure virtual OnDraw().
+
+Used WXDLLEXPORT macro uniformly for class forward-declarations.
+
+Saved snapshot 'wx-lmi-20040316T1856Z.tar.bz2'.
+
+Built thus
+  $make CXXFLAGS='-W -Wall -pedantic -Weffc++' 2>&1
+    |sed -e'/^\/wxW/d' |less
+and fixed the stylistic defects it indicated in local code, ignoring
+the very large number of things it dislikes in the wx library.
+
+Text-view class uses a plain wxTextCtrl for its child window, making
+the custom window class unnecessary.
+
+Fixed a major defect. To reproduce: open a document, close it, and
+reopen it. Symptom: with luck, the resulting segfault causes the
+program to close spontaneously. Proximate cause traced to
+wxFileHistory::RemoveFileFromHistory(), which attempts to return the
+ID of a menuitem that doesn't exist. Ultimate cause: main module
+called FileHistoryUseMenu() when creating an MDI child frame, without
+a corresponding FileHistoryRemoveMenu() call to clean up. Solution
+for this snapshot: move file-history function calls to view classes.
+Better solution, for next snapshot: move this and other common work
+into the view base class.
+
+It would be convenient to handle this in the main application class,
+or perhaps in the document-manager class. However, neither the wxApp
+nor the wxDocManager class provides an interface for that: wx has
+nothing akin to OWL's VnViewOpened and VnViewClosed virtual
+notifications, and adding such thing would be a far bigger change
+than it is necessary to contemplate here. The main module creates
+views but can't hook their destruction, so moving MDI file history
+handling into a view class is the path chosen.
+
+Saved snapshot 'wx-lmi-20040317T0419Z.tar.bz2', which illustrates the
+problem clearly: html documents work correctly, but text documents
+fail as above.
+
+2004-03-17
+
+View classes now extend friendship to their associated document
+classes, so that their view-window members can be private.
+
+Removed the view classes' unnecessary 'frame_' member, and moved most
+of their implementation into the base class, fixing the file-history
+problem there. Similarly, the html view's wxHtmlPrintout data member
+is removed as being unnecessary: a local variable suffices.
+
+Concrete view classes' icon and menu functions are now private:
+clients invoke them through public functions in the base class.
+
+Removed vestiges of former class MyTextWindow.
+
+Upon view creation, the view window is now given focus: because this
+was not done formerly, keyboard navigation keys didn't work until the
+window was clicked on.
+
+Removed MyApp::CreateChildFrame()'s last argument, a bool that
+indicated which of two view types to create.
+
+2004-03-18
+
+Cleaned up document classes. They appeared not to require ctors and
+dtors, but it seems better to have both anyway even if they're empty.
+Sorted members rationally. Instead of assuming that the first view
+is of the appropriate type, find the first view that is of appropriate
+type, and test view pointers before using them to avoid segfaults.
+Perhaps it would be better to throw a null-pointer exception instead.
+Restored some comments from the cited wx samples.
+
+Cleaned up document manager class. Sorted members rationally. Restored
+the commented-out OnPrintSetup() implementation; it should either be
+used or removed. Renamed class and files with an 'ex' suffix for
+parallelism with 'view_ex.?pp'.
+
+Saved snapshot 'wx-lmi-20040318T1438Z.tar.bz2'.
+
+By default, wx print preview frame disables the application's other
+windows, but leaves them shown. It is confusing to permit users to
+focus a window they can't interact with. The customized class in new
+files 'previewframe_ex.[ch]pp' hide the application's other windows as
+well as disabling them.
+
+When the user cancels printing, the wx printing sample displays a
+messagebox that says "You canceled printing". Removed this behavior
+from the code adapted from that sample as being distracting, but only
+when wx can tell that printing was canceled. If the printing request
+is actually sent to the printer and then canceled after the msw print
+manager gains control, then apparently wx doesn't know the reason, and
+reports an error; that behavior seems difficult to change.
+
+Regularized use of 'wxTheApp' versus 'wxGetApp'. The former is good
+enough for accessing virtual functions of class wxApp.
+
+'File|Print' now prints immediately, without displaying a dialog
+first. This should eventually be a user-configurable option.
+
+2004-03-19
+
+Menus now loaded from xml resources, instead of constructed in fifty
+gruesome lines of code that didn't quite work anyway.
+
+Using the wxxrc library, though, causes many mpatrol diagnostics,
+which really ought to be fixed in wx itself--and apparently have been.
+
+2004-03-25
+
+Upgraded to wx-2.5.1, which solves many problems, in particular those
+that mpatrol has been complaining about. Building this version of the
+library with '-DwxUSE_STL' defined causes class wxString to be based
+on std::string, instead of the problematic old wx base class. Now the
+wxxrc library can be used without producing a large number of spurious
+diagnostics that would obscure any real problems mpatrol finds.
+
+Changed 'wxNode' pointers to 'wxList::compatibility_iterator' as
+'-DwxUSE_STL' requires.
+
+This may make 'wx_workarounds.hpp' mostly or entirely unnecessary;
+that issue needs further investigation. Meanwhile, defined trivial
+destructors for certain classes in an experimental attempt to make
+memory-allocation problems easier to trace.
+
+Makefile rewritten to remove dependence on the old wx build system,
+which no longer exists.
+
+Saved snapshot 'wx-lmi-20040326T0016Z.tar.bz2'.
+
+2004-03-26
+
+Removed '-D__GNUWIN32__' from the makefile--it had the effect of
+including a header with an impermissible copyright.
+
+Redesigned the application icon to contain bitmaps of several sizes,
+and changed its identifier in the resource file to make sure it's used
+as intended.
+
+Expunged 'wx_workarounds.hpp', which is no longer necessary.
+
+2004-03-27
+
+In view classes, MenuBar() no longer caches a menubar--such caching
+was a mistake, because closing a view of any type deleted the static
+object, causing trouble upon later opening another view of the same
+type. Icons are still cached, and that's OK because Icon() returns
+them by value, though there may be little advantage to caching them.
+
+In view classes, replaced DominantView(), which returned a pointer to
+a view, with DominantViewWindow(), which returns a pointer to the
+view's MDI child window, because the child window was wanted in every
+case, and because the window's handle can thus be checked in one
+place, obviating downstream checking.
+
+MDI parent frame's menu now loaded from xml resources, instead of
+constructed in code--same as was done on 2004-03-19 for view menus.
+
+Exception handler added to main function.
+
+Got rid of unused event handlers in class MyFrame, which now has
+little reason to exist.
+
+Main function rewritten to be platform independent.
+
+Saved snapshot 'wx-lmi-20040328T0307Z.tar.bz2'.
+
+2004-03-28
+
+Added autodependencies to makefile.
+
+Archives now created without '..' before member names.
+
+Got rid of unneeded custom MDI parent frame class. The wx/samples/
+programs generally add event handlers by customizing the frame class,
+which otherwise rarely needs customization; but the same result can be
+had by customizing the application class, which must always be
+customized anyway.
+
+Renamed the application 'Skeleton' because it really is a general
+application skeleton. It will include a fairly comprehensive set of
+features normally expected in an application, as opposed to the wx
+samples that highlight particular features.
+
+2004-03-30
+
+This question from 2003-01-27
+  "Is the wxConfig object required for MRU? More research needed."
+is resolved. It is best to use the global config object, which uses
+the best implementation for each platform automatically. Improved the
+manner of its construction and destruction.
+
+Try to eliminate mpatrol diagnostics observed with nondefault setting
+  export MPATROL_OPTIONS='SHOWUNFREED'
+or, what is easier to work with,
+  export MPATROL_OPTIONS='LOGALL SHOWUNFREED USEDEBUG'
+by using the overloaded operator new in 'wx_new.[ch]pp' to allocate
+objects that wx deletes. The purpose is not to manage memory better,
+but rather to suppress diagnostics that are only an artifact of using
+both wx and mpatrol as dlls. This technique is largely but not
+entirely successful.
+
+Further experimentation is deferred. Some tentative or experimental
+code is left in place as a guide, and will be reverted after taking a
+snapshot.
+
+Saved snapshot 'wx-lmi-20040331T1512Z.tar.bz2'.
+
+2004-03-31
+
+Reverted yesterday's experimental mpatrol changes, leaving the tested
+operator new overload in place.
+
+Factored Skeleton::OnInit() into subroutines to initialize various GUI
+components separately.
+
+2004-04-01
+
+All '.cpp' files now include a precompiled-header file.
+
+All '.hpp' files now include a configuration header first.
+
+Menu items show associated bitmaps (if any).
+
+Saved snapshot 'wx-lmi-20040402T0322Z.tar.bz2'.
+
+Nonfunctional 'Print' item removed from text-view menu. Implementing
+it would apparently be difficult.
+
+Toolbar added.
+
+Drag and drop implemented.
+
+Idempotence test added to makefile.
+
+Implemented 'Window' menu.
+
+Added a dummy implementation for a 'Properties' dialog.
+
+Factored code to associate and dissociate file history from menubars
+into the custom document manager.
+
+Used dynamic_cast where applicable instead of nonstandard wx RTTI.
+
+Used std::auto_ptr in one class for the obvious RAII reason.
+
+Fixed a memory-allocation error: the document manager creates a
+print-preview frame that is deleted in the exe, so it needs to be
+created with 'new', not 'new(wx)'.
+
+If the main window is maximized, then print preview is, too.
+
+Added support for C++ exceptions via OnExceptionInMainLoop(), which
+requires two updated files from the wx CVS:
+  include/wx/app.h
+    RCS-ID:      $Id: ChangeLog,v 1.1.1.1 2004-05-15 19:58:13 chicares Exp $
+  src/msw/evtloop.cpp
+    RCS-ID:      $Id: ChangeLog,v 1.1.1.1 2004-05-15 19:58:13 chicares Exp $
+The wx makefiles don't understand dependencies, so the library must
+be rebuilt after updating these files and running the appropriate
+'clean' target.
+
+2004-04-06
+
+Customized MDI child frame class permits parent to have no 'Window'
+menu when no document is open, while giving child windows a 'Window'
+menu with an open-file list appended, and makes menu-highlight help
+work for child windows even if (as normally) the child has no
+statusbar of its own. Menuitems 'Window | [Next, Previous]' enabled
+iff more than one child frame exists.
+
+Saved snapshot 'wx-lmi-20040406T1700Z.tar.bz2'.
+
+Added derived-work notices to files 'view_ex.[ch]pp'.
+
+New MDI child windows now have default size and position, but are
+maximized if a maximized child already existed.
+
+Saved snapshot 'wx-lmi-20040407T0335Z.tar.bz2'.
+
+2004-04-09
+
+Explore a printing implementation for class TextEditView by replacing
+library class wxDocPrintout. To do this well requires some fundamental
+changes to the doc-view system.
+
+Saved a sketch as snapshot 'wx-lmi-20040409T1708Z.tar.bz2-print-text'
+in case it ever proves useful, then reverted to previous snapshot.
+
+Proceeding from snapshot 'wx-lmi-20040407T0335Z.tar.bz2':
+
+Flush active wxLog on caught exception, so that the log, which may
+contain messages from the library, is displayed before the exception
+message.
+
+2004-04-12
+
+Initial implementation of a tabbed input dialog illustrating various
+relationships among controls.
+
+Saved snapshot 'wx-lmi-20040413T1333Z.tar.bz2'.
+
+2004-04-16
+
+Factored input classes into a separate module.
+
+New template class mc_enum representing enumerative data pairs a
+string with each enumerator and restricts assignment to permitted
+values.
+
+Replaced template class value_cast with a new and much simpler
+implementation.
+
+Experimentally changed this version
+  // RCS-ID:      $Id: ChangeLog,v 1.1.1.1 2004-05-15 19:58:13 chicares Exp $
+of /wx/src/msw/evtloop.cpp as follows:
+
+--- patch begins ---
+ #if wxUSE_EXCEPTIONS
+             // exit the outer loop as well
+             break;
+         }
+
++// Begin GWC mods.
++        catch (std::exception& e)
++        {
++            try
++            {
++                wxSafeShowMessage("Exception caught", e.what());
++                if ( !wxTheApp || !wxTheApp->OnExceptionInMainLoop() )
++                {
++                    OnExit();
++                    break;
++                }
++                //else: continue running the event loop
++            }
++            catch ( ... )
++            {
++                // OnException() throwed, possibly rethrowing the same
++                // exception again: very good, but we still need OnExit() to
++                // be called
++                OnExit();
++                throw;
++            }
++        }
++// End GWC mods.
+
+         catch ( ... )
+         {
+--- patch ends ---
+
+and added code to test it to the new 'Miscellaneous' menu. That patch
+and the library's exception handling in general seem convoluted, but
+there's no time to fix that now. Without this patch, standard
+exceptions terminate the program. With it, they're caught, although
+the OnExceptionInMainLoop() handler is called separately, resulting in
+two messageboxes--here's the error, and what do you want to do about
+it--instead of a single messagebox, which would be more desirable.
+
+Saved snapshot 'wx-lmi-20040416T1427Z.tar.bz2'.
+
+2004-04-17
+
+By default, makefile no longer deletes '.idm' files when archiving.
+Those files cost something to build, and are zero bytes each if no
+idempotence problem is found; if they aren't zero bytes, then there's
+a problem whose traces shouldn't blithely be erased.
+
+Template class 'mc_enum' (Mapped, Constrained enumerations) somewhat
+improved. Implementation removed from header into a translation unit
+that uses explicit instantiation, which may make compilation faster,
+and binaries smaller, with noticeable effects once the input class
+incorporates a large number of entities. As a continuing experiment,
+the enumeration class used in the production branch is set aside and
+an alternative evolved from Hyman Rosen's work; eventually these two
+branches will be reevaluated and the best points of each selected for
+a final implementation.
+
+Moved code that handles interdependence between enumerative controls
+out of the dialog-notebook class into the input class; this code needs
+much refinement, but proves the concept.
+
+Saved snapshot 'wx-lmi-20040417T1554Z.tar.bz2'.
+
+Added unit tests for enumeration class, adding some missing operators.
+
+2004-04-18
+
+Renamed enumeration class to 'mc_enum', signifying that enumerators
+are Mapped to strings and Constrained to enumerated values.
+
+Renamed the file that implements class mc_enum's function members to
+'mc_enum.tpp', signifying that it implements Template functions. This
+resembles the file-suffix convention used by libstdc++, but has the
+advantage that it matches the filename-pattern '*.?pp' as do the
+customary '.hpp' and '.cpp' suffixes. This template class is
+explicitly instantiated in file 'mc_enum_types.cpp', and elsewhere for
+for unit testing.
+
+2004-04-19
+
+Removed duplicative and weak unit test built into the main program.
+The standalone unit test is preferable.
+
+The input class formerly expressed control-item enablement by
+returning a vector of enablement states for one particular set of
+items; now, it manipulates a new vector in the enumerator class. This
+proves the concept of embedding enablement states in a UDT bound to
+each control.
+
+2004-04-20
+
+Added an auxiliary source file to class mc_enum's unit test in order
+to test using a template class explicitly instantiated in a one
+translation unit and used in another.
+
+Arranged class mc_enum's template paramters more naturally.
+
+Class Transferor now stores a symbolic name, which will later be used
+to look up the corresponding entity in the input class. This name is
+available from a transferor-bound control's window id through a call
+to GetValidator() with an appropriate dynamic_cast.
+
+2004-04-21
+
+Replaced reinterpret_cast with dynamic_cast in class Transferor.
+
+Added an unused second parameter to partial specializations of
+template function value_cast() in order to make them compatible with
+the unspecialized function's signature.
+
+Incorporated the symbolic-member-name class that I had proposed to
+boost in this 2001-08-27 message
+  http://groups.yahoo.com/group/boost/message/16626
+into the input-class, temporarily suppressing it with conditional
+directives because it needs work.
+
+Factored control-item-enablement code into a separate subroutine in
+the xml-notebook class. This is a better physical structure, but the
+control names are still hardcoded--the desired logical structure
+cannot be realized until symbolic reference to input-class data
+members is implemented.
+
+Saved snapshot 'wx-lmi-20040422T0043Z.tar.bz2'.
+
+2004-04-21
+
+Cleaned up class mc_enum. Added a macro that can be used to ensure
+that arrays passed as non-type arguments are of the correct size.
+
+Saved snapshot 'wx-lmi-20040422T1346Z.tar.bz2'.
+
+2004-04-22
+
+Fixed defect 00002 by adding the appropriate bitmap for 'wxID_NEW'
+where missing in 'menus.xrc'.
+
+Improved class mc_enum, replacing the macro added yesterday with a
+more reliable technique.
+
+Changed makefile to delete idempotence files before archiving. The
+profusion of header files makes them annoying in an archive.
+
+Saved snapshot 'wx-lmi-20040423T0516Z.tar.bz2'.
+
+2004-04-26
+
+Corrected a latent defect in the custom ctype-facet class. The comeau
+compiler doesn't allow
+  std::ctype_base::mask x;
+  x &= ~std::ctype_base::space
+because libcomo implements std::ctype_base::mask as an enum; gcc would
+have warned about that except that libstdc++ implements it as an
+integer type, which is also permitted by 17.3.2.1.2/1.
+
+2004-04-27
+
+Changed template class mc_enum's 'n' parameter from int to std::size_t
+because that is the natural type for deduced array bounds.
+
+Improved class mc_enum's documentation and unit test.
+
+Removed carriage returns from a few files.
+
+Strengthened gcc warnings for unit tests.
+
+Saved snapshot 'wx-lmi-20040427T2306Z.tar.bz2'.
+
+2004-04-29
+
+Makefile 'clean' target deletes intermediate files generated by comeau
+and borland compilers.
+
+The comeau tools require two environment variables and expect to be
+run in a msw shell; script 'como' works around these problems, for
+zsh only at present. Sample invocation:
+  ./como -I /boost/boost_1_31_0 any_member_test.cpp 2>&1 |less
+Reported a problem with como-4.3.3 that prevents compiling unit tests.
+
+Upgraded from boost-1.23.0 to boost-1.31.0 . This surprisingly
+requires changing the boost header included in unit-test TUs, and
+turning off gcc's '-Wundef' warning.
+
+Instead of calling boost::lexical_cast() in value_cast(), copied part
+of the boost implementation, in order to throw a more informative
+exception on failure.
+
+Added unit test for template class any_member, which is still under
+development.
+
+Saved snapshot 'wx-lmi-20040502T1436Z.tar.bz2'.
+
+2004-05-02
+
+Initial version of new template class any_member with cast() member
+ready to experiment with.
+
+Saved snapshot 'wx-lmi-20040504T0034Z.tar.bz2'.
+
+2004-05-04
+
+Added a notebook page: an old page shows one radiobox that constrains
+the choices available in another radiobox, and the new page shows a
+listbox and a combobox that interact exactly the same way, thus
+demonstrating substitutability of enumerative controls.
+
+Added a class to represent boolean data combined with a flag
+indicating whether the corresponding control is enabled.
+
+The symbolic-member-name class introduced 2004-04-21 is now activated
+for the input class. Factored conditional enablement of controls and
+restriction of choices for enumerative controls out of the GUI
+notebook class and into the non-GUI input class--an improvement of
+great pith and moment that permits validation of input independent of
+the GUI, for instance as when importing data from a different system.
+
+Reverted test tools to boost-1.23.0 because their boost-1.31.0
+replacement is less suitable than the original. Copied the original
+test library and de-boostified it to avoid version conflicts with
+other parts of boost.
+
+Added a unit test for operator new(std::size_t, wx_allocator) and kin.
+
+Saved snapshot ''.
+
+
+reexamine input_datum.?pp
+
+mapping between controls and data
+  some controls bind to no datum
+  some data bound to no control
+  permit alias controls--map some data to multiple sibling controls
+  we'll also want alias subcontrols--distributed reflection
+    e.g. date <--> three edit controls
+  exactly when do we need to use the mapping?
+    (might the transferor hold two names?)
+    binding with transferors
+    laying out intermediate input-strings class for transfer
+    iterate across controls in OnUpdateGUI()
+
+Input::Harmonize() might report the changes it makes
+
+gcc defect: /tmp/member_template.cpp
+
+value_cast unit test
+
+
+
+next steps:
+  enum class: factor out enablement and proscription?
+  clean up notebook implementation: use member symbol table
+  add separate radiobox tab
+  check unit test coverage with gcov?
+  build unit tests with bc++5.5.1 or comeau
+  toolbar enablement
+
+nice to have, perhaps:
+  change other occurrences of 'lmi' to 'skeleton'?
+  drop doc with no template?
+    "Sorry, the format for this file is unknown."
+
+open issues:
+  exception safety and exception handling
+  clicking on a URL throws some kind of exception
+  print preview is slow for style.html, yet it's valid html-3.2
+
+
+
+
+
+
+
+
+
