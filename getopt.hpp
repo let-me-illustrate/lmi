@@ -1,18 +1,24 @@
-// http://www.geocrawler.com/archives/3/364/1995/2/0/2053420/
 // This may look like C code, but it is really -*- C++ -*-
 
-//    Getopt for GNU.
-//    Copyright (C) 1987, 1989, 1992 Free Software Foundation, Inc.
-//    (Modified by Douglas C. Schmidt for use with GNU G++ (Getopt).)
-//    (Modified by Vinicius J. Latorre for use with long options.)
-//    (Modified by Gregory W. Chicares 2001, 2004, 2005 as marked with 'GWC' inline.)
+// Getopt for GNU.
+// Copyright (C) 1987, 1989, 1992 Free Software Foundation, Inc.
 
-// http://savannah.nongnu.org/projects/lmi
-// email: <chicares@cox.net>
-// snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
-
-// GWC added this RCS Id:
-// $Id: getopt.hpp,v 1.1 2005-01-14 19:47:44 chicares Exp $
+// (Modified by Douglas C. Schmidt for use with GNU G++ (Getopt).)
+// (Modified by Vinicius J. Latorre for use with long options.)
+// (Modified by Gregory W. Chicares in years stated below:
+//   substantive changes marked inline with 'GWC'; trivial changes
+//   (formatting, style, standardization) not so marked, to reduce
+//   clutter.)
+//
+// Get the original Latorre sources here:
+// http://groups.google.com/groups?selm=9502241613.AA06287%40moon.cpqd.br
+// http://www.geocrawler.com/archives/3/364/1995/2/0/2053420/
+// [Both URLs should work, but the second seemed to lack the full
+// contents when I revisited it later.]
+//
+// GWC modifications Copyright (C) 2001, 2002, 2003, 2004, 2005
+//   Gregory W. Chicares and released with the same licensing terms as
+//   the original, viz.:
 
 // This file is part of the GNU C++ Library.  This library is free
 // software; you can redistribute it and/or modify it under the terms of
@@ -25,6 +31,13 @@
 // You should have received a copy of the GNU Library General Public
 // License along with this library; if not, write to the Free Software
 // Foundation, 675 Mass Ave, Cambridge, MA 02139, USA.
+
+// http://savannah.nongnu.org/projects/lmi
+// email: <chicares@cox.net>
+// snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
+
+// GWC added this RCS Id:
+// $Id: getopt.hpp,v 1.2 2005-02-19 03:28:18 chicares Exp $
 
 // This version of 'getopt' appears to the caller like standard Unix 'getopt'
 // but it behaves differently for the user, since it allows the user

@@ -5,16 +5,18 @@
 
 // (Modified by Douglas C. Schmidt for use with GNU G++.)
 // (Modified by Vinicius J. Latorre for use with long options.)
-// (Modified by Gregory W. Chicares 2001, 2002, 2003, 2004:
+// (Modified by Gregory W. Chicares in years stated below:
 //   substantive changes marked inline with 'GWC'; trivial changes
 //   (formatting, style, standardization) not so marked, to reduce
 //   clutter.)
+//
 // Get the original Latorre sources here:
 // http://groups.google.com/groups?selm=9502241613.AA06287%40moon.cpqd.br
 // http://www.geocrawler.com/archives/3/364/1995/2/0/2053420/
 // [Both URLs should work, but the second seemed to lack the full
 // contents when I revisited it later.]
-// GWC modifications copyright (C) 2001, 2002, 2003, 2004, 2005
+//
+// GWC modifications Copyright (C) 2001, 2002, 2003, 2004, 2005
 //   Gregory W. Chicares and released with the same licensing terms as
 //   the original, viz.:
 
@@ -35,7 +37,7 @@
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
 // GWC added this RCS Id:
-// $Id: getopt.cpp,v 1.1 2005-01-14 19:47:44 chicares Exp $
+// $Id: getopt.cpp,v 1.2 2005-02-19 03:28:18 chicares Exp $
 
 // GWC conditionalized gcc-specific pragma to avoid a warning when
 // compiling with como C++ using a gcc backend.
