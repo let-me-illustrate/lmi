@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: GNUmakefile,v 1.5 2005-02-19 03:28:26 chicares Exp $
+# $Id: GNUmakefile,v 1.6 2005-02-19 04:25:42 chicares Exp $
 
 ###############################################################################
 
@@ -133,6 +133,10 @@ $(src_dir)/configuration.make:: ;
 build_type ?= ship
 build_directory := ../build/$(uname)/$(build_type)
 
+datestamp_files := \
+  build.hpp \
+  version.hpp \
+
 MAKETARGET = \
   $(MAKE) \
     -C $@ \
@@ -212,9 +216,7 @@ never_source_files := \
 
 # Files that are source in some restrictive sense only:
 
-datestamp_files := \
-  build.hpp \
-  version.hpp \
+# $(datestamp_files), which is necessarily defined above.
 
 documentation_files := \
   $(wildcard ChangeLog*) \
@@ -264,7 +266,7 @@ licensed_files := $(filter-out $(gpl_files) $(never_source_files),$(wildcard *))
 
 # These headers define datestamp macros.
 
-# Update the version-datestamp header after committing any group of
+# Update the version-datestamp header before committing any group of
 # files to cvs. Use target 'cvs_ready' to do this reliably.
 
 .PHONY: set_version_datestamp
