@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: account_value.hpp,v 1.3 2005-03-07 11:48:58 chicares Exp $
+// $Id: account_value.hpp,v 1.4 2005-03-22 03:40:18 chicares Exp $
 
 #ifndef account_value_hpp
 #define account_value_hpp
@@ -199,7 +199,7 @@ class LMI_EXPIMP AccountValue
     double IncrementBOM
         (int year
         ,int month
-        ,double CaseExpRatReserve
+        ,double a_case_k_factor
         );
     // Credit interest and process all subsequent monthly transactions
     double IncrementEOM
@@ -580,6 +580,7 @@ class LMI_EXPIMP AccountValue
     double  YearsPremTaxLoadRate;
     double  YearsDacTaxLoadRate;
 
+    double  case_k_factor;
     double  ActualCoiRate;
 
     bool    TermRiderActive;
