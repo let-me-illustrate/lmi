@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: workhorse.make,v 1.8 2005-02-23 12:37:20 chicares Exp $
+# $Id: workhorse.make,v 1.9 2005-03-02 04:42:38 chicares Exp $
 
 ###############################################################################
 
@@ -87,6 +87,7 @@ default_targets := \
   static_demo$(EXEEXT) \
   antediluvian_cgi$(EXEEXT) \
   antediluvian_cli$(EXEEXT) \
+  lmi_cli$(EXEEXT) \
 
 .PHONY: effective_default_target
 effective_default_target: $(default_targets)
@@ -402,6 +403,15 @@ libantediluvian.a libantediluvian$(SHREXT): $(antediluvian_common_objects)
 shared_demo$(EXEEXT): library_demo.o alert_cli.o liblmi$(SHREXT)
 
 static_demo$(EXEEXT): library_demo.o alert_cli.o $(lmi_common_objects)
+
+# TODO ?? 'lmi_cli' can be built either with a shared or a static
+# 'lmi' library. Choose one, or support both--possibly expunging the
+# 'shared_demo' and 'static_demo' targets and the code that's unique
+# to them.
+
+#lmi_cli$(EXEEXT): $(lmi_cli_objects) liblmi$(SHREXT)
+
+lmi_cli$(EXEEXT): $(lmi_cli_objects) $(lmi_common_objects)
 
 antediluvian_cgi$(EXEEXT): $(antediluvian_cgi_objects) libantediluvian.a
 
