@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xml_notebook.cpp,v 1.1 2005-03-12 03:01:08 chicares Exp $
+// $Id: xml_notebook.cpp,v 1.2 2005-03-17 02:34:19 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -90,6 +90,7 @@ wxEventType const wxEVT_REFOCUS_INVALID_CONTROL = wxNewEventType();
 
 // Entries alphabetized by function name.
 BEGIN_EVENT_TABLE(XmlNotebook, wxDialog)
+    EVT_BUTTON(wxID_OK, XmlNotebook::OnOK)
     EVT_CHILD_FOCUS(XmlNotebook::OnChildFocus)
     EVT_INIT_DIALOG(XmlNotebook::OnInitDialog)
     EVT_NOTEBOOK_PAGE_CHANGED(XRCID("input_notebook"), XmlNotebook::OnPageChanged)
@@ -348,7 +349,16 @@ void XmlNotebook::RefreshItemBox
             itembox.Append(base_datum->str(j));
             }
         }
-    itembox.Select(base_datum->allowed_ordinal());
+
+    // Always leave at least one item in the itembox, and make it the
+    // default item that would get chosen when all are impermissible.
+    if(0 == itembox.GetCount())
+        {
+        itembox.Append(base_datum->str(base_datum->allowed_ordinal()));
+        }
+    itembox.Select
+        (itembox.FindString(base_datum->str(base_datum->allowed_ordinal()))
+        );
     itembox.Thaw();
     updates_blocked_ = updates_were_blocked;
 }
@@ -546,6 +556,28 @@ void XmlNotebook::OnInitDialog(wxInitDialogEvent&)
 
     updates_blocked_ = false;
     UpdateWindowUI(wxUPDATE_UI_RECURSE);
+}
+
+// TODO ?? Remove this function when the kludge it contains becomes
+// needless.
+void XmlNotebook::OnOK(wxCommandEvent& e)
+{
+    wxDialog::OnOK(e);
+    if(0 == GetReturnCode())
+        {
+        return;
+        }
+    // TODO ?? WX PORT !! Icky kludge.
+    input_["UseAverageOfAllFunds"] =
+        ("Average fund"  == input_["FundChoiceType"].str())
+        ? "Yes"
+        : "No"
+        ;
+    input_["OverrideFundManagementFee"] =
+        ("Override fund" == input_["FundChoiceType"].str())
+        ? "Yes"
+        : "No"
+        ;
 }
 
 // TODO ?? expunge?

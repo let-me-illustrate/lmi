@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xml_notebook.hpp,v 1.1 2005-03-12 03:01:08 chicares Exp $
+// $Id: xml_notebook.hpp,v 1.2 2005-03-17 02:34:19 chicares Exp $
 
 #ifndef xml_notebook_hpp
 #define xml_notebook_hpp
@@ -124,6 +124,12 @@ class XmlNotebook
     // function be virtual in the base class? Should a different
     // name be used here?
     void OnInitDialog            (wxInitDialogEvent&);
+
+    // TODO ?? This hides wxDialog::OnOK, at least for gtk. Shouldn't
+    // that function be virtual in the base class? Should a different
+    // name be used here?
+    void OnOK                    (wxCommandEvent&   );
+    
     void OnPageChanged           (wxNotebookEvent  &);
     void OnPageChanging          (wxNotebookEvent  &);
     void OnRefocusInvalidControl (wxCommandEvent   &);

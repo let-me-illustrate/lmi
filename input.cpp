@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input.cpp,v 1.1 2005-03-11 03:19:31 chicares Exp $
+// $Id: input.cpp,v 1.2 2005-03-17 02:34:19 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -338,21 +338,6 @@ void Input::ascribe_members()
     ascribe("WithdrawalToDuration"                  , &Input::WithdrawalToDuration                  );
 }
 
-// TODO ?? Later, expunge this comment:
-// Deliberately removed from legacy code, as being broken,
-// misbegotten, or offensive to compliance:
-//   PayLoanInterestInCash
-//   SocialSecurityNumber
-//   CorporationTaxpayerId
-//   YearsOfZeroDeaths
-//   InforceDcvDeathBenefit
-//   MiddleName
-//   LastName
-//   AgentMiddleName
-//   AgentLastName
-//   AssumedCaseNumberOfLives
-//   CaseAssumedAssets
-
 void convert_to_ihs(IllusInputParms& ihs, Input const& lmi)
 {
     // TODO ?? Can member_names() be made static?
@@ -384,6 +369,10 @@ void convert_to_ihs(std::vector<IllusInputParms>& ihs, std::vector<Input> const&
 
 void convert_from_ihs(IllusInputParms const& ihs, Input& lmi)
 {
+    // TODO ?? WX PORT !! Icky kludge.
+    LMI_ASSERT(ihs.AvgFund             == (e_fund_average  == ihs.FundChoiceType));
+    LMI_ASSERT(ihs.OverrideFundMgmtFee == (e_fund_override == ihs.FundChoiceType));
+
     // TODO ?? Can member_names() be made static?
     std::vector<std::string>::const_iterator i;
     for(i = lmi.member_names().begin(); i != lmi.member_names().end(); ++i)
