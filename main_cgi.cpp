@@ -30,7 +30,7 @@
 // it to the life-insurance-illustrations problem domain. Any defect
 // should not reflect on Stephen F. Booth's reputation.
 
-// $Id: cgimain.cpp,v 1.3 2005-02-12 12:59:31 chicares Exp $
+// $Id: main_cgi.cpp,v 1.1 2005-03-12 03:02:54 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
