@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mc_enum_types.xpp,v 1.2 2005-03-11 03:39:32 chicares Exp $
+// $Id: mc_enum_types.xpp,v 1.3 2005-03-30 19:30:05 chicares Exp $
 
 #define yes_or_no_VALUES \
     {mce_yes \
@@ -640,6 +640,8 @@
     ,mce_guaranteed_cash_value_irr \
     ,mce_current_death_benefit_irr \
     ,mce_guaranteed_death_benefit_irr \
+    ,mce_net_mortality_reserve \
+    ,mce_current_net_claims \
     };
 #define report_column_NAMES \
     {"[none]" \
@@ -674,6 +676,8 @@
     ,"IrrCsv_Guaranteed" \
     ,"IrrDb_Current" \
     ,"IrrDb_Guaranteed" \
+    ,"ExpRatRsvCash_Current" \
+    ,"NetClaims_Current" \
     };
 #if 0
 // TODO ?? Nicer-looking names--implement later.
@@ -710,6 +714,8 @@
     ,"Guaranteed Cash Value IRR" \
     ,"Current Death Benefit IRR" \
     ,"Guaranteed Death Benefit IRR" \
+    ,"Net Mortality Reserve" \
+    ,"Current Net Claims" \
     };
 #endif // 0
 

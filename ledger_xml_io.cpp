@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xml_io.cpp,v 1.5 2005-03-26 02:10:46 chicares Exp $
+// $Id: ledger_xml_io.cpp,v 1.6 2005-03-30 19:30:05 chicares Exp $
 
 #include "config.hpp"
 
@@ -267,7 +267,7 @@ void Ledger::write(xml::node& x) const
 // No good:    title_map["AttainedAge"                     ] = " בבבבבבבבבבבבב End of בבYear Age";
 // No good:    title_map["AttainedAge"                     ] = " &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; End of &#160;&#160;Year Age";
 
-//  Here are the columns to be listed in the User Interface
+//  Here are the columns to be listed in the user interface
 //  as well as their corresponding titles.
     title_map["AVRelOnDeath_Current"            ] = "Acct Val Rel on Death";
     title_map["AcctValLoadAMD_Current"          ] = "Curr Acct Val Load Aft MDed";
@@ -322,7 +322,7 @@ void Ledger::write(xml::node& x) const
     title_map["ErPmt"                           ] = "ER Payment Mode";
     title_map["ExcessLoan_Current"              ] = " _ Curr Excess Loan";
     title_map["ExcessLoan_Guaranteed"           ] = "Guar Excess Loan";
-// Everything beginning "ExpR" was obsolete experience rating stuff.
+    title_map["ExpRatRsvCash_Current"           ] = "Net Mortality Reserve";
     title_map["ExpenseCharges_Current"          ] = "Curr Expense Charge";
     title_map["ExpenseCharges_Guaranteed"       ] = "Guar Expense Charge";
 // STEVEN Can you make this one word?
@@ -460,7 +460,6 @@ void Ledger::write(xml::node& x) const
 // F4: scaled by 100, two decimals, with '%' at end:
 // > Format as percentage "0.00%"
 // >
-    format_map["ExpRatRsvCash"                     ] = f4;
     format_map["GuarMaxMandE"                      ] = f4;
     format_map["InitAnnGenAcctInt"                 ] = f4;
     format_map["InitAnnLoanCredRate"               ] = f4;
@@ -644,6 +643,7 @@ void Ledger::write(xml::node& x) const
     format_map["ErPmt"                             ] = f1;
     format_map["ExcessLoan"                        ] = f1;
     format_map["ExpenseCharges"                    ] = f1;
+    format_map["ExpRatRsvCash"                     ] = f1;
     format_map["ExpRatRsvForborne"                 ] = f1;
     format_map["ExpRfd"                            ] = f1;
     format_map["ExpRsv"                            ] = f1;
