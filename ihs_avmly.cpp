@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avmly.cpp,v 1.8 2005-03-22 14:20:16 chicares Exp $
+// $Id: ihs_avmly.cpp,v 1.9 2005-03-30 03:39:05 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -2334,6 +2334,23 @@ void AccountValue::TxSetCOI()
     NAAR = DBReflectingCorr * DBDiscountRate[Year] - TotalAccountValue();
     NAAR = std::max(0.0, round_naar(NAAR));
 
+// TODO ?? Temporary--erase after validation.
+if(std::string::npos != Input_->Comments.find("idiosyncrasyZ1"))
+    {
+    std::ofstream ofs
+        ("experience_rating"
+        ,std::ios_base::out | std::ios_base::ate | std::ios_base::app
+        );
+    ofs
+        << "\t\tYear\t"               << std::setprecision(20) << Year
+        << "\tMonth\t"                << std::setprecision(20) << Month
+        << "\tNAAR\t"                 << std::setprecision(20) << NAAR
+        << "\tDBReflectingCorr\t"     << std::setprecision(20) << DBReflectingCorr
+        << "\tTotalAccountValue()\t"  << std::setprecision(20) << TotalAccountValue()
+        << "\n"
+        ;
+    }
+
 // This doesn't work. We need to reconsider the basic transactions.
 //  double naar_forceout = std::max(0.0, NAAR - MaxNAAR);
 //  process_distribution(naar_forceout);
@@ -2347,6 +2364,8 @@ void AccountValue::TxSetCOI()
     DcvNaar = std::max(0.0, DcvNaar);
 
     ActualCoiRate = GetBandedCoiRates(ExpAndGABasis, ActualSpecAmt)[Year];
+    // TODO ?? Consider making this a member of the mortality-rates class.
+
     if(COIIsDynamic && Input_->UseExperienceRating)
         {
         double guaranteed_coi_rate = GetBandedCoiRates(e_basis(e_guarbasis), ActualSpecAmt)[Year];

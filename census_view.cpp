@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: census_view.cpp,v 1.6 2005-03-29 15:08:42 chicares Exp $
+// $Id: census_view.cpp,v 1.7 2005-03-30 03:39:05 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -1359,6 +1359,9 @@ convert_to_ihs(ihs_input0, cell_parms()[0]);
     ofs
         << '\t' << "year"
         << '\t' << "1+i"
+        << '\t' << "coi_rate"
+        << '\t' << "q"
+        << '\t' << "eoy_naar"
         << '\t' << "inforce"
         << '\t' << "coi"
         << '\t' << "cum_coi"
@@ -1486,7 +1489,9 @@ restart:
 
                     // Add assets and COI charges to case totals.
                     Assets[year] += (*i)->GetSepAcctAssetsInforce();
-                    CaseYearsCOICharges += (*i)->GetLastCOIChargeInforce();
+// TODO ?? expunge this along with all other code used only by the
+// obsolete experience-rating method                    
+//                    CaseYearsCOICharges += (*i)->GetLastCOIChargeInforce();
                     CaseYearsIBNR += (*i)->GetIBNRContrib();
 
                     current_mortchg += (*i)->GetLastCOIChargeInforce();
@@ -1722,11 +1727,21 @@ restart:
                     }
                 }
 
-            // Increment year, update curtate inforce factor.
+            // Increment year; update curtate inforce factor.
+
+            // TODO ?? Temporary. These variables are useful only
+            // for testing single-life cases.
+            double this_years_coi_rate       = 0.0;
+            double this_years_part_mort_rate = 0.0;
+            double eoy_naar                  = 0.0;
             for(i = AVS.begin(); i != AVS.end(); ++i)
                 {
                 if((*i)->PrecedesInforceDuration(year, 11)) continue;
-                projected_net_mortchgs += (*i)->GetInforceProjectedCoiCharge();
+                projected_net_mortchgs += (*i)->GetInforceProjectedCoiCharge
+                    (this_years_coi_rate
+                    ,this_years_part_mort_rate
+                    ,eoy_naar
+                    );
                 (*i)->IncrementEOY(year);
                 }
 
@@ -1761,6 +1776,9 @@ restart:
             ofs
                 << '\t' << std::setprecision( 0) << year
                 << '\t' << std::setprecision(20) << experience_reserve_annual_u
+                << '\t' << std::setprecision(20) << this_years_coi_rate
+                << '\t' << std::setprecision(20) << this_years_part_mort_rate
+                << '\t' << std::setprecision(20) << eoy_naar
                 << '\t' << std::setprecision(20) << NumLivesInforce
                 << '\t' << std::setprecision(20) << case_years_net_mortchgs
                 << '\t' << std::setprecision(20) << case_accum_net_mortchgs
