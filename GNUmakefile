@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: GNUmakefile,v 1.4 2005-02-17 23:59:25 chicares Exp $
+# $Id: GNUmakefile,v 1.5 2005-02-19 03:28:26 chicares Exp $
 
 ###############################################################################
 
@@ -144,7 +144,6 @@ MAKETARGET = \
                 idempotent_files='$(idempotent_files)' \
   $(MAKECMDGOALS)
 
-
 .PHONY: $(build_directory)
 $(build_directory): $(datestamp_files)
 	+@[ -d $@ ] || $(MKDIR) --parents $@
@@ -218,7 +217,7 @@ datestamp_files := \
   version.hpp \
 
 documentation_files := \
-  ChangeLog \
+  $(wildcard ChangeLog*) \
   README \
 
 gpl_files := \
@@ -304,15 +303,15 @@ version.hpp: $(filter-out $@,$(prerequisite_files))
 
 quoted_gpl: COPYING
 	<$(src_dir)/COPYING \
-    $(SED) -f $(src_dir)/text_to_strings.sed \
-    | $(TR) -d '\r' \
-    >$(src_dir)/$@
+	$(SED) -f $(src_dir)/text_to_strings.sed \
+	| $(TR) -d '\r' \
+	>$(src_dir)/$@
 
 quoted_gpl_html: COPYING
 	<$(src_dir)/COPYING \
-    $(SED) -f $(src_dir)/text_to_html_strings.sed \
-    | $(TR) -d '\r' \
-    >$(src_dir)/$@
+	$(SED) -f $(src_dir)/text_to_html_strings.sed \
+	| $(TR) -d '\r' \
+	>$(src_dir)/$@
 
 gpl_notices := \
 "\
@@ -374,12 +373,33 @@ clobber: maintainer-clean
 # counted in SLOC, but marked defects in them are counted. This has
 # some generally nugatory effect on a measure like defects per KLOC.
 
+# In testing files modified this year for a current copyright notice,
+# it is assumed that the year appears on the same line as the word
+# "Copyright". That may become too strict in the future if more than
+# one line is required to show all the years. But it is necessary to
+# avoid false positives that would arise when the current year appears
+# in an RCS Id but not in the copyright notice.
+
 eat := pwd > /dev/null # Gobble unwanted grep exit codes.
+
+expected_source_files = $(wildcard *.?pp *.c *.h *.rc *.xrc)
+
+old_email := $(join mind,spring)
 
 .PHONY: check_conformity
 check_conformity: mostlyclean
 	@$(ECHO) "  Unexpected or oddly-named source files:"
-	@$(ECHO) $(filter-out $(wildcard *.?pp *.c *.h),$(prerequisite_files))
+	@$(ECHO) $(filter-out $(expected_source_files),$(prerequisite_files))
+	@$(ECHO) "  Files with obsolete email address:"
+	@-$(GREP) --files-with-match $(old_email) $(licensed_files)    || $(eat)
+	@$(TOUCH) BOY --date=$(yyyy)0101
+	@$(ECHO) "  Files lacking current copyright year:"
+	@for z in $(licensed_files); \
+	  do \
+	    if [[ $$z -nt BOY ]] \
+	      $(GREP) --files-without-match "Copyright.*$(yyyy)" $$z; \
+	  done;
+	@$(RM) --force BOY
 	@$(ECHO) "  Files that don't point to savannah:"
 	@-$(GREP) --files-without-match savannah $(licensed_files)     || $(eat)
 	@$(ECHO) "  Files that lack an RCS Id:"
@@ -428,6 +448,7 @@ cvs_ready: distclean set_version_datestamp
 
 archname := lmi-$(yyyymmddhhmm)
 
+.PHONY: archive
 archive: distclean set_version_datestamp
 	$(MKDIR) ../$(archname)
 	-$(CP) --force --preserve --recursive * ../$(archname)
