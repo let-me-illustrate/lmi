@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avstrtgy.cpp,v 1.3 2005-02-12 12:59:31 chicares Exp $
+// $Id: ihs_avstrtgy.cpp,v 1.4 2005-02-17 04:40:02 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -63,18 +63,18 @@ double AccountValue::CalculateSpecAmtFromStrategy
     ) const
 {
     double z = 0.0;
-    switch(Input->VectorSpecifiedAmountStrategy[actual_year])
+    switch(Input_->VectorSpecifiedAmountStrategy[actual_year])
         {
         case e_sasalary:
             {
             // This ignores yearly-varying salary.
             double y;
-            y = Input->Salary[actual_year] * Input->SalarySAPct;
-            if(0.0 != Input->SalarySACap)
+            y = Input_->Salary[actual_year] * Input_->SalarySAPct;
+            if(0.0 != Input_->SalarySACap)
                 {
-                y = std::min(y, Input->SalarySACap.value());
+                y = std::min(y, Input_->SalarySACap.value());
                 }
-            y -= Input->SalarySAOffset;
+            y -= Input_->SalarySAOffset;
             z = y;
             }
             break;
@@ -161,7 +161,7 @@ double AccountValue::CalculateSpecAmtFromStrategy
             {
             fatal_error()
                 << "Case '"
-                << Input->VectorSpecifiedAmountStrategy[actual_year]
+                << Input_->VectorSpecifiedAmountStrategy[actual_year]
                 << "' not found."
                 << LMI_FLUSH
                 ;
@@ -174,7 +174,7 @@ double AccountValue::CalculateSpecAmtFromStrategy
 void AccountValue::NewPerformSpecAmtStrategy()
 {
     for
-        (int j = 0; j < Input->YearsToMaturity(); ++j)
+        (int j = 0; j < Input_->YearsToMaturity(); ++j)
         {
         double z = round_specamt(CalculateSpecAmtFromStrategy(j, 0));
         DeathBfts_->set_specamt(z, j, 1 + j);
@@ -188,7 +188,7 @@ void AccountValue::NewPerformSpecAmtStrategy()
 void AccountValue::OldPerformSpecAmtStrategy()
 {
     NewPerformSpecAmtStrategy();
-    if(e_obsolete_same_as_initial == Input->PostRetType)
+    if(e_obsolete_same_as_initial == Input_->PostRetType)
         {
         return;
         }
@@ -199,9 +199,9 @@ void AccountValue::OldPerformSpecAmtStrategy()
     // Done if no strategy to apply
     if
         (
-//            e_sasalary      == Input->SAStrategy
-//        ||  e_sainputscalar == Input->SAStrategy
-        e_sainputscalar == Input->SAStrategy
+//            e_sasalary      == Input_->SAStrategy
+//        ||  e_sainputscalar == Input_->SAStrategy
+        e_sainputscalar == Input_->SAStrategy
         )
         {
         return;
@@ -209,7 +209,7 @@ void AccountValue::OldPerformSpecAmtStrategy()
 
     SA = round_specamt(SA);
 
-    int RetDur = Input->Status[0].YearsToRetirement();
+    int RetDur = Input_->Status[0].YearsToRetirement();
 
     // I think we really need to do this here, because
     // DeathBenefits::SpecAmt is used downstream
@@ -218,7 +218,7 @@ void AccountValue::OldPerformSpecAmtStrategy()
 // TODO ?? Error if post-ret is same as pre-ret strategy.
 
     double postret_spec_amt = 0.0;
-    switch(Input->PostRetType)
+    switch(Input_->PostRetType)
         {
         case e_obsolete_same_as_initial:
             {
@@ -232,7 +232,7 @@ void AccountValue::OldPerformSpecAmtStrategy()
 //          break;
         case e_obsolete_percent_of_initial:
             {
-            postret_spec_amt = SA * Input->PostRetPct;
+            postret_spec_amt = SA * Input_->PostRetPct;
             }
             break;
         case e_obsolete_varying:
@@ -248,7 +248,7 @@ void AccountValue::OldPerformSpecAmtStrategy()
             {
             fatal_error()
                 << "Case '"
-                << Input->PostRetType
+                << Input_->PostRetType
                 << "' not found."
                 << LMI_FLUSH
                 ;
@@ -277,9 +277,9 @@ double AccountValue::DoPerformPmtStrategy
     // Don't override premium during prem solve period.
     if
         (
-        a_SolveForWhichPrem == Input->SolveType
-        && Input->SolveBegYear <= Year
-        && Year < std::min(Input->SolveEndYear.value(), BasicValues::Length)
+        a_SolveForWhichPrem == Input_->SolveType
+        && Input_->SolveBegYear <= Year
+        && Year < std::min(Input_->SolveEndYear.value(), BasicValues::Length)
         )
         {
         return a_PmtVector[Year];
@@ -379,9 +379,9 @@ double AccountValue::PerformEePmtStrategy() const
         (e_solve_type(e_solve_ee_prem)
         ,InvariantValues().EeMode[Year]
         ,InvariantValues().EeMode[0]
-        ,Input->EePremTableMult
+        ,Input_->EePremTableMult
         ,InvariantValues().EePmt
-        ,Input->VectorIndvPaymentStrategy
+        ,Input_->VectorIndvPaymentStrategy
         );
 }
 
@@ -392,9 +392,9 @@ double AccountValue::PerformErPmtStrategy() const
         (e_solve_type(e_solve_er_prem)
         ,InvariantValues().ErMode[Year]
         ,InvariantValues().ErMode[0]
-        ,Input->ErPremTableMult
+        ,Input_->ErPremTableMult
         ,InvariantValues().ErPmt
-        ,Input->VectorCorpPaymentStrategy
+        ,Input_->VectorCorpPaymentStrategy
         );
 }
 

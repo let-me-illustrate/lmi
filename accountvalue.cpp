@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: accountvalue.cpp,v 1.3 2005-02-12 12:59:31 chicares Exp $
+// $Id: accountvalue.cpp,v 1.4 2005-02-17 04:40:02 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -142,7 +142,7 @@ double AccountValue::RunAV()
 {
     InvariantValues().Init(this);
     OverridingPmts = InvariantValues().EePmt;
-    Solving = e_solve_none != Input->SolveType.value();
+    Solving = e_solve_none != Input_->SolveType.value();
     return RunAllApplicableBases();
 }
 
@@ -155,7 +155,7 @@ double AccountValue::RunOneBasis(e_run_basis const& TheBasis)
         // TODO ?? Do something more flexible?
         // TODO ?? Isn't this unreachable?
         throw std::logic_error("This line had seemed to be unreachable.");
-        LMI_ASSERT(TheBasis == Input->SolveBasis.value());
+        LMI_ASSERT(TheBasis == Input_->SolveBasis.value());
         z = Solve();
         }
     else
@@ -180,7 +180,7 @@ double AccountValue::RunAllApplicableBases()
     e_run_basis run_basis;
     set_run_basis_from_separate_bases
         (run_basis
-        ,e_basis(Input->SolveBasis.value())
+        ,e_basis(Input_->SolveBasis.value())
         ,e_sep_acct_basis(e_sep_acct_full)
         );
 
@@ -222,9 +222,9 @@ double AccountValue::PerformRun(e_run_basis const& TheBasis)
 
     Debugging       = false;
 
-    InforceYear                 = Input->InforceYear            ;
-    InforceMonth                = Input->InforceMonth           ;
-    InforceAVGenAcct            = Input->InforceAVGenAcct       ;
+    InforceYear      = Input_->InforceYear;
+    InforceMonth     = Input_->InforceMonth;
+    InforceAVGenAcct = Input_->InforceAVGenAcct;
 
     ItLapsed         = false;
     LapseMonth       = 0;
@@ -270,8 +270,8 @@ void AccountValue::DoYear
 
     YearsWPRate     = MortalityRates_->WPRates()[Year];
     YearsADDRate    = MortalityRates_->ADDRates()[Year];
-    haswp           = Input->Status[0].HasWP.value();
-    hasadd          = Input->Status[0].HasADD.value();
+    haswp           = Input_->Status[0].HasWP.value();
+    hasadd          = Input_->Status[0].HasADD.value();
 
     YearsGenAcctIntRate = InterestRates_->GenAcctNetRate
         (e_basis(ExpAndGABasis)
@@ -430,7 +430,7 @@ inline int AccountValue::MonthsToNextModalPmtDate() const
 void AccountValue::PerformSpecAmtStrategy()
 {
     double SA = 0.0;
-    switch(Input->SAStrategy.value())
+    switch(Input_->SAStrategy.value())
         {
         case e_sainputscalar:
             {
@@ -481,7 +481,7 @@ void AccountValue::PerformSpecAmtStrategy()
             {
             fatal_error()
                 << "Case '"
-                << Input->SAStrategy.value()
+                << Input_->SAStrategy.value()
                 << "' not found."
                 << LMI_FLUSH
                 ;
@@ -595,17 +595,17 @@ void AccountValue::PerformPmtStrategy(double* a_Pmt)
 {
     if
         (
-           e_solve_ee_prem == Input->SolveType.value()
-        && Year >= Input->SolveBegYear.value()
-        && Year < std::min
-            (Input->SolveEndYear.value()
-            ,BasicValues::GetLength()
-            )
+            e_solve_ee_prem == Input_->SolveType.value()
+        &&  Year >= Input_->SolveBegYear.value()
+        &&  Year < std::min
+                (Input_->SolveEndYear.value()
+                ,BasicValues::GetLength()
+                )
         )
         // Don't override premium during solve period
         return;
 
-    switch(Input->EePmtStrategy.value())
+    switch(Input_->EePmtStrategy.value())
         {
         case e_pmtinputscalar:
             {
@@ -664,7 +664,7 @@ void AccountValue::PerformPmtStrategy(double* a_Pmt)
             {
             fatal_error()
                 << "Case '"
-                << Input->EePmtStrategy.value()
+                << Input_->EePmtStrategy.value()
                 << "' not found."
                 << LMI_FLUSH
                 ;

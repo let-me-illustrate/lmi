@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.11 2005-02-14 04:37:51 chicares Exp $
+// $Id: ChangeLog,v 1.12 2005-02-17 04:40:02 chicares Exp $
 
 2005-01-14
 
@@ -415,4 +415,35 @@ assignment operator and documenting them as unimplemented.
   proprietary.cpp
 Revise and rename commutation-function, fund, and 7702 and 7702A
 classes.
+
+2005-02-16 [1063]
+
+  accountvalue.cpp
+  basic_values.hpp
+  basicvalues.cpp
+  death_benefits.cpp
+  ihs_acctval.cpp
+  ihs_avdebug.cpp
+  ihs_avmly.cpp
+  ihs_avsolve.cpp
+  ihs_avstrtgy.cpp
+  ihs_basicval.cpp
+  ihs_loads.cpp
+  ihs_mortal.cpp
+  interest_rates.cpp
+  ledger_invariant.cpp
+  ledgervalues.cpp
+  ledgervalues.hpp
+  mortality_rates.cpp
+  outlay.cpp
+  solve.cpp
+Use smart instead of raw pointers to hold resources in some classes,
+without fixing the parallel problem in others yet. Rename certain
+data members for consistency. Speed of the antediluvian command-line
+test is about four percent slower; the degradation is demonstrably
+attributable to removal of the hand-written assignment operator and
+copy ctor in class BasicValues. The tradeoff is acceptable because
+the removed code was not clearly correct, and the implicitly-defined
+special member functions bring the system a step closer to exception
+safety.
 

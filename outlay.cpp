@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: outlay.cpp,v 1.1 2005-01-14 19:47:45 chicares Exp $
+// $Id: outlay.cpp,v 1.2 2005-02-17 04:40:03 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -43,7 +43,7 @@ Outlay::Outlay(BasicValues const& basic_values)
 //============================================================================
 void Outlay::Init(BasicValues const& basic_values)
 {
-    InputParms const& in = *basic_values.Input;
+    InputParms const& in = *basic_values.Input_;
 
     dumpin_               = in.Dumpin;
     external_1035_amount_ = in.External1035ExchangeAmount.value();

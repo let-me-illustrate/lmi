@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: solve.cpp,v 1.4 2005-02-12 12:59:31 chicares Exp $
+// $Id: solve.cpp,v 1.5 2005-02-17 04:40:03 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -236,19 +236,19 @@ void AccountValue::SolveSetLoanThenWD
 double AccountValue::Solve()
 {
     That = this;
-    ThatSolveTargetCSV  = Input->SolveTgtCSV.value();
-    ThatSolveTarget     = Input->SolveTarget.value();
-    ThatSolveBasis      = Input->SolveBasis.value();
+    ThatSolveTargetCSV  = Input_->SolveTgtCSV.value();
+    ThatSolveTarget     = Input_->SolveTarget.value();
+    ThatSolveBasis      = Input_->SolveBasis.value();
     only_set_values = !Solving;
 
     // We mustn't solve for a target at a duration beyond the end.
-    ThatSolveTgtYear = Input->SolveTgtYear.value();
+    ThatSolveTgtYear = Input_->SolveTgtYear.value();
     ThatSolveTgtYear = std::min(ThatSolveTgtYear, BasicValues::GetLength());
     // ... or before the beginning
     ThatSolveTgtYear = std::max(ThatSolveTgtYear, 1);
     // We should do the same for these I guess...TODO ?? but here?
-    ThatSolveBegYear = Input->SolveBegYear.value();
-    ThatSolveEndYear = Input->SolveEndYear.value();
+    ThatSolveBegYear = Input_->SolveBegYear.value();
+    ThatSolveEndYear = Input_->SolveEndYear.value();
 
     if(e_solve_for_endt == ThatSolveTarget.value())
         {
@@ -263,7 +263,7 @@ double AccountValue::Solve()
     root_bias        Bias        = bias_higher;
     int              Decimals    = 0;
 
-    switch(Input->SolveType.value())
+    switch(Input_->SolveType.value())
         {
         case e_solve_specamt:
             {
@@ -311,7 +311,7 @@ double AccountValue::Solve()
             {
             fatal_error()
                 << "Case '"
-                << Input->SolveType.value()
+                << Input_->SolveType.value()
                 << "' not found."
                 << LMI_FLUSH
                 ;

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledgervalues.cpp,v 1.3 2005-02-12 12:59:31 chicares Exp $
+// $Id: ledgervalues.cpp,v 1.4 2005-02-17 04:40:03 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -51,7 +51,7 @@ IllusVal::IllusVal()
 
 //============================================================================
 IllusVal::IllusVal(Ledger* ledger)
-    :ledger_(ledger)
+    :ledger_(new Ledger(*ledger))
 {
 }
 
@@ -72,7 +72,8 @@ double IllusVal::Run(InputParms const& IP)
 {
     AccountValue av(IP);
     double z = av.RunAV();
-    ledger_ = new Ledger(av.LedgerValues());
+// TODO ?? Consider using boost::shared_ptr to avoid copying.
+    ledger_.reset(new Ledger(av.LedgerValues()));
     return z;
 }
 

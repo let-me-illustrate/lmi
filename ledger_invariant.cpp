@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_invariant.cpp,v 1.2 2005-02-14 04:37:51 chicares Exp $
+// $Id: ledger_invariant.cpp,v 1.3 2005-02-17 04:40:03 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -331,8 +331,8 @@ void LedgerInvariant::Init(BasicValues* b)
 
     irr_precision = b->GetRoundingRules().round_irr().decimals();
 
-    InputParms const& Input     = *b->Input;
-    InputStatus const& Status   = Input.Status[0]; // TODO ?? Based on first life only.
+    InputParms const& Input_    = *b->Input_;
+    InputStatus const& Status   = Input_.Status[0]; // TODO ?? Based on first life only.
 
 // TODO ?? These names are confusing. EePmt and ErPmt are *input* values.
 // If they're entered as $1000 for all years, then they have that value
@@ -372,24 +372,23 @@ void LedgerInvariant::Init(BasicValues* b)
     ErMode          = b->Outlay_->er_premium_modes();
     DBOpt           = b->DeathBfts_->dbopt();
 
-    IndvTaxBracket       = Input.VectorIndvTaxBracket       ;
-    CorpTaxBracket       = Input.VectorCorpTaxBracket       ;
-    Salary               = Input.Salary                     ;
-    MonthlyFlatExtra     = Status.VectorMonthlyFlatExtra    ;
-    HoneymoonValueSpread = Input.VectorHoneymoonValueSpread ;
-
-    AddonMonthlyFee      = Input.VectorAddonMonthlyCustodialFee;
-    AddonCompOnAssets    = Input.VectorAddonCompOnAssets;
-    AddonCompOnPremium   = Input.VectorAddonCompOnPremium;
+    IndvTaxBracket       = Input_.VectorIndvTaxBracket          ;
+    CorpTaxBracket       = Input_.VectorCorpTaxBracket          ;
+    Salary               = Input_.Salary                        ;
+    MonthlyFlatExtra     = Status.VectorMonthlyFlatExtra        ;
+    HoneymoonValueSpread = Input_.VectorHoneymoonValueSpread    ;
+    AddonMonthlyFee      = Input_.VectorAddonMonthlyCustodialFee;
+    AddonCompOnAssets    = Input_.VectorAddonCompOnAssets       ;
+    AddonCompOnPremium   = Input_.VectorAddonCompOnPremium      ;
     CorridorFactor       = b->GetCorridorFactor();
     CurrMandE            = b->InterestRates_->MAndERate(e_basis(e_currbasis));
     TotalIMF             = b->InterestRates_->InvestmentManagementFee();
     RefundableSalesLoad  = b->Loads_->refundable_sales_load_proportion();
 
-    CountryCOIMultiplier = Input.CountryCOIMultiplier;
+    CountryCOIMultiplier = Input_.CountryCOIMultiplier;
 
-    CountryIso3166Abbrev = Input.Country.str();
-    Comments             = Input.Comments;
+    CountryIso3166Abbrev = Input_.Country.str();
+    Comments             = Input_.Comments;
 
     FundNumbers           .resize(0);
     FundNames             .resize(0);
@@ -431,14 +430,14 @@ void LedgerInvariant::Init(BasicValues* b)
         // something like '.3333333...' would overflow the space available.
 
         FundAllocs.push_back
-            ((j < b->Input->NumberOfFunds)
-            ? (b->Input->FundAllocs[j].operator const int&())
+            ((j < b->Input_->NumberOfFunds)
+            ? (b->Input_->FundAllocs[j].operator const int&())
             : 0
             );
 
         FundAllocations.push_back
-            ((j < b->Input->NumberOfFunds)
-            ? .01 * (b->Input->FundAllocs[j].operator const int&())
+            ((j < b->Input_->NumberOfFunds)
+            ? .01 * (b->Input_->FundAllocs[j].operator const int&())
             : 0.0
             );
         }
@@ -479,25 +478,25 @@ void LedgerInvariant::Init(BasicValues* b)
         PremiumTaxIsTiered = false;
         }
 
-    NoLapseAlwaysActive     = b->Database->Query(DB_NoLapseAlwaysActive);
-    NoLapseMinDur           = b->Database->Query(DB_NoLapseMinDur);
-    NoLapseMinAge           = b->Database->Query(DB_NoLapseMinAge);
-    NominallyPar            = b->Database->Query(DB_NominallyPar);
-    Has1035ExchCharge       = b->Database->Query(DB_Has1035ExchCharge);
+    NoLapseAlwaysActive     = b->Database_->Query(DB_NoLapseAlwaysActive);
+    NoLapseMinDur           = b->Database_->Query(DB_NoLapseMinDur);
+    NoLapseMinAge           = b->Database_->Query(DB_NoLapseMinAge);
+    NominallyPar            = b->Database_->Query(DB_NominallyPar);
+    Has1035ExchCharge       = b->Database_->Query(DB_Has1035ExchCharge);
 
     InitBaseSpecAmt         = b->DeathBfts_->specamt()[0];
     InitTermSpecAmt         = TermSpecAmt[0];
-    ChildRiderAmount        = Input.ChildRiderAmount;
-    SpouseRiderAmount       = Input.SpouseRiderAmount;
+    ChildRiderAmount        = Input_.ChildRiderAmount;
+    SpouseRiderAmount       = Input_.SpouseRiderAmount;
 
 //  InitPrem                = 0;
 //  GuarPrem                = 0;
 //  InitSevenPayPrem        =
 //  InitTgtPrem     =
 
-    MaleProportion          = Input.MaleProportion;
-    NonsmokerProportion     = Input.NonsmokerProportion;
-    PartMortTableMult       = Input.VectorPartialMortalityMultiplier;
+    MaleProportion          = Input_.MaleProportion;
+    NonsmokerProportion     = Input_.NonsmokerProportion;
+    PartMortTableMult       = Input_.VectorPartialMortalityMultiplier;
 
     // Assert this because the illustration currently prints a scalar
     // guaranteed max, assuming that it's the same for all years.
@@ -513,78 +512,78 @@ void LedgerInvariant::Init(BasicValues* b)
         );
     GuarMaxMandE            = guar_m_and_e_rate[0];
 //  GenderDistinct          = 0;
-    GenderBlended           = Input.BlendMortGender;
+    GenderBlended           = Input_.BlendMortGender;
 //  SmokerDistinct          = 0;
-    SmokerBlended           = Input.BlendMortSmoking;
+    SmokerBlended           = Input_.BlendMortSmoking;
 
     SubstdTable             = Status.SubstdTable; // Prefer string 'SubstandardTable'.
 
     Age                     = Status.IssueAge;
     RetAge                  = Status.RetAge;
     EndtAge                 = Status.IssueAge + b->GetLength();
-    UseExperienceRating     = Input.UseExperienceRating;
-    UsePartialMort          = Input.UsePartialMort;
-    AvgFund                 = Input.AvgFund;
-    CustomFund              = Input.OverrideFundMgmtFee;
+    UseExperienceRating     = Input_.UseExperienceRating;
+    UsePartialMort          = Input_.UsePartialMort;
+    AvgFund                 = Input_.AvgFund;
+    CustomFund              = Input_.OverrideFundMgmtFee;
 
     HasWP                   = Status.HasWP;
     HasADD                  = Status.HasADD;
     HasTerm                 = Status.HasTerm;
 
-    HasChildRider           = Input.HasChildRider;
-    HasSpouseRider          = Input.HasSpouseRider;
-    SpouseIssueAge          = Input.SpouseIssueAge;
+    HasChildRider           = Input_.HasChildRider;
+    HasSpouseRider          = Input_.HasSpouseRider;
+    SpouseIssueAge          = Input_.SpouseIssueAge;
 
-    HasHoneymoon            = Input.HasHoneymoon;
-    AllowDbo3               = b->Database->Query(DB_AllowDBO3);
-    PostHoneymoonSpread     = Input.PostHoneymoonSpread;
+    HasHoneymoon            = Input_.HasHoneymoon;
+    AllowDbo3               = b->Database_->Query(DB_AllowDBO3);
+    PostHoneymoonSpread     = Input_.PostHoneymoonSpread;
 
-    // The antediluvian branch has a null ProductData object.
-    if(b->ProductData)
+    // The antediluvian branch has a null ProductData_ object.
+    if(b->ProductData_)
         {
-        PolicyMktgName         = b->ProductData->GetPolicyMktgName();
-        PolicyLegalName        = b->ProductData->GetPolicyLegalName();
-        PolicyForm             = b->ProductData->GetPolicyForm();
-        InsCoShortName         = b->ProductData->GetInsCoShortName();
-        InsCoName              = b->ProductData->GetInsCoName();
-        InsCoAddr              = b->ProductData->GetInsCoAddr();
-        InsCoStreet            = b->ProductData->GetInsCoStreet();
-        InsCoPhone             = b->ProductData->GetInsCoPhone();
-        MainUnderwriter        = b->ProductData->GetMainUnderwriter();
-        MainUnderwriterAddress = b->ProductData->GetMainUnderwriterAddress();
-        CoUnderwriter          = b->ProductData->GetCoUnderwriter();
-        CoUnderwriterAddress   = b->ProductData->GetCoUnderwriterAddress();
+        PolicyMktgName         = b->ProductData_->GetPolicyMktgName();
+        PolicyLegalName        = b->ProductData_->GetPolicyLegalName();
+        PolicyForm             = b->ProductData_->GetPolicyForm();
+        InsCoShortName         = b->ProductData_->GetInsCoShortName();
+        InsCoName              = b->ProductData_->GetInsCoName();
+        InsCoAddr              = b->ProductData_->GetInsCoAddr();
+        InsCoStreet            = b->ProductData_->GetInsCoStreet();
+        InsCoPhone             = b->ProductData_->GetInsCoPhone();
+        MainUnderwriter        = b->ProductData_->GetMainUnderwriter();
+        MainUnderwriterAddress = b->ProductData_->GetMainUnderwriterAddress();
+        CoUnderwriter          = b->ProductData_->GetCoUnderwriter();
+        CoUnderwriterAddress   = b->ProductData_->GetCoUnderwriterAddress();
 
-        AvName                 = b->ProductData->GetAvName();
-        CsvName                = b->ProductData->GetCsvName();
-        CsvHeaderName          = b->ProductData->GetCsvHeaderName();
-        NoLapseProvisionName   = b->ProductData->GetNoLapseProvisionName();
-        InterestDisclaimer     = b->ProductData->GetInterestDisclaimer();
+        AvName                 = b->ProductData_->GetAvName();
+        CsvName                = b->ProductData_->GetCsvName();
+        CsvHeaderName          = b->ProductData_->GetCsvHeaderName();
+        NoLapseProvisionName   = b->ProductData_->GetNoLapseProvisionName();
+        InterestDisclaimer     = b->ProductData_->GetInterestDisclaimer();
         }
 
-    ProducerName            = Input.AgentFullName();
+    ProducerName            = Input_.AgentFullName();
 
     ProducerStreet  =
-            Input.AgentAddr1
+            Input_.AgentAddr1
         ;
     ProducerCity    =
-            Input.AgentCity
+            Input_.AgentCity
         +   ", "
-        +   Input.AgentState.str()
+        +   Input_.AgentState.str()
         +   " "
-        +   Input.AgentZipCode
+        +   Input_.AgentZipCode
         ;
-    CorpName                = Input.SponsorFirstName;
+    CorpName                = Input_.SponsorFirstName;
 //  CertificateNumber       =
 //  PolicyNumber            =
 
-    Insured1                = Input.InsdFullName();
+    Insured1                = Input_.InsdFullName();
     Gender                  = Status.Gender.str();
-    UWType                  = Input.GroupUWType.str();
+    UWType                  = Input_.GroupUWType.str();
 
     e_smoking_or_tobacco smoke_or_tobacco =
         static_cast<e_smoking_or_tobacco>
-            (static_cast<int>(b->Database->Query(DB_SmokeOrTobacco))
+            (static_cast<int>(b->Database_->Query(DB_SmokeOrTobacco))
             );
     if(e_tobacco_nontobacco == smoke_or_tobacco)
         {
@@ -635,11 +634,11 @@ void LedgerInvariant::Init(BasicValues* b)
     UWClass                 = Status.Class.str();
     SubstandardTable        = Status.SubstdTable.str();
 
-    EffDate                 = calendar_date(Input.EffDate).str();
-    EffDateJdn              = calendar_date(Input.EffDate).julian_day_number();
-    DefnLifeIns             = Input.DefnLifeIns.str();
-    DefnMaterialChange      = Input.DefnMaterialChange.str();
-    AvoidMec                = Input.AvoidMec.str();
+    EffDate                 = calendar_date(Input_.EffDate).str();
+    EffDateJdn              = calendar_date(Input_.EffDate).julian_day_number();
+    DefnLifeIns             = Input_.DefnLifeIns.str();
+    DefnMaterialChange      = Input_.DefnMaterialChange.str();
+    AvoidMec                = Input_.AvoidMec.str();
     PartMortTableName       = "1983 GAM"; // TODO ?? Hardcoded.
     StatePostalAbbrev       = b->GetStateOfJurisdiction().str();
 
@@ -667,36 +666,36 @@ void LedgerInvariant::Init(BasicValues* b)
     // it seems that output forms assume that the DAC tax premium load
     // represents the entire DAC tax charge, so they're incorrect if
     // the DAC tax fund charge isn't zero.
-    LMI_ASSERT(0.0 == b->Database->Query(DB_DACTaxFundCharge));
+    LMI_ASSERT(0.0 == b->Database_->Query(DB_DACTaxFundCharge));
 
     InitAnnLoanDueRate      = b->InterestRates_->RegLnDueRate
         (e_basis(e_currbasis)
         ,e_rate_period(e_annual_rate)
         )[0];
 
-    IsInforce               = 0 != Input.InforceYear || 0 != Input.InforceMonth;
+    IsInforce = 0 != Input_.InforceYear || 0 != Input_.InforceMonth;
 
 // TODO ?? Kludge to meet a meaningless requirement.
     OffersRiders_ =
-            b->Database->Query(DB_AllowWP)
-        ||  b->Database->Query(DB_AllowADD)
-        ||  b->Database->Query(DB_AllowSpouse)
-        ||  b->Database->Query(DB_AllowChild)
+            b->Database_->Query(DB_AllowWP)
+        ||  b->Database_->Query(DB_AllowADD)
+        ||  b->Database_->Query(DB_AllowSpouse)
+        ||  b->Database_->Query(DB_AllowChild)
         ;
 
-    SupplementalReport         = Input.CreateSupplementalReport  ;
-    SupplementalReportColumn00 = Input.SupplementalReportColumn00;
-    SupplementalReportColumn01 = Input.SupplementalReportColumn01;
-    SupplementalReportColumn02 = Input.SupplementalReportColumn02;
-    SupplementalReportColumn03 = Input.SupplementalReportColumn03;
-    SupplementalReportColumn04 = Input.SupplementalReportColumn04;
-    SupplementalReportColumn05 = Input.SupplementalReportColumn05;
-    SupplementalReportColumn06 = Input.SupplementalReportColumn06;
-    SupplementalReportColumn07 = Input.SupplementalReportColumn07;
-    SupplementalReportColumn08 = Input.SupplementalReportColumn08;
-    SupplementalReportColumn09 = Input.SupplementalReportColumn09;
-    SupplementalReportColumn10 = Input.SupplementalReportColumn10;
-    SupplementalReportColumn11 = Input.SupplementalReportColumn11;
+    SupplementalReport         = Input_.CreateSupplementalReport  ;
+    SupplementalReportColumn00 = Input_.SupplementalReportColumn00;
+    SupplementalReportColumn01 = Input_.SupplementalReportColumn01;
+    SupplementalReportColumn02 = Input_.SupplementalReportColumn02;
+    SupplementalReportColumn03 = Input_.SupplementalReportColumn03;
+    SupplementalReportColumn04 = Input_.SupplementalReportColumn04;
+    SupplementalReportColumn05 = Input_.SupplementalReportColumn05;
+    SupplementalReportColumn06 = Input_.SupplementalReportColumn06;
+    SupplementalReportColumn07 = Input_.SupplementalReportColumn07;
+    SupplementalReportColumn08 = Input_.SupplementalReportColumn08;
+    SupplementalReportColumn09 = Input_.SupplementalReportColumn09;
+    SupplementalReportColumn10 = Input_.SupplementalReportColumn10;
+    SupplementalReportColumn11 = Input_.SupplementalReportColumn11;
 
     FullyInitialized = true;
 }
