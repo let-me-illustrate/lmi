@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_acctval.cpp,v 1.11 2005-03-26 14:27:09 chicares Exp $
+// $Id: ihs_acctval.cpp,v 1.12 2005-03-29 15:08:42 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -2166,6 +2166,51 @@ double AccountValue::GetCurtateNetClaimsInforce()
     // TODO ?? Of course, we shouldn't be assigning to VariantValues() here.
     VariantValues().NetClaims[Year] = net_claims;
     return InforceLives * net_claims;
+}
+
+//============================================================================
+// Proxy for next year's COI charge, to be used only for experience rating.
+double AccountValue::GetInforceProjectedCoiCharge()
+{
+//std::ofstream ofs("experience_rating",std::ios_base::out | std::ios_base::ate | std::ios_base::app);
+std::ofstream ofs("nowhere",std::ios_base::out | std::ios_base::ate | std::ios_base::app);
+
+    if(!Input_->UsePartialMort || ItLapsed || BasicValues::GetLength() <= Year)
+        {
+        return 0.0;
+ofs << "...early exit 0\n";
+        }
+    // Project zero charge if next year has no COI rate due to maturity.
+    if(BasicValues::GetLength() == 1 + Year)
+        {
+        return 0.0;
+ofs << "...early exit 0\n";
+        }
+
+    LMI_ASSERT(11 == Month);
+ofs << "Year " << Year << "; Month " << Month << '\n';    
+
+    TxSetDeathBft();
+    TxSetTermAmt();
+    double this_years_terminal_naar =
+            DBReflectingCorr + TermDB
+        -   TotalAccountValue()
+        ;
+    this_years_terminal_naar = std::max(0.0, this_years_terminal_naar);
+    double next_years_coi_rate = GetBandedCoiRates(ExpAndGABasis, ActualSpecAmt)[1 + Year];
+ofs
+  << "VariantValues().EOYDeathBft[Year] = " << VariantValues().EOYDeathBft[Year] << '\n'
+  << "VariantValues().AcctVal[Year] = " << VariantValues().AcctVal[Year] << '\n'
+  << "VariantValues().AcctVal[Year] = " << VariantValues().AcctVal[Year] << '\n'
+  << "difference = " << VariantValues().EOYDeathBft[Year] - VariantValues().AcctVal[Year] << '\n'
+
+
+  << "this_years_terminal_naar = " << this_years_terminal_naar << '\n'
+  << "next_years_coi_rate = " << next_years_coi_rate << '\n'
+  << "InforceLives = " << InforceLives << '\n'
+  << "return = " << InforceLives * this_years_terminal_naar * next_years_coi_rate << '\n'
+  ;
+    return 12.0 * InforceLives * this_years_terminal_naar * next_years_coi_rate;
 }
 
 //============================================================================
