@@ -24,7 +24,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: menus.xrc,v 1.1 2005-03-11 03:19:31 chicares Exp $
+    $Id: menus.xrc,v 1.2 2005-03-15 14:33:51 chicares Exp $
 -->
 
 <!-- reusable menus -->
@@ -34,6 +34,7 @@
     <help>Help</help>
     <object class="wxMenuItem" name="wxID_ABOUT">
         <label>_About...</label>
+        <bitmap>about.xpm</bitmap>
         <help>About this program</help>
     </object>
 </object>
@@ -76,16 +77,17 @@
             <label>_New...\tCtrl-N</label>
 -->
             <help>Create a new document</help>
-            <bitmap>new.bmp</bitmap>
+            <bitmap>new.xpm</bitmap>
         </object>
         <object class="wxMenuItem" name="wxID_OPEN">
             <label>_Open...</label>
-            <bitmap>open.bmp</bitmap>
+            <bitmap>open.xpm</bitmap>
             <help>Open an existing document</help>
         </object>
         <object class="separator"/>
         <object class="wxMenuItem" name="wxID_EXIT">
             <label>E_xit</label>
+            <bitmap>exit.xpm</bitmap>
             <help>Exit this program</help>
         </object>
     </object>
@@ -109,31 +111,33 @@
         <object class="wxMenuItem" name="wxID_NEW">
             <label>_New</label>
             <help>Create a new document</help>
-            <bitmap>new.bmp</bitmap>
+            <bitmap>new.xpm</bitmap>
         </object>
         <object class="wxMenuItem" name="wxID_OPEN">
             <label>_Open...</label>
-            <bitmap>open.bmp</bitmap>
+            <bitmap>open.xpm</bitmap>
             <help>Open an existing document</help>
         </object>
         <object class="wxMenuItem" name="wxID_CLOSE">
             <label>_Close\tCtrl-X</label>
+            <bitmap>close.xpm</bitmap>
             <help>Close this document</help>
         </object>
         <object class="separator"/>
         <object class="wxMenuItem" name="wxID_SAVE">
             <label>_Save</label>
-            <bitmap>save.bmp</bitmap>
+            <bitmap>save.xpm</bitmap>
             <help>Save this document</help>
         </object>
         <object class="wxMenuItem" name="wxID_SAVEAS">
             <label>Save _as...</label>
+            <bitmap>saveas.xpm</bitmap>
             <help>Save this document under a new name</help>
         </object>
         <object class="separator"/>
         <object class="wxMenuItem" name="wxID_PRINT">
             <label>_Print</label>
-            <bitmap>print.bmp</bitmap>
+            <bitmap>print.xpm</bitmap>
             <help>Print this document</help>
         </object>
         <!-- WX !! Propose adding wxID_PAGE_SETUP to the library.
@@ -145,16 +149,18 @@
         -->
         <object class="wxMenuItem" name="wxID_PRINT_SETUP">
             <label>Page set_up</label>
+            <bitmap>print-options.xpm</bitmap>
             <help>Choose printing options for this document</help>
         </object>
         <object class="wxMenuItem" name="wxID_PREVIEW">
             <label>Print pre_view</label>
-            <bitmap>preview.bmp</bitmap>
+            <bitmap>print-preview.xpm</bitmap>
             <help>See what this document will look like when printed</help>
         </object>
         <object class="separator"/>
         <object class="wxMenuItem" name="wxID_EXIT">
             <label>E_xit</label>
+            <bitmap>exit.xpm</bitmap>
             <help>Exit this program</help>
         </object>
     </object>
@@ -175,53 +181,53 @@ examples end
 -->
         <object class="wxMenuItem" name="edit_cell">
             <label>_Edit cell\tCtrl-E</label>
-            <bitmap>edit_cell.bmp</bitmap>
+            <bitmap>edit-cell.xpm</bitmap>
             <help>Edit selected cell</help>
         </object>
         <object class="wxMenuItem" name="edit_class">
             <label>Edit class defaults\tCtrl-Alt-E</label>
-            <bitmap>edit_class.bmp</bitmap>
+            <bitmap>edit-class.xpm</bitmap>
             <help>Edit selected cell's class defaults</help>
         </object>
         <object class="wxMenuItem" name="edit_case">
             <label>Edit case defaults\tCtrl-Shift-E</label>
-            <bitmap>edit_case.bmp</bitmap>
+            <bitmap>edit-case.xpm</bitmap>
             <help>Edit case defaults</help>
         </object>
         <object class="separator"/>
         <object class="wxMenuItem" name="run_cell">
             <label>_Run selected cell\tCtrl-R</label>
-            <bitmap>run_cell.bmp</bitmap>
+            <bitmap>run-cell.xpm</bitmap>
             <help>Run selected cell</help>
         </object>
 <!-- TODO ?? Either implement this, or expunge it.
         <object class="wxMenuItem" name="run_class">
             <label>Run class of selected cell\tCtrl-Alt-R</label>
-            <bitmap>run_class.bmp</bitmap>
+            <bitmap>run-class.xpm</bitmap>
             <help>Run all cells in selected cell's class</help>
         </object>
 -->
         <object class="wxMenuItem" name="run_case">
             <label>Run case\tCtrl-Shift-R</label>
-            <bitmap>run_case.bmp</bitmap>
+            <bitmap>run-case.xpm</bitmap>
             <help>Run all cells</help>
         </object>
         <object class="separator"/>
         <object class="wxMenuItem" name="print_cell">
             <label>Run and _print selected cell\tCtrl-P</label>
-            <bitmap>print_cell.bmp</bitmap>
+            <bitmap>print-cell.xpm</bitmap>
             <help>Run and print selected cell</help>
         </object>
 <!-- TODO ?? Either implement this, or expunge it.
         <object class="wxMenuItem" name="print_class">
             <label>Run and print all cells in selected cell's class\tCtrl-Alt-P</label>
-            <bitmap>print_class.bmp</bitmap>
+            <bitmap>print-class.xpm</bitmap>
             <help>Run and print all cells in selected cell's class</help>
         </object>
 --> TODO ?? Either implement this, or expunge it.
         <object class="wxMenuItem" name="print_case">
             <label>Run and print all cells\tCtrl-Shift-P</label>
-            <bitmap>print_case.bmp</bitmap>
+            <bitmap>print-case.xpm</bitmap>
             <help>Run and print all cells</help>
         </object>
 <!-- TODO ?? TODO ?? Either implement this, or expunge it.
@@ -232,36 +238,36 @@ Not supported yet: need to split columns into multiple pages.
 -->
         <object class="wxMenuItem" name="print_spreadsheet">
             <label>Print case to spreadsheet\tCtrl+Shift+S</label>
-            <bitmap>print_spreadsheet.bmp</bitmap>
+            <bitmap>write_spreadsheet.xpm</bitmap>
             <help>Run and print all cells to a spreadsheet file</help>
         </object>
         <object class="separator"/>
         <object class="wxMenuItem" name="paste_census">
             <label>Pa_ste census data\tCtrl-S</label>
-            <bitmap>paste_census.bmp</bitmap>
+            <bitmap>paste-case.xpm</bitmap>
             <help>Paste census data from clipboard</help>
         </object>
         <object class="wxMenuItem" name="add_cell">
             <label>_Add cell\tCtrl-A</label>
-            <bitmap>add_cell.bmp</bitmap>
+            <bitmap>insert-rows.xpm</bitmap>
             <help>Add a new cell with case default parameters</help>
         </object>
         <object class="wxMenuItem" name="delete_cells">
             <label>_Delete cell(s)\tCtrl-D</label>
-            <bitmap>delete_cells.bmp</bitmap>
+            <bitmap>delete-row.xpm</bitmap>
             <help>Delete selected cell(s)</help>
         </object>
         <object class="separator"/>
 <!-- TODO ?? Change the 'name' too. -->
         <object class="wxMenuItem" name="expand_columns">
             <label>_Vary column widths\tCtrl-V</label>
-            <bitmap>expand_columns.bmp</bitmap>
+            <bitmap>varying-width.xpm</bitmap>
             <help>Vary each column's width to show all contents</help>
         </object>
 <!-- TODO ?? Change the 'name' too. -->
         <object class="wxMenuItem" name="shrink_columns">
             <label>_Use fixed column widths\tCtrl-U</label>
-            <bitmap>shrink_columns.bmp</bitmap>
+            <bitmap>fixed-width.xpm</bitmap>
             <help>Display all columns with the same fixed width</help>
         </object>
     </object>
@@ -278,31 +284,33 @@ Not supported yet: need to split columns into multiple pages.
         <object class="wxMenuItem" name="wxID_NEW">
             <label>_New</label>
             <help>Create a new document</help>
-            <bitmap>new.bmp</bitmap>
+            <bitmap>new.xpm</bitmap>
         </object>
         <object class="wxMenuItem" name="wxID_OPEN">
             <label>_Open...</label>
-            <bitmap>open.bmp</bitmap>
+            <bitmap>open.xpm</bitmap>
             <help>Open an existing document</help>
         </object>
         <object class="wxMenuItem" name="wxID_CLOSE">
             <label>_Close\tCtrl-X</label>
+            <bitmap>close.xpm</bitmap>
             <help>Close this document</help>
         </object>
         <object class="separator"/>
         <object class="wxMenuItem" name="wxID_SAVE">
             <label>_Save</label>
-            <bitmap>save.bmp</bitmap>
+            <bitmap>save.xpm</bitmap>
             <help>Save this document</help>
         </object>
         <object class="wxMenuItem" name="wxID_SAVEAS">
             <label>Save _as...</label>
+            <bitmap>saveas.xpm</bitmap>
             <help>Save this document under a new name</help>
         </object>
         <object class="separator"/>
         <object class="wxMenuItem" name="wxID_PRINT">
             <label>_Print</label>
-            <bitmap>print.bmp</bitmap>
+            <bitmap>print.xpm</bitmap>
             <help>Print this document</help>
         </object>
         <!-- WX !! Propose adding wxID_PAGE_SETUP to the library.
@@ -314,16 +322,18 @@ Not supported yet: need to split columns into multiple pages.
         -->
         <object class="wxMenuItem" name="wxID_PRINT_SETUP">
             <label>Page set_up</label>
+            <bitmap>print-options.xpm</bitmap>
             <help>Choose printing options for this document</help>
         </object>
         <object class="wxMenuItem" name="wxID_PREVIEW">
             <label>Print pre_view</label>
-            <bitmap>preview.bmp</bitmap>
+            <bitmap>print-preview.xpm</bitmap>
             <help>See what this document will look like when printed</help>
         </object>
         <object class="separator"/>
         <object class="wxMenuItem" name="wxID_EXIT">
             <label>E_xit</label>
+            <bitmap>exit.xpm</bitmap>
             <help>Exit this program</help>
         </object>
     </object>
@@ -331,7 +341,7 @@ Not supported yet: need to split columns into multiple pages.
         <label>Illustration</label>
         <object class="wxMenuItem" name="edit_cell">
             <label>_Edit cell\tCtrl-E</label>
-            <bitmap>edit_cell.bmp</bitmap>
+            <bitmap>edit-cell.xpm</bitmap>
             <help>Edit this cell</help>
         </object>
     </object>
@@ -348,30 +358,33 @@ Not supported yet: need to split columns into multiple pages.
         <object class="wxMenuItem" name="wxID_NEW">
             <label>_New</label>
             <help>Create a new document</help>
-            <bitmap>new.bmp</bitmap>
+            <bitmap>new.xpm</bitmap>
         </object>
         <object class="wxMenuItem" name="wxID_OPEN">
             <label>_Open...</label>
-            <bitmap>open.bmp</bitmap>
+            <bitmap>open.xpm</bitmap>
             <help>Open an existing document</help>
         </object>
         <object class="wxMenuItem" name="wxID_CLOSE">
             <label>_Close\tCtrl-X</label>
+            <bitmap>close.xpm</bitmap>
             <help>Close this document</help>
         </object>
         <object class="separator"/>
         <object class="wxMenuItem" name="wxID_SAVE">
             <label>_Save</label>
-            <bitmap>save.bmp</bitmap>
+            <bitmap>save.xpm</bitmap>
             <help>Save this document</help>
         </object>
         <object class="wxMenuItem" name="wxID_SAVEAS">
             <label>Save _as...</label>
+            <bitmap>saveas.xpm</bitmap>
             <help>Save this document under a new name</help>
         </object>
         <object class="separator"/>
         <object class="wxMenuItem" name="wxID_EXIT">
             <label>E_xit</label>
+            <bitmap>exit.xpm</bitmap>
             <help>Exit this program</help>
         </object>
     </object>
