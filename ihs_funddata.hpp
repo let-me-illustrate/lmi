@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_funddata.hpp,v 1.4 2005-02-14 04:35:18 chicares Exp $
+// $Id: ihs_funddata.hpp,v 1.5 2005-03-11 03:39:32 chicares Exp $
 
 #ifndef funddata_hpp
 #define funddata_hpp
@@ -37,7 +37,7 @@
 // Separate account funds: their names and investment mgmt fees
 
 // Implicitly-declared special member functions do the right thing.
-//
+
 class LMI_EXPIMP FundInfo
     :virtual private obstruct_slicing<FundInfo>
 {
