@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: platform_dependent.hpp,v 1.2 2005-01-29 02:47:42 chicares Exp $
+// $Id: platform_dependent.hpp,v 1.3 2005-02-23 12:37:20 chicares Exp $
 
 #ifndef platform_dependent_hpp
 #define platform_dependent_hpp
@@ -43,6 +43,11 @@
 // light of the present header's raison d'être, it is sensible to
 // suspend the operation of the __STRICT_ANSI__ mechanism, taking care
 // to restore it after including other headers here.
+//
+// Some of the functions made accessible here provide capabilities
+// that are useful but absent from the standard language: for example,
+// it is difficult to implement cgi-bin without putenv(). Others, like
+// strdup(), should be avoided, but wx seems to use them in headers.
 
 #if defined __GNUC__ && defined __STRICT_ANSI__
 #   define LMI_GNUC_STRICT_ANSI
@@ -50,16 +55,21 @@
 #endif // defined __GNUC__ && defined __STRICT_ANSI__
 
 #if defined LMI_POSIX
-#   include <curses.h> // getch()
-#   include <stdlib.h> // putenv()
-#   include <unistd.h> // access(), R_OK, chdir()
+#   include <curses.h>  // getch()
+#   include <stdio.h>   // fileno()
+#   include <stdlib.h>  // putenv()
+#   include <string.h>  // strdup()
+#   include <strings.h> // strcasecmp()
+#   include <unistd.h>  // access(), R_OK, chdir()
 #elif defined LMI_MSW
     // The MinGW port of gcc to msw prototypes what lmi needs in these
     // headers. Other compilers for the msw platform might not.
-#   include <conio.h>  // getch()
-#   include <direct.h> // chdir()
-#   include <io.h>     // access(), R_OK
-#   include <stdlib.h> // putenv()
+#   include <conio.h>   // getch()
+#   include <direct.h>  // chdir()
+#   include <io.h>      // access(), R_OK
+#   include <stdio.h>   // fileno()
+#   include <stdlib.h>  // putenv()
+#   include <string.h>  // strdup()
 #else // Unknown platform.
     // It seems too fragile to give the prototypes here:
     //   extern "C" int access(char const*, int);

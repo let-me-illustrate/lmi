@@ -1,4 +1,4 @@
-// Precompiled header file.
+// Overloaded operator new--unit test.
 //
 // Copyright (C) 2004, 2005 Gregory W. Chicares.
 //
@@ -19,20 +19,36 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: pchfile.hpp,v 1.2 2005-02-23 12:37:20 chicares Exp $
+// $Id: wx_new_test.cpp,v 1.1 2005-02-23 12:37:20 chicares Exp $
 
-// Always include this header first in every '.cpp' file, before
-// anything else except comments and whitespace. Never include it in
-// any header file. Include any headers to be precompiled here.
+// This unit test proves little, but including it in the unit-test
+// suite ensures that it'll be compiled with stronger warning options
+// than wx would permit.
 
-#ifndef pchfile_hpp
-#define pchfile_hpp
+#include "pchfile.hpp"
 
-#include "config.hpp"
-
-#if defined LMI_COMPILER_USES_PCH && !defined LMI_IGNORE_PCH
-#   include <wx/wxprec.h>
+#ifdef __BORLANDC__
+#   pragma hdrstop
 #endif
 
-#endif // pchfile_hpp
+// The '.cpp' file is deliberately included here instead of the header
+// because it was probably already compiled for inclusion in a dll,
+// resulting in an object that wouldn't necessarily work here.
+#include "wx_new.cpp"
+
+#define BOOST_INCLUDE_MAIN
+#include "test_tools.hpp"
+
+#include <cstdlib> // std::free()
+
+int test_main(int, char*[])
+{
+    int* p0 = new int;
+    delete p0;
+
+    int* p1 = new(wx) int;
+    delete p1;
+
+    return 0;
+}
 

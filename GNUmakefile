@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: GNUmakefile,v 1.6 2005-02-19 04:25:42 chicares Exp $
+# $Id: GNUmakefile,v 1.7 2005-02-23 12:37:20 chicares Exp $
 
 ###############################################################################
 
@@ -131,7 +131,8 @@ $(src_dir)/configuration.make:: ;
 # Of course, other build types may be defined.
 
 build_type ?= ship
-build_directory := ../build/$(uname)/$(build_type)
+toolset ?= gcc
+build_directory := ../build/$(uname)/$(toolset)/$(build_type)
 
 datestamp_files := \
   build.hpp \
