@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: workhorse.make,v 1.2 2005-01-31 13:12:48 chicares Exp $
+# $Id: workhorse.make,v 1.3 2005-02-03 16:03:37 chicares Exp $
 
 ###############################################################################
 
@@ -134,6 +134,8 @@ vpath %.cpp           $(all_source_directories)
 vpath %.cxx           $(all_source_directories)
 vpath %.h             $(all_source_directories)
 vpath %.hpp           $(all_source_directories)
+vpath %.tpp           $(all_source_directories)
+vpath %.xpp           $(all_source_directories)
 vpath quoted_gpl      $(src_dir)
 vpath quoted_gpl_html $(src_dir)
 
@@ -237,11 +239,15 @@ LIBXML2_LIBS := \
 # that they reflect downstream conditional changes to the variables
 # they're composed from.
 
+# Use '-g' instead of '-ggdb'. MinGW gcc-3.4.2 writes dwarf2 debug
+# records if '-ggdb' is specified, but the version of gdb packaged
+# with it expects stabs format.
+
 CFLAGS = \
-  -ggdb $(optimization_flag) \
+  -g $(optimization_flag) \
 
 CXXFLAGS = \
-  -ggdb $(optimization_flag) \
+  -g $(optimization_flag) \
 
 # INELEGANT !! Define BOOST_DEPRECATED until code that uses the
 # deprecated boost::bind library is rewritten.
@@ -356,10 +362,10 @@ antediluvian_cli$(EXEEXT): $(antediluvian_cli_objects) libantediluvian.a
 
 ################################################################################
 
-# Tests. For now, only unit tests are defined.
+# Tests.
 
 .PHONY: test
-test: unit_tests
+test: unit_tests cgi_tests cli_tests
 
 ################################################################################
 
@@ -399,12 +405,49 @@ mpatrol.log:
 
 ################################################################################
 
+# Test command-line interface.
+
+# Run the test once, and throw away the results, just to get the
+# program into the disk cache. Then run it again and report the
+# results.
+
+.PHONY: cli_tests
+cli_tests:
+	@$(ECHO) Test command line interface:
+	@./antediluvian_cli$(EXEEXT) --accept --selftest > /dev/null;
+	@./antediluvian_cli$(EXEEXT) --accept --selftest
+
+################################################################################
+
+# Test common gateway interface.
+
+# This lightweight test emulates what a webserver would do.
+
+.PHONY: cgi_tests
+cgi_tests: antediluvian_cgi$(EXEEXT)
+	@$(ECHO) Test common gateway interface:
+	@./antediluvian_cgi$(EXEEXT) --write_content_string > /dev/null
+	@<$(src_dir)/expected.cgi.out \
+	  $(SED)  -e'/^[0-9. ]*$$/!d' -e'/[0-9]/!d' \
+	  > cgi_touchstone
+	@./antediluvian_cgi$(EXEEXT) --enable_test <cgi.test.in \
+	  | $(SED)  -e'/^[0-9. ]*$$/!d' -e'/[0-9]/!d' \
+	  | $(DIFF) -w - cgi_touchstone \
+	  | $(WC)   -l \
+	  | $(SED)  -e's/^/  /' -e's/$$/ errors/'
+
+################################################################################
+
 # Test idempotence of headers and template-instantiation files.
 
-# When a source file passes the test, create an empty file with suffix
-# '.idempotent' in the build directory to record that success, and to
-# prevent subsequent updates of this target from testing that source
+# When a file passes the idempotence test, create an empty file with
+# suffix '.idempotent' in the build directory to record that success,
+# and to prevent subsequent updates of this target from testing that
 # file again unless it changes.
+
+# TODO ?? Consider adding an autodependency mechanism--or is that
+# gilding the lily? Changing one header may cause another to become
+# nonidempotent, but the present test has not power to discover that.
 
 # Treat '.h' files as C++. Some C++ headers use that suffix, though
 # this project's do not. By default, g++ reports idempotence defects

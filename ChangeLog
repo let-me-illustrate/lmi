@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.4 2005-01-31 13:12:48 chicares Exp $
+// $Id: ChangeLog,v 1.5 2005-02-03 16:03:37 chicares Exp $
 
 2005-01-14
 
@@ -181,10 +181,73 @@ with gcc-3.4.2--and also with como, which is not yet fully supported.
 
   inputillus.cpp
 Rewrite a block of suspicious code that had seemed to work properly in
-the past, but failed with gcc-3.4.2 and mpatrol. Now, with gcc-3.4.2
-and stricter warning flags: all code compiles with no diagnostics,
-except for an unused-parameter warning in one boost file; all unit
-tests succeed except for one in a facility slated for replacement; and
+the past, but failed with gcc-3.4.2 and mpatrol.
+
+2005-02-03 [1107]
+
+  facets.cpp
+Forestall a gcc warning about a slightly unusual line of code already
+documented as standard conforming.
+
+  GNUmakefile
+  workhorse.make
+Use '-g' instead of '-ggdb' because of a MinGW problem documented
+inline.  
+
+  materially_equal.hpp
+Reformat for clarity.
+
+  datum_base.cpp
+  datum_base.hpp
+  mc_enum.cpp
+  mc_enum.hpp
+  mc_enum.tpp
+  mc_enum_fwd.hpp
+  mc_enum_test.cpp
+  mc_enum_test_aux.cpp
+  mc_enum_test_aux.hpp
+  mc_enum_test_aux_enums.hpp
+  mc_enum_type_enums.hpp
+  mc_enum_types.cpp
+  mc_enum_types.hpp
+  numeric_io_cast.hpp
+  numeric_io_test.cpp
+  numeric_io_traits.hpp
+  snprintf_test.cpp
+  stream_cast.hpp
+  stream_cast_test.cpp
+  test_tools_test.cpp
+  tn_range.hpp
+  tn_range.tpp
+  tn_range_fwd.hpp
+  tn_range_test.cpp
+  tn_range_test_aux.cpp
+  tn_range_test_aux.hpp
+  tn_range_type_trammels.hpp
+  tn_range_types.cpp
+  tn_range_types.hpp
+Import these unit-test files from the cvs/lmi/skeleton branch.
+
+  objects.make
+Add imported unit tests.
+
+  workhorse.make
+Test idempotence of template-instantiation files, which are akin to
+headers. Add test targets for the antediluvian branch's cgi-bin and
+command-line interfaces.
+
+Now, with gcc-3.4.2 and stricter warning flags: all code compiles with
+no diagnostics, except for an unused-parameter warning in one boost
+file; all unit tests succeed except for one in a facility slated for
+replacement and one that detects standard-library conformance; and
 mpatrol with default $(MPATROL_OPTIONS) issues no diagnostic for any
 unit test.
+
+  main.cpp
+Number of iterations adapts to make self test take about five seconds.
+Add several getopt options, implementing only a stub for regression
+testing for now.
+
+  mpatrol-mingw-GNUmakefile
+Add 'install' target.
 
