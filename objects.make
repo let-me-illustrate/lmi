@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: objects.make,v 1.1 2005-01-28 01:34:43 chicares Exp $
+# $Id: objects.make,v 1.2 2005-02-03 16:03:37 chicares Exp $
 
 ################################################################################
 
@@ -307,10 +307,16 @@ unit_test_targets := \
   kludges_test$(EXEEXT) \
   materially_equal_test$(EXEEXT) \
   mathmisc_test$(EXEEXT) \
+  mc_enum_test$(EXEEXT) \
   ncnnnpnn_test$(EXEEXT) \
+  numeric_io_test$(EXEEXT) \
   passkey_test$(EXEEXT) \
   quiet_nan_test$(EXEEXT) \
   round_to_test$(EXEEXT) \
+  snprintf_test$(EXEEXT) \
+  stream_cast_test$(EXEEXT) \
+  test_tools_test$(EXEEXT) \
+  tn_range_test$(EXEEXT) \
   value_cast_test$(EXEEXT) \
   xenum_test$(EXEEXT) \
   xrange_test$(EXEEXT) \
@@ -428,9 +434,21 @@ mathmisc_test$(EXEEXT): \
   $(common_test_objects) \
   mathmisc_test.o \
 
+mc_enum_test$(EXEEXT): \
+  $(common_test_objects) \
+  datum_base.o \
+  facets.o \
+  mc_enum.o \
+  mc_enum_test.o \
+  mc_enum_test_aux.o \
+
 ncnnnpnn_test$(EXEEXT): \
   $(common_test_objects) \
   ncnnnpnn_test.o \
+
+numeric_io_test$(EXEEXT): \
+  $(common_test_objects) \
+  numeric_io_test.o \
 
 passkey_test$(EXEEXT): \
   $(common_test_objects) \
@@ -449,6 +467,25 @@ quiet_nan_test$(EXEEXT): \
 round_to_test$(EXEEXT): \
   $(common_test_objects) \
   round_to_test.o \
+
+snprintf_test$(EXEEXT): \
+  $(common_test_objects) \
+  snprintf_test.o \
+
+stream_cast_test$(EXEEXT): \
+  $(common_test_objects) \
+  facets.o \
+  stream_cast_test.o \
+
+test_tools_test$(EXEEXT): \
+  $(common_test_objects) \
+  test_tools_test.o \
+
+tn_range_test$(EXEEXT): \
+  $(common_test_objects) \
+  datum_base.o \
+  tn_range_test.o \
+  tn_range_test_aux.o \
 
 value_cast_test$(EXEEXT): \
   $(common_test_objects) \
