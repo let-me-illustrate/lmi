@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: objects.make,v 1.3 2005-02-12 12:59:31 chicares Exp $
+# $Id: objects.make,v 1.4 2005-02-13 22:01:26 chicares Exp $
 
 ################################################################################
 
@@ -315,6 +315,7 @@ unit_test_targets := \
   mc_enum_test$(EXEEXT) \
   ncnnnpnn_test$(EXEEXT) \
   numeric_io_test$(EXEEXT) \
+  obstruct_slicing_test$(EXEEXT) \
   passkey_test$(EXEEXT) \
   quiet_nan_test$(EXEEXT) \
   round_to_test$(EXEEXT) \
@@ -454,6 +455,11 @@ ncnnnpnn_test$(EXEEXT): \
 numeric_io_test$(EXEEXT): \
   $(common_test_objects) \
   numeric_io_test.o \
+
+obstruct_slicing_test$(EXEEXT): \
+  $(common_test_objects) \
+  obstruct_slicing_test.o \
+  timer.o \
 
 passkey_test$(EXEEXT): \
   $(common_test_objects) \
