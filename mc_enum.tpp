@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mc_enum.tpp,v 1.2 2005-02-19 03:27:45 chicares Exp $
+// $Id: mc_enum.tpp,v 1.3 2005-03-10 04:38:42 chicares Exp $
 
 #include "config.hpp"
 
@@ -99,6 +99,32 @@ template<typename T, std::size_t n, T const (&e)[n], char const*const (&c)[n]>
 std::ostream& mc_enum<T,n,e,c>::write(std::ostream& os) const
 {
     return os << str();
+}
+
+template<typename T, std::size_t n, T const (&e)[n], char const*const (&c)[n]>
+std::size_t mc_enum<T,n,e,c>::allowed_ordinal() const
+{
+    int i = ordinal();
+    if(!is_allowed(ordinal()))
+        {
+        for(i = 0; i < static_cast<int>(cardinality()); ++i)
+            {
+            if(is_allowed(i))
+                {
+//                value_ = e[i]; // TODO ?? no...leave it const
+                break;
+                }
+            }
+        // TODO ?? Else is there really an error?
+        }
+    if(i < static_cast<int>(n))
+        {
+        return i;
+        }
+    else // TODO ?? Throw here?
+        {
+        return 0;
+        }
 }
 
 template<typename T, std::size_t n, T const (&e)[n], char const*const (&c)[n]>

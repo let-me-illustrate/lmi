@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mc_enum.hpp,v 1.2 2005-02-19 03:27:45 chicares Exp $
+// $Id: mc_enum.hpp,v 1.3 2005-03-10 04:38:42 chicares Exp $
 
 // Acknowledgment
 //
@@ -123,6 +123,7 @@ class mc_enum_base
 
     bool is_valid(std::string const&) const;
 
+    virtual std::size_t allowed_ordinal() const = 0;
     virtual std::size_t cardinality() const = 0;
     virtual std::size_t ordinal() const = 0;
     virtual std::string str(int) const = 0;
@@ -158,14 +159,15 @@ class mc_enum
     std::istream& read (std::istream& is);
     std::ostream& write(std::ostream& os) const;
 
+    std::size_t allowed_ordinal() const; // TODO ?? Add unit tests.
     std::size_t cardinality() const;
     std::size_t ordinal() const;
+    std::string str() const; // TODO ?? Add unit tests.
     std::string str(int) const;
     T value() const;
 
   private:
     static std::size_t ordinal(std::string const&);
-    std::string str() const;
 
     T value_;
 };
