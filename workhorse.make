@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: workhorse.make,v 1.14 2005-03-23 15:32:29 chicares Exp $
+# $Id: workhorse.make,v 1.15 2005-04-02 22:59:27 chicares Exp $
 
 ###############################################################################
 
@@ -465,10 +465,11 @@ data_files := \
   $(wildcard $(addprefix $(src_dir)/,*.xrc *.xpm)) \
 
 .PHONY: install
-install: wx_new$(SHREXT) lmi_wx$(EXEEXT)
-	@-$(CP) --preserve $^ $(install_dir)
-	@-$(CP) --preserve $^ $(install_dir)/bin
-	@-$(CP) --preserve $(data_files) $(install_dir)
+install: $(default_targets)
+	+@[ -d $(install_dir) ] || $(MKDIR) --parents $(install_dir)
+	@$(CP) --preserve $^ $(install_dir)
+	@$(CP) --preserve $^ $(install_dir)/bin
+	@$(CP) --preserve $(data_files) $(install_dir)
 
 ################################################################################
 
