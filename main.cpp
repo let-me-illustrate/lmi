@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main.cpp,v 1.4 2005-02-12 12:59:31 chicares Exp $
+// $Id: main.cpp,v 1.5 2005-03-02 04:16:09 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -29,6 +29,8 @@
 #include "alert.hpp"
 #include "argv0.hpp"
 #include "calculate.hpp"
+#include "database.hpp"
+#include "dbnames.hpp"
 #include "fenv_lmi.hpp"
 #include "getopt.hpp"
 #include "global_settings.hpp"
@@ -36,6 +38,10 @@
 #include "miscellany.hpp"
 #include "sigfpe.hpp"
 #include "value_cast_ihs.hpp"
+
+#include <boost/filesystem/convenience.hpp>
+#include <boost/filesystem/fstream.hpp>
+#include <boost/filesystem/path.hpp>
 
 #include <algorithm>
 #include <cmath>
@@ -51,9 +57,96 @@
 #include <utility>
 #include <vector>
 
+// TODO ?? Move to a utility file.
+namespace
+{
+    // Transform foo.bar --> foo.123456789.new_suffix .
+    fs::path serialized_file_path
+        (fs::path const& exemplar
+        ,int             serial_number
+        ,std::string     suffix
+        )
+    {
+        std::ostringstream oss;
+        oss
+            << '.'
+            << std::setfill('0') << std::setw(9) << serial_number
+            << '.'
+            << suffix
+            ;
+        return fs::change_extension(exemplar, oss.str());
+    }
+} // Unnamed namespace.
+
+//============================================================================
 void RegressionTest()
 {
-    std::cout << "regression test" << std::endl;
+    fs::path test_dir(global_settings::instance().regression_test_directory);
+    fs::directory_iterator i(test_dir);
+    fs::directory_iterator end_i;
+    for(; i != end_i; ++i)
+        {
+        if(is_directory(*i) || ".cns" != fs::extension(*i))
+            {
+            continue;
+            }
+
+        std::cout << "Regression testing: " << i->string() << std::endl;
+        multiple_cell_document doc(i->string());
+        std::vector<IllusInputParms> const& cells(doc.individual_parms());
+
+        // TODO ?? First cell is as good as any until consistency is
+        // enforced across all cells in a census. Perhaps a member
+        // function of the input class should give the ledger type.
+        TDatabase temp_db(cells[0]);
+        e_ledger_type ledger_type
+            (static_cast<enum_ledger_type>
+                (
+                static_cast<int>
+                    (temp_db.Query(DB_LedgerType)
+                    )
+                )
+            );
+        Ledger composite
+            (ledger_type
+            ,100
+            ,true
+            );
+
+        for(unsigned int j = 0; j < cells.size(); ++j)
+            {
+            try
+                {
+                fs::ofstream ofs
+                    (serialized_file_path(*i, 1 + j, "test")
+                    ,   std::ios_base::in
+                    |   std::ios_base::binary
+                    |   std::ios_base::trunc
+                    );
+                IllusVal IV;
+                IV.Run(cells[j]);
+                composite.PlusEq(IV.ledger());
+                IV.ledger().Spew(ofs);
+                std::cout << '.' << std::flush;
+                }
+            catch(std::exception& e)
+                {
+                std::cerr << "\nCaught exception: " << e.what() << std::endl;
+                }
+            catch(...)
+                {
+                std::cerr << "\nUnknown exception." << std::endl;
+                }
+            fs::ofstream ofs
+                (serialized_file_path(*i, 0, "test")
+                ,   std::ios_base::in
+                |   std::ios_base::binary
+                |   std::ios_base::trunc
+                );
+            composite.Spew(ofs);
+            }
+        std::cout << std::endl;
+        }
 }
 
 //============================================================================
