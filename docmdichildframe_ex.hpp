@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: docmdichildframe_ex.hpp,v 1.1 2005-03-11 03:09:22 chicares Exp $
+// $Id: docmdichildframe_ex.hpp,v 1.2 2005-03-11 13:40:41 chicares Exp $
 
 // Enhance class wxDocMDIChildFrame to support MDI without requiring
 // the parent MDI frame window to display a 'Window' menu when it has
@@ -109,7 +109,7 @@ class DocMDIChildFrameEx
         ,long int          style  = wxDEFAULT_FRAME_STYLE
         ,wxString   const& name   = "child frame"
         );
-    // WX!! Base class wxDocMDIChildFrame's dtor is virtual, but isn't
+    // WX !! Base class wxDocMDIChildFrame's dtor is virtual, but isn't
     // explicitly marked that way--though it seems that it should be,
     // for consistency with the style of the rest of the library.
     //

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: irc7702a_test.cpp,v 1.2 2005-02-14 04:37:51 chicares Exp $
+// $Id: irc7702a_test.cpp,v 1.3 2005-03-11 13:40:41 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -100,8 +100,8 @@ void test01(Irc7702A z)
 
     // Dropping Bfts to zero should cause a MEC.
     // Should we assert that the first arg is > 0.0??
-    // Is the second arg to UpdateBft7702A() really needed??
-    // If it is, can we assert that it has the expected value??
+    // TODO ?? Is the second arg to UpdateBft7702A() really needed?
+    // TODO ?? If it is, can we assert that it has the expected value?
     z.UpdateEOM7702A();
     BOOST_TEST(!z.IsMecAlready());
     z.UpdateBft7702A

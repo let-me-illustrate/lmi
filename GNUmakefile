@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: GNUmakefile,v 1.8 2005-03-10 04:37:56 chicares Exp $
+# $Id: GNUmakefile,v 1.9 2005-03-11 13:40:41 chicares Exp $
 
 ###############################################################################
 
@@ -397,8 +397,11 @@ check_conformity: mostlyclean
 	  || $(MAKE) --no-print-directory -f $(supplemental_test_makefile)
 	@$(ECHO) "  Unexpected or oddly-named source files:"
 	@$(ECHO) $(filter-out $(expected_source_files),$(prerequisite_files))
+	@$(ECHO) "  Files with irregular defect markers:"
+	@$(GREP) --line-number '[A-Za-z]??' $(licensed_files)          || true
+	@$(GREP) --line-number '[A-Za-z]!!' $(licensed_files)          || true
 	@$(ECHO) "  Files with lowercase 'c' in copyright symbol:"
-	@$(GREP) --files-with-match '(c) *[12]' $(licensed_files)     || true
+	@$(GREP) --files-with-match '(c) *[12]' $(licensed_files)      || true
 	@$(TOUCH) BOY --date=$(yyyy)0101
 	@$(ECHO) "  Files lacking current copyright year:"
 	@for z in $(licensed_files); \

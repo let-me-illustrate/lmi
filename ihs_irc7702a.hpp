@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_irc7702a.hpp,v 1.2 2005-02-14 04:35:18 chicares Exp $
+// $Id: ihs_irc7702a.hpp,v 1.3 2005-03-11 13:40:41 chicares Exp $
 
 #ifndef irc7702a_hpp
 #define irc7702a_hpp
@@ -56,8 +56,8 @@ class Irc7702A
         ,enum_mec_avoid_method      a_AvoidMec
         ,bool                       a_Use7PPTable
         ,bool                       a_UseNSPTable
-        ,std::vector<double> const& a_SevenPPRateVec// assume table passed, for now??
-        ,std::vector<double> const& a_NSPVec        // assume table passed, for now??
+        ,std::vector<double> const& a_SevenPPRateVec// TODO ?? Assume table passed, for now.
+        ,std::vector<double> const& a_NSPVec        // TODO ?? Assume table passed, for now.
         ,round_to<double>    const& a_RoundNonMecPrem
 //      ,unsigned int               a_IssueAge
 //      ,double                     a_Face
