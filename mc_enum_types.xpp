@@ -1,0 +1,837 @@
+// Macros for specific mc_enum types.
+//
+// Copyright (C) 2004, 2005 Gregory W. Chicares.
+//
+// This program is free software; you can redistribute it and/or modify
+// it under the terms of the GNU General Public License version 2 as
+// published by the Free Software Foundation.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program; if not, write to the Free Software
+// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+//
+// http://savannah.nongnu.org/projects/lmi
+// email: <chicares@cox.net>
+// snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
+
+// $Id: mc_enum_types.xpp,v 1.1 2005-03-10 04:44:53 chicares Exp $
+
+#define yes_or_no_VALUES \
+    {mce_yes \
+    ,mce_no \
+    };
+#define yes_or_no_NAMES \
+    {"Yes" \
+    ,"No" \
+    };
+
+#define gender_VALUES \
+    {mce_female \
+    ,mce_male \
+    ,mce_unisex \
+    };
+#define gender_NAMES \
+    {"Female" \
+    ,"Male" \
+    ,"Unisex" \
+    };
+
+#define smoking_VALUES \
+    {mce_smoker \
+    ,mce_nonsmoker \
+    ,mce_unismoke \
+    };
+#define smoking_NAMES \
+    {"Smoker" \
+    ,"Nonsmoker" \
+    ,"Unismoke" \
+    };
+
+#define class_VALUES \
+    {mce_preferred \
+    ,mce_standard \
+    ,mce_rated \
+    ,mce_ultrapreferred \
+    };
+#define class_NAMES \
+    {"Preferred" \
+    ,"Standard" \
+    ,"Rated" \
+    ,"Ultra" \
+    };
+
+#define dbopt_VALUES \
+    {mce_option1 \
+    ,mce_option2 \
+    ,mce_rop \
+    };
+#define dbopt_NAMES \
+    {"A" \
+    ,"B" \
+    ,"ROP" \
+    };
+
+#define dbopt_7702_VALUES \
+    {mce_option1_for_7702 \
+    ,mce_option2_for_7702 \
+    };
+#define dbopt_7702_NAMES \
+    {"A" \
+    ,"B" \
+    };
+
+#define mode_VALUES \
+    {mce_annual \
+    ,mce_semiannual \
+    ,mce_quarterly \
+    ,mce_monthly \
+    };
+#define mode_NAMES \
+    {"Annual" \
+    ,"Semiannual" \
+    ,"Quarterly" \
+    ,"Monthly" \
+    };
+
+#define basis_VALUES \
+    {mce_curr_basis \
+    ,mce_guar_basis \
+    ,mce_mdpt_basis \
+    };
+#define basis_NAMES \
+    {"Current basis" \
+    ,"Guaranteed basis" \
+    ,"Midpoint basis" \
+    };
+
+#define sep_acct_basis_VALUES \
+    {mce_sep_acct_full \
+    ,mce_sep_acct_zero \
+    ,mce_sep_acct_half \
+    };
+#define sep_acct_basis_NAMES \
+    {"Input %" \
+    ,"Zero %" \
+    ,"Half of input %" \
+    };
+
+#define rate_period_VALUES \
+    {mce_annual_rate \
+    ,mce_monthly_rate \
+    };
+#define rate_period_NAMES \
+    {"Annual rate" \
+    ,"Monthly rate" \
+    };
+
+#define run_basis_VALUES \
+    {mce_run_curr_basis \
+    ,mce_run_guar_basis \
+    ,mce_run_mdpt_basis \
+    ,mce_run_curr_basis_sa_zero \
+    ,mce_run_guar_basis_sa_zero \
+    ,mce_run_curr_basis_sa_half \
+    ,mce_run_guar_basis_sa_half \
+    };
+#define run_basis_NAMES \
+    {"curr charges, curr GA int, curr SA int" \
+    ,"guar charges, guar GA int, curr SA int" \
+    ,"mdpt charges, mdpt GA int, no SA" \
+    ,"curr charges, curr GA int, 0 SA int" \
+    ,"guar charges, guar GA int, 0 SA int" \
+    ,"curr charges, curr GA int, 1/2 SA int" \
+    ,"guar charges, guar GA int, 1/2 SA int" \
+    };
+
+#define ledger_type_VALUES \
+    {mce_ill_reg \
+    ,mce_nasd \
+    ,mce_prospectus \
+    ,mce_group_private_placement \
+    ,mce_offshore_private_placement \
+    ,mce_ill_reg_private_placement \
+    ,mce_individual_private_placement \
+    };
+#define ledger_type_NAMES \
+    {"Illustration reg" \
+    ,"NASD" \
+    ,"Prospectus" \
+    ,"Group private placement" \
+    ,"Offshore private placement" \
+    ,"Private placement subject to illustation reg" \
+    ,"Individual private placement" \
+    };
+
+#define uw_basis_VALUES \
+    {mce_medical \
+    ,mce_paramedical \
+    ,mce_nonmedical \
+    ,mce_simplified_issue \
+    ,mce_guaranteed_issue \
+    };
+#define uw_basis_NAMES \
+    {"Medical" \
+    ,"Paramedical" \
+    ,"Nonmedical" \
+    ,"Simplified issue" \
+    ,"Guaranteed issue" \
+    };
+
+#define table_rating_VALUES \
+    {mce_table_none \
+    ,mce_table_a \
+    ,mce_table_b \
+    ,mce_table_c \
+    ,mce_table_d \
+    ,mce_table_e \
+    ,mce_table_f \
+    ,mce_table_h \
+    ,mce_table_j \
+    ,mce_table_l \
+    ,mce_table_p \
+    };
+#define table_rating_NAMES \
+    {"None", \
+    "A=+25%", \
+    "B=+50%", \
+    "C=+75%", \
+    "D=+100%", \
+    "E=+125%", \
+    "F=+150%", \
+    "H=+200%", \
+    "J=+250%", \
+    "L=+300%", \
+    "P=+400%", \
+    };
+
+#define solve_type_VALUES \
+    {mce_solve_none \
+    ,mce_solve_specamt \
+    ,mce_solve_ee_prem \
+    ,mce_solve_er_prem \
+    ,mce_solve_loan \
+    ,mce_solve_wd \
+    ,mce_solve_ee_prem_dur \
+    ,mce_solve_er_prem_dur \
+    ,mce_solve_wd_then_loan \
+    };
+#define solve_type_NAMES \
+    {"SolveNone" \
+    ,"SolveSpecAmt" \
+    ,"SolveEePrem" \
+    ,"SolveErPrem" \
+    ,"SolveLoan" \
+    ,"SolveWD" \
+    ,"SolveEePremDur" \
+    ,"SolveErPremDur" \
+    ,"SolveWDThenLoan" \
+    };
+
+#define solve_target_VALUES \
+    {mce_solve_for_endt \
+    ,mce_solve_for_target \
+    };
+#define solve_target_NAMES \
+    {"SolveForEndt" \
+    ,"SolveForTarget" \
+    };
+
+#define solve_tgt_at_VALUES \
+    {mce_target_at_retirement \
+    ,mce_target_at_year \
+    ,mce_target_at_age \
+    ,mce_target_at_maturity \
+    };
+#define solve_tgt_at_NAMES \
+    {"TgtAtRetirement" \
+    ,"TgtAtYear" \
+    ,"TgtAtAge" \
+    ,"TgtAtMaturity" \
+    };
+
+#define solve_from_VALUES \
+    {mce_solve_from_issue \
+    ,mce_solve_from_year \
+    ,mce_solve_from_age \
+    ,mce_solve_from_retirement \
+    };
+#define solve_from_NAMES \
+    {"FromIssue" \
+    ,"FromYear" \
+    ,"FromAge" \
+    ,"FromRetirement" \
+    };
+
+#define solve_to_VALUES \
+    {mce_solve_to_retirement \
+    ,mce_solve_to_year \
+    ,mce_solve_to_age \
+    ,mce_solve_to_maturity \
+    };
+#define solve_to_NAMES \
+    {"ToRetirement" \
+    ,"ToYear" \
+    ,"ToAge" \
+    ,"ToMaturity" \
+    };
+
+#define pmt_strategy_VALUES \
+    {mce_pmt_input_scalar \
+    ,mce_pmt_input_vector \
+    ,mce_pmt_minimum \
+    ,mce_pmt_target \
+    ,mce_pmt_mep \
+    ,mce_pmt_glp \
+    ,mce_pmt_gsp \
+    ,mce_pmt_corridor \
+    ,mce_pmt_table \
+    };
+#define pmt_strategy_NAMES \
+    {"PmtInputScalar" \
+    ,"PmtInputVector" \
+    ,"PmtMinimum" \
+    ,"PmtTarget" \
+    ,"PmtMEP" \
+    ,"PmtGLP" \
+    ,"PmtGSP" \
+    ,"PmtCorridor" \
+    ,"PmtTable" \
+    };
+
+#define sa_strategy_VALUES \
+    {mce_sa_input_scalar \
+    ,mce_sa_input_vector \
+    ,mce_sa_maximum \
+    ,mce_sa_target \
+    ,mce_sa_mep \
+    ,mce_sa_glp \
+    ,mce_sa_gsp \
+    ,mce_sa_corridor \
+    ,mce_sa_salary \
+    };
+#define sa_strategy_NAMES \
+    {"SAInputScalar" \
+    ,"SAInputVector" \
+    ,"SAMaximum" \
+    ,"SATarget" \
+    ,"SAMEP" \
+    ,"SAGLP" \
+    ,"SAGSP" \
+    ,"SACorridor" \
+    ,"SASalary" \
+    };
+
+#define loan_strategy_VALUES \
+    {mce_loan_asinput \
+    ,mce_loan_maximum \
+    ,mce_loan_input_scalar \
+    ,mce_loan_input_vector \
+    };
+#define loan_strategy_NAMES \
+    {"LoanAsInput" \
+    ,"LoanMaximum" \
+    ,"LoanInputScalar" \
+    ,"LoanInputVector" \
+    };
+
+#define wd_strategy_VALUES \
+    {mce_wd_asinput \
+    ,mce_wd_maximum \
+    ,mce_wd_input_scalar \
+    ,mce_wd_input_vector \
+    };
+#define wd_strategy_NAMES \
+    {"WDAsInput" \
+    ,"WDMaximum" \
+    ,"WDInputScalar" \
+    ,"WDInputVector" \
+    };
+
+#define interest_rate_type_VALUES \
+    {mce_cred_rate \
+    ,mce_gross_rate \
+    ,mce_net_rate \
+    };
+#define interest_rate_type_NAMES \
+    {"CredRate" \
+    ,"GrossRate" \
+    ,"NetRate" \
+    };
+
+#define loan_rate_type_VALUES \
+    {mce_fixed_loan_rate \
+    ,mce_variable_loan_rate \
+    };
+#define loan_rate_type_NAMES \
+    {"Fixed" \
+    ,"VLR" \
+    };
+
+#define fund_input_method_VALUES \
+    {mce_fund_average \
+    ,mce_fund_override \
+    ,mce_fund_selection \
+    };
+#define fund_input_method_NAMES \
+    {"Average fund" \
+    ,"Override fund" \
+    ,"Choose funds" \
+    };
+
+#define run_order_VALUES \
+    {mce_life_by_life \
+    ,mce_month_by_month \
+    };
+#define run_order_NAMES \
+    {"Life by life" \
+    ,"Month by month" \
+    };
+
+#define survival_limit_VALUES \
+    {mce_no_survival_limit \
+    ,mce_survive_to_age \
+    ,mce_survive_to_year \
+    ,mce_survive_to_expectancy \
+    };
+#define survival_limit_NAMES \
+    {"No survival limit" \
+    ,"Survive to age limit" \
+    ,"Survive to duration limit" \
+    ,"Survive to life expectancy" \
+    };
+
+#define term_adj_method_VALUES \
+    {mce_adjust_base \
+    ,mce_adjust_term \
+    ,mce_adjust_both \
+    };
+#define term_adj_method_NAMES \
+    {"Adjust base first" \
+    ,"Adjust term first" \
+    ,"Adjust base and term proportionately" \
+    };
+
+#define state_VALUES \
+    {mce_s_AL,mce_s_AK,mce_s_AZ,mce_s_AR,mce_s_CA,mce_s_CO,mce_s_CT,mce_s_DE,mce_s_DC,mce_s_FL \
+    ,mce_s_GA,mce_s_HI,mce_s_ID,mce_s_IL,mce_s_IN,mce_s_IA,mce_s_KS,mce_s_KY,mce_s_LA,mce_s_ME \
+    ,mce_s_MD,mce_s_MA,mce_s_MI,mce_s_MN,mce_s_MS,mce_s_MO,mce_s_MT,mce_s_NE,mce_s_NV,mce_s_NH \
+    ,mce_s_NJ,mce_s_NM,mce_s_NY,mce_s_NC,mce_s_ND,mce_s_OH,mce_s_OK,mce_s_OR,mce_s_PA,mce_s_PR \
+    ,mce_s_RI,mce_s_SC,mce_s_SD,mce_s_TN,mce_s_TX,mce_s_UT,mce_s_VT,mce_s_VA,mce_s_WA,mce_s_WV \
+    ,mce_s_WI,mce_s_WY \
+    ,mce_s_XX \
+    };
+#define state_NAMES \
+    {"AL",  "AK",  "AZ",  "AR",  "CA",  "CO",  "CT",  "DE",  "DC",  "FL" \
+    ,"GA",  "HI",  "ID",  "IL",  "IN",  "IA",  "KS",  "KY",  "LA",  "ME" \
+    ,"MD",  "MA",  "MI",  "MN",  "MS",  "MO",  "MT",  "NE",  "NV",  "NH" \
+    ,"NJ"  ,"NM",  "NY",  "NC",  "ND",  "OH",  "OK",  "OR",  "PA",  "PR" \
+    ,"RI"  ,"SC"  ,"SD",  "TN",  "TX",  "UT",  "VT",  "VA",  "WA",  "WV" \
+    ,"WI"  ,"WY" \
+    ,"XX" \
+    };
+
+#define country_VALUES \
+    {mce_c_AD,mce_c_AE,mce_c_AF,mce_c_AG,mce_c_AI,mce_c_AL,mce_c_AM,mce_c_AN,mce_c_AO,mce_c_AQ \
+    ,mce_c_AR,mce_c_AS,mce_c_AT,mce_c_AU,mce_c_AW,mce_c_AZ,mce_c_BA,mce_c_BB,mce_c_BD,mce_c_BE \
+    ,mce_c_BF,mce_c_BG,mce_c_BH,mce_c_BI,mce_c_BJ,mce_c_BM,mce_c_BN,mce_c_BO,mce_c_BR,mce_c_BS \
+    ,mce_c_BT,mce_c_BV,mce_c_BW,mce_c_BY,mce_c_BZ,mce_c_CA,mce_c_CC,mce_c_CD,mce_c_CF,mce_c_CG \
+    ,mce_c_CH,mce_c_CI,mce_c_CK,mce_c_CL,mce_c_CM,mce_c_CN,mce_c_CO,mce_c_CR,mce_c_CU,mce_c_CV \
+    ,mce_c_CX,mce_c_CY,mce_c_CZ,mce_c_DE,mce_c_DJ,mce_c_DK,mce_c_DM,mce_c_DO,mce_c_DZ,mce_c_EC \
+    ,mce_c_EE,mce_c_EG,mce_c_EH,mce_c_ER,mce_c_ES,mce_c_ET,mce_c_FI,mce_c_FJ,mce_c_FK,mce_c_FM \
+    ,mce_c_FO,mce_c_FR,mce_c_GA,mce_c_GB,mce_c_GD,mce_c_GE,mce_c_GF,mce_c_GH,mce_c_GI,mce_c_GL \
+    ,mce_c_GM,mce_c_GN,mce_c_GP,mce_c_GQ,mce_c_GR,mce_c_GS,mce_c_GT,mce_c_GU,mce_c_GW,mce_c_GY \
+    ,mce_c_HK,mce_c_HM,mce_c_HN,mce_c_HR,mce_c_HT,mce_c_HU,mce_c_ID,mce_c_IE,mce_c_IL,mce_c_IN \
+    ,mce_c_IO,mce_c_IQ,mce_c_IR,mce_c_IS,mce_c_IT,mce_c_JM,mce_c_JO,mce_c_JP,mce_c_KE,mce_c_KG \
+    ,mce_c_KH,mce_c_KI,mce_c_KM,mce_c_KN,mce_c_KP,mce_c_KR,mce_c_KW,mce_c_KY,mce_c_KZ,mce_c_LA \
+    ,mce_c_LB,mce_c_LC,mce_c_LI,mce_c_LK,mce_c_LR,mce_c_LS,mce_c_LT,mce_c_LU,mce_c_LV,mce_c_LY \
+    ,mce_c_MA,mce_c_MC,mce_c_MD,mce_c_MG,mce_c_MH,mce_c_MK,mce_c_ML,mce_c_MM,mce_c_MN,mce_c_MO \
+    ,mce_c_MP,mce_c_MQ,mce_c_MR,mce_c_MS,mce_c_MT,mce_c_MU,mce_c_MV,mce_c_MW,mce_c_MX,mce_c_MY \
+    ,mce_c_MZ,mce_c_NA,mce_c_NC,mce_c_NE,mce_c_NF,mce_c_NG,mce_c_NI,mce_c_NL,mce_c_NO,mce_c_NP \
+    ,mce_c_NR,mce_c_NU,mce_c_NZ,mce_c_OM,mce_c_PA,mce_c_PE,mce_c_PF,mce_c_PG,mce_c_PH,mce_c_PK \
+    ,mce_c_PL,mce_c_PM,mce_c_PN,mce_c_PR,mce_c_PS,mce_c_PT,mce_c_PW,mce_c_PY,mce_c_QA,mce_c_RE \
+    ,mce_c_RO,mce_c_RU,mce_c_RW,mce_c_SA,mce_c_SB,mce_c_SC,mce_c_SD,mce_c_SE,mce_c_SG,mce_c_SH \
+    ,mce_c_SI,mce_c_SJ,mce_c_SK,mce_c_SL,mce_c_SM,mce_c_SN,mce_c_SO,mce_c_SR,mce_c_ST,mce_c_SV \
+    ,mce_c_SY,mce_c_SZ,mce_c_TC,mce_c_TD,mce_c_TF,mce_c_TG,mce_c_TH,mce_c_TJ,mce_c_TK,mce_c_TM \
+    ,mce_c_TN,mce_c_TO,mce_c_TP,mce_c_TR,mce_c_TT,mce_c_TV,mce_c_TW,mce_c_TZ,mce_c_UA,mce_c_UG \
+    ,mce_c_UM,mce_c_US,mce_c_UY,mce_c_UZ,mce_c_VA,mce_c_VC,mce_c_VE,mce_c_VG,mce_c_VI,mce_c_VN \
+    ,mce_c_VU,mce_c_WF,mce_c_WS,mce_c_YE,mce_c_YT,mce_c_YU,mce_c_ZA,mce_c_ZM,mce_c_ZW \
+    };
+#define country_NAMES \
+    {"AD",  "AE",  "AF",  "AG",  "AI",  "AL",  "AM",  "AN",  "AO",  "AQ" \
+    ,"AR",  "AS",  "AT",  "AU",  "AW",  "AZ",  "BA",  "BB",  "BD",  "BE" \
+    ,"BF",  "BG",  "BH",  "BI",  "BJ",  "BM",  "BN",  "BO",  "BR",  "BS" \
+    ,"BT",  "BV",  "BW",  "BY",  "BZ",  "CA",  "CC",  "CD",  "CF",  "CG" \
+    ,"CH",  "CI",  "CK",  "CL",  "CM",  "CN",  "CO",  "CR",  "CU",  "CV" \
+    ,"CX",  "CY",  "CZ",  "DE",  "DJ",  "DK",  "DM",  "DO",  "DZ",  "EC" \
+    ,"EE",  "EG",  "EH",  "ER",  "ES",  "ET",  "FI",  "FJ",  "FK",  "FM" \
+    ,"FO",  "FR",  "GA",  "GB",  "GD",  "GE",  "GF",  "GH",  "GI",  "GL" \
+    ,"GM",  "GN",  "GP",  "GQ",  "GR",  "GS",  "GT",  "GU",  "GW",  "GY" \
+    ,"HK",  "HM",  "HN",  "HR",  "HT",  "HU",  "ID",  "IE",  "IL",  "IN" \
+    ,"IO",  "IQ",  "IR",  "IS",  "IT",  "JM",  "JO",  "JP",  "KE",  "KG" \
+    ,"KH",  "KI",  "KM",  "KN",  "KP",  "KR",  "KW",  "KY",  "KZ",  "LA" \
+    ,"LB",  "LC",  "LI",  "LK",  "LR",  "LS",  "LT",  "LU",  "LV",  "LY" \
+    ,"MA",  "MC",  "MD",  "MG",  "MH",  "MK",  "ML",  "MM",  "MN",  "MO" \
+    ,"MP",  "MQ",  "MR",  "MS",  "MT",  "MU",  "MV",  "MW",  "MX",  "MY" \
+    ,"MZ",  "NA",  "NC",  "NE",  "NF",  "NG",  "NI",  "NL",  "NO",  "NP" \
+    ,"NR",  "NU",  "NZ",  "OM",  "PA",  "PE",  "PF",  "PG",  "PH",  "PK" \
+    ,"PL",  "PM",  "PN",  "PR",  "PS",  "PT",  "PW",  "PY",  "QA",  "RE" \
+    ,"RO",  "RU",  "RW",  "SA",  "SB",  "SC",  "SD",  "SE",  "SG",  "SH" \
+    ,"SI",  "SJ",  "SK",  "SL",  "SM",  "SN",  "SO",  "SR",  "ST",  "SV" \
+    ,"SY",  "SZ",  "TC",  "TD",  "TF",  "TG",  "TH",  "TJ",  "TK",  "TM" \
+    ,"TN",  "TO",  "TP",  "TR",  "TT",  "TV",  "TW",  "TZ",  "UA",  "UG" \
+    ,"UM",  "US",  "UY",  "UZ",  "VA",  "VC",  "VE",  "VG",  "VI",  "VN" \
+    ,"VU",  "WF",  "WS",  "YE",  "YT",  "YU",  "ZA",  "ZM",  "ZW" \
+    };
+
+#define defn_life_ins_VALUES \
+    {mce_cvat \
+    ,mce_gpt \
+    ,mce_noncompliant \
+    };
+#define defn_life_ins_NAMES \
+    {"CVAT" \
+    ,"GPT" \
+    ,"Not 7702 compliant" \
+    };
+
+#define mec_avoid_method_VALUES \
+    {mce_allow_mec \
+    ,mce_reduce_prem \
+    ,mce_increase_specamt \
+    };
+#define mec_avoid_method_NAMES \
+    {"Allow MEC" \
+    ,"Reduce premium" \
+    ,"Increase specified amount" \
+    };
+
+#define defn_material_change_VALUES \
+    {mce_unnecessary_premium \
+    ,mce_benefit_increase \
+    ,mce_later_of_increase_or_unnecessary_premium \
+    ,mce_earlier_of_increase_or_unnecessary_premium \
+    ,mce_adjustment_event \
+    };
+#define defn_material_change_NAMES \
+    {"Unnecessary premium" \
+    ,"Benefit increase" \
+    ,"Later of increase or unnecessary premium" \
+    ,"Earlier of increase or unnecessary premium" \
+    ,"GPT adjustment event" \
+    };
+
+#define spread_method_VALUES \
+    {mce_spread_is_effective_annual \
+    ,mce_spread_is_nominal_daily \
+    };
+#define spread_method_NAMES \
+    {"Effective annual" \
+    ,"Nominal daily" \
+    };
+
+#define coi_rate_method_VALUES \
+    {mce_coi_rate_subtractive \
+    ,mce_coi_rate_exponential \
+    };
+#define coi_rate_method_NAMES \
+    {"Subtractive" \
+    ,"Exponential" \
+    };
+
+#define anticipated_deduction_VALUES \
+    {mce_twelve_times_last \
+    ,mce_to_next_anniversary \
+    ,mce_to_next_modal_pmt_date \
+    ,mce_eighteen_times_last \
+    };
+#define anticipated_deduction_NAMES \
+    {"Twelve times most recent" \
+    ,"To next anniversary" \
+    ,"To next modal payment date" \
+    ,"Eighteen times most recent" \
+    };
+
+#define part_mort_table_VALUES \
+    {mce_default_part_mort_table \
+    };
+#define part_mort_table_NAMES \
+    {"0" \
+    };
+
+#define premium_table_VALUES \
+    {mce_default_premium_table \
+    };
+#define premium_table_NAMES \
+    {"0" \
+    };
+
+#define from_point_VALUES \
+    {mce_from_issue \
+    ,mce_from_year \
+    ,mce_from_age \
+    ,mce_from_retirement \
+    };
+#define from_point_NAMES \
+    {"Issue" \
+    ,"Year" \
+    ,"Age" \
+    ,"Retirement" \
+    };
+
+#define to_point_VALUES \
+    {mce_to_retirement \
+    ,mce_to_year \
+    ,mce_to_age \
+    ,mce_to_maturity \
+    };
+#define to_point_NAMES \
+    {"Retirement" \
+    ,"Year" \
+    ,"Age" \
+    ,"Maturity" \
+    };
+
+#define report_column_VALUES \
+    {mce_no_column \
+    ,mce_attained_age \
+    ,mce_policy_year \
+    ,mce_inforce_lives_boy \
+    ,mce_specified_amount \
+    ,mce_term_specified_amount \
+    ,mce_corridor_factor \
+    ,mce_general_account_crediting_rate \
+    ,mce_separate_account_net_rate \
+    ,mce_net_outlay \
+    ,mce_employee_gross_payment \
+    ,mce_employer_gross_payment \
+    ,mce_withdrawal \
+    ,mce_new_cash_loan \
+    ,mce_current_total_loan_balance \
+    ,mce_guaranteed_total_loan_balance \
+    ,mce_current_account_value \
+    ,mce_guaranteed_account_value \
+    ,mce_current_cash_surrender_value \
+    ,mce_guaranteed_cash_surrender_value \
+    ,mce_current_death_benefit \
+    ,mce_guaranteed_death_benefit \
+    ,mce_current_base_death_benefit \
+    ,mce_guaranteed_base_death_benefit \
+    ,mce_current_term_purchased \
+    ,mce_guaranteed_term_purchased \
+    ,mce_current_mortality_charge \
+    ,mce_guaranteed_mortality_charge \
+    ,mce_current_cash_value_irr \
+    ,mce_guaranteed_cash_value_irr \
+    ,mce_current_death_benefit_irr \
+    ,mce_guaranteed_death_benefit_irr \
+    };
+#define report_column_NAMES \
+    {"[none]" \
+    ,"AttainedAge" \
+    ,"PolicyYear" \
+    ,"InforceLives" \
+    ,"SpecAmt" \
+    ,"TermSpecAmt" \
+    ,"CorridorFactor" \
+    ,"AnnGAIntRate_Current" \
+    ,"AnnSAIntRate_Current" \
+    ,"Outlay" \
+    ,"EeGrossPmt" \
+    ,"ErGrossPmt" \
+    ,"NetWD" \
+    ,"Loan" \
+    ,"TotalLoanBalance_Current" \
+    ,"TotalLoanBalance_Guaranteed" \
+    ,"AcctVal_Current" \
+    ,"AcctVal_Guaranteed" \
+    ,"CSVNet_Current" \
+    ,"CSVNet_Guaranteed" \
+    ,"EOYDeathBft_Current" \
+    ,"EOYDeathBft_Guaranteed" \
+    ,"BaseDeathBft_Current" \
+    ,"BaseDeathBft_Guaranteed" \
+    ,"TermPurchased_Current" \
+    ,"TermPurchased_Guaranteed" \
+    ,"COICharge_Current" \
+    ,"COICharge_Guaranteed" \
+    ,"IrrCsv_Current" \
+    ,"IrrCsv_Guaranteed" \
+    ,"IrrDb_Current" \
+    ,"IrrDb_Guaranteed" \
+    };
+#if 0
+// TODO ?? Nicer-looking names--implement later.
+#define report_column_NAMES \
+    {"[none]" \
+    ,"Attained Age" \
+    ,"Policy Year" \
+    ,"Inforce Lives BOY" \
+    ,"Base Specified Amount" \
+    ,"Term Specified Amount" \
+    ,"Corridor Factor" \
+    ,"General Account Crediting Rate" \
+    ,"Separate Account Net Rate" \
+    ,"Net Outlay" \
+    ,"Employee Gross Payment" \
+    ,"Employer Gross Payment" \
+    ,"Withdrawal" \
+    ,"New Cash Loan" \
+    ,"Current Total Loan Balance" \
+    ,"Guaranteed Total Loan Balance" \
+    ,"Current Account Value" \
+    ,"Guaranteed Account Value" \
+    ,"Current Cash Surrender Value" \
+    ,"Guaranteed Cash Surrender Value" \
+    ,"Current Death Benefit" \
+    ,"Guaranteed Death Benefit" \
+    ,"Current Base Death Benefit" \
+    ,"Guaranteed Base Death Benefit" \
+    ,"Current Term Purchased" \
+    ,"Guaranteed Term Purchased" \
+    ,"Current Mortality Charge" \
+    ,"Guaranteed Mortality Charge" \
+    ,"Current Cash Value IRR" \
+    ,"Guaranteed Cash Value IRR" \
+    ,"Current Death Benefit IRR" \
+    ,"Guaranteed Death Benefit IRR" \
+    };
+#endif // 0
+
+#define contract_name_VALUES \
+    {mce_sample \
+    ,mce_product01 \
+    ,mce_product02 \
+    ,mce_product03 \
+    ,mce_product04 \
+    ,mce_product05 \
+    ,mce_product06 \
+    ,mce_product07 \
+    ,mce_product08 \
+    ,mce_product09 \
+    ,mce_product10 \
+    ,mce_product11 \
+    ,mce_product12 \
+    ,mce_product13 \
+    ,mce_product14 \
+    ,mce_product15 \
+    ,mce_product16 \
+    ,mce_product17 \
+    ,mce_product18 \
+    ,mce_product19 \
+    ,mce_product20 \
+    ,mce_product21 \
+    ,mce_product22 \
+    ,mce_product23 \
+    ,mce_product24 \
+    ,mce_product25 \
+    ,mce_product26 \
+    ,mce_product27 \
+    ,mce_product28 \
+    ,mce_product29 \
+    ,mce_product30 \
+    ,mce_product31 \
+    ,mce_product32 \
+    ,mce_product33 \
+    ,mce_product34 \
+    ,mce_product35 \
+    ,mce_product36 \
+    ,mce_product37 \
+    ,mce_product38 \
+    ,mce_product39 \
+    ,mce_product40 \
+    ,mce_product41 \
+    ,mce_product42 \
+    ,mce_product43 \
+    ,mce_product44 \
+    ,mce_product45 \
+    ,mce_product46 \
+    ,mce_product47 \
+    ,mce_product48 \
+    ,mce_product49 \
+    ,mce_product50 \
+    ,mce_product51 \
+    ,mce_product52 \
+    ,mce_product53 \
+    ,mce_product54 \
+    ,mce_product55 \
+    ,mce_product56 \
+    ,mce_product57 \
+    ,mce_product58 \
+    ,mce_product59 \
+    ,mce_product60 \
+    ,mce_product61 \
+    ,mce_product62 \
+    ,mce_product63 \
+    };
+#define contract_name_NAMES \
+    {"sample" \
+    ,"product01" \
+    ,"product02" \
+    ,"product03" \
+    ,"product04" \
+    ,"product05" \
+    ,"product06" \
+    ,"product07" \
+    ,"product08" \
+    ,"product09" \
+    ,"product10" \
+    ,"product11" \
+    ,"product12" \
+    ,"product13" \
+    ,"product14" \
+    ,"product15" \
+    ,"product16" \
+    ,"product17" \
+    ,"product18" \
+    ,"product19" \
+    ,"product20" \
+    ,"product21" \
+    ,"product22" \
+    ,"product23" \
+    ,"product24" \
+    ,"product25" \
+    ,"product26" \
+    ,"product27" \
+    ,"product28" \
+    ,"product29" \
+    ,"product30" \
+    ,"product31" \
+    ,"product32" \
+    ,"product33" \
+    ,"product34" \
+    ,"product35" \
+    ,"product36" \
+    ,"product37" \
+    ,"product38" \
+    ,"product39" \
+    ,"product40" \
+    ,"product41" \
+    ,"product42" \
+    ,"product43" \
+    ,"product44" \
+    ,"product45" \
+    ,"product46" \
+    ,"product47" \
+    ,"product48" \
+    ,"product49" \
+    ,"product50" \
+    ,"product51" \
+    ,"product52" \
+    ,"product53" \
+    ,"product54" \
+    ,"product55" \
+    ,"product56" \
+    ,"product57" \
+    ,"product58" \
+    ,"product59" \
+    ,"product60" \
+    ,"product61" \
+    ,"product62" \
+    ,"product63" \
+    };
+

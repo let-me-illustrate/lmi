@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: tn_range_types.hpp,v 1.2 2005-02-19 03:27:45 chicares Exp $
+// $Id: tn_range_types.hpp,v 1.3 2005-03-10 04:44:06 chicares Exp $
 
 #ifndef tn_range_types_hpp
 #define tn_range_types_hpp
@@ -29,8 +29,20 @@
 #include "tn_range_fwd.hpp"           // Template class forward declaration.
 #include "tn_range_type_trammels.hpp" // Trammels for specific tn_range types.
 
-typedef tn_range<int,    percentage_trammel<int   > > r_int_percentage;
+// TODO ?? Move these two to a 'test' file.
+
+typedef tn_range<int   , percentage_trammel<int   > > r_int_percentage;
 typedef tn_range<double, percentage_trammel<double> > r_double_percentage;
+
+typedef tn_range<double, proportion_trammel     <double> > tnr_proportion;
+typedef tn_range<double, nonnegative_trammel    <double> > tnr_nonnegative_double;
+typedef tn_range<int   , nonnegative_trammel    <int   > > tnr_nonnegative_integer;
+typedef tn_range<int   , issue_age_trammel      <int   > > tnr_issue_age;
+typedef tn_range<int   , attained_age_trammel   <int   > > tnr_attained_age;
+typedef tn_range<int   , duration_trammel       <int   > > tnr_duration;
+typedef tn_range<int   , month_trammel          <int   > > tnr_month;
+typedef tn_range<double, corridor_factor_trammel<double> > tnr_corridor_factor;
+typedef tn_range<int   , date_trammel           <int   > > tnr_date;
 
 #endif // tn_range_types_hpp
 
