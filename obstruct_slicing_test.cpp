@@ -1,0 +1,160 @@
+// Obstruct slicing.
+//
+// Copyright (C) 2005 Gregory W. Chicares.
+//
+// This program is free software; you can redistribute it and/or modify
+// it under the terms of the GNU General Public License version 2 as
+// published by the Free Software Foundation.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program; if not, write to the Free Software
+// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+//
+// http://savannah.nongnu.org/projects/lmi
+// email: <chicares@cox.net>
+// snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
+
+// $Id: obstruct_slicing_test.cpp,v 1.1 2005-02-13 22:01:26 chicares Exp $
+
+#ifdef __BORLANDC__
+#   include "pchfile.hpp"
+#   pragma hdrstop
+#endif // __BORLANDC__
+
+#include "obstruct_slicing.hpp"
+
+#define BOOST_INCLUDE_MAIN
+#include "test_tools.hpp"
+#include "timer.hpp"
+
+// Here are all the techniques discussed in the header.
+
+// Technique 1.
+
+class no_derive0
+{
+  protected:
+    no_derive0() {}
+};
+
+class A0
+    :private virtual no_derive0
+{};
+
+class A1
+    :public A0
+    ,private virtual no_derive0 // Could be accident rather than fraud.
+{};
+
+// Technique 2.
+
+template<typename T>
+class no_derive1
+{
+  protected:
+    no_derive1() {}
+    no_derive1(no_derive1 const&) {}
+};
+
+class B0
+    :private virtual no_derive1<B0>
+{};
+
+class B1
+    :public B0
+    ,private virtual no_derive1<B1>
+//    ,private virtual no_derive1<B0> // Either fraud, or really careless.
+{};
+
+// Technique 3.
+
+class C0;
+
+class C0_no_derive
+{
+    friend class C0;
+  private:
+    C0_no_derive() {}
+    C0_no_derive(C0_no_derive const&) {}
+};
+
+class C0
+    :public virtual C0_no_derive
+{};
+
+class C1
+    :public C0
+    ,public virtual C0_no_derive
+{};
+
+void test_all_techniques()
+{
+// Technique 1.
+    A0 a0;
+    A1 a1;     // This is allowed, but an error was desired.
+    A1 a2(a1); // This is allowed, but an error was desired.
+
+// Technique 2.
+    B0 b0;
+//    B1 b1;     // Error, as desired.
+//    B1 b2(b1); // Error, as desired.
+
+// Technique 3.
+    C0 c0;
+//    C1 c1;     // Error, as desired.
+//    C1 c2(c1); // Error, as desired.
+}
+
+struct X0
+{
+    X0(): i(4), s("This is a test.") {}
+    void foo();
+    int i;
+    std::string s;
+};
+
+struct X1
+    :virtual private obstruct_slicing<X1>
+{
+    X1(): i(4), s("This is a test.") {}
+    void foo();
+    int i;
+    std::string s;
+};
+
+template<typename T>
+void test_cost_of_obstruction(std::string const& s)
+{
+    std::cout << "  class " << s << " has size " << sizeof(T) << "; timing: ";
+    Timer timer;
+    volatile int vi;
+    // TODO ?? Determine iteration count dynamically.
+    for(int j = 0; j < 10000; ++j)
+        {
+        T t0;
+        T t1(t0);
+        t0.i = vi;
+        t0 = t1;
+        vi = t1.i;
+        }
+    timer.Stop();
+    std::cout << timer.Report() << '\n';
+}
+
+int test_main(int, char*[])
+{
+    test_all_techniques();
+
+    test_cost_of_obstruction<X0>("X0");
+    test_cost_of_obstruction<X1>("X1");
+
+    BOOST_TEST(true);
+
+    return EXIT_SUCCESS;
+}
+
