@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_proddata.cpp,v 1.2 2005-01-15 20:17:16 chicares Exp $
+// $Id: ihs_proddata.cpp,v 1.3 2005-02-28 12:58:27 chicares Exp $
 
 // This class contains names of files containing a product's tables as well
 // as strings that are the same for all instances of that product.
@@ -45,7 +45,6 @@
 #include "platform_dependent.hpp" // access()
 
 #include <boost/filesystem/convenience.hpp>
-#include <boost/filesystem/operations.hpp>
 #include <boost/filesystem/path.hpp>
 
 #include <algorithm>
@@ -73,7 +72,6 @@ void TProductData::Init(std::string const& a_Filename)
     fs::path path(a_Filename);
     LMI_ASSERT(a_Filename == path.leaf());
     path = fs::change_extension(path, ".pol");
-    path = global_settings::instance().data_directory / path;
     Read(AddDataDir(path.string()));
 }
 
