@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_fpios.cpp,v 1.1 2005-01-14 19:47:45 chicares Exp $
+// $Id: ihs_fpios.cpp,v 1.2 2005-03-23 15:32:29 chicares Exp $
 
 // This is a derived work based on Joshua Rowe's
 //   "Really cool persistent object stream library"
@@ -50,24 +50,34 @@
 #   pragma hdrstop
 #endif // __BORLANDC__
 
+#include "ihs_fpios.hpp" // GWC arbitrarily changed .hh to .hpp
+
+// Begin GWC mods
+// Neither of these is in the language standard
+//#include  <unistd.h>
+#include "platform_dependent.hpp" // unistd.h and other platforms too
+// End GWC mods
+
+#include <errno.h>
+#include <fcntl.h>
+
+// TODO ?? Probably anything here that's actually useful should be
+// moved to 'platform_dependent.hpp'.
+#if defined LMI_POSIX
+#   include <sys/types.h>
+#   include <sys/stat.h>
+#elif defined LMI_MSW
 #   if defined __GNUC__ && defined __STRICT_ANSI__
 #       define GNU_STRICT_ANSI_ORIGINALLY_NOT_DEFINED
 #       undef __STRICT_ANSI__
 #   endif // !(defined(__GNUC__) && defined(__STRICT_ANSI__))
 #   include <io.h>
-#include    <fcntl.h>
 #   if defined __GNUC__ && defined GNU_STRICT_ANSI_ORIGINALLY_NOT_DEFINED
 #       define __STRICT_ANSI__ ""
 #   endif // !(defined(__GNUC__) && defined(__STRICT_ANSI__))
-
-#include    "ihs_fpios.hpp" // GWC arbitrarily changed .hh to .hpp
-
-// Begin GWC mods
-// Neither of these is in the language standard
-//#include  <unistd.h>
-#include    "platform_dependent.hpp" // unistd.h and other platforms too
-// End GWC mods
-#include    <errno.h>
+#else  // Unknown OS.
+#   error "Unknown operating system. Consider contributing support."
+#endif // Unknown OS.
 
 namespace JOSHUA_ROWE_PERSISTENT_STREAMS
 {
@@ -243,7 +253,9 @@ void    JrPs_fpstreambuf::open(const char* aname, int aflags, int amode)
   //    ind fd = ::open(...
   // which I assume is an oversight because it shadows a class member
   unsigned int inspectable_flags = // OOPS aflags | // GWC added aflags |
+#ifdef O_BINARY
              O_BINARY |
+#endif
              ((aflags & JrPs_pstream::xxwrite) ? O_WRONLY : 0) |
              ((aflags & JrPs_pstream::xxread)  ? O_RDONLY : 0) |
              ((aflags & JrPs_pstream::xxappen) ? O_APPEND : 0) |

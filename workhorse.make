@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: workhorse.make,v 1.13 2005-03-19 13:23:10 chicares Exp $
+# $Id: workhorse.make,v 1.14 2005-03-23 15:32:29 chicares Exp $
 
 ###############################################################################
 
@@ -159,7 +159,6 @@ gcc_warnings := \
   -Wdisabled-optimization \
   -Wendif-labels \
   -Wimport \
-  -Winvalid-offsetof \
   -Wmultichar \
   -Wnon-template-friend \
   -Woverloaded-virtual \
@@ -169,6 +168,12 @@ gcc_warnings := \
   -Wsign-compare \
   -Wsynth \
   -Wwrite-strings \
+
+# TODO ?? VZ reports that
+#  -Winvalid-offsetof \
+# gives an error with GNU/Linux gcc-3.3 and 3.4, though that seems
+# to contradict the gcc manual. This should be investigated and
+# possibly reported on gcc bugzilla.
 
 # Some boost libraries treat 'long long' as part of the language,
 # which it probably soon will be, so permit it now.
@@ -307,8 +312,11 @@ REQUIRED_CPPFLAGS = \
 REQUIRED_CFLAGS = \
   $(C_WARNINGS) \
 
+# TODO ?? Define $(wx_cxxflags) for msw as well as posix.
+
 REQUIRED_CXXFLAGS = \
   $(CXX_WARNINGS) \
+  $(wx_cxxflags) \
 
 REQUIRED_ARFLAGS = \
   -rus

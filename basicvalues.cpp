@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: basicvalues.cpp,v 1.4 2005-02-17 04:40:02 chicares Exp $
+// $Id: basicvalues.cpp,v 1.5 2005-03-23 15:32:29 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -47,8 +47,8 @@
 // TODO ??  Instead of this hardcoded path, use either the location
 // FHS would recommend, or a configuration file.
 //
-char const* CurrentTableFile()    {return "/lmi-data/sample";}
-char const* GuaranteedTableFile() {return "/lmi-data/qx_cso";}
+char const* CurrentTableFile()    {return "/opt/lmi/sample";}
+char const* GuaranteedTableFile() {return "/opt/lmi/qx_cso";}
 
 // INELEGANT !! Many member variables are initialized not in ctors,
 // but rather in common initialization functions.
