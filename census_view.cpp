@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: census_view.cpp,v 1.7 2005-03-30 03:39:05 chicares Exp $
+// $Id: census_view.cpp,v 1.8 2005-03-30 19:29:24 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -1351,6 +1351,7 @@ convert_to_ihs(ihs_input0, cell_parms()[0]);
 
     int year_average_age_first_exceeds_80 = 0;
 
+if(std::string::npos != cell_parms()[0]["Comments"].str().find("idiosyncrasyZ3"))
     {
     std::ofstream ofs
         ("experience_rating"
@@ -1428,6 +1429,7 @@ restart:
         double CaseExpRatReserve = 0.0;
         double check_;
 
+if(std::string::npos != cell_parms()[0]["Comments"].str().find("idiosyncrasyZ3"))
         {
         std::ofstream ofs
             ("experience_rating"
@@ -1752,6 +1754,11 @@ restart:
                 *   case_ibnr_months
                 /   12.0
                 ;
+            double case_net_mortality_reserve =
+                    case_accum_net_mortchgs
+                -   case_accum_net_claims
+                -   case_ibnr
+                ;
 
             // Current COI charges can actually be zero, e.g. when the
             // corridor factor is unity.
@@ -1762,13 +1769,23 @@ restart:
             else
                 {
                 case_k_factor = -
-                        (case_accum_net_mortchgs - case_accum_net_claims - case_ibnr)
+                        case_net_mortality_reserve
 // TODO ?? '4.0' is an arbitrary factor that belongs in the database.
                     /   (4.0 * projected_net_mortchgs)
                     ;
                 case_k_factor = std::max(-1.0, case_k_factor);
                 }
 
+            for(i = AVS.begin(); i != AVS.end(); ++i)
+                {
+                (*i)->ApportionNetMortalityReserve
+                    (case_net_mortality_reserve
+                    ,case_years_net_mortchgs
+                    );
+                }
+
+if(std::string::npos != cell_parms()[0]["Comments"].str().find("idiosyncrasyZ3"))
+{
             std::ofstream ofs
                 ("experience_rating"
                 ,std::ios_base::out | std::ios_base::ate | std::ios_base::app
@@ -1790,6 +1807,7 @@ restart:
                 << '\t' << std::setprecision(20) << case_k_factor
                 << '\n' << std::flush
                 ;
+}
 
             progress_message.str("");
             progress_message << "Completed " << 1 + year << " of " << MaxYr;
