@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: single_cell_document.hpp,v 1.2 2005-02-13 23:17:18 chicares Exp $
+// $Id: single_cell_document.hpp,v 1.3 2005-03-02 03:33:22 chicares Exp $
 
 #ifndef single_cell_document_hpp
 #define single_cell_document_hpp
@@ -30,6 +30,7 @@
 
 #include "obstruct_slicing.hpp"
 
+#include <boost/scoped_ptr.hpp>
 #include <boost/utility.hpp>
 
 #include <istream>
@@ -57,13 +58,14 @@ class LMI_EXPIMP single_cell_document
     friend class IllustrationDocument;
     friend class IllustrationView;
     friend class CensusView;
-    friend struct RunIllustrationFromFile;
 
   public:
     single_cell_document();
     single_cell_document(IllusInputParms const&);
     single_cell_document(std::string const& filename);
     ~single_cell_document();
+
+    IllusInputParms const& input_data() const;
 
     void read(std::istream& is);
     void write(std::ostream& os);
@@ -76,8 +78,13 @@ class LMI_EXPIMP single_cell_document
     void parse(xml::tree_parser&);
     std::string xml_root_name() const;
 
-    std::auto_ptr<IllusInputParms> const input_data;
+    boost::scoped_ptr<IllusInputParms> const input_data_;
 };
+
+inline IllusInputParms const& single_cell_document::input_data() const
+{
+    return *input_data_;
+}
 
 inline std::istream& operator>>
     (std::istream& is
