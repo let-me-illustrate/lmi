@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: workhorse.make,v 1.5 2005-02-17 23:31:24 chicares Exp $
+# $Id: workhorse.make,v 1.6 2005-02-17 23:57:14 chicares Exp $
 
 ###############################################################################
 
@@ -208,24 +208,30 @@ CXX_EXTRA_WARNINGS := $(gcc_extra_warnings)
 
 ################################################################################
 
-# Build type governs optimization flags and use of mpatrol.
+# Build type governs optimization flags and use of mpatrol and gprof.
 
 # TODO ?? Also consider defining these libstdc++ macros:
 #   _GLIBCXX_DEBUG_ASSERT
 #   _GLIBCXX_DEBUG_PEDASSERT
 #   _GLIBCXX_DEBUG_VERIFY
 
+MPATROL_LIBS :=
+
+test_targets = unit_tests cgi_tests cli_tests av_tests
+
+# TODO ?? With mpatrol, target 'av_tests' takes far too long to run.
+# Investigate whether this indicates an optimization opportunity.
+
 ifeq (mpatrol,$(findstring mpatrol,$(build_type)))
   optimization_flag := -O0
   MPATROL_LIBS := -lmpatrol -lbfd -liberty $(platform_mpatrol_libraries)
+  test_targets = unit_tests cgi_tests cli_tests
 else
   ifeq (gprof,$(findstring gprof,$(build_type)))
     optimization_flag := -O0
     gprof_flag := -pg
-    MPATROL_LIBS :=
   else
     optimization_flag := -O2
-    MPATROL_LIBS :=
   endif
 endif
 
@@ -373,7 +379,7 @@ antediluvian_cli$(EXEEXT): $(antediluvian_cli_objects) libantediluvian.a
 # Tests.
 
 .PHONY: test
-test: unit_tests cgi_tests cli_tests
+test: $(test_targets)
 
 ################################################################################
 
@@ -443,6 +449,25 @@ cgi_tests: antediluvian_cgi$(EXEEXT)
 	  | $(DIFF) -w - cgi_touchstone \
 	  | $(WC)   -l \
 	  | $(SED)  -e's/^/  /' -e's/$$/ errors/'
+
+################################################################################
+
+# Test account values in production branch.
+
+# Run the test once, and throw away the results, just to get the
+# program into the disk cache. Then run it again and report the
+# results.
+
+.PHONY: av_tests
+av_tests: static_demo$(EXEEXT)
+	@$(ECHO) Test account values:
+	@./static_demo$(EXEEXT) > /dev/null
+	<$(src_dir)/spew_touchstone $(SED) -e'1s/^/0\t0\n/' >spew_touchstone
+	<eraseme.crc                $(SED) -e'1s/^/0\t0\n/' >spew_test
+	@/unified/bin/tools/ihs_crc_comp \
+	  spewage_touchstone \
+	  spewage_test \
+	  | $(SED) -e '/Summary/!d' -e"s/^ /$z/"
 
 ################################################################################
 
