@@ -19,20 +19,25 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: death_benefits.hpp,v 1.1 2005-02-12 12:59:31 chicares Exp $
+// $Id: death_benefits.hpp,v 1.2 2005-02-13 23:17:18 chicares Exp $
 
 #ifndef death_benefits_hpp
 #define death_benefits_hpp
 
 #include "config.hpp"
 
+#include "obstruct_slicing.hpp"
 #include "xenumtypes.hpp"
+
+#include <boost/utility.hpp>
 
 #include <vector>
 
 class BasicValues;
 
 class death_benefits
+    :private boost::noncopyable
+    ,virtual private obstruct_slicing<death_benefits>
 {
   public:
     explicit death_benefits(BasicValues const&);
@@ -44,9 +49,6 @@ class death_benefits
     std::vector<double>  const& specamt() const;
 
   private:
-    death_benefits(death_benefits const&);
-    death_benefits& operator=(death_benefits const&);
-
     int length_;
     std::vector<e_dbopt> dbopt_;
     std::vector<double>  specamt_;

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: inputstatus.hpp,v 1.2 2005-01-31 13:12:48 chicares Exp $
+// $Id: inputstatus.hpp,v 1.3 2005-02-13 23:17:18 chicares Exp $
 
 #ifndef inputstatus_hpp
 #define inputstatus_hpp
@@ -27,6 +27,7 @@
 #include "config.hpp"
 
 #include "expimp.hpp"
+#include "obstruct_slicing.hpp"
 #include "xenumtypes.hpp"
 #include "xrangetypes.hpp"
 
@@ -36,11 +37,14 @@
 // Parameters for a single life that could differ for other lives on
 // a multilife policy.
 
+// Implicitly-declared special member functions do the right thing.
+
 class LMI_EXPIMP InputStatus
+    :virtual private obstruct_slicing<InputStatus>
 {
   public:
     InputStatus();
-    virtual ~InputStatus();
+    ~InputStatus();
 
     bool operator==(InputStatus const&) const;
     bool operator!=(InputStatus const&) const;
