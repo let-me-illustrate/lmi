@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustration_view.cpp,v 1.2 2005-03-15 14:32:58 chicares Exp $
+// $Id: illustration_view.cpp,v 1.3 2005-03-24 15:53:32 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -302,10 +302,9 @@ void IllustrationView::FormatSelectedValuesAsHtml()
     html_window_->SetPage(selected_values_as_html_.c_str());
 }
 
-wxIcon const& IllustrationView::Icon() const
+wxIcon IllustrationView::Icon() const
 {
-    static wxIcon const icon = wxICON(IDI_ILLUSTRATION_VIEW);
-    return icon;
+    return IconFromXmlResource("illustration_view_icon");
 }
 
 wxMenuBar* IllustrationView::MenuBar() const

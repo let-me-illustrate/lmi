@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: census_view.cpp,v 1.4 2005-03-24 15:51:25 chicares Exp $
+// $Id: census_view.cpp,v 1.5 2005-03-24 15:53:32 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -624,11 +624,9 @@ void CensusView::DisplayAllVaryingData()
         }
 }
 
-wxIcon const& CensusView::Icon() const
+wxIcon CensusView::Icon() const
 {
-// TODO ?? Change that icon.
-    static wxIcon const icon = wxICON(IDI_CENSUS_VIEW);
-    return icon;
+    return IconFromXmlResource("census_view_icon");
 }
 
 wxMenuBar* CensusView::MenuBar() const

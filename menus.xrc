@@ -24,7 +24,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: menus.xrc,v 1.2 2005-03-15 14:33:51 chicares Exp $
+    $Id: menus.xrc,v 1.3 2005-03-24 15:53:32 chicares Exp $
 -->
 
 <!-- reusable menus -->
@@ -103,6 +103,8 @@
 </object>
 
 <!-- census menu -->
+
+<object class="wxIcon" name="census_view_icon">census_view.xpm</object>
 
 <object class="wxMenuBar" name="census_view_menu">
 <style>wxMB_DOCKABLE</style>
@@ -277,6 +279,8 @@ Not supported yet: need to split columns into multiple pages.
 
 <!-- illustration menu -->
 
+<object class="wxIcon" name="illustration_view_icon">illustration_view.xpm</object>
+
 <object class="wxMenuBar" name="illustration_view_menu">
 <style>wxMB_DOCKABLE</style>
     <object class="wxMenu" name="file_menu">
@@ -350,6 +354,8 @@ Not supported yet: need to split columns into multiple pages.
 </object>
 
 <!-- text-edit menu -->
+
+<object class="wxIcon" name="text_view_icon">text_view.xpm</object>
 
 <object class="wxMenuBar" name="text_view_menu">
 <style>wxMB_DOCKABLE</style>
