@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mc_enum.hpp,v 1.4 2005-04-06 23:08:16 chicares Exp $
+// $Id: mc_enum.hpp,v 1.5 2005-04-07 15:58:05 chicares Exp $
 
 // Acknowledgment
 //
@@ -48,6 +48,28 @@
 // which can be recovered for general use by removing the derivation
 // from the base (and optionally making function members such as
 // as cardinality() static instead of virtual).
+
+// Design notes: member function mc_enum_base::allowed_ordinal().
+//
+// Motivation: When an enumerative control is displayed, one choice
+// must be selected. Some choices are not permissible in context.
+//
+// TODO ?? The 'ordinal' is the index in the array of conceivable
+// values at which the current value is found. Is this the right
+// abstraction? Radiobuttons display all conceivable values, but
+// listboxes display only permissible values.
+//
+// If the context has changed to make the current choice permissible,
+// then another must be selected if possible. This function doesn't
+// change the value of the associated variable: the framework does
+// that when it later reads the control.
+//
+// If no choice is permissible, then the current choice is left alone.
+// In that case, presumably the control is grayed out.
+//
+// TODO ?? It may be better to mutate the value of the variable
+// associated with the control here. It may be better to assert that a
+// control with no permissible value is grayed out.
 
 // Implementation notes--template class mc_enum
 //
@@ -162,11 +184,11 @@ class mc_enum
     virtual std::ostream& write(std::ostream& os) const;
 
     // mc_enum_base overrides.
-    virtual std::size_t allowed_ordinal() const; // TODO ?? Add unit tests.
+    virtual std::size_t allowed_ordinal() const;
     virtual std::size_t cardinality() const;
     virtual std::string str(int) const;
 
-    std::string str() const; // TODO ?? Add unit tests.
+    std::string str() const;
     T value() const;
 
   private:
