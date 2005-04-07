@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: round_to_test.cpp,v 1.4 2005-03-23 15:32:29 chicares Exp $
+// $Id: round_to_test.cpp,v 1.5 2005-04-07 15:02:09 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -38,7 +38,7 @@
 #include <iostream>
 #include <ostream>
 
-#if defined BOOST_MSVC || defined __BORLANDC__
+#if defined BOOST_MSVC || defined __BORLANDC__ || defined __COMO__ && defined LMI_X86
 #   include <cfloat> // Nonstandard floating-point hardware control.
 #endif // defined BOOST_MSVC || defined __BORLANDC__
 
@@ -59,7 +59,7 @@
     int const fe_tonearest  = FE_TONEAREST;
     int const fe_upward     = FE_UPWARD;
     int const fe_downward   = FE_DOWNWARD;
-#elif defined BOOST_MSVC
+#elif defined BOOST_MSVC || defined __COMO__ && defined LMI_X86
     // These untested values seem necessary for msvc's _control87().
     int const fe_towardzero = _RC_CHOP;
     int const fe_tonearest  = _RC_NEAR;
@@ -150,7 +150,7 @@ void set_hardware_rounding_mode(int mode, bool synchronize)
     asm volatile ("fldcw %0" : : "m" (*&control_word));
 #elif defined __BORLANDC__
     _control87(mode,  MCW_RC);
-#elif defined BOOST_MSVC
+#elif defined BOOST_MSVC || defined __COMO__ && defined LMI_X86
     // Untested, but this appears to be the right nonstandard function.
     _control87(mode,  _MCW_RC);
 #else // No known way to set hardware rounding mode.

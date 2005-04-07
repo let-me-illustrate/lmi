@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: como_4_3_3.make,v 1.2 2005-03-23 17:35:08 chicares Exp $
+# $Id: como_4_3_3.make,v 1.3 2005-04-07 15:02:09 chicares Exp $
 
 toolset := como
 
@@ -42,11 +42,12 @@ CXX_WARNINGS       :=
 C_EXTRA_WARNINGS   :=
 CXX_EXTRA_WARNINGS :=
 
-# This compiler does not automatically define the customary macro for
-# identifying the msw platform.
+# This compiler does not automatically define the customary macros for
+# identifying the msw-intel platform.
 
 CPPFLAGS := \
   -D__WIN32__ \
+  -D_X86_ \
 
 CXX := como
 
@@ -61,9 +62,12 @@ CXX := como
 # 'strictly conforming'.
 #
 # Diagnostic 161: unrecognized pragma: frequent in wx.
+# Diagnostics 1195 and 1200: emulated ms defective loop variable scoping.
 #
 CXXFLAGS := \
   --diag_suppress=161 \
+  --diag_suppress=1195 \
+  --diag_suppress=1200 \
   --display_error_number \
   --long_long \
   --no_microsoft_bugs \
@@ -139,7 +143,7 @@ como_4_3_3.make:: ;
 	           MAKEDEPEND_0='$(MAKEDEPEND_0)' \
 	           MAKEDEPEND_1='$(MAKEDEPEND_1)' \
 	           MPATROL_LIBS='$(MPATROL_LIBS)' \
-	    all unit_tests; \
+	    unit_tests; \
 	"
 
 force: ;
