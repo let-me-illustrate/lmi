@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: platform_dependent.hpp,v 1.3 2005-02-23 12:37:20 chicares Exp $
+// $Id: platform_dependent.hpp,v 1.4 2005-04-07 15:03:07 chicares Exp $
 
 #ifndef platform_dependent_hpp
 #define platform_dependent_hpp
@@ -70,6 +70,9 @@
 #   include <stdio.h>   // fileno()
 #   include <stdlib.h>  // putenv()
 #   include <string.h>  // strdup()
+#   ifdef __BORLANDC__
+#       define R_OK 04
+#   endif // __BORLANDC__
 #else // Unknown platform.
     // It seems too fragile to give the prototypes here:
     //   extern "C" int access(char const*, int);
