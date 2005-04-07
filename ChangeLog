@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.36 2005-04-06 23:21:39 chicares Exp $
+// $Id: ChangeLog,v 1.37 2005-04-07 04:01:01 chicares Exp $
 
 2005-01-14
 
@@ -1105,4 +1105,10 @@ Document a defect.
   ihs_proddata.cpp
   ihs_proddata.hpp
 Remove disused member function.
+
+  workhorse.make
+Fix mpatrol problem.
+
+  ihs_acctval.cpp
+Fix reported problem.
 
