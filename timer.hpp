@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: timer.hpp,v 1.1 2005-01-14 19:47:45 chicares Exp $
+// $Id: timer.hpp,v 1.2 2005-04-07 15:05:40 chicares Exp $
 
 // Boost provides a timer class, but they deliberately chose to use
 // only a low-resolution timer. Their rationale is apparently that
@@ -43,12 +43,10 @@
     typedef double elapsed_t;
 #elif defined LMI_MSW
     // Compilers for this platform use various types for its high-
-    // resolution timer, but this seems just as good.
+    // resolution timer, but this seems just as good: it's reliably
+    // 64 bits, and that's all that matters.
     //
-    // TODO ?? Consider using 'double' instead: it's reliably 64
-    // bits on this platform, and long long int isn't in C++98.
-    //
-    typedef long long int elapsed_t;
+    typedef double elapsed_t;
 #else // Unknown platform.
 #   include <ctime>
     typedef std::clock_t elapsed_t;
