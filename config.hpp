@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: config.hpp,v 1.3 2005-03-23 15:32:29 chicares Exp $
+// $Id: config.hpp,v 1.4 2005-04-07 15:02:38 chicares Exp $
 
 // Configuration header for compiler quirks. Include at the beginning of
 // every .hpp file (and nowhere else).
@@ -54,7 +54,7 @@ namespace fs = boost::filesystem;
 #   error "Unknown operating system. Consider contributing support."
 #endif // Unknown OS.
 
-#if defined _X86_ || defined i386 || defined __i386
+#if defined _X86_ || defined _M_IX86 || defined i386 || defined __i386
 #   define LMI_X86
 #else  // Unknown hardware.
 #   error "Unknown hardware. Consider contributing support."
