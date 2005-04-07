@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xenum.hpp,v 1.1 2005-01-14 19:47:45 chicares Exp $
+// $Id: xenum.hpp,v 1.2 2005-04-07 15:00:56 chicares Exp $
 
 #ifndef xenum_hpp
 #define xenum_hpp
@@ -114,10 +114,12 @@ public:
 #endif // old borland compiler
 
 #define LMI_EXPLICIT_INSTANTIATION
+
 // Explicit instantiation of the extended-enum template yields about a
 // three percent build-time improvement for all three commmand-line
-// compilers tested, and a twenty-three percent improvement for the cli
-// target using the bc502 IDE compiler.
+// compilers tested, viz., gcc-2.95.2-1 MinGW and cygwin releases and
+// bc++5.02; and a twenty-three percent improvement for the cli target
+// target using the bc++5.02 IDE compiler, as measured in 2001.
 
 #ifdef LMI_EXPLICIT_INSTANTIATION
     template<typename EnumType, int N>
