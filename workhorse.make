@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: workhorse.make,v 1.16 2005-04-05 12:34:29 chicares Exp $
+# $Id: workhorse.make,v 1.17 2005-04-07 00:34:43 chicares Exp $
 
 ###############################################################################
 
@@ -335,19 +335,22 @@ REQUIRED_ARFLAGS = \
 # each language. Accordingly, pass GNU 'ld' options with '-Wl,'.
 
 # Two subdirectories of /usr/local
-#   /usr/local/bin
 #   /usr/local/lib
+#   /usr/local/bin
 # are placed on the link path in order to accommodate msw dlls, for
 # which no canonical location is clearly specified by FHS, because
 # they're both binaries and libraries in a sense. These two
-# subdirectories seem to be the most popular choices; wx uses the
-# first, treating a dll as a binary, while mpatrol uses the second,
-# treating a dll as a library.
+# subdirectories seem to be the most popular choices; wx regards its
+# dll as a binary, while mpatrol regards its as a library. For msw,
+# it seems crucial to list these two subdirectories in exactly the
+# order given; if they're specified in reverse order, then mpatrol
+# won't work, perhaps because gnu 'ld' finds its dll first and then
+# doesn't bother looking for its library.
 
 REQUIRED_LDFLAGS = \
   -L . \
-  -L $(system_root)/usr/local/bin \
   -L $(system_root)/usr/local/lib \
+  -L $(system_root)/usr/local/bin \
   $(REQUIRED_LIBS) \
   $(MPATROL_LIBS) \
 
