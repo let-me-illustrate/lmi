@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_acctval.cpp,v 1.14 2005-03-30 19:29:24 chicares Exp $
+// $Id: ihs_acctval.cpp,v 1.15 2005-04-07 03:56:02 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -2240,9 +2240,17 @@ void AccountValue::ApportionNetMortalityReserve
     ,double case_years_net_mortchgs
     )
 {
-// TODO ?? This is called after resetting the 'Year' counter, but it
+// TODO ?? This is called after incrementing the 'Year' counter, but it
 // shouldn't be that way.
     LMI_ASSERT(0 < Year);
+// TODO ?? Normally we'd test
+//    if(ItLapsed || BasicValues::GetLength() <= Year)
+// but, because the 'Year' counter is out of sync here as compared to
+// other functions that use that test, a change is required:
+    if(ItLapsed || BasicValues::GetLength() < Year)
+        {
+        return;
+        }
 
     if(0.0 != YearsTotalCOICharge)
         {
