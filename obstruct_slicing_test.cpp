@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: obstruct_slicing_test.cpp,v 1.1 2005-02-13 22:01:26 chicares Exp $
+// $Id: obstruct_slicing_test.cpp,v 1.2 2005-04-07 15:05:00 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -132,7 +132,7 @@ void test_cost_of_obstruction(std::string const& s)
 {
     std::cout << "  class " << s << " has size " << sizeof(T) << "; timing: ";
     Timer timer;
-    volatile int vi;
+    volatile int vi = 0;
     // TODO ?? Determine iteration count dynamically.
     for(int j = 0; j < 10000; ++j)
         {
@@ -153,6 +153,7 @@ int test_main(int, char*[])
     test_cost_of_obstruction<X0>("X0");
     test_cost_of_obstruction<X1>("X1");
 
+    // TODO ?? Instead, would it be possible actually to test something?
     BOOST_TEST(true);
 
     return EXIT_SUCCESS;
