@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mc_enum_test.cpp,v 1.2 2005-02-19 03:27:45 chicares Exp $
+// $Id: mc_enum_test.cpp,v 1.3 2005-04-07 15:58:05 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -109,12 +109,12 @@ int test_main(int, char*[])
     BOOST_TEST_UNEQUAL(s_Pentecost, holiday4);
     BOOST_TEST_UNEQUAL("Pentecost", holiday4);
 
-    // Ordinal.
-    BOOST_TEST_EQUAL(holiday4.ordinal(), 1);
+    // Ordinal. Function ordinal() itself is not tested because it's
+    // private, but this is equivalent here.
+    BOOST_TEST_EQUAL(holiday4.allowed_ordinal(), 1);
 
     // Explicit conversion to std::string.
-    // Not tested because it's private.
-//    BOOST_TEST_EQUAL(holiday4.str(), "Easter");
+    BOOST_TEST_EQUAL(holiday4.str(), "Easter");
 
     // Explicit conversion to enumerator.
     BOOST_TEST_EQUAL(holiday4.value(), h_Easter);
@@ -134,6 +134,24 @@ int test_main(int, char*[])
     BOOST_TEST_EQUAL("Theophany", holiday4.str(0));
     BOOST_TEST_EQUAL("Easter"   , holiday4.str(1));
     BOOST_TEST_EQUAL("Pentecost", holiday4.str(2));
+
+    // Allowed ordinal. By default, any conceivable value is allowed,
+    // conceivability meaning 0 <= value < cardinality.
+    BOOST_TEST_EQUAL(holiday4.allowed_ordinal(), 1);
+
+    // If current value isn't allowed, pick the first one that is.
+    holiday4.allow(1, false);
+    BOOST_TEST(!holiday4.is_allowed(1));
+    BOOST_TEST_EQUAL(holiday4.allowed_ordinal(), 0);
+
+    holiday4.allow(0, false);
+    BOOST_TEST(!holiday4.is_allowed(0));
+    BOOST_TEST_EQUAL(holiday4.allowed_ordinal(), 2);
+
+    // If no value is allowed, return the current ordinal.
+    holiday4.allow(2, false);
+    BOOST_TEST(!holiday4.is_allowed(2));
+    BOOST_TEST_EQUAL(holiday4.allowed_ordinal(), 1);
 
     // Stream operators.
     e_holiday const Easter(h_Easter);
