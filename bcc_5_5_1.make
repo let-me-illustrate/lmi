@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: bcc_5_5_1.make,v 1.2 2005-03-23 17:36:44 chicares Exp $
+# $Id: bcc_5_5_1.make,v 1.3 2005-04-07 15:04:28 chicares Exp $
 
 toolset := bcc
 
@@ -128,7 +128,7 @@ bcc_5_5_1.make:: ;
 	         MAKEDEPEND_1='$(MAKEDEPEND_1)' \
 	         MPATROL_LIBS='$(MPATROL_LIBS)' \
 	platform_wx_libraries='$(platform_wx_libraries)' \
-	  all unit_tests \
+	  unit_tests \
 
 force: ;
 
