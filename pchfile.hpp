@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: pchfile.hpp,v 1.2 2005-02-23 12:37:20 chicares Exp $
+// $Id: pchfile.hpp,v 1.3 2005-04-07 15:04:28 chicares Exp $
 
 // Always include this header first in every '.cpp' file, before
 // anything else except comments and whitespace. Never include it in
@@ -31,7 +31,8 @@
 #include "config.hpp"
 
 #if defined LMI_COMPILER_USES_PCH && !defined LMI_IGNORE_PCH
-#   include <wx/wxprec.h>
+// For wx, one would include this:
+// #   include <wx/wxprec.h>
 #endif
 
 #endif // pchfile_hpp
