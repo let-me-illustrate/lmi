@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_harmonization.cpp,v 1.3 2005-03-23 17:36:44 chicares Exp $
+// $Id: input_harmonization.cpp,v 1.4 2005-04-08 03:06:04 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -223,6 +223,10 @@ void Input::Harmonize()
     CurrentCoiGrading         .enable(part_mort_used && home_office_only);
     CashValueEnhancementRate  .enable(home_office_only);
 
+    SurviveToType             .allow(mce_no_survival_limit    , part_mort_used);
+    SurviveToType             .allow(mce_survive_to_age       , part_mort_used);
+    SurviveToType             .allow(mce_survive_to_year      , part_mort_used);
+    SurviveToType             .allow(mce_survive_to_expectancy, part_mort_used);
     SurviveToType             .enable(part_mort_used);
 
     SurviveToYear             .enable(part_mort_used && mce_survive_to_year == SurviveToType);
@@ -575,7 +579,7 @@ false // Silly workaround for now.
 //    mce_yes_or_no            OverrideFundManagementFee       ;
 //    mce_fund_input_method    FundChoiceType                  ;
 // The last duplicates the information borne by the first two.
-//    {mce_fund_average
+//     mce_fund_average
 //    ,mce_fund_override
 //    ,mce_fund_selection
 //
