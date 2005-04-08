@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.37 2005-04-07 04:01:01 chicares Exp $
+// $Id: ChangeLog,v 1.38 2005-04-08 03:14:08 chicares Exp $
 
 2005-01-14
 
@@ -1111,4 +1111,53 @@ Fix mpatrol problem.
 
   ihs_acctval.cpp
 Fix reported problem.
+
+2005-04-07 [1430]
+
+  xenum.hpp
+Improve documentation.
+
+  como_4_3_3.make
+  round_to_test.cpp
+Improvements for como, which still fails some unit tests.
+
+  config.hpp
+Detect hardware platform with borland compiler.
+
+  platform_dependent.hpp
+Define access() result macro for borland compiler.
+
+  bcc_5_5_1.make
+  pchfile.hpp
+Attempt only unit tests with this obsolete toolset. Accordingly,
+don't attempt to precompile wx headers. Many tests fail to compile,
+due in large part to the toolset's inability to cope with boost.
+
+  obstruct_slicing_test.cpp
+Prevent a nugatory warning.
+
+  timer.hpp
+Change underlying type for elapsed time, to increase portability.
+
+  mc_enum.hpp
+  mc_enum_test.cpp
+Improve documentation and unit test.
+
+  ledger_xml_io.cpp
+Mark some known defects.
+
+  mc_enum.cpp
+  mc_enum.hpp
+  mc_enum.tpp
+  mc_enum_test.cpp
+Forestall a latent defect.
+
+  xml_notebook.xrc
+Enhance 'Group' and 'Solve' tabs.
+
+  input_harmonization.cpp
+Enhance 'SurviveToType' enablement.
+
+  workhorse.make
+Add experimental regression-test target.
 
