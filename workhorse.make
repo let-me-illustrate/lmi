@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: workhorse.make,v 1.17 2005-04-07 00:34:43 chicares Exp $
+# $Id: workhorse.make,v 1.18 2005-04-08 03:06:57 chicares Exp $
 
 ###############################################################################
 
@@ -577,6 +577,32 @@ av_tests: static_demo$(EXEEXT)
 	  spew_touchstone \
 	  spew_test \
 	  | $(SED) -e '/Summary/!d' -e"s/^ /$z/"
+
+################################################################################
+
+# Regression test.
+
+# TODO ?? Needs work.
+# Don't refer to obsolete /unified : instead, put the tool this uses in cvs.
+# General rewrite: avoid imperative programming like 'install' target.
+
+.PHONY: regression_test
+regression_test: install
+	@$(ECHO) Regression test:
+	cd /opt/lmi/test; \
+	../lmi_cli \
+	  --ash_nazg --accept --regress \
+	  --data_path=/opt/lmi/data \
+	  --test_path=/opt/lmi/test; \
+	for z in *test; \
+	  { /unified/bin/tools/ihs_crc_comp $$z /opt/lmi/touchstone/$$z \
+	    | sed -e '/Summary/!d' -e"s/^ /$$z/" \
+	  } >results; \
+	<results sed \
+	  -e'/rel err.*e-01[5-9]/d' \
+	  -e'/abs.*0\.00.*rel/d' \
+	  -e'/abs diff: 0 /d'; \
+	@$(ECHO) ...regression test completed.
 
 ################################################################################
 
