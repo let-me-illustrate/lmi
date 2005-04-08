@@ -19,27 +19,83 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mc_enum.cpp,v 1.3 2005-04-06 23:08:16 chicares Exp $
+// $Id: mc_enum.cpp,v 1.4 2005-04-08 03:03:53 chicares Exp $
 
 #include "mc_enum.hpp"
 
-mc_enum_base::mc_enum_base(int n)
-    :allowed_(n, true)
+#include <sstream>
+#include <stdexcept>
+#include <typeinfo>
+
+mc_enum_base::mc_enum_base(int cardinality_of_the_enumeration)
+    :allowed_(cardinality_of_the_enumeration, true)
 {
 }
 
-void mc_enum_base::allow(int item, bool b)
+void mc_enum_base::allow(int index, bool b)
 {
-    allowed_[item] = b;
+    validate_index(index);
+    allowed_[index] = b;
 }
 
-bool mc_enum_base::is_allowed(int item) const
+bool mc_enum_base::is_allowed(int index) const
 {
-    return allowed_[item];
+    validate_index(index);
+    return allowed_[index];
 }
 
+// TODO ?? Is it reasonable to provide this default implementation?
+// Perhaps the base class just needs to document what this function
+// means--is it for numeric ranges only?
+//
 bool mc_enum_base::is_valid(std::string const&) const
 {
     return true;
+}
+
+void mc_enum_base::validate_index(int index) const
+{
+    if(index < 0)
+        {
+        std::ostringstream oss;
+        oss
+            << "Index "
+            << index
+            << " is invalid for type '"
+            << typeid(*this).name()
+            << "': it must not be less than zero."
+            ;
+        throw std::logic_error(oss.str());
+        }
+
+    if(static_cast<int>(cardinality()) <= index)
+        {
+        std::ostringstream oss;
+        oss
+            << "Index "
+            << index
+            << " is invalid for type '"
+            << typeid(*this).name()
+            << "': it must less than "
+            << cardinality()
+            << "."
+            ;
+        throw std::logic_error(oss.str());
+        }
+
+    if(cardinality() != allowed_.size())
+        {
+        std::ostringstream oss;
+        oss
+            << "Number of allowable flags for type '"
+            << typeid(*this).name()
+            << "' is "
+            << allowed_.size()
+            << " but it should be "
+            << cardinality()
+            << " instead."
+            ;
+        throw std::logic_error(oss.str());
+        }
 }
 

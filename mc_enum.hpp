@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mc_enum.hpp,v 1.5 2005-04-07 15:58:05 chicares Exp $
+// $Id: mc_enum.hpp,v 1.6 2005-04-08 03:03:53 chicares Exp $
 
 // Acknowledgment
 //
@@ -138,7 +138,7 @@ class mc_enum_base
     :public datum_base
 {
   public:
-    explicit mc_enum_base(int n);
+    explicit mc_enum_base(int);
 
     void allow(int, bool);
     bool is_allowed(int) const;
@@ -151,6 +151,8 @@ class mc_enum_base
     virtual std::string str(int) const = 0;
 
   private:
+    void validate_index(int) const;
+
     std::vector<int> allowed_;
 };
 
@@ -180,8 +182,8 @@ class mc_enum
 
     // datum_base overrides. Consider moving the implementation into
     // the base class.
-    virtual std::istream& read (std::istream& is);
-    virtual std::ostream& write(std::ostream& os) const;
+    virtual std::istream& read (std::istream&);
+    virtual std::ostream& write(std::ostream&) const;
 
     // mc_enum_base overrides.
     virtual std::size_t allowed_ordinal() const;
