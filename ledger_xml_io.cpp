@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xml_io.cpp,v 1.8 2005-04-02 23:01:22 chicares Exp $
+// $Id: ledger_xml_io.cpp,v 1.9 2005-04-08 03:04:38 chicares Exp $
 
 #include "config.hpp"
 
@@ -314,10 +314,12 @@ void Ledger::write(xml::node& x) const
     title_map["EOYDeathBft_Guaranteed"          ] = "Guar EOY Death Benefit";
     title_map["EeGrossPmt"                      ] = "______ EE Gross Payment";
     title_map["EeMode"                          ] = "EE Payment Mode";
+// TODO ?? This is incorrect.
 // STEVEN This can't be a mode. I don't know how it differs from 'EeGrossPmt' above.
     title_map["EePmt"                           ] = "EE Payment Mode";
     title_map["ErGrossPmt"                      ] = "______ ER Gross Payment";
     title_map["ErMode"                          ] = "ER Payment Mode";
+// TODO ?? This is incorrect.
 // STEVEN This can't be a mode. I don't know how it differs from 'ErGrossPmt' above.
     title_map["ErPmt"                           ] = "ER Payment Mode";
     title_map["ExcessLoan_Current"              ] = " _ Curr Excess Loan";
@@ -405,7 +407,7 @@ void Ledger::write(xml::node& x) const
 //        2) Keep in and add for other products? 
 //        3) Keep in with obvious warts? (preferred given time constraints)
 //        4) Comment out for now until a more comprehensive implementation?
-// It's defective, so it's excluded for now.
+// TODO ?? It's defective, so it's excluded for now.
 //    title_map["ProducerCompensation"            ] = " _____________ Producer Comp";
     title_map["RefundableSalesLoad"             ] = " _____________ Refundable Sales Load";
     title_map["Salary"                          ] = " _____________  _____________ Salary";
@@ -1011,6 +1013,8 @@ void Ledger::write(xml::node& x) const
         xml::node column("column");
         column.set_attr("name", j->first.c_str());
         std::vector<std::string> const& v = j->second;
+// TODO ?? InforceLives shows an extra value past the end; should it
+// be truncated here?        
         for(unsigned int k = 0; k < v.size(); ++k)
             {
             xml::node duration("duration");
