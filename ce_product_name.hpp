@@ -19,23 +19,36 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ce_product_name.hpp,v 1.1 2005-04-06 23:09:19 chicares Exp $
+// $Id: ce_product_name.hpp,v 1.2 2005-04-09 16:15:24 chicares Exp $
 
 // This class encapsulates product names. Being derived from class
 // mc_enum_base, it presents an interface compatible with other
 // enumerative classes. It differs from most enumerative classes in
-// that its valid values are knowable only at run time, and in that
-// it therefore cannot associate an enum with each value. Otherwise,
-// its implementation is similar to that of template class mc_enum.
+// that its valid values are knowable only at run time, so that it
+// cannot associate an enum with each value; and in that all its
+// valid values are always allowable. Otherwise, its implementation
+// is similar to that of template class mc_enum.
+//
+// Because there is no enum to map to, there is no 'm' for "Mapped"
+// at the beginning of the class's or file's name.
 //
 // Valid values are the base names of policy ('.pol') files found
-// in the (configurable) data directory. They are read at startup
-// and cached, not because of any measured improvement in run time,
-// but in order to keep the type from mutating with unknown
-// consequences. TODO ?? Reconsider this. It seems desirable to
-// recognize changes to the data directory made by advanced users,
-// but is that easily possible without adjusting the base class's
-// 'allowed_' vector and perhaps changing the way ordinal() works?
+// in the (configurable) data directory. They are read only once and
+// cached, not because of any measured improvement in run time, but in
+// order to keep the type from mutating with unknown consequences.
+//
+// TODO ?? Reconsider this. It seems desirable to recognize changes to
+// the data directory made by advanced users, but is that easily
+// possible without adjusting the base class's 'allowed_' vector and
+// perhaps changing the way ordinal() works?
+//
+// TODO ?? Policy-file names are read the first time this class is
+// instantiated. That's not the best time to do it, because an error
+// is reported if no such file is found. It would be better to test
+// that at startup. A simple singleton might be wanted if this
+// operation should really be performed only once. Alternatively, the
+// program might write the 'sample' product's files if it finds no
+// other product.
 
 #ifndef ce_product_name_hpp
 #define ce_product_name_hpp
