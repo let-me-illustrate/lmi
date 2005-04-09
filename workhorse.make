@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: workhorse.make,v 1.18 2005-04-08 03:06:57 chicares Exp $
+# $Id: workhorse.make,v 1.19 2005-04-09 16:17:53 chicares Exp $
 
 ###############################################################################
 
@@ -112,19 +112,23 @@ effective_default_target: $(default_targets)
 #
 # xmlwrapp: avoid the nonstandard build system provided.
 
+# Files whose names match 'my_%.cpp' are taken as product data files,
+# which are overridden by customized files in a special directory.
+
 all_include_directories := \
   $(src_dir) \
   $(system_root)/usr/local/include \
 
 all_source_directories := \
   $(src_dir) \
-  $(src_dir)/products \
   $(boost_dir)/libs/filesystem/src \
   $(cgicc_source_dir) \
   $(xmlwrapp_source_dir) \
 
 vpath lib%.a          $(CURDIR)
 vpath %.o             $(CURDIR)
+
+vpath my_%.cpp        $(src_dir)/../products/src
 
 vpath %.c             $(all_source_directories)
 vpath %.cpp           $(all_source_directories)
@@ -602,7 +606,7 @@ regression_test: install
 	  -e'/rel err.*e-01[5-9]/d' \
 	  -e'/abs.*0\.00.*rel/d' \
 	  -e'/abs diff: 0 /d'; \
-	@$(ECHO) ...regression test completed.
+	$(ECHO) ...regression test completed.
 
 ################################################################################
 
