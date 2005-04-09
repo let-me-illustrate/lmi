@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: objects.make,v 1.10 2005-04-06 23:19:16 chicares Exp $
+# $Id: objects.make,v 1.11 2005-04-09 16:16:38 chicares Exp $
 
 ################################################################################
 
@@ -116,6 +116,7 @@ antediluvian_common_objects := \
   dbvalue.o \
   death_benefits.o \
   expm1.o \
+  fenv_lmi.o \
   getopt.o \
   global_settings.o \
   input_sequence.o \
@@ -174,6 +175,7 @@ lmi_common_objects := \
   dbnames.o \
   death_benefits.o \
   expm1.o \
+  fenv_lmi.o \
   global_settings.o \
   ihs_acctval.o \
   ihs_avdebug.o \
@@ -307,6 +309,7 @@ gps_objects := \
   dbnames.o \
   death_benefits.o \
   expm1.o \
+  fenv_lmi.o \
   ihs_basicval.o \
   ihs_commfns.o \
   ihs_database.o \
@@ -374,6 +377,7 @@ unit_test_targets := \
 
 # Link these objects for all tests:
 common_test_objects := \
+  fenv_lmi.o \
   getopt.o \
   kludges.o \
   license.o \
@@ -613,4 +617,25 @@ generate_passkey$(EXEEXT): \
 
 ihs_crc_comp$(EXEEXT): \
   ihs_crc_comp.o \
+
+################################################################################
+
+# Product files.
+
+# TODO ?? Experiment with writing all dependencies and target-specific
+# variable definitions here. If that works well, use the technique
+# elsewhere.
+
+product_files$(EXEEXT): lmi_dllflag := -DLMI_USE_DLL
+
+product_files$(EXEEXT): \
+  alert_cli.o \
+  generate_product_files.o \
+  my_db.o \
+  my_fund.o \
+  my_prod.o \
+  my_rnd.o \
+  my_tier.o \
+  xenumtypes.o \
+  liblmi$(SHREXT) \
 
