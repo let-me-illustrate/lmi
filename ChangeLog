@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.38 2005-04-08 03:14:08 chicares Exp $
+// $Id: ChangeLog,v 1.39 2005-04-09 16:25:00 chicares Exp $
 
 2005-01-14
 
@@ -1160,4 +1160,30 @@ Enhance 'SurviveToType' enablement.
 
   workhorse.make
 Add experimental regression-test target.
+
+2005-04-09 [1431]
+
+  ce_product_name.hpp
+Improve documentation.
+
+  ihs_dbdict.cpp
+Enable experience rating for sample product.
+
+  fenv_lmi.cpp [new file]
+  fenv_lmi.hpp
+  objects.make
+Factor out and improve floating-point-environment management, as is
+required for product-file generation.
+
+  generate_product_files.cpp
+  objects.make
+  workhorse.make
+Program to generate product files.
+
+  my_db.cpp   [new file]
+  my_fund.cpp [new file]
+  my_prod.cpp [new file]
+  my_rnd.cpp  [new file]
+  my_tier.cpp [new file]
+Templates for creating product-file programs.
 
