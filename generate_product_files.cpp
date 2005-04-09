@@ -19,17 +19,17 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: generate_product_files.cpp,v 1.3 2005-02-14 04:37:51 chicares Exp $
+// $Id: generate_product_files.cpp,v 1.4 2005-04-09 16:17:53 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
 #   pragma hdrstop
 #endif // __BORLANDC__
 
+#include "fenv_lmi.hpp"
 #include "ihs_dbdict.hpp"
 #include "ihs_funddata.hpp"
 #include "ihs_proddata.hpp"
-#include "ihs_resetfpu.hpp"
 #include "ihs_rnddata.hpp"
 #include "tiered_charges.hpp"
 
@@ -38,7 +38,7 @@
 
 int main()
 {
-    SetIntelDefaultNdpControlWord();
+    initialize_fpu();
 
     std::cout << "Writing files: " << std::flush;
 
@@ -59,18 +59,6 @@ int main()
 
     std::cout << "\nAll product files written." << std::endl;
 
-    volatile unsigned short cw = NdpControlWord();
-    if(IntelDefaultNdpControlWord() != cw)
-        {
-        std::cerr <<
-            "Product data files are probably invalid because the "
-            "floating point precision changed while they were being "
-            "written. Probably some other program changed this "
-            "important setting. Rerun this program and do no work "
-            "in any other program until this one finishes. This "
-            "should take only a few seconds."
-            ;
-        }
-    return IntelDefaultNdpControlWord() != cw;
+    validate_fenv();
 }
 
