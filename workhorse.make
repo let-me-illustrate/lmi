@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: workhorse.make,v 1.19 2005-04-09 16:17:53 chicares Exp $
+# $Id: workhorse.make,v 1.20 2005-04-10 21:52:21 chicares Exp $
 
 ###############################################################################
 
@@ -593,7 +593,7 @@ av_tests: static_demo$(EXEEXT)
 .PHONY: regression_test
 regression_test: install
 	@$(ECHO) Regression test:
-	cd /opt/lmi/test; \
+	@cd /opt/lmi/test; \
 	../lmi_cli \
 	  --ash_nazg --accept --regress \
 	  --data_path=/opt/lmi/data \
