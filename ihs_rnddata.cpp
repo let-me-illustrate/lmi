@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_rnddata.cpp,v 1.2 2005-03-23 15:32:29 chicares Exp $
+// $Id: ihs_rnddata.cpp,v 1.3 2005-04-10 14:53:17 chicares Exp $
 
 // Rounding rules for a policy form
 
@@ -182,7 +182,5 @@ void StreamableRoundingRules::WriteRndFiles()
 {
     StreamableRoundingRules sample;
     sample.Write(AddDataDir("sample.rnd"));
-
-    WriteProprietaryRndFiles();
 }
 

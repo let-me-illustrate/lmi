@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_dbdict.cpp,v 1.2 2005-04-09 16:15:44 chicares Exp $
+// $Id: ihs_dbdict.cpp,v 1.3 2005-04-10 14:53:17 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -607,12 +607,5 @@ void DBDictionary::WriteSampleDBFile()
     Add(TDBValue(DB_ExpRatIBNRMult      , 6.0));
 
     WriteDB(AddDataDir("sample.db4"));
-}
-
-//============================================================================
-void DBDictionary::WriteDBFiles()
-{
-    DBDictionary::instance().WriteSampleDBFile();
-    DBDictionary::instance().WriteProprietaryDBFiles();
 }
 
