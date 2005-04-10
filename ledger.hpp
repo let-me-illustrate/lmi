@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger.hpp,v 1.6 2005-02-17 22:28:08 chicares Exp $
+// $Id: ledger.hpp,v 1.7 2005-04-10 21:44:57 chicares Exp $
 
 #ifndef ledger_hpp
 #define ledger_hpp
@@ -48,6 +48,9 @@
 // and are stored in a map whose key_type represents that basis. Other
 // values do not vary by basis, and accordingly are stored in a single
 // data structure.
+
+// The implicitly-defined copy ctor and copy assignment operator do
+// the right thing.
 
 class LedgerInvariant;
 class LedgerVariant;
