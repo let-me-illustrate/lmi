@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: tiered_charges.cpp,v 1.2 2005-02-13 23:17:18 chicares Exp $
+// $Id: tiered_charges.cpp,v 1.3 2005-04-10 14:51:02 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -453,18 +453,10 @@ void tiered_charges::write_tier_files()
 {
     tiered_charges foo;
 
-    foo.tiered_item(e_tier_stabilization_reserve           ).data_.push_back(5.0);
-    foo.tiered_item(e_tier_stabilization_reserve           ).data_.push_back(3.0);
-    foo.tiered_item(e_tier_stabilization_reserve           ).data_.push_back(1.7);
-    foo.tiered_item(e_tier_stabilization_reserve           ).bands_.push_back(100.0);
-    foo.tiered_item(e_tier_stabilization_reserve           ).bands_.push_back(200.0);
+    foo.tiered_item(e_tier_stabilization_reserve           ).data_.push_back(1.0);
     foo.tiered_item(e_tier_stabilization_reserve           ).bands_.push_back(DBL_MAX);
 
-    foo.tiered_item(e_tier_coi_retention                   ).data_.push_back(10.0);
-    foo.tiered_item(e_tier_coi_retention                   ).data_.push_back(7.0);
-    foo.tiered_item(e_tier_coi_retention                   ).data_.push_back(5.0);
-    foo.tiered_item(e_tier_coi_retention                   ).bands_.push_back(50.0);
-    foo.tiered_item(e_tier_coi_retention                   ).bands_.push_back(500.0);
+    foo.tiered_item(e_tier_coi_retention                   ).data_.push_back(1.0);
     foo.tiered_item(e_tier_coi_retention                   ).bands_.push_back(DBL_MAX);
 
     foo.tiered_item(e_tier_current_m_and_e                 ).data_.push_back(0.0);
@@ -484,21 +476,20 @@ void tiered_charges::write_tier_files()
     // AK 21.09.210(m)
     // SD 10-4-22(2) (see also 58-6-70)
 
-    foo.tiered_item(e_tier_ak_premium_tax                  ).data_.push_back(0.0270);
-    foo.tiered_item(e_tier_ak_premium_tax                  ).data_.push_back(0.0010);
+    foo.tiered_item(e_tier_ak_premium_tax                  ).data_.push_back (0.02700);
+    foo.tiered_item(e_tier_ak_premium_tax                  ).data_.push_back (0.00100);
     foo.tiered_item(e_tier_ak_premium_tax                  ).bands_.push_back(100000.0);
     foo.tiered_item(e_tier_ak_premium_tax                  ).bands_.push_back(DBL_MAX);
 
-    foo.tiered_item(e_tier_de_premium_tax                  ).data_.push_back(0.0);
+    // DE: not yet implemented.
+    foo.tiered_item(e_tier_de_premium_tax                  ).data_.push_back (0.0);
     foo.tiered_item(e_tier_de_premium_tax                  ).bands_.push_back(DBL_MAX);
 
-    foo.tiered_item(e_tier_sd_premium_tax                  ).data_.push_back(0.0250);
-    foo.tiered_item(e_tier_sd_premium_tax                  ).data_.push_back(0.0008);
+    foo.tiered_item(e_tier_sd_premium_tax                  ).data_.push_back (0.02500);
+    foo.tiered_item(e_tier_sd_premium_tax                  ).data_.push_back (0.00080);
     foo.tiered_item(e_tier_sd_premium_tax                  ).bands_.push_back(100000.0);
     foo.tiered_item(e_tier_sd_premium_tax                  ).bands_.push_back(DBL_MAX);
 
     foo.write(AddDataDir("sample.tir"));
-
-    write_proprietary_tier_files();
 }
 
