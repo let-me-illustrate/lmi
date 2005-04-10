@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: dbdict.hpp,v 1.2 2005-02-14 04:35:18 chicares Exp $
+// $Id: dbdict.hpp,v 1.3 2005-04-10 14:54:35 chicares Exp $
 
 #ifndef dbdict_hpp
 #define dbdict_hpp
@@ -47,7 +47,7 @@ class DBDictionary
     ~DBDictionary();
     void Init(std::string const& NewFilename);
     TDBEntry* Find(TDBEntry const& t);
-    TDBDictionary const& GetDictionary() {return *dictionary;}
+    TDBDictionary const& GetDictionary();
 
   private:
     DBDictionary();
@@ -59,6 +59,9 @@ class DBDictionary
 
     TDBDictionary* dictionary;
 };
+
+inline TDBDictionary const& DBDictionary::GetDictionary()
+{return *dictionary;}
 
 #endif // dbdict_hpp
 
