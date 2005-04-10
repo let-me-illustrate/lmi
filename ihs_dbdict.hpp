@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_dbdict.hpp,v 1.2 2005-02-14 04:35:18 chicares Exp $
+// $Id: ihs_dbdict.hpp,v 1.3 2005-04-10 14:54:35 chicares Exp $
 
 #ifndef ihs_dbdict_hpp
 #define ihs_dbdict_hpp
@@ -52,10 +52,8 @@ class LMI_EXPIMP DBDictionary
     static DBDictionary& instance();
     ~DBDictionary();
     void Init(std::string const& NewFilename);
-// TODO ?? This should be const.
-    dict_map /*const*/& GetDictionary(){return dictionary;}
-    void WriteSampleDBFile();   // A sample product you can play with.
-    static void WriteDBFiles();
+    dict_map& GetDictionary();
+    void WriteSampleDBFile();
     void WriteProprietaryDBFiles();
 
   private:
@@ -69,6 +67,9 @@ class LMI_EXPIMP DBDictionary
     static std::string CachedFilename;
     dict_map dictionary;
 };
+
+inline dict_map& DBDictionary::GetDictionary()
+{return dictionary;}
 
 #endif // ihs_dbdict_hpp
 
