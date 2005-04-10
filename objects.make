@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: objects.make,v 1.11 2005-04-09 16:16:38 chicares Exp $
+# $Id: objects.make,v 1.12 2005-04-10 14:52:15 chicares Exp $
 
 ################################################################################
 
@@ -218,7 +218,6 @@ lmi_common_objects := \
   miscellany.o \
   multiple_cell_document.o \
   outlay.o \
-  proprietary.o \
   rounding_rules.o \
   secure_date.o \
   security.o \
@@ -266,18 +265,6 @@ lmi_wx_objects := \
   view_ex.o \
   wx_checks.o \
   xml_notebook.o \
-
-product_files_objects := \
-  alert_cli.o \
-  generate_product_files.o \
-  my_db.o \
-  my_fund.o \
-  my_prod.o \
-  my_rnd.o \
-  my_tier.o \
-  xenumtypes.o \
-
-product_files$(EXEEXT): $(product_files_objects)
 
 ################################################################################
 
@@ -329,7 +316,6 @@ gps_objects := \
   mathmisc.o \
   miscellany.o \
   outlay.o \
-  proprietary.o \
   rounding_rules.o \
   surrchg_rates.o \
   tiered_charges.o \
