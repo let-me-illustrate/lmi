@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.39 2005-04-09 16:25:00 chicares Exp $
+// $Id: ChangeLog,v 1.40 2005-04-10 14:58:35 chicares Exp $
 
 2005-01-14
 
@@ -1186,4 +1186,35 @@ Program to generate product files.
   my_rnd.cpp  [new file]
   my_tier.cpp [new file]
 Templates for creating product-file programs.
+
+2005-04-10 [1430]
+
+  tiered_charges.xpp
+Improve descriptions.
+
+  tiered_charges.cpp
+Simplify defaults.
+
+  my_tier.cpp
+Simplify.
+
+  proprietary.cpp [expunged]
+Expunge disused file.
+
+  objects.make
+Remove duplicate target and references to 'proprietary.cpp'.
+
+  generate_product_files.cpp
+  ihs_dbdict.cpp
+  ihs_funddata.cpp
+  ihs_proddata.cpp
+  ihs_rnddata.cpp
+  tiered_charges.cpp
+Call 'proprietary' functions directly. Calling a shared-library
+function that calls them indirectly prevents overriding their
+implementations.
+
+  dbdict.hpp
+  ihs_dbdict.hpp
+Move inline functions out of class body. Remove a disused function.
 
