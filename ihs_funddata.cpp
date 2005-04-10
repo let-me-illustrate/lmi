@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_funddata.cpp,v 1.3 2005-02-14 04:35:18 chicares Exp $
+// $Id: ihs_funddata.cpp,v 1.4 2005-04-10 14:53:17 chicares Exp $
 
 // This class describes funds: their names and investment mgmt fees.
 // TODO ?? An extension other than .fnd would be preferable: msw uses
@@ -171,7 +171,5 @@ void FundData::WriteFundFiles()
             )
         );
     foo.Write(AddDataDir("sample.fnd"));
-
-    WriteProprietaryFundFiles();
 }
 
