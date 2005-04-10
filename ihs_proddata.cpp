@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_proddata.cpp,v 1.5 2005-04-06 23:11:32 chicares Exp $
+// $Id: ihs_proddata.cpp,v 1.6 2005-04-10 14:53:17 chicares Exp $
 
 // This class contains names of files containing a product's tables as well
 // as strings that are the same for all instances of that product.
@@ -253,7 +253,5 @@ void TProductData::WritePolFiles()
     foo.InterestDisclaimer     = "";
 
     foo.Write(AddDataDir("sample.pol"));
-
-    WriteProprietaryPolFiles();
 }
 

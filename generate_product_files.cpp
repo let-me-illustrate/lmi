@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: generate_product_files.cpp,v 1.4 2005-04-09 16:17:53 chicares Exp $
+// $Id: generate_product_files.cpp,v 1.5 2005-04-10 14:53:17 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -40,25 +40,22 @@ int main()
 {
     initialize_fpu();
 
-    std::cout << "Writing files: " << std::flush;
+    std::cout << "Generating product files." << std::endl;
 
-    DBDictionary::WriteDBFiles();
-    std::cout << ".db4 " << std::flush;
+    DBDictionary::instance().WriteSampleDBFile();
+    TProductData            ::WritePolFiles();
+    FundData                ::WriteFundFiles();
+    StreamableRoundingRules ::WriteRndFiles();
+    tiered_charges          ::write_tier_files();
 
-    TProductData::WritePolFiles();
-    std::cout << ".pol " << std::flush;
-
-    FundData::WriteFundFiles();
-    std::cout << ".fnd " << std::flush;
-
-    StreamableRoundingRules::WriteRndFiles();
-    std::cout << ".rnd " << std::flush;
-
-    tiered_charges::write_tier_files();
-    std::cout << ".tir " << std::flush;
-
-    std::cout << "\nAll product files written." << std::endl;
+    DBDictionary::instance().WriteProprietaryDBFiles();
+    FundData                ::WriteProprietaryFundFiles    ();
+    TProductData            ::WriteProprietaryPolFiles     ();
+    StreamableRoundingRules ::WriteProprietaryRndFiles     ();
+    tiered_charges          ::write_proprietary_tier_files ();
 
     validate_fenv();
+
+    std::cout << "\nAll product files written.\n" << std::endl;
 }
 
