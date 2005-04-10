@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: my_tier.cpp,v 1.1 2005-04-09 16:20:19 chicares Exp $
+// $Id: my_tier.cpp,v 1.2 2005-04-10 14:51:15 chicares Exp $
 
 // This file is a template for embedding product-specific data. Doing
 // that creates a derived work covered by the GPL. But you may prefer
@@ -52,34 +52,12 @@ void tiered_charges::write_proprietary_tier_files()
     // Sample policy form.
     tiered_charges foo;
 
-    foo.tiered_item(e_tier_stabilization_reserve           ).data_.push_back(1.0);
-    foo.tiered_item(e_tier_stabilization_reserve           ).bands_.push_back(DBL_MAX);
-    foo.tiered_item(e_tier_coi_retention                   ).data_.push_back(1.0);
-    foo.tiered_item(e_tier_coi_retention                   ).bands_.push_back(DBL_MAX);
-    foo.tiered_item(e_tier_current_m_and_e                 ).data_.push_back(0.0);
-    foo.tiered_item(e_tier_current_m_and_e                 ).bands_.push_back(DBL_MAX);
-    foo.tiered_item(e_tier_guaranteed_m_and_e              ).data_.push_back(0.0);
-    foo.tiered_item(e_tier_guaranteed_m_and_e              ).bands_.push_back(DBL_MAX);
-    foo.tiered_item(e_tier_asset_based_compensation        ).data_.push_back(0.0);
-    foo.tiered_item(e_tier_asset_based_compensation        ).bands_.push_back(DBL_MAX);
-    foo.tiered_item(e_tier_investment_management_fee       ).data_.push_back(0.0);
-    foo.tiered_item(e_tier_investment_management_fee       ).bands_.push_back(DBL_MAX);
+    // Example only.
     foo.tiered_item(e_tier_current_separate_account_load   ).data_.push_back(0.0);
     foo.tiered_item(e_tier_current_separate_account_load   ).bands_.push_back(DBL_MAX);
-    foo.tiered_item(e_tier_guaranteed_separate_account_load).data_.push_back(0.0);
-    foo.tiered_item(e_tier_guaranteed_separate_account_load).bands_.push_back(DBL_MAX);
-    foo.tiered_item(e_tier_ak_premium_tax                  ).data_.push_back(0.027);
-    foo.tiered_item(e_tier_ak_premium_tax                  ).data_.push_back(0.001);
-    foo.tiered_item(e_tier_ak_premium_tax                  ).bands_.push_back(100000.0);
-    foo.tiered_item(e_tier_ak_premium_tax                  ).bands_.push_back(DBL_MAX);
-    foo.tiered_item(e_tier_de_premium_tax                  ).data_.push_back(0.0);
-    foo.tiered_item(e_tier_de_premium_tax                  ).bands_.push_back(DBL_MAX);
-    foo.tiered_item(e_tier_sd_premium_tax                  ).data_.push_back(0.025);
-    foo.tiered_item(e_tier_sd_premium_tax                  ).data_.push_back(0.0008);
-    foo.tiered_item(e_tier_sd_premium_tax                  ).bands_.push_back(100000.0);
-    foo.tiered_item(e_tier_sd_premium_tax                  ).bands_.push_back(DBL_MAX);
 
-    foo.write(AddDataDir("sample.tir"));
+// Not necessary for 'sample' product only, because it's built in.
+//    foo.write(AddDataDir("sample.tir"));
 
     // Another policy form....
 }
