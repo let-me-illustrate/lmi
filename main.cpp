@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main.cpp,v 1.5 2005-03-02 04:16:09 chicares Exp $
+// $Id: main.cpp,v 1.6 2005-04-10 21:45:10 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -46,13 +46,16 @@
 #include <algorithm>
 #include <cmath>
 #include <csignal>
+#include <cstdio>
 #include <cstdlib> // std::free()
 #include <exception>
+#include <fstream>
+#include <iomanip>
 #include <ios>
 #include <iostream>
+#include <iterator>
 #include <ostream>
 #include <sstream>
-#include <stdexcept>
 #include <string>
 #include <utility>
 #include <vector>
@@ -168,15 +171,14 @@ void SelfTest()
     observed_value = IV.ledger().GetCurrFull().AcctVal.back();
     if(.005 < std::fabs(expected_value - observed_value))
         {
-        std::ostringstream error;
-        error
+        warning()
             << "Value should be "
             << value_cast_ihs<std::string>(expected_value)
             << ", but is "
             << value_cast_ihs<std::string>(observed_value)
-            << " .\n"
+            << " ."
+            << LMI_FLUSH
             ;
-        throw std::runtime_error(error.str());
         }
 
     IP.SolveType = e_solve_specamt;
@@ -184,15 +186,14 @@ void SelfTest()
     observed_value = IV.Run(IP);
     if(.005 < std::fabs(expected_value - observed_value))
         {
-        std::ostringstream error;
-        error
+        warning()
             << "Value should be "
             << value_cast_ihs<std::string>(expected_value)
             << ", but is "
             << value_cast_ihs<std::string>(observed_value)
             << " .\n"
+            << LMI_FLUSH
             ;
-        throw std::runtime_error(error.str());
         }
 
     IP.SolveType = e_solve_ee_prem;
@@ -200,15 +201,14 @@ void SelfTest()
     observed_value = IV.Run(IP);
     if(.005 < std::fabs(expected_value - observed_value))
         {
-        std::ostringstream error;
-        error
+        warning()
             << "Value should be "
             << value_cast_ihs<std::string>(expected_value)
             << ", but is "
             << value_cast_ihs<std::string>(observed_value)
             << " .\n"
+            << LMI_FLUSH
             ;
-        throw std::runtime_error(error.str());
         }
 
     multiple_cell_document census;
@@ -222,15 +222,14 @@ void SelfTest()
     expected_value = 12819.32;
     if(.005 < std::fabs(expected_value - observed_value))
         {
-        std::ostringstream error;
-        error
+        warning()
             << "Value should be "
             << value_cast_ihs<std::string>(expected_value)
             << ", but is "
             << value_cast_ihs<std::string>(observed_value)
             << " .\n"
+            << LMI_FLUSH
             ;
-        throw std::runtime_error(error.str());
         }
 
     // Set number of iterations to a power of ten that can be run in
