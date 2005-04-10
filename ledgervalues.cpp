@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledgervalues.cpp,v 1.5 2005-03-02 03:33:59 chicares Exp $
+// $Id: ledgervalues.cpp,v 1.6 2005-04-10 21:49:58 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -78,6 +78,18 @@ double IllusVal::Run(InputParms const& IP)
     double z = av.RunAV();
 // TODO ?? Consider using boost::shared_ptr to avoid copying.
     ledger_.reset(new Ledger(av.LedgerValues()));
+
+// TODO ?? Temporary code for trying to track down a problem.
+#if 0
+//LMI_ASSERT(av.LedgerValues().GetLedgerMap() == ledger_->GetLedgerMap());
+//LMI_ASSERT(av.LedgerValues().GetLedgerInvariant() == ledger_->GetLedgerInvariant());
+LMI_ASSERT(av.LedgerValues().GetLedgerInvariant().GetInforceLives() == ledger_->GetLedgerInvariant().GetInforceLives());
+
+LMI_ASSERT(av.LedgerValues().GetLedgerType() == ledger_->GetLedgerType());
+LMI_ASSERT(av.LedgerValues().GetRunBases() == ledger_->GetRunBases());
+LMI_ASSERT(av.LedgerValues().GetIsComposite() == ledger_->GetIsComposite());
+#endif // 0
+
     return z;
 }
 
