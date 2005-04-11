@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: accountvalue.cpp,v 1.5 2005-02-28 12:58:40 chicares Exp $
+// $Id: accountvalue.cpp,v 1.6 2005-04-11 03:49:14 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -123,10 +123,11 @@ showing {accesses, modifies current year, modifies future years}
 
 //============================================================================
 AccountValue::AccountValue(InputParms const& input)
-    :BasicValues(input)
+    :BasicValues       (input)
+    ,DebugFilename     ("anonymous.debug")
     ,ledger_(new Ledger(BasicValues::GetLedgerType(), BasicValues::GetLength()))
-    ,ledger_invariant_     (new LedgerInvariant(BasicValues::GetLength()))
-    ,ledger_variant_       (new LedgerVariant  (BasicValues::GetLength()))
+    ,ledger_invariant_ (new LedgerInvariant(BasicValues::GetLength()))
+    ,ledger_variant_   (new LedgerVariant  (BasicValues::GetLength()))
 {
     GrossPmts  .resize(12);
     NetPmts    .resize(12);
