@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main.cpp,v 1.7 2005-04-10 21:49:58 chicares Exp $
+// $Id: main.cpp,v 1.8 2005-04-11 03:50:06 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -126,7 +126,8 @@ void RegressionTest()
                     |   std::ios_base::binary
                     |   std::ios_base::trunc
                     );
-                IllusVal IV;
+// TODO ?? Rethink.                    
+                IllusVal IV(serialized_file_path(*i, 1 + j, "MISTAKE").string());
                 IV.Run(cells[j]);
                 composite.PlusEq(IV.ledger());
                 IV.ledger().Spew(ofs);

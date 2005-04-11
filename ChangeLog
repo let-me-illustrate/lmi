@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.40 2005-04-10 14:58:35 chicares Exp $
+// $Id: ChangeLog,v 1.41 2005-04-11 03:53:17 chicares Exp $
 
 2005-01-14
 
@@ -1187,7 +1187,7 @@ Program to generate product files.
   my_tier.cpp [new file]
 Templates for creating product-file programs.
 
-2005-04-10 [1430]
+2005-04-10 [1433]
 
   tiered_charges.xpp
 Improve descriptions.
@@ -1217,4 +1217,30 @@ implementations.
   dbdict.hpp
   ihs_dbdict.hpp
 Move inline functions out of class body. Remove a disused function.
+
+  ledger.hpp
+Improve documentation.
+
+  main.cpp
+Use 'alert' facility as appropriate.
+
+  ledgervalues.cpp
+  main.cpp
+Add temporary testing code, suppressing a failing test for the moment.
+
+  workhorse.make
+Don't echo regression-test commands.
+
+  accountvalue.cpp
+  ihs_acctval.cpp
+  ihs_avdebug.cpp
+  library_demo.cpp
+Improve handling of monthly-values filename. Initialize it in ctor
+instead of initializing it haphazardly and signaling an error
+downstream if it never got initialized.
+
+  ledgervalues.cpp
+  ledgervalues.hpp
+  main.cpp
+Emit monthly values for regression-test cases that require them.
 
