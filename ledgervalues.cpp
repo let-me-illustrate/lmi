@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledgervalues.cpp,v 1.6 2005-04-10 21:49:58 chicares Exp $
+// $Id: ledgervalues.cpp,v 1.7 2005-04-11 03:50:06 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -34,7 +34,10 @@
 #include "ledger.hpp"
 #include "ledger_invariant.hpp"
 #include "ledger_variant.hpp"
-#include "miscellany.hpp" // iso_8601_datestamp_terse
+#include "miscellany.hpp" // iso_8601_datestamp_terse()
+
+#include <boost/filesystem/convenience.hpp>
+#include <boost/filesystem/path.hpp>
 
 #include <algorithm>      // std::max(), std::min()
 #include <iomanip>
@@ -44,14 +47,16 @@
 #include <utility>
 
 //============================================================================
-IllusVal::IllusVal()
-    :ledger_(0)
+IllusVal::IllusVal(std::string const& filename)
+    :filename_ (filename)
+    ,ledger_   (0)
 {
 }
 
 //============================================================================
-IllusVal::IllusVal(Ledger* ledger)
-    :ledger_(new Ledger(*ledger))
+IllusVal::IllusVal(Ledger* ledger, std::string const& filename)
+    :filename_ (filename)
+    ,ledger_   (new Ledger(*ledger))
 {
 }
 
@@ -71,10 +76,13 @@ IllusVal& IllusVal::operator+=(Ledger const& addend)
 double IllusVal::Run(InputParms const& IP)
 {
     AccountValue av(IP);
-// TODO ?? Reconsider this. Even if no better naming convention can be
-// imagined, class AccountValue would be a better place to assign a
-// default name.
-    av.SetDebugFilename("anonymous.debug");
+
+    fs::path debug_filename = fs::change_extension
+        (fs::path(filename_)
+        ,".debug"
+        );
+    av.SetDebugFilename(debug_filename.string());
+
     double z = av.RunAV();
 // TODO ?? Consider using boost::shared_ptr to avoid copying.
     ledger_.reset(new Ledger(av.LedgerValues()));
