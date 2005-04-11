@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avdebug.cpp,v 1.7 2005-03-26 02:10:46 chicares Exp $
+// $Id: ihs_avdebug.cpp,v 1.8 2005-04-11 03:49:14 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -100,10 +100,6 @@ void AccountValue::DebugPrintInit()
     if(!Debugging)
         {
         return;
-        }
-    if("" == DebugFilename)
-        {
-        throw std::logic_error("Debug filename not specified.");
         }
 
     DebugStream.open

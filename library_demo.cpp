@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: library_demo.cpp,v 1.5 2005-03-02 03:33:22 chicares Exp $
+// $Id: library_demo.cpp,v 1.6 2005-04-11 03:49:14 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -104,7 +104,6 @@ void test()
 
     IllusInputParms input = *document.input_parameters();
     AccountValue av(input);
-    av.SetDebugFilename("foo.debug");
     av.RunAV();
 
     warning() << "Calculate: " << timer.Stop().Report() << std::flush;

@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_acctval.cpp,v 1.15 2005-04-07 03:56:02 chicares Exp $
+// $Id: ihs_acctval.cpp,v 1.16 2005-04-11 03:49:14 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -97,6 +97,7 @@ showing {accesses, modifies current year, modifies future years}
 //============================================================================
 AccountValue::AccountValue(InputParms const& input)
     :BasicValues           (&input)
+    ,DebugFilename         ("anonymous.debug")
     ,Debugging             (false)
     ,Solving               (e_solve_none != Input_->SolveType)
     ,SolvingForGuarPremium (false)
@@ -172,10 +173,11 @@ Then run other bases.
 */
     if
         (   std::string::npos != Input_->Comments.find("idiosyncrasyZ")
-        &&
-            (  !global_settings::instance().regression_testing()
-            ||  global_settings::instance().regression_test_full
-            )
+// TODO ?? Consider reactivating this later.
+//        &&
+//            (  !global_settings::instance().regression_testing()
+//            ||  global_settings::instance().regression_test_full
+//            )
         )
         {
         Debugging = true;
