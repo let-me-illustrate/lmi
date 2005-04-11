@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledgervalues.hpp,v 1.4 2005-02-17 04:40:03 chicares Exp $
+// $Id: ledgervalues.hpp,v 1.5 2005-04-11 03:50:06 chicares Exp $
 
 #ifndef ledgervalues_hpp
 #define ledgervalues_hpp
@@ -32,6 +32,7 @@
 #include <boost/utility.hpp>
 
 #include <iosfwd>
+#include <string>
 
 class InputParms;
 class Ledger;
@@ -41,8 +42,8 @@ class IllusVal
     ,virtual private obstruct_slicing<IllusVal>
 {
   public:
-    IllusVal();
-    explicit IllusVal(Ledger*);
+    explicit IllusVal(std::string const& filename = "anonymous");
+    explicit IllusVal(Ledger*, std::string const& filename = "anonymous");
     ~IllusVal();
 
     IllusVal& operator+=(Ledger const&);
@@ -62,6 +63,7 @@ class IllusVal
     void PrintTabularDetailHeader (std::ostream& os) const;
     void PrintTabularDetail       (std::ostream& os) const;
 
+    std::string filename_;
     boost::scoped_ptr<Ledger> ledger_;
 };
 
