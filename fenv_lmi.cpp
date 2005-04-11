@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: fenv_lmi.cpp,v 1.1 2005-04-09 16:16:38 chicares Exp $
+// $Id: fenv_lmi.cpp,v 1.2 2005-04-11 23:53:25 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -28,7 +28,8 @@
 
 #include "fenv_lmi.hpp"
 
-#include "alert.hpp"
+#include <sstream>
+#include <stdexcept>
 
 #ifdef __STDC_IEC_559__
     // In case the C++ compiler supports C99 7.6 facilities, assume
@@ -120,14 +121,15 @@ void validate_fenv()
 #endif // Unknown compiler or platform.
     if(!okay)
         {
-        fatal_error()
+        std::ostringstream error;
+        error
             << "The floating-point control word is unexpectedly "
             << std::hex << control_word
             << ". This is a problem: results may be invalid. "
             << "Probably some other program changed this crucial "
             << "setting."
-            << LMI_FLUSH
             ;
+        throw error.str();
         }
 }
 
