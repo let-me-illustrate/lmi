@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_acctval.cpp,v 1.16 2005-04-11 03:49:14 chicares Exp $
+// $Id: ihs_acctval.cpp,v 1.17 2005-04-12 14:10:27 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -2016,28 +2016,6 @@ double AccountValue::GetLastCOIChargeInforce() const
 // TODO ?? Fix problems in GetNetCOI() before using it.
 //    return GetNetCOI() * InforceLives;
 
-// TODO ?? Temporary--erase after validation.
-if(std::string::npos != Input_->Comments.find("idiosyncrasyZ0"))
-    {
-    std::ofstream ofs
-        ("experience_rating"
-        ,std::ios_base::out | std::ios_base::ate | std::ios_base::app
-        );
-    ofs
-        << "\tYear\t"                 << std::setprecision(20) << Year
-        << "\tMonth\t"                << std::setprecision(20) << Month
-        << "\tCOI\t"                  << std::setprecision(20) << COI
-        << "\tInforceLives\t"         << std::setprecision(20) << InforceLives
-        << "\tCOI\t"                  << std::setprecision(20) << COI
-        << "\tActualCoiRate\t"        << std::setprecision(20) << ActualCoiRate
-        << "\tNAAR\t"                 << std::setprecision(20) << NAAR
-        << "\tDBReflectingCorr\t"     << std::setprecision(20) << DBReflectingCorr
-        << "\tDBDiscountRate[Year]\t" << std::setprecision(20) << DBDiscountRate[Year]
-        << "\tTotalAccountValue()\t"  << std::setprecision(20) << TotalAccountValue()
-        << "\n"
-        ;
-    }
-
     return COI * InforceLives;
 }
 
@@ -2150,49 +2128,30 @@ return 0.0;
 }
 
 //============================================================================
-// Authors: GWC and JLM.
 double AccountValue::GetCurtateNetClaimsInforce()
 {
-    // if not using partial mortality, then claims must be zero
-    // if not using experience rating, then this function doesn't matter
-    if(!Input_->UseExperienceRating || !Input_->UsePartialMort)
+    if(!Input_->UsePartialMort || ItLapsed || BasicValues::GetLength() <= Year)
         {
         return 0.0;
         }
 
-    if(ItLapsed || BasicValues::GetLength() <= Year)
-        {
-        return 0.0;
-        }
+    // TODO ?? Also set AV released on death here?
+    // TODO ?? Is this function called on all paths through the code?
+    // TODO ?? Should the assignment to VariantValues occur elsewhere?
 
-    // TODO ?? Special NAAR calculation--I had expected monthly guaranteed
-    // interest and the experience rating reserve to play a part, e.g.
-//  TxSetDeathBft();
-
-// since const fn, I couldn't get this line to work here...
-// TODO ?? Maybe a separate function?
-//    YearsAVRelOnDeath += InforceLives
-//      *   GetPartMortQ(Year)
-//      *   TotalAccountValue()
-//      ;
-
-    // Experience fund changed, so need to update
+    // Use EOM values.
     TxSetDeathBft();
     TxSetTermAmt();
 
-    double net_claims =
-            GetPartMortQ(Year)
-        *   (
-                DBReflectingCorr
-            -   TotalAccountValue()
-            )
-        ;
-    // TODO ?? JOE I assign this only here. For other products or other
-    // ways of running an illustration (month-by-month e.g.) it's never
-    // assigned, unless it gets an initial value like zero
-    // somewhere. I don't know whether this breaks other code.
-    //
-    // TODO ?? Of course, we shouldn't be assigning to VariantValues() here.
+    // Avoid reporting minuscule claim amounts that are merely an
+    // artifact of rounding DB and AV differently.
+    double simplified_naar = 0.0;
+    if(!materially_equal(DBReflectingCorr, TotalAccountValue()))
+        {
+        simplified_naar = DBReflectingCorr - TotalAccountValue();
+        }
+    double net_claims = GetPartMortQ(Year) * simplified_naar;
+
     VariantValues().NetClaims[Year] = net_claims;
     return InforceLives * net_claims;
 }
