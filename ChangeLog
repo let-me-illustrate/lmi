@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.41 2005-04-11 03:53:17 chicares Exp $
+// $Id: ChangeLog,v 1.42 2005-04-12 14:15:46 chicares Exp $
 
 2005-01-14
 
@@ -1211,7 +1211,7 @@ Remove duplicate target and references to 'proprietary.cpp'.
   ihs_rnddata.cpp
   tiered_charges.cpp
 Call 'proprietary' functions directly. Calling a shared-library
-function that calls them indirectly prevents overriding their
+function that called them indirectly prevented overriding their
 implementations.
 
   dbdict.hpp
@@ -1243,4 +1243,16 @@ downstream if it never got initialized.
   ledgervalues.hpp
   main.cpp
 Emit monthly values for regression-test cases that require them.
+
+2005-04-11 [1431]
+
+  fenv_lmi.cpp
+Remove a gratuitous dependency.
+
+  ihs_avmly.cpp
+Adjust COI rate for k factor only on current-mortality basis; round
+the adjusted COI rate.
+
+  ihs_acctval.cpp
+Reimplement net-claims calculation.
 
