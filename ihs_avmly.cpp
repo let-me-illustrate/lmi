@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avmly.cpp,v 1.9 2005-03-30 03:39:05 chicares Exp $
+// $Id: ihs_avmly.cpp,v 1.10 2005-04-12 14:10:09 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -2364,12 +2364,20 @@ if(std::string::npos != Input_->Comments.find("idiosyncrasyZ1"))
     DcvNaar = std::max(0.0, DcvNaar);
 
     ActualCoiRate = GetBandedCoiRates(ExpAndGABasis, ActualSpecAmt)[Year];
-    // TODO ?? Consider making this a member of the mortality-rates class.
 
-    if(COIIsDynamic && Input_->UseExperienceRating)
+    // TODO ?? Consider moving this to the mortality-rates class.
+    if
+        (   COIIsDynamic
+        &&  Input_->UseExperienceRating
+        &&  e_currbasis == ExpAndGABasis
+        )
         {
         double guaranteed_coi_rate = GetBandedCoiRates(e_basis(e_guarbasis), ActualSpecAmt)[Year];
         ActualCoiRate = std::min(guaranteed_coi_rate, ActualCoiRate * (1.0 + case_k_factor));
+        round_to<double> const& round_coi_rate
+            (GetRoundingRules().round_coi_rate()
+            );
+        ActualCoiRate = round_coi_rate(ActualCoiRate);
         }
 
     COI = round_coi_charge(NAAR * ActualCoiRate);
