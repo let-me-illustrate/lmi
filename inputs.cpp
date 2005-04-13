@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: inputs.cpp,v 1.1 2005-01-14 19:47:45 chicares Exp $
+// $Id: inputs.cpp,v 1.2 2005-04-13 00:52:58 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -152,9 +152,9 @@ InputParms::InputParms()
     ,Country                     (e_c_US)
     ,OverrideCOIMultiplier       ("No")
     ,CountryCOIMultiplier        (1.0)
-    ,SurviveToType               (e_no_survival_limit)
+    ,SurviveToType               (e_survive_to_age)
     ,SurviveToYear               (100)
-    ,SurviveToAge                (100)
+    ,SurviveToAge                (99)
     ,MaxNAAR                     (10000000.0)
     ,NonUSCorridor               (1.0)
     ,HasChildRider               ("No")
