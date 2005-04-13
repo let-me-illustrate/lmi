@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.42 2005-04-12 14:15:46 chicares Exp $
+// $Id: ChangeLog,v 1.43 2005-04-13 00:52:58 chicares Exp $
 
 2005-01-14
 
@@ -1255,4 +1255,9 @@ the adjusted COI rate.
 
   ihs_acctval.cpp
 Reimplement net-claims calculation.
+
+  inputs.cpp
+Set new default: survive to age 99. Because coverage beyond maturity
+is not illustrated, at least for now, this is the most reasonable
+default for a composite. It has no effect on individual illustrations.
 
