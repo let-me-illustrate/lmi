@@ -24,7 +24,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: xml_notebook.xrc,v 1.7 2005-04-08 03:05:20 chicares Exp $
+    $Id: xml_notebook.xrc,v 1.8 2005-04-13 22:20:33 chicares Exp $
 -->
 
 <!-- TODO ??
@@ -493,7 +493,6 @@
                                     <object class="wxSpinCtrl" name="SurviveToAge">
                                         <size>10,-1</size>
                                         <max>100</max>
-                                        <value>99</value>
                                     </object>
                                 </object>
                                 <object class="sizeritem">
@@ -1577,7 +1576,8 @@ looks weird if we don't make this look like its siblings.
                                                 </object>
                                                 <object class="sizeritem">
                                                     <flag>wxGROW</flag>
-                                                    <object class="wxSpinCtrl" name="solve_from_age">
+<!-- Really want something like "SolveFromAge"; this is a temporary kludge. -->
+                                                    <object class="wxSpinCtrl" name="SolveBeginYear">
                                                         <size>10,-1</size>
                                                         <max>100</max>
                                                         <value>99</value>
@@ -1591,7 +1591,7 @@ looks weird if we don't make this look like its siblings.
                                                 </object>
                                                 <object class="sizeritem">
                                                     <flag>wxGROW</flag>
-                                                    <object class="wxSpinCtrl" name="SolveBeginYear">
+                                                    <object class="wxSpinCtrl" name="SolveBeginTime">
                                                         <size>10,-1</size>
                                                         <max>100</max>
                                                         <value>99</value>
@@ -1635,7 +1635,8 @@ looks weird if we don't make this look like its siblings.
                                                 </object>
                                                 <object class="sizeritem">
                                                     <flag>wxGROW</flag>
-                                                    <object class="wxSpinCtrl" name="solve_to_age">
+<!-- Really want something like "SolveToAge"; this is a temporary kludge. -->
+                                                    <object class="wxSpinCtrl" name="SolveEndYear">
                                                         <size>10,-1</size>
                                                         <max>100</max>
                                                         <value>99</value>
@@ -1649,7 +1650,7 @@ looks weird if we don't make this look like its siblings.
                                                 </object>
                                                 <object class="sizeritem">
                                                     <flag>wxGROW</flag>
-                                                    <object class="wxSpinCtrl" name="SolveEndYear">
+                                                    <object class="wxSpinCtrl" name="SolveEndTime">
                                                         <size>10,-1</size>
                                                         <max>100</max>
                                                         <value>99</value>
@@ -1693,7 +1694,8 @@ looks weird if we don't make this look like its siblings.
                                                 </object>
                                                 <object class="sizeritem">
                                                     <flag>wxGROW</flag>
-                                                    <object class="wxSpinCtrl" name="solve_at_age">
+<!-- Really want something like "SolveAtAge"; this is a temporary kludge. -->
+                                                    <object class="wxSpinCtrl" name="SolveTargetYear">
                                                         <size>10,-1</size>
                                                         <max>100</max>
                                                         <value>99</value>
@@ -1707,7 +1709,7 @@ looks weird if we don't make this look like its siblings.
                                                 </object>
                                                 <object class="sizeritem">
                                                     <flag>wxGROW</flag>
-                                                    <object class="wxSpinCtrl" name="SolveTargetYear">
+                                                    <object class="wxSpinCtrl" name="SolveTargetTime">
                                                         <size>10,-1</size>
                                                         <max>100</max>
                                                         <value>99</value>
@@ -1872,74 +1874,6 @@ looks weird if we don't make this look like its siblings.
                         </object>
                     </object>
                 </object>
-<!-- TODO ?? What is this stuff for?
-                <object class="sizeritem">
-                    <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
-                    <object class="wxFlexGridSizer">
-                        <rows>1</rows>
-                        <growablecols>0,1,2</growablecols>
-                        <growablerows>0</growablerows>
-                        <object class="sizeritem">
-                            <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
-                            <object class="wxFlexGridSizer">
-                                <cols>1</cols>
-                                <growablecols></growablecols>
-                                <growablerows></growablerows>
-                                <object class="sizeritem">
-                                    <flag>wxALIGN_CENTRE|wxALL</flag>
-                                    <object class="wxRadioBox" name="SolveEndTime">
-                                        <style>wxRA_SPECIFY_COLS</style>
-                                        <label>To</label>
-                                        <dimension>1</dimension>
-                                        <selection>0</selection>
-                                        <content>
-                                            <item>retirement</item>
-                                            <item>maturity</item>
-                                            <item>specified age</item>
-                                            <item>specified year</item>
-                                        </content>
-                                    </object>
-                                </object>
-                                <object class="sizeritem">
-                                    <flag>wxGROW|wxALL</flag>
-                                    <object class="wxFlexGridSizer">
-                                        <cols>2</cols>
-                                        <growablecols>1</growablecols>
-                                        <object class="sizeritem">
-                                            <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
-                                            <object class="wxStaticText">
-                                                <label>Age </label>
-                                            </object>
-                                        </object>
-                                        <object class="sizeritem">
-                                            <flag>wxGROW</flag>
-                                            <object class="wxSpinCtrl" name="solve_to_age">
-                                                <size>10,-1</size>
-                                                <max>100</max>
-                                                <value>99</value>
-                                            </object>
-                                        </object>
-                                        <object class="sizeritem">
-                                            <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
-                                            <object class="wxStaticText">
-                                                <label>Year </label>
-                                            </object>
-                                        </object>
-                                        <object class="sizeritem">
-                                            <flag>wxGROW</flag>
-                                            <object class="wxSpinCtrl" name="SolveEndYear">
-                                                <size>10,-1</size>
-                                                <max>100</max>
-                                                <value>99</value>
-                                            </object>
-                                        </object>
-                                    </object>
-                                </object>
-                            </object>
-                        </object>
-                    </object>
-                </object>
--->
                 <object class="sizeritem">
                     <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
                     <border>4</border>
@@ -2628,7 +2562,7 @@ looks weird if we don't make this look like its siblings.
                                                 <growablerows></growablerows>
                                                 <object class="sizeritem">
                                                     <flag>wxALIGN_CENTRE|wxALL</flag>
-                                                    <object class="wxRadioBox" name="solve_from_type">
+                                                    <object class="wxRadioBox" name="WithdrawalFromAlternative">
                                                         <style>wxRA_SPECIFY_COLS</style>
                                                         <label>From</label>
                                                         <dimension>1</dimension>
@@ -2654,7 +2588,7 @@ looks weird if we don't make this look like its siblings.
                                                         </object>
                                                         <object class="sizeritem">
                                                             <flag>wxGROW</flag>
-                                                            <object class="wxSpinCtrl" name="solve_from_age">
+                                                            <object class="wxSpinCtrl" name="WithdrawalFromAge">
                                                                 <size>10,-1</size>
                                                                 <max>100</max>
                                                                 <value>99</value>
@@ -2668,7 +2602,7 @@ looks weird if we don't make this look like its siblings.
                                                         </object>
                                                         <object class="sizeritem">
                                                             <flag>wxGROW</flag>
-                                                            <object class="wxSpinCtrl" name="solve_from_year">
+                                                            <object class="wxSpinCtrl" name="WithdrawalFromDuration">
                                                                 <size>10,-1</size>
                                                                 <max>100</max>
                                                                 <value>99</value>
@@ -2686,7 +2620,7 @@ looks weird if we don't make this look like its siblings.
                                                 <growablerows></growablerows>
                                                 <object class="sizeritem">
                                                     <flag>wxALIGN_CENTRE|wxALL</flag>
-                                                    <object class="wxRadioBox" name="solve_to_type">
+                                                    <object class="wxRadioBox" name="WithdrawalToAlternative">
                                                         <style>wxRA_SPECIFY_COLS</style>
                                                         <label>To</label>
                                                         <dimension>1</dimension>
@@ -2712,7 +2646,7 @@ looks weird if we don't make this look like its siblings.
                                                         </object>
                                                         <object class="sizeritem">
                                                             <flag>wxGROW</flag>
-                                                            <object class="wxSpinCtrl" name="solve_to_age">
+                                                            <object class="wxSpinCtrl" name="WithdrawalToAge">
                                                                 <size>10,-1</size>
                                                                 <max>100</max>
                                                                 <value>99</value>
@@ -2726,7 +2660,7 @@ looks weird if we don't make this look like its siblings.
                                                         </object>
                                                         <object class="sizeritem">
                                                             <flag>wxGROW</flag>
-                                                            <object class="wxSpinCtrl" name="solve_to_year">
+                                                            <object class="wxSpinCtrl" name="WithdrawalToDuration">
                                                                 <size>10,-1</size>
                                                                 <max>100</max>
                                                                 <value>99</value>
@@ -2787,7 +2721,7 @@ looks weird if we don't make this look like its siblings.
                                                 <growablerows></growablerows>
                                                 <object class="sizeritem">
                                                     <flag>wxALIGN_CENTRE|wxALL</flag>
-                                                    <object class="wxRadioBox" name="solve_from_type">
+                                                    <object class="wxRadioBox" name="LoanFromAlternative">
                                                         <style>wxRA_SPECIFY_COLS</style>
                                                         <label>From</label>
                                                         <dimension>1</dimension>
@@ -2813,7 +2747,7 @@ looks weird if we don't make this look like its siblings.
                                                         </object>
                                                         <object class="sizeritem">
                                                             <flag>wxGROW</flag>
-                                                            <object class="wxSpinCtrl" name="solve_from_age">
+                                                            <object class="wxSpinCtrl" name="LoanFromAge">
                                                                 <size>10,-1</size>
                                                                 <max>100</max>
                                                                 <value>99</value>
@@ -2827,7 +2761,7 @@ looks weird if we don't make this look like its siblings.
                                                         </object>
                                                         <object class="sizeritem">
                                                             <flag>wxGROW</flag>
-                                                            <object class="wxSpinCtrl" name="solve_from_year">
+                                                            <object class="wxSpinCtrl" name="LoanFromDuration">
                                                                 <size>10,-1</size>
                                                                 <max>100</max>
                                                                 <value>99</value>
@@ -2845,7 +2779,7 @@ looks weird if we don't make this look like its siblings.
                                                 <growablerows></growablerows>
                                                 <object class="sizeritem">
                                                     <flag>wxALIGN_CENTRE|wxALL</flag>
-                                                    <object class="wxRadioBox" name="solve_to_type">
+                                                    <object class="wxRadioBox" name="LoanToAlternative">
                                                         <style>wxRA_SPECIFY_COLS</style>
                                                         <label>To</label>
                                                         <dimension>1</dimension>
@@ -2871,7 +2805,7 @@ looks weird if we don't make this look like its siblings.
                                                         </object>
                                                         <object class="sizeritem">
                                                             <flag>wxGROW</flag>
-                                                            <object class="wxSpinCtrl" name="solve_to_age">
+                                                            <object class="wxSpinCtrl" name="LoanToAge">
                                                                 <size>10,-1</size>
                                                                 <max>100</max>
                                                                 <value>99</value>
@@ -2885,7 +2819,7 @@ looks weird if we don't make this look like its siblings.
                                                         </object>
                                                         <object class="sizeritem">
                                                             <flag>wxGROW</flag>
-                                                            <object class="wxSpinCtrl" name="solve_to_year">
+                                                            <object class="wxSpinCtrl" name="LoanToDuration">
                                                                 <size>10,-1</size>
                                                                 <max>100</max>
                                                                 <value>99</value>
@@ -2905,7 +2839,7 @@ looks weird if we don't make this look like its siblings.
         </object>
         <object class="sizeritem">
             <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
-            <object class="wxCheckBox" name="withdrawal_to_basis_then_loan">
+            <object class="wxCheckBox" name="WithdrawToBasisThenLoan">
                 <label>Change withdrawals to loans after basis</label>
             </object>
         </object>
