@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_harmonization.cpp,v 1.4 2005-04-08 03:06:04 chicares Exp $
+// $Id: input_harmonization.cpp,v 1.5 2005-04-13 22:20:33 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -791,36 +791,44 @@ false // Silly workaround for now.
     DeprecatedSolveTgtAtWhich .allow(mce_target_at_maturity   , actually_solving && mce_solve_for_target == SolveTarget);
     DeprecatedSolveTgtAtWhich .enable(actually_solving && mce_solve_for_target == SolveTarget);
 
-    SolveBeginYear .enable(actually_solving && mce_solve_from_year == DeprecatedSolveFromWhich);
-    SolveEndYear   .enable(actually_solving && mce_solve_to_year   == DeprecatedSolveToWhich);
-    SolveTargetYear.enable(actually_solving && mce_target_at_year  == DeprecatedSolveTgtAtWhich && mce_solve_for_target == SolveTarget);
-
-    // TODO ?? 'Time' seems to mean 'Age' here, I guess.
-    SolveBeginTime .enable(actually_solving && mce_solve_from_age == DeprecatedSolveFromWhich);
-    SolveEndTime   .enable(actually_solving && mce_solve_to_age   == DeprecatedSolveToWhich);
-    SolveTargetTime.enable(actually_solving && mce_target_at_age  == DeprecatedSolveTgtAtWhich && mce_solve_for_target == SolveTarget);
+// TODO ?? This is a mess. Here's what's really needed:
+//   separate variables for {begin, end, target} X {age, duration}
+//   remove ancient code that mangles this stuff, e.g. InputParms::SetSolveDurations()
+//
+// This is what things should probably look like:
+//
+//    SolveBeginYear .enable(actually_solving && mce_solve_from_year == DeprecatedSolveFromWhich);
+//    SolveEndYear   .enable(actually_solving && mce_solve_to_year   == DeprecatedSolveToWhich);
+//    SolveTargetYear.enable(actually_solving && mce_target_at_year  == DeprecatedSolveTgtAtWhich && mce_solve_for_target == SolveTarget);
+//
+//    SolveBeginAge  .enable(actually_solving && mce_solve_from_age == DeprecatedSolveFromWhich);
+//    SolveEndAge    .enable(actually_solving && mce_solve_to_age   == DeprecatedSolveToWhich);
+//    SolveTargetAge .enable(actually_solving && mce_target_at_age  == DeprecatedSolveTgtAtWhich && mce_solve_for_target == SolveTarget);
+//
+// but for now, as a temporary workaround, these '-Year' variables are mapped
+// to 'age' controls, merely so that we can inhibit them...
+    SolveBeginYear .enable(false);
+    SolveEndYear   .enable(false);
+    SolveTargetYear.enable(false);
+// ...and this actually 'works' for duration, because legacy code translates
+// it so that it seems to do the right thing:
+    SolveBeginTime .enable(actually_solving && mce_solve_from_year == DeprecatedSolveFromWhich);
+    SolveEndTime   .enable(actually_solving && mce_solve_to_year   == DeprecatedSolveToWhich);
+    SolveTargetTime.enable(actually_solving && mce_target_at_year  == DeprecatedSolveTgtAtWhich && mce_solve_for_target == SolveTarget);
 
     SolveTarget.enable(actually_solving);
     SolveTarget.allow(mce_solve_for_endt  , actually_solving);
     SolveTarget.allow(mce_solve_for_target, actually_solving);
 
     SolveBasis .enable(actually_solving);
-    SolveBasis .allow(mce_curr_basis, actually_solving && allow_sep_acct);
-    SolveBasis .allow(mce_guar_basis, actually_solving && allow_sep_acct);
+    SolveBasis .allow(mce_curr_basis, actually_solving);
+    SolveBasis .allow(mce_guar_basis, actually_solving);
     SolveBasis .allow(mce_mdpt_basis, actually_solving && is_subject_to_ill_reg(database->Query(DB_LedgerType)));
-// TODO ?? The legacy system seemed to support these, but they aren't among the
-// available enumerators.
-//    bool allow_sa_mdpt =
-//            allow_sep_acct
-//        &&  is_three_rate_nasd(database->Query(DB_LedgerType))
-//        ;
-//    SolveBasis .allow(mce_run_curr_basis_sa_half, actually_solving && allow_sa_mdpt);
-//    SolveBasis .allow(mce_run_guar_basis_sa_half, actually_solving && allow_sa_mdpt);
 
     SolveSeparateAccountBasis.enable(actually_solving);
-    SolveSeparateAccountBasis.allow(mce_sep_acct_full, actually_solving);
-    SolveSeparateAccountBasis.allow(mce_sep_acct_zero, actually_solving);
-    SolveSeparateAccountBasis.allow(mce_sep_acct_half, actually_solving);
+    SolveSeparateAccountBasis.allow(mce_sep_acct_full, actually_solving && allow_sep_acct);
+    SolveSeparateAccountBasis.allow(mce_sep_acct_zero, actually_solving && allow_sep_acct);
+    SolveSeparateAccountBasis.allow(mce_sep_acct_half, actually_solving && allow_sep_acct && is_three_rate_nasd(database->Query(DB_LedgerType)));
 
     SolveTargetCashSurrenderValue.enable(actually_solving && mce_solve_for_target == SolveTarget);
     DeprecatedSolveTgtAtWhich    .enable(actually_solving && mce_solve_for_target == SolveTarget);
