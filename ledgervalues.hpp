@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledgervalues.hpp,v 1.5 2005-04-11 03:50:06 chicares Exp $
+// $Id: ledgervalues.hpp,v 1.6 2005-04-14 21:43:58 chicares Exp $
 
 #ifndef ledgervalues_hpp
 #define ledgervalues_hpp
@@ -36,6 +36,11 @@
 
 class InputParms;
 class Ledger;
+
+std::string serialize_extension
+    (int                serial_number
+    ,std::string const& extension
+    );
 
 class IllusVal
     :private boost::noncopyable

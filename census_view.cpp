@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: census_view.cpp,v 1.9 2005-04-06 23:10:31 chicares Exp $
+// $Id: census_view.cpp,v 1.10 2005-04-14 21:43:57 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -38,6 +38,7 @@
 #include "input.hpp"
 #include "inputillus.hpp"
 #include "ledger.hpp"
+#include "ledgervalues.hpp"
 #include "materially_equal.hpp"
 #include "math_functors.hpp"
 #include "miscellany.hpp"
@@ -1011,11 +1012,7 @@ wxDocument* new_document = the_template->CreateDocument(filename, wxDOC_SILENT |
 
 IllustrationView* CensusView::ViewOneCell(int index)
 {
-    // Name file based on index origin one, as expected by users.
-    std::string file_name(serial_filename(1 + index, "ill"));
-
-    // Create a document with that filename.
-    // Get a ptr to the resulting view.
+    std::string file_name(serial_filename(index, "ill"));
     IllustrationView* illview = MakeNewDocAndView(file_name.c_str());
 
     // Plug in parameters for this cell.
@@ -1043,11 +1040,9 @@ IllustrationView* CensusView::ViewComposite()
             }
         }
 
-    // Create a document with that filename.
-    // Get a ptr to the resulting view.
     if(!was_canceled_)
         {
-        std::string file_name = base_filename() + "composite.ill";
+        std::string file_name(serial_filename(-1, "ill"));
         IllustrationView* illview = MakeNewDocAndView(file_name.c_str());
 
         // Plug in composite totals.
@@ -1170,9 +1165,7 @@ convert_to_ihs(Parms, cell_parms()[j]);
 //        try
             {
             AccountValue AV(Parms);
-            // Name files based on index origin one, reserving zero
-            // for the composite.
-            AV.SetDebugFilename    (serial_filename(1 + j, "debug"));
+            AV.SetDebugFilename(serial_filename(j, "debug"));
 
 // TODO ?? expunge?
 //            double value =
@@ -1266,9 +1259,7 @@ already_reported_error = false;
 IllusInputParms Parms;
 convert_to_ihs(Parms, *ip);
             boost::shared_ptr<AccountValue> AV(new AccountValue(Parms));
-            // Name files based on index origin one, reserving zero
-            // for the composite.
-            AV->SetDebugFilename    (serial_filename(1 + j, "debug"));
+            AV->SetDebugFilename    (serial_filename(j, "debug"));
             AVS.push_back(AV);
 
             if
@@ -1911,7 +1902,7 @@ void CensusView::EmitEveryone
 void CensusView::PrintAnonymousIllustration(Ledger const& a_Values, int index)
 {
 // TODO ?? Use an auto_ptr instead?
-    std::string file_name(serial_filename(1 + index, "ill"));
+    std::string file_name(serial_filename(index, "ill"));
     IllustrationView* illview = MakeNewDocAndView(file_name.c_str());
 
     illview->SetLedger(a_Values);
@@ -1924,11 +1915,7 @@ void CensusView::PrintAnonymousIllustration(Ledger const& a_Values, int index)
 
 void CensusView::SaveRegressionTestFile(Ledger const& a_Values, long idx)
 {
-    // Name file based on index origin one, as expected by users.
-//    std::string file_name(serial_filename(1 + idx, "ill"));
-
-    // Create a document with that filename.
-    // Get a pointer to the resulting view.
+//    std::string file_name(serial_filename(idx, "ill"));
 //    IllustrationView* illview = MakeNewDocAndView(file_name.c_str());
 std::runtime_error("Not supported yet");
 //    illview->SetLedger(a_Values);
@@ -1939,29 +1926,11 @@ std::runtime_error("Not supported yet");
 //    delete illview; // TODO ?? Want to get rid of this thing.
 }
 
-// Make the extension a configurable input.
+// TODO ?? Make the extension a configurable input.
 void CensusView::SaveSpreadsheetFile(Ledger const& a_Values, long idx)
 {
-/* TODO ?? Clean up.
-    // Name file based on index origin one, as expected by users.
-    std::string file_name(serial_filename("XL4", 1 + idx, "ill"));
-
-    // Create a document with that filename
-    // Get a ptr to the resulting view
-    IllustrationView* illview = MakeNewDocAndView(file_name.c_str());
-*/
     std::string spreadsheet_filename = base_filename() + ".xls";
-
     PrintFormTabDelimited(a_Values, spreadsheet_filename);
-
-// TODO ?? expunge
-//    illview->SetLedger(a_Values);
-//    illview->FormatSelectedValuesAsHtml();
-//    illview->NormalizePrintArea();
-//    illview->FileSaveAsXLS();
-
-//    illview->Destroy();
-//    delete illview;
 }
 
 std::string const CensusView::GetCRCFilename() const
@@ -2327,13 +2296,7 @@ convert_from_ihs(ihs_input, lmi_input);
     status() << std::flush;
 }
 
-
-//////////////////////////////////////////////////////////////////////////////
-
-// The following functions probably should be factored out into a
-// utility module.
-
-std::string const CensusView::base_filename() const
+std::string CensusView::base_filename() const
 {
     std::string t = GetDocument()->GetFilename().c_str();
     if(0 == t.size())
@@ -2345,28 +2308,11 @@ std::string const CensusView::base_filename() const
     return path.leaf();
 }
 
-std::string const CensusView::serial_filename
-    (std::string const prefix
-    ,int serial_number
-    ,std::string const suffix
+std::string CensusView::serial_filename
+    (int                serial_number
+    ,std::string const& extension
     ) const
 {
-    std::ostringstream oss;
-    oss
-        << prefix
-        << '.'
-        << std::setfill('0') << std::setw(9) << serial_number
-        << '.'
-        << suffix
-        ;
-    return oss.str();
-}
-
-std::string const CensusView::serial_filename
-    (int serial_number
-    ,std::string const suffix
-    ) const
-{
-    return serial_filename(base_filename(), serial_number, suffix);
+    return base_filename() + serialize_extension(serial_number, extension);
 }
 
