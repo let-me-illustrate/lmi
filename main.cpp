@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main.cpp,v 1.8 2005-04-11 03:50:06 chicares Exp $
+// $Id: main.cpp,v 1.9 2005-04-14 21:43:58 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -50,34 +50,27 @@
 #include <cstdlib> // std::free()
 #include <exception>
 #include <fstream>
-#include <iomanip>
 #include <ios>
 #include <iostream>
 #include <iterator>
 #include <ostream>
-#include <sstream>
 #include <string>
 #include <utility>
 #include <vector>
 
-// TODO ?? Move to a utility file.
+// TODO ?? Eventually move elsewhere.
 namespace
 {
-    // Transform foo.bar --> foo.123456789.new_suffix .
     fs::path serialized_file_path
-        (fs::path const& exemplar
-        ,int             serial_number
-        ,std::string     suffix
+        (fs::path const&    exemplar
+        ,int                serial_number
+        ,std::string const& extension
         )
     {
-        std::ostringstream oss;
-        oss
-            << '.'
-            << std::setfill('0') << std::setw(9) << serial_number
-            << '.'
-            << suffix
-            ;
-        return fs::change_extension(exemplar, oss.str());
+        return fs::change_extension
+            (exemplar
+            ,serialize_extension(serial_number, extension)
+            );
     }
 } // Unnamed namespace.
 
@@ -121,13 +114,13 @@ void RegressionTest()
             try
                 {
                 fs::ofstream ofs
-                    (serialized_file_path(*i, 1 + j, "test")
+                    (serialized_file_path(*i, j, "test")
                     ,   std::ios_base::in
                     |   std::ios_base::binary
                     |   std::ios_base::trunc
                     );
 // TODO ?? Rethink.                    
-                IllusVal IV(serialized_file_path(*i, 1 + j, "MISTAKE").string());
+                IllusVal IV(serialized_file_path(*i, j, "MISTAKE").string());
                 IV.Run(cells[j]);
                 composite.PlusEq(IV.ledger());
                 IV.ledger().Spew(ofs);
@@ -142,7 +135,7 @@ void RegressionTest()
                 std::cerr << "\nUnknown exception." << std::endl;
                 }
             fs::ofstream ofs
-                (serialized_file_path(*i, 0, "test")
+                (serialized_file_path(*i, -1, "test")
                 ,   std::ios_base::in
                 |   std::ios_base::binary
                 |   std::ios_base::trunc

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: census_view.hpp,v 1.2 2005-03-24 15:53:32 chicares Exp $
+// $Id: census_view.hpp,v 1.3 2005-04-14 21:43:58 chicares Exp $
 
 #ifndef census_view_hpp
 #define census_view_hpp
@@ -185,37 +185,12 @@ class CensusView
 // Copyright (C) 1998, 1999, 2000, 2002, 2003, 2004 Gregory W. Chicares.
 
     // Extract the base portion of the filename, excluding path and extension.
-    std::string const base_filename() const;
+    std::string base_filename() const;
 
-    // Make up an output filename based on a supplied serial number,
-    // and a prefix and suffix, either or both of which may be empty.
-    // The serial number is zero filled with at least nine characters;
-    // the range [0, 100000000) should be adequate for any foreseeable
-    // insured group (it can hold all US social security numbers, e.g.),
-    // and formatting it this way makes the filenames sort nicely.
-    //
-    // If more than nine characters are required, then all digits will
-    // be printed, but then the filenames won't sort as nicely.
-    //
-    // String arguments are of value rather than reference type in order
-    // to allow character array arguments.
-    //
-    // A terminating null is added so that result.c_str() can used with
-    // functions that require C strings.
-    //
-    std::string const serial_filename
-        (std::string const prefix
-        ,int serial_number
-        ,std::string const suffix
-        ) const;
-
-    // This form, with no prefix argument, uses the corresponding document's
-    // name to be used as the prefix. A default argument wouldn't work, for
-    // it would need to refer to the 'this' pointer [8.3.6/8].
-    //
-    std::string const serial_filename
-        (int serial_number
-        ,std::string const suffix
+    // Add a serial number and extension to base_filename()'s return value.
+    std::string serial_filename
+        (int                serial_number
+        ,std::string const& extension
         ) const;
 
     wxListView* list_window_;

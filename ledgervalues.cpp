@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledgervalues.cpp,v 1.7 2005-04-11 03:50:06 chicares Exp $
+// $Id: ledgervalues.cpp,v 1.8 2005-04-14 21:43:58 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -43,8 +43,39 @@
 #include <iomanip>
 #include <ios>
 #include <ostream>
+#include <sstream>
 #include <string>
 #include <utility>
+
+// Prepend a serial number to a file extension. This is intended to
+// be used for creating output file names for cells in a census. The
+// input serial number is an origin-zero index into the container of
+// individual cells. The formatted serial number embedded in the
+// output string is in origin one, so that the census's composite can
+// use output serial number zero--that's more satisfying than having
+// it use one plus the number of individual cells.
+//
+// The output serial number is formatted to nine places and filled
+// with zeroes, so that output file names sort well. It is hardly
+// conceivable for a census to have more cells than nine place
+// accommodate (it's enough to represent all US Social Security
+// numbers), but if it does, then the file names are still unique;
+// they just don't sort as nicely.
+//
+std::string serialize_extension
+    (int                serial_number
+    ,std::string const& extension
+    )
+{
+    std::ostringstream oss;
+    oss
+        << '.'
+        << std::setfill('0') << std::setw(9) << 1 + serial_number
+        << '.'
+        << extension
+        ;
+    return oss.str();
+}
 
 //============================================================================
 IllusVal::IllusVal(std::string const& filename)
