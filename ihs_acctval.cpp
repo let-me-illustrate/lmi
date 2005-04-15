@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_acctval.cpp,v 1.17 2005-04-12 14:10:27 chicares Exp $
+// $Id: ihs_acctval.cpp,v 1.18 2005-04-15 22:55:09 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -412,6 +412,7 @@ restart:
             CaseYearsCOICharges += GetLastCOIChargeInforce();
             ExpRatIBNRReserve += GetIBNRContrib();
 
+// TODO ?? expunge CaseExpRatReserve
             CaseExpRatReserve += UpdateExpRatReserveBOM(ExpRatMlyInt);
             CaseExpRatReserve *= ExpRatMlyInt;
             IncrementEOM(year, month, Assets);
@@ -442,6 +443,7 @@ restart:
             }
 
 //      double NumLivesInforce = GetInforceLives();
+// TODO ?? expunge StabResVariance
         double StabResVariance = GetStabResContrib();
         ExpRatStabReserve = 0.0;
         if(0.0 != StabResVariance)
@@ -455,6 +457,7 @@ restart:
             ;
         CaseExpRfd = std::max(0.0, CaseExpRfd);
         CaseExpRatReserve -= CaseExpRfd;
+// TODO ?? expunge SetExpRatRfd()
         SetExpRatRfd(CaseYearsCOICharges, CaseExpRfd);
         IncrementEOY(year);
         }
@@ -2019,6 +2022,7 @@ double AccountValue::GetLastCOIChargeInforce() const
     return COI * InforceLives;
 }
 
+// TODO ?? expunge
 //============================================================================
 // Authors: GWC and JLM.
 double AccountValue::GetIBNRContrib() const
@@ -2033,6 +2037,7 @@ double AccountValue::GetIBNRContrib() const
     return GetNetCOI() * InforceLives * Database_->Query(DB_ExpRatIBNRMult);
 }
 
+// TODO ?? expunge
 //============================================================================
 // Authors: GWC and JLM.
 double AccountValue::UpdateExpRatReserveBOM(double CaseExpRatMlyIntRate)
@@ -2068,6 +2073,7 @@ return 0.0;
     return GetNetCOI() * InforceLives;
 }
 
+// TODO ?? expunge
 //============================================================================
 // Authors: GWC and JLM.
 void AccountValue::UpdateExpRatReserveEOM
@@ -2102,6 +2108,7 @@ return;
         ;
 }
 
+// TODO ?? expunge
 // adjust ExpRatReserve by a multiple: proportion of case total
 //============================================================================
 // Authors: GWC and JLM.
@@ -2208,7 +2215,12 @@ void AccountValue::ApportionNetMortalityReserve
 //    if(ItLapsed || BasicValues::GetLength() <= Year)
 // but, because the 'Year' counter is out of sync here as compared to
 // other functions that use that test, a change is required:
-    if(ItLapsed || BasicValues::GetLength() < Year)
+    if
+        (   ItLapsed
+        ||  BasicValues::GetLength() < Year
+        ||  !Input_->UseExperienceRating
+        ||  !e_currbasis == ExpAndGABasis
+        )
         {
         return;
         }
@@ -2229,6 +2241,7 @@ void AccountValue::ApportionNetMortalityReserve
     VariantValues().ExpRatRsvCash[Year - 1] = apportioned_net_mortality_reserve;
 }
 
+// TODO ?? expunge
 //============================================================================
 // Get cell's contribution to variance of stabilization reserve
 // Authors: GWC and JLM.
@@ -2289,6 +2302,7 @@ double AccountValue::GetStabResContrib()
         ;
 }
 
+// TODO ?? expunge
 //============================================================================
 void AccountValue::SetExpRatRfd
     (double CaseYearsCOICharges
@@ -2340,6 +2354,7 @@ return;
 }
 
 //============================================================================
+// TODO ?? expunge
 double AccountValue::GetExpRatReserve() const
 {
     return 0.0 * ExpRatReserve * InforceLives;
@@ -2352,6 +2367,7 @@ void AccountValue::RecalculateGDBPrem()
 }
 
 //============================================================================
+// TODO ?? expunge
 double AccountValue::GetExpRatReserveNonforborne() const
 {
     double Forbearance;
