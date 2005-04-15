@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: accountvalue.cpp,v 1.6 2005-04-11 03:49:14 chicares Exp $
+// $Id: accountvalue.cpp,v 1.7 2005-04-15 22:55:41 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -1057,4 +1057,41 @@ void AccountValue::SetDebugFilename(std::string const& s)
 {
     DebugFilename = s;
 }
+
+// Stubs for member functions not implemented on this branch.
+
+void   AccountValue::ApportionNetMortalityReserve(double, double)
+    {return;}
+void   AccountValue::CoordinateCounters()
+    {return;}
+void   AccountValue::DebugRestart(std::string const&)
+    {return;}
+void   AccountValue::FinalizeLife(e_run_basis const&)
+    {return;}
+void   AccountValue::FinalizeLifeAllBases()
+    {return;}
+double AccountValue::GetCurtateNetClaimsInforce()
+    {return 0.0;}
+double AccountValue::GetInforceProjectedCoiCharge(double&, double&, double&)
+    {return 0.0;}
+double AccountValue::GetLastCOIChargeInforce() const
+    {return 0.0;}
+double AccountValue::GetSepAcctAssetsInforce() const
+    {return 0.0;}
+void   AccountValue::GuessWhetherFirstYearPremiumExceedsRetaliationLimit()
+    {return;}
+double AccountValue::IncrementBOM(int, int, double)
+    {return 0.0;}
+double AccountValue::IncrementEOM(int, int, double)
+    {return 0.0;}
+double AccountValue::IncrementEOY(int)
+    {return 0.0;}
+void   AccountValue::InitializeLife(e_run_basis const&)
+    {return;}
+bool   AccountValue::PrecedesInforceDuration(int, int)
+    {return false;}
+void   AccountValue::SetClaims()
+    {return;}
+bool   AccountValue::TestWhetherFirstYearPremiumExceededRetaliationLimit()
+    {return false;}
 
