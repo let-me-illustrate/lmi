@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: calculate.hpp,v 1.4 2005-03-11 13:40:41 chicares Exp $
+// $Id: calculate.hpp,v 1.5 2005-04-15 13:57:21 chicares Exp $
 
 #ifndef calculate_hpp
 #define calculate_hpp
@@ -214,7 +214,7 @@ struct RunCensusDeprecated
         std::cerr << "    Input:        " << timer.Stop().Report() << '\n';
 
         // TODO ?? Why copy?
-        std::vector<IllusInputParms> lives(doc.individual_parms());
+        std::vector<IllusInputParms> lives(doc.cell_parms());
 
         timer.Reset().Start();
 
