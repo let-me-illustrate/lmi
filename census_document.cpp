@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: census_document.cpp,v 1.1 2005-03-11 03:19:31 chicares Exp $
+// $Id: census_document.cpp,v 1.2 2005-04-15 13:57:21 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -99,9 +99,9 @@ bool CensusDocument::OnCreate(wxString const& filename, long int flags)
         doc_.read(ifs);
         }
 
-    convert_from_ihs(doc_.CaseParms,       case_parms_ );
-    convert_from_ihs(doc_.IndividualParms, cell_parms_ );
-    convert_from_ihs(doc_.ClassParms,      class_parms_);
+    convert_from_ihs(doc_.case_parms_ , case_parms_ );
+    convert_from_ihs(doc_.cell_parms_ , cell_parms_ );
+    convert_from_ihs(doc_.class_parms_, class_parms_);
 
     return wxDocument::OnCreate(filename, flags);
 }
@@ -133,9 +133,9 @@ bool CensusDocument::OnOpenDocument(wxString const& filename)
 
 bool CensusDocument::OnSaveDocument(wxString const& filename)
 {
-    convert_to_ihs(doc_.CaseParms,       case_parms_ );
-    convert_to_ihs(doc_.IndividualParms, cell_parms_ );
-    convert_to_ihs(doc_.ClassParms,      class_parms_);
+    convert_to_ihs(doc_.case_parms_ , case_parms_ );
+    convert_to_ihs(doc_.cell_parms_ , cell_parms_ );
+    convert_to_ihs(doc_.class_parms_, class_parms_);
 
     std::ofstream ofs(filename.c_str());
     doc_.write(ofs);

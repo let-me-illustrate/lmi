@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: multiple_cell_document.cpp,v 1.3 2005-03-26 01:34:18 chicares Exp $
+// $Id: multiple_cell_document.cpp,v 1.4 2005-04-15 13:57:21 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -45,9 +45,9 @@
 
 //============================================================================
 multiple_cell_document::multiple_cell_document()
-    :CaseParms(1)
-    ,ClassParms(1)
-    ,IndividualParms(1)
+    :case_parms_  (1)
+    ,class_parms_ (1)
+    ,cell_parms_  (1)
 {
 }
 
@@ -103,22 +103,21 @@ void multiple_cell_document::parse(xml::tree_parser& parser)
 using namespace xml;
 #endif // __BORLANDC__
 
-// TODO ?? Could this ever be useful? If not, then expunge.
+// TODO ?? It doesn't seem right to depend on node order.
+// See note below--perhaps do something like this:
 //    int NumberOfCases;
 //    is >> NumberOfCases;
 //    LMI_ASSERT(1 == NumberOfCases);
-
-// TODO ?? It doesn't seem right to depend on node order.
 
     IllusInputParms temp;
 
     // Case default parameters.
 
-    CaseParms.clear();
+    case_parms_.clear();
     xml::node::iterator child = root.begin();
     if(child->is_text())
         {
-        // TODO ?? Explain what this does.
+        // TODO ?? Explain what this does (passim).
         ++child;
         }
     if(std::string("cell") != child->get_name())
@@ -134,13 +133,12 @@ using namespace xml;
         throw std::runtime_error(msg.str());
         }
     (*child) >> temp;
-    CaseParms.push_back(temp);
+    case_parms_.push_back(temp);
 
-    // Number of Classes.
+    // Number of classes.
     ++child;
     if(child->is_text())
         {
-        // TODO ?? Explain what this does.
         ++child;
         }
     if(std::string("NumberOfClasses") != child->get_name())
@@ -155,16 +153,17 @@ using namespace xml;
             ;
         throw std::runtime_error(msg.str());
         }
-    unsigned int NumberOfClasses = value_cast_ihs<int>(child->get_content());
+    unsigned int number_of_classes = value_cast_ihs<unsigned int>
+        (child->get_content()
+        );
 
-    // Parameters for each Class.
-    ClassParms.clear();
-    ClassParms.reserve(NumberOfClasses);
+    // Parameters for each class.
+    class_parms_.clear();
+    class_parms_.reserve(number_of_classes);
 
     ++child;
     if(child->is_text())
         {
-        // TODO ?? Explain what this does.
         ++child;
         }
     for(; child != root.end(); ++child)
@@ -172,31 +171,30 @@ using namespace xml;
         if(!child->is_text())
             {
             (*child) >> temp;
-            ClassParms.push_back(temp);
+            class_parms_.push_back(temp);
             }
-        if(ClassParms.size() == NumberOfClasses)
+        if(class_parms_.size() == number_of_classes)
             {
             break;
             }
         }
-    if(ClassParms.size() != NumberOfClasses)
+    if(class_parms_.size() != number_of_classes)
         {
         std::ostringstream msg;
         msg
             << "Number of classes read is "
-            << ClassParms.size()
+            << class_parms_.size()
             << " but should have been "
-            << NumberOfClasses
+            << number_of_classes
             << "."
             ;
         throw std::runtime_error(msg.str());
         }
 
-    // Number of Cells.
+    // Number of cells.
     ++child;
     if(child->is_text())
         {
-        // TODO ?? Explain what this does.
         ++child;
         }
     if(std::string("NumberOfCells") != child->get_name())
@@ -211,16 +209,17 @@ using namespace xml;
             ;
         throw std::runtime_error(msg.str());
         }
-    unsigned int NumberOfCells = value_cast_ihs<int>(child->get_content());
+    unsigned int number_of_cells = value_cast_ihs<unsigned int>
+        (child->get_content()
+        );
 
     // Parameters for each Cell.
-    IndividualParms.clear();
-    IndividualParms.reserve(NumberOfCells);
+    cell_parms_.clear();
+    cell_parms_.reserve(number_of_cells);
 
     ++child;
     if(child->is_text())
         {
-        // TODO ?? Explain what this does.
         ++child;
         }
     for(; child != root.end(); ++child)
@@ -228,29 +227,29 @@ using namespace xml;
         if(!child->is_text())
             {
             (*child) >> temp;
-            IndividualParms.push_back(temp);
+            cell_parms_.push_back(temp);
             status()
                 << "Read "
-                << IndividualParms.size()
+                << cell_parms_.size()
                 << " of "
-                << NumberOfCells
+                << number_of_cells
                 << " lives."
                 << std::flush
                 ;
             }
-        if(IndividualParms.size() == NumberOfCells)
+        if(cell_parms_.size() == number_of_cells)
             {
             break;
             }
         }
-    if(IndividualParms.size() != NumberOfCells)
+    if(cell_parms_.size() != number_of_cells)
         {
         std::ostringstream msg;
         msg
             << "Number of individuals read is "
-            << IndividualParms.size()
+            << cell_parms_.size()
             << " but should have been "
-            << NumberOfCells
+            << number_of_cells
             << "."
             ;
         throw std::runtime_error(msg.str());
@@ -259,7 +258,6 @@ using namespace xml;
     ++child;
     if(child->is_text())
         {
-        // TODO ?? Explain what this does.
         ++child;
         }
     if(child != root.end())
@@ -294,40 +292,39 @@ void multiple_cell_document::write(std::ostream& os) const
     xml::init init;
     xml::node root(xml_root_name().c_str());
 
-// TODO ?? Could this ever be useful?
-//    root.push_back
-//        (xml::node
-//            ("NumberOfCases"
-//            ,value_cast_ihs<std::string>(CaseParms.size()).c_str()
-//            )
-//        );
-    root << CaseParms[0];
-
 // TODO ?? Diagnostics will be cryptic if the xml doesn't follow
 // the required layout. Perhaps they could be improved. Maybe it
 // would be better to restructure the document so that each set
 // of cells, with its cardinal number, is a distinct node.
+//
+//    root.push_back
+//        (xml::node
+//            ("NumberOfCases"
+//            ,value_cast_ihs<std::string>(case_parms_.size()).c_str()
+//            )
+//        );
+    root << case_parms_[0];
 
     root.push_back
         (xml::node
             ("NumberOfClasses"
-            ,value_cast_ihs<std::string>(ClassParms.size()).c_str()
+            ,value_cast_ihs<std::string>(class_parms_.size()).c_str()
             )
         );
-    for(unsigned int j = 0; j < ClassParms.size(); j++)
+    for(unsigned int j = 0; j < class_parms_.size(); j++)
         {
-        root << ClassParms[j];
+        root << class_parms_[j];
         }
 
     root.push_back
         (xml::node
             ("NumberOfCells"
-            ,value_cast_ihs<std::string>(IndividualParms.size()).c_str()
+            ,value_cast_ihs<std::string>(cell_parms_.size()).c_str()
             )
         );
-    for(unsigned int j = 0; j < IndividualParms.size(); j++)
+    for(unsigned int j = 0; j < cell_parms_.size(); j++)
         {
-        root << IndividualParms[j];
+        root << cell_parms_[j];
         }
 
     os << root;

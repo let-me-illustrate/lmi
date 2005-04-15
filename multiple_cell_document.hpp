@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: multiple_cell_document.hpp,v 1.3 2005-02-13 23:17:18 chicares Exp $
+// $Id: multiple_cell_document.hpp,v 1.4 2005-04-15 13:57:21 chicares Exp $
 
 #ifndef multiple_cell_document_hpp
 #define multiple_cell_document_hpp
@@ -51,18 +51,17 @@ class multiple_cell_document
     :private boost::noncopyable
     ,virtual private obstruct_slicing<multiple_cell_document>
 {
-// TODO ?? Too many long-distance friendships.
+// TODO ?? Avoid long-distance friendship.
     friend class CensusDocument;
-    friend class CensusView;
-    friend class RosterView;
-    friend class AdminExtractDocument;
 
   public:
     multiple_cell_document();
     multiple_cell_document(std::string const& filename);
     ~multiple_cell_document();
 
-    std::vector<IllusInputParms> const& individual_parms() const;
+    std::vector<IllusInputParms> const& case_parms() const;
+    std::vector<IllusInputParms> const& class_parms() const;
+    std::vector<IllusInputParms> const& cell_parms() const;
 
     void read(std::istream& is);
     void write(std::ostream& os) const;
@@ -75,16 +74,16 @@ class multiple_cell_document
     void parse(xml::tree_parser&);
     std::string xml_root_name() const;
 
-    // Default parameters for the whole case.
-    // There's only one, but we make it a std::vector of length one
-    // for parallelism with ClassParms and IndividualParms.
-    std::vector<IllusInputParms> CaseParms;
+    // Default parameters for the whole case, stored as a vector for
+    // parallelism with class_parms_ and cell_parms_. Naturally, this
+    // vector must have exactly one element.
+    std::vector<IllusInputParms> case_parms_;
 
     // Default parameters for each employee class.
-    std::vector<IllusInputParms> ClassParms;
+    std::vector<IllusInputParms> class_parms_;
 
     // Parameters for each cell.
-    std::vector<IllusInputParms> IndividualParms;
+    std::vector<IllusInputParms> cell_parms_;
 };
 
 inline std::istream& operator>>
@@ -105,9 +104,19 @@ inline std::ostream& operator<<
     return os;
 }
 
-inline std::vector<IllusInputParms> const& multiple_cell_document::individual_parms() const
+inline std::vector<IllusInputParms> const& multiple_cell_document::case_parms() const
 {
-    return IndividualParms;
+    return case_parms_;
+}
+
+inline std::vector<IllusInputParms> const& multiple_cell_document::class_parms() const
+{
+    return class_parms_;
+}
+
+inline std::vector<IllusInputParms> const& multiple_cell_document::cell_parms() const
+{
+    return cell_parms_;
 }
 
 #endif // multiple_cell_document_hpp
