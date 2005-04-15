@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main.cpp,v 1.9 2005-04-14 21:43:58 chicares Exp $
+// $Id: main.cpp,v 1.10 2005-04-15 13:57:21 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -89,7 +89,7 @@ void RegressionTest()
 
         std::cout << "Regression testing: " << i->string() << std::endl;
         multiple_cell_document doc(i->string());
-        std::vector<IllusInputParms> const& cells(doc.individual_parms());
+        std::vector<IllusInputParms> const& cells(doc.cell_parms());
 
         // TODO ?? First cell is as good as any until consistency is
         // enforced across all cells in a census. Perhaps a member
