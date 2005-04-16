@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: objects.make,v 1.12 2005-04-10 14:52:15 chicares Exp $
+# $Id: objects.make,v 1.13 2005-04-16 02:05:41 chicares Exp $
 
 ################################################################################
 
@@ -119,6 +119,7 @@ antediluvian_common_objects := \
   fenv_lmi.o \
   getopt.o \
   global_settings.o \
+  group_values.o \
   input_sequence.o \
   input_seq_helpers.o \
   inputillus.o \
@@ -177,6 +178,7 @@ lmi_common_objects := \
   expm1.o \
   fenv_lmi.o \
   global_settings.o \
+  group_values.o \
   ihs_acctval.o \
   ihs_avdebug.o \
   ihs_avmly.o \
