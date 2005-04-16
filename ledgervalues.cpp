@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledgervalues.cpp,v 1.8 2005-04-14 21:43:58 chicares Exp $
+// $Id: ledgervalues.cpp,v 1.9 2005-04-16 02:05:41 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -29,7 +29,7 @@
 #include "ledgervalues.hpp"
 
 #include "account_value.hpp"
-#include "alert.hpp"
+#include "group_values.hpp"
 #include "inputs.hpp"
 #include "ledger.hpp"
 #include "ledger_invariant.hpp"
@@ -43,39 +43,7 @@
 #include <iomanip>
 #include <ios>
 #include <ostream>
-#include <sstream>
 #include <string>
-#include <utility>
-
-// Prepend a serial number to a file extension. This is intended to
-// be used for creating output file names for cells in a census. The
-// input serial number is an origin-zero index into the container of
-// individual cells. The formatted serial number embedded in the
-// output string is in origin one, so that the census's composite can
-// use output serial number zero--that's more satisfying than having
-// it use one plus the number of individual cells.
-//
-// The output serial number is formatted to nine places and filled
-// with zeroes, so that output file names sort well. It is hardly
-// conceivable for a census to have more cells than nine place
-// accommodate (it's enough to represent all US Social Security
-// numbers), but if it does, then the file names are still unique;
-// they just don't sort as nicely.
-//
-std::string serialize_extension
-    (int                serial_number
-    ,std::string const& extension
-    )
-{
-    std::ostringstream oss;
-    oss
-        << '.'
-        << std::setfill('0') << std::setw(9) << 1 + serial_number
-        << '.'
-        << extension
-        ;
-    return oss.str();
-}
 
 //============================================================================
 IllusVal::IllusVal(std::string const& filename)
@@ -138,20 +106,21 @@ LMI_ASSERT(av.LedgerValues().GetIsComposite() == ledger_->GetIsComposite());
 // eight inches wide and still leave about a half-inch margin
 // on both sides.
 //
-// TODO ?? Need to scale everything if anything's $1B or over.
-// TODO ?? Want thousands separators.
+// TODO ?? Avoid overflow by scaling everything if anything's $1B or over.
+// TODO ?? Add thousands separators.
 namespace
 {
     int g_width = 128;
     std::string center(std::string const& s)
         {
         int z = s.length();
-        // std::max() used here because strings in inputs class might be too wide.
+        // TODO ?? Strings in the input class might be too wide;
+        // absent more graceful handling, at least no attempt is made
+        // to cure that problem with a negative number of spaces.
         std::string spaces(std::max(0, (g_width - z) / 2), char(' '));
         return spaces + s;
         }
 
-    // Could put some html stuff here, e.g.
     std::ostream& endrow(std::ostream& os)
         {
         os << '\n';
@@ -162,9 +131,9 @@ namespace
 //============================================================================
 void IllusVal::Print(std::ostream& os) const
 {
-    // TODO ?? Check os state.
+    // TODO ?? Check os state at entry and exit.
+    // TODO ?? Split into numbered pages.
 
-    // TODO ?? Page number in footers.
     PrintHeader              (os);
     PrintNarrativeSummary    (os);
     PrintKeyTerms            (os);
@@ -175,26 +144,20 @@ void IllusVal::Print(std::ostream& os) const
     PrintTabularDetailHeader (os);
     PrintTabularDetail       (os);
     PrintFooter              (os);
-    // TODO ?? Split into pages and paginate.
-
-    // TODO ?? Check os state.
 }
 
 //============================================================================
 void IllusVal::PrintHeader(std::ostream& os) const
 {
-// TODO ?? Members instead:
-    LedgerInvariant const& Invar = ledger_->GetLedgerInvariant();
-
     os << center("Life Insurance Basic Illustration") << endrow;
     os << endrow;
     os << center("Prepared on " + iso_8601_datestamp_terse() + " by") << endrow;
-    os << center(Invar.ProducerName) << endrow;
-    os << center(Invar.ProducerStreet) << endrow;
-    os << center(Invar.ProducerCity) << endrow;
-    os << "Insured: " << Invar.Insured1 << endrow;
-    os << "Issue age: " << Invar.Age << endrow;
-    os << Invar.Gender << endrow;
+    os << center(invar().ProducerName) << endrow;
+    os << center(invar().ProducerStreet) << endrow;
+    os << center(invar().ProducerCity) << endrow;
+    os << "Insured: " << invar().Insured1 << endrow;
+    os << "Issue age: " << invar().Age << endrow;
+    os << invar().Gender << endrow;
 // TODO ?? Add gender, smoker, and underwriting class.
 }
 
@@ -203,18 +166,12 @@ void IllusVal::PrintFooter(std::ostream& os) const
 {
 // TODO ?? Add page numbers.
     os << "\f";
-// TODO ?? Add page breaks for HTML (CSS2 browsers only).
-/*
- <div style="page-break-before:always">
- stuff on a new page
- </div>
-*/
 }
 
 //============================================================================
 void IllusVal::PrintNarrativeSummary(std::ostream& os) const
 {
-//  os << "123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 "
+//        "123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 "
     os << center("Narrative summary") << endrow;
     os << endrow;
     os << "This is an illustration of a life insurance policy. It is not an offer of insurance. Availability is subject to underwriting." << endrow;
@@ -263,15 +220,8 @@ void IllusVal::PrintKeyTerms(std::ostream& os) const
     os << endrow;
 }
 
-//--+----1----+----2----+----3----+----4----+----5----+----6----+----7----+---
 void IllusVal::PrintNumericalSummary(std::ostream& os) const
 {
-// TODO ?? Members instead:
-    LedgerInvariant const& Invar = ledger_->GetLedgerInvariant();
-    LedgerVariant   const& Curr_ = ledger_->GetCurrFull();
-    LedgerVariant   const& Guar_ = ledger_->GetGuarFull();
-    LedgerVariant   const& Mdpt_ = ledger_->GetMdptFull();
-
     os << center("Numerical summary") << endrow;
     os << endrow;
     os << "                    ------------Guaranteed------------- -------------Midpoint-------------- ----------Non-guaranteed-----------" << endrow;
@@ -279,9 +229,9 @@ void IllusVal::PrintNumericalSummary(std::ostream& os) const
     os << "   Year      Outlay       Value       Value     Benefit       Value       Value     Benefit       Value       Value     Benefit" << endrow;
     os << endrow;
 
-    int summary_rows[] = {4, 9, 19, std::min(99, 69 - static_cast<int>(Invar.Age))};
+    int summary_rows[] = {4, 9, 19, std::min(99, 69 - static_cast<int>(invar().Age))};
 
-    for(int j = 0; j < static_cast<int>(sizeof summary_rows / sizeof(int)); j++)
+    for(int j = 0; j < static_cast<int>(sizeof summary_rows / sizeof(int)); ++j)
         {
         int row = summary_rows[j];
         // Skip row if it doesn't exist. For instance, if issue age is
@@ -295,23 +245,23 @@ void IllusVal::PrintNumericalSummary(std::ostream& os) const
         os.precision(0);
         os.width(7);
 
-        os << std::setw( 7) << (1 + row)                    ;
+        os << std::setw( 7) << (1 + row)                ;
 
         os.precision(2);
 
-        os << std::setw(12) << Invar.GrossPmt[row]    ;
+        os << std::setw(12) << invar().GrossPmt[row]    ;
 
-        os << std::setw(12) << Guar_.AcctVal[row]     ;
-        os << std::setw(12) << Guar_.CSVNet[row]      ;
-        os << std::setw(12) << Guar_.EOYDeathBft[row] ;
+        os << std::setw(12) << guar_().AcctVal[row]     ;
+        os << std::setw(12) << guar_().CSVNet[row]      ;
+        os << std::setw(12) << guar_().EOYDeathBft[row] ;
 
-        os << std::setw(12) << Mdpt_.AcctVal[row]     ;
-        os << std::setw(12) << Mdpt_.CSVNet[row]      ;
-        os << std::setw(12) << Mdpt_.EOYDeathBft[row] ;
+        os << std::setw(12) << mdpt_().AcctVal[row]     ;
+        os << std::setw(12) << mdpt_().CSVNet[row]      ;
+        os << std::setw(12) << mdpt_().EOYDeathBft[row] ;
 
-        os << std::setw(12) << Curr_.AcctVal[row]     ;
-        os << std::setw(12) << Curr_.CSVNet[row]      ;
-        os << std::setw(12) << Curr_.EOYDeathBft[row] ;
+        os << std::setw(12) << curr_().AcctVal[row]     ;
+        os << std::setw(12) << curr_().CSVNet[row]      ;
+        os << std::setw(12) << curr_().EOYDeathBft[row] ;
 
         os << endrow;
         }
@@ -321,7 +271,6 @@ void IllusVal::PrintNumericalSummary(std::ostream& os) const
     os << endrow;
 }
 
-// TODO ?? Consider putting the signature blocks side by side.
 //============================================================================
 void IllusVal::PrintRequiredSignatures(std::ostream& os) const
 {
@@ -360,41 +309,40 @@ void IllusVal::PrintTabularDetailHeader(std::ostream& os) const
 //============================================================================
 void IllusVal::PrintTabularDetail(std::ostream& os) const
 {
-// TODO ?? Members instead:
-    LedgerInvariant const& Invar = ledger_->GetLedgerInvariant();
-    LedgerVariant   const& Curr_ = ledger_->GetCurrFull();
-    LedgerVariant   const& Guar_ = ledger_->GetGuarFull();
-
-    for(int j = 0; j < ledger_->GetMaxLength(); j++)
+    for(int j = 0; j < ledger_->GetMaxLength(); ++j)
         {
         os.setf(std::ios_base::fixed, std::ios_base::floatfield);
         os.precision(0);
         os.width(7);
 
-        os << std::setw( 7) << (1 + j)                    ;
-        os << std::setw(12) << (1 + j + Invar.Age)  ;
+        os << std::setw( 7) << (1 + j)                ;
+        os << std::setw(12) << (1 + j + invar().Age)  ;
 
         os.precision(2);
 
-        os << std::setw(12) << Invar.GrossPmt[j]    ;
-//        os << std::setw(12) << Invar.WD[j]          ;
-//        os << std::setw(12) << Invar.Loan[j]        ;
-//        double net_pmt =
-//                Invar.GrossPmt[j]
-//            -   Invar.WD[j]
-//            -   Invar.Loan[j]
-//            ;
-//        os << std::setw(12) << net_pmt                    ;
+        os << std::setw(12) << invar().GrossPmt[j]    ;
 
-        os << std::setw(12) << Guar_.AcctVal[j]     ;
-        os << std::setw(12) << Guar_.CSVNet[j]      ;
-        os << std::setw(12) << Guar_.EOYDeathBft[j] ;
+        os << std::setw(12) << guar_().AcctVal[j]     ;
+        os << std::setw(12) << guar_().CSVNet[j]      ;
+        os << std::setw(12) << guar_().EOYDeathBft[j] ;
 
-        os << std::setw(12) << Curr_.AcctVal[j]     ;
-        os << std::setw(12) << Curr_.CSVNet[j]      ;
-        os << std::setw(12) << Curr_.EOYDeathBft[j] ;
+        os << std::setw(12) << curr_().AcctVal[j]     ;
+        os << std::setw(12) << curr_().CSVNet[j]      ;
+        os << std::setw(12) << curr_().EOYDeathBft[j] ;
 
         os << endrow;
         }
 }
+
+inline LedgerInvariant const& IllusVal::invar() const
+{return ledger_->GetLedgerInvariant();}
+
+inline LedgerVariant   const& IllusVal::curr_() const
+{return ledger_->GetCurrFull();}
+
+inline LedgerVariant   const& IllusVal::guar_() const
+{return ledger_->GetGuarFull();}
+
+inline LedgerVariant   const& IllusVal::mdpt_() const
+{return ledger_->GetMdptFull();}
 

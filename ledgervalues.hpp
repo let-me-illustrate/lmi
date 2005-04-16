@@ -19,13 +19,14 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledgervalues.hpp,v 1.6 2005-04-14 21:43:58 chicares Exp $
+// $Id: ledgervalues.hpp,v 1.7 2005-04-16 02:05:41 chicares Exp $
 
 #ifndef ledgervalues_hpp
 #define ledgervalues_hpp
 
 #include "config.hpp"
 
+#include "expimp.hpp"
 #include "obstruct_slicing.hpp"
 
 #include <boost/scoped_ptr.hpp>
@@ -36,13 +37,10 @@
 
 class InputParms;
 class Ledger;
+class LedgerInvariant;
+class LedgerVariant;
 
-std::string serialize_extension
-    (int                serial_number
-    ,std::string const& extension
-    );
-
-class IllusVal
+class LMI_EXPIMP IllusVal
     :private boost::noncopyable
     ,virtual private obstruct_slicing<IllusVal>
 {
@@ -67,6 +65,11 @@ class IllusVal
     void PrintRequiredSignatures  (std::ostream& os) const;
     void PrintTabularDetailHeader (std::ostream& os) const;
     void PrintTabularDetail       (std::ostream& os) const;
+
+    LedgerInvariant const& invar() const;
+    LedgerVariant   const& curr_() const;
+    LedgerVariant   const& guar_() const;
+    LedgerVariant   const& mdpt_() const;
 
     std::string filename_;
     boost::scoped_ptr<Ledger> ledger_;

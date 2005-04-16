@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main.cpp,v 1.10 2005-04-15 13:57:21 chicares Exp $
+// $Id: main.cpp,v 1.11 2005-04-16 02:05:41 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -34,6 +34,7 @@
 #include "fenv_lmi.hpp"
 #include "getopt.hpp"
 #include "global_settings.hpp"
+#include "group_values.hpp"
 #include "license.hpp"
 #include "miscellany.hpp"
 #include "sigfpe.hpp"
@@ -57,22 +58,6 @@
 #include <string>
 #include <utility>
 #include <vector>
-
-// TODO ?? Eventually move elsewhere.
-namespace
-{
-    fs::path serialized_file_path
-        (fs::path const&    exemplar
-        ,int                serial_number
-        ,std::string const& extension
-        )
-    {
-        return fs::change_extension
-            (exemplar
-            ,serialize_extension(serial_number, extension)
-            );
-    }
-} // Unnamed namespace.
 
 //============================================================================
 void RegressionTest()
@@ -109,39 +94,41 @@ void RegressionTest()
             ,true
             );
 
-        for(unsigned int j = 0; j < cells.size(); ++j)
+// TODO ?? This largely replaces CensusView::DoAllCells().
+//
+// The run order depends on the case input and ignores any conflicting
+// input for any individual cell. Perhaps we should detect any such
+// conflicting input and signal an error? It would probably be cleaner
+// to offer this input item (and a few similar ones) only at the case
+// level. TODO ?? Fix this.
+
+        enum_run_order order = doc.case_parms()[0].RunOrder;
+        switch(order)
             {
-            try
+            // Perhaps this function should be run only in the month by month
+            // case, but it does no harm to generalize it this way.
+            case e_life_by_life:
                 {
-                fs::ofstream ofs
-                    (serialized_file_path(*i, j, "test")
-                    ,   std::ios_base::in
-                    |   std::ios_base::binary
-                    |   std::ios_base::trunc
-                    );
-// TODO ?? Rethink.                    
-                IllusVal IV(serialized_file_path(*i, j, "MISTAKE").string());
-                IV.Run(cells[j]);
-                composite.PlusEq(IV.ledger());
-                IV.ledger().Spew(ofs);
-                std::cout << '.' << std::flush;
+                RunCensusInSeries(i, cells, composite);
+// TODO ?? support various output destinations?
                 }
-            catch(std::exception& e)
+                break;
+            case e_month_by_month:
                 {
-                std::cerr << "\nCaught exception: " << e.what() << std::endl;
+                RunCensusInParallel()(i, cells, composite);
                 }
-            catch(...)
+                break;
+            default:
                 {
-                std::cerr << "\nUnknown exception." << std::endl;
+                fatal_error()
+                    << "Case '"
+                    << order
+                    << "' not found."
+                    << LMI_FLUSH
+                    ;
                 }
-            fs::ofstream ofs
-                (serialized_file_path(*i, -1, "test")
-                ,   std::ios_base::in
-                |   std::ios_base::binary
-                |   std::ios_base::trunc
-                );
-            composite.Spew(ofs);
             }
+
         std::cout << std::endl;
         }
 }
@@ -209,7 +196,7 @@ void SelfTest()
 // a recently-exposed problem.
 #if 0
     multiple_cell_document census;
-    std::vector<IllusInputParms> input_vector = census.individual_parms();
+    std::vector<IllusInputParms> input_vector = census.cell_parms();
     input_vector.push_back(input_vector.front());
     std::ostream dev_null_os(0);
     RunCensus runner(dev_null_os);
