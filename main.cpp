@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main.cpp,v 1.11 2005-04-16 02:05:41 chicares Exp $
+// $Id: main.cpp,v 1.12 2005-04-17 12:47:16 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -109,7 +109,7 @@ void RegressionTest()
             // case, but it does no harm to generalize it this way.
             case e_life_by_life:
                 {
-                RunCensusInSeries(i, cells, composite);
+                RunCensusInSeries()(i, cells, composite);
 // TODO ?? support various output destinations?
                 }
                 break;
