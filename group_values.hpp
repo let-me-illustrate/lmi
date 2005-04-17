@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: group_values.hpp,v 1.1 2005-04-16 02:05:41 chicares Exp $
+// $Id: group_values.hpp,v 1.2 2005-04-17 12:47:16 chicares Exp $
 
 #ifndef group_values_hpp
 #define group_values_hpp
@@ -41,15 +41,29 @@ std::string LMI_EXPIMP serialize_extension
     ,std::string const& extension
     );
 
-// TODO ?? Make this a functor.
-void LMI_EXPIMP RunCensusInSeries
-    (fs::directory_iterator       const& file
-    ,std::vector<IllusInputParms> const& cells
-    ,Ledger                            & composite
-    );
-
-struct LMI_EXPIMP RunCensusInParallel
+class LMI_EXPIMP RunCensusInSeries
 {
+  public:
+    explicit RunCensusInSeries()
+// TODO ?? Add timing code to implementation:
+//        ,time_for_calculations(0.0)
+//        ,time_for_output      (0.0)
+        {}
+
+    void operator()
+        (fs::directory_iterator       const& file
+        ,std::vector<IllusInputParms> const& cells
+        ,Ledger                            & composite
+        );
+
+  private:
+//    double time_for_calculations;
+//    double time_for_output;
+};
+
+class LMI_EXPIMP RunCensusInParallel
+{
+  public:
     explicit RunCensusInParallel()
 // TODO ?? Add timing code to implementation:
 //        ,time_for_calculations(0.0)
@@ -62,6 +76,7 @@ struct LMI_EXPIMP RunCensusInParallel
         ,Ledger                            & composite
         );
 
+  private:
 //    double time_for_calculations;
 //    double time_for_output;
 };
