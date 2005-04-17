@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: group_values.cpp,v 1.1 2005-04-16 02:05:41 chicares Exp $
+// $Id: group_values.cpp,v 1.2 2005-04-17 12:47:16 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -95,7 +95,8 @@ namespace
     }
 } // Unnamed namespace.
 
-void RunCensusInSeries
+//============================================================================
+void RunCensusInSeries::operator()
     (fs::directory_iterator       const& file
     ,std::vector<IllusInputParms> const& cells
     ,Ledger                            & composite
