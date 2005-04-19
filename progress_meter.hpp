@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: progress_meter.hpp,v 1.1 2005-04-19 14:02:45 chicares Exp $
+// $Id: progress_meter.hpp,v 1.2 2005-04-19 22:42:02 chicares Exp $
 
 // Design notes for class progress_meter.
 //
@@ -144,7 +144,7 @@ class LMI_EXPIMP progress_meter
 
 boost::shared_ptr<progress_meter> LMI_EXPIMP create_progress_meter
     (int max_count
-    ,std::string const& title
+    ,std::string const& title = ""
     );
 
 typedef boost::shared_ptr<progress_meter> (*progress_meter_creator_type)
