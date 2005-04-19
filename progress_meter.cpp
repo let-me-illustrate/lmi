@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: progress_meter.cpp,v 1.1 2005-04-19 14:02:45 chicares Exp $
+// $Id: progress_meter.cpp,v 1.2 2005-04-19 22:42:27 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -40,7 +40,8 @@ boost::shared_ptr<progress_meter> create_progress_meter
     if(0 == progress_meter_creator)
         {
         throw std::logic_error
-            ("progress_meter: uninitialized function pointer."
+            ("create_progress_meter: "
+            "function pointer not yet uninitialized."
             );
         }
 
@@ -49,6 +50,14 @@ boost::shared_ptr<progress_meter> create_progress_meter
 
 bool set_progress_meter_creator(progress_meter_creator_type f)
 {
+    if(0 != progress_meter_creator)
+        {
+        throw std::logic_error
+            ("set_progress_meter_creator: "
+            "function pointer already initialized--must not be reset."
+            );
+        }
+
     progress_meter_creator = f;
     return true;
 }
