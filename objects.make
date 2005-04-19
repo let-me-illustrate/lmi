@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: objects.make,v 1.13 2005-04-16 02:05:41 chicares Exp $
+# $Id: objects.make,v 1.14 2005-04-19 14:02:45 chicares Exp $
 
 ################################################################################
 
@@ -351,6 +351,7 @@ unit_test_targets := \
   numeric_io_test$(EXEEXT) \
   obstruct_slicing_test$(EXEEXT) \
   passkey_test$(EXEEXT) \
+  progress_meter_test$(EXEEXT) \
   quiet_nan_test$(EXEEXT) \
   round_to_test$(EXEEXT) \
   snprintf_test$(EXEEXT) \
@@ -526,6 +527,12 @@ passkey_test$(EXEEXT): \
   passkey_test.o \
   secure_date.o \
   system_command.o \
+
+progress_meter_test$(EXEEXT): \
+  $(common_test_objects) \
+  progress_meter.o \
+  progress_meter_cli.o \
+  progress_meter_test.o \
 
 quiet_nan_test$(EXEEXT): \
   $(common_test_objects) \

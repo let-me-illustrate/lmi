@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.43 2005-04-13 00:52:58 chicares Exp $
+// $Id: ChangeLog,v 1.44 2005-04-19 14:02:44 chicares Exp $
 
 2005-01-14
 
@@ -1260,4 +1260,65 @@ Reimplement net-claims calculation.
 Set new default: survive to age 99. Because coverage beyond maturity
 is not illustrated, at least for now, this is the most reasonable
 default for a composite. It has no effect on individual illustrations.
+
+2005-04-13 [1429]
+
+  input_harmonization.cpp
+  xml_notebook.xrc
+Fix some problems with solve inputs.
+
+  ledger.cpp
+Improve an error message.
+
+2005-04-14 [1429]
+
+  census_view.cpp
+  census_view.hpp
+  ledgervalues.cpp
+  ledgervalues.hpp
+  main.cpp
+Consolidate and refactor filename generation.
+
+2005-04-15 [1447]
+
+  calculate.hpp
+  census_document.cpp
+  main.cpp
+  multiple_cell_document.cpp
+  multiple_cell_document.hpp
+Revise class multiple_cell_document. Rename members. Add accessors.
+Change dependent code elsewhere.
+
+  ihs_acctval.cpp
+Apportion mortality reserve only on current-mortality basis.
+
+  accountvalue.cpp
+Add stubs for member functions not implemented on the antediluvian
+branch.
+
+  account_value.hpp
+  group_values.cpp [new file]
+  group_values.hpp [new file]
+  ledgervalues.cpp
+  ledgervalues.hpp
+  main.cpp
+Revise and move group-values code, distinguishing parallel from serial
+accumulation.
+
+2005-04-17 [1446]
+
+  group_values.cpp
+  group_values.hpp
+  main.cpp
+Make 'RunCensusInSeries' a function object.
+
+2005-04-19 [1446]
+
+  objects.make
+  progress_meter.cpp      [new file]
+  progress_meter.hpp      [new file]
+  progress_meter_cli.cpp  [new file]
+  progress_meter_cli.hpp  [new file]
+  progress_meter_test.cpp [new file]
+Add progress_meter class and unit test.
 
