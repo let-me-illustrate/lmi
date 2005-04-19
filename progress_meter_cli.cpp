@@ -19,14 +19,14 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: progress_meter_cli.cpp,v 1.1 2005-04-19 14:02:45 chicares Exp $
+// $Id: progress_meter_cli.cpp,v 1.2 2005-04-19 22:43:48 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
 #   pragma hdrstop
 #endif // __BORLANDC__
 
-#include "progress_meter_cli.hpp"
+#include "progress_meter.hpp"
 
 #include <iostream>
 #include <ostream>
@@ -34,22 +34,21 @@
 
 namespace
 {
-boost::shared_ptr<progress_meter> progress_meter_creator_cli
-    (int max_count
-    ,std::string const& title
-    )
+// Implicitly-declared special member functions do the right thing.
+
+class concrete_progress_meter
+    :public progress_meter
 {
-    return boost::shared_ptr<progress_meter>
-        (new progress_meter_cli(max_count, title)
-        );
-}
+  public:
+    concrete_progress_meter(int max_count, std::string const& title);
+    virtual ~concrete_progress_meter();
 
-volatile bool ensure_setup = set_progress_meter_creator
-    (progress_meter_creator_cli
-    );
-} // Unnamed namespace.
+    // progress_meter overrides.
+    virtual std::string progress_message() const;
+    virtual bool show_progress_message() const;
+};
 
-progress_meter_cli::progress_meter_cli
+concrete_progress_meter::concrete_progress_meter
     (int max_count
     ,std::string const& title
     )
@@ -57,7 +56,7 @@ progress_meter_cli::progress_meter_cli
 {
 }
 
-progress_meter_cli::~progress_meter_cli()
+concrete_progress_meter::~concrete_progress_meter()
 {
     try
         {
@@ -66,14 +65,29 @@ progress_meter_cli::~progress_meter_cli()
     catch(...) {}
 }
 
-std::string progress_meter_cli::progress_message() const
+std::string concrete_progress_meter::progress_message() const
 {
     return ".";
 }
 
-bool progress_meter_cli::show_progress_message() const
+bool concrete_progress_meter::show_progress_message() const
 {
     std::cout << progress_message();
     return true;
 }
+
+boost::shared_ptr<progress_meter> concrete_progress_meter_creator
+    (int max_count
+    ,std::string const& title
+    )
+{
+    return boost::shared_ptr<progress_meter>
+        (new concrete_progress_meter(max_count, title)
+        );
+}
+
+volatile bool ensure_setup = set_progress_meter_creator
+    (concrete_progress_meter_creator
+    );
+} // Unnamed namespace.
 
