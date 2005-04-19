@@ -19,23 +19,21 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: progress_meter_test.cpp,v 1.1 2005-04-19 14:02:45 chicares Exp $
+// $Id: progress_meter_test.cpp,v 1.2 2005-04-19 22:42:02 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
 #   pragma hdrstop
 #endif // __BORLANDC__
 
-#include "progress_meter_cli.hpp"
+#include "progress_meter.hpp"
 #define BOOST_INCLUDE_MAIN
 #include "test_tools.hpp"
 
 int test_main(int, char*[])
 {
     int const max_count = 3;
-    boost::shared_ptr<progress_meter> meter
-        (create_progress_meter(max_count, "Test")
-        );
+    boost::shared_ptr<progress_meter> meter(create_progress_meter(max_count));
     for(int i = 0; i < max_count; ++i)
         {
         // Intended use: do some work, then update meter at end of block.
