@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xml_io.cpp,v 1.9 2005-04-08 03:04:38 chicares Exp $
+// $Id: ledger_xml_io.cpp,v 1.10 2005-04-20 03:20:26 chicares Exp $
 
 #include "config.hpp"
 
@@ -1014,7 +1014,7 @@ void Ledger::write(xml::node& x) const
         column.set_attr("name", j->first.c_str());
         std::vector<std::string> const& v = j->second;
 // TODO ?? InforceLives shows an extra value past the end; should it
-// be truncated here?        
+// be truncated here?
         for(unsigned int k = 0; k < v.size(); ++k)
             {
             xml::node duration("duration");
@@ -1083,6 +1083,51 @@ void Ledger::write(xml::node& x) const
     x.push_back(scalar);
     x.push_back(data);
     x.push_back(supplementalreport);
+
+    if
+        (   GetIsComposite()
+        &&  std::string::npos != ledger_invariant_->Comments.find("idiosyncrasy_spreadsheet")
+        )
+        {
+// TODO ?? Abstract the extension here.
+        std::ofstream ofs
+            ("values.xls"
+            ,std::ios_base::out | std::ios_base::trunc
+            );
+        for
+            (std::map<std::string,std::vector<std::string> >::const_iterator j = stringvectors.begin()
+            ;j != stringvectors.end()
+            ;++j
+            )
+            {
+            ofs << j->first.c_str() << '\t';
+            }
+        ofs << '\n';
+
+        for(unsigned int i = 0; i < static_cast<unsigned int>(GetMaxLength()); ++i)
+            {
+            for
+                (std::map<std::string,std::vector<std::string> >::const_iterator j = stringvectors.begin()
+                ;j != stringvectors.end()
+                ;++j
+                )
+                {
+                std::vector<std::string> const& v = j->second;
+// TODO ?? InforceLives shows an extra value past the end; should it
+// be truncated here?
+                if(i < v.size())
+                    {
+                    ofs << v[i].c_str() << '\t';
+                    }
+                else
+                    {
+                    ofs << '\t';
+                    }
+                }
+            ofs << '\n';
+            }
+        }
+
 #else // old borland compiler
 // COMPILER !! Not supported.
 #endif // old borland compiler
