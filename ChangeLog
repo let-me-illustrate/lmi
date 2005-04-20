@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.45 2005-04-20 03:10:24 chicares Exp $
+// $Id: ChangeLog,v 1.46 2005-04-20 03:20:26 chicares Exp $
 
 2005-01-14
 
@@ -1312,7 +1312,7 @@ accumulation.
   main.cpp
 Make 'RunCensusInSeries' a function object.
 
-2005-04-19 [1446]
+2005-04-19 [1448]
 
   objects.make
   progress_meter.cpp      [new file]
@@ -1336,4 +1336,11 @@ Subsume concrete-class declaration into the implementation file, in an
 anonymous namespace, to improve encapsulation. Consequently, fewer
 files are needed, and all concrete implementations can share the same
 name, because only one may ever be defined.
+
+  ledger_invariant.cpp
+  ledger_xml_io.cpp
+Add experimental 'spreadsheet' output facility. Printing or previewing
+a composite creates a tab-delimited file of all values potentially
+available for output columns, iff the 'Comments' field at the case
+level contains the string 'idiosyncrasy_spreadsheet'.
 
