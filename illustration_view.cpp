@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustration_view.cpp,v 1.3 2005-03-24 15:53:32 chicares Exp $
+// $Id: illustration_view.cpp,v 1.4 2005-04-20 14:18:56 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -384,7 +384,6 @@ wxLog::FlushActive();
         edit_cell->Enable(!is_phony_);
         }
 }
-
 
 void IllustrationView::OnPreviewPdf(wxCommandEvent&)
 {
@@ -1135,6 +1134,11 @@ os << "\n\n" ;
             os << irr_on_surrender[j]                     << '\t';
             os << irr_on_death[j]                         << '\t';
             }
+
+        // The following columns are in a logical order. The last few
+        // columns immediately preceding aren't, because an important
+        // group of users wanted the columns they use on the left,
+        // before the columns they ignore.
 
         os << Invar.value_str("EeGrossPmt"            ,j) << '\t';
         os << Invar.value_str("ErGrossPmt"            ,j) << '\t';
