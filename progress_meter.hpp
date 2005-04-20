@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: progress_meter.hpp,v 1.2 2005-04-19 22:42:02 chicares Exp $
+// $Id: progress_meter.hpp,v 1.3 2005-04-20 14:19:34 chicares Exp $
 
 // Design notes for class progress_meter.
 //
@@ -53,8 +53,9 @@
 //
 // ctor: Initialize data members from ctor arguments.
 //
-// count(): Return the value of the iteration counter. Derived classes
-// need this to access the private datum.
+// count(), max_count(): Return the value of the iteration counter,
+// or its maximum, respectively. Derived classes need these to access
+// the private data.
 //
 // Protected interface--virtual.
 //
@@ -132,6 +133,7 @@ class LMI_EXPIMP progress_meter
     virtual ~progress_meter();
 
     int count() const;
+    int max_count() const;
 
     virtual std::string progress_message() const = 0;
     virtual bool show_progress_message() const = 0;

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: progress_meter.cpp,v 1.2 2005-04-19 22:42:27 chicares Exp $
+// $Id: progress_meter.cpp,v 1.3 2005-04-20 14:19:34 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -86,5 +86,10 @@ bool progress_meter::reflect_progress()
 int progress_meter::count() const
 {
     return count_;
+}
+
+int progress_meter::max_count() const
+{
+    return max_count_;
 }
 
