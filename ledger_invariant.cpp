@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_invariant.cpp,v 1.5 2005-04-02 22:55:01 chicares Exp $
+// $Id: ledger_invariant.cpp,v 1.6 2005-04-20 03:20:26 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -794,6 +794,8 @@ LedgerInvariant& LedgerInvariant::PlusEq(LedgerInvariant const& a_Addend)
     CsvHeaderName               = a_Addend.CsvHeaderName;
     NoLapseProvisionName        = a_Addend.NoLapseProvisionName;
     InterestDisclaimer          = a_Addend.InterestDisclaimer;
+
+    Comments                    = a_Addend.Comments;
 
     StatePostalAbbrev           = a_Addend.StatePostalAbbrev;
     StatePremTaxLoad            = a_Addend.StatePremTaxLoad;
