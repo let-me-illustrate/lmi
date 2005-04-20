@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: progress_meter_cli.cpp,v 1.2 2005-04-19 22:43:48 chicares Exp $
+// $Id: progress_meter_cli.cpp,v 1.3 2005-04-20 14:22:37 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -30,7 +30,6 @@
 
 #include <iostream>
 #include <ostream>
-#include <stdexcept>
 
 namespace
 {
@@ -54,6 +53,7 @@ concrete_progress_meter::concrete_progress_meter
     )
     :progress_meter(max_count, title)
 {
+    std::cout << title << std::flush;
 }
 
 concrete_progress_meter::~concrete_progress_meter()
@@ -72,7 +72,7 @@ std::string concrete_progress_meter::progress_message() const
 
 bool concrete_progress_meter::show_progress_message() const
 {
-    std::cout << progress_message();
+    std::cout << progress_message() << std::flush;
     return true;
 }
 
