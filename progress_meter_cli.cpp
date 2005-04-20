@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: progress_meter_cli.cpp,v 1.3 2005-04-20 14:22:37 chicares Exp $
+// $Id: progress_meter_cli.cpp,v 1.4 2005-04-20 21:03:45 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -35,6 +35,10 @@ namespace
 {
 // Implicitly-declared special member functions do the right thing.
 
+// Virtuals are private because no one has any business accessing
+// them--not even derived classes, because deriving from this concrete
+// class is not contemplated.
+
 class concrete_progress_meter
     :public progress_meter
 {
@@ -42,6 +46,7 @@ class concrete_progress_meter
     concrete_progress_meter(int max_count, std::string const& title);
     virtual ~concrete_progress_meter();
 
+  private:
     // progress_meter overrides.
     virtual std::string progress_message() const;
     virtual bool show_progress_message() const;
