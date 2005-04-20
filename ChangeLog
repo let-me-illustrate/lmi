@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.44 2005-04-19 14:02:44 chicares Exp $
+// $Id: ChangeLog,v 1.45 2005-04-20 03:10:24 chicares Exp $
 
 2005-01-14
 
@@ -1321,4 +1321,19 @@ Make 'RunCensusInSeries' a function object.
   progress_meter_cli.hpp  [new file]
   progress_meter_test.cpp [new file]
 Add progress_meter class and unit test.
+
+  progress_meter.hpp
+  progress_meter_test.cpp
+Default 'title' argument to an empty string.
+
+  progress_meter.cpp
+Throw an exception if function pointer assigned more than once.
+
+  progress_meter_cli.cpp
+  progress_meter_cli.hpp [expunged]
+  progress_meter_test.cpp
+Subsume concrete-class declaration into the implementation file, in an
+anonymous namespace, to improve encapsulation. Consequently, fewer
+files are needed, and all concrete implementations can share the same
+name, because only one may ever be defined.
 
