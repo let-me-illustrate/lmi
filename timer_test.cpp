@@ -1,4 +1,4 @@
-// Elapsed time to high resolution--unit test.
+// Measure elapsed time to high resolution--unit test.
 //
 // Copyright (C) 2005 Gregory W. Chicares.
 //
@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: timer_test.cpp,v 1.1 2005-04-21 14:21:35 chicares Exp $
+// $Id: timer_test.cpp,v 1.2 2005-04-21 15:22:16 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -36,11 +36,27 @@
 int test_main(int, char*[])
 {
     Timer timer;
-    std::clock_t first = std::clock();
+    std::clock_t first;
     std::clock_t last;
     double elapsed;
     double interval = 1.0;
+    double clock_resolution;
 
+    // Coarsely measure resolution of std::clock().
+    first = std::clock();
+    for(;;)
+        {
+        last = std::clock();
+        clock_resolution = double(last - first) / CLOCKS_PER_SEC;
+        if(0.0 != clock_resolution)
+            {
+            break;
+            }
+        }
+
+    // Use high-resolution time to measure an interval of about one
+    // second.
+    first = std::clock();
     for(;;)
         {
         last = std::clock();
@@ -50,12 +66,12 @@ int test_main(int, char*[])
             break;
             }
         }
-////    std::cout << elapsed << std::endl;
     double observed = timer.Stop().Result();
     double relative_error = std::fabs(observed - interval) / interval;
-    std::cout << "relative error: " << relative_error << std::endl;
 
-    BOOST_TEST_RELATION(relative_error,<,.1);
+    // Test accuracy of high-resolution timer. Finer tests might be
+    // devised, but this one catches gross errors.
+    BOOST_TEST_RELATION(relative_error,<,2.0*clock_resolution);
 
     // Already stopped--can't stop again.
     BOOST_TEST_THROW(timer.Stop(), std::logic_error, "");

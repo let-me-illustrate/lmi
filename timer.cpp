@@ -1,4 +1,4 @@
-// Elapsed time to high resolution.
+// Measure elapsed time to high resolution.
 //
 // Copyright (C) 1998, 2000, 2001, 2002, 2003, 2005 Gregory W. Chicares.
 //
@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: timer.cpp,v 1.1 2005-01-14 19:47:45 chicares Exp $
+// $Id: timer.cpp,v 1.2 2005-04-21 15:22:16 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -28,7 +28,6 @@
 
 #include "timer.hpp"
 
-#include <ostream>
 #include <sstream>
 #include <stdexcept>
 
@@ -59,31 +58,15 @@ Timer::Timer(bool autostart)
     ,elapsed    (0)
     ,iterations (0L)
 {
-    Init();
+    freq = calibrate();
+    if(0 == freq)
+        {
+        throw std::runtime_error("High resolution timer not available.");
+        }
     if(autostart)
         {
         Start();
         }
-}
-
-//============================================================================
-Timer& Timer::Init()
-{
-    if(is_running)
-        {
-        throw std::logic_error
-            ("Timer::Init() called, but timer was already running"
-            );
-        }
-    is_running = false;
-    elapsed = 0;
-    iterations = 0;
-    freq = calibrate();
-    if(0 == freq)
-        {
-        throw std::logic_error("High resolution timer not available");
-        }
-    return *this;
 }
 
 //============================================================================
@@ -92,7 +75,7 @@ Timer& Timer::Start()
     if(is_running)
         {
         throw std::logic_error
-            ("Timer::Start() called, but timer was already running"
+            ("Timer::Start() called, but timer was already running."
             );
         }
     else
@@ -109,7 +92,7 @@ Timer& Timer::Stop()
     if(!is_running)
         {
         throw std::logic_error
-            ("Timer::Stop() called, but timer was never started"
+            ("Timer::Stop() called, but timer was not running."
             );
         }
     else
@@ -137,7 +120,7 @@ double Timer::Result()
     if(is_running)
         {
         throw std::logic_error
-            ("Timer::Result() called, but timer is still running"
+            ("Timer::Result() called, but timer is still running."
             );
         }
     else
