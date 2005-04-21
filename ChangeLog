@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.46 2005-04-20 03:20:26 chicares Exp $
+// $Id: ChangeLog,v 1.47 2005-04-21 03:26:35 chicares Exp $
 
 2005-01-14
 
@@ -1343,4 +1343,28 @@ Add experimental 'spreadsheet' output facility. Printing or previewing
 a composite creates a tab-delimited file of all values potentially
 available for output columns, iff the 'Comments' field at the case
 level contains the string 'idiosyncrasy_spreadsheet'.
+
+2005-04-20 [1448]
+
+  illustration_view.cpp
+Improve documentation.
+
+  progress_meter.cpp
+  progress_meter.hpp
+Add protected accessor for maximum count.
+
+  progress_meter_cli.cpp
+Print title.
+
+  progress_meter_cli.cpp
+Make concrete_progress_meter virtuals private.
+
+  progress_meter_cgi.cpp
+  progress_meter_wx.cpp
+Implement progress meter for additional interfaces.
+
+  census_view.cpp
+  group_values.cpp
+  objects.make
+Use progress meter for both old and new group-values code.
 
