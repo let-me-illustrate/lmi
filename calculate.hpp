@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: calculate.hpp,v 1.5 2005-04-15 13:57:21 chicares Exp $
+// $Id: calculate.hpp,v 1.6 2005-04-21 16:11:47 chicares Exp $
 
 #ifndef calculate_hpp
 #define calculate_hpp
@@ -62,7 +62,7 @@ struct RunIllustration
         IV.Run(a_input);
         time_for_calculations += timer.Stop().Result();
 
-        timer.Reset().Start();
+        timer.Restart();
         IV.Print(OutputDest);
         time_for_output       += timer.Stop().Result();
         }
@@ -139,7 +139,7 @@ struct RunCensus
 
         time_for_calculations += timer.Stop().Result();
 
-        timer.Reset().Start();
+        timer.Restart();
         IllusVal Composite(&XXXComposite);
         Composite.Print(OutputDest);
 
@@ -216,7 +216,7 @@ struct RunCensusDeprecated
         // TODO ?? Why copy?
         std::vector<IllusInputParms> lives(doc.cell_parms());
 
-        timer.Reset().Start();
+        timer.Restart();
 
 // TODO ?? Use the stack instead of the heap.
         std::auto_ptr<IllusVal> Composite(new IllusVal(new Ledger(e_ledger_type(e_ill_reg), 100, true)));
@@ -234,7 +234,7 @@ struct RunCensusDeprecated
 
         std::cerr << "    Calculations: " << timer.Stop().Report() << '\n';
 
-        timer.Reset().Start();
+        timer.Restart();
         Composite->Print(std::cout);
         std::cerr << "    Output:       " << timer.Stop().Report() << '\n';
         }

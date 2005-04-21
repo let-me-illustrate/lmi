@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: commutation_functions_test.cpp,v 1.2 2005-02-14 04:37:51 chicares Exp $
+// $Id: commutation_functions_test.cpp,v 1.3 2005-04-21 16:11:47 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -125,7 +125,7 @@ int test_main(int, char*[])
         << cvat_corridor[99] << " [99]\n"
         ;
 
-    timer.Reset().Start();
+    timer.Restart();
     cvat_corridor.resize(q.size());
     for(int j = 0; j < trials; j++)
         {

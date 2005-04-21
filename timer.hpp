@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: timer.hpp,v 1.3 2005-04-21 15:22:16 chicares Exp $
+// $Id: timer.hpp,v 1.4 2005-04-21 16:11:47 chicares Exp $
 
 // Boost provides a timer class, but they deliberately chose to use
 // only a low-resolution timer. Their rationale is apparently that
@@ -27,8 +27,6 @@
 // and that latency is a significant concern. This class uses a high-
 // resolution timer if available; it's a sharp tool that lets you
 // make your own decision about that rationale.
-
-// TODO ?? Consider whether boost's timer class has a better api.
 
 #ifndef timer_hpp
 #define timer_hpp
@@ -58,16 +56,21 @@
     typedef std::clock_t elapsed_t;
 #endif // Unknown platform.
 
+#include <boost/utility.hpp>
+
 #include <string>
 
 class LMI_EXPIMP Timer
+    :private boost::noncopyable
 {
   public:
-    Timer(bool autostart = true);
+    Timer();
+    ~Timer();
 
+    // Public members presented in logical rather than alphabetical order.
     Timer&      Start();
     Timer&      Stop();
-    Timer&      Reset();
+    Timer&      Restart();
     double      Result();
     std::string Report();
 
@@ -75,12 +78,11 @@ class LMI_EXPIMP Timer
     elapsed_t   calibrate();
     elapsed_t   inspect();
 
-    bool        is_running;
-    elapsed_t   freq;
-    elapsed_t   start;
-    elapsed_t   end;
-    elapsed_t   elapsed;
-    long int    iterations;
+    elapsed_t   elapsed_time_;
+    elapsed_t   frequency_;
+    bool        is_running_;
+    elapsed_t   time_when_started_;
+    elapsed_t   time_when_stopped_;
 };
 
 #endif // timer_hpp

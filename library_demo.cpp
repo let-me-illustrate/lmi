@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: library_demo.cpp,v 1.6 2005-04-11 03:49:14 chicares Exp $
+// $Id: library_demo.cpp,v 1.7 2005-04-21 16:11:47 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -100,14 +100,14 @@ void test()
     IllustrationDocument document("foo.ill");
 
     warning() << "Read input file: " << timer.Stop().Report() << std::flush;
-    timer.Reset().Start();
+    timer.Restart();
 
     IllusInputParms input = *document.input_parameters();
     AccountValue av(input);
     av.RunAV();
 
     warning() << "Calculate: " << timer.Stop().Report() << std::flush;
-    timer.Reset().Start();
+    timer.Restart();
 
     Ledger const& ledger = av.LedgerValues();
     std::ofstream ofs0("eraseme.xml", std::ios_base::out | std::ios_base::trunc);
