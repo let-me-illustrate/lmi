@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.47 2005-04-21 03:26:35 chicares Exp $
+// $Id: ChangeLog,v 1.48 2005-04-21 16:27:00 chicares Exp $
 
 2005-01-14
 
@@ -1367,4 +1367,28 @@ Implement progress meter for additional interfaces.
   group_values.cpp
   objects.make
 Use progress meter for both old and new group-values code.
+
+2005-04-21 [1449]
+
+  objects.make
+  timer_test.cpp [new file]
+
+Add unit test for class Timer.
+
+  timer.cpp
+  timer.hpp
+  timer_test.cpp
+Revert 2005-04-07T15:05:40Z change, which had incorrectly quadrupled
+reported times. Improve documentation, interface, implementation, and
+unit test.
+
+  calculate.hpp
+  commutation_functions_test.cpp
+  illustration_view.cpp
+  input.cpp
+  library_demo.cpp
+  main.cpp
+  timer.cpp
+  timer.hpp
+Simplify and improve class Timer.
 
