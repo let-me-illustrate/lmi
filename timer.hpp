@@ -1,4 +1,4 @@
-// Elapsed time to high resolution.
+// Measure elapsed time to high resolution.
 //
 // Copyright (C) 1998, 2000, 2001, 2003, 2004, 2005 Gregory W. Chicares.
 //
@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: timer.hpp,v 1.2 2005-04-07 15:05:40 chicares Exp $
+// $Id: timer.hpp,v 1.3 2005-04-21 15:22:16 chicares Exp $
 
 // Boost provides a timer class, but they deliberately chose to use
 // only a low-resolution timer. Their rationale is apparently that
@@ -28,8 +28,7 @@
 // resolution timer if available; it's a sharp tool that lets you
 // make your own decision about that rationale.
 
-// TODO ?? Consider whether boost's timer class has a better api, and
-// at any rate provide unit tests for this class.
+// TODO ?? Consider whether boost's timer class has a better api.
 
 #ifndef timer_hpp
 #define timer_hpp
@@ -43,16 +42,22 @@
     typedef double elapsed_t;
 #elif defined LMI_MSW
     // Compilers for this platform use various types for its high-
-    // resolution timer, but this seems just as good: it's reliably
-    // 64 bits, and that's all that matters.
+    // resolution timer, but they use the same platform API, so
+    // it's sufficient to use the same 64-bit integer type for all.
     //
-    typedef double elapsed_t;
+    // Type double can't be used, even though it be the right size:
+    // arithmetic performed on this type requires that it be integral.
+    //
+#   ifndef __BORLANDC__
+    typedef unsigned long long int elapsed_t;
+#   else // __BORLANDC__
+    typedef unsigned __int64 elapsed_t;
+#   endif // __BORLANDC__
 #else // Unknown platform.
 #   include <ctime>
     typedef std::clock_t elapsed_t;
 #endif // Unknown platform.
 
-#include <ctime>
 #include <string>
 
 class LMI_EXPIMP Timer
@@ -60,7 +65,6 @@ class LMI_EXPIMP Timer
   public:
     Timer(bool autostart = true);
 
-    Timer&      Init();
     Timer&      Start();
     Timer&      Stop();
     Timer&      Reset();
