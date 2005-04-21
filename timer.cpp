@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: timer.cpp,v 1.2 2005-04-21 15:22:16 chicares Exp $
+// $Id: timer.cpp,v 1.3 2005-04-21 16:11:47 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -50,83 +50,76 @@
 #endif // LMI_MSW
 
 //============================================================================
-Timer::Timer(bool autostart)
-    :is_running (false)
-    ,freq       (0)
-    ,start      (0)
-    ,end        (0)
-    ,elapsed    (0)
-    ,iterations (0L)
+Timer::Timer()
+    :elapsed_time_      (0)
+    ,is_running_        (false)
+    ,time_when_started_ (0)
+    ,time_when_stopped_ (0)
 {
-    freq = calibrate();
-    if(0 == freq)
+    frequency_ = calibrate();
+    if(0 == frequency_)
         {
         throw std::runtime_error("High resolution timer not available.");
         }
-    if(autostart)
-        {
-        Start();
-        }
+    Start();
+}
+
+//============================================================================
+Timer::~Timer()
+{
 }
 
 //============================================================================
 Timer& Timer::Start()
 {
-    if(is_running)
+    if(is_running_)
         {
         throw std::logic_error
             ("Timer::Start() called, but timer was already running."
             );
         }
-    else
-        {
-        is_running = true;
-        start = inspect();
-        }
+
+    is_running_ = true;
+    time_when_started_ = inspect();
     return *this;
 }
 
 //============================================================================
 Timer& Timer::Stop()
 {
-    if(!is_running)
+    if(!is_running_)
         {
         throw std::logic_error
             ("Timer::Stop() called, but timer was not running."
             );
         }
-    else
-        {
-        is_running = false;
-        end = inspect();
-        elapsed += end - start;
-        iterations++;
-        }
+
+    is_running_ = false;
+    time_when_stopped_ = inspect();
+    elapsed_time_ += time_when_stopped_ - time_when_started_;
     return *this;
 }
 
 //============================================================================
-Timer& Timer::Reset()
+Timer& Timer::Restart()
 {
-    iterations = 0;
-    elapsed = 0;
-    start = inspect();
-    return *this;
+    elapsed_time_ = 0;
+    return Start();
 }
 
 //============================================================================
 double Timer::Result()
 {
-    if(is_running)
+    if(is_running_)
         {
         throw std::logic_error
             ("Timer::Result() called, but timer is still running."
             );
         }
-    else
-        {
-        return double(elapsed) / freq;
-        }
+
+    // The static_cast is necessary in case elapsed_t is integral.
+    // It is impossible for frequency_ to be zero.
+    return static_cast<double>(elapsed_time_) / frequency_;
 }
 
 //============================================================================
@@ -135,11 +128,6 @@ std::string Timer::Report()
     std::ostringstream oss;
     oss << static_cast<int>(1000.0 * Result());
     oss << " milliseconds ";
-    if(1 < iterations)
-        {
-        oss << iterations;
-        oss << " iterations";
-        }
     return oss.str().c_str();
 }
 

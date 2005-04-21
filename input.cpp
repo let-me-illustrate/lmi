@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input.cpp,v 1.2 2005-03-17 02:34:19 chicares Exp $
+// $Id: input.cpp,v 1.3 2005-04-21 16:11:47 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -393,10 +393,10 @@ void convert_from_ihs(std::vector<IllusInputParms> const& ihs, std::vector<Input
 //        Input z;
         convert_from_ihs(ihs[j], lmi[j]);
 //    status() << "copy item: " << timer.Stop().Report() << std::flush;
-//    timer.Reset().Start();
+//    timer.Restart();
 //        lmi.push_back(z);
 //    status() << "push back: " << timer.Stop().Report() << std::flush;
-//    timer.Reset().Start();
+//    timer.Restart();
         }
     status() << "Convert to lmi: " << timer.Stop().Report() << std::flush;
 }
