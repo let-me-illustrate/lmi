@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main.cpp,v 1.12 2005-04-17 12:47:16 chicares Exp $
+// $Id: main.cpp,v 1.13 2005-04-21 16:11:47 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -231,7 +231,7 @@ std::cout << "? " << runner.XXXComposite.GetLedgerInvariant().GetInforceLives().
     timer.Stop();
     int const m = static_cast<int>(std::log10(5.0 / timer.Result()));
     int const n = static_cast<int>(std::pow(10.0, std::max(0, m)));
-    timer.Reset().Start();
+    timer.Restart();
     for(int j = 0; j < n; j++)
         {
         observed_value = IV.Run(IP);

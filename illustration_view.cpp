@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustration_view.cpp,v 1.4 2005-04-20 14:18:56 chicares Exp $
+// $Id: illustration_view.cpp,v 1.5 2005-04-21 16:11:47 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -597,8 +597,6 @@ void IllustrationView::Run(Input* overriding_input)
     // TODO ?? For now, convert input on the fly.
     IllusInputParms ihs_input;
     convert_to_ihs(ihs_input, document().input_);
-
-    timer.Stop().Reset().Start();
 
     AccountValue av(ihs_input);
     av.SetDebugFilename    (base_filename() + ".debug");
