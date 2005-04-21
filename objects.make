@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: objects.make,v 1.14 2005-04-19 14:02:45 chicares Exp $
+# $Id: objects.make,v 1.15 2005-04-21 03:24:37 chicares Exp $
 
 ################################################################################
 
@@ -142,6 +142,7 @@ antediluvian_common_objects := \
   mortality_rates.o \
   multiple_cell_document.o \
   outlay.o \
+  progress_meter.o \
   rounding_rules.o \
   sigfpe.o \
   single_cell_document.o \
@@ -154,11 +155,13 @@ antediluvian_common_objects := \
 antediluvian_cli_objects := \
   alert_cli.o \
   main.o \
+  progress_meter_cli.o \
 
 antediluvian_cgi_objects := \
   $(cgicc_objects) \
   alert_cgi.o \
   main_cgi.o \
+  progress_meter_cgi.o \
 
 ################################################################################
 
@@ -220,6 +223,7 @@ lmi_common_objects := \
   miscellany.o \
   multiple_cell_document.o \
   outlay.o \
+  progress_meter.o \
   rounding_rules.o \
   secure_date.o \
   security.o \
@@ -236,6 +240,7 @@ lmi_cli_objects := \
   alert_cli.o \
   getopt.o \
   main.o \
+  progress_meter_cli.o \
 
 lmi_wx_objects := \
   about_dialog.o \
@@ -260,6 +265,7 @@ lmi_wx_objects := \
   mc_enum.o \
   mc_enum_types.o \
   previewframe_ex.o \
+  progress_meter_wx.o \
   text_doc.o \
   text_view.o \
   tn_range_types.o \
