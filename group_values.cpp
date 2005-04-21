@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: group_values.cpp,v 1.2 2005-04-17 12:47:16 chicares Exp $
+// $Id: group_values.cpp,v 1.3 2005-04-21 03:24:37 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -35,6 +35,7 @@
 #include "inputillus.hpp"
 #include "ledger.hpp"
 #include "ledgervalues.hpp"
+#include "progress_meter.hpp"
 #include "timer.hpp"
 #include "value_cast.hpp"
 
@@ -43,12 +44,8 @@
 #include <boost/shared_ptr.hpp>
 
 #include <algorithm> // std::max()
-#include <sstream>
-
-// TODO ?? Temporary--eventually expunge.
 #include <iomanip>
-#include <iostream>
-#include <ostream>
+#include <sstream>
 
 // Prepend a serial number to a file extension. This is intended to
 // be used for creating output file names for cells in a census. The
@@ -102,6 +99,13 @@ void RunCensusInSeries::operator()
     ,Ledger                            & composite
     )
 {
+// TODO ?? Rethink placement of try blocks. Why have them at all?
+    boost::shared_ptr<progress_meter> meter
+        (create_progress_meter
+            (cells.size()
+            ,"Calculating all cells"
+            )
+        );
     for(unsigned int j = 0; j < cells.size(); ++j)
         {
         try
@@ -117,15 +121,18 @@ void RunCensusInSeries::operator()
             IV.Run(cells[j]);
             composite.PlusEq(IV.ledger());
             IV.ledger().Spew(ofs);
-            std::cout << '.' << std::flush;
+            if(!meter->reflect_progress())
+                {
+                break;
+                }
             }
         catch(std::exception& e)
             {
-            std::cerr << "\nCaught exception: " << e.what() << std::endl;
+            fatal_error() << "\nCaught exception: " << e.what() << LMI_FLUSH;
             }
         catch(...)
             {
-            std::cerr << "\nUnknown exception." << std::endl;
+            fatal_error() << "\nUnknown exception." << LMI_FLUSH;
             }
         fs::ofstream ofs
             (serialized_file_path(*file, -1, "test")
@@ -144,15 +151,18 @@ void RunCensusInParallel::operator()
     ,Ledger                            & composite
     )
 {
-    // TODO ?? initialize progress indicator
-
-    bool was_canceled_ = false;
     Timer timer;
 
     std::vector<boost::shared_ptr<AccountValue> > AVS;
     std::vector<IllusInputParms>::const_iterator ip;
     try
         {
+        boost::shared_ptr<progress_meter> meter
+            (create_progress_meter
+                (cells.size()
+                ,"Initializing all cells"
+                )
+            );
         int j = 0;
         int first_cell_inforce_year  = value_cast<int>((*cells.begin())["InforceYear"].str());
         int first_cell_inforce_month = value_cast<int>((*cells.begin())["InforceMonth"].str());
@@ -192,21 +202,19 @@ void RunCensusInParallel::operator()
                     ;
                 }
 
-            // TODO ?? update progress indicator; break if canceled
+            if(!meter->reflect_progress())
+                {
+                return;
+                }
             }
         }
     catch(std::exception& e)
         {
-        std::cerr << "\nCaught exception: " << e.what() << std::endl;
+        fatal_error() << "\nCaught exception: " << e.what() << LMI_FLUSH;
         }
     catch(...)
         {
-        std::cerr << "\nUnknown exception." << std::endl;
-        }
-
-    if(was_canceled_)
-        {
-        return;
+        fatal_error() << "\nUnknown exception." << LMI_FLUSH;
         }
 
     std::vector<boost::shared_ptr<AccountValue> >::iterator i;
@@ -219,11 +227,6 @@ void RunCensusInParallel::operator()
         )
     try
         {
-        if(was_canceled_)
-            {
-            break;
-            }
-
         for(i = AVS.begin(); i != AVS.end(); ++i)
             {
             (*i)->GuessWhetherFirstYearPremiumExceedsRetaliationLimit();
@@ -242,7 +245,12 @@ restart:
     // Perhaps use it for individual-cell solves?
         std::vector<double> Assets(MaxYr, 0.0);
 
-    // TODO ?? initialize progress indicator
+        boost::shared_ptr<progress_meter> meter
+            (create_progress_meter
+                (MaxYr
+                ,run_basis->str().c_str()
+                )
+            );
 
         // Experience rating mortality reserve.
         double case_accum_net_mortchgs = 0.0;
@@ -423,7 +431,10 @@ restart:
                     );
                 }
 
-            // TODO ?? update progress indicator; break if canceled
+            if(!meter->reflect_progress())
+                {
+                return;
+                }
             } // End for year.
 
         for(i = AVS.begin(); i != AVS.end(); ++i)
@@ -434,11 +445,11 @@ restart:
         } // End for...try.
     catch(std::exception& e)
         {
-        std::cerr << "\nCaught exception: " << e.what() << std::endl;
+        fatal_error() << "\nCaught exception: " << e.what() << LMI_FLUSH;
         }
     catch(...)
         {
-        std::cerr << "\nUnknown exception." << std::endl;
+        fatal_error() << "\nUnknown exception." << LMI_FLUSH;
         }
 
     for(i = AVS.begin(); i != AVS.end(); ++i)
@@ -449,27 +460,24 @@ restart:
 
     status() << timer.Stop().Report() << std::flush;
 
-    if(!was_canceled_)
+    int j = 0;
+    for(i = AVS.begin(); i != AVS.end(); ++i, ++j)
         {
-        int j = 0;
-        for(i = AVS.begin(); i != AVS.end(); ++i, ++j)
-            {
-            fs::ofstream ofs
-                (serialized_file_path(*file, j, "test")
-                ,   std::ios_base::in
-                |   std::ios_base::binary
-                |   std::ios_base::trunc
-                );
-            (*i)->LedgerValues().Spew(ofs);
-            }
-
         fs::ofstream ofs
-            (serialized_file_path(*file, -1, "test")
+            (serialized_file_path(*file, j, "test")
             ,   std::ios_base::in
             |   std::ios_base::binary
             |   std::ios_base::trunc
             );
-        composite.Spew(ofs);
+        (*i)->LedgerValues().Spew(ofs);
         }
+
+    fs::ofstream ofs
+        (serialized_file_path(*file, -1, "test")
+        ,   std::ios_base::in
+        |   std::ios_base::binary
+        |   std::ios_base::trunc
+        );
+    composite.Spew(ofs);
 }
 

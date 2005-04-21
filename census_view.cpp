@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: census_view.cpp,v 1.11 2005-04-16 02:06:57 chicares Exp $
+// $Id: census_view.cpp,v 1.12 2005-04-21 03:24:37 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -42,6 +42,7 @@
 #include "materially_equal.hpp"
 #include "math_functors.hpp"
 #include "miscellany.hpp"
+#include "progress_meter.hpp"
 #include "timer.hpp"
 #include "wx_new.hpp"
 #include "xml_notebook.hpp"
@@ -1118,6 +1119,13 @@ void CensusView::RunAllLives(e_output_dest a_OutputDest)
 {
     // Reports based on # cells, not # cells actually used, which may
     // differ because not all are included in composite.
+    boost::shared_ptr<progress_meter> meter
+        (create_progress_meter
+            (cell_parms().size()
+            ,"Calculating all cells"
+            )
+        );
+/* TODO ?? expunge
     std::ostringstream progress_message;
     progress_message << "Completed " << 0 << " of " << cell_parms().size();
     wxProgressDialog Progress
@@ -1127,7 +1135,7 @@ void CensusView::RunAllLives(e_output_dest a_OutputDest)
         ,wxTheApp->GetTopWindow()
         ,progress_dialog_style
         );
-
+*/
     // TODO ?? Want youngest cell instead of first cell.
 IllusInputParms ihs_input0;
 convert_to_ihs(ihs_input0, cell_parms()[0]);
@@ -1182,12 +1190,15 @@ convert_to_ihs(Parms, cell_parms()[j]);
 //            throw;
 //            }
 
+/* TODO ?? expunge
         progress_message.str("");
         progress_message << "Completed " << 1 + j << " of " << cell_parms().size();
         was_canceled_ = !Progress.Update
             (1 + j
             ,progress_message.str().c_str()
             );
+*/
+        was_canceled_ = !meter->reflect_progress();
         if(was_canceled_)
             {
             break;
@@ -1210,6 +1221,13 @@ void CensusView::RunAllMonths(e_output_dest a_OutputDest)
 {
 already_reported_error = false;
 
+    boost::shared_ptr<progress_meter> meter
+        (create_progress_meter
+            (cell_parms().size()
+            ,"Initializing all cells"
+            )
+        );
+/* TODO ?? expunge
     std::ostringstream progress_message;
     progress_message << "Completed " << 0 << " of " << cell_parms().size();
     wxProgressDialog Progress
@@ -1219,7 +1237,7 @@ already_reported_error = false;
         ,wxTheApp->GetTopWindow()
         ,progress_dialog_style
         );
-
+*/
     was_canceled_ = false;
     Timer timer;
 
@@ -1282,12 +1300,15 @@ convert_to_ihs(Parms, *ip);
                     ;
                 }
 
+            was_canceled_ = !meter->reflect_progress();
+/* TODO ?? expunge
             progress_message.str("");
             progress_message << "Completed " << 1 + j << " of " << cell_parms().size();
             was_canceled_ = !Progress.Update
                 (1 + j
                 ,progress_message.str().c_str()
                 );
+*/
             if(was_canceled_)
                 {
                 break;
@@ -1397,6 +1418,13 @@ restart:
     // Perhaps use it for individual-cell solves?
         std::vector<double> Assets(MaxYr, 0.0);
 
+        boost::shared_ptr<progress_meter> meter
+            (create_progress_meter
+                (MaxYr
+                ,run_basis->str().c_str()
+                )
+            );
+/* TODO ?? expunge
         std::ostringstream progress_message;
         progress_message << "Completed " << 0 << " of " << cell_parms().size();
         wxProgressDialog Progress
@@ -1407,6 +1435,7 @@ restart:
             ,progress_dialog_style
             );
 // TODO ?? expunge        Progress->Create(); // Modeless.
+*/
 
         // Experience rating mortality reserve.
         double case_accum_net_mortchgs = 0.0;
@@ -1798,12 +1827,15 @@ if(std::string::npos != cell_parms()[0]["Comments"].str().find("idiosyncrasyZ3")
                 ;
 }
 
+            was_canceled_ = !meter->reflect_progress();
+/* TODO ?? expunge
             progress_message.str("");
             progress_message << "Completed " << 1 + year << " of " << MaxYr;
             was_canceled_ = !Progress.Update
                 (1 + year
                 ,progress_message.str().c_str()
                 );
+*/                
             if(was_canceled_)
                 {
                 break;
