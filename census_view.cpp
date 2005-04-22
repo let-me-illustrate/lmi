@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: census_view.cpp,v 1.12 2005-04-21 03:24:37 chicares Exp $
+// $Id: census_view.cpp,v 1.13 2005-04-22 02:21:21 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -330,7 +330,6 @@ void CensusView::identify_varying_columns()
     headers_of_varying_parameters_.clear();
     std::vector<std::string> const& all_headers(case_parms()[0].member_names());
     std::vector<std::string>::const_iterator i;
-    int column = 1; // TODO ?? Not used: expunge
     for(i = all_headers.begin(); i != all_headers.end(); ++i)
         {
         if
@@ -339,7 +338,6 @@ void CensusView::identify_varying_columns()
             )
             {
             headers_of_varying_parameters_.push_back(*i);
-            ++column;
             }
         }
 }
@@ -541,12 +539,6 @@ void CensusView::ApplyChanges
             headers_of_changed_parameters.push_back(*i);
             }
         }
-/* TODO ?? expunge?
-std::ostringstream oss;
-std::ostream_iterator<std::string> osi(oss, "\r\n");
-std::copy(headers_of_changed_parameters.begin(), headers_of_changed_parameters.end(), osi);
-warning() << oss.str().c_str() << "Changed parameters" << LMI_FLUSH;
-*/
     for
         (i  = headers_of_changed_parameters.begin()
         ;i != headers_of_changed_parameters.end  ()
@@ -1015,23 +1007,12 @@ IllustrationView* CensusView::ViewOneCell(int index)
 {
     std::string file_name(serial_filename(index, "ill"));
     IllustrationView* illview = MakeNewDocAndView(file_name.c_str());
-
-    // Plug in parameters for this cell.
-// TODO ?? expunge?
-//    illview->SetIllusInput(cell_parms()[index]);
-//    illview->document().input_ = cell_parms()[index];
-
-    // Run the cell.
     illview->Run(&cell_parms()[index]);
     return illview;
 }
 
 IllustrationView* CensusView::ViewComposite()
 {
-// TODO ?? expunge?
-//    if(is_invalid())
-//        return;
-
     // Run all cells if necessary to (re)generate composite numbers.
     if(!composite_is_available_)
         {
@@ -1125,17 +1106,6 @@ void CensusView::RunAllLives(e_output_dest a_OutputDest)
             ,"Calculating all cells"
             )
         );
-/* TODO ?? expunge
-    std::ostringstream progress_message;
-    progress_message << "Completed " << 0 << " of " << cell_parms().size();
-    wxProgressDialog Progress
-        ("Calculating all cells"
-        ,progress_message.str().c_str()
-        ,cell_parms().size()
-        ,wxTheApp->GetTopWindow()
-        ,progress_dialog_style
-        );
-*/
     // TODO ?? Want youngest cell instead of first cell.
 IllusInputParms ihs_input0;
 convert_to_ihs(ihs_input0, cell_parms()[0]);
@@ -1175,11 +1145,7 @@ convert_to_ihs(Parms, cell_parms()[j]);
             AccountValue AV(Parms);
             AV.SetDebugFilename(serial_filename(j, "debug"));
 
-// TODO ?? expunge?
-//            double value =
             AV.RunAV();
-// TODO ?? expunge?
-//            SetItemText(j, 3, value); // !! Would be nice to show result, but where?
 
             Composite.PlusEq(AV.LedgerValues());
 
@@ -1190,14 +1156,6 @@ convert_to_ihs(Parms, cell_parms()[j]);
 //            throw;
 //            }
 
-/* TODO ?? expunge
-        progress_message.str("");
-        progress_message << "Completed " << 1 + j << " of " << cell_parms().size();
-        was_canceled_ = !Progress.Update
-            (1 + j
-            ,progress_message.str().c_str()
-            );
-*/
         was_canceled_ = !meter->reflect_progress();
         if(was_canceled_)
             {
@@ -1227,17 +1185,6 @@ already_reported_error = false;
             ,"Initializing all cells"
             )
         );
-/* TODO ?? expunge
-    std::ostringstream progress_message;
-    progress_message << "Completed " << 0 << " of " << cell_parms().size();
-    wxProgressDialog Progress
-        ("Initializing all cells"
-        ,progress_message.str().c_str()
-        ,cell_parms().size()
-        ,wxTheApp->GetTopWindow()
-        ,progress_dialog_style
-        );
-*/
     was_canceled_ = false;
     Timer timer;
 
@@ -1301,14 +1248,6 @@ convert_to_ihs(Parms, *ip);
                 }
 
             was_canceled_ = !meter->reflect_progress();
-/* TODO ?? expunge
-            progress_message.str("");
-            progress_message << "Completed " << 1 + j << " of " << cell_parms().size();
-            was_canceled_ = !Progress.Update
-                (1 + j
-                ,progress_message.str().c_str()
-                );
-*/
             if(was_canceled_)
                 {
                 break;
@@ -1331,8 +1270,6 @@ convert_to_ihs(Parms, *ip);
 // TODO ?? Is this a real problem?
 //    Progress.Destroy();
 
-// TODO ?? expunge?
-//    std::vector<AccountValue>::iterator i;
     std::vector
         <boost::shared_ptr
             <AccountValue
@@ -1424,18 +1361,6 @@ restart:
                 ,run_basis->str().c_str()
                 )
             );
-/* TODO ?? expunge
-        std::ostringstream progress_message;
-        progress_message << "Completed " << 0 << " of " << cell_parms().size();
-        wxProgressDialog Progress
-            (run_basis->str().c_str()
-            ,progress_message.str().c_str()
-            ,MaxYr
-            ,wxTheApp->GetTopWindow()
-            ,progress_dialog_style
-            );
-// TODO ?? expunge        Progress->Create(); // Modeless.
-*/
 
         // Experience rating mortality reserve.
         double case_accum_net_mortchgs = 0.0;
@@ -1682,7 +1607,6 @@ if(std::string::npos != cell_parms()[0]["Comments"].str().find("idiosyncrasyZ3")
             double check_ = 0.0;
             for(i = AVS.begin(); i != AVS.end(); ++i)
                 {
-// TODO ?? expunge? //                check_ += i->GetExpRatReserve();
                 check_ += (*i)->GetExpRatReserveNonforborne();
                 }
 
@@ -1828,14 +1752,6 @@ if(std::string::npos != cell_parms()[0]["Comments"].str().find("idiosyncrasyZ3")
 }
 
             was_canceled_ = !meter->reflect_progress();
-/* TODO ?? expunge
-            progress_message.str("");
-            progress_message << "Completed " << 1 + year << " of " << MaxYr;
-            was_canceled_ = !Progress.Update
-                (1 + year
-                ,progress_message.str().c_str()
-                );
-*/                
             if(was_canceled_)
                 {
                 break;
@@ -2322,8 +2238,6 @@ convert_from_ihs(ihs_input, lmi_input);
     document().Modify(true);
 
     Update();
-
-//    OnValidate(); // TODO ?? expunge
 
     status() << std::flush;
 }

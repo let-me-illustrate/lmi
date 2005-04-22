@@ -27,10 +27,11 @@
 // permission to use a later version of the GPL.
 //
 // Gregory W. Chicares modified it in the years shown above to adapt
-// it to the life-insurance-illustrations problem domain. Any defect
-// should not reflect on Stephen F. Booth's reputation.
+// it to the life-insurance-illustrations problem domain, and for
+// other reasons evident in cvs or explained in 'ChangeLog'. Any
+// defect should not reflect on Stephen F. Booth's reputation.
 
-// $Id: main_cgi.cpp,v 1.2 2005-03-26 01:34:18 chicares Exp $
+// $Id: main_cgi.cpp,v 1.3 2005-04-22 02:21:21 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -80,17 +81,6 @@
 //  std::ofstream gLogFile( "/change_this_path/cgicc.log", std::ios_base::app );
   std::ofstream gLogFile( cgi_bin_log_filename().c_str(), std::ios_base::app );
 #endif
-
-/* TODO ?? expunge
-#if CGICC_USE_NAMESPACES
-  using namespace std;
-  using namespace cgicc;
-#else
-#  define div div_
-#  define link link_
-#  define select select_
-#endif
-*/
 
 // Function prototypes
 void ShowEnvironment(cgicc::CgiEnvironment const& env);

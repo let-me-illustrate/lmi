@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xml_notebook.hpp,v 1.3 2005-03-23 15:34:21 chicares Exp $
+// $Id: xml_notebook.hpp,v 1.4 2005-04-22 02:21:21 chicares Exp $
 
 #ifndef xml_notebook_hpp
 #define xml_notebook_hpp
@@ -162,8 +162,6 @@ class XmlNotebook
 
     std::map<std::string, std::string> transfer_data_;
     std::map<std::string, std::string> cached_transfer_data_;
-
-void foo(); // TODO ?? expunge
 
     DECLARE_EVENT_TABLE()
 };
