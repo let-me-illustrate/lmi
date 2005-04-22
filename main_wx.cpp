@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_wx.cpp,v 1.4 2005-03-30 19:28:31 chicares Exp $
+// $Id: main_wx.cpp,v 1.5 2005-04-22 02:21:21 chicares Exp $
 
 // Portions of this file are derived from wxWindows files
 //   samples/docvwmdi/docview.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -91,8 +91,6 @@ IMPLEMENT_WX_THEME_SUPPORT
 BEGIN_EVENT_TABLE(lmi_wx_app, wxApp)
  EVT_DROP_FILES(                             lmi_wx_app::OnDropFiles             )
  EVT_MENU(wxID_ABOUT                        ,lmi_wx_app::OnAbout                 )
-// TODO ?? expunge
-// EVT_MENU(XRCID("properties"               ),lmi_wx_app::OnProperties            )
  EVT_MENU(XRCID("test_standard_exception"  ),lmi_wx_app::OnTestStandardException )
  EVT_MENU(XRCID("window_cascade"           ),lmi_wx_app::OnWindowCascade         )
  EVT_MENU(XRCID("window_next"              ),lmi_wx_app::OnWindowNext            )
@@ -207,8 +205,6 @@ int WINAPI WinMain
         }
 
     process_command_line(argc, argv);
-    // TODO ?? expunge?
-//    DataDir::Get(global_settings::instance().data_directory.c_str());
 
     // The most privileged password bypasses security validation.
     if(!security_validated(global_settings::instance().ash_nazg))
@@ -550,7 +546,6 @@ void lmi_wx_app::InitToolBar()
 void lmi_wx_app::OnAbout(wxCommandEvent&)
 {
     AboutDialog(frame_).ShowModal();
-// TODO ?? expunge    wxLog::FlushActive();
 }
 
 void lmi_wx_app::OnDropFiles(wxDropFilesEvent& event)
@@ -754,14 +749,6 @@ void lmi_wx_app::OnMenuOpen(wxMenuEvent& event)
     // (else) Parent menu enablement could be handled here, but, for
     // now at least, none is required.
 }
-
-/* TODO ?? expunge
-void lmi_wx_app::OnProperties(wxCommandEvent&)
-{
-    XmlNotebook xml_notebook(frame_);
-    xml_notebook.ShowModal();
-}
-*/
 
 void lmi_wx_app::OnTestStandardException(wxCommandEvent&)
 {

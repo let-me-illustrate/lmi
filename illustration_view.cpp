@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustration_view.cpp,v 1.5 2005-04-21 16:11:47 chicares Exp $
+// $Id: illustration_view.cpp,v 1.6 2005-04-22 02:21:21 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -760,113 +760,6 @@ std::string show_tiered_table
     return oss.str();
 }
 } // Unnamed namespace.
-
-#if 0 // TODO ?? expunge
-//==============================================================================
-void IllustrationView::PrintCoverPage
-    (Ledger const& a_LedgerValues
-    ,std::string const& a_spreadsheet_range
-    )
-{
-    int const width = 100; // TODO ?? This is completely arbitrary.
-
-    LedgerInvariant const& Invar = a_LedgerValues.GetLedgerInvariant();
-    LedgerVariant   const& Curr_ = a_LedgerValues.GetCurrFull();
-
-    std::string preparation_date(calendar_date().str());
-    if(global_settings::instance().regression_testing())
-        {
-        // For regression tests, use EffDate as date prepared,
-        // in order to avoid gratuitous failures.
-        preparation_date = Invar.EffDate;
-        }
-
-    std::ostringstream oss;
-    oss
-        << "        " << Invar.PolicyMktgName << '\n'
-        << "        " << Invar.PolicyLegalName << " Cover Sheet\n"
-        << '\n'
-        << "The purpose of the attached illustration is to show how the "
-           "performance of the underlying separate account divisions "
-           "could affect the proposed\n"
-        << "contract's cash values and death benefits. The illustration "
-           "is hypothetical and may not be used to project or predict "
-           "investment results. The illustration\n"
-        << "must be accompanied or preceded by a Confidential Private "
-           "Placement Memorandum offering the Contract.\n"
-        << '\n'
-        << "Placement agent: " << Invar.MainUnderwriter << ".\n"
-        << '\n'
-        ;
-    if("" != Invar.ScaleUnit())
-        {
-        oss
-            << "Values per " << Invar.ScaleUnit() << " US dollars.\n"
-            << '\n'
-            ;
-        }
-    oss
-        << "        THIS ILLUSTRATION COVER SHEET IS FOR REGISTERED "
-           "REPRESENTATIVE USE ONLY. NOT FOR USE WITH CLIENTS.\n"
-        << '\n'
-        << "Date prepared: " << preparation_date << '\n'
-        << "Producer: " << truncate_to_width(Invar.ProducerName, width, "") << '\n'
-        << "Client: " << truncate_to_width(Invar.Insured1, width, "") << '\n'
-        << "Gender: " << Invar.Gender << '\n'
-        << "Issue age: " << Invar.Age << '\n'
-        << "State of jurisdiction: " << Invar.GetStatePostalAbbrev() << '\n'
-        << "Country: " << Invar.CountryIso3166Abbrev << '\n'
-        << "Non-US corridor factor: " << show_as_sequence(Invar.CorridorFactor, width) << '\n'
-        << "Rate class: " << Invar.UWClass << '\n'
-        << "7702 test: " << Invar.DefnLifeIns << '\n'
-        << "MEC: " << e_yes_or_no(enum_yes_or_no(Invar.IsMec)) << '\n'
-        << "Assumed gross rate: " << ncnnnpnn(Curr_.InitAnnSepAcctGrossRate()) << '\n'
-        << "New cash loan: " << show_as_sequence(Invar.Loan, width) << '\n'
-        << "Withdrawal: " << show_as_sequence(Invar.NetWD, width) << '\n'
-        << "Comments: " << truncate_to_width(Invar.Comments, width, "") << '\n'
-        << '\n'
-        << "        Premiums and death benefits\n"
-        << '\n'
-        << "Premium: " << show_as_sequence(Invar.GrossPmt, width) << '\n'
-        << "Dumpin: " << (Invar.Dumpin * Invar.ScaleFactor()) << '\n'
-        << "Internal 1035 exchange: " << (Invar.Internal1035Amount * Invar.ScaleFactor()) << '\n'
-        << "External 1035 exchange: " << (Invar.External1035Amount * Invar.ScaleFactor()) << '\n'
-        << "Specified amount: " << show_as_sequence(Invar.SpecAmt, width) << '\n'
-        << "Death benefit option: " << show_as_sequence(Invar.DBOpt, width) << '\n'
-        << '\n'
-        << "        Current fees and charges\n"
-        << '\n'
-        << "State premium tax load: " << value_cast_ihs<std::string>(Invar.GetStatePremTaxLoad()) << '\n'
-        << "DAC tax premium load: " << value_cast_ihs<std::string>(Invar.GetDacTaxPremLoadRate()) << '\n'
-        << "Asset-based compensation: " << show_as_sequence(Invar.AddonCompOnAssets, width) << '\n'
-        << "Premium-based compensation: " << show_as_sequence(Invar.AddonCompOnPremium, width) << '\n'
-        << "Add-on custodial fee: " << show_as_sequence(Invar.AddonMonthlyFee, width) << '\n'
-        << "Country COI multiplier: " << value_cast_ihs<std::string>(Invar.CountryCOIMultiplier) << '\n'
-        << "Separate account load: " << '\n'
-        << show_tiered_table(Invar.TieredSepAcctLoadBands, Invar.TieredSepAcctLoadRates) << '\n'
-        ;
-
-    // COMPILER !! gcc-2.95.2-1 We'd rather just reset the stringstream's
-    // get pointer, but that doesn't work with gcc-2.95.2-1 and Magnus
-    // Fromreide's <sstream>.
-    // TODO ?? So make this conditional.
-    std::istringstream iss(oss.str(), std::ios_base::in | std::ios_base::binary);
-    std::vector<std::string> vs;
-    std::string line;
-    while(std::getline(iss, line, '\n'))
-        {
-        vs.push_back(line);
-        }
-    unsigned int const cover_page_max_lines = 60;
-    if(cover_page_max_lines < vs.size())
-        {
-        warning() << "Cover sheet truncated to fit on one page." << LMI_FLUSH;
-        }
-    vs.resize(cover_page_max_lines);
-// TODO ?? WX PORT !!    SetRange(a_spreadsheet_range, vs, vs.size());
-// If needed, return as string.
-}
-#endif // 0 [expunge]
 
 //==============================================================================
 //void IllustrationView::PrintFormTabDelimited
