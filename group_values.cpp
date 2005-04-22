@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: group_values.cpp,v 1.3 2005-04-21 03:24:37 chicares Exp $
+// $Id: group_values.cpp,v 1.4 2005-04-22 01:48:18 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -92,6 +92,36 @@ namespace
     }
 } // Unnamed namespace.
 
+void emit_ledger
+    (fs::path                      const& file
+    ,int                           index
+    ,Ledger const&                 ledger
+    ,e_emission_target             emission_target
+// TODO ?? expunge    ,bool                          emit_every_cell
+    )
+{
+    if(emission_target & emit_to_printer)
+        {
+// TODO ?? Implement.
+//        PrintAnonymousIllustration(a_Values, a_idx);
+        }
+    if(emission_target & emit_to_spew_file)
+        {
+        fs::ofstream ofs
+            (serialized_file_path(file, index, "test")
+            ,   std::ios_base::in
+            |   std::ios_base::binary
+            |   std::ios_base::trunc
+            );
+        ledger.Spew(ofs);
+        }
+    if(emission_target & emit_to_spreadsheet)
+        {
+// TODO ?? Implement.
+//        SaveSpreadsheetFile(a_Values, a_idx);
+        }
+}
+
 //============================================================================
 void RunCensusInSeries::operator()
     (fs::directory_iterator       const& file
@@ -100,6 +130,9 @@ void RunCensusInSeries::operator()
     )
 {
 // TODO ?? Rethink placement of try blocks. Why have them at all?
+// How did they behave in the old production system? (It just rethrew.)
+
+    Timer timer; // TODO ?? Combine with progress meter?
     boost::shared_ptr<progress_meter> meter
         (create_progress_meter
             (cells.size()
@@ -108,23 +141,32 @@ void RunCensusInSeries::operator()
         );
     for(unsigned int j = 0; j < cells.size(); ++j)
         {
+// TODO ?? Skip if cell not included in composite (IncludeInComposite).        
         try
             {
+// TODO ?? Rethink. Old code set debug filename to base.debug .
+// TODO ?? Why use class IllusVal at all? What's the advantage over the AV class?
+            IllusVal IV(serialized_file_path(*file, j, "MISTAKE").string());
+            IV.Run(cells[j]);
+            composite.PlusEq(IV.ledger());
+            emit_ledger
+                (*file
+                ,j
+                ,IV.ledger()
+                ,emit_to_spew_file
+                );
+/* TODO ?? expunge
+// TODO ?? Instead of Spew(), do something flexible.
+// Support various (multiple?) output destinations.
+// Sometimes all cells should be emitted; sometimes, only the composite.
             fs::ofstream ofs
                 (serialized_file_path(*file, j, "test")
                 ,   std::ios_base::in
                 |   std::ios_base::binary
                 |   std::ios_base::trunc
                 );
-// TODO ?? Rethink.
-            IllusVal IV(serialized_file_path(*file, j, "MISTAKE").string());
-            IV.Run(cells[j]);
-            composite.PlusEq(IV.ledger());
             IV.ledger().Spew(ofs);
-            if(!meter->reflect_progress())
-                {
-                break;
-                }
+*/
             }
         catch(std::exception& e)
             {
@@ -134,14 +176,30 @@ void RunCensusInSeries::operator()
             {
             fatal_error() << "\nUnknown exception." << LMI_FLUSH;
             }
-        fs::ofstream ofs
-            (serialized_file_path(*file, -1, "test")
-            ,   std::ios_base::in
-            |   std::ios_base::binary
-            |   std::ios_base::trunc
-            );
-        composite.Spew(ofs);
+        if(!meter->reflect_progress())
+            {
+            return;
+            }
         }
+            emit_ledger
+                (*file
+                ,-1
+                ,composite
+                ,emit_to_spew_file
+                );
+/* TODO ?? expunge
+    fs::ofstream ofs
+        (serialized_file_path(*file, -1, "test")
+        ,   std::ios_base::in
+        |   std::ios_base::binary
+        |   std::ios_base::trunc
+        );
+    composite.Spew(ofs);
+*/
+
+// TODO ?? This is for calculations and output combined.
+// Running in parallel permits separating those things--good idea?
+    status() << timer.Stop().Report() << std::flush;
 }
 
 //============================================================================
@@ -153,6 +211,7 @@ void RunCensusInParallel::operator()
 {
     Timer timer;
 
+// TODO ?? Rename 'AVS'.    
     std::vector<boost::shared_ptr<AccountValue> > AVS;
     std::vector<IllusInputParms>::const_iterator ip;
     try
@@ -172,10 +231,14 @@ void RunCensusInParallel::operator()
             // Skip any cell with zero lives.
             // TODO ?? Should that even be permitted?
             if(0 == value_cast<int>((*ip)["NumberOfIdenticalLives"].str()))
+                {
                 continue;
+                }
             // Skip anyone not included in composite.
             if("Yes" != (*ip)["IncludeInComposite"].str())
+                {
                 continue;
+                }
 
             boost::shared_ptr<AccountValue> AV(new AccountValue(*ip));
             AV->SetDebugFilename(serialized_file_path(*file, j, "debug").string());
@@ -463,6 +526,14 @@ restart:
     int j = 0;
     for(i = AVS.begin(); i != AVS.end(); ++i, ++j)
         {
+        emit_ledger
+            (*file
+            ,j
+            ,(*i)->LedgerValues()
+            ,emit_to_spew_file
+            );
+/* TODO ?? expunge
+// TODO ?? Generalize this instead.
         fs::ofstream ofs
             (serialized_file_path(*file, j, "test")
             ,   std::ios_base::in
@@ -470,8 +541,16 @@ restart:
             |   std::ios_base::trunc
             );
         (*i)->LedgerValues().Spew(ofs);
+*/
         }
 
+        emit_ledger
+            (*file
+            ,-1
+            ,composite
+            ,emit_to_spew_file
+            );
+/* TODO ?? expunge
     fs::ofstream ofs
         (serialized_file_path(*file, -1, "test")
         ,   std::ios_base::in
@@ -479,5 +558,6 @@ restart:
         |   std::ios_base::trunc
         );
     composite.Spew(ofs);
+*/
 }
 

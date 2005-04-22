@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: group_values.hpp,v 1.2 2005-04-17 12:47:16 chicares Exp $
+// $Id: group_values.hpp,v 1.3 2005-04-22 01:48:19 chicares Exp $
 
 #ifndef group_values_hpp
 #define group_values_hpp
@@ -35,6 +35,22 @@
 
 class IllusInputParms;
 class Ledger;
+
+// Enumerators are binary powers so that more than one can be
+// specified in a single int.
+enum e_emission_target
+    {emit_to_nowhere     = 0
+    ,emit_to_printer     = 1
+    ,emit_to_spew_file   = 2
+    ,emit_to_spreadsheet = 4
+    };
+
+void emit_ledger
+    (fs::path const&               file
+    ,int                           index
+    ,Ledger const&                 ledger
+    ,e_emission_target             emission_target
+    );
 
 std::string LMI_EXPIMP serialize_extension
     (int                serial_number
@@ -77,6 +93,8 @@ class LMI_EXPIMP RunCensusInParallel
         );
 
   private:
+// TODO ?? hold composite here, and provide an accessor?
+
 //    double time_for_calculations;
 //    double time_for_output;
 };
