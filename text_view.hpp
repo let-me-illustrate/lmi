@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: text_view.hpp,v 1.2 2005-03-24 15:53:32 chicares Exp $
+// $Id: text_view.hpp,v 1.3 2005-04-22 02:21:21 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.h (C) 1998 Julian Smart and Markus Holzem
@@ -62,7 +62,6 @@ class TextEditView
     wxTextCtrl* text_window_;
 
     DECLARE_DYNAMIC_CLASS(TextEditView)
-    DECLARE_EVENT_TABLE()
 };
 
 #endif // text_view_hpp

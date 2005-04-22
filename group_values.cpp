@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: group_values.cpp,v 1.4 2005-04-22 01:48:18 chicares Exp $
+// $Id: group_values.cpp,v 1.5 2005-04-22 02:21:21 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -97,7 +97,6 @@ void emit_ledger
     ,int                           index
     ,Ledger const&                 ledger
     ,e_emission_target             emission_target
-// TODO ?? expunge    ,bool                          emit_every_cell
     )
 {
     if(emission_target & emit_to_printer)
@@ -155,18 +154,7 @@ void RunCensusInSeries::operator()
                 ,IV.ledger()
                 ,emit_to_spew_file
                 );
-/* TODO ?? expunge
-// TODO ?? Instead of Spew(), do something flexible.
-// Support various (multiple?) output destinations.
-// Sometimes all cells should be emitted; sometimes, only the composite.
-            fs::ofstream ofs
-                (serialized_file_path(*file, j, "test")
-                ,   std::ios_base::in
-                |   std::ios_base::binary
-                |   std::ios_base::trunc
-                );
-            IV.ledger().Spew(ofs);
-*/
+// TODO ?? Sometimes all cells should be emitted; sometimes, only the composite.
             }
         catch(std::exception& e)
             {
@@ -181,21 +169,13 @@ void RunCensusInSeries::operator()
             return;
             }
         }
-            emit_ledger
-                (*file
-                ,-1
-                ,composite
-                ,emit_to_spew_file
-                );
-/* TODO ?? expunge
-    fs::ofstream ofs
-        (serialized_file_path(*file, -1, "test")
-        ,   std::ios_base::in
-        |   std::ios_base::binary
-        |   std::ios_base::trunc
+
+    emit_ledger
+        (*file
+        ,-1
+        ,composite
+        ,emit_to_spew_file
         );
-    composite.Spew(ofs);
-*/
 
 // TODO ?? This is for calculations and output combined.
 // Running in parallel permits separating those things--good idea?
@@ -532,16 +512,6 @@ restart:
             ,(*i)->LedgerValues()
             ,emit_to_spew_file
             );
-/* TODO ?? expunge
-// TODO ?? Generalize this instead.
-        fs::ofstream ofs
-            (serialized_file_path(*file, j, "test")
-            ,   std::ios_base::in
-            |   std::ios_base::binary
-            |   std::ios_base::trunc
-            );
-        (*i)->LedgerValues().Spew(ofs);
-*/
         }
 
         emit_ledger
@@ -550,14 +520,5 @@ restart:
             ,composite
             ,emit_to_spew_file
             );
-/* TODO ?? expunge
-    fs::ofstream ofs
-        (serialized_file_path(*file, -1, "test")
-        ,   std::ios_base::in
-        |   std::ios_base::binary
-        |   std::ios_base::trunc
-        );
-    composite.Spew(ofs);
-*/
 }
 

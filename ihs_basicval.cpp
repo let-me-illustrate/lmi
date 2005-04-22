@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_basicval.cpp,v 1.7 2005-03-11 13:40:41 chicares Exp $
+// $Id: ihs_basicval.cpp,v 1.8 2005-04-22 02:21:21 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -1447,12 +1447,6 @@ double BasicValues::GetModalSpecAmtMlyDed
 
     if(Input_->Status[0].HasADD)
         {
-/* TODO ?? expunge
-        // TODO ?? Remove inefficient code if assertion never fires.
-        double r = GetADDRates()[0];
-        LMI_ASSERT(MortalityRates_->ADDRates()[0] == r);
-        z -= r;
-*/
         // TODO ?? For simplicity, ignore Database_->Query(DB_ADDMax)
         z -= MortalityRates_->ADDRates()[0];
         }

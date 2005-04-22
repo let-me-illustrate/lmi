@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_harmonization.cpp,v 1.5 2005-04-13 22:20:33 chicares Exp $
+// $Id: input_harmonization.cpp,v 1.6 2005-04-22 02:21:21 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -694,10 +694,7 @@ false // Silly workaround for now.
 // wx: TermProportion
     if(specamt_indeterminate_for_term && "Yes" == TermRiderUseProportion)
         {
-// TODO ?? expunge        ClearFlag(wfFullyCreated);
         TERM_USE_AMOUNT     ->SetCheck(BF_CHECKED);
-// TODO ?? expunge        GetApplication()->PumpWaitingMessages();
-// TODO ?? expunge        SetFlag(wfFullyCreated);
         }
     TERM_USE_AMOUNT     ->EnableWindow(enable_term);
 
