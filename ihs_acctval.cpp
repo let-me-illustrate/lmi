@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_acctval.cpp,v 1.19 2005-04-23 02:04:11 chicares Exp $
+// $Id: ihs_acctval.cpp,v 1.20 2005-04-23 02:27:23 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -1694,8 +1694,8 @@ void AccountValue::FinalizeYear()
             );
         }
 
-    LMI_ASSERT(0 != Input_->NumIdenticalLives); // Make sure division is safe.
 /* TODO ?? Belongs here, but done elsewhere for now.
+    LMI_ASSERT(0 != Input_->NumIdenticalLives); // Make sure division is safe.
     VariantValues().ExpRatRsvCash       [Year] =
           apportioned_net_mortality_reserve
         * (1.0 - GetPartMortQ(Year))
@@ -2225,7 +2225,7 @@ void AccountValue::ApportionNetMortalityReserve
         return;
         }
 
-    if(0.0 != YearsTotalCOICharge)
+    if(0.0 != case_years_net_mortchgs)
         {
         apportioned_net_mortality_reserve =
                 case_net_mortality_reserve
@@ -2238,6 +2238,7 @@ void AccountValue::ApportionNetMortalityReserve
         apportioned_net_mortality_reserve = 0.0;
         }
 // TODO ?? Done here for now because of the anomalous indexing.
+    LMI_ASSERT(0 != Input_->NumIdenticalLives); // Make sure division is safe.
     VariantValues().ExpRatRsvCash       [Year - 1] =
           apportioned_net_mortality_reserve
         * (1.0 - GetPartMortQ(Year - 1)) // TODO ?? Anomaly repeated here.
