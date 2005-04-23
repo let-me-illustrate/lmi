@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mc_enum_types.hpp,v 1.5 2005-04-06 23:09:56 chicares Exp $
+// $Id: mc_enum_types.hpp,v 1.6 2005-04-23 02:06:52 chicares Exp $
 
 #ifndef mc_enum_types_hpp
 #define mc_enum_types_hpp
@@ -83,7 +83,7 @@ MC_DECLARE(part_mort_table,1)
 MC_DECLARE(premium_table,1)
 MC_DECLARE(from_point,4)
 MC_DECLARE(to_point,4)
-MC_DECLARE(report_column,34)
+MC_DECLARE(report_column,35)
 
 #undef MC_DECLARE
 

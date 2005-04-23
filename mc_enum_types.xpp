@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mc_enum_types.xpp,v 1.4 2005-04-06 23:09:56 chicares Exp $
+// $Id: mc_enum_types.xpp,v 1.5 2005-04-23 02:06:52 chicares Exp $
 
 #define yes_or_no_VALUES \
     {mce_yes \
@@ -640,7 +640,8 @@
     ,mce_guaranteed_cash_value_irr \
     ,mce_current_death_benefit_irr \
     ,mce_guaranteed_death_benefit_irr \
-    ,mce_net_mortality_reserve \
+    ,mce_net_mortality_reserve_cash \
+    ,mce_net_mortality_reserve_forborne \
     ,mce_current_net_claims \
     };
 #define report_column_NAMES \
@@ -677,6 +678,7 @@
     ,"IrrDb_Current" \
     ,"IrrDb_Guaranteed" \
     ,"ExpRatRsvCash_Current" \
+    ,"ExpRatRsvForborne_Current" \
     ,"NetClaims_Current" \
     };
 #if 0
