@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.48 2005-04-21 16:27:00 chicares Exp $
+// $Id: ChangeLog,v 1.49 2005-04-23 03:30:00 chicares Exp $
 
 2005-01-14
 
@@ -1368,7 +1368,7 @@ Implement progress meter for additional interfaces.
   objects.make
 Use progress meter for both old and new group-values code.
 
-2005-04-21 [1449]
+2005-04-21 [1426]
 
   objects.make
   timer_test.cpp [new file]
@@ -1391,4 +1391,33 @@ unit test.
   timer.cpp
   timer.hpp
 Simplify and improve class Timer.
+
+  group_values.cpp
+  group_values.hpp
+Factor out report generation.
+
+  census_view.cpp
+  group_values.cpp
+  ihs_basicval.cpp
+  illustration_view.cpp
+  input_harmonization.cpp
+  main_cgi.cpp
+  main_wx.cpp
+  main_wx.hpp
+  text_view.cpp
+  text_view.hpp
+  xml_notebook.hpp
+Expunge many things previously marked for expunction.
+
+2005-04-22 [1430]
+
+  ihs_acctval.cpp
+Fix an error: experience-rating reserve was calculated correctly, but
+posted incorrectly to the output ledger.
+
+  ledger_xml_io.cpp
+  mc_enum_types.cpp
+  mc_enum_types.hpp
+  mc_enum_types.xpp
+Add column: forborne experience-rating reserve.
 
