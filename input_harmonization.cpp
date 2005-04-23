@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_harmonization.cpp,v 1.6 2005-04-22 02:21:21 chicares Exp $
+// $Id: input_harmonization.cpp,v 1.7 2005-04-23 21:42:57 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -232,11 +232,24 @@ void Input::Harmonize()
     SurviveToYear             .enable(part_mort_used && mce_survive_to_year == SurviveToType);
     SurviveToAge              .enable(part_mort_used && mce_survive_to_age  == SurviveToType);
 
-    UseExperienceRating.enable
-        (
+    bool enable_experience_rating =
             database->Query(DB_AllowExpRating)
         &&  part_mort_used
         &&  mce_month_by_month == RunOrder
+        ;
+    UseExperienceRating.enable(enable_experience_rating);
+
+    // TODO ?? These shouldn't need to depend on 'enable_experience_rating';
+    // instead, 'UseExperienceRating' should be transmogrified if it's not
+    // enabled.
+    OverrideExperienceReserveRate.enable
+        (   enable_experience_rating
+        &&  "Yes" == UseExperienceRating
+        );
+    ExperienceReserveRate.enable
+        (   enable_experience_rating
+        &&  "Yes" == UseExperienceRating
+        &&  "Yes" == OverrideExperienceReserveRate
         );
 
     IssueAge        .enable("No"  == DeprecatedUseDOB);
