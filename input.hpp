@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input.hpp,v 1.2 2005-04-06 23:10:13 chicares Exp $
+// $Id: input.hpp,v 1.3 2005-04-23 21:42:57 chicares Exp $
 
 #ifndef input_hpp
 #define input_hpp
@@ -159,6 +159,8 @@ class Input
     mce_interest_rate_type   SeparateAccountRateType         ;
     tnr_proportion           LoanRate                        ;
     mce_loan_rate_type       LoanRateType                    ;
+    tnr_proportion           ExperienceReserveRate           ;
+    mce_yes_or_no            OverrideExperienceReserveRate   ;
     mce_yes_or_no            WithdrawToBasisThenLoan         ;
     mce_yes_or_no            UseAverageOfAllFunds            ;
     mce_yes_or_no            OverrideFundManagementFee       ;

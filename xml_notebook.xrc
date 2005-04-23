@@ -24,7 +24,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: xml_notebook.xrc,v 1.8 2005-04-13 22:20:33 chicares Exp $
+    $Id: xml_notebook.xrc,v 1.9 2005-04-23 21:42:57 chicares Exp $
 -->
 
 <!-- TODO ??
@@ -418,12 +418,18 @@
                         </object>
                         <object class="sizeritem">
                             <flag>wxGROW|wxALL</flag>
+                            <object class="wxCheckBox" name="UsePartialMortality">
+                                <label>Partial mortality</label>
+                            </object>
+                        </object>
+                        <object class="sizeritem">
+                            <flag>wxGROW|wxALL</flag>
                             <object class="wxFlexGridSizer">
                                 <rows>1</rows>
                                 <growablecols>1</growablecols>
                                 <object class="sizeritem">
-                                    <flag>wxGROW|wxALL</flag>
-                                    <object class="wxCheckBox" name="UsePartialMortality">
+                                    <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                                    <object class="wxStaticText">
                                         <label>Partial mortality table </label>
                                     </object>
                                 </object>
@@ -443,6 +449,36 @@
                             <flag>wxGROW|wxALL</flag>
                             <object class="wxCheckBox" name="UseExperienceRating">
                                 <label>Experience rating</label>
+                            </object>
+                        </object>
+                        <object class="sizeritem">
+                            <flag>wxGROW|wxALL</flag>
+                            <object class="wxFlexGridSizer">
+                                <object class="sizeritem">
+                                    <flag>wxGROW|wxALL</flag>
+                                    <object class="wxCheckBox" name="OverrideExperienceReserveRate">
+                                        <label>Override experience-rating reserve rate</label>
+                                    </object>
+                                </object>
+                            </object>
+                        </object>
+                        <object class="sizeritem">
+                            <flag>wxGROW|wxALL</flag>
+                            <object class="wxFlexGridSizer">
+                                <rows>1</rows>
+                                <growablecols>1</growablecols>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                                    <object class="wxStaticText">
+                                        <label>Experience-rating reserve rate </label>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxGROW|wxALL</flag>
+                                    <object class="wxTextCtrl" name="ExperienceReserveRate">
+                                        <size>10,-1</size>
+                                    </object>
+                                </object>
                             </object>
                         </object>
                     </object>
@@ -521,7 +557,6 @@
             <object class="wxFlexGridSizer">
                 <cols>2</cols>
                 <growablecols>1</growablecols>
-
                 <object class="sizeritem">
                     <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
                     <border>4</border>
