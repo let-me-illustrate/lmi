@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: inputillus.cpp,v 1.3 2005-01-31 13:12:48 chicares Exp $
+// $Id: inputillus.cpp,v 1.4 2005-04-23 21:42:57 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -651,6 +651,8 @@ void IllusInputParms::ascribe_members()
     ascribe("SeparateAccountRateType"      , &IllusInputParms::IntRateTypeSA              );
     ascribe("LoanRate"                     , &IllusInputParms::LoanIntRate                ); // !
     ascribe("LoanRateType"                 , &IllusInputParms::LoanRateType               ); // !
+    ascribe("ExperienceReserveRate"        , &IllusInputParms::ExperienceReserveRate      );
+    ascribe("OverrideExperienceReserveRate", &IllusInputParms::OverrideExperienceReserveRate);
     ascribe("PayLoanInterestInCash"        , &IllusInputParms::PayLoanInt                 );
     ascribe("WithdrawToBasisThenLoan"      , &IllusInputParms::WDToBasisThenLoan          );
     ascribe("UseAverageOfAllFunds"         , &IllusInputParms::AvgFund                    );
@@ -884,6 +886,8 @@ std::vector<std::string> IllusInputParms::map_keys() const
     keys.push_back("SeparateAccountRateType"      );
     keys.push_back("LoanRate"                     );
     keys.push_back("LoanRateType"                 );
+    keys.push_back("ExperienceReserveRate"        );
+    keys.push_back("OverrideExperienceReserveRate");
     keys.push_back("PayLoanInterestInCash"        );
     keys.push_back("WithdrawToBasisThenLoan"      );
     keys.push_back("UseAverageOfAllFunds"         );
@@ -1106,6 +1110,8 @@ std::string IllusInputParms::get_value_by_name
     else if(name == "SeparateAccountRateType"      ) return get_value_from_string(IntRateTypeSA              );
     else if(name == "LoanRate"                     ) return get_value_from_string(LoanIntRate                );
     else if(name == "LoanRateType"                 ) return get_value_from_string(LoanRateType               );
+    else if(name == "ExperienceReserveRate"        ) return get_value_from_string(ExperienceReserveRate      );
+    else if(name == "OverrideExperienceReserveRate") return get_value_from_string(OverrideExperienceReserveRate);
     else if(name == "PayLoanInterestInCash"        ) return get_value_from_string(PayLoanInt                 );
     else if(name == "WithdrawToBasisThenLoan"      ) return get_value_from_string(WDToBasisThenLoan          );
     else if(name == "UseAverageOfAllFunds"         ) return get_value_from_string(AvgFund                    );
@@ -1328,6 +1334,8 @@ void IllusInputParms::set_value_by_name
     else if(name == "SeparateAccountRateType"      ) set_value_from_string(IntRateTypeSA              , value);
     else if(name == "LoanRate"                     ) set_value_from_string(LoanIntRate                , value);
     else if(name == "LoanRateType"                 ) set_value_from_string(LoanRateType               , value);
+    else if(name == "ExperienceReserveRate"        ) set_value_from_string(ExperienceReserveRate      , value);
+    else if(name == "OverrideExperienceReserveRate") set_value_from_string(OverrideExperienceReserveRate, value);
     else if(name == "PayLoanInterestInCash"        ) set_value_from_string(PayLoanInt                 , value);
     else if(name == "WithdrawToBasisThenLoan"      ) set_value_from_string(WDToBasisThenLoan          , value);
     else if(name == "UseAverageOfAllFunds"         ) set_value_from_string(AvgFund                    , value);

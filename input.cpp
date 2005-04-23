@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input.cpp,v 1.3 2005-04-21 16:11:47 chicares Exp $
+// $Id: input.cpp,v 1.4 2005-04-23 21:42:57 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -169,6 +169,8 @@ void Input::ascribe_members()
     ascribe("SeparateAccountRateType"               , &Input::SeparateAccountRateType               );
     ascribe("LoanRate"                              , &Input::LoanRate                              );
     ascribe("LoanRateType"                          , &Input::LoanRateType                          );
+    ascribe("ExperienceReserveRate"                 , &Input::ExperienceReserveRate                 );
+    ascribe("OverrideExperienceReserveRate"         , &Input::OverrideExperienceReserveRate         );
     ascribe("WithdrawToBasisThenLoan"               , &Input::WithdrawToBasisThenLoan               );
     ascribe("UseAverageOfAllFunds"                  , &Input::UseAverageOfAllFunds                  );
     ascribe("OverrideFundManagementFee"             , &Input::OverrideFundManagementFee             );
