@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_acctval.cpp,v 1.18 2005-04-15 22:55:09 chicares Exp $
+// $Id: ihs_acctval.cpp,v 1.19 2005-04-23 02:04:11 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -1581,7 +1581,7 @@ void AccountValue::FinalizeYear()
         - surr_chg
         - (RegLnBal + PrfLnBal)
         + GetRefundableSalesLoad()
-        + ExpRatReserve
+        + ExpRatReserve // TODO ?? expunge this line
         ;
     csv_net = std::max(csv_net, HoneymoonValue);
     csv_net = std::max(csv_net, 0.0);
@@ -1590,7 +1590,7 @@ void AccountValue::FinalizeYear()
     double cv_7702 =
           total_av
         + GetRefundableSalesLoad()
-        + std::max(0.0, ExpRatReserve)
+        + std::max(0.0, ExpRatReserve) // TODO ?? expunge this line
         ;
     // Increase by negative surrender charge. If some components of
     // the surrender charge are negative while others are positive,
@@ -1695,15 +1695,15 @@ void AccountValue::FinalizeYear()
         }
 
     LMI_ASSERT(0 != Input_->NumIdenticalLives); // Make sure division is safe.
-/* TODO ?? Probably belongs here, but done elsewhere for now.
+/* TODO ?? Belongs here, but done elsewhere for now.
     VariantValues().ExpRatRsvCash       [Year] =
-          ExpRatReserve
+          apportioned_net_mortality_reserve
         * (1.0 - GetPartMortQ(Year))
         * InforceLives
         / Input_->NumIdenticalLives
         ;
+    VariantValues().ExpRatRsvForborne   [Year] = apportioned_net_mortality_reserve;
 */
-    VariantValues().ExpRatRsvForborne   [Year] = ExpRatReserve;
 
     if(e_run_curr_basis == RateBasis)
         {
@@ -2229,16 +2229,24 @@ void AccountValue::ApportionNetMortalityReserve
         {
         apportioned_net_mortality_reserve =
                 case_net_mortality_reserve
-            *   case_years_net_mortchgs
-            /   YearsTotalCOICharge
+            *   YearsTotalCOICharge
+            /   case_years_net_mortchgs
             ;
         }
     else
         {
         apportioned_net_mortality_reserve = 0.0;
         }
-
-    VariantValues().ExpRatRsvCash[Year - 1] = apportioned_net_mortality_reserve;
+// TODO ?? Done here for now because of the anomalous indexing.
+    VariantValues().ExpRatRsvCash       [Year - 1] =
+          apportioned_net_mortality_reserve
+        * (1.0 - GetPartMortQ(Year - 1)) // TODO ?? Anomaly repeated here.
+        * InforceLives
+        / Input_->NumIdenticalLives
+        ;
+    VariantValues().ExpRatRsvForborne   [Year - 1] =
+        apportioned_net_mortality_reserve
+        ;
 }
 
 // TODO ?? expunge
