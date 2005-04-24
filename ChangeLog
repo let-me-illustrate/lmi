@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.49 2005-04-23 03:30:00 chicares Exp $
+// $Id: ChangeLog,v 1.50 2005-04-24 02:38:44 chicares Exp $
 
 2005-01-14
 
@@ -1420,4 +1420,19 @@ posted incorrectly to the output ledger.
   mc_enum_types.hpp
   mc_enum_types.xpp
 Add column: forborne experience-rating reserve.
+
+2005-04-23 [1431]
+
+  input.cpp
+  input.hpp
+  input_harmonization.cpp
+  inputillus.cpp
+  inputs.cpp
+  inputs.hpp
+  xml_notebook.xrc
+Add new input fields for experience rating.
+
+  census_view.cpp
+  group_values.cpp
+Use new input fields for experience rating.
 
