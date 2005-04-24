@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: census_view.cpp,v 1.13 2005-04-22 02:21:21 chicares Exp $
+// $Id: census_view.cpp,v 1.14 2005-04-24 02:18:52 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -1381,19 +1381,26 @@ if(std::string::npos != cell_parms()[0]["Comments"].str().find("idiosyncrasyZ3")
         ofs << *run_basis << '\n';
         }
 
-        // Experience rating as implemented here requires a general-account
-        // rate. Because that rate might vary across cells, the case-level
-        // rate must be used. Extend its last element if it doesn't have
-        // enough values.
-        std::vector<double> general_account_rate;
-        std::copy
-            (ihs_input0.GenAcctRate.begin()
-            ,ihs_input0.GenAcctRate.end()
-            ,std::back_inserter(general_account_rate)
-            );
-        general_account_rate.resize(MaxYr, general_account_rate.back());
+        // Experience rating as implemented here uses either a special
+        // scalar input rate, or the separate-account rate. Those
+        // rates as entered might vary across cells, but there must be
+        // only one rate: therefore, use the first cell's rate, and
+        // extend its last element if it doesn't have enough values.
 
-        std::vector<double> experience_reserve_rate = general_account_rate;
+        std::vector<double> experience_reserve_rate;
+        std::copy
+            (ihs_input0.SepAcctRate.begin()
+            ,ihs_input0.SepAcctRate.end()
+            ,std::back_inserter(experience_reserve_rate)
+            );
+        experience_reserve_rate.resize(MaxYr, experience_reserve_rate.back());
+        if(ihs_input0.OverrideExperienceReserveRate)
+            {
+            experience_reserve_rate.assign
+                (experience_reserve_rate.size()
+                ,ihs_input0.ExperienceReserveRate
+                );
+            }
 
         // TODO ?? We don't start at InforceYear, because issue years may
         // differ between cells and we have not coded support for that yet.
