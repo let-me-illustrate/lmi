@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xml_io.cpp,v 1.11 2005-04-23 02:06:52 chicares Exp $
+// $Id: ledger_xml_io.cpp,v 1.12 2005-04-25 19:23:34 chicares Exp $
 
 #include "config.hpp"
 
@@ -324,8 +324,8 @@ void Ledger::write(xml::node& x) const
     title_map["ErPmt"                           ] = "ER Payment Mode";
     title_map["ExcessLoan_Current"              ] = " _ Curr Excess Loan";
     title_map["ExcessLoan_Guaranteed"           ] = "Guar Excess Loan";
-    title_map["ExpRatRsvCash_Current"           ] = "Net Mortality Reserve Cash";
-    title_map["ExpRatRsvForborne_Current"       ] = "Net Mortality Reserve Forborne";
+    title_map["ExpRatRsvCash_Current"           ] = "Mortality Reserve Cash";
+    title_map["ExpRatRsvForborne_Current"       ] = "Mortality Reserve Forborne";
     title_map["ExpenseCharges_Current"          ] = "Curr Expense Charge";
     title_map["ExpenseCharges_Guaranteed"       ] = "Guar Expense Charge";
 // STEVEN Can you make this one word?
