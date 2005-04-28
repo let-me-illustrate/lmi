@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: configurable_settings.cpp,v 1.2 2005-03-26 01:34:18 chicares Exp $
+// $Id: configurable_settings.cpp,v 1.3 2005-04-28 08:38:36 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -39,9 +39,13 @@
 #include <xmlwrapp/node.h>
 #include <xmlwrapp/tree_parser.h>
 
+#include <algorithm>
+#include <iterator>
 #include <sstream>
 #include <stdexcept>
 #include <vector>
+
+// TODO ?? Need unit tests.
 
 namespace
 {
@@ -50,6 +54,7 @@ namespace
         static std::string s("configurable_settings");
         return s;
     }
+
     std::vector<char const*> const& xml_node_names()
     {
         static char const* node_names[] =
@@ -57,6 +62,9 @@ namespace
             ,"custom_input_filename"
             ,"custom_output_filename"
             ,"cgi_bin_log_filename"
+            ,"spreadsheet_file_extension"
+            ,"xsl_fo_command"
+            ,"xsl_fo_directory"
             };
         static std::vector<char const*> v
             (node_names
@@ -75,14 +83,18 @@ configurable_settings::configurable_settings()
     std::string filename = AddDataDir("configurable_settings.xml");
     if(access(filename.c_str(), R_OK))
         {
-        return;
+        throw std::runtime_error
+            ("No readable file 'configurable_settings.xml' exists."
+            );
         }
 
     xml::init init;
     xml::tree_parser parser(filename.c_str());
     if(!parser)
         {
-        throw std::runtime_error("Error parsing 'configurable_settings.xml'.");
+        throw std::runtime_error
+            ("Error parsing 'configurable_settings.xml'."
+            );
         }
 #ifdef USING_CURRENT_XMLWRAPP
     xml::node& root = parser.get_document().get_root_node();
@@ -130,9 +142,21 @@ configurable_settings::configurable_settings()
             {
             custom_output_filename_ = child->get_content();
             }
-        else if(std::string(xml_node_names()[2]) == child->get_name())
+        else if(std::string(xml_node_names()[3]) == child->get_name())
             {
             cgi_bin_log_filename_ = child->get_content();
+            }
+        else if(std::string(xml_node_names()[4]) == child->get_name())
+            {
+            spreadsheet_file_extension_ = child->get_content();
+            }
+        else if(std::string(xml_node_names()[5]) == child->get_name())
+            {
+            xsl_fo_command_ = child->get_content();
+            }
+        else if(std::string(xml_node_names()[6]) == child->get_name())
+            {
+            xsl_fo_directory_ = child->get_content();
             }
         else
             {
@@ -142,11 +166,14 @@ configurable_settings::configurable_settings()
                 << "xml node name '"
                 << child->get_name()
                 << "' is unknown. Expected one of: "
-                << "'" << xml_node_names()[0]
-                << "', '" << xml_node_names()[1]
-                << "', '" << xml_node_names()[2]
-                << "'."
-                << "Try reinstalling."
+                ;
+            std::copy
+                (xml_node_names().begin()
+                ,xml_node_names().end()
+                ,std::ostream_iterator<std::string>(msg, " ")
+                );
+            msg
+                << ". Try reinstalling."
                 ;
             throw std::runtime_error(msg.str());
             }
@@ -180,5 +207,20 @@ std::string const& configurable_settings::custom_output_filename()
 std::string const& configurable_settings::default_product()
 {
     return default_product_;
+}
+
+std::string const& configurable_settings::spreadsheet_file_extension()
+{
+    return spreadsheet_file_extension_;
+}
+
+std::string const& configurable_settings::xsl_fo_command()
+{
+    return xsl_fo_command_;
+}
+
+std::string const& configurable_settings::xsl_fo_directory()
+{
+    return xsl_fo_directory_;
 }
 
