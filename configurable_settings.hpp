@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: configurable_settings.hpp,v 1.2 2005-03-11 13:40:41 chicares Exp $
+// $Id: configurable_settings.hpp,v 1.3 2005-04-28 08:38:36 chicares Exp $
 
 #ifndef configurable_settings_hpp
 #define configurable_settings_hpp
@@ -30,8 +30,9 @@
 
 #include <string>
 
-// A simple Meyers singleton, with the expected dead-reference and
-// threading issues.
+/// A simple Meyers singleton, with the expected dead-reference and
+/// threading issues.
+
 class LMI_EXPIMP configurable_settings
 {
   public:
@@ -41,6 +42,9 @@ class LMI_EXPIMP configurable_settings
     std::string const& custom_input_filename();
     std::string const& custom_output_filename();
     std::string const& default_product();
+    std::string const& spreadsheet_file_extension();
+    std::string const& xsl_fo_command();
+    std::string const& xsl_fo_directory();
 
   private:
     configurable_settings();
@@ -51,6 +55,9 @@ class LMI_EXPIMP configurable_settings
     std::string custom_input_filename_;
     std::string custom_output_filename_;
     std::string default_product_;
+    std::string spreadsheet_file_extension_;
+    std::string xsl_fo_command_;
+    std::string xsl_fo_directory_;
 
 #ifdef __BORLANDC__
 // COMPILER !! Borland compilers defectively [11/5] require a public dtor; see:
