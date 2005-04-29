@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: interest_rates.cpp,v 1.4 2005-04-05 12:36:37 chicares Exp $
+// $Id: interest_rates.cpp,v 1.5 2005-04-29 16:14:08 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -268,14 +268,6 @@ InterestRates::InterestRates(BasicValues const& v)
     ,NeedHoneymoonRates_ (v.Input_->HasHoneymoon)
     ,SpreadFor7702_      (v.SpreadFor7702())
 {
-    // For now at least, we use a third separate-account rate
-    // (half of input) in one exceptional circumstance only
-    // (prospectus illustrations, which NASD no longer requires)
-    // and the GUI provides no friendly way to enable it.
-    if(std::string::npos != v.Input_->Comments.find("idiosyncrasy9"))
-        {
-        LedgerType_ = e_prospectus;
-        }
     Initialize(v);
 }
 
