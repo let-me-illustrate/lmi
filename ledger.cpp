@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger.cpp,v 1.5 2005-04-29 16:14:08 chicares Exp $
+// $Id: ledger.cpp,v 1.6 2005-04-29 16:32:58 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -62,19 +62,18 @@ void Ledger::SetRunBases(int a_Length)
     ledger_map& l_map_rep = ledger_map_->held_;
     switch(ledger_type_)
         {
-        case e_ill_reg:     // {current, midpoint, guaranteed}
-        case e_ill_reg_private_placement:
+        case e_ill_reg:
+        case e_ill_reg_private_placement:    // Deliberately fall through.
             {
             l_map_rep[e_run_basis(e_run_curr_basis)]         = LedgerVariant(a_Length);
             l_map_rep[e_run_basis(e_run_guar_basis)]         = LedgerVariant(a_Length);
             l_map_rep[e_run_basis(e_run_mdpt_basis)]         = LedgerVariant(a_Length);
             }
             break;
-        case e_group_private_placement:          // [format not yet final]
-        case e_offshore_private_placement:       // [format not yet final]
-        case e_individual_private_placement:     // [format not yet final]
-                            // fall through: same as NASD for now
-        case e_nasd:        // {current, 0% int} X {guar charges, curr charges}
+        case e_group_private_placement:      // Deliberately fall through.
+        case e_offshore_private_placement:   // Deliberately fall through.
+        case e_individual_private_placement: // Deliberately fall through.
+        case e_nasd:
             {
             l_map_rep[e_run_basis(e_run_curr_basis)]         = LedgerVariant(a_Length);
             l_map_rep[e_run_basis(e_run_guar_basis)]         = LedgerVariant(a_Length);

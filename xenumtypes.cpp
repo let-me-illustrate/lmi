@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xenumtypes.cpp,v 1.2 2005-04-29 16:14:08 chicares Exp $
+// $Id: xenumtypes.cpp,v 1.3 2005-04-29 16:32:58 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -137,9 +137,9 @@ template class xenum<enum_run_basis, 7>;
 template std::istream& operator>> (std::istream& is, xenum<enum_run_basis, 7>&);
 template std::ostream& operator<< (std::ostream& os, xenum<enum_run_basis, 7> const&);
 
-template class xenum<enum_ledger_type, 6>;
-template std::istream& operator>> (std::istream& is, xenum<enum_ledger_type, 7>&);
-template std::ostream& operator<< (std::ostream& os, xenum<enum_ledger_type, 7> const&);
+template class xenum<enum_ledger_type, 5>;
+template std::istream& operator>> (std::istream& is, xenum<enum_ledger_type, 5>&);
+template std::ostream& operator<< (std::ostream& os, xenum<enum_ledger_type, 5> const&);
 
 template class xenum<enum_amount_type, 2>;
 template std::istream& operator>> (std::istream& is, xenum<enum_amount_type, 2>&);
@@ -404,16 +404,14 @@ LMI_SPECIALIZATION enum_ledger_type const e_ledger_type::enumerators[] =
     ,e_nasd
     ,e_group_private_placement
     ,e_offshore_private_placement
-    ,e_ill_reg_private_placement
     ,e_individual_private_placement
     };
 LMI_SPECIALIZATION char const*const e_ledger_type::names[] =
-    {"Illustration reg"
-    ,"NASD"
-    ,"Group private placement"
-    ,"Offshore private placement"
-    ,"Private placement subject to illustation reg"
-    ,"Individual private placement"
+    {"illustration_reg"
+    ,"nasd"
+    ,"group_individual_private_placement"
+    ,"offshore_private_placement"
+    ,"individual_private_placement"
     };
 
 LMI_SPECIALIZATION enum_amount_type const e_amount_type::enumerators[] =
@@ -896,14 +894,9 @@ LMI_SPECIALIZATION char const*const e_post_ret_sa_strategy::names[] =
     ,"% of pre-retirement"
     };
 
-// TODO ?? This stuff is a little funky....
-
 bool is_subject_to_ill_reg(e_ledger_type const& z)
 {
-    return
-           e_ill_reg                   == z
-        || e_ill_reg_private_placement == z
-        ;
+    return is_subject_to_ill_reg(z.value());
 }
 
 bool is_subject_to_ill_reg(enum_ledger_type z)
@@ -916,10 +909,9 @@ bool is_subject_to_ill_reg(enum_ledger_type z)
 
 bool is_subject_to_ill_reg(double z)
 {
-    return
-           e_ill_reg                   == enum_ledger_type(z)
-        || e_ill_reg_private_placement == enum_ledger_type(z)
-        ;
+    return is_subject_to_ill_reg
+        (static_cast<enum_ledger_type>(static_cast<int>(z))
+        );
 }
 
 // Formerly, three-rate illustrations were required for prospectuses.
