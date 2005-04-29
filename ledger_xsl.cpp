@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xsl.cpp,v 1.2 2005-04-29 16:14:08 chicares Exp $
+// $Id: ledger_xsl.cpp,v 1.3 2005-04-29 17:19:46 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -57,7 +57,6 @@ fs::path xsl_filepath(Ledger const& ledger)
     switch(ledger.GetLedgerType())
         {
         case e_ill_reg:
-        case e_ill_reg_private_placement:  // TODO ?? Should have its own xsl.
             {
             xsl_name = "IllReg.xsl";
             }
