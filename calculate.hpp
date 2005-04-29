@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: calculate.hpp,v 1.6 2005-04-21 16:11:47 chicares Exp $
+// $Id: calculate.hpp,v 1.7 2005-04-29 18:51:34 chicares Exp $
 
 #ifndef calculate_hpp
 #define calculate_hpp
@@ -110,7 +110,7 @@ struct RunCensus
 {
     explicit RunCensus(std::ostream& aOutputDest)
         :OutputDest           (aOutputDest)
-// TODO ?? Hardcoded ledger type must be changed.
+// TODO ?? Hardcoded ledger type must be changed later, but is it?
         ,XXXComposite         (e_ledger_type(e_ill_reg), 100, true)
         ,time_for_calculations(0.0)
         ,time_for_output      (0.0)
@@ -215,11 +215,16 @@ struct RunCensusDeprecated
 
         // TODO ?? Why copy?
         std::vector<IllusInputParms> lives(doc.cell_parms());
+        LMI_ASSERT(0 == lives.size());
 
         timer.Restart();
 
 // TODO ?? Use the stack instead of the heap.
-        std::auto_ptr<IllusVal> Composite(new IllusVal(new Ledger(e_ledger_type(e_ill_reg), 100, true)));
+        std::auto_ptr<IllusVal> Composite
+            (new IllusVal
+                (new Ledger(lives[0].LedgerType(), 100, true)
+                )
+            );
 
         for
             (std::vector<IllusInputParms>::iterator lives_it = lives.begin()

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main.cpp,v 1.13 2005-04-21 16:11:47 chicares Exp $
+// $Id: main.cpp,v 1.14 2005-04-29 18:51:34 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -29,8 +29,6 @@
 #include "alert.hpp"
 #include "argv0.hpp"
 #include "calculate.hpp"
-#include "database.hpp"
-#include "dbnames.hpp"
 #include "fenv_lmi.hpp"
 #include "getopt.hpp"
 #include "global_settings.hpp"
@@ -76,20 +74,8 @@ void RegressionTest()
         multiple_cell_document doc(i->string());
         std::vector<IllusInputParms> const& cells(doc.cell_parms());
 
-        // TODO ?? First cell is as good as any until consistency is
-        // enforced across all cells in a census. Perhaps a member
-        // function of the input class should give the ledger type.
-        TDatabase temp_db(cells[0]);
-        e_ledger_type ledger_type
-            (static_cast<enum_ledger_type>
-                (
-                static_cast<int>
-                    (temp_db.Query(DB_LedgerType)
-                    )
-                )
-            );
         Ledger composite
-            (ledger_type
+            (cells[0].LedgerType()
             ,100
             ,true
             );

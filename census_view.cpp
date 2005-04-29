@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: census_view.cpp,v 1.15 2005-04-29 16:14:08 chicares Exp $
+// $Id: census_view.cpp,v 1.16 2005-04-29 18:51:34 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -150,6 +150,9 @@ CensusView::CensusView()
     :ViewEx                          ()
     ,all_changes_have_been_validated_(true)
     ,composite_is_available_         (false)
+// TODO ?? Is this variable necessary or even useful? This
+// initialization is wasteful because it must be overridden later.
+// Would a shared_ptr be better?    
     ,composite_ledger_               (e_ledger_type(e_nasd))
     ,list_window_                    (0)
 {
@@ -1109,16 +1112,9 @@ void CensusView::RunAllLives(e_output_dest a_OutputDest)
     // TODO ?? Want youngest cell instead of first cell.
 IllusInputParms ihs_input0;
 convert_to_ihs(ihs_input0, cell_parms()[0]);
-// TODO ?? expunge?
-//    TDatabase temp_db(cell_parms()[0]);
-    TDatabase temp_db(ihs_input0);
-    e_ledger_type ledger_type
-        (static_cast<enum_ledger_type>
-            (static_cast<int>(temp_db.Query(DB_LedgerType))
-            )
-        );
     Ledger Composite
-        (ledger_type
+//        (cell_parms()[0].LedgerType()
+        (ihs_input0.LedgerType()
         ,100
         ,true
         );
@@ -1275,15 +1271,10 @@ convert_to_ihs(Parms, *ip);
     // TODO ?? Want youngest cell instead of first cell.
 IllusInputParms ihs_input0;
 convert_to_ihs(ihs_input0, cell_parms()[0]);
-    TDatabase temp_db(ihs_input0);
-    e_ledger_type ledger_type
-        (static_cast<enum_ledger_type>
-            (static_cast<int>(temp_db.Query(DB_LedgerType))
-            )
-        );
 
     Ledger Composite
-        (ledger_type
+//        (cell_parms()[0].LedgerType()
+        (ihs_input0.LedgerType()
         ,100
         ,true
         );
@@ -1359,6 +1350,7 @@ restart:
         double case_accum_net_claims   = 0.0;
         double case_k_factor           = 0.0;
 
+        TDatabase temp_db(ihs_input0);
         double case_ibnr_months = temp_db.Query(DB_ExpRatIBNRMult);
 
         double CaseExpRatReserve = 0.0;
