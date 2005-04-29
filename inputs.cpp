@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: inputs.cpp,v 1.3 2005-04-23 21:42:57 chicares Exp $
+// $Id: inputs.cpp,v 1.4 2005-04-29 17:20:55 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -927,5 +927,28 @@ bool InputParms::CheckAllowDBO3() const
         {
         return false;
         }
+}
+
+e_ledger_type InputParms::LedgerType() const
+{
+// TODO ?? This class should have a shared_ptr<TDatabase> instead of
+// creating objects like this repeatedly.
+    std::auto_ptr<TDatabase> temp_database
+        (new TDatabase
+            (ProductName
+            ,Status[0].Gender
+            ,Status[0].Class
+            ,Status[0].Smoking
+            ,Status[0].IssueAge
+            ,GroupUWType
+            ,InsdState // TODO ?? This is wrong if endt age varies by state.
+            )
+        );
+    return e_ledger_type
+        (static_cast<enum_ledger_type>
+            (static_cast<int>
+                (temp_database->Query(DB_LedgerType))
+            )
+        );
 }
 

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: inputs.hpp,v 1.2 2005-04-23 21:42:57 chicares Exp $
+// $Id: inputs.hpp,v 1.3 2005-04-29 17:20:55 chicares Exp $
 
 #ifndef inputs_hpp
 #define inputs_hpp
@@ -50,6 +50,7 @@ class LMI_EXPIMP InputParms
     int SumOfSepAcctFundAllocs() const;
     void ResetAllFunds(bool GeneralAccountAllowed);
     void EnforceConsistency();
+    e_ledger_type LedgerType() const;
 
     bool NeedLoanRates() const;
 
