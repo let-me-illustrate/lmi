@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger.cpp,v 1.4 2005-04-14 01:26:47 chicares Exp $
+// $Id: ledger.cpp,v 1.5 2005-04-29 16:14:08 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -82,7 +82,13 @@ void Ledger::SetRunBases(int a_Length)
             l_map_rep[e_run_basis(e_run_guar_basis_sa_zero)] = LedgerVariant(a_Length);
             }
             break;
-        case e_prospectus:  // {current, 0% int, 1/2 int%} X {guar, curr}
+#if 0
+        // Formerly, three-rate illustrations were required for
+        // prospectuses. Since this code was written, that requirement
+        // has become inoperative, but the code is preserved in case
+        // such a format becomes desirable for some other reason.
+        //
+        case nonexistent:  // {current, 0% int, 1/2 int%} X {guar, curr}
             {
             l_map_rep[e_run_basis(e_run_curr_basis)]         = LedgerVariant(a_Length);
             l_map_rep[e_run_basis(e_run_guar_basis)]         = LedgerVariant(a_Length);
@@ -92,6 +98,7 @@ void Ledger::SetRunBases(int a_Length)
             l_map_rep[e_run_basis(e_run_guar_basis_sa_half)] = LedgerVariant(a_Length);
             }
             break;
+#endif
         default:
             {
             fatal_error()

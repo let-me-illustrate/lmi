@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_basicval.cpp,v 1.8 2005-04-22 02:21:21 chicares Exp $
+// $Id: ihs_basicval.cpp,v 1.9 2005-04-29 16:14:08 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -715,11 +715,6 @@ void BasicValues::SetPermanentInvariants()
     LedgerType = static_cast<enum_ledger_type>(static_cast<int>(Database_->Query(DB_LedgerType)));
 
     FirstYearPremiumRetaliationLimit = Database_->Query(DB_PremTaxRetalLimit);
-
-    if(std::string::npos != Input_->Comments.find("idiosyncrasy9"))
-        {
-        LedgerType = e_ledger_type(e_prospectus);
-        }
 
     COIIsDynamic        = Database_->Query(DB_DynamicCOI             );
     MandEIsDynamic      = Database_->Query(DB_DynamicMandE           );
