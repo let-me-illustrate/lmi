@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xenumtypes.cpp,v 1.3 2005-04-29 16:32:58 chicares Exp $
+// $Id: xenumtypes.cpp,v 1.4 2005-04-29 17:19:46 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -901,10 +901,7 @@ bool is_subject_to_ill_reg(e_ledger_type const& z)
 
 bool is_subject_to_ill_reg(enum_ledger_type z)
 {
-    return
-           e_ill_reg                   == z
-        || e_ill_reg_private_placement == z
-        ;
+    return e_ill_reg == z;
 }
 
 bool is_subject_to_ill_reg(double z)
