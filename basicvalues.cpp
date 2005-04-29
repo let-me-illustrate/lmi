@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: basicvalues.cpp,v 1.5 2005-03-23 15:32:29 chicares Exp $
+// $Id: basicvalues.cpp,v 1.6 2005-04-29 18:51:33 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -95,7 +95,7 @@ void BasicValues::Init()
             )
         );
 
-    LedgerType = e_ledger_type(e_ill_reg);
+    LedgerType = Input_->LedgerType();
 
     RoundingRules_.reset(new rounding_rules);
 
