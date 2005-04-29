@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xenumtypes.hpp,v 1.1 2005-01-14 19:47:45 chicares Exp $
+// $Id: xenumtypes.hpp,v 1.2 2005-04-29 16:14:08 chicares Exp $
 
 #ifndef xenumtypes_hpp
 #define xenumtypes_hpp
@@ -117,15 +117,14 @@ enum enum_run_basis
 typedef xenum<enum_run_basis, 7> e_run_basis;
 
 enum enum_ledger_type
-    {e_ill_reg         // {current, midpoint, guaranteed}
-    ,e_nasd            // {current, 0% interest} X {guar charges, curr charges}
-    ,e_prospectus      // {current, 0% interest, 1/2 interest%} X {guar, curr}
+    {e_ill_reg
+    ,e_nasd
     ,e_group_private_placement
     ,e_offshore_private_placement
-    ,e_ill_reg_private_placement // private placement subject to ill reg
+    ,e_ill_reg_private_placement
     ,e_individual_private_placement
     };
-typedef xenum<enum_ledger_type, 7> e_ledger_type;
+typedef xenum<enum_ledger_type, 6> e_ledger_type;
 
 enum enum_amount_type
     {e_face

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xenumtypes.cpp,v 1.1 2005-01-14 19:47:45 chicares Exp $
+// $Id: xenumtypes.cpp,v 1.2 2005-04-29 16:14:08 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -137,7 +137,7 @@ template class xenum<enum_run_basis, 7>;
 template std::istream& operator>> (std::istream& is, xenum<enum_run_basis, 7>&);
 template std::ostream& operator<< (std::ostream& os, xenum<enum_run_basis, 7> const&);
 
-template class xenum<enum_ledger_type, 7>;
+template class xenum<enum_ledger_type, 6>;
 template std::istream& operator>> (std::istream& is, xenum<enum_ledger_type, 7>&);
 template std::ostream& operator<< (std::ostream& os, xenum<enum_ledger_type, 7> const&);
 
@@ -402,7 +402,6 @@ LMI_SPECIALIZATION char const*const e_run_basis::names[] =
 LMI_SPECIALIZATION enum_ledger_type const e_ledger_type::enumerators[] =
     {e_ill_reg
     ,e_nasd
-    ,e_prospectus
     ,e_group_private_placement
     ,e_offshore_private_placement
     ,e_ill_reg_private_placement
@@ -411,7 +410,6 @@ LMI_SPECIALIZATION enum_ledger_type const e_ledger_type::enumerators[] =
 LMI_SPECIALIZATION char const*const e_ledger_type::names[] =
     {"Illustration reg"
     ,"NASD"
-    ,"Prospectus"
     ,"Group private placement"
     ,"Offshore private placement"
     ,"Private placement subject to illustation reg"
@@ -924,20 +922,24 @@ bool is_subject_to_ill_reg(double z)
         ;
 }
 
-// TODO ?? That old NASD format is obsolete, so expunge this function?
-bool is_three_rate_nasd(e_ledger_type const& z)
+// Formerly, three-rate illustrations were required for prospectuses.
+// Since these functions were orignally written, that requirement has
+// inoperative, but the functions are preserved as stubs in case such
+// a format becomes desirable for some other reason.
+
+bool is_three_rate_nasd(e_ledger_type const&)
 {
-    return e_prospectus == z;
+    return false;
 }
 
-bool is_three_rate_nasd(enum_ledger_type z)
+bool is_three_rate_nasd(enum_ledger_type)
 {
-    return e_prospectus == z;
+    return false;
 }
 
-bool is_three_rate_nasd(double z)
+bool is_three_rate_nasd(double)
 {
-    return e_prospectus == enum_ledger_type(z);
+    return false;
 }
 
 void set_separate_bases_from_run_basis

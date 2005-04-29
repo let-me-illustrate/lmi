@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xsl.cpp,v 1.1 2005-04-29 10:10:33 chicares Exp $
+// $Id: ledger_xsl.cpp,v 1.2 2005-04-29 16:14:08 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -73,7 +73,6 @@ fs::path xsl_filepath(Ledger const& ledger)
             xsl_name = "IllNASD.xsl";
             }
             break;
-        case e_prospectus:                 // TODO ?? Should have its own xsl.
         case e_offshore_private_placement: // TODO ?? Should have its own xsl.
         default:
             {

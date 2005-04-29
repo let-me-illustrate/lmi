@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: census_view.cpp,v 1.14 2005-04-24 02:18:52 chicares Exp $
+// $Id: census_view.cpp,v 1.15 2005-04-29 16:14:08 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -1117,10 +1117,6 @@ convert_to_ihs(ihs_input0, cell_parms()[0]);
             (static_cast<int>(temp_db.Query(DB_LedgerType))
             )
         );
-    if(std::string::npos != cell_parms()[0]["Comments"].str().find("idiosyncrasy9"))
-        {
-        ledger_type = e_ledger_type(e_prospectus);
-        }
     Ledger Composite
         (ledger_type
         ,100
@@ -1285,10 +1281,6 @@ convert_to_ihs(ihs_input0, cell_parms()[0]);
             (static_cast<int>(temp_db.Query(DB_LedgerType))
             )
         );
-    if(std::string::npos != cell_parms()[0]["Comments"].str().find("idiosyncrasy9"))
-        {
-        ledger_type = e_ledger_type(e_prospectus);
-        }
 
     Ledger Composite
         (ledger_type
