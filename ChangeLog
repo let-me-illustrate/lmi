@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.50 2005-04-24 02:38:44 chicares Exp $
+// $Id: ChangeLog,v 1.51 2005-04-29 17:26:42 chicares Exp $
 
 2005-01-14
 
@@ -1435,4 +1435,55 @@ Add new input fields for experience rating.
   census_view.cpp
   group_values.cpp
 Use new input fields for experience rating.
+
+2005-04-25 [1431]
+
+  ledger_xml_io.cpp
+Change a column title.
+
+  progress_meter.hpp
+Experiment with doxygen tags.
+
+2005-04-28 [1431]
+
+  configurable_settings.cpp
+  configurable_settings.hpp
+Add several settings.
+
+2005-04-29 [1431]
+
+  objects.make
+  path_utility.cpp      [new file]
+  path_utility.hpp      [new file]
+  path_utility_test.cpp [new file]
+Add path-utility functions and unit tests.
+
+  ledger_xsl.cpp [new file]
+  ledger_xsl.hpp [new file]
+  objects.make
+Factor pdf creation out of gui.
+
+2005-04-30 [1438]
+
+  census_view.cpp
+  ihs_basicval.cpp
+  interest_rates.cpp
+  ledger_xsl.cpp
+  ledger.cpp
+  mc_enum_types.cpp
+  mc_enum_types.hpp
+  mc_enum_types.xpp
+  xenumtypes.cpp
+  xenumtypes.hpp
+Expunge disused prospectus ledger type.
+
+  ledger_xsl.cpp
+  ledger.cpp
+  mc_enum_types.cpp
+  mc_enum_types.hpp
+  mc_enum_types.xpp
+  xenumtypes.cpp
+  xenumtypes.hpp
+Expunge disused illustration-reg private-placement ledger type.
+Change strings associated with ledger-type datatypes.
 
