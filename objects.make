@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: objects.make,v 1.16 2005-04-21 14:21:35 chicares Exp $
+# $Id: objects.make,v 1.17 2005-04-29 10:10:33 chicares Exp $
 
 ################################################################################
 
@@ -135,6 +135,7 @@ antediluvian_common_objects := \
   ledger_invariant.o \
   ledger_variant.o \
   ledger_xml_io.o \
+  ledger_xsl.o \
   ledgervalues.o \
   license.o \
   loads.o \
@@ -142,12 +143,14 @@ antediluvian_common_objects := \
   mortality_rates.o \
   multiple_cell_document.o \
   outlay.o \
+  path_utility.o \
   progress_meter.o \
   rounding_rules.o \
   sigfpe.o \
   single_cell_document.o \
   solve.o \
   surrchg_rates.o \
+  system_command.o \
   timer.o \
   xenumtypes.o \
   xrange.o \
@@ -216,6 +219,7 @@ lmi_common_objects := \
   ledger_invariant.o \
   ledger_variant.o \
   ledger_xml_io.o \
+  ledger_xsl.o \
   ledgervalues.o \
   license.o \
   mathmisc.o \
@@ -223,6 +227,7 @@ lmi_common_objects := \
   miscellany.o \
   multiple_cell_document.o \
   outlay.o \
+  path_utility.o \
   progress_meter.o \
   rounding_rules.o \
   secure_date.o \
@@ -357,6 +362,7 @@ unit_test_targets := \
   numeric_io_test$(EXEEXT) \
   obstruct_slicing_test$(EXEEXT) \
   passkey_test$(EXEEXT) \
+  path_utility_test$(EXEEXT) \
   progress_meter_test$(EXEEXT) \
   quiet_nan_test$(EXEEXT) \
   round_to_test$(EXEEXT) \
@@ -534,6 +540,14 @@ passkey_test$(EXEEXT): \
   passkey_test.o \
   secure_date.o \
   system_command.o \
+
+path_utility_test$(EXEEXT): \
+  $(boost_filesystem_objects) \
+  $(common_test_objects) \
+  alert.o \
+  miscellany.o \
+  path_utility.o \
+  path_utility_test.o \
 
 progress_meter_test$(EXEEXT): \
   $(common_test_objects) \
