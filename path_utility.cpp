@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: path_utility.cpp,v 1.1 2005-04-29 10:09:59 chicares Exp $
+// $Id: path_utility.cpp,v 1.2 2005-04-29 18:53:15 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -43,12 +43,12 @@
 /// extension. If even that does not produce a unique name, then throw
 /// an exception.
 ///
-/// A try-block is necessary because fs::remove() can throw. It is not
-/// clear from the boost documentation happens if the file doesn't
+/// A try-block is necessary because fs::remove() can throw. The boost
+/// documentation doesn't clearly say what happens if the file doesn't
 /// actually get removed, e.g. because it's write-protected, so this
 /// function checks the postcondition (file shouldn't exist) and, if
 /// it's not satisfied, explicitly throws an exception of the same
-/// type that the boost library function would throw if it enforces
+/// type that the boost library function would throw if it enforced
 /// the postcondition, because both these exceptional conditions are
 /// handled the same way.
 

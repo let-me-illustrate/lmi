@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: path_utility_test.cpp,v 1.1 2005-04-29 10:09:59 chicares Exp $
+// $Id: path_utility_test.cpp,v 1.2 2005-04-29 18:53:15 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -100,7 +100,7 @@ void test_normal_operation()
     BOOST_TEST_EQUAL(0, access(path2.string().c_str(), R_OK));
 
     // There's no easy way to test that unique_filepath() throws the
-    // intended exception if it's reinvoked more rapidly that its
+    // intended exception if it's reinvoked more rapidly than its
     // timestamp changes.
 
     keep_open.close();
