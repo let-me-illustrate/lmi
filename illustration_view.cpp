@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustration_view.cpp,v 1.6 2005-04-22 02:21:21 chicares Exp $
+// $Id: illustration_view.cpp,v 1.7 2005-04-29 18:51:34 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -477,29 +477,7 @@ void IllustrationView::Pdf(std::string action)
     ledger_values_->write(ofs);
     ofs.close();
 
-    std::string xsl_name;
-    switch(ledger_values_->GetLedgerType())
-        {
-        case e_ill_reg:
-            {
-            xsl_name = "IllReg.xsl";
-            }
-            break;
-        case e_individual_private_placement:
-            {
-            xsl_name = "IllIndivPP.xsl";
-            }
-            break;
-        case e_nasd:
-            {
-            xsl_name = "IllNASD.xsl";
-            }
-            break;
-        default:
-            {
-            xsl_name = "IllNASD.xsl";
-            }
-        }
+    std::string xsl_name = ledger_values_->GetLedgerType().str() + ".xsl";
     fs::path xsl_file(fop / xsl_name);
     if(!fs::exists(xml_out_file))
         {

@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_basicval.cpp,v 1.9 2005-04-29 16:14:08 chicares Exp $
+// $Id: ihs_basicval.cpp,v 1.10 2005-04-29 18:51:34 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -712,7 +712,7 @@ void BasicValues::SetPermanentInvariants()
     Database_->Query(CompTarget, DB_CompTarget);
     Database_->Query(CompExcess, DB_CompExcess);
 
-    LedgerType = static_cast<enum_ledger_type>(static_cast<int>(Database_->Query(DB_LedgerType)));
+    LedgerType = Input_->LedgerType();
 
     FirstYearPremiumRetaliationLimit = Database_->Query(DB_PremTaxRetalLimit);
 

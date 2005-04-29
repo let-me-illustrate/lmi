@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: interest_rates.cpp,v 1.5 2005-04-29 16:14:08 chicares Exp $
+// $Id: interest_rates.cpp,v 1.6 2005-04-29 18:51:34 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -251,7 +251,7 @@ InterestRates::~InterestRates()
 //
 InterestRates::InterestRates(BasicValues const& v)
     :Length_             (v.GetLength())
-    ,LedgerType_         (static_cast<enum_ledger_type>(static_cast<int>(v.Database_->Query(DB_LedgerType))))
+    ,LedgerType_         (v.Input_->LedgerType())
     ,RoundIntRate_       (v.GetRoundingRules().round_interest_rate())
     ,Round7702Rate_      (v.GetRoundingRules().round_interest_rate_7702())
     ,Zero_               (Length_)

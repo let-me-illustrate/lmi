@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.51 2005-04-29 17:26:42 chicares Exp $
+// $Id: ChangeLog,v 1.52 2005-04-29 18:56:01 chicares Exp $
 
 2005-01-14
 
@@ -1463,7 +1463,7 @@ Add path-utility functions and unit tests.
   objects.make
 Factor pdf creation out of gui.
 
-2005-04-30 [1438]
+2005-04-30 [1434]
 
   census_view.cpp
   ihs_basicval.cpp
@@ -1486,4 +1486,22 @@ Expunge disused prospectus ledger type.
   xenumtypes.hpp
 Expunge disused illustration-reg private-placement ledger type.
 Change strings associated with ledger-type datatypes.
+
+  inputs.cpp
+  inputs.hpp
+Add member function to determine ledger type.
+
+  basicvalues.cpp
+  calculate.hpp
+  census_view.cpp
+  ihs_basicval.cpp
+  illustration_view.cpp
+  interest_rates.cpp
+  ledger_xsl.cpp
+  main.cpp
+Simplify and improve ledger-type determination.
+
+  path_utility.cpp
+  path_utility_test.cpp
+Improve documentation.
 

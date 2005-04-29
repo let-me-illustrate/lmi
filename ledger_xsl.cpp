@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xsl.cpp,v 1.3 2005-04-29 17:19:46 chicares Exp $
+// $Id: ledger_xsl.cpp,v 1.4 2005-04-29 18:51:34 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -43,47 +43,9 @@
 
 namespace
 {
-/// Return the appropriate xsl filepath for a ledger.
-///
-/// TODO ?? The only reason for e_ledger_type enumerators to differ is
-/// that each requires a distinct output format. Therefore, it makes
-/// no sense to use a switch statement at all: instead, it should
-/// suffice to append '.xsl' to the string associated with the
-/// enumerator.
-
 fs::path xsl_filepath(Ledger const& ledger)
 {
-    std::string xsl_name;
-    switch(ledger.GetLedgerType())
-        {
-        case e_ill_reg:
-            {
-            xsl_name = "IllReg.xsl";
-            }
-            break;
-        case e_individual_private_placement:
-            {
-            xsl_name = "IllIndivPP.xsl";
-            }
-            break;
-        case e_nasd:
-        case e_group_private_placement:    // TODO ?? Should have its own xsl.
-            {
-            xsl_name = "IllNASD.xsl";
-            }
-            break;
-        case e_offshore_private_placement: // TODO ?? Should have its own xsl.
-        default:
-            {
-            fatal_error()
-                << "Case '"
-                << ledger.GetLedgerType()
-                << "' not found."
-                << LMI_FLUSH
-                ;
-            }
-        }
-
+    std::string xsl_name = ledger.GetLedgerType().str() + ".xsl";
     fs::path fop(configurable_settings::instance().xsl_fo_directory());
     fs::path xsl_file(fop / xsl_name);
     if(!fs::exists(xsl_file))
