@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustration_view.cpp,v 1.8 2005-04-30 15:45:23 chicares Exp $
+// $Id: illustration_view.cpp,v 1.9 2005-04-30 16:42:50 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -197,6 +197,7 @@ warning() << "That command should have been disabled." << LMI_FLUSH;
     return rc;
 }
 
+// TODO ?? Move this free function's prototype elsewhere.
 std::string FormatSelectedValuesAsHtml(Ledger const& ledger_values);
 void IllustrationView::DisplaySelectedValuesAsHtml()
 {
@@ -205,7 +206,7 @@ void IllustrationView::DisplaySelectedValuesAsHtml()
 }
 
 // TODO ?? Move this free function elsewhere.
-std::string IllustrationView::FormatSelectedValuesAsHtml(Ledger const& ledger_values)
+std::string FormatSelectedValuesAsHtml(Ledger const& ledger_values)
 {
     LedgerInvariant const& Invar = ledger_values.GetLedgerInvariant();
     LedgerVariant   const& Curr_ = ledger_values.GetCurrFull();
@@ -637,116 +638,10 @@ void set_net_payment
         ,std::minus<double>()
         );
 }
-
-// We can't use member templates with bc++5.02, so we need workarounds
-// like this.
-template<typename EnumType, unsigned int N>
-std::vector<std::string> enum_vector_to_string_vector
-    (std::vector<xenum<EnumType, N> > const& ve
-    )
-{
-    std::vector<std::string> vs;
-    typename std::vector<xenum<EnumType, N> >::const_iterator ve_i;
-    for(ve_i = ve.begin(); ve_i != ve.end(); ++ve_i)
-        {
-        vs.push_back(ve_i->str());
-        }
-    return vs;
-}
-} // Unnamed namespace.
-
-namespace
-{
-// Truncate string if necessary so that it's no longer than the given
-// length, truncating at the last feasible terminal if any is given.
-// Thus, an input sequence in its canonical form, with a ';' terminal
-// at the end of each clause, is truncated at the last clause that can
-// be completely represented within the given length. The function
-// name uses 'width' because it's intended to be called in a context
-// where string length is conformed to page width.
-std::string truncate_to_width
-    (std::string const& a_s
-    ,unsigned int max_length
-    ,std::string const& terminals
-    )
-{
-    std::string s(a_s);
-    if(max_length < s.size())
-        {
-        static std::string const ellipsis("...");
-        s.resize(max_length - ellipsis.size());
-        std::string::size_type xpos = s.find_last_of(terminals, max_length);
-        if(std::string::npos != xpos)
-            {
-            s.resize(xpos);
-            }
-        s += ellipsis;
-        }
-    return s;
-}
-
-std::string show_as_sequence
-    (std::vector<double> const& v
-    ,unsigned int max_length
-    )
-{
-    std::string s(InputSequence(v).mathematical_representation());
-    return truncate_to_width(s, max_length, ";");
-}
-
-template<typename EnumType, unsigned int N>
-std::string show_as_sequence
-    (std::vector<xenum<EnumType, N> > const& ve
-    ,unsigned int max_length
-    )
-{
-    std::vector<std::string> vs(enum_vector_to_string_vector(ve));
-    std::string s(InputSequence(vs).mathematical_representation());
-    return truncate_to_width(s, max_length, ";");
-}
-
-std::string show_tiered_table
-    (std::vector<double> const& bands
-    ,std::vector<double> const& data
-    )
-{
-    std::ostringstream oss;
-    // An arbitrary limit that, for the nonce at least, is small
-    // enough to keep the whole cover sheet on one page.
-    std::vector<double>::size_type const max_rows = 10;
-    for(std::vector<double>::size_type j = 0; j < std::min(max_rows, bands.size()); ++j)
-        {
-        oss << "    ";
-        oss << value_cast_ihs<std::string>(data[j]);
-        if(bands.size() == 1)
-            {
-            oss << " on all assets\n";
-            }
-        else if(0 == j)
-            {
-            oss << " on the first ";
-            oss << value_cast_ihs<std::string>(bands[j]) << '\n';
-            }
-        else if(1 < bands.size() - j)
-            {
-            oss << " on the next ";
-            oss << value_cast_ihs<std::string>(bands[j]) << '\n';
-            }
-        else
-            {
-            oss << " on all further assets\n";
-            }
-        }
-    if(max_rows < bands.size())
-        {
-        oss << "[further bands omitted]\n";
-        }
-    return oss.str();
-}
 } // Unnamed namespace.
 
 //==============================================================================
-//void IllustrationView::PrintFormTabDelimited
+// TODO ?? Move this free function elsewhere.
 void PrintFormTabDelimited
     (Ledger const& a_LedgerValues
     ,std::string const& file_name
@@ -824,7 +719,7 @@ std::ofstream os
           | std::ios_base::app
         );
 os
-<< "  IllustrationView::PrintFormTabDelimited():\n"
+<< "  PrintFormTabDelimited():\n"
         << "\n\tcash_flow.size() = " << cash_flow.size()
         << "\n\tcsv_plus_claims.size() = " << csv_plus_claims.size()
         << "\n\tirr_on_surrender.size() = " << irr_on_surrender.size()
@@ -1047,7 +942,10 @@ os << "\n\n" ;
 }
 
 //==============================================================================
-void IllustrationView::PrintFormSpecial(Ledger const& a_LedgerValues)
+// TODO ?? Move this free function's prototype elsewhere.
+void PrintFormSpecial(Ledger const& a_LedgerValues);
+// TODO ?? Move this free function elsewhere.
+void PrintFormSpecial(Ledger const& a_LedgerValues)
 {
     LedgerInvariant const& Invar = a_LedgerValues.GetLedgerInvariant();
     LedgerVariant   const& Curr_ = a_LedgerValues.GetCurrFull();
