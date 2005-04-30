@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustration_view.hpp,v 1.3 2005-04-30 15:45:23 chicares Exp $
+// $Id: illustration_view.hpp,v 1.4 2005-04-30 16:42:50 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -99,24 +99,9 @@ class IllustrationView
 // The following function probably should be factored out into
 // a utility module. The original base_filename() is
 // Copyright (C) 1998, 1999, 2000, 2002, 2003, 2004 Gregory W. Chicares.
-
+//
     // Extract the base portion of the filename, excluding path and extension.
     std::string const base_filename() const;
-
-// Begin obsolete section.
-// TODO ?? At least strive to make these free functions.
-void PrintCoverPage
-    (Ledger const& a_LedgerValues
-    ,std::string const& a_spreadsheet_range
-    );
-/*
-void PrintFormTabDelimited
-    (Ledger const& a_LedgerValues
-    ,std::string const& file_name
-    ) const;
-*/
-void PrintFormSpecial(Ledger const& a_LedgerValues);
-// End obsolete section.
 
     wxHtmlWindow* html_window_;
     bool is_phony_;
@@ -127,6 +112,7 @@ void PrintFormSpecial(Ledger const& a_LedgerValues);
     DECLARE_EVENT_TABLE()
 };
 
+// TODO ?? Move this free function's prototype elsewhere.
 void PrintFormTabDelimited
     (Ledger const& a_LedgerValues
     ,std::string const& file_name
