@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustration_view.cpp,v 1.7 2005-04-29 18:51:34 chicares Exp $
+// $Id: illustration_view.cpp,v 1.8 2005-04-30 15:45:23 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -197,13 +197,20 @@ warning() << "That command should have been disabled." << LMI_FLUSH;
     return rc;
 }
 
-// No longer 'Format': it's now 'Display'
-void IllustrationView::FormatSelectedValuesAsHtml()
+std::string FormatSelectedValuesAsHtml(Ledger const& ledger_values);
+void IllustrationView::DisplaySelectedValuesAsHtml()
 {
-    LedgerInvariant const& Invar = ledger_values_->GetLedgerInvariant();
-    LedgerVariant   const& Curr_ = ledger_values_->GetCurrFull();
-    LedgerVariant   const& Guar_ = ledger_values_->GetGuarFull();
-    int max_length = ledger_values_->GetMaxLength();
+    selected_values_as_html_ = FormatSelectedValuesAsHtml(*ledger_values_);
+    html_window_->SetPage(selected_values_as_html_.c_str());
+}
+
+// TODO ?? Move this free function elsewhere.
+std::string IllustrationView::FormatSelectedValuesAsHtml(Ledger const& ledger_values)
+{
+    LedgerInvariant const& Invar = ledger_values.GetLedgerInvariant();
+    LedgerVariant   const& Curr_ = ledger_values.GetCurrFull();
+    LedgerVariant   const& Guar_ = ledger_values.GetGuarFull();
+    int max_length = ledger_values.GetMaxLength();
 
     std::ostringstream oss;
 
@@ -223,7 +230,7 @@ void IllustrationView::FormatSelectedValuesAsHtml()
         << "Calculation summary for "
         ;
 
-    if(ledger_values_->GetIsComposite())
+    if(ledger_values.GetIsComposite())
         {
         oss
             << " composite<br>"
@@ -240,7 +247,7 @@ void IllustrationView::FormatSelectedValuesAsHtml()
             << "<br>"
             ;
 
-        if(is_subject_to_ill_reg(ledger_values_->GetLedgerType()))
+        if(is_subject_to_ill_reg(ledger_values.GetLedgerType()))
             {
             oss
                 << std::setprecision(2)
@@ -298,8 +305,7 @@ void IllustrationView::FormatSelectedValuesAsHtml()
         << "</table>"
         << "</body>"
         ;
-    selected_values_as_html_ = oss.str();
-    html_window_->SetPage(selected_values_as_html_.c_str());
+    return oss.str();
 }
 
 wxIcon IllustrationView::Icon() const
@@ -584,7 +590,7 @@ void IllustrationView::Run(Input* overriding_input)
 
     // Can the copy be avoided?
     ledger_values_ = std::auto_ptr<Ledger>(new Ledger(av.LedgerValues()));
-    FormatSelectedValuesAsHtml();
+    DisplaySelectedValuesAsHtml();
 }
 
 void IllustrationView::SetLedger(Ledger const& values)
