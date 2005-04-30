@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustration_view.hpp,v 1.2 2005-03-24 15:53:32 chicares Exp $
+// $Id: illustration_view.hpp,v 1.3 2005-04-30 15:45:23 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -75,7 +75,7 @@ class IllustrationView
     wxMenuBar* MenuBar() const;
 
   public: // TODO ?? Or make class CensusView a friend; or make these free functions.
-    void FormatSelectedValuesAsHtml();
+    void DisplaySelectedValuesAsHtml();
     void Pdf(std::string action);
     void Run(Input* = 0);
     void SetLedger(Ledger const&);

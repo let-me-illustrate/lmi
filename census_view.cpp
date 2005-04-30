@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: census_view.cpp,v 1.16 2005-04-29 18:51:34 chicares Exp $
+// $Id: census_view.cpp,v 1.17 2005-04-30 15:45:23 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -1032,7 +1032,7 @@ IllustrationView* CensusView::ViewComposite()
 
         // Plug in composite totals.
         illview->SetLedger(composite_ledger_);
-        illview->FormatSelectedValuesAsHtml();
+        illview->DisplaySelectedValuesAsHtml();
 
         return illview;
         }
@@ -1845,7 +1845,7 @@ void CensusView::PrintAnonymousIllustration(Ledger const& a_Values, int index)
     IllustrationView* illview = MakeNewDocAndView(file_name.c_str());
 
     illview->SetLedger(a_Values);
-    illview->FormatSelectedValuesAsHtml();
+    illview->DisplaySelectedValuesAsHtml();
     illview->Pdf("print");
 
 //    illview->Destroy();
@@ -1858,7 +1858,7 @@ void CensusView::SaveRegressionTestFile(Ledger const& a_Values, long idx)
 //    IllustrationView* illview = MakeNewDocAndView(file_name.c_str());
 std::runtime_error("Not supported yet");
 //    illview->SetLedger(a_Values);
-//    illview->FormatSelectedValuesAsHtml();
+//    illview->DisplaySelectedValuesAsHtml();
 //    illview->FileSaveAsTDT();
 
 //    illview->Destroy();
