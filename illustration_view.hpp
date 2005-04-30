@@ -1,6 +1,6 @@
 // Document view for illustrations.
 //
-// Copyright (C) 2002, 2003, 2004, 2005 Gregory W. Chicares.
+// Copyright (C) 2003, 2004, 2005 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustration_view.hpp,v 1.4 2005-04-30 16:42:50 chicares Exp $
+// $Id: illustration_view.hpp,v 1.5 2005-04-30 18:15:33 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -111,12 +111,6 @@ class IllustrationView
     DECLARE_DYNAMIC_CLASS(IllustrationView)
     DECLARE_EVENT_TABLE()
 };
-
-// TODO ?? Move this free function's prototype elsewhere.
-void PrintFormTabDelimited
-    (Ledger const& a_LedgerValues
-    ,std::string const& file_name
-    );
 
 #endif // illustration_view_hpp
 

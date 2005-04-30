@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: census_view.cpp,v 1.17 2005-04-30 15:45:23 chicares Exp $
+// $Id: census_view.cpp,v 1.18 2005-04-30 18:15:33 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -34,11 +34,12 @@
 #include "database.hpp"
 #include "dbnames.hpp"
 #include "global_settings.hpp"
+#include "group_values.hpp"
 #include "illustration_view.hpp"
 #include "input.hpp"
 #include "inputillus.hpp"
 #include "ledger.hpp"
-#include "group_values.hpp"
+#include "ledger_text_formats.hpp"
 #include "materially_equal.hpp"
 #include "math_functors.hpp"
 #include "miscellany.hpp"
