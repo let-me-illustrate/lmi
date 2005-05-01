@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xsl.cpp,v 1.4 2005-04-29 18:51:34 chicares Exp $
+// $Id: ledger_xsl.cpp,v 1.5 2005-05-01 14:21:39 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -63,60 +63,7 @@ fs::path xsl_filepath(Ledger const& ledger)
 }
 } // Unnamed namespace.
 
-/* Yet-untested rewrite of a function in another file:
-void IllustrationView::Pdf(std::string action)
-{
-    LMI_ASSERT(ledger_values_.get());
-    wxString z;
-    document().GetPrintableName(z);
-    std::string document_file(z.c_str());
-    write_ledger_to_pdf(ledger_values_.get(), document_file);
-
-    if("open" != action && "print" != action)
-        {
-        warning()
-            << "Action '"
-            << action
-            << "' unrecognized."
-            << LMI_FLUSH
-            ;
-        return;
-        }
-
-    // TODO ?? Experimental. Want a platform-independent solution.
-    // Consider this one:
-// http://groups-beta.google.com/group/comp.soft-sys.wxwindows/msg/583826b8d2f14f2c?dmode=source
-// http://groups-beta.google.com/group/comp.soft-sys.wxwindows/msg/b05623f68906edbd?dmode=source
-// and also
-// http://groups-beta.google.com/group/comp.soft-sys.wxwindows/msg/900fd00738b9b71a?dmode=source
-    // Putting this system call in a gui module means the wx facility
-    // can be used; and there's no need to perform such an operation
-    // with any other interface.
-
-    HINSTANCE rc = ShellExecute
-        ((HWND)GetFrame()->GetHandle()
-        ,action.c_str()
-        ,pdf_out_file.string().c_str()
-        ,0
-        ,0 // directory
-        ,SW_SHOWNORMAL
-        );
-    if(reinterpret_cast<long int>(rc) <= 32)
-        {
-        warning()
-            << "Failed to "
-            << action
-            << " file '"
-            << pdf_out_file.string()
-            << "'. If it was already open, then it could not"
-            << " be updated--close it first, then try again."
-            ;
-        return;
-        }
-}
-*/
-
-void write_ledger_to_pdf
+std::string write_ledger_to_pdf
     (Ledger const&      ledger
     ,std::string const& filename
     )
@@ -157,7 +104,7 @@ void write_ledger_to_pdf
             << "'."
             << LMI_FLUSH
             ;
-        return;
         }
+    return pdf_out_file.string();
 }
 
