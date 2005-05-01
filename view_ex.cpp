@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: view_ex.cpp,v 1.3 2005-03-24 15:53:32 chicares Exp $
+// $Id: view_ex.cpp,v 1.4 2005-05-01 00:50:28 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -36,9 +36,6 @@
 
 #include "view_ex.hpp"
 
-#include "alert.hpp"
-#include "docmanager_ex.hpp"
-
 // WX !! Application object's header must be included here because
 // view creation is not performed by the framework--instead, wxWindows
 // treats that as the user's responsibility. The framework defines
@@ -47,7 +44,11 @@
 // mean that a view class cannot be physically decoupled from the main
 // application header, and indeed there are no wxView derivatives in
 // the framework.
+
+#include "alert.hpp"
+#include "docmanager_ex.hpp"
 #include "main_wx.hpp" // wxGetApp()
+#include "path_utility.hpp"
 
 #include <wx/dc.h>
 #include <wx/menu.h>
@@ -156,5 +157,31 @@ bool ViewEx::OnCreate(wxDocument* doc, long)
 
 void ViewEx::OnDraw(wxDC*)
 {
+}
+
+std::string ViewEx::base_filename() const
+{
+    std::string t = GetDocument()->GetFilename().c_str();
+    if(0 == t.size())
+        {
+        t = GetDocument()->GetTitle().c_str();
+        }
+// TODO ?? This assertion fires for new documents. What's the best way
+// to handle this? Doesn't wx give a new document *some* name?
+//    LMI_ASSERT(0 != t.size());
+    if(0 != t.size())
+        {
+        t = "Anonymous";
+        }
+    fs::path path(t);
+    return path.leaf();
+}
+
+std::string ViewEx::serial_filename
+    (int                serial_number
+    ,std::string const& extension
+    ) const
+{
+    return base_filename() + serialize_extension(serial_number, extension);
 }
 

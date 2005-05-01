@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustration_view.cpp,v 1.10 2005-04-30 18:15:33 chicares Exp $
+// $Id: illustration_view.cpp,v 1.11 2005-05-01 00:50:28 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -99,8 +99,8 @@ BEGIN_EVENT_TABLE(IllustrationView, ViewEx)
     EVT_UPDATE_UI(XRCID("shrink_columns"   ),IllustrationView::OnUpdateInapplicable)
 END_EVENT_TABLE()
 
-// WX !! The html string must be initialized here because passing an
-// empty string to wxHtmlWindow::SetPage() crashes the application.
+// WX !! The html string must be initialized here, because passing an
+// empty string to wxHtmlWindow::SetPage() would crash the application.
 //
 IllustrationView::IllustrationView()
     :ViewEx                  ()
@@ -113,22 +113,6 @@ IllustrationView::IllustrationView()
 
 IllustrationView::~IllustrationView()
 {
-}
-
-// The following functions probably should be factored out into a
-// utility module.
-
-std::string const IllustrationView::base_filename() const
-{
-    std::string t = GetDocument()->GetFilename().c_str();
-    if(0 == t.size())
-        {
-        t = GetDocument()->GetTitle().c_str();
-        }
-// TODO ?? This assertion fires for new documents.
-//    LMI_ASSERT(0 != t.size());
-    boost::filesystem::path path(t);
-    return path.leaf();
 }
 
 IllustrationDocument& IllustrationView::document() const
@@ -312,7 +296,7 @@ void IllustrationView::OnUpdateProperties(wxUpdateUIEvent& e)
     e.Enable(!is_phony_);
 }
 
-void IllustrationView::Pdf(std::string action)
+void IllustrationView::Pdf(std::string const& action)
 {
     // TODO ?? Experimental. Want an platform-independent solution.
     // Consider this one:
@@ -457,7 +441,7 @@ void IllustrationView::Run(Input* overriding_input)
     convert_to_ihs(ihs_input, document().input_);
 
     AccountValue av(ihs_input);
-    av.SetDebugFilename    (base_filename() + ".debug");
+    av.SetDebugFilename(base_filename() + ".debug");
     av.RunAV();
 
     status() << "Calculate: " << timer.Stop().Report() << std::flush;
