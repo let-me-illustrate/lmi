@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: group_values.cpp,v 1.7 2005-05-01 00:50:28 chicares Exp $
+// $Id: group_values.cpp,v 1.8 2005-05-01 14:21:39 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -34,6 +34,8 @@
 #include "dbnames.hpp"
 #include "inputillus.hpp"
 #include "ledger.hpp"
+#include "ledger_text_formats.hpp"
+#include "ledger_xsl.hpp"
 #include "ledgervalues.hpp"
 #include "path_utility.hpp"
 #include "progress_meter.hpp"
@@ -55,8 +57,10 @@ void emit_ledger
 {
     if(emission_target & emit_to_printer)
         {
-// TODO ?? Implement.
-//        PrintAnonymousIllustration(a_Values, a_idx);
+        write_ledger_to_pdf
+            (ledger
+            ,serialized_file_path(file, index, ".ill").string()
+            );
         }
     if(emission_target & emit_to_spew_file)
         {
@@ -70,8 +74,8 @@ void emit_ledger
         }
     if(emission_target & emit_to_spreadsheet)
         {
-// TODO ?? Implement.
-//        SaveSpreadsheetFile(a_Values, a_idx);
+// TODO ?? Make the extension a configurable input.
+        PrintFormTabDelimited(ledger, file.string() + ".xls");
         }
 }
 
