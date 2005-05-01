@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: argv0_test.cpp,v 1.1 2005-03-11 03:19:31 chicares Exp $
+// $Id: argv0_test.cpp,v 1.2 2005-05-01 18:58:47 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -28,10 +28,13 @@
 
 #include "argv0.hpp"
 
+#define BOOST_INCLUDE_MAIN
+#include "test_tools.hpp"
+
 #include <iostream>
 #include <ostream>
 
-int main(int, char* argv[])
+int test_main(int, char* argv[])
 {
 // TODO ?? In this message
 //   http://lists.boost.org/MailArchives/boost/msg47862.php
@@ -47,20 +50,8 @@ int main(int, char* argv[])
 
     fs::initial_path();
 
-// TODO ?? Test these paths against expected values instead of just
-// writing them to stdout.
+    BOOST_TEST_EQUAL(fs::startup_path().string(), fs::initial_path().string());
 
-    std::cout << "Paths:\n";
-
-    std::cout << fs::initial_path().string() << " = initial_path\n";
-
-    std::cout << fs::startup_path().string() << " = startup_path\n";
-
-    fs::path path0(fs::startup_path());
-
-    std::cout << path0.string() << std::endl;
-    std::cout << path0.native_directory_string() << std::endl;
-
-    std::cout << "Done.\n";
+    return EXIT_SUCCESS;
 }
 
