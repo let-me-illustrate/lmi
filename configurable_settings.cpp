@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: configurable_settings.cpp,v 1.3 2005-04-28 08:38:36 chicares Exp $
+// $Id: configurable_settings.cpp,v 1.4 2005-05-01 14:21:04 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -75,11 +75,14 @@ namespace
 } // Unnamed namespace.
 
 configurable_settings::configurable_settings()
+    :cgi_bin_log_filename_       ("cgi_bin.log")
+    ,custom_input_filename_      ("custom.ini" )
+    ,custom_output_filename_     ("custom.out" )
+    ,default_product_            ("sample"     )
+    ,spreadsheet_file_extension_ (".gnumeric"  )
+    ,xsl_fo_command_             ("fo"         )
+    ,xsl_fo_directory_           ("/usr/bin/fo")
 {
-    default_product_ = "sample";
-    custom_input_filename_ = "custom.ini";
-    custom_output_filename_ = "custom.out";
-
     std::string filename = AddDataDir("configurable_settings.xml");
     if(access(filename.c_str(), R_OK))
         {
