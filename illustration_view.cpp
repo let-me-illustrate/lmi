@@ -19,11 +19,13 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustration_view.cpp,v 1.11 2005-05-01 00:50:28 chicares Exp $
+// $Id: illustration_view.cpp,v 1.12 2005-05-01 14:21:39 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
-// which is covered by the wxWindows license.
+// which is covered by the wxWindows license, and Julian Smart's
+// message here:
+// http://groups-beta.google.com/group/comp.soft-sys.wxwindows/msg/b05623f68906edbd
 //
 // The originals were modified by GWC in 2003 to create a standalone
 // view class customized for illustration documents, and in the later
@@ -43,15 +45,13 @@
 #include "inputillus.hpp"
 #include "ledger.hpp"
 #include "ledger_text_formats.hpp"
+#include "ledger_xsl.hpp"
 #include "miscellany.hpp"
 #include "system_command.hpp"
 #include "timer.hpp"
 #include "wx_new.hpp"
 #include "xml_notebook.hpp"
 
-#include <boost/filesystem/convenience.hpp>
-#include <boost/filesystem/exception.hpp>
-#include <boost/filesystem/fstream.hpp>
 #include <boost/filesystem/path.hpp>
 
 #include <wx/app.h> // wxTheApp
@@ -59,6 +59,7 @@
 #include <wx/icon.h>
 #include <wx/log.h> // TODO ?? Debugging only: consider removing.
 #include <wx/menu.h>
+#include <wx/mimetype.h>
 #include <wx/msgdlg.h>
 #include <wx/toolbar.h>
 #include <wx/xrc/xmlres.h>
@@ -298,14 +299,50 @@ void IllustrationView::OnUpdateProperties(wxUpdateUIEvent& e)
 
 void IllustrationView::Pdf(std::string const& action)
 {
-    // TODO ?? Experimental. Want an platform-independent solution.
-    // Consider this one:
-// http://groups-beta.google.com/group/comp.soft-sys.wxwindows/msg/583826b8d2f14f2c?dmode=source
-// http://groups-beta.google.com/group/comp.soft-sys.wxwindows/msg/b05623f68906edbd?dmode=source
-// and also
-// http://groups-beta.google.com/group/comp.soft-sys.wxwindows/msg/900fd00738b9b71a?dmode=source
+    LMI_ASSERT(ledger_values_.get());
+    wxString z;
+    document().GetPrintableName(z);
+    std::string document_file(z.c_str());
+    std::string pdf_out_file = write_ledger_to_pdf
+        (*ledger_values_
+        ,document_file
+        );
 
-    if("open" != action && "print" != action)
+    // Putting this system call in a gui module means the wx facility
+    // can be used; and there's no need to perform such an operation
+    // with any other interface.
+
+    fs::path msw_pdf_filename(pdf_out_file.c_str());
+
+    wxFileType* ft = wxTheMimeTypesManager->GetFileTypeFromExtension("pdf");
+    if(!ft)
+        {
+        warning() << "File type 'pdf' unknown." << LMI_FLUSH;
+        }
+
+    wxString cmd;
+    bool okay(false);
+    if("open" == action)
+        {
+        okay = ft->GetOpenCommand
+            (&cmd
+            ,wxFileType::MessageParameters
+                (msw_pdf_filename.native_file_string().c_str()
+                ,""
+                )
+            );
+        }
+    else if("print" == action)
+        {
+        okay = ft->GetPrintCommand
+            (&cmd
+            ,wxFileType::MessageParameters
+                (msw_pdf_filename.native_file_string().c_str()
+                ,""
+                )
+            );
+        }
+    else
         {
         warning()
             << "Action '"
@@ -316,114 +353,31 @@ void IllustrationView::Pdf(std::string const& action)
         return;
         }
 
-    // TODO ?? This should be a configurable string.
-    fs::path fop("C:\\fop-0.20.5");
-
-    wxString z;
-    document().GetPrintableName(z);
-    std::string document_file(z.c_str());
-
-    fs::path xml_out_file(fop / document_file);
-    xml_out_file = fs::change_extension(xml_out_file, ".xml");
-
-    fs::remove(xml_out_file);
-    if(fs::exists(xml_out_file))
+    delete ft;
+    if(!okay)
         {
         warning()
-            << "Attempt to remove xml output file failed."
-            << LMI_FLUSH
-            ;
-        return;
-        }
-
-    LMI_ASSERT(ledger_values_.get());
-    fs::ofstream ofs(xml_out_file, std::ios_base::out | std::ios_base::trunc);
-    ledger_values_->write(ofs);
-    ofs.close();
-
-    std::string xsl_name = ledger_values_->GetLedgerType().str() + ".xsl";
-    fs::path xsl_file(fop / xsl_name);
-    if(!fs::exists(xml_out_file))
-        {
-        warning()
-            << "Unable to read file '"
-            << xsl_file.string()
-            << "'."
-            << LMI_FLUSH
-            ;
-        return;
-        }
-
-    fs::ifstream ifs(xml_out_file);
-    ifs >> std::noskipws;
-    std::string s
-        ((std::istreambuf_iterator<char>(ifs))
-        ,std::istreambuf_iterator<char>()
-        );
-
-    fs::path pdf_out_file(fop / document_file);
-    pdf_out_file = fs::change_extension(pdf_out_file, ".pdf");
-
-    try
-        {
-        fs::remove(pdf_out_file);
-        }
-    catch(fs::filesystem_error const& e)
-        {
-//        status() << e.what() << LMI_FLUSH;
-        std::string basename = fs::basename(pdf_out_file);
-        basename += '-' + iso_8601_datestamp_terse() + ".pdf";
-        pdf_out_file = fop / basename;
-        status() << pdf_out_file.string() << std::flush;
-        }
-    if(fs::exists(pdf_out_file))
-        {
-        throw std::runtime_error("Oops");
-        }
-
-    std::ostringstream oss;
-    oss
-        << "CMD /c " << (fop / "fop").string()
-        << " -xsl "  << '"' << xsl_file.string()     << '"'
-        << " -xml "  << '"' << xml_out_file.string() << '"'
-        << " "       << '"' << pdf_out_file.string() << '"'
-        ;
-
-    int rc0 = system_command(oss.str());
-
-    // TODO ?? This seems not to catch any problem--perhaps the
-    // batch file eats the error code.
-    if(rc0)
-        {
-        warning()
-            << "Report formatting failed.\n"
-            << "The specific command that failed was '"
-            << oss.str()
-            << "'."
-            << LMI_FLUSH
-            ;
-        return;
-        }
-
-    HINSTANCE rc1 = ShellExecute
-        ((HWND)GetFrame()->GetHandle()
-        ,action.c_str()
-        ,pdf_out_file.string().c_str()
-        ,0
-        ,0 // directory
-        ,SW_SHOWNORMAL
-        );
-    if(reinterpret_cast<long int>(rc1) <= 32)
-        {
-        warning()
-            << "Failed to "
+            << "Unable to determine command to '"
             << action
-            << " file '"
-            << pdf_out_file.string()
-            << "'. If it was already open, then it could not"
-            << " be updated--close it first, then try again."
+            << "' file '"
+            << pdf_out_file
+            << "'."
+            << LMI_FLUSH
             ;
-        return;
+        }
+    okay = wxExecute(cmd);
+    if(!okay)
+        {
+        warning()
+            << "Unable to '"
+            << action
+            << "' file '"
+            << pdf_out_file
+            << "'. Return code: '"
+            << okay
+            << "'."
+            << LMI_FLUSH
+            ;
         }
 }
 

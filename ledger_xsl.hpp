@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xsl.hpp,v 1.1 2005-04-29 10:10:33 chicares Exp $
+// $Id: ledger_xsl.hpp,v 1.2 2005-05-01 14:21:39 chicares Exp $
 
 #ifndef ledger_xsl_hpp
 #define ledger_xsl_hpp
@@ -32,7 +32,7 @@
 
 class Ledger;
 
-void LMI_EXPIMP write_ledger_to_pdf
+std::string LMI_EXPIMP write_ledger_to_pdf
     (Ledger const&      ledger
     ,std::string const& filename
     );

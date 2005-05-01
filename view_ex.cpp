@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: view_ex.cpp,v 1.4 2005-05-01 00:50:28 chicares Exp $
+// $Id: view_ex.cpp,v 1.5 2005-05-01 14:21:39 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -161,15 +161,10 @@ void ViewEx::OnDraw(wxDC*)
 
 std::string ViewEx::base_filename() const
 {
-    std::string t = GetDocument()->GetFilename().c_str();
+    wxString z;
+    GetDocument()->GetPrintableName(z);
+    std::string t(z.c_str());
     if(0 == t.size())
-        {
-        t = GetDocument()->GetTitle().c_str();
-        }
-// TODO ?? This assertion fires for new documents. What's the best way
-// to handle this? Doesn't wx give a new document *some* name?
-//    LMI_ASSERT(0 != t.size());
-    if(0 != t.size())
         {
         t = "Anonymous";
         }
