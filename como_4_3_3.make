@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: como_4_3_3.make,v 1.3 2005-04-07 15:02:09 chicares Exp $
+# $Id: como_4_3_3.make,v 1.4 2005-05-01 14:27:49 chicares Exp $
 
 toolset := como
 
@@ -81,6 +81,11 @@ MAKEDEPEND_0 :=
 MAKEDEPEND_1 :=
 
 MPATROL_LIBS :=
+
+# To get rid of the ms nonsense and use the strictest mode available
+# on msw, uncomment the next two lines.
+# CPPFLAGS :=
+# CXXFLAGS := --a
 
 all:
 
