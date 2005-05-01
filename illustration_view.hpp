@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustration_view.hpp,v 1.5 2005-04-30 18:15:33 chicares Exp $
+// $Id: illustration_view.hpp,v 1.6 2005-05-01 00:50:28 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -76,7 +76,7 @@ class IllustrationView
 
   public: // TODO ?? Or make class CensusView a friend; or make these free functions.
     void DisplaySelectedValuesAsHtml();
-    void Pdf(std::string action);
+    void Pdf(std::string const& action);
     void Run(Input* = 0);
     void SetLedger(Ledger const&);
 
@@ -95,13 +95,6 @@ class IllustrationView
     void OnUpdateFileSaveAs  (wxUpdateUIEvent&);
     void OnUpdateInapplicable(wxUpdateUIEvent&);
     void OnUpdateProperties  (wxUpdateUIEvent&);
-
-// The following function probably should be factored out into
-// a utility module. The original base_filename() is
-// Copyright (C) 1998, 1999, 2000, 2002, 2003, 2004 Gregory W. Chicares.
-//
-    // Extract the base portion of the filename, excluding path and extension.
-    std::string const base_filename() const;
 
     wxHtmlWindow* html_window_;
     bool is_phony_;
