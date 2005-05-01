@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: path_utility.cpp,v 1.2 2005-04-29 18:53:15 chicares Exp $
+// $Id: path_utility.cpp,v 1.3 2005-05-01 00:50:28 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -33,6 +33,55 @@
 
 #include <boost/filesystem/convenience.hpp>
 #include <boost/filesystem/exception.hpp>
+
+#include <iomanip>
+#include <sstream>
+
+/// Prepend a serial number to a file extension. This is intended to
+/// be used for creating output file names for cells in a census. The
+/// input serial number is an origin-zero index into the container of
+/// individual cells. The formatted serial number embedded in the
+/// output string is in origin one, so that the census's composite can
+/// use output serial number zero--that's more satisfying than having
+/// it use one plus the number of individual cells.
+///
+/// The output serial number is formatted to nine places and filled
+/// with zeroes, so that output file names sort well. It is hardly
+/// conceivable for a census to have more cells than nine place
+/// accommodate (it's enough to represent all US Social Security
+/// numbers), but if it does, then the file names are still unique;
+/// they just don't sort as nicely.
+///
+/// TODO ?? Need unit tests.
+
+std::string serialize_extension
+    (int                serial_number
+    ,std::string const& extension
+    )
+{
+    std::ostringstream oss;
+    oss
+        << '.'
+        << std::setfill('0') << std::setw(9) << 1 + serial_number
+        << '.'
+        << extension
+        ;
+    return oss.str();
+}
+
+/// TODO ?? Need documentation and unit tests.
+
+fs::path serialized_file_path
+    (fs::path const&    exemplar
+    ,int                serial_number
+    ,std::string const& extension
+    )
+{
+    return fs::change_extension
+        (exemplar
+        ,serialize_extension(serial_number, extension)
+        );
+}
 
 /// Create a unique file path, following input as closely as possible.
 ///

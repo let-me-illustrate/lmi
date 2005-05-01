@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: group_values.hpp,v 1.3 2005-04-22 01:48:19 chicares Exp $
+// $Id: group_values.hpp,v 1.4 2005-05-01 00:50:28 chicares Exp $
 
 #ifndef group_values_hpp
 #define group_values_hpp
@@ -30,7 +30,6 @@
 
 #include <boost/filesystem/path.hpp>
 
-#include <string>
 #include <vector>
 
 class IllusInputParms;
@@ -50,11 +49,6 @@ void emit_ledger
     ,int                           index
     ,Ledger const&                 ledger
     ,e_emission_target             emission_target
-    );
-
-std::string LMI_EXPIMP serialize_extension
-    (int                serial_number
-    ,std::string const& extension
     );
 
 class LMI_EXPIMP RunCensusInSeries

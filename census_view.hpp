@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: census_view.hpp,v 1.3 2005-04-14 21:43:58 chicares Exp $
+// $Id: census_view.hpp,v 1.4 2005-05-01 00:50:28 chicares Exp $
 
 #ifndef census_view_hpp
 #define census_view_hpp
@@ -177,21 +177,6 @@ class CensusView
     std::vector<std::string> headers_of_varying_parameters_;
 
     bool was_canceled_;
-
-//////////////////////////////////////////////////////////////////////////////
-
-// These filename functions probably should be factored out into
-// a utility module. The originals are
-// Copyright (C) 1998, 1999, 2000, 2002, 2003, 2004 Gregory W. Chicares.
-
-    // Extract the base portion of the filename, excluding path and extension.
-    std::string base_filename() const;
-
-    // Add a serial number and extension to base_filename()'s return value.
-    std::string serial_filename
-        (int                serial_number
-        ,std::string const& extension
-        ) const;
 
     wxListView* list_window_;
 

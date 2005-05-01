@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: census_view.cpp,v 1.18 2005-04-30 18:15:33 chicares Exp $
+// $Id: census_view.cpp,v 1.19 2005-05-01 00:50:28 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -2232,25 +2232,5 @@ convert_from_ihs(ihs_input, lmi_input);
     Update();
 
     status() << std::flush;
-}
-
-std::string CensusView::base_filename() const
-{
-    std::string t = GetDocument()->GetFilename().c_str();
-    if(0 == t.size())
-        {
-        t = GetDocument()->GetTitle().c_str();
-        }
-    LMI_ASSERT(0 != t.size());
-    fs::path path(t);
-    return path.leaf();
-}
-
-std::string CensusView::serial_filename
-    (int                serial_number
-    ,std::string const& extension
-    ) const
-{
-    return base_filename() + serialize_extension(serial_number, extension);
 }
 

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: view_ex.hpp,v 1.2 2005-03-24 15:53:32 chicares Exp $
+// $Id: view_ex.hpp,v 1.3 2005-05-01 00:50:28 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -82,6 +82,8 @@
 #include <wx/defs.h> // WXDLLEXPORT
 #include <wx/docview.h>
 
+#include <string>
+
 // TODO ?? Here and elsewhere, consider losing 'WXDLLEXPORT' on
 // forward declarations, depending on the disposition of
 //   http://gcc.gnu.org/bugzilla/show_bug.cgi?id=20345
@@ -122,6 +124,13 @@ class ViewEx
     wxMenuBar* MenuBarFromXmlResource(char const*) const;
 
     wxFrame& FrameWindow() const;
+
+    std::string base_filename() const;
+
+    std::string serial_filename
+        (int                serial_number
+        ,std::string const& extension
+        ) const;
 
     // TODO ?? Probably better to provide the implementation in
     // separate functions that can be called by derived classes.
