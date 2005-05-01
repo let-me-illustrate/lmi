@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.52 2005-04-29 18:56:01 chicares Exp $
+// $Id: ChangeLog,v 1.53 2005-05-01 18:56:22 chicares Exp $
 
 2005-01-14
 
@@ -1504,4 +1504,46 @@ Simplify and improve ledger-type determination.
   path_utility.cpp
   path_utility_test.cpp
 Improve documentation.
+
+  census_view.cpp
+  illustration_view.cpp
+  illustration_view.hpp
+Factor html formatting out of GUI class.
+
+  illustration_view.cpp
+  illustration_view.hpp
+Factor special report out of GUI class.
+
+  census_view.cpp
+  illustration_view.cpp
+  illustration_view.hpp
+  ledger_text_formats.cpp [new file]
+  ledger_text_formats.hpp [new file]
+  objects.make
+Move ledger text formatting to new location.
+
+  census_view.cpp
+  census_view.hpp
+  group_values.cpp
+  group_values.hpp
+  illustration_view.cpp
+  illustration_view.hpp
+  path_utility.cpp
+  path_utility.hpp
+  view_ex.cpp
+  view_ex.hpp
+Refactor filename functions.
+
+  configurable_settings.cpp
+Explicitly initialize all data members.
+
+  como_4_3_3.make
+Improve documentation.
+
+  group_values.cpp
+  illustration_view.cpp
+  ledger_xsl.cpp
+  ledger_xsl.hpp
+  view_ex.cpp
+Use new ledger-formatting facilities.
 
