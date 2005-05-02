@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: group_values.cpp,v 1.8 2005-05-01 14:21:39 chicares Exp $
+// $Id: group_values.cpp,v 1.9 2005-05-02 06:26:48 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -30,6 +30,7 @@
 
 #include "account_value.hpp"
 #include "alert.hpp"
+#include "configurable_settings.hpp"
 #include "database.hpp"
 #include "dbnames.hpp"
 #include "inputillus.hpp"
@@ -74,8 +75,10 @@ void emit_ledger
         }
     if(emission_target & emit_to_spreadsheet)
         {
-// TODO ?? Make the extension a configurable input.
-        PrintFormTabDelimited(ledger, file.string() + ".xls");
+        PrintFormTabDelimited
+            (ledger
+            ,file.string() + configurable_settings::instance().spreadsheet_file_extension()
+            );
         }
 }
 
