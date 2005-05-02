@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: GNUmakefile,v 1.13 2005-03-23 15:32:29 chicares Exp $
+# $Id: GNUmakefile,v 1.14 2005-05-02 04:00:05 chicares Exp $
 
 ###############################################################################
 
@@ -152,6 +152,7 @@ MAKETARGET = \
                       build_type='$(build_type)' \
                platform-makefile='$(platform-makefile)' \
                 idempotent_files='$(idempotent_files)' \
+                    yyyymmddhhmm='$(yyyymmddhhmm)' \
   $(MAKECMDGOALS)
 
 .PHONY: $(build_directory)
