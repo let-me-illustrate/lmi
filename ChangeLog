@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.53 2005-05-01 18:56:22 chicares Exp $
+// $Id: ChangeLog,v 1.54 2005-05-02 05:00:32 chicares Exp $
 
 2005-01-14
 
@@ -1534,6 +1534,8 @@ Move ledger text formatting to new location.
   view_ex.hpp
 Refactor filename functions.
 
+2005-05-01 [1431]
+
   configurable_settings.cpp
 Explicitly initialize all data members.
 
@@ -1546,4 +1548,16 @@ Improve documentation.
   ledger_xsl.hpp
   view_ex.cpp
 Use new ledger-formatting facilities.
+
+  argv0_test.cpp
+Improve unit test.
+
+  ihs_crc_comp.cpp
+Temporary workaound to ignore fund-name changes.
+
+2005-05-02 [1431]
+
+  GNUmakefile
+  workhorse.make
+Improve regression-test automation.
 
