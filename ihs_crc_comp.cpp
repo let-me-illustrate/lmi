@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_crc_comp.cpp,v 1.1 2005-01-14 19:47:44 chicares Exp $
+// $Id: ihs_crc_comp.cpp,v 1.2 2005-05-02 03:56:45 chicares Exp $
 
 // Sample command line to compile:
 // /gcc-2.95.2-1/bin/g++ -Iming29521 ihs_crc_comp.cpp
@@ -123,7 +123,7 @@ enum line_type
 bool const transition_matrix[6][6] =
     {
     /*        to: 0  1  2  3  4  5 */
-    /* from 0 */ {0, 1, 0, 0, 0, 0,},
+    /* from 0 */ {0, 1, 1, 0, 0, 0,},
     /* from 1 */ {0, 1, 1, 0, 0, 0,},
     /* from 2 */ {0, 0, 1, 1, 1, 1,},   // TODO ?? Think about 2 -> 2,4 some more.
     /* from 3 */ {0, 0, 1, 1, 1, 0,},
@@ -234,15 +234,30 @@ void f11(std::string const& line1, std::string const& line2)
 //============================================================================
 void f_2(std::string const& line1, std::string const& line2)
 {
+    if
+        (   line1 != line2
+// TODO ?? Fix this kludge, which strives to ignore fund names.        
+        &&  std::string::npos != line1.find(" ")
+        )
+        {
+        return;
+        }
+
     current_name = line1;
     if(line1 != line2)
         {
-        std::cerr << "Logic error in get_type()\n";
+        std::cerr << "Logic error in f_2()\n";
         show_error_context(line1, line2);
         std::exit(EXIT_FAILURE);
         }
 // error if different
 // hold; print if >0 numbers differ
+}
+
+//============================================================================
+void f02(std::string const& line1, std::string const& line2)
+{
+    f_2(line1, line2);
 }
 
 //============================================================================
@@ -377,8 +392,8 @@ void f25(std::string const& line1, std::string const& line2)
 typedef void(*pf)(std::string const& line1, std::string const& line2);
 pf const transition_functions[6][6] =
     {
-    /*        to: 0  1  2  3  4  5 */
-    /* from 0 */ {0, &f01,    0,    0,    0,    0,},
+    /*        to: 0     1     2     3     4     5 */
+    /* from 0 */ {0, &f01, &f02,    0,    0,    0,},
     /* from 1 */ {0, &f11, &f12,    0,    0,    0,},
     /* from 2 */ {0,    0, &f22, &f23, &f24, &f25,},
     /* from 3 */ {0,    0, &f32, &f33, &f34,    0,},
