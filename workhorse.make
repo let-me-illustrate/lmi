@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: workhorse.make,v 1.21 2005-04-27 05:30:01 chicares Exp $
+# $Id: workhorse.make,v 1.22 2005-05-02 04:00:05 chicares Exp $
 
 ###############################################################################
 
@@ -572,12 +572,12 @@ cgi_tests: antediluvian_cgi$(EXEEXT)
 # results.
 
 .PHONY: av_tests
-av_tests: static_demo$(EXEEXT)
+av_tests: static_demo$(EXEEXT) ihs_crc_comp$(EXEEXT)
 	@$(ECHO) Test account values:
 	@./static_demo$(EXEEXT) > /dev/null
 	<$(src_dir)/spew_touchstone $(SED) -e'1s/^/0\t0\n/' >spew_touchstone
 	<eraseme.crc                $(SED) -e'1s/^/0\t0\n/' >spew_test
-	@/unified/bin/tools/ihs_crc_comp \
+	@./ihs_crc_comp \
 	  spew_touchstone \
 	  spew_test \
 	  | $(SED) -e '/Summary/!d' -e"s/^ /$z/"
@@ -590,19 +590,22 @@ av_tests: static_demo$(EXEEXT)
 # Don't refer to obsolete /unified : instead, put the tool this uses in cvs.
 # General rewrite: avoid imperative programming like 'install' target.
 
+regression_test_results := results-$(yyyymmddhhmm)
+
 .PHONY: regression_test
-regression_test: install
+regression_test: install ihs_crc_comp$(EXEEXT)
 	@$(ECHO) Regression test:
+	@$(CP) --preserve ihs_crc_comp$(EXEEXT) $(install_dir)/test
 	@cd /opt/lmi/test; \
 	../lmi_cli \
 	  --ash_nazg --accept --regress \
 	  --data_path=/opt/lmi/data \
 	  --test_path=/opt/lmi/test; \
 	for z in *test; \
-	  { /unified/bin/tools/ihs_crc_comp $$z /opt/lmi/touchstone/$$z \
+	  { ./ihs_crc_comp $$z /opt/lmi/touchstone/$$z \
 	    | sed -e '/Summary/!d' -e"s/^ /$$z/" \
-	  } >results; \
-	<results sed \
+	  } > $(regression_test_results); \
+	< $(regression_test_results) sed \
 	  -e'/rel err.*e-01[5-9]/d' \
 	  -e'/abs.*0\.00.*rel/d' \
 	  -e'/abs diff: 0 /d'; \
