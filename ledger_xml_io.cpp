@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xml_io.cpp,v 1.12 2005-04-25 19:23:34 chicares Exp $
+// $Id: ledger_xml_io.cpp,v 1.13 2005-05-02 06:26:48 chicares Exp $
 
 #include "config.hpp"
 
@@ -27,6 +27,7 @@
 
 #include "build.hpp"
 #include "calendar_date.hpp"
+#include "configurable_settings.hpp"
 #include "global_settings.hpp"
 #include "ledger.hpp"
 #include "ledger_base.hpp"
@@ -1090,9 +1091,8 @@ void Ledger::write(xml::node& x) const
         &&  std::string::npos != ledger_invariant_->Comments.find("idiosyncrasy_spreadsheet")
         )
         {
-// TODO ?? Abstract the extension here.
         std::ofstream ofs
-            ("values.xls"
+            (("values" + configurable_settings::instance().spreadsheet_file_extension()).c_str()
             ,std::ios_base::out | std::ios_base::trunc
             );
         for

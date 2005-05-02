@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: census_view.cpp,v 1.19 2005-05-01 00:50:28 chicares Exp $
+// $Id: census_view.cpp,v 1.20 2005-05-02 06:26:45 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -31,6 +31,7 @@
 #include "account_value.hpp"
 #include "alert.hpp"
 #include "census_document.hpp"
+#include "configurable_settings.hpp"
 #include "database.hpp"
 #include "dbnames.hpp"
 #include "global_settings.hpp"
@@ -1866,10 +1867,10 @@ std::runtime_error("Not supported yet");
 //    delete illview; // TODO ?? Want to get rid of this thing.
 }
 
-// TODO ?? Make the extension a configurable input.
 void CensusView::SaveSpreadsheetFile(Ledger const& a_Values, long idx)
 {
-    std::string spreadsheet_filename = base_filename() + ".xls";
+    std::string spreadsheet_filename =
+        base_filename() + configurable_settings::instance().spreadsheet_file_extension();
     PrintFormTabDelimited(a_Values, spreadsheet_filename);
 }
 
@@ -2041,7 +2042,8 @@ std::string GetClipboardText()
 // Print tab-delimited output to file loadable in spreadsheet programs.
 void CensusView::OnRunCaseToSpreadsheet(wxCommandEvent&)
 {
-    std::string spreadsheet_filename = base_filename() + ".xls";
+    std::string spreadsheet_filename =
+        base_filename() + configurable_settings::instance().spreadsheet_file_extension();
     std::remove(spreadsheet_filename.c_str());
     DoAllCells(to_spreadsheet);
 }
