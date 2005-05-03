@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avmly.cpp,v 1.10 2005-04-12 14:10:09 chicares Exp $
+// $Id: ihs_avmly.cpp,v 1.11 2005-05-03 01:35:48 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -162,7 +162,7 @@ void AccountValue::DoMonthDR()
         (HoneymoonValue
         ,   kludge_account_value
           + GetRefundableSalesLoad()
-          + std::max(0.0, ExpRatReserve)
+//          + std::max(0.0, ExpRatReserve) // This would be added if it existed.
         );
 // TODO ?? Use CashValueFor7702() instead?
     double max_necessary_premium = Irc7702A_->MaxNecessaryPremium
@@ -640,7 +640,7 @@ double AccountValue::CashValueFor7702() const
         (HoneymoonValue
         ,   TotalAccountValue()
           + GetRefundableSalesLoad()
-          + std::max(0.0, ExpRatReserve)
+//          + std::max(0.0, ExpRatReserve) // This would be added if it existed.
         );
 }
 
@@ -1146,7 +1146,7 @@ void AccountValue::IncreaseSpecAmtToAvoidMec()
                   *   Loads_->target_sales_load(ExpAndGABasis)[Year]
                   )
               )
-          + std::max(0.0, ExpRatReserve)
+//          + std::max(0.0, ExpRatReserve) // This would be added if it existed.
         );
     double gross_max_necessary_premium = Irc7702A_->MaxNecessaryPremium
         (PseudoDcv
@@ -1775,7 +1775,7 @@ void AccountValue::TxRecognizePaymentFor7702A
         (HoneymoonValue
         ,   kludge_account_value
           + GetRefundableSalesLoad()
-          + std::max(0.0, ExpRatReserve)
+//          + std::max(0.0, ExpRatReserve) // This would be added if it existed.
         );
     LMI_ASSERT(0.0 <= Dcv);
     Irc7702A_->UpdatePmt7702A
@@ -2216,7 +2216,7 @@ void AccountValue::TxSetDeathBft()
           TotalAccountValue()
         - std::min(0.0, SurrChg())
         + GetRefundableSalesLoad()
-        + std::max(0.0, ExpRatReserve)
+//        + std::max(0.0, ExpRatReserve) // This would be added if it existed.
         ;
 
     if(12 == Month || std::string::npos != Input_->Comments.find("idiosyncrasyV"))
@@ -2244,7 +2244,7 @@ void AccountValue::TxSetDeathBft()
                 YearsCorridorFactor
             *   (   Dcv
                 +   GetRefundableSalesLoad()
-                +   std::max(0.0, ExpRatReserve)
+//                +   std::max(0.0, ExpRatReserve) // This would be added if it existed.
                 )
             )
         );
@@ -2572,7 +2572,7 @@ void AccountValue::TxTestHoneymoonForExpiration()
           TotalAccountValue()
         - SurrChg()
         + GetRefundableSalesLoad()
-        + std::max(0.0, ExpRatReserve)
+//        + std::max(0.0, ExpRatReserve) // This would be added if it existed.
         ;
 
     // It may seem 'obvious' that 'HoneymoonValue' can never be
@@ -3422,7 +3422,7 @@ void AccountValue::TxTestLapse()
     double lapse_test_csv =
           TotalAccountValue()
         - (RegLnBal + PrfLnBal)
-        + std::max(0.0, ExpRatReserve)
+//        + std::max(0.0, ExpRatReserve) // This would be added if it existed.
         ;
     if(!LapseIgnoresSurrChg)
         {
