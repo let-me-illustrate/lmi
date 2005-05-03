@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avdebug.cpp,v 1.8 2005-04-11 03:49:14 chicares Exp $
+// $Id: ihs_avdebug.cpp,v 1.9 2005-05-03 01:35:48 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -257,7 +257,7 @@ void AccountValue::DebugPrint()
         -   SurrChg()
         -   RegLnBal
         +   GetRefundableSalesLoad()
-        +   std::max(0.0, ExpRatReserve)
+//        +   std::max(0.0, ExpRatReserve) // This would be added if it existed.
         ;
     csv_net = std::max(HoneymoonValue, csv_net);
 
