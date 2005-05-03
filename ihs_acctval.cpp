@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_acctval.cpp,v 1.21 2005-05-03 01:11:30 chicares Exp $
+// $Id: ihs_acctval.cpp,v 1.22 2005-05-03 01:29:33 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -787,7 +787,6 @@ void AccountValue::SetInitialValues()
     COI                         = 0.0;
     MlyDed                      = 0.0;
     CumulativeSalesLoad         = 0.0;
-    ExpRatReserve               = 0.0;
     apportioned_net_mortality_reserve = 0.0;
 
     Dumpin             = Outlay_->dumpin();
@@ -1533,7 +1532,7 @@ void AccountValue::FinalizeYear()
         - surr_chg
         - (RegLnBal + PrfLnBal)
         + GetRefundableSalesLoad()
-        + ExpRatReserve // TODO ?? expunge this line
+//        + ExpRatReserve // This would be added if it existed.
         ;
     csv_net = std::max(csv_net, HoneymoonValue);
     csv_net = std::max(csv_net, 0.0);
@@ -1542,7 +1541,7 @@ void AccountValue::FinalizeYear()
     double cv_7702 =
           total_av
         + GetRefundableSalesLoad()
-        + std::max(0.0, ExpRatReserve) // TODO ?? expunge this line
+//        + std::max(0.0, ExpRatReserve) // This would be added if it existed.
         ;
     // Increase by negative surrender charge. If some components of
     // the surrender charge are negative while others are positive,
