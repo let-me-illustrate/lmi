@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_variant.cpp,v 1.2 2005-03-26 02:10:46 chicares Exp $
+// $Id: ledger_variant.cpp,v 1.3 2005-05-03 01:11:00 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -191,17 +191,6 @@ void LedgerVariant::Init()
 {
     // Initializes (almost) everything with zeroes
     LedgerBase::Initialize(GetLength());
-
-// TODO ?? EGREGIOUS_DEFECT
-// Original code was:
-//   ExpAndGABasis           = IsSAInput;
-//   SABasis                 = IsCurrBasis;
-// Thus:
-//   the expense-charge and general-account basis is...
-//     ...use the input separate account rate; and
-//   the separate-account basis is...
-//     ...the current basis--not guaranteed, not midpoint, but current.
-// This must be verified.
 
     ExpAndGABasis           = e_basis(e_currbasis);
     SABasis                 = e_sep_acct_basis(e_sep_acct_full);
