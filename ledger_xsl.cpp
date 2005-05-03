@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xsl.cpp,v 1.5 2005-05-01 14:21:39 chicares Exp $
+// $Id: ledger_xsl.cpp,v 1.6 2005-05-03 01:20:59 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -46,8 +46,8 @@ namespace
 fs::path xsl_filepath(Ledger const& ledger)
 {
     std::string xsl_name = ledger.GetLedgerType().str() + ".xsl";
-    fs::path fop(configurable_settings::instance().xsl_fo_directory());
-    fs::path xsl_file(fop / xsl_name);
+    fs::path fo_dir(configurable_settings::instance().xsl_fo_directory());
+    fs::path xsl_file(fo_dir / xsl_name);
     if(!fs::exists(xsl_file))
         {
         fatal_error()
@@ -68,9 +68,9 @@ std::string write_ledger_to_pdf
     ,std::string const& filename
     )
 {
-    fs::path fop(configurable_settings::instance().xsl_fo_directory());
+    fs::path fo_dir(configurable_settings::instance().xsl_fo_directory());
 
-    fs::path xml_out_file = unique_filepath(fop / filename, ".xml");
+    fs::path xml_out_file = unique_filepath(fo_dir / filename, ".xml");
 
     fs::ofstream ofs(xml_out_file, std::ios_base::out | std::ios_base::trunc);
     ledger.write(ofs);
@@ -79,7 +79,7 @@ std::string write_ledger_to_pdf
     fs::path xsl_file = xsl_filepath(ledger);
 
     // TODO ?? Use xml_out_file as exemplar instead?
-    fs::path pdf_out_file = unique_filepath(fop / filename, ".pdf");
+    fs::path pdf_out_file = unique_filepath(fo_dir / filename, ".pdf");
 
     std::ostringstream oss;
     oss
