@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: group_values.cpp,v 1.9 2005-05-02 06:26:48 chicares Exp $
+// $Id: group_values.cpp,v 1.10 2005-05-03 01:10:43 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -105,7 +105,8 @@ void RunCensusInSeries::operator()
         try
             {
 // TODO ?? Rethink. Old code set debug filename to base.debug .
-// TODO ?? Why use class IllusVal at all? What's the advantage over the AV class?
+// TODO ?? Why use class IllusVal at all? What's the advantage over
+// the account-value class?
             IllusVal IV(serialized_file_path(*file, j, "MISTAKE").string());
             IV.Run(cells[j]);
             composite.PlusEq(IV.ledger());
@@ -152,8 +153,7 @@ void RunCensusInParallel::operator()
 {
     Timer timer;
 
-// TODO ?? Rename 'AVS'.    
-    std::vector<boost::shared_ptr<AccountValue> > AVS;
+    std::vector<boost::shared_ptr<AccountValue> > cell_values;
     std::vector<IllusInputParms>::const_iterator ip;
     try
         {
@@ -166,7 +166,7 @@ void RunCensusInParallel::operator()
         int j = 0;
         int first_cell_inforce_year  = value_cast<int>((*cells.begin())["InforceYear"].str());
         int first_cell_inforce_month = value_cast<int>((*cells.begin())["InforceMonth"].str());
-        AVS.reserve(cells.size());
+        cell_values.reserve(cells.size());
         for(ip = cells.begin(); ip != cells.end(); ++ip, ++j)
             {
             // Skip any cell with zero lives.
@@ -181,10 +181,12 @@ void RunCensusInParallel::operator()
                 continue;
                 }
 
-            boost::shared_ptr<AccountValue> AV(new AccountValue(*ip));
-            AV->SetDebugFilename(serialized_file_path(*file, j, "debug").string());
+            boost::shared_ptr<AccountValue> av(new AccountValue(*ip));
+            av->SetDebugFilename
+                (serialized_file_path(*file, j, "debug").string()
+                );
 
-            AVS.push_back(AV);
+            cell_values.push_back(av);
 
             if
                 (   first_cell_inforce_year  != value_cast<int>((*ip)["InforceYear"].str())
@@ -231,7 +233,7 @@ void RunCensusInParallel::operator()
         )
     try
         {
-        for(i = AVS.begin(); i != AVS.end(); ++i)
+        for(i = cell_values.begin(); i != cell_values.end(); ++i)
             {
             (*i)->GuessWhetherFirstYearPremiumExceedsRetaliationLimit();
             }
@@ -239,7 +241,7 @@ restart:
         // Initialize each cell.
         // Calculate duration when the youngest one ends.
         int MaxYr = 0;
-        for(i = AVS.begin(); i != AVS.end(); ++i)
+        for(i = cell_values.begin(); i != cell_values.end(); ++i)
             {
             (*i)->InitializeLife(*run_basis);
             MaxYr = std::max(MaxYr, (*i)->GetLength());
@@ -310,7 +312,7 @@ restart:
                 // those assets determine the M&E charge.
 
                 // Process transactions through monthly deduction.
-                for(i = AVS.begin(); i != AVS.end(); ++i)
+                for(i = cell_values.begin(); i != cell_values.end(); ++i)
                     {
                     (*i)->Year = year;
                     (*i)->Month = month;
@@ -325,7 +327,7 @@ restart:
                     }
 
                 // Process transactions from int credit through end of month.
-                for(i = AVS.begin(); i != AVS.end(); ++i)
+                for(i = cell_values.begin(); i != cell_values.end(); ++i)
                     {
                     if((*i)->PrecedesInforceDuration(year, month)) continue;
                     (*i)->IncrementEOM(year, month, Assets[year]);
@@ -339,7 +341,7 @@ restart:
                 double current_claims = 0.0;
                 if(month == 11)
                     {
-                    for(i = AVS.begin(); i != AVS.end(); ++i)
+                    for(i = cell_values.begin(); i != cell_values.end(); ++i)
                         {
                         (*i)->SetClaims();
 // TODO ?? AV released on death was added to the nearly-identical code in
@@ -360,7 +362,7 @@ restart:
                 }
 
             bool need_to_restart = false;
-            for(i = AVS.begin(); i != AVS.end(); ++i)
+            for(i = cell_values.begin(); i != cell_values.end(); ++i)
                 {
                 if(!(*i)->TestWhetherFirstYearPremiumExceededRetaliationLimit())
                     {
@@ -373,7 +375,7 @@ restart:
                 // the goto statement, we could instead reinitialize
                 // everything explicitly and decrement the loop counter,
                 // but that would be more unnatural.
-                for(i = AVS.begin(); i != AVS.end(); ++i)
+                for(i = cell_values.begin(); i != cell_values.end(); ++i)
                     {
                     (*i)->DebugRestart
                         ("First-year premium did not meet retaliation limit"
@@ -392,7 +394,7 @@ restart:
             double this_years_coi_rate       = 0.0;
             double this_years_part_mort_rate = 0.0;
             double eoy_naar                  = 0.0;
-            for(i = AVS.begin(); i != AVS.end(); ++i)
+            for(i = cell_values.begin(); i != cell_values.end(); ++i)
                 {
                 if((*i)->PrecedesInforceDuration(year, 11)) continue;
                 projected_net_mortchgs += (*i)->GetInforceProjectedCoiCharge
@@ -433,7 +435,7 @@ restart:
                 case_k_factor = std::max(-1.0, case_k_factor);
                 }
 
-            for(i = AVS.begin(); i != AVS.end(); ++i)
+            for(i = cell_values.begin(); i != cell_values.end(); ++i)
                 {
                 (*i)->ApportionNetMortalityReserve
                     (case_net_mortality_reserve
@@ -447,7 +449,7 @@ restart:
                 }
             } // End for year.
 
-        for(i = AVS.begin(); i != AVS.end(); ++i)
+        for(i = cell_values.begin(); i != cell_values.end(); ++i)
             {
             (*i)->FinalizeLife(*run_basis);
             }
@@ -462,7 +464,7 @@ restart:
         fatal_error() << "\nUnknown exception." << LMI_FLUSH;
         }
 
-    for(i = AVS.begin(); i != AVS.end(); ++i)
+    for(i = cell_values.begin(); i != cell_values.end(); ++i)
         {
         (*i)->FinalizeLifeAllBases();
         composite.PlusEq((*i)->LedgerValues());
@@ -471,7 +473,7 @@ restart:
     status() << timer.Stop().Report() << std::flush;
 
     int j = 0;
-    for(i = AVS.begin(); i != AVS.end(); ++i, ++j)
+    for(i = cell_values.begin(); i != cell_values.end(); ++i, ++j)
         {
         emit_ledger
             (*file
