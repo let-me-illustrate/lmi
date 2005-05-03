@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: account_value.hpp,v 1.9 2005-05-03 01:11:29 chicares Exp $
+// $Id: account_value.hpp,v 1.10 2005-05-03 01:29:33 chicares Exp $
 
 #ifndef account_value_hpp
 #define account_value_hpp
@@ -624,7 +624,6 @@ class LMI_EXPIMP AccountValue
 
     // For experience rating.
     double  YearsTotalNetCOIs;
-    double  ExpRatReserve;
     double  apportioned_net_mortality_reserve;
 
     double  CumulativeSalesLoad;
