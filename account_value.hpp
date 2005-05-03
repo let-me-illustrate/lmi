@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: account_value.hpp,v 1.8 2005-04-16 02:05:40 chicares Exp $
+// $Id: account_value.hpp,v 1.9 2005-05-03 01:11:29 chicares Exp $
 
 #ifndef account_value_hpp
 #define account_value_hpp
@@ -111,9 +111,6 @@ class LMI_EXPIMP AccountValue
     double GetSepAcctAssetsInforce    () const;
     double GetNetCOI                  () const;
     double GetLastCOIChargeInforce    () const;
-    double GetIBNRContrib             () const;
-    double GetExpRatReserve           () const;
-    double GetExpRatReserveNonforborne() const;
 
   private:
     AccountValue(AccountValue const&);
@@ -171,14 +168,6 @@ class LMI_EXPIMP AccountValue
     void   DebugPrint           ();
     void   DebugRestart         (std::string const& reason);
 
-    double UpdateExpRatReserveBOM(double CaseExpRatMlyIntRate);
-    void UpdateExpRatReserveEOM
-        (double CaseYearsCOICharges
-        ,double CaseMonthsClaims
-        );
-    double UpdateExpRatReserveForPersistency
-        (double a_PersistencyAdjustment
-        );
     // For experience rating, record claims paid and AV released on
     // death before adjusting the experience fund for deaths.
     void   SetClaims();
@@ -191,11 +180,6 @@ class LMI_EXPIMP AccountValue
     void ApportionNetMortalityReserve
         (double case_net_mortality_reserve
         ,double case_years_net_mortchgs
-        );
-    double GetStabResContrib();
-    void SetExpRatRfd
-        (double CaseYearsCOICharges
-        ,double CaseExpRfd
         );
 
     // To support the notion of an M&E charge that depends on total case
@@ -641,9 +625,6 @@ class LMI_EXPIMP AccountValue
     // For experience rating.
     double  YearsTotalNetCOIs;
     double  ExpRatReserve;
-    double  ExpRatStabReserve;
-    double  ExpRatIBNRReserve;
-    double  ExpRatRfd;
     double  apportioned_net_mortality_reserve;
 
     double  CumulativeSalesLoad;

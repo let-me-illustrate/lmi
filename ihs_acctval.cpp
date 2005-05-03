@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_acctval.cpp,v 1.20 2005-04-23 02:27:23 chicares Exp $
+// $Id: ihs_acctval.cpp,v 1.21 2005-05-03 01:11:30 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -383,24 +383,9 @@ double AccountValue::PerformRunMonthByMonth(e_run_basis const& a_Basis)
 restart:
     InitializeLife(a_Basis);
     double Assets;
-    double CaseExpRatReserve = 0.0;
 
     for(int year = InforceYear; year < BasicValues::GetLength(); ++year)
         {
-        double CaseYearsCOICharges = 0.0;
-        ExpRatIBNRReserve = 0.0;
-        // We don't use the rounded value calculated in class
-        // InterestRates. A census doesn't have an InterestRates
-        // object, so it gets the interest rate this way. We do the
-        // same to match exactly.
-        double ExpRatMlyInt = 0.0;
-        if(Input_->UseExperienceRating)
-            {
-            ExpRatMlyInt = 1.0 + i_upper_12_over_12_from_i<double>()
-                (Input_->GenAcctRate[year]
-                );
-            }
-
         for(int month = InforceMonth; month < 12; ++month)
             {
             CoordinateCounters();
@@ -409,32 +394,22 @@ restart:
 
             // Add assets and COI charges to case totals
             Assets = GetSepAcctAssetsInforce();
-            CaseYearsCOICharges += GetLastCOIChargeInforce();
-            ExpRatIBNRReserve += GetIBNRContrib();
 
-// TODO ?? expunge CaseExpRatReserve
-            CaseExpRatReserve += UpdateExpRatReserveBOM(ExpRatMlyInt);
-            CaseExpRatReserve *= ExpRatMlyInt;
             IncrementEOM(year, month, Assets);
-            double CaseMonthsClaims = 0.0;
             if(month == 11)
                 {
                 SetClaims();
-                CaseMonthsClaims += GetCurtateNetClaimsInforce();
                 YearsAVRelOnDeath += InforceLives // TODO ?? Validate.
                     *   GetPartMortQ(Year)
                     *   TotalAccountValue()
                     ;
                 }
-            CaseExpRatReserve -= CaseMonthsClaims;
-            UpdateExpRatReserveEOM(CaseYearsCOICharges, CaseMonthsClaims);
             }
 
         if(!TestWhetherFirstYearPremiumExceededRetaliationLimit())
             {
             // We could do this instead:
             //   InitializeLife(a_Basis);
-            //   CaseExpRatReserve = 0.0;
             //   --year;
             // to satisfy the popular 'zero-tolerance' attitude toward
             // the goto statement, but that would be more unnatural.
@@ -442,23 +417,6 @@ restart:
             goto restart;
             }
 
-//      double NumLivesInforce = GetInforceLives();
-// TODO ?? expunge StabResVariance
-        double StabResVariance = GetStabResContrib();
-        ExpRatStabReserve = 0.0;
-        if(0.0 != StabResVariance)
-            {
-            ExpRatStabReserve = std::sqrt(StabResVariance);
-            }
-        double CaseExpRfd =
-                CaseExpRatReserve
-            -   ExpRatIBNRReserve
-            -   ExpRatStabReserve
-            ;
-        CaseExpRfd = std::max(0.0, CaseExpRfd);
-        CaseExpRatReserve -= CaseExpRfd;
-// TODO ?? expunge SetExpRatRfd()
-        SetExpRatRfd(CaseYearsCOICharges, CaseExpRfd);
         IncrementEOY(year);
         }
 
@@ -830,8 +788,6 @@ void AccountValue::SetInitialValues()
     MlyDed                      = 0.0;
     CumulativeSalesLoad         = 0.0;
     ExpRatReserve               = 0.0;
-    ExpRatStabReserve           = 0.0;
-    ExpRatIBNRReserve           = 0.0;
     apportioned_net_mortality_reserve = 0.0;
 
     Dumpin             = Outlay_->dumpin();
@@ -1193,6 +1149,7 @@ void AccountValue::ApplyDynamicSepAcctLoadAMD(double assets)
 
     double tiered_comp = 0.0;
 
+// TODO ?? EGREGIOUS_DEFECT Let's resolve this once and for all.    
     // TODO ?? JOE What is the meaning of DB_AssetChargeType?
     // You apparently use it to govern tiered comp (tiered file).
     //   [later note: also DB_MiscFundCharge]
@@ -1206,10 +1163,10 @@ void AccountValue::ApplyDynamicSepAcctLoadAMD(double assets)
 //      double extra_asset_comp = Input_->ExtraAssetComp / 10000.0L;
 //      extra_asset_comp =   m = i_upper_12_over_12_from_i<double>()(extra_asset_comp);
 //      YearsAcctValLoadAMD += extra_asset_comp;
+// End of block with authors GWC and JLM.
         tiered_comp = TieredCharges_->tiered_asset_based_compensation(assets);
-        // convert tiered comp from annual to monthly effective rate
         tiered_comp = i_upper_12_over_12_from_i<double>()(tiered_comp);
-        // TODO ?? want rounding here?
+        // TODO ?? Probably this should be rounded.
         }
 
     // is there any advantage to this sort of implementation in loads.cpp?
@@ -1257,7 +1214,6 @@ void AccountValue::InitializeYear()
 
     PolicyYearRunningTotalPremiumSubjectToPremiumTax = 0.0;
 
-    ExpRatRfd                   = 0.0;
     DacTaxRsv                   = 0.0;
 
     // These are set to nonzero values elsewhere only if tiering is used.
@@ -1548,10 +1504,6 @@ void AccountValue::SetClaims()
                 GetPartMortQ(Year)
             *   (
                 TotalAccountValue()
-// JOE No longer need to back out experience refund because
-// we're doing this at a point where no refund has yet been credited
-// or indeed even ascertained
-//              - ExpRatRfd // TODO ??
                 )
             ;
         // TODO ?? JOE NetClaims is assigned elsewhere, and not on
@@ -2022,118 +1974,6 @@ double AccountValue::GetLastCOIChargeInforce() const
     return COI * InforceLives;
 }
 
-// TODO ?? expunge
-//============================================================================
-// Authors: GWC and JLM.
-double AccountValue::GetIBNRContrib() const
-{
-    if(ItLapsed || BasicValues::GetLength() <= Year)
-        {
-        return 0.0;
-        }
-
-    // JOE This lets IBNR factor vary by database axes--e.g. we
-    // might want a higher factor for smokers someday
-    return GetNetCOI() * InforceLives * Database_->Query(DB_ExpRatIBNRMult);
-}
-
-// TODO ?? expunge
-//============================================================================
-// Authors: GWC and JLM.
-double AccountValue::UpdateExpRatReserveBOM(double CaseExpRatMlyIntRate)
-{
-return 0.0;
-    if(!Input_->UseExperienceRating)
-        {
-        return 0.0;
-        }
-    if(ItLapsed || BasicValues::GetLength() <= Year)
-        {
-        return 0.0;
-        }
-
-    // We keep our ExpRateReserve on an issued basis
-    // but the case is on an inforce basis.
-
-    // Add net COI and accum result at interest.
-    // TODO ?? Isn't that order of operations backwards?
-    ExpRatReserve += GetNetCOI() ;
-
-// If we were doing non-curtate partial mortality, then we'd have to
-// take out 1/12 of the year's claims here. And the inforce factor would
-// change monthly. But we aren't doing any such thing.
-    YearsTotalExpRsvInt += ExpRatReserve * (CaseExpRatMlyIntRate - 1.0);
-    ExpRatReserve *= CaseExpRatMlyIntRate;
-
-    // Increment to case res is inforce net COI plus
-    // interest on that plus the former case res.
-    // But we'll do interest at the case level.
-
-    // TODO ?? This is just GetLastCOIChargeInforce(). Clean it up.
-    return GetNetCOI() * InforceLives;
-}
-
-// TODO ?? expunge
-//============================================================================
-// Authors: GWC and JLM.
-void AccountValue::UpdateExpRatReserveEOM
-    (double CaseYearsCOICharges
-    ,double CaseMonthsClaims
-    )
-{
-return;
-    if
-        (
-           !Input_->UseExperienceRating
-        || 0.0 == InforceLives
-        || 0.0 == CaseMonthsClaims
-        || 0.0 == CaseYearsCOICharges
-        )
-        {
-        return;
-        }
-
-    if(ItLapsed || BasicValues::GetLength() <= Year)
-        {
-        // TODO ?? What happens to the reserve on a matured or lapsed life?
-        // Answer: it vanishes into insurance company profit; that's wrong.
-        return;
-        }
-
-    // allocate claims by total net COI deds for pol yr
-    ExpRatReserve -=
-            CaseMonthsClaims
-        *   YearsTotalNetCOIs
-        /   CaseYearsCOICharges
-        ;
-}
-
-// TODO ?? expunge
-// adjust ExpRatReserve by a multiple: proportion of case total
-//============================================================================
-// Authors: GWC and JLM.
-double AccountValue::UpdateExpRatReserveForPersistency
-    (double a_PersistencyAdjustment
-    )
-{
-return 0.0;
-    if
-        (
-            !Input_->UseExperienceRating
-        ||  ItLapsed
-        ||  BasicValues::GetLength() <= Year
-        ||  0.0 == InforceLives
-        )
-        {
-        return 0.0;
-        }
-    if(std::string::npos != Input_->Comments.find("idiosyncrasy7"))
-        {
-        ExpRatReserve *= a_PersistencyAdjustment;
-        }
-    return GetExpRatReserve();
-}
-
 //============================================================================
 double AccountValue::GetCurtateNetClaimsInforce()
 {
@@ -2250,156 +2090,10 @@ void AccountValue::ApportionNetMortalityReserve
         ;
 }
 
-// TODO ?? expunge
-//============================================================================
-// Get cell's contribution to variance of stabilization reserve
-// Authors: GWC and JLM.
-double AccountValue::GetStabResContrib()
-{
-    if(ItLapsed || BasicValues::GetLength() <= Year)
-        {
-        return 0.0;
-        }
-
-    double q;
-    int NextYear = 1 + Year;
-    if(NextYear == BasicValues::GetLength())
-        {
-        q = 1.0;
-        }
-    else
-        {
-        double MortMult;
-        if(Input_->UseExperienceRating)
-            {
-            MortMult = Database_->Query(DB_ExpRatCoiMultCurr1);
-            }
-        else
-            {
-            MortMult = Database_->Query(DB_ExpRatCoiMultCurr0);
-            }
-
-        LMI_ASSERT(!UseUnusualCOIBanding);
-        q =
-              MortMult
-            * MortalityRates_->MonthlyCoiRatesBand0(e_basis(e_currbasis))[NextYear]
-            ;
-        q = std::max(q, GetPartMortQ(NextYear));
-        }
-    double p = 1.0 - q;
-    p = std::max(p, 0.5);
-
-    // Set death benefit at end of year, taking into account the
-    //   corridor factor times the end of year total AV
-    TxSetDeathBft();
-    double SpecialNAAR = DBReflectingCorr
-// TODO ?? Special NAAR: not discounted by guar monthly interest?
-//      * YearsDBDiscountRate
-        - TotalAccountValue()
-        ;
-    double z = SpecialNAAR * (1.0 - GetPartMortQ(Year));    // Not NextYear
-    // assumes std dev mult is scalar
-// TODO ?? This does not reflect our original intention.
-    z *= TieredCharges_->stabilization_reserve(InforceLives);
-
-    return
-            InforceLives
-        *   (1.0 - GetPartMortQ(Year))
-        *   z * z
-        *   p
-        *   q
-        ;
-}
-
-// TODO ?? expunge
-//============================================================================
-void AccountValue::SetExpRatRfd
-    (double CaseYearsCOICharges
-    ,double CaseExpRfd
-    )
-{
-return;
-    if
-        (
-          !Input_->UseExperienceRating
-        || 0.0 == InforceLives
-        // perhaps it would be better to assert that this is zero
-        //   if YearsTotalNetCOIs is zero
-        || 0.0 == CaseYearsCOICharges
-        )
-        {
-        return;
-        }
-
-    if(ItLapsed || BasicValues::GetLength() <= Year)
-        {
-        return;
-        }
-
-    // allocate refund by total net COI deds for pol yr
-    ExpRatRfd =
-            CaseExpRfd
-        *   YearsTotalNetCOIs
-        /   CaseYearsCOICharges
-        ;
-
-    // We need the deaths for the year, before we can calculate the
-    // experience refund. Those who died get no refund. The case
-    // refund is forborne among the survivors.
-    double Forbearance = (1.0 - GetPartMortQ(Year));
-    if(0.0 != Forbearance)
-        {
-        ExpRatRfd /= Forbearance;
-        ExpRatReserve /= Forbearance;
-        }
-    else
-        {
-        ExpRatRfd = 0.0;    // no survivors to get a refund
-        // TODO ?? Then who should get it?
-        }
-
-    AVSepAcct += ExpRatRfd;
-    ExpRatReserve -= ExpRatRfd;
-}
-
-//============================================================================
-// TODO ?? expunge
-double AccountValue::GetExpRatReserve() const
-{
-    return 0.0 * ExpRatReserve * InforceLives;
-}
-
 //============================================================================
 void AccountValue::RecalculateGDBPrem()
 {
     // TODO ?? Not yet implemented.
-}
-
-//============================================================================
-// TODO ?? expunge
-double AccountValue::GetExpRatReserveNonforborne() const
-{
-    double Forbearance;
-    if(ItLapsed || BasicValues::GetLength() <= Year)
-        {
-// TODO ?? Seems like this should be true, but it ain't necessarily so.
-//        LMI_ASSERT(0.0 == InforceLives);
-        Forbearance = 1.0;
-        }
-    else
-        {
-        Forbearance = (1.0 - GetPartMortQ(Year));
-        }
-
-    if(Input_->UseExperienceRating)
-        {
-        return 0.0 * ExpRatReserve * Forbearance * InforceLives;
-        }
-    else
-        {
-        LMI_ASSERT(0.0 == ExpRatReserve);
-        return 0.0;
-        }
 }
 
 /*

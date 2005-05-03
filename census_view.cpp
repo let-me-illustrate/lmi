@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: census_view.cpp,v 1.20 2005-05-02 06:26:45 chicares Exp $
+// $Id: census_view.cpp,v 1.21 2005-05-03 01:11:30 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -1355,9 +1355,6 @@ restart:
         TDatabase temp_db(ihs_input0);
         double case_ibnr_months = temp_db.Query(DB_ExpRatIBNRMult);
 
-        double CaseExpRatReserve = 0.0;
-        double check_;
-
 if(std::string::npos != cell_parms()[0]["Comments"].str().find("idiosyncrasyZ3"))
         {
         std::ofstream ofs
@@ -1396,10 +1393,6 @@ if(std::string::npos != cell_parms()[0]["Comments"].str().find("idiosyncrasyZ3")
             double case_years_net_mortchgs = 0.0;
             double projected_net_mortchgs  = 0.0;
 
-            double CaseYearsCOICharges = 0.0;
-            double CaseYearsIBNR = 0.0;
-
-            double ExpRatMlyInt = 0.0;
             double experience_reserve_annual_u = 1.0 + experience_reserve_rate[year];
 
             double current_mortchg = 0.0;
@@ -1427,10 +1420,6 @@ if(std::string::npos != cell_parms()[0]["Comments"].str().find("idiosyncrasyZ3")
 
                     // Add assets and COI charges to case totals.
                     Assets[year] += (*i)->GetSepAcctAssetsInforce();
-// TODO ?? expunge this along with all other code used only by the
-// obsolete experience-rating method                    
-//                    CaseYearsCOICharges += (*i)->GetLastCOIChargeInforce();
-                    CaseYearsIBNR += (*i)->GetIBNRContrib();
 
                     current_mortchg += (*i)->GetLastCOIChargeInforce();
 ////ofs << current_mortchg << " = mortchg" << std::endl;
@@ -1439,30 +1428,12 @@ if(std::string::npos != cell_parms()[0]["Comments"].str().find("idiosyncrasyZ3")
 
 ////ofs << "Month " << month << "ytd mortchg: " << case_years_net_mortchgs;
 }
-                check_ = 0.0;
+
 // TODO ?? composite is off when first cell dies.
 // Assertions are designed to ignore this.
 // TODO ?? Assertions would also fire if enabled for other bases than current.
-                for(i = AVS.begin(); i != AVS.end(); ++i)
-                    {
-                    check_ += (*i)->GetExpRatReserve();
-                    }
 
-                // Make experience rating reserve adjustments that
-                // depend only on this cell.
-                for(i = AVS.begin(); i != AVS.end(); ++i)
-                    {
-                    CaseExpRatReserve +=
-                        (*i)->UpdateExpRatReserveBOM(ExpRatMlyInt);
-                    }
                 // Accumulate at interest after adding net COI.
-                CaseExpRatReserve *= ExpRatMlyInt;
-
-                check_ = 0.0;
-                for(i = AVS.begin(); i != AVS.end(); ++i)
-                    {
-                    check_ += (*i)->GetExpRatReserve();
-                    }
 
                 // Process transactions from int credit through end of month.
                 for(i = AVS.begin(); i != AVS.end(); ++i)
@@ -1504,36 +1475,6 @@ if(std::string::npos != cell_parms()[0]["Comments"].str().find("idiosyncrasyZ3")
 
 //                    case_years_net_mortchgs *= experience_reserve_annual_u;
                     case_years_net_mortchgs += current_mortchg;
-
-                    CaseExpRatReserve -= CaseMonthsClaims;
-                    }
-
-                // Allocate claims by total net COI deds for pol yr.
-                for(i = AVS.begin(); i != AVS.end(); ++i)
-                    {
-                    (*i)->UpdateExpRatReserveEOM
-                        (CaseYearsCOICharges
-                        ,CaseMonthsClaims
-                        );
-                    }
-
-                check_ = 0.0;
-                for(i = AVS.begin(); i != AVS.end(); ++i)
-                    {
-                    check_ += (*i)->GetExpRatReserve();
-                    }
-
-                double persistency_adjustment;
-                if(0.0 != check_ && !materially_equal(check_, CaseExpRatReserve))
-                    {
-                    persistency_adjustment = CaseExpRatReserve / check_;
-                    check_ = 0.0;
-                    for(i = AVS.begin(); i != AVS.end(); ++i)
-                        {
-                        check_ += (*i)->UpdateExpRatReserveForPersistency
-                            (persistency_adjustment
-                            );
-                        }
                     }
                 }
 
@@ -1564,65 +1505,6 @@ if(std::string::npos != cell_parms()[0]["Comments"].str().find("idiosyncrasyZ3")
             // Perform end of year calculations.
 
             // Experience rating.
-            // NumLivesInforce determines exp rating std dev multiplier.
-            double NumLivesInforce = 0.0;
-            double StabResVariance = 0.0;
-            for(i = AVS.begin(); i != AVS.end(); ++i)
-                {
-                // Get total actual # lives for exp rating.
-                NumLivesInforce += (*i)->GetInforceLives();
-                // Add cell's contribution to variance of stabilization reserve.
-                StabResVariance += (*i)->GetStabResContrib();
-                }
-            double StabRes = 0.0;
-            if(0.0 != StabResVariance)
-                {
-                StabRes = std::sqrt(StabResVariance);
-                }
-// TODO ?? Parallel code in class AccountValue differs.
-            double CaseExpRfd = CaseExpRatReserve - CaseYearsIBNR - StabRes;
-
-            CaseExpRfd = std::max(0.0, CaseExpRfd);
-            CaseExpRatReserve -= CaseExpRfd;
-
-            // Allocate refund by total net COI deds for pol yr.
-            // SS does this *after* end of year,
-            // but refund is *at* end of year and it should
-            // affect the corridor DB e.g.
-            for(i = AVS.begin(); i != AVS.end(); ++i)
-                {
-                (*i)->SetExpRatRfd
-                    (CaseYearsCOICharges
-                    ,CaseExpRfd
-                    );
-                }
-
-            double check_ = 0.0;
-            for(i = AVS.begin(); i != AVS.end(); ++i)
-                {
-                check_ += (*i)->GetExpRatReserveNonforborne();
-                }
-
-// TODO ?? Resolve this.
-//
-// My latest in a long series of hypotheses is that the problem is here.
-// None of these asserts fires, but perhaps the one immediately above should.
-// In AccountValue::SetExpRatRfd(), AccountValue::ExpRatReserve is forborne
-// among those who will survive. But AccountValue::InforceLives is not
-// updated for survivorhip until AccountValue::InitializeYear() is called
-// at the beginning of the next year.
-//
-// This was done so that the EOY corridor DB would include the refund,
-// which was important to corporate tax. The refund must be forborne,
-// else we won't match the spreadsheet(?), and it must be calculated
-// before the EOY DB; but the EOY DB must be per unit inforce during
-// the year for curtate partial mortality, while the refund is per unit
-// inforce for the next year. That's why we looked ahead to the inforce
-// lives at the beginning of the next year.
-//
-// But why should the already-forborne reserve in class AccountValue
-// total to the case-level reserve here? Shouldn't the summation need
-// to be weighted by the next year's inforce factor?
 
             // Average age reflecting survivorship and persistency.
             // This must be done here, at the end of the year, in
@@ -1731,7 +1613,6 @@ if(std::string::npos != cell_parms()[0]["Comments"].str().find("idiosyncrasyZ3")
                 << '\t' << std::setprecision(20) << this_years_coi_rate
                 << '\t' << std::setprecision(20) << this_years_part_mort_rate
                 << '\t' << std::setprecision(20) << eoy_naar
-                << '\t' << std::setprecision(20) << NumLivesInforce
                 << '\t' << std::setprecision(20) << case_years_net_mortchgs
                 << '\t' << std::setprecision(20) << case_accum_net_mortchgs
                 << '\t' << std::setprecision(20) << case_years_net_claims
