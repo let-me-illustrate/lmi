@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: group_values.hpp,v 1.4 2005-05-01 00:50:28 chicares Exp $
+// $Id: group_values.hpp,v 1.5 2005-05-04 14:55:46 chicares Exp $
 
 #ifndef group_values_hpp
 #define group_values_hpp
@@ -29,6 +29,7 @@
 #include "expimp.hpp"
 
 #include <boost/filesystem/path.hpp>
+#include <boost/shared_ptr.hpp>
 
 #include <vector>
 
@@ -51,19 +52,43 @@ void emit_ledger
     ,e_emission_target             emission_target
     );
 
-class LMI_EXPIMP RunCensusInSeries
+// TODO ?? Should this be derived from std::*nary_function?
+
+class LMI_EXPIMP run_census
 {
   public:
-    explicit RunCensusInSeries()
+    explicit run_census()
+        {}
+
+    bool operator()
+        (fs::path const&                     file
+        ,e_emission_target                   emission_target
+        ,std::vector<IllusInputParms> const& cells
+        );
+
+    Ledger const& composite();
+
+  private:
+    boost::shared_ptr<Ledger> composite_;
+// TODO ?? Consider adding data members for timings.
+};
+
+// TODO ?? Should these other functors have linkage?
+
+class LMI_EXPIMP run_census_in_series
+{
+  public:
+    explicit run_census_in_series()
 // TODO ?? Add timing code to implementation:
 //        ,time_for_calculations(0.0)
 //        ,time_for_output      (0.0)
         {}
 
-    void operator()
-        (fs::directory_iterator       const& file
+    bool operator()
+        (fs::path const&                     file
+        ,e_emission_target                   emission_target
         ,std::vector<IllusInputParms> const& cells
-        ,Ledger                            & composite
+        ,Ledger&                             composite
         );
 
   private:
@@ -71,24 +96,23 @@ class LMI_EXPIMP RunCensusInSeries
 //    double time_for_output;
 };
 
-class LMI_EXPIMP RunCensusInParallel
+class LMI_EXPIMP run_census_in_parallel
 {
   public:
-    explicit RunCensusInParallel()
+    explicit run_census_in_parallel()
 // TODO ?? Add timing code to implementation:
 //        ,time_for_calculations(0.0)
 //        ,time_for_output      (0.0)
         {}
 
-    void operator()
-        (fs::directory_iterator       const& file
+    bool operator()
+        (fs::path const&                     file
+        ,e_emission_target                   emission_target
         ,std::vector<IllusInputParms> const& cells
-        ,Ledger                            & composite
+        ,Ledger&                             composite
         );
 
   private:
-// TODO ?? hold composite here, and provide an accessor?
-
 //    double time_for_calculations;
 //    double time_for_output;
 };
