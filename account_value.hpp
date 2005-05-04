@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: account_value.hpp,v 1.10 2005-05-03 01:29:33 chicares Exp $
+// $Id: account_value.hpp,v 1.11 2005-05-04 14:55:45 chicares Exp $
 
 #ifndef account_value_hpp
 #define account_value_hpp
@@ -53,7 +53,7 @@ class LMI_EXPIMP AccountValue
 {
     friend class SolveHelper;
     friend class CensusView;
-    friend class RunCensusInParallel;
+    friend class run_census_in_parallel;
 
   public:
     enum {months_per_year = 12};

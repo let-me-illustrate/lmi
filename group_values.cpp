@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: group_values.cpp,v 1.10 2005-05-03 01:10:43 chicares Exp $
+// $Id: group_values.cpp,v 1.11 2005-05-04 14:55:46 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -49,6 +49,7 @@
 
 #include <algorithm> // std::max()
 
+//============================================================================
 void emit_ledger
     (fs::path                      const& file
     ,int                           index
@@ -83,10 +84,61 @@ void emit_ledger
 }
 
 //============================================================================
-void RunCensusInSeries::operator()
-    (fs::directory_iterator       const& file
+bool run_census::operator()
+    (fs::path const&                     file
+    ,e_emission_target                   emission_target
     ,std::vector<IllusInputParms> const& cells
-    ,Ledger                            & composite
+    )
+{
+    composite_.reset
+        (new Ledger
+            (cells[0].LedgerType()
+            ,100
+            ,true
+            )
+        );
+
+// TODO ?? This largely replaces CensusView::DoAllCells().
+
+    enum_run_order order = cells[0].RunOrder;
+    switch(order)
+        {
+        case e_life_by_life:
+            {
+            return run_census_in_series()(file, emission_target, cells, *composite_);
+// TODO ?? support various output destinations?
+            }
+            break;
+        case e_month_by_month:
+            {
+            return run_census_in_parallel()(file, emission_target, cells, *composite_);
+            }
+            break;
+        default:
+            {
+            fatal_error()
+                << "Case '"
+                << order
+                << "' not found."
+                << LMI_FLUSH
+                ;
+            }
+        }
+    return false;
+}
+
+//============================================================================
+Ledger const& run_census::composite()
+{
+    return *composite_;
+}
+
+//============================================================================
+bool run_census_in_series::operator()
+    (fs::path const&                     file
+    ,e_emission_target                   emission_target
+    ,std::vector<IllusInputParms> const& cells
+    ,Ledger&                             composite
     )
 {
 // TODO ?? Rethink placement of try blocks. Why have them at all?
@@ -101,20 +153,20 @@ void RunCensusInSeries::operator()
         );
     for(unsigned int j = 0; j < cells.size(); ++j)
         {
-// TODO ?? Skip if cell not included in composite (IncludeInComposite).        
+// TODO ?? Skip if cell not included in composite (IncludeInComposite).
         try
             {
 // TODO ?? Rethink. Old code set debug filename to base.debug .
 // TODO ?? Why use class IllusVal at all? What's the advantage over
 // the account-value class?
-            IllusVal IV(serialized_file_path(*file, j, "MISTAKE").string());
+            IllusVal IV(serialized_file_path(file, j, "MISTAKE").string());
             IV.Run(cells[j]);
             composite.PlusEq(IV.ledger());
             emit_ledger
-                (*file
+                (file
                 ,j
                 ,IV.ledger()
-                ,emit_to_spew_file
+                ,emission_target
                 );
 // TODO ?? Sometimes all cells should be emitted; sometimes, only the composite.
             }
@@ -128,27 +180,29 @@ void RunCensusInSeries::operator()
             }
         if(!meter->reflect_progress())
             {
-            return;
+            return false;
             }
         }
 
     emit_ledger
-        (*file
+        (file
         ,-1
         ,composite
-        ,emit_to_spew_file
+        ,emission_target
         );
 
 // TODO ?? This is for calculations and output combined.
 // Running in parallel permits separating those things--good idea?
     status() << timer.Stop().Report() << std::flush;
+    return true;
 }
 
 //============================================================================
-void RunCensusInParallel::operator()
-    (fs::directory_iterator       const& file
+bool run_census_in_parallel::operator()
+    (fs::path const&                     file
+    ,e_emission_target                   emission_target
     ,std::vector<IllusInputParms> const& cells
-    ,Ledger                            & composite
+    ,Ledger&                             composite
     )
 {
     Timer timer;
@@ -183,7 +237,7 @@ void RunCensusInParallel::operator()
 
             boost::shared_ptr<AccountValue> av(new AccountValue(*ip));
             av->SetDebugFilename
-                (serialized_file_path(*file, j, "debug").string()
+                (serialized_file_path(file, j, "debug").string()
                 );
 
             cell_values.push_back(av);
@@ -210,7 +264,7 @@ void RunCensusInParallel::operator()
 
             if(!meter->reflect_progress())
                 {
-                return;
+                return false;
                 }
             }
         }
@@ -445,7 +499,7 @@ restart:
 
             if(!meter->reflect_progress())
                 {
-                return;
+                return false;
                 }
             } // End for year.
 
@@ -476,18 +530,19 @@ restart:
     for(i = cell_values.begin(); i != cell_values.end(); ++i, ++j)
         {
         emit_ledger
-            (*file
+            (file
             ,j
             ,(*i)->LedgerValues()
-            ,emit_to_spew_file
+            ,emission_target
             );
         }
 
-        emit_ledger
-            (*file
-            ,-1
-            ,composite
-            ,emit_to_spew_file
-            );
+    emit_ledger
+        (file
+        ,-1
+        ,composite
+        ,emission_target
+        );
+    return true;
 }
 
