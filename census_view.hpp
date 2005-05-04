@@ -1,4 +1,4 @@
-// Life insurance illustrations.
+// Census manager.
 //
 // Copyright (C) 2004, 2005 Gregory W. Chicares.
 //
@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: census_view.hpp,v 1.4 2005-05-01 00:50:28 chicares Exp $
+// $Id: census_view.hpp,v 1.5 2005-05-04 14:55:45 chicares Exp $
 
 #ifndef census_view_hpp
 #define census_view_hpp
@@ -28,6 +28,7 @@
 
 #include "view_ex.hpp"
 
+#include "group_values.hpp" // TODO ?? Only for e_emission_target; avoid this?
 #include "input.hpp"
 #include "ledger.hpp"
 #include "obstruct_slicing.hpp"
@@ -48,19 +49,6 @@ class CensusView
     ,virtual private obstruct_slicing<CensusView>
 {
     friend class CensusDocument;
-
-    // Output destination for composite and *each* individual life when
-    // running a census. Usually only the composite is emitted, and only
-    // to the screen. Other options let you additionally emit everything
-    // to the printer or to various file formats. Enumerators are binary
-    // powers so that more than one can be specified in an int.
-    enum e_output_dest
-        {to_nowhere     = 0
-        ,to_printer     = 1
-        ,to_tab_delim   = 2
-        ,to_spreadsheet = 4 // TODO ?? Does this just mean tab delimited?
-        ,to_crc_file    = 8
-        };
 
   public:
     CensusView();
@@ -102,10 +90,10 @@ class CensusView
 
     void Run();
 
-    void EmitEveryone(e_output_dest a_OutputDest, Ledger const& a_Values, int a_idx);
-    bool DoAllCells(e_output_dest a_OutputDest = to_nowhere);
-    void RunAllMonths(e_output_dest a_OutputDest = to_nowhere);
-    void RunAllLives(e_output_dest a_OutputDest = to_nowhere);
+    void EmitEveryone(e_emission_target, Ledger const& a_Values, int a_idx);
+    bool DoAllCells  (e_emission_target emission_target = emit_to_nowhere);
+    void RunAllMonths(e_emission_target emission_target = emit_to_nowhere);
+    void RunAllLives (e_emission_target emission_target = emit_to_nowhere);
 
     // Ascertain differences between old and new parameters and apply
     // each such difference to other cells...

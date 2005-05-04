@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main.cpp,v 1.14 2005-04-29 18:51:34 chicares Exp $
+// $Id: main.cpp,v 1.15 2005-05-04 14:55:46 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -72,48 +72,25 @@ void RegressionTest()
 
         std::cout << "Regression testing: " << i->string() << std::endl;
         multiple_cell_document doc(i->string());
-        std::vector<IllusInputParms> const& cells(doc.cell_parms());
 
-        Ledger composite
-            (cells[0].LedgerType()
-            ,100
-            ,true
-            );
-
-// TODO ?? This largely replaces CensusView::DoAllCells().
-//
-// The run order depends on the case input and ignores any conflicting
-// input for any individual cell. Perhaps we should detect any such
+// The run order depends on the first cell's parameters and ignores any
+// conflicting input for any individual cell. Perhaps we should detect
 // conflicting input and signal an error? It would probably be cleaner
 // to offer this input item (and a few similar ones) only at the case
 // level. TODO ?? Fix this.
-
-        enum_run_order order = doc.case_parms()[0].RunOrder;
-        switch(order)
+        if(doc.case_parms()[0].RunOrder != doc.cell_parms()[0].RunOrder)
             {
-            // Perhaps this function should be run only in the month by month
-            // case, but it does no harm to generalize it this way.
-            case e_life_by_life:
-                {
-                RunCensusInSeries()(i, cells, composite);
-// TODO ?? support various output destinations?
-                }
-                break;
-            case e_month_by_month:
-                {
-                RunCensusInParallel()(i, cells, composite);
-                }
-                break;
-            default:
-                {
-                fatal_error()
-                    << "Case '"
-                    << order
-                    << "' not found."
-                    << LMI_FLUSH
-                    ;
-                }
+            fatal_error()
+                << "Case-default run order '"
+                << doc.case_parms()[0].RunOrder
+                << "' differs from first cell's run order '"
+                << doc.cell_parms()[0].RunOrder
+                << "'. Make them consistent then run again."
+                << LMI_FLUSH
+                ;
             }
+
+        run_census()(*i, emit_to_spew_file, doc.cell_parms());
 
         std::cout << std::endl;
         }
