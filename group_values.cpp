@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: group_values.cpp,v 1.11 2005-05-04 14:55:46 chicares Exp $
+// $Id: group_values.cpp,v 1.12 2005-05-05 15:22:14 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -37,7 +37,6 @@
 #include "ledger.hpp"
 #include "ledger_text_formats.hpp"
 #include "ledger_xsl.hpp"
-#include "ledgervalues.hpp"
 #include "path_utility.hpp"
 #include "progress_meter.hpp"
 #include "timer.hpp"
@@ -106,7 +105,6 @@ bool run_census::operator()
         case e_life_by_life:
             {
             return run_census_in_series()(file, emission_target, cells, *composite_);
-// TODO ?? support various output destinations?
             }
             break;
         case e_month_by_month:
@@ -133,6 +131,13 @@ Ledger const& run_census::composite()
     return *composite_;
 }
 
+// TODO ?? Rethink placement of try blocks. Why have them at all?
+// How did they behave in the old production system? (It just rethrew.)
+//
+// But leave them alone for now. They turn exceptions into fatal_errors,
+// which, for now at least, are handled much more gracefully. Yet perhaps
+// they should be moved into run_census.
+
 //============================================================================
 bool run_census_in_series::operator()
     (fs::path const&                     file
@@ -141,9 +146,6 @@ bool run_census_in_series::operator()
     ,Ledger&                             composite
     )
 {
-// TODO ?? Rethink placement of try blocks. Why have them at all?
-// How did they behave in the old production system? (It just rethrew.)
-
     Timer timer; // TODO ?? Combine with progress meter?
     boost::shared_ptr<progress_meter> meter
         (create_progress_meter
@@ -156,19 +158,26 @@ bool run_census_in_series::operator()
 // TODO ?? Skip if cell not included in composite (IncludeInComposite).
         try
             {
+/*
 // TODO ?? Rethink. Old code set debug filename to base.debug .
 // TODO ?? Why use class IllusVal at all? What's the advantage over
 // the account-value class?
             IllusVal IV(serialized_file_path(file, j, "MISTAKE").string());
             IV.Run(cells[j]);
             composite.PlusEq(IV.ledger());
+*/
+            AccountValue av(cells[j]);
+            av.SetDebugFilename
+                (serialized_file_path(file, j, "debug").string()
+                );
+            av.RunAV();
+            composite.PlusEq(av.LedgerValues());
             emit_ledger
                 (file
                 ,j
-                ,IV.ledger()
+                ,av.LedgerValues()
                 ,emission_target
                 );
-// TODO ?? Sometimes all cells should be emitted; sometimes, only the composite.
             }
         catch(std::exception& e)
             {
@@ -224,7 +233,6 @@ bool run_census_in_parallel::operator()
         for(ip = cells.begin(); ip != cells.end(); ++ip, ++j)
             {
             // Skip any cell with zero lives.
-            // TODO ?? Should that even be permitted?
             if(0 == value_cast<int>((*ip)["NumberOfIdenticalLives"].str()))
                 {
                 continue;
@@ -443,19 +451,10 @@ restart:
 
             // Increment year; update curtate inforce factor.
 
-            // TODO ?? Temporary. Were these variables useful only
-            // for testing single-life cases?
-            double this_years_coi_rate       = 0.0;
-            double this_years_part_mort_rate = 0.0;
-            double eoy_naar                  = 0.0;
             for(i = cell_values.begin(); i != cell_values.end(); ++i)
                 {
                 if((*i)->PrecedesInforceDuration(year, 11)) continue;
-                projected_net_mortchgs += (*i)->GetInforceProjectedCoiCharge
-                    (this_years_coi_rate
-                    ,this_years_part_mort_rate
-                    ,eoy_naar
-                    );
+                projected_net_mortchgs += (*i)->GetInforceProjectedCoiCharge();
                 (*i)->IncrementEOY(year);
                 }
 
