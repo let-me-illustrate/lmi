@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_acctval.cpp,v 1.22 2005-05-03 01:29:33 chicares Exp $
+// $Id: ihs_acctval.cpp,v 1.23 2005-05-05 15:22:14 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -2004,11 +2004,7 @@ double AccountValue::GetCurtateNetClaimsInforce()
 
 //============================================================================
 // Proxy for next year's COI charge, to be used only for experience rating.
-double AccountValue::GetInforceProjectedCoiCharge
-    (double& this_years_coi_rate
-    ,double& this_years_part_mort_rate
-    ,double& eoy_naar
-    )
+double AccountValue::GetInforceProjectedCoiCharge()
 {
     if(!Input_->UsePartialMort || ItLapsed || BasicValues::GetLength() <= Year)
         {
@@ -2030,10 +2026,6 @@ double AccountValue::GetInforceProjectedCoiCharge
         ;
     this_years_terminal_naar = std::max(0.0, this_years_terminal_naar);
     double next_years_coi_rate = GetBandedCoiRates(ExpAndGABasis, ActualSpecAmt)[1 + Year];
-
-    this_years_coi_rate = GetBandedCoiRates(ExpAndGABasis, ActualSpecAmt)[Year];
-    this_years_part_mort_rate = GetPartMortQ(Year);
-    eoy_naar = this_years_terminal_naar;
 
     return 12.0 * InforceLives * this_years_terminal_naar * next_years_coi_rate;
 }

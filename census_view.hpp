@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: census_view.hpp,v 1.5 2005-05-04 14:55:45 chicares Exp $
+// $Id: census_view.hpp,v 1.6 2005-05-05 15:22:14 chicares Exp $
 
 #ifndef census_view_hpp
 #define census_view_hpp
@@ -90,10 +90,7 @@ class CensusView
 
     void Run();
 
-    void EmitEveryone(e_emission_target, Ledger const& a_Values, int a_idx);
     bool DoAllCells  (e_emission_target emission_target = emit_to_nowhere);
-    void RunAllMonths(e_emission_target emission_target = emit_to_nowhere);
-    void RunAllLives (e_emission_target emission_target = emit_to_nowhere);
 
     // Ascertain differences between old and new parameters and apply
     // each such difference to other cells...
@@ -110,11 +107,6 @@ class CensusView
     IllustrationView* MakeNewDocAndView(char const*);
     IllustrationView* ViewOneCell(int);
     IllustrationView* ViewComposite();
-    void PrintAnonymousIllustration(Ledger const& a_Values, int index);
-    void SaveRegressionTestFile(Ledger const& a_Values, long idx);
-    void SaveSpreadsheetFile(Ledger const& a_Values, long idx);
-    std::string const GetCRCFilename() const;
-    void SaveCRCToFile(Ledger const& a_Values, long idx);
 
     std::vector<Input>&       case_parms();
     std::vector<Input> const& case_parms() const;

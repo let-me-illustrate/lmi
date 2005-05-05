@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: census_view.cpp,v 1.22 2005-05-04 14:55:45 chicares Exp $
+// $Id: census_view.cpp,v 1.23 2005-05-05 15:22:14 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -48,7 +48,6 @@
 #include <wx/msgdlg.h>
 #include <wx/xrc/xmlres.h>
 
-#include <fstream> // TODO ?? Only for writing ledger--factor out?
 #include <sstream>
 #include <stdexcept>
 
@@ -256,26 +255,6 @@ wxWindow* CensusView::CreateChildWindow()
 //        ,wxDefaultValidator
 //        ,"Census name here..."
         );
-/* TODO ?? expunge
-    // Skip GUI updates for non-interactive regression testing.
-    if(global_settings::instance().regression_testing())
-        {
-        std::ofstream os
-            (GetCRCFilename().c_str()
-            ,std::ios_base::out | std::ios_base::trunc
-            );
-        os.close();
-        DoAllCells(emit_to_spew_file);
-        if(std::string::npos != cell_parms()[0]["Comments"].str().find("idiosyncrasyU"))
-            {
-            DoAllCells(emit_to_spreadsheet);
-            }
-        document().Modify(false);
-        // Close view and doc when done.
-        wxTheApp->ExitMainLoop();
-        return 0;
-        }
-*/
 
     // Show headers.
     Update();
@@ -1068,7 +1047,7 @@ bool CensusView::DoAllCells(e_emission_target emission_target)
     composite_ledger_ = runner.composite();
     return true;
 
-/*
+/* TODO ?? expunge
 // The run order depends on the case input and ignores any conflicting
 // input for any individual cell. Perhaps we should detect any such
 // conflicting input and signal an error? It would probably be cleaner
@@ -1101,58 +1080,6 @@ bool CensusView::DoAllCells(e_emission_target emission_target)
         }
     return true;
 */
-}
-
-void CensusView::PrintAnonymousIllustration(Ledger const& a_Values, int index)
-{
-// TODO ?? Use an auto_ptr instead?
-    std::string file_name(serial_filename(index, "ill"));
-    IllustrationView* illview = MakeNewDocAndView(file_name.c_str());
-
-    illview->SetLedger(a_Values);
-    illview->DisplaySelectedValuesAsHtml();
-    illview->Pdf("print");
-
-//    illview->Destroy();
-//    delete illview; // TODO ?? Want to get rid of this thing.
-}
-
-// TODO ?? expunge
-void CensusView::SaveRegressionTestFile(Ledger const& a_Values, long idx)
-{
-//    std::string file_name(serial_filename(idx, "ill"));
-//    IllustrationView* illview = MakeNewDocAndView(file_name.c_str());
-std::runtime_error("Not supported yet");
-//    illview->SetLedger(a_Values);
-//    illview->DisplaySelectedValuesAsHtml();
-//    illview->FileSaveAsTDT();
-
-//    illview->Destroy();
-//    delete illview; // TODO ?? Want to get rid of this thing.
-}
-
-void CensusView::SaveSpreadsheetFile(Ledger const& a_Values, long idx)
-{
-    std::string spreadsheet_filename =
-        base_filename() + configurable_settings::instance().spreadsheet_file_extension();
-    PrintFormTabDelimited(a_Values, spreadsheet_filename);
-}
-
-std::string const CensusView::GetCRCFilename() const
-{
-    return base_filename() + ".crc";
-}
-
-// TODO ?? expunge?
-void CensusView::SaveCRCToFile(Ledger const& a_Values, long idx)
-{
-    std::ofstream os
-        (GetCRCFilename().c_str()
-        ,   std::ios_base::out
-          | std::ios_base::ate
-          | std::ios_base::app
-        );
-    os << idx << "\t" << a_Values.CalculateCRC() << std::endl;
 }
 
 void CensusView::OnAddCell(wxCommandEvent&)
@@ -1500,7 +1427,4 @@ convert_from_ihs(ihs_input, lmi_input);
 
     status() << std::flush;
 }
-
-//// TODO ?? expunge after testing
-#include "census_view_obsolete.cpp"
 
