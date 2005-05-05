@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: group_values.cpp,v 1.12 2005-05-05 15:22:14 chicares Exp $
+// $Id: group_values.cpp,v 1.13 2005-05-05 21:19:24 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -48,12 +48,21 @@
 
 #include <algorithm> // std::max()
 
-//============================================================================
+namespace
+{
+bool cell_should_be_ignored(IllusInputParms const& cell)
+{
+    return
+            0     == value_cast<int>(cell["NumberOfIdenticalLives"].str())
+        ||  "Yes" !=                 cell["IncludeInComposite"    ].str()
+        ;
+}
+
 void emit_ledger
-    (fs::path                      const& file
-    ,int                           index
-    ,Ledger const&                 ledger
-    ,e_emission_target             emission_target
+    (fs::path const&   file
+    ,int               index
+    ,Ledger const&     ledger
+    ,e_emission_target emission_target
     )
 {
     if(emission_target & emit_to_printer)
@@ -81,55 +90,53 @@ void emit_ledger
             );
         }
 }
+} // Unnamed namespace.
 
-//============================================================================
-bool run_census::operator()
-    (fs::path const&                     file
-    ,e_emission_target                   emission_target
-    ,std::vector<IllusInputParms> const& cells
-    )
+// Functors run_census_in_series and run_census_in_parallel aren't in
+// an unnamed namespace because that makes it difficult to implement
+// friendship.
+
+class LMI_EXPIMP run_census_in_series
 {
-    composite_.reset
-        (new Ledger
-            (cells[0].LedgerType()
-            ,100
-            ,true
-            )
+  public:
+    explicit run_census_in_series()
+// TODO ?? Add timing code to implementation:
+//        ,time_for_calculations(0.0)
+//        ,time_for_output      (0.0)
+        {}
+
+    bool operator()
+        (fs::path const&                     file
+        ,e_emission_target                   emission_target
+        ,std::vector<IllusInputParms> const& cells
+        ,Ledger&                             composite
         );
 
-// TODO ?? This largely replaces CensusView::DoAllCells().
+  private:
+//    double time_for_calculations;
+//    double time_for_output;
+};
 
-    enum_run_order order = cells[0].RunOrder;
-    switch(order)
-        {
-        case e_life_by_life:
-            {
-            return run_census_in_series()(file, emission_target, cells, *composite_);
-            }
-            break;
-        case e_month_by_month:
-            {
-            return run_census_in_parallel()(file, emission_target, cells, *composite_);
-            }
-            break;
-        default:
-            {
-            fatal_error()
-                << "Case '"
-                << order
-                << "' not found."
-                << LMI_FLUSH
-                ;
-            }
-        }
-    return false;
-}
-
-//============================================================================
-Ledger const& run_census::composite()
+class LMI_EXPIMP run_census_in_parallel
 {
-    return *composite_;
-}
+  public:
+    explicit run_census_in_parallel()
+// TODO ?? Add timing code to implementation:
+//        ,time_for_calculations(0.0)
+//        ,time_for_output      (0.0)
+        {}
+
+    bool operator()
+        (fs::path const&                     file
+        ,e_emission_target                   emission_target
+        ,std::vector<IllusInputParms> const& cells
+        ,Ledger&                             composite
+        );
+
+  private:
+//    double time_for_calculations;
+//    double time_for_output;
+};
 
 // TODO ?? Rethink placement of try blocks. Why have them at all?
 // How did they behave in the old production system? (It just rethrew.)
@@ -155,9 +162,12 @@ bool run_census_in_series::operator()
         );
     for(unsigned int j = 0; j < cells.size(); ++j)
         {
-// TODO ?? Skip if cell not included in composite (IncludeInComposite).
         try
             {
+            if(cell_should_be_ignored(cells[j]))
+                {
+                continue;
+                }
 /*
 // TODO ?? Rethink. Old code set debug filename to base.debug .
 // TODO ?? Why use class IllusVal at all? What's the advantage over
@@ -232,13 +242,7 @@ bool run_census_in_parallel::operator()
         cell_values.reserve(cells.size());
         for(ip = cells.begin(); ip != cells.end(); ++ip, ++j)
             {
-            // Skip any cell with zero lives.
-            if(0 == value_cast<int>((*ip)["NumberOfIdenticalLives"].str()))
-                {
-                continue;
-                }
-            // Skip anyone not included in composite.
-            if("Yes" != (*ip)["IncludeInComposite"].str())
+            if(cell_should_be_ignored(cells[j]))
                 {
                 continue;
                 }
@@ -543,5 +547,54 @@ restart:
         ,emission_target
         );
     return true;
+}
+
+//============================================================================
+bool run_census::operator()
+    (fs::path const&                     file
+    ,e_emission_target                   emission_target
+    ,std::vector<IllusInputParms> const& cells
+    )
+{
+    composite_.reset
+        (new Ledger
+            (cells[0].LedgerType()
+            ,100
+            ,true
+            )
+        );
+
+// TODO ?? This largely replaces CensusView::DoAllCells().
+
+    enum_run_order order = cells[0].RunOrder;
+    switch(order)
+        {
+        case e_life_by_life:
+            {
+            return run_census_in_series()(file, emission_target, cells, *composite_);
+            }
+            break;
+        case e_month_by_month:
+            {
+            return run_census_in_parallel()(file, emission_target, cells, *composite_);
+            }
+            break;
+        default:
+            {
+            fatal_error()
+                << "Case '"
+                << order
+                << "' not found."
+                << LMI_FLUSH
+                ;
+            }
+        }
+    return false;
+}
+
+//============================================================================
+Ledger const& run_census::composite()
+{
+    return *composite_;
 }
 
