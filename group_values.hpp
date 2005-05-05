@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: group_values.hpp,v 1.6 2005-05-05 15:22:14 chicares Exp $
+// $Id: group_values.hpp,v 1.7 2005-05-05 21:19:25 chicares Exp $
 
 #ifndef group_values_hpp
 #define group_values_hpp
@@ -45,15 +45,8 @@ enum e_emission_target
     ,emit_to_spreadsheet = 4
     };
 
-void emit_ledger
-    (fs::path const&               file
-    ,int                           index
-    ,Ledger const&                 ledger
-    ,e_emission_target             emission_target
-    );
-
 // TODO ?? Sometimes all cells should be emitted; sometimes, only the composite.
-    
+
 // TODO ?? Should this be derived from std::*nary_function?
 
 class LMI_EXPIMP run_census
@@ -73,50 +66,6 @@ class LMI_EXPIMP run_census
   private:
     boost::shared_ptr<Ledger> composite_;
 // TODO ?? Consider adding data members for timings.
-};
-
-// TODO ?? Should these other functors have linkage?
-
-class LMI_EXPIMP run_census_in_series
-{
-  public:
-    explicit run_census_in_series()
-// TODO ?? Add timing code to implementation:
-//        ,time_for_calculations(0.0)
-//        ,time_for_output      (0.0)
-        {}
-
-    bool operator()
-        (fs::path const&                     file
-        ,e_emission_target                   emission_target
-        ,std::vector<IllusInputParms> const& cells
-        ,Ledger&                             composite
-        );
-
-  private:
-//    double time_for_calculations;
-//    double time_for_output;
-};
-
-class LMI_EXPIMP run_census_in_parallel
-{
-  public:
-    explicit run_census_in_parallel()
-// TODO ?? Add timing code to implementation:
-//        ,time_for_calculations(0.0)
-//        ,time_for_output      (0.0)
-        {}
-
-    bool operator()
-        (fs::path const&                     file
-        ,e_emission_target                   emission_target
-        ,std::vector<IllusInputParms> const& cells
-        ,Ledger&                             composite
-        );
-
-  private:
-//    double time_for_calculations;
-//    double time_for_output;
 };
 
 #endif // group_values_hpp
