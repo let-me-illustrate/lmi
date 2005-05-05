@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: group_values.hpp,v 1.5 2005-05-04 14:55:46 chicares Exp $
+// $Id: group_values.hpp,v 1.6 2005-05-05 15:22:14 chicares Exp $
 
 #ifndef group_values_hpp
 #define group_values_hpp
@@ -52,6 +52,8 @@ void emit_ledger
     ,e_emission_target             emission_target
     );
 
+// TODO ?? Sometimes all cells should be emitted; sometimes, only the composite.
+    
 // TODO ?? Should this be derived from std::*nary_function?
 
 class LMI_EXPIMP run_census
