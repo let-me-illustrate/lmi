@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: census_view.hpp,v 1.6 2005-05-05 15:22:14 chicares Exp $
+// $Id: census_view.hpp,v 1.7 2005-05-05 21:19:03 chicares Exp $
 
 #ifndef census_view_hpp
 #define census_view_hpp
@@ -28,7 +28,7 @@
 
 #include "view_ex.hpp"
 
-#include "group_values.hpp" // TODO ?? Only for e_emission_target; avoid this?
+#include "group_values.hpp"
 #include "input.hpp"
 #include "ledger.hpp"
 #include "obstruct_slicing.hpp"
