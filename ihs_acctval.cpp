@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_acctval.cpp,v 1.23 2005-05-05 15:22:14 chicares Exp $
+// $Id: ihs_acctval.cpp,v 1.24 2005-05-06 17:21:21 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -2162,5 +2162,17 @@ void AccountValue::CoordinateCounters()
             }
 */
         }
+}
+
+//============================================================================
+double AccountValue::ibnr_as_months_of_mortality_charges()
+{
+    return Database_->Query(DB_ExpRatIBNRMult);
+}
+
+//============================================================================
+double AccountValue::experience_rating_amortization_years()
+{
+    return Database_->Query(DB_ExpRatAmortPeriod);
 }
 
