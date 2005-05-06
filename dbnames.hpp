@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: dbnames.hpp,v 1.2 2005-02-08 14:11:57 chicares Exp $
+// $Id: dbnames.hpp,v 1.3 2005-05-06 17:20:54 chicares Exp $
 
 #ifndef dbnames_hpp
 #define dbnames_hpp
@@ -418,12 +418,13 @@ enum DatabaseNames
         ,DB_LapseIgnoresSurrChg
         ,DB_CoiInforceReentry
         ,DB_AssetComp
+        ,DB_ExpRatAmortPeriod
 
     ,DB_LAST    // Adding a new item? Insert directly above *only*.
     // That way, old databases remain compatible with new code, and any
     // error in using a new item will occur when the new item is used
     // instead of where a renumbered old item is used--that should make
-    // such errors much easier to track down and repair. We can resort
+    // such errors much easier to track down and repair. We can re-sort
     // additions into categories when preparing a major release.
 
     // TODO ?? We ought to find a way to make this file change whenever

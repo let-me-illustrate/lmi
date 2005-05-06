@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: dbdict.cpp,v 1.2 2005-02-12 12:59:31 chicares Exp $
+// $Id: dbdict.cpp,v 1.3 2005-05-06 17:20:54 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -237,6 +237,9 @@ void DBDictionary::Init()
     AddEntry(TDBEntry(DB_AllowADD, TDBValue(DB_AllowADD, n, dims, zero)));
     AddEntry(TDBEntry(DB_AllowSpouse, TDBValue(DB_AllowSpouse, n, dims, zero)));
     AddEntry(TDBEntry(DB_AllowChild, TDBValue(DB_AllowChild, n, dims, zero)));
+
+    double exp_rat_amort_period[1] = {4.0};
+    AddEntry(TDBEntry(DB_ExpRatAmortPeriod, TDBValue(DB_ExpRatAmortPeriod, n, dims, exp_rat_amort_period)));
 }
 
 //===========================================================================
