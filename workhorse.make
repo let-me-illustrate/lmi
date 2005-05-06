@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: workhorse.make,v 1.22 2005-05-02 04:00:05 chicares Exp $
+# $Id: workhorse.make,v 1.23 2005-05-06 17:20:17 chicares Exp $
 
 ###############################################################################
 
@@ -89,6 +89,9 @@ default_targets := \
   antediluvian_cli$(EXEEXT) \
   lmi_cli$(EXEEXT) \
   lmi_wx$(EXEEXT) \
+  ihs_crc_comp$(EXEEXT) \
+  product_files$(EXEEXT) \
+  liblmi$(SHREXT) \
 
 .PHONY: effective_default_target
 effective_default_target: $(default_targets)
@@ -586,23 +589,30 @@ av_tests: static_demo$(EXEEXT) ihs_crc_comp$(EXEEXT)
 
 # Regression test.
 
-# TODO ?? Needs work.
-# Don't refer to obsolete /unified : instead, put the tool this uses in cvs.
-# General rewrite: avoid imperative programming like 'install' target.
+# Relative errors less than 1e-14 are ignored. Machine epsilon for an
+# IEC 60559 double is 2.2204460492503131E-16 [C99 5.2.4.2.2/13], so
+# that tolerance is about forty-five times epsilon. Experience has
+# shown that the discrepancies thus ignored are never material, but
+# larger discrepancies may be.
+
+# TODO ?? Needs work: avoid imperative programming like 'install' target,
+# which copies large files whether or not they're already current.
 
 regression_test_results := results-$(yyyymmddhhmm)
 
 .PHONY: regression_test
-regression_test: install ihs_crc_comp$(EXEEXT)
+regression_test: install
 	@$(ECHO) Regression test:
-	@$(CP) --preserve ihs_crc_comp$(EXEEXT) $(install_dir)/test
-	@cd /opt/lmi/test; \
+	@ \
+	cd $(install_dir)/data; \
+	../product_files; \
+	cd $(install_dir)/test; \
 	../lmi_cli \
 	  --ash_nazg --accept --regress \
-	  --data_path=/opt/lmi/data \
-	  --test_path=/opt/lmi/test; \
+	  --data_path=$(install_dir)/data \
+	  --test_path=$(install_dir)/test; \
 	for z in *test; \
-	  { ./ihs_crc_comp $$z /opt/lmi/touchstone/$$z \
+	  { $(install_dir)/ihs_crc_comp $$z $(install_dir)/touchstone/$$z \
 	    | sed -e '/Summary/!d' -e"s/^ /$$z/" \
 	  } > $(regression_test_results); \
 	< $(regression_test_results) sed \
