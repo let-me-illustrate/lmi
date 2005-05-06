@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: group_values.cpp,v 1.13 2005-05-05 21:19:24 chicares Exp $
+// $Id: group_values.cpp,v 1.14 2005-05-06 17:21:37 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -33,6 +33,7 @@
 #include "configurable_settings.hpp"
 #include "database.hpp"
 #include "dbnames.hpp"
+#include "global_settings.hpp"
 #include "inputillus.hpp"
 #include "ledger.hpp"
 #include "ledger_text_formats.hpp"
@@ -96,13 +97,15 @@ void emit_ledger
 // an unnamed namespace because that makes it difficult to implement
 // friendship.
 
+// TODO ?? Consider adding timing code to these functors, even perhaps
+// by adding it the class progress_meter. At present, timings are
+// reported for calculations and output combined; is it desirable to
+// separate those things?
+
 class LMI_EXPIMP run_census_in_series
 {
   public:
     explicit run_census_in_series()
-// TODO ?? Add timing code to implementation:
-//        ,time_for_calculations(0.0)
-//        ,time_for_output      (0.0)
         {}
 
     bool operator()
@@ -111,19 +114,12 @@ class LMI_EXPIMP run_census_in_series
         ,std::vector<IllusInputParms> const& cells
         ,Ledger&                             composite
         );
-
-  private:
-//    double time_for_calculations;
-//    double time_for_output;
 };
 
 class LMI_EXPIMP run_census_in_parallel
 {
   public:
     explicit run_census_in_parallel()
-// TODO ?? Add timing code to implementation:
-//        ,time_for_calculations(0.0)
-//        ,time_for_output      (0.0)
         {}
 
     bool operator()
@@ -132,10 +128,6 @@ class LMI_EXPIMP run_census_in_parallel
         ,std::vector<IllusInputParms> const& cells
         ,Ledger&                             composite
         );
-
-  private:
-//    double time_for_calculations;
-//    double time_for_output;
 };
 
 // TODO ?? Rethink placement of try blocks. Why have them at all?
@@ -153,7 +145,7 @@ bool run_census_in_series::operator()
     ,Ledger&                             composite
     )
 {
-    Timer timer; // TODO ?? Combine with progress meter?
+    Timer timer;
     boost::shared_ptr<progress_meter> meter
         (create_progress_meter
             (cells.size()
@@ -210,8 +202,6 @@ bool run_census_in_series::operator()
         ,emission_target
         );
 
-// TODO ?? This is for calculations and output combined.
-// Running in parallel permits separating those things--good idea?
     status() << timer.Stop().Report() << std::flush;
     return true;
 }
@@ -279,6 +269,14 @@ bool run_census_in_parallel::operator()
                 return false;
                 }
             }
+        if(0 == cell_values.size())
+            {
+            // Make sure it's safe to dereference cell_values[0] later.
+            fatal_error()
+                << "No cell with any lives was included in the composite."
+                << LMI_FLUSH
+                ;
+            }
         }
     catch(std::exception& e)
         {
@@ -304,18 +302,22 @@ bool run_census_in_parallel::operator()
             (*i)->GuessWhetherFirstYearPremiumExceedsRetaliationLimit();
             }
 restart:
-        // Initialize each cell.
-        // Calculate duration when the youngest one ends.
+
+        e_basis          expense_and_general_account_basis;
+        e_sep_acct_basis separate_account_basis;
+        set_separate_bases_from_run_basis
+            (*run_basis
+            ,expense_and_general_account_basis
+            ,separate_account_basis
+            );
+
+        // Calculate duration when the youngest life matures.
         int MaxYr = 0;
         for(i = cell_values.begin(); i != cell_values.end(); ++i)
             {
             (*i)->InitializeLife(*run_basis);
             MaxYr = std::max(MaxYr, (*i)->GetLength());
             }
-
-    // TODO ?? WANT MONTHLY, NOT YEARLY? Why store it at all?
-    // Perhaps use it for individual-cell solves?
-        std::vector<double> Assets(MaxYr, 0.0);
 
         boost::shared_ptr<progress_meter> meter
             (create_progress_meter
@@ -324,14 +326,18 @@ restart:
                 )
             );
 
-        // Experience rating mortality reserve.
+        // Variables to support tiering and experience rating.
+
+        double const case_ibnr_months =
+            cell_values.front()->ibnr_as_months_of_mortality_charges()
+            ;
+        double const case_experience_rating_amortization_years =
+            cell_values.front()->experience_rating_amortization_years()
+            ;
+
         double case_accum_net_mortchgs = 0.0;
         double case_accum_net_claims   = 0.0;
         double case_k_factor           = 0.0;
-
-        // TODO ?? Inelegant and probably inefficient.
-        TDatabase temp_db(cells[0]);
-        double case_ibnr_months = temp_db.Query(DB_ExpRatIBNRMult);
 
         // Experience rating as implemented here uses either a special
         // scalar input rate, or the separate-account rate. Those
@@ -358,21 +364,19 @@ restart:
         // differ between cells and we have not coded support for that yet.
         for(int year = 0; year < MaxYr; ++year)
             {
-            double case_years_net_claims = 0.0;
             double case_years_net_mortchgs = 0.0;
             double projected_net_mortchgs  = 0.0;
+            double current_mortchg         = 0.0;
 
-            double experience_reserve_annual_u = 1.0 + experience_reserve_rate[year];
-
-            double current_mortchg = 0.0;
+            double experience_reserve_annual_u =
+                    1.0
+                +   experience_reserve_rate[year]
+                ;
 
             // Process one month at a time for all cells.
             for(int month = 0; month < 12; ++month)
                 {
-                // Initialize year's assets to zero.
-                // TODO ?? Uh--it already is, yearly...but this is monthly.
-                // TODO ?? Perhaps we'll want a vector of monthly assets.
-                Assets[year] = 0.0;
+                double assets = 0.0;
 
                 // Get total case assets prior to interest crediting because
                 // those assets determine the M&E charge.
@@ -383,20 +387,24 @@ restart:
                     (*i)->Year = year;
                     (*i)->Month = month;
                     (*i)->CoordinateCounters();
-                    if((*i)->PrecedesInforceDuration(year, month)) continue;
+                    if((*i)->PrecedesInforceDuration(year, month))
+                        {
+                        continue;
+                        }
                     (*i)->IncrementBOM(year, month, case_k_factor);
 
-                    // Add assets and COI charges to case totals.
-                    Assets[year] += (*i)->GetSepAcctAssetsInforce();
-
+                    assets += (*i)->GetSepAcctAssetsInforce();
                     current_mortchg += (*i)->GetLastCOIChargeInforce();
                     }
 
                 // Process transactions from int credit through end of month.
                 for(i = cell_values.begin(); i != cell_values.end(); ++i)
                     {
-                    if((*i)->PrecedesInforceDuration(year, month)) continue;
-                    (*i)->IncrementEOM(year, month, Assets[year]);
+                    if((*i)->PrecedesInforceDuration(year, month)) // TODO ?? Is this right?
+                        {
+                        continue;
+                        }
+                    (*i)->IncrementEOM(year, month, assets);
                     }
 
                 // Project claims using the partial-mortality rate,
@@ -417,8 +425,6 @@ restart:
 
                     case_accum_net_claims *= experience_reserve_annual_u;
                     case_accum_net_claims += current_claims;
-
-                    case_years_net_claims += current_claims;
 
                     case_accum_net_mortchgs *= experience_reserve_annual_u;
                     case_accum_net_mortchgs += current_mortchg;
@@ -457,47 +463,71 @@ restart:
 
             for(i = cell_values.begin(); i != cell_values.end(); ++i)
                 {
-                if((*i)->PrecedesInforceDuration(year, 11)) continue;
+                if((*i)->PrecedesInforceDuration(year, 11))
+                    {
+                    continue;
+                    }
                 projected_net_mortchgs += (*i)->GetInforceProjectedCoiCharge();
                 (*i)->IncrementEOY(year);
                 }
 
-            // Calculate next year's k factor.
-            // TODO ?? Only for current-mortality basis?
-
-            double case_ibnr =
-                    case_years_net_mortchgs
-                *   case_ibnr_months
-                /   12.0
-                ;
-            double case_net_mortality_reserve =
-                    case_accum_net_mortchgs
-                -   case_accum_net_claims
-                -   case_ibnr
-                ;
-
-            // Current COI charges can actually be zero, e.g. when the
-            // corridor factor is unity.
-            if(0.0 == projected_net_mortchgs)
+            if
+                (   cells[0].UseExperienceRating
+                &&  e_mdptbasis == expense_and_general_account_basis
+                // TODO ?? Let an old regression test run for now.
+                &&  !global_settings::instance().regression_testing()
+                )
                 {
-                case_k_factor = 0.0;
-                }
-            else
-                {
-                case_k_factor = -
-                        case_net_mortality_reserve
-// TODO ?? '4.0' is an arbitrary factor that belongs in the database.
-                    /   (4.0 * projected_net_mortchgs)
+                fatal_error()
+                    << "Experience rating not implemented for "
+                    << "illustration-reg products."
+                    << LMI_FLUSH
                     ;
-                case_k_factor = std::max(-1.0, case_k_factor);
                 }
 
-            for(i = cell_values.begin(); i != cell_values.end(); ++i)
+            // Calculate next year's k factor. Do this only for
+            // current-expense bases, not as a speed optimization,
+            // but rather because experience rating on other bases
+            // is undefined.
+            if
+                (   cells[0].UseExperienceRating
+                &&  e_currbasis == expense_and_general_account_basis
+                )
                 {
-                (*i)->ApportionNetMortalityReserve
-                    (case_net_mortality_reserve
-                    ,case_years_net_mortchgs
-                    );
+                double case_ibnr =
+                        case_years_net_mortchgs
+                    *   case_ibnr_months
+                    /   12.0
+                    ;
+                double case_net_mortality_reserve =
+                        case_accum_net_mortchgs
+                    -   case_accum_net_claims
+                    -   case_ibnr
+                    ;
+
+                // Current net mortality charge can actually be zero,
+                // e.g., when the corridor factor is unity.
+                double denominator =
+                        case_experience_rating_amortization_years
+                    *   projected_net_mortchgs
+                    ;
+                if(0.0 == denominator)
+                    {
+                    case_k_factor = 0.0;
+                    }
+                else
+                    {
+                    case_k_factor = - case_net_mortality_reserve / denominator;
+                    case_k_factor = std::max(-1.0, case_k_factor);
+                    }
+
+                for(i = cell_values.begin(); i != cell_values.end(); ++i)
+                    {
+                    (*i)->ApportionNetMortalityReserve
+                        (case_net_mortality_reserve
+                        ,case_years_net_mortchgs
+                        );
+                    }
                 }
 
             if(!meter->reflect_progress())
