@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: account_value.hpp,v 1.12 2005-05-05 15:22:14 chicares Exp $
+// $Id: account_value.hpp,v 1.13 2005-05-06 17:21:21 chicares Exp $
 
 #ifndef account_value_hpp
 #define account_value_hpp
@@ -177,6 +177,8 @@ class LMI_EXPIMP AccountValue
         (double case_net_mortality_reserve
         ,double case_years_net_mortchgs
         );
+    double ibnr_as_months_of_mortality_charges();
+    double experience_rating_amortization_years();
 
     // To support the notion of an M&E charge that depends on total case
     // assets, we provide these functions, which are designed to be
