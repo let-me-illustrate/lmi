@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.54 2005-05-02 05:00:32 chicares Exp $
+// $Id: ChangeLog,v 1.55 2005-05-06 17:25:01 chicares Exp $
 
 2005-01-14
 
@@ -1553,11 +1553,85 @@ Use new ledger-formatting facilities.
 Improve unit test.
 
   ihs_crc_comp.cpp
-Temporary workaound to ignore fund-name changes.
+Temporary workaround to ignore fund-name changes.
 
-2005-05-02 [1431]
+2005-05-02 [1400]
 
   GNUmakefile
   workhorse.make
 Improve regression-test automation.
+
+  census_view.cpp
+  group_values.cpp
+  ledger_xml_io.cpp
+Improve platform independence.
+
+  group_values.cpp
+Rename some local variables.
+
+  ledger_variant.cpp
+Remove a meaningless comment.
+
+  ledger_xsl.cpp
+Rename a local variable to avoid an implicit suggestion that this
+program depends on apache fop. Any xsl-fo implementation may be used;
+it's pluggable to avoid the conflict between apache and FSF licenses.
+
+  account_value.hpp
+  census_view.cpp
+  ihs_acctval.cpp
+  ihs_avdebug.cpp
+  ihs_avmly.cpp
+Remove dead code.
+
+2005-05-03 [1400]
+
+  account_value.hpp
+  census_view.cpp
+  census_view.hpp
+  census_view_obsolete.cpp [new file]
+  group_values.cpp
+  group_values.hpp
+  main.cpp
+Improve group-values code. Factor obsolete group-values code out of
+GUI into a new file that is to be expunged with celerity.
+
+2005-05-05 [1371]
+
+  account_value.hpp
+  accountvalue.cpp
+  census_view.cpp
+  census_view.hpp
+  census_view_obsolete.cpp [expunged]
+  group_values.cpp
+  group_values.hpp
+  ihs_acctval.cpp
+Simplify; remove dead code.
+
+  census_view.hpp
+Remove obsolete comment.
+
+  group_values.cpp
+  group_values.hpp
+Refactor.
+
+2005-05-06 [1361]
+
+  workhorse.make
+Improve automation.
+
+  dbdict.cpp
+  dbnames.hpp
+  dbnames.xpp
+  ihs_dbdict.cpp
+Add 'ExpRatAmortPeriod' entity: experience-rating amortization period.
+
+  account_value.hpp
+  accountvalue.cpp
+  ihs_acctval.cpp
+Add accessors for experience-rating database entities, so that the
+group-values code can be decoupled from the database.
+
+  group_values.cpp
+Simplify and improve.
 
