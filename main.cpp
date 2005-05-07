@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main.cpp,v 1.15 2005-05-04 14:55:46 chicares Exp $
+// $Id: main.cpp,v 1.16 2005-05-07 00:20:56 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -77,7 +77,8 @@ void RegressionTest()
 // conflicting input for any individual cell. Perhaps we should detect
 // conflicting input and signal an error? It would probably be cleaner
 // to offer this input item (and a few similar ones) only at the case
-// level. TODO ?? Fix this.
+// level. TODO ?? Fix this, and remove duplicate code in the census
+// manager.
         if(doc.case_parms()[0].RunOrder != doc.cell_parms()[0].RunOrder)
             {
             fatal_error()
