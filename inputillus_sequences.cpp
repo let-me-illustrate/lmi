@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: inputillus_sequences.cpp,v 1.2 2005-01-31 13:12:48 chicares Exp $
+// $Id: inputillus_sequences.cpp,v 1.3 2005-05-07 03:36:36 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -215,11 +215,6 @@ IllusInputParms::permissible_payment_strategy_keywords()
     // need to compare corresponding years.
     //  || specamt strategy is neither 'none' nor 'salary-based'
         );
-
-    if(std::string::npos != Comments.find("idiosyncrasyS"))
-        {
-        return permissible_keywords;
-        }
 
     if(payment_indeterminate)
         {

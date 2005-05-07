@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avmly.cpp,v 1.12 2005-05-07 00:21:42 chicares Exp $
+// $Id: ihs_avmly.cpp,v 1.13 2005-05-07 03:36:36 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -2334,24 +2334,7 @@ void AccountValue::TxSetCOI()
     NAAR = DBReflectingCorr * DBDiscountRate[Year] - TotalAccountValue();
     NAAR = std::max(0.0, round_naar(NAAR));
 
-// TODO ?? Temporary--erase after validation.
-if(std::string::npos != Input_->Comments.find("idiosyncrasyZ1"))
-    {
-    std::ofstream ofs
-        ("experience_rating"
-        ,std::ios_base::out | std::ios_base::ate | std::ios_base::app
-        );
-    ofs
-        << "\t\tYear\t"               << std::setprecision(20) << Year
-        << "\tMonth\t"                << std::setprecision(20) << Month
-        << "\tNAAR\t"                 << std::setprecision(20) << NAAR
-        << "\tDBReflectingCorr\t"     << std::setprecision(20) << DBReflectingCorr
-        << "\tTotalAccountValue()\t"  << std::setprecision(20) << TotalAccountValue()
-        << "\n"
-        ;
-    }
-
-// This doesn't work. We need to reconsider the basic transactions.
+// TODO ?? This doesn't work. We need to reconsider the basic transactions.
 //  double naar_forceout = std::max(0.0, NAAR - MaxNAAR);
 //  process_distribution(naar_forceout);
 
@@ -2611,55 +2594,6 @@ void AccountValue::TxTakeSepAcctLoad()
 // Credit interest on unloaned account value
 void AccountValue::TxCreditInt()
 {
-    // Deduct amortized premium tax load as dollar amount
-    if(std::string::npos != Input_->Comments.find("idiosyncrasy2"))
-        {
-// Authors of this block: GWC and JLM.
-        // JOE Take care that we neither subtract an amortization
-        // charge from the credited rate, nor deduct premium tax
-        // as a premium load.
-
-        // loads class only calculates the dollar-certain charge if
-        // AmortizePemLoad is chosen
-        LMI_ASSERT(Input_->AmortizePremLoad);
-        if(Year < Database_->Query(DB_PmTxAmortPeriod))
-            {
-            // Valid only for single premium
-            LMI_ASSERT(0 == Year || 0.0 == InvariantValues().GrossPmt[Year]);
-            // GrossPmts isn't posted to InvariantValues().GrossPmt[0]
-            // until the end of the first year; during the first year, we
-            // get its value as GrossPmts[0]. But GrossPmts[0] won't work
-            // in renewal years, because GrossPmts is a std::vector of monthly
-            // (not annual) values.
-            //
-            // TODO ?? But for now this code works only for single
-            // premium paid annually.
-            if(0 != Year || 0 != Month)
-                {
-                LMI_ASSERT(0.0 == GrossPmts[Month]);
-                }
-
-            double initial_premium =
-                (0 == Year)
-                ?   GrossPmts[0]
-                :   InvariantValues().GrossPmt[0]
-                ;
-            LMI_ASSERT(0.0 != InforceFactor);
-
-            // TODO ?? Which is it: 0 or 'Year'?
-            double extra_deduction = initial_premium
-                *   Loads_->amortized_premium_tax_load()[0 /*Year*/]
-                /   InforceFactor
-                ;
-
-            YearsTotalMlyPolFee += extra_deduction;
-            AVSepAcct -= extra_deduction;
-
-            // TODO ?? DCV too.
-            }
-        }
-
-
     // Accrue interest on unloaned and loaned account value separately
     //   but do not charge interest on negative account value
     double sa_int_spread = 0.0;
@@ -2686,8 +2620,9 @@ void AccountValue::TxCreditInt()
         SepAcctIntCred = 0.0;
         }
 
+#if 0
     // Deduct interest on DAC tax balance as a dollar amount
-    if(std::string::npos != Input_->Comments.find("idiosyncrasy3"))
+    if( [some appropriate condition] )
         {
 // Authors of this block: GWC and JLM.
 // TODO ?? JOE--please see comments
@@ -2739,6 +2674,7 @@ void AccountValue::TxCreditInt()
             AVSepAcct      -= decrement;
             }
         }
+#endif // 0
 
     if(0.0 < AVGenAcct)
         {
@@ -2789,40 +2725,8 @@ void AccountValue::TxCreditInt()
         +   GenAcctIntCred
         ;
 
-
-    // TODO ?? This can work only for SA products.
-    if(std::string::npos != Input_->Comments.find("idiosyncrasy3"))
-        {
-// Authors of this block and its else-if block: GWC and JLM.
-// TODO ?? We have to get rid of this workaround.
-// JOE I added variables for mly sep acct gross int as well as
-// the separate components that are subtracted from the gross
-// rate. I left those components are on an annual basis, since
-// we have to apportion them across the actual (monthly) fund
-// charge anyway because fund charge components are not additive.
-//
-// Try YearsSepAcctGrossRate instead of the following local var.
-//
-// Then we can get true fund charge as
-//   SepAcctIntCred *
-//  (YearsSepAcctGrossRate - YearsSepAcctIntRate) / YearsSepAcctIntRate
-// with due provision for division by zero.
-//
-// Then we can apportion the charges:
-//  double          YearsSepAcctMandERate;
-//  double          YearsSepAcctIMFRate;
-//  double          YearsSepAcctABCRate;
-//  double          YearsSepAcctSVRate;
-//  across that.
-        YearsTotalGrossIntCredited +=
-              RegLnIntCred
-            + PrfLnIntCred
-            + sa_int_spread + SepAcctIntCred
-            + GenAcctIntCred
-            ;
-
-        }
-    else if(0.0 != YearsSepAcctIntRate)
+    // TODO ?? What's this nonsense?
+    if(0.0 != YearsSepAcctIntRate)
         {
         YearsTotalGrossIntCredited +=
               RegLnIntCred
@@ -2831,7 +2735,6 @@ void AccountValue::TxCreditInt()
             + GenAcctIntCred
             ;
         }
-    // TODO ?? 'if...else if...' with no final 'else' is always a defect.
 }
 
 //============================================================================
@@ -3554,57 +3457,5 @@ void AccountValue::TxDebug()
 {
     DebugPrint();
     TxSetDeathBft(); // TODO ?? Unnecessary?
-}
-
-//============================================================================
-// Authors: GWC and JLM.
-void AccountValue::TxDebitExpRatRsvChg()
-// Special processing for certain individual illustrations
-// Is only be invoked using idiosyncrasy5
-// not currently used anywhere
-{
-    if
-        (   std::string::npos == Input_->Comments.find("idiosyncrasy5")
-        ||  Month != 11
-        )
-        {
-        return;
-        }
-
-    double multiplier = 0.0;
-    switch(ExpAndGABasis)
-        {
-        case e_currbasis:
-            {
-            multiplier = 0.0;
-            }
-            break;
-        case e_guarbasis:
-            {
-            multiplier = Database_->Query(DB_ExpRatRiskCOIMult);
-            }
-            break;
-        case e_mdptbasis:
-            {
-            multiplier = Database_->Query(DB_ExpRatRiskCOIMult) * .5;
-            }
-            break;
-        default:
-            {
-            fatal_error()
-                << "Case '"
-                << ExpAndGABasis
-                << "' not found."
-                << LMI_FLUSH
-                ;
-            }
-        }
-
-    double decrement = multiplier * YearsTotalCOICharge;
-
-    process_deduction(decrement);
-    YearsTotalCOICharge += decrement;
-    Dcv -= decrement;
-    Dcv = std::max(0.0, Dcv);
 }
 
