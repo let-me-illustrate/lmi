@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avmly.cpp,v 1.11 2005-05-03 01:35:48 chicares Exp $
+// $Id: ihs_avmly.cpp,v 1.12 2005-05-07 00:21:42 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -2372,8 +2372,13 @@ if(std::string::npos != Input_->Comments.find("idiosyncrasyZ1"))
         &&  e_currbasis == ExpAndGABasis
         )
         {
-        double guaranteed_coi_rate = GetBandedCoiRates(e_basis(e_guarbasis), ActualSpecAmt)[Year];
-        ActualCoiRate = std::min(guaranteed_coi_rate, ActualCoiRate * (1.0 + case_k_factor));
+        double guaranteed_coi_rate = GetBandedCoiRates
+            (e_basis(e_guarbasis), ActualSpecAmt)[Year]
+            ;
+        ActualCoiRate = std::min
+            (guaranteed_coi_rate
+            ,ActualCoiRate * case_k_factor
+            );
         round_to<double> const& round_coi_rate
             (GetRoundingRules().round_coi_rate()
             );
