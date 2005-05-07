@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.55 2005-05-06 17:25:01 chicares Exp $
+// $Id: ChangeLog,v 1.56 2005-05-07 00:52:07 chicares Exp $
 
 2005-01-14
 
@@ -1615,7 +1615,7 @@ Remove obsolete comment.
   group_values.hpp
 Refactor.
 
-2005-05-06 [1361]
+2005-05-06 [1353]
 
   workhorse.make
 Improve automation.
@@ -1634,4 +1634,19 @@ group-values code can be decoupled from the database.
 
   group_values.cpp
 Simplify and improve.
+
+  census_view.cpp
+Remove dead code and obsolete comments.
+
+  group_values.hpp
+  ihs_acctval.cpp
+Remove obsolete comments.
+
+  main.cpp
+Improve documentation of a defect.
+
+  group_values.cpp
+  ihs_avmly.cpp
+Improve documentation. Redefine 'k factor' to be a multiplicative
+factor, instead of a quantity added to one to produce such a factor.
 
