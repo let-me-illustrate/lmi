@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.56 2005-05-07 00:52:07 chicares Exp $
+// $Id: ChangeLog,v 1.57 2005-05-07 03:39:56 chicares Exp $
 
 2005-01-14
 
@@ -1615,7 +1615,7 @@ Remove obsolete comment.
   group_values.hpp
 Refactor.
 
-2005-05-06 [1353]
+2005-05-06 [1347]
 
   workhorse.make
 Improve automation.
@@ -1649,4 +1649,19 @@ Improve documentation of a defect.
   ihs_avmly.cpp
 Improve documentation. Redefine 'k factor' to be a multiplicative
 factor, instead of a quantity added to one to produce such a factor.
+
+  group_values.cpp
+Remove an obsolete comment.
+
+  census_view.cpp
+Document a defect.
+
+  account_value.hpp
+Withdraw unneeded friendship; remove a disused member.
+
+  ihs_avmly.cpp
+  ihs_basicval.cpp
+  input_harmonization.cpp
+  inputillus_sequences.cpp
+Extirpate otiose drek.
 
