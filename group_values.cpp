@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: group_values.cpp,v 1.14 2005-05-06 17:21:37 chicares Exp $
+// $Id: group_values.cpp,v 1.15 2005-05-07 00:21:42 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -94,8 +94,8 @@ void emit_ledger
 } // Unnamed namespace.
 
 // Functors run_census_in_series and run_census_in_parallel aren't in
-// an unnamed namespace because that makes it difficult to implement
-// friendship.
+// an unnamed namespace because that would make it difficult to
+// implement friendship.
 
 // TODO ?? Consider adding timing code to these functors, even perhaps
 // by adding it the class progress_meter. At present, timings are
@@ -207,6 +207,60 @@ bool run_census_in_series::operator()
 }
 
 //============================================================================
+
+/// Illustrations with group experience rating
+///
+/// Mortality profit,
+///   accumulated (net mortality charges - net claims) - IBNR,
+/// is amortized into future mortality charges by applying a k factor
+/// to COI rates. This profit accumulates in the general account at
+/// a special input gross rate that's notionally similar to a LIBOR
+/// rate; optionally, the separate-account rate may be used, but the
+/// reserve is nonetheless still held in the general account. This is
+/// a life-insurance reserve; it does not affect a certificate's CSV
+/// or 7702 corridor.
+///
+/// Yearly totals (without monthly interest) of monthly values of the
+/// accumulands are accumulated at annual interest. Treating mortality
+/// charges as though they were deducted at the end of the year is
+/// consistent with curtate partial mortality, though not with normal
+/// monthiversary processing. That's all right because this process is
+/// self correcting and therefore needs no exquisite refinements.
+///
+/// The effective current COI rate is
+///   tabular current COI rate, times
+///   input current COI multiplier, times
+///   k factor, times
+///   the reciprocal of (1 + mortality retention)[unimplemented]
+/// but never to exceed the tabular guaranteed COI rate. 'Tabular'
+/// signifies rates, notionally stored in a table, that do not reflect
+/// any of these adjustments.
+///
+/// The net mortality charge is NAAR (nonnegative by definition) times
+/// the effective current COI rate: the actual charge deducted from AV.
+///
+/// Net claims are NAAR (not DB) times the partial mortality rate.
+///
+/// IBNR (incurred but not reported reserve) is zero on the issue date;
+/// on each anniversary, it becomes
+///   the past twelve months' total net mortality charges, times
+///   one-twelfth (to get a monthly average), times
+///   the number of months given in database entity ExpRatIBNRMult.
+///
+/// At issue, the k factor is unity. On each anniversary, it becomes
+///   1 - (mortality profit / denominator),
+/// denominator being a proxy for the coming year's mortality charge:
+///   the just-completed year's EOY (DB - AV), times
+///   the about-to-begin year's COI rate times twelve, times
+///   the proportion surviving into the about-to-begin year, times
+///   the number of years given in database entity ExpRatAmortPeriod
+/// except that the k factor is set to 0.0 if either
+///   it would otherwise be less than 0.0, or
+///   denominator is zero.
+/// Here, EOY AV reflects interest to the last day of the year, and
+/// EOY DB reflects EOY AV: thus, they're the values normally printed
+/// on an illustration.
+
 bool run_census_in_parallel::operator()
     (fs::path const&                     file
     ,e_emission_target                   emission_target
@@ -337,7 +391,7 @@ restart:
 
         double case_accum_net_mortchgs = 0.0;
         double case_accum_net_claims   = 0.0;
-        double case_k_factor           = 0.0;
+        double case_k_factor           = 1.0;
 
         // Experience rating as implemented here uses either a special
         // scalar input rate, or the separate-account rate. Those
@@ -513,12 +567,14 @@ restart:
                     ;
                 if(0.0 == denominator)
                     {
-                    case_k_factor = 0.0;
+                    case_k_factor = 1.0;
                     }
                 else
                     {
-                    case_k_factor = - case_net_mortality_reserve / denominator;
-                    case_k_factor = std::max(-1.0, case_k_factor);
+                    case_k_factor = std::max
+                        (0.0
+                        ,1.0 - case_net_mortality_reserve / denominator
+                        );
                     }
 
                 for(i = cell_values.begin(); i != cell_values.end(); ++i)
