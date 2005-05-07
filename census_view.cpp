@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: census_view.cpp,v 1.23 2005-05-05 15:22:14 chicares Exp $
+// $Id: census_view.cpp,v 1.24 2005-05-07 00:20:11 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -37,7 +37,7 @@
 #include "inputillus.hpp"
 #include "ledger.hpp"
 #include "ledger_text_formats.hpp"
-#include "miscellany.hpp" //  // TODO ?? Only for is_ok_for_cctype()--factor out?
+#include "miscellany.hpp" // is_ok_for_cctype()
 #include "wx_new.hpp"
 #include "xml_notebook.hpp"
 
@@ -56,7 +56,8 @@
 
 namespace
 {
-    // TODO ?? Add description and unit tests; consider relocating.
+    // TODO ?? Add description and unit tests; consider relocating,
+    // and include "miscellany.hpp" only in ultimate location.
     std::string insert_spaces_between_words(std::string const& s)
     {
         std::string r;
@@ -999,24 +1000,8 @@ IllustrationView* CensusView::ViewComposite()
         }
 }
 
-// TODO ?? Clean up. Make compatible with 'main.cpp'.
-
 bool CensusView::DoAllCells(e_emission_target emission_target)
 {
-    int number_of_cells = 0;
-    std::vector<Input>::iterator ip;
-    for(ip = cell_parms().begin(); ip != cell_parms().end(); ++ip)
-        {
-        if("Yes" != (*ip)["IncludeInComposite"].str())
-            continue;
-        number_of_cells += value_cast<int>((*ip)["NumberOfIdenticalLives"].str());
-        }
-    if(0 == number_of_cells)
-        {
-        warning() << "No cells to include in composite." << LMI_FLUSH;
-        return false; // Return code apparently unused.
-        }
-
     mce_run_order order0 = (case_parms()[0]["RunOrder"]).cast<mce_run_order>();
     mce_run_order order1 = (cell_parms()[0]["RunOrder"]).cast<mce_run_order>();
     if(order0 != order1)
@@ -1046,40 +1031,6 @@ bool CensusView::DoAllCells(e_emission_target emission_target)
         }
     composite_ledger_ = runner.composite();
     return true;
-
-/* TODO ?? expunge
-// The run order depends on the case input and ignores any conflicting
-// input for any individual cell. Perhaps we should detect any such
-// conflicting input and signal an error? It would probably be cleaner
-// to offer this input item (and a few similar ones) only at the case
-// level. TODO ?? Fix this.
-    mce_run_order order = (case_parms()[0]["RunOrder"]).cast<mce_run_order>();
-    switch(order.value())
-        {
-        // Perhaps this function should be run only in the month by month
-        // case, but it does no harm to generalize it this way.
-        case e_life_by_life:
-            {
-            RunAllLives(emission_target);
-            }
-            break;
-        case e_month_by_month:
-            {
-            RunAllMonths(emission_target);
-            }
-            break;
-        default:
-            {
-            fatal_error()
-                << "Case '"
-                << order
-                << "' not found."
-                << LMI_FLUSH
-                ;
-            }
-        }
-    return true;
-*/
 }
 
 void CensusView::OnAddCell(wxCommandEvent&)
