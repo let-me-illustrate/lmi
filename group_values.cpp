@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: group_values.cpp,v 1.15 2005-05-07 00:21:42 chicares Exp $
+// $Id: group_values.cpp,v 1.16 2005-05-07 02:42:22 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -649,8 +649,6 @@ bool run_census::operator()
             ,true
             )
         );
-
-// TODO ?? This largely replaces CensusView::DoAllCells().
 
     enum_run_order order = cells[0].RunOrder;
     switch(order)
