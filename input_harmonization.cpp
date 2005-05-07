@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_harmonization.cpp,v 1.7 2005-04-23 21:42:57 chicares Exp $
+// $Id: input_harmonization.cpp,v 1.8 2005-05-07 03:36:36 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -493,12 +493,6 @@ false // Silly workaround for now.
     IndividualPaymentStrategy.allow(mce_pmt_table       , !inhibit_prem_simple && !prem_solve || specamt_indeterminate);
     IndividualPaymentStrategy.enable(!inhibit_prem_simple && !prem_solve);
 
-    // TODO ?? What's this thing?
-    if(std::string::npos != Comments.value().find("idiosyncrasyS"))
-        {
-        IndividualPaymentStrategy.allow(mce_pmt_table, true);
-        }
-
     IndividualPaymentAmount    .enable(mce_pmt_input_scalar == IndividualPaymentStrategy);
     IndividualPaymentToAge     .enable(mce_to_age  == IndividualPaymentToAlternative);
     IndividualPaymentToDuration.enable(mce_to_year == IndividualPaymentToAlternative);
@@ -766,10 +760,6 @@ false // Silly workaround for now.
             ||  SpecifiedAmountStrategyFromIssue    == mce_sa_salary
             )
         ;
-    if(std::string::npos != Comments.value().find("idiosyncrasyS"))
-        {
-        enable_prem_and_specamt_solves = true;
-        }
 
     SolveType.allow(mce_solve_none        , true);
     SolveType.allow(mce_solve_specamt     , solves_allowed && enable_prem_and_specamt_solves);
