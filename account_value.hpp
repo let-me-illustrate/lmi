@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: account_value.hpp,v 1.13 2005-05-06 17:21:21 chicares Exp $
+// $Id: account_value.hpp,v 1.14 2005-05-07 02:43:00 chicares Exp $
 
 #ifndef account_value_hpp
 #define account_value_hpp
@@ -52,7 +52,6 @@ class LMI_EXPIMP AccountValue
     :protected BasicValues
 {
     friend class SolveHelper;
-    friend class CensusView;
     friend class run_census_in_parallel;
 
   public:
@@ -292,8 +291,6 @@ class LMI_EXPIMP AccountValue
     void TxTakeWD                ();
     void TxTakeLoan              ();
     void TxCapitalizeLoan        ();
-
-    void TxDebitExpRatRsvChg     ();
 
     void TxTestLapse             ();
     void TxDebug                 ();
