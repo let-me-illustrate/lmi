@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: census_view.cpp,v 1.24 2005-05-07 00:20:11 chicares Exp $
+// $Id: census_view.cpp,v 1.25 2005-05-07 02:42:40 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -1016,6 +1016,11 @@ bool CensusView::DoAllCells(e_emission_target emission_target)
             ;
         }
 
+    // TODO ?? The census document already stores the cells as objects
+    // of the class they're turned into here. They might be accessed
+    // directly as such, but instead the old input class should be
+    // completely replaced with the new. In the meantime, a progress
+    // dialog might be wanted here.
     std::vector<IllusInputParms> cells;
     cells.reserve(cell_parms().size());
     for(unsigned int j = 0; j < cell_parms().size(); ++j)
