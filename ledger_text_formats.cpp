@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_text_formats.cpp,v 1.1 2005-04-30 18:15:33 chicares Exp $
+// $Id: ledger_text_formats.cpp,v 1.2 2005-05-07 16:17:40 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -29,6 +29,7 @@
 #include "ledger_text_formats.hpp"
 
 #include "calendar_date.hpp"
+#include "comma_punct.hpp"
 #include "configurable_settings.hpp"
 #include "financial.hpp"
 #include "global_settings.hpp"
@@ -46,26 +47,9 @@
 #include <iomanip>
 #include <ios>
 #include <iterator>
+#include <locale>
 #include <sstream>
 #include <vector>
-
-namespace
-{
-// TODO ?? Move this to a place whence it can be reused, and add unit
-// tests: it is suspected of formatting -100 as "-,100".
-//
-class comma_punct
-    :public std::numpunct<char>
-{
-  protected:
-    char do_thousands_sep() const {return ',';}
-    std::string do_grouping() const {return "\3";}
-  public:
-    comma_punct()
-        :std::numpunct<char>()
-        {}
-};
-} // Unnamed namespace.
 
 std::string FormatSelectedValuesAsHtml(Ledger const& ledger_values)
 {

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xml_io.cpp,v 1.13 2005-05-02 06:26:48 chicares Exp $
+// $Id: ledger_xml_io.cpp,v 1.14 2005-05-07 16:17:40 chicares Exp $
 
 #include "config.hpp"
 
@@ -27,6 +27,7 @@
 
 #include "build.hpp"
 #include "calendar_date.hpp"
+#include "comma_punct.hpp"
 #include "configurable_settings.hpp"
 #include "global_settings.hpp"
 #include "ledger.hpp"
@@ -97,18 +98,6 @@ std::vector<std::string> enum_vector_to_string_vector
         }
     return vs;
 }
-
-class comma_punct
-    :public std::numpunct<char>
-{
-  protected:
-    char do_thousands_sep() const {return ',';}
-    std::string do_grouping() const {return "\3";}
-  public:
-    comma_punct()
-        :std::numpunct<char>()
-        {}
-};
 
 // The std::pair argument is notionally <int precision, bool percentage>.
 std::string format(double d, std::pair<int,bool> f)
