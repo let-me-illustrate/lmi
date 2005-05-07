@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_basicval.cpp,v 1.10 2005-04-29 18:51:34 chicares Exp $
+// $Id: ihs_basicval.cpp,v 1.11 2005-05-07 03:36:36 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -1006,9 +1006,8 @@ double BasicValues::GetModalTgtPrem
         static_cast<e_modal_prem_type>(static_cast<int>(Database_->Query(DB_TgtPremType)));
     double modal_prem = GetModalPrem(Year, Mode, SpecAmt, PremType);
 
-    if(std::string::npos != Input_->Comments.find("idiosyncrasy6"))
-        {
-// Authors of this block: GWC and JLM.
+#if 0
+// Authors of this ifdefed-out block: GWC and JLM.
 // TODO ?? JOE--Please see comments
         // Some products define only an annual target premium, with
         // no directions for calculating a non-annual policy fee.
@@ -1064,7 +1063,7 @@ double BasicValues::GetModalTgtPrem
 // Changed to:
 //      modal_prem += POLICYFEE / Mode;
 // TODO ?? WE MUST DEFINE POLICYFEE HERE
-        }
+#endif // 0
 
     return modal_prem;
 }
