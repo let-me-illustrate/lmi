@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: group_values.hpp,v 1.7 2005-05-05 21:19:25 chicares Exp $
+// $Id: group_values.hpp,v 1.8 2005-05-07 00:20:38 chicares Exp $
 
 #ifndef group_values_hpp
 #define group_values_hpp
@@ -65,7 +65,6 @@ class LMI_EXPIMP run_census
 
   private:
     boost::shared_ptr<Ledger> composite_;
-// TODO ?? Consider adding data members for timings.
 };
 
 #endif // group_values_hpp

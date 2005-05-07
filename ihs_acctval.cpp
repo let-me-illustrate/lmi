@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_acctval.cpp,v 1.24 2005-05-06 17:21:21 chicares Exp $
+// $Id: ihs_acctval.cpp,v 1.25 2005-05-07 00:20:38 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -171,14 +171,8 @@ Then run other bases.
         although I wonder how other illustration systems handle this
         it should also be possible to solve on a midpt basis as well
 */
-    if
-        (   std::string::npos != Input_->Comments.find("idiosyncrasyZ")
-// TODO ?? Consider reactivating this later.
-//        &&
-//            (  !global_settings::instance().regression_testing()
-//            ||  global_settings::instance().regression_test_full
-//            )
-        )
+
+    if(std::string::npos != Input_->Comments.find("idiosyncrasyZ"))
         {
         Debugging = true;
         DebugPrintInit();
@@ -923,19 +917,11 @@ double AccountValue::IncrementBOM
         {
         InitializeYear();
         }
-// TODO ?? Also need this in the alternate path?
+
     if(COIIsDynamic && Input_->UseExperienceRating)
         {
         LMI_ASSERT(!UseUnusualCOIBanding);
         case_k_factor = a_case_k_factor;
-
-/* TODO ?? 'YearsCOIRate0' is unused.
-        YearsCOIRate0 = MortalityRates_->DynamicCOIRate
-            (ExpAndGABasis
-            ,Year
-            ,case_k_factor
-            );
-*/
         }
 
     DoMonthDR();
