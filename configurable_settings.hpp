@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: configurable_settings.hpp,v 1.3 2005-04-28 08:38:36 chicares Exp $
+// $Id: configurable_settings.hpp,v 1.4 2005-05-08 10:06:38 chicares Exp $
 
 #ifndef configurable_settings_hpp
 #define configurable_settings_hpp
@@ -50,6 +50,8 @@ class LMI_EXPIMP configurable_settings
     configurable_settings();
     configurable_settings(configurable_settings const&);
     configurable_settings& operator=(configurable_settings const&);
+
+    std::string const& configuration_filename();
 
     std::string cgi_bin_log_filename_;
     std::string custom_input_filename_;
