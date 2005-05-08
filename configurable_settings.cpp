@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: configurable_settings.cpp,v 1.4 2005-05-01 14:21:04 chicares Exp $
+// $Id: configurable_settings.cpp,v 1.5 2005-05-08 10:06:38 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -83,12 +83,19 @@ configurable_settings::configurable_settings()
     ,xsl_fo_command_             ("fo"         )
     ,xsl_fo_directory_           ("/usr/bin/fo")
 {
-    std::string filename = AddDataDir("configurable_settings.xml");
+    // Look for the configuration file first where FHS would put it.
+    // To support non-FHS platforms, if it's not found there, then
+    // look in the data directory.
+    std::string filename = "/etc/opt/lmi/" + configuration_filename();
     if(access(filename.c_str(), R_OK))
         {
-        throw std::runtime_error
-            ("No readable file 'configurable_settings.xml' exists."
-            );
+        filename = AddDataDir(configuration_filename());
+        if(access(filename.c_str(), R_OK))
+            {
+            throw std::runtime_error
+                ("No readable file '" + configuration_filename() + "' exists."
+                );
+            }
         }
 
     xml::init init;
@@ -96,7 +103,7 @@ configurable_settings::configurable_settings()
     if(!parser)
         {
         throw std::runtime_error
-            ("Error parsing 'configurable_settings.xml'."
+            ("Error parsing '" + configuration_filename() + "'."
             );
         }
 #ifdef USING_CURRENT_XMLWRAPP
@@ -108,8 +115,9 @@ configurable_settings::configurable_settings()
         {
         std::ostringstream msg;
         msg
-            << "File 'configurable_settings.xml': "
-            << "xml node name is '"
+            << "File '"
+            << configuration_filename()
+            << "': xml node name is '"
             << root.get_name()
             << "' but '"
             << xml_root_name()
@@ -165,8 +173,9 @@ configurable_settings::configurable_settings()
             {
             std::ostringstream msg;
             msg
-                << "File 'configurable_settings.xml': "
-                << "xml node name '"
+                << "File '"
+                << configuration_filename()
+                << "': xml node name '"
                 << child->get_name()
                 << "' is unknown. Expected one of: "
                 ;
@@ -190,6 +199,12 @@ configurable_settings& configurable_settings::instance()
 {
     static configurable_settings z;
     return z;
+}
+
+std::string const& configurable_settings::configuration_filename()
+{
+    static std::string s("configurable_settings.xml");
+    return s;
 }
 
 std::string const& configurable_settings::cgi_bin_log_filename()
