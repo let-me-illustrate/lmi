@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustration_view.hpp,v 1.6 2005-05-01 00:50:28 chicares Exp $
+// $Id: illustration_view.hpp,v 1.7 2005-05-08 23:44:54 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -39,11 +39,11 @@
 #include "illustration_document.hpp"
 #include "obstruct_slicing.hpp"
 
+#include <boost/shared_ptr.hpp>
 #include <boost/utility.hpp>
 
 #include <wx/event.h>
 
-#include <memory>
 #include <string>
 
 class Input;
@@ -98,7 +98,7 @@ class IllustrationView
 
     wxHtmlWindow* html_window_;
     bool is_phony_;
-    std::auto_ptr<Ledger> ledger_values_;
+    boost::shared_ptr<Ledger> ledger_values_;
     std::string selected_values_as_html_;
 
     DECLARE_DYNAMIC_CLASS(IllustrationView)
