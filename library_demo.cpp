@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: library_demo.cpp,v 1.7 2005-04-21 16:11:47 chicares Exp $
+// $Id: library_demo.cpp,v 1.8 2005-05-08 23:38:50 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -109,7 +109,7 @@ void test()
     warning() << "Calculate: " << timer.Stop().Report() << std::flush;
     timer.Restart();
 
-    Ledger const& ledger = av.LedgerValues();
+    Ledger const& ledger = *av.ledger_from_av();
     std::ofstream ofs0("eraseme.xml", std::ios_base::out | std::ios_base::trunc);
     ledger.write(ofs0);
     warning() << "Generate and write xml output: " << timer.Stop().Report() << std::flush;

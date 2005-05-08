@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: account_value.hpp,v 1.14 2005-05-07 02:43:00 chicares Exp $
+// $Id: account_value.hpp,v 1.15 2005-05-08 23:38:50 chicares Exp $
 
 #ifndef account_value_hpp
 #define account_value_hpp
@@ -29,7 +29,7 @@
 #include "basic_values.hpp"
 #include "expimp.hpp"
 
-#include <boost/scoped_ptr.hpp>
+#include <boost/shared_ptr.hpp>
 
 #include <iosfwd>
 #include <fstream>
@@ -53,6 +53,7 @@ class LMI_EXPIMP AccountValue
 {
     friend class SolveHelper;
     friend class run_census_in_parallel;
+    friend double SolveTest();
 
   public:
     enum {months_per_year = 12};
@@ -99,9 +100,7 @@ class LMI_EXPIMP AccountValue
         ,int    ThatSolveEndYear
         );
 
-    Ledger const&          LedgerValues   () const;
-    LedgerInvariant const& InvariantValues() const;
-    LedgerVariant   const& VariantValues  () const;
+    boost::shared_ptr<Ledger> ledger_from_av() const;
 
     int                    GetLength     () const;
     e_ledger_type const&   GetLedgerType () const;
@@ -115,6 +114,9 @@ class LMI_EXPIMP AccountValue
     AccountValue(AccountValue const&);
     AccountValue& operator=(AccountValue const&);
 
+    LedgerInvariant const& InvariantValues() const;
+    LedgerVariant   const& VariantValues  () const;
+    
     void process_payment          (double);
     void IncrementAVProportionally(double);
     void IncrementAVPreferentially(double, e_increment_account_preference);
@@ -364,9 +366,9 @@ class LMI_EXPIMP AccountValue
     bool            SolvingForGuarPremium;
     bool            ItLapsed;
 
-    boost::scoped_ptr<Ledger         > ledger_;
-    boost::scoped_ptr<LedgerInvariant> ledger_invariant_;
-    boost::scoped_ptr<LedgerVariant  > ledger_variant_;
+    boost::shared_ptr<Ledger         > ledger_;
+    boost::shared_ptr<LedgerInvariant> ledger_invariant_;
+    boost::shared_ptr<LedgerVariant  > ledger_variant_;
 
     e_increment_method             deduction_method;
     e_increment_account_preference deduction_preferred_account;
@@ -676,9 +678,9 @@ inline LedgerInvariant const& AccountValue::InvariantValues() const
 }
 
 //============================================================================
-inline Ledger const& AccountValue::LedgerValues() const
+inline boost::shared_ptr<Ledger> AccountValue::ledger_from_av() const
 {
-    return *ledger_;
+    return ledger_;
 }
 
 //============================================================================
