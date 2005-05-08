@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: group_values.cpp,v 1.16 2005-05-07 02:42:22 chicares Exp $
+// $Id: group_values.cpp,v 1.17 2005-05-08 23:38:50 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -173,11 +173,11 @@ bool run_census_in_series::operator()
                 (serialized_file_path(file, j, "debug").string()
                 );
             av.RunAV();
-            composite.PlusEq(av.LedgerValues());
+            composite.PlusEq(*av.ledger_from_av());
             emit_ledger
                 (file
                 ,j
-                ,av.LedgerValues()
+                ,*av.ledger_from_av()
                 ,emission_target
                 );
             }
@@ -610,7 +610,7 @@ restart:
     for(i = cell_values.begin(); i != cell_values.end(); ++i)
         {
         (*i)->FinalizeLifeAllBases();
-        composite.PlusEq((*i)->LedgerValues());
+        composite.PlusEq(*(*i)->ledger_from_av());
         }
 
     status() << timer.Stop().Report() << std::flush;
@@ -621,7 +621,7 @@ restart:
         emit_ledger
             (file
             ,j
-            ,(*i)->LedgerValues()
+            ,*(*i)->ledger_from_av()
             ,emission_target
             );
         }

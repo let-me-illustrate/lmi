@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledgervalues.cpp,v 1.9 2005-04-16 02:05:41 chicares Exp $
+// $Id: ledgervalues.cpp,v 1.10 2005-05-08 23:38:50 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -48,7 +48,6 @@
 //============================================================================
 IllusVal::IllusVal(std::string const& filename)
     :filename_ (filename)
-    ,ledger_   (0)
 {
 }
 
@@ -83,18 +82,17 @@ double IllusVal::Run(InputParms const& IP)
     av.SetDebugFilename(debug_filename.string());
 
     double z = av.RunAV();
-// TODO ?? Consider using boost::shared_ptr to avoid copying.
-    ledger_.reset(new Ledger(av.LedgerValues()));
+    ledger_ = av.ledger_from_av();
 
 // TODO ?? Temporary code for trying to track down a problem.
 #if 0
-//LMI_ASSERT(av.LedgerValues().GetLedgerMap() == ledger_->GetLedgerMap());
-//LMI_ASSERT(av.LedgerValues().GetLedgerInvariant() == ledger_->GetLedgerInvariant());
-LMI_ASSERT(av.LedgerValues().GetLedgerInvariant().GetInforceLives() == ledger_->GetLedgerInvariant().GetInforceLives());
+//LMI_ASSERT(*av.ledger_from_av().GetLedgerMap() == ledger_->GetLedgerMap());
+//LMI_ASSERT(*av.ledger_from_av().GetLedgerInvariant() == ledger_->GetLedgerInvariant());
+LMI_ASSERT(*av.ledger_from_av().GetLedgerInvariant().GetInforceLives() == ledger_->GetLedgerInvariant().GetInforceLives());
 
-LMI_ASSERT(av.LedgerValues().GetLedgerType() == ledger_->GetLedgerType());
-LMI_ASSERT(av.LedgerValues().GetRunBases() == ledger_->GetRunBases());
-LMI_ASSERT(av.LedgerValues().GetIsComposite() == ledger_->GetIsComposite());
+LMI_ASSERT(*av.ledger_from_av().GetLedgerType() == ledger_->GetLedgerType());
+LMI_ASSERT(*av.ledger_from_av().GetRunBases() == ledger_->GetRunBases());
+LMI_ASSERT(*av.ledger_from_av().GetIsComposite() == ledger_->GetIsComposite());
 #endif // 0
 
     return z;

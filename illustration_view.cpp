@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustration_view.cpp,v 1.12 2005-05-01 14:21:39 chicares Exp $
+// $Id: illustration_view.cpp,v 1.13 2005-05-08 23:38:50 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -107,7 +107,6 @@ IllustrationView::IllustrationView()
     :ViewEx                  ()
     ,html_window_            (0)
     ,is_phony_               (false)
-    ,ledger_values_          (0)
     ,selected_values_as_html_("<html><body>Hello, world!</body></html>")
 {
 }
@@ -401,12 +400,12 @@ void IllustrationView::Run(Input* overriding_input)
     status() << "Calculate: " << timer.Stop().Report() << std::flush;
 
     // Can the copy be avoided?
-    ledger_values_ = std::auto_ptr<Ledger>(new Ledger(av.LedgerValues()));
+    ledger_values_ = av.ledger_from_av();
     DisplaySelectedValuesAsHtml();
 }
 
 void IllustrationView::SetLedger(Ledger const& values)
 {
-    ledger_values_ = std::auto_ptr<Ledger>(new Ledger(values));
+    ledger_values_ = boost::shared_ptr<Ledger>(new Ledger(values));
 }
 

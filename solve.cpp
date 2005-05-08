@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: solve.cpp,v 1.5 2005-02-17 04:40:03 chicares Exp $
+// $Id: solve.cpp,v 1.6 2005-05-08 23:38:50 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -66,7 +66,9 @@ namespace
 }
 
 //============================================================================
-static double SolveTest()
+// This function isn't static and isn't in an unnamed namespace because
+// that would make it difficult to grant it friendship.
+double SolveTest()
 {
     // Separate-account basis hardcoded because separate account not supported.
     e_run_basis temp;
