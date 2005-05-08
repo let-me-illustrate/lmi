@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledgervalues.hpp,v 1.7 2005-04-16 02:05:41 chicares Exp $
+// $Id: ledgervalues.hpp,v 1.8 2005-05-08 23:38:50 chicares Exp $
 
 #ifndef ledgervalues_hpp
 #define ledgervalues_hpp
@@ -29,7 +29,7 @@
 #include "expimp.hpp"
 #include "obstruct_slicing.hpp"
 
-#include <boost/scoped_ptr.hpp>
+#include <boost/shared_ptr.hpp>
 #include <boost/utility.hpp>
 
 #include <iosfwd>
@@ -72,7 +72,7 @@ class LMI_EXPIMP IllusVal
     LedgerVariant   const& mdpt_() const;
 
     std::string filename_;
-    boost::scoped_ptr<Ledger> ledger_;
+    boost::shared_ptr<Ledger> ledger_;
 };
 
 #endif // ledgervalues_hpp
