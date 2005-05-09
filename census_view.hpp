@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: census_view.hpp,v 1.7 2005-05-05 21:19:03 chicares Exp $
+// $Id: census_view.hpp,v 1.8 2005-05-09 00:19:19 chicares Exp $
 
 #ifndef census_view_hpp
 #define census_view_hpp
@@ -106,7 +106,7 @@ class CensusView
     void UpdatePreservingSelection();
     IllustrationView* MakeNewDocAndView(char const*);
     IllustrationView* ViewOneCell(int);
-    IllustrationView* ViewComposite();
+    void ViewComposite();
 
     std::vector<Input>&       case_parms();
     std::vector<Input> const& case_parms() const;

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustration_view.cpp,v 1.13 2005-05-08 23:38:50 chicares Exp $
+// $Id: illustration_view.cpp,v 1.14 2005-05-09 00:19:19 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -160,9 +160,9 @@ warning() << "That command should have been disabled." << LMI_FLUSH;
     return rc;
 }
 
-void IllustrationView::DisplaySelectedValuesAsHtml()
+void IllustrationView::DisplaySelectedValuesAsHtml(Ledger const& ledger_values)
 {
-    selected_values_as_html_ = FormatSelectedValuesAsHtml(*ledger_values_);
+    selected_values_as_html_ = FormatSelectedValuesAsHtml(ledger_values);
     html_window_->SetPage(selected_values_as_html_.c_str());
 }
 
@@ -399,9 +399,8 @@ void IllustrationView::Run(Input* overriding_input)
 
     status() << "Calculate: " << timer.Stop().Report() << std::flush;
 
-    // Can the copy be avoided?
     ledger_values_ = av.ledger_from_av();
-    DisplaySelectedValuesAsHtml();
+    DisplaySelectedValuesAsHtml(*ledger_values_);
 }
 
 void IllustrationView::SetLedger(Ledger const& values)

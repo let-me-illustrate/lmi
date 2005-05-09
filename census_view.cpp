@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: census_view.cpp,v 1.25 2005-05-07 02:42:40 chicares Exp $
+// $Id: census_view.cpp,v 1.26 2005-05-09 00:19:19 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -972,14 +972,14 @@ IllustrationView* CensusView::ViewOneCell(int index)
     return illview;
 }
 
-IllustrationView* CensusView::ViewComposite()
+void CensusView::ViewComposite()
 {
     // Run all cells if necessary to (re)generate composite numbers.
     if(!composite_is_available_)
         {
         if(!DoAllCells(emit_to_nowhere))
             {
-            return 0;
+            return;
             }
         }
 
@@ -988,15 +988,8 @@ IllustrationView* CensusView::ViewComposite()
         std::string file_name(serial_filename(-1, "ill"));
         IllustrationView* illview = MakeNewDocAndView(file_name.c_str());
 
-        // Plug in composite totals.
         illview->SetLedger(composite_ledger_);
-        illview->DisplaySelectedValuesAsHtml();
-
-        return illview;
-        }
-    else
-        {
-        return 0;
+        illview->DisplaySelectedValuesAsHtml(composite_ledger_);
         }
 }
 
