@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: argv0_test.cpp,v 1.2 2005-05-01 18:58:47 chicares Exp $
+// $Id: argv0_test.cpp,v 1.3 2005-05-11 23:25:24 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -30,9 +30,6 @@
 
 #define BOOST_INCLUDE_MAIN
 #include "test_tools.hpp"
-
-#include <iostream>
-#include <ostream>
 
 int test_main(int, char* argv[])
 {
