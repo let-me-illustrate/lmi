@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: account_value.hpp,v 1.15 2005-05-08 23:38:50 chicares Exp $
+// $Id: account_value.hpp,v 1.16 2005-05-11 23:10:07 chicares Exp $
 
 #ifndef account_value_hpp
 #define account_value_hpp
@@ -30,6 +30,7 @@
 #include "expimp.hpp"
 
 #include <boost/shared_ptr.hpp>
+#include <boost/utility.hpp>
 
 #include <iosfwd>
 #include <fstream>
@@ -50,6 +51,7 @@ class DebugView;
 
 class LMI_EXPIMP AccountValue
     :protected BasicValues
+    ,private boost::noncopyable
 {
     friend class SolveHelper;
     friend class run_census_in_parallel;
@@ -111,12 +113,9 @@ class LMI_EXPIMP AccountValue
     double GetLastCOIChargeInforce    () const;
 
   private:
-    AccountValue(AccountValue const&);
-    AccountValue& operator=(AccountValue const&);
-
     LedgerInvariant const& InvariantValues() const;
     LedgerVariant   const& VariantValues  () const;
-    
+
     void process_payment          (double);
     void IncrementAVProportionally(double);
     void IncrementAVPreferentially(double, e_increment_account_preference);
