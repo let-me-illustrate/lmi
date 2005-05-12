@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.57 2005-05-07 03:39:56 chicares Exp $
+// $Id: ChangeLog,v 1.58 2005-05-12 15:55:04 chicares Exp $
 
 2005-01-14
 
@@ -1664,4 +1664,74 @@ Withdraw unneeded friendship; remove a disused member.
   input_harmonization.cpp
   inputillus_sequences.cpp
 Extirpate otiose drek.
+
+2005-05-07 [1346]
+
+  comma_punct.hpp      [new file]
+  comma_punct_test.cpp [new file]
+  ledger_text_formats.cpp
+  ledger_xml_io.cpp
+  objects.make
+Punctuate numbers with commas.
+
+2005-05-08 [1346]
+
+  configurable_settings.cpp
+  configurable_settings.hpp
+Improve FHS conformance.
+
+  library_demo.cpp [expunged]
+  spew_touchstone  [expunged]
+  workhorse.make
+Expunge shared_demo, static_demo, and av_tests targets: they're
+superseded by more powerful regression tests. Experimentally add
+distinct wx targets that link to the common lmi library statically
+and dynamically.
+
+  account_value.hpp
+  group_values.cpp
+  illustration_view.cpp
+  illustration_view.hpp
+  ledgervalues.cpp
+  ledgervalues.hpp
+  library_demo.cpp
+  solve.cpp
+Used shared_ptr instead of scoped_ptr or auto_ptr for ledgers.
+
+  census_view.cpp
+  census_view.hpp
+  illustration_view.cpp
+  illustration_view.hpp
+Refactor composite summary display.
+
+2005-05-11 [1346]
+
+  account_value.hpp
+  comma_punct.hpp
+Improve documentation.
+
+  argv0_test.cpp
+Remove unneeded headers.
+
+  callback.hpp      [new file]
+  callback_test.cpp [new file]
+  objects.make
+Generalize shared-library callbacks.
+
+2005-05-12 [1346]
+
+  census_view.cpp
+Improve documentation.
+
+  file_command.cpp     [new file]
+  file_command.hpp     [new file]
+  file_command_cgi.cpp [new file]
+  file_command_cli.cpp [new file]
+  file_command_wx.cpp  [new file]
+  group_values.cpp
+  illustration_view.cpp
+  objects.make
+Run a command against a file, respecting its extension. Factor the
+implementation out of the illustration-view class and into the new
+file-command class; use it for groups as well as individuals.
 
