@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: census_view.cpp,v 1.26 2005-05-09 00:19:19 chicares Exp $
+// $Id: census_view.cpp,v 1.27 2005-05-12 15:53:59 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -988,7 +988,9 @@ void CensusView::ViewComposite()
         std::string file_name(serial_filename(-1, "ill"));
         IllustrationView* illview = MakeNewDocAndView(file_name.c_str());
 
+        // This is necessary for the view to be able to print.
         illview->SetLedger(composite_ledger_);
+
         illview->DisplaySelectedValuesAsHtml(composite_ledger_);
         }
 }
