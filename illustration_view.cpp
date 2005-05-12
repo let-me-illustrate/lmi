@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustration_view.cpp,v 1.14 2005-05-09 00:19:19 chicares Exp $
+// $Id: illustration_view.cpp,v 1.15 2005-05-12 15:55:04 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -41,6 +41,7 @@
 #include "account_value.hpp"
 #include "alert.hpp"
 #include "argv0.hpp"
+#include "file_command.hpp"
 #include "illustration_document.hpp"
 #include "inputillus.hpp"
 #include "ledger.hpp"
@@ -59,7 +60,6 @@
 #include <wx/icon.h>
 #include <wx/log.h> // TODO ?? Debugging only: consider removing.
 #include <wx/menu.h>
-#include <wx/mimetype.h>
 #include <wx/msgdlg.h>
 #include <wx/toolbar.h>
 #include <wx/xrc/xmlres.h>
@@ -299,85 +299,16 @@ void IllustrationView::OnUpdateProperties(wxUpdateUIEvent& e)
 void IllustrationView::Pdf(std::string const& action)
 {
     LMI_ASSERT(ledger_values_.get());
+
     wxString z;
     document().GetPrintableName(z);
     std::string document_file(z.c_str());
+
     std::string pdf_out_file = write_ledger_to_pdf
         (*ledger_values_
         ,document_file
         );
-
-    // Putting this system call in a gui module means the wx facility
-    // can be used; and there's no need to perform such an operation
-    // with any other interface.
-
-    fs::path msw_pdf_filename(pdf_out_file.c_str());
-
-    wxFileType* ft = wxTheMimeTypesManager->GetFileTypeFromExtension("pdf");
-    if(!ft)
-        {
-        warning() << "File type 'pdf' unknown." << LMI_FLUSH;
-        }
-
-    wxString cmd;
-    bool okay(false);
-    if("open" == action)
-        {
-        okay = ft->GetOpenCommand
-            (&cmd
-            ,wxFileType::MessageParameters
-                (msw_pdf_filename.native_file_string().c_str()
-                ,""
-                )
-            );
-        }
-    else if("print" == action)
-        {
-        okay = ft->GetPrintCommand
-            (&cmd
-            ,wxFileType::MessageParameters
-                (msw_pdf_filename.native_file_string().c_str()
-                ,""
-                )
-            );
-        }
-    else
-        {
-        warning()
-            << "Action '"
-            << action
-            << "' unrecognized."
-            << LMI_FLUSH
-            ;
-        return;
-        }
-
-    delete ft;
-    if(!okay)
-        {
-        warning()
-            << "Unable to determine command to '"
-            << action
-            << "' file '"
-            << pdf_out_file
-            << "'."
-            << LMI_FLUSH
-            ;
-        }
-    okay = wxExecute(cmd);
-    if(!okay)
-        {
-        warning()
-            << "Unable to '"
-            << action
-            << "' file '"
-            << pdf_out_file
-            << "'. Return code: '"
-            << okay
-            << "'."
-            << LMI_FLUSH
-            ;
-        }
+    file_command()(pdf_out_file, action);
 }
 
 void IllustrationView::Run(Input* overriding_input)

@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: objects.make,v 1.20 2005-05-11 23:19:11 chicares Exp $
+# $Id: objects.make,v 1.21 2005-05-12 15:55:04 chicares Exp $
 
 ################################################################################
 
@@ -117,6 +117,7 @@ antediluvian_common_objects := \
   death_benefits.o \
   expm1.o \
   fenv_lmi.o \
+  file_command.o \
   getopt.o \
   global_settings.o \
   group_values.o \
@@ -158,12 +159,14 @@ antediluvian_common_objects := \
 
 antediluvian_cli_objects := \
   alert_cli.o \
+  file_command_cli.o \
   main.o \
   progress_meter_cli.o \
 
 antediluvian_cgi_objects := \
   $(cgicc_objects) \
   alert_cgi.o \
+  file_command_cgi.o \
   main_cgi.o \
   progress_meter_cgi.o \
 
@@ -184,6 +187,7 @@ lmi_common_objects := \
   death_benefits.o \
   expm1.o \
   fenv_lmi.o \
+  file_command.o \
   global_settings.o \
   group_values.o \
   ihs_acctval.o \
@@ -245,6 +249,7 @@ lmi_common_objects := \
 
 lmi_cli_objects := \
   alert_cli.o \
+  file_command_cli.o \
   getopt.o \
   main.o \
   progress_meter_cli.o \
@@ -262,6 +267,7 @@ lmi_wx_objects := \
   docmanager_ex.o \
   docmdichildframe_ex.o \
   facets.o \
+  file_command_wx.o \
   getopt.o \
   illustration_document.o \
   illustration_view.o \

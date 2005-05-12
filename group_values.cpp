@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: group_values.cpp,v 1.17 2005-05-08 23:38:50 chicares Exp $
+// $Id: group_values.cpp,v 1.18 2005-05-12 15:55:04 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -33,6 +33,7 @@
 #include "configurable_settings.hpp"
 #include "database.hpp"
 #include "dbnames.hpp"
+#include "file_command.hpp"
 #include "global_settings.hpp"
 #include "inputillus.hpp"
 #include "ledger.hpp"
@@ -68,10 +69,11 @@ void emit_ledger
 {
     if(emission_target & emit_to_printer)
         {
-        write_ledger_to_pdf
+        std::string pdf_out_file = write_ledger_to_pdf
             (ledger
             ,serialized_file_path(file, index, ".ill").string()
             );
+        file_command()(pdf_out_file, "print");
         }
     if(emission_target & emit_to_spew_file)
         {
