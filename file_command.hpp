@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: file_command.hpp,v 1.1 2005-05-12 15:46:43 chicares Exp $
+// $Id: file_command.hpp,v 1.2 2005-05-13 23:58:10 chicares Exp $
 
 #ifndef file_command_hpp
 #define file_command_hpp
@@ -48,21 +48,12 @@
 
 typedef void (*file_command_fp_type)(std::string const&, std::string const&);
 
-extern callback<file_command_fp_type> file_command_callback;
-
 bool file_command_initialize(file_command_fp_type);
 
-struct file_command
+struct LMI_EXPIMP file_command
     :private boost::noncopyable
 {
-  public:
-    void operator()
-        (std::string const& file
-        ,std::string const& action
-        ) const
-        {
-        file_command_callback()(file, action);
-        }
+    void operator()(std::string const&, std::string const&) const;
 };
 
 #endif // file_command_hpp

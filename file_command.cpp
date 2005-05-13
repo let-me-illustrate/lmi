@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: file_command.cpp,v 1.1 2005-05-12 15:46:43 chicares Exp $
+// $Id: file_command.cpp,v 1.2 2005-05-13 23:58:10 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -28,11 +28,22 @@
 
 #include "file_command.hpp"
 
-callback<file_command_fp_type> file_command_callback;
+namespace
+{
+    callback<file_command_fp_type> file_command_callback;
+}
 
 bool file_command_initialize(file_command_fp_type f)
 {
     file_command_callback.initialize(f);
     return true;
 }
+
+void file_command::operator()
+    (std::string const& file
+    ,std::string const& action
+    ) const
+    {
+    file_command_callback()(file, action);
+    }
 
