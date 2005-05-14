@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_cli.cpp,v 1.1 2005-05-14 02:32:43 chicares Exp $
+// $Id: main_cli.cpp,v 1.2 2005-05-14 15:11:31 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -29,32 +29,26 @@
 #include "alert.hpp"
 #include "argv0.hpp"
 #include "calculate.hpp"
-#include "fenv_lmi.hpp"
 #include "getopt.hpp"
 #include "global_settings.hpp"
 #include "group_values.hpp"
 #include "license.hpp"
+#include "main_common.hpp"
 #include "miscellany.hpp"
-#include "sigfpe.hpp"
 #include "value_cast_ihs.hpp"
 
 #include <boost/filesystem/convenience.hpp>
-#include <boost/filesystem/fstream.hpp>
 #include <boost/filesystem/path.hpp>
 
 #include <algorithm>
 #include <cmath>
-#include <csignal>
 #include <cstdio>  // std::printf()
-#include <cstdlib> // std::free()
 #include <exception>
-#include <fstream>
 #include <ios>
 #include <iostream>
 #include <iterator>
 #include <ostream>
 #include <string>
-#include <utility>
 #include <vector>
 
 //============================================================================
@@ -538,40 +532,12 @@ void process_command_line(int argc, char* argv[])
 }
 
 //============================================================================
-void initialize_application(int argc, char* argv[])
-{
-    // Set boost filesystem default name check function to native. Its
-    // facilities are used with names the user controls, and users
-    // may specify names that are not portable. The default name check
-    // function should be set before using this boost library, to
-    // ensure that it's used uniformly.
-    fs::path::default_name_check(fs::native);
-
-    // This line forces mpatrol to link when it otherwise might not.
-    // It has no other effect according to C99 7.20.3.2/2, second
-    // sentence.
-    std::free(0);
-
-    // TODO ?? Instead, consider a singleton that checks the control
-    // word upon destruction?
-    initialize_fpu();
-
-    if(SIG_ERR == std::signal(SIGFPE, floating_point_error_handler))
-        {
-        throw std::runtime_error
-            ("Cannot install floating point error signal handler."
-            );
-        }
-
-    process_command_line(argc, argv);
-}
-
-//============================================================================
 int main(int argc, char* argv[])
 {
     try
         {
         initialize_application(argc, argv);
+        process_command_line(argc, argv);
         }
     catch(std::exception& e)
         {
