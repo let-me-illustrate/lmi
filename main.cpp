@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main.cpp,v 1.16 2005-05-07 00:20:56 chicares Exp $
+// $Id: main.cpp,v 1.17 2005-05-14 02:28:28 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -252,35 +252,8 @@ void Profile()
 }
 
 //============================================================================
-int main(int argc, char* argv[])
+void process_command_line(int argc, char* argv[])
 {
-    // Set boost filesystem default name check function to native. Its
-    // facilities are used with names the user controls, and users
-    // may specify names that are not portable. The default name check
-    // function should be set before using this boost library, to
-    // ensure that it's used uniformly.
-    fs::path::default_name_check(fs::native);
-
-    fs::path argv0(argv[0]);
-
-    // This line forces mpatrol to link when it otherwise might not.
-    // It has no other effect according to C99 7.20.3.2/2, second
-    // sentence.
-    std::free(0);
-
-    // TODO ?? Instead, consider a singleton that checks the control
-    // word upon destruction?
-    initialize_fpu();
-
-    if(SIG_ERR == std::signal(SIGFPE, floating_point_error_handler))
-        {
-        warning() << "Cannot install floating point error signal handler.\n";
-        return EXIT_FAILURE;
-        }
-
-// TODO ?? Factor out the getopt stuff, into a new function like this:
-//    process_command_line(argc, argv);
-
     int c;
     int digit_optind = 0;
     int this_option_optind = 1;
@@ -325,19 +298,20 @@ int main(int argc, char* argv[])
     std::vector<std::string> ill_names;
     std::vector<std::string> cns_names;
 
-    try
+    GetOpt getopt_long
+        (argc
+        ,argv
+        ,"ac:hi:ls"
+        ,long_options
+        ,&option_index
+        ,1
+        );
+
+    while(EOF != (c = getopt_long ()))
         {
-        std::signal(SIGFPE, floating_point_error_handler);
-
-//        GetOpt  getopt_long (argc, argv, "abc:d:o::0123456789",
-        GetOpt  getopt_long (argc, argv, "ac:hi:ls",
-                             long_options, &option_index, 1);
-
-        while(EOF != (c = getopt_long ()))
-          {
-            switch (c)
-              {
-              case 0:
+        switch (c)
+            {
+            case 0:
                 {
                 char const* current_option = long_options[option_index].name;
                 std::printf("option %s", current_option);
@@ -349,29 +323,29 @@ int main(int argc, char* argv[])
                 }
                 break;
 
-              case 001:
+            case 001:
                 {
                 global_settings::instance().ash_nazg = true;
                 global_settings::instance().mellon = true;
                 }
                 break;
 
-              case 002:
+            case 002:
                 {
                 global_settings::instance().mellon = true;
                 }
                 break;
 
-              case '0':
-              case '1':
-              case '2':
-              case '3':
-              case '4':
-              case '5':
-              case '6':
-              case '7':
-              case '8':
-              case '9':
+            case '0':
+            case '1':
+            case '2':
+            case '3':
+            case '4':
+            case '5':
+            case '6':
+            case '7':
+            case '8':
+            case '9':
                 {
                 if(digit_optind != 0 && digit_optind != this_option_optind)
                     {
@@ -382,75 +356,51 @@ int main(int argc, char* argv[])
                 }
                 break;
 
-              case 'a':
+            case 'a':
                 {
                 license_accepted = true;
                 }
                 break;
 
-              case 'b':
+            case 'b':
                 {
                 std::printf ("option b\n");
                 }
                 break;
 
-              case 'c':
+            case 'c':
                 {
                 run_census = true;
                 cns_names.push_back(getopt_long.optarg);
                 }
                 break;
 
-              case 'd':
+            case 'd':
                 {
                 global_settings::instance().data_directory = getopt_long.optarg;
                 }
                 break;
 
-              case 'h':
+            case 'h':
                 {
                 show_help = true;
                 }
                 break;
 
-              case 'i':
+            case 'i':
                 {
                 run_illustration = true;
                 ill_names.push_back(getopt_long.optarg);
                 }
                 break;
 
-              case 'l':
+            case 'l':
                 {
                 show_license = true;
                 }
                 break;
 
-              case 'r':
-                {
-                run_regression_test = true;
-                }
-                break;
-
-              case 's':
-                {
-                run_selftest = true;
-                }
-                break;
-
-              case 't':
-                {
-                global_settings::instance().regression_test_directory = getopt_long.optarg;
-                }
-                break;
-
-              case 'p':
-                {
-                run_profile = true;
-                }
-                break;
-
-              case 'o':
+            case 'o':
                 {
                 std::printf ("option o");
                 if(getopt_long.optarg)
@@ -461,100 +411,167 @@ int main(int argc, char* argv[])
                 }
                 break;
 
-              case '?':
+            case 'p':
+                {
+                run_profile = true;
+                }
                 break;
 
-              default:
+            case 'r':
+                {
+                run_regression_test = true;
+                }
+                break;
+
+            case 's':
+                {
+                run_selftest = true;
+                }
+                break;
+
+            case 't':
+                {
+                global_settings::instance().regression_test_directory = getopt_long.optarg;
+                }
+                break;
+
+            case '?':
+                {
+                break;
+                }
+
+            default:
+                {
                 std::printf ("? getopt returned character code 0%o ?\n", c);
-              }
-          }
-
-        if((c = getopt_long.optind) < argc)
-          {
-            std::printf ("non-option ARGV-elements: ");
-            while (c < argc)
-              std::printf ("%s ", argv[c++]);
-            std::printf ("\n");
-          }
-
-        if(!license_accepted)
-            {
-            std::cerr << license_notices() << "\n\n";
+                }
             }
+        }
 
-        if(show_license)
+    if((c = getopt_long.optind) < argc)
+        {
+        std::printf ("non-option ARGV-elements: ");
+        while (c < argc)
             {
-            std::cerr << license_as_text() << "\n\n";
-            return EXIT_SUCCESS;
+            std::printf ("%s ", argv[c++]);
             }
+        std::printf ("\n");
+        }
 
-        if(show_help)
-            {
-            getopt_long.usage();
-            return EXIT_SUCCESS;
-            }
+    if(!license_accepted)
+        {
+        std::cerr << license_notices() << "\n\n";
+        }
 
-        if(run_selftest)
-            {
-            SelfTest();
-            return EXIT_SUCCESS;
-            }
+    if(show_license)
+        {
+        std::cerr << license_as_text() << "\n\n";
+        return;
+        }
 
-        if(run_regression_test)
-            {
-            RegressionTest();
-            return EXIT_SUCCESS;
-            }
+    if(show_help)
+        {
+        getopt_long.usage();
+        return;
+        }
 
-        if(run_profile)
-            {
-            Profile();
-            return EXIT_SUCCESS;
-            }
+    if(run_selftest)
+        {
+        SelfTest();
+        return;
+        }
 
-        if(run_illustration)
-            {
-            RunIllustrationFromFile run_functor = std::for_each
-                (ill_names.begin()
-                ,ill_names.end()
-                ,RunIllustrationFromFile(std::cout)
-                );
-            std::cerr
-                << "File"
-                << ((1U < ill_names.size()) ? "s" : "")
-                << ":\n"
-                ;
-            std::copy
-                (ill_names.begin()
-                ,ill_names.end()
-                ,std::ostream_iterator<std::string>(std::cerr, "\n")
-                );
-            std::cerr
-                << "    Input:        "
-                << 1000.0 * run_functor.time_for_input
-                << " milliseconds\n"
-                ;
-            std::cerr
-                << "    Calculations: "
-                << 1000.0 * run_functor.time_for_calculations
-                << " milliseconds\n"
-                ;
-            std::cerr
-                << "    Output:       "
-                << 1000.0 * run_functor.time_for_output
-                << " milliseconds\n"
-                ;
-            }
+    if(run_regression_test)
+        {
+        RegressionTest();
+        return;
+        }
 
-        if(run_census)
-            {
-            std::for_each
-                (cns_names.begin()
-                ,cns_names.end()
-// TODO ?? expunge                ,RunCensusDeprecated<std::string>()
-                ,RunCensusDeprecated()
-                );
-            }
+    if(run_profile)
+        {
+        Profile();
+        return;
+        }
+
+    if(run_illustration)
+        {
+        RunIllustrationFromFile run_functor = std::for_each
+            (ill_names.begin()
+            ,ill_names.end()
+            ,RunIllustrationFromFile(std::cout)
+            );
+        std::cerr
+            << "File"
+            << ((1U < ill_names.size()) ? "s" : "")
+            << ":\n"
+            ;
+        std::copy
+            (ill_names.begin()
+            ,ill_names.end()
+            ,std::ostream_iterator<std::string>(std::cerr, "\n")
+            );
+        std::cerr
+            << "    Input:        "
+            << 1000.0 * run_functor.time_for_input
+            << " milliseconds\n"
+            ;
+        std::cerr
+            << "    Calculations: "
+            << 1000.0 * run_functor.time_for_calculations
+            << " milliseconds\n"
+            ;
+        std::cerr
+            << "    Output:       "
+            << 1000.0 * run_functor.time_for_output
+            << " milliseconds\n"
+            ;
+        }
+
+    if(run_census)
+        {
+        std::for_each
+            (cns_names.begin()
+            ,cns_names.end()
+// TODO ?? expunge            ,RunCensusDeprecated<std::string>()
+            ,RunCensusDeprecated()
+            );
+        }
+}
+
+//============================================================================
+void initialize_application(int argc, char* argv[])
+{
+    // Set boost filesystem default name check function to native. Its
+    // facilities are used with names the user controls, and users
+    // may specify names that are not portable. The default name check
+    // function should be set before using this boost library, to
+    // ensure that it's used uniformly.
+    fs::path::default_name_check(fs::native);
+
+    // This line forces mpatrol to link when it otherwise might not.
+    // It has no other effect according to C99 7.20.3.2/2, second
+    // sentence.
+    std::free(0);
+
+    // TODO ?? Instead, consider a singleton that checks the control
+    // word upon destruction?
+    initialize_fpu();
+
+    if(SIG_ERR == std::signal(SIGFPE, floating_point_error_handler))
+        {
+        throw std::runtime_error
+            ("Cannot install floating point error signal handler."
+            );
+        }
+
+    process_command_line(argc, argv);
+}
+
+//============================================================================
+int main(int argc, char* argv[])
+{
+    try
+        {
+        initialize_application(argc, argv);
         }
     catch(std::exception& e)
         {
