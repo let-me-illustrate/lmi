@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: objects.make,v 1.22 2005-05-14 02:32:43 chicares Exp $
+# $Id: objects.make,v 1.23 2005-05-14 16:01:53 chicares Exp $
 
 ################################################################################
 
@@ -161,6 +161,7 @@ antediluvian_cli_objects := \
   alert_cli.o \
   file_command_cli.o \
   main_cli.o \
+  main_common.o \
   progress_meter_cli.o \
 
 antediluvian_cgi_objects := \
@@ -168,6 +169,7 @@ antediluvian_cgi_objects := \
   alert_cgi.o \
   file_command_cgi.o \
   main_cgi.o \
+  main_common.o \
   progress_meter_cgi.o \
 
 ################################################################################
@@ -252,6 +254,7 @@ lmi_cli_objects := \
   file_command_cli.o \
   getopt.o \
   main_cli.o \
+  main_common.o \
   progress_meter_cli.o \
 
 lmi_wx_objects := \
@@ -274,6 +277,7 @@ lmi_wx_objects := \
   input.o \
   input_harmonization.o \
   lmi.rc.o \
+  main_common.o \
   main_wx.o \
   mc_enum.o \
   mc_enum_types.o \
