@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: census_view.cpp,v 1.27 2005-05-12 15:53:59 chicares Exp $
+// $Id: census_view.cpp,v 1.28 2005-05-14 02:10:24 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -127,10 +127,6 @@ CensusView::CensusView()
     :ViewEx                          ()
     ,all_changes_have_been_validated_(true)
     ,composite_is_available_         (false)
-// TODO ?? Is this variable necessary or even useful? This
-// initialization is wasteful because it must be overridden later.
-// Would a shared_ptr be better?    
-    ,composite_ledger_               (e_ledger_type(e_nasd))
     ,was_canceled_                   (false)
     ,list_window_                    (0)
 {
@@ -865,6 +861,9 @@ void CensusView::OnPrintCell(wxCommandEvent&)
 
     int cell_number = selected_row();
     freeze(true);
+    // TODO ?? Is it desirable to create a view here, or would it be
+    // better to print invisibly? If the latter, then probably
+    // ViewOneCell() could be simplified to return void.
     ViewOneCell(cell_number)->Pdf("print");
 
     freeze(false);
@@ -991,7 +990,7 @@ void CensusView::ViewComposite()
         // This is necessary for the view to be able to print.
         illview->SetLedger(composite_ledger_);
 
-        illview->DisplaySelectedValuesAsHtml(composite_ledger_);
+        illview->DisplaySelectedValuesAsHtml();
         }
 }
 

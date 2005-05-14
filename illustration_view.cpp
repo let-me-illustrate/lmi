@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustration_view.cpp,v 1.15 2005-05-12 15:55:04 chicares Exp $
+// $Id: illustration_view.cpp,v 1.16 2005-05-14 02:10:24 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -160,9 +160,10 @@ warning() << "That command should have been disabled." << LMI_FLUSH;
     return rc;
 }
 
-void IllustrationView::DisplaySelectedValuesAsHtml(Ledger const& ledger_values)
+void IllustrationView::DisplaySelectedValuesAsHtml()
 {
-    selected_values_as_html_ = FormatSelectedValuesAsHtml(ledger_values);
+    LMI_ASSERT(ledger_values_.get());
+    selected_values_as_html_ = FormatSelectedValuesAsHtml(*ledger_values_);
     html_window_->SetPage(selected_values_as_html_.c_str());
 }
 
@@ -296,7 +297,7 @@ void IllustrationView::OnUpdateProperties(wxUpdateUIEvent& e)
     e.Enable(!is_phony_);
 }
 
-void IllustrationView::Pdf(std::string const& action)
+void IllustrationView::Pdf(std::string const& action) const
 {
     LMI_ASSERT(ledger_values_.get());
 
@@ -331,11 +332,11 @@ void IllustrationView::Run(Input* overriding_input)
     status() << "Calculate: " << timer.Stop().Report() << std::flush;
 
     ledger_values_ = av.ledger_from_av();
-    DisplaySelectedValuesAsHtml(*ledger_values_);
+    DisplaySelectedValuesAsHtml();
 }
 
-void IllustrationView::SetLedger(Ledger const& values)
+void IllustrationView::SetLedger(boost::shared_ptr<Ledger const> ledger)
 {
-    ledger_values_ = boost::shared_ptr<Ledger>(new Ledger(values));
+    ledger_values_ = ledger;
 }
 

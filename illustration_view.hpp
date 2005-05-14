@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustration_view.hpp,v 1.8 2005-05-09 00:20:06 chicares Exp $
+// $Id: illustration_view.hpp,v 1.9 2005-05-14 02:10:24 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -64,6 +64,15 @@ class IllustrationView
     IllustrationView();
     virtual ~IllustrationView();
 
+    // Making these functions public so that they can be invoked by
+    // class CensusView is arguably less bad than making that class a
+    // friend.
+    //
+    void DisplaySelectedValuesAsHtml();
+    void Pdf(std::string const& action) const;
+    void Run(Input* = 0);
+    void SetLedger(boost::shared_ptr<Ledger const>);
+
   private:
     IllustrationDocument& document() const;
 
@@ -74,13 +83,6 @@ class IllustrationView
     wxIcon Icon() const;
     wxMenuBar* MenuBar() const;
 
-  public: // TODO ?? Or make class CensusView a friend; or make these free functions.
-    void DisplaySelectedValuesAsHtml(Ledger const&);
-    void Pdf(std::string const& action);
-    void Run(Input* = 0);
-    void SetLedger(Ledger const&);
-
-  private:
     // ViewEx overrides.
     bool OnCreate            (wxDocument*, long);
 
@@ -98,7 +100,7 @@ class IllustrationView
 
     wxHtmlWindow* html_window_;
     bool is_phony_;
-    boost::shared_ptr<Ledger> ledger_values_;
+    boost::shared_ptr<Ledger const> ledger_values_;
     std::string selected_values_as_html_;
 
     DECLARE_DYNAMIC_CLASS(IllustrationView)

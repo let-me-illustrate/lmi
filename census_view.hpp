@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: census_view.hpp,v 1.8 2005-05-09 00:19:19 chicares Exp $
+// $Id: census_view.hpp,v 1.9 2005-05-14 02:10:24 chicares Exp $
 
 #ifndef census_view_hpp
 #define census_view_hpp
@@ -33,6 +33,7 @@
 #include "ledger.hpp"
 #include "obstruct_slicing.hpp"
 
+#include <boost/shared_ptr.hpp>
 #include <boost/utility.hpp>
 
 #include <string>
@@ -86,10 +87,6 @@ class CensusView
     void OnUpdateApplicable     (wxUpdateUIEvent&);
     void OnUpdateFileSaveAs     (wxUpdateUIEvent&);
 
-    // TODO ?? Realphabetize.
-
-    void Run();
-
     bool DoAllCells  (e_emission_target emission_target = emit_to_nowhere);
 
     // Ascertain differences between old and new parameters and apply
@@ -102,6 +99,7 @@ class CensusView
         ,Input const& old_parms
         ,bool         for_this_class_only
         );
+
     void Update();
     void UpdatePreservingSelection();
     IllustrationView* MakeNewDocAndView(char const*);
@@ -152,7 +150,7 @@ class CensusView
 
     bool composite_is_available_;
 
-    Ledger composite_ledger_;
+    boost::shared_ptr<Ledger const> composite_ledger_;
 
     std::vector<std::string> headers_of_varying_parameters_;
 
