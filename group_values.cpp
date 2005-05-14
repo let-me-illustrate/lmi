@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: group_values.cpp,v 1.18 2005-05-12 15:55:04 chicares Exp $
+// $Id: group_values.cpp,v 1.19 2005-05-14 02:10:24 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -679,8 +679,8 @@ bool run_census::operator()
 }
 
 //============================================================================
-Ledger const& run_census::composite()
+boost::shared_ptr<Ledger const> run_census::composite()
 {
-    return *composite_;
+    return composite_;
 }
 
