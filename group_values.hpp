@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: group_values.hpp,v 1.8 2005-05-07 00:20:38 chicares Exp $
+// $Id: group_values.hpp,v 1.9 2005-05-14 02:10:24 chicares Exp $
 
 #ifndef group_values_hpp
 #define group_values_hpp
@@ -36,8 +36,11 @@
 class IllusInputParms;
 class Ledger;
 
-// Enumerators are binary powers so that more than one can be
-// specified in a single int.
+/// Output target for census runs.
+///
+/// Enumerators are binary powers so that more than one can be
+/// specified in a single int.
+
 enum e_emission_target
     {emit_to_nowhere     = 0
     ,emit_to_printer     = 1
@@ -45,9 +48,18 @@ enum e_emission_target
     ,emit_to_spreadsheet = 4
     };
 
-// TODO ?? Sometimes all cells should be emitted; sometimes, only the composite.
-
-// TODO ?? Should this be derived from std::*nary_function?
+/// Run all cells in a census.
+///
+/// operator() returns true if the process was allowed to run to
+/// completion, or false if it was cancelled.
+///
+/// Output is emitted to specified targets for all cells as well as
+/// the composite. When output is wanted only for the composite, use
+/// target 'emit_to_nowhere' and handle output explicitly for the
+/// composite, which is accessible through composite(). That usage
+/// normally arises when the target isn't known at the time the
+/// composite is generated, so adding an emit-composite-only flag here
+/// would make little sense.
 
 class LMI_EXPIMP run_census
 {
@@ -61,7 +73,7 @@ class LMI_EXPIMP run_census
         ,std::vector<IllusInputParms> const& cells
         );
 
-    Ledger const& composite();
+    boost::shared_ptr<Ledger const> composite();
 
   private:
     boost::shared_ptr<Ledger> composite_;
