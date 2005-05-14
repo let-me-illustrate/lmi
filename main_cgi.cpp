@@ -31,7 +31,7 @@
 // other reasons evident in cvs or explained in 'ChangeLog'. Any
 // defect should not reflect on Stephen F. Booth's reputation.
 
-// $Id: main_cgi.cpp,v 1.3 2005-04-22 02:21:21 chicares Exp $
+// $Id: main_cgi.cpp,v 1.4 2005-05-14 14:21:14 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -89,8 +89,7 @@ void ShowOutput(cgicc::Cgicc const& formData);
 void ShowIllusOutput(IllusInputParms const&);
 void ShowCensusOutput(IllusInputParms const&, std::string const&, bool);
 
-// TODO ?? gnu getopt should be used here.
-int main(int argc, char* argv[])
+void initialize_application(int argc, char* argv[])
 {
     // Set boost filesystem default name check function to native. Its
     // facilities are used with names the user controls, and users
@@ -98,8 +97,6 @@ int main(int argc, char* argv[])
     // function should be set before using this boost library, to
     // ensure that it's used uniformly.
     fs::path::default_name_check(fs::native);
-
-    fs::path argv0(argv[0]);
 
     // This line forces mpatrol to link when it otherwise might not.
     // It has no other effect according to C99 7.20.3.2/2, second
@@ -115,6 +112,13 @@ int main(int argc, char* argv[])
         warning() << "Cannot install floating point error signal handler.\n";
         return EXIT_FAILURE;
         }
+}
+
+// TODO ?? gnu getopt should be used here.
+int main(int argc, char* argv[])
+{
+  try {
+    initialize_application(argc, argv);
 
     if(argc == 2 && argv[1] == std::string("--capture"))
         {
@@ -195,7 +199,6 @@ int main(int argc, char* argv[])
         putenv(const_cast<char*>("REQUEST_METHOD=POST"));
         }
 
-  try {
     // Create a new cgicc::Cgicc object containing all the CGI data
     cgicc::Cgicc cgi;
 

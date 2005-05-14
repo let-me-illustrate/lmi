@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.58 2005-05-12 15:55:04 chicares Exp $
+// $Id: ChangeLog,v 1.59 2005-05-14 14:21:14 chicares Exp $
 
 2005-01-14
 
@@ -1734,4 +1734,44 @@ Improve documentation.
 Run a command against a file, respecting its extension. Factor the
 implementation out of the illustration-view class and into the new
 file-command class; use it for groups as well as individuals.
+
+2005-05-13 [1345]
+
+  file_command.cpp
+  file_command.hpp
+Improve encapsulation.
+
+  census_view.cpp
+  census_view.hpp
+  group_values.cpp
+  group_values.hpp
+  illustration_view.cpp
+  illustration_view.hpp
+Use shared_ptr to avoid copying ledgers.
+
+  account_value.hpp
+  calculate.hpp
+  ledgervalues.cpp
+  ledgervalues.hpp
+Refactor to achieve constness for shared_ptr to ledger.
+
+  main.cpp
+Refactor, removing a defective and pointless line.
+
+  main_cli.cpp [new file]
+  objects.make
+Rename 'main.cpp' to 'main_cli.cpp' because it implements main() for
+the command-line interface only.
+
+  main_wx.cpp
+Refactor, removing a defective and pointless line.
+
+2005-05-14 [1343]
+
+  census_view.cpp
+Add generic clipboard implementation by <vadim@tt-solutions.com>.
+
+  main_cgi.cpp
+Refactor, removing a defective and pointless line.
+
 
