@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledgervalues.cpp,v 1.10 2005-05-08 23:38:50 chicares Exp $
+// $Id: ledgervalues.cpp,v 1.11 2005-05-14 02:11:32 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -54,20 +54,12 @@ IllusVal::IllusVal(std::string const& filename)
 //============================================================================
 IllusVal::IllusVal(Ledger* ledger, std::string const& filename)
     :filename_ (filename)
-    ,ledger_   (new Ledger(*ledger))
 {
 }
 
 //============================================================================
 IllusVal::~IllusVal()
 {
-}
-
-//============================================================================
-IllusVal& IllusVal::operator+=(Ledger const& addend)
-{
-    ledger_->PlusEq(addend);
-    return *this;
 }
 
 //============================================================================
@@ -82,7 +74,10 @@ double IllusVal::Run(InputParms const& IP)
     av.SetDebugFilename(debug_filename.string());
 
     double z = av.RunAV();
-    ledger_ = av.ledger_from_av();
+    // TODO ?? This seems nasty, but probably this whole class should
+    // be eradicated.
+    LMI_ASSERT(av.ledger_from_av().get());
+    ledger_ = boost::shared_ptr<Ledger>(new Ledger(*av.ledger_from_av()));
 
 // TODO ?? Temporary code for trying to track down a problem.
 #if 0
