@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_wx.cpp,v 1.5 2005-04-22 02:21:21 chicares Exp $
+// $Id: main_wx.cpp,v 1.6 2005-05-14 02:43:34 chicares Exp $
 
 // Portions of this file are derived from wxWindows files
 //   samples/docvwmdi/docview.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -144,29 +144,14 @@ extern int wxEntry
     );
 #endif // __WXMSW__ defined.
 
-#ifndef __WXMSW__
-int main(int argc, char* argv[])
+void initialize_application(int argc, char* argv[])
 {
-#else // __WXMSW__ defined.
-int WINAPI WinMain
-    (HINSTANCE hInstance
-    ,HINSTANCE hPrevInstance
-    ,LPSTR     lpCmdLine
-    ,int       nCmdShow
-    )
-{
-    int argc = __argc;
-    char** argv = __argv;
-#endif // __WXMSW__ defined.
-
     // Set boost filesystem default name-check function to native. Its
     // facilities are used with names the user controls, and users
     // may specify names that are not portable. The default name-check
     // function is set here, before using this boost library in any
     // other way, to ensure uniform name checking.
     fs::path::default_name_check(fs::native);
-
-    fs::path argv0(argv[0]);
 
     // This line forces mpatrol to link when it otherwise might not.
     // It has no other effect according to C99 7.20.3.2/2, second
@@ -197,11 +182,9 @@ int WINAPI WinMain
 
     if(SIG_ERR == std::signal(SIGFPE, (void(*)(int))floating_point_error_handler))
         {
-        wxSafeShowMessage
-            ("Error"
-            ,"Cannot install floating point error signal handler"
+        throw std::runtime_error
+            ("Cannot install floating point error signal handler."
             );
-        return EXIT_FAILURE;
         }
 
     process_command_line(argc, argv);
@@ -209,12 +192,31 @@ int WINAPI WinMain
     // The most privileged password bypasses security validation.
     if(!security_validated(global_settings::instance().ash_nazg))
         {
-        return EXIT_FAILURE;
+        throw std::runtime_error("Security validation failed.");
         }
+}
+
+#ifndef __WXMSW__
+int main(int argc, char* argv[])
+{
+#else // __WXMSW__ defined.
+int WINAPI WinMain
+    (HINSTANCE hInstance
+    ,HINSTANCE hPrevInstance
+    ,LPSTR     lpCmdLine
+    ,int       nCmdShow
+    )
+{
+    int argc = __argc;
+    char** argv = __argv;
+#endif // __WXMSW__ defined.
 
     int r = EXIT_SUCCESS;
+
     try
         {
+        initialize_application(argc, argv);
+
 #ifndef __WXMSW__
         r = wxEntry(argc, argv);
 #else // __WXMSW__ defined.
@@ -223,12 +225,12 @@ int WINAPI WinMain
         }
     catch(std::exception& e)
         {
-        wxSafeShowMessage(e.what(), "Fatal error");
+        wxSafeShowMessage("Fatal error", e.what());
         return EXIT_FAILURE;
         }
     catch(...)
         {
-        wxSafeShowMessage("Unknown error", "Fatal error");
+        wxSafeShowMessage("Fatal error", "Unknown error");
         return EXIT_FAILURE;
         }
     return r;
