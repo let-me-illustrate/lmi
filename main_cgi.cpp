@@ -31,7 +31,7 @@
 // other reasons evident in cvs or explained in 'ChangeLog'. Any
 // defect should not reflect on Stephen F. Booth's reputation.
 
-// $Id: main_cgi.cpp,v 1.4 2005-05-14 14:21:14 chicares Exp $
+// $Id: main_cgi.cpp,v 1.5 2005-05-14 15:11:30 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -40,11 +40,10 @@
 
 #include "argv0.hpp"
 #include "calculate.hpp"
-#include "fenv_lmi.hpp"
 #include "inputillus.hpp"
 #include "inputs.hpp"
+#include "main_common.hpp"
 #include "platform_dependent.hpp" // putenv() [GWC]
-#include "sigfpe.hpp"
 #include "timer.hpp"
 #include "value_cast_ihs.hpp"
 
@@ -58,8 +57,6 @@
 #   include <cgicc/HTTPHeaders.h>
 #endif // USING_CURRENT_CGICC not defined.
 
-#include <csignal>
-#include <cstdlib>
 #include <cstring>
 #include <exception>
 #include <fstream>
@@ -88,31 +85,6 @@ void ShowInput(cgicc::Cgicc const& formData);
 void ShowOutput(cgicc::Cgicc const& formData);
 void ShowIllusOutput(IllusInputParms const&);
 void ShowCensusOutput(IllusInputParms const&, std::string const&, bool);
-
-void initialize_application(int argc, char* argv[])
-{
-    // Set boost filesystem default name check function to native. Its
-    // facilities are used with names the user controls, and users
-    // may specify names that are not portable. The default name check
-    // function should be set before using this boost library, to
-    // ensure that it's used uniformly.
-    fs::path::default_name_check(fs::native);
-
-    // This line forces mpatrol to link when it otherwise might not.
-    // It has no other effect according to C99 7.20.3.2/2, second
-    // sentence.
-    std::free(0);
-
-    // TODO ?? Instead, consider a singleton that checks the control
-    // word upon destruction?
-    initialize_fpu();
-
-    if(SIG_ERR == std::signal(SIGFPE, floating_point_error_handler))
-        {
-        warning() << "Cannot install floating point error signal handler.\n";
-        return EXIT_FAILURE;
-        }
-}
 
 // TODO ?? gnu getopt should be used here.
 int main(int argc, char* argv[])
