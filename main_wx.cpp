@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_wx.cpp,v 1.6 2005-05-14 02:43:34 chicares Exp $
+// $Id: main_wx.cpp,v 1.7 2005-05-14 15:11:31 chicares Exp $
 
 // Portions of this file are derived from wxWindows files
 //   samples/docvwmdi/docview.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -40,21 +40,19 @@
 
 #include "about_dialog.hpp"
 #include "argv0.hpp"
-//#include "alert.hpp" // TODO ?? expunge?
 #include "census_document.hpp"
 #include "census_view.hpp"
 #include "data_directory.hpp"
 #include "docmanager_ex.hpp"
 #include "docmdichildframe_ex.hpp"
-#include "fenv_lmi.hpp"
 #include "global_settings.hpp"
 #include "getopt.hpp"
 #include "illustration_document.hpp"
 #include "illustration_view.hpp"
 #include "license.hpp"
+#include "main_common.hpp"
 #include "miscellany.hpp"
 #include "secure_date.hpp"
-#include "sigfpe.hpp"
 #include "text_doc.hpp"
 #include "text_view.hpp"
 #include "wx_new.hpp"
@@ -68,11 +66,8 @@
 #include <wx/toolbar.h>
 #include <wx/xrc/xmlres.h>
 
-#include <csignal>
-#include <cstdlib> // std::free()
 #include <stdexcept>
 #include <string>
-#include <utility>
 
 IMPLEMENT_APP_NO_MAIN(lmi_wx_app)
 IMPLEMENT_WX_THEME_SUPPORT
@@ -144,19 +139,21 @@ extern int wxEntry
     );
 #endif // __WXMSW__ defined.
 
-void initialize_application(int argc, char* argv[])
+#ifndef __WXMSW__
+int main(int argc, char* argv[])
 {
-    // Set boost filesystem default name-check function to native. Its
-    // facilities are used with names the user controls, and users
-    // may specify names that are not portable. The default name-check
-    // function is set here, before using this boost library in any
-    // other way, to ensure uniform name checking.
-    fs::path::default_name_check(fs::native);
+#else // __WXMSW__ defined.
+int WINAPI WinMain
+    (HINSTANCE hInstance
+    ,HINSTANCE hPrevInstance
+    ,LPSTR     lpCmdLine
+    ,int       nCmdShow
+    )
+{
+    int argc = __argc;
+    char** argv = __argv;
+#endif // __WXMSW__ defined.
 
-    // This line forces mpatrol to link when it otherwise might not.
-    // It has no other effect according to C99 7.20.3.2/2, second
-    // sentence.
-    std::free(0);
     // WX !! and MPATROL !! Using wx-2.5.1 and mpatrol-1.4.8, both
     // dynamically linked to this application built with gcc-3.2.3,
     // three memory leaks are reported with:
@@ -175,47 +172,19 @@ void initialize_application(int argc, char* argv[])
     // tracing this 'leak' becomes cumbersome and mysterious.
     std::string unused("Seems to trigger initialization of something.");
 
-    // TODO ?? Instead, consider a singleton that checks the control
-    // word upon destruction, or a boost::shared_ptr with a custom
-    // dtor that does that.
-    initialize_fpu();
-
-    if(SIG_ERR == std::signal(SIGFPE, (void(*)(int))floating_point_error_handler))
-        {
-        throw std::runtime_error
-            ("Cannot install floating point error signal handler."
-            );
-        }
-
-    process_command_line(argc, argv);
-
-    // The most privileged password bypasses security validation.
-    if(!security_validated(global_settings::instance().ash_nazg))
-        {
-        throw std::runtime_error("Security validation failed.");
-        }
-}
-
-#ifndef __WXMSW__
-int main(int argc, char* argv[])
-{
-#else // __WXMSW__ defined.
-int WINAPI WinMain
-    (HINSTANCE hInstance
-    ,HINSTANCE hPrevInstance
-    ,LPSTR     lpCmdLine
-    ,int       nCmdShow
-    )
-{
-    int argc = __argc;
-    char** argv = __argv;
-#endif // __WXMSW__ defined.
-
     int r = EXIT_SUCCESS;
 
     try
         {
         initialize_application(argc, argv);
+
+        process_command_line(argc, argv);
+
+        // The most privileged password bypasses security validation.
+        if(!security_validated(global_settings::instance().ash_nazg))
+            {
+            throw std::runtime_error("Security validation failed.");
+            }
 
 #ifndef __WXMSW__
         r = wxEntry(argc, argv);
