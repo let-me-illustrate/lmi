@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledgervalues.hpp,v 1.8 2005-05-08 23:38:50 chicares Exp $
+// $Id: ledgervalues.hpp,v 1.9 2005-05-14 02:11:32 chicares Exp $
 
 #ifndef ledgervalues_hpp
 #define ledgervalues_hpp
@@ -49,8 +49,6 @@ class LMI_EXPIMP IllusVal
     explicit IllusVal(Ledger*, std::string const& filename = "anonymous");
     ~IllusVal();
 
-    IllusVal& operator+=(Ledger const&);
-
     double Run(InputParms const&);
     void Print(std::ostream&) const;
 
@@ -72,7 +70,7 @@ class LMI_EXPIMP IllusVal
     LedgerVariant   const& mdpt_() const;
 
     std::string filename_;
-    boost::shared_ptr<Ledger> ledger_;
+    boost::shared_ptr<Ledger const> ledger_;
 };
 
 #endif // ledgervalues_hpp

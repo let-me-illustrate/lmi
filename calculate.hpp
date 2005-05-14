@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: calculate.hpp,v 1.7 2005-04-29 18:51:34 chicares Exp $
+// $Id: calculate.hpp,v 1.8 2005-05-14 02:11:32 chicares Exp $
 
 #ifndef calculate_hpp
 #define calculate_hpp
@@ -219,12 +219,7 @@ struct RunCensusDeprecated
 
         timer.Restart();
 
-// TODO ?? Use the stack instead of the heap.
-        std::auto_ptr<IllusVal> Composite
-            (new IllusVal
-                (new Ledger(lives[0].LedgerType(), 100, true)
-                )
-            );
+        Ledger XXXComposite(e_ledger_type(e_ill_reg), 100, true);
 
         for
             (std::vector<IllusInputParms>::iterator lives_it = lives.begin()
@@ -234,13 +229,14 @@ struct RunCensusDeprecated
             {
             std::auto_ptr<IllusVal> IV(new IllusVal());
             IV->Run(*lives_it);
-            Composite->operator+=(IV->ledger());
+            XXXComposite.PlusEq(IV->ledger());
             }
 
         std::cerr << "    Calculations: " << timer.Stop().Report() << '\n';
 
         timer.Restart();
-        Composite->Print(std::cout);
+        IllusVal Composite(&XXXComposite);
+        Composite.Print(std::cout);
         std::cerr << "    Output:       " << timer.Stop().Report() << '\n';
         }
 };
