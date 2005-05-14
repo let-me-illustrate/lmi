@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: census_view.cpp,v 1.28 2005-05-14 02:10:24 chicares Exp $
+// $Id: census_view.cpp,v 1.29 2005-05-14 13:57:48 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -41,7 +41,9 @@
 #include "wx_new.hpp"
 #include "xml_notebook.hpp"
 
-#include <wx/app.h> // wxTheApp
+#include <wx/app.h>     // wxTheApp
+#include <wx/clipbrd.h> // Used only by GetClipboardText().
+#include <wx/dataobj.h> // Used only by GetClipboardText().
 #include <wx/icon.h>
 #include <wx/listctrl.h>
 #include <wx/menu.h>
@@ -1150,32 +1152,30 @@ void diagnose_sequence_string_problems(IllusInputParms& input)
 }
 } // Unnamed namespace.
 
-// TODO ?? Belongs elsewhere.
-// TODO ?? FSF !! Use wx facilities instead.
+// INELEGANT !! Shouldn't this be in a different translation unit?
+
 namespace
 {
+// Based on 2005-03-14T13:12:15 +0100 email from <vadim@tt-solutions.com>.
 std::string GetClipboardText()
 {
     std::string s;
-    if
-        (   !::IsClipboardFormatAvailable(CF_TEXT)
-        ||  !::OpenClipboard(0)
-        )
+    // Lock opens clipboard in ctor, and closes it in dtor.
+    wxClipboardLocker lock;
+    if(!lock)
         {
-        return s;
+        warning() << "Unable to acquire lock for clipboard." << LMI_FLUSH;
         }
-
-    HGLOBAL hglb = ::GetClipboardData(CF_TEXT);
-    if(hglb)
+    else if(!wxTheClipboard->IsSupported(wxDF_TEXT))
         {
-        LPTSTR lptstr = (char*)::GlobalLock(hglb);
-        if(lptstr != NULL)
-            {
-            s = lptstr;
-            ::GlobalUnlock(hglb);
-            }
+        warning() << "Clipboard does not support text format." << LMI_FLUSH;
         }
-    ::CloseClipboard();
+    else
+        {
+        wxTextDataObject z;
+        wxTheClipboard->GetData(z);
+        s = z.GetText().c_str();
+        }
 
     return s;
 }
