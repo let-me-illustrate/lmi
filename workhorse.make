@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: workhorse.make,v 1.25 2005-05-14 15:59:03 chicares Exp $
+# $Id: workhorse.make,v 1.26 2005-05-15 02:59:21 chicares Exp $
 
 ###############################################################################
 
@@ -83,15 +83,16 @@ $(src_dir)/objects.make:: ;
 
 default_targets := \
   wx_new$(SHREXT) \
-  shared_demo$(EXEEXT) \
-  static_demo$(EXEEXT) \
   antediluvian_cgi$(EXEEXT) \
   antediluvian_cli$(EXEEXT) \
-  lmi_cli$(EXEEXT) \
-  lmi_wx$(EXEEXT) \
   ihs_crc_comp$(EXEEXT) \
-  product_files$(EXEEXT) \
   liblmi$(SHREXT) \
+  lmi_cli_monolithic$(EXEEXT) \
+  lmi_cli_shared$(EXEEXT) \
+  lmi_wx_monolithic$(EXEEXT) \
+  lmi_wx_shared$(EXEEXT) \
+  lmi_wx_static$(EXEEXT) \
+  product_files$(EXEEXT) \
 
 .PHONY: effective_default_target
 effective_default_target: $(default_targets)
@@ -241,15 +242,11 @@ CXX_EXTRA_WARNINGS := $(gcc_common_extra_warnings)
 
 MPATROL_LIBS :=
 
-test_targets = unit_tests cgi_tests cli_tests av_tests
-
-# TODO ?? With mpatrol, target 'av_tests' takes far too long to run.
-# Investigate whether this indicates an optimization opportunity.
+test_targets = unit_tests cgi_tests cli_tests
 
 ifeq (mpatrol,$(findstring mpatrol,$(build_type)))
   optimization_flag := -O0
   MPATROL_LIBS := -lmpatrol -lbfd -liberty $(platform_mpatrol_libraries)
-  test_targets = unit_tests cgi_tests cli_tests
 else
   ifeq (gprof,$(findstring gprof,$(build_type)))
     optimization_flag := -O0
@@ -431,7 +428,6 @@ ALL_RCFLAGS  = $(REQUIRED_RCFLAGS)  $(RCFLAGS)
 
 lib%.a              : lmi_dllflag :=
 lib%$(SHREXT)       : lmi_dllflag := -DLMI_BUILD_DLL
-shared_demo$(EXEEXT): lmi_dllflag := -DLMI_USE_DLL
 
 skeleton$(EXEEXT)   : lmi_wx_new_dllflag := -DLMI_WX_NEW_USING_DLL
 wx_new$(SHREXT)     : lmi_wx_new_dllflag := -DLMI_WX_NEW_BUILDING_DLL
@@ -439,33 +435,23 @@ wx_new$(SHREXT)     : lmi_wx_new_dllflag := -DLMI_WX_NEW_BUILDING_DLL
 liblmi.a liblmi$(SHREXT): $(lmi_common_objects)
 libantediluvian.a libantediluvian$(SHREXT): $(antediluvian_common_objects)
 
-shared_demo$(EXEEXT): library_demo.o alert_cli.o liblmi$(SHREXT)
-
-static_demo$(EXEEXT): library_demo.o alert_cli.o $(lmi_common_objects)
-
 # TODO ?? 'lmi*' targets can be built either with a shared or a static
-# 'lmi' library. Choose one, or support both--possibly expunging the
-# 'shared_demo' and 'static_demo' targets and the code that's unique
-# to them.
+# 'lmi' library. Choose one, or support both.
 
-#lmi_cli$(EXEEXT): $(lmi_cli_objects) liblmi$(SHREXT)
-
-lmi_cli$(EXEEXT): $(lmi_cli_objects) $(lmi_common_objects)
-
-#lmi_wx$(EXEEXT): REQUIRED_LDFLAGS += $(platform_wx_libraries)
-#lmi_wx$(EXEEXT): $(lmi_wx_objects) liblmi$(SHREXT) wx_new$(SHREXT)
-
-lmi_wx$(EXEEXT): REQUIRED_LDFLAGS += $(platform_wx_libraries) -mwindows
-lmi_wx$(EXEEXT): $(lmi_wx_objects) $(lmi_common_objects) wx_new$(SHREXT)
-
-# Experimental.
+lmi_wx_monolithic$(EXEEXT): REQUIRED_LDFLAGS += $(platform_wx_libraries) -mwindows
+lmi_wx_monolithic$(EXEEXT): $(lmi_wx_objects) $(lmi_common_objects) wx_new$(SHREXT)
 
 lmi_wx_shared$(EXEEXT): lmi_dllflag := -DLMI_USE_DLL
 lmi_wx_shared$(EXEEXT): REQUIRED_LDFLAGS += $(platform_wx_libraries) -mwindows
 lmi_wx_shared$(EXEEXT): $(lmi_wx_objects) liblmi$(SHREXT) wx_new$(SHREXT)
 
+lmi_wx_static$(EXEEXT): REQUIRED_LDFLAGS += $(platform_wx_libraries) -mwindows
+lmi_wx_static$(EXEEXT): $(lmi_wx_objects) liblmi.a wx_new$(SHREXT)
+
+lmi_cli_monolithic$(EXEEXT): $(lmi_cli_objects) $(lmi_common_objects)
+
 lmi_cli_shared$(EXEEXT): lmi_dllflag := -DLMI_USE_DLL
-lmi_cli_shared$(EXEEXT): $(lmi_cli_objects) liblmi$(SHREXT) wx_new$(SHREXT)
+lmi_cli_shared$(EXEEXT): $(lmi_cli_objects) liblmi$(SHREXT)
 
 antediluvian_cgi$(EXEEXT): $(antediluvian_cgi_objects) libantediluvian.a
 
@@ -577,25 +563,6 @@ cgi_tests: antediluvian_cgi$(EXEEXT)
 
 ################################################################################
 
-# Test account values in production branch.
-
-# Run the test once, and throw away the results, just to get the
-# program into the disk cache. Then run it again and report the
-# results.
-
-.PHONY: av_tests
-av_tests: static_demo$(EXEEXT) ihs_crc_comp$(EXEEXT)
-	@$(ECHO) Test account values:
-	@./static_demo$(EXEEXT) > /dev/null
-	<$(src_dir)/spew_touchstone $(SED) -e'1s/^/0\t0\n/' >spew_touchstone
-	<eraseme.crc                $(SED) -e'1s/^/0\t0\n/' >spew_test
-	@./ihs_crc_comp \
-	  spew_touchstone \
-	  spew_test \
-	  | $(SED) -e '/Summary/!d' -e"s/^ /$z/"
-
-################################################################################
-
 # Regression test.
 
 # Relative errors less than 1e-14 are ignored. Machine epsilon for an
@@ -616,7 +583,7 @@ regression_test: install
 	cd $(install_dir)/data; \
 	../product_files; \
 	cd $(install_dir)/test; \
-	../lmi_cli \
+	../lmi_cli_monolithic \
 	  --ash_nazg --accept --regress \
 	  --data_path=$(install_dir)/data \
 	  --test_path=$(install_dir)/test; \
@@ -672,7 +639,6 @@ files_normally_created_by_running_make := \
   cgi.test.in \
   cgi_touchstone \
   mpatrol.log \
-  spew_touchstone \
 
 .PHONY: clean distclean mostlyclean
 clean distclean mostlyclean:
