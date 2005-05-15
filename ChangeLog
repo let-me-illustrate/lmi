@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.60 2005-05-14 15:58:38 chicares Exp $
+// $Id: ChangeLog,v 1.61 2005-05-15 03:00:49 chicares Exp $
 
 2005-01-14
 
@@ -1766,7 +1766,7 @@ the command-line interface only.
   main_wx.cpp
 Refactor, removing a defective and pointless line.
 
-2005-05-14 [1336]
+2005-05-14 [1335]
 
   census_view.cpp
 Add generic clipboard implementation by <vadim@tt-solutions.com>.
@@ -1782,6 +1782,10 @@ Refactor, removing a defective and pointless line.
   main_wx.cpp
 Factor out common initialization.
 
+  spew_touchstone [expunged]
   workhorse.make
-Experiment with shared libraries.
+Remove 'av_tests' target: 'regression_test' target supersedes it.
+
+  workhorse.make
+Explore building with shared and static libraries.
 
