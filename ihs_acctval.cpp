@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_acctval.cpp,v 1.25 2005-05-07 00:20:38 chicares Exp $
+// $Id: ihs_acctval.cpp,v 1.26 2005-05-16 05:39:08 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -184,7 +184,7 @@ Then run other bases.
     if(std::string::npos != Input_->Comments.find("idiosyncrasy_spew"))
         {
         std::ofstream os
-            ("spewage"
+            ("raw_output"
             ,std::ios_base::out | std::ios_base::trunc
             );
         ledger_->Spew(os);
