@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: snprintf_test.cpp,v 1.2 2005-02-19 03:27:45 chicares Exp $
+// $Id: snprintf_test.cpp,v 1.3 2005-05-17 12:29:06 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -28,9 +28,6 @@
 
 #define BOOST_INCLUDE_MAIN
 #include "test_tools.hpp"
-
-#include <boost/lexical_cast.hpp>
-#include <boost/timer.hpp>
 
 #include <stdio.h> // Nonstandard (in C++98) snprintf().
 #include <string>
