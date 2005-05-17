@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: numeric_io_test.cpp,v 1.2 2005-02-19 03:27:45 chicares Exp $
+// $Id: numeric_io_test.cpp,v 1.3 2005-05-17 12:37:56 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -30,9 +30,9 @@
 
 #define BOOST_INCLUDE_MAIN
 #include "test_tools.hpp"
+#include "timer.hpp"
 
 #include <boost/lexical_cast.hpp>
-#include <boost/timer.hpp>
 
 #include <cmath>
 
@@ -149,18 +149,7 @@ int test_main(int, char*[])
 
     double volatile d;
 
-    boost::timer timer;
-    while(0.0 == timer.elapsed())
-        {}
-    std::cout
-        << "Using a timer with "
-        << 1e6 * timer.elapsed_min()
-        << " usec precision and about "
-        << 1e6 * timer.elapsed()
-        << " usec accuracy:\n"
-        ;
-
-    timer.restart();
+    Timer timer;
     int iterations = 1000;
     for(int j = 0; j < iterations; ++j)
         {
@@ -168,11 +157,11 @@ int test_main(int, char*[])
         d = numeric_io_cast<double>(s);
         }
     std::cout
-        << (1e6 * timer.elapsed() / iterations)
+        << (1e6 * timer.Stop().Result() / iterations)
         << " usec per iteration for numeric_io_cast().\n"
         ;
 
-    timer.restart();
+    timer.Restart();
     iterations = 1000;
     for(int j = 0; j < iterations; ++j)
         {
@@ -180,7 +169,7 @@ int test_main(int, char*[])
         d = boost::lexical_cast<double>(s);
         }
     std::cout
-        << (1e6 * timer.elapsed() / iterations)
+        << (1e6 * timer.Stop().Result() / iterations)
         << " usec per iteration for boost::lexical_cast().\n"
         ;
     (void) d;
@@ -188,7 +177,7 @@ int test_main(int, char*[])
     // Interpreted as decimal, not as octal.
     BOOST_TEST_EQUAL(77, numeric_io_cast<int>("077"));
 
-    // Valid decimal, not invalid octal.
+    // Interpreted as valid decimal, not as invalid octal.
     BOOST_TEST_EQUAL( 9, numeric_io_cast<int>( "09"));
 
     BOOST_TEST_EQUAL( "Z" , numeric_io_cast<std::string>( "Z" ));
@@ -278,7 +267,8 @@ int test_main(int, char*[])
     BOOST_TEST_THROW(numeric_io_cast<int>   (    ""), std::invalid_argument, "");
     BOOST_TEST_THROW(numeric_io_cast<double>(    ""), std::invalid_argument, "");
     BOOST_TEST_THROW(numeric_io_cast<double>(  "1e"), std::invalid_argument, "");
-    BOOST_TEST_THROW(numeric_io_cast<long double>(  "1e"), std::domain_error, "");
+
+    BOOST_TEST_THROW(numeric_io_cast<long double>("1e"), std::domain_error, "");
 
     // This shouldn't even throw, because adequate compilers detect
     // the error at compile time:
