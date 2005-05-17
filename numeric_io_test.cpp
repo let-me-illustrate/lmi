@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: numeric_io_test.cpp,v 1.3 2005-05-17 12:37:56 chicares Exp $
+// $Id: numeric_io_test.cpp,v 1.4 2005-05-17 13:47:15 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -279,6 +279,16 @@ int test_main(int, char*[])
     BOOST_TEST_EQUAL(  0, numeric_io_cast<double>("0"));
     BOOST_TEST_EQUAL( "", numeric_io_cast<std::string>(""));
     BOOST_TEST_EQUAL(" ", numeric_io_cast<std::string>(" "));
+
+    BOOST_TEST_EQUAL(  0, numeric_io_cast<double>("0."));
+    BOOST_TEST_EQUAL(  1, numeric_io_cast<double>("1."));
+    BOOST_TEST_EQUAL(  0, numeric_io_cast<double>(".0"));
+    BOOST_TEST_EQUAL(  1, numeric_io_cast<double>("1"));
+    BOOST_TEST_EQUAL(  1, numeric_io_cast<double>("1e0"));
+    BOOST_TEST_EQUAL(  1, numeric_io_cast<double>("1.e0"));
+    BOOST_TEST_EQUAL(  1, numeric_io_cast<double>("1.0e0"));
+    BOOST_TEST_EQUAL(  1, numeric_io_cast<double>("0.1e1"));
+    BOOST_TEST_EQUAL(  1, numeric_io_cast<double>(".1e1"));
 
     test_interconvertibility(std::exp(1.0), "2.718281828459045", __FILE__, __LINE__);
 
