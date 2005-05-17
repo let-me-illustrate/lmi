@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: numeric_io_cast.hpp,v 1.2 2005-02-19 03:27:45 chicares Exp $
+// $Id: numeric_io_cast.hpp,v 1.3 2005-05-17 13:26:47 chicares Exp $
 
 // Converts between arithmetic types and their std::string decimal
 // representations, in these cases only:
@@ -55,9 +55,10 @@
 //   ss << "Truncated after first space.", ss >> s;
 // it returns "Truncated". And, as this discussion:
 //   http://www.gotw.ca/publications/mill19.htm
-// observes, it is generally more than an order of magnitude slower,
-// though that's probably an artifact of the iostreams library.
-// With g++-3.2.3, it's two decimal orders of magnitude slower.
+// observes, it is generally much slower, probably because of memory-
+// allocation overhead and inefficient implementations of arithmetic
+// inserters and extractors. See the accompanying unit test for a way
+// to measure the speed difference.
 //
 // numeric_io_cast(), on the other hand, does whatever the strtoX()
 // and Xprintf() families do (except for octal). It is specially
