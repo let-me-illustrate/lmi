@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: calendar_date_test.cpp,v 1.1 2005-01-14 19:47:44 chicares Exp $
+// $Id: calendar_date_test.cpp,v 1.2 2005-05-18 23:57:41 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -316,22 +316,16 @@ int test_main(int, char*[])
 
     int return_value = 0;
 
-    return_value = -1;
-    try
-        {
-        // Effective date mustn't precede birthdate--this should throw:
-        birth_date     = calendar_date(2003,  1,  2);
-        effective_date = calendar_date(2003,  1,  1);
-        calculate_age(birth_date, effective_date, anb);
-        // This shouldn't be reached:
-        BOOST_TEST(false);
-        }
-    catch(std::exception const& e)
-        {
-        return_value = 0;
-        }
+    // Effective date mustn't precede birthdate--this should throw:
+    birth_date     = calendar_date(2003,  1,  2);
+    effective_date = calendar_date(2003,  1,  1);
+    BOOST_TEST_THROW
+        (calculate_age(birth_date, effective_date, anb)
+        ,std::runtime_error
+        ,""
+        );
 
-    return return_value;
+    return 0;
 }
 #endif // Not old borland compiler.
 
