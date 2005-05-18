@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: value_cast_test.cpp,v 1.3 2005-05-18 22:29:17 chicares Exp $
+// $Id: value_cast_test.cpp,v 1.4 2005-05-18 22:47:09 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -34,9 +34,9 @@
 #include <cmath>   // std::pow()
 #include <cstring> // std::strcpy(), std::strcmp
 
-struct X {X():d(0){} double d;};
-std::istream& operator>>(std::istream& is, X&       x) {is >> x.d; return is;}
-std::ostream& operator<<(std::ostream& os, X const& x) {os << x.d; return os;}
+struct X {std::string s;};
+std::istream& operator>>(std::istream& is, X&       x) {is >> x.s; return is;}
+std::ostream& operator<<(std::ostream& os, X const& x) {os << x.s; return os;}
 
 template<typename To, typename From>
 cast_method method(To, From)
@@ -69,7 +69,7 @@ int test_main(int, char*[])
     char* cp = const_cast<char*>("3.14159");
     int i(2);
     double d(1.23456);
-    std::string s;
+    std::string s("test");
     X x;
 
 #ifndef __BORLANDC__
@@ -103,8 +103,8 @@ int test_main(int, char*[])
     BOOST_TEST_EQUAL(e_stream,  method(ccp, s));
     BOOST_TEST_EQUAL(e_stream,  method(x, s));
 #else // __BORLANDC__ defined.
-    // Shut up compiler warnings that these variables aren't used.
-    &cp; &i; &x;
+    // Shut up compiler warnings for unused variables.
+    &cp;
 #endif // __BORLANDC__ defined.
 
 // INELEGANT !! This is forbidden, but perhaps should be allowed:
@@ -113,10 +113,9 @@ int test_main(int, char*[])
 
 // TODO ?? This is allowed, but should be forbidden:
 //    cp = value_cast(ccp, cp);
-//    BOOST_TEST_EQUAL(s, "2.71828");
 
-    x = value_cast(d, x);
-    BOOST_TEST_EQUAL(x.d, 1.23456);
+    x = value_cast(s, x);
+    BOOST_TEST_EQUAL(x.s, "test");
 
     d = value_cast(ccp, d);
     BOOST_TEST_EQUAL(d, 2.71828);
