@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: numeric_io_cast.hpp,v 1.3 2005-05-17 13:26:47 chicares Exp $
+// $Id: numeric_io_cast.hpp,v 1.4 2005-05-18 13:08:16 chicares Exp $
 
 // Converts between arithmetic types and their std::string decimal
 // representations, in these cases only:
@@ -96,23 +96,57 @@
 #   define snprintf _snprintf
 #endif // Old gcc compiler.
 
-inline std::string trim_superfluous_leading_zeros(std::string const& s)
+/// Remove leading zeros from strings that std::strto[l|ll|ul|ull]
+/// with a base [7.20.1.4/3] of zero would otherwise interpret as
+/// octal. The name is deliberately mysterious as a warning to any
+/// who seek a general leading-zero remover, which this is not.
+///
+/// Assume that the string argument represents a numeric scalar;
+/// should it not, downstream routines will deal with it.
+///
+/// If it contains a decimal point or the first letter of an
+/// exponent-part, then it can't be an integer literal, and it needs
+/// no preprocessing.
+///
+/// If it contains a nonzero-digit before the first zero, then it
+/// cannot be interpreted as octal.
+///
+/// Otherwise, filter out leading zeros.
+
+inline std::string remove_pernicious_leading_zeros(std::string const& s)
 {
-    if(s.empty())
+    if
+        (   s.empty()
+        ||  std::string::npos != s.find_first_of(".eE")
+        ||  s.find_first_of("123456789") < s.find_first_of("0")
+        )
         {
         return s;
         }
-    std::string::size_type p = s.find_first_not_of('0');
-    if(std::string::npos == p)
-        {
-        return s.substr(s.size() - 1);
-        }
-    else
-        {
-        return s.substr(p);
-        }
-}
 
+    std::string r;
+    bool no_nonzero_digit_encountered_yet = true;
+    for(unsigned int j = 0; j < s.size(); ++j)
+        {
+        if('1' <= s[j] && s[j] <= '9')
+            {
+            no_nonzero_digit_encountered_yet = false;
+            }
+        if
+            (   no_nonzero_digit_encountered_yet
+            &&  '0' == s[j]
+            &&  (1 + j) < s.size() && '0' <= s[1 + j] && s[1 + j] <= '9'
+            )
+            {
+            ; // Do nothing: don't copy the current '0'.
+            }
+        else
+            {
+            r += s[j];
+            }
+        }
+    return r;
+}
 
 // A compile-time failure iff this template is ever instantiated is
 // desired, but the straightforward
@@ -163,7 +197,7 @@ struct numeric_converter<To, std::string>
         {
         // Transform octal-literals to decimal-literals, to avoid
         // interpretation as octal.
-        std::string trimmed = trim_superfluous_leading_zeros(s);
+        std::string trimmed = remove_pernicious_leading_zeros(s);
         char const* nptr = trimmed.c_str();
         // Pointer to which strtoT()'s 'endptr' argument refers.
         char* rendptr;

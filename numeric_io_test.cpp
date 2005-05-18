@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: numeric_io_test.cpp,v 1.4 2005-05-17 13:47:15 chicares Exp $
+// $Id: numeric_io_test.cpp,v 1.5 2005-05-18 13:08:16 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -84,22 +84,31 @@ void test_interconvertibility
 
 int test_main(int, char*[])
 {
-    BOOST_TEST_EQUAL("", trim_superfluous_leading_zeros(""));
+    BOOST_TEST_EQUAL("", remove_pernicious_leading_zeros(""));
 
-    BOOST_TEST_EQUAL("0", trim_superfluous_leading_zeros("0"));
-    BOOST_TEST_EQUAL("0", trim_superfluous_leading_zeros("00"));
-    BOOST_TEST_EQUAL("0", trim_superfluous_leading_zeros("000"));
-    BOOST_TEST_EQUAL("0", trim_superfluous_leading_zeros("0000"));
-    BOOST_TEST_EQUAL("0", trim_superfluous_leading_zeros("00000"));
+    BOOST_TEST_EQUAL("0", remove_pernicious_leading_zeros("0"));
+    BOOST_TEST_EQUAL("0", remove_pernicious_leading_zeros("00"));
+    BOOST_TEST_EQUAL("0", remove_pernicious_leading_zeros("000"));
+    BOOST_TEST_EQUAL("0", remove_pernicious_leading_zeros("0000"));
+    BOOST_TEST_EQUAL("0", remove_pernicious_leading_zeros("00000"));
 
-    BOOST_TEST_EQUAL("9", trim_superfluous_leading_zeros("9"));
-    BOOST_TEST_EQUAL("9", trim_superfluous_leading_zeros("09"));
-    BOOST_TEST_EQUAL("9", trim_superfluous_leading_zeros("009"));
-    BOOST_TEST_EQUAL("9", trim_superfluous_leading_zeros("0009"));
-    BOOST_TEST_EQUAL("9", trim_superfluous_leading_zeros("00009"));
+    BOOST_TEST_EQUAL("9", remove_pernicious_leading_zeros("9"));
+    BOOST_TEST_EQUAL("9", remove_pernicious_leading_zeros("09"));
+    BOOST_TEST_EQUAL("9", remove_pernicious_leading_zeros("009"));
+    BOOST_TEST_EQUAL("9", remove_pernicious_leading_zeros("0009"));
+    BOOST_TEST_EQUAL("9", remove_pernicious_leading_zeros("00009"));
 
-    BOOST_TEST_EQUAL("10.00", trim_superfluous_leading_zeros("10.00"));
-    BOOST_TEST_EQUAL("10.00", trim_superfluous_leading_zeros("010.00"));
+    BOOST_TEST_EQUAL( "10.00", remove_pernicious_leading_zeros( "10.00"));
+    BOOST_TEST_EQUAL("010.00", remove_pernicious_leading_zeros("010.00"));
+
+    BOOST_TEST_EQUAL("9999", remove_pernicious_leading_zeros("9999"));
+    BOOST_TEST_EQUAL("99.99", remove_pernicious_leading_zeros("99.99"));
+
+    BOOST_TEST_EQUAL(" 0" , remove_pernicious_leading_zeros(" 0" ));
+    BOOST_TEST_EQUAL( "0 ", remove_pernicious_leading_zeros( "0 "));
+    BOOST_TEST_EQUAL(" 0 ", remove_pernicious_leading_zeros(" 0 "));
+
+    BOOST_TEST_EQUAL("- 9", remove_pernicious_leading_zeros("- 09"));
 
     volatile int z = 0; // Avoid "condition always true/false" warnings.
     BOOST_TEST_EQUAL( z, floating_point_decimals( 0.0));
@@ -150,7 +159,19 @@ int test_main(int, char*[])
     double volatile d;
 
     Timer timer;
-    int iterations = 1000;
+    int iterations = 1000000;
+
+    for(int j = 0; j < iterations; ++j)
+        {
+        remove_pernicious_leading_zeros("0.6666666667");
+        }
+    std::cout
+        << (1e6 * timer.Stop().Result() / iterations)
+        << " usec per iteration for remove_pernicious_leading_zeros().\n"
+        ;
+
+    timer.Restart();
+    iterations = 100000;
     for(int j = 0; j < iterations; ++j)
         {
         std::string s = numeric_io_cast<std::string>(2.0 / 3.0);
