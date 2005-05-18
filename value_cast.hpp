@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: value_cast.hpp,v 1.3 2005-05-18 21:14:33 chicares Exp $
+// $Id: value_cast.hpp,v 1.4 2005-05-18 22:29:17 chicares Exp $
 
 // Function template value_cast() converts between types, choosing a
 // conversion method in the following order of decreasing preference:
@@ -59,7 +59,7 @@
 // for template class datum_string.
 
 // INELEGANT !! Exceptions thrown from numeric_io_cast and stream_cast
-// ought to be derived from std::bad_cast.
+// ought perhaps to be derived from std::bad_cast.
 
 // Note: boost::is_convertible<From,To> gives template arguments in
 // the opposite of the order used for boost::lexical_cast<To,From>.
@@ -143,6 +143,8 @@ To value_cast(From from, To = To())
 
 // COMPILER !! Precision of casts between string and arithmetic types
 // is poor because borland can't handle the default implementation.
+// It's not worth working around borland defects. Don't use value_cast
+// with borland tools.
 
 template<typename To, typename From>
 To value_cast(From from, To = To())

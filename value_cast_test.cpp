@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: value_cast_test.cpp,v 1.2 2005-05-18 21:14:33 chicares Exp $
+// $Id: value_cast_test.cpp,v 1.3 2005-05-18 22:29:17 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -34,9 +34,9 @@
 #include <cmath>   // std::pow()
 #include <cstring> // std::strcpy(), std::strcmp
 
-class X {};
-std::istream& operator>>(std::istream& is, X&      ) {return is;}
-std::ostream& operator<<(std::ostream& os, X const&) {return os;}
+struct X {X():d(0){} double d;};
+std::istream& operator>>(std::istream& is, X&       x) {is >> x.d; return is;}
+std::ostream& operator<<(std::ostream& os, X const& x) {os << x.d; return os;}
 
 template<typename To, typename From>
 cast_method method(To, From)
@@ -104,12 +104,19 @@ int test_main(int, char*[])
     BOOST_TEST_EQUAL(e_stream,  method(x, s));
 #else // __BORLANDC__ defined.
     // Shut up compiler warnings that these variables aren't used.
-    &ccp; &cp; &i; &x;
+    &cp; &i; &x;
 #endif // __BORLANDC__ defined.
 
 // INELEGANT !! This is forbidden, but perhaps should be allowed:
 //    cp = value_cast(d, cp);
 //    BOOST_TEST_EQUAL(cp, std::string("3.14159"));
+
+// TODO ?? This is allowed, but should be forbidden:
+//    cp = value_cast(ccp, cp);
+//    BOOST_TEST_EQUAL(s, "2.71828");
+
+    x = value_cast(d, x);
+    BOOST_TEST_EQUAL(x.d, 1.23456);
 
     d = value_cast(ccp, d);
     BOOST_TEST_EQUAL(d, 2.71828);
@@ -121,9 +128,6 @@ int test_main(int, char*[])
 
     d = value_cast(i, d);
     BOOST_TEST_EQUAL(d, 2.0);
-
-    // TODO ?? The numeric_io_cast and stream_cast tests should be
-    // performed here too.
 
     s = value_cast<std::string>(double(2.0 / 3.0));
     BOOST_TEST_EQUAL(s, "0.666666666666667");
@@ -149,54 +153,49 @@ std::string strip(std::string numeric_string)
 int extra_tests()
 {
     char const* p = "31";
-    BOOST_TEST(31 == value_cast<int   >(p));
-    BOOST_TEST(31 == value_cast<double>(p));
+    BOOST_TEST_EQUAL(31, value_cast<int   >(p));
+    BOOST_TEST_EQUAL(31, value_cast<double>(p));
 
     char q[0x0100];
     std::strcpy(q, value_cast<std::string>(0).c_str());
-    BOOST_TEST(0 == std::strcmp(q, "0"));
+    BOOST_TEST_EQUAL(0, std::strcmp(q, "0"));
     int i = 0;
     std::strcpy(q, value_cast<std::string>(i).c_str());
-    BOOST_TEST(0 == std::strcmp(q, "0"));
+    BOOST_TEST_EQUAL(0, std::strcmp(q, "0"));
     std::strcpy(q, value_cast<std::string>(31.0).c_str());
-    BOOST_TEST(0 == std::strcmp(q, "31"));
+    BOOST_TEST_EQUAL(0, std::strcmp(q, "31"));
 
-    BOOST_TEST("31"  == value_cast<std::string>(31));
-    BOOST_TEST("310" == value_cast<std::string>(310));
-    BOOST_TEST("31"  == value_cast<std::string>(31.0));
-    BOOST_TEST("310" == value_cast<std::string>(310.0));
-    BOOST_TEST("0"   == value_cast<std::string>(.0));
+    BOOST_TEST_EQUAL("31" , value_cast<std::string>(31));
+    BOOST_TEST_EQUAL("310", value_cast<std::string>(310));
+    BOOST_TEST_EQUAL("31" , value_cast<std::string>(31.0));
+    BOOST_TEST_EQUAL("310", value_cast<std::string>(310.0));
+    BOOST_TEST_EQUAL("0"  , value_cast<std::string>(.0));
 
     double d;
-    d =         130000000000000.0;
-    BOOST_TEST("130000000000000" == value_cast<std::string>(d));
-    d =         1300000000000000.0;
-    BOOST_TEST("1300000000000000" == value_cast<std::string>(d));
+    d =  130000000000000.0;
+    BOOST_TEST_EQUAL( "130000000000000", value_cast<std::string>(d));
+    d = 1300000000000000.0;
+    BOOST_TEST_EQUAL("1300000000000000", value_cast<std::string>(d));
 
-    BOOST_TEST("1233"   == strip("1233"));
-    BOOST_TEST("1230"   == strip("1230"));
-    BOOST_TEST("1230"   == strip("1230."));
-    BOOST_TEST("1230"   == strip("1230.0"));
-    BOOST_TEST("123"    == strip("123.0"));
-    BOOST_TEST("123.3"  == strip("123.30"));
-    BOOST_TEST("123.3"  == strip("123.3"));
-    BOOST_TEST("1.233"  == strip("1.233"));
-    BOOST_TEST("0.1233" == strip(".1233"));
-    BOOST_TEST("0.1233" == strip("0.1233"));
-    BOOST_TEST("0.1233" == strip("0.123300"));
+    BOOST_TEST_EQUAL("1233"  , strip("1233"));
+    BOOST_TEST_EQUAL("1230"  , strip("1230"));
+    BOOST_TEST_EQUAL("1230"  , strip("1230."));
+    BOOST_TEST_EQUAL("1230"  , strip("1230.0"));
+    BOOST_TEST_EQUAL("123"   , strip("123.0"));
+    BOOST_TEST_EQUAL("123.3" , strip("123.30"));
+    BOOST_TEST_EQUAL("123.3" , strip("123.3"));
+    BOOST_TEST_EQUAL("1.233" , strip("1.233"));
+    BOOST_TEST_EQUAL("0.1233", strip(".1233"));
+    BOOST_TEST_EQUAL("0.1233", strip("0.1233"));
+    BOOST_TEST_EQUAL("0.1233", strip("0.123300"));
 
-std::cout << strip("1.233") << '\n';
-std::cout << strip(".1233") << '\n';
-std::cout << strip("0.1233") << '\n';
-std::cout << strip("0.123300") << '\n';
-
-    BOOST_TEST
-        (        "0.000000000000000000001233"
-        == strip("0.000000000000000000001233")
+    BOOST_TEST_EQUAL
+        (      "0.000000000000000000001233"
+        ,strip("0.000000000000000000001233")
         );
-    BOOST_TEST
-        (        "0.000000000000000000001233"
-        == strip( ".00000000000000000000123300000000")
+    BOOST_TEST_EQUAL
+        (      "0.000000000000000000001233"
+        ,strip( ".00000000000000000000123300000000")
         );
 
     char const* nptr = "0.";
@@ -207,24 +206,14 @@ std::cout << strip("0.123300") << '\n';
     char rendptr[100] = {'\0'};
     char* endptr = rendptr;
     std::strtod(nptr, &endptr);
-    BOOST_TEST('\0' == *endptr);
-    BOOST_TEST(nptr != endptr);
+    BOOST_TEST_EQUAL('\0', *endptr);
+    BOOST_TEST_UNEQUAL(nptr, endptr);
 
-{
-    double d;
-std::cout << __LINE__ << std::endl;
-    d = value_cast<double>("0.");
-std::cout << __LINE__ << std::endl;
-    std::string s = value_cast<std::string>(d);
-std::cout << __LINE__ << std::endl;
-}
-
-#if 0 // TODO ?? Fix this.
-    BOOST_TEST("0"      == strip("0."));
-#endif // 0
-    BOOST_TEST("0"      == strip(".0"));
-    BOOST_TEST("0"      == strip("0.0"));
-    BOOST_TEST("0"      == strip("00.00"));
+    BOOST_TEST_EQUAL("0", strip("00."  ));
+    BOOST_TEST_EQUAL("0", strip( "0."  ));
+    BOOST_TEST_EQUAL("0", strip(  ".0" ));
+    BOOST_TEST_EQUAL("0", strip( "0.0" ));
+    BOOST_TEST_EQUAL("0", strip("00.00"));
 
     std::string a("1.2");
     std::string b("3.4 777");
@@ -232,54 +221,29 @@ std::cout << __LINE__ << std::endl;
     d = 3.14159;
 
     a = value_cast<std::string>(b);
-    BOOST_TEST("3.4 777" == a);
+    BOOST_TEST_EQUAL("3.4 777", a);
 
     a = value_cast<std::string>(d);
-    BOOST_TEST("3.14159" == a);
+    BOOST_TEST_EQUAL("3.14159", a);
 
-    int return_value = -1;
-
-    try
-        {
-        // This should throw:
-        value_cast<double>(b);
-        // This shouldn't be reached:
-        BOOST_TEST(false);
-        }
-    catch(std::exception const& e)
-        {
-        return_value = 0;
-        }
-
-    try
-        {
-        // TODO ?? bc++5.02 fails here.
-        // This should throw:
-        value_cast<double>("");
-        // This shouldn't be reached:
-        BOOST_TEST(false);
-        }
-    catch(std::exception const& e)
-        {
-        // TODO ?? This idiom is silly. Remove it everywhere.
-        return_value = 0;
-        }
+    BOOST_TEST_THROW(value_cast<double>(b) , std::invalid_argument, "");
+    BOOST_TEST_THROW(value_cast<double>(""), std::invalid_argument, "");
 
     d = value_cast<double>(a);
-    BOOST_TEST(3.14159 == d);
+    BOOST_TEST_EQUAL(3.14159, d);
 
     a = value_cast<std::string>(d);
-    BOOST_TEST("3.14159" == a);
+    BOOST_TEST_EQUAL("3.14159", a);
 
     a = value_cast<std::string>(c);
-    BOOST_TEST("This is a test." == a);
+    BOOST_TEST_EQUAL("This is a test.", a);
 
     b = value_cast<std::string>(a);
-    BOOST_TEST("This is a test." == b);
+    BOOST_TEST_EQUAL("This is a test.", b);
 
     d = 1e+161;
     a = value_cast<std::string>(d);
-    BOOST_TEST(d == value_cast<double>(a));
+    BOOST_TEST_EQUAL(d, value_cast<double>(a));
 
     std::string e
         ("1"
@@ -290,35 +254,32 @@ std::cout << __LINE__ << std::endl;
         );
     BOOST_TEST_EQUAL(e, a);
 
-    // A big number that must be representable as a finite
-    // floating-point number [18.2.1.2/27].
-    double big = std::pow
-        (static_cast<double>(std::numeric_limits<double>::radix)
-        ,static_cast<double>(std::numeric_limits<double>::max_exponent - 1)
-        );
-    BOOST_TEST( big == value_cast<double>(value_cast<std::string>( big)));
-    BOOST_TEST(-big == value_cast<double>(value_cast<std::string>(-big)));
-
     // An empty string should be convertible to string without error.
     std::string s;
     BOOST_TEST(value_cast<std::string>(s).empty());
     std::string const& s_const_ref(s);
     BOOST_TEST(value_cast<std::string>(s_const_ref).empty());
 
+    // A big number that must be representable as a finite
+    // floating-point number [18.2.1.2/27].
+    double big = std::pow
+        (static_cast<double>(std::numeric_limits<double>::radix)
+        ,static_cast<double>(std::numeric_limits<double>::max_exponent - 1)
+        );
+    BOOST_TEST_EQUAL( big, value_cast<double>(value_cast<std::string>( big)));
+    BOOST_TEST_EQUAL(-big, value_cast<double>(value_cast<std::string>(-big)));
+
     // A small number that must be representable as a normalized
     // floating-point number [18.2.1.2/23].
     double small = std::pow
         (static_cast<double>(std::numeric_limits<double>::radix)
         ,static_cast<double>(std::numeric_limits<double>::min_exponent)
-// TODO ?? Why not this one too?        
+// TODO ?? Why doesn't this work with '- 1' appended?
 //        ,static_cast<double>(std::numeric_limits<double>::min_exponent - 1)
         );
     BOOST_TEST_EQUAL( small, value_cast<double>(value_cast<std::string>( small)));
     BOOST_TEST_EQUAL(-small, value_cast<double>(value_cast<std::string>(-small)));
-std::cout << small << '\n';
-std::cout << value_cast<std::string>( small) << '\n';
-std::cout << value_cast<double>(value_cast<std::string>( small)) << '\n';
 
-    return return_value;
+    return 0;
 }
 
