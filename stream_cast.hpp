@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: stream_cast.hpp,v 1.2 2005-02-19 03:27:45 chicares Exp $
+// $Id: stream_cast.hpp,v 1.3 2005-05-18 22:47:09 chicares Exp $
 
 // This is a derived work based on boost::lexical_cast, which bears
 // the following copyright and permissions notice:
@@ -72,6 +72,9 @@
 // Blank is the only whitespace character not treated as whitespace,
 // because blanks are more common than other whitespace characters in
 // std::strings.
+//
+// This technique is generally inappropriate for arithmetic types, and
+// especially for floating types: instead, use numeric_io_cast.
 
 #ifndef stream_cast_hpp
 #define stream_cast_hpp
@@ -88,6 +91,10 @@
 template<typename To, typename From>
 To stream_cast(From from, To = To())
 {
+#ifndef __BORLANDC__
+    BOOST_STATIC_ASSERT(!boost::is_arithmetic<From>::value);
+    BOOST_STATIC_ASSERT(!boost::is_arithmetic<To  >::value);
+#endif // ! defined __BORLANDC__
     std::stringstream interpreter;
     std::ostringstream err;
     To result;
