@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.61 2005-05-15 03:00:49 chicares Exp $
+// $Id: ChangeLog,v 1.62 2005-05-18 13:23:40 chicares Exp $
 
 2005-01-14
 
@@ -1788,4 +1788,38 @@ Remove 'av_tests' target: 'regression_test' target supersedes it.
 
   workhorse.make
 Explore building with shared and static libraries.
+
+2005-05-16 [1335]
+
+  ihs_acctval.cpp
+Rename an optional output file.
+
+2005-05-17 [1335]
+
+  snprintf_test.cpp
+Remove unused headers.
+
+  numeric_io_test.cpp
+Replace boost timer with the high-precision timer used for other unit
+tests.
+
+  numeric_io_cast.hpp
+Correct misleading documentation. The orders-of-magnitude speed
+difference formerly cited was measured with mpatrol in use, which
+exaggerates the cost of memory allocation.
+
+  numeric_io_test.cpp
+Add tests, revealing a latent defect: "0." is a valid floating literal
+but incorrectly triggers an exception.
+
+2005-05-18 [1335]
+
+  numeric_io_cast.hpp
+  numeric_io_test.cpp
+Work around defect noted 2005-05-17.
+
+  numeric_io_cast.hpp
+  numeric_io_test.cpp
+  numeric_io_traits.hpp
+Remove defect noted 2005-05-17.
 
