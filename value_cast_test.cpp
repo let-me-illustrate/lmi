@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: value_cast_test.cpp,v 1.4 2005-05-18 22:47:09 chicares Exp $
+// $Id: value_cast_test.cpp,v 1.5 2005-05-18 23:57:25 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -44,7 +44,8 @@ cast_method method(To, From)
     return value_cast_chooser<To,From>::method();
 }
 
-int extra_tests();
+int extra_tests0();
+int extra_tests1();
 
 int test_main(int, char*[])
 {
@@ -137,7 +138,8 @@ int test_main(int, char*[])
     std::string t("This is a test.");
     BOOST_TEST_EQUAL(t, value_cast<std::string>(t));
 
-    BOOST_TEST_EQUAL(0, extra_tests());
+    BOOST_TEST_EQUAL(0, extra_tests0());
+    BOOST_TEST_EQUAL(0, extra_tests1());
 
     return 0;
 }
@@ -149,7 +151,7 @@ std::string strip(std::string numeric_string)
     return value_cast<std::string>(d);
 }
 
-int extra_tests()
+int extra_tests0()
 {
     char const* p = "31";
     BOOST_TEST_EQUAL(31, value_cast<int   >(p));
@@ -278,6 +280,42 @@ int extra_tests()
         );
     BOOST_TEST_EQUAL( small, value_cast<double>(value_cast<std::string>( small)));
     BOOST_TEST_EQUAL(-small, value_cast<double>(value_cast<std::string>(-small)));
+
+    return 0;
+}
+
+/// These extra tests were originally used for template function
+/// stream_cast(), but represent cases for which value_cast() seems
+/// preferable.
+
+int extra_tests1()
+{
+    // A char is treated as an arithmetic type, not as an element of a
+    // string literal: here, stream_cast() behaves differently.
+    BOOST_TEST_UNEQUAL(" ", value_cast<std::string>(' '));
+
+    std::string s;
+
+    bool b0 = true;
+    s = value_cast<std::string>(b0);
+    BOOST_TEST_EQUAL("1", s);
+    bool const b1 = false;
+    s = value_cast(b1, s);
+    BOOST_TEST_EQUAL("0", s);
+
+    int i0 = 1234;
+    s = value_cast<std::string>(i0);
+    BOOST_TEST_EQUAL("1234", s);
+    int const i1 = -4321;
+    s = value_cast(i1, s);
+    BOOST_TEST_EQUAL("-4321", s);
+
+    double d0 = 1.5;
+    s = value_cast<std::string>(d0);
+    BOOST_TEST_EQUAL("1.5", s);
+    double const d1 = -2.5;
+    s = value_cast(d1, s);
+    BOOST_TEST_EQUAL("-2.5", s);
 
     return 0;
 }
