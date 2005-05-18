@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: objects.make,v 1.24 2005-05-18 21:14:33 chicares Exp $
+# $Id: objects.make,v 1.25 2005-05-18 22:29:16 chicares Exp $
 
 ################################################################################
 
@@ -617,6 +617,7 @@ value_cast_ihs_test$(EXEEXT): \
 
 value_cast_test$(EXEEXT): \
   $(common_test_objects) \
+  facets.o \
   value_cast_test.o \
 
 wx_new_test$(EXEEXT): \
