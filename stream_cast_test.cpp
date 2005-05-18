@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: stream_cast_test.cpp,v 1.2 2005-02-19 03:27:45 chicares Exp $
+// $Id: stream_cast_test.cpp,v 1.3 2005-05-18 23:57:25 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -51,12 +51,21 @@ int test_main(int, char*[])
     s = stream_cast<std::string>(empty);
     BOOST_TEST_EQUAL("", s);
 
-    BOOST_TEST_EQUAL(" ", stream_cast<std::string>(' '));
-
     BOOST_TEST_EQUAL( "Z" , stream_cast<std::string>( "Z" ));
     BOOST_TEST_EQUAL(" Z" , stream_cast<std::string>(" Z" ));
     BOOST_TEST_EQUAL( "Z ", stream_cast<std::string>( "Z "));
     BOOST_TEST_EQUAL(" Z ", stream_cast<std::string>(" Z "));
+
+#if 0
+    // These tests have been suppressed because function template
+    // numeric_io_cast is to be preferred for arithmetic types.
+    // They are left here to assist anyone who desires to use them
+    // that way anyway after carefully reading the numeric_io_cast
+    // documentation.
+
+    // For this test, numeric_io_cast() behaves differently: it treats
+    // the char argument as a number.
+    BOOST_TEST_EQUAL(" ", stream_cast<std::string>(' '));
 
     bool b0 = true;
     s = stream_cast<std::string>(b0);
@@ -78,6 +87,7 @@ int test_main(int, char*[])
     double const d1 = -2.5;
     s = stream_cast(d1, s);
     BOOST_TEST_EQUAL("-2.5", s);
+#endif // 0
 
     char* c0 = const_cast<char*>("as df"); // Cast avoids 4.2/2 warning.
     s = stream_cast<std::string>(c0);
