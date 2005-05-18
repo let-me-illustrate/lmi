@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: file_command_wx.cpp,v 1.1 2005-05-12 15:46:43 chicares Exp $
+// $Id: file_command_wx.cpp,v 1.2 2005-05-18 21:05:33 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -106,7 +106,7 @@ void concrete_file_command
             << "Unable to determine command to '"
             << action
             << "' file '"
-            << file
+            << path.native_file_string().c_str()
             << "'."
             << LMI_FLUSH
             ;
@@ -118,7 +118,7 @@ void concrete_file_command
             << "Unable to '"
             << action
             << "' file '"
-            << file
+            << path.native_file_string().c_str()
             << "'. Return code: '"
             << okay
             << "'."
