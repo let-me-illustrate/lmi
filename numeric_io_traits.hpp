@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: numeric_io_traits.hpp,v 1.2 2005-02-19 03:27:45 chicares Exp $
+// $Id: numeric_io_traits.hpp,v 1.3 2005-05-18 13:22:02 chicares Exp $
 
 #ifndef numeric_io_traits_hpp
 #define numeric_io_traits_hpp
@@ -111,7 +111,7 @@ struct numeric_conversion_traits
 };
 
 // Converting an int to string this way:
-//   static_cast<T>(std::strtol(nptr, endptr, 0));
+//   static_cast<T>(std::strtol(nptr, endptr, 10));
 // seems distasteful because of the narrowing conversion. But there is
 // no strtoi() in the C standard: C99 7.20.1.2 says that atoi() is
 // equivalent to
@@ -155,8 +155,8 @@ template<> struct numeric_conversion_traits<char>
     static T strtoT(char const* nptr, char** endptr)
         {
         return (0 == std::numeric_limits<T>::min())
-            ? boost::numeric_cast<T>(std::strtoul(nptr, endptr, 0))
-            : boost::numeric_cast<T>(std::strtol (nptr, endptr, 0))
+            ? boost::numeric_cast<T>(std::strtoul(nptr, endptr, 10))
+            : boost::numeric_cast<T>(std::strtol (nptr, endptr, 10))
             ;
         }
 };
@@ -168,7 +168,7 @@ template<> struct numeric_conversion_traits<signed char>
     typedef signed char T;
     static char const* fmt() {return "%.*i";}
     static T strtoT(char const* nptr, char** endptr)
-        {return boost::numeric_cast<T>(std::strtol(nptr, endptr, 0));}
+        {return boost::numeric_cast<T>(std::strtol(nptr, endptr, 10));}
 };
 
 // C99's "%.*hhi" might be used instead if it gets added to C++.
@@ -178,7 +178,7 @@ template<> struct numeric_conversion_traits<unsigned char>
     typedef unsigned char T;
     static char const* fmt() {return "%.*u";}
     static T strtoT(char const* nptr, char** endptr)
-        {return boost::numeric_cast<T>(std::strtoul(nptr, endptr, 0));}
+        {return boost::numeric_cast<T>(std::strtoul(nptr, endptr, 10));}
 };
 
 // SOMEDAY !! Support this type when an actual need arises.
@@ -190,7 +190,7 @@ template<> struct numeric_conversion_traits<wchar_t>
     typedef wchar_t T;
     static char const* fmt() {return "%.*lc";}
     static T strtoT(char const* nptr, char** endptr)
-        {return boost::numeric_cast<T>(std::strtol(nptr, endptr, 0));}
+        {return boost::numeric_cast<T>(std::strtol(nptr, endptr, 10));}
 };
 #endif // 0
 
@@ -200,7 +200,7 @@ template<> struct numeric_conversion_traits<bool>
     typedef bool T;
     static char const* fmt() {return "%.*i";}
     static T strtoT(char const* nptr, char** endptr)
-        {return boost::numeric_cast<T>(std::strtol(nptr, endptr, 0));}
+        {return boost::numeric_cast<T>(std::strtol(nptr, endptr, 10));}
 };
 
 template<> struct numeric_conversion_traits<int>
@@ -209,7 +209,7 @@ template<> struct numeric_conversion_traits<int>
     typedef int T;
     static char const* fmt() {return "%.*i";}
     static T strtoT(char const* nptr, char** endptr)
-        {return static_cast<T>(std::strtol(nptr, endptr, 0));}
+        {return static_cast<T>(std::strtol(nptr, endptr, 10));}
 };
 
 template<> struct numeric_conversion_traits<short int>
@@ -218,7 +218,7 @@ template<> struct numeric_conversion_traits<short int>
     typedef short int T;
     static char const* fmt() {return "%.*hi";}
     static T strtoT(char const* nptr, char** endptr)
-        {return static_cast<T>(std::strtol(nptr, endptr, 0));}
+        {return static_cast<T>(std::strtol(nptr, endptr, 10));}
 };
 
 template<> struct numeric_conversion_traits<long int>
@@ -227,7 +227,7 @@ template<> struct numeric_conversion_traits<long int>
     typedef long int T;
     static char const* fmt() {return "%.*li";}
     static T strtoT(char const* nptr, char** endptr)
-        {return std::strtol(nptr, endptr, 0);}
+        {return std::strtol(nptr, endptr, 10);}
 };
 
 // SOMEDAY !! Consider supporting type long long int when C++ does.
@@ -238,7 +238,7 @@ template<> struct numeric_conversion_traits<long long int>
     typedef long long int T;
     static char const* fmt() {return "%.*lli";}
     static T strtoT(char const* nptr, char** endptr)
-        {return std::strtoll(nptr, endptr, 0);}
+        {return std::strtoll(nptr, endptr, 10);}
 };
 #endif // 0
 
@@ -248,7 +248,7 @@ template<> struct numeric_conversion_traits<unsigned int>
     typedef unsigned int T;
     static char const* fmt() {return "%.*u";}
     static T strtoT(char const* nptr, char** endptr)
-        {return static_cast<T>(std::strtoul(nptr, endptr, 0));}
+        {return static_cast<T>(std::strtoul(nptr, endptr, 10));}
 };
 
 template<> struct numeric_conversion_traits<unsigned short int>
@@ -257,7 +257,7 @@ template<> struct numeric_conversion_traits<unsigned short int>
     typedef unsigned short int T;
     static char const* fmt() {return "%.*hu";}
     static T strtoT(char const* nptr, char** endptr)
-        {return static_cast<T>(std::strtoul(nptr, endptr, 0));}
+        {return static_cast<T>(std::strtoul(nptr, endptr, 10));}
 };
 
 template<> struct numeric_conversion_traits<unsigned long int>
@@ -266,7 +266,7 @@ template<> struct numeric_conversion_traits<unsigned long int>
     typedef unsigned long int T;
     static char const* fmt() {return "%.*lu";}
     static T strtoT(char const* nptr, char** endptr)
-        {return std::strtoul(nptr, endptr, 0);}
+        {return std::strtoul(nptr, endptr, 10);}
 };
 
 // SOMEDAY !! Consider supporting type long long int when C++ does.
@@ -277,7 +277,7 @@ template<> struct numeric_conversion_traits<unsigned long long int>
     typedef unsigned long long int T;
     static char const* fmt() {return "%.*llu";}
     static T strtoT(char const* nptr, char** endptr)
-        {return std::strtoull(nptr, endptr, 0);}
+        {return std::strtoull(nptr, endptr, 10);}
 };
 #endif // 0
 
