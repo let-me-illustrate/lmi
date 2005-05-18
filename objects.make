@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: objects.make,v 1.23 2005-05-14 16:01:53 chicares Exp $
+# $Id: objects.make,v 1.24 2005-05-18 21:14:33 chicares Exp $
 
 ################################################################################
 
@@ -385,6 +385,7 @@ unit_test_targets := \
   test_tools_test$(EXEEXT) \
   timer_test$(EXEEXT) \
   tn_range_test$(EXEEXT) \
+  value_cast_ihs_test$(EXEEXT) \
   value_cast_test$(EXEEXT) \
   wx_new_test$(EXEEXT) \
   xenum_test$(EXEEXT) \
@@ -547,6 +548,7 @@ ncnnnpnn_test$(EXEEXT): \
 numeric_io_test$(EXEEXT): \
   $(common_test_objects) \
   numeric_io_test.o \
+  timer.o \
 
 obstruct_slicing_test$(EXEEXT): \
   $(common_test_objects) \
@@ -608,6 +610,10 @@ tn_range_test$(EXEEXT): \
   datum_base.o \
   tn_range_test.o \
   tn_range_test_aux.o \
+
+value_cast_ihs_test$(EXEEXT): \
+  $(common_test_objects) \
+  value_cast_ihs_test.o \
 
 value_cast_test$(EXEEXT): \
   $(common_test_objects) \

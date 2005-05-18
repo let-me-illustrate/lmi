@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: value_cast.hpp,v 1.2 2005-03-12 16:45:03 chicares Exp $
+// $Id: value_cast.hpp,v 1.3 2005-05-18 21:14:33 chicares Exp $
 
 // Function template value_cast() converts between types, choosing a
 // conversion method in the following order of decreasing preference:
@@ -76,13 +76,13 @@
 
 #include <boost/type_traits.hpp>
 
-#ifndef __BORLANDC__
-
 enum cast_method
     {e_direct
     ,e_numeric
     ,e_stream
     };
+
+#ifndef __BORLANDC__
 
 template<typename T>
 struct is_string
