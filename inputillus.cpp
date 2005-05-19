@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: inputillus.cpp,v 1.4 2005-04-23 21:42:57 chicares Exp $
+// $Id: inputillus.cpp,v 1.5 2005-05-19 12:30:00 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -1034,15 +1034,15 @@ namespace
 //    template<typename T>
 //    std::string get_value_from_string(T& t)
 //    {
-//        return value_cast_ihs<std::string>(t);
+//        return value_cast<std::string>(t);
 //    }
 //
 //    template<> ...
 //
 // TODO ?? That really should work without specializations, if template
-// function value_cast_ihs() works as intended. It suffers from the problem
+// function value_cast() works as intended. It suffers from the problem
 // described above, but maybe we should make a stronger attempt to fix
-// it, since we use value_cast_ihs extensively elsewhere.
+// it, since we use value_cast extensively elsewhere.
 
     template<typename Essence, typename Substance>
     std::string get_value_from_string(xrange<Essence,Substance> const& t)
@@ -1255,12 +1255,12 @@ namespace
 //    template<typename T>
 //    void get_value_from_string(T& t, std::string const& s)
 //    {
-//        t = value_cast_ihs<T>(s);
+//        t = value_cast<T>(s);
 //    }
 //
 //    template<> ...
 //
-// TODO ?? As noted above, perhaps we should find a way to make value_cast_ihs
+// TODO ?? As noted above, perhaps we should find a way to make value_cast
 // work well enough with this compiler that no specialization of this
 // function would be needed. Until then, we leave this code the way it is:
 // even though the body is uniformly 't = s;', we may need to add other

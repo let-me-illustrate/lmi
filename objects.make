@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: objects.make,v 1.25 2005-05-18 22:29:16 chicares Exp $
+# $Id: objects.make,v 1.26 2005-05-19 12:30:00 chicares Exp $
 
 ################################################################################
 
@@ -116,6 +116,7 @@ antediluvian_common_objects := \
   dbvalue.o \
   death_benefits.o \
   expm1.o \
+  facets.o \
   fenv_lmi.o \
   file_command.o \
   getopt.o \
@@ -188,6 +189,7 @@ lmi_common_objects := \
   dbnames.o \
   death_benefits.o \
   expm1.o \
+  facets.o \
   fenv_lmi.o \
   file_command.o \
   global_settings.o \
@@ -385,7 +387,6 @@ unit_test_targets := \
   test_tools_test$(EXEEXT) \
   timer_test$(EXEEXT) \
   tn_range_test$(EXEEXT) \
-  value_cast_ihs_test$(EXEEXT) \
   value_cast_test$(EXEEXT) \
   wx_new_test$(EXEEXT) \
   xenum_test$(EXEEXT) \
@@ -481,6 +482,7 @@ input_test$(EXEEXT): \
   dbdict.o \
   dbnames.o \
   dbvalue.o \
+  facets.o \
   global_settings.o \
   input_seq_helpers.o \
   input_sequence.o \
@@ -611,10 +613,6 @@ tn_range_test$(EXEEXT): \
   tn_range_test.o \
   tn_range_test_aux.o \
 
-value_cast_ihs_test$(EXEEXT): \
-  $(common_test_objects) \
-  value_cast_ihs_test.o \
-
 value_cast_test$(EXEEXT): \
   $(common_test_objects) \
   facets.o \
@@ -636,6 +634,7 @@ xrange_test$(EXEEXT): \
   alert.o \
   alert_cli.o \
   calendar_date.o \
+  facets.o \
   xrange.o \
   xrange_test.o \
 

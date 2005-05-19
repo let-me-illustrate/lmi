@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_inputillus_term_rider.cpp,v 1.1 2005-01-14 19:47:45 chicares Exp $
+// $Id: ihs_inputillus_term_rider.cpp,v 1.2 2005-05-19 12:30:00 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -31,7 +31,7 @@
 #include "data_directory.hpp" // AddDataDir(), needed to access product data.
 #include "ihs_proddata.hpp"   // Product data, needed to access rounding rules.
 #include "ihs_rnddata.hpp"    // Rounding.
-#include "value_cast_ihs.hpp"
+#include "value_cast.hpp"
 
 #include <stdexcept>
 
@@ -67,7 +67,7 @@ void IllusInputParms::make_term_rider_consistent(bool aggressively)
         if(aggressively)
             {
             double base_spec_amt = total_spec_amt - term_spec_amt;
-            SpecifiedAmount = value_cast_ihs<std::string>(base_spec_amt);
+            SpecifiedAmount = value_cast<std::string>(base_spec_amt);
 // TODO ?? Are the next two calls necessary? or does
 //   realize_sequence_string_for_specified_amount();
 // take care of everything?

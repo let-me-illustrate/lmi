@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: calendar_date.cpp,v 1.1 2005-01-14 19:47:44 chicares Exp $
+// $Id: calendar_date.cpp,v 1.2 2005-05-19 12:30:00 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -28,7 +28,7 @@
 
 #include "calendar_date.hpp"
 
-#include "value_cast_ihs.hpp"
+#include "value_cast.hpp"
 
 #include <ctime>
 #include <istream>
@@ -128,7 +128,7 @@ namespace
 
     std::string JdnToYyyyMmDd(std::string const& j_str)
     {
-        return value_cast_ihs<std::string>(JdnToYyyyMmDd(value_cast_ihs<int>(j_str)));
+        return value_cast<std::string>(JdnToYyyyMmDd(value_cast<int>(j_str)));
     }
 */
 } // Unnamed namespace.

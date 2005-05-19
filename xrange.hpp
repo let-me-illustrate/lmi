@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xrange.hpp,v 1.1 2005-01-14 19:47:45 chicares Exp $
+// $Id: xrange.hpp,v 1.2 2005-05-19 12:30:00 chicares Exp $
 
 #ifndef xrange_hpp
 #define xrange_hpp
@@ -102,7 +102,7 @@ Or should the semantic type do that?
 #include "config.hpp"
 
 #include "alert.hpp"
-#include "value_cast_ihs.hpp"
+#include "value_cast.hpp"
 
 #ifndef LMI_LACKS_STD_ITERATOR
 // <boost/operators.hpp> requires 'std::iterator'.
@@ -198,16 +198,16 @@ class xrange_error
         )
         :std::range_error
             (xrange_error_message
-                (value_cast_ihs<std::string>(bad_value)
+                (value_cast<std::string>(bad_value)
                 ,typeid(Essence).name()
-                ,value_cast_ihs<std::string>(Essence::range_limits().first)
-                ,value_cast_ihs<std::string>(Essence::range_limits().second)
+                ,value_cast<std::string>(Essence::range_limits().first)
+                ,value_cast<std::string>(Essence::range_limits().second)
                 )
             )
     {}
 };
 
-// value_cast_ihs<numeric-type>(empty std::string) throws an exception.
+// value_cast<numeric-type>(empty std::string) throws an exception.
 // TODO ?? This workaround detects that situation so that corrective
 // action can be taken instead of propagating the exception back to
 // the main program. It would be better to rewrite the offending code.
@@ -225,9 +225,9 @@ bool value_cast_will_succeed(std::string const& s, Substance = Substance())
         }
     try
         {
-        (void)value_cast_ihs<Substance>(s);
+        (void)value_cast<Substance>(s);
         }
-    catch(bad_value_cast& x)
+    catch(std::exception& x)
         {
         return false;
         }
@@ -398,7 +398,7 @@ bool xrange<Essence,Substance>::is_valid(std::string const& s) const
         {
         return false;
         }
-    return is_valid(value_cast_ihs<Substance>(s));
+    return is_valid(value_cast<Substance>(s));
 }
 
 template<typename Essence, typename Substance>
@@ -426,7 +426,7 @@ Substance xrange<Essence,Substance>::force_valid(std::string const& s) const
         {
         return force_valid(Substance());
         }
-    return force_valid(value_cast_ihs<Substance>(s));
+    return force_valid(value_cast<Substance>(s));
 }
 
 template<typename Essence, typename Substance>
@@ -453,7 +453,7 @@ void xrange<Essence,Substance>::assign_iff_valid(std::string const& s)
 {
     if(value_cast_will_succeed<Substance>(s))
         {
-        assign_iff_valid(value_cast_ihs<Substance>(s));
+        assign_iff_valid(value_cast<Substance>(s));
         }
     else
         {
@@ -475,7 +475,7 @@ Substance xrange<Essence,Substance>::value() const
 template<typename Essence, typename Substance>
 std::string xrange<Essence,Substance>::str() const
 {
-    return value_cast_ihs<std::string>(representation);
+    return value_cast<std::string>(representation);
 }
 
 template<typename Essence, typename Substance>

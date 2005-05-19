@@ -31,7 +31,7 @@
 // other reasons evident in cvs or explained in 'ChangeLog'. Any
 // defect should not reflect on Stephen F. Booth's reputation.
 
-// $Id: main_cgi.cpp,v 1.5 2005-05-14 15:11:30 chicares Exp $
+// $Id: main_cgi.cpp,v 1.6 2005-05-19 12:30:00 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -45,7 +45,7 @@
 #include "main_common.hpp"
 #include "platform_dependent.hpp" // putenv() [GWC]
 #include "timer.hpp"
-#include "value_cast_ihs.hpp"
+#include "value_cast.hpp"
 
 #include <cgicc/Cgicc.h>
 #include <cgicc/CgiEnvironment.h>
@@ -164,7 +164,7 @@ int main(int argc, char* argv[])
     if(argc == 2 && argv[1] == std::string("--enable_test"))
         {
         std::string s("CONTENT_LENGTH=");
-        s += value_cast_ihs<std::string>(std::strlen(content_string));
+        s += value_cast<std::string>(std::strlen(content_string));
         static char content_length_string[sizeof "CONTENT_LENGTH=FFFFFFFFFFFFFFFF\0"];
         std::strcpy(content_length_string, s.c_str());
         putenv(content_length_string);
