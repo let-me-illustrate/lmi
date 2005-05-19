@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_text_formats.cpp,v 1.2 2005-05-07 16:17:40 chicares Exp $
+// $Id: ledger_text_formats.cpp,v 1.3 2005-05-19 12:30:00 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -39,7 +39,7 @@
 #include "ledger_variant.hpp"
 #include "miscellany.hpp"
 #include "security.hpp"
-#include "value_cast_ihs.hpp"
+#include "value_cast.hpp"
 
 #include <algorithm>
 #include <fstream>
@@ -319,7 +319,7 @@ os << "\n\n" ;
     os << "InitBaseSpecAmt\t\t"   << Invar.value_str("InitBaseSpecAmt") << '\n';
     os << "InitTermSpecAmt\t\t"   << Invar.value_str("InitTermSpecAmt") << '\n';
     double total_spec_amt = Invar.InitBaseSpecAmt + Invar.InitTermSpecAmt;
-    os << "  Total:\t\t"     << value_cast_ihs<std::string>(total_spec_amt) << '\n';
+    os << "  Total:\t\t"     << value_cast<std::string>(total_spec_amt) << '\n';
     os << "PolicyMktgName\t\t"    << Invar.value_str("PolicyMktgName" ) << '\n';
     os << "PolicyLegalName\t\t"   << Invar.value_str("PolicyLegalName") << '\n';
     os << "PolicyForm\t\t"        << Invar.value_str("PolicyForm"     ) << '\n';
@@ -427,7 +427,7 @@ os << "\n\n" ;
             - Invar.NetWD     [j]
             - Invar.Loan      [j]
             ;
-        os << value_cast_ihs<std::string>(net_outlay) << '\t';
+        os << value_cast<std::string>(net_outlay) << '\t';
 
         os << Guar_.value_str("AcctVal"               ,j) << '\t';
         os << Guar_.value_str("CSVNet"                ,j) << '\t';
@@ -474,7 +474,7 @@ os << "\n\n" ;
         os << Curr_.value_str("NetIntCredited"        ,j) << '\t';
 
         // First element of InforceLives is BOY--show only EOY.
-        os << value_cast_ihs<std::string>(Invar.InforceLives[1 + j]) << '\t';
+        os << value_cast<std::string>(Invar.InforceLives[1 + j]) << '\t';
         os << Curr_.value_str("ClaimsPaid"            ,j) << '\t';
         os << Invar.value_str("ProducerCompensation"  ,j) << '\t';
 

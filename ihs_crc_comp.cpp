@@ -19,13 +19,13 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_crc_comp.cpp,v 1.2 2005-05-02 03:56:45 chicares Exp $
+// $Id: ihs_crc_comp.cpp,v 1.3 2005-05-19 12:30:00 chicares Exp $
 
 // Sample command line to compile:
 // /gcc-2.95.2-1/bin/g++ -Iming29521 ihs_crc_comp.cpp
 
 #include "miscellany.hpp"
-#include "value_cast_ihs.hpp"
+#include "value_cast.hpp"
 
 #include <algorithm>
 #include <cctype>
@@ -297,8 +297,8 @@ void f_3(std::string const& line1, std::string const& line2)
         return;
         }
 
-    long double d1 = value_cast_ihs<long double>(line1);
-    long double d2 = value_cast_ihs<long double>(line2);
+    long double d1 = value_cast<long double>(line1);
+    long double d2 = value_cast<long double>(line2);
     if(d1 == d2)
         {
         return;

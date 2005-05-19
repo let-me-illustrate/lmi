@@ -20,7 +20,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_sequence.cpp,v 1.1 2005-01-14 19:47:45 chicares Exp $
+// $Id: input_sequence.cpp,v 1.2 2005-05-19 12:30:00 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -30,7 +30,7 @@
 #include "input_sequence.hpp"
 
 #include "miscellany.hpp"
-#include "value_cast_ihs.hpp"
+#include "value_cast.hpp"
 
 #include <algorithm>
 #include <cctype>
@@ -1084,7 +1084,7 @@ std::string InputSequence::mathematical_representation() const
             }
         else
             {
-            oss << value_cast_ihs<std::string>(intervals_i->value_number);
+            oss << value_cast<std::string>(intervals_i->value_number);
             }
 
         // If there's only one interval, it must span all years, so

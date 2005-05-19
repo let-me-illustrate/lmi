@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avdebug.cpp,v 1.9 2005-05-03 01:35:48 chicares Exp $
+// $Id: ihs_avdebug.cpp,v 1.10 2005-05-19 12:30:00 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -46,7 +46,7 @@
 #include "math_functors.hpp"
 #include "ncnnnpnn.hpp"
 #include "outlay.hpp"
-#include "value_cast_ihs.hpp"
+#include "value_cast.hpp"
 
 #include <algorithm>
 #include <fstream>
@@ -83,7 +83,7 @@ inline void AccountValue::SetMonthlyDetail(int enumerator, std::string const& s)
 //============================================================================
 inline void AccountValue::SetMonthlyDetail(int enumerator, double d)
 {
-    DebugRecord[enumerator] = value_cast_ihs<std::string>(d);
+    DebugRecord[enumerator] = value_cast<std::string>(d);
 }
 
 //============================================================================

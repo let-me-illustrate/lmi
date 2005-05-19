@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xml_io.cpp,v 1.14 2005-05-07 16:17:40 chicares Exp $
+// $Id: ledger_xml_io.cpp,v 1.15 2005-05-19 12:30:00 chicares Exp $
 
 #include "config.hpp"
 
@@ -36,7 +36,7 @@
 #include "ledger_variant.hpp"
 #include "miscellany.hpp"
 #include "security.hpp"
-#include "value_cast_ihs.hpp"
+#include "value_cast.hpp"
 #include "xmlwrapp_ex.hpp"
 
 #include <xmlwrapp/init.h>
@@ -772,9 +772,9 @@ void Ledger::write(xml::node& x) const
         prep_date.julian_day_number(static_cast<int>(ledger_invariant_->EffDateJdn));
         }
 
-    std::string PrepYear  = value_cast_ihs<std::string>(prep_date.year());
+    std::string PrepYear  = value_cast<std::string>(prep_date.year());
     std::string PrepMonth = calendar_date::month_name(prep_date.month());
-    std::string PrepDay   = value_cast_ihs<std::string>(prep_date.day());
+    std::string PrepDay   = value_cast<std::string>(prep_date.day());
 
     strings["PrepYear" ] = &PrepYear;
     strings["PrepMonth"] = &PrepMonth;
@@ -949,7 +949,7 @@ void Ledger::write(xml::node& x) const
         )
         {
         std::string node_tag = j->first;
-        std::string value = value_cast_ihs<std::string>(*j->second);
+        std::string value = value_cast<std::string>(*j->second);
         scalar.push_back(xml::node(node_tag.c_str(), value.c_str()));
         }
     for
@@ -959,7 +959,7 @@ void Ledger::write(xml::node& x) const
         )
         {
         std::string node_tag = j->first;
-        std::string value = value_cast_ihs<std::string>(*j->second);
+        std::string value = value_cast<std::string>(*j->second);
         scalar.push_back(xml::node(node_tag.c_str(), value.c_str()));
         }
     for
@@ -975,8 +975,8 @@ void Ledger::write(xml::node& x) const
         for(unsigned int k = 0; k < v.size(); ++k)
             {
             xml::node duration("duration");
-            duration.set_attr("number", value_cast_ihs<std::string>(k).c_str());
-            duration.set_attr("column_value", value_cast_ihs<std::string>(v[k]).c_str());
+            duration.set_attr("number", value_cast<std::string>(k).c_str());
+            duration.set_attr("column_value", value_cast<std::string>(v[k]).c_str());
             column.push_back(duration);
             }
 // TODO ?? Is <newcolumn> really useful?
@@ -1009,7 +1009,7 @@ void Ledger::write(xml::node& x) const
         for(unsigned int k = 0; k < v.size(); ++k)
             {
             xml::node duration("duration");
-            duration.set_attr("number", value_cast_ihs<std::string>(k).c_str());
+            duration.set_attr("number", value_cast<std::string>(k).c_str());
             duration.set_attr("column_value", v[k].c_str());
             column.push_back(duration);
             }

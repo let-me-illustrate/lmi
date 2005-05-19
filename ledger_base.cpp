@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_base.cpp,v 1.1 2005-02-12 12:59:31 chicares Exp $
+// $Id: ledger_base.cpp,v 1.2 2005-05-19 12:30:00 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -30,7 +30,7 @@
 
 #include "alert.hpp"
 #include "crc32.hpp"
-#include "value_cast_ihs.hpp"
+#include "value_cast.hpp"
 
 #include <algorithm>
 #include <cmath> // std::pow()
@@ -158,7 +158,7 @@ std::string LedgerBase::value_str(std::string const& map_key, int index) const
     double_vector_map::const_iterator found = AllVectors.find(map_key);
     if(AllVectors.end() != found)
         {
-        return value_cast_ihs<std::string>((*(*found).second)[index]);
+        return value_cast<std::string>((*(*found).second)[index]);
         }
 
     hobsons_choice()
@@ -182,7 +182,7 @@ std::string LedgerBase::value_str(std::string const& map_key) const
     scalar_map::const_iterator found_scalar = AllScalars.find(map_key);
     if(AllScalars.end() != found_scalar)
         {
-        return value_cast_ihs<std::string>(*(*found_scalar).second);
+        return value_cast<std::string>(*(*found_scalar).second);
         }
 
     hobsons_choice()
