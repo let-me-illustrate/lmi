@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: calendar_date_test.cpp,v 1.2 2005-05-18 23:57:41 chicares Exp $
+// $Id: calendar_date_test.cpp,v 1.3 2005-05-19 00:08:03 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -313,8 +313,6 @@ int test_main(int, char*[])
     birth_date     = calendar_date(1958,  8, 31);
     TEST_EQUALITY(45, calculate_age(birth_date, effective_date, anb));
     TEST_EQUALITY(45, calculate_age(birth_date, effective_date, alb));
-
-    int return_value = 0;
 
     // Effective date mustn't precede birthdate--this should throw:
     birth_date     = calendar_date(2003,  1,  2);
