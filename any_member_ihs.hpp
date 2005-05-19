@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: any_member_ihs.hpp,v 1.2 2005-03-11 13:40:41 chicares Exp $
+// $Id: any_member_ihs.hpp,v 1.3 2005-05-19 12:30:00 chicares Exp $
 
 // Refer to data members by symbolic names.
 
@@ -30,7 +30,7 @@
 
 #ifndef BC_BEFORE_5_5
 
-#include "value_cast_ihs.hpp"
+#include "value_cast.hpp"
 
 #include <algorithm>
 #include <ios>
@@ -130,7 +130,7 @@ namespace boost
         bool operator==(any_member_ihs<ClassType> const& rhs) const
         {
 // TODO ?? Track down the problem here: error on conversion from empty string.
-//            std::string s = value_cast_ihs<std::string>(rhs);
+//            std::string s = value_cast<std::string>(rhs);
 //
 //            std::string s = rhs.str();
 //            return *content == s;
@@ -200,7 +200,7 @@ namespace boost
             {
             // This is the place where we must reunify the object
             // and the pointer to member.
-                object->*held = value_cast_ihs(s, object->*held);
+                object->*held = value_cast(s, object->*held);
             }
 
         public: // queries
@@ -208,7 +208,7 @@ namespace boost
             virtual bool operator==(std::string const& s) const
             {
 //            return object->*held == s;
-                return s == value_cast_ihs(object->*held, s + " ");
+                return s == value_cast(object->*held, s + " ");
 //return s == object->*held.str();
             }
 

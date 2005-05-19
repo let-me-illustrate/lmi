@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: multiple_cell_document.cpp,v 1.4 2005-04-15 13:57:21 chicares Exp $
+// $Id: multiple_cell_document.cpp,v 1.5 2005-05-19 12:30:00 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -30,7 +30,7 @@
 
 #include "alert.hpp"
 #include "inputillus.hpp"
-#include "value_cast_ihs.hpp"
+#include "value_cast.hpp"
 #include "xmlwrapp_ex.hpp"
 
 #ifdef USING_CURRENT_XMLWRAPP
@@ -153,7 +153,7 @@ using namespace xml;
             ;
         throw std::runtime_error(msg.str());
         }
-    unsigned int number_of_classes = value_cast_ihs<unsigned int>
+    unsigned int number_of_classes = value_cast<unsigned int>
         (child->get_content()
         );
 
@@ -209,7 +209,7 @@ using namespace xml;
             ;
         throw std::runtime_error(msg.str());
         }
-    unsigned int number_of_cells = value_cast_ihs<unsigned int>
+    unsigned int number_of_cells = value_cast<unsigned int>
         (child->get_content()
         );
 
@@ -300,7 +300,7 @@ void multiple_cell_document::write(std::ostream& os) const
 //    root.push_back
 //        (xml::node
 //            ("NumberOfCases"
-//            ,value_cast_ihs<std::string>(case_parms_.size()).c_str()
+//            ,value_cast<std::string>(case_parms_.size()).c_str()
 //            )
 //        );
     root << case_parms_[0];
@@ -308,7 +308,7 @@ void multiple_cell_document::write(std::ostream& os) const
     root.push_back
         (xml::node
             ("NumberOfClasses"
-            ,value_cast_ihs<std::string>(class_parms_.size()).c_str()
+            ,value_cast<std::string>(class_parms_.size()).c_str()
             )
         );
     for(unsigned int j = 0; j < class_parms_.size(); j++)
@@ -319,7 +319,7 @@ void multiple_cell_document::write(std::ostream& os) const
     root.push_back
         (xml::node
             ("NumberOfCells"
-            ,value_cast_ihs<std::string>(cell_parms_.size()).c_str()
+            ,value_cast<std::string>(cell_parms_.size()).c_str()
             )
         );
     for(unsigned int j = 0; j < cell_parms_.size(); j++)

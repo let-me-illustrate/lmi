@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ncnnnpnn.hpp,v 1.1 2005-01-14 19:47:45 chicares Exp $
+// $Id: ncnnnpnn.hpp,v 1.2 2005-05-19 12:30:00 chicares Exp $
 
 // Ideally we would use imbue an appropriate locale and use some facet
 // like money_put, but most of our compilers's standard libraries don't
@@ -66,7 +66,7 @@ inline std::string ncnnnpnn(long double value)
     stream << std::setprecision(2);
     std::string s_in;
 
-// TODO ?? Do something like this in value_cast_ihs.hpp too.
+// TODO ?? Do something like this in stream_cast.hpp too.
 #ifdef LMI_MODERN_STREAMS
     if
         (  !(stream << value)

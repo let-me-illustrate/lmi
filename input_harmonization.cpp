@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_harmonization.cpp,v 1.8 2005-05-07 03:36:36 chicares Exp $
+// $Id: input_harmonization.cpp,v 1.9 2005-05-19 12:30:00 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -32,6 +32,7 @@
 #include "dbnames.hpp"
 #include "global_settings.hpp"
 #include "inputillus.hpp"
+#include "value_cast.hpp"
 #include "xenum.hpp"
 
 // Harmonization is physically separated for no better reason than to
@@ -929,7 +930,7 @@ void Input::TransferWithdrawalSimpleControlsToInputSequence()
             if(IssueAge < local_rep->WDBegTime)
 // TODO ??            local_rep->WDBegTime < database->Query(DB_EndtAge)
                 {
-                s += "0, @" + value_cast_ihs<std::string>(local_rep->WDBegTime);
+                s += "0, @" + value_cast<std::string>(local_rep->WDBegTime);
                 s += "; ";
                 }
             }
@@ -941,7 +942,7 @@ void Input::TransferWithdrawalSimpleControlsToInputSequence()
 // TODO ??                < database->Query(DB_EndtAge)
 // TODO ??                )
                 {
-                s += "0, " + value_cast_ihs<std::string>(local_rep->WDBegTime);
+                s += "0, " + value_cast<std::string>(local_rep->WDBegTime);
                 s += "; ";
                 }
             }
@@ -982,7 +983,7 @@ void Input::TransferWithdrawalSimpleControlsToInputSequence()
             {
             if(local_rep->WDEndTime < database->Query(DB_EndtAge))
                 {
-                s += ", @" + value_cast_ihs<std::string>(local_rep->WDEndTime);
+                s += ", @" + value_cast<std::string>(local_rep->WDEndTime);
                 s += "; 0";
                 }
             }
@@ -994,7 +995,7 @@ void Input::TransferWithdrawalSimpleControlsToInputSequence()
                 < database->Query(DB_EndtAge)
                 )
                 {
-                s += ", " + value_cast_ihs<std::string>(local_rep->WDEndTime);
+                s += ", " + value_cast<std::string>(local_rep->WDEndTime);
                 s += "; 0";
                 }
             }

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_cli.cpp,v 1.2 2005-05-14 15:11:31 chicares Exp $
+// $Id: main_cli.cpp,v 1.3 2005-05-19 12:30:00 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -35,7 +35,7 @@
 #include "license.hpp"
 #include "main_common.hpp"
 #include "miscellany.hpp"
-#include "value_cast_ihs.hpp"
+#include "value_cast.hpp"
 
 #include <boost/filesystem/convenience.hpp>
 #include <boost/filesystem/path.hpp>
@@ -112,9 +112,9 @@ void SelfTest()
         {
         warning()
             << "Value should be "
-            << value_cast_ihs<std::string>(expected_value)
+            << value_cast<std::string>(expected_value)
             << ", but is "
-            << value_cast_ihs<std::string>(observed_value)
+            << value_cast<std::string>(observed_value)
             << " ."
             << LMI_FLUSH
             ;
@@ -127,9 +127,9 @@ void SelfTest()
         {
         warning()
             << "Value should be "
-            << value_cast_ihs<std::string>(expected_value)
+            << value_cast<std::string>(expected_value)
             << ", but is "
-            << value_cast_ihs<std::string>(observed_value)
+            << value_cast<std::string>(observed_value)
             << " .\n"
             << LMI_FLUSH
             ;
@@ -142,9 +142,9 @@ void SelfTest()
         {
         warning()
             << "Value should be "
-            << value_cast_ihs<std::string>(expected_value)
+            << value_cast<std::string>(expected_value)
             << ", but is "
-            << value_cast_ihs<std::string>(observed_value)
+            << value_cast<std::string>(observed_value)
             << " .\n"
             << LMI_FLUSH
             ;
@@ -173,9 +173,9 @@ std::cout << "? " << runner.XXXComposite.GetLedgerInvariant().GetInforceLives().
         {
         warning()
             << "Value should be "
-            << value_cast_ihs<std::string>(expected_value)
+            << value_cast<std::string>(expected_value)
             << ", but is "
-            << value_cast_ihs<std::string>(observed_value)
+            << value_cast<std::string>(observed_value)
             << " .\n"
             << LMI_FLUSH
             ;

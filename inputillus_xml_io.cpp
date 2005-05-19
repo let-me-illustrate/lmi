@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: inputillus_xml_io.cpp,v 1.1 2005-01-14 19:47:45 chicares Exp $
+// $Id: inputillus_xml_io.cpp,v 1.2 2005-05-19 12:30:00 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -30,7 +30,7 @@
 
 #include "alert.hpp"
 #include "miscellany.hpp"
-#include "value_cast_ihs.hpp"
+#include "value_cast.hpp"
 
 #include <xmlwrapp/init.h>
 #include <xmlwrapp/node.h>
@@ -102,7 +102,7 @@ void IllusInputParms::read(xml::node& x)
             ;
         throw std::runtime_error(msg.str());
         }
-    int cell_version = value_cast_ihs<int>(cell_version_string);
+    int cell_version = value_cast<int>(cell_version_string);
 
     // "Use" this variable. Eventually we will. Until then we don't
     // care to see warnings that it's unused.
@@ -229,7 +229,7 @@ void IllusInputParms::write(xml::node& x) const
     xml::node root(xml_root_name().c_str());
 // XMLWRAPP !! There's no way to set an integer attribute; and function
 // set_attr() seems to be missing in the doxygen stuff at pmade.org .
-    root.set_attr("version", value_cast_ihs<std::string>(class_version()).c_str());
+    root.set_attr("version", value_cast<std::string>(class_version()).c_str());
 
     std::vector<std::string> const member_names(IllusInputParms::map_keys());
     std::vector<std::string>::const_iterator i;
