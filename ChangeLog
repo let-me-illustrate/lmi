@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.62 2005-05-18 13:23:40 chicares Exp $
+// $Id: ChangeLog,v 1.63 2005-05-19 13:39:47 chicares Exp $
 
 2005-01-14
 
@@ -1812,7 +1812,7 @@ exaggerates the cost of memory allocation.
 Add tests, revealing a latent defect: "0." is a valid floating literal
 but incorrectly triggers an exception.
 
-2005-05-18 [1335]
+2005-05-18 [1337]
 
   numeric_io_cast.hpp
   numeric_io_test.cpp
@@ -1822,4 +1822,65 @@ Work around defect noted 2005-05-17.
   numeric_io_test.cpp
   numeric_io_traits.hpp
 Remove defect noted 2005-05-17.
+
+  file_command_wx.cpp
+Show native path in diagnostic messages.
+
+  objects.make
+  value_cast.hpp
+  value_cast_ihs_test.cpp [new file]
+  value_cast_test.cpp
+Formerly, these unit tests corresponded to these libraries:
+  [no unit test]            tested 'value_cast.hpp'
+  'value_cast_test.cpp'     tested 'value_cast_ihs.hpp'
+Now, more rationally,
+  'value_cast_test.cpp'     tests  'value_cast.hpp'
+  'value_cast_test_ihs.cpp' tests  'value_cast_ihs.hpp'
+New file 'value_cast_test_ihs.cpp' is old file 'value_cast_test.cpp',
+renamed. Contents of old file 'value_cast_test.cpp' are replaced by
+code from the skeleton branch, with the addition of some tests from
+the suite for 'value_cast_ihs.hpp'.
+
+  objects.make
+  value_cast.hpp
+  value_cast_test.cpp
+Improve unit test and documentation.
+
+  stream_cast.hpp
+  value_cast_test.cpp
+Warn on inappropriate use of function template stream_cast(). Revise
+value-cast unit test accordingly.
+
+  stream_cast.hpp
+  stream_cast_test.cpp
+  value_cast_test.cpp
+Move certain stream-cast tests to value-cast unit test.
+
+  calendar_date_test.cpp
+Refactor.
+
+2005-05-19 [1328]
+
+  any_member_ihs.hpp
+  calendar_date.cpp
+  ihs_avdebug.cpp
+  ihs_crc_comp.cpp
+  ihs_inputillus_term_rider.cpp
+  input_harmonization.cpp
+  input_sequence.cpp
+  inputillus.cpp
+  inputillus_term_rider.cpp
+  inputillus_xml_io.cpp
+  ledger_base.cpp
+  ledger_text_formats.cpp
+  ledger_xml_io.cpp
+  main_cgi.cpp
+  main_cli.cpp
+  multiple_cell_document.cpp
+  ncnnnpnn.hpp
+  objects.make
+  value_cast_ihs.hpp      [expunged]
+  value_cast_ihs_test.cpp [expunged]
+  xrange.hpp
+Replace old with new value-cast function template.
 
