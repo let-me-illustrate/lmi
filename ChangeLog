@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.63 2005-05-19 13:39:47 chicares Exp $
+// $Id: ChangeLog,v 1.64 2005-05-20 15:18:02 chicares Exp $
 
 2005-01-14
 
@@ -1883,4 +1883,17 @@ Refactor.
   value_cast_ihs_test.cpp [expunged]
   xrange.hpp
 Replace old with new value-cast function template.
+
+2005-05-20 [1328]
+
+  ihs_crc_comp.cpp
+Catch exceptions in main(), which had abended due to a long-double IO
+issue identified when applying the 2005-05-19 changes. Catching
+exceptions prevents the abend; the next change (below) prevents the
+observed exception from being thrown.
+
+  numeric_io_test.cpp
+  numeric_io_traits.hpp
+Use what limited support MinGW gcc provides for long-double IO;
+document a known MinGW strtold() problem in the unit test.
 
