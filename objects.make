@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: objects.make,v 1.26 2005-05-19 12:30:00 chicares Exp $
+# $Id: objects.make,v 1.27 2005-05-20 16:34:10 chicares Exp $
 
 ################################################################################
 
@@ -364,6 +364,7 @@ unit_test_targets := \
   commutation_functions_test$(EXEEXT) \
   comma_punct_test$(EXEEXT) \
   crc32_test$(EXEEXT) \
+  global_settings_test$(EXEEXT) \
   financial_test$(EXEEXT) \
   input_seq_test$(EXEEXT) \
   input_test$(EXEEXT) \
@@ -453,6 +454,12 @@ crc32_test$(EXEEXT): \
   $(common_test_objects) \
   crc32.o \
   crc32_test.o \
+
+global_settings_test$(EXEEXT): \
+  $(boost_filesystem_objects) \
+  $(common_test_objects) \
+  global_settings.o \
+  global_settings_test.o \
 
 financial_test$(EXEEXT): \
   $(common_test_objects) \
