@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: numeric_io_test.cpp,v 1.6 2005-05-18 13:22:02 chicares Exp $
+// $Id: numeric_io_test.cpp,v 1.7 2005-05-20 15:07:43 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -251,7 +251,16 @@ int test_main(int, char*[])
     BOOST_TEST_THROW(numeric_io_cast<double>(    ""), std::invalid_argument, "");
     BOOST_TEST_THROW(numeric_io_cast<double>(  "1e"), std::invalid_argument, "");
 
-    BOOST_TEST_THROW(numeric_io_cast<long double>("1e"), std::domain_error, "");
+    BOOST_TEST_THROW(numeric_io_cast<long double>(    ""), std::invalid_argument, "");
+    BOOST_TEST_THROW(numeric_io_cast<long double>(  "1e"), std::invalid_argument, "");
+    // COMPILER !! It is rumored that gcc-4 uses builtin facilities
+    // for numeric conversion, which might remove this problem.
+#if defined __GNUC__ && __GNUC__ == 3
+    std::cerr
+        << "This test fails with gcc version 3.x: see\n"
+        << "  http://sf.net/mailarchive/message.php?msg_id=10706179\n"
+        ;
+#endif // gcc version 3.
 
     // This shouldn't even throw, because adequate compilers detect
     // the error at compile time:

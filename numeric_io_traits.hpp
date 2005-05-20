@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: numeric_io_traits.hpp,v 1.3 2005-05-18 13:22:02 chicares Exp $
+// $Id: numeric_io_traits.hpp,v 1.4 2005-05-20 15:07:43 chicares Exp $
 
 #ifndef numeric_io_traits_hpp
 #define numeric_io_traits_hpp
@@ -308,32 +308,23 @@ template<> struct numeric_conversion_traits<double>
         {return std::strtod(nptr, endptr);}
 };
 
-// COMPILER !! MinGW gcc-3.2.3 doesn't support "%Lf" correctly because
-// it uses the ms C runtime library. Perhaps MinGW's nonstandard
-// ldtoa() could be used instead.
-#if 0
+// COMPILER !! MinGW gcc-3.x doesn't support "%Lf" correctly because
+// it uses the defective ms C runtime library.
+
 template<> struct numeric_conversion_traits<long double>
     :public numeric_conversion_traits<Floating>
 {
     typedef long double T;
     static int digits(T t) {return floating_point_decimals(t);}
+#if defined __MINGW32__ && defined __GNUC__ && __GNUC__ == 3
+    static char const* fmt()
+        {throw std::domain_error("Type 'long double' not supported.");}
+#else  // Not MinGW gcc prior to version 4.
     static char const* fmt() {return "%#.*Lf";}
+#endif // Not MinGW gcc prior to version 4.
     static T strtoT(char const* nptr, char** endptr)
         {return std::strtold(nptr, endptr);}
 };
-#else
-template<> struct numeric_conversion_traits<long double>
-    :public numeric_conversion_traits<Floating>
-{
-    typedef long double T;
-    static int digits(T)
-        {throw std::domain_error("Type 'long double' not supported.");}
-    static char const* fmt()
-        {throw std::domain_error("Type 'long double' not supported.");}
-    static T strtoT(char const*, char**)
-        {throw std::domain_error("Type 'long double' not supported.");}
-};
-#endif // 0
 
 #endif // numeric_io_traits_hpp
 
