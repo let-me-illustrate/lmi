@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_crc_comp.cpp,v 1.3 2005-05-19 12:30:00 chicares Exp $
+// $Id: ihs_crc_comp.cpp,v 1.4 2005-05-20 15:08:11 chicares Exp $
 
 // Sample command line to compile:
 // /gcc-2.95.2-1/bin/g++ -Iming29521 ihs_crc_comp.cpp
@@ -402,7 +402,7 @@ pf const transition_functions[6][6] =
     };
 
 //============================================================================
-int main(int argc, char* argv[])
+int try_main(int argc, char* argv[])
 {
     if(3 != argc)
         {
@@ -492,5 +492,24 @@ int main(int argc, char* argv[])
     is2.close();
 
     return EXIT_SUCCESS;
+}
+
+//============================================================================
+int main(int argc, char* argv[])
+{
+    try
+        {
+        return try_main(argc, argv);
+        }
+    catch(std::exception& e)
+        {
+        std::cerr << "Fatal exception: " << e.what() << std::endl;
+        return EXIT_FAILURE;
+        }
+    catch(...)
+        {
+        std::cerr << "Fatal exception: [no detail available]" << std::endl;
+        return EXIT_FAILURE;
+        }
 }
 
