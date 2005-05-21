@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: configurable_settings.cpp,v 1.5 2005-05-08 10:06:38 chicares Exp $
+// $Id: configurable_settings.cpp,v 1.6 2005-05-21 03:37:26 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -207,37 +207,37 @@ std::string const& configurable_settings::configuration_filename()
     return s;
 }
 
-std::string const& configurable_settings::cgi_bin_log_filename()
+std::string const& configurable_settings::cgi_bin_log_filename() const
 {
     return cgi_bin_log_filename_;
 }
 
-std::string const& configurable_settings::custom_input_filename()
+std::string const& configurable_settings::custom_input_filename() const
 {
     return custom_input_filename_;
 }
 
-std::string const& configurable_settings::custom_output_filename()
+std::string const& configurable_settings::custom_output_filename() const
 {
     return custom_output_filename_;
 }
 
-std::string const& configurable_settings::default_product()
+std::string const& configurable_settings::default_product() const
 {
     return default_product_;
 }
 
-std::string const& configurable_settings::spreadsheet_file_extension()
+std::string const& configurable_settings::spreadsheet_file_extension() const
 {
     return spreadsheet_file_extension_;
 }
 
-std::string const& configurable_settings::xsl_fo_command()
+std::string const& configurable_settings::xsl_fo_command() const
 {
     return xsl_fo_command_;
 }
 
-std::string const& configurable_settings::xsl_fo_directory()
+std::string const& configurable_settings::xsl_fo_directory() const
 {
     return xsl_fo_directory_;
 }

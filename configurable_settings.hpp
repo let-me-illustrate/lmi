@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: configurable_settings.hpp,v 1.4 2005-05-08 10:06:38 chicares Exp $
+// $Id: configurable_settings.hpp,v 1.5 2005-05-21 03:37:27 chicares Exp $
 
 #ifndef configurable_settings_hpp
 #define configurable_settings_hpp
@@ -27,6 +27,9 @@
 #include "config.hpp"
 
 #include "expimp.hpp"
+#include "obstruct_slicing.hpp"
+
+#include <boost/utility.hpp>
 
 #include <string>
 
@@ -34,22 +37,22 @@
 /// threading issues.
 
 class LMI_EXPIMP configurable_settings
+    :private boost::noncopyable
+    ,virtual private obstruct_slicing<configurable_settings>
 {
   public:
     static configurable_settings& instance();
 
-    std::string const& cgi_bin_log_filename();
-    std::string const& custom_input_filename();
-    std::string const& custom_output_filename();
-    std::string const& default_product();
-    std::string const& spreadsheet_file_extension();
-    std::string const& xsl_fo_command();
-    std::string const& xsl_fo_directory();
+    std::string const& cgi_bin_log_filename      () const;
+    std::string const& custom_input_filename     () const;
+    std::string const& custom_output_filename    () const;
+    std::string const& default_product           () const;
+    std::string const& spreadsheet_file_extension() const;
+    std::string const& xsl_fo_command            () const;
+    std::string const& xsl_fo_directory          () const;
 
   private:
     configurable_settings();
-    configurable_settings(configurable_settings const&);
-    configurable_settings& operator=(configurable_settings const&);
 
     std::string const& configuration_filename();
 
