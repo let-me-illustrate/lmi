@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: objects.make,v 1.27 2005-05-20 16:34:10 chicares Exp $
+# $Id: objects.make,v 1.28 2005-05-22 14:04:56 chicares Exp $
 
 ################################################################################
 
@@ -86,6 +86,26 @@ xmlwrapp_objects := \
   node_iterator.o \
   tree_parser.o \
   xmlwrapp_ex.o \
+
+################################################################################
+
+# Generic interface-drivers that can be linked to either calculation
+# branch.
+
+cgi_objects := \
+  $(cgicc_objects) \
+  alert_cgi.o \
+  file_command_cgi.o \
+  main_cgi.o \
+  main_common.o \
+  progress_meter_cgi.o \
+
+cli_objects := \
+  alert_cli.o \
+  file_command_cli.o \
+  main_cli.o \
+  main_common.o \
+  progress_meter_cli.o \
 
 ################################################################################
 
@@ -158,21 +178,6 @@ antediluvian_common_objects := \
   xenumtypes.o \
   xrange.o \
 
-antediluvian_cli_objects := \
-  alert_cli.o \
-  file_command_cli.o \
-  main_cli.o \
-  main_common.o \
-  progress_meter_cli.o \
-
-antediluvian_cgi_objects := \
-  $(cgicc_objects) \
-  alert_cgi.o \
-  file_command_cgi.o \
-  main_cgi.o \
-  main_common.o \
-  progress_meter_cgi.o \
-
 ################################################################################
 
 # Illustrations: the production branch.
@@ -192,6 +197,7 @@ lmi_common_objects := \
   facets.o \
   fenv_lmi.o \
   file_command.o \
+  getopt.o \
   global_settings.o \
   group_values.o \
   ihs_acctval.o \
@@ -251,14 +257,6 @@ lmi_common_objects := \
   xenumtypes.o \
   xrange.o \
 
-lmi_cli_objects := \
-  alert_cli.o \
-  file_command_cli.o \
-  getopt.o \
-  main_cli.o \
-  main_common.o \
-  progress_meter_cli.o \
-
 lmi_wx_objects := \
   about_dialog.o \
   alert_wx.o \
@@ -273,7 +271,6 @@ lmi_wx_objects := \
   docmdichildframe_ex.o \
   facets.o \
   file_command_wx.o \
-  getopt.o \
   illustration_document.o \
   illustration_view.o \
   input.o \

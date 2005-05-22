@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: workhorse.make,v 1.26 2005-05-15 02:59:21 chicares Exp $
+# $Id: workhorse.make,v 1.27 2005-05-22 14:04:56 chicares Exp $
 
 ###############################################################################
 
@@ -86,12 +86,10 @@ default_targets := \
   antediluvian_cgi$(EXEEXT) \
   antediluvian_cli$(EXEEXT) \
   ihs_crc_comp$(EXEEXT) \
+  libantediluvian$(SHREXT) \
   liblmi$(SHREXT) \
-  lmi_cli_monolithic$(EXEEXT) \
   lmi_cli_shared$(EXEEXT) \
-  lmi_wx_monolithic$(EXEEXT) \
   lmi_wx_shared$(EXEEXT) \
-  lmi_wx_static$(EXEEXT) \
   product_files$(EXEEXT) \
 
 .PHONY: effective_default_target
@@ -266,11 +264,11 @@ endif
 # in order to ensure that this application can never display any file
 # that would use GPL-incompatible code provided with wx.
 
-# C:/wx-lmi/lmi[0]$cp --preserve /lib/libm.a libregex.a
-# C:/wx-lmi/lmi[0]$cp --preserve /lib/libm.a libpng.a
-# C:/wx-lmi/lmi[0]$cp --preserve /lib/libm.a libjpeg.a
-# C:/wx-lmi/lmi[0]$cp --preserve /lib/libm.a libzlib.a
-# C:/wx-lmi/lmi[0]$cp --preserve /lib/libm.a libtiff.a
+# C:/wx-lmi/lmi[0]$cp --preserve --update /lib/libm.a libregex.a
+# C:/wx-lmi/lmi[0]$cp --preserve --update /lib/libm.a libpng.a
+# C:/wx-lmi/lmi[0]$cp --preserve --update /lib/libm.a libjpeg.a
+# C:/wx-lmi/lmi[0]$cp --preserve --update /lib/libm.a libzlib.a
+# C:/wx-lmi/lmi[0]$cp --preserve --update /lib/libm.a libtiff.a
 
 ################################################################################
 
@@ -426,8 +424,13 @@ ALL_RCFLAGS  = $(REQUIRED_RCFLAGS)  $(RCFLAGS)
 # However, 'libwx_new.a' continues to use classic dll attributes,
 # because there's never a reason to build it as a static library.
 
+# Don't use mpatrol when building a shared library to be used by an
+# application that uses mpatrol. See my postings to the mpatrol
+# mailing list.
+
 lib%.a              : lmi_dllflag :=
 lib%$(SHREXT)       : lmi_dllflag := -DLMI_BUILD_DLL
+lib%$(SHREXT)       : MPATROL_LIBS :=
 
 skeleton$(EXEEXT)   : lmi_wx_new_dllflag := -DLMI_WX_NEW_USING_DLL
 wx_new$(SHREXT)     : lmi_wx_new_dllflag := -DLMI_WX_NEW_BUILDING_DLL
@@ -448,42 +451,48 @@ lmi_wx_shared$(EXEEXT): $(lmi_wx_objects) liblmi$(SHREXT) wx_new$(SHREXT)
 lmi_wx_static$(EXEEXT): REQUIRED_LDFLAGS += $(platform_wx_libraries) -mwindows
 lmi_wx_static$(EXEEXT): $(lmi_wx_objects) liblmi.a wx_new$(SHREXT)
 
-lmi_cli_monolithic$(EXEEXT): $(lmi_cli_objects) $(lmi_common_objects)
+lmi_cli_monolithic$(EXEEXT): $(cli_objects) $(lmi_common_objects)
 
 lmi_cli_shared$(EXEEXT): lmi_dllflag := -DLMI_USE_DLL
-lmi_cli_shared$(EXEEXT): $(lmi_cli_objects) liblmi$(SHREXT)
+lmi_cli_shared$(EXEEXT): $(cli_objects) liblmi$(SHREXT)
 
-antediluvian_cgi$(EXEEXT): $(antediluvian_cgi_objects) libantediluvian.a
+antediluvian_cgi$(EXEEXT): $(cgi_objects) libantediluvian$(SHREXT)
 
-antediluvian_cli$(EXEEXT): $(antediluvian_cli_objects) libantediluvian.a
+antediluvian_cli$(EXEEXT): $(cli_objects) libantediluvian$(SHREXT)
 
 wx_new$(SHREXT): wx_new.o
 
 # TODO ?? This needs a corresponding test target.
-lmi_cgi$(EXEEXT): $(antediluvian_cgi_objects) $(lmi_common_objects)
+lmi_cgi$(EXEEXT): $(cgi_objects) $(lmi_common_objects)
 
 ################################################################################
 
 # Install.
 
-# The third paragraph of the rationale for FHS-2.2final section 3.12.2
-# seems to require copies of binaries in opt/<package>, even though
-# they must be copied to opt/<package>/bin .
+# TODO ?? It's confusing to place
+#   $(data_files) in $(bin_dir), but other
+#   data files in $(data_dir).
+# And some of the files in $(data_dir) are found only in the ftp
+# area of savannah; should they be in cvs?
 
-# TODO ?? Should static data files reside in cvs so that this makefile
-# can install them?
-
-install_dir := /opt/lmi
+prefix         := /opt/lmi
+exec_prefix    := $(prefix)
+bin_dir        := $(exec_prefix)/bin
+data_dir       := $(exec_prefix)/data
+test_dir       := $(exec_prefix)/test
+touchstone_dir := $(exec_prefix)/touchstone
 
 data_files := \
   $(wildcard $(addprefix $(src_dir)/,*.xrc *.xpm)) \
 
 .PHONY: install
 install: $(default_targets)
-	+@[ -d $(install_dir) ] || $(MKDIR) --parents $(install_dir)
-	@$(CP) --preserve $^ $(install_dir)
-	@$(CP) --preserve $^ $(install_dir)/bin
-	@$(CP) --preserve $(data_files) $(install_dir)
+	+@[ -d $(exec_prefix) ] || $(MKDIR) --parents $(exec_prefix)
+	+@[ -d bin_dir        ] || $(MKDIR) --parents bin_dir
+	+@[ -d data_dir       ] || $(MKDIR) --parents data_dir
+	+@[ -d test_dir       ] || $(MKDIR) --parents test_dir
+	+@[ -d touchstone_dir ] || $(MKDIR) --parents touchstone_dir
+	@$(CP) --preserve --update $^ $(data_files) $(bin_dir)
 
 ################################################################################
 
@@ -565,37 +574,73 @@ cgi_tests: antediluvian_cgi$(EXEEXT)
 
 # Regression test.
 
+# Output is compared with $(DIFF), which reports all textual
+# discrepancies without regard to relevance; and also with
+# 'ihs_crc_comp', which interprets '.test' files and calculates
+# maximum relative and absolute errors for each file.
+#
 # Relative errors less than 1e-14 are ignored. Machine epsilon for an
 # IEC 60559 double is 2.2204460492503131E-16 [C99 5.2.4.2.2/13], so
 # that tolerance is about forty-five times epsilon. Experience has
 # shown that the discrepancies thus ignored are never material, but
 # larger discrepancies may be.
 
-# TODO ?? Needs work: avoid imperative programming like 'install' target,
-# which copies large files whether or not they're already current.
+test_result_suffixes     := test debug
 
-regression_test_results := results-$(yyyymmddhhmm)
+regression_test_analysis := $(test_dir)/analysis-$(yyyymmddhhmm)
+regression_test_diffs    := $(test_dir)/diffs-$(yyyymmddhhmm)
 
 .PHONY: regression_test
 regression_test: install
 	@$(ECHO) Regression test:
-	@ \
-	cd $(install_dir)/data; \
-	../product_files; \
-	cd $(install_dir)/test; \
-	../lmi_cli_monolithic \
-	  --ash_nazg --accept --regress \
-	  --data_path=$(install_dir)/data \
-	  --test_path=$(install_dir)/test; \
-	for z in *test; \
-	  { $(install_dir)/ihs_crc_comp $$z $(install_dir)/touchstone/$$z \
-	    | sed -e '/Summary/!d' -e"s/^ /$$z/" \
-	  } > $(regression_test_results); \
-	< $(regression_test_results) sed \
+	@cd $(data_dir); \
+	  $(bin_dir)/product_files
+	@cd $(test_dir); \
+	  $(bin_dir)/lmi_cli_shared \
+	    --ash_nazg --accept --regress \
+	    --data_path=$(data_dir) \
+	    --test_path=$(test_dir); \
+	  for z in *test; \
+	    { $(bin_dir)/ihs_crc_comp $$z $(touchstone_dir)/$$z \
+	      | $(SED) -e '/Summary/!d' -e"s|^ |$$z|" \
+	    } > $(regression_test_analysis)
+	@-< $(regression_test_analysis) $(SED) \
 	  -e'/rel err.*e-01[5-9]/d' \
 	  -e'/abs.*0\.00.*rel/d' \
-	  -e'/abs diff: 0 /d'; \
-	$(ECHO) ...regression test completed.
+	  -e'/abs diff: 0 /d'
+	@-$(DIFF) \
+	    --brief \
+	    --report-identical-files \
+	    $(test_dir) \
+	    $(touchstone_dir) \
+	    > $(regression_test_diffs)
+	@$(ECHO) Summarizing test results
+	@-<$(regression_test_diffs) \
+	  $(SED) \
+	    -e'/^Only in/d' \
+	  | $(WC) -l \
+	  | $(SED) 's/^/  /' \
+	  | $(SED) -e's/$$/ regression-test files compared/'
+	@-<$(regression_test_diffs) \
+	  $(SED) \
+	    -e'/^Files.*are identical$$/!d' \
+	  | $(WC) -l \
+	  | $(SED) 's/^/  /' \
+	  | $(SED) -e's/$$/ regression-test files match/'
+	@-<$(regression_test_diffs) \
+	  $(SED) \
+	    -e'/^Files.*are identical$$/d' \
+	    -e'/^Only in /d' \
+	  | $(WC) -l \
+	  | $(SED) 's/^/  /' \
+	  | $(SED) -e's/$$/ regression-test nonmatching files/'
+	@-<$(regression_test_diffs) \
+	  $(SED) \
+	    -e'/^Only in.*test\/touchstone/!d' \
+	  | $(WC) -l \
+	  | $(SED) 's/^/  /' \
+	  | $(SED) -e's/$$/ regression-test missing files/'
+	@$(ECHO) ...regression test completed.
 
 ################################################################################
 
