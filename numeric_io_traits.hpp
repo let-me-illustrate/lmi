@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: numeric_io_traits.hpp,v 1.5 2005-05-22 15:33:09 chicares Exp $
+// $Id: numeric_io_traits.hpp,v 1.6 2005-05-22 16:36:54 chicares Exp $
 
 #ifndef numeric_io_traits_hpp
 #define numeric_io_traits_hpp
@@ -315,10 +315,10 @@ template<> struct numeric_conversion_traits<double>
 // is unaware of that C99 function.
 
 #if defined __COMO__
-// COMPILER !! Comeau doesn't seem to provide this in a standard
-// header, but, at least with MinGW as the underlying compiler,
-// the linker finds it successfully.
-long double strtold(char const* nptr, char** endptr);
+// COMPILER !! Comeau doesn't seem to provide strtold(), so at
+// least for the nonce use this kludge:
+inline long double strtold(char const* nptr, char** endptr)
+{return strtod(nptr, endptr);}
 #endif // defined __COMO__
 
 template<> struct numeric_conversion_traits<long double>
