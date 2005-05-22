@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: any_member_test.cpp,v 1.3 2005-05-22 14:39:14 chicares Exp $
+// $Id: any_member_test.cpp,v 1.4 2005-05-22 15:44:22 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -150,8 +150,6 @@ void test();
 
 int test_main(int, char*[])
 {
-    std::free(0); // Force mpatrol to link.
-
     S s;
     s["i0"] = "999";
     BOOST_TEST_EQUAL(s.i0, 999);
