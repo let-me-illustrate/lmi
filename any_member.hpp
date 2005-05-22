@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: any_member.hpp,v 1.1 2005-03-11 03:09:22 chicares Exp $
+// $Id: any_member.hpp,v 1.2 2005-05-22 15:36:11 chicares Exp $
 
 // This is a derived work based on boost::any, which bears the following
 // copyright and permissions notice:
@@ -246,7 +246,8 @@ any_member<ClassType>::any_member()
 
 template<typename ClassType>
 any_member<ClassType>::any_member(any_member const& other)
-    :object_(other.object_)
+    :obstruct_slicing<any_member<ClassType> >()
+    ,object_(other.object_)
     ,content_(other.content_ ? other.content_->clone() : 0)
 {}
 
