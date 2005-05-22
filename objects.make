@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: objects.make,v 1.28 2005-05-22 14:04:56 chicares Exp $
+# $Id: objects.make,v 1.29 2005-05-22 14:39:14 chicares Exp $
 
 ################################################################################
 
@@ -354,6 +354,7 @@ gps_objects := \
 unit_test_targets := \
   actuarial_table_test$(EXEEXT) \
   alert_test$(EXEEXT) \
+  any_member_ihs_test$(EXEEXT) \
   any_member_test$(EXEEXT) \
   argv0_test$(EXEEXT) \
   calendar_date_test$(EXEEXT) \
@@ -412,6 +413,10 @@ alert_test$(EXEEXT): \
   alert.o \
   alert_cli.o \
   alert_test.o \
+
+any_member_ihs_test$(EXEEXT): \
+  $(common_test_objects) \
+  any_member_ihs_test.o \
 
 any_member_test$(EXEEXT): \
   $(common_test_objects) \
