@@ -19,22 +19,12 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: any_member_ihs_test.cpp,v 1.1 2005-05-22 14:39:14 chicares Exp $
+// $Id: any_member_ihs_test.cpp,v 1.2 2005-05-22 16:18:38 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
 #   pragma hdrstop
 #endif // __BORLANDC__
-
-#ifdef BC_BEFORE_5_5
-#   define BOOST_INCLUDE_MAIN
-#   include "test_tools.hpp"
-    int test_main(int, char*[])
-    {
-        BOOST_TEST(false);
-        return 1;
-    }
-#else
 
 #include "any_member_ihs.hpp"
 
@@ -83,10 +73,6 @@ struct T : public Q, public MemberSymbolTable_ihs<T>
         ascribe("q0", static_cast<float T::*>(&T::q0));
         }
 };
-
-// We could pass the object in. That means either
-// rewriting 'any' to know its type, or using a
-// member function template--which can't be virtual.
 
 int test_main(int, char*[])
 {
@@ -222,6 +208,4 @@ std::cout << "r1--should be 'world' : "    << r1.s0            << '\n';
 
     return return_value;
 }
-
-#endif // Not old borland compiler.
 
