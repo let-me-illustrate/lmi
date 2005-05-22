@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: GNUmakefile,v 1.14 2005-05-02 04:00:05 chicares Exp $
+# $Id: GNUmakefile,v 1.15 2005-05-22 14:03:42 chicares Exp $
 
 ###############################################################################
 
@@ -126,13 +126,14 @@ $(src_dir)/configuration.make:: ;
 # builds, which may be created by specifying 'build_type=mpatrol' on
 # the make command line. Because 'mpatrol' builds use an invasive
 # malloc debugger, they may run quite sluggishly, and they work poorly
-# with gdb. But 'ship' builds are built to work with gdb.
+# with gdb. But 'ship' builds are designed to work with gdb.
 #
 # Of course, other build types may be defined.
 
 build_type ?= ship
 toolset ?= gcc
-build_directory := ../build/$(uname)/$(toolset)/$(build_type)
+build_directory := \
+  ../build/$(notdir $(src_dir))/$(uname)/$(toolset)/$(build_type)
 
 datestamp_files := \
   build.hpp \
