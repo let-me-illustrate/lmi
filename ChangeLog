@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.65 2005-05-22 14:07:30 chicares Exp $
+// $Id: ChangeLog,v 1.66 2005-05-22 14:39:14 chicares Exp $
 
 2005-01-14
 
@@ -1926,4 +1926,17 @@ any files to be installed are already up to date. Regression testing
 analysis reports certain differences that were previously ignored.
 The 'prefix' and 'exec_prefix' variables expected by the GNU coding
 standards are now respected. Shared libraries are used by default.
+
+  any_member_ihs_test.cpp [new file]
+  any_member_test.cpp
+  objects.make
+Formerly, these unit tests corresponded to these libraries:
+  [no unit test]            tested 'any_member.hpp'
+  'any_member_test.cpp'     tested 'any_member_ihs.hpp'
+Now, more rationally,
+  'any_member_test.cpp'     tests  'any_member.hpp'
+  'any_member_test_ihs.cpp' tests  'any_member_ihs.hpp'
+New file 'any_member_ihs_test.cpp' is old file 'any_member_test.cpp',
+renamed. Contents of old file 'any_member_test.cpp' are replaced by
+code from the skeleton branch.
 
