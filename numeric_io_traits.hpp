@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: numeric_io_traits.hpp,v 1.4 2005-05-20 15:07:43 chicares Exp $
+// $Id: numeric_io_traits.hpp,v 1.5 2005-05-22 15:33:09 chicares Exp $
 
 #ifndef numeric_io_traits_hpp
 #define numeric_io_traits_hpp
@@ -311,6 +311,16 @@ template<> struct numeric_conversion_traits<double>
 // COMPILER !! MinGW gcc-3.x doesn't support "%Lf" correctly because
 // it uses the defective ms C runtime library.
 
+// 'strtold' is written rather than 'std::strtold' because C++98
+// is unaware of that C99 function.
+
+#if defined __COMO__
+// COMPILER !! Comeau doesn't seem to provide this in a standard
+// header, but, at least with MinGW as the underlying compiler,
+// the linker finds it successfully.
+long double strtold(char const* nptr, char** endptr);
+#endif // defined __COMO__
+
 template<> struct numeric_conversion_traits<long double>
     :public numeric_conversion_traits<Floating>
 {
@@ -323,7 +333,7 @@ template<> struct numeric_conversion_traits<long double>
     static char const* fmt() {return "%#.*Lf";}
 #endif // Not MinGW gcc prior to version 4.
     static T strtoT(char const* nptr, char** endptr)
-        {return std::strtold(nptr, endptr);}
+        {return strtold(nptr, endptr);}
 };
 
 #endif // numeric_io_traits_hpp
