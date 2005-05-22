@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.64 2005-05-20 15:18:02 chicares Exp $
+// $Id: ChangeLog,v 1.65 2005-05-22 14:07:30 chicares Exp $
 
 2005-01-14
 
@@ -1896,4 +1896,34 @@ observed exception from being thrown.
   numeric_io_traits.hpp
 Use what limited support MinGW gcc provides for long-double IO;
 document a known MinGW strtold() problem in the unit test.
+
+  global_settings_test.cpp [new file]
+  objects.make
+Add global-settings unit test: just an empty shell for now.
+
+  configurable_settings.cpp
+  configurable_settings.hpp
+Refactor.
+
+2005-05-22 [1327]
+
+  GNUmakefile
+Incorporate source directory's name in build directory's, in order to
+prevent source in distinct sibling directories from incorrectly using
+the same build directory.
+
+  objects.make
+  workhorse.make
+Refactor, making both the lmi and the antediluvian branch use exactly
+the same objects for their command-line and cgi-bin drivers. This
+demonstrates substitutability of the two branches' calculation
+libaries, making it an invariant that's enforced physically and
+validated whenever the 'test' target is run.
+
+  workhorse.make
+Numerous improvements. The 'install' target runs much faster when
+any files to be installed are already up to date. Regression testing
+analysis reports certain differences that were previously ignored.
+The 'prefix' and 'exec_prefix' variables expected by the GNU coding
+standards are now respected. Shared libraries are used by default.
 
