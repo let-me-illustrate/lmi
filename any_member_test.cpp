@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: any_member_test.cpp,v 1.6 2005-05-23 12:09:22 chicares Exp $
+// $Id: any_member_test.cpp,v 1.7 2005-05-23 12:16:49 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -190,7 +190,7 @@ struct T : public Q, public MemberSymbolTable<T>
         }
 };
 
-int test0()
+void test0()
 {
     T r0;
     BOOST_TEST_EQUAL(0  , r0.i0);
@@ -304,80 +304,6 @@ int test0()
 #endif // 0
 
     BOOST_TEST_THROW(r2["unknown_member"], std::runtime_error, "");
-
-    return 0;
-}
-
-void test1();
-
-int test_main(int, char*[])
-{
-    S s;
-    s["i0"] = "999";
-    BOOST_TEST_EQUAL(s.i0, 999);
-
-    s["i0"] = "077";   // Interpreted as decimal, not as octal.
-    BOOST_TEST_EQUAL(s.i0, 77);
-
-    s["i0"] = "09";    // Valid decimal, not invalid octal.
-    BOOST_TEST_EQUAL(s.i0, 9);
-
-    s["i1"] = "888000";
-    BOOST_TEST_EQUAL(s.i1, 888000);
-
-//  s["i0"] = "999.9"; // Invalid integer-literal.
-//  s["i1"] = "888e3"; // Invalid integer-literal.
-
-    s["d0"] = "777";
-    BOOST_TEST_EQUAL(s.d0, 777);
-
-    s["d0"] = "777.";
-    BOOST_TEST_EQUAL(s.d0, 777);
-
-    s["d0"] = "777E3";
-    BOOST_TEST_EQUAL(s.d0, 777000);
-
-    s["d0"] = ".777E3";
-    BOOST_TEST_EQUAL(s.d0, 777);
-
-    s["s0"] = "hello";
-    BOOST_TEST_EQUAL(s.s0, "hello");
-
-    std::stringstream ss;
-    s.write(ss);
-    BOOST_TEST_EQUAL(ss.str(), "9 888000 777 hello");
-
-    // Test const operator[]().
-    S const s_const;
-    BOOST_TEST_EQUAL("0", s_const["i0"].str());
-
-    // Make sure numeric_io_cast is used for writing arithmetic types
-    // to std::string (this test assumes IEC 60559 doubles).
-
-    s.d0 = std::exp(1.0);
-    double d1 = s["d0"].cast<double>();
-    BOOST_TEST_EQUAL(numeric_io_cast<std::string>(d1), "2.718281828459045");
-    BOOST_TEST_EQUAL(s["d0"].str(), "2.718281828459045");
-
-    // Want to be able to unify a subobject with a pmf, e.g.
-//    s["s0"].size();
-    // no matching function for call to `any_member<S>::size()
-    std::string str("xyzzy");
-
-//    std::mem_fun(&std::string::size);
-//    str.string_size();
-
-//    str.(std::mem_fun(&std::string::size));
-
-//    std::mem_fun_t sizer;
-//    std::mem_fun_t sizer();
-//    std::const_mem_fun_t(std::string::size);
-    std::mem_fun(&std::string::size)(&str);
-
-    test0();
-    test1();
-
-    return 0;
 }
 
 void test1()
@@ -488,5 +414,75 @@ void test1()
 
     std::cout << std::endl;
     }
+}
+
+int test_main(int, char*[])
+{
+    S s;
+    s["i0"] = "999";
+    BOOST_TEST_EQUAL(s.i0, 999);
+
+    s["i0"] = "077";   // Interpreted as decimal, not as octal.
+    BOOST_TEST_EQUAL(s.i0, 77);
+
+    s["i0"] = "09";    // Valid decimal, not invalid octal.
+    BOOST_TEST_EQUAL(s.i0, 9);
+
+    s["i1"] = "888000";
+    BOOST_TEST_EQUAL(s.i1, 888000);
+
+//  s["i0"] = "999.9"; // Invalid integer-literal.
+//  s["i1"] = "888e3"; // Invalid integer-literal.
+
+    s["d0"] = "777";
+    BOOST_TEST_EQUAL(s.d0, 777);
+
+    s["d0"] = "777.";
+    BOOST_TEST_EQUAL(s.d0, 777);
+
+    s["d0"] = "777E3";
+    BOOST_TEST_EQUAL(s.d0, 777000);
+
+    s["d0"] = ".777E3";
+    BOOST_TEST_EQUAL(s.d0, 777);
+
+    s["s0"] = "hello";
+    BOOST_TEST_EQUAL(s.s0, "hello");
+
+    std::stringstream ss;
+    s.write(ss);
+    BOOST_TEST_EQUAL(ss.str(), "9 888000 777 hello");
+
+    // Test const operator[]().
+    S const s_const;
+    BOOST_TEST_EQUAL("0", s_const["i0"].str());
+
+    // Make sure numeric_io_cast is used for writing arithmetic types
+    // to std::string (this test assumes IEC 60559 doubles).
+
+    s.d0 = std::exp(1.0);
+    double d1 = s["d0"].cast<double>();
+    BOOST_TEST_EQUAL(numeric_io_cast<std::string>(d1), "2.718281828459045");
+    BOOST_TEST_EQUAL(s["d0"].str(), "2.718281828459045");
+
+    // Want to be able to unify a subobject with a pmf, e.g.
+//    s["s0"].size();
+    // no matching function for call to `any_member<S>::size()
+    std::string str("xyzzy");
+
+//    std::mem_fun(&std::string::size);
+//    str.string_size();
+
+//    str.(std::mem_fun(&std::string::size));
+
+//    std::mem_fun_t sizer;
+//    std::mem_fun_t sizer();
+//    std::const_mem_fun_t(std::string::size);
+    std::mem_fun(&std::string::size)(&str);
+
+    test0();
+    test1();
+
+    return 0;
 }
 
