@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: any_member_test.cpp,v 1.7 2005-05-23 12:16:49 chicares Exp $
+// $Id: any_member_test.cpp,v 1.8 2005-05-23 12:46:43 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -206,9 +206,7 @@ void test0()
     BOOST_TEST_EQUAL(0.0, r0.d0);
 
     // Test writing through the map of ascribed member names.
-//    r0["i0"] = "999.9"; // TODO ??
     r0["i0"] = "999";
-//    r0["i1"] = "888e3"; // TODO ??
     r0["i1"] = "888000";
     r0["d0"] = "777";
     r0["s0"] = "hello";
@@ -274,39 +272,15 @@ void test0()
     BOOST_TEST(!(r1["s0"] != r1["s0"]));
     BOOST_TEST(!(r1["s0"] == r0["s0"]));
 
-#if 0
-// TODO ?? This experimental stuff doesn't work....
-
-    // Test implicit copy constructor.
-    T copy_constructed(r1);
-    copy_constructed["s0"] = "copy-constructed";
-    BOOST_TEST_EQUAL("copy-constructed", copy_constructed.s0);
-    BOOST_TEST_EQUAL("world", r1.s0);
-
-    // Make sure that didn't affect the thing-copied-from.
-    BOOST_TEST_EQUAL(135    , r1.i0);
-    BOOST_TEST_EQUAL(246    , r1.i1);
-    BOOST_TEST_EQUAL(888.0  , r1.d0);
-    BOOST_TEST_EQUAL("world", r1.s0);
-
-    // Test implicit assignment operator.
-    T copy_assigned;
-    copy_assigned = r1;
-    copy_assigned["s0"] = "copy-assigned";
-    BOOST_TEST_EQUAL("copy-assigned", copy_assigned   .s0);
-    BOOST_TEST_EQUAL("world", r1.s0);
-
-    // Make sure that didn't affect the thing-copied-from.
-    BOOST_TEST_EQUAL(135    , r1.i0);
-    BOOST_TEST_EQUAL(246    , r1.i1);
-    BOOST_TEST_EQUAL(888.0  , r1.d0);
-    BOOST_TEST_EQUAL("world", r1.s0);
-#endif // 0
-
     BOOST_TEST_THROW(r2["unknown_member"], std::runtime_error, "");
+
+    // Assigning a decimal-literal value to an integer isn't type
+    // safe, and might require truncation, so it's forbidden.
+    BOOST_TEST_THROW(r2["i0"] = "888e3", std::invalid_argument, "");
+    BOOST_TEST_THROW(r2["i1"] = "999.9", std::invalid_argument, "");
 }
 
-void test1()
+void optional_exploration()
 {
     S s;
     X x;
@@ -481,7 +455,8 @@ int test_main(int, char*[])
     std::mem_fun(&std::string::size)(&str);
 
     test0();
-    test1();
+// Uncomment this to explore various pointer-to-member techniques.
+//    optional_exploration();
 
     return 0;
 }
