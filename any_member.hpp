@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: any_member.hpp,v 1.2 2005-05-22 15:36:11 chicares Exp $
+// $Id: any_member.hpp,v 1.3 2005-05-23 12:46:43 chicares Exp $
 
 // This is a derived work based on boost::any, which bears the following
 // copyright and permissions notice:
@@ -338,9 +338,9 @@ std::type_info const& any_member<ClassType>::type() const
 
 // Declaration of class MemberSymbolTable.
 
-// TODO ?? Either implement functions that would be implicitly
-// declared, or document that implicitly-defined versions do the right
-// thing. Consider writing a protected dtor.
+// By its nature, this class must be Noncopyable: it holds a map of
+// pointers to member, which need to be initialized instead of copied
+// when a derived class is copied.
 
 template<typename ClassType>
 class MemberSymbolTable
@@ -362,15 +362,13 @@ class MemberSymbolTable
 
   private:
     member_map m_;
-    std::vector<std::string> member_names_;
+// TODO ?? With como-4.3.3, uncommenting this line moves a failure
+// from one unit test to another. It's a poor idea to assume this is
+// a compiler defect without investigating it carefully.
+//    std::vector<std::string> dummy_member_;
 };
 
 // Implementation of class MemberSymbolTable.
-
-// Data member 'member_names_' is an unsorted std::vector containing
-// member names in ascription order. The corresponding std::map has
-// the same names, but they're sorted because they're map keys.
-// Probably this doesn't matter; is it worth even documenting here?
 
 // INELEGANT !! The const and non-const operator[]() implementations
 // are nearly identical; what's commmon should be factored out.
@@ -451,8 +449,6 @@ void MemberSymbolTable<ClassType>::ascribe
 #endif // 0
     ClassType* class_object = static_cast<ClassType*>(this);
     m_.insert(member_pair(s, any_member<ClassType>(class_object, p2m)));
-// TODO ?? expunge?
-//    member_names_.push_back(s);
 }
 
 template<typename ClassType>
@@ -477,8 +473,6 @@ std::vector<std::string> const& MemberSymbolTable<ClassType>::member_names() con
 {
     static std::vector<std::string> member_name_vector(cached_member_names());
     return member_name_vector;
-// TODO ?? expunge?
-//    return member_names_;
 }
 
 #endif // any_member_hpp
