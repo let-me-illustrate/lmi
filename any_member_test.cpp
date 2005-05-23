@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: any_member_test.cpp,v 1.5 2005-05-22 16:20:29 chicares Exp $
+// $Id: any_member_test.cpp,v 1.6 2005-05-23 12:09:22 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -31,9 +31,10 @@
 #define BOOST_INCLUDE_MAIN
 #include "test_tools.hpp"
 
-#include <cmath>
+#include <cmath> // std::exp()
 #include <functional>
 #include <iostream>
+#include <istream>
 #include <ostream>
 #include <sstream>
 
@@ -192,17 +193,17 @@ struct T : public Q, public MemberSymbolTable<T>
 int test0()
 {
     T r0;
-    BOOST_TEST(0   == r0.i0);
-    BOOST_TEST(0   == r0.i1);
-    BOOST_TEST(0.0 == r0.d0);
-    BOOST_TEST(""  == r0.s0);
+    BOOST_TEST_EQUAL(0  , r0.i0);
+    BOOST_TEST_EQUAL(0  , r0.i1);
+    BOOST_TEST_EQUAL(0.0, r0.d0);
+    BOOST_TEST_EQUAL("" , r0.s0);
 
     // Test writing through a pointer to member.
     int T::*x = &T::i0;
     r0.*x = 5;
-    BOOST_TEST(5   == r0.i0);
-    BOOST_TEST(0   == r0.i1);
-    BOOST_TEST(0.0 == r0.d0);
+    BOOST_TEST_EQUAL(5  , r0.i0);
+    BOOST_TEST_EQUAL(0  , r0.i1);
+    BOOST_TEST_EQUAL(0.0, r0.d0);
 
     // Test writing through the map of ascribed member names.
 //    r0["i0"] = "999.9"; // TODO ??
@@ -211,45 +212,45 @@ int test0()
     r0["i1"] = "888000";
     r0["d0"] = "777";
     r0["s0"] = "hello";
-    BOOST_TEST(999     == r0.i0);
-    BOOST_TEST(888000  == r0.i1);
-    BOOST_TEST(777.0   == r0.d0);
-    BOOST_TEST("hello" == r0.s0);
+    BOOST_TEST_EQUAL(999    , r0.i0);
+    BOOST_TEST_EQUAL(888000 , r0.i1);
+    BOOST_TEST_EQUAL(777.0  , r0.d0);
+    BOOST_TEST_EQUAL("hello", r0.s0);
 
     T r1;
     r1["i0"] = "135";
     r1["i1"] = "246";
     r1["d0"] = "888";
     r1["s0"] = "world";
-    BOOST_TEST(135     == r1.i0);
-    BOOST_TEST(246     == r1.i1);
-    BOOST_TEST(888.0   == r1.d0);
-    BOOST_TEST("world" == r1.s0);
+    BOOST_TEST_EQUAL(135    , r1.i0);
+    BOOST_TEST_EQUAL(246    , r1.i1);
+    BOOST_TEST_EQUAL(888.0  , r1.d0);
+    BOOST_TEST_EQUAL("world", r1.s0);
 
     // Make sure that didn't affect the other instance of class T.
-    BOOST_TEST(999     == r0.i0);
-    BOOST_TEST(888e3   == r0.i1);
-    BOOST_TEST(777.0   == r0.d0);
-    BOOST_TEST("hello" == r0.s0);
+    BOOST_TEST_EQUAL(999    , r0.i0);
+    BOOST_TEST_EQUAL(888e3  , r0.i1);
+    BOOST_TEST_EQUAL(777.0  , r0.d0);
+    BOOST_TEST_EQUAL("hello", r0.s0);
 
     r0["i0"] = "1234567";
-    BOOST_TEST(1234567 == r0.i0);
-    BOOST_TEST(888e3   == r0.i1);
-    BOOST_TEST(777.0   == r0.d0);
-    BOOST_TEST("hello" == r0.s0);
+    BOOST_TEST_EQUAL(1234567, r0.i0);
+    BOOST_TEST_EQUAL(888e3  , r0.i1);
+    BOOST_TEST_EQUAL(777.0  , r0.d0);
+    BOOST_TEST_EQUAL("hello", r0.s0);
 
     // Make sure that didn't affect the other instance of class T.
-    BOOST_TEST(135     == r1.i0);
-    BOOST_TEST(246     == r1.i1);
-    BOOST_TEST(888.0   == r1.d0);
-    BOOST_TEST("world" == r1.s0);
+    BOOST_TEST_EQUAL(135    , r1.i0);
+    BOOST_TEST_EQUAL(246    , r1.i1);
+    BOOST_TEST_EQUAL(888.0  , r1.d0);
+    BOOST_TEST_EQUAL("world", r1.s0);
 
     // Works for base class Q too.
     T r2;
-    BOOST_TEST(0.0f == r2.q0);
+    BOOST_TEST_EQUAL(0.0f, r2.q0);
 
     r2["q0"] = "123.456";
-    BOOST_TEST(123.456f == r2.q0);
+    BOOST_TEST_EQUAL(123.456f, r2.q0);
 
     // Test equality operator.
     BOOST_TEST(  r1["i0"] == r1["i0"]);
@@ -279,48 +280,32 @@ int test0()
     // Test implicit copy constructor.
     T copy_constructed(r1);
     copy_constructed["s0"] = "copy-constructed";
-    BOOST_TEST("copy-constructed" == copy_constructed.s0);
-    BOOST_TEST("world"  == r1.s0);
-std::cout << "Should be 'copy-constructed': " << copy_constructed.s0 << '\n';
-std::cout << "r1--should be 'world' : "       << r1.s0               << '\n';
+    BOOST_TEST_EQUAL("copy-constructed", copy_constructed.s0);
+    BOOST_TEST_EQUAL("world", r1.s0);
 
     // Make sure that didn't affect the thing-copied-from.
-    BOOST_TEST(135     == r1.i0);
-    BOOST_TEST(246     == r1.i1);
-    BOOST_TEST(888.0   == r1.d0);
-    BOOST_TEST("world" == r1.s0);
+    BOOST_TEST_EQUAL(135    , r1.i0);
+    BOOST_TEST_EQUAL(246    , r1.i1);
+    BOOST_TEST_EQUAL(888.0  , r1.d0);
+    BOOST_TEST_EQUAL("world", r1.s0);
 
     // Test implicit assignment operator.
     T copy_assigned;
     copy_assigned = r1;
     copy_assigned["s0"] = "copy-assigned";
-    BOOST_TEST("copy-assigned" == copy_assigned   .s0);
-    BOOST_TEST("world"  == r1.s0);
-std::cout << "Should be 'copy-assigned': " << copy_assigned.s0 << '\n';
-std::cout << "r1--should be 'world' : "    << r1.s0            << '\n';
+    BOOST_TEST_EQUAL("copy-assigned", copy_assigned   .s0);
+    BOOST_TEST_EQUAL("world", r1.s0);
 
     // Make sure that didn't affect the thing-copied-from.
-    BOOST_TEST(135     == r1.i0);
-    BOOST_TEST(246     == r1.i1);
-    BOOST_TEST(888.0   == r1.d0);
-    BOOST_TEST("world" == r1.s0);
+    BOOST_TEST_EQUAL(135    , r1.i0);
+    BOOST_TEST_EQUAL(246    , r1.i1);
+    BOOST_TEST_EQUAL(888.0  , r1.d0);
+    BOOST_TEST_EQUAL("world", r1.s0);
 #endif // 0
 
-    int return_value = -1;
+    BOOST_TEST_THROW(r2["unknown_member"], std::runtime_error, "");
 
-    try
-        {
-        // This should throw:
-        r2["unknown_member"];
-        // This shouldn't be reached:
-        BOOST_TEST(false);
-        }
-    catch(std::exception const& e)
-        {
-        return_value = 0;
-        }
-
-    return return_value;
+    return 0;
 }
 
 void test1();
@@ -367,13 +352,11 @@ int test_main(int, char*[])
     BOOST_TEST_EQUAL("0", s_const["i0"].str());
 
     // Make sure numeric_io_cast is used for writing arithmetic types
-    // to std::string, for any compiler that can handle value_cast
-    // correctly (borland, for example, fails).
+    // to std::string (this test assumes IEC 60559 doubles).
 
     s.d0 = std::exp(1.0);
     double d1 = s["d0"].cast<double>();
     BOOST_TEST_EQUAL(numeric_io_cast<std::string>(d1), "2.718281828459045");
-    // This test fails with (defective) borland tools.
     BOOST_TEST_EQUAL(s["d0"].str(), "2.718281828459045");
 
     // Want to be able to unify a subobject with a pmf, e.g.
