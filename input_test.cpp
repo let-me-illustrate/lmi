@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_test.cpp,v 1.3 2005-01-31 13:12:48 chicares Exp $
+// $Id: input_test.cpp,v 1.4 2005-05-24 04:00:01 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -171,19 +171,11 @@ std::cout << "replica.FundAllocs.size() is " << replica.FundAllocs.size() << '\n
     BOOST_TEST(0 == std::remove("eraseme1.xml"));
 
     BOOST_TEST(0 == original.InforceYear);
-#ifndef BC_BEFORE_5_5
     original["InforceYear"] = std::string("3");
-#else // Old borland compiler.
-    original.set_value_by_name("InforceYear", std::string("3"));
-#endif // Old borland compiler.
     BOOST_TEST(3 == original.InforceYear);
 
     BOOST_TEST(45 == original.Status_IssueAge);
-#ifndef BC_BEFORE_5_5
     original["IssueAge"] = std::string("57");
-#else // Old borland compiler.
-    original.set_value_by_name("IssueAge", std::string("57"));
-#endif // Old borland compiler.
     BOOST_TEST(57 == original.Status_IssueAge);
     // Unfortunately, this can't get updated automatically:
     BOOST_TEST(45 == original.Status[0].IssueAge);
@@ -193,11 +185,7 @@ std::cout << "replica.FundAllocs.size() is " << replica.FundAllocs.size() << '\n
     IllusInputParms copy0(original);
     copy0.propagate_changes_from_base_and_finalize();
 //    BOOST_TEST(original == copy0); // TODO ?? Fails.
-#ifndef BC_BEFORE_5_5
     copy0["InsuredName"] = "Claude Proulx";
-#else // Old borland compiler.
-    copy0.set_value_by_name("InsuredName", std::string("Claude Proulx"));
-#endif // Old borland compiler.
     BOOST_TEST(std::string("Claude Proulx") == copy0   .InsdFirstName);
     BOOST_TEST(std::string("Actually Full Name") == original.InsdFirstName);
 
@@ -216,11 +204,7 @@ std::cout << "replica.FundAllocs.size() is " << replica.FundAllocs.size() << '\n
     copy1 = original;
     copy1.propagate_changes_from_base_and_finalize();
 //    BOOST_TEST(original == copy1); // TODO ?? Fails.
-#ifndef BC_BEFORE_5_5
     copy1["InsuredName"] = "Angela";
-#else // Old borland compiler.
-    copy1.set_value_by_name("FirstName", std::string("Angela"));
-#endif // Old borland compiler.
     BOOST_TEST(std::string("Angela") == copy1   .InsdFirstName);
     BOOST_TEST(std::string("Actually Full Name")  == original.InsdFirstName);
 
