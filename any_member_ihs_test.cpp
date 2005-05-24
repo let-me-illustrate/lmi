@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: any_member_ihs_test.cpp,v 1.2 2005-05-22 16:18:38 chicares Exp $
+// $Id: any_member_ihs_test.cpp,v 1.3 2005-05-24 04:00:01 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -70,7 +70,8 @@ struct T : public Q, public MemberSymbolTable_ihs<T>
         ascribe("i1", &T::i1);
         ascribe("d0", &T::d0);
         ascribe("s0", &T::s0);
-        ascribe("q0", static_cast<float T::*>(&T::q0));
+//        ascribe("q0", static_cast<float T::*>(&T::q0));
+        ascribe("q0", &T::q0);
         }
 };
 

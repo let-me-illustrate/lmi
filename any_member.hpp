@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: any_member.hpp,v 1.3 2005-05-23 12:46:43 chicares Exp $
+// $Id: any_member.hpp,v 1.4 2005-05-24 04:00:01 chicares Exp $
 
 // This is a derived work based on boost::any, which bears the following
 // copyright and permissions notice:
@@ -79,7 +79,7 @@
 // significant for held objects of type char*, but data members
 // generally should be of type std::string instead, so the cost seems
 // unimportant. The benefit is that arithmetic types are written with
-// all achievable decimal precision.
+// all possible decimal precision.
 
 #ifndef any_member_hpp
 #define any_member_hpp
@@ -102,7 +102,7 @@
 #include <typeinfo>
 #include <vector>
 
-// Definition of class placeholder.
+// Declaration of class placeholder.
 
 // The implicitly-defined copy ctor and copy assignment operator do
 // the right thing.
@@ -117,12 +117,17 @@
 class placeholder
 {
   public:
-    virtual ~placeholder() {}
+    virtual ~placeholder();
     virtual placeholder& operator=(std::string const&) = 0;
     virtual placeholder* clone() const = 0;
     virtual std::type_info const& type() const = 0;
-    virtual void write(std::ostream&) const = 0;
+    virtual std::ostream& write(std::ostream&) const = 0;
 };
+
+// Implementation of class placeholder.
+
+inline placeholder::~placeholder()
+{}
 
 // Declaration of class holder.
 
@@ -131,15 +136,18 @@ class holder
     :public placeholder
     ,private boost::noncopyable
 {
+    // Friendship is extended to class any_member only to support its
+    // cast operations.
     template<typename T> friend class any_member;
 
   public:
     holder(ClassType*, ValueType const&);
-    holder& operator=(std::string const&);
 
-    placeholder* clone() const;
-    std::type_info const& type() const;
-    void write(std::ostream&) const;
+    // placeholder overrides.
+    virtual holder& operator=(std::string const&);
+    virtual placeholder* clone() const;
+    virtual std::type_info const& type() const;
+    virtual std::ostream& write(std::ostream&) const;
 
   private:
     ClassType* object_;
@@ -179,14 +187,18 @@ std::type_info const& holder<ClassType,ValueType>::type() const
 }
 
 template<typename ClassType, typename ValueType>
-void holder<ClassType,ValueType>::write(std::ostream& os) const
+std::ostream& holder<ClassType,ValueType>::write(std::ostream& os) const
 {
     os << value_cast<std::string>(object_->*held_);
+    return os;
 }
 
 // Declaration of class any_member.
 
 // This class is necessarily Assignable, so that a std::map can hold it.
+
+// It holds a pointer to a ClassType object only so for its cast
+// operations.
 
 template<typename ClassType>
 class any_member
@@ -212,6 +224,7 @@ class any_member
 
     std::string str() const;
     std::type_info const& type() const;
+    std::ostream& write(std::ostream&) const;
 
   private:
     ClassType* object_;
@@ -336,32 +349,47 @@ std::type_info const& any_member<ClassType>::type() const
     return content_ ? content_->type() : typeid(void);
 }
 
+template<typename ClassType>
+std::ostream& any_member<ClassType>::write(std::ostream& os) const
+{
+    return content_->write(os);
+}
+
+template<typename ClassType>
+std::ostream& operator<<(std::ostream& os, any_member<ClassType> const& z)
+{
+    return z.write(os);
+}
+
 // Declaration of class MemberSymbolTable.
 
-// By its nature, this class must be Noncopyable: it holds a map of
+// By its nature, this class is Noncopyable: it holds a map of
 // pointers to member, which need to be initialized instead of copied
 // when a derived class is copied.
+//
+// TODO ?? Alternatively, one might define a copy ctor that
+// (automatically) ascribe()s all members to the appropriate object.
 
 template<typename ClassType>
 class MemberSymbolTable
     :private boost::noncopyable
 {
-    typedef std::map<std::string, any_member<ClassType> > member_map;
-    typedef typename member_map::value_type member_pair;
+    typedef std::map<std::string, any_member<ClassType> > map_type;
+    typedef typename map_type::value_type map_value_type;
 
   public:
     any_member<ClassType>& operator[](std::string const&);
     any_member<ClassType> const& operator[](std::string const&) const;
-
-    template<typename ValueType>
-    void ascribe(std::string const&, ValueType ClassType::*);
-
-    // TODO ?? Probably not both of these are necessary.
-    std::vector<std::string> cached_member_names() const;
     std::vector<std::string> const& member_names() const;
 
+  protected:
+    template<typename ValueType, typename RelatedClassType>
+    void ascribe(std::string const&, ValueType RelatedClassType::*);
+
   private:
-    member_map m_;
+    std::vector<std::string> cached_member_names() const;
+
+    map_type map_;
 // TODO ?? With como-4.3.3, uncommenting this line moves a failure
 // from one unit test to another. It's a poor idea to assume this is
 // a compiler defect without investigating it carefully.
@@ -369,6 +397,9 @@ class MemberSymbolTable
 };
 
 // Implementation of class MemberSymbolTable.
+
+// operator[]() returns a known member; unlike std::map::operator[](),
+// it never adds a new pair to the map.
 
 // INELEGANT !! The const and non-const operator[]() implementations
 // are nearly identical; what's commmon should be factored out.
@@ -378,8 +409,8 @@ any_member<ClassType>& MemberSymbolTable<ClassType>::operator[]
     (std::string const& s
     )
 {
-    typename member_map::iterator i = m_.find(s);
-    if(m_.end() != i)
+    typename map_type::iterator i = map_.find(s);
+    if(map_.end() != i)
         {
         return i->second;
         }
@@ -402,8 +433,8 @@ any_member<ClassType> const& MemberSymbolTable<ClassType>::operator[]
     (std::string const& s
     ) const
 {
-    typename member_map::const_iterator i = m_.find(s);
-    if(m_.end() != i)
+    typename map_type::const_iterator i = map_.find(s);
+    if(map_.end() != i)
         {
         return i->second;
         }
@@ -422,56 +453,58 @@ any_member<ClassType> const& MemberSymbolTable<ClassType>::operator[]
 }
 
 template<typename ClassType>
-template<typename ValueType>
+std::vector<std::string> const& MemberSymbolTable<ClassType>::member_names() const
+{
+    static std::vector<std::string> member_name_vector(cached_member_names());
+    return member_name_vector;
+}
+
+template<typename ClassType>
+template<typename ValueType, typename RelatedClassType>
 void MemberSymbolTable<ClassType>::ascribe
     (std::string const& s
-    ,ValueType ClassType::*p2m
+    ,ValueType RelatedClassType::*p2m
     )
 {
-    // Here, the behavior of dynamic_cast is well defined, whereas
-    // static_cast might display undefined behavior if ClassType
-    // does not have MemberSymbolTable<ClassType> as a base class.
-    // But static_cast actually gives a diagnostic at compile time
-    // with gcc and comeau, so it seems safe as long as at least one
-    // of those compilers is used.
-#if 0
-    ClassType* class_object = dynamic_cast<ClassType*>(this);
-    if(!class_object)
-        {
-        std::ostringstream oss;
-        oss
-            << "Class '"
-            << typeid(ClassType).name()
-            << "' must have base class MemberSymbolTable<itself>."
-            ;
-        throw std::runtime_error(oss.str());
-        }
-#endif // 0
+    // Assert that the static_cast doesn't engender undefined behavior.
+    // Double parentheses: don't parse comma as a macro parameter separator.
+    BOOST_STATIC_ASSERT
+        ((
+        boost::is_base_and_derived
+            <MemberSymbolTable<ClassType>
+            ,ClassType
+            >::value
+        ));
+    BOOST_STATIC_ASSERT
+        ((
+            boost::is_same
+                <RelatedClassType
+                ,ClassType
+                >::value
+        ||  boost::is_base_and_derived
+                <RelatedClassType
+                ,ClassType
+                >::value
+        ));
     ClassType* class_object = static_cast<ClassType*>(this);
-    m_.insert(member_pair(s, any_member<ClassType>(class_object, p2m)));
+    map_.insert(map_value_type(s, any_member<ClassType>(class_object, p2m)));
 }
+
+// TODO ?? This is invalid if the ascribe() is called after the first
+// invocation of cached_member_names(). If names are to be cached,
+// then they should be cached in a class member that ascribe() can
+// check and perhaps update directly.
 
 template<typename ClassType>
 std::vector<std::string> MemberSymbolTable<ClassType>::cached_member_names() const
 {
     std::vector<std::string> member_name_vector;
-    member_name_vector.reserve(m_.size());
-    for
-        (typename member_map::const_iterator i = m_.begin()
-        ;i != m_.end()
-        ;++i
-        )
+    member_name_vector.reserve(map_.size());
+    typename map_type::const_iterator i;
+    for(i = map_.begin(); i != map_.end(); ++i)
         {
         member_name_vector.push_back(i->first);
         }
-
-    return member_name_vector;
-}
-
-template<typename ClassType>
-std::vector<std::string> const& MemberSymbolTable<ClassType>::member_names() const
-{
-    static std::vector<std::string> member_name_vector(cached_member_names());
     return member_name_vector;
 }
 

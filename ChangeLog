@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.66 2005-05-22 14:39:14 chicares Exp $
+// $Id: ChangeLog,v 1.67 2005-05-24 04:00:01 chicares Exp $
 
 2005-01-14
 
@@ -1939,4 +1939,42 @@ Now, more rationally,
 New file 'any_member_ihs_test.cpp' is old file 'any_member_test.cpp',
 renamed. Contents of old file 'any_member_test.cpp' are replaced by
 code from the skeleton branch.
+
+  numeric_io_traits.hpp
+Work around strtold() conflict between C++98 and C99.
+
+  any_member.hpp
+Prevent a gcc-3.4.2 warning.
+
+  any_member_test.cpp
+  wx_new_test.cpp
+Remove redundant references to std::free(), which is already handled
+by the unit-test driver.
+
+  any_member_ihs_test.cpp
+Remove gratuitous differences.
+
+  any_member_test.cpp
+Merge old and new tests.
+
+  numeric_io_traits.hpp
+Add kludge for como.
+
+2005-05-23 [1324]
+
+  any_member.hpp
+  any_member_test.cpp
+Refactor.
+
+  any_member.hpp
+  any_member_ihs.hpp      [expunged]
+  any_member_ihs_test.cpp [expunged]
+  any_member_test.cpp
+  input_test.cpp
+  inputillus.cpp
+  inputillus.hpp
+  inputillus_xml_io.cpp
+  main_cgi.cpp
+  objects.make
+Replace old with new any_member class template.
 
