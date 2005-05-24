@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: inputillus_xml_io.cpp,v 1.2 2005-05-19 12:30:00 chicares Exp $
+// $Id: inputillus_xml_io.cpp,v 1.3 2005-05-24 04:00:02 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -115,7 +115,9 @@ using namespace xml;
 
     std::map<std::string, std::string> detritus_map;
 
-    std::vector<std::string> member_names(IllusInputParms::map_keys());
+    std::vector<std::string> member_names
+        (IllusInputParms::member_names()
+        );
     std::vector<std::string>::iterator current_member;
     xml::node::const_iterator child;
     for(child = x.begin(); child != x.end(); ++child)
@@ -164,11 +166,7 @@ using namespace xml;
             {
             content = "";
             }
-#ifndef BC_BEFORE_5_5
         operator[](node_tag) = content;
-#else // old borland compiler
-        set_value_by_name(node_tag, content);
-#endif // old borland compiler
         // TODO ?? Perhaps a std::list would perform better.
         member_names.erase(current_member);
         }
@@ -231,16 +229,14 @@ void IllusInputParms::write(xml::node& x) const
 // set_attr() seems to be missing in the doxygen stuff at pmade.org .
     root.set_attr("version", value_cast<std::string>(class_version()).c_str());
 
-    std::vector<std::string> const member_names(IllusInputParms::map_keys());
+    std::vector<std::string> const member_names
+        (IllusInputParms::member_names()
+        );
     std::vector<std::string>::const_iterator i;
     for(i = member_names.begin(); i != member_names.end(); ++i)
         {
         std::string node_tag(*i);
-#ifndef BC_BEFORE_5_5
         std::string value = operator[](*i).str();
-#else // old borland compiler
-        std::string value = get_value_by_name(*i);
-#endif // old borland compiler
         root.push_back(xml::node(node_tag.c_str(), value.c_str()));
         }
 

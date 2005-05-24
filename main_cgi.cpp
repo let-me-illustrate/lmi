@@ -31,7 +31,7 @@
 // other reasons evident in cvs or explained in 'ChangeLog'. Any
 // defect should not reflect on Stephen F. Booth's reputation.
 
-// $Id: main_cgi.cpp,v 1.6 2005-05-19 12:30:00 chicares Exp $
+// $Id: main_cgi.cpp,v 1.7 2005-05-24 04:00:02 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -482,8 +482,6 @@ void ShowOutput(cgicc::Cgicc const& data)
     Timer timer;
     IllusInputParms input;
 
-#ifndef BC_BEFORE_5_5
-
     // TODO ?? More KLUDGE stuff.
     input.Status_IssueAge      = 45;
     input.Status_RetAge        = 65;
@@ -521,39 +519,6 @@ void ShowOutput(cgicc::Cgicc const& data)
 //    input["SeparateAccountRateType"]       = GetValue(data, "SeparateAccountRateType"); // not used yet
     input["LoanRate"]                      = GetValue(data, "LoanRate" );
     input["LoanRateType"]                  = GetValue(data, "LoanRateType");
-
-#else // old borland compiler
-
-    input.set_value_by_name("ProductName"                   , GetValue(data, "ProductName"                   ));
-    input.set_value_by_name("IssueAge"                      , GetValue(data, "IssueAge"                      ));
-    input.set_value_by_name("RetirementAge"                 , GetValue(data, "RetirementAge"                 ));
-    input.set_value_by_name("Gender"                        , GetValue(data, "Gender"                        ));
-    input.set_value_by_name("UnderwritingClass"             , GetValue(data, "UnderwritingClass"             ));
-    input.set_value_by_name("Smoking"                       , GetValue(data, "Smoking"                       ));
-    input.set_value_by_name("WaiverOfPremiumBenefit"        , GetValue(data, "WaiverOfPremiumBenefit"        ));
-    input.set_value_by_name("AccidentalDeathBenefit"        , GetValue(data, "AccidentalDeathBenefit"        ));
-    input.set_value_by_name("SolveType"                     , GetValue(data, "SolveType"                     ));
-    input.set_value_by_name("SolveBeginYear"                , GetValue(data, "SolveBeginYear"                ));
-    input.set_value_by_name("SolveEndYear"                  , GetValue(data, "SolveEndYear"                  ));
-    input.set_value_by_name("SolveTarget"                   , GetValue(data, "SolveTarget"                   ));
-    input.set_value_by_name("SolveTargetCashSurrenderValue" , GetValue(data, "SolveTargetCashSurrenderValue" ));
-    input.set_value_by_name("SolveTargetYear"               , GetValue(data, "SolveTargetYear"               ));
-    input.set_value_by_name("SolveBasis"                    , GetValue(data, "SolveBasis"                    ));
-    input.set_value_by_name("SpecifiedAmount"               , GetValue(data, "SpecifiedAmount"               )); // rename
-    input.set_value_by_name("DeathBenefitOption"            , GetValue(data, "DeathBenefitOption"            )); // rename
-    input.set_value_by_name("Payment"                       , GetValue(data, "Payment"                       ));
-    input.set_value_by_name("PaymentMode"                   , GetValue(data, "PaymentMode"                   ));
-    input.set_value_by_name("Dumpin"                        , GetValue(data, "Dumpin"                        ));
-    input.set_value_by_name("Internal1035ExchangeAmount"    , GetValue(data, "1035ExchangeAmount"            ));
-    input.set_value_by_name("Internal1035ExchangeFromMec"   , GetValue(data, "1035ExchangeIsMec"             ));
-    input.set_value_by_name("Internal1035ExchangeBasis"     , GetValue(data, "1035ExchangeBasis"             ));
-    input.set_value_by_name("GeneralAccountRate"            , GetValue(data, "GeneralAccountRate"            )); // rename
-    input.set_value_by_name("GeneralAccountRateType"        , GetValue(data, "GeneralAccountRateType"        ));
-//    input.set_value_by_name("SeparateAccountRateType"       , GetValue(data, "SeparateAccountRateType"     )); // not used yet
-    input.set_value_by_name("LoanRate"                      , GetValue(data, "LoanRate"                      ));
-    input.set_value_by_name("LoanRateType"                  , GetValue(data, "LoanRateType"                  ));
-
-#endif // old borland compiler
 
     input.propagate_changes_to_base_and_finalize();
     std::string census_data = GetValue(data, "Census");
