@@ -19,16 +19,14 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: inputillus.hpp,v 1.2 2005-01-29 02:47:41 chicares Exp $
+// $Id: inputillus.hpp,v 1.3 2005-05-24 04:00:02 chicares Exp $
 
 #ifndef inputillus_hpp
 #define inputillus_hpp
 
 #include "config.hpp"
 
-#ifndef BC_BEFORE_5_5
-#   include "any_member_ihs.hpp"
-#endif // not old borland compiler
+#include "any_member.hpp"
 #include "expimp.hpp"
 #include "inputs.hpp"
 #include "streamable.hpp"
@@ -43,27 +41,10 @@
 class LMI_EXPIMP IllusInputParms
     :virtual public streamable
     ,public InputParms
-#ifndef BC_BEFORE_5_5
-    ,public MemberSymbolTable_ihs<IllusInputParms>
-#endif // not old borland compiler
+    ,public MemberSymbolTable<IllusInputParms>
 {
-    typedef
-        std::map
-            <std::string
-            ,std::string
-            ,std::less<std::string>
-            >
-        string_map
-        ;
-
-    typedef
-        std::map
-            <std::string
-            ,std::string
-            ,std::less<std::string>
-            >::const_iterator
-        string_map_iterator
-        ;
+    typedef std::map<std::string,std::string> string_map;
+    typedef std::map<std::string,std::string>::const_iterator string_map_iterator;
 
   public:
     IllusInputParms();
@@ -205,7 +186,7 @@ class LMI_EXPIMP IllusInputParms
     r_curr_int_rate sGenAcctRate; // obsolescent
 
 // TODO ?? This stuff really ought to be moved to the base class.
-// We wish we could make these references, but any_member_ihs.hpp can't
+// We wish we could make these references, but any_member can't
 // handle that, at least not now.
     r_iss_age            Status_IssueAge         ;
     r_ret_age            Status_RetAge           ;
@@ -224,17 +205,6 @@ class LMI_EXPIMP IllusInputParms
     r_date               Status_DOR              ;
     e_yes_or_no          Status_UseDOR           ;
     e_table_rating       Status_SubstdTable      ;
-
-#ifdef BC_BEFORE_5_5
-    std::vector<std::string> map_keys() const;
-    std::string get_value_by_name
-        (std::string const& name
-        ) const;
-    void set_value_by_name
-        (std::string const& name
-        ,std::string const& value
-        );
-#endif // old borland compiler
 
   private:
     void propagate_status_from_alii();
