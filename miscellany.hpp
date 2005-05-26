@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: miscellany.hpp,v 1.3 2005-03-11 04:14:33 chicares Exp $
+// $Id: miscellany.hpp,v 1.4 2005-05-26 18:37:18 chicares Exp $
 
 #ifndef miscellany_hpp
 #define miscellany_hpp
@@ -79,12 +79,12 @@ inline bool is_ok_for_cctype(int c)
 
 inline unsigned char lmi_tolower(unsigned char c)
 {
-    return std::tolower(c);
+    return static_cast<unsigned char>(std::tolower(c));
 }
 
 inline unsigned char lmi_toupper(unsigned char c)
 {
-    return std::toupper(c);
+    return static_cast<unsigned char>(std::toupper(c));
 }
 
 #endif // miscellany_hpp
