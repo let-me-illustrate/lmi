@@ -37,15 +37,12 @@
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
 // GWC added this RCS Id:
-// $Id: getopt.cpp,v 1.3 2005-03-11 13:40:41 chicares Exp $
+// $Id: getopt.cpp,v 1.4 2005-05-26 18:31:49 chicares Exp $
 
-// GWC conditionalized gcc-specific pragma to avoid a warning when
-// compiling with como C++ using a gcc backend.
-#ifdef __GNUG__
-#   if defined __GNUC__ && !defined __COMO__
-#       pragma implementation
-#   endif // defined __GNUC__ && !defined __COMO__
-#endif //  __GNUG__
+// GWC conditionalized gcc-specific pragma.
+#ifdef __GNUC__
+#   pragma implementation
+#endif // __GNUC__
 
 // GWC removed a dozen or two lines that served to make alloca() available
 // for various compilers.

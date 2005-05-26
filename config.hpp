@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: config.hpp,v 1.4 2005-04-07 15:02:38 chicares Exp $
+// $Id: config.hpp,v 1.5 2005-05-26 18:31:49 chicares Exp $
 
 // Configuration header for compiler quirks. Include at the beginning of
 // every .hpp file (and nowhere else).
@@ -89,31 +89,31 @@ namespace fs = boost::filesystem;
 // COMPILER !! gcc has macros for major and minor version, but not debug
 // version (e.g. 2.95, but not 2.95.2 or 2.95.2-1). See boost mailing list.
 
-#if defined __MINGW32__ && defined __GNUC__ && __GNUC__ == 2 && __GNUC_MINOR__ == 95 && !defined __COMO__
+#if defined __MINGW32__ && defined __GNUC__ && __GNUC__ == 2 && __GNUC_MINOR__ == 95
 #   define OK_TO_INCLUDE_CONFIG_MING29521_HPP
 #   include "config_ming29521.hpp"
 #   undef OK_TO_INCLUDE_CONFIG_MING29521_HPP
 #endif // mingw gcc 2.95.2-1 compiler.
 
-#if defined __MINGW32__ && defined __GNUC__ && __GNUC__ == 3 && __GNUC_MINOR__ == 2 && !defined __COMO__
+#if defined __MINGW32__ && defined __GNUC__ && __GNUC__ == 3 && __GNUC_MINOR__ == 2
 #   define OK_TO_INCLUDE_CONFIG_MING323_HPP
 #   include "config_ming323.hpp"
 #   undef OK_TO_INCLUDE_CONFIG_MING323_HPP
 #endif // mingw gcc 3.2.3 compiler.
 
-#if defined __CYGWIN__ && defined __GNUC__ && __GNUC__ == 2 && __GNUC_MINOR__ == 95 && !defined __COMO__
+#if defined __CYGWIN__ && defined __GNUC__ && __GNUC__ == 2 && __GNUC_MINOR__ == 95
 #   define OK_TO_INCLUDE_CONFIG_CYG29534_HPP
 #   include "config_cyg29534.hpp"
 #   undef OK_TO_INCLUDE_CONFIG_CYG29534_HPP
 #endif // cygwin gcc 2.95.3-4 compiler.
 
-#if defined __BORLANDC__ && __BORLANDC__ < 0x0550 && !defined __COMO__
+#if defined __BORLANDC__ && __BORLANDC__ < 0x0550
 #   define OK_TO_INCLUDE_CONFIG_BC502_HPP
 #   include "config_bc502.hpp"
 #   undef OK_TO_INCLUDE_CONFIG_BC502_HPP
 #endif // Old borland compiler.
 
-#if defined __BORLANDC__ && __BORLANDC__ >= 0x0550 && !defined __COMO__
+#if defined __BORLANDC__ && __BORLANDC__ >= 0x0550
 #   define OK_TO_INCLUDE_CONFIG_BC551_HPP
 #   include "config_bc551.hpp"
 #   undef OK_TO_INCLUDE_CONFIG_BC551_HPP

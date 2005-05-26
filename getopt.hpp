@@ -37,7 +37,7 @@
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
 // GWC added this RCS Id:
-// $Id: getopt.hpp,v 1.2 2005-02-19 03:28:18 chicares Exp $
+// $Id: getopt.hpp,v 1.3 2005-05-26 18:31:49 chicares Exp $
 
 // This version of 'getopt' appears to the caller like standard Unix 'getopt'
 // but it behaves differently for the user, since it allows the user
@@ -53,12 +53,11 @@
 // GNU application programs can use a third alternative mode in which
 // they can distinguish the relative order of options and other arguments.
 
-// GWC conditionalized gcc-specific pragma to avoid a warning when
-// compiling with como C++ using a gcc backend.
+// GWC conditionalized gcc-specific pragma.
 #ifndef getopt_hpp
-#   if defined __GNUC__ && !defined __COMO__
+#   if defined __GNUC__
 #       pragma interface
-#   endif // defined __GNUC__ && !defined __COMO__
+#   endif // defined __GNUC__
 #define getopt_hpp
 
 // GWC added this to conform to LMI standards.

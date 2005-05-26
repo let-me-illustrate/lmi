@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: round_to_test.cpp,v 1.6 2005-05-26 12:35:11 chicares Exp $
+// $Id: round_to_test.cpp,v 1.7 2005-05-26 18:31:49 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -39,7 +39,7 @@
 #include <iostream>
 #include <ostream>
 
-#if defined BOOST_MSVC || defined __BORLANDC__ || defined __COMO__ && defined LMI_X86
+#if defined BOOST_MSVC || defined __BORLANDC__ || defined LMI_COMO_WITH_MINGW
 #   include <cfloat> // Nonstandard floating-point hardware control.
 #endif // defined BOOST_MSVC || defined __BORLANDC__
 
@@ -60,7 +60,7 @@
     int const fe_tonearest  = FE_TONEAREST;
     int const fe_upward     = FE_UPWARD;
     int const fe_downward   = FE_DOWNWARD;
-#elif defined BOOST_MSVC || defined __COMO__ && defined LMI_X86
+#elif defined BOOST_MSVC || defined LMI_COMO_WITH_MINGW
     // These untested values seem necessary for msvc's _control87().
     int const fe_towardzero = _RC_CHOP;
     int const fe_tonearest  = _RC_NEAR;
@@ -151,7 +151,7 @@ void set_hardware_rounding_mode(int mode, bool synchronize)
     asm volatile ("fldcw %0" : : "m" (*&control_word));
 #elif defined __BORLANDC__
     _control87(mode,  MCW_RC);
-#elif defined BOOST_MSVC || defined __COMO__ && defined LMI_X86
+#elif defined BOOST_MSVC || defined LMI_COMO_WITH_MINGW
     // Untested, but this appears to be the right nonstandard function.
     _control87(mode,  _MCW_RC);
 #else // No known way to set hardware rounding mode.
@@ -317,7 +317,7 @@ bool test_one_case
              - 1.0
              ;
         }
-#ifdef __COMO__
+#ifdef LMI_COMO_WITH_MINGW
     // COMPILER !! This looks like a como porting defect: with mingw
     // as the underlying C compiler, a long double should occupy
     // twelve bytes, ten significant and two for padding.
@@ -328,7 +328,7 @@ bool test_one_case
             ,2.0L * (max_prec_real)std::numeric_limits<double>::epsilon()
             );
         }
-#endif // defined __COMO__
+#endif // defined LMI_COMO_WITH_MINGW
     bool error_is_within_tolerance = rel_error <= tolerance;
 
     if(!error_is_within_tolerance)

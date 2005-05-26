@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: numeric_io_traits.hpp,v 1.6 2005-05-22 16:36:54 chicares Exp $
+// $Id: numeric_io_traits.hpp,v 1.7 2005-05-26 18:31:49 chicares Exp $
 
 #ifndef numeric_io_traits_hpp
 #define numeric_io_traits_hpp
@@ -314,12 +314,12 @@ template<> struct numeric_conversion_traits<double>
 // 'strtold' is written rather than 'std::strtold' because C++98
 // is unaware of that C99 function.
 
-#if defined __COMO__
-// COMPILER !! Comeau doesn't seem to provide strtold(), so at
-// least for the nonce use this kludge:
+#if defined LMI_COMO_WITH_MINGW
+// COMPILER !! Comeau with mingw doesn't seem to provide strtold(),
+// so at least for the nonce use this kludge:
 inline long double strtold(char const* nptr, char** endptr)
 {return strtod(nptr, endptr);}
-#endif // defined __COMO__
+#endif // defined LMI_COMO_WITH_MINGW
 
 template<> struct numeric_conversion_traits<long double>
     :public numeric_conversion_traits<Floating>
