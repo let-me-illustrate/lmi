@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_fpios.cpp,v 1.2 2005-03-23 15:32:29 chicares Exp $
+// $Id: ihs_fpios.cpp,v 1.3 2005-05-26 22:01:15 chicares Exp $
 
 // This is a derived work based on Joshua Rowe's
 //   "Really cool persistent object stream library"
@@ -219,27 +219,19 @@ JrPs_fpstreambuf::~JrPs_fpstreambuf()
 // Maybe we should instead define _O_BINARY and prototype _fileno() and
 // _setmode() with simpler conditions--the way _setmode() is treated
 // for borland below.
-// TODO ?? Why not do this in "platform_dependent.hpp"?
-//   --Done, above; so clean this stuff up.
+// INELEGANT !! Why not do this in "platform_dependent.hpp"?
 
 #ifdef LMI_MSW
 #   if defined __GNUC__ && defined __STRICT_ANSI__
 #       define GNU_STRICT_ANSI_ORIGINALLY_NOT_DEFINED
 #       undef __STRICT_ANSI__
 #   endif // !(defined(__GNUC__) && defined(__STRICT_ANSI__))
-#   if defined BC_BEFORE_5_5 && !defined __MFC_COMPAT__
-#       define OLD_BC_MFC_COMPAT_ORIGINALLY_NOT_DEFINED
-#       define __MFC_COMPAT__
-#   endif // old borland compiler and mfc compatibility off
 //  for _O_BINARY, _fileno(), _setmode()
 #   include <io.h>
 #   include <fcntl.h>
 #   if defined __GNUC__ && defined GNU_STRICT_ANSI_ORIGINALLY_NOT_DEFINED
 #       define __STRICT_ANSI__ ""
 #   endif // !(defined(__GNUC__) && defined(__STRICT_ANSI__))
-#   if defined BC_BEFORE_5_5 && defined OLD_BC_MFC_COMPAT_ORIGINALLY_NOT_DEFINED
-#       undef __MFC_COMPAT__
-#   endif // old borland compiler and mfc compatibility off
 #   if defined __BORLANDC__
 #       define _setmode setmode
 #   endif // __BORLANDC

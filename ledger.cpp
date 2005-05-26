@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger.cpp,v 1.7 2005-04-29 17:19:46 chicares Exp $
+// $Id: ledger.cpp,v 1.8 2005-05-26 22:01:15 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -382,15 +382,4 @@ LedgerVariant const& Ledger::GetGuarHalf() const
 {
     return (*GetLedgerMap().held().find(e_run_basis(e_run_guar_basis_sa_half))).second;
 }
-
-#if 0
-#   if !defined BC_BEFORE_5_5 && !defined GCC_BEFORE_2_96
-#      include "ledger_xml_io.cpp"
-#   else // Using obsolete tools that can't cope with standard C++.
-    int Ledger::class_version() const {return 0;}
-    void Ledger::read(xml::node&) {}
-    void Ledger::write(xml::node& x) const {}
-    std::string Ledger::xml_root_name() const {return "";}
-#   endif // Using obsolete tools that can't cope with standard C++.
-#endif // 0
 

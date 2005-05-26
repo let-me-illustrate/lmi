@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xenum.cpp,v 1.1 2005-01-14 19:47:45 chicares Exp $
+// $Id: xenum.cpp,v 1.2 2005-05-26 22:01:15 chicares Exp $
 
 // Definitions for template class xenum.
 
@@ -154,27 +154,10 @@ std::string const& xenum<EnumType, N>::str() const
 */
 }
 
-#if defined BC_BEFORE_5_5
-template <typename EnumType, int N>
-std::vector<std::string> const& xenum<EnumType, N>::borland_502_workaround()
-{
-    static std::vector<std::string> v;
-    for(int j = 0; j < N; ++j)
-        {
-        v.push_back(names[j]);
-        }
-    return v;
-}
-#endif // old borland compiler
-
 template <typename EnumType, int N>
 std::vector<std::string> const& xenum<EnumType, N>::all_strings()
 {
-#if !defined BC_BEFORE_5_5
     static std::vector<std::string> const v(names, names + N);
-#else // old borland compiler
-    static std::vector<std::string> const v(borland_502_workaround());
-#endif // old borland compiler
     return v;
 }
 

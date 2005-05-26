@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xrange.hpp,v 1.2 2005-05-19 12:30:00 chicares Exp $
+// $Id: xrange.hpp,v 1.3 2005-05-26 22:01:15 chicares Exp $
 
 #ifndef xrange_hpp
 #define xrange_hpp
@@ -104,15 +104,10 @@ Or should the semantic type do that?
 #include "alert.hpp"
 #include "value_cast.hpp"
 
-#ifndef LMI_LACKS_STD_ITERATOR
-// <boost/operators.hpp> requires 'std::iterator'.
-#   include <boost/operators.hpp>
-#endif // not defined LMI_LACKS_STD_ITERATOR
+#include <boost/operators.hpp>
 
-#ifndef BC_BEFORE_5_5
-#   include <boost/static_assert.hpp>
-#   include <boost/type_traits/arithmetic_traits.hpp>
-#endif // not old borland compiler
+#include <boost/static_assert.hpp>
+#include <boost/type_traits/arithmetic_traits.hpp>
 
 #include <iosfwd>
 #include <limits>
@@ -213,11 +208,7 @@ class xrange_error
 // the main program. It would be better to rewrite the offending code.
 
 template<typename Substance>
-#ifndef BC_BEFORE_5_5
 bool value_cast_will_succeed(std::string const& s)
-#else // old borland compiler
-bool value_cast_will_succeed(std::string const& s, Substance = Substance())
-#endif // old borland compiler
 {
     if(s.empty())
         {
@@ -236,9 +227,7 @@ bool value_cast_will_succeed(std::string const& s, Substance = Substance())
 
 template<typename Essence, typename Substance>
 class xrange
-#ifndef LMI_LACKS_STD_ITERATOR
     :boost::totally_ordered<xrange<Essence,Substance> >
-#endif // defined LMI_LACKS_STD_ITERATOR
 {
 public:
     typedef std::pair<Substance,Substance> limits_type;
@@ -290,17 +279,15 @@ private:
     // If Substance is an integer POD type, then it must be signed,
     // so that force_valid() works: else forcing (unsigned)(-1) to
     // [0,100] would yield 100, when 0 is wanted.
-#ifndef BC_BEFORE_5_5
 // TODO ?? This never worked with bc++5.02, but now that we've allowed
 // non-POD types, bc++5.5.1 rejects this; is it correct? If it is
 // correct, then is gcc wrong?
-#   ifndef __BORLANDC__
+#ifndef __BORLANDC__
     BOOST_STATIC_ASSERT
         (  !std::numeric_limits<Substance>::is_integer
         ||  std::numeric_limits<Substance>::is_signed
         );
-#   endif // borland compilers
-#endif // old borland compiler
+#endif // not defined __BORLANDC__
 };
 
 template<typename Essence, typename Substance>

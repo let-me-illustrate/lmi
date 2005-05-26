@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xenum_sample.hpp,v 1.1 2005-01-14 19:47:45 chicares Exp $
+// $Id: xenum_sample.hpp,v 1.2 2005-05-26 22:01:15 chicares Exp $
 
 #ifndef xenum_sample_hpp
 #define xenum_sample_hpp
@@ -41,14 +41,11 @@ enum enum_foobar
     };
 typedef xenum<enum_foobar, 2> e_foobar;
 
-#if !defined BC_BEFORE_5_5
 // Any attempted use of this should be a compile-time error.
-// COMPILER !! bc++5.02 cannot handle this even if it's not used.
 enum enum_empty
   {
   };
 typedef xenum<enum_empty, 0> e_empty;
-#endif // old borland compiler
 
 #endif // xenum_sample_hpp
 

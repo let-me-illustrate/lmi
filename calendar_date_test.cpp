@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: calendar_date_test.cpp,v 1.3 2005-05-19 00:08:03 chicares Exp $
+// $Id: calendar_date_test.cpp,v 1.4 2005-05-26 22:01:15 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -43,15 +43,6 @@
             ; \
         } \
     BOOST_TEST((a) == (b));
-
-#ifdef BC_BEFORE_5_5
-// COMPILER !! The old borland compiler gets operator!=() wrong.
-    int test_main(int, char*[])
-    {
-        BOOST_TEST(false);
-        return 1;
-    }
-#else
 
 int test_main(int, char*[])
 {
@@ -325,5 +316,4 @@ int test_main(int, char*[])
 
     return 0;
 }
-#endif // Not old borland compiler.
 

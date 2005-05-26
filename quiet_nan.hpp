@@ -20,18 +20,15 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: quiet_nan.hpp,v 1.2 2005-01-29 02:47:42 chicares Exp $
+// $Id: quiet_nan.hpp,v 1.3 2005-05-26 22:01:15 chicares Exp $
 
 #ifndef quiet_nan_hpp
 #define quiet_nan_hpp
 
 #include "config.hpp"
 
-#ifndef BC_BEFORE_5_5
-// TODO ?? expunge #   include <boost/config.hpp>
-#   include <boost/static_assert.hpp>
-#   include <boost/type_traits/arithmetic_traits.hpp>
-#endif // old borland compiler
+#include <boost/static_assert.hpp>
+#include <boost/type_traits/arithmetic_traits.hpp>
 
 #include <limits>
 
@@ -47,14 +44,13 @@
 template<typename T>
 T implausible_value(T const& t = -9.99999e35)
 {
-#ifndef BC_BEFORE_5_5
     BOOST_STATIC_ASSERT(::boost::is_float<T>::value);
-#endif // Old borland compiler.
 
-#if defined __BORLANDC__ && !defined BC_BEFORE_5_5
-    // Without this workaround, bc++5.5.1 gives a BSOD on msw xp.
+#if defined __BORLANDC__
+    // Without this 'workaround', bc++5.5.1 gives a BSOD on msw xp.
     return t;
-#else // Not newer borland compiler.
+#else // __BORLANDC__
+
     if(std::numeric_limits<T>::has_quiet_NaN)
         {
         return std::numeric_limits<T>::quiet_NaN();

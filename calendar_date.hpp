@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: calendar_date.hpp,v 1.1 2005-01-14 19:47:44 chicares Exp $
+// $Id: calendar_date.hpp,v 1.2 2005-05-26 22:01:15 chicares Exp $
 
 #ifndef calendar_date_hpp
 #define calendar_date_hpp
@@ -28,29 +28,18 @@
 
 #include "expimp.hpp"
 
-#ifndef LMI_LACKS_STD_ITERATOR
-// <boost/operators.hpp> requires 'std::iterator'.
-#   include <boost/operators.hpp>
-#endif // not defined LMI_LACKS_STD_ITERATOR
+#include <boost/operators.hpp>
 
 #include <string>
 
 class LMI_EXPIMP calendar_date
-#ifndef LMI_LACKS_STD_ITERATOR
     :boost::additive<calendar_date, int>
     ,boost::totally_ordered<calendar_date>
     ,boost::unit_steppable<calendar_date>
-#endif // defined LMI_LACKS_STD_ITERATOR
 {
   public:
     calendar_date(); // Defaults to today's date.
     calendar_date(int year, int month, int day);
-#ifdef BC_BEFORE_5_5
-// TODO ?? For some reason I don't understand, this compiler wants to
-// instantiate std::numeric_limits<calendar_date>, but providing this
-// ctor declaration with no implementation stops that problem.
-    calendar_date(void*);
-#endif // BC_BEFORE_5_5
 
     calendar_date& operator++();
     calendar_date& operator--();
@@ -90,13 +79,6 @@ class LMI_EXPIMP calendar_date
     bool operator==(calendar_date const&) const;
     bool operator<(calendar_date const&) const;
 
-#ifdef LMI_LACKS_STD_ITERATOR
-    bool operator<=(calendar_date const&) const;
-    bool operator>(calendar_date const&) const;
-    bool operator>=(calendar_date const&) const;
-    bool operator!=(calendar_date const&) const;
-#endif // defined LMI_LACKS_STD_ITERATOR
-
     // Year, month, and day functions are origin one by convention,
     // so that concatenating their representations as YYYYMMDD would
     // produce a valid ISO8601 date.
@@ -119,21 +101,11 @@ class LMI_EXPIMP calendar_date
     int jdn_;
 };
 
-#ifndef LMI_LACKS_STD_ITERATOR
 // gcc-3.x and bc5.51 do not work at all well with this technique
 // suggested as a space optimization in the boost documentation:
 //    template struct boost::additive<calendar_date, int>;
 //    template struct boost::totally_ordered<calendar_date>;
 //    template struct boost::unit_steppable<calendar_date>;
-#else // defined LMI_LACKS_STD_ITERATOR
-
-inline bool operator!=(calendar_date const& x, calendar_date const& y)
-    {return !(x == y);}
-
-inline calendar_date operator-(calendar_date const& x, int i)
-    {return calendar_date(x) -= i;}
-
-#endif // defined LMI_LACKS_STD_ITERATOR
 
 // Age on EffDate if born on DOB.
 int calculate_age

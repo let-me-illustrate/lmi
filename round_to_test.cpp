@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: round_to_test.cpp,v 1.7 2005-05-26 18:31:49 chicares Exp $
+// $Id: round_to_test.cpp,v 1.8 2005-05-26 22:01:15 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -108,7 +108,6 @@ char const* get_name_of_float_type()
     throw std::domain_error("Unknown float type.");
 }
 
-#ifndef BC_BEFORE_5_5
 template<> char const* get_name_of_float_type<float>()
 {
     return "(float)";
@@ -123,22 +122,6 @@ template<> char const* get_name_of_float_type<long double>()
 {
     return "(long double)";
 }
-#else // Old borland compiler.
-LMI_SPECIALIZATION char const* get_name_of_float_type<float>(float)
-{
-    return "(float)";
-}
-
-LMI_SPECIALIZATION char const* get_name_of_float_type<double>(double)
-{
-    return "(double)";
-}
-
-LMI_SPECIALIZATION char const* get_name_of_float_type<long double>(long double)
-{
-    return "(long double)";
-}
-#endif // Old borland compiler.
 
 void set_hardware_rounding_mode(int mode, bool synchronize)
 {
@@ -344,11 +327,7 @@ bool test_one_case
         std::ios_base::fmtflags old_flags = std::cout.flags();
 
         std::cout
-#ifndef BC_BEFORE_5_5
             << "Rounding   "     << get_name_of_float_type<RealType>()
-#else // Old borland compiler.
-            << "Rounding   "     << get_name_of_float_type(RealType())
-#endif // Old borland compiler.
             << unrounded
             << "\n  to "         << decimals << " decimals"
             << "\n  with style " << get_name_of_style(style)
