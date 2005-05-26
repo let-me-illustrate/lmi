@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: round_to_test.cpp,v 1.5 2005-04-07 15:02:09 chicares Exp $
+// $Id: round_to_test.cpp,v 1.6 2005-05-26 12:35:11 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -33,6 +33,7 @@
 #define BOOST_INCLUDE_MAIN
 #include "test_tools.hpp"
 
+#include <algorithm> // std::max()
 #include <cstddef> // std::size_t
 #include <ios>
 #include <iostream>
@@ -316,7 +317,18 @@ bool test_one_case
              - 1.0
              ;
         }
-
+#ifdef __COMO__
+    // COMPILER !! This looks like a como porting defect: with mingw
+    // as the underlying C compiler, a long double should occupy
+    // twelve bytes, ten significant and two for padding.
+    if(8 == sizeof(long double))
+        {
+        tolerance = std::max
+            (tolerance
+            ,2.0L * (max_prec_real)std::numeric_limits<double>::epsilon()
+            );
+        }
+#endif // defined __COMO__
     bool error_is_within_tolerance = rel_error <= tolerance;
 
     if(!error_is_within_tolerance)
