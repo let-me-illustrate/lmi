@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: snprintf_test.cpp,v 1.3 2005-05-17 12:29:06 chicares Exp $
+// $Id: snprintf_test.cpp,v 1.4 2005-05-26 18:31:49 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -32,12 +32,9 @@
 #include <stdio.h> // Nonstandard (in C++98) snprintf().
 #include <string>
 
-// COMPILER !! Ask como how to conditionalize this tastefully. It
-// appears to be a defect in the msvc library underlying MinGW.
-//#if defined __MINGW32_WITH_COMO [doesn't seem to work]
-#if defined __COMO__
+#if defined LMI_COMO_WITH_MINGW
 #   define snprintf _snprintf
-#endif // Old gcc compiler.
+#endif // defined LMI_COMO_WITH_MINGW
 
 int test_main(int, char*[])
 {
@@ -75,7 +72,7 @@ int test_main(int, char*[])
     return 0;
 }
 
-#if defined __COMO__
+#if defined LMI_COMO_WITH_MINGW
 #   undef snprintf
-#endif // Old gcc compiler.
+#endif // defined LMI_COMO_WITH_MINGW
 

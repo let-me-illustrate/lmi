@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: stream_cast.hpp,v 1.4 2005-05-18 23:57:25 chicares Exp $
+// $Id: stream_cast.hpp,v 1.5 2005-05-26 18:31:49 chicares Exp $
 
 // This is a derived work based on boost::lexical_cast, which bears
 // the following copyright and permissions notice:
@@ -112,11 +112,9 @@ To stream_cast(From from, To = To())
         {
         err << "Output failed ";
         }
-// TODO ?? Ask como how to conditionalize this tastefully. It appears
-// to be a defect in either the underlying MinGW gcc's standard
-// library, or in libcomo.
-//#if defined __MINGW32_WITH_COMO [doesn't seem to work]
-#if !defined __COMO__
+#if !defined LMI_COMO_WITH_MINGW
+    // COMPILER !! This appears to be a defect either in libcomo or
+    // in the the underlying MinGW gcc's standard library.
     else if(!(interpreter >> std::ws))
         {
         err << "Trailing whitespace remains ";
@@ -125,7 +123,7 @@ To stream_cast(From from, To = To())
         {
         err << "Unconverted data remains ";
         }
-#endif // __COMO__
+#endif // Not defined LMI_COMO_WITH_MINGW .
     else
         {
         ; // Nothing left to do.

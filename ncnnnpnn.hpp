@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ncnnnpnn.hpp,v 1.2 2005-05-19 12:30:00 chicares Exp $
+// $Id: ncnnnpnn.hpp,v 1.3 2005-05-26 18:31:49 chicares Exp $
 
 // Ideally we would use imbue an appropriate locale and use some facet
 // like money_put, but most of our compilers's standard libraries don't
@@ -42,8 +42,7 @@
 #include <sstream>
 
 // TODO ?? Move to config_all.hpp .
-// TODO ?? Need to use this widely to support como properly.
-#if (defined __BORLANDC__) && (0x0550 <= __BORLANDC__) && (!defined __COMO__)
+#if (defined __BORLANDC__) && (0x0550 <= __BORLANDC__)
 #   define BC_SINCE_5_5
 #endif // Newer borland compiler version 5.5 or greater.
 
@@ -94,13 +93,11 @@ inline std::string ncnnnpnn(long double value)
 
     switch(z % 3)
         {
-#ifdef __BORLANDC__
-        // COMPILER !! This negative 'case' is unreachable because the
-        // switch-condition must be nonnegative [5.6/4, 20.1.5/2]. Yet
-        // this unreachable code shuts up a borland diagnostic that
-        // otherwise complains that the code that immediately follows
-        // is unreachable.
-        case -1:
+#if defined __BORLANDC__ || defined __COMO__
+        // COMPILER !! This 'case' is unreachable; its sole purpose is
+        // to shut up compiler diagnostics that otherwise complain
+        // that the code that immediately follows is unreachable.
+        case 3:
 #endif // borland compiler
                 do
                     {

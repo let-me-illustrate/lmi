@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: config_all.hpp,v 1.2 2005-04-05 12:36:37 chicares Exp $
+// $Id: config_all.hpp,v 1.3 2005-05-26 18:31:49 chicares Exp $
 
 // Configuration header for compiler quirks--generic configuration.
 // Never include this file directly.
@@ -31,16 +31,26 @@
 #   error This file is not intended for separate inclusion.
 #endif // OK_TO_INCLUDE_CONFIG_ALL_HPP
 
-#if defined __BORLANDC__ && __BORLANDC__ < 0x0550 && !defined __COMO__
+#if defined __BORLANDC__ && __BORLANDC__ < 0x0550
 #   define BC_BEFORE_5_5
 #endif // Old borland compiler.
 
-#if defined __GNUC__ && __GNUC__ == 2 && __GNUC_MINOR__ == 95 && !defined __COMO__
+#if defined __COMO__
+//  09 Oct 2004 17:04:46 -0700 email from <comeau@comeaucomputing.com>
+//  suggests this method to detect whether MinGW is the underlying C
+//  compiler.
+#   include <stdio.h>
+#   if defined __MINGW32_VERSION
+#       define LMI_COMO_WITH_MINGW
+#   endif // __MINGW32_VERSION defined.
+#endif // Como.
+
+#if defined __GNUC__ && __GNUC__ == 2 && __GNUC_MINOR__ == 95
 #   define GCC_BEFORE_2_96
 #endif // Old gcc compiler.
 
 // TODO ?? Untested with como using gcc backend.
-#if defined __GNUC__ || defined __COMO__
+#if defined __GNUC__ || defined LMI_COMO_WITH_MINGW
 #   define LMI_PACKED_ATTRIBUTE __attribute__ ((packed))
 #elif defined __BORLANDC__
 #   define LMI_PACKED_ATTRIBUTE
@@ -48,15 +58,15 @@
 #   error Unknown compiler
 #endif // Neither gcc nor borland.
 
-#if defined __MINGW32__ && defined __GNUC__ && __GNUC__ == 3 && 4 <= __GNUC_MINOR__ && !defined __COMO__
+#if defined __MINGW32__ && defined __GNUC__ && __GNUC__ == 3 && 4 <= __GNUC_MINOR__
 #   define LMI_COMPILER_HAS_LOG1P
 #endif // Recent MinGW.
 
-#if defined BC_BEFORE_5_5 || defined GCC_BEFORE_2_96 && !defined __COMO__
+#if defined BC_BEFORE_5_5 || defined GCC_BEFORE_2_96
 #   define LMI_LACK_BASIC_IOSTREAMS
 #endif // Old gcc or borland compiler, or unknown compiler.
 
-#if defined BC_BEFORE_5_5 || defined GCC_BEFORE_2_96 && !defined __COMO__
+#if defined BC_BEFORE_5_5 || defined GCC_BEFORE_2_96
 #   define LMI_SSTREAM_LACKS_POSITIONING
 #endif // Old gcc or borland compiler, or unknown compiler.
 

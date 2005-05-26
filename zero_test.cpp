@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: zero_test.cpp,v 1.4 2005-05-26 13:35:17 chicares Exp $
+// $Id: zero_test.cpp,v 1.5 2005-05-26 18:31:49 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -194,9 +194,9 @@ int test_main(int, char*[])
 
     e_former_rounding_problem e_frp;
     r = decimal_root(0.12609, 0.12611, bias_lower, 5, e_frp);
-#if !(defined __COMO__ && defined __MINGW32_VERSION)
+#if !defined LMI_COMO_WITH_MINGW
     BOOST_TEST(materially_equal(0.12610, r.first));
-#else // defined __COMO__ && defined __MINGW32_VERSION
+#else // defined LMI_COMO_WITH_MINGW
     // One would naively expect 0.12610 to be the answer, but it's
     // necessary to inquire which of the two closest representations
     // is meant [C++98 4.8/1]. This particular compiler iterates to
@@ -210,7 +210,7 @@ int test_main(int, char*[])
         (   materially_equal(0.12609, r.first)
         ||  materially_equal(0.12610, r.first)
         );
-#endif // defined __COMO__ && defined __MINGW32_VERSION
+#endif // defined LMI_COMO_WITH_MINGW
 
     BOOST_TEST(root_is_valid == r.second);
 

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: inputillus_sequences.cpp,v 1.3 2005-05-07 03:36:36 chicares Exp $
+// $Id: inputillus_sequences.cpp,v 1.4 2005-05-26 18:31:49 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -247,7 +247,7 @@ std::vector<std::string> IllusInputParms::realize_all_sequence_strings
 {
     std::vector<std::string> s;
 
-#if defined __MINGW32__ && defined __GNUC__ && __GNUC__ == 2 && __GNUC_MINOR__ == 95 && !defined __COMO__
+#if defined __MINGW32__ && defined __GNUC__ && __GNUC__ == 2 && __GNUC_MINOR__ == 95
     // COMPILER !! Here's a mystery: unit test segfaults without this line.
     s.push_back("");
 #endif // mingw gcc 2.95.2-1 compiler.
