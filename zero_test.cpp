@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: zero_test.cpp,v 1.3 2005-05-26 06:57:59 chicares Exp $
+// $Id: zero_test.cpp,v 1.4 2005-05-26 13:35:17 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -194,7 +194,24 @@ int test_main(int, char*[])
 
     e_former_rounding_problem e_frp;
     r = decimal_root(0.12609, 0.12611, bias_lower, 5, e_frp);
+#if !(defined __COMO__ && defined __MINGW32_VERSION)
     BOOST_TEST(materially_equal(0.12610, r.first));
+#else // defined __COMO__ && defined __MINGW32_VERSION
+    // One would naively expect 0.12610 to be the answer, but it's
+    // necessary to inquire which of the two closest representations
+    // is meant [C++98 4.8/1]. This particular compiler iterates to
+    //          b  = 0.1261 3fc0240b780346dc
+    // and then changes its value slightly
+    //   round_(b) = 0.1261 3fc0240b780346dd
+    // (see documentation of the rounding library and its unit test)
+    // resulting in a final iterand whose function value is slightly
+    // different from zero, and in the "wrong" direction.
+    BOOST_TEST
+        (   materially_equal(0.12609, r.first)
+        ||  materially_equal(0.12610, r.first)
+        );
+#endif // defined __COMO__ && defined __MINGW32_VERSION
+
     BOOST_TEST(root_is_valid == r.second);
 
     return 0;
