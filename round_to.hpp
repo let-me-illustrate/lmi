@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: round_to.hpp,v 1.3 2005-03-23 15:32:29 chicares Exp $
+// $Id: round_to.hpp,v 1.4 2005-05-26 12:35:11 chicares Exp $
 
 #ifndef round_to_hpp
 #define round_to_hpp
@@ -188,14 +188,6 @@ inline RealType perform_floor(RealType r)
 }
 
 #endif // not defined BROKEN_FLOAT_AND_LONG_DOUBLE_CMATH_FNS
-
-// Returns largest integer-valued max_prec_real that does not exceed
-// its argument. Used as a last resort by perform_rint(), as documented
-// where that function is declared below.
-inline max_prec_real max_prec_floor(max_prec_real z)
-{
-    return perform_floor<max_prec_real>(z);
-}
 } // namespace detail
 
 // See HTML documentation.
@@ -230,17 +222,9 @@ namespace detail
 // case it's the same as the C99 rint() function. Not named rint()
 // because some C++ compilers already provide that function.
 
-#ifdef MAINTAINER_TEST_WITHOUT_ASM
+#if defined __GNUC__ && defined LMI_X86
 
-// This implementation lets you test the last-resort behavior for a
-// system where we lack rint() and don't know how to implement it.
-template<typename RealType>
-inline RealType perform_rint(RealType r)
-{
-    return max_prec_floor(r);
-}
-
-#elif defined __GNUC__ && defined LMI_X86
+// TODO ?? Test speed with mingw's builtin rint().
 
 // Profiling suggests that inlining this template function makes a
 // realistic application that performs a lot of rounding run about
@@ -298,10 +282,9 @@ long double perform_rint(long double)
 
 #else // neither (__GNUC__ && LMI_X86) nor __BORLANDC__
 
-// The round_X functions below work with any real_type-to-integer_type
+// The round_X functions below work with any real_type-to-integer_type.
 // Compilers that provide rint() may have optimized it (or you can
-// provide a fast implementation yourself); otherwise, max_prec_floor()
-// will do--see documentation of 'auxiliary rounding functions' below.
+// provide a fast implementation yourself).
 
 #if defined __GNUC__ && !defined __MINGW32__
 #   define RINT_AVAILABLE
@@ -313,17 +296,17 @@ inline RealType perform_rint(RealType r)
 #ifdef RINT_AVAILABLE
     return rint(r);
 #else // not defined RINT_AVAILABLE
-    return max_prec_floor(r); // TODO ?? Is this correct?
+#   define LACKING_RINT_OR_EQUIVALENT
+    throw std::logic_error("rint() not defined.");
 #endif // not defined RINT_AVAILABLE
 }
 
 #endif // neither (__GNUC__ && LMI_X86) nor __BORLANDC__
 
 // Auxiliary rounding functions: one for each supported rounding style.
-// Naive implementations for type double are given in comments.
 // These functions avoid switching the hardware rounding mode as long
-// as perform_rint() does. They use perform_rint() but do not require
-// it to follow any particular style.
+// as perform_rint() does. Most use perform_rint() if available, but
+// do not require it to follow any particular style.
 
 // Perform no rounding at all.
 template<typename RealType>
@@ -336,7 +319,7 @@ RealType round_not(RealType r)
 template<typename RealType>
 RealType round_up(RealType r)
 {
-// return std::ceil(r); // Naive equivalent.
+#ifndef LACKING_RINT_OR_EQUIVALENT
     RealType i_part = perform_rint(r);
     if(i_part < r)
         {
@@ -347,27 +330,32 @@ RealType round_up(RealType r)
         i_part++;
         }
     return i_part;
+#else // defined LACKING_RINT_OR_EQUIVALENT
+    return std::ceil(r);
+#endif // defined LACKING_RINT_OR_EQUIVALENT
 }
 
 // Round down.
 template<typename RealType>
 RealType round_down(RealType r)
 {
-// return std::floor(r); // Naive equivalent.
+#ifndef LACKING_RINT_OR_EQUIVALENT
     RealType i_part = perform_rint(r);
     if(r < i_part)
         {
         i_part--;
         }
     return i_part;
+#else // defined LACKING_RINT_OR_EQUIVALENT
+    return std::floor(r);
+#endif // defined LACKING_RINT_OR_EQUIVALENT
 }
 
 // Truncate.
 template<typename RealType>
 RealType round_trunc(RealType r)
 {
-// Naive equivalent:
-//   double x = std::floor(std::fabs(r)); return (0.0 <= r) ? x : -x;
+#ifndef LACKING_RINT_OR_EQUIVALENT
     RealType i_part = perform_rint(r);
     RealType f_part = r - i_part;
     // Consider the integer part 'i_part' and the fractional part
@@ -387,21 +375,33 @@ RealType round_trunc(RealType r)
         i_part++;
         }
     return i_part;
+#else // defined LACKING_RINT_OR_EQUIVALENT
+    double x = std::floor(std::fabs(r));
+    return (0.0 <= r) ? x : -x;
+#endif // defined LACKING_RINT_OR_EQUIVALENT
 }
 
 // Round to nearest using bankers method.
 template<typename RealType>
 RealType round_near(RealType r)
 {
-// Naive equivalent: something like this
-//    return (RealType(0) < r) ? std::floor(r + 0.5) : std::ceil(r -0.5);
-// except that halfway cases are rounded to even.
+#ifndef LACKING_RINT_OR_EQUIVALENT
     RealType i_part = perform_rint(r);
+#else // defined LACKING_RINT_OR_EQUIVALENT
+//  This
+//    return (RealType(0) < r) ? std::floor(r + 0.5) : std::ceil(r -0.5);
+//  would be incorrect, because halfway cases must be rounded to even.
+    RealType i_part =
+        (RealType(0) < r)
+            ? std::floor(r + 0.5)
+            : std::ceil (r - 0.5)
+            ;
+#endif // defined LACKING_RINT_OR_EQUIVALENT
     RealType f_part = r - i_part;
     RealType abs_f_part = perform_fabs(f_part);
 
-    // If |fractional part| < .5, ignore it;
-    // if |fractional part| == .5, ignore it if integer part is even;
+    // If      |fractional part| <  .5, ignore it;
+    // else if |fractional part| == .5, ignore it if integer part is even;
     // else add sgn(fractional part).
     if
         (
@@ -491,7 +491,7 @@ round_to<RealType>::round_to()
 // would be consistent with other math functions. But it's a shame to
 // write new code that forces the user to check 'errno'.
 //
-// TODO ?? The data members were made non-cost after profiling showed
+// TODO ?? The data members were made non-const after profiling showed
 // no penalty on four available compilers (not including Naran's).
 // The code should now be reworked to provide the strong guarantee.
 
@@ -510,6 +510,21 @@ round_to<RealType>::round_to(int decimals, rounding_style a_style)
     ,scale_back_(max_prec_real(1.0) / scale_fwd_)
     ,rounding_function(select_rounding_function(a_style))
 {
+/*
+// TODO ?? This might improve accuracy slightly, but would prevent
+// the data members from being const.
+    if(0 <= decimals)
+        {
+        scale_fwd_  = detail::perform_pow(max_prec_real(10.0), decimals);
+        scale_back_ = max_prec_real(1.0) / scale_fwd_;
+        }
+    else
+        {
+        scale_back_ = detail::perform_pow(max_prec_real(10.0), -decimals);
+        scale_fwd_  = max_prec_real(1.0) / scale_back_;
+        }
+*/
+
     // This throws only if all use of the function object is invalid.
     // Even if it doesn't throw, there are numbers that it cannot round
     // without overflow, for instance
@@ -579,6 +594,7 @@ template<typename RealType>
 typename round_to<RealType>::rounding_function_t
 round_to<RealType>::select_rounding_function(rounding_style const a_style) const
 {
+#ifndef LACKING_RINT_OR_EQUIVALENT
     if
         (  a_style == default_rounding_style()
         && a_style != r_indeterminate
@@ -586,6 +602,7 @@ round_to<RealType>::select_rounding_function(rounding_style const a_style) const
         {
         return detail::perform_rint;
         }
+#endif // not defined LACKING_RINT_OR_EQUIVALENT
 
     switch(a_style)
         {
