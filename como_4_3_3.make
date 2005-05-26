@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: como_4_3_3.make,v 1.4 2005-05-01 14:27:49 chicares Exp $
+# $Id: como_4_3_3.make,v 1.5 2005-05-26 06:34:42 chicares Exp $
 
 toolset := como
 
@@ -71,6 +71,10 @@ CXXFLAGS := \
   --display_error_number \
   --long_long \
   --no_microsoft_bugs \
+
+# For debugging on msw with gcc as the underlying C compiler, add
+#  /g
+# to $(CXXFLAGS): the slash is required, and '-g' won't work.
 
 LD := $(CXX)
 
