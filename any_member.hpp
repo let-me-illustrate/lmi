@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: any_member.hpp,v 1.4 2005-05-24 04:00:01 chicares Exp $
+// $Id: any_member.hpp,v 1.5 2005-05-26 06:41:20 chicares Exp $
 
 // This is a derived work based on boost::any, which bears the following
 // copyright and permissions notice:
@@ -231,24 +231,6 @@ class any_member
     placeholder* content_;
 };
 
-// TODO ?? Move equality operators after member functions.
-
-// TODO ?? Separate implementation from interface; also consider
-// operator==(std::string), and boost::operators.
-template<typename ClassType>
-bool operator==(any_member<ClassType> const& lhs, any_member<ClassType> const& rhs)
-{
-// TODO ?? This is horrid. Compare contents directly instead.
-    return lhs.str() == rhs.str();
-}
-
-template<typename ClassType>
-bool operator!=(any_member<ClassType> const& lhs, any_member<ClassType> const& rhs)
-{
-// TODO ?? This is horrid. Compare contents directly instead.
-    return lhs.str() != rhs.str();
-}
-
 // Implementation of class any_member.
 
 template<typename ClassType>
@@ -359,6 +341,23 @@ template<typename ClassType>
 std::ostream& operator<<(std::ostream& os, any_member<ClassType> const& z)
 {
     return z.write(os);
+}
+
+// Free functions that complement class any_member.
+
+// TODO ?? Also consider operator==(std::string), and boost::operators.
+
+template<typename ClassType>
+bool operator==(any_member<ClassType> const& lhs, any_member<ClassType> const& rhs)
+{
+// TODO ?? Compare contents directly instead.
+    return lhs.str() == rhs.str();
+}
+
+template<typename ClassType>
+bool operator!=(any_member<ClassType> const& lhs, any_member<ClassType> const& rhs)
+{
+    return !(lhs == rhs);
 }
 
 // Declaration of class MemberSymbolTable.
@@ -490,7 +489,7 @@ void MemberSymbolTable<ClassType>::ascribe
     map_.insert(map_value_type(s, any_member<ClassType>(class_object, p2m)));
 }
 
-// TODO ?? This is invalid if the ascribe() is called after the first
+// TODO ?? This is invalid if ascribe() is called after the first
 // invocation of cached_member_names(). If names are to be cached,
 // then they should be cached in a class member that ascribe() can
 // check and perhaps update directly.
