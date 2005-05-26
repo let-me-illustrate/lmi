@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: bcc_5_5_1.make,v 1.3 2005-04-07 15:04:28 chicares Exp $
+# $Id: bcc_5_5_1.make,v 1.4 2005-05-26 06:31:20 chicares Exp $
 
 toolset := bcc
 
@@ -36,6 +36,9 @@ src_dir := $(CURDIR)
 # because their syntax is convoluted. TODO ?? Either upload those
 # wrappers, or expunge this makefile because the compiler is too
 # outdated to support.
+
+compiler_include_directory := \
+  -I /borland/bcc55/include
 
 # Options for borland compilers:
 # -a   alignment (-a1 is byte [5.02 default]; -a4 is 4-byte [5.5.1 default])
@@ -113,21 +116,22 @@ bcc_5_5_1.make:: ;
 %: force
 	@-$(MAKE) \
 	  -f $(src_dir)/GNUmakefile \
-	              src_dir='$(src_dir)' \
-	              toolset='$(toolset)' \
-	           C_WARNINGS='$(C_WARNINGS)' \
-	         CXX_WARNINGS='$(CXX_WARNINGS)' \
-	     C_EXTRA_WARNINGS='$(C_EXTRA_WARNINGS)' \
-	   CXX_EXTRA_WARNINGS='$(CXX_EXTRA_WARNINGS)' \
-	             CPPFLAGS='$(CPPFLAGS)' \
-	                  CXX='$(CXX)' \
-	             CXXFLAGS='$(CXXFLAGS)' \
-	                   LD='$(LD)' \
-	              LDFLAGS='$(LDFLAGS)' \
-	         MAKEDEPEND_0='$(MAKEDEPEND_0)' \
-	         MAKEDEPEND_1='$(MAKEDEPEND_1)' \
-	         MPATROL_LIBS='$(MPATROL_LIBS)' \
-	platform_wx_libraries='$(platform_wx_libraries)' \
+	                       src_dir='$(src_dir)' \
+	                       toolset='$(toolset)' \
+	                    C_WARNINGS='$(C_WARNINGS)' \
+	                  CXX_WARNINGS='$(CXX_WARNINGS)' \
+	              C_EXTRA_WARNINGS='$(C_EXTRA_WARNINGS)' \
+	            CXX_EXTRA_WARNINGS='$(CXX_EXTRA_WARNINGS)' \
+	                      CPPFLAGS='$(CPPFLAGS)' \
+	    compiler_include_directory='$(compiler_include_directory)' \
+	                           CXX='$(CXX)' \
+	                      CXXFLAGS='$(CXXFLAGS)' \
+	                            LD='$(LD)' \
+	                       LDFLAGS='$(LDFLAGS)' \
+	                  MAKEDEPEND_0='$(MAKEDEPEND_0)' \
+	                  MAKEDEPEND_1='$(MAKEDEPEND_1)' \
+	                  MPATROL_LIBS='$(MPATROL_LIBS)' \
+	         platform_wx_libraries='$(platform_wx_libraries)' \
 	  unit_tests \
 
 force: ;
