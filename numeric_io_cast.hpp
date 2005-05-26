@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: numeric_io_cast.hpp,v 1.5 2005-05-18 13:22:02 chicares Exp $
+// $Id: numeric_io_cast.hpp,v 1.6 2005-05-26 18:31:49 chicares Exp $
 
 // Converts between arithmetic types and their std::string decimal
 // representations, in these cases only:
@@ -89,12 +89,9 @@
 #include <boost/static_assert.hpp>
 #include <boost/type_traits.hpp>
 
-// COMPILER !! Discuss a better workaround with como.
-//#if defined __COMO__ && defined __MINGW32_MAJOR_VERSION && __MINGW32_MAJOR_VERSION < 3
-//#if defined __COMO__ && defined __MINGW32_VERSION
-#if defined __COMO__
+#if defined LMI_COMO_WITH_MINGW
 #   define snprintf _snprintf
-#endif // Old gcc compiler.
+#endif // defined LMI_COMO_WITH_MINGW
 
 // A compile-time failure iff this template is ever instantiated is
 // desired, but the straightforward
@@ -333,9 +330,9 @@ To numeric_io_cast(From from, To = To())
     return converter.operator()(from);
 }
 
-#if defined __COMO__ && defined __MINGW32_MAJOR_VERSION && __MINGW32_MAJOR_VERSION < 3
+#if defined LMI_COMO_WITH_MINGW
 #   undef snprintf
-#endif // Old gcc compiler.
+#endif // defined LMI_COMO_WITH_MINGW
 
 #endif // numeric_io_cast_hpp
 
