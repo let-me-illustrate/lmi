@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: workhorse.make,v 1.27 2005-05-22 14:04:56 chicares Exp $
+# $Id: workhorse.make,v 1.28 2005-05-26 06:31:20 chicares Exp $
 
 ###############################################################################
 
@@ -119,6 +119,7 @@ effective_default_target: $(default_targets)
 
 all_include_directories := \
   $(src_dir) \
+  $(compiler_include_directory) \
   $(system_root)/usr/local/include \
 
 all_source_directories := \
@@ -432,6 +433,8 @@ lib%.a              : lmi_dllflag :=
 lib%$(SHREXT)       : lmi_dllflag := -DLMI_BUILD_DLL
 lib%$(SHREXT)       : MPATROL_LIBS :=
 
+# TODO ?? How could 'skeleton' be right here? Should this not apply
+# to all applications?
 skeleton$(EXEEXT)   : lmi_wx_new_dllflag := -DLMI_WX_NEW_USING_DLL
 wx_new$(SHREXT)     : lmi_wx_new_dllflag := -DLMI_WX_NEW_BUILDING_DLL
 
