@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: zero_test.cpp,v 1.2 2005-01-29 02:47:42 chicares Exp $
+// $Id: zero_test.cpp,v 1.3 2005-05-26 06:57:59 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -28,6 +28,7 @@
 
 #include "zero.hpp"
 
+#include "materially_equal.hpp"
 #define BOOST_INCLUDE_MAIN
 #include "test_tools.hpp"
 
@@ -89,6 +90,26 @@ struct e_functor
 struct e_nineteenth
 {
     double operator()(double z) {return std::pow(z, 19);}
+};
+
+// This problem once arose in a unit test for irr calculations.
+// Minimal test case:
+//
+//   rounding = near
+//   bias     = lower
+//   decimals = 5
+//
+//   lower bound  = 0.12609
+//   upper bound  = 0.12611
+//   desired root = 0.12610
+//
+// With a certain compiler, due to a defect in the rounding library,
+// the midpoint of the bounds rounded to the lower bound, and the
+// function never terminated.
+
+struct e_former_rounding_problem
+{
+    double operator()(double z) {return z - 0.12610;}
 };
 
 int test_main(int, char*[])
@@ -170,6 +191,11 @@ int test_main(int, char*[])
     TEST_ZERO(-1.0, 4.0, -100, e_19, std::exp(1.0));
     TEST_ZERO(-1.0, 4.0,    0, e_19, std::exp(1.0));
     TEST_ZERO(-1.0, 4.0,  100, e_19, std::exp(1.0));
+
+    e_former_rounding_problem e_frp;
+    r = decimal_root(0.12609, 0.12611, bias_lower, 5, e_frp);
+    BOOST_TEST(materially_equal(0.12610, r.first));
+    BOOST_TEST(root_is_valid == r.second);
 
     return 0;
 }
