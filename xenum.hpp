@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xenum.hpp,v 1.2 2005-04-07 15:00:56 chicares Exp $
+// $Id: xenum.hpp,v 1.3 2005-05-26 22:01:15 chicares Exp $
 
 #ifndef xenum_hpp
 #define xenum_hpp
@@ -93,9 +93,6 @@ public:
 
 private:
     void set_value(std::string const& s);
-#if defined BC_BEFORE_5_5
-    static std::vector<std::string> const& borland_502_workaround();
-#endif // old borland compiler
 
     EnumType representation;
     static EnumType const enumerators[N];
@@ -103,15 +100,12 @@ private:
 };
 
 // Prohibit declaration of a xenum based on an empty enumeration.
-// COMPILER !! bc++5.02 cannot handle this.
-#if !defined BC_BEFORE_5_5
 template <typename EnumType>
 class xenum<EnumType, 0>
 {
 public:
     virtual ~xenum() = 0;
 };
-#endif // old borland compiler
 
 #define LMI_EXPLICIT_INSTANTIATION
 

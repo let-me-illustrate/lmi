@@ -31,7 +31,7 @@
 // other reasons evident in cvs or explained in 'ChangeLog'. Any
 // defect should not reflect on Stephen F. Booth's reputation.
 
-// $Id: main_cgi.cpp,v 1.7 2005-05-24 04:00:02 chicares Exp $
+// $Id: main_cgi.cpp,v 1.8 2005-05-26 22:01:15 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -570,7 +570,6 @@ void ShowCensusOutput
     ,bool show_each_life
     )
 {
-#ifndef BC_BEFORE_5_5
     std::vector<std::string> headers;
     std::vector<IllusInputParms> lives;
 
@@ -684,14 +683,5 @@ void ShowCensusOutput
             ShowIllusOutput(*i);
             }
         }
-#else // old borland compiler
-    std::cout
-        << "Census input not supported with this compiler. "
-        << "Rebuild with a better compiler.<BR>";
-    // Shut up 'parameter not used' warnings.
-    &a_input;
-    &a_census;
-    &show_each_life;
-#endif // old borland compiler
 }
 

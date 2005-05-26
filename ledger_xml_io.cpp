@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xml_io.cpp,v 1.15 2005-05-19 12:30:00 chicares Exp $
+// $Id: ledger_xml_io.cpp,v 1.16 2005-05-26 22:01:15 chicares Exp $
 
 #include "config.hpp"
 
@@ -72,18 +72,10 @@ char const* char_p_suffixes[n] =
     ,"_GuaranteedHalf" // e_run_guar_basis_sa_half
     };
 
-#if !defined BC_BEFORE_5_5
-#else // old borland compiler
-#endif // old borland compiler
-
-#if !defined BC_BEFORE_5_5
 std::vector<std::string> const suffixes
     (char_p_suffixes
     ,char_p_suffixes + n
     );
-#else // old borland compiler
-std::vector<std::string> const suffixes; // COMPILER !! Not supported.
-#endif // old borland compiler
 
 template<typename EnumType, int N>
 std::vector<std::string> enum_vector_to_string_vector
@@ -243,8 +235,6 @@ bool format_exists(std::string const& s, std::string const& suffix, format_map_t
 
 void Ledger::write(xml::node& x) const
 {
-#if !defined BC_BEFORE_5_5
-
     title_map_t title_map;
 
 // Can't seem to get a literal &nbsp; into the output.
@@ -1117,10 +1107,6 @@ void Ledger::write(xml::node& x) const
             ofs << '\n';
             }
         }
-
-#else // old borland compiler
-// COMPILER !! Not supported.
-#endif // old borland compiler
 }
 
 int Ledger::class_version() const

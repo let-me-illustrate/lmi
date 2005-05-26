@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: calendar_date.cpp,v 1.2 2005-05-19 12:30:00 chicares Exp $
+// $Id: calendar_date.cpp,v 1.3 2005-05-26 22:01:15 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -179,28 +179,6 @@ bool calendar_date::operator<(calendar_date const& z) const
 {
     return jdn_ < z.jdn_;
 }
-
-#ifdef LMI_LACKS_STD_ITERATOR
-bool calendar_date::operator<=(calendar_date const& z) const
-{
-    return jdn_ <= z.jdn_;
-}
-
-bool calendar_date::operator>(calendar_date const& z) const
-{
-    return jdn_ > z.jdn_;
-}
-
-bool calendar_date::operator>=(calendar_date const& z) const
-{
-    return jdn_ >= z.jdn_;
-}
-
-bool calendar_date::operator!=(calendar_date const& z) const
-{
-    return jdn_ != z.jdn_;
-}
-#endif // defined LMI_LACKS_STD_ITERATOR
 
 int calendar_date::julian_day_number() const
 {

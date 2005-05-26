@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xrange_test.cpp,v 1.1 2005-01-14 19:47:45 chicares Exp $
+// $Id: xrange_test.cpp,v 1.2 2005-05-26 22:01:15 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -56,7 +56,7 @@ typedef xrange<range_dbl_0_1000, double> r_dbl_0_1000;
 /*
 // TODO ?? Alternatively we could just specialize the functions
 // we need instead of forwarding, e.g.
-LMI_SPECIALIZATION std::pair<double,double>
+template<> std::pair<double,double>
 xrange<range_dbl_0_1000,double>::range_limits() const
 {
 //    return std::pair<double,double>(0.0, 1000.0);
@@ -196,17 +196,7 @@ int test_main(int, char*[])
     r_int_0_1200 m_result;
     std::stringstream ss;
     ss << m;
-
-#ifndef GCC_BEFORE_2_96
     ss >> m_result;
-#else // Old gnu compiler.
-    // COMPILER !! gcc-2.95.2-1 We'd rather just reset the stringstream's
-    // get pointer, but that doesn't work with gcc-2.95.2-1 and Magnus
-    // Fromreide's <sstream>.
-    std::istringstream iss(ss.str(), ios_base::in | ios_base::binary);
-    iss >> m_result;
-#endif // Old gnu compiler.
-
     BOOST_TEST(11 == m_result.value());
 
     Inputs i(10, 20, 30, 40);
@@ -231,14 +221,9 @@ int test_main(int, char*[])
     BOOST_TEST(!(date0 == date1));
     BOOST_TEST(  date0 != date1 );
     BOOST_TEST(  date0 <  date1 );
-#ifndef BC_BEFORE_5_5
-// TODO ?? We haven't yet bothered to write these operators for the
-// old borland compiler--that's not a real problem because we don't
-// use them anywhere except in this unit test.
     BOOST_TEST(  date0 <= date1 );
     BOOST_TEST(  date1 >  date0 );
     BOOST_TEST(  date1 >= date0 );
-#endif // old borland compiler
 
     return return_value;
 }

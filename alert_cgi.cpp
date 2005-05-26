@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: alert_cgi.cpp,v 1.1 2005-01-14 19:47:44 chicares Exp $
+// $Id: alert_cgi.cpp,v 1.2 2005-05-26 22:01:15 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -45,9 +45,7 @@ namespace
     void throw_alert(std::string const& s)
     {
     std::cerr << s << std::endl;
-#ifndef BC_BEFORE_5_5
     throw std::runtime_error(s);
-#endif // Not old borland compiler.
     }
 } // Unnamed namespace.
 

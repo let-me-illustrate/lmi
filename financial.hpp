@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: financial.hpp,v 1.2 2005-01-31 13:12:48 chicares Exp $
+// $Id: financial.hpp,v 1.3 2005-05-26 22:01:15 chicares Exp $
 
 #ifndef financial_hpp
 #define financial_hpp
@@ -231,13 +231,8 @@ void irr
     (InputContainer0 const& pmts
     ,InputContainer1 const& bfts
     ,OutputContainer& results
-#ifndef BC_BEFORE_5_5
     ,typename OutputContainer::size_type lapse_duration
     ,typename OutputContainer::size_type total_duration
-#else // BC_BEFORE_5_5
-    ,unsigned int lapse_duration
-    ,unsigned int total_duration
-#endif // BC_BEFORE_5_5
     ,int decimals
     )
 {

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: math_functors.hpp,v 1.2 2005-04-05 12:36:37 chicares Exp $
+// $Id: math_functors.hpp,v 1.3 2005-05-26 22:01:15 chicares Exp $
 
 #ifndef math_functors_hpp
 #define math_functors_hpp
@@ -34,12 +34,17 @@
 #include <functional>
 
 #ifndef LMI_COMPILER_HAS_EXPM1
-extern "C" double expm1(double);
+#   error Compiler lacks expm1().
 #endif // LMI_COMPILER_HAS_EXPM1
 
 #ifndef LMI_COMPILER_HAS_LOG1P
-extern "C" double log1p(double);
+#   error Compiler lacks log1p().
 #endif // LMI_COMPILER_HAS_LOG1P
+
+#if defined __MINGW32__ && defined __GNUC__ && __GNUC__ == 3 && 4 <= __GNUC_MINOR__
+// MinGW gcc lacks this prototype, at least in version 3.4.2 :
+extern "C" double expm1(double);
+#endif // Recent MinGW.
 
 // TODO ?? Use the expm1() and log1p() approach for mortality, too,
 // and write functors here for refactorable uses of std::pow()

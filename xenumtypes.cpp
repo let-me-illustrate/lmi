@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xenumtypes.cpp,v 1.4 2005-04-29 17:19:46 chicares Exp $
+// $Id: xenumtypes.cpp,v 1.5 2005-05-26 22:01:15 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -50,7 +50,7 @@ magic_stream& operator<< (magic_stream&, magic_class const&);
 
 // Special case: this type is of boolean essence, and we want it to accept
 // "1" or "0" as well as "Yes" or "No" for assignment.
-LMI_SPECIALIZATION void xenum<enum_yes_or_no, 2>::set_value(std::string const& s)
+template<> void xenum<enum_yes_or_no, 2>::set_value(std::string const& s)
 {
     int const expanded_N = 4;
 
@@ -272,115 +272,115 @@ template std::ostream& operator<< (std::ostream& os, xenum<enum_post_ret_sa_stra
 #endif // LMI_EXPLICIT_INSTANTIATION
 
 // TODO ?? Do we really want 'enum_yes_or_no' here? Why not a typedef?
-LMI_SPECIALIZATION enum_yes_or_no const e_yes_or_no::enumerators[] =
+template<> enum_yes_or_no const e_yes_or_no::enumerators[] =
     {e_yes
     ,e_no
     };
-LMI_SPECIALIZATION char const*const e_yes_or_no::names[] =
+template<> char const*const e_yes_or_no::names[] =
     {"Yes"
     ,"No"
     };
 
-LMI_SPECIALIZATION enum_gender const e_gender::enumerators[] =
+template<> enum_gender const e_gender::enumerators[] =
     {e_female
     ,e_male
     ,e_unisex
     };
-LMI_SPECIALIZATION char const*const e_gender::names[] =
+template<> char const*const e_gender::names[] =
     {"Female"
     ,"Male"
     ,"Unisex"
     };
 
-LMI_SPECIALIZATION enum_smoking const e_smoking::enumerators[] =
+template<> enum_smoking const e_smoking::enumerators[] =
     {e_smoker
     ,e_nonsmoker
     ,e_unismoke
     };
-LMI_SPECIALIZATION char const*const e_smoking::names[] =
+template<> char const*const e_smoking::names[] =
     {"Smoker"
     ,"Nonsmoker"
     ,"Unismoke"
     };
 
-LMI_SPECIALIZATION enum_class const e_class::enumerators[] =
+template<> enum_class const e_class::enumerators[] =
     {e_preferred
     ,e_standard
     ,e_rated
     ,e_ultrapref
     };
-LMI_SPECIALIZATION char const*const e_class::names[] =
+template<> char const*const e_class::names[] =
     {"Preferred"
     ,"Standard"
     ,"Rated"
     ,"Ultra"
     };
 
-LMI_SPECIALIZATION enum_dbopt const e_dbopt::enumerators[] =
+template<> enum_dbopt const e_dbopt::enumerators[] =
     {e_option1
     ,e_option2
     ,e_rop
     };
-LMI_SPECIALIZATION char const*const e_dbopt::names[] =
+template<> char const*const e_dbopt::names[] =
     {"A"
     ,"B"
     ,"ROP"
     };
 
-LMI_SPECIALIZATION enum_dbopt_7702 const e_dbopt_7702::enumerators[] =
+template<> enum_dbopt_7702 const e_dbopt_7702::enumerators[] =
     {e_option1_for_7702
     ,e_option2_for_7702
     };
-LMI_SPECIALIZATION char const*const e_dbopt_7702::names[] =
+template<> char const*const e_dbopt_7702::names[] =
     {"A"
     ,"B"
     };
 
-LMI_SPECIALIZATION enum_mode const e_mode::enumerators[] =
+template<> enum_mode const e_mode::enumerators[] =
     {e_annual
     ,e_semiannual
     ,e_quarterly
     ,e_monthly
     };
-LMI_SPECIALIZATION char const*const e_mode::names[] =
+template<> char const*const e_mode::names[] =
     {"Annual"
     ,"Semiannual"
     ,"Quarterly"
     ,"Monthly"
     };
 
-LMI_SPECIALIZATION enum_basis const e_basis::enumerators[] =
+template<> enum_basis const e_basis::enumerators[] =
     {e_currbasis
     ,e_guarbasis
     ,e_mdptbasis    // midpoint
     };
-LMI_SPECIALIZATION char const*const e_basis::names[] =
+template<> char const*const e_basis::names[] =
     {"Current basis"
     ,"Guaranteed basis"
     ,"Midpoint basis"
     };
 
-LMI_SPECIALIZATION enum_sep_acct_basis const e_sep_acct_basis::enumerators[] =
+template<> enum_sep_acct_basis const e_sep_acct_basis::enumerators[] =
     {e_sep_acct_full
     ,e_sep_acct_zero
     ,e_sep_acct_half
     };
-LMI_SPECIALIZATION char const*const e_sep_acct_basis::names[] =
+template<> char const*const e_sep_acct_basis::names[] =
     {"Input %"         // "Full"
     ,"Zero %"          // "Zero"
     ,"Half of input %" // "Half"
     };
 
-LMI_SPECIALIZATION enum_rate_period const e_rate_period::enumerators[] =
+template<> enum_rate_period const e_rate_period::enumerators[] =
     {e_annual_rate
     ,e_monthly_rate
     };
-LMI_SPECIALIZATION char const*const e_rate_period::names[] =
+template<> char const*const e_rate_period::names[] =
     {"Annual rate"
     ,"Monthly rate"
     };
 
-LMI_SPECIALIZATION enum_run_basis const e_run_basis::enumerators[] =
+template<> enum_run_basis const e_run_basis::enumerators[] =
     {e_run_curr_basis
     ,e_run_guar_basis
     ,e_run_mdpt_basis
@@ -389,7 +389,7 @@ LMI_SPECIALIZATION enum_run_basis const e_run_basis::enumerators[] =
     ,e_run_curr_basis_sa_half
     ,e_run_guar_basis_sa_half
     };
-LMI_SPECIALIZATION char const*const e_run_basis::names[] =
+template<> char const*const e_run_basis::names[] =
     {"curr charges, curr GA int, curr SA int"
     ,"guar charges, guar GA int, curr SA int"
     ,"mdpt charges, mdpt GA int, no SA"
@@ -399,14 +399,14 @@ LMI_SPECIALIZATION char const*const e_run_basis::names[] =
     ,"guar charges, guar GA int, 1/2 SA int"
     };
 
-LMI_SPECIALIZATION enum_ledger_type const e_ledger_type::enumerators[] =
+template<> enum_ledger_type const e_ledger_type::enumerators[] =
     {e_ill_reg
     ,e_nasd
     ,e_group_private_placement
     ,e_offshore_private_placement
     ,e_individual_private_placement
     };
-LMI_SPECIALIZATION char const*const e_ledger_type::names[] =
+template<> char const*const e_ledger_type::names[] =
     {"illustration_reg"
     ,"nasd"
     ,"group_individual_private_placement"
@@ -414,23 +414,23 @@ LMI_SPECIALIZATION char const*const e_ledger_type::names[] =
     ,"individual_private_placement"
     };
 
-LMI_SPECIALIZATION enum_amount_type const e_amount_type::enumerators[] =
+template<> enum_amount_type const e_amount_type::enumerators[] =
     {e_face
     ,e_prem
     };
-LMI_SPECIALIZATION char const*const e_amount_type::names[] =
+template<> char const*const e_amount_type::names[] =
     {"Face"
     ,"Prem"
     };
 
-LMI_SPECIALIZATION enum_uw_basis const e_uw_basis::enumerators[] =
+template<> enum_uw_basis const e_uw_basis::enumerators[] =
     {e_medical
     ,e_paramedical
     ,e_nonmedical
     ,e_simplifiedissue
     ,e_guaranteedissue
     };
-LMI_SPECIALIZATION char const*const e_uw_basis::names[] =
+template<> char const*const e_uw_basis::names[] =
     {"Medical"
     ,"Paramedical"
     ,"Nonmedical"
@@ -438,7 +438,7 @@ LMI_SPECIALIZATION char const*const e_uw_basis::names[] =
     ,"Guaranteed issue"
     };
 
-LMI_SPECIALIZATION enum_table_rating const e_table_rating::enumerators[] =
+template<> enum_table_rating const e_table_rating::enumerators[] =
     {e_table_none
     ,e_table_a
     ,e_table_b
@@ -451,7 +451,7 @@ LMI_SPECIALIZATION enum_table_rating const e_table_rating::enumerators[] =
     ,e_table_l
     ,e_table_p
     };
-LMI_SPECIALIZATION char const*const e_table_rating::names[] =
+template<> char const*const e_table_rating::names[] =
     {"None",
     "A=+25%",
     "B=+50%",
@@ -465,7 +465,7 @@ LMI_SPECIALIZATION char const*const e_table_rating::names[] =
     "P=+400%",
     };
 
-LMI_SPECIALIZATION enum_solve_type const e_solve_type::enumerators[] =
+template<> enum_solve_type const e_solve_type::enumerators[] =
     {e_solve_none
     ,e_solve_specamt
     ,e_solve_ee_prem
@@ -476,7 +476,7 @@ LMI_SPECIALIZATION enum_solve_type const e_solve_type::enumerators[] =
     ,e_solve_er_prem_dur
     ,e_solve_wd_then_loan
     };
-LMI_SPECIALIZATION char const*const e_solve_type::names[] =
+template<> char const*const e_solve_type::names[] =
     {"SolveNone"
     ,"SolveSpecAmt"
     ,"SolveEePrem"
@@ -488,81 +488,81 @@ LMI_SPECIALIZATION char const*const e_solve_type::names[] =
     ,"SolveWDThenLoan"
     };
 
-LMI_SPECIALIZATION enum_solve_target const e_solve_target::enumerators[] =
+template<> enum_solve_target const e_solve_target::enumerators[] =
     {e_solve_for_endt
     ,e_solve_for_target
     };
-LMI_SPECIALIZATION char const*const e_solve_target::names[] =
+template<> char const*const e_solve_target::names[] =
     {"SolveForEndt"
     ,"SolveForTarget"
     };
 
-LMI_SPECIALIZATION enum_solve_tgt_at const e_solve_tgt_at::enumerators[] =
+template<> enum_solve_tgt_at const e_solve_tgt_at::enumerators[] =
     {e_tgtatret
     ,e_tgtatyear
     ,e_tgtatage
     ,e_tgtatend
     };
-LMI_SPECIALIZATION char const*const e_solve_tgt_at::names[] =
+template<> char const*const e_solve_tgt_at::names[] =
     {"TgtAtRetirement"
     ,"TgtAtYear"
     ,"TgtAtAge"
     ,"TgtAtMaturity"
     };
 
-LMI_SPECIALIZATION enum_solve_from const e_solve_from::enumerators[] =
+template<> enum_solve_from const e_solve_from::enumerators[] =
     {e_fromissue
     ,e_fromyear
     ,e_fromage
     ,e_fromret
     };
-LMI_SPECIALIZATION char const*const e_solve_from::names[] =
+template<> char const*const e_solve_from::names[] =
     {"FromIssue"
     ,"FromYear"
     ,"FromAge"
     ,"FromRetirement"
     };
 
-LMI_SPECIALIZATION enum_solve_to const e_solve_to::enumerators[] =
+template<> enum_solve_to const e_solve_to::enumerators[] =
     {e_toret
     ,e_toyear
     ,e_toage
     ,e_toend
     };
-LMI_SPECIALIZATION char const*const e_solve_to::names[] =
+template<> char const*const e_solve_to::names[] =
     {"ToRetirement"
     ,"ToYear"
     ,"ToAge"
     ,"ToMaturity"
     };
 
-LMI_SPECIALIZATION enum_kludge_from const e_kludge_from::enumerators[] =
+template<> enum_kludge_from const e_kludge_from::enumerators[] =
     {e_kludge_fromissue
     ,e_kludge_fromyear
     ,e_kludge_fromage
     ,e_kludge_fromret
     };
-LMI_SPECIALIZATION char const*const e_kludge_from::names[] =
+template<> char const*const e_kludge_from::names[] =
     {"Issue"
     ,"Year"
     ,"Age"
     ,"Retirement"
     };
 
-LMI_SPECIALIZATION enum_kludge_to const e_kludge_to::enumerators[] =
+template<> enum_kludge_to const e_kludge_to::enumerators[] =
     {e_kludge_toret
     ,e_kludge_toyear
     ,e_kludge_toage
     ,e_kludge_toend
     };
-LMI_SPECIALIZATION char const*const e_kludge_to::names[] =
+template<> char const*const e_kludge_to::names[] =
     {"Retirement"
     ,"Year"
     ,"Age"
     ,"Maturity"
     };
 
-LMI_SPECIALIZATION enum_pmt_strategy const e_pmt_strategy::enumerators[] =
+template<> enum_pmt_strategy const e_pmt_strategy::enumerators[] =
     {e_pmtinputscalar
     ,e_pmtinputvector
     ,e_pmtminimum
@@ -573,7 +573,7 @@ LMI_SPECIALIZATION enum_pmt_strategy const e_pmt_strategy::enumerators[] =
     ,e_pmtcorridor
     ,e_pmttable
     };
-LMI_SPECIALIZATION char const*const e_pmt_strategy::names[] =
+template<> char const*const e_pmt_strategy::names[] =
     {"PmtInputScalar"
     ,"PmtInputVector"
     ,"PmtMinimum"
@@ -585,7 +585,7 @@ LMI_SPECIALIZATION char const*const e_pmt_strategy::names[] =
     ,"PmtTable"
     };
 
-LMI_SPECIALIZATION enum_sa_strategy const e_sa_strategy::enumerators[] =
+template<> enum_sa_strategy const e_sa_strategy::enumerators[] =
     {e_sainputscalar
     ,e_sainputvector
     ,e_samaximum
@@ -596,7 +596,7 @@ LMI_SPECIALIZATION enum_sa_strategy const e_sa_strategy::enumerators[] =
     ,e_sacorridor
     ,e_sasalary
     };
-LMI_SPECIALIZATION char const*const e_sa_strategy::names[] =
+template<> char const*const e_sa_strategy::names[] =
     {"SAInputScalar"
     ,"SAInputVector"
     ,"SAMaximum"
@@ -608,26 +608,26 @@ LMI_SPECIALIZATION char const*const e_sa_strategy::names[] =
     ,"SASalary"
     };
 
-LMI_SPECIALIZATION enum_loan_strategy const e_loan_strategy::enumerators[] =
+template<> enum_loan_strategy const e_loan_strategy::enumerators[] =
     {e_loanasinput
     ,e_loanmaximum
     ,e_loaninputscalar
     ,e_loaninputvector
     };
-LMI_SPECIALIZATION char const*const e_loan_strategy::names[] =
+template<> char const*const e_loan_strategy::names[] =
     {"LoanAsInput"
     ,"LoanMaximum"
     ,"LoanInputScalar"
     ,"LoanInputVector"
     };
 
-LMI_SPECIALIZATION enum_wd_strategy const e_wd_strategy::enumerators[] =
+template<> enum_wd_strategy const e_wd_strategy::enumerators[] =
     {e_wdasinput
     ,e_wdmaximum
     ,e_wdinputscalar
     ,e_wdinputvector
     };
-LMI_SPECIALIZATION char const*const e_wd_strategy::names[] =
+template<> char const*const e_wd_strategy::names[] =
     {"WDAsInput"
     ,"WDMaximum"
     ,"WDInputScalar"
@@ -636,80 +636,80 @@ LMI_SPECIALIZATION char const*const e_wd_strategy::names[] =
 
 // TODO ?? "NetRate" would be better than "CredRate", but changing it
 // breaks backward compatibility.    
-LMI_SPECIALIZATION enum_int_rate_type const e_int_rate_type::enumerators[] =
+template<> enum_int_rate_type const e_int_rate_type::enumerators[] =
     {e_netrate
     ,e_grossrate
     ,e_netrate
     };
-LMI_SPECIALIZATION char const*const e_int_rate_type::names[] =
+template<> char const*const e_int_rate_type::names[] =
     {"CredRate"
     ,"GrossRate"
     ,"NetRate"
     };
 
-LMI_SPECIALIZATION enum_loan_rate_type const e_loan_rate_type::enumerators[] =
+template<> enum_loan_rate_type const e_loan_rate_type::enumerators[] =
     {e_fixed_loan_rate
     ,e_variable_loan_rate
     };
-LMI_SPECIALIZATION char const*const e_loan_rate_type::names[] =
+template<> char const*const e_loan_rate_type::names[] =
     {"Fixed"
     ,"VLR"
     };
 
-LMI_SPECIALIZATION enum_fund_input_method const e_fund_input_method::enumerators[] =
+template<> enum_fund_input_method const e_fund_input_method::enumerators[] =
     {e_fund_average
     ,e_fund_override
     ,e_fund_selection
     };
-LMI_SPECIALIZATION char const*const e_fund_input_method::names[] =
+template<> char const*const e_fund_input_method::names[] =
     {"Average fund"
     ,"Override fund"
     ,"Choose funds"
     };
 
-LMI_SPECIALIZATION enum_run_order const e_run_order::enumerators[] =
+template<> enum_run_order const e_run_order::enumerators[] =
     {e_life_by_life
     ,e_month_by_month
     };
-LMI_SPECIALIZATION char const*const e_run_order::names[] =
+template<> char const*const e_run_order::names[] =
     {"Life by life"
     ,"Month by month"
     };
 
-LMI_SPECIALIZATION enum_survival_limit const e_survival_limit::enumerators[] =
+template<> enum_survival_limit const e_survival_limit::enumerators[] =
     {e_no_survival_limit
     ,e_survive_to_age
     ,e_survive_to_year
     ,e_survive_to_ex
     };
-LMI_SPECIALIZATION char const*const e_survival_limit::names[] =
+template<> char const*const e_survival_limit::names[] =
     {"No survival limit"
     ,"Survive to age limit"
     ,"Survive to duration limit"
     ,"Survive to life expectancy"
     };
 
-LMI_SPECIALIZATION enum_term_adj_method const e_term_adj_method::enumerators[] =
+template<> enum_term_adj_method const e_term_adj_method::enumerators[] =
     {e_adjust_base
     ,e_adjust_term
     ,e_adjust_both
     };
-LMI_SPECIALIZATION char const*const e_term_adj_method::names[] =
+template<> char const*const e_term_adj_method::names[] =
     {"Adjust base first"
     ,"Adjust term first"
     ,"Adjust base and term proportionately"
     };
 
-LMI_SPECIALIZATION enum_plan const e_plan::enumerators[] =
+template<> enum_plan const e_plan::enumerators[] =
     {e_sample1
     ,e_sample2
     };
-LMI_SPECIALIZATION char const*const e_plan::names[] =
+template<> char const*const e_plan::names[] =
     {"Sample1"
     ,"Sample2"
     };
 
-LMI_SPECIALIZATION enum_state const e_state::enumerators[] =
+template<> enum_state const e_state::enumerators[] =
     {e_s_AL,e_s_AK,e_s_AZ,e_s_AR,e_s_CA,e_s_CO,e_s_CT,e_s_DE,e_s_DC,e_s_FL
     ,e_s_GA,e_s_HI,e_s_ID,e_s_IL,e_s_IN,e_s_IA,e_s_KS,e_s_KY,e_s_LA,e_s_ME
     ,e_s_MD,e_s_MA,e_s_MI,e_s_MN,e_s_MS,e_s_MO,e_s_MT,e_s_NE,e_s_NV,e_s_NH
@@ -718,7 +718,7 @@ LMI_SPECIALIZATION enum_state const e_state::enumerators[] =
     ,e_s_WI,e_s_WY
     ,e_s_XX
     };
-LMI_SPECIALIZATION char const*const e_state::names[] =
+template<> char const*const e_state::names[] =
     {"AL",  "AK",  "AZ",  "AR",  "CA",  "CO",  "CT",  "DE",  "DC",  "FL"
     ,"GA",  "HI",  "ID",  "IL",  "IN",  "IA",  "KS",  "KY",  "LA",  "ME"
     ,"MD",  "MA",  "MI",  "MN",  "MS",  "MO",  "MT",  "NE",  "NV",  "NH"
@@ -728,7 +728,7 @@ LMI_SPECIALIZATION char const*const e_state::names[] =
     ,"XX"
     };
 
-LMI_SPECIALIZATION enum_country const e_country::enumerators[] =
+template<> enum_country const e_country::enumerators[] =
     {e_c_AD,e_c_AE,e_c_AF,e_c_AG,e_c_AI,e_c_AL,e_c_AM,e_c_AN,e_c_AO,e_c_AQ
     ,e_c_AR,e_c_AS,e_c_AT,e_c_AU,e_c_AW,e_c_AZ,e_c_BA,e_c_BB,e_c_BD,e_c_BE
     ,e_c_BF,e_c_BG,e_c_BH,e_c_BI,e_c_BJ,e_c_BM,e_c_BN,e_c_BO,e_c_BR,e_c_BS
@@ -754,7 +754,7 @@ LMI_SPECIALIZATION enum_country const e_country::enumerators[] =
     ,e_c_UM,e_c_US,e_c_UY,e_c_UZ,e_c_VA,e_c_VC,e_c_VE,e_c_VG,e_c_VI,e_c_VN
     ,e_c_VU,e_c_WF,e_c_WS,e_c_YE,e_c_YT,e_c_YU,e_c_ZA,e_c_ZM,e_c_ZW,
     };
-LMI_SPECIALIZATION char const*const e_country::names[] =
+template<> char const*const e_country::names[] =
     {"AD",  "AE",  "AF",  "AG",  "AI",  "AL",  "AM",  "AN",  "AO",  "AQ"
     ,"AR",  "AS",  "AT",  "AU",  "AW",  "AZ",  "BA",  "BB",  "BD",  "BE"
     ,"BF",  "BG",  "BH",  "BI",  "BJ",  "BM",  "BN",  "BO",  "BR",  "BS"
@@ -781,36 +781,36 @@ LMI_SPECIALIZATION char const*const e_country::names[] =
     ,"VU",  "WF",  "WS",  "YE",  "YT",  "YU",  "ZA",  "ZM",  "ZW",
     };
 
-LMI_SPECIALIZATION enum_defn_life_ins const e_defn_life_ins::enumerators[] =
+template<> enum_defn_life_ins const e_defn_life_ins::enumerators[] =
     {e_cvat
     ,e_gpt
     ,e_noncompliant
     };
-LMI_SPECIALIZATION char const*const e_defn_life_ins::names[] =
+template<> char const*const e_defn_life_ins::names[] =
     {"CVAT"
     ,"GPT"
     ,"Not 7702 compliant"
     };
 
-LMI_SPECIALIZATION enum_mec_avoid_method const e_mec_avoid_method::enumerators[] =
+template<> enum_mec_avoid_method const e_mec_avoid_method::enumerators[] =
     {e_allow_mec
     ,e_reduce_prem
     ,e_increase_specamt
     };
-LMI_SPECIALIZATION char const*const e_mec_avoid_method::names[] =
+template<> char const*const e_mec_avoid_method::names[] =
     {"Allow MEC"
     ,"Reduce premium"
     ,"Increase specified amount"
     };
 
-LMI_SPECIALIZATION enum_defn_material_change const e_defn_material_change::enumerators[] =
+template<> enum_defn_material_change const e_defn_material_change::enumerators[] =
     {e_unnecessary_premium
     ,e_benefit_increase
     ,e_later_of_increase_or_unnecessary_premium
     ,e_earlier_of_increase_or_unnecessary_premium
     ,e_adjustment_event
     };
-LMI_SPECIALIZATION char const*const e_defn_material_change::names[] =
+template<> char const*const e_defn_material_change::names[] =
     {"Unnecessary premium"
     ,"Benefit increase"
     ,"Later of increase or unnecessary premium"
@@ -818,31 +818,31 @@ LMI_SPECIALIZATION char const*const e_defn_material_change::names[] =
     ,"GPT adjustment event"
     };
 
-LMI_SPECIALIZATION enum_spread_method const e_spread_method::enumerators[] =
+template<> enum_spread_method const e_spread_method::enumerators[] =
     {e_spread_is_effective_annual
     ,e_spread_is_nominal_daily
     };
-LMI_SPECIALIZATION char const*const e_spread_method::names[] =
+template<> char const*const e_spread_method::names[] =
     {"Effective annual"
     ,"Nominal daily"
     };
 
-LMI_SPECIALIZATION enum_coi_rate_method const e_coi_rate_method::enumerators[] =
+template<> enum_coi_rate_method const e_coi_rate_method::enumerators[] =
     {e_coi_rate_subtractive
     ,e_coi_rate_exponential
     };
-LMI_SPECIALIZATION char const*const e_coi_rate_method::names[] =
+template<> char const*const e_coi_rate_method::names[] =
     {"Subtractive"
     ,"Exponential"
     };
 
-LMI_SPECIALIZATION enum_anticipated_deduction const e_anticipated_deduction::enumerators[] =
+template<> enum_anticipated_deduction const e_anticipated_deduction::enumerators[] =
     {e_twelve_times_last
     ,e_to_next_anniversary
     ,e_to_next_modal_pmt_date
     ,e_eighteen_times_last
     };
-LMI_SPECIALIZATION char const*const e_anticipated_deduction::names[] =
+template<> char const*const e_anticipated_deduction::names[] =
     {"Twelve times most recent"
     ,"To next anniversary"
     ,"To next modal payment date"
@@ -850,30 +850,30 @@ LMI_SPECIALIZATION char const*const e_anticipated_deduction::names[] =
     };
 
 // TODO ?? This is used in a convoluted way that's probably incorrect.
-LMI_SPECIALIZATION enum_asset_charge_type const e_asset_charge_type::enumerators[] =
+template<> enum_asset_charge_type const e_asset_charge_type::enumerators[] =
     {e_asset_charge_spread
     ,e_asset_charge_load_after_ded
     ,e_asset_charge_load_before_ded
     };
-LMI_SPECIALIZATION char const*const e_asset_charge_type::names[] =
+template<> char const*const e_asset_charge_type::names[] =
     {"Asset charge assessed as spread"
     ,"Asset charge assessed as load after monthly deduction"
     ,"Asset charge assessed as load before monthly deduction"
     };
 
-LMI_SPECIALIZATION enum_part_mort_table const e_part_mort_table::enumerators[] =
+template<> enum_part_mort_table const e_part_mort_table::enumerators[] =
     {e_default_part_mort_table
     };
-LMI_SPECIALIZATION char const*const e_part_mort_table::names[] =
+template<> char const*const e_part_mort_table::names[] =
 // TODO ?? Change in next update:
 //    {"Default partial mortality table (83 GAM)"
     {"0"
     };
 
-LMI_SPECIALIZATION enum_premium_table const e_premium_table::enumerators[] =
+template<> enum_premium_table const e_premium_table::enumerators[] =
     {e_default_premium_table
     };
-LMI_SPECIALIZATION char const*const e_premium_table::names[] =
+template<> char const*const e_premium_table::names[] =
 // TODO ?? Change in next update:
 //    {"Default partial mortality table (Table Y)"
     {"0"
@@ -881,13 +881,13 @@ LMI_SPECIALIZATION char const*const e_premium_table::names[] =
 
 // TODO ?? Obsolescent.
 
-LMI_SPECIALIZATION enum_post_ret_sa_strategy const e_post_ret_sa_strategy::enumerators[] =
+template<> enum_post_ret_sa_strategy const e_post_ret_sa_strategy::enumerators[] =
     {e_obsolete_same_as_initial
     ,e_obsolete_varying
     ,e_obsolete_scalar
     ,e_obsolete_percent_of_initial
     };
-LMI_SPECIALIZATION char const*const e_post_ret_sa_strategy::names[] =
+template<> char const*const e_post_ret_sa_strategy::names[] =
     {"Same as pre-retirement"
     ,"Vector"
     ,"Scalar"

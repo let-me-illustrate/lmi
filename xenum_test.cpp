@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xenum_test.cpp,v 1.1 2005-01-14 19:47:45 chicares Exp $
+// $Id: xenum_test.cpp,v 1.2 2005-05-26 22:01:15 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -91,17 +91,7 @@ int test_main(int, char*[])
     e_123 f(e_two);
     e_123 g;
     ss << f;
-
-#ifndef GCC_BEFORE_2_96
     ss >> g;
-#else // Old gnu compiler.
-    // COMPILER !! gcc-2.95.2-1 We'd rather just reset the stringstream's
-    // get pointer, but that doesn't work with gcc-2.95.2-1 and Magnus
-    // Fromreide's <sstream>.
-    std::istringstream iss(ss.str(), ios_base::in | ios_base::binary);
-    iss >> g;
-#endif // Old gnu compiler.
-
     BOOST_TEST("2 Two" == g.str());
 
     e_123 m(e_one);

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xenum_sample.cpp,v 1.1 2005-01-14 19:47:45 chicares Exp $
+// $Id: xenum_sample.cpp,v 1.2 2005-05-26 22:01:15 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -57,7 +57,7 @@ template std::ostream& operator<< (std::ostream& os, xenum<enum_foobar, 2> const
 
 #endif // LMI_EXPLICIT_INSTANTIATION
 
-LMI_SPECIALIZATION enum_123 const e_123::enumerators[] =
+template<> enum_123 const e_123::enumerators[] =
     {e_one
     ,e_two
     ,e_three
@@ -66,18 +66,18 @@ LMI_SPECIALIZATION enum_123 const e_123::enumerators[] =
 //  ,e_one
     };
 
-LMI_SPECIALIZATION char const*const e_123::names[] =
+template<> char const*const e_123::names[] =
     {"1 One"
     ,"2 Two"
     ,"3 Three"
     };
 
-LMI_SPECIALIZATION enum_foobar const e_foobar::enumerators[] =
+template<> enum_foobar const e_foobar::enumerators[] =
     {e_foo
     ,e_bar
     };
 
-LMI_SPECIALIZATION char const*const e_foobar::names[] =
+template<> char const*const e_foobar::names[] =
     {"foo"
     ,"bar"
     };
