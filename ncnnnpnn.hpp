@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ncnnnpnn.hpp,v 1.3 2005-05-26 18:31:49 chicares Exp $
+// $Id: ncnnnpnn.hpp,v 1.4 2005-05-26 22:01:15 chicares Exp $
 
 // Ideally we would use imbue an appropriate locale and use some facet
 // like money_put, but most of our compilers's standard libraries don't
@@ -40,16 +40,6 @@
 #include <ostream>
 #include <stdexcept>
 #include <sstream>
-
-// TODO ?? Move to config_all.hpp .
-#if (defined __BORLANDC__) && (0x0550 <= __BORLANDC__)
-#   define BC_SINCE_5_5
-#endif // Newer borland compiler version 5.5 or greater.
-
-// TODO ?? Move to config_all.hpp .
-#if (defined BC_SINCE_5_5) || (defined __GNUC__) && (3 <= __GNUC__)
-#   define LMI_MODERN_STREAMS
-#endif // Newer borland compiler version 5.5 or greater.
 
 // Reference:
 // http://groups.google.com/groups?selm=38C9B681.B8A036DF%40flash.net

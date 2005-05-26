@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xmlwrapp_ex.cpp,v 1.1 2005-01-14 19:47:45 chicares Exp $
+// $Id: xmlwrapp_ex.cpp,v 1.2 2005-05-26 22:01:15 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -36,9 +36,8 @@
 
 std::string istream_to_string(std::istream& is)
 {
-#if !defined __BORLANDC__ && !defined GCC_BEFORE_2_96
-// COMPILER !! bc++5.02 and gcc-2.95.2-1 lack istreambuf_iterator;
-// bc++5.5.1 has it, but it doesn't work here.
+#if !defined __BORLANDC__
+// COMPILER !! bc++5.5.1 has istreambuf_iterator, but it doesn't work here.
     is >> std::noskipws;
     std::string s
         ((std::istreambuf_iterator<char>(is))
@@ -51,26 +50,14 @@ std::string istream_to_string(std::istream& is)
 //        throw std::runtime_error("Unable to read input file into string.");
         }
     return s;
-#else // defined __BORLANDC__ || defined GCC_BEFORE_2_96
-// COMPILER !! Incorrect declaration used by bc++5.02:
-//    template<typename T, typename Distance> class istream_iterator;
-// COMPILER !! incorrect declaration used by gcc-2.95.2-1:
-//    template<typename T, typename Distance=ptrdiff_t> class istream_iterator;
+#else // defined __BORLANDC__
     is.unsetf(std::ios_base::skipws);
     std::vector<char>v;
-#   ifndef BC_BEFORE_5_5
     std::copy
         (std::istream_iterator<char>(is)
         ,std::istream_iterator<char>()
         ,std::back_inserter(v)
         );
-#   else // defined BC_BEFORE_5_5
-    std::copy
-        (std::istream_iterator<char, std::ptrdiff_t>(is)
-        ,std::istream_iterator<char, std::ptrdiff_t>()
-        ,std::back_inserter(v)
-        );
-#   endif // defined BC_BEFORE_5_5
     if(!is.eof())
         {
         throw std::runtime_error("Unable to read input file into string.");
@@ -80,6 +67,6 @@ std::string istream_to_string(std::istream& is)
     std::string s;
     s.reserve(v.size());
     return s.assign(&v[0], v.size());
-#endif // defined BC_BEFORE_5_5 || defined GCC_BEFORE_2_96
+#endif // defined __BORLANDC__
 }
 

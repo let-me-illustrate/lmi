@@ -19,17 +19,15 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: round_to.hpp,v 1.5 2005-05-26 13:34:59 chicares Exp $
+// $Id: round_to.hpp,v 1.6 2005-05-26 22:01:15 chicares Exp $
 
 #ifndef round_to_hpp
 #define round_to_hpp
 
 #include "config.hpp"
 
-#ifndef BC_BEFORE_5_5
-#   include <boost/static_assert.hpp>
-#   include <boost/type_traits/arithmetic_traits.hpp>
-#endif // Old borland compiler.
+#include <boost/static_assert.hpp>
+#include <boost/type_traits/arithmetic_traits.hpp>
 
 #include <cmath>
 #include <functional>
@@ -432,9 +430,7 @@ template<typename RealType>
 class round_to
     :public std::unary_function<RealType, RealType>
 {
-#ifndef BC_BEFORE_5_5
     BOOST_STATIC_ASSERT(boost::is_float<RealType>::value);
-#endif // Old borland compiler.
 
   public:
     round_to();

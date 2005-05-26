@@ -20,7 +20,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_sequence.cpp,v 1.2 2005-05-19 12:30:00 chicares Exp $
+// $Id: input_sequence.cpp,v 1.3 2005-05-26 22:01:15 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -285,19 +285,8 @@ InputSequence::InputSequence
 
 void InputSequence::realize_vector()
 {
-#ifndef BC_BEFORE_5_5
     std::vector<double> default_numeric_vector(last_possible_duration);
     std::vector<std::string> default_string_vector(last_possible_duration, default_keyword);
-#else // BC_BEFORE_5_5
-    // COMPILER !! Looks like bc++5.02 doesn't initialize the vector correctly
-    // for this case: "1 [1, 2); 3 [3, 4); 5 [5, 6); 7". I would guess that
-    // this might be a problem with its RVO, since its debugger is unable
-    // to display the vector right after the next line:
-    std::vector<double> default_numeric_vector;
-    default_numeric_vector.assign(last_possible_duration, 0.0);
-    std::vector<std::string> default_string_vector;
-    default_string_vector.assign(last_possible_duration, default_keyword);
-#endif // BC_BEFORE_5_5
     std::vector<double> r(default_numeric_vector);
     number_result = r;
     std::vector<std::string> s(default_string_vector);
@@ -997,9 +986,7 @@ void InputSequence::mark_diagnostic_context()
     diagnostics
         << "Current token "
         << '\'' << token_type_name(current_token_type) << '\''
-#ifndef LMI_SSTREAM_LACKS_POSITIONING
         << " at position " << input_stream.tellg()
-#endif // LMI_SSTREAM_LACKS_POSITIONING
         << ".\n"
         ;
 }
@@ -1015,12 +1002,7 @@ std::string InputSequence::formatted_diagnostics
         std::string::size_type z(s.find('\n'));
         if(std::string::npos != z)
             {
-// TODO ?? Address this in our compatibility headers.
-#ifndef BC_BEFORE_5_5
             s.erase(z);
-#else // BC_BEFORE_5_5
-            s.remove(z);
-#endif // BC_BEFORE_5_5
             }
         }
     if(use_carriage_return_line_feed)

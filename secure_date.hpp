@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: secure_date.hpp,v 1.1 2005-01-14 19:47:45 chicares Exp $
+// $Id: secure_date.hpp,v 1.2 2005-05-26 22:01:15 chicares Exp $
 
 #ifndef secure_date_hpp
 #define secure_date_hpp
@@ -29,19 +29,15 @@
 #include "calendar_date.hpp"
 #include "expimp.hpp"
 
-#ifndef BC_BEFORE_5_5
-#   include <boost/static_assert.hpp>
-#endif // not old borland compiler
+#include <boost/static_assert.hpp>
 
 #include <climits> // CHAR_BIT
 #include <string>
 #include <vector>
 
-#ifndef BC_BEFORE_5_5
-    // The gnu libc md5 implementation seems to assume this:
-    BOOST_STATIC_ASSERT(8 == CHAR_BIT || 16 == CHAR_BIT);
-#endif // not old borland compiler
-    // so md5 output is 128 bits == 16 8-bit bytes or 8 16-bit bytes:
+// The gnu libc md5 implementation seems to assume this:
+BOOST_STATIC_ASSERT(8 == CHAR_BIT || 16 == CHAR_BIT);
+// so md5 output is 128 bits == 16 8-bit bytes or 8 16-bit bytes:
 enum {md5len = 128 / CHAR_BIT};
 
 class LMI_EXPIMP secure_date

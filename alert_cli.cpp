@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: alert_cli.cpp,v 1.1 2005-01-14 19:47:44 chicares Exp $
+// $Id: alert_cli.cpp,v 1.2 2005-05-26 22:01:15 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -77,23 +77,16 @@ void warning_alert(std::string const& s)
 
 void hobsons_choice_alert(std::string const& s)
 {
-#ifndef BC_BEFORE_5_5
     std::cerr << s << '\n' << hobsons_prompt << std::endl;
     if(!continue_anyway())
         {
         throw std::runtime_error(s);
         }
-#else // Old borland compiler.
-    // Avoid abnormal termination due to compiler defect.
-    std::cerr << s << std::endl;
-#endif // Old borland compiler.
 }
 
 void fatal_error_alert(std::string const& s)
 {
     std::cerr << s << std::endl;
-#ifndef BC_BEFORE_5_5
     throw std::runtime_error(s);
-#endif // Not old borland compiler.
 }
 

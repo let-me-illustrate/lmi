@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: config_all.hpp,v 1.3 2005-05-26 18:31:49 chicares Exp $
+// $Id: config_all.hpp,v 1.4 2005-05-26 22:01:15 chicares Exp $
 
 // Configuration header for compiler quirks--generic configuration.
 // Never include this file directly.
@@ -32,7 +32,7 @@
 #endif // OK_TO_INCLUDE_CONFIG_ALL_HPP
 
 #if defined __BORLANDC__ && __BORLANDC__ < 0x0550
-#   define BC_BEFORE_5_5
+#   error Obsolete compiler not supported.
 #endif // Old borland compiler.
 
 #if defined __COMO__
@@ -45,8 +45,8 @@
 #   endif // __MINGW32_VERSION defined.
 #endif // Como.
 
-#if defined __GNUC__ && __GNUC__ == 2 && __GNUC_MINOR__ == 95
-#   define GCC_BEFORE_2_96
+#if defined __GNUC__ && __GNUC__ < 3
+#   error Obsolete compiler not supported.
 #endif // Old gcc compiler.
 
 // TODO ?? Untested with como using gcc backend.
@@ -56,30 +56,16 @@
 #   define LMI_PACKED_ATTRIBUTE
 #else // Neither gcc nor borland.
 #   error Unknown compiler
-#endif // Neither gcc nor borland.
+#endif // Neither gcc, nor como with mingw, nor borland.
 
 #if defined __MINGW32__ && defined __GNUC__ && __GNUC__ == 3 && 4 <= __GNUC_MINOR__
+#   define LMI_COMPILER_HAS_EXPM1
 #   define LMI_COMPILER_HAS_LOG1P
 #endif // Recent MinGW.
 
-#if defined BC_BEFORE_5_5 || defined GCC_BEFORE_2_96
-#   define LMI_LACK_BASIC_IOSTREAMS
-#endif // Old gcc or borland compiler, or unknown compiler.
-
-#if defined BC_BEFORE_5_5 || defined GCC_BEFORE_2_96
-#   define LMI_SSTREAM_LACKS_POSITIONING
-#endif // Old gcc or borland compiler, or unknown compiler.
-
-#if defined BC_BEFORE_5_5
-// No std::iterator template.
-#   define LMI_LACKS_STD_ITERATOR
-#endif // Old borland compiler.
-
-#if !defined BC_BEFORE_5_5
-#   define LMI_SPECIALIZATION template<>
-#else // Old borland compiler.
-#   define LMI_SPECIALIZATION
-#endif // Old borland compiler.
+#if defined __BORLANDC__ || defined __GNUC__
+#   define LMI_MODERN_STREAMS
+#endif
 
 #endif // config_all_hpp
 
