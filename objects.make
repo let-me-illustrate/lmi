@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: objects.make,v 1.31 2005-05-24 04:00:02 chicares Exp $
+# $Id: objects.make,v 1.32 2005-05-26 21:03:08 chicares Exp $
 
 ################################################################################
 
@@ -151,7 +151,6 @@ antediluvian_common_objects := \
   inputs.o \
   inputstatus.o \
   interest_rates.o \
-  kludges.o \
   ledger.o \
   ledger_base.o \
   ledger_invariant.o \
@@ -228,7 +227,6 @@ lmi_common_objects := \
   inputs.o \
   inputstatus.o \
   interest_rates.o \
-  kludges.o \
   ledger.o \
   ledger_base.o \
   ledger_invariant.o \
@@ -336,7 +334,6 @@ gps_objects := \
   inputs.o \
   inputstatus.o \
   interest_rates.o \
-  kludges.o \
   mathmisc.o \
   miscellany.o \
   outlay.o \
@@ -366,7 +363,6 @@ unit_test_targets := \
   input_seq_test$(EXEEXT) \
   input_test$(EXEEXT) \
   irc7702a_test$(EXEEXT) \
-  kludges_test$(EXEEXT) \
   materially_equal_test$(EXEEXT) \
   mathmisc_test$(EXEEXT) \
   math_functors_test$(EXEEXT) \
@@ -395,7 +391,6 @@ unit_test_targets := \
 common_test_objects := \
   fenv_lmi.o \
   getopt.o \
-  kludges.o \
   license.o \
 
 actuarial_table_test$(EXEEXT): \
@@ -498,7 +493,6 @@ input_test$(EXEEXT): \
   inputillus_xml_io.o \
   inputs.o \
   inputstatus.o \
-  kludges.o \
   license.o \
   multiple_cell_document.o \
   single_cell_document.o \
@@ -513,10 +507,6 @@ irc7702a_test$(EXEEXT): \
   ihs_irc7702a.o \
   irc7702a_test.o \
   mathmisc.o \
-
-kludges_test$(EXEEXT): \
-  $(common_test_objects) \
-  kludges_test.o \
 
 materially_equal_test$(EXEEXT): \
   $(common_test_objects) \
