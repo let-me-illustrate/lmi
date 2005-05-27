@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avstrtgy.cpp,v 1.4 2005-02-17 04:40:02 chicares Exp $
+// $Id: ihs_avstrtgy.cpp,v 1.5 2005-05-27 10:37:06 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -116,7 +116,7 @@ double AccountValue::CalculateSpecAmtFromStrategy
                 );
             }
             break;
-// TODO ?? The following strategies (at least) should recognize dumpins.            
+// TODO ?? The following strategies (at least) should recognize dumpins.
         case e_samep:
             {
             z = GetModalSpecAmtMinNonMec

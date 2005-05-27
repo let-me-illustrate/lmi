@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_acctval.cpp,v 1.26 2005-05-16 05:39:08 chicares Exp $
+// $Id: ihs_acctval.cpp,v 1.27 2005-05-27 10:37:06 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -1134,7 +1134,7 @@ void AccountValue::ApplyDynamicSepAcctLoadAMD(double assets)
 
     double tiered_comp = 0.0;
 
-// TODO ?? EGREGIOUS_DEFECT Let's resolve this once and for all.    
+// TODO ?? EGREGIOUS_DEFECT Let's resolve this once and for all.
     // TODO ?? JOE What is the meaning of DB_AssetChargeType?
     // You apparently use it to govern tiered comp (tiered file).
     //   [later note: also DB_MiscFundCharge]

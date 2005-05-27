@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_server7702.cpp,v 1.3 2005-03-23 15:32:29 chicares Exp $
+// $Id: ihs_server7702.cpp,v 1.4 2005-05-27 10:37:06 chicares Exp $
 
 // Known defects:
 // grep for "NEED DECISION"
@@ -58,7 +58,7 @@ int main()
         << " developers to patch the compiler as described here:\n"
         << "http://www.geocrawler.com/archives/3/6013/2001/4/100/5548198/"
         << LMI_FLUSH
-        ; 
+        ;
     throw std::logic_error();
 // TODO ?? We'd like to skip the explicit message and just throw something,
 // but we don't know where it would be caught for a shared library versus
@@ -130,7 +130,7 @@ extern "C" void LMI_EXPIMP InitializeServer7702()
 {
     // Data directory where tables etc. are stored
 // TODO ?? This is obsolete; need a replacement. Either let main()
-// take care of it, or copy main()'s initialization code here.    
+// take care of it, or copy main()'s initialization code here.
 //    DataDir::Get("./");
 }
 

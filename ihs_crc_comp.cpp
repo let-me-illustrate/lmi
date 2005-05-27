@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_crc_comp.cpp,v 1.4 2005-05-20 15:08:11 chicares Exp $
+// $Id: ihs_crc_comp.cpp,v 1.5 2005-05-27 10:37:06 chicares Exp $
 
 // Sample command line to compile:
 // /gcc-2.95.2-1/bin/g++ -Iming29521 ihs_crc_comp.cpp
@@ -236,7 +236,7 @@ void f_2(std::string const& line1, std::string const& line2)
 {
     if
         (   line1 != line2
-// TODO ?? Fix this kludge, which strives to ignore fund names.        
+// TODO ?? Fix this kludge, which strives to ignore fund names.
         &&  std::string::npos != line1.find(" ")
         )
         {

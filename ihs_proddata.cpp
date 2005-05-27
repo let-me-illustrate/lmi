@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_proddata.cpp,v 1.6 2005-04-10 14:53:17 chicares Exp $
+// $Id: ihs_proddata.cpp,v 1.7 2005-05-27 10:37:06 chicares Exp $
 
 // This class contains names of files containing a product's tables as well
 // as strings that are the same for all instances of that product.
@@ -78,7 +78,7 @@ void TProductData::Read(std::string const& a_Filename)
             << a_Filename
             << "' is required but could not be found. Try reinstalling."
             << LMI_FLUSH
-            ; 
+            ;
         }
     std::ifstream is(a_Filename.c_str());
 
@@ -129,7 +129,7 @@ void TProductData::Read(std::string const& a_Filename)
             << a_Filename
             << "'. Try reinstalling."
             << LMI_FLUSH
-            ; 
+            ;
         }
     std::string dummy;
     is >> dummy;
@@ -141,7 +141,7 @@ void TProductData::Read(std::string const& a_Filename)
             << a_Filename
             << "'. Try reinstalling."
             << LMI_FLUSH
-            ; 
+            ;
         }
 }
 

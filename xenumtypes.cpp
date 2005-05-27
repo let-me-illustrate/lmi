@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xenumtypes.cpp,v 1.5 2005-05-26 22:01:15 chicares Exp $
+// $Id: xenumtypes.cpp,v 1.6 2005-05-27 10:37:06 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -635,7 +635,7 @@ template<> char const*const e_wd_strategy::names[] =
     };
 
 // TODO ?? "NetRate" would be better than "CredRate", but changing it
-// breaks backward compatibility.    
+// breaks backward compatibility.
 template<> enum_int_rate_type const e_int_rate_type::enumerators[] =
     {e_netrate
     ,e_grossrate
