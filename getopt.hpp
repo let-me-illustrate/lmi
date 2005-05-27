@@ -37,7 +37,7 @@
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
 // GWC added this RCS Id:
-// $Id: getopt.hpp,v 1.3 2005-05-26 18:31:49 chicares Exp $
+// $Id: getopt.hpp,v 1.4 2005-05-27 08:16:09 chicares Exp $
 
 // This version of 'getopt' appears to the caller like standard Unix 'getopt'
 // but it behaves differently for the user, since it allows the user
@@ -325,6 +325,10 @@ public:
     GetOpt (int argc, char** argv, char const* optstring);
     GetOpt (int argc, char** argv, char const* optstring,
             Option const* longopts, int* longind, int long_only);
+    // Write a non-inline dtor explicitly, to prevent an ostensible
+    // problem detected by a malloc debugger when memory allocated on
+    // one side of a shared-library boundary is freed on the other.
+    ~GetOpt(); // Added by GWC.
     int operator () (void);
 
 
