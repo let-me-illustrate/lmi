@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xml_io.cpp,v 1.16 2005-05-26 22:01:15 chicares Exp $
+// $Id: ledger_xml_io.cpp,v 1.17 2005-05-27 10:37:06 chicares Exp $
 
 #include "config.hpp"
 
@@ -360,7 +360,7 @@ void Ledger::write(xml::node& x) const
 // presumably always be zero, though I'd be prepared for surprise.
 // If sales ever take off in this market, we'll need to add this quickly.
 
-// Greg--I conclude that we should comment this line out for now, since it is not 
+// Greg--I conclude that we should comment this line out for now, since it is not
 //  used, but be prepared to add it in the future
 //    title_map["NaarForceout"                    ] = "Net Amt At Risk __Force Out";
     title_map["NetCOICharge_Current"            ] = " _____________ Curr Net COI Charge";
@@ -385,7 +385,7 @@ void Ledger::write(xml::node& x) const
     title_map["PremTaxLoad_Guaranteed"          ] = "Guar Premium Tax Load";
 // STEVEN Implemented only for two products, and defectively at that.
 // Greg-- 1) Keep in and limit use in input interface? (ideal)
-//        2) Keep in and add for other products? 
+//        2) Keep in and add for other products?
 //        3) Keep in with obvious warts? (preferred given time constraints)
 //        4) Comment out for now until a more comprehensive implementation?
 // TODO ?? It's defective, so it's excluded for now.

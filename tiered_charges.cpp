@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: tiered_charges.cpp,v 1.3 2005-04-10 14:51:02 chicares Exp $
+// $Id: tiered_charges.cpp,v 1.4 2005-05-27 10:37:06 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -373,7 +373,7 @@ void tiered_charges::read(std::string const& filename)
             << filename
             << "' is required but could not be found. Try reinstalling."
             << LMI_FLUSH
-            ; 
+            ;
         }
     std::ifstream is(filename.c_str());
 
@@ -444,7 +444,7 @@ void tiered_charges::write(std::string const& filename) const
             << filename
             << "'."
             << LMI_FLUSH
-            ; 
+            ;
         }
 }
 

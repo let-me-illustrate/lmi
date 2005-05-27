@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: transferor.cpp,v 1.2 2005-03-19 13:22:46 chicares Exp $
+// $Id: transferor.cpp,v 1.3 2005-05-27 10:37:06 chicares Exp $
 
 // Acknowledgment
 
@@ -247,7 +247,7 @@ namespace
                 {
                 warning()
                     << "Boolean data is unexpectedly numeric"
-// TODO ?? Show the offending control's name (unavailable for now).                    
+// TODO ?? Show the offending control's name (unavailable for now).
 //                    << " for control '" << name() << "'"
                     << "."
                     << LMI_FLUSH

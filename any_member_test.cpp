@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: any_member_test.cpp,v 1.9 2005-05-24 04:00:01 chicares Exp $
+// $Id: any_member_test.cpp,v 1.10 2005-05-27 10:37:06 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -186,7 +186,7 @@ struct T : public Q, public MemberSymbolTable<T>
         ascribe("i1", &T::i1);
         ascribe("d0", &T::d0);
         ascribe("s0", &T::s0);
-// Don't need to cast base-class members explicitly:        
+// Don't need to cast base-class members explicitly:
 //        ascribe("q0", static_cast<float T::*>(&T::q0));
         ascribe("q0", &T::q0);
         }

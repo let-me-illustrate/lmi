@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: census_view.cpp,v 1.29 2005-05-14 13:57:48 chicares Exp $
+// $Id: census_view.cpp,v 1.30 2005-05-27 10:37:06 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -247,7 +247,7 @@ wxWindow* CensusView::CreateChildWindow()
         (GetFrame()
         ,ID_LISTWINDOW
 // TODO ?? expunge unless census name is to be specified as title.
-// These are builtin defaults:        
+// These are builtin defaults:
 //        ,wxDefaultPosition
 //        ,wxDefaultSize
 //        ,wxLC_REPORT
@@ -369,7 +369,7 @@ int CensusView::selected_row()
     if(row < 0)
         {
         row = 0;
-// TODO ?? Reserve for grid implementation.        
+// TODO ?? Reserve for grid implementation.
 //        throw std::logic_error("No row selected.");
         }
     if(static_cast<int>(cell_parms().size()) <= row)
@@ -587,7 +587,7 @@ wxMenuBar* CensusView::MenuBar() const
     wxMenuBar* menu_bar = MenuBarFromXmlResource("census_view_menu");
     if(!menu_bar)
         {
-// TODO ?? Clean up.        
+// TODO ?? Clean up.
 //        wxLogError("Unable to load 'census_view_menu'.");
 //        wxLog::FlushActive();
         throw std::runtime_error("Unable to load 'census_view_menu'.");
@@ -1211,7 +1211,7 @@ void CensusView::OnPasteCensus(wxCommandEvent&)
     // In the solution domain:
     //   document modified <--> dirty flag set
     //   loaded from file  <--> document path not null
-// Except that the wx port is different.    
+// Except that the wx port is different.
     //
     // Furthermore, a brand-new census has default parameters for
     // the case, the class, and the default cell. As this is written,

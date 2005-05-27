@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_wx.cpp,v 1.7 2005-05-14 15:11:31 chicares Exp $
+// $Id: main_wx.cpp,v 1.8 2005-05-27 10:37:06 chicares Exp $
 
 // Portions of this file are derived from wxWindows files
 //   samples/docvwmdi/docview.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -311,7 +311,7 @@ void process_command_line(int argc, char* argv[])
                 break;
 
             default:
-;            
+;
 ////                warning() << "Unrecognized option '" << c << "'." << LMI_FLUSH;
             }
         }
@@ -715,7 +715,7 @@ void lmi_wx_app::OnMenuOpen(wxMenuEvent& event)
             {
             file_save_as->Enable(true);
             }
-*/            
+*/
         }
     // (else) Parent menu enablement could be handled here, but, for
     // now at least, none is required.

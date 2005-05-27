@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: calculate.hpp,v 1.8 2005-05-14 02:11:32 chicares Exp $
+// $Id: calculate.hpp,v 1.9 2005-05-27 10:37:06 chicares Exp $
 
 #ifndef calculate_hpp
 #define calculate_hpp
@@ -132,7 +132,7 @@ struct RunCensus
             {
             std::auto_ptr<IllusVal> IV(new IllusVal());
             IV->Run(*lives_it);
-// TODO ?? Pick one:            
+// TODO ?? Pick one:
 //            Composite.operator+=(IV->ledger());
             XXXComposite.PlusEq(IV->ledger());
             }

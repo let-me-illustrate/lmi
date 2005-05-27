@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avmly.cpp,v 1.13 2005-05-07 03:36:36 chicares Exp $
+// $Id: ihs_avmly.cpp,v 1.14 2005-05-27 10:37:06 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -1339,7 +1339,7 @@ void AccountValue::IncreaseSpecAmtToAvoidMec()
             // eighth year, there'll be a decrease then. Note that we
             // do not allow specamt strategies with increase-to-avoid.
 
-// TODO ?? TEMPORARILY SUPPRESSED FOR REGRESSION TEST            
+// TODO ?? TEMPORARILY SUPPRESSED FOR REGRESSION TEST
 //            DeathBfts_->SetSpecAmt(min_benefit, 0, 7);
 
             InitializeLife(RateBasis);
@@ -1938,7 +1938,7 @@ double AccountValue::GetPremLoad
             << " is exempt from premium tax; but a "
             << (total_load - sum_of_separate_loads)
             << " difference is observed."
-            << LMI_FLUSH 
+            << LMI_FLUSH
             ;
         }
 //    LMI_ASSERT
