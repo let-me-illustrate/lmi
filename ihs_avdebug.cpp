@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avdebug.cpp,v 1.10 2005-05-19 12:30:00 chicares Exp $
+// $Id: ihs_avdebug.cpp,v 1.11 2005-05-27 09:33:46 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -44,7 +44,6 @@
 #include "ledger_variant.hpp"
 #include "loads.hpp"
 #include "math_functors.hpp"
-#include "ncnnnpnn.hpp"
 #include "outlay.hpp"
 #include "value_cast.hpp"
 
