@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: crc32.hpp,v 1.2 2005-01-31 13:12:48 chicares Exp $
+// $Id: crc32.hpp,v 1.3 2005-05-27 10:37:06 chicares Exp $
 
 #ifndef crc32_hpp
 #define crc32_hpp
@@ -98,7 +98,7 @@ inline CRC& CRC::operator+=(                    double  z)
 inline CRC& CRC::operator+=(            long    double  z)
     {return update(reinterpret_cast<unsigned char const*>(&z), sizeof(z));}
 
-// Forward char const* and signed char const* to the unsigned char const* function.    
+// Forward char const* and signed char const* to the unsigned char const* function.
 inline CRC& CRC::operator+=(                    char const* z)
     {
     return operator+=(reinterpret_cast<unsigned char const*>(z));

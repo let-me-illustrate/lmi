@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xml_notebook.cpp,v 1.3 2005-03-30 03:40:16 chicares Exp $
+// $Id: xml_notebook.cpp,v 1.4 2005-05-27 10:37:06 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -842,7 +842,7 @@ bool XmlNotebook::Validate()
         return false;
         }
 */
-    return true;        
+    return true;
 }
 
 void XmlNotebook::ValidateTextControl(wxWindow* w)
@@ -881,7 +881,7 @@ void XmlNotebook::ValidateTextControl(wxWindow* w)
             << textctrl->GetValue() << " = GetValue()\n"
             ;
         wxLogError(oss.str().c_str());
-*/        
+*/
         return;
         }
 

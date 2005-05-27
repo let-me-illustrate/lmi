@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_text_formats.cpp,v 1.3 2005-05-19 12:30:00 chicares Exp $
+// $Id: ledger_text_formats.cpp,v 1.4 2005-05-27 10:37:06 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -240,7 +240,7 @@ void PrintFormTabDelimited
         ,csv_plus_claims.begin()
         ,std::plus<double>()
         );
-// TODO ?? Is this irr valid?        
+// TODO ?? Is this irr valid?
     std::vector<double> irr_on_surrender(Curr_.CSVNet.size());
     if(!Invar.IsInforce)
         {

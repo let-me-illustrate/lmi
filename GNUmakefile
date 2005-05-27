@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: GNUmakefile,v 1.15 2005-05-22 14:03:42 chicares Exp $
+# $Id: GNUmakefile,v 1.16 2005-05-27 10:37:05 chicares Exp $
 
 ###############################################################################
 
@@ -444,6 +444,8 @@ check_conformity: source_clean
 	@$(GREP) --files-without-match '$$Id.*$$' $(licensed_files)    || true
 	@$(ECHO) "  Files that contain non-empty blank lines:"
 	@$(GREP) --line-number '^ \+$$' $(licensed_files)              || true
+	@$(ECHO) "  Files with blanks at end of line:"
+	@$(GREP) --line-number ' $$' $(licensed_files)                 || true
 	@$(ECHO) "  Files that improperly contain physical tabs:"
 	@$(GREP) -l '	' $(filter-out $(makefiles),$(licensed_files)) || true
 	@$(ECHO) "  Files that contain carriage returns:"

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: cpp_main.cpp,v 1.1 2005-01-14 19:47:44 chicares Exp $
+// $Id: cpp_main.cpp,v 1.2 2005-05-27 10:37:06 chicares Exp $
 
 // This is a derived work based on Beman Dawes's boost test library
 // that bears the following copyright and license statement:
@@ -83,14 +83,14 @@
 //
 //   * In test frameworks, which supply cpp_main() to detect (or catch)
 //     test specific errors, report them,  and then return a presumably
-//     non-zero value. 
+//     non-zero value.
 //
 // Requires: A user-supplied cpp_main() function with same interface as main().
 //
 // Effects:
 //
 //   Call cpp_main( argc, argv ) in a try block.
-// 
+//
 //   Treat as errors:
 //
 //     *  exceptions from cpp_main().

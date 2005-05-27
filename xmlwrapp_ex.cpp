@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xmlwrapp_ex.cpp,v 1.2 2005-05-26 22:01:15 chicares Exp $
+// $Id: xmlwrapp_ex.cpp,v 1.3 2005-05-27 10:37:06 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -46,7 +46,7 @@ std::string istream_to_string(std::istream& is)
 
     if(!is.eof())
         {
-// http://groups.google.com/groups?selm=d6651fb6.0210180402.53236e96%40posting.google.com        
+// http://groups.google.com/groups?selm=d6651fb6.0210180402.53236e96%40posting.google.com
 //        throw std::runtime_error("Unable to read input file into string.");
         }
     return s;

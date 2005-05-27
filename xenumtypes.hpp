@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xenumtypes.hpp,v 1.3 2005-04-29 16:32:58 chicares Exp $
+// $Id: xenumtypes.hpp,v 1.4 2005-05-27 10:37:06 chicares Exp $
 
 #ifndef xenumtypes_hpp
 #define xenumtypes_hpp
@@ -267,7 +267,7 @@ enum enum_int_rate_type
     {e_netrate
     ,e_grossrate
     };
-// TODO ?? See implementation file, which handles a deprecated enum-name.    
+// TODO ?? See implementation file, which handles a deprecated enum-name.
 typedef xenum<enum_int_rate_type, 3> e_int_rate_type;
 
 enum enum_loan_rate_type

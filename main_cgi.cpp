@@ -31,7 +31,7 @@
 // other reasons evident in cvs or explained in 'ChangeLog'. Any
 // defect should not reflect on Stephen F. Booth's reputation.
 
-// $Id: main_cgi.cpp,v 1.8 2005-05-26 22:01:15 chicares Exp $
+// $Id: main_cgi.cpp,v 1.9 2005-05-27 10:37:06 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -401,21 +401,21 @@ ShowEnvironment(cgicc::CgiEnvironment const& env)
        << cgicc::td(env.getAuthType()).set("class","data") << cgicc::tr() << '\n';
   std::cout << cgicc::tr() << cgicc::td("Remote User").set("class","title")
        << cgicc::td(env.getRemoteUser()).set("class","data") << cgicc::tr() << '\n';
-  std::cout << cgicc::tr() << cgicc::td("Remote Identification").set("class","title") 
+  std::cout << cgicc::tr() << cgicc::td("Remote Identification").set("class","title")
        << cgicc::td(env.getRemoteIdent()).set("class","data") << cgicc::tr() << '\n';
   std::cout << cgicc::tr() << cgicc::td("Content Type").set("class","title")
        << cgicc::td(env.getContentType()).set("class","data") << cgicc::tr() << '\n';
-  std::cout << cgicc::tr() << cgicc::td("HTTP Accept").set("class","title") 
+  std::cout << cgicc::tr() << cgicc::td("HTTP Accept").set("class","title")
        << cgicc::td(env.getAccept()).set("class","data") << cgicc::tr() << '\n';
   std::cout << cgicc::tr() << cgicc::td("User Agent").set("class","title")
        << cgicc::td(env.getUserAgent()).set("class","data") << cgicc::tr() << '\n';
-  std::cout << cgicc::tr() << cgicc::td("Server Software").set("class","title") 
+  std::cout << cgicc::tr() << cgicc::td("Server Software").set("class","title")
        << cgicc::td(env.getServerSoftware()).set("class","data") << cgicc::tr() << '\n';
   std::cout << cgicc::tr() << cgicc::td("Server Name").set("class","title")
        << cgicc::td(env.getServerName()).set("class","data") << cgicc::tr() << '\n';
-  std::cout << cgicc::tr() << cgicc::td("Gateway Interface").set("class","title") 
+  std::cout << cgicc::tr() << cgicc::td("Gateway Interface").set("class","title")
        << cgicc::td(env.getGatewayInterface()).set("class","data") << cgicc::tr() << '\n';
-  std::cout << cgicc::tr() << cgicc::td("Server Protocol").set("class","title") 
+  std::cout << cgicc::tr() << cgicc::td("Server Protocol").set("class","title")
        << cgicc::td(env.getServerProtocol()).set("class","data") << cgicc::tr() << '\n';
   std::cout << cgicc::tr() << cgicc::td("Server Port").set("class","title")
        << cgicc::td().set("class","data") << env.getServerPort()
