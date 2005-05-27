@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.67 2005-05-24 04:00:01 chicares Exp $
+// $Id: ChangeLog,v 1.68 2005-05-27 10:40:53 chicares Exp $
 
 2005-01-14
 
@@ -514,7 +514,7 @@ Add test for current copyright date.
 Rewrite copyright statement as 'GNUmakefile' now expects.
 
   mpatrol-mingw-GNUmakefile
-Insert copyright statement for revisions.  
+Insert copyright statement for revisions.
 
   datum_base.cpp
   datum_base.hpp
@@ -1960,7 +1960,7 @@ Merge old and new tests.
   numeric_io_traits.hpp
 Add kludge for como.
 
-2005-05-23 [1324]
+2005-05-23 [1313]
 
   any_member.hpp
   any_member_test.cpp
@@ -1977,4 +1977,118 @@ Refactor.
   main_cgi.cpp
   objects.make
 Replace old with new any_member class template.
+
+2005-05-26 [1302]
+
+  any_member.hpp
+Refactor.
+
+  bcc_5_5_1.make
+  workhorse.make
+Help borland find its own include directory.
+
+  como_4_3_3.make
+Improve documentation.
+
+  zero_test.cpp
+Add a regression test.
+
+  round_to.hpp
+  round_to_test.cpp
+Make unit test work with compilers that lack rint().
+
+  round_to.hpp
+Improve usage of unavoidable macros.
+
+  zero_test.cpp
+Increase rigor of a unit test.
+
+  config.hpp
+  config_all.hpp
+  getopt.cpp
+  getopt.hpp
+  inputillus_sequences.cpp
+  ncnnnpnn.hpp
+  numeric_io_cast.hpp
+  numeric_io_traits.hpp
+  round_to_test.cpp
+  snprintf_test.cpp
+  stream_cast.hpp
+  zero_test.cpp
+Rationalize some toolset conditionals.
+
+  miscellany.hpp
+Prevent a benign warning.
+
+  bcc_5_5_1.make
+Turn off warnings that complain so much about boost that they make it
+hard to see any warnings that might be important to lmi.
+
+  kludges.cpp      [expunged]
+  kludges_test.cpp [expunged]
+  objects.make
+Remove kludges once needed for a compiler no longer supported.
+
+  alert_cgi.cpp
+  alert_cli.cpp
+  calendar_date.cpp
+  calendar_date.hpp
+  calendar_date_test.cpp
+  config_all.hpp
+  financial.hpp
+  ihs_fpios.cpp
+  input_sequence.cpp
+  ledger.cpp
+  ledger_xml_io.cpp
+  main_cgi.cpp
+  math_functors.hpp
+  ncnnnpnn.hpp
+  quiet_nan.hpp
+  round_to.hpp
+  round_to_test.cpp
+  secure_date.hpp
+  xenum.cpp
+  xenum.hpp
+  xenum_sample.cpp
+  xenum_sample.hpp
+  xenum_test.cpp
+  xenumtypes.cpp
+  xmlwrapp_ex.cpp
+  xrange.hpp
+  xrange_test.cpp
+Refactor preprocessor conditionals.
+
+2005-05-27 [1302]
+
+  getopt.cpp
+  getopt.hpp
+Prevent ostensive memory-allocation problem.
+
+  ihs_avdebug.cpp
+Stop including an unused header.
+
+  GNUmakefile
+  any_member_test.cpp
+  calculate.hpp
+  census_view.cpp
+  cpp_main.cpp
+  crc32.hpp
+  ihs_acctval.cpp
+  ihs_avmly.cpp
+  ihs_avstrtgy.cpp
+  ihs_crc_comp.cpp
+  ihs_irc7702.hpp
+  ihs_proddata.cpp
+  ihs_server7702.cpp
+  ledger_text_formats.cpp
+  ledger_xml_io.cpp
+  main_cgi.cpp
+  main_wx.cpp
+  tiered_charges.cpp
+  transferor.cpp
+  xenumtypes.cpp
+  xenumtypes.hpp
+  xml_notebook.cpp
+  xmlwrapp_ex.cpp
+Don't let lines end in blanks.
 
