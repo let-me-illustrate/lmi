@@ -37,7 +37,7 @@
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
 // GWC added this RCS Id:
-// $Id: getopt.cpp,v 1.4 2005-05-26 18:31:49 chicares Exp $
+// $Id: getopt.cpp,v 1.5 2005-05-27 08:16:08 chicares Exp $
 
 // GWC conditionalized gcc-specific pragma.
 #ifdef __GNUC__
@@ -170,6 +170,9 @@ GetOpt::GetOpt (int argc, char** argv, char const* optstring,
     Initialize (noptstring);
 }
 
+GetOpt::~GetOpt()
+{
+}
 
 void
 GetOpt::Initialize  (std::string const& a_optstring)
