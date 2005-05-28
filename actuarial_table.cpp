@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: actuarial_table.cpp,v 1.7 2005-05-28 02:02:50 chicares Exp $
+// $Id: actuarial_table.cpp,v 1.8 2005-05-28 05:59:22 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -173,8 +173,6 @@ namespace
             // is likely to return a past-the-end iterator, which
             // libstdc++'s debug mode will dislike.
             //
-            int x = age - min_age;
-            int y = age - min_age + length;
             v = std::vector<double>
                 (values.begin() + (age - min_age)
                 ,values.begin() + (age - min_age + length)
