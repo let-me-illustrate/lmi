@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avsolve.cpp,v 1.6 2005-05-28 01:22:02 chicares Exp $
+// $Id: ihs_avsolve.cpp,v 1.7 2005-05-28 05:59:22 chicares Exp $
 
 // All iterative illustration solves are performed in this file.
 // We use Brent's algorithm because it is guaranteed to converge
@@ -188,11 +188,14 @@ double AccountValue::SolveTest(double a_CandidateValue)
     if(no_lapse_dur < (EffectiveSolveTargetYear - 1))
         {
         std::vector<double>::const_iterator csv_begin = csv.begin();
-        LMI_ASSERT(no_lapse_dur <= csv.size());
+        LMI_ASSERT(static_cast<unsigned int>(no_lapse_dur) <= csv.size());
         std::advance(csv_begin, no_lapse_dur);
         // Stop at EffectiveSolveTargetYear
         std::vector<double>::const_iterator csv_end = csv.begin();
-        LMI_ASSERT((EffectiveSolveTargetYear - 1) <= csv.size());
+        LMI_ASSERT
+            (   static_cast<unsigned int>(EffectiveSolveTargetYear - 1)
+            <=  csv.size()
+            );
         std::advance(csv_end, EffectiveSolveTargetYear - 1);
 
         // Paranoid check that solvetgtyr is within no-lapse period.
@@ -216,7 +219,7 @@ double AccountValue::SolveTest(double a_CandidateValue)
             = VariantValues().ExcessLoan.begin()
             ;
         LMI_ASSERT
-            (   EffectiveSolveTargetYear
+            (   static_cast<unsigned int>(EffectiveSolveTargetYear)
             <=  VariantValues().ExcessLoan.size()
             );
         std::advance(excess_loan_end, EffectiveSolveTargetYear);

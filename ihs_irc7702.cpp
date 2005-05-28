@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_irc7702.cpp,v 1.5 2005-05-28 01:22:02 chicares Exp $
+// $Id: ihs_irc7702.cpp,v 1.6 2005-05-28 05:59:22 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -487,7 +487,10 @@ void Irc7702::InitCorridor()
 
     // GPT corridor
     std::vector<double>::const_iterator corr = CompleteGptCorridor().begin();
-    LMI_ASSERT(IssueAge <= CompleteGptCorridor().size());
+    LMI_ASSERT
+        (   static_cast<unsigned int>(IssueAge)
+        <=  CompleteGptCorridor().size()
+        );
     std::advance(corr, IssueAge);
     GptCorridor.assign
         (corr
