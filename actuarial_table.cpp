@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: actuarial_table.cpp,v 1.6 2005-05-28 01:22:31 chicares Exp $
+// $Id: actuarial_table.cpp,v 1.7 2005-05-28 02:02:50 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -163,7 +163,8 @@ namespace
           {
           case 'A':
             {
-            // Parenthesize the offsets--addition is right-associative:
+            // Parenthesize the offsets--addition in C and C++ is
+            // in effect left associative:
             //   values.begin() + age - min_age
             // means
             //   (values.begin() + age) - min_age
