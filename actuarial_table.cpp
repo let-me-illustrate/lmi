@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: actuarial_table.cpp,v 1.5 2005-02-28 12:58:14 chicares Exp $
+// $Id: actuarial_table.cpp,v 1.6 2005-05-28 01:22:31 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -163,9 +163,20 @@ namespace
           {
           case 'A':
             {
+            // Parenthesize the offsets--addition is right-associative:
+            //   values.begin() + age - min_age
+            // means
+            //   (values.begin() + age) - min_age
+            // but the subexpression
+            //   (values.begin() + age)
+            // is likely to return a past-the-end iterator, which
+            // libstdc++'s debug mode will dislike.
+            //
+            int x = age - min_age;
+            int y = age - min_age + length;
             v = std::vector<double>
-                (values.begin() + age - min_age
-                ,values.begin() + age - min_age + length
+                (values.begin() + (age - min_age)
+                ,values.begin() + (age - min_age + length)
                 );
             }
             break;
