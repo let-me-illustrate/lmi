@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xenumtypes.cpp,v 1.7 2005-05-29 13:36:44 chicares Exp $
+// $Id: xenumtypes.cpp,v 1.8 2005-05-29 16:49:07 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -137,9 +137,9 @@ template class xenum<enum_run_basis, 7>;
 template std::istream& operator>> (std::istream& is, xenum<enum_run_basis, 7>&);
 template std::ostream& operator<< (std::ostream& os, xenum<enum_run_basis, 7> const&);
 
-template class xenum<enum_ledger_type, 5>;
-template std::istream& operator>> (std::istream& is, xenum<enum_ledger_type, 5>&);
-template std::ostream& operator<< (std::ostream& os, xenum<enum_ledger_type, 5> const&);
+template class xenum<enum_ledger_type, 7>;
+template std::istream& operator>> (std::istream& is, xenum<enum_ledger_type, 7>&);
+template std::ostream& operator<< (std::ostream& os, xenum<enum_ledger_type, 7> const&);
 
 template class xenum<enum_amount_type, 2>;
 template std::istream& operator>> (std::istream& is, xenum<enum_amount_type, 2>&);
@@ -402,15 +402,19 @@ template<> char const*const e_run_basis::names[] =
 template<> enum_ledger_type const e_ledger_type::enumerators[] =
     {e_ill_reg
     ,e_nasd
+    ,e_prospectus
     ,e_group_private_placement
     ,e_offshore_private_placement
+    ,e_ill_reg_private_placement
     ,e_individual_private_placement
     };
 template<> char const*const e_ledger_type::names[] =
     {"illustration_reg"
     ,"nasd"
+    ,"erroneous_0"
     ,"group_private_placement"
     ,"offshore_private_placement"
+    ,"erroneous_1"
     ,"individual_private_placement"
     };
 

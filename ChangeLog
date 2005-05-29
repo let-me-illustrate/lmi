@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.69 2005-05-29 13:37:16 chicares Exp $
+// $Id: ChangeLog,v 1.70 2005-05-29 16:49:19 chicares Exp $
 
 2005-01-14
 
@@ -2105,4 +2105,9 @@ Prevent a problem with libstdc++ debug mode.
   xenumtypes.cpp
 Fix mistaken "group_individual_private_placement": either it's group,
 or it's individual, but it can't be both.
+
+  xenumtypes.cpp
+  xenumtypes.hpp
+Restore obsolete enumerative values, in order to achieve compatibility
+with an obsolete external program.
 

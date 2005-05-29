@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xenumtypes.hpp,v 1.4 2005-05-27 10:37:06 chicares Exp $
+// $Id: xenumtypes.hpp,v 1.5 2005-05-29 16:49:07 chicares Exp $
 
 #ifndef xenumtypes_hpp
 #define xenumtypes_hpp
@@ -119,11 +119,13 @@ typedef xenum<enum_run_basis, 7> e_run_basis;
 enum enum_ledger_type
     {e_ill_reg
     ,e_nasd
+    ,e_prospectus                   // Obsolete.
     ,e_group_private_placement
     ,e_offshore_private_placement
+    ,e_ill_reg_private_placement    // Obsolete.
     ,e_individual_private_placement
     };
-typedef xenum<enum_ledger_type, 5> e_ledger_type;
+typedef xenum<enum_ledger_type, 7> e_ledger_type;
 
 enum enum_amount_type
     {e_face
