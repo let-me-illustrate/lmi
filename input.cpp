@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input.cpp,v 1.4 2005-04-23 21:42:57 chicares Exp $
+// $Id: input.cpp,v 1.5 2005-05-29 21:32:31 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -32,13 +32,6 @@
 #include "inputillus.hpp"
 #include "timer.hpp"
 
-// TODO ?? Open tasks:
-//
-// Add new enumerative fields:
-//   ProductName
-//   supplemental-report columns
-// whose enumerators aren't fixed in the normal sense.
-//
 // TODO ?? Initialize values in types, not initializer-list.
 // This probably requires two distinct yes-no types.
 
@@ -342,7 +335,6 @@ void Input::ascribe_members()
 
 void convert_to_ihs(IllusInputParms& ihs, Input const& lmi)
 {
-    // TODO ?? Can member_names() be made static?
     std::vector<std::string>::const_iterator i;
     for(i = lmi.member_names().begin(); i != lmi.member_names().end(); ++i)
         {
@@ -352,85 +344,48 @@ void convert_to_ihs(IllusInputParms& ihs, Input const& lmi)
     ihs.propagate_changes_to_base_and_finalize();
 }
 
-// TODO ?? Decide what to do about commented-out lines.
 void convert_to_ihs(std::vector<IllusInputParms>& ihs, std::vector<Input> const& lmi)
 {
     Timer timer;
-//    ihs.clear();
-//    ihs.reserve(lmi.size());
     ihs.resize(lmi.size());
     for(unsigned int j = 0; j < lmi.size(); ++j)
         {
-//        IllusInputParms z;
-//        convert_to_ihs(z, lmi[j]);
         convert_to_ihs(ihs[j], lmi[j]);
-//        ihs.push_back(z);
         }
     status() << "Convert to ihs: " << timer.Stop().Report() << std::flush;
 }
 
 void convert_from_ihs(IllusInputParms const& ihs, Input& lmi)
 {
-    // TODO ?? WX PORT !! Icky kludge.
-    LMI_ASSERT(ihs.AvgFund             == (e_fund_average  == ihs.FundChoiceType));
-    LMI_ASSERT(ihs.OverrideFundMgmtFee == (e_fund_override == ihs.FundChoiceType));
-
-    // TODO ?? Can member_names() be made static?
     std::vector<std::string>::const_iterator i;
     for(i = lmi.member_names().begin(); i != lmi.member_names().end(); ++i)
         {
         lmi[*i] = ihs[*i].str();
         }
+    // Repair a known problem in the legacy implementation, where
+    // these two possibilities were originally treated as independent
+    // boolean states (which is wrong, because they're mutually
+    // exclusive), and later unified into a single enumerative state
+    // (but defectively, so that only the boolean state is actually
+    // reliable).
+    if(ihs.AvgFund)
+        {
+        lmi["FundChoiceType"] = "Average fund";
+        }
+    if(ihs.OverrideFundMgmtFee)
+        {
+        lmi["FundChoiceType"] = "Override fund";
+        }
 }
 
-// TODO ?? Decide what to do about commented-out lines.
 void convert_from_ihs(std::vector<IllusInputParms> const& ihs, std::vector<Input>& lmi)
 {
     Timer timer;
-//    lmi.clear();
-//    lmi.reserve(ihs.size());
     lmi.resize(ihs.size());
     for(unsigned int j = 0; j < ihs.size(); ++j)
         {
-//        Input z;
         convert_from_ihs(ihs[j], lmi[j]);
-//    status() << "copy item: " << timer.Stop().Report() << std::flush;
-//    timer.Restart();
-//        lmi.push_back(z);
-//    status() << "push back: " << timer.Stop().Report() << std::flush;
-//    timer.Restart();
         }
     status() << "Convert to lmi: " << timer.Stop().Report() << std::flush;
 }
-
-// TODO ?? Strive to get rid of this.
-/*
-namespace
-{
-void safely_convert_from_ihs(IllusInputParms const& ihs, Input& lmi)
-{
-    // TODO ?? Can member_names() be made static?
-    std::vector<std::string>::const_iterator i;
-    for(i = lmi.member_names().begin(); i != lmi.member_names().end(); ++i)
-        {
-        try
-            {
-            lmi[*i] = ihs[*i].str();
-            }
-        catch(std::exception const& e)
-            {
-            std::ostringstream oss;
-            oss
-                << "Problem converting field '"
-                << *i
-                << "' from input file format: "
-                << e.what()
-                ;
-            wxLogMessage(oss.str().c_str());
-            wxLog::FlushActive();
-            }
-        }
-}
-} // Unnamed namespace.
-*/
 
