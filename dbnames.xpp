@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: dbnames.xpp,v 1.5 2005-05-06 17:20:54 chicares Exp $
+// $Id: dbnames.xpp,v 1.6 2005-05-29 21:32:05 chicares Exp $
 
 #define DB_NAMES \
 {DB_FIRST,DB_FIRST,"dummy","dummy",}, \
@@ -78,8 +78,8 @@
 {DB_IntFloor,DB_Topic_Interest,"IntFloor","[not used]",}, \
 {DB_SepAcctSpreadMethod,DB_Topic_Interest,"SepAcctSpreadMethod","Separate-account spread and fee subtraction: 0 = annual (effective), 1 = daily (nominal)",}, \
 {DB_DynamicMandE,DB_Topic_Interest,"DynamicMandE","M&&E dynamically determined based on total case assets: 0=no, 1=yes",}, \
-{DB_DynamicCOI,DB_Topic_Mortality,"DynamicCOI","Cost of insurance rates dynamically determined: 0=no, 1=based on experience-rating k factor",}, \
 {DB_Topic_Mortality,DB_FIRST,"Mortality","Mortality (cost of insurance) charges",}, \
+{DB_DynamicCOI,DB_Topic_Mortality,"DynamicCOI","Cost of insurance rates dynamically determined: 0=no, 1=based on experience-rating k factor",}, \
 {DB_CurrCOITable,DB_Topic_Mortality,"CurrCOITable","Current mortality charge table (index in mortality table database)",}, \
 {DB_MdptCOITable,DB_Topic_Mortality,"MdptCOITable","Midpoint mortality charge table (index in mortality table database) [not used--calculated as mean of current and guaranteed]",}, \
 {DB_GuarCOITable,DB_Topic_Mortality,"GuarCOITable","Guaranteed mortality charge table (index in mortality table database)",}, \
@@ -229,6 +229,7 @@
 {DB_PrimaryHurdle,DB_Topic_MiscAsspts,"PrimaryHurdle","Hurdle rate [not yet implemented]",}, \
 {DB_SecondaryHurdle,DB_Topic_MiscAsspts,"SecondaryHurdle","Secondary hurdle rate (TSA XL, Part I, page 61) [not yet implemented]",}, \
 {DB_LedgerType,DB_Topic_Misc,"LedgerType","Ledger type: 0=illustration reg, 1=NASD, 2=prospectus illustration, 3=group private placement, 4=offshore private placement, 5=private placement subject to illustration reg, 6=individual private placement",}, \
+{DB_Topic_ExpRating,DB_FIRST,"Experience rating","Experience rating",}, \
 {DB_AllowExpRating,DB_Topic_ExpRating,"AllowExpRating","Allow experience rating: 0=no, 1=yes",}, \
 {DB_Topic_Tables,DB_FIRST,"Tables","Miscellaneous tables stored externally in SOA standard format",}, \
 {DB_PremTaxTable,DB_Topic_Tables,"PremTaxTable","[not yet implemented]",}, \
@@ -240,7 +241,6 @@
 {DB_AllowSAIncr,DB_Topic_DeathBfts,"AllowSAIncr","Allow increases in specified amount: 0=no, 1=yes",}, \
 {DB_NoLapseAlwaysActive,DB_Topic_Misc,"NoLapseAlwaysActive","No-lapse guarantee requirements are always met by contract or issue rules: 0=no, 1=yes",}, \
 {DB_PrefOrSelect,DB_Topic_Issue_Rules,"PrefOrSelect","Underwriting class more restrictive than standard is called: 0=preferred, 1=select",}, \
-{DB_Topic_ExpRating,DB_FIRST,"Experience rating","Experience rating",}, \
 {DB_ExpRatStdDevMult,DB_Topic_ExpRating,"ExpRatStdDevMult","Experience rating reserve as multiple of standard deviation of expected claims net of account value released on death",}, \
 {DB_ExpRatIBNRMult,DB_Topic_ExpRating,"ExpRatIBNRMult","Experience rating IBNR reserve as number of months of net cost of insurance charges",}, \
 {DB_ExpRatCOIRetention,DB_Topic_ExpRating,"ExpRatCOIRetention","Experience rating retention as proportion of net cost of insurance charges",}, \
