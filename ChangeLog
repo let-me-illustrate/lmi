@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.68 2005-05-27 10:40:53 chicares Exp $
+// $Id: ChangeLog,v 1.69 2005-05-29 13:37:16 chicares Exp $
 
 2005-01-14
 
@@ -2091,4 +2091,18 @@ Stop including an unused header.
   xml_notebook.cpp
   xmlwrapp_ex.cpp
 Don't let lines end in blanks.
+
+  ihs_avsolve.cpp
+  ihs_irc7702.cpp
+Add assertions.
+
+  actuarial_table.cpp
+Prevent a problem with libstdc++ debug mode.
+
+2005-05-29 [1302]
+
+  mc_enum_types.xpp
+  xenumtypes.cpp
+Fix mistaken "group_individual_private_placement": either it's group,
+or it's individual, but it can't be both.
 

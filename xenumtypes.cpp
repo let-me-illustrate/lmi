@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xenumtypes.cpp,v 1.6 2005-05-27 10:37:06 chicares Exp $
+// $Id: xenumtypes.cpp,v 1.7 2005-05-29 13:36:44 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -409,7 +409,7 @@ template<> enum_ledger_type const e_ledger_type::enumerators[] =
 template<> char const*const e_ledger_type::names[] =
     {"illustration_reg"
     ,"nasd"
-    ,"group_individual_private_placement"
+    ,"group_private_placement"
     ,"offshore_private_placement"
     ,"individual_private_placement"
     };
