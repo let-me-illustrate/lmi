@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: workhorse.make,v 1.28 2005-05-26 06:31:20 chicares Exp $
+# $Id: workhorse.make,v 1.29 2005-05-30 16:01:06 chicares Exp $
 
 ###############################################################################
 
@@ -459,6 +459,8 @@ lmi_cli_monolithic$(EXEEXT): $(cli_objects) $(lmi_common_objects)
 lmi_cli_shared$(EXEEXT): lmi_dllflag := -DLMI_USE_DLL
 lmi_cli_shared$(EXEEXT): $(cli_objects) liblmi$(SHREXT)
 
+lmi_cli_static$(EXEEXT): $(cli_objects) liblmi.a
+
 antediluvian_cgi$(EXEEXT): $(cgi_objects) libantediluvian$(SHREXT)
 
 antediluvian_cli$(EXEEXT): $(cli_objects) libantediluvian$(SHREXT)
@@ -490,11 +492,11 @@ data_files := \
 
 .PHONY: install
 install: $(default_targets)
-	+@[ -d $(exec_prefix) ] || $(MKDIR) --parents $(exec_prefix)
-	+@[ -d bin_dir        ] || $(MKDIR) --parents bin_dir
-	+@[ -d data_dir       ] || $(MKDIR) --parents data_dir
-	+@[ -d test_dir       ] || $(MKDIR) --parents test_dir
-	+@[ -d touchstone_dir ] || $(MKDIR) --parents touchstone_dir
+	+@[ -d $(exec_prefix)    ] || $(MKDIR) --parents $(exec_prefix)
+	+@[ -d $(bin_dir)        ] || $(MKDIR) --parents $(bin_dir)
+	+@[ -d $(data_dir)       ] || $(MKDIR) --parents $(data_dir)
+	+@[ -d $(test_dir)       ] || $(MKDIR) --parents $(test_dir)
+	+@[ -d $(touchstone_dir) ] || $(MKDIR) --parents $(touchstone_dir)
 	@$(CP) --preserve --update $^ $(data_files) $(bin_dir)
 
 ################################################################################
