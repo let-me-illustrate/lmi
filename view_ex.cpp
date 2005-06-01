@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: view_ex.cpp,v 1.5 2005-05-01 14:21:39 chicares Exp $
+// $Id: view_ex.cpp,v 1.6 2005-06-01 14:48:49 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -36,7 +36,7 @@
 
 #include "view_ex.hpp"
 
-// WX !! Application object's header must be included here because
+// WX !! The application object's header must be included here because
 // view creation is not performed by the framework--instead, wxWindows
 // treats that as the user's responsibility. The framework defines
 // wxView::OnCreate() to do nothing but {return true;}, so one would

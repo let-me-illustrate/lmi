@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: view_ex.hpp,v 1.3 2005-05-01 00:50:28 chicares Exp $
+// $Id: view_ex.hpp,v 1.4 2005-06-01 14:48:50 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -40,8 +40,8 @@
 // otherwise useful in this class, but neither of those conditions
 // seems to obtain.
 
-// Icon() and MenuBar() return the types wanted by wx functions
-// SetIcon() and SetMenuBar() respectively. Because these things are
+// Icon() and MenuBar() return types suitable for passing to wx
+// functions SetIcon() and SetMenuBar() respectively. Because they are
 // expected to be loaded from xml resources, the functions could have
 // been made nonvirtual, with a string argument to distinguish view
 // types, and indeed protected functions are provided to encapsulate
@@ -94,16 +94,22 @@ class WXDLLEXPORT wxMenuBar;
 
 class DocManagerEx;
 
-// TODO ?? Here,
-//    ,virtual private boost::noncopyable
-// would elicit
+// INELEGANT !! If both a base and a derived class derive nonvirtually
+// from boost::noncopyable
+//    ,private boost::noncopyable
+// then gcc will complain
 //   warning: direct base `boost::noncopyable' inaccessible in
 //   [derived classes] due to ambiguity
-// from gcc. Consider these messages
-//   http://lists.boost.org/MailArchives/boost/msg17474.php
+// Cacciola's noncopyable<T> solution here
 //   http://lists.boost.org/MailArchives/boost/msg17485.php
+//   http://lists.boost.org/MailArchives/boost/msg17012.php
+// is best; no good reason for dismissing it was given on the boost
+// mailing list, but presumably they didn't want to require typing
+// the template argument. The workaround used here is rightfully
+// criticized by Cacciola:
 //   http://lists.boost.org/MailArchives/boost/msg17491.php
-// and write a general style rule to encompass this case.
+// That criticism matters little in this particular case, but perhaps
+// it would be better to use Cacciola's idea instead of boost's.
 
 class ViewEx
     :public wxView
