@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.70 2005-05-29 16:49:19 chicares Exp $
+// $Id: ChangeLog,v 1.71 2005-06-01 04:21:42 chicares Exp $
 
 2005-01-14
 
@@ -2099,7 +2099,7 @@ Add assertions.
   actuarial_table.cpp
 Prevent a problem with libstdc++ debug mode.
 
-2005-05-29 [1302]
+2005-05-29 [1294]
 
   mc_enum_types.xpp
   xenumtypes.cpp
@@ -2110,4 +2110,20 @@ or it's individual, but it can't be both.
   xenumtypes.hpp
 Restore obsolete enumerative values, in order to achieve compatibility
 with an obsolete external program.
+
+  dbnames.xpp
+Ensure that parent nodes precede their children.
+
+  input.cpp
+Rework.
+
+2005-05-30 [1294]
+
+  workhorse.make
+Create directories correctly.
+
+2005-05-31 [1290]
+
+  ihs_basicval.cpp
+Rewrite a consistency test.
 
