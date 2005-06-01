@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_basicval.cpp,v 1.11 2005-05-07 03:36:36 chicares Exp $
+// $Id: ihs_basicval.cpp,v 1.12 2005-06-01 03:57:35 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -729,34 +729,24 @@ void BasicValues::SetPermanentInvariants()
     LMI_ASSERT(!(UseUnusualCOIBanding && COIIsDynamic));
     LMI_ASSERT(!(UseUnusualCOIBanding && AllowTerm));
 
-    // Table ratings cannot arise with simplified or guaranteed issue.
-    //
-    // TODO ?? Perhaps they'd require full medical underwriting as
-    // opposed to paramedical or nonmedical.
-    //
-    // At least for the time being, though, we permit anything in
-    // order to let defective regression testdecks work.
-    //
-    // However, flat extras could be added even with guaranteed issue,
+    // Table ratings can arise only from medical underwriting.
+    // However, flat extras can be used even with guaranteed issue,
     // e.g. for aviation, occupation, avocation, or foreign travel.
     if
-        (e_table_none != Input_->Status[0].SubstdTable
-        && (  e_simplifiedissue == Input_->GroupUWType
-           || e_guaranteedissue == Input_->GroupUWType
-           )
+        (   e_table_none != Input_->Status[0].SubstdTable
+        &&  e_medical    != Input_->GroupUWType
         )
         {
-// TODO ?? For now, permit flawed testdecks to run.
-if(!global_settings::instance().ash_nazg)
         fatal_error()
-            << "Substandard not available for guaranteed issue."
+            << "Substandard table ratings require medical underwriting."
             << LMI_FLUSH
             ;
         }
+
+    // Spouse and child riders are not similarly tested because
+    // their rates shouldn't depend on the main insured's health.
     if(Input_->Status[0].IsPolicyRated() && Input_->Status[0].HasWP)
         {
-// TODO ?? For now, permit flawed testdecks to run.
-if(!global_settings::instance().ash_nazg)
         fatal_error()
             << "Substandard waiver of premium not supported."
             << LMI_FLUSH
@@ -764,15 +754,11 @@ if(!global_settings::instance().ash_nazg)
         }
     if(Input_->Status[0].IsPolicyRated() && Input_->Status[0].HasADD)
         {
-// TODO ?? For now, permit flawed testdecks to run.
-if(!global_settings::instance().ash_nazg)
         fatal_error()
             << "Substandard accidental death rider not supported."
             << LMI_FLUSH
             ;
         }
-    // Spouse and child riders are not similarly tested because
-    // their rates shouldn't depend on the main insured's health.
 
     DefnLifeIns         = Input_->DefnLifeIns;
     DefnMaterialChange  = Input_->DefnMaterialChange;
