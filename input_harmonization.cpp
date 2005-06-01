@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_harmonization.cpp,v 1.9 2005-05-19 12:30:00 chicares Exp $
+// $Id: input_harmonization.cpp,v 1.10 2005-06-01 14:49:06 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -266,6 +266,23 @@ void Input::Harmonize()
     // guaranteed-issue contracts. No such principle is hardcoded here
     // because the database is the proper place to express such a
     // judgment.
+    //
+    // TODO ?? OTOH, the basic-values class allows table ratings only
+    // if the group underwriting type is full medical underwriting,
+    // i.e. if
+    //   GroupUnderwritingType is mce_medical
+    // and enablement here is inconsistent with that, which is bad.
+    // The real question is: to which rate table should table ratings
+    // be applied? Probably the rule in the basic-values class is
+    // overbroad and should be removed, with very careful attention
+    // paid to databases. One could conceive of a product that has
+    // only SI rates and allows table ratings to be applied to them.
+    // Another product might offer GI, SI, and full underwriting, but
+    // allow table ratings only with a full-underwriting rate table.
+    // It is important to put aside prior notions of what GI or SI
+    // might connote, and realize that to the table-access code they
+    // are simply lookup axes.
+    //
     UnderwritingClass.allow(mce_rated, database->Query(DB_AllowSubstdTable));
 
     // TODO ?? WX PORT !! Nasty interaction here.
