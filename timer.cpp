@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: timer.cpp,v 1.3 2005-04-21 16:11:47 chicares Exp $
+// $Id: timer.cpp,v 1.4 2005-06-03 22:05:58 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -42,7 +42,8 @@
     //#   include <windows.h>
     //#endif // LMI_MSW
     // ...just to get a couple of prototypes, because that can materially
-    // increase compile times for small programs.
+    // increase compile times for small programs, and because it requires
+    // ms extensions and defines many macros.
 #   ifndef LMI_MS_HEADER_INCLUDED
         extern "C" int __stdcall QueryPerformanceCounter(elapsed_t*);
         extern "C" int __stdcall QueryPerformanceFrequency(elapsed_t*);
@@ -108,7 +109,7 @@ Timer& Timer::Restart()
 }
 
 //============================================================================
-double Timer::Result()
+double Timer::Result() const
 {
     if(is_running_)
         {
@@ -123,7 +124,7 @@ double Timer::Result()
 }
 
 //============================================================================
-std::string Timer::Report()
+std::string Timer::Report() const
 {
     std::ostringstream oss;
     oss << static_cast<int>(1000.0 * Result());
@@ -152,7 +153,7 @@ elapsed_t Timer::calibrate()
 }
 
 //============================================================================
-elapsed_t Timer::inspect()
+elapsed_t Timer::inspect() const
 {
 #if defined LMI_POSIX
     timeval x;
