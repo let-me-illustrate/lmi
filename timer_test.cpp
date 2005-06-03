@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: timer_test.cpp,v 1.2 2005-04-21 15:22:16 chicares Exp $
+// $Id: timer_test.cpp,v 1.3 2005-06-03 22:05:58 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -30,20 +30,50 @@
 #include "test_tools.hpp"
 #include "timer.hpp"
 
-#include <cmath> // std::fabs()
+#include <boost/bind.hpp>
+
 #include <ctime>
+
+void foo()
+{
+    volatile double d;
+    for(int j = 0; j < 10000; ++j)
+        {
+        d = std::log10(j * j);
+        }
+}
+
+class X{};
+
+void goo(int i, X, X const&, X*)
+{
+    volatile double d;
+    for(int j = 0; j < i * 10000; ++j)
+        {
+        d = std::log10(j * j);
+        }
+}
+
+void wait_half_a_second()
+{
+    std::clock_t first = std::clock();
+    for(;;)
+        {
+        std::clock_t last = std::clock();
+        double elapsed = double(last - first) / CLOCKS_PER_SEC;
+        if(0.5 <= elapsed)
+            {
+            break;
+            }
+        }
+}
 
 int test_main(int, char*[])
 {
-    Timer timer;
-    std::clock_t first;
-    std::clock_t last;
-    double elapsed;
-    double interval = 1.0;
-    double clock_resolution;
-
     // Coarsely measure resolution of std::clock().
-    first = std::clock();
+    std::clock_t first = std::clock();
+    std::clock_t last;
+    double clock_resolution;
     for(;;)
         {
         last = std::clock();
@@ -56,11 +86,13 @@ int test_main(int, char*[])
 
     // Use high-resolution time to measure an interval of about one
     // second.
+    Timer timer;
     first = std::clock();
+    double interval = 1.0;
     for(;;)
         {
         last = std::clock();
-        elapsed = (last - first) / CLOCKS_PER_SEC;
+        double elapsed = (last - first) / CLOCKS_PER_SEC;
         if(interval <= elapsed)
             {
             break;
@@ -83,6 +115,13 @@ int test_main(int, char*[])
 
     // Still running--can't report interval until stopped.
     BOOST_TEST_THROW(timer.Result(), std::logic_error, "");
+
+    std::cout << measure_timing(foo) << '\n';
+
+    X x;
+    std::cout << measure_timing(boost::bind(goo, 10, x, x, &x)) << '\n';
+
+    std::cout << measure_timing(wait_half_a_second, 0.1) << '\n';
 
     return EXIT_SUCCESS;
 }

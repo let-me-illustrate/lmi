@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: timer.hpp,v 1.4 2005-04-21 16:11:47 chicares Exp $
+// $Id: timer.hpp,v 1.5 2005-06-03 22:05:58 chicares Exp $
 
 // Boost provides a timer class, but they deliberately chose to use
 // only a low-resolution timer. Their rationale is apparently that
@@ -58,11 +58,19 @@
 
 #include <boost/utility.hpp>
 
+#include <algorithm> // std::min()
+#include <climits>   // ULONG_MAX
+#include <cmath>     // std::log10(), std::pow()
+#include <sstream>
 #include <string>
+
+template<typename F> std::string measure_timing(F, double = 1.0);
 
 class LMI_EXPIMP Timer
     :private boost::noncopyable
 {
+    template<typename F> friend std::string measure_timing(F, double);
+
   public:
     Timer();
     ~Timer();
@@ -71,12 +79,12 @@ class LMI_EXPIMP Timer
     Timer&      Start();
     Timer&      Stop();
     Timer&      Restart();
-    double      Result();
-    std::string Report();
+    double      Result() const;
+    std::string Report() const;
 
   private:
     elapsed_t   calibrate();
-    elapsed_t   inspect();
+    elapsed_t   inspect() const;
 
     elapsed_t   elapsed_time_;
     elapsed_t   frequency_;
@@ -84,6 +92,93 @@ class LMI_EXPIMP Timer
     elapsed_t   time_when_started_;
     elapsed_t   time_when_stopped_;
 };
+
+/// Design of function template measure_timing().
+///
+/// measure_timing() reports how long an operation takes, dynamically
+/// adjusting the number of iterations measured to balance accuracy
+/// with a desired limit on total time for the measurement.
+///
+/// Execute the operation once and observe how long it took. Repeat
+/// the operation as many times as that observation indicates it can
+/// be repeated in the time interval specified, but rounding the
+/// number of iterations down to the next-lower power of ten so that
+/// the reported timing and iteration count can be divided at sight.
+///
+/// If the operation took longer than the specified interval in the
+/// initial calibration trial, then just report how long that took.
+/// Rationale: if it is desired to spend one second testing an
+/// operation, but the operation takes ten seconds, then it's not
+/// appropriate to spend another ten seconds for a single iteration.
+///
+/// If the operation took no measurable amount of time, set the number
+/// of iterations to the number of timer quanta in the specified
+/// interval. Rationale: the initial calibration trial could have
+/// taken just less than one quantum, and the specified interval
+/// should not be exceeded.
+///
+/// Template parameter 'F' either is a nullary function or behaves
+/// like one; boost::bind() is useful for reducing the arity of the
+/// template argument (see unit test). Naturally, this is subject to
+/// the Forwarding Problem, but that's inherent in the language.
+///
+/// Parameter 'seconds' is the desired limit on measurement time,
+/// in seconds. It is approximately respected iff the operation
+/// takes no longer than that limit. The default is one second, which
+/// is generally long enough to get a stable measurement.
+///
+/// This function template is a friend of class Timer so that it can
+/// access Timer::frequency_, which should not have a public accessor
+/// because its type is platform dependent.
+///
+/// Implementation of function template measure_timing().
+///
+/// Class Timer guarantees that its frequency_ member is nonzero, so
+/// it is safe to divide by that member.
+///
+/// An intermediate value is volatile-qualified in order to work
+/// around a defect observed with MinGW gcc: the defective ms C
+/// runtime library MinGW uses doesn't reliably return integer
+/// results for std::pow() with exact-integer arguments.
+///
+/// It might be nicer to make this a non-template nullary function
+/// and move its definition out of the header. The problem there is
+/// that the type of a boost::bind() expression is unspecified.
+
+template<typename F>
+std::string measure_timing(F f, double seconds)
+{
+    Timer timer;
+    f();
+    timer.Stop();
+    double elapsed = timer.Result();
+    double const v =
+        (0.0 != elapsed)
+        ? seconds / elapsed
+        : seconds * timer.frequency_
+        ;
+
+    double const w = std::min(std::log10(v), static_cast<double>(ULONG_MAX));
+    unsigned long int const x = static_cast<unsigned long int>(w);
+    double const volatile y = std::pow(10.0, static_cast<double>(x));
+    unsigned long int const z = static_cast<unsigned long int>(y);
+    if(1 < z)
+        {
+        timer.Restart();
+        for(unsigned long int j = 0; j < z; j++)
+            {
+            f();
+            }
+        timer.Stop();
+        }
+    std::ostringstream oss;
+    oss
+        << z
+        << " iteration" << ((1 == z) ? "" : "s") << " took "
+        << timer.Report()
+        ;
+    return oss.str();
+}
 
 #endif // timer_hpp
 
