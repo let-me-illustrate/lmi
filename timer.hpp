@@ -19,14 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: timer.hpp,v 1.5 2005-06-03 22:05:58 chicares Exp $
-
-// Boost provides a timer class, but they deliberately chose to use
-// only a low-resolution timer. Their rationale is apparently that
-// high-resolution timers may be more precise than they are accurate,
-// and that latency is a significant concern. This class uses a high-
-// resolution timer if available; it's a sharp tool that lets you
-// make your own decision about that rationale.
+// $Id: timer.hpp,v 1.6 2005-06-04 17:27:09 chicares Exp $
 
 #ifndef timer_hpp
 #define timer_hpp
@@ -66,6 +59,26 @@
 
 template<typename F> std::string measure_timing(F, double = 1.0);
 
+/// Why another timer class?
+///
+/// Boost provides a timer class, but they deliberately chose to use
+/// only a low-resolution timer. Their rationale is apparently that
+/// high-resolution timers may be more precise than they are accurate,
+/// and that latency is a significant concern. This class uses a high-
+/// resolution timer if available; it's a sharp tool that lets you
+/// make your own decision about that rationale.
+///
+/// Class timer design.
+///
+/// ctor postconditions: frequency_ != 0. Throws if a nonzero
+/// frequency_ cannot be determined.
+///
+/// Result() returns elapsed time in milliseconds.
+///
+/// Report() returns elapsed time in milliseconds, formatted.
+///
+/// Stop(), Restart(): nomen est omen.
+
 class LMI_EXPIMP Timer
     :private boost::noncopyable
 {
@@ -75,8 +88,8 @@ class LMI_EXPIMP Timer
     Timer();
     ~Timer();
 
-    // Public members presented in logical rather than alphabetical order.
-    Timer&      Start();
+    // Member functions presented in logical rather than alphabetical order.
+
     Timer&      Stop();
     Timer&      Restart();
     double      Result() const;
@@ -84,6 +97,7 @@ class LMI_EXPIMP Timer
 
   private:
     elapsed_t   calibrate();
+    void        start();
     elapsed_t   inspect() const;
 
     elapsed_t   elapsed_time_;
