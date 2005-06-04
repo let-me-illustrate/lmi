@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: workhorse.make,v 1.29 2005-05-30 16:01:06 chicares Exp $
+# $Id: workhorse.make,v 1.30 2005-06-04 16:30:11 chicares Exp $
 
 ###############################################################################
 
@@ -425,13 +425,15 @@ ALL_RCFLAGS  = $(REQUIRED_RCFLAGS)  $(RCFLAGS)
 # However, 'libwx_new.a' continues to use classic dll attributes,
 # because there's never a reason to build it as a static library.
 
+lib%.a              : lmi_dllflag :=
+lib%$(SHREXT)       : lmi_dllflag := -DLMI_BUILD_DLL
+
 # Don't use mpatrol when building a shared library to be used by an
 # application that uses mpatrol. See my postings to the mpatrol
 # mailing list.
 
-lib%.a              : lmi_dllflag :=
-lib%$(SHREXT)       : lmi_dllflag := -DLMI_BUILD_DLL
 lib%$(SHREXT)       : MPATROL_LIBS :=
+wx_new$(SHREXT)     : MPATROL_LIBS :=
 
 # TODO ?? How could 'skeleton' be right here? Should this not apply
 # to all applications?
@@ -594,6 +596,7 @@ test_result_suffixes     := test debug
 
 regression_test_analysis := $(test_dir)/analysis-$(yyyymmddhhmm)
 regression_test_diffs    := $(test_dir)/diffs-$(yyyymmddhhmm)
+regression_test_md5sums  := $(test_dir)/md5sums-$(yyyymmddhhmm)
 
 .PHONY: regression_test
 regression_test: install
@@ -605,6 +608,9 @@ regression_test: install
 	    --ash_nazg --accept --regress \
 	    --data_path=$(data_dir) \
 	    --test_path=$(test_dir); \
+	  $(MD5SUM) \
+	    $(addprefix *.,$(test_result_suffixes)) \
+	    >$(regression_test_md5sums); \
 	  for z in *test; \
 	    { $(bin_dir)/ihs_crc_comp $$z $(touchstone_dir)/$$z \
 	      | $(SED) -e '/Summary/!d' -e"s|^ |$$z|" \
