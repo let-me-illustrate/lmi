@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: timer_test.cpp,v 1.3 2005-06-03 22:05:58 chicares Exp $
+// $Id: timer_test.cpp,v 1.4 2005-06-04 17:27:09 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -108,10 +108,10 @@ int test_main(int, char*[])
     // Already stopped--can't stop again.
     BOOST_TEST_THROW(timer.Stop(), std::logic_error, "");
 
-    timer.Start();
+    timer.Restart();
 
-    // Already running--can't start again.
-    BOOST_TEST_THROW(timer.Start(), std::logic_error, "");
+    // Already running--can't restart again before stopping.
+    BOOST_TEST_THROW(timer.Restart(), std::logic_error, "");
 
     // Still running--can't report interval until stopped.
     BOOST_TEST_THROW(timer.Result(), std::logic_error, "");

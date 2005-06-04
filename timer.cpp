@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: timer.cpp,v 1.4 2005-06-03 22:05:58 chicares Exp $
+// $Id: timer.cpp,v 1.5 2005-06-04 17:27:09 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -62,27 +62,12 @@ Timer::Timer()
         {
         throw std::runtime_error("High resolution timer not available.");
         }
-    Start();
+    start();
 }
 
 //============================================================================
 Timer::~Timer()
 {
-}
-
-//============================================================================
-Timer& Timer::Start()
-{
-    if(is_running_)
-        {
-        throw std::logic_error
-            ("Timer::Start() called, but timer was already running."
-            );
-        }
-
-    is_running_ = true;
-    time_when_started_ = inspect();
-    return *this;
 }
 
 //============================================================================
@@ -105,7 +90,8 @@ Timer& Timer::Stop()
 Timer& Timer::Restart()
 {
     elapsed_time_ = 0;
-    return Start();
+    start();
+    return *this;
 }
 
 //============================================================================
@@ -172,6 +158,20 @@ elapsed_t Timer::inspect() const
 #else // Unknown platform.
     return std::clock();
 #endif // Unknown platform.
+}
+
+//============================================================================
+void Timer::start()
+{
+    if(is_running_)
+        {
+        throw std::logic_error
+            ("Timer::start() called, but timer was already running."
+            );
+        }
+
+    is_running_ = true;
+    time_when_started_ = inspect();
 }
 
 #undef LMI_MS_HEADER_INCLUDED
