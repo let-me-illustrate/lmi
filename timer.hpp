@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: timer.hpp,v 1.6 2005-06-04 17:27:09 chicares Exp $
+// $Id: timer.hpp,v 1.7 2005-06-05 03:55:52 chicares Exp $
 
 #ifndef timer_hpp
 #define timer_hpp
@@ -57,7 +57,7 @@
 #include <sstream>
 #include <string>
 
-template<typename F> std::string measure_timing(F, double = 1.0);
+template<typename F> std::string aliquot_timer(F, double = 1.0);
 
 /// Why another timer class?
 ///
@@ -73,31 +73,27 @@ template<typename F> std::string measure_timing(F, double = 1.0);
 /// ctor postconditions: frequency_ != 0. Throws if a nonzero
 /// frequency_ cannot be determined.
 ///
-/// Result() returns elapsed time in milliseconds.
-///
-/// Report() returns elapsed time in milliseconds, formatted.
-///
-/// Stop(), Restart(): nomen est omen.
+/// elapsed_msec_str(), elapsed_usec(), stop(), restart(): nomen est omen.
 
 class LMI_EXPIMP Timer
     :private boost::noncopyable
 {
-    template<typename F> friend std::string measure_timing(F, double);
+    template<typename F> friend std::string aliquot_timer(F, double);
 
   public:
     Timer();
     ~Timer();
 
-    // Member functions presented in logical rather than alphabetical order.
+    Timer&      restart();
+    Timer&      stop();
 
-    Timer&      Stop();
-    Timer&      Restart();
-    double      Result() const;
-    std::string Report() const;
+    std::string elapsed_msec_str() const;
+    double      elapsed_usec() const;
 
   private:
     elapsed_t   calibrate();
     void        start();
+
     elapsed_t   inspect() const;
 
     elapsed_t   elapsed_time_;
@@ -107,9 +103,9 @@ class LMI_EXPIMP Timer
     elapsed_t   time_when_stopped_;
 };
 
-/// Design of function template measure_timing().
+/// Design of function template aliquot_timer().
 ///
-/// measure_timing() reports how long an operation takes, dynamically
+/// aliquot_timer() reports how long an operation takes, dynamically
 /// adjusting the number of iterations measured to balance accuracy
 /// with a desired limit on total time for the measurement.
 ///
@@ -145,7 +141,7 @@ class LMI_EXPIMP Timer
 /// access Timer::frequency_, which should not have a public accessor
 /// because its type is platform dependent.
 ///
-/// Implementation of function template measure_timing().
+/// Implementation of function template aliquot_timer().
 ///
 /// Class Timer guarantees that its frequency_ member is nonzero, so
 /// it is safe to divide by that member.
@@ -158,14 +154,18 @@ class LMI_EXPIMP Timer
 /// It might be nicer to make this a non-template nullary function
 /// and move its definition out of the header. The problem there is
 /// that the type of a boost::bind() expression is unspecified.
+///
+/// Function names should be verb phrases, but English seems to lack
+/// a one-word transitive verb for chronometry. Maybe someday this
+/// function will become a functor anyway.
 
 template<typename F>
-std::string measure_timing(F f, double seconds)
+std::string aliquot_timer(F f, double seconds)
 {
     Timer timer;
     f();
-    timer.Stop();
-    double elapsed = timer.Result();
+    timer.stop();
+    double elapsed = timer.elapsed_usec();
     double const v =
         (0.0 != elapsed)
         ? seconds / elapsed
@@ -178,18 +178,18 @@ std::string measure_timing(F f, double seconds)
     unsigned long int const z = static_cast<unsigned long int>(y);
     if(1 < z)
         {
-        timer.Restart();
+        timer.restart();
         for(unsigned long int j = 0; j < z; j++)
             {
             f();
             }
-        timer.Stop();
+        timer.stop();
         }
     std::ostringstream oss;
     oss
         << z
         << " iteration" << ((1 == z) ? "" : "s") << " took "
-        << timer.Report()
+        << timer.elapsed_msec_str()
         ;
     return oss.str();
 }

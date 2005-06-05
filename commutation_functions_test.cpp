@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: commutation_functions_test.cpp,v 1.3 2005-04-21 16:11:47 chicares Exp $
+// $Id: commutation_functions_test.cpp,v 1.4 2005-06-05 03:55:52 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -93,12 +93,12 @@ int test_main(int, char*[])
             ,e_mode(e_monthly)
             );
         }
-    timer.Stop();
+    timer.stop();
     std::cout
         << "Generated UL commutation functions "
         << trials
         << " times in "
-        << timer.Report()
+        << timer.elapsed_msec_str()
         << '\n'
         ;
 
@@ -125,7 +125,7 @@ int test_main(int, char*[])
         << cvat_corridor[99] << " [99]\n"
         ;
 
-    timer.Restart();
+    timer.restart();
     cvat_corridor.resize(q.size());
     for(int j = 0; j < trials; j++)
         {
@@ -137,12 +137,12 @@ int test_main(int, char*[])
             ,std::divides<double>()
             );
         }
-    timer.Stop();
+    timer.stop();
     std::cout
         << "Calculated CVAT corridor factors for ages 0 through 99 "
         << trials
         << " times in "
-        << timer.Report()
+        << timer.elapsed_msec_str()
         << '\n'
         ;
 

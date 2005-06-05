@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: obstruct_slicing_test.cpp,v 1.2 2005-04-07 15:05:00 chicares Exp $
+// $Id: obstruct_slicing_test.cpp,v 1.3 2005-06-05 03:55:52 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -142,8 +142,8 @@ void test_cost_of_obstruction(std::string const& s)
         t0 = t1;
         vi = t1.i;
         }
-    timer.Stop();
-    std::cout << timer.Report() << '\n';
+    timer.stop();
+    std::cout << timer.elapsed_msec_str() << '\n';
 }
 
 int test_main(int, char*[])

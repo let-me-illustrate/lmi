@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: numeric_io_test.cpp,v 1.7 2005-05-20 15:07:43 chicares Exp $
+// $Id: numeric_io_test.cpp,v 1.8 2005-06-05 03:55:52 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -140,11 +140,11 @@ int test_main(int, char*[])
         d = numeric_io_cast<double>(s);
         }
     std::cout
-        << (1e6 * timer.Stop().Result() / iterations)
+        << (1e6 * timer.stop().elapsed_usec() / iterations)
         << " usec per iteration for numeric_io_cast().\n"
         ;
 
-    timer.Restart();
+    timer.restart();
     iterations = 1000;
     for(int j = 0; j < iterations; ++j)
         {
@@ -152,7 +152,7 @@ int test_main(int, char*[])
         d = boost::lexical_cast<double>(s);
         }
     std::cout
-        << (1e6 * timer.Stop().Result() / iterations)
+        << (1e6 * timer.stop().elapsed_usec() / iterations)
         << " usec per iteration for boost::lexical_cast().\n"
         ;
     (void) d;

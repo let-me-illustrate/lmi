@@ -31,7 +31,7 @@
 // other reasons evident in cvs or explained in 'ChangeLog'. Any
 // defect should not reflect on Stephen F. Booth's reputation.
 
-// $Id: main_cgi.cpp,v 1.9 2005-05-27 10:37:06 chicares Exp $
+// $Id: main_cgi.cpp,v 1.10 2005-06-05 03:55:52 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -525,7 +525,7 @@ void ShowOutput(cgicc::Cgicc const& data)
 
     std::cout
         << "      input:        "
-        << 1000.0 * timer.Stop().Result()
+        << 1000.0 * timer.stop().elapsed_usec()
         << " milliseconds\n"
         << "<BR>"
         ;

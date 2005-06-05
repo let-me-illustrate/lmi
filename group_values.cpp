@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: group_values.cpp,v 1.19 2005-05-14 02:10:24 chicares Exp $
+// $Id: group_values.cpp,v 1.20 2005-06-05 03:55:52 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -204,7 +204,7 @@ bool run_census_in_series::operator()
         ,emission_target
         );
 
-    status() << timer.Stop().Report() << std::flush;
+    status() << timer.stop().elapsed_msec_str() << std::flush;
     return true;
 }
 
@@ -615,7 +615,7 @@ restart:
         composite.PlusEq(*(*i)->ledger_from_av());
         }
 
-    status() << timer.Stop().Report() << std::flush;
+    status() << timer.stop().elapsed_msec_str() << std::flush;
 
     int j = 0;
     for(i = cell_values.begin(); i != cell_values.end(); ++i, ++j)

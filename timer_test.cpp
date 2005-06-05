@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: timer_test.cpp,v 1.4 2005-06-04 17:27:09 chicares Exp $
+// $Id: timer_test.cpp,v 1.5 2005-06-05 03:55:52 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -98,7 +98,7 @@ int test_main(int, char*[])
             break;
             }
         }
-    double observed = timer.Stop().Result();
+    double observed = timer.stop().elapsed_usec();
     double relative_error = std::fabs(observed - interval) / interval;
 
     // Test accuracy of high-resolution timer. Finer tests might be
@@ -106,22 +106,22 @@ int test_main(int, char*[])
     BOOST_TEST_RELATION(relative_error,<,2.0*clock_resolution);
 
     // Already stopped--can't stop again.
-    BOOST_TEST_THROW(timer.Stop(), std::logic_error, "");
+    BOOST_TEST_THROW(timer.stop(), std::logic_error, "");
 
-    timer.Restart();
+    timer.restart();
 
     // Already running--can't restart again before stopping.
-    BOOST_TEST_THROW(timer.Restart(), std::logic_error, "");
+    BOOST_TEST_THROW(timer.restart(), std::logic_error, "");
 
     // Still running--can't report interval until stopped.
-    BOOST_TEST_THROW(timer.Result(), std::logic_error, "");
+    BOOST_TEST_THROW(timer.elapsed_usec(), std::logic_error, "");
 
-    std::cout << measure_timing(foo) << '\n';
+    std::cout << aliquot_timer(foo) << '\n';
 
     X x;
-    std::cout << measure_timing(boost::bind(goo, 10, x, x, &x)) << '\n';
+    std::cout << aliquot_timer(boost::bind(goo, 10, x, x, &x)) << '\n';
 
-    std::cout << measure_timing(wait_half_a_second, 0.1) << '\n';
+    std::cout << aliquot_timer(wait_half_a_second, 0.1) << '\n';
 
     return EXIT_SUCCESS;
 }
