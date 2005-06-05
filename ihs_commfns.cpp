@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_commfns.cpp,v 1.2 2005-02-14 04:35:18 chicares Exp $
+// $Id: ihs_commfns.cpp,v 1.3 2005-06-05 03:55:52 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -323,16 +323,16 @@ void LMI_EXPIMP ULCommFns::SelfTest()
             ,e_mode(e_monthly)
             );
         }
-//timer->Stop();
-//timer->Report();
+//timer->stop();
+//timer->elapsed_msec_str();
 //string xxx = foo();
 // 1 extra leaks if #ifdef out remainder of fn
     os
         << "Commutation function calculation time for "
         << trials
         << " trials: "
-        << timer->Stop().Report()
-//      << timer->Report()
+        << timer->stop().elapsed_msec_str()
+//      << timer->elapsed_msec_str()
 ///     << xxx
         << "\n\n"
         ;

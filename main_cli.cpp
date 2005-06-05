@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_cli.cpp,v 1.3 2005-05-19 12:30:00 chicares Exp $
+// $Id: main_cli.cpp,v 1.4 2005-06-05 03:55:52 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -35,6 +35,7 @@
 #include "license.hpp"
 #include "main_common.hpp"
 #include "miscellany.hpp"
+#include "timer.hpp"
 #include "value_cast.hpp"
 
 #include <boost/filesystem/convenience.hpp>
@@ -186,16 +187,22 @@ std::cout << "? " << runner.XXXComposite.GetLedgerInvariant().GetInforceLives().
     // five seconds, but not less than one iteration.
     Timer timer;
     observed_value = IV.Run(IP);
-    timer.Stop();
-    int const m = static_cast<int>(std::log10(5.0 / timer.Result()));
+    timer.stop();
+    int const m = static_cast<int>(std::log10(5.0 / timer.elapsed_usec()));
     int const n = static_cast<int>(std::pow(10.0, std::max(0, m)));
-    timer.Restart();
+    timer.restart();
     for(int j = 0; j < n; j++)
         {
         observed_value = IV.Run(IP);
         }
-    timer.Stop();
-    std::cout << "    Time for " << n << " solves: " << timer.Report() << '\n';
+    timer.stop();
+    std::cout
+        << "    Time for "
+        << n
+        << " solves: "
+        << timer.elapsed_msec_str()
+        << '\n'
+        ;
 
     // These run times are measured at the command line. Timings in file
     // 'statistics.txt' are run from make and are generally higher,

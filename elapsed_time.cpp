@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: elapsed_time.cpp,v 1.2 2005-01-15 20:17:29 chicares Exp $
+// $Id: elapsed_time.cpp,v 1.3 2005-06-05 03:55:52 chicares Exp $
 
 #include "system_command.hpp"
 #include "timer.hpp"
@@ -55,7 +55,7 @@ int main(int argc, char* argv[])
         }
     std::cout
         << "Elapsed time: "
-        << static_cast<int>(1000.0 * timer.Stop().Result())
+        << static_cast<int>(1000.0 * timer.stop().elapsed_usec())
         << " milliseconds\n"
         ;
     return rc;

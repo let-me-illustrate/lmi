@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: financial_test.cpp,v 1.2 2005-01-29 02:47:41 chicares Exp $
+// $Id: financial_test.cpp,v 1.3 2005-06-05 03:55:52 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -188,14 +188,14 @@ std::cout << "tolerance = .000005: " << .000005 << '\n';
         {
         irr(p.begin(), p.end(), b.begin(), results.begin(), 5);
         }
-    timer.Stop();
+    timer.stop();
     std::cout
         << "Time for "
         << count
         << " runs of "
         << results.size()
         << " irrs: "
-        << timer.Report()
+        << timer.elapsed_msec_str()
         << '\n'
         ;
 

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: calculate.hpp,v 1.9 2005-05-27 10:37:06 chicares Exp $
+// $Id: calculate.hpp,v 1.10 2005-06-05 03:55:52 chicares Exp $
 
 #ifndef calculate_hpp
 #define calculate_hpp
@@ -60,11 +60,11 @@ struct RunIllustration
         Timer timer;
         IllusVal IV;
         IV.Run(a_input);
-        time_for_calculations += timer.Stop().Result();
+        time_for_calculations += timer.stop().elapsed_usec();
 
-        timer.Restart();
+        timer.restart();
         IV.Print(OutputDest);
-        time_for_output       += timer.Stop().Result();
+        time_for_output       += timer.stop().elapsed_usec();
         }
 
     std::ostream& OutputDest;
@@ -99,7 +99,7 @@ struct RunIllustrationFromFile
         single_cell_document doc;
         is >> doc;
         IllusInputParms input(doc.input_data());
-        time_for_input += timer.Stop().Result();
+        time_for_input += timer.stop().elapsed_usec();
         RunIllustration::operator()(input);
         }
     double time_for_input;
@@ -137,13 +137,13 @@ struct RunCensus
             XXXComposite.PlusEq(IV->ledger());
             }
 
-        time_for_calculations += timer.Stop().Result();
+        time_for_calculations += timer.stop().elapsed_usec();
 
-        timer.Restart();
+        timer.restart();
         IllusVal Composite(&XXXComposite);
         Composite.Print(OutputDest);
 
-        time_for_output       += timer.Stop().Result();
+        time_for_output       += timer.stop().elapsed_usec();
         }
 
     std::ostream& OutputDest;
@@ -210,14 +210,16 @@ struct RunCensusDeprecated
             throw std::runtime_error("Unable to read file " + a_filename);
             }
 
-        std::cerr << "File:             " << a_filename << '\n';
-        std::cerr << "    Input:        " << timer.Stop().Report() << '\n';
+        std::cerr
+            << "File:             " << a_filename << '\n'
+            << "    Input:        " << timer.stop().elapsed_msec_str() << '\n'
+            ;
 
         // TODO ?? Why copy?
         std::vector<IllusInputParms> lives(doc.cell_parms());
         LMI_ASSERT(0 == lives.size());
 
-        timer.Restart();
+        timer.restart();
 
         Ledger XXXComposite(e_ledger_type(e_ill_reg), 100, true);
 
@@ -232,12 +234,16 @@ struct RunCensusDeprecated
             XXXComposite.PlusEq(IV->ledger());
             }
 
-        std::cerr << "    Calculations: " << timer.Stop().Report() << '\n';
+        std::cerr
+            << "    Calculations: " << timer.stop().elapsed_msec_str() << '\n'
+            ;
 
-        timer.Restart();
+        timer.restart();
         IllusVal Composite(&XXXComposite);
         Composite.Print(std::cout);
-        std::cerr << "    Output:       " << timer.Stop().Report() << '\n';
+        std::cerr
+            << "    Output:       " << timer.stop().elapsed_msec_str() << '\n'
+            ;
         }
 };
 
