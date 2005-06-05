@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_irc7702.cpp,v 1.6 2005-05-28 05:59:22 chicares Exp $
+// $Id: ihs_irc7702.cpp,v 1.7 2005-06-05 03:55:52 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -1163,7 +1163,7 @@ int main()
         ,10000000.0
         ,PolFee
         );
-    cout << timer->Stop().Report();
+    cout << timer->stop().elapsed_msec_str();
     delete Irc7702_;
 }
 #endif  // TESTING

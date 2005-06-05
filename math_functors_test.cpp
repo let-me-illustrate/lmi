@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: math_functors_test.cpp,v 1.1 2005-04-05 12:36:37 chicares Exp $
+// $Id: math_functors_test.cpp,v 1.2 2005-06-05 03:55:52 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -289,9 +289,11 @@ int test_main(int, char*[])
         x = d_upper_12_from_i_naive        <double>()(0.04);
         x = net_i_from_gross_naive<double,365>()(0.04, 0.007, 0.003);
         }
-    timer0.Stop();
+    timer0.stop();
     std::cout
-        << timer0.Report() << " for " << iterations
+        << timer0.elapsed_msec_str()
+        << " for "
+        << iterations
         << " runs with power method\n"
         ;
 
@@ -303,9 +305,11 @@ int test_main(int, char*[])
         x = d_upper_12_from_i        <double>()(0.04);
         x = net_i_from_gross<double,365>()(0.04, 0.007, 0.003);
         }
-    timer1.Stop();
+    timer1.stop();
     std::cout
-        << timer1.Report() << " for " << iterations
+        << timer1.elapsed_msec_str()
+        << " for "
+        << iterations
         << " runs with C++ exponential method\n"
         ;
 
@@ -325,9 +329,11 @@ int test_main(int, char*[])
                 )
             );
         }
-    timer2.Stop();
+    timer2.stop();
     std::cout
-        << timer2.Report() << " for " << iterations
+        << timer2.elapsed_msec_str()
+        << " for "
+        << iterations
         << " runs with C exponential method\n"
         ;
 

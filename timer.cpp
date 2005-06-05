@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: timer.cpp,v 1.5 2005-06-04 17:27:09 chicares Exp $
+// $Id: timer.cpp,v 1.6 2005-06-05 03:55:52 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -45,6 +45,10 @@
     // increase compile times for small programs, and because it requires
     // ms extensions and defines many macros.
 #   ifndef LMI_MS_HEADER_INCLUDED
+    // These declarations would be erroneous if the ms headers were
+    // included. It's necessary to guard against that explicitly,
+    // because those headers might be implicitly included by a pch
+    // mechanism.
         extern "C" int __stdcall QueryPerformanceCounter(elapsed_t*);
         extern "C" int __stdcall QueryPerformanceFrequency(elapsed_t*);
 #   endif // LMI_MS_HEADER_INCLUDED
@@ -71,12 +75,20 @@ Timer::~Timer()
 }
 
 //============================================================================
-Timer& Timer::Stop()
+Timer& Timer::restart()
+{
+    elapsed_time_ = 0;
+    start();
+    return *this;
+}
+
+//============================================================================
+Timer& Timer::stop()
 {
     if(!is_running_)
         {
         throw std::logic_error
-            ("Timer::Stop() called, but timer was not running."
+            ("Timer::stop() called, but timer was not running."
             );
         }
 
@@ -87,35 +99,27 @@ Timer& Timer::Stop()
 }
 
 //============================================================================
-Timer& Timer::Restart()
+std::string Timer::elapsed_msec_str() const
 {
-    elapsed_time_ = 0;
-    start();
-    return *this;
+    std::ostringstream oss;
+    oss << static_cast<int>(1000.0 * elapsed_usec());
+    oss << " milliseconds ";
+    return oss.str().c_str();
 }
 
 //============================================================================
-double Timer::Result() const
+double Timer::elapsed_usec() const
 {
     if(is_running_)
         {
         throw std::logic_error
-            ("Timer::Result() called, but timer is still running."
+            ("Timer::elapsed_usec() called, but timer is still running."
             );
         }
 
     // The static_cast is necessary in case elapsed_t is integral.
     // It is impossible for frequency_ to be zero.
     return static_cast<double>(elapsed_time_) / frequency_;
-}
-
-//============================================================================
-std::string Timer::Report() const
-{
-    std::ostringstream oss;
-    oss << static_cast<int>(1000.0 * Result());
-    oss << " milliseconds ";
-    return oss.str().c_str();
 }
 
 //============================================================================
@@ -139,6 +143,20 @@ elapsed_t Timer::calibrate()
 }
 
 //============================================================================
+void Timer::start()
+{
+    if(is_running_)
+        {
+        throw std::logic_error
+            ("Timer::start() called, but timer was already running."
+            );
+        }
+
+    is_running_ = true;
+    time_when_started_ = inspect();
+}
+
+//============================================================================
 elapsed_t Timer::inspect() const
 {
 #if defined LMI_POSIX
@@ -158,20 +176,6 @@ elapsed_t Timer::inspect() const
 #else // Unknown platform.
     return std::clock();
 #endif // Unknown platform.
-}
-
-//============================================================================
-void Timer::start()
-{
-    if(is_running_)
-        {
-        throw std::logic_error
-            ("Timer::start() called, but timer was already running."
-            );
-        }
-
-    is_running_ = true;
-    time_when_started_ = inspect();
 }
 
 #undef LMI_MS_HEADER_INCLUDED

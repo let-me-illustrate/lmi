@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustration_view.cpp,v 1.16 2005-05-14 02:10:24 chicares Exp $
+// $Id: illustration_view.cpp,v 1.17 2005-06-05 03:55:52 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -329,7 +329,7 @@ void IllustrationView::Run(Input* overriding_input)
     av.SetDebugFilename(base_filename() + ".debug");
     av.RunAV();
 
-    status() << "Calculate: " << timer.Stop().Report() << std::flush;
+    status() << "Calculate: " << timer.stop().elapsed_msec_str() << std::flush;
 
     ledger_values_ = av.ledger_from_av();
     DisplaySelectedValuesAsHtml();

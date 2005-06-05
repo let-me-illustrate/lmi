@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: actuarial_table_test.cpp,v 1.3 2005-03-23 15:32:29 chicares Exp $
+// $Id: actuarial_table_test.cpp,v 1.4 2005-06-05 03:55:52 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -69,6 +69,23 @@ std::vector<double> table_47_age_89()
 
 } // Unnamed namespace.
 
+void mete()
+{
+    std::string const table_name("/opt/lmi/qx_cso");
+
+    std::vector<double> rates00 = actuarial_table(table_name, 42,  0, 100);
+    std::vector<double> rates01 = actuarial_table(table_name, 42, 35,  65);
+    std::vector<double> rates02 = actuarial_table(table_name, 47, 89,  17);
+    std::vector<double> rates03 = actuarial_table(table_name, 47, 80,  26);
+    std::vector<double> rates04 = actuarial_table(table_name, 47, 80,  20);
+    std::vector<double> rates05 = actuarial_table(table_name, 47, 20,  20);
+}
+
+void assay_speed()
+{
+    std::cout << "  Speed test: " << aliquot_timer(mete) << '\n';
+}
+
 int test_main(int, char*[])
 {
 // TODO ?? Use whatever directory FHS would suggest instead.
@@ -85,21 +102,7 @@ int test_main(int, char*[])
     std::vector<double> rates2 = actuarial_table(table_name, 47, 89,  17);
     BOOST_TEST(rates2 == table_47_age_89());
 
-    int const iterations = 10;
-
-    Timer timer0;
-    for(int j = 0; j < iterations; ++j)
-        {
-        std::vector<double> rates00 = actuarial_table(table_name, 42,  0, 100);
-        std::vector<double> rates01 = actuarial_table(table_name, 42, 35,  65);
-        std::vector<double> rates02 = actuarial_table(table_name, 47, 89,  17);
-        std::vector<double> rates03 = actuarial_table(table_name, 47, 80,  26);
-        std::vector<double> rates04 = actuarial_table(table_name, 47, 80,  20);
-        std::vector<double> rates05 = actuarial_table(table_name, 47, 20,  20);
-        }
-    timer0.Stop();
-    std::cout << "Reading actuarial table--time for " << iterations << " runs: ";
-    std::cout << timer0.Report() << '\n';
+    assay_speed();
 
     return EXIT_SUCCESS;
 }
