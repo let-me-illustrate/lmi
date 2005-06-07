@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledgervalues.cpp,v 1.11 2005-05-14 02:11:32 chicares Exp $
+// $Id: ledgervalues.cpp,v 1.12 2005-06-07 23:11:36 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -63,9 +63,9 @@ IllusVal::~IllusVal()
 }
 
 //============================================================================
-double IllusVal::Run(InputParms const& IP)
+double IllusVal::Run(InputParms const* IP)
 {
-    AccountValue av(IP);
+    AccountValue av(*IP);
 
     fs::path debug_filename = fs::change_extension
         (fs::path(filename_)

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_cli.cpp,v 1.4 2005-06-05 03:55:52 chicares Exp $
+// $Id: main_cli.cpp,v 1.5 2005-06-07 23:11:36 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -38,6 +38,7 @@
 #include "timer.hpp"
 #include "value_cast.hpp"
 
+#include <boost/bind.hpp>
 #include <boost/filesystem/convenience.hpp>
 #include <boost/filesystem/path.hpp>
 
@@ -107,7 +108,7 @@ void SelfTest()
 
     IP.SolveType = e_solve_none;
     expected_value = 29206514.78;
-    IV.Run(IP);
+    IV.Run(&IP);
     observed_value = IV.ledger().GetCurrFull().AcctVal.back();
     if(.005 < std::fabs(expected_value - observed_value))
         {
@@ -123,7 +124,7 @@ void SelfTest()
 
     IP.SolveType = e_solve_specamt;
     expected_value = 1827289;
-    observed_value = IV.Run(IP);
+    observed_value = IV.Run(&IP);
     if(.005 < std::fabs(expected_value - observed_value))
         {
         warning()
@@ -138,7 +139,7 @@ void SelfTest()
 
     IP.SolveType = e_solve_ee_prem;
     expected_value = 5498.99;
-    observed_value = IV.Run(IP);
+    observed_value = IV.Run(&IP);
     if(.005 < std::fabs(expected_value - observed_value))
         {
         warning()
@@ -183,64 +184,11 @@ std::cout << "? " << runner.XXXComposite.GetLedgerInvariant().GetInforceLives().
         }
 #endif // 0
 
-    // Set number of iterations to a power of ten that can be run in
-    // five seconds, but not less than one iteration.
-    Timer timer;
-    observed_value = IV.Run(IP);
-    timer.stop();
-    int const m = static_cast<int>(std::log10(5.0 / timer.elapsed_usec()));
-    int const n = static_cast<int>(std::pow(10.0, std::max(0, m)));
-    timer.restart();
-    for(int j = 0; j < n; j++)
-        {
-        observed_value = IV.Run(IP);
-        }
-    timer.stop();
     std::cout
-        << "    Time for "
-        << n
-        << " solves: "
-        << timer.elapsed_msec_str()
+        << "Test solve speed: "
+        << aliquot_timer(boost::bind(&IllusVal::Run, &IV, &IP), 5)
         << '\n'
         ;
-
-    // These run times are measured at the command line. Timings in file
-    // 'statistics.txt' are run from make and are generally higher,
-    // probably due to make's overhead; bc++5.02 timings are for IDE build.
-    //
-    // msec for 100 iterations, median of three runs:
-    // bc++5.02 gcc-2.95.2-1         date
-    //    16065        -----   2001-02-27
-    //    16338        27028   2001-03-02
-    //    14187        22549   2001-03-02  skip checksums in SOA table manager
-    //    14304        19268   2001-03-02  gcc didn't have maximum optimization
-    //    14097        13947   2001-03-03  use sgi power() template (gcc only)
-    //    13874        13643   2001-03-06
-    //    14294        13674   2001-03-10
-    //    14470        13914   2001-03-10  BIDS -> vector in SOA tablfile.hpp
-    //    14313        13689   2001-03-14
-    //    13898        13291   2001-03-16
-    //    13750        13348   2001-03-20  bc++5.02 cstring.h -> std::string
-    //    13954        13048   2001-03-24  console program
-    //    14621        13129   2001-03-26  use std::string in inputs class
-    //    14652        13062   2001-03-27
-    //    14426        12791   2001-04-10
-    //    14294        12881   2001-04-12
-    //    14255        12882   2001-04-19
-    //    11022         8605   2001-06-18 faster rounding
-
-    //
-    // build times: max optimization
-    //   bc++5.02  gcc-2.95.2-1      date
-    //  GUI console GUI console
-    //  77          893        2001-03-16
-    //  72          902        2001-03-20
-    //  76      7   873   143  2001-03-24
-    //  80      8   891   166  2001-03-28
-    //  76      8              2001-04-12  added three headers to pch.hpp
-    //  85      8              2001-04-19
-    //  75      8              2001-04-20
-    //  76      8         170  2001-05-15
 }
 
 //============================================================================
