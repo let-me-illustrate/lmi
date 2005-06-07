@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: actuarial_table_test.cpp,v 1.4 2005-06-05 03:55:52 chicares Exp $
+// $Id: actuarial_table_test.cpp,v 1.5 2005-06-07 11:50:14 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -62,7 +62,7 @@ std::vector<double> table_47_age_89()
         //  0     1     2     3     4     5     6     7     8     9
         {                                                      0.60 //  80
         ,0.60, 0.64, 0.68, 0.68, 0.72, 0.75, 0.75, 0.80, 0.80, 1.00 //  90
-        ,0.00, 0.00, 0.00, 0.00, 0.00, 0.00                     // 100
+        ,0.00, 0.00, 0.00, 0.00, 0.00, 0.00                         // 100
         };
     return std::vector<double>(q, q + n);
     }
