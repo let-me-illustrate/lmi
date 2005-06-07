@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: math_functors_test.cpp,v 1.2 2005-06-05 03:55:52 chicares Exp $
+// $Id: math_functors_test.cpp,v 1.3 2005-06-07 12:17:51 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -34,6 +34,9 @@
 #include "test_tools.hpp"
 #include "timer.hpp"
 
+#include <algorithm> // std::min()
+#include <cmath>     // std::pow()
+#include <functional>
 #include <iomanip>
 #include <limits>
 
@@ -105,6 +108,32 @@ struct net_i_from_gross_naive
             -   1.0L;
         }
 };
+
+template<typename T>
+struct coi_rate_from_q_naive
+    :public std::binary_function<T,T,T>
+{
+    BOOST_STATIC_ASSERT(boost::is_float<T>::value);
+    T operator()(T const& q, T const& max_coi) const
+        {
+        if(0.0 == q)
+            {
+            return 0.0;
+            }
+        else if(1.0 <= q)
+            {
+            return max_coi;
+            }
+        else
+            {
+            long double monthly_q = 1.0L - std::pow(1.0L - q, 1.0L / 12.0L);
+            return std::min
+                (max_coi
+                ,static_cast<T>(monthly_q / (1.0L - monthly_q))
+                );
+            }
+        }
+};
 } // Unnamed namespace.
 
 // This function isn't a unit test per se. Its purpose is to show
@@ -115,11 +144,11 @@ struct net_i_from_gross_naive
 void sample_results()
 {
     std::cout
-        << "\n-0.004 upper 365 by various methods\n"
+        << "\n  -0.004 upper 365 by various methods\n"
         << std::setprecision(20)
-        << "  64-bit mantissa, expm1 and log1p\n"
+        << "    64-bit mantissa, expm1 and log1p\n      "
         << net_i_from_gross<double,365>()(0.0, 0.004, 0.0) << '\n'
-        << "  64-bit mantissa, pow\n"
+        << "    64-bit mantissa, pow\n      "
         << net_i_from_gross_naive<double,365>()(0.0, 0.004, 0.0) << '\n'
         ;
 #if defined __GNUC__ && defined LMI_X86
@@ -127,9 +156,9 @@ void sample_results()
     asm volatile("fldcw %0" : : "m" (control_word));
     std::cout
         << std::setprecision(20)
-        << "  53-bit mantissa, expm1 and log1p\n"
+        << "    53-bit mantissa, expm1 and log1p\n      "
         << net_i_from_gross<double,365>      ()(0.0, 0.004, 0.0) << '\n'
-        << "  53-bit mantissa, pow\n"
+        << "    53-bit mantissa, pow\n      "
         << net_i_from_gross_naive<double,365>()(0.0, 0.004, 0.0) << '\n'
         ;
     control_word = 0x037f;
@@ -137,10 +166,61 @@ void sample_results()
 #endif // defined __GNUC__ && defined LMI_X86
 }
 
+// These 'meteN' functions perform the same set of operations using
+// different implementations.
+
+// This implementation naively uses std::pow(); it is both slower and
+// less inaccurate than an alternative using expm1() and log1p().
+void mete0()
+{
+    volatile double x;
+    x = i_upper_12_over_12_from_i_naive<double>()(0.04);
+    x = i_from_i_upper_12_over_12_naive<double>()(0.04);
+    x = d_upper_12_from_i_naive        <double>()(0.04);
+    x = net_i_from_gross_naive<double,365>()(0.04, 0.007, 0.003);
+}
+
+// This implementation uses production functors.
+void mete1()
+{
+    volatile double x;
+    x = i_upper_12_over_12_from_i<double>()(0.04);
+    x = i_from_i_upper_12_over_12<double>()(0.04);
+    x = d_upper_12_from_i        <double>()(0.04);
+    x = net_i_from_gross<double,365>()(0.04, 0.007, 0.003);
+}
+
+// This implementation uses code equivalent to the production
+// functors, but coded by hand in C; speed is materially the same.
+// TODO ?? Then it no longer serves any purpose and should be expunged.
+void mete2()
+{
+    static long double const one_twelfth = 1.0L / 12.0L;
+    volatile double x;
+    x = expm1(log1p(0.04) * one_twelfth);
+    x = expm1(log1p(0.04) * 12.0L);
+    x = -12.0L * expm1(log1p(0.04) * -one_twelfth);
+    x = expm1
+        (
+        days_per_year * log1p
+            (   expm1(years_per_day * log1p(0.04))
+            -   expm1(years_per_day * log1p(0.007))
+            -         years_per_day *       0.003
+            )
+        );
+}
+
+void assay_speed()
+{
+    std::cout << "  Speed test: pow  \n    " << aliquot_timer(mete0) << '\n';
+    std::cout << "  Speed test: expm1\n    " << aliquot_timer(mete1) << '\n';
+    std::cout << "  Speed test: C\n    "     << aliquot_timer(mete2) << '\n';
+}
+
 int test_main(int, char*[])
 {
-    double smallnumD = std::numeric_limits<double>::min();
-    double bignumD   = std::numeric_limits<double>::max();
+    double      smallnumD = std::numeric_limits<double     >::min();
+    double      bignumD   = std::numeric_limits<double     >::max();
 
     long double smallnumL = std::numeric_limits<long double>::min();
     long double bignumL   = std::numeric_limits<long double>::max();
@@ -276,66 +356,7 @@ int test_main(int, char*[])
             )
         );
 
-    // Test run time.
-
-    int const iterations = 1000000;
-    volatile double x;
-
-    Timer timer0;
-    for(int j = 0; j < iterations; ++j)
-        {
-        x = i_upper_12_over_12_from_i_naive<double>()(0.04);
-        x = i_from_i_upper_12_over_12_naive<double>()(0.04);
-        x = d_upper_12_from_i_naive        <double>()(0.04);
-        x = net_i_from_gross_naive<double,365>()(0.04, 0.007, 0.003);
-        }
-    timer0.stop();
-    std::cout
-        << timer0.elapsed_msec_str()
-        << " for "
-        << iterations
-        << " runs with power method\n"
-        ;
-
-    Timer timer1;
-    for(int j = 0; j < iterations; ++j)
-        {
-        x = i_upper_12_over_12_from_i<double>()(0.04);
-        x = i_from_i_upper_12_over_12<double>()(0.04);
-        x = d_upper_12_from_i        <double>()(0.04);
-        x = net_i_from_gross<double,365>()(0.04, 0.007, 0.003);
-        }
-    timer1.stop();
-    std::cout
-        << timer1.elapsed_msec_str()
-        << " for "
-        << iterations
-        << " runs with C++ exponential method\n"
-        ;
-
-    Timer timer2;
-    for(int j = 0; j < iterations; ++j)
-        {
-        static long double const one_twelfth = 1.0L / 12.0L;
-        x = expm1(log1p(0.04) * one_twelfth);
-        x = expm1(log1p(0.04) * 12.0L);
-        x = -12.0L * expm1(log1p(0.04) * -one_twelfth);
-        x = expm1
-            (
-            days_per_year * log1p
-                (   expm1(years_per_day * log1p(0.04))
-                -   expm1(years_per_day * log1p(0.007))
-                -         years_per_day *       0.003
-                )
-            );
-        }
-    timer2.stop();
-    std::cout
-        << timer2.elapsed_msec_str()
-        << " for "
-        << iterations
-        << " runs with C exponential method\n"
-        ;
+    assay_speed();
 
     sample_results();
 
