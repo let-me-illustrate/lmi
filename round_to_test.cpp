@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: round_to_test.cpp,v 1.8 2005-05-26 22:01:15 chicares Exp $
+// $Id: round_to_test.cpp,v 1.9 2005-06-07 14:21:16 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -649,9 +649,9 @@ int test_main(int, char*[])
 
     // The software default rounding style and the hardware rounding
     // mode may be either synchronized or not, so test both ways.
-    std::cout << "Default style synchronized to hardware mode:\n";
+    std::cout << "  Default style synchronized to hardware mode:\n";
     bool rc = test_all_modes(true);
-    std::cout << "Default style NOT synchronized to hardware mode:\n";
+    std::cout << "  Default style NOT synchronized to hardware mode:\n";
     // Use '+' rather than '||' to avoid short-circuit evaluation,
     // so that failure on one test doesn't prevent downstream tests
     // from being run.

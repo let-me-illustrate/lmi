@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: commutation_functions_test.cpp,v 1.5 2005-06-07 12:17:51 chicares Exp $
+// $Id: commutation_functions_test.cpp,v 1.6 2005-06-07 14:19:26 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -83,23 +83,6 @@ int test_main(int, char*[])
     std::vector<double>ic(q.size(), i_upper_12_over_12_from_i<double>()(0.10));
     std::vector<double>ig(q.size(), i_upper_12_over_12_from_i<double>()(0.04));
 
-    std::cout
-        << "  Speed test: generate UL commutation functions\n    "
-        << aliquot_timer
-            (boost::lambda::bind
-                (boost::lambda::constructor<ULCommFns>()
-                ,q
-                ,ic
-                ,ig
-                ,e_dbopt(e_option1)
-                ,e_mode(e_annual)
-                ,e_mode(e_annual)
-                ,e_mode(e_monthly)
-                )
-            )
-        << '\n'
-        ;
-
     ULCommFns ulcf
         (q
         ,ig
@@ -117,10 +100,24 @@ int test_main(int, char*[])
         ,std::back_inserter(cvat_corridor)
         ,std::divides<double>()
         );
+    // TODO ?? Add tests to validate values. Consider using examples
+    // published in Eckley's paper.
+
     std::cout
-        << cvat_corridor[ 0] << " [ 0]; "
-        << cvat_corridor[45] << " [45]; "
-        << cvat_corridor[99] << " [99]\n"
+        << "  Speed test: generate UL commutation functions\n    "
+        << aliquot_timer
+            (boost::lambda::bind
+                (boost::lambda::constructor<ULCommFns>()
+                ,q
+                ,ic
+                ,ig
+                ,e_dbopt(e_option1)
+                ,e_mode(e_annual)
+                ,e_mode(e_annual)
+                ,e_mode(e_monthly)
+                )
+            )
+        << '\n'
         ;
 
     std::cout

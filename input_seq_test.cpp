@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_seq_test.cpp,v 1.1 2005-01-14 19:47:45 chicares Exp $
+// $Id: input_seq_test.cpp,v 1.2 2005-06-07 14:19:26 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -31,6 +31,7 @@
 #define BOOST_INCLUDE_MAIN
 #include "test_tools.hpp"
 
+#include <algorithm>
 #include <cassert>
 #include <iterator>
 
@@ -356,15 +357,11 @@ int test_main(int, char*[])
     BOOST_TEST(e_retirement == i[0].end_mode  );
     BOOST_TEST(e_retirement == i[1].begin_mode);
     BOOST_TEST(e_maturity   == i[1].end_mode  );
-std::cout << i[0].begin_mode << ' ' << i[0].end_mode << '\n';
-std::cout << i[1].begin_mode << ' ' << i[1].end_mode << '\n';
     }
-
 
 // TODO ?? Also test default keyword.
 
 // TODO ?? Also test keywords-only switch.
-
 
     return 0;
 }
