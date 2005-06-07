@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_commfns.cpp,v 1.3 2005-06-05 03:55:52 chicares Exp $
+// $Id: ihs_commfns.cpp,v 1.4 2005-06-07 11:50:14 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -89,18 +89,18 @@ ULCommFns::ULCommFns
     (std::vector<double> const& a_q
     ,std::vector<double> const& a_ic
     ,std::vector<double> const& a_ig
-    ,e_dbopt const&         a_db_option
-    ,e_mode const&          a_asspt_mode
-    ,e_mode const&          a_commfn_mode
-    ,e_mode const&          a_process_mode
+    ,e_dbopt const&             a_db_option
+    ,e_mode const&              a_asspt_mode
+    ,e_mode const&              a_commfn_mode
+    ,e_mode const&              a_process_mode
     )
-    :qc             (a_q)
-    ,ic             (a_ic)
-    ,ig             (a_ig)
-    ,DBOption       (a_db_option)
-    ,AssptMode      (a_asspt_mode)
-    ,CommfnMode     (a_commfn_mode)
-    ,ProcessMode    (a_process_mode)
+    :qc          (a_q)
+    ,ic          (a_ic)
+    ,ig          (a_ig)
+    ,DBOption    (a_db_option)
+    ,AssptMode   (a_asspt_mode)
+    ,CommfnMode  (a_commfn_mode)
+    ,ProcessMode (a_process_mode)
 {
     Length = qc.size();
     LMI_ASSERT(ic.size() == qc.size());
