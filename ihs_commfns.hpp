@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_commfns.hpp,v 1.3 2005-03-11 13:40:41 chicares Exp $
+// $Id: ihs_commfns.hpp,v 1.4 2005-06-07 11:48:57 chicares Exp $
 
 #ifndef commfns_hpp
 #define commfns_hpp
@@ -76,11 +76,12 @@ class LMI_EXPIMP OLCommFns
     std::vector<double>        n;
 };
 
-// UL commutation functions: see Eckley, TSA XXXIX, page 18
+// UL commutation functions: see Eckley, TSA XXXIX, page 18.
+
+// Implicitly-declared special member functions do the right thing.
 
 class LMI_EXPIMP ULCommFns
-    :private boost::noncopyable
-    ,virtual private obstruct_slicing<ULCommFns>
+    :virtual private obstruct_slicing<ULCommFns>
 {
   public:
     ULCommFns
@@ -127,18 +128,15 @@ class LMI_EXPIMP ULCommFns
 
     ~ULCommFns();
 
-    std::vector<double> const&  aD() const {return ad;}
-    std::vector<double> const&  kD() const {return kd;}
-    std::vector<double> const&  kC() const {return kc;}
-    std::vector<double> const&  aN() const {return an;}
-    std::vector<double> const&  kM() const {return km;}
+    std::vector<double> const& aD() const {return ad;}
+    std::vector<double> const& kD() const {return kd;}
+    std::vector<double> const& kC() const {return kc;}
+    std::vector<double> const& aN() const {return an;}
+    std::vector<double> const& kM() const {return km;}
 
     static void SelfTest();
 
   private:
-//  std::vector<double> const& qc;
-//  std::vector<double> const& ic;
-//  std::vector<double> const& ig;
     std::vector<double>        qc;
     std::vector<double>        ic;
     std::vector<double>        ig;
@@ -146,23 +144,23 @@ class LMI_EXPIMP ULCommFns
 //  std::vector<double>        q;
 //  std::vector<double>        i;
 
-    e_dbopt const& DBOption;
+    e_dbopt DBOption;
     // Assumption mode indicates the mode of input mortality and
     // interest assumptions.
-    e_mode const&  AssptMode;
+    e_mode AssptMode;
     // TODO ?? Should we keep this?
-    e_mode const&  CommfnMode;
+    e_mode CommfnMode;
     // Processing mode--usually monthly--governs how frequently
     // COIs and expense charges are deducted.
-    e_mode const&  ProcessMode;
+    e_mode ProcessMode;
 
     int Length;
 
-    std::vector<double>        ad;
-    std::vector<double>        kd;
-    std::vector<double>        kc;
-    std::vector<double>        an;
-    std::vector<double>        km;
+    std::vector<double> ad;
+    std::vector<double> kd;
+    std::vector<double> kc;
+    std::vector<double> an;
+    std::vector<double> km;
 };
 
 #endif
