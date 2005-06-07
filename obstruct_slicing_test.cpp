@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: obstruct_slicing_test.cpp,v 1.3 2005-06-05 03:55:52 chicares Exp $
+// $Id: obstruct_slicing_test.cpp,v 1.4 2005-06-07 12:17:51 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -31,6 +31,10 @@
 #define BOOST_INCLUDE_MAIN
 #include "test_tools.hpp"
 #include "timer.hpp"
+
+#include <boost/bind.hpp>
+
+#include <string>
 
 // Here are all the techniques discussed in the header.
 
@@ -128,22 +132,24 @@ struct X1
 };
 
 template<typename T>
+void mete(volatile int vi)
+{
+    T t0;
+    T t1(t0);
+    t0.i = vi;
+    t0 = t1;
+    vi = t1.i;
+}
+
+template<typename T>
 void test_cost_of_obstruction(std::string const& s)
 {
-    std::cout << "  class " << s << " has size " << sizeof(T) << "; timing: ";
-    Timer timer;
-    volatile int vi = 0;
-    // TODO ?? Determine iteration count dynamically.
-    for(int j = 0; j < 10000; ++j)
-        {
-        T t0;
-        T t1(t0);
-        t0.i = vi;
-        t0 = t1;
-        vi = t1.i;
-        }
-    timer.stop();
-    std::cout << timer.elapsed_msec_str() << '\n';
+    std::cout
+        << "  Class " << s << " has size " << sizeof(T) << '\n'
+        << "  Speed test: \n      "
+        << aliquot_timer(boost::bind(mete<T>, 0))
+        << '\n'
+        ;
 }
 
 int test_main(int, char*[])
