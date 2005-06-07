@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: calculate.hpp,v 1.10 2005-06-05 03:55:52 chicares Exp $
+// $Id: calculate.hpp,v 1.11 2005-06-07 23:11:36 chicares Exp $
 
 #ifndef calculate_hpp
 #define calculate_hpp
@@ -59,7 +59,7 @@ struct RunIllustration
         {
         Timer timer;
         IllusVal IV;
-        IV.Run(a_input);
+        IV.Run(&a_input);
         time_for_calculations += timer.stop().elapsed_usec();
 
         timer.restart();
@@ -131,7 +131,7 @@ struct RunCensus
             )
             {
             std::auto_ptr<IllusVal> IV(new IllusVal());
-            IV->Run(*lives_it);
+            IV->Run(&*lives_it);
 // TODO ?? Pick one:
 //            Composite.operator+=(IV->ledger());
             XXXComposite.PlusEq(IV->ledger());
@@ -230,7 +230,7 @@ struct RunCensusDeprecated
             )
             {
             std::auto_ptr<IllusVal> IV(new IllusVal());
-            IV->Run(*lives_it);
+            IV->Run(&*lives_it);
             XXXComposite.PlusEq(IV->ledger());
             }
 
