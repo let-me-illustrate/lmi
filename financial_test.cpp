@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: financial_test.cpp,v 1.3 2005-06-05 03:55:52 chicares Exp $
+// $Id: financial_test.cpp,v 1.4 2005-06-07 12:17:51 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -32,6 +32,9 @@
 #include "test_tools.hpp"
 #include "timer.hpp"
 
+#include <boost/bind.hpp>
+
+#include <cmath>    // std::fabs()
 #include <iomanip>  // Formatting of optional detail.
 #include <iostream>
 #include <vector>
@@ -41,7 +44,10 @@ int test_main(int, char*[])
     double pmts[3] = {100.0,  200.0,  300.0};
     double bfts[3] = {300.0, 1500.0, 5400.0};
 
-    // TODO ?? Explain why float == float works here.
+    // The next few tests compare floating-point quantities for exact
+    // equality. Often that's inappropriate; however, the quantities
+    // are integer-valued and the algorithm is designed to round them
+    // exactly.
 
     irr_helper<double*> xxx(pmts, pmts + 1, bfts[0], 5);
     BOOST_TEST(2.0 == xxx());
@@ -61,8 +67,8 @@ int test_main(int, char*[])
     BOOST_TEST(2.0 == irr(v.begin(), v.end(), 0.0, 5));
     BOOST_TEST(2.0 == irr(v.begin(), v.end(), 5));
 
-    std::vector<double> p;
-    std::vector<double> b;
+    std::vector<double> p; // Payments.
+    std::vector<double> b; // Benefits.
     for(int j = 1; j < 101; ++j)
         {
         p.push_back(j);
@@ -109,14 +115,6 @@ std::cout << "tolerance = .000005: " << .000005 << '\n';
     std::vector<double> const& crcb(cb);
     irr(crcp.begin(), crcp.end(), crcb.begin(), results.begin(), 5);
 
-    /* Use this if you want to print everything year by year:
-    std::cout << std::setprecision(12);
-    for(int j = 0; j < 100; ++j)
-        {
-        std::cout << p[j] << '\t' << b[j] << '\t' << results[j] << '\n';
-        }
-    */
-
     // Test specialized irr() for life insurance, reflecting lapse duration.
 
     irr(p, b, results, p.size(), p.size(), 5);
@@ -147,7 +145,7 @@ std::cout << "tolerance = .000005: " << .000005 << '\n';
 
     // Test empty payment interval.
 
-    // This version leaves 'results' unchanged. We test it to make
+    // This version leaves 'results' unchanged. Test it to make
     // sure it doesn't segfault.
     irr(p.begin(), p.begin(), b.begin(), results.begin(), 5);
 
@@ -166,8 +164,6 @@ std::cout << "tolerance = .000005: " << .000005 << '\n';
     BOOST_TEST(std::fabs(-1.00000 - results[99]) <= tolerance);
 
     // Test fv().
-    // TODO ?? We could use a version with a vector instead of
-    // a scalar result in IllustrationView::PrintProspectus().
 
     static long double const i = .05L;
     static double const one_plus_i = 1.0L + i;
@@ -182,20 +178,24 @@ std::cout << "tolerance = .000005: " << .000005 << '\n';
         <= tolerance
         );
 
-    Timer timer;
-    int const count = 1;
-    for(int j = 0; j < count; ++j)
-        {
-        irr(p.begin(), p.end(), b.begin(), results.begin(), 5);
-        }
-    timer.stop();
+    typedef std::vector<double>::iterator VI;
+    int const decimals = 5;
     std::cout
-        << "Time for "
-        << count
-        << " runs of "
-        << results.size()
-        << " irrs: "
-        << timer.elapsed_msec_str()
+        << "  Speed test: vector of irrs, length "
+        << p.size()
+        << ","
+        << decimals
+        << " decimals\n    "
+        << aliquot_timer
+            (boost::bind
+                (irr<VI,VI,VI>
+                ,p.begin()
+                ,p.end()
+                ,b.begin()
+                ,results.begin()
+                ,decimals
+                )
+            )
         << '\n'
         ;
 

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: commutation_functions_test.cpp,v 1.4 2005-06-05 03:55:52 chicares Exp $
+// $Id: commutation_functions_test.cpp,v 1.5 2005-06-07 12:17:51 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -31,6 +31,10 @@
 #define BOOST_INCLUDE_MAIN
 #include "test_tools.hpp"
 #include "timer.hpp"
+
+#include <boost/lambda/algorithm.hpp>
+#include <boost/lambda/bind.hpp>
+#include <boost/lambda/construct.hpp>
 
 #include <algorithm>
 #include <functional>
@@ -79,26 +83,20 @@ int test_main(int, char*[])
     std::vector<double>ic(q.size(), i_upper_12_over_12_from_i<double>()(0.10));
     std::vector<double>ig(q.size(), i_upper_12_over_12_from_i<double>()(0.04));
 
-    Timer timer;
-    int const trials = 1000;
-    for(int j = 0; j < trials; j++)
-        {
-        ULCommFns
-            (q
-            ,ic
-            ,ig
-            ,e_dbopt(e_option1)
-            ,e_mode(e_annual)
-            ,e_mode(e_annual)
-            ,e_mode(e_monthly)
-            );
-        }
-    timer.stop();
     std::cout
-        << "Generated UL commutation functions "
-        << trials
-        << " times in "
-        << timer.elapsed_msec_str()
+        << "  Speed test: generate UL commutation functions\n    "
+        << aliquot_timer
+            (boost::lambda::bind
+                (boost::lambda::constructor<ULCommFns>()
+                ,q
+                ,ic
+                ,ig
+                ,e_dbopt(e_option1)
+                ,e_mode(e_annual)
+                ,e_mode(e_annual)
+                ,e_mode(e_monthly)
+                )
+            )
         << '\n'
         ;
 
@@ -125,24 +123,18 @@ int test_main(int, char*[])
         << cvat_corridor[99] << " [99]\n"
         ;
 
-    timer.restart();
-    cvat_corridor.resize(q.size());
-    for(int j = 0; j < trials; j++)
-        {
-        std::transform
-            (ulcf.aD().begin()
-            ,ulcf.aD().end() - 1
-            ,ulcf.kM().begin()
-            ,cvat_corridor.begin()
-            ,std::divides<double>()
-            );
-        }
-    timer.stop();
     std::cout
-        << "Calculated CVAT corridor factors for ages 0 through 99 "
-        << trials
-        << " times in "
-        << timer.elapsed_msec_str()
+        << "  Speed test: calculate CVAT corridor factors\n    "
+        << aliquot_timer
+            (boost::lambda::bind
+                (boost::lambda::ll::transform()
+                ,ulcf.aD().begin()
+                ,ulcf.aD().end() - 1
+                ,ulcf.kM().begin()
+                ,cvat_corridor.begin()
+                ,std::divides<double>()
+                )
+            )
         << '\n'
         ;
 
