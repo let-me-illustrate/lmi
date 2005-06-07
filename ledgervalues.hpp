@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledgervalues.hpp,v 1.9 2005-05-14 02:11:32 chicares Exp $
+// $Id: ledgervalues.hpp,v 1.10 2005-06-07 23:11:36 chicares Exp $
 
 #ifndef ledgervalues_hpp
 #define ledgervalues_hpp
@@ -40,6 +40,15 @@ class Ledger;
 class LedgerInvariant;
 class LedgerVariant;
 
+// Implementation note.
+//
+// Member function Run() ought to take a const& argument. Passing the
+// argument by pointer avoids a problem encountered on the msw
+// platform with the gnu linker: the (implicit) copy ctor for class
+// Inputs "can't be auto-imported". It would be better to fix class
+// Inputs, but that class and class IllusVal itself are both targeted
+// for expunction, so a workaround here seems acceptable for now.
+
 class LMI_EXPIMP IllusVal
     :private boost::noncopyable
     ,virtual private obstruct_slicing<IllusVal>
@@ -49,7 +58,7 @@ class LMI_EXPIMP IllusVal
     explicit IllusVal(Ledger*, std::string const& filename = "anonymous");
     ~IllusVal();
 
-    double Run(InputParms const&);
+    double Run(InputParms const* ip);
     void Print(std::ostream&) const;
 
     Ledger const& ledger() const {return *ledger_;}
