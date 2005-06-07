@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: math_functors.hpp,v 1.3 2005-05-26 22:01:15 chicares Exp $
+// $Id: math_functors.hpp,v 1.4 2005-06-07 11:46:26 chicares Exp $
 
 #ifndef math_functors_hpp
 #define math_functors_hpp
@@ -46,9 +46,8 @@
 extern "C" double expm1(double);
 #endif // Recent MinGW.
 
-// TODO ?? Use the expm1() and log1p() approach for mortality, too,
-// and write functors here for refactorable uses of std::pow()
-// found throughout the program.
+// TODO ?? Write functors here for other refactorable uses of
+// std::pow() found throughout the program.
 
 // These functors are Adaptable Unary or Binary Functions wherever
 // possible.
@@ -241,7 +240,8 @@ struct coi_rate_from_q
             }
         else
             {
-            long double monthly_q = 1.0L - std::pow(1.0L - q, 1.0L / 12.0L);
+            static long double const reciprocal_12 = 1.0L / 12;
+            long double monthly_q = -expm1(log1p(-q) * reciprocal_12);
             return std::min
                 (max_coi
                 ,static_cast<T>(monthly_q / (1.0L - monthly_q))
