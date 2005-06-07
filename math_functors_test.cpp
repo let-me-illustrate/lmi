@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: math_functors_test.cpp,v 1.3 2005-06-07 12:17:51 chicares Exp $
+// $Id: math_functors_test.cpp,v 1.4 2005-06-07 14:29:53 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -190,31 +190,10 @@ void mete1()
     x = net_i_from_gross<double,365>()(0.04, 0.007, 0.003);
 }
 
-// This implementation uses code equivalent to the production
-// functors, but coded by hand in C; speed is materially the same.
-// TODO ?? Then it no longer serves any purpose and should be expunged.
-void mete2()
-{
-    static long double const one_twelfth = 1.0L / 12.0L;
-    volatile double x;
-    x = expm1(log1p(0.04) * one_twelfth);
-    x = expm1(log1p(0.04) * 12.0L);
-    x = -12.0L * expm1(log1p(0.04) * -one_twelfth);
-    x = expm1
-        (
-        days_per_year * log1p
-            (   expm1(years_per_day * log1p(0.04))
-            -   expm1(years_per_day * log1p(0.007))
-            -         years_per_day *       0.003
-            )
-        );
-}
-
 void assay_speed()
 {
     std::cout << "  Speed test: pow  \n    " << aliquot_timer(mete0) << '\n';
     std::cout << "  Speed test: expm1\n    " << aliquot_timer(mete1) << '\n';
-    std::cout << "  Speed test: C\n    "     << aliquot_timer(mete2) << '\n';
 }
 
 int test_main(int, char*[])
