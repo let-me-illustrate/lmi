@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: docmanager_ex.cpp,v 1.1 2005-03-11 03:09:22 chicares Exp $
+// $Id: docmanager_ex.cpp,v 1.2 2005-06-08 16:39:29 chicares Exp $
 
 // This implementation is a derived work based on wxWindows code, viz.
 //   samples/printing/printing.cpp (C) 1995 Julian Smart
@@ -93,7 +93,10 @@ wxSingleChoicePopupMenu::wxSingleChoicePopupMenu
         }
     for(unsigned int j = 0; j < choices.GetCount(); ++j)
         {
-        menu_.Append(j, choices[j]);
+        wxString s = choices[j];
+        if(-1 == s.Find('&'))
+            s.Prepend('&');
+        menu_.Append(j, s);
         }
     Connect
         (0
