@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.71 2005-06-01 04:21:42 chicares Exp $
+// $Id: ChangeLog,v 1.72 2005-06-08 15:59:50 chicares Exp $
 
 2005-01-14
 
@@ -2126,4 +2126,81 @@ Create directories correctly.
 
   ihs_basicval.cpp
 Rewrite a consistency test.
+
+2005-06-01 [1289]
+
+  view_ex.cpp
+  view_ex.hpp
+Improve documentation.
+
+  input_harmonization.cpp
+Document a problem.
+
+  GNUmakefile
+Improve style checking.
+
+2005-06-03 [1289]
+
+  timer.cpp
+  timer.hpp
+  timer_test.cpp
+Add adaptable time-measurement facility.
+
+2005-06-04 [1286]
+
+  workhorse.make
+Write regression-test md5sums.
+
+  actuarial_table_test.cpp
+  calculate.hpp
+  commutation_functions_test.cpp
+  elapsed_time.cpp
+  financial_test.cpp
+  group_values.cpp
+  ihs_commfns.cpp
+  ihs_irc7702.cpp
+  illustration_view.cpp
+  input.cpp
+  main_cgi.cpp
+  main_cli.cpp
+  math_functors_test.cpp
+  numeric_io_test.cpp
+  obstruct_slicing_test.cpp
+  timer.cpp
+  timer.hpp
+  timer_test.cpp
+Refactor timer class.
+
+2005-06-07 [1285]
+
+  math_functors.hpp
+Improve speed and accuracy of mortality-rate calculations.
+
+  ihs_commfns.hpp
+Make class ULCommFns Copyable.
+
+  actuarial_table_test.cpp
+  ihs_commfns.cpp
+Improve formatting.
+
+  commutation_functions_test.cpp
+  financial_test.cpp
+  math_functors_test.cpp
+  obstruct_slicing_test.cpp
+Use adaptable time-measurement facility.
+
+  commutation_functions_test.cpp
+  input_seq_test.cpp
+  round_to_test.cpp
+  timer_test.cpp
+Make some unit-test output less distracting.
+
+  math_functors_test.cpp
+Expunge obsolete code.
+
+  calculate.hpp
+  main_cli.cpp
+  ledgervalues.cpp
+  ledgervalues.hpp
+Pass an argument by pointer to work around a shared-library issue.
 
