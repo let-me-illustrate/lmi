@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: objects.make,v 1.33 2005-06-08 16:03:04 chicares Exp $
+# $Id: objects.make,v 1.34 2005-06-09 03:58:06 chicares Exp $
 
 ################################################################################
 
@@ -539,10 +539,12 @@ mpatrol_patch_test$(EXEEXT): \
   $(common_test_objects) \
   mpatrol_patch_test.o \
 
+# TODO ?? Eventually expunge 'alert' objects here.
 name_value_pairs_test$(EXEEXT): \
   $(common_test_objects) \
   alert.o \
   alert_cli.o \
+  name_value_pairs.o \
   name_value_pairs_test.o \
 
 ncnnnpnn_test$(EXEEXT): \

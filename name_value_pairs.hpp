@@ -19,70 +19,89 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: name_value_pairs.hpp,v 1.1 2005-06-08 16:03:04 chicares Exp $
+// $Id: name_value_pairs.hpp,v 1.2 2005-06-09 03:58:06 chicares Exp $
 
 #ifndef name_value_pairs_hpp
 #define name_value_pairs_hpp
 
 #include "config.hpp"
 
-// TODO ?? expunge
-#include "alert.hpp"
+#include "expimp.hpp"
+#include "obstruct_slicing.hpp"
 
-#include <fstream>
+#include <boost/utility.hpp>
+
 #include <map>
-#include <ostream> // std::flush() TODO ?? expunge eventually
-#include <sstream>
-#include <string>
 
-// TODO ??
-// Document.
-//   'ini' resemblance
-//   reason for skipping lines without '='
-// Deliberately don't open file in binary mode.
-// Don't check file existence--just return empty map if no such file?
-//   then what if the filename is invalidly formed?
-// Eventually write out of line, or make this function into a class.
-// Duplicate names --> overwritten values.
-// Don't strip trailing blanks--take care though with numeric conversions.
-//   numeric conversions--eventually default to zero if value is blank?
+/// Design notes for class name_value_pairs.
+///
+/// This class stores name-value pairs as strings, providing read-only
+/// access to values either as strings or as numbers.
+///
+/// Its design is deliberately quite limited. The motivation is only
+/// to read flat-text configuration files with one name-value pair per
+/// line, separated by an equal sign. For each line, every character
+/// preceding the equal sign is part of the name, and every character
+/// following the equal sign but preceding the end-of-line marker is
+/// part of the value: leading or trailing blanks are not skipped.
+///
+/// This is similar to the file layout specified for wx class
+/// wxFileConfig, but simpler in that 'group' names (special lines
+/// consisting of a token in square brackets] are ignored, because
+/// they aren't meaningful for the particular files lmi uses.
+///
+/// Eventually a facility to write such files might become desirable;
+/// for now, they may only be read, and for simplicity the file to
+/// read is given as a ctor argument.
+///
+/// It may seem odd to provide a distinct numeric accessor. The
+/// rationale is that "missing" numeric data are to be treated as
+/// zero; furthermore, leading and trailing blanks are disregarded
+/// for numeric conversions.
+///
+/// A private accessor to the internal std::map data member is
+/// provided only for use by the friend unit-test function.
+///
+/// Implementation notes for class name_value_pairs.
+///
+/// The 'configuration' file is deliberately read in text rather than
+/// binary mode. For msw, this means that carriage returns in CR-LF
+/// pairs are ignored. Using CR-LF delimiters in such files prevents
+/// them from being portable to other operating systems, but the
+/// author of such a file can choose to write portable files--that's
+/// not the responsibility of this class.
+///
+/// If two lines have name-value pairs with the same name, then the
+/// later line's value overwrites the first line's. This class's
+/// responsibility is only to behave reasonably, not to diagnose
+/// practices that the 'configuration' file's author would do well to
+/// eschew.
+///
+/// TODO ?? Reconsider this:
+/// Existence and accessibility of the 'configuration' file are not
+/// checked; if the file cannot be read, then the std::map member is
+/// simply not populated.
 
-inline std::map<std::string, std::string> read_name_value_pairs
-    (std::string const& filename
-    )
+class name_value_pairs
+    :private boost::noncopyable
+    ,virtual private obstruct_slicing<name_value_pairs>
 {
-    std::ifstream is(filename.c_str());
-    std::map<std::string, std::string> m;
-    std::string line;
-    while(std::getline(is, line))
-        {
-        std::istringstream iss_line(line, std::ios_base::in);
-        if(std::string::npos == line.find_first_of('='))
-            {
-// TODO ?? expunge eventually
-warning()
-  << "line: " << "'" << line << "' skipped\n"
-  << std::flush
-  ;
-            continue;
-            }
+    friend int test_main(int, char*[]);
 
-        std::string name;
-        std::getline(iss_line, name, '=');
-        std::string value;
-        std::getline(iss_line, value);
-        m[name] = value;
+    typedef std::map<std::string, std::string> string_map;
 
-// TODO ?? expunge eventually
-warning()
-  << "line: " << "'" << line << "'\n"
-  << "  name: " << "'" << name << "'; "
-  << "value: " << "'" << value << "'\n"
-  << std::flush
-  ;
-        }
-    return m;
-}
+  public:
+    name_value_pairs(std::string const& filename);
+    ~name_value_pairs();
+
+    std::string const& string(std::string const& key) const;
+    double number(std::string const& key) const;
+
+  private:
+    std::map<std::string, std::string> const& map() const;
+
+    string_map map_;
+};
 
 #endif // name_value_pairs_hpp
 
