@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: name_value_pairs.cpp,v 1.1 2005-06-09 03:58:06 chicares Exp $
+// $Id: name_value_pairs.cpp,v 1.2 2005-06-09 21:34:21 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -28,11 +28,9 @@
 
 #include "name_value_pairs.hpp"
 
-#include "alert.hpp" // TODO ?? expunge eventually
 #include "numeric_io_cast.hpp"
 
 #include <fstream>
-#include <ostream> // std::flush() TODO ?? expunge eventually
 #include <sstream>
 
 name_value_pairs::name_value_pairs(std::string const& filename)
@@ -44,11 +42,6 @@ name_value_pairs::name_value_pairs(std::string const& filename)
         std::istringstream iss_line(line, std::ios_base::in);
         if(std::string::npos == line.find_first_of('='))
             {
-// TODO ?? expunge eventually
-warning()
-  << "line: " << "'" << line << "' skipped\n"
-  << std::flush
-  ;
             continue;
             }
 
@@ -57,21 +50,13 @@ warning()
         std::string value;
         std::getline(iss_line, value);
         map_[name] = value;
-
-// TODO ?? expunge eventually
-warning()
-  << "line: " << "'" << line << "'\n"
-  << "  name: " << "'" << name << "'; "
-  << "value: " << "'" << value << "'\n"
-  << std::flush
-  ;
         }
 }
 
 name_value_pairs::~name_value_pairs()
 {}
 
-std::string const& name_value_pairs::string(std::string const& key) const
+std::string const& name_value_pairs::string_value(std::string const& key) const
 {
     string_map::const_iterator i = map_.find(key);
     if(i == map_.end())
@@ -85,17 +70,19 @@ std::string const& name_value_pairs::string(std::string const& key) const
         }
 }
 
-double name_value_pairs::number(std::string const& key) const
+double name_value_pairs::numeric_value(std::string const& key) const
 {
     double z = 0.0;
-    std::string s(string(key));
+    std::string s(string_value(key));
 
     std::string::size_type last_nonblank = s.find_last_not_of(' ');
     s.resize(++last_nonblank);
+
     if(!s.empty())
         {
         z = numeric_io_cast<double>(s);
         }
+
     return z;
 }
 
