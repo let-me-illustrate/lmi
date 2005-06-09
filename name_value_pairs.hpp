@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: name_value_pairs.hpp,v 1.2 2005-06-09 03:58:06 chicares Exp $
+// $Id: name_value_pairs.hpp,v 1.3 2005-06-09 21:34:30 chicares Exp $
 
 #ifndef name_value_pairs_hpp
 #define name_value_pairs_hpp
@@ -77,10 +77,11 @@
 /// practices that the 'configuration' file's author would do well to
 /// eschew.
 ///
-/// TODO ?? Reconsider this:
 /// Existence and accessibility of the 'configuration' file are not
 /// checked; if the file cannot be read, then the std::map member is
-/// simply not populated.
+/// simply not populated. This might be inappropriate for a general-
+/// purpose library, but it meets lmi's specialized needs, and such
+/// extra checks can easily be added if they become desirable.
 
 class name_value_pairs
     :private boost::noncopyable
@@ -94,8 +95,8 @@ class name_value_pairs
     name_value_pairs(std::string const& filename);
     ~name_value_pairs();
 
-    std::string const& string(std::string const& key) const;
-    double number(std::string const& key) const;
+    std::string const& string_value(std::string const& key) const;
+    double numeric_value(std::string const& key) const;
 
   private:
     std::map<std::string, std::string> const& map() const;
