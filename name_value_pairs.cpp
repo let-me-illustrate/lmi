@@ -1,0 +1,106 @@
+// Manage files of name-value pairs.
+//
+// Copyright (C) 2005 Gregory W. Chicares.
+//
+// This program is free software; you can redistribute it and/or modify
+// it under the terms of the GNU General Public License version 2 as
+// published by the Free Software Foundation.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program; if not, write to the Free Software
+// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+//
+// http://savannah.nongnu.org/projects/lmi
+// email: <chicares@cox.net>
+// snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
+
+// $Id: name_value_pairs.cpp,v 1.1 2005-06-09 03:58:06 chicares Exp $
+
+#ifdef __BORLANDC__
+#   include "pchfile.hpp"
+#   pragma hdrstop
+#endif // __BORLANDC__
+
+#include "name_value_pairs.hpp"
+
+#include "alert.hpp" // TODO ?? expunge eventually
+#include "numeric_io_cast.hpp"
+
+#include <fstream>
+#include <ostream> // std::flush() TODO ?? expunge eventually
+#include <sstream>
+
+name_value_pairs::name_value_pairs(std::string const& filename)
+{
+    std::ifstream is(filename.c_str());
+    std::string line;
+    while(std::getline(is, line))
+        {
+        std::istringstream iss_line(line, std::ios_base::in);
+        if(std::string::npos == line.find_first_of('='))
+            {
+// TODO ?? expunge eventually
+warning()
+  << "line: " << "'" << line << "' skipped\n"
+  << std::flush
+  ;
+            continue;
+            }
+
+        std::string name;
+        std::getline(iss_line, name, '=');
+        std::string value;
+        std::getline(iss_line, value);
+        map_[name] = value;
+
+// TODO ?? expunge eventually
+warning()
+  << "line: " << "'" << line << "'\n"
+  << "  name: " << "'" << name << "'; "
+  << "value: " << "'" << value << "'\n"
+  << std::flush
+  ;
+        }
+}
+
+name_value_pairs::~name_value_pairs()
+{}
+
+std::string const& name_value_pairs::string(std::string const& key) const
+{
+    string_map::const_iterator i = map_.find(key);
+    if(i == map_.end())
+        {
+        static std::string const empty_string("");
+        return empty_string;
+        }
+    else
+        {
+        return (*i).second;
+        }
+}
+
+double name_value_pairs::number(std::string const& key) const
+{
+    double z = 0.0;
+    std::string s(string(key));
+
+    std::string::size_type last_nonblank = s.find_last_not_of(' ');
+    s.resize(++last_nonblank);
+    if(!s.empty())
+        {
+        z = numeric_io_cast<double>(s);
+        }
+    return z;
+}
+
+std::map<std::string, std::string> const& name_value_pairs::map() const
+{
+    return map_;
+}
+

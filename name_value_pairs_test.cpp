@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: name_value_pairs_test.cpp,v 1.1 2005-06-08 16:03:04 chicares Exp $
+// $Id: name_value_pairs_test.cpp,v 1.2 2005-06-09 03:58:06 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -32,6 +32,7 @@
 #include "test_tools.hpp"
 
 #include <cstdio> // std::remove()
+#include <fstream>
 
 int test_main(int, char*[])
 {
@@ -55,30 +56,55 @@ int test_main(int, char*[])
         << "d==\n"
         << "e=1=.\n"
         << "f= f \r\n"
+        << "this=a test\n"
+        << "z=2\n"
+        << "y=-3.142\n"
+        << "x=2.718 \n"
+        << "w= 2.718\n"
+        << "v= 2.718 \n"
+        << "u=\n"
+        << "t= \n"
+        << "s=       \n"
         ;
     }
 
-    std::map<std::string, std::string> m0 = read_name_value_pairs(filename0);
-    BOOST_TEST_EQUAL("a"  , m0["a"]);
-    BOOST_TEST_EQUAL("b"  , m0["b"]);
-    BOOST_TEST_EQUAL(""   , m0["c"]);
-    BOOST_TEST_EQUAL("="  , m0["d"]);
-    BOOST_TEST_EQUAL("1=.", m0["e"]);
-#ifndef LMI_MSW
-    BOOST_TEST_EQUAL(" f \r", m0["f"]);
-#else  // LMI_MSW
-    BOOST_TEST_EQUAL(" f ", m0["f"]);
-#endif // LMI_MSW
-
-    BOOST_TEST_EQUAL(6, m0.size());
-
+    name_value_pairs n_v_pairs_0(filename0);
+    std::map<std::string, std::string> m0 = n_v_pairs_0.map();
     BOOST_TEST(0 == std::remove(filename0.c_str()));
 
+    BOOST_TEST_EQUAL(15, m0.size());
+
+    // Test string().
+
+    BOOST_TEST_EQUAL("a"     , n_v_pairs_0.string("a"));
+    BOOST_TEST_EQUAL("b"     , n_v_pairs_0.string("b"));
+    BOOST_TEST_EQUAL(""      , n_v_pairs_0.string("c"));
+    BOOST_TEST_EQUAL("="     , n_v_pairs_0.string("d"));
+    BOOST_TEST_EQUAL("1=."   , n_v_pairs_0.string("e"));
+#ifndef LMI_MSW
+    BOOST_TEST_EQUAL(" f \r" , n_v_pairs_0.string("f"));
+#else  // LMI_MSW
+    BOOST_TEST_EQUAL(" f "   , n_v_pairs_0.string("f"));
+#endif // LMI_MSW
+    BOOST_TEST_EQUAL("a test", n_v_pairs_0.string("this"));
+
+    // Test number().
+
+    BOOST_TEST_EQUAL( 2.0    , n_v_pairs_0.number("z"));
+    BOOST_TEST_EQUAL(-3.142  , n_v_pairs_0.number("y"));
+    BOOST_TEST_EQUAL( 2.718  , n_v_pairs_0.number("x"));
+    BOOST_TEST_EQUAL( 2.718  , n_v_pairs_0.number("w"));
+    BOOST_TEST_EQUAL( 2.718  , n_v_pairs_0.number("v"));
+    BOOST_TEST_EQUAL( 0.0    , n_v_pairs_0.number("u"));
+    BOOST_TEST_EQUAL( 0.0    , n_v_pairs_0.number("t"));
+    BOOST_TEST_EQUAL( 0.0    , n_v_pairs_0.number("s"));
+
     std::string filename1("/tmp/nonexistent_name_value_pairs_test_file");
-    std::map<std::string, std::string> m1 = read_name_value_pairs(filename1);
+    name_value_pairs n_v_pairs_1(filename1);
+    std::map<std::string, std::string> m1 = n_v_pairs_1.map();
     BOOST_TEST_EQUAL(0, m1.size());
 
-// TODO ?? expunge
+// TODO ?? expunge eventually
 // Test with a particular file:
 //    read_name_value_pairs("/opt/lmi/test/ini00000.test");
 
