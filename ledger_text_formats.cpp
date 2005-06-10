@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_text_formats.cpp,v 1.4 2005-05-27 10:37:06 chicares Exp $
+// $Id: ledger_text_formats.cpp,v 1.5 2005-06-10 23:38:34 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -185,22 +185,21 @@ void set_net_payment
 
 //==============================================================================
 void PrintFormTabDelimited
-    (Ledger const& a_LedgerValues
+    (Ledger const& ledger_values
     ,std::string const& file_name
-//    ) const
     )
 {
-    LedgerInvariant const& Invar = a_LedgerValues.GetLedgerInvariant();
-    LedgerVariant   const& Curr_ = a_LedgerValues.GetCurrFull();
-    LedgerVariant   const& Guar_ = a_LedgerValues.GetGuarFull();
+    LedgerInvariant const& Invar = ledger_values.GetLedgerInvariant();
+    LedgerVariant   const& Curr_ = ledger_values.GetCurrFull();
+    LedgerVariant   const& Guar_ = ledger_values.GetGuarFull();
 
-    int max_length = a_LedgerValues.GetMaxLength();
+    int max_length = ledger_values.GetMaxLength();
 
     std::vector<double> net_payment;
     set_net_payment(Invar, net_payment);
 
     std::vector<double> real_claims;
-    if(a_LedgerValues.GetIsComposite())
+    if(ledger_values.GetIsComposite())
         {
         real_claims = Curr_.ClaimsPaid;
         }
@@ -484,20 +483,27 @@ os << "\n\n" ;
 }
 
 //==============================================================================
-void PrintFormSpecial(Ledger const& a_LedgerValues)
+void PrintFormSpecial
+    (Ledger const& ledger_values
+    ,char const*   overridden_filename
+    )
 {
-    LedgerInvariant const& Invar = a_LedgerValues.GetLedgerInvariant();
-    LedgerVariant   const& Curr_ = a_LedgerValues.GetCurrFull();
-
+    std::string filename =
+        overridden_filename
+        ? overridden_filename
+        : configurable_settings::instance().custom_output_filename()
+        ;
     std::ofstream os
-        (configurable_settings::instance().custom_output_filename().c_str()
+        (filename.c_str()
         ,std::ios_base::out | std::ios_base::trunc
         );
-
     if(!os.good())
         {
         hobsons_choice() << "Error initializing output file." << LMI_FLUSH;
         }
+
+    LedgerInvariant const& Invar = ledger_values.GetLedgerInvariant();
+    LedgerVariant   const& Curr_ = ledger_values.GetCurrFull();
 
     os
         << "CashValu,SurrValu,DeathBen,IntEarned,"
