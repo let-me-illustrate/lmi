@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: financial_test.cpp,v 1.4 2005-06-07 12:17:51 chicares Exp $
+// $Id: financial_test.cpp,v 1.5 2005-06-10 23:34:04 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -183,7 +183,7 @@ std::cout << "tolerance = .000005: " << .000005 << '\n';
     std::cout
         << "  Speed test: vector of irrs, length "
         << p.size()
-        << ","
+        << ", "
         << decimals
         << " decimals\n    "
         << aliquot_timer
