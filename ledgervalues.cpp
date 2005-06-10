@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledgervalues.cpp,v 1.12 2005-06-07 23:11:36 chicares Exp $
+// $Id: ledgervalues.cpp,v 1.13 2005-06-10 23:34:24 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -213,6 +213,7 @@ void IllusVal::PrintKeyTerms(std::ostream& os) const
     os << endrow;
 }
 
+//============================================================================
 void IllusVal::PrintNumericalSummary(std::ostream& os) const
 {
     os << center("Numerical summary") << endrow;
