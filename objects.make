@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: objects.make,v 1.36 2005-06-10 01:09:37 chicares Exp $
+# $Id: objects.make,v 1.37 2005-06-10 16:46:04 chicares Exp $
 
 ################################################################################
 
@@ -109,32 +109,19 @@ cli_objects := \
 
 ################################################################################
 
-# Illustrations: the antediluvian branch. This code is fairly simple
-# and clean, but less powerful than the production branch. For
-# historical reasons, these 'branches' aren't maintained in separate
-# cvs branches; instead, all their source code resides in the same
-# place, and conflicts are prevented by prepending 'ihs_' to the
-# names of many files in the production branch. Gradually the
-# differences are being eliminated.
+# Illustrations: files shared by the antediluvian and production branches.
 
-antediluvian_common_objects := \
+common_common_objects := \
   $(boost_filesystem_objects) \
   $(xmlwrapp_objects) \
-  accountvalue.o \
   actuarial_table.o \
   alert.o \
-  antediluvian_stubs.o \
-  avdebug.o \
-  basicvalues.o \
   calendar_date.o \
   configurable_settings.o \
   crc32.o \
   custom_io_0.o \
-  database.o \
   data_directory.o \
-  dbdict.o \
   dbnames.o \
-  dbvalue.o \
   death_benefits.o \
   expm1.o \
   facets.o \
@@ -147,7 +134,6 @@ antediluvian_common_objects := \
   input_seq_helpers.o \
   inputillus.o \
   inputillus_sequences.o \
-  inputillus_term_rider.o \
   inputillus_xml_io.o \
   inputs.o \
   inputstatus.o \
@@ -161,9 +147,7 @@ antediluvian_common_objects := \
   ledger_xsl.o \
   ledgervalues.o \
   license.o \
-  loads.o \
   miscellany.o \
-  mortality_rates.o \
   multiple_cell_document.o \
   name_value_pairs.o \
   outlay.o \
@@ -172,7 +156,6 @@ antediluvian_common_objects := \
   rounding_rules.o \
   sigfpe.o \
   single_cell_document.o \
-  solve.o \
   surrchg_rates.o \
   system_command.o \
   timer.o \
@@ -181,27 +164,34 @@ antediluvian_common_objects := \
 
 ################################################################################
 
+# Illustrations: the antediluvian branch. This code is fairly simple
+# and clean, but less powerful than the production branch. For
+# historical reasons, these 'branches' aren't maintained in separate
+# cvs branches; instead, all their source code resides in the same
+# place, and conflicts are prevented by prepending 'ihs_' to the
+# names of many files in the production branch. Gradually the
+# differences are being eliminated.
+
+antediluvian_common_objects := \
+  $(common_common_objects) \
+  accountvalue.o \
+  antediluvian_stubs.o \
+  avdebug.o \
+  basicvalues.o \
+  database.o \
+  dbdict.o \
+  dbvalue.o \
+  inputillus_term_rider.o \
+  loads.o \
+  mortality_rates.o \
+  solve.o \
+
+################################################################################
+
 # Illustrations: the production branch.
 
 lmi_common_objects := \
-  $(boost_filesystem_objects) \
-  $(xmlwrapp_objects) \
-  actuarial_table.o \
-  alert.o \
-  calendar_date.o \
-  configurable_settings.o \
-  crc32.o \
-  custom_io_0.o \
-  data_directory.o \
-  dbnames.o \
-  death_benefits.o \
-  expm1.o \
-  facets.o \
-  fenv_lmi.o \
-  file_command.o \
-  getopt.o \
-  global_settings.o \
-  group_values.o \
+  $(common_common_objects) \
   ihs_acctval.o \
   ihs_avdebug.o \
   ihs_avmly.o \
@@ -222,42 +212,11 @@ lmi_common_objects := \
   ihs_pios.o \
   ihs_proddata.o \
   ihs_rnddata.o \
-  input_sequence.o \
-  input_seq_helpers.o \
-  inputillus.o \
-  inputillus_sequences.o \
-  inputillus_xml_io.o \
-  inputs.o \
-  inputstatus.o \
-  interest_rates.o \
-  ledger.o \
-  ledger_base.o \
-  ledger_invariant.o \
-  ledger_text_formats.o \
-  ledger_variant.o \
-  ledger_xml_io.o \
-  ledger_xsl.o \
-  ledgervalues.o \
-  license.o \
   mathmisc.o \
   md5.o \
-  miscellany.o \
-  multiple_cell_document.o \
-  name_value_pairs.o \
-  outlay.o \
-  path_utility.o \
-  progress_meter.o \
-  rounding_rules.o \
   secure_date.o \
   security.o \
-  sigfpe.o \
-  single_cell_document.o \
-  surrchg_rates.o \
-  system_command.o \
   tiered_charges.o \
-  timer.o \
-  xenumtypes.o \
-  xrange.o \
 
 lmi_wx_objects := \
   about_dialog.o \
@@ -362,8 +321,8 @@ unit_test_targets := \
   commutation_functions_test$(EXEEXT) \
   comma_punct_test$(EXEEXT) \
   crc32_test$(EXEEXT) \
-  global_settings_test$(EXEEXT) \
   financial_test$(EXEEXT) \
+  global_settings_test$(EXEEXT) \
   input_seq_test$(EXEEXT) \
   input_test$(EXEEXT) \
   irc7702a_test$(EXEEXT) \
@@ -453,12 +412,6 @@ crc32_test$(EXEEXT): \
   crc32.o \
   crc32_test.o \
 
-global_settings_test$(EXEEXT): \
-  $(boost_filesystem_objects) \
-  $(common_test_objects) \
-  global_settings.o \
-  global_settings_test.o \
-
 financial_test$(EXEEXT): \
   $(common_test_objects) \
   alert.o \
@@ -466,6 +419,12 @@ financial_test$(EXEEXT): \
   financial_test.o \
   mathmisc.o \
   timer.o \
+
+global_settings_test$(EXEEXT): \
+  $(boost_filesystem_objects) \
+  $(common_test_objects) \
+  global_settings.o \
+  global_settings_test.o \
 
 input_seq_test$(EXEEXT): \
   $(common_test_objects) \
