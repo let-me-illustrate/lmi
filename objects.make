@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: objects.make,v 1.35 2005-06-09 21:36:03 chicares Exp $
+# $Id: objects.make,v 1.36 2005-06-10 01:09:37 chicares Exp $
 
 ################################################################################
 
@@ -129,6 +129,7 @@ antediluvian_common_objects := \
   calendar_date.o \
   configurable_settings.o \
   crc32.o \
+  custom_io_0.o \
   database.o \
   data_directory.o \
   dbdict.o \
@@ -164,6 +165,7 @@ antediluvian_common_objects := \
   miscellany.o \
   mortality_rates.o \
   multiple_cell_document.o \
+  name_value_pairs.o \
   outlay.o \
   path_utility.o \
   progress_meter.o \
@@ -189,6 +191,7 @@ lmi_common_objects := \
   calendar_date.o \
   configurable_settings.o \
   crc32.o \
+  custom_io_0.o \
   data_directory.o \
   dbnames.o \
   death_benefits.o \
@@ -240,6 +243,7 @@ lmi_common_objects := \
   md5.o \
   miscellany.o \
   multiple_cell_document.o \
+  name_value_pairs.o \
   outlay.o \
   path_utility.o \
   progress_meter.o \
