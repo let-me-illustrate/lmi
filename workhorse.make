@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: workhorse.make,v 1.30 2005-06-04 16:30:11 chicares Exp $
+# $Id: workhorse.make,v 1.31 2005-06-10 23:34:33 chicares Exp $
 
 ###############################################################################
 
@@ -611,7 +611,7 @@ regression_test: install
 	  $(MD5SUM) \
 	    $(addprefix *.,$(test_result_suffixes)) \
 	    >$(regression_test_md5sums); \
-	  for z in *test; \
+	  for z in *.test; \
 	    { $(bin_dir)/ihs_crc_comp $$z $(touchstone_dir)/$$z \
 	      | $(SED) -e '/Summary/!d' -e"s|^ |$$z|" \
 	    } > $(regression_test_analysis)
