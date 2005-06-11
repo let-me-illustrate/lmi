@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_base.cpp,v 1.2 2005-05-19 12:30:00 chicares Exp $
+// $Id: ledger_base.cpp,v 1.3 2005-06-11 15:27:28 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -522,13 +522,8 @@ void LedgerBase::UpdateCRC(CRC& crc) const
 //============================================================================
 void LedgerBase::Spew(std::ostream& os) const
 {
-    static int const prec =
-//      std::numeric_limits<double>::digits10;
-//      DBL_DIG;
-//      LDBL_DIG;
-        18; // COMPILER !! mingw gcc-2.95.2-1 has this wrong.
-    // Somehow bc++ gives at least 19 digits; it prolly emits long doubles.
-// TODO ?? Consider using max_stream_precision.hpp instead.
+    static int const prec = max_stream_precision();
+
     for
         (double_vector_map::const_iterator vmi = AllVectors.begin()
         ;vmi != AllVectors.end()
