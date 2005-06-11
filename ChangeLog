@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.72 2005-06-08 15:59:50 chicares Exp $
+// $Id: ChangeLog,v 1.73 2005-06-11 15:45:20 chicares Exp $
 
 2005-01-14
 
@@ -2203,4 +2203,70 @@ Expunge obsolete code.
   ledgervalues.cpp
   ledgervalues.hpp
 Pass an argument by pointer to work around a shared-library issue.
+
+2005-06-08 [1285]
+
+  name_value_pairs.hpp      [new file]
+  name_value_pairs_test.cpp [new file]
+  objects.make
+Read name-value pairs--initial sketch.
+
+  docmanager_ex.cpp
+Fix defect #12345.
+
+  name_value_pairs.cpp      [new file]
+  name_value_pairs.hpp
+  name_value_pairs_test.cpp
+  objects.make
+Read name-value pairs--rewritten as a class.
+
+2005-06-09 [1285]
+
+  name_value_pairs.cpp
+  name_value_pairs.hpp
+  name_value_pairs_test.cpp
+  objects.make
+Refactor.
+
+  objects.make
+Prepare for new files, yet to be added.
+
+2005-06-10 [1286]
+
+  objects.make
+Refactor.
+
+  financial_test.cpp
+Reformat speed-test output.
+
+  ledgervalues.cpp
+Reformat.
+
+  workhorse.make
+Improve consistency.
+
+  ledger_text_formats.cpp
+  ledger_text_formats.hpp
+Optionally specify PrintFormSpecial()'s output file.
+
+2005-06-11 [1282]
+
+  ihs_avmly.cpp
+  ihs_commfns.cpp
+  ledger_base.hpp
+  ledger_text_formats.cpp
+  ncnnnpnn.hpp
+Refactor stream precision.
+
+  input_sequence.cpp
+  ledger_base.cpp
+  ledger_base.hpp
+  max_stream_precision.hpp
+Rewrite max_stream_precision().
+
+  custom_io_0.cpp [new file]
+  custom_io_0.hpp [new file]
+  main_cli.cpp
+  workhorse.make
+Support a custom interface.
 
