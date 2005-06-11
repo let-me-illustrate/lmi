@@ -1,4 +1,4 @@
-// Set ostream for lossless floating-point I/O.
+// Precision for lossless floating-point I/O.
 //
 // Copyright (C) 2002, 2004, 2005 Gregory W. Chicares.
 //
@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: max_stream_precision.hpp,v 1.1 2005-01-14 19:47:45 chicares Exp $
+// $Id: max_stream_precision.hpp,v 1.2 2005-06-11 15:04:25 chicares Exp $
 
 #ifndef max_stream_precision_hpp
 #define max_stream_precision_hpp
@@ -27,26 +27,36 @@
 #include "config.hpp"
 
 #include <cmath>
-#include <ios>
 #include <limits>
 
-// Return the stream precision necessary to map any base-ten
-// scientific-notation representation back to binary without
-// loss of accuracy.
-//
-// Reference: c99 5.2.4.2.2/8 (DECIMAL_DIG)
-// TODO ?? Why not just use that?
-//
-// TODO ?? Would it be better to make the type a template
-// argument, and pass the stream as an argument so that
-// we can make sure 'scientific' is set? How about making
-// this a manipulator?
-//
-inline std::streamsize max_stream_precision()
+/// Return the stream precision necessary to map any base-ten
+/// scientific-notation representation back to binary without
+/// loss of accuracy.
+///
+/// Return a value of type int, rather than type std::streamsize .
+/// Rationale: this value is intended to be used with function
+///   std::ios_base::precision(std::streamsize)
+/// and manipulator
+///   std::setprecision(int)
+/// and its value can't plausibly exceed the range of an int, so it is
+/// preferable to avoid a narrowing conversion in the first use case.
+///
+/// Reference: c99 5.2.4.2.2/8 (DECIMAL_DIG)
+/// ...but that's used here because it's not in c++98 .
+///
+/// INELEGANT !! Would it be better to make the type a template
+/// argument, and pass the stream as an argument so that
+/// we can make sure 'scientific' is set? How about making
+/// this a manipulator?
+
+inline int max_stream_precision()
 {
-    int nbits = std::numeric_limits<long double>::digits;
-    double prec = 1 + std::ceil(std::log10(std::pow(2.0, nbits)));
-    return static_cast<std::streamsize>(prec);
+    static const int nbits = std::numeric_limits<long double>::digits;
+    static const double precision =
+            1.0
+        +   std::ceil(std::log10(std::pow(2.0, nbits)))
+        ;
+    return static_cast<int>(precision);
 }
 
 #endif // max_stream_precision_hpp
