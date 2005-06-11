@@ -20,7 +20,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_sequence.cpp,v 1.3 2005-05-26 22:01:15 chicares Exp $
+// $Id: input_sequence.cpp,v 1.4 2005-06-11 15:04:25 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -1046,15 +1046,12 @@ std::string InputSequence::element_by_element_representation() const
 //   do we want enumerators e.g. for such tokens?
 std::string InputSequence::mathematical_representation() const
 {
-    std::ostringstream oss;
-// TODO ?? This gives lots of precision--more than we'd like?
-//    oss.setf(std::ios_base::scientific, std::ios_base::floatfield);
-//    oss.precision(max_stream_precision());
-
     if(intervals.empty())
         {
         throw std::logic_error("Sequence contains no interval.");
         }
+
+    std::ostringstream oss;
     std::vector<ValueInterval>::const_iterator intervals_i = intervals.begin();
     std::vector<ValueInterval>::const_iterator off_the_end = intervals.end();
     std::vector<ValueInterval>::const_iterator last_interval = --off_the_end;
