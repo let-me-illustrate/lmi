@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_commfns.cpp,v 1.4 2005-06-07 11:50:14 chicares Exp $
+// $Id: ihs_commfns.cpp,v 1.5 2005-06-11 15:03:59 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -364,18 +364,16 @@ void LMI_EXPIMP ULCommFns::SelfTest()
     for(unsigned int j = 0; j < coi.size(); j++)
         {
         os
-            << std::setw(3)
-            << j
-            << std::setiosflags(std::ios_base::fixed) << std::setprecision(3) << std::setw(6)
-            << ic[j]
-            << std::setiosflags(std::ios_base::fixed) << std::setprecision(6) << std::setw(9)
-            << coi[j]
-            << std::setiosflags(std::ios_base::fixed) << std::setprecision(9) << std::setw(13)
-            << CF->aD()[j]
-            << std::setiosflags(std::ios_base::fixed) << std::setprecision(9) << std::setw(13)
-            << CF->kD()[j]
-            << std::setiosflags(std::ios_base::fixed) << std::setprecision(9) << std::setw(13)
-            << CF->kC()[j]
+            << std::setw(3)  << j
+            << std::setiosflags(std::ios_base::fixed)
+            << std::setprecision(3)
+            << std::setw(6)  << ic[j]
+            << std::setprecision(6)
+            << std::setw(9)  << coi[j]
+            << std::setprecision(9)
+            << std::setw(13) << CF->aD()[j]
+            << std::setw(13) << CF->kD()[j]
+            << std::setw(13) << CF->kC()[j]
             << '\n'
             ;
         }
@@ -420,20 +418,17 @@ void LMI_EXPIMP OLCommFns::SelfTest()
     for(unsigned int j = 0; j < q.size(); j++)
         {
         os
-            << std::setw(3)
-            << j
-            << std::setiosflags(std::ios_base::fixed) << std::setprecision(3) << std::setw(6)
-            << i[j]
-            << std::setiosflags(std::ios_base::fixed) << std::setprecision(6) << std::setw(9)
-            << q[j]
-            << std::setiosflags(std::ios_base::fixed) << std::setprecision(9) << std::setw(13)
-            << CF->C()[j]
-            << std::setiosflags(std::ios_base::fixed) << std::setprecision(9) << std::setw(13)
-            << CF->D()[j]
-            << std::setiosflags(std::ios_base::fixed) << std::setprecision(9) << std::setw(13)
-            << CF->M()[j]
-            << std::setiosflags(std::ios_base::fixed) << std::setprecision(9) << std::setw(13)
-            << CF->N()[j]
+            << std::setw(3)  << j
+            << std::setiosflags(std::ios_base::fixed)
+            << std::setprecision(3)
+            << std::setw(6)  << i[j]
+            << std::setprecision(6)
+            << std::setw(9)  << q[j]
+            << std::setprecision(9)
+            << std::setw(13) << CF->C()[j]
+            << std::setw(13) << CF->D()[j]
+            << std::setw(13) << CF->M()[j]
+            << std::setw(13) << CF->N()[j]
             << '\n'
             ;
         }
