@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_cli.cpp,v 1.5 2005-06-07 23:11:36 chicares Exp $
+// $Id: main_cli.cpp,v 1.6 2005-06-11 15:31:37 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -29,9 +29,11 @@
 #include "alert.hpp"
 #include "argv0.hpp"
 #include "calculate.hpp"
+#include "custom_io_0.hpp"
 #include "getopt.hpp"
 #include "global_settings.hpp"
 #include "group_values.hpp"
+#include "ledger_text_formats.hpp"
 #include "license.hpp"
 #include "main_common.hpp"
 #include "miscellany.hpp"
@@ -54,20 +56,10 @@
 #include <vector>
 
 //============================================================================
-void RegressionTest()
+void RegressionTestOneCensusFile(fs::directory_iterator i)
 {
-    fs::path test_dir(global_settings::instance().regression_test_directory);
-    fs::directory_iterator i(test_dir);
-    fs::directory_iterator end_i;
-    for(; i != end_i; ++i)
-        {
-        if(is_directory(*i) || ".cns" != fs::extension(*i))
-            {
-            continue;
-            }
-
-        std::cout << "Regression testing: " << i->string() << std::endl;
-        multiple_cell_document doc(i->string());
+    std::cout << "Regression testing: " << i->string() << std::endl;
+    multiple_cell_document doc(i->string());
 
 // The run order depends on the first cell's parameters and ignores any
 // conflicting input for any individual cell. Perhaps we should detect
@@ -75,21 +67,57 @@ void RegressionTest()
 // to offer this input item (and a few similar ones) only at the case
 // level. TODO ?? Fix this, and remove duplicate code in the census
 // manager.
-        if(doc.case_parms()[0].RunOrder != doc.cell_parms()[0].RunOrder)
+    if(doc.case_parms()[0].RunOrder != doc.cell_parms()[0].RunOrder)
+        {
+        fatal_error()
+            << "Case-default run order '"
+            << doc.case_parms()[0].RunOrder
+            << "' differs from first cell's run order '"
+            << doc.cell_parms()[0].RunOrder
+            << "'. Make them consistent then run again."
+            << LMI_FLUSH
+            ;
+        }
+
+    run_census()(*i, emit_to_spew_file, doc.cell_parms());
+}
+
+//============================================================================
+void RegressionTestOneIniFile(fs::directory_iterator i)
+{
+    std::cout << "Regression testing: " << i->string() << std::endl;
+    IllusVal IV;
+    IllusInputParms IP;
+    SetSpecialInput(IP, i->string().c_str());
+    IV.Run(&IP);
+    fs::path out_file = fs::change_extension(*i, ".test0");
+    PrintFormSpecial(IV.ledger(), out_file.string().c_str());
+}
+
+//============================================================================
+void RegressionTest()
+{
+    fs::path test_dir(global_settings::instance().regression_test_directory);
+    fs::directory_iterator i(test_dir);
+    fs::directory_iterator end_i;
+    for(; i != end_i; ++i)
+        {
+        if(is_directory(*i))
             {
-            fatal_error()
-                << "Case-default run order '"
-                << doc.case_parms()[0].RunOrder
-                << "' differs from first cell's run order '"
-                << doc.cell_parms()[0].RunOrder
-                << "'. Make them consistent then run again."
-                << LMI_FLUSH
-                ;
+            continue;
             }
-
-        run_census()(*i, emit_to_spew_file, doc.cell_parms());
-
-        std::cout << std::endl;
+        else if(".cns" == fs::extension(*i))
+            {
+            RegressionTestOneCensusFile(i);
+            }
+        else if(".ini" == fs::extension(*i))
+            {
+            RegressionTestOneIniFile(i);
+            }
+        else
+            {
+            ; // Do nothing.
+            }
         }
 }
 
