@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_base.hpp,v 1.1 2005-02-12 12:59:31 chicares Exp $
+// $Id: ledger_base.hpp,v 1.2 2005-06-11 15:04:25 chicares Exp $
 
 #ifndef ledger_base_hpp
 #define ledger_base_hpp
@@ -27,6 +27,7 @@
 #include "config.hpp"
 
 #include "expimp.hpp"
+#include "max_stream_precision.hpp"
 
 #include <algorithm>
 #include <cfloat>
@@ -155,16 +156,8 @@ template<typename T> void SpewVector
 {
     std::ostream_iterator<T> osi(os, "\n");
 
-    static int const prec =
-//      std::numeric_limits<double>::digits10;
-//      DBL_DIG;
-//      LDBL_DIG;
-        18; // TODO ?? gcc has this wrong (?)
-    // Somehow BC++ gives at least 19 digits;
-    // it prolly emits long doubles
-// TODO ?? Consider using max_stream_precision.hpp instead.
+    static int const prec = max_stream_precision();
     os << name << '\n';
-//      os << setiosflags(std::ios_base::fixed) << std::setprecision(prec);
     os << std::setprecision(prec);
     std::copy(elements.begin(), elements.end(), osi);
 }
