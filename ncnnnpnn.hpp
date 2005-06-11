@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ncnnnpnn.hpp,v 1.4 2005-05-26 22:01:15 chicares Exp $
+// $Id: ncnnnpnn.hpp,v 1.5 2005-06-11 15:03:59 chicares Exp $
 
 // Ideally we would use imbue an appropriate locale and use some facet
 // like money_put, but most of our compilers's standard libraries don't
@@ -51,8 +51,7 @@ inline std::string ncnnnpnn(long double value)
         }
 
     std::stringstream stream;
-    stream << std::setiosflags(std::ios_base::fixed);
-    stream << std::setprecision(2);
+    stream << std::setiosflags(std::ios_base::fixed) << std::setprecision(2);
     std::string s_in;
 
 // TODO ?? Do something like this in stream_cast.hpp too.
