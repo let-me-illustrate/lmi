@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_text_formats.cpp,v 1.5 2005-06-10 23:38:34 chicares Exp $
+// $Id: ledger_text_formats.cpp,v 1.6 2005-06-11 15:03:59 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -90,19 +90,18 @@ std::string FormatSelectedValuesAsHtml(Ledger const& ledger_values)
             << Invar.Gender << ", " << Invar.Smoker
             << std::setprecision(0)
             << ", age " << Invar.Age
+            << std::setprecision(2)
             << "<br>"
             ;
 
         if(is_subject_to_ill_reg(ledger_values.GetLedgerType()))
             {
             oss
-                << std::setprecision(2)
                 << Invar.GuarPrem << "   guaranteed premium<br>"
                 ;
             }
 
         oss
-            << std::setprecision(2)
             << "<br>"
             << Invar.InitGLP          << "   initial guideline level premium<br>"
             << Invar.InitGSP          << "   initial guideline single premium<br>"
@@ -135,14 +134,16 @@ std::string FormatSelectedValuesAsHtml(Ledger const& ledger_values)
         {
         oss
             << "<tr>"
-            << "<td>" << std::setprecision(0) << j + Invar.Age        << "</td>"
-            << "<td>" << std::setprecision(2) << Invar.Outlay[j]      << "</td>"
-            << "<td>" << std::setprecision(2) << Guar_.AcctVal[j]     << "</td>"
-            << "<td>" << std::setprecision(2) << Guar_.CSVNet[j]      << "</td>"
-            << "<td>" << std::setprecision(2) << Guar_.EOYDeathBft[j] << "</td>"
-            << "<td>" << std::setprecision(2) << Curr_.AcctVal[j]     << "</td>"
-            << "<td>" << std::setprecision(2) << Curr_.CSVNet[j]      << "</td>"
-            << "<td>" << std::setprecision(2) << Curr_.EOYDeathBft[j] << "</td>"
+            << std::setprecision(0)
+            << "<td>" << j + Invar.Age        << "</td>"
+            << std::setprecision(2)
+            << "<td>" << Invar.Outlay[j]      << "</td>"
+            << "<td>" << Guar_.AcctVal[j]     << "</td>"
+            << "<td>" << Guar_.CSVNet[j]      << "</td>"
+            << "<td>" << Guar_.EOYDeathBft[j] << "</td>"
+            << "<td>" << Curr_.AcctVal[j]     << "</td>"
+            << "<td>" << Curr_.CSVNet[j]      << "</td>"
+            << "<td>" << Curr_.EOYDeathBft[j] << "</td>"
             << "</tr>"
             ;
         }
@@ -539,18 +540,19 @@ void PrintFormSpecial
         // Customer requirement: show interest rate in bp.
         double gen_acct_int_rate_bp = 10000.0 * Curr_.AnnGAIntRate[j];
         os
-            << std::setprecision(0) << Curr_.AcctVal         [j] << ','
-            << std::setprecision(0) << Curr_.CSVNet          [j] << ','
-            << std::setprecision(0) << Curr_.EOYDeathBft     [j] << ','
-            << std::setprecision(0) << Curr_.NetIntCredited  [j] << ','
-            << std::setprecision(0) << Curr_.COICharge       [j] << ','
+            << std::setprecision(0)
+            << Curr_.AcctVal        [j] << ','
+            << Curr_.CSVNet         [j] << ','
+            << Curr_.EOYDeathBft    [j] << ','
+            << Curr_.NetIntCredited [j] << ','
+            << Curr_.COICharge      [j] << ','
             // Assume 'min prem' is zero--see comments below.
-            << std::setprecision(0) << 0 << ','
-            << std::setprecision(0) << prem_load             [j] << ','
-            << std::setprecision(0) << surr_chg              [j] << ','
-            << std::setprecision(0) << Invar.GrossPmt        [j] << ','
-            << std::setprecision(0) << gen_acct_int_rate_bp
-            << std::setprecision(0) << '\n'
+            << 0 << ','
+            << prem_load            [j] << ','
+            << surr_chg             [j] << ','
+            << Invar.GrossPmt       [j] << ','
+            << gen_acct_int_rate_bp
+            << '\n'
             ;
         }
 /*

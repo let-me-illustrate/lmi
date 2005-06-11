@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avmly.cpp,v 1.14 2005-05-27 10:37:06 chicares Exp $
+// $Id: ihs_avmly.cpp,v 1.15 2005-06-11 15:03:59 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -1306,7 +1306,9 @@ void AccountValue::IncreaseSpecAmtToAvoidMec()
     os << std::setiosflags(std::ios_base::fixed);
     os << "Unrounded min specamt = " << min_benefit << '\n';
 #endif // DEBUGGING_MEC_AVOIDANCE
+
     min_benefit = round_min_specamt(min_benefit);
+
 #ifdef DEBUGGING_MEC_AVOIDANCE
     os << std::setiosflags(std::ios_base::fixed);
     os << "Rounded   min specamt = " << min_benefit << '\n';
