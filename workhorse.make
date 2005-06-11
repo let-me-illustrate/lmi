@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: workhorse.make,v 1.31 2005-06-10 23:34:33 chicares Exp $
+# $Id: workhorse.make,v 1.32 2005-06-11 15:31:38 chicares Exp $
 
 ###############################################################################
 
@@ -592,7 +592,7 @@ cgi_tests: antediluvian_cgi$(EXEEXT)
 # shown that the discrepancies thus ignored are never material, but
 # larger discrepancies may be.
 
-test_result_suffixes     := test debug
+test_result_suffixes     := test test0 debug
 
 regression_test_analysis := $(test_dir)/analysis-$(yyyymmddhhmm)
 regression_test_diffs    := $(test_dir)/diffs-$(yyyymmddhhmm)
@@ -624,7 +624,8 @@ regression_test: install
 	    --report-identical-files \
 	    $(test_dir) \
 	    $(touchstone_dir) \
-	    > $(regression_test_diffs)
+	    > $(regression_test_diffs) \
+	  || true
 	@$(ECHO) Summarizing test results
 	@-<$(regression_test_diffs) \
 	  $(SED) \
