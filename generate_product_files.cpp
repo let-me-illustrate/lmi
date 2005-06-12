@@ -19,27 +19,25 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: generate_product_files.cpp,v 1.5 2005-04-10 14:53:17 chicares Exp $
+// $Id: generate_product_files.cpp,v 1.6 2005-06-12 16:58:36 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
 #   pragma hdrstop
 #endif // __BORLANDC__
 
-#include "fenv_lmi.hpp"
 #include "ihs_dbdict.hpp"
 #include "ihs_funddata.hpp"
 #include "ihs_proddata.hpp"
 #include "ihs_rnddata.hpp"
+#include "main_common.hpp"
 #include "tiered_charges.hpp"
 
 #include <iostream>
 #include <ostream>
 
-int main()
+int try_main(int, char*[])
 {
-    initialize_fpu();
-
     std::cout << "Generating product files." << std::endl;
 
     DBDictionary::instance().WriteSampleDBFile();
@@ -54,8 +52,8 @@ int main()
     StreamableRoundingRules ::WriteProprietaryRndFiles     ();
     tiered_charges          ::write_proprietary_tier_files ();
 
-    validate_fenv();
-
     std::cout << "\nAll product files written.\n" << std::endl;
+
+    return EXIT_SUCCESS;
 }
 

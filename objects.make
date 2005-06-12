@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: objects.make,v 1.37 2005-06-10 16:46:04 chicares Exp $
+# $Id: objects.make,v 1.38 2005-06-12 16:58:36 chicares Exp $
 
 ################################################################################
 
@@ -89,6 +89,21 @@ xmlwrapp_objects := \
 
 ################################################################################
 
+# All command-line-interface programs use a common 'main.o', which
+# catches exceptions and performs certain default initialization.
+# They should use this variable in their object lists unless some of
+# these objects are included in libraries they already use.
+
+main_cli_common_objects := \
+  alert.o \
+  alert_cli.o \
+  fenv_lmi.o \
+  main_common.o \
+  main_common_non_wx.o \
+  sigfpe.o \
+
+################################################################################
+
 # Generic interface-drivers that can be linked to either calculation
 # branch.
 
@@ -98,6 +113,7 @@ cgi_objects := \
   file_command_cgi.o \
   main_cgi.o \
   main_common.o \
+  main_common_non_wx.o \
   progress_meter_cgi.o \
 
 cli_objects := \
@@ -105,6 +121,7 @@ cli_objects := \
   file_command_cli.o \
   main_cli.o \
   main_common.o \
+  main_common_non_wx.o \
   progress_meter_cli.o \
 
 ################################################################################
@@ -613,15 +630,13 @@ zero_test$(EXEEXT): \
 # Custom tools built from source.
 
 elapsed_time$(EXEEXT): \
-  alert.o \
-  alert_cli.o \
+  $(main_cli_common_objects) \
   elapsed_time.o \
   system_command.o \
   timer.o \
 
 generate_passkey$(EXEEXT): \
-  alert.o \
-  alert_cli.o \
+  $(main_cli_common_objects) \
   calendar_date.o \
   generate_passkey.o \
   md5.o \
@@ -629,6 +644,7 @@ generate_passkey$(EXEEXT): \
   system_command.o \
 
 ihs_crc_comp$(EXEEXT): \
+  $(main_cli_common_objects) \
   ihs_crc_comp.o \
 
 ################################################################################
@@ -642,7 +658,7 @@ ihs_crc_comp$(EXEEXT): \
 product_files$(EXEEXT): lmi_dllflag := -DLMI_USE_DLL
 
 product_files$(EXEEXT): \
-  alert_cli.o \
+  $(main_cli_common_objects) \
   generate_product_files.o \
   my_db.o \
   my_fund.o \

@@ -19,11 +19,12 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_crc_comp.cpp,v 1.5 2005-05-27 10:37:06 chicares Exp $
+// $Id: ihs_crc_comp.cpp,v 1.6 2005-06-12 16:58:36 chicares Exp $
 
 // Sample command line to compile:
 // /gcc-2.95.2-1/bin/g++ -Iming29521 ihs_crc_comp.cpp
 
+#include "main_common.hpp"
 #include "miscellany.hpp"
 #include "value_cast.hpp"
 
@@ -492,24 +493,5 @@ int try_main(int argc, char* argv[])
     is2.close();
 
     return EXIT_SUCCESS;
-}
-
-//============================================================================
-int main(int argc, char* argv[])
-{
-    try
-        {
-        return try_main(argc, argv);
-        }
-    catch(std::exception& e)
-        {
-        std::cerr << "Fatal exception: " << e.what() << std::endl;
-        return EXIT_FAILURE;
-        }
-    catch(...)
-        {
-        std::cerr << "Fatal exception: [no detail available]" << std::endl;
-        return EXIT_FAILURE;
-        }
 }
 
