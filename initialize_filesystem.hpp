@@ -1,4 +1,4 @@
-// Startup code common to all interfaces.
+// Initialize boost filesystem library.
 //
 // Copyright (C) 2005 Gregory W. Chicares.
 //
@@ -19,18 +19,28 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_common.hpp,v 1.2 2005-06-12 16:58:36 chicares Exp $
+// $Id: initialize_filesystem.hpp,v 1.1 2005-06-12 16:58:36 chicares Exp $
 
-#ifndef main_common_hpp
-#define main_common_hpp
+#ifndef initialize_filesystem_hpp
+#define initialize_filesystem_hpp
 
 #include "config.hpp"
 
-// Included so that try_main() definitions can use EXIT_SUCCESS, EXIT_FAILURE.
-#include <cstdlib>
+#include <boost/filesystem/path.hpp>
 
-void initialize_application();
-int try_main(int argc, char* argv[]);
+/// Applications that end users would normally run should call this
+/// function during initialization--before using this boost library
+/// in any other way, to ensure uniform name checking. This enables
+/// them to use nonportable paths, as some demand.
+///
+/// This function is not called in the initialization routine used by
+/// all applications, because simple command-line tools should not be
+/// forced to depend on this boost library.
 
-#endif // main_common_hpp
+inline void initialize_filesystem()
+{
+    fs::path::default_name_check(fs::native);
+}
+
+#endif // initialize_filesystem_hpp
 

@@ -19,8 +19,9 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: elapsed_time.cpp,v 1.3 2005-06-05 03:55:52 chicares Exp $
+// $Id: elapsed_time.cpp,v 1.4 2005-06-12 16:58:35 chicares Exp $
 
+#include "main_common.hpp"
 #include "system_command.hpp"
 #include "timer.hpp"
 
@@ -28,7 +29,7 @@
 #include <iostream>
 #include <string>
 
-int main(int argc, char* argv[])
+int try_main(int argc, char* argv[])
 {
     if(argc < 2)
         {

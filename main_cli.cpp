@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_cli.cpp,v 1.6 2005-06-11 15:31:37 chicares Exp $
+// $Id: main_cli.cpp,v 1.7 2005-06-12 16:58:36 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -33,6 +33,7 @@
 #include "getopt.hpp"
 #include "global_settings.hpp"
 #include "group_values.hpp"
+#include "initialize_filesystem.hpp"
 #include "ledger_text_formats.hpp"
 #include "license.hpp"
 #include "main_common.hpp"
@@ -515,22 +516,10 @@ void process_command_line(int argc, char* argv[])
 }
 
 //============================================================================
-int main(int argc, char* argv[])
+int try_main(int argc, char* argv[])
 {
-    try
-        {
-        initialize_application(argc, argv);
-        process_command_line(argc, argv);
-        }
-    catch(std::exception& e)
-        {
-        std::cerr << "Fatal exception: " << e.what() << std::endl;
-        return EXIT_FAILURE;
-        }
-    catch(...)
-        {
-        std::cerr << "Fatal exception: [no detail available]" << std::endl;
-        return EXIT_FAILURE;
-        }
+    initialize_filesystem();
+    process_command_line(argc, argv);
+    return EXIT_SUCCESS;
 }
 
