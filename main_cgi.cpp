@@ -31,7 +31,7 @@
 // other reasons evident in cvs or explained in 'ChangeLog'. Any
 // defect should not reflect on Stephen F. Booth's reputation.
 
-// $Id: main_cgi.cpp,v 1.10 2005-06-05 03:55:52 chicares Exp $
+// $Id: main_cgi.cpp,v 1.11 2005-06-12 16:58:36 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -40,6 +40,7 @@
 
 #include "argv0.hpp"
 #include "calculate.hpp"
+#include "initialize_filesystem.hpp"
 #include "inputillus.hpp"
 #include "inputs.hpp"
 #include "main_common.hpp"
@@ -87,10 +88,10 @@ void ShowIllusOutput(IllusInputParms const&);
 void ShowCensusOutput(IllusInputParms const&, std::string const&, bool);
 
 // TODO ?? gnu getopt should be used here.
-int main(int argc, char* argv[])
+int try_main(int argc, char* argv[])
 {
   try {
-    initialize_application(argc, argv);
+    initialize_filesystem();
 
     if(argc == 2 && argv[1] == std::string("--capture"))
         {
@@ -349,6 +350,7 @@ int main(int argc, char* argv[])
   }
   catch(...) {
     std::cerr << "Unknown exception;";
+    return EXIT_FAILURE;
   }
 }
 

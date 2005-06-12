@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: workhorse.make,v 1.32 2005-06-11 15:31:38 chicares Exp $
+# $Id: workhorse.make,v 1.33 2005-06-12 16:58:36 chicares Exp $
 
 ###############################################################################
 
@@ -85,6 +85,8 @@ default_targets := \
   wx_new$(SHREXT) \
   antediluvian_cgi$(EXEEXT) \
   antediluvian_cli$(EXEEXT) \
+  elapsed_time$(EXEEXT) \
+  generate_passkey$(EXEEXT) \
   ihs_crc_comp$(EXEEXT) \
   libantediluvian$(SHREXT) \
   liblmi$(SHREXT) \

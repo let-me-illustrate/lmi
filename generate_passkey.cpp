@@ -19,13 +19,14 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: generate_passkey.cpp,v 1.2 2005-01-31 13:12:48 chicares Exp $
+// $Id: generate_passkey.cpp,v 1.3 2005-06-12 16:58:36 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
 #   pragma hdrstop
 #endif // __BORLANDC__
 
+#include "main_common.hpp"
 #include "md5.hpp"
 #include "secure_date.hpp" // md5_hex_string()
 
@@ -40,7 +41,7 @@
 // Iterating the md5 operation twice provides modest security: it's easy
 // to forge if you know the trick; otherwise it's infeasibly hard, unless
 // you use this program.
-int main()
+int try_main(int, char*[])
 {
     char c_passkey[md5len];
     unsigned char u_passkey[md5len];
@@ -58,5 +59,6 @@ int main()
     md5_buffer(c_passkey, md5len, u_passkey);
     std::vector<unsigned char> v(u_passkey, u_passkey + md5len);
     std::cout << md5_hex_string(v) << std::flush;
+    return EXIT_SUCCESS;
 }
 

@@ -1,4 +1,4 @@
-// Startup code common to all interfaces.
+// Startup code common to all interfaces except wx.
 //
 // Copyright (C) 2005 Gregory W. Chicares.
 //
@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_common.cpp,v 1.2 2005-06-12 16:58:36 chicares Exp $
+// $Id: main_common_non_wx.cpp,v 1.1 2005-06-12 16:58:36 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -29,31 +29,41 @@
 #include "main_common.hpp"
 
 #include "fenv_lmi.hpp"
-#include "sigfpe.hpp"
 
-#include <csignal>
-#include <stdexcept>
-
-// TODO ?? Remove other uses of fenv_lmi, initialize_fpu()?
+#include <iostream>
+#include <ostream>
+#include <exception>
 
 //============================================================================
-void initialize_application()
+int main(int argc, char* argv[])
 {
-    // This line forces mpatrol to link when it otherwise might not.
-    // It has no other effect according to C99 7.20.3.2/2, second
-    // sentence.
-    std::free(0);
-
-    // TODO ?? Instead, consider a singleton that checks the control
-    // word upon destruction, or a shared_ptr with a custom deleter
-    // that does that.
-    initialize_fpu();
-
-    if(SIG_ERR == std::signal(SIGFPE, floating_point_error_handler))
+    int result = EXIT_SUCCESS;
+    try
         {
-        throw std::runtime_error
-            ("Cannot install floating point error signal handler."
-            );
+// TODO ?? Remove calls to this function elsewhere.
+        initialize_application();
+        result = try_main(argc, argv);
         }
+    catch(std::exception& e)
+        {
+        std::cerr << "Fatal exception: " << e.what() << std::endl;
+        result = EXIT_FAILURE;
+        }
+// TODO ?? Consider other cases in 'catch_exceptions.cpp'.
+    catch(...)
+        {
+        std::cerr << "Fatal exception: [no detail available]" << std::endl;
+        result = EXIT_FAILURE;
+        }
+
+    // TODO ?? It would be better to do this in a singleton's dtor.
+    validate_fenv();
+
+    // COMPILER !! MinGW doesn't reliably flush streams on exit.
+    std::cout << std::flush;
+    std::cerr << std::flush;
+    std::clog << std::flush;
+
+    return result;
 }
 

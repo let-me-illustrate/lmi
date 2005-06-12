@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_wx.cpp,v 1.8 2005-05-27 10:37:06 chicares Exp $
+// $Id: main_wx.cpp,v 1.9 2005-06-12 16:58:36 chicares Exp $
 
 // Portions of this file are derived from wxWindows files
 //   samples/docvwmdi/docview.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -45,10 +45,12 @@
 #include "data_directory.hpp"
 #include "docmanager_ex.hpp"
 #include "docmdichildframe_ex.hpp"
+#include "fenv_lmi.hpp"
 #include "global_settings.hpp"
 #include "getopt.hpp"
 #include "illustration_document.hpp"
 #include "illustration_view.hpp"
+#include "initialize_filesystem.hpp"
 #include "license.hpp"
 #include "main_common.hpp"
 #include "miscellany.hpp"
@@ -172,12 +174,12 @@ int WINAPI WinMain
     // tracing this 'leak' becomes cumbersome and mysterious.
     std::string unused("Seems to trigger initialization of something.");
 
-    int r = EXIT_SUCCESS;
+    int result = EXIT_SUCCESS;
 
     try
         {
-        initialize_application(argc, argv);
-
+        initialize_application();
+        initialize_filesystem();
         process_command_line(argc, argv);
 
         // The most privileged password bypasses security validation.
@@ -187,10 +189,12 @@ int WINAPI WinMain
             }
 
 #ifndef __WXMSW__
-        r = wxEntry(argc, argv);
+        int result = wxEntry(argc, argv);
 #else // __WXMSW__ defined.
-        r = wxEntry(hInstance, hPrevInstance, lpCmdLine, nCmdShow);
+        int result = wxEntry(hInstance, hPrevInstance, lpCmdLine, nCmdShow);
 #endif // __WXMSW__ defined.
+
+        return result;
         }
     catch(std::exception& e)
         {
@@ -202,7 +206,10 @@ int WINAPI WinMain
         wxSafeShowMessage("Fatal error", "Unknown error");
         return EXIT_FAILURE;
         }
-    return r;
+
+    validate_fenv();
+
+    return result;
 }
 
 // TODO ?? Can't use warning() here--it prevents wx's logging from
