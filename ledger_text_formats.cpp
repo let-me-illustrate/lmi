@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_text_formats.cpp,v 1.6 2005-06-11 15:03:59 chicares Exp $
+// $Id: ledger_text_formats.cpp,v 1.7 2005-06-12 15:17:15 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -481,103 +481,5 @@ os << "\n\n" ;
         os << '\n';
         }
 // TODO ?? Should we add death benefit option?
-}
-
-//==============================================================================
-void PrintFormSpecial
-    (Ledger const& ledger_values
-    ,char const*   overridden_filename
-    )
-{
-    std::string filename =
-        overridden_filename
-        ? overridden_filename
-        : configurable_settings::instance().custom_output_filename()
-        ;
-    std::ofstream os
-        (filename.c_str()
-        ,std::ios_base::out | std::ios_base::trunc
-        );
-    if(!os.good())
-        {
-        hobsons_choice() << "Error initializing output file." << LMI_FLUSH;
-        }
-
-    LedgerInvariant const& Invar = ledger_values.GetLedgerInvariant();
-    LedgerVariant   const& Curr_ = ledger_values.GetCurrFull();
-
-    os
-        << "CashValu,SurrValu,DeathBen,IntEarned,"
-        << "MortCost,Load,MinPrem,SurrCost,PremAmt,IntRate\n"
-        ;
-
-// TODO ?? "??? Is this exactly what the customer wanted?"
-    // Surr charge = acct val - cash surr val
-    std::vector<double> surr_chg(Curr_.AcctVal);
-    std::transform
-        (surr_chg.begin()
-        ,surr_chg.end()
-        ,Curr_.CSVNet.begin()
-        ,surr_chg.begin()
-        ,std::minus<double>()
-        );
-
-    // Load = gross pmt - net pmt.
-    std::vector<double> prem_load(Invar.GrossPmt);
-    std::transform
-        (prem_load.begin()
-        ,prem_load.end()
-        ,Curr_.NetPmt.begin()
-        ,prem_load.begin()
-        ,std::minus<double>()
-        );
-
-    os.setf(std::ios_base::fixed, std::ios_base::floatfield);
-
-    int max_duration = static_cast<int>(std::min(95.0, Invar.EndtAge) - Invar.Age);
-    for(int j = 0; j < max_duration; j++)
-        {
-        // Customer requirement: show interest rate in bp.
-        double gen_acct_int_rate_bp = 10000.0 * Curr_.AnnGAIntRate[j];
-        os
-            << std::setprecision(0)
-            << Curr_.AcctVal        [j] << ','
-            << Curr_.CSVNet         [j] << ','
-            << Curr_.EOYDeathBft    [j] << ','
-            << Curr_.NetIntCredited [j] << ','
-            << Curr_.COICharge      [j] << ','
-            // Assume 'min prem' is zero--see comments below.
-            << 0 << ','
-            << prem_load            [j] << ','
-            << surr_chg             [j] << ','
-            << Invar.GrossPmt       [j] << ','
-            << gen_acct_int_rate_bp
-            << '\n'
-            ;
-        }
-/*
-TODO ?? Resolve these comments.
-
-dir where installed: instead, dir from which run
-age 95 even though pol goes to 100
-behavior if file locked?
-
-values: all as of EOY
-assume "interest earned" is net interest credited, net of any spread
-assume "mortality cost" is sum of actual COIs deducted throughout the year
-assume "load" is premium load including any sales load and premium-based
-  loads for premium tax and dac tax, but excluding policy fee
-assume "minimum premium" is a required premium as is typical of interest
-  sensitive whole life, and should be zero for flexible premium universal life
-assume "surrender cost" is account value minus cash surrender value; if
-  there is any refund in the early years, this value can be negative
-assume file is terminated with a CRLF at the end of the last line,
-  with no EOF character following
-
-*/
-    if(!os.good())
-        {
-        hobsons_choice() << "Error writing output file." << LMI_FLUSH;
-        }
 }
 
