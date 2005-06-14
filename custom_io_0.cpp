@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: custom_io_0.cpp,v 1.2 2005-06-12 15:17:15 chicares Exp $
+// $Id: custom_io_0.cpp,v 1.3 2005-06-14 00:58:34 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -32,6 +32,7 @@
 #include "configurable_settings.hpp"
 #include "database.hpp"
 #include "dbnames.hpp"
+#include "global_settings.hpp"
 #include "inputillus.hpp"
 #include "inputstatus.hpp"
 #include "ledger.hpp"
@@ -48,6 +49,10 @@
 #include <stdexcept>
 #include <string>
 #include <vector>
+
+// TODO ?? Eventually rename all this stuff. Explain that this file is
+// 'custom_io_0.cpp' because there'll be other customizations;
+// accordingly, rename global_settings::special_output .
 
 //==============================================================================
 bool DoesSpecialInputFileExist()
@@ -75,6 +80,8 @@ bool GetSpecialAutocloseFlag()
 //==============================================================================
 void SetSpecialInput(IllusInputParms& ip, char const* overridden_filename)
 {
+    // Set global flag to liberalize input restrictions slightly.
+    global_settings::instance().special_output = true;
     std::string filename =
         overridden_filename
         ? overridden_filename
