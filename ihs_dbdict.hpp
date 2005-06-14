@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_dbdict.hpp,v 1.4 2005-06-14 20:45:03 chicares Exp $
+// $Id: ihs_dbdict.hpp,v 1.5 2005-06-14 21:38:36 chicares Exp $
 
 #ifndef ihs_dbdict_hpp
 #define ihs_dbdict_hpp
@@ -71,7 +71,7 @@ class LMI_EXPIMP DBDictionary
 inline dict_map& DBDictionary::GetDictionary()
 {return dictionary;}
 
-void print_databases();
+void LMI_EXPIMP print_databases();
 
 #endif // ihs_dbdict_hpp
 
