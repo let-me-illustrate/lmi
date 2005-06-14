@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_common_non_wx.cpp,v 1.1 2005-06-12 16:58:36 chicares Exp $
+// $Id: main_common_non_wx.cpp,v 1.2 2005-06-14 00:29:15 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -34,13 +34,20 @@
 #include <ostream>
 #include <exception>
 
+/// Interfaces that always use a normal main() function share this
+/// implementation, which performs common initialization and catches
+/// stray exceptions to prevent them from causing drastic termination.
+///
+/// Exception: for msw at least, wx doesn't use main(). The way
+/// diagnostic messages are displayed for wx is different enough to
+/// warrant a parallel implementation.
+
 //============================================================================
 int main(int argc, char* argv[])
 {
     int result = EXIT_SUCCESS;
     try
         {
-// TODO ?? Remove calls to this function elsewhere.
         initialize_application();
         result = try_main(argc, argv);
         }
@@ -49,7 +56,7 @@ int main(int argc, char* argv[])
         std::cerr << "Fatal exception: " << e.what() << std::endl;
         result = EXIT_FAILURE;
         }
-// TODO ?? Consider other cases in 'catch_exceptions.cpp'.
+    // TODO ?? Consider the other cases treated in 'catch_exceptions.cpp'.
     catch(...)
         {
         std::cerr << "Fatal exception: [no detail available]" << std::endl;
