@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input.cpp,v 1.6 2005-06-05 03:55:52 chicares Exp $
+// $Id: input.cpp,v 1.7 2005-06-14 00:19:40 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -338,9 +338,22 @@ void convert_to_ihs(IllusInputParms& ihs, Input const& lmi)
     std::vector<std::string>::const_iterator i;
     for(i = lmi.member_names().begin(); i != lmi.member_names().end(); ++i)
         {
-        ihs[*i] = lmi[*i].str();
+        try
+            {
+            ihs[*i] = lmi[*i].str();
+            }
+        catch(...)
+            {
+            warning()
+                << "Problem converting input from lmi to ihs: field '"
+                << *i
+                << "' has value '"
+                << lmi[*i].str()
+                << "'."
+                << LMI_FLUSH
+                ;
+            }
         }
-// TODO ?? This is wrong, no?    ihs.propagate_changes_from_base_and_finalize();
     ihs.propagate_changes_to_base_and_finalize();
 }
 
@@ -364,7 +377,21 @@ void convert_from_ihs(IllusInputParms const& ihs, Input& lmi)
     std::vector<std::string>::const_iterator i;
     for(i = lmi.member_names().begin(); i != lmi.member_names().end(); ++i)
         {
-        lmi[*i] = ihs[*i].str();
+        try
+            {
+            lmi[*i] = ihs[*i].str();
+            }
+        catch(...)
+            {
+            warning()
+                << "Problem converting input from ihs to lmi: field '"
+                << *i
+                << "' has value '"
+                << lmi[*i].str()
+                << "'."
+                << LMI_FLUSH
+                ;
+            }
         }
     // Repair a known problem in the legacy implementation, where
     // these two possibilities were originally treated as independent
