@@ -1,4 +1,4 @@
-// A custom input interface.
+// A custom interface.
 //
 // Copyright (C) 2001, 2002, 2003, 2004, 2005 Gregory W. Chicares.
 //
@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: custom_io_0.cpp,v 1.3 2005-06-14 00:58:34 chicares Exp $
+// $Id: custom_io_0.cpp,v 1.4 2005-06-14 13:52:45 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -64,21 +64,7 @@ bool DoesSpecialInputFileExist()
 }
 
 //==============================================================================
-bool GetSpecialAutocloseFlag()
-{
-    name_value_pairs n_v_pairs
-        (configurable_settings::instance().custom_input_filename()
-        );
-    // "AutoClose": "Y" or "N". Either way, read the custom input file
-    // and write the custom output file. Then:
-    //   if "Y", then exit;
-    //   else, leave the GUI active.
-    bool auto_close = "Y" == n_v_pairs.string_value("AutoClose");
-    return auto_close;
-}
-
-//==============================================================================
-void SetSpecialInput(IllusInputParms& ip, char const* overridden_filename)
+bool SetSpecialInput(IllusInputParms& ip, char const* overridden_filename)
 {
     // Set global flag to liberalize input restrictions slightly.
     global_settings::instance().special_output = true;
@@ -381,6 +367,13 @@ void SetSpecialInput(IllusInputParms& ip, char const* overridden_filename)
     ip.propagate_changes_from_base_and_finalize();
 
     ip.ResetAllFunds(database.Query(DB_AllowGenAcct));
+
+    // "AutoClose": "Y" or "N". Either way, read the custom input file
+    // and write the custom output file. Then:
+    //   if "Y", then exit;
+    //   else, leave the GUI active.
+    // Ignored for command-line regression testing.
+    return "Y" == n_v_pairs.string_value("AutoClose");
 }
 
 //==============================================================================
