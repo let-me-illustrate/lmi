@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: dbdict.cpp,v 1.3 2005-05-06 17:20:54 chicares Exp $
+// $Id: dbdict.cpp,v 1.4 2005-06-14 21:34:51 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -246,5 +246,11 @@ void DBDictionary::Init()
 void DBDictionary::AddEntry(TDBEntry const& e)
 {
     (*dictionary)[e.first] = e.second;
+}
+
+//===========================================================================
+// Unimplemented in this branch.
+void print_databases()
+{
 }
 
