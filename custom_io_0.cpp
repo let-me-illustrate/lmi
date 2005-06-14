@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: custom_io_0.cpp,v 1.4 2005-06-14 13:52:45 chicares Exp $
+// $Id: custom_io_0.cpp,v 1.5 2005-06-14 14:19:39 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -340,13 +340,6 @@ bool SetSpecialInput(IllusInputParms& ip, char const* overridden_filename)
 
     ip.SepAcctIntRate = value_cast<std::string>(separate_account_rate);
 
-    // TODO ?? Isn't this obsolete?
-    if("Y" == n_v_pairs.string_value("ExcludeIMF"))
-        {
-        ip.OverrideFundMgmtFee  = "Yes";
-        ip.InputFundMgmtFee     = 0.0;
-        }
-
     // TRICKY !! We need to consider the unconverted string: if it's empty,
     // it should be ignored, and must not be incorrectly converted to
     // zero. Yet one might actually wish to set the multiplier to zero;
@@ -357,12 +350,6 @@ bool SetSpecialInput(IllusInputParms& ip, char const* overridden_filename)
         ip.OverrideCOIMultiplier= "Yes";
         ip.CountryCOIMultiplier = coi_mult;
         }
-
-    // TODO ?? expunge
-    // The customer that this interface was designed for doesn't need
-    // a Comments field. We permit it anyway because we often use it
-    // for experimental changes ("idiosyncrasies").
-    ip.Comments                 = n_v_pairs.string_value("Comments");
 
     ip.propagate_changes_from_base_and_finalize();
 
@@ -377,6 +364,18 @@ bool SetSpecialInput(IllusInputParms& ip, char const* overridden_filename)
 }
 
 //==============================================================================
+// Assumptions:
+//   values are all as of EOY
+//   "interest earned" is net interest credited, net of any spread
+//   "mortality cost" is sum of actual COIs deducted throughout the year
+//   "load" is premium load including any sales load and premium-based
+//      loads for premium tax and dac tax, but excluding policy fee
+//   "minimum premium" is a required premium as is typical of interest
+//      sensitive whole life, and should be zero for flexible premium
+//      universal life
+//   "surrender cost" is account value minus cash surrender value; if
+//      there is any refund in the early years, this value can be negative
+//
 void PrintFormSpecial
     (Ledger const& ledger_values
     ,char const*   overridden_filename
@@ -404,8 +403,6 @@ void PrintFormSpecial
         << "MortCost,Load,MinPrem,SurrCost,PremAmt,IntRate\n"
         ;
 
-// TODO ?? "??? Is this exactly what the customer wanted?"
-    // Surr charge = acct val - cash surr val
     std::vector<double> surr_chg(Curr_.AcctVal);
     std::transform
         (surr_chg.begin()
@@ -415,7 +412,6 @@ void PrintFormSpecial
         ,std::minus<double>()
         );
 
-    // Load = gross pmt - net pmt.
     std::vector<double> prem_load(Invar.GrossPmt);
     std::transform
         (prem_load.begin()
@@ -427,7 +423,7 @@ void PrintFormSpecial
 
     os.setf(std::ios_base::fixed, std::ios_base::floatfield);
 
-    int max_duration = static_cast<int>(std::min(95.0, Invar.EndtAge) - Invar.Age);
+    int max_duration = static_cast<int>(Invar.EndtAge - Invar.Age);
     for(int j = 0; j < max_duration; j++)
         {
         // Customer requirement: show interest rate in bp.
@@ -439,8 +435,7 @@ void PrintFormSpecial
             << Curr_.EOYDeathBft    [j] << ','
             << Curr_.NetIntCredited [j] << ','
             << Curr_.COICharge      [j] << ','
-            // Assume 'min prem' is zero--see comments below.
-            << 0 << ','
+            << 0 << ',' // 'MinPrem' always zero.
             << prem_load            [j] << ','
             << surr_chg             [j] << ','
             << Invar.GrossPmt       [j] << ','
@@ -448,26 +443,6 @@ void PrintFormSpecial
             << '\n'
             ;
         }
-/*
-TODO ?? Resolve these comments.
-
-dir where installed: instead, dir from which run
-age 95 even though pol goes to 100
-behavior if file locked?
-
-values: all as of EOY
-assume "interest earned" is net interest credited, net of any spread
-assume "mortality cost" is sum of actual COIs deducted throughout the year
-assume "load" is premium load including any sales load and premium-based
-  loads for premium tax and dac tax, but excluding policy fee
-assume "minimum premium" is a required premium as is typical of interest
-  sensitive whole life, and should be zero for flexible premium universal life
-assume "surrender cost" is account value minus cash surrender value; if
-  there is any refund in the early years, this value can be negative
-assume file is terminated with a CRLF at the end of the last line,
-  with no EOF character following
-
-*/
     if(!os.good())
         {
         hobsons_choice() << "Error writing output file." << LMI_FLUSH;
