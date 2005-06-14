@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_wx.cpp,v 1.9 2005-06-12 16:58:36 chicares Exp $
+// $Id: main_wx.cpp,v 1.10 2005-06-14 13:53:03 chicares Exp $
 
 // Portions of this file are derived from wxWindows files
 //   samples/docvwmdi/docview.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -42,6 +42,7 @@
 #include "argv0.hpp"
 #include "census_document.hpp"
 #include "census_view.hpp"
+#include "custom_io_0.hpp"
 #include "data_directory.hpp"
 #include "docmanager_ex.hpp"
 #include "docmdichildframe_ex.hpp"
@@ -600,6 +601,120 @@ int lmi_wx_app::OnExit()
     return 0;
 }
 
+// TODO ?? Move elsewhere. Make this a template.
+#include <wx/docview.h>
+wxView* MakeNewDocAndView(wxDocManager* dm, char const* filename)
+{
+    LMI_ASSERT(0 != dm);
+    LMI_ASSERT(0 != filename);
+
+// TODO ?? Rewrite comments.
+    // We don't want this document to show up in the MRU list
+    //   so we create it with the dtNewDoc flag
+    //   and call SetTitle() rather than SetDocPath()
+
+// Keep it out of the file history.
+// TODO ?? Using '8' to indicate 'child document' (a concept that wx
+// does not support) is brittle at best.
+    wxDocTemplate* dt = dm->FindTemplateForPath(filename);
+    LMI_ASSERT(0 != dt);
+
+    wxDocument* new_document = dt->CreateDocument(filename, wxDOC_SILENT | 8);
+
+    IllustrationDocument* illdoc = dynamic_cast<IllustrationDocument*>(new_document);
+    if(0 == illdoc)
+        {
+        fatal_error() << "dynamic_cast<IllustrationDocument*> failed." << LMI_FLUSH;
+        return 0;
+        }
+// TODO ?? expunge?
+////
+//    IllusInputParms Parms = cell_parms()[idx];
+//    *illdoc->inputctrl = Parms;
+////
+
+    // TODO ?? Why do we need both of these?
+    new_document->SetTitle(filename);
+    new_document->SetFilename(filename);
+
+    new_document->Modify(false);
+    new_document->SetDocumentSaved(true);
+
+    IllustrationView* illview = 0;
+    while(wxList::compatibility_iterator node = new_document->GetViews().GetFirst())
+        {
+        if(node->GetData()->IsKindOf(CLASSINFO(IllustrationView)))
+            {
+            illview = dynamic_cast<IllustrationView*>(node->GetData());
+            break;
+            }
+        node = node->GetNext();
+        }
+    if(0 == illview)
+        {
+        fatal_error() << "dynamic_cast<IllustrationView*> failed." << LMI_FLUSH;
+        return 0;
+        }
+    return illview;
+
+// TODO ?? Buttons should be disabled here.
+}
+
+//TODO ?? Move this elsewhere.
+#include "account_value.hpp"
+#include "inputillus.hpp"
+//============================================================================
+// Must follow document-manager initialization.
+// Return value: prevent displaying GUI.
+bool RunSpecialInputFileIfPresent(wxDocManager* dm)
+{
+    try
+        {
+        if(DoesSpecialInputFileExist())
+            {
+            IllusInputParms input;
+            bool close_when_done = SetSpecialInput(input);
+            AccountValue av(input);
+            av.RunAV();
+            PrintFormSpecial(*av.ledger_from_av());
+            if(close_when_done)
+                {
+                return true;
+                }
+            else
+                {
+                // TODO ?? Name the view after the special output file?
+        LMI_ASSERT(0 != dm);
+IllustrationView* illview =
+(IllustrationView*) // TODO ??
+MakeNewDocAndView(dm, "testing.ill");
+
+                // TODO ?? Use real input.
+                Input x;
+                convert_from_ihs(input, x);
+                illview->Run(&x);// TODO ?? (&input);
+//                illview->GetFrame()->SetBestFittingSize();
+// TODO ?? Unsafe cast.
+                ((wxFrame*)illview->GetFrame())->Maximize();
+                }
+            }
+        }
+    catch(std::exception& e)
+        {
+        wxSafeShowMessage("Fatal error", e.what());
+        throw;
+        }
+    catch(...)
+        {
+        wxSafeShowMessage("Fatal error", "Unknown error");
+        throw;
+        }
+    return false;
+}
+
+
+
+
 bool lmi_wx_app::OnInit()
 {
 // WX !! An exception thrown anywhere in this function, even right
@@ -656,6 +771,12 @@ bool lmi_wx_app::OnInit()
 #endif // __WXMSW__ defined.
     frame_->Centre(wxBOTH);
     frame_->Maximize(true);
+
+    if(RunSpecialInputFileIfPresent(doc_manager_))
+        {
+        return false;
+        }
+
     frame_->Show(true);
     SetTopWindow(frame_);
 
