@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_dbvalue.cpp,v 1.2 2005-01-31 13:12:48 chicares Exp $
+// $Id: ihs_dbvalue.cpp,v 1.3 2005-06-14 20:45:03 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -31,6 +31,7 @@
 #include "alert.hpp"
 #include "dbnames.hpp"
 #include "math_functors.hpp"
+#include "value_cast.hpp"
 
 #include <algorithm>
 #include <functional>
@@ -84,7 +85,7 @@ std::ostream& operator<< (std::ostream& os, std::vector<T> const& x)
     os << x.size() << " ";
     for(typename std::vector<T>::const_iterator i = x.begin(); i < x.end(); i++)
         {
-        os << (*i) << " ";
+        os << value_cast<std::string>(*i) << " ";
         }
     os << '\n';
     return os;

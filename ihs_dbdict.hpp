@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_dbdict.hpp,v 1.3 2005-04-10 14:54:35 chicares Exp $
+// $Id: ihs_dbdict.hpp,v 1.4 2005-06-14 20:45:03 chicares Exp $
 
 #ifndef ihs_dbdict_hpp
 #define ihs_dbdict_hpp
@@ -31,7 +31,7 @@
 #include "config.hpp"
 
 #include "expimp.hpp"
-#include "ihs_dbvalue.hpp"      // needed here for map
+#include "ihs_dbvalue.hpp" // Needed here for map declaration.
 #include "obstruct_slicing.hpp"
 
 #include <boost/utility.hpp>
@@ -39,7 +39,7 @@
 #include <map>
 #include <string>
 
-typedef std::map<int, TDBValue, std::less<int> > dict_map;
+typedef std::map<int, TDBValue> dict_map;
 typedef dict_map::value_type dict_map_val;
 
 class LMI_EXPIMP DBDictionary
@@ -62,7 +62,7 @@ class LMI_EXPIMP DBDictionary
     void WriteDB(std::string const& filename);
     void Add(TDBValue const& e);
     void BadFile(std::string const& Filename, std::string const& why);
-    void InitDB();  // TODO ?? A KLUDGE.
+    void InitDB();
 
     static std::string CachedFilename;
     dict_map dictionary;
@@ -70,6 +70,8 @@ class LMI_EXPIMP DBDictionary
 
 inline dict_map& DBDictionary::GetDictionary()
 {return dictionary;}
+
+void print_databases();
 
 #endif // ihs_dbdict_hpp
 

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_dbdict.cpp,v 1.4 2005-05-06 17:20:54 chicares Exp $
+// $Id: ihs_dbdict.cpp,v 1.5 2005-06-14 20:45:03 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -33,6 +33,11 @@
 #include "global_settings.hpp"
 #include "data_directory.hpp"
 #include "xenumtypes.hpp"
+
+#include <boost/filesystem/convenience.hpp>
+#include <boost/filesystem/fstream.hpp>
+#include <boost/filesystem/operations.hpp>
+#include <boost/filesystem/path.hpp>
 
 #include <limits>
 #include <sstream>
@@ -608,5 +613,31 @@ void DBDictionary::WriteSampleDBFile()
     Add(TDBValue(DB_ExpRatAmortPeriod   , 4.0));
 
     WriteDB(AddDataDir("sample.db4"));
+}
+
+//============================================================================
+void print_databases()
+{
+    fs::path data_dir(global_settings::instance().data_directory);
+    fs::directory_iterator i(data_dir);
+    fs::directory_iterator end_i;
+    for(; i != end_i; ++i)
+        {
+        if(is_directory(*i) || ".db4" != fs::extension(*i))
+            {
+            continue;
+            }
+
+        DBDictionary::instance().Init(i->string());
+        fs::path out_file = fs::change_extension(*i, ".dbt");
+        fs::ofstream os(out_file, std::ios_base::out | std::ios_base::trunc);
+        dict_map& dictionary = DBDictionary::instance().GetDictionary();
+        // std::ostream_iterator not used because it doesn't work
+        // nicely with std::map (a name-lookup issue).
+        for(unsigned int j = 0; j < dictionary.size(); j++)
+            {
+            os << dictionary[j];
+            }
+        }
 }
 
