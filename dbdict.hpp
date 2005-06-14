@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: dbdict.hpp,v 1.4 2005-06-14 21:02:15 chicares Exp $
+// $Id: dbdict.hpp,v 1.5 2005-06-14 21:34:51 chicares Exp $
 
 #ifndef dbdict_hpp
 #define dbdict_hpp
@@ -63,7 +63,7 @@ class DBDictionary
 inline TDBDictionary const& DBDictionary::GetDictionary()
 {return *dictionary;}
 
-inline void print_databases() {} // Unimplemented in this branch.
+void print_databases();
 
 #endif // dbdict_hpp
 
