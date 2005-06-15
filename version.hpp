@@ -17,6 +17,6 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: version.hpp,v 1.22 2005-05-24 04:00:02 chicares Exp $
+// $Id: version.hpp,v 1.23 2005-06-15 23:53:39 chicares Exp $
 
-#define LMI_VERSION "20050524T0113Z"
+#define LMI_VERSION "20050615T1110Z"
