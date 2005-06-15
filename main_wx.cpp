@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_wx.cpp,v 1.10 2005-06-14 13:53:03 chicares Exp $
+// $Id: main_wx.cpp,v 1.11 2005-06-15 05:05:04 chicares Exp $
 
 // Portions of this file are derived from wxWindows files
 //   samples/docvwmdi/docview.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -42,13 +42,13 @@
 #include "argv0.hpp"
 #include "census_document.hpp"
 #include "census_view.hpp"
-#include "custom_io_0.hpp"
 #include "data_directory.hpp"
 #include "docmanager_ex.hpp"
 #include "docmdichildframe_ex.hpp"
 #include "fenv_lmi.hpp"
 #include "global_settings.hpp"
 #include "getopt.hpp"
+#include "ihs_dbdict.hpp" // print_databases()
 #include "illustration_document.hpp"
 #include "illustration_view.hpp"
 #include "initialize_filesystem.hpp"
@@ -218,28 +218,22 @@ int WINAPI WinMain
 // always safe to use...and perhaps doesn't throw, so that it can
 // appropriately be used in dtors.
 
-// TODO ?? Old command-line arguments not yet supported here:
-// [custom input]
-// -datadir=path
-// -testdir=path
-// -tdt_too
-// -print_databases
-
 void process_command_line(int argc, char* argv[])
 {
     // TRICKY !! Some long options are aliased to unlikely octal values.
     static struct Option long_options[] =
       {
-        {"accept",       NO_ARG,   0, 'a', 0, "accept license (-l to display)"},
-        {"ash_nazg",     NO_ARG,   0, 001, 0, "ash nazg durbatulûk"},
-        {"ash_naz",      NO_ARG,   0, 003, 0, "fraud"},
-        {"help",         NO_ARG,   0, 'h', 0, "display this help and exit"},
-        {"license",      NO_ARG,   0, 'l', 0, "display license and exit"},
-        {"mellon",       NO_ARG,   0, 002, 0, "pedo mellon a minno"},
-        {"mello",        NO_ARG,   0, 003, 0, "fraud"},
-        {"data_path",    REQD_ARG, 0, 'd', 0, "path to data files"},
-        {"test_path",    REQD_ARG, 0, 't', 0, "path to test files"},
-        {0,              NO_ARG,   0,   0, 0, ""}
+        {"accept"    ,NO_ARG   ,0 ,'a' ,0 ,"accept license (-l to display)"},
+        {"ash_nazg"  ,NO_ARG   ,0 ,001 ,0 ,"ash nazg durbatulûk"},
+        {"ash_naz"   ,NO_ARG   ,0 ,003 ,0 ,"fraud"},
+        {"help"      ,NO_ARG   ,0 ,'h' ,0 ,"display this help and exit"},
+        {"license"   ,NO_ARG   ,0 ,'l' ,0 ,"display license and exit"},
+        {"mellon"    ,NO_ARG   ,0 ,002 ,0 ,"pedo mellon a minno"},
+        {"mello"     ,NO_ARG   ,0 ,003 ,0 ,"fraud"},
+        {"data_path" ,REQD_ARG ,0 ,'d' ,0 ,"path to data files"},
+        {"test_path" ,REQD_ARG ,0 ,'t' ,0 ,"path to test files"},
+        {"print_db"  ,NO_ARG   ,0 ,'p' ,0 ,"print product databases"},
+        {0           ,NO_ARG   ,0 ,0   ,0 ,""}
       };
 
     bool license_accepted = false;
@@ -295,6 +289,12 @@ void process_command_line(int argc, char* argv[])
             case 'l':
                 {
                 show_license = true;
+                }
+                break;
+
+            case 'p':
+                {
+                print_databases();
                 }
                 break;
 
@@ -600,120 +600,6 @@ int lmi_wx_app::OnExit()
     delete config_;
     return 0;
 }
-
-// TODO ?? Move elsewhere. Make this a template.
-#include <wx/docview.h>
-wxView* MakeNewDocAndView(wxDocManager* dm, char const* filename)
-{
-    LMI_ASSERT(0 != dm);
-    LMI_ASSERT(0 != filename);
-
-// TODO ?? Rewrite comments.
-    // We don't want this document to show up in the MRU list
-    //   so we create it with the dtNewDoc flag
-    //   and call SetTitle() rather than SetDocPath()
-
-// Keep it out of the file history.
-// TODO ?? Using '8' to indicate 'child document' (a concept that wx
-// does not support) is brittle at best.
-    wxDocTemplate* dt = dm->FindTemplateForPath(filename);
-    LMI_ASSERT(0 != dt);
-
-    wxDocument* new_document = dt->CreateDocument(filename, wxDOC_SILENT | 8);
-
-    IllustrationDocument* illdoc = dynamic_cast<IllustrationDocument*>(new_document);
-    if(0 == illdoc)
-        {
-        fatal_error() << "dynamic_cast<IllustrationDocument*> failed." << LMI_FLUSH;
-        return 0;
-        }
-// TODO ?? expunge?
-////
-//    IllusInputParms Parms = cell_parms()[idx];
-//    *illdoc->inputctrl = Parms;
-////
-
-    // TODO ?? Why do we need both of these?
-    new_document->SetTitle(filename);
-    new_document->SetFilename(filename);
-
-    new_document->Modify(false);
-    new_document->SetDocumentSaved(true);
-
-    IllustrationView* illview = 0;
-    while(wxList::compatibility_iterator node = new_document->GetViews().GetFirst())
-        {
-        if(node->GetData()->IsKindOf(CLASSINFO(IllustrationView)))
-            {
-            illview = dynamic_cast<IllustrationView*>(node->GetData());
-            break;
-            }
-        node = node->GetNext();
-        }
-    if(0 == illview)
-        {
-        fatal_error() << "dynamic_cast<IllustrationView*> failed." << LMI_FLUSH;
-        return 0;
-        }
-    return illview;
-
-// TODO ?? Buttons should be disabled here.
-}
-
-//TODO ?? Move this elsewhere.
-#include "account_value.hpp"
-#include "inputillus.hpp"
-//============================================================================
-// Must follow document-manager initialization.
-// Return value: prevent displaying GUI.
-bool RunSpecialInputFileIfPresent(wxDocManager* dm)
-{
-    try
-        {
-        if(DoesSpecialInputFileExist())
-            {
-            IllusInputParms input;
-            bool close_when_done = SetSpecialInput(input);
-            AccountValue av(input);
-            av.RunAV();
-            PrintFormSpecial(*av.ledger_from_av());
-            if(close_when_done)
-                {
-                return true;
-                }
-            else
-                {
-                // TODO ?? Name the view after the special output file?
-        LMI_ASSERT(0 != dm);
-IllustrationView* illview =
-(IllustrationView*) // TODO ??
-MakeNewDocAndView(dm, "testing.ill");
-
-                // TODO ?? Use real input.
-                Input x;
-                convert_from_ihs(input, x);
-                illview->Run(&x);// TODO ?? (&input);
-//                illview->GetFrame()->SetBestFittingSize();
-// TODO ?? Unsafe cast.
-                ((wxFrame*)illview->GetFrame())->Maximize();
-                }
-            }
-        }
-    catch(std::exception& e)
-        {
-        wxSafeShowMessage("Fatal error", e.what());
-        throw;
-        }
-    catch(...)
-        {
-        wxSafeShowMessage("Fatal error", "Unknown error");
-        throw;
-        }
-    return false;
-}
-
-
-
 
 bool lmi_wx_app::OnInit()
 {

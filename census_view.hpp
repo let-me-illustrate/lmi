@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: census_view.hpp,v 1.9 2005-05-14 02:10:24 chicares Exp $
+// $Id: census_view.hpp,v 1.10 2005-06-15 05:05:04 chicares Exp $
 
 #ifndef census_view_hpp
 #define census_view_hpp
@@ -102,7 +102,6 @@ class CensusView
 
     void Update();
     void UpdatePreservingSelection();
-    IllustrationView* MakeNewDocAndView(char const*);
     IllustrationView* ViewOneCell(int);
     void ViewComposite();
 
