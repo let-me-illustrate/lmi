@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: census_view.cpp,v 1.30 2005-05-27 10:37:06 chicares Exp $
+// $Id: census_view.cpp,v 1.31 2005-06-15 05:05:04 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -897,78 +897,13 @@ void CensusView::OnRunCell(wxCommandEvent&)
     ViewOneCell(cell_number);
 }
 
-IllustrationView* CensusView::MakeNewDocAndView(char const* filename)
-{
-// WX !! Help for wxView says GetDocumentManager() returns a
-// wxDocumentManager*, but it actually returns a wxDocManager* .
-    wxDocManager* dm = document().GetDocumentManager();
-    // We don't want this document to show up in the MRU list
-    //   so we create it with the dtNewDoc flag
-    //   and call SetTitle() rather than SetDocPath()
-/*
-// TODO ?? Is this still necessary?
-    // Note that we're creating a child document here [wx: or so we wish]
-    wxDocument* new_document = dm->CreateDocument
-        (filename
-        ,wxDOC_SILENT | 8 // | wxDOC_NEW
-        );
-//        (dm->MatchTemplate(filename)
-//        ,filename
-//        ,&document()
-//        ,dtNewDoc
-//        );
-*/
-
-// Keep it out of the file history.
-// TODO ?? Using '8' to indicate 'child document' (a concept that wx
-// does not support) is brittle at best.
-wxDocTemplate* the_template = dm->FindTemplateForPath(filename);
-wxDocument* new_document = the_template->CreateDocument(filename, wxDOC_SILENT | 8);
-
-    IllustrationDocument* illdoc = dynamic_cast<IllustrationDocument*>(new_document);
-    if(0 == illdoc)
-        {
-        fatal_error() << "dynamic_cast<IllustrationDocument*> failed." << LMI_FLUSH;
-        return 0;
-        }
-
-    // TODO ?? Why do we need both of these?
-    new_document->SetTitle(filename);
-    new_document->SetFilename(filename);
-
-    new_document->Modify(false);
-    new_document->SetDocumentSaved(true);
-
-// TODO ?? expunge?
-////
-//    IllusInputParms Parms = cell_parms()[idx];
-//    *illdoc->inputctrl = Parms;
-////
-    IllustrationView* illview = 0;
-    while(wxList::compatibility_iterator node = new_document->GetViews().GetFirst())
-        {
-        if(node->GetData()->IsKindOf(CLASSINFO(IllustrationView)))
-            {
-            illview = dynamic_cast<IllustrationView*>(node->GetData());
-            break;
-            }
-        node = node->GetNext();
-        }
-
-    if(0 == illview)
-        {
-        fatal_error() << "dynamic_cast<IllustrationView*> failed." << LMI_FLUSH;
-        return 0;
-        }
-    return illview;
-
-// TODO ?? Buttons should be disabled here.
-}
-
 IllustrationView* CensusView::ViewOneCell(int index)
 {
     std::string file_name(serial_filename(index, "ill"));
-    IllustrationView* illview = MakeNewDocAndView(file_name.c_str());
+    IllustrationView* illview = MakeNewIllustrationDocAndView
+        (document().GetDocumentManager()
+        ,file_name.c_str()
+        );
     illview->Run(&cell_parms()[index]);
     return illview;
 }
@@ -987,7 +922,10 @@ void CensusView::ViewComposite()
     if(!was_canceled_)
         {
         std::string file_name(serial_filename(-1, "ill"));
-        IllustrationView* illview = MakeNewDocAndView(file_name.c_str());
+        IllustrationView* illview = MakeNewIllustrationDocAndView
+            (document().GetDocumentManager()
+            ,file_name.c_str()
+            );
 
         // This is necessary for the view to be able to print.
         illview->SetLedger(composite_ledger_);

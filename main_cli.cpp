@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_cli.cpp,v 1.7 2005-06-12 16:58:36 chicares Exp $
+// $Id: main_cli.cpp,v 1.8 2005-06-15 05:05:04 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -43,6 +43,7 @@
 
 #include <boost/bind.hpp>
 #include <boost/filesystem/convenience.hpp>
+#include <boost/filesystem/operations.hpp>
 #include <boost/filesystem/path.hpp>
 
 #include <algorithm>
@@ -55,6 +56,11 @@
 #include <ostream>
 #include <string>
 #include <vector>
+
+// INELEGANT !! Prototype specified explicitly because the production
+// and antediluvian branches define it identically but in different
+// and incompatible headers.
+void print_databases();
 
 //============================================================================
 void RegressionTestOneCensusFile(fs::directory_iterator i)
@@ -249,11 +255,12 @@ void process_command_line(int argc, char* argv[])
         {"license"   ,NO_ARG   ,0 ,'l' ,0 ,"display license and exit"},
         {"accept"    ,NO_ARG   ,0 ,'a' ,0 ,"accept license (-l to display)"},
         {"selftest"  ,NO_ARG   ,0 ,'s' ,0 ,"perform self test and exit"},
-        {"profile"   ,NO_ARG   ,0 ,'p' ,0 ,"set up for profiling and exit"},
+        {"profile"   ,NO_ARG   ,0 ,'o' ,0 ,"set up for profiling and exit"},
         {"illfile"   ,REQD_ARG ,0 ,'i' ,0 ,"run illustration"},
         {"cnsfile"   ,REQD_ARG ,0 ,'c' ,0 ,"run census"},
         {"data_path" ,REQD_ARG ,0 ,'d' ,0 ,"path to data files"},
-        {"regress  " ,NO_ARG   ,0 ,'r' ,0 ,"run regression test"},
+        {"print_db"  ,NO_ARG   ,0 ,'p', 0, "print product databases"},
+        {"regress"   ,NO_ARG   ,0 ,'r' ,0 ,"run regression test"},
         {"test_path" ,REQD_ARG ,0 ,'t' ,0 ,"path to test files"},
 //        {"list"    ,LIST_ARG, 0,   0, 0    , "list"},
 //        {"opt"     ,OPT_ARG,  0,   0, 0    , "optional"},
@@ -270,6 +277,7 @@ void process_command_line(int argc, char* argv[])
     bool run_regression_test = false;
     bool run_selftest        = false;
     bool run_profile         = false;
+    bool print_all_databases = false;
     bool run_illustration    = false;
     bool run_census          = false;
 
@@ -380,18 +388,13 @@ void process_command_line(int argc, char* argv[])
 
             case 'o':
                 {
-                std::printf ("option o");
-                if(getopt_long.optarg)
-                    {
-                    std::printf (" with value '%s'", getopt_long.optarg);
-                    }
-                std::printf ("\n");
+                run_profile = true;
                 }
                 break;
 
             case 'p':
                 {
-                run_profile = true;
+                print_all_databases = true;
                 }
                 break;
 
@@ -467,6 +470,12 @@ void process_command_line(int argc, char* argv[])
     if(run_profile)
         {
         Profile();
+        return;
+        }
+
+    if(print_all_databases)
+        {
+        print_databases();
         return;
         }
 
