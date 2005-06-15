@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.73 2005-06-11 15:45:20 chicares Exp $
+// $Id: ChangeLog,v 1.74 2005-06-15 23:53:39 chicares Exp $
 
 2005-01-14
 
@@ -2269,4 +2269,75 @@ Rewrite max_stream_precision().
   main_cli.cpp
   workhorse.make
 Support a custom interface.
+
+2005-06-12 [1285]
+
+  custom_io_0.cpp
+  custom_io_0.hpp
+  ledger_text_formats.cpp
+  ledger_text_formats.hpp
+Refactor.
+
+  elapsed_time.cpp
+  generate_passkey.cpp
+  generate_product_files.cpp
+  ihs_crc_comp.cpp
+  initialize_filesystem.hpp [new file]
+  main_cgi.cpp
+  main_cli.cpp
+  main_common.cpp
+  main_common.hpp
+  main_common_non_wx.cpp    [new file]
+  main_wx.cpp
+  objects.make
+  workhorse.make
+Refactor.
+
+2005-06-13 [1284]
+
+  input.hpp
+Change a data member to a more appropriate type.
+
+  input.cpp
+Diagnose data-conversion problems.
+
+  main_common_non_wx.cpp
+Update documentation.
+
+  custom_io_0.cpp
+Slightly liberalize input restrictions.
+
+2005-06-14 [1292]
+
+  custom_io_0.cpp
+  custom_io_0.hpp
+Refactor.
+
+  main_wx.cpp
+Support a custom interface: optional GUI.
+
+  custom_io_0.cpp
+Remove obsolete code.
+
+  custom_io_0.cpp
+Run custom output to maturity.
+
+  dbdict.cpp
+  dbdict.hpp
+  ihs_dbvalue.cpp
+  ihs_dbdict.cpp
+  ihs_dbdict.hpp
+Add facility to print product databases.
+
+2005-06-15 [1275]
+
+  census_view.cpp
+  census_view.hpp
+  illustration_document.cpp
+  illustration_document.hpp
+  illustration_view.cpp
+  illustration_view.hpp
+  main_cli.cpp
+  main_wx.cpp
+Refactor.
 
