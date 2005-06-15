@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustration_view.hpp,v 1.9 2005-05-14 02:10:24 chicares Exp $
+// $Id: illustration_view.hpp,v 1.10 2005-06-15 05:05:04 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -106,6 +106,13 @@ class IllustrationView
     DECLARE_DYNAMIC_CLASS(IllustrationView)
     DECLARE_EVENT_TABLE()
 };
+
+IllustrationView* MakeNewIllustrationDocAndView
+    (wxDocManager* dm
+    ,char const*   filename
+    );
+
+bool RunSpecialInputFileIfPresent(wxDocManager*);
 
 #endif // illustration_view_hpp
 

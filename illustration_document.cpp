@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustration_document.cpp,v 1.1 2005-03-11 03:19:31 chicares Exp $
+// $Id: illustration_document.cpp,v 1.2 2005-06-15 05:05:04 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -113,8 +113,7 @@ bool IllustrationDocument::OnCreate(wxString const& filename, long int flags)
 // TODO ?? Why not offer doc_.read(filename)?
 // TODO ?? Would a vector<char> help?
 
-// TODO ?? '8' is sneaky and should be documented at least.
-    if(8 & flags)
+    if(LMI_WX_CHILD_DOCUMENT & flags)
         {
         is_phony_ = true;
         }

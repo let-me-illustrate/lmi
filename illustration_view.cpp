@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustration_view.cpp,v 1.17 2005-06-05 03:55:52 chicares Exp $
+// $Id: illustration_view.cpp,v 1.18 2005-06-15 05:05:04 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -41,8 +41,9 @@
 #include "account_value.hpp"
 #include "alert.hpp"
 #include "argv0.hpp"
+#include "configurable_settings.hpp"
+#include "custom_io_0.hpp"
 #include "file_command.hpp"
-#include "illustration_document.hpp"
 #include "inputillus.hpp"
 #include "ledger.hpp"
 #include "ledger_text_formats.hpp"
@@ -186,7 +187,7 @@ wxMenuBar* IllustrationView::MenuBar() const
 
 bool IllustrationView::OnCreate(wxDocument* doc, long flags)
 {
-    if(flags & 8)
+    if(flags & LMI_WX_CHILD_DOCUMENT)
         {
         is_phony_ = true;
         return ViewEx::OnCreate(doc, flags);
@@ -205,19 +206,6 @@ bool IllustrationView::OnCreate(wxDocument* doc, long flags)
     Run();
     return true;
 }
-
-/* TODO ?? expunge
-wxPrintout* IllustrationView::OnCreatePrintout()
-{
-    // WX !! The string argument seems pretty pointless: it simply
-    // follows "Please wait while printing" in messagebox text. The
-    // argument is documented as a "title", but the messagebox title
-    // is immutably "Printing failed".
-    wxHtmlPrintout* printout = new(wx) wxHtmlPrintout("");
-    printout->SetHtmlText(selected_values_as_html_.c_str());
-    return printout;
-}
-*/
 
 void IllustrationView::OnMenuOpen(wxMenuEvent&)
 {
@@ -281,6 +269,10 @@ void IllustrationView::OnUpdateFileSave(wxUpdateUIEvent& e)
 void IllustrationView::OnUpdateFileSaveAs(wxUpdateUIEvent& e)
 {
 // TODO ?? Doesn't seem to get called.
+
+// TODO ?? Is special logic required, here and elsewhere, to prevent
+// actions that don't make sense with style LMI_WX_CHILD_DOCUMENT?
+
 wxLogMessage("OnUpdateFileSaveAs");
 wxLog::FlushActive();
     e.Enable(!is_phony_);
@@ -338,5 +330,110 @@ void IllustrationView::Run(Input* overriding_input)
 void IllustrationView::SetLedger(boost::shared_ptr<Ledger const> ledger)
 {
     ledger_values_ = ledger;
+}
+
+// This could be generalized as a function template if that ever
+// becomes useful.
+IllustrationView* MakeNewIllustrationDocAndView
+    (wxDocManager* dm
+    ,char const*   filename
+    )
+{
+    LMI_ASSERT(0 != dm);
+    LMI_ASSERT(0 != filename);
+
+    wxDocTemplate* dt = dm->FindTemplateForPath(filename);
+    LMI_ASSERT(0 != dt);
+
+    wxDocument* new_document = dt->CreateDocument
+        (filename
+        ,wxDOC_SILENT | LMI_WX_CHILD_DOCUMENT
+        );
+
+    IllustrationDocument* illdoc = dynamic_cast<IllustrationDocument*>(new_document);
+    if(0 == illdoc)
+        {
+        fatal_error() << "dynamic_cast<IllustrationDocument*> failed." << LMI_FLUSH;
+        return 0;
+        }
+
+    // TODO ?? Why do we need both of these? [Neither seems effective.]
+    new_document->SetTitle(filename);
+    new_document->SetFilename(filename);
+
+    new_document->Modify(false);
+    new_document->SetDocumentSaved(true);
+
+    IllustrationView* illview = 0;
+    while(wxList::compatibility_iterator node = new_document->GetViews().GetFirst())
+        {
+        if(node->GetData()->IsKindOf(CLASSINFO(IllustrationView)))
+            {
+            illview = dynamic_cast<IllustrationView*>(node->GetData());
+            break;
+            }
+        node = node->GetNext();
+        }
+    if(0 == illview)
+        {
+        fatal_error() << "dynamic_cast<IllustrationView*> failed." << LMI_FLUSH;
+        return 0;
+        }
+    return illview;
+}
+
+// Must follow document-manager initialization.
+// Return value: prevent displaying GUI.
+bool RunSpecialInputFileIfPresent(wxDocManager* dm)
+{
+// TODO ?? It's silly to write try...catch here, but the customer that
+// needs this is a thousand miles away, and wx still seems not to
+// handle exceptions well--an exception thrown here was demonstrably
+// unobservable without this extra work.
+    try
+        {
+        if(DoesSpecialInputFileExist())
+            {
+            IllusInputParms input;
+            bool close_when_done = SetSpecialInput(input);
+            AccountValue av(input);
+            av.RunAV();
+            PrintFormSpecial(*av.ledger_from_av());
+            if(close_when_done)
+                {
+                return true;
+                }
+            else
+                {
+                LMI_ASSERT(0 != dm);
+                IllustrationView* illview = MakeNewIllustrationDocAndView
+                    (dm
+                    ,configurable_settings::instance().custom_output_filename().c_str()
+                    );
+
+                // It seems silly to perform this conversion here,
+                // because Run() performs an inverse conversion.
+                // But time is better spent removing the root of
+                // this silliness--the pair of duplicative input
+                // classes--than fretting over its symptoms.
+                Input x;
+                convert_from_ihs(input, x);
+                illview->Run(&x);
+                LMI_ASSERT(dynamic_cast<wxFrame*>(illview->GetFrame()));
+                dynamic_cast<wxFrame*>(illview->GetFrame())->Maximize();
+                }
+            }
+        }
+    catch(std::exception& e)
+        {
+        wxSafeShowMessage("Fatal error", e.what());
+        throw;
+        }
+    catch(...)
+        {
+        wxSafeShowMessage("Fatal error", "Unknown error");
+        throw;
+        }
+    return false;
 }
 

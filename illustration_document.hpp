@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustration_document.hpp,v 1.1 2005-03-11 03:19:31 chicares Exp $
+// $Id: illustration_document.hpp,v 1.2 2005-06-15 05:05:04 chicares Exp $
 
 // Because illustration windows have their own functions for loading
 // and saving files, override OnOpenDocument() and OnSaveDocument()
@@ -36,6 +36,19 @@
 #include <boost/utility.hpp>
 
 #include <wx/docview.h>
+
+/// WX !! The wx document-view implementation has no notion of 'child'
+/// documents, but sometimes lmi creates a document that logically is
+/// a 'child' of a parent CensusDocument: it corresponds to no actual,
+/// distinct document, can't be opened or saved separately, and should
+/// be closed, along with all its views, when its parent closes; and,
+/// accordingly, it should never be added to any wxFileHistory. This
+/// set of behaviors is implemented here by implicitly defining a new
+/// document-creation flag, appropriating an unused bit in the flags
+/// word. This is brittle, but then again it seems unlikely that
+/// anyone will change this aspect of wx.
+
+enum {LMI_WX_CHILD_DOCUMENT = 8};
 
 class WXDLLEXPORT wxHtmlWindow;
 
