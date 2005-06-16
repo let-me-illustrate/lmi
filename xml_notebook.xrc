@@ -24,7 +24,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: xml_notebook.xrc,v 1.11 2005-06-16 03:26:52 chicares Exp $
+    $Id: xml_notebook.xrc,v 1.12 2005-06-16 23:41:26 chicares Exp $
 
     This version is generic. It strives to present every input field
     the system offers, in a way that suits the main developer's tastes.
@@ -1784,7 +1784,7 @@ looks weird if we don't make this look like its siblings.
                     <object class="wxStaticBoxSizer">
                         <flag>wxGROW|wxALL</flag>
                         <orient>wxVERTICAL</orient>
-                        <label>Initial specified amount</label>
+                        <label>Salary-based specified amount</label>
                         <object class="sizeritem">
                             <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
                             <border>4</border>
@@ -1792,6 +1792,7 @@ looks weird if we don't make this look like its siblings.
                                 <cols>1</cols>
                                 <growablecols>0</growablecols>
                                 <growablerows>0,1,2,3,4</growablerows>
+<!-- TODO ?? expunge
                                 <object class="sizeritem">
                                     <flag>wxGROW</flag>
                                     <object class="wxComboBox" name="SpecifiedAmountStrategyFromIssue">
@@ -1829,6 +1830,7 @@ looks weird if we don't make this look like its siblings.
                                         </object>
                                     </object>
                                 </object>
+-->
                                 <object class="sizeritem">
                                     <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
                                     <border>4</border>
@@ -1877,6 +1879,7 @@ looks weird if we don't make this look like its siblings.
                                         </object>
                                     </object>
                                 </object>
+<!-- TODO ?? expunge
                                 <object class="sizeritem">
                                     <flag>wxALIGN_LEFT|wxALIGN_BOTTOM|wxALL</flag>
                                     <border>2</border>
@@ -1892,10 +1895,12 @@ looks weird if we don't make this look like its siblings.
                                         </content>
                                     </object>
                                 </object>
+-->
                             </object>
                         </object>
                     </object>
                 </object>
+<!-- TODO ?? expunge
                 <object class="sizeritem">
                     <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
                     <border>4</border>
@@ -1956,6 +1961,7 @@ looks weird if we don't make this look like its siblings.
                         </object>
                     </object>
                 </object>
+-->
             </object>
         </object>
         <object class="sizeritem">
@@ -2014,7 +2020,7 @@ looks weird if we don't make this look like its siblings.
                     <object class="wxStaticBoxSizer">
                         <flag>wxGROW|wxALL</flag>
                         <orient>wxVERTICAL</orient>
-                        <label>Individual payment</label>
+                        <label>Table</label>
                         <object class="sizeritem">
                             <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
                             <border>4</border>
@@ -2022,6 +2028,7 @@ looks weird if we don't make this look like its siblings.
                                 <cols>1</cols>
                                 <growablecols>0</growablecols>
                                 <growablerows>0,1,2,3,4</growablerows>
+<!-- TODO ?? expunge
                                 <object class="sizeritem">
                                     <flag>wxGROW</flag>
                                     <object class="wxComboBox" name="IndividualPaymentStrategy">
@@ -2060,6 +2067,7 @@ looks weird if we don't make this look like its siblings.
                                         </object>
                                     </object>
                                 </object>
+-->
                                 <object class="sizeritem">
                                     <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
                                     <border>4</border>
@@ -2099,6 +2107,7 @@ looks weird if we don't make this look like its siblings.
                                         </object>
                                     </object>
                                 </object>
+<!-- TODO ?? expunge
                                 <object class="sizeritem">
                                     <flag>wxALIGN_LEFT|wxALIGN_BOTTOM|wxALL</flag>
                                     <border>2</border>
@@ -2115,10 +2124,12 @@ looks weird if we don't make this look like its siblings.
                                         </content>
                                     </object>
                                 </object>
+-->
                             </object>
                         </object>
                     </object>
                 </object>
+<!-- TODO ?? expunge
                 <object class="sizeritem">
                     <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
                     <object class="wxFlexGridSizer">
@@ -2185,6 +2196,7 @@ looks weird if we don't make this look like its siblings.
                         </object>
                     </object>
                 </object>
+-->
                 <object class="sizeritem">
                     <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
                     <border>4</border>
@@ -2531,7 +2543,8 @@ looks weird if we don't make this look like its siblings.
     <object class="wxFlexGridSizer">
         <cols>1</cols>
         <growablecols>0</growablecols>
-        <growablerows>0,1</growablerows>
+        <growablerows>0</growablerows>
+<!-- TODO ?? expunge
         <object class="sizeritem">
             <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
             <border>4</border>
@@ -2859,6 +2872,7 @@ looks weird if we don't make this look like its siblings.
                 </object>
             </object>
         </object>
+-->
         <object class="sizeritem">
             <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
             <object class="wxCheckBox" name="WithdrawToBasisThenLoan">
