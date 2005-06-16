@@ -24,7 +24,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: xml_notebook.xrc,v 1.10 2005-06-16 01:07:03 chicares Exp $
+    $Id: xml_notebook.xrc,v 1.11 2005-06-16 03:26:52 chicares Exp $
 
     This version is generic. It strives to present every input field
     the system offers, in a way that suits the main developer's tastes.
@@ -58,6 +58,14 @@
                     <flag>wxGROW|wxALL</flag>
                     <border>4</border>
                     <object class="wxListBox" name="ProductName">
+<!-- TODO ?? WX !! If this "size" line... -->
+                        <size>-1,0</size>
+<!--
+...is deleted, then the dialog is displayed incorrectly: at least with
+msw, at the bottom of the screen, the 'Cancel' button's bottom border
+is not shown, and the 'Help' button isn't shown at all. This seems to
+demonstrate a defect in the wx library.
+-->
                         <style>wxLB_SINGLE</style>
                     </object>
                 </object>
