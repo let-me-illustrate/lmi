@@ -3,7 +3,7 @@
 <resource xmlns="http://www.wxwindows.org/wxxrc" version="2.3.0.1">
 
 <!--
-    Life insurance illustrations: wxWindows xml resources.
+    Let me illustrate...: wxWindows xml input-notebook resources.
 
     Copyright (C) 2003, 2004, 2005 Gregory W. Chicares.
 
@@ -24,7 +24,10 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: xml_notebook.xrc,v 1.9 2005-04-23 21:42:57 chicares Exp $
+    $Id: xml_notebook.xrc,v 1.10 2005-06-16 01:07:03 chicares Exp $
+
+    This version is generic. It strives to present every input field
+    the system offers, in a way that suits the main developer's tastes.
 -->
 
 <!-- TODO ??
@@ -55,30 +58,7 @@
                     <flag>wxGROW|wxALL</flag>
                     <border>4</border>
                     <object class="wxListBox" name="ProductName">
-                        <size>-1,10</size>
                         <style>wxLB_SINGLE</style>
-                        <content>
-                            <item>policy00</item>
-                            <item>policy01</item>
-                            <item>policy02</item>
-                            <item>policy03</item>
-                            <item>policy04</item>
-                            <item>policy05</item>
-                            <item>policy06</item>
-                            <item>policy07</item>
-                            <item>policy08</item>
-                            <item>policy09</item>
-                            <item>policy10</item>
-                            <item>policy11</item>
-                            <item>policy12</item>
-                            <item>policy13</item>
-                            <item>policy14</item>
-                            <item>policy15</item>
-                            <item>policy16</item>
-                            <item>policy17</item>
-                            <item>policy18</item>
-                            <item>policy19</item>
-                        </content>
                     </object>
                 </object>
             </object>
@@ -491,7 +471,6 @@
                         <growablerows>0,1</growablerows>
                         <object class="sizeritem">
                             <object class="wxRadioBox" name="RunOrder">
-                                <size>-1,-1</size>
                                 <style>wxRA_SPECIFY_COLS</style>
                                 <label>Processing order</label>
                                 <content>
@@ -3145,7 +3124,7 @@ looks weird if we don't make this look like its siblings.
 </object>
 
 <object class="wxDialog" name="dialog_containing_notebook">
-    <title>Xml input notebook demonstration</title>
+    <title>Let me illustrate...</title>
     <style>wxCAPTION|wxRESIZE_BORDER|wxSYSTEM_MENU</style>
     <exstyle>wxWS_EX_VALIDATE_RECURSIVELY</exstyle>
 <!-- WX !! This style flag is unknown to wxxrc:
@@ -3226,14 +3205,7 @@ looks weird if we don't make this look like its siblings.
                     <border>4</border>
                     <flag>wxGROW|wxRIGHT</flag>
                     <object class="wxStaticText" name="diagnostics">
-<!--
-TODO ?? wxSTATIC_BORDER works only for the msw platform.
-Perhaps we should switch on platform at run time.
-FSF !! Make sure this doesn't favor any proprietary platform over GNU/Linux.
-                        <style>wxSTATIC_BORDER</style>
-                        <style>wxSUNKEN_BORDER</style>
--->
-                        <style>wxSTATIC_BORDER|wxST_NO_AUTORESIZE</style>
+                        <style>wxSUNKEN_BORDER|wxST_NO_AUTORESIZE</style>
                         <label>[diagnostics]</label>
                     </object>
                 </object>
