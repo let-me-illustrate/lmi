@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.74 2005-06-15 23:53:39 chicares Exp $
+// $Id: ChangeLog,v 1.75 2005-06-17 13:58:38 chicares Exp $
 
 2005-01-14
 
@@ -2329,7 +2329,7 @@ Run custom output to maturity.
   ihs_dbdict.hpp
 Add facility to print product databases.
 
-2005-06-15 [1275]
+2005-06-15 [1276]
 
   census_view.cpp
   census_view.hpp
@@ -2340,4 +2340,38 @@ Add facility to print product databases.
   main_cli.cpp
   main_wx.cpp
 Refactor.
+
+  xml_notebook_coli_boli.xrc [new file]
+Add new input skin.
+
+  xml_notebook.xrc
+  xml_notebook_coli_boli.xrc
+Rewrite.
+
+  xml_notebook.xrc
+Demonstrate a defect.
+
+  xml_notebook_coli_boli.xrc
+Make <border> tags slightly more consistent.
+
+2005-06-16 [1283]
+
+  xml_notebook.xrc
+Mark redundant scalar controls for expunction.
+
+  xml_notebook.xrc
+Reformat 'Names' tab.
+
+  xml_notebook.xrc
+Clean up.
+
+2005-06-17 [1283]
+
+  xml_notebook_coli_boli.xrc
+Make <border> tags more consistent.
+
+  xml_notebook_single_premium.xrc [new file]
+Add experimental input skin, drastically simplified for a particular
+group of users. Some defaults will need to be changed to make this
+work correctly.
 
