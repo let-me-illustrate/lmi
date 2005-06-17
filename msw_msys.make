@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: msw_msys.make,v 1.1 2005-01-28 01:34:43 chicares Exp $
+# $Id: msw_msys.make,v 1.2 2005-06-17 13:46:15 zeitlin Exp $
 
 ################################################################################
 
@@ -38,14 +38,24 @@ system_root := /c
 
 ################################################################################
 
+# set the paths if the tools are not already in the PATH
+#
+# NB: they must be slash-terminated so that it's possible to set them to empty
+#     strings too
+ifeq (,$(USE_STD_PATHS))
+    PATH_MINGW := /mingw/bin/
+    PATH_BIN := /bin/
+    PATH_USR_BIN := /usr/bin/
+endif
+
 # Compiler, linker, and so on.
 
-AR  := /mingw/bin/ar
-CC  := /mingw/bin/gcc
-CPP := /mingw/bin/cpp
-CXX := /mingw/bin/g++
-LD  := /mingw/bin/g++
-RC  := /mingw/bin/windres
+AR  := $(PATH_MINGW)ar
+CC  := $(PATH_MINGW)gcc
+CPP := $(PATH_MINGW)cpp
+CXX := $(PATH_MINGW)g++
+LD  := $(PATH_MINGW)g++
+RC  := $(PATH_MINGW)windres
 
 ################################################################################
 
@@ -57,26 +67,26 @@ RC  := /mingw/bin/windres
 # Get the GNU sources, for sed-4.0.7 or later; build a new msw binary
 # with MSYS; and define $(SED) to point to it.
 
-CP     := /bin/cp
-DATE   := /bin/date
-ECHO   := /bin/echo
-LS     := /bin/ls
-MKDIR  := /bin/mkdir
-MV     := /bin/mv
-RM     := /bin/rm
-SED    := $(system_root)/usr/bin/sed
-TAR    := /bin/tar
+CP     := $(PATH_BIN)cp
+DATE   := $(PATH_BIN)date
+ECHO   := $(PATH_BIN)echo
+LS     := $(PATH_BIN)ls
+MKDIR  := $(PATH_BIN)mkdir
+MV     := $(PATH_BIN)mv
+RM     := $(PATH_BIN)rm
+TAR    := $(PATH_BIN)tar
 
 # FHS-2.2 would put these in /usr/bin .
 
-BZIP2  := /usr/bin/bzip2
-DIFF   := /usr/bin/diff
-GREP   := /usr/bin/grep
-MD5SUM := /usr/bin/md5sum
-PATCH  := /usr/bin/patch
-TOUCH  := /usr/bin/touch
-TR     := /usr/bin/tr
-WC     := /usr/bin/wc
+BZIP2  := $(PATH_USR_BIN)bzip2
+DIFF   := $(PATH_USR_BIN)diff
+GREP   := $(PATH_USR_BIN)grep
+MD5SUM := $(PATH_USR_BIN)md5sum
+PATCH  := $(PATH_USR_BIN)patch
+SED    := $(PATH_USR_BIN)sed
+TOUCH  := $(PATH_USR_BIN)touch
+TR     := $(PATH_USR_BIN)tr
+WC     := $(PATH_USR_BIN)wc
 
 ################################################################################
 
