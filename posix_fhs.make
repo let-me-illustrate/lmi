@@ -20,7 +20,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: posix_fhs.make,v 1.3 2005-03-23 15:32:29 chicares Exp $
+# $Id: posix_fhs.make,v 1.4 2005-06-17 01:46:14 zeitlin Exp $
 
 ################################################################################
 
@@ -43,8 +43,9 @@ CPP    := cpp
 CXX    := g++
 LD     := g++
 
-# TODO ?? Seems unnecessary, but do any make rules require it?
-RC     := windres
+# don't set RC to anything, this means that we don't use resources on this
+# platform
+RC     :=
 
 CP     := cp
 DATE   := date
