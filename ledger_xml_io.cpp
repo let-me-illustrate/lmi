@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xml_io.cpp,v 1.17 2005-05-27 10:37:06 chicares Exp $
+// $Id: ledger_xml_io.cpp,v 1.18 2005-06-17 01:41:05 zeitlin Exp $
 
 #include "config.hpp"
 
@@ -42,6 +42,12 @@
 #include <xmlwrapp/init.h>
 #include <xmlwrapp/node.h>
 #include <xmlwrapp/tree_parser.h>
+#ifdef USING_CURRENT_XMLWRAPP
+    // FIXME: gross hack to be undone when USING_CURRENT_XMLWRAPP becomes the
+    //        only supported version
+#   define set_attr     get_attributes().insert
+#   include <xmlwrapp/attributes.h>
+#endif
 
 #include <fstream>
 #include <iomanip>

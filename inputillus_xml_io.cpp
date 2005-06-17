@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: inputillus_xml_io.cpp,v 1.3 2005-05-24 04:00:02 chicares Exp $
+// $Id: inputillus_xml_io.cpp,v 1.4 2005-06-17 01:41:05 zeitlin Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -35,6 +35,9 @@
 #include <xmlwrapp/init.h>
 #include <xmlwrapp/node.h>
 #include <xmlwrapp/tree_parser.h>
+#ifdef USING_CURRENT_XMLWRAPP
+#   include <xmlwrapp/attributes.h>
+#endif
 
 #include <istream>
 #include <ostream>
@@ -92,7 +95,17 @@ void IllusInputParms::read(xml::node& x)
         }
 
     std::string cell_version_string;
+#ifdef USING_CURRENT_XMLWRAPP
+    const xml::attributes& attrs = x.get_attributes();
+    xml::attributes::const_iterator i = attrs.find("version");
+    if(i != attrs.end())
+        {
+            cell_version_string = i->get_value();
+        }
+    else
+#else
     if(!x.get_attr("version", cell_version_string))
+#endif
         {
         std::ostringstream msg;
         msg
@@ -227,7 +240,12 @@ void IllusInputParms::write(xml::node& x) const
     xml::node root(xml_root_name().c_str());
 // XMLWRAPP !! There's no way to set an integer attribute; and function
 // set_attr() seems to be missing in the doxygen stuff at pmade.org .
-    root.set_attr("version", value_cast<std::string>(class_version()).c_str());
+#ifdef USING_CURRENT_XMLWRAPP
+    root.get_attributes().insert
+#else
+    root.set_attr
+#endif
+    ("version", value_cast<std::string>(class_version()).c_str());
 
     std::vector<std::string> const member_names
         (IllusInputParms::member_names()
