@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: transferor.cpp,v 1.3 2005-05-27 10:37:06 chicares Exp $
+// $Id: transferor.cpp,v 1.4 2005-06-17 01:42:49 zeitlin Exp $
 
 // Acknowledgment
 
@@ -308,9 +308,11 @@ namespace
             wxComboBox* p = dynamic_cast<wxComboBox*>(&control);
             if(p)
                 {
+#ifdef __WXMSW__
 // FSF !! Need this in the wx library for GNU/linux.
 bool dropped = ::SendMessage((HWND)(p->GetHandle()), CB_GETDROPPEDSTATE, 0, 0);
 if(!dropped)
+#endif // __WXMSW__
 {
                 data = p->GetValue();
 }
