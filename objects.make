@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: objects.make,v 1.38 2005-06-12 16:58:36 chicares Exp $
+# $Id: objects.make,v 1.39 2005-06-17 01:46:14 zeitlin Exp $
 
 ################################################################################
 
@@ -253,7 +253,6 @@ lmi_wx_objects := \
   illustration_view.o \
   input.o \
   input_harmonization.o \
-  lmi.rc.o \
   main_common.o \
   main_wx.o \
   mc_enum.o \
@@ -267,6 +266,10 @@ lmi_wx_objects := \
   view_ex.o \
   wx_checks.o \
   xml_notebook.o \
+
+ifneq (,$(RC))
+lmi_wx_objects += lmi.rc.o
+endif
 
 ################################################################################
 
