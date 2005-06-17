@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: msw_common.make,v 1.5 2005-03-18 00:17:06 chicares Exp $
+# $Id: msw_common.make,v 1.6 2005-06-17 01:45:15 zeitlin Exp $
 
 ################################################################################
 
@@ -54,6 +54,8 @@ platform_mpatrol_libraries := \
 platform_wx_libraries := \
   -lwx_new \
   -lwxmsw25d \
+
+platform_gui_ldflags := -mwindows
 
 ################################################################################
 
