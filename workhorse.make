@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: workhorse.make,v 1.33 2005-06-12 16:58:36 chicares Exp $
+# $Id: workhorse.make,v 1.34 2005-06-17 01:45:15 zeitlin Exp $
 
 ###############################################################################
 
@@ -448,14 +448,14 @@ libantediluvian.a libantediluvian$(SHREXT): $(antediluvian_common_objects)
 # TODO ?? 'lmi*' targets can be built either with a shared or a static
 # 'lmi' library. Choose one, or support both.
 
-lmi_wx_monolithic$(EXEEXT): REQUIRED_LDFLAGS += $(platform_wx_libraries) -mwindows
+lmi_wx_monolithic$(EXEEXT): REQUIRED_LDFLAGS += $(platform_wx_libraries) $(platform_gui_ldflags)
 lmi_wx_monolithic$(EXEEXT): $(lmi_wx_objects) $(lmi_common_objects) wx_new$(SHREXT)
 
 lmi_wx_shared$(EXEEXT): lmi_dllflag := -DLMI_USE_DLL
-lmi_wx_shared$(EXEEXT): REQUIRED_LDFLAGS += $(platform_wx_libraries) -mwindows
+lmi_wx_shared$(EXEEXT): REQUIRED_LDFLAGS += $(platform_wx_libraries) $(platform_gui_ldflags)
 lmi_wx_shared$(EXEEXT): $(lmi_wx_objects) liblmi$(SHREXT) wx_new$(SHREXT)
 
-lmi_wx_static$(EXEEXT): REQUIRED_LDFLAGS += $(platform_wx_libraries) -mwindows
+lmi_wx_static$(EXEEXT): REQUIRED_LDFLAGS += $(platform_wx_libraries) $(platform_gui_ldflags)
 lmi_wx_static$(EXEEXT): $(lmi_wx_objects) liblmi.a wx_new$(SHREXT)
 
 lmi_cli_monolithic$(EXEEXT): $(cli_objects) $(lmi_common_objects)
