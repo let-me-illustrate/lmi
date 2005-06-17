@@ -30,7 +30,7 @@
    email: <chicares@cox.net>
    snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-   $Id: md5.hpp,v 1.1 2005-01-14 19:47:45 chicares Exp $
+   $Id: md5.hpp,v 1.2 2005-06-17 13:59:30 chicares Exp $
 
    GWC: File renamed md5.h --> md5.hpp so that grep whatever *.?pp
    can be used across the lmi project.
@@ -100,6 +100,12 @@ typedef u_int32_t md5_uint32;
    prefer to assume I have a conforming compiler in a mode of relaxed
    conformance that nonetheless permits prototypes--which are required
    by C++ anyway.
+
+   At any rate, '__P' is a reserved name, and moving it from glibc to
+   lmi makes that a problem not just in theory but also in fact
+   because it conflicts with GNU/Linux system headers, so it's renamed
+   here (and explicitly undefined at the end of the header).
+
 #undef __P
 #if defined (__STDC__) && __STDC__
 #define __P(x) x
@@ -107,7 +113,7 @@ typedef u_int32_t md5_uint32;
 #define __P(x) ()
 #endif
  */
-#define __P(x) x
+#define LMI_P(x) x
 
 /* Structure to save state of computation between the single steps.  */
 struct md5_ctx
@@ -129,20 +135,20 @@ struct md5_ctx
 
 /* Initialize structure containing state of computation.
    (RFC 1321, 3.3: Step 3)  */
-extern void md5_init_ctx __P ((struct md5_ctx *ctx));
+extern void md5_init_ctx LMI_P ((struct md5_ctx *ctx));
 
 /* Starting with the result of former calls of this function (or the
    initialization function update the context for the next LEN bytes
    starting at BUFFER.
    It is necessary that LEN is a multiple of 64!!! */
-extern void md5_process_block __P ((const void *buffer, size_t len,
+extern void md5_process_block LMI_P ((const void *buffer, size_t len,
                     struct md5_ctx *ctx));
 
 /* Starting with the result of former calls of this function (or the
    initialization function update the context for the next LEN bytes
    starting at BUFFER.
    It is NOT required that LEN is a multiple of 64.  */
-extern void md5_process_bytes __P ((const void *buffer, size_t len,
+extern void md5_process_bytes LMI_P ((const void *buffer, size_t len,
                     struct md5_ctx *ctx));
 
 /* Process the remaining bytes in the buffer and put result from CTX
@@ -152,7 +158,7 @@ extern void md5_process_bytes __P ((const void *buffer, size_t len,
 
    IMPORTANT: On some systems it is required that RESBUF is correctly
    aligned for a 32 bits value.  */
-extern void *md5_finish_ctx __P ((struct md5_ctx *ctx, void *resbuf));
+extern void *md5_finish_ctx LMI_P ((struct md5_ctx *ctx, void *resbuf));
 
 
 /* Put result from CTX in first 16 bytes following RESBUF.  The result is
@@ -161,21 +167,25 @@ extern void *md5_finish_ctx __P ((struct md5_ctx *ctx, void *resbuf));
 
    IMPORTANT: On some systems it is required that RESBUF is correctly
    aligned for a 32 bits value.  */
-extern void *md5_read_ctx __P ((const struct md5_ctx *ctx, void *resbuf));
+extern void *md5_read_ctx LMI_P ((const struct md5_ctx *ctx, void *resbuf));
 
 
 /* Compute MD5 message digest for bytes read from STREAM.  The
    resulting message digest number will be written into the 16 bytes
    beginning at RESBLOCK.  */
-extern int md5_stream __P ((FILE *stream, void *resblock));
+extern int md5_stream LMI_P ((FILE *stream, void *resblock));
 
 /* Compute MD5 message digest for LEN bytes beginning at BUFFER.  The
    result is always in little endian byte order, so that a byte-wise
    output yields to the wanted ASCII representation of the message
    digest.  */
-extern void *md5_buffer __P ((const char *buffer, size_t len, void *resblock));
+extern void *md5_buffer LMI_P ((const char *buffer, size_t len, void *resblock));
 #ifdef __cplusplus
 } /* extern "C" */
 #endif /* __cplusplus */
+
+/* GWC: Explicitly undefine prototype macro. */
+#undef LMI_P
+
 #endif /* LMI_MD5_H */
 
