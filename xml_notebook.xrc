@@ -24,7 +24,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: xml_notebook.xrc,v 1.13 2005-06-17 00:38:30 chicares Exp $
+    $Id: xml_notebook.xrc,v 1.14 2005-06-17 02:49:00 chicares Exp $
 
     This version is generic. It strives to present every input field
     the system offers, in a way that suits the main developer's tastes.
@@ -663,9 +663,6 @@ demonstrate a defect in the wx library.
                             <flag>wxGROW</flag>
                             <object class="wxComboBox" name="State">
                                 <style>wxCB_DROPDOWN|wxCB_READONLY</style>
-                                <selection>0</selection>
-                                <content>
-                                </content>
                             </object>
                         </object>
                         <object class="sizeritem">
@@ -686,9 +683,9 @@ demonstrate a defect in the wx library.
                             </object>
                         </object>
                         <object class="sizeritem">
+                            <flag>wxGROW</flag>
                             <object class="wxComboBox" name="Country">
                                 <style>wxCB_DROPDOWN|wxCB_READONLY</style>
-                                <selection>0</selection>
                             </object>
                         </object>
                     </object>
@@ -765,10 +762,6 @@ demonstrate a defect in the wx library.
                             <flag>wxGROW</flag>
                             <object class="wxComboBox" name="CorporationState">
                                 <style>wxCB_DROPDOWN|wxCB_READONLY</style>
-                                <selection>0</selection>
-                                <content>
-                                    <item>AK</item>
-                                </content>
                             </object>
                         </object>
                         <object class="sizeritem">
@@ -789,9 +782,9 @@ demonstrate a defect in the wx library.
                             </object>
                         </object>
                         <object class="sizeritem">
+                            <flag>wxGROW</flag>
                             <object class="wxComboBox" name="corporation_country">
                                 <style>wxCB_DROPDOWN|wxCB_READONLY</style>
-                                <selection>0</selection>
                             </object>
                         </object>
                     </object>
@@ -868,7 +861,6 @@ demonstrate a defect in the wx library.
                             <flag>wxGROW</flag>
                             <object class="wxComboBox" name="AgentState">
                                 <style>wxCB_DROPDOWN|wxCB_READONLY</style>
-                                <selection>0</selection>
                             </object>
                         </object>
                         <object class="sizeritem">
@@ -892,7 +884,6 @@ demonstrate a defect in the wx library.
                             <flag>wxGROW</flag>
                             <object class="wxComboBox" name="agent_country">
                                 <style>wxCB_DROPDOWN|wxCB_READONLY</style>
-                                <selection>0</selection>
                             </object>
                         </object>
                     </object>
@@ -1821,17 +1812,6 @@ looks weird if we don't make this look like its siblings.
                                     <flag>wxGROW</flag>
                                     <object class="wxComboBox" name="SpecifiedAmountStrategyFromIssue">
                                         <style>wxCB_DROPDOWN|wxCB_READONLY</style>
-                                        <selection>0</selection>
-                                        <content>
-                                            <item>Flat amount</item>
-                                            <item>Initial maximum premium</item>
-                                            <item>Initial target premium</item>
-                                            <item>Corridor factor times initial premium</item>
-                                            <item>7702A rate times initial premium</item>
-                                            <item>GLP rate times initial premium</item>
-                                            <item>GSP rate times initial premium</item>
-                                            <item>Function of salary</item>
-                                        </content>
                                     </object>
                                 </object>
                                 <object class="sizeritem">
@@ -2057,18 +2037,6 @@ looks weird if we don't make this look like its siblings.
                                     <flag>wxGROW</flag>
                                     <object class="wxComboBox" name="IndividualPaymentStrategy">
                                         <style>wxCB_DROPDOWN|wxCB_READONLY</style>
-                                        <selection>0</selection>
-                                        <content>
-                                            <item>PmtInputScalar</item>
-                                            <item>PmtMinimum</item>
-                                            <item>PmtTarget</item>
-                                            <item>Corridor</item>
-                                            <item>PmtMEP</item>
-                                            <item>PmtGLP</item>
-                                            <item>PmtGSP</item>
-                                            <item>PmtCorridor</item>
-                                            <item>PmtTable</item>
-                                        </content>
                                     </object>
                                 </object>
                                 <object class="sizeritem">
@@ -2973,7 +2941,6 @@ looks weird if we don't make this look like its siblings.
                         <selection>0</selection>
                         <content>
                             <item>none</item>
-                            <item>dunno</item>
                         </content>
                     </object>
                 </object>
