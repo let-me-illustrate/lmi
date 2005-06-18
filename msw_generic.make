@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: msw_generic.make,v 1.2 2005-02-17 23:27:21 chicares Exp $
+# $Id: msw_generic.make,v 1.3 2005-06-18 04:46:41 chicares Exp $
 
 ################################################################################
 
@@ -77,7 +77,6 @@ MKDIR  := $(gnu_utils_dir)/mkdir
 MV     := $(gnu_utils_dir)/mv
 RM     := $(gnu_utils_dir)/rm
 SED    := $(gnu_utils_dir)/sed
-TAR    := $(gnu_utils_dir)/tar
 
 # FHS-2.2 would put these in /usr/bin .
 
@@ -86,6 +85,7 @@ DIFF   := $(gnu_utils_dir)/diff
 GREP   := $(gnu_utils_dir)/grep
 MD5SUM := $(gnu_utils_dir)/md5sum
 PATCH  := $(gnu_utils_dir)/patch
+TAR    := $(gnu_utils_dir)/tar
 TOUCH  := $(gnu_utils_dir)/touch
 TR     := $(gnu_utils_dir)/tr
 WC     := $(gnu_utils_dir)/wc

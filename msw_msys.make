@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: msw_msys.make,v 1.2 2005-06-17 13:46:15 zeitlin Exp $
+# $Id: msw_msys.make,v 1.3 2005-06-18 04:46:41 chicares Exp $
 
 ################################################################################
 
@@ -31,6 +31,11 @@
 # The defect is apparently in the MSYS fork of bash. The most
 # important makefile targets work more or less correctly despite this
 # defect, but it breaks autodependency generation.
+#
+# TODO ?? These instructions, however:
+# # Get the GNU sources, for sed-4.0.7 or later; build a new msw binary
+# # with MSYS; and define $(SED) to point to it.
+# don't fix the problem. More work is needed.
 
 ################################################################################
 
@@ -38,34 +43,38 @@ system_root := /c
 
 ################################################################################
 
-# set the paths if the tools are not already in the PATH
-#
-# NB: they must be slash-terminated so that it's possible to set them to empty
-#     strings too
+# Set normal system paths explicitly unless $(USE_STD_PATHS) is specified.
+# Reason: many problems reported on mailing lists are due to users mixing
+# MSYS and cygwin tools by setting $(PATH) incorrectly; but people who set
+# $(USE_STD_PATHS) are assumed to know what they're doing. These paths are
+# slash-terminated so that setting them to empty strings works, too.
+
+# MSYS mounts /usr/bin/ as an alias for /bin/ , so it's irrelevant that
+# it places files that belong in /usr/bin/ physically in its /bin/ . This
+# has nothing to do with $(PATH).
+
 ifeq (,$(USE_STD_PATHS))
-    PATH_MINGW := /mingw/bin/
-    PATH_BIN := /bin/
-    PATH_USR_BIN := /usr/bin/
+  PATH_BIN     := /bin/
+  PATH_GCC     := /mingw/bin/
+  PATH_USR_BIN := /usr/bin/
 endif
+
+################################################################################
 
 # Compiler, linker, and so on.
 
-AR  := $(PATH_MINGW)ar
-CC  := $(PATH_MINGW)gcc
-CPP := $(PATH_MINGW)cpp
-CXX := $(PATH_MINGW)g++
-LD  := $(PATH_MINGW)g++
-RC  := $(PATH_MINGW)windres
+AR     := $(PATH_GCC)ar
+CC     := $(PATH_GCC)gcc
+CPP    := $(PATH_GCC)cpp
+CXX    := $(PATH_GCC)g++
+LD     := $(PATH_GCC)g++
+RC     := $(PATH_GCC)windres
 
 ################################################################################
 
 # Standard utilities.
 
 # Required in /bin (if anywhere) by FHS-2.2 .
-
-# A more modern 'sed' than MSYS provides as of 2005-01 is needed.
-# Get the GNU sources, for sed-4.0.7 or later; build a new msw binary
-# with MSYS; and define $(SED) to point to it.
 
 CP     := $(PATH_BIN)cp
 DATE   := $(PATH_BIN)date
@@ -74,7 +83,7 @@ LS     := $(PATH_BIN)ls
 MKDIR  := $(PATH_BIN)mkdir
 MV     := $(PATH_BIN)mv
 RM     := $(PATH_BIN)rm
-TAR    := $(PATH_BIN)tar
+SED    := $(PATH_BIN)sed
 
 # FHS-2.2 would put these in /usr/bin .
 
@@ -83,7 +92,7 @@ DIFF   := $(PATH_USR_BIN)diff
 GREP   := $(PATH_USR_BIN)grep
 MD5SUM := $(PATH_USR_BIN)md5sum
 PATCH  := $(PATH_USR_BIN)patch
-SED    := $(PATH_USR_BIN)sed
+TAR    := $(PATH_USR_BIN)tar
 TOUCH  := $(PATH_USR_BIN)touch
 TR     := $(PATH_USR_BIN)tr
 WC     := $(PATH_USR_BIN)wc
