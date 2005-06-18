@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_acctval.cpp,v 1.27 2005-05-27 10:37:06 chicares Exp $
+// $Id: ihs_acctval.cpp,v 1.28 2005-06-18 21:19:58 zeitlin Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -57,7 +57,7 @@
 #include "surrchg_rates.hpp"
 #include "tiered_charges.hpp"
 
-#include <boost/compose.hpp>
+#include <boost/bind.hpp>
 
 #include <algorithm>
 #include <cmath>
@@ -1314,9 +1314,9 @@ void AccountValue::AddSurrChgLayer(int year, double delta_specamt)
         (SurrChgRates_->SpecamtRateDurationalFactor().begin()
         ,SurrChgRates_->SpecamtRateDurationalFactor().end() - year
         ,std::inserter(new_layer, new_layer.begin())
-        ,boost::compose_f_gx
+        ,boost::bind
             (round_surrender_charge
-            ,std::bind2nd(std::multiplies<double>(), z)
+            ,boost::bind(std::multiplies<double>(), _1, z)
             )
         );
 
@@ -1406,9 +1406,9 @@ void AccountValue::ReduceSurrChg(int year, double partial_surrchg)
             (year + SurrChg_.begin()
             ,       SurrChg_.end()
             ,year + SurrChg_.begin()
-            ,boost::compose_f_gx
+            ,boost::bind
                 (round_surrender_charge
-                ,std::bind2nd(std::multiplies<double>(), multiplier)
+                ,boost::bind(std::multiplies<double>(), _1, multiplier)
                 )
             );
         }
