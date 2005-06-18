@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: msw_cygwin.make,v 1.1 2005-01-28 01:34:43 chicares Exp $
+# $Id: msw_cygwin.make,v 1.2 2005-06-18 04:27:41 chicares Exp $
 
 ################################################################################
 
@@ -27,14 +27,28 @@ system_root := /cygdrive/c
 
 ################################################################################
 
+# Set normal system paths explicitly unless $(USE_STD_PATHS) is specified.
+# Reason: many problems reported on mailing lists are due to users mixing
+# MSYS and cygwin tools by setting $(PATH) incorrectly; but people who set
+# $(USE_STD_PATHS) are assumed to know what they're doing. These paths are
+# slash-terminated so that setting them to empty strings works, too.
+
+ifeq (,$(USE_STD_PATHS))
+  PATH_BIN     := /bin/
+  PATH_GCC     := /usr/local/bin/
+  PATH_USR_BIN := /usr/bin/
+endif
+
+################################################################################
+
 # Compiler, linker, and so on.
 
-AR  := /bin/ar
-CC  := /bin/gcc
-CPP := /bin/cpp
-CXX := /bin/g++
-LD  := /bin/g++
-RC  := /bin/windres
+AR     := $(PATH_GCC)ar
+CC     := $(PATH_GCC)gcc
+CPP    := $(PATH_GCC)cpp
+CXX    := $(PATH_GCC)g++
+LD     := $(PATH_GCC)g++
+RC     := $(PATH_GCC)windres
 
 ################################################################################
 
@@ -42,26 +56,26 @@ RC  := /bin/windres
 
 # Required in /bin (if anywhere) by FHS-2.2 .
 
-CP     := /bin/cp
-DATE   := /bin/date
-ECHO   := /bin/echo
-LS     := /bin/ls
-MKDIR  := /bin/mkdir
-MV     := /bin/mv
-RM     := /bin/rm
-SED    := /bin/sed
-TAR    := /bin/tar
+CP     := $(PATH_BIN)cp
+DATE   := $(PATH_BIN)date
+ECHO   := $(PATH_BIN)echo
+LS     := $(PATH_BIN)ls
+MKDIR  := $(PATH_BIN)mkdir
+MV     := $(PATH_BIN)mv
+RM     := $(PATH_BIN)rm
+SED    := $(PATH_BIN)sed
 
 # FHS-2.2 would put these in /usr/bin .
 
-BZIP2  := /usr/bin/bzip2
-DIFF   := /usr/bin/diff
-GREP   := /usr/bin/grep
-MD5SUM := /usr/bin/md5sum
-PATCH  := /usr/bin/patch
-TOUCH  := /usr/bin/touch
-TR     := /usr/bin/tr
-WC     := /usr/bin/wc
+BZIP2  := $(PATH_USR_BIN)bzip2
+DIFF   := $(PATH_USR_BIN)diff
+GREP   := $(PATH_USR_BIN)grep
+MD5SUM := $(PATH_USR_BIN)md5sum
+PATCH  := $(PATH_USR_BIN)patch
+TAR    := $(PATH_USR_BIN)tar
+TOUCH  := $(PATH_USR_BIN)touch
+TR     := $(PATH_USR_BIN)tr
+WC     := $(PATH_USR_BIN)wc
 
 ################################################################################
 
