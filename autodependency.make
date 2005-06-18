@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: autodependency.make,v 1.1 2005-01-28 01:34:43 chicares Exp $
+# $Id: autodependency.make,v 1.2 2005-06-18 19:39:02 chicares Exp $
 
 ################################################################################
 
@@ -192,11 +192,20 @@ $(src_dir)/configuration.make:: ;
 # gcc-3.x preprocessor. If you're still using a preprocessor older
 # than gcc-3.x's, change '-M -MT $@' to '-M' in $(MAKEDEPEND) below.
 
+# The sed command line that would normally be written
+#   -e 's/$$/ :/' \
+# is instead written
+#   -e 's|$$| :|' \
+# because of a nasty problem with MSYS, which seems to think that
+# the character-sequence
+#   :/
+# even in quotes must be some msw path that needs translation.
+
 autodependency_sed_commands = \
   -e :a -e '/\\$$/N; s/\\\n//; ta' \
   -e 'h' \
   -e 's/^[^:]*: *//' \
-  -e 's/$$/ :/' \
+  -e 's|$$| :|' \
   -e 'G' \
   $(comp_autodependency_kludge) \
 
@@ -228,7 +237,7 @@ MAKEDEPEND_0 = \
 
 MAKEDEPEND_1 = \
   $(SED) $(autodependency_sed_commands) < $*.d0 > $*.d; \
-  $(RM) $*.d0 \
+  $(RM) $*.d0; \
 
 -include *.d
 *.d: ;

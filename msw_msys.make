@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: msw_msys.make,v 1.3 2005-06-18 04:46:41 chicares Exp $
+# $Id: msw_msys.make,v 1.4 2005-06-18 19:39:02 chicares Exp $
 
 ################################################################################
 
@@ -83,7 +83,20 @@ LS     := $(PATH_BIN)ls
 MKDIR  := $(PATH_BIN)mkdir
 MV     := $(PATH_BIN)mv
 RM     := $(PATH_BIN)rm
-SED    := $(PATH_BIN)sed
+
+# TODO ?? Override MSYS's ancient sed. This is an experimental change.
+# If testing confirms that it works, then it should be explained better,
+# and instructions for building a more modern sed should be given.
+#
+# Vadim--I merely downloaded the GNU project's sources for sed-4.0.7
+# and built them in MSYS in the normal './configure && make' way, then
+# copied the resulting binary to "C:\usr\bin\sed.exe". Maybe it should
+# go in a special directory in the lmi hierarchy instead. Just be sure
+# you don't copy it into MSYS's own /bin/ directory: that's likely to
+# cause horrible problems.
+
+# SED    := $(PATH_BIN)sed
+SED    := /c/usr/bin/sed
 
 # FHS-2.2 would put these in /usr/bin .
 
