@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_loads.cpp,v 1.3 2005-02-17 04:40:03 chicares Exp $
+// $Id: ihs_loads.cpp,v 1.4 2005-06-18 21:19:58 zeitlin Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -38,7 +38,7 @@
 #include "inputs.hpp"
 #include "math_functors.hpp"
 
-#include <boost/compose.hpp>
+#include <boost/bind.hpp>
 
 #include <algorithm>
 #include <cmath>     // std::pow()
@@ -202,9 +202,9 @@ void Loads::Init
             (extra_asset_comp.begin()
             ,extra_asset_comp.end()
             ,extra_asset_comp.begin()
-            ,boost::compose_f_gx
+            ,boost::bind
                 (i_upper_12_over_12_from_i<double>()
-                ,std::bind2nd(std::multiplies<double>(), 1.0 / 10000.0L)
+                ,boost::bind(std::multiplies<double>(), _1, 1.0 / 10000.0L)
                 )
             );
 
