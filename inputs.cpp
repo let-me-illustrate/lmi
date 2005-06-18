@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: inputs.cpp,v 1.4 2005-04-29 17:20:55 chicares Exp $
+// $Id: inputs.cpp,v 1.5 2005-06-18 13:10:01 zeitlin Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -36,7 +36,7 @@
 #include "inputstatus.hpp"
 #include "is_sorted_.hpp"
 
-#include <boost/compose.hpp>
+#include <boost/bind.hpp>
 
 #include <algorithm>
 #include <functional>
@@ -877,10 +877,10 @@ bool InputParms::CheckAllowChangeToDBO2() const
         (nonstd::is_sorted_
             (DBOpt.begin()
             ,DBOpt.end()
-            ,boost::compose_f_gx_hy
+            ,boost::bind
                 (std::logical_and<bool>()
-                ,std::bind2nd(std::equal_to<e_dbopt>(), "B")
-                ,std::bind2nd(std::not_equal_to<e_dbopt>(), "B")
+                ,boost::bind(std::equal_to<e_dbopt>(), _1, e_dbopt("B"))
+                ,boost::bind(std::not_equal_to<e_dbopt>(), _2, e_dbopt("B"))
                 )
             )
         )
