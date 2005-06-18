@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: GNUmakefile,v 1.17 2005-06-01 14:49:25 chicares Exp $
+# $Id: GNUmakefile,v 1.18 2005-06-18 13:38:29 zeitlin Exp $
 
 ###############################################################################
 
@@ -274,29 +274,21 @@ licensed_files := $(filter-out $(unlicensed_files),$(wildcard *))
 
 # These headers define datestamp macros.
 
+# this function creates a new header file with the specified contents
+# automatically prepending it with the standard copyright header, syntax:
+#
+#        $(call create_src, 'contents of the file', filename)
+#
+create_src = $(ECHO) -e $(gpl_notices) $1 | \
+		$(SED) -e 's/^ *//' | \
+		$(TR) -d '\r' > $2
+
 # Update the version-datestamp header before committing any group of
 # files to cvs. Use target 'cvs_ready' to do this reliably.
 
-# TODO ?? On 2005-03-22, GWC substituted
-#     |$(SED) -e's/ *\\n/\n/g' |$(SED) -e's/^ *//'|$(TR) -d '\r' > version.hpp
-#     |$(SED) -e's/ *\\n/\n/g' |$(SED) -e's/^ *//'|$(TR) -d '\r' > build.hpp
-# below for
-#     |$(SED) -e's/^ *//' |$(TR) -d '\r' > version.hpp
-#     |$(SED) -e's/^ *//' |$(TR) -d '\r' > build.hpp
-# as a temporary fix; VZ notes:
-#   I've had to add additional sed to makefile as otherwise I had only a
-#   single line in build.hpp with literal '\\' and 'n' symbols instead of
-#   new lines (I noticed this because LMI_BUILD wasn't defined as it was
-#   effectively commented out because of this). A cleaner way to do it could
-#   be to use a make "define" in msw/posix.make to define the canned command
-#   sequence used for version.hpp and [build.hpp], but I didn't want to do any
-#   non trivial changes.
-# and that suggestion should be pursued later.
-
 .PHONY: set_version_datestamp
 set_version_datestamp:
-	@$(ECHO) $(gpl_notices) '#define LMI_VERSION "$(yyyymmddhhmm)"' \
-	  |$(SED) -e's/ *\\n/\n/g' |$(SED) -e's/^ *//'|$(TR) -d '\r' > version.hpp
+	@$(call create_src, '#define LMI_VERSION "$(yyyymmddhhmm)"', version.hpp)
 	@$(ECHO) Version is '$(yyyymmddhhmm)'.
 
 # Update the build-datestamp header whenever any other source file has
@@ -311,8 +303,7 @@ set_version_datestamp:
 
 build.hpp: $(filter-out $@,$(prerequisite_files)) version.hpp
 	@$(ECHO) These files are more recent than '$@': $?
-	@$(ECHO) $(gpl_notices) '#define LMI_BUILD "$(yyyymmddhhmm)"' \
-	  |$(SED) -e's/ *\\n/\n/g' |$(SED) -e's/^ *//'|$(TR) -d '\r' > build.hpp
+	@$(call create_src, '#define LMI_BUILD "$(yyyymmddhhmm)"', build.hpp)
 	@$(ECHO) Built '$(yyyymmddhhmm)'.
 
 version.hpp: $(filter-out $@,$(prerequisite_files))
