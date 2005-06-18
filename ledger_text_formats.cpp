@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_text_formats.cpp,v 1.7 2005-06-12 15:17:15 chicares Exp $
+// $Id: ledger_text_formats.cpp,v 1.8 2005-06-18 01:57:33 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -68,11 +68,9 @@ std::string FormatSelectedValuesAsHtml(Ledger const& ledger_values)
     oss
         << "<html>"
         << "<head><title>Let me illustrate...</title></head>"
-        << "<body text=\"#000000\" bgcolor=\"#B0B0B0\">"
+        << "<body>"
 
         << "<p>"
-        << " <h5>"
-        << "  <font color=\"#804040\">"
         << "Calculation summary for "
         ;
 
@@ -117,16 +115,24 @@ std::string FormatSelectedValuesAsHtml(Ledger const& ledger_values)
         }
 
     oss
-        << "  </font>"
-        << " </h5>"
         << "</p>"
 
         << "<hr>"
         << "<table align=right>"
         << "  <tr>"
+        << "    <th></th>    <th></th>"
+        << "    <th>Guaranteed</th> <th>Guaranteed</th> <th>Guaranteed</th>"
+        << "    <th>Current</th>    <th>Current</th>    <th>Current</th>"
+        << "  </tr>"
+        << "  <tr>"
+        << "    <th></th>    <th></th>"
+        << "    <th>Account</th>    <th>Surrender</th>  <th>Death</th>"
+        << "    <th>Account</th>    <th>Surrender</th>  <th>Death</th>"
+        << "  </tr>"
+        << "  <tr>"
         << "    <th>Age</th> <th>Outlay</th>"
-        << "    <th>GuarAV</th> <th>GuarCSV</th> <th>GuarDB</th>"
-        << "    <th>CurrAV</th> <th>CurrCSV</th> <th>CurrDB</th>"
+        << "    <th>Value</th>      <th>Value</th>      <th>Benefit</th>"
+        << "    <th>Value</th>      <th>Value</th>      <th>Benefit</th>"
         << "  </tr>"
         ;
 
