@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: workhorse.make,v 1.35 2005-06-18 14:55:58 chicares Exp $
+# $Id: workhorse.make,v 1.36 2005-06-18 22:29:33 zeitlin Exp $
 
 ###############################################################################
 
@@ -310,9 +310,6 @@ LDFLAGS = \
   $(gprof_flag) \
   -Wl,-Map,$@.map \
 
-# INELEGANT !! Define BOOST_DEPRECATED until code that uses the
-# deprecated boost::bind library is rewritten.
-
 # TODO ?? Is there a better way to handle __WXDEBUG__, such as
 # #including some wx configuration header?
 
@@ -320,7 +317,6 @@ REQUIRED_CPPFLAGS = \
   $(addprefix -I , $(all_include_directories)) \
   $(lmi_wx_new_dllflag) \
   $(platform_defines) \
-  -DBOOST_DEPRECATED \
   -D__WXDEBUG__ \
 
 REQUIRED_CFLAGS = \
