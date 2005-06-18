@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: objects.make,v 1.39 2005-06-17 01:46:14 zeitlin Exp $
+# $Id: objects.make,v 1.40 2005-06-18 22:38:52 zeitlin Exp $
 
 ################################################################################
 
@@ -29,12 +29,14 @@
 
 # Boost filesystem library. The other boost libraries that lmi
 # requires are implemented entirely in headers.
-
+ifeq (,$(BOOST_FILESYSTEM_LIB))
 boost_filesystem_objects := \
   convenience.o \
   exception.o \
   path_posix_windows.o \
   operations_posix_windows.o \
+
+endif
 
 # GNU cgicc.
 
@@ -79,13 +81,17 @@ cgicc_3_1_4_objects = \
 
 # xmlwrapp library from pmade.org .
 
-xmlwrapp_objects := \
+ifeq (,$(XMLWRAPP_LIB))
+xmlwrapp_lib_objects := \
   event_parser.o \
   init.o \
   node.o \
   node_iterator.o \
   tree_parser.o \
-  xmlwrapp_ex.o \
+
+endif
+
+xmlwrapp_objects := $(xmlwrapp_lib_objects) xmlwrapp_ex.o
 
 ################################################################################
 
