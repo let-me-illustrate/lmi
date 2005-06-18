@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: workhorse.make,v 1.34 2005-06-17 01:45:15 zeitlin Exp $
+# $Id: workhorse.make,v 1.35 2005-06-18 14:55:58 chicares Exp $
 
 ###############################################################################
 
@@ -502,6 +502,38 @@ install: $(default_targets)
 	+@[ -d $(test_dir)       ] || $(MKDIR) --parents $(test_dir)
 	+@[ -d $(touchstone_dir) ] || $(MKDIR) --parents $(touchstone_dir)
 	@$(CP) --preserve --update $^ $(data_files) $(bin_dir)
+	@cd $(data_dir); $(bin_dir)/product_files
+
+################################################################################
+
+# Archive data files. Designed for maintainer use only.
+
+data_archname := lmi-data-$(yyyymmddhhmm).tar
+
+shared_data_files = \
+  qx_ann.dat \
+  qx_ann.ndx \
+  qx_cso.dat \
+  qx_cso.ndx \
+  qx_ins.dat \
+  qx_ins.ndx \
+  sample.dat \
+  sample.db4 \
+  sample.fnd \
+  sample.ndx \
+  sample.pol \
+  sample.rnd \
+  sample.tir \
+
+.PHONY: archive_shared_data_files
+archive_shared_data_files:
+	cd $(data_dir)/..; \
+	$(TAR) \
+	  --create \
+	  --file=$(data_archname) \
+	  --verbose \
+	  $(addprefix data/,$(shared_data_files)); \
+	$(BZIP2) $(data_archname); \
 
 ################################################################################
 
@@ -603,8 +635,6 @@ regression_test_md5sums  := $(test_dir)/md5sums-$(yyyymmddhhmm)
 .PHONY: regression_test
 regression_test: install
 	@$(ECHO) Regression test:
-	@cd $(data_dir); \
-	  $(bin_dir)/product_files
 	@cd $(test_dir); \
 	  $(bin_dir)/lmi_cli_shared \
 	    --ash_nazg --accept --regress \
