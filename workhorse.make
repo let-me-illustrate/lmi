@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: workhorse.make,v 1.36 2005-06-18 22:29:33 zeitlin Exp $
+# $Id: workhorse.make,v 1.37 2005-06-18 22:38:52 zeitlin Exp $
 
 ###############################################################################
 
@@ -83,16 +83,21 @@ $(src_dir)/objects.make:: ;
 
 default_targets := \
   wx_new$(SHREXT) \
-  antediluvian_cgi$(EXEEXT) \
-  antediluvian_cli$(EXEEXT) \
   elapsed_time$(EXEEXT) \
   generate_passkey$(EXEEXT) \
   ihs_crc_comp$(EXEEXT) \
-  libantediluvian$(SHREXT) \
   liblmi$(SHREXT) \
   lmi_cli_shared$(EXEEXT) \
   lmi_wx_shared$(EXEEXT) \
   product_files$(EXEEXT) \
+
+ifeq (,$(NO_CGI))
+default_targets += \
+  antediluvian_cgi$(EXEEXT) \
+  antediluvian_cli$(EXEEXT) \
+  libantediluvian$(SHREXT) \
+
+endif
 
 .PHONY: effective_default_target
 effective_default_target: $(default_targets)
@@ -285,7 +290,12 @@ endif
 # TODO ?? Consider refining it anyway, because it's unclean: libxml2
 # isn't actually required for all targets.
 
+# function which returns -larg if arg is non empty and nothing otherwise
+make_lib_if = $(if $1,-l$1)
+
 REQUIRED_LIBS := \
+  $(call make_lib_if,$(XMLWRAPP_LIB)) \
+  $(call make_lib_if,$(BOOST_FILESYSTEM_LIB)) \
   $(platform_libxml2_libraries) \
 
 ################################################################################
@@ -318,6 +328,11 @@ REQUIRED_CPPFLAGS = \
   $(lmi_wx_new_dllflag) \
   $(platform_defines) \
   -D__WXDEBUG__ \
+
+# assume that if we have xmlwrapp as system library, it's recent enough
+ifneq (,$(XMLWRAPP_LIB))
+REQUIRED_CPPFLAGS += -DUSING_CURRENT_XMLWRAPP
+endif
 
 REQUIRED_CFLAGS = \
   $(C_WARNINGS) \
