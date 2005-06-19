@@ -20,7 +20,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: posix_fhs.make,v 1.4 2005-06-17 01:46:14 zeitlin Exp $
+# $Id: posix_fhs.make,v 1.5 2005-06-19 18:39:03 chicares Exp $
 
 ################################################################################
 
@@ -43,8 +43,8 @@ CPP    := cpp
 CXX    := g++
 LD     := g++
 
-# don't set RC to anything, this means that we don't use resources on this
-# platform
+# Don't set RC to anything: elsewhere, this is taken as indicating
+# that msw resources aren't used on this platform.
 RC     :=
 
 CP     := cp

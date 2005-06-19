@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: fenv_lmi.cpp,v 1.3 2005-06-17 01:41:37 zeitlin Exp $
+// $Id: fenv_lmi.cpp,v 1.4 2005-06-19 18:39:03 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -37,8 +37,8 @@
     // but not in namespace std.
 #   include <fenv.h>
 #   if \
-        defined __GNUC__ && (__GNUC__ <= 3 || \
-                            (__GNUC__ == 4 && __GNUC_MINOR__ <= 1))
+            defined __GNUC__ \
+        &&  (__GNUC__ <= 3 || __GNUC__ == 4 && __GNUC_MINOR__ <= 1)
         // As of 2005-04-08, the gcc manual here
         // http://gcc.gnu.org/onlinedocs/gcc/Floating-point-implementation.html
         // which "corresponds to GCC version 4.1.0" says "This pragma
