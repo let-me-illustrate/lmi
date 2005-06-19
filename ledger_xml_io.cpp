@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xml_io.cpp,v 1.18 2005-06-17 01:41:05 zeitlin Exp $
+// $Id: ledger_xml_io.cpp,v 1.19 2005-06-19 18:39:03 chicares Exp $
 
 #include "config.hpp"
 
@@ -39,15 +39,16 @@
 #include "value_cast.hpp"
 #include "xmlwrapp_ex.hpp"
 
+#ifdef USING_CURRENT_XMLWRAPP
+#   include <xmlwrapp/attributes.h>
+// TODO ?? Gross hack to be undone when USING_CURRENT_XMLWRAPP becomes
+// the only supported version.
+#   define set_attr get_attributes().insert
+#endif
+
 #include <xmlwrapp/init.h>
 #include <xmlwrapp/node.h>
 #include <xmlwrapp/tree_parser.h>
-#ifdef USING_CURRENT_XMLWRAPP
-    // FIXME: gross hack to be undone when USING_CURRENT_XMLWRAPP becomes the
-    //        only supported version
-#   define set_attr     get_attributes().insert
-#   include <xmlwrapp/attributes.h>
-#endif
 
 #include <fstream>
 #include <iomanip>
@@ -1146,4 +1147,8 @@ void Ledger::write(std::ostream& os) const
         );
     os << s;
 }
+
+#ifdef USING_CURRENT_XMLWRAPP
+#   undef set_attr
+#endif
 

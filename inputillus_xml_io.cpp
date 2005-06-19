@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: inputillus_xml_io.cpp,v 1.4 2005-06-17 01:41:05 zeitlin Exp $
+// $Id: inputillus_xml_io.cpp,v 1.5 2005-06-19 18:39:03 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -32,12 +32,13 @@
 #include "miscellany.hpp"
 #include "value_cast.hpp"
 
-#include <xmlwrapp/init.h>
-#include <xmlwrapp/node.h>
-#include <xmlwrapp/tree_parser.h>
 #ifdef USING_CURRENT_XMLWRAPP
 #   include <xmlwrapp/attributes.h>
 #endif
+
+#include <xmlwrapp/init.h>
+#include <xmlwrapp/node.h>
+#include <xmlwrapp/tree_parser.h>
 
 #include <istream>
 #include <ostream>
@@ -96,11 +97,11 @@ void IllusInputParms::read(xml::node& x)
 
     std::string cell_version_string;
 #ifdef USING_CURRENT_XMLWRAPP
-    const xml::attributes& attrs = x.get_attributes();
+    xml::attributes const& attrs = x.get_attributes();
     xml::attributes::const_iterator i = attrs.find("version");
     if(i != attrs.end())
         {
-            cell_version_string = i->get_value();
+        cell_version_string = i->get_value();
         }
     else
 #else
@@ -238,8 +239,7 @@ void IllusInputParms::write(xml::node& x) const
     // TODO ?? Experimental.
     xml::init init;
     xml::node root(xml_root_name().c_str());
-// XMLWRAPP !! There's no way to set an integer attribute; and function
-// set_attr() seems to be missing in the doxygen stuff at pmade.org .
+// XMLWRAPP !! There's no way to set an integer attribute.
 #ifdef USING_CURRENT_XMLWRAPP
     root.get_attributes().insert
 #else
