@@ -1,0 +1,48 @@
+// INSTALL for "Let me illustrate...".
+//
+// Copyright (C) 2005 Gregory W. Chicares.
+//
+// This program is free software; you can redistribute it and/or modify
+// it under the terms of the GNU General Public License version 2 as
+// published by the Free Software Foundation.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program; if not, write to the Free Software
+// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+//
+// http://savannah.nongnu.org/projects/lmi
+// email: <chicares@cox.net>
+// snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
+
+// $Id: INSTALL,v 1.1 2005-06-20 17:03:07 chicares Exp $
+
+[This initial version says only how to install and patch the required
+version of cgicc. Other instructions will be added later.]
+
+* cgicc
+
+Download
+  ftp://ftp.gnu.org/pub/gnu/cgicc/cgicc-3.1.4.tar.bz2
+and
+  http://savannah.nongnu.org/cgi-bin/viewcvs/*checkout*/lmi/lmi/cgicc-patch-gwc-20050217
+to /tmp/ .
+
+Validate:
+  /tmp[0]$md5sum cgicc-3.1.4.tar.bz2  cgicc-patch-gwc-20050217
+  6cb5153fc9fa64b4e50c7962aa557bbe  cgicc-3.1.4.tar.bz2
+  245c51c9c9c9f2b33b93650bef5467bf  cgicc-patch-gwc-20050217
+
+Extract archive:
+  /tmp[0]$bzip2 -cdk cgicc-3.1.4.tar.bz2 | tar -xf-
+
+Apply required patch:
+  /tmp[0]$/msys/1.0/bin/patch --strip=0 <cgicc-patch-gwc-20050217
+  patching file `cgicc-3.1.4/cgicc/CgiDefs.h'
+  patching file `cgicc-3.1.4/cgicc/CgiEnvironment.cpp'
+  patching file `cgicc-3.1.4/cgicc/CgiUtils.cpp'
+
