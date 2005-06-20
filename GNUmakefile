@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: GNUmakefile,v 1.19 2005-06-20 00:51:32 chicares Exp $
+# $Id: GNUmakefile,v 1.20 2005-06-20 17:03:07 chicares Exp $
 
 ###############################################################################
 
@@ -202,6 +202,19 @@ date:
 # automatically), and arguably might be included in SLOC, but binary
 # targets don't depend on them.
 
+# MSYS !! The definition of $(subdirectories) does not work in MSYS's
+# bash if a non-MSYS sed is used. Even this trivial expression to
+# remove lines containing a slash
+#   $ /c/usr/bin/sed -e'/\//!d'
+# fails:
+#   c:\usr\bin\sed.exe: -e expression #1, char 3: Unknown command: `/'
+# apparently because MSYS so aggressively translates strings that look
+# like path fragments. Here is a dramatic example using a non-MSYS
+# build of gnu echo from sh-utils 1.12:
+#   $ /c/usr/bin/echo '/[/]/!d'
+# actually echoes
+#   C:/msys/1.0/[/]/!d
+
 # Files that can't be source in any useful sense:
 
 # Graphics files whose format doesn't permit embedding copyright and
@@ -228,6 +241,7 @@ never_source_files := \
 
 documentation_files := \
   $(wildcard ChangeLog*) \
+  INSTALL \
   README \
 
 makefiles := $(wildcard *make*)
