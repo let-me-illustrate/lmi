@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: GNUmakefile,v 1.18 2005-06-18 13:38:29 zeitlin Exp $
+# $Id: GNUmakefile,v 1.19 2005-06-20 00:51:32 chicares Exp $
 
 ###############################################################################
 
@@ -272,23 +272,23 @@ licensed_files := $(filter-out $(unlicensed_files),$(wildcard *))
 
 ################################################################################
 
-# These headers define datestamp macros.
+# The headers in this section define datestamp macros.
 
-# this function creates a new header file with the specified contents
-# automatically prepending it with the standard copyright header, syntax:
-#
-#        $(call create_src, 'contents of the file', filename)
-#
-create_src = $(ECHO) -e $(gpl_notices) $1 | \
-		$(SED) -e 's/^ *//' | \
-		$(TR) -d '\r' > $2
+string_to_source_file_with_required_notices = \
+  $(ECHO) -e $(gpl_notices) $1 \
+  | $(SED) -e 's/^ *//' \
+  | $(TR) -d '\r' \
+  > $2 \
 
 # Update the version-datestamp header before committing any group of
 # files to cvs. Use target 'cvs_ready' to do this reliably.
 
 .PHONY: set_version_datestamp
 set_version_datestamp:
-	@$(call create_src, '#define LMI_VERSION "$(yyyymmddhhmm)"', version.hpp)
+	@$(call string_to_source_file_with_required_notices \
+	  ,'#define LMI_VERSION "$(yyyymmddhhmm)"' \
+	  ,version.hpp \
+	  )
 	@$(ECHO) Version is '$(yyyymmddhhmm)'.
 
 # Update the build-datestamp header whenever any other source file has
@@ -303,7 +303,10 @@ set_version_datestamp:
 
 build.hpp: $(filter-out $@,$(prerequisite_files)) version.hpp
 	@$(ECHO) These files are more recent than '$@': $?
-	@$(call create_src, '#define LMI_BUILD "$(yyyymmddhhmm)"', build.hpp)
+	@$(call string_to_source_file_with_required_notices \
+	  ,'#define LMI_BUILD "$(yyyymmddhhmm)"' \
+	  ,build.hpp \
+	  )
 	@$(ECHO) Built '$(yyyymmddhhmm)'.
 
 version.hpp: $(filter-out $@,$(prerequisite_files))
