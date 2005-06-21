@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: objects.make,v 1.40 2005-06-18 22:38:52 zeitlin Exp $
+# $Id: objects.make,v 1.41 2005-06-21 05:58:52 chicares Exp $
 
 ################################################################################
 
@@ -29,14 +29,12 @@
 
 # Boost filesystem library. The other boost libraries that lmi
 # requires are implemented entirely in headers.
-ifeq (,$(BOOST_FILESYSTEM_LIB))
+
 boost_filesystem_objects := \
   convenience.o \
   exception.o \
   path_posix_windows.o \
   operations_posix_windows.o \
-
-endif
 
 # GNU cgicc.
 
@@ -81,17 +79,13 @@ cgicc_3_1_4_objects = \
 
 # xmlwrapp library from pmade.org .
 
-ifeq (,$(XMLWRAPP_LIB))
-xmlwrapp_lib_objects := \
+xmlwrapp_objects := \
   event_parser.o \
   init.o \
   node.o \
   node_iterator.o \
   tree_parser.o \
-
-endif
-
-xmlwrapp_objects := $(xmlwrapp_lib_objects) xmlwrapp_ex.o
+  xmlwrapp_ex.o \
 
 ################################################################################
 
@@ -274,7 +268,7 @@ lmi_wx_objects := \
   xml_notebook.o \
 
 ifneq (,$(RC))
-lmi_wx_objects += lmi.rc.o
+  lmi_wx_objects += lmi.rc.o
 endif
 
 ################################################################################
@@ -449,6 +443,8 @@ financial_test$(EXEEXT): \
 global_settings_test$(EXEEXT): \
   $(boost_filesystem_objects) \
   $(common_test_objects) \
+  alert.o \
+  alert_cli.o \
   global_settings.o \
   global_settings_test.o \
 
