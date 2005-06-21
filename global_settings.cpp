@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: global_settings.cpp,v 1.4 2005-06-21 05:59:56 chicares Exp $
+// $Id: global_settings.cpp,v 1.5 2005-06-21 14:57:22 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -28,43 +28,79 @@
 
 #include "global_settings.hpp"
 
-#include "alert.hpp"
-
+#include <boost/filesystem/exception.hpp>
 #include <boost/filesystem/path.hpp>
 #include <boost/filesystem/operations.hpp>
 
+#include <sstream>
+#include <stdexcept>
+
 namespace
 {
-    void validate_path(std::string const& path, std::string const& name)
+    /// validate_directory() throws an informative exception if its
+    /// 'd' argument does not name a valid directory.
+    ///
+    /// 'd': directory-name to be validated.
+    ///
+    /// 'context': semantic description of the directory to be named.
+    ///
+    /// Although a std::invalid_argument exception would seem more
+    /// fitting in the context of this function, in the global context
+    /// 'd' may be specified by users, so std::runtime_error is
+    /// preferable.
+    ///
+    /// Exceptions thrown from the boost filesystem library on path
+    /// assignment are caught in order to rethrow with 'context'
+    /// prepended.
+
+    void validate_directory(std::string const& d, std::string const& context)
         {
-        fs::path p(path);
-        if(p.empty())
+        fs::path path;
+        try
             {
-            hobsons_choice()
-                << name
+            path = d;
+            }
+        catch(fs::filesystem_error const& e)
+            {
+            std::ostringstream oss;
+            oss
+                << context
+                << ": "
+                << e.what()
+                ;
+            throw std::runtime_error(oss.str());
+            }
+
+        if(path.empty())
+            {
+            std::ostringstream oss;
+            oss
+                << context
                 << " must not be empty."
-                << LMI_FLUSH
                 ;
+            throw std::runtime_error(oss.str());
             }
-        if(!fs::exists(p))
+        if(!fs::exists(path))
             {
-            hobsons_choice()
-                << name
+            std::ostringstream oss;
+            oss
+                << context
                 << " '"
-                << p.string()
+                << path.string()
                 << "' not found."
-                << LMI_FLUSH
                 ;
+            throw std::runtime_error(oss.str());
             }
-        if(!fs::is_directory(p))
+        if(!fs::is_directory(path))
             {
-            hobsons_choice()
-                << name
+            std::ostringstream oss;
+            oss
+                << context
                 << " '"
-                << p.string()
+                << path.string()
                 << "' is not a directory."
-                << LMI_FLUSH
                 ;
+            throw std::runtime_error(oss.str());
             }
         }
 } // Unnamed namespace.
@@ -118,13 +154,13 @@ void global_settings::set_custom_io_0(bool b)
 
 void global_settings::set_data_directory(std::string const& s)
 {
-    validate_path(s, "Data directory");
+    validate_directory(s, "Data directory");
     data_directory_ = s;
 }
 
 void global_settings::set_regression_test_directory(std::string const& s)
 {
-    validate_path(s, "Regression-test directory");
+    validate_directory(s, "Regression-test directory");
     regression_test_directory_ = s;
 }
 
