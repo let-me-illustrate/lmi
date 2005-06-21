@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: global_settings_test.cpp,v 1.1 2005-05-20 16:34:10 chicares Exp $
+// $Id: global_settings_test.cpp,v 1.2 2005-06-21 14:57:44 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -31,13 +31,49 @@
 #define BOOST_INCLUDE_MAIN
 #include "test_tools.hpp"
 
-#include <boost/filesystem/path.hpp>
-#include <boost/filesystem/operations.hpp>
-
-/// Just an empty shell for now.
-
 int test_main(int, char*[])
 {
+    // Test an exception from each 'directory' member to make sure
+    // the member's nature (e.g., "Data directory") is correct.
+
+    // Directory names must not be empty.
+
+    BOOST_TEST_THROW
+        (global_settings::instance().set_data_directory("")
+        ,std::runtime_error
+        ,"Data directory must not be empty."
+        );
+
+    BOOST_TEST_THROW
+        (global_settings::instance().set_regression_test_directory("")
+        ,std::runtime_error
+        ,"Regression-test directory must not be empty."
+        );
+
+    // Directory names must exist in the filesystem.
+
+    BOOST_TEST_THROW
+        (global_settings::instance().set_data_directory("UnLiKeLyNaMe")
+        ,std::runtime_error
+        ,"Data directory 'UnLiKeLyNaMe' not found."
+        );
+
+    // Directory names must be name directories, not normal files.
+
+    BOOST_TEST_THROW
+        (global_settings::instance().set_data_directory("global_settings.o")
+        ,std::runtime_error
+        ,"Data directory 'global_settings.o' is not a directory."
+        );
+
+    // Directory names must be valid pathnames.
+
+    BOOST_TEST_THROW
+        (global_settings::instance().set_data_directory("?")
+        ,std::runtime_error
+        ,""
+        );
+
     return 0;
 }
 
