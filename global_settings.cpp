@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: global_settings.cpp,v 1.3 2005-06-21 05:26:39 chicares Exp $
+// $Id: global_settings.cpp,v 1.4 2005-06-21 05:59:56 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -28,37 +28,51 @@
 
 #include "global_settings.hpp"
 
-#if 0
-// Code copied from elsewhere that belongs here.
+#include "alert.hpp"
 
-    // TODO ?? Path validation belongs in class global_settings.
-    if(0 == data_directory.size())
-        {
-        data_directory = ".";
-        }
-    fs::path path(data_directory);
-    if(!fs::exists(path) || !fs::is_directory(path))
-        {
-        hobsons_choice()
-            << "Data directory '"
-            << path.string()
-            << "' not found."
-            << LMI_FLUSH
-            ;
-        }
-[Not yet done]
+#include <boost/filesystem/path.hpp>
+#include <boost/filesystem/operations.hpp>
 
-Elsewhere was formerly found code like
-                global_settings::instance().set_ash_nazg(true);
-                global_settings::instance().set_mellon(true);
-but ash_nazg should imply mellon, and the place to do that is here.
-[Done]
-#endif // 0
+namespace
+{
+    void validate_path(std::string const& path, std::string const& name)
+        {
+        fs::path p(path);
+        if(p.empty())
+            {
+            hobsons_choice()
+                << name
+                << " must not be empty."
+                << LMI_FLUSH
+                ;
+            }
+        if(!fs::exists(p))
+            {
+            hobsons_choice()
+                << name
+                << " '"
+                << p.string()
+                << "' not found."
+                << LMI_FLUSH
+                ;
+            }
+        if(!fs::is_directory(p))
+            {
+            hobsons_choice()
+                << name
+                << " '"
+                << p.string()
+                << "' is not a directory."
+                << LMI_FLUSH
+                ;
+            }
+        }
+} // Unnamed namespace.
 
 // Initialize directory strings to ".", not an empty string. Reason:
 // objects of the boost filesystem library's path class are created
-// from these strings, and that class deliberately rejects empty
-// strings.
+// from these strings, which are not allowed to be passed to that
+// library's directory_iterator ctor.
 
 global_settings::global_settings()
     :mellon_                    (false)
@@ -104,11 +118,13 @@ void global_settings::set_custom_io_0(bool b)
 
 void global_settings::set_data_directory(std::string const& s)
 {
+    validate_path(s, "Data directory");
     data_directory_ = s;
 }
 
 void global_settings::set_regression_test_directory(std::string const& s)
 {
+    validate_path(s, "Regression-test directory");
     regression_test_directory_ = s;
 }
 
