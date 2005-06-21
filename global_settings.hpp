@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: global_settings.hpp,v 1.3 2005-04-06 23:11:11 chicares Exp $
+// $Id: global_settings.hpp,v 1.4 2005-06-21 03:21:56 chicares Exp $
 
 // TODO ?? This behaviorless aggregate is no longer appropriate.
 // File 'ce_product_name.cpp' does this:
@@ -72,17 +72,22 @@
 #include "config.hpp"
 
 #include "expimp.hpp"
+#include "obstruct_slicing.hpp"
+
+#include <boost/utility.hpp>
 
 #include <string>
 
 // A simple Meyers singleton, with the expected dead-reference and
 // threading issues.
+
 class LMI_EXPIMP global_settings
+    :private boost::noncopyable
+    ,virtual private obstruct_slicing<global_settings>
 {
   public:
     static global_settings& instance();
 
-    // Run regression test when regression_test_directory is specified.
     bool regression_testing();
 
     // 'Home-office' password given--enable some fancy features.
@@ -96,17 +101,10 @@ class LMI_EXPIMP global_settings
 
     std::string data_directory;
 
-    // Generate tab-delimited text output, as well as CRC, when
-    // running a regression test.
-    bool regression_test_full;
-
-    // Regression test all .cns files in specified directory.
     std::string regression_test_directory;
 
   private:
     global_settings();
-    global_settings(global_settings const&);
-    global_settings& operator=(global_settings const&);
 
 #ifdef __BORLANDC__
 // COMPILER !! Borland compilers defectively [11/5] require a public dtor; see:
