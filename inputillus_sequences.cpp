@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: inputillus_sequences.cpp,v 1.4 2005-05-26 18:31:49 chicares Exp $
+// $Id: inputillus_sequences.cpp,v 1.5 2005-06-21 05:27:48 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -751,15 +751,15 @@ std::string IllusInputParms::realize_sequence_string_for_gen_acct_int_rate()
     std::vector<double> general_account_max_rate;
     temp_database.Query(general_account_max_rate, DB_MaxGenAcctRate);
 
-    if(global_settings::instance().ash_nazg)
+    if(global_settings::instance().ash_nazg())
         {
         // We have some regression-test files with rates higher even
         // than twelve percent.
         general_account_max_rate.assign(general_account_max_rate.size(), 1.0);
         }
     else if
-        (   global_settings::instance().mellon
-        ||  global_settings::instance().special_output
+        (   global_settings::instance().mellon()
+        ||  global_settings::instance().custom_io_0()
         )
         {
         general_account_max_rate.assign(general_account_max_rate.size(), 0.12);
@@ -812,7 +812,7 @@ std::string IllusInputParms::realize_sequence_string_for_sep_acct_int_rate()
 
     // TODO ?? Should enforce minimum = (0.0 - spread)?
     double max_sep_acct_rate = temp_database.Query(DB_MaxSepAcctRate);
-    if(global_settings::instance().ash_nazg)
+    if(global_settings::instance().ash_nazg())
         {
         // We have some regression-test files with rates higher even
         // than twelve percent.

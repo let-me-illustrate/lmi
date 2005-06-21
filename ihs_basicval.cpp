@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_basicval.cpp,v 1.12 2005-06-01 03:57:35 chicares Exp $
+// $Id: ihs_basicval.cpp,v 1.13 2005-06-21 05:27:48 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -201,7 +201,7 @@ void BasicValues::Init()
 
     if
         (   !Database_->Query(DB_StateApproved)
-        &&  !global_settings::instance().ash_nazg
+        &&  !global_settings::instance().ash_nazg()
         &&  !global_settings::instance().regression_testing()
         )
         {

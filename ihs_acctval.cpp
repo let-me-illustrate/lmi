@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_acctval.cpp,v 1.28 2005-06-18 21:19:58 zeitlin Exp $
+// $Id: ihs_acctval.cpp,v 1.29 2005-06-21 05:27:48 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -36,7 +36,6 @@
 #include "database.hpp"
 #include "dbnames.hpp"
 #include "death_benefits.hpp"
-#include "global_settings.hpp"
 #include "ihs_funddata.hpp" // TODO ?? This is a crock.
 #include "ihs_irc7702.hpp"
 #include "ihs_irc7702a.hpp"

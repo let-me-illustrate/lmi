@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_cli.cpp,v 1.8 2005-06-15 05:05:04 chicares Exp $
+// $Id: main_cli.cpp,v 1.9 2005-06-21 05:27:48 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -104,7 +104,7 @@ void RegressionTestOneIniFile(fs::directory_iterator i)
 //============================================================================
 void RegressionTest()
 {
-    fs::path test_dir(global_settings::instance().regression_test_directory);
+    fs::path test_dir(global_settings::instance().regression_test_directory());
     fs::directory_iterator i(test_dir);
     fs::directory_iterator end_i;
     for(; i != end_i; ++i)
@@ -311,14 +311,13 @@ void process_command_line(int argc, char* argv[])
 
             case 001:
                 {
-                global_settings::instance().ash_nazg = true;
-                global_settings::instance().mellon = true;
+                global_settings::instance().set_ash_nazg(true);
                 }
                 break;
 
             case 002:
                 {
-                global_settings::instance().mellon = true;
+                global_settings::instance().set_mellon(true);
                 }
                 break;
 
@@ -363,7 +362,9 @@ void process_command_line(int argc, char* argv[])
 
             case 'd':
                 {
-                global_settings::instance().data_directory = getopt_long.optarg;
+                global_settings::instance().set_data_directory
+                    (getopt_long.optarg
+                    );
                 }
                 break;
 
@@ -412,7 +413,9 @@ void process_command_line(int argc, char* argv[])
 
             case 't':
                 {
-                global_settings::instance().regression_test_directory = getopt_long.optarg;
+                global_settings::instance().set_regression_test_directory
+                    (getopt_long.optarg
+                    );
                 }
                 break;
 

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: security.cpp,v 1.2 2005-01-29 02:47:42 chicares Exp $
+// $Id: security.cpp,v 1.3 2005-06-21 05:27:48 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -46,7 +46,7 @@ void validate_security(bool do_validate)
 
     int invalid = secure_date::instance()->validate
         (calendar_date()
-        ,global_settings::instance().data_directory
+        ,global_settings::instance().data_directory()
         );
 
     // TODO ?? It would be better either to return a string from

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_harmonization.cpp,v 1.10 2005-06-01 14:49:06 chicares Exp $
+// $Id: input_harmonization.cpp,v 1.11 2005-06-21 05:27:48 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -91,8 +91,8 @@ void Input::Harmonize()
 {
     reset_database();
 
-    bool anything_goes    = global_settings::instance().ash_nazg;
-    bool home_office_only = global_settings::instance().mellon;
+    bool anything_goes    = global_settings::instance().ash_nazg();
+    bool home_office_only = global_settings::instance().mellon();
 
     bool allow_sep_acct = database->Query(DB_AllowSepAcct);
     bool allow_gen_acct = database->Query(DB_AllowGenAcct);

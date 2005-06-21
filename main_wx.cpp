@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_wx.cpp,v 1.12 2005-06-17 01:42:16 zeitlin Exp $
+// $Id: main_wx.cpp,v 1.13 2005-06-21 05:27:48 chicares Exp $
 
 // Portions of this file are derived from wxWindows files
 //   samples/docvwmdi/docview.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -188,7 +188,7 @@ int WINAPI WinMain
         process_command_line(argc, argv);
 
         // The most privileged password bypasses security validation.
-        if(!security_validated(global_settings::instance().ash_nazg))
+        if(!security_validated(global_settings::instance().ash_nazg()))
             {
             throw std::runtime_error("Security validation failed.");
             }
@@ -261,14 +261,13 @@ void process_command_line(int argc, char* argv[])
             {
             case 001:
                 {
-                global_settings::instance().ash_nazg = true;
-                global_settings::instance().mellon = true;
+                global_settings::instance().set_ash_nazg(true);
                 }
                 break;
 
             case 002:
                 {
-                global_settings::instance().mellon = true;
+                global_settings::instance().set_mellon(true);
                 }
                 break;
 
@@ -280,7 +279,9 @@ void process_command_line(int argc, char* argv[])
 
             case 'd':
                 {
-                global_settings::instance().data_directory = getopt_long.optarg;
+                global_settings::instance().set_data_directory
+                    (getopt_long.optarg
+                    );
                 }
                 break;
 
@@ -304,7 +305,9 @@ void process_command_line(int argc, char* argv[])
 
             case 't':
                 {
-                global_settings::instance().regression_test_directory = getopt_long.optarg;
+                global_settings::instance().set_regression_test_directory
+                    (getopt_long.optarg
+                    );
                 }
                 break;
 
@@ -355,7 +358,7 @@ bool security_validated(bool skip_validation)
 
     int rc = secure_date::instance()->validate
         (calendar_date()
-        ,global_settings::instance().data_directory
+        ,global_settings::instance().data_directory()
         );
 
     if(0 == rc)
@@ -456,7 +459,7 @@ void lmi_wx_app::InitDocManager()
         ,CLASSINFO(IllustrationView)
         );
 
-    if(!global_settings::instance().ash_nazg)
+    if(!global_settings::instance().ash_nazg())
         {
         return;
         }
@@ -670,7 +673,7 @@ bool lmi_wx_app::OnInit()
     frame_->Show(true);
     SetTopWindow(frame_);
 
-    if(!global_settings::instance().ash_nazg)
+    if(!global_settings::instance().ash_nazg())
         {
         wxCommandEvent event(wxEVT_COMMAND_MENU_SELECTED, wxID_ABOUT);
         wxPostEvent(frame_, event);
