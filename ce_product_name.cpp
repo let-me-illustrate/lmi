@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ce_product_name.cpp,v 1.1 2005-04-06 23:09:19 chicares Exp $
+// $Id: ce_product_name.cpp,v 1.2 2005-06-21 05:27:48 chicares Exp $
 
 #include "ce_product_name.hpp"
 
@@ -40,24 +40,7 @@ namespace
 {
 std::vector<std::string> fetch_product_names()
 {
-    std::string data_directory = global_settings::instance().data_directory;
-
-    // TODO ?? Path validation belongs in class global_settings.
-    if(0 == data_directory.size())
-        {
-        data_directory = ".";
-        }
-    fs::path path(data_directory);
-    if(!fs::exists(path) || !fs::is_directory(path))
-        {
-        hobsons_choice()
-            << "Data directory '"
-            << path.string()
-            << "' not found."
-            << LMI_FLUSH
-            ;
-        }
-
+    fs::path path(global_settings::instance().data_directory());
     std::vector<std::string> names;
     fs::directory_iterator i(path);
     fs::directory_iterator end_i;

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_text_formats.cpp,v 1.8 2005-06-18 01:57:33 chicares Exp $
+// $Id: ledger_text_formats.cpp,v 1.9 2005-06-21 05:27:48 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -338,7 +338,7 @@ os << "\n\n" ;
     if(!global_settings::instance().regression_testing())
         {
         // Skip security validation for the most privileged password.
-        validate_security(!global_settings::instance().ash_nazg);
+        validate_security(!global_settings::instance().ash_nazg());
         os << "DatePrepared\t\t'" << calendar_date().str() << "'\n";
         }
     else
