@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: global_settings.hpp,v 1.4 2005-06-21 03:21:56 chicares Exp $
+// $Id: global_settings.hpp,v 1.5 2005-06-21 05:26:39 chicares Exp $
 
 // TODO ?? This behaviorless aggregate is no longer appropriate.
 // File 'ce_product_name.cpp' does this:
@@ -78,8 +78,26 @@
 
 #include <string>
 
-// A simple Meyers singleton, with the expected dead-reference and
-// threading issues.
+/// Design notes for class global_settings
+///
+/// A simple Meyers singleton, with the expected dead-reference and
+/// threading issues.
+///
+/// Data members, in logical rather than alphabetical order.
+///
+/// mellon: 'Home-office' password given--enable some fancy features.
+/// (LOTR: 'pedo mellon a minno'.)
+///
+/// ash_nazg: 'One password to rule them all' given--enable everything
+/// 'mellon' does, along with even perilous features.
+/// (LOTR: 'ash nazg durbatulûk'.)
+///
+/// custom_io_0: Special input and output facility for one customer.
+///
+/// data_directory: Path to data files.
+///
+/// regression_test_directory: Path for regression-testing input and
+/// output.
 
 class LMI_EXPIMP global_settings
     :private boost::noncopyable
@@ -88,23 +106,28 @@ class LMI_EXPIMP global_settings
   public:
     static global_settings& instance();
 
-    bool regression_testing();
+    bool regression_testing() const;
 
-    // 'Home-office' password given--enable some fancy features.
-    bool mellon; // 'pedo mellon a minno'
+    void set_mellon                   (bool);
+    void set_ash_nazg                 (bool);
+    void set_custom_io_0              (bool);
+    void set_data_directory           (std::string const&);
+    void set_regression_test_directory(std::string const&);
 
-    // 'One password to rule them all' given--enable even perilous features.
-    bool ash_nazg; // 'ash nazg durbatulûk'
-
-    // Special text output in a format desired by one customer.
-    bool special_output;
-
-    std::string data_directory;
-
-    std::string regression_test_directory;
+    bool               mellon                   () const;
+    bool               ash_nazg                 () const;
+    bool               custom_io_0              () const;
+    std::string const& data_directory           () const;
+    std::string const& regression_test_directory() const;
 
   private:
     global_settings();
+
+    bool mellon_;
+    bool ash_nazg_;
+    bool custom_io_0_;
+    std::string data_directory_;
+    std::string regression_test_directory_;
 
 #ifdef __BORLANDC__
 // COMPILER !! Borland compilers defectively [11/5] require a public dtor; see:
