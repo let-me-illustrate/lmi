@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.75 2005-06-17 13:58:38 chicares Exp $
+// $Id: ChangeLog,v 1.76 2005-06-21 15:00:06 chicares Exp $
 
 2005-01-14
 
@@ -2374,4 +2374,106 @@ Make <border> tags more consistent.
 Add experimental input skin, drastically simplified for a particular
 group of users. Some defaults will need to be changed to make this
 work correctly.
+
+  md5.hpp
+Rename a macro; undefine it at end of file.
+
+  ledger_text_formats.cpp
+Reformat 'Calculation Summary'.
+
+  fenv_lmi.cpp
+  main_wx.cpp
+  msw_common.make
+  msw_msys.make
+  objects.make
+  posix_fhs.make
+  transferor.cpp
+  workhorse.make
+Increase platform independence.
+
+  msw_cygwin.make
+Replace explicit paths with variables, in the spirit of Vadim's
+changes to 'msw_msys.make'.
+
+  msw_cygwin.make
+  msw_generic.make
+  msw_msys.make
+Expect 'tar' in /usr/bin/, not in /bin/ [FHS-2.2, 3.4.2].
+
+  inputillus_xml_io.cpp
+  ledger_xml_io.cpp
+Workarounds for xmlwrapp version conflicts.
+
+2005-06-18 [1284]
+
+  workhorse.make
+Improve data-file installation.
+
+  autodependency.make
+  msw_msys.make
+Attempt to fix an MSYS problem.
+
+  ihs_acctval.cpp
+  ihs_loads.cpp
+  inputs.cpp
+Replace obsolete boost::compose with boost::bind.
+
+2005-06-19 [1283]
+
+  workhorse.make
+Replace obsolete boost::compose with boost::bind.
+
+  GNUmakefile
+  fenv_lmi.cpp
+  inputillus_xml_io.cpp
+  ledger_xml_io.cpp
+  posix_fhs.make
+Trivial stylistic changes.
+
+2005-06-20 [1284]
+
+  GNUmakefile
+  INSTALL [new file]
+Add (initially quite limited) installation instructions.
+
+  global_settings.cpp
+  global_settings.hpp
+Refactor.
+
+2005-06-21 [1281]
+
+  global_settings.cpp
+  global_settings.hpp
+Refactor.
+
+  ce_product_name.cpp
+  census_view.cpp
+  custom_io_0.cpp
+  data_directory.cpp
+  global_settings.cpp
+  ihs_acctval.cpp
+  ihs_basicval.cpp
+  ihs_dbdict.cpp
+  input_harmonization.cpp
+  inputillus_sequences.cpp
+  ledger_text_formats.cpp
+  ledger_xml_io.cpp
+  main_cli.cpp
+  main_wx.cpp
+  security.cpp
+Reflect changes to class 'global_settings'.
+
+  global_settings.cpp
+  objects.make
+Validate directories.
+
+  global_settings.cpp
+Remove global_settings_test dependence on 'alert*.o'.
+
+  objects.make
+Remove global_settings_test dependence on 'alert*.o', reverting a
+makefile commit that incorrectly overwrote some of Vadim's changes.
+
+  global_settings_test.cpp
+Add unit tests.
 
