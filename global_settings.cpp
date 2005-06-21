@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: global_settings.cpp,v 1.1 2005-01-14 19:47:44 chicares Exp $
+// $Id: global_settings.cpp,v 1.2 2005-06-21 03:21:56 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -28,11 +28,17 @@
 
 #include "global_settings.hpp"
 
+// Initialize directory strings to ".", not an empty string. Reason:
+// objects of the boost filesystem library's path class are created
+// from these strings, and that class deliberately rejects empty
+// strings.
+
 global_settings::global_settings()
-    :mellon               (false)
-    ,ash_nazg             (false)
-    ,special_output       (false)
-    ,regression_test_full (false)
+    :mellon                    (false)
+    ,ash_nazg                  (false)
+    ,special_output            (false)
+    ,data_directory            (".")
+    ,regression_test_directory (".")
 {}
 
 global_settings::~global_settings()
@@ -40,7 +46,7 @@ global_settings::~global_settings()
 
 bool global_settings::regression_testing()
 {
-    return 0 != regression_test_directory.size();
+    return regression_test_directory.empty();
 }
 
 global_settings& global_settings::instance()
