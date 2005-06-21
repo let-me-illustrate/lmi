@@ -19,12 +19,35 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: INSTALL,v 1.1 2005-06-20 17:03:07 chicares Exp $
+// $Id: INSTALL,v 1.2 2005-06-21 17:45:06 chicares Exp $
 
 [This initial version says only how to install and patch the required
 version of cgicc. Other instructions will be added later.]
 
-* cgicc
+[It's clearest to validate commands, then copy and paste them here.
+Once we've done that, it becomes trivial to turn this into a shell
+script or a makefile--which is better than asking users to copy lines
+from this file and paste them tediously into a shell. We'll want to
+write everything as a command first (e.g. write a 'wget' command
+instead of saying 'Go download some file'.]
+
+* Choose a directory for third-party libraries
+
+[Insert rationale for freezing particular versions of third-party
+libraries--see
+  http://boost.org/more/faq.htm
+topic
+  "How can the Boost libraries be used successfully for important projects?"
+]
+
+[I have simply used /usr/local/include/ . That's not appropriate for
+others who have later versions of these libraries already installed in
+that location. To accommodate their needs, I'll modify the makefiles
+soon to support /opt/lmi/third-party/ as an alternative. When that's
+done, maybe we'll find that best for everyone. For now at least, I'll
+assume that, and write /opt/lmi/third-party/ in these instructions.]
+
+* Install and patch cgicc-3.1.4
 
 Download
   ftp://ftp.gnu.org/pub/gnu/cgicc/cgicc-3.1.4.tar.bz2
@@ -38,11 +61,76 @@ Validate:
   245c51c9c9c9f2b33b93650bef5467bf  cgicc-patch-gwc-20050217
 
 Extract archive:
-  /tmp[0]$bzip2 -cdk cgicc-3.1.4.tar.bz2 | tar -xf-
+  /tmp[0]$bzip2 -dk cgicc-3.1.4.tar.bz2
+  /tmp[0]$tar -xf cgicc-3.1.4.tar
 
 Apply required patch:
-  /tmp[0]$/msys/1.0/bin/patch --strip=0 <cgicc-patch-gwc-20050217
+  /tmp[0]$/msys/1.0/bin/patch --strip=0 <cgicc-patch-gwc-20050217 # note 0
   patching file `cgicc-3.1.4/cgicc/CgiDefs.h'
   patching file `cgicc-3.1.4/cgicc/CgiEnvironment.cpp'
   patching file `cgicc-3.1.4/cgicc/CgiUtils.cpp'
+
+Copy cgicc's header files to /opt/lmi/third-party/ :
+  /tmp[0]$mkdir -p /opt/lmi/third-party/include/cgicc/
+  /tmp[0]$cp --preserve cgicc-3.1.4/cgicc/*.h /opt/lmi/third-party/include/cgicc/
+
+* Install and patch xmlwrapp [Wendy--please insert exact version]
+
+...
+
+* Install boost-1.31.0
+
+...
+
+* Install libxml2
+
+...
+[Wendy--Vadim's given some helpful guidance here; let's discuss it later]
+
+* Install wx
+
+...
+[We'll ask Vadim for advice on specifying options.]
+
+* Platform-specific instructions
+
+No special instructions are needed for GNU/Linux: on that platform,
+everything will just work.
+
+* Platform: msw
+
+On the msw platform, it is necessary to install a compiler, a shell,
+and certain general-purpose utilities that GNU/Linux systems provide
+by default.
+
+* Install MinGW
+
+...
+[perhaps cygwin should be mentioned, too]
+
+* Install MSYS
+
+...
+[perhaps cygwin should be mentioned, too]
+
+* Install zsh
+
+...
+[amol deshpande's port, because MSYS's bash is broken [explain why]]
+
+[perhaps we should mention cygwin's 'sh', which is an Almquist shell;
+it's tiny and simple, and testing it ensures that shell scripts and
+shell commands in makefiles are extremely portable]
+
+---------
+
+Notes.
+
+note 0: Wendy--I think our msw users have an ancient and defective
+version of 'patch'. They should instead use the one in the current
+MSYS distribution. Probably they should copy it over the defective
+binary they already have. At any rate, we mustn't write
+  /tmp[0]$/msys/1.0/bin/patch ...
+in platform-independent installation instructions: it should say only
+  /tmp[0]$patch ...
 
