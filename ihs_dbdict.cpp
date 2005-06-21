@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_dbdict.cpp,v 1.6 2005-06-14 21:38:36 chicares Exp $
+// $Id: ihs_dbdict.cpp,v 1.7 2005-06-21 05:27:48 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -141,7 +141,7 @@ void DBDictionary::BadFile(std::string const& Filename, std::string const& why)
     s += " Try reinstalling. Other products might work in the meantime.";
 
     // It's generally pointless to proceed.
-    if(global_settings::instance().mellon)
+    if(global_settings::instance().mellon())
         {
         hobsons_choice() << "File '" << Filename << "'" << s << LMI_FLUSH;
         }
@@ -618,24 +618,7 @@ void DBDictionary::WriteSampleDBFile()
 //============================================================================
 void print_databases()
 {
-    std::string data_directory = global_settings::instance().data_directory;
-
-    // TODO ?? Path validation belongs in class global_settings.
-    if(0 == data_directory.size())
-        {
-        data_directory = ".";
-        }
-    fs::path path(data_directory);
-    if(!fs::exists(path) || !fs::is_directory(path))
-        {
-        hobsons_choice()
-            << "Data directory '"
-            << path.string()
-            << "' not found."
-            << LMI_FLUSH
-            ;
-        }
-
+    fs::path path(global_settings::instance().data_directory());
     fs::directory_iterator i(path);
     fs::directory_iterator end_i;
     for(; i != end_i; ++i)

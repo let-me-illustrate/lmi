@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: data_directory.cpp,v 1.2 2005-01-15 20:17:16 chicares Exp $
+// $Id: data_directory.cpp,v 1.3 2005-06-21 05:27:48 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -40,7 +40,7 @@ std::string AddDataDir(std::string const& a_filename)
     fs::path path(a_filename);
     LMI_ASSERT(a_filename == path.leaf());
 
-    path = global_settings::instance().data_directory / path;
+    path = global_settings::instance().data_directory() / path;
     return path.string();
 }
 
