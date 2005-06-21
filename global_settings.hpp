@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: global_settings.hpp,v 1.6 2005-06-21 06:04:54 chicares Exp $
+// $Id: global_settings.hpp,v 1.7 2005-06-21 23:48:35 chicares Exp $
 
 #ifndef global_settings_hpp
 #define global_settings_hpp
@@ -33,18 +33,19 @@
 
 #include <string>
 
-/// Design notes for class global_settings
+/// Design notes for class global_settings.
 ///
 /// A simple Meyers singleton, with the expected dead-reference and
 /// threading issues.
 ///
-/// Data members, in logical rather than alphabetical order.
+/// Data members, in logical rather than alphabetical order:
 ///
 /// mellon: 'Home-office' password given--enable some fancy features.
 /// (LOTR: 'pedo mellon a minno'.)
 ///
 /// ash_nazg: 'One password to rule them all' given--enable everything
-/// 'mellon' does, along with even perilous features.
+/// 'mellon' does (by forcing the latter member's value), along with
+/// other features--some of which may be experimental or perilous.
 /// (LOTR: 'ash nazg durbatulûk'.)
 ///
 /// custom_io_0: Special input and output facility for one customer.

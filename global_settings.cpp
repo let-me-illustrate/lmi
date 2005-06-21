@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: global_settings.cpp,v 1.5 2005-06-21 14:57:22 chicares Exp $
+// $Id: global_settings.cpp,v 1.6 2005-06-21 23:48:35 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -42,7 +42,8 @@ namespace
     ///
     /// 'd': directory-name to be validated.
     ///
-    /// 'context': semantic description of the directory to be named.
+    /// 'context': semantic description of the directory to be named;
+    /// used in the exception report.
     ///
     /// Although a std::invalid_argument exception would seem more
     /// fitting in the context of this function, in the global context
@@ -105,10 +106,10 @@ namespace
         }
 } // Unnamed namespace.
 
-// Initialize directory strings to ".", not an empty string. Reason:
-// objects of the boost filesystem library's path class are created
-// from these strings, which are not allowed to be passed to that
-// library's directory_iterator ctor.
+/// Initialize directory strings to ".", not an empty string. Reason:
+/// objects of the boost filesystem library's path class are created
+/// from these strings, which, if the strings were empty, would trigger
+/// exceptions when passed to that library's directory_iterator ctor.
 
 global_settings::global_settings()
     :mellon_                    (false)
