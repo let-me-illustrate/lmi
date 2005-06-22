@@ -19,10 +19,11 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: INSTALL,v 1.2 2005-06-21 17:45:06 chicares Exp $
+// $Id: INSTALL,v 1.3 2005-06-22 03:41:35 wboutin Exp $
 
-[This initial version says only how to install and patch the required
-version of cgicc. Other instructions will be added later.]
+[This version says only how to install and patch the required version
+of cgicc and xmlwrapp, and how to install the required version or boost.
+Other instructions will be added later.]
 
 [It's clearest to validate commands, then copy and paste them here.
 Once we've done that, it becomes trivial to turn this into a shell
@@ -74,13 +75,58 @@ Copy cgicc's header files to /opt/lmi/third-party/ :
   /tmp[0]$mkdir -p /opt/lmi/third-party/include/cgicc/
   /tmp[0]$cp --preserve cgicc-3.1.4/cgicc/*.h /opt/lmi/third-party/include/cgicc/
 
-* Install and patch xmlwrapp [Wendy--please insert exact version]
+* Install and patch xmlwrapp-0.2.0
 
-...
+Download
+  xmlwrapp-0.2.0.tar.gz from http://pmade.org/software/xmlwrapp/download.html
+and
+  http://savannah.nongnu.org/cgi-bin/viewcvs/*checkout*/lmi/lmi/xmlwrapp-patch-gwc-20050217
+to /tmp/ .
+
+Validate:
+  /tmp[0]$md5sum xmlwrapp-patch-gwc-20050217 xmlwrapp-0.2.0.tar.gz
+  69b6d8f00f7352e13ca7a68c4d6282c8  xmlwrapp-patch-gwc-20050217
+  f142e8bc349597ecbaebb4a8e246b65a  xmlwrapp-0.2.0.tar.gz
+
+Extract archive:
+  /tmp[0]$gzip -d xmlwrapp-0.2.0.tar.gz |tar -xf-
+
+Apply required patch:
+  /tmp[0]$/msys/1.0/bin/patch --strip=0 <xmlwrapp-patch-gwc-20050217 # note 0
+  patching file `xmlwrapp-0.2.0/include/xmlwrapp/event_parser.h'
+  patching file `xmlwrapp-0.2.0/include/xmlwrapp/node.h'
+  patching file `xmlwrapp-0.2.0/include/xmlwrapp/tree_parser.h'
+  patching file `xmlwrapp-0.2.0/src/libxml/tree_parser.cxx'
+
+Copy xmlwrapp's header files to /opt/lmi/third-party/ :
+  /tmp[0]$mkdir -p /opt/lmi/third-party/include/xmlwrapp/
+  /tmp[0]$cp --preserve xmlwrapp-0.2.0/include/xmlwrapp/*.h /opt/lmi/third-party/include/xmlwrapp/
+
+Copy xmlwrapp's src files to /opt/lmi/third-party/ :
+  /tmp[0]$mkdir -p /opt/lmi/third-party/src/libxml/
+  /tmp[0]$cp --preserve xmlwrapp-0.2.0/src/libxml/* /opt/lmi/third-party/src/libxml/
 
 * Install boost-1.31.0
 
-...
+Download
+  http://prdownloads.sourceforge.net/boost/boost_1_32_0.tar.bz2
+to /tmp/ .
+
+Validate:
+  /tmp[0]$md5sum boost_1_31_0.tar.bz2
+  8cc183538eaa5cfc53d88d0e94bd2fd4  boost_1_31_0.tar.bz2
+
+Extract archive:
+  /tmp[0]$bzip2 -dk boost_1_31_0.tar.bz2
+  /tmp[0]$tar -xf boost_1_31_0.tar
+
+Copy boost files to /opt/lmi/third-party/ :
+  /tmp[0]$mkdir -p /opt/lmi/third-party/include/boost/
+  /tmp[0]$cp -pR boost_1_31_0/boost/* /opt/lmi/third-party/include/boost/
+
+Copy boost's src files to /opt/lmi/third-party/ :
+  /tmp[0]$mkdir -p /opt/lmi/third-party/src/boost_1_31_0
+  /tmp[0]$cp -pR boost_1_31_0/* /opt/lmi/third-party/src/boost_1_31_0/
 
 * Install libxml2
 
