@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: global_settings.hpp,v 1.8 2005-06-23 14:47:55 chicares Exp $
+// $Id: global_settings.hpp,v 1.9 2005-06-23 15:22:04 chicares Exp $
 
 #ifndef global_settings_hpp
 #define global_settings_hpp
@@ -70,7 +70,7 @@ class LMI_EXPIMP global_settings
     void set_mellon                   (bool);
     void set_ash_nazg                 (bool);
     void set_custom_io_0              (bool);
-    bool set_regression_testing       (bool);
+    void set_regression_testing       (bool);
     void set_data_directory           (std::string const&);
     void set_regression_test_directory(std::string const&);
 
