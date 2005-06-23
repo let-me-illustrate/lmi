@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_cli.cpp,v 1.11 2005-06-23 14:47:55 chicares Exp $
+// $Id: main_cli.cpp,v 1.12 2005-06-23 15:22:04 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -111,7 +111,7 @@ int RegressionTestOneIniFile(fs::directory_iterator i)
 //============================================================================
 void RegressionTest()
 {
-    global_settings::instance().set_regression_test(true);
+    global_settings::instance().set_regression_testing(true);
     fs::path test_dir(global_settings::instance().regression_test_directory());
     fs::directory_iterator i(test_dir);
     fs::directory_iterator end_i;
