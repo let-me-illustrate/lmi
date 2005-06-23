@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_harmonization.cpp,v 1.11 2005-06-21 05:27:48 chicares Exp $
+// $Id: input_harmonization.cpp,v 1.12 2005-06-23 01:46:48 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -342,11 +342,11 @@ void Input::Harmonize()
         (
             IndividualPaymentStrategy != mce_pmt_input_scalar
 // TODO ??        ||  mce_pmt_input_scalar != ErPmtStrategy
-        ||  mce_solve_ee_prem == SolveType
+        ||  mce_solve_ee_prem     == SolveType
         ||  mce_solve_ee_prem_dur == SolveType
-        ||  mce_solve_er_prem == SolveType
+        ||  mce_solve_er_prem     == SolveType
         ||  mce_solve_er_prem_dur == SolveType
-        ||  mce_reduce_prem == AvoidMecMethod
+        ||  mce_reduce_prem       == AvoidMecMethod
         );
 
     bool specamt_solve = mce_solve_specamt == SolveType;
@@ -472,18 +472,18 @@ false // Silly workaround for now.
 */
 
     bool prem_solve =
-            SolveType == mce_solve_ee_prem
-        ||  SolveType == mce_solve_ee_prem_dur
+            mce_solve_ee_prem     == SolveType
+        ||  mce_solve_ee_prem_dur == SolveType
         ;
 
     // Many payment strategies are forbidden if specamt is a function
     // of payment.
     bool specamt_indeterminate =
-            SolveType == mce_solve_specamt
+            mce_solve_specamt == SolveType
         ||  AvoidMecMethod == mce_increase_specamt
         ||  (
-               SpecifiedAmountStrategyFromIssue != mce_sa_input_scalar
-            && SpecifiedAmountStrategyFromIssue != mce_sa_salary
+               mce_sa_input_scalar != SpecifiedAmountStrategyFromIssue
+            && mce_sa_salary       != SpecifiedAmountStrategyFromIssue
             )
         ;
 
@@ -634,8 +634,8 @@ false // Silly workaround for now.
 
     bool wd_solve =
         (
-            SolveType == mce_solve_wd
-        ||  SolveType == mce_solve_wd_then_loan
+            mce_solve_wd           == SolveType
+        ||  mce_solve_wd_then_loan == SolveType
         );
     bool wd_forbidden = !wd_allowed;
     // TODO ?? Also need to inhibit affected solves.
@@ -664,10 +664,7 @@ false // Silly workaround for now.
     WithdrawalToAge          .enable(!wd_inhibit_simple && mce_to_age    == WithdrawalToAlternative);
     WithdrawalToDuration     .enable(!wd_inhibit_simple && mce_to_year   == WithdrawalToAlternative);
 
-    bool loan_solve =
-        (
-            SolveType == mce_solve_loan
-        );
+    bool loan_solve = mce_solve_loan == SolveType;
     bool loan_forbidden = !loan_allowed;
 
     WithdrawToBasisThenLoan.enable(!wd_forbidden && !loan_forbidden);
@@ -767,15 +764,15 @@ false // Silly workaround for now.
     bool enable_prem_and_specamt_solves =
             true
         &&  (
-                IndividualPaymentStrategy == mce_pmt_input_scalar
+                mce_pmt_input_scalar == IndividualPaymentStrategy
             )
 // TODO ?? WX PORT !! There is no employer payment strategy.
 //        &&  (
-//                ErPmtStrategy == mce_pmt_input_scalar
+//                mce_pmt_input_scalar == ErPmtStrategy
 //            )
         &&  (
-                SpecifiedAmountStrategyFromIssue    == mce_sa_input_scalar
-            ||  SpecifiedAmountStrategyFromIssue    == mce_sa_salary
+                mce_sa_input_scalar == SpecifiedAmountStrategyFromIssue
+            ||  mce_sa_salary       == SpecifiedAmountStrategyFromIssue
             )
         ;
 
