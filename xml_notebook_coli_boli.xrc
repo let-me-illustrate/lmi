@@ -24,7 +24,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: xml_notebook_coli_boli.xrc,v 1.4 2005-06-17 11:13:05 wboutin Exp $
+    $Id: xml_notebook_coli_boli.xrc,v 1.5 2005-06-23 14:52:26 chicares Exp $
 
     This version is designed for COLI and BOLI users; it omits input
     fields that seem irrelevant in that context, and reflects the
@@ -988,7 +988,7 @@
                                     <flag>wxALIGN_TOP|wxALL</flag>
                                     <border>4</border>
                                     <object class="wxStaticText">
-                                       <label>Table rating</label>
+                                        <label>Table rating</label>
                                     </object>
                                 </object>
                                 <object class="sizeritem">
@@ -1355,6 +1355,10 @@
                                             <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
                                             <border>4</border>
                                             <object class="wxStaticText">
+<!-- TODO ?? Wendy, if the leading spaces in this label serve a purpose,
+then wouldn't that purpose be better served by an alignment flag? I'd
+ask the same question about other occurrences of 'label> ' in this file.
+-->
                                                 <label>         Franchise</label>
                                             </object>
                                         </object>
@@ -2017,7 +2021,8 @@
                             </object>
                         </object>
                         <object class="sizeritem">
-                        <flag>wxGROW|wxLEFT|wxRIGHT</flag>
+<-- TODO ?? Wendy, does it make sense to specify both left and right here? -->
+                            <flag>wxGROW|wxLEFT|wxRIGHT</flag>
                             <border>2</border>
                             <object class="wxStaticBoxSizer">
                                 <orient>wxVERTICAL</orient>
@@ -2345,8 +2350,8 @@
                                     <object class="wxRadioBox" name="SpecifiedAmountStrategyFromRetirement">
                                         <label>Specified amount</label>
                                         <content>
-                                           <item>Level</item>
-                                           <item>Same as before retirement</item>
+                                            <item>Level</item>
+                                            <item>Same as before retirement</item>
                                         </content>
                                     </object>
                                 </object>
