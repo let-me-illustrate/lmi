@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avstrtgy.cpp,v 1.5 2005-05-27 10:37:06 chicares Exp $
+// $Id: ihs_avstrtgy.cpp,v 1.6 2005-06-23 01:46:48 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -268,18 +268,18 @@ double AccountValue::DoPerformPmtStrategy
     ,std::vector<e_pmt_strategy> const& a_StrategyVector
     ) const
 {
-// TODO ?? What happens if you specify a corp payment?
+    // TODO ?? What happens if a corporation payment is specified?
     if(SolvingForGuarPremium)
         {
         return a_PmtVector[Year];
         }
 
-    // Don't override premium during prem solve period.
+    // Don't override premium during premium solve period.
     if
         (
-        a_SolveForWhichPrem == Input_->SolveType
-        && Input_->SolveBegYear <= Year
-        && Year < std::min(Input_->SolveEndYear.value(), BasicValues::Length)
+            a_SolveForWhichPrem == Input_->SolveType
+        &&  Input_->SolveBegYear <= Year
+        &&  Year < std::min(Input_->SolveEndYear.value(), BasicValues::Length)
         )
         {
         return a_PmtVector[Year];
