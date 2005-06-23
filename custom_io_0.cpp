@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: custom_io_0.cpp,v 1.6 2005-06-21 05:27:48 chicares Exp $
+// $Id: custom_io_0.cpp,v 1.7 2005-06-23 01:47:21 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -83,10 +83,6 @@ bool SetSpecialInput(IllusInputParms& ip, char const* overridden_filename)
         }
 
     name_value_pairs n_v_pairs(filename);
-
-    // Turn off solves, overriding a general default that's not
-    // appropriate here.
-    ip.SolveType = enum_solve_type(e_solve_none);
 
     // The list is not complete; other items may be required eventually.
     ip.InforceYear              = static_cast<int>(n_v_pairs.numeric_value("InforceYear"));
