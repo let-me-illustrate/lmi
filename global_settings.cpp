@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: global_settings.cpp,v 1.6 2005-06-21 23:48:35 chicares Exp $
+// $Id: global_settings.cpp,v 1.7 2005-06-23 14:47:55 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -115,6 +115,7 @@ global_settings::global_settings()
     :mellon_                    (false)
     ,ash_nazg_                  (false)
     ,custom_io_0_               (false)
+    ,regression_testing         (false)
     ,data_directory_            (".")
     ,regression_test_directory_ (".")
 {}
@@ -126,11 +127,6 @@ global_settings& global_settings::instance()
 {
     static global_settings z;
     return z;
-}
-
-bool global_settings::regression_testing() const
-{
-    return regression_test_directory_.empty();
 }
 
 void global_settings::set_mellon(bool b)
@@ -151,6 +147,11 @@ void global_settings::set_ash_nazg(bool b)
 void global_settings::set_custom_io_0(bool b)
 {
     custom_io_0_ = b;
+}
+
+void global_settings::set_regression_testing(bool b)
+{
+    regression_testing_ = b;
 }
 
 void global_settings::set_data_directory(std::string const& s)
@@ -178,6 +179,11 @@ bool global_settings::ash_nazg() const
 bool global_settings::custom_io_0() const
 {
     return custom_io_0_;
+}
+
+bool global_settings::regression_testing() const
+{
+    return regression_testing_;
 }
 
 std::string const& global_settings::data_directory() const
