@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: census_view.cpp,v 1.32 2005-06-21 05:27:48 chicares Exp $
+// $Id: census_view.cpp,v 1.33 2005-06-23 01:47:21 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -1145,48 +1145,19 @@ void CensusView::OnPasteCensus(wxCommandEvent&)
     // say they want to append pasted data to the cells that are
     // already present.
     //
-    // In the solution domain:
-    //   document modified <--> dirty flag set
-    //   loaded from file  <--> document path not null
-// Except that the wx port is different.
-    //
-    // Furthermore, a brand-new census has default parameters for
-    // the case, the class, and the default cell. As this is written,
-    // the default parameters involve a premium solve. Generally, this
-    // is not wanted in a pasted census unless a solve is specified in
-    // the pasted data. Therefore, in the case where we erase the
-    // default cell as described above, we turn off solves too, for
-    // case and class defaults.
-    //
     // We do all of this as soon as we know that the user wants to
     // paste census data. If pasting fails, the user is left with a
     // census that contains no cells, but that's OK; in this event,
     // they're likely to correct the data and repaste it.
     //
-
+    // In the solution domain:
+    //   document modified <--> dirty flag set
+    //   loaded from file  <--> document path not null
 // TODO ?? WX PORT !! How to do this with wx?
 //    if(!document().IsModified() && 0 == document().GetDocPath())
 //    if(!document().IsModified())
         {
         cell_parms().clear();
-/* TODO Expunge this old comment...
-        // If this is an old census, leave solves alone. Otherwise,
-        // turn off solves at the case level. The default is to solve for
-        // individual (employee) premium; that would override pasted payment
-        // values. And set solve target durations as a function of age, so
-        // that they won't vary when cells with different ages are pasted in.
-...and answer this new question: */
-// TODO ?? Is there any actual benefit to changing solve target age or
-// duration? If we make it "target at age", then "target-at duration"
-// differs across cells. If we make it "target at duration", then
-// "target-at age" differs across cells. Is that right?
-
-// TODO ?? The input["member_name"] idiom isn't desirable here.
-// Compile-time errors are wanted for invalid names.
-        case_parms()[0]["SolveType"      ] = "SolveNone";
-// TODO ?? expunge if no longer necessary.
-//        case_parms()[0]["SolveTgtAtWhich"] = "TgtAtAge";
-//        case_parms()[0]["SolveToWhich"   ] = "ToAge";
         class_parms().clear();
         class_parms().push_back(case_parms()[0]);
         }
