@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: global_settings.hpp,v 1.7 2005-06-21 23:48:35 chicares Exp $
+// $Id: global_settings.hpp,v 1.8 2005-06-23 14:47:55 chicares Exp $
 
 #ifndef global_settings_hpp
 #define global_settings_hpp
@@ -50,6 +50,11 @@
 ///
 /// custom_io_0: Special input and output facility for one customer.
 ///
+/// regression_testing: Enable special behaviors needed for regression
+/// testing. For instance, allow test cases to run even in states that
+/// haven't approved a product, because it is important to test new
+/// products before approval.
+///
 /// data_directory: Path to data files.
 ///
 /// regression_test_directory: Path for regression-testing input and
@@ -62,17 +67,17 @@ class LMI_EXPIMP global_settings
   public:
     static global_settings& instance();
 
-    bool regression_testing() const;
-
     void set_mellon                   (bool);
     void set_ash_nazg                 (bool);
     void set_custom_io_0              (bool);
+    bool set_regression_testing       (bool);
     void set_data_directory           (std::string const&);
     void set_regression_test_directory(std::string const&);
 
     bool               mellon                   () const;
     bool               ash_nazg                 () const;
     bool               custom_io_0              () const;
+    bool               regression_testing       () const;
     std::string const& data_directory           () const;
     std::string const& regression_test_directory() const;
 
@@ -82,6 +87,7 @@ class LMI_EXPIMP global_settings
     bool mellon_;
     bool ash_nazg_;
     bool custom_io_0_;
+    bool regression_testing_;
     std::string data_directory_;
     std::string regression_test_directory_;
 
