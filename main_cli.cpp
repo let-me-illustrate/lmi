@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_cli.cpp,v 1.9 2005-06-21 05:27:48 chicares Exp $
+// $Id: main_cli.cpp,v 1.10 2005-06-23 14:28:51 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -29,6 +29,7 @@
 #include "alert.hpp"
 #include "argv0.hpp"
 #include "calculate.hpp"
+#include "catch_exceptions.hpp"
 #include "custom_io_0.hpp"
 #include "getopt.hpp"
 #include "global_settings.hpp"
@@ -62,8 +63,12 @@
 // and incompatible headers.
 void print_databases();
 
+// TODO ?? These 'RegressionTestOne*File' functions return an int
+// merely for compatibility with 'catch_exceptions', which probably
+// should be revised and then more widely used.
+
 //============================================================================
-void RegressionTestOneCensusFile(fs::directory_iterator i)
+int RegressionTestOneCensusFile(fs::directory_iterator i)
 {
     std::cout << "Regression testing: " << i->string() << std::endl;
     multiple_cell_document doc(i->string());
@@ -87,10 +92,11 @@ void RegressionTestOneCensusFile(fs::directory_iterator i)
         }
 
     run_census()(*i, emit_to_spew_file, doc.cell_parms());
+    return 0;
 }
 
 //============================================================================
-void RegressionTestOneIniFile(fs::directory_iterator i)
+int RegressionTestOneIniFile(fs::directory_iterator i)
 {
     std::cout << "Regression testing: " << i->string() << std::endl;
     IllusVal IV;
@@ -99,6 +105,7 @@ void RegressionTestOneIniFile(fs::directory_iterator i)
     IV.Run(&IP);
     fs::path out_file = fs::change_extension(*i, ".test0");
     PrintFormSpecial(IV.ledger(), out_file.string().c_str());
+    return 0;
 }
 
 //============================================================================
@@ -115,11 +122,19 @@ void RegressionTest()
             }
         else if(".cns" == fs::extension(*i))
             {
-            RegressionTestOneCensusFile(i);
+            lmi_test::catch_exceptions
+                (boost::bind(RegressionTestOneCensusFile, i)
+                ,std::cout
+                ,std::cerr
+                );
             }
         else if(".ini" == fs::extension(*i))
             {
-            RegressionTestOneIniFile(i);
+            lmi_test::catch_exceptions
+                (boost::bind(RegressionTestOneIniFile, i)
+                ,std::cout
+                ,std::cerr
+                );
             }
         else
             {
