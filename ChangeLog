@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.76 2005-06-21 15:00:06 chicares Exp $
+// $Id: ChangeLog,v 1.77 2005-06-23 14:55:20 chicares Exp $
 
 2005-01-14
 
@@ -2476,4 +2476,55 @@ makefile commit that incorrectly overwrote some of Vadim's changes.
 
   global_settings_test.cpp
 Add unit tests.
+
+  global_settings.cpp
+  global_settings.hpp
+Improve documentation.
+
+  global_settings_test.cpp
+Add more unit tests.
+
+2005-06-22 [1281]
+
+  INSTALL
+Improve installation instructions.
+
+  xml_notebook_single_premium.xrc
+Remove superfluous controls and tabs.
+
+  ihs_avstrtgy.cpp
+  input_harmonization.cpp
+Reformat.
+
+  census_view.cpp
+  custom_io_0.cpp
+  inputs.cpp
+  inputillus.cpp
+Change default inputs from
+  solve for ee premium, ee premium 20000, er premium 0
+to
+  no solve, ee premium 0, er premium 20000 .
+Users wouldn't be able to turn off a default solve through a GUI
+interface that doesn't permit solves, and there was already too much
+special-case code to override the former default solve in other cases
+where it was inappropriate. It would make no sense to make the default
+zero premium: the illustration would lapse instantly, producing a
+report that would astonish new users, though a 20000 premium and a
+1000000 specified amount are regrettably arbitrary defaults.
+
+2005-06-23 [1281]
+
+  xml_notebook_coli_boli.xrc
+Regularize formatting; mark other potential changes.
+
+  custom_io_0.cpp
+Assume BOLI premium is paid by the bank.
+
+  main_cli.cpp
+Don't let a failing testdeck halt regression testing.
+
+  global_settings.cpp
+  global_settings.hpp
+  main_cli.cpp
+Add a global setting for regression testing.
 
