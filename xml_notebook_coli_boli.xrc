@@ -24,7 +24,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: xml_notebook_coli_boli.xrc,v 1.5 2005-06-23 14:52:26 chicares Exp $
+    $Id: xml_notebook_coli_boli.xrc,v 1.6 2005-06-23 16:14:52 chicares Exp $
 
     This version is designed for COLI and BOLI users; it omits input
     fields that seem irrelevant in that context, and reflects the
@@ -2021,7 +2021,7 @@ ask the same question about other occurrences of 'label> ' in this file.
                             </object>
                         </object>
                         <object class="sizeritem">
-<-- TODO ?? Wendy, does it make sense to specify both left and right here? -->
+<!-- TODO ?? Wendy, does it make sense to specify both left and right here? -->
                             <flag>wxGROW|wxLEFT|wxRIGHT</flag>
                             <border>2</border>
                             <object class="wxStaticBoxSizer">
