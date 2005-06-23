@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: global_settings.cpp,v 1.7 2005-06-23 14:47:55 chicares Exp $
+// $Id: global_settings.cpp,v 1.8 2005-06-23 15:22:04 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -115,7 +115,7 @@ global_settings::global_settings()
     :mellon_                    (false)
     ,ash_nazg_                  (false)
     ,custom_io_0_               (false)
-    ,regression_testing         (false)
+    ,regression_testing_        (false)
     ,data_directory_            (".")
     ,regression_test_directory_ (".")
 {}
