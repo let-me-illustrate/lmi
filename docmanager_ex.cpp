@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: docmanager_ex.cpp,v 1.3 2005-06-24 22:00:57 zeitlin Exp $
+// $Id: docmanager_ex.cpp,v 1.4 2005-06-24 22:05:15 zeitlin Exp $
 
 // This implementation is a derived work based on wxWindows code, viz.
 //   samples/printing/printing.cpp (C) 1995 Julian Smart
@@ -109,10 +109,9 @@ wxSingleChoicePopupMenu::~wxSingleChoicePopupMenu()
 }
 
 // WX !! Can't be const because PopupMenu isn't.
-// WX !! Isn't there a function to get current cursor position?
 int wxSingleChoicePopupMenu::Choose()
 {
-    PopupMenu(&menu_, wxPoint());
+    PopupMenu(&menu_, ScreenToClient(wxGetMousePosition()));
     return selection_index_;
 }
 
