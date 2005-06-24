@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: workhorse.make,v 1.37 2005-06-18 22:38:52 zeitlin Exp $
+# $Id: workhorse.make,v 1.38 2005-06-24 01:49:03 chicares Exp $
 
 ###############################################################################
 
@@ -83,21 +83,16 @@ $(src_dir)/objects.make:: ;
 
 default_targets := \
   wx_new$(SHREXT) \
+  antediluvian_cgi$(EXEEXT) \
+  antediluvian_cli$(EXEEXT) \
   elapsed_time$(EXEEXT) \
   generate_passkey$(EXEEXT) \
   ihs_crc_comp$(EXEEXT) \
+  libantediluvian$(SHREXT) \
   liblmi$(SHREXT) \
   lmi_cli_shared$(EXEEXT) \
   lmi_wx_shared$(EXEEXT) \
   product_files$(EXEEXT) \
-
-ifeq (,$(NO_CGI))
-default_targets += \
-  antediluvian_cgi$(EXEEXT) \
-  antediluvian_cli$(EXEEXT) \
-  libantediluvian$(SHREXT) \
-
-endif
 
 .PHONY: effective_default_target
 effective_default_target: $(default_targets)
@@ -121,12 +116,15 @@ effective_default_target: $(default_targets)
 #
 # xmlwrapp: avoid the nonstandard build system provided.
 
-# Files whose names match 'my_%.cpp' are taken as product data files,
-# which are overridden by customized files in a special directory.
+# Directory /usr/local/include/ is searched for headers, but only
+# after the special directory for third-party libraries, in order to
+# make it easier to test or use later library versions that have
+# already been installed in the former directory.
 
 all_include_directories := \
   $(src_dir) \
   $(compiler_include_directory) \
+  $(system_root)/opt/lmi/third-party/include/cgicc \
   $(system_root)/usr/local/include \
 
 all_source_directories := \
@@ -137,6 +135,10 @@ all_source_directories := \
 
 vpath lib%.a          $(CURDIR)
 vpath %.o             $(CURDIR)
+
+# Files whose names match 'my_%.cpp' are taken as product data files,
+# which are overridden by any customized files found in a special
+# directory.
 
 vpath my_%.cpp        $(src_dir)/../products/src
 
