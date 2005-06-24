@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.77 2005-06-23 14:55:20 chicares Exp $
+// $Id: ChangeLog,v 1.78 2005-06-24 13:52:53 wboutin Exp $
 
 2005-01-14
 
@@ -2512,6 +2512,9 @@ zero premium: the illustration would lapse instantly, producing a
 report that would astonish new users, though a 20000 premium and a
 1000000 specified amount are regrettably arbitrary defaults.
 
+  xml_notebook_private_placement.xrc
+Add customized interface.
+
 2005-06-23 [1281]
 
   xml_notebook_coli_boli.xrc
@@ -2527,4 +2530,15 @@ Don't let a failing testdeck halt regression testing.
   global_settings.hpp
   main_cli.cpp
 Add a global setting for regression testing.
+
+  xml_notebook_coli_boli.xrc
+Remove unused scalar controls.
+
+2005-06-24 [1285]
+
+  xml_notebook_coli_boli.xrc
+Improve documentation. Reformat one panel's layout.
+
+  xml_notebook_private_placement.xrc
+Remove unused scalar controls.
 
