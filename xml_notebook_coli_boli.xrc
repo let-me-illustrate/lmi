@@ -24,7 +24,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: xml_notebook_coli_boli.xrc,v 1.7 2005-06-23 20:10:15 wboutin Exp $
+    $Id: xml_notebook_coli_boli.xrc,v 1.8 2005-06-24 12:15:43 wboutin Exp $
 
     This version is designed for COLI and BOLI users; it omits input
     fields that seem irrelevant in that context, and reflects the
@@ -1336,10 +1336,6 @@
                             <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL</flag>
                             <border>4</border>
                             <object class="wxStaticText">
-<!-- TODO ?? Wendy, if the leading spaces in this label serve a purpose,
-              then wouldn't that purpose be better served by an alignment flag? I'd
-              ask the same question about other occurrences of 'label> ' in this file.
-              -->
                                 <label>Franchise</label>
                             </object>
                         </object>
@@ -2137,7 +2133,7 @@
         <growablecols>0</growablecols>
         <growablerows>1</growablerows>
         <object class="sizeritem">
-            <flag>wxALIGN_RIGHT|wxLEFT|wxRIGHT|wxTOP</flag>
+            <flag>wxGROW|wxLEFT|wxRIGHT|wxTOP</flag>
             <border>2</border>
             <object class="wxStaticBoxSizer">
                 <orient>wxVERTICAL</orient>
