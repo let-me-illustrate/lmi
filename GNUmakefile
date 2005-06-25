@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: GNUmakefile,v 1.20 2005-06-20 17:03:07 chicares Exp $
+# $Id: GNUmakefile,v 1.21 2005-06-25 01:26:32 chicares Exp $
 
 ###############################################################################
 
@@ -144,11 +144,36 @@ gpl_files := \
   quoted_gpl \
   quoted_gpl_html \
 
+# TODO ?? Ask the make maintainer why it's necessary to pass $(LDFLAGS)
+# etc. here. Testcase (run without passing $(LDFLAGS) here):
+#
+# /lmi/src/lmi[0]$export LDFLAGS="EXTRA_LDFLAG"
+# /lmi/src/lmi[0]$print $LDFLAGS
+# EXTRA_LDFLAG
+#
+# [unexpected:]
+# /lmi/src/lmi[0]$make show_flags |grep LDFLAGS
+# ALL_LDFLAGS = -L . -L C:/usr/local/lib -L C:/usr/local/bin   -lxml2_dll       -Wl,-Map,show_flags.map
+#
+# [unexpected:]
+# /lmi/src/lmi[0]$LDFLAGS="EXTRA_FLAG" make show_flags |grep LDFLAGS
+# ALL_LDFLAGS = -L . -L C:/usr/local/lib -L C:/usr/local/bin   -lxml2_dll       -Wl,-Map,show_flags.map
+#
+# [expected:]
+# /lmi/src/lmi[0]$make LDFLAGS="EXTRA_FLAG" show_flags |grep LDFLAGS
+# ALL_LDFLAGS = -L . -L C:/usr/local/lib -L C:/usr/local/bin   -lxml2_dll      EXTRA_FLAG
+
 MAKETARGET = \
   $(MAKE) \
     -C $@ \
     -f $(src_dir)/workhorse.make \
     --no-print-directory \
+                         ARFLAGS='$(ARFLAGS)' \
+                          CFLAGS='$(CFLAGS)' \
+                        CPPFLAGS='$(CPPFLAGS)' \
+                        CXXFLAGS='$(CXXFLAGS)' \
+                         LDFLAGS='$(LDFLAGS)' \
+                         RCFLAGS='$(RCFLAGS)' \
                          src_dir='$(src_dir)' \
                       build_type='$(build_type)' \
                platform-makefile='$(platform-makefile)' \
