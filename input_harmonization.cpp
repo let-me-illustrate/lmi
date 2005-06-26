@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_harmonization.cpp,v 1.12 2005-06-23 01:46:48 chicares Exp $
+// $Id: input_harmonization.cpp,v 1.13 2005-06-26 23:01:43 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -32,11 +32,51 @@
 #include "dbnames.hpp"
 #include "global_settings.hpp"
 #include "inputillus.hpp"
+#include "input_sequence.hpp"
 #include "value_cast.hpp"
 #include "xenum.hpp"
 
 // Harmonization is physically separated for no better reason than to
 // facilitate its development at a time when it frequently changes.
+
+namespace
+{
+    std::string current_credited_rate(TDatabase const& database)
+        {
+        std::vector<double> z;
+        database.Query(z, DB_MaxGenAcctRate);
+        return InputSequence(z).mathematical_representation();
+        }
+} // Unnamed namespace.
+
+/// Implementation notes: general-account rate.
+///
+/// If the general-account interest-rate field holds the default value
+/// for the former product before the product changed, then change its
+/// contents to the new product's default value. What's tested is
+/// literal equality, not equivalence: even typing a blank at the end
+/// of the field makes in no longer equal to the default string.
+/// Similarly, given
+///   product X: credited rate 0.052
+///   product Y: credited rate 0.037
+/// if product X is selected and a rate of 0.037 is given, and the
+/// product is then changed to Y, then the default-rate behavior is
+/// in effect; and if the product is later changed back to X, then
+/// the rate changes to X's default of 0.052. This behavior seems
+/// complicated, but generally does the right thing; and it is
+/// conjectured that no more "natural" behavior can be achieved
+/// without adding a control to turn default on and off manually.
+///
+/// Take the same action if no product had been selected previously,
+/// or if the field is empty.
+///
+/// Otherwise, leave it alone, deeming it to represent intentional
+/// user input that should be preserved--even if it exceeds the new
+/// product's current credited rate and will therefore be disallowed.
+///
+/// An alternative for future consideration is a "use current rate"
+/// checkbox. Until we have a historical database, that would only
+/// frustrate users running inforce or backdated illustrations.
 
 void Input::reset_database()
 {
@@ -55,6 +95,13 @@ void Input::reset_database()
         )
         {
         return;
+        }
+
+    std::string cached_credited_rate;
+
+    if(database.get())
+        {
+        cached_credited_rate = current_credited_rate(*database);
         }
 
     CachedProductName           = ProductName          ;
@@ -85,6 +132,15 @@ void Input::reset_database()
             ,IhsState
             )
         );
+
+    if
+        (   cached_credited_rate.empty()
+        ||  GeneralAccountRate.value().empty()
+        ||  cached_credited_rate == GeneralAccountRate.value()
+        )
+        {
+        GeneralAccountRate = datum_string(current_credited_rate(*database));
+        }
 }
 
 void Input::Harmonize()

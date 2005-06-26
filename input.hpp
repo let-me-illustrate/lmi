@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input.hpp,v 1.4 2005-06-14 00:19:11 chicares Exp $
+// $Id: input.hpp,v 1.5 2005-06-26 23:01:43 chicares Exp $
 
 #ifndef input_hpp
 #define input_hpp
@@ -51,42 +51,48 @@ class InputSequence;
 #include <memory>
 #include <vector>
 
-// TODO ?? Revise.
-// This sample input class is part of a demonstration program that
-// uses wxWindows and its xml resource library to implement dialogs
-// that can be maintained through xml resources instead of C++ code.
-//
-// Two separate input data structures are used. One is simply a
-// std::map<std::string> > that captures user input exactly. The other
-// is this class, which holds data of various types that a program
-// would capture from GUI input and use downstream. These two data
-// structures are distinct because conversion between them may not
-// perfectly preserve value.
-//
-// For example, "1.07" in a text control may be translated to
-//   (double)(1.07)
-// but the latter converted to a string, with the maximum precision
-// the machine is capable of, would differ from the original "1.07".
-// A user who reloads saved input from a file would likely protest
-// "but I didn't say 1.0700000000001". Truncating to a 'reasonable'
-// precision merely engenders complaints from other users who may
-// enter pi to machine precision and expect more than "3.1416": there
-// is no universally reasonable way to truncate numbers.
-//
-// [Note: that example impedes interconvertibility. Adding floating-
-// point text controls later will force us to grapple with that.]
-//
-// Members are of custom datatypes that express certain relationships
-// among controls. For example:
-//   - discrete-valued controls like wxControlWithItems and wxRadioBox
-//     are mapped to an enumerative type that constrains assignment to
-//     values that are permissible within the overall context of the
-//     input object;
-//   - a radiobox might offer three choices, but allow only the first
-//     two if the input object is in a particular state determined by
-//     the contents of other controls.
-
-// TODO ?? Add functions to convert to and from a std::map<std::string> >?
+/// Design notes for class input.
+///
+/// TODO ?? Revise.
+/// This sample input class is part of a demonstration program that
+/// uses wxWindows and its xml resource library to implement dialogs
+/// that can be maintained through xml resources instead of C++ code.
+///
+/// Two separate input data structures are used. One is simply a
+/// std::map<std::string> > that captures user input exactly. The other
+/// is this class, which holds data of various types that a program
+/// would capture from GUI input and use downstream. These two data
+/// structures are distinct because conversion between them may not
+/// perfectly preserve value.
+///
+/// For example, "1.07" in a text control may be translated to
+///   (double)(1.07)
+/// but the latter converted to a string, with the maximum precision
+/// the machine is capable of, would differ from the original "1.07".
+/// A user who reloads saved input from a file would likely protest
+/// "but I didn't say 1.0700000000001". Truncating to a 'reasonable'
+/// precision merely engenders complaints from other users who may
+/// enter pi to machine precision and expect more than "3.1416": there
+/// is no universally reasonable way to truncate numbers.
+///
+/// [Note: that example impedes interconvertibility. Adding floating-
+/// point text controls later will force us to grapple with that.]
+///
+/// Members are of custom datatypes that express certain relationships
+/// among controls. For example:
+///   - discrete-valued controls like wxControlWithItems and wxRadioBox
+///     are mapped to an enumerative type that constrains assignment to
+///     values that are permissible within the overall context of the
+///     input object;
+///   - a radiobox might offer three choices, but allow only the first
+///     two if the input object is in a particular state determined by
+///     the contents of other controls.
+///
+/// TODO ?? Add functions to convert to and from a std::map<std::string> >?
+///
+/// reset_database(): Reset database if necessary, i.e., if the
+/// product or any database axis changed. Conditionally update
+/// general-account rate (see implementation for details).
 
 class Input
     :public MemberSymbolTable<Input>
@@ -117,6 +123,10 @@ class Input
     void TransferWithdrawalInputSequenceToSimpleControls
         (InputSequence const& s
         );
+
+    void reset_database();
+
+    std::auto_ptr<TDatabase> database                        ;
 
     // TODO ?? Temporary.
     typedef datum_string datum_sequence;
@@ -328,11 +338,6 @@ class Input
     mce_to_point             WithdrawalToAlternative         ;
     tnr_duration             WithdrawalToDuration            ;
 
-    // TODO ?? Database--perhaps this should be an auxiliary class.
-
-    void reset_database();
-
-    std::auto_ptr<TDatabase> database                        ;
     ce_product_name          CachedProductName               ;
     mce_gender               CachedGender                    ;
     mce_class                CachedUnderwritingClass         ;
