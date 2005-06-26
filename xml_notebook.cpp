@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xml_notebook.cpp,v 1.4 2005-05-27 10:37:06 chicares Exp $
+// $Id: xml_notebook.cpp,v 1.5 2005-06-26 23:01:43 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -724,6 +724,10 @@ void XmlNotebook::OnUpdateGUI(wxUpdateUIEvent& event)
         }
 
     input_.Harmonize();
+
+    // TODO ?? Experimental. A general solution is wanted instead.
+    transfer_data_["GeneralAccountRate"] = input_["GeneralAccountRate"].str();
+
     ConditionallyEnable();
 }
 
