@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.78 2005-06-24 13:52:53 wboutin Exp $
+// $Id: ChangeLog,v 1.79 2005-06-27 13:35:56 chicares Exp $
 
 2005-01-14
 
@@ -2489,6 +2489,9 @@ Add more unit tests.
   INSTALL
 Improve installation instructions.
 
+  xml_notebook_private_placement.xrc [new file]
+Add new input skin.
+
   xml_notebook_single_premium.xrc
 Remove superfluous controls and tabs.
 
@@ -2512,9 +2515,6 @@ zero premium: the illustration would lapse instantly, producing a
 report that would astonish new users, though a 20000 premium and a
 1000000 specified amount are regrettably arbitrary defaults.
 
-  xml_notebook_private_placement.xrc
-Add customized interface.
-
 2005-06-23 [1281]
 
   xml_notebook_coli_boli.xrc
@@ -2534,6 +2534,11 @@ Add a global setting for regression testing.
   xml_notebook_coli_boli.xrc
 Remove unused scalar controls.
 
+  workhorse.make
+Remove cgicc workaround. 'INSTALL' explains where to get the version
+of cgicc that's known to work with lmi, and gives special instructions
+for patching it for the msw platform.
+
 2005-06-24 [1285]
 
   xml_notebook_coli_boli.xrc
@@ -2541,4 +2546,27 @@ Improve documentation. Reformat one panel's layout.
 
   xml_notebook_private_placement.xrc
 Remove unused scalar controls.
+
+  docmanager_ex.cpp
+Put popup menu at mouse cursor position.
+
+  GNUmakefile
+Work around problem passing environment variables to submakefiles.
+
+2005-06-26 [1285]
+
+20050626T2301Z <chicares@cox.net>
+
+  GNUmakefile
+Strive to detect malformed RCS Ids.
+
+  input.hpp
+  input_harmonization.cpp
+  xml_notebook.cpp
+Default general-account rate to product's current credited rate.
+
+20050627T1332Z <chicares@cox.net>
+
+  setup.make [new file]
+Add experimental facility to set up build environment.
 
