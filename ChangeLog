@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.79 2005-06-27 13:35:56 chicares Exp $
+// $Id: ChangeLog,v 1.80 2005-07-01 12:30:20 wboutin Exp $
 
 2005-01-14
 
@@ -2570,3 +2570,9 @@ Default general-account rate to product's current credited rate.
   setup.make [new file]
 Add experimental facility to set up build environment.
 
+2005-07-01 [1293]
+
+20050701T1204Z <wboutin@massmutual.com>
+
+  INSTALL
+Improve installation instructions.

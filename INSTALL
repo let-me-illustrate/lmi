@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: INSTALL,v 1.4 2005-06-22 14:51:08 chicares Exp $
+// $Id: INSTALL,v 1.5 2005-07-01 12:30:20 wboutin Exp $
 
 [This version says only how to install and patch the required version
 of cgicc and xmlwrapp, and how to install the required version of boost.
@@ -121,7 +121,7 @@ Extract archive:
   /tmp[0]$bzip2 -dk boost_1_31_0.tar.bz2
   /tmp[0]$tar -xf boost_1_31_0.tar
 
-Copy boost headers to the third-party hierarchy:
+Copy boost header files to the third-party hierarchy:
   /tmp[0]$mkdir -p /opt/lmi/third-party/include/boost/
   /tmp[0]$pushd boost_1_31_0/boost/
   /tmp/boost/boost_1_31_0/boost[0]$/msys/1.0/bin/cp --force --parents --preserve --recursive * /c/opt/lmi/third-party/include/boost/
@@ -143,10 +143,36 @@ Copy boost source files to the third-party hierarchy:
   /tmp[0]$/msys/1.0/bin/cp --force --parents --preserve --recursive * /c/opt/lmi/third-party/src/boost_1_31_0/
   /tmp/boost/boost_1_31_0[0]$popd
 
-* Install libxml2
+* Install libxml2-2.6.19
 
-...
-[Wendy--Vadim's given some helpful guidance here; let's discuss it later]
+Download
+  http://ftp.gnome.org/pub/GNOME/sources/libxml2/2.6/libxml2-2.6.19.tar.gz
+to /tmp/ .
+
+Validate:
+  /tmp[0]$md5sum libxml2-2.6.19.tar.gz
+  61587d43389a414fc2f5223b428e325e  libxml2-2.6.19.tar.gz
+
+Extract archive:
+  /tmp[0]$gzip -d libxml2-2.6.19.tar.gz
+  /tmp[0]$tar -xf libxml2-2.6.19.tar
+
+Build library with MSYS:
+ mm39272@MM53451PA /c/tmp/libxml2-2.6.19
+$ ./configure && make
+
+Copy libxml header files to the third-party hierarchy:
+  /tmp[0]$mkdir -p /opt/lmi/third-party/include/libxml/
+  /tmp[0]$pushd libxml2-2.6.19/include/libxml/
+  /tmp/libxml2-2.6.19/include/libxml[0]$/msys/1.0/bin/cp.exe --force --parents --preserve --recursive * /c/opt/lmi/third-party/include/libxml/
+  /tmp/libxml2-2.6.19/include/libxml[0]$popd
+
+Copy libxml libraries to the third-party hierarchy:
+  /tmp[0]$mkdir -p /opt/lmi/third-party/bin /opt/lmi/third-party/lib
+  /tmp[0]$pushd libxml2-2.6.19/.libs/
+  /tmp/libxml2-2.6.19/.libs[0]$cp -p libxml2-2.dll c:/opt/lmi/third-party/bin/
+  /tmp/libxml2-2.6.19/.libs[0]$cp -p libxml2.dll.a c:/opt/lmi/third-party/lib/
+  /tmp/libxml2-2.6.19/.libs[0]$popd
 
 * Install wx
 
@@ -166,13 +192,41 @@ by default.
 
 * Install MinGW
 
+Download
+  http://prdownloads.sourceforge.net/mingw/MinGW-4.1.0.exe?download
+to /tmp/ .
+
+Validate:
+  /tmp[0]$md5sum MinGW-4.1.0.exe
+  08ed1853fec1440b0ef03f0e3a8682af  MinGW-4.1.0.exe
+
+Install
+  /tmp[0]$./MinGW-4.1.0.exe
+
+If an earlier release of MinGW already exists then this discussion
+is useful prior to installing the newer release:
+  http://gcc.gnu.org/ml/gcc-patches/2004-06/msg00703.html
+
 ...
 [perhaps cygwin should be mentioned, too]
 
 * Install MSYS
 
-...
+Download
+  http://prdownloads.sourceforge.net/mingw/MSYS-1.0.10.exe?download
+to /tmp/ .
+
+Validate:
+  /tmp[0]$md5sum MSYS-1.0.10.exe
+  da686e2c7b283385ef79d7b75afb609c  MSYS-1.0.10.exe
+
+Install:
+  /tmp[0]$./MSYS-1.0.10.exe
+
+  ...
 [perhaps cygwin should be mentioned, too]
+[I assume the MSYS Developer Tool Kit isn't needed for installation
+instructions, right?]
 
 * Install zsh
 
@@ -194,4 +248,6 @@ binary they already have. At any rate, we mustn't write
   /tmp[0]$/msys/1.0/bin/patch ...
 in platform-independent installation instructions: it should say only
   /tmp[0]$patch ...
+
+We can do that, but should it always be noted in this file? 
 
