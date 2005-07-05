@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.80 2005-07-01 12:30:20 wboutin Exp $
+// $Id: ChangeLog,v 1.81 2005-07-05 17:42:58 wboutin Exp $
 
 2005-01-14
 
@@ -2576,3 +2576,11 @@ Add experimental facility to set up build environment.
 
   INSTALL
 Improve installation instructions.
+
+2005-07-05 [1293]
+
+20050705T1729Z <wboutin@massmutual.com>
+
+  INSTALL
+  xml_notebook_private_placement.xrc
+Improve conformance.
