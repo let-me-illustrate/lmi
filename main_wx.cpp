@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_wx.cpp,v 1.13 2005-06-21 05:27:48 chicares Exp $
+// $Id: main_wx.cpp,v 1.14 2005-07-05 17:49:53 chicares Exp $
 
 // Portions of this file are derived from wxWindows files
 //   samples/docvwmdi/docview.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -356,33 +356,20 @@ bool security_validated(bool skip_validation)
         return true;
         }
 
-    int rc = secure_date::instance()->validate
+    std::string diagnostic_message = secure_date::instance()->validate
         (calendar_date()
         ,global_settings::instance().data_directory()
         );
 
-    if(0 == rc)
+    if(diagnostic_message.empty())
         {
         return true;
         }
-
-    char const* error_messages[] =
-        {"Logic error: too low."
-        ,"Passkey has unexpected length. Try reinstalling."
-        ,"Current date is outside permitted range. Contact the home office."
-        ,"At least one file is missing, altered, or invalid. Try reinstalling."
-        ,"Passkey is incorrect for this version. Contact the home office."
-        ,"Logic error: too high."
-        };
-    rc = std::min
-        (std::max(0, rc)
-        ,static_cast<int>(lmi_array_size(error_messages))
-        );
-
-    // TODO ?? Brittle. Instead, make secure_date::validate return a string.
-    std::string explanation(error_messages[1 + rc]);
-    wxSafeShowMessage("Passkey: fatal error", explanation);
-    return false;
+    else
+        {
+        wxSafeShowMessage("Passkey: fatal error", diagnostic_message.c_str());
+        return false;
+        }
 }
 
 lmi_wx_app::lmi_wx_app()

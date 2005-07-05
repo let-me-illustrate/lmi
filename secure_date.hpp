@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: secure_date.hpp,v 1.2 2005-05-26 22:01:15 chicares Exp $
+// $Id: secure_date.hpp,v 1.3 2005-07-05 17:49:53 chicares Exp $
 
 #ifndef secure_date_hpp
 #define secure_date_hpp
@@ -28,8 +28,10 @@
 
 #include "calendar_date.hpp"
 #include "expimp.hpp"
+#include "obstruct_slicing.hpp"
 
 #include <boost/static_assert.hpp>
+#include <boost/utility.hpp>
 
 #include <climits> // CHAR_BIT
 #include <string>
@@ -42,26 +44,18 @@ enum {md5len = 128 / CHAR_BIT};
 
 class LMI_EXPIMP secure_date
     :public calendar_date
+    ,private boost::noncopyable
+    ,virtual private obstruct_slicing<secure_date>
 {
   public:
-
-    enum
-        {ill_formed_passkey = 1
-        ,date_out_of_range
-        ,md5sum_error
-        ,incorrect_passkey
-        };
-
     static secure_date* instance();
-    static int validate
+    static std::string validate
         (calendar_date const& candidate
         ,std::string const& path = ""
         );
 
   private:
     secure_date();
-    secure_date(secure_date const&);
-    secure_date& operator=(secure_date const&);
 
     static secure_date* instance_;
 };
