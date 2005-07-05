@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: secure_date.cpp,v 1.2 2005-01-31 13:12:48 chicares Exp $
+// $Id: secure_date.cpp,v 1.3 2005-07-05 17:49:53 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -74,7 +74,7 @@ secure_date::secure_date()
 }
 
 //============================================================================
-int secure_date::validate
+std::string secure_date::validate
     (calendar_date const& candidate
     ,std::string const& path
     )
@@ -85,8 +85,10 @@ int secure_date::validate
         && candidate == dynamic_cast<calendar_date const&>(*instance())
         )
         {
-        return 0;
+        return "";
         }
+
+    std::ostringstream oss;
 
     // Read the passkey and valid-date-range files each time
     // because they might change while the program is running.
@@ -97,35 +99,104 @@ int secure_date::validate
     std::string passkey;
     {
     std::ifstream is((path + "passkey").c_str());
-    is >> passkey;
-    if(!is.eof() || (chars_per_formatted_hex_byte * md5len) != passkey.size())
+    if(!is)
         {
-        return ill_formed_passkey;
+        oss
+            << "Unable to read passkey file '"
+            << path + "passkey"
+            << "'. Try reinstalling."
+            ;
+        return oss.str();
+        }
+
+    is >> passkey;
+    if(!is.eof())
+        {
+        oss
+            << "Error reading passkey file '"
+            << path + "passkey"
+            << "'. Try reinstalling."
+            ;
+        return oss.str();
+        }
+
+    if(passkey.size() != chars_per_formatted_hex_byte * md5len)
+        {
+        oss
+            << "Length of passkey '"
+            << passkey
+            << "' is "
+            << passkey.size()
+            << " but should be "
+            << chars_per_formatted_hex_byte * md5len
+            << ". Try reinstalling."
+            ;
+        oss << "'" << path << "' = path\n";
+        oss << "'" << path + "passkey" << "' = path + passkey\n";
+        return oss.str();
         }
     }
 
-    // Read valid date range [begin, end) from file. We needn't check
-    // whether the dates were read correctly, or even whether the file
-    // exists, because they default to the empty range [g, g) where
-    // 'g' is the gregorian epoch.
+    // Read valid date range [begin, end) from file.
     calendar_date begin;
     calendar_date end;
     {
     std::ifstream is((path + "expiry").c_str());
+    if(!is)
+        {
+        oss
+            << "Unable to read expiry file '"
+            << path + "expiry"
+            << "'. Try reinstalling."
+            ;
+        return oss.str();
+        }
+
     is >> begin >> end;
+    if(!is.eof())
+        {
+        oss
+            << "Error reading expiry file '"
+            << path + "expiry"
+            << "'. Try reinstalling."
+            ;
+        return oss.str();
+        }
     }
 
     // Make sure candidate date is within valid range.
-    if(!(begin <= candidate && candidate < end))
+    if(candidate < begin)
         {
-        return date_out_of_range;
+        oss
+            << "Current date '"
+            << candidate.str()
+            << "' is invalid: this system cannot be used before '"
+            << begin.str()
+            << "'. Contact the home office."
+            ;
+        return oss.str();
+        }
+    if(end <= candidate)
+        {
+        oss
+            << "Current date '"
+            << candidate.str()
+            << "' is invalid: this system expired on '"
+            << end.str()
+            << "'. Contact the home office."
+            ;
+        return oss.str();
         }
 
     // Validate all data files.
     chdir(path.c_str());
     if(system_command("md5sum --check --status validated.md5"))
         {
-        return md5sum_error;
+        oss
+            << "At least one required file is missing, altered, or invalid."
+            << " Try reinstalling."
+            ;
+        return oss.str();
         }
 
     // The passkey must match the md5 sum of the md5 sum of file
@@ -151,11 +222,15 @@ int secure_date::validate
         );
     if(passkey != expected)
         {
-        return incorrect_passkey;
+        oss
+            << "Passkey is incorrect for this version."
+            << " Contact the home office."
+            ;
+        return oss.str();
         }
     // Cache the validated date.
     dynamic_cast<calendar_date&>(*instance()) = candidate;
-    return 0;
+    return "";
 }
 
 //============================================================================

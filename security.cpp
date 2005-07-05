@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: security.cpp,v 1.3 2005-06-21 05:27:48 chicares Exp $
+// $Id: security.cpp,v 1.4 2005-07-05 17:49:53 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -33,7 +33,7 @@
 #include "global_settings.hpp"
 #include "secure_date.hpp"
 
-#include <cstdlib> // std::exit()
+#include <cstdlib> // std::exit(), EXIT_FAILURE
 #include <sstream>
 #include <string>
 
@@ -44,76 +44,21 @@ void validate_security(bool do_validate)
         return;
         }
 
-    int invalid = secure_date::instance()->validate
+    std::string diagnostic_message = secure_date::instance()->validate
         (calendar_date()
         ,global_settings::instance().data_directory()
         );
-
-    // TODO ?? It would be better either to return a string from
-    // validate(), or to let it throw an exception. In particular,
-    // in the 'date_out_of_range' case it would be nice to specify
-    // the current date and range.
-    std::string problem;
-    switch(invalid)
-        {
-        case 0:
-            {
-            // Do nothing.
-            }
-            break;
-        case secure_date::ill_formed_passkey:
-            {
-            problem =
-                "Passkey has unexpected length."
-                " Try reinstalling."
-                ;
-            }
-            break;
-        case secure_date::date_out_of_range:
-            {
-            problem =
-                "Current date is outside permitted range."
-                " Contact the home office."
-                ;
-            }
-            break;
-        case secure_date::md5sum_error:
-            {
-            problem =
-                "At least one file is missing, altered, or invalid."
-                " Try reinstalling."
-                ;
-            }
-            break;
-        case secure_date::incorrect_passkey:
-            {
-            problem =
-                "Passkey is incorrect for this version."
-                " Contact the home office."
-                ;
-            }
-            break;
-        default:
-            {
-            fatal_error()
-                << "Case '"
-                << invalid
-                << "' not found."
-                << LMI_FLUSH
-                ;
-            }
-        }
 
     // TODO ?? Instead of making this file depend on any gui, either
     // add an untrappable exit facility to 'alert.hpp', or return
     // a string.
     //
-    if(invalid)
+    if(!diagnostic_message.empty())
         {
         std::ostringstream msg;
         msg << "Passkey validation failed.";
         warning() << msg.str() << std::flush;
-        std::exit(invalid);
+        std::exit(EXIT_FAILURE);
         }
 }
 
@@ -126,7 +71,7 @@ like this, for situations that call for unconditional termination:
 #include <wx/log.h>
 
         wxSafeShowMessage
-            (problem.c_str()
+            (diagnostic_message.c_str()
             ,msg.str().c_str()
             );
         wxExit();

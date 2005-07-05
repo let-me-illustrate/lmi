@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: passkey_test.cpp,v 1.2 2005-01-31 13:12:48 chicares Exp $
+// $Id: passkey_test.cpp,v 1.3 2005-07-05 17:49:53 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -37,6 +37,8 @@
 #include <fstream>
 #include <ios>
 #include <string>
+
+// TODO ?? Add tests for diagnostics that aren't tested yet.
 
 char const coleridge[] =
     "It is an ancient Mariner,\n"
@@ -101,7 +103,8 @@ int test_main(int, char*[])
     std::fclose(in);
     BOOST_TEST(0 == std::memcmp(expected, result, sizeof expected));
 
-     // Ensure 'md5sum' program is available.
+    // Ensure 'md5sum' program is available.
+    std::cout << "  Checking for 'md5sum':" << std::endl;
     BOOST_TEST(0 == system_command("md5sum --version"));
 
     // For production, we'll provide a file 'validated.md5' with md5
@@ -130,9 +133,9 @@ int test_main(int, char*[])
 
     // Test with no passkey file. This is intended to fail.
     calendar_date candidate;
-    BOOST_TEST
-        (  secure_date::ill_formed_passkey
-        == secure_date::instance()->validate(candidate)
+    BOOST_TEST_EQUAL
+        ("Unable to read passkey file 'passkey'. Try reinstalling."
+        ,secure_date::instance()->validate(candidate)
         );
 
     {
@@ -151,9 +154,9 @@ int test_main(int, char*[])
     // Test with default dates, which are used if file 'expiry' fails
     // to exist, e.g. because it was deliberately deleted. This is
     // intended to fail.
-    BOOST_TEST
-        (  secure_date::date_out_of_range
-        == secure_date::instance()->validate(candidate)
+    BOOST_TEST_EQUAL
+        ("Unable to read expiry file 'expiry'. Try reinstalling."
+        ,secure_date::instance()->validate(candidate)
         );
 
     // Test with real dates. The current millenium began on 20010101,
@@ -167,23 +170,27 @@ int test_main(int, char*[])
 
     // The first day of the valid period should work.
     candidate.julian_day_number(millenium);
-    BOOST_TEST(!secure_date::instance()->validate(candidate));
+    BOOST_TEST_EQUAL("", secure_date::instance()->validate(candidate));
     // Repeat the test: stepping through the called function with a
     // debugger should show an early exit because the date was cached.
-    BOOST_TEST(!secure_date::instance()->validate(candidate));
+    BOOST_TEST_EQUAL("", secure_date::instance()->validate(candidate));
     // The last day of the valid period should work.
     candidate.julian_day_number(millenium + 1);
-    BOOST_TEST(!secure_date::instance()->validate(candidate));
+    BOOST_TEST_EQUAL("", secure_date::instance()->validate(candidate));
     // Test one day before the period, and one day after.
     candidate.julian_day_number(millenium - 1);
-    BOOST_TEST
-        (  secure_date::date_out_of_range
-        == secure_date::instance()->validate(candidate)
+    BOOST_TEST_EQUAL
+        ("Current date '2000-12-30' is invalid:"
+        " this system cannot be used before '2000-12-31'."
+        " Contact the home office."
+        ,secure_date::instance()->validate(candidate)
         );
     candidate.julian_day_number(millenium + 2);
-    BOOST_TEST
-        (  secure_date::date_out_of_range
-        == secure_date::instance()->validate(candidate)
+    BOOST_TEST_EQUAL
+        ("Current date '2001-1-2' is invalid:"
+        " this system expired on '2001-1-2'."
+        " Contact the home office."
+        ,secure_date::instance()->validate(candidate)
         );
 
     // Test with incorrect passkey. This is intended to fail--but see below.
@@ -200,11 +207,11 @@ int test_main(int, char*[])
     }
     // But it shouldn't fail if the date was previously cached as valid.
     candidate.julian_day_number(millenium + 1);
-    BOOST_TEST(!secure_date::instance()->validate(candidate));
+    BOOST_TEST_EQUAL("", secure_date::instance()->validate(candidate));
     candidate.julian_day_number(millenium);
-    BOOST_TEST
-        (  secure_date::incorrect_passkey
-        == secure_date::instance()->validate(candidate)
+    BOOST_TEST_EQUAL
+        ("Passkey is incorrect for this version. Contact the home office."
+        ,secure_date::instance()->validate(candidate)
         );
 
     // Test with altered data file. This is intended to fail.
@@ -218,9 +225,10 @@ int test_main(int, char*[])
     BOOST_TEST(!!os);
     os << "This file has the wrong md5sum.";
     }
-    BOOST_TEST
-        (  secure_date::md5sum_error
-        == secure_date::instance()->validate(candidate)
+    BOOST_TEST_EQUAL
+        ("At least one required file is missing, altered, or invalid. "
+        "Try reinstalling."
+        ,secure_date::instance()->validate(candidate)
         );
 
     BOOST_TEST(0 == std::remove("expiry"));
