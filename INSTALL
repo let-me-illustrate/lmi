@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: INSTALL,v 1.5 2005-07-01 12:30:20 wboutin Exp $
+// $Id: INSTALL,v 1.6 2005-07-05 17:42:58 wboutin Exp $
 
 [This version says only how to install and patch the required version
 of cgicc and xmlwrapp, and how to install the required version of boost.
@@ -249,5 +249,4 @@ binary they already have. At any rate, we mustn't write
 in platform-independent installation instructions: it should say only
   /tmp[0]$patch ...
 
-We can do that, but should it always be noted in this file? 
-
+We can do that, but should it always be noted in this file?
