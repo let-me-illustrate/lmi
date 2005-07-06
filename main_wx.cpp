@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_wx.cpp,v 1.14 2005-07-05 17:49:53 chicares Exp $
+// $Id: main_wx.cpp,v 1.15 2005-07-06 00:48:24 chicares Exp $
 
 // Portions of this file are derived from wxWindows files
 //   samples/docvwmdi/docview.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -349,6 +349,7 @@ void process_command_line(int argc, char* argv[])
         }
 }
 
+// TODO ?? This largely duplicates function validate_security(). Refactor.
 bool security_validated(bool skip_validation)
 {
     if(skip_validation)

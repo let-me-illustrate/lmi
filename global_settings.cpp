@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: global_settings.cpp,v 1.8 2005-06-23 15:22:04 chicares Exp $
+// $Id: global_settings.cpp,v 1.9 2005-07-06 00:48:24 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -29,7 +29,6 @@
 #include "global_settings.hpp"
 
 #include <boost/filesystem/exception.hpp>
-#include <boost/filesystem/path.hpp>
 #include <boost/filesystem/operations.hpp>
 
 #include <sstream>
@@ -186,12 +185,12 @@ bool global_settings::regression_testing() const
     return regression_testing_;
 }
 
-std::string const& global_settings::data_directory() const
+fs::path const& global_settings::data_directory() const
 {
     return data_directory_;
 }
 
-std::string const& global_settings::regression_test_directory() const
+fs::path const& global_settings::regression_test_directory() const
 {
     return regression_test_directory_;
 }

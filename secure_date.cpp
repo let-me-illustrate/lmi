@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: secure_date.cpp,v 1.3 2005-07-05 17:49:53 chicares Exp $
+// $Id: secure_date.cpp,v 1.4 2005-07-06 00:48:24 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -33,9 +33,10 @@
 #include "platform_dependent.hpp" // chdir()
 #include "system_command.hpp"
 
+#include <boost/filesystem/fstream.hpp>
+
 #include <cstdio>
 #include <cstring>
-#include <fstream>
 #include <iomanip>
 #include <memory>
 #include <sstream>
@@ -76,7 +77,7 @@ secure_date::secure_date()
 //============================================================================
 std::string secure_date::validate
     (calendar_date const& candidate
-    ,std::string const& path
+    ,fs::path const&      path
     )
 {
     // The date last validated is valid unless it's JDN zero.
@@ -98,12 +99,13 @@ std::string secure_date::validate
     // Read saved passkey from file.
     std::string passkey;
     {
-    std::ifstream is((path + "passkey").c_str());
+    fs::path passkey_path(path / "passkey");
+    fs::ifstream is(passkey_path);
     if(!is)
         {
         oss
             << "Unable to read passkey file '"
-            << path + "passkey"
+            << passkey_path.string()
             << "'. Try reinstalling."
             ;
         return oss.str();
@@ -114,7 +116,7 @@ std::string secure_date::validate
         {
         oss
             << "Error reading passkey file '"
-            << path + "passkey"
+            << passkey_path.string()
             << "'. Try reinstalling."
             ;
         return oss.str();
@@ -131,8 +133,6 @@ std::string secure_date::validate
             << chars_per_formatted_hex_byte * md5len
             << ". Try reinstalling."
             ;
-        oss << "'" << path << "' = path\n";
-        oss << "'" << path + "passkey" << "' = path + passkey\n";
         return oss.str();
         }
     }
@@ -141,12 +141,13 @@ std::string secure_date::validate
     calendar_date begin;
     calendar_date end;
     {
-    std::ifstream is((path + "expiry").c_str());
+    fs::path expiry_path(path / "expiry");
+    fs::ifstream is(expiry_path);
     if(!is)
         {
         oss
             << "Unable to read expiry file '"
-            << path + "expiry"
+            << expiry_path.string()
             << "'. Try reinstalling."
             ;
         return oss.str();
@@ -157,7 +158,7 @@ std::string secure_date::validate
         {
         oss
             << "Error reading expiry file '"
-            << path + "expiry"
+            << expiry_path.string()
             << "'. Try reinstalling."
             ;
         return oss.str();
@@ -189,7 +190,7 @@ std::string secure_date::validate
         }
 
     // Validate all data files.
-    chdir(path.c_str());
+    chdir(path.string().c_str());
     if(system_command("md5sum --check --status validated.md5"))
         {
         oss
@@ -208,7 +209,7 @@ std::string secure_date::validate
     char c_passkey[md5len];
     unsigned char u_passkey[md5len];
     FILE* md5sums_file = std::fopen
-        ((path + "validated.md5").c_str()
+        ((path / "validated.md5").string().c_str()
         ,"rb"
         );
     md5_stream(md5sums_file, u_passkey);
