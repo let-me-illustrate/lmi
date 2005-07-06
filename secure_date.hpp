@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: secure_date.hpp,v 1.3 2005-07-05 17:49:53 chicares Exp $
+// $Id: secure_date.hpp,v 1.4 2005-07-06 00:48:24 chicares Exp $
 
 #ifndef secure_date_hpp
 #define secure_date_hpp
@@ -30,6 +30,7 @@
 #include "expimp.hpp"
 #include "obstruct_slicing.hpp"
 
+#include <boost/filesystem/path.hpp>
 #include <boost/static_assert.hpp>
 #include <boost/utility.hpp>
 
@@ -51,7 +52,7 @@ class LMI_EXPIMP secure_date
     static secure_date* instance();
     static std::string validate
         (calendar_date const& candidate
-        ,std::string const& path = ""
+        ,fs::path const&      path
         );
 
   private:

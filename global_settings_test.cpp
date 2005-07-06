@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: global_settings_test.cpp,v 1.3 2005-06-21 23:48:46 chicares Exp $
+// $Id: global_settings_test.cpp,v 1.4 2005-07-06 00:48:24 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -89,7 +89,7 @@ int test_main(int, char*[])
     // operations tested here must not throw.
 
     global_settings::instance().set_data_directory
-        (global_settings::instance().data_directory()
+        (global_settings::instance().data_directory().string()
         );
 
     fs::path path(global_settings::instance().data_directory());
