@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.81 2005-07-05 17:42:58 wboutin Exp $
+// $Id: ChangeLog,v 1.82 2005-07-06 00:54:44 chicares Exp $
 
 2005-01-14
 
@@ -2577,10 +2577,36 @@ Add experimental facility to set up build environment.
   INSTALL
 Improve installation instructions.
 
-2005-07-05 [1293]
+2005-07-05 [1287]
 
-20050705T1729Z <wboutin@massmutual.com>
+20050705T1726Z <chicares@cox.net>
+
+  ledger_invariant.cpp
+Use last cell's 'TotalIMF' for composite.
+
+20050705T1743Z <wboutin@massmutual.com>
 
   INSTALL
   xml_notebook_private_placement.xrc
 Improve conformance.
+
+20050705T1750Z <chicares@cox.net>
+
+  main_wx.cpp
+  passkey_test.cpp
+  secure_date.cpp
+  secure_date.hpp
+  security.cpp
+Improve passkey diagnostics.
+
+20050706T0048Z <chicares@cox.net>
+
+  global_settings.cpp
+  global_settings.hpp
+  global_settings_test.cpp
+  main_wx.cpp
+  objects.make
+  secure_date.cpp
+  secure_date.hpp
+Change type of global_settings data members representing directories.
+
