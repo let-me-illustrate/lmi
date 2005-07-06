@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.82 2005-07-06 00:54:44 chicares Exp $
+// $Id: ChangeLog,v 1.83 2005-07-06 14:40:53 chicares Exp $
 
 2005-01-14
 
@@ -2609,4 +2609,10 @@ Improve passkey diagnostics.
   secure_date.cpp
   secure_date.hpp
 Change type of global_settings data members representing directories.
+
+20050706T1438Z <chicares@cox.net>
+
+  objects.make
+  passkey_test.cpp
+Fix broken unit test.
 
