@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: objects.make,v 1.42 2005-06-21 14:57:23 chicares Exp $
+# $Id: objects.make,v 1.43 2005-07-06 00:48:24 chicares Exp $
 
 ################################################################################
 
@@ -645,6 +645,7 @@ elapsed_time$(EXEEXT): \
   timer.o \
 
 generate_passkey$(EXEEXT): \
+  $(boost_filesystem_objects) \
   $(main_cli_common_objects) \
   calendar_date.o \
   generate_passkey.o \

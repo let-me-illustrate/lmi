@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: global_settings.hpp,v 1.9 2005-06-23 15:22:04 chicares Exp $
+// $Id: global_settings.hpp,v 1.10 2005-07-06 00:48:24 chicares Exp $
 
 #ifndef global_settings_hpp
 #define global_settings_hpp
@@ -29,6 +29,7 @@
 #include "expimp.hpp"
 #include "obstruct_slicing.hpp"
 
+#include <boost/filesystem/path.hpp>
 #include <boost/utility.hpp>
 
 #include <string>
@@ -40,25 +41,32 @@
 ///
 /// Data members, in logical rather than alphabetical order:
 ///
-/// mellon: 'Home-office' password given--enable some fancy features.
+/// mellon_: 'Home-office' password given--enable some fancy features.
 /// (LOTR: 'pedo mellon a minno'.)
 ///
-/// ash_nazg: 'One password to rule them all' given--enable everything
+/// ash_nazg_: 'One password to rule them all' given--enable everything
 /// 'mellon' does (by forcing the latter member's value), along with
 /// other features--some of which may be experimental or perilous.
 /// (LOTR: 'ash nazg durbatulûk'.)
 ///
-/// custom_io_0: Special input and output facility for one customer.
+/// custom_io_0_: Special input and output facility for one customer.
 ///
-/// regression_testing: Enable special behaviors needed for regression
+/// regression_testing_: Enable special behaviors needed for regression
 /// testing. For instance, allow test cases to run even in states that
 /// haven't approved a product, because it is important to test new
 /// products before approval.
 ///
-/// data_directory: Path to data files.
+/// data_directory_: Path to data files.
 ///
-/// regression_test_directory: Path for regression-testing input and
+/// regression_test_directory_: Path for regression-testing input and
 /// output.
+///
+/// Directory members, whose names end in 'directory_', are stored as
+/// filesystem path objects because that is their nature. They are
+/// accessed as such in order to make misuse more difficult. But they
+/// are set from std::string objects, because that is a natural way to
+/// store them e.g. in xml files, and because that enables 'set_'
+/// functions to validate their arguments.
 
 class LMI_EXPIMP global_settings
     :private boost::noncopyable
@@ -74,12 +82,12 @@ class LMI_EXPIMP global_settings
     void set_data_directory           (std::string const&);
     void set_regression_test_directory(std::string const&);
 
-    bool               mellon                   () const;
-    bool               ash_nazg                 () const;
-    bool               custom_io_0              () const;
-    bool               regression_testing       () const;
-    std::string const& data_directory           () const;
-    std::string const& regression_test_directory() const;
+    bool            mellon                   () const;
+    bool            ash_nazg                 () const;
+    bool            custom_io_0              () const;
+    bool            regression_testing       () const;
+    fs::path const& data_directory           () const;
+    fs::path const& regression_test_directory() const;
 
   private:
     global_settings();
@@ -88,8 +96,8 @@ class LMI_EXPIMP global_settings
     bool ash_nazg_;
     bool custom_io_0_;
     bool regression_testing_;
-    std::string data_directory_;
-    std::string regression_test_directory_;
+    fs::path data_directory_;
+    fs::path regression_test_directory_;
 
 #ifdef __BORLANDC__
 // COMPILER !! Borland compilers defectively [11/5] require a public dtor; see:
