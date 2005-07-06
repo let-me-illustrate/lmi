@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: passkey_test.cpp,v 1.3 2005-07-05 17:49:53 chicares Exp $
+// $Id: passkey_test.cpp,v 1.4 2005-07-06 14:40:54 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -131,11 +131,13 @@ int test_main(int, char*[])
     std::memcpy(c_passkey, u_passkey, md5len);
     md5_buffer(c_passkey, md5len, u_passkey);
 
+    fs::path pwd(".");
+
     // Test with no passkey file. This is intended to fail.
     calendar_date candidate;
     BOOST_TEST_EQUAL
         ("Unable to read passkey file 'passkey'. Try reinstalling."
-        ,secure_date::instance()->validate(candidate)
+        ,secure_date::instance()->validate(candidate, pwd)
         );
 
     {
@@ -156,7 +158,7 @@ int test_main(int, char*[])
     // intended to fail.
     BOOST_TEST_EQUAL
         ("Unable to read expiry file 'expiry'. Try reinstalling."
-        ,secure_date::instance()->validate(candidate)
+        ,secure_date::instance()->validate(candidate, pwd)
         );
 
     // Test with real dates. The current millenium began on 20010101,
@@ -170,27 +172,27 @@ int test_main(int, char*[])
 
     // The first day of the valid period should work.
     candidate.julian_day_number(millenium);
-    BOOST_TEST_EQUAL("", secure_date::instance()->validate(candidate));
+    BOOST_TEST_EQUAL("", secure_date::instance()->validate(candidate, pwd));
     // Repeat the test: stepping through the called function with a
     // debugger should show an early exit because the date was cached.
-    BOOST_TEST_EQUAL("", secure_date::instance()->validate(candidate));
+    BOOST_TEST_EQUAL("", secure_date::instance()->validate(candidate, pwd));
     // The last day of the valid period should work.
     candidate.julian_day_number(millenium + 1);
-    BOOST_TEST_EQUAL("", secure_date::instance()->validate(candidate));
+    BOOST_TEST_EQUAL("", secure_date::instance()->validate(candidate, pwd));
     // Test one day before the period, and one day after.
     candidate.julian_day_number(millenium - 1);
     BOOST_TEST_EQUAL
         ("Current date '2000-12-30' is invalid:"
         " this system cannot be used before '2000-12-31'."
         " Contact the home office."
-        ,secure_date::instance()->validate(candidate)
+        ,secure_date::instance()->validate(candidate, pwd)
         );
     candidate.julian_day_number(millenium + 2);
     BOOST_TEST_EQUAL
         ("Current date '2001-1-2' is invalid:"
         " this system expired on '2001-1-2'."
         " Contact the home office."
-        ,secure_date::instance()->validate(candidate)
+        ,secure_date::instance()->validate(candidate, pwd)
         );
 
     // Test with incorrect passkey. This is intended to fail--but see below.
@@ -207,11 +209,11 @@ int test_main(int, char*[])
     }
     // But it shouldn't fail if the date was previously cached as valid.
     candidate.julian_day_number(millenium + 1);
-    BOOST_TEST_EQUAL("", secure_date::instance()->validate(candidate));
+    BOOST_TEST_EQUAL("", secure_date::instance()->validate(candidate, pwd));
     candidate.julian_day_number(millenium);
     BOOST_TEST_EQUAL
         ("Passkey is incorrect for this version. Contact the home office."
-        ,secure_date::instance()->validate(candidate)
+        ,secure_date::instance()->validate(candidate, pwd)
         );
 
     // Test with altered data file. This is intended to fail.
@@ -228,7 +230,7 @@ int test_main(int, char*[])
     BOOST_TEST_EQUAL
         ("At least one required file is missing, altered, or invalid. "
         "Try reinstalling."
-        ,secure_date::instance()->validate(candidate)
+        ,secure_date::instance()->validate(candidate, pwd)
         );
 
     BOOST_TEST(0 == std::remove("expiry"));
