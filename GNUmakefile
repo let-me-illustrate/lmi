@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: GNUmakefile,v 1.22 2005-06-26 23:01:19 chicares Exp $
+# $Id: GNUmakefile,v 1.23 2005-07-08 14:26:52 chicares Exp $
 
 ###############################################################################
 
@@ -120,6 +120,37 @@ $(src_dir)/configuration.make:: ;
 
 ################################################################################
 
+# Pass customary flags to submakefiles if they're defined in the
+# environment. See these messages:
+#   http://lists.gnu.org/archive/html/help-make/2005-07/msg00023.html
+#   http://lists.gnu.org/archive/html/help-make/2005-07/msg00025.html
+
+ifeq "$(origin ARFLAGS)" "environment"
+  flags_to_pass_from_environment += ARFLAGS=$(ARFLAGS)
+endif
+
+ifeq "$(origin CFLAGS)" "environment"
+  flags_to_pass_from_environment += CFLAGS=$(CFLAGS)
+endif
+
+ifeq "$(origin CPPFLAGS)" "environment"
+  flags_to_pass_from_environment += CPPFLAGS=$(CPPFLAGS)
+endif
+
+ifeq "$(origin CXXFLAGS)" "environment"
+  flags_to_pass_from_environment += CXXFLAGS=$(CXXFLAGS)
+endif
+
+ifeq "$(origin LDFLAGS)" "environment"
+  flags_to_pass_from_environment += LDFLAGS=$(LDFLAGS)
+endif
+
+ifeq "$(origin RCFLAGS)" "environment"
+  flags_to_pass_from_environment += RCFLAGS=$(RCFLAGS)
+endif
+
+################################################################################
+
 # Multiple build directories.
 
 # $(build_type) distinguishes optimized 'ship' builds from 'mpatrol'
@@ -144,36 +175,12 @@ gpl_files := \
   quoted_gpl \
   quoted_gpl_html \
 
-# TODO ?? Ask the make maintainer why it's necessary to pass $(LDFLAGS)
-# etc. here. Testcase (run without passing $(LDFLAGS) here):
-#
-# /lmi/src/lmi[0]$export LDFLAGS="EXTRA_LDFLAG"
-# /lmi/src/lmi[0]$print $LDFLAGS
-# EXTRA_LDFLAG
-#
-# [unexpected:]
-# /lmi/src/lmi[0]$make show_flags |grep LDFLAGS
-# ALL_LDFLAGS = -L . -L C:/usr/local/lib -L C:/usr/local/bin   -lxml2_dll       -Wl,-Map,show_flags.map
-#
-# [unexpected:]
-# /lmi/src/lmi[0]$LDFLAGS="EXTRA_FLAG" make show_flags |grep LDFLAGS
-# ALL_LDFLAGS = -L . -L C:/usr/local/lib -L C:/usr/local/bin   -lxml2_dll       -Wl,-Map,show_flags.map
-#
-# [expected:]
-# /lmi/src/lmi[0]$make LDFLAGS="EXTRA_FLAG" show_flags |grep LDFLAGS
-# ALL_LDFLAGS = -L . -L C:/usr/local/lib -L C:/usr/local/bin   -lxml2_dll      EXTRA_FLAG
-
 MAKETARGET = \
   $(MAKE) \
     -C $@ \
     -f $(src_dir)/workhorse.make \
     --no-print-directory \
-                         ARFLAGS='$(ARFLAGS)' \
-                          CFLAGS='$(CFLAGS)' \
-                        CPPFLAGS='$(CPPFLAGS)' \
-                        CXXFLAGS='$(CXXFLAGS)' \
-                         LDFLAGS='$(LDFLAGS)' \
-                         RCFLAGS='$(RCFLAGS)' \
+    $(flags_to_pass_from_environment) \
                          src_dir='$(src_dir)' \
                       build_type='$(build_type)' \
                platform-makefile='$(platform-makefile)' \
