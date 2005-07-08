@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.83 2005-07-06 14:40:53 chicares Exp $
+// $Id: ChangeLog,v 1.84 2005-07-08 14:27:23 chicares Exp $
 
 2005-01-14
 
@@ -2615,4 +2615,9 @@ Change type of global_settings data members representing directories.
   objects.make
   passkey_test.cpp
 Fix broken unit test.
+
+20050708T1426Z <chicares@cox.net>
+
+  GNUmakefile
+Restore default options incorrectly overridden in version 1.21 .
 
