@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: path_utility.cpp,v 1.3 2005-05-01 00:50:28 chicares Exp $
+// $Id: path_utility.cpp,v 1.4 2005-07-10 04:15:03 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -85,7 +85,7 @@ fs::path serialized_file_path
 
 /// Create a unique file path, following input as closely as possible.
 ///
-/// Compose a file path from 'directory' and 'filename', changing its
+/// Create a file path from 'original_filepath', changing its
 /// extension, if any, to 'extension'. If the file path already exists,
 /// then try to remove it. If that fails, then try to make the file
 /// path unique by inserting a "YYYYMMDDTHHMMSSZ" timestamp before the
