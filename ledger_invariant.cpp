@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_invariant.cpp,v 1.7 2005-07-05 17:25:40 chicares Exp $
+// $Id: ledger_invariant.cpp,v 1.8 2005-07-10 12:42:00 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -447,6 +447,8 @@ void LedgerInvariant::Init(BasicValues* b)
             );
         }
 
+    // TODO ?? Instead, share code now in AccountValue::SetInitialValues()
+    // to avoid catastrophic cancellation.
     GenAcctAllocation = 1.0 - std::accumulate
         (FundAllocations.begin()
         ,FundAllocations.end()
