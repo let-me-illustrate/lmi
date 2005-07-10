@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.84 2005-07-08 14:27:23 chicares Exp $
+// $Id: ChangeLog,v 1.85 2005-07-10 04:16:16 chicares Exp $
 
 2005-01-14
 
@@ -2620,4 +2620,15 @@ Fix broken unit test.
 
   GNUmakefile
 Restore default options incorrectly overridden in version 1.21 .
+
+2005-07-10 [1286]
+
+20050710T0414Z <chicares@cox.net>
+
+  path_utility.cpp
+Improve documentation.
+
+  ledger_xsl.cpp
+Force portable filename for printing, to work around problems observed
+with apache fop.
 
