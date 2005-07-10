@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xsl.cpp,v 1.6 2005-05-03 01:20:59 chicares Exp $
+// $Id: ledger_xsl.cpp,v 1.7 2005-07-10 04:16:16 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -70,7 +70,33 @@ std::string write_ledger_to_pdf
 {
     fs::path fo_dir(configurable_settings::instance().xsl_fo_directory());
 
-    fs::path xml_out_file = unique_filepath(fo_dir / filename, ".xml");
+    // Ensure that the output filename is portable. Apache fop rejects
+    // some names for '-xml' that it accepts for pdf output, without
+    // documenting what names it considers valid, so using the boost
+    // conventions here is just a guess. Nonportable names that apache
+    // fop accepts for pdf output seem not to work well with the most
+    // popular msw pdf viewer, at least in a msw 'dde conversation',
+    // so use a similar portable name for pdf output.
+    //
+    // SOMEDAY !! It might be nicer to transform a nonportable name to
+    // a portable one, preserving as many original characters as
+    // possible--for instance, by filtering out everything but
+    // [.-_A-Za-z0-9] and forbidding a terminal period '.'. OTOH, some
+    // users might find that more astonishing than the behavior
+    // implemented here.
+    //
+    // USER !! This filename change should be documented for users.
+    // Ultimately, for fop, the reason why their nonportable msw
+    // filenames must be transformed is that apache fop is java, and
+    // java is "portable".
+    //
+    std::string real_filename
+        (fs::portable_name(filename)
+        ?   filename
+        :   "output"
+        );
+
+    fs::path xml_out_file = unique_filepath(fo_dir / real_filename, ".xml");
 
     fs::ofstream ofs(xml_out_file, std::ios_base::out | std::ios_base::trunc);
     ledger.write(ofs);
@@ -78,8 +104,7 @@ std::string write_ledger_to_pdf
 
     fs::path xsl_file = xsl_filepath(ledger);
 
-    // TODO ?? Use xml_out_file as exemplar instead?
-    fs::path pdf_out_file = unique_filepath(fo_dir / filename, ".pdf");
+    fs::path pdf_out_file = unique_filepath(fo_dir / real_filename, ".pdf");
 
     std::ostringstream oss;
     oss
@@ -93,7 +118,7 @@ std::string write_ledger_to_pdf
 
     // TODO ?? Using apache fop on the msw platform, following the
     // procedure suggested at the apache website, this seems not to
-    // catch any problem--perhaps because they use a batch file that
+    // catch all problems--perhaps because they use a batch file that
     // eats the error code?
     if(rc)
         {
