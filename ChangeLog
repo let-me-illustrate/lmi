@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.85 2005-07-10 04:16:16 chicares Exp $
+// $Id: ChangeLog,v 1.86 2005-07-11 14:55:56 chicares Exp $
 
 2005-01-14
 
@@ -2621,14 +2621,30 @@ Fix broken unit test.
   GNUmakefile
 Restore default options incorrectly overridden in version 1.21 .
 
-2005-07-10 [1286]
-
-20050710T0414Z <chicares@cox.net>
+20050710T0414Z <chicares@cox.net> [1286]
 
   path_utility.cpp
 Improve documentation.
 
+20050710T1241Z <chicares@cox.net> [1286]
+
   ledger_xsl.cpp
 Force portable filename for printing, to work around problems observed
 with apache fop.
+
+  ledger_invariant.cpp
+Document a defect.
+
+20050711T1414Z <chicares@cox.net> [1288]
+
+  actuarial_table.cpp
+Improve diagnostics.
+
+  ihs_proddata.cpp
+  my_prod.cpp
+  my_rnd.cpp
+Make 'sample' product files less inconsistent. Formerly, these files
+differed materially depending on whether the source directory from
+which the makefile is invoked has a populated sibling /products/src/
+directory.
 
