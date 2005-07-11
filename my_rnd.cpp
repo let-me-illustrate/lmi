@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: my_rnd.cpp,v 1.1 2005-04-09 16:20:19 chicares Exp $
+// $Id: my_rnd.cpp,v 1.2 2005-07-11 14:15:52 chicares Exp $
 
 // This file is a template for embedding product-specific data. Doing
 // that creates a derived work covered by the GPL. But you may prefer
@@ -43,15 +43,20 @@
 
 #include "data_directory.hpp"
 
+// TODO ?? It would be better to call StreamableRoundingRules::WriteRndFiles()
+// here than to duplicate what it does. However, it would be better still
+// to use xml for all product data files.
+
 //============================================================================
 void StreamableRoundingRules::WriteProprietaryRndFiles()
 {
     // Sample policy form.
     StreamableRoundingRules sample;
+
     sample.round_specamt_         = round_to<double>(0, r_upward    );
     sample.round_death_benefit_   = round_to<double>(2, r_to_nearest);
     sample.round_naar_            = round_to<double>(2, r_to_nearest);
-    sample.round_coi_rate_        = round_to<double>(8, r_to_nearest);
+    sample.round_coi_rate_        = round_to<double>(8, r_downward  );
     sample.round_coi_charge_      = round_to<double>(2, r_to_nearest);
     sample.round_gross_premium_   = round_to<double>(2, r_to_nearest);
     sample.round_net_premium_     = round_to<double>(2, r_to_nearest);
@@ -61,7 +66,8 @@ void StreamableRoundingRules::WriteProprietaryRndFiles()
     sample.round_loan_            = round_to<double>(2, r_to_nearest);
     sample.round_corridor_factor_ = round_to<double>(2, r_to_nearest);
     sample.round_surrender_charge_= round_to<double>(2, r_to_nearest);
-    sample.round_irr_             = round_to<double>(5, r_downward);
+    sample.round_irr_             = round_to<double>(5, r_downward  );
+
     sample.Write(AddDataDir("sample.rnd"));
 
     // Another policy form....

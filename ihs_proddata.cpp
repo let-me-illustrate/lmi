@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_proddata.cpp,v 1.7 2005-05-27 10:37:06 chicares Exp $
+// $Id: ihs_proddata.cpp,v 1.8 2005-07-11 14:15:52 chicares Exp $
 
 // This class contains names of files containing a product's tables as well
 // as strings that are the same for all instances of that product.
@@ -213,44 +213,45 @@ void TProductData::WritePolFiles()
 {
     TProductData foo;
 
-    foo.DatabaseFilename       = "sample.db4";
-    foo.FundFilename           = "sample.fnd";
-    foo.CorridorFilename       = "sample";
-    foo.CurrCOIFilename        = "qx_cso";
-    foo.GuarCOIFilename        = "qx_cso";
-    foo.WPFilename             = "sample";
-    foo.ADDFilename            = "qx_ins";
-    foo.ChildRiderFilename     = "qx_ins";
-    foo.CurrSpouseRiderFilename= "qx_ins";
-    foo.GuarSpouseRiderFilename= "qx_ins";
-    foo.CurrTermFilename       = "qx_cso";
-    foo.GuarTermFilename       = "qx_cso";
-    foo.TableYFilename         = "qx_ins";
-    foo.PremTaxFilename        = "sample";
-    foo.TAMRA7PayFilename      = "sample";
-    foo.TgtPremFilename        = "sample";
-    foo.IRC7702Filename        = "qx_cso";
-    foo.Gam83Filename          = "qx_ann";
-    foo.RoundingFilename       = "sample.rnd";
-    foo.TierFilename           = "sample.tir";
-    foo.PolicyForm             = "UL32768-NY";
-    foo.PolicyMktgName         = "UL Supreme";
-    foo.PolicyLegalName  = "Flexible Premium Adjustable Life Insurance Policy";
-    foo.InsCoShortName         = "Superior Life";
-    foo.InsCoName              = "Superior Life Insurance Company";
-    foo.InsCoAddr              = "Superior, WI 12345";
-    foo.InsCoStreet            = "246 Main Street";
-    foo.InsCoPhone             = "(800) 555-1212";
-    foo.InsCoDomicile          = "WI";
-    foo.MainUnderwriter        = "Superior Securities";
-    foo.MainUnderwriterAddress = "246-M Main Street, Superior, WI 12345";
-    foo.CoUnderwriter          = "Superior Investors";
-    foo.CoUnderwriterAddress   = "246-C Main Street, Superior, WI 12345";
-    foo.AvName                 = "Account";
-    foo.CsvName                = "Cash Surrender";
-    foo.CsvHeaderName          = "Cash Surr";
-    foo.NoLapseProvisionName   = "No-lapse Provision";
-    foo.InterestDisclaimer     = "";
+    foo.CorridorFilename        = "sample";
+    foo.CurrCOIFilename         = "qx_cso";
+    foo.GuarCOIFilename         = "qx_cso";
+    foo.WPFilename              = "sample";
+    foo.ADDFilename             = "qx_ins";
+    foo.ChildRiderFilename      = "qx_ins";
+    foo.CurrSpouseRiderFilename = "qx_ins";
+    foo.GuarSpouseRiderFilename = "qx_ins";
+    foo.CurrTermFilename        = "qx_cso";
+    foo.GuarTermFilename        = "qx_cso";
+    foo.TableYFilename          = "qx_ins";
+    foo.PremTaxFilename         = "sample";
+    foo.TAMRA7PayFilename       = "sample";
+    foo.TgtPremFilename         = "sample";
+    foo.IRC7702Filename         = "qx_cso";
+    foo.Gam83Filename           = "qx_ann";
+    foo.PolicyForm              = "UL32768-NY";
+    foo.PolicyMktgName          = "UL Supreme";
+    foo.PolicyLegalName = "Flexible Premium Adjustable Life Insurance Policy";
+    foo.InsCoShortName          = "Superior Life";
+    foo.InsCoName               = "Superior Life Insurance Company";
+    foo.InsCoAddr               = "Superior, WI 12345";
+    foo.InsCoStreet             = "246 Main Street";
+    foo.InsCoPhone              = "(800) 555-1212";
+    foo.InsCoDomicile           = "WI";
+    foo.MainUnderwriter         = "Superior Securities";
+    foo.MainUnderwriterAddress  = "246-M Main Street, Superior, WI 12345";
+    foo.CoUnderwriter           = "Superior Investors";
+    foo.CoUnderwriterAddress    = "246-C Main Street, Superior, WI 12345";
+    foo.AvName                  = "Account";
+    foo.CsvName                 = "Cash Surrender";
+    foo.CsvHeaderName           = "Cash Surr";
+    foo.NoLapseProvisionName    = "No-lapse Provision";
+    foo.InterestDisclaimer      = "";
+
+    foo.DatabaseFilename = "sample.db4";
+    foo.FundFilename     = "sample.fnd";
+    foo.RoundingFilename = "sample.rnd";
+    foo.TierFilename     = "sample.tir";
 
     foo.Write(AddDataDir("sample.pol"));
 }
