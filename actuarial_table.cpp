@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: actuarial_table.cpp,v 1.8 2005-05-28 05:59:22 chicares Exp $
+// $Id: actuarial_table.cpp,v 1.9 2005-07-11 14:14:53 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -275,7 +275,11 @@ std::vector<double> actuarial_table
             {
             std::ostringstream oss;
             oss
-                << "Attempted to read "
+                << "Table "
+                << a_table_number
+                << " in file '"
+                << a_table_filename
+                << "': attempted to read "
                 << index_record_length
                 << " bytes, but got "
                 << index_ifs.gcount()
@@ -288,9 +292,13 @@ std::vector<double> actuarial_table
     if(table_offset == std::streampos(-1))
         {
         fatal_error()
-            << "Table offset '"
+            << "Table "
+            << a_table_number
+            << " in file '"
+            << a_table_filename
+            << "': offset "
             << table_offset
-            << "' is invalid."
+            << " is invalid."
             << LMI_FLUSH
             ;
         }
