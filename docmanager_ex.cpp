@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: docmanager_ex.cpp,v 1.4 2005-06-24 22:05:15 zeitlin Exp $
+// $Id: docmanager_ex.cpp,v 1.5 2005-07-12 01:15:03 chicares Exp $
 
 // This implementation is a derived work based on wxWindows code, viz.
 //   samples/printing/printing.cpp (C) 1995 Julian Smart
@@ -49,12 +49,12 @@
 #include <wx/msgdlg.h>
 #include <wx/printdlg.h>
 
-// TODO ?? Factor out class wxSingleChoicePopupMenu, and ask whether
-// wx would like to incorporate it into the library.
-
-// A wxGetSingleChoiceIndex alternative.
-// No distracting dialog frame.
-// No needless OK button--requires only a single click or keystroke.
+/// A wxGetSingleChoiceIndex alternative. No distracting dialog frame.
+/// No needless OK button--requires only a single click or keystroke.
+///
+/// Warning: the first character in 'title' (if specified) seems to
+/// become an accelerator, interfering with any menuitem that uses the
+/// same character as its own accelerator.
 
 class wxSingleChoicePopupMenu
     :public wxWindow
@@ -350,10 +350,7 @@ wxDocTemplate* DocManagerEx::SelectDocumentType
                             wxFindSuitableParent()
                           );
 */
-            int selection = wxSingleChoicePopupMenu
-                (strings
-                ,"Choose type"
-                ).Choose();
+            int selection = wxSingleChoicePopupMenu(strings).Choose();
 
             theTemplate = 0;
             if(-1 != selection)

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.86 2005-07-11 14:55:56 chicares Exp $
+// $Id: ChangeLog,v 1.87 2005-07-12 01:15:03 chicares Exp $
 
 2005-01-14
 
@@ -2647,4 +2647,14 @@ Make 'sample' product files less inconsistent. Formerly, these files
 differed materially depending on whether the source directory from
 which the makefile is invoked has a populated sibling /products/src/
 directory.
+
+20050712T0113Z <chicares@cox.net> [1287]
+
+  docmanager_ex.cpp
+Fix a defect that seems similar to #12345 but has a different cause.
+Making "Choose type" the actual title of the popup document-template
+menu caused it to interfere with the "Census" menuitem's keyboard
+accelerator. Prevent that by removing the title, which didn't really
+convey any information anyway. Document this oddity inline to warn
+future maintainers.
 
