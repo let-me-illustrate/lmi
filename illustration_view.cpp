@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustration_view.cpp,v 1.18 2005-06-15 05:05:04 chicares Exp $
+// $Id: illustration_view.cpp,v 1.19 2005-07-12 01:17:01 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -406,9 +406,16 @@ bool RunSpecialInputFileIfPresent(wxDocManager* dm)
             else
                 {
                 LMI_ASSERT(0 != dm);
+                std::string f
+                    (configurable_settings::instance().custom_output_filename()
+                    );
+                // Add '.ill' extension to force use of the correct
+                // document template, even if the filename didn't
+                // match it.
+                f += ".ill";
                 IllustrationView* illview = MakeNewIllustrationDocAndView
                     (dm
-                    ,configurable_settings::instance().custom_output_filename().c_str()
+                    ,f.c_str()
                     );
 
                 // It seems silly to perform this conversion here,
