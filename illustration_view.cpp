@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustration_view.cpp,v 1.19 2005-07-12 01:17:01 chicares Exp $
+// $Id: illustration_view.cpp,v 1.20 2005-07-12 01:26:34 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -357,9 +357,7 @@ IllustrationView* MakeNewIllustrationDocAndView
         return 0;
         }
 
-    // TODO ?? Why do we need both of these? [Neither seems effective.]
-    new_document->SetTitle(filename);
-    new_document->SetFilename(filename);
+    new_document->SetFilename(filename, true);
 
     new_document->Modify(false);
     new_document->SetDocumentSaved(true);

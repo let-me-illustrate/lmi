@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.88 2005-07-12 01:17:01 chicares Exp $
+// $Id: ChangeLog,v 1.89 2005-07-12 01:26:34 chicares Exp $
 
 2005-01-14
 
@@ -2658,6 +2658,13 @@ accelerator. Prevent that by removing the title, which didn't really
 convey any information anyway. Document this oddity inline to warn
 future maintainers.
 
+20050712T0117Z <chicares@cox.net> [1287]
+
   illustration_view.cpp
 Fix a defect: 'custom' input failed to work with GUI.
+
+20050712T0126Z <chicares@cox.net> [1286]
+
+  illustration_view.cpp
+Display intended title instead of 'Loading document...'.
 
