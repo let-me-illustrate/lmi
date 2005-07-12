@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_wx.cpp,v 1.15 2005-07-06 00:48:24 chicares Exp $
+// $Id: main_wx.cpp,v 1.16 2005-07-12 01:47:03 chicares Exp $
 
 // Portions of this file are derived from wxWindows files
 //   samples/docvwmdi/docview.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -378,6 +378,8 @@ lmi_wx_app::lmi_wx_app()
     ,doc_manager_ (0)
     ,frame_       (0)
 {
+    SetAppName("lmi");
+    SetVendorName("lmi");
 }
 
 lmi_wx_app::~lmi_wx_app()
