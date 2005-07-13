@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.90 2005-07-12 01:47:03 chicares Exp $
+// $Id: ChangeLog,v 1.91 2005-07-13 00:22:21 chicares Exp $
 
 2005-01-14
 
@@ -2673,6 +2673,12 @@ Display intended title instead of 'Loading document...'.
   main_wx.cpp
 Call SetAppName() and SetVendorName() explicitly in application ctor.
 This is recommended practice, but does not seem to have the hoped-for
-effect of forcing file history to be stored under an "lmi" key in the
+effect of forcing file history to be stored under an 'lmi' key in the
 msw registry.
+
+20050713T0020Z <chicares@cox.net> [1286]
+
+  main_wx.cpp
+Call wxConfigBase::Get() after SetAppName() and SetVendorName(). Now,
+file history is stored under an 'lmi' key in the msw registry.
 
