@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_wx.cpp,v 1.16 2005-07-12 01:47:03 chicares Exp $
+// $Id: main_wx.cpp,v 1.17 2005-07-13 00:22:21 chicares Exp $
 
 // Portions of this file are derived from wxWindows files
 //   samples/docvwmdi/docview.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -373,13 +373,23 @@ bool security_validated(bool skip_validation)
         }
 }
 
+// 'config_' can't be initialized in the initializer list, because
+// wxConfigBase::Get() must be called after SetAppName() and
+// SetVendorName(). Otherwise, the configuration object wouldn't
+// reflect the vendor and application name; on the msw platform,
+// for instance, that would prevent writing to an 'lmi' registry key.
+//
+// The application name contains 'wx' because it may someday become
+// desirable to maintain different configuration information in a
+// similar manner for other lmi user interfaces.
+
 lmi_wx_app::lmi_wx_app()
-    :config_      (wxConfigBase::Get())
-    ,doc_manager_ (0)
+    :doc_manager_ (0)
     ,frame_       (0)
 {
-    SetAppName("lmi");
+    SetAppName("lmi_wx");
     SetVendorName("lmi");
+    config_ = wxConfigBase::Get();
 }
 
 lmi_wx_app::~lmi_wx_app()
