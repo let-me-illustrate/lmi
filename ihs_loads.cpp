@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_loads.cpp,v 1.4 2005-06-18 21:19:58 zeitlin Exp $
+// $Id: ihs_loads.cpp,v 1.5 2005-07-15 12:40:59 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -236,21 +236,9 @@ void Loads::Init
                 }
             }
         }
-    else if(e_asset_charge_load_before_ded == database.Query(DB_AssetChargeType))
-        {
-// Authors of this block: GWC and JLM.
-        // EGREGIOUS_DEFECT This seems dubious everywhere it's used.
-        //
-        // TODO ?? JOE Since we don't cover this case, is an old product
-        // that used it wrong?
-        //
-        // It's problematic to give someone one version of the software for his
-        // old product, and another version for his new product. Or is
-        // everything OK, because the BOM load is a separate item?
-        }
     else if(e_asset_charge_spread == database.Query(DB_AssetChargeType))
         {
-        // do nothing
+        // Do nothing here: handle in interest-rate class instead.
         }
     else
         {

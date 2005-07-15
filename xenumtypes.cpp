@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xenumtypes.cpp,v 1.8 2005-05-29 16:49:07 chicares Exp $
+// $Id: xenumtypes.cpp,v 1.9 2005-07-15 12:40:59 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -253,9 +253,9 @@ template class xenum<enum_anticipated_deduction, 4>;
 template std::istream& operator>> (std::istream& is, xenum<enum_anticipated_deduction, 4>&);
 template std::ostream& operator<< (std::ostream& os, xenum<enum_anticipated_deduction, 4> const&);
 
-template class xenum<enum_asset_charge_type, 3>;
-template std::istream& operator>> (std::istream& is, xenum<enum_asset_charge_type, 3>&);
-template std::ostream& operator<< (std::ostream& os, xenum<enum_asset_charge_type, 3> const&);
+template class xenum<enum_asset_charge_type, 2>;
+template std::istream& operator>> (std::istream& is, xenum<enum_asset_charge_type, 2>&);
+template std::ostream& operator<< (std::ostream& os, xenum<enum_asset_charge_type, 2> const&);
 
 template class xenum<enum_part_mort_table, 1>;
 template std::istream& operator>> (std::istream& is, xenum<enum_part_mort_table, 1>&);
@@ -857,12 +857,10 @@ template<> char const*const e_anticipated_deduction::names[] =
 template<> enum_asset_charge_type const e_asset_charge_type::enumerators[] =
     {e_asset_charge_spread
     ,e_asset_charge_load_after_ded
-    ,e_asset_charge_load_before_ded
     };
 template<> char const*const e_asset_charge_type::names[] =
-    {"Asset charge assessed as spread"
-    ,"Asset charge assessed as load after monthly deduction"
-    ,"Asset charge assessed as load before monthly deduction"
+    {"Separate-account asset charge assessed as spread"
+    ,"Separate-account asset charge assessed as account-value load"
     };
 
 template<> enum_part_mort_table const e_part_mort_table::enumerators[] =
