@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.91 2005-07-13 00:22:21 chicares Exp $
+// $Id: ChangeLog,v 1.92 2005-07-15 12:42:03 chicares Exp $
 
 2005-01-14
 
@@ -2681,4 +2681,21 @@ msw registry.
   main_wx.cpp
 Call wxConfigBase::Get() after SetAppName() and SetVendorName(). Now,
 file history is stored under an 'lmi' key in the msw registry.
+
+20050715T1239Z <chicares@cox.net> [1284]
+
+  dbnames.xpp
+  ihs_loads.cpp
+  xenumtypes.cpp
+  xenumtypes.hpp
+Expunge unused enumerator 'e_asset_charge_load_before_ded'.
+
+  xml_notebook.xrc
+Clarify labels for extra loads and charges. These input fields had
+labeled as compensation, which is potentially confusing because the
+system doesn't generally calculate compensation. The asset-based
+charge applies only to separate-account assets, and it was potentially
+confusing not to specify that. Other input skins left unchanged for
+now because their users might already understand these issues and
+might prefer to think of these fields as associated with compensation.
 
