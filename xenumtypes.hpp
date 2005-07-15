@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xenumtypes.hpp,v 1.5 2005-05-29 16:49:07 chicares Exp $
+// $Id: xenumtypes.hpp,v 1.6 2005-07-15 12:40:59 chicares Exp $
 
 #ifndef xenumtypes_hpp
 #define xenumtypes_hpp
@@ -381,13 +381,11 @@ enum enum_anticipated_deduction
     };
 typedef xenum<enum_anticipated_deduction, 4> e_anticipated_deduction;
 
-// TODO ?? This is used in a convoluted way that's probably incorrect.
 enum enum_asset_charge_type
     {e_asset_charge_spread
     ,e_asset_charge_load_after_ded
-    ,e_asset_charge_load_before_ded
     };
-typedef xenum<enum_asset_charge_type, 3> e_asset_charge_type;
+typedef xenum<enum_asset_charge_type, 2> e_asset_charge_type;
 
 enum enum_part_mort_table
     {e_default_part_mort_table
