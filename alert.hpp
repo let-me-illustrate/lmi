@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: alert.hpp,v 1.3 2005-02-28 12:58:01 chicares Exp $
+// $Id: alert.hpp,v 1.4 2005-07-16 22:51:30 chicares Exp $
 
 #ifndef alert_hpp
 #define alert_hpp
@@ -158,6 +158,12 @@ bool LMI_EXPIMP set_alert_functions
 // Ask whether to continue or abort when Hobson's choice is offered.
 // Making this a function eliminates duplication and ensures that the
 // question is always posed in the same terms.
+//
+// TODO ?? Sometimes it is inappropriate to ask a question and wait
+// for a response. For unit tests, failure semantics would probably be
+// more appropriate; without such an option, unit tests that would
+// require intervention just won't be written. A server application
+// probably should fail and write a message in a log file.
 
 std::string const& LMI_EXPIMP hobsons_prompt();
 std::ostream& LMI_EXPIMP hobsons_prompt(std::ostream&);
