@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xenum.cpp,v 1.2 2005-05-26 22:01:15 chicares Exp $
+// $Id: xenum.cpp,v 1.3 2005-07-16 22:51:04 chicares Exp $
 
 // Definitions for template class xenum.
 
@@ -133,6 +133,7 @@ std::string const& xenum<EnumType, N>::str() const
             << "' out of range for type '"
             << typeid(EnumType).name()
             << "'."
+            << LMI_FLUSH
             ;
         return all_strings()[0];
         }
@@ -193,6 +194,7 @@ void xenum<EnumType, N>::set_value(std::string const& s)
             << "' out of range for type '"
             << typeid(EnumType).name()
             << "'."
+            << LMI_FLUSH
             ;
         representation = enumerators[0];
         }
