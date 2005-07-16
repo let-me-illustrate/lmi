@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xenum_test.cpp,v 1.2 2005-05-26 22:01:15 chicares Exp $
+// $Id: xenum_test.cpp,v 1.3 2005-07-16 22:52:00 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -136,6 +136,9 @@ int test_main(int, char*[])
         return_value = 0;
         }
 #else // not RESUMPTION_SEMANTICS_SUPPRESSED_AND_TERMINATION_SEMANTICS_RESTORED
+// TODO ?? There is no test of failure behavior here. It actually was
+// incorrect as of 2004-01-15, and the problem was not detected until
+// 2005-07-16.
     return_value = 0;
 #endif // not RESUMPTION_SEMANTICS_SUPPRESSED_AND_TERMINATION_SEMANTICS_RESTORED
 
