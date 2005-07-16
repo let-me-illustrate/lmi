@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: alert_wx.cpp,v 1.1 2005-03-11 03:19:31 chicares Exp $
+// $Id: alert_wx.cpp,v 1.2 2005-07-16 22:51:44 chicares Exp $
 
 // TODO ?? Once this facility is tested, consider using it widely,
 // perhaps instead of using wx's logging classes directly at all.
@@ -46,6 +46,20 @@ namespace
         ,hobsons_choice_alert
         ,fatal_error_alert
         );
+
+#if 0
+    // Alert messages could be lost if they're flushed before wx has
+    // initialized its logging facility. Here is an untested idea for
+    // a function that could be called prior to each use of that
+    // facility in this file.
+    void show_safely_if_log_uninitialized(std::string const& s)
+        {
+        if(0 == wxLog::GetActiveTarget())
+            {
+            wxSafeShowMessage("Error before GUI initialized", s.c_str());
+            }
+        }
+#endif // 0
 } // Unnamed namespace.
 
 void status_alert(std::string const& s)
