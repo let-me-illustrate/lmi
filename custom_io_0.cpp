@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: custom_io_0.cpp,v 1.8 2005-06-23 14:28:38 chicares Exp $
+// $Id: custom_io_0.cpp,v 1.9 2005-07-16 22:51:30 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -61,6 +61,13 @@ bool DoesSpecialInputFileExist()
         ,F_OK
         );
 }
+
+/// Set custom input from a particular file.
+///
+/// Normally, the filename is a constant string governed by the
+/// configurable_settings singleton. For regression testing, it's
+/// convenient to let it be overridden; copying each test file in turn
+/// to the filename normally expected would seem less tasteful.
 
 //==============================================================================
 bool SetSpecialInput(IllusInputParms& ip, char const* overridden_filename)
@@ -151,7 +158,20 @@ bool SetSpecialInput(IllusInputParms& ip, char const* overridden_filename)
         }
 
     ip.InsdState                = n_v_pairs.string_value("ApplicantState");
-    ip.SponsorState = ip.InsdState;
+    ip.SponsorState             = ip.InsdState;
+    // TRICKY !! This is probably unnecessary, but if so, it's because
+    // of some kludge that works around the problem. 'InsdState' and
+    // 'SponsorState' should not exist; only 'StateOfJurisdiction'
+    // should. Therefore, when that felicitous state of affairs is
+    // brought about, the following line (which is perhaps redundant
+    // today) will do the right thing, and the preceding two lines
+    // can be deleted. The customer's name 'ApplicantState' would seem
+    // to correspond to correspond better to lmi's 'InsdState', but
+    // that's a red herring: the customer gives only two states, one
+    // for "Applicant" and one for "Agent", but none for "Corporation"
+    // that would correspond to 'SponsorState', and our intention is
+    // to make lmi correspond to that paradigm anyway, someday.
+    ip.StateOfJurisdiction      = ip.InsdState;
 
 // Not yet used, but might be wanted someday:
 // PaymentsPerYear=1
