@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_loads.cpp,v 1.5 2005-07-15 12:40:59 chicares Exp $
+// $Id: ihs_loads.cpp,v 1.6 2005-07-18 16:25:08 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -44,67 +44,70 @@
 #include <cmath>     // std::pow()
 #include <functional>
 
-class load_details
+struct load_details
 {
-  public:
     load_details
-        (bool                       a_AmortizePremLoad
-        ,double                     a_LowestPremTaxRate
-        ,round_to<double>    const& a_round_interest_rate
-        ,std::vector<double> const& a_VectorExtraCompLoad
-        ,std::vector<double> const& a_VectorExtraAssetComp
-        ,std::vector<double> const& a_VectorExtraPolFee
+        (int                        length
+        ,bool                       AmortizePremLoad
+        ,double                     LowestPremTaxRate
+        ,double                     premium_tax_rate
+        ,double                     premium_tax_amortization_rate
+        ,double                     premium_tax_amortization_period
+        ,double                     asset_charge_type
+        ,double                     ledger_type
+        ,round_to<double>    const& round_interest_rate
+        ,std::vector<double> const& VectorExtraCompLoad
+        ,std::vector<double> const& VectorExtraAssetComp
+        ,std::vector<double> const& VectorExtraPolFee
         )
-        :AmortizePremLoad     (a_AmortizePremLoad)
-        ,LowestPremTaxRate    (a_LowestPremTaxRate)
-        ,round_interest_rate      (a_round_interest_rate)
-        ,VectorExtraCompLoad  (a_VectorExtraCompLoad)
-        ,VectorExtraAssetComp (a_VectorExtraAssetComp)
-        ,VectorExtraPolFee    (a_VectorExtraPolFee)
+        :length_                          (length)
+        ,AmortizePremLoad_                (AmortizePremLoad)
+        ,LowestPremTaxRate_               (LowestPremTaxRate)
+        ,premium_tax_rate_                (premium_tax_rate)
+        ,premium_tax_amortization_rate_   (premium_tax_amortization_rate)
+        ,premium_tax_amortization_period_ (premium_tax_amortization_period)
+        ,asset_charge_type_               (asset_charge_type)
+        ,ledger_type_                     (ledger_type)
+        ,round_interest_rate_             (round_interest_rate)
+        ,VectorExtraCompLoad_             (VectorExtraCompLoad)
+        ,VectorExtraAssetComp_            (VectorExtraAssetComp)
+        ,VectorExtraPolFee_               (VectorExtraPolFee)
         {}
 
-    bool                       AmortizePremLoad;
-    double                     LowestPremTaxRate;
-    round_to<double>    const& round_interest_rate;
-    std::vector<double> const& VectorExtraCompLoad;
-    std::vector<double> const& VectorExtraAssetComp;
-    std::vector<double> const& VectorExtraPolFee;
+    int                        length_;
+    bool                       AmortizePremLoad_;
+    double                     LowestPremTaxRate_;
+    double                     premium_tax_rate_;
+    double                     premium_tax_amortization_rate_;
+    double                     premium_tax_amortization_period_;
+    double                     asset_charge_type_;
+    double                     ledger_type_;
+    round_to<double>    const& round_interest_rate_;
+    std::vector<double> const& VectorExtraCompLoad_;
+    std::vector<double> const& VectorExtraAssetComp_;
+    std::vector<double> const& VectorExtraPolFee_;
 };
 
 //============================================================================
 Loads::Loads(BasicValues& V)
 {
+    int length = V.GetLength();
+    LMI_ASSERT(length == V.Database_->length());
     load_details details
-        (V.Input_->AmortizePremLoad
+        (length
+        ,V.Input_->AmortizePremLoad
         ,V.GetLowestPremTaxRate()
+        ,V.Database_->Query(DB_PremTaxRate)
+        ,V.Database_->Query(DB_PmTxAmortIntRate)
+        ,V.Database_->Query(DB_PmTxAmortPeriod)
+        ,V.Database_->Query(DB_AssetChargeType)
+        ,V.Database_->Query(DB_LedgerType)
         ,V.GetRoundingRules().round_interest_rate()
         ,V.Input_->VectorAddonCompOnPremium
         ,V.Input_->VectorAddonCompOnAssets
         ,V.Input_->VectorAddonMonthlyCustodialFee
         );
     Init(*V.Database_, details);
-}
-
-//============================================================================
-Loads::Loads
-    (bool                       AmortizePremLoad
-    ,TDatabase           const& database
-    ,round_to<double>    const& round_interest_rate
-    ,std::vector<double> const& VectorExtraCompLoad
-    ,std::vector<double> const& VectorExtraAssetComp
-    ,std::vector<double> const& VectorExtraPolFee
-    ,double                     LowestPremTaxRate
-    )
-{
-    load_details details
-        (AmortizePremLoad
-        ,LowestPremTaxRate
-        ,round_interest_rate
-        ,VectorExtraCompLoad
-        ,VectorExtraAssetComp
-        ,VectorExtraPolFee
-        );
-    Init(database, details);
 }
 
 //============================================================================
@@ -125,29 +128,29 @@ void Loads::Init
     account_value_load_before_deduction_ .resize(n_illreg_bases);
     account_value_load_after_deduction_  .resize(n_illreg_bases);
 
-    int length = database.length();
     for(int j = e_currbasis; j < n_illreg_bases; j++)
         {
         // TODO ?? Consider skipping midpoint basis if unneeded.
-        monthly_policy_fee_                  [j].resize(length);
-        annual_policy_fee_                   [j].resize(length);
-        target_premium_load_                 [j].resize(length);
-        excess_premium_load_                 [j].resize(length);
-        target_sales_load_                   [j].resize(length);
-        excess_sales_load_                   [j].resize(length);
-        target_total_load_                   [j].resize(length);
-        excess_total_load_                   [j].resize(length);
-        specified_amount_load_               [j].resize(length);
-        account_value_load_before_deduction_ [j].resize(length);
-        account_value_load_after_deduction_  [j].resize(length);
+        monthly_policy_fee_                  [j].resize(details.length_);
+        annual_policy_fee_                   [j].resize(details.length_);
+        target_premium_load_                 [j].resize(details.length_);
+        excess_premium_load_                 [j].resize(details.length_);
+        target_sales_load_                   [j].resize(details.length_);
+        excess_sales_load_                   [j].resize(details.length_);
+        target_total_load_                   [j].resize(details.length_);
+        excess_total_load_                   [j].resize(details.length_);
+        specified_amount_load_               [j].resize(details.length_);
+        account_value_load_before_deduction_ [j].resize(details.length_);
+        account_value_load_after_deduction_  [j].resize(details.length_);
         }
-    target_premium_load_7702_excluding_premium_tax_.resize(length);
-    excess_premium_load_7702_excluding_premium_tax_.resize(length);
-    target_premium_load_7702_lowest_premium_tax_   .resize(length);
-    excess_premium_load_7702_lowest_premium_tax_   .resize(length);
-    premium_tax_load_                              .resize(length);
-    amortized_premium_tax_load_                    .resize(length);
-    dac_tax_load_                                  .resize(length);
+
+    target_premium_load_7702_excluding_premium_tax_.resize(details.length_);
+    excess_premium_load_7702_excluding_premium_tax_.resize(details.length_);
+    target_premium_load_7702_lowest_premium_tax_   .resize(details.length_);
+    excess_premium_load_7702_lowest_premium_tax_   .resize(details.length_);
+    premium_tax_load_                              .resize(details.length_);
+    amortized_premium_tax_load_                    .resize(details.length_);
+    dac_tax_load_                                  .resize(details.length_);
 
     database.Query(refundable_sales_load_proportion_, DB_PremRefund);
 
@@ -180,12 +183,14 @@ void Loads::Init
             }
         }
 
-    // Iff asset comp type is e_extra_comp_load_after_ded,
-    // then add in miscellaneous fund charge and input extra asset comp.
-    if(e_asset_charge_load_after_ded == database.Query(DB_AssetChargeType))
+    // Deduct input extra asset comp as an account-value load, iff
+    // database entity 'DB_AssetChargeType' has the value
+    // 'e_asset_charge_load_after_ded'; otherwise, reflect it
+    // elsewhere as an interest spread.
+    if(e_asset_charge_load_after_ded == details.asset_charge_type_)
         {
-        std::vector<double> miscellaneous_fund_charge;
-        database.Query(miscellaneous_fund_charge, DB_MiscFundCharge);
+        // TODO ?? Eradicate this.
+        std::vector<double> miscellaneous_fund_charge(details.length_, 0);
         std::vector<double>::iterator i;
         // TODO ?? JOE See note above.
         for(i = miscellaneous_fund_charge.begin(); i != miscellaneous_fund_charge.end(); ++i)
@@ -194,9 +199,7 @@ void Loads::Init
             *i = i_upper_12_over_12_from_i<double>()(*i);
             }
 
-        // get input extra asset comp, and put it on a monthly basis
-        //
-        std::vector<double> extra_asset_comp = details.VectorExtraAssetComp;
+        std::vector<double> extra_asset_comp = details.VectorExtraAssetComp_;
 
         std::transform
             (extra_asset_comp.begin()
@@ -232,11 +235,11 @@ void Loads::Init
                 ;++k
                 )
                 {
-                *k = details.round_interest_rate(*k);
+                *k = details.round_interest_rate_(*k);
                 }
             }
         }
-    else if(e_asset_charge_spread == database.Query(DB_AssetChargeType))
+    else if(e_asset_charge_spread == details.asset_charge_type_)
         {
         // Do nothing here: handle in interest-rate class instead.
         }
@@ -244,15 +247,15 @@ void Loads::Init
         {
         fatal_error()
             << "Case '"
-            << database.Query(DB_AssetChargeType)
+            << details.asset_charge_type_
             << "' not found."
             << LMI_FLUSH
             ;
         }
 
-    if(details.AmortizePremLoad)
+    if(details.AmortizePremLoad_)
         {
-        AmortizePremiumTax(database);
+        AmortizePremiumTax(details);
         }
     else
         {
@@ -280,7 +283,7 @@ void Loads::Init
         std::transform
             (target_sales_load_[j].begin()
             ,target_sales_load_[j].end()
-            ,details.VectorExtraCompLoad.begin()
+            ,details.VectorExtraCompLoad_.begin()
             ,target_sales_load_[j].begin()
             ,std::plus<double>()
             );
@@ -307,7 +310,7 @@ void Loads::Init
                 (target_premium_load_7702_lowest_premium_tax_.begin()
                 ,target_premium_load_7702_lowest_premium_tax_.end()
                 ,target_premium_load_7702_lowest_premium_tax_.begin()
-                ,std::bind2nd(std::plus<double>(), details.LowestPremTaxRate)
+                ,std::bind2nd(std::plus<double>(), details.LowestPremTaxRate_)
                 );
             }
         std::transform
@@ -321,7 +324,7 @@ void Loads::Init
         std::transform
             (excess_sales_load_[j].begin()
             ,excess_sales_load_[j].end()
-            ,details.VectorExtraCompLoad.begin()
+            ,details.VectorExtraCompLoad_.begin()
             ,excess_sales_load_[j].begin()
             ,std::plus<double>()
             );
@@ -348,7 +351,7 @@ void Loads::Init
                 (excess_premium_load_7702_lowest_premium_tax_.begin()
                 ,excess_premium_load_7702_lowest_premium_tax_.end()
                 ,excess_premium_load_7702_lowest_premium_tax_.begin()
-                ,std::bind2nd(std::plus<double>(), details.LowestPremTaxRate)
+                ,std::bind2nd(std::plus<double>(), details.LowestPremTaxRate_)
                 );
             }
         std::transform
@@ -360,7 +363,8 @@ void Loads::Init
             );
         }
 
-    // Add 'VectorExtraPolFee' to monthly policy fee on the current
+    // USER !! Explain this in user documentation.
+    // Add 'VectorExtraPolFee_' to monthly policy fee on the current
     // basis only. It's added only to the current-basis policy fee
     // because it represents an extra current charge constrained by
     // the difference between the guaranteed and the (otherwise)
@@ -371,11 +375,11 @@ void Loads::Init
     std::transform
         (monthly_policy_fee_[e_currbasis].begin()
         ,monthly_policy_fee_[e_currbasis].end()
-        ,details.VectorExtraPolFee.begin()
+        ,details.VectorExtraPolFee_.begin()
         ,monthly_policy_fee_[e_currbasis].begin()
         ,std::plus<double>()
         );
-    for(int j = 0; j < length; ++j)
+    for(int j = 0; j < details.length_; ++j)
         {
         if
             ( monthly_policy_fee_[e_guarbasis][j]
@@ -388,7 +392,7 @@ void Loads::Init
                 << ": current monthly policy fee "
                 << monthly_policy_fee_[e_currbasis][j]
                 << " (which includes a custodial fee of "
-                << details.VectorExtraPolFee[j]
+                << details.VectorExtraPolFee_[j]
                 << ") improperly exceeds guaranteed maximum of "
                 << monthly_policy_fee_[e_guarbasis][j]
                 << " so the illustration will be incorrect."
@@ -399,7 +403,7 @@ void Loads::Init
 
     // Calculate midpoint as mean of current and guaranteed.
     // A different average might be used instead.
-    if(is_subject_to_ill_reg(database.Query(DB_LedgerType)))
+    if(is_subject_to_ill_reg(details.ledger_type_))
         {
         std::transform
             (monthly_policy_fee_[e_guarbasis].begin()
@@ -482,45 +486,23 @@ void Loads::Init
 }
 
 //============================================================================
-// Premium tax amortization as dollar certain charge.
-// Charge is a function of amortization period and interest rate.
-// The interest rate is specified in the database and can differ
-// from all other interest rates.
+// Not implemented. The idea is to amortize premium tax as an
+// annuity-certain. Sketch:
 //
-// TODO ?? These preconditions should be asserted:
-//   For now, correct only for single premium paid annually
-//   For now, correct only for scalar amortization rates
-void Loads::AmortizePremiumTax(TDatabase const& database)
+// Test parameters for sanity.
+//
+// Calculate a monthly annuity factor, reflecting the amortization
+// rate and period.
+//
+// Apply the annuity factor to the appropriate charge: probably
+// the rate the state actually charges, though the product's
+// premium-tax load might be taken into account. It's also
+// conceivable to amortize DAC tax similarly.
+//
+// Store the result in 'amortized_premium_tax_load_'.
+//
+void Loads::AmortizePremiumTax(load_details const& details)
 {
-    int const period = static_cast<int>(
-        database.Query(DB_PmTxAmortPeriod)
-        );
-    double const i = database.Query(DB_PmTxAmortIntRate);
-    double z = 0.0;
-
-    if(0.0 != i)
-// TODO ?? What if 'i' is zero?
-        {
-// Authors of this block: GWC and JLM.
-        // TODO ?? Write a functor to do this.
-        double const u = 1.0 + i;
-        double const mly_annuity_factor =
-                i
-            /   ((1.0 - std::pow(u, -period)) * u)
-            *   d_upper_12_from_i<double>()(i)
-            /   (i / u)
-            ;
-
-        // JOE Now premium tax rate payable by ins co is distinct
-        // from premium tax load. I based this on the first, so
-        // you can zero out the second and still get this.
-        z =
-                database.Query(DB_PremTaxRate)
-            *   mly_annuity_factor
-            *   (1.0 / 12.0)    // monthly
-            ;
-        }
-
-    amortized_premium_tax_load_.assign(database.length(), z);
+    fatal_error() << "Premium-tax amortization not implemented." << LMI_FLUSH;
 }
 
