@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_acctval.cpp,v 1.29 2005-06-21 05:27:48 chicares Exp $
+// $Id: ihs_acctval.cpp,v 1.30 2005-07-18 03:33:46 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -1137,6 +1137,7 @@ void AccountValue::ApplyDynamicSepAcctLoadAMD(double assets)
     // TODO ?? JOE What is the meaning of DB_AssetChargeType?
     // You apparently use it to govern tiered comp (tiered file).
     //   [later note: also DB_MiscFundCharge]
+    //   [even later note: support for DB_MiscFundCharge withdrawn]
     // I had apparently used it to govern extra comp (input item).
     // Are you ignoring that input item altogether?
     // Or does the interest class truly take care of that?
