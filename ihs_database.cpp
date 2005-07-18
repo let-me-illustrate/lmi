@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_database.cpp,v 1.3 2005-07-18 03:33:46 chicares Exp $
+// $Id: ihs_database.cpp,v 1.4 2005-07-18 16:24:45 chicares Exp $
 
 // TODO ?? Should length_ be dynamically reset when IssueAge is?
 // TODO ?? Should State be dynamically reset?
@@ -172,7 +172,7 @@ void TDatabase::Init()
     length_ = static_cast<int>(*GetEntry(DB_EndtAge)[Idx]) - IssueAge;
     if(length_ <= 0)
         {
-        hobsons_choice() << "Endowment precedes issue age." << LMI_FLUSH;
+        hobsons_choice() << "Endowment age precedes issue age." << LMI_FLUSH;
         }
     ConstrainScalar(DB_EndtAge);
 
@@ -253,9 +253,18 @@ TDBValue const& TDatabase::GetEntry(int k) const
     dict_map::const_iterator p = dict.find(k);
     if(p == dict.end())
         {
-        // TODO ?? Report value of k too...
-        // and what do we fill the data with?
-        hobsons_choice() << "Value not found in database." << LMI_FLUSH;
+        std::string s("no name");
+        if(0 <= k && static_cast<unsigned int>(k) < GetDBNames().size())
+            {
+            s = GetDBNames()[k].ShortName;
+            }
+        hobsons_choice()
+            << "Database element "
+            << k
+            << " ('" << s << "')"
+            << " not found. The illustration will be incorrect."
+            << LMI_FLUSH
+            ;
         return *new TDBValue;
         }
     else
