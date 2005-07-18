@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: loads.hpp,v 1.1 2005-01-14 19:47:45 chicares Exp $
+// $Id: loads.hpp,v 1.2 2005-07-18 16:25:08 chicares Exp $
 
 #ifndef loads_hpp
 #define loads_hpp
@@ -40,15 +40,6 @@ class Loads
   public:
     Loads(TDatabase const&);
     Loads(BasicValues& values);
-    Loads
-        (bool                       AmortizePremLoad
-        ,TDatabase           const& Database
-        ,round_to<double>    const& round_interest_rate
-        ,std::vector<double> const& VectorExtraCompLoad
-        ,std::vector<double> const& VectorExtraAssetComp
-        ,std::vector<double> const& VectorExtraPolFee
-        ,double                     LowestPremTaxRate
-        );
 
     // Accessors for lmi branch.
     std::vector<double> const& monthly_policy_fee    (enum_basis) const;
@@ -91,7 +82,8 @@ class Loads
          (TDatabase const&
          ,load_details const&
          );
-    void AmortizePremiumTax(TDatabase const&);
+
+    void AmortizePremiumTax(load_details const& details);
 
     std::vector<double> refundable_sales_load_proportion_;
 
