@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.93 2005-07-16 22:53:51 chicares Exp $
+// $Id: ChangeLog,v 1.94 2005-07-18 03:33:46 chicares Exp $
 
 2005-01-14
 
@@ -2713,4 +2713,17 @@ Add a sketch of an idea that may be useful someday.
 
   xenum_test.cpp
 Document a defect.
+
+20050718T0332Z <chicares@cox.net> [1288]
+
+  dbnames.xpp
+  ihs_acctval.cpp
+  ihs_database.cpp
+  interest_rates.cpp
+  interest_rates.hpp
+Withdraw support for dubious database entity 'DB_MiscFundCharge'. It
+seems superfluous, and ancient comments suggested that different
+authors disagreed on its meaning, so its correctness could hardly
+be ascertained. Attempting to use it with a nonzero value produces a
+message suggesting a different approach.
 
