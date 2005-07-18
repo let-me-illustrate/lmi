@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: interest_rates.hpp,v 1.1 2005-01-14 19:47:45 chicares Exp $
+// $Id: interest_rates.hpp,v 1.2 2005-07-18 03:33:46 chicares Exp $
 
 #ifndef interest_rates_hpp
 #define interest_rates_hpp
@@ -251,7 +251,7 @@ class InterestRates
     std::vector<double> SepAcctFloor_;
     std::vector<double> Stabilizer_; // TODO ?? Obsolete?
     std::vector<double> AmortLoad_;
-    std::vector<double> MiscFundCharge_;
+    std::vector<double> ExtraSepAcctCharge_;
     std::vector<double> InvestmentManagementFee_;
     std::vector<double> MAndERate_[n_illreg_bases];
 

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: interest_rates.cpp,v 1.6 2005-04-29 18:51:34 chicares Exp $
+// $Id: interest_rates.cpp,v 1.7 2005-07-18 03:33:46 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -261,7 +261,7 @@ InterestRates::InterestRates(BasicValues const& v)
     ,SepAcctRateType_    (v.Input_->IntRateTypeSA)
     ,SepAcctSpreadMethod_(static_cast<enum_spread_method>(static_cast<int>(v.Database_->Query(DB_SepAcctSpreadMethod))))
     ,AmortLoad_          (Zero_)
-    ,MiscFundCharge_     (Zero_)
+    ,ExtraSepAcctCharge_ (Zero_)
     ,NeedLoanRates_      (true)
     ,LoanRateType_       (v.Input_->LoanRateType)
     ,NeedPrefLoanRates_  (v.Database_->Query(DB_AllowPrefLoan))
@@ -282,8 +282,8 @@ void InterestRates::Initialize(BasicValues const& v)
         ,v.Input_->GenAcctRate.end()
         ,std::back_inserter(GenAcctGrossRate_[e_currbasis])
         );
-    // TODO ?? At least for the lmi branch, the vector in the input
-    // class has an inappropriate size.
+    // TODO ?? At least for the antediluvian branch, the vector in
+    // the input class has an inappropriate size.
     GenAcctGrossRate_[e_currbasis].resize(Length_);
 
     // General-account interest bonus implemented only as a simple
@@ -311,8 +311,8 @@ void InterestRates::Initialize(BasicValues const& v)
         ,v.Input_->SepAcctRate.end()
         ,std::back_inserter(SepAcctGrossRate_[e_sep_acct_full])
         );
-    // TODO ?? At least for the lmi branch, the vector in the input
-    // class has an inappropriate size.
+    // TODO ?? At least for the antediluvian branch, the vector in
+    // the input class has an inappropriate size.
     SepAcctGrossRate_[e_sep_acct_full].resize(Length_);
 
     v.Database_->Query(MAndERate_[e_guarbasis], DB_GuarMandE            );
@@ -326,12 +326,23 @@ void InterestRates::Initialize(BasicValues const& v)
     // elsewhere as an account-value load.
     if(e_asset_charge_spread == v.Database_->Query(DB_AssetChargeType))
         {
-        v.Database_->Query(MiscFundCharge_, DB_MiscFundCharge);
+        // TODO ?? At least for the antediluvian branch, the vector in
+        // the input class has an inappropriate size. Truncating it
+        // with std::transform() here is far too tricky.
+        LMI_ASSERT
+            (   ExtraSepAcctCharge_.size()
+            ==  static_cast<unsigned int>(v.Database_->length())
+            );
+// Not reliably true:
+//        LMI_ASSERT
+//            (   ExtraSepAcctCharge_.size()
+//            ==  v.Input_->VectorAddonCompOnAssets.size()
+//            );
         std::transform
-            (MiscFundCharge_.begin()
-            ,MiscFundCharge_.end()
+            (ExtraSepAcctCharge_.begin()
+            ,ExtraSepAcctCharge_.end()
             ,v.Input_->VectorAddonCompOnAssets.begin()
-            ,MiscFundCharge_.begin()
+            ,ExtraSepAcctCharge_.begin()
             ,std::plus<double>()
             );
         }
@@ -506,8 +517,8 @@ void InterestRates::InitializeSeparateAccountRates()
 
     std::vector<double> miscellaneous_charges(Stabilizer_);
 // TODO ?? Replace these long lines with PETE expressions.
-    std::transform(miscellaneous_charges.begin(), miscellaneous_charges.end(), AmortLoad_     .begin(), miscellaneous_charges.begin(), std::plus<double>());
-    std::transform(miscellaneous_charges.begin(), miscellaneous_charges.end(), MiscFundCharge_.begin(), miscellaneous_charges.begin(), std::plus<double>());
+    std::transform(miscellaneous_charges.begin(), miscellaneous_charges.end(), AmortLoad_         .begin(), miscellaneous_charges.begin(), std::plus<double>());
+    std::transform(miscellaneous_charges.begin(), miscellaneous_charges.end(), ExtraSepAcctCharge_.begin(), miscellaneous_charges.begin(), std::plus<double>());
 
     std::vector<double> total_charges[n_illreg_bases];
     for(int j = e_currbasis; j < n_illreg_bases; j++)
@@ -777,8 +788,8 @@ void InterestRates::DynamicMlySepAcctRate
 {
 //    AnnualSepAcctIMFRate    += TieredInvestmentManagementFee_[year]; // TODO ?? BOGUS
     InvestmentManagementFee_[year] += AnnualSepAcctIMFRate;
-    AnnualSepAcctMiscChargeRate    += MiscFundCharge_               [year];
-    AnnualSepAcctSVRate            += Stabilizer_                   [year];
+    AnnualSepAcctMiscChargeRate    += ExtraSepAcctCharge_    [year];
+    AnnualSepAcctSVRate            += Stabilizer_            [year];
 // TODO ?? Reference argument 'AnnualSepAcctMandERate' is not modified.
 // Shouldn't it be?
 
