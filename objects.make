@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: objects.make,v 1.44 2005-07-06 14:40:54 chicares Exp $
+# $Id: objects.make,v 1.45 2005-07-19 13:09:50 chicares Exp $
 
 ################################################################################
 
@@ -170,6 +170,7 @@ common_common_objects := \
   ledger_xsl.o \
   ledgervalues.o \
   license.o \
+  loads.o \
   miscellany.o \
   multiple_cell_document.o \
   name_value_pairs.o \
@@ -205,7 +206,6 @@ antediluvian_common_objects := \
   dbdict.o \
   dbvalue.o \
   inputillus_term_rider.o \
-  loads.o \
   mortality_rates.o \
   solve.o \
 
@@ -230,7 +230,6 @@ lmi_common_objects := \
   ihs_inputillus_term_rider.o \
   ihs_irc7702.o \
   ihs_irc7702a.o \
-  ihs_loads.o \
   ihs_mortal.o \
   ihs_pios.o \
   ihs_proddata.o \
@@ -315,7 +314,6 @@ gps_objects := \
   ihs_dbvalue.o \
   ihs_fpios.o \
   ihs_funddata.o \
-  ihs_loads.o \
   ihs_mortal.o \
   ihs_pios.o \
   ihs_proddata.o \
@@ -323,6 +321,7 @@ gps_objects := \
   inputs.o \
   inputstatus.o \
   interest_rates.o \
+  loads.o \
   mathmisc.o \
   miscellany.o \
   outlay.o \
