@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xml_io.cpp,v 1.20 2005-06-21 05:27:48 chicares Exp $
+// $Id: ledger_xml_io.cpp,v 1.21 2005-07-19 21:47:41 chicares Exp $
 
 #include "config.hpp"
 
@@ -554,6 +554,7 @@ void Ledger::write(xml::node& x) const
     format_map["FundAllocations"                   ] = f3;
     format_map["MaleProportion"                    ] = f3;
     format_map["NonsmokerProportion"               ] = f3;
+    format_map["PartMortTableMult"                 ] = f3;
 
 // >
 // F4: scaled by 100, two decimals, with '%' at end:
@@ -584,7 +585,6 @@ void Ledger::write(xml::node& x) const
     format_map["MlyHoneymoonValueRate"             ] = f4;
     format_map["MlyPostHoneymoonRate"              ] = f4;
     format_map["MlySAIntRate"                      ] = f4;
-    format_map["PartMortTableMult"                 ] = f4;
     format_map["TotalIMF"                          ] = f4;
 // >
 // F0: zero decimals
