@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_invariant.cpp,v 1.8 2005-07-10 12:42:00 chicares Exp $
+// $Id: ledger_invariant.cpp,v 1.9 2005-07-19 21:47:15 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -822,6 +822,7 @@ LedgerInvariant& LedgerInvariant::PlusEq(LedgerInvariant const& a_Addend)
     SmokerDistinct              = a_Addend.SmokerDistinct;
     SmokerBlended               = a_Addend.SmokerBlended;
 
+    PartMortTableMult           = a_Addend.PartMortTableMult;
     TotalIMF                    = a_Addend.TotalIMF;
     RefundableSalesLoad         = a_Addend.RefundableSalesLoad;
 
