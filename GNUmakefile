@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: GNUmakefile,v 1.23 2005-07-08 14:26:52 chicares Exp $
+# $Id: GNUmakefile,v 1.24 2005-07-20 10:17:54 chicares Exp $
 
 ###############################################################################
 
@@ -451,7 +451,7 @@ clobber: source_clean
 # avoid false positives that would arise when the current year appears
 # in an RCS Id but not in the copyright notice.
 
-expected_source_files = $(wildcard *.?pp *.c *.h *.rc *.xrc)
+expected_source_files = $(wildcard *.?pp *.c *.h *.rc *.xrc *.xsl)
 
 # Invoke a supplemental makefile, if it exists, to test things that
 # don't belong in the standard sources. For example, it might report
@@ -523,6 +523,25 @@ cvs_ready: source_clean set_version_datestamp
 	-$(MAKE) check_idempotence
 	-$(MAKE) all test
 	-$(MAKE) all test build_type=mpatrol
+
+################################################################################
+
+# Routine daily test.
+
+# TODO ?? Consider other tests. Consider testing skeleton branch, too.
+
+daily_name := $(TMPDIR)/lmi-daily-$(yyyymmddhhmm)
+
+.PHONY: checkout
+checkout:
+	$(MKDIR) --parents $(daily_name); \
+	cd $(daily_name); \
+	export CVS_RSH="ssh"; \
+	cvs -z3 -d:ext:anoncvs@savannah.gnu.org:/cvsroot/lmi co skeleton lmi; \
+
+.PHONY: daily_test
+daily_test: checkout
+	-$(MAKE) -C $(daily_name)/lmi cvs_ready >../log-$(daily_name)
 
 ################################################################################
 
