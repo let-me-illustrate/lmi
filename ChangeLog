@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.94 2005-07-18 03:33:46 chicares Exp $
+// $Id: ChangeLog,v 1.95 2005-07-22 21:25:45 wboutin Exp $
 
 2005-01-14
 
@@ -2727,3 +2727,7 @@ authors disagreed on its meaning, so its correctness could hardly
 be ascertained. Attempting to use it with a nonzero value produces a
 message suggesting a different approach.
 
+20050722T2103Z <wboutin@massmutual.com> [1288]
+
+  INSTALL
+Add mpatrol and sed installation instructions.
