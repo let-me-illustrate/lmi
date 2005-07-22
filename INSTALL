@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: INSTALL,v 1.6 2005-07-05 17:42:58 wboutin Exp $
+// $Id: INSTALL,v 1.7 2005-07-22 21:25:45 wboutin Exp $
 
 [This version says only how to install and patch the required version
 of cgicc and xmlwrapp, and how to install the required version of boost.
@@ -158,8 +158,8 @@ Extract archive:
   /tmp[0]$tar -xf libxml2-2.6.19.tar
 
 Build library with MSYS:
- mm39272@MM53451PA /c/tmp/libxml2-2.6.19
-$ ./configure && make
+  wboutin@OWNER /c/tmp/libxml2-2.6.19
+  $ ./configure && make
 
 Copy libxml header files to the third-party hierarchy:
   /tmp[0]$mkdir -p /opt/lmi/third-party/include/libxml/
@@ -173,6 +173,62 @@ Copy libxml libraries to the third-party hierarchy:
   /tmp/libxml2-2.6.19/.libs[0]$cp -p libxml2-2.dll c:/opt/lmi/third-party/bin/
   /tmp/libxml2-2.6.19/.libs[0]$cp -p libxml2.dll.a c:/opt/lmi/third-party/lib/
   /tmp/libxml2-2.6.19/.libs[0]$popd
+
+* Install and patch mpatrol_1.4.8
+
+Download
+  http://www.cbmamiga.demon.co.uk/mpatrol/files/mpatrol_1.4.8.tar.gz
+and
+  http://sourceforge.net/tracker/download.php?group_id=19456&atid=319456&file_id=117735&aid=1112376
+to /tmp/ .
+
+Validate:
+  /tmp[0]$md5sum mpatrol_1.4.8.tar.gz mpatrol-zero-byte-moves.tar.bz2
+  ada423c49bc5bfa7c3e7a80a711c2a1a  mpatrol_1.4.8.tar.gz
+  d8281af88b98f35212a851942158a9f6  mpatrol-zero-byte-moves.tar.bz2
+
+Extract archives:
+  /tmp[0]$gzip -d mpatrol_1.4.8.tar.gz
+  /tmp[0]$tar -xf mpatrol_1.4.8.tar
+  /tmp[0]$bzip2 -dk mpatrol-zero-byte-moves.tar.bz2
+  /tmp[0]$tar -xf mpatrol-zero-byte-moves.tar
+
+Apply required patch:
+  /tmp[0]$/msys/1.0/bin/patch --strip=0 <mpatrol/mpatrol-zero-byte-moves  # note 0
+  patching file `mpatrol/src/malloc.c'
+
+Download:
+  http://savannah.nongnu.org/cgi-bin/viewcvs/lmi/lmi/mpatrol-mingw-GNUmakefile
+to /mpatrol/build/windows/ .
+
+Build mpatrol libraries:
+  /tmp/mpatrol/build/windows[0]$path=(/usr/bin /MinGW/bin)
+  /tmp/mpatrol/build/windows[0]$make -f mpatrol-mingw-GNUmakefile
+
+Install mpatrol libraries to the third-party hierarchy:
+  /tmp/mpatrol/build/windows[0]$make -f mpatrol-mingw-GNUmakefile install
+
+* Install sed-4.0.7 # note 1
+
+Download
+  http://gnome.dti.ad.jp/pub/GNU/sed/sed-4.0.7.tar.gz
+to /tmp/ .
+
+Validate:
+  /tmp[0]$md5sum sed-4.0.7.tar.gz
+  005738e7f97bd77d95b6907156c8202a  sed-4.0.7.tar.gz
+
+Extract archive:
+  /tmp[0]$gzip -d sed-4.0.7.tar.gz
+  /tmp[0]$tar -xf sed-4.0.7.tar
+
+Build with MSYS:
+  wboutin@OWNER /c/tmp/sed-4.0.7
+  $ ./configure && make
+
+Copy binary to path:
+  mm39272@MM39272PC /c/tmp/sed-4.0.7/sed
+  $ cp --force --parents --preserve --recursive sed.exe /c/usr/bin/
 
 * Install wx
 
@@ -225,10 +281,12 @@ Install:
 
   ...
 [perhaps cygwin should be mentioned, too]
-[I assume the MSYS Developer Tool Kit isn't needed for installation
-instructions, right?]
 
 * Install zsh
+
+Is there a particular version we want to use? My setup isn't allowing
+me to easily determine what that version should be and the old recovery
+CD only has a binary.
 
 ...
 [amol deshpande's port, because MSYS's bash is broken [explain why]]
@@ -248,5 +306,19 @@ binary they already have. At any rate, we mustn't write
   /tmp[0]$/msys/1.0/bin/patch ...
 in platform-independent installation instructions: it should say only
   /tmp[0]$patch ...
+Greg--The technique you suggest doesn't work. Apparently, 'msys-1.0.dll'
+is required on the path. Once it's there, I get a return code one and
+the files aren't patched.
 
-We can do that, but should it always be noted in this file?
+note 1: There are several later versions. Building sed-4.1.4 fails
+for several reasons:
+ - it expects some natural language that's not present
+     ("./configure --disable-nls" seems to fix that)
+ - it expects to find 'bcopy'
+     (to fix that, "make CPPFLAGS='-DHAVE_STRING_H'")
+ - it can't resolve multibyte-character functions
+     (to fix that, suppress "#define HAVE_MBRTOWC 1" in config.h)
+Those seem to be problems with MSYS or autotools, except that
+the second one looks like a defect in the sed sources (a file
+that uses 'bcopy' doesn't seem to include config.h).
+
