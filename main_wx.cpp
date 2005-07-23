@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_wx.cpp,v 1.17 2005-07-13 00:22:21 chicares Exp $
+// $Id: main_wx.cpp,v 1.18 2005-07-23 14:40:23 chicares Exp $
 
 // Portions of this file are derived from wxWindows files
 //   samples/docvwmdi/docview.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -673,7 +673,12 @@ bool lmi_wx_app::OnInit()
     frame_->Show(true);
     SetTopWindow(frame_);
 
-    if(!global_settings::instance().ash_nazg())
+    if
+        (!
+            (   global_settings::instance().ash_nazg()
+            ||  global_settings::instance().custom_io_0()
+            )
+        )
         {
         wxCommandEvent event(wxEVT_COMMAND_MENU_SELECTED, wxID_ABOUT);
         wxPostEvent(frame_, event);
