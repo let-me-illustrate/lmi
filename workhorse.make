@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: workhorse.make,v 1.38 2005-06-24 01:49:03 chicares Exp $
+# $Id: workhorse.make,v 1.39 2005-07-24 15:50:04 chicares Exp $
 
 ###############################################################################
 
@@ -124,7 +124,7 @@ effective_default_target: $(default_targets)
 all_include_directories := \
   $(src_dir) \
   $(compiler_include_directory) \
-  $(system_root)/opt/lmi/third-party/include/cgicc \
+  $(system_root)/opt/lmi/third-party/include \
   $(system_root)/usr/local/include \
 
 all_source_directories := \
@@ -266,22 +266,6 @@ endif
 
 ################################################################################
 
-# Prevent license issues by providing dummy versions of problematic
-# libraries that wx builds by default.
-
-# TODO ?? Consider forcing this issue in case someone builds wx
-# without prescribed changes to prevent making these libraries,
-# in order to ensure that this application can never display any file
-# that would use GPL-incompatible code provided with wx.
-
-# C:/wx-lmi/lmi[0]$cp --preserve --update /lib/libm.a libregex.a
-# C:/wx-lmi/lmi[0]$cp --preserve --update /lib/libm.a libpng.a
-# C:/wx-lmi/lmi[0]$cp --preserve --update /lib/libm.a libjpeg.a
-# C:/wx-lmi/lmi[0]$cp --preserve --update /lib/libm.a libzlib.a
-# C:/wx-lmi/lmi[0]$cp --preserve --update /lib/libm.a libtiff.a
-
-################################################################################
-
 # Required libraries.
 #
 # The link command promiscuously mentions libxml2 for all targets.
@@ -292,12 +276,9 @@ endif
 # TODO ?? Consider refining it anyway, because it's unclean: libxml2
 # isn't actually required for all targets.
 
-# function which returns -larg if arg is non empty and nothing otherwise
-make_lib_if = $(if $1,-l$1)
-
 REQUIRED_LIBS := \
-  $(call make_lib_if,$(XMLWRAPP_LIB)) \
-  $(call make_lib_if,$(BOOST_FILESYSTEM_LIB)) \
+  $(platform_boost_libraries) \
+  -lxmlwrapp \
   $(platform_libxml2_libraries) \
 
 ################################################################################
@@ -331,11 +312,6 @@ REQUIRED_CPPFLAGS = \
   $(platform_defines) \
   -D__WXDEBUG__ \
 
-# assume that if we have xmlwrapp as system library, it's recent enough
-ifneq (,$(XMLWRAPP_LIB))
-REQUIRED_CPPFLAGS += -DUSING_CURRENT_XMLWRAPP
-endif
-
 REQUIRED_CFLAGS = \
   $(C_WARNINGS) \
 
@@ -367,6 +343,8 @@ REQUIRED_ARFLAGS = \
 
 REQUIRED_LDFLAGS = \
   -L . \
+  -L $(system_root)/opt/lmi/third-party/lib \
+  -L $(system_root)/opt/lmi/third-party/bin \
   -L $(system_root)/usr/local/lib \
   -L $(system_root)/usr/local/bin \
   $(REQUIRED_LIBS) \
