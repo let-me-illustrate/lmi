@@ -20,7 +20,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: posix_fhs.make,v 1.5 2005-06-19 18:39:03 chicares Exp $
+# $Id: posix_fhs.make,v 1.6 2005-07-24 15:50:04 chicares Exp $
 
 ################################################################################
 
@@ -28,7 +28,11 @@ system_root := /
 EXEEXT :=
 SHREXT := .so
 
-platform_libxml2_libraries = $(shell xml2-config --libs)
+platform_boost_libraries := \
+  -lboost_filesystem-gcc \
+
+platform_libxml2_libraries := \
+  $(shell xml2-config --libs) \
 
 # Let the user override this on the make command line to use a
 # non-default wx configuration.

@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: objects.make,v 1.45 2005-07-19 13:09:50 chicares Exp $
+# $Id: objects.make,v 1.46 2005-07-24 15:50:04 chicares Exp $
 
 ################################################################################
 
@@ -29,14 +29,12 @@
 
 # Boost filesystem library. The other boost libraries that lmi
 # requires are implemented entirely in headers.
-ifeq (,$(BOOST_FILESYSTEM_LIB))
+
 boost_filesystem_objects := \
   convenience.o \
   exception.o \
   path_posix_windows.o \
   operations_posix_windows.o \
-
-endif
 
 # GNU cgicc.
 
@@ -81,17 +79,28 @@ cgicc_3_1_4_objects = \
 
 # xmlwrapp library from pmade.org .
 
-ifeq (,$(XMLWRAPP_LIB))
-xmlwrapp_lib_objects := \
+xmlwrapp_objects := \
   event_parser.o \
   init.o \
   node.o \
   node_iterator.o \
   tree_parser.o \
 
+# For systems that already have boost, cgicc, and xmlwrapp libraries
+# installed, define 'HAVE_THIRD_PARTY_LIBRARIES' to use them instead
+# of using the workarounds above.
+#
+# TODO ?? It would make more sense to build these as lib*.a, instead
+# of as collections of object files, on systems that don't already
+# have them as libraries.
+
+ifdef HAVE_THIRD_PARTY_LIBRARIES
+  boost_filesystem_objects :=
+  cgicc_objects :=
+  xmlwrapp_objects :=
 endif
 
-xmlwrapp_objects := $(xmlwrapp_lib_objects) xmlwrapp_ex.o
+xmlwrapp_objects += xmlwrapp_ex.o
 
 ################################################################################
 

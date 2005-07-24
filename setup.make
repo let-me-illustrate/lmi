@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: setup.make,v 1.1 2005-06-27 13:33:01 chicares Exp $
+# $Id: setup.make,v 1.2 2005-07-24 15:50:04 chicares Exp $
 
 .PHONY: all
 all: setup
@@ -75,23 +75,30 @@ $(third_party_lib_dir):
 
 # Create dummy libraries.
 
-# Prevent license issues by providing dummy versions of problematic
-# libraries that wx builds by default.
-
-# TODO ?? Consider forcing this issue in case someone builds wx
-# without prescribed changes to prevent making these libraries,
-# in order to ensure that this application can never display any file
-# that would use GPL-incompatible code provided with wx.
-
 # At least with gnu tools, a zero-byte file may be linked with no
 # diagnostic (and no effect, which is the intention).
 
+# Create dummy libraries for boost and xmlwrapp: see discussion of
+# 'third-party' libraries in other makefiles. For boost, derive
+# library names from the platform-dependent linker option, because
+# the names of boost libraries incorporate a platform suffix.
+
+# Prevent license issues by providing dummy versions of problematic
+# libraries that wx builds by default.
+#
+# TODO ?? Apparently libregex.a is no longer a problem since wx-2.5.0,
+# and it's not clear why zlib was ever on this list. Consider removing
+# those libraries from this list after carefully reauditing the
+# licenses of all libraries wx uses.
+
 dummy_library_names := \
-  libregex.a \
-  libpng.a \
+  $(patsubst -l%,lib%.a,$(platform_boost_libraries)) \
   libjpeg.a \
-  libzlib.a \
+  libpng.a \
+  libregex.a \
   libtiff.a \
+  libxmlwrapp.a \
+  libzlib.a \
 
 .PHONY: dummy_libraries
 dummy_libraries: $(third_party_bin_dir) $(third_party_lib_dir)
