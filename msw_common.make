@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: msw_common.make,v 1.7 2005-07-24 15:50:04 chicares Exp $
+# $Id: msw_common.make,v 1.8 2005-07-24 23:13:50 chicares Exp $
 
 ################################################################################
 
@@ -61,26 +61,6 @@ platform_wx_libraries := \
 platform_gui_ldflags := -mwindows
 
 ################################################################################
-
-# Paths to external libraries.
-
-# Path to libraries from www.boost.org . Most required boost libraries
-# are implemented exclusively in headers. It seems common in the *nix
-# world to leave those headers in the subdirectory of /usr/local/src/
-# to which the boost distribution is extracted, probably because boost
-# does not put all its headers in an include/ subdirectory. But that
-# seems broken, so instead copy those headers to /usr/local/include .
-#
-# TODO ?? If the "common" practice above turns out to be universal,
-# then conform to it.
-#
-boost_dir    := $(system_root)/usr/local/src/boost_1_31_0
-
-# Path to GNU cgicc.
-cgicc_source_dir  := $(system_root)/usr/local/src/cgicc
-
-# Path to xmlwrapp.
-xmlwrapp_source_dir  := $(system_root)/usr/local/src/libxml
 
 # HTML server's cgi-bin directory. Not used yet. Eventually, an
 # 'install' target might copy cgi-bin binaries thither.

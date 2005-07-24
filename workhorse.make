@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: workhorse.make,v 1.39 2005-07-24 15:50:04 chicares Exp $
+# $Id: workhorse.make,v 1.40 2005-07-24 23:13:50 chicares Exp $
 
 ###############################################################################
 
@@ -116,6 +116,16 @@ effective_default_target: $(default_targets)
 #
 # xmlwrapp: avoid the nonstandard build system provided.
 
+# Path to libraries from www.boost.org : most required boost libraries
+# are implemented exclusively in headers. It seems common in the *nix
+# world to leave those headers in the subdirectory of /whatever/src/
+# to which the boost distribution is extracted, probably because boost
+# does not put all its headers in an include/ subdirectory. But that
+# seems broken, so instead copy those headers to /usr/local/include .
+#
+# TODO ?? If the "common" practice above turns out to be universal,
+# then conform to it.
+
 # Directory /usr/local/include/ is searched for headers, but only
 # after the special directory for third-party libraries, in order to
 # make it easier to test or use later library versions that have
@@ -129,9 +139,9 @@ all_include_directories := \
 
 all_source_directories := \
   $(src_dir) \
-  $(boost_dir)/libs/filesystem/src \
-  $(cgicc_source_dir) \
-  $(xmlwrapp_source_dir) \
+  $(system_root)/opt/lmi/third-party/src/boost/libs/filesystem/src \
+  $(system_root)/opt/lmi/third-party/src/cgicc \
+  $(system_root)/opt/lmi/third-party/src/libxml \
 
 vpath lib%.a          $(CURDIR)
 vpath %.o             $(CURDIR)
@@ -740,12 +750,6 @@ show_flags:
 	@$(ECHO) ALL_LDFLAGS             = '$(ALL_LDFLAGS)'
 	@$(ECHO) ALL_RCFLAGS             = '$(ALL_RCFLAGS)'
 	@$(ECHO) src_dir                 = '$(src_dir)'
-	@$(ECHO) boost_dir               = '$(boost_dir)'
-	@$(ECHO) cgicc_include_dir       = '$(cgicc_include_dir)'
-	@$(ECHO) cgicc_source_dir        = '$(cgicc_source_dir)'
-	@$(ECHO) libxml2_include_dir     = '$(libxml2_include_dir)'
-	@$(ECHO) xmlwrapp_include_dir    = '$(xmlwrapp_include_dir)'
-	@$(ECHO) xmlwrapp_source_dir     = '$(xmlwrapp_source_dir)'
 	@$(ECHO) all_include_directories = '$(all_include_directories)'
 	@$(ECHO) all_source_directories  = '$(all_source_directories)'
 
