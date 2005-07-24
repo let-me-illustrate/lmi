@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.96 2005-07-24 16:19:44 chicares Exp $
+// $Id: ChangeLog,v 1.97 2005-07-24 23:15:48 chicares Exp $
 
 2005-01-14
 
@@ -2783,7 +2783,7 @@ Add mpatrol and sed installation instructions.
   main_wx.cpp
 Suppress startup banner for custom input.
 
-20050724T1550Z <chicares@cox.net> [1285]
+20050724T1550Z <chicares@cox.net> [1286]
 
   msw_common.make
   objects.make
@@ -2800,4 +2800,12 @@ latest version of xmlwrapp (not yet tested with lmi) is supported if
 way to report its version unless its weird build system is used). The
 libxml2 dll import library for msw is now referred to by the name most
 commonly used.
+
+20050724T1550Z <chicares@cox.net> [1286]
+
+  msw_common.make
+  workhorse.make
+Expect third-party libraries in FHS-prescribed locations. Get rid of
+makefile variables like $(cgicc_include_dir) and $(cgicc_source_dir),
+which had been used only for msw only.
 
