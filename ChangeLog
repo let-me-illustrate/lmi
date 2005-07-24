@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.95 2005-07-22 21:25:45 wboutin Exp $
+// $Id: ChangeLog,v 1.96 2005-07-24 16:19:44 chicares Exp $
 
 2005-01-14
 
@@ -2727,7 +2727,77 @@ authors disagreed on its meaning, so its correctness could hardly
 be ascertained. Attempting to use it with a nonzero value produces a
 message suggesting a different approach.
 
+20050718T1624Z <chicares@cox.net> [1288]
+
+  ihs_database.cpp
+Improve diagnostics.
+
+  ihs_loads.cpp
+  loads.hpp
+Refactor.
+
+20050719T1309Z <chicares@cox.net> [1284]
+
+  dbnames.xpp
+Improve documentation.
+
+  loads.cpp
+  loads.hpp
+  objects.make
+Merge production and antediluvian branches of loads class.
+
+20050719T2147Z <chicares@cox.net> [1284]
+
+  ledger_invariant.cpp
+Use last cell's 'PartMortTableMult' for composite, instead of zero.
+
+  ledger_xml_io.cpp
+Format 'PartMortTableMult' as an integral percentage.
+
+20050720T1017Z <chicares@cox.net> [1285]
+
+  GNUmakefile
+Add circadian-test target.
+
+20050720T1018Z <chicares@cox.net> [1285]
+
+  illustration_reg.xsl             [new file]
+  individual_private_placement.xsl [new file]
+  nasd.xsl                         [new file]
+Add xsl-fo stylesheets as of 2004-12-31.
+
+20050720T1056Z <chicares@cox.net> [1285]
+
+  illustration_reg.xsl
+  individual_private_placement.xsl
+  nasd.xsl
+Update copyright year and email address; add RCS Id.
+
 20050722T2103Z <wboutin@massmutual.com> [1288]
 
   INSTALL
 Add mpatrol and sed installation instructions.
+
+20050723T1440Z <chicares@cox.net> [1285]
+
+  main_wx.cpp
+Suppress startup banner for custom input.
+
+20050724T1550Z <chicares@cox.net> [1285]
+
+  msw_common.make
+  objects.make
+  posix_fhs.make
+  setup.make
+  workhorse.make
+Revise treatment of third-party libraries. For libraries with exotic
+build procedures (one of which even uses non-free tools), the lmi
+makefiles create required objects in the normal way, as always. If
+prebuilt libraries are available, as in some GNU/Linux distributions,
+defining 'HAVE_THIRD_PARTY_LIBRARIES' skips local compilation. The
+latest version of xmlwrapp (not yet tested with lmi) is supported if
+'-DUSING_CURRENT_LIBXMLWRAPP' is passed in 'CPPFLAGS' (xmlwrapp has no
+way to report its version unless its weird build system is used). The
+libxml2 dll import library for msw is now referred to by the name most
+commonly used.
+
