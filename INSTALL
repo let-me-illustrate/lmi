@@ -19,11 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: INSTALL,v 1.7 2005-07-22 21:25:45 wboutin Exp $
-
-[This version says only how to install and patch the required version
-of cgicc and xmlwrapp, and how to install the required version of boost.
-Other instructions will be added later.]
+// $Id: INSTALL,v 1.8 2005-07-25 13:39:08 chicares Exp $
 
 [It's clearest to validate commands, then copy and paste them here.
 Once we've done that, it becomes trivial to turn this into a shell
@@ -32,7 +28,7 @@ from this file and paste them tediously into a shell. We'll want to
 write everything as a command first (e.g. write a 'wget' command
 instead of saying 'Go download some file'.]
 
-* Choose a directory for third-party libraries
+* Special directory for certain third-party libraries
 
 [Insert rationale for freezing particular versions of third-party
 libraries--see
@@ -41,12 +37,10 @@ topic
   "How can the Boost libraries be used successfully for important projects?"
 ]
 
-[I have simply used /usr/local/include/ . That's not appropriate for
-others who have later versions of these libraries already installed in
-that location. To accommodate their needs, I'll modify the makefiles
-soon to support /opt/lmi/third-party/ as an alternative. When that's
-done, maybe we'll find that best for everyone. For now at least, I'll
-assume that, and write /opt/lmi/third-party/ in these instructions.]
+[/usr/local/include/ would not be appropriate for others who have
+later versions of these libraries already installed in that location.
+To accommodate their needs, the makefiles look in /opt/lmi/third-party/
+for third-party libraries that we build as collections of objects.]
 
 * Install and patch cgicc-3.1.4
 
@@ -197,21 +191,29 @@ Apply required patch:
   /tmp[0]$/msys/1.0/bin/patch --strip=0 <mpatrol/mpatrol-zero-byte-moves  # note 0
   patching file `mpatrol/src/malloc.c'
 
+That patch suppresses diagnostics for behavior that's actually
+undefined according to C99 7.21.1/2, but wxWidgets relies on that
+behavior being benign.
+
 Download:
   http://savannah.nongnu.org/cgi-bin/viewcvs/lmi/lmi/mpatrol-mingw-GNUmakefile
 to /mpatrol/build/windows/ .
+
+[This is specific to msw. We should give GNU/Linux commands too.]
 
 Build mpatrol libraries:
   /tmp/mpatrol/build/windows[0]$path=(/usr/bin /MinGW/bin)
   /tmp/mpatrol/build/windows[0]$make -f mpatrol-mingw-GNUmakefile
 
-Install mpatrol libraries to the third-party hierarchy:
+Install mpatrol libraries:
   /tmp/mpatrol/build/windows[0]$make -f mpatrol-mingw-GNUmakefile install
 
 * Install sed-4.0.7 # note 1
 
 Download
   http://gnome.dti.ad.jp/pub/GNU/sed/sed-4.0.7.tar.gz
+[WENDY--Please use a canonical gnu.org URL instead. We don't want to
+rely on any particular mirror: mirrors come and go.]
 to /tmp/ .
 
 Validate:
@@ -288,6 +290,9 @@ Is there a particular version we want to use? My setup isn't allowing
 me to easily determine what that version should be and the old recovery
 CD only has a binary.
 
+[WENDY--See the following comment. His last name is a good search term.
+For now, at least, we'll keep using the last version he published.]
+
 ...
 [amol deshpande's port, because MSYS's bash is broken [explain why]]
 
@@ -306,9 +311,15 @@ binary they already have. At any rate, we mustn't write
   /tmp[0]$/msys/1.0/bin/patch ...
 in platform-independent installation instructions: it should say only
   /tmp[0]$patch ...
+
 Greg--The technique you suggest doesn't work. Apparently, 'msys-1.0.dll'
 is required on the path. Once it's there, I get a return code one and
 the files aren't patched.
+
+WENDY--It worked for me. The manual tells you how to interpret the
+return code, and discusses the program's behavior when it returns one.
+In light of what the manual says, what other information can you share
+that'll help us to get this working for you?
 
 note 1: There are several later versions. Building sed-4.1.4 fails
 for several reasons:
