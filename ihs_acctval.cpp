@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_acctval.cpp,v 1.30 2005-07-18 03:33:46 chicares Exp $
+// $Id: ihs_acctval.cpp,v 1.31 2005-07-25 12:49:06 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -1040,6 +1040,7 @@ void AccountValue::ApplyDynamicMandE(double assets)
         }
 
 // TODO ?? Dynamic M&E should be different for guar vs. curr.
+// TODO ?? Implement tiered comp and tiered management fee.
 
     // Annual rates
 //  double guar_m_and_e = TieredCharges_->tiered_guaranteed_m_and_e(assets);
@@ -1058,6 +1059,14 @@ void AccountValue::ApplyDynamicMandE(double assets)
             ? TieredCharges_->tiered_asset_based_compensation(assets)
             : 0
             ;
+    if(0.0 != YearsSepAcctABCRate)
+        {
+        hobsons_choice()
+            << "Tiered asset-based compensation unimplemented. "
+            << "The illustration will be incorrect."
+            << LMI_FLUSH
+            ;
+        }
 
     YearsSepAcctSVRate = 0.0;
 
@@ -1152,6 +1161,14 @@ void AccountValue::ApplyDynamicSepAcctLoadAMD(double assets)
         tiered_comp = TieredCharges_->tiered_asset_based_compensation(assets);
         tiered_comp = i_upper_12_over_12_from_i<double>()(tiered_comp);
         // TODO ?? Probably this should be rounded.
+        }
+    if(0.0 != tiered_comp)
+        {
+        hobsons_choice()
+            << "Tiered asset-based compensation unimplemented. "
+            << "The illustration will be incorrect."
+            << LMI_FLUSH
+            ;
         }
 
     // is there any advantage to this sort of implementation in loads.cpp?
