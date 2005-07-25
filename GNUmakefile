@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: GNUmakefile,v 1.24 2005-07-20 10:17:54 chicares Exp $
+# $Id: GNUmakefile,v 1.25 2005-07-25 12:48:07 chicares Exp $
 
 ###############################################################################
 
@@ -526,22 +526,37 @@ cvs_ready: source_clean set_version_datestamp
 
 ################################################################################
 
-# Routine daily test.
+# Routine circadian test. Others might call this the 'nightly build'
+# or 'daily smoke test'. What's important is not whether it's run in
+# the daytime or in the nighttime, but rather that it's run something
+# like once every twenty-four hours.
 
-# TODO ?? Consider other tests. Consider testing skeleton branch, too.
+# TODO ?? This is an evolving experiment. Possible enhancements include:
+#   - Add other tests, particularly regression tests.
+#       Consider using ../products/src if it exists.
+#       Also consider using cvs only, and using testdecks from cvs or ftp.
+#   - Test skeleton branch, too.
+#   - Gather statistics, e.g., elapsed time and total size of binaries.
+#   - Filter logs e.g. as 'fancy.make' does.
+#   - Upload outcome (e.g. log and statistics) to savannah.
+#       Can a simple binary measure {success, failure} be devised?
+#   - Set this up as a 'cron' job (or equivalent on other platforms).
+#   - Devise a simple way to test changes to this target without
+#       requiring 5 Mb of downloading and 10 minutes of crunching.
 
-daily_name := $(TMPDIR)/lmi-daily-$(yyyymmddhhmm)
+circadian_directory := $(TMPDIR)/lmi-circadian-$(yyyymmddhhmm)
+circadian_log := log-lmi-circadian-$(yyyymmddhhmm)
 
 .PHONY: checkout
 checkout:
-	$(MKDIR) --parents $(daily_name); \
-	cd $(daily_name); \
+	$(MKDIR) --parents $(circadian_directory); \
+	cd $(circadian_directory); \
 	export CVS_RSH="ssh"; \
 	cvs -z3 -d:ext:anoncvs@savannah.gnu.org:/cvsroot/lmi co skeleton lmi; \
 
-.PHONY: daily_test
-daily_test: checkout
-	-$(MAKE) -C $(daily_name)/lmi cvs_ready >../log-$(daily_name)
+.PHONY: circadian_test
+circadian_test: checkout
+	-$(MAKE) -C $(circadian_directory)/lmi cvs_ready >../$(circadian_log)
 
 ################################################################################
 
