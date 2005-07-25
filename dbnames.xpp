@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: dbnames.xpp,v 1.9 2005-07-19 13:09:09 chicares Exp $
+// $Id: dbnames.xpp,v 1.10 2005-07-25 12:48:31 chicares Exp $
 
 #define DB_NAMES \
 {DB_FIRST,DB_FIRST,"dummy","dummy",}, \
@@ -264,7 +264,7 @@
 {DB_TgtPremPolFee,DB_Topic_Tables,"TgtPremPolFee","Target premium policy fee",}, \
 {DB_AllowExtraAssetComp,DB_Topic_Comp,"AllowExtraAssetComp","Allow extra asset-based compensation: 0=no, 1=yes",}, \
 {DB_AllowExtraPremComp,DB_Topic_Comp,"AllowExtraPremComp","Allow extra premium-based compensation: 0=no, 1=yes",}, \
-{DB_AssetChargeType,DB_Topic_AssetCharges,"AssetChargeType","Treatment of certain separate-account asset charges: 0=interest spread, 1=account-value load after monthly deduction",}, \
+{DB_AssetChargeType,DB_Topic_AssetCharges,"AssetChargeType","Treatment of input extra separate-account asset charge: 0=interest spread, 1=account-value load after monthly deduction",}, \
 {DB_AllowUltraPrefClass,DB_Topic_Issue_Rules,"AllowUltraPrefClass","Allow ultra-preferred class: 0=no, 1=yes",}, \
 {DB_MaxGenAcctRate,DB_Topic_Interest,"MaxGenAcctRate","Maximum general account interest rate",}, \
 {DB_MaxSepAcctRate,DB_Topic_Interest,"MaxSepAcctRate","Maximum separate account interest rate",}, \
