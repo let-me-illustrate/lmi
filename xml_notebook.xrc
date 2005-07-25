@@ -24,7 +24,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: xml_notebook.xrc,v 1.15 2005-07-15 12:41:42 chicares Exp $
+    $Id: xml_notebook.xrc,v 1.16 2005-07-25 12:48:50 chicares Exp $
 
     This version is generic. It strives to present every input field
     the system offers, in a way that suits the main developer's tastes.
@@ -254,7 +254,7 @@ demonstrate a defect in the wx library.
             <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
             <border>4</border>
             <object class="wxStaticText">
-                <label>Extra separate-account charge</label>
+                <label>Extra separate-account asset charge</label>
             </object>
         </object>
         <object class="sizeritem">
