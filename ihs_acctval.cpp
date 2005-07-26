@@ -1,8 +1,6 @@
 // Account value.
 //
 // Copyright (C) 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005 Gregory W. Chicares.
-// Portions marked JLM Copyright (C) 2000, 2001, 2002 Gregory W. Chicares and Joseph L. Murdzek.
-// Author is GWC except where specifically noted otherwise.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -21,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_acctval.cpp,v 1.31 2005-07-25 12:49:06 chicares Exp $
+// $Id: ihs_acctval.cpp,v 1.32 2005-07-26 00:11:24 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -1142,22 +1140,8 @@ void AccountValue::ApplyDynamicSepAcctLoadAMD(double assets)
 
     double tiered_comp = 0.0;
 
-// TODO ?? EGREGIOUS_DEFECT Let's resolve this once and for all.
-    // TODO ?? JOE What is the meaning of DB_AssetChargeType?
-    // You apparently use it to govern tiered comp (tiered file).
-    //   [later note: also DB_MiscFundCharge]
-    //   [even later note: support for DB_MiscFundCharge withdrawn]
-    // I had apparently used it to govern extra comp (input item).
-    // Are you ignoring that input item altogether?
-    // Or does the interest class truly take care of that?
-    //   (I think it does only for 'e_asset_charge_spread', unless you changed that.)
     if(e_asset_charge_load_after_ded == Database_->Query(DB_AssetChargeType))
         {
-// Authors of this block: GWC and JLM.
-//      double extra_asset_comp = Input_->ExtraAssetComp / 10000.0L;
-//      extra_asset_comp =   m = i_upper_12_over_12_from_i<double>()(extra_asset_comp);
-//      YearsAcctValLoadAMD += extra_asset_comp;
-// End of block with authors GWC and JLM.
         tiered_comp = TieredCharges_->tiered_asset_based_compensation(assets);
         tiered_comp = i_upper_12_over_12_from_i<double>()(tiered_comp);
         // TODO ?? Probably this should be rounded.
