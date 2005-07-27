@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: setup.make,v 1.2 2005-07-24 15:50:04 chicares Exp $
+# $Id: setup.make,v 1.3 2005-07-27 10:58:01 zeitlin Exp $
 
 .PHONY: all
 all: setup
@@ -136,7 +136,7 @@ install_frozen_cgicc_from_tmp_dir:
 	$(ECHO) "6cb5153fc9fa64b4e50c7962aa557bbe  cgicc-3.1.4.tar.bz2" |md5sum --check
 	[ -e cgicc-3.1.4.tar ] || $(BZIP2) --decompress --keep cgicc-3.1.4.tar.bz2
 	$(TAR) --extract --file=cgicc-3.1.4.tar
-	/msys/1.0/bin/patch --strip=0 <cgicc-patch-gwc-20050217
+	$(PATCH) --strip=0 < $(src_dir)/cgicc-patch-gwc-20050217
 	$(MKDIR) --parents $(third_party_include_dir)/cgicc/
 	$(CP) --preserve cgicc-3.1.4/cgicc/*.h $(third_party_include_dir)/cgicc/
 
