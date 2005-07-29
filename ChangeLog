@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.97 2005-07-24 23:15:48 chicares Exp $
+// $Id: ChangeLog,v 1.98 2005-07-29 13:24:51 chicares Exp $
 
 2005-01-14
 
@@ -2808,4 +2808,41 @@ commonly used.
 Expect third-party libraries in FHS-prescribed locations. Get rid of
 makefile variables like $(cgicc_include_dir) and $(cgicc_source_dir),
 which had been used only for msw only.
+
+20050725T1247Z <chicares@cox.net> [1287]
+
+  GNUmakefile
+Improve circadian-test target.
+
+  dbnames.xpp
+Clarify meaning of 'AssetChargeType'.
+
+  xml_notebook.xrc
+Clarify meaning of 'extra' asset charge.
+
+  ihs_acctval.cpp
+Withdraw (flawed) support for tiered asset comp.
+
+20050725T1338Z <chicares@cox.net> [1287]
+
+  INSTALL
+Revise treatment of third-party libraries.
+
+20050726T0011Z <chicares@cox.net> [1285]
+
+  ihs_acctval.cpp
+Remove vestiges of defective tiered asset comp calculation.
+
+20050729T1324Z <chicares@cox.net> [1285]
+
+  GNUmakefile
+Make quoting style consistent. Double quotes might seem preferable for
+passing variables requiring expansion to submakefiles, e.g.,
+  $(MAKE) -f some-submakefile OPTIONS="$(OPTIONS)" some-target
+because that is the usual shell convention; but here gnu make is
+passing a makefile variable, for which expansion occurs even within
+single quotes. The reason for preferring single quotes is that double
+quotes fail horribly in some cases on the msw platform, apparently
+because make adds double quotes around the strings that represent
+variable definitions when it passes them to submakefiles.
 
