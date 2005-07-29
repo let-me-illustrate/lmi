@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: GNUmakefile,v 1.26 2005-07-27 11:08:56 zeitlin Exp $
+# $Id: GNUmakefile,v 1.27 2005-07-29 13:24:51 chicares Exp $
 
 ###############################################################################
 
@@ -126,27 +126,27 @@ $(src_dir)/configuration.make:: ;
 #   http://lists.gnu.org/archive/html/help-make/2005-07/msg00025.html
 
 ifeq "$(origin ARFLAGS)" "environment"
-  flags_to_pass_from_environment += ARFLAGS="$(ARFLAGS)"
+  flags_to_pass_from_environment += ARFLAGS='$(ARFLAGS)'
 endif
 
 ifeq "$(origin CFLAGS)" "environment"
-  flags_to_pass_from_environment += CFLAGS="$(CFLAGS)"
+  flags_to_pass_from_environment += CFLAGS='$(CFLAGS)'
 endif
 
 ifeq "$(origin CPPFLAGS)" "environment"
-  flags_to_pass_from_environment += CPPFLAGS="$(CPPFLAGS)"
+  flags_to_pass_from_environment += CPPFLAGS='$(CPPFLAGS)'
 endif
 
 ifeq "$(origin CXXFLAGS)" "environment"
-  flags_to_pass_from_environment += CXXFLAGS="$(CXXFLAGS)"
+  flags_to_pass_from_environment += CXXFLAGS='$(CXXFLAGS)'
 endif
 
 ifeq "$(origin LDFLAGS)" "environment"
-  flags_to_pass_from_environment += LDFLAGS="$(LDFLAGS)"
+  flags_to_pass_from_environment += LDFLAGS='$(LDFLAGS)'
 endif
 
 ifeq "$(origin RCFLAGS)" "environment"
-  flags_to_pass_from_environment += RCFLAGS="$(RCFLAGS)"
+  flags_to_pass_from_environment += RCFLAGS='$(RCFLAGS)'
 endif
 
 ################################################################################
