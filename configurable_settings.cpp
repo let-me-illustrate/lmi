@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: configurable_settings.cpp,v 1.6 2005-05-21 03:37:26 chicares Exp $
+// $Id: configurable_settings.cpp,v 1.7 2005-08-02 21:23:17 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -54,24 +54,6 @@ namespace
         static std::string s("configurable_settings");
         return s;
     }
-
-    std::vector<char const*> const& xml_node_names()
-    {
-        static char const* node_names[] =
-            {"default_product"
-            ,"custom_input_filename"
-            ,"custom_output_filename"
-            ,"cgi_bin_log_filename"
-            ,"spreadsheet_file_extension"
-            ,"xsl_fo_command"
-            ,"xsl_fo_directory"
-            };
-        static std::vector<char const*> v
-            (node_names
-            ,node_names + lmi_array_size(node_names)
-            );
-        return v;
-    }
 } // Unnamed namespace.
 
 configurable_settings::configurable_settings()
@@ -79,10 +61,13 @@ configurable_settings::configurable_settings()
     ,custom_input_filename_      ("custom.ini" )
     ,custom_output_filename_     ("custom.out" )
     ,default_product_            ("sample"     )
+    ,offer_hobsons_choice_       (false)
     ,spreadsheet_file_extension_ (".gnumeric"  )
     ,xsl_fo_command_             ("fo"         )
     ,xsl_fo_directory_           ("/usr/bin/fo")
 {
+    ascribe_members();
+
     // Look for the configuration file first where FHS would put it.
     // To support non-FHS platforms, if it's not found there, then
     // look in the data directory.
@@ -138,57 +123,7 @@ configurable_settings::configurable_settings()
             {
             continue;
             }
-            // TODO ?? This is hokey. Rewrite it using the
-            // symbolic-member-name idiom after we remove support for
-            // ancient compilers that make that difficult.
-        else if(std::string(xml_node_names()[0]) == child->get_name())
-            {
-            default_product_ = child->get_content();
-            }
-        else if(std::string(xml_node_names()[1]) == child->get_name())
-            {
-            custom_input_filename_ = child->get_content();
-            }
-        else if(std::string(xml_node_names()[2]) == child->get_name())
-            {
-            custom_output_filename_ = child->get_content();
-            }
-        else if(std::string(xml_node_names()[3]) == child->get_name())
-            {
-            cgi_bin_log_filename_ = child->get_content();
-            }
-        else if(std::string(xml_node_names()[4]) == child->get_name())
-            {
-            spreadsheet_file_extension_ = child->get_content();
-            }
-        else if(std::string(xml_node_names()[5]) == child->get_name())
-            {
-            xsl_fo_command_ = child->get_content();
-            }
-        else if(std::string(xml_node_names()[6]) == child->get_name())
-            {
-            xsl_fo_directory_ = child->get_content();
-            }
-        else
-            {
-            std::ostringstream msg;
-            msg
-                << "File '"
-                << configuration_filename()
-                << "': xml node name '"
-                << child->get_name()
-                << "' is unknown. Expected one of: "
-                ;
-            std::copy
-                (xml_node_names().begin()
-                ,xml_node_names().end()
-                ,std::ostream_iterator<std::string>(msg, " ")
-                );
-            msg
-                << ". Try reinstalling."
-                ;
-            throw std::runtime_error(msg.str());
-            }
+        operator[](child->get_name()) = child->get_content();
         }
 }
 
@@ -199,6 +134,18 @@ configurable_settings& configurable_settings::instance()
 {
     static configurable_settings z;
     return z;
+}
+
+void configurable_settings::ascribe_members()
+{
+    ascribe("cgi_bin_log_filename"       ,&configurable_settings::cgi_bin_log_filename_      );
+    ascribe("custom_input_filename"      ,&configurable_settings::custom_input_filename_     );
+    ascribe("custom_output_filename"     ,&configurable_settings::custom_output_filename_    );
+    ascribe("default_product"            ,&configurable_settings::default_product_           );
+    ascribe("offer_hobsons_choice"       ,&configurable_settings::offer_hobsons_choice_      );
+    ascribe("spreadsheet_file_extension" ,&configurable_settings::spreadsheet_file_extension_);
+    ascribe("xsl_fo_command"             ,&configurable_settings::xsl_fo_command_            );
+    ascribe("xsl_fo_directory"           ,&configurable_settings::xsl_fo_directory_          );
 }
 
 std::string const& configurable_settings::configuration_filename()
@@ -225,6 +172,11 @@ std::string const& configurable_settings::custom_output_filename() const
 std::string const& configurable_settings::default_product() const
 {
     return default_product_;
+}
+
+bool configurable_settings::offer_hobsons_choice() const
+{
+    return offer_hobsons_choice_;
 }
 
 std::string const& configurable_settings::spreadsheet_file_extension() const
