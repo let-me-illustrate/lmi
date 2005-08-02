@@ -31,7 +31,7 @@
 // other reasons evident in cvs or explained in 'ChangeLog'. Any
 // defect should not reflect on Stephen F. Booth's reputation.
 
-// $Id: main_cgi.cpp,v 1.11 2005-06-12 16:58:36 chicares Exp $
+// $Id: main_cgi.cpp,v 1.12 2005-08-02 21:13:10 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -76,7 +76,6 @@
 // To use logging, the variable gLogFile MUST be defined, and it _must_
 // be an ofstream
 #if DEBUG
-//  std::ofstream gLogFile( "/change_this_path/cgicc.log", std::ios_base::app );
   std::ofstream gLogFile( cgi_bin_log_filename().c_str(), std::ios_base::app );
 #endif
 
