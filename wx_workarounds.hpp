@@ -19,18 +19,20 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: wx_workarounds.hpp,v 1.1 2005-03-11 03:09:22 chicares Exp $
+// $Id: wx_workarounds.hpp,v 1.2 2005-08-02 12:38:27 chicares Exp $
 
 #ifndef wx_workarounds_hpp
 #define wx_workarounds_hpp
 
 #include "config.hpp"
 
-#include <wx/string.h>
+#include <wx/defs.h>
 
-#include <string>
+#if !wxCHECK_VERSION(2,5,4) // wx prior to version 2.5.4 .
 
-// WX !! Consider adding these functions to the library.
+#   include <wx/string.h>
+
+#   include <string>
 
 inline bool operator==(std::string const& s, wxString const& w)
 {
@@ -51,6 +53,8 @@ inline bool operator!=(wxString const& w, std::string const& s)
 {
     return s != w.c_str();
 }
+
+#endif // wx prior to version 2.5.4 .
 
 #endif // wx_workarounds_hpp
 
