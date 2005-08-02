@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: any_member.hpp,v 1.5 2005-05-26 06:41:20 chicares Exp $
+// $Id: any_member.hpp,v 1.6 2005-08-02 21:22:11 chicares Exp $
 
 // This is a derived work based on boost::any, which bears the following
 // copyright and permissions notice:
@@ -364,14 +364,19 @@ bool operator!=(any_member<ClassType> const& lhs, any_member<ClassType> const& r
 
 // By its nature, this class is Noncopyable: it holds a map of
 // pointers to member, which need to be initialized instead of copied
-// when a derived class is copied.
+// when a derived class is copied. Its Noncopyability is implemented
+// natively: deriving from boost::noncopyable would prevent class C
+// from deriving from MemberSymbolTable<C> and boost::noncopyable.
 //
 // TODO ?? Alternatively, one might define a copy ctor that
 // (automatically) ascribe()s all members to the appropriate object.
 
+// A do-nothing constructor is specified in order to prevent compilers
+// from warning of its absence. It's protected because this class
+// should not be instantiated as a most-derived object.
+
 template<typename ClassType>
 class MemberSymbolTable
-    :private boost::noncopyable
 {
     typedef std::map<std::string, any_member<ClassType> > map_type;
     typedef typename map_type::value_type map_value_type;
@@ -382,10 +387,14 @@ class MemberSymbolTable
     std::vector<std::string> const& member_names() const;
 
   protected:
+    MemberSymbolTable();
     template<typename ValueType, typename RelatedClassType>
     void ascribe(std::string const&, ValueType RelatedClassType::*);
 
   private:
+    MemberSymbolTable(MemberSymbolTable const&);
+    MemberSymbolTable const& operator=(MemberSymbolTable const&);
+
     std::vector<std::string> cached_member_names() const;
 
     map_type map_;
@@ -396,6 +405,11 @@ class MemberSymbolTable
 };
 
 // Implementation of class MemberSymbolTable.
+
+template<typename ClassType>
+MemberSymbolTable<ClassType>::MemberSymbolTable()
+{
+}
 
 // operator[]() returns a known member; unlike std::map::operator[](),
 // it never adds a new pair to the map.
