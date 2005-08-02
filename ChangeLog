@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.98 2005-07-29 13:24:51 chicares Exp $
+// $Id: ChangeLog,v 1.99 2005-08-02 12:48:59 chicares Exp $
 
 2005-01-14
 
@@ -2845,4 +2845,10 @@ single quotes. The reason for preferring single quotes is that double
 quotes fail horribly in some cases on the msw platform, apparently
 because make adds double quotes around the strings that represent
 variable definitions when it passes them to submakefiles.
+
+20050802T1238Z <chicares@cox.net> [1285]
+
+  wx_workarounds.hpp
+Conditionalize workarounds for older wx versions. See
+  http://lists.gnu.org/archive/html/lmi/2005-08/msg00000.html
 
