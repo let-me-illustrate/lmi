@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: workhorse.make,v 1.40 2005-07-24 23:13:50 chicares Exp $
+# $Id: workhorse.make,v 1.41 2005-08-02 21:09:29 chicares Exp $
 
 ###############################################################################
 
@@ -229,8 +229,13 @@ gcc_common_extra_warnings := \
 #  -Wold-style-cast \
 #  -Wshadow \
 
-# Boost deems that no one should use this warning flag:
+# Boost normally makes '-Wundef' give spurious warnings:
 #   http://aspn.activestate.com/ASPN/Mail/Message/boost/1822550
+# but defining BOOST_STRICT_CONFIG:
+#   http://www.boost.org/libs/config/config.htm#user_settable
+# makes '-Wundef' usable, because boost-1.31.0 doesn't seem to need
+# any workarounds for gcc-3.3+ . However, it gives a number of
+# warnings with wx-2.5.4 .
 
 #  -Wundef \
 
@@ -321,6 +326,7 @@ REQUIRED_CPPFLAGS = \
   $(lmi_wx_new_dllflag) \
   $(platform_defines) \
   -D__WXDEBUG__ \
+  -DBOOST_STRICT_CONFIG \
 
 REQUIRED_CFLAGS = \
   $(C_WARNINGS) \
