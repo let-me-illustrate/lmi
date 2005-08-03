@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: objects.make,v 1.46 2005-07-24 15:50:04 chicares Exp $
+# $Id: objects.make,v 1.47 2005-08-03 18:16:36 chicares Exp $
 
 ################################################################################
 
@@ -512,6 +512,8 @@ materially_equal_test$(EXEEXT): \
 
 mathmisc_test$(EXEEXT): \
   $(common_test_objects) \
+  alert.o \
+  alert_cli.o \
   mathmisc_test.o \
 
 math_functors_test$(EXEEXT): \
