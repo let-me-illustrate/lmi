@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: alert_cgi.cpp,v 1.2 2005-05-26 22:01:15 chicares Exp $
+// $Id: alert_cgi.cpp,v 1.3 2005-08-03 14:44:45 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -40,13 +40,6 @@ namespace
         ,fatal_error_alert
         );
 
-    // With cgicc, the most natural way to treat any alert that must
-    // be brought to the user's attention is to throw an exception.
-    void throw_alert(std::string const& s)
-    {
-    std::cerr << s << std::endl;
-    throw std::runtime_error(s);
-    }
 } // Unnamed namespace.
 
 void status_alert(std::string const&)
@@ -54,18 +47,23 @@ void status_alert(std::string const&)
     ; // Do nothing.
 }
 
+// With cgicc, the most natural way to treat any alert that must be
+// brought to the user's attention is to throw an exception and let
+// a higher-level routine catch and display it. It might be desirable
+// to write a log file, too.
+
 void warning_alert(std::string const& s)
 {
-    throw_alert(s);
+    throw std::runtime_error(s);
 }
 
 void hobsons_choice_alert(std::string const& s)
 {
-    throw_alert(s);
+    throw std::runtime_error(s);
 }
 
 void fatal_error_alert(std::string const& s)
 {
-    throw_alert(s);
+    throw std::runtime_error(s);
 }
 
