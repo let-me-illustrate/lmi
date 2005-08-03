@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: alert_cli.cpp,v 1.2 2005-05-26 22:01:15 chicares Exp $
+// $Id: alert_cli.cpp,v 1.3 2005-08-03 14:44:45 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -77,16 +77,27 @@ void warning_alert(std::string const& s)
 
 void hobsons_choice_alert(std::string const& s)
 {
+    throw std::runtime_error(s);
+#if 0
+    // If it seems desirable to offer a choice, the following tested
+    // code can be used. That seems a poor choice for applications
+    // that should run unattended, such as servers or regression
+    // tests.
+    //
+    // TODO ?? This choice could be governed by
+    //   configurable_settings::instance().offer_hobsons_choice()
+    // if desired; otherwise, if this alternative behavior is never
+    // useful, then this code should be removed.
     std::cerr << s << '\n' << hobsons_prompt << std::endl;
     if(!continue_anyway())
         {
         throw std::runtime_error(s);
         }
+#endif // 0
 }
 
 void fatal_error_alert(std::string const& s)
 {
-    std::cerr << s << std::endl;
     throw std::runtime_error(s);
 }
 
