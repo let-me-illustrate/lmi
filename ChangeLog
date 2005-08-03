@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.99 2005-08-02 12:48:59 chicares Exp $
+// $Id: ChangeLog,v 1.100 2005-08-03 17:59:51 chicares Exp $
 
 2005-01-14
 
@@ -2851,4 +2851,43 @@ variable definitions when it passes them to submakefiles.
   wx_workarounds.hpp
 Conditionalize workarounds for older wx versions. See
   http://lists.gnu.org/archive/html/lmi/2005-08/msg00000.html
+
+20050802T2108Z <chicares@cox.net> [1285]
+
+  workhorse.make
+Work around problems that boost causes with '-Wundef'.
+
+20050802T2113Z <chicares@cox.net> [1285]
+
+  main_cgi.cpp
+Remove superfluous comment line.
+
+20050802T2122Z <chicares@cox.net> [1285]
+
+  any_member.hpp
+Permit derived classes to use boost::noncopyable.
+
+20050802T2123Z <chicares@cox.net> [1284]
+
+  configurable_settings.cpp
+  configurable_settings.hpp
+Rewrite and document; add switch to govern hobsons_choice behavior.
+
+20050802T2230Z <chicares@cox.net> [1285]
+
+  alert.hpp
+Prevent file and line number from displaying twice.
+
+20050803T1444Z <chicares@cox.net> [1285]
+
+  alert_cgi.cpp
+  alert_cli.cpp
+Prevent alert messages from displaying twice. For these interfaces,
+don't offer hobsons_choice.
+
+20050803T1748Z <chicares@cox.net> [1288]
+
+  mathmisc.hpp
+  mathmisc_test.cpp
+Support another variety of stratified rates.
 
