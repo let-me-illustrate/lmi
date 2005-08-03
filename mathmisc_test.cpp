@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mathmisc_test.cpp,v 1.1 2005-01-14 19:47:45 chicares Exp $
+// $Id: mathmisc_test.cpp,v 1.2 2005-08-03 17:48:47 chicares Exp $
 
 // TODO ?? Add tests for tiered_product<>() and tiered_rate<>().
 
@@ -30,11 +30,45 @@
 
 #include "mathmisc.hpp"
 
+#include "materially_equal.hpp"
+#include "miscellany.hpp" // lmi_array_size()
+
 #define BOOST_INCLUDE_MAIN
 #include "test_tools.hpp"
 
-#include <cmath>  // std::fabs()
+#include <cmath>          // std::fabs()
 #include <limits>
+
+void banded_test()
+{
+    double const m = std::numeric_limits<double>::max();
+    double x[] = {1000.0 , 5000.0 , m   };
+    double y[] = {   0.05,    0.02, 0.01};
+    std::vector<double> const limits(x, x + lmi_array_size(x));
+    std::vector<double> const rates(y, y + lmi_array_size(y));
+
+    BOOST_TEST_EQUAL(0.05, banded_rate<double>()(      0.0, limits, rates));
+    BOOST_TEST_EQUAL(0.05, banded_rate<double>()(     -0.0, limits, rates));
+    BOOST_TEST_EQUAL(0.02, banded_rate<double>()(   1000.0, limits, rates));
+    BOOST_TEST_EQUAL(0.01, banded_rate<double>()(   5000.0, limits, rates));
+    BOOST_TEST_EQUAL(0.01, banded_rate<double>()(        m, limits, rates));
+    BOOST_TEST_EQUAL(0.01, banded_rate<double>()(0.999 * m, limits, rates));
+    BOOST_TEST_EQUAL(0.01, banded_rate<double>()(  0.1 * m, limits, rates));
+
+    BOOST_TEST_THROW
+        (banded_rate<double>()(-1.0, limits, rates)
+        ,std::runtime_error
+        ,""
+        );
+
+    BOOST_TEST_EQUAL(0.05, banded_rate<double>()(  900.0, limits, rates));
+    BOOST_TEST_EQUAL(0.02, banded_rate<double>()( 1500.0, limits, rates));
+    BOOST_TEST_EQUAL(0.01, banded_rate<double>()(10000.0, limits, rates));
+
+    BOOST_TEST(materially_equal( 45.0, banded_product<double>()(  900.0, limits, rates)));
+    BOOST_TEST(materially_equal( 30.0, banded_product<double>()( 1500.0, limits, rates)));
+    BOOST_TEST(materially_equal(100.0, banded_product<double>()(10000.0, limits, rates)));
+}
 
 void progressively_limit_test()
 {
@@ -359,6 +393,7 @@ void progressively_reduce_test()
 
 int test_main(int, char*[])
 {
+    banded_test();
     progressively_limit_test();
     progressively_reduce_test();
     return 0;
