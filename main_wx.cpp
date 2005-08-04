@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_wx.cpp,v 1.18 2005-07-23 14:40:23 chicares Exp $
+// $Id: main_wx.cpp,v 1.19 2005-08-04 02:20:13 chicares Exp $
 
 // Portions of this file are derived from wxWindows files
 //   samples/docvwmdi/docview.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -464,8 +464,6 @@ void lmi_wx_app::InitDocManager()
         return;
         }
 
-    // TODO ?? Consider eliminating this template and the associated
-    // source files.
     new(wx) wxDocTemplate
         (doc_manager_
         ,"Text"
@@ -545,7 +543,7 @@ void lmi_wx_app::OnDropFiles(wxDropFilesEvent& event)
 
 // TODO ?? Confirm that wx-2.5.4 solved the underlying problem, so
 // that this now works as expected.
-#if 1
+#if !defined NEW_EXCEPTION_HANDLER
 bool lmi_wx_app::OnExceptionInMainLoop()
 {
     wxLog::FlushActive();
@@ -557,7 +555,7 @@ bool lmi_wx_app::OnExceptionInMainLoop()
         );
     return wxYES == z;
 }
-#else // not 1
+#else // defined NEW_EXCEPTION_HANDLER
 // INELEGANT !! "Unhandled exception" occurs in msw system messages,
 // so a distinct alternative here might be better.
 //
@@ -598,7 +596,7 @@ bool lmi_wx_app::OnExceptionInMainLoop()
         return false;
         }
 }
-#endif // not 1
+#endif // defined NEW_EXCEPTION_HANDLER
 
 int lmi_wx_app::OnExit()
 {

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustration_view.cpp,v 1.20 2005-07-12 01:26:34 chicares Exp $
+// $Id: illustration_view.cpp,v 1.21 2005-08-04 02:20:13 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -128,13 +128,6 @@ wxWindow* IllustrationView::CreateChildWindow()
 
 int IllustrationView::EditProperties()
 {
-// TODO ?? expunge the commented-out testing code
-// (well, move it into skeleton with an alert-test menu)
-//        status() << "Test..." << LMI_FLUSH;
-//        warning() << "Test..." << LMI_FLUSH;
-//        hobsons_choice() << "Test..." << LMI_FLUSH;
-//        fatal_error() << "Test..." << LMI_FLUSH;
-
     if(is_phony_)
         {
 warning() << "That command should have been disabled." << LMI_FLUSH;
