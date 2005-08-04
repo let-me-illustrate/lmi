@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.100 2005-08-03 17:59:51 chicares Exp $
+// $Id: ChangeLog,v 1.101 2005-08-04 02:23:08 chicares Exp $
 
 2005-01-14
 
@@ -2889,5 +2889,21 @@ don't offer hobsons_choice.
 
   mathmisc.hpp
   mathmisc_test.cpp
+  objects.make
 Support another variety of stratified rates.
+
+20050804T0220Z <chicares@cox.net> [1285]
+
+  ihs_basicval.cpp
+Correct a typo in a comment.
+
+  illustration_view.cpp
+  main_wx.cpp
+  menus.xrc
+  text_view.cpp
+  text_view.hpp
+Demonstrate a suspected wx defect. Building this way:
+  make CPPFLAGS='-DNEW_EXCEPTION_HANDLER' install
+is probably the easiest way to see it clearly. Please don't build it
+that way unless you were specifically asked to in email.
 

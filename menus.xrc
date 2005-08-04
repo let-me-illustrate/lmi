@@ -24,7 +24,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: menus.xrc,v 1.3 2005-03-24 15:53:32 chicares Exp $
+    $Id: menus.xrc,v 1.4 2005-08-04 02:20:13 chicares Exp $
 -->
 
 <!-- reusable menus -->
@@ -394,16 +394,13 @@ Not supported yet: need to split columns into multiple pages.
             <help>Exit this program</help>
         </object>
     </object>
-<!--
-TODO ?? Why not expunge this?
-This temporary item just lets us see that a text_edit window is
-active and the appropriate menu is chosen. We could add any special
-menus for this type of window this way.
--->
     <object class="wxMenu" name="text_edit">
-        <label>text</label>
-        <object class="wxMenuItem" name="properties">
-            <label>text</label>
+        <label>_Text</label>
+        <object class="wxMenuItem" name="test_alert_streams">
+            <label>Test _alert streams</label>
+        </object>
+        <object class="wxMenuItem" name="test_exception">
+            <label>Test _exception</label>
         </object>
     </object>
     <object_ref name="window_menu" ref="window_menu_ref"/>
