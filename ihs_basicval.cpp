@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_basicval.cpp,v 1.13 2005-06-21 05:27:48 chicares Exp $
+// $Id: ihs_basicval.cpp,v 1.14 2005-08-04 02:19:28 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -1434,7 +1434,7 @@ double BasicValues::GetModalSpecAmtMlyDed
 
     z -= Loads_->monthly_policy_fee(e_basis(e_currbasis))[0];
     // TODO ?? Probably we should respect banding. This is a
-    // conservtive shortcut.
+    // conservative shortcut.
     z /= MortalityRates_->MonthlyCoiRatesBand0(e_basis(e_currbasis))[0];
     z *= 1.0 + InterestRates_->GenAcctNetRate
         (e_basis(e_guarbasis)
