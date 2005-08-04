@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: text_view.hpp,v 1.3 2005-04-22 02:21:21 chicares Exp $
+// $Id: text_view.hpp,v 1.4 2005-08-04 02:20:13 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.h (C) 1998 Julian Smart and Markus Holzem
@@ -42,6 +42,15 @@
 
 class WXDLLEXPORT wxTextCtrl;
 
+/// This class isn't actually used in production: it's exposed for use
+/// only with a special command-line option that enables "experimental
+/// or perilous" features. There's no intention to make lmi a general-
+/// purpose text editor.
+///
+/// It's left in cvs, though, because it's a convenient place to test
+/// to test purely experimental features such as OnTest(). It might
+/// be a valuable model for some other feature someday.
+
 class TextEditView
     :public ViewEx
     ,virtual private boost::noncopyable
@@ -59,9 +68,13 @@ class TextEditView
     virtual wxIcon Icon() const;
     virtual wxMenuBar* MenuBar() const;
 
+    void OnTestAlertStreams(wxCommandEvent&);
+    void OnTestException   (wxCommandEvent&);
+
     wxTextCtrl* text_window_;
 
     DECLARE_DYNAMIC_CLASS(TextEditView)
+    DECLARE_EVENT_TABLE()
 };
 
 #endif // text_view_hpp
