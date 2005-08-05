@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avmly.cpp,v 1.15 2005-06-11 15:03:59 chicares Exp $
+// $Id: ihs_avmly.cpp,v 1.16 2005-08-05 21:18:25 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -1539,10 +1539,19 @@ but position could be reversed for variable policy with bad curr performance
             ,old_dbopt
             );
         }
-    // TODO ?? How should the forceout affect basis?
+
     GptForceout = Irc7702_->Forceout();
     process_distribution(GptForceout);
     YearsTotalGptForceout += GptForceout;
+
+    // SOMEDAY !! Actually, forceouts reduce basis only to the extent
+    // they're nontaxable. For now, tax basis is used only as a limit
+    // (if requested) on withdrawals, and it is conservative for that
+    // purpose to underestimate basis.
+
+    CumPmts     -= GptForceout;
+    TaxBasis    -= GptForceout;
+
     if(adj_event)
         {
         Irc7702A_->InduceMaterialChange();
@@ -3120,8 +3129,6 @@ void AccountValue::TxTakeWD()
     CumPmts     -= NetWD;
     TaxBasis    -= NetWD;
     CumWD       += NetWD;
-//  if(Input_->WDToBasisThenLoan)
-//      LMI_ASSERT(CumWD <= TaxBasis);    // TODO ?? no-- <= CumPmts or something like that?
 
 // This seems wrong. If we're changing something that's invariant among
 // bases, why do we change it for each basis?
