@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: text_view.hpp,v 1.4 2005-08-04 02:20:13 chicares Exp $
+// $Id: text_view.hpp,v 1.5 2005-08-05 17:02:30 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.h (C) 1998 Julian Smart and Markus Holzem
@@ -68,8 +68,11 @@ class TextEditView
     virtual wxIcon Icon() const;
     virtual wxMenuBar* MenuBar() const;
 
-    void OnTestAlertStreams(wxCommandEvent&);
-    void OnTestException   (wxCommandEvent&);
+    void OnTestStatus       (wxCommandEvent&);
+    void OnTestWarning      (wxCommandEvent&);
+    void OnTestHobsons      (wxCommandEvent&);
+    void OnTestFatal        (wxCommandEvent&);
+    void OnTestException    (wxCommandEvent&);
 
     wxTextCtrl* text_window_;
 

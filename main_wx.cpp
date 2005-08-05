@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_wx.cpp,v 1.19 2005-08-04 02:20:13 chicares Exp $
+// $Id: main_wx.cpp,v 1.20 2005-08-05 17:02:30 chicares Exp $
 
 // Portions of this file are derived from wxWindows files
 //   samples/docvwmdi/docview.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -93,7 +93,6 @@ IMPLEMENT_WX_THEME_SUPPORT
 BEGIN_EVENT_TABLE(lmi_wx_app, wxApp)
  EVT_DROP_FILES(                             lmi_wx_app::OnDropFiles             )
  EVT_MENU(wxID_ABOUT                        ,lmi_wx_app::OnAbout                 )
- EVT_MENU(XRCID("test_standard_exception"  ),lmi_wx_app::OnTestStandardException )
  EVT_MENU(XRCID("window_cascade"           ),lmi_wx_app::OnWindowCascade         )
  EVT_MENU(XRCID("window_next"              ),lmi_wx_app::OnWindowNext            )
  EVT_MENU(XRCID("window_previous"          ),lmi_wx_app::OnWindowPrevious        )
@@ -543,7 +542,7 @@ void lmi_wx_app::OnDropFiles(wxDropFilesEvent& event)
 
 // TODO ?? Confirm that wx-2.5.4 solved the underlying problem, so
 // that this now works as expected.
-#if !defined NEW_EXCEPTION_HANDLER
+#if 0
 bool lmi_wx_app::OnExceptionInMainLoop()
 {
     wxLog::FlushActive();
@@ -555,36 +554,21 @@ bool lmi_wx_app::OnExceptionInMainLoop()
         );
     return wxYES == z;
 }
-#else // defined NEW_EXCEPTION_HANDLER
-// INELEGANT !! "Unhandled exception" occurs in msw system messages,
-// so a distinct alternative here might be better.
-//
-// WX !! The dialog wx presents is confusing: "Abort" actually seems
-// to be the choice that means 'try to resume', although probably
-// that should be the meaning of "Fail".
-//
-// Experimental: suggested by Vadim Zeitlin 6/17/2004 6:01 AM.
-//
+#else // !0
 bool lmi_wx_app::OnExceptionInMainLoop()
 {
     try
         {
-        // this just rethrows the exception but it is
-        // better practice to call it instead of doing
-        // it directly here in case the base class
-        // behaviour changes later
-        return wxApp::OnExceptionInMainLoop();
+        // This just rethrows the exception. It seems crucial that the
+        // exception be thrown from the same dll that caught it. This
+        // works only with a 'monolithic' wx dll.
+        return wxAppConsole::OnExceptionInMainLoop();
         }
     catch(std::exception& e)
         {
-// TODO ?? Does wxSafeShowMessage() have any advantage once the main
-// loop has begun? Using it here seems to duplicate messages pending
-// in the wxLog facility.
-//        wxSafeShowMessage("Error caught in OnExceptionInMainLoop().", e.what());
-        wxLog::FlushActive();
         int z = wxMessageBox
-            ("Try to resume?"
-            ,"Unhandled exception"
+            (e.what()
+            ,"Attempt to continue?"
             ,wxYES_NO | wxICON_QUESTION
             );
         return wxYES == z;
@@ -592,11 +576,10 @@ bool lmi_wx_app::OnExceptionInMainLoop()
     catch(...)
         {
         wxSafeShowMessage("Error caught in OnExceptionInMainLoop().", "Unknown error");
-        wxLog::FlushActive();
         return false;
         }
 }
-#endif // defined NEW_EXCEPTION_HANDLER
+#endif // !0
 
 int lmi_wx_app::OnExit()
 {
@@ -743,11 +726,6 @@ void lmi_wx_app::OnMenuOpen(wxMenuEvent& event)
         }
     // (else) Parent menu enablement could be handled here, but, for
     // now at least, none is required.
-}
-
-void lmi_wx_app::OnTestStandardException(wxCommandEvent&)
-{
-    throw std::runtime_error("See whether this gets caught.");
 }
 
 // WX !! The wx exception-handling code doesn't seem to permit
