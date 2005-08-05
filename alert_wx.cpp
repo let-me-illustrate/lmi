@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: alert_wx.cpp,v 1.2 2005-07-16 22:51:44 chicares Exp $
+// $Id: alert_wx.cpp,v 1.3 2005-08-05 17:02:30 chicares Exp $
 
 // TODO ?? Once this facility is tested, consider using it widely,
 // perhaps instead of using wx's logging classes directly at all.
@@ -30,6 +30,8 @@
 #endif // __BORLANDC__
 
 #include "alert.hpp"
+
+#include "configurable_settings.hpp"
 
 #include <wx/app.h> // wxTheApp
 #include <wx/frame.h>
@@ -87,21 +89,38 @@ void warning_alert(std::string const& s)
 
 void hobsons_choice_alert(std::string const& s)
 {
-    int rc = wxMessageBox
-        (s.c_str()
-        ,"Try to resume?"
-        ,wxYES_NO | wxICON_QUESTION
-        ,wxTheApp->GetTopWindow()
-        );
-    if(wxYES != rc)
+    if(configurable_settings::instance().offer_hobsons_choice())
         {
+        int rc = wxMessageBox
+            (s.c_str()
+            ,"Stop the current operation and attempt to resume safely?"
+            ,wxYES_NO | wxICON_QUESTION
+            ,wxTheApp->GetTopWindow()
+            );
+        if(wxYES == rc)
+            {
+            throw std::runtime_error(s);
+            }
+        else
+            {
+            wxMessageBox
+                (s.c_str()
+                ,"Warning: the illustration may be invalid."
+                ,wxYES_NO | wxICON_QUESTION
+                ,wxTheApp->GetTopWindow()
+                );
+            }
+        }
+    else
+        {
+// TODO ?? expunge?        wxLogError(s.c_str());
         throw std::runtime_error(s);
         }
 }
 
 void fatal_error_alert(std::string const& s)
 {
-    wxLogError(s.c_str());
+// TODO ?? expunge?    wxLogError(s.c_str());
     throw std::runtime_error(s);
 }
 

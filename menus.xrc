@@ -24,7 +24,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: menus.xrc,v 1.4 2005-08-04 02:20:13 chicares Exp $
+    $Id: menus.xrc,v 1.5 2005-08-05 17:02:30 chicares Exp $
 -->
 
 <!-- reusable menus -->
@@ -91,14 +91,6 @@
             <help>Exit this program</help>
         </object>
     </object>
-<!-- TODO ?? Eventually expunge this.
-    <object class="wxMenu" name="miscellaneous">
-        <label>_Miscellaneous</label>
-        <object class="wxMenuItem" name="test_standard_exception">
-            <label>_Test standard exception</label>
-        </object>
-    </object>
--->
     <object_ref name="wxID_HELP" ref="help_menu_ref"/>
 </object>
 
@@ -396,8 +388,17 @@ Not supported yet: need to split columns into multiple pages.
     </object>
     <object class="wxMenu" name="text_edit">
         <label>_Text</label>
-        <object class="wxMenuItem" name="test_alert_streams">
-            <label>Test _alert streams</label>
+        <object class="wxMenuItem" name="test_status_alert">
+            <label>Test _status-bar alert</label>
+        </object>
+        <object class="wxMenuItem" name="test_warning_alert">
+            <label>Test _warning alert</label>
+        </object>
+        <object class="wxMenuItem" name="test_hobsons_choice_alert">
+            <label>Test _hobsons-choice alert</label>
+        </object>
+        <object class="wxMenuItem" name="test_fatal_error_alert">
+            <label>Test _fatal-error alert</label>
         </object>
         <object class="wxMenuItem" name="test_exception">
             <label>Test _exception</label>

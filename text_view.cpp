@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: text_view.cpp,v 1.4 2005-08-04 02:20:13 chicares Exp $
+// $Id: text_view.cpp,v 1.5 2005-08-05 17:02:30 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -50,8 +50,11 @@
 IMPLEMENT_DYNAMIC_CLASS(TextEditView, ViewEx)
 
 BEGIN_EVENT_TABLE(TextEditView, ViewEx)
-    EVT_MENU(XRCID("test_alert_streams"),TextEditView::OnTestAlertStreams)
-    EVT_MENU(XRCID("test_exception"    ),TextEditView::OnTestException)
+    EVT_MENU(XRCID("test_status_alert"        ),TextEditView::OnTestStatus)
+    EVT_MENU(XRCID("test_warning_alert"       ),TextEditView::OnTestWarning)
+    EVT_MENU(XRCID("test_hobsons_choice_alert"),TextEditView::OnTestHobsons)
+    EVT_MENU(XRCID("test_fatal_error_alert"   ),TextEditView::OnTestFatal)
+    EVT_MENU(XRCID("test_exception"           ),TextEditView::OnTestException)
 END_EVENT_TABLE()
 
 TextEditView::TextEditView()
@@ -86,14 +89,24 @@ wxMenuBar* TextEditView::MenuBar() const
     return MenuBarFromXmlResource("text_view_menu");
 }
 
-void TextEditView::OnTestAlertStreams(wxCommandEvent&)
+void TextEditView::OnTestStatus(wxCommandEvent&)
 {
     status()         << "Test status()"         << LMI_FLUSH;
+}
+
+void TextEditView::OnTestWarning(wxCommandEvent&)
+{
     warning()        << "Test warning()"        << LMI_FLUSH;
+}
+
+void TextEditView::OnTestHobsons(wxCommandEvent&)
+{
     hobsons_choice() << "Test hobsons_choice()" << LMI_FLUSH;
+}
+
+void TextEditView::OnTestFatal(wxCommandEvent&)
+{
     fatal_error()    << "Test fatal_error()"    << LMI_FLUSH;
-    wxLogError("Calling FlushActive()");
-    wxLog::FlushActive();
 }
 
 void TextEditView::OnTestException(wxCommandEvent&)

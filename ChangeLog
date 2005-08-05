@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.101 2005-08-04 02:23:08 chicares Exp $
+// $Id: ChangeLog,v 1.102 2005-08-05 17:02:30 chicares Exp $
 
 2005-01-14
 
@@ -2906,4 +2906,25 @@ Demonstrate a suspected wx defect. Building this way:
   make CPPFLAGS='-DNEW_EXCEPTION_HANDLER' install
 is probably the easiest way to see it clearly. Please don't build it
 that way unless you were specifically asked to in email.
+
+20050805T1702Z <chicares@cox.net> [1286]
+
+  alert_wx.cpp
+  main_wx.cpp
+  main_wx.hpp
+  menus.xrc
+  text_view.cpp
+  text_view.hpp
+Experimentally revamp error-handling facility for wx. Attempt to avoid
+presenting the same messabebox twice. When Hobson's choice is offered,
+change the default choice to make it halt the operation in which a
+problem was detected and attempt to back up and resume safely; if the
+nondefault choice is selected, then a new warning appears, explicitly
+stating that "the illustration may be invalid". A new setting
+  <offer_hobsons_choice>0</offer_hobsons_choice>
+or
+  <offer_hobsons_choice>1</offer_hobsons_choice>
+in 'configurable_settings.xml' controls whether Hobson's choice is
+even offered: a value of 1 offers it, and a value of 0 does not.
+Expunge the no-longer-needed NEW_EXCEPTION_HANDLER macro.
 
