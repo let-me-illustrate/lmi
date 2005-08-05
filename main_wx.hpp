@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_wx.hpp,v 1.2 2005-04-22 02:21:21 chicares Exp $
+// $Id: main_wx.hpp,v 1.3 2005-08-05 17:02:30 chicares Exp $
 
 // Portions of this file are derived from wxWindows files
 //   samples/docvwmdi/docview.h (C) 1998 Julian Smart and Markus Holzem
@@ -75,7 +75,6 @@ class lmi_wx_app
     void OnAbout                  (wxCommandEvent&);
     void OnDropFiles              (wxDropFilesEvent&);
     void OnMenuOpen               (wxMenuEvent&);
-    void OnTestStandardException  (wxCommandEvent&);
     void OnUpdateInapplicable     (wxUpdateUIEvent&);
     void OnUpdateFileSave         (wxUpdateUIEvent&);
     void OnUpdateUI               (wxUpdateUIEvent&);
