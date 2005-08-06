@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: autodependency.make,v 1.2 2005-06-18 19:39:02 chicares Exp $
+# $Id: autodependency.make,v 1.3 2005-08-06 02:40:29 chicares Exp $
 
 ################################################################################
 
@@ -106,11 +106,25 @@ $(src_dir)/configuration.make:: ;
 #   $(MAKEDEPEND)
 #   $(CXX) -c $(ALL_CPPFLAGS) $(ALL_CXXFLAGS) $< -o$@
 #
+# [superseded paragraph]
 # If we were never going to use any other compiler than gcc, then we
 # could combine this with the compile command, e.g., with '-MD',
 # paying careful attention to the complex interactions among '-M'
 # options:
 #   http://gcc.gnu.org/ml/gcc-bugs/2003-05/msg00161.html
+#
+# TODO ?? Merely marking the preceding paragraph as superseded isn't
+# ideal. This file has accumulated a lot of clutter over the years
+# and needs to be completely rewritten.
+#
+# Subsequent change: now '-MMD' is used. It was measured to improve
+# build speed by five or ten percent over '-MD'. It would be dangerous
+# to use with any preprocessor older than gcc-3.x's: the documentation
+# for gcc-2.95's preprocessor says it treats
+#   #include <my_own_header_included_with_angle_brackets.hpp>
+# as a system file, which would be most undesirable because lmi uses
+# that syntax for third-party headers (as does boost). This makefile
+# should ensure that it's not using an older preprocessor.
 
 # A problem can arise if cpp fails abnormally:
 #   http://mail.gnu.org/archive/html/help-make/2004-01/msg00065.html
@@ -233,7 +247,7 @@ MAKEDEPEND = \
 # intermediate '.d0' file?
 
 MAKEDEPEND_0 = \
-  -MD -MF $*.d0 \
+  -MMD -MF $*.d0 \
 
 MAKEDEPEND_1 = \
   $(SED) $(autodependency_sed_commands) < $*.d0 > $*.d; \
