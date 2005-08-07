@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.104 2005-08-07 23:34:46 chicares Exp $
+// $Id: ChangeLog,v 1.105 2005-08-07 23:45:19 chicares Exp $
 
 2005-01-14
 
@@ -2954,7 +2954,7 @@ a cell before its inforce duration.
 
 20050807T2334Z <chicares@cox.net> [1273]
 
-  accountvalue.cpp
+  account_value.hpp
   group_values.cpp
   ihs_acctval.cpp
 Refactor. Remove an incorrect calculation of account value released on
