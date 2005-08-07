@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: group_values.cpp,v 1.20 2005-06-05 03:55:52 chicares Exp $
+// $Id: group_values.cpp,v 1.21 2005-08-07 15:53:14 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -429,6 +429,16 @@ restart:
                 +   experience_reserve_rate[year]
                 ;
 
+            for(i = cell_values.begin(); i != cell_values.end(); ++i)
+                {
+                if((*i)->PrecedesInforceDuration(year, 0))
+                    {
+                    continue;
+                    }
+                (*i)->Year = year;
+                (*i)->InitializeYear();
+                }
+
             // Process one month at a time for all cells.
             for(int month = 0; month < 12; ++month)
                 {
@@ -440,13 +450,12 @@ restart:
                 // Process transactions through monthly deduction.
                 for(i = cell_values.begin(); i != cell_values.end(); ++i)
                     {
-                    (*i)->Year = year;
-                    (*i)->Month = month;
-                    (*i)->CoordinateCounters();
                     if((*i)->PrecedesInforceDuration(year, month))
                         {
                         continue;
                         }
+                    (*i)->Month = month;
+                    (*i)->CoordinateCounters();
                     (*i)->IncrementBOM(year, month, case_k_factor);
 
                     assets += (*i)->GetSepAcctAssetsInforce();
@@ -456,7 +465,7 @@ restart:
                 // Process transactions from int credit through end of month.
                 for(i = cell_values.begin(); i != cell_values.end(); ++i)
                     {
-                    if((*i)->PrecedesInforceDuration(year, month)) // TODO ?? Is this right?
+                    if((*i)->PrecedesInforceDuration(year, month))
                         {
                         continue;
                         }
@@ -468,11 +477,19 @@ restart:
                 // at the end of last month and no interest adjustment
                 // is required.
                 //
+                // An off-anniversary inforce case generates a full
+                // year's claims, which is consistent with curtate
+                // mortality.
+                //
                 double current_claims = 0.0;
                 if(month == 11)
                     {
                     for(i = cell_values.begin(); i != cell_values.end(); ++i)
                         {
+                        if((*i)->PrecedesInforceDuration(year, month))
+                            {
+                            continue;
+                            }
                         (*i)->SetClaims();
 // TODO ?? AV released on death was added to the nearly-identical code in
 // the account-value class, but not here.
@@ -579,8 +596,16 @@ restart:
                         );
                     }
 
+                // Apportion experience-rating reserve according to
+                // projected mortality charges, assuming that any
+                // cell in force at end of year contributes a full
+                // year to the projection.
                 for(i = cell_values.begin(); i != cell_values.end(); ++i)
                     {
+                    if((*i)->PrecedesInforceDuration(year, 11))
+                        {
+                        continue;
+                        }
                     (*i)->ApportionNetMortalityReserve
                         (case_net_mortality_reserve
                         ,case_years_net_mortchgs
