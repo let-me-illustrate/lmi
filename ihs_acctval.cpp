@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_acctval.cpp,v 1.33 2005-08-07 15:53:14 chicares Exp $
+// $Id: ihs_acctval.cpp,v 1.34 2005-08-07 23:34:46 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -391,10 +391,6 @@ restart:
             if(month == 11)
                 {
                 SetClaims();
-                YearsAVRelOnDeath += InforceLives // TODO ?? Validate.
-                    *   GetPartMortQ(Year)
-                    *   TotalAccountValue()
-                    ;
                 }
             }
 
@@ -1185,6 +1181,8 @@ void AccountValue::InitializeYear()
 
     YearsTotalCOICharge         = 0.0;
     YearsAVRelOnDeath           = 0.0;
+    YearsGrossClaims            = 0.0;
+    YearsNetClaims              = 0.0;
     YearsTotalNetIntCredited    = 0.0;
     YearsTotalGrossIntCredited  = 0.0;
     YearsTotalExpRsvInt         = 0.0;
@@ -1459,61 +1457,53 @@ double AccountValue::SurrChg()
 //============================================================================
 void AccountValue::SetClaims()
 {
-    if(ItLapsed || BasicValues::GetLength() <= Year)
+    if(!Input_->UsePartialMort || ItLapsed || BasicValues::GetLength() <= Year)
         {
         return;
         }
 
     // Update death benefit: "DBReflectingCorr" currently holds benefit as of
-    //   the beginning of month 12, but we want it as of the end of that month,
-    //   in case the corridor or option 2 drove it up during the last month.
-    //   TODO ?? Needs end of year corridor factor, if it varies monthly.
-    // Death benefit also reflects any experience refund credited to AV.
-    // We do this here to get death benefit based on experience refund
-    // before deaths or refunds are recognized in the experience fund.
+    // the beginning of month 12, but we want it as of the end of that month,
+    // in case the corridor or option 2 drove it up during the last month.
+
     TxSetDeathBft();
     TxSetTermAmt();
 
     if(Input_->UsePartialMort)
         {
-        // TODO ?? Replace with calls to GetCurtateNetClaimsInforce() e.g.
-        // and move the comment into that function.
-        //
-        // TODO ?? If claims are handled more frequently than annually
-        // (not curtate), this will be inaccurate:
-        VariantValues().ClaimsPaid      [Year] =
+        // Amounts such as claims and account value released on death
+        // are multiplied by the beginning-of-year inforce factor when
+        // a composite is produced; it would be incorrect to multiply
+        // them by the inforce factor here because individual-cell
+        // ledgers do not reflect partial mortality. This calculation
+        // assumes that partial mortality is curtate.
+
+        YearsGrossClaims =
                 GetPartMortQ(Year)
             *   (
                     DBReflectingCorr
-//              -   TotalAccountValue()
                 )
             ;
-        VariantValues().AVRelOnDeath    [Year] =
-                GetPartMortQ(Year)
-            *   (
-                TotalAccountValue()
-                )
-            ;
-        // TODO ?? JOE NetClaims is assigned elsewhere, and not on
-        // every path through the code...
-        }
 
-// JOE Here are the differences I would expect this change to produce:
-//
-// AV rel should be the same, at least until there's a refund
-//
-// Claims paid will be higher, because now we're paying q times
-//   AV + exp fund incl net COIs with int, but disregarding deaths
-// instead of
-//   AV + exp fund incl net COIs with int, minus deaths, as previously
+        YearsAVRelOnDeath =
+                GetPartMortQ(Year)
+            *   TotalAccountValue()
+            ;
+
+        YearsNetClaims = YearsGrossClaims - YearsAVRelOnDeath;
+
+        // Avoid reporting minuscule claim amounts that are merely an
+        // artifact of rounding DB and AV differently.
+        if(materially_equal(DBReflectingCorr, TotalAccountValue()))
+            {
+            YearsNetClaims = 0.0;
+            }
+        }
 }
 
 //============================================================================
 void AccountValue::FinalizeYear()
 {
-    // AV already includes any experience refund credited, but it's
-    // forborne among the survivors. See below.
-    //
     double total_av = TotalAccountValue();
     double surr_chg = SurrChg();
     double csv_net =
@@ -1588,7 +1578,9 @@ void AccountValue::FinalizeYear()
     // year; but if it lapses during the year, should things that happened
     // during the year of lapse be included in a composite?
     VariantValues().COICharge       [Year] = YearsTotalCOICharge        ;
-// erase    VariantValues().AVRelOnDeath    [Year] = YearsAVRelOnDeath          ;
+    VariantValues().AVRelOnDeath    [Year] = YearsAVRelOnDeath          ;
+    VariantValues().ClaimsPaid      [Year] = YearsGrossClaims           ;
+    VariantValues().NetClaims       [Year] = YearsNetClaims             ;
     VariantValues().NetIntCredited  [Year] = YearsTotalNetIntCredited   ;
     VariantValues().GrossIntCredited[Year] = YearsTotalGrossIntCredited ;
     VariantValues().ExpRsvInt       [Year] = YearsTotalExpRsvInt        ;
@@ -1969,26 +1961,7 @@ double AccountValue::GetCurtateNetClaimsInforce()
         {
         return 0.0;
         }
-
-    // TODO ?? Also set AV released on death here?
-    // TODO ?? Is this function called on all paths through the code?
-    // TODO ?? Should the assignment to VariantValues occur elsewhere?
-
-    // Use EOM values.
-    TxSetDeathBft();
-    TxSetTermAmt();
-
-    // Avoid reporting minuscule claim amounts that are merely an
-    // artifact of rounding DB and AV differently.
-    double simplified_naar = 0.0;
-    if(!materially_equal(DBReflectingCorr, TotalAccountValue()))
-        {
-        simplified_naar = DBReflectingCorr - TotalAccountValue();
-        }
-    double net_claims = GetPartMortQ(Year) * simplified_naar;
-
-    VariantValues().NetClaims[Year] = net_claims;
-    return InforceLives * net_claims;
+    return InforceLives * YearsNetClaims;
 }
 
 //============================================================================

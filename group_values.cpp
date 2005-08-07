@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: group_values.cpp,v 1.21 2005-08-07 15:53:14 chicares Exp $
+// $Id: group_values.cpp,v 1.22 2005-08-07 23:34:46 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -491,8 +491,6 @@ restart:
                             continue;
                             }
                         (*i)->SetClaims();
-// TODO ?? AV released on death was added to the nearly-identical code in
-// the account-value class, but not here.
                         current_claims += (*i)->GetCurtateNetClaimsInforce();
                         }
 
