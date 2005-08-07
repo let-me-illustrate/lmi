@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.102 2005-08-05 17:02:30 chicares Exp $
+// $Id: ChangeLog,v 1.103 2005-08-07 15:53:14 chicares Exp $
 
 2005-01-14
 
@@ -2927,4 +2927,28 @@ or
 in 'configurable_settings.xml' controls whether Hobson's choice is
 even offered: a value of 1 offers it, and a value of 0 does not.
 Expunge the no-longer-needed NEW_EXCEPTION_HANDLER macro.
+
+20050805T2118Z <chicares@cox.net> [1283]
+
+  ihs_avmly.cpp
+Reflect GPT forceouts in approximate tax basis.
+
+20050806T0240Z <chicares@cox.net> [1284]
+
+  autodependency.make
+Use '-MMD' instead of '-MD' for faster builds.
+
+20050807T1552Z <chicares@cox.net> [1283]
+
+  accountvalue.cpp
+  group_values.cpp
+  ihs_acctval.cpp
+Refactor. Always call InitializeYear() independently when needed--not
+in InitializeBOM(), where it had been called at the beginning of month
+zero, which apparently skipped yearly initialization for inforce cases
+run off anniversary.  Call DoMonthDR() only through IncrementBOM(),
+using the latter function even if the run order is life by life; skip
+experience rating in IncrementBOM() if the run order is not month by
+month. For month-by-month census calculations, perform no operation on
+a cell before its inforce duration.
 
