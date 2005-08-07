@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_acctval.cpp,v 1.32 2005-07-26 00:11:24 chicares Exp $
+// $Id: ihs_acctval.cpp,v 1.33 2005-08-07 15:53:14 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -377,6 +377,7 @@ restart:
 
     for(int year = InforceYear; year < BasicValues::GetLength(); ++year)
         {
+        InitializeYear();
         for(int month = InforceMonth; month < 12; ++month)
             {
             CoordinateCounters();
@@ -836,16 +837,14 @@ void AccountValue::SetInitialValues()
 //============================================================================
 void AccountValue::DoYear(int inforce_month)
 {
-    // TODO ?? Designed to be called only this way:
-    // NO: should be life by life only for census run.
-//  LMI_ASSERT(e_life_by_life == Input_->RunOrder);
+    LMI_ASSERT(e_life_by_life == Input_->RunOrder);
 
     InitializeYear();
 
     for(Month = inforce_month; Month < 12; ++Month)
         {
         CoordinateCounters();
-        DoMonthDR();
+        IncrementBOM(Year, Month, 0.0);
 
         ApplyDynamicSepAcctLoadAMD  (Input_->VectorCaseAssumedAssets[Year]);
         ApplyDynamicMandE           (Input_->VectorCaseAssumedAssets[Year]);
@@ -861,7 +860,6 @@ void AccountValue::DoYear(int inforce_month)
     SetClaims();
     FinalizeYear();
 }
-
 
 //============================================================================
 // Process monthly transactions up to but excluding interest credit
@@ -910,12 +908,11 @@ double AccountValue::IncrementBOM
             ;
         }
 
-    if(0 == Month)
-        {
-        InitializeYear();
-        }
-
-    if(COIIsDynamic && Input_->UseExperienceRating)
+    if
+        (   COIIsDynamic
+        &&  Input_->UseExperienceRating
+        &&  e_month_by_month == Input_->RunOrder
+        )
         {
         LMI_ASSERT(!UseUnusualCOIBanding);
         case_k_factor = a_case_k_factor;
@@ -1172,6 +1169,11 @@ void AccountValue::ApplyDynamicSepAcctLoadAMD(double assets)
 //============================================================================
 void AccountValue::InitializeYear()
 {
+    if(ItLapsed || BasicValues::GetLength() <= Year)
+        {
+        return;
+        }
+
     if(Input_->UsePartialMort && 0 < Year)
         {
         InforceFactor *= 1.0 - GetPartMortQ(Year - 1);
