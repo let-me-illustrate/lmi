@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.103 2005-08-07 15:53:14 chicares Exp $
+// $Id: ChangeLog,v 1.104 2005-08-07 23:34:46 chicares Exp $
 
 2005-01-14
 
@@ -2951,4 +2951,15 @@ using the latter function even if the run order is life by life; skip
 experience rating in IncrementBOM() if the run order is not month by
 month. For month-by-month census calculations, perform no operation on
 a cell before its inforce duration.
+
+20050807T2334Z <chicares@cox.net> [1273]
+
+  accountvalue.cpp
+  group_values.cpp
+  ihs_acctval.cpp
+Refactor. Remove an incorrect calculation of account value released on
+death, which actually had no effect. Consolidate correct calculation
+of account value released on death and claims calculations, with the
+salubrious effect that net claims are now always calculated if partial
+mortality is used.
 
