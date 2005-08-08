@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: group_values.cpp,v 1.22 2005-08-07 23:34:46 chicares Exp $
+// $Id: group_values.cpp,v 1.23 2005-08-08 02:41:15 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -471,37 +471,6 @@ restart:
                         }
                     (*i)->IncrementEOM(year, month, assets);
                     }
-
-                // Project claims using the partial-mortality rate,
-                // which is curtate, so the whole year's claims occur
-                // at the end of last month and no interest adjustment
-                // is required.
-                //
-                // An off-anniversary inforce case generates a full
-                // year's claims, which is consistent with curtate
-                // mortality.
-                //
-                double current_claims = 0.0;
-                if(month == 11)
-                    {
-                    for(i = cell_values.begin(); i != cell_values.end(); ++i)
-                        {
-                        if((*i)->PrecedesInforceDuration(year, month))
-                            {
-                            continue;
-                            }
-                        (*i)->SetClaims();
-                        current_claims += (*i)->GetCurtateNetClaimsInforce();
-                        }
-
-                    case_accum_net_claims *= experience_reserve_annual_u;
-                    case_accum_net_claims += current_claims;
-
-                    case_accum_net_mortchgs *= experience_reserve_annual_u;
-                    case_accum_net_mortchgs += current_mortchg;
-
-                    case_years_net_mortchgs += current_mortchg;
-                    }
                 }
 
             bool need_to_restart = false;
@@ -528,20 +497,7 @@ restart:
                 goto restart;
                 }
 
-            // Perform end of year calculations.
-
-            // Increment year; update curtate inforce factor.
-
-            for(i = cell_values.begin(); i != cell_values.end(); ++i)
-                {
-                if((*i)->PrecedesInforceDuration(year, 11))
-                    {
-                    continue;
-                    }
-                projected_net_mortchgs += (*i)->GetInforceProjectedCoiCharge();
-                (*i)->IncrementEOY(year);
-                }
-
+            // TODO ?? This test should be moved elsewhere.
             if
                 (   cells[0].UseExperienceRating
                 &&  e_mdptbasis == expense_and_general_account_basis
@@ -556,10 +512,43 @@ restart:
                     ;
                 }
 
+            // Perform end of year calculations.
+
+            // Project claims using the partial-mortality rate:
+            // it's curtate, so the whole year's claims occur at
+            // the end of the last month and no interest
+            // adjustment is required.
+            //
+            // An off-anniversary inforce case generates a full
+            // year's claims, which is consistent with curtate
+            // mortality.
+
+            double current_claims = 0.0;
+            for(i = cell_values.begin(); i != cell_values.end(); ++i)
+                {
+                if((*i)->PrecedesInforceDuration(year, 11))
+                    {
+                    continue;
+                    }
+                (*i)->SetClaims();
+                current_claims += (*i)->GetCurtateNetClaimsInforce();
+                projected_net_mortchgs += (*i)->GetInforceProjectedCoiCharge();
+                (*i)->IncrementEOY(year);
+                }
+
             // Calculate next year's k factor. Do this only for
             // current-expense bases, not as a speed optimization,
             // but rather because experience rating on other bases
             // is undefined.
+
+            case_accum_net_claims *= experience_reserve_annual_u;
+            case_accum_net_claims += current_claims;
+
+            case_accum_net_mortchgs *= experience_reserve_annual_u;
+            case_accum_net_mortchgs += current_mortchg;
+
+            case_years_net_mortchgs += current_mortchg;
+
             if
                 (   cells[0].UseExperienceRating
                 &&  e_currbasis == expense_and_general_account_basis
