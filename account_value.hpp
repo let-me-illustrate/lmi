@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: account_value.hpp,v 1.19 2005-08-08 16:01:53 chicares Exp $
+// $Id: account_value.hpp,v 1.20 2005-08-08 23:57:01 chicares Exp $
 
 #ifndef account_value_hpp
 #define account_value_hpp
@@ -170,7 +170,8 @@ class LMI_EXPIMP AccountValue
 
     void   SetClaims();
     double GetCurtateNetClaimsInforce();
-    double GetInforceProjectedCoiCharge();
+    void   SetProjectedCoiCharge();
+    double GetProjectedCoiChargeInforce();
     void ApportionNetMortalityReserve
         (double case_net_mortality_reserve
         ,double case_years_net_mortchgs
@@ -192,15 +193,13 @@ class LMI_EXPIMP AccountValue
         ,double a_case_k_factor
         );
     // Credit interest and process all subsequent monthly transactions
-    double IncrementEOM
+    void IncrementEOM
         (int year
         ,int month
         ,double MandE
         );
-    // Increment year, update curtate inforce factor
-    double IncrementEOY
-        (int year
-        );
+
+    void IncrementEOY(int year);
 
     bool PrecedesInforceDuration(int year, int month);
 
@@ -613,6 +612,8 @@ class LMI_EXPIMP AccountValue
     double  YearsTotalSpecAmtLoad;
     double  YearsTotalAcctValLoadBOM;
     double  YearsTotalAcctValLoadAMD;
+
+    double NextYearsProjectedCOICharge;
 
     std::vector<double> partial_mortality_q;
 
