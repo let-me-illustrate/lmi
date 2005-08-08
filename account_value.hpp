@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: account_value.hpp,v 1.18 2005-08-07 23:44:42 chicares Exp $
+// $Id: account_value.hpp,v 1.19 2005-08-08 16:01:53 chicares Exp $
 
 #ifndef account_value_hpp
 #define account_value_hpp
@@ -168,8 +168,6 @@ class LMI_EXPIMP AccountValue
     void   DebugPrint           ();
     void   DebugRestart         (std::string const& reason);
 
-    // For experience rating, record claims paid and AV released on
-    // death before adjusting the experience fund for deaths.
     void   SetClaims();
     double GetCurtateNetClaimsInforce();
     double GetInforceProjectedCoiCharge();
@@ -226,8 +224,6 @@ class LMI_EXPIMP AccountValue
 
     double SolveGuarPremium        ();
 
-    // Not inline--goes through class MortalityRates, and we don't
-    // want to put that class's full declaration in the header.
     double GetPartMortQ            (int year) const;
 
     void PerformSpecAmtStrategy(); // Antediluvian.
@@ -439,8 +435,6 @@ class LMI_EXPIMP AccountValue
     double  InforceCumPmts;
     double  InforceTaxBasis;
     double  InforceLoanBalance;
-    double  InforceLives;
-    double  InforceFactor;
 
     // Intermediate values.
     int     Year;
@@ -620,6 +614,8 @@ class LMI_EXPIMP AccountValue
     double  YearsTotalAcctValLoadBOM;
     double  YearsTotalAcctValLoadAMD;
 
+    std::vector<double> partial_mortality_q;
+
     // For experience rating.
     double  YearsTotalNetCOIs;
     double  apportioned_net_mortality_reserve;
@@ -694,12 +690,6 @@ inline int AccountValue::GetLength() const
 inline e_ledger_type const& AccountValue::GetLedgerType() const
 {
     return BasicValues::GetLedgerType();
-}
-
-//============================================================================
-inline double AccountValue::GetInforceLives() const
-{
-    return InforceLives;
 }
 
 #endif // account_value_hpp

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avdebug.cpp,v 1.11 2005-05-27 09:33:46 chicares Exp $
+// $Id: ihs_avdebug.cpp,v 1.12 2005-08-08 16:01:53 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -263,11 +263,14 @@ void AccountValue::DebugPrint()
     SetMonthlyDetail(eEOMCSVNet          ,csv_net                          );
     SetMonthlyDetail(eEOMCV7702          ,CashValueFor7702()               );
 
-    SetMonthlyDetail(eInforceFactor      ,InforceFactor                    );
+    LMI_ASSERT(0 != Input_->NumIdenticalLives); // Make sure division is safe.
     SetMonthlyDetail
-        (   eClaimsPaid
-        ,   GetPartMortQ(Year) * InvariantValues().SpecAmt[Year]
+        (eInforceFactor
+        ,ItLapsed
+            ? 0.0
+            : InvariantValues().InforceLives[Year] / Input_->NumIdenticalLives
         );
+    SetMonthlyDetail(eClaimsPaid         ,YearsGrossClaims                 );
 
     bool irc7702a_data_irrelevant =
            InvariantValues().MecYear < Year

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.106 2005-08-08 02:41:15 chicares Exp $
+// $Id: ChangeLog,v 1.107 2005-08-08 16:01:53 chicares Exp $
 
 2005-01-14
 
@@ -2963,11 +2963,19 @@ of account value released on death and claims calculations, with the
 salubrious effect that net claims are now always calculated if partial
 mortality is used.
 
-
- <chicares@cox.net> [1273]
+20050808T0241Z <chicares@cox.net> [1273]
 
   group_values.cpp
   ihs_acctval.cpp
 Refactor. Determine claims at the end of a yearly loop, not at the end
 of a monthly loop depending on whether it's the last month in a year.
+
+20050808T1601Z <chicares@cox.net> [1270]
+
+  account_value.hpp
+  ihs_acctval.cpp
+  ihs_avdebug.cpp
+  ihs_avmly.cpp
+Refactor. Calculate partial-mortality q once, storing its value for
+later use.
 
