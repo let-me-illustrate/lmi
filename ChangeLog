@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.107 2005-08-08 16:01:53 chicares Exp $
+// $Id: ChangeLog,v 1.108 2005-08-08 23:57:01 chicares Exp $
 
 2005-01-14
 
@@ -253,9 +253,9 @@ Add 'install' target.
 
 2005-02-04 [1085]
 
+  account_value.hpp [new file]
   accountvalue.cpp
   accountvalue.hpp  [expunged]
-  account_value.hpp [new file]
   avdebug.cpp
   ihs_acctval.cpp
   ihs_acctval.hpp   [expunged]
@@ -2978,4 +2978,16 @@ of a monthly loop depending on whether it's the last month in a year.
   ihs_avmly.cpp
 Refactor. Calculate partial-mortality q once, storing its value for
 later use.
+
+20050808T2356Z <chicares@cox.net> [1265]
+
+  account_value.hpp
+  accountvalue.cpp
+  group_values.cpp
+  ihs_acctval.cpp
+Refactor. Avoid incrementing 'Year' and 'Month' counters in functions
+called by loop drivers. Separate the calculation of experience-rating
+projected mortality charge from its use. Call FinalizeYear() only
+through IncrementEOY(), using the latter function even if the run
+order is life by life.
 

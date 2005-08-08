@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: group_values.cpp,v 1.23 2005-08-08 02:41:15 chicares Exp $
+// $Id: group_values.cpp,v 1.24 2005-08-08 23:57:01 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -436,6 +436,7 @@ restart:
                     continue;
                     }
                 (*i)->Year = year;
+                (*i)->CoordinateCounters();
                 (*i)->InitializeYear();
                 }
 
@@ -531,9 +532,10 @@ restart:
                     continue;
                     }
                 (*i)->SetClaims();
-                current_claims += (*i)->GetCurtateNetClaimsInforce();
-                projected_net_mortchgs += (*i)->GetInforceProjectedCoiCharge();
+                (*i)->SetProjectedCoiCharge();
                 (*i)->IncrementEOY(year);
+                current_claims += (*i)->GetCurtateNetClaimsInforce();
+                projected_net_mortchgs += (*i)->GetProjectedCoiChargeInforce();
                 }
 
             // Calculate next year's k factor. Do this only for
