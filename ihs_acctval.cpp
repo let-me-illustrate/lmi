@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_acctval.cpp,v 1.34 2005-08-07 23:34:46 chicares Exp $
+// $Id: ihs_acctval.cpp,v 1.35 2005-08-08 02:41:15 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -388,10 +388,6 @@ restart:
             Assets = GetSepAcctAssetsInforce();
 
             IncrementEOM(year, month, Assets);
-            if(month == 11)
-                {
-                SetClaims();
-                }
             }
 
         if(!TestWhetherFirstYearPremiumExceededRetaliationLimit())
@@ -405,6 +401,7 @@ restart:
             goto restart;
             }
 
+        SetClaims();
         IncrementEOY(year);
         }
 
