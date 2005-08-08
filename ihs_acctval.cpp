@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_acctval.cpp,v 1.36 2005-08-08 16:01:53 chicares Exp $
+// $Id: ihs_acctval.cpp,v 1.37 2005-08-08 23:57:01 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -390,9 +390,12 @@ restart:
 
     for(int year = InforceYear; year < BasicValues::GetLength(); ++year)
         {
+        Year = year;
+        CoordinateCounters();
         InitializeYear();
         for(int month = InforceMonth; month < 12; ++month)
             {
+            Month = month;
             CoordinateCounters();
             // Individual run: case-level k factor is zero.
             IncrementBOM(year, month, 0.0);
@@ -415,6 +418,7 @@ restart:
             }
 
         SetClaims();
+        SetProjectedCoiCharge();
         IncrementEOY(year);
         }
 
@@ -857,7 +861,8 @@ void AccountValue::DoYear(int inforce_month)
         }
 
     SetClaims();
-    FinalizeYear();
+    SetProjectedCoiCharge();
+    IncrementEOY(Year);
 }
 
 //============================================================================
@@ -923,7 +928,7 @@ double AccountValue::IncrementBOM
 
 //============================================================================
 // Credit interest and process all subsequent monthly transactions
-double AccountValue::IncrementEOM
+void AccountValue::IncrementEOM
     (int year
     ,int month
     ,double TotalCaseAssets
@@ -935,7 +940,7 @@ double AccountValue::IncrementEOM
 
     if(ItLapsed || BasicValues::GetLength() <= Year)
         {
-        return 0.0;
+        return;
         }
 
     // Paranoid check.
@@ -953,35 +958,20 @@ double AccountValue::IncrementEOM
     ApplyDynamicMandE         (TotalCaseAssets);
 
     DoMonthCR();
-
-    if(Month < 11)
-        {
-        ++Month;
-        CoordinateCounters();
-        }
-
-    // Ultimately we may want to supply a meaningful return value
-    return 0.0;
 }
 
 //============================================================================
-// Increment year, update curtate inforce factor
-double AccountValue::IncrementEOY(int year)
+void AccountValue::IncrementEOY(int year)
 {
     if(ItLapsed || BasicValues::GetLength() <= Year)
         {
-        return 0.0;
+        return;
         }
 
     // Paranoid check.
     LMI_ASSERT(year == Year);
 
     FinalizeYear();
-    Month = 0;
-    ++Year;
-    CoordinateCounters();
-    // Ultimately we may want to supply a meaningful return value
-    return 0.0;
 }
 
 //============================================================================
@@ -1194,6 +1184,8 @@ void AccountValue::InitializeYear()
     YearsTotalAcctValLoadBOM    = 0.0;
     YearsTotalAcctValLoadAMD    = 0.0;
     YearsTotalGptForceout       = 0.0;
+
+    NextYearsProjectedCOICharge = 0.0;
 
     PolicyYearRunningTotalPremiumSubjectToPremiumTax = 0.0;
 
@@ -1489,6 +1481,48 @@ void AccountValue::SetClaims()
 }
 
 //============================================================================
+// Proxy for next year's COI charge, used only for experience rating.
+void AccountValue::SetProjectedCoiCharge()
+{
+    if
+        (   ItLapsed
+        ||  BasicValues::GetLength() <= Year
+        ||  !Input_->UseExperienceRating
+        ||  !e_currbasis == ExpAndGABasis
+        )
+        {
+        return;
+        }
+
+    // Project a charge of zero for the year after maturity.
+    //
+    // This is written separately to emphasize its meaning, though it
+    // obviously could be combined with the above '<=' comparison.
+    //
+    if(BasicValues::GetLength() == 1 + Year)
+        {
+        return;
+        }
+
+    LMI_ASSERT(11 == Month);
+
+    TxSetDeathBft();
+    TxSetTermAmt();
+    double this_years_terminal_naar =
+            DBReflectingCorr + TermDB
+        -   TotalAccountValue()
+        ;
+    this_years_terminal_naar = std::max(0.0, this_years_terminal_naar);
+    double next_years_coi_rate = GetBandedCoiRates(ExpAndGABasis, ActualSpecAmt)[1 + Year];
+
+    NextYearsProjectedCOICharge =
+            12.0
+        *   this_years_terminal_naar
+        *   next_years_coi_rate
+        ;
+}
+
+//============================================================================
 void AccountValue::FinalizeYear()
 {
     double total_av = TotalAccountValue();
@@ -1626,26 +1660,26 @@ void AccountValue::FinalizeYear()
 
     if(e_run_curr_basis == RateBasis)
         {
-        InvariantValues().GrossPmt[Year]    = 0.0;
+        InvariantValues().GrossPmt  [Year]  = 0.0;
         InvariantValues().EeGrossPmt[Year]  = 0.0;
         InvariantValues().ErGrossPmt[Year]  = 0.0;
-        VariantValues().NetPmt[Year]        = 0.0;
+        VariantValues  ().NetPmt    [Year]  = 0.0;
 
         // TODO ?? This is a temporary workaround until we do it right.
         // Forceouts should be a distinct component, passed separately
         // to ledger values. Probably we should treat 1035 exchanges
         // and NAAR 'forceouts' the same way.
-        InvariantValues().GrossPmt[Year]    -= YearsTotalGptForceout;
+        InvariantValues().GrossPmt  [Year]  -= YearsTotalGptForceout;
         InvariantValues().EeGrossPmt[Year]  -= YearsTotalGptForceout;
-        VariantValues().NetPmt[Year]        -= YearsTotalGptForceout;
+        VariantValues  ().NetPmt    [Year]  -= YearsTotalGptForceout;
 
         for(int j = 0; j < 12; ++j)
             {
             LMI_ASSERT(materially_equal(GrossPmts[j], EeGrossPmts[j] + ErGrossPmts[j]));
-            InvariantValues().GrossPmt[Year]    += GrossPmts[j];
+            InvariantValues().GrossPmt  [Year]  += GrossPmts[j];
             InvariantValues().EeGrossPmt[Year]  += EeGrossPmts[j];
             InvariantValues().ErGrossPmt[Year]  += ErGrossPmts[j];
-            VariantValues().NetPmt[Year]        += NetPmts[j];
+            VariantValues  ().NetPmt    [Year]  += NetPmts[j];
             }
         if(0 == Year)
             {
@@ -1653,19 +1687,19 @@ void AccountValue::FinalizeYear()
             }
         LMI_ASSERT
             (materially_equal
-                (InvariantValues().GrossPmt[Year]
-                , InvariantValues().EeGrossPmt[Year]
-                + InvariantValues().ErGrossPmt[Year]
+                (   InvariantValues().GrossPmt  [Year]
+                ,   InvariantValues().EeGrossPmt[Year]
+                +   InvariantValues().ErGrossPmt[Year]
                 )
             );
         InvariantValues().Outlay[Year] =
                 InvariantValues().GrossPmt[Year]
-            -   InvariantValues().NetWD[Year]
-            -   InvariantValues().Loan[Year]
+            -   InvariantValues().NetWD   [Year]
+            -   InvariantValues().Loan    [Year]
             ;
 
-        InvariantValues().EePmt[Year]   = InvariantValues().EeGrossPmt[Year];
-        InvariantValues().ErPmt[Year]   = InvariantValues().ErGrossPmt[Year];
+        InvariantValues().EePmt[Year] = InvariantValues().EeGrossPmt[Year];
+        InvariantValues().ErPmt[Year] = InvariantValues().ErGrossPmt[Year];
 
         InvariantValues().GptForceout[Year] = YearsTotalGptForceout;
 
@@ -1947,8 +1981,7 @@ double AccountValue::GetCurtateNetClaimsInforce()
 }
 
 //============================================================================
-// Proxy for next year's COI charge, to be used only for experience rating.
-double AccountValue::GetInforceProjectedCoiCharge()
+double AccountValue::GetProjectedCoiChargeInforce()
 {
     if
         (   ItLapsed
@@ -1959,55 +1992,22 @@ double AccountValue::GetInforceProjectedCoiCharge()
         {
         return 0.0;
         }
-
-    // Project a charge of zero for the year after maturity.
-    //
-    // This is written separately to emphasize its meaning, though it
-    // obviously could be combined with the above '<=' comparison.
-    //
-    if(BasicValues::GetLength() == 1 + Year)
-        {
-        return 0.0;
-        }
-
-    LMI_ASSERT(11 == Month);
-
-    TxSetDeathBft();
-    TxSetTermAmt();
-    double this_years_terminal_naar =
-            DBReflectingCorr + TermDB
-        -   TotalAccountValue()
-        ;
-    this_years_terminal_naar = std::max(0.0, this_years_terminal_naar);
-    double next_years_coi_rate = GetBandedCoiRates(ExpAndGABasis, ActualSpecAmt)[1 + Year];
-
-    return
-            12.0
-        *   InvariantValues().InforceLives[Year]
-        *   this_years_terminal_naar
-        *   next_years_coi_rate
-        ;
+    return NextYearsProjectedCOICharge * InvariantValues().InforceLives[Year];
 }
 
 //============================================================================
-// TODO ?? The experience-rating mortality reserve isn't actually held
-// in individual certificates: it really exists only at the case level.
-// This is a workaround to make composites equal the sum of individuals.
+// The experience-rating mortality reserve isn't actually held in
+// individual certificates: it really exists only at the case level.
+// Yet it is apportioned among certificates in order to conform to the
+// design invariant that a composite is a weighted sum of cells.
 void AccountValue::ApportionNetMortalityReserve
     (double case_net_mortality_reserve
     ,double case_years_net_mortchgs
     )
 {
-// TODO ?? This is called after incrementing the 'Year' counter, but it
-// shouldn't be that way.
-    LMI_ASSERT(0 < Year);
-// TODO ?? Normally we'd test
-//    if(ItLapsed || BasicValues::GetLength() <= Year)
-// but, because the 'Year' counter is out of sync here as compared to
-// other functions that use that test, a change is required:
     if
         (   ItLapsed
-        ||  BasicValues::GetLength() < Year
+        ||  BasicValues::GetLength() <= Year
         ||  !Input_->UseExperienceRating
         ||  !e_currbasis == ExpAndGABasis
         )
@@ -2027,16 +2027,15 @@ void AccountValue::ApportionNetMortalityReserve
         {
         apportioned_net_mortality_reserve = 0.0;
         }
-// TODO ?? Done here for now because of the anomalous indexing.
     LMI_ASSERT(0 != Input_->NumIdenticalLives); // Make sure division is safe.
-    VariantValues().ExpRatRsvCash       [Year - 1] =
-          apportioned_net_mortality_reserve
-        * (1.0 - partial_mortality_q[Year - 1]) // TODO ?? Anomaly repeated here.
-        * InvariantValues().InforceLives[Year - 1]
-        / Input_->NumIdenticalLives
-        ;
-    VariantValues().ExpRatRsvForborne   [Year - 1] =
+    VariantValues().ExpRatRsvForborne [Year] =
         apportioned_net_mortality_reserve
+        ;
+    VariantValues().ExpRatRsvCash     [Year] =
+          apportioned_net_mortality_reserve
+        * (1.0 - partial_mortality_q[Year])
+        * InvariantValues().InforceLives[Year]
+        / Input_->NumIdenticalLives
         ;
 }
 

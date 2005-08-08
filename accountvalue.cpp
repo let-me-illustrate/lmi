@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: accountvalue.cpp,v 1.10 2005-08-07 15:53:14 chicares Exp $
+// $Id: accountvalue.cpp,v 1.11 2005-08-08 23:57:01 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -1072,7 +1072,7 @@ void   AccountValue::FinalizeLifeAllBases()
     {return;}
 double AccountValue::GetCurtateNetClaimsInforce()
     {return 0.0;}
-double AccountValue::GetInforceProjectedCoiCharge()
+double AccountValue::GetProjectedCoiChargeInforce()
     {return 0.0;}
 double AccountValue::GetLastCOIChargeInforce() const
     {return 0.0;}
@@ -1082,10 +1082,10 @@ void   AccountValue::GuessWhetherFirstYearPremiumExceedsRetaliationLimit()
     {return;}
 double AccountValue::IncrementBOM(int, int, double)
     {return 0.0;}
-double AccountValue::IncrementEOM(int, int, double)
-    {return 0.0;}
-double AccountValue::IncrementEOY(int)
-    {return 0.0;}
+void   AccountValue::IncrementEOM(int, int, double)
+    {return;}
+void   AccountValue::IncrementEOY(int)
+    {return;}
 void   AccountValue::InitializeLife(e_run_basis const&)
     {return;}
 void   AccountValue::InitializeYear()
@@ -1093,6 +1093,8 @@ void   AccountValue::InitializeYear()
 bool   AccountValue::PrecedesInforceDuration(int, int)
     {return false;}
 void   AccountValue::SetClaims()
+    {return;}
+void   AccountValue::SetProjectedCoiCharge()
     {return;}
 bool   AccountValue::TestWhetherFirstYearPremiumExceededRetaliationLimit()
     {return false;}
