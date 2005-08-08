@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avmly.cpp,v 1.16 2005-08-05 21:18:25 chicares Exp $
+// $Id: ihs_avmly.cpp,v 1.17 2005-08-08 16:01:53 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -2675,11 +2675,11 @@ void AccountValue::TxCreditInt()
                 *   dac_factor
                 ;
 
-            LMI_ASSERT(0.0 != InforceFactor);
+            LMI_ASSERT(0.0 != InvariantValues().InforceLives[Year]);
             double decrement =
                     DacTaxRsv
                 *   YearsSepAcctIntRate
-                /   InforceFactor
+                /   InvariantValues().InforceLives[Year]
                 ;
             SepAcctIntCred -= decrement;
             AVSepAcct      -= decrement;
@@ -3405,9 +3405,6 @@ void AccountValue::TxTestLapse()
         VariantValues().LapseMonth = Month;
         VariantValues().LapseYear = Year;
         ItLapsed = true;
-
-        InforceFactor = 0.0;
-        InforceLives = 0.0;
 
         // We need to set VariantValues().CSVPayable here
         // (else it would print as a negative number)

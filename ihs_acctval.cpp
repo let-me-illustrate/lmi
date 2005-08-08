@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_acctval.cpp,v 1.35 2005-08-08 02:41:15 chicares Exp $
+// $Id: ihs_acctval.cpp,v 1.36 2005-08-08 16:01:53 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -113,25 +113,38 @@ AccountValue::AccountValue(InputParms const& input)
     // If BasicValues changes, then this init becomes invalid
     //   e.g. solves change BasicValues
 
-    // Get vector of inforce lives assuming no one ever lapses.
-    // Store this in the invariant ledger value object.
-    double inforce_lives = Input_->NumIdenticalLives;
-//    for(int j = 0; j < BasicValues::GetLength(); ++j)
-// TODO ?? Prefer a standard algorithm.
-    for(int j = 0; j < 1 + BasicValues::GetLength(); ++j)
+    // Iff partial mortality is used, save yearly values in a vector
+    // for use elsewhere in this class, and store yearly inforce lives
+    // (assuming no one ever lapses) in the invariant ledger object.
+    //
+    // A contract may be in force at the end of its maturity year,
+    // and it's necessary to treat it that way because other year-end
+    // composite values are multiplied by the number of lives inforce.
+    // Of course, a contract is not normally in force after maturity.
+
+    LMI_ASSERT
+        (   InvariantValues().InforceLives.size()
+        ==  static_cast<unsigned int>(1 + BasicValues::GetLength())
+        );
+    partial_mortality_q.resize(BasicValues::GetLength());
+    if(Input_->UsePartialMort)
         {
-        if(Input_->UsePartialMort && 0 < j)
+        double inforce_lives = Input_->NumIdenticalLives;
+        InvariantValues().InforceLives[0] = inforce_lives;
+        for(int j = 0; j < BasicValues::GetLength(); ++j)
             {
-            inforce_lives *= 1.0 - GetPartMortQ(j - 1);
+            partial_mortality_q[j] = GetPartMortQ(j);
+            inforce_lives *= 1.0 - partial_mortality_q[j];
+            InvariantValues().InforceLives[1 + j] = inforce_lives;
             }
-        InvariantValues().InforceLives[j] = inforce_lives;
         }
-    // There can be no one in force at the end of the endowment year.
-    // The vector in the invariant ledger values class has one more
-    // element than other vectors for this value, so that it can be
-    // offset by one and multiplied by EOY vectors.
-//    InvariantValues().InforceLives[BasicValues::GetLength()] = 0.0;
-// TODO ?? But that would make EOY values zero for endowment year.
+    else
+        {
+        InvariantValues().InforceLives.assign
+            (InvariantValues().InforceLives.size()
+            ,Input_->NumIdenticalLives
+            );
+        }
 
     OverridingEePmts    .resize(12 * BasicValues::GetLength());
     OverridingErPmts    .resize(12 * BasicValues::GetLength());
@@ -585,9 +598,6 @@ void AccountValue::InitializeLife(e_run_basis const& a_Basis)
         ,bfts_7702a
         );
 
-    InforceFactor = 1.0;
-    InforceLives = Input_->NumIdenticalLives;
-
     daily_interest_accounting =
             std::string::npos
         !=  Input_->Comments.find("idiosyncrasy_daily_interest_accounting")
@@ -603,10 +613,6 @@ void AccountValue::FinalizeLife(e_run_basis const& a_Basis)
 {
     LMI_ASSERT(RateBasis == a_Basis);
 
-    // no longer in force at end of last year
-    // note that this array's length is 1 + Length
-    InforceFactor = 0.0;
-    InforceLives = 0.0;
     DebugEndBasis();
 
     if(SolvingForGuarPremium)
@@ -904,7 +910,7 @@ double AccountValue::IncrementBOM
     if
         (   COIIsDynamic
         &&  Input_->UseExperienceRating
-        &&  e_month_by_month == Input_->RunOrder
+        &&  e_currbasis == ExpAndGABasis
         )
         {
         LMI_ASSERT(!UseUnusualCOIBanding);
@@ -1165,12 +1171,6 @@ void AccountValue::InitializeYear()
     if(ItLapsed || BasicValues::GetLength() <= Year)
         {
         return;
-        }
-
-    if(Input_->UsePartialMort && 0 < Year)
-        {
-        InforceFactor *= 1.0 - GetPartMortQ(Year - 1);
-        InforceLives *= 1.0 - GetPartMortQ(Year - 1);
         }
 
 // TODO ?? Solve...() should reset not inputs but...something else?
@@ -1459,42 +1459,32 @@ void AccountValue::SetClaims()
         return;
         }
 
-    // Update death benefit: "DBReflectingCorr" currently holds benefit as of
-    // the beginning of month 12, but we want it as of the end of that month,
-    // in case the corridor or option 2 drove it up during the last month.
+    // Update death benefit. 'DBReflectingCorr' currently equals the
+    // death benefit as of the beginning of the twelfth month, but its
+    // end-of-year value (as of the end of the twelfth month) is
+    // needed.
 
     TxSetDeathBft();
     TxSetTermAmt();
 
-    if(Input_->UsePartialMort)
+    // Amounts such as claims and account value released on death
+    // are multiplied by the beginning-of-year inforce factor when
+    // a composite is produced; it would be incorrect to multiply
+    // them by the inforce factor here because individual-cell
+    // ledgers do not reflect partial mortality. This calculation
+    // assumes that partial mortality is curtate.
+
+    YearsGrossClaims =  partial_mortality_q[Year] * DBReflectingCorr;
+
+    YearsAVRelOnDeath = partial_mortality_q[Year] * TotalAccountValue();
+
+    YearsNetClaims = YearsGrossClaims - YearsAVRelOnDeath;
+
+    // Avoid reporting minuscule claim amounts that are merely an
+    // artifact of rounding DB and AV differently.
+    if(materially_equal(DBReflectingCorr, TotalAccountValue()))
         {
-        // Amounts such as claims and account value released on death
-        // are multiplied by the beginning-of-year inforce factor when
-        // a composite is produced; it would be incorrect to multiply
-        // them by the inforce factor here because individual-cell
-        // ledgers do not reflect partial mortality. This calculation
-        // assumes that partial mortality is curtate.
-
-        YearsGrossClaims =
-                GetPartMortQ(Year)
-            *   (
-                    DBReflectingCorr
-                )
-            ;
-
-        YearsAVRelOnDeath =
-                GetPartMortQ(Year)
-            *   TotalAccountValue()
-            ;
-
-        YearsNetClaims = YearsGrossClaims - YearsAVRelOnDeath;
-
-        // Avoid reporting minuscule claim amounts that are merely an
-        // artifact of rounding DB and AV differently.
-        if(materially_equal(DBReflectingCorr, TotalAccountValue()))
-            {
-            YearsNetClaims = 0.0;
-            }
+        YearsNetClaims = 0.0;
         }
 }
 
@@ -1534,11 +1524,11 @@ void AccountValue::FinalizeYear()
     VariantValues().CSVNet      [Year] = csv_net;
     VariantValues().CV7702      [Year] = cv_7702;
 
-    // Update death benefit: "DBReflectingCorr" currently holds benefit as of
-    //   the beginning of month 12, but we want it as of the end of that month,
-    //   in case the corridor or option 2 drove it up during the last month.
-    //   TODO ?? needs end of year corridor factor, if it varies monthly.
-    // Death benefit also reflects any experience refund credited to AV.
+    // Update death benefit. 'DBReflectingCorr' currently equals the
+    // death benefit as of the beginning of the twelfth month, but its
+    // end-of-year value (as of the end of the twelfth month) is
+    // needed.
+
     TxSetDeathBft();
     TxSetTermAmt();
     // post values to LedgerVariant
@@ -1627,8 +1617,8 @@ void AccountValue::FinalizeYear()
     LMI_ASSERT(0 != Input_->NumIdenticalLives); // Make sure division is safe.
     VariantValues().ExpRatRsvCash       [Year] =
           apportioned_net_mortality_reserve
-        * (1.0 - GetPartMortQ(Year))
-        * InforceLives
+        * (1.0 - partial_mortality_q[Year])
+        * InvariantValues().InforceLives[Year]
         / Input_->NumIdenticalLives
         ;
     VariantValues().ExpRatRsvForborne   [Year] = apportioned_net_mortality_reserve;
@@ -1864,8 +1854,6 @@ bool AccountValue::TestWhetherFirstYearPremiumExceededRetaliationLimit()
 }
 
 //============================================================================
-// Always go through this function to get partial mort q, because of
-// the important adjustments it makes.
 double AccountValue::GetPartMortQ(int a_year) const
 {
     LMI_ASSERT(a_year <= BasicValues::GetLength());
@@ -1934,7 +1922,7 @@ double AccountValue::GetSepAcctAssetsInforce() const
         return 0.0;
         }
 
-    return AVSepAcct * InforceLives;
+    return AVSepAcct * InvariantValues().InforceLives[Year];
 }
 
 //============================================================================
@@ -1945,10 +1933,7 @@ double AccountValue::GetLastCOIChargeInforce() const
         return 0.0;
         }
 
-// TODO ?? Fix problems in GetNetCOI() before using it.
-//    return GetNetCOI() * InforceLives;
-
-    return COI * InforceLives;
+    return COI * InvariantValues().InforceLives[Year];
 }
 
 //============================================================================
@@ -1958,18 +1943,28 @@ double AccountValue::GetCurtateNetClaimsInforce()
         {
         return 0.0;
         }
-    return InforceLives * YearsNetClaims;
+    return YearsNetClaims * InvariantValues().InforceLives[Year];
 }
 
 //============================================================================
 // Proxy for next year's COI charge, to be used only for experience rating.
 double AccountValue::GetInforceProjectedCoiCharge()
 {
-    if(!Input_->UsePartialMort || ItLapsed || BasicValues::GetLength() <= Year)
+    if
+        (   ItLapsed
+        ||  BasicValues::GetLength() <= Year
+        ||  !Input_->UseExperienceRating
+        ||  !e_currbasis == ExpAndGABasis
+        )
         {
         return 0.0;
         }
-    // Project zero charge if next year has no COI rate due to maturity.
+
+    // Project a charge of zero for the year after maturity.
+    //
+    // This is written separately to emphasize its meaning, though it
+    // obviously could be combined with the above '<=' comparison.
+    //
     if(BasicValues::GetLength() == 1 + Year)
         {
         return 0.0;
@@ -1986,7 +1981,12 @@ double AccountValue::GetInforceProjectedCoiCharge()
     this_years_terminal_naar = std::max(0.0, this_years_terminal_naar);
     double next_years_coi_rate = GetBandedCoiRates(ExpAndGABasis, ActualSpecAmt)[1 + Year];
 
-    return 12.0 * InforceLives * this_years_terminal_naar * next_years_coi_rate;
+    return
+            12.0
+        *   InvariantValues().InforceLives[Year]
+        *   this_years_terminal_naar
+        *   next_years_coi_rate
+        ;
 }
 
 //============================================================================
@@ -2031,13 +2031,19 @@ void AccountValue::ApportionNetMortalityReserve
     LMI_ASSERT(0 != Input_->NumIdenticalLives); // Make sure division is safe.
     VariantValues().ExpRatRsvCash       [Year - 1] =
           apportioned_net_mortality_reserve
-        * (1.0 - GetPartMortQ(Year - 1)) // TODO ?? Anomaly repeated here.
-        * InforceLives
+        * (1.0 - partial_mortality_q[Year - 1]) // TODO ?? Anomaly repeated here.
+        * InvariantValues().InforceLives[Year - 1]
         / Input_->NumIdenticalLives
         ;
     VariantValues().ExpRatRsvForborne   [Year - 1] =
         apportioned_net_mortality_reserve
         ;
+}
+
+//============================================================================
+double AccountValue::GetInforceLives() const
+{
+    return InvariantValues().InforceLives[Year];
 }
 
 //============================================================================
