@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.109 2005-08-10 13:11:56 chicares Exp $
+// $Id: ChangeLog,v 1.110 2005-08-10 14:57:58 chicares Exp $
 
 2005-01-14
 
@@ -3006,4 +3006,11 @@ until 20050810T1311Z]
 
   workhorse.make
 Remove old output before system test to avoid false positives.
+
+20050810T1457Z <chicares@cox.net> [1252]
+
+  account_value.hpp
+  ihs_acctval.cpp
+  ihs_avmly.cpp
+Remove some superfluous stuff.
 

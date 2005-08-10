@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: account_value.hpp,v 1.21 2005-08-09 12:21:43 chicares Exp $
+// $Id: account_value.hpp,v 1.22 2005-08-10 14:57:58 chicares Exp $
 
 #ifndef account_value_hpp
 #define account_value_hpp
@@ -317,7 +317,6 @@ class LMI_EXPIMP AccountValue
     double DetermineSpecAmtLoad    ();
     double DetermineAcctValLoadBOM ();
     double DetermineAcctValLoadAMD ();
-    void   RecalculateGDBPrem      ();
 
     void   ApplyDynamicMandE          (double assets);
     void   ApplyDynamicSepAcctLoadAMD (double assets);

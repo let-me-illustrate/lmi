@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avmly.cpp,v 1.17 2005-08-08 16:01:53 chicares Exp $
+// $Id: ihs_avmly.cpp,v 1.18 2005-08-10 14:57:58 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -57,7 +57,7 @@
 
 // Each month, process all transactions in order
 
-// TODO ?? Not yet implemented:
+// SOMEDAY !! Not yet implemented:
 //   max allowable prem (without increasing NAAR)
 //   increase premium during no lapse period, for solves at least
 //   monthly varying corridor
@@ -456,7 +456,6 @@ void AccountValue::DecrementAVProportionally(double decrement)
               + separate_account_nonnegative_assets
               )
             ;
-        // TODO ?? Can we expunge this as being self-evident?
         LMI_ASSERT
             (                         0.0 <= general_account_proportion
             && general_account_proportion <= 1.0
@@ -605,9 +604,6 @@ void AccountValue::TxExch1035()
           Input_->External1035ExchangeBasis
         + Input_->Internal1035ExchangeBasis
         ;
-
-    // TODO ?? Save ee and er bases separately e.g. for split dollar;
-    // call them EeTaxBasis and ErTaxBasis.
 
     if(e_run_curr_basis == RateBasis)
         {
@@ -812,7 +808,6 @@ void AccountValue::ChangeSurrChgSpecAmtBy(double delta)
     // It is fairly common to let withdrawals affect it. If this is
     // the best place to do that, then perhaps this function should
     // be renamed, since it doesn't merely change 'SurrChgSpecAmt'.
-    RecalculateGDBPrem();
 }
 
 //============================================================================
@@ -878,12 +873,9 @@ void AccountValue::TxOptChg()
         return;
         }
 
-    // TODO ?? This should be an assertion because it should be impossible.
-    // But it's not, because the restriction isn't implemented on the
-    // Varying tab....but we're changing that.
     if(!AllowChangeToDBO2 && YearsDBOpt == e_option2)
         {
-        warning()
+        fatal_error()
             << "Change to increasing death benefit option"
             << " not allowed on this policy form."
             << LMI_FLUSH
@@ -1414,7 +1406,7 @@ void AccountValue::TxSpecAmtChg()
     double const old_specamt = DeathBfts_->specamt()[Year - 1];
 
     // Nothing to do if no increase or decrease requested.
-// TODO ?? Minimum specified amount not completely enforced.
+    // TODO ?? Minimum specified amount not completely enforced.
     // TODO ?? YearsSpecAmt != ActualSpecAmt; the latter should be used
     if(YearsSpecAmt == old_specamt)
         {
@@ -2267,7 +2259,7 @@ void AccountValue::TxSetDeathBft()
     LMI_ASSERT(0.0 <= Dcv);
 */
 
-    // TODO ?? Accumulate average death benefit for profit testing here.
+    // SOMEDAY !! Accumulate average death benefit for profit testing here.
 }
 
 //============================================================================
@@ -2354,7 +2346,7 @@ void AccountValue::TxSetCOI()
         *   DBDiscountRate[Year]
         -   Dcv
         ;
-//  DcvNaar = round_naar(DcvNaar);
+//  TODO ?? DcvNaar = round_naar(DcvNaar);
     DcvNaar = std::max(0.0, DcvNaar);
 
     ActualCoiRate = GetBandedCoiRates(ExpAndGABasis, ActualSpecAmt)[Year];
@@ -2632,19 +2624,17 @@ void AccountValue::TxCreditInt()
         }
 
 #if 0
+// THIS COMMENTED-OUT CODE IS NOT CORRECT.
     // Deduct interest on DAC tax balance as a dollar amount
     if( [some appropriate condition] )
         {
 // Authors of this block: GWC and JLM.
-// TODO ?? JOE--please see comments
-// TODO ?? JOE--determine if the exact DAC Tax run off pattern is more desirable.
-// TODO ?? JOE shouldn't this be 11?
-// GREG: The actual DAC Tax Asset depreciates mid-year in years 0 - 10.
+//  - Use the exact DAC Tax run off pattern.
+//  - Shouldn't this be 11?
+// Joe answers: The actual DAC Tax Asset depreciates mid-year in years 0 - 10.
 // The dac schedule below uses the mid-year values as of the end of each year,
 // so the DAC reserve runs off 6 months before the actual DAC asset. This is the
-// pattern described to us by the requesters. I will keep the code unchanged, but
-// add the following pragma statement as a reminder to discuss this with them
-// sometime.
+// pattern described to us by the requesters.
         if(Year < 10)
             {
             // Valid only for single premium
@@ -3251,7 +3241,7 @@ void AccountValue::TxTakeLoan()
         return;
         }
 
-    // TODO ?? Preferred loan calculations not yet implemented.
+    // SOMEDAY !! Preferred loan calculations not yet implemented.
     LMI_ASSERT(0.0 == AVPrfLn);
 
     double max_loan_increment = MaxLoan - (AVRegLn + AVPrfLn);
@@ -3300,7 +3290,7 @@ void AccountValue::TxTakeLoan()
     // Transfer new cash loan from the appropriate unloaned account(s).
     process_distribution(ActualLoan);
 
-    // TODO ?? Also handle preferred loan.
+    // SOMEDAY !! Also handle preferred loan.
     AVRegLn += ActualLoan;
     RegLnBal += ActualLoan;
 }
