@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.108 2005-08-08 23:57:01 chicares Exp $
+// $Id: ChangeLog,v 1.109 2005-08-10 13:11:56 chicares Exp $
 
 2005-01-14
 
@@ -2990,4 +2990,20 @@ called by loop drivers. Separate the calculation of experience-rating
 projected mortality charge from its use. Call FinalizeYear() only
 through IncrementEOY(), using the latter function even if the run
 order is life by life.
+
+20050810T1311Z <chicares@cox.net> [1265]
+
+  account_value.hpp
+  accountvalue.cpp
+  group_values.cpp
+  ihs_acctval.cpp
+Add tentative diagnostic code, suppressed for the moment, to
+investigate a change observed in experience rating.
+
+[20050809T1233Z 'account_value.hpp' was committed without the other
+files because of a problem with savannah cvs, and that broke the build
+until 20050810T1311Z]
+
+  workhorse.make
+Remove old output before system test to avoid false positives.
 
