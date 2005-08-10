@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_acctval.cpp,v 1.38 2005-08-10 13:11:56 chicares Exp $
+// $Id: ihs_acctval.cpp,v 1.39 2005-08-10 14:57:58 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -34,7 +34,6 @@
 #include "database.hpp"
 #include "dbnames.hpp"
 #include "death_benefits.hpp"
-#include "ihs_funddata.hpp" // TODO ?? This is a crock.
 #include "ihs_irc7702.hpp"
 #include "ihs_irc7702a.hpp"
 #include "ihs_rnddata.hpp"
@@ -321,9 +320,6 @@ double AccountValue::PerformRun(e_run_basis const& a_Basis)
 {
     switch(Input_->RunOrder)
         {
-        // TODO ?? Perhaps this function should be run only in the
-        // month-by-month case, but it does no harm to generalize it
-        // this way.
         case e_life_by_life:
             {
             return PerformRunLifeByLife(a_Basis);
@@ -424,11 +420,6 @@ restart:
 
 // TODO ?? Looks like loop does not exit early upon lapse.
     FinalizeLife(a_Basis);
-
-    // Do partial mortality. This approach would appear unseemly.
-    // TODO ?? Furthermore, it no longer works because 0.0 is not a valid arg.
-//  ledger_[a_Basis].ApplyScaleFactor(0.0);
-//  ledger_[a_Basis] += *this;
 
     return TotalAccountValue();
 }
@@ -934,10 +925,6 @@ void AccountValue::IncrementEOM
     ,double TotalCaseAssets
     )
 {
-    // designed to be called only this way:
-    LMI_ASSERT(e_month_by_month == Input_->RunOrder);
-    // TODO ?? IS THIS THE PLACE TO GUARD IT? WHY NOT IN SIBLINGS TOO?
-
     if(ItLapsed || BasicValues::GetLength() <= Year)
         {
         return;
@@ -953,7 +940,6 @@ void AccountValue::IncrementEOM
         LMI_ASSERT(28 <= days_in_policy_month && days_in_policy_month <= 31);
         }
 
-    // TODO ?? Also need on other path?
     ApplyDynamicSepAcctLoadAMD(TotalCaseAssets);
     ApplyDynamicMandE         (TotalCaseAssets);
 
@@ -2049,30 +2035,6 @@ double AccountValue::GetInforceLives() const
 {
     return InvariantValues().InforceLives[Year];
 }
-
-//============================================================================
-void AccountValue::RecalculateGDBPrem()
-{
-    // TODO ?? Not yet implemented.
-}
-
-/*
-Coherence?
-    example: payment needs loads (const), and pmts and 7702 (not const)
-    example: COI ded needs DB, mort, int (all const); yet subdivide further:
-        Set DB (needs 7702)
-        Set NAAR (needs DB, int)
-        Set COI
-*/
-
-/*
-// Here's how overrides (as above) were actually implemented.
-
-EePmt, ErPmt, SpecAmt, SurrChg are set from LedgerVariant in override fn (ever called?)
-
-what about loan and WD?
-
-*/
 
 //============================================================================
 void AccountValue::CoordinateCounters()
