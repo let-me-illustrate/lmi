@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: group_values.cpp,v 1.24 2005-08-08 23:57:01 chicares Exp $
+// $Id: group_values.cpp,v 1.25 2005-08-10 13:11:56 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -39,6 +39,7 @@
 #include "ledger.hpp"
 #include "ledger_text_formats.hpp"
 #include "ledger_xsl.hpp"
+#include "materially_equal.hpp"
 #include "path_utility.hpp"
 #include "progress_meter.hpp"
 #include "timer.hpp"
@@ -416,6 +417,8 @@ restart:
                 );
             }
 
+        bool everyone_lapsed = false;
+
         // TODO ?? We don't start at InforceYear, because issue years may
         // differ between cells and we have not coded support for that yet.
         for(int year = 0; year < MaxYr; ++year)
@@ -471,6 +474,11 @@ restart:
                         continue;
                         }
                     (*i)->IncrementEOM(year, month, assets);
+                    everyone_lapsed = everyone_lapsed && (*i)->ItLapsed;
+                    }
+                if(everyone_lapsed)
+                    {
+                    break;
                     }
                 }
 
@@ -496,6 +504,11 @@ restart:
                         );
                     }
                 goto restart;
+                }
+
+            if(everyone_lapsed)
+                {
+                break;
                 }
 
             // TODO ?? This test should be moved elsewhere.
@@ -589,17 +602,44 @@ restart:
                 // projected mortality charges, assuming that any
                 // cell in force at end of year contributes a full
                 // year to the projection.
+                double case_net_mortality_reserve_checksum = 0.0;
                 for(i = cell_values.begin(); i != cell_values.end(); ++i)
                     {
                     if((*i)->PrecedesInforceDuration(year, 11))
                         {
                         continue;
                         }
-                    (*i)->ApportionNetMortalityReserve
-                        (case_net_mortality_reserve
-                        ,case_years_net_mortchgs
-                        );
+                    case_net_mortality_reserve_checksum +=
+                        (*i)->ApportionNetMortalityReserve
+                            (case_net_mortality_reserve
+                            ,case_years_net_mortchgs
+                            );
                     }
+# if 1 // TODO ?? Temporary diagnostic code.
+                if
+                    (!materially_equal
+                        (case_net_mortality_reserve
+                        ,case_net_mortality_reserve_checksum
+                        )
+                    )
+                    {
+                    warning()
+                        << "\nYear " << year << ": "
+                        << case_net_mortality_reserve
+                        << " != "
+                        << case_net_mortality_reserve_checksum
+                        << LMI_FLUSH
+                        ;
+                    }
+/*
+                LMI_ASSERT
+                    (materially_equal
+                        (case_net_mortality_reserve
+                        ,case_net_mortality_reserve_checksum
+                        )
+                    );
+*/
+#endif // 0
                 }
 
             if(!meter->reflect_progress())
