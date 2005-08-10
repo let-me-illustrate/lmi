@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_acctval.cpp,v 1.37 2005-08-08 23:57:01 chicares Exp $
+// $Id: ihs_acctval.cpp,v 1.38 2005-08-10 13:11:56 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -1421,7 +1421,7 @@ void AccountValue::ReduceSurrChg(int year, double partial_surrchg)
 //============================================================================
 // Surrender charge. Only simple multiplicative parts are implemented.
 //
-// TODO ?? Tables and UL model reg formulas should be added.
+// SOMEDAY !! Table support and UL model reg formulas should be added.
 //
 double AccountValue::SurrChg()
 {
@@ -2000,7 +2000,8 @@ double AccountValue::GetProjectedCoiChargeInforce()
 // individual certificates: it really exists only at the case level.
 // Yet it is apportioned among certificates in order to conform to the
 // design invariant that a composite is a weighted sum of cells.
-void AccountValue::ApportionNetMortalityReserve
+//
+double AccountValue::ApportionNetMortalityReserve
     (double case_net_mortality_reserve
     ,double case_years_net_mortchgs
     )
@@ -2012,7 +2013,7 @@ void AccountValue::ApportionNetMortalityReserve
         ||  !e_currbasis == ExpAndGABasis
         )
         {
-        return;
+        return 0.0;
         }
 
     if(0.0 != case_years_net_mortchgs)
@@ -2036,6 +2037,10 @@ void AccountValue::ApportionNetMortalityReserve
         * (1.0 - partial_mortality_q[Year])
         * InvariantValues().InforceLives[Year]
         / Input_->NumIdenticalLives
+        ;
+    return
+            apportioned_net_mortality_reserve
+        *   InvariantValues().InforceLives[Year]
         ;
 }
 
