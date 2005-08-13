@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.110 2005-08-10 14:57:58 chicares Exp $
+// $Id: ChangeLog,v 1.111 2005-08-13 23:45:42 chicares Exp $
 
 2005-01-14
 
@@ -3013,4 +3013,24 @@ Remove old output before system test to avoid false positives.
   ihs_acctval.cpp
   ihs_avmly.cpp
 Remove some superfluous stuff.
+
+20050810T1457Z <chicares@cox.net> [1251]
+
+  ihs_acctval.cpp
+  ihs_mortal.cpp
+  inputillus.cpp
+  inputillus.hpp
+  inputillus_sequences.cpp
+  inputs.cpp
+  inputs.hpp
+Expunge deprecated input fields representing assumed assets and number
+of lives at the case level. They weren't available in any contemporary
+input skin. They weren't ever a good idea anyway: accurate values need
+the exact assets and number of lives, and the approximations these
+fields enabled weren't disclaimed on reports. The original intention
+was to make it easy to run a single cell in a case whose cells are
+interdependent, e.g., because total case assets determine the level of
+the M&E charge. However, exact values should be available, and users
+can easily get a similar approximation by running a one-cell census
+and manipulating the number of identical lives.
 

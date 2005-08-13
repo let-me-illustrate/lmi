@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_acctval.cpp,v 1.39 2005-08-10 14:57:58 chicares Exp $
+// $Id: ihs_acctval.cpp,v 1.40 2005-08-13 23:45:42 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -382,7 +382,6 @@ double AccountValue::PerformRunMonthByMonth(e_run_basis const& a_Basis)
     GuessWhetherFirstYearPremiumExceedsRetaliationLimit();
 restart:
     InitializeLife(a_Basis);
-    double Assets;
 
     for(int year = InforceYear; year < BasicValues::GetLength(); ++year)
         {
@@ -395,11 +394,7 @@ restart:
             CoordinateCounters();
             // Individual run: case-level k factor is zero.
             IncrementBOM(year, month, 0.0);
-
-            // Add assets and COI charges to case totals
-            Assets = GetSepAcctAssetsInforce();
-
-            IncrementEOM(year, month, Assets);
+            IncrementEOM(year, month, GetSepAcctAssetsInforce());
             }
 
         if(!TestWhetherFirstYearPremiumExceededRetaliationLimit())
@@ -839,11 +834,7 @@ void AccountValue::DoYear(int inforce_month)
         {
         CoordinateCounters();
         IncrementBOM(Year, Month, 0.0);
-
-        ApplyDynamicSepAcctLoadAMD  (Input_->VectorCaseAssumedAssets[Year]);
-        ApplyDynamicMandE           (Input_->VectorCaseAssumedAssets[Year]);
-
-        DoMonthCR();
+        IncrementEOM(Year, Month, GetSepAcctAssetsInforce());
 
         if(ItLapsed)
             {
@@ -1912,18 +1903,18 @@ double AccountValue::GetNetCOI() const
     // TODO ?? Do this once per cell?
 
     // TODO ?? Compare comments to code: are 'additive' and 'multiplicative'
-    // mixed up?
+    // mixed up? The lookup parameter for 'coi_retention' is undefined;
+    // the quantity formerly used was found useless, '1.0' is just a
+    // placeholder, and clearly this needs some work.
 
     // This is the multiplicative part of COI retention,
     // expressed as 1 + constant: e.g. 1.05 for 5% retention.
-    // It is tiered by initial "assumed" number of lives.
     double coi_ret_additive = Database_->Query(DB_ExpRatCOIRetention);
 
     // This is the additive part of COI retention,
     // expressed as an addition to q.
     // It is a constant retrieved from the database.
-    double coi_ret_multiplicative
-        = TieredCharges_->coi_retention(Input_->AssumedCaseNumLives);
+    double coi_ret_multiplicative = TieredCharges_->coi_retention(1.0);
     LMI_ASSERT(0.0 < coi_ret_multiplicative);
 
     // TODO ?? Do this once per year?

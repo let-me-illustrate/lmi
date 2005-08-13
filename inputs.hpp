@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: inputs.hpp,v 1.3 2005-04-29 17:20:55 chicares Exp $
+// $Id: inputs.hpp,v 1.4 2005-08-13 23:45:42 chicares Exp $
 
 #ifndef inputs_hpp
 #define inputs_hpp
@@ -95,7 +95,6 @@ class LMI_EXPIMP InputParms
     std::vector<double>          VectorCurrentCoiMultiplier;
     std::vector<double>          VectorCurrentCoiGrading;
     std::vector<double>          VectorCashValueEnhancementRate;
-    std::vector<double>          VectorCaseAssumedAssets;
     std::vector<double>          VectorCorpTaxBracket;
     std::vector<double>          VectorIndvTaxBracket;
     std::vector<double>          VectorPolicyLevelFlatExtra;
@@ -165,12 +164,8 @@ class LMI_EXPIMP InputParms
     // a census. Ultimately it should be moved to a census-level
     // class, but none exists at present.
     e_run_order          RunOrder             ;
-    // Assumed assets for M&E banding; ignored if composite is
-    // run month by month and M&E is dynamically determined.
-    r_nonnegative_double AssumedCaseAssets    ;
+
     // Note these differences:
-    //   AssumedCaseNumLives is the *case* total number of lives that
-    //     we use when running an individual illustration.
     //   NumIdenticalLives is the number of *identical* lives that this
     //     class object represents. The case (census) could contain other
     //     lives as well. This parameter has no effect on an individual
@@ -179,7 +174,6 @@ class LMI_EXPIMP InputParms
     //     that a single census entry represents.
     //   NumberOfLives is the number of lives on one policy: 2 for survivorship
     //
-    r_nonnegative_int    AssumedCaseNumLives  ;
     r_nonnegative_int    NumIdenticalLives    ;
     // TODO ?? Should not vary across lives in a census
     e_yes_or_no          UseExperienceRating  ;
