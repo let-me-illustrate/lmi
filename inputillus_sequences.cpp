@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: inputillus_sequences.cpp,v 1.5 2005-06-21 05:27:48 chicares Exp $
+// $Id: inputillus_sequences.cpp,v 1.6 2005-08-13 23:45:42 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -259,7 +259,6 @@ std::vector<std::string> IllusInputParms::realize_all_sequence_strings
     s.push_back(realize_sequence_string_for_current_coi_multiplier      ());
     s.push_back(realize_sequence_string_for_current_coi_grading         ());
     s.push_back(realize_sequence_string_for_cash_value_enhancement_rate ());
-    s.push_back(realize_sequence_string_for_case_assumed_assets         ());
     s.push_back(realize_sequence_string_for_corp_tax_bracket            ());
     s.push_back(realize_sequence_string_for_indv_tax_bracket            ());
     s.push_back(realize_sequence_string_for_projected_salary            ());
@@ -514,16 +513,6 @@ std::string IllusInputParms::realize_sequence_string_for_cash_value_enhancement_
         return oss.str();
         }
     return "";
-}
-
-//============================================================================
-std::string IllusInputParms::realize_sequence_string_for_case_assumed_assets()
-{
-    return realize_sequence_string
-        (*this
-        ,VectorCaseAssumedAssets
-        ,CaseAssumedAssets
-        );
 }
 
 //============================================================================

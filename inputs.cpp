@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: inputs.cpp,v 1.6 2005-06-23 01:47:21 chicares Exp $
+// $Id: inputs.cpp,v 1.7 2005-08-13 23:45:42 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -97,8 +97,6 @@ InputParms::InputParms()
     ,FundChoiceType                (e_fund_selection)
     ,InputFundMgmtFee              (0.0)
     ,RunOrder                      (e_life_by_life)
-    ,AssumedCaseAssets             (0.0)
-    ,AssumedCaseNumLives           (1)
     ,NumIdenticalLives             (1)
     ,UseExperienceRating           ("No")
     ,UsePartialMort                ("No")
@@ -238,7 +236,6 @@ InputParms::InputParms()
     VectorCurrentCoiMultiplier       .assign(KludgeLength,     1.0   );
     VectorCurrentCoiGrading          .assign(KludgeLength,     0.0   );
     VectorCashValueEnhancementRate   .assign(KludgeLength,     0.0   );
-    VectorCaseAssumedAssets          .assign(KludgeLength,     0.0   );
     VectorCorpTaxBracket             .assign(KludgeLength,     0.0   );
     VectorIndvTaxBracket             .assign(KludgeLength,     0.0   );
     VectorPolicyLevelFlatExtra       .assign(KludgeLength,     0.0   );
@@ -412,7 +409,6 @@ bool InputParms::operator==(InputParms const& z) const
     if(VectorCurrentCoiMultiplier       != z.VectorCurrentCoiMultiplier      ) return false;
     if(VectorCurrentCoiGrading          != z.VectorCurrentCoiGrading         ) return false;
     if(VectorCashValueEnhancementRate   != z.VectorCashValueEnhancementRate  ) return false;
-    if(VectorCaseAssumedAssets          != z.VectorCaseAssumedAssets         ) return false;
     if(VectorCorpTaxBracket             != z.VectorCorpTaxBracket            ) return false;
     if(VectorIndvTaxBracket             != z.VectorIndvTaxBracket            ) return false;
     if(VectorPolicyLevelFlatExtra       != z.VectorPolicyLevelFlatExtra      ) return false;
@@ -466,8 +462,6 @@ bool InputParms::operator==(InputParms const& z) const
     if(FundChoiceType                   != z.FundChoiceType                  ) return false;
     if(InputFundMgmtFee                 != z.InputFundMgmtFee                ) return false;
     if(RunOrder                         != z.RunOrder                        ) return false;
-    if(AssumedCaseAssets                != z.AssumedCaseAssets               ) return false;
-    if(AssumedCaseNumLives              != z.AssumedCaseNumLives             ) return false;
     if(NumIdenticalLives                != z.NumIdenticalLives               ) return false;
     if(UseExperienceRating              != z.UseExperienceRating             ) return false;
     if(UsePartialMort                   != z.UsePartialMort                  ) return false;

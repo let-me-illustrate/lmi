@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_mortal.cpp,v 1.5 2005-03-22 03:40:18 chicares Exp $
+// $Id: ihs_mortal.cpp,v 1.6 2005-08-13 23:45:42 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -86,9 +86,17 @@ void MortalityRates::Init(BasicValues const& basic_values)
 
     // This is the multiplicative part of COI retention,
     // expressed as 1 + constant: e.g. 1.05 for 5% retention.
-    // It is tiered by initial "assumed" number of lives.
+    //
+    // TODO ?? Clean this up.
+    //
+    // It was once tiered by initial "assumed" number of lives, but
+    // that quantity is no longer used; '1.0' is just a placeholder.
+    //
+    // Compare notes in AccountValue::GetNetCOI() that suggest
+    // serious problems with COI retention calculations.
+    //
     MultiplicativeCoiRetention_ = basic_values.TieredCharges_->coi_retention
-        (basic_values.Input_->AssumedCaseNumLives
+        (1.0
         );
 
     // Alternative COI rate for experience rating.
