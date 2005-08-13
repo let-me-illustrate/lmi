@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: inputillus.hpp,v 1.3 2005-05-24 04:00:02 chicares Exp $
+// $Id: inputillus.hpp,v 1.4 2005-08-13 23:45:42 chicares Exp $
 
 #ifndef inputillus_hpp
 #define inputillus_hpp
@@ -98,7 +98,6 @@ class LMI_EXPIMP IllusInputParms
     std::string realize_sequence_string_for_current_coi_multiplier();
     std::string realize_sequence_string_for_current_coi_grading();
     std::string realize_sequence_string_for_cash_value_enhancement_rate();
-    std::string realize_sequence_string_for_case_assumed_assets();
     std::string realize_sequence_string_for_corp_tax_bracket();
     std::string realize_sequence_string_for_indv_tax_bracket();
     std::string realize_sequence_string_for_projected_salary();
@@ -128,7 +127,6 @@ class LMI_EXPIMP IllusInputParms
     std::string CurrentCoiMultiplier;
     std::string CurrentCoiGrading;
     std::string CashValueEnhancementRate;
-    std::string CaseAssumedAssets;
     std::string CorpTaxBracket;
     std::string IndvTaxBracket;
     std::string ProjectedSalary;
