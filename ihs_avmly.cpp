@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avmly.cpp,v 1.18 2005-08-10 14:57:58 chicares Exp $
+// $Id: ihs_avmly.cpp,v 1.19 2005-08-16 14:18:12 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -2162,7 +2162,7 @@ void AccountValue::TxSetBOMAV()
 
 //============================================================================
 // Set death benefit reflecting corridor and death benefit option.
-void AccountValue::TxSetDeathBft()
+void AccountValue::TxSetDeathBft(bool force_eoy_behavior)
 {
     // TODO ?? Should 7702 or 7702A processing be done here?
     // If so, then this code may be useful:
@@ -2222,11 +2222,23 @@ void AccountValue::TxSetDeathBft()
 //        + std::max(0.0, ExpRatReserve) // This would be added if it existed.
         ;
 
-    if(12 == Month || std::string::npos != Input_->Comments.find("idiosyncrasyV"))
+    if
+        (   force_eoy_behavior
+        ||  std::string::npos != Input_->Comments.find("idiosyncrasyV")
+        )
         {
-        // This is really the correct behavior, but without this
-        // idiosyncrasy we want to match an admin system that
-        // doesn't do this correctly.
+        // The corridor death benefit ought always to reflect the
+        // honeymoon value. It always does if "idiosyncrasyV" is
+        // specified; otherwise, to match account values (but not
+        // death benefits) with an incorrect admin system, the
+        // honeymoon value is respected only if end-of-year behavior
+        // is forced--thus, year-end death benefit is correct, but
+        // the effect of the honeymoon value on corridor calculations
+        // (and hence mortality charges) is ignored for monthiversary
+        // processing. The idea is that in the event of death the
+        // faulty admin system's death-benefit calculation is ignored
+        // and the correct death benefit is calculated manually.
+        //
         cash_value_for_corridor = std::max
             (cash_value_for_corridor
             ,HoneymoonValue
@@ -3452,6 +3464,5 @@ void AccountValue::FinalizeMonth()
 void AccountValue::TxDebug()
 {
     DebugPrint();
-    TxSetDeathBft(); // TODO ?? Unnecessary?
 }
 
