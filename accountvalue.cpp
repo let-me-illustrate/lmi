@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: accountvalue.cpp,v 1.12 2005-08-10 13:11:56 chicares Exp $
+// $Id: accountvalue.cpp,v 1.13 2005-08-16 14:18:12 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -750,7 +750,7 @@ void AccountValue::TxSetBOMAV()
 
 //============================================================================
 // Set death benefit reflecting corridor and option 2
-void AccountValue::TxSetDeathBft()
+void AccountValue::TxSetDeathBft(bool)
 {
     // Total account value is unloaned plus loaned
     double AV = AVUnloaned + AVRegLn + AVPrfLn;

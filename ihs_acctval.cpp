@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_acctval.cpp,v 1.40 2005-08-13 23:45:42 chicares Exp $
+// $Id: ihs_acctval.cpp,v 1.41 2005-08-16 14:18:12 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -318,15 +318,17 @@ double AccountValue::RunAllApplicableBases()
 //============================================================================
 double AccountValue::PerformRun(e_run_basis const& a_Basis)
 {
+// Temporarily swap the sense of run order, as a device to test whether
+// the two different functions called here work interchangeably.
     switch(Input_->RunOrder)
         {
         case e_life_by_life:
             {
-            return PerformRunLifeByLife(a_Basis);
+            return PerformRunMonthByMonth(a_Basis);
             }
         case e_month_by_month:
             {
-            return PerformRunMonthByMonth(a_Basis);
+            return PerformRunLifeByLife(a_Basis);
             }
         default:
             {
@@ -344,17 +346,28 @@ double AccountValue::PerformRun(e_run_basis const& a_Basis)
 //============================================================================
 double AccountValue::PerformRunLifeByLife(e_run_basis const& a_Basis)
 {
-    LMI_ASSERT(e_life_by_life == Input_->RunOrder);
-
     GuessWhetherFirstYearPremiumExceedsRetaliationLimit();
 restart:
     InitializeLife(a_Basis);
     for(Year = InforceYear; Year < BasicValues::GetLength(); ++Year)
         {
         CoordinateCounters();
-        if(!ItLapsed)
+
+        InitializeYear();
+
+        // This loop needs no early-exit condition like
+        //   if(ItLapsed) break;
+        // because all the functions it calls contain such a
+        // condition. Not writing such a condition here keeps this
+        // code similar to the group-values equivalent.
+
+        int inforce_month = (Year == InforceYear) ? InforceMonth : 0;
+        for(Month = inforce_month; Month < 12; ++Month)
             {
-            DoYear((Year == InforceYear) ? InforceMonth : 0);
+            CoordinateCounters();
+            // Individual run: case-level k factor is zero.
+            IncrementBOM(Year, Month, 0.0);
+            IncrementEOM(Year, Month, GetSepAcctAssetsInforce());
             }
 
         if(!TestWhetherFirstYearPremiumExceededRetaliationLimit())
@@ -367,6 +380,10 @@ restart:
             DebugRestart("First-year premium did not meet retaliation limit.");
             goto restart;
             }
+
+        SetClaims();
+        SetProjectedCoiCharge();
+        IncrementEOY(Year);
         }
 
     FinalizeLife(a_Basis);
@@ -377,8 +394,6 @@ restart:
 //============================================================================
 double AccountValue::PerformRunMonthByMonth(e_run_basis const& a_Basis)
 {
-    LMI_ASSERT(e_month_by_month == Input_->RunOrder);
-
     GuessWhetherFirstYearPremiumExceedsRetaliationLimit();
 restart:
     InitializeLife(a_Basis);
@@ -388,7 +403,8 @@ restart:
         Year = year;
         CoordinateCounters();
         InitializeYear();
-        for(int month = InforceMonth; month < 12; ++month)
+        int inforce_month = (Year == InforceYear) ? InforceMonth : 0;
+        for(int month = inforce_month; month < 12; ++month)
             {
             Month = month;
             CoordinateCounters();
@@ -413,7 +429,6 @@ restart:
         IncrementEOY(year);
         }
 
-// TODO ?? Looks like loop does not exit early upon lapse.
     FinalizeLife(a_Basis);
 
     return TotalAccountValue();
@@ -821,30 +836,6 @@ void AccountValue::SetInitialValues()
         {
         LMI_ASSERT(Database_->Query(DB_AllowSepAcct));
         }
-}
-
-//============================================================================
-void AccountValue::DoYear(int inforce_month)
-{
-    LMI_ASSERT(e_life_by_life == Input_->RunOrder);
-
-    InitializeYear();
-
-    for(Month = inforce_month; Month < 12; ++Month)
-        {
-        CoordinateCounters();
-        IncrementBOM(Year, Month, 0.0);
-        IncrementEOM(Year, Month, GetSepAcctAssetsInforce());
-
-        if(ItLapsed)
-            {
-            return; // TODO ?? Or break so we get 'Finalized'?
-            }
-        }
-
-    SetClaims();
-    SetProjectedCoiCharge();
-    IncrementEOY(Year);
 }
 
 //============================================================================
@@ -1433,7 +1424,7 @@ void AccountValue::SetClaims()
     // end-of-year value (as of the end of the twelfth month) is
     // needed.
 
-    TxSetDeathBft();
+    TxSetDeathBft(true);
     TxSetTermAmt();
 
     // Amounts such as claims and account value released on death
@@ -1481,9 +1472,7 @@ void AccountValue::SetProjectedCoiCharge()
         return;
         }
 
-    LMI_ASSERT(11 == Month);
-
-    TxSetDeathBft();
+    TxSetDeathBft(true);
     TxSetTermAmt();
     double this_years_terminal_naar =
             DBReflectingCorr + TermDB
@@ -1540,7 +1529,7 @@ void AccountValue::FinalizeYear()
     // end-of-year value (as of the end of the twelfth month) is
     // needed.
 
-    TxSetDeathBft();
+    TxSetDeathBft(true);
     TxSetTermAmt();
     // post values to LedgerVariant
     InvariantValues().TermSpecAmt   [Year] = TermSpecAmt;
