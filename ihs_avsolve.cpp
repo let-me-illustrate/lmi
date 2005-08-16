@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avsolve.cpp,v 1.7 2005-05-28 05:59:22 chicares Exp $
+// $Id: ihs_avsolve.cpp,v 1.8 2005-08-16 16:18:09 chicares Exp $
 
 // All iterative illustration solves are performed in this file.
 // We use Brent's algorithm because it is guaranteed to converge
@@ -166,7 +166,7 @@ double AccountValue::SolveTest(double a_CandidateValue)
         ,e_basis(SolveBasis)
         ,e_sep_acct_basis(SolveSABasis)
         );
-    PerformRun(temp);
+    RunOneCell(temp);
 
     // return least of
     //   CSV at target duration
