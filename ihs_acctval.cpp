@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_acctval.cpp,v 1.41 2005-08-16 14:18:12 chicares Exp $
+// $Id: ihs_acctval.cpp,v 1.42 2005-08-16 16:18:09 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -241,7 +241,7 @@ double AccountValue::RunOneBasis(e_run_basis const& a_Basis)
         }
     else
         {
-        z = PerformRun(a_Basis);
+        z = RunOneCell(a_Basis);
         }
     return z;
 }
@@ -316,83 +316,15 @@ double AccountValue::RunAllApplicableBases()
 }
 
 //============================================================================
-double AccountValue::PerformRun(e_run_basis const& a_Basis)
-{
-// Temporarily swap the sense of run order, as a device to test whether
-// the two different functions called here work interchangeably.
-    switch(Input_->RunOrder)
-        {
-        case e_life_by_life:
-            {
-            return PerformRunMonthByMonth(a_Basis);
-            }
-        case e_month_by_month:
-            {
-            return PerformRunLifeByLife(a_Basis);
-            }
-        default:
-            {
-            fatal_error()
-                << "Case '"
-                << Input_->RunOrder
-                << "' not found."
-                << LMI_FLUSH
-                ;
-            return 0; // Bogus return--actually unreachable.
-            }
-        }
-}
+/// This implementation seems slightly unnatural because it strives
+/// for similarity with run_census_in_parallel::operator(). For
+/// instance, 'Year' and 'Month' aren't used directly as loop
+/// counters, and the loop has no early-exit condition like
+///   if(ItLapsed) break;
+/// which isn't necessary anyway because all the functions it calls
+/// contain such a condition.
 
-//============================================================================
-double AccountValue::PerformRunLifeByLife(e_run_basis const& a_Basis)
-{
-    GuessWhetherFirstYearPremiumExceedsRetaliationLimit();
-restart:
-    InitializeLife(a_Basis);
-    for(Year = InforceYear; Year < BasicValues::GetLength(); ++Year)
-        {
-        CoordinateCounters();
-
-        InitializeYear();
-
-        // This loop needs no early-exit condition like
-        //   if(ItLapsed) break;
-        // because all the functions it calls contain such a
-        // condition. Not writing such a condition here keeps this
-        // code similar to the group-values equivalent.
-
-        int inforce_month = (Year == InforceYear) ? InforceMonth : 0;
-        for(Month = inforce_month; Month < 12; ++Month)
-            {
-            CoordinateCounters();
-            // Individual run: case-level k factor is zero.
-            IncrementBOM(Year, Month, 0.0);
-            IncrementEOM(Year, Month, GetSepAcctAssetsInforce());
-            }
-
-        if(!TestWhetherFirstYearPremiumExceededRetaliationLimit())
-            {
-            // We could do this instead:
-            //   InitializeLife(a_Basis);
-            //   --Year;
-            // to satisfy the popular 'zero-tolerance' attitude toward
-            // the goto statement, but that would be more unnatural.
-            DebugRestart("First-year premium did not meet retaliation limit.");
-            goto restart;
-            }
-
-        SetClaims();
-        SetProjectedCoiCharge();
-        IncrementEOY(Year);
-        }
-
-    FinalizeLife(a_Basis);
-
-    return TotalAccountValue();
-}
-
-//============================================================================
-double AccountValue::PerformRunMonthByMonth(e_run_basis const& a_Basis)
+double AccountValue::RunOneCell(e_run_basis const& a_Basis)
 {
     GuessWhetherFirstYearPremiumExceedsRetaliationLimit();
 restart:
@@ -403,6 +335,7 @@ restart:
         Year = year;
         CoordinateCounters();
         InitializeYear();
+
         int inforce_month = (Year == InforceYear) ? InforceMonth : 0;
         for(int month = inforce_month; month < 12; ++month)
             {

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: accountvalue.cpp,v 1.13 2005-08-16 14:18:12 chicares Exp $
+// $Id: accountvalue.cpp,v 1.14 2005-08-16 16:18:09 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -161,7 +161,7 @@ double AccountValue::RunOneBasis(e_run_basis const& TheBasis)
         }
     else
         {
-        z = PerformRun(TheBasis);
+        z = RunOneCell(TheBasis);
         }
     return z;
 }
@@ -211,7 +211,7 @@ double AccountValue::RunAllApplicableBases()
 }
 
 //============================================================================
-double AccountValue::PerformRun(e_run_basis const& TheBasis)
+double AccountValue::RunOneCell(e_run_basis const& TheBasis)
 {
     if(Solving)
         {
