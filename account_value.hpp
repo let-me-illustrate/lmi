@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: account_value.hpp,v 1.23 2005-08-16 14:18:12 chicares Exp $
+// $Id: account_value.hpp,v 1.24 2005-08-16 16:18:09 chicares Exp $
 
 #ifndef account_value_hpp
 #define account_value_hpp
@@ -64,18 +64,9 @@ class LMI_EXPIMP AccountValue
     ~AccountValue();
 
     double RunAV                ();
-    double PerformRun           (e_run_basis const&);
-    void   InitializeLife       (e_run_basis const&);
-    void   FinalizeLife         (e_run_basis const&);
-    void   FinalizeLifeAllBases ();
-    void   SetGuarPrem          ();
 
     void SetDebugFilename    (std::string const&);
 
-    void   GuessWhetherFirstYearPremiumExceedsRetaliationLimit();
-    bool   TestWhetherFirstYearPremiumExceededRetaliationLimit();
-
-    double Solve(); // Antediluvian.
     void SolveSetPmts // Antediluvian.
         (double a_Pmt
         ,int    ThatSolveBegYear
@@ -104,6 +95,10 @@ class LMI_EXPIMP AccountValue
 
     boost::shared_ptr<Ledger const> ledger_from_av() const;
 
+  private:
+    LedgerInvariant const& InvariantValues() const;
+    LedgerVariant   const& VariantValues  () const;
+
     int                    GetLength     () const;
     e_ledger_type const&   GetLedgerType () const;
 
@@ -111,10 +106,6 @@ class LMI_EXPIMP AccountValue
     double GetSepAcctAssetsInforce    () const;
     double GetNetCOI                  () const;
     double GetLastCOIChargeInforce    () const;
-
-  private:
-    LedgerInvariant const& InvariantValues() const;
-    LedgerVariant   const& VariantValues  () const;
 
     void process_payment          (double);
     void IncrementAVProportionally(double);
@@ -137,10 +128,13 @@ class LMI_EXPIMP AccountValue
     LedgerInvariant& InvariantValues();
     LedgerVariant  & VariantValues  ();
 
-    double PerformRunMonthByMonth  (e_run_basis const&);
-    double PerformRunLifeByLife    (e_run_basis const&);
+    double RunOneCell              (e_run_basis const&);
     double RunOneBasis             (e_run_basis const&);
     double RunAllApplicableBases   ();
+    void   InitializeLife          (e_run_basis const&);
+    void   FinalizeLife            (e_run_basis const&);
+    void   FinalizeLifeAllBases    ();
+    void   SetGuarPrem             ();
     void   InitializeYear          ();
     void   InitializeSpecAmt       ();
     void   FinalizeYear            ();
@@ -178,6 +172,9 @@ class LMI_EXPIMP AccountValue
     double ibnr_as_months_of_mortality_charges();
     double experience_rating_amortization_years();
 
+    void GuessWhetherFirstYearPremiumExceedsRetaliationLimit();
+    bool TestWhetherFirstYearPremiumExceededRetaliationLimit();
+
     // To support the notion of an M&E charge that depends on total case
     // assets, we provide these functions, which are designed to be
     // called by a distant module that has a pointer to an object of this
@@ -202,6 +199,7 @@ class LMI_EXPIMP AccountValue
 
     bool PrecedesInforceDuration(int year, int month);
 
+    double Solve(); // Antediluvian.
     double Solve
         (e_solve_type const&     a_SolveType
         ,int                     a_SolveBegYear

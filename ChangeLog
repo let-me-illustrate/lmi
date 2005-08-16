@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.111 2005-08-13 23:45:42 chicares Exp $
+// $Id: ChangeLog,v 1.112 2005-08-16 16:18:09 chicares Exp $
 
 2005-01-14
 
@@ -3014,7 +3014,7 @@ Remove old output before system test to avoid false positives.
   ihs_avmly.cpp
 Remove some superfluous stuff.
 
-20050810T1457Z <chicares@cox.net> [1251]
+20050813T2345Z <chicares@cox.net> [1251]
 
   ihs_acctval.cpp
   ihs_mortal.cpp
@@ -3033,4 +3033,29 @@ interdependent, e.g., because total case assets determine the level of
 the M&E charge. However, exact values should be available, and users
 can easily get a similar approximation by running a one-cell census
 and manipulating the number of identical lives.
+
+20050816T1417Z <chicares@cox.net> [1248]
+
+  account_value.hpp
+  accountvalue.cpp
+  ihs_acctval.cpp
+  ihs_avmly.cpp
+Make serial and parallel account-value calculations equivalent for
+single-life input; temporarily swap serial and parallel calculations
+in order to test this, before replacing them with a single common
+implementation. Give AccountValue::TxSetDeathBft() a boolean argument
+to force special end-of-year behavior: previously, it relied on the
+side effect that AccountValue::Month, which is normally in [0,11],
+would have the value 12 at year end, but that side effect didn't occur
+for parallel calculations.
+
+20050816T1617Z <chicares@cox.net> [1248]
+
+  account_value.hpp
+  accountvalue.cpp
+  ihs_acctval.cpp
+  ihs_avsolve.cpp
+  solve.cpp
+Merge serial and parallel account-value calculations for single-life
+input.
 
