@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: account_value.hpp,v 1.22 2005-08-10 14:57:58 chicares Exp $
+// $Id: account_value.hpp,v 1.23 2005-08-16 14:18:12 chicares Exp $
 
 #ifndef account_value_hpp
 #define account_value_hpp
@@ -141,7 +141,6 @@ class LMI_EXPIMP AccountValue
     double PerformRunLifeByLife    (e_run_basis const&);
     double RunOneBasis             (e_run_basis const&);
     double RunAllApplicableBases   ();
-    void   DoYear                  (int InforceMonth = 0);
     void   InitializeYear          ();
     void   InitializeSpecAmt       ();
     void   FinalizeYear            ();
@@ -276,7 +275,7 @@ class LMI_EXPIMP AccountValue
     void TxSetBOMAV              ();
     void TxTestHoneymoonForExpiration();
     void TxSetTermAmt            ();
-    void TxSetDeathBft           ();
+    void TxSetDeathBft           (bool force_eoy_behavior = false);
     void TxSetCOI                ();
     void TxSetRiderDed           ();
     void TxDoMlyDed              ();
