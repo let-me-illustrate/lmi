@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_acctval.cpp,v 1.42 2005-08-16 16:18:09 chicares Exp $
+// $Id: ihs_acctval.cpp,v 1.43 2005-08-17 12:49:02 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -1816,18 +1816,8 @@ double AccountValue::GetPartMortQ(int a_year) const
 //============================================================================
 double AccountValue::GetNetCOI() const
 {
-// If monthly COI rate including COI retention exceeds .08333333, then
-// net COI rate may be lower than spreadsheet. This makes the C++ system
-// slightly more conservative; I would expect it to occur only at age 99.
-// Of course it can have a large effect on the last year's experience refund,
-// but it should have only a trivial effect on level premium to endow.
-
-    // TODO ?? Do this once per cell?
-
     // TODO ?? Compare comments to code: are 'additive' and 'multiplicative'
-    // mixed up? The lookup parameter for 'coi_retention' is undefined;
-    // the quantity formerly used was found useless, '1.0' is just a
-    // placeholder, and clearly this needs some work.
+    // mixed up? Support for the tiered 'coi_retention' has been withdrawn.
 
     // This is the multiplicative part of COI retention,
     // expressed as 1 + constant: e.g. 1.05 for 5% retention.
@@ -1836,7 +1826,8 @@ double AccountValue::GetNetCOI() const
     // This is the additive part of COI retention,
     // expressed as an addition to q.
     // It is a constant retrieved from the database.
-    double coi_ret_multiplicative = TieredCharges_->coi_retention(1.0);
+    // Well, maybe not: it was formerly TieredCharges_->coi_retention(1.0);
+    double coi_ret_multiplicative = 1.0;
     LMI_ASSERT(0.0 < coi_ret_multiplicative);
 
     // TODO ?? Do this once per year?

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: tiered_charges.cpp,v 1.4 2005-05-27 10:37:06 chicares Exp $
+// $Id: tiered_charges.cpp,v 1.5 2005-08-17 12:49:03 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -188,30 +188,30 @@ void tiered_charges::initialize_dictionary()
 {
     // Dummy nodes: root and topic headers
     dictionary[e_tier_first                            ] = tiered_item_rep();
-    dictionary[e_tier_topic_experience_rating          ] = tiered_item_rep();
-    dictionary[e_tier_topic_asset_based                ] = tiered_item_rep();
-    dictionary[e_tier_topic_premium_tax                ] = tiered_item_rep();
+    dictionary[e_topic_premium_banded                  ] = tiered_item_rep();
+    dictionary[e_topic_asset_tiered                    ] = tiered_item_rep();
+    dictionary[e_topic_tiered_premium_tax              ] = tiered_item_rep();
 
     // Data-bearing nodes
 
-    dictionary[e_tier_stabilization_reserve            ] = tiered_item_rep();
-    dictionary[e_tier_coi_retention                    ] = tiered_item_rep();
-    dictionary[e_tier_current_m_and_e                  ] = tiered_item_rep();
-    dictionary[e_tier_guaranteed_m_and_e               ] = tiered_item_rep();
-    dictionary[e_tier_asset_based_compensation         ] = tiered_item_rep();
-    dictionary[e_tier_investment_management_fee        ] = tiered_item_rep();
-    dictionary[e_tier_current_separate_account_load    ] = tiered_item_rep();
-    dictionary[e_tier_guaranteed_separate_account_load ] = tiered_item_rep();
+    dictionary[e_curr_sepacct_load_banded_by_premium   ] = tiered_item_rep();
+    dictionary[e_guar_sepacct_load_banded_by_premium   ] = tiered_item_rep();
+    dictionary[e_curr_m_and_e_tiered_by_assets         ] = tiered_item_rep();
+    dictionary[e_guar_m_and_e_tiered_by_assets         ] = tiered_item_rep();
+    dictionary[e_asset_based_comp_tiered_by_assets     ] = tiered_item_rep();
+    dictionary[e_investment_mgmt_fee_tiered_by_assets  ] = tiered_item_rep();
+    dictionary[e_curr_sepacct_load_tiered_by_assets    ] = tiered_item_rep();
+    dictionary[e_guar_sepacct_load_tiered_by_assets    ] = tiered_item_rep();
 
-    dictionary[e_tier_ak_premium_tax                   ] = tiered_item_rep();
-    dictionary[e_tier_de_premium_tax                   ] = tiered_item_rep();
-    dictionary[e_tier_sd_premium_tax                   ] = tiered_item_rep();
+    dictionary[e_tiered_ak_premium_tax                   ] = tiered_item_rep();
+    dictionary[e_tiered_de_premium_tax                   ] = tiered_item_rep();
+    dictionary[e_tiered_sd_premium_tax                   ] = tiered_item_rep();
 }
 
 //============================================================================
 double tiered_charges::stabilization_reserve(double number_of_lives_inforce) const
 {
-    tiered_item_rep const& z = tiered_item(e_tier_stabilization_reserve);
+    tiered_item_rep const& z = tiered_item(e_curr_sepacct_load_banded_by_premium);
     std::vector<double>::const_iterator band = std::upper_bound
         (z.bands().begin()
         ,z.bands().end()
@@ -223,7 +223,7 @@ double tiered_charges::stabilization_reserve(double number_of_lives_inforce) con
 //============================================================================
 double tiered_charges::coi_retention(double number_of_lives_at_issue) const
 {
-    tiered_item_rep const& z = tiered_item(e_tier_coi_retention);
+    tiered_item_rep const& z = tiered_item(e_guar_sepacct_load_banded_by_premium);
     std::vector<double>::const_iterator band = std::upper_bound
         (z.bands().begin()
         ,z.bands().end()
@@ -235,42 +235,42 @@ double tiered_charges::coi_retention(double number_of_lives_at_issue) const
 //============================================================================
 double tiered_charges::tiered_current_m_and_e(double assets) const
 {
-    tiered_item_rep const& z = tiered_item(e_tier_current_m_and_e);
+    tiered_item_rep const& z = tiered_item(e_curr_m_and_e_tiered_by_assets);
     return tiered_rate<double>() (assets, z.bands(), z.data());
 }
 
 //============================================================================
 double tiered_charges::tiered_guaranteed_m_and_e(double assets) const
 {
-    tiered_item_rep const& z = tiered_item(e_tier_guaranteed_m_and_e);
+    tiered_item_rep const& z = tiered_item(e_guar_m_and_e_tiered_by_assets);
     return tiered_rate<double>() (assets, z.bands(), z.data());
 }
 
 //============================================================================
 double tiered_charges::tiered_asset_based_compensation(double assets) const
 {
-    tiered_item_rep const& z = tiered_item(e_tier_asset_based_compensation);
+    tiered_item_rep const& z = tiered_item(e_asset_based_comp_tiered_by_assets);
     return tiered_rate<double>() (assets, z.bands(), z.data());
 }
 
 //============================================================================
 double tiered_charges::tiered_investment_management_fee(double assets) const
 {
-    tiered_item_rep const& z = tiered_item(e_tier_investment_management_fee);
+    tiered_item_rep const& z = tiered_item(e_investment_mgmt_fee_tiered_by_assets);
     return tiered_rate<double>() (assets, z.bands(), z.data());
 }
 
 //============================================================================
 double tiered_charges::tiered_current_separate_account_load(double assets) const
 {
-    tiered_item_rep const& z = tiered_item(e_tier_current_separate_account_load);
+    tiered_item_rep const& z = tiered_item(e_curr_sepacct_load_tiered_by_assets);
     return tiered_rate<double>() (assets, z.bands(), z.data());
 }
 
 //============================================================================
 double tiered_charges::tiered_guaranteed_separate_account_load(double assets) const
 {
-    tiered_item_rep const& z = tiered_item(e_tier_guaranteed_separate_account_load);
+    tiered_item_rep const& z = tiered_item(e_guar_sepacct_load_tiered_by_assets);
     return tiered_rate<double>() (assets, z.bands(), z.data());
 }
 
@@ -285,7 +285,7 @@ double tiered_charges::tiered_guaranteed_separate_account_load(double assets) co
 //
 double tiered_charges::minimum_tiered_spread_for_7702() const
 {
-    tiered_item_rep const& z = tiered_item(e_tier_current_separate_account_load);
+    tiered_item_rep const& z = tiered_item(e_curr_sepacct_load_tiered_by_assets);
     return *std::min_element(z.data().begin(), z.data().end());
 }
 
@@ -296,19 +296,19 @@ namespace
         enum_state const z = state.value();
         if(e_s_AK == z)
             {
-            return tiered_charges::e_tier_ak_premium_tax;
+            return tiered_charges::e_tiered_ak_premium_tax;
             }
         else if(e_s_DE == z)
             {
             // TRICKY !! We'll eventually implement DE like this:
-            //   return tiered_charges::e_tier_de_premium_tax;
+            //   return tiered_charges::e_tiered_de_premium_tax;
             // But we haven't implemented DE's tiered premium tax yet,
             // so we treat it as any other state for now:
             return tiered_charges::e_tier_last;
             }
         else if(e_s_SD == z)
             {
-            return tiered_charges::e_tier_sd_premium_tax;
+            return tiered_charges::e_tiered_sd_premium_tax;
             }
         else
             {
@@ -377,17 +377,17 @@ void tiered_charges::read(std::string const& filename)
         }
     std::ifstream is(filename.c_str());
 
-    is >> tiered_item(e_tier_stabilization_reserve           );
-    is >> tiered_item(e_tier_coi_retention                   );
-    is >> tiered_item(e_tier_current_m_and_e                 );
-    is >> tiered_item(e_tier_guaranteed_m_and_e              );
-    is >> tiered_item(e_tier_asset_based_compensation        );
-    is >> tiered_item(e_tier_investment_management_fee       );
-    is >> tiered_item(e_tier_current_separate_account_load   );
-    is >> tiered_item(e_tier_guaranteed_separate_account_load);
-    is >> tiered_item(e_tier_ak_premium_tax                  );
-    is >> tiered_item(e_tier_de_premium_tax                  );
-    is >> tiered_item(e_tier_sd_premium_tax                  );
+    is >> tiered_item(e_curr_sepacct_load_banded_by_premium  );
+    is >> tiered_item(e_guar_sepacct_load_banded_by_premium  );
+    is >> tiered_item(e_curr_m_and_e_tiered_by_assets        );
+    is >> tiered_item(e_guar_m_and_e_tiered_by_assets        );
+    is >> tiered_item(e_asset_based_comp_tiered_by_assets    );
+    is >> tiered_item(e_investment_mgmt_fee_tiered_by_assets );
+    is >> tiered_item(e_curr_sepacct_load_tiered_by_assets   );
+    is >> tiered_item(e_guar_sepacct_load_tiered_by_assets   );
+    is >> tiered_item(e_tiered_ak_premium_tax                );
+    is >> tiered_item(e_tiered_de_premium_tax                );
+    is >> tiered_item(e_tiered_sd_premium_tax                );
 
     if(!is.good())
         {
@@ -425,17 +425,17 @@ void tiered_charges::write(std::string const& filename) const
             ;
         }
 
-    os << tiered_item(e_tier_stabilization_reserve           );
-    os << tiered_item(e_tier_coi_retention                   );
-    os << tiered_item(e_tier_current_m_and_e                 );
-    os << tiered_item(e_tier_guaranteed_m_and_e              );
-    os << tiered_item(e_tier_asset_based_compensation        );
-    os << tiered_item(e_tier_investment_management_fee       );
-    os << tiered_item(e_tier_current_separate_account_load   );
-    os << tiered_item(e_tier_guaranteed_separate_account_load);
-    os << tiered_item(e_tier_ak_premium_tax                  );
-    os << tiered_item(e_tier_de_premium_tax                  );
-    os << tiered_item(e_tier_sd_premium_tax                  );
+    os << tiered_item(e_curr_sepacct_load_banded_by_premium  );
+    os << tiered_item(e_guar_sepacct_load_banded_by_premium  );
+    os << tiered_item(e_curr_m_and_e_tiered_by_assets        );
+    os << tiered_item(e_guar_m_and_e_tiered_by_assets        );
+    os << tiered_item(e_asset_based_comp_tiered_by_assets    );
+    os << tiered_item(e_investment_mgmt_fee_tiered_by_assets );
+    os << tiered_item(e_curr_sepacct_load_tiered_by_assets   );
+    os << tiered_item(e_guar_sepacct_load_tiered_by_assets   );
+    os << tiered_item(e_tiered_ak_premium_tax                );
+    os << tiered_item(e_tiered_de_premium_tax                );
+    os << tiered_item(e_tiered_sd_premium_tax                );
 
     if(!os.good())
         {
@@ -453,42 +453,41 @@ void tiered_charges::write_tier_files()
 {
     tiered_charges foo;
 
-    foo.tiered_item(e_tier_stabilization_reserve           ).data_.push_back(1.0);
-    foo.tiered_item(e_tier_stabilization_reserve           ).bands_.push_back(DBL_MAX);
+    foo.tiered_item(e_curr_sepacct_load_banded_by_premium  ).data_.push_back(0.0);
+    foo.tiered_item(e_curr_sepacct_load_banded_by_premium  ).bands_.push_back(DBL_MAX);
+    foo.tiered_item(e_guar_sepacct_load_banded_by_premium  ).data_.push_back(0.0);
+    foo.tiered_item(e_guar_sepacct_load_banded_by_premium  ).bands_.push_back(DBL_MAX);
 
-    foo.tiered_item(e_tier_coi_retention                   ).data_.push_back(1.0);
-    foo.tiered_item(e_tier_coi_retention                   ).bands_.push_back(DBL_MAX);
-
-    foo.tiered_item(e_tier_current_m_and_e                 ).data_.push_back(0.0);
-    foo.tiered_item(e_tier_current_m_and_e                 ).bands_.push_back(DBL_MAX);
-    foo.tiered_item(e_tier_guaranteed_m_and_e              ).data_.push_back(0.0);
-    foo.tiered_item(e_tier_guaranteed_m_and_e              ).bands_.push_back(DBL_MAX);
-    foo.tiered_item(e_tier_asset_based_compensation        ).data_.push_back(0.0);
-    foo.tiered_item(e_tier_asset_based_compensation        ).bands_.push_back(DBL_MAX);
-    foo.tiered_item(e_tier_investment_management_fee       ).data_.push_back(0.0);
-    foo.tiered_item(e_tier_investment_management_fee       ).bands_.push_back(DBL_MAX);
-    foo.tiered_item(e_tier_current_separate_account_load   ).data_.push_back(0.0);
-    foo.tiered_item(e_tier_current_separate_account_load   ).bands_.push_back(DBL_MAX);
-    foo.tiered_item(e_tier_guaranteed_separate_account_load).data_.push_back(0.0);
-    foo.tiered_item(e_tier_guaranteed_separate_account_load).bands_.push_back(DBL_MAX);
+    foo.tiered_item(e_curr_m_and_e_tiered_by_assets        ).data_.push_back(0.0);
+    foo.tiered_item(e_curr_m_and_e_tiered_by_assets        ).bands_.push_back(DBL_MAX);
+    foo.tiered_item(e_guar_m_and_e_tiered_by_assets        ).data_.push_back(0.0);
+    foo.tiered_item(e_guar_m_and_e_tiered_by_assets        ).bands_.push_back(DBL_MAX);
+    foo.tiered_item(e_asset_based_comp_tiered_by_assets    ).data_.push_back(0.0);
+    foo.tiered_item(e_asset_based_comp_tiered_by_assets    ).bands_.push_back(DBL_MAX);
+    foo.tiered_item(e_investment_mgmt_fee_tiered_by_assets ).data_.push_back(0.0);
+    foo.tiered_item(e_investment_mgmt_fee_tiered_by_assets ).bands_.push_back(DBL_MAX);
+    foo.tiered_item(e_curr_sepacct_load_tiered_by_assets   ).data_.push_back(0.0);
+    foo.tiered_item(e_curr_sepacct_load_tiered_by_assets   ).bands_.push_back(DBL_MAX);
+    foo.tiered_item(e_guar_sepacct_load_tiered_by_assets   ).data_.push_back(0.0);
+    foo.tiered_item(e_guar_sepacct_load_tiered_by_assets   ).bands_.push_back(DBL_MAX);
 
     // For AK and SD, these are the actual rates as of 2003-09-09. Statutes:
     // AK 21.09.210(m)
     // SD 10-4-22(2) (see also 58-6-70)
 
-    foo.tiered_item(e_tier_ak_premium_tax                  ).data_.push_back (0.02700);
-    foo.tiered_item(e_tier_ak_premium_tax                  ).data_.push_back (0.00100);
-    foo.tiered_item(e_tier_ak_premium_tax                  ).bands_.push_back(100000.0);
-    foo.tiered_item(e_tier_ak_premium_tax                  ).bands_.push_back(DBL_MAX);
+    foo.tiered_item(e_tiered_ak_premium_tax                ).data_.push_back (0.02700);
+    foo.tiered_item(e_tiered_ak_premium_tax                ).data_.push_back (0.00100);
+    foo.tiered_item(e_tiered_ak_premium_tax                ).bands_.push_back(100000.0);
+    foo.tiered_item(e_tiered_ak_premium_tax                ).bands_.push_back(DBL_MAX);
 
     // DE: not yet implemented.
-    foo.tiered_item(e_tier_de_premium_tax                  ).data_.push_back (0.0);
-    foo.tiered_item(e_tier_de_premium_tax                  ).bands_.push_back(DBL_MAX);
+    foo.tiered_item(e_tiered_de_premium_tax                ).data_.push_back (0.0);
+    foo.tiered_item(e_tiered_de_premium_tax                ).bands_.push_back(DBL_MAX);
 
-    foo.tiered_item(e_tier_sd_premium_tax                  ).data_.push_back (0.02500);
-    foo.tiered_item(e_tier_sd_premium_tax                  ).data_.push_back (0.00080);
-    foo.tiered_item(e_tier_sd_premium_tax                  ).bands_.push_back(100000.0);
-    foo.tiered_item(e_tier_sd_premium_tax                  ).bands_.push_back(DBL_MAX);
+    foo.tiered_item(e_tiered_sd_premium_tax                ).data_.push_back (0.02500);
+    foo.tiered_item(e_tiered_sd_premium_tax                ).data_.push_back (0.00080);
+    foo.tiered_item(e_tiered_sd_premium_tax                ).bands_.push_back(100000.0);
+    foo.tiered_item(e_tiered_sd_premium_tax                ).bands_.push_back(DBL_MAX);
 
     foo.write(AddDataDir("sample.tir"));
 }
