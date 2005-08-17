@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: my_tier.cpp,v 1.2 2005-04-10 14:51:15 chicares Exp $
+// $Id: my_tier.cpp,v 1.3 2005-08-17 12:49:03 chicares Exp $
 
 // This file is a template for embedding product-specific data. Doing
 // that creates a derived work covered by the GPL. But you may prefer
@@ -54,7 +54,7 @@ void tiered_charges::write_proprietary_tier_files()
 
     // Example only.
     foo.tiered_item(e_tier_current_separate_account_load   ).data_.push_back(0.0);
-    foo.tiered_item(e_tier_current_separate_account_load   ).bands_.push_back(DBL_MAX);
+    foo.tiered_item(e_curr_sepacct_load_tiered_by_assets   ).bands_.push_back(DBL_MAX);
 
 // Not necessary for 'sample' product only, because it's built in.
 //    foo.write(AddDataDir("sample.tir"));
