@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_mortal.cpp,v 1.6 2005-08-13 23:45:42 chicares Exp $
+// $Id: ihs_mortal.cpp,v 1.7 2005-08-17 12:49:03 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -40,7 +40,6 @@
 #include "inputstatus.hpp"
 #include "math_functors.hpp"
 #include "miscellany.hpp"
-#include "tiered_charges.hpp"
 
 #include <algorithm>
 #include <cstdlib>      // std::min()
@@ -89,15 +88,18 @@ void MortalityRates::Init(BasicValues const& basic_values)
     //
     // TODO ?? Clean this up.
     //
-    // It was once tiered by initial "assumed" number of lives, but
-    // that quantity is no longer used; '1.0' is just a placeholder.
-    //
     // Compare notes in AccountValue::GetNetCOI() that suggest
     // serious problems with COI retention calculations.
     //
-    MultiplicativeCoiRetention_ = basic_values.TieredCharges_->coi_retention
-        (1.0
-        );
+// Formerly, this was:
+// It was once tiered by initial "assumed" number of lives, but
+// that quantity is no longer used; '1.0' is just a placeholder.
+//
+//    MultiplicativeCoiRetention_ = basic_values.TieredCharges_->coi_retention
+//        (1.0
+//        );
+// but support for the tiered 'coi_retention' has been withdrawn.
+    MultiplicativeCoiRetention_ = 1.0;
 
     // Alternative COI rate for experience rating.
     AlternativeMonthlyCoiRates_ = basic_values.GetSmokerBlendedGuarCOIRates();

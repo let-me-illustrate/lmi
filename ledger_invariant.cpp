@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_invariant.cpp,v 1.9 2005-07-19 21:47:15 chicares Exp $
+// $Id: ledger_invariant.cpp,v 1.10 2005-08-17 12:49:03 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -469,7 +469,7 @@ void LedgerInvariant::Init(BasicValues* b)
         //
         tiered_charges const& x(*b->TieredCharges_);
         tiered_item_rep const& tiered_sep_acct_load
-            (x.tiered_item(tiered_charges::e_tier_current_separate_account_load));
+            (x.tiered_item(tiered_charges::e_curr_sepacct_load_tiered_by_assets));
 
         TieredSepAcctLoadBands = tiered_sep_acct_load.bands();
         TieredSepAcctLoadRates = tiered_sep_acct_load.data();

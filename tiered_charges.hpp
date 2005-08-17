@@ -20,7 +20,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: tiered_charges.hpp,v 1.2 2005-02-13 23:17:18 chicares Exp $
+// $Id: tiered_charges.hpp,v 1.3 2005-08-17 12:49:03 chicares Exp $
 
 #ifndef tierdata_hpp
 #define tierdata_hpp
@@ -84,20 +84,24 @@ class LMI_EXPIMP tiered_charges
   public:
     enum tiered_enumerator
         {e_tier_first
-        ,e_tier_topic_experience_rating
-        ,e_tier_stabilization_reserve
-        ,e_tier_coi_retention
-        ,e_tier_topic_asset_based
-        ,e_tier_current_m_and_e
-        ,e_tier_guaranteed_m_and_e
-        ,e_tier_asset_based_compensation
-        ,e_tier_investment_management_fee
-        ,e_tier_current_separate_account_load
-        ,e_tier_guaranteed_separate_account_load
-        ,e_tier_topic_premium_tax
-        ,e_tier_ak_premium_tax
-        ,e_tier_de_premium_tax
-        ,e_tier_sd_premium_tax
+
+        ,e_topic_premium_banded
+        ,e_curr_sepacct_load_banded_by_premium
+        ,e_guar_sepacct_load_banded_by_premium
+
+        ,e_topic_asset_tiered
+        ,e_curr_m_and_e_tiered_by_assets
+        ,e_guar_m_and_e_tiered_by_assets
+        ,e_asset_based_comp_tiered_by_assets
+        ,e_investment_mgmt_fee_tiered_by_assets
+        ,e_curr_sepacct_load_tiered_by_assets
+        ,e_guar_sepacct_load_tiered_by_assets
+
+        ,e_topic_tiered_premium_tax
+        ,e_tiered_ak_premium_tax
+        ,e_tiered_de_premium_tax
+        ,e_tiered_sd_premium_tax
+
         ,e_tier_last
         };
 
@@ -108,6 +112,20 @@ class LMI_EXPIMP tiered_charges
 
     // Function names generally use prefix 'tiered_' only if needed to
     // distinguish them from a parallel non-tiered name.
+
+    // TODO ?? Some of these things are not implemented, or not
+    // implemented correctly:
+    //
+    // - stabilization_reserve: never referenced.
+    //
+    // - coi_retention: actually used, but in a way that's not useful.
+    //
+    // - tiered_asset_based_compensation, tiered_investment_management_fee:
+    // setting these to any nonzero value produces a runtime error in
+    // the place where they ought to be used.
+    //
+    // - tiered_guaranteed_separate_account_load: seems to be
+    // incorrectly implemented.
 
     double stabilization_reserve (double number_of_lives_inforce ) const;
     double coi_retention         (double number_of_lives_at_issue) const;
