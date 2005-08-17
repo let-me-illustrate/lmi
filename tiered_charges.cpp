@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: tiered_charges.cpp,v 1.5 2005-08-17 12:49:03 chicares Exp $
+// $Id: tiered_charges.cpp,v 1.6 2005-08-17 16:22:58 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -209,27 +209,17 @@ void tiered_charges::initialize_dictionary()
 }
 
 //============================================================================
-double tiered_charges::stabilization_reserve(double number_of_lives_inforce) const
+double tiered_charges::banded_current_separate_account_load(double premium) const
 {
     tiered_item_rep const& z = tiered_item(e_curr_sepacct_load_banded_by_premium);
-    std::vector<double>::const_iterator band = std::upper_bound
-        (z.bands().begin()
-        ,z.bands().end()
-        ,number_of_lives_inforce
-        );
-    return z.data()[band - z.bands().begin()];
+    return banded_rate<double>() (premium, z.bands(), z.data());
 }
 
 //============================================================================
-double tiered_charges::coi_retention(double number_of_lives_at_issue) const
+double tiered_charges::banded_guaranteed_separate_account_load(double premium) const
 {
     tiered_item_rep const& z = tiered_item(e_guar_sepacct_load_banded_by_premium);
-    std::vector<double>::const_iterator band = std::upper_bound
-        (z.bands().begin()
-        ,z.bands().end()
-        ,number_of_lives_at_issue
-        );
-    return z.data()[band - z.bands().begin()];
+    return banded_rate<double>() (premium, z.bands(), z.data());
 }
 
 //============================================================================

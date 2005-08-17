@@ -20,7 +20,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: tiered_charges.hpp,v 1.3 2005-08-17 12:49:03 chicares Exp $
+// $Id: tiered_charges.hpp,v 1.4 2005-08-17 16:22:58 chicares Exp $
 
 #ifndef tierdata_hpp
 #define tierdata_hpp
@@ -116,10 +116,6 @@ class LMI_EXPIMP tiered_charges
     // TODO ?? Some of these things are not implemented, or not
     // implemented correctly:
     //
-    // - stabilization_reserve: never referenced.
-    //
-    // - coi_retention: actually used, but in a way that's not useful.
-    //
     // - tiered_asset_based_compensation, tiered_investment_management_fee:
     // setting these to any nonzero value produces a runtime error in
     // the place where they ought to be used.
@@ -127,8 +123,8 @@ class LMI_EXPIMP tiered_charges
     // - tiered_guaranteed_separate_account_load: seems to be
     // incorrectly implemented.
 
-    double stabilization_reserve (double number_of_lives_inforce ) const;
-    double coi_retention         (double number_of_lives_at_issue) const;
+    double banded_current_separate_account_load    (double premium) const;
+    double banded_guaranteed_separate_account_load (double premium) const;
 
     double tiered_current_m_and_e                  (double assets) const;
     double tiered_guaranteed_m_and_e               (double assets) const;
