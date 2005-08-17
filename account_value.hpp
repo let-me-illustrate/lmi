@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: account_value.hpp,v 1.24 2005-08-16 16:18:09 chicares Exp $
+// $Id: account_value.hpp,v 1.25 2005-08-17 16:22:58 chicares Exp $
 
 #ifndef account_value_hpp
 #define account_value_hpp
@@ -316,7 +316,7 @@ class LMI_EXPIMP AccountValue
     double DetermineAcctValLoadAMD ();
 
     void   ApplyDynamicMandE          (double assets);
-    void   ApplyDynamicSepAcctLoadAMD (double assets);
+    void   ApplyDynamicSepAcctLoadAMD (double assets, double cumpmts);
 
     void   SetMonthlyDetail(int enumerator, std::string const& s);
     void   SetMonthlyDetail(int enumerator, double d);
