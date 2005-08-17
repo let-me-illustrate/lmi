@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_acctval.cpp,v 1.43 2005-08-17 12:49:02 chicares Exp $
+// $Id: ihs_acctval.cpp,v 1.44 2005-08-17 16:22:58 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -855,7 +855,7 @@ void AccountValue::IncrementEOM
         LMI_ASSERT(28 <= days_in_policy_month && days_in_policy_month <= 31);
         }
 
-    ApplyDynamicSepAcctLoadAMD(TotalCaseAssets);
+    ApplyDynamicSepAcctLoadAMD(TotalCaseAssets, CumPmts);
     ApplyDynamicMandE         (TotalCaseAssets);
 
     DoMonthCR();
@@ -977,7 +977,7 @@ void AccountValue::ApplyDynamicMandE(double assets)
 //============================================================================
 // When the sep acct AV load depends on each month's case total assets, the
 // interest rate is no longer an annual invariant. Set it monthly here.
-void AccountValue::ApplyDynamicSepAcctLoadAMD(double assets)
+void AccountValue::ApplyDynamicSepAcctLoadAMD(double assets, double cumpmts)
 {
     if(!SepAcctLoadIsDynamic)
         {
@@ -986,18 +986,50 @@ void AccountValue::ApplyDynamicSepAcctLoadAMD(double assets)
 
     double tiered_load_amd = 0.0;
 
-    // Calculate M&E dynamically for current expense basis only
+    std::ofstream os
+        ("trace.txt"
+        ,   std::ios_base::out
+          | std::ios_base::ate
+          | std::ios_base::app
+        );
+    os
+        << "\nbanded load detail:"
+        << "\n  Year = " << Year
+        << "\n  Month = " << Month
+        << std::endl
+        ;
     switch(ExpAndGABasis)
         {
         case e_currbasis:
             {
-            // do nothing here; what follows will be correct
-            tiered_load_amd = TieredCharges_->tiered_current_separate_account_load(assets);
+            tiered_load_amd =
+                    TieredCharges_->tiered_current_separate_account_load(assets)
+                +   TieredCharges_->banded_current_separate_account_load(cumpmts)
+                ;
+    os
+        << "\n current:"
+        << "\n  cumpmts = " << cumpmts
+        << "\n  premium-based = " << TieredCharges_->banded_current_separate_account_load(cumpmts)
+        << "\n  assets = " << assets
+        << "\n  asset-based = " << TieredCharges_->tiered_current_separate_account_load(assets)
+        << std::endl
+        ;
             }
             break;
         case e_guarbasis:
             {
-            tiered_load_amd = TieredCharges_->tiered_guaranteed_separate_account_load(assets);
+            tiered_load_amd =
+                    TieredCharges_->tiered_guaranteed_separate_account_load(assets)
+                +   TieredCharges_->banded_guaranteed_separate_account_load(cumpmts)
+                ;
+    os
+        << "\n guaranteed:"
+        << "\n  cumpmts = " << cumpmts
+        << "\n  premium-based = " << TieredCharges_->banded_guaranteed_separate_account_load(cumpmts)
+        << "\n  assets = " << assets
+        << "\n  asset-based = " << TieredCharges_->tiered_guaranteed_separate_account_load(assets)
+        << std::endl
+        ;
             }
             break;
         case e_mdptbasis:
@@ -1021,9 +1053,18 @@ void AccountValue::ApplyDynamicSepAcctLoadAMD(double assets)
             }
         }
 
+    os
+        << "\n  tiered_load_amd = " << tiered_load_amd
+        << std::endl
+        ;
     // convert tiered load from annual to monthly effective rate
     tiered_load_amd = i_upper_12_over_12_from_i<double>()(tiered_load_amd);
     round_interest_rate(tiered_load_amd);
+
+    os
+        << "\n  monthly tiered_load_amd = " << tiered_load_amd
+        << std::endl
+        ;
 
     double tiered_comp = 0.0;
 
@@ -1054,6 +1095,11 @@ void AccountValue::ApplyDynamicSepAcctLoadAMD(double assets)
     YearsAcctValLoadAMD = Loads_->account_value_load_after_deduction(ExpAndGABasis)[Year];
     YearsAcctValLoadAMD+= tiered_load_amd;
     YearsAcctValLoadAMD+= tiered_comp;
+    os
+        << "\n  load in database = " << Loads_->account_value_load_after_deduction(ExpAndGABasis)[Year]
+        << "\n  YearsAcctValLoadAMD = " << YearsAcctValLoadAMD
+        << std::endl
+        ;
 }
 
 //============================================================================

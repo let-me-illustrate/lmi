@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.112 2005-08-16 16:18:09 chicares Exp $
+// $Id: ChangeLog,v 1.113 2005-08-17 16:22:58 chicares Exp $
 
 2005-01-14
 
@@ -3058,4 +3058,23 @@ for parallel calculations.
   solve.cpp
 Merge serial and parallel account-value calculations for single-life
 input.
+
+20050817T1245Z <chicares@cox.net> [1248]
+
+  ihs_acctval.cpp
+  ihs_mortal.cpp
+  ledger_invariant.cpp
+  my_tier.cpp
+  tiered_charges.cpp
+  tiered_charges.hpp
+  tiered_charges.xpp
+Rename enumerators for tiered and banded entities.
+
+20050817T1619Z <chicares@cox.net> [1248]
+
+  account_value.hpp
+  ihs_acctval.cpp
+  tiered_charges.cpp
+  tiered_charges.hpp
+Implement banded separate-account load.
 
