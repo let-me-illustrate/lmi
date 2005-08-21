@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: about_dialog.cpp,v 1.1 2005-03-11 03:09:22 chicares Exp $
+// $Id: about_dialog.cpp,v 1.2 2005-08-21 12:00:25 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -29,6 +29,7 @@
 #include "about_dialog.hpp"
 
 #include "license.hpp"
+#include "version.hpp"
 
 #include <wx/button.h>
 #include <wx/html/htmlwin.h>
@@ -61,7 +62,14 @@ BEGIN_EVENT_TABLE(AboutDialog, wxDialog)
 END_EVENT_TABLE()
 
 AboutDialog::AboutDialog(wxWindow* parent)
-    :wxDialog(parent, -1, wxString("About 'Let me illustrate...'"))
+    :wxDialog
+        (parent
+        ,-1
+        ,wxString
+            (   "About 'Let me illustrate...' version "
+            +   std::string(LMI_VERSION)
+            )
+        )
 {
 }
 
