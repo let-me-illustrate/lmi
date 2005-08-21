@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: GNUmakefile,v 1.27 2005-07-29 13:24:51 chicares Exp $
+# $Id: GNUmakefile,v 1.28 2005-08-21 12:00:25 chicares Exp $
 
 ###############################################################################
 
@@ -166,10 +166,6 @@ toolset ?= gcc
 build_directory := \
   ../build/$(notdir $(src_dir))/$(uname)/$(toolset)/$(build_type)
 
-datestamp_files := \
-  build.hpp \
-  version.hpp \
-
 gpl_files := \
   COPYING \
   quoted_gpl \
@@ -189,7 +185,7 @@ MAKETARGET = \
   $(MAKECMDGOALS)
 
 .PHONY: $(build_directory)
-$(build_directory): $(gpl_files) $(datestamp_files)
+$(build_directory): $(gpl_files) date_last_made
 	+@[ -d $@ ] || $(MKDIR) --parents $@
 	+@$(MAKETARGET)
 
@@ -266,10 +262,9 @@ never_source_files := \
   $(subdirectories) \
   $(testing_files) \
   $(wildcard *-patch-*) \
+  date_last_made \
 
 # Files that are source in some restrictive sense only:
-
-# $(datestamp_files), which is necessarily defined above.
 
 documentation_files := \
   $(wildcard ChangeLog*) \
@@ -284,7 +279,6 @@ xpm_files := $(wildcard *.xpm)
 
 non_source_files := \
   $(never_source_files) \
-  $(datestamp_files) \
   $(documentation_files) \
   $(gpl_files) \
   $(makefiles) \
@@ -318,47 +312,27 @@ licensed_files := $(filter-out $(unlicensed_files),$(wildcard *))
 
 ################################################################################
 
-# The headers in this section define datestamp macros.
+# Update datestamp files.
 
-string_to_source_file_with_required_notices = \
-  $(ECHO) -e $(gpl_notices) $1 \
-  | $(SED) -e 's/^ *//' \
-  | $(TR) -d '\r' \
-  > $2 \
+# Update the build-datestamp file whenever any other source file has
+# changed. Don't use it in any other way: making any file depend on it
+# would force costly, unnecessary relinking.
 
-# Update the version-datestamp header before committing any group of
-# files to cvs. Use target 'cvs_ready' to do this reliably.
-
-.PHONY: set_version_datestamp
-set_version_datestamp:
-	@$(call string_to_source_file_with_required_notices \
-	  ,'#define LMI_VERSION "$(yyyymmddhhmm)"' \
-	  ,version.hpp \
-	  )
-	@$(ECHO) Version is '$(yyyymmddhhmm)'.
-
-# Update the build-datestamp header whenever any other source file has
-# changed. Don't do this every time make is run: that would force
-# recompilation of files that depend on this header, but running make
-# again immediately after running it successfully should do nothing.
-#
-# Similarly, update the version-datestamp header, but in a different
-# way. Instead of naming a new version whenever any other source file
-# has changed, retain the version from the header in cvs and add a
-# notation that the code has been modified.
-
-build.hpp: $(filter-out $@,$(prerequisite_files)) version.hpp
+date_last_made: $(filter-out $@,$(prerequisite_files))
 	@$(ECHO) These files are more recent than '$@': $?
-	@$(call string_to_source_file_with_required_notices \
-	  ,'#define LMI_BUILD "$(yyyymmddhhmm)"' \
-	  ,build.hpp \
-	  )
+	@$(TOUCH) $@
 	@$(ECHO) Built '$(yyyymmddhhmm)'.
 
-version.hpp: $(filter-out $@,$(prerequisite_files))
-	@$(CP) version.hpp eraseme
-	@$(SED) <eraseme -e's/Z"$$/Z (modified)"/' >version.hpp
-	@$(RM) eraseme
+# Update the version-datestamp header before committing any release
+# candidate to cvs.
+
+.PHONY: release_candidate
+release_candidate:
+	@$(ECHO) -e $(gpl_notices) '#define LMI_VERSION "$(yyyymmddhhmm)"' \
+	  | $(SED) -e 's/^ *//' \
+	  | $(TR) -d '\r' \
+	  > version.hpp
+	@$(ECHO) Version is '$(yyyymmddhhmm)' .
 
 ################################################################################
 
@@ -418,15 +392,14 @@ gpl_notices := \
 # directory, viz.
 #   quoted_gpl
 #   quoted_gpl_html
-# which should be updated only if the owner changes the license;
+# which should be updated only if lmi's owner changes the license;
 #   version.hpp
-# which should be updated when anything is committed to cvs; and
-#   build.hpp
-# which is updated automatically whenever make is run after any source
-# file has changed. These required files are all in cvs; no 'clean'
-# rule deletes them because they should never be deleted.
-#
-# TODO ?? Do those first two files really belong in cvs?
+# which should be updated by making target 'release_candidate' as
+# needed (these required files are all in cvs; no 'clean' rule deletes
+# them because they should never be deleted); and
+#   date_last_made
+# which is updated (or created if it didn't already exist) whenever
+# make is run after any source file has changed.
 
 .PHONY: source_clean
 source_clean:
@@ -518,7 +491,7 @@ check_conformity: source_clean
 # Prepare to commit to cvs.
 
 .PHONY: cvs_ready
-cvs_ready: source_clean set_version_datestamp
+cvs_ready: source_clean
 	-$(MAKE) check_conformity 2>&1 |$(SED) -e'/ermission.denied/d'
 	-$(MAKE) check_idempotence
 	-$(MAKE) all test
@@ -565,7 +538,7 @@ circadian_test: checkout
 archname := lmi-$(yyyymmddhhmm)
 
 .PHONY: archive
-archive: source_clean set_version_datestamp
+archive: source_clean
 	$(MKDIR) ../$(archname)
 	-$(CP) --force --preserve --recursive * ../$(archname)
 	$(TAR) --create --directory=.. --file=$(archname).tar $(archname)

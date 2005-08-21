@@ -19,13 +19,12 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xml_io.cpp,v 1.21 2005-07-19 21:47:41 chicares Exp $
+// $Id: ledger_xml_io.cpp,v 1.22 2005-08-21 12:00:25 chicares Exp $
 
 #include "config.hpp"
 
 #include "alert.hpp" // TODO ?? expunge after testing
 
-#include "build.hpp"
 #include "calendar_date.hpp"
 #include "comma_punct.hpp"
 #include "configurable_settings.hpp"
@@ -37,6 +36,7 @@
 #include "miscellany.hpp"
 #include "security.hpp"
 #include "value_cast.hpp"
+#include "version.hpp"
 #include "xmlwrapp_ex.hpp"
 
 #ifdef USING_CURRENT_XMLWRAPP
@@ -806,8 +806,7 @@ void Ledger::write(xml::node& x) const
         ;
     scalars["InitTotalSA"] = &InitTotalSA;
 
-    // TODO ?? This isn't the *source version*--it's the *build*.
-    std::string LmiVersion(LMI_BUILD);
+    std::string LmiVersion(LMI_VERSION);
     strings["LmiVersion"] = &LmiVersion;
 
     // Maps to hold the results of formatting numeric data.

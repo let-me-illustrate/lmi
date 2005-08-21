@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: workhorse.make,v 1.42 2005-08-10 13:14:33 chicares Exp $
+# $Id: workhorse.make,v 1.43 2005-08-21 12:00:25 chicares Exp $
 
 ###############################################################################
 
@@ -82,7 +82,6 @@ $(src_dir)/objects.make:: ;
 # Effective default target (described above under "Default target").
 
 default_targets := \
-  wx_new$(SHREXT) \
   antediluvian_cgi$(EXEEXT) \
   antediluvian_cli$(EXEEXT) \
   elapsed_time$(EXEEXT) \
@@ -93,6 +92,7 @@ default_targets := \
   lmi_cli_shared$(EXEEXT) \
   lmi_wx_shared$(EXEEXT) \
   product_files$(EXEEXT) \
+  wx_new$(SHREXT) \
 
 .PHONY: effective_default_target
 effective_default_target: $(default_targets)
@@ -444,9 +444,7 @@ lib%$(SHREXT)       : lmi_dllflag := -DLMI_BUILD_DLL
 lib%$(SHREXT)       : MPATROL_LIBS :=
 wx_new$(SHREXT)     : MPATROL_LIBS :=
 
-# TODO ?? How could 'skeleton' be right here? Should this not apply
-# to all applications?
-skeleton$(EXEEXT)   : lmi_wx_new_dllflag := -DLMI_WX_NEW_USING_DLL
+                      lmi_wx_new_dllflag := -DLMI_WX_NEW_USING_DLL
 wx_new$(SHREXT)     : lmi_wx_new_dllflag := -DLMI_WX_NEW_BUILDING_DLL
 
 liblmi.a liblmi$(SHREXT): $(lmi_common_objects)
