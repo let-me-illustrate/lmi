@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: stratified_algorithms.hpp,v 1.3 2005-08-22 15:35:33 chicares Exp $
+// $Id: stratified_algorithms.hpp,v 1.4 2005-08-22 23:59:31 chicares Exp $
 
 #ifndef stratified_algorithms_hpp
 #define stratified_algorithms_hpp
@@ -27,14 +27,13 @@
 #include "config.hpp"
 
 #include "alert.hpp"
-
-#include <boost/detail/algorithm.hpp> // boost::is_sorted()
+#include "is_sorted_.hpp"
 
 #include <functional>
 #include <vector>
 
-// Miscellaneous numerical routines and functors.
-
+/// Numerical algorithms for stratified rates.
+///
 /// Definitions: the functors in this library distinguish 'tiered' from
 /// 'banded' rates and values. The vernacular lacks precise terms for
 /// these two important and distinct concepts, so those and other terms
@@ -240,7 +239,7 @@ T banded_rate<T>::operator()
 {
     // TODO ?? It would be better to assert that limits are increasing.
     LMI_ASSERT
-        (boost::is_sorted
+        (nonstd::is_sorted_
             (cumulative_limits.begin()
             ,cumulative_limits.end()
             )
