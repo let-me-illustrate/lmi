@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avmly.cpp,v 1.19 2005-08-16 14:18:12 chicares Exp $
+// $Id: ihs_avmly.cpp,v 1.20 2005-08-22 14:49:13 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -46,10 +46,10 @@
 #include "loads.hpp"
 #include "materially_equal.hpp"
 #include "math_functors.hpp"
-#include "mathmisc.hpp"
 #include "mortality_rates.hpp"
 #include "outlay.hpp"
-#include "tiered_charges.hpp"
+#include "stratified_algorithms.hpp"
+#include "stratified_charges.hpp"
 
 #include <cmath>   // std::pow()
 #include <limits>

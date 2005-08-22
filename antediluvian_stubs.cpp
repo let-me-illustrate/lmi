@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: antediluvian_stubs.cpp,v 1.1 2005-02-12 12:59:31 chicares Exp $
+// $Id: antediluvian_stubs.cpp,v 1.2 2005-08-22 14:49:13 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -27,7 +27,7 @@
 #endif // __BORLANDC__
 
 #include "security.hpp"
-#include "tiered_charges.hpp"
+#include "stratified_charges.hpp"
 
 bool tiered_charges::premium_tax_is_tiered(e_state const&) const
 {

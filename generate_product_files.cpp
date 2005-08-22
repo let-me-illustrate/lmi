@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: generate_product_files.cpp,v 1.6 2005-06-12 16:58:36 chicares Exp $
+// $Id: generate_product_files.cpp,v 1.7 2005-08-22 14:49:13 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -31,7 +31,7 @@
 #include "ihs_proddata.hpp"
 #include "ihs_rnddata.hpp"
 #include "main_common.hpp"
-#include "tiered_charges.hpp"
+#include "stratified_charges.hpp"
 
 #include <iostream>
 #include <ostream>
