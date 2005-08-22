@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.113 2005-08-17 16:22:58 chicares Exp $
+// $Id: ChangeLog,v 1.114 2005-08-22 13:02:00 chicares Exp $
 
 2005-01-14
 
@@ -3077,4 +3077,34 @@ Rename enumerators for tiered and banded entities.
   tiered_charges.cpp
   tiered_charges.hpp
 Implement banded separate-account load.
+
+20050821T1200Z <chicares@cox.net> [1245]
+
+  GNUmakefile
+  about_dialog.cpp
+  build.hpp [expunged]
+  ledger_xml_io.cpp
+  version.hpp
+  workhorse.make
+Rework build and version datestamps. Prevent superfluous relinking.
+Display version in 'Help | About'. Version string 'LmiVersion' in xml
+output now represents source version instead of build date, though
+it's yet unused. A new makefile target marks release candidates.
+
+20050822T1259Z <chicares@cox.net> [1257]
+
+  stratified_algorithms.cpp      [new file]
+  stratified_algorithms.hpp      [new file]
+  stratified_algorithms_test.cpp [new file]
+  stratified_charges.cpp         [new file]
+  stratified_charges.hpp         [new file]
+  stratified_charges.xpp         [new file]
+Copied
+  from mathmisc.cpp       to stratified_algorithms.cpp
+  from mathmisc.hpp       to stratified_algorithms.hpp
+  from mathmisc_test.cpp  to stratified_algorithms_test.cpp
+  from tiered_charges.cpp to stratified_charges.cpp
+  from tiered_charges.hpp to stratified_charges.hpp
+  from tiered_charges.xpp to stratified_charges.xpp
+in anticipation of expunging the files copied from.
 
