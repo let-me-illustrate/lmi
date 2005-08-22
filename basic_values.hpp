@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: basic_values.hpp,v 1.6 2005-08-22 15:35:53 chicares Exp $
+// $Id: basic_values.hpp,v 1.7 2005-08-22 18:00:00 chicares Exp $
 
 #ifndef basic_values_hpp
 #define basic_values_hpp
@@ -111,6 +111,7 @@ class LMI_EXPIMP BasicValues
     double                GetPremTaxRate()            const;
     double                GetLowestPremTaxRate()      const;
     double                GetDomiciliaryPremTaxRate() const;
+    bool                  IsPremTaxTiered()           const;
     rounding_rules const& GetRoundingRules()          const;
     double                InvestmentManagementFee()   const;
 
@@ -473,6 +474,11 @@ inline double BasicValues::GetLowestPremTaxRate() const
 inline double BasicValues::GetDomiciliaryPremTaxRate() const
 {
     return DomiciliaryPremTaxRate;
+}
+
+inline bool BasicValues::IsPremTaxTiered() const
+{
+    return PremiumTaxLoadIsTieredInStateOfJurisdiction;
 }
 
 inline rounding_rules const& BasicValues::GetRoundingRules() const
