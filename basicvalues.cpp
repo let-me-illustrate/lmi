@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: basicvalues.cpp,v 1.6 2005-04-29 18:51:33 chicares Exp $
+// $Id: basicvalues.cpp,v 1.7 2005-08-22 18:00:00 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -75,6 +75,8 @@ BasicValues::~BasicValues()
 //============================================================================
 void BasicValues::Init()
 {
+    PremiumTaxLoadIsTieredInStateOfJurisdiction = false;
+
     // Bind to input and database representing policy form.
 
     InputStatus const& S = Input_->Status[0]; // TODO ?? Database based on first life only?
