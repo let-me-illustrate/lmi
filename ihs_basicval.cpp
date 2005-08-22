@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_basicval.cpp,v 1.15 2005-08-22 14:49:13 chicares Exp $
+// $Id: ihs_basicval.cpp,v 1.16 2005-08-22 15:35:53 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -244,7 +244,7 @@ void BasicValues::Init()
             )
         );
     TieredCharges_.reset
-        (new tiered_charges(AddDataDir(ProductData_->GetTierFilename()))
+        (new stratified_charges(AddDataDir(ProductData_->GetTierFilename()))
         );
     SpreadFor7702_.assign(Length, TieredCharges_->minimum_tiered_spread_for_7702());
 
@@ -322,7 +322,7 @@ void BasicValues::GPTServerInit()
             )
         );
     TieredCharges_.reset
-        (new tiered_charges(AddDataDir(ProductData_->GetTierFilename()))
+        (new stratified_charges(AddDataDir(ProductData_->GetTierFilename()))
         );
 
     // Requires database.

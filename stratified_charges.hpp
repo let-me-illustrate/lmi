@@ -1,5 +1,4 @@
-// Tiered data, e.g. compensation of x% on the first $z and y% thereafter; or
-// the simpler x% or y% of total when total is up through or beyond $z.
+// Rates that depend on the amount they're muliplied by.
 //
 // Copyright (C) 1998, 2001, 2002, 2003, 2005 Gregory W. Chicares.
 //
@@ -20,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: stratified_charges.hpp,v 1.2 2005-08-22 14:49:13 chicares Exp $
+// $Id: stratified_charges.hpp,v 1.3 2005-08-22 15:35:53 chicares Exp $
 
 #ifndef stratified_charges_hpp
 #define stratified_charges_hpp
@@ -36,85 +35,69 @@
 #include <string>
 #include <vector>
 
+enum e_stratified
+    {e_stratified_first
+
+    ,e_topic_premium_banded
+    ,e_curr_sepacct_load_banded_by_premium
+    ,e_guar_sepacct_load_banded_by_premium
+
+    ,e_topic_asset_tiered
+    ,e_curr_m_and_e_tiered_by_assets
+    ,e_guar_m_and_e_tiered_by_assets
+    ,e_asset_based_comp_tiered_by_assets
+    ,e_investment_mgmt_fee_tiered_by_assets
+    ,e_curr_sepacct_load_tiered_by_assets
+    ,e_guar_sepacct_load_tiered_by_assets
+
+    ,e_topic_tiered_premium_tax
+    ,e_tiered_ak_premium_tax
+    ,e_tiered_de_premium_tax
+    ,e_tiered_sd_premium_tax
+
+    ,e_stratified_last
+    };
+
 // Implicitly-declared special member functions do the right thing.
 
-class LMI_EXPIMP tiered_item_rep
-    :virtual private obstruct_slicing<tiered_item_rep>
+class LMI_EXPIMP stratified_entity
+    :virtual private obstruct_slicing<stratified_entity>
 {
     friend class TierView;
-    friend class tiered_charges;
+    friend class stratified_charges;
 
   public:
-    tiered_item_rep();
-    tiered_item_rep
-        (std::vector<double> const& bands
-        ,std::vector<double> const& data
+    stratified_entity();
+    stratified_entity
+        (std::vector<double> const& limits
+        ,std::vector<double> const& values
         );
-    ~tiered_item_rep();
-
-    std::vector<double> const& bands() const;
-    std::vector<double> const& data () const;
+    ~stratified_entity();
 
     void read(std::istream& is);
     void write(std::ostream& os) const;
 
   private:
-    std::vector<double> bands_;
-    std::vector<double> data_;
+    std::vector<double> const& limits() const;
+    std::vector<double> const& values() const;
+
+    std::vector<double> limits_;
+    std::vector<double> values_;
 };
-
-inline std::vector<double> const& tiered_item_rep::bands() const
-{
-    return bands_;
-}
-
-inline std::vector<double> const& tiered_item_rep::data () const
-{
-    return data_ ;
-}
 
 // Implicitly-declared special member functions do the right thing.
 
-class LMI_EXPIMP tiered_charges
-    :virtual private obstruct_slicing<tiered_charges>
+class LMI_EXPIMP stratified_charges
+    :virtual private obstruct_slicing<stratified_charges>
 {
     friend class TierDocument;
     friend class TierView;
 
   public:
-    enum tiered_enumerator
-        {e_tier_first
+    stratified_charges(std::string const& filename);
+    ~stratified_charges();
 
-        ,e_topic_premium_banded
-        ,e_curr_sepacct_load_banded_by_premium
-        ,e_guar_sepacct_load_banded_by_premium
-
-        ,e_topic_asset_tiered
-        ,e_curr_m_and_e_tiered_by_assets
-        ,e_guar_m_and_e_tiered_by_assets
-        ,e_asset_based_comp_tiered_by_assets
-        ,e_investment_mgmt_fee_tiered_by_assets
-        ,e_curr_sepacct_load_tiered_by_assets
-        ,e_guar_sepacct_load_tiered_by_assets
-
-        ,e_topic_tiered_premium_tax
-        ,e_tiered_ak_premium_tax
-        ,e_tiered_de_premium_tax
-        ,e_tiered_sd_premium_tax
-
-        ,e_tier_last
-        };
-
-    tiered_charges(std::string const& filename);
-    ~tiered_charges();
-
-    tiered_item_rep const& tiered_item(tiered_enumerator) const;
-
-    // Function names generally use prefix 'tiered_' only if needed to
-    // distinguish them from a parallel non-tiered name.
-
-    // TODO ?? Some of these things are not implemented, or not
-    // implemented correctly:
+    // TODO ?? These things are not implemented implemented correctly:
     //
     // - tiered_asset_based_compensation, tiered_investment_management_fee:
     // setting these to any nonzero value produces a runtime error in
@@ -147,32 +130,22 @@ class LMI_EXPIMP tiered_charges
     // don't yet reflect tiering.
     double minimum_tiered_premium_tax_rate(e_state const& state) const;
 
-    static void write_tier_files();
-    static void write_proprietary_tier_files();
+    static void write_stratified_files();
+    static void write_proprietary_stratified_files();
 
   private:
-    tiered_charges(); // Private, but implemented: needed by std::map.
+    stratified_charges(); // Private, but implemented: needed by std::map.
 
-    tiered_item_rep& tiered_item(tiered_enumerator);
+    stratified_entity&       raw_entity(e_stratified);
+    stratified_entity const& raw_entity(e_stratified) const;
 
     void initialize_dictionary();
 
     void read (std::string const& filename);
     void write(std::string const& filename) const;
 
-    typedef std::map<tiered_enumerator, tiered_item_rep> tier_dictionary_type;
-    tier_dictionary_type dictionary;
+    std::map<e_stratified, stratified_entity> dictionary;
 };
-
-inline tiered_item_rep const& tiered_charges::tiered_item(tiered_enumerator e) const
-{
-    return (*dictionary.find(e)).second;
-}
-
-inline tiered_item_rep& tiered_charges::tiered_item(tiered_enumerator e)
-{
-    return (*dictionary.find(e)).second;
-}
 
 #endif  // stratified_charges_hpp
 

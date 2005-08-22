@@ -1,4 +1,4 @@
-// Life insurance illustrations: tiered rates.
+// Rates that depend on the amount they're muliplied by.
 //
 // Copyright (C) 2003, 2005 Gregory W. Chicares.
 //
@@ -19,21 +19,25 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: stratified_charges.xpp,v 1.1 2005-08-22 13:02:00 chicares Exp $
+// $Id: stratified_charges.xpp,v 1.2 2005-08-22 15:35:53 chicares Exp $
 
-#define TIERED_CHARGE_NAMES = \
-{tiered_data::e_tier_first,tiered_data::e_tier_first,"dummy","dummy",}, \
-{tiered_data::e_topic_premium_banded,tiered_data::e_tier_first,"Premium-banded charges","Experience rating items that vary by case size.",}, \
+#include "stratified_charges.hpp"
+
+/// Tree structure for GUI portrayal of stratified charges.
+
+#define LMI_TIERED_CHARGE_NAMES = \
+{tiered_data::e_stratified_first,tiered_data::e_stratified_first,"dummy","dummy",}, \
+{tiered_data::e_topic_premium_banded,tiered_data::e_stratified_first,"Premium-banded charges","Experience rating items that vary by case size.",}, \
 {tiered_data::e_curr_sepacct_load_banded_by_premium,tiered_data::e_topic_premium_banded,"Curr sep acct load by premium","Current separate account load, banded by cumulative 'net' premium. Enter breakpoints as cumulative premium.",}, \
 {tiered_data::e_guar_sepacct_load_banded_by_premium,tiered_data::e_topic_premium_banded,"Guar sep acct load by premium","Guaranteed separate account load, banded by cumulative 'net' premium. Enter breakpoints as cumulative premium.",}, \
-{tiered_data::e_topic_asset_tiered,tiered_data::e_tier_first,"Asset-tiered charges","Charges that are tiered by assets.",}, \
+{tiered_data::e_topic_asset_tiered,tiered_data::e_stratified_first,"Asset-tiered charges","Charges that are tiered by assets.",}, \
 {tiered_data::e_curr_m_and_e_tiered_by_assets,tiered_data::e_topic_asset_tiered,"Current M&E","Current M&&E, tiered by present assets. Enter breakpoints as increments, e.g. first 50,000,000, next 50,000,000, and so on.",}, \
 {tiered_data::e_guar_m_and_e_tiered_by_assets,tiered_data::e_topic_asset_tiered,"Guaranteed M&E","Guaranteed M&&E, tiered by present assets. Enter breakpoints as increments, e.g. first 50,000,000, next 50,000,000, and so on.",}, \
 {tiered_data::e_asset_based_comp_tiered_by_assets,tiered_data::e_topic_asset_tiered,"Compensation","Compensation, tiered by present assets. Enter breakpoints as increments, e.g. first 50,000,000, next 50,000,000, and so on.",}, \
 {tiered_data::e_investment_mgmt_fee_tiered_by_assets,tiered_data::e_topic_asset_tiered,"Investment management","Investment management, tiered by present assets. Enter breakpoints as increments, e.g. first 50,000,000, next 50,000,000, and so on.",}, \
 {tiered_data::e_curr_sepacct_load_tiered_by_assets,tiered_data::e_topic_asset_tiered,"Curr sep acct load by assets","Current separate account load, tiered by present separate account assets. Enter breakpoints as increments, e.g. first 50,000,000, next 50,000,000, and so on.",}, \
 {tiered_data::e_guar_sepacct_load_tiered_by_assets,tiered_data::e_topic_asset_tiered,"Guar sep acct load by assets","Guaranteed separate account load, tiered by present separate account assets. Enter breakpoints as increments, e.g. first 50,000,000, next 50,000,000, and so on.",}, \
-{tiered_data::e_topic_tiered_premium_tax,tiered_data::e_tier_first,"Premium tax","Tiered premium tax.",}, \
+{tiered_data::e_topic_tiered_premium_tax,tiered_data::e_stratified_first,"Premium tax","Tiered premium tax.",}, \
 {tiered_data::e_tiered_ak_premium_tax,tiered_data::e_topic_tiered_premium_tax,"Alaska","Alaska premium tax, tiered by policy-year individual-contract premium. Enter breakpoints as increments, e.g. first 50,000,000, next 50,000,000, and so on.",}, \
 {tiered_data::e_tiered_de_premium_tax,tiered_data::e_topic_tiered_premium_tax,"Delaware","Delaware premium tax, tiered by calendar-year total-case premium (NOT YET IMPLEMENTED). Enter breakpoints as increments, e.g. first 50,000,000, next 50,000,000, and so on.",}, \
 {tiered_data::e_tiered_sd_premium_tax,tiered_data::e_topic_tiered_premium_tax,"South Dakota","South Dakota premium tax, tiered by policy-year individual-contract premium. Enter breakpoints as increments, e.g. first 50,000,000, next 50,000,000, and so on.",}, \

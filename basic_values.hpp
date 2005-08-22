@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: basic_values.hpp,v 1.5 2005-02-17 04:40:02 chicares Exp $
+// $Id: basic_values.hpp,v 1.6 2005-08-22 15:35:53 chicares Exp $
 
 #ifndef basic_values_hpp
 #define basic_values_hpp
@@ -57,9 +57,9 @@ class Irc7702A;
 class Loads;
 class MortalityRates;
 class Outlay;
+class stratified_charges;
 class SurrChgRates;
 class TDatabase;
-class tiered_charges;
 class TProductData;
 class rounding_rules;
 
@@ -114,20 +114,20 @@ class LMI_EXPIMP BasicValues
     rounding_rules const& GetRoundingRules()          const;
     double                InvestmentManagementFee()   const;
 
-    boost::shared_ptr<InputParms const> Input_;
-    boost::shared_ptr<TProductData>     ProductData_;
-    boost::shared_ptr<TDatabase>        Database_;
-    boost::shared_ptr<FundData>         FundData_;
-    boost::shared_ptr<rounding_rules>   RoundingRules_;
-    boost::shared_ptr<tiered_charges>   TieredCharges_;
-    boost::shared_ptr<MortalityRates>   MortalityRates_;
-    boost::shared_ptr<InterestRates>    InterestRates_;
-    boost::shared_ptr<SurrChgRates>     SurrChgRates_;
-    boost::shared_ptr<death_benefits>   DeathBfts_;
-    boost::shared_ptr<Outlay>           Outlay_;
-    boost::shared_ptr<Loads>            Loads_;
-    boost::shared_ptr<Irc7702>          Irc7702_;
-    boost::shared_ptr<Irc7702A>         Irc7702A_;
+    boost::shared_ptr<InputParms const>   Input_;
+    boost::shared_ptr<TProductData>       ProductData_;
+    boost::shared_ptr<TDatabase>          Database_;
+    boost::shared_ptr<FundData>           FundData_;
+    boost::shared_ptr<rounding_rules>     RoundingRules_;
+    boost::shared_ptr<stratified_charges> TieredCharges_;
+    boost::shared_ptr<MortalityRates>     MortalityRates_;
+    boost::shared_ptr<InterestRates>      InterestRates_;
+    boost::shared_ptr<SurrChgRates>       SurrChgRates_;
+    boost::shared_ptr<death_benefits>     DeathBfts_;
+    boost::shared_ptr<Outlay>             Outlay_;
+    boost::shared_ptr<Loads>              Loads_;
+    boost::shared_ptr<Irc7702>            Irc7702_;
+    boost::shared_ptr<Irc7702A>           Irc7702A_;
 
     double GetTgtPrem
         (int            Year
