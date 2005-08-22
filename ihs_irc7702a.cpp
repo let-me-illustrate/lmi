@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_irc7702a.cpp,v 1.3 2005-03-11 13:40:41 chicares Exp $
+// $Id: ihs_irc7702a.cpp,v 1.4 2005-08-22 14:49:13 chicares Exp $
 
 // TODO ?? Make this a server app. Consider where to store DB, SA history.
 
@@ -36,7 +36,7 @@
 
 #include "alert.hpp"
 #include "materially_equal.hpp"
-#include "mathmisc.hpp" // TieredNetToGross()
+#include "stratified_algorithms.hpp" // TieredNetToGross()
 
 #include <algorithm>
 #include <cmath>
