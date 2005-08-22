@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: my_tier.cpp,v 1.4 2005-08-22 14:49:13 chicares Exp $
+// $Id: my_tier.cpp,v 1.5 2005-08-22 15:35:53 chicares Exp $
 
 // This file is a template for embedding product-specific data. Doing
 // that creates a derived work covered by the GPL. But you may prefer
@@ -47,10 +47,10 @@
 #include <cfloat> // DBL_MAX
 
 //============================================================================
-void tiered_charges::write_proprietary_tier_files()
+void stratified_charges::write_proprietary_tier_files()
 {
     // Sample policy form.
-    tiered_charges foo;
+    stratified_charges foo;
 
     // Example only.
     foo.tiered_item(e_tier_current_separate_account_load   ).data_.push_back(0.0);

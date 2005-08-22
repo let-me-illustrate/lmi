@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: generate_product_files.cpp,v 1.7 2005-08-22 14:49:13 chicares Exp $
+// $Id: generate_product_files.cpp,v 1.8 2005-08-22 15:35:53 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -40,17 +40,17 @@ int try_main(int, char*[])
 {
     std::cout << "Generating product files." << std::endl;
 
-    DBDictionary::instance().WriteSampleDBFile();
-    TProductData            ::WritePolFiles();
-    FundData                ::WriteFundFiles();
-    StreamableRoundingRules ::WriteRndFiles();
-    tiered_charges          ::write_tier_files();
+    DBDictionary::instance() .WriteSampleDBFile                  ();
+    TProductData            ::WritePolFiles                      ();
+    FundData                ::WriteFundFiles                     ();
+    StreamableRoundingRules ::WriteRndFiles                      ();
+    stratified_charges      ::write_stratified_files             ();
 
-    DBDictionary::instance().WriteProprietaryDBFiles();
-    FundData                ::WriteProprietaryFundFiles    ();
-    TProductData            ::WriteProprietaryPolFiles     ();
-    StreamableRoundingRules ::WriteProprietaryRndFiles     ();
-    tiered_charges          ::write_proprietary_tier_files ();
+    DBDictionary::instance() .WriteProprietaryDBFiles            ();
+    FundData                ::WriteProprietaryFundFiles          ();
+    TProductData            ::WriteProprietaryPolFiles           ();
+    StreamableRoundingRules ::WriteProprietaryRndFiles           ();
+    stratified_charges      ::write_proprietary_stratified_files ();
 
     std::cout << "\nAll product files written.\n" << std::endl;
 

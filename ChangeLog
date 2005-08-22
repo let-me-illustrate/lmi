@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.114 2005-08-22 13:02:00 chicares Exp $
+// $Id: ChangeLog,v 1.115 2005-08-22 15:35:53 chicares Exp $
 
 2005-01-14
 
@@ -3107,4 +3107,55 @@ Copied
   from tiered_charges.hpp to stratified_charges.hpp
   from tiered_charges.xpp to stratified_charges.xpp
 in anticipation of expunging the files copied from.
+
+20050822T1446Z <chicares@cox.net> [1245]
+
+  mathmisc.cpp                   [expunged]
+  mathmisc.hpp                   [expunged]
+  mathmisc_test.cpp              [expunged]
+  tiered_charges.cpp             [expunged]
+  tiered_charges.hpp             [expunged]
+  tiered_charges.xpp             [expunged]
+Expunge files that have been renamed.
+
+  antediluvian_stubs.cpp
+  generate_product_files.cpp
+  ihs_acctval.cpp
+  ihs_avmly.cpp
+  ihs_basicval.cpp
+  ihs_irc7702a.cpp
+  ledger_invariant.cpp
+  my_tier.cpp
+  objects.make
+  stratified_algorithms.cpp
+  stratified_algorithms.hpp
+  stratified_algorithms_test.cpp
+  stratified_charges.cpp
+  stratified_charges.hpp
+Reflect renaming of 'stratified*' files.
+
+20050822T1532Z <chicares@cox.net> [1246]
+
+  stratified_algorithms.cpp
+  stratified_algorithms.hpp
+  stratified_algorithms_test.cpp
+Improve documentation.
+
+  ledger_invariant.cpp
+  ledger_invariant.hpp
+  ledger_xml_io.cpp
+Remove unused support for printing tiered loads. If tiered and banded
+loads are to be printed, a cleaner implementation will be needed. This
+change causes regression-testing md5sums to mismatch.
+
+  antediluvian_stubs.cpp
+  basic_values.hpp
+  generate_product_files.cpp
+  ihs_basicval.cpp
+  ihs_standalone.cpp
+  my_tier.cpp
+  stratified_charges.cpp
+  stratified_charges.hpp
+  stratified_charges.xpp
+Rework and rename classes 'tiered_item_rep' and 'tiered_charges'.
 
