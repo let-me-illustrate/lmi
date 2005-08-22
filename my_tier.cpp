@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: my_tier.cpp,v 1.3 2005-08-17 12:49:03 chicares Exp $
+// $Id: my_tier.cpp,v 1.4 2005-08-22 14:49:13 chicares Exp $
 
 // This file is a template for embedding product-specific data. Doing
 // that creates a derived work covered by the GPL. But you may prefer
@@ -39,7 +39,7 @@
 #   pragma hdrstop
 #endif // __BORLANDC__
 
-#include "tiered_charges.hpp"
+#include "stratified_charges.hpp"
 
 #include "data_directory.hpp"
 #include "platform_dependent.hpp" // access()

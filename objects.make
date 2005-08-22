@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: objects.make,v 1.47 2005-08-03 18:16:36 chicares Exp $
+# $Id: objects.make,v 1.48 2005-08-22 14:49:13 chicares Exp $
 
 ################################################################################
 
@@ -243,11 +243,11 @@ lmi_common_objects := \
   ihs_pios.o \
   ihs_proddata.o \
   ihs_rnddata.o \
-  mathmisc.o \
   md5.o \
   secure_date.o \
   security.o \
-  tiered_charges.o \
+  stratified_algorithms.o \
+  stratified_charges.o \
 
 lmi_wx_objects := \
   about_dialog.o \
@@ -331,12 +331,12 @@ gps_objects := \
   inputstatus.o \
   interest_rates.o \
   loads.o \
-  mathmisc.o \
   miscellany.o \
   outlay.o \
   rounding_rules.o \
+  stratified_algorithms.o \
+  stratified_charges.o \
   surrchg_rates.o \
-  tiered_charges.o \
   timer.o \
   xenumtypes.o \
   xrange.o \
@@ -361,7 +361,6 @@ unit_test_targets := \
   input_test$(EXEEXT) \
   irc7702a_test$(EXEEXT) \
   materially_equal_test$(EXEEXT) \
-  mathmisc_test$(EXEEXT) \
   math_functors_test$(EXEEXT) \
   mc_enum_test$(EXEEXT) \
   mpatrol_patch_test$(EXEEXT) \
@@ -375,6 +374,7 @@ unit_test_targets := \
   quiet_nan_test$(EXEEXT) \
   round_to_test$(EXEEXT) \
   snprintf_test$(EXEEXT) \
+  stratified_algorithms_test$(EXEEXT) \
   stream_cast_test$(EXEEXT) \
   test_tools_test$(EXEEXT) \
   timer_test$(EXEEXT) \
@@ -451,7 +451,7 @@ financial_test$(EXEEXT): \
   alert.o \
   alert_cli.o \
   financial_test.o \
-  mathmisc.o \
+  stratified_algorithms.o \
   timer.o \
 
 global_settings_test$(EXEEXT): \
@@ -504,17 +504,11 @@ irc7702a_test$(EXEEXT): \
   alert_cli.o \
   ihs_irc7702a.o \
   irc7702a_test.o \
-  mathmisc.o \
+  stratified_algorithms.o \
 
 materially_equal_test$(EXEEXT): \
   $(common_test_objects) \
   materially_equal_test.o \
-
-mathmisc_test$(EXEEXT): \
-  $(common_test_objects) \
-  alert.o \
-  alert_cli.o \
-  mathmisc_test.o \
 
 math_functors_test$(EXEEXT): \
   $(common_test_objects) \
@@ -593,6 +587,12 @@ round_to_test$(EXEEXT): \
 snprintf_test$(EXEEXT): \
   $(common_test_objects) \
   snprintf_test.o \
+
+stratified_algorithms_test$(EXEEXT): \
+  $(common_test_objects) \
+  alert.o \
+  alert_cli.o \
+  stratified_algorithms_test.o \
 
 stream_cast_test$(EXEEXT): \
   $(common_test_objects) \

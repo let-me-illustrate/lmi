@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_invariant.cpp,v 1.10 2005-08-17 12:49:03 chicares Exp $
+// $Id: ledger_invariant.cpp,v 1.11 2005-08-22 14:49:13 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -46,7 +46,7 @@
 #include "miscellany.hpp"
 #include "outlay.hpp"
 #include "rounding_rules.hpp"
-#include "tiered_charges.hpp"
+#include "stratified_charges.hpp"
 
 #include <algorithm>
 #include <numeric>   // std::accumulate()

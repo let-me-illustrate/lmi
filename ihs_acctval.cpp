@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_acctval.cpp,v 1.44 2005-08-17 16:22:58 chicares Exp $
+// $Id: ihs_acctval.cpp,v 1.45 2005-08-22 14:49:13 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -47,11 +47,11 @@
 #include "loads.hpp"
 #include "materially_equal.hpp"
 #include "math_functors.hpp"
-#include "mathmisc.hpp"
 #include "mortality_rates.hpp"
 #include "outlay.hpp"
+#include "stratified_algorithms.hpp"
+#include "stratified_charges.hpp"
 #include "surrchg_rates.hpp"
-#include "tiered_charges.hpp"
 
 #include <boost/bind.hpp>
 

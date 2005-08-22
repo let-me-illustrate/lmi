@@ -20,10 +20,10 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: stratified_charges.hpp,v 1.1 2005-08-22 13:02:00 chicares Exp $
+// $Id: stratified_charges.hpp,v 1.2 2005-08-22 14:49:13 chicares Exp $
 
-#ifndef tierdata_hpp
-#define tierdata_hpp
+#ifndef stratified_charges_hpp
+#define stratified_charges_hpp
 
 #include "config.hpp"
 
@@ -174,5 +174,5 @@ inline tiered_item_rep& tiered_charges::tiered_item(tiered_enumerator e)
     return (*dictionary.find(e)).second;
 }
 
-#endif  // tierdata_hpp
+#endif  // stratified_charges_hpp
 
