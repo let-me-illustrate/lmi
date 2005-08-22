@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xml_io.cpp,v 1.22 2005-08-21 12:00:25 chicares Exp $
+// $Id: ledger_xml_io.cpp,v 1.23 2005-08-22 15:35:40 chicares Exp $
 
 #include "config.hpp"
 
@@ -911,8 +911,6 @@ void Ledger::write(xml::node& x) const
 //    std::vector<int>            FundAllocs;  [not handled yet]
 //
 //    std::vector<double> InforceLives;
-//    std::vector<double> TieredSepAcctLoadBands; [used only for cover page?]
-//    std::vector<double> TieredSepAcctLoadRates; [used only for cover page?]
 //
 //    // Special-case strings.
 //    std::string     EffDate; [furnished as PrepYear, PrepMonth, PrepDay]
