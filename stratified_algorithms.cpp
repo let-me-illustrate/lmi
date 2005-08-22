@@ -1,4 +1,4 @@
-// Miscellaneous mathematical routines.
+// Numerical algorithms for stratified rates.
 //
 // Copyright (C) 1998, 2001, 2002, 2003, 2004, 2005 Gregory W. Chicares.
 //
@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: stratified_algorithms.cpp,v 1.2 2005-08-22 14:49:13 chicares Exp $
+// $Id: stratified_algorithms.cpp,v 1.3 2005-08-22 15:35:33 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"

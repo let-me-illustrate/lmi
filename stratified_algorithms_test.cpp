@@ -1,4 +1,4 @@
-// Miscellaneous mathematical routines--unit test.
+// Numerical algorithms for stratified rates--unit test.
 //
 // Copyright (C) 2003, 2004, 2005 Gregory W. Chicares.
 //
@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: stratified_algorithms_test.cpp,v 1.2 2005-08-22 14:49:13 chicares Exp $
+// $Id: stratified_algorithms_test.cpp,v 1.3 2005-08-22 15:35:34 chicares Exp $
 
 // TODO ?? Add tests for tiered_product<>() and tiered_rate<>().
 
