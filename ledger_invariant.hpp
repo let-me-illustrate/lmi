@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_invariant.hpp,v 1.1 2005-02-12 12:59:31 chicares Exp $
+// $Id: ledger_invariant.hpp,v 1.2 2005-08-22 15:35:40 chicares Exp $
 
 #ifndef ledger_invariant_hpp
 #define ledger_invariant_hpp
@@ -130,8 +130,6 @@ class LMI_EXPIMP LedgerInvariant
     std::vector<double>      FundAllocations;
 
     std::vector<double> InforceLives;
-    std::vector<double> TieredSepAcctLoadBands;
-    std::vector<double> TieredSepAcctLoadRates;
 
     // IRRs that we need to think about some more before deciding
     // where to put them.

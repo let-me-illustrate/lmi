@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_invariant.cpp,v 1.11 2005-08-22 14:49:13 chicares Exp $
+// $Id: ledger_invariant.cpp,v 1.12 2005-08-22 15:35:40 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -51,6 +51,10 @@
 #include <algorithm>
 #include <numeric>   // std::accumulate()
 #include <ostream>
+
+// TODO ?? It is extraordinary that this 'invariant' class includes
+// some data that vary by basis. Perhaps they should be in the
+// complementary 'variant' class.
 
 //============================================================================
 LedgerInvariant::LedgerInvariant(int len)
@@ -281,8 +285,6 @@ void LedgerInvariant::Copy(LedgerInvariant const& obj)
     FundNames              = obj.FundNames             ;
     FundAllocs             = obj.FundAllocs            ;
     FundAllocations        = obj.FundAllocations       ;
-    TieredSepAcctLoadBands = obj.TieredSepAcctLoadBands;
-    TieredSepAcctLoadRates = obj.TieredSepAcctLoadRates;
 
     // Scalars of type not compatible with double.
     EffDate                = obj.EffDate               ;
@@ -399,8 +401,6 @@ void LedgerInvariant::Init(BasicValues* b)
     FundNames             .resize(0);
     FundAllocs            .resize(0);
     FundAllocations       .resize(0);
-    TieredSepAcctLoadBands.resize(0);
-    TieredSepAcctLoadRates.resize(0);
 
     // The antediluvian branch has a null FundData_ object.
     int number_of_funds(0);
@@ -455,31 +455,9 @@ void LedgerInvariant::Init(BasicValues* b)
         ,0.0
         );
 
-    // TODO ?? It is somewhat unusual that this 'invariant' class
-    // includes this item that varies by basis. Perhaps it should be
-    // in the complementary 'variant' class. But apparently the
-    // guaranteed version of this load isn't implemented.
-
-    // The antediluvian branch has a null TieredCharges_ object.
-    if(b->TieredCharges_)
-        {
-        // TRICKY !! This const reference is required for overload
-        // resolution to choose the const version of
-        // tiered_charges::tiered_item().
-        //
-        tiered_charges const& x(*b->TieredCharges_);
-        tiered_item_rep const& tiered_sep_acct_load
-            (x.tiered_item(tiered_charges::e_curr_sepacct_load_tiered_by_assets));
-
-        TieredSepAcctLoadBands = tiered_sep_acct_load.bands();
-        TieredSepAcctLoadRates = tiered_sep_acct_load.data();
-
-        PremiumTaxIsTiered = x.premium_tax_is_tiered(b->GetStateOfJurisdiction());
-        }
-    else
-        {
-        PremiumTaxIsTiered = false;
-        }
+    PremiumTaxIsTiered = b->TieredCharges_->premium_tax_is_tiered
+        (b->GetStateOfJurisdiction()
+        );
 
     NoLapseAlwaysActive     = b->Database_->Query(DB_NoLapseAlwaysActive);
     NoLapseMinDur           = b->Database_->Query(DB_NoLapseMinDur);
@@ -814,8 +792,6 @@ LedgerInvariant& LedgerInvariant::PlusEq(LedgerInvariant const& a_Addend)
     FundNames                   = a_Addend.FundNames;
     FundAllocs                  = a_Addend.FundAllocs;
     FundAllocations             = a_Addend.FundAllocations;
-    TieredSepAcctLoadBands      = a_Addend.TieredSepAcctLoadBands;
-    TieredSepAcctLoadRates      = a_Addend.TieredSepAcctLoadRates;
     GenderDistinct              = a_Addend.GenderDistinct;
     GenderBlended               = a_Addend.GenderBlended;
     Smoker                      = a_Addend.Smoker;
@@ -1012,8 +988,6 @@ void LedgerInvariant::UpdateCRC(CRC& a_crc) const
     a_crc += FundNames;
     a_crc += FundAllocs;
     a_crc += FundAllocations;
-    a_crc += TieredSepAcctLoadBands;
-    a_crc += TieredSepAcctLoadRates;
 }
 
 //============================================================================
@@ -1029,7 +1003,5 @@ void LedgerInvariant::Spew(std::ostream& os) const
     SpewVector(os, std::string("FundNames")        ,FundNames       );
     SpewVector(os, std::string("FundAllocs")       ,FundAllocs      );
     SpewVector(os, std::string("FundAllocations")  ,FundAllocations );
-    SpewVector(os, std::string("TieredSepAcctLoadBands") ,TieredSepAcctLoadBands);
-    SpewVector(os, std::string("TieredSepAcctLoadRates") ,TieredSepAcctLoadRates);
 }
 
