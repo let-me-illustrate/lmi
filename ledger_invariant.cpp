@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_invariant.cpp,v 1.12 2005-08-22 15:35:40 chicares Exp $
+// $Id: ledger_invariant.cpp,v 1.13 2005-08-22 18:00:00 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -455,9 +455,7 @@ void LedgerInvariant::Init(BasicValues* b)
         ,0.0
         );
 
-    PremiumTaxIsTiered = b->TieredCharges_->premium_tax_is_tiered
-        (b->GetStateOfJurisdiction()
-        );
+    PremiumTaxIsTiered      = b->IsPremTaxTiered();
 
     NoLapseAlwaysActive     = b->Database_->Query(DB_NoLapseAlwaysActive);
     NoLapseMinDur           = b->Database_->Query(DB_NoLapseMinDur);
