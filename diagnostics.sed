@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 #
-# $Id: diagnostics.sed,v 1.2 2005-01-29 02:47:41 chicares Exp $
+# $Id: diagnostics.sed,v 1.3 2005-08-23 00:12:46 chicares Exp $
 #
   # Delete expected output from make.
 /Circular.*dependency dropped/d
@@ -43,6 +43,8 @@
 /^rm eraseme.o$/d
 /^.:.gnu.rm eraseme.o$/d
 /not remade because of errors\./d
+/^These files are more recent than/d
+/Built [0-9].*T[0-9].*Z\.$/d
 /^make.*\[[0-9]*\]: \*\*\* \[.*\] Error [0-9]*$/d
 /^make.*\[[0-9]*\]: \[.*\] Error [0-9]* (ignored)$/d
   # Delete expected output from gnu cpp.
