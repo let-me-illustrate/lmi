@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_acctval.cpp,v 1.45 2005-08-22 14:49:13 chicares Exp $
+// $Id: ihs_acctval.cpp,v 1.46 2005-08-25 12:43:52 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -986,6 +986,7 @@ void AccountValue::ApplyDynamicSepAcctLoadAMD(double assets, double cumpmts)
 
     double tiered_load_amd = 0.0;
 
+#ifdef DEBUGGING_SEP_ACCT_LOAD
     std::ofstream os
         ("trace.txt"
         ,   std::ios_base::out
@@ -998,6 +999,7 @@ void AccountValue::ApplyDynamicSepAcctLoadAMD(double assets, double cumpmts)
         << "\n  Month = " << Month
         << std::endl
         ;
+#endif // DEBUGGING_SEP_ACCT_LOAD
     switch(ExpAndGABasis)
         {
         case e_currbasis:
@@ -1006,6 +1008,7 @@ void AccountValue::ApplyDynamicSepAcctLoadAMD(double assets, double cumpmts)
                     TieredCharges_->tiered_current_separate_account_load(assets)
                 +   TieredCharges_->banded_current_separate_account_load(cumpmts)
                 ;
+#ifdef DEBUGGING_SEP_ACCT_LOAD
     os
         << "\n current:"
         << "\n  cumpmts = " << cumpmts
@@ -1014,6 +1017,7 @@ void AccountValue::ApplyDynamicSepAcctLoadAMD(double assets, double cumpmts)
         << "\n  asset-based = " << TieredCharges_->tiered_current_separate_account_load(assets)
         << std::endl
         ;
+#endif // DEBUGGING_SEP_ACCT_LOAD
             }
             break;
         case e_guarbasis:
@@ -1022,6 +1026,7 @@ void AccountValue::ApplyDynamicSepAcctLoadAMD(double assets, double cumpmts)
                     TieredCharges_->tiered_guaranteed_separate_account_load(assets)
                 +   TieredCharges_->banded_guaranteed_separate_account_load(cumpmts)
                 ;
+#ifdef DEBUGGING_SEP_ACCT_LOAD
     os
         << "\n guaranteed:"
         << "\n  cumpmts = " << cumpmts
@@ -1030,6 +1035,7 @@ void AccountValue::ApplyDynamicSepAcctLoadAMD(double assets, double cumpmts)
         << "\n  asset-based = " << TieredCharges_->tiered_guaranteed_separate_account_load(assets)
         << std::endl
         ;
+#endif // DEBUGGING_SEP_ACCT_LOAD
             }
             break;
         case e_mdptbasis:
@@ -1053,18 +1059,22 @@ void AccountValue::ApplyDynamicSepAcctLoadAMD(double assets, double cumpmts)
             }
         }
 
+#ifdef DEBUGGING_SEP_ACCT_LOAD
     os
         << "\n  tiered_load_amd = " << tiered_load_amd
         << std::endl
         ;
+#endif // DEBUGGING_SEP_ACCT_LOAD
     // convert tiered load from annual to monthly effective rate
     tiered_load_amd = i_upper_12_over_12_from_i<double>()(tiered_load_amd);
     round_interest_rate(tiered_load_amd);
 
+#ifdef DEBUGGING_SEP_ACCT_LOAD
     os
         << "\n  monthly tiered_load_amd = " << tiered_load_amd
         << std::endl
         ;
+#endif // DEBUGGING_SEP_ACCT_LOAD
 
     double tiered_comp = 0.0;
 
@@ -1095,11 +1105,13 @@ void AccountValue::ApplyDynamicSepAcctLoadAMD(double assets, double cumpmts)
     YearsAcctValLoadAMD = Loads_->account_value_load_after_deduction(ExpAndGABasis)[Year];
     YearsAcctValLoadAMD+= tiered_load_amd;
     YearsAcctValLoadAMD+= tiered_comp;
+#ifdef DEBUGGING_SEP_ACCT_LOAD
     os
         << "\n  load in database = " << Loads_->account_value_load_after_deduction(ExpAndGABasis)[Year]
         << "\n  YearsAcctValLoadAMD = " << YearsAcctValLoadAMD
         << std::endl
         ;
+#endif // DEBUGGING_SEP_ACCT_LOAD
 }
 
 //============================================================================
