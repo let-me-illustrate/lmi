@@ -24,7 +24,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: xml_notebook_single_premium.xrc,v 1.2 2005-06-23 00:35:45 chicares Exp $
+    $Id: xml_notebook_single_premium.xrc,v 1.3 2005-08-25 01:22:58 chicares Exp $
 
     This version is generic. It strives to present every input field
     the system offers, in a way that suits the main developer's tastes.
@@ -854,12 +854,12 @@
                     <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
                     <border>4</border>
                     <object class="wxStaticText">
-                        <label>Corporation payment</label>
+                        <label>Payment</label>
                     </object>
                 </object>
                 <object class="sizeritem">
                     <flag>wxGROW</flag>
-                    <object class="wxTextCtrl" name="CorporationPayment">
+                    <object class="wxTextCtrl" name="Payment">
                         <size>180,-1</size>
                     </object>
                 </object>
