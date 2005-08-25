@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.116 2005-08-25 01:22:58 chicares Exp $
+// $Id: ChangeLog,v 1.117 2005-08-25 12:44:49 chicares Exp $
 
 2005-01-14
 
@@ -3202,4 +3202,9 @@ In 'xml_notebook_single_premium.xrc', map the (one and only)
 payment field to ee payment, with the regrettable effect that the
 single premium shows up as ee premium on a supplemental report.
 This dislikable workaround should be revisited later.
+
+20050825T1242Z <chicares@cox.net> [1249]
+
+  ihs_acctval.cpp
+Conditionalize debugging code; soon it'll be removed altogether.
 
