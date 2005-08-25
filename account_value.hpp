@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: account_value.hpp,v 1.25 2005-08-17 16:22:58 chicares Exp $
+// $Id: account_value.hpp,v 1.26 2005-08-25 15:49:55 chicares Exp $
 
 #ifndef account_value_hpp
 #define account_value_hpp
@@ -312,7 +312,7 @@ class LMI_EXPIMP AccountValue
     void   SetMaxWD                ();
     double GetRefundableSalesLoad  () const;
     double DetermineSpecAmtLoad    ();
-    double DetermineAcctValLoadBOM ();
+    double DetermineAcctValLoadBOM (); // TODO ?? eradicate
     double DetermineAcctValLoadAMD ();
 
     void   ApplyDynamicMandE          (double assets);
@@ -447,7 +447,7 @@ class LMI_EXPIMP AccountValue
     double  COI;    // TODO ?? Call it COIChg instead?
     double  SpecAmtLoadBase;
     // TODO ?? Separating different types of sepacct load is probably unneeded.
-    double  AVSepAcctLoadBaseBOM;
+    double  AVSepAcctLoadBaseBOM; // TODO ?? eradicate
     double  AVSepAcctLoadBaseAMD;
     double  DacTaxRsv;
 
@@ -553,7 +553,7 @@ class LMI_EXPIMP AccountValue
     double  YearsSalesLoadTgt;
     double  YearsSalesLoadExc;
     double  YearsSpecAmtLoad;
-    double  YearsAcctValLoadBOM;
+    double  YearsAcctValLoadBOM; // TODO ?? eradicate
     double  YearsAcctValLoadAMD;
     double  YearsSalesLoadRefundRate;
     double  YearsPremTaxLoadRate;
@@ -606,7 +606,7 @@ class LMI_EXPIMP AccountValue
     double  YearsTotalPremTaxLoadInStateOfJurisdiction;
     double  YearsTotalDacTaxLoad;
     double  YearsTotalSpecAmtLoad;
-    double  YearsTotalAcctValLoadBOM;
+    double  YearsTotalAcctValLoadBOM; // TODO ?? eradicate
     double  YearsTotalAcctValLoadAMD;
 
     double NextYearsProjectedCOICharge;

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_acctval.cpp,v 1.46 2005-08-25 12:43:52 chicares Exp $
+// $Id: ihs_acctval.cpp,v 1.47 2005-08-25 15:49:56 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -984,6 +984,8 @@ void AccountValue::ApplyDynamicSepAcctLoadAMD(double assets, double cumpmts)
         return;
         }
 
+    // TODO ?? This is misnamed. It does double duty in 'tiered' and
+    // 'banded' guises.
     double tiered_load_amd = 0.0;
 
 #ifdef DEBUGGING_SEP_ACCT_LOAD
@@ -1066,6 +1068,8 @@ void AccountValue::ApplyDynamicSepAcctLoadAMD(double assets, double cumpmts)
         ;
 #endif // DEBUGGING_SEP_ACCT_LOAD
     // convert tiered load from annual to monthly effective rate
+    // TODO ?? This isn't really right. Instead, aggregate annual
+    // rates, then convert their sum to monthly.
     tiered_load_amd = i_upper_12_over_12_from_i<double>()(tiered_load_amd);
     round_interest_rate(tiered_load_amd);
 
@@ -1093,14 +1097,48 @@ void AccountValue::ApplyDynamicSepAcctLoadAMD(double assets, double cumpmts)
             ;
         }
 
+/*
+// TODO ?? Resolve these comments soon, rewriting and relocating this
+// function and the others it works with, and probably some of the
+// variables they use.
+
     // is there any advantage to this sort of implementation in loads.cpp?
     //YearsAcctValLoadAMD   = Loads_->GetDynamicSepAcctLoadAMD()
-    //  (ExpAndGABasis
-    //  ,SABasis
-    //  ,Year
-    //  ,tiered_load_amd
-    //  ,tiered_comp
-    //  );
+    // TODO ?? Yes. It would be far better to move it there and write
+    // a unit test suite for the loads class.
+
+// Pass these arguments:
+//(ExpAndGABasis, Year, double assets, double cumpmts)
+// and perhaps SABasis
+
+// These are the things that should be done in the loads class:
+
+    // curr and guar:
+            tiered_load_amd =
+                    TieredCharges_->tiered_current_separate_account_load(assets)
+                +   TieredCharges_->banded_current_separate_account_load(cumpmts)
+                ;
+
+    if(e_asset_charge_load_after_ded == Database_->Query(DB_AssetChargeType))
+        {
+        tiered_comp = TieredCharges_->tiered_asset_based_compensation(assets);
+        tiered_comp = i_upper_12_over_12_from_i<double>()(tiered_comp);
+        // TODO ?? Probably this should be rounded.
+        // TODO ?? ^ No, remove that comment. Loads should be combined
+        // on the annual basis used for specifying them, then their
+        // sum converted to monthly, in order to match the calculations
+        // that an admin system would be expected to do.
+        }
+
+    YearsAcctValLoadAMD = Loads_->account_value_load_after_deduction(ExpAndGABasis)[Year];
+
+    // TODO ?? aggregate loads once and only once for conversion to monthly
+    tiered_load_amd = i_upper_12_over_12_from_i<double>()(tiered_load_amd);
+
+    // TODO ?? shouldn't rounding be done in the loads class?
+    round_interest_rate(tiered_load_amd);
+
+*/
 
     YearsAcctValLoadAMD = Loads_->account_value_load_after_deduction(ExpAndGABasis)[Year];
     YearsAcctValLoadAMD+= tiered_load_amd;

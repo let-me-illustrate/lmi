@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: basic_values.hpp,v 1.7 2005-08-22 18:00:00 chicares Exp $
+// $Id: basic_values.hpp,v 1.8 2005-08-25 15:49:56 chicares Exp $
 
 #ifndef basic_values_hpp
 #define basic_values_hpp
@@ -108,6 +108,7 @@ class LMI_EXPIMP BasicValues
     e_ledger_type  const& GetLedgerType()             const;
     e_state        const& GetStateOfJurisdiction()    const;
     e_state        const& GetStateOfDomicile()        const;
+    // TODO ?? Rename: these are probably premium-tax *loads*.
     double                GetPremTaxRate()            const;
     double                GetLowestPremTaxRate()      const;
     double                GetDomiciliaryPremTaxRate() const;
@@ -120,6 +121,7 @@ class LMI_EXPIMP BasicValues
     boost::shared_ptr<TDatabase>          Database_;
     boost::shared_ptr<FundData>           FundData_;
     boost::shared_ptr<rounding_rules>     RoundingRules_;
+// TODO ?? This is misnamed. It encompasses both types of stratified charges.
     boost::shared_ptr<stratified_charges> TieredCharges_;
     boost::shared_ptr<MortalityRates>     MortalityRates_;
     boost::shared_ptr<InterestRates>      InterestRates_;
@@ -280,6 +282,7 @@ class LMI_EXPIMP BasicValues
 
     // Invariant data.
     void                    SetPermanentInvariants();
+    // TODO ?? Rename: this is probably a premium-tax *loads*.
     void                    SetLowestPremTaxRate();
     void                    TestPremiumTaxLoadConsistency();
     void                    SetMaxSurvivalDur();
@@ -416,6 +419,7 @@ class LMI_EXPIMP BasicValues
     e_ledger_type       LedgerType;
     e_state             StateOfJurisdiction;
     e_state             StateOfDomicile;
+    // TODO ?? Rename: these are probably premium-tax *loads*.
     double              PremTaxRate;
     double              LowestPremTaxRate;
     double              DomiciliaryPremTaxRate;
@@ -461,6 +465,7 @@ inline e_state const& BasicValues::GetStateOfDomicile() const
     return StateOfDomicile;
 }
 
+// TODO ?? Rename these four functions: these are probably premium-tax *loads*.
 inline double BasicValues::GetPremTaxRate() const
 {
     return PremTaxRate;

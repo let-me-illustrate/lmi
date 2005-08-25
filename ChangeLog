@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.117 2005-08-25 12:44:49 chicares Exp $
+// $Id: ChangeLog,v 1.118 2005-08-25 15:49:56 chicares Exp $
 
 2005-01-14
 
@@ -3207,4 +3207,16 @@ This dislikable workaround should be revisited later.
 
   ihs_acctval.cpp
 Conditionalize debugging code; soon it'll be removed altogether.
+
+20050825T1549Z <chicares@cox.net> [1277]
+
+  account_value.hpp
+  basic_values.hpp
+  ihs_acctval.cpp
+  ihs_avmly.cpp
+Add twenty-eight defects, hurriedly implementing a testable limit on
+the banded portion of the account-value load. The build is no longer
+clean: now the compiler prints warnings about obvious defects. This
+expedient "seemed like a good idea at the time"; it's nothing but
+gratuitous damage if it's not undone and completely reworked soon.
 
