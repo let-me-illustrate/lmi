@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: custom_io_0.cpp,v 1.9 2005-07-16 22:51:30 chicares Exp $
+// $Id: custom_io_0.cpp,v 1.10 2005-08-25 01:22:58 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -243,8 +243,13 @@ bool SetSpecialInput(IllusInputParms& ip, char const* overridden_filename)
     // but the customer wants to enter the specified amount explicitly.
     ip.SpecifiedAmount = n_v_pairs.string_value("FaceAmt");
 
-    // Assume single premium. Assume the corporation pays it.
-    ip.CorpPayment = n_v_pairs.string_value("PremiumAmt") + ";0";
+    // Zero out any default er premium.
+    ip.CorpPayment = "0";
+    // Assume single premium. Although the corporation pays it,
+    // treat it, contrary to fact, as paid by the insured; reason:
+    // consistency with GUI--see ChangeLog for 20050825T0122Z .
+    // TODO ?? Revisit this later.
+    ip.IndvPayment = n_v_pairs.string_value("PremiumAmt") + ";0";
 
 // Not yet used, but might be wanted someday:
 //ExchangeAmt=0
