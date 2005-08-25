@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: inputillus.cpp,v 1.8 2005-08-13 23:45:42 chicares Exp $
+// $Id: inputillus.cpp,v 1.9 2005-08-25 01:22:58 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -54,9 +54,9 @@ IllusInputParms::IllusInputParms()
     ,ProjectedSalary            ("100000")
     ,SpecifiedAmount            ("1000000")
     ,DeathBenefitOption         ("a")
-    ,IndvPayment                ("0")
+    ,IndvPayment                ("20000")
     ,IndvPaymentMode            ("annual")
-    ,CorpPayment                ("20000")
+    ,CorpPayment                ("0")
     ,CorpPaymentMode            ("annual")
     ,GenAcctIntRate             (current_credited_rate())
     ,SepAcctIntRate             (".08")
