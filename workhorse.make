@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: workhorse.make,v 1.43 2005-08-21 12:00:25 chicares Exp $
+# $Id: workhorse.make,v 1.44 2005-08-25 00:05:52 chicares Exp $
 
 ###############################################################################
 
@@ -488,6 +488,12 @@ lmi_cgi$(EXEEXT): $(cgi_objects) $(lmi_common_objects)
 #   data files in $(data_dir).
 # And some of the files in $(data_dir) are found only in the ftp
 # area of savannah; should they be in cvs?
+
+# TODO ?? This line
+#   $(CP) --preserve --update $^
+# isn't quite right: running 'make install build_type=[...]' with
+# different build_types and picking the latest version of each
+# component can produce a mismatched set.
 
 prefix         := /opt/lmi
 exec_prefix    := $(prefix)

@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_basicval.cpp,v 1.16 2005-08-22 15:35:53 chicares Exp $
+// $Id: ihs_basicval.cpp,v 1.17 2005-08-25 00:05:52 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -873,6 +873,10 @@ void BasicValues::TestPremiumTaxLoadConsistency()
     // states that have tiered premium-tax rates. For instance, if
     // a flat two percent is coded for every state, then it is
     // probably desired to ignore all state variations and nuances.
+    //
+    // TODO ?? Don't override parameters--instead, only detect and
+    // report inconsistencies.
+    //
     TDBValue const& premium_tax_loads = Database_->GetEntry(DB_PremTaxLoad);
     if(!TDBValue::VariesByState(premium_tax_loads))
         {
