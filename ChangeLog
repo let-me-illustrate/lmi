@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.118 2005-08-25 15:49:56 chicares Exp $
+// $Id: ChangeLog,v 1.119 2005-08-26 02:54:08 chicares Exp $
 
 2005-01-14
 
@@ -3219,4 +3219,11 @@ the banded portion of the account-value load. The build is no longer
 clean: now the compiler prints warnings about obvious defects. This
 expedient "seemed like a good idea at the time"; it's nothing but
 gratuitous damage if it's not undone and completely reworked soon.
+
+20050826T0253Z <chicares@cox.net> [1278]
+
+  group_values.cpp
+Temporarily suppress temporary debugging scaffold. The underlying
+problem hasn't yet been resolved, but a monthly release draws nigh
+and users would only be puzzled by these diagnostics.
 
