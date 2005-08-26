@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: group_values.cpp,v 1.25 2005-08-10 13:11:56 chicares Exp $
+// $Id: group_values.cpp,v 1.26 2005-08-26 02:54:08 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -615,7 +615,8 @@ restart:
                             ,case_years_net_mortchgs
                             );
                     }
-# if 1 // TODO ?? Temporary diagnostic code.
+// TODO ?? Temporarily suppress this diagnostic.
+#if defined DEBUG_EXPERIENCE_RATING_PROBLEM // TODO ?? Temporary diagnostic code.
                 if
                     (!materially_equal
                         (case_net_mortality_reserve
@@ -639,7 +640,7 @@ restart:
                         )
                     );
 */
-#endif // 0
+#endif // defined DEBUG_EXPERIENCE_RATING_PROBLEM
                 }
 
             if(!meter->reflect_progress())
