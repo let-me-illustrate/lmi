@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avmly.cpp,v 1.21 2005-08-25 15:49:56 chicares Exp $
+// $Id: ihs_avmly.cpp,v 1.22 2005-08-27 13:06:20 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -2609,9 +2609,7 @@ void AccountValue::TxTakeSepAcctLoad()
     // TODO ?? This is a hasty kludge that needs to be removed.
     if(SepAcctLoadIsDynamic)
         {
-        // TODO ?? This is misnamed. It does double duty in 'tiered' and
-        // 'banded' guises.
-        double tiered_load_amd = 0.0;
+        double banded_load_amd = 0.0;
 
         // TODO ?? What was a passed parameter in IncrementEOM() here
         // becomes a local whose value, we hope, is no different.
@@ -2625,17 +2623,15 @@ void AccountValue::TxTakeSepAcctLoad()
             {
             case e_currbasis:
                 {
-                tiered_load_amd =
-                        TieredCharges_->tiered_current_separate_account_load(assets)
-                    +   TieredCharges_->banded_current_separate_account_load(cumpmts)
+                banded_load_amd =
+                    TieredCharges_->banded_current_separate_account_load(cumpmts)
                     ;
                 }
                 break;
             case e_guarbasis:
                 {
-                tiered_load_amd =
-                        TieredCharges_->tiered_guaranteed_separate_account_load(assets)
-                    +   TieredCharges_->banded_guaranteed_separate_account_load(cumpmts)
+                banded_load_amd =
+                    TieredCharges_->banded_guaranteed_separate_account_load(cumpmts)
                     ;
                 }
                 break;
@@ -2643,26 +2639,31 @@ void AccountValue::TxTakeSepAcctLoad()
             // TODO ?? Lack of a default case is always a defect.
             }
 
-        // TODO ?? This isn't really right. Instead, aggregate annual
-        // rates, then convert their sum to monthly.
-        tiered_load_amd = i_upper_12_over_12_from_i<double>()(tiered_load_amd);
-        round_interest_rate(tiered_load_amd);
+        // TODO ?? Won't this fail if 'cumpmts' is negative?
+        LMI_ASSERT(0.0 <= banded_load_amd);
+        if(0.0 != banded_load_amd)
+            {
+            // TODO ?? This isn't really right. Instead, aggregate annual
+            // rates, then convert their sum to monthly.
+            banded_load_amd = i_upper_12_over_12_from_i<double>()(banded_load_amd);
+            round_interest_rate(banded_load_amd);
 
-        // TODO ?? As a ghastly expedient that must be reworked soon,
-        // calculate and deduct the supposed error term.
-        double kludge_adjustment =
-                tiered_load_amd
-            *   std::max
-                    (0.0
+            // TODO ?? As a ghastly expedient that must be reworked soon,
+            // calculate and deduct the supposed error term.
+            double kludge_adjustment =
+                    banded_load_amd
+                *   std::max
+                        (0.0
 // TODO ?? Here, the hardcoded number is of course a defect: it should
 // be in the product database. $10,000,000 is just an arbitrary number
 // to be used for testing. The idea is that some such limit applies to
 // the banded load only, but not to any other account-value load.
-                    ,AVSepAcctLoadBaseAMD - 10000000.0
-                    )
-            ;
-        LMI_ASSERT(0.0 <= kludge_adjustment);
-        z -= kludge_adjustment;
+                        ,AVSepAcctLoadBaseAMD - 10000000.0
+                        )
+                ;
+            LMI_ASSERT(0.0 <= kludge_adjustment);
+            z -= kludge_adjustment;
+            }
         }
 
     process_deduction(z);
