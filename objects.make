@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: objects.make,v 1.48 2005-08-22 14:49:13 chicares Exp $
+# $Id: objects.make,v 1.49 2005-08-27 16:15:14 chicares Exp $
 
 ################################################################################
 
@@ -380,6 +380,7 @@ unit_test_targets := \
   timer_test$(EXEEXT) \
   tn_range_test$(EXEEXT) \
   value_cast_test$(EXEEXT) \
+  vector_test$(EXEEXT) \
   wx_new_test$(EXEEXT) \
   xenum_test$(EXEEXT) \
   xrange_test$(EXEEXT) \
@@ -618,6 +619,10 @@ value_cast_test$(EXEEXT): \
   $(common_test_objects) \
   facets.o \
   value_cast_test.o \
+
+vector_test$(EXEEXT): \
+  $(common_test_objects) \
+  vector_test.o \
 
 wx_new_test$(EXEEXT): \
   $(common_test_objects) \
