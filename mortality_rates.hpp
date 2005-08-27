@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mortality_rates.hpp,v 1.2 2005-03-22 03:40:18 chicares Exp $
+// $Id: mortality_rates.hpp,v 1.3 2005-08-27 22:48:58 chicares Exp $
 
 #ifndef mortality_rates_hpp
 #define mortality_rates_hpp
@@ -100,11 +100,35 @@ class MortalityRates
         );
 
     int Length_;
-    double MaxMonthlyRate;
+
+    bool AllowADD_        ;
+    bool AllowChild_      ;
+    bool AllowExpRating_  ;
+    bool AllowFlatExtras_ ;
+    bool AllowSpouse_     ;
+    bool AllowSubstdTable_;
+    bool AllowTerm_       ;
+    bool AllowWP_         ;
+    bool CCoiIsAnnual_    ;
+    bool GCoiIsAnnual_    ;
+    bool IsTgtPremTabular_;
+
+    double MaxMonthlyCoiRate_;
+
+    // TODO ?? Dubious.
+    double ExpRatCoiMultAlt_;
+    double ExpRatCoiMultCurr0_;
+    double ExpRatCoiMultCurr1_;
+    double ExpRatCoiMultGuar_;
+    bool UsePMQOnCurrCOI_;
 
     // Experience-rating COI retention.
     double AdditiveCoiRetention_;
     double MultiplicativeCoiRetention_;
+
+    std::vector<double> GCOIMultiplier_;
+    std::vector<double> CCOIMultiplier_;
+    std::vector<double> SubstdTblMult_;
 
 // MonthlyCoiRatesBand2
     std::vector<double> MonthlyGuaranteedCoiRates_;
