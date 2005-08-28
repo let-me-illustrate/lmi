@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: rounding_rules.hpp,v 1.2 2005-01-29 02:47:42 chicares Exp $
+// $Id: rounding_rules.hpp,v 1.3 2005-08-28 21:36:56 chicares Exp $
 
 #ifndef rounding_rules_hpp
 #define rounding_rules_hpp
@@ -34,7 +34,7 @@
 // This is the way admin systems are most likely to work, and
 // gratuitous differences between systems should be avoided.
 // Rounding is a property of the transaction, and not of the
-// variable it ultimatedly affects.
+// variable it ultimately affects.
 
 class LMI_EXPIMP rounding_rules
 {
