@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mortality_rates.hpp,v 1.3 2005-08-27 22:48:58 chicares Exp $
+// $Id: mortality_rates.hpp,v 1.4 2005-08-28 13:50:55 chicares Exp $
 
 #ifndef mortality_rates_hpp
 #define mortality_rates_hpp
@@ -30,24 +30,28 @@
 
 #include <vector>
 
-// Someday, add other rates, such as:
-//   1983 GAM for experience rating
-//   experience q for pricing
-//   q for basic reserves
-//   q for deficiency reserves
-//   q for tax reserves
-//   q for nonforfeiture calculations
-//   New York minimum COI rate
-//   80 CSO with select factors for NY Reg 112 section 47.2(a)(3) ["XXX"]
-// When that's done, it may make sense to reduce initialization
-// overhead by calculating each private member's value only when
-// it's first needed.
-
-// Adding 7702A premium rates and CVAT corridor factors extended the
-// scope of this class beyond mortality rates. We might either change
-// its name or move such members elsewhere.
-
 class BasicValues;
+
+/// Design notes--class MortalityRates
+///
+/// This class encapsulates mortality rates.
+///
+/// TODO ?? It also includes certain other types of rates that happen
+/// to be stored using the same technology as true mortality rates.
+/// It is not yet clear whether the class should be renamed or the
+/// other rates should be moved elsewhere. The set of other rates
+/// might someday be expanded to include
+///   1983 GAM for experience rating
+///   experience q for pricing
+///   q for basic reserves
+///   q for deficiency reserves
+///   q for tax reserves
+///   q for nonforfeiture calculations
+///   New York minimum COI rate
+///   80 CSO with select factors for NY Reg 112 section 47.2(a)(3) ["XXX"]
+/// When that's done, it may make sense to reduce initialization
+/// overhead by calculating each private member's value only when
+/// it's first needed.
 
 class MortalityRates
 {
