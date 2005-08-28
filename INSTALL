@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: INSTALL,v 1.8 2005-07-25 13:39:08 chicares Exp $
+// $Id: INSTALL,v 1.9 2005-08-28 23:09:34 wboutin Exp $
 
 [It's clearest to validate commands, then copy and paste them here.
 Once we've done that, it becomes trivial to turn this into a shell
@@ -68,6 +68,10 @@ Apply required patch:
 Copy cgicc's header files to the third-party hierarchy:
   /tmp[0]$mkdir -p /opt/lmi/third-party/include/cgicc/
   /tmp[0]$cp --preserve cgicc-3.1.4/cgicc/*.h /opt/lmi/third-party/include/cgicc/
+
+Copy cgicc's source files to the third-party hierarchy:
+  /tmp[0]$mkdir -p /opt/lmi/third-party/src/cgicc/
+  /tmp[0]$cp --preserve cgicc-3.1.4/cgicc/*.cpp /opt/lmi/third-party/src/cgicc/
 
 * Install and patch xmlwrapp-0.2.0
 
@@ -211,9 +215,7 @@ Install mpatrol libraries:
 * Install sed-4.0.7 # note 1
 
 Download
-  http://gnome.dti.ad.jp/pub/GNU/sed/sed-4.0.7.tar.gz
-[WENDY--Please use a canonical gnu.org URL instead. We don't want to
-rely on any particular mirror: mirrors come and go.]
+  http://ftp.gnu.org/gnu/sed/sed-4.0.7.tar.gz
 to /tmp/ .
 
 Validate:

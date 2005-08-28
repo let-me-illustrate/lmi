@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.121 2005-08-28 16:43:53 wboutin Exp $
+// $Id: ChangeLog,v 1.122 2005-08-28 23:09:34 wboutin Exp $
 
 2005-01-14
 
@@ -3279,3 +3279,9 @@ raise privacy concerns.
 
   xml_notebook.xrc
 Reformat for control-selection readability.
+
+20050828T2120Z <wboutin@massmutual.com> [1280]
+
+  INSTALL
+  setup.make
+Add requirements for build environmnet.
