@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_mortal.cpp,v 1.8 2005-08-27 22:48:58 chicares Exp $
+// $Id: ihs_mortal.cpp,v 1.9 2005-08-28 13:50:52 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -34,15 +34,13 @@
 #include "basic_values.hpp"
 #include "database.hpp"
 #include "dbnames.hpp"
-#include "ihs_proddata.hpp"
-#include "ihs_rnddata.hpp"
 #include "inputs.hpp"
 #include "inputstatus.hpp"
 #include "math_functors.hpp"
-#include "miscellany.hpp"
+#include "miscellany.hpp" // each_equal
+#include "rounding_rules.hpp"
 
 #include <algorithm>
-#include <cstdlib>      // std::min()
 #include <fstream>
 #include <functional>
 #include <iomanip>
