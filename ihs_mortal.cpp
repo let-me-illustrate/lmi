@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_mortal.cpp,v 1.10 2005-08-28 14:09:03 chicares Exp $
+// $Id: ihs_mortal.cpp,v 1.11 2005-08-28 22:41:43 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -125,8 +125,70 @@ void MortalityRates::Init(BasicValues const& basic_values)
 // but support for the tiered 'coi_retention' has been withdrawn.
     MultiplicativeCoiRetention_ = 1.0;
 
+    CountryCOIMultiplier_ = basic_values.Input_->CountryCOIMultiplier;
+    IsPolicyRated_        = basic_values.Input_->Status[0].IsPolicyRated();
+    SubstdTable_          = basic_values.Input_->Status[0].SubstdTable;
+    UseExperienceRating_  = basic_values.Input_->UseExperienceRating;
+
+    ShowGrading_          = std::string::npos != basic_values.Input_->Comments.find("idiosyncrasy_grading");
+
+    CurrentCoiGrading_    = basic_values.Input_->VectorCurrentCoiGrading;
+    CurrentCoiMultiplier_ = basic_values.Input_->VectorCurrentCoiMultiplier;
+    MonthlyFlatExtra_     = basic_values.Input_->Status[0].VectorMonthlyFlatExtra;
+    PartialMortalityMultiplier_ = basic_values.Input_->VectorPartialMortalityMultiplier;
+
+    round_coi_rate_ = basic_values.GetRoundingRules().round_coi_rate();
+
+// TODO ?? Try moving the following two groups of "delicate" things hither.
+
+// TODO ?? These are delicate: they get modified downstream.
+    //// TODO ?? e.g. see this below:
+    ////        std::vector<double> original = basic_values.GetCurrCOIRates0();
+    MonthlyGuaranteedCoiRates_   = basic_values.GetGuarCOIRates();
+    MonthlyCurrentCoiRatesBand0_ = basic_values.GetCurrCOIRates0();
+    MonthlyCurrentCoiRatesBand1_ = basic_values.GetCurrCOIRates1();
+    MonthlyCurrentCoiRatesBand2_ = basic_values.GetCurrCOIRates2();
+
+/* TODO ?? These are delicate: they get read only conditionally.
+    MonthlyGuaranteedTermCoiRates_ = basic_values.GetGuaranteedTermRates();
+    MonthlyCurrentTermCoiRates_    = basic_values.GetCurrentTermRates();
+    ADDRates_ = basic_values.GetADDRates();
+    WPRates_ = basic_values.GetWPRates();
+    ChildRiderRates_ = basic_values.GetChildRiderRates();
+    GuaranteedSpouseRiderRates_ = basic_values.GetGuaranteedSpouseRiderRates();
+    CurrentSpouseRiderRates_    = basic_values.GetCurrentSpouseRiderRates();
+    TargetPremiumRates_ = basic_values.GetTgtPremRates();
+*/
     // Alternative COI rate for experience rating.
     AlternativeMonthlyCoiRates_ = basic_values.GetSmokerBlendedGuarCOIRates();
+
+    // TODO ?? Why have these here, since they're already in the
+    // basic-values class? Same question for 'TableYRates_' too.
+
+    Irc7702Q_ = basic_values.GetIRC7702Rates();
+    TableYRates_ = basic_values.GetTableYRates();
+// TODO ?? 83 GAM and table Y should instead be something like
+//   term cost table
+//   partial mortality table
+// should both permit a choice from among numerous and tables.
+// We could offer the whole SOA database, but it lacks table Y,
+// and some choices would be inappropriate (e.g. lapse factors).
+
+// TODO ?? Is this correct or not?
+/*
+    for(int j = 0; j < Length_; j++)
+        {
+        TableYRates_[j] *= 12.0;  // stored as monthly
+        }
+*/
+
+    PartialMortalityQ_ = basic_values.Get83GamRates();
+
+    CvatCorridorFactors_ = basic_values.GetCvatCorridorFactors();
+    SevenPayRates_ = basic_values.GetTAMRA7PayRates();
+
+// TODO ?? Move this up here?
+//    CvatNspRates_;
 
     SetGuaranteedRates(basic_values);
     SetNonguaranteedRates(basic_values);
@@ -139,7 +201,7 @@ void MortalityRates::Init(BasicValues const& basic_values)
         MakeCoiRateSubstandard(MonthlyCurrentCoiRatesBand2_, basic_values);
         // TODO ?? If experience rating is ALLOWED, not necessarily USED?
         if(AllowExpRating_)
-//      if(basic_values.Input_->UseExperienceRating)  // TODO ?? And this condition too?
+//      if(UseExperienceRating_)  // TODO ?? And this condition too?
             {
             MakeCoiRateSubstandard(AlternativeMonthlyCoiRates_, basic_values);
             }
@@ -148,8 +210,8 @@ void MortalityRates::Init(BasicValues const& basic_values)
 
     if
         (!each_equal
-            (basic_values.Input_->VectorCurrentCoiGrading.begin()
-            ,basic_values.Input_->VectorCurrentCoiGrading.end()
+            (CurrentCoiGrading_.begin()
+            ,CurrentCoiGrading_.end()
             ,0.0
             )
         )
@@ -161,7 +223,7 @@ void MortalityRates::Init(BasicValues const& basic_values)
         std::transform
             (monthly_partial_mortality.begin()
             ,monthly_partial_mortality.end()
-            ,basic_values.Input_->VectorPartialMortalityMultiplier.begin()
+            ,PartialMortalityMultiplier_.begin()
             ,monthly_partial_mortality.begin()
             ,std::multiplies<double>()
             );
@@ -189,24 +251,24 @@ void MortalityRates::Init(BasicValues const& basic_values)
         GradeCurrentCoiRatesFromPartialMortalityAssumption
             (MonthlyCurrentCoiRatesBand0_
             ,monthly_partial_mortality
-            ,basic_values.Input_->VectorCurrentCoiGrading
+            ,CurrentCoiGrading_
             ,basic_values
             );
         GradeCurrentCoiRatesFromPartialMortalityAssumption
             (MonthlyCurrentCoiRatesBand1_
             ,monthly_partial_mortality
-            ,basic_values.Input_->VectorCurrentCoiGrading
+            ,CurrentCoiGrading_
             ,basic_values
             );
         GradeCurrentCoiRatesFromPartialMortalityAssumption
             (MonthlyCurrentCoiRatesBand2_
             ,monthly_partial_mortality
-            ,basic_values.Input_->VectorCurrentCoiGrading
+            ,CurrentCoiGrading_
             ,basic_values
             );
-        if(std::string::npos != basic_values.Input_->Comments.find("idiosyncrasy_grading"))
+        if(ShowGrading_)
             {
-            std::vector<double>original = basic_values.GetCurrCOIRates0();
+            std::vector<double> original = basic_values.GetCurrCOIRates0();
             MakeCoiRateSubstandard(original, basic_values);
             std::ofstream os
                 ("coi_grading"
@@ -235,7 +297,7 @@ void MortalityRates::Init(BasicValues const& basic_values)
 << "            ,       coi_rates[j]                 * (1.0 - grading_factors[j])\n"
 << "                +   monthly_partial_mortality[j] *        grading_factors[j]\n"
 << "            );\n"
-<< "        coi_rates[j] = round_coi_rate(coi_rates[j]);\n"
+<< "        coi_rates[j] = round_coi_rate_(coi_rates[j]);\n"
 << "        }\n"
 
                 << "\n'MaxMonthlyCoiRate_' is " << MaxMonthlyCoiRate_ << '\n'
@@ -253,7 +315,7 @@ void MortalityRates::Init(BasicValues const& basic_values)
                 {
                 os
                     << j
-                    << '\t' << basic_values.Input_->VectorCurrentCoiGrading[j]
+                    << '\t' << CurrentCoiGrading_[j]
                     << '\t' << original[j]
                     << '\t' << monthly_partial_mortality[j]
                     << '\t' << MonthlyCurrentCoiRatesBand0_[j]
@@ -305,16 +367,13 @@ void MortalityRates::Init(BasicValues const& basic_values)
 //============================================================================
 void MortalityRates::SetGuaranteedRates(BasicValues const& basic_values)
 {
-    round_to<double> const& round_coi_rate
-        (basic_values.GetRoundingRules().round_coi_rate()
-        );
     MonthlyGuaranteedCoiRates_ = basic_values.GetGuarCOIRates();
 
     if(GCoiIsAnnual_) // TODO ?? Assume this means experience rated?
         {
         // If experience rating is ALLOWED, not necessarily USED.
         if(AllowExpRating_)
-//      if(basic_values.Input_->UseExperienceRating) // TODO ?? And this condition too?
+//      if(UseExperienceRating_) // TODO ?? And this condition too?
             {
             for(int j = 0; j < Length_; j++)
                 {
@@ -322,14 +381,14 @@ void MortalityRates::SetGuaranteedRates(BasicValues const& basic_values)
                 double q = std::min(1.0, ExpRatCoiMultGuar_ * qstart);
                 q = coi_rate_from_q<double>()(q, MaxMonthlyCoiRate_);
                 // No COI retention for guaranteed
-                MonthlyGuaranteedCoiRates_[j] = round_coi_rate(q);
+                MonthlyGuaranteedCoiRates_[j] = round_coi_rate_(q);
 
                 q = std::min(1.0, ExpRatCoiMultAlt_ * qstart);
                 q = coi_rate_from_q<double>()(q, MonthlyGuaranteedCoiRates_[j]);
                 q *= MultiplicativeCoiRetention_;
                 q += AdditiveCoiRetention_;
                 q = std::min(q, MonthlyGuaranteedCoiRates_[j]);
-                AlternativeMonthlyCoiRates_[j] = round_coi_rate(q);
+                AlternativeMonthlyCoiRates_[j] = round_coi_rate_(q);
                 }
             }
         // This is just one way it might be done...
@@ -362,7 +421,7 @@ void MortalityRates::SetGuaranteedRates(BasicValues const& basic_values)
                     (MonthlyGuaranteedCoiRates_[j]
                     ,MaxMonthlyCoiRate_
                     );
-                MonthlyGuaranteedCoiRates_[j] = round_coi_rate
+                MonthlyGuaranteedCoiRates_[j] = round_coi_rate_
                         (MonthlyGuaranteedCoiRates_[j]
                         );
                 }
@@ -375,7 +434,7 @@ void MortalityRates::SetGuaranteedRates(BasicValues const& basic_values)
             double q = MonthlyGuaranteedCoiRates_[j];
             // TODO ?? COI multiple is applied to the monthly COI.
             q = std::min(GCOIMultiplier_[j] * q, MaxMonthlyCoiRate_);
-            MonthlyGuaranteedCoiRates_[j] = round_coi_rate(q);
+            MonthlyGuaranteedCoiRates_[j] = round_coi_rate_(q);
             }
         }
 }
@@ -392,14 +451,14 @@ void MortalityRates::SetNonguaranteedRates(BasicValues const& basic_values)
         ,curr_coi_multiplier.begin()
         ,std::bind1st
             (std::multiplies<double>()
-            ,basic_values.Input_->CountryCOIMultiplier
+            ,CountryCOIMultiplier_
             )
         );
     // Input vector current-COI multiplier affects only nonguaranteed COI rates.
     std::transform
         (curr_coi_multiplier.begin()
         ,curr_coi_multiplier.end()
-        ,basic_values.Input_->VectorCurrentCoiMultiplier.begin()
+        ,CurrentCoiMultiplier_.begin()
         ,curr_coi_multiplier.begin()
         ,std::multiplies<double>()
         );
@@ -432,25 +491,21 @@ void MortalityRates::SetOneNonguaranteedRateBand
     ,BasicValues         const& basic_values
     )
 {
-    round_to<double> const& round_coi_rate
-        (basic_values.GetRoundingRules().round_coi_rate()
-        );
     if(CCoiIsAnnual_)
         {
         // If experience rating is ALLOWED, not necessarily USED
         if(AllowExpRating_)
-//      if(basic_values.Input_->UseExperienceRating)  // TODO ?? And this condition too?
+//      if(UseExperienceRating_)  // TODO ?? And this condition too?
             {
             bool apply_partial_mortality_multiplier = false;
 
             double experience_rating_coi_multiplier;
-            if(basic_values.Input_->UseExperienceRating)
+            if(UseExperienceRating_)
                 {
                 experience_rating_coi_multiplier = // if experience rated
                     ExpRatCoiMultCurr1_;
                 if(UsePMQOnCurrCOI_)
                     {
-//                    experience_rating_coi_multiplier *= basic_values.Input_->PartialMortTableMult; // TODO ?? expunge
                     apply_partial_mortality_multiplier = true;
                     }
                 }
@@ -465,14 +520,14 @@ void MortalityRates::SetOneNonguaranteedRateBand
                 double multiplier = experience_rating_coi_multiplier;
                 if(apply_partial_mortality_multiplier)
                     {
-                    multiplier *= basic_values.Input_->VectorPartialMortalityMultiplier[j];
+                    multiplier *= PartialMortalityMultiplier_[j];
                     }
                 double q = multiplier * curr_coi_multiplier[j] * coi_rates[j];
                 q = coi_rate_from_q<double>()(q, MonthlyGuaranteedCoiRates_[j]);
                 q *= MultiplicativeCoiRetention_;
                 q += AdditiveCoiRetention_;
                 q = std::min(q, MonthlyGuaranteedCoiRates_[j]);
-                coi_rates[j] = round_coi_rate(q);
+                coi_rates[j] = round_coi_rate_(q);
                 }
             }
         // This is just one way it might be done...
@@ -486,7 +541,7 @@ void MortalityRates::SetOneNonguaranteedRateBand
                     (coi_rates[j]
                     ,MonthlyGuaranteedCoiRates_[j]
                     );
-                coi_rates[j] = round_coi_rate(coi_rates[j]);
+                coi_rates[j] = round_coi_rate_(coi_rates[j]);
                 }
             }
         }
@@ -497,7 +552,7 @@ void MortalityRates::SetOneNonguaranteedRateBand
             double q = coi_rates[j];
             // TODO ?? COI Multiple is applied to the monthly COI.
             q = std::min(curr_coi_multiplier[j] * q, MaxMonthlyCoiRate_);
-            coi_rates[j] = round_coi_rate(q);
+            coi_rates[j] = round_coi_rate_(q);
             }
         }
 }
@@ -505,8 +560,6 @@ void MortalityRates::SetOneNonguaranteedRateBand
 //============================================================================
 void MortalityRates::SetOtherRates(BasicValues const& basic_values)
 {
-    Irc7702Q_ = basic_values.GetIRC7702Rates();
-
     if(AllowTerm_)
         {
         MonthlyCurrentTermCoiRates_    = basic_values.GetCurrentTermRates();
@@ -597,24 +650,6 @@ void MortalityRates::SetOtherRates(BasicValues const& basic_values)
         TargetPremiumRates_.assign(Length_, 0.0);
         }
 
-// TODO ?? These things should be global to all products,
-// and we should offer others to choose from too.
-    TableYRates_ = basic_values.GetTableYRates();
-/*
-    for(int j = 0; j < Length_; j++)
-        {
-        TableYRates_[j] *= 12.0;  // stored as monthly
-        }
-*/
-
-    // TODO ?? Not correct--just a placeholder for now.
-    PartialMortalityQ_ = basic_values.Get83GamRates();
-
-    // TODO ?? Why have these here, since they're already in the
-    // basic-values class? Same question for 'TableYRates_' too.
-    CvatCorridorFactors_ = basic_values.GetCvatCorridorFactors();
-    SevenPayRates_ = basic_values.GetTAMRA7PayRates();
-
     // TODO ?? Temporary stuff to support NSP for 7702A
     // TODO ?? Incorrect if GPT
     for(int j = 0; j < Length_; j++)
@@ -631,13 +666,10 @@ void MortalityRates::MakeCoiRateSubstandard
     ,BasicValues         const& basic_values
     )
 {
-    round_to<double> const& round_coi_rate
-        (basic_values.GetRoundingRules().round_coi_rate()
-        );
     InputStatus const& status = basic_values.Input_->Status[0];
     // Nothing to do if no rating.
 
-    if(!status.IsPolicyRated())
+    if(!IsPolicyRated_)
         {
         return;
         }
@@ -652,19 +684,20 @@ void MortalityRates::MakeCoiRateSubstandard
 
     static double const factors[11] =
         {0.0, 0.25, 0.50, 0.75, 1.00, 1.25, 1.50, 2.00, 2.50, 3.00, 4.00,};
-    double TableMultiple = factors[status.SubstdTable];
+    double table_multiple = factors[SubstdTable_];
     for(int j = 0; j < Length_; ++j)
         {
         // Flat extra: input as annual per K, want monthly per $.
-        double flat_extra = status.VectorMonthlyFlatExtra[j] / 12000.0;
+        double flat_extra = MonthlyFlatExtra_[j] / 12000.0;
 
 // TODO ?? Results here really should be rounded. Instead, for the
 // nonce, we round only the maximum, in order to match old
 // regression tests.
-        double z = round_coi_rate(MaxMonthlyCoiRate_);
+        double z = round_coi_rate_(MaxMonthlyCoiRate_);
         coi_rates[j] = std::min
             (z
-            ,flat_extra + coi_rates[j] * (1.0 + SubstdTblMult_[j] * TableMultiple)
+            ,   flat_extra
+            +   coi_rates[j] * (1.0 + SubstdTblMult_[j] * table_multiple)
             );
 
 // TODO ?? Some UL admin systems convert flat extras to an integral
@@ -685,9 +718,6 @@ void MortalityRates::GradeCurrentCoiRatesFromPartialMortalityAssumption
     // COI rate, because one would never use a higher rate. No floor
     // need be imposed because both inputs are constrained to be
     // nonnegative.
-    round_to<double> const& round_coi_rate
-        (basic_values.GetRoundingRules().round_coi_rate()
-        );
     for(unsigned int j = 0; j < coi_rates.size(); ++j)
         {
         coi_rates[j] = std::min
@@ -695,7 +725,7 @@ void MortalityRates::GradeCurrentCoiRatesFromPartialMortalityAssumption
             ,       coi_rates[j]                 * (1.0 - grading_factors[j])
                 +   monthly_partial_mortality[j] *        grading_factors[j]
             );
-        coi_rates[j] = round_coi_rate(coi_rates[j]);
+        coi_rates[j] = round_coi_rate_(coi_rates[j]);
         }
 }
 
