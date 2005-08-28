@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.119 2005-08-26 02:54:08 chicares Exp $
+// $Id: ChangeLog,v 1.120 2005-08-28 14:48:15 chicares Exp $
 
 2005-01-14
 
@@ -3226,4 +3226,52 @@ gratuitous damage if it's not undone and completely reworked soon.
 Temporarily suppress temporary debugging scaffold. The underlying
 problem hasn't yet been resolved, but a monthly release draws nigh
 and users would only be puzzled by these diagnostics.
+
+20050827T1306Z <chicares@cox.net> [1278]
+
+  ihs_avmly.cpp
+Apply special limit only to banded account-value load.
+
+20050827T1615Z <chicares@cox.net> [1279]
+
+  objects.make
+  vector_test.cpp
+Demonstration of various arithmetic techniques to support discussion
+on the lmi mailing list.
+
+20050827T2248Z <chicares@cox.net> [1281]
+
+  ihs_mortal.cpp
+  mortality_rates.hpp
+Refactor, consolidating database lookups.
+
+20050828T1342Z <chicares@cox.net> [1282]
+
+  ihs_mortal.cpp
+Include only appropriate headers.
+
+  mortality_rates.hpp
+Improve documentation.
+
+20050828T1409Z <chicares@cox.net> [1280]
+
+  ihs_acctval.cpp
+  ihs_mortal.cpp
+  inputs.cpp
+  inputs.hpp
+  inputillus.cpp
+  inputillus_xml_io.cpp
+Expunge disused 'YearsOfZeroDeaths' and 'YrsPartMortYrsEqZero', which
+weren't implemented correctly and are unnecessary because the same
+effect can be obtained with the more general partial-mortality
+multiplier.
+
+20050828T1423Z <chicares@cox.net> [1279]
+
+  inputs.cpp
+  inputs.hpp
+  inputillus.cpp
+  inputillus_xml_io.cpp
+Expunge disused 'SocialSecurityNumber' and 'InsdSSN', which would
+raise privacy concerns.
 
