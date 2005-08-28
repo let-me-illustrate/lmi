@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.120 2005-08-28 14:48:15 chicares Exp $
+// $Id: ChangeLog,v 1.121 2005-08-28 16:43:53 wboutin Exp $
 
 2005-01-14
 
@@ -3275,3 +3275,7 @@ multiplier.
 Expunge disused 'SocialSecurityNumber' and 'InsdSSN', which would
 raise privacy concerns.
 
+20050828T1725Z <wboutin@massmutual.com> [1279]
+
+  xml_notebook.xrc
+Reformat for control-selection readability.
