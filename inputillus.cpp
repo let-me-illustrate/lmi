@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: inputillus.cpp,v 1.10 2005-08-28 14:09:03 chicares Exp $
+// $Id: inputillus.cpp,v 1.11 2005-08-28 14:23:41 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -664,7 +664,6 @@ void IllusInputParms::ascribe_members()
     ascribe("State"                        , &IllusInputParms::InsdState                  ); // !
     ascribe("ZipCode"                      , &IllusInputParms::InsdZipCode                );
 //    ascribe("TaxBracket"                   , &IllusInputParms::InsdTaxBracket             );
-    ascribe("SocialSecurityNumber"         , &IllusInputParms::InsdSSN                    ); // !
     ascribe("EmployeeClass"                , &IllusInputParms::InsdEeClass                );
     ascribe("CorporationName"              , &IllusInputParms::SponsorFirstName           );
     ascribe("CorporationAddress"           , &IllusInputParms::SponsorAddr1               );

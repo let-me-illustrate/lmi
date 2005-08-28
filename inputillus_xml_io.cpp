@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: inputillus_xml_io.cpp,v 1.6 2005-08-28 14:09:03 chicares Exp $
+// $Id: inputillus_xml_io.cpp,v 1.7 2005-08-28 14:23:41 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -70,7 +70,7 @@ std::vector<std::string> const& detritus()
         ,"PartialMortalityTable"         // Never implemented.
         ,"PayLoanInterestInCash"         // Never implemented.
         ,"PolicyLevelFlatExtra"          // Never implemented; poor name.
-        ,"SocialSecurityNumber"          // Violates privacy.
+        ,"SocialSecurityNumber"          // Withdrawn: would violate privacy.
         ,"TaxBracket"                    // Never implemented.
         ,"YearsOfZeroDeaths"             // Withdrawn.
         };
