@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: setup.make,v 1.3 2005-07-27 10:58:01 zeitlin Exp $
+# $Id: setup.make,v 1.4 2005-08-28 23:09:34 wboutin Exp $
 
 .PHONY: all
 all: setup
@@ -58,10 +58,20 @@ $(src_dir)/objects.make:: ;
 third_party_bin_dir     := $(system_root)/opt/lmi/third-party/bin
 third_party_include_dir := $(system_root)/opt/lmi/third-party/include
 third_party_lib_dir     := $(system_root)/opt/lmi/third-party/lib
-third_party_source_dir  := $(system_root)/opt/lmi/third-party/source
+
+# Greg--using "source" seems inconsistent with using "src" everywhere
+# else; it also causes compilation problems, so I opted to keep all
+# names consistent.
+
+third_party_src_dir  := $(system_root)/opt/lmi/third-party/src
 
 .PHONY: setup
-setup: dummy_libraries frozen_cgicc
+setup: \
+  dummy_libraries \
+  frozen_cgicc \
+  frozen_xmlwrapp \
+  frozen_boost \
+  frozen_libxml2 \
 
 .PHONY: $(third_party_bin_dir)
 $(third_party_bin_dir):
@@ -118,11 +128,12 @@ dummy_libraries: $(third_party_bin_dir) $(third_party_lib_dir)
 .PHONY: frozen_cgicc
 frozen_cgicc: $(third_party_bin_dir) $(third_party_lib_dir)
 	$(MAKE) \
-	  -C /tmp \
-	  -f $(src_dir)/setup.make \
-	                    src_dir='$(src_dir)' \
-	    third_party_include_dir='$(third_party_include_dir)' \
-	  install_frozen_cgicc_from_tmp_dir
+	-C /tmp \
+	-f $(src_dir)/setup.make \
+	                src_dir='$(src_dir)' \
+        third_party_include_dir='$(third_party_include_dir)' \
+            third_party_src_dir='$(third_party_srcdir)' \
+	install_frozen_cgicc_from_tmp_dir
 
 #	  --no-print-directory \
 
@@ -133,10 +144,106 @@ frozen_cgicc: $(third_party_bin_dir) $(third_party_lib_dir)
 .PHONY: install_frozen_cgicc_from_tmp_dir
 install_frozen_cgicc_from_tmp_dir:
 	[ -e cgicc-3.1.4.tar.bz2 ] || wget --non-verbose ftp://ftp.gnu.org/pub/gnu/cgicc/cgicc-3.1.4.tar.bz2
-	$(ECHO) "6cb5153fc9fa64b4e50c7962aa557bbe  cgicc-3.1.4.tar.bz2" |md5sum --check
+	$(ECHO) "6cb5153fc9fa64b4e50c7962aa557bbe  cgicc-3.1.4.tar.bz2" |$(MD5SUM) --check
 	[ -e cgicc-3.1.4.tar ] || $(BZIP2) --decompress --keep cgicc-3.1.4.tar.bz2
 	$(TAR) --extract --file=cgicc-3.1.4.tar
 	$(PATCH) --strip=0 < $(src_dir)/cgicc-patch-gwc-20050217
 	$(MKDIR) --parents $(third_party_include_dir)/cgicc/
+	$(MKDIR) --parents $(third_party_src_dir)/cgicc/
 	$(CP) --preserve cgicc-3.1.4/cgicc/*.h $(third_party_include_dir)/cgicc/
+	$(CP) --preserve cgicc-3.1.4/cgicc/*.cpp $(third_party_src_dir)/cgicc/
+
+###############################################################################
+
+# Install and patch xmlwrapp-0.2.0
+
+# TODO ?? Prefer to define $(GZIP) elsewhere and use the definition here.
+
+.PHONY: frozen_xmlwrapp
+frozen_xmlwrapp: $(third_party_include_dir) $(third_party_src_dir)
+	$(MAKE) \
+	-C /tmp \
+	-f $(src_dir)/setup.make \
+	                src_dir='$(src_dir)' \
+	third_party_include_dir='$(third_party_include_dir)' \
+	    third_party_src_dir='$(third_party_src_dir)' \
+	install_frozen_xmlwrapp_from_tmp_dir
+
+.PHONY: install_frozen_xmlwrapp_from_tmp_dir
+install_frozen_xmlwrapp_from_tmp_dir:
+# This command won't work because there's no longer a valid URL for the
+# version currently used in production:
+#	|| wget --non-verbose http://pmade.org/software/xmlwrapp/download/xmlwrapp-0.2.0.tar.gz
+
+# The following assumes 'xmlwrapp-0.2.0.tar.gz' exists in '/tmp/' already.
+	[ -e xmlwrapp-0.2.0.tar.gz ]
+	$(ECHO) "f142e8bc349597ecbaebb4a8e246b65a  xmlwrapp-0.2.0.tar.gz" |$(MD5SUM) --check
+	[ -e xmlwrapp-0.2.0.tar ] || gzip -d xmlwrapp-0.2.0.tar.gz
+	$(TAR) --extract --verbose --file=xmlwrapp-0.2.0.tar
+	$(PATCH) --strip=0 < $(src_dir)/xmlwrapp-patch-gwc-20050217
+	$(MKDIR) --parents $(third_party_include_dir)/xmlwrapp/
+	$(MKDIR) --parents $(third_party_src_dir)/libxml/
+	$(CP) --preserve xmlwrapp-0.2.0/include/xmlwrapp/*.h $(third_party_include_dir)/xmlwrapp/
+	$(CP) --preserve xmlwrapp-0.2.0/src/libxml/* $(third_party_src_dir)/libxml/
+
+###############################################################################
+
+# Install boost-1.31.0
+
+.PHONY: frozen_boost
+frozen_boost: $(third_party_include_dir) $(third_party_src_dir)
+	$(MAKE) \
+	-C /tmp \
+	-f $(src_dir)/setup.make \
+	                src_dir='$(src_dir)' \
+	third_party_include_dir='$(third_party_include_dir)' \
+	    third_party_src_dir='$(third_party_src_dir)' \
+	install_frozen_boost_from_tmp_dir
+
+.PHONY: install_frozen_boost_from_tmp_dir
+install_frozen_boost_from_tmp_dir:
+	[ -e boost_1_31_0.tar.bz2 ] || wget --non-verbose http://umn.dl.sourceforge.net/sourceforge/boost/boost_1_31_0.tar.bz2
+	$(ECHO) "8cc183538eaa5cfc53d88d0e94bd2fd4  boost_1_31_0.tar.bz2" |$(MD5SUM) --check
+	[ -e boost_1_31_0.tar ] || $(BZIP2) --decompress --keep boost_1_31_0.tar.bz2
+	$(TAR) --extract --file=boost_1_31_0.tar
+	$(MKDIR) --parents $(third_party_include_dir)/boost/
+	$(MKDIR) --parents $(third_party_src_dir)/boost/
+	-$(CP) --force --preserve --recursive boost_1_31_0/boost/* $(third_party_include_dir)/boost/
+	-$(CP) --force --preserve --recursive boost_1_31_0/* $(third_party_src_dir)/boost/
+
+###############################################################################
+# This version has not been formally tested and released for production with
+# lmi. The version actually used can't be easily rebuilt, so this target is
+# intended to provide a stop-gap library until it can be formally tested.
+
+# Install libxml2-2.6.19
+
+.PHONY: frozen_libxml2
+frozen_libxml2: \
+	$(third_party_bin_dir) \
+	$(third_party_include_dir) \
+	$(third_party_src_dir)
+	$(MAKE) \
+	-C /tmp \
+	-f $(src_dir)/setup.make \
+	                src_dir='$(src_dir)' \
+	    third_party_bin_dir='$(third_party_bin_dir)' \
+	third_party_include_dir='$(third_party_include_dir)' \
+	 third_party_src_dir='$(third_party_src_dir)' \
+	install_frozen_libxml2_from_tmp_dir
+
+.PHONY: install_frozen_libxml2_from_tmp_dir
+install_frozen_libxml2_from_tmp_dir:
+	[ -e libxml2-2.6.19.tar.bz2 ] || wget --non-verbose http://ftp.gnome.org/pub/GNOME/sources/libxml2/2.6/libxml2-2.6.19.tar.bz2
+	$(ECHO) "ed581732d586f86324ec46e572526ede  libxml2-2.6.19.tar.bz2" |$(MD5SUM) --check
+	[ -e libxml2-2.6.19.tar ] || $(BZIP2) --decompress --keep libxml2-2.6.19.tar.bz2
+	$(TAR) --extract --file=libxml2-2.6.19.tar
+
+# The following two commands don't do what's needed; I'm stumped here.
+#	$(MAKE) -C libxml2-2.6.19 \
+#        configure && make
+	$(MKDIR) --parents $(third_party_include_dir)/libxml/
+	-$(CP) --force --preserve --recursive libxml2-2.6.19/include/libxml/* $(third_party_include_dir)/libxml/ 2>/dev/null
+	$(CP) --force --preserve libxml2-2.6.19/.libs/libxml2-2.dll $(third_party_bin_dir)
+	$(CP) --force --preserve libxml2-2.6.19/.libs/libxml2.dll.a $(third_party_lib_dir)
 
