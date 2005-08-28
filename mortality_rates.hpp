@@ -19,13 +19,14 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mortality_rates.hpp,v 1.4 2005-08-28 13:50:55 chicares Exp $
+// $Id: mortality_rates.hpp,v 1.5 2005-08-28 22:41:43 chicares Exp $
 
 #ifndef mortality_rates_hpp
 #define mortality_rates_hpp
 
 #include "config.hpp"
 
+#include "round_to.hpp"
 #include "xenumtypes.hpp"
 
 #include <vector>
@@ -125,6 +126,19 @@ class MortalityRates
     double ExpRatCoiMultCurr1_;
     double ExpRatCoiMultGuar_;
     bool UsePMQOnCurrCOI_;
+
+    double CountryCOIMultiplier_;
+    bool IsPolicyRated_;
+    e_table_rating SubstdTable_;
+    bool ShowGrading_;
+    bool UseExperienceRating_;
+
+    std::vector<double> CurrentCoiGrading_;
+    std::vector<double> CurrentCoiMultiplier_;
+    std::vector<double> MonthlyFlatExtra_;
+    std::vector<double> PartialMortalityMultiplier_;
+
+    round_to<double> round_coi_rate_;
 
     // Experience-rating COI retention.
     double AdditiveCoiRetention_;
