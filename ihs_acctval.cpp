@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_acctval.cpp,v 1.47 2005-08-25 15:49:56 chicares Exp $
+// $Id: ihs_acctval.cpp,v 1.48 2005-08-28 14:09:02 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -1886,11 +1886,7 @@ bool AccountValue::TestWhetherFirstYearPremiumExceededRetaliationLimit()
 double AccountValue::GetPartMortQ(int a_year) const
 {
     LMI_ASSERT(a_year <= BasicValues::GetLength());
-    if
-        (   !Input_->UsePartialMort
-        ||  ItLapsed
-        ||  a_year < Input_->YrsPartMortYrsEqZero
-        )
+    if(!Input_->UsePartialMort || ItLapsed)
         {
         return 0.0;
         }

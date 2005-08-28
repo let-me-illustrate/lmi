@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: inputs.hpp,v 1.4 2005-08-13 23:45:42 chicares Exp $
+// $Id: inputs.hpp,v 1.5 2005-08-28 14:09:03 chicares Exp $
 
 #ifndef inputs_hpp
 #define inputs_hpp
@@ -242,7 +242,6 @@ class LMI_EXPIMP InputParms
     e_yes_or_no          IncludeInComposite   ;
     std::string          Comments             ;
     e_yes_or_no          AmortizePremLoad     ;
-    r_duration           YrsPartMortYrsEqZero ;
 
     r_inforce_year       InforceYear          ;
     r_inforce_month      InforceMonth         ;
