@@ -24,7 +24,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: xml_notebook.xrc,v 1.16 2005-07-25 12:48:50 chicares Exp $
+    $Id: xml_notebook.xrc,v 1.17 2005-08-28 16:43:53 wboutin Exp $
 
     This version is generic. It strives to present every input field
     the system offers, in a way that suits the main developer's tastes.
@@ -2984,6 +2984,7 @@ looks weird if we don't make this look like its siblings.
                 <object class="sizeritem">
                     <flag>wxGROW</flag>
                     <object class="wxComboBox" name="SupplementalReportColumn00">
+                        <size>200,20</size>
                         <style>wxCB_DROPDOWN|wxCB_READONLY</style>
                     </object>
                 </object>
@@ -2997,6 +2998,7 @@ looks weird if we don't make this look like its siblings.
                 <object class="sizeritem">
                     <flag>wxGROW</flag>
                     <object class="wxComboBox" name="SupplementalReportColumn01">
+                        <size>200,20</size>
                         <style>wxCB_DROPDOWN|wxCB_READONLY</style>
                     </object>
                 </object>
@@ -3010,6 +3012,7 @@ looks weird if we don't make this look like its siblings.
                 <object class="sizeritem">
                     <flag>wxGROW</flag>
                     <object class="wxComboBox" name="SupplementalReportColumn02">
+                        <size>200,20</size>
                         <style>wxCB_DROPDOWN|wxCB_READONLY</style>
                     </object>
                 </object>
@@ -3023,6 +3026,7 @@ looks weird if we don't make this look like its siblings.
                 <object class="sizeritem">
                     <flag>wxGROW</flag>
                     <object class="wxComboBox" name="SupplementalReportColumn03">
+                        <size>200,20</size>
                         <style>wxCB_DROPDOWN|wxCB_READONLY</style>
                     </object>
                 </object>
@@ -3036,6 +3040,7 @@ looks weird if we don't make this look like its siblings.
                 <object class="sizeritem">
                     <flag>wxGROW</flag>
                     <object class="wxComboBox" name="SupplementalReportColumn04">
+                        <size>200,20</size>
                         <style>wxCB_DROPDOWN|wxCB_READONLY</style>
                     </object>
                 </object>
@@ -3049,6 +3054,7 @@ looks weird if we don't make this look like its siblings.
                 <object class="sizeritem">
                     <flag>wxGROW</flag>
                     <object class="wxComboBox" name="SupplementalReportColumn05">
+                        <size>200,20</size>
                         <style>wxCB_DROPDOWN|wxCB_READONLY</style>
                     </object>
                 </object>
@@ -3062,6 +3068,7 @@ looks weird if we don't make this look like its siblings.
                 <object class="sizeritem">
                     <flag>wxGROW</flag>
                     <object class="wxComboBox" name="SupplementalReportColumn06">
+                        <size>200,20</size>
                         <style>wxCB_DROPDOWN|wxCB_READONLY</style>
                     </object>
                 </object>
@@ -3075,6 +3082,7 @@ looks weird if we don't make this look like its siblings.
                 <object class="sizeritem">
                     <flag>wxGROW</flag>
                     <object class="wxComboBox" name="SupplementalReportColumn07">
+                        <size>200,20</size>
                         <style>wxCB_DROPDOWN|wxCB_READONLY</style>
                     </object>
                 </object>
@@ -3088,6 +3096,7 @@ looks weird if we don't make this look like its siblings.
                 <object class="sizeritem">
                     <flag>wxGROW</flag>
                     <object class="wxComboBox" name="SupplementalReportColumn08">
+                        <size>200,20</size>
                         <style>wxCB_DROPDOWN|wxCB_READONLY</style>
                     </object>
                 </object>
@@ -3101,6 +3110,7 @@ looks weird if we don't make this look like its siblings.
                 <object class="sizeritem">
                     <flag>wxGROW</flag>
                     <object class="wxComboBox" name="SupplementalReportColumn09">
+                        <size>200,20</size>
                         <style>wxCB_DROPDOWN|wxCB_READONLY</style>
                     </object>
                 </object>
@@ -3114,6 +3124,7 @@ looks weird if we don't make this look like its siblings.
                 <object class="sizeritem">
                     <flag>wxGROW</flag>
                     <object class="wxComboBox" name="SupplementalReportColumn10">
+                        <size>200,20</size>
                         <style>wxCB_DROPDOWN|wxCB_READONLY</style>
                     </object>
                 </object>
@@ -3127,6 +3138,7 @@ looks weird if we don't make this look like its siblings.
                 <object class="sizeritem">
                     <flag>wxGROW</flag>
                     <object class="wxComboBox" name="SupplementalReportColumn11">
+                        <size>200,20</size>
                         <style>wxCB_DROPDOWN|wxCB_READONLY</style>
                     </object>
                 </object>
