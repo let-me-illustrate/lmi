@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_mortal.cpp,v 1.9 2005-08-28 13:50:52 chicares Exp $
+// $Id: ihs_mortal.cpp,v 1.10 2005-08-28 14:09:03 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -154,9 +154,6 @@ void MortalityRates::Init(BasicValues const& basic_values)
             )
         )
         {
-        // TODO ?? Ignores Input_->YrsPartMortYrsEqZero, which should
-        // be expunged everywhere.
-        //
         // TODO ?? Ignores 'MaxSurvivalDur', which should be distinct
         // from partial mortality q, but isn't in the interface as of
         // 2004-03.
