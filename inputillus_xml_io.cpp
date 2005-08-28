@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: inputillus_xml_io.cpp,v 1.5 2005-06-19 18:39:03 chicares Exp $
+// $Id: inputillus_xml_io.cpp,v 1.6 2005-08-28 14:09:03 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -56,8 +56,8 @@ std::vector<std::string> const& detritus()
         {"AgentFirstName"                // Single name instead.
         ,"AgentLastName"                 // Single name instead.
         ,"AgentMiddleName"               // Single name instead.
-        ,"AssumedCaseNumberOfLives"      // Obsolete and incorrectly implemented.
-        ,"CaseAssumedAssets"             // Obsolete and incorrectly implemented.
+        ,"AssumedCaseNumberOfLives"      // Withdrawn.
+        ,"CaseAssumedAssets"             // Withdrawn.
         ,"CorporationPremiumTableFactor" // Never implemented.
         ,"CorporationPremiumTableNumber" // Never implemented.
         ,"CorporationTaxBracket"         // Never implemented.
@@ -72,7 +72,7 @@ std::vector<std::string> const& detritus()
         ,"PolicyLevelFlatExtra"          // Never implemented; poor name.
         ,"SocialSecurityNumber"          // Violates privacy.
         ,"TaxBracket"                    // Never implemented.
-        ,"YearsOfZeroDeaths"             // Obsolete; implementation untested.
+        ,"YearsOfZeroDeaths"             // Withdrawn.
         };
     static std::vector<std::string> const v(s, s + lmi_array_size(s));
     return v;

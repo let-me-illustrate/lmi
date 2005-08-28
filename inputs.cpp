@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: inputs.cpp,v 1.7 2005-08-13 23:45:42 chicares Exp $
+// $Id: inputs.cpp,v 1.8 2005-08-28 14:09:03 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -133,7 +133,6 @@ InputParms::InputParms()
     ,ErPremEndYear                 (0)
     ,IncludeInComposite            ("Yes")
     ,AmortizePremLoad              ("No")
-    ,YrsPartMortYrsEqZero          (0)
     ,InforceYear                   (0)
     ,InforceMonth                  (0)
     ,InforceAVGenAcct              (0.0)
@@ -516,7 +515,6 @@ bool InputParms::operator==(InputParms const& z) const
     if(IncludeInComposite               != z.IncludeInComposite              ) return false;
     if(Comments                         != z.Comments                        ) return false;
     if(AmortizePremLoad                 != z.AmortizePremLoad                ) return false;
-    if(YrsPartMortYrsEqZero             != z.YrsPartMortYrsEqZero            ) return false;
     if(InforceYear                      != z.InforceYear                     ) return false;
     if(InforceMonth                     != z.InforceMonth                    ) return false;
     if(InforceAVGenAcct                 != z.InforceAVGenAcct                ) return false;

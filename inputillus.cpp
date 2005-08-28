@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: inputillus.cpp,v 1.9 2005-08-25 01:22:58 chicares Exp $
+// $Id: inputillus.cpp,v 1.10 2005-08-28 14:09:03 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -699,8 +699,6 @@ void IllusInputParms::ascribe_members()
     ascribe("IncludeInComposite"           , &IllusInputParms::IncludeInComposite         );
     ascribe("Comments"                     , &IllusInputParms::Comments                   );
     ascribe("AmortizePremiumLoad"          , &IllusInputParms::AmortizePremLoad           );
-// TODO ?? Ugly name...and do we want this at all?
-    ascribe("YearsOfZeroDeaths"            , &IllusInputParms::YrsPartMortYrsEqZero       );
     ascribe("InforceYear"                  , &IllusInputParms::InforceYear                );
     ascribe("InforceMonth"                 , &IllusInputParms::InforceMonth               );
     ascribe("InforceGeneralAccountValue"   , &IllusInputParms::InforceAVGenAcct           );
