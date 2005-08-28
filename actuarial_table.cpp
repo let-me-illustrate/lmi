@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: actuarial_table.cpp,v 1.9 2005-07-11 14:14:53 chicares Exp $
+// $Id: actuarial_table.cpp,v 1.10 2005-08-28 21:37:07 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -232,7 +232,23 @@ std::vector<double> actuarial_table
     // Asserting that the table number is nonzero makes it safe to use
     // zero as a sentry.
 
-    LMI_ASSERT(0 < a_table_number);
+    // TODO ?? Consider requiring an extra argument--a string that
+    // gives context, e.g., "Current COI rates"--so that diagnostics
+    // can be made more helpful.
+
+    // TODO ?? Add a unit test for this.
+    if(a_table_number <= 0)
+        {
+        std::ostringstream oss;
+        oss
+            << "There is no table number "
+            << a_table_number
+            << " in file '"
+            << a_table_filename
+            << "."
+            ;
+        fatal_error() << oss.str() << LMI_FLUSH;
+        }
 
     fs::path index_path(a_table_filename);
     index_path = fs::change_extension(index_path, ".ndx");
