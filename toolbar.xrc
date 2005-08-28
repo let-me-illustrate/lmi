@@ -24,7 +24,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: toolbar.xrc,v 1.2 2005-03-15 14:33:51 chicares Exp $
+    $Id: toolbar.xrc,v 1.3 2005-08-28 15:57:54 zeitlin Exp $
 -->
 
 <object class="wxToolBar" name="toolbar">
@@ -71,12 +71,7 @@ WX !! The 'separation' and 'packing' tags seem to have no effect.
         <bitmap>edit-case.xpm</bitmap>
         <longhelp>Edit case defaults</longhelp>
     </object>
-<!--
-WX !! Shouldn't the 'separator' tag work here? It's used in
-  contrib/samples/xrc/rc/toolbar.xrc
-but it seems to have no effect.
--->
-    <separator/>
+    <object class="separator"/>
     <object class="tool" name="run_cell">
         <tooltip>Run cell</tooltip>
         <bitmap>run-cell.xpm</bitmap>
@@ -94,7 +89,7 @@ but it seems to have no effect.
         <bitmap>run-case.xpm</bitmap>
         <longhelp>Run all cells</longhelp>
     </object>
-    <separator/>
+    <object class="separator"/>
     <object class="tool" name="print_cell">
         <tooltip>Print cell</tooltip>
         <bitmap>print-cell.xpm</bitmap>
@@ -117,7 +112,7 @@ but it seems to have no effect.
         <bitmap>write_spreadsheet.xpm</bitmap>
         <longhelp>Run and print all cells to a spreadsheet file</longhelp>
     </object>
-    <separator/>
+    <object class="separator"/>
     <object class="tool" name="paste_census">
         <tooltip>Paste census</tooltip>
         <bitmap>paste-case.xpm</bitmap>
@@ -133,7 +128,7 @@ but it seems to have no effect.
         <bitmap>delete-row.xpm</bitmap>
         <longhelp>Delete selected cell(s)</longhelp>
     </object>
-    <separator/>
+    <object class="separator"/>
     <object class="tool" name="expand_columns">
         <tooltip>Vary column width</tooltip>
         <bitmap>varying-width.xpm</bitmap>
@@ -144,7 +139,7 @@ but it seems to have no effect.
         <bitmap>fixed-width.xpm</bitmap>
         <longhelp>Display all columns with the same fixed width</longhelp>
     </object>
-    <separator/>
+    <object class="separator"/>
     <object class="tool" name="wxID_HELP">
         <tooltip>Help</tooltip>
         <bitmap>help.xpm</bitmap>
