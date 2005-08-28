@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: accountvalue.cpp,v 1.14 2005-08-16 16:18:09 chicares Exp $
+// $Id: accountvalue.cpp,v 1.15 2005-08-28 21:37:02 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -28,7 +28,6 @@
 
 #include "account_value.hpp"
 
-#include "actuarial_table.hpp"
 #include "alert.hpp"
 #include "database.hpp"
 #include "dbnames.hpp"
