@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: inputs.hpp,v 1.5 2005-08-28 14:09:03 chicares Exp $
+// $Id: inputs.hpp,v 1.6 2005-08-28 14:23:41 chicares Exp $
 
 #ifndef inputs_hpp
 #define inputs_hpp
@@ -189,7 +189,6 @@ class LMI_EXPIMP InputParms
     std::string          InsdCity             ;
     e_state              InsdState            ;
     std::string          InsdZipCode          ; // TODO ?? Want validator.
-    std::string          InsdSSN              ; // TODO ?? Want validator.
     std::string          InsdEeClass          ;
 // TODO Prefer 'Corp'- to 'Sponsor'- .
     std::string          SponsorFirstName     ;

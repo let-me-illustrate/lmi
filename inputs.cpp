@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: inputs.cpp,v 1.8 2005-08-28 14:09:03 chicares Exp $
+// $Id: inputs.cpp,v 1.9 2005-08-28 14:23:41 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -473,7 +473,6 @@ bool InputParms::operator==(InputParms const& z) const
     if(InsdCity                         != z.InsdCity                        ) return false;
     if(InsdState                        != z.InsdState                       ) return false;
     if(InsdZipCode                      != z.InsdZipCode                     ) return false;
-    if(InsdSSN                          != z.InsdSSN                         ) return false;
     if(InsdEeClass                      != z.InsdEeClass                     ) return false;
     if(SponsorFirstName                 != z.SponsorFirstName                ) return false;
     if(SponsorAddr1                     != z.SponsorAddr1                    ) return false;
