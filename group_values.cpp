@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: group_values.cpp,v 1.26 2005-08-26 02:54:08 chicares Exp $
+// $Id: group_values.cpp,v 1.27 2005-08-29 16:06:58 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -72,7 +72,7 @@ void emit_ledger
         {
         std::string pdf_out_file = write_ledger_to_pdf
             (ledger
-            ,serialized_file_path(file, index, ".ill").string()
+            ,serialized_file_path(file, index, "ill").string()
             );
         file_command()(pdf_out_file, "print");
         }
