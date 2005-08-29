@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mortality_rates.hpp,v 1.5 2005-08-28 22:41:43 chicares Exp $
+// $Id: mortality_rates.hpp,v 1.6 2005-08-29 11:32:34 chicares Exp $
 
 #ifndef mortality_rates_hpp
 #define mortality_rates_hpp
@@ -195,6 +195,11 @@ inline std::vector<double> const& MortalityRates::WPRates() const
 inline std::vector<double> const& MortalityRates::ChildRiderRates() const
 {
     return ChildRiderRates_;
+}
+
+inline std::vector<double> const& MortalityRates::TargetPremiumRates() const
+{
+    return TargetPremiumRates_;
 }
 
 inline std::vector<double> const& MortalityRates::Irc7702Q() const

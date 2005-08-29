@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_mortal.cpp,v 1.11 2005-08-28 22:41:43 chicares Exp $
+// $Id: ihs_mortal.cpp,v 1.12 2005-08-29 11:32:34 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -666,9 +666,7 @@ void MortalityRates::MakeCoiRateSubstandard
     ,BasicValues         const& basic_values
     )
 {
-    InputStatus const& status = basic_values.Input_->Status[0];
     // Nothing to do if no rating.
-
     if(!IsPolicyRated_)
         {
         return;
@@ -832,12 +830,5 @@ std::vector<double> const& MortalityRates::MonthlyTermCoiRates
                 ;
         }
     throw("Logic error");
-}
-
-//============================================================================
-std::vector<double> const& MortalityRates::TargetPremiumRates() const
-{
-    LMI_ASSERT(0 != TargetPremiumRates_.size());
-    return TargetPremiumRates_;
 }
 
