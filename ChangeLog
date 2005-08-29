@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.122 2005-08-28 23:09:34 wboutin Exp $
+// $Id: ChangeLog,v 1.123 2005-08-29 14:17:31 chicares Exp $
 
 2005-01-14
 
@@ -3284,4 +3284,33 @@ Reformat for control-selection readability.
 
   INSTALL
   setup.make
-Add requirements for build environmnet.
+Add requirements for build environment.
+
+20050828T2136Z <chicares@cox.net> [1282]
+
+  rounding_rules.hpp
+Correct a typographical error in a comment.
+
+  accountvalue.cpp
+Include only appropriate headers.
+
+  actuarial_table.cpp
+Improve a diagnostic message.
+
+20050828T2241Z <chicares@cox.net> [1286]
+
+  ihs_mortal.cpp
+  mortality_rates.hpp
+Refactor, consolidating calls to class BasicValues.
+
+20050829T1132Z <chicares@cox.net> [1286]
+
+  ihs_mortal.cpp
+  mortality_rates.hpp
+Refactor, removing a superfluous assertion.
+
+20050829T1405Z <chicares@cox.net> [1286]
+
+  my_tier.cpp
+Fix breakage.
+
