@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: path_utility.cpp,v 1.4 2005-07-10 04:15:03 chicares Exp $
+// $Id: path_utility.cpp,v 1.5 2005-08-30 03:54:38 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -46,7 +46,7 @@
 /// it use one plus the number of individual cells.
 ///
 /// The output serial number is formatted to nine places and filled
-/// with zeroes, so that output file names sort well. It is hardly
+/// with zeros, so that output file names sort well. It is hardly
 /// conceivable for a census to have more cells than nine place
 /// accommodate (it's enough to represent all US Social Security
 /// numbers), but if it does, then the file names are still unique;

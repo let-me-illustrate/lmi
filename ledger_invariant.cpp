@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_invariant.cpp,v 1.14 2005-08-22 23:59:05 chicares Exp $
+// $Id: ledger_invariant.cpp,v 1.15 2005-08-30 03:54:38 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -255,7 +255,7 @@ void LedgerInvariant::Alloc(int len)
     // it can hold both BOY and EOY values for all years. It might
     // seem more natural to initialize it to unity here because it's
     // used as a multiplier, but the composite when constructed must
-    // have zeroes, so that adding each cell to it produces the
+    // have zeros, so that adding each cell to it produces the
     // correct total. For each actual non-composite cell, it's
     // initialized correctly by the account-value class.
     InforceLives        .assign(1 + Length, 0.0);
