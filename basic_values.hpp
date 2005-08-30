@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: basic_values.hpp,v 1.8 2005-08-25 15:49:56 chicares Exp $
+// $Id: basic_values.hpp,v 1.9 2005-08-30 03:54:43 chicares Exp $
 
 #ifndef basic_values_hpp
 #define basic_values_hpp
@@ -263,8 +263,9 @@ class LMI_EXPIMP BasicValues
     std::vector<double> GetTable
         (std::string const& TableFile
         ,long int    const& TableID
+        ,bool               IsTableValid    = true
         ,EBlend      const& CanBlendSmoking = CannotBlend
-        ,EBlend      const& CanBlendGender = CannotBlend
+        ,EBlend      const& CanBlendGender  = CannotBlend
         ) const;
 
     std::vector<double> const& GetBandedCoiRates

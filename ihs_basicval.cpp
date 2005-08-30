@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_basicval.cpp,v 1.17 2005-08-25 00:05:52 chicares Exp $
+// $Id: ihs_basicval.cpp,v 1.18 2005-08-30 03:54:43 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -1600,10 +1600,16 @@ std::vector<double> BasicValues::GetUnblendedTable
 std::vector<double> BasicValues::GetTable
     (std::string const& TableFile
     ,long int    const& TableID
+    ,bool               IsTableValid
     ,EBlend      const& CanBlendSmoking
     ,EBlend      const& CanBlendGender
     ) const
 {
+    if(!IsTableValid)
+        {
+        return std::vector<double>(GetLength());
+        }
+
     std::string const file_name = AddDataDir(TableFile);
 
     // To blend by either smoking or gender, both the input must allow
@@ -2012,7 +2018,10 @@ std::vector<double> BasicValues::GetCurrCOIRates0() const
 {
     return GetTable
         (ProductData_->GetCurrCOIFilename()
-        ,DB_CurrCOITable, CanBlend, CanBlend
+        ,DB_CurrCOITable
+        ,true
+        ,CanBlend
+        ,CanBlend
         );
 }
 std::vector<double> BasicValues::GetCurrCOIRates1() const
@@ -2024,7 +2033,10 @@ std::vector<double> BasicValues::GetCurrCOIRates1() const
         {
         return GetTable
             (ProductData_->GetCurrCOIFilename()
-            ,DB_CurrCOITable1, CanBlend, CanBlend
+            ,DB_CurrCOITable1
+            ,true
+            ,CanBlend
+            ,CanBlend
             );
         }
     else
@@ -2041,7 +2053,10 @@ std::vector<double> BasicValues::GetCurrCOIRates2() const
         {
         return GetTable
             (ProductData_->GetCurrCOIFilename()
-            ,DB_CurrCOITable2, CanBlend, CanBlend
+            ,DB_CurrCOITable2
+            ,true
+            ,CanBlend
+            ,CanBlend
             );
         }
     else
@@ -2060,7 +2075,10 @@ std::vector<double> BasicValues::GetSmokerBlendedGuarCOIRates() const
 {
     return GetTable
         (ProductData_->GetGuarCOIFilename()
-        ,DB_GuarCOITable, CanBlend, CanBlend
+        ,DB_GuarCOITable
+        ,true
+        ,CanBlend
+        ,CanBlend
         );
 }
 std::vector<double> BasicValues::GetWPRates() const
@@ -2068,6 +2086,7 @@ std::vector<double> BasicValues::GetWPRates() const
     return GetTable
         (ProductData_->GetWPFilename()
         ,DB_WPTable
+        ,Database_->Query(DB_AllowWP)
         );
 }
 std::vector<double> BasicValues::GetADDRates() const
@@ -2075,6 +2094,7 @@ std::vector<double> BasicValues::GetADDRates() const
     return GetTable
         (ProductData_->GetADDFilename()
         ,DB_ADDTable
+        ,Database_->Query(DB_AllowADD)
         );
 }
 std::vector<double> BasicValues::GetChildRiderRates() const
@@ -2082,10 +2102,16 @@ std::vector<double> BasicValues::GetChildRiderRates() const
     return GetTable
         (ProductData_->GetChildRiderFilename()
         ,DB_ChildRiderTable
+        ,Database_->Query(DB_AllowChild)
         );
 }
 std::vector<double> BasicValues::GetCurrentSpouseRiderRates() const
 {
+    if(!Database_->Query(DB_AllowSpouse))
+        {
+        return std::vector<double>(GetLength());
+        }
+
     std::vector<double> z = actuarial_table
         (AddDataDir(ProductData_->GetCurrSpouseRiderFilename())
         ,static_cast<long int>(Database_->Query(DB_SpouseRiderTable))
@@ -2097,6 +2123,11 @@ std::vector<double> BasicValues::GetCurrentSpouseRiderRates() const
 }
 std::vector<double> BasicValues::GetGuaranteedSpouseRiderRates() const
 {
+    if(!Database_->Query(DB_AllowSpouse))
+        {
+        return std::vector<double>(GetLength());
+        }
+
     std::vector<double> z = actuarial_table
         (AddDataDir(ProductData_->GetGuarSpouseRiderFilename())
         ,static_cast<long int>(Database_->Query(DB_SpousRiderGuarTable))
@@ -2110,14 +2141,20 @@ std::vector<double> BasicValues::GetCurrentTermRates() const
 {
     return GetTable
         (ProductData_->GetCurrTermFilename()
-        ,DB_TermTable, CanBlend, CanBlend
+        ,DB_TermTable
+        ,Database_->Query(DB_AllowTerm)
+        ,CanBlend
+        ,CanBlend
         );
 }
 std::vector<double> BasicValues::GetGuaranteedTermRates() const
 {
     return GetTable
         (ProductData_->GetGuarTermFilename()
-        ,DB_GuarTermTable, CanBlend, CanBlend
+        ,DB_GuarTermTable
+        ,Database_->Query(DB_AllowTerm)
+        ,CanBlend
+        ,CanBlend
         );
 }
 std::vector<double> BasicValues::GetTableYRates() const
@@ -2139,6 +2176,7 @@ std::vector<double> BasicValues::GetTgtPremRates() const
     return GetTable
         (ProductData_->GetTgtPremFilename()
         ,DB_TgtPremTable
+        ,e_modal_table == Database_->Query(DB_TgtPremType)
         );
 }
 std::vector<double> BasicValues::GetIRC7702Rates() const
@@ -2152,7 +2190,10 @@ std::vector<double> BasicValues::Get83GamRates() const
 {
     return GetTable
         (ProductData_->GetGam83Filename()
-        ,DB_83GamTable, CannotBlend, CanBlend
+        ,DB_83GamTable
+        ,true
+        ,CannotBlend
+        ,CanBlend
         );
 }
 
