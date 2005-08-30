@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_mortal.cpp,v 1.12 2005-08-29 11:32:34 chicares Exp $
+// $Id: ihs_mortal.cpp,v 1.13 2005-08-30 03:54:43 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -72,20 +72,21 @@ MortalityRates::MortalityRates(BasicValues const& basic_values)
 //============================================================================
 void MortalityRates::Init(BasicValues const& basic_values)
 {
-    AllowADD_          = basic_values.Database_->Query(DB_AllowADD         );
-    AllowChild_        = basic_values.Database_->Query(DB_AllowChild       );
+AllowADD_ = AllowChild_ = AllowSpouse_ = AllowTerm_ = AllowWP_ = IsTgtPremTabular_ = true;
+// TODO ?? eradicate this variable:    AllowADD_          = basic_values.Database_->Query(DB_AllowADD         );
+// TODO ?? eradicate this variable:    AllowChild_        = basic_values.Database_->Query(DB_AllowChild       );
     AllowExpRating_    = basic_values.Database_->Query(DB_AllowExpRating   );
     AllowFlatExtras_   = basic_values.Database_->Query(DB_AllowFlatExtras  );
-    AllowSpouse_       = basic_values.Database_->Query(DB_AllowSpouse      );
+// TODO ?? eradicate this variable:    AllowSpouse_       = basic_values.Database_->Query(DB_AllowSpouse      );
     AllowSubstdTable_  = basic_values.Database_->Query(DB_AllowSubstdTable );
-    AllowTerm_         = basic_values.Database_->Query(DB_AllowTerm        );
-    AllowWP_           = basic_values.Database_->Query(DB_AllowWP          );
+// TODO ?? eradicate this variable:    AllowTerm_         = basic_values.Database_->Query(DB_AllowTerm        );
+// TODO ?? eradicate this variable:    AllowWP_           = basic_values.Database_->Query(DB_AllowWP          );
     CCoiIsAnnual_      = basic_values.Database_->Query(DB_CCoiIsAnnual     );
     GCoiIsAnnual_      = basic_values.Database_->Query(DB_GCoiIsAnnual     );
 
-    IsTgtPremTabular_ =
-        e_modal_table == basic_values.Database_->Query(DB_TgtPremType)
-        ;
+// TODO ?? eradicate this variable:    IsTgtPremTabular_ =
+//        e_modal_table == basic_values.Database_->Query(DB_TgtPremType)
+//        ;
 
     MaxMonthlyCoiRate_ = basic_values.Database_->Query(DB_MaxMonthlyCoiRate);
 
@@ -149,7 +150,7 @@ void MortalityRates::Init(BasicValues const& basic_values)
     MonthlyCurrentCoiRatesBand1_ = basic_values.GetCurrCOIRates1();
     MonthlyCurrentCoiRatesBand2_ = basic_values.GetCurrCOIRates2();
 
-/* TODO ?? These are delicate: they get read only conditionally.
+// TODO ?? These are delicate: they get read only conditionally.
     MonthlyGuaranteedTermCoiRates_ = basic_values.GetGuaranteedTermRates();
     MonthlyCurrentTermCoiRates_    = basic_values.GetCurrentTermRates();
     ADDRates_ = basic_values.GetADDRates();
@@ -158,7 +159,8 @@ void MortalityRates::Init(BasicValues const& basic_values)
     GuaranteedSpouseRiderRates_ = basic_values.GetGuaranteedSpouseRiderRates();
     CurrentSpouseRiderRates_    = basic_values.GetCurrentSpouseRiderRates();
     TargetPremiumRates_ = basic_values.GetTgtPremRates();
-*/
+// Test this now, then eradicate calls through 'basic_values' below.
+
     // Alternative COI rate for experience rating.
     AlternativeMonthlyCoiRates_ = basic_values.GetSmokerBlendedGuarCOIRates();
 
