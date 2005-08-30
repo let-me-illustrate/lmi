@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_variant.cpp,v 1.3 2005-05-03 01:11:00 chicares Exp $
+// $Id: ledger_variant.cpp,v 1.4 2005-08-30 03:54:38 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -189,7 +189,7 @@ void LedgerVariant::Destroy()
 //============================================================================
 void LedgerVariant::Init()
 {
-    // Initializes (almost) everything with zeroes
+    // Initializes (almost) everything with zeros.
     LedgerBase::Initialize(GetLength());
 
     ExpAndGABasis           = e_basis(e_currbasis);
