@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: actuarial_table.cpp,v 1.10 2005-08-28 21:37:07 chicares Exp $
+// $Id: actuarial_table.cpp,v 1.11 2005-08-30 03:54:43 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -215,6 +215,7 @@ namespace
                 ;
             }
           }
+        LMI_ASSERT(v.size() == static_cast<unsigned int>(length));
         return v;
     }
 } // Unnamed namespace.
