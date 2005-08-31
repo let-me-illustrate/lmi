@@ -31,7 +31,7 @@
 // other reasons evident in cvs or explained in 'ChangeLog'. Any
 // defect should not reflect on Stephen F. Booth's reputation.
 
-// $Id: main_cgi.cpp,v 1.12 2005-08-02 21:13:10 chicares Exp $
+// $Id: main_cgi.cpp,v 1.13 2005-08-31 17:54:57 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -69,13 +69,13 @@
 #include <string>
 #include <vector>
 
-#if HAVE_SYS_TIME_H
+#if defined HAVE_SYS_TIME_H && HAVE_SYS_TIME_H
 #  include <sys/time.h>
 #endif
 
 // To use logging, the variable gLogFile MUST be defined, and it _must_
 // be an ofstream
-#if DEBUG
+#if defined DEBUG && DEBUG
   std::ofstream gLogFile( cgi_bin_log_filename().c_str(), std::ios_base::app );
 #endif
 
