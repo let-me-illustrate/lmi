@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: loads.cpp,v 1.3 2005-07-19 13:09:50 chicares Exp $
+// $Id: loads.cpp,v 1.4 2005-08-31 17:54:53 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -154,6 +154,11 @@ void Loads::Init
     excess_premium_load_7702_excluding_premium_tax_.resize(details.length_);
     target_premium_load_7702_lowest_premium_tax_   .resize(details.length_);
     excess_premium_load_7702_lowest_premium_tax_   .resize(details.length_);
+
+    // SOMEDAY !! Database lookups have been consolidated here, to
+    // facilitate the long-term goal of factoring them into a separate
+    // module so that unit tests can be more easily written for the
+    // rest of this class's implementation.
 
     database.Query(refundable_sales_load_proportion_, DB_PremRefund    );
 
@@ -478,7 +483,7 @@ void Loads::Init
 // Store the result in 'amortized_premium_tax_load_'. Modify
 // any corresponding loads previously stored.
 //
-void Loads::AmortizePremiumTax(load_details const& details)
+void Loads::AmortizePremiumTax(load_details const&)
 {
     fatal_error() << "Premium-tax amortization not implemented." << LMI_FLUSH;
 }
