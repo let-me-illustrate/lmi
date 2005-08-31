@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: workhorse.make,v 1.44 2005-08-25 00:05:52 chicares Exp $
+# $Id: workhorse.make,v 1.45 2005-08-31 17:55:04 chicares Exp $
 
 ###############################################################################
 
@@ -215,19 +215,21 @@ gcc_cxx_warnings := \
 # to contradict the gcc manual. This should be investigated and
 # possibly reported on gcc bugzilla.
 
-# WX !! The wx library triggers many warnings with these flags:
-
-gcc_common_extra_warnings := \
-  -W \
-  -Wcast-qual \
-  -Wredundant-decls \
-
 # Too many warnings on correct code, e.g. exact comparison to zero:
 #  -Wfloat-equal \
 
-# Too many warnings for various boost libraries:
-#  -Wold-style-cast \
-#  -Wshadow \
+# WX !! The wx library triggers many warnings with these flags:
+
+gcc_common_extra_warnings := \
+  -Wextra \
+  -Wcast-qual \
+  -Wredundant-decls \
+  -Wundef \
+
+# INELEGANT !! It might be preferable to specify what is wx dependent
+# at the object level.
+
+$(lmi_wx_objects): gcc_common_extra_warnings :=
 
 # Boost normally makes '-Wundef' give spurious warnings:
 #   http://aspn.activestate.com/ASPN/Mail/Message/boost/1822550
@@ -235,9 +237,11 @@ gcc_common_extra_warnings := \
 #   http://www.boost.org/libs/config/config.htm#user_settable
 # makes '-Wundef' usable, because boost-1.31.0 doesn't seem to need
 # any workarounds for gcc-3.3+ . However, it gives a number of
-# warnings with wx-2.5.4 .
+# warnings with wx-2.5.4 (that have been fixed in a later version).
 
-#  -Wundef \
+# Too many warnings for various boost libraries:
+#  -Wold-style-cast \
+#  -Wshadow \
 
 # Too many warnings for libstdc++:
 #  -Wunreachable-code \
@@ -245,14 +249,8 @@ gcc_common_extra_warnings := \
 # Since at least gcc-3.4.2, -Wmissing-prototypes is deprecated as
 # being redundant for C++.
 
-# TODO ?? How can these best be enabled for non-wx code?
-# gcc_warnings += $(gcc_common_extra_warnings)
-
-C_WARNINGS         := $(gcc_c_warnings)
-CXX_WARNINGS       := $(gcc_cxx_warnings)
-
-C_EXTRA_WARNINGS   := $(gcc_common_extra_warnings)
-CXX_EXTRA_WARNINGS := $(gcc_common_extra_warnings)
+C_WARNINGS   = $(gcc_c_warnings)   $(gcc_common_extra_warnings)
+CXX_WARNINGS = $(gcc_cxx_warnings) $(gcc_common_extra_warnings)
 
 ################################################################################
 
@@ -556,12 +554,6 @@ test: $(test_targets)
 ################################################################################
 
 # Unit tests.
-
-# Add extra warnings for unit tests.
-
-$(unit_test_targets): REQUIRED_CFLAGS   += $(C_EXTRA_WARNINGS)
-
-$(unit_test_targets): REQUIRED_CXXFLAGS += $(CXX_EXTRA_WARNINGS)
 
 .PHONY: unit_tests
 unit_tests: $(unit_test_targets) run_unit_tests

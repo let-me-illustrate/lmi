@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.124 2005-08-30 03:54:43 chicares Exp $
+// $Id: ChangeLog,v 1.125 2005-08-31 17:55:04 chicares Exp $
 
 2005-01-14
 
@@ -3319,7 +3319,7 @@ Fix breakage.
   group_values.cpp
 Prevent spuriously doubled '..' in generated file names.
 
-20050830T0104Z <chicares@cox.net> [1293]
+20050830T0354Z <chicares@cox.net> [1293]
 
   ledger_invariant.cpp
   ledger_variant.cpp
@@ -3333,6 +3333,21 @@ Correct spelling to conform to Compact OED.
 Prevent reading tables that needn't exist. For instance, no table of
 WP rates is needed for a product that doesn't offer WP. Previously,
 functions like BasicValues::GetWPRates() were unsafe to call without
-first ascertaining that the product offers SP; now, they just return
+first ascertaining that the product offers WP; now, they just return
 a properly-sized vector of zeros.
+
+20050831T1747Z <chicares@cox.net> [1293]
+
+  file_command_cgi.cpp
+  file_command_cli.cpp
+  ledgervalues.cpp
+  loads.cpp
+Leave legitimately unused parameters unnamed.
+
+  main_cgi.cpp
+Don't evaluate undefined macros.
+
+  workhorse.make
+Enable extra gcc warnings for non-wx code. This exposes poor usage in
+cgicc, for which a patch will be provided later.
 
