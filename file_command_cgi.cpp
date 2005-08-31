@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: file_command_cgi.cpp,v 1.1 2005-05-12 15:46:43 chicares Exp $
+// $Id: file_command_cgi.cpp,v 1.2 2005-08-31 17:54:53 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -28,13 +28,21 @@
 
 #include "file_command.hpp"
 
+#include "alert.hpp"
+
 namespace
 {
 void concrete_file_command
-    (std::string const& file
-    ,std::string const& action
+    (std::string const&
+    ,std::string const&
     )
-{}
+{
+    warning()
+        << "Class 'file_command' not implemented for "
+        << "cgi-bin interface."
+        << LMI_FLUSH
+        ;
+}
 
 volatile bool ensure_setup = file_command_initialize(concrete_file_command);
 } // Unnamed namespace.
