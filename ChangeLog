@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.125 2005-08-31 17:55:04 chicares Exp $
+// $Id: ChangeLog,v 1.126 2005-09-01 21:03:01 wboutin Exp $
 
 2005-01-14
 
@@ -3351,3 +3351,8 @@ Don't evaluate undefined macros.
 Enable extra gcc warnings for non-wx code. This exposes poor usage in
 cgicc, for which a patch will be provided later.
 
+20050901T2058Z <wboutin@massmutual.com> [1293]
+
+  INSTALL
+  setup.make
+Improve setup requirements.
