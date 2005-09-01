@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: INSTALL,v 1.9 2005-08-28 23:09:34 wboutin Exp $
+// $Id: INSTALL,v 1.10 2005-09-01 16:58:47 zeitlin Exp $
 
 [It's clearest to validate commands, then copy and paste them here.
 Once we've done that, it becomes trivial to turn this into a shell
@@ -237,7 +237,19 @@ Copy binary to path:
 * Install wx
 
 ...
-[We'll ask Vadim for advice on specifying options.]
+The following options must be set to 1 in wx/setup.h (or using configure):
+    wxUSE_DOC_VIEW_ARCHITECTURE
+    wxUSE_MDI_ARCHITECTURE
+    wxUSE_PRINTING_ARCHITECTURE
+    wxUSE_STD_STRING
+
+The following options must be set to 0 (all thes are on by default):
+    wxUSE_APPLE_IEEE
+    wxUSE_LIBJPEG
+    wxUSE_LIBTIFF
+    wxUSE_GIF
+    wxUSE_THREADS
+
 
 * Platform-specific instructions
 
