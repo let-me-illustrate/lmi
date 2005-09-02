@@ -24,7 +24,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: xml_notebook_coli_boli.xrc,v 1.8 2005-06-24 12:15:43 wboutin Exp $
+    $Id: xml_notebook_coli_boli.xrc,v 1.9 2005-09-02 16:09:17 wboutin Exp $
 
     This version is designed for COLI and BOLI users; it omits input
     fields that seem irrelevant in that context, and reflects the
@@ -1785,7 +1785,7 @@
                                         <object class="sizeritem">
                                             <flag>wxALIGN_LEFT|wxALIGN_BOTTOM|wxTOP|wxBOTTOM</flag>
                                             <border>2</border>
-                                            <object class="wxSpinCtrl" name="SolveBeginYear">
+                                            <object class="wxSpinCtrl" name="SolveBeginTime">
                                                 <size>45,-1</size>
                                             </object>
                                         </object>
@@ -1807,7 +1807,7 @@
                                         <object class="sizeritem">
                                             <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
                                             <border>4</border>
-                                            <object class="wxSpinCtrl" name="SolveBeginTime">
+                                            <object class="wxSpinCtrl" name="SolveBeginYear">
                                                 <size>45,-1</size>
                                             </object>
                                         </object>
@@ -1860,7 +1860,7 @@
                                         <object class="sizeritem">
                                             <flag>wxALIGN_LEFT|wxALIGN_BOTTOM|wxTOP|wxBOTTOM</flag>
                                             <border>2</border>
-                                            <object class="wxSpinCtrl" name="SolveEndYear">
+                                            <object class="wxSpinCtrl" name="SolveEndTime">
                                                 <size>45,-1</size>
                                             </object>
                                         </object>
@@ -1882,7 +1882,7 @@
                                         <object class="sizeritem">
                                             <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
                                             <border>4</border>
-                                            <object class="wxSpinCtrl" name="SolveEndTime">
+                                            <object class="wxSpinCtrl" name="SolveEndYear">
                                                 <size>45,-1</size>
                                             </object>
                                         </object>
@@ -1998,7 +1998,7 @@
                                                                 <object class="sizeritem">
                                                                     <flag>wxALIGN_LEFT|wxALIGN_BOTTOM|wxTOP|wxBOTTOM</flag>
                                                                     <border>2</border>
-                                                                    <object class="wxSpinCtrl" name="SolveTargetYear">
+                                                                    <object class="wxSpinCtrl" name="SolveTargetTime">
                                                                         <size>45,-1</size>
                                                                     </object>
                                                                 </object>
@@ -2020,7 +2020,7 @@
                                                                 <object class="sizeritem">
                                                                     <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
                                                                     <border>4</border>
-                                                                    <object class="wxSpinCtrl" name="SolveTargetTime">
+                                                                    <object class="wxSpinCtrl" name="SolveTargetYear">
                                                                         <size>45,-1</size>
                                                                     </object>
                                                                 </object>
