@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.126 2005-09-01 21:03:01 wboutin Exp $
+// $Id: ChangeLog,v 1.127 2005-09-02 16:10:00 wboutin Exp $
 
 2005-01-14
 
@@ -3356,3 +3356,12 @@ cgicc, for which a patch will be provided later.
   INSTALL
   setup.make
 Improve setup requirements.
+
+20050902T1553Z <wboutin@massmutual.com> [1293]
+
+  xml_notebook_private_placement.xrc
+  xml_notebook_coli_boli.xrc
+Fix two defects, unmasking another.
+
+  INSTALL
+Update md5sum.
