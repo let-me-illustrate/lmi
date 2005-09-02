@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: INSTALL,v 1.12 2005-09-01 21:08:09 wboutin Exp $
+// $Id: INSTALL,v 1.13 2005-09-02 16:10:00 wboutin Exp $
 
 [It's clearest to validate commands, then copy and paste them here.
 Once we've done that, it becomes trivial to turn this into a shell
@@ -149,7 +149,7 @@ to /tmp/ .
 
 Validate:
   /tmp[0]$md5sum libxml2-2.6.19.tar.bz2
-  61587d43389a414fc2f5223b428e325e  libxml2-2.6.19.tar.bz2
+  ed581732d586f86324ec46e572526ede  libxml2-2.6.19.tar.bz2
 
 Extract archive:
   /tmp[0]$bzip2 -dk libxml2-2.6.19.tar.bz2
