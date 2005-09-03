@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: passkey_test.cpp,v 1.4 2005-07-06 14:40:54 chicares Exp $
+// $Id: passkey_test.cpp,v 1.5 2005-09-03 00:20:46 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -101,11 +101,14 @@ int test_main(int, char*[])
     FILE* in = std::fopen("coleridge", "rb");
     md5_stream(in, result);
     std::fclose(in);
-    BOOST_TEST(0 == std::memcmp(expected, result, sizeof expected));
+    BOOST_TEST_EQUAL(0, std::memcmp(expected, result, sizeof expected));
 
-    // Ensure 'md5sum' program is available.
-    std::cout << "  Checking for 'md5sum':" << std::endl;
-    BOOST_TEST(0 == system_command("md5sum --version"));
+    // Ascertain whether 'md5sum' program is available. Regrettably,
+    // this writes to stdout, but without this test, it's hard to tell
+    // whether errors in subsequent tests stem from incorrect md5sums
+    // or absence of the 'md5sum' program.
+    std::cout << "  Result of 'md5sum --version':" << std::endl;
+    BOOST_TEST_EQUAL(0, system_command("md5sum --version"));
 
     // For production, we'll provide a file 'validated.md5' with md5
     // sums of all data files. For this unit test, we'll treat file
@@ -114,7 +117,10 @@ int test_main(int, char*[])
     // 'md5sum' is not trivial--that program emits its output to
     // stdout, and redirection can be tricky.
 
-    BOOST_TEST(0 == system_command("md5sum --check --status validated.md5"));
+    BOOST_TEST_EQUAL
+        (0
+        ,system_command("md5sum --check --status validated.md5")
+        );
 
     FILE* md5 = std::fopen("validated.md5", "rb");
     md5_stream(md5, result);
@@ -189,8 +195,8 @@ int test_main(int, char*[])
         );
     candidate.julian_day_number(millenium + 2);
     BOOST_TEST_EQUAL
-        ("Current date '2001-1-2' is invalid:"
-        " this system expired on '2001-1-2'."
+        ("Current date '2001-01-02' is invalid:"
+        " this system expired on '2001-01-02'."
         " Contact the home office."
         ,secure_date::instance()->validate(candidate, pwd)
         );
@@ -233,10 +239,10 @@ int test_main(int, char*[])
         ,secure_date::instance()->validate(candidate, pwd)
         );
 
-    BOOST_TEST(0 == std::remove("expiry"));
-    BOOST_TEST(0 == std::remove("passkey"));
-    BOOST_TEST(0 == std::remove("coleridge"));
-    BOOST_TEST(0 == std::remove("validated.md5"));
+    BOOST_TEST_EQUAL(0, std::remove("expiry"));
+    BOOST_TEST_EQUAL(0, std::remove("passkey"));
+    BOOST_TEST_EQUAL(0, std::remove("coleridge"));
+    BOOST_TEST_EQUAL(0, std::remove("validated.md5"));
 
     return 0;
 }
