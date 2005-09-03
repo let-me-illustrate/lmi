@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_mortal.cpp,v 1.14 2005-09-03 00:55:23 chicares Exp $
+// $Id: ihs_mortal.cpp,v 1.15 2005-09-03 15:23:34 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -56,6 +56,14 @@
 MortalityRates::MortalityRates(BasicValues const& basic_values)
     :Length_(basic_values.GetLength())
 {
+    reserve_vectors();
+    fetch_parameters(basic_values);
+    initialize();
+}
+
+//============================================================================
+void MortalityRates::reserve_vectors()
+{
     MonthlyGuaranteedCoiRates_    .reserve(Length_);
     MonthlyCurrentCoiRatesBand0_  .reserve(Length_);
     MonthlyCurrentCoiRatesBand1_  .reserve(Length_);
@@ -72,11 +80,11 @@ MortalityRates::MortalityRates(BasicValues const& basic_values)
     CvatCorridorFactors_          .reserve(Length_);
     SevenPayRates_                .reserve(Length_);
     CvatNspRates_                 .reserve(1 + Length_);
-    Init(basic_values);
 }
 
 //============================================================================
-void MortalityRates::Init(BasicValues const& basic_values)
+// TODO ?? Want alternative for unit testing.
+void MortalityRates::fetch_parameters(BasicValues const& basic_values)
 {
     // Some of these data members seem useless for now, but they will
     // become useful when mortality-table access is moved hither from
@@ -148,17 +156,16 @@ void MortalityRates::Init(BasicValues const& basic_values)
 
     round_coi_rate_ = basic_values.GetRoundingRules().round_coi_rate();
 
-// TODO ?? Try moving the following two groups of "delicate" things hither.
+// TODO ?? Rethink these "delicate" things. Should raw rates be stored
+// temporarily in some other manner, e.g. using a handle-body idiom.
 
 // TODO ?? These are delicate: they get modified downstream.
-    //// TODO ?? e.g. see this below:
-    ////        std::vector<double> original = basic_values.GetCurrCOIRates0();
     MonthlyGuaranteedCoiRates_   = basic_values.GetGuarCOIRates();
     MonthlyCurrentCoiRatesBand0_ = basic_values.GetCurrCOIRates0();
     MonthlyCurrentCoiRatesBand1_ = basic_values.GetCurrCOIRates1();
     MonthlyCurrentCoiRatesBand2_ = basic_values.GetCurrCOIRates2();
 
-// TODO ?? These are delicate: they get read only conditionally.
+// TODO ?? These are delicate: they are needed only conditionally.
     MonthlyGuaranteedTermCoiRates_ = basic_values.GetGuaranteedTermRates();
     MonthlyCurrentTermCoiRates_    = basic_values.GetCurrentTermRates();
     ADDRates_ = basic_values.GetADDRates();
@@ -199,9 +206,13 @@ void MortalityRates::Init(BasicValues const& basic_values)
 
 // TODO ?? Move this up here?
 //    CvatNspRates_;
+}
 
-    SetGuaranteedRates(basic_values);
-    SetNonguaranteedRates(basic_values);
+//============================================================================
+void MortalityRates::initialize()
+{
+    SetGuaranteedRates();
+    SetNonguaranteedRates();
     SetOtherRates();
 
     if(AllowFlatExtras_ || AllowSubstdTable_)
@@ -218,6 +229,52 @@ void MortalityRates::Init(BasicValues const& basic_values)
         MakeCoiRateSubstandard(MonthlyGuaranteedCoiRates_);
         }
 
+    perform_grading();
+
+    LMI_ASSERT(0 == MonthlyMidpointCoiRatesBand0_.size());
+    LMI_ASSERT(0 == MonthlyMidpointCoiRatesBand1_.size());
+    LMI_ASSERT(0 == MonthlyMidpointCoiRatesBand2_.size());
+    for(int j = 0; j < Length_; j++)
+        {
+        // Here we take midpoint as average of monthly curr and guar.
+        // Other approaches are possible.
+        // TODO ?? Use mean() instead.
+        MonthlyMidpointCoiRatesBand0_.push_back
+            (  0.5
+            * (MonthlyCurrentCoiRatesBand0_[j] + MonthlyGuaranteedCoiRates_[j])
+            );
+        MonthlyMidpointCoiRatesBand1_.push_back
+            (  0.5
+            * (MonthlyCurrentCoiRatesBand1_[j] + MonthlyGuaranteedCoiRates_[j])
+            );
+        MonthlyMidpointCoiRatesBand2_.push_back
+            (  0.5
+            * (MonthlyCurrentCoiRatesBand2_[j] + MonthlyGuaranteedCoiRates_[j])
+            );
+        }
+
+/*
+    input from Database, InputParms
+    input
+        unisex male proportion guar
+        unisex male proportion curr
+        ANB/ALB
+        bool use NY COI limits
+        TODO ?? bool ignore ratings for 7702
+        flat extras
+        substd table
+        uninsurable
+        cCOI, gCOI stored as annual/monthly
+    annual to monthly method for each
+    rounding for each: decimals and bias
+    max for each
+*/
+}
+
+//============================================================================
+void MortalityRates::perform_grading()
+{
+// TODO ?? Exit early instead of writing whole body in conditional.
     if
         (!each_equal
             (CurrentCoiGrading_.begin()
@@ -226,6 +283,8 @@ void MortalityRates::Init(BasicValues const& basic_values)
             )
         )
         {
+        std::vector<double> ungraded(MonthlyCurrentCoiRatesBand0_);
+
         // TODO ?? Ignores 'MaxSurvivalDur', which should be distinct
         // from partial mortality q, but isn't in the interface as of
         // 2004-03.
@@ -275,8 +334,6 @@ void MortalityRates::Init(BasicValues const& basic_values)
             );
         if(ShowGrading_)
             {
-            std::vector<double> original = basic_values.GetCurrCOIRates0();
-            MakeCoiRateSubstandard(original);
             std::ofstream os
                 ("coi_grading"
                 ,std::ios_base::out | std::ios_base::trunc
@@ -309,7 +366,7 @@ void MortalityRates::Init(BasicValues const& basic_values)
 
                 << "\n'MaxMonthlyCoiRate_' is " << MaxMonthlyCoiRate_ << '\n'
                 << "\nHere is the year-by-year calculation:\n\n"
-                << "duration\tgrading_factor\toriginal_coi_rate\tpartial_mortality_rate\tresult\n"
+                << "duration\tgrading_factor\tungraded_coi_rate\tpartial_mortality_rate\tresult\n"
                 ;
 
             os << std::setiosflags(std::ios_base::scientific);
@@ -323,7 +380,7 @@ void MortalityRates::Init(BasicValues const& basic_values)
                 os
                     << j
                     << '\t' << CurrentCoiGrading_[j]
-                    << '\t' << original[j]
+                    << '\t' << ungraded[j]
                     << '\t' << monthly_partial_mortality[j]
                     << '\t' << MonthlyCurrentCoiRatesBand0_[j]
                     << '\n'
@@ -331,52 +388,11 @@ void MortalityRates::Init(BasicValues const& basic_values)
                 }
             }
         }
-
-    LMI_ASSERT(0 == MonthlyMidpointCoiRatesBand0_.size());
-    LMI_ASSERT(0 == MonthlyMidpointCoiRatesBand1_.size());
-    LMI_ASSERT(0 == MonthlyMidpointCoiRatesBand2_.size());
-    for(int j = 0; j < Length_; j++)
-        {
-        // Here we take midpoint as average of monthly curr and guar.
-        // Other approaches are possible.
-        // TODO ?? Use mean() instead.
-        MonthlyMidpointCoiRatesBand0_.push_back
-            (  0.5
-            * (MonthlyCurrentCoiRatesBand0_[j] + MonthlyGuaranteedCoiRates_[j])
-            );
-        MonthlyMidpointCoiRatesBand1_.push_back
-            (  0.5
-            * (MonthlyCurrentCoiRatesBand1_[j] + MonthlyGuaranteedCoiRates_[j])
-            );
-        MonthlyMidpointCoiRatesBand2_.push_back
-            (  0.5
-            * (MonthlyCurrentCoiRatesBand2_[j] + MonthlyGuaranteedCoiRates_[j])
-            );
-        }
-
-/*
-    input from Database, InputParms
-    input
-        unisex male proportion guar
-        unisex male proportion curr
-        ANB/ALB
-        bool use NY COI limits
-        TODO ?? bool ignore ratings for 7702
-        flat extras
-        substd table
-        uninsurable
-        cCOI, gCOI stored as annual/monthly
-    annual to monthly method for each
-    rounding for each: decimals and bias
-    max for each
-*/
 }
 
 //============================================================================
-void MortalityRates::SetGuaranteedRates(BasicValues const& basic_values)
+void MortalityRates::SetGuaranteedRates()
 {
-    MonthlyGuaranteedCoiRates_ = basic_values.GetGuarCOIRates();
-
     if(GCoiIsAnnual_) // TODO ?? Assume this means experience rated?
         {
         // If experience rating is ALLOWED, not necessarily USED.
@@ -448,7 +464,7 @@ void MortalityRates::SetGuaranteedRates(BasicValues const& basic_values)
 }
 
 //============================================================================
-void MortalityRates::SetNonguaranteedRates(BasicValues const& basic_values)
+void MortalityRates::SetNonguaranteedRates()
 {
     std::vector<double> curr_coi_multiplier(CCOIMultiplier_);
 
@@ -470,10 +486,6 @@ void MortalityRates::SetNonguaranteedRates(BasicValues const& basic_values)
         ,curr_coi_multiplier.begin()
         ,std::multiplies<double>()
         );
-
-    MonthlyCurrentCoiRatesBand0_ = basic_values.GetCurrCOIRates0();
-    MonthlyCurrentCoiRatesBand1_ = basic_values.GetCurrCOIRates1();
-    MonthlyCurrentCoiRatesBand2_ = basic_values.GetCurrCOIRates2();
 
     SetOneNonguaranteedRateBand
         (MonthlyCurrentCoiRatesBand0_
