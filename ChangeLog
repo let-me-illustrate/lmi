@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.127 2005-09-02 16:10:00 wboutin Exp $
+// $Id: ChangeLog,v 1.128 2005-09-03 01:39:54 chicares Exp $
 
 2005-01-14
 
@@ -3365,3 +3365,21 @@ Fix two defects, unmasking another.
 
   INSTALL
 Update md5sum.
+
+20050903T0020Z <chicares@cox.net> [1294]
+
+  calendar_date.cpp
+  passkey_test.cpp
+Improve ISO 8601 conformance.
+
+20050903T0046Z <chicares@cox.net> [1292]
+
+  toolbar.xrc
+Remove irrelevant tags.
+
+20050903T0055Z <chicares@cox.net> [1289]
+
+  ihs_mortal.cpp
+  mortality_rates.hpp
+Factor out many dependencies on class BasicValues.
+
