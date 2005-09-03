@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mortality_rates.hpp,v 1.6 2005-08-29 11:32:34 chicares Exp $
+// $Id: mortality_rates.hpp,v 1.7 2005-09-03 00:55:23 chicares Exp $
 
 #ifndef mortality_rates_hpp
 #define mortality_rates_hpp
@@ -89,19 +89,14 @@ class MortalityRates
     void SetOneNonguaranteedRateBand
         (std::vector<double>      & coi_rates
         ,std::vector<double> const& coi_multiplier
-        ,BasicValues         const& basic_values
         );
-    void SetOtherRates(BasicValues const&);
+    void SetOtherRates();
 
-    void MakeCoiRateSubstandard
-        (std::vector<double>      & coi_rates
-        ,BasicValues         const& basic_values
-        );
+    void MakeCoiRateSubstandard(std::vector<double>& coi_rates);
     void GradeCurrentCoiRatesFromPartialMortalityAssumption
         (std::vector<double>      & coi_rates
         ,std::vector<double> const& monthly_partial_mortality
         ,std::vector<double> const& grading_factors
-        ,BasicValues         const& basic_values
         );
 
     int Length_;
