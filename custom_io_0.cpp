@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: custom_io_0.cpp,v 1.10 2005-08-25 01:22:58 chicares Exp $
+// $Id: custom_io_0.cpp,v 1.11 2005-09-03 23:55:42 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -423,6 +423,7 @@ void PrintFormSpecial
         << "MortCost,Load,MinPrem,SurrCost,PremAmt,IntRate\n"
         ;
 
+    // ET !! std::vector<double> surr_chg = Curr_.AcctVal - Curr_.CSVNet;
     std::vector<double> surr_chg(Curr_.AcctVal);
     std::transform
         (surr_chg.begin()
@@ -432,6 +433,7 @@ void PrintFormSpecial
         ,std::minus<double>()
         );
 
+    // ET !! std::vector<double> prem_load = Invar.GrossPmt - Curr_.NetPmt;
     std::vector<double> prem_load(Invar.GrossPmt);
     std::transform
         (prem_load.begin()

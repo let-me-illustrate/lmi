@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.129 2005-09-03 02:45:45 chicares Exp $
+// $Id: ChangeLog,v 1.130 2005-09-03 23:55:43 chicares Exp $
 
 MAINTENANCE
 
@@ -37,7 +37,8 @@ Explanations:
 Omit the optional defect-count if you like; it's explained below.
 
 [3] Exact name of file changed, indented two spaces.
-[4] Write each file on a separate line.
+[4] Write each file's name on a separate line. Write them in
+alphabetical order.
 
 [5] We aren't exactly following GNU standards here, but this one makes
 a lot of sense:
@@ -3429,4 +3430,29 @@ Review. Experimentally use cvs as a code review system, writing
 interlinear glosses containing the tag "REVIEW:", in the expectation
 that they will either be removed silently if accepted and followed, or
 lead to further discussion, whether in cvs or on the lmi mailing list.
+
+20050903T1523Z <chicares@cox.net> [1291]
+
+  ihs_mortal.cpp
+  mortality_rates.hpp
+Sequester all dependencies on class BasicValues.
+
+20050903T2355Z <chicares@cox.net> [1293]
+
+  GNUmakefile
+Improve consistency checking.
+
+  commutation_functions_test.cpp
+  custom_io_0.cpp
+  ihs_basicval.cpp
+  ihs_dbvalue.cpp
+  ihs_irc7702.cpp
+  ihs_mortal.cpp
+  ihs_standalone.cpp
+  interest_rates.cpp
+  ledger_base.cpp
+  ledger_text_formats.cpp
+  loads.cpp
+  mortality_rates.cpp
+Add expression-template glosses.
 

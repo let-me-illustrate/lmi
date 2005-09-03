@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: commutation_functions_test.cpp,v 1.6 2005-06-07 14:19:26 chicares Exp $
+// $Id: commutation_functions_test.cpp,v 1.7 2005-09-03 23:55:42 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -72,6 +72,7 @@ int test_main(int, char*[])
 {
 //    ULCommFns::SelfTest(); TODO ?? Make that test meaningful, or expunge it.
 
+    // ET !! q = coi_rate_from_q(sample_q, 1.0);
     std::vector<double> q;
     std::transform
         (sample_q().begin()

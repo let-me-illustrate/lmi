@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_irc7702.cpp,v 1.7 2005-06-05 03:55:52 chicares Exp $
+// $Id: ihs_irc7702.cpp,v 1.8 2005-09-03 23:55:43 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -477,6 +477,7 @@ void Irc7702::InitCorridor()
     // --better to ignore susbstandard
     CvatCorridor.resize(Length);
     // CVAT NSP = M/D, so corridor factor = D/M
+    // ET !! CvatCorridor = drop(CommFns[Opt1Int4Pct]->aD(), 1) / CommFns[Opt1Int4Pct]->kM();
     std::transform
         (CommFns[Opt1Int4Pct]->aD().begin()
         ,CommFns[Opt1Int4Pct]->aD().end() - 1
@@ -517,6 +518,7 @@ void Irc7702::InitPvVectors(EIOBasis const& a_EIOBasis)
 
     unsigned int u_length = static_cast<unsigned int>(Length);
 
+    // ET !! std::vector<double> ann_chg_pol = AnnChgPol * drop(comm_fns.aD(), -1);
     std::vector<double> ann_chg_pol(Length);
     LMI_ASSERT(u_length == ann_chg_pol.size());
     LMI_ASSERT(u_length == AnnChgPol.size());
@@ -529,6 +531,7 @@ void Irc7702::InitPvVectors(EIOBasis const& a_EIOBasis)
         ,std::multiplies<double>()
         );
 
+    // ET !! std::vector<double> mly_chg_pol = MlyChgPol * drop(comm_fns.kD(), -1);
     std::vector<double> mly_chg_pol(Length);
     LMI_ASSERT(u_length == mly_chg_pol.size());
     LMI_ASSERT(u_length == MlyChgPol.size());
@@ -549,6 +552,7 @@ void Irc7702::InitPvVectors(EIOBasis const& a_EIOBasis)
         ,std::multiplies<double>()
         );
 
+    // ET !! PvChgPol[a_EIOBasis] = ann_chg_pol + mly_chg_pol;
     std::vector<double>& chg_pol = PvChgPol[a_EIOBasis];
     chg_pol.resize(Length);
     LMI_ASSERT(u_length == chg_pol.size());
@@ -561,6 +565,11 @@ void Irc7702::InitPvVectors(EIOBasis const& a_EIOBasis)
         ,chg_pol.begin()
         ,std::plus<double>()
         );
+    // ET !! This is just APL written verbosely in a funny C++ syntax.
+    // Perhaps we could hope for an expression-template library to do this:
+    //   chg_pol = chg_pol.reverse().partial_sum().reverse();
+    // but that would require a special type: 'chg_pol' couldn't be a
+    // std::vector anymore.
     std::reverse(chg_pol.begin(), chg_pol.end());
     std::partial_sum(chg_pol.begin(), chg_pol.end(), chg_pol.begin());
     std::reverse(chg_pol.begin(), chg_pol.end());
@@ -568,6 +577,7 @@ void Irc7702::InitPvVectors(EIOBasis const& a_EIOBasis)
     // Present value of charges per $1 specified amount
 
     // APL: chg_sa gets rotate plus scan rotate MlyChgSpecAmt times kD
+    // ET !! PvChgSpecAmt[a_EIOBasis] = MlyChgSpecAmt * comm_fns.kD();
     std::vector<double>& chg_sa = PvChgSpecAmt[a_EIOBasis];
     chg_sa.resize(Length);
     LMI_ASSERT(u_length == chg_sa.size());
@@ -585,6 +595,7 @@ void Irc7702::InitPvVectors(EIOBasis const& a_EIOBasis)
     std::reverse(chg_sa.begin(), chg_sa.end());
 
     // APL: chg_add gets rotate plus scan rotate MlyChgADD times kD
+    // ET !! PvChgADD[a_EIOBasis] = MlyChgADD * comm_fns.kD();
     std::vector<double>& chg_add = PvChgADD[a_EIOBasis];
     chg_add.resize(Length);
     LMI_ASSERT(u_length == chg_add.size());
@@ -612,6 +623,7 @@ void Irc7702::InitPvVectors(EIOBasis const& a_EIOBasis)
 
     // Present value of 1 - target premium load
 
+    // ET !! PvNpfSglTgt[a_EIOBasis] = (1.0 - LoadTgt) * comm_fns.aD();
     std::vector<double>& npf_sgl_tgt = PvNpfSglTgt[a_EIOBasis];
 //  LMI_ASSERT(u_length == npf_sgl_tgt.size());
     npf_sgl_tgt = LoadTgt;
@@ -638,6 +650,7 @@ void Irc7702::InitPvVectors(EIOBasis const& a_EIOBasis)
 
     // Present value of 1 - excess premium load
 
+    // ET !! PvNpfSglExc[a_EIOBasis] = (1.0 - LoadExc) * comm_fns.aD();
     std::vector<double>& npf_sgl_exc = PvNpfSglExc[a_EIOBasis];
 //  LMI_ASSERT(u_length == npf_sgl_exc.size());
     npf_sgl_exc = LoadExc;
@@ -664,6 +677,7 @@ void Irc7702::InitPvVectors(EIOBasis const& a_EIOBasis)
 
     // Present value of target premium load - excess premium load
 
+    // ET !! PvLoadDiffSgl[a_EIOBasis] = npf_sgl_exc - npf_sgl_tgt;
     std::vector<double>& diff_sgl = PvLoadDiffSgl[a_EIOBasis];
 //  LMI_ASSERT(u_length == diff_sgl.size());
     diff_sgl.resize(Length);
