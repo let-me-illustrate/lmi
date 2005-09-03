@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: interest_rates.cpp,v 1.7 2005-07-18 03:33:46 chicares Exp $
+// $Id: interest_rates.cpp,v 1.8 2005-09-03 23:55:43 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -294,6 +294,12 @@ void InterestRates::Initialize(BasicValues const& v)
     // interest bonus is not guaranteed.
     std::vector<double> general_account_interest_bonus;
     v.Database_->Query(general_account_interest_bonus, DB_GAIntBonus);
+    // ET !! GenAcctGrossRate_ += general_account_interest_bonus;
+    // ...and this might be further simplified by implementing e.g.
+    //   std::vector<double> TDatabase::QueryVector(int k) const;
+    // and replacing 'general_account_interest_bonus' with a
+    // temporary:
+    //   GenAcctGrossRate_ += v.Database_->QueryVector(DB_GAIntBonus);
     std::transform
         (GenAcctGrossRate_[e_currbasis].begin()
         ,GenAcctGrossRate_[e_currbasis].end()
@@ -338,6 +344,8 @@ void InterestRates::Initialize(BasicValues const& v)
 //            (   ExtraSepAcctCharge_.size()
 //            ==  v.Input_->VectorAddonCompOnAssets.size()
 //            );
+        // ET !! ExtraSepAcctCharge_ += v.Input_->VectorAddonCompOnAssets;
+        // ...but see the problem noted above.
         std::transform
             (ExtraSepAcctCharge_.begin()
             ,ExtraSepAcctCharge_.end()
@@ -443,12 +451,15 @@ void InterestRates::InitializeGeneralAccountRates()
             << LMI_FLUSH
             ;
         spread[e_currbasis] = GenAcctSpread_;
+        // ET !! spread[e_currbasis] -= spread[e_currbasis][0];
         std::transform
             (spread[e_currbasis].begin()
             ,spread[e_currbasis].end()
             ,spread[e_currbasis].begin()
             ,std::bind2nd(std::minus<double>(), spread[e_currbasis].front())
             );
+        // ET !! spread[e_mdptbasis] = 0.5 * spread[e_currbasis];
+        // ...but writing it that way makes it look wrong.
         std::transform
             (spread[e_currbasis].begin()
             ,spread[e_currbasis].end()
@@ -464,6 +475,7 @@ void InterestRates::InitializeGeneralAccountRates()
     GenAcctGrossRate_[e_mdptbasis] = Zero_;
     if(NeedMidpointRates_)
         {
+        // ET !! GenAcctGrossRate_[e_mdptbasis] = mean(GenAcctGrossRate_[e_guarbasis], GenAcctGrossRate_[e_currbasis]);
         std::transform
             (GenAcctGrossRate_[e_guarbasis].begin()
             ,GenAcctGrossRate_[e_guarbasis].end()
@@ -517,6 +529,7 @@ void InterestRates::InitializeSeparateAccountRates()
 
     std::vector<double> miscellaneous_charges(Stabilizer_);
 // TODO ?? Replace these long lines with PETE expressions.
+    // ET !! miscellaneous_charges += AmortLoad_ + ExtraSepAcctCharge_;
     std::transform(miscellaneous_charges.begin(), miscellaneous_charges.end(), AmortLoad_         .begin(), miscellaneous_charges.begin(), std::plus<double>());
     std::transform(miscellaneous_charges.begin(), miscellaneous_charges.end(), ExtraSepAcctCharge_.begin(), miscellaneous_charges.begin(), std::plus<double>());
 
@@ -527,6 +540,7 @@ void InterestRates::InitializeSeparateAccountRates()
             {
             continue;
             }
+        // ET !! total_charges[j] = MAndERate_[j] + miscellaneous_charges;
         total_charges[j].reserve(Length_);
         std::transform
             (MAndERate_[j].begin()
@@ -554,6 +568,7 @@ void InterestRates::InitializeSeparateAccountRates()
                 {
                 continue;
                 }
+            // ET !! total_charges[j] -= total_charges[j][0];
             std::transform
                 (total_charges[j].begin()
                 ,total_charges[j].end()
@@ -569,6 +584,7 @@ void InterestRates::InitializeSeparateAccountRates()
         }
 
     SepAcctGrossRate_[e_sep_acct_zero] = Zero_;
+    // ET !! SepAcctGrossRate_[e_sep_acct_half] = 0.5 * SepAcctGrossRate_[e_sep_acct_full];
     std::transform
         (SepAcctGrossRate_[e_sep_acct_full].begin()
         ,SepAcctGrossRate_[e_sep_acct_full].end()
@@ -627,6 +643,7 @@ void InterestRates::InitializeLoanRates()
     PrfLoanSpread_[e_mdptbasis] = Zero_;
     if(NeedMidpointRates_)
         {
+        // ET !! RegLoanSpread_[e_mdptbasis] = mean(RegLoanSpread_[e_guarbasis], RegLoanSpread_[e_currbasis]);
         std::transform
             (RegLoanSpread_[e_guarbasis].begin()
             ,RegLoanSpread_[e_guarbasis].end()
@@ -634,6 +651,7 @@ void InterestRates::InitializeLoanRates()
             ,RegLoanSpread_[e_mdptbasis].begin()
             ,mean<double>()
             );
+        // ET !! PrfLoanSpread_[e_mdptbasis] = mean(PrfLoanSpread_[e_guarbasis], PrfLoanSpread_[e_currbasis]);
         std::transform
             (PrfLoanSpread_[e_guarbasis].begin()
             ,PrfLoanSpread_[e_guarbasis].end()
@@ -994,14 +1012,20 @@ void InterestRates::Initialize7702Rates()
     std::vector<double> const& annual_guar_rate = GenAcctGrossRate_[e_guarbasis];
 
     MlyGlpRate_.resize(Length_);
+    // ET !! MlyGlpRate_ = max(0.04, annual_guar_rate);
     std::transform(annual_guar_rate.begin(), annual_guar_rate.end(), MlyGlpRate_.begin(), std::bind1st(greater_of<double>(), 0.04));
+    // ET !! This ought to be implicit, at least in some 'safe' mode:
     LMI_ASSERT(MlyGlpRate_.size() == SpreadFor7702_.size());
+    // ET !! MlyGlpRate_ = i_upper_12_over_12_from_i(MlyGlpRate_ - SpreadFor7702_);
     std::transform(MlyGlpRate_.begin(), MlyGlpRate_.end(), SpreadFor7702_.begin(), MlyGlpRate_.begin(), std::minus<double>());
     std::transform(MlyGlpRate_.begin(), MlyGlpRate_.end(), MlyGlpRate_.begin(), i_upper_12_over_12_from_i<double>());
 }
 
 #if 0
-// Here's the implementation actually used, elsewhere--it needs work.
+// TODO ?? Here's the implementation actually used, elsewhere--it needs work.
+// Eventually this should be rewritten. It still lives here because it
+// really belongs here, not in class BasicValues.
+
 {
     // Monthly guar net int for 7702, with 4 or 6% min, is
     //   greater of {4%, 6%} and annual guar int rate
@@ -1017,8 +1041,14 @@ void InterestRates::Initialize7702Rates()
     switch(LoanRateType_)
         {
         case e_fixed_loan_rate:
-        // APL: guar_int gets guar_int max gross_loan_rate - guar_loan_spread
             {
+            // ET !! std::vector<double> guar_loan_rate = PublishedLoanRate_ - RegLoanSpread_[e_guarbasis];
+            // ET !! guar_int = max(guar_int, RegLoanSpread_[e_guarbasis]);
+            // TODO ?? But that looks incorrect when written clearly!
+            // Perhaps this old comment:
+            //   APL: guar_int gets guar_int max gross_loan_rate - guar_loan_spread
+            // suggests the actual intention.
+
             // TODO ?? Need loan rates for 7702 whenever loans are allowed.
             std::vector<double> gross_loan_rate = PublishedLoanRate_;
             // TODO ?? Should at least assert that regular spread >= preferred.
@@ -1057,6 +1087,7 @@ void InterestRates::Initialize7702Rates()
         }
 */
 
+    // ET !! Mly7702iGlp = i_upper_12_over_12_from_i(max(.04, guar_int) - SpreadFor7702_);
     Mly7702iGlp.assign(Length, 0.04);
     std::transform
         (guar_int.begin()
@@ -1079,6 +1110,7 @@ void InterestRates::Initialize7702Rates()
         ,i_upper_12_over_12_from_i<double>()
         );
 
+    // ET !! Mly7702iGlp = i_upper_12_over_12_from_i(max(.06, guar_int) - SpreadFor7702_);
     Mly7702iGsp.assign(Length, 0.06);
     std::transform
         (guar_int.begin()
@@ -1101,8 +1133,8 @@ void InterestRates::Initialize7702Rates()
         ,i_upper_12_over_12_from_i<double>()
         );
 
+    // ET !! Mly7702ig = -1.0 + 1.0 / DBDiscountRate;
     Mly7702ig = DBDiscountRate;
-    // TODO ?? Divide it by unity?
     std::transform(Mly7702ig.begin(), Mly7702ig.end(), Mly7702ig.begin(),
           std::bind1st(std::divides<double>(), 1.0)
           );

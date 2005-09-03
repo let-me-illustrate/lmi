@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_standalone.cpp,v 1.4 2005-08-22 15:35:53 chicares Exp $
+// $Id: ihs_standalone.cpp,v 1.5 2005-09-03 23:55:43 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -160,6 +160,7 @@ void GPT_BasicValues::Init()
     TargetPremiumType =
         static_cast<e_modal_prem_type>(local_database->Query(DB_TgtPremType));
 
+    // ET !! std::vector<double> mly7702qc = q_irc_7702 (12.0 - q_irc_7702);
     std::vector<double> mly7702qc(q_irc_7702);
     std::transform(mly7702qc.begin(), mly7702qc.end(), mly7702qc.begin(),
           std::bind1st(std::minus<double>(), 12.0)
@@ -180,6 +181,7 @@ void GPT_BasicValues::Init()
     std::vector<double> mly7702ig;
     local_database->Query(mly7702ig, DB_NAARDiscount);
 
+    // ET !! mly7702ig = -1.0 + 1.0 / mly7702ig;
     std::transform(mly7702ig.begin(), mly7702ig.end(), mly7702ig.begin(),
           std::bind1st(std::divides<double>(), 1.0)
           );
@@ -201,6 +203,7 @@ void GPT_BasicValues::Init()
             ,IssueAge
             ,Length
             );
+        // ET !! local_mly_charge_sa += mAddRates;
         std::transform
             (local_mly_charge_sa.begin()
             ,local_mly_charge_sa.end()

@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_mortal.cpp,v 1.15 2005-09-03 15:23:34 chicares Exp $
+// $Id: ihs_mortal.cpp,v 1.16 2005-09-03 23:55:43 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -288,6 +288,12 @@ void MortalityRates::perform_grading()
         // TODO ?? Ignores 'MaxSurvivalDur', which should be distinct
         // from partial mortality q, but isn't in the interface as of
         // 2004-03.
+        //
+        // ET !! Easier to write as
+        //   std::vector<double> monthly_partial_mortality = coi_rate_from_q
+        //     (max(0.0, min(1.0, PartialMortalityQ_ * PartialMortalityMultiplier_))
+        //     ,MaxMonthlyCoiRate_
+        //     );
         std::vector<double> monthly_partial_mortality(PartialMortalityQ_);
         std::transform
             (monthly_partial_mortality.begin()
@@ -466,6 +472,9 @@ void MortalityRates::SetGuaranteedRates()
 //============================================================================
 void MortalityRates::SetNonguaranteedRates()
 {
+    // ET !! Easier to write as
+    //   std::vector<double> curr_coi_multiplier =
+    //     CCOIMultiplier_ * CountryCOIMultiplier_ * CurrentCoiMultiplier_;
     std::vector<double> curr_coi_multiplier(CCOIMultiplier_);
 
     // Multiplier for country affects only nonguaranteed COI rates.

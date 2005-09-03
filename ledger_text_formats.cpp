@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_text_formats.cpp,v 1.9 2005-06-21 05:27:48 chicares Exp $
+// $Id: ledger_text_formats.cpp,v 1.10 2005-09-03 23:55:43 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -172,6 +172,7 @@ void set_net_payment
     ,std::vector<double>&   net_payment
     )
 {
+    // ET !! net_payment = Invar.GrossPmt - Invar.Loan - Invar.NetWD;
     net_payment = Invar.GrossPmt;
     std::transform
         (net_payment.begin()
@@ -222,12 +223,16 @@ void PrintFormTabDelimited
         ,real_claims.end()
         ,std::inserter(cash_flow, cash_flow.end())
         );
+    // ET !! This is tricky: incompatible lengths.
+    // ET !! cash_flow = catenate(0.0, -real_claims);
     std::transform
         (cash_flow.begin()
         ,cash_flow.end()
         ,cash_flow.begin()
         ,std::negate<double>()
         );
+    // ET !! This is tricky: incompatible lengths.
+    // ET !! net_payment += drop(-1, cash_flow);
     std::transform
         (net_payment.begin()
         ,net_payment.end()
@@ -238,6 +243,7 @@ void PrintFormTabDelimited
 
     cash_flow.pop_back(); // Here we no longer need cash_flow[omega].
 
+    // ET !! std::vector<double> csv_plus_claims = Curr_.CSVNet + real_claims;
     std::vector<double> csv_plus_claims(Curr_.CSVNet);
     std::transform
         (csv_plus_claims.begin()
@@ -284,6 +290,7 @@ os << "\n\n" ;
 #endif // DEBUGGING_IRR
         }
 
+    // ET !! std::vector<double> db_plus_claims = Curr_.EOYDeathBft + real_claims;
     std::vector<double> db_plus_claims(Curr_.EOYDeathBft);
     std::transform
         (db_plus_claims.begin()
