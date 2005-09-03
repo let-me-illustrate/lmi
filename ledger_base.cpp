@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_base.cpp,v 1.3 2005-06-11 15:27:28 chicares Exp $
+// $Id: ledger_base.cpp,v 1.4 2005-09-03 23:55:43 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -464,6 +464,7 @@ void LedgerBase::ApplyScaleFactor(double a_Mult)
         ;svmi++
         )
         {
+        // ET !! *(*svmi).second *= M;
         std::vector<double>& v = *(*svmi).second;
         std::transform
             (v.begin()

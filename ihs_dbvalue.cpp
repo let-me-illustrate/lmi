@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_dbvalue.cpp,v 1.3 2005-06-14 20:45:03 chicares Exp $
+// $Id: ihs_dbvalue.cpp,v 1.4 2005-09-03 23:55:43 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -415,6 +415,8 @@ void TDBValue::Reshape(std::vector<int> const& a_dims)
         ,new_data
         );
 
+    // ET !! std::vector<int> max_dims_used = max(axis_lengths, a_dims);
+    // ...and then expunge this comment:
     // greater length of src or dst along each axis
     std::vector<int> max_dims_used(e_number_of_axes);
     std::transform
@@ -436,6 +438,8 @@ void TDBValue::Reshape(std::vector<int> const& a_dims)
         ,std::multiplies<int>()
         );
 
+    // ET !! std::vector<int> dst_max_idx = a_dims - 1;
+    // ...and then expunge this comment:
     // max index of dst along each axis
     std::vector<int> dst_max_idx(a_dims);
     std::transform
@@ -444,6 +448,8 @@ void TDBValue::Reshape(std::vector<int> const& a_dims)
         ,dst_max_idx.begin()
         ,std::bind2nd(std::minus<int>(), 1)
         );
+    // ET !! std::vector<int> src_max_idx = axis_lengths - 1;
+    // ...and then expunge this comment:
     // max index of src along each axis
     std::vector<int> src_max_idx(axis_lengths);
     std::transform
@@ -473,6 +479,9 @@ void TDBValue::Reshape(std::vector<int> const& a_dims)
             }
         LMI_ASSERT(0 == z);
 
+        // ET !! dst_idx = min(working_idx, dst_max_idx)
+        // ET !! src_idx = min(working_idx, src_max_idx)
+        // ...and then expunge this comment:
         // limit dst and source indexes to those that actually vary
         std::transform
             (working_idx.begin()

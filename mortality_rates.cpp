@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mortality_rates.cpp,v 1.3 2005-02-17 04:40:03 chicares Exp $
+// $Id: mortality_rates.cpp,v 1.4 2005-09-03 23:55:43 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -87,6 +87,7 @@ void MortalityRates::Init(BasicValues const& basic_values)
     MonthlyMidpointCoiRatesBand0_.resize(length);
     // Calculate midpoint as mean of current and guaranteed.
     // A different average might be used instead.
+    // ET !! MonthlyMidpointCoiRatesBand0_ = mean(MonthlyCurrentCoiRatesBand0_, MonthlyGuaranteedCoiRates_);
     std::transform
         (MonthlyCurrentCoiRatesBand0_.begin()
         ,MonthlyCurrentCoiRatesBand0_.end()

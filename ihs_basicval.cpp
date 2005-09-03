@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_basicval.cpp,v 1.18 2005-08-30 03:54:43 chicares Exp $
+// $Id: ihs_basicval.cpp,v 1.19 2005-09-03 23:55:42 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -432,6 +432,7 @@ void BasicValues::Init7702()
 {
 //  Mly7702qc = MortalityRates_->GetaCoi7702(); // TODO ?? Should this function be eliminated?
     Mly7702qc = GetIRC7702Rates(); // TODO ?? This could use a better name.
+    // ET !! Mly7702qc = coi_rate_from_q(Mly7702qc, Database_->Query(DB_MaxMonthlyCoiRate));
     std::transform
         (Mly7702qc.begin()
         ,Mly7702qc.end()
@@ -457,12 +458,12 @@ void BasicValues::Init7702()
     switch(Input_.LoanRateType)
         {
         case e_fixed_loan_rate:
-        // APL: guar_int gets guar_int max gross_loan_rate - guar_loan_spread
             {
             std::vector<double> gross_loan_rate;
             Database_->Query(gross_loan_rate, DB_FixedLoanRate);
             std::vector<double> guar_loan_spread;
             Database_->Query(guar_loan_spread, DB_GuarRegLoanSpread);
+            // ET !! std::vector<double> guar_loan_rate = gross_loan_rate - guar_loan_spread;
             std::vector<double> guar_loan_rate(Length);
             std::transform
                 (gross_loan_rate.begin()
@@ -471,6 +472,11 @@ void BasicValues::Init7702()
                 ,guar_loan_rate.begin()
                 ,std::minus<double>()
                 );
+            // ET !! guar_int = max(guar_int, guar_loan_spread);
+            // TODO ?? But that looks incorrect when written clearly!
+            // Perhaps this old comment:
+            //   APL: guar_int gets guar_int max gross_loan_rate - guar_loan_spread
+            // suggests the actual intention.
             std::transform
                 (guar_int.begin()
                 ,guar_int.end()
@@ -497,6 +503,7 @@ void BasicValues::Init7702()
         }
 */
 
+    // ET !! Mly7702iGlp = i_upper_12_over_12_from_i(max(.04, guar_int) - SpreadFor7702_);
     Mly7702iGlp.assign(Length, 0.04);
     std::transform
         (guar_int.begin()
@@ -519,6 +526,7 @@ void BasicValues::Init7702()
         ,i_upper_12_over_12_from_i<double>()
         );
 
+    // ET !! Mly7702iGlp = i_upper_12_over_12_from_i(max(.06, guar_int) - SpreadFor7702_);
     Mly7702iGsp.assign(Length, 0.06);
     std::transform
         (guar_int.begin()
@@ -541,6 +549,7 @@ void BasicValues::Init7702()
         ,i_upper_12_over_12_from_i<double>()
         );
 
+    // ET !! Mly7702ig = -1.0 + 1.0 / DBDiscountRate;
     Mly7702ig = DBDiscountRate;
     std::transform(Mly7702ig.begin(), Mly7702ig.end(), Mly7702ig.begin(),
           std::bind1st(std::divides<double>(), 1.0)
@@ -949,12 +958,16 @@ void BasicValues::SetMaxSurvivalDur()
         case e_survive_to_ex:
             {
             std::vector<double> z(MortalityRates_->PartialMortalityQ());
+            // ET !! z = 1.0 - z;
             std::transform
                 (z.begin()
                 ,z.end()
                 ,z.begin()
                 ,std::bind1st(std::minus<double>(), 1.0)
                 );
+            // ET !! In APL, this would be [writing multiplication as '*']
+            //   +/*\1-z
+            // It would be nice to have a concise representation for that.
             std::partial_sum(z.begin(), z.end(), z.begin(), std::multiplies<double>());
             MaxSurvivalDur = std::accumulate(z.begin(), z.end(), 0.0);
             }
