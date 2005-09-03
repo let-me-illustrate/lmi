@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_mortal.cpp,v 1.13 2005-08-30 03:54:43 chicares Exp $
+// $Id: ihs_mortal.cpp,v 1.14 2005-09-03 00:55:23 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -45,6 +45,12 @@
 #include <functional>
 #include <iomanip>
 #include <ios>
+
+// TODO ?? Rewrite, paying attention to the following issues.
+//
+// Mortality tables are read in class BasicValues, then used here.
+// The vectors are used by value, not by reference, so they are
+// copied needlessly. Tables should instead be read here.
 
 //============================================================================
 MortalityRates::MortalityRates(BasicValues const& basic_values)
@@ -72,21 +78,23 @@ MortalityRates::MortalityRates(BasicValues const& basic_values)
 //============================================================================
 void MortalityRates::Init(BasicValues const& basic_values)
 {
-AllowADD_ = AllowChild_ = AllowSpouse_ = AllowTerm_ = AllowWP_ = IsTgtPremTabular_ = true;
-// TODO ?? eradicate this variable:    AllowADD_          = basic_values.Database_->Query(DB_AllowADD         );
-// TODO ?? eradicate this variable:    AllowChild_        = basic_values.Database_->Query(DB_AllowChild       );
+    // Some of these data members seem useless for now, but they will
+    // become useful when mortality-table access is moved hither from
+    // class BasicValues.
+    AllowADD_          = basic_values.Database_->Query(DB_AllowADD         );
+    AllowChild_        = basic_values.Database_->Query(DB_AllowChild       );
     AllowExpRating_    = basic_values.Database_->Query(DB_AllowExpRating   );
     AllowFlatExtras_   = basic_values.Database_->Query(DB_AllowFlatExtras  );
-// TODO ?? eradicate this variable:    AllowSpouse_       = basic_values.Database_->Query(DB_AllowSpouse      );
+    AllowSpouse_       = basic_values.Database_->Query(DB_AllowSpouse      );
     AllowSubstdTable_  = basic_values.Database_->Query(DB_AllowSubstdTable );
-// TODO ?? eradicate this variable:    AllowTerm_         = basic_values.Database_->Query(DB_AllowTerm        );
-// TODO ?? eradicate this variable:    AllowWP_           = basic_values.Database_->Query(DB_AllowWP          );
+    AllowTerm_         = basic_values.Database_->Query(DB_AllowTerm        );
+    AllowWP_           = basic_values.Database_->Query(DB_AllowWP          );
     CCoiIsAnnual_      = basic_values.Database_->Query(DB_CCoiIsAnnual     );
     GCoiIsAnnual_      = basic_values.Database_->Query(DB_GCoiIsAnnual     );
 
-// TODO ?? eradicate this variable:    IsTgtPremTabular_ =
-//        e_modal_table == basic_values.Database_->Query(DB_TgtPremType)
-//        ;
+    IsTgtPremTabular_ =
+        e_modal_table == basic_values.Database_->Query(DB_TgtPremType)
+        ;
 
     MaxMonthlyCoiRate_ = basic_values.Database_->Query(DB_MaxMonthlyCoiRate);
 
@@ -194,20 +202,20 @@ AllowADD_ = AllowChild_ = AllowSpouse_ = AllowTerm_ = AllowWP_ = IsTgtPremTabula
 
     SetGuaranteedRates(basic_values);
     SetNonguaranteedRates(basic_values);
-    SetOtherRates(basic_values);
+    SetOtherRates();
 
     if(AllowFlatExtras_ || AllowSubstdTable_)
         {
-        MakeCoiRateSubstandard(MonthlyCurrentCoiRatesBand0_, basic_values);
-        MakeCoiRateSubstandard(MonthlyCurrentCoiRatesBand1_, basic_values);
-        MakeCoiRateSubstandard(MonthlyCurrentCoiRatesBand2_, basic_values);
+        MakeCoiRateSubstandard(MonthlyCurrentCoiRatesBand0_);
+        MakeCoiRateSubstandard(MonthlyCurrentCoiRatesBand1_);
+        MakeCoiRateSubstandard(MonthlyCurrentCoiRatesBand2_);
         // TODO ?? If experience rating is ALLOWED, not necessarily USED?
         if(AllowExpRating_)
 //      if(UseExperienceRating_)  // TODO ?? And this condition too?
             {
-            MakeCoiRateSubstandard(AlternativeMonthlyCoiRates_, basic_values);
+            MakeCoiRateSubstandard(AlternativeMonthlyCoiRates_);
             }
-        MakeCoiRateSubstandard(MonthlyGuaranteedCoiRates_, basic_values);
+        MakeCoiRateSubstandard(MonthlyGuaranteedCoiRates_);
         }
 
     if
@@ -254,24 +262,21 @@ AllowADD_ = AllowChild_ = AllowSpouse_ = AllowTerm_ = AllowWP_ = IsTgtPremTabula
             (MonthlyCurrentCoiRatesBand0_
             ,monthly_partial_mortality
             ,CurrentCoiGrading_
-            ,basic_values
             );
         GradeCurrentCoiRatesFromPartialMortalityAssumption
             (MonthlyCurrentCoiRatesBand1_
             ,monthly_partial_mortality
             ,CurrentCoiGrading_
-            ,basic_values
             );
         GradeCurrentCoiRatesFromPartialMortalityAssumption
             (MonthlyCurrentCoiRatesBand2_
             ,monthly_partial_mortality
             ,CurrentCoiGrading_
-            ,basic_values
             );
         if(ShowGrading_)
             {
             std::vector<double> original = basic_values.GetCurrCOIRates0();
-            MakeCoiRateSubstandard(original, basic_values);
+            MakeCoiRateSubstandard(original);
             std::ofstream os
                 ("coi_grading"
                 ,std::ios_base::out | std::ios_base::trunc
@@ -334,6 +339,7 @@ AllowADD_ = AllowChild_ = AllowSpouse_ = AllowTerm_ = AllowWP_ = IsTgtPremTabula
         {
         // Here we take midpoint as average of monthly curr and guar.
         // Other approaches are possible.
+        // TODO ?? Use mean() instead.
         MonthlyMidpointCoiRatesBand0_.push_back
             (  0.5
             * (MonthlyCurrentCoiRatesBand0_[j] + MonthlyGuaranteedCoiRates_[j])
@@ -472,17 +478,14 @@ void MortalityRates::SetNonguaranteedRates(BasicValues const& basic_values)
     SetOneNonguaranteedRateBand
         (MonthlyCurrentCoiRatesBand0_
         ,curr_coi_multiplier
-        ,basic_values
         );
     SetOneNonguaranteedRateBand
         (MonthlyCurrentCoiRatesBand1_
         ,curr_coi_multiplier
-        ,basic_values
         );
     SetOneNonguaranteedRateBand
         (MonthlyCurrentCoiRatesBand2_
         ,curr_coi_multiplier
-        ,basic_values
         );
 }
 
@@ -490,7 +493,6 @@ void MortalityRates::SetNonguaranteedRates(BasicValues const& basic_values)
 void MortalityRates::SetOneNonguaranteedRateBand
     (std::vector<double>      & coi_rates
     ,std::vector<double> const& curr_coi_multiplier
-    ,BasicValues         const& basic_values
     )
 {
     if(CCoiIsAnnual_)
@@ -560,96 +562,74 @@ void MortalityRates::SetOneNonguaranteedRateBand
 }
 
 //============================================================================
-void MortalityRates::SetOtherRates(BasicValues const& basic_values)
+void MortalityRates::SetOtherRates()
 {
     if(AllowTerm_)
         {
-        MonthlyCurrentTermCoiRates_    = basic_values.GetCurrentTermRates();
-        MonthlyGuaranteedTermCoiRates_ = basic_values.GetGuaranteedTermRates();
-
-        MakeCoiRateSubstandard(MonthlyCurrentTermCoiRates_, basic_values);
-        MakeCoiRateSubstandard(MonthlyGuaranteedTermCoiRates_, basic_values);
+        MakeCoiRateSubstandard(MonthlyCurrentTermCoiRates_);
+        MakeCoiRateSubstandard(MonthlyGuaranteedTermCoiRates_);
 
         LMI_ASSERT(0 == MonthlyMidpointTermCoiRates_.size());
         for(int j = 0; j < Length_; j++)
             {
             // Here we take midpoint as average of monthly curr and guar.
             // Other approaches are possible.
+            // TODO ?? Use mean() instead.
             MonthlyMidpointTermCoiRates_.push_back
-                (  0.5
-                * (MonthlyCurrentTermCoiRates_[j] + MonthlyGuaranteedTermCoiRates_[j])
+                (   0.5
+                *   (   MonthlyCurrentTermCoiRates_[j]
+                    +   MonthlyGuaranteedTermCoiRates_[j]
+                    )
                 );
             }
         }
     else
         {
-        MonthlyCurrentTermCoiRates_   .assign(Length_, 0.0);
         MonthlyMidpointTermCoiRates_  .assign(Length_, 0.0);
-        MonthlyGuaranteedTermCoiRates_.assign(Length_, 0.0);
         }
 
     if(AllowADD_)
         {
-        ADDRates_ = basic_values.GetADDRates();
 // TODO ?? No substandard support yet for this rider.
-//        MakeCoiRateSubstandard(ADDRates_, basic_values);
-        }
-    else
-        {
-        ADDRates_.assign(Length_, 0.0);
+//        MakeCoiRateSubstandard(ADDRates_);
         }
 
     if(AllowWP_)
         {
-        WPRates_ = basic_values.GetWPRates();
 // TODO ?? No substandard support yet for this rider.
-//        MakeCoiRateSubstandard(WPRates_, basic_values);
-        }
-    else
-        {
-        WPRates_.assign(Length_, 0.0);
+//        MakeCoiRateSubstandard(WPRates_);
         }
 
     if(AllowSpouse_)
         {
-        // Don't rate spouse rider--assume spouse not underwritten.
-        CurrentSpouseRiderRates_    = basic_values.GetCurrentSpouseRiderRates();
-        GuaranteedSpouseRiderRates_ = basic_values.GetGuaranteedSpouseRiderRates();
+        // Spouse rider can't be substandard--spouse not underwritten.
         LMI_ASSERT(0 == MidpointSpouseRiderRates_.size());
         for(int j = 0; j < Length_; j++)
             {
             // Here we take midpoint as average of monthly curr and guar.
             // Other approaches are possible.
+            // TODO ?? Use mean() instead.
             MidpointSpouseRiderRates_.push_back
-                (  0.5
-                * (CurrentSpouseRiderRates_[j] + GuaranteedSpouseRiderRates_[j])
+                (   0.5
+                *   (   CurrentSpouseRiderRates_[j]
+                    +   GuaranteedSpouseRiderRates_[j]
+                    )
                 );
             }
         }
     else
         {
-        CurrentSpouseRiderRates_    .assign(Length_, 0.0);
-        GuaranteedSpouseRiderRates_ .assign(Length_, 0.0);
         MidpointSpouseRiderRates_   .assign(Length_, 0.0);
         }
 
     if(AllowChild_)
         {
-        // Don't rate child rider--assume child not underwritten.
-        ChildRiderRates_ = basic_values.GetChildRiderRates();
-        }
-    else
-        {
-        ChildRiderRates_.assign(Length_, 0.0);
+        // Child rider can't be substandard--child not underwritten.
         }
 
     if(IsTgtPremTabular_)
         {
-        TargetPremiumRates_ = basic_values.GetTgtPremRates();
-        }
-    else
-        {
-        TargetPremiumRates_.assign(Length_, 0.0);
+        // Assume target premium table is never changed for substandard.
         }
 
     // TODO ?? Temporary stuff to support NSP for 7702A
@@ -665,7 +645,6 @@ void MortalityRates::SetOtherRates(BasicValues const& basic_values)
 //============================================================================
 void MortalityRates::MakeCoiRateSubstandard
     (std::vector<double>      & coi_rates
-    ,BasicValues         const& basic_values
     )
 {
     // Nothing to do if no rating.
@@ -711,7 +690,6 @@ void MortalityRates::GradeCurrentCoiRatesFromPartialMortalityAssumption
     (std::vector<double>& coi_rates
     ,std::vector<double> const& monthly_partial_mortality
     ,std::vector<double> const& grading_factors
-    ,BasicValues         const& basic_values
     )
 {
     // It seems necessary to limit the result to the maximum monthly
