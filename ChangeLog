@@ -1,4 +1,4 @@
-// 2005 ChangeLog for "Let me illustrate...".
+// 2005 ChangeLog for "Let me illustrate...". See 'MAINTENANCE' after license.
 //
 // Copyright (C) 2005 Gregory W. Chicares.
 //
@@ -19,7 +19,43 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.128 2005-09-03 01:39:54 chicares Exp $
+// $Id: ChangeLog,v 1.129 2005-09-03 02:45:45 chicares Exp $
+
+MAINTENANCE
+
+Please write entries this way:
+
+[1] YYYYMMDDTHHMMZ <yourname@domain.net> [defect-count]
+[2] [this line intentionally left blank]
+[3]   filename0
+[4]   filename1
+[5] Your comments.
+
+Explanations:
+
+[1] Write an ISO 8601 timestamp, using UTC because it sorts easily.
+Omit the optional defect-count if you like; it's explained below.
+
+[3] Exact name of file changed, indented two spaces.
+[4] Write each file on a separate line.
+
+[5] We aren't exactly following GNU standards here, but this one makes
+a lot of sense:
+  "If you think that a change calls for explanation, you're probably
+  right. Please do explain it--but please put the explanation in
+  comments in the code, where people will see it whenever they see the
+  code."
+If, as is often the case, the cvs commit message alone is sufficient,
+then just copy it here.
+
+We started following this convention only on 20050710T0414Z, so don't
+take earlier entries as exemplary.
+
+Run 'make check_conformity' before committing to cvs. It identifies
+common problems, e.g., incorrect copyright statements. It reports the
+"Number of marked defects" shown as [defect-count] above.
+
+//
 
 2005-01-14
 
@@ -3382,4 +3418,15 @@ Remove irrelevant tags.
   ihs_mortal.cpp
   mortality_rates.hpp
 Factor out many dependencies on class BasicValues.
+
+20050903T0245Z <chicares@cox.net> [1289]
+
+  INSTALL
+Remove nonempty blank line.
+
+  setup.make
+Review. Experimentally use cvs as a code review system, writing
+interlinear glosses containing the tag "REVIEW:", in the expectation
+that they will either be removed silently if accepted and followed, or
+lead to further discussion, whether in cvs or on the lmi mailing list.
 
