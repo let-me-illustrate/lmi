@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mortality_rates.hpp,v 1.7 2005-09-03 00:55:23 chicares Exp $
+// $Id: mortality_rates.hpp,v 1.8 2005-09-03 15:23:34 chicares Exp $
 
 #ifndef mortality_rates_hpp
 #define mortality_rates_hpp
@@ -59,7 +59,8 @@ class MortalityRates
   public:
     MortalityRates(BasicValues const&);
 
-    std::vector<double> const& MonthlyCoiRates(enum_basis)                const;
+    std::vector<double> const& MonthlyCoiRates(enum_basis) const; // Antediluvian.
+
     std::vector<double> const& MonthlyCoiRatesBand0(e_basis const& Basis) const;
     std::vector<double> const& MonthlyCoiRatesBand1(e_basis const& Basis) const;
     std::vector<double> const& MonthlyCoiRatesBand2(e_basis const& Basis) const;
@@ -82,10 +83,17 @@ class MortalityRates
   private:
     MortalityRates();
 
-    void Init(BasicValues const&);
+    void Init(BasicValues const&); // Antediluvian.
 
-    void SetGuaranteedRates(BasicValues const&);
-    void SetNonguaranteedRates(BasicValues const&);
+    void reserve_vectors();
+    // TODO ?? Want alternative for unit testing.
+    void fetch_parameters(BasicValues const&);
+    void initialize();
+
+    void perform_grading();
+
+    void SetGuaranteedRates();
+    void SetNonguaranteedRates();
     void SetOneNonguaranteedRateBand
         (std::vector<double>      & coi_rates
         ,std::vector<double> const& coi_multiplier
