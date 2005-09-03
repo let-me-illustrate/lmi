@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: calendar_date.cpp,v 1.3 2005-05-26 22:01:15 chicares Exp $
+// $Id: calendar_date.cpp,v 1.4 2005-09-03 00:20:46 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -31,14 +31,24 @@
 #include "value_cast.hpp"
 
 #include <ctime>
+#include <iomanip>
 #include <istream>
 #include <ostream>
 #include <sstream>
 #include <stdexcept>
 
-// TODO ?? Consider using this LGPL class:
+// TODO ?? It seems improbable that I've written a defect-free date
+// class. It might make sense to run this class's unit tests against
+// some other implementation--boost's, or perhaps this one:
 //   http://liblookdb.sourceforge.net/source/liblookdb/looktypes/lkdatetime.cpp
-// at least as a comparative basis for unit testing.
+// to make sure they agree. Using boost in the unit test would seem
+// ideal if it does the same job; and boost would have its own unit
+// tests, which might inspire more lmi tests.
+
+// TODO ?? Not everything here is exercised in the companion unit
+// test. For instance, calendar_date::str() isn't tested at all, and
+// indeed an earlier version of that function returned a non-ISO8601
+// string like "2005-9-2".
 
 namespace
 {
@@ -106,7 +116,13 @@ namespace
             ++year;
             }
     }
-/* TODO ?? Do we want functions like these?
+/*
+// TODO ?? Do we want functions like these?
+// Answer: Yes. Look elsewhere in lmi for corrected versions,
+// perhaps in 'date_control.cpp' (probably that file is otherwise
+// obsolete, but I know I corrected some defects and I think it
+// was there).
+
     int YyyyMmDdToJdn(int g)
     {
         int year = g / 10000;
@@ -193,14 +209,23 @@ int calendar_date::julian_day_number(int z)
 
 // This could delegate to platform-specific code; for now, it just
 // returns ISO8601 with hyphens.
+//
 std::string calendar_date::str() const
 {
     std::ostringstream oss;
-    oss << year() << '-' << month() << '-' << day();
+    oss
+        << std::setfill('0') << std::setw(4) << year()
+        << '-'
+        << std::setfill('0') << std::setw(2) << month()
+        << '-'
+        << std::setfill('0') << std::setw(2) << day()
+        ;
     return oss.str();
 }
 
-// TODO ?? Fix the manifest i18n defect.
+// TODO ?? Fix the manifest i18n defect. Wouldn't the standard
+// library's time_get facet's get_monthname() take care of this
+// without requiring any third-party i18n library?
 std::string calendar_date::month_name(int month)
 {
     if(!(0 < month && month < 13))
