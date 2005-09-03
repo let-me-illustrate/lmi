@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: INSTALL,v 1.13 2005-09-02 16:10:00 wboutin Exp $
+// $Id: INSTALL,v 1.14 2005-09-03 02:45:16 chicares Exp $
 
 [It's clearest to validate commands, then copy and paste them here.
 Once we've done that, it becomes trivial to turn this into a shell
@@ -123,7 +123,7 @@ Copy boost header files to the third-party hierarchy:
   /tmp[0]$mkdir -p /opt/lmi/third-party/include/boost/
   /tmp[0]$pushd boost_1_31_0/boost/
   /tmp/boost/boost_1_31_0/boost[0]$/msys/1.0/bin/cp --force --parents --preserve --recursive * /c/opt/lmi/third-party/include/boost/
-  
+
 [WENDY--the ancient cp you're using won't do this without producing
 tons of bogus diagnostics; alternatively, you could do this:
 
