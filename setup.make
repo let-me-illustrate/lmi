@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: setup.make,v 1.5 2005-09-01 21:03:02 wboutin Exp $
+# $Id: setup.make,v 1.6 2005-09-03 02:45:45 chicares Exp $
 
 .PHONY: all
 all: setup
@@ -67,6 +67,16 @@ setup: \
   frozen_xmlwrapp \
   frozen_boost \
   frozen_libxml2 \
+
+# REVIEW: Could these be combined? Untested idea:
+# third_party_directories := \
+#   third_party_bin_dir \
+#   third_party_include_dir \
+#   third_party_lib_dir \
+#   third_party_source_dir \
+#
+# $(third_party_directories):
+# 	+@[ -d $@ ] || $(MKDIR) --parents $@
 
 .PHONY: $(third_party_bin_dir)
 $(third_party_bin_dir):
@@ -127,6 +137,17 @@ dummy_libraries: $(third_party_bin_dir) $(third_party_lib_dir)
 
 # TODO ?? Prefer to define $(TMPDIR) elsewhere and use the definition here.
 # Can the definition in 'GNUmakefile' be shared?
+
+# REVIEW: Can 'frozen_.*' rules be combined? Untested idea:
+# frozen%: $(third_party_directories)
+# 	$(MAKE) \
+# 	  -C /tmp \
+# 	  -f $(src_dir)/setup.make \
+# 	                    src_dir='$(src_dir)' \
+#        third_party_include_dir='$(third_party_include_dir)' \
+#         third_party_source_dir='$(third_party_source_dir)' \
+# [similarly pass other '.*_dir' variables?]
+# 	  install_$@_from_tmp_dir
 
 .PHONY: frozen_cgicc
 frozen_cgicc:
@@ -241,8 +262,8 @@ install_frozen_libxml2_from_tmp_dir:
 	$(ECHO) "ed581732d586f86324ec46e572526ede  libxml2-2.6.19.tar.bz2" |$(MD5SUM) --check
 	[ -e libxml2-2.6.19.tar ] || $(BZIP2) --decompress --keep libxml2-2.6.19.tar.bz2
 	$(TAR) --extract --file=libxml2-2.6.19.tar
-	cd libxml2-2.6.19; \
-	configure && $(MAKE)
+# REVIEW: I think you need this 's_configure_./configure_' change:
+	cd libxml2-2.6.19; ./configure && $(MAKE)
 	$(MKDIR) --parents $(third_party_include_dir)/libxml/
 	-$(CP) --force --preserve --recursive libxml2-2.6.19/include/libxml/* $(third_party_include_dir)/libxml/ 2>/dev/null
 	$(CP) --force --preserve libxml2-2.6.19/.libs/libxml2-2.dll $(third_party_bin_dir)
