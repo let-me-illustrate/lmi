@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: timer.hpp,v 1.7 2005-06-05 03:55:52 chicares Exp $
+// $Id: timer.hpp,v 1.8 2005-09-04 17:05:30 chicares Exp $
 
 #ifndef timer_hpp
 #define timer_hpp
@@ -54,6 +54,8 @@
 #include <algorithm> // std::min()
 #include <climits>   // ULONG_MAX
 #include <cmath>     // std::log10(), std::pow()
+#include <iomanip>
+#include <ios>
 #include <sstream>
 #include <string>
 
@@ -187,6 +189,8 @@ std::string aliquot_timer(F f, double seconds)
         }
     std::ostringstream oss;
     oss
+        << std::scientific << std::setprecision(3)
+        << "[" << timer.elapsed_usec() / z << "] "
         << z
         << " iteration" << ((1 == z) ? "" : "s") << " took "
         << timer.elapsed_msec_str()
