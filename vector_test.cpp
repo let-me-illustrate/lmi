@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: vector_test.cpp,v 1.1 2005-08-27 16:15:14 chicares Exp $
+// $Id: vector_test.cpp,v 1.2 2005-09-04 17:05:28 chicares Exp $
 
 // This file is of historical interest only. It shows various attempts
 // to reinvent work that others have done better.
@@ -99,9 +99,9 @@ struct adder
 // a class that knows how to do the same thing, but doesn't actually
 // do it. It knows what input iterators we want to use because it
 // retains local copies of them. It knows how to traverse the
-// iterators: that's what it operator++() is for. And the knowledge of
-// how to invoke the binary operation on each iterand-pair is embodied
-// in operator*().
+// iterators: that's what its operator++() is for. And the knowledge
+// of how to invoke the binary operation on each iterand-pair is
+// embodied in operator*().
 
 template<typename I, typename J, typename BinaryOperation>
 class binary_expression
