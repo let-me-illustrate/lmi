@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.130 2005-09-03 23:55:43 chicares Exp $
+// $Id: ChangeLog,v 1.131 2005-09-04 17:05:33 chicares Exp $
 
 MAINTENANCE
 
@@ -3455,4 +3455,16 @@ Improve consistency checking.
   loads.cpp
   mortality_rates.cpp
 Add expression-template glosses.
+
+20050904T1705Z <chicares@cox.net> [1293]
+
+  vector_test.cpp
+Improve documentation.
+
+  timer.hpp
+Improve output.
+
+  expression_template_0_test.cpp [new file]
+  objects.make
+Investigate expression templates.
 
