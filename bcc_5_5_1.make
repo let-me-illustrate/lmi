@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: bcc_5_5_1.make,v 1.5 2005-05-26 18:37:48 chicares Exp $
+# $Id: bcc_5_5_1.make,v 1.6 2005-09-05 04:27:15 chicares Exp $
 
 toolset := bcc
 
@@ -99,6 +99,13 @@ MAKEDEPEND_1 :=
 
 MPATROL_LIBS :=
 
+# The default value '-lboost_filesystem-mgw' contains a hyphen, which
+# violates the rule here
+#   http://www.boost.org/more/lib_guide.htm#Directory_structure
+# and causes problems because it looks like an option prefix.
+
+platform_boost_libraries :=
+
 # The borland linker fails with this library search path:
 #   /wx-cvs-20050216/wxWidgets/lib/gcc_dll
 # Perhaps it requires an msdos path. Passing an empty variable
@@ -134,6 +141,7 @@ bcc_5_5_1.make:: ;
 	                  MAKEDEPEND_0='$(MAKEDEPEND_0)' \
 	                  MAKEDEPEND_1='$(MAKEDEPEND_1)' \
 	                  MPATROL_LIBS='$(MPATROL_LIBS)' \
+	      platform_boost_libraries='$(platform_boost_libraries)' \
 	         platform_wx_libraries='$(platform_wx_libraries)' \
 	  unit_tests \
 
