@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: setup.make,v 1.6 2005-09-03 02:45:45 chicares Exp $
+# $Id: setup.make,v 1.7 2005-09-05 04:27:19 chicares Exp $
 
 .PHONY: all
 all: setup
@@ -55,10 +55,10 @@ $(src_dir)/objects.make:: ;
 
 # TODO ?? Move these definitions elsewhere.
 
-third_party_bin_dir     := $(system_root)/opt/lmi/third-party/bin
-third_party_include_dir := $(system_root)/opt/lmi/third-party/include
-third_party_lib_dir     := $(system_root)/opt/lmi/third-party/lib
-third_party_source_dir  := $(system_root)/opt/lmi/third-party/src
+third_party_bin_dir     := $(system_root)/opt/lmi/third_party/bin
+third_party_include_dir := $(system_root)/opt/lmi/third_party/include
+third_party_lib_dir     := $(system_root)/opt/lmi/third_party/lib
+third_party_source_dir  := $(system_root)/opt/lmi/third_party/src
 
 .PHONY: setup
 setup: \

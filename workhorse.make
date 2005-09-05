@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: workhorse.make,v 1.45 2005-08-31 17:55:04 chicares Exp $
+# $Id: workhorse.make,v 1.46 2005-09-05 04:27:19 chicares Exp $
 
 ###############################################################################
 
@@ -134,14 +134,14 @@ effective_default_target: $(default_targets)
 all_include_directories := \
   $(src_dir) \
   $(compiler_include_directory) \
-  $(system_root)/opt/lmi/third-party/include \
+  $(system_root)/opt/lmi/third_party/include \
   $(system_root)/usr/local/include \
 
 all_source_directories := \
   $(src_dir) \
-  $(system_root)/opt/lmi/third-party/src/boost/libs/filesystem/src \
-  $(system_root)/opt/lmi/third-party/src/cgicc \
-  $(system_root)/opt/lmi/third-party/src/libxml \
+  $(system_root)/opt/lmi/third_party/src/boost/libs/filesystem/src \
+  $(system_root)/opt/lmi/third_party/src/cgicc \
+  $(system_root)/opt/lmi/third_party/src/libxml \
 
 vpath lib%.a          $(CURDIR)
 vpath %.o             $(CURDIR)
@@ -357,8 +357,8 @@ REQUIRED_ARFLAGS = \
 
 REQUIRED_LDFLAGS = \
   -L . \
-  -L $(system_root)/opt/lmi/third-party/lib \
-  -L $(system_root)/opt/lmi/third-party/bin \
+  -L $(system_root)/opt/lmi/third_party/lib \
+  -L $(system_root)/opt/lmi/third_party/bin \
   -L $(system_root)/usr/local/lib \
   -L $(system_root)/usr/local/bin \
   $(REQUIRED_LIBS) \
