@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: expression_template_0_test.cpp,v 1.1 2005-09-04 17:05:33 chicares Exp $
+// $Id: expression_template_0_test.cpp,v 1.2 2005-09-05 04:27:12 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -49,6 +49,26 @@
 // and serves mainly to demonstrate the verbosity and limitations of
 // the STL approaches.
 
+// These variables are global because passing them as arguments is
+// quite a chore, and an unnecessary one in this standalone module.
+
+int const length = 100;
+
+// cv*: C vectors.
+double cv0[length];
+double cv1[length];
+double cv2[length];
+
+// sv*: standard vectors
+std::vector<double> sv0;
+std::vector<double> sv1;
+std::vector<double> sv2;
+
+// va*: valarrays
+std::valarray<double> va0;
+std::valarray<double> va1;
+std::valarray<double> va2;
+
 // These 'mete*' functions perform the same set of operations using
 // different implementations.
 
@@ -59,49 +79,39 @@
 ///        v2[j] += v0 - 2.0 * v1[0];
 /// and that many such errors can be very difficult to find.
 
-void mete_c
-    (int length
-    ,double* v0
-    ,double* v1
-    ,double* v2
-    )
+void mete_c()
 {
     for(int j = 0; j < length; ++j)
         {
-        v2[j] += v0[j] - 2.0 * v1[j];
+        cv2[j] += cv0[j] - 2.0 * cv1[j];
         }
 }
 
 /// This implementation uses STL in a naive way.
 
-void mete_stl_naive
-    (int
-    ,std::vector<double>& v0
-    ,std::vector<double>& v1
-    ,std::vector<double>& v2
-    )
+void mete_stl_naive()
 {
     std::vector<double> tmp0;
     // Omitting the call to reserve() greatly impairs performance.
     tmp0.reserve(100);
     std::transform
-        (v1.begin()
-        ,v1.end()
+        (sv1.begin()
+        ,sv1.end()
         ,std::back_inserter(tmp0)
         ,std::bind1st(std::multiplies<double>(), 2.0)
         );
     std::transform
-        (v0.begin()
-        ,v0.end()
+        (sv0.begin()
+        ,sv0.end()
         ,tmp0.begin()
         ,tmp0.begin()
         ,std::minus<double>()
         );
     std::transform
-        (v2.begin()
-        ,v2.end()
+        (sv2.begin()
+        ,sv2.end()
         ,tmp0.begin()
-        ,v2.begin()
+        ,sv2.begin()
         ,std::plus<double>()
         );
 }
@@ -130,21 +140,16 @@ void mete_stl_naive
 /// Of course, n-ary analogs of std::transform could be written,
 /// but what's really wanted is a much more concise notation.
 
-void mete_stl_smart
-    (int
-    ,std::vector<double>& v0
-    ,std::vector<double>& v1
-    ,std::vector<double>& v2
-    )
+void mete_stl_smart()
 {
     // Writing 'static' here is an optimization, though of course it
     // is not consonant with thread safety.
     static std::vector<double> tmp0;
     tmp0.reserve(100);
     std::transform
-        (v0.begin()
-        ,v0.end()
-        ,v1.begin()
+        (sv0.begin()
+        ,sv0.end()
+        ,sv1.begin()
         ,tmp0.begin()
         ,boost::bind
             (std::minus<double>()
@@ -157,35 +162,35 @@ void mete_stl_smart
             )
         );
     std::transform
-        (v2.begin()
-        ,v2.end()
+        (sv2.begin()
+        ,sv2.end()
         ,tmp0.begin()
-        ,v2.begin()
+        ,sv2.begin()
         ,std::plus<double>()
         );
 }
 
 /// This implementation uses std::valarray.
 
-void mete_valarray
-    (int
-    ,std::valarray<double>& v0
-    ,std::valarray<double>& v1
-    ,std::valarray<double>& v2
-    )
+void mete_valarray()
 {
-    v2 += v0 - 2.0 * v1;
+    va2 += va0 - 2.0 * va1;
+}
+
+void run_one_test(std::string const& s, void(*f)())
+{
+    double const max_seconds = 10.0;
+    std::cout
+        << "  Speed test: "
+        << s
+        << '\n'
+        << aliquot_timer(f, max_seconds)
+        << '\n'
+        ;
 }
 
 int test_main(int, char*[])
 {
-    int const length = 100;
-
-    // cv*: C vectors.
-    double cv0[length];
-    double cv1[length];
-    double cv2[length];
-
     for(int j = 0; j < length; ++j)
         {
         cv0[j] = 0.100 * j;
@@ -193,36 +198,39 @@ int test_main(int, char*[])
         cv2[j] = 0.001 * j;
         }
 
-    // sv*: standard vectors
-    std::vector<double> sv0(cv0, cv0 + length);
-    std::vector<double> sv1(cv1, cv1 + length);
-    std::vector<double> sv2(cv2, cv2 + length);
+    sv0 = std::vector<double>(cv0, cv0 + length);
+    sv1 = std::vector<double>(cv1, cv1 + length);
+    sv2 = std::vector<double>(cv2, cv2 + length);
 
-    // va*: valarrays
-    std::valarray<double> va0(cv0, length);
-    std::valarray<double> va1(cv1, length);
-    std::valarray<double> va2(cv2, length);
+    // Don't try to assign to a default-constructed valarray without
+    // resizing it first [26.3.2.2/1].
+    va0.resize(length);
+    va1.resize(length);
+    va2.resize(length);
+
+    va0 = std::valarray<double>(cv0, length);
+    va1 = std::valarray<double>(cv1, length);
+    va2 = std::valarray<double>(cv2, length);
 
     double original = cv2[1];
 
-    mete_c        (length, cv0, cv1, cv2);
+    mete_c();
     BOOST_TEST_EQUAL(cv2[1], 0.001 + 0.100 - 2.0 * 0.010);
 
-    mete_stl_naive(length, sv0, sv1, sv2);
+    mete_stl_naive();
     BOOST_TEST_EQUAL(sv2[1], 0.001 + 0.100 - 2.0 * 0.010);
 
     sv2[1] = original; // Restore overwritten initial value.
-    mete_stl_smart(length, sv0, sv1, sv2);
+    mete_stl_smart();
     BOOST_TEST_EQUAL(sv2[1], 0.001 + 0.100 - 2.0 * 0.010);
 
-    mete_valarray (length, va0, va1, va2);
+    mete_valarray();
     BOOST_TEST_EQUAL(va2[1], 0.001 + 0.100 - 2.0 * 0.010);
 
-    double const max_seconds = 10.0;
-    std::cout << "  Speed test: C\n"         << aliquot_timer(boost::bind(mete_c        , length, cv0, cv1, cv2), max_seconds) << '\n';
-    std::cout << "  Speed test: STL naive\n" << aliquot_timer(boost::bind(mete_stl_naive, length, sv0, sv1, sv2), max_seconds) << '\n';
-    std::cout << "  Speed test: STL smart\n" << aliquot_timer(boost::bind(mete_stl_smart, length, sv0, sv1, sv2), max_seconds) << '\n';
-    std::cout << "  Speed test: valarray\n"  << aliquot_timer(boost::bind(mete_valarray , length, va0, va1, va2), max_seconds) << '\n';
+    run_one_test("C"        , mete_c        );
+    run_one_test("STL naive", mete_stl_naive);
+    run_one_test("STL smart", mete_stl_smart);
+    run_one_test("valarray" , mete_valarray );
 
     return 0;
 }
