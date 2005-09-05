@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.131 2005-09-04 17:05:33 chicares Exp $
+// $Id: ChangeLog,v 1.132 2005-09-05 04:27:19 chicares Exp $
 
 MAINTENANCE
 
@@ -3467,4 +3467,22 @@ Improve output.
   expression_template_0_test.cpp [new file]
   objects.make
 Investigate expression templates.
+
+20050905T0427Z <chicares@cox.net> [1293]
+
+  expression_template_0_test.cpp
+Refactor to facilitate extension.
+
+  bcc_5_5_1.make
+Work around a problem with the boost build system that we eschew.
+
+  setup.make
+  workhorse.make
+Use a more portable path for third-party libraries, following boost
+  http://www.boost.org/more/lib_guide.htm#Directory_structure
+recommendations. Any
+  /opt/lmi/third-party/
+directory must be renamed to
+  /opt/lmi/third_party/
+with an underscore instead of a hyphen.
 
