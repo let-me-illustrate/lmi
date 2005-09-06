@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: expression_template_0_test.cpp,v 1.2 2005-09-05 04:27:12 chicares Exp $
+// $Id: expression_template_0_test.cpp,v 1.3 2005-09-06 13:54:01 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -59,12 +59,17 @@ double cv0[length];
 double cv1[length];
 double cv2[length];
 
-// sv*: standard vectors
-std::vector<double> sv0;
-std::vector<double> sv1;
-std::vector<double> sv2;
+// sv*: Standard vectors, first test.
+std::vector<double> sv0a;
+std::vector<double> sv1a;
+std::vector<double> sv2a;
 
-// va*: valarrays
+// sv*: Standard vectors, second test.
+std::vector<double> sv0b;
+std::vector<double> sv1b;
+std::vector<double> sv2b;
+
+// va*: Standard valarrays.
 std::valarray<double> va0;
 std::valarray<double> va1;
 std::valarray<double> va2;
@@ -95,23 +100,23 @@ void mete_stl_naive()
     // Omitting the call to reserve() greatly impairs performance.
     tmp0.reserve(100);
     std::transform
-        (sv1.begin()
-        ,sv1.end()
+        (sv1a.begin()
+        ,sv1a.end()
         ,std::back_inserter(tmp0)
         ,std::bind1st(std::multiplies<double>(), 2.0)
         );
     std::transform
-        (sv0.begin()
-        ,sv0.end()
+        (sv0a.begin()
+        ,sv0a.end()
         ,tmp0.begin()
         ,tmp0.begin()
         ,std::minus<double>()
         );
     std::transform
-        (sv2.begin()
-        ,sv2.end()
+        (sv2a.begin()
+        ,sv2a.end()
         ,tmp0.begin()
-        ,sv2.begin()
+        ,sv2a.begin()
         ,std::plus<double>()
         );
 }
@@ -147,9 +152,9 @@ void mete_stl_smart()
     static std::vector<double> tmp0;
     tmp0.reserve(100);
     std::transform
-        (sv0.begin()
-        ,sv0.end()
-        ,sv1.begin()
+        (sv0b.begin()
+        ,sv0b.end()
+        ,sv1b.begin()
         ,tmp0.begin()
         ,boost::bind
             (std::minus<double>()
@@ -162,10 +167,10 @@ void mete_stl_smart()
             )
         );
     std::transform
-        (sv2.begin()
-        ,sv2.end()
+        (sv2b.begin()
+        ,sv2b.end()
         ,tmp0.begin()
-        ,sv2.begin()
+        ,sv2b.begin()
         ,std::plus<double>()
         );
 }
@@ -198,9 +203,13 @@ int test_main(int, char*[])
         cv2[j] = 0.001 * j;
         }
 
-    sv0 = std::vector<double>(cv0, cv0 + length);
-    sv1 = std::vector<double>(cv1, cv1 + length);
-    sv2 = std::vector<double>(cv2, cv2 + length);
+    sv0a = std::vector<double>(cv0, cv0 + length);
+    sv1a = std::vector<double>(cv1, cv1 + length);
+    sv2a = std::vector<double>(cv2, cv2 + length);
+
+    sv0b = std::vector<double>(cv0, cv0 + length);
+    sv1b = std::vector<double>(cv1, cv1 + length);
+    sv2b = std::vector<double>(cv2, cv2 + length);
 
     // Don't try to assign to a default-constructed valarray without
     // resizing it first [26.3.2.2/1].
@@ -212,20 +221,17 @@ int test_main(int, char*[])
     va1 = std::valarray<double>(cv1, length);
     va2 = std::valarray<double>(cv2, length);
 
-    double original = cv2[1];
-
     mete_c();
-    BOOST_TEST_EQUAL(cv2[1], 0.001 + 0.100 - 2.0 * 0.010);
+    BOOST_TEST_EQUAL(cv2 [1], 0.001 + 0.100 - 2.0 * 0.010);
 
     mete_stl_naive();
-    BOOST_TEST_EQUAL(sv2[1], 0.001 + 0.100 - 2.0 * 0.010);
+    BOOST_TEST_EQUAL(sv2a[1], 0.001 + 0.100 - 2.0 * 0.010);
 
-    sv2[1] = original; // Restore overwritten initial value.
     mete_stl_smart();
-    BOOST_TEST_EQUAL(sv2[1], 0.001 + 0.100 - 2.0 * 0.010);
+    BOOST_TEST_EQUAL(sv2b[1], 0.001 + 0.100 - 2.0 * 0.010);
 
     mete_valarray();
-    BOOST_TEST_EQUAL(va2[1], 0.001 + 0.100 - 2.0 * 0.010);
+    BOOST_TEST_EQUAL(va2 [1], 0.001 + 0.100 - 2.0 * 0.010);
 
     run_one_test("C"        , mete_c        );
     run_one_test("STL naive", mete_stl_naive);
