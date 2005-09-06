@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: vector_test.cpp,v 1.2 2005-09-04 17:05:28 chicares Exp $
+// $Id: vector_test.cpp,v 1.3 2005-09-06 03:21:32 chicares Exp $
 
 // This file is of historical interest only. It shows various attempts
 // to reinvent work that others have done better.
@@ -42,26 +42,33 @@
 
 // Expression templates
 //
-// First read
+// Read these papers by Veldhuizen and Furnish respectively:
 //   http://osl.iu.edu/~tveldhui/papers/Expression-Templates/exprtmpl.html
 //   http://www.adtmag.com/joop/crarticle.asp?ID=627
-// to understand the motivation. The following code is adapted from
-// ideas in those two papers. Also see
-// http://web.media.mit.edu/~rahimi/lazy-containers/
-// ipdps.eece.unm.edu/1998/papers/113.pdf
-
-// First consider std::plus :
+// to understand the motivation. The following code is an original
+// implementation of ideas in those two papers.
 //
-//   template <class T>
-//   struct plus : public binary_function<T,T,T>
+// Consider adding two vectors:
+//
+//   std::transform
+//      (v0.begin(), v0.end(), v1.begin(), v2.end(), std::plus<double>());
+//
+// We want to write this in the simplest way imaginable:
+//   v2 = v0 + v1;
+// and we want more complicated expressions to be evaluated in one
+// pass through the vectors, without redundant loads and stores.
+// That can be achieved by deferred evaluation.
+//
+// Consider std::plus :
+//
+//   template<typename T>
+//   struct plus
+//       :binary_function<T,T,T>
 //   {
-//       T operator()(const T& x, const T& y) const {return x + y;}
-//   };
+//       T operator()(T const& t0, T const& t1) const {return t0 + t1;}
+//   }
 //
-// whose base class binary_function serves only to inject typenames
-// for the arguments and the result.
-//
-// Why don't we just use that? Well, operator()() must be a nonstatic
+// Why not just use that? Well, operator()() must be a nonstatic
 // member function [13.5.4], so it can't be invoked without an object.
 // When we use std::plus as an argument to std::transform(), the
 // objects are immediately available. But for expression templates we
@@ -70,27 +77,27 @@
 // as Furnish points out, that's the problem we're trying to avoid.
 //
 // Instead, we write this similar code that uses a static member
-// function and therefore can be invoked without an object. Following
-// Veldhuizen's presentation here and throughout this file, we write
-// specifically for type double, knowing that we can abstract that
-// type later.
+// function and therefore can be invoked without an object:
 
-struct adder
+struct plus
 {
-    static double apply(double a, double b) {return a + b;}
+    static double apply(double d0, double d1) {return d0 + d1;}
 };
 
+// Following Veldhuizen's presentation here and throughout this file,
+// we write specifically for type double, knowing that we can later
+// abstract that type. Furnish and Veldhuizen both name this 'apply';
+// it can't be named 'operator()' because it's static.
+//
 // Now consider the binary form of std::transform():
 //
-//   template<typename I, typename J, typename R, typename BinOp>
-//   R transform(I first1, I last1, J first2, R result, BinOp bin_op)
-//   {
-//       for(;first1 != last1; ++first1, ++first2, ++result)
-//           {
-//           *result = bin_op(*first1, *first2);
-//           }
-//       return result;
-//   }
+// template<typename I0, typename I1, typename R, typename F>
+// R transform(I0 alpha0, I0 omega0, I1 alpha1, R result, F f)
+// {
+//     for(; alpha0 != omega0; ++alpha0, ++alpha1, ++result)
+//         *result = f(*alpha0, *alpha1);
+//     return result;
+// }
 //
 // which iterates across input iterators, at each step applying a
 // binary-operation object to the iterators and assigning the result
@@ -102,19 +109,26 @@ struct adder
 // iterators: that's what its operator++() is for. And the knowledge
 // of how to invoke the binary operation on each iterand-pair is
 // embodied in operator*().
+//
+// The concept-names SDF (Scalar Dyadic Function) is borrowed from
+// APL. "Dyadic" and "Monadic" are the common APL terms for what the
+// C++ literature usually calls binary and unary functions. The APL
+// terms emphasize that the functions are scalar (because their
+// arguments and results are), although they'll often be applied to
+// vectors.
 
-template<typename I, typename J, typename BinaryOperation>
+template<typename I0, typename I1, typename SDF>
 class binary_expression
 {
   public:
-    binary_expression(I const& a_i, J const& a_j) :i(a_i), j(a_j) {}
+    binary_expression(I0 const& i, I1 const& j) :i_(i), j_(j) {}
 
-    double operator*() const       {return BinaryOperation::apply(*i, *j);}
-    void operator++()              {++i; ++j;}
+    double operator*() const {return SDF::apply(*i_, *j_);}
+    void operator++()        {++i_; ++j_;}
 
   private:
-    I i;
-    J j;
+    I0 i_;
+    I1 j_;
 };
 
 // It's instructive to examine how these low-level pieces work:
@@ -128,185 +142,89 @@ void demo0()
     // We can use it to add just one pair if we like.
     double r;
     std::transform(u, 1 + u, v, &r, std::plus<double>());
-    std::cout << r << '\n';
-    BOOST_TEST(materially_equal(r, 6.8));
+    BOOST_TEST(materially_equal(6.8, r));
 
     // Here's an equivalent using our new code.
-    std::cout << *binary_expression<double*,double*,adder>(u, v) << '\n';
+    r = *binary_expression<double const*,double const*,plus>(u, v);
+    BOOST_TEST(materially_equal(6.8, r));
 
     // This type embodies everything we need to know to add pairs of
     // values during iteration.
-    typedef binary_expression<double*,double*,adder> Add;
-    std::cout << *Add(u, v) << '\n';
-    BOOST_TEST(materially_equal(*Add(u, v), 6.8));
+    typedef binary_expression<double const*,double const*,plus> Add;
+    BOOST_TEST(materially_equal(6.8, *Add(u, v)));
 
     // Since 'Add' is a class type, we can construct an instance and
-    // exercise its operator*() and operator++().
+    // exercise its operator*() and operator++() separately.
     Add a(u, v);
-    std::cout << "Sum of first  pair: " << *a << '\n';
-    BOOST_TEST(materially_equal(*a, 6.8));
+    BOOST_TEST(materially_equal(6.8, *a));
     ++a;
-    std::cout << "Sum of second pair: " << *a << '\n';
-    BOOST_TEST(materially_equal(*a, 11.2));
+    BOOST_TEST(materially_equal(11.2, *a));
 }
 
 // As this example shows, we have something equivalent to std::plus
 // combined with std::transform(), but with iterative evaluation
-// removed in such a way that it can easily be done later.
+// removed so that it can easily be done later.
 
-// Now let's create a simple container and add its elements together.
-// This container holds an array of two doubles and is obviously
+// Let's create a simple array class and add its elements together.
+// This class holds an array of exactly two doubles and is obviously
 // unsuitable for use beyond this demonstration. The real point is its
-// operator=(), which automates the iterator traversal
-//    *iterator
-//    ++iterator;
-//    repeat until done
-// demonstrated manually above.
+// operator=(), which automates the iterator traversal demonstrated
+// manually above.
 
-class ArrayOfDouble
+class simple_array0
 {
   public:
-    ArrayOfDouble(double a, double b) {data[0] = a; data[1] = b;}
+    simple_array0(int n, double d = 0.0)
+        :length_(n)
+        {
+        data_ = new double[n];
+        for(int j = 0; j < n; ++j) data_[j] = d;
+        }
 
-    ArrayOfDouble& operator=(binary_expression<double*,double*,adder> e)
-        {for(double* i = begin(); i < end(); ++i, ++e) {*i = *e;} return *this;}
+    ~simple_array0() {delete[] data_;}
 
-    double* begin() const {return     const_cast<double*>(data);}
-    double* end  () const {return n + const_cast<double*>(data);}
+    double& operator[](int i)           {return data_[i];}
+
+    typedef binary_expression<double const*,double const*,plus> add_t;
+    simple_array0& operator=(add_t e)
+        {
+        for(double* i = begin(); i < end(); ++i, ++e)
+            {*i = *e;}
+        return *this;
+        }
+
+    double const* begin() const {return           data_;}
+    double const* end  () const {return length_ + data_;}
+
+    double*       begin()       {return           data_;}
+    double*       end  ()       {return length_ + data_;}
 
   private:
-    enum {n = 2};
-    double data[n];
+    double* data_;
+    int length_;
 };
 
-// Here is some 'syntactic sugar' that lets us add two instances of
-// our simple array class together by writing a plus sign between
-// their names.
+// This syntactic sugar that lets us add two instances of our simple
+// array class together by writing a plus sign between their names.
 
-typedef binary_expression<double*,double*,adder> demo1_t;
+//typedef binary_expression<double*,double*,plus> sdf_addition;
+typedef binary_expression<double const*,double const*,plus> sdf_addition;
 
-demo1_t operator+(ArrayOfDouble const& v0, ArrayOfDouble const& v1)
+// Geoffrey Furnish notes that the result is created on the stack and
+// must therefore be returned by value. That's unavoidable, but it
+// doesn't cost much: it's just a pair of iterators.
+
+sdf_addition operator+(simple_array0 const& v0, simple_array0 const& v1)
 {
-    // Geoffrey Furnish notes that this is created on the stack and
-    // must therefore be returned by value. TODO ?? Why does that matter?
-    return demo1_t(v0.begin(), v1.begin());
+    return sdf_addition(v0.begin(), v1.begin());
 }
 
 void demo1()
 {
-    ArrayOfDouble u(1.2, 3.4);
-    ArrayOfDouble v(5.6, 7.8);
-    ArrayOfDouble r(0.0, 0.0);
-    r = u + v;
-    std::cout << "Vector sum: ";
-    std::copy(r.begin(), r.end(), std::ostream_iterator<double>(std::cout, " "));
-    std::cout << '\n';
-    BOOST_TEST(materially_equal(*     r.begin() ,  6.8));
-    BOOST_TEST(materially_equal(*(1 + r.begin()), 11.2));
-    r = u;
-    ArrayOfDouble s(r);
-    (void) s; // Avoid gcc 'unused variable' warning.
-}
-
-////
-
-/*
-binop...add this...
-operator ArrayOfDouble() ////
-{
-  ArrayOfDouble r(0.0, 0.0);
-  for(double* i = r.begin(); i < r.end(); ++i, operator++())
-    {*i = operator*();}
-  return r;
-}
-*/
-
-/*
-template<typename BinaryOperation>
-ArrayOfDouble operator=(binary_expression<double*,double*,adder> e)
-        {for(double* i = begin(); i < end(); ++i, ++e) {*i = *e;} return *this;}
-
-
-operator=(), operator+=() etc. must be members
-
-*/
-
-
-class vec;
-
-class assignable
-{
-  public:
-    virtual void assign_to(vec&) const = 0;
-};
-
-class vec
-{
-    typedef double* iterator_type;
-
-  public:
-    vec(int n)
-        : length(n)
-        {data = new double[n];}
-
-    vec(double d, int n)
-        : length(n)
-        {
-        data = new double[n];
-        for(int j = 0; j < n; ++j) data[j] = d;
-        }
-
-    ~vec()                              {delete[] data;}
-
-    iterator_type begin() const         {return data;}
-    iterator_type end  () const         {return data + length;}
-    double& operator[](int i)           {return data[i];}
-
-    vec& operator=(assignable const& x) {x.assign_to(*this); return *this;}
-
-  private:
-    double* data;
-    int length;
-};
-
-template<typename IteratorType>
-void perform_assignment(vec& v, IteratorType const& a_root)
-{
-    IteratorType root = a_root;
-    for(double* result = v.begin(); result != v.end(); ++result, ++root)
-        {
-        *result = *root;
-        }
-}
-
-template<typename T>
-class general_expression
-    :public assignable
-{
-public:
-    general_expression(T const& a_t) :t(a_t) {}
-
-    double operator*() const             {return *t; }
-    void operator++()                    {++t;}
-
-    virtual void assign_to(vec& x) const {perform_assignment(x, *this);}
-
-private:
-    T t;
-};
-
-general_expression<binary_expression<double*,double*,adder> >
-operator+(vec const& v0, vec const& v1)
-{
-    return binary_expression<double*,double*,adder>(v0.begin(), v1.begin());
-}
-
-void demo2()
-{
     int const length = 10;
-    vec u(length);
-    vec v(length);
-    vec w(length);
+    simple_array0 u(length);
+    simple_array0 v(length);
+    simple_array0 w(length);
 
     for(int j = 0; j < length; ++j)
         {
@@ -315,8 +233,6 @@ void demo2()
         }
 
     w = u + v;
-
-    std::cout << w[1] << '\n';
 
     BOOST_TEST(materially_equal(w[0],  0.0));
     BOOST_TEST(materially_equal(w[1],  4.6));
@@ -330,11 +246,26 @@ void demo2()
     BOOST_TEST(materially_equal(w[9], 41.4));
 }
 
+// Obviously class simple_array0 is very limited: for instance, this:
+//   simple_array0 s = u + v;
+// isn't allowed. (Then again, with std::valarray, it has undefined
+// behavior.) Such problems can be solved; one solution for this
+// problem would be to add this member function:
+//
+// operator simple_array0()
+// {
+//     simple_array0 r(0.0, 0.0);
+//     for(double* i = r.begin(); i < r.end(); ++i, operator++())
+//         {*i = operator*();}
+//     return r;
+// }
+//
+// to class binary_expression.
+
 int test_main(int, char*[])
 {
     demo0();
     demo1();
-    demo2();
     return 0;
 }
 
