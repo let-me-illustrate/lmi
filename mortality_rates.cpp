@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mortality_rates.cpp,v 1.4 2005-09-03 23:55:43 chicares Exp $
+// $Id: mortality_rates.cpp,v 1.5 2005-09-07 03:04:54 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -103,14 +103,14 @@ void MortalityRates::Init(BasicValues const& basic_values)
         ,length
         );
 
-    ADDRates_ = actuarial_table
+    AdbRates_ = actuarial_table
         (CurrentTableFile()
         ,static_cast<long int>(basic_values.Database_->Query(DB_ADDTable))
         ,issue_age
         ,length
         );
 
-    WPRates_ = actuarial_table
+    WpRates_ = actuarial_table
         (CurrentTableFile()
         ,static_cast<long int>(basic_values.Database_->Query(DB_WPTable))
         ,issue_age

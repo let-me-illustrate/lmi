@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avdebug.cpp,v 1.12 2005-08-08 16:01:53 chicares Exp $
+// $Id: ihs_avdebug.cpp,v 1.13 2005-09-07 03:04:54 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -196,15 +196,15 @@ void AccountValue::DebugPrint()
     SetMonthlyDetail(eSpecAmtLoad        ,DetermineSpecAmtLoad()           );
     SetMonthlyDetail(eAcctValLoadBOM     ,DetermineAcctValLoadBOM()        );
     SetMonthlyDetail(eNAAR               ,NAAR                             );
-    SetMonthlyDetail(eCOIRate            ,ActualCoiRate                    );
-    SetMonthlyDetail(eCOICharge          ,COI                              );
-    SetMonthlyDetail(eADDRate            ,YearsADDRate                     );
-    SetMonthlyDetail(eADDCharge          ,ADDChg                           );
-    SetMonthlyDetail(eWPRate             ,YearsWPRate                      );
-    SetMonthlyDetail(eWPCharge           ,WPChg                            );
+    SetMonthlyDetail(eCoiRate            ,ActualCoiRate                    );
+    SetMonthlyDetail(eCoiCharge          ,CoiCharge                        );
+    SetMonthlyDetail(eAdbRate            ,YearsAdbRate                     );
+    SetMonthlyDetail(eAdbCharge          ,AdbCharge                        );
+    SetMonthlyDetail(eWpRate             ,YearsWpRate                      );
+    SetMonthlyDetail(eWpCharge           ,WpCharge                         );
     SetMonthlyDetail(eTermAmount         ,TermDB                           );
     SetMonthlyDetail(eTermRate           ,YearsTermRate                    );
-    SetMonthlyDetail(eTermCharge         ,TermChg                          );
+    SetMonthlyDetail(eTermCharge         ,TermCharge                       );
     SetMonthlyDetail(eTotalRiderCharge   ,RiderDeductions                  );
     SetMonthlyDetail(eTotalMonthlyDeds   ,MlyDed                           );
 

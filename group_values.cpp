@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: group_values.cpp,v 1.27 2005-08-29 16:06:58 chicares Exp $
+// $Id: group_values.cpp,v 1.28 2005-09-07 03:04:54 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -230,17 +230,25 @@ bool run_census_in_series::operator()
 /// monthiversary processing. That's all right because this process is
 /// self correcting and therefore needs no exquisite refinements.
 ///
-/// The effective current COI rate is
-///   tabular current COI rate, times
-///   input current COI multiplier, times
-///   k factor, times
-///   the reciprocal of (1 + mortality retention)[unimplemented]
-/// but never to exceed the tabular guaranteed COI rate. 'Tabular'
-/// signifies rates, notionally stored in a table, that do not reflect
-/// any of these adjustments.
+/// The current COI rate is the tabular current COI rate times the
+/// input current COI multiplier (with any other customary adjustments
+/// for substandard, foreign country, etc.), but never to exceed the
+/// guaranteed COI rate.
 ///
-/// The net mortality charge is NAAR (nonnegative by definition) times
-/// the effective current COI rate: the actual charge deducted from AV.
+/// The actual mortality charge deducted from the account value is the
+/// sum of two components--the net mortality charge, and the retention
+/// charge:
+///
+///   actual mortality charge = NAAR * coi_rate * (R + K)
+///   net mortality charge    = NAAR * coi_rate * (    K)
+///   retention charge        = NAAR * coi_rate * (R    )
+///
+/// where R is the retention rate, K is the k factor, and NAAR is by
+/// convention nonnegative. Database entity 'UseRawTableForRetention'
+/// optionally causes R to be divided by the input current COI
+/// multiplier, removing the latter from the retention calculation; in
+/// that case, R becomes zero whenever the input current COI multiplier
+/// is zero. Only the net mortality charge is contrained to guarantees.
 ///
 /// Net claims are NAAR (not DB) times the partial mortality rate.
 ///
@@ -250,7 +258,9 @@ bool run_census_in_series::operator()
 ///   one-twelfth (to get a monthly average), times
 ///   the number of months given in database entity ExpRatIBNRMult.
 ///
-/// At issue, the k factor is unity. On each anniversary, it becomes
+/// On the date the projection begins--the issue date for new business,
+/// else the inforce date--the k factor is an input scalar. On each
+/// anniversary, it becomes
 ///   1 - (mortality profit / denominator),
 /// denominator being a proxy for the coming year's mortality charge:
 ///   the just-completed year's EOY (DB - AV), times
@@ -394,7 +404,7 @@ restart:
 
         double case_accum_net_mortchgs = 0.0;
         double case_accum_net_claims   = 0.0;
-        double case_k_factor           = 1.0;
+        double case_k_factor           = 1.0; // TODO ?? Use input instead.
 
         // Experience rating as implemented here uses either a special
         // scalar input rate, or the separate-account rate. Those
@@ -463,7 +473,7 @@ restart:
                     (*i)->IncrementBOM(year, month, case_k_factor);
 
                     assets += (*i)->GetSepAcctAssetsInforce();
-                    current_mortchg += (*i)->GetLastCOIChargeInforce();
+                    current_mortchg += (*i)->GetLastCoiChargeInforce();
                     }
 
                 // Process transactions from int credit through end of month.
