@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: basic_values.hpp,v 1.9 2005-08-30 03:54:43 chicares Exp $
+// $Id: basic_values.hpp,v 1.10 2005-09-07 03:04:54 chicares Exp $
 
 #ifndef basic_values_hpp
 #define basic_values_hpp
@@ -94,7 +94,7 @@ class LMI_EXPIMP BasicValues
         ,e_state      const& a_StateOfJurisdiction
         ,double              a_FaceAmount
         ,e_dbopt_7702 const& a_DBOpt
-        ,bool                a_ADDInForce
+        ,bool                a_AdbInForce
         ,double              a_TargetPremium
         );
     virtual ~BasicValues();
@@ -161,8 +161,8 @@ class LMI_EXPIMP BasicValues
     // This function custom blends unismoke and unisex rates, using
     //   the same table as guaranteed COI rates.
     std::vector<double> GetSmokerBlendedGuarCOIRates()   const;
-    std::vector<double> GetWPRates()                     const;
-    std::vector<double> GetADDRates()                    const;
+    std::vector<double> GetWpRates()                     const;
+    std::vector<double> GetAdbRates()                    const;
     std::vector<double> GetChildRiderRates()             const;
     std::vector<double> GetCurrentSpouseRiderRates()     const;
     std::vector<double> GetGuaranteedSpouseRiderRates()  const;
@@ -319,8 +319,8 @@ class LMI_EXPIMP BasicValues
     std::vector<double>     FreeWDProportion;
 
     double                  MinSpecAmt;
-    double                  ADDLimit;
-    double                  WPLimit;
+    double                  AdbLimit;
+    double                  WpLimit;
     double                  SpecAmtLoadLimit;
     double                  MinWD;
     double                  WDFee;

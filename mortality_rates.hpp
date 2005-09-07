@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mortality_rates.hpp,v 1.8 2005-09-03 15:23:34 chicares Exp $
+// $Id: mortality_rates.hpp,v 1.9 2005-09-07 03:04:54 chicares Exp $
 
 #ifndef mortality_rates_hpp
 #define mortality_rates_hpp
@@ -66,8 +66,8 @@ class MortalityRates
     std::vector<double> const& MonthlyCoiRatesBand2(e_basis const& Basis) const;
 
     std::vector<double> const& MonthlyTermCoiRates (e_basis const& Basis) const;
-    std::vector<double> const& ADDRates            () const;
-    std::vector<double> const& WPRates             () const;
+    std::vector<double> const& AdbRates            () const;
+    std::vector<double> const& WpRates             () const;
     std::vector<double> const& ChildRiderRates     () const;
     std::vector<double> const& SpouseRiderRates    (e_basis const& Basis) const;
 
@@ -109,14 +109,14 @@ class MortalityRates
 
     int Length_;
 
-    bool AllowADD_        ;
+    bool AllowAdb_        ;
     bool AllowChild_      ;
     bool AllowExpRating_  ;
     bool AllowFlatExtras_ ;
     bool AllowSpouse_     ;
     bool AllowSubstdTable_;
     bool AllowTerm_       ;
-    bool AllowWP_         ;
+    bool AllowWp_         ;
     bool CCoiIsAnnual_    ;
     bool GCoiIsAnnual_    ;
     bool IsTgtPremTabular_;
@@ -128,9 +128,9 @@ class MortalityRates
     double ExpRatCoiMultCurr0_;
     double ExpRatCoiMultCurr1_;
     double ExpRatCoiMultGuar_;
-    bool UsePMQOnCurrCOI_;
+    bool UsePMQOnCurrCoiRate_;
 
-    double CountryCOIMultiplier_;
+    double CountryCoiMultiplier_;
     bool IsPolicyRated_;
     e_table_rating SubstdTable_;
     bool ShowGrading_;
@@ -143,12 +143,8 @@ class MortalityRates
 
     round_to<double> round_coi_rate_;
 
-    // Experience-rating COI retention.
-    double AdditiveCoiRetention_;
-    double MultiplicativeCoiRetention_;
-
-    std::vector<double> GCOIMultiplier_;
-    std::vector<double> CCOIMultiplier_;
+    std::vector<double> GCoiMultiplier_;
+    std::vector<double> CCoiMultiplier_;
     std::vector<double> SubstdTblMult_;
 
 // MonthlyCoiRatesBand2
@@ -163,8 +159,8 @@ class MortalityRates
     std::vector<double> MonthlyGuaranteedTermCoiRates_;
     std::vector<double> MonthlyCurrentTermCoiRates_;
     std::vector<double> MonthlyMidpointTermCoiRates_;
-    std::vector<double> ADDRates_;
-    std::vector<double> WPRates_;
+    std::vector<double> AdbRates_;
+    std::vector<double> WpRates_;
     std::vector<double> ChildRiderRates_;
     std::vector<double> GuaranteedSpouseRiderRates_;
     std::vector<double> CurrentSpouseRiderRates_;
@@ -185,14 +181,14 @@ class MortalityRates
     std::vector<double> CvatNspRates_;
 };
 
-inline std::vector<double> const& MortalityRates::ADDRates() const
+inline std::vector<double> const& MortalityRates::AdbRates() const
 {
-    return ADDRates_;
+    return AdbRates_;
 }
 
-inline std::vector<double> const& MortalityRates::WPRates() const
+inline std::vector<double> const& MortalityRates::WpRates() const
 {
-    return WPRates_;
+    return WpRates_;
 }
 
 inline std::vector<double> const& MortalityRates::ChildRiderRates() const

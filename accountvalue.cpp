@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: accountvalue.cpp,v 1.15 2005-08-28 21:37:02 chicares Exp $
+// $Id: accountvalue.cpp,v 1.16 2005-09-07 03:04:54 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -265,13 +265,14 @@ void AccountValue::DoYear
 
 // TODO ?? Solve...() should reset not inputs but...??
 
-    // TODO ?? These variables are set in current run and used in guar and midpt
-    YearsCOIRate0   = MortalityRates_->MonthlyCoiRates(ExpAndGABasis)[Year];
+    // TODO ?? These variables are set in current run and used in
+    // guaranteed and midpoint runs.
+    YearsCoiRate0   = MortalityRates_->MonthlyCoiRates(ExpAndGABasis)[Year];
 
-    YearsWPRate     = MortalityRates_->WPRates()[Year];
-    YearsADDRate    = MortalityRates_->ADDRates()[Year];
+    YearsWpRate     = MortalityRates_->WpRates()[Year];
+    YearsAdbRate    = MortalityRates_->AdbRates()[Year];
     haswp           = Input_->Status[0].HasWP.value();
-    hasadd          = Input_->Status[0].HasADD.value();
+    hasadb          = Input_->Status[0].HasADD.value();
 
     YearsGenAcctIntRate = InterestRates_->GenAcctNetRate
         (e_basis(ExpAndGABasis)
@@ -284,7 +285,7 @@ void AccountValue::DoYear
     YearsMlyPolFee  = Loads_->monthly_policy_fee(ExpAndGABasis)[Year];
     ActualSpecAmt   = InvariantValues().SpecAmt[Year];
 
-    // These variables are set for each pass independently
+    // These variables are set for each pass independently.
     mode            = InvariantValues().EeMode[Year];
     ModeIndex       = get_mode_index(mode);
     RequestedLoan   = Outlay_->new_cash_loans()[Year];
@@ -299,7 +300,7 @@ void AccountValue::DoYear
     YearsSpecAmt    = DeathBfts_->specamt()[Year];
     YearsDBOpt      = DeathBfts_->dbopt()[Year];
 
-    // for guar basis run, what loan rates do we use?
+    // For guaranteed-basis run, what loan rates should be used?
     YearsRegLnIntCredRate = InterestRates_->RegLnCredRate
         (e_basis(e_currbasis)
         ,e_rate_period(e_monthly_rate)
@@ -326,7 +327,7 @@ void AccountValue::DoYear
     GrossPmts  .assign(12, 0.0);
     NetPmts    .assign(12, 0.0);
 
-    // TODO ?? strategy here?
+    // TODO ?? Strategy here?
 
     for(Month = a_InforceMonth; Month < 12; Month++)
         {
@@ -351,12 +352,12 @@ void AccountValue::DoYear
 
     if(Debugging)
         {
-//        DebugPrint(); // TODO ?? need stream arg
+//        DebugPrint(); // TODO ?? Need stream argument.
         }
 }
 
 //============================================================================
-// Each month, process all transactions in order
+// Each month, process all transactions in order.
 void AccountValue::DoMonth()
 {
     if(ItLapsed)
@@ -376,7 +377,7 @@ void AccountValue::DoMonth()
     //   7702A
     //   CVT corridor
     //   rounding
-    //   ADD and WP rider rates; WP rider duration
+    //   ADB and WP rates; WP rider duration
     //   preferred loans; loan parameterization
     //   guar accum
     //     curr SA, SC, pmts for guar
@@ -392,14 +393,14 @@ void AccountValue::DoMonth()
     //   GPT
     //   multiple layers of coverage
 
-    TxOptChg();
-    TxSpecAmtChg();
-//    TxTestGPT();        // Not yet implemented
-    TxPmt();            // Incomplete
-    TxLoanRepay();      // Not called...
+    TxOptionChange();
+    TxSpecAmtChange();
+//    TxTestGPT();        // Not yet implemented.
+    TxPmt();            // TODO ?? Incomplete.
+    TxLoanRepay();      // TODO ?? Not called.
 
     TxSetBOMAV();
-    TxSetCOI();
+    TxSetCoiCharge();
     TxSetRiderDed();
     TxDoMlyDed();
 
@@ -426,7 +427,7 @@ inline int AccountValue::MonthsToNextModalPmtDate() const
 }
 
 //============================================================================
-// Sets spec amt according to selected strategy, in every year
+// Set specamt according to selected strategy, in every year.
 void AccountValue::PerformSpecAmtStrategy()
 {
     double SA = 0.0;
@@ -497,44 +498,44 @@ void AccountValue::PerformSpecAmtStrategy()
 }
 
 //============================================================================
-// Death benefit option change
-// Assumes surrender charge is not affected by this transaction
-// Assumes target premium rate is not affected by this transaction
-// Assumes change to option 2 mustn't decrease spec amt below minimum
-void AccountValue::TxOptChg()
+// Change death benefit option.
+// Assumes surrender charge is not affected by this transaction.
+// Assumes target premium rate is not affected by this transaction.
+// Assumes change to option 2 mustn't decrease spec amt below minimum.
+void AccountValue::TxOptionChange()
 {
-    // Illustrations allow option changes only on anniversary
-    //   but not on zeroth anniversary
+    // Illustrations allow option changes only on anniversary, but
+    // not on zeroth anniversary.
     if(0 != Month || 0 == Year)
         {
         return;
         }
 
-    // Nothing to do if no option change requested
+    // Nothing to do if no option change requested.
     if(YearsDBOpt.value() == DeathBfts_->dbopt()[Year - 1].value())
         {
         return;
         }
 
-    // Nothing to do unless AV is positive
+    // Nothing to do unless AV is positive.
     double AV = AVUnloaned + AVRegLn + AVPrfLn;
     if(AV <= 0.0)
         {
         return;
         }
 
-    // Change specified amount, keeping amount at risk invariant
+    // Change specified amount, keeping amount at risk invariant.
     switch(YearsDBOpt.value())
         {
         case e_option1:
             {
-            // Option 1: increase spec amt by AV
+            // Option 1: increase spec amt by AV.
             ActualSpecAmt += AV;
             }
             break;
         case e_option2:
             {
-            // Option 2: decrease spec amt by AV, but not below min spec amt
+            // Option 2: decrease spec amt by AV, but not below min spec amt.
             ActualSpecAmt -= AV;
             ActualSpecAmt = std::max(ActualSpecAmt, MinSpecAmt);
             // An alternative is to lapse the policy.
@@ -552,7 +553,7 @@ void AccountValue::TxOptChg()
         }
     ActualSpecAmt = GetRoundingRules().round_specamt()(ActualSpecAmt);
 
-    // Carry the new spec amt forward into all future years
+    // Carry the new spec amt forward into all future years.
     for(int j = Year; j < BasicValues::GetLength(); j++)
         {
         InvariantValues().SpecAmt[j] = ActualSpecAmt;
@@ -560,29 +561,29 @@ void AccountValue::TxOptChg()
 }
 
 //============================================================================
-// Specified amount change: increase or decrease
-// Ignores multiple layers of coverage: not correct for sel & ult COIs
-// Assumes target premium rate is not affected by increases or decreases
-void AccountValue::TxSpecAmtChg()
+// Specified amount change: increase or decrease.
+// Ignores multiple layers of coverage: not correct for sel & ult COI rates.
+// Assumes target premium rate is not affected by increases or decreases.
+void AccountValue::TxSpecAmtChange()
 {
-// Make sure this is the right place to do this
+// Make sure this is the right place to do this.
     // Illustrations allow increases and decreases only on anniversary
-    //   but not on zeroth anniversary
+    //   but not on zeroth anniversary.
     if(0 != Month || 0 == Year)
         {
         return;
         }
 
-    // Nothing to do if no increase or decrease requested
+    // Nothing to do if no increase or decrease requested.
     if(DeathBfts_->specamt()[Year] == DeathBfts_->specamt()[Year - 1])
         {
         return;
         }
 
-    // Change specified amount
+    // Change specified amount.
     ActualSpecAmt = std::max(MinSpecAmt, DeathBfts_->specamt()[Year]);
 
-    // Carry the new spec amt forward into all future years
+    // Carry the new spec amt forward into all future years.
     for(int j = Year; j < BasicValues::GetLength(); j++)
         {
         InvariantValues().SpecAmt[j] = ActualSpecAmt;
@@ -590,7 +591,7 @@ void AccountValue::TxSpecAmtChg()
 }
 
 //============================================================================
-// Sets payment according to selected strategy, in each non-solve year
+// Set payment according to selected strategy, in each non-solve year.
 void AccountValue::PerformPmtStrategy(double* a_Pmt)
 {
     if
@@ -602,7 +603,7 @@ void AccountValue::PerformPmtStrategy(double* a_Pmt)
                 ,BasicValues::GetLength()
                 )
         )
-        // Don't override premium during solve period
+        // Don't override premium during solve period.
         return;
 
     switch(Input_->EePmtStrategy.value())
@@ -673,16 +674,16 @@ void AccountValue::PerformPmtStrategy(double* a_Pmt)
 }
 
 //============================================================================
-// Process premium payment reflecting premium load
-// Contains hooks for guideline premium test; they need to be fleshed out
-// Ignores strategies such as pay guideline max--see PerformPmtStrategy()
-// Ignores no-lapse periods and other death benefit guarantees
+// Process premium payment reflecting premium load.
+// Contains hooks for guideline premium test; they need to be fleshed out.
+// Ignores strategies such as pay guideline max--see PerformPmtStrategy().
+// Ignores no-lapse periods and other death benefit guarantees.
 // Some systems force monthly premium to be integral cents even though
 //   mode is not monthly; TODO ?? is this something we need to do here?
-// TODO ?? Tiered premium loads not implemented
+// TODO ?? Tiered premium loads not implemented.
 void AccountValue::TxPmt()
 {
-    // Do nothing if this is not a modal payment date
+    // Do nothing if this is not a modal payment date.
     if(!IsModalPmtDate())
         {
         return;
@@ -690,7 +691,7 @@ void AccountValue::TxPmt()
 
     // TODO ?? Put GPT stuff like forceout and premium limit here.
 
-    // Pay premium
+    // Pay premium.
     PerformPmtStrategy(&pmt);
     GrossPmts[Month] = pmt;
     if(0 == Year && 0 == Month)
@@ -706,7 +707,7 @@ void AccountValue::TxPmt()
     // TODO ?? Test maximum premium. Round it with Rounding.RoundMAXP .
 //            (DB-AV)/YearsCorridorFactor - AV
 
-    // Subtract premium load from gross premium yielding net premium
+    // Subtract premium load from gross premium yielding net premium.
     NetPmts[Month] = GetRoundingRules().round_net_premium()
         (GrossPmts[Month] * (1.0 - YearsPremLoadTgt)
         );
@@ -714,33 +715,32 @@ void AccountValue::TxPmt()
     //   calculate load as pmt * load rate and round the result
     //   subtract from pmt
 
-    // Add net premium to unloaned account value
+    // Add net premium to unloaned account value.
     AVUnloaned += NetPmts[Month];
 }
 
 //============================================================================
 void AccountValue::TxLoanRepay()
 {
-// loan repayment
-    // Illustrations allow loan repayment only on anniversary
+    // Illustrations allow loan repayment only on anniversary.
     if(0 != Month)
         {
         return;
         }
 
-    // Nothing to do if no loan repayment requested
+    // Nothing to do if no loan repayment requested.
     if(0.0 <= RequestedLoan)
         {
         return;
         }
 
     AVUnloaned -= RequestedLoan;
-    AVRegLn += RequestedLoan;    // TODO ?? also preferred...
+    AVRegLn += RequestedLoan;    // TODO ?? Also preferred.
     InvariantValues().Loan[Year] = RequestedLoan;
 }
 
 //============================================================================
-// Set account value before monthly deductions
+// Set account value before monthly deductions.
 // TODO ?? Should this function live?
 void AccountValue::TxSetBOMAV()
 {
@@ -748,24 +748,24 @@ void AccountValue::TxSetBOMAV()
 }
 
 //============================================================================
-// Set death benefit reflecting corridor and option 2
+// Set death benefit reflecting corridor and option 2.
 void AccountValue::TxSetDeathBft(bool)
 {
-    // Total account value is unloaned plus loaned
+    // Total account value is unloaned plus loaned.
     double AV = AVUnloaned + AVRegLn + AVPrfLn;
 
-    // Set death benefit reflecting corridor and death benefit option
+    // Set death benefit reflecting corridor and death benefit option.
     switch(YearsDBOpt.value())
         {
         case e_option1:
             {
-            // Option 1: specamt, or corridor times AV if greater
+            // Option 1: specamt, or corridor times AV if greater.
             deathbft = std::max(ActualSpecAmt, YearsCorridorFactor * AV);
             }
             break;
         case e_option2:
-            // Option 2: specamt plus AV, or corridor times AV if greater
-            // Note negative AV doesn't decrease death benefit
+            // Option 2: specamt plus AV, or corridor times AV if greater.
+            // Negative AV doesn't decrease death benefit.
             deathbft = std::max
                 (ActualSpecAmt + std::max(0.0, AV)
                 ,YearsCorridorFactor * AV
@@ -784,59 +784,55 @@ void AccountValue::TxSetDeathBft(bool)
 
     deathbft = GetRoundingRules().round_death_benefit()(deathbft);
 
-    // TODO ?? Here we should accumulate average death benefit for profit testing
+    // TODO ?? Here we should accumulate average death benefit for profit testing.
 }
 
 //============================================================================
-// Set cost of insurance charge
-void AccountValue::TxSetCOI()
+// Set cost of insurance charge.
+void AccountValue::TxSetCoiCharge()
 {
     TxSetDeathBft();
-    // Net amount at risk: death benefit discounted one month at
-    //   guaranteed interest, minus account value if nonnegative
-    // Note negative AV doesn't increase NAAR
 
+    // Negative AV doesn't increase NAAR.
     NAAR = GetRoundingRules().round_naar()
         (deathbft * mlyguarv - (AVUnloaned + AVRegLn + AVPrfLn)
         );
 
-    // Cost of insurance is COI rate times net amount at risk
-    COI = GetRoundingRules().round_coi_charge()(NAAR * YearsCOIRate0);
+    CoiCharge = GetRoundingRules().round_coi_charge()(NAAR * YearsCoiRate0);
 }
 
 //============================================================================
-// Calculate rider charges
+// Calculate rider charges.
 void AccountValue::TxSetRiderDed()
 {
-    WPChg = 0.0;
+    WpCharge = 0.0;
     if(haswp)
         {
-        WPChg = YearsWPRate * (COI + YearsMlyPolFee + ADDChg);
+        WpCharge = YearsWpRate * (CoiCharge + YearsMlyPolFee + AdbCharge);
         }
 
-    ADDChg = 0.0;
-    if(hasadd)
+    AdbCharge = 0.0;
+    if(hasadb)
         {
-        ADDChg = YearsADDRate * std::min(500000.0, ActualSpecAmt);
+        AdbCharge = YearsAdbRate * std::min(500000.0, ActualSpecAmt);
         }
 }
 
 //============================================================================
-// Subtract monthly deductions from unloaned account value
+// Subtract monthly deduction from unloaned account value.
 void AccountValue::TxDoMlyDed()
 {
-    // Subtract mortality and rider deductions from unloaned account value
-    AVUnloaned -= COI + ADDChg + WPChg;
-    MlyDed = YearsMlyPolFee + COI + ADDChg + WPChg;
+    AVUnloaned -=             CoiCharge + AdbCharge + WpCharge;
+    MlyDed = YearsMlyPolFee + CoiCharge + AdbCharge + WpCharge;
     mlydedtonextmodalpmtdate = MlyDed * MonthsToNextModalPmtDate();
 }
 
 //============================================================================
-// Credit interest on loaned and unloaned account value separately
+// Credit interest on loaned and unloaned account value separately.
 void AccountValue::TxCreditInt()
 {
-    // Accrue interest on unloaned and loaned account value separately
-    //   but do not charge interest on negative account value
+    // Accrue interest on unloaned and loaned account value separately,
+    //   but do not charge interest on negative account value.
     if(0.0 < AVUnloaned)
         {
         // TODO ?? Should each interest increment be rounded separately?
@@ -845,14 +841,15 @@ void AccountValue::TxCreditInt()
             );
         AVUnloaned += z;
         }
-    LMI_ASSERT(0.0 <= AVRegLn + AVPrfLn); // loaned account value cannot be negative
+    // Loaned account value cannot be negative.
+    LMI_ASSERT(0.0 <= AVRegLn + AVPrfLn);
 }
 
 //============================================================================
-// Accrue loan interest
+// Accrue loan interest.
 void AccountValue::TxLoanInt()
 {
-    // Nothing to do if there's no loan outstanding
+    // Nothing to do if there's no loan outstanding.
     if(0.0 == RegLnBal && 0.0 == PrfLnBal)
         {
         return;
@@ -885,32 +882,32 @@ void AccountValue::TxLoanInt()
 // TODO ?? Min AV after WD not implemented--does max WD calculation take care of it?
 void AccountValue::TxTakeWD()
 {
-    // Illustrations allow withdrawals only on anniversary
+    // Illustrations allow withdrawals only on anniversary.
     if(0 != Month)
         {
         return;
         }
 
-    // Nothing to do if no withdrawal requested
+    // Nothing to do if no withdrawal requested.
     if(0.0 == wd)
         {
         return;
         }
 
-    // For solves, we may wish to ignore min and max
+    // For solves, we may wish to ignore min and max.
 
-    // Impose minimum amount (if nonzero) on withdrawals
+    // Impose minimum amount (if nonzero) on withdrawals.
     if(wd < MinWD)
         {
         wd = 0.0;
         }
 
-    // Impose maximum amount
+    // Impose maximum amount.
     // If maximum exceeded, limit it.
-    // TODO ?? Max WD and max loan formulas treat loan interest differently
+    // TODO ?? Max WD and max loan formulas treat loan interest differently:
     //   max WD on a loaned policy: cannot become overloaned until next
-    //     modal premium date
-    //   max loan: cannot become overloaned until end of policy year
+    //     modal premium date;
+    //   max loan: cannot become overloaned until end of policy year.
     double MaxWD
         = AVUnloaned
         + (AVRegLn  + AVPrfLn)
@@ -942,7 +939,7 @@ void AccountValue::TxTakeWD()
             //   lapse the policy?
             // Maybe it can't happen because of max WD defn?
 
-            // Carry the new spec amt forward into all future years
+            // Carry the new spec amt forward into all future years.
             for(int j = Year; j < BasicValues::GetLength(); j++)
                 {
                 InvariantValues().SpecAmt[j] = ActualSpecAmt;
@@ -963,9 +960,9 @@ void AccountValue::TxTakeWD()
             }
         }
 
-    // Deduct withdrawal fee
+    // Deduct withdrawal fee.
     wd -= std::min(WDFee, wd * WDFeeRate);
-    // TODO ?? This treats input WD as gross; it prolly should be net
+    // TODO ?? This treats input WD as gross; it prolly should be net.
 
     InvariantValues().NetWD[Year] = wd;
 // TODO ??    TaxBasis -= wd;
@@ -975,13 +972,13 @@ void AccountValue::TxTakeWD()
 // Take a new loan
 void AccountValue::TxTakeLoan()
 {
-    // Illustrations allow loans only on anniversary
+    // Illustrations allow loans only on anniversary.
     if(0 != Month)
         {
         return;
         }
 
-    // Nothing to do if no loan requested
+    // Nothing to do if no loan requested.
     if(RequestedLoan <= 0.0)
         {
         return;
@@ -991,23 +988,23 @@ void AccountValue::TxTakeLoan()
     // If maximum exceeded...limit it.
     // TODO ?? For solves, we may wish to ignore max.
     MaxLoan
-        = AVUnloaned * 0.9    // TODO ?? icky manifest constant
+        = AVUnloaned * 0.9    // TODO ?? Icky manifest constant.
         // - surrchg
         + (AVRegLn + AVPrfLn)
         - RegLnBal * (std::pow((1.0 + YearsRegLnIntDueRate), 12 - Month) - 1.0)
         - PrfLnBal * (std::pow((1.0 + YearsPrfLnIntDueRate), 12 - Month) - 1.0)
         - mlydedtonextmodalpmtdate;
-    // Interest adjustment: d upper n where n is # months remaining in year
-    //   witholding this keeps policy from becoming overloaned before year end
+    // Interest adjustment: d upper n where n is # months remaining in year.
+    // Witholding this keeps policy from becoming overloaned before year end.
     double IntAdj = std::pow((1.0 + YearsRegLnIntDueRate), 12 - Month);
     IntAdj = (IntAdj - 1.0) / IntAdj;
     MaxLoan *= 1.0 - IntAdj;
     MaxLoan = std::max(0.0, MaxLoan);
     MaxLoan = GetRoundingRules().round_loan()(MaxLoan);
 
-    // TODO ?? preferred loan calculations go here
+    // TODO ?? Preferred loan calculations go here.
 
-    // update loan AV, loan bal
+    // Update loan AV, loan balance.
 
     if(MaxLoan < RequestedLoan)
         {
@@ -1015,24 +1012,24 @@ void AccountValue::TxTakeLoan()
         }
 
     AVUnloaned -= RequestedLoan;
-    AVRegLn += RequestedLoan;    // TODO ?? also preferred...
+    AVRegLn += RequestedLoan;    // TODO ?? Also preferred.
     InvariantValues().Loan[Year] = RequestedLoan;
 }
 
 //============================================================================
-// Test for lapse
+// Test for lapse.
 void AccountValue::TxTestLapse()
 {
-// Perform no-lapse test
+// Perform no-lapse test.
 
     // If we're doing a solve, don't let it lapse--otherwise lapse would
-    // introduce a discontinuity in the function for which we seek a root
+    // introduce a discontinuity in the function for which we seek a root.
     if(Solving)
         {
         return;
         }
 
-    // Otherwise if AV is negative or if overloaned, then lapse the policy
+    // Otherwise if AV is negative or if overloaned, then lapse the policy.
     else if
         (
             (AVUnloaned + AVRegLn + AVPrfLn < 0.0)
@@ -1073,7 +1070,7 @@ double AccountValue::GetCurtateNetClaimsInforce()
     {return 0.0;}
 double AccountValue::GetProjectedCoiChargeInforce()
     {return 0.0;}
-double AccountValue::GetLastCOIChargeInforce() const
+double AccountValue::GetLastCoiChargeInforce() const
     {return 0.0;}
 double AccountValue::GetSepAcctAssetsInforce() const
     {return 0.0;}

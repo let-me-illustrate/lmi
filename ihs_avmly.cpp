@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avmly.cpp,v 1.22 2005-08-27 13:06:20 chicares Exp $
+// $Id: ihs_avmly.cpp,v 1.23 2005-09-07 03:04:54 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -116,7 +116,7 @@ void AccountValue::DoMonthDR()
     // Capitalize loan on anniversary
     TxCapitalizeLoan();
 
-    TxOptChg();
+    TxOptionChange();
 /*
     PerformSpecAmtStrategy
         (&ActualSpecAmt
@@ -132,7 +132,7 @@ void AccountValue::DoMonthDR()
     // the Irc7702_ object. This is an important defect and a test
     // escape.
 
-    TxSpecAmtChg();
+    TxSpecAmtChange();
     TxTakeWD();
 
     TxTestGPT();
@@ -234,7 +234,7 @@ void AccountValue::DoMonthDR()
     TxTestHoneymoonForExpiration();
     TxSetDeathBft();
     TxSetTermAmt();
-    TxSetCOI();
+    TxSetCoiCharge();
     TxSetRiderDed();
     TxDoMlyDed();
 }
@@ -854,7 +854,7 @@ void AccountValue::InitializeMonth()
 // Assumes surrender charge is not affected by this transaction
 // Assumes target premium rate is not affected by this transaction
 // Assumes change to option 2 mustn't decrease spec amt below minimum
-void AccountValue::TxOptChg()
+void AccountValue::TxOptionChange()
 {
     // Illustrations allow option changes only on anniversary
     //   but not on zeroth anniversary
@@ -1375,7 +1375,7 @@ LedgerInvariant::Init(BasicValues* b)
 //   if select period restarts on increase
 // Assumes target premium rate is not affected by increases or decreases
 // TODO ?? Is this the right place to change target premium?
-void AccountValue::TxSpecAmtChg()
+void AccountValue::TxSpecAmtChange()
 {
     // Illustrations allow increases and decreases only on anniversary
     //   but not on zeroth anniversary
@@ -2336,7 +2336,7 @@ void AccountValue::EndTermRider()
 
 //============================================================================
 // Calculate mortality charge.
-void AccountValue::TxSetCOI()
+void AccountValue::TxSetCoiCharge()
 {
     // Net amount at risk is the death benefit discounted one month
     // at the guaranteed interest rate, minus account value iff
@@ -2358,7 +2358,7 @@ void AccountValue::TxSetCOI()
         *   DBDiscountRate[Year]
         -   Dcv
         ;
-//  TODO ?? DcvNaar = round_naar(DcvNaar);
+    // DCV need not be rounded.
     DcvNaar = std::max(0.0, DcvNaar);
 
     ActualCoiRate = GetBandedCoiRates(ExpAndGABasis, ActualSpecAmt)[Year];
@@ -2383,13 +2383,12 @@ void AccountValue::TxSetCOI()
         ActualCoiRate = round_coi_rate(ActualCoiRate);
         }
 
-    COI = round_coi_charge(NAAR * ActualCoiRate);
-    YearsTotalCOICharge += COI;
+    NetCoiCharge = round_coi_charge(NAAR *  ActualCoiRate                    );
+    CoiCharge    = round_coi_charge(NAAR * (ActualCoiRate + CoiRetentionRate));
+    YearsTotalCoiCharge += CoiCharge;
 
-    DcvCoi = DcvNaar * Years7702CoiRate;
-
-// TODO ?? Should we round the DCV COI charge?
-//  DcvCoi = round_coi_charge(DcvCoi);
+    // DCV need not be rounded.
+    DcvCoiCharge = DcvNaar * (Years7702CoiRate  + CoiRetentionRate);
 }
 
 //============================================================================
@@ -2420,90 +2419,90 @@ double AccountValue::DetermineAcctValLoadAMD()
 // Calculate rider charges
 void AccountValue::TxSetRiderDed()
 {
-    ADDChg = 0.0;
+    AdbCharge = 0.0;
     if(Input_->Status[0].HasADD)
         {
-        ADDChg =
-                YearsADDRate
-            *   std::min(ActualSpecAmt, ADDLimit)
+        AdbCharge =
+                YearsAdbRate
+            *   std::min(ActualSpecAmt, AdbLimit)
             ;
         }
 
-    SpouseRiderChg = 0.0;
+    SpouseRiderCharge = 0.0;
     if(Input_->HasSpouseRider)
         {
-        SpouseRiderChg =
+        SpouseRiderCharge =
                 YearsSpouseRiderRate
             *   Input_->SpouseRiderAmount
             ;
         }
-    ChildRiderChg = 0.0;
+    ChildRiderCharge = 0.0;
     if(Input_->HasChildRider)
         {
-        ChildRiderChg =
+        ChildRiderCharge =
                 YearsChildRiderRate
             *   Input_->ChildRiderAmount
             ;
         }
 
-    TermChg = 0.0;
-    DcvTermChg = 0.0;
+    TermCharge = 0.0;
+    DcvTermCharge = 0.0;
     if(TermRiderActive && Input_->Status[0].HasTerm)
         {
-        TermChg =
+        TermCharge =
             YearsTermRate
             * TermDB
             * DBDiscountRate[Year]
             ;
-        DcvTermChg =
+        DcvTermCharge =
             Years7702CoiRate
             * TermDB
             * DBDiscountRate[Year]
             ;
         }
 
-    WPChg = 0.0;
-    DcvWpChg = 0.0;
+    WpCharge = 0.0;
+    DcvWpCharge = 0.0;
     if(Input_->Status[0].HasWP)
         {
         switch(WaiverChargeMethod)
             {
             case e_waiver_times_naar:
                 {
-                WPChg =
-                        YearsWPRate
-                    *   std::min(ActualSpecAmt, WPLimit)
+                WpCharge =
+                        YearsWpRate
+                    *   std::min(ActualSpecAmt, WpLimit)
                     ;
                 }
                 break;
             case e_waiver_times_deductions:
                 {
                 // TODO ?? Should the after-monthly-deduction load be waived?
-                WPChg =
-                    YearsWPRate
+                WpCharge =
+                    YearsWpRate
                     *   (
-                            COI
+                            CoiCharge
                         +   YearsMlyPolFee
                         +   YearsAnnPolFee
                         +   DetermineSpecAmtLoad()
                         +   DetermineAcctValLoadBOM()
-                        +   ADDChg
-                        +   SpouseRiderChg
-                        +   ChildRiderChg
-                        +   TermChg
+                        +   AdbCharge
+                        +   SpouseRiderCharge
+                        +   ChildRiderCharge
+                        +   TermCharge
                         );
-                DcvWpChg =
-                    YearsWPRate
+                DcvWpCharge =
+                    YearsWpRate
                     *   (
-                            DcvCoi
+                            DcvCoiCharge
                         +   YearsMlyPolFee
                         +   YearsAnnPolFee
                         +   DetermineSpecAmtLoad()
                         +   DetermineAcctValLoadBOM()
-                        +   ADDChg
-                        +   SpouseRiderChg
-                        +   ChildRiderChg
-                        +   DcvTermChg
+                        +   AdbCharge
+                        +   SpouseRiderCharge
+                        +   ChildRiderCharge
+                        +   DcvTermCharge
                         );
                 }
                 break;
@@ -2526,23 +2525,28 @@ void AccountValue::TxDoMlyDed()
 {
     // Subtract mortality and rider deductions from unloaned account value
     // policy fee was already subtracted in NAAR calculation
-    if(TermRiderActive && (AVGenAcct + AVSepAcct - COI) < TermChg)
+    if(TermRiderActive && (AVGenAcct + AVSepAcct - CoiCharge) < TermCharge)
         {
         EndTermRider();
-        TermChg = 0.0;
+        TermCharge = 0.0;
         }
 
     // 'Simple' riders are the same for AV and DCV.
     double simple_rider_charges =
-            ADDChg
-        +   SpouseRiderChg
-        +   ChildRiderChg
+            AdbCharge
+        +   SpouseRiderCharge
+        +   ChildRiderCharge
         ;
 
-    double dcv_mly_ded = DcvCoi + simple_rider_charges + DcvTermChg + DcvWpChg;
+    double dcv_mly_ded =
+            DcvCoiCharge
+        +   simple_rider_charges
+        +   DcvTermCharge
+        +   DcvWpCharge
+        ;
 
-    RiderDeductions = simple_rider_charges + TermChg + WPChg;
-    MlyDed = COI + RiderDeductions;
+    RiderDeductions = simple_rider_charges + TermCharge + WpCharge;
+    MlyDed = CoiCharge + RiderDeductions;
 
     process_deduction(MlyDed);
     Dcv -= dcv_mly_ded;
@@ -2555,7 +2559,7 @@ void AccountValue::TxDoMlyDed()
     MlyDed += DetermineSpecAmtLoad();
     MlyDed += DetermineAcctValLoadBOM();
 
-    YearsTotalNetCOIs += GetNetCOI();
+    YearsTotalNetCoiCharges += NetCoiCharge;
 }
 
 //============================================================================

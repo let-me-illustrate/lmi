@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_basicval.cpp,v 1.19 2005-09-03 23:55:42 chicares Exp $
+// $Id: ihs_basicval.cpp,v 1.20 2005-09-07 03:04:54 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -110,7 +110,7 @@ BasicValues::BasicValues
     ,e_state      const& a_StateOfJurisdiction
     ,double              a_FaceAmount
     ,e_dbopt_7702 const& a_DBOptFor7702
-    ,bool                a_ADDInForce
+    ,bool                a_AdbInForce
     ,double              a_TargetPremium
     // TODO ?? Need loan rate type here?
     )
@@ -129,7 +129,7 @@ BasicValues::BasicValues
 // TODO ?? reinterpret_cast can't be right...
 //    kludge_input->Status[0].HasADD    = reinterpret_cast<enum_yes_or_no>(a_ADDInForce);
 //    kludge_input->Status[0].HasADD    = a_ADDInForce;
-if(a_ADDInForce)
+if(a_AdbInForce)
     {
     kludge_input->Status[0].HasADD = "Yes";
     }
@@ -564,7 +564,7 @@ void BasicValues::Init7702()
     std::vector<double> local_mly_charge_add(Length, 0.0);
     if(Input_->Status[0].HasADD)
         {
-        local_mly_charge_add = GetADDRates();
+        local_mly_charge_add = GetAdbRates();
         }
 
     Irc7702_.reset
@@ -588,7 +588,7 @@ void BasicValues::Init7702()
             ,Loads_->specified_amount_load(e_basis(e_currbasis))
             ,SpecAmtLoadLimit
             ,local_mly_charge_add
-            ,ADDLimit
+            ,AdbLimit
             ,Loads_->target_premium_load_7702_excluding_premium_tax()
             ,Loads_->excess_premium_load_7702_excluding_premium_tax()
             ,InitialTargetPremium
@@ -698,8 +698,8 @@ void BasicValues::SetPermanentInvariants()
     NoLapseMinDur       = static_cast<int>(Database_->Query(DB_NoLapseMinDur));
     NoLapseMinAge       = static_cast<int>(Database_->Query(DB_NoLapseMinAge));
     MinSpecAmt          = Database_->Query(DB_MinSpecAmt           );
-    ADDLimit            = Database_->Query(DB_ADDLimit             );
-    WPLimit             = Database_->Query(DB_WPMax                );
+    AdbLimit            = Database_->Query(DB_ADDLimit             );
+    WpLimit             = Database_->Query(DB_WPMax                );
     SpecAmtLoadLimit    = Database_->Query(DB_SpecAmtLoadLimit     );
     MinWD               = Database_->Query(DB_MinWD                );
     WDFee               = Database_->Query(DB_WDFee                );
@@ -1216,8 +1216,8 @@ double BasicValues::GetModalPremMlyDed
     if(Input_->Status[0].HasADD)
         {
         z +=
-                MortalityRates_->ADDRates()[Year]
-            *   std::min(SpecAmt, ADDLimit)
+                MortalityRates_->AdbRates()[Year]
+            *   std::min(SpecAmt, AdbLimit)
             ;
         }
     // TODO ?? Other riders should be considered here.
@@ -1227,7 +1227,7 @@ double BasicValues::GetModalPremMlyDed
     if(Input_->Status[0].HasWP)
         {
         // TODO ?? For simplicity, ignore Database_->Query(DB_WPMax)
-        double r = MortalityRates_->WPRates()[Year];
+        double r = MortalityRates_->WpRates()[Year];
         z *= 1.0 + r;
         annual_charge *= 1.0 + r;
         }
@@ -1420,7 +1420,7 @@ double BasicValues::GetModalSpecAmtMlyDed
     if(Input_->Status[0].HasWP)
         {
         // For simplicity, ignore Database_->Query(DB_WPMax)
-        wp_rate = MortalityRates_->WPRates()[0];
+        wp_rate = MortalityRates_->WpRates()[0];
         if(0.0 != 1.0 + wp_rate)
             {
             annual_charge /= (1.0 + wp_rate);
@@ -1445,7 +1445,7 @@ double BasicValues::GetModalSpecAmtMlyDed
     if(Input_->Status[0].HasADD)
         {
         // TODO ?? For simplicity, ignore Database_->Query(DB_ADDMax)
-        z -= MortalityRates_->ADDRates()[0];
+        z -= MortalityRates_->AdbRates()[0];
         }
     // TODO ?? Other riders should be considered here.
 
@@ -2094,7 +2094,7 @@ std::vector<double> BasicValues::GetSmokerBlendedGuarCOIRates() const
         ,CanBlend
         );
 }
-std::vector<double> BasicValues::GetWPRates() const
+std::vector<double> BasicValues::GetWpRates() const
 {
     return GetTable
         (ProductData_->GetWPFilename()
@@ -2102,7 +2102,7 @@ std::vector<double> BasicValues::GetWPRates() const
         ,Database_->Query(DB_AllowWP)
         );
 }
-std::vector<double> BasicValues::GetADDRates() const
+std::vector<double> BasicValues::GetAdbRates() const
 {
     return GetTable
         (ProductData_->GetADDFilename()
