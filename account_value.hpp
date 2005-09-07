@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: account_value.hpp,v 1.26 2005-08-25 15:49:55 chicares Exp $
+// $Id: account_value.hpp,v 1.27 2005-09-07 03:04:53 chicares Exp $
 
 #ifndef account_value_hpp
 #define account_value_hpp
@@ -104,8 +104,7 @@ class LMI_EXPIMP AccountValue
 
     double GetInforceLives            () const;
     double GetSepAcctAssetsInforce    () const;
-    double GetNetCOI                  () const;
-    double GetLastCOIChargeInforce    () const;
+    double GetLastCoiChargeInforce    () const;
 
     void process_payment          (double);
     void IncrementAVProportionally(double);
@@ -252,8 +251,8 @@ class LMI_EXPIMP AccountValue
     void InitializeMonth            ();
     void TxExch1035                 ();
     void IncreaseSpecAmtToAvoidMec  ();
-    void TxOptChg                   ();
-    void TxSpecAmtChg               ();
+    void TxOptionChange             ();
+    void TxSpecAmtChange            ();
     void TxTestGPT                  ();
     void TxPmt(); // Antediluvian.
     void TxAscertainDesiredPayment  ();
@@ -274,7 +273,7 @@ class LMI_EXPIMP AccountValue
     void TxTestHoneymoonForExpiration();
     void TxSetTermAmt            ();
     void TxSetDeathBft           (bool force_eoy_behavior = false);
-    void TxSetCOI                ();
+    void TxSetCoiCharge          ();
     void TxSetRiderDed           ();
     void TxDoMlyDed              ();
 
@@ -444,7 +443,8 @@ class LMI_EXPIMP AccountValue
     double  GenAcctAlloc;   // pmt allocation to gen acct
     double  SepAcctAlloc;   // pmt allocation to sep acct
     double  NAAR;
-    double  COI;    // TODO ?? Call it COIChg instead?
+    double  CoiCharge;
+    double  NetCoiCharge;
     double  SpecAmtLoadBase;
     // TODO ?? Separating different types of sepacct load is probably unneeded.
     double  AVSepAcctLoadBaseBOM; // TODO ?? eradicate
@@ -462,9 +462,9 @@ class LMI_EXPIMP AccountValue
     double  Dcv;
     double  DcvDeathBft;
     double  DcvNaar;
-    double  DcvCoi;
-    double  DcvTermChg;
-    double  DcvWpChg;
+    double  DcvCoiCharge;
+    double  DcvTermCharge;
+    double  DcvWpCharge;
     // For other riders like AD&D, charge for DCV = charge otherwise.
 
     // Honeymoon provision.
@@ -535,13 +535,13 @@ class LMI_EXPIMP AccountValue
     double  YearsSurrChgPremMult;
     double  YearsSurrChgAVMult;
     double  YearsSurrChgSAMult;
-    double  YearsCOIRate0;
-    double  YearsCOIRate1;
-    double  YearsCOIRate2;
+    double  YearsCoiRate0;
+    double  YearsCoiRate1;
+    double  YearsCoiRate2;
     double  Years7702CoiRate;
-    double  YearsADDRate;
+    double  YearsAdbRate;
     double  YearsTermRate;
-    double  YearsWPRate;
+    double  YearsWpRate;
     double  YearsSpouseRiderRate;
     double  YearsChildRiderRate;
     double  YearsPremLoadTgt;
@@ -572,7 +572,7 @@ class LMI_EXPIMP AccountValue
 
     double      deathbft; // Antediluvian.
     bool        haswp;    // Antediluvian.
-    bool        hasadd;   // Antediluvian.
+    bool        hasadb;   // Antediluvian.
 
     // The spec amt used as the basis for surrender charges is not
     // always the current spec amt, but rather the original spec amt
@@ -583,16 +583,16 @@ class LMI_EXPIMP AccountValue
     double  RequestedLoan;
     double  RequestedWD;
 
-    double  ADDChg;
-    double  SpouseRiderChg;
-    double  ChildRiderChg;
-    double  WPChg;
-    double  TermChg;
+    double  AdbCharge;
+    double  SpouseRiderCharge;
+    double  ChildRiderCharge;
+    double  WpCharge;
+    double  TermCharge;
 
     double  MlyDed;
     double  mlydedtonextmodalpmtdate; // Antediluvian.
 
-    double  YearsTotalCOICharge;
+    double  YearsTotalCoiCharge;
     double  YearsAVRelOnDeath;
     double  YearsGrossClaims;
     double  YearsNetClaims;
@@ -609,13 +609,13 @@ class LMI_EXPIMP AccountValue
     double  YearsTotalAcctValLoadBOM; // TODO ?? eradicate
     double  YearsTotalAcctValLoadAMD;
 
-    double NextYearsProjectedCOICharge;
-
     std::vector<double> partial_mortality_q;
 
     // For experience rating.
-    double  YearsTotalNetCOIs;
     double  apportioned_net_mortality_reserve;
+    double  CoiRetentionRate;
+    double  NextYearsProjectedCoiCharge;
+    double  YearsTotalNetCoiCharges;
 
     double  CumulativeSalesLoad;
     bool    FirstYearPremiumExceedsRetaliationLimit;

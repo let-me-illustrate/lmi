@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_acctval.cpp,v 1.48 2005-08-28 14:09:02 chicares Exp $
+// $Id: ihs_acctval.cpp,v 1.49 2005-09-07 03:04:54 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -691,9 +691,9 @@ void AccountValue::SetInitialValues()
     Dcv                         = Input_->InforceDcv;
     DcvDeathBft                 = 0.0;
     DcvNaar                     = 0.0;
-    DcvCoi                      = 0.0;
-    DcvTermChg                  = 0.0;
-    DcvWpChg                    = 0.0;
+    DcvCoiCharge                = 0.0;
+    DcvTermCharge               = 0.0;
+    DcvWpCharge                 = 0.0;
 
     HoneymoonActive             = false;
     HoneymoonValue              = -std::numeric_limits<double>::max();
@@ -713,10 +713,13 @@ void AccountValue::SetInitialValues()
             }
         }
 
-    COI                         = 0.0;
+    CoiCharge                   = 0.0;
+    NetCoiCharge                = 0.0;
     MlyDed                      = 0.0;
     CumulativeSalesLoad         = 0.0;
+
     apportioned_net_mortality_reserve = 0.0;
+    CoiRetentionRate = Database_->Query(DB_ExpRatCOIRetention);
 
     Dumpin             = Outlay_->dumpin();
     External1035Amount = Outlay_->external_1035_amount();
@@ -1163,14 +1166,14 @@ void AccountValue::InitializeYear()
 // TODO ?? Solve...() should reset not inputs but...something else?
     SetAnnualInvariants();
 
-    YearsTotalCOICharge         = 0.0;
+    YearsTotalCoiCharge         = 0.0;
     YearsAVRelOnDeath           = 0.0;
     YearsGrossClaims            = 0.0;
     YearsNetClaims              = 0.0;
     YearsTotalNetIntCredited    = 0.0;
     YearsTotalGrossIntCredited  = 0.0;
     YearsTotalExpRsvInt         = 0.0;
-    YearsTotalNetCOIs           = 0.0;
+    YearsTotalNetCoiCharges     = 0.0;
     YearsTotalAnnPolFee         = 0.0;
     YearsTotalMlyPolFee         = 0.0;
     YearsTotalPremTaxLoad       = 0.0;
@@ -1182,7 +1185,7 @@ void AccountValue::InitializeYear()
     YearsTotalAcctValLoadAMD    = 0.0;
     YearsTotalGptForceout       = 0.0;
 
-    NextYearsProjectedCOICharge = 0.0;
+    NextYearsProjectedCoiCharge = 0.0;
 
     PolicyYearRunningTotalPremiumSubjectToPremiumTax = 0.0;
 
@@ -1510,7 +1513,7 @@ void AccountValue::SetProjectedCoiCharge()
     this_years_terminal_naar = std::max(0.0, this_years_terminal_naar);
     double next_years_coi_rate = GetBandedCoiRates(ExpAndGABasis, ActualSpecAmt)[1 + Year];
 
-    NextYearsProjectedCOICharge =
+    NextYearsProjectedCoiCharge =
             12.0
         *   this_years_terminal_naar
         *   next_years_coi_rate
@@ -1593,14 +1596,14 @@ void AccountValue::FinalizeYear()
     // TODO ?? This is done only if the policy is in force at the end of the
     // year; but if it lapses during the year, should things that happened
     // during the year of lapse be included in a composite?
-    VariantValues().COICharge       [Year] = YearsTotalCOICharge        ;
+    VariantValues().COICharge       [Year] = YearsTotalCoiCharge        ;
     VariantValues().AVRelOnDeath    [Year] = YearsAVRelOnDeath          ;
     VariantValues().ClaimsPaid      [Year] = YearsGrossClaims           ;
     VariantValues().NetClaims       [Year] = YearsNetClaims             ;
     VariantValues().NetIntCredited  [Year] = YearsTotalNetIntCredited   ;
     VariantValues().GrossIntCredited[Year] = YearsTotalGrossIntCredited ;
     VariantValues().ExpRsvInt       [Year] = YearsTotalExpRsvInt        ;
-    VariantValues().NetCOICharge    [Year] = YearsTotalNetCOIs          ;
+    VariantValues().NetCOICharge    [Year] = YearsTotalNetCoiCharges    ;
     VariantValues().MlyPolFee       [Year] = YearsTotalMlyPolFee        ;
     VariantValues().AnnPolFee       [Year] = YearsTotalAnnPolFee        ;
     VariantValues().PolFee          [Year] = YearsTotalAnnPolFee + YearsTotalMlyPolFee;
@@ -1783,13 +1786,13 @@ void AccountValue::SetAnnualInvariants()
         [Year]
         ;
 
-    YearsCOIRate0           = MortalityRates_->MonthlyCoiRatesBand0(ExpAndGABasis)[Year];
-    YearsCOIRate1           = MortalityRates_->MonthlyCoiRatesBand1(ExpAndGABasis)[Year];
-    YearsCOIRate2           = MortalityRates_->MonthlyCoiRatesBand2(ExpAndGABasis)[Year];
+    YearsCoiRate0           = MortalityRates_->MonthlyCoiRatesBand0(ExpAndGABasis)[Year];
+    YearsCoiRate1           = MortalityRates_->MonthlyCoiRatesBand1(ExpAndGABasis)[Year];
+    YearsCoiRate2           = MortalityRates_->MonthlyCoiRatesBand2(ExpAndGABasis)[Year];
     Years7702CoiRate        = GetMly7702qc                     ()             [Year];
-    YearsADDRate            = MortalityRates_->ADDRates        ()             [Year];
+    YearsAdbRate            = MortalityRates_->AdbRates        ()             [Year];
     YearsTermRate           = MortalityRates_->MonthlyTermCoiRates(ExpAndGABasis)[Year];
-    YearsWPRate             = MortalityRates_->WPRates         ()             [Year];
+    YearsWpRate             = MortalityRates_->WpRates         ()             [Year];
     YearsSpouseRiderRate    = MortalityRates_->SpouseRiderRates(ExpAndGABasis)[Year];
     YearsChildRiderRate     = MortalityRates_->ChildRiderRates ()             [Year];
 
@@ -1906,31 +1909,6 @@ double AccountValue::GetPartMortQ(int a_year) const
 }
 
 //============================================================================
-double AccountValue::GetNetCOI() const
-{
-    // TODO ?? Compare comments to code: are 'additive' and 'multiplicative'
-    // mixed up? Support for the tiered 'coi_retention' has been withdrawn.
-
-    // This is the multiplicative part of COI retention,
-    // expressed as 1 + constant: e.g. 1.05 for 5% retention.
-    double coi_ret_additive = Database_->Query(DB_ExpRatCOIRetention);
-
-    // This is the additive part of COI retention,
-    // expressed as an addition to q.
-    // It is a constant retrieved from the database.
-    // Well, maybe not: it was formerly TieredCharges_->coi_retention(1.0);
-    double coi_ret_multiplicative = 1.0;
-    LMI_ASSERT(0.0 < coi_ret_multiplicative);
-
-    // TODO ?? Do this once per year?
-    double net_coi = COI;
-    net_coi -= coi_ret_additive * NAAR;
-    net_coi /= coi_ret_multiplicative;
-
-    return net_coi;
-}
-
-//============================================================================
 double AccountValue::GetSepAcctAssetsInforce() const
 {
     if(ItLapsed || BasicValues::GetLength() <= Year)
@@ -1942,14 +1920,14 @@ double AccountValue::GetSepAcctAssetsInforce() const
 }
 
 //============================================================================
-double AccountValue::GetLastCOIChargeInforce() const
+double AccountValue::GetLastCoiChargeInforce() const
 {
     if(ItLapsed || BasicValues::GetLength() <= Year)
         {
         return 0.0;
         }
 
-    return COI * InvariantValues().InforceLives[Year];
+    return CoiCharge * InvariantValues().InforceLives[Year];
 }
 
 //============================================================================
@@ -1974,7 +1952,7 @@ double AccountValue::GetProjectedCoiChargeInforce()
         {
         return 0.0;
         }
-    return NextYearsProjectedCOICharge * InvariantValues().InforceLives[Year];
+    return NextYearsProjectedCoiCharge * InvariantValues().InforceLives[Year];
 }
 
 //============================================================================
@@ -2002,7 +1980,7 @@ double AccountValue::ApportionNetMortalityReserve
         {
         apportioned_net_mortality_reserve =
                 case_net_mortality_reserve
-            *   YearsTotalCOICharge
+            *   YearsTotalCoiCharge
             /   case_years_net_mortchgs
             ;
         }

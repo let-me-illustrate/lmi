@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.132 2005-09-05 04:27:19 chicares Exp $
+// $Id: ChangeLog,v 1.133 2005-09-07 03:04:54 chicares Exp $
 
 MAINTENANCE
 
@@ -3272,7 +3272,7 @@ Apply special limit only to banded account-value load.
 20050827T1615Z <chicares@cox.net> [1279]
 
   objects.make
-  vector_test.cpp
+  vector_test.cpp [new file]
 Demonstration of various arithmetic techniques to support discussion
 on the lmi mailing list.
 
@@ -3485,4 +3485,31 @@ recommendations. Any
 directory must be renamed to
   /opt/lmi/third_party/
 with an underscore instead of a hyphen.
+
+20050906T0321Z <chicares@cox.net> [1292]
+
+  vector_test.cpp
+Clean up old experiments.
+
+20050906T1352Z <chicares@cox.net> [1292]
+
+  expression_template_0_test.cpp
+Clean up new experiments.
+
+20050907T0304Z <chicares@cox.net> [1290]
+
+  account_value.hpp
+  accountvalue.cpp
+  basic_values.hpp
+  basicvalues.cpp
+  group_values.cpp
+  ihs_acctval.cpp
+  ihs_avdebug.cpp
+  ihs_avmly.cpp
+  ihs_basicval.cpp
+  ihs_dbughdr.hpp
+  ihs_mortal.cpp
+  mortality_rates.cpp
+  mortality_rates.hpp
+Reimplement COI retention, rectifying names.
 

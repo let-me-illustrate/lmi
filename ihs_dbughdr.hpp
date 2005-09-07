@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_dbughdr.hpp,v 1.2 2005-03-26 02:10:46 chicares Exp $
+// $Id: ihs_dbughdr.hpp,v 1.3 2005-09-07 03:04:54 chicares Exp $
 
 #ifndef dbughdr_hpp
 #define dbughdr_hpp
@@ -65,12 +65,12 @@ enum DebugColNames
     ,eSpecAmtLoad
     ,eAcctValLoadBOM
     ,eNAAR
-    ,eCOIRate
-    ,eCOICharge
-    ,eADDRate
-    ,eADDCharge
-    ,eWPRate
-    ,eWPCharge
+    ,eCoiRate
+    ,eCoiCharge
+    ,eAdbRate
+    ,eAdbCharge
+    ,eWpRate
+    ,eWpCharge
     ,eTermAmount
     ,eTermRate
     ,eTermCharge
@@ -139,10 +139,10 @@ inline std::vector<std::string> const& DebugColHeadersHelper()
     v[eTotalBOMAV]          = "Total BOM AV";
     v[eRegLoanBal]          = "Reg loan bal";
     v[ePrefLoanBal]         = "Pref loan bal";
-    v[eDBOption]            = "DB Option";
+    v[eDBOption]            = "DB option";
     v[eSpecAmt]             = "Spec amt";
     v[eCorridorFactor]      = "Corridor factor";
-    v[eDeathBft]            = "Death bft";
+    v[eDeathBft]            = "Death benefit";
     v[eForceout]            = "Forceout";
     v[eEePrem]              = "Ee prem";
     v[eErPrem]              = "Er prem";
@@ -155,17 +155,17 @@ inline std::vector<std::string> const& DebugColHeadersHelper()
     v[eSpecAmtLoad]         = "Spec amt load";
     v[eAcctValLoadBOM]      = "Sep acct load BOM";
     v[eNAAR]                = "NAAR";
-    v[eCOIRate]             = "COI Rate";
-    v[eCOICharge]           = "COI charge";
-    v[eADDRate]             = "ADD Rate";
-    v[eADDCharge]           = "ADD charge";
-    v[eWPRate]              = "WP Rate";
-    v[eWPCharge]            = "WP charge";
+    v[eCoiRate]             = "COI rate";
+    v[eCoiCharge]           = "COI charge";
+    v[eAdbRate]             = "ADD rate";
+    v[eAdbCharge]           = "ADD charge";
+    v[eWpRate]              = "WP rate";
+    v[eWpCharge]            = "WP charge";
     v[eTermAmount]          = "Term amount";
-    v[eTermRate]            = "Term Rate";
+    v[eTermRate]            = "Term rate";
     v[eTermCharge]          = "Term charge";
     v[eTotalRiderCharge]    = "Total rider charge";
-    v[eTotalMonthlyDeds]    = "Total monthly deds";
+    v[eTotalMonthlyDeds]    = "Total monthly deductions";
     v[eGenAcctIntRate]      = "Unloaned GA interest rate";
     v[eGenAcctIntCred]      = "Unloaned GA interest credited";
     v[eSepAcctIntRate]      = "Unloaned SA interest rate";
@@ -189,7 +189,7 @@ inline std::vector<std::string> const& DebugColHeadersHelper()
     v[eNoLapseActive]       = "No lapse active";
     v[eEOMAV]               = "EOM AV";
     v[eHMValue]             = "Honeymoon value";
-    v[eSurrChg]             = "EOM SurrChg";
+    v[eSurrChg]             = "EOM surrender charge";
     v[eEOMCSVNet]           = "EOM CSV net";
     v[eEOMCV7702]           = "EOM CV for 7702";
     v[eInforceFactor]       = "Inforce factor";

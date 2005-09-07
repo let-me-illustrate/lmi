@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_mortal.cpp,v 1.16 2005-09-03 23:55:43 chicares Exp $
+// $Id: ihs_mortal.cpp,v 1.17 2005-09-07 03:04:54 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -89,14 +89,14 @@ void MortalityRates::fetch_parameters(BasicValues const& basic_values)
     // Some of these data members seem useless for now, but they will
     // become useful when mortality-table access is moved hither from
     // class BasicValues.
-    AllowADD_          = basic_values.Database_->Query(DB_AllowADD         );
+    AllowAdb_          = basic_values.Database_->Query(DB_AllowADD         );
     AllowChild_        = basic_values.Database_->Query(DB_AllowChild       );
     AllowExpRating_    = basic_values.Database_->Query(DB_AllowExpRating   );
     AllowFlatExtras_   = basic_values.Database_->Query(DB_AllowFlatExtras  );
     AllowSpouse_       = basic_values.Database_->Query(DB_AllowSpouse      );
     AllowSubstdTable_  = basic_values.Database_->Query(DB_AllowSubstdTable );
     AllowTerm_         = basic_values.Database_->Query(DB_AllowTerm        );
-    AllowWP_           = basic_values.Database_->Query(DB_AllowWP          );
+    AllowWp_           = basic_values.Database_->Query(DB_AllowWP          );
     CCoiIsAnnual_      = basic_values.Database_->Query(DB_CCoiIsAnnual     );
     GCoiIsAnnual_      = basic_values.Database_->Query(DB_GCoiIsAnnual     );
 
@@ -111,38 +111,13 @@ void MortalityRates::fetch_parameters(BasicValues const& basic_values)
     ExpRatCoiMultCurr0_ = basic_values.Database_->Query(DB_ExpRatCoiMultCurr0);
     ExpRatCoiMultCurr1_ = basic_values.Database_->Query(DB_ExpRatCoiMultCurr1);
     ExpRatCoiMultGuar_  = basic_values.Database_->Query(DB_ExpRatCoiMultGuar);
-    UsePMQOnCurrCOI_    = basic_values.Database_->Query(DB_UsePMQOnCurrCOI);
+    UsePMQOnCurrCoiRate_= basic_values.Database_->Query(DB_UsePMQOnCurrCOI);
 
-    basic_values.Database_->Query(GCOIMultiplier_, DB_GCOIMultiplier);
-    basic_values.Database_->Query(CCOIMultiplier_, DB_CCOIMultiplier);
+    basic_values.Database_->Query(GCoiMultiplier_, DB_GCOIMultiplier);
+    basic_values.Database_->Query(CCoiMultiplier_, DB_CCOIMultiplier);
     basic_values.Database_->Query(SubstdTblMult_ , DB_SubstdTblMult );
 
-    // This is the additive part of COI retention,
-    // expressed as an addition to q.
-    // It is a constant retrieved from the database.
-    AdditiveCoiRetention_ = basic_values.Database_->Query
-        (DB_ExpRatCOIRetention
-        );
-
-    // This is the multiplicative part of COI retention,
-    // expressed as 1 + constant: e.g. 1.05 for 5% retention.
-    //
-    // TODO ?? Clean this up.
-    //
-    // Compare notes in AccountValue::GetNetCOI() that suggest
-    // serious problems with COI retention calculations.
-    //
-// Formerly, this was:
-// It was once tiered by initial "assumed" number of lives, but
-// that quantity is no longer used; '1.0' is just a placeholder.
-//
-//    MultiplicativeCoiRetention_ = basic_values.TieredCharges_->coi_retention
-//        (1.0
-//        );
-// but support for the tiered 'coi_retention' has been withdrawn.
-    MultiplicativeCoiRetention_ = 1.0;
-
-    CountryCOIMultiplier_ = basic_values.Input_->CountryCOIMultiplier;
+    CountryCoiMultiplier_ = basic_values.Input_->CountryCOIMultiplier;
     IsPolicyRated_        = basic_values.Input_->Status[0].IsPolicyRated();
     SubstdTable_          = basic_values.Input_->Status[0].SubstdTable;
     UseExperienceRating_  = basic_values.Input_->UseExperienceRating;
@@ -168,8 +143,8 @@ void MortalityRates::fetch_parameters(BasicValues const& basic_values)
 // TODO ?? These are delicate: they are needed only conditionally.
     MonthlyGuaranteedTermCoiRates_ = basic_values.GetGuaranteedTermRates();
     MonthlyCurrentTermCoiRates_    = basic_values.GetCurrentTermRates();
-    ADDRates_ = basic_values.GetADDRates();
-    WPRates_ = basic_values.GetWPRates();
+    AdbRates_ = basic_values.GetAdbRates();
+    WpRates_ = basic_values.GetWpRates();
     ChildRiderRates_ = basic_values.GetChildRiderRates();
     GuaranteedSpouseRiderRates_ = basic_values.GetGuaranteedSpouseRiderRates();
     CurrentSpouseRiderRates_    = basic_values.GetCurrentSpouseRiderRates();
@@ -410,13 +385,10 @@ void MortalityRates::SetGuaranteedRates()
                 double qstart = MonthlyGuaranteedCoiRates_[j];
                 double q = std::min(1.0, ExpRatCoiMultGuar_ * qstart);
                 q = coi_rate_from_q<double>()(q, MaxMonthlyCoiRate_);
-                // No COI retention for guaranteed
                 MonthlyGuaranteedCoiRates_[j] = round_coi_rate_(q);
 
                 q = std::min(1.0, ExpRatCoiMultAlt_ * qstart);
                 q = coi_rate_from_q<double>()(q, MonthlyGuaranteedCoiRates_[j]);
-                q *= MultiplicativeCoiRetention_;
-                q += AdditiveCoiRetention_;
                 q = std::min(q, MonthlyGuaranteedCoiRates_[j]);
                 AlternativeMonthlyCoiRates_[j] = round_coi_rate_(q);
                 }
@@ -432,7 +404,7 @@ void MortalityRates::SetGuaranteedRates()
 // hard coding the exponential method for now.
 // [It's DB_CoiUpper12Method: 0=exponential, 1=linear]
 //  linear COI method:
-//              MonthlyGuaranteedCoiRates_[j] *= GCOIMultiplier_[j];
+//              MonthlyGuaranteedCoiRates_[j] *= GCoiMultiplier_[j];
 //              MonthlyGuaranteedCoiRates_[j] = std::min
 //                  (1.0 / 12.0
 //                  , MonthlyGuaranteedCoiRates_[j]
@@ -445,8 +417,7 @@ void MortalityRates::SetGuaranteedRates()
 
 //  exponential COI method
 // TODO ?? should respect DB_CoiUpper12Method
-                // No COI retention for guaranteed
-                MonthlyGuaranteedCoiRates_[j] *= GCOIMultiplier_[j];
+                MonthlyGuaranteedCoiRates_[j] *= GCoiMultiplier_[j];
                 MonthlyGuaranteedCoiRates_[j] = coi_rate_from_q<double>()
                     (MonthlyGuaranteedCoiRates_[j]
                     ,MaxMonthlyCoiRate_
@@ -463,7 +434,7 @@ void MortalityRates::SetGuaranteedRates()
             {
             double q = MonthlyGuaranteedCoiRates_[j];
             // TODO ?? COI multiple is applied to the monthly COI.
-            q = std::min(GCOIMultiplier_[j] * q, MaxMonthlyCoiRate_);
+            q = std::min(GCoiMultiplier_[j] * q, MaxMonthlyCoiRate_);
             MonthlyGuaranteedCoiRates_[j] = round_coi_rate_(q);
             }
         }
@@ -474,8 +445,8 @@ void MortalityRates::SetNonguaranteedRates()
 {
     // ET !! Easier to write as
     //   std::vector<double> curr_coi_multiplier =
-    //     CCOIMultiplier_ * CountryCOIMultiplier_ * CurrentCoiMultiplier_;
-    std::vector<double> curr_coi_multiplier(CCOIMultiplier_);
+    //     CCoiMultiplier_ * CountryCoiMultiplier_ * CurrentCoiMultiplier_;
+    std::vector<double> curr_coi_multiplier(CCoiMultiplier_);
 
     // Multiplier for country affects only nonguaranteed COI rates.
     std::transform
@@ -484,7 +455,7 @@ void MortalityRates::SetNonguaranteedRates()
         ,curr_coi_multiplier.begin()
         ,std::bind1st
             (std::multiplies<double>()
-            ,CountryCOIMultiplier_
+            ,CountryCoiMultiplier_
             )
         );
     // Input vector current-COI multiplier affects only nonguaranteed COI rates.
@@ -529,7 +500,7 @@ void MortalityRates::SetOneNonguaranteedRateBand
                 {
                 experience_rating_coi_multiplier = // if experience rated
                     ExpRatCoiMultCurr1_;
-                if(UsePMQOnCurrCOI_)
+                if(UsePMQOnCurrCoiRate_)
                     {
                     apply_partial_mortality_multiplier = true;
                     }
@@ -549,8 +520,6 @@ void MortalityRates::SetOneNonguaranteedRateBand
                     }
                 double q = multiplier * curr_coi_multiplier[j] * coi_rates[j];
                 q = coi_rate_from_q<double>()(q, MonthlyGuaranteedCoiRates_[j]);
-                q *= MultiplicativeCoiRetention_;
-                q += AdditiveCoiRetention_;
                 q = std::min(q, MonthlyGuaranteedCoiRates_[j]);
                 coi_rates[j] = round_coi_rate_(q);
                 }
@@ -609,16 +578,16 @@ void MortalityRates::SetOtherRates()
         MonthlyMidpointTermCoiRates_  .assign(Length_, 0.0);
         }
 
-    if(AllowADD_)
+    if(AllowAdb_)
         {
 // TODO ?? No substandard support yet for this rider.
-//        MakeCoiRateSubstandard(ADDRates_);
+//        MakeCoiRateSubstandard(AdbRates_);
         }
 
-    if(AllowWP_)
+    if(AllowWp_)
         {
 // TODO ?? No substandard support yet for this rider.
-//        MakeCoiRateSubstandard(WPRates_);
+//        MakeCoiRateSubstandard(WpRates_);
         }
 
     if(AllowSpouse_)
