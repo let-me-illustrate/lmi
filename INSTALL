@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: INSTALL,v 1.15 2005-09-08 12:54:47 wboutin Exp $
+// $Id: INSTALL,v 1.16 2005-09-08 13:38:29 wboutin Exp $
 
 [It's clearest to validate commands, then copy and paste them here.
 Once we've done that, it becomes trivial to turn this into a shell
@@ -53,7 +53,7 @@ to /tmp/ .
 Validate:
   /tmp[0]$md5sum cgicc-3.1.4.tar.bz2  cgicc_3_1_4_patch
   6cb5153fc9fa64b4e50c7962aa557bbe  cgicc-3.1.4.tar.bz2
-  accb5565b254a2fe158d9f38996355cb  cgicc_3_1_4_patch
+  1d71cc4c9a075b7b623b5499a8300cde  cgicc_3_1_4_patch
 
 Extract archive:
   /tmp[0]$bzip2 -dk cgicc-3.1.4.tar.bz2
