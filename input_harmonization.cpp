@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_harmonization.cpp,v 1.13 2005-06-26 23:01:43 chicares Exp $
+// $Id: input_harmonization.cpp,v 1.14 2005-09-08 23:03:45 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -62,27 +62,26 @@ namespace
 /// if product X is selected and a rate of 0.037 is given, and the
 /// product is then changed to Y, then the default-rate behavior is
 /// in effect; and if the product is later changed back to X, then
-/// the rate changes to X's default of 0.052. This behavior seems
-/// complicated, but generally does the right thing; and it is
-/// conjectured that no more "natural" behavior can be achieved
-/// without adding a control to turn default on and off manually.
+/// the rate changes to X's default of 0.052.
 ///
-/// Take the same action if no product had been selected previously,
-/// or if the field is empty.
+/// Take the same action if the field is empty.
 ///
 /// Otherwise, leave it alone, deeming it to represent intentional
 /// user input that should be preserved--even if it exceeds the new
 /// product's current credited rate and will therefore be disallowed.
 ///
-/// An alternative for future consideration is a "use current rate"
-/// checkbox. Until we have a historical database, that would only
-/// frustrate users running inforce or backdated illustrations.
+/// This behavior seems complicated, but generally does exactly what
+/// is desired. An alternative for future consideration is to add a
+/// "use current rate" checkbox. Until lmi has a historical database,
+/// that would only frustrate users running inforce or backdated
+/// illustrations.
 
 void Input::reset_database()
 {
-    // This has to fail the first time it's called, because the
-    // product name is implicitly initialized to an empty string,
-    // which cannot match any actual product.
+    // This early-exit condition has to fail the first time this
+    // function is called, because the product name is implicitly
+    // initialized to an empty string, which cannot match any actual
+    // product.
     if
         (
             CachedProductName           == ProductName
@@ -134,8 +133,7 @@ void Input::reset_database()
         );
 
     if
-        (   cached_credited_rate.empty()
-        ||  GeneralAccountRate.value().empty()
+        (   GeneralAccountRate.value().empty()
         ||  cached_credited_rate == GeneralAccountRate.value()
         )
         {
