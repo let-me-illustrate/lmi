@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.133 2005-09-07 03:04:54 chicares Exp $
+// $Id: ChangeLog,v 1.134 2005-09-08 12:54:47 wboutin Exp $
 
 MAINTENANCE
 
@@ -3512,4 +3512,14 @@ Clean up new experiments.
   mortality_rates.cpp
   mortality_rates.hpp
 Reimplement COI retention, rectifying names.
+
+20050908T1240Z <wboutin@massmutual.com> [1290]
+
+  cgicc-patch-gwc-20050217    [renamed to cgicc_3_1_4_patch]
+  cgicc_3_1_4_patch           [new file]
+  xmlwrapp-patch-gwc-20050217 [renamed to xmlwrapp_0_2_0_patch]
+  xmlwrapp_0_2_0_patch        [new file]
+  INSTALL
+  setup.make
+Remove embedded dates from filenames, which don't belong in cvs.
 

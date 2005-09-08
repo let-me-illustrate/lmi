@@ -1,6 +1,6 @@
 diff --recursive --context=2 scratch/include/xmlwrapp/event_parser.h xmlwrapp-0.2.0/include/xmlwrapp/event_parser.h
-*** scratch/include/xmlwrapp/event_parser.h	Thu Apr 11 23:11:41 2002
---- xmlwrapp-0.2.0/include/xmlwrapp/event_parser.h	Thu Feb 17 09:20:30 2005
+*** scratch/include/xmlwrapp/event_parser.h Thu Apr 11 23:11:41 2002
+--- xmlwrapp-0.2.0/include/xmlwrapp/event_parser.h  Thu Feb 17 09:20:30 2005
 ***************
 *** 39,42 ****
 --- 39,43 ----
@@ -10,8 +10,8 @@ diff --recursive --context=2 scratch/include/xmlwrapp/event_parser.h xmlwrapp-0.
   #include <string>
   #include <iosfwd>
 diff --recursive --context=2 scratch/include/xmlwrapp/node.h xmlwrapp-0.2.0/include/xmlwrapp/node.h
-*** scratch/include/xmlwrapp/node.h	Mon May 06 21:19:05 2002
---- xmlwrapp-0.2.0/include/xmlwrapp/node.h	Thu Feb 17 09:20:54 2005
+*** scratch/include/xmlwrapp/node.h Mon May 06 21:19:05 2002
+--- xmlwrapp-0.2.0/include/xmlwrapp/node.h  Thu Feb 17 09:20:54 2005
 ***************
 *** 39,42 ****
 --- 39,43 ----
@@ -21,8 +21,8 @@ diff --recursive --context=2 scratch/include/xmlwrapp/node.h xmlwrapp-0.2.0/incl
   #include <iosfwd>
   #include <string>
 diff --recursive --context=2 scratch/include/xmlwrapp/tree_parser.h xmlwrapp-0.2.0/include/xmlwrapp/tree_parser.h
-*** scratch/include/xmlwrapp/tree_parser.h	Thu Feb 28 11:27:50 2002
---- xmlwrapp-0.2.0/include/xmlwrapp/tree_parser.h	Thu Feb 17 09:21:30 2005
+*** scratch/include/xmlwrapp/tree_parser.h  Thu Feb 28 11:27:50 2002
+--- xmlwrapp-0.2.0/include/xmlwrapp/tree_parser.h   Thu Feb 17 09:21:30 2005
 ***************
 *** 38,43 ****
   #define __xmlwrapp_tree_parser_h__
@@ -38,8 +38,8 @@ diff --recursive --context=2 scratch/include/xmlwrapp/tree_parser.h xmlwrapp-0.2
   
   namespace xml {
 diff --recursive --context=2 scratch/src/libxml/tree_parser.cxx xmlwrapp-0.2.0/src/libxml/tree_parser.cxx
-*** scratch/src/libxml/tree_parser.cxx	Thu Feb 28 11:27:50 2002
---- xmlwrapp-0.2.0/src/libxml/tree_parser.cxx	Sun Jan 16 17:45:00 2005
+*** scratch/src/libxml/tree_parser.cxx  Thu Feb 28 11:27:50 2002
+--- xmlwrapp-0.2.0/src/libxml/tree_parser.cxx   Sun Jan 16 17:45:00 2005
 ***************
 *** 50,54 ****
       bool okay_;
