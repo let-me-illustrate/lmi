@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.135 2005-09-08 13:44:49 wboutin Exp $
+// $Id: ChangeLog,v 1.136 2005-09-08 23:03:45 chicares Exp $
 
 MAINTENANCE
 
@@ -3531,4 +3531,13 @@ Improve conformance.
   cgicc_3_1_4_patch
   INSTALL
 Patch cgicc-3.1.4 to prevent compiler warnings.
+
+20050908T2303Z <chicares@cox.net> [1290]
+
+  input_harmonization.cpp
+  inputillus.cpp
+  inputillus.hpp
+  inputillus_sequences.cpp
+Stop overriding user-specified general-account rates. This refines
+the 20050626T2301Z modifications.
 
