@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: setup.make,v 1.7 2005-09-05 04:27:19 chicares Exp $
+# $Id: setup.make,v 1.8 2005-09-08 12:54:47 wboutin Exp $
 
 .PHONY: all
 all: setup
@@ -171,7 +171,7 @@ install_frozen_cgicc_from_tmp_dir:
 	$(ECHO) "6cb5153fc9fa64b4e50c7962aa557bbe  cgicc-3.1.4.tar.bz2" |$(MD5SUM) --check
 	[ -e cgicc-3.1.4.tar ] || $(BZIP2) --decompress --keep cgicc-3.1.4.tar.bz2
 	$(TAR) --extract --file=cgicc-3.1.4.tar
-	$(PATCH) --strip=0 < $(src_dir)/cgicc-patch-gwc-20050217
+	$(PATCH) --strip=0 < $(src_dir)/cgicc_3_1_4_patch
 	$(MKDIR) --parents $(third_party_include_dir)/cgicc/
 	$(MKDIR) --parents $(third_party_source_dir)/cgicc/
 	$(CP) --preserve cgicc-3.1.4/cgicc/*.h $(third_party_include_dir)/cgicc/
@@ -205,7 +205,7 @@ install_frozen_xmlwrapp_from_tmp_dir:
 	$(ECHO) "f142e8bc349597ecbaebb4a8e246b65a  xmlwrapp-0.2.0.tar.gz" |$(MD5SUM) --check
 	[ -e xmlwrapp-0.2.0.tar ] || gzip -d xmlwrapp-0.2.0.tar.gz
 	$(TAR) --extract --verbose --file=xmlwrapp-0.2.0.tar
-	$(PATCH) --strip=0 < $(src_dir)/xmlwrapp-patch-gwc-20050217
+	$(PATCH) --strip=0 < $(src_dir)/xmlwrapp_0_2_0_patch
 	$(MKDIR) --parents $(third_party_include_dir)/xmlwrapp/
 	$(MKDIR) --parents $(third_party_source_dir)/libxml/
 	$(CP) --preserve xmlwrapp-0.2.0/include/xmlwrapp/*.h $(third_party_include_dir)/xmlwrapp/

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: INSTALL,v 1.14 2005-09-03 02:45:16 chicares Exp $
+// $Id: INSTALL,v 1.15 2005-09-08 12:54:47 wboutin Exp $
 
 [It's clearest to validate commands, then copy and paste them here.
 Once we've done that, it becomes trivial to turn this into a shell
@@ -39,7 +39,7 @@ topic
 
 [/usr/local/include/ would not be appropriate for others who have
 later versions of these libraries already installed in that location.
-To accommodate their needs, the makefiles look in /opt/lmi/third-party/
+To accommodate their needs, the makefiles look in /opt/lmi/third_party/
 for third-party libraries that we build as collections of objects.]
 
 * Install and patch cgicc-3.1.4
@@ -51,9 +51,9 @@ and
 to /tmp/ .
 
 Validate:
-  /tmp[0]$md5sum cgicc-3.1.4.tar.bz2  cgicc-patch-gwc-20050217
+  /tmp[0]$md5sum cgicc-3.1.4.tar.bz2  cgicc_3_1_4_patch
   6cb5153fc9fa64b4e50c7962aa557bbe  cgicc-3.1.4.tar.bz2
-  245c51c9c9c9f2b33b93650bef5467bf  cgicc-patch-gwc-20050217
+  accb5565b254a2fe158d9f38996355cb  cgicc_3_1_4_patch
 
 Extract archive:
   /tmp[0]$bzip2 -dk cgicc-3.1.4.tar.bz2
@@ -66,12 +66,12 @@ Apply required patch:
   patching file `cgicc-3.1.4/cgicc/CgiUtils.cpp'
 
 Copy cgicc's header files to the third-party hierarchy:
-  /tmp[0]$mkdir -p /opt/lmi/third-party/include/cgicc/
-  /tmp[0]$cp --preserve cgicc-3.1.4/cgicc/*.h /opt/lmi/third-party/include/cgicc/
+  /tmp[0]$mkdir -p /opt/lmi/third_party/include/cgicc/
+  /tmp[0]$cp --preserve cgicc-3.1.4/cgicc/*.h /opt/lmi/third_party/include/cgicc/
 
 Copy cgicc's source files to the third-party hierarchy:
-  /tmp[0]$mkdir -p /opt/lmi/third-party/src/cgicc/
-  /tmp[0]$cp --preserve cgicc-3.1.4/cgicc/*.cpp /opt/lmi/third-party/src/cgicc/
+  /tmp[0]$mkdir -p /opt/lmi/third_party/src/cgicc/
+  /tmp[0]$cp --preserve cgicc-3.1.4/cgicc/*.cpp /opt/lmi/third_party/src/cgicc/
 
 * Install and patch xmlwrapp-0.2.0
 
@@ -82,8 +82,8 @@ and
 to /tmp/ .
 
 Validate:
-  /tmp[0]$md5sum xmlwrapp-patch-gwc-20050217 xmlwrapp-0.2.0.tar.gz
-  69b6d8f00f7352e13ca7a68c4d6282c8  xmlwrapp-patch-gwc-20050217
+  /tmp[0]$md5sum xmlwrapp_0_2_0_patch xmlwrapp-0.2.0.tar.gz
+  8f8360b74127496f990691e94db554d5  xmlwrapp_0_2_0_patch
   f142e8bc349597ecbaebb4a8e246b65a  xmlwrapp-0.2.0.tar.gz
 
 Extract archive:
@@ -98,12 +98,12 @@ Apply required patch:
   patching file `xmlwrapp-0.2.0/src/libxml/tree_parser.cxx'
 
 Copy xmlwrapp's header files to the third-party hierarchy:
-  /tmp[0]$mkdir -p /opt/lmi/third-party/include/xmlwrapp/
-  /tmp[0]$cp --preserve xmlwrapp-0.2.0/include/xmlwrapp/*.h /opt/lmi/third-party/include/xmlwrapp/
+  /tmp[0]$mkdir -p /opt/lmi/third_party/include/xmlwrapp/
+  /tmp[0]$cp --preserve xmlwrapp-0.2.0/include/xmlwrapp/*.h /opt/lmi/third_party/include/xmlwrapp/
 
 Copy xmlwrapp's src files to the third-party hierarchy:
-  /tmp[0]$mkdir -p /opt/lmi/third-party/src/libxml/
-  /tmp[0]$cp --preserve xmlwrapp-0.2.0/src/libxml/* /opt/lmi/third-party/src/libxml/
+  /tmp[0]$mkdir -p /opt/lmi/third_party/src/libxml/
+  /tmp[0]$cp --preserve xmlwrapp-0.2.0/src/libxml/* /opt/lmi/third_party/src/libxml/
 
 * Install boost-1.31.0
 
@@ -120,14 +120,14 @@ Extract archive:
   /tmp[0]$tar -xf boost_1_31_0.tar
 
 Copy boost header files to the third-party hierarchy:
-  /tmp[0]$mkdir -p /opt/lmi/third-party/include/boost/
+  /tmp[0]$mkdir -p /opt/lmi/third_party/include/boost/
   /tmp[0]$pushd boost_1_31_0/boost/
-  /tmp/boost/boost_1_31_0/boost[0]$/msys/1.0/bin/cp --force --parents --preserve --recursive * /c/opt/lmi/third-party/include/boost/
+  /tmp/boost/boost_1_31_0/boost[0]$/msys/1.0/bin/cp --force --parents --preserve --recursive * /c/opt/lmi/third_party/include/boost/
 
 [WENDY--the ancient cp you're using won't do this without producing
 tons of bogus diagnostics; alternatively, you could do this:
 
-  /tmp/boost/boost_1_31_0/boost[0]$cp --force --parents --preserve --recursive * /opt/lmi/third-party/include/boost/ 2>/dev/null
+  /tmp/boost/boost_1_31_0/boost[0]$cp --force --parents --preserve --recursive * /opt/lmi/third_party/include/boost/ 2>/dev/null
 
 but that would lose any meaningful diagnostics.
 
@@ -136,9 +136,9 @@ Something similar could be done for the source directory below.]
   /tmp/boost/boost_1_31_0/boost[0]$popd
 
 Copy boost source files to the third-party hierarchy:
-  /tmp[0]$mkdir -p /opt/lmi/third-party/src/boost_1_31_0
+  /tmp[0]$mkdir -p /opt/lmi/third_party/src/boost_1_31_0
   /tmp[0]$pushd boost_1_31_0/
-  /tmp[0]$/msys/1.0/bin/cp --force --parents --preserve --recursive * /c/opt/lmi/third-party/src/boost_1_31_0/
+  /tmp[0]$/msys/1.0/bin/cp --force --parents --preserve --recursive * /c/opt/lmi/third_party/src/boost_1_31_0/
   /tmp/boost/boost_1_31_0[0]$popd
 
 * Install libxml2-2.6.19
@@ -160,16 +160,16 @@ Build library with MSYS:
   $ ./configure && make
 
 Copy libxml header files to the third-party hierarchy:
-  /tmp[0]$mkdir -p /opt/lmi/third-party/include/libxml/
+  /tmp[0]$mkdir -p /opt/lmi/third_party/include/libxml/
   /tmp[0]$pushd libxml2-2.6.19/include/libxml/
-  /tmp/libxml2-2.6.19/include/libxml[0]$/msys/1.0/bin/cp.exe --force --parents --preserve --recursive * /c/opt/lmi/third-party/include/libxml/
+  /tmp/libxml2-2.6.19/include/libxml[0]$/msys/1.0/bin/cp.exe --force --parents --preserve --recursive * /c/opt/lmi/third_party/include/libxml/
   /tmp/libxml2-2.6.19/include/libxml[0]$popd
 
 Copy libxml libraries to the third-party hierarchy:
-  /tmp[0]$mkdir -p /opt/lmi/third-party/bin /opt/lmi/third-party/lib
+  /tmp[0]$mkdir -p /opt/lmi/third_party/bin /opt/lmi/third_party/lib
   /tmp[0]$pushd libxml2-2.6.19/.libs/
-  /tmp/libxml2-2.6.19/.libs[0]$cp -p libxml2-2.dll c:/opt/lmi/third-party/bin/
-  /tmp/libxml2-2.6.19/.libs[0]$cp -p libxml2.dll.a c:/opt/lmi/third-party/lib/
+  /tmp/libxml2-2.6.19/.libs[0]$cp -p libxml2-2.dll c:/opt/lmi/third_party/bin/
+  /tmp/libxml2-2.6.19/.libs[0]$cp -p libxml2.dll.a c:/opt/lmi/third_party/lib/
   /tmp/libxml2-2.6.19/.libs[0]$popd
 
 * Install and patch mpatrol_1.4.8
