@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.134 2005-09-08 12:54:47 wboutin Exp $
+// $Id: ChangeLog,v 1.135 2005-09-08 13:44:49 wboutin Exp $
 
 MAINTENANCE
 
@@ -3522,4 +3522,13 @@ Reimplement COI retention, rectifying names.
   INSTALL
   setup.make
 Remove embedded dates from filenames, which don't belong in cvs.
+
+20050908T1304Z <wboutin@massmutual.com> [1290]
+
+  GNUmakefile
+Improve conformance.
+
+  cgicc_3_1_4_patch
+  INSTALL
+Patch cgicc-3.1.4 to prevent compiler warnings.
 
