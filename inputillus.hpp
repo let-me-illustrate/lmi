@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: inputillus.hpp,v 1.4 2005-08-13 23:45:42 chicares Exp $
+// $Id: inputillus.hpp,v 1.5 2005-09-08 23:03:45 chicares Exp $
 
 #ifndef inputillus_hpp
 #define inputillus_hpp
@@ -75,11 +75,6 @@ class LMI_EXPIMP IllusInputParms
     // desirable to display the proportional term specified amount
     // without necessarily changing the base specified amount.
     void make_term_rider_consistent(bool aggressively = true);
-
-    // It is often desirable to set the general-account interest rate
-    // to the maximum allowed, which is presumed to be the current
-    // credited rate.
-    std::string current_credited_rate();
 
     std::vector<std::string> realize_all_sequence_strings
         (bool report_errors = true
