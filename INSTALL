@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: INSTALL,v 1.16 2005-09-08 13:38:29 wboutin Exp $
+// $Id: INSTALL,v 1.17 2005-09-09 00:54:32 wboutin Exp $
 
 [It's clearest to validate commands, then copy and paste them here.
 Once we've done that, it becomes trivial to turn this into a shell
@@ -47,7 +47,7 @@ for third-party libraries that we build as collections of objects.]
 Download
   ftp://ftp.gnu.org/pub/gnu/cgicc/cgicc-3.1.4.tar.bz2
 and
-  http://savannah.nongnu.org/cgi-bin/viewcvs/*checkout*/lmi/lmi/cgicc-patch-gwc-20050217
+  http://savannah.nongnu.org/cgi-bin/viewcvs/*checkout*/lmi/lmi/cgicc_3_1_4_patch
 to /tmp/ .
 
 Validate:
@@ -60,7 +60,7 @@ Extract archive:
   /tmp[0]$tar -xf cgicc-3.1.4.tar
 
 Apply required patch:
-  /tmp[0]$/msys/1.0/bin/patch --strip=0 <cgicc-patch-gwc-20050217 # note 0
+  /tmp[0]$/msys/1.0/bin/patch --strip=0 <cgicc_3_1_4_patch # note 0
   patching file `cgicc-3.1.4/cgicc/CgiDefs.h'
   patching file `cgicc-3.1.4/cgicc/CgiEnvironment.cpp'
   patching file `cgicc-3.1.4/cgicc/CgiUtils.cpp'
@@ -78,7 +78,7 @@ Copy cgicc's source files to the third-party hierarchy:
 Download
   http://pmade.org/software/xmlwrapp/download/xmlwrapp-0.2.0.tar.gz
 and
-  http://savannah.nongnu.org/cgi-bin/viewcvs/*checkout*/lmi/lmi/xmlwrapp-patch-gwc-20050217
+  http://savannah.nongnu.org/cgi-bin/viewcvs/*checkout*/lmi/lmi/xmlwrapp_0_2_0_patch
 to /tmp/ .
 
 Validate:
@@ -91,7 +91,7 @@ Extract archive:
   /tmp[0]$tar -xf xmlwrapp-0.2.0.tar
 
 Apply required patch:
-  /tmp[0]$/msys/1.0/bin/patch --strip=0 <xmlwrapp-patch-gwc-20050217 # note 0
+  /tmp[0]$/msys/1.0/bin/patch --strip=0 <xmlwrapp_0_2_0_patch # note 0
   patching file `xmlwrapp-0.2.0/include/xmlwrapp/event_parser.h'
   patching file `xmlwrapp-0.2.0/include/xmlwrapp/node.h'
   patching file `xmlwrapp-0.2.0/include/xmlwrapp/tree_parser.h'
@@ -243,7 +243,7 @@ The following options must be set to 1 in wx/setup.h (or using configure):
     wxUSE_PRINTING_ARCHITECTURE
     wxUSE_STD_STRING
 
-The following options must be set to 0 (all thes are on by default):
+The following options must be set to 0 (all these are on by default):
     wxUSE_APPLE_IEEE
     wxUSE_LIBJPEG
     wxUSE_LIBTIFF
