@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avmly.cpp,v 1.23 2005-09-07 03:04:54 chicares Exp $
+// $Id: ihs_avmly.cpp,v 1.24 2005-09-09 01:24:03 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -2341,12 +2341,17 @@ void AccountValue::TxSetCoiCharge()
     // Net amount at risk is the death benefit discounted one month
     // at the guaranteed interest rate, minus account value iff
     // nonnegative (a negative account value mustn't increase NAAR);
-    // but never less than zero. The subtraction could yield a value
-    // less than zero because the corridor factor can be as low as
-    // unity, but it's constrained to be nonnegative to prevent
-    // increasing account value by deducting a negative mortality
-    // charge.
-    NAAR = DBReflectingCorr * DBDiscountRate[Year] - TotalAccountValue();
+    // but never less than zero. The account value could be negative
+    // because of pending lapse on an admin system (whose inforce
+    // values might be used in an illustration), or because of a
+    // no-lapse guarantee. The subtraction could yield a value less
+    // than zero because the corridor factor can be as low as unity,
+    // but it's constrained to be nonnegative to prevent increasing
+    // the account value by deducting a negative mortality charge.
+    NAAR =
+            DBReflectingCorr * DBDiscountRate[Year]
+        -   std::max(0.0, TotalAccountValue())
+        ;
     NAAR = std::max(0.0, round_naar(NAAR));
 
 // TODO ?? This doesn't work. We need to reconsider the basic transactions.
@@ -2382,6 +2387,10 @@ void AccountValue::TxSetCoiCharge()
             );
         ActualCoiRate = round_coi_rate(ActualCoiRate);
         }
+
+    // TODO ?? Need to divide CoiRetentionRate by CoiMultiplier
+    // depending on database entity 'UseRawTableForRetention'.
+    // These calculations must be refined for other reasons, too.
 
     NetCoiCharge = round_coi_charge(NAAR *  ActualCoiRate                    );
     CoiCharge    = round_coi_charge(NAAR * (ActualCoiRate + CoiRetentionRate));
