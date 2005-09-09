@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: msw_generic.make,v 1.4 2005-09-09 00:56:11 wboutin Exp $
+# $Id: msw_generic.make,v 1.5 2005-09-09 04:36:22 wboutin Exp $
 
 ################################################################################
 
@@ -91,6 +91,7 @@ TAR    := $(gnu_utils_dir)/tar
 TOUCH  := $(gnu_utils_dir)/touch
 TR     := $(gnu_utils_dir)/tr
 WC     := $(gnu_utils_dir)/wc
+WGET   := $(msys_utils_dir)/wget
 
 ################################################################################
 
