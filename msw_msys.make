@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: msw_msys.make,v 1.4 2005-06-18 19:39:02 chicares Exp $
+# $Id: msw_msys.make,v 1.5 2005-09-09 00:56:11 wboutin Exp $
 
 ################################################################################
 
@@ -103,6 +103,7 @@ SED    := /c/usr/bin/sed
 BZIP2  := $(PATH_USR_BIN)bzip2
 DIFF   := $(PATH_USR_BIN)diff
 GREP   := $(PATH_USR_BIN)grep
+GZIP   := $(PATH_USR_BIN)gzip
 MD5SUM := $(PATH_USR_BIN)md5sum
 PATCH  := $(PATH_USR_BIN)patch
 TAR    := $(PATH_USR_BIN)tar

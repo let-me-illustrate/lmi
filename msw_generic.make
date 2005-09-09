@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: msw_generic.make,v 1.3 2005-06-18 04:46:41 chicares Exp $
+# $Id: msw_generic.make,v 1.4 2005-09-09 00:56:11 wboutin Exp $
 
 ################################################################################
 
@@ -62,7 +62,8 @@ RC  := $(mingw_dir)/bin/windres
 
 # Standard utilities.
 
-gnu_utils_dir := $(system_root)/gnu
+gnu_utils_dir  := $(system_root)/gnu
+msys_utils_dir := $(system_root)/msys/1.0/bin
 
 # Required in /bin (if anywhere) by FHS-2.2 .
 
@@ -83,8 +84,9 @@ SED    := $(gnu_utils_dir)/sed
 BZIP2  := $(gnu_utils_dir)/bzip2
 DIFF   := $(gnu_utils_dir)/diff
 GREP   := $(gnu_utils_dir)/grep
+GZIP   := $(gnu_utils_dir)/gzip
 MD5SUM := $(gnu_utils_dir)/md5sum
-PATCH  := $(gnu_utils_dir)/patch
+PATCH  := $(msys_utils_dir)/patch
 TAR    := $(gnu_utils_dir)/tar
 TOUCH  := $(gnu_utils_dir)/touch
 TR     := $(gnu_utils_dir)/tr

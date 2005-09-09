@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: setup.make,v 1.8 2005-09-08 12:54:47 wboutin Exp $
+# $Id: setup.make,v 1.9 2005-09-09 00:56:11 wboutin Exp $
 
 .PHONY: all
 all: setup
@@ -161,8 +161,6 @@ frozen_cgicc:
 
 #	  --no-print-directory \
 
-# TODO ?? Avoid using '/msys/1.0/bin/patch': instead, fix definition of $(PATCH).
-
 # TODO ?? Make this target abend if it's not run in /tmp/ ?
 
 .PHONY: install_frozen_cgicc_from_tmp_dir
@@ -181,8 +179,6 @@ install_frozen_cgicc_from_tmp_dir:
 ###############################################################################
 
 # Install and patch xmlwrapp-0.2.0 .
-
-# TODO ?? Prefer to define $(GZIP) elsewhere and use the definition here.
 
 .PHONY: frozen_xmlwrapp
 frozen_xmlwrapp:
@@ -203,7 +199,7 @@ install_frozen_xmlwrapp_from_tmp_dir:
 # The following assumes 'xmlwrapp-0.2.0.tar.gz' exists in '/tmp/' already.
 	[ -e xmlwrapp-0.2.0.tar.gz ]
 	$(ECHO) "f142e8bc349597ecbaebb4a8e246b65a  xmlwrapp-0.2.0.tar.gz" |$(MD5SUM) --check
-	[ -e xmlwrapp-0.2.0.tar ] || gzip -d xmlwrapp-0.2.0.tar.gz
+	[ -e xmlwrapp-0.2.0.tar ] || $(GZIP) -d xmlwrapp-0.2.0.tar.gz
 	$(TAR) --extract --verbose --file=xmlwrapp-0.2.0.tar
 	$(PATCH) --strip=0 < $(src_dir)/xmlwrapp_0_2_0_patch
 	$(MKDIR) --parents $(third_party_include_dir)/xmlwrapp/
@@ -263,6 +259,14 @@ install_frozen_libxml2_from_tmp_dir:
 	[ -e libxml2-2.6.19.tar ] || $(BZIP2) --decompress --keep libxml2-2.6.19.tar.bz2
 	$(TAR) --extract --file=libxml2-2.6.19.tar
 # REVIEW: I think you need this 's_configure_./configure_' change:
+# Is this what you mean:
+#	cd libxml2-2.6.19; configure && $(MAKE)
+# ? It doesn't seem right because it fails with this message:
+#     zsh: command not found: configure
+# I didn't find a comparable command to MSYS's './configure' for zsh. Don't
+# we prefer using MSYS to build 'libxml2' and 'sed' anyway? That's what I
+# assumed when testing the individual targets, but didn't know how to tie it
+# all together.
 	cd libxml2-2.6.19; ./configure && $(MAKE)
 	$(MKDIR) --parents $(third_party_include_dir)/libxml/
 	-$(CP) --force --preserve --recursive libxml2-2.6.19/include/libxml/* $(third_party_include_dir)/libxml/ 2>/dev/null
