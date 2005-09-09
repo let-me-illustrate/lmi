@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: INSTALL,v 1.17 2005-09-09 00:54:32 wboutin Exp $
+// $Id: INSTALL,v 1.18 2005-09-09 04:36:22 wboutin Exp $
 
 [It's clearest to validate commands, then copy and paste them here.
 Once we've done that, it becomes trivial to turn this into a shell
@@ -199,7 +199,7 @@ That patch suppresses diagnostics for behavior that's actually
 undefined according to C99 7.21.1/2, but wxWidgets relies on that
 behavior being benign.
 
-Download:
+Download
   http://savannah.nongnu.org/cgi-bin/viewcvs/lmi/lmi/mpatrol-mingw-GNUmakefile
 to /mpatrol/build/windows/ .
 
@@ -298,14 +298,39 @@ Install:
   ...
 [perhaps cygwin should be mentioned, too]
 
+* Install wget
+
+Download
+  http://umn.dl.sourceforge.net/sourceforge/mingw/wget-1.9.1-mingwPORT.tar.bz2
+to /tmp/ .
+
+Validate:
+  /tmp[0]$md5sum wget-2.9.1-mingwPORT.tar.bz2
+  5e320ff2ff5c81b67bb1e1aa87a27973  wget-2.9.1-mingwPORT.tar.bz2
+
+Extract archive:
+  /tmp[0]$bzip2 -dk wget-2.9.1-mingwPORT.tar.bz2
+  /tmp[0]$tar -xf wget-2.9.1-mingwPORT.tar
+
+Copy binary to path:
+  /tmp[0]$cp --preserve wget-1.9.1/mingwPORT/wget.exe /usr/bin/
+  /tmp[0]$cp --preserve wget-1.9.1/mingwPORT/wget.exe /msys/1.0/bin/
+
 * Install zsh
 
-Is there a particular version we want to use? My setup isn't allowing
-me to easily determine what that version should be and the old recovery
-CD only has a binary.
+Download
+  ftp://ftp.blarg.net/users/amol/zsh/zsh.exe.gz
+to /tmp/ .
 
-[WENDY--See the following comment. His last name is a good search term.
-For now, at least, we'll keep using the last version he published.]
+Validate:
+  /tmp[0]$md5sum zsh.exe
+  4e642dd3439a2840727504bd637972b8  zsh.exe
+
+Extract archive:
+  /tmp[0]$gzip -d zsh.exe.gz
+
+Copy binary to path:
+  /tmp[0]$cp --preserve zsh.exe /usr/bin/
 
 ...
 [amol deshpande's port, because MSYS's bash is broken [explain why]]
@@ -334,6 +359,9 @@ WENDY--It worked for me. The manual tells you how to interpret the
 return code, and discusses the program's behavior when it returns one.
 In light of what the manual says, what other information can you share
 that'll help us to get this working for you?
+
+Greg--Do you agree 'note 0:' can be removed now that 'patch' is defined
+appropriately?
 
 note 1: There are several later versions. Building sed-4.1.4 fails
 for several reasons:

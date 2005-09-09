@@ -20,7 +20,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: posix_fhs.make,v 1.7 2005-09-09 00:56:11 wboutin Exp $
+# $Id: posix_fhs.make,v 1.8 2005-09-09 04:36:22 wboutin Exp $
 
 ################################################################################
 
@@ -70,4 +70,4 @@ PATCH  := patch
 TOUCH  := touch
 TR     := tr
 WC     := wc
-
+WGET   := wget

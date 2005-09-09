@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.137 2005-09-09 00:56:11 wboutin Exp $
+// $Id: ChangeLog,v 1.138 2005-09-09 04:36:22 wboutin Exp $
 
 MAINTENANCE
 
@@ -3552,4 +3552,14 @@ Improve documentation.
   posix_fhs.make
   setup.make
 Redefine several tools.
+
+20050909T0403Z <wboutin@massmutual.com> [1287]
+
+  INSTALL
+  msw_cygwin.make
+  msw_generic.make
+  msw_msys.make
+  posix_fhs.make
+  setup.make
+Add new tool for automating setup environment.
 

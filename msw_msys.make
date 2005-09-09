@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: msw_msys.make,v 1.5 2005-09-09 00:56:11 wboutin Exp $
+# $Id: msw_msys.make,v 1.6 2005-09-09 04:36:22 wboutin Exp $
 
 ################################################################################
 
@@ -110,6 +110,7 @@ TAR    := $(PATH_USR_BIN)tar
 TOUCH  := $(PATH_USR_BIN)touch
 TR     := $(PATH_USR_BIN)tr
 WC     := $(PATH_USR_BIN)wc
+WGET   := $(PATH_USR_BIN)wget
 
 ################################################################################
 
