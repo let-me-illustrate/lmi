@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.136 2005-09-08 23:03:45 chicares Exp $
+// $Id: ChangeLog,v 1.137 2005-09-09 00:56:11 wboutin Exp $
 
 MAINTENANCE
 
@@ -3515,12 +3515,12 @@ Reimplement COI retention, rectifying names.
 
 20050908T1240Z <wboutin@massmutual.com> [1290]
 
-  cgicc-patch-gwc-20050217    [renamed to cgicc_3_1_4_patch]
   cgicc_3_1_4_patch           [new file]
-  xmlwrapp-patch-gwc-20050217 [renamed to xmlwrapp_0_2_0_patch]
-  xmlwrapp_0_2_0_patch        [new file]
+  cgicc-patch-gwc-20050217    [renamed to cgicc_3_1_4_patch]
   INSTALL
   setup.make
+  xmlwrapp_0_2_0_patch        [new file]
+  xmlwrapp-patch-gwc-20050217 [renamed to xmlwrapp_0_2_0_patch]
 Remove embedded dates from filenames, which don't belong in cvs.
 
 20050908T1304Z <wboutin@massmutual.com> [1290]
@@ -3540,4 +3540,16 @@ Patch cgicc-3.1.4 to prevent compiler warnings.
   inputillus_sequences.cpp
 Stop overriding user-specified general-account rates. This refines
 the 20050626T2301Z modifications.
+
+20050909T0042Z <wboutin@massmutual.com> [1288]
+
+  INSTALL
+Improve documentation.
+
+  msw_cygwin.make
+  msw_generic.make
+  msw_msys.make
+  posix_fhs.make
+  setup.make
+Redefine several tools.
 
