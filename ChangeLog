@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.138 2005-09-09 04:36:22 wboutin Exp $
+// $Id: ChangeLog,v 1.139 2005-09-10 11:44:36 chicares Exp $
 
 MAINTENANCE
 
@@ -3553,7 +3553,12 @@ Improve documentation.
   setup.make
 Redefine several tools.
 
-20050909T0403Z <wboutin@massmutual.com> [1287]
+20050909T0123Z <chicares@cox.net> [1289]
+
+  ihs_avmly.cpp
+Refine NAAR calculation.
+
+20050909T0403Z <wboutin@massmutual.com> [1288]
 
   INSTALL
   msw_cygwin.make
