@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_database.cpp,v 1.4 2005-07-18 16:24:45 chicares Exp $
+// $Id: ihs_database.cpp,v 1.5 2005-09-11 22:19:13 chicares Exp $
 
 // TODO ?? Should length_ be dynamically reset when IssueAge is?
 // TODO ?? Should State be dynamically reset?
@@ -274,9 +274,10 @@ TDBValue const& TDatabase::GetEntry(int k) const
 }
 
 //===========================================================================
-// Constrain the value extracted from the database to be scalar--i.e.,
-// invariant by duration. The database item may nonetheless vary across
-// any axis except duration.
+/// Constrain the value extracted from the database to be scalar--i.e.,
+/// invariant by duration. The database item may nonetheless vary
+/// across any axis except duration.
+
 void TDatabase::ConstrainScalar(int k) const
 {
     std::vector<double> z;
@@ -294,11 +295,17 @@ void TDatabase::ConstrainScalar(int k) const
         hobsons_choice()
             << "Database element "
             << GetDBNames()[k].ShortName
-            << " varies by duration, but it must not."
-            << " It will be treated as not varying."
-            << " The illustration will be incorrect."
-            << LMI_FLUSH
+            << " varies by duration, but it must not. "
+            << "It will be treated as not varying. "
+            << "The illustration will be incorrect. "
+            << "Values by duration: "
             ;
+        std::copy
+            (z.begin()
+            ,z.end()
+            ,std::ostream_iterator<double>(hobsons_choice(), " ")
+            );
+        hobsons_choice() << LMI_FLUSH;
         }
 }
 

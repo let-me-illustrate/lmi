@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: database.cpp,v 1.3 2005-03-02 03:34:27 chicares Exp $
+// $Id: database.cpp,v 1.4 2005-09-11 22:19:13 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -167,6 +167,10 @@ TDBValue const& TDatabase::GetEntry(int k) const
 }
 
 //===========================================================================
+/// Constrain the value extracted from the database to be scalar--i.e.,
+/// invariant by duration. The database item may nonetheless vary
+/// across any axis except duration.
+
 void TDatabase::ConstrainScalar(int k) const
 {
     std::vector<double> z;
@@ -195,7 +199,6 @@ void TDatabase::ConstrainScalar(int k) const
             ,std::ostream_iterator<double>(hobsons_choice(), " ")
             );
         hobsons_choice() << LMI_FLUSH;
-//        throw std::runtime_error(error.str());
         }
 }
 
