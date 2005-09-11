@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: account_value.hpp,v 1.27 2005-09-07 03:04:53 chicares Exp $
+// $Id: account_value.hpp,v 1.28 2005-09-11 22:19:10 chicares Exp $
 
 #ifndef account_value_hpp
 #define account_value_hpp
@@ -168,8 +168,8 @@ class LMI_EXPIMP AccountValue
         (double case_net_mortality_reserve
         ,double case_years_net_mortchgs
         );
-    double ibnr_as_months_of_mortality_charges();
-    double experience_rating_amortization_years();
+    double experience_rating_amortization_years() const;
+    double ibnr_as_months_of_mortality_charges() const;
 
     void GuessWhetherFirstYearPremiumExceedsRetaliationLimit();
     bool TestWhetherFirstYearPremiumExceededRetaliationLimit();
@@ -614,6 +614,8 @@ class LMI_EXPIMP AccountValue
     // For experience rating.
     double  apportioned_net_mortality_reserve;
     double  CoiRetentionRate;
+    double  ExperienceRatingAmortizationYears;
+    double  IbnrAsMonthsOfMortalityCharges;
     double  NextYearsProjectedCoiCharge;
     double  YearsTotalNetCoiCharges;
 
@@ -687,6 +689,18 @@ inline int AccountValue::GetLength() const
 inline e_ledger_type const& AccountValue::GetLedgerType() const
 {
     return BasicValues::GetLedgerType();
+}
+
+//============================================================================
+inline double AccountValue::experience_rating_amortization_years() const
+{
+    return ExperienceRatingAmortizationYears;
+}
+
+//============================================================================
+inline double AccountValue::ibnr_as_months_of_mortality_charges() const
+{
+    return IbnrAsMonthsOfMortalityCharges;
 }
 
 #endif // account_value_hpp
