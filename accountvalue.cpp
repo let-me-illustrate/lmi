@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: accountvalue.cpp,v 1.16 2005-09-07 03:04:54 chicares Exp $
+// $Id: accountvalue.cpp,v 1.17 2005-09-11 22:19:10 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -1094,17 +1094,4 @@ void   AccountValue::SetProjectedCoiCharge()
     {return;}
 bool   AccountValue::TestWhetherFirstYearPremiumExceededRetaliationLimit()
     {return false;}
-
-
-//============================================================================
-double AccountValue::ibnr_as_months_of_mortality_charges()
-{
-    return Database_->Query(DB_ExpRatIBNRMult);
-}
-
-//============================================================================
-double AccountValue::experience_rating_amortization_years()
-{
-    return Database_->Query(DB_ExpRatAmortPeriod);
-}
 
