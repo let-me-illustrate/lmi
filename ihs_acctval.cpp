@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_acctval.cpp,v 1.49 2005-09-07 03:04:54 chicares Exp $
+// $Id: ihs_acctval.cpp,v 1.50 2005-09-11 22:19:10 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -719,7 +719,9 @@ void AccountValue::SetInitialValues()
     CumulativeSalesLoad         = 0.0;
 
     apportioned_net_mortality_reserve = 0.0;
-    CoiRetentionRate = Database_->Query(DB_ExpRatCOIRetention);
+    CoiRetentionRate                  = Database_->Query(DB_ExpRatCOIRetention);
+    ExperienceRatingAmortizationYears = Database_->Query(DB_ExpRatAmortPeriod);
+    IbnrAsMonthsOfMortalityCharges    = Database_->Query(DB_ExpRatIBNRMult);
 
     Dumpin             = Outlay_->dumpin();
     External1035Amount = Outlay_->external_1035_amount();
@@ -2067,17 +2069,5 @@ void AccountValue::CoordinateCounters()
             }
 */
         }
-}
-
-//============================================================================
-double AccountValue::ibnr_as_months_of_mortality_charges()
-{
-    return Database_->Query(DB_ExpRatIBNRMult);
-}
-
-//============================================================================
-double AccountValue::experience_rating_amortization_years()
-{
-    return Database_->Query(DB_ExpRatAmortPeriod);
 }
 
