@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: INSTALL,v 1.18 2005-09-09 04:36:22 wboutin Exp $
+// $Id: INSTALL,v 1.19 2005-09-12 17:35:19 wboutin Exp $
 
 [It's clearest to validate commands, then copy and paste them here.
 Once we've done that, it becomes trivial to turn this into a shell
@@ -56,21 +56,21 @@ Validate:
   1d71cc4c9a075b7b623b5499a8300cde  cgicc_3_1_4_patch
 
 Extract archive:
-  /tmp[0]$bzip2 -dk cgicc-3.1.4.tar.bz2
-  /tmp[0]$tar -xf cgicc-3.1.4.tar
+  /tmp[0]$bzip2 --decompress --keep cgicc-3.1.4.tar.bz2
+  /tmp[0]$tar --extract --file cgicc-3.1.4.tar
 
 Apply required patch:
-  /tmp[0]$/msys/1.0/bin/patch --strip=0 <cgicc_3_1_4_patch # note 0
+  /tmp[0]$patch --strip=0 <cgicc_3_1_4_patch
   patching file `cgicc-3.1.4/cgicc/CgiDefs.h'
   patching file `cgicc-3.1.4/cgicc/CgiEnvironment.cpp'
   patching file `cgicc-3.1.4/cgicc/CgiUtils.cpp'
 
 Copy cgicc's header files to the third-party hierarchy:
-  /tmp[0]$mkdir -p /opt/lmi/third_party/include/cgicc/
+  /tmp[0]$mkdir --parents /opt/lmi/third_party/include/cgicc/
   /tmp[0]$cp --preserve cgicc-3.1.4/cgicc/*.h /opt/lmi/third_party/include/cgicc/
 
 Copy cgicc's source files to the third-party hierarchy:
-  /tmp[0]$mkdir -p /opt/lmi/third_party/src/cgicc/
+  /tmp[0]$mkdir -parents /opt/lmi/third_party/src/cgicc/
   /tmp[0]$cp --preserve cgicc-3.1.4/cgicc/*.cpp /opt/lmi/third_party/src/cgicc/
 
 * Install and patch xmlwrapp-0.2.0
@@ -87,22 +87,22 @@ Validate:
   f142e8bc349597ecbaebb4a8e246b65a  xmlwrapp-0.2.0.tar.gz
 
 Extract archive:
-  /tmp[0]$gzip -d xmlwrapp-0.2.0.tar.gz
-  /tmp[0]$tar -xf xmlwrapp-0.2.0.tar
+  /tmp[0]$gzip --decompress xmlwrapp-0.2.0.tar.gz
+  /tmp[0]$tar --extract --file xmlwrapp-0.2.0.tar
 
 Apply required patch:
-  /tmp[0]$/msys/1.0/bin/patch --strip=0 <xmlwrapp_0_2_0_patch # note 0
+  /tmp[0]$patch --strip=0 <xmlwrapp_0_2_0_patch
   patching file `xmlwrapp-0.2.0/include/xmlwrapp/event_parser.h'
   patching file `xmlwrapp-0.2.0/include/xmlwrapp/node.h'
   patching file `xmlwrapp-0.2.0/include/xmlwrapp/tree_parser.h'
   patching file `xmlwrapp-0.2.0/src/libxml/tree_parser.cxx'
 
 Copy xmlwrapp's header files to the third-party hierarchy:
-  /tmp[0]$mkdir -p /opt/lmi/third_party/include/xmlwrapp/
+  /tmp[0]$mkdir --parents /opt/lmi/third_party/include/xmlwrapp/
   /tmp[0]$cp --preserve xmlwrapp-0.2.0/include/xmlwrapp/*.h /opt/lmi/third_party/include/xmlwrapp/
 
 Copy xmlwrapp's src files to the third-party hierarchy:
-  /tmp[0]$mkdir -p /opt/lmi/third_party/src/libxml/
+  /tmp[0]$mkdir --parents /opt/lmi/third_party/src/libxml/
   /tmp[0]$cp --preserve xmlwrapp-0.2.0/src/libxml/* /opt/lmi/third_party/src/libxml/
 
 * Install boost-1.31.0
@@ -116,11 +116,11 @@ Validate:
   8cc183538eaa5cfc53d88d0e94bd2fd4  boost_1_31_0.tar.bz2
 
 Extract archive:
-  /tmp[0]$bzip2 -dk boost_1_31_0.tar.bz2
-  /tmp[0]$tar -xf boost_1_31_0.tar
+  /tmp[0]$bzip2 --decompress --keep boost_1_31_0.tar.bz2
+  /tmp[0]$tar --extract --file boost_1_31_0.tar
 
 Copy boost header files to the third-party hierarchy:
-  /tmp[0]$mkdir -p /opt/lmi/third_party/include/boost/
+  /tmp[0]$mkdir --parents /opt/lmi/third_party/include/boost/
   /tmp[0]$pushd boost_1_31_0/boost/
   /tmp/boost/boost_1_31_0/boost[0]$/msys/1.0/bin/cp --force --parents --preserve --recursive * /c/opt/lmi/third_party/include/boost/
 
@@ -136,7 +136,7 @@ Something similar could be done for the source directory below.]
   /tmp/boost/boost_1_31_0/boost[0]$popd
 
 Copy boost source files to the third-party hierarchy:
-  /tmp[0]$mkdir -p /opt/lmi/third_party/src/boost_1_31_0
+  /tmp[0]$mkdir --parents /opt/lmi/third_party/src/boost_1_31_0
   /tmp[0]$pushd boost_1_31_0/
   /tmp[0]$/msys/1.0/bin/cp --force --parents --preserve --recursive * /c/opt/lmi/third_party/src/boost_1_31_0/
   /tmp/boost/boost_1_31_0[0]$popd
@@ -152,24 +152,24 @@ Validate:
   ed581732d586f86324ec46e572526ede  libxml2-2.6.19.tar.bz2
 
 Extract archive:
-  /tmp[0]$bzip2 -dk libxml2-2.6.19.tar.bz2
-  /tmp[0]$tar -xf libxml2-2.6.19.tar
+  /tmp[0]$bzip2 --decompress --keep libxml2-2.6.19.tar.bz2
+  /tmp[0]$tar --extract --file libxml2-2.6.19.tar
 
 Build library with MSYS:
   wboutin@OWNER /c/tmp/libxml2-2.6.19
   $ ./configure && make
 
 Copy libxml header files to the third-party hierarchy:
-  /tmp[0]$mkdir -p /opt/lmi/third_party/include/libxml/
+  /tmp[0]$mkdir --parents /opt/lmi/third_party/include/libxml/
   /tmp[0]$pushd libxml2-2.6.19/include/libxml/
   /tmp/libxml2-2.6.19/include/libxml[0]$/msys/1.0/bin/cp.exe --force --parents --preserve --recursive * /c/opt/lmi/third_party/include/libxml/
   /tmp/libxml2-2.6.19/include/libxml[0]$popd
 
 Copy libxml libraries to the third-party hierarchy:
-  /tmp[0]$mkdir -p /opt/lmi/third_party/bin /opt/lmi/third_party/lib
+  /tmp[0]$mkdir --parents /opt/lmi/third_party/bin /opt/lmi/third_party/lib
   /tmp[0]$pushd libxml2-2.6.19/.libs/
-  /tmp/libxml2-2.6.19/.libs[0]$cp -p libxml2-2.dll c:/opt/lmi/third_party/bin/
-  /tmp/libxml2-2.6.19/.libs[0]$cp -p libxml2.dll.a c:/opt/lmi/third_party/lib/
+  /tmp/libxml2-2.6.19/.libs[0]$cp --parents libxml2-2.dll c:/opt/lmi/third_party/bin/
+  /tmp/libxml2-2.6.19/.libs[0]$cp --parents libxml2.dll.a c:/opt/lmi/third_party/lib/
   /tmp/libxml2-2.6.19/.libs[0]$popd
 
 * Install and patch mpatrol_1.4.8
@@ -186,13 +186,13 @@ Validate:
   d8281af88b98f35212a851942158a9f6  mpatrol-zero-byte-moves.tar.bz2
 
 Extract archives:
-  /tmp[0]$gzip -d mpatrol_1.4.8.tar.gz
-  /tmp[0]$tar -xf mpatrol_1.4.8.tar
-  /tmp[0]$bzip2 -dk mpatrol-zero-byte-moves.tar.bz2
-  /tmp[0]$tar -xf mpatrol-zero-byte-moves.tar
+  /tmp[0]$gzip --decompress mpatrol_1.4.8.tar.gz
+  /tmp[0]$tar --extract --file mpatrol_1.4.8.tar
+  /tmp[0]$bzip2 --decompress --keep mpatrol-zero-byte-moves.tar.bz2
+  /tmp[0]$tar --extract --file mpatrol-zero-byte-moves.tar
 
 Apply required patch:
-  /tmp[0]$/msys/1.0/bin/patch --strip=0 <mpatrol/mpatrol-zero-byte-moves  # note 0
+  /tmp[0]$patch --strip=0 <mpatrol/mpatrol-zero-byte-moves
   patching file `mpatrol/src/malloc.c'
 
 That patch suppresses diagnostics for behavior that's actually
@@ -207,12 +207,12 @@ to /mpatrol/build/windows/ .
 
 Build mpatrol libraries:
   /tmp/mpatrol/build/windows[0]$path=(/usr/bin /MinGW/bin)
-  /tmp/mpatrol/build/windows[0]$make -f mpatrol-mingw-GNUmakefile
+  /tmp/mpatrol/build/windows[0]$make --file=mpatrol-mingw-GNUmakefile
 
 Install mpatrol libraries:
-  /tmp/mpatrol/build/windows[0]$make -f mpatrol-mingw-GNUmakefile install
+  /tmp/mpatrol/build/windows[0]$make --file=mpatrol-mingw-GNUmakefile install
 
-* Install sed-4.0.7 # note 1
+* Install sed-4.0.7 # note 0
 
 Download
   http://ftp.gnu.org/gnu/sed/sed-4.0.7.tar.gz
@@ -223,8 +223,8 @@ Validate:
   005738e7f97bd77d95b6907156c8202a  sed-4.0.7.tar.gz
 
 Extract archive:
-  /tmp[0]$gzip -d sed-4.0.7.tar.gz
-  /tmp[0]$tar -xf sed-4.0.7.tar
+  /tmp[0]$gzip --decompress sed-4.0.7.tar.gz
+  /tmp[0]$tar --extract --file sed-4.0.7.tar
 
 Build with MSYS:
   wboutin@OWNER /c/tmp/sed-4.0.7
@@ -305,12 +305,12 @@ Download
 to /tmp/ .
 
 Validate:
-  /tmp[0]$md5sum wget-2.9.1-mingwPORT.tar.bz2
-  5e320ff2ff5c81b67bb1e1aa87a27973  wget-2.9.1-mingwPORT.tar.bz2
+  /tmp[0]$md5sum wget-1.9.1-mingwPORT.tar.bz2
+  5e320ff2ff5c81b67bb1e1aa87a27973  wget-1.9.1-mingwPORT.tar.bz2
 
 Extract archive:
-  /tmp[0]$bzip2 -dk wget-2.9.1-mingwPORT.tar.bz2
-  /tmp[0]$tar -xf wget-2.9.1-mingwPORT.tar
+  /tmp[0]$bzip2 --decompress --keep wget-1.9.1-mingwPORT.tar.bz2
+  /tmp[0]$tar --extract --file wget-1.9.1-mingwPORT.tar
 
 Copy binary to path:
   /tmp[0]$cp --preserve wget-1.9.1/mingwPORT/wget.exe /usr/bin/
@@ -327,7 +327,7 @@ Validate:
   4e642dd3439a2840727504bd637972b8  zsh.exe
 
 Extract archive:
-  /tmp[0]$gzip -d zsh.exe.gz
+  /tmp[0]$gzip --decompress zsh.exe.gz
 
 Copy binary to path:
   /tmp[0]$cp --preserve zsh.exe /usr/bin/
@@ -343,27 +343,7 @@ shell commands in makefiles are extremely portable]
 
 Notes.
 
-note 0: Wendy--I think our msw users have an ancient and defective
-version of 'patch'. They should instead use the one in the current
-MSYS distribution. Probably they should copy it over the defective
-binary they already have. At any rate, we mustn't write
-  /tmp[0]$/msys/1.0/bin/patch ...
-in platform-independent installation instructions: it should say only
-  /tmp[0]$patch ...
-
-Greg--The technique you suggest doesn't work. Apparently, 'msys-1.0.dll'
-is required on the path. Once it's there, I get a return code one and
-the files aren't patched.
-
-WENDY--It worked for me. The manual tells you how to interpret the
-return code, and discusses the program's behavior when it returns one.
-In light of what the manual says, what other information can you share
-that'll help us to get this working for you?
-
-Greg--Do you agree 'note 0:' can be removed now that 'patch' is defined
-appropriately?
-
-note 1: There are several later versions. Building sed-4.1.4 fails
+note 0: There are several later versions. Building sed-4.1.4 fails
 for several reasons:
  - it expects some natural language that's not present
      ("./configure --disable-nls" seems to fix that)

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.140 2005-09-12 01:32:19 chicares Exp $
+// $Id: ChangeLog,v 1.141 2005-09-12 17:35:19 wboutin Exp $
 
 MAINTENANCE
 
@@ -3630,4 +3630,10 @@ Many others were certain to produce invalid results. Removed unneeded
 headers. The old method--using std::ostringstream to create an error
 message, then throwing a standard exception--is still used in a few
 modules that could conceivably be used as standalone libraries.
+
+20050912T1630Z <wboutin@massmutual.com> [1280]
+
+  INSTALL
+  setup.make
+Improve conformance.
 
