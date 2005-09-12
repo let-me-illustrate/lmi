@@ -19,12 +19,12 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mc_enum.cpp,v 1.4 2005-04-08 03:03:53 chicares Exp $
+// $Id: mc_enum.cpp,v 1.5 2005-09-12 01:32:19 chicares Exp $
 
 #include "mc_enum.hpp"
 
-#include <sstream>
-#include <stdexcept>
+#include "alert.hpp"
+
 #include <typeinfo>
 
 mc_enum_base::mc_enum_base(int cardinality_of_the_enumeration)
@@ -57,21 +57,19 @@ void mc_enum_base::validate_index(int index) const
 {
     if(index < 0)
         {
-        std::ostringstream oss;
-        oss
+        fatal_error()
             << "Index "
             << index
             << " is invalid for type '"
             << typeid(*this).name()
             << "': it must not be less than zero."
+            << LMI_FLUSH
             ;
-        throw std::logic_error(oss.str());
         }
 
     if(static_cast<int>(cardinality()) <= index)
         {
-        std::ostringstream oss;
-        oss
+        fatal_error()
             << "Index "
             << index
             << " is invalid for type '"
@@ -79,14 +77,13 @@ void mc_enum_base::validate_index(int index) const
             << "': it must less than "
             << cardinality()
             << "."
+            << LMI_FLUSH
             ;
-        throw std::logic_error(oss.str());
         }
 
     if(cardinality() != allowed_.size())
         {
-        std::ostringstream oss;
-        oss
+        fatal_error()
             << "Number of allowable flags for type '"
             << typeid(*this).name()
             << "' is "
@@ -94,8 +91,8 @@ void mc_enum_base::validate_index(int index) const
             << " but it should be "
             << cardinality()
             << " instead."
+            << LMI_FLUSH
             ;
-        throw std::logic_error(oss.str());
         }
 }
 

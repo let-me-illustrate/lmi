@@ -19,18 +19,18 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: tn_range.tpp,v 1.2 2005-02-19 03:27:45 chicares Exp $
+// $Id: tn_range.tpp,v 1.3 2005-09-12 01:32:19 chicares Exp $
 
 #include "config.hpp"
 
 #include "tn_range.hpp"
 
+#include "alert.hpp"
 #include "numeric_io_cast.hpp"
 
 #include <cmath> // std::pow()
 #include <istream>
 #include <ostream>
-#include <sstream>
 
 namespace
 {
@@ -196,39 +196,36 @@ void trammel_base<T>::check_sanity()
 {
     if(!(nominal_minimum() <= nominal_maximum()))
         {
-        std::ostringstream oss;
-        oss
+        fatal_error()
             << "Lower bound '"
             << nominal_minimum()
             << "' exceeds upper bound '"
             << nominal_maximum()
             << "'."
+            << LMI_FLUSH
             ;
-        throw std::runtime_error(oss.str());
         }
     else if(!(nominal_minimum() <= default_value()))
         {
-        std::ostringstream oss;
-        oss
+        fatal_error()
             << "Lower bound '"
             << nominal_minimum()
             << "' exceeds default value '"
             << default_value()
             << "'."
+            << LMI_FLUSH
             ;
-        throw std::runtime_error(oss.str());
         }
     else if(!(default_value() <= nominal_maximum()))
         {
-        std::ostringstream oss;
-        oss
+        fatal_error()
             << "Default value '"
             << default_value()
             << "' exceeds upper bound '"
             << nominal_maximum()
             << "'."
+            << LMI_FLUSH
             ;
-        throw std::runtime_error(oss.str());
         }
     else
         {

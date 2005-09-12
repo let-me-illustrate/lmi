@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: multiple_cell_document.cpp,v 1.5 2005-05-19 12:30:00 chicares Exp $
+// $Id: multiple_cell_document.cpp,v 1.6 2005-09-12 01:32:19 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -40,8 +40,6 @@
 #include <xmlwrapp/tree_parser.h>
 
 #include <fstream>
-#include <sstream>
-#include <stdexcept>
 
 //============================================================================
 multiple_cell_document::multiple_cell_document()
@@ -77,7 +75,7 @@ void multiple_cell_document::parse(xml::tree_parser& parser)
 {
     if(!parser)
         {
-        throw std::runtime_error("Error parsing XML file.");
+        fatal_error() << "Error parsing XML file." << LMI_FLUSH;
         }
 
 #ifdef USING_CURRENT_XMLWRAPP
@@ -87,15 +85,14 @@ void multiple_cell_document::parse(xml::tree_parser& parser)
 #endif // USING_CURRENT_XMLWRAPP not defined.
     if(xml_root_name() != root.get_name())
         {
-        std::ostringstream msg;
-        msg
+        fatal_error()
             << "XML node name is '"
             << root.get_name()
             << "' but '"
             << xml_root_name()
             << "' was expected."
+            << LMI_FLUSH
             ;
-        throw std::runtime_error(msg.str());
         }
 
 // COMPILER !! Borland doesn't find operator==() in ns xml.
@@ -122,15 +119,14 @@ using namespace xml;
         }
     if(std::string("cell") != child->get_name())
         {
-        std::ostringstream msg;
-        msg
+        fatal_error()
             << "XML node name is '"
             << child->get_name()
             << "' but '"
             << "cell"
             << "' was expected."
+            << LMI_FLUSH
             ;
-        throw std::runtime_error(msg.str());
         }
     (*child) >> temp;
     case_parms_.push_back(temp);
@@ -143,15 +139,14 @@ using namespace xml;
         }
     if(std::string("NumberOfClasses") != child->get_name())
         {
-        std::ostringstream msg;
-        msg
+        fatal_error()
             << "XML node name is '"
             << child->get_name()
             << "' but '"
             << "NumberOfClasses"
             << "' was expected."
+            << LMI_FLUSH
             ;
-        throw std::runtime_error(msg.str());
         }
     unsigned int number_of_classes = value_cast<unsigned int>
         (child->get_content()
@@ -180,15 +175,14 @@ using namespace xml;
         }
     if(class_parms_.size() != number_of_classes)
         {
-        std::ostringstream msg;
-        msg
+        fatal_error()
             << "Number of classes read is "
             << class_parms_.size()
             << " but should have been "
             << number_of_classes
             << "."
+            << LMI_FLUSH
             ;
-        throw std::runtime_error(msg.str());
         }
 
     // Number of cells.
@@ -199,15 +193,14 @@ using namespace xml;
         }
     if(std::string("NumberOfCells") != child->get_name())
         {
-        std::ostringstream msg;
-        msg
+        fatal_error()
             << "XML node name is '"
             << child->get_name()
             << "' but '"
             << "NumberOfCells"
             << "' was expected."
+            << LMI_FLUSH
             ;
-        throw std::runtime_error(msg.str());
         }
     unsigned int number_of_cells = value_cast<unsigned int>
         (child->get_content()
@@ -244,15 +237,14 @@ using namespace xml;
         }
     if(cell_parms_.size() != number_of_cells)
         {
-        std::ostringstream msg;
-        msg
+        fatal_error()
             << "Number of individuals read is "
             << cell_parms_.size()
             << " but should have been "
             << number_of_cells
             << "."
+            << LMI_FLUSH
             ;
-        throw std::runtime_error(msg.str());
         }
 
     ++child;
@@ -262,12 +254,11 @@ using namespace xml;
         }
     if(child != root.end())
         {
-        std::ostringstream msg;
-        msg
+        fatal_error()
             << "Read all data expected in XML document, "
             << "but more data remains."
+            << LMI_FLUSH
             ;
-        throw std::runtime_error(msg.str());
         }
 }
 

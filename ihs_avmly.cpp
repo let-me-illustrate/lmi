@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avmly.cpp,v 1.24 2005-09-09 01:24:03 chicares Exp $
+// $Id: ihs_avmly.cpp,v 1.25 2005-09-12 01:32:19 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -1870,7 +1870,7 @@ double AccountValue::GetPremLoad
     CumulativeSalesLoad += sales_load;
     if(sales_load < 0.0)
         {
-        hobsons_choice()
+        fatal_error()
             << std::setiosflags(std::ios_base::fixed)
             << std::setprecision(10)
             << std::setw(20)
@@ -1917,7 +1917,7 @@ double AccountValue::GetPremLoad
 //    LMI_ASSERT(0.0 <= sum_of_separate_loads);
     if(sum_of_separate_loads < 0.0)
         {
-        hobsons_choice()
+        fatal_error()
             << std::setiosflags(std::ios_base::fixed)
             << std::setprecision(10)
             << std::setw(20)
@@ -1953,7 +1953,7 @@ double AccountValue::GetPremLoad
         &&  !materially_equal(total_load, sum_of_separate_loads)
         )
         {
-        hobsons_choice()
+        fatal_error()
             << std::setiosflags(std::ios_base::fixed)
             << std::setprecision(10)
             << std::setw(20)
@@ -3271,7 +3271,7 @@ void AccountValue::SetMaxLoan()
         ;
     if(0 != Month)
         {
-        hobsons_choice()
+        fatal_error()
             << "Off-anniversary loans untested."
             << LMI_FLUSH
             ;

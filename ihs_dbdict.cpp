@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_dbdict.cpp,v 1.7 2005-06-21 05:27:48 chicares Exp $
+// $Id: ihs_dbdict.cpp,v 1.8 2005-09-12 01:32:19 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -130,7 +130,7 @@ void DBDictionary::Init(std::string const& NewFilename)
 }
 
 //============================================================================
-// TODO ?? Why isn't this a class derived from std::runtime_error?
+// TODO ?? Does this function make the code clearer, or less clear?
 void DBDictionary::BadFile(std::string const& Filename, std::string const& why)
 {
     // Invalidate cache.
@@ -192,7 +192,6 @@ void DBDictionary::WriteDB(std::string const& filename)
 //===========================================================================
 void DBDictionary::Add(TDBValue const& e)
 {
-    // TODO ?? Why erase? Doesn't map do that?
     dictionary.erase(e.GetKey());
     dictionary.insert(dict_map_val(e.GetKey(), e));
 }

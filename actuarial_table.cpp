@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: actuarial_table.cpp,v 1.11 2005-08-30 03:54:43 chicares Exp $
+// $Id: actuarial_table.cpp,v 1.12 2005-09-12 01:32:19 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -39,10 +39,6 @@
 #include <climits>   // CHAR_BIT
 #include <ios>
 #include <limits>
-#include <memory>
-#include <sstream>
-#include <stdexcept>
-#include <utility>
 
 // Read a table from a database in the binary format designed by the
 // Society of Actuaries (SOA) and used for the tables SOA publishes.
@@ -240,15 +236,14 @@ std::vector<double> actuarial_table
     // TODO ?? Add a unit test for this.
     if(a_table_number <= 0)
         {
-        std::ostringstream oss;
-        oss
+        fatal_error()
             << "There is no table number "
             << a_table_number
             << " in file '"
             << a_table_filename
             << "."
+            << LMI_FLUSH
             ;
-        fatal_error() << oss.str() << LMI_FLUSH;
         }
 
     fs::path index_path(a_table_filename);
@@ -290,8 +285,7 @@ std::vector<double> actuarial_table
         index_ifs.read(index_record, index_record_length);
         if(index_record_length != index_ifs.gcount())
             {
-            std::ostringstream oss;
-            oss
+            fatal_error()
                 << "Table "
                 << a_table_number
                 << " in file '"
@@ -301,8 +295,8 @@ std::vector<double> actuarial_table
                 << " bytes, but got "
                 << index_ifs.gcount()
                 << " bytes instead."
+                << LMI_FLUSH
                 ;
-            hobsons_choice() << oss.str() << LMI_FLUSH;
             }
         }
 

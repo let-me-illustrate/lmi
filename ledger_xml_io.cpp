@@ -19,12 +19,11 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xml_io.cpp,v 1.23 2005-08-22 15:35:40 chicares Exp $
+// $Id: ledger_xml_io.cpp,v 1.24 2005-09-12 01:32:19 chicares Exp $
 
 #include "config.hpp"
 
-#include "alert.hpp" // TODO ?? expunge after testing
-
+#include "alert.hpp"
 #include "calendar_date.hpp"
 #include "comma_punct.hpp"
 #include "configurable_settings.hpp"
@@ -56,7 +55,6 @@
 #include <locale>
 #include <numeric>
 #include <sstream>
-#include <stdexcept>
 #include <string>
 #include <utility>
 
@@ -112,7 +110,10 @@ std::string format(double d, std::pair<int,bool> f)
     interpreter << d;
     interpreter >> s;
     if(f.second) s += '%';
-    if(!interpreter.eof()) throw std::runtime_error("Format error");
+    if(!interpreter.eof())
+        {
+        fatal_error() << "Format error" << LMI_FLUSH;
+        }
     return s;
 }
 
@@ -138,7 +139,10 @@ std::vector<std::string> format(std::vector<double> dv, std::pair<int,bool> f)
         interpreter << dv[j];
         interpreter >> s;
         if(f.second) s += '%';
-        if(!interpreter.eof()) throw std::runtime_error("Format error");
+        if(!interpreter.eof())
+            {
+            fatal_error << "Format error" << LMI_FLUSH;
+            }
         interpreter.str("");
         sv.push_back(s);
         }

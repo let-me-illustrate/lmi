@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: database.cpp,v 1.4 2005-09-11 22:19:13 chicares Exp $
+// $Id: database.cpp,v 1.5 2005-09-12 01:32:19 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -185,20 +185,18 @@ void TDatabase::ConstrainScalar(int k) const
         }
     else
         {
-        hobsons_choice()
+        fatal_error()
             << "Database element "
             << GetDBNames()[k].ShortName
             << " varies by duration, but it must not. "
-            << "It will be treated as not varying. "
-            << "The illustration will be incorrect. "
             << "Values by duration: "
             ;
         std::copy
             (z.begin()
             ,z.end()
-            ,std::ostream_iterator<double>(hobsons_choice(), " ")
+            ,std::ostream_iterator<double>(fatal_error(), " ")
             );
-        hobsons_choice() << LMI_FLUSH;
+        fatal_error() << LMI_FLUSH;
         }
 }
 

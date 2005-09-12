@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: stratified_charges.cpp,v 1.3 2005-08-22 15:35:53 chicares Exp $
+// $Id: stratified_charges.cpp,v 1.4 2005-09-12 01:32:19 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -382,7 +382,7 @@ void stratified_charges::read(std::string const& filename)
 {
     if(access(filename.c_str(), R_OK))
         {
-        hobsons_choice()
+        fatal_error()
             << "File '"
             << filename
             << "' is required but could not be found. Try reinstalling."
@@ -405,7 +405,7 @@ void stratified_charges::read(std::string const& filename)
 
     if(!is.good())
         {
-        hobsons_choice()
+        fatal_error()
             << "Unexpected end of stratified-data file '"
             << filename
             << "'. Try reinstalling."
@@ -416,7 +416,7 @@ void stratified_charges::read(std::string const& filename)
     is >> dummy;
     if(!is.eof())
         {
-        hobsons_choice()
+        fatal_error()
             << "Data past expected end of stratified-data file '"
             << filename
             << "'. Try reinstalling."
@@ -453,7 +453,7 @@ void stratified_charges::write(std::string const& filename) const
 
     if(!os.good())
         {
-        hobsons_choice()
+        fatal_error()
             << "Unable to write stratified-data file '"
             << filename
             << "'."

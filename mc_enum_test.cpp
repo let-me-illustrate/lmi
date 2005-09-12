@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mc_enum_test.cpp,v 1.4 2005-04-08 03:03:53 chicares Exp $
+// $Id: mc_enum_test.cpp,v 1.5 2005-09-12 01:32:19 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -154,9 +154,9 @@ int test_main(int, char*[])
     BOOST_TEST_EQUAL(holiday4.allowed_ordinal(), 1);
 
     // That which is inconceivable is not to be allowed.
-    BOOST_TEST_THROW(holiday4.allow( 3, false), std::logic_error, "");
-    BOOST_TEST_THROW(holiday4.allow(17, false), std::logic_error, "");
-    BOOST_TEST_THROW(holiday4.allow(-1, false), std::logic_error, "");
+    BOOST_TEST_THROW(holiday4.allow( 3, false), std::runtime_error, "");
+    BOOST_TEST_THROW(holiday4.allow(17, false), std::runtime_error, "");
+    BOOST_TEST_THROW(holiday4.allow(-1, false), std::runtime_error, "");
 
     // Stream operators.
     e_holiday const Easter(h_Easter);

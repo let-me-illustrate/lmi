@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger.cpp,v 1.8 2005-05-26 22:01:15 chicares Exp $
+// $Id: ledger.cpp,v 1.9 2005-09-12 01:32:19 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -248,7 +248,7 @@ void Ledger::SetOneLedgerVariant
         }
     else
         {
-        hobsons_choice()
+        fatal_error()
             << "Failed attempt to set ledger for unused basis '"
             << a_Basis
             << "'."

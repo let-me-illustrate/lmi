@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_test.cpp,v 1.4 2005-05-24 04:00:01 chicares Exp $
+// $Id: input_test.cpp,v 1.5 2005-09-12 01:32:19 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -44,7 +44,6 @@
 #include <istream>
 #include <iterator>
 #include <ostream>
-#include <sstream>
 
 // This function is a derived work adapted from usenet article
 // <1eo2sct.ggkc9z84ko0eN%cbarron3@ix.netcom.com>. GWC rewrote it

@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_basicval.cpp,v 1.20 2005-09-07 03:04:54 chicares Exp $
+// $Id: ihs_basicval.cpp,v 1.21 2005-09-12 01:32:19 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -841,7 +841,7 @@ void BasicValues::SetLowestPremTaxRate()
     TDBValue const& premium_tax_rates = Database_->GetEntry(DB_PremTaxRate);
     if(!TDBValue::Equivalent(premium_tax_loads, premium_tax_rates))
         {
-        hobsons_choice()
+        fatal_error()
             << "Premium-tax load varies by state, but differs"
             << " from premium-tax rates. Probably the database"
             << " is incorrect.\n"
@@ -858,7 +858,7 @@ void BasicValues::SetLowestPremTaxRate()
         // the database class.
         if(0.0 != LowestPremTaxRate)
             {
-            hobsons_choice()
+            fatal_error()
                 << "Premium-tax rate is tiered in state "
                 << StateOfJurisdiction
                 << ", but the product database specifies a scalar rate of "
@@ -897,7 +897,7 @@ void BasicValues::TestPremiumTaxLoadConsistency()
         PremiumTaxLoadIsTieredInStateOfJurisdiction = true;
         if(0.0 != Database_->Query(DB_PremTaxLoad))
             {
-            hobsons_choice()
+            fatal_error()
                 << "Premium-tax rate is tiered in state of jurisdiction "
                 << GetStateOfJurisdiction()
                 << ", but the product database specifies a scalar rate of "
@@ -914,7 +914,7 @@ void BasicValues::TestPremiumTaxLoadConsistency()
         PremiumTaxLoadIsTieredInStateOfDomicile = true;
         if(0.0 != GetDomiciliaryPremTaxRate())
             {
-            hobsons_choice()
+            fatal_error()
                 << "Premium-tax rate is tiered in state of domicile "
                 << GetStateOfDomicile()
                 << ", but the product database specifies a scalar rate of "
@@ -925,7 +925,7 @@ void BasicValues::TestPremiumTaxLoadConsistency()
                 ;
             }
         // TODO ?? Code not tested if state of domicile has tiered rate.
-        hobsons_choice()
+        fatal_error()
             << "Premium-tax rate is tiered in state of domicile "
             << GetStateOfDomicile()
             << ", but this program has not been tested for that case."

@@ -19,19 +19,18 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mc_enum.tpp,v 1.6 2005-04-08 03:03:53 chicares Exp $
+// $Id: mc_enum.tpp,v 1.7 2005-09-12 01:32:19 chicares Exp $
 
 #include "config.hpp"
 
 #include "mc_enum.hpp"
 
+#include "alert.hpp"
 #include "facets.hpp"
 
 #include <algorithm> // std::find()
 #include <istream>
 #include <ostream>
-#include <stdexcept>
-#include <sstream>
 #include <typeinfo>
 
 // TODO ?? Should there be a runtime check that all elements in 'e'
@@ -158,15 +157,14 @@ std::size_t mc_enum<T,n,e,c>::ordinal() const
     std::size_t i = std::find(e, e + n, value_) - e;
     if(i == n)
         {
-        std::ostringstream oss;
-        oss
+        fatal_error()
             << "Value "
             << value_
             << " invalid for type '"
             << typeid(T).name()
             << "'."
+            << LMI_FLUSH
             ;
-        throw std::logic_error(oss.str());
         }
     return i;
 }
@@ -178,15 +176,14 @@ std::size_t mc_enum<T,n,e,c>::ordinal(std::string const& s) const
     std::size_t v = std::find(c, c + n, s) - c;
     if(v == n)
         {
-        std::ostringstream oss;
-        oss
+        fatal_error()
             << "Value '"
             << s
             << "' invalid for type '"
             << typeid(T).name()
             << "'."
+            << LMI_FLUSH
             ;
-        throw std::runtime_error(oss.str());
         }
     return v;
 }

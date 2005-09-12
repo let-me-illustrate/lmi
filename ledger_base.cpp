@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_base.cpp,v 1.4 2005-09-03 23:55:43 chicares Exp $
+// $Id: ledger_base.cpp,v 1.5 2005-09-12 01:32:19 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -161,7 +161,7 @@ std::string LedgerBase::value_str(std::string const& map_key, int index) const
         return value_cast<std::string>((*(*found).second)[index]);
         }
 
-    hobsons_choice()
+    fatal_error()
         << "Map key '"
         << map_key
         << "' not found."
@@ -185,7 +185,7 @@ std::string LedgerBase::value_str(std::string const& map_key) const
         return value_cast<std::string>(*(*found_scalar).second);
         }
 
-    hobsons_choice()
+    fatal_error()
         << "Map key '"
         << map_key
         << "' not found."

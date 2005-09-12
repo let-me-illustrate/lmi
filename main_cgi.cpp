@@ -31,13 +31,14 @@
 // other reasons evident in cvs or explained in 'ChangeLog'. Any
 // defect should not reflect on Stephen F. Booth's reputation.
 
-// $Id: main_cgi.cpp,v 1.13 2005-08-31 17:54:57 chicares Exp $
+// $Id: main_cgi.cpp,v 1.14 2005-09-12 01:32:19 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
 #   pragma hdrstop
 #endif // __BORLANDC__
 
+#include "alert.hpp"
 #include "argv0.hpp"
 #include "calculate.hpp"
 #include "initialize_filesystem.hpp"
@@ -65,7 +66,6 @@
 #include <iostream>
 #include <ostream>
 #include <sstream>
-#include <stdexcept>
 #include <string>
 #include <vector>
 
@@ -610,15 +610,14 @@ void ShowCensusOutput
             }
         if(values.size() != headers.size())
             {
-            std::ostringstream error;
-            error
+            fatal_error()
                 << "Line #" << current_line << ":<BR>"
                 << "  (" << line << ")<BR>"
                 << "should have one value per column.<BR>"
                 << "Number of values: " << values.size() << "; "
                 << "number expected: " << headers.size() << ".<BR>"
+                << LMI_FLUSH
                 ;
-            throw std::range_error(error.str());
             }
 
         for(unsigned int j = 0; j < headers.size(); ++j)
