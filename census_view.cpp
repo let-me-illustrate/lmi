@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: census_view.cpp,v 1.33 2005-06-23 01:47:21 chicares Exp $
+// $Id: census_view.cpp,v 1.34 2005-09-12 01:32:19 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -448,7 +448,7 @@ void CensusView::update_class_names()
             // It should not be possible for no cell to be found in the class.
             if(!found)
                 {
-                hobsons_choice()
+                fatal_error()
                     << "Cannot find any cell in class "
                     << "'" << *n << "'."
                     << LMI_FLUSH

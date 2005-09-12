@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_seq_helpers.hpp,v 1.1 2005-01-14 19:47:45 chicares Exp $
+// $Id: input_seq_helpers.hpp,v 1.2 2005-09-12 01:32:19 chicares Exp $
 
 #ifndef input_seq_helpers_hpp
 #define input_seq_helpers_hpp
@@ -88,8 +88,8 @@ namespace detail
             else
                 {
                 dst[j] = T(); // COMPILER !! Cuz we can't throw...see below.
-                hobsons_choice()
-                    << "convert_vector: key '"
+                fatal_error()
+                    << "Key '"
                     << src[j]
                     << "' not found in map."
                     << LMI_FLUSH

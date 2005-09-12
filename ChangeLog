@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.139 2005-09-10 11:44:36 chicares Exp $
+// $Id: ChangeLog,v 1.140 2005-09-12 01:32:19 chicares Exp $
 
 MAINTENANCE
 
@@ -3567,4 +3567,67 @@ Refine NAAR calculation.
   posix_fhs.make
   setup.make
 Add new tool for automating setup environment.
+
+20050911T2219Z <chicares@cox.net> [1287]
+
+  account_value.hpp
+  accountvalue.cpp
+  ihs_acctval.cpp
+Cache certain database values.
+
+  database.cpp
+  ihs_database.cpp
+Merge TDatabase::ConstrainScalar() implementations.
+
+20050912T0132Z <chicares@cox.net> [1280]
+
+  actuarial_table.cpp
+  ce_product_name.cpp
+  census_view.cpp
+  configurable_settings.cpp
+  custom_io_0.cpp
+  database.cpp
+  fenv_lmi.cpp
+  global_settings.cpp
+  global_settings_test.cpp
+  ihs_acctval.cpp
+  ihs_avdebug.cpp
+  ihs_avmly.cpp
+  ihs_basicval.cpp
+  ihs_database.cpp
+  ihs_dbdict.cpp
+  ihs_dbvalue.cpp
+  ihs_irc7702.cpp
+  ihs_irc7702a.cpp
+  ihs_proddata.cpp
+  ihs_rnddata.cpp
+  illustration_view.cpp
+  input_seq_helpers.hpp
+  input_sequence.cpp
+  input_test.cpp
+  inputillus.cpp
+  inputillus_sequences.cpp
+  inputs.cpp
+  interest_rates.cpp
+  ledger.cpp
+  ledger_base.cpp
+  ledger_xml_io.cpp
+  loads.cpp
+  main_cgi.cpp
+  mc_enum.cpp
+  mc_enum.tpp
+  mc_enum_test.cpp
+  multiple_cell_document.cpp
+  objects.make
+  security.cpp
+  single_cell_document.cpp
+  stratified_charges.cpp
+  tn_range.tpp
+  xml_notebook.cpp
+Revise error handling. Most errors that formerly offered Hobson's
+Choice should not have. Many were unrecoverable, and unsafe to bypass.
+Many others were certain to produce invalid results. Removed unneeded
+headers. The old method--using std::ostringstream to create an error
+message, then throwing a standard exception--is still used in a few
+modules that could conceivably be used as standalone libraries.
 

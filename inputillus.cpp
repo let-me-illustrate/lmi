@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: inputillus.cpp,v 1.12 2005-09-08 23:03:45 chicares Exp $
+// $Id: inputillus.cpp,v 1.13 2005-09-12 01:32:19 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -36,7 +36,6 @@
 #include <memory>
 #include <ostream>
 #include <sstream>
-#include <stdexcept>
 
 //============================================================================
 IllusInputParms::IllusInputParms()
@@ -107,7 +106,7 @@ IllusInputParms::IllusInputParms()
 // TODO ?? Debugging--expunge
 if(Status_Smoking != Status[0].Smoking)
   {
-  hobsons_choice() << "Default constructor defective." << LMI_FLUSH;
+  fatal_error() << "Default constructor defective." << LMI_FLUSH;
   }
 }
 
@@ -201,15 +200,15 @@ IllusInputParms::IllusInputParms(IllusInputParms const& z)
 // TODO ?? Debugging--expunge
 if(Status[0].Smoking != z.Status[0].Smoking)
   {
-  hobsons_choice() << "Copy constructor defective." << LMI_FLUSH;
+  fatal_error() << "Copy constructor defective." << LMI_FLUSH;
   }
 if(Status_Smoking != Status[0].Smoking)
   {
-  hobsons_choice() << "Copy constructor defective." << LMI_FLUSH;
+  fatal_error() << "Copy constructor defective." << LMI_FLUSH;
   }
 if(Status_Smoking != z.Status_Smoking)
   {
-  hobsons_choice() << "Copy constructor defective." << LMI_FLUSH;
+  fatal_error() << "Copy constructor defective." << LMI_FLUSH;
   }
 }
 
@@ -306,15 +305,15 @@ IllusInputParms& IllusInputParms::operator=(IllusInputParms const& z)
 // TODO ?? Debugging--expunge
 if(Status_Smoking != z.Status_Smoking)
   {
-  hobsons_choice() << "operator=() defective." << LMI_FLUSH;
+  fatal_error() << "operator=() defective." << LMI_FLUSH;
   }
 if(Status[0].Smoking != z.Status[0].Smoking)
   {
-  hobsons_choice() << "operator=() defective." << LMI_FLUSH;
+  fatal_error() << "operator=() defective." << LMI_FLUSH;
   }
 if(Status_Smoking != Status[0].Smoking)
   {
-  hobsons_choice() << "operator=() defective." << LMI_FLUSH;
+  fatal_error() << "operator=() defective." << LMI_FLUSH;
   }
     return *this;
 }
@@ -325,11 +324,11 @@ bool IllusInputParms::operator==(IllusInputParms const& z) const
 // TODO ?? Debugging--expunge
 if(Status_Smoking != Status[0].Smoking)
   {
-  hobsons_choice() << "operator==() defective." << LMI_FLUSH;
+  fatal_error() << "operator==() defective." << LMI_FLUSH;
   }
 if(z.Status_Smoking != z.Status[0].Smoking)
   {
-  hobsons_choice() << "operator==() defective." << LMI_FLUSH;
+  fatal_error() << "operator==() defective." << LMI_FLUSH;
   }
 
     if(!InputParms::operator==(z)) return false;

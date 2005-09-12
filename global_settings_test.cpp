@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: global_settings_test.cpp,v 1.4 2005-07-06 00:48:24 chicares Exp $
+// $Id: global_settings_test.cpp,v 1.5 2005-09-12 01:32:19 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -46,16 +46,18 @@ void test_directory_exceptions()
 
     // Such string values must not be empty.
 
+    // "Data directory must not be empty."
     BOOST_TEST_THROW
         (global_settings::instance().set_data_directory("")
         ,std::runtime_error
-        ,"Data directory must not be empty."
+        ,""
         );
 
+    // "Regression-test directory must not be empty."
     BOOST_TEST_THROW
         (global_settings::instance().set_regression_test_directory("")
         ,std::runtime_error
-        ,"Regression-test directory must not be empty."
+        ,""
         );
 
     // Such string values must be validly-formed paths.
@@ -68,18 +70,20 @@ void test_directory_exceptions()
 
     // Such string values must name paths that exist in the filesystem.
 
+    // "Data directory 'UnLiKeLyNaMe' not found."
     BOOST_TEST_THROW
         (global_settings::instance().set_data_directory("UnLiKeLyNaMe")
         ,std::runtime_error
-        ,"Data directory 'UnLiKeLyNaMe' not found."
+        ,""
         );
 
     // Such string values must name directories, not normal files.
 
+    // "Data directory 'global_settings.o' is not a directory."
     BOOST_TEST_THROW
         (global_settings::instance().set_data_directory("global_settings.o")
         ,std::runtime_error
-        ,"Data directory 'global_settings.o' is not a directory."
+        ,""
         );
 }
 

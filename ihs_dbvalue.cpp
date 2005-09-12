@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_dbvalue.cpp,v 1.4 2005-09-03 23:55:43 chicares Exp $
+// $Id: ihs_dbvalue.cpp,v 1.5 2005-09-12 01:32:19 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -39,8 +39,6 @@
 #include <limits>       // numeric_limits<>
 #include <numeric>
 #include <ostream>
-#include <sstream>
-#include <stdexcept>
 
 #ifndef stlstrm_hpp
 #define stlstrm_hpp
@@ -276,7 +274,7 @@ int TDBValue::getndata() const
     // Calculate number of elements required from lengths of axes.
     // Use a double for this purpose so that we can detect whether
     // the required number exceeds the maximum addressable number,
-    // since a double will have a wider range than an integer type.
+    // because a double has a wider range than an integer type.
     double n = std::accumulate
         (axis_lengths.begin()
         ,axis_lengths.end()
@@ -284,7 +282,7 @@ int TDBValue::getndata() const
         ,std::multiplies<double>()
         );
 
-    // Meaningful iff a long is bigger than an int
+    // Meaningful iff a long int is bigger than an int.
     if(MaxPossibleElements < n)
         {
         fatal_error()
@@ -309,10 +307,7 @@ int TDBValue::getndata() const
             ;
         }
 
-    // Since n <= MaxPossibleElements, the implicit
-    // cast to int cannot lose information
-//  return n;
-    // TODO ?? gcc warns on the implicit cast, so try this instead:
+    // Because MaxPossibleElements < n, this cast cannot lose information.
     return static_cast<int>(n);
 }
 
@@ -335,13 +330,12 @@ double& TDBValue::operator[](std::vector<int> const& a_idx)
     if(static_cast<int>(data_values.size()) <= z)
         {
         z = 0;
-        hobsons_choice()
+        fatal_error()
             << "Trying to index database item with key "
             << key
             << " past end of data."
             << LMI_FLUSH
             ;
-        //  TODO ?? throw(DBIndexError);
         }
     return data_values[z];
 }
@@ -384,13 +378,12 @@ double const* TDBValue::operator[](TDBIndex const& a_idx) const
     if(static_cast<int>(data_values.size()) <= z)
         {
         z = 0;
-        hobsons_choice()
+        fatal_error()
             << "Trying to index database item with key "
             << key
             << " past end of data."
             << LMI_FLUSH
             ;
-        // TODO ?? throw(DBIndexError);
         }
     return &data_values[z];
 }
@@ -665,8 +658,8 @@ Implementation
 //===========================================================================
 std::istream& LMI_EXPIMP operator>>(std::istream& is, TDBValue&)
 {
-    // TODO ?? Someday we should implement this.
-    hobsons_choice()
+    // SOMEDAY !! Someday we should implement this.
+    fatal_error()
         << "operator>>(std::istream&, TDBValue&) not implemented."
         << LMI_FLUSH
         ;
@@ -729,14 +722,14 @@ void* TDBValue::read(JRPS::JrPs_ipstream& is)
     is >> version;
     if(version < StreamingVersion)
         {
-        std::ostringstream s;
-        s
-            << "TDBValue: code supports input versions up to "
+        fatal_error()
+            << "Program supports input versions up to "
             << StreamingVersion
             << " but input file is version "
             << version
+            << " ."
+            << LMI_FLUSH
             ;
-        throw std::runtime_error(s.str());
         }
 
     is >> key;

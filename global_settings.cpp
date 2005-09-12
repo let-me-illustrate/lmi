@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: global_settings.cpp,v 1.9 2005-07-06 00:48:24 chicares Exp $
+// $Id: global_settings.cpp,v 1.10 2005-09-12 01:32:19 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -28,11 +28,10 @@
 
 #include "global_settings.hpp"
 
+#include "alert.hpp"
+
 #include <boost/filesystem/exception.hpp>
 #include <boost/filesystem/operations.hpp>
-
-#include <sstream>
-#include <stdexcept>
 
 namespace
 {
@@ -62,45 +61,41 @@ namespace
             }
         catch(fs::filesystem_error const& e)
             {
-            std::ostringstream oss;
-            oss
+            fatal_error()
                 << context
                 << ": "
                 << e.what()
+                << LMI_FLUSH
                 ;
-            throw std::runtime_error(oss.str());
             }
 
         if(path.empty())
             {
-            std::ostringstream oss;
-            oss
+            fatal_error()
                 << context
                 << " must not be empty."
+                << LMI_FLUSH
                 ;
-            throw std::runtime_error(oss.str());
             }
         if(!fs::exists(path))
             {
-            std::ostringstream oss;
-            oss
+            fatal_error()
                 << context
                 << " '"
                 << path.string()
                 << "' not found."
+                << LMI_FLUSH
                 ;
-            throw std::runtime_error(oss.str());
             }
         if(!fs::is_directory(path))
             {
-            std::ostringstream oss;
-            oss
+            fatal_error()
                 << context
                 << " '"
                 << path.string()
                 << "' is not a directory."
+                << LMI_FLUSH
                 ;
-            throw std::runtime_error(oss.str());
             }
         }
 } // Unnamed namespace.

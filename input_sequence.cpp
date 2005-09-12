@@ -20,7 +20,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_sequence.cpp,v 1.4 2005-06-11 15:04:25 chicares Exp $
+// $Id: input_sequence.cpp,v 1.5 2005-09-12 01:32:19 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -29,6 +29,7 @@
 
 #include "input_sequence.hpp"
 
+#include "alert.hpp"
 #include "miscellany.hpp"
 #include "value_cast.hpp"
 
@@ -39,7 +40,6 @@
 #include <iterator>
 #include <ostream>
 #include <sstream>
-#include <stdexcept>
 
 ValueInterval::ValueInterval()
     :value_number     (0.0)
@@ -209,7 +209,10 @@ InputSequence::InputSequence
 {
     if(n_v.size() != s_v.size())
         {
-        throw std::runtime_error("InputSequence: vector lengths differ.");
+        fatal_error()
+            << "InputSequence: vector lengths differ."
+            << LMI_FLUSH
+            ;
         }
 
     ValueInterval dummy;
@@ -308,43 +311,41 @@ void InputSequence::realize_vector()
         {
         if(intervals_i->insane)
             {
-            throw std::logic_error("InputSequence: untrapped parser error.");
+            fatal_error()
+                << "InputSequence: untrapped parser error."
+                << LMI_FLUSH
+                ;
             }
         if(e_invalid_mode == intervals_i->begin_mode)
             {
-            std::ostringstream error;
-            error
+            fatal_error()
                 << "Interval "
                 << "[ " << intervals_i->begin_duration << ", "
                 << intervals_i->end_duration << " )"
                 << " has invalid begin_mode."
+                << LMI_FLUSH
                 ;
-            throw std::logic_error(error.str());
             }
         if(e_invalid_mode == intervals_i->end_mode)
             {
-            std::ostringstream error;
-            error
+            fatal_error()
                 << "Interval "
                 << "[ " << intervals_i->begin_duration << ", "
                 << intervals_i->end_duration << " )"
                 << " has invalid end_mode."
+                << LMI_FLUSH
                 ;
-            throw std::logic_error(error.str());
             }
         // TODO ?? Also check whether value_number is a NaN.
         if(intervals_i->value_is_keyword && "insane" == intervals_i->value_keyword)
             {
-            std::ostringstream error;
-            error
+            fatal_error()
                 << "Interval "
                 << "[ " << intervals_i->begin_duration << ", "
                 << intervals_i->end_duration << " )"
                 << " has invalid value_keyword."
+                << LMI_FLUSH
                 ;
-            // This is a logic error because we believe we
-            // prevented it upstream.
-            throw std::logic_error(error.str());
             }
         // TODO ?? Decide whether we should permit what's disallowed here.
         // Similar logic could disallow other things too.
@@ -369,16 +370,13 @@ void InputSequence::realize_vector()
             ;
         if(!interval_is_ok)
             {
-            std::ostringstream error;
-            error
+            fatal_error()
                 << "Interval "
                 << "[ " << intervals_i->begin_duration << ", "
                 << intervals_i->end_duration << " )"
                 << " not valid."
+                << LMI_FLUSH
                 ;
-            // This is a logic error because we believe we
-            // prevented it upstream.
-            throw std::logic_error(error.str());
             }
         if(intervals_i->value_is_keyword)
             {
@@ -1048,7 +1046,10 @@ std::string InputSequence::mathematical_representation() const
 {
     if(intervals.empty())
         {
-        throw std::logic_error("Sequence contains no interval.");
+        fatal_error()
+            << "Sequence contains no interval."
+            << LMI_FLUSH
+            ;
         }
 
     std::ostringstream oss;

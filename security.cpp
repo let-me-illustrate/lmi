@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: security.cpp,v 1.4 2005-07-05 17:49:53 chicares Exp $
+// $Id: security.cpp,v 1.5 2005-09-12 01:32:19 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -34,7 +34,6 @@
 #include "secure_date.hpp"
 
 #include <cstdlib> // std::exit(), EXIT_FAILURE
-#include <sstream>
 #include <string>
 
 void validate_security(bool do_validate)
@@ -55,9 +54,7 @@ void validate_security(bool do_validate)
     //
     if(!diagnostic_message.empty())
         {
-        std::ostringstream msg;
-        msg << "Passkey validation failed.";
-        warning() << msg.str() << std::flush;
+        warning() << "Passkey validation failed." << LMI_FLUSH;
         std::exit(EXIT_FAILURE);
         }
 }

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avdebug.cpp,v 1.13 2005-09-07 03:04:54 chicares Exp $
+// $Id: ihs_avdebug.cpp,v 1.14 2005-09-12 01:32:19 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -54,8 +54,6 @@
 #include <iostream>
 #include <iterator>
 #include <ostream>
-#include <stdexcept>
-#include <sstream>
 #include <string>
 #include <vector>
 

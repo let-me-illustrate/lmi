@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: objects.make,v 1.50 2005-09-04 17:05:33 chicares Exp $
+# $Id: objects.make,v 1.51 2005-09-12 01:32:19 chicares Exp $
 
 ################################################################################
 
@@ -389,6 +389,8 @@ unit_test_targets := \
 
 # Link these objects for all tests:
 common_test_objects := \
+  alert.o \
+  alert_cli.o \
   fenv_lmi.o \
   getopt.o \
   license.o \
@@ -396,16 +398,12 @@ common_test_objects := \
 actuarial_table_test$(EXEEXT): \
   $(boost_filesystem_objects) \
   $(common_test_objects) \
-  alert.o \
-  alert_cli.o \
   actuarial_table.o \
   actuarial_table_test.o \
   timer.o \
 
 alert_test$(EXEEXT): \
   $(common_test_objects) \
-  alert.o \
-  alert_cli.o \
   alert_test.o \
 
 any_member_test$(EXEEXT): \
@@ -420,8 +418,6 @@ argv0_test$(EXEEXT): \
 
 calendar_date_test$(EXEEXT): \
   $(common_test_objects) \
-  alert.o \
-  alert_cli.o \
   calendar_date.o \
   calendar_date_test.o \
 
@@ -431,8 +427,6 @@ callback_test$(EXEEXT): \
 
 commutation_functions_test$(EXEEXT): \
   $(common_test_objects) \
-  alert.o \
-  alert_cli.o \
   commutation_functions_test.o \
   expm1.o \
   ihs_commfns.o \
@@ -455,8 +449,6 @@ expression_template_0_test$(EXEEXT): \
 
 financial_test$(EXEEXT): \
   $(common_test_objects) \
-  alert.o \
-  alert_cli.o \
   financial_test.o \
   stratified_algorithms.o \
   timer.o \
@@ -478,8 +470,6 @@ input_test$(EXEEXT): \
   $(boost_filesystem_objects) \
   $(common_test_objects) \
   $(xmlwrapp_objects) \
-  alert.o \
-  alert_cli.o \
   calendar_date.o \
   configurable_settings.o \
   data_directory.o \
@@ -507,8 +497,6 @@ input_test$(EXEEXT): \
 
 irc7702a_test$(EXEEXT): \
   $(common_test_objects) \
-  alert.o \
-  alert_cli.o \
   ihs_irc7702a.o \
   irc7702a_test.o \
   stratified_algorithms.o \
@@ -526,8 +514,6 @@ math_functors_test$(EXEEXT): \
 mc_enum_test$(EXEEXT): \
   $(boost_filesystem_objects) \
   $(common_test_objects) \
-  alert.o \
-  alert_cli.o \
   datum_base.o \
   facets.o \
   global_settings.o \
@@ -561,8 +547,6 @@ obstruct_slicing_test$(EXEEXT): \
 passkey_test$(EXEEXT): \
   $(boost_filesystem_objects) \
   $(common_test_objects) \
-  alert.o \
-  alert_cli.o \
   calendar_date.o \
   md5.o \
   passkey_test.o \
@@ -572,7 +556,6 @@ passkey_test$(EXEEXT): \
 path_utility_test$(EXEEXT): \
   $(boost_filesystem_objects) \
   $(common_test_objects) \
-  alert.o \
   miscellany.o \
   path_utility.o \
   path_utility_test.o \
@@ -597,8 +580,6 @@ snprintf_test$(EXEEXT): \
 
 stratified_algorithms_test$(EXEEXT): \
   $(common_test_objects) \
-  alert.o \
-  alert_cli.o \
   stratified_algorithms_test.o \
 
 stream_cast_test$(EXEEXT): \
@@ -636,15 +617,11 @@ wx_new_test$(EXEEXT): \
 
 xenum_test$(EXEEXT): \
   $(common_test_objects) \
-  alert.o \
-  alert_cli.o \
   xenum_sample.o \
   xenum_test.o \
 
 xrange_test$(EXEEXT): \
   $(common_test_objects) \
-  alert.o \
-  alert_cli.o \
   calendar_date.o \
   facets.o \
   xrange.o \
@@ -652,8 +629,6 @@ xrange_test$(EXEEXT): \
 
 zero_test$(EXEEXT): \
   $(common_test_objects) \
-  alert.o \
-  alert_cli.o \
   zero_test.o \
 
 ################################################################################

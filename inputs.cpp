@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: inputs.cpp,v 1.9 2005-08-28 14:23:41 chicares Exp $
+// $Id: inputs.cpp,v 1.10 2005-09-12 01:32:19 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -673,7 +673,7 @@ void InputParms::SetSolveDurations() const
         }
     if(endt_age < Status[0].IssueAge + mutable_solve_tgt_year)
         {
-        hobsons_choice()
+        fatal_error()
             << "Solve target year exceeds maturity year."
             << LMI_FLUSH
             ;

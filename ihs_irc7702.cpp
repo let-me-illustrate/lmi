@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_irc7702.cpp,v 1.8 2005-09-03 23:55:43 chicares Exp $
+// $Id: ihs_irc7702.cpp,v 1.9 2005-09-12 01:32:19 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -206,7 +206,7 @@ Irc7702::Irc7702
         LeastBftAmtEver     = a_LeastBftAmtEver;
         LMI_ASSERT(LeastBftAmtEver <= PriorBftAmt);
         LMI_ASSERT(LeastBftAmtEver <= PresentBftAmt);
-// TODO ?? Tthink more about inforce.
+// TODO ?? Think more about inforce.
         CumGLP              = InforceCumGLP;    // TODO ?? Don't need as member?
         GptLimit            = 0.0;  // TODO ??
         CumPmts             = 0.0;  // TODO ??
@@ -780,6 +780,8 @@ void Irc7702::UpdateBOY7702()
 //============================================================================
 std::vector<double> const& Irc7702::Corridor() const
 {
+    // The 7702 test might indeed be neither CVAT nor GPT for a non-US
+    // contract, but in that case this code shouldn't be reached.
     if(e_gpt == Test7702)
         {
         return GptCorridor;
@@ -788,11 +790,9 @@ std::vector<double> const& Irc7702::Corridor() const
         {
         return CvatCorridor;
         }
-    // TODO ?? Why not a switch?
-    // TODO ?? We do have a third enumerator--non-7702-compliant.
     else
         {
-        hobsons_choice() << "7702 test is neither GPT nor CVAT." << LMI_FLUSH;
+        fatal_error() << "7702 test is neither GPT nor CVAT." << LMI_FLUSH;
         }
 
     // This line is obviously unreachable because all paths through the
