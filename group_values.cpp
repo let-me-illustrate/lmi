@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: group_values.cpp,v 1.28 2005-09-07 03:04:54 chicares Exp $
+// $Id: group_values.cpp,v 1.29 2005-09-12 15:36:36 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -231,24 +231,26 @@ bool run_census_in_series::operator()
 /// self correcting and therefore needs no exquisite refinements.
 ///
 /// The current COI rate is the tabular current COI rate times the
-/// input current COI multiplier (with any other customary adjustments
-/// for substandard, foreign country, etc.), but never to exceed the
-/// guaranteed COI rate.
+/// input current COI multiplier, with all other customary adjustments
+/// for substandard, foreign country, etc., but with no adjustment for
+/// retention or k factor--yet never to exceed the guaranteed COI rate.
 ///
-/// The actual mortality charge deducted from the account value is the
-/// sum of two components--the net mortality charge, and the retention
-/// charge:
+/// The actual mortality charge deducted from the account value is
+/// loaded for retention, and reflects experience through the k factor.
+/// The net mortality charge is whatever remains after subtracting the
+/// retention charge from the actual mortality charge.
 ///
-///   actual mortality charge = NAAR * coi_rate * (R + K)
-///   net mortality charge    = NAAR * coi_rate * (    K)
-///   retention charge        = NAAR * coi_rate * (R    )
+///   actual mortality charge = NAAR * min(G, C * (R + K))
+///   retention charge        = NAAR *        C *  R
+///   net mortality charge = actual mortality charge - retention charge
 ///
-/// where R is the retention rate, K is the k factor, and NAAR is by
-/// convention nonnegative. Database entity 'UseRawTableForRetention'
-/// optionally causes R to be divided by the input current COI
-/// multiplier, removing the latter from the retention calculation; in
-/// that case, R becomes zero whenever the input current COI multiplier
-/// is zero. Only the net mortality charge is contrained to guarantees.
+/// where C is the current COI rate defined above, R is the retention
+/// rate, K is the k factor, and NAAR is by convention nonnegative.
+///
+/// Database entity 'UseRawTableForRetention' optionally causes R to be
+/// divided by the input current COI multiplier, removing the latter
+/// from the retention calculation; in that case, retention becomes
+/// zero whenever the input current COI multiplier is zero.
 ///
 /// Net claims are NAAR (not DB) times the partial mortality rate.
 ///
