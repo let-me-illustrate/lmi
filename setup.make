@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: setup.make,v 1.10 2005-09-09 04:36:22 wboutin Exp $
+# $Id: setup.make,v 1.11 2005-09-12 17:35:19 wboutin Exp $
 
 .PHONY: all
 all: setup
@@ -152,9 +152,9 @@ frozen_cgicc:
 	$(MAKE) \
 	  -C /tmp \
 	  -f $(src_dir)/setup.make \
-	                    src_dir='$(src_dir)' \
-       third_party_include_dir='$(third_party_include_dir)' \
-        third_party_source_dir='$(third_party_source_dir)' \
+	                  src_dir='$(src_dir)' \
+	  third_party_include_dir='$(third_party_include_dir)' \
+	   third_party_source_dir='$(third_party_source_dir)' \
 	  install_frozen_cgicc_from_tmp_dir
 
 #	  --no-print-directory \
@@ -167,7 +167,7 @@ install_frozen_cgicc_from_tmp_dir:
           || $(WGET) --non-verbose \
           ftp://ftp.gnu.org/pub/gnu/cgicc/cgicc-3.1.4.tar.bz2
 	$(ECHO) "6cb5153fc9fa64b4e50c7962aa557bbe  cgicc-3.1.4.tar.bz2" \
-          |$(MD5SUM) --check
+	  |$(MD5SUM) --check
 	[ -e cgicc-3.1.4.tar ] \
           || $(BZIP2) --decompress --keep cgicc-3.1.4.tar.bz2
 	$(TAR) --extract --file=cgicc-3.1.4.tar
@@ -175,9 +175,9 @@ install_frozen_cgicc_from_tmp_dir:
 	$(MKDIR) --parents $(third_party_include_dir)/cgicc/
 	$(MKDIR) --parents $(third_party_source_dir)/cgicc/
 	$(CP) --preserve cgicc-3.1.4/cgicc/*.h \
-        $(third_party_include_dir)/cgicc/
+	  $(third_party_include_dir)/cgicc/
 	$(CP) --preserve cgicc-3.1.4/cgicc/*.cpp \
-        $(third_party_source_dir)/cgicc/
+	  $(third_party_source_dir)/cgicc/
 	$(RM) --force cgicc-3.1.4.tar cgicc-3.1.4.tar.bz2
 
 ###############################################################################
@@ -189,9 +189,9 @@ frozen_xmlwrapp:
 	$(MAKE) \
 	  -C /tmp \
 	  -f $(src_dir)/setup.make \
-	                    src_dir='$(src_dir)' \
-	    third_party_include_dir='$(third_party_include_dir)' \
-	     third_party_source_dir='$(third_party_source_dir)' \
+	                  src_dir='$(src_dir)' \
+	  third_party_include_dir='$(third_party_include_dir)' \
+	   third_party_source_dir='$(third_party_source_dir)' \
 	  install_frozen_xmlwrapp_from_tmp_dir
 
 .PHONY: install_frozen_xmlwrapp_from_tmp_dir
@@ -205,15 +205,15 @@ install_frozen_xmlwrapp_from_tmp_dir:
 	[ -e xmlwrapp-0.2.0.tar.gz ]
 	$(ECHO) "f142e8bc349597ecbaebb4a8e246b65a  xmlwrapp-0.2.0.tar.gz" \
           |$(MD5SUM) --check
-	[ -e xmlwrapp-0.2.0.tar ] || $(GZIP) -d xmlwrapp-0.2.0.tar.gz
+	[ -e xmlwrapp-0.2.0.tar ] || $(GZIP) --decompress xmlwrapp-0.2.0.tar.gz
 	$(TAR) --extract --verbose --file=xmlwrapp-0.2.0.tar
 	$(PATCH) --strip=0 < $(src_dir)/xmlwrapp_0_2_0_patch
 	$(MKDIR) --parents $(third_party_include_dir)/xmlwrapp/
 	$(MKDIR) --parents $(third_party_source_dir)/libxml/
 	$(CP) --preserve xmlwrapp-0.2.0/include/xmlwrapp/*.h \
-        $(third_party_include_dir)/xmlwrapp/
+	  $(third_party_include_dir)/xmlwrapp/
 	$(CP) --preserve xmlwrapp-0.2.0/src/libxml/* \
-        $(third_party_source_dir)/libxml/
+	  $(third_party_source_dir)/libxml/
 	$(RM) --force xmlwrapp-0.2.0.tar xmlwrapp-0.2.0.tar.gz
 
 ###############################################################################
@@ -225,9 +225,9 @@ frozen_boost:
 	$(MAKE) \
 	  -C /tmp \
 	  -f $(src_dir)/setup.make \
-	                    src_dir='$(src_dir)' \
-	    third_party_include_dir='$(third_party_include_dir)' \
-	     third_party_source_dir='$(third_party_source_dir)' \
+	                  src_dir='$(src_dir)' \
+	  third_party_include_dir='$(third_party_include_dir)' \
+	   third_party_source_dir='$(third_party_source_dir)' \
 	  install_frozen_boost_from_tmp_dir
 
 .PHONY: install_frozen_boost_from_tmp_dir
@@ -243,9 +243,9 @@ install_frozen_boost_from_tmp_dir:
 	$(MKDIR) --parents $(third_party_include_dir)/boost/
 	$(MKDIR) --parents $(third_party_source_dir)/boost/
 	-$(CP) --force --preserve --recursive boost_1_31_0/boost/* \
-        $(third_party_include_dir)/boost/
+          $(third_party_include_dir)/boost/
 	-$(CP) --force --preserve --recursive boost_1_31_0/* \
-        $(third_party_source_dir)/boost/
+          $(third_party_source_dir)/boost/
 	$(RM) --force boost_1_31_0.tar boost_1_31_0.tar.bz2
 
 ###############################################################################
@@ -260,21 +260,21 @@ frozen_libxml2:
 	$(MAKE) \
 	  -C /tmp \
 	  -f $(src_dir)/setup.make \
-	                    src_dir='$(src_dir)' \
-	        third_party_bin_dir='$(third_party_bin_dir)' \
-	    third_party_include_dir='$(third_party_include_dir)' \
-	     third_party_source_dir='$(third_party_source_dir)' \
+	                  src_dir='$(src_dir)' \
+	      third_party_bin_dir='$(third_party_bin_dir)' \
+	  third_party_include_dir='$(third_party_include_dir)' \
+	   third_party_source_dir='$(third_party_source_dir)' \
 	  install_frozen_libxml2_from_tmp_dir
 
 .PHONY: install_frozen_libxml2_from_tmp_dir
 install_frozen_libxml2_from_tmp_dir:
 	[ -e libxml2-2.6.19.tar.bz2 ] \
           || $(WGET) --non-verbose \
-        http://ftp.gnome.org/pub/GNOME/sources/libxml2/2.6/libxml2-2.6.19.tar.bz2
+	  http://ftp.gnome.org/pub/GNOME/sources/libxml2/2.6/libxml2-2.6.19.tar.bz2
 	$(ECHO) "ed581732d586f86324ec46e572526ede  libxml2-2.6.19.tar.bz2" \
-          |$(MD5SUM) --check
+	  |$(MD5SUM) --check
 	[ -e libxml2-2.6.19.tar ] \
-          || $(BZIP2) --decompress --keep libxml2-2.6.19.tar.bz2
+	  || $(BZIP2) --decompress --keep libxml2-2.6.19.tar.bz2
 	$(TAR) --extract --file=libxml2-2.6.19.tar
 # REVIEW: I think you need this 's_configure_./configure_' change:
 # Is this what you mean:
@@ -288,10 +288,10 @@ install_frozen_libxml2_from_tmp_dir:
 	cd libxml2-2.6.19; ./configure && $(MAKE)
 	$(MKDIR) --parents $(third_party_include_dir)/libxml/
 	-$(CP) --force --preserve --recursive libxml2-2.6.19/include/libxml/* \
-        $(third_party_include_dir)/libxml/ 2>/dev/null
+	  $(third_party_include_dir)/libxml/ 2>/dev/null
 	$(CP) --force --preserve libxml2-2.6.19/.libs/libxml2-2.dll \
-        $(third_party_bin_dir)
+	  $(third_party_bin_dir)
 	$(CP) --force --preserve libxml2-2.6.19/.libs/libxml2.dll.a \
-        $(third_party_lib_dir)
+	  $(third_party_lib_dir)
 	$(RM) --force libxml2-2.6.19.tar libxml2-2.6.19.tar.bz2
 
