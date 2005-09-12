@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ce_product_name.cpp,v 1.2 2005-06-21 05:27:48 chicares Exp $
+// $Id: ce_product_name.cpp,v 1.3 2005-09-12 01:32:19 chicares Exp $
 
 #include "ce_product_name.hpp"
 
@@ -33,8 +33,6 @@
 #include <boost/filesystem/path.hpp>
 
 #include <iterator>
-#include <sstream>
-#include <stdexcept>
 
 namespace
 {
@@ -160,15 +158,14 @@ std::size_t ce_product_name::ordinal(std::string const& s) const
         ;
     if(v == product_names().size())
         {
-        std::ostringstream oss;
-        oss
+        fatal_error()
             << "Value '"
             << s
             << "' invalid for type '"
             << "ce_product_name"
             << "'."
+            << LMI_FLUSH
             ;
-        throw std::runtime_error(oss.str());
         }
     return v;
 }

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: configurable_settings.cpp,v 1.7 2005-08-02 21:23:17 chicares Exp $
+// $Id: configurable_settings.cpp,v 1.8 2005-09-12 01:32:19 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -28,6 +28,7 @@
 
 #include "configurable_settings.hpp"
 
+#include "alert.hpp"
 #include "data_directory.hpp"
 #include "miscellany.hpp"
 #include "platform_dependent.hpp" // access()
@@ -41,8 +42,6 @@
 
 #include <algorithm>
 #include <iterator>
-#include <sstream>
-#include <stdexcept>
 #include <vector>
 
 // TODO ?? Need unit tests.
@@ -77,9 +76,12 @@ configurable_settings::configurable_settings()
         filename = AddDataDir(configuration_filename());
         if(access(filename.c_str(), R_OK))
             {
-            throw std::runtime_error
-                ("No readable file '" + configuration_filename() + "' exists."
-                );
+            fatal_error()
+                << "No readable file '"
+                << configuration_filename()
+                << "' exists."
+                << LMI_FLUSH
+                ;
             }
         }
 
@@ -87,9 +89,12 @@ configurable_settings::configurable_settings()
     xml::tree_parser parser(filename.c_str());
     if(!parser)
         {
-        throw std::runtime_error
-            ("Error parsing '" + configuration_filename() + "'."
-            );
+        fatal_error()
+            << "Error parsing '"
+            << configuration_filename()
+            << "'."
+            << LMI_FLUSH
+            ;
         }
 #ifdef USING_CURRENT_XMLWRAPP
     xml::node& root = parser.get_document().get_root_node();
@@ -98,8 +103,7 @@ configurable_settings::configurable_settings()
 #endif // USING_CURRENT_XMLWRAPP not defined.
     if(xml_root_name() != root.get_name())
         {
-        std::ostringstream msg;
-        msg
+        fatal_error()
             << "File '"
             << configuration_filename()
             << "': xml node name is '"
@@ -107,8 +111,8 @@ configurable_settings::configurable_settings()
             << "' but '"
             << xml_root_name()
             << "' was expected. Try reinstalling."
+            << LMI_FLUSH
             ;
-        throw std::runtime_error(msg.str());
         }
 
 // COMPILER !! Borland doesn't find operator==() in ns xml.

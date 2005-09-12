@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_proddata.cpp,v 1.8 2005-07-11 14:15:52 chicares Exp $
+// $Id: ihs_proddata.cpp,v 1.9 2005-09-12 01:32:19 chicares Exp $
 
 // This class contains names of files containing a product's tables as well
 // as strings that are the same for all instances of that product.
@@ -199,7 +199,7 @@ void TProductData::Write(std::string const& a_Filename) const
 
     if(!os.good())
         {
-        hobsons_choice()
+        fatal_error()
             << "Unable to write product data file '"
             << a_Filename
             << "'."

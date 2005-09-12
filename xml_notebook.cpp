@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xml_notebook.cpp,v 1.5 2005-06-26 23:01:43 chicares Exp $
+// $Id: xml_notebook.cpp,v 1.6 2005-09-12 01:32:19 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -28,6 +28,7 @@
 
 #include "xml_notebook.hpp"
 
+#include "alert.hpp"
 #include "input.hpp"
 #include "transferor.hpp"
 
@@ -448,16 +449,12 @@ wxNotebookPage& XmlNotebook::CurrentPage()
     wxNotebook* notebook = dynamic_cast<wxNotebook*>(FindWindow(id));
     if(!notebook)
         {
-        // WX !! When wx handles exceptions more gracefully, throw here:
-        throw std::runtime_error("No notebook window.");
-//        wxLogError("No notebook window.");
+        fatal_error() << "No notebook window." << LMI_FLUSH;
         }
     wxNotebookPage* page = notebook->GetPage(notebook->GetSelection());
     if(!page)
         {
-        // WX !! When wx handles exceptions more gracefully, throw here:
-        throw std::runtime_error("No page selected in notebook.");
-//        wxLogError("No page selected in notebook.");
+        fatal_error() << "No page selected in notebook." << LMI_FLUSH;
         }
     return *page;
 }
@@ -474,9 +471,7 @@ wxStaticText* XmlNotebook::DiagnosticsWindow()
         );
     if(!diagnostics_window)
         {
-        // WX !! When wx handles exceptions more gracefully, throw here:
-        //   throw std::runtime_error("No 'diagnostics' window.");
-        wxLogError("No 'diagnostics' window.");
+        fatal_error() << "No 'diagnostics' window." << LMI_FLUSH;
         }
     return diagnostics_window;
 }
@@ -771,8 +766,7 @@ os << "Only the following controls were processed correctly:" << std::endl;
             {
             if(w != FindWindow(XRCID(t->name().c_str())))
                 {
-                std::ostringstream oss;
-                oss
+                fatal_error()
                     << "Input name '"
                     << t->name()
                     << "': window "
@@ -782,8 +776,8 @@ os << "Only the following controls were processed correctly:" << std::endl;
                     << " found from wxxrc ID "
                     << XRCID(t->name().c_str())
                     << " ."
+                    << LMI_FLUSH
                     ;
-                throw oss.str();
                 }
 /*
 os << t->name() << std::endl;

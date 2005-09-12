@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_rnddata.cpp,v 1.3 2005-04-10 14:53:17 chicares Exp $
+// $Id: ihs_rnddata.cpp,v 1.4 2005-09-12 01:32:19 chicares Exp $
 
 // Rounding rules for a policy form
 
@@ -90,7 +90,7 @@ void StreamableRoundingRules::Read(std::string const& a_Filename)
 {
     if(access(a_Filename.c_str(), R_OK))
         {
-        hobsons_choice()
+        fatal_error()
             << "File '"
             << a_Filename
             << "' is required but could not be found. Try reinstalling."
@@ -116,7 +116,7 @@ void StreamableRoundingRules::Read(std::string const& a_Filename)
     bool okay = is.good();
     if(!okay)
         {
-        hobsons_choice()
+        fatal_error()
             << "Unexpected end of rounding file '"
             << a_Filename
             << "'. Try reinstalling."
@@ -128,7 +128,7 @@ void StreamableRoundingRules::Read(std::string const& a_Filename)
     okay = is.eof();
     if(!okay)
         {
-        hobsons_choice()
+        fatal_error()
             << "Data past expected end of rounding file '"
             << a_Filename
             << "'. Try reinstalling."
@@ -168,7 +168,7 @@ void StreamableRoundingRules::Write(std::string const& a_Filename)
 
     if(!os.good())
         {
-        hobsons_choice()
+        fatal_error()
             << "Unable to write rounding file '"
             << a_Filename
             << "'."

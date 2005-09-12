@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: custom_io_0.cpp,v 1.11 2005-09-03 23:55:42 chicares Exp $
+// $Id: custom_io_0.cpp,v 1.12 2005-09-12 01:32:19 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -412,7 +412,7 @@ void PrintFormSpecial
         );
     if(!os.good())
         {
-        hobsons_choice() << "Error initializing output file." << LMI_FLUSH;
+        fatal_error() << "Error initializing output file." << LMI_FLUSH;
         }
 
     LedgerInvariant const& Invar = ledger_values.GetLedgerInvariant();
@@ -467,7 +467,7 @@ void PrintFormSpecial
         }
     if(!os.good())
         {
-        hobsons_choice() << "Error writing output file." << LMI_FLUSH;
+        fatal_error() << "Error writing output file." << LMI_FLUSH;
         }
 }
 

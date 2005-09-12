@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_acctval.cpp,v 1.50 2005-09-11 22:19:10 chicares Exp $
+// $Id: ihs_acctval.cpp,v 1.51 2005-09-12 01:32:19 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -224,7 +224,7 @@ double AccountValue::RunOneBasis(e_run_basis const& a_Basis)
         && e_mdptbasis == a_Basis
         )
         {
-        hobsons_choice()
+        fatal_error()
             << "Midpoint basis defined only for illustration-reg ledger."
             << LMI_FLUSH
             ;
@@ -810,7 +810,7 @@ double AccountValue::IncrementBOM
         ||  daily_interest_accounting && !(28 <= days_in_policy_month && days_in_policy_month <= 31)
         )
         {
-        hobsons_choice()
+        fatal_error()
             << "Expected year = "  << Year
             << "; actual year is  " << year << ".\n"
             << "Expected month = " << Month
@@ -911,9 +911,8 @@ void AccountValue::ApplyDynamicMandE(double assets)
             }
         case e_mdptbasis:
             {
-            hobsons_choice()
-                << "ApplyDynamicMandE(): dynamic M&E"
-                << " not supported with midpoint expense basis."
+            fatal_error()
+                << "Dynamic M&E not supported with midpoint expense basis."
                 << LMI_FLUSH
                 ;
             }
@@ -938,9 +937,8 @@ void AccountValue::ApplyDynamicMandE(double assets)
     YearsSepAcctIMFRate   = TieredCharges_->tiered_investment_management_fee(assets);
     if(0.0 != YearsSepAcctIMFRate)
         {
-        hobsons_choice()
-            << "Tiered investment management fee unimplemented. "
-            << "The illustration will be incorrect."
+        fatal_error()
+            << "Tiered investment management fee unimplemented."
             << LMI_FLUSH
             ;
         }
@@ -951,9 +949,8 @@ void AccountValue::ApplyDynamicMandE(double assets)
             ;
     if(0.0 != YearsSepAcctABCRate)
         {
-        hobsons_choice()
-            << "Tiered asset-based compensation unimplemented. "
-            << "The illustration will be incorrect."
+        fatal_error()
+            << "Tiered asset-based compensation unimplemented."
             << LMI_FLUSH
             ;
         }
@@ -1047,10 +1044,10 @@ void AccountValue::ApplyDynamicSepAcctLoadAMD(double assets, double cumpmts)
             break;
         case e_mdptbasis:
             {
-            hobsons_choice()
-                << "ApplyDynamicSepAcctLoadAMD(): dynamic sep acct load"
-                << " not supported with midpoint expense basis, because"
-                << " variable products are not subject to illustration reg."
+            fatal_error()
+                << "Dynamic separate-account load not supported with "
+                << "midpoint expense basis, because variable products "
+                << "are not subject to the illustration reg."
                 << LMI_FLUSH
                 ;
             }
@@ -1095,9 +1092,8 @@ void AccountValue::ApplyDynamicSepAcctLoadAMD(double assets, double cumpmts)
         }
     if(0.0 != tiered_comp)
         {
-        hobsons_choice()
-            << "Tiered asset-based compensation unimplemented. "
-            << "The illustration will be incorrect."
+        fatal_error()
+            << "Tiered asset-based compensation unimplemented."
             << LMI_FLUSH
             ;
         }

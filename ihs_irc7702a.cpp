@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_irc7702a.cpp,v 1.4 2005-08-22 14:49:13 chicares Exp $
+// $Id: ihs_irc7702a.cpp,v 1.5 2005-09-12 01:32:19 chicares Exp $
 
 // TODO ?? Make this a server app. Consider where to store DB, SA history.
 
@@ -424,7 +424,7 @@ bool Irc7702A::UpdateEOM7702A()
 //============================================================================
 // Process 1035 exchange as material change
 // TODO ?? Unnecessary premium tested later, not here?
-// TODO ?? Seccond argument won't be needed after we redo class AccountValue?
+// TODO ?? Second argument won't be needed after we redo class AccountValue.
 void Irc7702A::Update1035Exch7702A
     (double& a_DeemedCashValue
     ,double  a_Net1035Amount
@@ -716,7 +716,7 @@ double Irc7702A::UpdatePmt7702A
 /* TODO ?? Reenable after testing.
             if(e_reduce_prem == AvoidMec)
                 {
-                hobsons_choice()
+                warning()
                     << "Failed to avoid MEC by reducing premium."
                     << LMI_FLUSH
                     ;
@@ -788,13 +788,13 @@ double Irc7702A::UpdatePmt7702A
 //============================================================================
 // record and test monthly Bfts
 double Irc7702A::UpdateBft7702A
-    (double // a_DeemedCashValue // TODO ?? not used
+    (double // a_DeemedCashValue // TODO ?? Not used.
     ,double  a_NewDB
     ,double  a_OldDB
     ,bool    a_IsInCorridor
     ,double  a_NewSA
     ,double  a_OldSA
-    ,double  // a_CashValue // TODO ?? not used
+    ,double  // a_CashValue // TODO ?? Not used.
     )
 {
     if(Ignore || IsMec)
@@ -886,7 +886,7 @@ double Irc7702A::UpdateBft7702A
 // recalculate 7pp and apply retroactively to beginning of 7 yr period
 void Irc7702A::TestBftDecrease(double a_NewBft)
 {
-    // TODO ?? Is AssumedBft always = LowestBft?
+    // TODO ?? Is AssumedBft always equal to LowestBft?
 
     // Bfts reductions during any seven-year test period need to be tested.
     // In addition, only for second-to-die (but not first-to-die) contracts,
@@ -954,7 +954,7 @@ void Irc7702A::TestBftDecrease(double a_NewBft)
         // to becoming a MEC in a past year, then we didn't add all the
         // payments together; but we don't need to, since we're a MEC
         // and the cumulative payments are no longer relevant.
-        hobsons_choice()
+        fatal_error()
             << "Cumulative premium during most recent seven-pay period"
             << " should be " << CumPmts
             << " but is " << cum_prem
@@ -1059,7 +1059,7 @@ void Irc7702A::Determine7PP
 {
     // We always treat payment of unnecessary premium as a material change
     // So this test is unnecessary; so is the parm in the conditional.
-    // TODO ?? NO LONGER TRUE
+    // TODO ?? NO LONGER TRUE.
     if(a_TriggeredByUnnecPrem)
         {
         LMI_ASSERT(a_TriggeredByMatChg);

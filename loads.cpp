@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: loads.cpp,v 1.5 2005-09-03 23:55:43 chicares Exp $
+// $Id: loads.cpp,v 1.6 2005-09-12 01:32:19 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -428,7 +428,7 @@ void Loads::Init
             < monthly_policy_fee_[e_currbasis][j]
             )
             {
-            hobsons_choice()
+            fatal_error()
                 << "Duration "
                 << j
                 << ": current monthly policy fee "
@@ -437,7 +437,7 @@ void Loads::Init
                 << details.VectorExtraPolFee_[j]
                 << ") improperly exceeds guaranteed maximum of "
                 << monthly_policy_fee_[e_guarbasis][j]
-                << " so the illustration will be incorrect."
+                << " ."
                 << LMI_FLUSH
                 ;
             }

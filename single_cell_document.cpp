@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: single_cell_document.cpp,v 1.3 2005-03-26 01:34:18 chicares Exp $
+// $Id: single_cell_document.cpp,v 1.4 2005-09-12 01:32:19 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -28,6 +28,7 @@
 
 #include "single_cell_document.hpp"
 
+#include "alert.hpp"
 #include "inputillus.hpp"
 #include "xmlwrapp_ex.hpp"
 
@@ -38,8 +39,6 @@
 #include <xmlwrapp/tree_parser.h>
 
 #include <fstream>
-#include <sstream>
-#include <stdexcept>
 
 //============================================================================
 single_cell_document::single_cell_document()
@@ -90,15 +89,14 @@ void single_cell_document::parse(xml::tree_parser& parser)
 #endif // USING_CURRENT_XMLWRAPP not defined.
     if(xml_root_name() != root.get_name())
         {
-        std::ostringstream msg;
-        msg
+        fatal_error()
             << "XML node name is '"
             << root.get_name()
             << "' but '"
             << xml_root_name()
             << "' was expected."
+            << LMI_FLUSH
             ;
-        throw std::runtime_error(msg.str());
         }
 
 // COMPILER !! Borland doesn't find operator==() in ns xml.

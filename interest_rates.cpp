@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: interest_rates.cpp,v 1.8 2005-09-03 23:55:43 chicares Exp $
+// $Id: interest_rates.cpp,v 1.9 2005-09-12 01:32:19 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -685,10 +685,7 @@ void InterestRates::InitializeLoanRates()
             );
         if(NeedPrefLoanRates_)
             {
-            hobsons_choice()
-                << "Preferred loans not tested--almost certainly wrong."
-                << LMI_FLUSH
-                ;
+            fatal_error() << "Preferred loans not implemented." << LMI_FLUSH;
             convert_interest_rates
                 (PrfLnDueRate_[e_annual_rate][j]
                 ,PrfLnDueRate_[e_annual_rate ][j]
@@ -851,7 +848,7 @@ void InterestRates::DynamicMlySepAcctRate
             break;
         case e_netrate:
             {
-            hobsons_choice() << "Net rate not supported." << LMI_FLUSH;
+            fatal_error() << "Net rate not supported." << LMI_FLUSH;
             }
             break;
         default:

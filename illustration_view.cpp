@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustration_view.cpp,v 1.21 2005-08-04 02:20:13 chicares Exp $
+// $Id: illustration_view.cpp,v 1.22 2005-09-12 01:32:19 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -69,8 +69,6 @@
 #include <fstream>
 #include <ios>
 #include <locale>
-#include <sstream>
-#include <stdexcept>
 
 IMPLEMENT_DYNAMIC_CLASS(IllustrationView, ViewEx)
 
@@ -171,9 +169,10 @@ wxMenuBar* IllustrationView::MenuBar() const
     wxMenuBar* menu_bar = MenuBarFromXmlResource("illustration_view_menu");
     if(!menu_bar)
         {
-//        wxLogError("Unable to load 'illustration_view_menu'.");
-//        wxLog::FlushActive();
-        throw std::runtime_error("Unable to load 'illustration_view_menu'.");
+        fatal_error()
+            << "Unable to load 'illustration_view_menu'."
+            << LMI_FLUSH
+            ;
         };
     return menu_bar;
 }
