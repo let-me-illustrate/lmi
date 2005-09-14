@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: alert_cli.cpp,v 1.3 2005-08-03 14:44:45 chicares Exp $
+// $Id: alert_cli.cpp,v 1.4 2005-09-14 14:16:30 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -88,10 +88,10 @@ void hobsons_choice_alert(std::string const& s)
     //   configurable_settings::instance().offer_hobsons_choice()
     // if desired; otherwise, if this alternative behavior is never
     // useful, then this code should be removed.
-    std::cerr << s << '\n' << hobsons_prompt << std::endl;
-    if(!continue_anyway())
+    std::cerr << s << '\n' << hobsons_prompt() << std::endl;
+    if(continue_anyway())
         {
-        throw std::runtime_error(s);
+        throw hobsons_choice_exception();
         }
 #endif // 0
 }

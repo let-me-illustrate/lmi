@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: alert.hpp,v 1.5 2005-08-02 22:30:41 chicares Exp $
+// $Id: alert.hpp,v 1.6 2005-09-14 14:16:30 chicares Exp $
 
 #ifndef alert_hpp
 #define alert_hpp
@@ -32,6 +32,7 @@
 // to modules that use the LMI_ASSERT macro.
 #include <ostream>
 #include <string>
+#include <exception>
 
 /// Print user messages in a manner appropriate to the interface and
 /// platform by writing to the std::ostreams these functions return.
@@ -168,7 +169,34 @@ bool LMI_EXPIMP set_alert_functions
 /// probably should fail and write a message in a log file.
 
 std::string const& LMI_EXPIMP hobsons_prompt();
-std::ostream& LMI_EXPIMP hobsons_prompt(std::ostream&);
+
+/// Rejecting Hobson's Choice throws a distinctive exception. Design
+/// intention: a user interface can catch this and take appropriate
+/// action immediately without displaying the diagnostic again. For
+/// example, suppose a GUI has a catch-all exception handler that
+/// displays a messagebox. When a different messagebox offers Hobson's
+/// Choice and the user wisely elects safe resumption, this special
+/// exception can be thrown--and caught in a special handler that
+/// doesn't pop up the catch-all messagebox, which would seem
+/// redundant.
+
+class LMI_EXPIMP hobsons_choice_exception
+    :public std::exception
+{
+  public:
+    hobsons_choice_exception();
+};
+
+/// Functions for testing, intended to be implemented in a shared
+/// library to demonstrate that alerts can be raised there and
+/// processed in the main application.
+
+void LMI_EXPIMP test_status();
+void LMI_EXPIMP test_warning();
+void LMI_EXPIMP test_hobsons_choice();
+void LMI_EXPIMP test_fatal_error();
+void LMI_EXPIMP test_standard_exception();
+void LMI_EXPIMP test_arbitrary_exception();
 
 /// Write file name and line number to diagnostic stream, and flush.
 
