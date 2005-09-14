@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: objects.make,v 1.51 2005-09-12 01:32:19 chicares Exp $
+# $Id: objects.make,v 1.52 2005-09-14 14:16:26 chicares Exp $
 
 ################################################################################
 
@@ -104,12 +104,13 @@ xmlwrapp_objects += xmlwrapp_ex.o
 
 ################################################################################
 
-# All command-line-interface programs use a common 'main.o', which
-# catches exceptions and performs certain default initialization.
-# They should use this variable in their object lists unless some of
-# these objects are included in libraries they already use.
+# All non-wx auxiliary programs built here (other than illustration
+# systems) share a common main() implementation that performs certain
+# default initialization and catches and handles exceptions. They
+# should use this variable in their object lists unless some of these
+# objects are included in libraries they already use.
 
-main_cli_common_objects := \
+main_auxiliary_common_objects := \
   alert.o \
   alert_cli.o \
   fenv_lmi.o \
@@ -636,14 +637,14 @@ zero_test$(EXEEXT): \
 # Custom tools built from source.
 
 elapsed_time$(EXEEXT): \
-  $(main_cli_common_objects) \
+  $(main_auxiliary_common_objects) \
   elapsed_time.o \
   system_command.o \
   timer.o \
 
 generate_passkey$(EXEEXT): \
   $(boost_filesystem_objects) \
-  $(main_cli_common_objects) \
+  $(main_auxiliary_common_objects) \
   calendar_date.o \
   generate_passkey.o \
   md5.o \
@@ -651,7 +652,7 @@ generate_passkey$(EXEEXT): \
   system_command.o \
 
 ihs_crc_comp$(EXEEXT): \
-  $(main_cli_common_objects) \
+  $(main_auxiliary_common_objects) \
   ihs_crc_comp.o \
 
 ################################################################################
@@ -665,7 +666,7 @@ ihs_crc_comp$(EXEEXT): \
 product_files$(EXEEXT): lmi_dllflag := -DLMI_USE_DLL
 
 product_files$(EXEEXT): \
-  $(main_cli_common_objects) \
+  $(main_auxiliary_common_objects) \
   generate_product_files.o \
   my_db.o \
   my_fund.o \
