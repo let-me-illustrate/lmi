@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: alert.cpp,v 1.3 2005-02-28 12:58:01 chicares Exp $
+// $Id: alert.cpp,v 1.4 2005-09-14 14:16:30 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -203,14 +203,42 @@ std::ostream& fatal_error()
 std::string const& hobsons_prompt()
 {
     static std::string s
-        ("Attempt to continue, probably with erroneous results?"
+        ("Stop the current operation and attempt to resume safely?"
         );
     return s;
 }
 
-std::ostream& hobsons_prompt(std::ostream& os)
+hobsons_choice_exception::hobsons_choice_exception()
 {
-    os << hobsons_prompt();
-    return os;
+}
+
+void LMI_EXPIMP test_status()
+{
+    status()         << "Test status()"         << LMI_FLUSH;
+}
+
+void LMI_EXPIMP test_warning()
+{
+    warning()        << "Test warning()"        << LMI_FLUSH;
+}
+
+void LMI_EXPIMP test_hobsons_choice()
+{
+    hobsons_choice() << "Test hobsons_choice()" << LMI_FLUSH;
+}
+
+void LMI_EXPIMP test_fatal_error()
+{
+    fatal_error()    << "Test fatal_error()"    << LMI_FLUSH;
+}
+
+void LMI_EXPIMP test_standard_exception()
+{
+    throw std::runtime_error("Test a standard exception.");
+}
+
+void LMI_EXPIMP test_arbitrary_exception()
+{
+    throw "Test an arbitrary exception.";
 }
 

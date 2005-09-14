@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_wx.cpp,v 1.20 2005-08-05 17:02:30 chicares Exp $
+// $Id: main_wx.cpp,v 1.21 2005-09-14 14:16:30 chicares Exp $
 
 // Portions of this file are derived from wxWindows files
 //   samples/docvwmdi/docview.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -199,6 +199,10 @@ int WINAPI WinMain
 #endif // __WXMSW__ defined.
 
         return result;
+        }
+    catch(hobsons_choice_exception&)
+        {
+        return EXIT_FAILURE;
         }
     catch(std::exception& e)
         {
@@ -563,6 +567,10 @@ bool lmi_wx_app::OnExceptionInMainLoop()
         // exception be thrown from the same dll that caught it. This
         // works only with a 'monolithic' wx dll.
         return wxAppConsole::OnExceptionInMainLoop();
+        }
+    catch(hobsons_choice_exception&)
+        {
+        return EXIT_FAILURE;
         }
     catch(std::exception& e)
         {
