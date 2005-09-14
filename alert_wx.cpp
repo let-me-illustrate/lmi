@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: alert_wx.cpp,v 1.3 2005-08-05 17:02:30 chicares Exp $
+// $Id: alert_wx.cpp,v 1.4 2005-09-14 14:16:30 chicares Exp $
 
 // TODO ?? Once this facility is tested, consider using it widely,
 // perhaps instead of using wx's logging classes directly at all.
@@ -93,34 +93,35 @@ void hobsons_choice_alert(std::string const& s)
         {
         int rc = wxMessageBox
             (s.c_str()
-            ,"Stop the current operation and attempt to resume safely?"
+            ,hobsons_prompt()
             ,wxYES_NO | wxICON_QUESTION
             ,wxTheApp->GetTopWindow()
             );
         if(wxYES == rc)
             {
-            throw std::runtime_error(s);
+            throw hobsons_choice_exception();
             }
         else
             {
+            // TODO ?? Is it a really good idea to offer an option
+            // that it's probably foolish to decline, then rebuke
+            // the user for choosing it?
             wxMessageBox
                 (s.c_str()
                 ,"Warning: the illustration may be invalid."
-                ,wxYES_NO | wxICON_QUESTION
+                ,wxOK | wxICON_EXCLAMATION
                 ,wxTheApp->GetTopWindow()
                 );
             }
         }
     else
         {
-// TODO ?? expunge?        wxLogError(s.c_str());
         throw std::runtime_error(s);
         }
 }
 
 void fatal_error_alert(std::string const& s)
 {
-// TODO ?? expunge?    wxLogError(s.c_str());
     throw std::runtime_error(s);
 }
 

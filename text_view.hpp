@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: text_view.hpp,v 1.5 2005-08-05 17:02:30 chicares Exp $
+// $Id: text_view.hpp,v 1.6 2005-09-14 14:16:30 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.h (C) 1998 Julian Smart and Markus Holzem
@@ -68,11 +68,21 @@ class TextEditView
     virtual wxIcon Icon() const;
     virtual wxMenuBar* MenuBar() const;
 
-    void OnTestStatus       (wxCommandEvent&);
-    void OnTestWarning      (wxCommandEvent&);
-    void OnTestHobsons      (wxCommandEvent&);
-    void OnTestFatal        (wxCommandEvent&);
-    void OnTestException    (wxCommandEvent&);
+    // Test alerts from application.
+    void OnTestAppStatus             (wxCommandEvent&);
+    void OnTestAppWarning            (wxCommandEvent&);
+    void OnTestAppHobsons            (wxCommandEvent&);
+    void OnTestAppFatal              (wxCommandEvent&);
+    void OnTestAppStandardException  (wxCommandEvent&);
+    void OnTestAppArbitraryException (wxCommandEvent&);
+
+    // Test alerts from shared library.
+    void OnTestLibStatus             (wxCommandEvent&);
+    void OnTestLibWarning            (wxCommandEvent&);
+    void OnTestLibHobsons            (wxCommandEvent&);
+    void OnTestLibFatal              (wxCommandEvent&);
+    void OnTestLibStandardException  (wxCommandEvent&);
+    void OnTestLibArbitraryException (wxCommandEvent&);
 
     wxTextCtrl* text_window_;
 

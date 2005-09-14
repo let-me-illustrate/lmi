@@ -24,7 +24,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: menus.xrc,v 1.5 2005-08-05 17:02:30 chicares Exp $
+    $Id: menus.xrc,v 1.6 2005-09-14 14:16:30 chicares Exp $
 -->
 
 <!-- reusable menus -->
@@ -387,21 +387,48 @@ Not supported yet: need to split columns into multiple pages.
         </object>
     </object>
     <object class="wxMenu" name="text_edit">
-        <label>_Text</label>
-        <object class="wxMenuItem" name="test_status_alert">
-            <label>Test _status-bar alert</label>
+        <label>_Test</label>
+        <object class="wxMenu">
+            <label>Test alerts from _application</label>
+            <object class="wxMenuItem" name="test_app_status_alert">
+                <label>Test _status-bar alert</label>
+            </object>
+            <object class="wxMenuItem" name="test_app_warning_alert">
+                <label>Test _warning alert</label>
+            </object>
+            <object class="wxMenuItem" name="test_app_hobsons_choice_alert">
+                <label>Test _hobsons-choice alert</label>
+            </object>
+            <object class="wxMenuItem" name="test_app_fatal_error_alert">
+                <label>Test _fatal-error alert</label>
+            </object>
+            <object class="wxMenuItem" name="test_app_standard_exception">
+                <label>Test standard _exception</label>
+            </object>
+            <object class="wxMenuItem" name="test_app_arbitrary_exception">
+                <label>Test _arbitrary exception</label>
+            </object>
         </object>
-        <object class="wxMenuItem" name="test_warning_alert">
-            <label>Test _warning alert</label>
-        </object>
-        <object class="wxMenuItem" name="test_hobsons_choice_alert">
-            <label>Test _hobsons-choice alert</label>
-        </object>
-        <object class="wxMenuItem" name="test_fatal_error_alert">
-            <label>Test _fatal-error alert</label>
-        </object>
-        <object class="wxMenuItem" name="test_exception">
-            <label>Test _exception</label>
+        <object class="wxMenu">
+            <label>Test alerts from _shared library</label>
+            <object class="wxMenuItem" name="test_lib_status_alert">
+                <label>Test _status-bar alert</label>
+            </object>
+            <object class="wxMenuItem" name="test_lib_warning_alert">
+                <label>Test _warning alert</label>
+            </object>
+            <object class="wxMenuItem" name="test_lib_hobsons_choice_alert">
+                <label>Test _hobsons-choice alert</label>
+            </object>
+            <object class="wxMenuItem" name="test_lib_fatal_error_alert">
+                <label>Test _fatal-error alert</label>
+            </object>
+            <object class="wxMenuItem" name="test_lib_standard_exception">
+                <label>Test standard _exception</label>
+            </object>
+            <object class="wxMenuItem" name="test_lib_arbitrary_exception">
+                <label>Test _arbitrary exception</label>
+            </object>
         </object>
     </object>
     <object_ref name="window_menu" ref="window_menu_ref"/>
