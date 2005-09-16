@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avmly.cpp,v 1.25 2005-09-12 01:32:19 chicares Exp $
+// $Id: ihs_avmly.cpp,v 1.26 2005-09-16 03:26:28 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -2418,6 +2418,11 @@ double AccountValue::DetermineAcctValLoadBOM()
 // reason to stand alone; probably it should be merged into
 // TxTakeSepAcctLoad(), and then much of the work should be deferred
 // to a (new) member function of the loads class.
+//
+// TODO ?? Furthermore, it causes the monthly detail to display a
+// value that does not reflect the dynamic calculation in
+// AccountValue::TxTakeSepAcctLoad().
+//
 //============================================================================
 double AccountValue::DetermineAcctValLoadAMD()
 {
