@@ -24,7 +24,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: xml_notebook.xrc,v 1.18 2005-09-14 18:54:03 chicares Exp $
+    $Id: xml_notebook.xrc,v 1.19 2005-09-16 17:33:31 chicares Exp $
 
     This version is generic. It strives to present every input field
     the system offers, in a way that suits the main developer's tastes.
@@ -1665,8 +1665,6 @@ here, but it looks weird if we don't make this look like its siblings.
                                     <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
                                     <object class="wxFlexGridSizer">
                                         <cols>1</cols>
-                                        <growablecols></growablecols>
-                                        <growablerows></growablerows>
                                         <object class="sizeritem">
                                             <flag>wxALIGN_CENTRE|wxALL</flag>
                                             <object class="wxRadioBox" name="DeprecatedSolveFromWhich">
@@ -1724,8 +1722,6 @@ here, but it looks weird if we don't make this look like its siblings.
                                     <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
                                     <object class="wxFlexGridSizer">
                                         <cols>1</cols>
-                                        <growablecols></growablecols>
-                                        <growablerows></growablerows>
                                         <object class="sizeritem">
                                             <flag>wxALIGN_CENTRE|wxALL</flag>
                                             <object class="wxRadioBox" name="DeprecatedSolveToWhich">
@@ -1783,8 +1779,6 @@ here, but it looks weird if we don't make this look like its siblings.
                                     <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
                                     <object class="wxFlexGridSizer">
                                         <cols>1</cols>
-                                        <growablecols></growablecols>
-                                        <growablerows></growablerows>
                                         <object class="sizeritem">
                                             <flag>wxALIGN_CENTRE|wxALL</flag>
                                             <object class="wxRadioBox" name="DeprecatedSolveTgtAtWhich">
@@ -1895,7 +1889,6 @@ here, but it looks weird if we don't make this look like its siblings.
                                     <object class="wxFlexGridSizer">
                                         <cols>2</cols>
                                         <growablecols>1</growablecols>
-                                        <growablerows></growablerows>
                                         <object class="sizeritem">
                                             <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
                                             <border>4</border>
@@ -1949,7 +1942,6 @@ here, but it looks weird if we don't make this look like its siblings.
             <object class="wxFlexGridSizer">
                 <cols>2</cols>
                 <growablecols>1</growablecols>
-                <growablerows></growablerows>
                 <object class="sizeritem">
                     <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
                     <border>4</border>
@@ -2013,7 +2005,6 @@ here, but it looks weird if we don't make this look like its siblings.
                                     <object class="wxFlexGridSizer">
                                         <cols>2</cols>
                                         <growablecols>1</growablecols>
-                                        <growablerows></growablerows>
                                         <object class="sizeritem">
                                             <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
                                             <border>4</border>
@@ -2055,31 +2046,39 @@ here, but it looks weird if we don't make this look like its siblings.
                     <border>4</border>
                     <object class="wxStaticBoxSizer">
                         <flag>wxGROW|wxALL</flag>
-                        <orient>wxVERTICAL</orient>
+                        <orient>wxHORIZONTAL</orient>
                         <label>First-year extra</label>
                         <object class="sizeritem">
                             <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
                             <border>4</border>
                             <object class="wxFlexGridSizer">
                                 <cols>3</cols>
+<!-- WX !! The only 'group box' in wx is wxStaticBoxSizer, and it can
+have only one orientation, either horizontal or vertical. Here, the
+orientation of the enclosing wxStaticBoxSizer determines which of
+'growablecols' or 'growablerows' can be used meaningfully, but one or
+the other is perforce ignored.
+                        <orient>wxVERTICAL</orient>
+-->
                                 <growablecols>1,2</growablecols>
-                                <growablerows>0,1,2,3,4</growablerows>
+                                <growablerows>1,4</growablerows>
                                 <object class="sizeritem">
                                     <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxLEFT</flag>
                                     <border>4</border>
                                     <object class="wxStaticText">
-                                        <label></label>
+                                        <!-- No label, by design. -->
                                     </object>
                                 </object>
                                 <object class="sizeritem">
-                                    <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxLEFT</flag>
+                                    <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxALL</flag>
                                     <border>4</border>
                                     <object class="wxStaticText">
                                         <label>Dumpin </label>
                                     </object>
                                 </object>
                                 <object class="sizeritem">
-                                    <flag>wxGROW</flag>
+                                    <flag>wxGROW|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxLEFT</flag>
+                                    <border>4</border>
                                     <object class="wxTextCtrl" name="Dumpin">
                                         <size>10,-1</size>
                                     </object>
@@ -2088,21 +2087,21 @@ here, but it looks weird if we don't make this look like its siblings.
                                     <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxLEFT</flag>
                                     <border>4</border>
                                     <object class="wxStaticText">
-                                        <label>1035</label>
+                                        <!-- No label, by design. -->
                                     </object>
                                 </object>
                                 <object class="sizeritem">
-                                    <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxLEFT</flag>
+                                    <flag>wxALIGN_LEFT|wxALIGN_BOTTOM|wxALL</flag>
                                     <border>4</border>
                                     <object class="wxStaticText">
-                                        <label>external </label>
+                                        <label>External 1035 exchange</label>
                                     </object>
                                 </object>
                                 <object class="sizeritem">
-                                    <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxLEFT</flag>
+                                    <flag>wxALIGN_LEFT|wxALIGN_BOTTOM|wxALL</flag>
                                     <border>4</border>
                                     <object class="wxStaticText">
-                                        <label>internal </label>
+                                        <label>Internal 1035 exchange</label>
                                     </object>
                                 </object>
                                 <object class="sizeritem">
@@ -2113,13 +2112,15 @@ here, but it looks weird if we don't make this look like its siblings.
                                     </object>
                                 </object>
                                 <object class="sizeritem">
-                                    <flag>wxGROW</flag>
+                                    <flag>wxGROW|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxLEFT</flag>
+                                    <border>4</border>
                                     <object class="wxTextCtrl" name="External1035ExchangeAmount">
                                         <size>10,-1</size>
                                     </object>
                                 </object>
                                 <object class="sizeritem">
-                                    <flag>wxGROW</flag>
+                                    <flag>wxGROW|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxLEFT</flag>
+                                    <border>4</border>
                                     <object class="wxTextCtrl" name="Internal1035ExchangeAmount">
                                         <size>10,-1</size>
                                     </object>
@@ -2132,13 +2133,15 @@ here, but it looks weird if we don't make this look like its siblings.
                                     </object>
                                 </object>
                                 <object class="sizeritem">
-                                    <flag>wxGROW</flag>
+                                    <flag>wxGROW|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxLEFT</flag>
+                                    <border>4</border>
                                     <object class="wxTextCtrl" name="External1035ExchangeBasis">
                                         <size>10,-1</size>
                                     </object>
                                 </object>
                                 <object class="sizeritem">
-                                    <flag>wxGROW</flag>
+                                    <flag>wxGROW|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxLEFT</flag>
+                                    <border>4</border>
                                     <object class="wxTextCtrl" name="Internal1035ExchangeBasis">
                                         <size>10,-1</size>
                                     </object>
@@ -2147,21 +2150,21 @@ here, but it looks weird if we don't make this look like its siblings.
                                     <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxLEFT</flag>
                                     <border>4</border>
                                     <object class="wxStaticText">
-                                        <label></label>
+                                        <!-- No label, by design. -->
                                     </object>
                                 </object>
                                 <object class="sizeritem">
                                     <flag>wxALIGN_LEFT|wxALL</flag>
                                     <border>4</border>
                                     <object class="wxCheckBox" name="External1035ExchangeFromMec">
-                                        <label>From MEC</label>
+                                        <label>from MEC</label>
                                     </object>
                                 </object>
                                 <object class="sizeritem">
                                     <flag>wxALIGN_LEFT|wxALL</flag>
                                     <border>4</border>
                                     <object class="wxCheckBox" name="Internal1035ExchangeFromMec">
-                                        <label>From MEC</label>
+                                        <label>from MEC</label>
                                     </object>
                                 </object>
                             </object>
@@ -2176,7 +2179,6 @@ here, but it looks weird if we don't make this look like its siblings.
             <object class="wxFlexGridSizer">
                 <cols>2</cols>
                 <growablecols>1</growablecols>
-                <growablerows></growablerows>
                 <object class="sizeritem">
                     <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
                     <border>4</border>
@@ -2409,7 +2411,6 @@ here, but it looks weird if we don't make this look like its siblings.
             <object class="wxFlexGridSizer">
                 <cols>2</cols>
                 <growablecols>1</growablecols>
-                <growablerows></growablerows>
                 <object class="sizeritem">
                     <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
                     <border>4</border>
