@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.144 2005-09-16 03:26:43 chicares Exp $
+// $Id: ChangeLog,v 1.145 2005-09-16 17:33:31 chicares Exp $
 
 MAINTENANCE
 
@@ -3666,4 +3666,9 @@ Add a new 'ExperienceRatingInitialKFactor' field.
 
   ihs_avmly.cpp
 Mark a newly-discovered defect.
+
+20050916T1733Z <chicares@cox.net> [1270]
+
+  xml_notebook.xrc
+Improve layout of first-year extra premium.
 
