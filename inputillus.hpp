@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: inputillus.hpp,v 1.5 2005-09-08 23:03:45 chicares Exp $
+// $Id: inputillus.hpp,v 1.6 2005-09-17 04:05:10 chicares Exp $
 
 #ifndef inputillus_hpp
 #define inputillus_hpp
@@ -122,6 +122,8 @@ class LMI_EXPIMP IllusInputParms
     std::string CurrentCoiMultiplier;
     std::string CurrentCoiGrading;
     std::string CashValueEnhancementRate;
+    std::string NetMortalityChargeHistory;
+
     std::string CorpTaxBracket;
     std::string IndvTaxBracket;
     std::string ProjectedSalary;

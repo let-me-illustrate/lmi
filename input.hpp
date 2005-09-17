@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input.hpp,v 1.5 2005-06-26 23:01:43 chicares Exp $
+// $Id: input.hpp,v 1.6 2005-09-17 04:05:09 chicares Exp $
 
 #ifndef input_hpp
 #define input_hpp
@@ -169,7 +169,9 @@ class Input
     mce_interest_rate_type   SeparateAccountRateType         ;
     tnr_proportion           LoanRate                        ;
     mce_loan_rate_type       LoanRateType                    ;
+    tnr_nonnegative_double   ExperienceRatingInitialKFactor  ;
     tnr_proportion           ExperienceReserveRate           ;
+    tnr_unrestricted_double  InforceExperienceReserve        ;
     mce_yes_or_no            OverrideExperienceReserveRate   ;
     mce_yes_or_no            WithdrawToBasisThenLoan         ;
     mce_yes_or_no            UseAverageOfAllFunds            ;
@@ -290,6 +292,7 @@ class Input
     datum_sequence           SpecamtHistory                  ;
     datum_sequence           FundAllocations                 ; // TODO ?? Needs work.
     datum_sequence           CashValueEnhancementRate        ;
+    datum_sequence           NetMortalityChargeHistory       ;
 
     mce_yes_or_no            CreateSupplementalReport        ;
     mce_report_column        SupplementalReportColumn00      ;

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_harmonization.cpp,v 1.14 2005-09-08 23:03:45 chicares Exp $
+// $Id: input_harmonization.cpp,v 1.15 2005-09-17 04:05:09 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -289,6 +289,7 @@ void Input::Harmonize()
 
     bool enable_experience_rating =
             database->Query(DB_AllowExpRating)
+        &&  !is_subject_to_ill_reg(database->Query(DB_LedgerType))
         &&  part_mort_used
         &&  mce_month_by_month == RunOrder
         ;
@@ -297,6 +298,10 @@ void Input::Harmonize()
     // TODO ?? These shouldn't need to depend on 'enable_experience_rating';
     // instead, 'UseExperienceRating' should be transmogrified if it's not
     // enabled.
+    ExperienceRatingInitialKFactor.enable
+        (   enable_experience_rating
+        &&  "Yes" == UseExperienceRating
+        );
     OverrideExperienceReserveRate.enable
         (   enable_experience_rating
         &&  "Yes" == UseExperienceRating
@@ -305,6 +310,14 @@ void Input::Harmonize()
         (   enable_experience_rating
         &&  "Yes" == UseExperienceRating
         &&  "Yes" == OverrideExperienceReserveRate
+        );
+    InforceExperienceReserve.enable
+        (   enable_experience_rating
+        &&  "Yes" == UseExperienceRating
+        );
+    NetMortalityChargeHistory.enable
+        (   enable_experience_rating
+        &&  "Yes" == UseExperienceRating
         );
 
     IssueAge        .enable("No"  == DeprecatedUseDOB);
