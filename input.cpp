@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input.cpp,v 1.7 2005-06-14 00:19:40 chicares Exp $
+// $Id: input.cpp,v 1.8 2005-09-17 04:05:09 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -162,7 +162,9 @@ void Input::ascribe_members()
     ascribe("SeparateAccountRateType"               , &Input::SeparateAccountRateType               );
     ascribe("LoanRate"                              , &Input::LoanRate                              );
     ascribe("LoanRateType"                          , &Input::LoanRateType                          );
+    ascribe("ExperienceRatingInitialKFactor"        , &Input::ExperienceRatingInitialKFactor        );
     ascribe("ExperienceReserveRate"                 , &Input::ExperienceReserveRate                 );
+    ascribe("InforceExperienceReserve"              , &Input::InforceExperienceReserve              );
     ascribe("OverrideExperienceReserveRate"         , &Input::OverrideExperienceReserveRate         );
     ascribe("WithdrawToBasisThenLoan"               , &Input::WithdrawToBasisThenLoan               );
     ascribe("UseAverageOfAllFunds"                  , &Input::UseAverageOfAllFunds                  );
@@ -283,6 +285,7 @@ void Input::ascribe_members()
     ascribe("SpecamtHistory"                        , &Input::SpecamtHistory                        );
     ascribe("FundAllocations"                       , &Input::FundAllocations                       );
     ascribe("CashValueEnhancementRate"              , &Input::CashValueEnhancementRate              );
+    ascribe("NetMortalityChargeHistory"             , &Input::NetMortalityChargeHistory             );
 
     ascribe("CreateSupplementalReport"              , &Input::CreateSupplementalReport              );
     ascribe("SupplementalReportColumn00"            , &Input::SupplementalReportColumn00            );
@@ -341,6 +344,22 @@ void convert_to_ihs(IllusInputParms& ihs, Input const& lmi)
         try
             {
             ihs[*i] = lmi[*i].str();
+/*
+// TODO ?? Track down a defect here: floating-point input truncated to integer?
+            if("InforceGeneralAccountValue" == *i)
+                {
+                warning()
+                    << "InforceGeneralAccountValue:"
+                    << "\nfrom lmi: " << lmi[*i]
+                    << "\nihs: " << value_cast<std::string>(ihs[*i])
+                    << "\nlmi: " << value_cast<std::string>(lmi[*i])
+                    << LMI_FLUSH
+                    ;
+                }
+// Look for this line
+//        operator[](node_tag) = content;
+// in 'inputillus_xml_io.cpp'....
+*/
             }
         catch(...)
             {
@@ -380,6 +399,19 @@ void convert_from_ihs(IllusInputParms const& ihs, Input& lmi)
         try
             {
             lmi[*i] = ihs[*i].str();
+/*
+// TODO ?? Track down a defect here: floating-point input truncated to integer?
+            if("InforceGeneralAccountValue" == *i)
+                {
+                warning()
+                    << "InforceGeneralAccountValue:"
+                    << "\nfrom ihs: " << ihs[*i]
+                    << "\nihs: " << value_cast<std::string>(ihs[*i])
+                    << "\nlmi: " << value_cast<std::string>(lmi[*i])
+                    << LMI_FLUSH
+                    ;
+                }
+*/
             }
         catch(...)
             {
