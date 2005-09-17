@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: inputs.hpp,v 1.6 2005-08-28 14:23:41 chicares Exp $
+// $Id: inputs.hpp,v 1.7 2005-09-17 04:05:10 chicares Exp $
 
 #ifndef inputs_hpp
 #define inputs_hpp
@@ -145,10 +145,12 @@ class LMI_EXPIMP InputParms
     r_loan_int_rate      LoanIntRate          ;
     e_loan_rate_type     LoanRateType         ;
 
+    r_nonnegative_double ExperienceRatingInitialKFactor;
     // TODO ?? Either this should have a distinct type, or the type
     // used should be generalized, e.g., to mean any positive interest
     // rate.
     r_loan_int_rate      ExperienceReserveRate;
+    r_unchecked_double   InforceExperienceReserve;
     e_yes_or_no          OverrideExperienceReserveRate;
 
     e_yes_or_no          PayLoanInt           ; // Pay loan interest in cash

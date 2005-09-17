@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.145 2005-09-16 17:33:31 chicares Exp $
+// $Id: ChangeLog,v 1.146 2005-09-17 04:05:10 chicares Exp $
 
 MAINTENANCE
 
@@ -3671,4 +3671,24 @@ Mark a newly-discovered defect.
 
   xml_notebook.xrc
 Improve layout of first-year extra premium.
+
+20050917T0405Z <chicares@cox.net> [1272]
+
+  tn_range_type_trammels.hpp
+  tn_range_types.cpp
+  tn_range_types.hpp
+Add unrestricted double type.
+
+  input.cpp
+  input.hpp
+  input_harmonization.cpp
+  inputillus.cpp
+  inputillus.hpp
+  inputs.cpp
+  inputs.hpp
+Add new experience-rating input fields.
+
+  ihs_acctval.cpp
+  ihs_basicval.cpp
+Forbid certain conflicts.
 

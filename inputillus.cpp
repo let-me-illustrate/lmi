@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: inputillus.cpp,v 1.13 2005-09-12 01:32:19 chicares Exp $
+// $Id: inputillus.cpp,v 1.14 2005-09-17 04:05:10 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -48,6 +48,7 @@ IllusInputParms::IllusInputParms()
     ,CurrentCoiMultiplier             ("1")
     ,CurrentCoiGrading                ("0")
     ,CashValueEnhancementRate         ("0")
+    ,NetMortalityChargeHistory        ("0")
     ,CorpTaxBracket                   ("0")
     ,IndvTaxBracket                   ("0")
     ,ProjectedSalary                  ("100000")
@@ -125,6 +126,7 @@ IllusInputParms::IllusInputParms(IllusInputParms const& z)
     CurrentCoiMultiplier       = z.CurrentCoiMultiplier       ;
     CurrentCoiGrading          = z.CurrentCoiGrading          ;
     CashValueEnhancementRate   = z.CashValueEnhancementRate   ;
+    NetMortalityChargeHistory  = z.NetMortalityChargeHistory  ;
     CorpTaxBracket             = z.CorpTaxBracket             ;
     IndvTaxBracket             = z.IndvTaxBracket             ;
     ProjectedSalary            = z.ProjectedSalary            ;
@@ -230,6 +232,7 @@ IllusInputParms& IllusInputParms::operator=(IllusInputParms const& z)
     CurrentCoiMultiplier       = z.CurrentCoiMultiplier       ;
     CurrentCoiGrading          = z.CurrentCoiGrading          ;
     CashValueEnhancementRate   = z.CashValueEnhancementRate   ;
+    NetMortalityChargeHistory  = z.NetMortalityChargeHistory  ;
     CorpTaxBracket             = z.CorpTaxBracket             ;
     IndvTaxBracket             = z.IndvTaxBracket             ;
     ProjectedSalary            = z.ProjectedSalary            ;
@@ -341,6 +344,7 @@ if(z.Status_Smoking != z.Status[0].Smoking)
     if(CurrentCoiMultiplier       != z.CurrentCoiMultiplier      ) return false;
     if(CurrentCoiGrading          != z.CurrentCoiGrading         ) return false;
     if(CashValueEnhancementRate   != z.CashValueEnhancementRate  ) return false;
+    if(NetMortalityChargeHistory  != z.NetMortalityChargeHistory ) return false;
     if(CorpTaxBracket             != z.CorpTaxBracket            ) return false;
     if(IndvTaxBracket             != z.IndvTaxBracket            ) return false;
     if(ProjectedSalary            != z.ProjectedSalary           ) return false;
@@ -642,7 +646,9 @@ void IllusInputParms::ascribe_members()
     ascribe("SeparateAccountRateType"      , &IllusInputParms::IntRateTypeSA              );
     ascribe("LoanRate"                     , &IllusInputParms::LoanIntRate                ); // !
     ascribe("LoanRateType"                 , &IllusInputParms::LoanRateType               ); // !
+    ascribe("ExperienceRatingInitialKFactor",&IllusInputParms::ExperienceRatingInitialKFactor);
     ascribe("ExperienceReserveRate"        , &IllusInputParms::ExperienceReserveRate      );
+    ascribe("InforceExperienceReserve"     , &IllusInputParms::InforceExperienceReserve   );
     ascribe("OverrideExperienceReserveRate", &IllusInputParms::OverrideExperienceReserveRate);
     ascribe("PayLoanInterestInCash"        , &IllusInputParms::PayLoanInt                 );
     ascribe("WithdrawToBasisThenLoan"      , &IllusInputParms::WDToBasisThenLoan          );
@@ -751,6 +757,7 @@ void IllusInputParms::ascribe_members()
     ascribe("CurrentCoiMultiplier"         , &IllusInputParms::CurrentCoiMultiplier       );
     ascribe("CurrentCoiGrading"            , &IllusInputParms::CurrentCoiGrading          );
     ascribe("CashValueEnhancementRate"     , &IllusInputParms::CashValueEnhancementRate   );
+    ascribe("NetMortalityChargeHistory"    , &IllusInputParms::NetMortalityChargeHistory  );
     ascribe("CorporationTaxBracket"        , &IllusInputParms::CorpTaxBracket             );
     ascribe("TaxBracket"                   , &IllusInputParms::IndvTaxBracket             );
     ascribe("ProjectedSalary"              , &IllusInputParms::ProjectedSalary            );

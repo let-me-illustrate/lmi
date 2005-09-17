@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: inputs.cpp,v 1.10 2005-09-12 01:32:19 chicares Exp $
+// $Id: inputs.cpp,v 1.11 2005-09-17 04:05:10 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -88,7 +88,9 @@ InputParms::InputParms()
     ,IntRateTypeSA                 (e_grossrate)
     ,LoanIntRate                   (0.06)
     ,LoanRateType                  (e_fixed_loan_rate)
+    ,ExperienceRatingInitialKFactor(1.0)
     ,ExperienceReserveRate         (0.02)
+    ,InforceExperienceReserve      (0.0)
     ,OverrideExperienceReserveRate ("Yes")
     ,PayLoanInt                    ("No")
     ,WDToBasisThenLoan             ("No")
@@ -452,7 +454,9 @@ bool InputParms::operator==(InputParms const& z) const
     if(IntRateTypeSA                    != z.IntRateTypeSA                   ) return false;
     if(LoanIntRate                      != z.LoanIntRate                     ) return false;
     if(LoanRateType                     != z.LoanRateType                    ) return false;
+    if(ExperienceRatingInitialKFactor   != z.ExperienceRatingInitialKFactor  ) return false;
     if(ExperienceReserveRate            != z.ExperienceReserveRate           ) return false;
+    if(InforceExperienceReserve         != z.InforceExperienceReserve        ) return false;
     if(OverrideExperienceReserveRate    != z.OverrideExperienceReserveRate   ) return false;
     if(PayLoanInt                       != z.PayLoanInt                      ) return false;
     if(WDToBasisThenLoan                != z.WDToBasisThenLoan               ) return false;
