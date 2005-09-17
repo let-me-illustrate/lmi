@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: tn_range_types.cpp,v 1.3 2005-03-10 04:44:06 chicares Exp $
+// $Id: tn_range_types.cpp,v 1.4 2005-09-17 04:05:04 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -38,6 +38,7 @@
 template class tn_range<int   , percentage_trammel<int   > >;
 template class tn_range<double, percentage_trammel<double> >;
 
+template class tn_range<double, unrestricted_trammel   <double> >;
 template class tn_range<double, proportion_trammel     <double> >;
 template class tn_range<double, nonnegative_trammel    <double> >;
 template class tn_range<int   , nonnegative_trammel    <int   > >;

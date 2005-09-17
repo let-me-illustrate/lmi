@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: tn_range_type_trammels.hpp,v 1.3 2005-03-10 04:44:06 chicares Exp $
+// $Id: tn_range_type_trammels.hpp,v 1.4 2005-09-17 04:05:04 chicares Exp $
 
 #ifndef tn_range_type_trammels_hpp
 #define tn_range_type_trammels_hpp
@@ -54,7 +54,7 @@ struct proportion_trammel
 };
 
 template<typename T>
-struct unlimited_trammel
+struct unrestricted_trammel
     :public trammel_base<T>
 {
     T nominal_maximum() const {return  std::numeric_limits<T>::max();}

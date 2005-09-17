@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: tn_range_types.hpp,v 1.3 2005-03-10 04:44:06 chicares Exp $
+// $Id: tn_range_types.hpp,v 1.4 2005-09-17 04:05:04 chicares Exp $
 
 #ifndef tn_range_types_hpp
 #define tn_range_types_hpp
@@ -34,6 +34,7 @@
 typedef tn_range<int   , percentage_trammel<int   > > r_int_percentage;
 typedef tn_range<double, percentage_trammel<double> > r_double_percentage;
 
+typedef tn_range<double, unrestricted_trammel   <double> > tnr_unrestricted_double;
 typedef tn_range<double, proportion_trammel     <double> > tnr_proportion;
 typedef tn_range<double, nonnegative_trammel    <double> > tnr_nonnegative_double;
 typedef tn_range<int   , nonnegative_trammel    <int   > > tnr_nonnegative_integer;
