@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_basicval.cpp,v 1.21 2005-09-12 01:32:19 chicares Exp $
+// $Id: ihs_basicval.cpp,v 1.22 2005-09-17 04:05:14 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -736,7 +736,16 @@ void BasicValues::SetPermanentInvariants()
     // rating, so we assert those preconditions and write simple code
     // for 'unusual' COI banding that ignores those features.
     LMI_ASSERT(!(UseUnusualCOIBanding && COIIsDynamic));
+    LMI_ASSERT(!(UseUnusualCOIBanding && Input_->UseExperienceRating));
     LMI_ASSERT(!(UseUnusualCOIBanding && AllowTerm));
+
+    // Experience rating isn't implemented for the midpoint basis, and
+    // it might be generally incompatible with the illustration reg
+    // because sufficiently favorable experience can reduce mortality
+    // charges below the DCS.
+    LMI_ASSERT
+        (!(Input_->UseExperienceRating && is_subject_to_ill_reg(LedgerType))
+        );
 
     // Table ratings can arise only from medical underwriting.
     // However, flat extras can be used even with guaranteed issue,

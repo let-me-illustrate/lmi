@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_acctval.cpp,v 1.51 2005-09-12 01:32:19 chicares Exp $
+// $Id: ihs_acctval.cpp,v 1.52 2005-09-17 04:05:14 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -829,7 +829,6 @@ double AccountValue::IncrementBOM
         &&  e_currbasis == ExpAndGABasis
         )
         {
-        LMI_ASSERT(!UseUnusualCOIBanding);
         case_k_factor = a_case_k_factor;
         }
 
