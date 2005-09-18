@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_basicval.cpp,v 1.22 2005-09-17 04:05:14 chicares Exp $
+// $Id: ihs_basicval.cpp,v 1.23 2005-09-18 01:22:14 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -743,9 +743,19 @@ void BasicValues::SetPermanentInvariants()
     // it might be generally incompatible with the illustration reg
     // because sufficiently favorable experience can reduce mortality
     // charges below the DCS.
-    LMI_ASSERT
-        (!(Input_->UseExperienceRating && is_subject_to_ill_reg(LedgerType))
-        );
+    if
+        (   Input_->UseExperienceRating
+        &&  is_subject_to_ill_reg(LedgerType)
+        // TODO ?? Let an old regression test run for now.
+        &&  !global_settings::instance().regression_testing()
+        )
+        {
+        fatal_error()
+            << "Experience rating deliberately not implemented for "
+            << "illustration-reg products."
+            << LMI_FLUSH
+            ;
+        }
 
     // Table ratings can arise only from medical underwriting.
     // However, flat extras can be used even with guaranteed issue,

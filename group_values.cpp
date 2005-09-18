@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: group_values.cpp,v 1.29 2005-09-12 15:36:36 chicares Exp $
+// $Id: group_values.cpp,v 1.30 2005-09-18 01:22:14 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -252,7 +252,7 @@ bool run_census_in_series::operator()
 /// from the retention calculation; in that case, retention becomes
 /// zero whenever the input current COI multiplier is zero.
 ///
-/// Net claims are NAAR (not DB) times the partial mortality rate.
+/// Net claims = partial mortality rate times (DB - AV).
 ///
 /// IBNR (incurred but not reported reserve) is zero on the issue date;
 /// on each anniversary, it becomes
@@ -521,21 +521,6 @@ restart:
             if(everyone_lapsed)
                 {
                 break;
-                }
-
-            // TODO ?? This test should be moved elsewhere.
-            if
-                (   cells[0].UseExperienceRating
-                &&  e_mdptbasis == expense_and_general_account_basis
-                // TODO ?? Let an old regression test run for now.
-                &&  !global_settings::instance().regression_testing()
-                )
-                {
-                fatal_error()
-                    << "Experience rating not implemented for "
-                    << "illustration-reg products."
-                    << LMI_FLUSH
-                    ;
                 }
 
             // Perform end of year calculations.
