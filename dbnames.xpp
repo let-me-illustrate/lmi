@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: dbnames.xpp,v 1.10 2005-07-25 12:48:31 chicares Exp $
+// $Id: dbnames.xpp,v 1.11 2005-09-18 01:22:24 chicares Exp $
 
 #define DB_NAMES \
 {DB_FIRST,DB_FIRST,"dummy","dummy",}, \
@@ -244,11 +244,11 @@
 {DB_ExpRatStdDevMult,DB_Topic_ExpRating,"ExpRatStdDevMult","Experience rating reserve as multiple of standard deviation of expected claims net of account value released on death",}, \
 {DB_ExpRatIBNRMult,DB_Topic_ExpRating,"ExpRatIBNRMult","Experience rating IBNR reserve as number of months of net cost of insurance charges",}, \
 {DB_ExpRatCOIRetention,DB_Topic_ExpRating,"ExpRatCOIRetention","Experience rating retention as proportion of net cost of insurance charges",}, \
-{DB_UsePMQOnCurrCOI,DB_Topic_ExpRating,"UsePMQOnCurrCOI","Apply partial mortality multiplier to current cost of insurance charges for experience rating",}, \
+{DB_UsePMQOnCurrCOI,DB_Topic_ExpRating,"UsePMQOnCurrCOI","[no longer supported]",}, \
 {DB_Topic_AssetCharges,DB_FIRST,"Asset charges","Charges deducted from separate account in proportion to assets",}, \
 {DB_MiscFundCharge,DB_Topic_AssetCharges,"MiscFundCharge","[no longer supported]",}, \
 {DB_StableValFundCharge,DB_Topic_AssetCharges,"StableValFundCharge","Stable value fund charge",}, \
-{DB_MgmtFeeFundCharge,DB_Topic_AssetCharges,"MgmtFeeFundCharge","Management fee fund charge [no longer supported--use GUI input]",}, \
+{DB_MgmtFeeFundCharge,DB_Topic_AssetCharges,"MgmtFeeFundCharge","[no longer supported]",}, \
 {DB_AmortPmLdFundCharge,DB_Topic_AssetCharges,"AmortPmLdFundCharge","Asset charge for premium load when it's amortized",}, \
 {DB_AllowAmortPremLoad,DB_Topic_AssetCharges,"AllowAmortPremLoad","Allow premium load amortization: 0=no, 1=yes [not supported--set to 0]",}, \
 {DB_GuarAcctValLoadBOM,DB_Topic_Loads,"GuarAcctValLoadBOM","Guaranteed maximum for expense charge as proportion of separate account value taken at beginning of month",}, \
@@ -258,8 +258,8 @@
 {DB_PremTaxLoad,DB_Topic_Loads,"PremTaxLoad","Scalar premium load due to premium tax",}, \
 {DB_GCOIMultiplier,DB_Topic_Mortality,"GCOIMultiplier","Multiplier applied to guaranteed cost of insurance charges",}, \
 {DB_AllowHoneymoon,DB_Topic_Interest,"AllowHoneymoon","Honeymoon allowed: 0=no, 1=yes",}, \
-{DB_HCVSpread,DB_Topic_Interest,"HCVSpread","[obsolete--not used--it's an input item now]",}, \
-{DB_ExtraHMSpreadonCV,DB_Topic_Interest,"ExtraHMSpreadonCV","[obsolete--not used--it's an input item now]",}, \
+{DB_HCVSpread,DB_Topic_Interest,"HCVSpread","[no longer supported]",}, \
+{DB_ExtraHMSpreadonCV,DB_Topic_Interest,"ExtraHMSpreadonCV","[no longer supported]",}, \
 {DB_TgtPremTable,DB_Topic_Tables,"TgtPremTable","Target premium table (index in mortality table database)",}, \
 {DB_TgtPremPolFee,DB_Topic_Tables,"TgtPremPolFee","Target premium policy fee",}, \
 {DB_AllowExtraAssetComp,DB_Topic_Comp,"AllowExtraAssetComp","Allow extra asset-based compensation: 0=no, 1=yes",}, \
@@ -317,10 +317,10 @@
 {DB_MinPremIntSpread,DB_Topic_Misc,"MinPremIntSpread","Interest spread from general-account rate used to capitalize monthly deductions for minimum premium calculation",}, \
 {DB_CoiUpper12Method,DB_Topic_Mortality,"CoiUpper12Method","Method to derive monthly from annual COI rates: 0=exponential, 1=linear [not yet implemented]",}, \
 {DB_MaxMonthlyCoiRate,DB_Topic_Mortality,"MaxMonthlyCoiRate","Maximum monthly COI rate per $1 of specified amount [not yet implemented]",}, \
-{DB_ExpRatCoiMultGuar,DB_Topic_ExpRating,"ExpRatCoiMultGuar","Experience rating guaranteed-COI multiplier [not yet implemented]",}, \
-{DB_ExpRatCoiMultAlt,DB_Topic_ExpRating,"ExpRatCoiMultAlt","Experience rating alternative-COI multiplier [not yet implemented]",}, \
-{DB_ExpRatCoiMultCurr0,DB_Topic_ExpRating,"ExpRatCoiMultCurr0","Experience rating current-COI multiplier for non-experience-rated cases [not validated]",}, \
-{DB_ExpRatCoiMultCurr1,DB_Topic_ExpRating,"ExpRatCoiMultCurr1","Experience rating current-COI multiplier for experience-rated cases [not validated]",}, \
+{DB_ExpRatCoiMultGuar,DB_Topic_ExpRating,"ExpRatCoiMultGuar","[no longer supported]",}, \
+{DB_ExpRatCoiMultAlt,DB_Topic_ExpRating,"ExpRatCoiMultAlt","[no longer supported]",}, \
+{DB_ExpRatCoiMultCurr0,DB_Topic_ExpRating,"ExpRatCoiMultCurr0","[no longer supported]",}, \
+{DB_ExpRatCoiMultCurr1,DB_Topic_ExpRating,"ExpRatCoiMultCurr1","[no longer supported]",}, \
 {DB_SpousRiderGuarTable,DB_Topic_Riders,"SpousRiderGuarTable","Spouse rider guaranteed charge table (index in mortality table database)",}, \
 {DB_GuarTermTable,DB_Topic_Riders,"GuarTermTable","Term rider guaranteed mortality charge table (index in mortality table database)",}, \
 {DB_NominallyPar,DB_Topic_Misc,"NominallyPar","Nominally participating, but dividends expected to be zero",}, \

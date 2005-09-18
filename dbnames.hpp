@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: dbnames.hpp,v 1.3 2005-05-06 17:20:54 chicares Exp $
+// $Id: dbnames.hpp,v 1.4 2005-09-18 01:22:24 chicares Exp $
 
 #ifndef dbnames_hpp
 #define dbnames_hpp
@@ -29,6 +29,8 @@
 #include "expimp.hpp"
 
 #include <vector>
+
+// TODO ?? Eradicate entites marked as deprecated.
 
 enum DatabaseNames
     {DB_FIRST
@@ -329,13 +331,13 @@ enum DatabaseNames
         ,DB_ExpRatIBNRMult
         ,DB_ExpRatCOIRetention
 
-        ,DB_UsePMQOnCurrCOI
+        ,DB_UsePMQOnCurrCOI // Deprecated.
 
     ,DB_Topic_AssetCharges
 
-        ,DB_MiscFundCharge
+        ,DB_MiscFundCharge // Deprecated.
         ,DB_StableValFundCharge
-        ,DB_MgmtFeeFundCharge
+        ,DB_MgmtFeeFundCharge // Deprecated.
         ,DB_AmortPmLdFundCharge
         ,DB_AllowAmortPremLoad
 
@@ -348,8 +350,8 @@ enum DatabaseNames
         ,DB_GCOIMultiplier
 
         ,DB_AllowHoneymoon
-        ,DB_HCVSpread // TODO ?? Obsolete?
-        ,DB_ExtraHMSpreadonCV // TODO ?? Obsolete?
+        ,DB_HCVSpread         // Deprecated.
+        ,DB_ExtraHMSpreadonCV // Deprecated.
         ,DB_TgtPremTable
         ,DB_TgtPremPolFee
         ,DB_AllowExtraAssetComp
@@ -407,10 +409,10 @@ enum DatabaseNames
         ,DB_MinPremIntSpread
         ,DB_CoiUpper12Method
         ,DB_MaxMonthlyCoiRate
-        ,DB_ExpRatCoiMultGuar
-        ,DB_ExpRatCoiMultAlt
-        ,DB_ExpRatCoiMultCurr0
-        ,DB_ExpRatCoiMultCurr1
+        ,DB_ExpRatCoiMultGuar  // Deprecated.
+        ,DB_ExpRatCoiMultAlt   // Deprecated.
+        ,DB_ExpRatCoiMultCurr0 // Deprecated.
+        ,DB_ExpRatCoiMultCurr1 // Deprecated.
         ,DB_SpousRiderGuarTable
         ,DB_GuarTermTable
         ,DB_NominallyPar

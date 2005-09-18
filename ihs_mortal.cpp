@@ -1,8 +1,6 @@
 // Mortality rates.
 //
 // Copyright (C) 1998, 2001, 2002, 2003, 2004, 2005 Gregory W. Chicares.
-// Portions marked JLM Copyright (C) 2001 Gregory W. Chicares and Joseph L. Murdzek.
-// Author is GWC except where specifically noted otherwise.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -21,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_mortal.cpp,v 1.17 2005-09-07 03:04:54 chicares Exp $
+// $Id: ihs_mortal.cpp,v 1.18 2005-09-18 01:22:25 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -68,7 +66,6 @@ void MortalityRates::reserve_vectors()
     MonthlyCurrentCoiRatesBand0_  .reserve(Length_);
     MonthlyCurrentCoiRatesBand1_  .reserve(Length_);
     MonthlyCurrentCoiRatesBand2_  .reserve(Length_);
-    AlternativeMonthlyCoiRates_   .reserve(Length_);
     Irc7702Q_                     .reserve(Length_);
     MonthlyMidpointCoiRatesBand0_ .reserve(Length_);
     MonthlyMidpointCoiRatesBand1_ .reserve(Length_);
@@ -105,13 +102,6 @@ void MortalityRates::fetch_parameters(BasicValues const& basic_values)
         ;
 
     MaxMonthlyCoiRate_ = basic_values.Database_->Query(DB_MaxMonthlyCoiRate);
-
-    // TODO ?? Dubious.
-    ExpRatCoiMultAlt_   = basic_values.Database_->Query(DB_ExpRatCoiMultAlt);
-    ExpRatCoiMultCurr0_ = basic_values.Database_->Query(DB_ExpRatCoiMultCurr0);
-    ExpRatCoiMultCurr1_ = basic_values.Database_->Query(DB_ExpRatCoiMultCurr1);
-    ExpRatCoiMultGuar_  = basic_values.Database_->Query(DB_ExpRatCoiMultGuar);
-    UsePMQOnCurrCoiRate_= basic_values.Database_->Query(DB_UsePMQOnCurrCOI);
 
     basic_values.Database_->Query(GCoiMultiplier_, DB_GCOIMultiplier);
     basic_values.Database_->Query(CCoiMultiplier_, DB_CCOIMultiplier);
@@ -150,9 +140,6 @@ void MortalityRates::fetch_parameters(BasicValues const& basic_values)
     CurrentSpouseRiderRates_    = basic_values.GetCurrentSpouseRiderRates();
     TargetPremiumRates_ = basic_values.GetTgtPremRates();
 // Test this now, then eradicate calls through 'basic_values' below.
-
-    // Alternative COI rate for experience rating.
-    AlternativeMonthlyCoiRates_ = basic_values.GetSmokerBlendedGuarCOIRates();
 
     // TODO ?? Why have these here, since they're already in the
     // basic-values class? Same question for 'TableYRates_' too.
@@ -195,12 +182,6 @@ void MortalityRates::initialize()
         MakeCoiRateSubstandard(MonthlyCurrentCoiRatesBand0_);
         MakeCoiRateSubstandard(MonthlyCurrentCoiRatesBand1_);
         MakeCoiRateSubstandard(MonthlyCurrentCoiRatesBand2_);
-        // TODO ?? If experience rating is ALLOWED, not necessarily USED?
-        if(AllowExpRating_)
-//      if(UseExperienceRating_)  // TODO ?? And this condition too?
-            {
-            MakeCoiRateSubstandard(AlternativeMonthlyCoiRates_);
-            }
         MakeCoiRateSubstandard(MonthlyGuaranteedCoiRates_);
         }
 
@@ -376,6 +357,7 @@ void MortalityRates::SetGuaranteedRates()
 {
     if(GCoiIsAnnual_) // TODO ?? Assume this means experience rated?
         {
+// TODO ?? Merge these pointlessly-distinguished alternatives.
         // If experience rating is ALLOWED, not necessarily USED.
         if(AllowExpRating_)
 //      if(UseExperienceRating_) // TODO ?? And this condition too?
@@ -383,14 +365,9 @@ void MortalityRates::SetGuaranteedRates()
             for(int j = 0; j < Length_; j++)
                 {
                 double qstart = MonthlyGuaranteedCoiRates_[j];
-                double q = std::min(1.0, ExpRatCoiMultGuar_ * qstart);
+                double q = std::min(1.0, qstart);
                 q = coi_rate_from_q<double>()(q, MaxMonthlyCoiRate_);
                 MonthlyGuaranteedCoiRates_[j] = round_coi_rate_(q);
-
-                q = std::min(1.0, ExpRatCoiMultAlt_ * qstart);
-                q = coi_rate_from_q<double>()(q, MonthlyGuaranteedCoiRates_[j]);
-                q = std::min(q, MonthlyGuaranteedCoiRates_[j]);
-                AlternativeMonthlyCoiRates_[j] = round_coi_rate_(q);
                 }
             }
         // This is just one way it might be done...
@@ -398,25 +375,7 @@ void MortalityRates::SetGuaranteedRates()
             {
             for(int j = 0; j < Length_; j++)
                 {
-// Author of this commented block: JLM.
-// [Joe said:]
-// I could not find the database item for choosing different methods, so I am
-// hard coding the exponential method for now.
-// [It's DB_CoiUpper12Method: 0=exponential, 1=linear]
-//  linear COI method:
-//              MonthlyGuaranteedCoiRates_[j] *= GCoiMultiplier_[j];
-//              MonthlyGuaranteedCoiRates_[j] = std::min
-//                  (1.0 / 12.0
-//                  , MonthlyGuaranteedCoiRates_[j]
-//                  / (12.0 - MonthlyGuaranteedCoiRates_[j])
-//                  );
-
-// Author of this commented block: GWC.
-// TODO ?? Determine whether any of the comments above indicate
-// defects here.
-
-//  exponential COI method
-// TODO ?? should respect DB_CoiUpper12Method
+                // TODO ?? Should respect DB_CoiUpper12Method.
                 MonthlyGuaranteedCoiRates_[j] *= GCoiMultiplier_[j];
                 MonthlyGuaranteedCoiRates_[j] = coi_rate_from_q<double>()
                     (MonthlyGuaranteedCoiRates_[j]
@@ -428,7 +387,7 @@ void MortalityRates::SetGuaranteedRates()
                 }
             }
         }
-    else  // gCoi is not annual
+    else
         {
         for(int j = 0; j < Length_; j++)
             {
@@ -489,37 +448,16 @@ void MortalityRates::SetOneNonguaranteedRateBand
 {
     if(CCoiIsAnnual_)
         {
+// TODO ?? Merge these pointlessly-distinguished alternatives.
         // If experience rating is ALLOWED, not necessarily USED
         if(AllowExpRating_)
 //      if(UseExperienceRating_)  // TODO ?? And this condition too?
             {
-            bool apply_partial_mortality_multiplier = false;
-
-            double experience_rating_coi_multiplier;
-            if(UseExperienceRating_)
-                {
-                experience_rating_coi_multiplier = // if experience rated
-                    ExpRatCoiMultCurr1_;
-                if(UsePMQOnCurrCoiRate_)
-                    {
-                    apply_partial_mortality_multiplier = true;
-                    }
-                }
-            else
-                {
-                experience_rating_coi_multiplier = // if not experience rated
-                    ExpRatCoiMultCurr0_;
-                }
-
             for(int j = 0; j < Length_; j++)
                 {
-                double multiplier = experience_rating_coi_multiplier;
-                if(apply_partial_mortality_multiplier)
-                    {
-                    multiplier *= PartialMortalityMultiplier_[j];
-                    }
-                double q = multiplier * curr_coi_multiplier[j] * coi_rates[j];
+                double q = curr_coi_multiplier[j] * coi_rates[j];
                 q = coi_rate_from_q<double>()(q, MonthlyGuaranteedCoiRates_[j]);
+                // TODO ?? Is this not handled already by coi_rate_from_q()?
                 q = std::min(q, MonthlyGuaranteedCoiRates_[j]);
                 coi_rates[j] = round_coi_rate_(q);
                 }

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_database.cpp,v 1.6 2005-09-12 01:32:19 chicares Exp $
+// $Id: ihs_database.cpp,v 1.7 2005-09-18 01:22:25 chicares Exp $
 
 // TODO ?? Should length_ be dynamically reset when IssueAge is?
 // TODO ?? Should State be dynamically reset?
@@ -44,8 +44,6 @@
 #   include "inputs.hpp"
 #   include "inputstatus.hpp"
 #endif  // STANDALONE
-
-#include "miscellany.hpp"
 
 #include <algorithm>
 
@@ -175,24 +173,6 @@ void TDatabase::Init()
         fatal_error() << "Endowment age precedes issue age." << LMI_FLUSH;
         }
     ConstrainScalar(DB_EndtAge);
-
-    std::vector<double> misc_fund_charge;
-    Query(misc_fund_charge, DB_MiscFundCharge);
-    if
-        (!each_equal
-            (misc_fund_charge.begin()
-            ,misc_fund_charge.end()
-            ,0.0
-            )
-        )
-        {
-        fatal_error()
-            << "Database entity 'MiscFundCharge' is no longer supported, "
-            << "but its value is not zero. Change it to zero and move the "
-            << "charge elsewhere in the database (e.g. 'StableValFundCharge')."
-            << LMI_FLUSH
-            ;
-        }
 }
 
 //===========================================================================
