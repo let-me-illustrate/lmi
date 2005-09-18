@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: interest_rates.cpp,v 1.9 2005-09-12 01:32:19 chicares Exp $
+// $Id: interest_rates.cpp,v 1.10 2005-09-18 01:22:25 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -360,10 +360,10 @@ void InterestRates::Initialize(BasicValues const& v)
         v.Database_->Query(AmortLoad_, DB_AmortPmLdFundCharge);
         }
 
-    // TODO ?? This might be initialized with 'DB_MgmtFeeFundCharge',
-    // but is that even useful? The implementation ignores that
-    // database entity, so this vector simply stores a scalar--except
-    // that it adds rates passed to DynamicMlySepAcctRate(), which
+    // TODO ?? This was once initialized with 'DB_MgmtFeeFundCharge',
+    // which has been deprecated and is ignored. Is it still useful?
+    // useful? Here, this vector is simply initialized with a scalar,
+    // but later it adds rates passed to DynamicMlySepAcctRate(), which
     // seems ugly. Is it ever accessed externally? Does it really need
     // to be a vector?
     InvestmentManagementFee_.assign(Length_, v.InvestmentManagementFee());

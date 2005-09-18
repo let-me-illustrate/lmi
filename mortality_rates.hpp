@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mortality_rates.hpp,v 1.9 2005-09-07 03:04:54 chicares Exp $
+// $Id: mortality_rates.hpp,v 1.10 2005-09-18 01:22:25 chicares Exp $
 
 #ifndef mortality_rates_hpp
 #define mortality_rates_hpp
@@ -123,13 +123,6 @@ class MortalityRates
 
     double MaxMonthlyCoiRate_;
 
-    // TODO ?? Dubious.
-    double ExpRatCoiMultAlt_;
-    double ExpRatCoiMultCurr0_;
-    double ExpRatCoiMultCurr1_;
-    double ExpRatCoiMultGuar_;
-    bool UsePMQOnCurrCoiRate_;
-
     double CountryCoiMultiplier_;
     bool IsPolicyRated_;
     e_table_rating SubstdTable_;
@@ -167,11 +160,6 @@ class MortalityRates
     std::vector<double> MidpointSpouseRiderRates_;
 
     std::vector<double> TargetPremiumRates_;
-
-    // This 'alternative' COI rate is used for experience rated group
-    // products when the mortality reserve is negative, and is based
-    // on the guaranteed COI table.
-    std::vector<double> AlternativeMonthlyCoiRates_;
 
     std::vector<double> Irc7702Q_;
     std::vector<double> TableYRates_;

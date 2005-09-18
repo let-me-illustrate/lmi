@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: dbdict.cpp,v 1.4 2005-06-14 21:34:51 chicares Exp $
+// $Id: dbdict.cpp,v 1.5 2005-09-18 01:22:24 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -119,7 +119,6 @@ void DBDictionary::Init()
     AddEntry(TDBEntry(DB_CurrMandE, TDBValue(DB_CurrMandE, n, dims, zilch)));
     AddEntry(TDBEntry(DB_StableValFundCharge, TDBValue(DB_StableValFundCharge, n, dims, zilch)));
     AddEntry(TDBEntry(DB_AssetChargeType, TDBValue(DB_AssetChargeType, n, dims, zilch)));
-    AddEntry(TDBEntry(DB_MiscFundCharge, TDBValue(DB_MiscFundCharge, n, dims, zilch)));
     AddEntry(TDBEntry(DB_AmortPmLdFundCharge, TDBValue(DB_AmortPmLdFundCharge, n, dims, zilch)));
     AddEntry(TDBEntry(DB_AllowSepAcct, TDBValue(DB_AllowSepAcct, n, dims, zilch)));
     AddEntry(TDBEntry(DB_SepAcctSpreadMethod, TDBValue(DB_SepAcctSpreadMethod, n, dims, zilch)));

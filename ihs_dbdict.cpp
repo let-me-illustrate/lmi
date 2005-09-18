@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_dbdict.cpp,v 1.8 2005-09-12 01:32:19 chicares Exp $
+// $Id: ihs_dbdict.cpp,v 1.9 2005-09-18 01:22:25 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -212,10 +212,6 @@ void DBDictionary::InitDB()
     Add(TDBValue(DB_SubstdTblMult       , 1.0));
     Add(TDBValue(DB_SurrChgSADurFactor  , 1.0));
     Add(TDBValue(DB_SurrChgAVDurFactor  , 1.0));
-    Add(TDBValue(DB_ExpRatCoiMultGuar   , 1.0));
-    Add(TDBValue(DB_ExpRatCoiMultAlt    , 1.0));
-    Add(TDBValue(DB_ExpRatCoiMultCurr0  , 1.0));
-    Add(TDBValue(DB_ExpRatCoiMultCurr1  , 1.0));
 
     // Generally you would want a value such as 1/12 or 1/11 here.
     Add(TDBValue(DB_MaxMonthlyCoiRate   , 1.0 / 12.0));
@@ -553,10 +549,7 @@ void DBDictionary::WriteSampleDBFile()
     Add(TDBValue(DB_ExpRatStdDevMult    , 0.0));
     Add(TDBValue(DB_ExpRatIBNRMult      , 0.0));
     Add(TDBValue(DB_ExpRatCOIRetention  , 0.0));
-    Add(TDBValue(DB_UsePMQOnCurrCOI     , false));
-    Add(TDBValue(DB_MiscFundCharge      , 0.0));
     Add(TDBValue(DB_StableValFundCharge , 0.0));
-    Add(TDBValue(DB_MgmtFeeFundCharge   , 0.0));
     Add(TDBValue(DB_AmortPmLdFundCharge , 0.0030));
     Add(TDBValue(DB_AllowAmortPremLoad  , false));
     Add(TDBValue(DB_PmTxAmortPeriod     , 0));
