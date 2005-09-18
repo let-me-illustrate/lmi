@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mortality_rates.cpp,v 1.5 2005-09-07 03:04:54 chicares Exp $
+// $Id: mortality_rates.cpp,v 1.6 2005-09-18 01:22:25 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -40,12 +40,6 @@
 /* TODO ?? Mortality-rate pointer-to-implementation might contain:
     double MonthlyRateLimit_;
     e_coi_rate_method AnnualToMonthlyMethod_;
-
-    // Experience-rating parameters.
-    DB_ExpRatCoiMultGuar,
-    DB_ExpRatCoiMultAlt,
-    DB_ExpRatCoiMultCurr0,
-    DB_ExpRatCoiMultCurr1,
 */
 
 //============================================================================
