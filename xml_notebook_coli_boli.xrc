@@ -24,7 +24,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: xml_notebook_coli_boli.xrc,v 1.9 2005-09-02 16:09:17 wboutin Exp $
+    $Id: xml_notebook_coli_boli.xrc,v 1.10 2005-09-19 19:52:21 wboutin Exp $
 
     This version is designed for COLI and BOLI users; it omits input
     fields that seem irrelevant in that context, and reflects the
@@ -524,7 +524,7 @@
                             </object>
                         </object>
                         <object class="sizeritem">
-                            <flag>wxALIGN_CENTRE|wxGROW|wxALL</flag>
+                            <flag>wxALIGN_CENTER|wxGROW|wxALL</flag>
                             <border>4</border>
                             <object class="wxCheckBox" name="UseExperienceRating">
                                 <label>Use experience rating</label>
@@ -532,7 +532,29 @@
                             </object>
                         </object>
                         <object class="sizeritem">
-                            <flag>wxALIGN_CENTRE|wxGROW|wxALL</flag>
+                            <flag>wxALIGN_CENTER|wxGROW|wxALL</flag>
+                            <border>4</border>
+                            <object class="wxFlexGridSizer">
+                                <cols>0</cols>
+                                <rows>1</rows>
+                                <growablecols>1</growablecols>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_LEFT|wxGROW|wxTOP|wxRIGHT</flag>
+                                    <border>4</border>
+                                    <object class="wxStaticText">
+                                        <label>Experience-rating initial k factor</label>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_LEFT|wxGROW|wxALL</flag>
+                                    <object class="wxTextCtrl" name="ExperienceRatingInitialKFactor">
+                                        <size>10,-1</size>
+                                    </object>
+                                </object>
+                            </object>
+                        </object>
+                        <object class="sizeritem">
+                            <flag>wxALIGN_CENTER|wxGROW|wxALL</flag>
                             <border>4</border>
                             <object class="wxCheckBox" name="OverrideExperienceReserveRate">
                                 <label>Override experience-rating reserve rate</label>
@@ -1692,7 +1714,7 @@
                     <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
                     <border>4</border>
                     <object class="wxStaticText">
-                        <label>Payments last 7 years</label>
+                        <label>Amounts-paid history for current 7-pay period</label>
                     </object>
                 </object>
                 <object class="sizeritem">
@@ -1705,7 +1727,7 @@
                     <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
                     <border>4</border>
                     <object class="wxStaticText">
-                        <label>Specified amount history</label>
+                        <label>Specified-amount history since issue</label>
                     </object>
                 </object>
                 <object class="sizeritem">
@@ -2783,7 +2805,7 @@
                                             </object>
                                         </object>
                                         <object class="sizeritem">
-                                            <flag>wxALIGN_RIGHT|wxALIGN_CENTRE|wxALL</flag>
+                                            <flag>wxALIGN_RIGHT|wxALIGN_CENTER|wxALL</flag>
                                             <border>2</border>
                                             <object class="wxStaticText">
                                                 <label>Term proportion</label>

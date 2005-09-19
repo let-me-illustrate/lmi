@@ -24,7 +24,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: xml_notebook_private_placement.xrc,v 1.4 2005-09-02 16:09:17 wboutin Exp $
+    $Id: xml_notebook_private_placement.xrc,v 1.5 2005-09-19 19:52:22 wboutin Exp $
 
     This version is designed for private placement users; it omits input
     fields that seem irrelevant in that context, and reflects the
@@ -1901,7 +1901,7 @@
                     <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
                     <border>4</border>
                     <object class="wxStaticText">
-                        <label>Payments last 7 years</label>
+                        <label>Amounts-paid history for current 7-pay period</label>
                     </object>
                 </object>
                 <object class="sizeritem">
@@ -1914,7 +1914,7 @@
                     <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
                     <border>4</border>
                     <object class="wxStaticText">
-                        <label>Specified amount history</label>
+                        <label>Specified-amount history since issue</label>
                     </object>
                 </object>
                 <object class="sizeritem">
