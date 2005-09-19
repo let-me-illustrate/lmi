@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_mortal.cpp,v 1.18 2005-09-18 01:22:25 chicares Exp $
+// $Id: ihs_mortal.cpp,v 1.19 2005-09-19 13:00:40 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -122,7 +122,7 @@ void MortalityRates::fetch_parameters(BasicValues const& basic_values)
     round_coi_rate_ = basic_values.GetRoundingRules().round_coi_rate();
 
 // TODO ?? Rethink these "delicate" things. Should raw rates be stored
-// temporarily in some other manner, e.g. using a handle-body idiom.
+// temporarily in some other manner, e.g. using a handle-body idiom?
 
 // TODO ?? These are delicate: they get modified downstream.
     MonthlyGuaranteedCoiRates_   = basic_values.GetGuarCOIRates();
@@ -139,7 +139,6 @@ void MortalityRates::fetch_parameters(BasicValues const& basic_values)
     GuaranteedSpouseRiderRates_ = basic_values.GetGuaranteedSpouseRiderRates();
     CurrentSpouseRiderRates_    = basic_values.GetCurrentSpouseRiderRates();
     TargetPremiumRates_ = basic_values.GetTgtPremRates();
-// Test this now, then eradicate calls through 'basic_values' below.
 
     // TODO ?? Why have these here, since they're already in the
     // basic-values class? Same question for 'TableYRates_' too.
@@ -482,7 +481,8 @@ void MortalityRates::SetOneNonguaranteedRateBand
         for(int j = 0; j < Length_; j++)
             {
             double q = coi_rates[j];
-            // TODO ?? COI Multiple is applied to the monthly COI.
+            // USER !! Multiplier is applied to the monthly COI rate
+            // if only a monthly rate is given.
             q = std::min(curr_coi_multiplier[j] * q, MaxMonthlyCoiRate_);
             coi_rates[j] = round_coi_rate_(q);
             }
