@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avmly.cpp,v 1.26 2005-09-16 03:26:28 chicares Exp $
+// $Id: ihs_avmly.cpp,v 1.27 2005-09-19 13:00:36 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -2366,34 +2366,30 @@ void AccountValue::TxSetCoiCharge()
     // DCV need not be rounded.
     DcvNaar = std::max(0.0, DcvNaar);
 
-    ActualCoiRate = GetBandedCoiRates(ExpAndGABasis, ActualSpecAmt)[Year];
+    double retention_charge = 0.0;
+    double coi_rate = GetBandedCoiRates(ExpAndGABasis, ActualSpecAmt)[Year];
+    ActualCoiRate = coi_rate;
 
-    // TODO ?? Consider moving this to the mortality-rates class.
+    // TODO ?? Need to divide CoiRetentionRate by CoiMultiplier
+    // depending on database entity 'UseRawTableForRetention'.
+
     if
         (   COIIsDynamic
         &&  Input_->UseExperienceRating
         &&  e_currbasis == ExpAndGABasis
         )
         {
-        double guaranteed_coi_rate = GetBandedCoiRates
-            (e_basis(e_guarbasis), ActualSpecAmt)[Year]
-            ;
-        ActualCoiRate = std::min
-            (guaranteed_coi_rate
-            ,ActualCoiRate * case_k_factor
+        ActualCoiRate = round_coi_rate
+            (std::min
+                (GetBandedCoiRates(e_basis(e_guarbasis), ActualSpecAmt)[Year]
+                ,coi_rate * (case_k_factor + CoiRetentionRate)
+                )
             );
-        round_to<double> const& round_coi_rate
-            (GetRoundingRules().round_coi_rate()
-            );
-        ActualCoiRate = round_coi_rate(ActualCoiRate);
+        retention_charge = NAAR * coi_rate * CoiRetentionRate;
         }
 
-    // TODO ?? Need to divide CoiRetentionRate by CoiMultiplier
-    // depending on database entity 'UseRawTableForRetention'.
-    // These calculations must be refined for other reasons, too.
-
-    NetCoiCharge = round_coi_charge(NAAR *  ActualCoiRate                    );
-    CoiCharge    = round_coi_charge(NAAR * (ActualCoiRate + CoiRetentionRate));
+    CoiCharge    = round_coi_charge(NAAR * ActualCoiRate);
+    NetCoiCharge = round_coi_charge(CoiCharge - retention_charge);
     YearsTotalCoiCharge += CoiCharge;
 
     // DCV need not be rounded.
@@ -2436,43 +2432,26 @@ void AccountValue::TxSetRiderDed()
     AdbCharge = 0.0;
     if(Input_->Status[0].HasADD)
         {
-        AdbCharge =
-                YearsAdbRate
-            *   std::min(ActualSpecAmt, AdbLimit)
-            ;
+        AdbCharge = YearsAdbRate * std::min(ActualSpecAmt, AdbLimit);
         }
 
     SpouseRiderCharge = 0.0;
     if(Input_->HasSpouseRider)
         {
-        SpouseRiderCharge =
-                YearsSpouseRiderRate
-            *   Input_->SpouseRiderAmount
-            ;
+        SpouseRiderCharge = YearsSpouseRiderRate * Input_->SpouseRiderAmount;
         }
     ChildRiderCharge = 0.0;
     if(Input_->HasChildRider)
         {
-        ChildRiderCharge =
-                YearsChildRiderRate
-            *   Input_->ChildRiderAmount
-            ;
+        ChildRiderCharge = YearsChildRiderRate * Input_->ChildRiderAmount;
         }
 
     TermCharge = 0.0;
     DcvTermCharge = 0.0;
     if(TermRiderActive && Input_->Status[0].HasTerm)
         {
-        TermCharge =
-            YearsTermRate
-            * TermDB
-            * DBDiscountRate[Year]
-            ;
-        DcvTermCharge =
-            Years7702CoiRate
-            * TermDB
-            * DBDiscountRate[Year]
-            ;
+        TermCharge    = YearsTermRate    * TermDB * DBDiscountRate[Year];
+        DcvTermCharge = Years7702CoiRate * TermDB * DBDiscountRate[Year];
         }
 
     WpCharge = 0.0;
@@ -2483,10 +2462,8 @@ void AccountValue::TxSetRiderDed()
             {
             case e_waiver_times_naar:
                 {
-                WpCharge =
-                        YearsWpRate
-                    *   std::min(ActualSpecAmt, WpLimit)
-                    ;
+                WpCharge = YearsWpRate * std::min(ActualSpecAmt, WpLimit);
+                DcvWpCharge = WpCharge;
                 }
                 break;
             case e_waiver_times_deductions:
