@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.147 2005-09-18 01:22:25 chicares Exp $
+// $Id: ChangeLog,v 1.148 2005-09-19 13:00:48 chicares Exp $
 
 MAINTENANCE
 
@@ -3718,4 +3718,20 @@ in anticipation of removing those entities utterly.
   group_values.cpp
   ihs_basicval.cpp
 Consolidate a consistency test.
+
+20050919T1300Z <chicares@cox.net> [1265]
+
+  group_values.cpp
+Use input initial k factor.
+
+  ihs_avmly.cpp
+Revise experience-rating retention.
+
+  ihs_mortal.cpp
+Improve documentation.
+
+  ihs_acctval.cpp
+Correct a defect: absent a group context, k factor should be unity.
+Formerly, it was set to zero, which caused mortality charges to be
+uniformly zero.
 
