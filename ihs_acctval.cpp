@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_acctval.cpp,v 1.52 2005-09-17 04:05:14 chicares Exp $
+// $Id: ihs_acctval.cpp,v 1.53 2005-09-19 13:00:43 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -341,8 +341,11 @@ restart:
             {
             Month = month;
             CoordinateCounters();
-            // Individual run: case-level k factor is zero.
-            IncrementBOM(year, month, 0.0);
+            // Absent a group context, case-level k factor is unity:
+            // because partial mortality has no effect, experience
+            // rating is impossible. USER !! Explain this in user
+            // documentation.
+            IncrementBOM(year, month, 1.0);
             IncrementEOM(year, month, GetSepAcctAssetsInforce());
             }
 
