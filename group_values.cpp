@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: group_values.cpp,v 1.30 2005-09-18 01:22:14 chicares Exp $
+// $Id: group_values.cpp,v 1.31 2005-09-19 13:00:30 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -406,7 +406,7 @@ restart:
 
         double case_accum_net_mortchgs = 0.0;
         double case_accum_net_claims   = 0.0;
-        double case_k_factor           = 1.0; // TODO ?? Use input instead.
+        double case_k_factor = cells[0].ExperienceRatingInitialKFactor;
 
         // Experience rating as implemented here uses either a special
         // scalar input rate, or the separate-account rate. Those
