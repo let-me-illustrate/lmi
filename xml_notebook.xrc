@@ -24,7 +24,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: xml_notebook.xrc,v 1.19 2005-09-16 17:33:31 chicares Exp $
+    $Id: xml_notebook.xrc,v 1.20 2005-09-19 19:52:21 wboutin Exp $
 
     This version is generic. It strives to present every input field
     the system offers, in a way that suits the main developer's tastes.
@@ -1666,7 +1666,7 @@ here, but it looks weird if we don't make this look like its siblings.
                                     <object class="wxFlexGridSizer">
                                         <cols>1</cols>
                                         <object class="sizeritem">
-                                            <flag>wxALIGN_CENTRE|wxALL</flag>
+                                            <flag>wxALIGN_CENTER|wxALL</flag>
                                             <object class="wxRadioBox" name="DeprecatedSolveFromWhich">
                                                 <style>wxRA_SPECIFY_COLS</style>
                                                 <label>From</label>
@@ -1723,7 +1723,7 @@ here, but it looks weird if we don't make this look like its siblings.
                                     <object class="wxFlexGridSizer">
                                         <cols>1</cols>
                                         <object class="sizeritem">
-                                            <flag>wxALIGN_CENTRE|wxALL</flag>
+                                            <flag>wxALIGN_CENTER|wxALL</flag>
                                             <object class="wxRadioBox" name="DeprecatedSolveToWhich">
                                                 <style>wxRA_SPECIFY_COLS</style>
                                                 <label>To</label>
@@ -1780,7 +1780,7 @@ here, but it looks weird if we don't make this look like its siblings.
                                     <object class="wxFlexGridSizer">
                                         <cols>1</cols>
                                         <object class="sizeritem">
-                                            <flag>wxALIGN_CENTRE|wxALL</flag>
+                                            <flag>wxALIGN_CENTER|wxALL</flag>
                                             <object class="wxRadioBox" name="DeprecatedSolveTgtAtWhich">
                                                 <style>wxRA_SPECIFY_COLS</style>
                                                 <label>At</label>
