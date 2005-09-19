@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.148 2005-09-19 13:00:48 chicares Exp $
+// $Id: ChangeLog,v 1.149 2005-09-19 19:52:21 wboutin Exp $
 
 MAINTENANCE
 
@@ -3735,3 +3735,10 @@ Correct a defect: absent a group context, k factor should be unity.
 Formerly, it was set to zero, which caused mortality charges to be
 uniformly zero.
 
+20050919T1935Z <wboutin@massmutual.com> [1265]
+
+  xml_notebook.xrc
+  xml_notebook_coli_boli.xrc
+  xml_notebook_private_placement.xrc
+Refine interface skins: correct a flag; add one new field; label
+several fields more precisely.
