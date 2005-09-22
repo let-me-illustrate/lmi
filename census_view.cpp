@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: census_view.cpp,v 1.34 2005-09-12 01:32:19 chicares Exp $
+// $Id: census_view.cpp,v 1.35 2005-09-22 03:19:11 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -1122,7 +1122,9 @@ std::string GetClipboardText()
 void CensusView::OnRunCaseToSpreadsheet(wxCommandEvent&)
 {
     std::string spreadsheet_filename =
-        base_filename() + configurable_settings::instance().spreadsheet_file_extension();
+            base_filename()
+        +   configurable_settings::instance().spreadsheet_file_extension()
+        ;
     std::remove(spreadsheet_filename.c_str());
     DoAllCells(emit_to_spreadsheet);
 }

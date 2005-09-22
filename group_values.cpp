@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: group_values.cpp,v 1.31 2005-09-19 13:00:30 chicares Exp $
+// $Id: group_values.cpp,v 1.32 2005-09-22 03:19:12 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -90,7 +90,8 @@ void emit_ledger
         {
         PrintFormTabDelimited
             (ledger
-            ,file.string() + configurable_settings::instance().spreadsheet_file_extension()
+            ,   file.string()
+            +   configurable_settings::instance().spreadsheet_file_extension()
             );
         }
 }
@@ -371,7 +372,6 @@ bool run_census_in_parallel::operator()
             (*i)->GuessWhetherFirstYearPremiumExceedsRetaliationLimit();
             }
 restart:
-
         e_basis          expense_and_general_account_basis;
         e_sep_acct_basis separate_account_basis;
         set_separate_bases_from_run_basis
@@ -461,7 +461,7 @@ restart:
                 double assets = 0.0;
 
                 // Get total case assets prior to interest crediting because
-                // those assets determine the M&E charge.
+                // those assets may determine the M&E charge.
 
                 // Process transactions through monthly deduction.
                 for(i = cell_values.begin(); i != cell_values.end(); ++i)
