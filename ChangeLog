@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.151 2005-09-22 16:23:24 chicares Exp $
+// $Id: ChangeLog,v 1.152 2005-09-22 20:26:14 wboutin Exp $
 
 MAINTENANCE
 
@@ -3781,4 +3781,10 @@ Change meaning of 'ExpRatRsvCash', rendering it equivalent to
 practice, and perhaps the former should be expunged; until a decision
 is made, this change is intended to prevent false negative results in
 regression testing.
+
+20050922T2019Z <wboutin@massmutual.com> [1264]
+
+  setup.make
+  xmlwrapp_md5sums
+Add validation for another tool.
 

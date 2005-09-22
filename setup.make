@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: setup.make,v 1.13 2005-09-22 16:00:24 chicares Exp $
+# $Id: setup.make,v 1.14 2005-09-22 20:26:15 wboutin Exp $
 
 .PHONY: all
 all: setup
@@ -200,7 +200,7 @@ frozen_xmlwrapp:
 	                  src_dir='$(src_dir)' \
 	  third_party_include_dir='$(third_party_include_dir)' \
 	   third_party_source_dir='$(third_party_source_dir)' \
-	  install_frozen_xmlwrapp_from_tmp_dir
+	  install_frozen_xmlwrapp_from_tmp_dir check_xmlwrapp_md5sums
 
 .PHONY: install_frozen_xmlwrapp_from_tmp_dir
 install_frozen_xmlwrapp_from_tmp_dir:
@@ -223,6 +223,11 @@ install_frozen_xmlwrapp_from_tmp_dir:
 	$(CP) --preserve xmlwrapp-0.2.0/src/libxml/* \
 	  $(third_party_source_dir)/libxml/
 	$(RM) --force xmlwrapp-0.2.0.tar xmlwrapp-0.2.0.tar.gz
+
+.PHONY: check_xmlwrapp_md5sums
+check_xmlwrapp_md5sums: $(third_party_dir)
+	cd $(third_party_dir) ; \
+	$(MD5SUM) --check $(src_dir)/xmlwrapp_md5sums
 
 ###############################################################################
 
@@ -297,5 +302,5 @@ install_frozen_libxml2_from_tmp_dir:
 # Validate setup files.
 
 .PHONY: test_setup
-test_setup: check_cgicc_md5sums
+test_setup: check_cgicc_md5sums check_xmlwrapp_md5sums
 
