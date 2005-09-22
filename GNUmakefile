@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: GNUmakefile,v 1.31 2005-09-22 14:32:38 wboutin Exp $
+# $Id: GNUmakefile,v 1.32 2005-09-22 16:00:24 chicares Exp $
 
 ###############################################################################
 
@@ -248,21 +248,25 @@ date:
 # Graphics files whose format doesn't permit embedding copyright and
 # license notices (TODO ?? can these be replaced by xpm?):
 
-binary_graphics := $(wildcard *.bmp *.ico *.png)
+binary_graphics  := $(wildcard *.bmp *.ico *.png)
 
 expungible_files := $(wildcard *~ *.bak *eraseme*)
 
-subdirectories := $(shell $(LS) --classify | $(SED) -e'/\//!d' -e's/\/$$//')
+md5sum_files     := $(wildcard *md5sums)
 
-testing_files := expected.cgi.out $(wildcard *touchstone*)
+patch_files      := $(wildcard *patch)
+
+subdirectories   := $(shell $(LS) --classify | $(SED) -e'/\//!d' -e's/\/$$//')
+
+testing_files    := expected.cgi.out $(wildcard *touchstone*)
 
 never_source_files := \
   $(binary_graphics) \
   $(expungible_files) \
+  $(md5sum_files) \
+  $(patch_files) \
   $(subdirectories) \
   $(testing_files) \
-  $(wildcard *_md5sums) \
-  $(wildcard *[0-9]_patch) \
   date_last_made \
 
 # Files that are source in some restrictive sense only:
