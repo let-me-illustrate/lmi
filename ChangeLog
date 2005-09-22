@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.150 2005-09-22 14:32:38 wboutin Exp $
+// $Id: ChangeLog,v 1.151 2005-09-22 16:23:24 chicares Exp $
 
 MAINTENANCE
 
@@ -3743,10 +3743,42 @@ uniformly zero.
 Refine interface skins: correct a flag; add one new field; label
 several fields more precisely.
 
+20050922T0319Z <chicares@cox.net> [1265]
+
+  census_view.cpp
+  group_values.cpp
+Shorten some excessively-long lines.
+
+20050922T0358Z <chicares@cox.net> [1265]
+
+  group_values.cpp
+Rename some local variables; delete another that was superfluous.
+
+20050922T0512Z <chicares@cox.net> [1265]
+
+  group_values.cpp
+Remove a delusive optimization.
+
 20050922T1426Z <wboutin@massmutual.com> [1265]
 
   cgicc_md5sums [new file]
   GNUmakefile
   setup.make
 Add validation for one tool.
+
+20050922T1600Z <chicares@cox.net> [1265]
+
+  GNUmakefile
+  setup.make
+Refactor and reformat.
+
+20050922T1619Z <chicares@cox.net> [1264]
+
+  ihs_acctval.cpp
+  ledger_variant.cpp
+Change meaning of 'ExpRatRsvCash', rendering it equivalent to
+'ExpRatRsvForborne' on a composite. Only the latter is used in actual
+practice, and perhaps the former should be expunged; until a decision
+is made, this change is intended to prevent false negative results in
+regression testing.
 

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_acctval.cpp,v 1.53 2005-09-19 13:00:43 chicares Exp $
+// $Id: ihs_acctval.cpp,v 1.54 2005-09-22 16:23:24 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -1649,7 +1649,6 @@ void AccountValue::FinalizeYear()
     LMI_ASSERT(0 != Input_->NumIdenticalLives); // Make sure division is safe.
     VariantValues().ExpRatRsvCash       [Year] =
           apportioned_net_mortality_reserve
-        * (1.0 - partial_mortality_q[Year])
         * InvariantValues().InforceLives[Year]
         / Input_->NumIdenticalLives
         ;
@@ -1993,10 +1992,9 @@ double AccountValue::ApportionNetMortalityReserve
         apportioned_net_mortality_reserve
         ;
     VariantValues().ExpRatRsvCash     [Year] =
-          apportioned_net_mortality_reserve
-        * (1.0 - partial_mortality_q[Year])
-        * InvariantValues().InforceLives[Year]
-        / Input_->NumIdenticalLives
+            apportioned_net_mortality_reserve
+        *   InvariantValues().InforceLives[Year]
+        /   Input_->NumIdenticalLives
         ;
     return
             apportioned_net_mortality_reserve
