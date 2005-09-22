@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.149 2005-09-19 19:52:21 wboutin Exp $
+// $Id: ChangeLog,v 1.150 2005-09-22 14:32:38 wboutin Exp $
 
 MAINTENANCE
 
@@ -3742,3 +3742,11 @@ uniformly zero.
   xml_notebook_private_placement.xrc
 Refine interface skins: correct a flag; add one new field; label
 several fields more precisely.
+
+20050922T1426Z <wboutin@massmutual.com> [1265]
+
+  cgicc_md5sums [new file]
+  GNUmakefile
+  setup.make
+Add validation for one tool.
+
