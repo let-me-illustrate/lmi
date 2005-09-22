@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: setup.make,v 1.12 2005-09-22 14:32:38 wboutin Exp $
+# $Id: setup.make,v 1.13 2005-09-22 16:00:24 chicares Exp $
 
 .PHONY: all
 all: setup
@@ -56,10 +56,10 @@ $(src_dir)/objects.make:: ;
 # TODO ?? Move these definitions elsewhere.
 
 third_party_dir         := $(system_root)/opt/lmi/third_party
-third_party_bin_dir     := $(system_root)/opt/lmi/third_party/bin
-third_party_include_dir := $(system_root)/opt/lmi/third_party/include
-third_party_lib_dir     := $(system_root)/opt/lmi/third_party/lib
-third_party_source_dir  := $(system_root)/opt/lmi/third_party/src
+third_party_bin_dir     := $(third_party_dir)/bin
+third_party_include_dir := $(third_party_dir)/include
+third_party_lib_dir     := $(third_party_dir)/lib
+third_party_source_dir  := $(third_party_dir)/src
 
 .PHONY: setup
 setup: \
@@ -68,7 +68,7 @@ setup: \
   frozen_xmlwrapp \
   frozen_boost \
   frozen_libxml2 \
-  test_setup
+  test_setup \
 
 # REVIEW: Could these be combined? Untested idea:
 # third_party_directories := \
@@ -146,25 +146,22 @@ dummy_libraries: $(third_party_bin_dir) $(third_party_lib_dir)
 # frozen%: $(third_party_directories)
 # 	$(MAKE) \
 # 	  -C /tmp \
-#	  -f $(src_dir)/setup.make \
-#                         src_dir='$(src_dir)' \
-#         third_party_include_dir='$(third_party_include_dir)' \
-#          third_party_source_dir='$(third_party_source_dir)' \
+# 	  -f $(src_dir)/setup.make \
+# 	                    src_dir='$(src_dir)' \
+# 	    third_party_include_dir='$(third_party_include_dir)' \
+# 	     third_party_source_dir='$(third_party_source_dir)' \
 # [similarly pass other '.*_dir' variables?]
-#	  install_$@_from_tmp_dir
+# 	  install_$@_from_tmp_dir
 
 .PHONY: frozen_cgicc
 frozen_cgicc:
 	$(MAKE) \
 	  -C /tmp \
 	  -f $(src_dir)/setup.make \
-	                  src_dir='$(src_dir)' \
-	  third_party_include_dir='$(third_party_include_dir)' \
-	   third_party_source_dir='$(third_party_source_dir)' \
-	  install_frozen_cgicc_from_tmp_dir \
-	  check_cgicc_md5sums
-
-#     --no-print-directory \
+	                    src_dir='$(src_dir)' \
+	    third_party_include_dir='$(third_party_include_dir)' \
+	     third_party_source_dir='$(third_party_source_dir)' \
+	  install_frozen_cgicc_from_tmp_dir check_cgicc_md5sums
 
 # TODO ?? Make this target abend if it's not run in /tmp/ ?
 
@@ -188,7 +185,7 @@ install_frozen_cgicc_from_tmp_dir:
 
 .PHONY: check_cgicc_md5sums
 check_cgicc_md5sums: $(third_party_dir)
-	cd $(third_party_dir) ; \
+	cd $(third_party_dir); \
 	$(MD5SUM) --check $(src_dir)/cgicc_md5sums
 
 ###############################################################################
@@ -270,10 +267,10 @@ frozen_libxml2:
 	$(MAKE) \
 	  -C /tmp \
 	  -f $(src_dir)/setup.make \
-	                  src_dir='$(src_dir)' \
-	      third_party_bin_dir='$(third_party_bin_dir)' \
-          third_party_include_dir='$(third_party_include_dir)' \
-	   third_party_source_dir='$(third_party_source_dir)' \
+	                    src_dir='$(src_dir)' \
+	        third_party_bin_dir='$(third_party_bin_dir)' \
+	    third_party_include_dir='$(third_party_include_dir)' \
+	     third_party_source_dir='$(third_party_source_dir)' \
 	  install_frozen_libxml2_from_tmp_dir
 
 .PHONY: install_frozen_libxml2_from_tmp_dir
@@ -285,15 +282,6 @@ install_frozen_libxml2_from_tmp_dir:
 	  |$(MD5SUM) --check
 	$(BZIP2) --decompress --keep libxml2-2.6.19.tar.bz2
 	$(TAR) --extract --file=libxml2-2.6.19.tar
-# REVIEW: I think you need this 's_configure_./configure_' change:
-# Is this what you mean:
-#   cd libxml2-2.6.19; configure && $(MAKE)
-# ? It doesn't seem right because it fails with this message:
-#     zsh: command not found: configure
-# I didn't find a comparable command to MSYS's './configure' for zsh. Don't
-# we prefer using MSYS to build 'libxml2' and 'sed' anyway? That's what I
-# assumed when testing the individual targets, but didn't know how to tie it
-# all together.
 	cd libxml2-2.6.19; ./configure && $(MAKE)
 	$(MKDIR) --parents $(third_party_include_dir)/libxml/
 	-$(CP) --force --preserve --recursive libxml2-2.6.19/include/libxml/* \
