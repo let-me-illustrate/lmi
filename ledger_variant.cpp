@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_variant.cpp,v 1.4 2005-08-30 03:54:38 chicares Exp $
+// $Id: ledger_variant.cpp,v 1.5 2005-09-22 16:23:24 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -101,19 +101,19 @@ void LedgerVariant::Alloc(int len)
     BegYearVectors  ["ExpRsvInt"            ] = &ExpRsvInt              ;
     BegYearVectors  ["NetCOICharge"         ] = &NetCOICharge           ;
 
-    // These two vectors have two versions each. The versions are
-    //  - cash, on a "financial-statement" basis
-    //      this is per unit issued
-    //  - forborne among the survivors
-    //      this is per unit issued and surviving at the end of each year
-    // TODO ?? This terminology is confusing and should be improved.
-    // Both versions are ForborneVectors, meaning that they are never
-    //   multiplied by tpx.
-    // The second version is divided by px (not tpx).
+    // TODO ?? There seems to be no reason for both these 'ExpRatRsv.*'
+    // variables to exist anymore. It seems peculiar that the one with
+    // 'Forborne' in its name is not an element of 'ForborneVectors',
+    // and vice versa; originally, 'ExpRatRsvForborne' had been
+    // multiplied by px when set elsewhere, in a context that required
+    // the experience-rating reserve to be held in certificates rather
+    // than held separately for the group as a whole, and it was wrong
+    // then to show any such reserve in a certificate that would have
+    // become a claim at year end.
     //
-    // TODO ?? THE ABOVE COMMENTS MAY BE WRONG.
     ForborneVectors ["ExpRatRsvCash"        ] = &ExpRatRsvCash          ;
     BegYearVectors  ["ExpRatRsvForborne"    ] = &ExpRatRsvForborne      ;
+
     // TODO ?? Do any other vectors need to be forborne? AVRelDeath, e.g.?
 
     BegYearVectors  ["MlyPolFee"            ] = &MlyPolFee              ;
