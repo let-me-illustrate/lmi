@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: setup.make,v 1.11 2005-09-12 17:35:19 wboutin Exp $
+# $Id: setup.make,v 1.12 2005-09-22 14:32:38 wboutin Exp $
 
 .PHONY: all
 all: setup
@@ -55,6 +55,7 @@ $(src_dir)/objects.make:: ;
 
 # TODO ?? Move these definitions elsewhere.
 
+third_party_dir         := $(system_root)/opt/lmi/third_party
 third_party_bin_dir     := $(system_root)/opt/lmi/third_party/bin
 third_party_include_dir := $(system_root)/opt/lmi/third_party/include
 third_party_lib_dir     := $(system_root)/opt/lmi/third_party/lib
@@ -67,6 +68,7 @@ setup: \
   frozen_xmlwrapp \
   frozen_boost \
   frozen_libxml2 \
+  test_setup
 
 # REVIEW: Could these be combined? Untested idea:
 # third_party_directories := \
@@ -77,6 +79,10 @@ setup: \
 #
 # $(third_party_directories):
 # 	+@[ -d $@ ] || $(MKDIR) --parents $@
+
+.PHONY: $(third_party_dir)
+$(third_party_dir):
+	+@[ -d $@ ] || $(MKDIR) --parents $@
 
 .PHONY: $(third_party_bin_dir)
 $(third_party_bin_dir):
@@ -140,12 +146,12 @@ dummy_libraries: $(third_party_bin_dir) $(third_party_lib_dir)
 # frozen%: $(third_party_directories)
 # 	$(MAKE) \
 # 	  -C /tmp \
-# 	  -f $(src_dir)/setup.make \
-# 	                    src_dir='$(src_dir)' \
-#        third_party_include_dir='$(third_party_include_dir)' \
-#         third_party_source_dir='$(third_party_source_dir)' \
+#	  -f $(src_dir)/setup.make \
+#                         src_dir='$(src_dir)' \
+#         third_party_include_dir='$(third_party_include_dir)' \
+#          third_party_source_dir='$(third_party_source_dir)' \
 # [similarly pass other '.*_dir' variables?]
-# 	  install_$@_from_tmp_dir
+#	  install_$@_from_tmp_dir
 
 .PHONY: frozen_cgicc
 frozen_cgicc:
@@ -155,9 +161,10 @@ frozen_cgicc:
 	                  src_dir='$(src_dir)' \
 	  third_party_include_dir='$(third_party_include_dir)' \
 	   third_party_source_dir='$(third_party_source_dir)' \
-	  install_frozen_cgicc_from_tmp_dir
+	  install_frozen_cgicc_from_tmp_dir \
+	  check_cgicc_md5sums
 
-#	  --no-print-directory \
+#     --no-print-directory \
 
 # TODO ?? Make this target abend if it's not run in /tmp/ ?
 
@@ -168,8 +175,7 @@ install_frozen_cgicc_from_tmp_dir:
           ftp://ftp.gnu.org/pub/gnu/cgicc/cgicc-3.1.4.tar.bz2
 	$(ECHO) "6cb5153fc9fa64b4e50c7962aa557bbe  cgicc-3.1.4.tar.bz2" \
 	  |$(MD5SUM) --check
-	[ -e cgicc-3.1.4.tar ] \
-          || $(BZIP2) --decompress --keep cgicc-3.1.4.tar.bz2
+	$(BZIP2) --decompress --keep cgicc-3.1.4.tar.bz2
 	$(TAR) --extract --file=cgicc-3.1.4.tar
 	$(PATCH) --strip=0 < $(src_dir)/cgicc_3_1_4_patch
 	$(MKDIR) --parents $(third_party_include_dir)/cgicc/
@@ -179,6 +185,11 @@ install_frozen_cgicc_from_tmp_dir:
 	$(CP) --preserve cgicc-3.1.4/cgicc/*.cpp \
 	  $(third_party_source_dir)/cgicc/
 	$(RM) --force cgicc-3.1.4.tar cgicc-3.1.4.tar.bz2
+
+.PHONY: check_cgicc_md5sums
+check_cgicc_md5sums: $(third_party_dir)
+	cd $(third_party_dir) ; \
+	$(MD5SUM) --check $(src_dir)/cgicc_md5sums
 
 ###############################################################################
 
@@ -198,14 +209,14 @@ frozen_xmlwrapp:
 install_frozen_xmlwrapp_from_tmp_dir:
 # This command won't work because there's no longer a valid URL for the
 # version currently used in production:
-#	|| $(WGET) --non-verbose \
-#	http://pmade.org/software/xmlwrapp/download/xmlwrapp-0.2.0.tar.gz
+# 	|| $(WGET) --non-verbose \
+# 	http://pmade.org/software/xmlwrapp/download/xmlwrapp-0.2.0.tar.gz
 
 # The following assumes 'xmlwrapp-0.2.0.tar.gz' exists in '/tmp/' already.
 	[ -e xmlwrapp-0.2.0.tar.gz ]
 	$(ECHO) "f142e8bc349597ecbaebb4a8e246b65a  xmlwrapp-0.2.0.tar.gz" \
-          |$(MD5SUM) --check
-	[ -e xmlwrapp-0.2.0.tar ] || $(GZIP) --decompress xmlwrapp-0.2.0.tar.gz
+	  |$(MD5SUM) --check
+	$(GZIP) --decompress xmlwrapp-0.2.0.tar.gz
 	$(TAR) --extract --verbose --file=xmlwrapp-0.2.0.tar
 	$(PATCH) --strip=0 < $(src_dir)/xmlwrapp_0_2_0_patch
 	$(MKDIR) --parents $(third_party_include_dir)/xmlwrapp/
@@ -233,19 +244,18 @@ frozen_boost:
 .PHONY: install_frozen_boost_from_tmp_dir
 install_frozen_boost_from_tmp_dir:
 	[ -e boost_1_31_0.tar.bz2 ] \
-          || $(WGET) --non-verbose \
-          http://umn.dl.sourceforge.net/sourceforge/boost/boost_1_31_0.tar.bz2
+	  || $(WGET) --non-verbose \
+	  http://umn.dl.sourceforge.net/sourceforge/boost/boost_1_31_0.tar.bz2
 	$(ECHO) "8cc183538eaa5cfc53d88d0e94bd2fd4  boost_1_31_0.tar.bz2" \
-          |$(MD5SUM) --check
-	[ -e boost_1_31_0.tar ] \
-          || $(BZIP2) --decompress --keep boost_1_31_0.tar.bz2
+	  |$(MD5SUM) --check
+	$(BZIP2) --decompress --keep boost_1_31_0.tar.bz2
 	$(TAR) --extract --file=boost_1_31_0.tar
 	$(MKDIR) --parents $(third_party_include_dir)/boost/
 	$(MKDIR) --parents $(third_party_source_dir)/boost/
 	-$(CP) --force --preserve --recursive boost_1_31_0/boost/* \
-          $(third_party_include_dir)/boost/
+	  $(third_party_include_dir)/boost/
 	-$(CP) --force --preserve --recursive boost_1_31_0/* \
-          $(third_party_source_dir)/boost/
+	  $(third_party_source_dir)/boost/
 	$(RM) --force boost_1_31_0.tar boost_1_31_0.tar.bz2
 
 ###############################################################################
@@ -262,23 +272,22 @@ frozen_libxml2:
 	  -f $(src_dir)/setup.make \
 	                  src_dir='$(src_dir)' \
 	      third_party_bin_dir='$(third_party_bin_dir)' \
-	  third_party_include_dir='$(third_party_include_dir)' \
+          third_party_include_dir='$(third_party_include_dir)' \
 	   third_party_source_dir='$(third_party_source_dir)' \
 	  install_frozen_libxml2_from_tmp_dir
 
 .PHONY: install_frozen_libxml2_from_tmp_dir
 install_frozen_libxml2_from_tmp_dir:
 	[ -e libxml2-2.6.19.tar.bz2 ] \
-          || $(WGET) --non-verbose \
+	  || $(WGET) --non-verbose \
 	  http://ftp.gnome.org/pub/GNOME/sources/libxml2/2.6/libxml2-2.6.19.tar.bz2
 	$(ECHO) "ed581732d586f86324ec46e572526ede  libxml2-2.6.19.tar.bz2" \
 	  |$(MD5SUM) --check
-	[ -e libxml2-2.6.19.tar ] \
-	  || $(BZIP2) --decompress --keep libxml2-2.6.19.tar.bz2
+	$(BZIP2) --decompress --keep libxml2-2.6.19.tar.bz2
 	$(TAR) --extract --file=libxml2-2.6.19.tar
 # REVIEW: I think you need this 's_configure_./configure_' change:
 # Is this what you mean:
-#	cd libxml2-2.6.19; configure && $(MAKE)
+#   cd libxml2-2.6.19; configure && $(MAKE)
 # ? It doesn't seem right because it fails with this message:
 #     zsh: command not found: configure
 # I didn't find a comparable command to MSYS's './configure' for zsh. Don't
@@ -294,4 +303,11 @@ install_frozen_libxml2_from_tmp_dir:
 	$(CP) --force --preserve libxml2-2.6.19/.libs/libxml2.dll.a \
 	  $(third_party_lib_dir)
 	$(RM) --force libxml2-2.6.19.tar libxml2-2.6.19.tar.bz2
+
+###############################################################################
+
+# Validate setup files.
+
+.PHONY: test_setup
+test_setup: check_cgicc_md5sums
 
