@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: group_values.cpp,v 1.32 2005-09-22 03:19:12 chicares Exp $
+// $Id: group_values.cpp,v 1.33 2005-09-22 03:58:41 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -435,9 +435,8 @@ restart:
         // differ between cells and we have not coded support for that yet.
         for(int year = 0; year < MaxYr; ++year)
             {
-            double case_years_net_mortchgs = 0.0;
             double projected_net_mortchgs  = 0.0;
-            double current_mortchg         = 0.0;
+            double ytd_net_mortchgs        = 0.0;
 
             double experience_reserve_annual_u =
                     1.0
@@ -475,7 +474,7 @@ restart:
                     (*i)->IncrementBOM(year, month, case_k_factor);
 
                     assets += (*i)->GetSepAcctAssetsInforce();
-                    current_mortchg += (*i)->GetLastCoiChargeInforce();
+                    ytd_net_mortchgs += (*i)->GetLastCoiChargeInforce();
                     }
 
                 // Process transactions from int credit through end of month.
@@ -534,7 +533,7 @@ restart:
             // year's claims, which is consistent with curtate
             // mortality.
 
-            double current_claims = 0.0;
+            double ytd_net_claims = 0.0;
             for(i = cell_values.begin(); i != cell_values.end(); ++i)
                 {
                 if((*i)->PrecedesInforceDuration(year, 11))
@@ -544,7 +543,7 @@ restart:
                 (*i)->SetClaims();
                 (*i)->SetProjectedCoiCharge();
                 (*i)->IncrementEOY(year);
-                current_claims += (*i)->GetCurtateNetClaimsInforce();
+                ytd_net_claims += (*i)->GetCurtateNetClaimsInforce();
                 projected_net_mortchgs += (*i)->GetProjectedCoiChargeInforce();
                 }
 
@@ -554,12 +553,10 @@ restart:
             // is undefined.
 
             case_accum_net_claims *= experience_reserve_annual_u;
-            case_accum_net_claims += current_claims;
+            case_accum_net_claims += ytd_net_claims;
 
             case_accum_net_mortchgs *= experience_reserve_annual_u;
-            case_accum_net_mortchgs += current_mortchg;
-
-            case_years_net_mortchgs += current_mortchg;
+            case_accum_net_mortchgs += ytd_net_mortchgs;
 
             if
                 (   cells[0].UseExperienceRating
@@ -567,7 +564,7 @@ restart:
                 )
                 {
                 double case_ibnr =
-                        case_years_net_mortchgs
+                        ytd_net_mortchgs
                     *   case_ibnr_months
                     /   12.0
                     ;
@@ -609,7 +606,7 @@ restart:
                     case_net_mortality_reserve_checksum +=
                         (*i)->ApportionNetMortalityReserve
                             (case_net_mortality_reserve
-                            ,case_years_net_mortchgs
+                            ,ytd_net_mortchgs
                             );
                     }
 // TODO ?? Temporarily suppress this diagnostic.
