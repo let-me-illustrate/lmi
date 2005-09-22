@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: group_values.cpp,v 1.33 2005-09-22 03:58:41 chicares Exp $
+// $Id: group_values.cpp,v 1.34 2005-09-22 05:12:25 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -429,8 +429,6 @@ restart:
                 );
             }
 
-        bool everyone_lapsed = false;
-
         // TODO ?? We don't start at InforceYear, because issue years may
         // differ between cells and we have not coded support for that yet.
         for(int year = 0; year < MaxYr; ++year)
@@ -485,11 +483,6 @@ restart:
                         continue;
                         }
                     (*i)->IncrementEOM(year, month, assets);
-                    everyone_lapsed = everyone_lapsed && (*i)->ItLapsed;
-                    }
-                if(everyone_lapsed)
-                    {
-                    break;
                     }
                 }
 
@@ -515,11 +508,6 @@ restart:
                         );
                     }
                 goto restart;
-                }
-
-            if(everyone_lapsed)
-                {
-                break;
                 }
 
             // Perform end of year calculations.
