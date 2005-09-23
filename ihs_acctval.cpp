@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_acctval.cpp,v 1.54 2005-09-22 16:23:24 chicares Exp $
+// $Id: ihs_acctval.cpp,v 1.55 2005-09-23 03:38:19 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -2002,10 +2002,35 @@ double AccountValue::ApportionNetMortalityReserve
         ;
 }
 
+// These two functions are experimental and might be removed later.
 //============================================================================
-double AccountValue::GetInforceLives() const
+double AccountValue::InforceLivesBoy() const
 {
-    return InvariantValues().InforceLives[Year];
+    if
+        (   ItLapsed
+        ||  BasicValues::GetLength() <= Year
+        )
+        {
+        return 0.0;
+        }
+    int index = Year;
+    LMI_ASSERT(index < InvariantValues().InforceLives.size());
+    return InvariantValues().InforceLives[index];
+}
+
+//============================================================================
+double AccountValue::InforceLivesEoy() const
+{
+    if
+        (   ItLapsed
+        ||  BasicValues::GetLength() <= Year
+        )
+        {
+        return 0.0;
+        }
+    int index = 1 + Year;
+    LMI_ASSERT(index < InvariantValues().InforceLives.size());
+    return InvariantValues().InforceLives[index];
 }
 
 //============================================================================

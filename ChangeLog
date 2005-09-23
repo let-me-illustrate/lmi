@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.152 2005-09-22 20:26:14 wboutin Exp $
+// $Id: ChangeLog,v 1.153 2005-09-23 03:38:19 chicares Exp $
 
 MAINTENANCE
 
@@ -3787,4 +3787,11 @@ regression testing.
   setup.make
   xmlwrapp_md5sums
 Add validation for another tool.
+
+20050923T0334Z <chicares@cox.net> [1264]
+
+  account_value.hpp
+  accountvalue.cpp
+  ihs_acctval.cpp
+Add experimental functions to report inforce lives.
 
