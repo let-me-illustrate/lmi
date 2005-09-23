@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_acctval.cpp,v 1.55 2005-09-23 03:38:19 chicares Exp $
+// $Id: ihs_acctval.cpp,v 1.56 2005-09-23 14:36:50 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -2013,7 +2013,7 @@ double AccountValue::InforceLivesBoy() const
         {
         return 0.0;
         }
-    int index = Year;
+    unsigned int index = Year;
     LMI_ASSERT(index < InvariantValues().InforceLives.size());
     return InvariantValues().InforceLives[index];
 }
@@ -2028,7 +2028,7 @@ double AccountValue::InforceLivesEoy() const
         {
         return 0.0;
         }
-    int index = 1 + Year;
+    unsigned int index = 1 + Year;
     LMI_ASSERT(index < InvariantValues().InforceLives.size());
     return InvariantValues().InforceLives[index];
 }
