@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_acctval.cpp,v 1.58 2005-09-24 18:27:08 chicares Exp $
+// $Id: ihs_acctval.cpp,v 1.59 2005-09-24 19:10:34 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -1966,9 +1966,6 @@ double AccountValue::GetProjectedCoiChargeInforce()
 // TODO ?? For the nonce, the return value is weighted here;
 // it would seem clearer to take the weighted sum at the call site.
 //
-// TODO ?? Weighting by EOY inforce would seem preferable, when other
-// code that assumes BOY is changed.
-//
 // TODO ?? Any historical reason for distinguishing
 // 'ExpRatRsvForborne' and 'ExpRatRsvCash' has become inoperative.
 //
@@ -1988,7 +1985,7 @@ double AccountValue::ApportionNetMortalityReserve
 
     double inforce_factor =
         (0.0 != Input_->NumIdenticalLives)
-        ? InforceLivesBoy() / Input_->NumIdenticalLives
+        ? InforceLivesEoy() / Input_->NumIdenticalLives
         : 0.0
         ;
 

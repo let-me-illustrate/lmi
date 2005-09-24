@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: group_values.cpp,v 1.37 2005-09-24 18:27:08 chicares Exp $
+// $Id: group_values.cpp,v 1.38 2005-09-24 19:10:34 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -522,7 +522,7 @@ restart:
             // mortality.
 
             double ytd_net_claims = 0.0;
-            double boy_inforce_lives = 0.0;
+            double eoy_inforce_lives = 0.0;
             for(i = cell_values.begin(); i != cell_values.end(); ++i)
                 {
                 if((*i)->PrecedesInforceDuration(year, 11))
@@ -531,7 +531,7 @@ restart:
                     }
                 (*i)->SetClaims();
                 (*i)->SetProjectedCoiCharge();
-                boy_inforce_lives += (*i)->InforceLivesBoy();
+                eoy_inforce_lives += (*i)->InforceLivesEoy();
                 (*i)->IncrementEOY(year);
                 ytd_net_claims += (*i)->GetCurtateNetClaimsInforce();
                 projected_net_mortchgs += (*i)->GetProjectedCoiChargeInforce();
@@ -564,7 +564,7 @@ restart:
             if
                 (   cells[0].UseExperienceRating
                 &&  e_currbasis == expense_and_general_account_basis
-                &&  0.0 != boy_inforce_lives
+                &&  0.0 != eoy_inforce_lives
                 )
                 {
                 double case_ibnr =
@@ -606,7 +606,7 @@ restart:
                     case_net_mortality_reserve_checksum +=
                         (*i)->ApportionNetMortalityReserve
                             (   case_net_mortality_reserve
-                            /   boy_inforce_lives
+                            /   eoy_inforce_lives
                             );
                     }
                 if

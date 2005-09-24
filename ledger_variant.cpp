@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_variant.cpp,v 1.6 2005-09-24 18:27:08 chicares Exp $
+// $Id: ledger_variant.cpp,v 1.7 2005-09-24 19:10:34 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -117,7 +117,7 @@ void LedgerVariant::Alloc(int len)
     // first to drop the 'Cash' lexeme.
     //
     ForborneVectors ["ExpRatRsvCash"        ] = &ExpRatRsvCash          ;
-    BegYearVectors  ["ExpRatRsvForborne"    ] = &ExpRatRsvForborne      ;
+    EndYearVectors  ["ExpRatRsvForborne"    ] = &ExpRatRsvForborne      ;
 
     // TODO ?? Do any other vectors need to be forborne? AVRelDeath, e.g.?
 
