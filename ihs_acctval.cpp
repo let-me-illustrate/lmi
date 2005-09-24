@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_acctval.cpp,v 1.56 2005-09-23 14:36:50 chicares Exp $
+// $Id: ihs_acctval.cpp,v 1.57 2005-09-24 15:13:32 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -1960,9 +1960,23 @@ double AccountValue::GetProjectedCoiChargeInforce()
 // Yet it is apportioned among certificates in order to conform to the
 // design invariant that a composite is a weighted sum of cells.
 //
+// The return value, added across cells, should reproduce the total
+// total reserve at the case level, as the caller may assert.
+//
+// TODO ?? For the nonce, the return value is weighted here;
+// it would seem clearer to take the weighted sum at the call site.
+//
+// TODO ?? A single argument would suffice.
+//
+// TODO ?? Weighting by EOY inforce would seem preferable, when other
+// code that assumes BOY is changed.
+//
+// TODO ?? Any historical reason for distinguishing
+// 'ExpRatRsvForborne' and 'ExpRatRsvCash' has become inoperative.
+//
 double AccountValue::ApportionNetMortalityReserve
     (double case_net_mortality_reserve
-    ,double case_years_net_mortchgs
+    ,double case_lives_in_force
     )
 {
     if
@@ -1975,30 +1989,29 @@ double AccountValue::ApportionNetMortalityReserve
         return 0.0;
         }
 
-    if(0.0 != case_years_net_mortchgs)
-        {
-        apportioned_net_mortality_reserve =
-                case_net_mortality_reserve
-            *   YearsTotalCoiCharge
-            /   case_years_net_mortchgs
-            ;
-        }
-    else
-        {
-        apportioned_net_mortality_reserve = 0.0;
-        }
-    LMI_ASSERT(0 != Input_->NumIdenticalLives); // Make sure division is safe.
-    VariantValues().ExpRatRsvForborne [Year] =
-        apportioned_net_mortality_reserve
+    double reserve_per_life_inforce =
+        (0.0 != case_lives_in_force)
+        ? case_net_mortality_reserve / case_lives_in_force
+        : 0.0
         ;
-    VariantValues().ExpRatRsvCash     [Year] =
-            apportioned_net_mortality_reserve
-        *   InvariantValues().InforceLives[Year]
-        /   Input_->NumIdenticalLives
+
+    double inforce_factor =
+        (0.0 != Input_->NumIdenticalLives)
+        ? InforceLivesBoy() / Input_->NumIdenticalLives
+        : 0.0
         ;
+
+    apportioned_net_mortality_reserve =
+            reserve_per_life_inforce
+        *   inforce_factor
+        ;
+
+    VariantValues().ExpRatRsvForborne[Year] = reserve_per_life_inforce;
+    VariantValues().ExpRatRsvCash[Year] = apportioned_net_mortality_reserve;
+
     return
             apportioned_net_mortality_reserve
-        *   InvariantValues().InforceLives[Year]
+        *   Input_->NumIdenticalLives
         ;
 }
 
