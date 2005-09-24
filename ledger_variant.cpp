@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_variant.cpp,v 1.5 2005-09-22 16:23:24 chicares Exp $
+// $Id: ledger_variant.cpp,v 1.6 2005-09-24 18:27:08 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -109,7 +109,12 @@ void LedgerVariant::Alloc(int len)
     // the experience-rating reserve to be held in certificates rather
     // than held separately for the group as a whole, and it was wrong
     // then to show any such reserve in a certificate that would have
-    // become a claim at year end.
+    // become a claim at year end. That usage of 'Forborne' was in
+    // conflict with the meaning of that lexeme in 'ForborneVectors'.
+    //
+    // Let us regard only 'ExpRatRsvCash' as authoritative, and
+    // expunge 'ExpRatRsvForborne' when convenient, renaming the
+    // first to drop the 'Cash' lexeme.
     //
     ForborneVectors ["ExpRatRsvCash"        ] = &ExpRatRsvCash          ;
     BegYearVectors  ["ExpRatRsvForborne"    ] = &ExpRatRsvForborne      ;
