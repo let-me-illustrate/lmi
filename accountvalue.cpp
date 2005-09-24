@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: accountvalue.cpp,v 1.18 2005-09-23 03:38:19 chicares Exp $
+// $Id: accountvalue.cpp,v 1.19 2005-09-24 18:45:40 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -1056,7 +1056,7 @@ void AccountValue::SetDebugFilename(std::string const& s)
 
 // Stubs for member functions not implemented on this branch.
 
-double AccountValue::ApportionNetMortalityReserve(double, double)
+double AccountValue::ApportionNetMortalityReserve(double)
     {return 0.0;}
 void   AccountValue::CoordinateCounters()
     {return;}
