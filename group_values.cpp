@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: group_values.cpp,v 1.36 2005-09-24 15:13:32 chicares Exp $
+// $Id: group_values.cpp,v 1.37 2005-09-24 18:27:08 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -605,8 +605,8 @@ restart:
                         }
                     case_net_mortality_reserve_checksum +=
                         (*i)->ApportionNetMortalityReserve
-                            (case_net_mortality_reserve
-                            ,boy_inforce_lives
+                            (   case_net_mortality_reserve
+                            /   boy_inforce_lives
                             );
                     }
                 if

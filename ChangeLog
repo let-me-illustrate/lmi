@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.155 2005-09-24 15:13:33 chicares Exp $
+// $Id: ChangeLog,v 1.156 2005-09-24 18:27:08 chicares Exp $
 
 MAINTENANCE
 
@@ -3807,7 +3807,17 @@ a cell lapses or matures, or when its corridor factor is unity.
 20050924T1513Z <chicares@cox.net> [1267]
 
   account_value.hpp
+  accountvalue.cpp
   group_values.cpp
   ihs_acctval.cpp
 Apportion experience reserve uniformly across inforce lives.
+
+20050924T1827Z <chicares@cox.net> [1266]
+
+  account_value.hpp
+  accountvalue.cpp
+  group_values.cpp
+  ihs_acctval.cpp
+  ledger_variant.cpp
+Refactor.
 
