@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: group_values.cpp,v 1.35 2005-09-23 14:36:50 chicares Exp $
+// $Id: group_values.cpp,v 1.36 2005-09-24 15:13:32 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -522,6 +522,7 @@ restart:
             // mortality.
 
             double ytd_net_claims = 0.0;
+            double boy_inforce_lives = 0.0;
             for(i = cell_values.begin(); i != cell_values.end(); ++i)
                 {
                 if((*i)->PrecedesInforceDuration(year, 11))
@@ -530,6 +531,7 @@ restart:
                     }
                 (*i)->SetClaims();
                 (*i)->SetProjectedCoiCharge();
+                boy_inforce_lives += (*i)->InforceLivesBoy();
                 (*i)->IncrementEOY(year);
                 ytd_net_claims += (*i)->GetCurtateNetClaimsInforce();
                 projected_net_mortchgs += (*i)->GetProjectedCoiChargeInforce();
@@ -546,9 +548,23 @@ restart:
             case_accum_net_mortchgs *= experience_reserve_annual_u;
             case_accum_net_mortchgs += ytd_net_mortchgs;
 
+            // Apportion experience-rating reserve uniformly across
+            // inforce lives. Previously, it had been apportioned by
+            // projected mortality charges; that proved unworkable
+            // when a cell lapsed, matured, or failed to have a
+            // nonzero NAAR due to a corridor factor of unity. To
+            // guard against such problems, the apportioned reserve
+            // is summed across cells and asserted materially to
+            // equal the original total reserve.
+            //
+            // TODO ?? For the nonce, beginning-of-year inforce is
+            // used, for compatibility with code elsewhere, which
+            // assumes that the reserve is a BOY quantity.
+
             if
                 (   cells[0].UseExperienceRating
                 &&  e_currbasis == expense_and_general_account_basis
+                &&  0.0 != boy_inforce_lives
                 )
                 {
                 double case_ibnr =
@@ -580,10 +596,6 @@ restart:
                         );
                     }
 
-                // Apportion experience-rating reserve according to
-                // projected mortality charges, assuming that any
-                // cell in force at end of year contributes a full
-                // year to the projection.
                 double case_net_mortality_reserve_checksum = 0.0;
                 for(i = cell_values.begin(); i != cell_values.end(); ++i)
                     {
@@ -594,12 +606,9 @@ restart:
                     case_net_mortality_reserve_checksum +=
                         (*i)->ApportionNetMortalityReserve
                             (case_net_mortality_reserve
-                            ,ytd_net_mortchgs
+                            ,boy_inforce_lives
                             );
                     }
-// TODO ?? Temporarily enable this diagnostic.
-#define DEBUG_EXPERIENCE_RATING_PROBLEM
-#if defined DEBUG_EXPERIENCE_RATING_PROBLEM // TODO ?? Temporary diagnostic code.
                 if
                     (!materially_equal
                         (case_net_mortality_reserve
@@ -608,22 +617,15 @@ restart:
                     )
                     {
                     warning()
-                        << "\nYear " << year << ": "
+                        << "\nExperience-rating reserve discrepancy in year "
+                        << year
+                        << ": "
                         << case_net_mortality_reserve
                         << " != "
                         << case_net_mortality_reserve_checksum
                         << LMI_FLUSH
                         ;
                     }
-/*
-                LMI_ASSERT
-                    (materially_equal
-                        (case_net_mortality_reserve
-                        ,case_net_mortality_reserve_checksum
-                        )
-                    );
-*/
-#endif // defined DEBUG_EXPERIENCE_RATING_PROBLEM
                 }
 
             if(!meter->reflect_progress())

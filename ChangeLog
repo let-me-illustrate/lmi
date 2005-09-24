@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.154 2005-09-23 14:36:51 chicares Exp $
+// $Id: ChangeLog,v 1.155 2005-09-24 15:13:33 chicares Exp $
 
 MAINTENANCE
 
@@ -3803,4 +3803,11 @@ Prepare to change experience-rating implementation. This is the last
 version that reproduces old regression-testing results. Errors in
 those results are written to the console. Such errors may arise when
 a cell lapses or matures, or when its corridor factor is unity.
+
+20050924T1513Z <chicares@cox.net> [1267]
+
+  account_value.hpp
+  group_values.cpp
+  ihs_acctval.cpp
+Apportion experience reserve uniformly across inforce lives.
 
