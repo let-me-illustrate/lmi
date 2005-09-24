@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.156 2005-09-24 18:27:08 chicares Exp $
+// $Id: ChangeLog,v 1.157 2005-09-24 19:10:34 chicares Exp $
 
 MAINTENANCE
 
@@ -3819,5 +3819,13 @@ Apportion experience reserve uniformly across inforce lives.
   group_values.cpp
   ihs_acctval.cpp
   ledger_variant.cpp
+Refactor.
+
+20050924T1910Z <chicares@cox.net> [1265]
+
+  group_values.cpp
+  ihs_acctval.cpp
+  ledger_variant.cpp
+  ledger_variant.hpp
 Refactor.
 
