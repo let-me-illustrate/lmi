@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: group_values.cpp,v 1.39 2005-09-26 01:10:57 chicares Exp $
+// $Id: group_values.cpp,v 1.40 2005-09-26 01:27:22 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -351,6 +351,12 @@ bool run_census_in_parallel::operator()
                 );
 
             cell_values.push_back(av);
+
+            if(std::string::npos != av->Input_->Comments.find("idiosyncrasyZ"))
+                {
+                av->Debugging = true;
+                av->DebugPrintInit();
+                }
 
             if
                 (   first_cell_inforce_year  != value_cast<int>((*ip)["InforceYear"].str())

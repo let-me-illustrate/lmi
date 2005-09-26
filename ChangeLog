@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.157 2005-09-24 19:10:34 chicares Exp $
+// $Id: ChangeLog,v 1.158 2005-09-26 01:27:22 chicares Exp $
 
 MAINTENANCE
 
@@ -3828,4 +3828,43 @@ Refactor.
   ledger_variant.cpp
   ledger_variant.hpp
 Refactor.
+
+20050926T0110Z <chicares@cox.net> [1267]
+
+  ihs_acctval.cpp
+Improve documentation.
+
+  ihs_avdebug.cpp
+Document a defect.
+
+  ledger_text_formats.cpp
+Add net claims and experience-rating reserve to 'spreadsheet' output.
+
+  group_values.cpp
+Temporarily resurrect an old testing scaffold. This is distasteful
+because it's intrusive, not general, and bloats the code, (as may also
+be said of code guarded by
+  DEBUGGING_SEP_ACCT_LOAD
+  DEBUGGING_SC
+as the present addition is guarded by
+  SHOW_EXPERIENCE_RATING_REPORT
+) but it's temporarily impossible for "business" reasons to do this in
+the most natural way.
+
+ <chicares@cox.net> [1267]
+
+
+  accountvalue.cpp
+  group_values.cpp
+Enable monthly detail report for parallel runs.
+
+Remove old testing scaffold.
+
+
+!           cell_values.push_back(av);
+            if(std::string::npos != av->Input_->Comments.find("idiosyncrasyZ"))
+                {
+                av->Debugging = true;
+                av->DebugPrintInit();
+                }
 
