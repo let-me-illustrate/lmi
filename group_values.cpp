@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: group_values.cpp,v 1.40 2005-09-26 01:27:22 chicares Exp $
+// $Id: group_values.cpp,v 1.41 2005-09-26 01:48:48 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -50,11 +50,6 @@
 #include <boost/shared_ptr.hpp>
 
 #include <algorithm> // std::max()
-
-#ifdef SHOW_EXPERIENCE_RATING_REPORT
-#   include <fstream>
-#   include <ios>
-#endif // defined SHOW_EXPERIENCE_RATING_REPORT
 
 namespace
 {
@@ -291,39 +286,6 @@ bool run_census_in_parallel::operator()
 {
     Timer timer;
 
-#ifdef SHOW_EXPERIENCE_RATING_REPORT
-    // TODO ?? Actually, this is annual, not "monthly".
-    // TODO ?? Test efficiency: does it really cost nothing to write
-    // to an unopened std::ofstream?
-    std::ofstream monthly_detail_stream;
-    if(std::string::npos != cells[0].Comments.find("idiosyncrasyZ"))
-        {
-        std::string s =
-                "monthly"
-            +   configurable_settings::instance().spreadsheet_file_extension()
-            ;
-        monthly_detail_stream.open
-            (serialized_file_path(file, -1, s).string().c_str()
-            ,std::ios_base::out | std::ios_base::trunc
-            );
-        monthly_detail_stream
-            << "year\t"
-            << "experience_reserve_annual_u\t"
-            << "ytd_net_mortchgs\t"
-            << "case_accum_net_mortchgs\t"
-            << "current_net_claims\t"
-            << "case_accum_net_claims\t"
-            << "case_ibnr_months\t"
-            << "case_ibnr\t"
-            << "projected_net_mortchgs\t"
-            << "case_k_factor\t"
-            << "case_net_mortality_reserve\t"
-            << "case_net_mortality_reserve_checksum\t"
-            << '\n'
-            ;
-        }
-#endif // defined SHOW_EXPERIENCE_RATING_REPORT
-
     std::vector<boost::shared_ptr<AccountValue> > cell_values;
     std::vector<IllusInputParms>::const_iterator ip;
     try
@@ -423,10 +385,6 @@ restart:
             ,expense_and_general_account_basis
             ,separate_account_basis
             );
-
-#ifdef SHOW_EXPERIENCE_RATING_REPORT
-        monthly_detail_stream << '\n' << *run_basis << '\n';
-#endif // defined SHOW_EXPERIENCE_RATING_REPORT
 
         // Calculate duration when the youngest life matures.
         int MaxYr = 0;
@@ -670,23 +628,6 @@ restart:
                         << LMI_FLUSH
                         ;
                     }
-#ifdef SHOW_EXPERIENCE_RATING_REPORT
-                monthly_detail_stream
-                    <<         std::setprecision( 0) << year
-                    << '\t' << std::setprecision(20) << experience_reserve_annual_u
-                    << '\t' << std::setprecision(20) << ytd_net_mortchgs
-                    << '\t' << std::setprecision(20) << case_accum_net_mortchgs
-                    << '\t' << std::setprecision(20) << ytd_net_claims
-                    << '\t' << std::setprecision(20) << case_accum_net_claims
-                    << '\t' << std::setprecision(20) << case_ibnr_months
-                    << '\t' << std::setprecision(20) << case_ibnr
-                    << '\t' << std::setprecision(20) << projected_net_mortchgs
-                    << '\t' << std::setprecision(20) << case_k_factor
-                    << '\t' << std::setprecision(20) << case_net_mortality_reserve
-                    << '\t' << std::setprecision(20) << case_net_mortality_reserve_checksum
-                    << '\n' << std::flush
-                    ;
-#endif // defined SHOW_EXPERIENCE_RATING_REPORT
                 }
 
             if(!meter->reflect_progress())
