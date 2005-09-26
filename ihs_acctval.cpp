@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_acctval.cpp,v 1.59 2005-09-24 19:10:34 chicares Exp $
+// $Id: ihs_acctval.cpp,v 1.60 2005-09-26 01:10:28 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -126,6 +126,11 @@ AccountValue::AccountValue(InputParms const& input)
         ==  static_cast<unsigned int>(1 + BasicValues::GetLength())
         );
     partial_mortality_q.resize(BasicValues::GetLength());
+    // TODO ?? 'InvariantValues().InforceLives' may be thought of as
+    // counting potential inforce lives: it does not reflect lapses.
+    // It should either reflect lapses or be renamed. Meanwhile,
+    // InforceLivesBoy() and InforceLivesEoy() may be used where
+    // lapses should be taken into account.
     if(Input_->UsePartialMort)
         {
         double inforce_lives = Input_->NumIdenticalLives;
@@ -1645,16 +1650,6 @@ void AccountValue::FinalizeYear()
             );
         }
 
-/* TODO ?? Belongs here, but done elsewhere for now.
-    LMI_ASSERT(0 != Input_->NumIdenticalLives); // Make sure division is safe.
-    VariantValues().ExpRatRsvCash       [Year] =
-          apportioned_net_mortality_reserve
-        * InvariantValues().InforceLives[Year]
-        / Input_->NumIdenticalLives
-        ;
-    VariantValues().ExpRatRsvForborne   [Year] = apportioned_net_mortality_reserve;
-*/
-
     if(e_run_curr_basis == RateBasis)
         {
         InvariantValues().GrossPmt  [Year]  = 0.0;
@@ -1963,9 +1958,6 @@ double AccountValue::GetProjectedCoiChargeInforce()
 // The return value, added across cells, should reproduce the total
 // total reserve at the case level, as the caller may assert.
 //
-// TODO ?? For the nonce, the return value is weighted here;
-// it would seem clearer to take the weighted sum at the call site.
-//
 // TODO ?? Any historical reason for distinguishing
 // 'ExpRatRsvForborne' and 'ExpRatRsvCash' has become inoperative.
 //
@@ -1994,6 +1986,8 @@ double AccountValue::ApportionNetMortalityReserve
         *   inforce_factor
         ;
 
+    // The experience-rating reserve can't be posted to the ledger in
+    // FinalizeYear(), which is run before the reserve is calculated.
     VariantValues().ExpRatRsvForborne[Year] = reserve_per_life_inforce;
     VariantValues().ExpRatRsvCash[Year] = apportioned_net_mortality_reserve;
 
@@ -2003,7 +1997,6 @@ double AccountValue::ApportionNetMortalityReserve
         ;
 }
 
-// These two functions are experimental and might be removed later.
 //============================================================================
 double AccountValue::InforceLivesBoy() const
 {
