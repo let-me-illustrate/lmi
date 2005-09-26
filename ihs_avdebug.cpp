@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avdebug.cpp,v 1.14 2005-09-12 01:32:19 chicares Exp $
+// $Id: ihs_avdebug.cpp,v 1.15 2005-09-26 01:10:39 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -268,6 +268,14 @@ void AccountValue::DebugPrint()
             ? 0.0
             : InvariantValues().InforceLives[Year] / Input_->NumIdenticalLives
         );
+
+    // TODO ?? Claims show up as zero because SetClaims() is called
+    // not at the end of each month (before DebugPrint() is called),
+    // but at the end of each year (after DebugPrint() has been called).
+    // The 'debug' facility (which ought probably to be renamed) should
+    // be redesigned anyway to show monthly detail for composites. And
+    // it should show 'YearsNetClaims' as well as 'YearsGrossClaims',
+    // but adding the former is pointless as long as it would be zero.
     SetMonthlyDetail(eClaimsPaid         ,YearsGrossClaims                 );
 
     bool irc7702a_data_irrelevant =
