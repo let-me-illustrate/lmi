@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.158 2005-09-26 01:27:22 chicares Exp $
+// $Id: ChangeLog,v 1.159 2005-09-26 01:50:07 chicares Exp $
 
 MAINTENANCE
 
@@ -3851,20 +3851,14 @@ as the present addition is guarded by
 ) but it's temporarily impossible for "business" reasons to do this in
 the most natural way.
 
- <chicares@cox.net> [1267]
-
+20050926T0127Z <chicares@cox.net> [1267]
 
   accountvalue.cpp
   group_values.cpp
 Enable monthly detail report for parallel runs.
 
+20050926T0148Z <chicares@cox.net> [1265]
+
+  group_values.cpp
 Remove old testing scaffold.
-
-
-!           cell_values.push_back(av);
-            if(std::string::npos != av->Input_->Comments.find("idiosyncrasyZ"))
-                {
-                av->Debugging = true;
-                av->DebugPrintInit();
-                }
 
