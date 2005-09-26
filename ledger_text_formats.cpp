@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_text_formats.cpp,v 1.10 2005-09-03 23:55:43 chicares Exp $
+// $Id: ledger_text_formats.cpp,v 1.11 2005-09-26 01:10:52 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -392,6 +392,8 @@ os << "\n\n" ;
         ,"NetInterestCredited"
         ,"YearEndInforceLives"
         ,"ClaimsPaid"
+        ,"NetClaims"
+        ,"ExpRatRsvCash"
         ,"ProducerCompensation"
         };
 
@@ -488,7 +490,13 @@ os << "\n\n" ;
 
         // First element of InforceLives is BOY--show only EOY.
         os << value_cast<std::string>(Invar.InforceLives[1 + j]) << '\t';
+
+        // TODO ?? For experience rating, it would be nice to add
+        // projected mortality charge and k factor here. That requires
+        // adding them to the ledger class first.
         os << Curr_.value_str("ClaimsPaid"            ,j) << '\t';
+        os << Curr_.value_str("NetClaims"             ,j) << '\t';
+        os << Curr_.value_str("ExpRatRsvCash"         ,j) << '\t';
         os << Invar.value_str("ProducerCompensation"  ,j) << '\t';
 
         os << '\n';
