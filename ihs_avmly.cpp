@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avmly.cpp,v 1.27 2005-09-19 13:00:36 chicares Exp $
+// $Id: ihs_avmly.cpp,v 1.28 2005-09-27 02:03:43 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -2374,8 +2374,7 @@ void AccountValue::TxSetCoiCharge()
     // depending on database entity 'UseRawTableForRetention'.
 
     if
-        (   COIIsDynamic
-        &&  Input_->UseExperienceRating
+        (   Input_->UseExperienceRating
         &&  e_currbasis == ExpAndGABasis
         )
         {
