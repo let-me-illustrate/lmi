@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: account_value.hpp,v 1.31 2005-09-24 18:27:08 chicares Exp $
+// $Id: account_value.hpp,v 1.32 2005-09-27 16:49:11 chicares Exp $
 
 #ifndef account_value_hpp
 #define account_value_hpp
@@ -311,11 +311,10 @@ class LMI_EXPIMP AccountValue
     void   SetMaxWD                ();
     double GetRefundableSalesLoad  () const;
     double DetermineSpecAmtLoad    ();
-    double DetermineAcctValLoadBOM (); // TODO ?? eradicate
-    double DetermineAcctValLoadAMD ();
+    double DetermineSepAcctLoad    ();
 
-    void   ApplyDynamicMandE          (double assets);
-    void   ApplyDynamicSepAcctLoadAMD (double assets, double cumpmts);
+    void   ApplyDynamicMandE       (double assets);
+    void   ApplyDynamicSepAcctLoad (double assets, double cumpmts);
 
     void   SetMonthlyDetail(int enumerator, std::string const& s);
     void   SetMonthlyDetail(int enumerator, double d);
@@ -446,9 +445,7 @@ class LMI_EXPIMP AccountValue
     double  CoiCharge;
     double  NetCoiCharge;
     double  SpecAmtLoadBase;
-    // TODO ?? Separating different types of sepacct load is probably unneeded.
-    double  AVSepAcctLoadBaseBOM; // TODO ?? eradicate
-    double  AVSepAcctLoadBaseAMD;
+    double  AVSepAcctLoadBase;
     double  DacTaxRsv;
 
     double  AVUnloaned; // Antediluvian.
@@ -553,8 +550,7 @@ class LMI_EXPIMP AccountValue
     double  YearsSalesLoadTgt;
     double  YearsSalesLoadExc;
     double  YearsSpecAmtLoad;
-    double  YearsAcctValLoadBOM; // TODO ?? eradicate
-    double  YearsAcctValLoadAMD;
+    double  YearsSepAcctLoad;
     double  YearsSalesLoadRefundRate;
     double  YearsPremTaxLoadRate;
     double  YearsDacTaxLoadRate;
@@ -606,8 +602,7 @@ class LMI_EXPIMP AccountValue
     double  YearsTotalPremTaxLoadInStateOfJurisdiction;
     double  YearsTotalDacTaxLoad;
     double  YearsTotalSpecAmtLoad;
-    double  YearsTotalAcctValLoadBOM; // TODO ?? eradicate
-    double  YearsTotalAcctValLoadAMD;
+    double  YearsTotalSepAcctLoad;
 
     std::vector<double> partial_mortality_q;
 

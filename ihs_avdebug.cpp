@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avdebug.cpp,v 1.15 2005-09-26 01:10:39 chicares Exp $
+// $Id: ihs_avdebug.cpp,v 1.16 2005-09-27 16:49:11 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -192,7 +192,6 @@ void AccountValue::DebugPrint()
     SetMonthlyDetail(eMlyPolicyFee       ,YearsMlyPolFee                   );
     SetMonthlyDetail(eAnnPolicyFee       ,YearsAnnPolFee                   );
     SetMonthlyDetail(eSpecAmtLoad        ,DetermineSpecAmtLoad()           );
-    SetMonthlyDetail(eAcctValLoadBOM     ,DetermineAcctValLoadBOM()        );
     SetMonthlyDetail(eNAAR               ,NAAR                             );
     SetMonthlyDetail(eCoiRate            ,ActualCoiRate                    );
     SetMonthlyDetail(eCoiCharge          ,CoiCharge                        );
@@ -210,7 +209,7 @@ void AccountValue::DebugPrint()
     SetMonthlyDetail(eGenAcctIntCred     ,GenAcctIntCred                   );
     SetMonthlyDetail(eSepAcctIntRate     ,ActualMonthlyRate(YearsSepAcctIntRate              ));
     SetMonthlyDetail(eSepAcctIntCred     ,SepAcctIntCred                   );
-    SetMonthlyDetail(eAcctValLoadAMD     ,DetermineAcctValLoadAMD()        );
+    SetMonthlyDetail(eSepAcctLoad        ,DetermineSepAcctLoad()           );
     SetMonthlyDetail(eRegLnIntRate       ,ActualMonthlyRate(YearsRegLnIntCredRate            ));
     SetMonthlyDetail(eRegLnIntCred       ,RegLnIntCred                     );
     SetMonthlyDetail(ePrfLnIntRate       ,ActualMonthlyRate(YearsPrfLnIntCredRate            ));

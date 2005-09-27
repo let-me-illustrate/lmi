@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xml_io.cpp,v 1.24 2005-09-12 01:32:19 chicares Exp $
+// $Id: ledger_xml_io.cpp,v 1.25 2005-09-27 16:49:11 chicares Exp $
 
 #include "config.hpp"
 
@@ -188,14 +188,12 @@ typedef std::map<std::string, std::string> title_map_t;
 // >
 // > AcctVal_*
 // > AcctValLoadAMD_*
-// > AcctValLoadBOM_*
 // > AccumulatedPremium
 //
 // I translated that into
 //
 //    format_map["AcctVal"                           ] = f1;
 //    format_map["AcctValLoadAMD"                    ] = f1;
-//    format_map["AcctValLoadBOM"                    ] = f1;
 //    format_map["AccumulatedPremium"                ] = f1;
 //
 // where 'f1' is one of several formats I abstracted from your specs
@@ -261,10 +259,8 @@ void Ledger::write(xml::node& x) const
 //  Here are the columns to be listed in the user interface
 //  as well as their corresponding titles.
     title_map["AVRelOnDeath_Current"            ] = "Acct Val Rel on Death";
-    title_map["AcctValLoadAMD_Current"          ] = "Curr Acct Val Load Aft MDed";
-    title_map["AcctValLoadAMD_Guaranteed"       ] = "Guar Acct Val Load Aft MDed";
-    title_map["AcctValLoadBOM_Current"          ] = "Curr Acct Value Load BOM";
-    title_map["AcctValLoadBOM_Guaranteed"       ] = "Guar Acct Value Load BOM";
+    title_map["AcctValLoadAMD_Current"          ] = "Curr Sep Acct Load";
+    title_map["AcctValLoadAMD_Guaranteed"       ] = "Guar Sep Acct Load";
     title_map["AcctVal_Current"                 ] = "Curr Account Value";
     title_map["AcctVal_Guaranteed"              ] = "Guar Account Value";
     title_map["AddonCompOnAssets"               ] = "Additional Comp on Assets";
@@ -611,7 +607,6 @@ void Ledger::write(xml::node& x) const
 // >
     format_map["AcctVal"                           ] = f1;
     format_map["AcctValLoadAMD"                    ] = f1;
-    format_map["AcctValLoadBOM"                    ] = f1;
     format_map["AccumulatedPremium"                ] = f1;
     format_map["AddonCompOnAssets"                 ] = f1;
     format_map["AddonCompOnPremium"                ] = f1;

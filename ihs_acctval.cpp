@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_acctval.cpp,v 1.61 2005-09-27 02:03:42 chicares Exp $
+// $Id: ihs_acctval.cpp,v 1.62 2005-09-27 16:49:11 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -866,8 +866,8 @@ void AccountValue::IncrementEOM
         LMI_ASSERT(28 <= days_in_policy_month && days_in_policy_month <= 31);
         }
 
-    ApplyDynamicSepAcctLoadAMD(TotalCaseAssets, CumPmts);
-    ApplyDynamicMandE         (TotalCaseAssets);
+    ApplyDynamicSepAcctLoad(TotalCaseAssets, CumPmts);
+    ApplyDynamicMandE      (TotalCaseAssets);
 
     DoMonthCR();
 }
@@ -983,9 +983,9 @@ void AccountValue::ApplyDynamicMandE(double assets)
 }
 
 //============================================================================
-// When the sep acct AV load depends on each month's case total assets, the
+// When the sep acct load depends on each month's case total assets, the
 // interest rate is no longer an annual invariant. Set it monthly here.
-void AccountValue::ApplyDynamicSepAcctLoadAMD(double assets, double cumpmts)
+void AccountValue::ApplyDynamicSepAcctLoad(double assets, double cumpmts)
 {
     if(!SepAcctLoadIsDynamic)
         {
@@ -994,7 +994,7 @@ void AccountValue::ApplyDynamicSepAcctLoadAMD(double assets, double cumpmts)
 
     // TODO ?? This is misnamed. It does double duty in 'tiered' and
     // 'banded' guises.
-    double tiered_load_amd = 0.0;
+    double tiered_load = 0.0;
 
 #ifdef DEBUGGING_SEP_ACCT_LOAD
     std::ofstream os
@@ -1014,7 +1014,7 @@ void AccountValue::ApplyDynamicSepAcctLoadAMD(double assets, double cumpmts)
         {
         case e_currbasis:
             {
-            tiered_load_amd =
+            tiered_load =
                     TieredCharges_->tiered_current_separate_account_load(assets)
                 +   TieredCharges_->banded_current_separate_account_load(cumpmts)
                 ;
@@ -1032,7 +1032,7 @@ void AccountValue::ApplyDynamicSepAcctLoadAMD(double assets, double cumpmts)
             break;
         case e_guarbasis:
             {
-            tiered_load_amd =
+            tiered_load =
                     TieredCharges_->tiered_guaranteed_separate_account_load(assets)
                 +   TieredCharges_->banded_guaranteed_separate_account_load(cumpmts)
                 ;
@@ -1071,26 +1071,26 @@ void AccountValue::ApplyDynamicSepAcctLoadAMD(double assets, double cumpmts)
 
 #ifdef DEBUGGING_SEP_ACCT_LOAD
     os
-        << "\n  tiered_load_amd = " << tiered_load_amd
+        << "\n  tiered_load = " << tiered_load
         << std::endl
         ;
 #endif // DEBUGGING_SEP_ACCT_LOAD
     // convert tiered load from annual to monthly effective rate
     // TODO ?? This isn't really right. Instead, aggregate annual
     // rates, then convert their sum to monthly.
-    tiered_load_amd = i_upper_12_over_12_from_i<double>()(tiered_load_amd);
-    round_interest_rate(tiered_load_amd);
+    tiered_load = i_upper_12_over_12_from_i<double>()(tiered_load);
+    round_interest_rate(tiered_load);
 
 #ifdef DEBUGGING_SEP_ACCT_LOAD
     os
-        << "\n  monthly tiered_load_amd = " << tiered_load_amd
+        << "\n  monthly tiered_load = " << tiered_load
         << std::endl
         ;
 #endif // DEBUGGING_SEP_ACCT_LOAD
 
     double tiered_comp = 0.0;
 
-    if(e_asset_charge_load_after_ded == Database_->Query(DB_AssetChargeType))
+    if(e_asset_charge_load == Database_->Query(DB_AssetChargeType))
         {
         tiered_comp = TieredCharges_->tiered_asset_based_compensation(assets);
         tiered_comp = i_upper_12_over_12_from_i<double>()(tiered_comp);
@@ -1110,7 +1110,7 @@ void AccountValue::ApplyDynamicSepAcctLoadAMD(double assets, double cumpmts)
 // variables they use.
 
     // is there any advantage to this sort of implementation in loads.cpp?
-    //YearsAcctValLoadAMD   = Loads_->GetDynamicSepAcctLoadAMD()
+    //   YearsSepAcctLoad   = Loads_->GetDynamicSepAcctLoad()
     // TODO ?? Yes. It would be far better to move it there and write
     // a unit test suite for the loads class.
 
@@ -1121,12 +1121,12 @@ void AccountValue::ApplyDynamicSepAcctLoadAMD(double assets, double cumpmts)
 // These are the things that should be done in the loads class:
 
     // curr and guar:
-            tiered_load_amd =
+            tiered_load =
                     TieredCharges_->tiered_current_separate_account_load(assets)
                 +   TieredCharges_->banded_current_separate_account_load(cumpmts)
                 ;
 
-    if(e_asset_charge_load_after_ded == Database_->Query(DB_AssetChargeType))
+    if(e_asset_charge_load == Database_->Query(DB_AssetChargeType))
         {
         tiered_comp = TieredCharges_->tiered_asset_based_compensation(assets);
         tiered_comp = i_upper_12_over_12_from_i<double>()(tiered_comp);
@@ -1137,23 +1137,23 @@ void AccountValue::ApplyDynamicSepAcctLoadAMD(double assets, double cumpmts)
         // that an admin system would be expected to do.
         }
 
-    YearsAcctValLoadAMD = Loads_->account_value_load_after_deduction(ExpAndGABasis)[Year];
+    YearsSepAcctLoad = Loads_->separate_account_load(ExpAndGABasis)[Year];
 
     // TODO ?? aggregate loads once and only once for conversion to monthly
-    tiered_load_amd = i_upper_12_over_12_from_i<double>()(tiered_load_amd);
+    tiered_load = i_upper_12_over_12_from_i<double>()(tiered_load);
 
     // TODO ?? shouldn't rounding be done in the loads class?
-    round_interest_rate(tiered_load_amd);
+    round_interest_rate(tiered_load);
 
 */
 
-    YearsAcctValLoadAMD = Loads_->account_value_load_after_deduction(ExpAndGABasis)[Year];
-    YearsAcctValLoadAMD+= tiered_load_amd;
-    YearsAcctValLoadAMD+= tiered_comp;
+    YearsSepAcctLoad = Loads_->separate_account_load(ExpAndGABasis)[Year];
+    YearsSepAcctLoad+= tiered_load;
+    YearsSepAcctLoad+= tiered_comp;
 #ifdef DEBUGGING_SEP_ACCT_LOAD
     os
-        << "\n  load in database = " << Loads_->account_value_load_after_deduction(ExpAndGABasis)[Year]
-        << "\n  YearsAcctValLoadAMD = " << YearsAcctValLoadAMD
+        << "\n  load in database = " << Loads_->separate_account_load(ExpAndGABasis)[Year]
+        << "\n  YearsSepAcctLoad = " << YearsSepAcctLoad
         << std::endl
         ;
 #endif // DEBUGGING_SEP_ACCT_LOAD
@@ -1185,8 +1185,7 @@ void AccountValue::InitializeYear()
     YearsTotalPremTaxLoadInStateOfJurisdiction = 0.0;
     YearsTotalDacTaxLoad        = 0.0;
     YearsTotalSpecAmtLoad       = 0.0;
-    YearsTotalAcctValLoadBOM    = 0.0;
-    YearsTotalAcctValLoadAMD    = 0.0;
+    YearsTotalSepAcctLoad       = 0.0;
     YearsTotalGptForceout       = 0.0;
 
     NextYearsProjectedCoiCharge = 0.0;
@@ -1614,8 +1613,7 @@ void AccountValue::FinalizeYear()
     VariantValues().PremTaxLoad     [Year] = YearsTotalPremTaxLoad      ;
     VariantValues().DacTaxLoad      [Year] = YearsTotalDacTaxLoad       ;
     VariantValues().SpecAmtLoad     [Year] = YearsTotalSpecAmtLoad      ;
-    VariantValues().AcctValLoadBOM  [Year] = YearsTotalAcctValLoadBOM   ;
-    VariantValues().AcctValLoadAMD  [Year] = YearsTotalAcctValLoadAMD   ;
+    VariantValues().AcctValLoadAMD  [Year] = YearsTotalSepAcctLoad      ;
 
     // Record dynamic interest rate in ledger object.
     //
@@ -1698,7 +1696,7 @@ void AccountValue::FinalizeYear()
 //        InvariantValues().NaarForceout[Year] = InvariantValues().ErGrossPmt[Year];
 
         // TODO ?? This should also incorporate:
-        //   asset-tiered compensation as in ApplyDynamicSepAcctLoadAMD()
+        //   asset-tiered compensation as in ApplyDynamicSepAcctLoad()
         //   input 'extra' compensation (on premium and assets)
         double commission =
                 InvariantValues().GrossPmt[Year]
@@ -1815,8 +1813,7 @@ void AccountValue::SetAnnualInvariants()
     YearsSalesLoadTgt       = Loads_->target_sales_load  (ExpAndGABasis)[Year];
     YearsSalesLoadExc       = Loads_->excess_sales_load  (ExpAndGABasis)[Year];
     YearsSpecAmtLoad        = Loads_->specified_amount_load (ExpAndGABasis)[Year];
-    YearsAcctValLoadBOM     = Loads_->account_value_load_before_deduction (ExpAndGABasis)[Year];
-    YearsAcctValLoadAMD     = Loads_->account_value_load_after_deduction  (ExpAndGABasis)[Year];
+    YearsSepAcctLoad        = Loads_->separate_account_load (ExpAndGABasis)[Year];
     YearsSalesLoadRefundRate= Loads_->refundable_sales_load_proportion()[Year];
     YearsPremTaxLoadRate    = Loads_->premium_tax_load                ()[Year];
     YearsDacTaxLoadRate     = Loads_->dac_tax_load                    ()[Year];

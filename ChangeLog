@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.161 2005-09-27 14:00:36 chicares Exp $
+// $Id: ChangeLog,v 1.162 2005-09-27 16:49:11 chicares Exp $
 
 MAINTENANCE
 
@@ -3881,4 +3881,24 @@ Revise comments.
 
   ihs_avmly.cpp
 Resolve or demote certain defects.
+
+20050927T1649Z <chicares@cox.net> [1260]
+
+  account_value.hpp
+  dbnames.hpp
+  dbnames.xpp
+  ihs_acctval.cpp
+  ihs_avdebug.cpp
+  ihs_avmly.cpp
+  ihs_dbdict.cpp
+  ihs_dbughdr.hpp
+  ledger_text_formats.cpp
+  ledger_variant.cpp
+  ledger_variant.hpp
+  ledger_xml_io.cpp
+  loads.cpp
+  loads.hpp
+  xenumtypes.cpp
+  xenumtypes.hpp
+Purge misbegotten beginning-of-month separate-account load.
 

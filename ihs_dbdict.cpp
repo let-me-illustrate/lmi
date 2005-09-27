@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_dbdict.cpp,v 1.10 2005-09-27 02:03:43 chicares Exp $
+// $Id: ihs_dbdict.cpp,v 1.11 2005-09-27 16:49:11 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -264,7 +264,6 @@ void DBDictionary::WriteSampleDBFile()
     Add(TDBValue(DB_GuarPremLoadExc     , 0.04));
     Add(TDBValue(DB_GuarPremLoadTgtRfd  , 0.00));
     Add(TDBValue(DB_GuarPremLoadExcRfd  , 0.00));
-    Add(TDBValue(DB_GuarAcctValLoadBOM  , 0.0));
     Add(TDBValue(DB_GuarAcctValLoadAMD  , 0.0));
     Add(TDBValue(DB_CurrPolFee          , 5.00));
     Add(TDBValue(DB_CurrSpecAmtLoad     , 0.0));
@@ -274,7 +273,6 @@ void DBDictionary::WriteSampleDBFile()
     Add(TDBValue(DB_CurrPremLoadExc     , 0.02));
     Add(TDBValue(DB_CurrPremLoadTgtRfd  , 0.00));
     Add(TDBValue(DB_CurrPremLoadExcRfd  , 0.00));
-    Add(TDBValue(DB_CurrAcctValLoadBOM  , 0.0));
     Add(TDBValue(DB_CurrAcctValLoadAMD  , 0.0));
     Add(TDBValue(DB_DACTaxPremLoad      , 0.01));
     Add(TDBValue(DB_FundCharge          , 0.0));

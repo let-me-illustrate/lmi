@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: loads.hpp,v 1.3 2005-07-19 13:09:50 chicares Exp $
+// $Id: loads.hpp,v 1.4 2005-09-27 16:49:11 chicares Exp $
 
 #ifndef loads_hpp
 #define loads_hpp
@@ -49,8 +49,7 @@ class Loads
     std::vector<double> const& monthly_policy_fee    (e_basis const&) const;
     std::vector<double> const& annual_policy_fee     (e_basis const&) const;
     std::vector<double> const& specified_amount_load (e_basis const&) const;
-    std::vector<double> const& account_value_load_before_deduction (e_basis const&) const;
-    std::vector<double> const& account_value_load_after_deduction  (e_basis const&) const;
+    std::vector<double> const& separate_account_load (e_basis const&) const;
     std::vector<double> const& target_premium_load   (e_basis const&) const;
     std::vector<double> const& excess_premium_load   (e_basis const&) const;
     std::vector<double> const& target_sales_load     (e_basis const&) const;
@@ -86,8 +85,7 @@ class Loads
     std::vector<std::vector<double> > monthly_policy_fee_;
     std::vector<std::vector<double> > annual_policy_fee_;
     std::vector<std::vector<double> > specified_amount_load_;
-    std::vector<std::vector<double> > account_value_load_before_deduction_;
-    std::vector<std::vector<double> > account_value_load_after_deduction_;
+    std::vector<std::vector<double> > separate_account_load_;
     std::vector<std::vector<double> > target_premium_load_;
     std::vector<std::vector<double> > excess_premium_load_;
     std::vector<std::vector<double> > target_sales_load_;
@@ -130,15 +128,9 @@ Loads::specified_amount_load(e_basis const& b) const
 }
 
 inline std::vector<double> const&
-Loads::account_value_load_before_deduction(e_basis const& b) const
+Loads::separate_account_load(e_basis const& b) const
 {
-    return account_value_load_before_deduction_[b.value()];
-}
-
-inline std::vector<double> const&
-Loads::account_value_load_after_deduction(e_basis const& b) const
-{
-    return account_value_load_after_deduction_[b.value()];
+    return separate_account_load_[b.value()];
 }
 
 inline std::vector<double> const&
