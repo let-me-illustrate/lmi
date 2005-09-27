@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.160 2005-09-27 02:03:43 chicares Exp $
+// $Id: ChangeLog,v 1.161 2005-09-27 14:00:36 chicares Exp $
 
 MAINTENANCE
 
@@ -3871,4 +3871,14 @@ Remove old testing scaffold.
   ihs_basicval.cpp
   ihs_dbdict.cpp
 Withdraw support for unneeded 'DB_DynamicCOI'.
+
+20050927T1306Z <chicares@cox.net> [1270]
+
+  ihs_avmly.cpp
+Revise comments.
+
+20050927T1400Z <chicares@cox.net> [1263]
+
+  ihs_avmly.cpp
+Resolve or demote certain defects.
 

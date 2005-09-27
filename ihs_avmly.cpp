@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avmly.cpp,v 1.29 2005-09-27 13:06:43 chicares Exp $
+// $Id: ihs_avmly.cpp,v 1.30 2005-09-27 14:00:36 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -803,12 +803,12 @@ void AccountValue::ChangeSurrChgSpecAmtBy(double delta)
     LMI_ASSERT(delta <= 0.0);
     SurrChgSpecAmt += delta;
     SurrChgSpecAmt = std::max(0.0, SurrChgSpecAmt);
-    // TODO ?? But it's not used yet....
+    // TODO ?? 'SurrChgSpecAmt' isn't used yet.
 
-    // TODO ?? Recalculation of GDB premium is not yet implemented.
+    // SOMEDAY !! Recalculation of GDB premium is not yet implemented.
     // It is fairly common to let withdrawals affect it. If this is
     // the best place to do that, then perhaps this function should
-    // be renamed, since it doesn't merely change 'SurrChgSpecAmt'.
+    // be renamed, since it wouldn't merely change 'SurrChgSpecAmt'.
 }
 
 //============================================================================
@@ -1235,7 +1235,7 @@ void AccountValue::IncreaseSpecAmtToAvoidMec()
             ,e_mode(e_annual)
             );
 
-        double target_premium_rate = 0.01; // TODO ?? Arbitrary.
+        double target_premium_rate = 0.0;
         if(e_modal_nonmec == Database_->Query(DB_TgtPremType))
             {
             target_premium_rate = MortalityRates_->SevenPayRates()[0];
@@ -1562,8 +1562,9 @@ but position could be reversed for variable policy with bad curr performance
 // Ignores strategies such as pay guideline premium, which are handled
 //   in PerformE[er]PmtStrategy().
 // Ignores no-lapse periods and other death benefit guarantees.
-// TODO ?? Some systems force monthly premium to be integral cents even
-//   though actual mode is not monthly; is that something we need to do here?
+//
+// SOMEDAY !! Some systems force monthly premium to be integral cents even
+// though actual mode is not monthly; is that something we need to do here?
 
 /*
 Decide whether we need to do anything
@@ -1613,7 +1614,6 @@ void AccountValue::TxAscertainDesiredPayment()
             double eepmt = PerformEePmtStrategy();
             // Don't enforce the GPT premium limit when solving for
             // illustration-reg guaranteed premium.
-// TODO ?? JOE--Compliance change needed in output.
             if(!SolvingForGuarPremium)
                 {
                 double fake_cum_pmt = 0.0; // TODO ?? Needs work.
@@ -2142,7 +2142,6 @@ void AccountValue::TxSetBOMAV()
         {
         total_bom_deduction += YearsAnnPolFee;
         YearsTotalAnnPolFee += YearsAnnPolFee;
-        Dcv -= YearsAnnPolFee;
         }
 
     total_bom_deduction += YearsMlyPolFee;
@@ -2158,7 +2157,6 @@ void AccountValue::TxSetBOMAV()
 
     process_deduction(total_bom_deduction);
 
-    // TODO ?? Doesn't this double count 'YearsAnnPolFee'?
     Dcv -= total_bom_deduction;
     Dcv = std::max(0.0, Dcv);
 }
@@ -2848,7 +2846,7 @@ void AccountValue::SetMaxWD()
     // Some contracts make only a portion of account value eligible
     // for withdrawal, say 80% or 90%. Some apply such a multiple only
     // to separate-account value--a refinement we don't need yet.
-    // TODO ?? Add a database item to restrict the multiple to the
+    // SOMEDAY !! Add a database item to restrict the multiple to the
     // separate account only.
 
     MaxWD =
@@ -3372,9 +3370,9 @@ void AccountValue::TxTestLapse()
         }
     YearlyNoLapseActive[Year] = NoLapseActive;
 
-// TODO ?? Handle these issues:
-//recalculate GDB on face change...need 7PP
-//recapture mly deds due if in GDB period...
+// SOMEDAY !! Handle these GDB issues:
+//   Recalculate GDB on face change--need 7PP.
+//   Recapture monthly deductions due if in GDB period.
 
     // If we're doing a solve, don't let it lapse--otherwise lapse would
     // introduce a discontinuity in the function for which we seek a root.
