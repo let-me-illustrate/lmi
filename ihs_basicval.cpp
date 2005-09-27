@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_basicval.cpp,v 1.23 2005-09-18 01:22:14 chicares Exp $
+// $Id: ihs_basicval.cpp,v 1.24 2005-09-27 02:03:43 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -725,7 +725,6 @@ void BasicValues::SetPermanentInvariants()
 
     FirstYearPremiumRetaliationLimit = Database_->Query(DB_PremTaxRetalLimit);
 
-    COIIsDynamic        = Database_->Query(DB_DynamicCOI             );
     MandEIsDynamic      = Database_->Query(DB_DynamicMandE           );
     SepAcctLoadIsDynamic= Database_->Query(DB_DynamicSepAcctLoad     );
 
@@ -735,7 +734,6 @@ void BasicValues::SetPermanentInvariants()
     // product which has no term rider and doesn't permit experience
     // rating, so we assert those preconditions and write simple code
     // for 'unusual' COI banding that ignores those features.
-    LMI_ASSERT(!(UseUnusualCOIBanding && COIIsDynamic));
     LMI_ASSERT(!(UseUnusualCOIBanding && Input_->UseExperienceRating));
     LMI_ASSERT(!(UseUnusualCOIBanding && AllowTerm));
 

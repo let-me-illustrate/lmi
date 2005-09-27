@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_dbdict.cpp,v 1.9 2005-09-18 01:22:25 chicares Exp $
+// $Id: ihs_dbdict.cpp,v 1.10 2005-09-27 02:03:43 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -311,7 +311,6 @@ void DBDictionary::WriteSampleDBFile()
     Add(TDBValue(DB_IntFloor            , 0.0));
     Add(TDBValue(DB_SepAcctSpreadMethod , e_spread_is_effective_annual));
     Add(TDBValue(DB_DynamicMandE        , false));
-    Add(TDBValue(DB_DynamicCOI          , false));
 
     // gender, smoker
     int dims313[TDBValue::e_number_of_axes] = {3, 1, 3, 1, 1, 1, 1};
@@ -600,7 +599,6 @@ void DBDictionary::WriteSampleDBFile()
 
     // Allow experience rating.
     Add(TDBValue(DB_AllowExpRating      , 1.0));
-    Add(TDBValue(DB_DynamicCOI          , 1.0));
     Add(TDBValue(DB_ExpRatIBNRMult      , 6.0));
     Add(TDBValue(DB_ExpRatAmortPeriod   , 4.0));
 

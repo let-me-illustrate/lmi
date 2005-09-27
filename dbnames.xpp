@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: dbnames.xpp,v 1.11 2005-09-18 01:22:24 chicares Exp $
+// $Id: dbnames.xpp,v 1.12 2005-09-27 02:03:42 chicares Exp $
 
 #define DB_NAMES \
 {DB_FIRST,DB_FIRST,"dummy","dummy",}, \
@@ -79,7 +79,7 @@
 {DB_SepAcctSpreadMethod,DB_Topic_Interest,"SepAcctSpreadMethod","Separate-account spread and fee subtraction: 0 = annual (effective), 1 = daily (nominal)",}, \
 {DB_DynamicMandE,DB_Topic_Interest,"DynamicMandE","M&&E dynamically determined based on total case assets: 0=no, 1=yes",}, \
 {DB_Topic_Mortality,DB_FIRST,"Mortality","Mortality (cost of insurance) charges",}, \
-{DB_DynamicCOI,DB_Topic_Mortality,"DynamicCOI","Cost of insurance rates dynamically determined: 0=no, 1=based on experience-rating k factor",}, \
+{DB_DynamicCOI,DB_Topic_Mortality,"DynamicCOI","[no longer supported]",}, \
 {DB_CurrCOITable,DB_Topic_Mortality,"CurrCOITable","Current mortality charge table (index in mortality table database)",}, \
 {DB_MdptCOITable,DB_Topic_Mortality,"MdptCOITable","Midpoint mortality charge table (index in mortality table database) [not used--calculated as mean of current and guaranteed]",}, \
 {DB_GuarCOITable,DB_Topic_Mortality,"GuarCOITable","Guaranteed mortality charge table (index in mortality table database)",}, \

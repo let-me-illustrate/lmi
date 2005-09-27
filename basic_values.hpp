@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: basic_values.hpp,v 1.10 2005-09-07 03:04:54 chicares Exp $
+// $Id: basic_values.hpp,v 1.11 2005-09-27 02:03:42 chicares Exp $
 
 #ifndef basic_values_hpp
 #define basic_values_hpp
@@ -336,7 +336,6 @@ class LMI_EXPIMP BasicValues
     std::vector<double>     CompExcess;
 
     bool                    UseUnusualCOIBanding;
-    bool                    COIIsDynamic;
     bool                    MandEIsDynamic;
     bool                    SepAcctLoadIsDynamic;
 
