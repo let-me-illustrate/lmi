@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avmly.cpp,v 1.28 2005-09-27 02:03:43 chicares Exp $
+// $Id: ihs_avmly.cpp,v 1.29 2005-09-27 13:06:43 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -55,7 +55,7 @@
 #include <limits>
 #include <utility>
 
-// Each month, process all transactions in order
+// Each month, process all transactions in order.
 
 // SOMEDAY !! Not yet implemented:
 //   max allowable prem (without increasing NAAR)
@@ -63,7 +63,8 @@
 //   monthly varying corridor
 //   multiple layers of coverage
 
-// Some COLI products will have M&E banded by case total assets.
+// Some COLI products have M&E banded by case total assets.
+//
 // To determine case total assets before crediting interest on any life,
 // first we have to process all transactions through the monthly deduction
 // on all lives. Therefore we break monthly processing into two phases;
@@ -113,11 +114,11 @@ void AccountValue::DoMonthDR()
         }
 
     InitializeMonth();
-    // Capitalize loan on anniversary
     TxCapitalizeLoan();
 
     TxOptionChange();
 /*
+// TODO ?? Does this belong here?
     PerformSpecAmtStrategy
         (&ActualSpecAmt
         ,Input_->SAStrategy
@@ -217,7 +218,7 @@ void AccountValue::DoMonthDR()
     // premium triggering a corridor DB increase, depending on the 7702A
     // interpretation chosen) are queued to be processed together.
     Irc7702A_->RedressMatChg
-        (Dcv    // potentially modified
+        (Dcv // Potentially modified.
         ,unnecessary_premium
         ,necessary_premium
         ,CashValueFor7702()
@@ -229,7 +230,7 @@ void AccountValue::DoMonthDR()
     TxAcceptPayment(unnecessary_premium);
 
     TxTakeLoan();
-    TxLoanRepay();      // Not tested
+    TxLoanRepay();
     TxSetBOMAV();
     TxTestHoneymoonForExpiration();
     TxSetDeathBft();
@@ -530,7 +531,7 @@ void AccountValue::TxExch1035()
 //        }
 
 //    if(!SolvingForGuarPremium && Solving || e_run_curr_basis == RateBasis)
-// TODO ?? Probably the condition (here and elsewhere) should be
+// TODO ?? Probably the condition (here and elsewhere) should be:
 //   Solving || (!Solving && e_run_curr_basis == RateBasis)
     if(Solving || e_run_curr_basis == RateBasis)
         {
@@ -542,7 +543,7 @@ void AccountValue::TxExch1035()
                 ,GrossPmts[Month]
                 ,fake_cum_pmt
                 );
-        }
+            }
         // Limit external 1035 first, then internal, as necessary to avoid
         // exceeding the guideline limit. This is what the customer would
         // normally want, because an internal exchange might be free of
@@ -564,7 +565,7 @@ void AccountValue::TxExch1035()
         GrossPmts[Month] = External1035Amount + Internal1035Amount;
         }
 
-    // TODO ?? Assume for now that all 1035 exchanges represent ee prem.
+    // TODO ?? Assume for now that all 1035 exchanges represent ee payments.
     EeGrossPmts[Month] = GrossPmts[Month];
     double amount_exempt_from_premium_tax = 0.0;
     if(WaivePmTxInt1035)
@@ -684,12 +685,11 @@ int AccountValue::MonthsToNextModalPmtDate() const
 }
 
 //============================================================================
-// All changes to SA must be handled here
-// Proportionately reduce base and term SA if term rider present
-// ActualSpecAmt never < min spec amt
+// All changes to SA must be handled here.
+// Proportionately reduce base and term SA if term rider present.
+// Make sure ActualSpecAmt is never less than minimum specamt.
 void AccountValue::ChangeSpecAmtBy(double delta)
 {
-    // Proportion of change that will be applied to term
     double ProportionAppliedToTerm = 0.0;
     double prior_specamt = ActualSpecAmt;
     if(TermRiderActive)
@@ -765,12 +765,12 @@ void AccountValue::ChangeSpecAmtBy(double delta)
         MinSpecAmt = MinRenlFace;
         }
 
-    // I assume that if the minimum isn't met, we force it
+    // If the minimum isn't met, then force it.
     ActualSpecAmt = std::max(ActualSpecAmt, MinSpecAmt);
     ActualSpecAmt = round_specamt(ActualSpecAmt);
     AddSurrChgLayer(Year, std::max(0.0, ActualSpecAmt - prior_specamt));
 
-    // Carry the new spec amt forward into all future years
+    // Carry the new specamt forward into all future years.
     for(int j = Year; j < BasicValues::GetLength(); j++)
         {
 // This seems wrong. If we're changing something that's invariant among
@@ -778,15 +778,16 @@ void AccountValue::ChangeSpecAmtBy(double delta)
 // TODO ?? Shouldn't this be moved to FinalizeMonth()?
         InvariantValues().SpecAmt[j] = ActualSpecAmt;
         InvariantValues().TermSpecAmt[j] = TermSpecAmt;
-// We have term SA in class Inputs, in anticipation of differing
+// We have term specamt in class Inputs, in anticipation of differing
 // rider amounts on a multilife policy. It's scalar now:
 //   Input_->Status[0].TermAmt
 // TODO ?? Should it be a std::vector?
-// Probably this term rider deserves special treatment
+// Probably this term rider deserves special treatment:
 //   maybe even a class of its own (7702-integrated term).
 // Anyway, we have a place for vector values already in LedgerVariant for now.
         }
-    TxSetDeathBft(); // Reset DB whenever SA changes.
+    // Reset DB whenever SA changes.
+    TxSetDeathBft();
 }
 
 //============================================================================
@@ -817,6 +818,7 @@ void AccountValue::InitializeMonth()
     TxSetDeathBft();
     TxSetTermAmt();
 
+// TODO ?? Resolve this issue.
 /* Jacob--you said: <jacob>
     // It seems that these calls cause problems if
     // we have both SA and DBO change at the same
@@ -850,24 +852,24 @@ void AccountValue::InitializeMonth()
 }
 
 //============================================================================
-// Death benefit option change
-// Assumes surrender charge is not affected by this transaction
-// Assumes target premium rate is not affected by this transaction
-// Assumes change to option 2 mustn't decrease spec amt below minimum
+// Death benefit option change.
+// Assume surrender charge is not affected by this transaction.
+// Assume target premium rate is not affected by this transaction.
+// Assume change to option 2 mustn't decrease spec amt below minimum.
 void AccountValue::TxOptionChange()
 {
-    // Illustrations allow option changes only on anniversary
-    //   but not on zeroth anniversary
+    // Illustrations allow option changes only on anniversary,
+    // but not on the zeroth anniversary.
     if(0 != Month || 0 == Year)
         {
         return;
         }
 
     // It's OK to index by [Year - 1] because above we return early
-    //   if 0 == Year.
+    // if 0 == Year.
     e_dbopt const& old_option = DeathBfts_->dbopt()[Year - 1];
 
-    // Nothing to do if no option change requested
+    // Nothing to do if no option change requested.
     if(YearsDBOpt == old_option)
         {
         return;
@@ -894,7 +896,7 @@ void AccountValue::TxOptionChange()
     // of a no-lapse provision. But specamt changes to or from option
     // 2 should reflect AV only to the extent it's positive.
 
-    // Change specified amount, keeping amount at risk invariant
+    // Change specified amount, keeping amount at risk invariant.
     switch(YearsDBOpt)
         {
         case e_option1:
@@ -919,7 +921,7 @@ void AccountValue::TxOptionChange()
                 }
             else
                 {
-                // do nothing
+                // Do nothing.
                 }
             }
             break;
@@ -932,7 +934,7 @@ void AccountValue::TxOptionChange()
                 }
             else
                 {
-                // do nothing
+                // Do nothing.
                 }
             break;
         case e_rop:
@@ -942,7 +944,7 @@ void AccountValue::TxOptionChange()
                 }
             else
                 {
-                // do nothing
+                // Do nothing.
                 }
             break;
         default:
@@ -1370,15 +1372,15 @@ LedgerInvariant::Init(BasicValues* b)
 }
 
 //============================================================================
-// Specified amount change: increase or decrease
-// Ignores multiple layers of coverage: not correct for sel & ult COIs
-//   if select period restarts on increase
-// Assumes target premium rate is not affected by increases or decreases
+// Specified amount change: increase or decrease.
+// Ignores multiple layers of coverage: not correct for select and
+// ultimate COI rates if select period restarts on increase.
+// Assumes target premium rate is not affected by increases or decreases.
 // TODO ?? Is this the right place to change target premium?
 void AccountValue::TxSpecAmtChange()
 {
-    // Illustrations allow increases and decreases only on anniversary
-    //   but not on zeroth anniversary
+    // Illustrations allow increases and decreases only on anniversary,
+    // but not on the zeroth anniversary.
     if(0 != Month || 0 == Year)
         {
         // What needful thing does this accomplish?
@@ -1407,7 +1409,7 @@ void AccountValue::TxSpecAmtChange()
 
     // Nothing to do if no increase or decrease requested.
     // TODO ?? Minimum specified amount not completely enforced.
-    // TODO ?? YearsSpecAmt != ActualSpecAmt; the latter should be used
+    // TODO ?? YearsSpecAmt != ActualSpecAmt; the latter should be used.
     if(YearsSpecAmt == old_specamt)
         {
         return;
@@ -1441,7 +1443,6 @@ void AccountValue::TxSpecAmtChange()
         return;
         }
 
-    // Change specified amount
     ChangeSpecAmtBy(YearsSpecAmt - ActualSpecAmt);
 
     // TODO ?? Should 7702 or 7702A processing be done here?
@@ -1472,8 +1473,8 @@ but position could be reversed for variable policy with bad curr performance
     // DB option.
     //
     // Illustrations allow no adjustable events at issue.
-    // TODO ?? If this assumption is not valid, then OldSA, OldDB, and OldDBOpt
-    // need to be initialized more carefully.
+    // TODO ?? If this assumption is not valid, then OldSA, OldDB, and
+    // OldDBOpt need to be initialized more carefully.
     if(0 == Year && 0 == Month)
         {
         return;
@@ -1497,7 +1498,7 @@ but position could be reversed for variable policy with bad curr performance
     // effect cannot be combined with other adjustable events because
     // the premium in question must first be tested against the
     // guideline premium limit. We should probably ignore any effect
-    // of ROP premium unless a forceout is required--TODO ?? confirm this.
+    // of ROP premium unless a forceout is required. TODO ?? Confirm this.
     //
     TxSetDeathBft();
     TxSetTermAmt();
@@ -1554,13 +1555,15 @@ but position could be reversed for variable policy with bad curr performance
 }
 
 //============================================================================
-// All payments must be made here
-// Process premium payment reflecting premium load
-// Contains hooks for guideline premium test; they need to be fleshed out
-// Ignores strategies such as pay guideline max--done in PerformE[er]PmtStrategy()
-// Ignores no-lapse periods and other death benefit guarantees
-// Some systems force monthly premium to be integral cents even though actual
-//   mode is not monthly; is that something we need to do here?
+// All payments must be made here.
+// Process premium payment reflecting premium load.
+// TODO ?? Contains hooks for guideline premium test; they need to be
+//   fleshed out.
+// Ignores strategies such as pay guideline premium, which are handled
+//   in PerformE[er]PmtStrategy().
+// Ignores no-lapse periods and other death benefit guarantees.
+// TODO ?? Some systems force monthly premium to be integral cents even
+//   though actual mode is not monthly; is that something we need to do here?
 
 /*
 Decide whether we need to do anything
@@ -1601,7 +1604,7 @@ void AccountValue::TxAscertainDesiredPayment()
 
     LMI_ASSERT(materially_equal(GrossPmts[Month], EeGrossPmts[Month] + ErGrossPmts[Month]));
 
-// TODO ?? Probably the condition (here and elsewhere) should be
+// TODO ?? Probably the condition (here and elsewhere) should be:
 //   Solving || (!Solving && e_run_curr_basis == RateBasis)
     if(Solving || e_run_curr_basis == RateBasis)
         {
@@ -1638,7 +1641,7 @@ void AccountValue::TxAscertainDesiredPayment()
                     );
                 }
             ErGrossPmts[Month] += erpmt;
-            GrossPmts[Month] += erpmt;  // GrossPmts include er pmt
+            GrossPmts[Month] += erpmt;
             }
         }
 
@@ -1661,7 +1664,7 @@ void AccountValue::TxAscertainDesiredPayment()
     // unique nature that requires them to be recognized before any
     // premium is paid, and dumpins do not share that nature.
 
-// TODO ?? Probably the condition (here and elsewhere) should be
+// TODO ?? Probably the condition (here and elsewhere) should be:
 //   Solving || (!Solving && e_run_curr_basis == RateBasis)
 // in addition to the first-year, first-month condition.
     if(0 == Year && 0 == Month && (Solving || e_run_curr_basis == RateBasis))
@@ -1686,9 +1689,9 @@ void AccountValue::TxAscertainDesiredPayment()
 //============================================================================
 void AccountValue::TxLimitPayment(double a_maxpmt)
 {
-// Subtract premium load from gross premium yielding net premium
+// Subtract premium load from gross premium yielding net premium.
 
-    // This is needed only for curr basis run or solve basis run.
+    // This is needed only for current-basis or solve-basis runs.
     // Otherwise we're doing too much work, and maybe doing things
     // we shouldn't.
 // TODO ?? Clean this up, and put GPT limit here, on prem net of WD.
@@ -1719,7 +1722,7 @@ void AccountValue::TxLimitPayment(double a_maxpmt)
 
     LMI_ASSERT(materially_equal(GrossPmts[Month], EeGrossPmts[Month] + ErGrossPmts[Month]));
 
-// TODO ?? Probably the condition (here and elsewhere) should be
+// TODO ?? Probably the condition (here and elsewhere) should be:
 //   Solving || (!Solving && e_run_curr_basis == RateBasis)
     if(Solving || e_run_curr_basis == RateBasis)
         {
@@ -1733,13 +1736,12 @@ void AccountValue::TxLimitPayment(double a_maxpmt)
         GrossPmts[Month] = EeGrossPmts[Month] + ErGrossPmts[Month];
         }
 
-    // TODO ?? This assertion fired with the .ini file '09_1_1.test'
-    // until we zero-initialized the premium arrays in Init(). We do
-    // not fully understand why zero-initialization prevents the
-    // assertion from firing, and it is not unlikely that a broader
-    // problem is thereby masked. We need to address this when we
-    // eventually replace these C arrays with std::vectors.
-    LMI_ASSERT(materially_equal(GrossPmts[Month], EeGrossPmts[Month] + ErGrossPmts[Month]));
+    LMI_ASSERT
+        (materially_equal
+            (GrossPmts[Month]
+            ,EeGrossPmts[Month] + ErGrossPmts[Month]
+            )
+        );
 }
 
 //============================================================================
@@ -1755,7 +1757,7 @@ void AccountValue::TxRecognizePaymentFor7702A
 
     // 1035 exchanges are handled in a separate transaction.
 
-    // Policy issue date is always a modal payment date
+    // Policy issue date is always a modal payment date.
 
     // TODO ?? Not correct yet--need to test pmt less deductible WD; and
     // shouldn't we deduct the *gross* WD?
@@ -2066,15 +2068,16 @@ double AccountValue::GetRefundableSalesLoad() const
 }
 
 //============================================================================
+// TODO ?? This is untested, and probably isn't right.
 void AccountValue::TxLoanRepay()
 {
-    // Illustrations allow loan repayment only on anniversary
+    // Illustrations allow loan repayment only on anniversary.
     if(0 != Month)
         {
         return;
         }
 
-    // Nothing to do if no loan repayment requested
+    // Nothing to do if no loan repayment requested.
     if(0.0 <= RequestedLoan)
         {
         return;
@@ -2084,7 +2087,8 @@ void AccountValue::TxLoanRepay()
 // one that takes a loan, and one that repays a loan.
 
     // TODO ?? This idiom seems too cute.
-    ActualLoan = -std::min(-RequestedLoan, RegLnBal); // Max repayment is debt.
+    // Maximum repayment is total debt.
+    ActualLoan = -std::min(-RequestedLoan, RegLnBal);
 
     process_distribution(ActualLoan);
     AVRegLn  += ActualLoan;
@@ -2101,15 +2105,14 @@ void AccountValue::TxLoanRepay()
 }
 
 //============================================================================
-// Set account value before monthly deductions
-// Should this function live?
-// Perhaps we want separate variables for mly deds taken before vs.
-// after NAAR calculation
+// Set account value before monthly deductions.
+// Perhaps we want separate variables for deductions taken before as
+// opposed to after the NAAR calculation.
 void AccountValue::TxSetBOMAV()
 {
-    // Subtract monthly policy fee and per K charge from account value
+    // Subtract monthly policy fee and per K charge from account value.
 
-    // These assignments must happen every month
+    // These assignments must happen every month.
     AVSepAcctLoadBaseBOM = AVSepAcct;
 
     // Set base for per K load at issue. Other approaches could be imagined.
@@ -2312,9 +2315,9 @@ void AccountValue::EndTermRider()
         {
         return;
         }
+    // TODO ?? Not yet implemented.
     // If insufficient AV for termchg, then term rider terminates.
-    // (TODO ?? not yet implemented)
-    // In that case, we assume that the owner has an opportunity to pay
+    // In that case, assume that the owner has an opportunity to pay
     // the term charge in cash, and that term coverage continues by
     // grace until the next monthiversary even if it is not so paid.
     // Thus, termination of the term rider is not an adjustable event
@@ -2327,7 +2330,7 @@ void AccountValue::EndTermRider()
     ChangeSpecAmtBy(TermSpecAmt);
     TermSpecAmt = 0.0;
     TermDB = 0.0;
-    // Carry the new term spec amt forward into all future years
+    // Carry the new term spec amt forward into all future years.
     for(int j = Year; j < BasicValues::GetLength(); j++)
         {
         InvariantValues().TermSpecAmt[j] = TermSpecAmt;
@@ -2425,7 +2428,7 @@ double AccountValue::DetermineAcctValLoadAMD()
 }
 
 //============================================================================
-// Calculate rider charges
+// Calculate rider charges.
 void AccountValue::TxSetRiderDed()
 {
     AdbCharge = 0.0;
@@ -2510,11 +2513,11 @@ void AccountValue::TxSetRiderDed()
 }
 
 //============================================================================
-// Subtract monthly deductions from unloaned account value
+// Subtract monthly deductions from unloaned account value.
 void AccountValue::TxDoMlyDed()
 {
-    // Subtract mortality and rider deductions from unloaned account value
-    // policy fee was already subtracted in NAAR calculation
+    // Subtract mortality and rider deductions from unloaned account value.
+    // Policy fee was already subtracted in NAAR calculation.
     if(TermRiderActive && (AVGenAcct + AVSepAcct - CoiCharge) < TermCharge)
         {
         EndTermRider();
@@ -2594,7 +2597,7 @@ void AccountValue::TxTestHoneymoonForExpiration()
 }
 
 //============================================================================
-// Subtract separate account load after monthly deductions
+// Subtract separate account load after monthly deductions.
 void AccountValue::TxTakeSepAcctLoad()
 {
     AVSepAcctLoadBaseAMD = AVSepAcct;
@@ -2667,22 +2670,21 @@ void AccountValue::TxTakeSepAcctLoad()
 }
 
 //============================================================================
-// Credit interest on unloaned account value
+// Credit interest on unloaned account value.
 void AccountValue::TxCreditInt()
 {
-    // Accrue interest on unloaned and loaned account value separately
-    //   but do not charge interest on negative account value
+    // Accrue interest on unloaned and loaned account value separately,
+    // but do not charge interest on negative account value.
+
     double sa_int_spread = 0.0;
 
     double gross_sep_acct_rate = i_upper_12_over_12_from_i<double>()
         (InterestRates_->SepAcctGrossRate(SABasis)[Year]
         );
 
-    // Accrue interest on unloaned and loaned account value separately
-    //   but do not charge interest on negative account value
     if(0.0 < AVSepAcct)
         {
-        // I'm assuming that each interest increment is rounded separately
+        // Each interest increment is rounded separately.
         SepAcctIntCred = InterestCredited(AVSepAcct, YearsSepAcctIntRate);
         sa_int_spread =
                 AVSepAcct * gross_sep_acct_rate
@@ -2695,60 +2697,6 @@ void AccountValue::TxCreditInt()
         {
         SepAcctIntCred = 0.0;
         }
-
-#if 0
-// THIS COMMENTED-OUT CODE IS NOT CORRECT.
-    // Deduct interest on DAC tax balance as a dollar amount
-    if( [some appropriate condition] )
-        {
-// Authors of this block: GWC and JLM.
-//  - Use the exact DAC Tax run off pattern.
-//  - Shouldn't this be 11?
-// Joe answers: The actual DAC Tax Asset depreciates mid-year in years 0 - 10.
-// The dac schedule below uses the mid-year values as of the end of each year,
-// so the DAC reserve runs off 6 months before the actual DAC asset. This is the
-// pattern described to us by the requesters.
-        if(Year < 10)
-            {
-            // Valid only for single premium
-            LMI_ASSERT(0 == Year || 0.0 == InvariantValues().GrossPmt[Year]);
-            double const dac_schedule[10] =
-                {0.95, 0.85, 0.75, 0.65, 0.55, 0.45, 0.35, 0.25, 0.15, 0.05
-                };
-            double lic_dac_tax_rate = Database_->Query(DB_LicDacTaxRate);
-            double lic_fit_rate     = Database_->Query(DB_LICFitRate);
-            double const dac_factor =
-                    lic_dac_tax_rate
-                *   lic_fit_rate
-                /   (1.0 - lic_fit_rate)
-                ;
-
-            // GrossPmts isn't posted to InvariantValues().GrossPmt[0]
-            // until the end of the first year; during the first year, we
-            // get its value as GrossPmts[0]. But GrossPmts[0] won't work
-            // in renewal years, because GrossPmts is a std::vector of monthly
-            // (not annual) values.
-            double initial_premium =
-                (0 == Year)
-                ?   GrossPmts[0]
-                :   InvariantValues().GrossPmt[0]
-                ;
-            DacTaxRsv = initial_premium
-                *   dac_schedule[Year]
-                *   dac_factor
-                ;
-
-            LMI_ASSERT(0.0 != InvariantValues().InforceLives[Year]);
-            double decrement =
-                    DacTaxRsv
-                *   YearsSepAcctIntRate
-                /   InvariantValues().InforceLives[Year]
-                ;
-            SepAcctIntCred -= decrement;
-            AVSepAcct      -= decrement;
-            }
-        }
-#endif // 0
 
     if(0.0 < AVGenAcct)
         {
@@ -2789,7 +2737,7 @@ void AccountValue::TxCreditInt()
             );
         }
 
-    // loaned account value must not be negative
+    // Loaned account value must not be negative.
     LMI_ASSERT(0.0 <= AVRegLn + AVPrfLn);
 
     YearsTotalNetIntCredited +=
@@ -2812,17 +2760,17 @@ void AccountValue::TxCreditInt()
 }
 
 //============================================================================
-// Accrue loan interest and credit interest on loaned account value
+// Accrue loan interest and credit interest on loaned account value.
 void AccountValue::TxLoanInt()
 {
-    // Nothing to do if there's no loan outstanding
+    // Nothing to do if there's no loan outstanding.
     if(0.0 == RegLnBal && 0.0 == PrfLnBal)
         {
         return;
         }
 
-    // We may want to display credited interest separately
-    // I'm assuming that each interest increment is rounded separately
+    // We may want to display credited interest separately.
+    // Each interest increment is rounded separately.
     RegLnIntCred = InterestCredited(AVRegLn, YearsRegLnIntCredRate);
     PrfLnIntCred = InterestCredited(AVPrfLn, YearsPrfLnIntCredRate);
 
@@ -2944,7 +2892,7 @@ void AccountValue::TxTakeWD()
     // If maximum exceeded...limit it, rather than letting it lapse, on
     // the current basis--but on other bases, let it lapse
     NetWD = RequestedWD;
-// TODO ?? Probably the condition (here and elsewhere) should be
+// TODO ?? Probably the condition (here and elsewhere) should be:
 //   Solving || (!Solving && e_run_curr_basis == RateBasis)
     if(RateBasis == e_run_curr_basis)
         {
@@ -2976,13 +2924,12 @@ void AccountValue::TxTakeWD()
         // does that mean the 'MinWD' limitation doesn't work?
         NetWD = 0.0;
         }
-// TODO ?? If WD zero, skip some steps?
-        // cannot simply return in this case because
-        // we may prefer to shift to loans
+// TODO ?? If WD zero, skip some steps? Cannot simply return in this case
+// because user may prefer to shift to loans.
 
     // If in solve period and solve is for WD to basis then loan,
     // need to do this in yearly loop: e.g. there could be a forceout
-    // order dependency: after prem pmt, before loan
+    // order dependency: after prem pmt, before loan.
     if
         (
         Input_->WDToBasisThenLoan
@@ -2990,10 +2937,11 @@ void AccountValue::TxTakeWD()
 // TODO ?? What about guar prem solve?
         )
         {
-        // WD below min: switch to loan
-        // solve objective fn now not monotone; may introduce multiple roots
+        // WD below min: switch to loan.
+        //
+        // Solve objective fn now not monotone; may introduce multiple roots.
         // Even after the entire basis has been withdrawn, we still
-        // take withdrawals if payments since have increased the basis
+        // take withdrawals if payments since have increased the basis.
         // TODO ?? Should RequestedWD be constrained by MaxWD and MinWD here?
         if(0.0 == TaxBasis || std::min(TaxBasis, RequestedWD) < MinWD) // All loan
             {
@@ -3010,7 +2958,7 @@ void AccountValue::TxTakeWD()
 // recovered through withdrawals. Is this a good thing, or a problem
 // we should fix? TODO ?? Investigate.
 //
-// It appears that we need to do this even when not solving
+// It appears that we need to do this even when not solving:
 // i.e. if Input_->WDToBasisThenLoan means to take loans after WDs stop...
 // TODO ?? Should the next line be suppressed?
 //      if(e_solve_wd_then_loan == Input_->SolveType)
@@ -3096,7 +3044,6 @@ void AccountValue::TxTakeWD()
         // after any loan has been capitalized.
         LMI_ASSERT(AVRegLn == RegLnBal);
         LMI_ASSERT(AVPrfLn == PrfLnBal);
-        // In other words, we assert this:
         LMI_ASSERT(av == AVGenAcct + AVSepAcct);
         double free_wd = FreeWDProportion[Year] * av;
         non_free_wd = std::max(0.0, GrossWD - free_wd);
@@ -3111,7 +3058,7 @@ void AccountValue::TxTakeWD()
     double original_specamt = ActualSpecAmt;
     switch(YearsDBOpt)
         {
-        // If DBOpt 1, SA = std::min(SA, DB - WD); if opt 2, no change
+        // If DBOpt 1, SA = std::min(SA, DB - WD); if opt 2, no change.
         case e_option1:
             {
             // Spec amt reduced for option 1 even if in corridor?
@@ -3126,7 +3073,7 @@ void AccountValue::TxTakeWD()
             if(WDCanDecrSADBO1)
                 {
                 ChangeSpecAmtBy(-GrossWD);
-                // Min AV after WD not directly implemented
+                // Min AV after WD not directly implemented.
                 // If WD causes AV < min AV, do we:
                 //   reduce the WD?
                 //   lapse the policy?
@@ -3141,7 +3088,7 @@ void AccountValue::TxTakeWD()
                 }
             else
                 {
-                ;   // do nothing
+                // Do nothing.
                 }
             }
             break;
@@ -3157,7 +3104,7 @@ void AccountValue::TxTakeWD()
                 }
             else
                 {
-                ;   // do nothing
+                // Do nothing.
                 }
             }
             break;
@@ -3173,7 +3120,7 @@ void AccountValue::TxTakeWD()
                 }
             else
                 {
-                ;   // do nothing
+                // Do nothing.
                 }
             }
             break;
@@ -3188,7 +3135,6 @@ void AccountValue::TxTakeWD()
             }
         }
 
-    // Subtract net WD from cum pmts and from tax basis
     CumPmts     -= NetWD;
     TaxBasis    -= NetWD;
     CumWD       += NetWD;
@@ -3339,7 +3285,7 @@ void AccountValue::TxTakeLoan()
         );
 
     {
-// TODO ?? Probably the condition (here and elsewhere) should be
+// TODO ?? Probably the condition (here and elsewhere) should be:
 //   Solving || (!Solving && e_run_curr_basis == RateBasis)
     if(RateBasis == e_run_curr_basis)
         {
@@ -3369,7 +3315,7 @@ void AccountValue::TxTakeLoan()
 }
 
 //============================================================================
-// On anniversary, capitalize loan and set loan AV = loan balance
+// On anniversary, capitalize loan and set loaned AV equal to loan balance.
 void AccountValue::TxCapitalizeLoan()
 {
     // Capitalized loans only on anniversary.
@@ -3388,7 +3334,7 @@ void AccountValue::TxCapitalizeLoan()
 }
 
 //============================================================================
-// Test for lapse
+// Test for lapse.
 void AccountValue::TxTestLapse()
 {
     // The refundable load cannot prevent a lapse that would otherwise
@@ -3426,6 +3372,7 @@ void AccountValue::TxTestLapse()
         }
     YearlyNoLapseActive[Year] = NoLapseActive;
 
+// TODO ?? Handle these issues:
 //recalculate GDB on face change...need 7PP
 //recapture mly deds due if in GDB period...
 
@@ -3445,11 +3392,11 @@ void AccountValue::TxTestLapse()
     else if
         (
             (!NoLapseActive && lapse_test_csv < 0.0)
-        // lapse if overloaned regardless of guar DB
-        // CSV includes a positive loan (that can offset a negative AV)
-        // however, we still need to test for NoLapseActive
+        // Lapse if overloaned regardless of guar DB.
+        // CSV includes a positive loan (that can offset a negative AV);
+        // however, we still need to test for NoLapseActive.
         ||  (!NoLapseActive && (AVGenAcct + AVSepAcct) < 0.0)
-        // This tests for nonnegative unloaned account value.
+        // Test for nonnegative unloaned account value.
         // We are aware that some companies test against loan balance:
 // TODO ?? Would the explicit test
 //      ||  (MaxLoan < RegLnBal + PrfLnBal)
@@ -3483,7 +3430,6 @@ void AccountValue::TxTestLapse()
             // TODO ?? Can't this be done elsewhere?
             VariantValues().CSVNet[Year] = 0.0;
             }
-        // Logic error if unloaned AV < 0 at end of monthly processing.
         else if(!HoneymoonActive && !Solving && lapse_test_csv < 0.0)
             {
             warning()
