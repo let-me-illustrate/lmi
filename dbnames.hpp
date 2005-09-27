@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: dbnames.hpp,v 1.4 2005-09-18 01:22:24 chicares Exp $
+// $Id: dbnames.hpp,v 1.5 2005-09-27 16:49:11 chicares Exp $
 
 #ifndef dbnames_hpp
 #define dbnames_hpp
@@ -341,8 +341,8 @@ enum DatabaseNames
         ,DB_AmortPmLdFundCharge
         ,DB_AllowAmortPremLoad
 
-        ,DB_GuarAcctValLoadBOM
-        ,DB_CurrAcctValLoadBOM
+        ,DB_GuarAcctValLoadBOM // Deprecated.
+        ,DB_CurrAcctValLoadBOM // Deprecated.
 
         ,DB_PmTxAmortPeriod
         ,DB_PmTxAmortIntRate

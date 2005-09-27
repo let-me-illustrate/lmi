@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_variant.cpp,v 1.7 2005-09-24 19:10:34 chicares Exp $
+// $Id: ledger_variant.cpp,v 1.8 2005-09-27 16:49:11 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -127,7 +127,7 @@ void LedgerVariant::Alloc(int len)
     BegYearVectors  ["PremTaxLoad"          ] = &PremTaxLoad            ;
     BegYearVectors  ["DacTaxLoad"           ] = &DacTaxLoad             ;
     BegYearVectors  ["SpecAmtLoad"          ] = &SpecAmtLoad            ;
-    BegYearVectors  ["AcctValLoadBOM"       ] = &AcctValLoadBOM         ;
+    BegYearVectors  ["AcctValLoadBOM"       ] = &AcctValLoadBOM         ; // TODO ?? expunge in October
     BegYearVectors  ["AcctValLoadAMD"       ] = &AcctValLoadAMD         ;
 
     // Deaths are assumed to come at the end of the year only; but

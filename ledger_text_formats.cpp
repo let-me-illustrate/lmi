@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_text_formats.cpp,v 1.11 2005-09-26 01:10:52 chicares Exp $
+// $Id: ledger_text_formats.cpp,v 1.12 2005-09-27 16:49:11 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -478,7 +478,6 @@ os << "\n\n" ;
         os << Curr_.value_str("MlyPolFee"             ,j) << '\t';
         os << Curr_.value_str("AnnPolFee"             ,j) << '\t';
         os << Curr_.value_str("SpecAmtLoad"           ,j) << '\t';
-        os << Curr_.value_str("AcctValLoadBOM"        ,j) << '\t';
         os << Curr_.value_str("AcctValLoadAMD"        ,j) << '\t';
         os << Invar.value_str("MonthlyFlatExtra"      ,j) << '\t';
         os << Curr_.value_str("COICharge"             ,j) << '\t';

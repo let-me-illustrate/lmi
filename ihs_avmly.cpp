@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avmly.cpp,v 1.30 2005-09-27 14:00:36 chicares Exp $
+// $Id: ihs_avmly.cpp,v 1.31 2005-09-27 16:49:11 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -2106,14 +2106,11 @@ void AccountValue::TxLoanRepay()
 
 //============================================================================
 // Set account value before monthly deductions.
-// Perhaps we want separate variables for deductions taken before as
-// opposed to after the NAAR calculation.
 void AccountValue::TxSetBOMAV()
 {
     // Subtract monthly policy fee and per K charge from account value.
 
     // These assignments must happen every month.
-    AVSepAcctLoadBaseBOM = AVSepAcct;
 
     // Set base for per K load at issue. Other approaches could be imagined.
     if(Year == InforceYear && Month == InforceMonth)
@@ -2149,10 +2146,6 @@ void AccountValue::TxSetBOMAV()
 
     double z = DetermineSpecAmtLoad();
     YearsTotalSpecAmtLoad += z;
-    total_bom_deduction += z;
-
-    z = DetermineAcctValLoadBOM();
-    YearsTotalAcctValLoadBOM += z;
     total_bom_deduction += z;
 
     process_deduction(total_bom_deduction);
@@ -2402,14 +2395,6 @@ double AccountValue::DetermineSpecAmtLoad()
     return YearsSpecAmtLoad * SpecAmtLoadBase;
 }
 
-//============================================================================
-// TODO ?? 'Load.*BOM' variables and functions should be eradicated
-// throughout all source files.
-double AccountValue::DetermineAcctValLoadBOM()
-{
-    return YearsAcctValLoadBOM * AVSepAcctLoadBaseBOM;
-}
-
 // TODO ?? This function should be eradicated. It has no ostensible
 // reason to stand alone; probably it should be merged into
 // TxTakeSepAcctLoad(), and then much of the work should be deferred
@@ -2420,9 +2405,9 @@ double AccountValue::DetermineAcctValLoadBOM()
 // AccountValue::TxTakeSepAcctLoad().
 //
 //============================================================================
-double AccountValue::DetermineAcctValLoadAMD()
+double AccountValue::DetermineSepAcctLoad()
 {
-    return YearsAcctValLoadAMD * AVSepAcctLoadBaseAMD;
+    return YearsSepAcctLoad * AVSepAcctLoadBase;
 }
 
 //============================================================================
@@ -2468,7 +2453,7 @@ void AccountValue::TxSetRiderDed()
                 break;
             case e_waiver_times_deductions:
                 {
-                // TODO ?? Should the after-monthly-deduction load be waived?
+                // TODO ?? Should the separate-account load be waived?
                 WpCharge =
                     YearsWpRate
                     *   (
@@ -2476,7 +2461,6 @@ void AccountValue::TxSetRiderDed()
                         +   YearsMlyPolFee
                         +   YearsAnnPolFee
                         +   DetermineSpecAmtLoad()
-                        +   DetermineAcctValLoadBOM()
                         +   AdbCharge
                         +   SpouseRiderCharge
                         +   ChildRiderCharge
@@ -2489,7 +2473,6 @@ void AccountValue::TxSetRiderDed()
                         +   YearsMlyPolFee
                         +   YearsAnnPolFee
                         +   DetermineSpecAmtLoad()
-                        +   DetermineAcctValLoadBOM()
                         +   AdbCharge
                         +   SpouseRiderCharge
                         +   ChildRiderCharge
@@ -2548,7 +2531,6 @@ void AccountValue::TxDoMlyDed()
     // What if pmt is zero? --Do it anyway.
     MlyDed += YearsMlyPolFee;
     MlyDed += DetermineSpecAmtLoad();
-    MlyDed += DetermineAcctValLoadBOM();
 
     YearsTotalNetCoiCharges += NetCoiCharge;
 }
@@ -2598,13 +2580,13 @@ void AccountValue::TxTestHoneymoonForExpiration()
 // Subtract separate account load after monthly deductions.
 void AccountValue::TxTakeSepAcctLoad()
 {
-    AVSepAcctLoadBaseAMD = AVSepAcct;
-    double z = DetermineAcctValLoadAMD();
+    AVSepAcctLoadBase = AVSepAcct;
+    double z = DetermineSepAcctLoad();
 
     // TODO ?? This is a hasty kludge that needs to be removed.
     if(SepAcctLoadIsDynamic)
         {
-        double banded_load_amd = 0.0;
+        double banded_load = 0.0;
 
         // TODO ?? What was a passed parameter in IncrementEOM() here
         // becomes a local whose value, we hope, is no different.
@@ -2618,14 +2600,14 @@ void AccountValue::TxTakeSepAcctLoad()
             {
             case e_currbasis:
                 {
-                banded_load_amd =
+                banded_load =
                     TieredCharges_->banded_current_separate_account_load(cumpmts)
                     ;
                 }
                 break;
             case e_guarbasis:
                 {
-                banded_load_amd =
+                banded_load =
                     TieredCharges_->banded_guaranteed_separate_account_load(cumpmts)
                     ;
                 }
@@ -2635,25 +2617,25 @@ void AccountValue::TxTakeSepAcctLoad()
             }
 
         // TODO ?? Won't this fail if 'cumpmts' is negative?
-        LMI_ASSERT(0.0 <= banded_load_amd);
-        if(0.0 != banded_load_amd)
+        LMI_ASSERT(0.0 <= banded_load);
+        if(0.0 != banded_load)
             {
             // TODO ?? This isn't really right. Instead, aggregate annual
             // rates, then convert their sum to monthly.
-            banded_load_amd = i_upper_12_over_12_from_i<double>()(banded_load_amd);
-            round_interest_rate(banded_load_amd);
+            banded_load = i_upper_12_over_12_from_i<double>()(banded_load);
+            round_interest_rate(banded_load);
 
             // TODO ?? As a ghastly expedient that must be reworked soon,
             // calculate and deduct the supposed error term.
             double kludge_adjustment =
-                    banded_load_amd
+                    banded_load
                 *   std::max
                         (0.0
 // TODO ?? Here, the hardcoded number is of course a defect: it should
 // be in the product database. $10,000,000 is just an arbitrary number
 // to be used for testing. The idea is that some such limit applies to
 // the banded load only, but not to any other account-value load.
-                        ,AVSepAcctLoadBaseAMD - 10000000.0
+                        ,AVSepAcctLoadBase - 10000000.0
                         )
                 ;
             LMI_ASSERT(0.0 <= kludge_adjustment);
@@ -2662,7 +2644,7 @@ void AccountValue::TxTakeSepAcctLoad()
         }
 
     process_deduction(z);
-    YearsTotalAcctValLoadAMD += z;
+    YearsTotalSepAcctLoad += z;
     Dcv -= z;
     Dcv = std::max(0.0, Dcv);
 }

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_dbughdr.hpp,v 1.3 2005-09-07 03:04:54 chicares Exp $
+// $Id: ihs_dbughdr.hpp,v 1.4 2005-09-27 16:49:11 chicares Exp $
 
 #ifndef dbughdr_hpp
 #define dbughdr_hpp
@@ -63,7 +63,6 @@ enum DebugColNames
     ,eMlyPolicyFee
     ,eAnnPolicyFee
     ,eSpecAmtLoad
-    ,eAcctValLoadBOM
     ,eNAAR
     ,eCoiRate
     ,eCoiCharge
@@ -80,7 +79,7 @@ enum DebugColNames
     ,eGenAcctIntCred
     ,eSepAcctIntRate
     ,eSepAcctIntCred
-    ,eAcctValLoadAMD
+    ,eSepAcctLoad
     ,eRegLnIntRate
     ,eRegLnIntCred
     ,ePrfLnIntRate
@@ -153,7 +152,6 @@ inline std::vector<std::string> const& DebugColHeadersHelper()
     v[eMlyPolicyFee]        = "Monthly policy fee";
     v[eAnnPolicyFee]        = "Annual policy fee";
     v[eSpecAmtLoad]         = "Spec amt load";
-    v[eAcctValLoadBOM]      = "Sep acct load BOM";
     v[eNAAR]                = "NAAR";
     v[eCoiRate]             = "COI rate";
     v[eCoiCharge]           = "COI charge";
@@ -170,7 +168,7 @@ inline std::vector<std::string> const& DebugColHeadersHelper()
     v[eGenAcctIntCred]      = "Unloaned GA interest credited";
     v[eSepAcctIntRate]      = "Unloaned SA interest rate";
     v[eSepAcctIntCred]      = "Unloaned SA interest credited";
-    v[eAcctValLoadAMD]      = "Sep acct load after mly ded";
+    v[eSepAcctLoad]         = "Separate account load";
     v[eRegLnIntRate]        = "Regular loan interest rate";
     v[eRegLnIntCred]        = "Regular loan interest credited";
     v[ePrfLnIntRate]        = "Pref loan interest rate";

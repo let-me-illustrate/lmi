@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xenumtypes.hpp,v 1.6 2005-07-15 12:40:59 chicares Exp $
+// $Id: xenumtypes.hpp,v 1.7 2005-09-27 16:49:11 chicares Exp $
 
 #ifndef xenumtypes_hpp
 #define xenumtypes_hpp
@@ -383,7 +383,7 @@ typedef xenum<enum_anticipated_deduction, 4> e_anticipated_deduction;
 
 enum enum_asset_charge_type
     {e_asset_charge_spread
-    ,e_asset_charge_load_after_ded
+    ,e_asset_charge_load
     };
 typedef xenum<enum_asset_charge_type, 2> e_asset_charge_type;
 
