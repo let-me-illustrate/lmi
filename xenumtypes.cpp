@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xenumtypes.cpp,v 1.9 2005-07-15 12:40:59 chicares Exp $
+// $Id: xenumtypes.cpp,v 1.10 2005-09-27 16:49:11 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -856,7 +856,7 @@ template<> char const*const e_anticipated_deduction::names[] =
 // TODO ?? This is used in a convoluted way that's probably incorrect.
 template<> enum_asset_charge_type const e_asset_charge_type::enumerators[] =
     {e_asset_charge_spread
-    ,e_asset_charge_load_after_ded
+    ,e_asset_charge_load
     };
 template<> char const*const e_asset_charge_type::names[] =
     {"Separate-account asset charge assessed as spread"

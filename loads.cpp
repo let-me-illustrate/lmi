@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: loads.cpp,v 1.6 2005-09-12 01:32:19 chicares Exp $
+// $Id: loads.cpp,v 1.7 2005-09-27 16:49:11 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -113,17 +113,16 @@ void Loads::Init
     ,load_details const& details
     )
 {
-    monthly_policy_fee_                  .resize(n_illreg_bases);
-    annual_policy_fee_                   .resize(n_illreg_bases);
-    specified_amount_load_               .resize(n_illreg_bases);
-    account_value_load_before_deduction_ .resize(n_illreg_bases);
-    account_value_load_after_deduction_  .resize(n_illreg_bases);
-    target_premium_load_                 .resize(n_illreg_bases);
-    excess_premium_load_                 .resize(n_illreg_bases);
-    target_sales_load_                   .resize(n_illreg_bases);
-    excess_sales_load_                   .resize(n_illreg_bases);
-    target_total_load_                   .resize(n_illreg_bases);
-    excess_total_load_                   .resize(n_illreg_bases);
+    monthly_policy_fee_    .resize(n_illreg_bases);
+    annual_policy_fee_     .resize(n_illreg_bases);
+    specified_amount_load_ .resize(n_illreg_bases);
+    separate_account_load_ .resize(n_illreg_bases);
+    target_premium_load_   .resize(n_illreg_bases);
+    excess_premium_load_   .resize(n_illreg_bases);
+    target_sales_load_     .resize(n_illreg_bases);
+    excess_sales_load_     .resize(n_illreg_bases);
+    target_total_load_     .resize(n_illreg_bases);
+    excess_total_load_     .resize(n_illreg_bases);
 
     for(int j = e_currbasis; j < n_illreg_bases; j++)
         {
@@ -131,15 +130,14 @@ void Loads::Init
 
         // TODO ?? Why is this necessary? Why aren't all of these
         // initialized by database lookup?
-        monthly_policy_fee_                  [j].resize(details.length_);
-        annual_policy_fee_                   [j].resize(details.length_);
-        specified_amount_load_               [j].resize(details.length_);
-        account_value_load_before_deduction_ [j].resize(details.length_);
-        account_value_load_after_deduction_  [j].resize(details.length_);
-        target_premium_load_                 [j].resize(details.length_);
-        excess_premium_load_                 [j].resize(details.length_);
-        target_sales_load_                   [j].resize(details.length_);
-        excess_sales_load_                   [j].resize(details.length_);
+        monthly_policy_fee_    [j].resize(details.length_);
+        annual_policy_fee_     [j].resize(details.length_);
+        specified_amount_load_ [j].resize(details.length_);
+        separate_account_load_ [j].resize(details.length_);
+        target_premium_load_   [j].resize(details.length_);
+        excess_premium_load_   [j].resize(details.length_);
+        target_sales_load_     [j].resize(details.length_);
+        excess_sales_load_     [j].resize(details.length_);
 
         // TODO ?? Not retrieved from database. Initialize elsewhere?
         target_total_load_                   [j].resize(details.length_);
@@ -162,51 +160,49 @@ void Loads::Init
 
     database.Query(refundable_sales_load_proportion_, DB_PremRefund    );
 
-    database.Query(monthly_policy_fee_                  [e_guarbasis], DB_GuarPolFee          );
-    database.Query(annual_policy_fee_                   [e_guarbasis], DB_GuarIssueFee        );
-    database.Query(specified_amount_load_               [e_guarbasis], DB_GuarSpecAmtLoad     );
-    database.Query(account_value_load_before_deduction_ [e_guarbasis], DB_GuarAcctValLoadBOM  );
-    database.Query(account_value_load_after_deduction_  [e_guarbasis], DB_GuarAcctValLoadAMD  );
-    database.Query(target_premium_load_                 [e_guarbasis], DB_GuarPremLoadTgt     );
-    database.Query(excess_premium_load_                 [e_guarbasis], DB_GuarPremLoadExc     );
-    database.Query(target_sales_load_                   [e_guarbasis], DB_GuarPremLoadTgtRfd  );
-    database.Query(excess_sales_load_                   [e_guarbasis], DB_GuarPremLoadExcRfd  );
+    database.Query(monthly_policy_fee_   [e_guarbasis], DB_GuarPolFee          );
+    database.Query(annual_policy_fee_    [e_guarbasis], DB_GuarIssueFee        );
+    database.Query(specified_amount_load_[e_guarbasis], DB_GuarSpecAmtLoad     );
+    database.Query(separate_account_load_[e_guarbasis], DB_GuarAcctValLoadAMD  );
+    database.Query(target_premium_load_  [e_guarbasis], DB_GuarPremLoadTgt     );
+    database.Query(excess_premium_load_  [e_guarbasis], DB_GuarPremLoadExc     );
+    database.Query(target_sales_load_    [e_guarbasis], DB_GuarPremLoadTgtRfd  );
+    database.Query(excess_sales_load_    [e_guarbasis], DB_GuarPremLoadExcRfd  );
 
-    database.Query(monthly_policy_fee_                  [e_currbasis], DB_CurrPolFee          );
-    database.Query(annual_policy_fee_                   [e_currbasis], DB_CurrIssueFee        );
-    database.Query(specified_amount_load_               [e_currbasis], DB_CurrSpecAmtLoad     );
-    database.Query(account_value_load_before_deduction_ [e_currbasis], DB_CurrAcctValLoadBOM  );
-    database.Query(account_value_load_after_deduction_  [e_currbasis], DB_CurrAcctValLoadAMD  );
-    database.Query(target_premium_load_                 [e_currbasis], DB_CurrPremLoadTgt     );
-    database.Query(excess_premium_load_                 [e_currbasis], DB_CurrPremLoadExc     );
-    database.Query(target_sales_load_                   [e_currbasis], DB_CurrPremLoadTgtRfd  );
-    database.Query(excess_sales_load_                   [e_currbasis], DB_CurrPremLoadExcRfd  );
+    database.Query(monthly_policy_fee_   [e_currbasis], DB_CurrPolFee          );
+    database.Query(annual_policy_fee_    [e_currbasis], DB_CurrIssueFee        );
+    database.Query(specified_amount_load_[e_currbasis], DB_CurrSpecAmtLoad     );
+    database.Query(separate_account_load_[e_currbasis], DB_CurrAcctValLoadAMD  );
+    database.Query(target_premium_load_  [e_currbasis], DB_CurrPremLoadTgt     );
+    database.Query(excess_premium_load_  [e_currbasis], DB_CurrPremLoadExc     );
+    database.Query(target_sales_load_    [e_currbasis], DB_CurrPremLoadTgtRfd  );
+    database.Query(excess_sales_load_    [e_currbasis], DB_CurrPremLoadExcRfd  );
 
     database.Query(premium_tax_load_                , DB_PremTaxLoad   );
     database.Query(dac_tax_load_                    , DB_DACTaxPremLoad);
 
     // ET !! The loop and the std::transform call should both be
     // unnecessary: it should be possible to write simply
-    //   account_value_load_after_deduction_ = i_upper_12_over_12_from_i(account_value_load_after_deduction_);
+    //   separate_account_load_ = i_upper_12_over_12_from_i(separate_account_load_);
     for(int j = e_currbasis; j != n_illreg_bases; j++)
         {
         // ET !! Rewrite [but see above comment]
-        // account_value_load_after_deduction_[j] = i_upper_12_over_12_from_i
-        //    (account_value_load_after_deduction_[j]
+        // separate_account_load_[j] = i_upper_12_over_12_from_i
+        //    (separate_account_load_[j]
         //    );
         std::transform
-            (account_value_load_after_deduction_[j].begin()
-            ,account_value_load_after_deduction_[j].end()
-            ,account_value_load_after_deduction_[j].begin()
+            (separate_account_load_[j].begin()
+            ,separate_account_load_[j].end()
+            ,separate_account_load_[j].begin()
             ,i_upper_12_over_12_from_i<double>()
             );
         }
 
     // Deduct input extra asset comp as an account-value load, iff
     // database entity 'DB_AssetChargeType' has the value
-    // 'e_asset_charge_load_after_ded'; otherwise, reflect it
+    // 'e_asset_charge_load'; otherwise, reflect it
     // elsewhere as an interest spread.
-    if(e_asset_charge_load_after_ded == details.asset_charge_type_)
+    if(e_asset_charge_load == details.asset_charge_type_)
         {
         // ET !! Rewrite:
         // std::vector<double> extra_asset_comp = i_upper_12_over_12_from_i
@@ -224,10 +220,10 @@ void Loads::Init
             );
 
         // ET !! Rewrite: inside the loop, it could be:
-        //   account_value_load_after_deduction_[j] += extra_asset_comp;
+        //   separate_account_load_[j] += extra_asset_comp;
         // ...yet OTOH any APL programmer would just write
-        //   account_value_load_after_deduction_ +=
-        //     reshape(extra_asset_comp, shape_of(account_value_load_after_deduction_));
+        //   separate_account_load_ +=
+        //     reshape(extra_asset_comp, shape_of(separate_account_load_));
         // and would that be sensible with expression templates?
         // No, probably not; optimized APL interpreters wouldn't allocate
         // any extra storage for this, but that's probably too much to ask
@@ -237,22 +233,22 @@ void Loads::Init
         // ET !! As for rounding, we do want an expression-template library
         // to apply a scalar function like rounding to all elements of a
         // matrix, with some natural syntax like
-        //   account_value_load_after_deduction_ = details.round_interest_rate_(account_value_load_after_deduction_);
+        //   separate_account_load_ = details.round_interest_rate_(separate_account_load_);
         for(int j = e_currbasis; j != n_illreg_bases; j++)
             {
-            // ET !! account_value_load_after_deduction_[j] += extra_asset_comp;
+            // ET !! separate_account_load_[j] += extra_asset_comp;
             std::transform
-                (account_value_load_after_deduction_[j].begin()
-                ,account_value_load_after_deduction_[j].end()
+                (separate_account_load_[j].begin()
+                ,separate_account_load_[j].end()
                 ,extra_asset_comp.begin()
-                ,account_value_load_after_deduction_[j].begin()
+                ,separate_account_load_[j].begin()
                 ,std::plus<double>()
                 );
             std::vector<double>::iterator k;
             // TODO ?? Test this. Why not use std::transform()?
             for
-                (k = account_value_load_after_deduction_[j].begin()
-                ;k != account_value_load_after_deduction_[j].end()
+                (k = separate_account_load_[j].begin()
+                ;k != separate_account_load_[j].end()
                 ;++k
                 )
                 {
@@ -472,17 +468,10 @@ void Loads::Init
             ,mean<double>()
             );
         std::transform
-            (account_value_load_before_deduction_[e_guarbasis].begin()
-            ,account_value_load_before_deduction_[e_guarbasis].end()
-            ,account_value_load_before_deduction_[e_currbasis].begin()
-            ,account_value_load_before_deduction_[e_mdptbasis].begin()
-            ,mean<double>()
-            );
-        std::transform
-            (account_value_load_after_deduction_[e_guarbasis].begin()
-            ,account_value_load_after_deduction_[e_guarbasis].end()
-            ,account_value_load_after_deduction_[e_currbasis].begin()
-            ,account_value_load_after_deduction_[e_mdptbasis].begin()
+            (separate_account_load_[e_guarbasis].begin()
+            ,separate_account_load_[e_guarbasis].end()
+            ,separate_account_load_[e_currbasis].begin()
+            ,separate_account_load_[e_mdptbasis].begin()
             ,mean<double>()
             );
         std::transform

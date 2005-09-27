@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: dbnames.xpp,v 1.12 2005-09-27 02:03:42 chicares Exp $
+// $Id: dbnames.xpp,v 1.13 2005-09-27 16:49:11 chicares Exp $
 
 #define DB_NAMES \
 {DB_FIRST,DB_FIRST,"dummy","dummy",}, \
@@ -251,8 +251,8 @@
 {DB_MgmtFeeFundCharge,DB_Topic_AssetCharges,"MgmtFeeFundCharge","[no longer supported]",}, \
 {DB_AmortPmLdFundCharge,DB_Topic_AssetCharges,"AmortPmLdFundCharge","Asset charge for premium load when it's amortized",}, \
 {DB_AllowAmortPremLoad,DB_Topic_AssetCharges,"AllowAmortPremLoad","Allow premium load amortization: 0=no, 1=yes [not supported--set to 0]",}, \
-{DB_GuarAcctValLoadBOM,DB_Topic_Loads,"GuarAcctValLoadBOM","Guaranteed maximum for expense charge as proportion of separate account value taken at beginning of month",}, \
-{DB_CurrAcctValLoadBOM,DB_Topic_Loads,"CurrAcctValLoadBOM","Expense charge as proportion of separate account value taken at beginning of month",}, \
+{DB_GuarAcctValLoadBOM,DB_Topic_Loads,"GuarAcctValLoadBOM","[no longer supported]",}, \
+{DB_CurrAcctValLoadBOM,DB_Topic_Loads,"CurrAcctValLoadBOM","[no longer supported]",}, \
 {DB_PmTxAmortPeriod,DB_Topic_AssetCharges,"PmTxAmortPeriod","Premium tax amortization period in years",}, \
 {DB_PmTxAmortIntRate,DB_Topic_AssetCharges,"PmTxAmortIntRate","Premium tax amortization annual effective interest rate",}, \
 {DB_PremTaxLoad,DB_Topic_Loads,"PremTaxLoad","Scalar premium load due to premium tax",}, \
@@ -277,8 +277,8 @@
 {DB_AllowCustomFund,DB_Topic_AssetCharges,"AllowCustomFund","Allow custom funds: 0=no, 1=yes [not yet implemented]",}, \
 {DB_AllowNo7702,DB_Topic_7702,"AllowNo7702","Allow 7702 to be ignored (foreign): 0=no, 1=yes [not yet implemented]",}, \
 {DB_EnforceNAARLimit,DB_Topic_DeathBfts,"EnforceNAARLimit","Enforce input limit on net amount at risk: 0=no, 1=yes [not yet implemented]",}, \
-{DB_GuarAcctValLoadAMD,DB_Topic_Loads,"GuarAcctValLoadAMD","Guaranteed maximum for expense charge as proportion of separate account value taken after monthly deduction",}, \
-{DB_CurrAcctValLoadAMD,DB_Topic_Loads,"CurrAcctValLoadAMD","Expense charge as proportion of separate account value taken after monthly deduction",}, \
+{DB_GuarAcctValLoadAMD,DB_Topic_Loads,"GuarAcctValLoadAMD","Guaranteed maximum for expense charge as proportion of separate account value",}, \
+{DB_CurrAcctValLoadAMD,DB_Topic_Loads,"CurrAcctValLoadAMD","Expense charge as proportion of separate account value",}, \
 {DB_DynamicSepAcctLoad,DB_Topic_Loads,"DynamicSepAcctLoad","Separate account AV load dynamically determined based on total case assets: 0=no, 1=yes",}, \
 {DB_SpecAmtLoadLimit,DB_Topic_Loads,"SpecAmtLoadLimit","Limit up to which charge per $1 of specified amount applies",}, \
 {DB_Equiv7702DBO3,DB_Topic_7702,"Equiv7702DBO3","For 7702, treat return of premium death benefit option same as: 0=level 1=increasing",}, \
