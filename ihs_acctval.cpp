@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_acctval.cpp,v 1.62 2005-09-27 16:49:11 chicares Exp $
+// $Id: ihs_acctval.cpp,v 1.63 2005-09-29 00:47:51 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -938,9 +938,9 @@ void AccountValue::ApplyDynamicMandE(double assets)
 // TODO ?? Implement tiered comp and tiered management fee.
 
     // Annual rates
-//  double guar_m_and_e = TieredCharges_->tiered_guaranteed_m_and_e(assets);
-    YearsSepAcctMandERate = TieredCharges_->tiered_current_m_and_e(assets);
-    YearsSepAcctIMFRate   = TieredCharges_->tiered_investment_management_fee(assets);
+//  double guar_m_and_e = StratifiedCharges_->tiered_guaranteed_m_and_e(assets);
+    YearsSepAcctMandERate = StratifiedCharges_->tiered_current_m_and_e(assets);
+    YearsSepAcctIMFRate   = StratifiedCharges_->tiered_investment_management_fee(assets);
     if(0.0 != YearsSepAcctIMFRate)
         {
         fatal_error()
@@ -950,8 +950,8 @@ void AccountValue::ApplyDynamicMandE(double assets)
         }
     YearsSepAcctABCRate =
         (e_asset_charge_spread == Database_->Query(DB_AssetChargeType))
-            ? TieredCharges_->tiered_asset_based_compensation(assets)
-            : 0
+            ? StratifiedCharges_->tiered_asset_based_compensation(assets)
+            : 0.0
             ;
     if(0.0 != YearsSepAcctABCRate)
         {
@@ -992,9 +992,7 @@ void AccountValue::ApplyDynamicSepAcctLoad(double assets, double cumpmts)
         return;
         }
 
-    // TODO ?? This is misnamed. It does double duty in 'tiered' and
-    // 'banded' guises.
-    double tiered_load = 0.0;
+    double stratified_load = 0.0;
 
 #ifdef DEBUGGING_SEP_ACCT_LOAD
     std::ofstream os
@@ -1014,17 +1012,17 @@ void AccountValue::ApplyDynamicSepAcctLoad(double assets, double cumpmts)
         {
         case e_currbasis:
             {
-            tiered_load =
-                    TieredCharges_->tiered_current_separate_account_load(assets)
-                +   TieredCharges_->banded_current_separate_account_load(cumpmts)
+            stratified_load =
+                    StratifiedCharges_->tiered_current_separate_account_load(assets)
+                +   StratifiedCharges_->banded_current_separate_account_load(cumpmts)
                 ;
 #ifdef DEBUGGING_SEP_ACCT_LOAD
     os
         << "\n current:"
         << "\n  cumpmts = " << cumpmts
-        << "\n  premium-based = " << TieredCharges_->banded_current_separate_account_load(cumpmts)
+        << "\n  premium-based = " << StratifiedCharges_->banded_current_separate_account_load(cumpmts)
         << "\n  assets = " << assets
-        << "\n  asset-based = " << TieredCharges_->tiered_current_separate_account_load(assets)
+        << "\n  asset-based = " << StratifiedCharges_->tiered_current_separate_account_load(assets)
         << std::endl
         ;
 #endif // DEBUGGING_SEP_ACCT_LOAD
@@ -1032,17 +1030,17 @@ void AccountValue::ApplyDynamicSepAcctLoad(double assets, double cumpmts)
             break;
         case e_guarbasis:
             {
-            tiered_load =
-                    TieredCharges_->tiered_guaranteed_separate_account_load(assets)
-                +   TieredCharges_->banded_guaranteed_separate_account_load(cumpmts)
+            stratified_load =
+                    StratifiedCharges_->tiered_guaranteed_separate_account_load(assets)
+                +   StratifiedCharges_->banded_guaranteed_separate_account_load(cumpmts)
                 ;
 #ifdef DEBUGGING_SEP_ACCT_LOAD
     os
         << "\n guaranteed:"
         << "\n  cumpmts = " << cumpmts
-        << "\n  premium-based = " << TieredCharges_->banded_guaranteed_separate_account_load(cumpmts)
+        << "\n  premium-based = " << StratifiedCharges_->banded_guaranteed_separate_account_load(cumpmts)
         << "\n  assets = " << assets
-        << "\n  asset-based = " << TieredCharges_->tiered_guaranteed_separate_account_load(assets)
+        << "\n  asset-based = " << StratifiedCharges_->tiered_guaranteed_separate_account_load(assets)
         << std::endl
         ;
 #endif // DEBUGGING_SEP_ACCT_LOAD
@@ -1071,19 +1069,19 @@ void AccountValue::ApplyDynamicSepAcctLoad(double assets, double cumpmts)
 
 #ifdef DEBUGGING_SEP_ACCT_LOAD
     os
-        << "\n  tiered_load = " << tiered_load
+        << "\n  stratified_load = " << stratified_load
         << std::endl
         ;
 #endif // DEBUGGING_SEP_ACCT_LOAD
     // convert tiered load from annual to monthly effective rate
     // TODO ?? This isn't really right. Instead, aggregate annual
     // rates, then convert their sum to monthly.
-    tiered_load = i_upper_12_over_12_from_i<double>()(tiered_load);
-    round_interest_rate(tiered_load);
+    stratified_load = i_upper_12_over_12_from_i<double>()(stratified_load);
+    round_interest_rate(stratified_load);
 
 #ifdef DEBUGGING_SEP_ACCT_LOAD
     os
-        << "\n  monthly tiered_load = " << tiered_load
+        << "\n  monthly stratified_load = " << stratified_load
         << std::endl
         ;
 #endif // DEBUGGING_SEP_ACCT_LOAD
@@ -1092,7 +1090,7 @@ void AccountValue::ApplyDynamicSepAcctLoad(double assets, double cumpmts)
 
     if(e_asset_charge_load == Database_->Query(DB_AssetChargeType))
         {
-        tiered_comp = TieredCharges_->tiered_asset_based_compensation(assets);
+        tiered_comp = StratifiedCharges_->tiered_asset_based_compensation(assets);
         tiered_comp = i_upper_12_over_12_from_i<double>()(tiered_comp);
         // TODO ?? Probably this should be rounded.
         }
@@ -1121,14 +1119,14 @@ void AccountValue::ApplyDynamicSepAcctLoad(double assets, double cumpmts)
 // These are the things that should be done in the loads class:
 
     // curr and guar:
-            tiered_load =
-                    TieredCharges_->tiered_current_separate_account_load(assets)
-                +   TieredCharges_->banded_current_separate_account_load(cumpmts)
+            stratified_load =
+                    StratifiedCharges_->tiered_current_separate_account_load(assets)
+                +   StratifiedCharges_->banded_current_separate_account_load(cumpmts)
                 ;
 
     if(e_asset_charge_load == Database_->Query(DB_AssetChargeType))
         {
-        tiered_comp = TieredCharges_->tiered_asset_based_compensation(assets);
+        tiered_comp = StratifiedCharges_->tiered_asset_based_compensation(assets);
         tiered_comp = i_upper_12_over_12_from_i<double>()(tiered_comp);
         // TODO ?? Probably this should be rounded.
         // TODO ?? ^ No, remove that comment. Loads should be combined
@@ -1140,15 +1138,15 @@ void AccountValue::ApplyDynamicSepAcctLoad(double assets, double cumpmts)
     YearsSepAcctLoad = Loads_->separate_account_load(ExpAndGABasis)[Year];
 
     // TODO ?? aggregate loads once and only once for conversion to monthly
-    tiered_load = i_upper_12_over_12_from_i<double>()(tiered_load);
+    stratified_load = i_upper_12_over_12_from_i<double>()(stratified_load);
 
     // TODO ?? shouldn't rounding be done in the loads class?
-    round_interest_rate(tiered_load);
+    round_interest_rate(stratified_load);
 
 */
 
     YearsSepAcctLoad = Loads_->separate_account_load(ExpAndGABasis)[Year];
-    YearsSepAcctLoad+= tiered_load;
+    YearsSepAcctLoad+= stratified_load;
     YearsSepAcctLoad+= tiered_comp;
 #ifdef DEBUGGING_SEP_ACCT_LOAD
     os

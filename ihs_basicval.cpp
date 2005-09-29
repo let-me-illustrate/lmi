@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_basicval.cpp,v 1.24 2005-09-27 02:03:43 chicares Exp $
+// $Id: ihs_basicval.cpp,v 1.25 2005-09-29 00:47:51 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -243,10 +243,13 @@ void BasicValues::Init()
                 ).get_rounding_rules()
             )
         );
-    TieredCharges_.reset
+    StratifiedCharges_.reset
         (new stratified_charges(AddDataDir(ProductData_->GetTierFilename()))
         );
-    SpreadFor7702_.assign(Length, TieredCharges_->minimum_tiered_spread_for_7702());
+    SpreadFor7702_.assign
+        (Length
+        ,StratifiedCharges_->minimum_tiered_spread_for_7702()
+        );
 
     // Multilife contracts will need a vector of mortality-rate objects.
 
@@ -259,7 +262,7 @@ void BasicValues::Init()
     DeathBfts_     .reset(new death_benefits (*this));
     // Outlay requires interest rates.
     Outlay_        .reset(new Outlay         (*this));
-    SetLowestPremTaxRate();
+    SetLowestPremiumTaxLoad();
     Loads_         .reset(new Loads          (*this));
 
     // The target premium can't be ascertained yet if specamt is
@@ -321,7 +324,7 @@ void BasicValues::GPTServerInit()
                 ).get_rounding_rules()
             )
         );
-    TieredCharges_.reset
+    StratifiedCharges_.reset
         (new stratified_charges(AddDataDir(ProductData_->GetTierFilename()))
         );
 
@@ -333,7 +336,7 @@ void BasicValues::GPTServerInit()
 //  DeathBfts_     .reset(new death_benefits (*this));
     // Requires interest rates.
 //  Outlay_        .reset(new Outlay         (*this));
-    SetLowestPremTaxRate();
+    SetLowestPremiumTaxLoad();
     Loads_         .reset(new Loads          (*this));
 
     SetPermanentInvariants();
@@ -663,17 +666,17 @@ void BasicValues::SetPermanentInvariants()
     // TODO ?? Perhaps we want the premium-tax load instead of the
     // premium-tax rate here; or maybe we want neither as a member
     // variable, since the premium-tax load is in the loads class.
-    PremTaxRate         = Database_->Query(DB_PremTaxRate);
+    PremiumTaxRate_     = Database_->Query(DB_PremTaxRate);
 
     {
     InputParms IP(*Input_);
     IP.InsdState    = GetStateOfDomicile();
     IP.SponsorState = GetStateOfDomicile();
     TDatabase TempDatabase(IP);
-    DomiciliaryPremTaxRate = 0.0;
+    DomiciliaryPremiumTaxLoad_ = 0.0;
     if(!Input_->AmortizePremLoad)
         {
-        DomiciliaryPremTaxRate = TempDatabase.Query(DB_PremTaxLoad);
+        DomiciliaryPremiumTaxLoad_ = TempDatabase.Query(DB_PremTaxLoad);
         }
     }
     TestPremiumTaxLoadConsistency();
@@ -817,10 +820,10 @@ void BasicValues::SetPermanentInvariants()
 }
 
 //============================================================================
-void BasicValues::SetLowestPremTaxRate()
+void BasicValues::SetLowestPremiumTaxLoad()
 {
     // TRICKY !! Here, we use 'DB_PremTaxLoad', not 'DB_PremTaxRate',
-    // to set the value of 'LowestPremTaxRate'. Premium-tax loads
+    // to set the value of 'LowestPremiumTaxLoad_'. Premium-tax loads
     // (charged by the insurer to the contract) and rates (charged by
     // the state to the insurer) really shouldn't be mixed. The
     // intention is to support products that pass actual premium tax
@@ -837,13 +840,13 @@ void BasicValues::SetLowestPremTaxRate()
     // In the second case, the exact premium tax is passed through,
     // so the tax rate equals the tax load.
 
-    LowestPremTaxRate = 0.0;
+    LowestPremiumTaxLoad_ = 0.0;
     if(Input_->AmortizePremLoad)
         {
         return;
         }
 
-    LowestPremTaxRate = Database_->Query(DB_PremTaxLoad);
+    LowestPremiumTaxLoad_ = Database_->Query(DB_PremTaxLoad);
 
     TDBValue const& premium_tax_loads = Database_->GetEntry(DB_PremTaxLoad);
     if(!TDBValue::VariesByState(premium_tax_loads))
@@ -868,26 +871,27 @@ void BasicValues::SetLowestPremTaxRate()
             ;
         }
 
-    if(TieredCharges_->premium_tax_is_tiered(StateOfJurisdiction))
+    if(StratifiedCharges_->premium_tax_is_tiered(StateOfJurisdiction))
         {
         // TODO ?? TestPremiumTaxLoadConsistency() repeats this test.
         // Probably all the consistency testing should be moved to
         // the database class.
-        if(0.0 != LowestPremTaxRate)
+        if(0.0 != LowestPremiumTaxLoad_)
             {
             fatal_error()
                 << "Premium-tax rate is tiered in state "
                 << StateOfJurisdiction
-                << ", but the product database specifies a scalar rate of "
-                << LowestPremTaxRate
+                << ", but the product database specifies a scalar load of "
+                << LowestPremiumTaxLoad_
                 << " instead of zero as expected. Probably the database"
                 << " is incorrect."
                 << LMI_FLUSH
                 ;
             }
-        LowestPremTaxRate = TieredCharges_->minimum_tiered_premium_tax_rate
-            (StateOfJurisdiction
-            );
+        LowestPremiumTaxLoad_ =
+            StratifiedCharges_->minimum_tiered_premium_tax_rate
+                (StateOfJurisdiction
+                );
         }
 }
 
@@ -909,7 +913,7 @@ void BasicValues::TestPremiumTaxLoadConsistency()
         return;
         }
 
-    if(TieredCharges_->premium_tax_is_tiered(GetStateOfJurisdiction()))
+    if(StratifiedCharges_->premium_tax_is_tiered(GetStateOfJurisdiction()))
         {
         PremiumTaxLoadIsTieredInStateOfJurisdiction = true;
         if(0.0 != Database_->Query(DB_PremTaxLoad))
@@ -917,7 +921,7 @@ void BasicValues::TestPremiumTaxLoadConsistency()
             fatal_error()
                 << "Premium-tax rate is tiered in state of jurisdiction "
                 << GetStateOfJurisdiction()
-                << ", but the product database specifies a scalar rate of "
+                << ", but the product database specifies a scalar load of "
                 << Database_->Query(DB_PremTaxLoad)
                 << " instead of zero as expected. Probably the database"
                 << " is incorrect."
@@ -926,16 +930,16 @@ void BasicValues::TestPremiumTaxLoadConsistency()
             }
         }
 
-    if(TieredCharges_->premium_tax_is_tiered(GetStateOfDomicile()))
+    if(StratifiedCharges_->premium_tax_is_tiered(GetStateOfDomicile()))
         {
         PremiumTaxLoadIsTieredInStateOfDomicile = true;
-        if(0.0 != GetDomiciliaryPremTaxRate())
+        if(0.0 != DomiciliaryPremiumTaxLoad())
             {
             fatal_error()
                 << "Premium-tax rate is tiered in state of domicile "
                 << GetStateOfDomicile()
-                << ", but the product database specifies a scalar rate of "
-                << GetDomiciliaryPremTaxRate()
+                << ", but the product database specifies a scalar load of "
+                << DomiciliaryPremiumTaxLoad()
                 << " instead of zero as expected. Probably the database"
                 << " is incorrect."
                 << LMI_FLUSH
