@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: basicvalues.cpp,v 1.8 2005-09-07 03:04:54 chicares Exp $
+// $Id: basicvalues.cpp,v 1.9 2005-09-29 00:47:50 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -117,7 +117,7 @@ void BasicValues::Init()
     WDFee      = Database_->Query(DB_WDFee     );
     WDFeeRate  = Database_->Query(DB_WDFeeRate );
 
-// The antediluvian branch leaves FundData_, TieredCharges_, and
+// The antediluvian branch leaves FundData_, StratifiedCharges_, and
 // ProductData initialized to null pointers.
 }
 

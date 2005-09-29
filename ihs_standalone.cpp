@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_standalone.cpp,v 1.5 2005-09-03 23:55:43 chicares Exp $
+// $Id: ihs_standalone.cpp,v 1.6 2005-09-29 00:47:51 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -137,7 +137,7 @@ void GPT_BasicValues::Init()
 //  StreamableRoundingRules = new StreamableRoundingRules
 //      (AddDataDir(ProductData->GetRoundingFilename())
 //      );
-//  TieredCharges_ = new stratified_charges
+//  StratifiedCharges_ = new stratified_charges
 //      (AddDataDir(ProductData->GetTierFilename())
 //      );
 
