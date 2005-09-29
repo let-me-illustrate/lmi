@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avmly.cpp,v 1.31 2005-09-27 16:49:11 chicares Exp $
+// $Id: ihs_avmly.cpp,v 1.32 2005-09-29 00:47:51 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -1870,28 +1870,7 @@ double AccountValue::GetPremLoad
         +   excess_portion * YearsSalesLoadExc
         ;
     CumulativeSalesLoad += sales_load;
-    if(sales_load < 0.0)
-        {
-        fatal_error()
-            << std::setiosflags(std::ios_base::fixed)
-            << std::setprecision(10)
-            << std::setw(20)
-            << "Sales load ("
-            << sales_load
-            << ") should be nonnegative. It is\n ("
-            << target_portion
-            << " * "
-            << YearsSalesLoadTgt
-            << ") + ("
-            << excess_portion
-            << " * "
-            << YearsSalesLoadExc
-            << ") on payment of "
-            << a_pmt
-            << " ."
-            << LMI_FLUSH
-            ;
-        }
+    LMI_ASSERT(0.0 <= sales_load);
 
     // TODO ?? This variable and the variables it depends on probably
     // are no longer needed and should be expunged.
@@ -1916,95 +1895,32 @@ double AccountValue::GetPremLoad
         + prem_tax_load
         + dac_tax_load
         ;
-//    LMI_ASSERT(0.0 <= sum_of_separate_loads);
-    if(sum_of_separate_loads < 0.0)
-        {
-        fatal_error()
-            << std::setiosflags(std::ios_base::fixed)
-            << std::setprecision(10)
-            << std::setw(20)
-            << "Total load ("
-            << total_load
-            << ") should equal the sum of separate loads ("
-            << sum_of_separate_loads
-            << ") and both should be nonnegative. "
-            << "Separate loads: premium load ("
-            << prem_load
-            << ") + sales load ("
-            << sales_load
-            << ") + premium tax load ("
-            << prem_tax_load
-            << ") + DAC tax load ("
-            << dac_tax_load
-            << ") on payment of "
-            << a_pmt
-            << " of which "
-            << a_portion_exempt_from_premium_tax
-            << " is exempt from premium tax; but a "
-            << (total_load - sum_of_separate_loads)
-            << " difference is observed."
-            << LMI_FLUSH
-            ;
-        }
-//    LMI_ASSERT
-//        (   TieredCharges_->premium_tax_is_tiered(GetStateOfJurisdiction())
-//        ||  materially_equal(total_load, sum_of_separate_loads)
-//        );
-    if
-        (   !TieredCharges_->premium_tax_is_tiered(GetStateOfJurisdiction())
-        &&  !materially_equal(total_load, sum_of_separate_loads)
-        )
-        {
-        fatal_error()
-            << std::setiosflags(std::ios_base::fixed)
-            << std::setprecision(10)
-            << std::setw(20)
-            << "Total load ("
-            << total_load
-            << ") should equal the sum of separate loads ("
-            << sum_of_separate_loads
-            << "): premium load ("
-            << prem_load
-            << ") + sales load ("
-            << sales_load
-            << ") + premium tax load ("
-            << prem_tax_load
-            << ") + DAC tax load ("
-            << dac_tax_load
-            << ") on payment of "
-            << a_pmt
-            << " of which "
-            << a_portion_exempt_from_premium_tax
-            << " is exempt from premium tax; but a "
-            << (total_load - sum_of_separate_loads)
-            << " difference is observed."
-            << " State of jurisdiction is "
-            << GetStateOfJurisdiction()
-            << " with tiering '"
-            << TieredCharges_->premium_tax_is_tiered(GetStateOfJurisdiction())
-            << "'; state of domicile is "
-            << GetStateOfDomicile()
-            << " with tiering '"
-            << TieredCharges_->premium_tax_is_tiered(GetStateOfDomicile())
-            << "'. Year-to-date premium-tax-load totals: "
-            << YearsTotalPremTaxLoadInStateOfJurisdiction
-            << " in state of juristiction and "
-            << YearsTotalPremTaxLoadInStateOfDomicile
-            << " in state of domicile."
-            << LMI_FLUSH
-            ;
-        }
+    LMI_ASSERT(0.0 <= sum_of_separate_loads);
+    LMI_ASSERT
+        (   StratifiedCharges_->premium_tax_is_tiered(GetStateOfJurisdiction())
+        ||  materially_equal(total_load, sum_of_separate_loads)
+        );
 
     return round_net_premium(sum_of_separate_loads);
 }
 
 //============================================================================
+/// Calculate premium-tax load.
+///
+/// The premium-tax load and the actual premium tax payable by an
+/// insurer are distinct concepts. They may have equal values when
+/// premium tax is passed through as a load.
+///
+/// Where tiering is considered, the actual premium tax is used as a
+/// load here, because in practice tiering is used only when the
+/// actual tax is passed through.
+
 double AccountValue::GetPremTaxLoad(double payment)
 {
     double tax_in_state_of_jurisdiction = YearsPremTaxLoadRate * payment;
     if(PremiumTaxLoadIsTieredInStateOfJurisdiction)
         {
-        tax_in_state_of_jurisdiction = TieredCharges_->tiered_premium_tax
+        tax_in_state_of_jurisdiction = StratifiedCharges_->tiered_premium_tax
             (GetStateOfJurisdiction()
             ,payment
             ,PolicyYearRunningTotalPremiumSubjectToPremiumTax
@@ -2015,10 +1931,10 @@ double AccountValue::GetPremTaxLoad(double payment)
     double tax_in_state_of_domicile = 0.0;
     if(!FirstYearPremiumExceedsRetaliationLimit)
         {
-        tax_in_state_of_domicile = GetDomiciliaryPremTaxRate() * payment;
+        tax_in_state_of_domicile = DomiciliaryPremiumTaxLoad() * payment;
         if(PremiumTaxLoadIsTieredInStateOfDomicile)
             {
-            tax_in_state_of_domicile = TieredCharges_->tiered_premium_tax
+            tax_in_state_of_domicile = StratifiedCharges_->tiered_premium_tax
                 (GetStateOfDomicile()
                 ,payment
                 ,PolicyYearRunningTotalPremiumSubjectToPremiumTax
@@ -2601,15 +2517,17 @@ void AccountValue::TxTakeSepAcctLoad()
             case e_currbasis:
                 {
                 banded_load =
-                    TieredCharges_->banded_current_separate_account_load(cumpmts)
-                    ;
+                    StratifiedCharges_->banded_current_separate_account_load
+                        (cumpmts
+                        );
                 }
                 break;
             case e_guarbasis:
                 {
                 banded_load =
-                    TieredCharges_->banded_guaranteed_separate_account_load(cumpmts)
-                    ;
+                    StratifiedCharges_->banded_guaranteed_separate_account_load
+                        (cumpmts
+                        );
                 }
                 break;
             // TODO ?? Handling fewer cases than can arise is always a defect.

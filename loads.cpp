@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: loads.cpp,v 1.7 2005-09-27 16:49:11 chicares Exp $
+// $Id: loads.cpp,v 1.8 2005-09-29 00:47:51 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -46,7 +46,7 @@ struct load_details
     load_details
         (int                        length
         ,bool                       AmortizePremLoad
-        ,double                     LowestPremTaxRate
+        ,double                     LowestPremiumTaxLoadRate
         ,double                     premium_tax_rate
         ,double                     premium_tax_amortization_rate
         ,double                     premium_tax_amortization_period
@@ -59,7 +59,7 @@ struct load_details
         )
         :length_                          (length)
         ,AmortizePremLoad_                (AmortizePremLoad)
-        ,LowestPremTaxRate_               (LowestPremTaxRate)
+        ,LowestPremiumTaxLoadRate_        (LowestPremiumTaxLoadRate)
         ,premium_tax_rate_                (premium_tax_rate)
         ,premium_tax_amortization_rate_   (premium_tax_amortization_rate)
         ,premium_tax_amortization_period_ (premium_tax_amortization_period)
@@ -73,7 +73,7 @@ struct load_details
 
     int                        length_;
     bool                       AmortizePremLoad_;
-    double                     LowestPremTaxRate_;
+    double                     LowestPremiumTaxLoadRate_;
     double                     premium_tax_rate_;
     double                     premium_tax_amortization_rate_;
     double                     premium_tax_amortization_period_;
@@ -93,7 +93,7 @@ Loads::Loads(BasicValues& V)
     load_details details
         (length
         ,V.Input_->AmortizePremLoad
-        ,V.GetLowestPremTaxRate()
+        ,V.LowestPremiumTaxLoad()
         ,V.Database_->Query(DB_PremTaxRate)
         ,V.Database_->Query(DB_PmTxAmortIntRate)
         ,V.Database_->Query(DB_PmTxAmortPeriod)
@@ -309,10 +309,10 @@ void Loads::Init
         // Then, after the loop ends:
         //
         //  target_premium_load_7702_excluding_premium_tax_ = target_total_load_before_premium_tax;
-        //  target_premium_load_7702_lowest_premium_tax_    = target_load_before_premium_tax + details.LowestPremTaxRate_;
+        //  target_premium_load_7702_lowest_premium_tax_    = target_load_before_premium_tax + details.LowestPremiumTaxLoadRate_;
         //
         //  excess_premium_load_7702_excluding_premium_tax_ = excess_total_load_before_premium_tax;
-        //  excess_premium_load_7702_lowest_premium_tax_    = excess_load_before_premium_tax + details.LowestPremTaxRate_;
+        //  excess_premium_load_7702_lowest_premium_tax_    = excess_load_before_premium_tax + details.LowestPremiumTaxLoadRate_;
         //
         // Then go back and look at the ET version to see whether it can
         // be rewritten more clearly, now that it can be comprehended.
@@ -347,7 +347,7 @@ void Loads::Init
                 (target_premium_load_7702_lowest_premium_tax_.begin()
                 ,target_premium_load_7702_lowest_premium_tax_.end()
                 ,target_premium_load_7702_lowest_premium_tax_.begin()
-                ,std::bind2nd(std::plus<double>(), details.LowestPremTaxRate_)
+                ,std::bind2nd(std::plus<double>(), details.LowestPremiumTaxLoadRate_)
                 );
             }
         std::transform
@@ -388,7 +388,7 @@ void Loads::Init
                 (excess_premium_load_7702_lowest_premium_tax_.begin()
                 ,excess_premium_load_7702_lowest_premium_tax_.end()
                 ,excess_premium_load_7702_lowest_premium_tax_.begin()
-                ,std::bind2nd(std::plus<double>(), details.LowestPremTaxRate_)
+                ,std::bind2nd(std::plus<double>(), details.LowestPremiumTaxLoadRate_)
                 );
             }
         std::transform

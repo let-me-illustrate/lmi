@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.162 2005-09-27 16:49:11 chicares Exp $
+// $Id: ChangeLog,v 1.163 2005-09-29 00:47:51 chicares Exp $
 
 MAINTENANCE
 
@@ -3901,4 +3901,16 @@ Resolve or demote certain defects.
   xenumtypes.cpp
   xenumtypes.hpp
 Purge misbegotten beginning-of-month separate-account load.
+
+20050929T0047Z <chicares@cox.net> [1255]
+
+  basic_values.hpp
+  basicvalues.cpp
+  ihs_acctval.cpp
+  ihs_avmly.cpp
+  ihs_basicval.cpp
+  ihs_standalone.cpp
+  ledger_invariant.cpp
+  loads.cpp
+Remove defects.
 

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_invariant.cpp,v 1.15 2005-08-30 03:54:38 chicares Exp $
+// $Id: ledger_invariant.cpp,v 1.16 2005-09-29 00:47:51 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -454,7 +454,8 @@ void LedgerInvariant::Init(BasicValues* b)
         ,0.0
         );
 
-    PremiumTaxIsTiered      = b->IsPremTaxTiered();
+// TODO ?? October: clarify names--premium-tax load versus rate.
+    PremiumTaxIsTiered      = b->IsPremiumTaxLoadTiered();
 
     NoLapseAlwaysActive     = b->Database_->Query(DB_NoLapseAlwaysActive);
     NoLapseMinDur           = b->Database_->Query(DB_NoLapseMinDur);
@@ -620,7 +621,7 @@ void LedgerInvariant::Init(BasicValues* b)
     PartMortTableName       = "1983 GAM"; // TODO ?? Hardcoded.
     StatePostalAbbrev       = b->GetStateOfJurisdiction().str();
 
-    StatePremTaxRate        = b->GetPremTaxRate();
+    StatePremTaxRate        = b->PremiumTaxRate();
     // TODO ?? Output forms presuppose that the premium tax load is a
     // scalar unless it is tiered.
     StatePremTaxLoad        = b->Loads_->premium_tax_load()[0];
