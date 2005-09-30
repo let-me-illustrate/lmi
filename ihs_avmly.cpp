@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avmly.cpp,v 1.32 2005-09-29 00:47:51 chicares Exp $
+// $Id: ihs_avmly.cpp,v 1.33 2005-09-30 00:33:13 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -2311,21 +2311,6 @@ double AccountValue::DetermineSpecAmtLoad()
     return YearsSpecAmtLoad * SpecAmtLoadBase;
 }
 
-// TODO ?? This function should be eradicated. It has no ostensible
-// reason to stand alone; probably it should be merged into
-// TxTakeSepAcctLoad(), and then much of the work should be deferred
-// to a (new) member function of the loads class.
-//
-// TODO ?? Furthermore, it causes the monthly detail to display a
-// value that does not reflect the dynamic calculation in
-// AccountValue::TxTakeSepAcctLoad().
-//
-//============================================================================
-double AccountValue::DetermineSepAcctLoad()
-{
-    return YearsSepAcctLoad * AVSepAcctLoadBase;
-}
-
 //============================================================================
 // Calculate rider charges.
 void AccountValue::TxSetRiderDed()
@@ -2441,10 +2426,7 @@ void AccountValue::TxDoMlyDed()
     process_deduction(MlyDed);
     Dcv -= dcv_mly_ded;
     Dcv = std::max(0.0, Dcv);
-    // TODO ?? Resolve these issues:
-    // these were subtracted from acct val earlier? is that true?
-    // Does this vary by current vs. guaranteed? --No, always use current
-    // What if pmt is zero? --Do it anyway.
+
     MlyDed += YearsMlyPolFee;
     MlyDed += DetermineSpecAmtLoad();
 
@@ -2493,11 +2475,14 @@ void AccountValue::TxTestHoneymoonForExpiration()
 }
 
 //============================================================================
-// Subtract separate account load after monthly deductions.
+/// Subtract separate account load after monthly deductions: it is not
+/// regarded as part of monthly deductions per se.
+///
+/// TODO ?? Verify the last clause above.
+
 void AccountValue::TxTakeSepAcctLoad()
 {
-    AVSepAcctLoadBase = AVSepAcct;
-    double z = DetermineSepAcctLoad();
+    double z = YearsSepAcctLoad * AVSepAcct;
 
     // TODO ?? This is a hasty kludge that needs to be removed.
     if(SepAcctLoadIsDynamic)
@@ -2553,7 +2538,7 @@ void AccountValue::TxTakeSepAcctLoad()
 // be in the product database. $10,000,000 is just an arbitrary number
 // to be used for testing. The idea is that some such limit applies to
 // the banded load only, but not to any other account-value load.
-                        ,AVSepAcctLoadBase - 10000000.0
+                        ,AVSepAcct - 10000000.0
                         )
                 ;
             LMI_ASSERT(0.0 <= kludge_adjustment);
