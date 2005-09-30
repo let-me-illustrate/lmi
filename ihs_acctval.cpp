@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_acctval.cpp,v 1.64 2005-09-30 00:33:13 chicares Exp $
+// $Id: ihs_acctval.cpp,v 1.65 2005-09-30 13:31:36 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -934,7 +934,7 @@ void AccountValue::ApplyDynamicMandE(double assets)
             }
         }
 
-// TODO ?? Dynamic M&E should be different for guar vs. curr.
+// TODO ?? PRESSING Dynamic M&E should be different for guar vs. curr.
 // TODO ?? Implement tiered comp and tiered management fee.
 
     // Annual rates
@@ -983,7 +983,7 @@ void AccountValue::ApplyDynamicMandE(double assets)
 }
 
 //============================================================================
-// When the sep acct load depends on each month's case total assets, the
+// When the sepacct load depends on each month's case total assets, the
 // interest rate is no longer an annual invariant. Set it monthly here.
 void AccountValue::ApplyDynamicSepAcctLoad(double assets, double cumpmts)
 {
@@ -1073,8 +1073,8 @@ void AccountValue::ApplyDynamicSepAcctLoad(double assets, double cumpmts)
         << std::endl
         ;
 #endif // DEBUGGING_SEP_ACCT_LOAD
-    // convert tiered load from annual to monthly effective rate
-    // TODO ?? This isn't really right. Instead, aggregate annual
+    // Convert tiered load from annual to monthly effective rate.
+    // TODO ?? PRESSING This isn't really right. Instead, aggregate annual
     // rates, then convert their sum to monthly.
     stratified_load = i_upper_12_over_12_from_i<double>()(stratified_load);
     round_interest_rate(stratified_load);
@@ -1103,13 +1103,13 @@ void AccountValue::ApplyDynamicSepAcctLoad(double assets, double cumpmts)
         }
 
 /*
-// TODO ?? Resolve these comments soon, rewriting and relocating this
+// TODO ?? PRESSING Resolve these comments soon, rewriting and relocating this
 // function and the others it works with, and probably some of the
 // variables they use.
 
     // is there any advantage to this sort of implementation in loads.cpp?
     //   YearsSepAcctLoad   = Loads_->GetDynamicSepAcctLoad()
-    // TODO ?? Yes. It would be far better to move it there and write
+    // TODO ?? PRESSING Yes. It would be far better to move it there and write
     // a unit test suite for the loads class.
 
 // Pass these arguments:
@@ -1129,7 +1129,7 @@ void AccountValue::ApplyDynamicSepAcctLoad(double assets, double cumpmts)
         tiered_comp = StratifiedCharges_->tiered_asset_based_compensation(assets);
         tiered_comp = i_upper_12_over_12_from_i<double>()(tiered_comp);
 
-        // TODO ?? Loads should be combined on the annual basis used
+        // TODO ?? PRESSING Loads should be combined on the annual basis used
         // for specifying them, then their sum converted to monthly,
         // in order to match the calculations that an admin system
         // would be expected to do.
@@ -1137,10 +1137,10 @@ void AccountValue::ApplyDynamicSepAcctLoad(double assets, double cumpmts)
 
     YearsSepAcctLoad = Loads_->separate_account_load(ExpAndGABasis)[Year];
 
-    // TODO ?? aggregate loads once and only once for conversion to monthly
+    // TODO ?? PRESSING Aggregate loads once and only once for conversion to monthly.
     stratified_load = i_upper_12_over_12_from_i<double>()(stratified_load);
 
-    // TODO ?? shouldn't rounding be done in the loads class?
+    // TODO ?? PRESSING Shouldn't rounding be done in the loads class?
     round_interest_rate(stratified_load);
 
 */
