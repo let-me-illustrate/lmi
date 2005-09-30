@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avmly.cpp,v 1.33 2005-09-30 00:33:13 chicares Exp $
+// $Id: ihs_avmly.cpp,v 1.34 2005-09-30 13:31:36 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -2484,16 +2484,16 @@ void AccountValue::TxTakeSepAcctLoad()
 {
     double z = YearsSepAcctLoad * AVSepAcct;
 
-    // TODO ?? This is a hasty kludge that needs to be removed.
+    // TODO ?? PRESSING This is a hasty kludge that needs to be removed.
     if(SepAcctLoadIsDynamic)
         {
         double banded_load = 0.0;
 
-        // TODO ?? What was a passed parameter in IncrementEOM() here
+        // TODO ?? PRESSING What was a passed parameter in IncrementEOM() here
         // becomes a local whose value, we hope, is no different.
         double cumpmts = CumPmts;
 
-        // TODO ?? What was a passed parameter in IncrementEOM() here
+        // TODO ?? PRESSING What was a passed parameter in IncrementEOM() here
         // becomes a local whose value, we hope, is no different.
         double assets = GetSepAcctAssetsInforce();
 
@@ -2515,26 +2515,26 @@ void AccountValue::TxTakeSepAcctLoad()
                         );
                 }
                 break;
-            // TODO ?? Handling fewer cases than can arise is always a defect.
-            // TODO ?? Lack of a default case is always a defect.
+            // TODO ?? PRESSING Handling fewer cases than can arise is always a defect.
+            // TODO ?? PRESSING Lack of a default case is always a defect.
             }
 
-        // TODO ?? Won't this fail if 'cumpmts' is negative?
+        // TODO ?? PRESSING Won't this fail if 'cumpmts' is negative?
         LMI_ASSERT(0.0 <= banded_load);
         if(0.0 != banded_load)
             {
-            // TODO ?? This isn't really right. Instead, aggregate annual
+            // TODO ?? PRESSING This isn't really right. Instead, aggregate annual
             // rates, then convert their sum to monthly.
             banded_load = i_upper_12_over_12_from_i<double>()(banded_load);
             round_interest_rate(banded_load);
 
-            // TODO ?? As a ghastly expedient that must be reworked soon,
+            // TODO ?? PRESSING As a ghastly expedient that must be reworked soon,
             // calculate and deduct the supposed error term.
             double kludge_adjustment =
                     banded_load
                 *   std::max
                         (0.0
-// TODO ?? Here, the hardcoded number is of course a defect: it should
+// TODO ?? PRESSING Here, the hardcoded number is of course a defect: it should
 // be in the product database. $10,000,000 is just an arbitrary number
 // to be used for testing. The idea is that some such limit applies to
 // the banded load only, but not to any other account-value load.
