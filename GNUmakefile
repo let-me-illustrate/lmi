@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: GNUmakefile,v 1.32 2005-09-22 16:00:24 chicares Exp $
+# $Id: GNUmakefile,v 1.33 2005-09-30 13:31:31 chicares Exp $
 
 ###############################################################################
 
@@ -326,7 +326,7 @@ licensed_files := $(filter-out $(unlicensed_files),$(wildcard *))
 date_last_made: $(filter-out $@,$(prerequisite_files))
 	@$(ECHO) These files are more recent than '$@': $?
 	@$(TOUCH) $@
-	@$(ECHO) Built '$(yyyymmddhhmm)'.
+	@$(ECHO) Built $(yyyymmddhhmm).
 
 # Update the version-datestamp header before committing any release
 # candidate to cvs.
@@ -337,7 +337,8 @@ release_candidate:
 	  | $(SED) -e 's/^ *//' \
 	  | $(TR) -d '\r' \
 	  > version.hpp
-	@$(ECHO) Version is '$(yyyymmddhhmm)' .
+	@$(ECHO) Version is $(yyyymmddhhmm) .
+	@$(ECHO) Tag a release, e.g. 'cvs rtag lmi-$(yyyymmddhhmm)-rcX lmi'.
 
 ################################################################################
 
@@ -448,6 +449,7 @@ check_conformity: source_clean
 	@$(GREP) --line-number '[A-Za-z] !![A-Za-z]' $(licensed_files) || true
 	@$(GREP) --line-number \?\? $(licensed_files) | $(SED) -e '/TODO \?\?/d'
 	@$(GREP) --line-number \?\?'[A-Za-z]' $(licensed_files)        || true
+	@$(GREP) --line-number '?\{3,\}' $(licensed_files)             || true
 	@$(ECHO) "  Files with lowercase 'c' in copyright symbol:"
 	@$(GREP) --files-with-match '(c) *[12]' $(licensed_files)      || true
 	@$(TOUCH) BOY --date=$(yyyy)0101
