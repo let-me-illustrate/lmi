@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_acctval.cpp,v 1.63 2005-09-29 00:47:51 chicares Exp $
+// $Id: ihs_acctval.cpp,v 1.64 2005-09-30 00:33:13 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -1128,11 +1128,11 @@ void AccountValue::ApplyDynamicSepAcctLoad(double assets, double cumpmts)
         {
         tiered_comp = StratifiedCharges_->tiered_asset_based_compensation(assets);
         tiered_comp = i_upper_12_over_12_from_i<double>()(tiered_comp);
-        // TODO ?? Probably this should be rounded.
-        // TODO ?? ^ No, remove that comment. Loads should be combined
-        // on the annual basis used for specifying them, then their
-        // sum converted to monthly, in order to match the calculations
-        // that an admin system would be expected to do.
+
+        // TODO ?? Loads should be combined on the annual basis used
+        // for specifying them, then their sum converted to monthly,
+        // in order to match the calculations that an admin system
+        // would be expected to do.
         }
 
     YearsSepAcctLoad = Loads_->separate_account_load(ExpAndGABasis)[Year];
