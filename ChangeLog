@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.163 2005-09-29 00:47:51 chicares Exp $
+// $Id: ChangeLog,v 1.164 2005-09-30 00:33:13 chicares Exp $
 
 MAINTENANCE
 
@@ -3912,5 +3912,13 @@ Purge misbegotten beginning-of-month separate-account load.
   ihs_standalone.cpp
   ledger_invariant.cpp
   loads.cpp
+Remove defects.
+
+20050930T0033Z <chicares@cox.net> [1252]
+
+  account_value.hpp
+  ihs_acctval.cpp
+  ihs_avdebug.cpp
+  ihs_avmly.cpp
 Remove defects.
 
