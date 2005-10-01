@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_invariant.cpp,v 1.16 2005-09-29 00:47:51 chicares Exp $
+// $Id: ledger_invariant.cpp,v 1.17 2005-10-01 17:52:46 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -454,7 +454,7 @@ void LedgerInvariant::Init(BasicValues* b)
         ,0.0
         );
 
-// TODO ?? October: clarify names--premium-tax load versus rate.
+// TODO ?? PRESSING Clarify names--premium-tax load versus rate.
     PremiumTaxIsTiered      = b->IsPremiumTaxLoadTiered();
 
     NoLapseAlwaysActive     = b->Database_->Query(DB_NoLapseAlwaysActive);
