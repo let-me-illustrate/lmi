@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_variant.hpp,v 1.4 2005-09-27 16:49:11 chicares Exp $
+// $Id: ledger_variant.hpp,v 1.5 2005-10-01 18:58:59 chicares Exp $
 
 #ifndef ledger_variant_hpp
 #define ledger_variant_hpp
@@ -107,8 +107,8 @@ public:
     std::vector<double> PremTaxLoad;
     std::vector<double> DacTaxLoad;
     std::vector<double> SpecAmtLoad;
-    std::vector<double> AcctValLoadBOM; // TODO ?? expunge in October
-    std::vector<double> AcctValLoadAMD; // TODO ?? Rename to 'SepAcctLoad' in October.
+    std::vector<double> AcctValLoadBOM; // TODO ?? expunge in October PRESSING
+    std::vector<double> AcctValLoadAMD; // TODO ?? PRESSING Rename to 'SepAcctLoad' in October.
     std::vector<double> ClaimsPaid;
     std::vector<double> NetClaims;
     std::vector<double> NetPmt;
