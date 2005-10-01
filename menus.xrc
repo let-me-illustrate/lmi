@@ -24,7 +24,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: menus.xrc,v 1.6 2005-09-14 14:16:30 chicares Exp $
+    $Id: menus.xrc,v 1.7 2005-10-01 17:52:50 chicares Exp $
 -->
 
 <!-- reusable menus -->
@@ -254,13 +254,13 @@ Not supported yet: need to split columns into multiple pages.
         <object class="separator"/>
 <!-- TODO ?? Change the 'name' too. -->
         <object class="wxMenuItem" name="expand_columns">
-            <label>_Vary column widths\tCtrl-V</label>
+            <label>_Vary column width\tCtrl-V</label>
             <bitmap>varying-width.xpm</bitmap>
             <help>Vary each column's width to show all contents</help>
         </object>
 <!-- TODO ?? Change the 'name' too. -->
         <object class="wxMenuItem" name="shrink_columns">
-            <label>_Use fixed column widths\tCtrl-U</label>
+            <label>_Use fixed column width\tCtrl-U</label>
             <bitmap>fixed-width.xpm</bitmap>
             <help>Display all columns with the same fixed width</help>
         </object>
