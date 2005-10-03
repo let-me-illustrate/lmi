@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: loads.cpp,v 1.8 2005-09-29 00:47:51 chicares Exp $
+// $Id: loads.cpp,v 1.9 2005-10-03 12:55:33 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -40,6 +40,9 @@
 
 #include <algorithm>
 #include <functional>
+
+/// Behaviorless aggregate 'load_details' holds data required for
+/// initialization of class 'Loads'.
 
 struct load_details
 {
@@ -85,7 +88,8 @@ struct load_details
     std::vector<double> const& VectorExtraPolFee_;
 };
 
-//============================================================================
+/// Ctor for production branch.
+
 Loads::Loads(BasicValues& V)
 {
     int length = V.GetLength();
@@ -104,14 +108,14 @@ Loads::Loads(BasicValues& V)
         ,V.Input_->VectorAddonCompOnAssets
         ,V.Input_->VectorAddonMonthlyCustodialFee
         );
-    Init(*V.Database_, details);
+    Allocate(length);
+    Initialize(*V.Database_);
+    Calculate(details);
 }
 
-//============================================================================
-void Loads::Init
-    (TDatabase    const& database
-    ,load_details const& details
-    )
+/// Reserve required space for vector data members.
+
+void Loads::Allocate(int length)
 {
     monthly_policy_fee_    .resize(n_illreg_bases);
     annual_policy_fee_     .resize(n_illreg_bases);
@@ -130,57 +134,61 @@ void Loads::Init
 
         // TODO ?? Why is this necessary? Why aren't all of these
         // initialized by database lookup?
-        monthly_policy_fee_    [j].resize(details.length_);
-        annual_policy_fee_     [j].resize(details.length_);
-        specified_amount_load_ [j].resize(details.length_);
-        separate_account_load_ [j].resize(details.length_);
-        target_premium_load_   [j].resize(details.length_);
-        excess_premium_load_   [j].resize(details.length_);
-        target_sales_load_     [j].resize(details.length_);
-        excess_sales_load_     [j].resize(details.length_);
+        monthly_policy_fee_    [j].resize(length);
+        annual_policy_fee_     [j].resize(length);
+        specified_amount_load_ [j].resize(length);
+        separate_account_load_ [j].resize(length);
+        target_premium_load_   [j].resize(length);
+        excess_premium_load_   [j].resize(length);
+        target_sales_load_     [j].resize(length);
+        excess_sales_load_     [j].resize(length);
 
         // TODO ?? Not retrieved from database. Initialize elsewhere?
-        target_total_load_                   [j].resize(details.length_);
-        excess_total_load_                   [j].resize(details.length_);
+        target_total_load_     [j].resize(length);
+        excess_total_load_     [j].resize(length);
         }
 
-    premium_tax_load_                              .resize(details.length_);
-    amortized_premium_tax_load_                    .resize(details.length_);
-    dac_tax_load_                                  .resize(details.length_);
+    premium_tax_load_                              .resize(length);
+    amortized_premium_tax_load_                    .resize(length);
+    dac_tax_load_                                  .resize(length);
 
-    target_premium_load_7702_excluding_premium_tax_.resize(details.length_);
-    excess_premium_load_7702_excluding_premium_tax_.resize(details.length_);
-    target_premium_load_7702_lowest_premium_tax_   .resize(details.length_);
-    excess_premium_load_7702_lowest_premium_tax_   .resize(details.length_);
+    target_premium_load_7702_excluding_premium_tax_.resize(length);
+    excess_premium_load_7702_excluding_premium_tax_.resize(length);
+    target_premium_load_7702_lowest_premium_tax_   .resize(length);
+    excess_premium_load_7702_lowest_premium_tax_   .resize(length);
+}
 
-    // SOMEDAY !! Database lookups have been consolidated here, to
-    // facilitate the long-term goal of factoring them into a separate
-    // module so that unit tests can be more easily written for the
-    // rest of this class's implementation.
+/// Set various data members from product database.
 
+void Loads::Initialize(TDatabase const& database)
+{
     database.Query(refundable_sales_load_proportion_, DB_PremRefund    );
-
-    database.Query(monthly_policy_fee_   [e_guarbasis], DB_GuarPolFee          );
-    database.Query(annual_policy_fee_    [e_guarbasis], DB_GuarIssueFee        );
-    database.Query(specified_amount_load_[e_guarbasis], DB_GuarSpecAmtLoad     );
-    database.Query(separate_account_load_[e_guarbasis], DB_GuarAcctValLoadAMD  );
-    database.Query(target_premium_load_  [e_guarbasis], DB_GuarPremLoadTgt     );
-    database.Query(excess_premium_load_  [e_guarbasis], DB_GuarPremLoadExc     );
-    database.Query(target_sales_load_    [e_guarbasis], DB_GuarPremLoadTgtRfd  );
-    database.Query(excess_sales_load_    [e_guarbasis], DB_GuarPremLoadExcRfd  );
-
-    database.Query(monthly_policy_fee_   [e_currbasis], DB_CurrPolFee          );
-    database.Query(annual_policy_fee_    [e_currbasis], DB_CurrIssueFee        );
-    database.Query(specified_amount_load_[e_currbasis], DB_CurrSpecAmtLoad     );
-    database.Query(separate_account_load_[e_currbasis], DB_CurrAcctValLoadAMD  );
-    database.Query(target_premium_load_  [e_currbasis], DB_CurrPremLoadTgt     );
-    database.Query(excess_premium_load_  [e_currbasis], DB_CurrPremLoadExc     );
-    database.Query(target_sales_load_    [e_currbasis], DB_CurrPremLoadTgtRfd  );
-    database.Query(excess_sales_load_    [e_currbasis], DB_CurrPremLoadExcRfd  );
-
     database.Query(premium_tax_load_                , DB_PremTaxLoad   );
     database.Query(dac_tax_load_                    , DB_DACTaxPremLoad);
 
+    database.Query(monthly_policy_fee_   [e_guarbasis], DB_GuarPolFee        );
+    database.Query(annual_policy_fee_    [e_guarbasis], DB_GuarIssueFee      );
+    database.Query(specified_amount_load_[e_guarbasis], DB_GuarSpecAmtLoad   );
+    database.Query(separate_account_load_[e_guarbasis], DB_GuarAcctValLoadAMD);
+    database.Query(target_premium_load_  [e_guarbasis], DB_GuarPremLoadTgt   );
+    database.Query(excess_premium_load_  [e_guarbasis], DB_GuarPremLoadExc   );
+    database.Query(target_sales_load_    [e_guarbasis], DB_GuarPremLoadTgtRfd);
+    database.Query(excess_sales_load_    [e_guarbasis], DB_GuarPremLoadExcRfd);
+
+    database.Query(monthly_policy_fee_   [e_currbasis], DB_CurrPolFee        );
+    database.Query(annual_policy_fee_    [e_currbasis], DB_CurrIssueFee      );
+    database.Query(specified_amount_load_[e_currbasis], DB_CurrSpecAmtLoad   );
+    database.Query(separate_account_load_[e_currbasis], DB_CurrAcctValLoadAMD);
+    database.Query(target_premium_load_  [e_currbasis], DB_CurrPremLoadTgt   );
+    database.Query(excess_premium_load_  [e_currbasis], DB_CurrPremLoadExc   );
+    database.Query(target_sales_load_    [e_currbasis], DB_CurrPremLoadTgtRfd);
+    database.Query(excess_sales_load_    [e_currbasis], DB_CurrPremLoadExcRfd);
+}
+
+/// Transform raw input and database data into directly-useful rates.
+
+void Loads::Calculate(load_details const& details)
+{
     // ET !! The loop and the std::transform call should both be
     // unnecessary: it should be possible to write simply
     //   separate_account_load_ = i_upper_12_over_12_from_i(separate_account_load_);
@@ -519,30 +527,31 @@ void Loads::Init
         }
 }
 
-//============================================================================
-// Not implemented. The idea is to amortize premium tax as an
-// annuity-certain. Sketch:
-//
-// Test parameters for sanity.
-//
-// Calculate a monthly annuity factor, reflecting the amortization
-// rate and period.
-//
-// Apply the annuity factor to the appropriate charge: probably
-// the rate the state actually charges, though the product's
-// premium-tax load might be taken into account. It's also
-// conceivable to amortize DAC tax similarly.
-//
-// Store the result in 'amortized_premium_tax_load_'. Modify
-// any corresponding loads previously stored.
-//
+/// Amortize premium tax.
+///
+/// Not implemented. The idea is to amortize premium tax as an
+/// annuity-certain. Sketch:
+///
+/// Test parameters for sanity.
+///
+/// Calculate a monthly annuity factor, reflecting the amortization
+/// rate and period.
+///
+/// Apply the annuity factor to the appropriate charge: probably
+/// the rate the state actually charges, though the product's
+/// premium-tax load might be taken into account. It's also
+/// conceivable to amortize DAC tax similarly.
+///
+/// Store the result in 'amortized_premium_tax_load_'. Modify
+/// any corresponding loads previously stored.
+
 void Loads::AmortizePremiumTax(load_details const&)
 {
     fatal_error() << "Premium-tax amortization not implemented." << LMI_FLUSH;
 }
 
-//============================================================================
-// Antediluvian branch.
+/// Ctor for antediluvian branch.
+
 Loads::Loads(TDatabase const& database)
 {
     monthly_policy_fee_   .resize(n_illreg_bases);

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: loads.hpp,v 1.4 2005-09-27 16:49:11 chicares Exp $
+// $Id: loads.hpp,v 1.5 2005-10-03 12:55:33 chicares Exp $
 
 #ifndef loads_hpp
 #define loads_hpp
@@ -73,10 +73,9 @@ class Loads
     std::vector<double> const& excess_premium_load   (enum_basis) const;
 
   private:
-    void Init
-         (TDatabase const&
-         ,load_details const&
-         );
+    void Allocate(int length);
+    void Initialize(TDatabase const&);
+    void Calculate(load_details const&);
 
     void AmortizePremiumTax(load_details const& details);
 
