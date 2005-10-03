@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: GNUmakefile,v 1.33 2005-09-30 13:31:31 chicares Exp $
+# $Id: GNUmakefile,v 1.34 2005-10-03 12:55:21 chicares Exp $
 
 ###############################################################################
 
@@ -209,10 +209,12 @@ idempotent_files := $(addsuffix .idempotent,$(idempotent_files))
 
 ################################################################################
 
-# Datestamps.
+# Datestamps. These are all UTC. Only the first has an explicit 'Z'
+# suffix, to avoid any ambiguity.
 
 yyyymmddhhmm := $(shell $(DATE) -u +'%Y%m%dT%H%MZ')
-yyyymmdd     := $(shell $(DATE) -u +'%Y%m%dZ')
+yyyymmdd     := $(shell $(DATE) -u +'%Y%m%d')
+yyyymm       := $(shell $(DATE) -u +'%Y%m')
 yyyy         := $(shell $(DATE) -u +'%Y')
 
 .PHONY: date
@@ -494,6 +496,14 @@ check_conformity: source_clean
 	@$(WC) -l $(prerequisite_files) | $(SED) -e'/[Tt]otal/d' | $(WC) -l
 	@$(ECHO) "Number of marked defects:"
 	@$(GREP) \?\? $(licensed_files) | $(WC) -l
+	@$(TOUCH) --date=$(yyyymmdd) TODAY
+	@$(TOUCH) --date=$(yyyymm)00 BOM
+	@$(TOUCH) --date=$(yyyymm)23 CANDIDATE
+	@if [[ TODAY -nt CANDIDATE ]] && [[ version.hpp -ot BOM ]] \
+	  $(ECHO) "Is it time to 'make release_candidate'?"
+	@$(RM) --force CANDIDATE
+	@$(RM) --force BOM
+	@$(RM) --force TODAY
 
 ################################################################################
 
