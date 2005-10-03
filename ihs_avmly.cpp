@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avmly.cpp,v 1.34 2005-09-30 13:31:36 chicares Exp $
+// $Id: ihs_avmly.cpp,v 1.35 2005-10-03 18:02:38 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -2491,7 +2491,9 @@ void AccountValue::TxTakeSepAcctLoad()
 
         // TODO ?? PRESSING What was a passed parameter in IncrementEOM() here
         // becomes a local whose value, we hope, is no different.
-        double cumpmts = CumPmts;
+
+        // TODO ?? PRESSING Is this the right thing to do?
+        double cumpmts = std::max(0.0, CumPmts);
 
         // TODO ?? PRESSING What was a passed parameter in IncrementEOM() here
         // becomes a local whose value, we hope, is no different.
@@ -2519,7 +2521,6 @@ void AccountValue::TxTakeSepAcctLoad()
             // TODO ?? PRESSING Lack of a default case is always a defect.
             }
 
-        // TODO ?? PRESSING Won't this fail if 'cumpmts' is negative?
         LMI_ASSERT(0.0 <= banded_load);
         if(0.0 != banded_load)
             {
