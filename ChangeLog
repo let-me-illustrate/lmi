@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.165 2005-09-30 13:31:36 chicares Exp $
+// $Id: ChangeLog,v 1.166 2005-10-03 18:02:38 chicares Exp $
 
 MAINTENANCE
 
@@ -3930,4 +3930,30 @@ Fortify against errors.
   ihs_acctval.cpp
   ihs_avmly.cpp
 Mark pressing issues created by the 20050825T1549Z changes.
+
+20051001T1752Z <chicares@cox.net> [1252]
+
+  ledger_invariant.cpp
+  ledger_variant.cpp
+  ledger_variant.hpp
+Mark pressing issues.
+
+  menus.xrc
+  toolbar.xrc
+Improve consistency.
+
+20051003T1255Z <chicares@cox.net> [1252]
+
+  GNUmakefile
+Suggest declaring a release candidate if it seems overdue.
+
+  loads.cpp
+  loads.hpp
+Refactor.
+
+20051003T1802Z <chicares@cox.net> [1253]
+
+  ihs_acctval.cpp
+  ihs_avmly.cpp
+Hastily work around a problem that obstructs testing.
 
