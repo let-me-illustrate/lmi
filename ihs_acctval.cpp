@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_acctval.cpp,v 1.65 2005-09-30 13:31:36 chicares Exp $
+// $Id: ihs_acctval.cpp,v 1.66 2005-10-03 18:02:38 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -991,6 +991,9 @@ void AccountValue::ApplyDynamicSepAcctLoad(double assets, double cumpmts)
         {
         return;
         }
+
+    // TODO ?? PRESSING Is this the right thing to do?
+    cumpmts = std::max(0.0, cumpmts);
 
     double stratified_load = 0.0;
 
