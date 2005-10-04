@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: loads.cpp,v 1.9 2005-10-03 12:55:33 chicares Exp $
+// $Id: loads.cpp,v 1.10 2005-10-04 05:36:35 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -27,6 +27,7 @@
 #endif // __BORLANDC__
 
 #include "loads.hpp"
+#include "loads_impl.hpp"
 
 #include "alert.hpp"
 #include "basic_values.hpp"
@@ -41,52 +42,11 @@
 #include <algorithm>
 #include <functional>
 
-/// Behaviorless aggregate 'load_details' holds data required for
-/// initialization of class 'Loads'.
+/// Ctor for unit testing.
 
-struct load_details
+Loads::Loads()
 {
-    load_details
-        (int                        length
-        ,bool                       AmortizePremLoad
-        ,double                     LowestPremiumTaxLoadRate
-        ,double                     premium_tax_rate
-        ,double                     premium_tax_amortization_rate
-        ,double                     premium_tax_amortization_period
-        ,double                     asset_charge_type
-        ,double                     ledger_type
-        ,round_to<double>    const& round_interest_rate
-        ,std::vector<double> const& VectorExtraCompLoad
-        ,std::vector<double> const& VectorExtraAssetComp
-        ,std::vector<double> const& VectorExtraPolFee
-        )
-        :length_                          (length)
-        ,AmortizePremLoad_                (AmortizePremLoad)
-        ,LowestPremiumTaxLoadRate_        (LowestPremiumTaxLoadRate)
-        ,premium_tax_rate_                (premium_tax_rate)
-        ,premium_tax_amortization_rate_   (premium_tax_amortization_rate)
-        ,premium_tax_amortization_period_ (premium_tax_amortization_period)
-        ,asset_charge_type_               (asset_charge_type)
-        ,ledger_type_                     (ledger_type)
-        ,round_interest_rate_             (round_interest_rate)
-        ,VectorExtraCompLoad_             (VectorExtraCompLoad)
-        ,VectorExtraAssetComp_            (VectorExtraAssetComp)
-        ,VectorExtraPolFee_               (VectorExtraPolFee)
-        {}
-
-    int                        length_;
-    bool                       AmortizePremLoad_;
-    double                     LowestPremiumTaxLoadRate_;
-    double                     premium_tax_rate_;
-    double                     premium_tax_amortization_rate_;
-    double                     premium_tax_amortization_period_;
-    double                     asset_charge_type_;
-    double                     ledger_type_;
-    round_to<double>    const& round_interest_rate_;
-    std::vector<double> const& VectorExtraCompLoad_;
-    std::vector<double> const& VectorExtraAssetComp_;
-    std::vector<double> const& VectorExtraPolFee_;
-};
+}
 
 /// Ctor for production branch.
 
@@ -147,6 +107,8 @@ void Loads::Allocate(int length)
         target_total_load_     [j].resize(length);
         excess_total_load_     [j].resize(length);
         }
+
+    // TODO ?? refundable_sales_load_proportion_ isn't resized.
 
     premium_tax_load_                              .resize(length);
     amortized_premium_tax_load_                    .resize(length);

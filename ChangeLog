@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.166 2005-10-03 18:02:38 chicares Exp $
+// $Id: ChangeLog,v 1.167 2005-10-04 05:36:35 chicares Exp $
 
 MAINTENANCE
 
@@ -3956,4 +3956,13 @@ Refactor.
   ihs_acctval.cpp
   ihs_avmly.cpp
 Hastily work around a problem that obstructs testing.
+
+20051004T0536Z <chicares@cox.net> [1259]
+
+  loads.cpp
+  loads.hpp
+  loads_impl.hpp
+  loads_test.cpp
+  objects.make
+Add inchoate unit test for loads class.
 

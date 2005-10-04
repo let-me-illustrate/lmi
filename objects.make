@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: objects.make,v 1.52 2005-09-14 14:16:26 chicares Exp $
+# $Id: objects.make,v 1.53 2005-10-04 05:36:35 chicares Exp $
 
 ################################################################################
 
@@ -362,6 +362,7 @@ unit_test_targets := \
   input_seq_test$(EXEEXT) \
   input_test$(EXEEXT) \
   irc7702a_test$(EXEEXT) \
+  loads_test$(EXEEXT) \
   materially_equal_test$(EXEEXT) \
   math_functors_test$(EXEEXT) \
   mc_enum_test$(EXEEXT) \
@@ -501,6 +502,13 @@ irc7702a_test$(EXEEXT): \
   ihs_irc7702a.o \
   irc7702a_test.o \
   stratified_algorithms.o \
+
+loads_test$(EXEEXT): \
+  $(common_test_objects) \
+  expm1.o \
+  loads.o \
+  loads_test.o \
+  timer.o \
 
 materially_equal_test$(EXEEXT): \
   $(common_test_objects) \
