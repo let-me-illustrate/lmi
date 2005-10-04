@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: loads.hpp,v 1.5 2005-10-03 12:55:33 chicares Exp $
+// $Id: loads.hpp,v 1.6 2005-10-04 05:36:35 chicares Exp $
 
 #ifndef loads_hpp
 #define loads_hpp
@@ -34,8 +34,13 @@ class BasicValues;
 class TDatabase;
 class load_details;
 
+/// Declaration of class Loads.
+
 class Loads
 {
+    // TODO ?? Would a friend class be better?
+    friend int test_main(int, char*[]);
+
   public:
     Loads(BasicValues& values);
     Loads(TDatabase const&); // Antediluvian branch.
@@ -73,6 +78,8 @@ class Loads
     std::vector<double> const& excess_premium_load   (enum_basis) const;
 
   private:
+    Loads(); // Ctor for unit testing.
+
     void Allocate(int length);
     void Initialize(TDatabase const&);
     void Calculate(load_details const&);
