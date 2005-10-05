@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: loads.hpp,v 1.6 2005-10-04 05:36:35 chicares Exp $
+// $Id: loads.hpp,v 1.7 2005-10-05 17:07:52 chicares Exp $
 
 #ifndef loads_hpp
 #define loads_hpp
@@ -43,7 +43,7 @@ class Loads
 
   public:
     Loads(BasicValues& values);
-    Loads(TDatabase const&); // Antediluvian branch.
+    Loads(TDatabase const&, bool NeedMidpointRates); // Antediluvian branch.
 
     // Accessors.
 

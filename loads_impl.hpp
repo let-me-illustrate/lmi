@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: loads_impl.hpp,v 1.2 2005-10-05 13:43:42 chicares Exp $
+// $Id: loads_impl.hpp,v 1.3 2005-10-05 17:07:52 chicares Exp $
 
 #ifndef loads_impl_hpp
 #define loads_impl_hpp
@@ -50,7 +50,7 @@ class TDatabase;
 /// asset_charge_type_: Determines whether input extra asset loads
 /// should be treated as a load or as an interest-rate decrement.
 ///
-/// ledger_type_: Determines whether midpoint loads are needed.
+/// NeedMidpointRates_: Nomen est omen.
 ///
 /// round_interest_rate_: Rounding functor generally used for interest
 /// rates, used because the separate-account load is similar to an M&E
@@ -81,7 +81,7 @@ struct load_details
         ,double                     premium_tax_amortization_rate
         ,double                     premium_tax_amortization_period
         ,double                     asset_charge_type
-        ,double                     ledger_type
+        ,bool                       NeedMidpointRates
         ,round_to<double>    const& round_interest_rate
         ,std::vector<double> const& VectorExtraCompLoad
         ,std::vector<double> const& VectorExtraAssetComp
@@ -94,7 +94,7 @@ struct load_details
         ,premium_tax_amortization_rate_   (premium_tax_amortization_rate)
         ,premium_tax_amortization_period_ (premium_tax_amortization_period)
         ,asset_charge_type_               (asset_charge_type)
-        ,ledger_type_                     (ledger_type)
+        ,NeedMidpointRates_               (NeedMidpointRates)
         ,round_interest_rate_             (round_interest_rate)
         ,VectorExtraCompLoad_             (VectorExtraCompLoad)
         ,VectorExtraAssetComp_            (VectorExtraAssetComp)
@@ -108,7 +108,7 @@ struct load_details
     double                     premium_tax_amortization_rate_;
     double                     premium_tax_amortization_period_;
     double                     asset_charge_type_;
-    double                     ledger_type_;
+    bool                       NeedMidpointRates_;
     round_to<double>    const& round_interest_rate_;
     std::vector<double> const& VectorExtraCompLoad_;
     std::vector<double> const& VectorExtraAssetComp_;

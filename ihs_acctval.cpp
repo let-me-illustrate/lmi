@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_acctval.cpp,v 1.66 2005-10-03 18:02:38 chicares Exp $
+// $Id: ihs_acctval.cpp,v 1.67 2005-10-05 17:07:52 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -213,7 +213,7 @@ Then run other bases.
 void AccountValue::SetGuarPrem()
 {
     GuarPremium = 0.0;
-    if(is_subject_to_ill_reg(BasicValues::GetLedgerType()))
+    if(BasicValues::IsSubjectToIllustrationReg())
         {
         GuarPremium = SolveGuarPremium();
         }
@@ -225,7 +225,7 @@ void AccountValue::SetGuarPrem()
 double AccountValue::RunOneBasis(e_run_basis const& a_Basis)
 {
     if
-        (  !is_subject_to_ill_reg(BasicValues::GetLedgerType())
+        (  !BasicValues::IsSubjectToIllustrationReg()
         && e_mdptbasis == a_Basis
         )
         {

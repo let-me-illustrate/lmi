@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_basicval.cpp,v 1.25 2005-09-29 00:47:51 chicares Exp $
+// $Id: ihs_basicval.cpp,v 1.26 2005-10-05 17:07:52 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -220,6 +220,7 @@ void BasicValues::Init()
 
     int endt_age = static_cast<int>(Database_->Query(DB_EndtAge));
     Length = endt_age - IssueAge;
+    SetLedgerType();
 
     if(IssueAge < Database_->Query(DB_MinIssAge))
         {
@@ -299,6 +300,7 @@ void BasicValues::GPTServerInit()
 
     int endt_age = static_cast<int>(Database_->Query(DB_EndtAge));
     Length = endt_age - IssueAge;
+    SetLedgerType();
 
     if(IssueAge < Database_->Query(DB_MinIssAge))
         {
@@ -724,8 +726,6 @@ void BasicValues::SetPermanentInvariants()
     Database_->Query(CompTarget, DB_CompTarget);
     Database_->Query(CompExcess, DB_CompExcess);
 
-    LedgerType = Input_->LedgerType();
-
     FirstYearPremiumRetaliationLimit = Database_->Query(DB_PremTaxRetalLimit);
 
     MandEIsDynamic      = Database_->Query(DB_DynamicMandE           );
@@ -746,7 +746,7 @@ void BasicValues::SetPermanentInvariants()
     // charges below the DCS.
     if
         (   Input_->UseExperienceRating
-        &&  is_subject_to_ill_reg(LedgerType)
+        &&  IsSubjectToIllustrationReg()
         // TODO ?? Let an old regression test run for now.
         &&  !global_settings::instance().regression_testing()
         )
@@ -817,6 +817,13 @@ void BasicValues::SetPermanentInvariants()
     round_interest_rate_7702 = RoundingRules_->round_interest_rate_7702();
 
     SetMaxSurvivalDur();
+}
+
+//============================================================================
+void BasicValues::SetLedgerType()
+{
+    LedgerType = Input_->LedgerType();
+    IsSubjectToIllustrationReg_ = is_subject_to_ill_reg(LedgerType);
 }
 
 //============================================================================

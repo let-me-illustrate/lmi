@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: loads.cpp,v 1.10 2005-10-04 05:36:35 chicares Exp $
+// $Id: loads.cpp,v 1.11 2005-10-05 17:07:52 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -62,7 +62,7 @@ Loads::Loads(BasicValues& V)
         ,V.Database_->Query(DB_PmTxAmortIntRate)
         ,V.Database_->Query(DB_PmTxAmortPeriod)
         ,V.Database_->Query(DB_AssetChargeType)
-        ,V.Database_->Query(DB_LedgerType)
+        ,V.IsSubjectToIllustrationReg()
         ,V.GetRoundingRules().round_interest_rate()
         ,V.Input_->VectorAddonCompOnPremium
         ,V.Input_->VectorAddonCompOnAssets
@@ -411,7 +411,7 @@ void Loads::Calculate(load_details const& details)
 
     // Calculate midpoint as mean of current and guaranteed.
     // A different average might be used instead.
-    if(is_subject_to_ill_reg(details.ledger_type_))
+    if(details.NeedMidpointRates_)
         {
         // ET !! Matrix operations are most welcome here:
         //   monthly_policy_fee_[e_mdptbasis] = mean(monthly_policy_fee_[e_guarbasis], monthly_policy_fee_[e_currbasis]);
@@ -514,7 +514,7 @@ void Loads::AmortizePremiumTax(load_details const&)
 
 /// Ctor for antediluvian branch.
 
-Loads::Loads(TDatabase const& database)
+Loads::Loads(TDatabase const& database, bool NeedMidpointRates)
 {
     monthly_policy_fee_   .resize(n_illreg_bases);
     target_premium_load_  .resize(n_illreg_bases);
@@ -533,7 +533,7 @@ Loads::Loads(TDatabase const& database)
 
     // Calculate midpoint as mean of current and guaranteed.
     // A different average might be used instead.
-    if(is_subject_to_ill_reg(database.Query(DB_LedgerType)))
+    if(NeedMidpointRates)
         {
         monthly_policy_fee_   [e_mdptbasis].resize(database.length());
         // ET !! Matrix operations are most welcome here:
