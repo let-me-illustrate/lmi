@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: interest_rates.hpp,v 1.2 2005-07-18 03:33:46 chicares Exp $
+// $Id: interest_rates.hpp,v 1.3 2005-10-05 17:07:52 chicares Exp $
 
 #ifndef interest_rates_hpp
 #define interest_rates_hpp
@@ -217,7 +217,6 @@ class InterestRates
     void Initialize7702Rates();
 
     int                Length_;
-    e_ledger_type      LedgerType_;
     round_to<double>   RoundIntRate_;
     round_to<double>   Round7702Rate_;
 
