@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: basicvalues.cpp,v 1.9 2005-09-29 00:47:50 chicares Exp $
+// $Id: basicvalues.cpp,v 1.10 2005-10-05 17:07:52 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -98,6 +98,7 @@ void BasicValues::Init()
         );
 
     LedgerType = Input_->LedgerType();
+    IsSubjectToIllustrationReg_ = is_subject_to_ill_reg(LedgerType);
 
     RoundingRules_.reset(new rounding_rules);
 
@@ -110,7 +111,7 @@ void BasicValues::Init()
     SurrChgRates_  .reset(new SurrChgRates   (*Database_));
     DeathBfts_     .reset(new death_benefits (*this));
     Outlay_        .reset(new Outlay         (*this));
-    Loads_         .reset(new Loads          (*Database_));
+    Loads_         .reset(new Loads(*Database_, IsSubjectToIllustrationReg()));
 
     MinSpecAmt = Database_->Query(DB_MinSpecAmt);
     MinWD      = Database_->Query(DB_MinWD     );

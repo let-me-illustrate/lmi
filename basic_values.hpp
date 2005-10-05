@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: basic_values.hpp,v 1.12 2005-09-29 00:47:50 chicares Exp $
+// $Id: basic_values.hpp,v 1.13 2005-10-05 17:07:52 chicares Exp $
 
 #ifndef basic_values_hpp
 #define basic_values_hpp
@@ -102,18 +102,19 @@ class LMI_EXPIMP BasicValues
     void Init();
     void GPTServerInit();
 
-    int                   GetLength()                 const;
-    int                   GetIssueAge()               const;
-    int                   GetRetAge()                 const;
-    e_ledger_type  const& GetLedgerType()             const;
-    e_state        const& GetStateOfJurisdiction()    const;
-    e_state        const& GetStateOfDomicile()        const;
-    double                PremiumTaxRate()            const;
-    double                LowestPremiumTaxLoad()      const;
-    double                DomiciliaryPremiumTaxLoad() const;
-    bool                  IsPremiumTaxLoadTiered()    const;
-    rounding_rules const& GetRoundingRules()          const;
-    double                InvestmentManagementFee()   const;
+    int                   GetLength()                  const;
+    int                   GetIssueAge()                const;
+    int                   GetRetAge()                  const;
+    e_ledger_type  const& GetLedgerType()              const;
+    e_state        const& GetStateOfJurisdiction()     const;
+    e_state        const& GetStateOfDomicile()         const;
+    double                PremiumTaxRate()             const;
+    double                LowestPremiumTaxLoad()       const;
+    double                DomiciliaryPremiumTaxLoad()  const;
+    bool                  IsPremiumTaxLoadTiered()     const;
+    bool                  IsSubjectToIllustrationReg() const;
+    rounding_rules const& GetRoundingRules()           const;
+    double                InvestmentManagementFee()    const;
 
     boost::shared_ptr<InputParms const>   Input_;
     boost::shared_ptr<TProductData>       ProductData_;
@@ -281,6 +282,7 @@ class LMI_EXPIMP BasicValues
 
     // Invariant data.
     void                    SetPermanentInvariants();
+    void                    SetLedgerType();
     void                    SetLowestPremiumTaxLoad();
     void                    TestPremiumTaxLoadConsistency();
     void                    SetMaxSurvivalDur();
@@ -414,6 +416,7 @@ class LMI_EXPIMP BasicValues
         ) const;
 
     e_ledger_type       LedgerType;
+    bool                IsSubjectToIllustrationReg_;
     e_state             StateOfJurisdiction;
     e_state             StateOfDomicile;
     double              PremiumTaxRate_;
@@ -479,6 +482,11 @@ inline double BasicValues::DomiciliaryPremiumTaxLoad() const
 inline bool BasicValues::IsPremiumTaxLoadTiered() const
 {
     return PremiumTaxLoadIsTieredInStateOfJurisdiction;
+}
+
+inline bool BasicValues::IsSubjectToIllustrationReg() const
+{
+    return IsSubjectToIllustrationReg_;
 }
 
 inline rounding_rules const& BasicValues::GetRoundingRules() const

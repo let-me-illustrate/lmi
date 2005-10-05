@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: interest_rates.cpp,v 1.10 2005-09-18 01:22:25 chicares Exp $
+// $Id: interest_rates.cpp,v 1.11 2005-10-05 17:07:52 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -251,11 +251,10 @@ InterestRates::~InterestRates()
 //
 InterestRates::InterestRates(BasicValues const& v)
     :Length_             (v.GetLength())
-    ,LedgerType_         (v.Input_->LedgerType())
     ,RoundIntRate_       (v.GetRoundingRules().round_interest_rate())
     ,Round7702Rate_      (v.GetRoundingRules().round_interest_rate_7702())
     ,Zero_               (Length_)
-    ,NeedMidpointRates_  (is_subject_to_ill_reg(LedgerType_))
+    ,NeedMidpointRates_  (v.IsSubjectToIllustrationReg())
     ,GenAcctRateType_    (v.Input_->IntRateTypeGA)
     ,NeedSepAcctRates_   (v.Database_->Query(DB_AllowSepAcct))
     ,SepAcctRateType_    (v.Input_->IntRateTypeSA)
