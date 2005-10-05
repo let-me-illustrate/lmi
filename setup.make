@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: setup.make,v 1.14 2005-09-22 20:26:15 wboutin Exp $
+# $Id: setup.make,v 1.15 2005-10-05 15:04:40 wboutin Exp $
 
 .PHONY: all
 all: setup
@@ -60,6 +60,8 @@ third_party_bin_dir     := $(third_party_dir)/bin
 third_party_include_dir := $(third_party_dir)/include
 third_party_lib_dir     := $(third_party_dir)/lib
 third_party_source_dir  := $(third_party_dir)/src
+
+sf_mirror := http://umn.dl.sourceforge.net/sourceforge
 
 .PHONY: setup
 setup: \
@@ -247,7 +249,7 @@ frozen_boost:
 install_frozen_boost_from_tmp_dir:
 	[ -e boost_1_31_0.tar.bz2 ] \
 	  || $(WGET) --non-verbose \
-	  http://umn.dl.sourceforge.net/sourceforge/boost/boost_1_31_0.tar.bz2
+	  $(sf_mirror)/boost/boost_1_31_0.tar.bz2
 	$(ECHO) "8cc183538eaa5cfc53d88d0e94bd2fd4  boost_1_31_0.tar.bz2" \
 	  |$(MD5SUM) --check
 	$(BZIP2) --decompress --keep boost_1_31_0.tar.bz2
@@ -296,6 +298,109 @@ install_frozen_libxml2_from_tmp_dir:
 	$(CP) --force --preserve libxml2-2.6.19/.libs/libxml2.dll.a \
 	  $(third_party_lib_dir)
 	$(RM) --force libxml2-2.6.19.tar libxml2-2.6.19.tar.bz2
+
+###############################################################################
+
+# Install MinGW.
+
+.PHONY: frozen_mingw
+frozen_mingw:
+	$(MAKE) \
+	  -C /tmp/mingw \
+	  -f $(src_dir)/setup.make \
+	  mingw_dir='$(mingw_dir)' \
+	    src_dir='$(src_dir)' \
+          install_frozen_mingw_from_tmp_dir
+
+# Consider refactoring to consolidate these repetitive commands.
+.PHONY: install_frozen_mingw_from_tmp_dir
+install_frozen_mingw_from_tmp_dir:
+	[ -e binutils-2.15.91-20040904-1.tar.gz ] \
+	  || $(WGET) --non-verbose \
+	  $(sf_mirror)/mingw/binutils-2.15.91-20040904-1.tar.gz
+	[ -e gcc-core-3.4.2-20040916-1.tar.gz ] \
+	  || $(WGET) --non-verbose \
+	  $(sf_mirror)/mingw/gcc-core-3.4.2-20040916-1.tar.gz
+	[ -e gcc-g++-3.4.2-20040916-1.tar.gz ] \
+          || $(WGET) --non-verbose \
+	  $(sf_mirror)/mingw/gcc-g++-3.4.2-20040916-1.tar.gz
+	[ -e mingw-runtime-3.7.tar.gz ] \
+	  || $(WGET) --non-verbose \
+          $(sf_mirror)/mingw/mingw-runtime-3.7.tar.gz
+	[ -e w32api-3.2.tar.gz ] \
+	  || $(WGET) --non-verbose \
+	  $(sf_mirror)/mingw/w32api-3.2.tar.gz
+	[ -e gdb-5.2.1-1.exe ] \
+	  || $(WGET) --non-verbose \
+          $(sf_mirror)/mingw/gdb-5.2.1-1.exe
+	[ -e mingw32-make-3.80.0-3.tar.gz ] \
+	  || $(WGET) --non-verbose \
+	  $(sf_mirror)/mingw/mingw32-make-3.80.0-3.tar.gz
+	[ -e mingw-utils-0.3.tar.gz ] \
+	  || $(WGET) --non-verbose \
+	  $(sf_mirror)/mingw/mingw-utils-0.3.tar.gz
+	[ -e MSYS-1.0.10.exe ] \
+	  || $(WGET) --non-verbose \
+	  $(sf_mirror)/mingw/MSYS-1.0.10.exe
+	[ -e wget-1.9.1-mingwPORT.tar.bz2 ] \
+	  || $(WGET) --non-verbose \
+	  $(sf_mirror)/mingw/wget-1.9.1-mingwPORT.tar.bz2
+	$(ECHO) \
+	  " 64e8a3a2aa3b780f56287e0b6144689c  binutils-2.15.91-20040904-1.tar.gz " \
+	  | $(MD5SUM) --check
+	$(ECHO) \
+	  " d9cd78f926fc31ef101c6fa7072fc65d  gcc-core-3.4.2-20040916-1.tar.gz " \
+	  | $(MD5SUM) --check
+	$(ECHO) \
+	  " e5c7eb2c1e5f7e10842eac03d1d6fcdc  gcc-g++-3.4.2-20040916-1.tar.gz " \
+	  | $(MD5SUM) --check
+	$(ECHO) \
+	  " ee41eee0e87b8600e163ab43d11c7edf  gdb-5.2.1-1.exe " \
+	  | $(MD5SUM) --check
+	$(ECHO) \
+	  " 33db567db9a2034a44bf216762049df4  mingw-runtime-3.7.tar.gz " \
+	  | $(MD5SUM) --check
+	$(ECHO) \
+	  " e6af3568d75e1f3df475a1259610c6b2  mingw-utils-0.3.tar.gz " \
+	  | $(MD5SUM) --check
+	$(ECHO) \
+	  " da686e2c7b283385ef79d7b75afb609c  MSYS-1.0.10.exe " \
+	  | $(MD5SUM) --check
+	$(ECHO) \
+	  " a68e5a25917eb1bb6aa1d359eec47b4b  mingw32-make-3.80.0-3.tar.gz " \
+	  | $(MD5SUM) --check
+	$(ECHO) \
+	  " ea357143f74f05a0ddccc0d2bebe9b03  w32api-3.2.tar.gz " \
+	  | $(MD5SUM) --check
+	$(ECHO) \
+	  " 5e320ff2ff5c81b67bb1e1aa87a27973  wget-1.9.1-mingwPORT.tar.bz2 " \
+	  | $(MD5SUM) --check
+	$(GZIP) --decompress binutils-2.15.91-20040904-1.tar.gz
+	$(TAR) --extract --file binutils-2.15.91-20040904-1.tar
+	$(GZIP) --decompress gcc-core-3.4.2-20040916-1.tar.gz
+	$(TAR) --extract --file gcc-core-3.4.2-20040916-1.tar
+	$(GZIP) --decompress gcc-g++-3.4.2-20040916-1.tar.gz
+	$(TAR) --extract --file gcc-g++-3.4.2-20040916-1.tar
+	$(GZIP) --decompress mingw-runtime-3.7.tar.gz
+	$(TAR) --extract --file mingw-runtime-3.7.tar
+	$(GZIP) --decompress mingw-utils-0.3.tar.gz
+	$(TAR) --extract --file mingw-utils-0.3.tar
+	$(GZIP) --decompress mingw32-make-3.80.0-3.tar.gz
+	$(TAR) --extract --file mingw32-make-3.80.0-3.tar
+	$(GZIP) --decompress w32api-3.2.tar.gz
+	$(TAR) --extract --file w32api-3.2.tar
+# Should this tool be a separate target by itself rather than
+# nested in this mingw one?
+	$(BZIP2) -dk wget-1.9.1-mingwPORT.tar.bz2
+	$(TAR) -xf wget-1.9.1-mingwPORT.tar
+	$(CP) --preserve wget-1.9.1/mingwPORT/wget.exe /usr/bin/
+	$(CP) --preserve wget-1.9.1/mingwPORT/wget.exe /msys/1.0/bin/
+	$(RM) --recursive *.bz2 *.exe *.tar wget-1.9.1
+	$(MKDIR) --parents $(mingw_dir)
+	-$(CP) --force --parents --preserve --recursive * $(mingw_dir)
+# Running this file type requires human interaction, but is there
+# any way to avoid that interaction so the entire setup can be run
+# unattended? (e.g. gdb-5.2.1-1.exe and MSYS-1.0.10.exe)
 
 ###############################################################################
 

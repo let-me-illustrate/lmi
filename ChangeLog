@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.168 2005-10-05 13:43:42 chicares Exp $
+// $Id: ChangeLog,v 1.169 2005-10-05 15:04:40 wboutin Exp $
 
 MAINTENANCE
 
@@ -3785,7 +3785,7 @@ regression testing.
 20050922T2019Z <wboutin@massmutual.com> [1264]
 
   setup.make
-  xmlwrapp_md5sums
+  xmlwrapp_md5sums [new file]
 Add validation for another tool.
 
 20050923T0334Z <chicares@cox.net> [1264]
@@ -3978,4 +3978,10 @@ Reformat for consistency with similar headers.
   loads_impl.hpp
   loads_test.cpp
 Remove defects.
+
+20051005T1415Z <wboutin@massmutual.com> [1256]
+
+  INSTALL
+  setup.make
+Add MinGW toolchain.
 

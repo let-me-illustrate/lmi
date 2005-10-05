@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: INSTALL,v 1.19 2005-09-12 17:35:19 wboutin Exp $
+// $Id: INSTALL,v 1.20 2005-10-05 15:04:40 wboutin Exp $
 
 [It's clearest to validate commands, then copy and paste them here.
 Once we've done that, it becomes trivial to turn this into a shell
@@ -264,20 +264,61 @@ by default.
 
 * Install MinGW
 
-Download
-  http://prdownloads.sourceforge.net/mingw/MinGW-4.1.0.exe?download
-to /tmp/ .
-
-Validate:
-  /tmp[0]$md5sum MinGW-4.1.0.exe
-  08ed1853fec1440b0ef03f0e3a8682af  MinGW-4.1.0.exe
-
-Install
-  /tmp[0]$./MinGW-4.1.0.exe
-
 If an earlier release of MinGW already exists then this discussion
 is useful prior to installing the newer release:
   http://gcc.gnu.org/ml/gcc-patches/2004-06/msg00703.html
+
+Download
+  http://umn.dl.sourceforge.net/sourceforge/mingw/binutils-2.15.91-20040904-1.tar.gz
+  http://umn.dl.sourceforge.net/sourceforge/mingw/gcc-core-3.4.2-20040916-1.tar.gz
+  http://umn.dl.sourceforge.net/sourceforge/mingw/gcc-g++-3.4.2-20040916-1.tar.gz
+  http://umn.dl.sourceforge.net/sourceforge/mingw/gdb-5.2.1-1.exe
+  http://umn.dl.sourceforge.net/sourceforge/mingw/mingw-runtime-3.7.tar.gz
+  http://umn.dl.sourceforge.net/sourceforge/mingw/mingw-utils-0.3.tar.gz
+  http://umn.dl.sourceforge.net/sourceforge/mingw/mingw32-make-3.80.0-3.tar.gz
+  http://umn.dl.sourceforge.net/sourceforge/mingw/w32api-3.2.tar.gz
+to /tmp/ .
+
+Validate:
+  /tmp[0]$md5sum binutils-2.15.91-20040904-1.tar.gz \
+  gcc-core-3.4.2-20040916-1.tar.gz \
+  gcc-g++-3.4.2-20040916-1.tar.gz \
+  gdb-5.2.1-1.exe \
+  mingw-runtime-3.7.tar.gz \
+  mingw-utils-0.3.tar.gz \
+  mingw32-make-3.80.0-3.tar.gz \
+  w32api-3.2.tar.gz \
+
+  64e8a3a2aa3b780f56287e0b6144689c  binutils-2.15.91-20040904-1.tar.gz
+  d9cd78f926fc31ef101c6fa7072fc65d  gcc-core-3.4.2-20040916-1.tar.gz
+  e5c7eb2c1e5f7e10842eac03d1d6fcdc  gcc-g++-3.4.2-20040916-1.tar.gz
+  ee41eee0e87b8600e163ab43d11c7edf  gdb-5.2.1-1.exe
+  33db567db9a2034a44bf216762049df4  mingw-runtime-3.7.tar.gz
+  e6af3568d75e1f3df475a1259610c6b2  mingw-utils-0.3.tar.gz
+  a68e5a25917eb1bb6aa1d359eec47b4b  mingw32-make-3.80.0-3.tar.gz
+  ea357143f74f05a0ddccc0d2bebe9b03  w32api-3.2.tar.gz
+
+Extract archives:
+  /tmp/MinGW[0]$gzip --decompress binutils-2.15.91-20040904-1.tar.gz
+  /tmp/MinGW[0]$tar --extract --file binutils-2.15.91-20040904-1.tar
+  /tmp/MinGW[0]$gzip --decompress gcc-core-3.4.2-20040916-1.tar.gz
+  /tmp/MinGW[0]$tar --extract --file gcc-core-3.4.2-20040916-1.tar
+  /tmp/MinGW[0]$gzip --decompress gcc-g++-3.4.2-20040916-1.tar.gz
+  /tmp/MinGW[0]$tar --extract --file gcc-g++-3.4.2-20040916-1.tar
+  /tmp/MinGW[0]$gzip --decompress mingw-runtime-3.7.tar.gz
+  /tmp/MinGW[0]$tar --extract --file mingw-runtime-3.7.tar
+  /tmp/MinGW[0]$gzip --decompress mingw-utils-0.3.tar.gz
+  /tmp/MinGW[0]$tar --extract --file mingw-utils-0.3.tar
+  /tmp/MinGW[0]$gzip --decompress mingw32-make-3.80.0-3.tar.gz
+  /tmp/MinGW[0]$tar --extract --file mingw32-make-3.80.0-3.tar
+  /tmp/MinGW[0]$gzip --decompress w32api-3.2.tar.gz
+  /tmp/MinGW[0]$tar --extract --file w32api-3.2.tar
+
+Copy all files to the root:
+tmp/MinGW[0]$cp --preserve --recursive * c:/MinGW
+
+Install:
+  /tmp[0]$./gdb-5.2.1-1.exe
 
 ...
 [perhaps cygwin should be mentioned, too]
