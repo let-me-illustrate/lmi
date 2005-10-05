@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: math_functors.hpp,v 1.4 2005-06-07 11:46:26 chicares Exp $
+// $Id: math_functors.hpp,v 1.5 2005-10-05 13:43:35 chicares Exp $
 
 #ifndef math_functors_hpp
 #define math_functors_hpp
@@ -34,11 +34,13 @@
 #include <functional>
 
 #ifndef LMI_COMPILER_HAS_EXPM1
-#   error Compiler lacks expm1().
+// COMPILER !! This workaround loses some accuracy.
+double expm1(double x) {return exp(x) - 1.0;}
 #endif // LMI_COMPILER_HAS_EXPM1
 
 #ifndef LMI_COMPILER_HAS_LOG1P
-#   error Compiler lacks log1p().
+// COMPILER !! This workaround loses some accuracy.
+double log1p(double x) {return log(1.0 + x);}
 #endif // LMI_COMPILER_HAS_LOG1P
 
 #if defined __MINGW32__ && defined __GNUC__ && __GNUC__ == 3 && 4 <= __GNUC_MINOR__
