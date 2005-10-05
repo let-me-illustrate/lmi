@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: loads_impl.hpp,v 1.1 2005-10-04 05:36:35 chicares Exp $
+// $Id: loads_impl.hpp,v 1.2 2005-10-05 13:43:42 chicares Exp $
 
 #ifndef loads_impl_hpp
 #define loads_impl_hpp
@@ -38,6 +38,38 @@ class TDatabase;
 /// Behaviorless aggregate 'load_details' holds data required for
 /// initialization of class 'Loads' that are normally obtained from
 /// the input and database classes.
+///
+/// Data members.
+///
+/// length_: Number of elements in any vector of loads.
+///
+/// LowestPremiumTaxLoadRate_: The lowest rate of premium tax, which
+/// products that pass through premium tax need for 7702 calculations.
+/// The actual rate may vary if it is tiered.
+///
+/// asset_charge_type_: Determines whether input extra asset loads
+/// should be treated as a load or as an interest-rate decrement.
+///
+/// ledger_type_: Determines whether midpoint loads are needed.
+///
+/// round_interest_rate_: Rounding functor generally used for interest
+/// rates, used because the separate-account load is similar to an M&E
+/// charge--it is expressed annually, converted to monthly in the
+/// implementation, and then must be rounded.
+///
+/// VectorExtraCompLoad_: Input extra load per dollar of premium.
+///
+/// VectorExtraAssetComp_: Input extra load per dollar of assets.
+///
+/// VectorExtraPolFee_: Input extra fee per month.
+///
+/// These presently-unused data members
+///   AmortizePremLoad
+///   premium_tax_rate_
+///   premium_tax_amortization_rate_
+///   premium_tax_amortization_period_
+/// are kept against the day when premium-tax amortization is
+/// implemented.
 
 struct load_details
 {
@@ -72,7 +104,7 @@ struct load_details
     int                        length_;
     bool                       AmortizePremLoad_;
     double                     LowestPremiumTaxLoadRate_;
-    double                     premium_tax_rate_; // TODO ?? Unused?
+    double                     premium_tax_rate_;
     double                     premium_tax_amortization_rate_;
     double                     premium_tax_amortization_period_;
     double                     asset_charge_type_;
