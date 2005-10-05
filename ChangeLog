@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.167 2005-10-04 05:36:35 chicares Exp $
+// $Id: ChangeLog,v 1.168 2005-10-05 13:43:42 chicares Exp $
 
 MAINTENANCE
 
@@ -3965,4 +3965,17 @@ Hastily work around a problem that obstructs testing.
   loads_test.cpp
   objects.make
 Add inchoate unit test for loads class.
+
+20051005T1343Z <chicares@cox.net> [1256]
+
+  math_functors.hpp
+Add approximate workarounds for toolsets lacking expm1() and log1p().
+This enables more unit tests to be built with como, e.g.
+
+  progress_meter.hpp
+Reformat for consistency with similar headers.
+
+  loads_impl.hpp
+  loads_test.cpp
+Remove defects.
 
