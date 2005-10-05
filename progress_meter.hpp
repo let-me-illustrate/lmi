@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: progress_meter.hpp,v 1.4 2005-04-25 19:25:34 chicares Exp $
+// $Id: progress_meter.hpp,v 1.5 2005-10-05 13:43:40 chicares Exp $
 
 /// Design notes for class progress_meter.
 ///
@@ -36,9 +36,11 @@
 ///
 /// Data members.
 ///
-///  'count_' is the number of iterations completed so far.
-///  'max_count_' is the total number of iterations anticipated.
-///  'title_' is a string suitable e.g. as a message-box title.
+/// count_: Number of iterations completed so far.
+///
+/// max_count_: Total number of iterations anticipated.
+///
+/// title_: A string suitable (e.g.) as a message-box title.
 ///
 /// Public interface.
 ///
