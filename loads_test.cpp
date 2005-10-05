@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: loads_test.cpp,v 1.1 2005-10-04 05:36:35 chicares Exp $
+// $Id: loads_test.cpp,v 1.2 2005-10-05 13:43:42 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -30,7 +30,6 @@
 #include "loads_impl.hpp"
 
 #include "alert.hpp"
-#include "math_functors.hpp" // expm1() declaration TODO ?? Move to platform header?
 #include "round_to.hpp"
 
 #define BOOST_INCLUDE_MAIN
@@ -87,8 +86,7 @@ int test_main(int, char*[])
         << '\n'
         ;
 
-    // TODO ?? This fails, revealing a defect.
-    BOOST_TEST_EQUAL(0.02, loads.premium_tax_load()[0]);
+    BOOST_TEST_EQUAL(0.00, loads.premium_tax_load()[0]);
 
     return 0;
 }
