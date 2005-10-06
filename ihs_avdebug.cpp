@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avdebug.cpp,v 1.17 2005-09-30 00:33:13 chicares Exp $
+// $Id: ihs_avdebug.cpp,v 1.18 2005-10-06 14:14:43 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -56,6 +56,195 @@
 #include <ostream>
 #include <string>
 #include <vector>
+
+// Headers for debug output.
+
+// We can rearrange columns by just changing the order of enumerators.
+
+// To add a new column, insert an enumerator here and a header in
+// DebugColHeadersHelper(), and print the value in AccountValue::DebugPrint().
+
+enum DebugColNames
+    {eYear
+    ,eMonth
+    ,eRateBasis
+    ,eAge
+    ,eGenAcctBOMAV
+    ,eSepAcctBOMAV
+    ,eUnloanedBOMAV
+    ,eRegularLoanBOMAV
+    ,ePrefLoanBOMAV
+    ,eTotalBOMAV
+    ,eRegLoanBal
+    ,ePrefLoanBal
+    ,eDBOption
+    ,eSpecAmt
+    ,eCorridorFactor
+    ,eDeathBft
+    ,eForceout
+    ,eEePrem
+    ,eErPrem
+    ,eTotalPrem
+    ,eTargetPrem
+    ,ePremLoad
+    ,eNetPrem
+    ,eMlyPolicyFee
+    ,eAnnPolicyFee
+    ,eSpecAmtLoad
+    ,eNAAR
+    ,eCoiRate
+    ,eCoiCharge
+    ,eAdbRate
+    ,eAdbCharge
+    ,eWpRate
+    ,eWpCharge
+    ,eTermAmount
+    ,eTermRate
+    ,eTermCharge
+    ,eTotalRiderCharge
+    ,eTotalMonthlyDeds
+    ,eGenAcctIntRate
+    ,eGenAcctIntCred
+    ,eSepAcctIntRate
+    ,eSepAcctIntCred
+    ,eSepAcctLoad
+    ,eRegLnIntRate
+    ,eRegLnIntCred
+    ,ePrfLnIntRate
+    ,ePrfLnIntCred
+    ,eYearsHMValueRate
+    ,eYearsPostHMRate
+    ,eRequestedWD
+    ,eMaxWD
+    ,eGrossWD
+    ,eNetWD
+    ,eRequestedLoan
+    ,eMaxLoan
+    ,eNewLoan
+    ,eTaxBasis
+    ,eCumNoLapsePrem
+    ,eNoLapseActive
+    ,eEOMAV
+    ,eHMValue
+    ,eSurrChg
+    ,eEOMCSVNet
+    ,eEOMCV7702
+    ,eInforceFactor
+    ,eClaimsPaid
+    ,e7702ATestDur
+    ,e7702A7ppRate
+    ,e7702ANsp
+    ,e7702ALowestDb
+    ,e7702ADeemedCv
+    ,e7702ANetMaxNecPm
+    ,e7702AGrossMaxNecPm
+    ,e7702AUnnecPm
+    ,e7702ADbAdj
+    ,e7702A7pp
+    ,e7702ACumPmts
+    ,e7702ACum7pp
+    ,e7702AIsMatChg
+    ,e7702AIsMec
+    ,eGSP
+    ,eGLP
+    // Insert new enumerators above
+    ,eLast
+    };
+
+inline std::vector<std::string> const& DebugColHeadersHelper()
+{
+    static std::vector<std::string> v(eLast);
+    v[eYear]                = "Year";
+    v[eMonth]               = "Month";
+    v[eRateBasis]           = "Rate basis";
+    v[eAge]                 = "Age";
+    v[eGenAcctBOMAV]        = "Unloaned BOM GA AV";
+    v[eSepAcctBOMAV]        = "Unloaned BOM SA AV";
+    v[eUnloanedBOMAV]       = "Unloaned BOM Tot AV";
+    v[eRegularLoanBOMAV]    = "Regular loan BOM AV";
+    v[ePrefLoanBOMAV]       = "Pref loan BOM AV";
+    v[eTotalBOMAV]          = "Total BOM AV";
+    v[eRegLoanBal]          = "Reg loan bal";
+    v[ePrefLoanBal]         = "Pref loan bal";
+    v[eDBOption]            = "DB option";
+    v[eSpecAmt]             = "Spec amt";
+    v[eCorridorFactor]      = "Corridor factor";
+    v[eDeathBft]            = "Death benefit";
+    v[eForceout]            = "Forceout";
+    v[eEePrem]              = "Ee prem";
+    v[eErPrem]              = "Er prem";
+    v[eTotalPrem]           = "Total prem";
+    v[eTargetPrem]          = "Target prem";
+    v[ePremLoad]            = "Prem load";
+    v[eNetPrem]             = "Net prem";
+    v[eMlyPolicyFee]        = "Monthly policy fee";
+    v[eAnnPolicyFee]        = "Annual policy fee";
+    v[eSpecAmtLoad]         = "Spec amt load";
+    v[eNAAR]                = "NAAR";
+    v[eCoiRate]             = "COI rate";
+    v[eCoiCharge]           = "COI charge";
+    v[eAdbRate]             = "ADD rate";
+    v[eAdbCharge]           = "ADD charge";
+    v[eWpRate]              = "WP rate";
+    v[eWpCharge]            = "WP charge";
+    v[eTermAmount]          = "Term amount";
+    v[eTermRate]            = "Term rate";
+    v[eTermCharge]          = "Term charge";
+    v[eTotalRiderCharge]    = "Total rider charge";
+    v[eTotalMonthlyDeds]    = "Total monthly deductions";
+    v[eGenAcctIntRate]      = "Unloaned GA interest rate";
+    v[eGenAcctIntCred]      = "Unloaned GA interest credited";
+    v[eSepAcctIntRate]      = "Unloaned SA interest rate";
+    v[eSepAcctIntCred]      = "Unloaned SA interest credited";
+    v[eSepAcctLoad]         = "Separate account load";
+    v[eRegLnIntRate]        = "Regular loan interest rate";
+    v[eRegLnIntCred]        = "Regular loan interest credited";
+    v[ePrfLnIntRate]        = "Pref loan interest rate";
+    v[ePrfLnIntCred]        = "Pref loan interest credited";
+    v[eYearsHMValueRate]    = "Honeymoon value rate";
+    v[eYearsPostHMRate]     = "Post honeymoon rate";
+    v[eRequestedWD]         = "Requested wd";
+    v[eMaxWD]               = "Max wd";
+    v[eGrossWD]             = "Gross wd";
+    v[eNetWD]               = "Net wd";
+    v[eRequestedLoan]       = "Requested loan";
+    v[eMaxLoan]             = "Max loan";
+    v[eNewLoan]             = "New loan";
+    v[eTaxBasis]            = "Tax basis";
+    v[eCumNoLapsePrem]      = "Cum no lapse prem";
+    v[eNoLapseActive]       = "No lapse active";
+    v[eEOMAV]               = "EOM AV";
+    v[eHMValue]             = "Honeymoon value";
+    v[eSurrChg]             = "EOM surrender charge";
+    v[eEOMCSVNet]           = "EOM CSV net";
+    v[eEOMCV7702]           = "EOM CV for 7702";
+    v[eInforceFactor]       = "Inforce factor";
+    v[eClaimsPaid]          = "Partial mort claims paid";
+    v[e7702ATestDur]        = "7702A test duration";
+    v[e7702A7ppRate]        = "7702A 7pp rate";
+    v[e7702ANsp]            = "7702A NSP";
+    v[e7702ALowestDb]       = "7702A lowest DB";
+    v[e7702ADeemedCv]       = "7702A deemed CV";
+    v[e7702ANetMaxNecPm]    = "7702A net max nec prem";
+    v[e7702AGrossMaxNecPm]  = "7702A gross max nec prem";
+    v[e7702AUnnecPm]        = "7702A unnec prem";
+    v[e7702ADbAdj]          = "7702A DB adjustment";
+    v[e7702A7pp]            = "7702A 7pp";
+    v[e7702ACumPmts]        = "7702A cum pmts";
+    v[e7702ACum7pp]         = "7702A cum 7pp";
+    v[e7702AIsMatChg]       = "Is material change";
+    v[e7702AIsMec]          = "Is MEC";
+    v[eGSP]                 = "GSP";
+    v[eGLP]                 = "GLP";
+
+    return v;
+}
+
+inline std::vector<std::string> const& DebugColHeaders()
+{
+    static std::vector<std::string> v(DebugColHeadersHelper());
+    return v;
+}
 
 // Display monthly detail of calculations for debugging.
 
