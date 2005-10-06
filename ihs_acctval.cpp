@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_acctval.cpp,v 1.67 2005-10-05 17:07:52 chicares Exp $
+// $Id: ihs_acctval.cpp,v 1.68 2005-10-06 14:58:32 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -351,7 +351,10 @@ restart:
             // rating is impossible. USER !! Explain this in user
             // documentation.
             IncrementBOM(year, month, 1.0);
-            IncrementEOM(year, month, GetSepAcctAssetsInforce());
+            // TODO ?? PRESSING Adjusting this by inforce is wrong for
+            // individual cells run as such, because they don't
+            // reflect partial mortality.
+            IncrementEOM(year, month, SepAcctValueAfterDeduction * InforceLivesBoy());
             }
 
         if(!TestWhetherFirstYearPremiumExceededRetaliationLimit())
@@ -851,6 +854,12 @@ void AccountValue::IncrementEOM
     ,double TotalCaseAssets
     )
 {
+    // Save arguments for monthly output.
+    // TODO ?? PRESSING The last argument should be renamed, and a
+    // new argument for cumulative payments should be added.
+    AssetsPostBom  = TotalCaseAssets;
+    CumPmtsPostBom = CumPmts;
+
     if(ItLapsed || BasicValues::GetLength() <= Year)
         {
         return;
@@ -866,8 +875,8 @@ void AccountValue::IncrementEOM
         LMI_ASSERT(28 <= days_in_policy_month && days_in_policy_month <= 31);
         }
 
-    ApplyDynamicSepAcctLoad(TotalCaseAssets, CumPmts);
-    ApplyDynamicMandE      (TotalCaseAssets);
+    ApplyDynamicSepAcctLoad(AssetsPostBom, CumPmtsPostBom);
+    ApplyDynamicMandE      (AssetsPostBom);
 
     DoMonthCR();
 }
@@ -1111,7 +1120,7 @@ void AccountValue::ApplyDynamicSepAcctLoad(double assets, double cumpmts)
 // variables they use.
 
     // is there any advantage to this sort of implementation in loads.cpp?
-    //   YearsSepAcctLoad   = Loads_->GetDynamicSepAcctLoad()
+    //   YearsSepAcctLoadRate   = Loads_->GetDynamicSepAcctLoad()
     // TODO ?? PRESSING Yes. It would be far better to move it there and write
     // a unit test suite for the loads class.
 
@@ -1138,7 +1147,7 @@ void AccountValue::ApplyDynamicSepAcctLoad(double assets, double cumpmts)
         // would be expected to do.
         }
 
-    YearsSepAcctLoad = Loads_->separate_account_load(ExpAndGABasis)[Year];
+    YearsSepAcctLoadRate = Loads_->separate_account_load(ExpAndGABasis)[Year];
 
     // TODO ?? PRESSING Aggregate loads once and only once for conversion to monthly.
     stratified_load = i_upper_12_over_12_from_i<double>()(stratified_load);
@@ -1148,13 +1157,13 @@ void AccountValue::ApplyDynamicSepAcctLoad(double assets, double cumpmts)
 
 */
 
-    YearsSepAcctLoad = Loads_->separate_account_load(ExpAndGABasis)[Year];
-    YearsSepAcctLoad+= stratified_load;
-    YearsSepAcctLoad+= tiered_comp;
+    YearsSepAcctLoadRate = Loads_->separate_account_load(ExpAndGABasis)[Year];
+    YearsSepAcctLoadRate += stratified_load;
+    YearsSepAcctLoadRate += tiered_comp;
 #ifdef DEBUGGING_SEP_ACCT_LOAD
     os
         << "\n  load in database = " << Loads_->separate_account_load(ExpAndGABasis)[Year]
-        << "\n  YearsSepAcctLoad = " << YearsSepAcctLoad
+        << "\n  YearsSepAcctLoadRate = " << YearsSepAcctLoadRate
         << std::endl
         ;
 #endif // DEBUGGING_SEP_ACCT_LOAD
@@ -1170,6 +1179,10 @@ void AccountValue::InitializeYear()
 
 // TODO ?? Solve...() should reset not inputs but...something else?
     SetAnnualInvariants();
+
+    AssetsPostBom               = 0.0;
+    CumPmtsPostBom              = 0.0;
+    SepAcctLoad                 = 0.0;
 
     YearsTotalCoiCharge         = 0.0;
     YearsAVRelOnDeath           = 0.0;
@@ -1814,7 +1827,7 @@ void AccountValue::SetAnnualInvariants()
     YearsSalesLoadTgt       = Loads_->target_sales_load  (ExpAndGABasis)[Year];
     YearsSalesLoadExc       = Loads_->excess_sales_load  (ExpAndGABasis)[Year];
     YearsSpecAmtLoad        = Loads_->specified_amount_load (ExpAndGABasis)[Year];
-    YearsSepAcctLoad        = Loads_->separate_account_load (ExpAndGABasis)[Year];
+    YearsSepAcctLoadRate    = Loads_->separate_account_load (ExpAndGABasis)[Year];
     YearsSalesLoadRefundRate= Loads_->refundable_sales_load_proportion()[Year];
     YearsPremTaxLoadRate    = Loads_->premium_tax_load                ()[Year];
     YearsDacTaxLoadRate     = Loads_->dac_tax_load                    ()[Year];
@@ -1907,6 +1920,7 @@ double AccountValue::GetSepAcctAssetsInforce() const
         return 0.0;
         }
 
+    // TODO ?? Would it be better to use 'SepAcctValueAfterDeduction' here?
     return AVSepAcct * InvariantValues().InforceLives[Year];
 }
 

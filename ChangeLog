@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.169 2005-10-05 15:04:40 wboutin Exp $
+// $Id: ChangeLog,v 1.170 2005-10-06 15:01:57 chicares Exp $
 
 MAINTENANCE
 
@@ -3984,4 +3984,35 @@ Remove defects.
   INSTALL
   setup.make
 Add MinGW toolchain.
+
+20051005T1707Z <chicares@cox.net> [1256]
+
+  basic_values.hpp
+  basicvalues.cpp
+  ihs_acctval.cpp
+  ihs_basicval.cpp
+  interest_rates.cpp
+  interest_rates.hpp
+  loads.cpp
+  loads.hpp
+  loads_impl.hpp
+  loads_test.cpp
+Refactor illustration-reg applicability.
+
+20051006T1414Z <chicares@cox.net> [1256]
+
+  ihs_avdebug.cpp
+  ihs_dbughdr.hpp [expunged]
+Move contents of header into the only file that included it.
+
+20051006T1458Z <chicares@cox.net> [1259]
+
+  account_value.hpp
+  ihs_acctval.cpp
+  ihs_avdebug.cpp
+  ihs_avmly.cpp
+Refactor separate-account load. On monthly output: show each month's
+separate-account load, instead of its year-to-date accumulated value;
+show the assets and cumulative payments used to determine it; and show
+annual policy fee only in the first month.
 
