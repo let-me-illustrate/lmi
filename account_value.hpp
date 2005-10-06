@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: account_value.hpp,v 1.33 2005-09-30 00:33:12 chicares Exp $
+// $Id: account_value.hpp,v 1.34 2005-10-06 14:58:32 chicares Exp $
 
 #ifndef account_value_hpp
 #define account_value_hpp
@@ -437,6 +437,7 @@ class LMI_EXPIMP AccountValue
     int     days_in_policy_year;
     double  AVGenAcct;
     double  AVSepAcct;
+    double  SepAcctValueAfterDeduction;
     // TODO ?? Fold comments into names?
     double  GenAcctAlloc;   // pmt allocation to gen acct
     double  SepAcctAlloc;   // pmt allocation to sep acct
@@ -548,10 +549,18 @@ class LMI_EXPIMP AccountValue
     double  YearsSalesLoadTgt;
     double  YearsSalesLoadExc;
     double  YearsSpecAmtLoad;
-    double  YearsSepAcctLoad;
+    double  YearsSepAcctLoadRate;
     double  YearsSalesLoadRefundRate;
     double  YearsPremTaxLoadRate;
     double  YearsDacTaxLoadRate;
+
+    // Stratified loads are determined by assets and cumulative
+    // payments immediately after other monthly processing.
+    // Stratified loads happen to be used only for the separate
+    // account.
+    double  AssetsPostBom;
+    double  CumPmtsPostBom;
+    double  SepAcctLoad;
 
     double  case_k_factor;
     double  ActualCoiRate;
