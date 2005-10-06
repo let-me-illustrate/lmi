@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.170 2005-10-06 15:01:57 chicares Exp $
+// $Id: ChangeLog,v 1.171 2005-10-06 18:02:31 chicares Exp $
 
 MAINTENANCE
 
@@ -4015,4 +4015,13 @@ Refactor separate-account load. On monthly output: show each month's
 separate-account load, instead of its year-to-date accumulated value;
 show the assets and cumulative payments used to determine it; and show
 annual policy fee only in the first month.
+
+20051006T1802Z <chicares@cox.net> [1253]
+
+  account_value.hpp
+  accountvalue.cpp
+  group_values.cpp
+  ihs_acctval.cpp
+  ihs_avmly.cpp
+Refactor.
 

@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avmly.cpp,v 1.36 2005-10-06 14:58:32 chicares Exp $
+// $Id: ihs_avmly.cpp,v 1.37 2005-10-06 18:02:31 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -2491,23 +2491,13 @@ void AccountValue::TxTakeSepAcctLoad()
         {
         double banded_load = 0.0;
 
-        // TODO ?? PRESSING What was a passed parameter in IncrementEOM() here
-        // becomes a local whose value, we hope, is no different.
-
-        // TODO ?? PRESSING Is this the right thing to do?
-        double cumpmts = std::max(0.0, CumPmts);
-
-        // TODO ?? PRESSING What was a passed parameter in IncrementEOM() here
-        // becomes a local whose value, we hope, is no different.
-        double assets = GetSepAcctAssetsInforce();
-
         switch(ExpAndGABasis)
             {
             case e_currbasis:
                 {
                 banded_load =
                     StratifiedCharges_->banded_current_separate_account_load
-                        (cumpmts
+                        (CumPmtsPostBom
                         );
                 }
                 break;
@@ -2515,7 +2505,7 @@ void AccountValue::TxTakeSepAcctLoad()
                 {
                 banded_load =
                     StratifiedCharges_->banded_guaranteed_separate_account_load
-                        (cumpmts
+                        (CumPmtsPostBom
                         );
                 }
                 break;

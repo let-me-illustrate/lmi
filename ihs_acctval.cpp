@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_acctval.cpp,v 1.68 2005-10-06 14:58:32 chicares Exp $
+// $Id: ihs_acctval.cpp,v 1.69 2005-10-06 18:02:31 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -354,7 +354,12 @@ restart:
             // TODO ?? PRESSING Adjusting this by inforce is wrong for
             // individual cells run as such, because they don't
             // reflect partial mortality.
-            IncrementEOM(year, month, SepAcctValueAfterDeduction * InforceLivesBoy());
+            IncrementEOM
+                (year
+                ,month
+                ,SepAcctValueAfterDeduction * InforceLivesBoy()
+                ,CumPmts
+                );
             }
 
         if(!TestWhetherFirstYearPremiumExceededRetaliationLimit())
@@ -851,14 +856,14 @@ double AccountValue::IncrementBOM
 void AccountValue::IncrementEOM
     (int year
     ,int month
-    ,double TotalCaseAssets
+    ,double assets_post_bom
+    ,double cum_pmts_post_bom
     )
 {
-    // Save arguments for monthly output.
-    // TODO ?? PRESSING The last argument should be renamed, and a
-    // new argument for cumulative payments should be added.
-    AssetsPostBom  = TotalCaseAssets;
-    CumPmtsPostBom = CumPmts;
+    // Save arguments, constraining their values to be nonnegative,
+    // for calculating banded and tiered quantities.
+    AssetsPostBom  = std::max(0.0, assets_post_bom  );
+    CumPmtsPostBom = std::max(0.0, cum_pmts_post_bom);
 
     if(ItLapsed || BasicValues::GetLength() <= Year)
         {
@@ -1000,9 +1005,6 @@ void AccountValue::ApplyDynamicSepAcctLoad(double assets, double cumpmts)
         {
         return;
         }
-
-    // TODO ?? PRESSING Is this the right thing to do?
-    cumpmts = std::max(0.0, cumpmts);
 
     double stratified_load = 0.0;
 
@@ -1920,8 +1922,7 @@ double AccountValue::GetSepAcctAssetsInforce() const
         return 0.0;
         }
 
-    // TODO ?? Would it be better to use 'SepAcctValueAfterDeduction' here?
-    return AVSepAcct * InvariantValues().InforceLives[Year];
+    return SepAcctValueAfterDeduction * InvariantValues().InforceLives[Year];
 }
 
 //============================================================================
