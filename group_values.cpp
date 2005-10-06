@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: group_values.cpp,v 1.41 2005-09-26 01:48:48 chicares Exp $
+// $Id: group_values.cpp,v 1.42 2005-10-06 18:02:31 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -488,7 +488,7 @@ restart:
                         {
                         continue;
                         }
-                    (*i)->IncrementEOM(year, month, assets);
+                    (*i)->IncrementEOM(year, month, assets, (*i)->CumPmts);
                     }
                 }
 

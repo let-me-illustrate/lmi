@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: account_value.hpp,v 1.34 2005-10-06 14:58:32 chicares Exp $
+// $Id: account_value.hpp,v 1.35 2005-10-06 18:02:31 chicares Exp $
 
 #ifndef account_value_hpp
 #define account_value_hpp
@@ -189,9 +189,10 @@ class LMI_EXPIMP AccountValue
         );
     // Credit interest and process all subsequent monthly transactions
     void IncrementEOM
-        (int year
-        ,int month
-        ,double MandE
+        (int    year
+        ,int    month
+        ,double assets_post_bom
+        ,double cum_pmts_post_bom
         );
 
     void IncrementEOY(int year);
@@ -555,9 +556,10 @@ class LMI_EXPIMP AccountValue
     double  YearsDacTaxLoadRate;
 
     // Stratified loads are determined by assets and cumulative
-    // payments immediately after other monthly processing.
-    // Stratified loads happen to be used only for the separate
-    // account.
+    // payments immediately after the monthly deduction. Both are
+    // stored at the proper moment, where they're constrained to be
+    // nonnegative. Stratified loads happen to be used only for the
+    // separate account.
     double  AssetsPostBom;
     double  CumPmtsPostBom;
     double  SepAcctLoad;

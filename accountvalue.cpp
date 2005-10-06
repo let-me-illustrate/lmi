@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: accountvalue.cpp,v 1.20 2005-09-26 01:27:22 chicares Exp $
+// $Id: accountvalue.cpp,v 1.21 2005-10-06 18:02:31 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -1080,7 +1080,7 @@ void   AccountValue::GuessWhetherFirstYearPremiumExceedsRetaliationLimit()
     {return;}
 double AccountValue::IncrementBOM(int, int, double)
     {return 0.0;}
-void   AccountValue::IncrementEOM(int, int, double)
+void   AccountValue::IncrementEOM(int, int, double, double)
     {return;}
 void   AccountValue::IncrementEOY(int)
     {return;}
