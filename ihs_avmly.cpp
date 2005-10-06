@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avmly.cpp,v 1.35 2005-10-03 18:02:38 chicares Exp $
+// $Id: ihs_avmly.cpp,v 1.36 2005-10-06 14:58:32 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -2431,6 +2431,8 @@ void AccountValue::TxDoMlyDed()
     MlyDed += DetermineSpecAmtLoad();
 
     YearsTotalNetCoiCharges += NetCoiCharge;
+
+    SepAcctValueAfterDeduction = AVSepAcct;
 }
 
 //============================================================================
@@ -2482,7 +2484,7 @@ void AccountValue::TxTestHoneymoonForExpiration()
 
 void AccountValue::TxTakeSepAcctLoad()
 {
-    double z = YearsSepAcctLoad * AVSepAcct;
+    SepAcctLoad = YearsSepAcctLoadRate * AVSepAcct;
 
     // TODO ?? PRESSING This is a hasty kludge that needs to be removed.
     if(SepAcctLoadIsDynamic)
@@ -2543,13 +2545,13 @@ void AccountValue::TxTakeSepAcctLoad()
                         )
                 ;
             LMI_ASSERT(0.0 <= kludge_adjustment);
-            z -= kludge_adjustment;
+            SepAcctLoad -= kludge_adjustment;
             }
         }
 
-    process_deduction(z);
-    YearsTotalSepAcctLoad += z;
-    Dcv -= z;
+    process_deduction(SepAcctLoad);
+    YearsTotalSepAcctLoad += SepAcctLoad;
+    Dcv -= SepAcctLoad;
     Dcv = std::max(0.0, Dcv);
 }
 
