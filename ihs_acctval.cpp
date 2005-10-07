@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_acctval.cpp,v 1.69 2005-10-06 18:02:31 chicares Exp $
+// $Id: ihs_acctval.cpp,v 1.70 2005-10-07 02:12:24 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -1008,20 +1008,6 @@ void AccountValue::ApplyDynamicSepAcctLoad(double assets, double cumpmts)
 
     double stratified_load = 0.0;
 
-#ifdef DEBUGGING_SEP_ACCT_LOAD
-    std::ofstream os
-        ("trace.txt"
-        ,   std::ios_base::out
-          | std::ios_base::ate
-          | std::ios_base::app
-        );
-    os
-        << "\nbanded load detail:"
-        << "\n  Year = " << Year
-        << "\n  Month = " << Month
-        << std::endl
-        ;
-#endif // DEBUGGING_SEP_ACCT_LOAD
     switch(ExpAndGABasis)
         {
         case e_currbasis:
@@ -1030,16 +1016,6 @@ void AccountValue::ApplyDynamicSepAcctLoad(double assets, double cumpmts)
                     StratifiedCharges_->tiered_current_separate_account_load(assets)
                 +   StratifiedCharges_->banded_current_separate_account_load(cumpmts)
                 ;
-#ifdef DEBUGGING_SEP_ACCT_LOAD
-    os
-        << "\n current:"
-        << "\n  cumpmts = " << cumpmts
-        << "\n  premium-based = " << StratifiedCharges_->banded_current_separate_account_load(cumpmts)
-        << "\n  assets = " << assets
-        << "\n  asset-based = " << StratifiedCharges_->tiered_current_separate_account_load(assets)
-        << std::endl
-        ;
-#endif // DEBUGGING_SEP_ACCT_LOAD
             }
             break;
         case e_guarbasis:
@@ -1048,16 +1024,6 @@ void AccountValue::ApplyDynamicSepAcctLoad(double assets, double cumpmts)
                     StratifiedCharges_->tiered_guaranteed_separate_account_load(assets)
                 +   StratifiedCharges_->banded_guaranteed_separate_account_load(cumpmts)
                 ;
-#ifdef DEBUGGING_SEP_ACCT_LOAD
-    os
-        << "\n guaranteed:"
-        << "\n  cumpmts = " << cumpmts
-        << "\n  premium-based = " << StratifiedCharges_->banded_guaranteed_separate_account_load(cumpmts)
-        << "\n  assets = " << assets
-        << "\n  asset-based = " << StratifiedCharges_->tiered_guaranteed_separate_account_load(assets)
-        << std::endl
-        ;
-#endif // DEBUGGING_SEP_ACCT_LOAD
             }
             break;
         case e_mdptbasis:
@@ -1081,24 +1047,11 @@ void AccountValue::ApplyDynamicSepAcctLoad(double assets, double cumpmts)
             }
         }
 
-#ifdef DEBUGGING_SEP_ACCT_LOAD
-    os
-        << "\n  stratified_load = " << stratified_load
-        << std::endl
-        ;
-#endif // DEBUGGING_SEP_ACCT_LOAD
     // Convert tiered load from annual to monthly effective rate.
     // TODO ?? PRESSING This isn't really right. Instead, aggregate annual
     // rates, then convert their sum to monthly.
     stratified_load = i_upper_12_over_12_from_i<double>()(stratified_load);
     round_interest_rate(stratified_load);
-
-#ifdef DEBUGGING_SEP_ACCT_LOAD
-    os
-        << "\n  monthly stratified_load = " << stratified_load
-        << std::endl
-        ;
-#endif // DEBUGGING_SEP_ACCT_LOAD
 
     double tiered_comp = 0.0;
 
@@ -1162,13 +1115,6 @@ void AccountValue::ApplyDynamicSepAcctLoad(double assets, double cumpmts)
     YearsSepAcctLoadRate = Loads_->separate_account_load(ExpAndGABasis)[Year];
     YearsSepAcctLoadRate += stratified_load;
     YearsSepAcctLoadRate += tiered_comp;
-#ifdef DEBUGGING_SEP_ACCT_LOAD
-    os
-        << "\n  load in database = " << Loads_->separate_account_load(ExpAndGABasis)[Year]
-        << "\n  YearsSepAcctLoadRate = " << YearsSepAcctLoadRate
-        << std::endl
-        ;
-#endif // DEBUGGING_SEP_ACCT_LOAD
 }
 
 //============================================================================
