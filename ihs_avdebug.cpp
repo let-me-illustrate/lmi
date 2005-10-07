@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avdebug.cpp,v 1.19 2005-10-06 14:58:32 chicares Exp $
+// $Id: ihs_avdebug.cpp,v 1.20 2005-10-07 12:56:40 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -91,8 +91,7 @@ namespace
         ,eTargetPrem
         ,ePremLoad
         ,eNetPrem
-        ,eMlyPolicyFee
-        ,eAnnPolicyFee
+        ,ePolicyFees
         ,eSpecAmtLoad
         ,eNAAR
         ,eCoiRate
@@ -184,8 +183,7 @@ namespace
         v[eTargetPrem]          = "Target prem";
         v[ePremLoad]            = "Prem load";
         v[eNetPrem]             = "Net prem";
-        v[eMlyPolicyFee]        = "Monthly policy fee";
-        v[eAnnPolicyFee]        = "Annual policy fee";
+        v[ePolicyFees]          = "Policy fees";
         v[eSpecAmtLoad]         = "Spec amt load";
         v[eNAAR]                = "NAAR";
         v[eCoiRate]             = "COI rate";
@@ -374,9 +372,8 @@ void AccountValue::DebugPrint()
     SetMonthlyDetail(eTargetPrem         ,AnnualTargetPrem                 );
     SetMonthlyDetail(ePremLoad           ,GrossPmts[Month] - NetPmts[Month]);
     SetMonthlyDetail(eNetPrem            ,NetPmts[Month]                   );
-    SetMonthlyDetail(eMlyPolicyFee       ,YearsMlyPolFee                   );
-    SetMonthlyDetail(eAnnPolicyFee       ,(0 == Month) ? YearsAnnPolFee : 0.0);
-    SetMonthlyDetail(eSpecAmtLoad        ,DetermineSpecAmtLoad()           );
+    SetMonthlyDetail(ePolicyFees         ,MonthsPolicyFees                 );
+    SetMonthlyDetail(eSpecAmtLoad        ,SpecAmtLoad                      );
     SetMonthlyDetail(eNAAR               ,NAAR                             );
     SetMonthlyDetail(eCoiRate            ,ActualCoiRate                    );
     SetMonthlyDetail(eCoiCharge          ,CoiCharge                        );
