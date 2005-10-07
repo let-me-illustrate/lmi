@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avmly.cpp,v 1.37 2005-10-06 18:02:31 chicares Exp $
+// $Id: ihs_avmly.cpp,v 1.38 2005-10-07 02:12:30 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -2427,7 +2427,11 @@ void AccountValue::TxDoMlyDed()
     Dcv -= dcv_mly_ded;
     Dcv = std::max(0.0, Dcv);
 
-    MlyDed += YearsMlyPolFee;
+    // Policy and issue fees and the specified-amount load are really
+    // part of the monthly deduction, yet they must be kept distinct
+    // so that they can be deducted before the mortality charge is
+    // determined.
+    MlyDed += YearsMlyPolFee + YearsAnnPolFee;
     MlyDed += DetermineSpecAmtLoad();
 
     YearsTotalNetCoiCharges += NetCoiCharge;
