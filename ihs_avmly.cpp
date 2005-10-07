@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avmly.cpp,v 1.38 2005-10-07 02:12:30 chicares Exp $
+// $Id: ihs_avmly.cpp,v 1.39 2005-10-07 12:56:40 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -2050,19 +2050,22 @@ void AccountValue::TxSetBOMAV()
         }
 
     double total_bom_deduction(0.0);
+    MonthsPolicyFees = 0.0;
 
     if(0 == Month)
         {
+        MonthsPolicyFees    += YearsAnnPolFee;
         total_bom_deduction += YearsAnnPolFee;
         YearsTotalAnnPolFee += YearsAnnPolFee;
         }
 
+    MonthsPolicyFees    += YearsMlyPolFee;
     total_bom_deduction += YearsMlyPolFee;
     YearsTotalMlyPolFee += YearsMlyPolFee;
 
-    double z = DetermineSpecAmtLoad();
-    YearsTotalSpecAmtLoad += z;
-    total_bom_deduction += z;
+    SpecAmtLoad = YearsSpecAmtLoadRate * SpecAmtLoadBase;
+    YearsTotalSpecAmtLoad += SpecAmtLoad;
+    total_bom_deduction   += SpecAmtLoad;
 
     process_deduction(total_bom_deduction);
 
@@ -2306,12 +2309,6 @@ void AccountValue::TxSetCoiCharge()
 }
 
 //============================================================================
-double AccountValue::DetermineSpecAmtLoad()
-{
-    return YearsSpecAmtLoad * SpecAmtLoadBase;
-}
-
-//============================================================================
 // Calculate rider charges.
 void AccountValue::TxSetRiderDed()
 {
@@ -2359,9 +2356,8 @@ void AccountValue::TxSetRiderDed()
                     YearsWpRate
                     *   (
                             CoiCharge
-                        +   YearsMlyPolFee
-                        +   YearsAnnPolFee
-                        +   DetermineSpecAmtLoad()
+                        +   MonthsPolicyFees
+                        +   SpecAmtLoad
                         +   AdbCharge
                         +   SpouseRiderCharge
                         +   ChildRiderCharge
@@ -2371,9 +2367,8 @@ void AccountValue::TxSetRiderDed()
                     YearsWpRate
                     *   (
                             DcvCoiCharge
-                        +   YearsMlyPolFee
-                        +   YearsAnnPolFee
-                        +   DetermineSpecAmtLoad()
+                        +   MonthsPolicyFees
+                        +   SpecAmtLoad
                         +   AdbCharge
                         +   SpouseRiderCharge
                         +   ChildRiderCharge
@@ -2431,8 +2426,7 @@ void AccountValue::TxDoMlyDed()
     // part of the monthly deduction, yet they must be kept distinct
     // so that they can be deducted before the mortality charge is
     // determined.
-    MlyDed += YearsMlyPolFee + YearsAnnPolFee;
-    MlyDed += DetermineSpecAmtLoad();
+    MlyDed += MonthsPolicyFees + SpecAmtLoad;
 
     YearsTotalNetCoiCharges += NetCoiCharge;
 
