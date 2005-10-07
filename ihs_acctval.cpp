@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_acctval.cpp,v 1.70 2005-10-07 02:12:24 chicares Exp $
+// $Id: ihs_acctval.cpp,v 1.71 2005-10-07 12:56:40 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -1128,6 +1128,9 @@ void AccountValue::InitializeYear()
 // TODO ?? Solve...() should reset not inputs but...something else?
     SetAnnualInvariants();
 
+    MonthsPolicyFees            = 0.0;
+    SpecAmtLoad                 = 0.0;
+
     AssetsPostBom               = 0.0;
     CumPmtsPostBom              = 0.0;
     SepAcctLoad                 = 0.0;
@@ -1774,7 +1777,7 @@ void AccountValue::SetAnnualInvariants()
     YearsPremLoadExc        = Loads_->excess_premium_load(ExpAndGABasis)[Year];
     YearsSalesLoadTgt       = Loads_->target_sales_load  (ExpAndGABasis)[Year];
     YearsSalesLoadExc       = Loads_->excess_sales_load  (ExpAndGABasis)[Year];
-    YearsSpecAmtLoad        = Loads_->specified_amount_load (ExpAndGABasis)[Year];
+    YearsSpecAmtLoadRate    = Loads_->specified_amount_load (ExpAndGABasis)[Year];
     YearsSepAcctLoadRate    = Loads_->separate_account_load (ExpAndGABasis)[Year];
     YearsSalesLoadRefundRate= Loads_->refundable_sales_load_proportion()[Year];
     YearsPremTaxLoadRate    = Loads_->premium_tax_load                ()[Year];

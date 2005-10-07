@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.172 2005-10-07 02:12:30 chicares Exp $
+// $Id: ChangeLog,v 1.173 2005-10-07 12:56:40 chicares Exp $
 
 MAINTENANCE
 
@@ -4033,4 +4033,12 @@ Include annual policy fee in monthly deductions.
   ihs_acctval.cpp
 Remove testing scaffold for separate-account load. It was supplanted
 20051006T1458Z by the enhanced monthly output.
+
+20051007T1256Z <chicares@cox.net> [1253]
+
+  account_value.hpp
+  ihs_acctval.cpp
+  ihs_avdebug.cpp
+  ihs_avmly.cpp
+Refactor policy fees and specified-amount load.
 
