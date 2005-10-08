@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: account_value.hpp,v 1.36 2005-10-07 12:56:39 chicares Exp $
+// $Id: account_value.hpp,v 1.37 2005-10-08 00:18:15 chicares Exp $
 
 #ifndef account_value_hpp
 #define account_value_hpp
@@ -438,9 +438,8 @@ class LMI_EXPIMP AccountValue
     double  AVGenAcct;
     double  AVSepAcct;
     double  SepAcctValueAfterDeduction;
-    // TODO ?? Fold comments into names?
-    double  GenAcctAlloc;   // pmt allocation to gen acct
-    double  SepAcctAlloc;   // pmt allocation to sep acct
+    double  GenAcctPaymentAllocation;
+    double  SepAcctPaymentAllocation;
     double  NAAR;
     double  CoiCharge;
     double  NetCoiCharge;

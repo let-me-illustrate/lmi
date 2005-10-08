@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avmly.cpp,v 1.39 2005-10-07 12:56:40 chicares Exp $
+// $Id: ihs_avmly.cpp,v 1.40 2005-10-08 00:18:15 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -336,8 +336,8 @@ void AccountValue::process_payment(double payment)
 // portions of unloaned account value according to input allocations.
 void AccountValue::IncrementAVProportionally(double increment)
 {
-    AVGenAcct += increment * GenAcctAlloc;
-    AVSepAcct += increment * SepAcctAlloc;
+    AVGenAcct += increment * GenAcctPaymentAllocation;
+    AVSepAcct += increment * SepAcctPaymentAllocation;
 }
 
 //============================================================================
@@ -446,8 +446,8 @@ void AccountValue::DecrementAVProportionally(double decrement)
         && 0.0 == separate_account_nonnegative_assets
         )
         {
-        general_account_proportion  = GenAcctAlloc;
-        separate_account_proportion = SepAcctAlloc;
+        general_account_proportion  = GenAcctPaymentAllocation;
+        separate_account_proportion = SepAcctPaymentAllocation;
         }
     else
         {
