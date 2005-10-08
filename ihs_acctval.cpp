@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_acctval.cpp,v 1.71 2005-10-07 12:56:40 chicares Exp $
+// $Id: ihs_acctval.cpp,v 1.72 2005-10-08 00:18:15 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -621,7 +621,7 @@ void AccountValue::SetInitialValues()
 
     if(Input_->AvgFund || Input_->OverrideFundMgmtFee)
         {
-        SepAcctAlloc = 1.0;
+        SepAcctPaymentAllocation = 1.0;
         }
     else if(100 == Input_->SumOfSepAcctFundAllocs())
         {
@@ -629,32 +629,32 @@ void AccountValue::SetInitialValues()
         // as a special case to avoid catastrophic cancellation when
         // calculating general-account allocation as the difference
         // between this quantity and unity.
-        SepAcctAlloc = 1.0;
+        SepAcctPaymentAllocation = 1.0;
         }
     else
         {
-        SepAcctAlloc = .01 * Input_->SumOfSepAcctFundAllocs();
+        SepAcctPaymentAllocation = .01 * Input_->SumOfSepAcctFundAllocs();
         }
 
-    GenAcctAlloc = 1.0 - SepAcctAlloc;
+    GenAcctPaymentAllocation = 1.0 - SepAcctPaymentAllocation;
 
-    if(!Database_->Query(DB_AllowGenAcct) && 0.0 != GenAcctAlloc)
+    if(!Database_->Query(DB_AllowGenAcct) && 0.0 != GenAcctPaymentAllocation)
         {
         fatal_error()
             << "No general account is allowed for this product, but "
             << "allocation to general account is "
-            << GenAcctAlloc
+            << GenAcctPaymentAllocation
             << " ."
             << LMI_FLUSH
             ;
         }
 
-    if(!Database_->Query(DB_AllowSepAcct) && 0.0 != SepAcctAlloc)
+    if(!Database_->Query(DB_AllowSepAcct) && 0.0 != SepAcctPaymentAllocation)
         {
         fatal_error()
             << "No separate account is allowed for this product, but "
             << " total allocation to separate accounts is "
-            << SepAcctAlloc
+            << SepAcctPaymentAllocation
             << " ."
             << LMI_FLUSH
             ;
