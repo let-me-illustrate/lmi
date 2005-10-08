@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_invariant.hpp,v 1.3 2005-10-08 16:44:43 chicares Exp $
+// $Id: ledger_invariant.hpp,v 1.4 2005-10-08 18:25:24 chicares Exp $
 
 #ifndef ledger_invariant_hpp
 #define ledger_invariant_hpp
@@ -45,9 +45,8 @@ class LMI_EXPIMP LedgerInvariant
     :public LedgerBase
 {
   public:
-    // Need default ctor to put this thing in a map.
-    // See comments on class Ledger's default ctor.
-    // TODO ?? Is that so? This doesn't appear to be in that map.
+    // TODO ?? '100' here is poor. See inline comments on class
+    // Ledger's default ctor.
     explicit LedgerInvariant(int len = 100);
     LedgerInvariant(LedgerInvariant const&);
     LedgerInvariant& operator=(LedgerInvariant const&);
@@ -77,7 +76,8 @@ class LMI_EXPIMP LedgerInvariant
     void UpdateCRC(CRC& a_crc) const;
     void Spew(std::ostream& os) const;
 
-// TODO ?? Data members should not be public.
+// TODO ?? Make data private. Provide const accessors. Some values
+// (e.g., outlay) could be calculated dynamically instead of stored.
 
     // BOY vectors.
     std::vector<double> EePmt;
@@ -263,16 +263,15 @@ class LMI_EXPIMP LedgerInvariant
     void Destroy();
     void Init();
 
-    // TODO ?? All data should be private, with const accessors, like this:
     std::string     StatePostalAbbrev;
 
-    // Nonscalable scalars
+    // Nonscalable scalars.
     double          StatePremTaxLoad;
     double          StatePremTaxRate;
     double          DacTaxPremLoadRate;
     double          InitAnnLoanDueRate;
 
-    // special cases
+    // Special cases.
     int             Length;
     bool            FullyInitialized;   // I.e. by Init(BasicValues* b).
 };

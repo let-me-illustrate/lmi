@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_variant.hpp,v 1.5 2005-10-01 18:58:59 chicares Exp $
+// $Id: ledger_variant.hpp,v 1.6 2005-10-08 18:25:24 chicares Exp $
 
 #ifndef ledger_variant_hpp
 #define ledger_variant_hpp
@@ -91,9 +91,11 @@ public:
     void UpdateCRC(CRC& a_crc) const;
     void Spew(std::ostream& os) const;
 
-// TODO ?? PUBLIC DATA NOT GOOD
+// TODO ?? Make data private. Provide const accessors. Some values
+// (e.g., loan interest) could be calculated dynamically instead
+// of stored.
 
-    // BOY vectors
+    // BOY vectors.
     std::vector<double> COICharge;      // TODO ?? Never used?
     std::vector<double> ExpenseCharges;
     std::vector<double> AVRelOnDeath;
@@ -113,29 +115,29 @@ public:
     std::vector<double> NetClaims;
     std::vector<double> NetPmt;
 // TODO ?? Why do we use "BOY" only in "BOYPrefLoan" but not in "Loan"?
-    std::vector<double> BOYPrefLoan;    // TODO ?? Never used?
+    std::vector<double> BOYPrefLoan;    // Not used yet.
 
     // EOY vectors
     std::vector<double> AcctVal;
     std::vector<double> DacTaxRsv;
-    // see account value class for CSV defns
+    // See account value class for CSV definitions.
     std::vector<double> CSVNet;
     std::vector<double> CV7702;
     std::vector<double> EOYDeathBft;
     std::vector<double> ExpRatRsvForborne;
-    std::vector<double> PrefLoanBalance;    // TODO ?? Never used?
-    std::vector<double> TotalLoanBalance;   // TODO ?? Never used?
+    std::vector<double> PrefLoanBalance; // Not used yet.
+    std::vector<double> TotalLoanBalance;
     std::vector<double> ExcessLoan;
-    std::vector<double> NetDeathBft;    // TODO ?? Never used?
-    std::vector<double> AvgDeathBft;    // TODO ?? Never used?
-    std::vector<double> SurrChg;        // TODO ?? never used?
+    std::vector<double> NetDeathBft;     // TODO ?? Never used?
+    std::vector<double> AvgDeathBft;     // TODO ?? Never used?
+    std::vector<double> SurrChg;         // TODO ?? Never used?
     std::vector<double> TermPurchased;
     std::vector<double> BaseDeathBft;
 
-    // Forborne vectors
+    // Forborne vectors.
     std::vector<double> ExpRatRsvCash;
 
-    // Nonscalable vectors
+    // Nonscalable vectors.
     std::vector<double> MlySAIntRate;
     std::vector<double> MlyGAIntRate;
     std::vector<double> MlyHoneymoonValueRate;
@@ -145,7 +147,7 @@ public:
     std::vector<double> AnnHoneymoonValueRate;
     std::vector<double> AnnPostHoneymoonRate;
 
-    // Nonscalable scalars
+    // Nonscalable scalars.
     double          LapseMonth;
     double          LapseYear;
 
@@ -155,17 +157,17 @@ private:
     void Destroy();
     void Init();
 
-    // Nonscalable scalars
+    // Nonscalable scalars.
     double  InitAnnLoanCredRate;
     double  InitAnnGenAcctInt;
     double  InitAnnSepAcctGrossInt;
     double  InitAnnSepAcctNetInt;
 
-    // special cases
+    // Special cases.
     int              Length;
     e_basis          ExpAndGABasis;
     e_sep_acct_basis SABasis;
-    bool             FullyInitialized;   // i.e. by Init(BasicValues* b)
+    bool             FullyInitialized; // I.e. by Init(BasicValues* b).
 };
 
 // C++98 17.4.3.6 forbids declaring std::map<S,T> where S or T is

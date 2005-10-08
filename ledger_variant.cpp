@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_variant.cpp,v 1.9 2005-10-01 18:58:59 chicares Exp $
+// $Id: ledger_variant.cpp,v 1.10 2005-10-08 18:25:24 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -119,8 +119,6 @@ void LedgerVariant::Alloc(int len)
     ForborneVectors ["ExpRatRsvCash"        ] = &ExpRatRsvCash          ;
     EndYearVectors  ["ExpRatRsvForborne"    ] = &ExpRatRsvForborne      ;
 
-    // TODO ?? Do any other vectors need to be forborne? AVRelDeath, e.g.?
-
     BegYearVectors  ["MlyPolFee"            ] = &MlyPolFee              ;
     BegYearVectors  ["AnnPolFee"            ] = &AnnPolFee              ;
     BegYearVectors  ["PolFee"               ] = &PolFee                 ;
@@ -213,7 +211,7 @@ void LedgerVariant::Init
     ,e_sep_acct_basis a_SABasis
     )
 {
-    Init(); // zero out (almost) everything to start
+    Init(); // Zero out (almost) everything to start.
 
     ExpAndGABasis       = a_ExpAndGABasis;
     SABasis             = a_SABasis;
@@ -310,15 +308,15 @@ LedgerVariant& LedgerVariant::PlusEq
 {
     LedgerBase::PlusEq(a_Addend, a_Inforce);
 
-    // Make sure total (this) has enough years to add all years of a_Addend to
+    // Make sure total (this) has enough years to add all years of a_Addend to.
     LMI_ASSERT(Length >= a_Addend.Length);
 
-    // TODO ?? If int rates vary across a census, this will be wrong.
+    // TODO ?? If interest rates vary across a census, this will be wrong.
     InitAnnGenAcctInt           = a_Addend.InitAnnGenAcctInt;
     InitAnnSepAcctGrossInt      = a_Addend.InitAnnSepAcctGrossInt;
     InitAnnSepAcctNetInt        = a_Addend.InitAnnSepAcctNetInt;
     InitAnnLoanCredRate         = a_Addend.InitAnnLoanCredRate;
-    // TODO ?? Use std::copy() instead.
+    // ET !! This is of the form 'x = (lengthof x) take y'.
     for(int j = 0; j < a_Addend.Length; j++)
         {
         MlySAIntRate              [j] = a_Addend.MlySAIntRate              [j];

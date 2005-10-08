@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_invariant.cpp,v 1.18 2005-10-08 16:44:43 chicares Exp $
+// $Id: ledger_invariant.cpp,v 1.19 2005-10-08 18:25:24 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -676,8 +676,8 @@ LedgerInvariant& LedgerInvariant::PlusEq(LedgerInvariant const& a_Addend)
     std::vector<double> const& N = a_Addend.InforceLives;
     int Max = std::min(Length, a_Addend.Length);
 
-// TODO ?? STL offers better ways to do this.
-    // Make sure total (this) has enough years to add all years of a_Addend to
+    // ET !! This is of the form 'x = (lengthof x) take y'.
+    // Make sure total (this) has enough years to add all years of a_Addend to.
     LMI_ASSERT(Length >= a_Addend.Length);
     for(int j = 0; j < Max; j++)
         {
