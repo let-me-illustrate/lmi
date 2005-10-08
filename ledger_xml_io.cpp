@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xml_io.cpp,v 1.25 2005-09-27 16:49:11 chicares Exp $
+// $Id: ledger_xml_io.cpp,v 1.26 2005-10-08 16:44:43 chicares Exp $
 
 #include "config.hpp"
 
@@ -532,7 +532,6 @@ void Ledger::write(xml::node& x) const
     format_map["NoLapseMinAge"                     ] = f1;
     format_map["NoLapseMinDur"                     ] = f1;
     format_map["NominallyPar"                      ] = f1;
-    format_map["OffersRiders"                      ] = f1;
     format_map["PremiumTaxIsTiered"                ] = f1;
     format_map["RetAge"                            ] = f1;
     format_map["SmokerBlended"                     ] = f1;
@@ -748,9 +747,6 @@ void Ledger::write(xml::node& x) const
         ||  0 != ledger_invariant_->NoLapseMinAge
         ;
     scalars["NoLapse"] = &NoLapse;
-
-    double OffersRiders = ledger_invariant_->OffersRiders();
-    scalars["OffersRiders"] = &OffersRiders;
 
     calendar_date prep_date;
 

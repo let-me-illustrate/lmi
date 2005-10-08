@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_invariant.cpp,v 1.17 2005-10-01 17:52:46 chicares Exp $
+// $Id: ledger_invariant.cpp,v 1.18 2005-10-08 16:44:43 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -288,9 +288,6 @@ void LedgerInvariant::Copy(LedgerInvariant const& obj)
     // Scalars of type not compatible with double.
     EffDate                = obj.EffDate               ;
 
-    // TODO ?? Kludge to meet a meaningless requirement.
-    OffersRiders_          = obj.OffersRiders_         ;
-
     FullyInitialized       = obj.FullyInitialized      ;
 }
 
@@ -321,8 +318,6 @@ void LedgerInvariant::Init()
     NoLapseAlwaysActive = false;
     NominallyPar        = false;
     Has1035ExchCharge   = false;
-// TODO ?? Kludge to meet a meaningless requirement.
-    OffersRiders_       = false;
 
     SupplementalReport  = false;
 
@@ -654,14 +649,6 @@ void LedgerInvariant::Init(BasicValues* b)
 
     IsInforce = 0 != Input_.InforceYear || 0 != Input_.InforceMonth;
 
-// TODO ?? Kludge to meet a meaningless requirement.
-    OffersRiders_ =
-            b->Database_->Query(DB_AllowWP)
-        ||  b->Database_->Query(DB_AllowADD)
-        ||  b->Database_->Query(DB_AllowSpouse)
-        ||  b->Database_->Query(DB_AllowChild)
-        ;
-
     SupplementalReport         = Input_.CreateSupplementalReport  ;
     SupplementalReportColumn00 = Input_.SupplementalReportColumn00;
     SupplementalReportColumn01 = Input_.SupplementalReportColumn01;
@@ -844,9 +831,6 @@ LedgerInvariant& LedgerInvariant::PlusEq(LedgerInvariant const& a_Addend)
     // wouldn't be equally spaced, so we'd need a more general irr
     // routine.
     IsInforce     = IsInforce     || a_Addend.IsInforce    ;
-
-// TODO ?? Kludge to meet a meaningless requirement.
-    OffersRiders_ = OffersRiders_ || a_Addend.OffersRiders_;
 
     // TODO ?? This doesn't seem quite right, but what would be better?
     // We can't take the union of all columns selected for any life,
