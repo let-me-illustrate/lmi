@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_text_formats.cpp,v 1.12 2005-09-27 16:49:11 chicares Exp $
+// $Id: ledger_text_formats.cpp,v 1.13 2005-10-08 15:37:30 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -161,36 +161,6 @@ std::string FormatSelectedValuesAsHtml(Ledger const& ledger_values)
     return oss.str();
 }
 
-// Experimental--see development notes for 2003-03-04 for a discussion
-// of other approaches.
-namespace
-{
-// Subtract loans and WDs from gross payments, yielding net payments.
-// TODO ?? Obsolete--use LedgerInvariant::Outlay instead.
-void set_net_payment
-    (LedgerInvariant const& Invar
-    ,std::vector<double>&   net_payment
-    )
-{
-    // ET !! net_payment = Invar.GrossPmt - Invar.Loan - Invar.NetWD;
-    net_payment = Invar.GrossPmt;
-    std::transform
-        (net_payment.begin()
-        ,net_payment.end()
-        ,Invar.Loan.begin()
-        ,net_payment.begin()
-        ,std::minus<double>()
-        );
-    std::transform
-        (net_payment.begin()
-        ,net_payment.end()
-        ,Invar.NetWD.begin()
-        ,net_payment.begin()
-        ,std::minus<double>()
-        );
-}
-} // Unnamed namespace.
-
 //==============================================================================
 void PrintFormTabDelimited
     (Ledger const& ledger_values
@@ -203,8 +173,7 @@ void PrintFormTabDelimited
 
     int max_length = ledger_values.GetMaxLength();
 
-    std::vector<double> net_payment;
-    set_net_payment(Invar, net_payment);
+    std::vector<double> net_payment(Invar.Outlay);
 
     std::vector<double> real_claims;
     if(ledger_values.GetIsComposite())
@@ -232,7 +201,7 @@ void PrintFormTabDelimited
         ,std::negate<double>()
         );
     // ET !! This is tricky: incompatible lengths.
-    // ET !! net_payment += drop(-1, cash_flow);
+    // ET !! drop(-1, cash_flow) = net_payment;
     std::transform
         (net_payment.begin()
         ,net_payment.end()
@@ -357,13 +326,40 @@ os << "\n\n" ;
 
         os << '\n';
 
-    // This column ordering reflects the natural processing order, but
-    // with the most commonly wanted columns placed first.
     char const* cheaders[] =
         {"PolicyYear"
         ,"AttainedAge"
         ,"DeathBenefitOption"
-        ,"TotalNetOutlay"
+        ,"EmployeeGrossPremium"
+        ,"CorporationGrossPremium"
+        ,"GrossWithdrawal"
+        ,"NewCashLoan"
+        ,"LoanBalance"
+// TODO ?? Add loan interest?
+        ,"Outlay"
+        ,"NetPremium"
+        ,"PremiumTaxLoad"
+        ,"DacTaxLoad"
+// TODO ?? Also:
+//   M&E
+//   stable value
+//   DAC- and premium-tax charge
+//   comp
+//   IMF
+//   custodial expense?
+//   account value released?
+
+// TODO ?? PRESSING Replace these with just one policy fee:
+        ,"MonthlyPolicyFee"
+        ,"AnnualPolicyFee"
+        ,"SpecifiedAmountLoad"
+        ,"MonthlyFlatExtra"
+        ,"MortalityCharge"
+        ,"AccountValueLoadAfterMonthlyDeduction"
+        ,"CurrentSeparateAccountInterestRate"
+        ,"CurrentGeneralAccountInterestRate"
+        ,"CurrentGrossInterestCredited"
+        ,"CurrentNetInterestCredited"
         ,"GuaranteedAccountValue"
         ,"GuaranteedNetCashSurrenderValue"
         ,"GuaranteedYearEndDeathBenefit"
@@ -372,28 +368,12 @@ os << "\n\n" ;
         ,"CurrentYearEndDeathBenefit"
         ,"IrrOnSurrender"
         ,"IrrOnDeath"
-        ,"EmployeeGrossPremium"
-        ,"CorporationGrossPremium"
-        ,"GrossWithdrawal"
-        ,"NewCashLoan"
-        ,"NetPayment"
-        ,"PremiumTaxLoad"
-        ,"DacTaxLoad"
-        ,"MonthlyPolicyFee"
-        ,"AnnualPolicyFee"
-        ,"SpecifiedAmountLoad"
-        ,"AccountValueLoadBeforeMonthlyDeduction"
-        ,"AccountValueLoadAfterMonthlyDeduction"
-        ,"MonthlyFlatExtra"
-        ,"MortalityCharge"
-        ,"SeparateAccountInterestRate"
-        ,"GeneralAccountInterestRate"
-        ,"GrossInterestCredited"
-        ,"NetInterestCredited"
         ,"YearEndInforceLives"
         ,"ClaimsPaid"
         ,"NetClaims"
-        ,"ExpRatRsvCash"
+        ,"ExperienceRatingReserve"
+        ,"ProjectedMortalityCharge"
+        ,"KFactor"
         ,"ProducerCompensation"
         };
 
@@ -402,7 +382,6 @@ os << "\n\n" ;
     unsigned int max_header_rows = 0;
     for(unsigned int j = 0; j < lmi_array_size(cheaders); ++j)
         {
-//        std::istringstream iss(insert_spaces_between_words(cheaders[j]));
         std::istringstream iss(cheaders[j]);
         std::vector<std::string> v;
         std::copy
@@ -437,12 +416,28 @@ os << "\n\n" ;
 
         os << Invar.DBOpt[j]                              << '\t';
 
-        double net_outlay =
-              Invar.GrossPmt[j]
-            - Invar.NetWD     [j]
-            - Invar.Loan      [j]
-            ;
-        os << value_cast<std::string>(net_outlay) << '\t';
+        os << Invar.value_str("EeGrossPmt"            ,j) << '\t';
+        os << Invar.value_str("ErGrossPmt"            ,j) << '\t';
+        os << Invar.value_str("NetWD"                 ,j) << '\t'; // TODO ?? It's *gross* WD.
+        os << Invar.value_str("Loan"                  ,j) << '\t';
+        os << Invar.value_str("TotalLoanBalance"      ,j) << '\t';
+        os << Invar.value_str("Outlay"                ,j) << '\t';
+
+        os << Curr_.value_str("NetPmt"                ,j) << '\t';
+
+        os << Curr_.value_str("PremTaxLoad"           ,j) << '\t';
+        os << Curr_.value_str("DacTaxLoad"            ,j) << '\t';
+        os << Curr_.value_str("MlyPolFee"             ,j) << '\t';
+        os << Curr_.value_str("AnnPolFee"             ,j) << '\t';
+        os << Curr_.value_str("SpecAmtLoad"           ,j) << '\t';
+        os << Invar.value_str("MonthlyFlatExtra"      ,j) << '\t';
+        os << Curr_.value_str("COICharge"             ,j) << '\t';
+        os << Curr_.value_str("AcctValLoadAMD"        ,j) << '\t';
+
+        os << Curr_.value_str("AnnSAIntRate"          ,j) << '\t';
+        os << Curr_.value_str("AnnGAIntRate"          ,j) << '\t';
+        os << Curr_.value_str("GrossIntCredited"      ,j) << '\t';
+        os << Curr_.value_str("NetIntCredited"        ,j) << '\t';
 
         os << Guar_.value_str("AcctVal"               ,j) << '\t';
         os << Guar_.value_str("CSVNet"                ,j) << '\t';
@@ -462,44 +457,20 @@ os << "\n\n" ;
             os << irr_on_death[j]                         << '\t';
             }
 
-        // The following columns are in a logical order. The last few
-        // columns immediately preceding aren't, because an important
-        // group of users wanted the columns they use on the left,
-        // before the columns they ignore.
-
-        os << Invar.value_str("EeGrossPmt"            ,j) << '\t';
-        os << Invar.value_str("ErGrossPmt"            ,j) << '\t';
-        os << Invar.value_str("NetWD"                 ,j) << '\t'; // TODO ?? It's *gross* WD.
-        os << Invar.value_str("Loan"                  ,j) << '\t';
-        os << Curr_.value_str("NetPmt"                ,j) << '\t';
-
-        os << Curr_.value_str("PremTaxLoad"           ,j) << '\t';
-        os << Curr_.value_str("DacTaxLoad"            ,j) << '\t';
-        os << Curr_.value_str("MlyPolFee"             ,j) << '\t';
-        os << Curr_.value_str("AnnPolFee"             ,j) << '\t';
-        os << Curr_.value_str("SpecAmtLoad"           ,j) << '\t';
-        os << Curr_.value_str("AcctValLoadAMD"        ,j) << '\t';
-        os << Invar.value_str("MonthlyFlatExtra"      ,j) << '\t';
-        os << Curr_.value_str("COICharge"             ,j) << '\t';
-
-        os << Curr_.value_str("AnnSAIntRate"          ,j) << '\t';
-        os << Curr_.value_str("AnnGAIntRate"          ,j) << '\t';
-        os << Curr_.value_str("GrossIntCredited"      ,j) << '\t';
-        os << Curr_.value_str("NetIntCredited"        ,j) << '\t';
-
         // First element of InforceLives is BOY--show only EOY.
         os << value_cast<std::string>(Invar.InforceLives[1 + j]) << '\t';
+
+        os << Curr_.value_str("ClaimsPaid"            ,j) << '\t';
+        os << Curr_.value_str("NetClaims"             ,j) << '\t';
+        os << Curr_.value_str("ExpRatRsvCash"         ,j) << '\t';
 
         // TODO ?? For experience rating, it would be nice to add
         // projected mortality charge and k factor here. That requires
         // adding them to the ledger class first.
-        os << Curr_.value_str("ClaimsPaid"            ,j) << '\t';
-        os << Curr_.value_str("NetClaims"             ,j) << '\t';
-        os << Curr_.value_str("ExpRatRsvCash"         ,j) << '\t';
+
         os << Invar.value_str("ProducerCompensation"  ,j) << '\t';
 
         os << '\n';
         }
-// TODO ?? Should we add death benefit option?
 }
 
