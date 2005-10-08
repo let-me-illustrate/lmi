@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_invariant.hpp,v 1.2 2005-08-22 15:35:40 chicares Exp $
+// $Id: ledger_invariant.hpp,v 1.3 2005-10-08 16:44:43 chicares Exp $
 
 #ifndef ledger_invariant_hpp
 #define ledger_invariant_hpp
@@ -65,8 +65,6 @@ class LMI_EXPIMP LedgerInvariant
     double const&                GetStatePremTaxLoad()   const;
     double const&                GetStatePremTaxRate()   const;
     double const&                GetDacTaxPremLoadRate() const;
-
-    bool OffersRiders() const; // TODO ?? Kludge to meet a meaningless requirement.
 
     // TODO ?? Does this really belong here?
     // Yes: it keeps the ledger object small; otherwise, numerous IRR
@@ -277,8 +275,6 @@ class LMI_EXPIMP LedgerInvariant
     // special cases
     int             Length;
     bool            FullyInitialized;   // I.e. by Init(BasicValues* b).
-
-    bool OffersRiders_; // TODO ?? Kludge to meet a meaningless requirement.
 };
 
 inline bool LedgerInvariant::IsFullyInitialized() const
@@ -319,12 +315,6 @@ inline double const& LedgerInvariant::GetStatePremTaxRate() const
 inline double const& LedgerInvariant::GetDacTaxPremLoadRate() const
 {
     return DacTaxPremLoadRate;
-}
-
-// TODO ?? Kludge to meet a meaningless requirement.
-inline bool LedgerInvariant::OffersRiders() const
-{
-    return OffersRiders_;
 }
 
 #endif // ledger_invariant_hpp
