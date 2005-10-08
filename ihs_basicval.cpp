@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_basicval.cpp,v 1.26 2005-10-05 17:07:52 chicares Exp $
+// $Id: ihs_basicval.cpp,v 1.27 2005-10-08 00:18:15 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -347,7 +347,8 @@ void BasicValues::GPTServerInit()
 }
 
 //============================================================================
-// TODO ?? Does this belong in the funds class?
+// TODO ?? Does this belong in the funds class? Consider merging it
+// with code in AccountValue::SetInitialValues().
 double BasicValues::InvestmentManagementFee() const
 {
     if(!Database_->Query(DB_AllowSepAcct))
@@ -361,7 +362,7 @@ double BasicValues::InvestmentManagementFee() const
         }
 
     double z = 0.0;
-    double TotalSepAcctAllocations = 0.0;
+    double total_sepacct_allocations = 0.0;
     FundData const& Funds = *FundData_;
 
     for(int j = 0; j < Funds.GetNumberOfFunds(); j++)
@@ -418,15 +419,15 @@ double BasicValues::InvestmentManagementFee() const
         if(0.0 != weight)
             {
             z += weight * Funds.GetFundInfo(j).ScalarIMF();
-            TotalSepAcctAllocations += weight;
+            total_sepacct_allocations += weight;
             }
         }
 
     // Spread over separate account funds only
-    if(0.0 != TotalSepAcctAllocations)
+    if(0.0 != total_sepacct_allocations)
         {
         // Convert from basis points
-        z /= 10000.0 * TotalSepAcctAllocations;
+        z /= 10000.0 * total_sepacct_allocations;
         }
 
     return z;
