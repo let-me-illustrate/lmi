@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.173 2005-10-07 12:56:40 chicares Exp $
+// $Id: ChangeLog,v 1.174 2005-10-09 22:49:26 chicares Exp $
 
 MAINTENANCE
 
@@ -4041,4 +4041,39 @@ Remove testing scaffold for separate-account load. It was supplanted
   ihs_avdebug.cpp
   ihs_avmly.cpp
 Refactor policy fees and specified-amount load.
+
+20051008T0012Z <chicares@cox.net> [1252]
+
+  account_value.hpp
+  ihs_acctval.cpp
+  ihs_avmly.cpp
+  ihs_basicval.cpp
+Rename variables.
+
+20051008T1537Z <chicares@cox.net> [1253]
+
+  ledger_text_formats.cpp
+Improve a report.
+
+20051008T1644Z <chicares@cox.net> [1246]
+
+  ledger_xml_io.cpp
+  ledger_invariant.cpp
+  ledger_invariant.hpp
+Remove an obsolete artifact.
+
+20051008T1825Z <chicares@cox.net> [1240]
+
+  ledger_invariant.cpp
+  ledger_invariant.hpp
+  ledger_variant.cpp
+  ledger_variant.hpp
+Improve documentation.
+
+20051009T2247Z <chicares@cox.net> [1240]
+
+  ledger_base.cpp
+Anticipate change in '.test' output format, to facilitate testing.
+Check out full source as of this moment to produce regression-test
+results with present contents in new fields.
 
