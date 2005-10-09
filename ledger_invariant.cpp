@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_invariant.cpp,v 1.19 2005-10-08 18:25:24 chicares Exp $
+// $Id: ledger_invariant.cpp,v 1.20 2005-10-09 23:25:27 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -103,7 +103,7 @@ void LedgerInvariant::Alloc(int len)
     BegYearVectors  ["EeGrossPmt"            ] = &EeGrossPmt             ;
     BegYearVectors  ["ErGrossPmt"            ] = &ErGrossPmt             ;
     BegYearVectors  ["NetWD"                 ] = &NetWD                  ;
-    BegYearVectors  ["Loan"                  ] = &Loan                   ;
+    BegYearVectors  ["NewCashLoan"           ] = &NewCashLoan            ;
     BegYearVectors  ["Outlay"                ] = &Outlay                 ;
     BegYearVectors  ["GptForceout"           ] = &GptForceout            ;
     BegYearVectors  ["NaarForceout"          ] = &NaarForceout           ;
@@ -174,7 +174,7 @@ void LedgerInvariant::Alloc(int len)
     OtherScalars    ["InitAnnLoanDueRate"    ] = &InitAnnLoanDueRate     ;
     OtherScalars    ["IsInforce"             ] = &IsInforce              ;
     OtherScalars    ["CountryCOIMultiplier"  ] = &CountryCOIMultiplier   ;
-    OtherScalars    ["PremiumTaxIsTiered"    ] = &PremiumTaxIsTiered     ;
+    OtherScalars    ["PremiumTaxLoadIsTiered"] = &PremiumTaxLoadIsTiered ;
     OtherScalars    ["NoLapseAlwaysActive"   ] = &NoLapseAlwaysActive    ;
     OtherScalars    ["NoLapseMinDur"         ] = &NoLapseMinDur          ;
     OtherScalars    ["NoLapseMinAge"         ] = &NoLapseMinAge          ;
@@ -184,7 +184,6 @@ void LedgerInvariant::Alloc(int len)
     OtherScalars    ["GenAcctAllocation"     ] = &GenAcctAllocation      ;
     OtherScalars    ["SupplementalReport"    ] = &SupplementalReport     ;
 
-    Strings         ["PolicyShortName"       ] = &PolicyShortName        ;
     Strings         ["PolicyMktgName"        ] = &PolicyMktgName         ;
     Strings         ["PolicyLegalName"       ] = &PolicyLegalName        ;
     Strings         ["PolicyForm"            ] = &PolicyForm             ;
@@ -354,7 +353,7 @@ void LedgerInvariant::Init(BasicValues* b)
 //    Dumpin               =
 
     NetWD           = b->Outlay_->withdrawals();
-    Loan            = b->Outlay_->new_cash_loans();
+    NewCashLoan     = b->Outlay_->new_cash_loans();
 
 //    GptForceout     =
 //    NaarForceout    =
@@ -449,8 +448,7 @@ void LedgerInvariant::Init(BasicValues* b)
         ,0.0
         );
 
-// TODO ?? PRESSING Clarify names--premium-tax load versus rate.
-    PremiumTaxIsTiered      = b->IsPremiumTaxLoadTiered();
+    PremiumTaxLoadIsTiered  = b->IsPremiumTaxLoadTiered();
 
     NoLapseAlwaysActive     = b->Database_->Query(DB_NoLapseAlwaysActive);
     NoLapseMinDur           = b->Database_->Query(DB_NoLapseMinDur);
@@ -621,16 +619,18 @@ void LedgerInvariant::Init(BasicValues* b)
     // scalar unless it is tiered.
     StatePremTaxLoad        = b->Loads_->premium_tax_load()[0];
     LMI_ASSERT
-        (PremiumTaxIsTiered || each_equal
+        (PremiumTaxLoadIsTiered || each_equal
             (b->Loads_->premium_tax_load().begin()
             ,b->Loads_->premium_tax_load().end()
             ,b->Loads_->premium_tax_load().front()
             )
         );
     DacTaxPremLoadRate      = b->Loads_->dac_tax_load()[0];
-    // TODO ?? Output forms presuppose that the DAC tax load is scalar.
+    // TODO ?? Output forms presuppose that the DAC tax load is scalar;
+    // and it seems odd that the DAC-tax load would have much to do
+    // with whether the premium-tax is tiered.
     LMI_ASSERT
-        (PremiumTaxIsTiered || each_equal
+        (PremiumTaxLoadIsTiered || each_equal
             (b->Loads_->dac_tax_load().begin()
             ,b->Loads_->dac_tax_load().end()
             ,b->Loads_->dac_tax_load().front()
@@ -817,7 +817,10 @@ LedgerInvariant& LedgerInvariant::PlusEq(LedgerInvariant const& a_Addend)
     HasHoneymoon = HasHoneymoon || a_Addend.HasHoneymoon ;
     AllowDbo3    = AllowDbo3    || a_Addend.AllowDbo3    ;
 
-    PremiumTaxIsTiered = a_Addend.PremiumTaxIsTiered || PremiumTaxIsTiered;
+    PremiumTaxLoadIsTiered =
+            a_Addend.PremiumTaxLoadIsTiered
+        ||  PremiumTaxLoadIsTiered
+        ;
 
     NoLapseMinDur      = std::min(a_Addend.NoLapseMinDur, NoLapseMinDur);
     NoLapseMinAge      = std::min(a_Addend.NoLapseMinAge, NoLapseMinAge);

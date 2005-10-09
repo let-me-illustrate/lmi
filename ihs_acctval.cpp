@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_acctval.cpp,v 1.72 2005-10-08 00:18:15 chicares Exp $
+// $Id: ihs_acctval.cpp,v 1.73 2005-10-09 23:25:27 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -734,7 +734,6 @@ void AccountValue::SetInitialValues()
     MlyDed                      = 0.0;
     CumulativeSalesLoad         = 0.0;
 
-    apportioned_net_mortality_reserve = 0.0;
     CoiRetentionRate                  = Database_->Query(DB_ExpRatCOIRetention);
     ExperienceRatingAmortizationYears = Database_->Query(DB_ExpRatAmortPeriod);
     IbnrAsMonthsOfMortalityCharges    = Database_->Query(DB_ExpRatIBNRMult);
@@ -1141,10 +1140,8 @@ void AccountValue::InitializeYear()
     YearsNetClaims              = 0.0;
     YearsTotalNetIntCredited    = 0.0;
     YearsTotalGrossIntCredited  = 0.0;
-    YearsTotalExpRsvInt         = 0.0;
     YearsTotalNetCoiCharges     = 0.0;
-    YearsTotalAnnPolFee         = 0.0;
-    YearsTotalMlyPolFee         = 0.0;
+    YearsTotalPolicyFee         = 0.0;
     YearsTotalPremTaxLoad       = 0.0;
     YearsTotalPremTaxLoadInStateOfDomicile = 0.0;
     YearsTotalPremTaxLoadInStateOfJurisdiction = 0.0;
@@ -1570,15 +1567,12 @@ void AccountValue::FinalizeYear()
     VariantValues().NetClaims       [Year] = YearsNetClaims             ;
     VariantValues().NetIntCredited  [Year] = YearsTotalNetIntCredited   ;
     VariantValues().GrossIntCredited[Year] = YearsTotalGrossIntCredited ;
-    VariantValues().ExpRsvInt       [Year] = YearsTotalExpRsvInt        ;
     VariantValues().NetCOICharge    [Year] = YearsTotalNetCoiCharges    ;
-    VariantValues().MlyPolFee       [Year] = YearsTotalMlyPolFee        ;
-    VariantValues().AnnPolFee       [Year] = YearsTotalAnnPolFee        ;
-    VariantValues().PolFee          [Year] = YearsTotalAnnPolFee + YearsTotalMlyPolFee;
+    VariantValues().PolicyFee       [Year] = YearsTotalPolicyFee        ;
     VariantValues().PremTaxLoad     [Year] = YearsTotalPremTaxLoad      ;
     VariantValues().DacTaxLoad      [Year] = YearsTotalDacTaxLoad       ;
     VariantValues().SpecAmtLoad     [Year] = YearsTotalSpecAmtLoad      ;
-    VariantValues().AcctValLoadAMD  [Year] = YearsTotalSepAcctLoad      ;
+    VariantValues().SepAcctLoad     [Year] = YearsTotalSepAcctLoad      ;
 
     // Record dynamic interest rate in ledger object.
     //
@@ -1647,9 +1641,9 @@ void AccountValue::FinalizeYear()
                 )
             );
         InvariantValues().Outlay[Year] =
-                InvariantValues().GrossPmt[Year]
-            -   InvariantValues().NetWD   [Year]
-            -   InvariantValues().Loan    [Year]
+                InvariantValues().GrossPmt   [Year]
+            -   InvariantValues().NetWD      [Year]
+            -   InvariantValues().NewCashLoan[Year]
             ;
 
         InvariantValues().EePmt[Year] = InvariantValues().EeGrossPmt[Year];
@@ -1686,8 +1680,8 @@ void AccountValue::SetAnnualInvariants()
 {
     YearsCorridorFactor     = GetCorridorFactor()[Year];
     YearsDBOpt              = DeathBfts_->dbopt()[Year];
-    YearsMlyPolFee          = Loads_->monthly_policy_fee(ExpAndGABasis)[Year];
-    YearsAnnPolFee          = Loads_->annual_policy_fee(ExpAndGABasis)[Year];
+    YearsMonthlyPolicyFee   = Loads_->monthly_policy_fee(ExpAndGABasis)[Year];
+    YearsAnnualPolicyFee    = Loads_->annual_policy_fee(ExpAndGABasis)[Year];
 
     YearsGenAcctIntRate     = InterestRates_->GenAcctNetRate
         (ExpAndGABasis
@@ -1919,9 +1913,6 @@ double AccountValue::GetProjectedCoiChargeInforce()
 // The return value, added across cells, should reproduce the total
 // total reserve at the case level, as the caller may assert.
 //
-// TODO ?? Any historical reason for distinguishing
-// 'ExpRatRsvForborne' and 'ExpRatRsvCash' has become inoperative.
-//
 double AccountValue::ApportionNetMortalityReserve
     (double reserve_per_life_inforce
     )
@@ -1942,20 +1933,17 @@ double AccountValue::ApportionNetMortalityReserve
         : 0.0
         ;
 
-    apportioned_net_mortality_reserve =
-            reserve_per_life_inforce
-        *   inforce_factor
-        ;
+    double apportioned_reserve = reserve_per_life_inforce * inforce_factor;
 
     // The experience-rating reserve can't be posted to the ledger in
     // FinalizeYear(), which is run before the reserve is calculated.
-    VariantValues().ExpRatRsvForborne[Year] = reserve_per_life_inforce;
-    VariantValues().ExpRatRsvCash[Year] = apportioned_net_mortality_reserve;
+    // The projected COI charge and K factor are posted to the ledger
+    // here as well, simply for uniformity.
+    VariantValues().ExperienceReserve [Year] = apportioned_reserve;
+    VariantValues().ProjectedCoiCharge[Year] = NextYearsProjectedCoiCharge;
+    VariantValues().KFactor           [Year] = case_k_factor;
 
-    return
-            apportioned_net_mortality_reserve
-        *   Input_->NumIdenticalLives
-        ;
+    return apportioned_reserve * Input_->NumIdenticalLives;
 }
 
 //============================================================================
