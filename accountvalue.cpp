@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: accountvalue.cpp,v 1.21 2005-10-06 18:02:31 chicares Exp $
+// $Id: accountvalue.cpp,v 1.22 2005-10-09 23:25:27 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -280,10 +280,10 @@ void AccountValue::DoYear
         )[Year]
         ;
 
-    pmt             = InvariantValues().EePmt[Year];
-    YearsPremLoadTgt= Loads_->target_premium_load(ExpAndGABasis)[Year];
-    YearsMlyPolFee  = Loads_->monthly_policy_fee(ExpAndGABasis)[Year];
-    ActualSpecAmt   = InvariantValues().SpecAmt[Year];
+    pmt                   = InvariantValues().EePmt[Year];
+    YearsPremLoadTgt      = Loads_->target_premium_load(ExpAndGABasis)[Year];
+    YearsMonthlyPolicyFee = Loads_->monthly_policy_fee(ExpAndGABasis)[Year];
+    ActualSpecAmt         = InvariantValues().SpecAmt[Year];
 
     // These variables are set for each pass independently.
     mode            = InvariantValues().EeMode[Year];
@@ -736,7 +736,7 @@ void AccountValue::TxLoanRepay()
 
     AVUnloaned -= RequestedLoan;
     AVRegLn += RequestedLoan;    // TODO ?? Also preferred.
-    InvariantValues().Loan[Year] = RequestedLoan;
+    InvariantValues().NewCashLoan[Year] = RequestedLoan;
 }
 
 //============================================================================
@@ -744,7 +744,7 @@ void AccountValue::TxLoanRepay()
 // TODO ?? Should this function live?
 void AccountValue::TxSetBOMAV()
 {
-    AVUnloaned -= YearsMlyPolFee;
+    AVUnloaned -= YearsMonthlyPolicyFee;
 }
 
 //============================================================================
@@ -808,7 +808,10 @@ void AccountValue::TxSetRiderDed()
     WpCharge = 0.0;
     if(haswp)
         {
-        WpCharge = YearsWpRate * (CoiCharge + YearsMlyPolFee + AdbCharge);
+        WpCharge =
+                YearsWpRate
+            *   (CoiCharge + YearsMonthlyPolicyFee + AdbCharge)
+            ;
         }
 
     AdbCharge = 0.0;
@@ -823,7 +826,7 @@ void AccountValue::TxSetRiderDed()
 void AccountValue::TxDoMlyDed()
 {
     AVUnloaned -=             CoiCharge + AdbCharge + WpCharge;
-    MlyDed = YearsMlyPolFee + CoiCharge + AdbCharge + WpCharge;
+    MlyDed = YearsMonthlyPolicyFee + CoiCharge + AdbCharge + WpCharge;
     mlydedtonextmodalpmtdate = MlyDed * MonthsToNextModalPmtDate();
 }
 
@@ -1013,7 +1016,7 @@ void AccountValue::TxTakeLoan()
 
     AVUnloaned -= RequestedLoan;
     AVRegLn += RequestedLoan;    // TODO ?? Also preferred.
-    InvariantValues().Loan[Year] = RequestedLoan;
+    InvariantValues().NewCashLoan[Year] = RequestedLoan;
 }
 
 //============================================================================

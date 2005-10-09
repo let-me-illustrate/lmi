@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: account_value.hpp,v 1.37 2005-10-08 00:18:15 chicares Exp $
+// $Id: account_value.hpp,v 1.38 2005-10-09 23:25:27 chicares Exp $
 
 #ifndef account_value_hpp
 #define account_value_hpp
@@ -505,8 +505,8 @@ class LMI_EXPIMP AccountValue
     double  YearsCorridorFactor;
     e_dbopt YearsDBOpt;
     double  YearsSpecAmt;
-    double  YearsAnnPolFee;
-    double  YearsMlyPolFee;
+    double  YearsAnnualPolicyFee;
+    double  YearsMonthlyPolicyFee;
     double  YearsGenAcctIntRate;
     double  YearsSepAcctIntRate;
 
@@ -604,9 +604,7 @@ class LMI_EXPIMP AccountValue
     double  YearsNetClaims;
     double  YearsTotalNetIntCredited;
     double  YearsTotalGrossIntCredited;
-    double  YearsTotalExpRsvInt;
-    double  YearsTotalAnnPolFee;
-    double  YearsTotalMlyPolFee;
+    double  YearsTotalPolicyFee;
     double  YearsTotalPremTaxLoad;
     double  YearsTotalPremTaxLoadInStateOfDomicile;
     double  YearsTotalPremTaxLoadInStateOfJurisdiction;
@@ -617,7 +615,6 @@ class LMI_EXPIMP AccountValue
     std::vector<double> partial_mortality_q;
 
     // For experience rating.
-    double  apportioned_net_mortality_reserve;
     double  CoiRetentionRate;
     double  ExperienceRatingAmortizationYears;
     double  IbnrAsMonthsOfMortalityCharges;

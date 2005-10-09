@@ -19,22 +19,22 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: dbnames.xpp,v 1.13 2005-09-27 16:49:11 chicares Exp $
+// $Id: dbnames.xpp,v 1.14 2005-10-09 23:25:27 chicares Exp $
 
 #define DB_NAMES \
 {DB_FIRST,DB_FIRST,"dummy","dummy",}, \
 {DB_Topic_Loads,DB_FIRST,"Loads","Loads and expense charges deducted from payments and account value",}, \
-{DB_GuarPolFee,DB_Topic_Loads,"GuarPolFee","Guaranteed policy fee",}, \
+{DB_GuarPolFee,DB_Topic_Loads,"GuarPolFee","Guaranteed monthly policy fee",}, \
 {DB_GuarSpecAmtLoad,DB_Topic_Loads,"GuarSpecAmtLoad","Guaranteed charge per $1 of specified amount",}, \
-{DB_GuarIssueFee,DB_Topic_Loads,"GuarIssueFee","Guaranteed issue fee",}, \
+{DB_GuarIssueFee,DB_Topic_Loads,"GuarIssueFee","Guaranteed annual policy fee",}, \
 {DB_GuarFundAdminChg,DB_Topic_Loads,"GuarFundAdminChg","Guaranteed fund administration charge [not used]",}, \
 {DB_GuarPremLoadTgt,DB_Topic_Loads,"GuarPremLoadTgt","Guaranteed load on premium up to target",}, \
 {DB_GuarPremLoadExc,DB_Topic_Loads,"GuarPremLoadExc","Guaranteed load on premium in excess of target",}, \
 {DB_GuarPremLoadTgtRfd,DB_Topic_Loads,"GuarPremLoadTgtRfd","Guaranteed load on premium up to target, refundable on lapse",}, \
 {DB_GuarPremLoadExcRfd,DB_Topic_Loads,"GuarPremLoadExcRfd","Guaranteed load on premium in excess of target, refundable on lapse",}, \
-{DB_CurrPolFee,DB_Topic_Loads,"CurrPolFee","Current policy fee",}, \
+{DB_CurrPolFee,DB_Topic_Loads,"CurrPolFee","Current monthly policy fee",}, \
 {DB_CurrSpecAmtLoad,DB_Topic_Loads,"CurrSpecAmtLoad","Current charge per $1 of specified amount",}, \
-{DB_CurrIssueFee,DB_Topic_Loads,"CurrIssueFee","Current issue fee",}, \
+{DB_CurrIssueFee,DB_Topic_Loads,"CurrIssueFee","Current annual policy fee",}, \
 {DB_CurrFundAdminChg,DB_Topic_Loads,"CurrFundAdminChg","Current fund administration charge [not used]",}, \
 {DB_CurrPremLoadTgt,DB_Topic_Loads,"CurrPremLoadTgt","Current load on premium up to target",}, \
 {DB_CurrPremLoadExc,DB_Topic_Loads,"CurrPremLoadExc","Current load on premium in excess of target",}, \
@@ -261,7 +261,7 @@
 {DB_HCVSpread,DB_Topic_Interest,"HCVSpread","[no longer supported]",}, \
 {DB_ExtraHMSpreadonCV,DB_Topic_Interest,"ExtraHMSpreadonCV","[no longer supported]",}, \
 {DB_TgtPremTable,DB_Topic_Tables,"TgtPremTable","Target premium table (index in mortality table database)",}, \
-{DB_TgtPremPolFee,DB_Topic_Tables,"TgtPremPolFee","Target premium policy fee",}, \
+{DB_TgtPremPolFee,DB_Topic_Tables,"TgtPremPolFee","Target-premium monthly policy fee",}, \
 {DB_AllowExtraAssetComp,DB_Topic_Comp,"AllowExtraAssetComp","Allow extra asset-based compensation: 0=no, 1=yes",}, \
 {DB_AllowExtraPremComp,DB_Topic_Comp,"AllowExtraPremComp","Allow extra premium-based compensation: 0=no, 1=yes",}, \
 {DB_AssetChargeType,DB_Topic_AssetCharges,"AssetChargeType","Treatment of input extra separate-account asset charge: 0=interest spread, 1=account-value load after monthly deduction",}, \

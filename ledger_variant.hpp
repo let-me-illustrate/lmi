@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_variant.hpp,v 1.6 2005-10-08 18:25:24 chicares Exp $
+// $Id: ledger_variant.hpp,v 1.7 2005-10-09 23:25:28 chicares Exp $
 
 #ifndef ledger_variant_hpp
 #define ledger_variant_hpp
@@ -101,21 +101,15 @@ public:
     std::vector<double> AVRelOnDeath;
     std::vector<double> NetIntCredited;
     std::vector<double> GrossIntCredited;
-    std::vector<double> ExpRsvInt;
     std::vector<double> NetCOICharge;
-    std::vector<double> MlyPolFee;
-    std::vector<double> AnnPolFee;
-    std::vector<double> PolFee;
+    std::vector<double> PolicyFee;
     std::vector<double> PremTaxLoad;
     std::vector<double> DacTaxLoad;
     std::vector<double> SpecAmtLoad;
-    std::vector<double> AcctValLoadBOM; // TODO ?? expunge in October PRESSING
-    std::vector<double> AcctValLoadAMD; // TODO ?? PRESSING Rename to 'SepAcctLoad' in October.
+    std::vector<double> SepAcctLoad;
     std::vector<double> ClaimsPaid;
     std::vector<double> NetClaims;
     std::vector<double> NetPmt;
-// TODO ?? Why do we use "BOY" only in "BOYPrefLoan" but not in "Loan"?
-    std::vector<double> BOYPrefLoan;    // Not used yet.
 
     // EOY vectors
     std::vector<double> AcctVal;
@@ -124,7 +118,6 @@ public:
     std::vector<double> CSVNet;
     std::vector<double> CV7702;
     std::vector<double> EOYDeathBft;
-    std::vector<double> ExpRatRsvForborne;
     std::vector<double> PrefLoanBalance; // Not used yet.
     std::vector<double> TotalLoanBalance;
     std::vector<double> ExcessLoan;
@@ -133,9 +126,10 @@ public:
     std::vector<double> SurrChg;         // TODO ?? Never used?
     std::vector<double> TermPurchased;
     std::vector<double> BaseDeathBft;
+    std::vector<double> ProjectedCoiCharge;
 
     // Forborne vectors.
-    std::vector<double> ExpRatRsvCash;
+    std::vector<double> ExperienceReserve;
 
     // Nonscalable vectors.
     std::vector<double> MlySAIntRate;
@@ -146,6 +140,7 @@ public:
     std::vector<double> AnnGAIntRate;
     std::vector<double> AnnHoneymoonValueRate;
     std::vector<double> AnnPostHoneymoonRate;
+    std::vector<double> KFactor;
 
     // Nonscalable scalars.
     double          LapseMonth;

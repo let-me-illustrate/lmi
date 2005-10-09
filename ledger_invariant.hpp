@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_invariant.hpp,v 1.4 2005-10-08 18:25:24 chicares Exp $
+// $Id: ledger_invariant.hpp,v 1.5 2005-10-09 23:25:28 chicares Exp $
 
 #ifndef ledger_invariant_hpp
 #define ledger_invariant_hpp
@@ -87,7 +87,7 @@ class LMI_EXPIMP LedgerInvariant
     std::vector<double> EeGrossPmt;
     std::vector<double> ErGrossPmt;
     std::vector<double> NetWD;      // TODO ?? Unclear whether this is truly net.
-    std::vector<double> Loan;       // New cash loan.
+    std::vector<double> NewCashLoan;
     std::vector<double> Outlay;
     std::vector<double> GptForceout;
     std::vector<double> NaarForceout;
@@ -187,7 +187,7 @@ class LMI_EXPIMP LedgerInvariant
     double          AllowDbo3;
     double          IsInforce;
     double          CountryCOIMultiplier;
-    double          PremiumTaxIsTiered;
+    double          PremiumTaxLoadIsTiered;
     double          NoLapseAlwaysActive;
     double          NoLapseMinDur;
     double          NoLapseMinAge;
@@ -198,7 +198,6 @@ class LMI_EXPIMP LedgerInvariant
     double          SupplementalReport;
 
     std::string     PolicyForm;
-    std::string     PolicyShortName; // TODO ?? Appears to be unused--expunge?
     std::string     PolicyMktgName;
     std::string     PolicyLegalName;
     std::string     InsCoShortName;

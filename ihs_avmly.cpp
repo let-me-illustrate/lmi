@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avmly.cpp,v 1.40 2005-10-08 00:18:15 chicares Exp $
+// $Id: ihs_avmly.cpp,v 1.41 2005-10-09 23:25:27 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -2016,7 +2016,7 @@ void AccountValue::TxLoanRepay()
 // This seems wrong. If we're changing something that's invariant among
 // bases, why do we change it for each basis?
 // TODO ?? Shouldn't this be moved to FinalizeMonth()?
-    InvariantValues().Loan[Year] = ActualLoan;
+    InvariantValues().NewCashLoan[Year] = ActualLoan;
     // TODO ?? Do we need to change VariantValues().ExcessLoan[Year]?
 }
 
@@ -2049,27 +2049,19 @@ void AccountValue::TxSetBOMAV()
         SpecAmtLoadBase = std::min(SpecAmtLoadBase, SpecAmtLoadLimit);
         }
 
-    double total_bom_deduction(0.0);
-    MonthsPolicyFees = 0.0;
-
+    MonthsPolicyFees = YearsMonthlyPolicyFee;
     if(0 == Month)
         {
-        MonthsPolicyFees    += YearsAnnPolFee;
-        total_bom_deduction += YearsAnnPolFee;
-        YearsTotalAnnPolFee += YearsAnnPolFee;
+        MonthsPolicyFees    += YearsAnnualPolicyFee;
         }
-
-    MonthsPolicyFees    += YearsMlyPolFee;
-    total_bom_deduction += YearsMlyPolFee;
-    YearsTotalMlyPolFee += YearsMlyPolFee;
+    YearsTotalPolicyFee += MonthsPolicyFees;
 
     SpecAmtLoad = YearsSpecAmtLoadRate * SpecAmtLoadBase;
     YearsTotalSpecAmtLoad += SpecAmtLoad;
-    total_bom_deduction   += SpecAmtLoad;
 
-    process_deduction(total_bom_deduction);
+    process_deduction(MonthsPolicyFees + SpecAmtLoad);
 
-    Dcv -= total_bom_deduction;
+    Dcv -= MonthsPolicyFees + SpecAmtLoad;
     Dcv = std::max(0.0, Dcv);
 }
 
@@ -3151,7 +3143,7 @@ void AccountValue::TxTakeLoan()
         ActualLoan = std::min(max_loan_increment, RequestedLoan);
         ActualLoan = std::max(ActualLoan, 0.0);
         // TODO ?? Shouldn't this happen in FinalizeMonth()?
-        InvariantValues().Loan[Year] = ActualLoan;
+        InvariantValues().NewCashLoan[Year] = ActualLoan;
         }
     VariantValues().ExcessLoan[Year] = std::min
         (0.0
