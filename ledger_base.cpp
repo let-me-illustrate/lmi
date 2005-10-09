@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_base.cpp,v 1.5 2005-09-12 01:32:19 chicares Exp $
+// $Id: ledger_base.cpp,v 1.6 2005-10-09 22:47:27 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -525,9 +525,67 @@ void LedgerBase::Spew(std::ostream& os) const
 {
     static int const prec = max_stream_precision();
 
+    // These changes are intended to facilitate regression testing.
+    // Changing only this function, only in this file, causes '.test'
+    // output to reflect the following modifications.
+    //
+    // Copy:
+    //   "AcctValLoadAMD"     --> "SepAcctLoad"
+    //   "ExpRatRsvCash"      --> "ExperienceReserve"
+    //   "Loan"               --> "NewCashLoan"
+    //   "PolFee"             --> "PolicyFee"
+    //   "ExpRatRsvCash"      --> "KFactor"
+    //   "ExpRatRsvCash"      --> "ProjectedCoiCharge"
+    //   "PremiumTaxIsTiered" --> "PremiumTaxLoadIsTiered"
+    //
+    // Then expunge:
+    //   "AcctValLoadAMD"
+    //   "AcctValLoadBOM"
+    //   "AnnPolFee"
+    //   "BOYPrefLoan"
+    //   "ExpRatRsvCash"
+    //   "ExpRatRsvForborne"
+    //   "ExpRsvInt"
+    //   "Loan"
+    //   "MlyPolFee"
+    //   "PolFee"
+    //   "PremiumTaxIsTiered"
+    //   "PolicyShortName"
+    //
+    // New fields "KFactor" and "ProjectedCoiCharge" are initialized
+    // with the value in old field "ExpRatRsvCash". That value is, of
+    // course, wrong unless it happens to be zero; but it happens to
+    // be correct for almost all present test cases.
+
+    double_vector_map vectors(AllVectors);
+    if(vectors.count("AcctValLoadAMD")) vectors["SepAcctLoad"       ] = vectors["AcctValLoadAMD"];
+    if(vectors.count("ExpRatRsvCash" )) vectors["ExperienceReserve" ] = vectors["ExpRatRsvCash" ];
+    if(vectors.count("Loan"          )) vectors["NewCashLoan"       ] = vectors["Loan"          ];
+    if(vectors.count("PolFee"        )) vectors["PolicyFee"         ] = vectors["PolFee"        ];
+    if(vectors.count("ExpRatRsvCash" )) vectors["KFactor"           ] = vectors["ExpRatRsvCash" ];
+    if(vectors.count("ExpRatRsvCash" )) vectors["ProjectedCoiCharge"] = vectors["ExpRatRsvCash" ];
+
+    if(vectors.count("AcctValLoadAMD"   )) vectors.erase("AcctValLoadAMD"   );
+    if(vectors.count("AcctValLoadBOM"   )) vectors.erase("AcctValLoadBOM"   );
+    if(vectors.count("AnnPolFee"        )) vectors.erase("AnnPolFee"        );
+    if(vectors.count("BOYPrefLoan"      )) vectors.erase("BOYPrefLoan"      );
+    if(vectors.count("ExpRatRsvCash"    )) vectors.erase("ExpRatRsvCash"    );
+    if(vectors.count("ExpRatRsvForborne")) vectors.erase("ExpRatRsvForborne");
+    if(vectors.count("ExpRsvInt"        )) vectors.erase("ExpRsvInt"        );
+    if(vectors.count("Loan"             )) vectors.erase("Loan"             );
+    if(vectors.count("MlyPolFee"        )) vectors.erase("MlyPolFee"        );
+    if(vectors.count("PolFee"           )) vectors.erase("PolFee"           );
+
+    scalar_map scalars(AllScalars);
+    if(scalars.count("PremiumTaxIsTiered")) scalars["PremiumTaxLoadIsTiered"] = scalars["PremiumTaxIsTiered"];
+    if(scalars.count("PremiumTaxIsTiered")) scalars.erase("PremiumTaxIsTiered");
+
+    string_map strings(Strings);
+    if(strings.count("PolicyShortName"   )) strings.erase("PolicyShortName"   );
+
     for
-        (double_vector_map::const_iterator vmi = AllVectors.begin()
-        ;vmi != AllVectors.end()
+        (double_vector_map::const_iterator vmi = vectors.begin()
+        ;vmi != vectors.end()
         ;vmi++
         )
         {
@@ -535,8 +593,8 @@ void LedgerBase::Spew(std::ostream& os) const
         }
 
     for
-        (scalar_map::const_iterator sci = AllScalars.begin()
-        ;sci != AllScalars.end()
+        (scalar_map::const_iterator sci = scalars.begin()
+        ;sci != scalars.end()
         ;sci++
         )
         {
@@ -549,8 +607,8 @@ void LedgerBase::Spew(std::ostream& os) const
         }
 
     for
-        (string_map::const_iterator sti = Strings.begin()
-        ;sti != Strings.end()
+        (string_map::const_iterator sti = strings.begin()
+        ;sti != strings.end()
         ;sti++
         )
         {
