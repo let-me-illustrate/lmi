@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_base.cpp,v 1.6 2005-10-09 22:47:27 chicares Exp $
+// $Id: ledger_base.cpp,v 1.7 2005-10-09 23:25:30 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -525,67 +525,9 @@ void LedgerBase::Spew(std::ostream& os) const
 {
     static int const prec = max_stream_precision();
 
-    // These changes are intended to facilitate regression testing.
-    // Changing only this function, only in this file, causes '.test'
-    // output to reflect the following modifications.
-    //
-    // Copy:
-    //   "AcctValLoadAMD"     --> "SepAcctLoad"
-    //   "ExpRatRsvCash"      --> "ExperienceReserve"
-    //   "Loan"               --> "NewCashLoan"
-    //   "PolFee"             --> "PolicyFee"
-    //   "ExpRatRsvCash"      --> "KFactor"
-    //   "ExpRatRsvCash"      --> "ProjectedCoiCharge"
-    //   "PremiumTaxIsTiered" --> "PremiumTaxLoadIsTiered"
-    //
-    // Then expunge:
-    //   "AcctValLoadAMD"
-    //   "AcctValLoadBOM"
-    //   "AnnPolFee"
-    //   "BOYPrefLoan"
-    //   "ExpRatRsvCash"
-    //   "ExpRatRsvForborne"
-    //   "ExpRsvInt"
-    //   "Loan"
-    //   "MlyPolFee"
-    //   "PolFee"
-    //   "PremiumTaxIsTiered"
-    //   "PolicyShortName"
-    //
-    // New fields "KFactor" and "ProjectedCoiCharge" are initialized
-    // with the value in old field "ExpRatRsvCash". That value is, of
-    // course, wrong unless it happens to be zero; but it happens to
-    // be correct for almost all present test cases.
-
-    double_vector_map vectors(AllVectors);
-    if(vectors.count("AcctValLoadAMD")) vectors["SepAcctLoad"       ] = vectors["AcctValLoadAMD"];
-    if(vectors.count("ExpRatRsvCash" )) vectors["ExperienceReserve" ] = vectors["ExpRatRsvCash" ];
-    if(vectors.count("Loan"          )) vectors["NewCashLoan"       ] = vectors["Loan"          ];
-    if(vectors.count("PolFee"        )) vectors["PolicyFee"         ] = vectors["PolFee"        ];
-    if(vectors.count("ExpRatRsvCash" )) vectors["KFactor"           ] = vectors["ExpRatRsvCash" ];
-    if(vectors.count("ExpRatRsvCash" )) vectors["ProjectedCoiCharge"] = vectors["ExpRatRsvCash" ];
-
-    if(vectors.count("AcctValLoadAMD"   )) vectors.erase("AcctValLoadAMD"   );
-    if(vectors.count("AcctValLoadBOM"   )) vectors.erase("AcctValLoadBOM"   );
-    if(vectors.count("AnnPolFee"        )) vectors.erase("AnnPolFee"        );
-    if(vectors.count("BOYPrefLoan"      )) vectors.erase("BOYPrefLoan"      );
-    if(vectors.count("ExpRatRsvCash"    )) vectors.erase("ExpRatRsvCash"    );
-    if(vectors.count("ExpRatRsvForborne")) vectors.erase("ExpRatRsvForborne");
-    if(vectors.count("ExpRsvInt"        )) vectors.erase("ExpRsvInt"        );
-    if(vectors.count("Loan"             )) vectors.erase("Loan"             );
-    if(vectors.count("MlyPolFee"        )) vectors.erase("MlyPolFee"        );
-    if(vectors.count("PolFee"           )) vectors.erase("PolFee"           );
-
-    scalar_map scalars(AllScalars);
-    if(scalars.count("PremiumTaxIsTiered")) scalars["PremiumTaxLoadIsTiered"] = scalars["PremiumTaxIsTiered"];
-    if(scalars.count("PremiumTaxIsTiered")) scalars.erase("PremiumTaxIsTiered");
-
-    string_map strings(Strings);
-    if(strings.count("PolicyShortName"   )) strings.erase("PolicyShortName"   );
-
     for
-        (double_vector_map::const_iterator vmi = vectors.begin()
-        ;vmi != vectors.end()
+        (double_vector_map::const_iterator vmi = AllVectors.begin()
+        ;vmi != AllVectors.end()
         ;vmi++
         )
         {
@@ -593,8 +535,8 @@ void LedgerBase::Spew(std::ostream& os) const
         }
 
     for
-        (scalar_map::const_iterator sci = scalars.begin()
-        ;sci != scalars.end()
+        (scalar_map::const_iterator sci = AllScalars.begin()
+        ;sci != AllScalars.end()
         ;sci++
         )
         {
@@ -607,8 +549,8 @@ void LedgerBase::Spew(std::ostream& os) const
         }
 
     for
-        (string_map::const_iterator sti = strings.begin()
-        ;sti != strings.end()
+        (string_map::const_iterator sti = Strings.begin()
+        ;sti != Strings.end()
         ;sti++
         )
         {
@@ -620,95 +562,4 @@ void LedgerBase::Spew(std::ostream& os) const
             ;
         }
 }
-
-/*
-
-Analysis and design: a few maps instead of many vectors
-
-We want to assemble a large number of vectors into a collection so that
-we can iterate over the collection instead of performing operations (e.g.
-initialize, copy, test for equality, find max/min element, multiply) for
-each vector separately. The reason is that performing a half dozen
-operations for each of a couple dozen vectors requires us to write about
-a dozen squared names, getting each one exactly right. Adding a new vector
-requires us to write its name in each of a half dozen places. This was the
-approach originally taken, and the resulting code was sprawling, hard to
-maintain, and difficult to validate.
-
-We note that almost all are vector<double>, have the same size(), and
-are initialized to zero. Treating only this majority subset of vector
-members substantially fulfills our wishes, so we won't attempt polymorphic
-treatment of the other vectors.
-
-A map<> is clearly called for. Certain implementation choices must be made.
-
-Choice 1: Who owns the data? We want only one instance of the data to
-exist. If we have a bunch of vectors and a map<key, vector> then we have
-two copies; that wastes memory and, worse, the copies can become
-unsynchronized.
-
-1.a. Vector members own the data. Then we need a map<key, vector<>*>.
-
-1.b. Map owns the data. Then we want vector& members that refer to map
-entries. Reason: we extremely often want to read or write one element
-of a vector, and we don't want a map lookup each time. But this approach
-appears problematic: for instance, what happens to those references when
-we copy the map?
-
-We choose 1.a.
-
-Choice 2. Some vectors represent beginning-of-year data; others,
-end-of-year data. Some are "arithmetic"; others are not. Arithmetic, an
-adjective, here means that arithmetic can be performed upon them in the
-sense of the following example. Payments can be multiplied by a scale
-factor (1000, 1000000, etc.) to make them print in a given width, and
-can be added together when combining multiple ledgers into a composite,
-so they are arithmetic. Interest rates are not.
-
-2.a. Separate maps for BOY and EOY.
-
-2.b. Wrap vector<>* into a class and add a member BOY/EOY/non-arith indicator.
-
-To make this choice, we need to consider wrappers further.
-
-Choice 3. We can use vector<> pointers as such, or wrap them. Since we
-chose to use vector<> members that own their own storage, the pointer
-would be needed only within this class, for dealing with whole groups of
-vectors at a time.
-
-3.a. Use vector<>* . Only map::data_type is a pointer; key_type is not.
-STL algorithms like copy() would operate on the pointers themselves,
-which is not the behavior we want. We could code such operations by hand:
-iterate across the map, and dereference pointers to operate on the
-data inside a loop or with transform() e.g.
-
-3.b. Use wrappers. The extra level of indirection is not a real concern
-because we would intend to address all elements of a vector when going
-through the wrapper.
-
-A wrapper for data_type doesn't need to be very elaborate. According to
-Matt Austern's authoritative book, the type requirements of map<> specify
-that map::data_type be Assignable. It need not even be EqualityComparable.
-
-The equivalence between map[k] and
-    (*((map.insert(value_type(k, data_type()))).first)).second
-suggests that data_type must also be DefaultConstructible.
-
-The operations we need for each vector<> are initialization, assignment,
-scaling (multiplying by a scalar), adding, and finding the max and min
-elements. The last four of these six are arithmetic, so we can regard
-the necessary operations as predominantly arithmetic. So the choice
-really amounts to
-    3.a. iterate across map, dereference vector, perform operation
-    3.b. iterate across map, perform operation; push operation into ptr class
-The second option would mean defining a min_element operation on the ptr
-class, which sounds like a Bad Idea.
-
-A hybrid might be considered: 3.a. for arithmetic operations, and 3.b. for
-other operations. This seems to secure the disadvantages of both pure
-approaches at the cost of increased complexity.
-
-We choose 3.a., which impels us to choose 2.a.
-
-*/
 
