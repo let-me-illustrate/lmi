@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.174 2005-10-09 22:49:26 chicares Exp $
+// $Id: ChangeLog,v 1.175 2005-10-09 23:25:33 chicares Exp $
 
 MAINTENANCE
 
@@ -4076,4 +4076,27 @@ Improve documentation.
 Anticipate change in '.test' output format, to facilitate testing.
 Check out full source as of this moment to produce regression-test
 results with present contents in new fields.
+
+20051009T2325Z <chicares@cox.net> [1230]
+
+  account_value.hpp
+  accountvalue.cpp
+  dbnames.xpp
+  ihs_acctval.cpp
+  ihs_avmly.cpp
+  ledger_invariant.cpp
+  ledger_invariant.hpp
+  ledger_text_formats.cpp
+  ledger_variant.cpp
+  ledger_variant.hpp
+  ledger_xml_io.cpp
+  mc_enum_types.cpp
+  mc_enum_types.hpp
+  mc_enum_types.xpp
+Rename some ledger fields; expunge others.
+
+  ledger_base.cpp
+  ledger_base.hpp
+Revert 20051009T2247Z anticipatory change: the new format now arises
+naturally.
 

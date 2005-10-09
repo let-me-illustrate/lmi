@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_variant.cpp,v 1.10 2005-10-08 18:25:24 chicares Exp $
+// $Id: ledger_variant.cpp,v 1.11 2005-10-09 23:25:28 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -98,35 +98,15 @@ void LedgerVariant::Alloc(int len)
     BegYearVectors  ["NetIntCredited"       ] = &NetIntCredited         ;
     BegYearVectors  ["GrossIntCredited"     ] = &GrossIntCredited       ;
 
-    BegYearVectors  ["ExpRsvInt"            ] = &ExpRsvInt              ;
     BegYearVectors  ["NetCOICharge"         ] = &NetCOICharge           ;
 
-    // TODO ?? There seems to be no reason for both these 'ExpRatRsv.*'
-    // variables to exist anymore. It seems peculiar that the one with
-    // 'Forborne' in its name is not an element of 'ForborneVectors',
-    // and vice versa; originally, 'ExpRatRsvForborne' had been
-    // multiplied by px when set elsewhere, in a context that required
-    // the experience-rating reserve to be held in certificates rather
-    // than held separately for the group as a whole, and it was wrong
-    // then to show any such reserve in a certificate that would have
-    // become a claim at year end. That usage of 'Forborne' was in
-    // conflict with the meaning of that lexeme in 'ForborneVectors'.
-    //
-    // Let us regard only 'ExpRatRsvCash' as authoritative, and
-    // expunge 'ExpRatRsvForborne' when convenient, renaming the
-    // first to drop the 'Cash' lexeme.
-    //
-    ForborneVectors ["ExpRatRsvCash"        ] = &ExpRatRsvCash          ;
-    EndYearVectors  ["ExpRatRsvForborne"    ] = &ExpRatRsvForborne      ;
+    ForborneVectors ["ExperienceReserve"    ] = &ExperienceReserve      ;
 
-    BegYearVectors  ["MlyPolFee"            ] = &MlyPolFee              ;
-    BegYearVectors  ["AnnPolFee"            ] = &AnnPolFee              ;
-    BegYearVectors  ["PolFee"               ] = &PolFee                 ;
+    BegYearVectors  ["PolicyFee"            ] = &PolicyFee              ;
     BegYearVectors  ["PremTaxLoad"          ] = &PremTaxLoad            ;
     BegYearVectors  ["DacTaxLoad"           ] = &DacTaxLoad             ;
     BegYearVectors  ["SpecAmtLoad"          ] = &SpecAmtLoad            ;
-    BegYearVectors  ["AcctValLoadBOM"       ] = &AcctValLoadBOM         ; // TODO ?? expunge in October PRESSING
-    BegYearVectors  ["AcctValLoadAMD"       ] = &AcctValLoadAMD         ;
+    BegYearVectors  ["SepAcctLoad"          ] = &SepAcctLoad            ;
 
     // Deaths are assumed to come at the end of the year only; but
     // they're discounted by the proportion in force at the beginning.
@@ -136,7 +116,6 @@ void LedgerVariant::Alloc(int len)
     // get it corrected.
     BegYearVectors  ["NetClaims"            ] = &NetClaims              ;
     BegYearVectors  ["NetPmt"               ] = &NetPmt                 ;
-    BegYearVectors  ["BOYPrefLoan"          ] = &BOYPrefLoan            ;
 
     EndYearVectors  ["AcctVal"              ] = &AcctVal                ;
     EndYearVectors  ["DacTaxRsv"            ] = &DacTaxRsv              ;
@@ -151,6 +130,7 @@ void LedgerVariant::Alloc(int len)
     EndYearVectors  ["SurrChg"              ] = &SurrChg                ;
     EndYearVectors  ["TermPurchased"        ] = &TermPurchased          ;
     EndYearVectors  ["BaseDeathBft"         ] = &BaseDeathBft           ;
+    EndYearVectors  ["ProjectedCoiCharge"   ] = &ProjectedCoiCharge     ;
 
     OtherVectors    ["MlySAIntRate"         ] = &MlySAIntRate           ;
     OtherVectors    ["MlyGAIntRate"         ] = &MlyGAIntRate           ;
@@ -160,6 +140,7 @@ void LedgerVariant::Alloc(int len)
     OtherVectors    ["AnnGAIntRate"         ] = &AnnGAIntRate           ;
     OtherVectors    ["AnnHoneymoonValueRate"] = &AnnHoneymoonValueRate  ;
     OtherVectors    ["AnnPostHoneymoonRate" ] = &AnnPostHoneymoonRate   ;
+    OtherVectors    ["KFactor"              ] = &KFactor                ;
 
     OtherScalars    ["LapseMonth"           ] = &LapseMonth             ;
     OtherScalars    ["LapseYear"            ] = &LapseYear              ;
@@ -265,7 +246,6 @@ void LedgerVariant::Init
             ,e_rate_period(e_annual_rate)
             );
 
-//  BOYPrefLoan     =
 //  PrefLoanBalance =
 //  TotalLoanBalance=
 //  ExcessLoan      =
@@ -274,6 +254,8 @@ void LedgerVariant::Init
 //  SurrChg         =
 //  TermPurchased   =
 //  BaseDeathBft    =
+//  ProjectedCoiCharge =
+//  KFactor         =
 
     InitAnnLoanCredRate = a_BV->InterestRates_->RegLnCredRate
         (a_ExpAndGABasis

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xml_io.cpp,v 1.26 2005-10-08 16:44:43 chicares Exp $
+// $Id: ledger_xml_io.cpp,v 1.27 2005-10-09 23:25:28 chicares Exp $
 
 #include "config.hpp"
 
@@ -187,13 +187,13 @@ typedef std::map<std::string, std::string> title_map_t;
 // > Format as a number with thousand separators and no decimal places (#,###,##0)
 // >
 // > AcctVal_*
-// > AcctValLoadAMD_*
+// > SepAcctLoad_*
 // > AccumulatedPremium
 //
 // I translated that into
 //
 //    format_map["AcctVal"                           ] = f1;
-//    format_map["AcctValLoadAMD"                    ] = f1;
+//    format_map["SepAcctLoad"                       ] = f1;
 //    format_map["AccumulatedPremium"                ] = f1;
 //
 // where 'f1' is one of several formats I abstracted from your specs
@@ -259,8 +259,8 @@ void Ledger::write(xml::node& x) const
 //  Here are the columns to be listed in the user interface
 //  as well as their corresponding titles.
     title_map["AVRelOnDeath_Current"            ] = "Acct Val Rel on Death";
-    title_map["AcctValLoadAMD_Current"          ] = "Curr Sep Acct Load";
-    title_map["AcctValLoadAMD_Guaranteed"       ] = "Guar Sep Acct Load";
+    title_map["SepAcctLoad_Current"             ] = "Curr Sep Acct Load";
+    title_map["SepAcctLoad_Guaranteed"          ] = "Guar Sep Acct Load";
     title_map["AcctVal_Current"                 ] = "Curr Account Value";
     title_map["AcctVal_Guaranteed"              ] = "Guar Account Value";
     title_map["AddonCompOnAssets"               ] = "Additional Comp on Assets";
@@ -277,8 +277,6 @@ void Ledger::write(xml::node& x) const
     title_map["AttainedAge"                     ] = " _____________ End of __Year Age";
     title_map["AvgDeathBft_Current"             ] = "Curr Avg Death Benefit";
     title_map["AvgDeathBft_Guaranteed"          ] = "Guar Avg Death Benefit";
-    title_map["BOYPrefLoan_Current"             ] = "Curr BOY Pref Loan Balance";
-    title_map["BOYPrefLoan_Guaranteed"          ] = "Guar BOY Pref Loan Balance";
     title_map["BaseDeathBft_Current"            ] = "Curr Base Death Benefit";
     title_map["BaseDeathBft_Guaranteed"         ] = "Guar Base Death Benefit";
     title_map["COICharge_Current"               ] = " _____________ Curr COI Charge";
@@ -311,8 +309,7 @@ void Ledger::write(xml::node& x) const
     title_map["ErPmt"                           ] = "ER Payment Mode";
     title_map["ExcessLoan_Current"              ] = " _ Curr Excess Loan";
     title_map["ExcessLoan_Guaranteed"           ] = "Guar Excess Loan";
-    title_map["ExpRatRsvCash_Current"           ] = "Mortality Reserve Cash";
-    title_map["ExpRatRsvForborne_Current"       ] = "Mortality Reserve Forborne";
+    title_map["ExperienceReserve_Current"       ] = "Mortality Reserve";
     title_map["ExpenseCharges_Current"          ] = "Curr Expense Charge";
     title_map["ExpenseCharges_Guaranteed"       ] = "Guar Expense Charge";
 // STEVEN Can you make this one word?
@@ -330,13 +327,11 @@ void Ledger::write(xml::node& x) const
     title_map["IrrCsv_Guaranteed"               ] = " _____________ Guar IRR on CSV";
     title_map["IrrDb_Current"                   ] = " _____________ Curr IRR on DB";
     title_map["IrrDb_Guaranteed"                ] = " _____________ Guar IRR on DB";
-    title_map["Loan"                            ] = " ________ Annual Loan";
+    title_map["NewCashLoan"                     ] = " ________ Annual Loan";
     title_map["MlyGAIntRate_Current"            ] = "Curr Mon Gen Acct Int Rate";
     title_map["MlyGAIntRate_Guaranteed"         ] = "Guar Mon Gen Acct Int Rate";
     title_map["MlyHoneymoonValueRate_Current"   ] = "Curr Mon Honeymoon Val Rate";
     title_map["MlyHoneymoonValueRate_Guaranteed"] = "Guar Mon Honeymoon Val Rate";
-    title_map["MlyPolFee_Current"               ] = "Curr Monthly Policy Fee";
-    title_map["MlyPolFee_Guaranteed"            ] = "Guar Monthly Policy Fee";
     title_map["MlyPostHoneymoonRate_Current"    ] = "Curr Mon Post HM Rate";
     title_map["MlyPostHoneymoonRate_Guaranteed" ] = "Guar Mon Post HM Rate";
     title_map["MlySAIntRate_Current"            ] = "Curr Mon Sep Acct Int Rate";
@@ -383,8 +378,8 @@ void Ledger::write(xml::node& x) const
     title_map["NetWD"                           ] = " _____________  _____________ Withdrawal";
     title_map["Outlay"                          ] = " _____________ Premium Outlay";
     title_map["PartMortTableMult"               ] = "Partial Mortality Muliplier";
-    title_map["PolFee_Current"                  ] = "Curr ____Policy Fee";
-    title_map["PolFee_Guaranteed"               ] = "Guar ____Policy Fee";
+    title_map["PolicyFee_Current"               ] = "Curr ____Policy Fee";
+    title_map["PolicyFee_Guaranteed"            ] = "Guar ____Policy Fee";
     title_map["PolicyYear"                      ] = " _____________ Policy __Year";
     title_map["PrefLoanBalance_Current"         ] = "Curr Preferred Loan Bal";
     title_map["PrefLoanBalance_Guaranteed"      ] = "Guar Preferred Loan Bal";
@@ -532,7 +527,7 @@ void Ledger::write(xml::node& x) const
     format_map["NoLapseMinAge"                     ] = f1;
     format_map["NoLapseMinDur"                     ] = f1;
     format_map["NominallyPar"                      ] = f1;
-    format_map["PremiumTaxIsTiered"                ] = f1;
+    format_map["PremiumTaxLoadIsTiered"            ] = f1;
     format_map["RetAge"                            ] = f1;
     format_map["SmokerBlended"                     ] = f1;
     format_map["SmokerDistinct"                    ] = f1;
@@ -605,16 +600,14 @@ void Ledger::write(xml::node& x) const
 // > Format as a number with thousand separators and no decimal places (#,###,##0)
 // >
     format_map["AcctVal"                           ] = f1;
-    format_map["AcctValLoadAMD"                    ] = f1;
+    format_map["SepAcctLoad"                       ] = f1;
     format_map["AccumulatedPremium"                ] = f1;
     format_map["AddonCompOnAssets"                 ] = f1;
     format_map["AddonCompOnPremium"                ] = f1;
-    format_map["AnnPolFee"                         ] = f1;
     format_map["AvgDeathBft"                       ] = f1;
     format_map["AVRelOnDeath"                      ] = f1;
     format_map["BaseDeathBft"                      ] = f1;
     format_map["BOYAssets"                         ] = f1;
-    format_map["BOYPrefLoan"                       ] = f1;
     format_map["ClaimsPaid"                        ] = f1;
     format_map["COICharge"                         ] = f1;
     format_map["Composite"                         ] = f1;
@@ -631,11 +624,7 @@ void Ledger::write(xml::node& x) const
     format_map["ErPmt"                             ] = f1;
     format_map["ExcessLoan"                        ] = f1;
     format_map["ExpenseCharges"                    ] = f1;
-    format_map["ExpRatRsvCash"                     ] = f1;
-    format_map["ExpRatRsvForborne"                 ] = f1;
-    format_map["ExpRfd"                            ] = f1;
-    format_map["ExpRsv"                            ] = f1;
-    format_map["ExpRsvInt"                         ] = f1;
+    format_map["ExperienceReserve"                 ] = f1;
     format_map["FundNumbers"                       ] = f1;
     format_map["GptForceout"                       ] = f1;
     format_map["GrossIntCredited"                  ] = f1;
@@ -643,9 +632,8 @@ void Ledger::write(xml::node& x) const
 // TODO ?? This precision is inadequate; are all the others OK?
     format_map["InforceLives"                      ] = f1;
     format_map["Loads"                             ] = f1;
-    format_map["Loan"                              ] = f1;
+    format_map["NewCashLoan"                       ] = f1;
     format_map["LoanInt"                           ] = f1;
-    format_map["MlyPolFee"                         ] = f1;
     format_map["NaarForceout"                      ] = f1;
     format_map["NetClaims"                         ] = f1;
     format_map["NetCOICharge"                      ] = f1;
@@ -654,7 +642,7 @@ void Ledger::write(xml::node& x) const
     format_map["NetPmt"                            ] = f1;
     format_map["NetWD"                             ] = f1;
     format_map["Outlay"                            ] = f1;
-    format_map["PolFee"                            ] = f1;
+    format_map["PolicyFee"                         ] = f1;
     format_map["PrefLoanBalance"                   ] = f1;
     format_map["PremTaxLoad"                       ] = f1;
     format_map["ProducerCompensation"              ] = f1;

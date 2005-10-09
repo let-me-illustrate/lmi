@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_text_formats.cpp,v 1.13 2005-10-08 15:37:30 chicares Exp $
+// $Id: ledger_text_formats.cpp,v 1.14 2005-10-09 23:25:28 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -348,10 +348,7 @@ os << "\n\n" ;
 //   IMF
 //   custodial expense?
 //   account value released?
-
-// TODO ?? PRESSING Replace these with just one policy fee:
-        ,"MonthlyPolicyFee"
-        ,"AnnualPolicyFee"
+        ,"PolicyFee"
         ,"SpecifiedAmountLoad"
         ,"MonthlyFlatExtra"
         ,"MortalityCharge"
@@ -371,7 +368,7 @@ os << "\n\n" ;
         ,"YearEndInforceLives"
         ,"ClaimsPaid"
         ,"NetClaims"
-        ,"ExperienceRatingReserve"
+        ,"ExperienceReserve"
         ,"ProjectedMortalityCharge"
         ,"KFactor"
         ,"ProducerCompensation"
@@ -419,7 +416,7 @@ os << "\n\n" ;
         os << Invar.value_str("EeGrossPmt"            ,j) << '\t';
         os << Invar.value_str("ErGrossPmt"            ,j) << '\t';
         os << Invar.value_str("NetWD"                 ,j) << '\t'; // TODO ?? It's *gross* WD.
-        os << Invar.value_str("Loan"                  ,j) << '\t';
+        os << Invar.value_str("NewCashLoan"           ,j) << '\t';
         os << Invar.value_str("TotalLoanBalance"      ,j) << '\t';
         os << Invar.value_str("Outlay"                ,j) << '\t';
 
@@ -427,12 +424,11 @@ os << "\n\n" ;
 
         os << Curr_.value_str("PremTaxLoad"           ,j) << '\t';
         os << Curr_.value_str("DacTaxLoad"            ,j) << '\t';
-        os << Curr_.value_str("MlyPolFee"             ,j) << '\t';
-        os << Curr_.value_str("AnnPolFee"             ,j) << '\t';
+        os << Curr_.value_str("PolicyFee"             ,j) << '\t';
         os << Curr_.value_str("SpecAmtLoad"           ,j) << '\t';
         os << Invar.value_str("MonthlyFlatExtra"      ,j) << '\t';
         os << Curr_.value_str("COICharge"             ,j) << '\t';
-        os << Curr_.value_str("AcctValLoadAMD"        ,j) << '\t';
+        os << Curr_.value_str("SepAcctLoad"           ,j) << '\t';
 
         os << Curr_.value_str("AnnSAIntRate"          ,j) << '\t';
         os << Curr_.value_str("AnnGAIntRate"          ,j) << '\t';
@@ -462,7 +458,7 @@ os << "\n\n" ;
 
         os << Curr_.value_str("ClaimsPaid"            ,j) << '\t';
         os << Curr_.value_str("NetClaims"             ,j) << '\t';
-        os << Curr_.value_str("ExpRatRsvCash"         ,j) << '\t';
+        os << Curr_.value_str("ExperienceReserve"     ,j) << '\t';
 
         // TODO ?? For experience rating, it would be nice to add
         // projected mortality charge and k factor here. That requires
