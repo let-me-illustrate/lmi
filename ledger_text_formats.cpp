@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_text_formats.cpp,v 1.14 2005-10-09 23:25:28 chicares Exp $
+// $Id: ledger_text_formats.cpp,v 1.15 2005-10-10 16:58:34 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -417,7 +417,7 @@ os << "\n\n" ;
         os << Invar.value_str("ErGrossPmt"            ,j) << '\t';
         os << Invar.value_str("NetWD"                 ,j) << '\t'; // TODO ?? It's *gross* WD.
         os << Invar.value_str("NewCashLoan"           ,j) << '\t';
-        os << Invar.value_str("TotalLoanBalance"      ,j) << '\t';
+        os << Curr_.value_str("TotalLoanBalance"      ,j) << '\t';
         os << Invar.value_str("Outlay"                ,j) << '\t';
 
         os << Curr_.value_str("NetPmt"                ,j) << '\t';
@@ -459,6 +459,8 @@ os << "\n\n" ;
         os << Curr_.value_str("ClaimsPaid"            ,j) << '\t';
         os << Curr_.value_str("NetClaims"             ,j) << '\t';
         os << Curr_.value_str("ExperienceReserve"     ,j) << '\t';
+        os << Curr_.value_str("ProjectedCoiCharge"    ,j) << '\t';
+        os << Curr_.value_str("KFactor"               ,j) << '\t';
 
         // TODO ?? For experience rating, it would be nice to add
         // projected mortality charge and k factor here. That requires
