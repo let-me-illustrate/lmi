@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.175 2005-10-09 23:25:33 chicares Exp $
+// $Id: ChangeLog,v 1.176 2005-10-10 16:58:34 chicares Exp $
 
 MAINTENANCE
 
@@ -4099,4 +4099,10 @@ Rename some ledger fields; expunge others.
   ledger_base.hpp
 Revert 20051009T2247Z anticipatory change: the new format now arises
 naturally.
+
+20051010T1658Z <chicares@cox.net> [1230]
+
+  ledger_text_formats.cpp
+  ledger_variant.cpp
+Show new experience-rating fields in reports.
 
