@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_variant.cpp,v 1.11 2005-10-09 23:25:28 chicares Exp $
+// $Id: ledger_variant.cpp,v 1.12 2005-10-10 16:58:34 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -111,9 +111,6 @@ void LedgerVariant::Alloc(int len)
     // Deaths are assumed to come at the end of the year only; but
     // they're discounted by the proportion in force at the beginning.
     BegYearVectors  ["ClaimsPaid"           ] = &ClaimsPaid             ;
-    // "Special" claims are used in experience rating. This is probably
-    // an error in the specs for a particular product, but we couldn't
-    // get it corrected.
     BegYearVectors  ["NetClaims"            ] = &NetClaims              ;
     BegYearVectors  ["NetPmt"               ] = &NetPmt                 ;
 
@@ -301,14 +298,15 @@ LedgerVariant& LedgerVariant::PlusEq
     // ET !! This is of the form 'x = (lengthof x) take y'.
     for(int j = 0; j < a_Addend.Length; j++)
         {
-        MlySAIntRate              [j] = a_Addend.MlySAIntRate              [j];
-        MlyGAIntRate              [j] = a_Addend.MlyGAIntRate              [j];
-        MlyHoneymoonValueRate     [j] = a_Addend.MlyHoneymoonValueRate     [j];
-        MlyPostHoneymoonRate      [j] = a_Addend.MlyPostHoneymoonRate      [j];
-        AnnSAIntRate              [j] = a_Addend.AnnSAIntRate              [j];
-        AnnGAIntRate              [j] = a_Addend.AnnGAIntRate              [j];
-        AnnHoneymoonValueRate     [j] = a_Addend.AnnHoneymoonValueRate     [j];
-        AnnPostHoneymoonRate      [j] = a_Addend.AnnPostHoneymoonRate      [j];
+        MlySAIntRate              [j]  = a_Addend.MlySAIntRate              [j];
+        MlyGAIntRate              [j]  = a_Addend.MlyGAIntRate              [j];
+        MlyHoneymoonValueRate     [j]  = a_Addend.MlyHoneymoonValueRate     [j];
+        MlyPostHoneymoonRate      [j]  = a_Addend.MlyPostHoneymoonRate      [j];
+        AnnSAIntRate              [j]  = a_Addend.AnnSAIntRate              [j];
+        AnnGAIntRate              [j]  = a_Addend.AnnGAIntRate              [j];
+        AnnHoneymoonValueRate     [j]  = a_Addend.AnnHoneymoonValueRate     [j];
+        AnnPostHoneymoonRate      [j]  = a_Addend.AnnPostHoneymoonRate      [j];
+        KFactor                   [j]  = a_Addend.KFactor                   [j];
         }
 
     LMI_ASSERT(a_Addend.ExpAndGABasis == ExpAndGABasis);
