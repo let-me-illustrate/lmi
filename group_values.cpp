@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: group_values.cpp,v 1.42 2005-10-06 18:02:31 chicares Exp $
+// $Id: group_values.cpp,v 1.43 2005-10-11 15:56:53 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -265,14 +265,15 @@ bool run_census_in_series::operator()
 /// else the inforce date--the k factor is an input scalar. On each
 /// anniversary, it becomes
 ///   1 - (mortality profit / denominator),
-/// denominator being a proxy for the coming year's mortality charge:
+/// denominator being the number of years specified in database entity
+/// ExpRatAmortPeriod times a proxy for the coming year's mortality
+/// charge:
 ///   the just-completed year's EOY (DB - AV), times
 ///   the about-to-begin year's COI rate times twelve, times
-///   the proportion surviving into the about-to-begin year, times
-///   the number of years given in database entity ExpRatAmortPeriod
-/// except that the k factor is set to 0.0 if either
-///   it would otherwise be less than 0.0, or
-///   denominator is zero.
+///   the proportion surviving into the about-to-begin year;
+/// except that the k factor is set to
+///   0.0 if it would otherwise be less than 0.0, or
+///   1.0 if the denominator is zero.
 /// Here, EOY AV reflects interest to the last day of the year, and
 /// EOY DB reflects EOY AV: thus, they're the values normally printed
 /// on an illustration.
