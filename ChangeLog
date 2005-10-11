@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.176 2005-10-10 16:58:34 chicares Exp $
+// $Id: ChangeLog,v 1.177 2005-10-11 02:28:56 chicares Exp $
 
 MAINTENANCE
 
@@ -4105,4 +4105,12 @@ naturally.
   ledger_text_formats.cpp
   ledger_variant.cpp
 Show new experience-rating fields in reports.
+
+20051011T0228Z <chicares@cox.net> [1230]
+
+  ihs_acctval.cpp
+Correct an experience-rating defect: the projected mortality charge
+had not been multiplied by
+  "the proportion surviving into the about-to-begin year"
+as the specifications in 'group_values.cpp' require.
 
