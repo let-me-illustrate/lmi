@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.177 2005-10-11 02:28:56 chicares Exp $
+// $Id: ChangeLog,v 1.178 2005-10-12 03:20:51 chicares Exp $
 
 MAINTENANCE
 
@@ -4113,4 +4113,22 @@ Correct an experience-rating defect: the projected mortality charge
 had not been multiplied by
   "the proportion surviving into the about-to-begin year"
 as the specifications in 'group_values.cpp' require.
+
+20051011T1556Z <chicares@cox.net> [1230]
+
+  group_values.cpp
+Correct experience-rating specification. The k factor should be set to
+unity when the projected mortality charge is zero, instead of to zero
+as the specifications hitherto prescribed. The code already reflected
+this change.
+
+20051012T0320Z <chicares@cox.net> [1230]
+
+  account_value.hpp
+  accountvalue.cpp
+  group_values.cpp
+  ihs_acctval.cpp
+  ledger_text_formats.cpp
+Correct an experience-rating defect: use net mortality charge where
+required, instead of the actual charge deducted from account value.
 
