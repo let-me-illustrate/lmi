@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: group_values.cpp,v 1.43 2005-10-11 15:56:53 chicares Exp $
+// $Id: group_values.cpp,v 1.44 2005-10-12 03:20:51 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -479,7 +479,7 @@ restart:
                     (*i)->IncrementBOM(year, month, case_k_factor);
 
                     assets += (*i)->GetSepAcctAssetsInforce();
-                    ytd_net_mortchgs += (*i)->GetLastCoiChargeInforce();
+                    ytd_net_mortchgs += (*i)->GetNetCoiChargeInforce();
                     }
 
                 // Process transactions from int credit through end of month.
