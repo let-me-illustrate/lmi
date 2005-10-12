@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: account_value.hpp,v 1.38 2005-10-09 23:25:27 chicares Exp $
+// $Id: account_value.hpp,v 1.39 2005-10-12 03:20:51 chicares Exp $
 
 #ifndef account_value_hpp
 #define account_value_hpp
@@ -102,10 +102,10 @@ class LMI_EXPIMP AccountValue
     int                    GetLength     () const;
     e_ledger_type const&   GetLedgerType () const;
 
-    double InforceLivesBoy            () const;
-    double InforceLivesEoy            () const;
-    double GetSepAcctAssetsInforce    () const;
-    double GetLastCoiChargeInforce    () const;
+    double InforceLivesBoy         () const;
+    double InforceLivesEoy         () const;
+    double GetSepAcctAssetsInforce () const;
+    double GetNetCoiChargeInforce  () const;
 
     void process_payment          (double);
     void IncrementAVProportionally(double);
