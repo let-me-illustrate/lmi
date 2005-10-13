@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: materially_equal_test.cpp,v 1.1 2005-01-14 19:47:45 chicares Exp $
+// $Id: materially_equal_test.cpp,v 1.2 2005-10-13 01:05:26 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -36,6 +36,10 @@
 int test_main(int, char*[])
 {
     double epsilon = std::numeric_limits<double>::epsilon();
+
+    BOOST_TEST( materially_equal(0.0,  0.0));
+    BOOST_TEST( materially_equal(0.0, -0.0));
+    BOOST_TEST(!materially_equal(0.0, epsilon));
 
     BOOST_TEST( materially_equal(1, 1));
     BOOST_TEST(!materially_equal(1, 2));
@@ -76,6 +80,28 @@ int test_main(int, char*[])
     BOOST_TEST( materially_equal(1000000000L , 1000000001.0, 1.0E-9));
     BOOST_TEST( materially_equal(1000000000.0, 1000000001L , 1.0E-9));
     BOOST_TEST( materially_equal(1000000000L , 1000000001L , 1.0E-9));
+
+    // Test material_difference().
+
+    BOOST_TEST_EQUAL( 0.0, material_difference(0.0, 0.0));
+    BOOST_TEST_EQUAL( 0.0, material_difference(1.1, 1.1));
+    BOOST_TEST_EQUAL( 1.1, material_difference(1.1, 0.0));
+    BOOST_TEST_EQUAL(-1.1, material_difference(0.0, 1.1));
+
+    BOOST_TEST_EQUAL
+        (0.0
+        ,material_difference(1234567890.123456789, 1234567890.123456789)
+        );
+
+    BOOST_TEST_EQUAL
+        (0.0
+        ,material_difference(1234567890.123456789, 1234567890.1234)
+        );
+
+    BOOST_TEST_UNEQUAL
+        (0.0
+        ,material_difference(1234567890.123456789, 1234567890.123)
+        );
 
     return 0;
 }
