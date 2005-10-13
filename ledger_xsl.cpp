@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xsl.cpp,v 1.7 2005-07-10 04:16:16 chicares Exp $
+// $Id: ledger_xsl.cpp,v 1.8 2005-10-13 13:55:29 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -99,7 +99,11 @@ std::string write_ledger_to_pdf
     fs::path xml_out_file = unique_filepath(fo_dir / real_filename, ".xml");
 
     fs::ofstream ofs(xml_out_file, std::ios_base::out | std::ios_base::trunc);
-    ledger.write(ofs);
+    // Scale a copy of the 'ledger' argument. The original must not be
+    // modified because scaling is not reentrant.
+    Ledger scaled_ledger(ledger);
+    scaled_ledger.AutoScale();
+    scaled_ledger.write(ofs);
     ofs.close();
 
     fs::path xsl_file = xsl_filepath(ledger);
