@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avmly.cpp,v 1.41 2005-10-09 23:25:27 chicares Exp $
+// $Id: ihs_avmly.cpp,v 1.42 2005-10-13 01:35:40 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -2253,21 +2253,20 @@ void AccountValue::TxSetCoiCharge()
     // than zero because the corridor factor can be as low as unity,
     // but it's constrained to be nonnegative to prevent increasing
     // the account value by deducting a negative mortality charge.
-    NAAR =
-            DBReflectingCorr * DBDiscountRate[Year]
-        -   std::max(0.0, TotalAccountValue())
-        ;
+    NAAR = material_difference
+        (DBReflectingCorr * DBDiscountRate[Year]
+        ,std::max(0.0, TotalAccountValue())
+        );
     NAAR = std::max(0.0, round_naar(NAAR));
 
 // TODO ?? This doesn't work. We need to reconsider the basic transactions.
 //  double naar_forceout = std::max(0.0, NAAR - MaxNAAR);
 //  process_distribution(naar_forceout);
 
-    DcvNaar =
-            std::max(DcvDeathBft, DBIgnoringCorr)
-        *   DBDiscountRate[Year]
-        -   Dcv
-        ;
+    DcvNaar = material_difference
+        (std::max(DcvDeathBft, DBIgnoringCorr) * DBDiscountRate[Year]
+        ,std::max(0.0, Dcv)
+        );
     // DCV need not be rounded.
     DcvNaar = std::max(0.0, DcvNaar);
 
