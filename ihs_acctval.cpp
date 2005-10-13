@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_acctval.cpp,v 1.75 2005-10-12 03:20:51 chicares Exp $
+// $Id: ihs_acctval.cpp,v 1.76 2005-10-13 01:35:40 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -1432,17 +1432,8 @@ void AccountValue::SetClaims()
     // assumes that partial mortality is curtate.
 
     YearsGrossClaims =  partial_mortality_q[Year] * DBReflectingCorr;
-
     YearsAVRelOnDeath = partial_mortality_q[Year] * TotalAccountValue();
-
-    YearsNetClaims = YearsGrossClaims - YearsAVRelOnDeath;
-
-    // Avoid reporting minuscule claim amounts that are merely an
-    // artifact of rounding DB and AV differently.
-    if(materially_equal(DBReflectingCorr, TotalAccountValue()))
-        {
-        YearsNetClaims = 0.0;
-        }
+    YearsNetClaims = material_difference(YearsGrossClaims, YearsAVRelOnDeath);
 }
 
 //============================================================================
@@ -1471,10 +1462,10 @@ void AccountValue::SetProjectedCoiCharge()
 
     TxSetDeathBft(true);
     TxSetTermAmt();
-    double this_years_terminal_naar =
-            DBReflectingCorr + TermDB
-        -   TotalAccountValue()
-        ;
+    double this_years_terminal_naar = material_difference
+        (DBReflectingCorr + TermDB
+        ,TotalAccountValue()
+        );
     this_years_terminal_naar = std::max(0.0, this_years_terminal_naar);
     double next_years_coi_rate = GetBandedCoiRates(ExpAndGABasis, ActualSpecAmt)[1 + Year];
 
