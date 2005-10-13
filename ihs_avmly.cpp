@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avmly.cpp,v 1.42 2005-10-13 01:35:40 chicares Exp $
+// $Id: ihs_avmly.cpp,v 1.43 2005-10-13 13:55:22 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -773,9 +773,11 @@ void AccountValue::ChangeSpecAmtBy(double delta)
     // Carry the new specamt forward into all future years.
     for(int j = Year; j < BasicValues::GetLength(); j++)
         {
-// This seems wrong. If we're changing something that's invariant among
-// bases, why do we change it for each basis?
-// TODO ?? Shouldn't this be moved to FinalizeMonth()?
+// TODO ?? This seems wrong. If we're changing something that doesn't
+// vary across bases, why do we change it for all bases?
+// TODO ?? Shouldn't this be moved to FinalizeMonth()? The problem is
+// that the ledger object is used for working storage, where it should
+// probably be write-only instead.
         InvariantValues().SpecAmt[j] = ActualSpecAmt;
         InvariantValues().TermSpecAmt[j] = TermSpecAmt;
 // We have term specamt in class Inputs, in anticipation of differing
