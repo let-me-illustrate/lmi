@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_text_formats.cpp,v 1.16 2005-10-12 03:20:51 chicares Exp $
+// $Id: ledger_text_formats.cpp,v 1.17 2005-10-13 01:05:24 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -463,10 +463,6 @@ os << "\n\n" ;
         os << Curr_.value_str("ExperienceReserve"     ,j) << '\t';
         os << Curr_.value_str("ProjectedCoiCharge"    ,j) << '\t';
         os << Curr_.value_str("KFactor"               ,j) << '\t';
-
-        // TODO ?? For experience rating, it would be nice to add
-        // projected mortality charge and k factor here. That requires
-        // adding them to the ledger class first.
 
         os << Invar.value_str("ProducerCompensation"  ,j) << '\t';
 
