@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.178 2005-10-12 03:20:51 chicares Exp $
+// $Id: ChangeLog,v 1.179 2005-10-13 01:35:40 chicares Exp $
 
 MAINTENANCE
 
@@ -4131,4 +4131,23 @@ this change.
   ledger_text_formats.cpp
 Correct an experience-rating defect: use net mortality charge where
 required, instead of the actual charge deducted from account value.
+
+20051013T0105Z <chicares@cox.net> [1229]
+
+  ihs_basicval.cpp
+Remove unneeded header.
+
+  ledger_text_formats.cpp
+Remove obsolete comment.
+
+  materially_equal.hpp
+  materially_equal_test.cpp
+Add tool for avoiding catastrophic cancellation.
+
+20051013T0135Z <chicares@cox.net> [1229]
+
+  ihs_acctval.cpp
+  ihs_avmly.cpp
+  ledger_invariant.cpp
+Avoid catastrophic cancellation.
 
