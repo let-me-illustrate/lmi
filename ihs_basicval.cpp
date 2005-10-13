@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_basicval.cpp,v 1.27 2005-10-08 00:18:15 chicares Exp $
+// $Id: ihs_basicval.cpp,v 1.28 2005-10-13 01:05:20 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -48,7 +48,6 @@
 #include "inputstatus.hpp"
 #include "interest_rates.hpp"
 #include "loads.hpp"
-#include "materially_equal.hpp"
 #include "math_functors.hpp"
 #include "mortality_rates.hpp"
 #include "outlay.hpp"
