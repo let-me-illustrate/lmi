@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.179 2005-10-13 01:35:40 chicares Exp $
+// $Id: ChangeLog,v 1.180 2005-10-13 13:55:29 chicares Exp $
 
 MAINTENANCE
 
@@ -4150,4 +4150,12 @@ Add tool for avoiding catastrophic cancellation.
   ihs_avmly.cpp
   ledger_invariant.cpp
 Avoid catastrophic cancellation.
+
+20051013T1355Z <chicares@cox.net> [1230]
+
+  ihs_avmly.cpp
+Improve documentation.
+
+  ledger_xsl.cpp
+Scale ledger prn before printing.
 
