@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.180 2005-10-13 13:55:29 chicares Exp $
+// $Id: ChangeLog,v 1.181 2005-10-14 13:40:44 chicares Exp $
 
 MAINTENANCE
 
@@ -4158,4 +4158,11 @@ Improve documentation.
 
   ledger_xsl.cpp
 Scale ledger prn before printing.
+
+20051014T1340Z <chicares@cox.net> [1234]
+
+  ledger.cpp
+  ledger.hpp
+  ledger_xsl.cpp
+Document several defects.
 
