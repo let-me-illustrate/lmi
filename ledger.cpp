@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger.cpp,v 1.9 2005-09-12 01:32:19 chicares Exp $
+// $Id: ledger.cpp,v 1.10 2005-10-14 13:40:44 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -35,6 +35,40 @@
 
 #include <algorithm>
 #include <ostream>
+
+// TODO ?? Doubts and shortcomings:
+//
+// Is it really a good idea to have shared_ptr data members? If so,
+// should there be a member function
+//   Ledger Ledger::Clone() const
+//   {
+//       Ledger new_ledger(*this);
+//       new_ledger.ledger_map_       = boost::shared_ptr<ledger_map_holder>(new ledger_map_holder(*ledger_map_));
+//       new_ledger.ledger_invariant_ = boost::shared_ptr<LedgerInvariant>(new LedgerInvariant(*ledger_invariant_));
+//       return new_ledger;
+//   }
+// that would make unshared copies? If not, then Clone() would be
+// unnecessary--the copy ctor would suffice. This is a problem for
+// the (poorly-named) member function AutoScale(), which refuses to
+// be applied to the same object twice (though perhaps that's an
+// unnecessary restriction). What problem did shared_ptr data members
+// solve, and were they the best way to solve it?
+//
+// Perhaps member function AutoScale() should be replaced by, e.g.,
+//   Ledger ScaledLedger() const;
+// yet would that double the memory requirements when a container of
+// ledgers must be retained?
+//
+// Composites typically have zeros in all columns for numerous years
+// at the end, which is a defect for printing at least. Perhaps
+//   ApplyScaleFactor()
+// (implemented elsewhere) should be augmented (and renamed) to
+// serve the more general purpose of preparing a ledger for printing;
+// then, it might truncate every column to GetMaxLength() (which has
+// documented problems of its own). Or perhaps this truncation should
+// be a separate function, which could then be applied even for the
+// composite output used for regression testing. Is it only the
+// composite which stands in need of truncation?
 
 //============================================================================
 Ledger::Ledger
@@ -141,6 +175,8 @@ void Ledger::SetRunBases(int a_Length)
 }
 
 //============================================================================
+// TODO ?? This seems to be a bad idea: it zeroes what should already
+// have been zero.
 void Ledger::ZeroInforceAfterLapse()
 {
     ledger_map const& l_map_rep = ledger_map_->held();
@@ -180,6 +216,16 @@ Ledger& Ledger::PlusEq(Ledger const& a_Addend)
     // TODO ?? We should look at other things like Smoker and handle
     // them in some appropriate manner if they differ across
     // lives in a composite.
+    //
+    // For vectors, the {BOY, EOY, forborne,...} distinction works.
+    // For scalars, the situation is less satisfactory: the "addition"
+    // method is hardcoded for many, and many are ignored. Probably a
+    // larger set of possibilities is wanted: e.g., Smoker might use
+    // a method like "blank unless identical across all cells", while
+    // various ages and durations might use {...minimum, maximum,...}.
+    // Perhaps these distinctions should be expressed not as named
+    // subcollections of containers but rather as enumerators.
+
     if(ledger_type_ != a_Addend.GetLedgerType())
         {
         fatal_error()
@@ -272,8 +318,8 @@ int Ledger::GetMaxLength() const
         return static_cast<int>(composite_lapse_year_);
         }
 
-    // For all ledgers in the map:
-    //   find the longest duration we need to print (until the last one lapses)
+    // For all ledgers in the map, find the longest duration that must
+    // be printed (until the last one lapses).
     ledger_map const& l_map_rep = ledger_map_->held();
     double max_length = 0.0;
 
@@ -289,11 +335,10 @@ int Ledger::GetMaxLength() const
 }
 
 //============================================================================
-void Ledger::AutoScale()
+// Scale all numbers in every column of every subledger according to the
+// largest absolute value of any number in any column of every subledger.
+Ledger Ledger::AutoScale()
 {
-    // For the invariant ledger and all variant ledgers in the map:
-
-    // First find the largest number in any ledger
     double mult = ledger_invariant_->DetermineScaleFactor();
 
     ledger_map& l_map_rep = ledger_map_->held_;
@@ -303,8 +348,6 @@ void Ledger::AutoScale()
         mult = std::min(mult, (*lmci).second.DetermineScaleFactor());
         }
 
-    // Now that we have the scale factor, apply it to all:
-    // scale all according to the biggest number in any
     ledger_invariant_->ApplyScaleFactor(mult);
 
     ledger_map::iterator lmi = l_map_rep.begin();
