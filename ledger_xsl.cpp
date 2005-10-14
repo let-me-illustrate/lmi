@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xsl.cpp,v 1.8 2005-10-13 13:55:29 chicares Exp $
+// $Id: ledger_xsl.cpp,v 1.9 2005-10-14 13:40:44 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -100,7 +100,10 @@ std::string write_ledger_to_pdf
 
     fs::ofstream ofs(xml_out_file, std::ios_base::out | std::ios_base::trunc);
     // Scale a copy of the 'ledger' argument. The original must not be
-    // modified because scaling is not reentrant.
+    // modified because scaling is not reentrant. TODO ?? However,
+    // that problem is not avoided here, because what is scaled is
+    // actually not copied due to use of shared_ptr; see description
+    // of problems in the ledger-class implementation.
     Ledger scaled_ledger(ledger);
     scaled_ledger.AutoScale();
     scaled_ledger.write(ofs);

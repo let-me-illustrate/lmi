@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger.hpp,v 1.7 2005-04-10 21:44:57 chicares Exp $
+// $Id: ledger.hpp,v 1.8 2005-10-14 13:40:44 chicares Exp $
 
 #ifndef ledger_hpp
 #define ledger_hpp
@@ -35,22 +35,25 @@
 #include <iosfwd>
 #include <vector>
 
-// This class holds all the data needed to print an illustration.
-// Class AccountValue generates the data held here, but also stores a
-// great deal of input and intermediate data that can be discarded to
-// save space. This class's data could be saved to permit deferred
-// generation of originally-unforeseen reports without repeating
-// monthiversary processing; that might be a useful enhancement
-// someday, but the calculations are fast enough that no user has
-// asked for it.
-//
-// Some values vary by calculation basis (current, guaranteed, etc.)
-// and are stored in a map whose key_type represents that basis. Other
-// values do not vary by basis, and accordingly are stored in a single
-// data structure.
-
-// The implicitly-defined copy ctor and copy assignment operator do
-// the right thing.
+/// Design notes for class Ledger.
+///
+/// This class holds all the data needed to print an illustration.
+/// Class AccountValue generates the data held here, but also stores a
+/// great deal of input and intermediate data that can be discarded to
+/// save space. This class's data could be saved to permit deferred
+/// generation of originally-unforeseen reports without repeating
+/// monthiversary processing; that might be a useful enhancement
+/// someday, but the calculations are fast enough that no user has
+/// asked for it.
+///
+/// Some values vary by calculation basis (current, guaranteed, etc.)
+/// and are stored in a map whose key_type represents that basis. Other
+/// values do not vary by basis, and accordingly are stored in a single
+/// data structure.
+///
+/// The implicitly-defined copy ctor and copy assignment operator do
+/// the right thing. TODO ?? However, the "right thing" may be somewhat
+/// surprising if the shared_ptr members are misunderstood.
 
 class LedgerInvariant;
 class LedgerVariant;
@@ -74,37 +77,33 @@ class LMI_EXPIMP Ledger
         );
     virtual ~Ledger();
 
-    void                ZeroInforceAfterLapse();
-    Ledger&             PlusEq(Ledger const& a_Addend);
+    void ZeroInforceAfterLapse();
+    Ledger& PlusEq(Ledger const& a_Addend);
 
-    void                SetLedgerInvariant
-                            (LedgerInvariant const& a_Invariant
-                            );
-    void                SetOneLedgerVariant
-                            (e_run_basis const& a_Basis
-                            ,LedgerVariant const& a_Variant
-                            );
-    void                SetGuarPremium(double);
+    void SetLedgerInvariant(LedgerInvariant const&);
+    void SetOneLedgerVariant(e_run_basis const&, LedgerVariant const&);
 
-    void                AutoScale();
+    void SetGuarPremium(double);
 
-    ledger_map_holder const&        GetLedgerMap()          const;
-    LedgerInvariant const&          GetLedgerInvariant()    const;
-    LedgerVariant const&            GetCurrFull()           const;
-    LedgerVariant const&            GetGuarFull()           const;
-    LedgerVariant const&            GetMdptFull()           const;
-    LedgerVariant const&            GetCurrZero()           const;
-    LedgerVariant const&            GetGuarZero()           const;
-    LedgerVariant const&            GetCurrHalf()           const;
-    LedgerVariant const&            GetGuarHalf()           const;
+    void AutoScale();
 
-    e_ledger_type const&            GetLedgerType()         const;
-    int                             GetMaxLength()          const;
-    std::vector<e_run_basis> const& GetRunBases()           const;
-    bool                            GetIsComposite()        const;
+    ledger_map_holder const&        GetLedgerMap()       const;
+    LedgerInvariant const&          GetLedgerInvariant() const;
+    LedgerVariant const&            GetCurrFull()        const;
+    LedgerVariant const&            GetGuarFull()        const;
+    LedgerVariant const&            GetMdptFull()        const;
+    LedgerVariant const&            GetCurrZero()        const;
+    LedgerVariant const&            GetGuarZero()        const;
+    LedgerVariant const&            GetCurrHalf()        const;
+    LedgerVariant const&            GetGuarHalf()        const;
 
-    unsigned int        CalculateCRC() const;
-    void                Spew(std::ostream& os) const;
+    e_ledger_type const&            GetLedgerType()      const;
+    int                             GetMaxLength()       const;
+    std::vector<e_run_basis> const& GetRunBases()        const;
+    bool                            GetIsComposite()     const;
+
+    unsigned int CalculateCRC() const;
+    void Spew(std::ostream& os) const;
 
     void read(xml::node&);
     void write(xml::node&) const;
@@ -114,19 +113,19 @@ class LMI_EXPIMP Ledger
     void write(std::ostream& os) const;
 
   private:
-    void                SetRunBases(int a_Length);
+    void SetRunBases(int a_Length);
 
-    bool                is_composite_;
+    bool is_composite_;
 
     // TODO ?? This is either badly named or badly implemented. Every
     // instance of this class, even an instance for a single cell, has
     // this variable. It seems to be used only for composites. It
     // seems to cache the latest lapse year on any basis, but only for
-    // composites, but it is not evident why that is desirable for
+    // composites, yet it is not evident why that is desirable for
     // composites but not for all cells.
-    double              composite_lapse_year_;
+    double composite_lapse_year_;
 
-    e_ledger_type       ledger_type_;
+    e_ledger_type ledger_type_;
 
     boost::shared_ptr<ledger_map_holder> ledger_map_;
     boost::shared_ptr<LedgerInvariant>   ledger_invariant_;
