@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger.cpp,v 1.10 2005-10-14 13:40:44 chicares Exp $
+// $Id: ledger.cpp,v 1.11 2005-10-15 15:45:18 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -337,7 +337,7 @@ int Ledger::GetMaxLength() const
 //============================================================================
 // Scale all numbers in every column of every subledger according to the
 // largest absolute value of any number in any column of every subledger.
-Ledger Ledger::AutoScale()
+void Ledger::AutoScale()
 {
     double mult = ledger_invariant_->DetermineScaleFactor();
 
