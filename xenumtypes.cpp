@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xenumtypes.cpp,v 1.10 2005-09-27 16:49:11 chicares Exp $
+// $Id: xenumtypes.cpp,v 1.11 2005-10-16 16:36:10 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -915,8 +915,8 @@ bool is_subject_to_ill_reg(double z)
 
 // Formerly, three-rate illustrations were required for prospectuses.
 // Since these functions were orignally written, that requirement has
-// inoperative, but the functions are preserved as stubs in case such
-// a format becomes desirable for some other reason.
+// become inoperative, but the functions are preserved as stubs in
+// case such a format becomes desirable for some other reason.
 
 bool is_three_rate_nasd(e_ledger_type const&)
 {
