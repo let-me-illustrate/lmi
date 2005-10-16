@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.181 2005-10-14 13:40:44 chicares Exp $
+// $Id: ChangeLog,v 1.182 2005-10-16 16:36:15 chicares Exp $
 
 MAINTENANCE
 
@@ -4165,4 +4165,28 @@ Scale ledger prn before printing.
   ledger.hpp
   ledger_xsl.cpp
 Document several defects.
+
+20051015T1545Z <chicares@cox.net> [1234]
+
+  ledger.cpp
+Correct a defect introduced 20051014T1340Z.
+
+20051016T1427Z <chicares@cox.net> [1234]
+
+  ledger_text_formats.cpp
+Show more experience-rating detail.
+
+20051016T1636Z <chicares@cox.net> [1234]
+
+  xenumtypes.cpp
+Improve documentation.
+
+  ihs_mortal.cpp
+  input.hpp
+  inputillus.hpp
+  inputillus_xml_io.cpp
+  inputs.hpp
+  mortality_rates.hpp
+Partially remove disused 'mortality grading' feature, marking the
+surviving vestiges for expunction when convenient.
 

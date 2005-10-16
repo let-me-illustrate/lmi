@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: inputs.hpp,v 1.7 2005-09-17 04:05:10 chicares Exp $
+// $Id: inputs.hpp,v 1.8 2005-10-16 16:36:15 chicares Exp $
 
 #ifndef inputs_hpp
 #define inputs_hpp
@@ -93,7 +93,7 @@ class LMI_EXPIMP InputParms
     std::vector<double>          VectorNonUsCorridorFactor;
     std::vector<double>          VectorPartialMortalityMultiplier;
     std::vector<double>          VectorCurrentCoiMultiplier;
-    std::vector<double>          VectorCurrentCoiGrading;
+    std::vector<double>          VectorCurrentCoiGrading; // TODO ?? Obsolete: expunge.
     std::vector<double>          VectorCashValueEnhancementRate;
     std::vector<double>          VectorCorpTaxBracket;
     std::vector<double>          VectorIndvTaxBracket;

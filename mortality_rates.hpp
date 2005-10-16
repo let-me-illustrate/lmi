@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mortality_rates.hpp,v 1.10 2005-09-18 01:22:25 chicares Exp $
+// $Id: mortality_rates.hpp,v 1.11 2005-10-16 16:36:15 chicares Exp $
 
 #ifndef mortality_rates_hpp
 #define mortality_rates_hpp
@@ -90,8 +90,6 @@ class MortalityRates
     void fetch_parameters(BasicValues const&);
     void initialize();
 
-    void perform_grading();
-
     void SetGuaranteedRates();
     void SetNonguaranteedRates();
     void SetOneNonguaranteedRateBand
@@ -101,11 +99,6 @@ class MortalityRates
     void SetOtherRates();
 
     void MakeCoiRateSubstandard(std::vector<double>& coi_rates);
-    void GradeCurrentCoiRatesFromPartialMortalityAssumption
-        (std::vector<double>      & coi_rates
-        ,std::vector<double> const& monthly_partial_mortality
-        ,std::vector<double> const& grading_factors
-        );
 
     int Length_;
 
@@ -126,10 +119,7 @@ class MortalityRates
     double CountryCoiMultiplier_;
     bool IsPolicyRated_;
     e_table_rating SubstdTable_;
-    bool ShowGrading_;
-    bool UseExperienceRating_;
 
-    std::vector<double> CurrentCoiGrading_;
     std::vector<double> CurrentCoiMultiplier_;
     std::vector<double> MonthlyFlatExtra_;
     std::vector<double> PartialMortalityMultiplier_;
