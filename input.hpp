@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input.hpp,v 1.6 2005-09-17 04:05:09 chicares Exp $
+// $Id: input.hpp,v 1.7 2005-10-16 16:36:15 chicares Exp $
 
 #ifndef input_hpp
 #define input_hpp
@@ -271,7 +271,7 @@ class Input
     datum_sequence           OffshoreCorridorFactor          ;
     datum_sequence           PartialMortalityMultiplier      ;
     datum_sequence           CurrentCoiMultiplier            ;
-    datum_sequence           CurrentCoiGrading               ;
+    datum_sequence           CurrentCoiGrading               ; // TODO ?? Obsolete: expunge.
     datum_sequence           CorporationTaxBracket           ;
     datum_sequence           TaxBracket                      ;
     datum_sequence           ProjectedSalary                 ;

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_mortal.cpp,v 1.19 2005-09-19 13:00:40 chicares Exp $
+// $Id: ihs_mortal.cpp,v 1.20 2005-10-16 16:36:15 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -96,7 +96,6 @@ void MortalityRates::fetch_parameters(BasicValues const& basic_values)
     AllowWp_           = basic_values.Database_->Query(DB_AllowWP          );
     CCoiIsAnnual_      = basic_values.Database_->Query(DB_CCoiIsAnnual     );
     GCoiIsAnnual_      = basic_values.Database_->Query(DB_GCoiIsAnnual     );
-
     IsTgtPremTabular_ =
         e_modal_table == basic_values.Database_->Query(DB_TgtPremType)
         ;
@@ -110,13 +109,11 @@ void MortalityRates::fetch_parameters(BasicValues const& basic_values)
     CountryCoiMultiplier_ = basic_values.Input_->CountryCOIMultiplier;
     IsPolicyRated_        = basic_values.Input_->Status[0].IsPolicyRated();
     SubstdTable_          = basic_values.Input_->Status[0].SubstdTable;
-    UseExperienceRating_  = basic_values.Input_->UseExperienceRating;
 
-    ShowGrading_          = std::string::npos != basic_values.Input_->Comments.find("idiosyncrasy_grading");
-
-    CurrentCoiGrading_    = basic_values.Input_->VectorCurrentCoiGrading;
     CurrentCoiMultiplier_ = basic_values.Input_->VectorCurrentCoiMultiplier;
     MonthlyFlatExtra_     = basic_values.Input_->Status[0].VectorMonthlyFlatExtra;
+
+    // TODO ?? Defectively, this data member is not yet used.
     PartialMortalityMultiplier_ = basic_values.Input_->VectorPartialMortalityMultiplier;
 
     round_coi_rate_ = basic_values.GetRoundingRules().round_coi_rate();
@@ -184,8 +181,6 @@ void MortalityRates::initialize()
         MakeCoiRateSubstandard(MonthlyGuaranteedCoiRates_);
         }
 
-    perform_grading();
-
     LMI_ASSERT(0 == MonthlyMidpointCoiRatesBand0_.size());
     LMI_ASSERT(0 == MonthlyMidpointCoiRatesBand1_.size());
     LMI_ASSERT(0 == MonthlyMidpointCoiRatesBand2_.size());
@@ -227,131 +222,6 @@ void MortalityRates::initialize()
 }
 
 //============================================================================
-void MortalityRates::perform_grading()
-{
-// TODO ?? Exit early instead of writing whole body in conditional.
-    if
-        (!each_equal
-            (CurrentCoiGrading_.begin()
-            ,CurrentCoiGrading_.end()
-            ,0.0
-            )
-        )
-        {
-        std::vector<double> ungraded(MonthlyCurrentCoiRatesBand0_);
-
-        // TODO ?? Ignores 'MaxSurvivalDur', which should be distinct
-        // from partial mortality q, but isn't in the interface as of
-        // 2004-03.
-        //
-        // ET !! Easier to write as
-        //   std::vector<double> monthly_partial_mortality = coi_rate_from_q
-        //     (max(0.0, min(1.0, PartialMortalityQ_ * PartialMortalityMultiplier_))
-        //     ,MaxMonthlyCoiRate_
-        //     );
-        std::vector<double> monthly_partial_mortality(PartialMortalityQ_);
-        std::transform
-            (monthly_partial_mortality.begin()
-            ,monthly_partial_mortality.end()
-            ,PartialMortalityMultiplier_.begin()
-            ,monthly_partial_mortality.begin()
-            ,std::multiplies<double>()
-            );
-        std::transform
-            (monthly_partial_mortality.begin()
-            ,monthly_partial_mortality.end()
-            ,monthly_partial_mortality.begin()
-            ,std::bind1st(greater_of<double>(), 0.0)
-            );
-        std::transform
-            (monthly_partial_mortality.begin()
-            ,monthly_partial_mortality.end()
-            ,monthly_partial_mortality.begin()
-            ,std::bind1st(lesser_of<double>(), 1.0)
-            );
-        std::transform
-            (monthly_partial_mortality.begin()
-            ,monthly_partial_mortality.end()
-            ,monthly_partial_mortality.begin()
-            ,std::bind2nd
-                (coi_rate_from_q<double>()
-                ,MaxMonthlyCoiRate_
-                )
-            );
-        GradeCurrentCoiRatesFromPartialMortalityAssumption
-            (MonthlyCurrentCoiRatesBand0_
-            ,monthly_partial_mortality
-            ,CurrentCoiGrading_
-            );
-        GradeCurrentCoiRatesFromPartialMortalityAssumption
-            (MonthlyCurrentCoiRatesBand1_
-            ,monthly_partial_mortality
-            ,CurrentCoiGrading_
-            );
-        GradeCurrentCoiRatesFromPartialMortalityAssumption
-            (MonthlyCurrentCoiRatesBand2_
-            ,monthly_partial_mortality
-            ,CurrentCoiGrading_
-            );
-        if(ShowGrading_)
-            {
-            std::ofstream os
-                ("coi_grading"
-                ,std::ios_base::out | std::ios_base::trunc
-//                ,std::ios_base::out | std::ios_base::ate | std::ios_base::app
-                );
-            os
-                << "This file shows COI grading detail. These are monthly\n"
-                << "current rates. Only the first COI band is shown,\n"
-                << "because that's probably all you want to see.\n\n"
-                << "The table of values is tab delimited, so you can just\n"
-                << "drop it into a spreadsheet program. The columns are\n"
-                << "arranged so that the ones you probably want to graph\n"
-                << "are contiguous.\n\n"
-
-                << "Each time you run a life, its grading detail replaces\n"
-                << "whatever was in the former 'coi_grading' file: probably\n"
-                << "you would find it annoying if it appended instead.\n"
-
-                << "\nThe code looks like this:\n"
-
-<< "    for(unsigned int j = 0; j < coi_rates.size(); ++j)\n"
-<< "        {\n"
-<< "        coi_rates[j] = std::min\n"
-<< "            (MaxMonthlyCoiRate_\n"
-<< "            ,       coi_rates[j]                 * (1.0 - grading_factors[j])\n"
-<< "                +   monthly_partial_mortality[j] *        grading_factors[j]\n"
-<< "            );\n"
-<< "        coi_rates[j] = round_coi_rate_(coi_rates[j]);\n"
-<< "        }\n"
-
-                << "\n'MaxMonthlyCoiRate_' is " << MaxMonthlyCoiRate_ << '\n'
-                << "\nHere is the year-by-year calculation:\n\n"
-                << "duration\tgrading_factor\tungraded_coi_rate\tpartial_mortality_rate\tresult\n"
-                ;
-
-            os << std::setiosflags(std::ios_base::scientific);
-
-            int prec = 20;
-            int width = 24;
-            os << std::setprecision(prec) << std::setw(width);
-
-            for(int j = 0; j < Length_; ++j)
-                {
-                os
-                    << j
-                    << '\t' << CurrentCoiGrading_[j]
-                    << '\t' << ungraded[j]
-                    << '\t' << monthly_partial_mortality[j]
-                    << '\t' << MonthlyCurrentCoiRatesBand0_[j]
-                    << '\n'
-                    ;
-                }
-            }
-        }
-}
-
-//============================================================================
 void MortalityRates::SetGuaranteedRates()
 {
     if(GCoiIsAnnual_) // TODO ?? Assume this means experience rated?
@@ -359,7 +229,6 @@ void MortalityRates::SetGuaranteedRates()
 // TODO ?? Merge these pointlessly-distinguished alternatives.
         // If experience rating is ALLOWED, not necessarily USED.
         if(AllowExpRating_)
-//      if(UseExperienceRating_) // TODO ?? And this condition too?
             {
             for(int j = 0; j < Length_; j++)
                 {
@@ -450,7 +319,6 @@ void MortalityRates::SetOneNonguaranteedRateBand
 // TODO ?? Merge these pointlessly-distinguished alternatives.
         // If experience rating is ALLOWED, not necessarily USED
         if(AllowExpRating_)
-//      if(UseExperienceRating_)  // TODO ?? And this condition too?
             {
             for(int j = 0; j < Length_; j++)
                 {
@@ -610,28 +478,6 @@ void MortalityRates::MakeCoiRateSubstandard
 // TODO ?? Some UL admin systems convert flat extras to an integral
 // number of cents per thousand per month. It would be nice to offer
 // such a behavior here.
-        }
-}
-
-//============================================================================
-void MortalityRates::GradeCurrentCoiRatesFromPartialMortalityAssumption
-    (std::vector<double>& coi_rates
-    ,std::vector<double> const& monthly_partial_mortality
-    ,std::vector<double> const& grading_factors
-    )
-{
-    // It seems necessary to limit the result to the maximum monthly
-    // COI rate, because one would never use a higher rate. No floor
-    // need be imposed because both inputs are constrained to be
-    // nonnegative.
-    for(unsigned int j = 0; j < coi_rates.size(); ++j)
-        {
-        coi_rates[j] = std::min
-            (MaxMonthlyCoiRate_
-            ,       coi_rates[j]                 * (1.0 - grading_factors[j])
-                +   monthly_partial_mortality[j] *        grading_factors[j]
-            );
-        coi_rates[j] = round_coi_rate_(coi_rates[j]);
         }
 }
 
