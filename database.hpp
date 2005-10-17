@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: database.hpp,v 1.2 2005-02-14 04:35:18 chicares Exp $
+// $Id: database.hpp,v 1.3 2005-10-17 15:48:06 chicares Exp $
 
 #ifndef database_hpp
 #define database_hpp
@@ -56,6 +56,8 @@ class LMI_EXPIMP TDatabase
         ,e_state     const& a_State
         );
     explicit TDatabase(InputParms const&);
+    // Ctor for unit-testing support.
+    explicit TDatabase(int length) :length_(length) {}
     ~TDatabase();
 
     e_state const& GetStateOfJurisdiction() const {return State;}
