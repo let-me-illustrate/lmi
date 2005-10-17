@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mc_enum_types.xpp,v 1.9 2005-10-09 23:25:28 chicares Exp $
+// $Id: mc_enum_types.xpp,v 1.10 2005-10-17 17:35:41 chicares Exp $
 
 #define yes_or_no_VALUES \
     {mce_yes \
@@ -653,7 +653,7 @@
     ,"EeGrossPmt" \
     ,"ErGrossPmt" \
     ,"NetWD" \
-    ,"Loan" \
+    ,"NewCashLoan" \
     ,"TotalLoanBalance_Current" \
     ,"TotalLoanBalance_Guaranteed" \
     ,"AcctVal_Current" \
@@ -672,7 +672,7 @@
     ,"IrrCsv_Guaranteed" \
     ,"IrrDb_Current" \
     ,"IrrDb_Guaranteed" \
-    ,"ExperienceReserve" \
+    ,"ExperienceReserve_Current" \
     ,"NetClaims_Current" \
     };
 #if 0

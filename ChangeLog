@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.183 2005-10-17 15:48:10 chicares Exp $
+// $Id: ChangeLog,v 1.184 2005-10-17 17:35:41 chicares Exp $
 
 MAINTENANCE
 
@@ -4199,4 +4199,10 @@ Support unit testing.
   loads_test.cpp
   objects.make
 Improve unit test.
+
+20051017T1732Z <chicares@cox.net> [1234]
+
+  mc_enum_types.xpp
+Fix two column names that were incompatible with 20051009T2325Z
+changes.
 
