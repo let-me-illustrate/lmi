@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: loads_test.cpp,v 1.3 2005-10-05 17:07:52 chicares Exp $
+// $Id: loads_test.cpp,v 1.4 2005-10-17 15:48:10 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -38,13 +38,91 @@
 
 #include <boost/bind.hpp>
 
-// TODO ?? Find a different way of dealing with these dependencies.
-// Either refactor 'loads.cpp' to remove them, or provide stubs for
-// everything that might get linked.
+#include <cstddef> // std::size_t
+
+// TODO ?? Consider factoring out these database stubs.
 
 #include "database.hpp"
-void TDatabase::Query(std::vector<double, std::allocator<double> >&, int) const {}
+TDatabase::~TDatabase() {}
+void TDatabase::Query(std::vector<double>& v, int) const {v.resize(length_);}
 double TDatabase::Query(int) const {return 0.0;}
+
+struct LoadsTest
+{
+    LoadsTest(load_details const& details)
+        :details_ (details)
+        ,database_(details.length_)
+        ,loads_   ()
+        {}
+
+    void Allocate  () {loads_.Allocate(details_.length_);}
+    void Initialize() {loads_.Initialize(database_);}
+    void Calculate () {loads_.Calculate(details_);}
+
+    void TestVectorLengths(char const* file, int line);
+    void TestCalculations (char const* file, int line);
+
+    load_details details_;
+    TDatabase database_;
+    Loads loads_;
+};
+
+void LoadsTest::TestVectorLengths(char const* file, int line)
+{
+    size_t const z = details_.length_;
+
+    INVOKE_BOOST_TEST_EQUAL(z, loads_.refundable_sales_load_proportion              ().size(), file, line);
+    INVOKE_BOOST_TEST_EQUAL(z, loads_.premium_tax_load                              ().size(), file, line);
+    INVOKE_BOOST_TEST_EQUAL(z, loads_.amortized_premium_tax_load                    ().size(), file, line);
+    INVOKE_BOOST_TEST_EQUAL(z, loads_.dac_tax_load                                  ().size(), file, line);
+    INVOKE_BOOST_TEST_EQUAL(z, loads_.target_premium_load_7702_excluding_premium_tax().size(), file, line);
+    INVOKE_BOOST_TEST_EQUAL(z, loads_.excess_premium_load_7702_excluding_premium_tax().size(), file, line);
+    INVOKE_BOOST_TEST_EQUAL(z, loads_.target_premium_load_7702_lowest_premium_tax   ().size(), file, line);
+    INVOKE_BOOST_TEST_EQUAL(z, loads_.excess_premium_load_7702_lowest_premium_tax   ().size(), file, line);
+
+    e_basis currbasis(e_currbasis);
+    e_basis guarbasis(e_guarbasis);
+    e_basis mdptbasis(e_mdptbasis);
+
+    INVOKE_BOOST_TEST_EQUAL(z, loads_.monthly_policy_fee    (currbasis).size(), file, line);
+    INVOKE_BOOST_TEST_EQUAL(z, loads_.annual_policy_fee     (currbasis).size(), file, line);
+    INVOKE_BOOST_TEST_EQUAL(z, loads_.specified_amount_load (currbasis).size(), file, line);
+    INVOKE_BOOST_TEST_EQUAL(z, loads_.separate_account_load (currbasis).size(), file, line);
+    INVOKE_BOOST_TEST_EQUAL(z, loads_.target_premium_load   (currbasis).size(), file, line);
+    INVOKE_BOOST_TEST_EQUAL(z, loads_.excess_premium_load   (currbasis).size(), file, line);
+    INVOKE_BOOST_TEST_EQUAL(z, loads_.target_sales_load     (currbasis).size(), file, line);
+    INVOKE_BOOST_TEST_EQUAL(z, loads_.excess_sales_load     (currbasis).size(), file, line);
+    INVOKE_BOOST_TEST_EQUAL(z, loads_.target_total_load     (currbasis).size(), file, line);
+    INVOKE_BOOST_TEST_EQUAL(z, loads_.excess_total_load     (currbasis).size(), file, line);
+
+    INVOKE_BOOST_TEST_EQUAL(z, loads_.monthly_policy_fee    (guarbasis).size(), file, line);
+    INVOKE_BOOST_TEST_EQUAL(z, loads_.annual_policy_fee     (guarbasis).size(), file, line);
+    INVOKE_BOOST_TEST_EQUAL(z, loads_.specified_amount_load (guarbasis).size(), file, line);
+    INVOKE_BOOST_TEST_EQUAL(z, loads_.separate_account_load (guarbasis).size(), file, line);
+    INVOKE_BOOST_TEST_EQUAL(z, loads_.target_premium_load   (guarbasis).size(), file, line);
+    INVOKE_BOOST_TEST_EQUAL(z, loads_.excess_premium_load   (guarbasis).size(), file, line);
+    INVOKE_BOOST_TEST_EQUAL(z, loads_.target_sales_load     (guarbasis).size(), file, line);
+    INVOKE_BOOST_TEST_EQUAL(z, loads_.excess_sales_load     (guarbasis).size(), file, line);
+    INVOKE_BOOST_TEST_EQUAL(z, loads_.target_total_load     (guarbasis).size(), file, line);
+    INVOKE_BOOST_TEST_EQUAL(z, loads_.excess_total_load     (guarbasis).size(), file, line);
+
+    INVOKE_BOOST_TEST_EQUAL(z, loads_.monthly_policy_fee    (mdptbasis).size(), file, line);
+    INVOKE_BOOST_TEST_EQUAL(z, loads_.annual_policy_fee     (mdptbasis).size(), file, line);
+    INVOKE_BOOST_TEST_EQUAL(z, loads_.specified_amount_load (mdptbasis).size(), file, line);
+    INVOKE_BOOST_TEST_EQUAL(z, loads_.separate_account_load (mdptbasis).size(), file, line);
+    INVOKE_BOOST_TEST_EQUAL(z, loads_.target_premium_load   (mdptbasis).size(), file, line);
+    INVOKE_BOOST_TEST_EQUAL(z, loads_.excess_premium_load   (mdptbasis).size(), file, line);
+    INVOKE_BOOST_TEST_EQUAL(z, loads_.target_sales_load     (mdptbasis).size(), file, line);
+    INVOKE_BOOST_TEST_EQUAL(z, loads_.excess_sales_load     (mdptbasis).size(), file, line);
+    INVOKE_BOOST_TEST_EQUAL(z, loads_.target_total_load     (mdptbasis).size(), file, line);
+    INVOKE_BOOST_TEST_EQUAL(z, loads_.excess_total_load     (mdptbasis).size(), file, line);
+}
+
+void LoadsTest::TestCalculations(char const* file, int line)
+{
+// TODO ?? Really do something here.
+    INVOKE_BOOST_TEST_EQUAL(0.00, loads_.premium_tax_load()[0], file, line);
+}
 
 int test_main(int, char*[])
 {
@@ -69,23 +147,24 @@ int test_main(int, char*[])
         ,extra_policy_fee      // VectorExtraPolFee_
         );
 
-    Loads loads;
-    loads.Allocate(length);
-    loads.Calculate(details);
+    LoadsTest t(details);
+    t.Allocate();
+    t.Initialize();
+    t.TestVectorLengths(__FILE__, __LINE__);
+    t.Calculate();
+    t.TestCalculations (__FILE__, __LINE__);
 
     std::cout
-        << "  "
-        << aliquot_timer(boost::bind(&Loads::Allocate, &loads, length))
+        << "  Allocate:  "
+        << aliquot_timer(boost::bind(&LoadsTest::Allocate , &t))
         << '\n'
         ;
 
     std::cout
-        << "  "
-        << aliquot_timer(boost::bind(&Loads::Calculate, &loads, details))
+        << "  Calculate: "
+        << aliquot_timer(boost::bind(&LoadsTest::Calculate, &t))
         << '\n'
         ;
-
-    BOOST_TEST_EQUAL(0.00, loads.premium_tax_load()[0]);
 
     return 0;
 }

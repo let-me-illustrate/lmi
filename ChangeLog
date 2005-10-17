@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.182 2005-10-16 16:36:15 chicares Exp $
+// $Id: ChangeLog,v 1.183 2005-10-17 15:48:10 chicares Exp $
 
 MAINTENANCE
 
@@ -4189,4 +4189,14 @@ Improve documentation.
   mortality_rates.hpp
 Partially remove disused 'mortality grading' feature, marking the
 surviving vestiges for expunction when convenient.
+
+20051017T1548Z <chicares@cox.net> [1234]
+
+  database.hpp
+Support unit testing.
+
+  loads.hpp
+  loads_test.cpp
+  objects.make
+Improve unit test.
 
