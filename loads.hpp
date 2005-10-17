@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: loads.hpp,v 1.7 2005-10-05 17:07:52 chicares Exp $
+// $Id: loads.hpp,v 1.8 2005-10-17 15:48:10 chicares Exp $
 
 #ifndef loads_hpp
 #define loads_hpp
@@ -38,8 +38,7 @@ class load_details;
 
 class Loads
 {
-    // TODO ?? Would a friend class be better?
-    friend int test_main(int, char*[]);
+    friend class LoadsTest;
 
   public:
     Loads(BasicValues& values);
