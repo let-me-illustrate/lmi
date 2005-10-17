@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: objects.make,v 1.53 2005-10-04 05:36:35 chicares Exp $
+# $Id: objects.make,v 1.54 2005-10-17 15:48:10 chicares Exp $
 
 ################################################################################
 
@@ -509,6 +509,7 @@ loads_test$(EXEEXT): \
   loads.o \
   loads_test.o \
   timer.o \
+  xenumtypes.o \
 
 materially_equal_test$(EXEEXT): \
   $(common_test_objects) \
