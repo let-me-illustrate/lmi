@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mortality_rates.cpp,v 1.6 2005-09-18 01:22:25 chicares Exp $
+// $Id: mortality_rates.cpp,v 1.7 2005-10-18 16:57:58 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -33,7 +33,7 @@
 #include "basic_values.hpp"
 #include "database.hpp"
 #include "dbnames.hpp"
-#include "math_functors.hpp"
+#include "math_functors.hpp" // mean()
 
 #include <algorithm> // std::min()
 
