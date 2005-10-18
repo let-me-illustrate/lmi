@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_dbvalue.cpp,v 1.5 2005-09-12 01:32:19 chicares Exp $
+// $Id: ihs_dbvalue.cpp,v 1.6 2005-10-18 16:57:58 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -30,7 +30,7 @@
 
 #include "alert.hpp"
 #include "dbnames.hpp"
-#include "math_functors.hpp"
+#include "math_functors.hpp" // greater_of(), lesser_of
 #include "value_cast.hpp"
 
 #include <algorithm>
