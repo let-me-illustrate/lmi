@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_acctval.cpp,v 1.76 2005-10-13 01:35:40 chicares Exp $
+// $Id: ihs_acctval.cpp,v 1.77 2005-10-18 00:10:17 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -46,7 +46,6 @@
 #include "ledger_variant.hpp"
 #include "loads.hpp"
 #include "materially_equal.hpp"
-#include "math_functors.hpp"
 #include "mortality_rates.hpp"
 #include "outlay.hpp"
 #include "stratified_algorithms.hpp"
@@ -859,11 +858,6 @@ void AccountValue::IncrementEOM
     ,double cum_pmts_post_bom
     )
 {
-    // Save arguments, constraining their values to be nonnegative,
-    // for calculating banded and tiered quantities.
-    AssetsPostBom  = std::max(0.0, assets_post_bom  );
-    CumPmtsPostBom = std::max(0.0, cum_pmts_post_bom);
-
     if(ItLapsed || BasicValues::GetLength() <= Year)
         {
         return;
@@ -879,8 +873,10 @@ void AccountValue::IncrementEOM
         LMI_ASSERT(28 <= days_in_policy_month && days_in_policy_month <= 31);
         }
 
-    ApplyDynamicSepAcctLoad(AssetsPostBom, CumPmtsPostBom);
-    ApplyDynamicMandE      (AssetsPostBom);
+    // Save arguments, constraining their values to be nonnegative,
+    // for calculating banded and tiered quantities.
+    AssetsPostBom  = std::max(0.0, assets_post_bom  );
+    CumPmtsPostBom = std::max(0.0, cum_pmts_post_bom);
 
     DoMonthCR();
 }
@@ -903,217 +899,6 @@ void AccountValue::IncrementEOY(int year)
 bool AccountValue::PrecedesInforceDuration(int year, int month)
 {
     return year < InforceYear || (year == InforceYear && month < InforceMonth);
-}
-
-//============================================================================
-// When the M&E charge depends on each month's case total assets, the
-// interest rate is no longer an annual invariant. Set it monthly here.
-void AccountValue::ApplyDynamicMandE(double assets)
-{
-    if(!MandEIsDynamic)
-        {
-        return;
-        }
-
-    // Calculate M&E dynamically for current expense basis only
-    switch(ExpAndGABasis)
-        {
-        case e_currbasis:
-            {
-            // do nothing here; what follows will be correct
-            }
-            break;
-        case e_guarbasis:
-            {
-            // guaranteed M&E is not dynamic
-            return;
-            }
-        case e_mdptbasis:
-            {
-            fatal_error()
-                << "Dynamic M&E not supported with midpoint expense basis."
-                << LMI_FLUSH
-                ;
-            }
-            break;
-        default:
-            {
-            fatal_error()
-                << "Case '"
-                << ExpAndGABasis
-                << "' not found."
-                << LMI_FLUSH
-                ;
-            }
-        }
-
-// TODO ?? PRESSING Dynamic M&E should be different for guar vs. curr.
-// TODO ?? Implement tiered comp and tiered management fee.
-
-    // Annual rates
-//  double guar_m_and_e = StratifiedCharges_->tiered_guaranteed_m_and_e(assets);
-    YearsSepAcctMandERate = StratifiedCharges_->tiered_current_m_and_e(assets);
-    YearsSepAcctIMFRate   = StratifiedCharges_->tiered_investment_management_fee(assets);
-    if(0.0 != YearsSepAcctIMFRate)
-        {
-        fatal_error()
-            << "Tiered investment management fee unimplemented."
-            << LMI_FLUSH
-            ;
-        }
-    YearsSepAcctABCRate =
-        (e_asset_charge_spread == Database_->Query(DB_AssetChargeType))
-            ? StratifiedCharges_->tiered_asset_based_compensation(assets)
-            : 0.0
-            ;
-    if(0.0 != YearsSepAcctABCRate)
-        {
-        fatal_error()
-            << "Tiered asset-based compensation unimplemented."
-            << LMI_FLUSH
-            ;
-        }
-
-    YearsSepAcctSVRate = 0.0;
-
-    InterestRates_->DynamicMlySepAcctRate
-        (ExpAndGABasis
-        ,SABasis
-        ,Year
-        ,YearsSepAcctGrossRate // Reference argument--set here.
-        ,YearsSepAcctMandERate
-        ,YearsSepAcctIMFRate
-        ,YearsSepAcctABCRate
-        ,YearsSepAcctSVRate
-        );
-    YearsSepAcctIntRate     = InterestRates_->SepAcctNetRate
-        (SABasis
-        ,ExpAndGABasis
-        ,e_rate_period(e_monthly_rate)
-        )
-        [Year]
-        ;
-}
-
-//============================================================================
-// When the sepacct load depends on each month's case total assets, the
-// interest rate is no longer an annual invariant. Set it monthly here.
-void AccountValue::ApplyDynamicSepAcctLoad(double assets, double cumpmts)
-{
-    if(!SepAcctLoadIsDynamic)
-        {
-        return;
-        }
-
-    double stratified_load = 0.0;
-
-    switch(ExpAndGABasis)
-        {
-        case e_currbasis:
-            {
-            stratified_load =
-                    StratifiedCharges_->tiered_current_separate_account_load(assets)
-                +   StratifiedCharges_->banded_current_separate_account_load(cumpmts)
-                ;
-            }
-            break;
-        case e_guarbasis:
-            {
-            stratified_load =
-                    StratifiedCharges_->tiered_guaranteed_separate_account_load(assets)
-                +   StratifiedCharges_->banded_guaranteed_separate_account_load(cumpmts)
-                ;
-            }
-            break;
-        case e_mdptbasis:
-            {
-            fatal_error()
-                << "Dynamic separate-account load not supported with "
-                << "midpoint expense basis, because variable products "
-                << "are not subject to the illustration reg."
-                << LMI_FLUSH
-                ;
-            }
-            break;
-        default:
-            {
-            fatal_error()
-                << "Case '"
-                << ExpAndGABasis
-                << "' not found."
-                << LMI_FLUSH
-                ;
-            }
-        }
-
-    // Convert tiered load from annual to monthly effective rate.
-    // TODO ?? PRESSING This isn't really right. Instead, aggregate annual
-    // rates, then convert their sum to monthly.
-    stratified_load = i_upper_12_over_12_from_i<double>()(stratified_load);
-    round_interest_rate(stratified_load);
-
-    double tiered_comp = 0.0;
-
-    if(e_asset_charge_load == Database_->Query(DB_AssetChargeType))
-        {
-        tiered_comp = StratifiedCharges_->tiered_asset_based_compensation(assets);
-        tiered_comp = i_upper_12_over_12_from_i<double>()(tiered_comp);
-        // TODO ?? Probably this should be rounded.
-        }
-    if(0.0 != tiered_comp)
-        {
-        fatal_error()
-            << "Tiered asset-based compensation unimplemented."
-            << LMI_FLUSH
-            ;
-        }
-
-/*
-// TODO ?? PRESSING Resolve these comments soon, rewriting and relocating this
-// function and the others it works with, and probably some of the
-// variables they use.
-
-    // is there any advantage to this sort of implementation in loads.cpp?
-    //   YearsSepAcctLoadRate   = Loads_->GetDynamicSepAcctLoad()
-    // TODO ?? PRESSING Yes. It would be far better to move it there and write
-    // a unit test suite for the loads class.
-
-// Pass these arguments:
-//(ExpAndGABasis, Year, double assets, double cumpmts)
-// and perhaps SABasis
-
-// These are the things that should be done in the loads class:
-
-    // curr and guar:
-            stratified_load =
-                    StratifiedCharges_->tiered_current_separate_account_load(assets)
-                +   StratifiedCharges_->banded_current_separate_account_load(cumpmts)
-                ;
-
-    if(e_asset_charge_load == Database_->Query(DB_AssetChargeType))
-        {
-        tiered_comp = StratifiedCharges_->tiered_asset_based_compensation(assets);
-        tiered_comp = i_upper_12_over_12_from_i<double>()(tiered_comp);
-
-        // TODO ?? PRESSING Loads should be combined on the annual basis used
-        // for specifying them, then their sum converted to monthly,
-        // in order to match the calculations that an admin system
-        // would be expected to do.
-        }
-
-    YearsSepAcctLoadRate = Loads_->separate_account_load(ExpAndGABasis)[Year];
-
-    // TODO ?? PRESSING Aggregate loads once and only once for conversion to monthly.
-    stratified_load = i_upper_12_over_12_from_i<double>()(stratified_load);
-
-    // TODO ?? PRESSING Shouldn't rounding be done in the loads class?
-    round_interest_rate(stratified_load);
-
-*/
-
-    YearsSepAcctLoadRate = Loads_->separate_account_load(ExpAndGABasis)[Year];
-    YearsSepAcctLoadRate += stratified_load;
-    YearsSepAcctLoadRate += tiered_comp;
 }
 
 //============================================================================
@@ -1155,13 +940,6 @@ void AccountValue::InitializeYear()
     PolicyYearRunningTotalPremiumSubjectToPremiumTax = 0.0;
 
     DacTaxRsv                   = 0.0;
-
-    // These are set to nonzero values elsewhere only if tiering is used.
-    YearsSepAcctGrossRate       = 0.0;
-    YearsSepAcctMandERate       = 0.0;
-    YearsSepAcctIMFRate         = 0.0;
-    YearsSepAcctABCRate         = 0.0;
-    YearsSepAcctSVRate          = 0.0;
 
     RequestedLoan       = Outlay_->new_cash_loans()[Year];
     ActualLoan          = RequestedLoan; // TODO ?? Why not zero?

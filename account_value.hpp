@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: account_value.hpp,v 1.39 2005-10-12 03:20:51 chicares Exp $
+// $Id: account_value.hpp,v 1.40 2005-10-18 00:10:48 chicares Exp $
 
 #ifndef account_value_hpp
 #define account_value_hpp
@@ -509,14 +509,6 @@ class LMI_EXPIMP AccountValue
     double  YearsMonthlyPolicyFee;
     double  YearsGenAcctIntRate;
     double  YearsSepAcctIntRate;
-
-    // Separate components of separate account interest rate: all
-    // except 'YearsSepAcctGrossRate' are annual.
-    double  YearsSepAcctGrossRate;
-    double  YearsSepAcctMandERate;
-    double  YearsSepAcctIMFRate;
-    double  YearsSepAcctABCRate;
-    double  YearsSepAcctSVRate;
 
     double  YearsDcvIntRate;
 
