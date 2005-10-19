@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.184 2005-10-17 17:35:41 chicares Exp $
+// $Id: ChangeLog,v 1.185 2005-10-19 01:53:50 chicares Exp $
 
 MAINTENANCE
 
@@ -4205,4 +4205,28 @@ Improve unit test.
   mc_enum_types.xpp
 Fix two column names that were incompatible with 20051009T2325Z
 changes.
+
+20051018T0011Z <chicares@cox.net> [1236]
+
+  account_value.hpp
+  ihs_acctval.cpp
+  ihs_avmly.cpp
+Refactor.
+
+20051018T1657Z <chicares@cox.net> [1236]
+
+  ihs_avdebug.cpp
+  ihs_irc7702.cpp
+Remove unneeded header.
+
+  ihs_dbvalue.cpp
+  mortality_rates.cpp
+Document reason for including a certain header.
+
+20051019T0153Z <chicares@cox.net> [1236]
+
+  account_value.hpp
+  ihs_acctval.cpp
+  ihs_avmly.cpp
+Refactor.
 
