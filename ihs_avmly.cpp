@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avmly.cpp,v 1.44 2005-10-18 00:10:17 chicares Exp $
+// $Id: ihs_avmly.cpp,v 1.45 2005-10-19 01:53:50 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -2467,79 +2467,21 @@ void AccountValue::TxTestHoneymoonForExpiration()
         }
 }
 
-
 //============================================================================
-// When the sepacct load depends on each month's case total assets, the
-// interest rate is no longer an annual invariant. Set it monthly here.
-void AccountValue::ApplyDynamicSepAcctLoad(double assets, double cumpmts)
+/// Subtract separate account load after monthly deductions: it is not
+/// regarded as part of monthly deductions per se.
+///
+/// TODO ?? Verify the last clause above.
+///
+/// When the sepacct load depends on each month's case total assets, the
+/// interest rate is no longer an annual invariant. Set it monthly here.
+
+void AccountValue::TxTakeSepAcctLoad()
 {
-    if(!SepAcctLoadIsDynamic) // TODO ?? PRESSING Deprecate?
-        {
-        return;
-        }
-
-    double stratified_load = 0.0;
-
-    switch(ExpAndGABasis)
-        {
-        case e_currbasis:
-            {
-            stratified_load =
-                    StratifiedCharges_->tiered_current_separate_account_load(assets)
-                +   StratifiedCharges_->banded_current_separate_account_load(cumpmts)
-                ;
-            }
-            break;
-        case e_guarbasis:
-            {
-            stratified_load =
-                    StratifiedCharges_->tiered_guaranteed_separate_account_load(assets)
-                +   StratifiedCharges_->banded_guaranteed_separate_account_load(cumpmts)
-                ;
-            }
-            break;
-        case e_mdptbasis:
-            {
-            fatal_error()
-                << "Dynamic separate-account load not supported with "
-                << "midpoint expense basis, because variable products "
-                << "are not subject to the illustration reg."
-                << LMI_FLUSH
-                ;
-            }
-            break;
-        default:
-            {
-            fatal_error()
-                << "Case '"
-                << ExpAndGABasis
-                << "' not found."
-                << LMI_FLUSH
-                ;
-            }
-        }
-
-    // Convert tiered load from annual to monthly effective rate.
-    // TODO ?? PRESSING This isn't really right. Instead, aggregate annual
-    // rates, then convert their sum to monthly.
-    stratified_load = i_upper_12_over_12_from_i<double>()(stratified_load);
-    round_interest_rate(stratified_load);
-
-    double tiered_comp = 0.0;
-
-    if(e_asset_charge_load == Database_->Query(DB_AssetChargeType))
-        {
-        tiered_comp = StratifiedCharges_->tiered_asset_based_compensation(assets);
-        tiered_comp = i_upper_12_over_12_from_i<double>()(tiered_comp);
-        // TODO ?? Probably this should be rounded.
-        }
-    if(0.0 != tiered_comp)
-        {
-        fatal_error()
-            << "Tiered asset-based compensation unimplemented."
-            << LMI_FLUSH
-            ;
-        }
+    // TODO ?? Are database entities
+    //   DB_DynamicMandE
+    //   DB_DynamicSepAcctLoad
+    // actually useful?
 
 /*
 // TODO ?? PRESSING Resolve these comments soon, rewriting and relocating this
@@ -2584,20 +2526,75 @@ void AccountValue::ApplyDynamicSepAcctLoad(double assets, double cumpmts)
 
 */
 
-    YearsSepAcctLoadRate = Loads_->separate_account_load(ExpAndGABasis)[Year];
-    YearsSepAcctLoadRate += stratified_load;
-    YearsSepAcctLoadRate += tiered_comp;
-}
+    if(SepAcctLoadIsDynamic)
+        {
+        double stratified_load = 0.0;
 
-//============================================================================
-/// Subtract separate account load after monthly deductions: it is not
-/// regarded as part of monthly deductions per se.
-///
-/// TODO ?? Verify the last clause above.
+        switch(ExpAndGABasis)
+            {
+            case e_currbasis:
+                {
+                stratified_load =
+                        StratifiedCharges_->tiered_current_separate_account_load(AssetsPostBom)
+                    +   StratifiedCharges_->banded_current_separate_account_load(CumPmtsPostBom)
+                    ;
+                }
+                break;
+            case e_guarbasis:
+                {
+                stratified_load =
+                        StratifiedCharges_->tiered_guaranteed_separate_account_load(AssetsPostBom)
+                    +   StratifiedCharges_->banded_guaranteed_separate_account_load(CumPmtsPostBom)
+                    ;
+                }
+                break;
+            case e_mdptbasis:
+                {
+                fatal_error()
+                    << "Dynamic separate-account load not supported with "
+                    << "midpoint expense basis, because variable products "
+                    << "are not subject to the illustration reg."
+                    << LMI_FLUSH
+                    ;
+                }
+                break;
+            default:
+                {
+                fatal_error()
+                    << "Case '"
+                    << ExpAndGABasis
+                    << "' not found."
+                    << LMI_FLUSH
+                    ;
+                }
+            }
 
-void AccountValue::TxTakeSepAcctLoad()
-{
-    ApplyDynamicSepAcctLoad(AssetsPostBom, CumPmtsPostBom);
+        // Convert tiered load from annual to monthly effective rate.
+        // TODO ?? PRESSING This isn't really right. Instead, aggregate annual
+        // rates, then convert their sum to monthly.
+        stratified_load = i_upper_12_over_12_from_i<double>()(stratified_load);
+        round_interest_rate(stratified_load);
+
+        double tiered_comp = 0.0;
+
+        if(e_asset_charge_load == Database_->Query(DB_AssetChargeType))
+            {
+            tiered_comp = StratifiedCharges_->tiered_asset_based_compensation(AssetsPostBom);
+            tiered_comp = i_upper_12_over_12_from_i<double>()(tiered_comp);
+            // TODO ?? Probably this should be rounded.
+            }
+        if(0.0 != tiered_comp)
+            {
+            fatal_error()
+                << "Tiered asset-based compensation unimplemented."
+                << LMI_FLUSH
+                ;
+            }
+
+        YearsSepAcctLoadRate = Loads_->separate_account_load(ExpAndGABasis)[Year];
+        YearsSepAcctLoadRate += stratified_load;
+        YearsSepAcctLoadRate += tiered_comp;
+        }
 
     SepAcctLoad = YearsSepAcctLoadRate * AVSepAcct;
 
@@ -2731,15 +2728,16 @@ void AccountValue::ApplyDynamicMandE(double assets)
             ;
         }
 
+    // TODO ?? Unused for the moment. At least the first must be
+    // implemented in order for reports to show components separately.
     double stable_value_rate = 0.0;
-
     double gross_rate = 0.0;
 
     InterestRates_->DynamicMlySepAcctRate
         (ExpAndGABasis
         ,SABasis
         ,Year
-        ,gross_rate // Reference argument--set here. TODO ?? PRESSING But unused?
+        ,gross_rate
         ,m_and_e_rate
         ,imf_rate
         ,asset_comp_rate
