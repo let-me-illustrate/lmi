@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_acctval.cpp,v 1.77 2005-10-18 00:10:17 chicares Exp $
+// $Id: ihs_acctval.cpp,v 1.78 2005-10-19 01:53:50 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -1424,7 +1424,7 @@ void AccountValue::FinalizeYear()
 //        InvariantValues().NaarForceout[Year] = InvariantValues().ErGrossPmt[Year];
 
         // TODO ?? This should also incorporate:
-        //   asset-tiered compensation as in ApplyDynamicSepAcctLoad()
+        //   asset-tiered compensation
         //   input 'extra' compensation (on premium and assets)
         double commission =
                 InvariantValues().GrossPmt[Year]
