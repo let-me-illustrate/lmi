@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.187 2005-10-20 02:48:25 chicares Exp $
+// $Id: ChangeLog,v 1.188 2005-10-20 03:36:56 chicares Exp $
 
 MAINTENANCE
 
@@ -4246,4 +4246,9 @@ Refactor.
   stratified_charges.cpp
   stratified_charges.hpp
 Refactor.
+
+20051020T0236Z <chicares@cox.net> [1238]
+
+  setup.make
+Review.
 
