@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.186 2005-10-19 20:54:29 wboutin Exp $
+// $Id: ChangeLog,v 1.187 2005-10-20 02:48:25 chicares Exp $
 
 MAINTENANCE
 
@@ -4230,8 +4230,20 @@ Document reason for including a certain header.
   ihs_avmly.cpp
 Refactor.
 
+20051019T1712Z <chicares@cox.net> [1236]
+
+  ledger_xml_io.cpp
+Reformat a column title.
+
 20051019T2052Z <wboutin@massmutual.com> [1239]
 
   setup.make
+Refactor.
+
+20051020T0236Z <chicares@cox.net> [1238]
+
+  ihs_avmly.cpp
+  stratified_charges.cpp
+  stratified_charges.hpp
 Refactor.
 

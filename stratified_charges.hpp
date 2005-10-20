@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: stratified_charges.hpp,v 1.3 2005-08-22 15:35:53 chicares Exp $
+// $Id: stratified_charges.hpp,v 1.4 2005-10-20 02:48:25 chicares Exp $
 
 #ifndef stratified_charges_hpp
 #define stratified_charges_hpp
@@ -106,15 +106,25 @@ class LMI_EXPIMP stratified_charges
     // - tiered_guaranteed_separate_account_load: seems to be
     // incorrectly implemented.
 
-    double banded_current_separate_account_load    (double premium) const;
-    double banded_guaranteed_separate_account_load (double premium) const;
+    // TODO ?? For the public interface, these functions seem preferable
+    // to the lower-level functions they invoke. Consider rewriting the
+    // rest of the public interface.
+    //
+    double banded_sepacct_load
+        (e_basis const& basis
+        ,double         assets
+        ,double         premium
+        );
+    double tiered_sepacct_load
+        (e_basis const& basis
+        ,double         assets
+        ,double         premium
+        );
 
     double tiered_current_m_and_e                  (double assets) const;
     double tiered_guaranteed_m_and_e               (double assets) const;
     double tiered_asset_based_compensation         (double assets) const;
     double tiered_investment_management_fee        (double assets) const;
-    double tiered_current_separate_account_load    (double assets) const;
-    double tiered_guaranteed_separate_account_load (double assets) const;
 
     double minimum_tiered_spread_for_7702() const;
 
@@ -143,6 +153,12 @@ class LMI_EXPIMP stratified_charges
 
     void read (std::string const& filename);
     void write(std::string const& filename) const;
+
+    double banded_current_separate_account_load    (double premium) const;
+    double banded_guaranteed_separate_account_load (double premium) const;
+
+    double tiered_current_separate_account_load    (double assets) const;
+    double tiered_guaranteed_separate_account_load (double assets) const;
 
     std::map<e_stratified, stratified_entity> dictionary;
 };

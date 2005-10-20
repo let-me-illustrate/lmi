@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: stratified_charges.cpp,v 1.4 2005-09-12 01:32:19 chicares Exp $
+// $Id: stratified_charges.cpp,v 1.5 2005-10-20 02:48:25 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -230,6 +230,80 @@ void stratified_charges::initialize_dictionary()
     dictionary[e_tiered_ak_premium_tax                 ] = stratified_entity();
     dictionary[e_tiered_de_premium_tax                 ] = stratified_entity();
     dictionary[e_tiered_sd_premium_tax                 ] = stratified_entity();
+}
+
+//============================================================================
+double stratified_charges::banded_sepacct_load
+    (e_basis const& basis
+    ,double         // assets (unused for now)
+    ,double         premium
+    )
+{
+    switch(basis)
+        {
+        case e_currbasis:
+            {
+            return banded_current_separate_account_load(premium);
+            }
+            break;
+        case e_guarbasis:
+            {
+            return banded_guaranteed_separate_account_load(premium);
+            }
+            break;
+        case e_mdptbasis:
+            {
+            fatal_error()
+                << "Dynamic separate-account load not supported with "
+                << "midpoint expense basis, because variable products "
+                << "are not subject to the illustration reg."
+                << LMI_FLUSH
+                ;
+            }
+            break;
+        default:
+            {
+            fatal_error() << "Case '" << basis << "' not found." << LMI_FLUSH;
+            }
+        }
+    return 0.0; // Actually unreachable, but some compilers don't know that.
+}
+
+//============================================================================
+double stratified_charges::tiered_sepacct_load
+    (e_basis const& basis
+    ,double         assets
+    ,double         // premium (unused for now)
+    )
+{
+    switch(basis)
+        {
+        case e_currbasis:
+            {
+            return tiered_current_separate_account_load(assets);
+            }
+            break;
+        case e_guarbasis:
+            {
+            return tiered_guaranteed_separate_account_load(assets);
+            }
+            break;
+        case e_mdptbasis:
+            {
+            fatal_error()
+                << "Dynamic separate-account load not supported with "
+                << "midpoint expense basis, because variable products "
+                << "are not subject to the illustration reg."
+                << LMI_FLUSH
+                ;
+            }
+            break;
+        default:
+            {
+            fatal_error() << "Case '" << basis << "' not found." << LMI_FLUSH;
+            }
+        }
+    return 0.0; // Actually unreachable, but some compilers don't know that.
 }
 
 //============================================================================
