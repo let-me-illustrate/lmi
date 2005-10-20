@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.190 2005-10-20 16:30:22 chicares Exp $
+// $Id: ChangeLog,v 1.191 2005-10-20 20:30:44 wboutin Exp $
 
 MAINTENANCE
 
@@ -4262,4 +4262,9 @@ Improve documentation.
 
   ihs_avmly.cpp
 Address a defect that escaped regression testing.
+
+20051020T2027Z <wboutin@massmutual.com> [1231]
+
+  setup.make
+Improve documentation.
 
