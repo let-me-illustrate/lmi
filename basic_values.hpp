@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: basic_values.hpp,v 1.13 2005-10-05 17:07:52 chicares Exp $
+// $Id: basic_values.hpp,v 1.14 2005-10-20 15:27:32 chicares Exp $
 
 #ifndef basic_values_hpp
 #define basic_values_hpp
@@ -335,6 +335,14 @@ class LMI_EXPIMP BasicValues
     std::vector<double>     CompExcess;
 
     bool                    UseUnusualCOIBanding;
+
+    // TODO ?? These two data members make the code clearer and
+    // marginally more efficient. They're set from database entities
+    // 'DB_DynamicMandE' and 'DB_DynamicSepAcctLoad', which seems
+    // regrettable because a database maintainer could overlook them.
+    // It would seem better to set them dynamically based on whether
+    // the dynamic charges are not zero.
+
     bool                    MandEIsDynamic;
     bool                    SepAcctLoadIsDynamic;
 
