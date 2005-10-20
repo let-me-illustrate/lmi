@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.188 2005-10-20 03:36:56 chicares Exp $
+// $Id: ChangeLog,v 1.189 2005-10-20 15:27:32 chicares Exp $
 
 MAINTENANCE
 
@@ -4251,4 +4251,10 @@ Refactor.
 
   setup.make
 Review.
+
+<chicares@cox.net> [1231]
+
+  basic_values.hpp
+  ihs_avmly.cpp
+Improve documentation.
 
