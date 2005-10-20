@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avmly.cpp,v 1.45 2005-10-19 01:53:50 chicares Exp $
+// $Id: ihs_avmly.cpp,v 1.46 2005-10-20 02:48:25 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -2528,46 +2528,17 @@ void AccountValue::TxTakeSepAcctLoad()
 
     if(SepAcctLoadIsDynamic)
         {
-        double stratified_load = 0.0;
-
-        switch(ExpAndGABasis)
-            {
-            case e_currbasis:
-                {
-                stratified_load =
-                        StratifiedCharges_->tiered_current_separate_account_load(AssetsPostBom)
-                    +   StratifiedCharges_->banded_current_separate_account_load(CumPmtsPostBom)
-                    ;
-                }
-                break;
-            case e_guarbasis:
-                {
-                stratified_load =
-                        StratifiedCharges_->tiered_guaranteed_separate_account_load(AssetsPostBom)
-                    +   StratifiedCharges_->banded_guaranteed_separate_account_load(CumPmtsPostBom)
-                    ;
-                }
-                break;
-            case e_mdptbasis:
-                {
-                fatal_error()
-                    << "Dynamic separate-account load not supported with "
-                    << "midpoint expense basis, because variable products "
-                    << "are not subject to the illustration reg."
-                    << LMI_FLUSH
-                    ;
-                }
-                break;
-            default:
-                {
-                fatal_error()
-                    << "Case '"
-                    << ExpAndGABasis
-                    << "' not found."
-                    << LMI_FLUSH
-                    ;
-                }
-            }
+        double banded_load = StratifiedCharges_->banded_sepacct_load
+            (ExpAndGABasis
+            ,AssetsPostBom
+            ,CumPmtsPostBom
+            );
+        double tiered_load = StratifiedCharges_->tiered_sepacct_load
+            (ExpAndGABasis
+            ,AssetsPostBom
+            ,CumPmtsPostBom
+            );
+        double stratified_load = banded_load + tiered_load;
 
         // Convert tiered load from annual to monthly effective rate.
         // TODO ?? PRESSING This isn't really right. Instead, aggregate annual
@@ -2594,49 +2565,21 @@ void AccountValue::TxTakeSepAcctLoad()
         YearsSepAcctLoadRate = Loads_->separate_account_load(ExpAndGABasis)[Year];
         YearsSepAcctLoadRate += stratified_load;
         YearsSepAcctLoadRate += tiered_comp;
-        }
 
-    SepAcctLoad = YearsSepAcctLoadRate * AVSepAcct;
-
-    // TODO ?? PRESSING This is a hasty kludge that needs to be removed.
-    if(SepAcctLoadIsDynamic)
-        {
-        double banded_load = 0.0;
-
-        switch(ExpAndGABasis)
-            {
-            case e_currbasis:
-                {
-                banded_load =
-                    StratifiedCharges_->banded_current_separate_account_load
-                        (CumPmtsPostBom
-                        );
-                }
-                break;
-            case e_guarbasis:
-                {
-                banded_load =
-                    StratifiedCharges_->banded_guaranteed_separate_account_load
-                        (CumPmtsPostBom
-                        );
-                }
-                break;
-            // TODO ?? PRESSING Handling fewer cases than can arise is always a defect.
-            // TODO ?? PRESSING Lack of a default case is always a defect.
-            }
-
+        // TODO ?? PRESSING This is a hasty kludge that needs to be removed.
+        double kludge_adjustment = 0.0;
         LMI_ASSERT(0.0 <= banded_load);
         if(0.0 != banded_load)
             {
             // TODO ?? PRESSING This isn't really right. Instead, aggregate annual
             // rates, then convert their sum to monthly.
-            banded_load = i_upper_12_over_12_from_i<double>()(banded_load);
-            round_interest_rate(banded_load);
+            double z = i_upper_12_over_12_from_i<double>()(banded_load);
+            round_interest_rate(z);
 
             // TODO ?? PRESSING As a ghastly expedient that must be reworked soon,
             // calculate and deduct the supposed error term.
             double kludge_adjustment =
-                    banded_load
+                    z
                 *   std::max
                         (0.0
 // TODO ?? PRESSING Here, the hardcoded number is of course a defect: it should
@@ -2647,8 +2590,12 @@ void AccountValue::TxTakeSepAcctLoad()
                         )
                 ;
             LMI_ASSERT(0.0 <= kludge_adjustment);
-            SepAcctLoad -= kludge_adjustment;
             }
+        SepAcctLoad = YearsSepAcctLoadRate * AVSepAcct - kludge_adjustment;
+        }
+    else
+        {
+        SepAcctLoad = YearsSepAcctLoadRate * AVSepAcct;
         }
 
     process_deduction(SepAcctLoad);
