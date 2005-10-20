@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avmly.cpp,v 1.46 2005-10-20 02:48:25 chicares Exp $
+// $Id: ihs_avmly.cpp,v 1.47 2005-10-20 15:27:32 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -181,7 +181,7 @@ void AccountValue::DoMonthDR()
         ,kludge_account_value
         );
 
-    // TODO ?? For debug output--there has to be a better way, though.
+    // Saved for monthly detail report only.
     NetMaxNecessaryPremium   = Irc7702A_->DebugGetNetMaxNecPm  ();
     GrossMaxNecessaryPremium = Irc7702A_->DebugGetGrossMaxNecPm();
 
@@ -2044,7 +2044,7 @@ void AccountValue::TxSetBOMAV()
             }
         else
             {
-            // TODO ?? For inforce, we need term rider amount as of issue date.
+            // TODO ?? INPUT !! For inforce, need term rider amount as of issue date.
             z = Input_->VectorSpecamtHistory.front().operator double const&();
             }
         SpecAmtLoadBase = std::max(z, NetPmts[Month] * YearsCorridorFactor);
@@ -2471,61 +2471,11 @@ void AccountValue::TxTestHoneymoonForExpiration()
 /// Subtract separate account load after monthly deductions: it is not
 /// regarded as part of monthly deductions per se.
 ///
-/// TODO ?? Verify the last clause above.
-///
 /// When the sepacct load depends on each month's case total assets, the
 /// interest rate is no longer an annual invariant. Set it monthly here.
 
 void AccountValue::TxTakeSepAcctLoad()
 {
-    // TODO ?? Are database entities
-    //   DB_DynamicMandE
-    //   DB_DynamicSepAcctLoad
-    // actually useful?
-
-/*
-// TODO ?? PRESSING Resolve these comments soon, rewriting and relocating this
-// function and the others it works with, and probably some of the
-// variables they use.
-
-    // is there any advantage to this sort of implementation in loads.cpp?
-    //   YearsSepAcctLoadRate   = Loads_->GetDynamicSepAcctLoad()
-    // TODO ?? PRESSING Yes. It would be far better to move it there and write
-    // a unit test suite for the loads class.
-
-// Pass these arguments:
-//(ExpAndGABasis, Year, double assets, double cumpmts)
-// and perhaps SABasis
-
-// These are the things that should be done in the loads class:
-
-    // curr and guar:
-            stratified_load =
-                    StratifiedCharges_->tiered_current_separate_account_load(assets)
-                +   StratifiedCharges_->banded_current_separate_account_load(cumpmts)
-                ;
-
-    if(e_asset_charge_load == Database_->Query(DB_AssetChargeType))
-        {
-        tiered_comp = StratifiedCharges_->tiered_asset_based_compensation(assets);
-        tiered_comp = i_upper_12_over_12_from_i<double>()(tiered_comp);
-
-        // TODO ?? PRESSING Loads should be combined on the annual basis used
-        // for specifying them, then their sum converted to monthly,
-        // in order to match the calculations that an admin system
-        // would be expected to do.
-        }
-
-    YearsSepAcctLoadRate = Loads_->separate_account_load(ExpAndGABasis)[Year];
-
-    // TODO ?? PRESSING Aggregate loads once and only once for conversion to monthly.
-    stratified_load = i_upper_12_over_12_from_i<double>()(stratified_load);
-
-    // TODO ?? PRESSING Shouldn't rounding be done in the loads class?
-    round_interest_rate(stratified_load);
-
-*/
-
     if(SepAcctLoadIsDynamic)
         {
         double banded_load = StratifiedCharges_->banded_sepacct_load
@@ -2540,9 +2490,11 @@ void AccountValue::TxTakeSepAcctLoad()
             );
         double stratified_load = banded_load + tiered_load;
 
-        // Convert tiered load from annual to monthly effective rate.
-        // TODO ?? PRESSING This isn't really right. Instead, aggregate annual
-        // rates, then convert their sum to monthly.
+        // TODO ?? Loads should be combined on the annual basis used
+        // for specifying them, then their sum converted to monthly,
+        // in order to match the calculations that an admin system
+        // would be expected to do; then rounded (round_interest_rate).
+
         stratified_load = i_upper_12_over_12_from_i<double>()(stratified_load);
         round_interest_rate(stratified_load);
 
@@ -2566,25 +2518,25 @@ void AccountValue::TxTakeSepAcctLoad()
         YearsSepAcctLoadRate += stratified_load;
         YearsSepAcctLoadRate += tiered_comp;
 
-        // TODO ?? PRESSING This is a hasty kludge that needs to be removed.
+        // TODO ?? This seems bogus. Reevaluate.
         double kludge_adjustment = 0.0;
         LMI_ASSERT(0.0 <= banded_load);
         if(0.0 != banded_load)
             {
-            // TODO ?? PRESSING This isn't really right. Instead, aggregate annual
+            // TODO ?? This isn't really right. Instead, aggregate annual
             // rates, then convert their sum to monthly.
             double z = i_upper_12_over_12_from_i<double>()(banded_load);
             round_interest_rate(z);
 
-            // TODO ?? PRESSING As a ghastly expedient that must be reworked soon,
+            // TODO ?? As an expedient that must be reconsidered,
             // calculate and deduct the supposed error term.
             double kludge_adjustment =
                     z
                 *   std::max
                         (0.0
-// TODO ?? PRESSING Here, the hardcoded number is of course a defect: it should
-// be in the product database. $10,000,000 is just an arbitrary number
-// to be used for testing. The idea is that some such limit applies to
+// TODO ?? DATABASE !! Here, the hardcoded number is of course a defect:
+// it should be in the product database. $10,000,000 is just an arbitrary
+// number for testing. The idea is that some such limit applies to
 // the banded load only, but not to any other account-value load.
                         ,AVSepAcct - 10000000.0
                         )
@@ -2647,7 +2599,7 @@ void AccountValue::ApplyDynamicMandE(double assets)
             }
         }
 
-// TODO ?? PRESSING Dynamic M&E should be different for guar vs. curr.
+// TODO ?? Dynamic M&E should be different for guar vs. curr.
 // TODO ?? Implement tiered comp and tiered management fee.
 
     // Annual separate-account rates.
