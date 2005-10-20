@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avmly.cpp,v 1.47 2005-10-20 15:27:32 chicares Exp $
+// $Id: ihs_avmly.cpp,v 1.48 2005-10-20 16:30:22 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -2530,7 +2530,7 @@ void AccountValue::TxTakeSepAcctLoad()
 
             // TODO ?? As an expedient that must be reconsidered,
             // calculate and deduct the supposed error term.
-            double kludge_adjustment =
+            kludge_adjustment =
                     z
                 *   std::max
                         (0.0
@@ -2555,7 +2555,6 @@ void AccountValue::TxTakeSepAcctLoad()
     Dcv -= SepAcctLoad;
     Dcv = std::max(0.0, Dcv);
 }
-
 
 //============================================================================
 // When the M&E charge depends on each month's case total assets, the
