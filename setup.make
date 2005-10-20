@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: setup.make,v 1.17 2005-10-20 03:36:56 chicares Exp $
+# $Id: setup.make,v 1.18 2005-10-20 20:30:44 wboutin Exp $
 
 .PHONY: all
 all: setup
@@ -316,10 +316,7 @@ mingw_requirements = \
 
 # These aren't necessary for compiling a C++ program with <windows.h>.
 # Although, they're included here in an attempt to reproduce a C++-only
-# version of the latest MinGW auto-installer.
-
-# REVIEW: Do you mean the one from 2005-10, or the last one Earnie
-# uploaded, in February I think?
+# version of MinGW-5.0.0 .
 
 mingw_extras = \
   mingw32-make-3.80.0-3.tar.gz \
@@ -387,6 +384,13 @@ install_mingw_20050827_from_tmp_dir: $(mingw_requirements) $(mingw_extras)
 
 # REVIEW: If wget isn't already installed, then it can't be used to
 # install itself. Does this target have any practical purpose?
+# It has at least one: upgrading to later versions of wget is automated.
+# There's a later stable version of wget available from www.MinGW.org,
+# but it isn't at the download page yet. 'INSTALL' should still be the
+# place describing how to get this prerequisite tool, but this is where
+# an automatic update should be written for users with an older version.
+# Would changing 'Install' to 'Upgrade' be better in the introductory
+# comment for this target?
 
 wget_mingwport = wget-1.9.1
 
