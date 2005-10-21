@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input.cpp,v 1.8 2005-09-17 04:05:09 chicares Exp $
+// $Id: input.cpp,v 1.9 2005-10-21 16:58:23 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -47,7 +47,8 @@ Input::~Input()
 }
 
 Input::Input(Input const& z)
-    :MemberSymbolTable<Input>()
+    :obstruct_slicing<Input>()
+    ,MemberSymbolTable<Input>()
 {
     ascribe_members();
     std::vector<std::string>::const_iterator i;
