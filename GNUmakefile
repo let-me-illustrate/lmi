@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: GNUmakefile,v 1.34 2005-10-03 12:55:21 chicares Exp $
+# $Id: GNUmakefile,v 1.35 2005-10-21 17:01:32 chicares Exp $
 
 ###############################################################################
 
@@ -511,7 +511,7 @@ check_conformity: source_clean
 
 .PHONY: cvs_ready
 cvs_ready: source_clean
-	-$(MAKE) check_conformity 2>&1 |$(SED) -e'/ermission.denied/d'
+	-$(MAKE) check_conformity
 	-$(MAKE) check_idempotence
 	-$(MAKE) all test
 	-$(MAKE) all test build_type=mpatrol
