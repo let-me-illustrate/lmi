@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: text_view.hpp,v 1.6 2005-09-14 14:16:30 chicares Exp $
+// $Id: text_view.hpp,v 1.7 2005-10-21 16:58:21 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.h (C) 1998 Julian Smart and Markus Holzem
@@ -39,6 +39,8 @@
 #include "obstruct_slicing.hpp"
 
 #include <boost/utility.hpp>
+
+#include <wx/defs.h> // WXDLLEXPORT
 
 class WXDLLEXPORT wxTextCtrl;
 
