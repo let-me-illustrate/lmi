@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: workhorse.make,v 1.46 2005-09-05 04:27:19 chicares Exp $
+# $Id: workhorse.make,v 1.47 2005-10-21 16:58:26 chicares Exp $
 
 ###############################################################################
 
@@ -221,15 +221,48 @@ gcc_cxx_warnings := \
 # WX !! The wx library triggers many warnings with these flags:
 
 gcc_common_extra_warnings := \
+  -pedantic-errors \
+  -Werror \
   -Wextra \
   -Wcast-qual \
   -Wredundant-decls \
   -Wundef \
 
-# INELEGANT !! It might be preferable to specify what is wx dependent
-# at the object level.
+wx_dependent_objects := \
+  $(addsuffix .o,\
+    $(basename \
+      $(notdir \
+        $(shell $(GREP) \
+          --files-with-matches \
+          'include.*<wx/' \
+          $(src_dir)/*.?pp \
+        ) \
+      ) \
+    ) \
+  )
 
-$(lmi_wx_objects): gcc_common_extra_warnings :=
+# This heuristic isn't foolproof. Include an innocuous header like
+# <wx/version.h> in files for which it fails.
+
+wx_dependent_idempotencies := \
+  $(addsuffix .hpp.idempotent,\
+    $(basename \
+      $(notdir \
+        $(shell $(GREP) \
+          --files-with-matches \
+          'include.*<wx/' \
+          $(addprefix $(src_dir)/,$(idempotent_files:%pp.idempotent=%pp)) \
+        ) \
+      ) \
+    ) \
+  )
+
+$(wx_dependent_objects):       gcc_common_extra_warnings :=
+$(wx_dependent_idempotencies): gcc_common_extra_warnings :=
+
+# Boost didn't remove an unused parameter in this file:
+
+operations_posix_windows.o:    gcc_common_extra_warnings :=
 
 # Boost normally makes '-Wundef' give spurious warnings:
 #   http://aspn.activestate.com/ASPN/Mail/Message/boost/1822550
