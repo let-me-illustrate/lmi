@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: census_view.hpp,v 1.10 2005-06-15 05:05:04 chicares Exp $
+// $Id: census_view.hpp,v 1.11 2005-10-21 16:58:21 chicares Exp $
 
 #ifndef census_view_hpp
 #define census_view_hpp
@@ -35,6 +35,10 @@
 
 #include <boost/shared_ptr.hpp>
 #include <boost/utility.hpp>
+
+// Include at least one wx header so that idempotence testing can
+// easily recognize this file as wx dependent.
+#include <wx/version.h>
 
 #include <string>
 #include <vector>
