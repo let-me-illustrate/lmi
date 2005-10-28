@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.192 2005-10-21 17:06:38 chicares Exp $
+// $Id: ChangeLog,v 1.193 2005-10-28 18:26:08 wboutin Exp $
 
 MAINTENANCE
 
@@ -4285,4 +4285,10 @@ Treat warnings as errors.
 
   version.hpp
 Mark release candidate.
+
+20051028T1808Z <wboutin@massmutual.com> [1232]
+
+  setup.make
+  mingw_setup.make [new file]
+Create stand-alone MinGW installation.
 

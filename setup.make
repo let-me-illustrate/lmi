@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: setup.make,v 1.18 2005-10-20 20:30:44 wboutin Exp $
+# $Id: setup.make,v 1.19 2005-10-28 18:26:06 wboutin Exp $
 
 .PHONY: all
 all: setup
@@ -312,7 +312,7 @@ mingw_requirements = \
   gcc-core-3.4.4-20050522-1.tar.gz \
   gcc-g++-3.4.4-20050522-1.tar.gz \
   mingw-runtime-3.8.tar.gz \
-  w32api-3.3.tar.gz
+  w32api-3.3.tar.gz \
 
 # These aren't necessary for compiling a C++ program with <windows.h>.
 # Although, they're included here in an attempt to reproduce a C++-only
@@ -322,21 +322,31 @@ mingw_extras = \
   mingw32-make-3.80.0-3.tar.gz \
   mingw-utils-0.3.tar.gz \
 
+# Download archives if they're out of date, then extract them.
+
 # TODO ?? Downloaded files should be validated before extracting.
 %.tar.bz2:
 	[ -e $@ ] || $(WGET) --non-verbose $(sf_mirror)/mingw/$@
+	$(CP) --force --preserve $@ $(mingw_dir)
 	$(BZIP2) --decompress --keep --force $@
 	$(TAR) --extract --file=$*.tar
 
 %.tar.gz:
 	[ -e $@ ] || $(WGET) --non-verbose $(sf_mirror)/mingw/$@
+	$(CP) --force --preserve $@ $(mingw_dir)
 	$(GZIP) --decompress --force $@
 	$(TAR) --extract --file=$*.tar
 
-# This provides the minimum requirements for building lmi with this compiler.
+# This target is intended to always be synchronized with the latest
+# packages found at http://www.mingw.org/download.shtml .
+
 .PHONY: mingw_current
 mingw_current:
 	$(MKDIR) --parents /tmp/$@
+	-@[ -e $(mingw_dir) ]
+	@$(ECHO) "Preserving your existing MinGW installation is\
+	strongly recommended."
+	$(MKDIR) $(mingw_dir)
 	$(MAKE) \
 	  -C /tmp/$@ \
 	  -f $(src_dir)/setup.make \
@@ -345,19 +355,11 @@ mingw_current:
 	  install_mingw_current_from_tmp_dir
 
 .PHONY: install_mingw_current_from_tmp_dir
-install_mingw_current_from_tmp_dir: $(mingw_requirements)
-	$(RM) --recursive *.tar
-	$(MKDIR) --parents $(mingw_dir)
-	-$(CP) --force --parents --preserve --recursive * $(mingw_dir)
-# TODO ?? Keep this command blocked during testing to allow comparison
-# with sibling target.
-#	$(RM) --recursive *
+install_mingw_current_from_tmp_dir: $(mingw_requirements) $(mingw_extras)
+	-$(RM) --recursive *.tar
+	$(MV) --force * $(mingw_dir)
 
-# This target is intended to always be synchronized with the latest
-# packages found at http://www.mingw.org/download.shtml .
-
-# REVIEW: Does the comment above refer to the target below? That's
-# how I'd read it, but I think it applies to target 'mingw_current'.
+# This provides the minimum requirements for building lmi with this compiler.
 
 .PHONY: mingw_20050827
 mingw_20050827:
@@ -370,7 +372,7 @@ mingw_20050827:
 	  install_mingw_20050827_from_tmp_dir
 
 .PHONY: install_mingw_20050827_from_tmp_dir
-install_mingw_20050827_from_tmp_dir: $(mingw_requirements) $(mingw_extras)
+install_mingw_20050827_from_tmp_dir: $(mingw_requirements)
 	$(RM) --recursive *.tar
 	$(MKDIR) --parents $(mingw_dir)
 	-$(CP) --force --parents --preserve --recursive * $(mingw_dir)
@@ -380,17 +382,10 @@ install_mingw_20050827_from_tmp_dir: $(mingw_requirements) $(mingw_extras)
 
 ###############################################################################
 
-# Install wget-1.9.1.tar.bz2 .
+# Upgrade wget-1.9.1.tar.bz2 .
 
-# REVIEW: If wget isn't already installed, then it can't be used to
-# install itself. Does this target have any practical purpose?
-# It has at least one: upgrading to later versions of wget is automated.
-# There's a later stable version of wget available from www.MinGW.org,
-# but it isn't at the download page yet. 'INSTALL' should still be the
-# place describing how to get this prerequisite tool, but this is where
-# an automatic update should be written for users with an older version.
-# Would changing 'Install' to 'Upgrade' be better in the introductory
-# comment for this target?
+# This is only for users to upgrade this tool because it relies on itself
+# to fetch the new archive.
 
 wget_mingwport = wget-1.9.1
 
