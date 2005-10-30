@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: calculate.hpp,v 1.11 2005-06-07 23:11:36 chicares Exp $
+// $Id: calculate.hpp,v 1.12 2005-10-30 19:06:57 zeitlin Exp $
 
 #ifndef calculate_hpp
 #define calculate_hpp
@@ -221,7 +221,11 @@ struct RunCensusDeprecated
 
         timer.restart();
 
-        Ledger XXXComposite(e_ledger_type(e_ill_reg), 100, true);
+        // compilation workaround for g++ 3.3: passing e_ledger_type(e_ill_reg)
+        // directly to Ledger ctor results in an error (but the code compilers
+        // fine with g++ 3.4 and 4.0)
+        static const e_ledger_type ledgerType(e_ill_reg);
+        Ledger XXXComposite(ledgerType, 100, true);
 
         for
             (std::vector<IllusInputParms>::iterator lives_it = lives.begin()
