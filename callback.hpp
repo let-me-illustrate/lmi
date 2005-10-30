@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: callback.hpp,v 1.1 2005-05-11 23:07:37 chicares Exp $
+// $Id: callback.hpp,v 1.2 2005-10-30 20:46:36 zeitlin Exp $
 
 #ifndef callback_hpp
 #define callback_hpp
@@ -102,13 +102,10 @@ class LMI_EXPIMP callback
     ,virtual private obstruct_slicing<callback<FunctionPointer> >
 {
     BOOST_STATIC_ASSERT(boost::is_pointer<FunctionPointer>::value);
-// COMPILER !! This test is rejected by gcc-3.4.2; the reason is
-// unknown and should be investigated.
-#if !(defined __GNUC__ && __GNUC__ < 4)
-    BOOST_STATIC_ASSERT
-        (boost::is_function<boost::remove_pointer<FunctionPointer>::type>::value
-        );
-#endif // Not gcc version less than 4.
+    BOOST_STATIC_ASSERT(
+        boost::is_function<typename boost::remove_pointer<FunctionPointer>::type>::value
+    );
+
   public:
     callback();
     ~callback();
