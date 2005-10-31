@@ -23,7 +23,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: autogen.sh,v 1.2 2005-10-31 01:54:47 zeitlin Exp $
+# $Id: autogen.sh,v 1.3 2005-10-31 02:55:51 zeitlin Exp $
 
 if [ ! -f configure.ac -o ! -f Makefile.am -o ! -f lmi.xpm ]; then
     echo "Please run this script from the lmi source directory."
@@ -38,7 +38,7 @@ echo " - libtoolize " && libtoolize --automake && \
 echo " - autoconf " && autoconf && \
 echo " - autoheader " && autoheader && \
 echo " - automake " && automake -a --foreign && \
-echo "Build setup successful, type \"make\" to build lmi now."
+echo "Build setup successful, type \"configure\" to configure lmi now."
 exit 0
 
 echo "Automatic build files setup failed!"
