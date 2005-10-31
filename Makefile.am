@@ -20,7 +20,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: Makefile.am,v 1.3 2005-10-31 21:04:09 zeitlin Exp $
+# $Id: Makefile.am,v 1.4 2005-10-31 22:49:05 zeitlin Exp $
 
 ##############################################################################
 # All Targets
@@ -28,8 +28,8 @@
 
 # targets going in bin
 bin_PROGRAMS =   \
-    lmi_wx \
     lmi_cli   \
+    lmi_wx \
     elapsed_time    \
     generate_passkey    \
     antediluvian_cli    \
@@ -43,10 +43,13 @@ EXTRA_PROGRAMS = \
 # libtool libraries installed in lib
 lib_LTLIBRARIES =   \
     liblmi.la   \
+    libwx_new.la
+
+# libtool convenience libraries which are not installed at all
+noinst_LTLIBRARIES = \
     liblmi_common.la \
     libcli.la   \
-    libantediluvian.la \
-    libwx_new.la
+    libantediluvian.la
 
 # other libraries which may, or not, be built
 EXTRA_LTLIBRARIES =   \
@@ -249,8 +252,7 @@ lmi_wx_SOURCES = \
     tn_range_types.cpp \
     transferor.cpp \
     view_ex.cpp \
-    xml_notebook.cpp \
-    xmlwrapp_ex.cpp
+    xml_notebook.cpp
 
 lmi_wx_CXXFLAGS = $(WX_CXXFLAGS) $(CGICC_INCLUDE_FLAGS) $(XMLWRAPP_FLAGS) $(AM_CXXFLAGS)
 if LMI_WINDOWS
@@ -269,24 +271,18 @@ lmi_cli_CXXFLAGS=$(CGICC_INCLUDE_FLAGS)
 lmi_cli_LDADD = \
     libcli.la \
     liblmi.la    \
-    liblmi_common.la    \
     $(BOOST_LIBS)
 
 # libraries
 
 liblmi_common_la_SOURCES = \
-    accountvalue.cpp \
     actuarial_table.cpp \
     alert.cpp \
-    basicvalues.cpp \
-    database.cpp \
     calendar_date.cpp \
     configurable_settings.cpp \
     crc32.cpp \
     custom_io_0.cpp \
     data_directory.cpp \
-    dbdict.cpp \
-    dbvalue.cpp \
     dbnames.cpp \
     death_benefits.cpp \
     facets.cpp \
@@ -299,7 +295,6 @@ liblmi_common_la_SOURCES = \
     input_seq_helpers.cpp \
     inputillus.cpp \
     inputillus_sequences.cpp \
-    inputillus_term_rider.cpp \
     inputillus_xml_io.cpp \
     inputs.cpp \
     inputstatus.cpp \
@@ -314,26 +309,22 @@ liblmi_common_la_SOURCES = \
     ledgervalues.cpp \
     license.cpp \
     loads.cpp \
-    md5.cpp \
     miscellany.cpp \
-    mortality_rates.cpp \
     multiple_cell_document.cpp \
     name_value_pairs.cpp \
     outlay.cpp \
     path_utility.cpp \
     progress_meter.cpp \
     rounding_rules.cpp \
-    secure_date.cpp \
-    security.cpp \
     sigfpe.cpp \
     single_cell_document.cpp \
-    solve.cpp \
     surrchg_rates.cpp \
     system_command.cpp \
     timer.cpp \
     xenumtypes.cpp \
     xmlwrapp_ex.cpp \
     xrange.cpp
+
 liblmi_common_la_LIBADD = \
     $(BOOST_LIBS) \
     $(XMLWRAPP_LIBS)
@@ -349,10 +340,17 @@ libmain_auxiliary_common_la_SOURCES = \
 
 
 libantediluvian_la_SOURCES = \
-    accountvalue.cpp antediluvian_stubs.cpp avdebug.cpp basicvalues.cpp database.cpp dbdict.cpp \
-    dbvalue.cpp inputillus_term_rider.cpp mortality_rates.cpp solve.cpp
-libantediluvian_la_LIBADD = \
-    liblmi_common.la
+    accountvalue.cpp \
+    antediluvian_stubs.cpp \
+    avdebug.cpp \
+    basicvalues.cpp \
+    database.cpp \
+    dbdict.cpp \
+    dbvalue.cpp \
+    inputillus_term_rider.cpp \
+    mortality_rates.cpp \
+    solve.cpp
+libantediluvian_la_LIBADD = liblmi_common.la
 
 
 liblmi_la_SOURCES = \
@@ -380,8 +378,8 @@ liblmi_la_SOURCES = \
     security.cpp \
     stratified_algorithms.cpp \
     stratified_charges.cpp
-liblmi_la_LIBADD = \
-    liblmi_common.la
+
+liblmi_la_LIBADD = liblmi_common.la
 
 libcgi_la_SOURCES = \
     alert_cgi.cpp \
@@ -392,8 +390,7 @@ libcgi_la_SOURCES = \
     progress_meter_cgi.cpp
 
 libcgi_la_CXXFLAGS = $(BOOST_INCLUDE_FLAGS) $(CGICC_INCLUDE_FLAGS) $(AM_CXXFLAGS)
-libcgi_la_LIBADD = \
-    $(CGICC_LIBS)
+libcgi_la_LIBADD = $(CGICC_LIBS)
 
 libcli_la_SOURCES = \
     alert_cli.cpp \
@@ -420,7 +417,11 @@ libwx_new_la_LIBADD = \
 # auxiliary executables
 
 generate_passkey_SOURCES = \
-    calendar_date.cpp generate_passkey.cpp md5.cpp secure_date.cpp system_command.cpp
+    calendar_date.cpp \
+    generate_passkey.cpp \
+    md5.cpp \
+    secure_date.cpp \
+    system_command.cpp
 generate_passkey_CXXFLAGS = $(AM_CXXFLAGS)
 generate_passkey_LDADD = \
     $(BOOST_LIBS) libmain_auxiliary_common.la
