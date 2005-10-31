@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: workhorse.make,v 1.47 2005-10-21 16:58:26 chicares Exp $
+# $Id: workhorse.make,v 1.48 2005-10-31 03:42:55 chicares Exp $
 
 ###############################################################################
 
@@ -174,8 +174,22 @@ quoted_gpl quoted_gpl_html:
 
 # Warning options for gcc.
 
+gcc_version = $(shell $(CXX) -dumpversion)
+
+# Specify $(gcc_version_specific_warnings) last, in order to override
+# other options.
+
+# Suppress spurious gcc-3.4.4 warnings: see
+#   http://gcc.gnu.org/bugzilla/show_bug.cgi?id=22207
+
+ifeq (3.4.4,$(gcc_version))
+  gcc_version_specific_warnings := -Wno-uninitialized
+endif
+
+treat_warnings_as_errors := -pedantic-errors -Werror
+
 gcc_common_warnings := \
-  -pedantic \
+  $(treat_warnings_as_errors) \
   -Wall \
   -Wcast-align \
   -Wconversion \
@@ -221,8 +235,6 @@ gcc_cxx_warnings := \
 # WX !! The wx library triggers many warnings with these flags:
 
 gcc_common_extra_warnings := \
-  -pedantic-errors \
-  -Werror \
   -Wextra \
   -Wcast-qual \
   -Wredundant-decls \
@@ -282,8 +294,15 @@ operations_posix_windows.o:    gcc_common_extra_warnings :=
 # Since at least gcc-3.4.2, -Wmissing-prototypes is deprecated as
 # being redundant for C++.
 
-C_WARNINGS   = $(gcc_c_warnings)   $(gcc_common_extra_warnings)
-CXX_WARNINGS = $(gcc_cxx_warnings) $(gcc_common_extra_warnings)
+C_WARNINGS = \
+  $(gcc_c_warnings) \
+  $(gcc_common_extra_warnings) \
+  $(gcc_version_specific_warnings) \
+
+CXX_WARNINGS = \
+  $(gcc_cxx_warnings) \
+  $(gcc_common_extra_warnings) \
+  $(gcc_version_specific_warnings) \
 
 ################################################################################
 
