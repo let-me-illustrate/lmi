@@ -20,7 +20,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: Makefile.am,v 1.2 2005-10-31 21:03:26 zeitlin Exp $
+# $Id: Makefile.am,v 1.3 2005-10-31 21:04:09 zeitlin Exp $
 
 ##############################################################################
 # All Targets
@@ -249,7 +249,6 @@ lmi_wx_SOURCES = \
     tn_range_types.cpp \
     transferor.cpp \
     view_ex.cpp \
-    wx_checks.cpp \
     xml_notebook.cpp \
     xmlwrapp_ex.cpp
 

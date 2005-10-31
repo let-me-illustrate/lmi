@@ -21,7 +21,7 @@ dnl snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
 dnl === Prologue ===
 
-AC_REVISION($Id: configure.ac,v 1.4 2005-10-31 20:21:24 zeitlin Exp $)dnl
+AC_REVISION($Id: configure.ac,v 1.5 2005-10-31 21:04:09 zeitlin Exp $)dnl
 
 AC_PREREQ(2.59)
 AC_INIT(LMI, 1.0.0, [chicares@cox.net])
@@ -326,6 +326,40 @@ AC_SUBST(WX_LIBS)
 
 fi dnl AM_PATH_WXCONFIG failed
 
+save_CXXFLAGS=$CXXFLAGS
+CXXFLAGS="$CXXFLAGS $WX_CXXFLAGS"
+
+dnl check that the library options allow to build lmi
+AC_TRY_COMPILE([#include <wx/setup.h>],
+    [
+    #if !wxUSE_DOC_VIEW_ARCHITECTURE || \
+        !wxUSE_MDI_ARCHITECTURE || \
+        !wxUSE_PRINTING_ARCHITECTURE || \
+        !(wxUSE_STL || wxUSE_STD_STRING)
+        wrong wx library options
+    #endif
+    ],
+    [],
+    AC_MSG_ERROR([Please configure wxWidgets using --enable-std_string.])
+)
+
+dnl these options are not fatal but it's better not to use them for various
+dnl (mostly licensing) reasons
+AC_TRY_COMPILE([#include <wx/setup.h>],
+    [
+    #if wxUSE_APPLE_IEEE || \
+        wxUSE_LIBJPEG || \
+        wxUSE_LIBTIFF || \
+        wxUSE_GIF || \
+        wxUSE_THREADS
+        inappropriate wx library options
+    #endif
+    ],
+    [],
+    AC_MSG_WARN([Inappropriate wxWidgets build options detected but continuing.])
+)
+
+CXXFLAGS=$save_CXXFLAGS
 
 dnl --- Boost (required) ---
 if test "x$lmi_boost_headers" != "x"; then
