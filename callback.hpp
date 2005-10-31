@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: callback.hpp,v 1.2 2005-10-30 20:46:36 zeitlin Exp $
+// $Id: callback.hpp,v 1.3 2005-10-31 13:04:34 chicares Exp $
 
 #ifndef callback_hpp
 #define callback_hpp
@@ -95,6 +95,12 @@
 /// functions. An alternative design might use a uniform extern "C"
 /// function pointer with a large number of void* arguments that are
 /// ignored in most cases; this design prefers type safety.
+///
+/// Future directions.
+///
+/// Perhaps this class could be supplanted by boost::function. One of
+/// those facilities should be used in 'progress_meter*.?pp' and in
+/// 'alert*.?pp'.
 
 template<typename FunctionPointer>
 class LMI_EXPIMP callback
@@ -102,9 +108,8 @@ class LMI_EXPIMP callback
     ,virtual private obstruct_slicing<callback<FunctionPointer> >
 {
     BOOST_STATIC_ASSERT(boost::is_pointer<FunctionPointer>::value);
-    BOOST_STATIC_ASSERT(
-        boost::is_function<typename boost::remove_pointer<FunctionPointer>::type>::value
-    );
+    typedef typename boost::remove_pointer<FunctionPointer>::type f_type;
+    BOOST_STATIC_ASSERT(boost::is_function<f_type>::value);
 
   public:
     callback();
