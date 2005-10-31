@@ -21,7 +21,7 @@ dnl snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
 dnl === Prologue ===
 
-AC_REVISION($Id: configure.ac,v 1.2 2005-10-31 14:03:17 zeitlin Exp $)dnl
+AC_REVISION($Id: configure.ac,v 1.3 2005-10-31 14:04:09 zeitlin Exp $)dnl
 
 AC_PREREQ(2.59)
 AC_INIT(LMI, 1.0.0, [chicares@cox.net])
@@ -132,9 +132,6 @@ AC_PROG_CXX
 
 AM_CONDITIONAL(LMI_GCC, [test "x$GCC" == "xyes"])
 AM_CONDITIONAL(LMI_GXX, [test "x$GXX" == "xyes"])
-
-AC_DISABLE_STATIC   dnl don't waste time on static build by default
-AC_PROG_LIBTOOL
 
 AC_PROG_LD
 
@@ -470,6 +467,13 @@ AC_CACHE_CHECK([if we are using recent version of xmlwrapp],
 if test "x$lmi_cv_lib_xmlwrapp_recent" = "xyes"; then
     AC_DEFINE([USING_CURRENT_XMLWRAPP], [1], [Define this if you have the latest version of libxmlwrapp])
 fi
+
+dnl === Configure libtool ===
+
+dnl do this at the end as this is the longest step so only do it if all the
+dnl rest succeeded
+AC_DISABLE_STATIC   dnl don't waste time on static build by default
+AC_PROG_LIBTOOL
 
 dnl === Generate output files ===
 AC_CONFIG_FILES([Makefile])
