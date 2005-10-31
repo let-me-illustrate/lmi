@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: como_4_3_3.make,v 1.5 2005-05-26 06:34:42 chicares Exp $
+# $Id: como_4_3_3.make,v 1.6 2005-10-31 18:09:51 chicares Exp $
 
 toolset := como
 
@@ -49,6 +49,7 @@ CPPFLAGS := \
   -D__WIN32__ \
   -D_X86_ \
 
+CC  := como
 CXX := como
 
 # Sadly, this compiler's valuable '--strict' option is unavailable on
@@ -145,6 +146,7 @@ como_4_3_3.make:: ;
 	       C_EXTRA_WARNINGS='$(C_EXTRA_WARNINGS)' \
 	     CXX_EXTRA_WARNINGS='$(CXX_EXTRA_WARNINGS)' \
 	               CPPFLAGS='$(CPPFLAGS)' \
+	                     CC='$(CC)' \
 	                    CXX='$(CXX)' \
 	               CXXFLAGS='$(CXXFLAGS)' \
 	                     LD='$(LD)' \

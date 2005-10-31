@@ -41,7 +41,7 @@ double expm1(double x);
  * email: <chicares@cox.net>
  * snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
  *
- * $Id: expm1.c,v 1.2 2005-10-31 03:43:02 chicares Exp $
+ * $Id: expm1.c,v 1.3 2005-10-31 18:09:52 chicares Exp $
  *
  * End local GWC modifications. */
 
@@ -57,16 +57,26 @@ double expm1 (double x)
     return exp(x) - 1.0;
 }
 
+/* COMPILER !! Apparently como compiles this file as C++ despite its '.c'
+   extension: else 'extern "C"' wouldn't be required (or permitted).
+ */
+
 /* Begin local GWC modifications. */
 #   else // Not gcc.
     // COMPILER !! This workaround loses some accuracy.
-    double expm1(double x) {return exp(x) - 1.0;}
+#       ifdef __COMO__
+            extern "C"
+#       endif // __COMO__
+            double expm1(double x) {return exp(x) - 1.0;}
 #   endif // Not gcc.
 #endif // !defined LMI_COMPILER_PROVIDES_EXPM1
 
 #if !defined LMI_COMPILER_PROVIDES_LOG1P
 // COMPILER !! This workaround loses some accuracy.
-double log1p(double x) {return log(1.0 + x);}
+#       ifdef __COMO__
+            extern "C"
+#       endif // __COMO__
+            double log1p(double x) {return log(1.0 + x);}
 #endif // !defined LMI_COMPILER_PROVIDES_LOG1P
 
 /* End local GWC modifications. */

@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 #
-# $Id: diagnostics.sed,v 1.4 2005-10-31 03:42:51 chicares Exp $
+# $Id: diagnostics.sed,v 1.5 2005-10-31 18:09:51 chicares Exp $
 #
   # Delete expected output from make.
 /Circular.*dependency dropped/d
@@ -62,4 +62,14 @@
 /^[^ ]*ar: creating /d
 /^Creating library file:.*.a$/d
 /^< [a-z0-9].d0/d
+  # Delete expected output from como build.
+/^como  -c/d
+/^como -o/d
+/^Comeau/d
+/^Copyright/d
+/^MODE:.*C++/d
+/^C++ prelinker:.*assigned to file [^ ]*o$/d
+/^C++ prelinker:.*adopted by file [^ ]*o$/d
+/^C++ prelinker:.*no longer needed in [^ ]*o$/d
+/^C++ prelinker: executing:/d
 
