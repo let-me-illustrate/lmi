@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: fenv_lmi.cpp,v 1.5 2005-09-12 01:32:19 chicares Exp $
+// $Id: fenv_lmi.cpp,v 1.6 2005-10-31 03:43:02 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -35,16 +35,14 @@
     // that it sets __STDC_IEC_559__ and puts prototypes in <fenv.h>
     // but not in namespace std.
 #   include <fenv.h>
-#   if \
-            defined __GNUC__ \
-        &&  (__GNUC__ <= 3 || __GNUC__ == 4 && __GNUC_MINOR__ <= 1)
+#   if defined __GNUC__ && LMI_GCC_VERSION <= 40100
         // As of 2005-04-08, the gcc manual here
         // http://gcc.gnu.org/onlinedocs/gcc/Floating-point-implementation.html
         // which "corresponds to GCC version 4.1.0" says "This pragma
         // is not implemented".
-#   else // !(defined __GNUC__ && __GNUC__ <= 3)
+#   else  // Pragma STDC FENV_ACCESS implemented.
 #       pragma STDC FENV_ACCESS ON
-#   endif // !(defined __GNUC__ && __GNUC__ <= 3)
+#   endif // Pragma STDC FENV_ACCESS implemented.
 #endif // __STDC_IEC_559__
 
 #if defined __BORLANDC__ || defined _MSC_VER
