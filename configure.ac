@@ -21,7 +21,7 @@ dnl snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
 dnl === Prologue ===
 
-AC_REVISION($Id: configure.ac,v 1.3 2005-10-31 14:04:09 zeitlin Exp $)dnl
+AC_REVISION($Id: configure.ac,v 1.4 2005-10-31 20:21:24 zeitlin Exp $)dnl
 
 AC_PREREQ(2.59)
 AC_INIT(LMI, 1.0.0, [chicares@cox.net])
@@ -158,59 +158,6 @@ dnl === Library checks ===
 
 dnl use C++ compiler as we're checking for C++ libraries/headers
 AC_LANG(C++)
-
-
-dnl --- CGICC (optional) ----------------
-if test "x$lmi_cgicc_option" != "xno"; then
-    lmi_found_cgicc=yes
-    AC_CHECK_HEADER("cgicc/CgiDefs.h", [], [lmi_found_cgicc=no])
-    AC_CHECK_FILE("libcgicc.la", [], [lmi_found_cgicc=no])
-    if test "x$lmi_found_cgicc" == "xno"; then
-        for m_lmi_cgicc_guess in /usr/include /usr/local/include
-        do
-            echo "checking with m_lmi_cgicc_guess=$m_lmi_cgicc_guess"
-            AC_CHECK_HEADER([$m_lmi_cgicc_guess/cgicc/CgiDefs.h],
-                [ok_lmi_cgicc_include=$m_lmi_cgicc_guess], [])
-            if test "x$ok_lmi_cgicc_include" != "x"; then break; fi
-        done
-        for m_lmi_cgicc_lib_guess in /usr/lib /usr/local/lib
-        do
-            echo "checking with m_lmi_cgicc_lib_guess=$m_lmi_cgicc_lib_guess"
-            AC_CHECK_FILE([$m_lmi_cgicc_lib_guess/libcgicc.la],
-                [ok_lmi_cgicc_lib="$m_lmi_cgicc_lib_guess"], [])
-            if test "x$ok_lmi_cgicc_lib" != "x"; then break; fi
-        done
-        if test "x$ok_lmi_cgicc_include" != "x"; then
-            if test "x$ok_lmi_cgicc_lib" != "x"; then
-                lmi_found_cgicc=yes
-            fi
-        fi
-    fi
-    if test "x$lmi_cgicc_option" == "xyes"; then
-        if test "x$lmi_found_cgicc" == "xno"; then
-            AC_MSG_ERROR([Cannot find cgicc installation on the system. Please install cgicc...])
-        fi
-    fi
-    lmi_cgicc_option=$lmi_found_cgicc
-fi
-
-if test "x$lmi_cgicc_option" == "xyes"; then
-    CGICC_INCLUDES=$ok_lmi_cgicc_include
-    CGICC_INCLUDE_FLAGS="-I $ok_lmi_cgicc_include"
-    CGICC_LIBS="$ok_lmi_cgicc_lib/libcgicc.la"
-    CGICC_LIB_LDADD="-l$ok_lmi_cgicc_lib/libcgicc.la"
-else
-    CGICC_INCLUDES=
-    CGICC_INCLUDE_FLAGS=
-    CGICC_LIBS=
-    CGICC_LIB_LDADD=
-fi
-
-AM_CONDITIONAL(LMI_WITH_CGI, [test "x$lmi_cgicc_option" == "xyes"])
-AC_SUBST(CGICC_INCLUDES)
-AC_SUBST(CGICC_INCLUDE_FLAGS)
-AC_SUBST(CGICC_LIBS)
-AC_SUBST(CGICC_LIB_LDADD)
 
 
 dnl --- wxWidgets ---
@@ -467,6 +414,59 @@ AC_CACHE_CHECK([if we are using recent version of xmlwrapp],
 if test "x$lmi_cv_lib_xmlwrapp_recent" = "xyes"; then
     AC_DEFINE([USING_CURRENT_XMLWRAPP], [1], [Define this if you have the latest version of libxmlwrapp])
 fi
+
+dnl --- CGICC (optional) ----------------
+if test "x$lmi_cgicc_option" != "xno"; then
+    lmi_found_cgicc=yes
+    AC_CHECK_HEADER("cgicc/CgiDefs.h", [], [lmi_found_cgicc=no])
+    AC_CHECK_FILE("libcgicc.la", [], [lmi_found_cgicc=no])
+    if test "x$lmi_found_cgicc" == "xno"; then
+        for m_lmi_cgicc_guess in /usr/include /usr/local/include
+        do
+            echo "checking with m_lmi_cgicc_guess=$m_lmi_cgicc_guess"
+            AC_CHECK_HEADER([$m_lmi_cgicc_guess/cgicc/CgiDefs.h],
+                [ok_lmi_cgicc_include=$m_lmi_cgicc_guess], [])
+            if test "x$ok_lmi_cgicc_include" != "x"; then break; fi
+        done
+        for m_lmi_cgicc_lib_guess in /usr/lib /usr/local/lib
+        do
+            echo "checking with m_lmi_cgicc_lib_guess=$m_lmi_cgicc_lib_guess"
+            AC_CHECK_FILE([$m_lmi_cgicc_lib_guess/libcgicc.la],
+                [ok_lmi_cgicc_lib="$m_lmi_cgicc_lib_guess"], [])
+            if test "x$ok_lmi_cgicc_lib" != "x"; then break; fi
+        done
+        if test "x$ok_lmi_cgicc_include" != "x"; then
+            if test "x$ok_lmi_cgicc_lib" != "x"; then
+                lmi_found_cgicc=yes
+            fi
+        fi
+    fi
+    if test "x$lmi_cgicc_option" == "xyes"; then
+        if test "x$lmi_found_cgicc" == "xno"; then
+            AC_MSG_ERROR([Cannot find cgicc installation on the system. Please install cgicc...])
+        fi
+    fi
+    lmi_cgicc_option=$lmi_found_cgicc
+fi
+
+if test "x$lmi_cgicc_option" == "xyes"; then
+    CGICC_INCLUDES=$ok_lmi_cgicc_include
+    CGICC_INCLUDE_FLAGS="-I $ok_lmi_cgicc_include"
+    CGICC_LIBS="$ok_lmi_cgicc_lib/libcgicc.la"
+    CGICC_LIB_LDADD="-l$ok_lmi_cgicc_lib/libcgicc.la"
+else
+    CGICC_INCLUDES=
+    CGICC_INCLUDE_FLAGS=
+    CGICC_LIBS=
+    CGICC_LIB_LDADD=
+fi
+
+AM_CONDITIONAL(LMI_WITH_CGI, [test "x$lmi_cgicc_option" == "xyes"])
+AC_SUBST(CGICC_INCLUDES)
+AC_SUBST(CGICC_INCLUDE_FLAGS)
+AC_SUBST(CGICC_LIBS)
+AC_SUBST(CGICC_LIB_LDADD)
+
 
 dnl === Configure libtool ===
 
