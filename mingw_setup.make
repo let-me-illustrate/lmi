@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: mingw_setup.make,v 1.1 2005-10-28 18:26:07 wboutin Exp $
+# $Id: mingw_setup.make,v 1.2 2005-10-31 15:03:52 wboutin Exp $
 
 # This makefile is self-contained, which is intended to make a MinGW
 # community review easy. Some overlap now exists with the unified lmi
@@ -33,12 +33,12 @@ src_dir := $(CURDIR)
 
 system_root := C:
 
-################################################################################
+###############################################################################
 
 # Path to compiler's root directory, i.e. bin/.. .
 mingw_dir  := $(system_root)/MinGW
 
-################################################################################
+###############################################################################
 
 # Standard utilities.
 
@@ -48,29 +48,17 @@ msys_utils_dir := $(system_root)/msys/1.0/bin
 # Required in /bin (if anywhere) by FHS-2.2 .
 
 CP     := $(gnu_utils_dir)/cp
-# TODO ?? Build this from FSF sources and put it in the same
-# directory as everything else.
-#DATE   := $(gnu_utils_dir)/date
-DATE   ?= $(cygwin_dir)/bin/date
 ECHO   := $(gnu_utils_dir)/echo
-LS     := $(gnu_utils_dir)/ls
 MKDIR  := $(gnu_utils_dir)/mkdir
 MV     := $(gnu_utils_dir)/mv
 RM     := $(gnu_utils_dir)/rm
-SED    := $(gnu_utils_dir)/sed
 
 # FHS-2.2 would put these in /usr/bin .
 
 BZIP2  := $(gnu_utils_dir)/bzip2
-DIFF   := $(gnu_utils_dir)/diff
-GREP   := $(gnu_utils_dir)/grep
 GZIP   := $(gnu_utils_dir)/gzip
 MD5SUM := $(gnu_utils_dir)/md5sum
-PATCH  := $(msys_utils_dir)/patch
 TAR    := $(gnu_utils_dir)/tar
-TOUCH  := $(gnu_utils_dir)/touch
-TR     := $(gnu_utils_dir)/tr
-WC     := $(gnu_utils_dir)/wc
 WGET   := $(msys_utils_dir)/wget
 
 ###############################################################################
@@ -189,7 +177,8 @@ install_human_interactive_tools_from_tmp_dir: $(human_interactive_tools)
 
 # Upgrade wget-1.9.1.tar.bz2 .
 
-# This is only for users to upgrade this tool.
+# This is only for users to upgrade this tool because it relies on itself to
+# fetch the new archive.
 
 wget_mingwport = wget-1.9.1
 
