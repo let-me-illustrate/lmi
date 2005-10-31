@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: numeric_io_test.cpp,v 1.8 2005-06-05 03:55:52 chicares Exp $
+// $Id: numeric_io_test.cpp,v 1.9 2005-10-31 18:16:18 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -253,14 +253,13 @@ int test_main(int, char*[])
 
     BOOST_TEST_THROW(numeric_io_cast<long double>(    ""), std::invalid_argument, "");
     BOOST_TEST_THROW(numeric_io_cast<long double>(  "1e"), std::invalid_argument, "");
-    // COMPILER !! It is rumored that gcc-4 uses builtin facilities
-    // for numeric conversion, which might remove this problem.
-#if defined __GNUC__ && __GNUC__ == 3
+
+#if defined __MINGW32__ && defined __GNUC__ && LMI_GCC_VERSION < 30404
     std::cerr
-        << "This test fails with gcc version 3.x: see\n"
+        << "The preceding test fails with MinGW prior to gcc-3.4.4: see\n"
         << "  http://sf.net/mailarchive/message.php?msg_id=10706179\n"
         ;
-#endif // gcc version 3.
+#endif // MinGW gcc version prior to 3.4.4 .
 
     // This shouldn't even throw, because adequate compilers detect
     // the error at compile time:

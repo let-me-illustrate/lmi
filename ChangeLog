@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.197 2005-10-31 18:09:52 chicares Exp $
+// $Id: ChangeLog,v 1.198 2005-10-31 18:16:18 chicares Exp $
 
 MAINTENANCE
 
@@ -4350,4 +4350,9 @@ Refactor and improve documentation.
   xenum_sample.cpp
   xenumtypes.cpp
 Address various comeau issues.
+
+20051031T1816Z <chicares@cox.net> [1233]
+
+  numeric_io_test.cpp
+Tighten condition for a compiler workaround.
 
