@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 #
-# $Id: diagnostics.sed,v 1.3 2005-08-23 00:12:46 chicares Exp $
+# $Id: diagnostics.sed,v 1.4 2005-10-31 03:42:51 chicares Exp $
 #
   # Delete expected output from make.
 /Circular.*dependency dropped/d
@@ -55,7 +55,7 @@
   # Delete expected output from gcc build.
 /^[^ ]*g\+\+.*-[Ico] /d
 /^[^ ]*sed -e.* /d
-/^windres --include-dir/d
+/^[^ ]*windres /d
 /total time in link/d
 /ld: data size /d
 /^[^ ]*ar -[rus]* /d
