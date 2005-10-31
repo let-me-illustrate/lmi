@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: config.hpp,v 1.7 2005-10-31 03:43:02 chicares Exp $
+// $Id: config.hpp,v 1.8 2005-10-31 14:05:30 zeitlin Exp $
 
 // Configuration header for compiler quirks. Include at the beginning of
 // every .hpp file (and nowhere else).
@@ -89,6 +89,9 @@ namespace fs = boost::filesystem;
 #include "config_all.hpp"
 #undef OK_TO_INCLUDE_CONFIG_ALL_HPP
 
+// we don't need all this ugliness with configure
+#ifndef HAVE_CONFIG_H
+
 // Redundant include guards are passé: with modern tools, the benefit
 // is not worth the ugliness. The guards here, however, are intended
 // not to speed up compilation with antique tools that don't recognize
@@ -124,6 +127,8 @@ namespace fs = boost::filesystem;
 #   include "config_bc551.hpp"
 #   undef OK_TO_INCLUDE_CONFIG_BC551_HPP
 #endif // Old borland compiler.
+
+#endif // !HAVE_CONFIG_H
 
 // We include standard library headers this way:
 //   #include <filename>
