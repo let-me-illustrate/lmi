@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.195 2005-10-31 13:04:34 chicares Exp $
+// $Id: ChangeLog,v 1.196 2005-10-31 15:03:52 wboutin Exp $
 
 MAINTENANCE
 
@@ -4335,4 +4335,9 @@ Adapt to MinGW gcc-3.4.4 in anticipation of supporting it.
 
   callback.hpp
 Note boost::function as a possible alternative.
+
+20051031T1458Z <wboutin@massmutual.com> [1233]
+
+  mingw_setup.make
+Refactor and improve documentation.
 
