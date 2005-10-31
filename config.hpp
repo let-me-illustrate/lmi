@@ -19,13 +19,19 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: config.hpp,v 1.5 2005-05-26 18:31:49 chicares Exp $
+// $Id: config.hpp,v 1.6 2005-10-31 01:45:10 zeitlin Exp $
 
 // Configuration header for compiler quirks. Include at the beginning of
 // every .hpp file (and nowhere else).
 
 #ifndef config_hpp
 #define config_hpp
+
+// when using configure, this symbol is defined to indicate that we have access
+// to configure-generated config.h
+#ifdef HAVE_CONFIG_H
+#   include "config.h"
+#endif
 
 // Namespace alii.
 namespace boost {namespace filesystem {} }
