@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: platform_dependent.hpp,v 1.4 2005-04-07 15:03:07 chicares Exp $
+// $Id: platform_dependent.hpp,v 1.5 2005-10-31 14:46:30 zeitlin Exp $
 
 #ifndef platform_dependent_hpp
 #define platform_dependent_hpp
@@ -84,6 +84,10 @@
     // so just complain.
 #   error "Unknown platform. Consider contributing support."
 #endif // Unknown platform.
+
+// log1p() and expm1() can be declared only ifndef __STRICT_ANSI__ so get their
+// declarations while we can
+#include <cmath>
 
 // Although gcc may once have defined __STRICT_ANSI__ differently:
 //   http://gcc.gnu.org/bugzilla/show_bug.cgi?id=3199
