@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: numeric_io_traits.hpp,v 1.7 2005-05-26 18:31:49 chicares Exp $
+// $Id: numeric_io_traits.hpp,v 1.8 2005-10-31 14:03:18 zeitlin Exp $
 
 #ifndef numeric_io_traits_hpp
 #define numeric_io_traits_hpp
@@ -61,6 +61,19 @@
 // are missing, which would cause std::fabs() and std::log10() to be
 // invoked for type long double.
 //
+// But if we don't have fabsl() or log10l() we have no choice but to fall back
+// to the C++ overloads and hope the compiler gets it right.
+#ifdef HAVE_CONFIG_H
+    #ifndef HAVE_FABSL
+        inline long double fabsl(long double x) { return fabs(x); }
+    #endif
+    #ifndef HAVE_LOG10L
+        inline long double log10l(long double x) { return log10(x); }
+    #endif
+#else // !HAVE_CONFIG_H
+    // be optimistic and assume we do have fabsl() and log10l()
+#endif
+
 template<typename T>
 inline int floating_point_decimals(T t)
 {
@@ -314,11 +327,16 @@ template<> struct numeric_conversion_traits<double>
 // 'strtold' is written rather than 'std::strtold' because C++98
 // is unaware of that C99 function.
 
-#if defined LMI_COMO_WITH_MINGW
 // COMPILER !! Comeau with mingw doesn't seem to provide strtold(),
 // so at least for the nonce use this kludge:
-inline long double strtold(char const* nptr, char** endptr)
-{return strtod(nptr, endptr);}
+//
+// if we're using condigure, we know if we have strtold(), no need to guess
+#if (defined(HAVE_CONFIG_H) && !defined(HAVE_STRTOLD)) || \
+    defined LMI_COMO_WITH_MINGW
+    inline long double strtold(char const* nptr, char** endptr)
+    {
+        return strtod(nptr, endptr);
+    }
 #endif // defined LMI_COMO_WITH_MINGW
 
 template<> struct numeric_conversion_traits<long double>

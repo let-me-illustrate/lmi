@@ -21,7 +21,7 @@ dnl snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
 dnl === Prologue ===
 
-AC_REVISION($Id: configure.ac,v 1.1 2005-10-31 01:44:31 zeitlin Exp $)dnl
+AC_REVISION($Id: configure.ac,v 1.2 2005-10-31 14:03:17 zeitlin Exp $)dnl
 
 AC_PREREQ(2.59)
 AC_INIT(LMI, 1.0.0, [chicares@cox.net])
@@ -133,15 +133,22 @@ AC_PROG_CXX
 AM_CONDITIONAL(LMI_GCC, [test "x$GCC" == "xyes"])
 AM_CONDITIONAL(LMI_GXX, [test "x$GXX" == "xyes"])
 
-AC_PROG_LD
 AC_DISABLE_STATIC   dnl don't waste time on static build by default
 AC_PROG_LIBTOOL
 
-dnl do all the following checks using C++ compiler
-AC_LANG(C++)
-
+AC_PROG_LD
 
 dnl === Checks for standard headers/functions ===
+
+AC_CHECK_HEADERS(curses.h)
+if test "$ac_cv_header_curses_h" != "yes"; then
+    AC_CHECK_HEADERS(conio.h)
+    if test "$ac_cv_header_conio_h" != "yes"; then
+        AC_MSG_ERROR([Header for getch() not found: neither curses.h nor conio.h are available.])
+    fi
+fi
+
+AC_CHECK_FUNCS(log10l fabsl strtold)
 
 dnl existing code already uses these macros so continue to use them instead of
 dnl the usual HAVE_EXPM1/HAVE_LOG1P
@@ -151,6 +158,10 @@ AC_CHECK_FUNC(log1p, AC_DEFINE(LMI_COMPILER_HAS_LOG1P, [1], [Define this if you 
 
 
 dnl === Library checks ===
+
+dnl use C++ compiler as we're checking for C++ libraries/headers
+AC_LANG(C++)
+
 
 dnl --- CGICC (optional) ----------------
 if test "x$lmi_cgicc_option" != "xno"; then
