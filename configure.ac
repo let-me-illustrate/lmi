@@ -21,7 +21,7 @@ dnl snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
 dnl === Prologue ===
 
-AC_REVISION($Id: configure.ac,v 1.5 2005-10-31 21:04:09 zeitlin Exp $)dnl
+AC_REVISION($Id: configure.ac,v 1.6 2005-10-31 22:58:03 zeitlin Exp $)dnl
 
 AC_PREREQ(2.59)
 AC_INIT(LMI, 1.0.0, [chicares@cox.net])
@@ -34,6 +34,8 @@ dnl remember, "build" is where we compile, "host" is where the resulting
 dnl program runs (which may be different from "build" for cross-compilation)
 AC_CANONICAL_HOST
 
+USE_LINUX=0
+USE_WINDOWS=0
 case "${host}" in
     *-*-linux* )
         USE_LINUX=1;
@@ -50,7 +52,7 @@ case "${host}" in
         ;;
 esac
 
-AM_CONDITIONAL(LMI_WINDOWS, [test "x$USE_WINDOWS" = "x1"])
+AM_CONDITIONAL(LMI_WINDOWS, [test "$USE_WINDOWS" = 1])
 
 
 dnl === Command line options ===
@@ -152,6 +154,24 @@ dnl the usual HAVE_EXPM1/HAVE_LOG1P
 AC_CHECK_FUNC(expm1, AC_DEFINE(LMI_COMPILER_HAS_EXPM1, [1], [Define this if you have expm1() function]))
 AC_CHECK_FUNC(log1p, AC_DEFINE(LMI_COMPILER_HAS_LOG1P, [1], [Define this if you have log1p() function]))
 
+if test "$USE_WINDOWS" = 1; then
+    AC_CACHE_CHECK([for __argc/__argv global variables],
+        lmi_cv_var__argc,
+        [
+            AC_TRY_COMPILE([],
+                [
+                    int ac = __argc;
+                    char **av = __argv;
+                ],
+                lmi_cv_var__argc=yes,
+                lmi_cv_var__argc=no
+            )
+        ]
+    )
+    if test "x$lmi_cv_var__argc" = "xyes"; then
+        AC_DEFINE([HAVE__ARGC], [1], [Define this if you have __argc and __argv global variables])
+    fi
+fi
 
 
 dnl === Library checks ===
