@@ -23,7 +23,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: autogen.sh,v 1.1 2005-10-31 01:44:31 zeitlin Exp $
+# $Id: autogen.sh,v 1.2 2005-10-31 01:54:47 zeitlin Exp $
 
 if [ ! -f configure.ac -o ! -f Makefile.am -o ! -f lmi.xpm ]; then
     echo "Please run this script from the lmi source directory."
@@ -33,12 +33,11 @@ fi
 # use --foreign with automake because we lack standard GNU NEWS and AUTHOR
 # files, if they're added we can "upgrade" to (default) GNU strictness
 echo "Setting up build system for lmi:"
-echo " - aclocal " && aclocal ${wx+-I $wx} && \
+echo " - aclocal " && aclocal ${wx+-I} $wx && \
 echo " - libtoolize " && libtoolize --automake && \
 echo " - autoconf " && autoconf && \
 echo " - autoheader " && autoheader && \
 echo " - automake " && automake -a --foreign && \
-echo " - configure " && ./configure "$@" && \
 echo "Build setup successful, type \"make\" to build lmi now."
 exit 0
 
