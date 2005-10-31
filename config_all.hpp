@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: config_all.hpp,v 1.4 2005-05-26 22:01:15 chicares Exp $
+// $Id: config_all.hpp,v 1.5 2005-10-31 03:43:02 chicares Exp $
 
 // Configuration header for compiler quirks--generic configuration.
 // Never include this file directly.
@@ -31,10 +31,6 @@
 #   error This file is not intended for separate inclusion.
 #endif // OK_TO_INCLUDE_CONFIG_ALL_HPP
 
-#if defined __BORLANDC__ && __BORLANDC__ < 0x0550
-#   error Obsolete compiler not supported.
-#endif // Old borland compiler.
-
 #if defined __COMO__
 //  09 Oct 2004 17:04:46 -0700 email from <comeau@comeaucomputing.com>
 //  suggests this method to detect whether MinGW is the underlying C
@@ -45,10 +41,6 @@
 #   endif // __MINGW32_VERSION defined.
 #endif // Como.
 
-#if defined __GNUC__ && __GNUC__ < 3
-#   error Obsolete compiler not supported.
-#endif // Old gcc compiler.
-
 // TODO ?? Untested with como using gcc backend.
 #if defined __GNUC__ || defined LMI_COMO_WITH_MINGW
 #   define LMI_PACKED_ATTRIBUTE __attribute__ ((packed))
@@ -58,10 +50,14 @@
 #   error Unknown compiler
 #endif // Neither gcc, nor como with mingw, nor borland.
 
-#if defined __MINGW32__ && defined __GNUC__ && __GNUC__ == 3 && 4 <= __GNUC_MINOR__
-#   define LMI_COMPILER_HAS_EXPM1
-#   define LMI_COMPILER_HAS_LOG1P
-#endif // Recent MinGW.
+#if defined __MINGW32__ && defined __GNUC__ && 30404 <= LMI_GCC_VERSION
+#   define LMI_COMPILER_PROVIDES_EXPM1
+#endif // MinGW gcc-3.4.4+ .
+
+// COMPILER !! Not sure which exact MinGW version added log1p() support.
+#if defined __MINGW32__ && defined __GNUC__ && 30000 <= LMI_GCC_VERSION
+#   define LMI_COMPILER_PROVIDES_LOG1P
+#endif // MinGW gcc-3.0.0+ .
 
 #if defined __BORLANDC__ || defined __GNUC__
 #   define LMI_MODERN_STREAMS

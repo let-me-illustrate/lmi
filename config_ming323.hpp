@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: config_ming323.hpp,v 1.1 2005-01-14 19:47:44 chicares Exp $
+// $Id: config_ming323.hpp,v 1.2 2005-10-31 03:43:02 chicares Exp $
 
 // Configuration header for compiler quirks--mingw gcc-3.2.3 .
 
@@ -30,9 +30,12 @@
 #   error This file is not intended for separate inclusion.
 #endif // OK_TO_INCLUDE_CONFIG_MING323_HPP
 
-#if defined __MINGW32__ && defined __GNUC__ && __GNUC__ == 3 && __GNUC_MINOR__ == 2
+#if defined __MINGW32__ && defined __GNUC__ && 30203 <= LMI_GCC_VERSION
 
-    // dannysmith's email of 2003-12-08:
+#   if LMI_GCC_VERSION < 30300
+
+    // dannysmith's email of 2003-12-08T22:32Z suggests this approach
+    // to address the slowness of pow() in mingw-runtime-2.2:
 /*
     extern double  (*_imp__pow) (double, double);
     static inline double pow (double x, double y)
@@ -42,11 +45,13 @@
     }
     #define pow(_x, _y) __pow(_x, _y)
 */
-    // Doesn't seem to work. Need to ask on mingw mailing list.
+    // But it didn't seem to work. Probably the issue is moot now.
 
-#else // Not old gnu compiler.
-#   error Use this file for mingw gcc version 3.2.3 only.
-#endif // Not old gnu compiler.
+#   endif // Not MinGW gcc-3.2.x or prior.
+
+#else  // Not MinGW gcc-3.2.3+ .
+#   error Use this file for mingw gcc version 3.2.3 or higher only.
+#endif // Not MinGW gcc-3.2.3+ .
 
 #endif // config_ming323_hpp
 

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.193 2005-10-28 18:26:08 wboutin Exp $
+// $Id: ChangeLog,v 1.194 2005-10-31 03:43:02 chicares Exp $
 
 MAINTENANCE
 
@@ -4291,4 +4291,35 @@ Mark release candidate.
   setup.make
   mingw_setup.make [new file]
 Create stand-alone MinGW installation.
+
+20051030T1906Z <vadim@tt-solutions.com> [1232]
+
+  calculate.hpp
+Work around a gcc-3.3 diagnostic.
+
+20051030T2046Z <vadim@tt-solutions.com> [1232]
+
+  callback.hpp
+Correct a defect: use 'typename' where required.
+
+20051031T0145Z <vadim@tt-solutions.com> [1232]
+
+  config.hpp
+Include 'config.h' if supplied by autotools.
+
+20051031T0342Z <chicares@cox.net> [1233]
+
+  diagnostics.sed
+Improve diagnostic filtering for 'windres'.
+
+  workhorse.make
+Adjust warnings for gcc-3.4.4 .
+
+  config.hpp
+  config_all.hpp
+  config_ming323.hpp
+  expm1.c
+  fenv_lmi.cpp
+  math_functors.hpp
+Adapt to MinGW gcc-3.4.4 in anticipation of supporting it.
 

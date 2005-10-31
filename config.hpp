@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: config.hpp,v 1.6 2005-10-31 01:45:10 zeitlin Exp $
+// $Id: config.hpp,v 1.7 2005-10-31 03:43:02 chicares Exp $
 
 // Configuration header for compiler quirks. Include at the beginning of
 // every .hpp file (and nowhere else).
@@ -27,15 +27,17 @@
 #ifndef config_hpp
 #define config_hpp
 
-// when using configure, this symbol is defined to indicate that we have access
-// to configure-generated config.h
+// When using configure, this symbol is defined to indicate that we have access
+// to configure-generated config.h .
 #ifdef HAVE_CONFIG_H
 #   include "config.h"
 #endif
 
+#ifdef __cplusplus
 // Namespace alii.
 namespace boost {namespace filesystem {} }
 namespace fs = boost::filesystem;
+#endif // Not C++.
 
 // The msw platform-identifying macro that its vendor encourages
 // people to use contains the word "win". I don't consider a non-free
@@ -74,6 +76,15 @@ namespace fs = boost::filesystem;
 //
 #include "platform_dependent.hpp"
 
+#if defined __GNUC__ && __GNUC__ < 3
+#   error Obsolete compiler not supported.
+#endif // Ancient gcc compiler.
+
+#if defined __GNUC__
+#   define LMI_GCC_VERSION \
+        (__GNUC__ * 10000 + __GNUC_MINOR__ * 100 + __GNUC_PATCHLEVEL__)
+#endif // Compiler is gcc.
+
 #define OK_TO_INCLUDE_CONFIG_ALL_HPP
 #include "config_all.hpp"
 #undef OK_TO_INCLUDE_CONFIG_ALL_HPP
@@ -92,34 +103,23 @@ namespace fs = boost::filesystem;
 // header causes an error. We take care to undefine each reverse
 // include guard immediately after using it.
 
-// COMPILER !! gcc has macros for major and minor version, but not debug
-// version (e.g. 2.95, but not 2.95.2 or 2.95.2-1). See boost mailing list.
-
-#if defined __MINGW32__ && defined __GNUC__ && __GNUC__ == 2 && __GNUC_MINOR__ == 95
-#   define OK_TO_INCLUDE_CONFIG_MING29521_HPP
-#   include "config_ming29521.hpp"
-#   undef OK_TO_INCLUDE_CONFIG_MING29521_HPP
-#endif // mingw gcc 2.95.2-1 compiler.
-
-#if defined __MINGW32__ && defined __GNUC__ && __GNUC__ == 3 && __GNUC_MINOR__ == 2
+#if defined __MINGW32__ && defined __GNUC__ && 30203 <= LMI_GCC_VERSION
 #   define OK_TO_INCLUDE_CONFIG_MING323_HPP
 #   include "config_ming323.hpp"
 #   undef OK_TO_INCLUDE_CONFIG_MING323_HPP
-#endif // mingw gcc 3.2.3 compiler.
+#endif // MinGW gcc 3.2.3+ .
 
-#if defined __CYGWIN__ && defined __GNUC__ && __GNUC__ == 2 && __GNUC_MINOR__ == 95
-#   define OK_TO_INCLUDE_CONFIG_CYG29534_HPP
-#   include "config_cyg29534.hpp"
-#   undef OK_TO_INCLUDE_CONFIG_CYG29534_HPP
-#endif // cygwin gcc 2.95.3-4 compiler.
+#if defined __CYGWIN__ && defined __GNUC__ && 30203 <= LMI_GCC_VERSION
+#   define OK_TO_INCLUDE_CONFIG_CYG323_HPP
+#   include "config_cyg323.hpp"
+#   undef OK_TO_INCLUDE_CONFIG_CYG323_HPP
+#endif // Cygwin gcc 3.2.3+ .
 
 #if defined __BORLANDC__ && __BORLANDC__ < 0x0550
-#   define OK_TO_INCLUDE_CONFIG_BC502_HPP
-#   include "config_bc502.hpp"
-#   undef OK_TO_INCLUDE_CONFIG_BC502_HPP
-#endif // Old borland compiler.
+#   error Obsolete compiler not supported.
+#endif // Ancient borland compiler.
 
-#if defined __BORLANDC__ && __BORLANDC__ >= 0x0550
+#if defined __BORLANDC__ && 0x0550 <= __BORLANDC__
 #   define OK_TO_INCLUDE_CONFIG_BC551_HPP
 #   include "config_bc551.hpp"
 #   undef OK_TO_INCLUDE_CONFIG_BC551_HPP
