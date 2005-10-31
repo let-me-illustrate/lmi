@@ -20,7 +20,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: Makefile.am,v 1.1 2005-10-31 01:44:31 zeitlin Exp $
+# $Id: Makefile.am,v 1.2 2005-10-31 21:03:26 zeitlin Exp $
 
 ##############################################################################
 # All Targets
@@ -50,7 +50,6 @@ lib_LTLIBRARIES =   \
 
 # other libraries which may, or not, be built
 EXTRA_LTLIBRARIES =   \
-    libxmlwrapp.la  \
     libmain_auxiliary_common.la \
     libtest_commons.la
 
@@ -222,22 +221,48 @@ endif
 
 # main program executables
 lmi_wx_SOURCES = \
-    about_dialog.cpp alert_wx.cpp ce_product_name.cpp census_document.cpp census_view.cpp \
-    date_control.cpp datum_base.cpp datum_boolean.cpp datum_string.cpp docmanager_ex.cpp \
-    docmdichildframe_ex.cpp facets.cpp file_command_wx.cpp illustration_document.cpp \
-    illustration_view.cpp input.cpp input_harmonization.cpp main_common.cpp main_wx.cpp \
-    mc_enum.cpp mc_enum_types.cpp previewframe_ex.cpp progress_meter_wx.cpp text_doc.cpp \
-    text_view.cpp tn_range_types.cpp transferor.cpp view_ex.cpp wx_checks.cpp xml_notebook.cpp
-lmi_wx_CXXFLAGS = $(WX_CXXFLAGS) $(CGICC_INCLUDE_FLAGS) $(AM_CXXFLAGS)
+    about_dialog.cpp \
+    alert_wx.cpp \
+    ce_product_name.cpp \
+    census_document.cpp \
+    census_view.cpp \
+    date_control.cpp \
+    datum_base.cpp \
+    datum_boolean.cpp \
+    datum_string.cpp \
+    docmanager_ex.cpp \
+    docmdichildframe_ex.cpp \
+    facets.cpp \
+    file_command_wx.cpp \
+    illustration_document.cpp \
+    illustration_view.cpp \
+    input.cpp \
+    input_harmonization.cpp \
+    main_common.cpp \
+    main_wx.cpp \
+    mc_enum.cpp \
+    mc_enum_types.cpp \
+    previewframe_ex.cpp \
+    progress_meter_wx.cpp \
+    text_doc.cpp \
+    text_view.cpp \
+    tn_range_types.cpp \
+    transferor.cpp \
+    view_ex.cpp \
+    wx_checks.cpp \
+    xml_notebook.cpp \
+    xmlwrapp_ex.cpp
+
+lmi_wx_CXXFLAGS = $(WX_CXXFLAGS) $(CGICC_INCLUDE_FLAGS) $(XMLWRAPP_FLAGS) $(AM_CXXFLAGS)
 if LMI_WINDOWS
     lmi_wx_CXXFLAGS += -DLMI_USE_DLL -mwindows
 endif
 lmi_wx_LDADD =  \
     liblmi.la \
-    libwx_new.la   \
     liblmi_common.la \
-    libxmlwrapp.la    \
+    libwx_new.la   \
     $(BOOST_LIBS) \
+    $(XMLWRAPP_LIBS) \
     $(WX_LIBS)
 
 lmi_cli_SOURCES = $(top_builddir)/dummy.cpp
@@ -249,30 +274,78 @@ lmi_cli_LDADD = \
     $(BOOST_LIBS)
 
 # libraries
-libxmlwrapp_la_SOURCES =   \
-    xmlwrapp_ex.cpp
-libxmlwrapp_la_CXXFLAGS =  \
-    $(XMLWRAPP_FLAGS) $(AM_CXXFLAGS)
-libxmlwrapp_la_LIBADD = \
-    $(XMLWRAPP_LIBS)
-
 
 liblmi_common_la_SOURCES = \
-    actuarial_table.cpp alert.cpp calendar_date.cpp configurable_settings.cpp crc32.cpp \
-    custom_io_0.cpp data_directory.cpp dbnames.cpp death_benefits.cpp facets.cpp \
-    fenv_lmi.cpp file_command.cpp getopt.cpp global_settings.cpp group_values.cpp input_sequence.cpp \
-    input_seq_helpers.cpp inputillus.cpp inputillus_sequences.cpp inputillus_xml_io.cpp inputs.cpp \
-    inputstatus.cpp interest_rates.cpp ledger.cpp ledger_base.cpp ledger_invariant.cpp \
-    ledger_text_formats.cpp ledger_variant.cpp ledger_xml_io.cpp ledger_xsl.cpp ledgervalues.cpp \
-    license.cpp loads.cpp miscellany.cpp multiple_cell_document.cpp name_value_pairs.cpp outlay.cpp \
-    path_utility.cpp progress_meter.cpp rounding_rules.cpp sigfpe.cpp single_cell_document.cpp \
-    surrchg_rates.cpp system_command.cpp timer.cpp xenumtypes.cpp xrange.cpp
+    accountvalue.cpp \
+    actuarial_table.cpp \
+    alert.cpp \
+    basicvalues.cpp \
+    database.cpp \
+    calendar_date.cpp \
+    configurable_settings.cpp \
+    crc32.cpp \
+    custom_io_0.cpp \
+    data_directory.cpp \
+    dbdict.cpp \
+    dbvalue.cpp \
+    dbnames.cpp \
+    death_benefits.cpp \
+    facets.cpp \
+    fenv_lmi.cpp \
+    file_command.cpp \
+    getopt.cpp \
+    global_settings.cpp \
+    group_values.cpp \
+    input_sequence.cpp \
+    input_seq_helpers.cpp \
+    inputillus.cpp \
+    inputillus_sequences.cpp \
+    inputillus_term_rider.cpp \
+    inputillus_xml_io.cpp \
+    inputs.cpp \
+    inputstatus.cpp \
+    interest_rates.cpp \
+    ledger.cpp \
+    ledger_base.cpp \
+    ledger_invariant.cpp \
+    ledger_text_formats.cpp \
+    ledger_variant.cpp \
+    ledger_xml_io.cpp \
+    ledger_xsl.cpp \
+    ledgervalues.cpp \
+    license.cpp \
+    loads.cpp \
+    md5.cpp \
+    miscellany.cpp \
+    mortality_rates.cpp \
+    multiple_cell_document.cpp \
+    name_value_pairs.cpp \
+    outlay.cpp \
+    path_utility.cpp \
+    progress_meter.cpp \
+    rounding_rules.cpp \
+    secure_date.cpp \
+    security.cpp \
+    sigfpe.cpp \
+    single_cell_document.cpp \
+    solve.cpp \
+    surrchg_rates.cpp \
+    system_command.cpp \
+    timer.cpp \
+    xenumtypes.cpp \
+    xmlwrapp_ex.cpp \
+    xrange.cpp
 liblmi_common_la_LIBADD = \
-    libxmlwrapp.la
+    $(BOOST_LIBS) \
+    $(XMLWRAPP_LIBS)
 
 libmain_auxiliary_common_la_SOURCES = \
-    alert.cpp alert_cli.cpp fenv_lmi.cpp \
-    main_common.cpp main_common_non_wx.cpp sigfpe.cpp
+    alert.cpp \
+    alert_cli.cpp \
+    fenv_lmi.cpp \
+    main_common.cpp \
+    main_common_non_wx.cpp \
+    sigfpe.cpp
 
 
 
@@ -284,11 +357,30 @@ libantediluvian_la_LIBADD = \
 
 
 liblmi_la_SOURCES = \
-    ihs_acctval.cpp ihs_avdebug.cpp ihs_avmly.cpp ihs_avsolve.cpp ihs_avstrtgy.cpp \
-    ihs_basicval.cpp ihs_commfns.cpp ihs_database.cpp ihs_dbdict.cpp ihs_dbvalue.cpp \
-    ihs_fpios.cpp ihs_funddata.cpp ihs_inputillus_term_rider.cpp ihs_irc7702.cpp ihs_irc7702a.cpp \
-    ihs_mortal.cpp ihs_pios.cpp ihs_proddata.cpp ihs_rnddata.cpp md5.cpp secure_date.cpp \
-    security.cpp stratified_algorithms.cpp stratified_charges.cpp
+    ihs_acctval.cpp \
+    ihs_avdebug.cpp \
+    ihs_avmly.cpp \
+    ihs_avsolve.cpp \
+    ihs_avstrtgy.cpp \
+    ihs_basicval.cpp \
+    ihs_commfns.cpp \
+    ihs_database.cpp \
+    ihs_dbdict.cpp \
+    ihs_dbvalue.cpp \
+    ihs_fpios.cpp \
+    ihs_funddata.cpp \
+    ihs_inputillus_term_rider.cpp \
+    ihs_irc7702.cpp \
+    ihs_irc7702a.cpp \
+    ihs_mortal.cpp \
+    ihs_pios.cpp \
+    ihs_proddata.cpp \
+    ihs_rnddata.cpp \
+    md5.cpp \
+    secure_date.cpp \
+    security.cpp \
+    stratified_algorithms.cpp \
+    stratified_charges.cpp
 liblmi_la_LIBADD = \
     liblmi_common.la
 
@@ -493,13 +585,14 @@ test_input_SOURCES =    \
   multiple_cell_document.cpp \
   single_cell_document.cpp \
   xenumtypes.cpp \
+  xmlwrapp_ex.cpp \
   xrange.cpp
-test_input_CXXFLAGS = $(AM_CXXFLAGS)
+
+test_input_CXXFLAGS = $(XMLWRAPP_FLAGS) $(AM_CXXFLAGS)
 test_input_LDADD =    \
   $(BOOST_LIBS) \
   libtest_commons.la \
-  libxmlwrapp.la    \
-  $(LIBXML_LIBS) \
+  $(XMLWRAPP_LIBS) \
   $(test_input_extra_libs)
 
 test_irc7702a_SOURCES = \
