@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: math_functors.hpp,v 1.6 2005-10-31 03:43:02 chicares Exp $
+// $Id: math_functors.hpp,v 1.7 2005-10-31 18:09:52 chicares Exp $
 
 #ifndef math_functors_hpp
 #define math_functors_hpp
@@ -36,6 +36,10 @@
 #if !defined LMI_COMPILER_PROVIDES_EXPM1
 extern "C" double expm1(double);
 #endif // !defined LMI_COMPILER_PROVIDES_EXPM1
+
+#if !defined LMI_COMPILER_PROVIDES_LOG1P
+extern "C" double log1p(double);
+#endif // !defined LMI_COMPILER_PROVIDES_LOG1P
 
 // TODO ?? Write functors here for other refactorable uses of
 // std::pow() found throughout the program.

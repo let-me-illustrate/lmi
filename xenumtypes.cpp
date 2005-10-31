@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xenumtypes.cpp,v 1.11 2005-10-16 16:36:10 chicares Exp $
+// $Id: xenumtypes.cpp,v 1.12 2005-10-31 18:09:52 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -41,235 +41,6 @@ magic_stream& operator<< (magic_stream&, magic_class const&);
 #include "xenumtypes.hpp"
 
 #include <sstream>
-
-#ifdef LMI_EXPLICIT_INSTANTIATION
-
-#   define OK_TO_COMPILE_XENUM_CPP
-#   include "xenum.cpp"
-#   undef OK_TO_COMPILE_XENUM_CPP
-
-// Special case: this type is of boolean essence, and we want it to accept
-// "1" or "0" as well as "Yes" or "No" for assignment.
-template<> void xenum<enum_yes_or_no, 2>::set_value(std::string const& s)
-{
-    int const expanded_N = 4;
-
-    static enum_yes_or_no const expanded_enumerators[] =
-        {e_yes
-        ,e_no
-        ,e_yes
-        ,e_no
-        };
-
-    static char const*const expanded_names[] =
-        {"Yes"
-        ,"No"
-        ,"1"
-        ,"0"
-        };
-
-    std::ptrdiff_t index =
-        std::find
-            (expanded_names
-            ,expanded_names + expanded_N
-            ,s
-            )
-        - expanded_names
-        ;
-
-    if(expanded_N == index)
-        {
-        std::ostringstream error;
-        error
-            << s
-            << " out of range for type "
-            << typeid(enum_yes_or_no).name()
-            ;
-        throw std::range_error(error.str());
-        }
-    else
-        {
-        representation = expanded_enumerators[index];
-        }
-}
-
-template class xenum<enum_yes_or_no, 2>;
-template std::istream& operator>> (std::istream& is, xenum<enum_yes_or_no, 2>&);
-template std::ostream& operator<< (std::ostream& os, xenum<enum_yes_or_no, 2> const&);
-
-template class xenum<enum_gender, 3>;
-template std::istream& operator>> (std::istream& is, xenum<enum_gender, 3>&);
-template std::ostream& operator<< (std::ostream& os, xenum<enum_gender, 3> const&);
-
-template class xenum<enum_smoking, 3>;
-template std::istream& operator>> (std::istream& is, xenum<enum_smoking, 3>&);
-template std::ostream& operator<< (std::ostream& os, xenum<enum_smoking, 3> const&);
-
-template class xenum<enum_class, 4>;
-template std::istream& operator>> (std::istream& is, xenum<enum_class, 4>&);
-template std::ostream& operator<< (std::ostream& os, xenum<enum_class, 4> const&);
-
-template class xenum<enum_dbopt, 3>;
-template std::istream& operator>> (std::istream& is, xenum<enum_dbopt, 3>&);
-template std::ostream& operator<< (std::ostream& os, xenum<enum_dbopt, 3> const&);
-
-template class xenum<enum_dbopt_7702, 2>;
-template std::istream& operator>> (std::istream& is, xenum<enum_dbopt_7702, 2>&);
-template std::ostream& operator<< (std::ostream& os, xenum<enum_dbopt_7702, 2> const&);
-
-template class xenum<enum_mode, 4>;
-template std::istream& operator>> (std::istream& is, xenum<enum_mode, 4>&);
-template std::ostream& operator<< (std::ostream& os, xenum<enum_mode, 4> const&);
-
-template class xenum<enum_basis, 3>;
-template std::istream& operator>> (std::istream& is, xenum<enum_basis, 3>&);
-template std::ostream& operator<< (std::ostream& os, xenum<enum_basis, 3> const&);
-
-template class xenum<enum_sep_acct_basis, 3>;
-template std::istream& operator>> (std::istream& is, xenum<enum_sep_acct_basis, 3>&);
-template std::ostream& operator<< (std::ostream& os, xenum<enum_sep_acct_basis, 3> const&);
-
-template class xenum<enum_rate_period, 2>;
-template std::istream& operator>> (std::istream& is, xenum<enum_rate_period, 2>&);
-template std::ostream& operator<< (std::ostream& os, xenum<enum_rate_period, 2> const&);
-
-template class xenum<enum_run_basis, 7>;
-template std::istream& operator>> (std::istream& is, xenum<enum_run_basis, 7>&);
-template std::ostream& operator<< (std::ostream& os, xenum<enum_run_basis, 7> const&);
-
-template class xenum<enum_ledger_type, 7>;
-template std::istream& operator>> (std::istream& is, xenum<enum_ledger_type, 7>&);
-template std::ostream& operator<< (std::ostream& os, xenum<enum_ledger_type, 7> const&);
-
-template class xenum<enum_amount_type, 2>;
-template std::istream& operator>> (std::istream& is, xenum<enum_amount_type, 2>&);
-template std::ostream& operator<< (std::ostream& os, xenum<enum_amount_type, 2> const&);
-
-template class xenum<enum_uw_basis, 5>;
-template std::istream& operator>> (std::istream& is, xenum<enum_uw_basis, 5>&);
-template std::ostream& operator<< (std::ostream& os, xenum<enum_uw_basis, 5> const&);
-
-template class xenum<enum_table_rating, 11>;
-template std::istream& operator>> (std::istream& is, xenum<enum_table_rating, 11>&);
-template std::ostream& operator<< (std::ostream& os, xenum<enum_table_rating, 11> const&);
-
-template class xenum<enum_solve_type, 9>;
-template std::istream& operator>> (std::istream& is, xenum<enum_solve_type, 9>&);
-template std::ostream& operator<< (std::ostream& os, xenum<enum_solve_type, 9> const&);
-
-template class xenum<enum_solve_target, 2>;
-template std::istream& operator>> (std::istream& is, xenum<enum_solve_target, 2>&);
-template std::ostream& operator<< (std::ostream& os, xenum<enum_solve_target, 2> const&);
-
-template class xenum<enum_solve_tgt_at, 4>;
-template std::istream& operator>> (std::istream& is, xenum<enum_solve_tgt_at, 4>&);
-template std::ostream& operator<< (std::ostream& os, xenum<enum_solve_tgt_at, 4> const&);
-
-template class xenum<enum_solve_from, 4>;
-template std::istream& operator>> (std::istream& is, xenum<enum_solve_from, 4>&);
-template std::ostream& operator<< (std::ostream& os, xenum<enum_solve_from, 4> const&);
-
-template class xenum<enum_solve_to, 4>;
-template std::istream& operator>> (std::istream& is, xenum<enum_solve_to, 4>&);
-template std::ostream& operator<< (std::ostream& os, xenum<enum_solve_to, 4> const&);
-
-template class xenum<enum_kludge_from, 4>;
-template std::istream& operator>> (std::istream& is, xenum<enum_kludge_from, 4>&);
-template std::ostream& operator<< (std::ostream& os, xenum<enum_kludge_from, 4> const&);
-
-template class xenum<enum_kludge_to, 4>;
-template std::istream& operator>> (std::istream& is, xenum<enum_kludge_to, 4>&);
-template std::ostream& operator<< (std::ostream& os, xenum<enum_kludge_to, 4> const&);
-
-template class xenum<enum_pmt_strategy, 9>;
-template std::istream& operator>> (std::istream& is, xenum<enum_pmt_strategy, 9>&);
-template std::ostream& operator<< (std::ostream& os, xenum<enum_pmt_strategy, 9> const&);
-
-template class xenum<enum_sa_strategy, 9>;
-template std::istream& operator>> (std::istream& is, xenum<enum_sa_strategy, 9>&);
-template std::ostream& operator<< (std::ostream& os, xenum<enum_sa_strategy, 9> const&);
-
-template class xenum<enum_loan_strategy, 4>;
-template std::istream& operator>> (std::istream& is, xenum<enum_loan_strategy, 4>&);
-template std::ostream& operator<< (std::ostream& os, xenum<enum_loan_strategy, 4> const&);
-
-template class xenum<enum_wd_strategy, 4>;
-template std::istream& operator>> (std::istream& is, xenum<enum_wd_strategy, 4>&);
-template std::ostream& operator<< (std::ostream& os, xenum<enum_wd_strategy, 4> const&);
-
-template class xenum<enum_int_rate_type, 3>;
-template std::istream& operator>> (std::istream& is, xenum<enum_int_rate_type, 3>&);
-template std::ostream& operator<< (std::ostream& os, xenum<enum_int_rate_type, 3> const&);
-
-template class xenum<enum_loan_rate_type, 2>;
-template std::istream& operator>> (std::istream& is, xenum<enum_loan_rate_type, 2>&);
-template std::ostream& operator<< (std::ostream& os, xenum<enum_loan_rate_type, 2> const&);
-
-template class xenum<enum_fund_input_method, 3>;
-template std::istream& operator>> (std::istream& is, xenum<enum_fund_input_method, 3>&);
-template std::ostream& operator<< (std::ostream& os, xenum<enum_fund_input_method, 3> const&);
-
-template class xenum<enum_run_order, 2>;
-template std::istream& operator>> (std::istream& is, xenum<enum_run_order, 2>&);
-template std::ostream& operator<< (std::ostream& os, xenum<enum_run_order, 2> const&);
-
-template class xenum<enum_survival_limit, 4>;
-template std::istream& operator>> (std::istream& is, xenum<enum_survival_limit, 4>&);
-template std::ostream& operator<< (std::ostream& os, xenum<enum_survival_limit, 4> const&);
-
-template class xenum<enum_term_adj_method, 3>;
-template std::istream& operator>> (std::istream& is, xenum<enum_term_adj_method, 3>&);
-template std::ostream& operator<< (std::ostream& os, xenum<enum_term_adj_method, 3> const&);
-
-template class xenum<enum_plan, 2>;
-template std::istream& operator>> (std::istream& is, xenum<enum_plan, 2>&);
-template std::ostream& operator<< (std::ostream& os, xenum<enum_plan, 2> const&);
-
-template class xenum<enum_state, 53>;
-template std::istream& operator>> (std::istream& is, xenum<enum_state, 53>&);
-template std::ostream& operator<< (std::ostream& os, xenum<enum_state, 53> const&);
-
-template class xenum<enum_country, 239>;
-template std::istream& operator>> (std::istream& is, xenum<enum_country, 239>&);
-template std::ostream& operator<< (std::ostream& os, xenum<enum_country, 239> const&);
-
-template class xenum<enum_defn_life_ins, 3>;
-template std::istream& operator>> (std::istream& is, xenum<enum_defn_life_ins, 3>&);
-template std::ostream& operator<< (std::ostream& os, xenum<enum_defn_life_ins, 3> const&);
-
-template class xenum<enum_mec_avoid_method, 3>;
-template std::istream& operator>> (std::istream& is, xenum<enum_mec_avoid_method, 3>&);
-template std::ostream& operator<< (std::ostream& os, xenum<enum_mec_avoid_method, 3> const&);
-
-template class xenum<enum_defn_material_change, 5>;
-template std::istream& operator>> (std::istream& is, xenum<enum_defn_material_change, 5>&);
-template std::ostream& operator<< (std::ostream& os, xenum<enum_defn_material_change, 5> const&);
-
-template class xenum<enum_spread_method, 2>;
-template std::istream& operator>> (std::istream& is, xenum<enum_spread_method, 2>&);
-template std::ostream& operator<< (std::ostream& os, xenum<enum_spread_method, 2> const&);
-
-template class xenum<enum_anticipated_deduction, 4>;
-template std::istream& operator>> (std::istream& is, xenum<enum_anticipated_deduction, 4>&);
-template std::ostream& operator<< (std::ostream& os, xenum<enum_anticipated_deduction, 4> const&);
-
-template class xenum<enum_asset_charge_type, 2>;
-template std::istream& operator>> (std::istream& is, xenum<enum_asset_charge_type, 2>&);
-template std::ostream& operator<< (std::ostream& os, xenum<enum_asset_charge_type, 2> const&);
-
-template class xenum<enum_part_mort_table, 1>;
-template std::istream& operator>> (std::istream& is, xenum<enum_part_mort_table, 1>&);
-template std::ostream& operator<< (std::ostream& os, xenum<enum_part_mort_table, 1> const&);
-
-template class xenum<enum_premium_table, 1>;
-template std::istream& operator>> (std::istream& is, xenum<enum_premium_table, 1>&);
-template std::ostream& operator<< (std::ostream& os, xenum<enum_premium_table, 1> const&);
-
-template class xenum<enum_post_ret_sa_strategy, 4>;
-template std::istream& operator>> (std::istream& is, xenum<enum_post_ret_sa_strategy, 4>&);
-template std::ostream& operator<< (std::ostream& os, xenum<enum_post_ret_sa_strategy, 4> const&);
-
-#endif // LMI_EXPLICIT_INSTANTIATION
 
 // TODO ?? Do we really want 'enum_yes_or_no' here? Why not a typedef?
 template<> enum_yes_or_no const e_yes_or_no::enumerators[] =
@@ -895,6 +666,235 @@ template<> char const*const e_post_ret_sa_strategy::names[] =
     ,"Scalar"
     ,"% of pre-retirement"
     };
+
+#ifdef LMI_EXPLICIT_INSTANTIATION
+
+#   define OK_TO_COMPILE_XENUM_CPP
+#   include "xenum.cpp"
+#   undef OK_TO_COMPILE_XENUM_CPP
+
+// Special case: this type is of boolean essence, and we want it to accept
+// "1" or "0" as well as "Yes" or "No" for assignment.
+template<> void xenum<enum_yes_or_no, 2>::set_value(std::string const& s)
+{
+    int const expanded_N = 4;
+
+    static enum_yes_or_no const expanded_enumerators[] =
+        {e_yes
+        ,e_no
+        ,e_yes
+        ,e_no
+        };
+
+    static char const*const expanded_names[] =
+        {"Yes"
+        ,"No"
+        ,"1"
+        ,"0"
+        };
+
+    std::ptrdiff_t index =
+        std::find
+            (expanded_names
+            ,expanded_names + expanded_N
+            ,s
+            )
+        - expanded_names
+        ;
+
+    if(expanded_N == index)
+        {
+        std::ostringstream error;
+        error
+            << s
+            << " out of range for type "
+            << typeid(enum_yes_or_no).name()
+            ;
+        throw std::range_error(error.str());
+        }
+    else
+        {
+        representation = expanded_enumerators[index];
+        }
+}
+
+template class xenum<enum_yes_or_no, 2>;
+template std::istream& operator>> (std::istream& is, xenum<enum_yes_or_no, 2>&);
+template std::ostream& operator<< (std::ostream& os, xenum<enum_yes_or_no, 2> const&);
+
+template class xenum<enum_gender, 3>;
+template std::istream& operator>> (std::istream& is, xenum<enum_gender, 3>&);
+template std::ostream& operator<< (std::ostream& os, xenum<enum_gender, 3> const&);
+
+template class xenum<enum_smoking, 3>;
+template std::istream& operator>> (std::istream& is, xenum<enum_smoking, 3>&);
+template std::ostream& operator<< (std::ostream& os, xenum<enum_smoking, 3> const&);
+
+template class xenum<enum_class, 4>;
+template std::istream& operator>> (std::istream& is, xenum<enum_class, 4>&);
+template std::ostream& operator<< (std::ostream& os, xenum<enum_class, 4> const&);
+
+template class xenum<enum_dbopt, 3>;
+template std::istream& operator>> (std::istream& is, xenum<enum_dbopt, 3>&);
+template std::ostream& operator<< (std::ostream& os, xenum<enum_dbopt, 3> const&);
+
+template class xenum<enum_dbopt_7702, 2>;
+template std::istream& operator>> (std::istream& is, xenum<enum_dbopt_7702, 2>&);
+template std::ostream& operator<< (std::ostream& os, xenum<enum_dbopt_7702, 2> const&);
+
+template class xenum<enum_mode, 4>;
+template std::istream& operator>> (std::istream& is, xenum<enum_mode, 4>&);
+template std::ostream& operator<< (std::ostream& os, xenum<enum_mode, 4> const&);
+
+template class xenum<enum_basis, 3>;
+template std::istream& operator>> (std::istream& is, xenum<enum_basis, 3>&);
+template std::ostream& operator<< (std::ostream& os, xenum<enum_basis, 3> const&);
+
+template class xenum<enum_sep_acct_basis, 3>;
+template std::istream& operator>> (std::istream& is, xenum<enum_sep_acct_basis, 3>&);
+template std::ostream& operator<< (std::ostream& os, xenum<enum_sep_acct_basis, 3> const&);
+
+template class xenum<enum_rate_period, 2>;
+template std::istream& operator>> (std::istream& is, xenum<enum_rate_period, 2>&);
+template std::ostream& operator<< (std::ostream& os, xenum<enum_rate_period, 2> const&);
+
+template class xenum<enum_run_basis, 7>;
+template std::istream& operator>> (std::istream& is, xenum<enum_run_basis, 7>&);
+template std::ostream& operator<< (std::ostream& os, xenum<enum_run_basis, 7> const&);
+
+template class xenum<enum_ledger_type, 7>;
+template std::istream& operator>> (std::istream& is, xenum<enum_ledger_type, 7>&);
+template std::ostream& operator<< (std::ostream& os, xenum<enum_ledger_type, 7> const&);
+
+template class xenum<enum_amount_type, 2>;
+template std::istream& operator>> (std::istream& is, xenum<enum_amount_type, 2>&);
+template std::ostream& operator<< (std::ostream& os, xenum<enum_amount_type, 2> const&);
+
+template class xenum<enum_uw_basis, 5>;
+template std::istream& operator>> (std::istream& is, xenum<enum_uw_basis, 5>&);
+template std::ostream& operator<< (std::ostream& os, xenum<enum_uw_basis, 5> const&);
+
+template class xenum<enum_table_rating, 11>;
+template std::istream& operator>> (std::istream& is, xenum<enum_table_rating, 11>&);
+template std::ostream& operator<< (std::ostream& os, xenum<enum_table_rating, 11> const&);
+
+template class xenum<enum_solve_type, 9>;
+template std::istream& operator>> (std::istream& is, xenum<enum_solve_type, 9>&);
+template std::ostream& operator<< (std::ostream& os, xenum<enum_solve_type, 9> const&);
+
+template class xenum<enum_solve_target, 2>;
+template std::istream& operator>> (std::istream& is, xenum<enum_solve_target, 2>&);
+template std::ostream& operator<< (std::ostream& os, xenum<enum_solve_target, 2> const&);
+
+template class xenum<enum_solve_tgt_at, 4>;
+template std::istream& operator>> (std::istream& is, xenum<enum_solve_tgt_at, 4>&);
+template std::ostream& operator<< (std::ostream& os, xenum<enum_solve_tgt_at, 4> const&);
+
+template class xenum<enum_solve_from, 4>;
+template std::istream& operator>> (std::istream& is, xenum<enum_solve_from, 4>&);
+template std::ostream& operator<< (std::ostream& os, xenum<enum_solve_from, 4> const&);
+
+template class xenum<enum_solve_to, 4>;
+template std::istream& operator>> (std::istream& is, xenum<enum_solve_to, 4>&);
+template std::ostream& operator<< (std::ostream& os, xenum<enum_solve_to, 4> const&);
+
+template class xenum<enum_kludge_from, 4>;
+template std::istream& operator>> (std::istream& is, xenum<enum_kludge_from, 4>&);
+template std::ostream& operator<< (std::ostream& os, xenum<enum_kludge_from, 4> const&);
+
+template class xenum<enum_kludge_to, 4>;
+template std::istream& operator>> (std::istream& is, xenum<enum_kludge_to, 4>&);
+template std::ostream& operator<< (std::ostream& os, xenum<enum_kludge_to, 4> const&);
+
+template class xenum<enum_pmt_strategy, 9>;
+template std::istream& operator>> (std::istream& is, xenum<enum_pmt_strategy, 9>&);
+template std::ostream& operator<< (std::ostream& os, xenum<enum_pmt_strategy, 9> const&);
+
+template class xenum<enum_sa_strategy, 9>;
+template std::istream& operator>> (std::istream& is, xenum<enum_sa_strategy, 9>&);
+template std::ostream& operator<< (std::ostream& os, xenum<enum_sa_strategy, 9> const&);
+
+template class xenum<enum_loan_strategy, 4>;
+template std::istream& operator>> (std::istream& is, xenum<enum_loan_strategy, 4>&);
+template std::ostream& operator<< (std::ostream& os, xenum<enum_loan_strategy, 4> const&);
+
+template class xenum<enum_wd_strategy, 4>;
+template std::istream& operator>> (std::istream& is, xenum<enum_wd_strategy, 4>&);
+template std::ostream& operator<< (std::ostream& os, xenum<enum_wd_strategy, 4> const&);
+
+template class xenum<enum_int_rate_type, 3>;
+template std::istream& operator>> (std::istream& is, xenum<enum_int_rate_type, 3>&);
+template std::ostream& operator<< (std::ostream& os, xenum<enum_int_rate_type, 3> const&);
+
+template class xenum<enum_loan_rate_type, 2>;
+template std::istream& operator>> (std::istream& is, xenum<enum_loan_rate_type, 2>&);
+template std::ostream& operator<< (std::ostream& os, xenum<enum_loan_rate_type, 2> const&);
+
+template class xenum<enum_fund_input_method, 3>;
+template std::istream& operator>> (std::istream& is, xenum<enum_fund_input_method, 3>&);
+template std::ostream& operator<< (std::ostream& os, xenum<enum_fund_input_method, 3> const&);
+
+template class xenum<enum_run_order, 2>;
+template std::istream& operator>> (std::istream& is, xenum<enum_run_order, 2>&);
+template std::ostream& operator<< (std::ostream& os, xenum<enum_run_order, 2> const&);
+
+template class xenum<enum_survival_limit, 4>;
+template std::istream& operator>> (std::istream& is, xenum<enum_survival_limit, 4>&);
+template std::ostream& operator<< (std::ostream& os, xenum<enum_survival_limit, 4> const&);
+
+template class xenum<enum_term_adj_method, 3>;
+template std::istream& operator>> (std::istream& is, xenum<enum_term_adj_method, 3>&);
+template std::ostream& operator<< (std::ostream& os, xenum<enum_term_adj_method, 3> const&);
+
+template class xenum<enum_plan, 2>;
+template std::istream& operator>> (std::istream& is, xenum<enum_plan, 2>&);
+template std::ostream& operator<< (std::ostream& os, xenum<enum_plan, 2> const&);
+
+template class xenum<enum_state, 53>;
+template std::istream& operator>> (std::istream& is, xenum<enum_state, 53>&);
+template std::ostream& operator<< (std::ostream& os, xenum<enum_state, 53> const&);
+
+template class xenum<enum_country, 239>;
+template std::istream& operator>> (std::istream& is, xenum<enum_country, 239>&);
+template std::ostream& operator<< (std::ostream& os, xenum<enum_country, 239> const&);
+
+template class xenum<enum_defn_life_ins, 3>;
+template std::istream& operator>> (std::istream& is, xenum<enum_defn_life_ins, 3>&);
+template std::ostream& operator<< (std::ostream& os, xenum<enum_defn_life_ins, 3> const&);
+
+template class xenum<enum_mec_avoid_method, 3>;
+template std::istream& operator>> (std::istream& is, xenum<enum_mec_avoid_method, 3>&);
+template std::ostream& operator<< (std::ostream& os, xenum<enum_mec_avoid_method, 3> const&);
+
+template class xenum<enum_defn_material_change, 5>;
+template std::istream& operator>> (std::istream& is, xenum<enum_defn_material_change, 5>&);
+template std::ostream& operator<< (std::ostream& os, xenum<enum_defn_material_change, 5> const&);
+
+template class xenum<enum_spread_method, 2>;
+template std::istream& operator>> (std::istream& is, xenum<enum_spread_method, 2>&);
+template std::ostream& operator<< (std::ostream& os, xenum<enum_spread_method, 2> const&);
+
+template class xenum<enum_anticipated_deduction, 4>;
+template std::istream& operator>> (std::istream& is, xenum<enum_anticipated_deduction, 4>&);
+template std::ostream& operator<< (std::ostream& os, xenum<enum_anticipated_deduction, 4> const&);
+
+template class xenum<enum_asset_charge_type, 2>;
+template std::istream& operator>> (std::istream& is, xenum<enum_asset_charge_type, 2>&);
+template std::ostream& operator<< (std::ostream& os, xenum<enum_asset_charge_type, 2> const&);
+
+template class xenum<enum_part_mort_table, 1>;
+template std::istream& operator>> (std::istream& is, xenum<enum_part_mort_table, 1>&);
+template std::ostream& operator<< (std::ostream& os, xenum<enum_part_mort_table, 1> const&);
+
+template class xenum<enum_premium_table, 1>;
+template std::istream& operator>> (std::istream& is, xenum<enum_premium_table, 1>&);
+template std::ostream& operator<< (std::ostream& os, xenum<enum_premium_table, 1> const&);
+
+template class xenum<enum_post_ret_sa_strategy, 4>;
+template std::istream& operator>> (std::istream& is, xenum<enum_post_ret_sa_strategy, 4>&);
+template std::ostream& operator<< (std::ostream& os, xenum<enum_post_ret_sa_strategy, 4> const&);
+
+#endif // LMI_EXPLICIT_INSTANTIATION
 
 bool is_subject_to_ill_reg(e_ledger_type const& z)
 {

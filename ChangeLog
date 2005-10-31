@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.196 2005-10-31 15:03:52 wboutin Exp $
+// $Id: ChangeLog,v 1.197 2005-10-31 18:09:52 chicares Exp $
 
 MAINTENANCE
 
@@ -4340,4 +4340,14 @@ Note boost::function as a possible alternative.
 
   mingw_setup.make
 Refactor and improve documentation.
+
+20051031T1809Z <chicares@cox.net> [1233]
+
+  como_4_3_3.make
+  diagnostics.sed
+  expm1.c
+  math_functors.hpp
+  xenum_sample.cpp
+  xenumtypes.cpp
+Address various comeau issues.
 

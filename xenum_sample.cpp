@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xenum_sample.cpp,v 1.2 2005-05-26 22:01:15 chicares Exp $
+// $Id: xenum_sample.cpp,v 1.3 2005-10-31 18:09:52 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -35,27 +35,6 @@
 // separate this file from the main unit test, because we want these
 // globals defined in a separate translation unit in order to unmask
 // initialization-order dependencies to the extent possible.
-
-#ifdef LMI_EXPLICIT_INSTANTIATION
-
-#   define OK_TO_COMPILE_XENUM_CPP
-#   include "xenum.cpp"
-#   undef OK_TO_COMPILE_XENUM_CPP
-
-template class xenum<enum_123, 3>;
-template std::istream& operator>> (std::istream& is, xenum<enum_123, 3>&);
-template std::ostream& operator<< (std::ostream& os, xenum<enum_123, 3> const&);
-
-template class xenum<enum_foobar, 2>;
-template std::istream& operator>> (std::istream& is, xenum<enum_foobar, 2>&);
-template std::ostream& operator<< (std::ostream& os, xenum<enum_foobar, 2> const&);
-
-// This demonstrates something that's a compile-time error.
-//template class xenum<enum_empty, 0>;
-//template std::istream& operator>> (std::istream& is, xenum<enum_empty, 0>&);
-//template std::ostream& operator<< (std::ostream& os, xenum<enum_empty, 0> const&);
-
-#endif // LMI_EXPLICIT_INSTANTIATION
 
 template<> enum_123 const e_123::enumerators[] =
     {e_one
@@ -81,4 +60,25 @@ template<> char const*const e_foobar::names[] =
     {"foo"
     ,"bar"
     };
+
+#ifdef LMI_EXPLICIT_INSTANTIATION
+
+#   define OK_TO_COMPILE_XENUM_CPP
+#   include "xenum.cpp"
+#   undef OK_TO_COMPILE_XENUM_CPP
+
+template class xenum<enum_123, 3>;
+template std::istream& operator>> (std::istream& is, xenum<enum_123, 3>&);
+template std::ostream& operator<< (std::ostream& os, xenum<enum_123, 3> const&);
+
+template class xenum<enum_foobar, 2>;
+template std::istream& operator>> (std::istream& is, xenum<enum_foobar, 2>&);
+template std::ostream& operator<< (std::ostream& os, xenum<enum_foobar, 2> const&);
+
+// This demonstrates something that's a compile-time error.
+//template class xenum<enum_empty, 0>;
+//template std::istream& operator>> (std::istream& is, xenum<enum_empty, 0>&);
+//template std::ostream& operator<< (std::ostream& os, xenum<enum_empty, 0> const&);
+
+#endif // LMI_EXPLICIT_INSTANTIATION
 
