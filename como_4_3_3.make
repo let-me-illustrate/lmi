@@ -19,11 +19,13 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: como_4_3_3.make,v 1.6 2005-10-31 18:09:51 chicares Exp $
+# $Id: como_4_3_3.make,v 1.7 2005-11-01 18:01:00 chicares Exp $
 
 toolset := como
 
 src_dir := $(CURDIR)
+
+gcc_version :=
 
 # Casual workarounds for como C++ version 4.3.3, using gcc as the
 # underlying C compiler. It is casually supported through this
@@ -139,6 +141,7 @@ como_4_3_3.make:: ;
 	  ComSpec=C:\\\\WINDOWS\\\\SYSTEM32\\\\CMD.EXE; \
 	  $(MAKE) \
 	    -f $(src_dir)/GNUmakefile \
+	            gcc_version='$(gcc_version)' \
 	                src_dir='$(src_dir)' \
 	                toolset='$(toolset)' \
 	             C_WARNINGS='$(C_WARNINGS)' \
