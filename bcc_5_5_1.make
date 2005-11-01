@@ -19,11 +19,13 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: bcc_5_5_1.make,v 1.6 2005-09-05 04:27:15 chicares Exp $
+# $Id: bcc_5_5_1.make,v 1.7 2005-11-01 18:01:00 chicares Exp $
 
 toolset := bcc
 
 src_dir := $(CURDIR)
+
+gcc_version :=
 
 # Casual workarounds for borland C++ version 5.5.1 . The vendor calls
 # this compiler "free", but it is not: it is merely gratis. It may
@@ -128,6 +130,7 @@ bcc_5_5_1.make:: ;
 	  -f $(src_dir)/GNUmakefile \
 	                       src_dir='$(src_dir)' \
 	                       toolset='$(toolset)' \
+	                   gcc_version='$(gcc_version)' \
 	                    C_WARNINGS='$(C_WARNINGS)' \
 	                  CXX_WARNINGS='$(CXX_WARNINGS)' \
 	              C_EXTRA_WARNINGS='$(C_EXTRA_WARNINGS)' \
