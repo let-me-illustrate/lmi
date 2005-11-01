@@ -21,7 +21,7 @@ dnl snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
 dnl === Prologue ===
 
-AC_REVISION($Id: configure.ac,v 1.6 2005-10-31 22:58:03 zeitlin Exp $)dnl
+AC_REVISION($Id: configure.ac,v 1.7 2005-11-01 14:25:10 zeitlin Exp $)dnl
 
 AC_PREREQ(2.59)
 AC_INIT(LMI, 1.0.0, [chicares@cox.net])
@@ -66,19 +66,24 @@ AC_ARG_WITH(boost-libs,
 
  
 AC_ARG_WITH(wx,
-            [AC_HELP_STRING([--with-wx=dir], [wxWidgets directory])],
+            [AC_HELP_STRING([--with-wx=dir],
+                            [wxWidgets directory (defaults to WXWIN env var)])],
             lmi_wx_dir=$withval)
 AC_ARG_WITH(wx-version,
-            [AC_HELP_STRING([--with-wx-version=version], [wxWidgets version to search for - 2.5, 2.6, 2.7 are guessed by default])],
+            [AC_HELP_STRING([--with-wx-ver=version],
+                            [wxWidgets version to search for (default 2.6, 2.7)])],
             lmi_wx_version=$withval)
 AC_ARG_WITH(wx-headers,
-            [AC_HELP_STRING([--with-wx-headers=dir], [wxWidgets header files directory])],
+            [AC_HELP_STRING([--with-wx-headers=dir],
+                            [wxWidgets header files directory])],
             lmi_wx_headers_dir=$withval)
 AC_ARG_WITH(wx-libs,
-            [AC_HELP_STRING([--with-wx-libs=dir], [wxWidgets libraries directory])],
+            [AC_HELP_STRING([--with-wx-libs=dir],
+                            [wxWidgets libraries directory])],
             lmi_wx_libs_dir=$withval)
 AC_ARG_WITH(wx-setup,
-            [AC_HELP_STRING([--with-wx-setup=dir], [wxWidgets setup.h directory (contains wx/setup.h file)])],
+            [AC_HELP_STRING([--with-wx-setup=dir],
+                            [wx/setup.h directory])],
             lmi_wx_setup_dir=$withval)
 
 
@@ -86,12 +91,20 @@ AC_ARG_ENABLE(debug,
              [AC_HELP_STRING([--enable-debug],
                              [compile with debug information])],
              [case "x${enableval}" in
-                   x) debug=yes ;;
-                xyes) debug=yes ;;
-                 xno) debug=no ;;
+                   x) debug_option=yes ;;
+                xyes) debug_option=yes ;;
+                 xno) debug_option=no ;;
                    *) AC_MSG_ERROR(bad value ${enableval} for --enable-debug) ;;
-             esac], [debug=no])
-AM_CONDITIONAL(LMI_DEBUG, [test "x$debug" = "xyes"])
+             esac], [debug_option=yes])
+AC_ARG_ENABLE(optimize,
+             [AC_HELP_STRING([--disable-optimize],
+                             [generate non-optimized code])],
+             [case "x${enableval}" in
+                   x) optimize_option=no ;;
+                xyes) optimize_option=yes ;;
+                 xno) optimize_option=no ;;
+                   *) AC_MSG_ERROR(bad value ${enableval} for --enable-optimize) ;;
+             esac], [optimize_option=default])
 
 AC_ARG_ENABLE(mpatrol,
              [AC_HELP_STRING([--with-mpatrol],
@@ -115,27 +128,86 @@ AC_ARG_ENABLE(cgicc,
              esac],
              lmi_cgicc_option=no)
 
-AC_ARG_ENABLE(tests,
-             [AC_HELP_STRING([--enable-tests],
-                             [Build tests.])],
-             [case "x${enableval}" in
-                   x) lmi_tests_option=yes ;;
-                xyes) lmi_tests_option=yes ;;
-                 xno) lmi_tests_option=no;;
-                   *) AC_MSG_ERROR(bad value ${enableval} for --enable-tests=[no*|yes], default is no) ;;
-             esac],
-             lmi_tests_option=no)
-AM_CONDITIONAL(LMI_WITH_TESTS, [test "x$lmi_tests_option" == "xyes"])
-
-
 dnl === Program checks ===
+
+dnl this magic incantation is needed to prevent AC_PROG_CC from setting the
+dnl default CFLAGS to "-g -O2") -- we don't need this as we add -g and -O
+dnl flags ourselves below (and "-g" is inappropriate for msvc anyhow)
+CFLAGS=${CFLAGS:=}
 AC_PROG_CC
+
+CXXFLAGS=${CXXFLAGS:=}
 AC_PROG_CXX
 
-AM_CONDITIONAL(LMI_GCC, [test "x$GCC" == "xyes"])
-AM_CONDITIONAL(LMI_GXX, [test "x$GXX" == "xyes"])
-
 AC_PROG_LD
+
+dnl enable all possible warnings for gcc/g++
+CFLAGS_gcc_common="\
+    -pedantic \
+    -Wall \
+    -Wcast-align \
+    -Wconversion \
+    -Wdeprecated-declarations \
+    -Wdisabled-optimization \
+    -Wendif-labels \
+    -Wimport \
+    -Wmultichar \
+    -Wno-long-long \
+    -Wpacked \
+    -Wpointer-arith \
+    -Wsign-compare \
+    -Wwrite-strings"
+
+if test "x$GCC" == "xyes"; then
+    CFLAGS="$CFLAGS $CFLAGS_gcc_common -std=c99 -Wmissing-prototypes"
+fi
+
+if test "x$GXX" == "xyes"; then
+    CXXFLAGS="$CXXFLAGS $CFLAGS_gcc_common -std=c++98 \
+        -Wctor-dtor-privacy \
+        -Wdeprecated \
+        -Wnon-template-friend \
+        -Woverloaded-virtual \
+        -Wpmf-conversions \
+        -Wsynth"
+fi
+
+dnl add debug option if necessary
+if test "$debug_option" = "yes"; then
+    case "$CC" in
+        cl) DEBUG_FLAG="/Zi";;
+        *)  DEBUG_FLAG="-g";;
+    esac
+
+    CFLAGS="$CFLAGS $DEBUG_FLAG"
+    CXXFLAGS="$CXXFLAGS $DEBUG_FLAG"
+    LDFLAGS="$LDFLAGS $DEBUG_FLAG"
+
+    dnl disable optimizations by default in debug build but don't disable them
+    dnl if explicit --enable-optimize was given
+    if test "$optimize_option" != "yes"; then
+        optimize_option="no"
+    fi
+else
+    CPPFLAGS="$CPPFLAGS -DNDEBUG"
+fi
+
+dnl and optimize options too
+if test "$optimize_option" = "default"; then
+    optimize_option="yes"
+fi
+
+if test "$optimize_option" = "yes"; then
+    case "$CC" in
+        cl)     OPT_FLAG="/O";;
+        gcc)    OPT_FLAG="-O2";;
+        *)      OPT_FLAG="-O";;
+    esac
+
+    CFLAGS="$CFLAGS $OPT_FLAG"
+    CXXFLAGS="$CXXFLAGS $OPT_FLAG"
+fi
+
 
 dnl === Checks for standard headers/functions ===
 
@@ -185,7 +257,7 @@ dnl --- wxWidgets ---
 AM_OPTIONS_WXCONFIG
 
 dnl normally we should get all we need from wx-config
-AM_PATH_WXCONFIG([2.6.0], [wx="yes"])
+AM_PATH_WXCONFIG([2.6.0], [wx="yes"],[],[],[--unicode=no --debug=$debug_option])
 
 dnl if we didn't (may happen under Windows), try to find wx headers and
 dnl libraries ourselves
@@ -198,125 +270,93 @@ else
 fi
 
 lmi_wx_basename="msw-ansi"
-if test "x$debug" == "xyes"; then
+if test "$debug_option" == "yes"; then
     lmi_wx_basename="$lmi_wx_basename-debug"
 fi
-for m_wx_version in $lmi_wx_version_guess
-do
-    echo "checking for wxWidgets version $m_wx_version :"
+for lmi_wx_version in $lmi_wx_version_guess; do
+    echo "checking for wxWidgets version $lmi_wx_version:"
     dnl the order of checks by priority
     dnl   1. check --with-wx
     dnl        use --with-wx-headers if specified
     dnl        use --with-wx-libs if specified'
     dnl        if not found => throw an error
-    dnl   2. check wx-config
-    dnl        if found, use it
-    dnl   3. if still no libs found, then guess
+    dnl   2. if still no libs found, then guess
     dnl        using $wxwin and some common install paths
-    dnl   4. if not found report an error and description of what was done
-    dnl
-    dnl 1 and 3 are very similar, so what we really do:
-    dnl  First we check 2, and then 1 and 3
+    dnl   3. if not found report an error and description of what was done
+    lmi_wx_root=$lmi_wx_dir
 
-    if test "x$lmi_wx_config" == "xyes"; then
-        dnl FIXME: we use wx-config only if no specific details were given
-        if test "x$lmi_wx_dir" == "x"; then
-            if test "x$lmi_wx_headers_dir" == "x"; then
-                if test "x$lmi_wx_libs_dir" == "x"; then
-                    if test "x$lmi_wx_setup_dir" == "x"; then
-
-                        WX_CONFIG="[wx-config --unicode=no --static=no --debug=$debug --version=$m_wx_version]"
-
-                        `$WX_CONFIG 2>/dev/null`
-
-                        if test "x$?" == "x0"; then
-                            WX_FLAGS=`$WX_CONFIG --cxxflags`
-                            WX_LIBS=`$WX_CONFIG --libs`
-                            echo "checking for $WX_CONFIG ... yes"
-                            break; dnl from the lmi_wx_version_guess loop
-                        else
-                            echo "checking for $WX_CONFIG ... no"
-                        fi
-                    fi
-                fi
-            fi
-        fi
-    fi
-
-    m_wx_root=$lmi_wx_dir
-
-    if test "x$m_wx_root" == "x"; then
-        m_wx_root="$wxwin"
+    if test "x$lmi_wx_root" == "x"; then
+        lmi_wx_root="$WXWIN"
     fi
 
     dnl take values provided by user
-    m_wx_headers_guess="$lmi_wx_headers_dir"
-    m_wx_libs_guess="$lmi_wx_libs_dir"
-    m_wx_setup_guess="$lmi_wx_setup_dir"
+    lmi_wx_headers_guess="$lmi_wx_headers_dir"
+    lmi_wx_libs_guess="$lmi_wx_libs_dir"
+    lmi_wx_setup_guess="$lmi_wx_setup_dir"
 
     dnl now look for the root directory hint
-    if test "x$m_wx_root" != "x"; then
+    if test "x$lmi_wx_root" != "x"; then
         dnl we are given a hint on the wxWidgets root directory
-        if test "x$m_wx_headers_guess" == "x"; then
-            m_wx_headers_guess="$m_wx_root/include"
+        if test "x$lmi_wx_headers_guess" == "x"; then
+            lmi_wx_headers_guess="$lmi_wx_root/include"
         fi
-        if test "x$m_wx_libs_guess" == "x"; then
-            m_wx_libs_guess="$m_wx_root/lib"
+        if test "x$lmi_wx_libs_guess" == "x"; then
+            lmi_wx_libs_guess="$lmi_wx_root/lib"
         fi
     else
         dnl no wxWidgets root directory is given - search common install paths
-        if test "x$m_wx_headers_guess" == "x"; then
-            m_wx_headers_guess="/usr/local/include/wx-$m_wx_version"
+        if test "x$lmi_wx_headers_guess" == "x"; then
+            lmi_wx_headers_guess="/usr/local/include/wx-$lmi_wx_version"
         fi
-        if test "x$m_wx_libs_guess" == "x"; then
-            m_wx_libs_guess="/usr/lib /usr/local/lib"
+        if test "x$lmi_wx_libs_guess" == "x"; then
+            lmi_wx_libs_guess="/usr/lib /usr/local/lib"
         fi
     fi
-    if test "x$m_wx_setup_guess" == "x"; then
+    if test "x$lmi_wx_setup_guess" == "x"; then
         dnl try every lib directory
-        for tmp_wx_libs in $m_wx_libs_guess
+        for tmp_wx_libs in $lmi_wx_libs_guess
         do
-            m_wx_setup_guess="$m_wx_setup_guess $tmp_wx_libs/wx/include/$lmi_wx_basename-$m_wx_version"
+            lmi_wx_setup_guess="$lmi_wx_setup_guess $tmp_wx_libs/wx/include/$lmi_wx_basename-$lmi_wx_version"
         done
         dnl and also try the headers diectories
-        m_wx_setup_guess="$m_wx_setup_guess $m_wx_headers_guess"
+        lmi_wx_setup_guess="$lmi_wx_setup_guess $lmi_wx_headers_guess"
     fi
 
     dnl now do try to find the files
 
-    dnl wx/setup.h in m_wx_setup_guess
-    for m_wx_setup in $m_wx_setup_guess
+    dnl wx/setup.h in lmi_wx_setup_guess
+    for lmi_wx_setup in $lmi_wx_setup_guess
     do
-        AC_CHECK_FILE([$m_wx_setup/wx/setup.h], [ok_wx_setup=$m_wx_setup])
+        AC_CHECK_FILE([$lmi_wx_setup/wx/setup.h], [ok_wx_setup=$lmi_wx_setup])
         if test "x$ok_wx_setup" != "x"; then
-            for m_wx_headers in $m_wx_headers_guess
+            for lmi_wx_headers in $lmi_wx_headers_guess
             do
-                AC_CHECK_FILE([$m_wx_headers/wx/chkconf.h], [ok_wx_headers=$m_wx_headers])
+                AC_CHECK_FILE([$lmi_wx_headers/wx/chkconf.h], [ok_wx_headers=$lmi_wx_headers])
                 if test "x$ok_wx_headers" != "x"; then
-                    for m_wx_libs in $m_wx_libs_guess
+                    for lmi_wx_libs in $lmi_wx_libs_guess
                     do
-                        echo "guessing libs in $m_wx_libs ..."
+                        echo "guessing libs in $lmi_wx_libs ..."
                         lmi_wx_libs_needed="base core adv xml xrc"
                         lmi_wx_lib_prefix=wx_msw
-                        if test "x$debug" == "xyes"; then
+                        if test "$debug_option" == "yes"; then
                             lmi_wx_lib_prefix="$lmi_wx_lib_prefix""d"
                         fi
                         lmi_wx_lib_prefix="$lmi_wx_lib_prefix""_"
-                        lmi_wx_lib_suffix="-$m_wx_version"
-                        ok_wx_libs=$m_wx_libs
-                        for m_wx_lib_needed in $lmi_wx_libs_needed
+                        lmi_wx_lib_suffix="-$lmi_wx_version"
+                        ok_wx_libs=$lmi_wx_libs
+                        for lmi_wx_lib_needed in $lmi_wx_libs_needed
                         do
-                            AC_CHECK_FILE("$m_wx_libs/$lmi_wx_lib_prefix$m_wx_lib_needed$lmi_wx_lib_suffix", [],
+                            AC_CHECK_FILE("$lmi_wx_libs/$lmi_wx_lib_prefix$lmi_wx_lib_needed$lmi_wx_lib_suffix", [],
                             [ok_wx_libs=""])
                             if test "x$ok_wx_libs" == "x"; then
                                 break;
                             fi
                         done
                         if test "x$ok_wx_libs" != "x"; then
-                            WX_FLAGS="-I$ok_wx_setup -I$ok_wx_headers"
-                            WX_LIBS="-L$ok_wx_libs -lwx_$lmi_wx_basename""_xrc-$m_wx_version"
+                            WX_CXXFLAGS="-I$ok_wx_setup -I$ok_wx_headers"
+                            WX_LIBS="-L$ok_wx_libs -lwx_$lmi_wx_basename""_xrc-$lmi_wx_version"
                             echo "using the following wxWidgets configuration:"
-                            echo "  - version         $m_wx_version"
+                            echo "  - version         $lmi_wx_version"
                             echo "  - setup.h         $ok_wx_setup/wx/setup.h"
                             echo "  - headers         $ok_wx_headers"
                             echo "  - libraries       $ok_wx_libs"
@@ -329,19 +369,14 @@ do
     done
 done dnl lmi_wx_version_guess
 
-if test "x$WX_FLAGS" == "x"; then
-    AC_MSG_ERROR([No wxWidgets headers or setup.h were found!..])
+if test "x$WX_CXXFLAGS" == "x"; then
+    AC_MSG_ERROR([No wxWidgets headers or setup.h were found!])
 fi
 if test "x$WX_LIBS" == "x"; then
-    AC_MSG_ERROR([No wxWidgets libs were found!..])
+    AC_MSG_ERROR([No wxWidgets libs were found!])
 fi
-echo "------------wxWidgets-config--------"
-echo "using the following flags:"
-echo "  CPPFLAGS    $WX_FLAGS"
-echo "  LDDFLAGS    $WX_LIBS"
-echo "--------end-wxWidgets-config-------"
 
-AC_SUBST(WX_FLAGS)
+AC_SUBST(WX_CXXFLAGS)
 AC_SUBST(WX_LIBS)
 
 fi dnl AM_PATH_WXCONFIG failed
@@ -412,7 +447,10 @@ else
     errmsg="use --with-boost-libs=dir
 if it is installed in non default location"
 fi
-AC_CHECK_LIB([$boost_libfs], main,
+dnl usually when we want to just check for the library existence we use main()
+dnl as the function to test for but this doesn't work with -pedantic, so use
+dnl exit() which happens to be declared on configure-generated test fragment
+AC_CHECK_LIB([$boost_libfs], exit,
     [],
     [AC_MSG_ERROR([Boost filesystem library $boost_libfs not found, $errmsg])]
 )
