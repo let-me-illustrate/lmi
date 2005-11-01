@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: comma_punct_test.cpp,v 1.1 2005-05-07 16:17:40 chicares Exp $
+// $Id: comma_punct_test.cpp,v 1.2 2005-11-01 17:57:30 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -40,14 +40,12 @@
 
 int test_main(int, char*[])
 {
-#if defined __GNUC__ && __GNUC__ < 4
+#if defined __GNUC__ && 40001 <= LMI_GCC_VERSION
     std::cerr
         << "This test fails with gcc version 4.0.0 or earlier: see\n"
         << "  http://gcc.gnu.org/bugzilla/show_bug.cgi?id=20914\n"
         ;
-// The conditional is imprecise, because gcc-X.Y.Z has version macros
-// to test X and Y, but not Z. The defect was fixed in gcc-4.0.1 .
-#endif // gcc version less than 4
+#endif // gcc version less than 4.0.1 .
 
     std::ostringstream oss;
 
