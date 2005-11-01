@@ -1,0 +1,104 @@
+                  README file for building LMI with autotools
+                  ===========================================
+
+0. Introduction
+---------------
+
+LMI now has a autoconf toolchain build system. The advantages of using it are:
+
+a) we can use standard "configure && make && make install" invocation and
+   standard configure options such as --prefix, --enable-debug and so on
+   can be used
+
+b) configure does run-time checks which allows to find 3rd party libraries
+   (boost, wxWidgets, ...) and adapt to other systems/compilers more easily
+
+c) makefiles are much simpler and we get install, dist and check targets
+   for free
+
+
+Possible disadvantage is the need for additional tools but if you follow the
+instructions below it shouldn't be a problem.
+
+
+1. Installing the required libraries
+------------------------------------
+
+a) wxWidgets: create any directory (it will be called wx-build below),
+        for example a $wx/build-cygwin subdirectory (but it doesn't
+        necessarily have to be under $wx) and run
+
+            $wx/configure \
+                --enable-std_string \
+                --disable-threads \
+                --disable-apple_ieee \
+                --without-libjpeg \
+                --without-libtiff \
+                --disable-gif
+
+        You may add "--prefix=" option if you are building shared libraries
+        which will be installed wih lmi, "--disable-shared" option if you want
+        to build static libraries and "--enable-debug" if you want to build
+        wxWidgets with debugging enabled (highly recommended during
+        development!).
+
+b) boost: static boost_filesystem library is available as a standard cygwin
+        package but if you want to use shared libraries or use mingw32, you
+        need to build this library yourself (the rest of boost classes used by
+        lmi are headers only and don't have to be built at all) using the
+        standard instruction from http://www.boost.org/
+
+        Notice that if you don't have shared boost libraries, libtool won't be
+        able to build shared liblmi and so using it will be just a waste of a
+        couple of dozens of megabytes.
+
+        Under Unix, at the time of this writing (2005-11-01) Debian has boost
+        packages built with g++ 3.3 but they are not binary compatible with g++
+        3.4/4.0 so if you use the latter you *must* build from source or you
+        get mysterious run-time crashes.
+
+
+2. Build system setup
+---------------------
+
+After a fresh cvs checkout you need to run autogen.sh once. For it to work,
+you need the following utilities:
+
+a) GNU autoconf >= 2.57 (2.59 known to work)
+b) GNU automake >= 1.5 (at least; 1.7.9 and 1.9.6 known to work)
+c) GNU libtool >= 1.5 (1.5.20 known to work)
+
+Notice that you can run autogen.sh on one system and copy the resulting files
+(configure, Makefile.in, config.*, libtool) to another one, then you just need
+the C++ compiler (g++ versions 3.3, 3.4 and 4.0 are known to work) on the other
+system but you won't be able to change neither configure.ac nor Makefile.am.
+
+Also note that you must normally install wxWidgets before running autogen.sh as
+this installs wxwin.m4 file required by aclocal. However there is an
+alternative: ensure that "wx" environment variable exists and points to the
+(uninstalled) wx source tree which you want to use and set ACLOCAL_AMFLAGS
+environment variable to "-I $wx".
+
+
+3. Build
+--------
+
+To build, create a build directory (building in source directory is also
+possible but strongly unadvised) and run "lmi-path/configure" from it. Full
+list of configure options can be obtained with "configure --help" but the most
+useful ones are:
+
+    --prefix=/opt/lmi           to install /opt and not default /usr/local
+    --with-wxdir=$wx-build      to use uninstalled wx version from $wx-build
+    --enable-debug              to enable debugging (asserts...)
+    --disable-shared            to build static libraries only (for deployment)
+
+
+Then type "make". If it succeeds, you can do "make install". Other useful
+targets are "make check", "make dist" or "make dist-bzip2" (and "make
+distcheck" to check that it works), "make uninstall", "make clean" and "make
+maintainer-clean" (don't use the latter if you don't have autotools installed
+as you won't be able to regenerate the makefile after it).
+
+
+Version: $Id: README.auto,v 1.1 2005-11-01 16:24:54 zeitlin Exp $
