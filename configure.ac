@@ -21,7 +21,7 @@ dnl snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
 dnl === Prologue ===
 
-AC_REVISION($Id: configure.ac,v 1.9 2005-11-01 19:05:57 zeitlin Exp $)dnl
+AC_REVISION($Id: configure.ac,v 1.10 2005-11-01 19:07:07 zeitlin Exp $)dnl
 
 AC_PREREQ(2.59)
 AC_INIT(LMI, 1.0.0, [chicares@cox.net])
@@ -225,8 +225,8 @@ AC_CHECK_FUNCS(log10l fabsl strtold)
 
 dnl existing code already uses these macros so continue to use them instead of
 dnl the usual HAVE_EXPM1/HAVE_LOG1P
-AC_CHECK_FUNC(expm1, AC_DEFINE(LMI_COMPILER_HAS_EXPM1, [1], [Define this if you have expm1() function]))
-AC_CHECK_FUNC(log1p, AC_DEFINE(LMI_COMPILER_HAS_LOG1P, [1], [Define this if you have log1p() function]))
+AC_CHECK_FUNC(expm1, AC_DEFINE(LMI_COMPILER_PROVIDES_EXPM1, [1], [Define this if you have expm1() function]))
+AC_CHECK_FUNC(log1p, AC_DEFINE(LMI_COMPILER_PROVIDES_LOG1P, [1], [Define this if you have log1p() function]))
 
 if test "$USE_WINDOWS" = 1; then
     AC_CACHE_CHECK([for __argc/__argv global variables],
