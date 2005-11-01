@@ -21,7 +21,7 @@ dnl snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
 dnl === Prologue ===
 
-AC_REVISION($Id: configure.ac,v 1.7 2005-11-01 14:25:10 zeitlin Exp $)dnl
+AC_REVISION($Id: configure.ac,v 1.8 2005-11-01 14:59:32 zeitlin Exp $)dnl
 
 AC_PREREQ(2.59)
 AC_INIT(LMI, 1.0.0, [chicares@cox.net])
@@ -376,6 +376,8 @@ if test "x$WX_LIBS" == "x"; then
     AC_MSG_ERROR([No wxWidgets libs were found!])
 fi
 
+WX_CPPFLAGS=$WX_CXXFLAGS
+AC_SUBST(WX_CPPFLAGS)
 AC_SUBST(WX_CXXFLAGS)
 AC_SUBST(WX_LIBS)
 
