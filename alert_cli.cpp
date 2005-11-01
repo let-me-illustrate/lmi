@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: alert_cli.cpp,v 1.4 2005-09-14 14:16:30 chicares Exp $
+// $Id: alert_cli.cpp,v 1.5 2005-11-01 04:59:36 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -42,6 +42,7 @@ namespace
         ,fatal_error_alert
         );
 
+    // Not referenced for now, except in an ifdef'd-out block.
     bool continue_anyway()
     {
         int c;
