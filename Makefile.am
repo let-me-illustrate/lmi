@@ -20,7 +20,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: Makefile.am,v 1.4 2005-10-31 22:49:05 zeitlin Exp $
+# $Id: Makefile.am,v 1.5 2005-11-01 14:25:10 zeitlin Exp $
 
 ##############################################################################
 # All Targets
@@ -48,22 +48,17 @@ lib_LTLIBRARIES =   \
 # libtool convenience libraries which are not installed at all
 noinst_LTLIBRARIES = \
     liblmi_common.la \
-    libcli.la   \
-    libantediluvian.la
-
-# other libraries which may, or not, be built
-EXTRA_LTLIBRARIES =   \
+    libcli.la \
     libmain_auxiliary_common.la \
-    libtest_commons.la
+    libantediluvian.la
 
 
 # data files
 #
-# TODO: install xpm and xrc in share/resources or some other such directory
-#       (we need to update code in main_wx.cpp to look for them there), as
-#       as we have to install them in bin we must fool automake by using
-#       SCRIPTS and not DATA primary
-dist_bin_SCRIPTS = \
+# TODO: we should install them in $(pkgdatadir)/resources or something similar
+#       (but for this the code in main_wx.cpp must be modified to allow it)
+xrcdir = $(bindir)
+dist_xrc_DATA = \
     about.xpm \
     census_view.xpm \
     close.xpm \
@@ -106,116 +101,51 @@ if LMI_WITH_CGI
 endif
 
 # tests
-if LMI_WITH_TESTS
-    bin_PROGRAMS += \
-        test_actuarial_table test_alert test_any_member test_argv0  \
-        test_calendar_date test_callback test_commutation_functions \
-        test_comma_punct test_crc32 test_expression_template_0 test_financial   \
-        test_global_settings test_input_seq test_input test_irc7702a    \
-        test_materially_equal test_math_functors test_mc_enum test_mpatrol_patch  \
-        test_name_value_pairs test_ncnnnpnn test_numeric_io test_obstruct_slicing \
-        test_passkey test_path_utility test_progress_meter test_quiet_nan   \
-        test_round_to test_snprintf test_stratified_algorithms test_stream_cast \
-        test_test_tools test_timer test_tn_range test_value_cast test_vector \
-        test_lib_wx_new test_xenum test_xrange test_zero
-endif
+TESTS = \
+    test_actuarial_table \
+    test_alert \
+    test_any_member \
+    test_argv0 \
+    test_calendar_date \
+    test_callback \
+    test_commutation_functions \
+    test_comma_punct \
+    test_crc32 \
+    test_expression_template_0 \
+    test_financial \
+    test_global_settings \
+    test_input_seq \
+    test_input \
+    test_irc7702a \
+    test_materially_equal \
+    test_math_functors \
+    test_mc_enum \
+    test_mpatrol_patch \
+    test_name_value_pairs \
+    test_ncnnnpnn \
+    test_numeric_io \
+    test_obstruct_slicing \
+    test_passkey \
+    test_path_utility \
+    test_progress_meter \
+    test_quiet_nan \
+    test_round_to \
+    test_snprintf \
+    test_stratified_algorithms \
+    test_stream_cast \
+    test_test_tools \
+    test_timer \
+    test_tn_range \
+    test_value_cast \
+    test_vector \
+    test_lib_wx_new \
+    test_xenum \
+    test_xrange \
+    test_zero
 
-
-##############################################################################
-# Compiler options
-##############################################################################
-
-# initialize them to avoid automake warnings when using += below
-AM_CPPFLAGS =
-AM_CFLAGS =
-AM_CXXFLAGS =
-AM_LDFLAGS =
-
-if LMI_DEBUG
-    AM_CFLAGS += -g
-    AM_CXXFLAGS += -g
-    AM_LDFLAGS += -g
-else
-    AM_CPPFLAGS += -DNDEBUG
-endif
-
-gcc_common_warnings := \
-  -pedantic \
-  -Wall \
-  -Wcast-align \
-  -Wconversion \
-  -Wdeprecated-declarations \
-  -Wdisabled-optimization \
-  -Wendif-labels \
-  -Wimport \
-  -Wmultichar \
-  -Wpacked \
-  -Wpointer-arith \
-  -Wsign-compare \
-  -Wwrite-strings
-
-# Some boost libraries treat 'long long' as part of the language,
-# which it probably soon will be, so permit it now.
-gcc_common_warnings += -Wno-long-long
-
-gcc_c_warnings := \
-  $(gcc_common_warnings) \
-  -std=c99 \
-  -Wmissing-prototypes
-
-gcc_cxx_warnings := \
-  $(gcc_common_warnings) \
-  -std=c++98 \
-  -Wctor-dtor-privacy \
-  -Wdeprecated \
-  -Wnon-template-friend \
-  -Woverloaded-virtual \
-  -Wpmf-conversions \
-  -Wsynth
-
-# TODO ?? VZ reports that
-#  -Winvalid-offsetof
-# gives an error with GNU/Linux gcc-3.3 and 3.4, though that seems
-# to contradict the gcc manual. This should be investigated and
-# possibly reported on gcc bugzilla.
-
-# Too many warnings on correct code, e.g. exact comparison to zero:
-#  -Wfloat-equal
-
-# WX !! The wx library triggers many warnings with these flags:
-
-# -Wextra is for g++ >= 3.4 only
-gcc_common_extra_warnings := \
-  -Wextra \
-  -Wcast-qual \
-  -Wredundant-decls
-#  -Wundef -- generates spurios warnings in boost headers
-
-
-# Boost normally makes '-Wundef' give spurious warnings:
-#   http://aspn.activestate.com/ASPN/Mail/Message/boost/1822550
-# but defining BOOST_STRICT_CONFIG:
-#   http://www.boost.org/libs/config/config.htm#user_settable
-# makes '-Wundef' usable, because boost-1.31.0 doesn't seem to need
-# any workarounds for gcc-3.3+ . However, it gives a number of
-# warnings with wx-2.5.4 (that have been fixed in a later version).
-
-# Too many warnings for various boost libraries:
-#  -Wold-style-cast
-#  -Wshadow
-
-# Too many warnings for libstdc++:
-#  -Wunreachable-code
-
-# Since at least gcc-3.4.2, -Wmissing-prototypes is deprecated as
-# being redundant for C++.
-
-if LMI_GCC
-    AM_CFLAGS += $(gcc_c_warnings)
-endif
-if LMI_GXX
-    AM_CXXFLAGS += $(gcc_cxx_warnings)
-endif
+check_PROGRAMS = $(TESTS)
+check_LTLIBRARIES = \
+    libtest_commons.la
 
 
 ##############################################################################
@@ -270,7 +200,8 @@ lmi_cli_SOURCES = $(top_builddir)/dummy.cpp
 lmi_cli_CXXFLAGS=$(CGICC_INCLUDE_FLAGS)
 lmi_cli_LDADD = \
     libcli.la \
-    liblmi.la    \
+    liblmi.la \
+    liblmi_common.la \
     $(BOOST_LIBS)
 
 # libraries
@@ -324,7 +255,7 @@ liblmi_common_la_SOURCES = \
     xenumtypes.cpp \
     xmlwrapp_ex.cpp \
     xrange.cpp
-
+liblmi_common_la_LDFLAGS = -no-undefined
 liblmi_common_la_LIBADD = \
     $(BOOST_LIBS) \
     $(XMLWRAPP_LIBS)
@@ -378,7 +309,7 @@ liblmi_la_SOURCES = \
     security.cpp \
     stratified_algorithms.cpp \
     stratified_charges.cpp
-
+liblmi_la_LDFLAGS = -no-undefined
 liblmi_la_LIBADD = liblmi_common.la
 
 libcgi_la_SOURCES = \
@@ -401,17 +332,9 @@ libcli_la_SOURCES = \
     progress_meter_cli.cpp
 libcli_la_LIBADD = -lncurses
 
-libtest_commons_la_SOURCES = \
-    alert.cpp \
-    alert_cli.cpp \
-    fenv_lmi.cpp \
-    getopt.cpp \
-    license.cpp
-
-libwx_new_la_SOURCES = \
-    wx_new.cpp
-libwx_new_la_LIBADD = \
-    $(WX_LIBS)
+libwx_new_la_SOURCES = wx_new.cpp
+libwx_new_la_LDFLAGS = -no-undefined
+libwx_new_la_LIBADD = $(WX_LIBS)
 
 
 # auxiliary executables
@@ -465,8 +388,13 @@ dummy.cpp:
 
 
 # unit tests
-#
-# TODO: use automake built-in support for the tests?
+libtest_commons_la_SOURCES = \
+    alert.cpp \
+    alert_cli.cpp \
+    fenv_lmi.cpp \
+    getopt.cpp \
+    license.cpp
+
 test_actuarial_table_SOURCES = \
   actuarial_table.cpp \
   actuarial_table_test.cpp \
