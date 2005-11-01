@@ -1,4 +1,4 @@
-// Platform-dependent functions not in C++98.
+// Functions (mostly platform dependent) not in C++98.
 //
 // Copyright (C) 2005 Gregory W. Chicares.
 //
@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: platform_dependent.hpp,v 1.5 2005-10-31 14:46:30 zeitlin Exp $
+// $Id: platform_dependent.hpp,v 1.6 2005-11-01 05:58:33 chicares Exp $
 
 #ifndef platform_dependent_hpp
 #define platform_dependent_hpp
@@ -85,9 +85,13 @@
 #   error "Unknown platform. Consider contributing support."
 #endif // Unknown platform.
 
-// log1p() and expm1() can be declared only ifndef __STRICT_ANSI__ so get their
-// declarations while we can
-#include <cmath>
+// GNU/Linux (but not MinGW) requires including the math header while
+// __STRICT_ANSI__ is not defined in order to get prototypes for
+// expm1() and log1p() for C++ with '-std=c++98'. Use the C instead
+// of the C++ system header so that the present file can be included
+// in C as well as C++ translation units.
+
+#include <math.h>
 
 // Although gcc may once have defined __STRICT_ANSI__ differently:
 //   http://gcc.gnu.org/bugzilla/show_bug.cgi?id=3199
