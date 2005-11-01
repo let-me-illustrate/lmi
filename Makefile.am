@@ -20,7 +20,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: Makefile.am,v 1.6 2005-11-01 14:40:06 zeitlin Exp $
+# $Id: Makefile.am,v 1.7 2005-11-01 15:00:10 zeitlin Exp $
 
 ##############################################################################
 # All Targets
@@ -186,8 +186,15 @@ lmi_wx_SOURCES = \
 
 lmi_wx_CXXFLAGS = $(WX_CXXFLAGS) $(CGICC_INCLUDE_FLAGS) $(XMLWRAPP_FLAGS) $(AM_CXXFLAGS)
 if LMI_WINDOWS
+## use old style suffix rule instead of the pattern one as automake only
+## recognizes the old style rules
+.rc.o:
+	windres -I $(top_srcdir) -I $(WX_CPPFLAGS) $< $@
+
+    lmi_wx_SOURCES += lmi.rc
     lmi_wx_CXXFLAGS += -DLMI_USE_DLL -mwindows
 endif
+
 lmi_wx_LDADD =  \
     liblmi.la \
     liblmi_common.la \
