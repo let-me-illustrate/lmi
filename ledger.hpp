@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger.hpp,v 1.8 2005-10-14 13:40:44 chicares Exp $
+// $Id: ledger.hpp,v 1.9 2005-11-01 17:56:44 chicares Exp $
 
 #ifndef ledger_hpp
 #define ledger_hpp
@@ -70,7 +70,7 @@ class LMI_EXPIMP Ledger
     // endt requires initializing each life and doing a database lookup
     // for endt age. Yet 100 won't work for issue age 0 if coverage
     // beyond age 100 is to be shown.
-    Ledger
+    explicit Ledger
         (e_ledger_type const& a_LedgerType
         ,int                  a_Length        = 100
         ,bool                 a_IsComposite   = false

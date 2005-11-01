@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.200 2005-11-01 05:58:33 chicares Exp $
+// $Id: ChangeLog,v 1.201 2005-11-01 17:56:44 chicares Exp $
 
 MAINTENANCE
 
@@ -4385,4 +4385,9 @@ Remove unreferenced variables.
   platform_dependent.hpp
 Rework the 20051031T1446Z change, which broke the build because
 <cmath> cannot be included when compiling C.
+
+20051101T1756Z <chicares@cox.net> [1232]
+
+  ledger.hpp
+Make ctor explicit.
 
