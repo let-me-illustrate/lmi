@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.199 2005-11-01 04:59:40 chicares Exp $
+// $Id: ChangeLog,v 1.200 2005-11-01 05:58:33 chicares Exp $
 
 MAINTENANCE
 
@@ -4336,6 +4336,22 @@ Adapt to MinGW gcc-3.4.4 in anticipation of supporting it.
   callback.hpp
 Note boost::function as a possible alternative.
 
+20051031T1403Z <vadim@tt-solutions.com> [1233]
+
+  numeric_io_traits.hpp
+Add autotools tests for various functions not in C++98.
+
+20051031T1405Z <vadim@tt-solutions.com> [1233]
+
+  config.hpp
+Autotoolize.
+
+20051031T1446Z <vadim@tt-solutions.com> [1233]
+
+  platform_dependent.hpp
+Work around a conflict between __STRICT_ANSI__ and the expm1() and
+log1p() functions.
+
 20051031T1458Z <wboutin@massmutual.com> [1232]
 
   mingw_setup.make
@@ -4363,4 +4379,10 @@ Explain the cause of a benign EDG warning.
 
   math_functors_test.cpp
 Remove unreferenced variables.
+
+20051101T0558Z <chicares@cox.net> [1232]
+
+  platform_dependent.hpp
+Rework the 20051031T1446Z change, which broke the build because
+<cmath> cannot be included when compiling C.
 
