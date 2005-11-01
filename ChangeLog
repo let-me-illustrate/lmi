@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.201 2005-11-01 17:56:44 chicares Exp $
+// $Id: ChangeLog,v 1.202 2005-11-01 17:57:30 chicares Exp $
 
 MAINTENANCE
 
@@ -4390,4 +4390,9 @@ Rework the 20051031T1446Z change, which broke the build because
 
   ledger.hpp
 Make ctor explicit.
+
+20051101T1757Z <chicares@cox.net> [1232]
+
+  comma_punct_test.cpp
+Tighten condition for a compiler-version-specific message.
 
