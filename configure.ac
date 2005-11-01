@@ -21,7 +21,7 @@ dnl snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
 dnl === Prologue ===
 
-AC_REVISION($Id: configure.ac,v 1.8 2005-11-01 14:59:32 zeitlin Exp $)dnl
+AC_REVISION($Id: configure.ac,v 1.9 2005-11-01 19:05:57 zeitlin Exp $)dnl
 
 AC_PREREQ(2.59)
 AC_INIT(LMI, 1.0.0, [chicares@cox.net])
@@ -164,7 +164,6 @@ fi
 
 if test "x$GXX" == "xyes"; then
     CXXFLAGS="$CXXFLAGS $CFLAGS_gcc_common -std=c++98 \
-        -Wctor-dtor-privacy \
         -Wdeprecated \
         -Wnon-template-friend \
         -Woverloaded-virtual \
@@ -219,6 +218,9 @@ if test "$ac_cv_header_curses_h" != "yes"; then
     fi
 fi
 
+dnl the functions below are typically found in libm and not libc so make sure
+dnl we look there
+LIBS="$LIBS -lm"
 AC_CHECK_FUNCS(log10l fabsl strtold)
 
 dnl existing code already uses these macros so continue to use them instead of
