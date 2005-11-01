@@ -20,7 +20,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: Makefile.am,v 1.5 2005-11-01 14:25:10 zeitlin Exp $
+# $Id: Makefile.am,v 1.6 2005-11-01 14:40:06 zeitlin Exp $
 
 ##############################################################################
 # All Targets
@@ -198,6 +198,9 @@ lmi_wx_LDADD =  \
 
 lmi_cli_SOURCES = $(top_builddir)/dummy.cpp
 lmi_cli_CXXFLAGS=$(CGICC_INCLUDE_FLAGS)
+if LMI_WINDOWS
+    lmi_cli_CXXFLAGS += -DLMI_USE_DLL
+endif
 lmi_cli_LDADD = \
     libcli.la \
     liblmi.la \
@@ -375,11 +378,21 @@ ihs_crc_comp_SOURCES = ihs_crc_comp.cpp
 ihs_crc_comp_LDADD = libmain_auxiliary_common.la
 
 product_files_SOURCES = \
-    generate_product_files.cpp my_db.cpp my_fund.cpp my_prod.cpp my_rnd.cpp my_tier.cpp xenumtypes.cpp
+    generate_product_files.cpp \
+    main_common.cpp \
+    main_common_non_wx.cpp \
+    my_db.cpp \
+    my_fund.cpp \
+    my_prod.cpp \
+    my_rnd.cpp \
+    my_tier.cpp \
+    xenumtypes.cpp
 product_files_CXXFLAGS = $(AM_CXXFLAGS)
+if LMI_WINDOWS
+    product_files_CXXFLAGS += -DLMI_USE_DLL
+endif
 product_files_LDADD = \
     liblmi.la   \
-    libmain_auxiliary_common.la    \
     $(BOOST_LIBS)
 
 
