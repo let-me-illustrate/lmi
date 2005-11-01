@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.198 2005-10-31 18:16:18 chicares Exp $
+// $Id: ChangeLog,v 1.199 2005-11-01 04:59:40 chicares Exp $
 
 MAINTENANCE
 
@@ -4336,12 +4336,12 @@ Adapt to MinGW gcc-3.4.4 in anticipation of supporting it.
   callback.hpp
 Note boost::function as a possible alternative.
 
-20051031T1458Z <wboutin@massmutual.com> [1233]
+20051031T1458Z <wboutin@massmutual.com> [1232]
 
   mingw_setup.make
 Refactor and improve documentation.
 
-20051031T1809Z <chicares@cox.net> [1233]
+20051031T1809Z <chicares@cox.net> [1232]
 
   como_4_3_3.make
   diagnostics.sed
@@ -4351,8 +4351,16 @@ Refactor and improve documentation.
   xenumtypes.cpp
 Address various comeau issues.
 
-20051031T1816Z <chicares@cox.net> [1233]
+20051031T1816Z <chicares@cox.net> [1232]
 
   numeric_io_test.cpp
 Tighten condition for a compiler workaround.
+
+20051101T0459Z <chicares@cox.net> [1232]
+
+  alert_cli.cpp
+Explain the cause of a benign EDG warning.
+
+  math_functors_test.cpp
+Remove unreferenced variables.
 

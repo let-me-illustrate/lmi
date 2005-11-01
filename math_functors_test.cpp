@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: math_functors_test.cpp,v 1.4 2005-06-07 14:29:53 chicares Exp $
+// $Id: math_functors_test.cpp,v 1.5 2005-11-01 04:59:40 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -46,9 +46,6 @@
 
 namespace
 {
-long double const days_per_year = 365.0L;
-long double const years_per_day = 1.0L / days_per_year;
-
 // C99's isnan macro can't be written correctly in portable C++.
 // This implementation is portable, but compilers needn't implement
 // it correctly.
