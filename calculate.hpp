@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: calculate.hpp,v 1.12 2005-10-30 19:06:57 zeitlin Exp $
+// $Id: calculate.hpp,v 1.13 2005-11-02 04:48:46 chicares Exp $
 
 #ifndef calculate_hpp
 #define calculate_hpp
@@ -221,11 +221,12 @@ struct RunCensusDeprecated
 
         timer.restart();
 
-        // compilation workaround for g++ 3.3: passing e_ledger_type(e_ill_reg)
-        // directly to Ledger ctor results in an error (but the code compilers
-        // fine with g++ 3.4 and 4.0)
-        static const e_ledger_type ledgerType(e_ill_reg);
-        Ledger XXXComposite(ledgerType, 100, true);
+        // COMPILER !! Don't write this as
+        //   Ledger XXXComposite(e_ledger_type(e_ill_reg), 100, true);
+        // because gcc versions 2.95, 3.2, and 3.3 erroneously parse
+        // its first argument as an erroneous function declaration.
+        static e_ledger_type const ill_reg_type(e_ill_reg);
+        Ledger XXXComposite(ill_reg_type, 100, true);
 
         for
             (std::vector<IllusInputParms>::iterator lives_it = lives.begin()
