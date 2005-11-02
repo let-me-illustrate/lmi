@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.207 2005-11-02 15:53:13 chicares Exp $
+// $Id: ChangeLog,v 1.208 2005-11-02 17:46:10 chicares Exp $
 
 MAINTENANCE
 
@@ -4428,4 +4428,14 @@ Add an explicit virtual dtor.
 
   config.hpp
 Refactor.
+
+20051102T1723Z <chicares@cox.net> [1231]
+
+  platform_dependent.hpp
+Improve documentation.
+
+20051102T1746Z <chicares@cox.net> [1231]
+
+  tn_range_test.cpp
+Fix order of header inclusion.
 
