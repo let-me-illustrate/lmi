@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.205 2005-11-02 04:48:46 chicares Exp $
+// $Id: ChangeLog,v 1.206 2005-11-02 07:26:50 chicares Exp $
 
 MAINTENANCE
 
@@ -4418,4 +4418,9 @@ Remove non-empty blank line.
 
   calculate.hpp
 Explain a compiler workaround.
+
+20051102T0651Z <chicares@cox.net> [1231]
+
+  streamable.hpp
+Add an explicit virtual dtor.
 
