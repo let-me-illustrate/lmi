@@ -19,18 +19,12 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: tn_range_test.cpp,v 1.2 2005-02-19 03:27:45 chicares Exp $
+// $Id: tn_range_test.cpp,v 1.3 2005-11-02 17:46:10 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
 #   pragma hdrstop
 #endif // __BORLANDC__
-
-#include <algorithm>
-#include <exception>
-#include <ios>
-#include <iterator>
-#include <sstream>
 
 #include "tn_range.hpp"
 #include "tn_range.tpp" // Template class implementation.
@@ -38,6 +32,12 @@
 
 #define BOOST_INCLUDE_MAIN
 #include "test_tools.hpp"
+
+#include <algorithm>
+#include <exception>
+#include <ios>
+#include <iterator>
+#include <sstream>
 
 template<typename T>
 struct nonnegative
