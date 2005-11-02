@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.204 2005-11-02 03:36:08 chicares Exp $
+// $Id: ChangeLog,v 1.205 2005-11-02 04:48:46 chicares Exp $
 
 MAINTENANCE
 
@@ -4413,4 +4413,9 @@ Use double-hyphen command option.
 
   configure.ac
 Remove non-empty blank line.
+
+20051102T0448Z <chicares@cox.net> [1231]
+
+  calculate.hpp
+Explain a compiler workaround.
 
