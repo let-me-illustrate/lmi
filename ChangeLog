@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.203 2005-11-01 18:01:00 chicares Exp $
+// $Id: ChangeLog,v 1.204 2005-11-02 03:36:08 chicares Exp $
 
 MAINTENANCE
 
@@ -34,7 +34,9 @@ Please write entries this way:
 Explanations:
 
 [1] Write an ISO 8601 timestamp, using UTC because it sorts easily.
-Omit the optional defect-count if you like; it's explained below.
+Run 'make check_conformity' before committing to cvs. It identifies
+common problems, e.g., incorrect copyright statements. It reports the
+"Number of marked defects" shown as [defect-count] above.
 
 [3] Exact name of file changed, indented two spaces.
 [4] Write each file's name on a separate line. Write them in
@@ -51,10 +53,6 @@ then just copy it here.
 
 We started following this convention only on 20050710T0414Z, so don't
 take earlier entries as exemplary.
-
-Run 'make check_conformity' before committing to cvs. It identifies
-common problems, e.g., incorrect copyright statements. It reports the
-"Number of marked defects" shown as [defect-count] above.
 
 //
 
@@ -4401,4 +4399,18 @@ Tighten condition for a compiler-version-specific message.
   bcc_5_5_1.make
   como_4_3_3.make
 Prevent determining gcc version for non-gcc toolsets.
+
+20051101T1503Z <vadim@tt-solutions.com> [1231]
+
+  Makefile.am
+  README.auto
+Refine autotoolization.
+
+20051102T0336Z <chicares@cox.net> [1231]
+
+  INSTALL
+Use double-hyphen command option.
+
+  configure.ac
+Remove non-empty blank line.
 

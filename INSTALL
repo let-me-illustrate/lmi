@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: INSTALL,v 1.20 2005-10-05 15:04:40 wboutin Exp $
+// $Id: INSTALL,v 1.21 2005-11-02 03:36:08 chicares Exp $
 
 [It's clearest to validate commands, then copy and paste them here.
 Once we've done that, it becomes trivial to turn this into a shell
@@ -70,7 +70,7 @@ Copy cgicc's header files to the third-party hierarchy:
   /tmp[0]$cp --preserve cgicc-3.1.4/cgicc/*.h /opt/lmi/third_party/include/cgicc/
 
 Copy cgicc's source files to the third-party hierarchy:
-  /tmp[0]$mkdir -parents /opt/lmi/third_party/src/cgicc/
+  /tmp[0]$mkdir --parents /opt/lmi/third_party/src/cgicc/
   /tmp[0]$cp --preserve cgicc-3.1.4/cgicc/*.cpp /opt/lmi/third_party/src/cgicc/
 
 * Install and patch xmlwrapp-0.2.0

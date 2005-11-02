@@ -21,7 +21,7 @@ dnl snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
 dnl === Prologue ===
 
-AC_REVISION($Id: configure.ac,v 1.10 2005-11-01 19:07:07 zeitlin Exp $)dnl
+AC_REVISION($Id: configure.ac,v 1.11 2005-11-02 03:36:08 chicares Exp $)dnl
 
 AC_PREREQ(2.59)
 AC_INIT(LMI, 1.0.0, [chicares@cox.net])
@@ -64,7 +64,7 @@ AC_ARG_WITH(boost-libs,
             [AC_HELP_STRING([--with-boost-libs=dir], [Boost libs installation directory])],
             lmi_boost_libs=$withval)
 
- 
+
 AC_ARG_WITH(wx,
             [AC_HELP_STRING([--with-wx=dir],
                             [wxWidgets directory (defaults to WXWIN env var)])],
