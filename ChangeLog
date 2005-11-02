@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.206 2005-11-02 07:26:50 chicares Exp $
+// $Id: ChangeLog,v 1.207 2005-11-02 15:53:13 chicares Exp $
 
 MAINTENANCE
 
@@ -4423,4 +4423,9 @@ Explain a compiler workaround.
 
   streamable.hpp
 Add an explicit virtual dtor.
+
+20051102T1553Z <chicares@cox.net> [1231]
+
+  config.hpp
+Refactor.
 

@@ -19,19 +19,13 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: config.hpp,v 1.8 2005-10-31 14:05:30 zeitlin Exp $
+// $Id: config.hpp,v 1.9 2005-11-02 15:53:13 chicares Exp $
 
 // Configuration header for compiler quirks. Include at the beginning of
 // every .hpp file (and nowhere else).
 
 #ifndef config_hpp
 #define config_hpp
-
-// When using configure, this symbol is defined to indicate that we have access
-// to configure-generated config.h .
-#ifdef HAVE_CONFIG_H
-#   include "config.h"
-#endif
 
 #ifdef __cplusplus
 // Namespace alii.
@@ -71,6 +65,10 @@ namespace fs = boost::filesystem;
 // INELEGANT !! Either the foregoing belongs in 'config_all.hpp',
 // or 'config_all.hpp' should not exist.
 
+#if defined HAVE_CONFIG_H
+#   include "config.h"
+#endif // Using autoconf.
+
 // This header #includes standard headers in an unusual way, and must
 // be #included before any standard headers are seen.
 //
@@ -89,8 +87,7 @@ namespace fs = boost::filesystem;
 #include "config_all.hpp"
 #undef OK_TO_INCLUDE_CONFIG_ALL_HPP
 
-// we don't need all this ugliness with configure
-#ifndef HAVE_CONFIG_H
+#if !defined HAVE_CONFIG_H
 
 // Redundant include guards are passé: with modern tools, the benefit
 // is not worth the ugliness. The guards here, however, are intended
@@ -106,29 +103,29 @@ namespace fs = boost::filesystem;
 // header causes an error. We take care to undefine each reverse
 // include guard immediately after using it.
 
-#if defined __MINGW32__ && defined __GNUC__ && 30203 <= LMI_GCC_VERSION
-#   define OK_TO_INCLUDE_CONFIG_MING323_HPP
-#   include "config_ming323.hpp"
-#   undef OK_TO_INCLUDE_CONFIG_MING323_HPP
-#endif // MinGW gcc 3.2.3+ .
+#   if defined __MINGW32__ && defined __GNUC__ && 30203 <= LMI_GCC_VERSION
+#       define OK_TO_INCLUDE_CONFIG_MING323_HPP
+#       include "config_ming323.hpp"
+#       undef OK_TO_INCLUDE_CONFIG_MING323_HPP
+#   endif // MinGW gcc 3.2.3+ .
 
-#if defined __CYGWIN__ && defined __GNUC__ && 30203 <= LMI_GCC_VERSION
-#   define OK_TO_INCLUDE_CONFIG_CYG323_HPP
-#   include "config_cyg323.hpp"
-#   undef OK_TO_INCLUDE_CONFIG_CYG323_HPP
-#endif // Cygwin gcc 3.2.3+ .
+#   if defined __CYGWIN__ && defined __GNUC__ && 30203 <= LMI_GCC_VERSION
+#       define OK_TO_INCLUDE_CONFIG_CYG323_HPP
+#       include "config_cyg323.hpp"
+#       undef OK_TO_INCLUDE_CONFIG_CYG323_HPP
+#   endif // Cygwin gcc 3.2.3+ .
 
-#if defined __BORLANDC__ && __BORLANDC__ < 0x0550
-#   error Obsolete compiler not supported.
-#endif // Ancient borland compiler.
+#   if defined __BORLANDC__ && __BORLANDC__ < 0x0550
+#       error Obsolete compiler not supported.
+#   endif // Ancient borland compiler.
 
-#if defined __BORLANDC__ && 0x0550 <= __BORLANDC__
-#   define OK_TO_INCLUDE_CONFIG_BC551_HPP
-#   include "config_bc551.hpp"
-#   undef OK_TO_INCLUDE_CONFIG_BC551_HPP
-#endif // Old borland compiler.
+#   if defined __BORLANDC__ && 0x0550 <= __BORLANDC__
+#       define OK_TO_INCLUDE_CONFIG_BC551_HPP
+#       include "config_bc551.hpp"
+#       undef OK_TO_INCLUDE_CONFIG_BC551_HPP
+#   endif // Old borland compiler.
 
-#endif // !HAVE_CONFIG_H
+#endif // Not using autoconf.
 
 // We include standard library headers this way:
 //   #include <filename>
