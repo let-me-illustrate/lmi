@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_wx.cpp,v 1.22 2005-10-31 22:58:03 zeitlin Exp $
+// $Id: main_wx.cpp,v 1.23 2005-11-03 06:14:13 chicares Exp $
 
 // Portions of this file are derived from wxWindows files
 //   samples/docvwmdi/docview.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -69,16 +69,12 @@
 #include <wx/toolbar.h>
 #include <wx/xrc/xmlres.h>
 
-#if defined(__WXMSW__) && !defined(HAVE___ARGC)
-    #include <wx/cmdline.h>
-#endif
-
 #include <stdexcept>
 #include <string>
 
-#ifndef __WXMSW__
-    #include "lmi.xpm"
-#endif
+#if !defined __WXMSW__
+#   include "lmi.xpm"
+#endif // !defined __WXMSW__
 
 IMPLEMENT_APP_NO_MAIN(lmi_wx_app)
 IMPLEMENT_WX_THEME_SUPPORT
@@ -160,41 +156,8 @@ int WINAPI WinMain
     ,int       nCmdShow
     )
 {
-#ifdef HAVE___ARGC
     int argc = __argc;
     char** argv = __argv;
-#else // no __arg[cv]
-    struct CmdLineArgs
-    {
-        CmdLineArgs(const wxChar *cmdline)
-            : m_args(wxCmdLineParser::ConvertStringToArgs(cmdline)),
-              m_argc(m_args.size() + 1 /* for program name */),
-              m_argv(new wxChar *[m_argc + 1 /* for terminating NULL */])
-        {
-            wxString progname;
-            // ignore return value, there is nothing we can do other than leave
-            // progname empty if it fails anyhow
-            ::GetModuleFileName(NULL /* this module */,
-                                wxStringBuffer(progname, MAX_PATH),
-                                MAX_PATH);
-
-            m_args.Insert(progname, 0);
-
-            for ( int n = 0; n < m_argc; n++ )
-                m_argv[n] = const_cast<wxChar *>(m_args[n].c_str());
-
-            m_argv[m_argc] = NULL;
-        }
-
-        wxArrayString m_args;
-        int m_argc;
-        wxChar **m_argv;
-    } cmdLineArgs(lpCmdLine);
-
-    int argc = cmdLineArgs.m_argc;
-    char **argv = cmdLineArgs.m_argv;
-#endif // __argc/!__argc
-
 #endif // __WXMSW__ defined.
 
     // WX !! and MPATROL !! Using wx-2.5.1 and mpatrol-1.4.8, both
@@ -203,9 +166,9 @@ int WINAPI WinMain
     //   MPATROL_OPTIONS='SHOWUNFREED'
     // It's easier to trace them with:
     //   MPATROL_OPTIONS='LOGALL SHOWUNFREED USEDEBUG'
-    // Two are apparently mpatrol artifacts traceable to
-    //   ___mp_findsource
-    //   ___mp_init
+    // Two are apparently mpatrol artifacts traceable to symbols:
+    //   "___mp_findsource"
+    //   "___mp_init"
     // The third is traceable in 'mpatrol.log' with 'USEDEBUG' to
     //   lmi_wx_app::GetEventHashTable() const
     // (although stepping through the code in gdb suggests it's really
