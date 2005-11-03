@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.213 2005-11-03 18:54:38 chicares Exp $
+// $Id: ChangeLog,v 1.214 2005-11-03 22:22:12 wboutin Exp $
 
 MAINTENANCE
 
@@ -4478,4 +4478,17 @@ Exempt __CYGWIN__ from reserved-identifier check.
 
   numeric_io_traits.hpp
 Add cygwin workaround.
+
+20051103T2128Z <wboutin@massmutual.com> [1233]
+
+  setup.make
+Add 'sed-4.0.7' .
+
+20051103T2220Z <wboutin@massmutual.com< [1233]
+
+  INSTALL
+Remove tools that 'setup.make' now automates.
+
+  setup.make
+Refactor.
 

@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: setup.make,v 1.20 2005-11-03 22:13:02 wboutin Exp $
+# $Id: setup.make,v 1.21 2005-11-03 22:22:12 wboutin Exp $
 
 .PHONY: all
 all: setup
@@ -66,11 +66,11 @@ sf_mirror := http://umn.dl.sourceforge.net/sourceforge
 .PHONY: setup
 setup: \
   dummy_libraries \
-  frozen_cgicc \
-  frozen_xmlwrapp \
   frozen_boost \
+  frozen_cgicc \
   frozen_libxml2 \
   frozen_sed \
+  frozen_xmlwrapp \
   mingw_20050827 \
   test_setup \
 
@@ -141,6 +141,37 @@ dummy_libraries: $(third_party_bin_dir) $(third_party_lib_dir)
 
 ###############################################################################
 
+# Install boost-1.31.0 .
+
+.PHONY: frozen_boost
+frozen_boost:
+	$(MAKE) \
+	  -C /tmp \
+	  -f $(src_dir)/setup.make \
+	                    src_dir='$(src_dir)' \
+	    third_party_include_dir='$(third_party_include_dir)' \
+	     third_party_source_dir='$(third_party_source_dir)' \
+	  install_frozen_boost_from_tmp_dir
+
+.PHONY: install_frozen_boost_from_tmp_dir
+install_frozen_boost_from_tmp_dir:
+	[ -e boost_1_31_0.tar.bz2 ] \
+	  || $(WGET) --non-verbose \
+	  $(sf_mirror)/boost/boost_1_31_0.tar.bz2
+	$(ECHO) "8cc183538eaa5cfc53d88d0e94bd2fd4  boost_1_31_0.tar.bz2" \
+	  |$(MD5SUM) --check
+	$(BZIP2) --decompress --keep boost_1_31_0.tar.bz2
+	$(TAR) --extract --file=boost_1_31_0.tar
+	$(MKDIR) --parents $(third_party_include_dir)/boost/
+	$(MKDIR) --parents $(third_party_source_dir)/boost/
+	-$(CP) --force --preserve --recursive boost_1_31_0/boost/* \
+	  $(third_party_include_dir)/boost/
+	-$(CP) --force --preserve --recursive boost_1_31_0/* \
+	  $(third_party_source_dir)/boost/
+	$(RM) --force boost_1_31_0.tar boost_1_31_0.tar.bz2
+
+###############################################################################
+
 # Install and patch cgicc-3.1.4 .
 
 # TODO ?? Prefer to define $(TMPDIR) elsewhere and use the definition here.
@@ -193,6 +224,82 @@ check_cgicc_md5sums: $(third_party_dir)
 	$(MD5SUM) --check $(src_dir)/cgicc_md5sums
 
 ###############################################################################
+# This version has not been formally tested and released for production with
+# lmi. The version actually used can't be easily rebuilt, so this target is
+# intended to provide a stop-gap library until it can be formally tested.
+
+# Install libxml2-2.6.19 .
+
+.PHONY: frozen_libxml2
+frozen_libxml2:
+	$(MAKE) \
+	  -C /tmp \
+	  -f $(src_dir)/setup.make \
+	                    src_dir='$(src_dir)' \
+	        third_party_bin_dir='$(third_party_bin_dir)' \
+	    third_party_include_dir='$(third_party_include_dir)' \
+	     third_party_source_dir='$(third_party_source_dir)' \
+	  install_frozen_libxml2_from_tmp_dir
+
+.PHONY: install_frozen_libxml2_from_tmp_dir
+install_frozen_libxml2_from_tmp_dir:
+	[ -e libxml2-2.6.19.tar.bz2 ] \
+	  || $(WGET) --non-verbose \
+	  http://ftp.gnome.org/pub/GNOME/sources/libxml2/2.6/libxml2-2.6.19.tar.bz2
+	$(ECHO) "ed581732d586f86324ec46e572526ede  libxml2-2.6.19.tar.bz2" \
+	  |$(MD5SUM) --check
+	$(BZIP2) --decompress --keep libxml2-2.6.19.tar.bz2
+	$(TAR) --extract --file=libxml2-2.6.19.tar
+	cd libxml2-2.6.19; \
+	/msys/1.0/bin/sh.exe ./configure && /msys/1.0/bin/make
+	$(MKDIR) --parents $(third_party_include_dir)/libxml/
+	-$(CP) --force --preserve --recursive libxml2-2.6.19/include/libxml/* \
+	  $(third_party_include_dir)/libxml/ 2>/dev/null
+	$(CP) --force --preserve libxml2-2.6.19/.libs/libxml2-2.dll \
+	  $(third_party_bin_dir)
+	$(CP) --force --preserve libxml2-2.6.19/.libs/libxml2.dll.a \
+	  $(third_party_lib_dir)
+	$(RM) --force libxml2-2.6.19.tar libxml2-2.6.19.tar.bz2
+
+###############################################################################
+
+# Install sed-4.0.7 .
+
+# There are several later versions. Building sed-4.1.4 fails
+# for several reasons:
+#  - it expects some natural language that's not present
+#      ("./configure --disable-nls" seems to fix that)
+#  - it expects to find 'bcopy'
+#      (to fix that, "make CPPFLAGS='-DHAVE_STRING_H'")
+#  - it can't resolve multibyte-character functions
+#      (to fix that, suppress "#define HAVE_MBRTOWC 1" in config.h)
+# Those seem to be problems with MSYS or autotools, except that
+# the second one looks like a defect in the sed sources (a file
+# that uses 'bcopy' doesn't seem to include config.h).
+
+.PHONY: frozen_sed
+frozen_sed:
+	$(MAKE) \
+	  -C /tmp/ \
+	  -f $(src_dir)/setup.make \
+	  src_dir='$(src_dir)' \
+          install_sed_from_tmp_dir
+
+.PHONY: install_sed_from_tmp_dir
+install_sed_from_tmp_dir:
+	[ -e sed-4.0.7.tar.gz ] \
+	  || $(WGET) --non-verbose \
+	  http://ftp.gnu.org/gnu/sed/sed-4.0.7.tar.gz
+	$(ECHO) " 005738e7f97bd77d95b6907156c8202a  sed-4.0.7.tar.gz " \
+	  |$(MD5SUM) --check
+	$(GZIP) --decompress --force sed-4.0.7.tar.gz
+	$(TAR) --extract --file sed-4.0.7.tar
+	cd /tmp/sed-4.0.7/ ; \
+	/msys/1.0/bin/sh.exe ./configure && /msys/1.0/bin/make
+	-$(CP) --force --preserve sed-4.0.7/sed/sed.exe /usr/bin/
+	$(RM) --recursive sed-4.0.7.tar
+
+###############################################################################
 
 # Install and patch xmlwrapp-0.2.0 .
 
@@ -232,75 +339,6 @@ install_frozen_xmlwrapp_from_tmp_dir:
 check_xmlwrapp_md5sums: $(third_party_dir)
 	cd $(third_party_dir) ; \
 	$(MD5SUM) --check $(src_dir)/xmlwrapp_md5sums
-
-###############################################################################
-
-# Install boost-1.31.0 .
-
-.PHONY: frozen_boost
-frozen_boost:
-	$(MAKE) \
-	  -C /tmp \
-	  -f $(src_dir)/setup.make \
-	                    src_dir='$(src_dir)' \
-	    third_party_include_dir='$(third_party_include_dir)' \
-	     third_party_source_dir='$(third_party_source_dir)' \
-	  install_frozen_boost_from_tmp_dir
-
-.PHONY: install_frozen_boost_from_tmp_dir
-install_frozen_boost_from_tmp_dir:
-	[ -e boost_1_31_0.tar.bz2 ] \
-	  || $(WGET) --non-verbose \
-	  $(sf_mirror)/boost/boost_1_31_0.tar.bz2
-	$(ECHO) "8cc183538eaa5cfc53d88d0e94bd2fd4  boost_1_31_0.tar.bz2" \
-	  |$(MD5SUM) --check
-	$(BZIP2) --decompress --keep boost_1_31_0.tar.bz2
-	$(TAR) --extract --file=boost_1_31_0.tar
-	$(MKDIR) --parents $(third_party_include_dir)/boost/
-	$(MKDIR) --parents $(third_party_source_dir)/boost/
-	-$(CP) --force --preserve --recursive boost_1_31_0/boost/* \
-	  $(third_party_include_dir)/boost/
-	-$(CP) --force --preserve --recursive boost_1_31_0/* \
-	  $(third_party_source_dir)/boost/
-	$(RM) --force boost_1_31_0.tar boost_1_31_0.tar.bz2
-
-###############################################################################
-# This version has not been formally tested and released for production with
-# lmi. The version actually used can't be easily rebuilt, so this target is
-# intended to provide a stop-gap library until it can be formally tested.
-
-# Install libxml2-2.6.19 .
-
-.PHONY: frozen_libxml2
-frozen_libxml2:
-	$(MAKE) \
-	  -C /tmp \
-	  -f $(src_dir)/setup.make \
-	                    src_dir='$(src_dir)' \
-	        third_party_bin_dir='$(third_party_bin_dir)' \
-	    third_party_include_dir='$(third_party_include_dir)' \
-	     third_party_source_dir='$(third_party_source_dir)' \
-	  install_frozen_libxml2_from_tmp_dir
-
-.PHONY: install_frozen_libxml2_from_tmp_dir
-install_frozen_libxml2_from_tmp_dir:
-	[ -e libxml2-2.6.19.tar.bz2 ] \
-	  || $(WGET) --non-verbose \
-	  http://ftp.gnome.org/pub/GNOME/sources/libxml2/2.6/libxml2-2.6.19.tar.bz2
-	$(ECHO) "ed581732d586f86324ec46e572526ede  libxml2-2.6.19.tar.bz2" \
-	  |$(MD5SUM) --check
-	$(BZIP2) --decompress --keep libxml2-2.6.19.tar.bz2
-	$(TAR) --extract --file=libxml2-2.6.19.tar
-	cd libxml2-2.6.19; \
-	/msys/1.0/bin/sh.exe ./configure && /msys/1.0/bin/make
-	$(MKDIR) --parents $(third_party_include_dir)/libxml/
-	-$(CP) --force --preserve --recursive libxml2-2.6.19/include/libxml/* \
-	  $(third_party_include_dir)/libxml/ 2>/dev/null
-	$(CP) --force --preserve libxml2-2.6.19/.libs/libxml2-2.dll \
-	  $(third_party_bin_dir)
-	$(CP) --force --preserve libxml2-2.6.19/.libs/libxml2.dll.a \
-	  $(third_party_lib_dir)
-	$(RM) --force libxml2-2.6.19.tar libxml2-2.6.19.tar.bz2
 
 ###############################################################################
 
@@ -381,44 +419,6 @@ install_mingw_20050827_from_tmp_dir: $(mingw_requirements)
 # TODO ?? Keep this command blocked during testing to allow comparison
 # with sibling target.
 #	$(RM) --recursive *
-
-###############################################################################
-
-# Install sed-4.0.7 .
-
-# There are several later versions. Building sed-4.1.4 fails
-# for several reasons:
-#  - it expects some natural language that's not present
-#      ("./configure --disable-nls" seems to fix that)
-#  - it expects to find 'bcopy'
-#      (to fix that, "make CPPFLAGS='-DHAVE_STRING_H'")
-#  - it can't resolve multibyte-character functions
-#      (to fix that, suppress "#define HAVE_MBRTOWC 1" in config.h)
-# Those seem to be problems with MSYS or autotools, except that
-# the second one looks like a defect in the sed sources (a file
-# that uses 'bcopy' doesn't seem to include config.h).
-
-.PHONY: frozen_sed
-frozen_sed:
-	$(MAKE) \
-	  -C /tmp/ \
-	  -f $(src_dir)/setup.make \
-	  src_dir='$(src_dir)' \
-          install_sed_from_tmp_dir
-
-.PHONY: install_sed_from_tmp_dir
-install_sed_from_tmp_dir:
-	[ -e sed-4.0.7.tar.gz ] \
-	  || $(WGET) --non-verbose \
-	  http://ftp.gnu.org/gnu/sed/sed-4.0.7.tar.gz
-	$(ECHO) " 005738e7f97bd77d95b6907156c8202a  sed-4.0.7.tar.gz " \
-	  |$(MD5SUM) --check
-	$(GZIP) --decompress --force sed-4.0.7.tar.gz
-	$(TAR) --extract --file sed-4.0.7.tar
-	cd /tmp/sed-4.0.7/ ; \
-	/msys/1.0/bin/sh.exe ./configure && /msys/1.0/bin/make
-	-$(CP) --force --preserve sed-4.0.7/sed/sed.exe /usr/bin/
-	$(RM) --recursive sed-4.0.7.tar
 
 ###############################################################################
 
