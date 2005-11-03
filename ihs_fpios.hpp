@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_fpios.hpp,v 1.2 2005-03-23 15:32:29 chicares Exp $
+// $Id: ihs_fpios.hpp,v 1.3 2005-11-03 04:53:55 chicares Exp $
 
 // This is a derived work based on Joshua Rowe's
 //   "Really cool persistent object stream library"
@@ -42,8 +42,8 @@
  * File-based persistent object streams
  */
 
-#ifndef __FPIOS_HH__
-#define __FPIOS_HH__
+#ifndef ihs_fpios_hpp
+#define ihs_fpios_hpp
 
 #include "config.hpp"
 
@@ -186,5 +186,5 @@ public:
 };
 
 }   // namespace JOSHUA_ROWE_PERSISTENT_STREAMS
-#endif
+#endif // ihs_fpios_hpp
 

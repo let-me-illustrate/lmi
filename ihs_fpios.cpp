@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_fpios.cpp,v 1.3 2005-05-26 22:01:15 chicares Exp $
+// $Id: ihs_fpios.cpp,v 1.4 2005-11-03 04:53:55 chicares Exp $
 
 // This is a derived work based on Joshua Rowe's
 //   "Really cool persistent object stream library"
@@ -234,7 +234,7 @@ JrPs_fpstreambuf::~JrPs_fpstreambuf()
 #   endif // !(defined(__GNUC__) && defined(__STRICT_ANSI__))
 #   if defined __BORLANDC__
 #       define _setmode setmode
-#   endif // __BORLANDC
+#   endif // __BORLANDC__
 #   include <stdio.h>
 #endif
 
