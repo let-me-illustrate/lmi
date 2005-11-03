@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: GNUmakefile,v 1.35 2005-10-21 17:01:32 chicares Exp $
+# $Id: GNUmakefile,v 1.36 2005-11-03 04:53:51 chicares Exp $
 
 ###############################################################################
 
@@ -490,6 +490,47 @@ check_conformity: source_clean
 	    -e"s/^.*$$/$$z/" $$z \
 	    ; \
 	  done;
+	@$(ECHO) "  Files that use reserved identifiers:"
+	@# The sed commands are sorted alphabetically by group:
+	@#   {standard, platform-specific, compiler-specific, regrettable}
+	@# TODO ?? Use '[^_A-Za-z0-9]_\|__' to find more reserved
+	@# identifiers--then filter then with care.
+	@$(GREP) \
+	    '__' \
+	    $(filter-out GNUmakefile,$(expected_source_files)) \
+	  | $(SED) \
+	    -e's/"[^"]*"//g' \
+	    -e'/__FILE__/d' \
+	    -e'/__LINE__/d' \
+	    -e'/__STDC__/d' \
+	    -e'/__STDC_IEC_559__/d' \
+	    -e'/__cplusplus/d' \
+	    -e'/__WIN32__/d' \
+	    -e'/__X__/d' \
+	    -e'/__arg[cv]/d' \
+	    -e'/__i386/d' \
+	    -e'/__unix__/d' \
+	    -e'/__BIG_ENDIAN/d' \
+	    -e'/__BORLANDC__/d' \
+	    -e'/__BYTE_ORDER/d' \
+	    -e'/__COMO__/d' \
+	    -e'/__GLIBCPP__/d' \
+	    -e'/__GNUC__/d' \
+	    -e'/__MINGW32_VERSION/d' \
+	    -e'/__MINGW32__/d' \
+	    -e'/__STRICT_ANSI__/d' \
+	    -e'/__asm__/d' \
+	    -e'/__attribute__/d' \
+	    -e'/__declspec/d' \
+	    -e'/__emit__/d' \
+	    -e'/__int64/d' \
+	    -e'/__stdcall/d' \
+	    -e'/__volatile__/d' \
+	    -e'/__WXMSW__/d' \
+	    -e'/__init_aux/d' \
+	    -e'/__pow/d' \
+	    -e'/____/d' \
+	    -e'/__/!d'
 	@$(ECHO) "Total lines of code:"
 	@$(WC) -l $(prerequisite_files) | $(SED) -e'/[Tt]otal/!d' -e's/[^0-9]//'
 	@$(ECHO) "Number of source files:"
