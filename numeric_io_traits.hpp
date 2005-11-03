@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: numeric_io_traits.hpp,v 1.9 2005-11-03 14:56:12 chicares Exp $
+// $Id: numeric_io_traits.hpp,v 1.10 2005-11-03 18:54:38 chicares Exp $
 
 #ifndef numeric_io_traits_hpp
 #define numeric_io_traits_hpp
@@ -70,7 +70,19 @@ inline int floating_point_decimals(T t)
         {
         return 0;
         }
+// TODO ?? As this is written on 2005-11-03, cygwin lacks fabsl().
+// It would be far better to write replacements for this and other
+// such functions in one unit-tested module, and use them here as
+// well as in 'round_to.hpp'.
+#if !defined __CYGWIN__
     long double z = std::numeric_limits<T>::epsilon() * fabsl(t);
+#else  // defined __CYGWIN__
+    long double z = std::numeric_limits<T>::epsilon();
+    if(t < 0.0)
+        {
+        z = -z;
+        }
+#endif // defined __CYGWIN__
     return std::max(0, static_cast<int>(-log10l(z)));
 }
 
