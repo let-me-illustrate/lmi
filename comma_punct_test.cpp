@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: comma_punct_test.cpp,v 1.2 2005-11-01 17:57:30 chicares Exp $
+// $Id: comma_punct_test.cpp,v 1.3 2005-11-03 00:30:54 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -40,9 +40,9 @@
 
 int test_main(int, char*[])
 {
-#if defined __GNUC__ && 40001 <= LMI_GCC_VERSION
+#if defined __GNUC__ && LMI_GCC_VERSION <= 40001
     std::cerr
-        << "This test fails with gcc version 4.0.0 or earlier: see\n"
+        << "This test fails with gcc versions before 4.0.1: see\n"
         << "  http://gcc.gnu.org/bugzilla/show_bug.cgi?id=20914\n"
         ;
 #endif // gcc version less than 4.0.1 .
