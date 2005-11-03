@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: GNUmakefile,v 1.36 2005-11-03 04:53:51 chicares Exp $
+# $Id: GNUmakefile,v 1.37 2005-11-03 18:54:38 chicares Exp $
 
 ###############################################################################
 
@@ -514,6 +514,7 @@ check_conformity: source_clean
 	    -e'/__BORLANDC__/d' \
 	    -e'/__BYTE_ORDER/d' \
 	    -e'/__COMO__/d' \
+	    -e'/__CYGWIN__/d' \
 	    -e'/__GLIBCPP__/d' \
 	    -e'/__GNUC__/d' \
 	    -e'/__MINGW32_VERSION/d' \
