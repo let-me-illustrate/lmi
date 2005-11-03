@@ -30,7 +30,7 @@
    email: <chicares@cox.net>
    snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-   $Id: md5.hpp,v 1.2 2005-06-17 13:59:30 chicares Exp $
+   $Id: md5.hpp,v 1.3 2005-11-03 04:53:55 chicares Exp $
 
    GWC: File renamed md5.h --> md5.hpp so that grep whatever *.?pp
    can be used across the lmi project.
@@ -101,16 +101,18 @@ typedef u_int32_t md5_uint32;
    conformance that nonetheless permits prototypes--which are required
    by C++ anyway.
 
-   At any rate, '__P' is a reserved name, and moving it from glibc to
+   At any rate, "__P" is a reserved name, and moving it from glibc to
    lmi makes that a problem not just in theory but also in fact
    because it conflicts with GNU/Linux system headers, so it's renamed
-   here (and explicitly undefined at the end of the header).
+   here (and explicitly undefined at the end of the header). Even in
+   this commented-out code, "__P" has been rewritten as "MD5_P" to
+   avoid triggering lmi's tests for reserved identifiers.
 
-#undef __P
+#undef MD5_P
 #if defined (__STDC__) && __STDC__
-#define __P(x) x
+#define MD5_P(x) x
 #else
-#define __P(x) ()
+#define MD5_P(x) ()
 #endif
  */
 #define LMI_P(x) x

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.209 2005-11-03 00:30:54 chicares Exp $
+// $Id: ChangeLog,v 1.210 2005-11-03 04:53:55 chicares Exp $
 
 MAINTENANCE
 
@@ -4448,4 +4448,16 @@ Refactor.
 
   comma_punct_test.cpp
 Fix defective 20051101T1757Z revision.
+
+20051103T0453Z <chicares@cox.net> [1232]
+
+  GNUmakefile
+Complain about certain reserved identifiers.
+
+  ihs_dbvalue.cpp
+  ihs_fpios.cpp
+  ihs_fpios.hpp
+  ihs_pios.hpp
+  md5.hpp
+Replace reserved identifiers.
 
