@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.212 2005-11-03 14:56:12 chicares Exp $
+// $Id: ChangeLog,v 1.213 2005-11-03 18:54:38 chicares Exp $
 
 MAINTENANCE
 
@@ -4470,4 +4470,12 @@ Revert to prior revision.
 
   numeric_io_traits.hpp
 Revert to prior revision.
+
+20051103T1854Z <chicares@cox.net> [1233]
+
+  GNUmakefile
+Exempt __CYGWIN__ from reserved-identifier check.
+
+  numeric_io_traits.hpp
+Add cygwin workaround.
 
