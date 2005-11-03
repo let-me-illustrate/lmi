@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.208 2005-11-02 17:46:10 chicares Exp $
+// $Id: ChangeLog,v 1.209 2005-11-03 00:30:54 chicares Exp $
 
 MAINTENANCE
 
@@ -4438,4 +4438,14 @@ Improve documentation.
 
   tn_range_test.cpp
 Fix order of header inclusion.
+
+20051103T0029Z <chicares@cox.net> [1231]
+
+  config.hpp
+Refactor.
+
+20051103T0030Z <chicares@cox.net> [1231]
+
+  comma_punct_test.cpp
+Fix defective 20051101T1757Z revision.
 
