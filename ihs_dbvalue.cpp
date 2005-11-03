@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_dbvalue.cpp,v 1.6 2005-10-18 16:57:58 chicares Exp $
+// $Id: ihs_dbvalue.cpp,v 1.7 2005-11-03 04:53:55 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -702,7 +702,7 @@ JRPS::JrPs_pstreamable* TDBValue::jrps_build()
 JRPS::JrPs_pstreamreg RegTDBValue
     ("TDBValue"
     ,TDBValue::jrps_build
-    ,__PSTREAM_DELTA(TDBValue)
+    ,JRPS_PSTREAM_DELTA(TDBValue)
     );
 
 // TODO ?? Couldn't templates handle this?

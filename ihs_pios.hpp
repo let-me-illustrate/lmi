@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_pios.hpp,v 1.1 2005-01-14 19:47:45 chicares Exp $
+// $Id: ihs_pios.hpp,v 1.2 2005-11-03 04:53:55 chicares Exp $
 
 // This is a derived work based on Joshua Rowe's
 //   "Really cool persistent object stream library"
@@ -42,8 +42,8 @@
  * Really cool persistent object stream library
  */
 
-#ifndef __PIOS_HH__
-#define __PIOS_HH__
+#ifndef ihs_pios_hpp
+#define ihs_pios_hpp
 
 #include "config.hpp"
 
@@ -61,7 +61,7 @@
     // This would be preferable, but the borland class doesn't
     // have string::size_type :
     // static const size_type npos = static_cast<size_type>(-1);
-#elif __BORLANDC__ >= 0x0550
+#elif 0x0550 <= __BORLANDC__
 #   include </bc5/include/cstring.h>
 #endif
 
@@ -283,11 +283,10 @@ public:
   virtual void  write(const void* d, int l) = 0;
 };
 
-// #define  __PSTREAM_LINK(t)   extern JrPs_pstreamreg t;   // GWC: never used
-#define __PSTREAM_DELTA(d) \
+#define JRPS_PSTREAM_DELTA(d) \
 (int((JOSHUA_ROWE_PERSISTENT_STREAMS::JrPs_pstreamable *)(d *)1) - 1)
 
 }   // namespace JOSHUA_ROWE_PERSISTENT_STREAMS
 
-#endif              // __PIOS_HH__
+#endif // ihs_pios_hpp
 
