@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: config.hpp,v 1.9 2005-11-02 15:53:13 chicares Exp $
+// $Id: config.hpp,v 1.10 2005-11-03 00:29:33 chicares Exp $
 
 // Configuration header for compiler quirks. Include at the beginning of
 // every .hpp file (and nowhere else).
@@ -50,7 +50,7 @@ namespace fs = boost::filesystem;
 
 #if defined unix || defined __unix__ || defined __unix // Detected POSIX.
 #   define LMI_POSIX
-#elif defined __WIN32__    // Detected msw.
+#elif defined __WIN32__ || defined _WIN32 || defined WIN32 // Detected msw.
 #   define LMI_MSW
 #else  // Unknown OS.
 #   error "Unknown operating system. Consider contributing support."
@@ -64,10 +64,6 @@ namespace fs = boost::filesystem;
 
 // INELEGANT !! Either the foregoing belongs in 'config_all.hpp',
 // or 'config_all.hpp' should not exist.
-
-#if defined HAVE_CONFIG_H
-#   include "config.h"
-#endif // Using autoconf.
 
 // This header #includes standard headers in an unusual way, and must
 // be #included before any standard headers are seen.
@@ -83,11 +79,13 @@ namespace fs = boost::filesystem;
         (__GNUC__ * 10000 + __GNUC_MINOR__ * 100 + __GNUC_PATCHLEVEL__)
 #endif // Compiler is gcc.
 
-#define OK_TO_INCLUDE_CONFIG_ALL_HPP
-#include "config_all.hpp"
-#undef OK_TO_INCLUDE_CONFIG_ALL_HPP
+#if defined HAVE_CONFIG_H // Using autoconf.
+#   include "config.h"
+#else // Not using autoconf.
 
-#if !defined HAVE_CONFIG_H
+#   define OK_TO_INCLUDE_CONFIG_ALL_HPP
+#   include "config_all.hpp"
+#   undef OK_TO_INCLUDE_CONFIG_ALL_HPP
 
 // Redundant include guards are passé: with modern tools, the benefit
 // is not worth the ugliness. The guards here, however, are intended
