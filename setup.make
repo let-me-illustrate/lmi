@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: setup.make,v 1.19 2005-10-28 18:26:06 wboutin Exp $
+# $Id: setup.make,v 1.20 2005-11-03 22:13:02 wboutin Exp $
 
 .PHONY: all
 all: setup
@@ -70,7 +70,8 @@ setup: \
   frozen_xmlwrapp \
   frozen_boost \
   frozen_libxml2 \
-  mingw_current \
+  frozen_sed \
+  mingw_20050827 \
   test_setup \
 
 # REVIEW: Could these be combined? Untested idea:
@@ -290,7 +291,8 @@ install_frozen_libxml2_from_tmp_dir:
 	  |$(MD5SUM) --check
 	$(BZIP2) --decompress --keep libxml2-2.6.19.tar.bz2
 	$(TAR) --extract --file=libxml2-2.6.19.tar
-	cd libxml2-2.6.19; ./configure && $(MAKE)
+	cd libxml2-2.6.19; \
+	/msys/1.0/bin/sh.exe ./configure && /msys/1.0/bin/make
 	$(MKDIR) --parents $(third_party_include_dir)/libxml/
 	-$(CP) --force --preserve --recursive libxml2-2.6.19/include/libxml/* \
 	  $(third_party_include_dir)/libxml/ 2>/dev/null
@@ -379,6 +381,44 @@ install_mingw_20050827_from_tmp_dir: $(mingw_requirements)
 # TODO ?? Keep this command blocked during testing to allow comparison
 # with sibling target.
 #	$(RM) --recursive *
+
+###############################################################################
+
+# Install sed-4.0.7 .
+
+# There are several later versions. Building sed-4.1.4 fails
+# for several reasons:
+#  - it expects some natural language that's not present
+#      ("./configure --disable-nls" seems to fix that)
+#  - it expects to find 'bcopy'
+#      (to fix that, "make CPPFLAGS='-DHAVE_STRING_H'")
+#  - it can't resolve multibyte-character functions
+#      (to fix that, suppress "#define HAVE_MBRTOWC 1" in config.h)
+# Those seem to be problems with MSYS or autotools, except that
+# the second one looks like a defect in the sed sources (a file
+# that uses 'bcopy' doesn't seem to include config.h).
+
+.PHONY: frozen_sed
+frozen_sed:
+	$(MAKE) \
+	  -C /tmp/ \
+	  -f $(src_dir)/setup.make \
+	  src_dir='$(src_dir)' \
+          install_sed_from_tmp_dir
+
+.PHONY: install_sed_from_tmp_dir
+install_sed_from_tmp_dir:
+	[ -e sed-4.0.7.tar.gz ] \
+	  || $(WGET) --non-verbose \
+	  http://ftp.gnu.org/gnu/sed/sed-4.0.7.tar.gz
+	$(ECHO) " 005738e7f97bd77d95b6907156c8202a  sed-4.0.7.tar.gz " \
+	  |$(MD5SUM) --check
+	$(GZIP) --decompress --force sed-4.0.7.tar.gz
+	$(TAR) --extract --file sed-4.0.7.tar
+	cd /tmp/sed-4.0.7/ ; \
+	/msys/1.0/bin/sh.exe ./configure && /msys/1.0/bin/make
+	-$(CP) --force --preserve sed-4.0.7/sed/sed.exe /usr/bin/
+	$(RM) --recursive sed-4.0.7.tar
 
 ###############################################################################
 
