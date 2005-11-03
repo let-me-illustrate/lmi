@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.210 2005-11-03 04:53:55 chicares Exp $
+// $Id: ChangeLog,v 1.211 2005-11-03 06:14:13 chicares Exp $
 
 MAINTENANCE
 
@@ -4460,4 +4460,9 @@ Complain about certain reserved identifiers.
   ihs_pios.hpp
   md5.hpp
 Replace reserved identifiers.
+
+20051103T0614Z <chicares@cox.net> [1232]
+
+  main_wx.cpp
+Revert to prior revision.
 
