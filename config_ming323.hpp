@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: config_ming323.hpp,v 1.2 2005-10-31 03:43:02 chicares Exp $
+// $Id: config_ming323.hpp,v 1.3 2005-11-04 18:36:16 chicares Exp $
 
 // Configuration header for compiler quirks--mingw gcc-3.2.3 .
 
@@ -47,7 +47,7 @@
 */
     // But it didn't seem to work. Probably the issue is moot now.
 
-#   endif // Not MinGW gcc-3.2.x or prior.
+#   endif // Not MinGW gcc-3.3.0 or prior.
 
 #else  // Not MinGW gcc-3.2.3+ .
 #   error Use this file for mingw gcc version 3.2.3 or higher only.
