@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: GNUmakefile,v 1.37 2005-11-03 18:54:38 chicares Exp $
+# $Id: GNUmakefile,v 1.38 2005-11-04 00:03:48 chicares Exp $
 
 ###############################################################################
 
@@ -274,13 +274,15 @@ never_source_files := \
 # Files that are source in some restrictive sense only:
 
 documentation_files := \
-  $(wildcard ChangeLog*) \
+  $(wildcard ChangeLog* README*) \
   INSTALL \
-  README \
 
-makefiles := $(wildcard *make*)
+makefiles := \
+  $(wildcard *.make) \
+  $(wildcard *GNUmakefile) \
+  Makefile.am \
 
-scripts := $(wildcard *.sed)
+scripts := $(wildcard *.sed *.sh)
 
 xpm_files := $(wildcard *.xpm)
 
@@ -432,7 +434,7 @@ clobber: source_clean
 # avoid false positives that would arise when the current year appears
 # in an RCS Id but not in the copyright notice.
 
-expected_source_files = $(wildcard *.?pp *.c *.h *.rc *.xrc *.xsl)
+expected_source_files = $(wildcard *.ac *.?pp *.c *.h *.rc *.xrc *.xsl)
 
 # Invoke a supplemental makefile, if it exists, to test things that
 # don't belong in the standard sources. For example, it might report
