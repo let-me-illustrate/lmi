@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: setup.make,v 1.21 2005-11-03 22:22:12 wboutin Exp $
+# $Id: setup.make,v 1.22 2005-11-04 13:44:14 chicares Exp $
 
 .PHONY: all
 all: setup
@@ -344,8 +344,10 @@ check_xmlwrapp_md5sums: $(third_party_dir)
 
 # Install MinGW.
 
-# Keep this order for best results, as discussed here:
-# http://groups.yahoo.com/group/mingw32/message/1145
+# The required packages contain some duplicate files, so the order of
+# extraction is important. It follows these instructions:
+#   http://groups.yahoo.com/group/mingw32/message/1145
+# It is apparently fortuitous that the order is alphabetical.
 
 mingw_requirements = \
   binutils-2.16.91-20050827-1.tar.gz \
@@ -364,6 +366,12 @@ mingw_extras = \
 
 # Download archives if they're out of date, then extract them.
 
+# REVIEW: The $(CP) commands below place all original archives
+# in $(mingw_dir). Aren't there some that belong elsewhere, at
+# least if these targets are reused for other archives? And are
+# the $(CP) flags optimal, or would it be better to use
+# '--update'?
+
 # TODO ?? Downloaded files should be validated before extracting.
 %.tar.bz2:
 	[ -e $@ ] || $(WGET) --non-verbose $(sf_mirror)/mingw/$@
@@ -377,15 +385,24 @@ mingw_extras = \
 	$(GZIP) --decompress --force $@
 	$(TAR) --extract --file=$*.tar
 
-# This target is intended to always be synchronized with the latest
-# packages found at http://www.mingw.org/download.shtml .
+# This target must be kept synchronized with the latest packages
+# available from http://www.mingw.org/download.shtml .
+# REVIEW: "latest": does that mean "current" or "candidate"?
+
+# REVIEW: It's nice to echo the advice to preserve a prior MinGW
+# installation, but doesn't this print that message even if there is
+# no prior installation? Did you intend the test on the immediately
+# preceding line to control the echo command? If not, what does that
+# test accomplish? And wouldn't it be better to detect a prior
+# installation and either halt with an error message, or move the
+# prior installation and echo its new location?
 
 .PHONY: mingw_current
 mingw_current:
 	$(MKDIR) --parents /tmp/$@
 	-@[ -e $(mingw_dir) ]
 	@$(ECHO) "Preserving your existing MinGW installation is\
-	strongly recommended."
+	  strongly recommended."
 	$(MKDIR) $(mingw_dir)
 	$(MAKE) \
 	  -C /tmp/$@ \
@@ -399,7 +416,9 @@ install_mingw_current_from_tmp_dir: $(mingw_requirements) $(mingw_extras)
 	-$(RM) --recursive *.tar
 	$(MV) --force * $(mingw_dir)
 
-# This provides the minimum requirements for building lmi with this compiler.
+# REVIEW: Doesn't the following comment belong at the top of this section?
+
+# Minimal installation for building lmi with MinGW.
 
 .PHONY: mingw_20050827
 mingw_20050827:
@@ -424,8 +443,9 @@ install_mingw_20050827_from_tmp_dir: $(mingw_requirements)
 
 # Upgrade wget-1.9.1.tar.bz2 .
 
-# This is only for users to upgrade this tool because it relies on itself
-# to fetch the new archive.
+# This target uses wget to install wget. That may seem silly on the
+# face of it, but it's actually useful for upgrading to a later
+# version of wget.
 
 wget_mingwport = wget-1.9.1
 
