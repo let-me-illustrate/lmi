@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 #
-# $Id: diagnostics.sed,v 1.5 2005-10-31 18:09:51 chicares Exp $
+# $Id: diagnostics.sed,v 1.6 2005-11-04 14:21:54 chicares Exp $
 #
   # Delete expected output from make.
 /Circular.*dependency dropped/d
@@ -72,4 +72,12 @@
 /^C++ prelinker:.*adopted by file [^ ]*o$/d
 /^C++ prelinker:.*no longer needed in [^ ]*o$/d
 /^C++ prelinker: executing:/d
+  # Delete expected output from regression test.
+/^Regression testing:/d
+/^Initializing all cells./d
+/^curr charges,/d
+/^guar charges,/d
+/^mdpt charges,/d
+/^Calculating all cells/d
+/^no errors detected/d
 
