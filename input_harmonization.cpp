@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_harmonization.cpp,v 1.15 2005-09-17 04:05:09 chicares Exp $
+// $Id: input_harmonization.cpp,v 1.16 2005-11-05 03:57:23 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -183,7 +183,7 @@ void Input::Harmonize()
         }
     else
         {
-        warning()
+        fatal_error()
             << "No option selected for definition of life insurance."
             << LMI_FLUSH
             ;
@@ -245,7 +245,7 @@ void Input::Harmonize()
         }
     else
         {
-        warning()
+        fatal_error()
             << "No option selected for definition of material change."
             << LMI_FLUSH
             ;
