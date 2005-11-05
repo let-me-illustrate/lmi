@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.219 2005-11-05 03:57:23 chicares Exp $
+// $Id: ChangeLog,v 1.220 2005-11-05 19:52:24 chicares Exp $
 
 MAINTENANCE
 
@@ -4526,4 +4526,9 @@ Correct a comment.
   inputillus_sequences.cpp
 Increase the severity of numerous diagnostics. This is an experimental
 change; subject to testing, it may need to be reverted.
+
+20051105T1952Z <chicares@cox.net> [1233]
+
+  workhorse.make
+Adjust debug flags for gcc-3.4.2 only.
 
