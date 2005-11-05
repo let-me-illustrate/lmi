@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_acctval.cpp,v 1.78 2005-10-19 01:53:50 chicares Exp $
+// $Id: ihs_acctval.cpp,v 1.79 2005-11-05 03:57:23 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -1790,7 +1790,7 @@ void AccountValue::CoordinateCounters()
 //   eleventh monthiversary 2001-02-28 (not the twenty-ninth)
         if(days_in_policy_month !=  current_monthiversary.days_in_month())
             {
-            warning()
+            fatal_error()
                 << Year << " Year; " << Month << " Month\n"
                 << current_monthiversary.year() << '-'
                 << current_monthiversary.month() << '-'
