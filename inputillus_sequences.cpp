@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: inputillus_sequences.cpp,v 1.8 2005-09-12 01:32:19 chicares Exp $
+// $Id: inputillus_sequences.cpp,v 1.9 2005-11-05 03:57:23 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -295,10 +295,9 @@ std::vector<std::string> IllusInputParms::realize_all_sequence_strings
                 }
             if(diagnostics_present)
                 {
-                warning()
+                fatal_error()
                     << "Input validation problems: "
                     << oss.str() << '\n'
-                    << "CORRECT THESE PROBLEMS BEFORE USING THE ILLUSTRATION."
                     << LMI_FLUSH
                     ;
                 }

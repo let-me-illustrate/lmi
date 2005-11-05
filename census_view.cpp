@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: census_view.cpp,v 1.35 2005-09-22 03:19:11 chicares Exp $
+// $Id: census_view.cpp,v 1.36 2005-11-05 03:57:22 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -1079,7 +1079,7 @@ void diagnose_sequence_string_problems(IllusInputParms& input)
             }
         if(diagnostics_present)
             {
-            warning()
+            fatal_error()
                 << "Input validation problems:\n"
                 << oss.str()
                 << LMI_FLUSH

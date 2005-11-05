@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avmly.cpp,v 1.48 2005-10-20 16:30:22 chicares Exp $
+// $Id: ihs_avmly.cpp,v 1.49 2005-11-05 03:57:23 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -1423,7 +1423,7 @@ void AccountValue::TxSpecAmtChange()
         &&  ActualSpecAmt < YearsSpecAmt
         )
         {
-        warning()
+        fatal_error()
             << "Specified-amount increases not allowed on this policy form."
             << LMI_FLUSH
             ;
@@ -1436,7 +1436,7 @@ void AccountValue::TxSpecAmtChange()
         &&  ActualSpecAmt < YearsSpecAmt
         )
         {
-        warning()
+        fatal_error()
             << "Cannot increase specified amount after age "
             << MaxIncrAge
             << " on this policy form."
@@ -3415,7 +3415,7 @@ void AccountValue::TxTestLapse()
             }
         else if(!HoneymoonActive && !Solving && lapse_test_csv < 0.0)
             {
-            warning()
+            fatal_error()
                 << "Unloaned value not positive,"
                 << " no-lapse guarantee not active,"
                 << " and honeymoon not active, yet policy did not lapse."

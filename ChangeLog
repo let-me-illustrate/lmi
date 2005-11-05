@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.218 2005-11-04 18:36:16 chicares Exp $
+// $Id: ChangeLog,v 1.219 2005-11-05 03:57:23 chicares Exp $
 
 MAINTENANCE
 
@@ -4515,4 +4515,15 @@ Filter expected regression-test output.
 
   config_ming323.hpp
 Correct a comment.
+
+20051105T0357Z <chicares@cox.net> [1233]
+
+  census_view.cpp
+  group_values.cpp
+  ihs_acctval.cpp
+  ihs_avmly.cpp
+  input_harmonization.cpp
+  inputillus_sequences.cpp
+Increase the severity of numerous diagnostics. This is an experimental
+change; subject to testing, it may need to be reverted.
 

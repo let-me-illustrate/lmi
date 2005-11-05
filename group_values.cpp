@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: group_values.cpp,v 1.44 2005-10-12 03:20:51 chicares Exp $
+// $Id: group_values.cpp,v 1.45 2005-11-05 03:57:23 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -619,7 +619,7 @@ restart:
                         )
                     )
                     {
-                    warning()
+                    fatal_error()
                         << "\nExperience-rating reserve discrepancy in year "
                         << year
                         << ": "
