@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: workhorse.make,v 1.48 2005-10-31 03:42:55 chicares Exp $
+# $Id: workhorse.make,v 1.49 2005-11-05 19:52:24 chicares Exp $
 
 ###############################################################################
 
@@ -354,15 +354,21 @@ REQUIRED_LIBS := \
 # that they reflect downstream conditional changes to the variables
 # they're composed from.
 
-# Use '-g' instead of '-ggdb'. MinGW gcc-3.4.2 writes dwarf2 debug
-# records if '-ggdb' is specified, but the version of gdb packaged
-# with it expects stabs format.
+debug_flag = -ggdb
+
+# MinGW gcc-3.4.2 writes dwarf2 debug records if '-ggdb' is specified,
+# but the version of gdb packaged with it expects stabs format.
+#
+ifeq (3.4.2,$(gcc_version))
+  debug_flag = -g
+  gcc_version_specific_warnings := -Wno-uninitialized
+endif
 
 CFLAGS = \
-  -g $(optimization_flag) $(gprof_flag) \
+  $(debug_flag) $(optimization_flag) $(gprof_flag) \
 
 CXXFLAGS = \
-  -g $(optimization_flag) $(gprof_flag) \
+  $(debug_flag) $(optimization_flag) $(gprof_flag) \
 
 LDFLAGS = \
   $(gprof_flag) \
