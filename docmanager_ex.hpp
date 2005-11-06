@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: docmanager_ex.hpp,v 1.2 2005-03-11 13:40:41 chicares Exp $
+// $Id: docmanager_ex.hpp,v 1.3 2005-11-06 15:28:25 chicares Exp $
 
 #ifndef docmanager_ex_hpp
 #define docmanager_ex_hpp
@@ -33,7 +33,7 @@
 
 #include <memory>
 
-class wxMenuBar;
+class WXDLLEXPORT wxMenuBar;
 
 class DocManagerEx
     :public wxDocManager
