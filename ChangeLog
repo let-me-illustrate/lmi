@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.220 2005-11-05 19:52:24 chicares Exp $
+// $Id: ChangeLog,v 1.221 2005-11-06 15:28:32 chicares Exp $
 
 MAINTENANCE
 
@@ -4531,4 +4531,19 @@ change; subject to testing, it may need to be reverted.
 
   workhorse.make
 Adjust debug flags for gcc-3.4.2 only.
+
+20051106T1528Z <chicares@cox.net> [1233]
+
+  census_document.hpp
+  census_view.hpp
+  docmanager_ex.hpp
+Qualify forward declarations of wx classes with WXDLLEXPORT.
+
+  ihs_fpios.hpp
+Rewrite conditional directives.
+
+  workhorse.make
+Refactor for backward compatibility. '-Wendif-labels' should never
+have been specified: see
+  http://gcc.gnu.org/bugzilla/show_bug.cgi?id=16323
 
