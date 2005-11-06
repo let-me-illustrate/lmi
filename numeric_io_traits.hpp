@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: numeric_io_traits.hpp,v 1.10 2005-11-03 18:54:38 chicares Exp $
+// $Id: numeric_io_traits.hpp,v 1.11 2005-11-06 15:46:17 chicares Exp $
 
 #ifndef numeric_io_traits_hpp
 #define numeric_io_traits_hpp
@@ -326,12 +326,11 @@ template<> struct numeric_conversion_traits<double>
 // 'strtold' is written rather than 'std::strtold' because C++98
 // is unaware of that C99 function.
 
-#if defined LMI_COMO_WITH_MINGW
-// COMPILER !! Comeau with mingw doesn't seem to provide strtold(),
-// so at least for the nonce use this kludge:
+#if !defined LMI_COMPILER_PROVIDES_STRTOLD
+// COMPILER !! This workaround is rather poor, of course.
 inline long double strtold(char const* nptr, char** endptr)
 {return strtod(nptr, endptr);}
-#endif // defined LMI_COMO_WITH_MINGW
+#endif // !defined LMI_COMPILER_PROVIDES_STRTOLD
 
 template<> struct numeric_conversion_traits<long double>
     :public numeric_conversion_traits<Floating>

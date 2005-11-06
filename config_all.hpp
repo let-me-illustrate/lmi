@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: config_all.hpp,v 1.5 2005-10-31 03:43:02 chicares Exp $
+// $Id: config_all.hpp,v 1.6 2005-11-06 15:46:17 chicares Exp $
 
 // Configuration header for compiler quirks--generic configuration.
 // Never include this file directly.
@@ -50,6 +50,10 @@
 #   error Unknown compiler
 #endif // Neither gcc, nor como with mingw, nor borland.
 
+// Define the following macros when a compiler departs from C++98,
+// whether by providing extra features (such as C99 functions) or by
+// lacking required features.
+
 #if defined __MINGW32__ && defined __GNUC__ && 30404 <= LMI_GCC_VERSION
 #   define LMI_COMPILER_PROVIDES_EXPM1
 #endif // MinGW gcc-3.4.4+ .
@@ -59,8 +63,15 @@
 #   define LMI_COMPILER_PROVIDES_LOG1P
 #endif // MinGW gcc-3.0.0+ .
 
+// COMPILER !! Not sure which exact MinGW version added strtold() support.
+// It was added between 20021009 and 20030915.
+#if defined __MINGW32__ && defined __GNUC__ && 30203 <= LMI_GCC_VERSION
+#   define LMI_COMPILER_PROVIDES_STRTOLD
+#endif // MinGW gcc-3.0.0+ .
+
 #if defined __BORLANDC__ || defined __GNUC__
-#   define LMI_MODERN_STREAMS
+#else
+#   define LMI_COMPLIANT_IOSTREAMS_LACKING
 #endif
 
 #endif // config_all_hpp
