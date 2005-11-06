@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: workhorse.make,v 1.49 2005-11-05 19:52:24 chicares Exp $
+# $Id: workhorse.make,v 1.50 2005-11-06 15:28:32 chicares Exp $
 
 ###############################################################################
 
@@ -179,10 +179,9 @@ gcc_version = $(shell $(CXX) -dumpversion)
 # Specify $(gcc_version_specific_warnings) last, in order to override
 # other options.
 
-# Suppress spurious gcc-3.4.4 warnings: see
-#   http://gcc.gnu.org/bugzilla/show_bug.cgi?id=22207
-
 ifeq (3.4.4,$(gcc_version))
+  # Suppress spurious gcc-3.4.4 warnings:
+  #   http://gcc.gnu.org/bugzilla/show_bug.cgi?id=22207
   gcc_version_specific_warnings := -Wno-uninitialized
 endif
 
@@ -195,7 +194,6 @@ gcc_common_warnings := \
   -Wconversion \
   -Wdeprecated-declarations \
   -Wdisabled-optimization \
-  -Wendif-labels \
   -Wimport \
   -Wmultichar \
   -Wpacked \
@@ -232,10 +230,12 @@ gcc_cxx_warnings := \
 # Too many warnings on correct code, e.g. exact comparison to zero:
 #  -Wfloat-equal \
 
-# WX !! The wx library triggers many warnings with these flags:
+# WX !! The wx library triggers many warnings with the following
+# 'extra' flags. (Use '-W' for backward compatibility, instead of the
+# modern equivalent '-Wextra'.)
 
 gcc_common_extra_warnings := \
-  -Wextra \
+  -W \
   -Wcast-qual \
   -Wredundant-decls \
   -Wundef \
