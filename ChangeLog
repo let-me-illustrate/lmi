@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.221 2005-11-06 15:28:32 chicares Exp $
+// $Id: ChangeLog,v 1.222 2005-11-06 15:46:17 chicares Exp $
 
 MAINTENANCE
 
@@ -4546,4 +4546,11 @@ Rewrite conditional directives.
 Refactor for backward compatibility. '-Wendif-labels' should never
 have been specified: see
   http://gcc.gnu.org/bugzilla/show_bug.cgi?id=16323
+
+20051106T1546Z <chicares@cox.net> [1232]
+
+  config_all.hpp
+  ncnnnpnn.hpp
+  numeric_io_traits.hpp
+Rewrite conditional directives.
 
