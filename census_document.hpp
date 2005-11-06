@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: census_document.hpp,v 1.1 2005-03-11 03:19:31 chicares Exp $
+// $Id: census_document.hpp,v 1.2 2005-11-06 15:28:25 chicares Exp $
 
 // WX !! Override OnOpenDocument() and OnSaveDocument() instead of
 // LoadObject() and SaveObject(): the latter would probably work, but
@@ -35,6 +35,7 @@
 
 #include <boost/utility.hpp>
 
+#include <wx/defs.h> // WXDLLEXPORT
 #include <wx/docview.h>
 
 class WXDLLEXPORT wxListView;
