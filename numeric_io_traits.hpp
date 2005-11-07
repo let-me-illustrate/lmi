@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: numeric_io_traits.hpp,v 1.12 2005-11-07 01:30:24 chicares Exp $
+// $Id: numeric_io_traits.hpp,v 1.13 2005-11-07 02:48:20 chicares Exp $
 
 #ifndef numeric_io_traits_hpp
 #define numeric_io_traits_hpp
@@ -30,7 +30,6 @@
 #include <cstdlib>
 #include <limits>
 #include <stdexcept>
-#include <stdio.h> // Nonstandard (in C++98) snprintf().
 #include <string>
 
 #include <boost/cast.hpp>

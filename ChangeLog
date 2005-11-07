@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.223 2005-11-07 01:30:24 chicares Exp $
+// $Id: ChangeLog,v 1.224 2005-11-07 02:48:20 chicares Exp $
 
 MAINTENANCE
 
@@ -4572,4 +4572,14 @@ Rewrite conditional directives.
   value_cast.hpp
   xrange.hpp
 Address various borland issues.
+
+20051107T0248Z <chicares@cox.net> [1232]
+
+  config.hpp
+  config_como_mingw.hpp [new file]
+  diagnostics.sed
+  numeric_io_cast.hpp
+  numeric_io_traits.hpp
+  snprintf_test.cpp
+Address various comeau issues.
 
