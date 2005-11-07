@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: alert.cpp,v 1.4 2005-09-14 14:16:30 chicares Exp $
+// $Id: alert.cpp,v 1.5 2005-11-07 01:30:24 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -28,8 +28,12 @@
 
 #include "alert.hpp"
 
-#include <boost/static_assert.hpp>
-#include <boost/type_traits.hpp>
+#if !defined __BORLANDC__
+#   include <boost/static_assert.hpp>
+#   include <boost/type_traits.hpp>
+#else  // Defined __BORLANDC__ .
+#   define BOOST_STATIC_ASSERT(deliberately_ignored) /##/
+#endif // Defined __BORLANDC__ .
 
 #include <ios>
 #include <sstream>   // std::stringbuf

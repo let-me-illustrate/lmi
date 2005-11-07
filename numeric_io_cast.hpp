@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: numeric_io_cast.hpp,v 1.6 2005-05-26 18:31:49 chicares Exp $
+// $Id: numeric_io_cast.hpp,v 1.7 2005-11-07 01:30:24 chicares Exp $
 
 // Converts between arithmetic types and their std::string decimal
 // representations, in these cases only:
@@ -86,9 +86,14 @@
 #include <string>
 #include <typeinfo>
 
-#include <boost/static_assert.hpp>
-#include <boost/type_traits.hpp>
+#if !defined __BORLANDC__
+#   include <boost/static_assert.hpp>
+#   include <boost/type_traits.hpp>
+#else  // Defined __BORLANDC__ .
+#   define BOOST_STATIC_ASSERT(deliberately_ignored) /##/
+#endif // Defined __BORLANDC__ .
 
+// TODO ?? Use a configuration macro instead.
 #if defined LMI_COMO_WITH_MINGW
 #   define snprintf _snprintf
 #endif // defined LMI_COMO_WITH_MINGW

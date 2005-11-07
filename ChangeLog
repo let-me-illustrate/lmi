@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.222 2005-11-06 15:46:17 chicares Exp $
+// $Id: ChangeLog,v 1.223 2005-11-07 01:30:24 chicares Exp $
 
 MAINTENANCE
 
@@ -4553,4 +4553,23 @@ have been specified: see
   ncnnnpnn.hpp
   numeric_io_traits.hpp
 Rewrite conditional directives.
+
+20051107T0130Z <chicares@cox.net> [1233]
+
+  alert.cpp
+  any_member.hpp
+  callback.hpp
+  diagnostics.sed
+  math_functors.hpp
+  mc_enum.hpp
+  numeric_io_cast.hpp
+  numeric_io_traits.hpp
+  quiet_nan.hpp
+  round_to.hpp
+  secure_date.hpp
+  stream_cast.hpp
+  tn_range.hpp
+  value_cast.hpp
+  xrange.hpp
+Address various borland issues.
 
