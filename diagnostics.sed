@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 #
-# $Id: diagnostics.sed,v 1.6 2005-11-04 14:21:54 chicares Exp $
+# $Id: diagnostics.sed,v 1.7 2005-11-07 01:30:24 chicares Exp $
 #
   # Delete expected output from make.
 /Circular.*dependency dropped/d
@@ -67,11 +67,17 @@
 /^como -o/d
 /^Comeau/d
 /^Copyright/d
-/^MODE:.*C++/d
-/^C++ prelinker:.*assigned to file [^ ]*o$/d
-/^C++ prelinker:.*adopted by file [^ ]*o$/d
-/^C++ prelinker:.*no longer needed in [^ ]*o$/d
-/^C++ prelinker: executing:/d
+/^MODE:.*C\+\+/d
+/^C\+\+ prelinker:.*assigned to file [^ ]*o$/d
+/^C\+\+ prelinker:.*adopted by file [^ ]*o$/d
+/^C\+\+ prelinker:.*no longer needed in [^ ]*o$/d
+/^C\+\+ prelinker: executing:/d
+  # Delete expected output from borland build.
+/^[^ ]*borland_compile --accept/d
+/^Borland C\+\+/d
+/^Loaded pre-compiled headers\.$/d
+/^[^ ]*borland_link --accept/d
+/^Turbo Incremental Link/d
   # Delete expected output from regression test.
 /^Regression testing:/d
 /^Initializing all cells./d
