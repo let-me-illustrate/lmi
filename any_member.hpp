@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: any_member.hpp,v 1.6 2005-08-02 21:22:11 chicares Exp $
+// $Id: any_member.hpp,v 1.7 2005-11-07 01:30:24 chicares Exp $
 
 // This is a derived work based on boost::any, which bears the following
 // copyright and permissions notice:
@@ -89,8 +89,13 @@
 #include "obstruct_slicing.hpp"
 #include "value_cast.hpp"
 
-#include <boost/static_assert.hpp>
-#include <boost/type_traits/arithmetic_traits.hpp>
+#if !defined __BORLANDC__
+#   include <boost/static_assert.hpp>
+#   include <boost/type_traits/arithmetic_traits.hpp>
+#else  // Defined __BORLANDC__ .
+#   define BOOST_STATIC_ASSERT(deliberately_ignored) /##/
+#endif // Defined __BORLANDC__ .
+
 #include <boost/utility.hpp>
 
 #include <algorithm>

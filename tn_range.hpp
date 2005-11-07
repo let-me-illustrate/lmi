@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: tn_range.hpp,v 1.2 2005-02-19 03:27:45 chicares Exp $
+// $Id: tn_range.hpp,v 1.3 2005-11-07 01:30:24 chicares Exp $
 
 // Design notes for template class tn_range
 //
@@ -116,8 +116,13 @@
 #include "datum_base.hpp"
 
 #include <boost/operators.hpp>
-#include <boost/static_assert.hpp>
-#include <boost/type_traits.hpp>
+
+#if !defined __BORLANDC__
+#   include <boost/static_assert.hpp>
+#   include <boost/type_traits.hpp>
+#else  // Defined __BORLANDC__ .
+#   define BOOST_STATIC_ASSERT(deliberately_ignored) /##/
+#endif // Defined __BORLANDC__ .
 
 #include <utility> // std::pair
 

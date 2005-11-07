@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: callback.hpp,v 1.3 2005-10-31 13:04:34 chicares Exp $
+// $Id: callback.hpp,v 1.4 2005-11-07 01:30:24 chicares Exp $
 
 #ifndef callback_hpp
 #define callback_hpp
@@ -30,8 +30,13 @@
 
 #include "obstruct_slicing.hpp"
 
-#include <boost/static_assert.hpp>
-#include <boost/type_traits.hpp>
+#if !defined __BORLANDC__
+#   include <boost/static_assert.hpp>
+#   include <boost/type_traits.hpp>
+#else  // Defined __BORLANDC__ .
+#   define BOOST_STATIC_ASSERT(deliberately_ignored) /##/
+#endif // Defined __BORLANDC__ .
+
 #include <boost/utility.hpp>
 
 #include <stdexcept>

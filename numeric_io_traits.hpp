@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: numeric_io_traits.hpp,v 1.11 2005-11-06 15:46:17 chicares Exp $
+// $Id: numeric_io_traits.hpp,v 1.12 2005-11-07 01:30:24 chicares Exp $
 
 #ifndef numeric_io_traits_hpp
 #define numeric_io_traits_hpp
@@ -34,8 +34,13 @@
 #include <string>
 
 #include <boost/cast.hpp>
-#include <boost/static_assert.hpp>
-#include <boost/type_traits.hpp>
+
+#if !defined __BORLANDC__
+#   include <boost/static_assert.hpp>
+#   include <boost/type_traits.hpp>
+#else  // Defined __BORLANDC__ .
+#   define BOOST_STATIC_ASSERT(deliberately_ignored) /##/
+#endif // Defined __BORLANDC__ .
 
 // Number of exact decimal digits to the right of the decimal point.
 //
