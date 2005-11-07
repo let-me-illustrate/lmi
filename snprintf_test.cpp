@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: snprintf_test.cpp,v 1.4 2005-05-26 18:31:49 chicares Exp $
+// $Id: snprintf_test.cpp,v 1.5 2005-11-07 02:48:20 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -29,12 +29,8 @@
 #define BOOST_INCLUDE_MAIN
 #include "test_tools.hpp"
 
-#include <stdio.h> // Nonstandard (in C++98) snprintf().
+#include <stdio.h> // snprintf() (C99, not C++98).
 #include <string>
-
-#if defined LMI_COMO_WITH_MINGW
-#   define snprintf _snprintf
-#endif // defined LMI_COMO_WITH_MINGW
 
 int test_main(int, char*[])
 {
@@ -71,8 +67,4 @@ int test_main(int, char*[])
 
     return 0;
 }
-
-#if defined LMI_COMO_WITH_MINGW
-#   undef snprintf
-#endif // defined LMI_COMO_WITH_MINGW
 

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: numeric_io_cast.hpp,v 1.7 2005-11-07 01:30:24 chicares Exp $
+// $Id: numeric_io_cast.hpp,v 1.8 2005-11-07 02:48:20 chicares Exp $
 
 // Converts between arithmetic types and their std::string decimal
 // representations, in these cases only:
@@ -82,7 +82,7 @@
 
 #include <sstream>
 #include <stdexcept>
-#include <stdio.h> // snprintf()
+#include <stdio.h> // snprintf() (C99, not C++98).
 #include <string>
 #include <typeinfo>
 
@@ -92,11 +92,6 @@
 #else  // Defined __BORLANDC__ .
 #   define BOOST_STATIC_ASSERT(deliberately_ignored) /##/
 #endif // Defined __BORLANDC__ .
-
-// TODO ?? Use a configuration macro instead.
-#if defined LMI_COMO_WITH_MINGW
-#   define snprintf _snprintf
-#endif // defined LMI_COMO_WITH_MINGW
 
 // A compile-time failure iff this template is ever instantiated is
 // desired, but the straightforward
@@ -334,10 +329,6 @@ To numeric_io_cast(From from, To = To())
     numeric_converter<To,From> converter;
     return converter.operator()(from);
 }
-
-#if defined LMI_COMO_WITH_MINGW
-#   undef snprintf
-#endif // defined LMI_COMO_WITH_MINGW
 
 #endif // numeric_io_cast_hpp
 

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: config.hpp,v 1.10 2005-11-03 00:29:33 chicares Exp $
+// $Id: config.hpp,v 1.11 2005-11-07 02:48:20 chicares Exp $
 
 // Configuration header for compiler quirks. Include at the beginning of
 // every .hpp file (and nowhere else).
@@ -85,7 +85,7 @@ namespace fs = boost::filesystem;
 
 #   define OK_TO_INCLUDE_CONFIG_ALL_HPP
 #   include "config_all.hpp"
-#   undef OK_TO_INCLUDE_CONFIG_ALL_HPP
+#   undef  OK_TO_INCLUDE_CONFIG_ALL_HPP
 
 // Redundant include guards are passé: with modern tools, the benefit
 // is not worth the ugliness. The guards here, however, are intended
@@ -104,14 +104,20 @@ namespace fs = boost::filesystem;
 #   if defined __MINGW32__ && defined __GNUC__ && 30203 <= LMI_GCC_VERSION
 #       define OK_TO_INCLUDE_CONFIG_MING323_HPP
 #       include "config_ming323.hpp"
-#       undef OK_TO_INCLUDE_CONFIG_MING323_HPP
+#       undef  OK_TO_INCLUDE_CONFIG_MING323_HPP
 #   endif // MinGW gcc 3.2.3+ .
 
 #   if defined __CYGWIN__ && defined __GNUC__ && 30203 <= LMI_GCC_VERSION
 #       define OK_TO_INCLUDE_CONFIG_CYG323_HPP
 #       include "config_cyg323.hpp"
-#       undef OK_TO_INCLUDE_CONFIG_CYG323_HPP
+#       undef  OK_TO_INCLUDE_CONFIG_CYG323_HPP
 #   endif // Cygwin gcc 3.2.3+ .
+
+#   if defined LMI_COMO_WITH_MINGW
+#       define OK_TO_INCLUDE_CONFIG_COMO_WITH_MINGW_HPP
+#       include "config_como_mingw.hpp"
+#       undef  OK_TO_INCLUDE_CONFIG_COMO_WITH_MINGW_HPP
+#   endif // Como with MinGW as the underlying C compiler.
 
 #   if defined __BORLANDC__ && __BORLANDC__ < 0x0550
 #       error Obsolete compiler not supported.
@@ -120,7 +126,7 @@ namespace fs = boost::filesystem;
 #   if defined __BORLANDC__ && 0x0550 <= __BORLANDC__
 #       define OK_TO_INCLUDE_CONFIG_BC551_HPP
 #       include "config_bc551.hpp"
-#       undef OK_TO_INCLUDE_CONFIG_BC551_HPP
+#       undef  OK_TO_INCLUDE_CONFIG_BC551_HPP
 #   endif // Old borland compiler.
 
 #endif // Not using autoconf.
