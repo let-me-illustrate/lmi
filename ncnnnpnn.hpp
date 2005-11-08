@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ncnnnpnn.hpp,v 1.6 2005-11-06 15:46:17 chicares Exp $
+// $Id: ncnnnpnn.hpp,v 1.7 2005-11-08 23:54:33 chicares Exp $
 
 // Ideally we would use imbue an appropriate locale and use some facet
 // like money_put, but most of our compilers's standard libraries don't
@@ -54,17 +54,11 @@ inline std::string ncnnnpnn(long double value)
     stream << std::setiosflags(std::ios_base::fixed) << std::setprecision(2);
     std::string s_in;
 
-#if !defined LMI_COMPLIANT_IOSTREAMS_LACKING
     if
         (  !(stream << value)
         || !(stream >> s_in)
         || !(stream >> std::ws).eof()
         )
-#else // Defined LMI_COMPLIANT_IOSTREAMS_LACKING.
-    stream << value;
-    stream >> s_in;
-    if(!(stream >> std::ws).eof())
-#endif // Defined LMI_COMPLIANT_IOSTREAMS_LACKING.
         {
         throw std::runtime_error("Stream error in ncnnnpnn.hpp .");
         }

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.224 2005-11-07 02:48:20 chicares Exp $
+// $Id: ChangeLog,v 1.225 2005-11-08 23:54:33 chicares Exp $
 
 MAINTENANCE
 
@@ -4532,7 +4532,7 @@ change; subject to testing, it may need to be reverted.
   workhorse.make
 Adjust debug flags for gcc-3.4.2 only.
 
-20051106T1528Z <chicares@cox.net> [1233]
+20051106T1528Z <chicares@cox.net> [1232]
 
   census_document.hpp
   census_view.hpp
@@ -4582,4 +4582,10 @@ Address various borland issues.
   numeric_io_traits.hpp
   snprintf_test.cpp
 Address various comeau issues.
+
+20051108T2354Z <chicares@cox.net> [1232]
+
+  config_all.hpp
+  ncnnnpnn.hpp
+Remove a disused configuration option.
 
