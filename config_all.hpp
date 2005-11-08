@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: config_all.hpp,v 1.6 2005-11-06 15:46:17 chicares Exp $
+// $Id: config_all.hpp,v 1.7 2005-11-08 23:54:33 chicares Exp $
 
 // Configuration header for compiler quirks--generic configuration.
 // Never include this file directly.
@@ -68,11 +68,6 @@
 #if defined __MINGW32__ && defined __GNUC__ && 30203 <= LMI_GCC_VERSION
 #   define LMI_COMPILER_PROVIDES_STRTOLD
 #endif // MinGW gcc-3.0.0+ .
-
-#if defined __BORLANDC__ || defined __GNUC__
-#else
-#   define LMI_COMPLIANT_IOSTREAMS_LACKING
-#endif
 
 #endif // config_all_hpp
 
