@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.225 2005-11-08 23:54:33 chicares Exp $
+// $Id: ChangeLog,v 1.226 2005-11-09 05:00:33 chicares Exp $
 
 MAINTENANCE
 
@@ -4588,4 +4588,17 @@ Address various comeau issues.
   config_all.hpp
   ncnnnpnn.hpp
 Remove a disused configuration option.
+
+20051109T0500Z <chicares@cox.net> [1231]
+
+  diagnostics.sed
+Improve filtering of expected gcc output.
+
+  GNUmakefile
+  config.hpp
+  config_all.hpp    [expunged]
+  config_bc551.hpp
+  config_como_mingw.hpp
+  config_ming323.hpp
+Refactor configuration.
 
