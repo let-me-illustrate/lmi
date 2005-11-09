@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: config_como_mingw.hpp,v 1.1 2005-11-07 02:48:20 chicares Exp $
+// $Id: config_como_mingw.hpp,v 1.2 2005-11-09 05:00:33 chicares Exp $
 
 // Configuration header for compiler quirks.
 
@@ -31,11 +31,16 @@
 #endif // OK_TO_INCLUDE_CONFIG_COMO_WITH_MINGW_HPP
 
 #if defined LMI_COMO_WITH_MINGW
-    // COMPILER !! Access the (somewhat defective) msvcrt _snprintf().
-#   define snprintf _snprintf
-#else // Not Como with MinGW as the underlying C compiler.
-#   error Use this file for Como with MinGW as the underlying C compiler only.
+#   // Copacetic.
+#else  // Not Como with MinGW as the underlying C compiler.
+#   error Use this file only for Como with MinGW as the underlying C compiler.
 #endif // Not Como with MinGW as the underlying C compiler.
+
+#if 202 <= LMI_MINGW_VERSION
+#   error Reconsider como configuration to reflect recent libmingwex.
+#else  // LMI_MINGW_VERSION < 202
+#   define snprintf _snprintf
+#endif // LMI_MINGW_VERSION < 202
 
 #endif // config_como_mingw_hpp
 

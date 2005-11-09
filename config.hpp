@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: config.hpp,v 1.11 2005-11-07 02:48:20 chicares Exp $
+// $Id: config.hpp,v 1.12 2005-11-09 05:00:33 chicares Exp $
 
 // Configuration header for compiler quirks. Include at the beginning of
 // every .hpp file (and nowhere else).
@@ -62,9 +62,6 @@ namespace fs = boost::filesystem;
 #   error "Unknown hardware. Consider contributing support."
 #endif // Unknown hardware.
 
-// INELEGANT !! Either the foregoing belongs in 'config_all.hpp',
-// or 'config_all.hpp' should not exist.
-
 // This header #includes standard headers in an unusual way, and must
 // be #included before any standard headers are seen.
 //
@@ -77,15 +74,37 @@ namespace fs = boost::filesystem;
 #if defined __GNUC__
 #   define LMI_GCC_VERSION \
         (__GNUC__ * 10000 + __GNUC_MINOR__ * 100 + __GNUC_PATCHLEVEL__)
-#endif // Compiler is gcc.
+#endif // __GNUC__
+
+#if defined __COMO__
+//  09 Oct 2004 17:04:46 -0700 email from <comeau@comeaucomputing.com>
+//  suggests this method to detect whether MinGW is the underlying C
+//  compiler. Because it requires including some standard header
+//  (including <_mingw.h> could be an error), this section has to
+//  follow inclusion of "platform_dependent.hpp" above.
+#   include <stdio.h>
+#   if defined __MINGW32_VERSION
+#       define LMI_COMO_WITH_MINGW
+#   endif // __MINGW32_VERSION
+#endif // __COMO__
+
+#if defined __MINGW32__
+//  Get definition of __MINGW32_VERSION.
+#   include <_mingw.h>
+#endif // __MINGW32__
+
+#if defined __MINGW32_VERSION
+#   define LMI_MINGW_VERSION \
+        (__MINGW32_MAJOR_VERSION * 100 + __MINGW32_MINOR_VERSION)
+#endif // __MINGW32_VERSION
+
+#if defined __BORLANDC__ && __BORLANDC__ < 0x0550
+#    error Obsolete compiler not supported.
+#endif // Ancient borland compiler.
 
 #if defined HAVE_CONFIG_H // Using autoconf.
 #   include "config.h"
 #else // Not using autoconf.
-
-#   define OK_TO_INCLUDE_CONFIG_ALL_HPP
-#   include "config_all.hpp"
-#   undef  OK_TO_INCLUDE_CONFIG_ALL_HPP
 
 // Redundant include guards are passé: with modern tools, the benefit
 // is not worth the ugliness. The guards here, however, are intended
@@ -119,52 +138,13 @@ namespace fs = boost::filesystem;
 #       undef  OK_TO_INCLUDE_CONFIG_COMO_WITH_MINGW_HPP
 #   endif // Como with MinGW as the underlying C compiler.
 
-#   if defined __BORLANDC__ && __BORLANDC__ < 0x0550
-#       error Obsolete compiler not supported.
-#   endif // Ancient borland compiler.
-
 #   if defined __BORLANDC__ && 0x0550 <= __BORLANDC__
 #       define OK_TO_INCLUDE_CONFIG_BC551_HPP
 #       include "config_bc551.hpp"
 #       undef  OK_TO_INCLUDE_CONFIG_BC551_HPP
-#   endif // Old borland compiler.
+#   endif // Borland 5.5.1+ .
 
 #endif // Not using autoconf.
-
-// We include standard library headers this way:
-//   #include <filename>
-// using their standard names with no '.h' . While GNU tools look for
-// 'filename', borland tools append an '.h' and look for 'filename.h' as
-// permitted by 2.8/1, and indeed borland uses '.h' names for its standard
-// library headers. For each standard header we use, we provide a forwarding
-// header 'filename' with no '.h' so that GNU CPP can be used to generate
-// autodependencies for command-line builds using 'make'.
-//
-// Unfortunately, bc++ never sees these forwarding headers, so we can't
-// use them to patch this compiler's problems. What options do we have?
-//
-//  - Patch the borland headers. This may render the compiler unusable
-//    for programs that use other workarounds. And other programs might
-//    make different patches for the same reason. This is solipsistic.
-//
-//  - Override all standard headers by putting 'filename.h' in a directory
-//    of our own that precedes the borland include directory on the search
-//    path. But then there's no way to forward to the borland headers without
-//    knowing where the borland headers reside, which may differ from one
-//    installation to another. That could work well enough for makefiles,
-//    but it's nasty with the borland IDE. (Yet it does work for gcc.)
-//
-//  - Write '#include <header.>' to convince borland tools that there really
-//    is no '.h' . But we want our mainstream code to be standard.
-//
-//  - Include problematic headers in this file, which is included everywhere,
-//    and put patches here.
-//
-// We choose the last option as the least evil, and mitigate the evil by
-// including the problematic headers in 'pch.hpp' unless that creates
-// additional problems (e.g. precompiling STL headers with bc++5.02 can
-// produce internal compiler errors). The special borland headers use
-// this approach.
 
 #endif // config_hpp
 

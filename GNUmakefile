@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: GNUmakefile,v 1.38 2005-11-04 00:03:48 chicares Exp $
+# $Id: GNUmakefile,v 1.39 2005-11-09 05:00:33 chicares Exp $
 
 ###############################################################################
 
@@ -483,7 +483,8 @@ check_conformity: source_clean
 	    <$$z $(TR) '\r' '\a' | $(SED) -e'/\a/!d' | $(WC) -l; \
 	  done | $(SED) -e'/ 0$$/d';
 	@$(ECHO) "  Headers that should include \"config.hpp\" first but don't:"
-	@for z in $(filter-out $(wildcard config*.hpp),$(wildcard *.hpp)); \
+	@for z in \
+	  $(filter-out config.hpp $(wildcard config_*.hpp),$(wildcard *.hpp)); \
 	  do \
 	    $(SED) \
 	    -e'/^#include "config.hpp"/,$$d' \
@@ -519,6 +520,8 @@ check_conformity: source_clean
 	    -e'/__CYGWIN__/d' \
 	    -e'/__GLIBCPP__/d' \
 	    -e'/__GNUC__/d' \
+	    -e'/__MINGW32_MAJOR_VERSION/d' \
+	    -e'/__MINGW32_MINOR_VERSION/d' \
 	    -e'/__MINGW32_VERSION/d' \
 	    -e'/__MINGW32__/d' \
 	    -e'/__STRICT_ANSI__/d' \
