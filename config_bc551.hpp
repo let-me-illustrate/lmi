@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: config_bc551.hpp,v 1.1 2005-02-23 12:37:20 chicares Exp $
+// $Id: config_bc551.hpp,v 1.2 2005-11-09 05:00:33 chicares Exp $
 
 // Configuration header for compiler quirks--bcc-5.5.1 .
 
@@ -30,10 +30,15 @@
 #   error This file is not intended for separate inclusion.
 #endif // OK_TO_INCLUDE_CONFIG_BC551_HPP
 
-#if defined __BORLANDC__ && __BORLANDC__ >= 0x0550
-#   define LMI_COMPILER_USES_PCH
-#   define LMI_TEMPLATE_ARRAY_PARM_DEFECT
-#   include <cstdio>
+#if defined __BORLANDC__ && 0x0550 <= __BORLANDC__
+#   // Copacetic.
+#else  // Not borland 5.5.1+ .
+#   error Use this file only for borland version 5.5.1 or greater.
+#endif // Not borland 5.5.1+ .
+
+#define LMI_COMPILER_USES_PCH
+
+#include <cstdio>
     // COMPILER !! bc++5.5.1 Work around library bug: the 'stdin'
     // macro references '_streams' with no namespace qualifier,
     // but including <cstdio> rather than <stdio.h> puts that
@@ -45,18 +50,49 @@
     // See my post to borland.public.cppbuilder.language dated
     //   2001-11-08T18:23:48 -0500
     using std::size_t;
-#   include <cfloat>
+#include <cfloat>
     // COMPILER !! bc++5.5.1 got this wrong too.
     // See my post to borland.public.cppbuilder.language dated
     // 2001-11-04T08:28:56 PST
     using std::_max_dble;
-#   include <csignal>
+#include <csignal>
     // COMPILER !! bc++5.5.1 got this wrong too.
     using std::_CatcherPTR;
 
-#else // Not newer borland compiler.
-#   error Use this file for borland version 5.5.1 or greater only.
-#endif // Not newer borland compiler.
+// We include standard library headers this way:
+//   #include <filename>
+// using their standard names with no '.h' . While GNU tools look for
+// 'filename', borland tools append an '.h' and look for 'filename.h' as
+// permitted by 2.8/1, and indeed borland uses '.h' names for its standard
+// library headers. For each standard header we use, we provide a forwarding
+// header 'filename' with no '.h' so that GNU CPP can be used to generate
+// autodependencies for command-line builds using 'make'.
+//
+// Unfortunately, bc++ never sees these forwarding headers, so we can't
+// use them to patch this compiler's problems. What options do we have?
+//
+//  - Patch the borland headers. This may render the compiler unusable
+//    for programs that use other workarounds. And other programs might
+//    make different patches for the same reason. This is solipsistic.
+//
+//  - Override all standard headers by putting 'filename.h' in a directory
+//    of our own that precedes the borland include directory on the search
+//    path. But then there's no way to forward to the borland headers without
+//    knowing where the borland headers reside, which may differ from one
+//    installation to another. That could work well enough for makefiles,
+//    but it's nasty with the borland IDE. (Yet it does work for gcc.)
+//
+//  - Write '#include <header.>' to convince borland tools that there really
+//    is no '.h' . But we want our mainstream code to be standard.
+//
+//  - Include problematic headers in this file, which is included everywhere,
+//    and put patches here.
+//
+// We choose the last option as the least evil, and mitigate the evil by
+// including the problematic headers in 'pch.hpp' unless that creates
+// additional problems (e.g. precompiling STL headers with bc++5.02 can
+// produce internal compiler errors). The special borland headers use
+// this approach.
 
 #endif // config_bc551_hpp
 

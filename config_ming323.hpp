@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: config_ming323.hpp,v 1.3 2005-11-04 18:36:16 chicares Exp $
+// $Id: config_ming323.hpp,v 1.4 2005-11-09 05:00:33 chicares Exp $
 
 // Configuration header for compiler quirks--mingw gcc-3.2.3 .
 
@@ -30,28 +30,27 @@
 #   error This file is not intended for separate inclusion.
 #endif // OK_TO_INCLUDE_CONFIG_MING323_HPP
 
-#if defined __MINGW32__ && defined __GNUC__ && 30203 <= LMI_GCC_VERSION
-
-#   if LMI_GCC_VERSION < 30300
-
-    // dannysmith's email of 2003-12-08T22:32Z suggests this approach
-    // to address the slowness of pow() in mingw-runtime-2.2:
-/*
-    extern double  (*_imp__pow) (double, double);
-    static inline double pow (double x, double y)
-    {
-        __volatile__ double res = (*_imp__pow)(x, y);
-        return res;
-    }
-    #define pow(_x, _y) __pow(_x, _y)
-*/
-    // But it didn't seem to work. Probably the issue is moot now.
-
-#   endif // Not MinGW gcc-3.3.0 or prior.
-
+#if 30203 <= LMI_GCC_VERSION
+#   // Copacetic.
 #else  // Not MinGW gcc-3.2.3+ .
-#   error Use this file for mingw gcc version 3.2.3 or higher only.
+#   error Use this file only for MinGW gcc version 3.2.3 or higher.
 #endif // Not MinGW gcc-3.2.3+ .
+
+// Assume C++98 conformance by default. Define macros to indicate
+// departures from C++98, whether positive (such as providing C99
+// functions) or negative.
+
+#if 308 <= LMI_MINGW_VERSION
+#   define LMI_COMPILER_PROVIDES_EXPM1
+#endif // 308 <= LMI_MINGW_VERSION
+
+#if 202 <= LMI_MINGW_VERSION
+#   define LMI_COMPILER_PROVIDES_LOG1P
+#endif // 202 <= LMI_MINGW_VERSION
+
+#if 204 <= LMI_MINGW_VERSION
+#   define LMI_COMPILER_PROVIDES_STRTOLD
+#endif // 204 <= LMI_MINGW_VERSION
 
 #endif // config_ming323_hpp
 
