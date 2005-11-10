@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_text_formats.cpp,v 1.18 2005-10-16 15:12:41 chicares Exp $
+// $Id: ledger_text_formats.cpp,v 1.19 2005-11-10 16:09:15 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -474,7 +474,7 @@ os << "\n\n" ;
         std::vector<e_run_basis> const& bases(ledger_values.GetRunBases());
         if
             (   bases.end()
-            ==  std::find(bases.begin(), bases.end(), e_run_curr_basis_sa_zero)
+            !=  std::find(bases.begin(), bases.end(), e_run_curr_basis_sa_zero)
             )
             {
             LedgerVariant const& Curr0 = ledger_values.GetCurrZero();
