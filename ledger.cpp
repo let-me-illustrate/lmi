@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger.cpp,v 1.11 2005-10-15 15:45:18 chicares Exp $
+// $Id: ledger.cpp,v 1.12 2005-11-10 15:59:23 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -385,44 +385,56 @@ void Ledger::Spew(std::ostream& os) const
 }
 
 //============================================================================
+LedgerVariant const& Ledger::GetOneVariantLedger(enum_run_basis b) const
+{
+    e_run_basis const basis(b);
+    ledger_map::const_iterator i(GetLedgerMap().held().find(basis));
+    if(i == GetLedgerMap().held().end())
+        {
+        fatal_error() << "No values for basis '" << basis << "'" << LMI_FLUSH;
+        }
+    return i->second;
+}
+
+//============================================================================
 LedgerVariant const& Ledger::GetCurrFull() const
 {
-    return (*GetLedgerMap().held().find(e_run_basis(e_run_curr_basis))).second;
+    return GetOneVariantLedger(e_run_curr_basis);
 }
 
 //============================================================================
 LedgerVariant const& Ledger::GetGuarFull() const
 {
-    return (*GetLedgerMap().held().find(e_run_basis(e_run_guar_basis))).second;
+    return GetOneVariantLedger(e_run_guar_basis);
 }
 
 //============================================================================
 LedgerVariant const& Ledger::GetMdptFull() const
 {
-    return (*GetLedgerMap().held().find(e_run_basis(e_run_mdpt_basis))).second;
+    return GetOneVariantLedger(e_run_mdpt_basis);
 }
 
 //============================================================================
 LedgerVariant const& Ledger::GetCurrZero() const
 {
-    return (*GetLedgerMap().held().find(e_run_basis(e_run_curr_basis_sa_zero))).second;
+    return GetOneVariantLedger(e_run_curr_basis_sa_zero);
 }
 
 //============================================================================
 LedgerVariant const& Ledger::GetGuarZero() const
 {
-    return (*GetLedgerMap().held().find(e_run_basis(e_run_guar_basis_sa_zero))).second;
+    return GetOneVariantLedger(e_run_guar_basis_sa_zero);
 }
 
 //============================================================================
 LedgerVariant const& Ledger::GetCurrHalf() const
 {
-    return (*GetLedgerMap().held().find(e_run_basis(e_run_curr_basis_sa_half))).second;
+    return GetOneVariantLedger(e_run_curr_basis_sa_half);
 }
 
 //============================================================================
 LedgerVariant const& Ledger::GetGuarHalf() const
 {
-    return (*GetLedgerMap().held().find(e_run_basis(e_run_guar_basis_sa_half))).second;
+    return GetOneVariantLedger(e_run_guar_basis_sa_half);
 }
 
