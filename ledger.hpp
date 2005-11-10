@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger.hpp,v 1.9 2005-11-01 17:56:44 chicares Exp $
+// $Id: ledger.hpp,v 1.10 2005-11-10 15:59:23 chicares Exp $
 
 #ifndef ledger_hpp
 #define ledger_hpp
@@ -113,6 +113,7 @@ class LMI_EXPIMP Ledger
     void write(std::ostream& os) const;
 
   private:
+    LedgerVariant const& GetOneVariantLedger(enum_run_basis) const;
     void SetRunBases(int a_Length);
 
     bool is_composite_;

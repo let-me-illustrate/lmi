@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.226 2005-11-09 05:00:33 chicares Exp $
+// $Id: ChangeLog,v 1.227 2005-11-10 15:59:23 chicares Exp $
 
 MAINTENANCE
 
@@ -4596,9 +4596,15 @@ Improve filtering of expected gcc output.
 
   GNUmakefile
   config.hpp
-  config_all.hpp    [expunged]
+  config_all.hpp [expunged]
   config_bc551.hpp
   config_como_mingw.hpp
   config_ming323.hpp
 Refactor configuration.
+
+20051110T1559Z <chicares@cox.net> [1231]
+
+  ledger.cpp
+  ledger.hpp
+Prevent a defect reported yesterday from causing a segfault.
 
