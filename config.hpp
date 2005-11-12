@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: config.hpp,v 1.12 2005-11-09 05:00:33 chicares Exp $
+// $Id: config.hpp,v 1.13 2005-11-12 19:05:22 chicares Exp $
 
 // Configuration header for compiler quirks. Include at the beginning of
 // every .hpp file (and nowhere else).
@@ -81,11 +81,17 @@ namespace fs = boost::filesystem;
 //  suggests this method to detect whether MinGW is the underlying C
 //  compiler. Because it requires including some standard header
 //  (including <_mingw.h> could be an error), this section has to
-//  follow inclusion of "platform_dependent.hpp" above.
-#   include <stdio.h>
-#   if defined __MINGW32_VERSION
+//  follow inclusion of "platform_dependent.hpp" above. Comeau
+//  suggested <stdio.h>, but <setjmp.h> is used here because it's the
+//  standard header most unlikely to be used in a C++ program. Still,
+//  it's a good idea to test not only __MINGW32_VERSION but also
+//  __MINGW_H, in case <setjmp.h> was already included above through
+//  "platform_dependent.hpp".
+//
+#   include <setjmp.h>
+#   if defined __MINGW32_VERSION || defined __MINGW_H
 #       define LMI_COMO_WITH_MINGW
-#   endif // __MINGW32_VERSION
+#   endif // defined __MINGW32_VERSION || defined __MINGW_H
 #endif // __COMO__
 
 #if defined __MINGW32__
