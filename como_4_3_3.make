@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: como_4_3_3.make,v 1.7 2005-11-01 18:01:00 chicares Exp $
+# $Id: como_4_3_3.make,v 1.8 2005-11-12 19:05:22 chicares Exp $
 
 toolset := como
 
@@ -54,26 +54,46 @@ CPPFLAGS := \
 CC  := como
 CXX := como
 
-# Sadly, this compiler's valuable '--strict' option is unavailable on
-# the msw platform, and even its relaxed '--a' counterpart is
-# incompatible with '__declspec'.
-#
-# CXXFLAGS := --a
+# This compiler's '--strict' option is incompatible with MinGW system
+# headers, and even its relaxed '--a' counterpart is incompatible with
+# '__declspec'.
 #
 # '--display_error_number' shows numeric error codes that may be
 # useful for choosing diagnostics to suppress for code that is not
 # 'strictly conforming'.
 #
 # Diagnostic 161: unrecognized pragma: frequent in wx.
-# Diagnostics 1195 and 1200: emulated ms defective loop variable scoping.
 #
-CXXFLAGS := \
+# Diagnostic 654: supposed 'declspec' incompatibility: there seems to
+# be no way to avoid this warning here:
+#   LMI_WX_NEW_EXPIMP void* operator new  (std::size_t, wx_allocator);
+#   void* operator new(std::size_t bytes, wx_allocator) {...}
+# Como requires that the decoration precede the return type in the
+# declaration, but doesn't allow it anywhere in the definition. With
+# '--a', this doesn't need to be suppressed, but it doesn't hurt either
+# because '--a' treats any '__declspec' as an error.
+#
+# Diagnostics 1195 and 1200: emulated ms defective loop variable scoping.
+
+nonstrict_cxxflags := \
   --diag_suppress=161 \
+  --diag_suppress=654 \
   --diag_suppress=1195 \
   --diag_suppress=1200 \
   --display_error_number \
   --long_long \
   --no_microsoft_bugs \
+
+strict_cxxflags := \
+  --a \
+  --display_error_number \
+  --long_long \
+  --no_microsoft_bugs \
+
+# This compiler's strict mode is incompatible with many useful tools
+# such as boost::filesystem (if built from source).
+
+CXXFLAGS := $(nonstrict_cxxflags)
 
 # For debugging on msw with gcc as the underlying C compiler, add
 #  /g
