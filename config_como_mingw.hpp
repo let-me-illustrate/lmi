@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: config_como_mingw.hpp,v 1.2 2005-11-09 05:00:33 chicares Exp $
+// $Id: config_como_mingw.hpp,v 1.3 2005-11-12 19:05:22 chicares Exp $
 
 // Configuration header for compiler quirks.
 
@@ -35,6 +35,18 @@
 #else  // Not Como with MinGW as the underlying C compiler.
 #   error Use this file only for Como with MinGW as the underlying C compiler.
 #endif // Not Como with MinGW as the underlying C compiler.
+
+#if !defined c_plusplus
+#   define LMI_COMO_STRICT_MODE
+#endif // !defined c_plusplus
+
+#if !defined __STDC__
+#   define LMI_COMO_MS_MODE
+#endif // !defined __STDC__
+
+#if defined LMI_COMO_STRICT_MODE && !defined LMI_COMO_MS_MODE
+#   define __declspec(deliberately_ignored)
+#endif // defined LMI_COMO_STRICT_MODE && !defined LMI_COMO_MS_MODE
 
 #if 202 <= LMI_MINGW_VERSION
 #   error Reconsider como configuration to reflect recent libmingwex.
