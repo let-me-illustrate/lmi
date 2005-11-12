@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: wx_new.hpp,v 1.2 2005-03-23 17:36:44 chicares Exp $
+// $Id: wx_new.hpp,v 1.3 2005-11-12 19:05:16 chicares Exp $
 
 // When wx is used as a dll, memory is allocated and freed across dll
 // boundaries, and that causes mpatrol to emit spurious diagnostics.
@@ -47,10 +47,11 @@
 
 enum wx_allocator{wx};
 
-LMI_WX_NEW_EXPIMP void* operator new(std::size_t, wx_allocator);
+LMI_WX_NEW_EXPIMP void* operator new  (std::size_t, wx_allocator);
 LMI_WX_NEW_EXPIMP void* operator new[](std::size_t, wx_allocator);
-LMI_WX_NEW_EXPIMP void operator delete(void*, wx_allocator);
-LMI_WX_NEW_EXPIMP void operator delete[](void*, wx_allocator);
+
+LMI_WX_NEW_EXPIMP void  operator delete  (void*, wx_allocator);
+LMI_WX_NEW_EXPIMP void  operator delete[](void*, wx_allocator);
 
 #endif // wx_new_hpp
 
