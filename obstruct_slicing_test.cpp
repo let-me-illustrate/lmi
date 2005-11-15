@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: obstruct_slicing_test.cpp,v 1.4 2005-06-07 12:17:51 chicares Exp $
+// $Id: obstruct_slicing_test.cpp,v 1.5 2005-11-15 19:35:37 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -156,11 +156,11 @@ int test_main(int, char*[])
 {
     test_all_techniques();
 
+    // Correctness is verifiable only at compile time. At run time,
+    // there's nothing to test except the cost.
+
     test_cost_of_obstruction<X0>("X0");
     test_cost_of_obstruction<X1>("X1");
-
-    // TODO ?? Instead, would it be possible actually to test something?
-    BOOST_TEST(true);
 
     return EXIT_SUCCESS;
 }
