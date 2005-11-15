@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.229 2005-11-12 19:05:22 chicares Exp $
+// $Id: ChangeLog,v 1.230 2005-11-15 19:35:54 chicares Exp $
 
 MAINTENANCE
 
@@ -4624,4 +4624,15 @@ Reformat.
   config.hpp
   config_como_mingw.hpp
 Improve comeau support.
+
+20051115T1935Z <chicares@cox.net> [1230]
+
+  obstruct_slicing.hpp
+  obstruct_slicing_test.cpp
+Revise documentation.
+
+  interest_rates.cpp
+Increase the severity of two diagnostics. They are unreachable today
+except with the most-secure password, but they are now fatal errors
+just in case access to the features they concern is liberalized.
 
