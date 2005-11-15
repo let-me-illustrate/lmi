@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: interest_rates.cpp,v 1.11 2005-10-05 17:07:52 chicares Exp $
+// $Id: interest_rates.cpp,v 1.12 2005-11-15 19:35:54 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -445,7 +445,7 @@ void InterestRates::InitializeGeneralAccountRates()
     std::vector<double> spread[n_illreg_bases] = {Zero_, Zero_, Zero_};
     if(e_grossrate == GenAcctRateType_)
         {
-        warning()
+        fatal_error()
             << "General-account rate is unexpectedly gross."
             << LMI_FLUSH
             ;
@@ -557,7 +557,7 @@ void InterestRates::InitializeSeparateAccountRates()
     // neither is the implicit net rate.
     if(e_netrate == SepAcctRateType_)
         {
-        warning()
+        fatal_error()
             << "Separate-account rate is unexpectedly net."
             << LMI_FLUSH
             ;
