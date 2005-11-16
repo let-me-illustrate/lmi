@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.230 2005-11-15 19:35:54 chicares Exp $
+// $Id: ChangeLog,v 1.231 2005-11-16 15:50:25 chicares Exp $
 
 MAINTENANCE
 
@@ -4635,4 +4635,9 @@ Revise documentation.
 Increase the severity of two diagnostics. They are unreachable today
 except with the most-secure password, but they are now fatal errors
 just in case access to the features they concern is liberalized.
+
+20051116T1550Z <chicares@cox.net> [1230]
+
+  version.hpp
+Mark release candidate.
 
