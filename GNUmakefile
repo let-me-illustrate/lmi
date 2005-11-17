@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: GNUmakefile,v 1.41 2005-11-17 03:49:11 chicares Exp $
+# $Id: GNUmakefile,v 1.42 2005-11-17 16:53:29 chicares Exp $
 
 ###############################################################################
 
@@ -231,9 +231,9 @@ date:
 # Files that can't be source in any useful sense:
 
 # Graphics files whose format doesn't permit embedding copyright and
-# license notices (TODO ?? can these be replaced by xpm?):
+# license notices:
 
-binary_graphics  := $(wildcard *.bmp *.ico *.png)
+binary_graphics  := $(wildcard *.ico *.png)
 
 expungible_files := $(wildcard *~ *.bak *eraseme*)
 
