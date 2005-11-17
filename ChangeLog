@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.231 2005-11-16 15:50:25 chicares Exp $
+// $Id: ChangeLog,v 1.232 2005-11-17 03:49:11 chicares Exp $
 
 MAINTENANCE
 
@@ -4640,4 +4640,11 @@ just in case access to the features they concern is liberalized.
 
   version.hpp
 Mark release candidate.
+
+20051117T0349Z <chicares@cox.net> [1230]
+
+  GNUmakefile
+  workhorse.make
+Fix a defect: wx-dependent template-instantiation (.tpp) files need
+relaxed warnings in idempotence test.
 
