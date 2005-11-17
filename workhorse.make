@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: workhorse.make,v 1.50 2005-11-06 15:28:32 chicares Exp $
+# $Id: workhorse.make,v 1.51 2005-11-17 03:49:11 chicares Exp $
 
 ###############################################################################
 
@@ -172,6 +172,64 @@ quoted_gpl quoted_gpl_html:
 
 ################################################################################
 
+# Headers and template-instantiation files to test for idempotence.
+
+# Only files in the source directory are tested. Files that reside
+# elsewhere (e.g., headers accompanying libraries) are not tested.
+
+# Exclude headers named 'config_*.hpp': they are designed to signal
+# errors if they are used separately.
+
+idempotent_files := \
+  $(addsuffix .idempotent,\
+    $(filter-out config_%.hpp,\
+      $(notdir \
+        $(wildcard \
+          $(addprefix $(src_dir)/,*.h *.hpp *.tpp *.xpp \
+          ) \
+        ) \
+      ) \
+    ) \
+  )
+
+################################################################################
+
+# Files that depend on wx, which can't use the strictest gcc warnings.
+
+# Files are deemed to depend on wx iff they contain 'include.*<wx/'.
+# This heuristic isn't foolproof because wx headers might be included
+# indirectly. Include an innocuous header like <wx/version.h> in files
+# for which it fails.
+
+wx_dependent_objects := \
+  $(addsuffix .o,\
+    $(basename \
+      $(notdir \
+        $(shell $(GREP) \
+          --files-with-matches \
+          'include.*<wx/' \
+          $(src_dir)/*.?pp \
+        ) \
+      ) \
+    ) \
+  )
+
+wx_dependent_idempotent_files := \
+  $(addsuffix .idempotent,\
+    $(notdir \
+      $(shell $(GREP) \
+        --files-with-matches \
+        'include.*<wx/' \
+        $(wildcard \
+          $(addprefix $(src_dir)/,*.h *.hpp *.tpp *.xpp \
+          ) \
+        ) \
+      ) \
+    ) \
+  )
+
+################################################################################
+
 # Warning options for gcc.
 
 gcc_version = $(shell $(CXX) -dumpversion)
@@ -240,37 +298,8 @@ gcc_common_extra_warnings := \
   -Wredundant-decls \
   -Wundef \
 
-wx_dependent_objects := \
-  $(addsuffix .o,\
-    $(basename \
-      $(notdir \
-        $(shell $(GREP) \
-          --files-with-matches \
-          'include.*<wx/' \
-          $(src_dir)/*.?pp \
-        ) \
-      ) \
-    ) \
-  )
-
-# This heuristic isn't foolproof. Include an innocuous header like
-# <wx/version.h> in files for which it fails.
-
-wx_dependent_idempotencies := \
-  $(addsuffix .hpp.idempotent,\
-    $(basename \
-      $(notdir \
-        $(shell $(GREP) \
-          --files-with-matches \
-          'include.*<wx/' \
-          $(addprefix $(src_dir)/,$(idempotent_files:%pp.idempotent=%pp)) \
-        ) \
-      ) \
-    ) \
-  )
-
-$(wx_dependent_objects):       gcc_common_extra_warnings :=
-$(wx_dependent_idempotencies): gcc_common_extra_warnings :=
+$(wx_dependent_objects):          gcc_common_extra_warnings :=
+$(wx_dependent_idempotent_files): gcc_common_extra_warnings :=
 
 # Boost didn't remove an unused parameter in this file:
 
