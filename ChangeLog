@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.232 2005-11-17 03:49:11 chicares Exp $
+// $Id: ChangeLog,v 1.233 2005-11-17 16:53:42 chicares Exp $
 
 MAINTENANCE
 
@@ -4647,4 +4647,13 @@ Mark release candidate.
   workhorse.make
 Fix a defect: wx-dependent template-instantiation (.tpp) files need
 relaxed warnings in idempotence test.
+
+20051117T1653Z <chicares@cox.net> [1228]
+
+  GNUmakefile
+Remove an obsolete defect marker. Almost all graphics files are now
+in '.xpm' format. For msw, an application requires one '.ico'.
+
+  configuration.make
+Expunge an unused variable.
 
