@@ -19,18 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: configuration.make,v 1.1 2005-01-28 01:34:43 chicares Exp $
-
-################################################################################
-
-# Useful paths relative to $(src_dir). TODO ?? Not used yet--expunge?
-
-# It might seem more natural to specify the parent of $(src_dir) as
-#   $(dir $(src_dir))
-# but that would retain the trailing slash, which can cause problems
-# on the msw platform, even with a decent shell.
-
-lmi_root        := $(src_dir:%/$(notdir $(src_dir))=%)
+# $Id: configuration.make,v 1.2 2005-11-17 16:53:32 chicares Exp $
 
 ################################################################################
 
