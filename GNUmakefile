@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: GNUmakefile,v 1.40 2005-11-12 19:05:22 chicares Exp $
+# $Id: GNUmakefile,v 1.41 2005-11-17 03:49:11 chicares Exp $
 
 ###############################################################################
 
@@ -180,7 +180,6 @@ MAKETARGET = \
                          src_dir='$(src_dir)' \
                       build_type='$(build_type)' \
                platform-makefile='$(platform-makefile)' \
-                idempotent_files='$(idempotent_files)' \
                     yyyymmddhhmm='$(yyyymmddhhmm)' \
   $(MAKECMDGOALS)
 
@@ -190,22 +189,6 @@ $(build_directory): $(gpl_files) date_last_made
 	+@$(MAKETARGET)
 
 % :: $(build_directory) ;
-
-################################################################################
-
-# Headers and template-instantiation files to test for idempotence.
-
-# The actual idempotence test is performed in the build directory.
-
-# Only files in the current directory are tested. Files that reside
-# elsewhere (e.g., headers accompanying libraries) are not tested.
-
-# Exclude headers named 'config_*.hpp': they are designed to signal
-# errors if they are used separately.
-
-idempotent_files := $(wildcard *.h *.hpp *.tpp *.xpp)
-idempotent_files := $(filter-out config_%.hpp,$(idempotent_files))
-idempotent_files := $(addsuffix .idempotent,$(idempotent_files))
 
 ################################################################################
 
@@ -342,7 +325,9 @@ release_candidate:
 	  | $(TR) -d '\r' \
 	  > version.hpp
 	@$(ECHO) Version is $(yyyymmddhhmm) .
-	@$(ECHO) Tag a release, e.g. 'cvs rtag lmi-$(yyyymmddhhmm)-rcX lmi'.
+	@$(ECHO) Tag a release, e.g.
+	@$(ECHO) "  'cvs rtag lmi-$(yyyymmddhhmm)-rcX lmi'"
+	@$(ECHO) remembering to change "'X'" to a meaningful number.
 
 ################################################################################
 
