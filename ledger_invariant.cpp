@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_invariant.cpp,v 1.21 2005-10-13 01:35:40 chicares Exp $
+// $Id: ledger_invariant.cpp,v 1.22 2005-11-18 06:06:25 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -159,6 +159,8 @@ void LedgerInvariant::Alloc(int len)
     OtherScalars    ["CustomFund"            ] = &CustomFund             ;
     OtherScalars    ["IsMec"                 ] = &IsMec                  ;
     OtherScalars    ["InforceIsMec"          ] = &InforceIsMec           ;
+    OtherScalars    ["InforceYear"           ] = &InforceYear            ;
+    OtherScalars    ["InforceMonth"          ] = &InforceMonth           ;
     OtherScalars    ["MecYear"               ] = &MecYear                ;
     OtherScalars    ["MecMonth"              ] = &MecMonth               ;
     OtherScalars    ["HasWP"                 ] = &HasWP                  ;
@@ -308,6 +310,9 @@ void LedgerInvariant::Init()
     EeMode              .assign(Length, e_mode(e_annual));
     ErMode              .assign(Length, e_mode(e_annual));
     DBOpt               .assign(Length, e_dbopt(e_option1));
+
+    InforceYear         = Length;
+    InforceMonth        = 11;
 
     MecYear             = Length;
     MecMonth            = 11;
@@ -790,6 +795,17 @@ LedgerInvariant& LedgerInvariant::PlusEq(LedgerInvariant const& a_Addend)
 
     IsMec                       = a_Addend.IsMec        || IsMec;
     InforceIsMec                = a_Addend.InforceIsMec || InforceIsMec;
+
+    if(InforceYear == a_Addend.InforceYear)
+        {
+        InforceMonth            = std::min(InforceMonth, a_Addend.InforceMonth);
+        }
+    else if(a_Addend.InforceYear < InforceYear)
+        {
+        InforceMonth            = a_Addend.InforceMonth;
+        }
+    InforceYear                 = std::min(InforceYear, a_Addend.InforceYear);
+
     if(MecYear == a_Addend.MecYear)
         {
         MecMonth                = std::min(MecMonth, a_Addend.MecMonth);

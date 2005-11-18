@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xml_io.cpp,v 1.28 2005-10-19 17:12:48 chicares Exp $
+// $Id: ledger_xml_io.cpp,v 1.29 2005-11-18 06:06:25 chicares Exp $
 
 #include "config.hpp"
 
@@ -510,6 +510,8 @@ void Ledger::write(xml::node& x) const
     format_map["HasSpouseRider"                    ] = f1;
     format_map["HasTerm"                           ] = f1;
     format_map["HasWP"                             ] = f1;
+    format_map["InforceMonth"                      ] = f1;
+    format_map["InforceYear"                       ] = f1;
     format_map["InitBaseSpecAmt"                   ] = f1;
     format_map["InitTermSpecAmt"                   ] = f1;
     format_map["InitTotalSA"                       ] = f1;

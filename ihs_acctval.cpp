@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_acctval.cpp,v 1.79 2005-11-05 03:57:23 chicares Exp $
+// $Id: ihs_acctval.cpp,v 1.80 2005-11-18 06:06:25 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -483,6 +483,9 @@ void AccountValue::InitializeLife(e_run_basis const& a_Basis)
     // for all other bases. TODO ?? How should we handle MEC-avoid
     // solves on bases other than current?
 
+    InvariantValues().InforceYear  = Input_->InforceYear;
+    InvariantValues().InforceMonth = Input_->InforceMonth;
+    
     bool inforce_is_mec =
            (
               0 != Input_->InforceYear

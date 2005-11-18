@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_invariant.hpp,v 1.5 2005-10-09 23:25:28 chicares Exp $
+// $Id: ledger_invariant.hpp,v 1.6 2005-11-18 06:06:25 chicares Exp $
 
 #ifndef ledger_invariant_hpp
 #define ledger_invariant_hpp
@@ -175,6 +175,8 @@ class LMI_EXPIMP LedgerInvariant
     double          CustomFund;
     double          IsMec;
     double          InforceIsMec;
+    double          InforceYear;
+    double          InforceMonth;
     double          MecYear;
     double          MecMonth;
     double          HasWP;
