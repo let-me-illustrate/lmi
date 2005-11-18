@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: GNUmakefile,v 1.42 2005-11-17 16:53:29 chicares Exp $
+# $Id: GNUmakefile,v 1.43 2005-11-18 06:06:22 chicares Exp $
 
 ###############################################################################
 
@@ -269,6 +269,10 @@ scripts := $(wildcard *.sed *.sh)
 
 xpm_files := $(wildcard *.xpm)
 
+# TODO ?? The '.xsl' files need to be cleaned up.
+# xml_files := $(wildcard *.xrc *.xsl)
+xml_files := $(wildcard *.xrc)
+
 non_source_files := \
   $(never_source_files) \
   $(documentation_files) \
@@ -427,6 +431,31 @@ expected_source_files = $(wildcard *.ac *.?pp *.c *.h *.rc *.xrc *.xsl)
 
 supplemental_test_makefile = ../forbidden.make
 
+# TODO ?? Wendy--please move this elsewhere, treating it similarly to,
+# say, $(WGET). I seem to get a working xmllint with libxml2-2.4.22
+# but not with libxml2-2.6.19; have you had better luck? I'd rather do
+# this now despite these issues, lest we upgrade to 2.6.19 and later
+# find that it's become impossible. It might be nice to use xmllint's
+# '--format' option, though that does some goofy stuff in 2.4.22 at
+# least. It'd be really nice to have $(XMLLINT_INDENT), which was
+# introduced in libxml2-2.5.5; here's something (make it one line)
+# that'll let you work rectify the indenting with 2.4.22 so that you
+# can see the goofiness:
+#
+# /lmi/src/skeleton[0]$/xml/libxml2-2.4.22/xmllint --format xml_notebook.xrc
+#  |tr -d '\r'
+#  |sed
+#    -e '/<!--/,/-->/!{s/^  //'
+#    -e's/^  /\t/'
+#    -e :a
+#    -e's/\t  /\t\t/;ta'
+#    -e's/\t/    /g}'
+#  >eraseme
+#
+# then compare 'eraseme' to the input file.
+
+XMLLINT := /xml/libxml2-2.4.22/xmllint
+
 .PHONY: check_conformity
 check_conformity: source_clean
 	@-[ ! -e $(supplemental_test_makefile) ] \
@@ -523,6 +552,13 @@ check_conformity: source_clean
 	    -e'/__pow/d' \
 	    -e'/____/d' \
 	    -e'/__/!d'
+	@$(ECHO) "Problems detected by xmllint:"
+	@for z in $(xml_files); \
+	  do \
+	    $(XMLLINT) $$z \
+	    | $(TR) -d '\r' \
+	    | $(DIFF) --ignore-blank-lines - $$z || $(ECHO) "... in file $$z"; \
+	  done;
 	@$(ECHO) "Total lines of code:"
 	@$(WC) -l $(prerequisite_files) | $(SED) -e'/[Tt]otal/!d' -e's/[^0-9]//'
 	@$(ECHO) "Number of source files:"
