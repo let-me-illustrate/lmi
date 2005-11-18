@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.233 2005-11-17 16:53:42 chicares Exp $
+// $Id: ChangeLog,v 1.234 2005-11-18 06:06:25 chicares Exp $
 
 MAINTENANCE
 
@@ -4656,4 +4656,15 @@ in '.xpm' format. For msw, an application requires one '.ico'.
 
   configuration.make
 Expunge an unused variable.
+
+20051118T0606Z <chicares@cox.net> [1230]
+
+  GNUmakefile
+Test validity of xml files.
+
+  ihs_acctval.cpp
+  ledger_invariant.cpp
+  ledger_invariant.hpp
+  ledger_xml_io.cpp
+Report inforce year and month.
 
