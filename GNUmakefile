@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: GNUmakefile,v 1.43 2005-11-18 06:06:22 chicares Exp $
+# $Id: GNUmakefile,v 1.44 2005-11-19 00:17:29 chicares Exp $
 
 ###############################################################################
 
@@ -320,7 +320,7 @@ date_last_made: $(filter-out $@,$(prerequisite_files))
 	@$(ECHO) Built $(yyyymmddhhmm).
 
 # Update the version-datestamp header before committing any release
-# candidate to cvs.
+# candidate to cvs. Release candidates are named 'lmi-YYYYMMDDTHHMM'.
 
 .PHONY: release_candidate
 release_candidate:
@@ -329,9 +329,9 @@ release_candidate:
 	  | $(TR) -d '\r' \
 	  > version.hpp
 	@$(ECHO) Version is $(yyyymmddhhmm) .
-	@$(ECHO) Tag a release, e.g.
-	@$(ECHO) "  'cvs rtag lmi-$(yyyymmddhhmm)-rcX lmi'"
-	@$(ECHO) remembering to change "'X'" to a meaningful number.
+	@$(ECHO) "  Tag a release this way:"
+	@$(ECHO) "cvs commit -m\"Mark release candidate\" version.hpp ChangeLog"
+	@$(ECHO) "cvs rtag lmi-$(yyyymmddhhmm) lmi"
 
 ################################################################################
 

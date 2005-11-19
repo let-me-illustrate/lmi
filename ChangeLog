@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.235 2005-11-19 00:13:23 chicares Exp $
+// $Id: ChangeLog,v 1.236 2005-11-19 00:17:29 chicares Exp $
 
 MAINTENANCE
 
@@ -4668,11 +4668,18 @@ Test validity of xml files.
   ledger_xml_io.cpp
 Report inforce year and month.
 
-20051119T0013Z <chicares@cox.net> [1230]
+20051118T0606Z <chicares@cox.net> [1230]
 
   GNUmakefile
 Test validity of xml files.
 
+20051119T0013Z <chicares@cox.net> [1230]
+
   version.hpp
 Mark release candidate.
+
+20051119T0017Z <chicares@cox.net> [1230]
+
+  GNUmakefile
+Refine 'release_candidate' target.
 
