@@ -24,7 +24,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: xml_notebook_single_premium.xrc,v 1.3 2005-08-25 01:22:58 chicares Exp $
+    $Id: xml_notebook_single_premium.xrc,v 1.4 2005-11-22 21:22:24 wboutin Exp $
 
     This version is generic. It strives to present every input field
     the system offers, in a way that suits the main developer's tastes.
@@ -327,13 +327,14 @@
                         <growablecols>1</growablecols>
                         <object class="sizeritem">
                             <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                            <border>2</border>
                             <object class="wxStaticText">
-                                <label>Name </label>
+                                <label>Name</label>
                             </object>
                         </object>
                         <object class="sizeritem">
                             <flag>wxGROW</flag>
-                            <object class="wxTextCtrl" name="insured_name">
+                            <object class="wxTextCtrl" name="InsuredName">
                             </object>
                         </object>
                     </object>
@@ -346,8 +347,9 @@
                         <growablecols>1,3</growablecols>
                         <object class="sizeritem">
                             <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                            <border>2</border>
                             <object class="wxStaticText">
-                                <label>Address </label>
+                                <label>Address</label>
                             </object>
                         </object>
                         <object class="sizeritem">
@@ -357,8 +359,9 @@
                         </object>
                         <object class="sizeritem">
                             <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                            <border>2</border>
                             <object class="wxStaticText">
-                                <label>City </label>
+                                <label>City</label>
                             </object>
                         </object>
                         <object class="sizeritem">
@@ -374,8 +377,9 @@
                     <object class="wxFlexGridSizer">
                         <object class="sizeritem">
                             <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                            <border>2</border>
                             <object class="wxStaticText">
-                                <label>State </label>
+                                <label>State</label>
                             </object>
                         </object>
                         <object class="sizeritem">
@@ -386,8 +390,9 @@
                         </object>
                         <object class="sizeritem">
                             <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                            <border>2</border>
                             <object class="wxStaticText">
-                                <label>Zip </label>
+                                <label>Zip</label>
                             </object>
                         </object>
                         <object class="sizeritem">
@@ -414,8 +419,9 @@
                         <growablecols>1</growablecols>
                         <object class="sizeritem">
                             <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                            <border>2</border>
                             <object class="wxStaticText">
-                                <label>Name </label>
+                                <label>Name</label>
                             </object>
                         </object>
                         <object class="sizeritem">
@@ -433,8 +439,9 @@
                         <growablecols>1,3</growablecols>
                         <object class="sizeritem">
                             <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                            <border>2</border>
                             <object class="wxStaticText">
-                                <label>Address </label>
+                                <label>Address</label>
                             </object>
                         </object>
                         <object class="sizeritem">
@@ -444,8 +451,9 @@
                         </object>
                         <object class="sizeritem">
                             <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                            <border>2</border>
                             <object class="wxStaticText">
-                                <label>City </label>
+                                <label>City</label>
                             </object>
                         </object>
                         <object class="sizeritem">
@@ -461,8 +469,9 @@
                     <object class="wxFlexGridSizer">
                         <object class="sizeritem">
                             <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                            <border>2</border>
                             <object class="wxStaticText">
-                                <label>State </label>
+                                <label>State</label>
                             </object>
                         </object>
                         <object class="sizeritem">
@@ -473,8 +482,9 @@
                         </object>
                         <object class="sizeritem">
                             <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                            <border>2</border>
                             <object class="wxStaticText">
-                                <label>Zip </label>
+                                <label>Zip</label>
                             </object>
                         </object>
                         <object class="sizeritem">
@@ -501,13 +511,14 @@
                         <growablecols>1</growablecols>
                         <object class="sizeritem">
                             <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                            <border>2</border>
                             <object class="wxStaticText">
-                                <label>Name </label>
+                                <label>Name</label>
                             </object>
                         </object>
                         <object class="sizeritem">
                             <flag>wxGROW</flag>
-                            <object class="wxTextCtrl" name="agent_name">
+                            <object class="wxTextCtrl" name="AgentName">
                             </object>
                         </object>
                     </object>
@@ -520,6 +531,7 @@
                         <growablecols>1,3</growablecols>
                         <object class="sizeritem">
                             <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                            <border>2</border>
                             <object class="wxStaticText">
                                 <label>Address </label>
                             </object>
@@ -531,6 +543,7 @@
                         </object>
                         <object class="sizeritem">
                             <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                            <border>2</border>
                             <object class="wxStaticText">
                                 <label>City </label>
                             </object>
@@ -548,8 +561,9 @@
                     <object class="wxFlexGridSizer">
                         <object class="sizeritem">
                             <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                            <border>2</border>
                             <object class="wxStaticText">
-                                <label>State </label>
+                                <label>State</label>
                             </object>
                         </object>
                         <object class="sizeritem">
@@ -560,6 +574,7 @@
                         </object>
                         <object class="sizeritem">
                             <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                            <border>2</border>
                             <object class="wxStaticText">
                                 <label>Zip </label>
                             </object>
@@ -701,8 +716,8 @@
                         </object>
                         <object class="sizeritem">
                             <flag>wxGROW</flag>
-                            <object class="wxTextCtrl" name="SubstandardTable">
-                                <size>10,-1</size>
+                            <object class="wxComboBox" name="SubstandardTable">
+                                <style>wxCB_DROPDOWN|wxCB_READONLY</style>
                             </object>
                         </object>
                     </object>
@@ -890,7 +905,8 @@
                     </object>
                 </object>
                 <object class="sizeritem">
-                    <flag>wxALIGN_CENTER_VERTICAL</flag>
+                    <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                    <border>4</border>
                     <object class="wxStaticText">
                         <label>General-account credited rate</label>
                     </object>
