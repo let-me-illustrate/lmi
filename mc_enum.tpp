@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mc_enum.tpp,v 1.7 2005-09-12 01:32:19 chicares Exp $
+// $Id: mc_enum.tpp,v 1.8 2005-11-22 21:20:22 wboutin Exp $
 
 #include "config.hpp"
 
@@ -160,7 +160,7 @@ std::size_t mc_enum<T,n,e,c>::ordinal() const
         fatal_error()
             << "Value "
             << value_
-            << " invalid for type '"
+            << "invalid for type '"
             << typeid(T).name()
             << "'."
             << LMI_FLUSH
@@ -177,9 +177,9 @@ std::size_t mc_enum<T,n,e,c>::ordinal(std::string const& s) const
     if(v == n)
         {
         fatal_error()
-            << "Value '"
+            << "Value "
             << s
-            << "' invalid for type '"
+            << "invalid for type '"
             << typeid(T).name()
             << "'."
             << LMI_FLUSH
