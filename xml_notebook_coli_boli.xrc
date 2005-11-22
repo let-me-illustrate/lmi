@@ -24,7 +24,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: xml_notebook_coli_boli.xrc,v 1.10 2005-09-19 19:52:21 wboutin Exp $
+    $Id: xml_notebook_coli_boli.xrc,v 1.11 2005-11-22 21:21:25 wboutin Exp $
 
     This version is designed for COLI and BOLI users; it omits input
     fields that seem irrelevant in that context, and reflects the
@@ -1227,7 +1227,6 @@
                     <border>4</border>
                     <object class="wxTextCtrl" name="AgentName">
                         <style>wxTE_LEFT</style>
-                        <value>*** REQUIRED FIELD MISSING ***</value>
                     </object>
                 </object>
             </object>
@@ -1250,7 +1249,6 @@
                     <flag>wxGROW|wxALL</flag>
                     <border>2</border>
                     <object class="wxTextCtrl" name="AgentAddress">
-                        <value>*** REQUIRED FIELD MISSING ***</value>
                     </object>
                 </object>
                 <object class="sizeritem">
@@ -1264,7 +1262,6 @@
                     <flag>wxGROW|wxALL</flag>
                     <border>2</border>
                     <object class="wxTextCtrl" name="AgentCity">
-                        <value>*** REQUIRED FIELD MISSING ***</value>
                     </object>
                 </object>
                 <object class="sizeritem">
@@ -1329,7 +1326,6 @@
                     <flag>wxGROW|wxALL</flag>
                     <border>2</border>
                     <object class="wxTextCtrl" name="AgentId">
-                        <value>*** REQUIRED FIELD MISSING ***</value>
                     </object>
                 </object>
             </object>
