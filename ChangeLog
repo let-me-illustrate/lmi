@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.236 2005-11-19 00:17:29 chicares Exp $
+// $Id: ChangeLog,v 1.237 2005-11-22 21:22:24 wboutin Exp $
 
 MAINTENANCE
 
@@ -4625,61 +4625,17 @@ Reformat.
   config_como_mingw.hpp
 Improve comeau support.
 
-20051115T1935Z <chicares@cox.net> [1230]
+20051122T2032Z <wboutin@massmutual.com> [1230]
 
-  obstruct_slicing.hpp
-  obstruct_slicing_test.cpp
-Revise documentation.
+  mc_enum.tpp
+Reformat diagnostic message.
 
-  interest_rates.cpp
-Increase the severity of two diagnostics. They are unreachable today
-except with the most-secure password, but they are now fatal errors
-just in case access to the features they concern is liberalized.
-
-20051116T1550Z <chicares@cox.net> [1230]
-
-  version.hpp
-Mark release candidate.
-
-20051117T0349Z <chicares@cox.net> [1230]
-
-  GNUmakefile
-  workhorse.make
-Fix a defect: wx-dependent template-instantiation (.tpp) files need
-relaxed warnings in idempotence test.
-
-20051117T1653Z <chicares@cox.net> [1228]
-
-  GNUmakefile
-Remove an obsolete defect marker. Almost all graphics files are now
-in '.xpm' format. For msw, an application requires one '.ico'.
-
-  configuration.make
-Expunge an unused variable.
-
-20051118T0606Z <chicares@cox.net> [1230]
-
-  GNUmakefile
-Test validity of xml files.
+  xml_notebook_coli_boli.xrc
+Remove data the system already handles.
 
   ihs_acctval.cpp
-  ledger_invariant.cpp
-  ledger_invariant.hpp
-  ledger_xml_io.cpp
-Report inforce year and month.
+Improve conformance.
 
-20051118T0606Z <chicares@cox.net> [1230]
-
-  GNUmakefile
-Test validity of xml files.
-
-20051119T0013Z <chicares@cox.net> [1230]
-
-  version.hpp
-Mark release candidate.
-
-20051119T0017Z <chicares@cox.net> [1230]
-
-  GNUmakefile
-Refine 'release_candidate' target.
+  xml_notebook_single_premium.xrc
+Reformat and remove defect #14006.
 
