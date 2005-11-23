@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_wx.cpp,v 1.23 2005-11-03 06:14:13 chicares Exp $
+// $Id: main_wx.cpp,v 1.24 2005-11-23 03:59:18 chicares Exp $
 
 // Portions of this file are derived from wxWindows files
 //   samples/docvwmdi/docview.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -193,12 +193,10 @@ int WINAPI WinMain
             }
 
 #ifndef __WXMSW__
-        int result = wxEntry(argc, argv);
+        result = wxEntry(argc, argv);
 #else // __WXMSW__ defined.
-        int result = wxEntry(hInstance, hPrevInstance, lpCmdLine, nCmdShow);
+        result = wxEntry(hInstance, hPrevInstance, lpCmdLine, nCmdShow);
 #endif // __WXMSW__ defined.
-
-        return result;
         }
     catch(hobsons_choice_exception&)
         {
@@ -380,7 +378,8 @@ bool security_validated(bool skip_validation)
 // wxConfigBase::Get() must be called after SetAppName() and
 // SetVendorName(). Otherwise, the configuration object wouldn't
 // reflect the vendor and application name; on the msw platform,
-// for instance, that would prevent writing to an 'lmi' registry key.
+// for instance, that would prevent writing to a registry key based
+// on the application's name.
 //
 // The application name contains 'wx' because it may someday become
 // desirable to maintain different configuration information in a
@@ -544,21 +543,6 @@ void lmi_wx_app::OnDropFiles(wxDropFilesEvent& event)
         }
 }
 
-// TODO ?? Confirm that wx-2.5.4 solved the underlying problem, so
-// that this now works as expected.
-#if 0
-bool lmi_wx_app::OnExceptionInMainLoop()
-{
-    wxLog::FlushActive();
-
-    int z = wxMessageBox
-        ("Try to resume?"
-        ,"Unhandled exception"
-        ,wxYES_NO | wxICON_QUESTION
-        );
-    return wxYES == z;
-}
-#else // !0
 bool lmi_wx_app::OnExceptionInMainLoop()
 {
     try
@@ -583,11 +567,13 @@ bool lmi_wx_app::OnExceptionInMainLoop()
         }
     catch(...)
         {
-        wxSafeShowMessage("Error caught in OnExceptionInMainLoop().", "Unknown error");
+        wxSafeShowMessage
+            ("Error caught in OnExceptionInMainLoop()."
+            ,"Unknown error"
+            );
         return false;
         }
 }
-#endif // !0
 
 int lmi_wx_app::OnExit()
 {
