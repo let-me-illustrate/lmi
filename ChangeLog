@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.238 2005-11-22 21:36:30 wboutin Exp $
+// $Id: ChangeLog,v 1.239 2005-11-23 19:25:38 chicares Exp $
 
 MAINTENANCE
 
@@ -4696,4 +4696,41 @@ Improve conformance.
 
   xml_notebook_single_premium.xrc
 Reformat and remove defect #14006.
+
+20051123T0359Z <chicares@cox.net> [1228]
+
+  GNUmakefile
+Fix minor shortcomings.
+
+  workhorse.make
+Resolve a marked defect.
+
+  file_command.cpp
+  ihs_acctval.cpp
+  main_wx.hpp
+Reformat.
+
+  main_wx.cpp
+Validate FPU settings on normal exit.
+
+  dbvalue.cpp
+  ihs_dbvalue.cpp
+Fix defective comments.
+
+  xml_notebook.cpp
+Improve a diagnostic message.
+
+20051123T0410Z <chicares@cox.net> [1228]
+
+  file_command.cpp
+  main_wx.hpp
+Reformat.
+
+20051123T1925Z <chicares@cox.net> [1229]
+
+  mc_enum_test.cpp
+  test_tools.hpp
+  test_tools_test.cpp
+Strengthen a unit test, revealing a problem with the 20051122T2032Z
+change.
 
