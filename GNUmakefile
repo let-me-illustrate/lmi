@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: GNUmakefile,v 1.44 2005-11-19 00:17:29 chicares Exp $
+# $Id: GNUmakefile,v 1.45 2005-11-23 03:59:07 chicares Exp $
 
 ###############################################################################
 
@@ -267,11 +267,11 @@ makefiles := \
 
 scripts := $(wildcard *.sed *.sh)
 
-xpm_files := $(wildcard *.xpm)
-
 # TODO ?? The '.xsl' files need to be cleaned up.
 # xml_files := $(wildcard *.xrc *.xsl)
 xml_files := $(wildcard *.xrc)
+
+xpm_files := $(wildcard *.xpm)
 
 non_source_files := \
   $(never_source_files) \
@@ -423,7 +423,7 @@ clobber: source_clean
 # avoid false positives that would arise when the current year appears
 # in an RCS Id but not in the copyright notice.
 
-expected_source_files = $(wildcard *.ac *.?pp *.c *.h *.rc *.xrc *.xsl)
+expected_source_files := $(wildcard *.ac *.?pp *.c *.h *.rc *.xrc *.xsl)
 
 # Invoke a supplemental makefile, if it exists, to test things that
 # don't belong in the standard sources. For example, it might report
@@ -452,7 +452,9 @@ supplemental_test_makefile = ../forbidden.make
 #    -e's/\t/    /g}'
 #  >eraseme
 #
-# then compare 'eraseme' to the input file.
+# then compare 'eraseme' to the input file (more stringently than with
+# '$(DIFF) --ignore-blank-lines': the gnu diff I'm using ignores much
+# more than blank lines with that option).
 
 XMLLINT := /xml/libxml2-2.4.22/xmllint
 
@@ -552,12 +554,16 @@ check_conformity: source_clean
 	    -e'/__pow/d' \
 	    -e'/____/d' \
 	    -e'/__/!d'
-	@$(ECHO) "Problems detected by xmllint:"
+	@$(ECHO) "  Problems detected by xmllint:"
 	@for z in $(xml_files); \
 	  do \
 	    $(XMLLINT) $$z \
 	    | $(TR) -d '\r' \
-	    | $(DIFF) --ignore-blank-lines - $$z || $(ECHO) "... in file $$z"; \
+	    | $(DIFF) \
+	      --ignore-blank-lines \
+	      --unified=0 \
+	      $$z - \
+	      || $(ECHO) "... in file $$z"; \
 	  done;
 	@$(ECHO) "Total lines of code:"
 	@$(WC) -l $(prerequisite_files) | $(SED) -e'/[Tt]otal/!d' -e's/[^0-9]//'
