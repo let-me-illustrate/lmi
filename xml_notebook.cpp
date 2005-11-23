@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xml_notebook.cpp,v 1.6 2005-09-12 01:32:19 chicares Exp $
+// $Id: xml_notebook.cpp,v 1.7 2005-11-23 03:59:16 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -31,6 +31,7 @@
 #include "alert.hpp"
 #include "input.hpp"
 #include "transferor.hpp"
+#include "wx_workarounds.hpp"
 
 #include <wx/checkbox.h>
 #include <wx/ctrlsub.h>
@@ -40,8 +41,6 @@
 #include <wx/radiobox.h>
 #include <wx/textctrl.h>
 #include <wx/xrc/xmlres.h>
-
-#include "wx_workarounds.hpp"
 
 #include <fstream> // TODO ?? Temporary--diagnostics only.
 #include <sstream>
@@ -54,7 +53,7 @@
 // be used. Several alternative .xrc files may present different
 // subsets of the input class's data in different ways.
 //
-// Acertain here what data the active .xrc file requires, during
+// Ascertain here what data the active .xrc file requires, during
 // construction, and store their names. Verify that collection of
 // names and bind each automatically to its corresponding data
 // member in the input class.
@@ -689,7 +688,7 @@ void XmlNotebook::OnUpdateGUI(wxUpdateUIEvent& event)
             }
         catch(std::exception const& e)
             {
-            DiagnosticsWindow()->SetLabel(*i + e.what());
+            DiagnosticsWindow()->SetLabel(*i + ": " + e.what());
             }
         }
 
