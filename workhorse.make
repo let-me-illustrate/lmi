@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: workhorse.make,v 1.51 2005-11-17 03:49:11 chicares Exp $
+# $Id: workhorse.make,v 1.52 2005-11-23 03:59:21 chicares Exp $
 
 ###############################################################################
 
@@ -403,8 +403,8 @@ LDFLAGS = \
   $(gprof_flag) \
   -Wl,-Map,$@.map \
 
-# TODO ?? Is there a better way to handle __WXDEBUG__, such as
-# #including some wx configuration header?
+# Always specify __WXDEBUG__:
+#   http://lists.nongnu.org/archive/html/lmi/2005-11/msg00026.html
 
 REQUIRED_CPPFLAGS = \
   $(addprefix -I , $(all_include_directories)) \
@@ -789,7 +789,7 @@ regression_test: install
 
 # TODO ?? Consider adding an autodependency mechanism--or is that
 # gilding the lily? Changing one header may cause another to become
-# nonidempotent, but the present test has not power to discover that.
+# nonidempotent, but the present test has no power to discover that.
 
 # Treat '.h' files as C++. Some C++ headers use that suffix, though
 # this project's do not. By default, g++ reports idempotence defects
