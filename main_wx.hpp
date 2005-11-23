@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_wx.hpp,v 1.3 2005-08-05 17:02:30 chicares Exp $
+// $Id: main_wx.hpp,v 1.4 2005-11-23 04:10:26 chicares Exp $
 
 // Portions of this file are derived from wxWindows files
 //   samples/docvwmdi/docview.h (C) 1998 Julian Smart and Markus Holzem
@@ -61,10 +61,7 @@ class lmi_wx_app
     ~lmi_wx_app();
 
     // Called by view classes when they are instantiated.
-    wxMDIChildFrame* CreateChildFrame
-        (wxDocument* doc
-        ,ViewEx*     view
-        );
+    wxMDIChildFrame* CreateChildFrame(wxDocument*, ViewEx*);
 
   private:
     void InitDocManager();
@@ -86,10 +83,10 @@ class lmi_wx_app
     void OnWindowTileVertically   (wxCommandEvent&);
 
     // wxApp overrides.
-    virtual void OnUnhandledException ();
     virtual bool OnExceptionInMainLoop();
     virtual int  OnExit               ();
     virtual bool OnInit               ();
+    virtual void OnUnhandledException ();
 
     wxConfigBase* config_;
     DocManagerEx* doc_manager_;
