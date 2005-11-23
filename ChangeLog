@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.239 2005-11-23 19:25:38 chicares Exp $
+// $Id: ChangeLog,v 1.240 2005-11-23 19:57:41 wboutin Exp $
 
 MAINTENANCE
 
@@ -4733,4 +4733,9 @@ Reformat.
   test_tools_test.cpp
 Strengthen a unit test, revealing a problem with the 20051122T2032Z
 change.
+
+20051123T1932Z <wboutin@massmutual.com> [1229]
+
+  mc_enum.tpp
+Revert 20051122T2032Z change.
 
