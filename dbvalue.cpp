@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: dbvalue.cpp,v 1.2 2005-02-14 04:35:18 chicares Exp $
+// $Id: dbvalue.cpp,v 1.3 2005-11-23 03:59:13 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -163,7 +163,7 @@ Implementation
             *( ((int*)a) + ((((i0*d1)+i1)*s2)+i2) )
         so we can do
             int* p =( ((int*)a) + (((i0*d1)+i1)*s2) )
-            while(int j = length; 0 < j; j--)
+            for(int j = length; 0 < j; j--)
                 *output++ = *p++;
 
     TODO ?? must-be-scalar flag?
