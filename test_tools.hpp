@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: test_tools.hpp,v 1.3 2005-02-28 12:57:47 chicares Exp $
+// $Id: test_tools.hpp,v 1.4 2005-11-23 19:25:38 chicares Exp $
 
 // This is a derived work based on Beman Dawes's boost test library
 // that bears the following copyright and license statement:
@@ -109,6 +109,31 @@
             ;                                            \
         }                                                \
 
+/// Make sure 'expression' throws the anticipated exception. Signal an
+/// error if no exception is thrown. Otherwise, compare the exception
+/// actually thrown against the one anticipated: deem them equivalent
+/// iff both
+///  - their types match exactly, and
+///  - either
+///    - 'WHAT' is empty, or
+///    - 'WHAT' exactly matches the actual exception's what(), or
+///    - 'WHAT' matches the actual exception's what() up to but not
+///      including the first newline (because some lmi exceptions add
+///      a newline and the file name and line number).
+///
+/// TODO ?? Probably the first element of the triple condition should
+/// be removed, and tests that rely on it strengthened.
+///
+/// COMPILER !! The borland compiler complains:
+///   std::out_of_range: position beyond end of string in function:
+///   basic_string::compare(size_t,size_t,const basic_string&) const
+///   index: -1 is greater than max_index: [size of string]
+/// but that complaint seems incorrect: the second argument is allowed
+/// to be npos, and only an invalid first argument can cause this
+/// exception, but the first argument here is always zero, which is
+/// always permissible. See C++98 21.3.6.8/3 and 21.3.1/4 and cf.
+/// Josuttis, TC++SL, 11.3.4 .
+
 #define BOOST_TEST_THROW(expression,TYPE,WHAT)          \
     try                                                 \
         {                                               \
@@ -145,6 +170,11 @@
             &&  (   std::string((e).what())             \
                 !=  std::string(WHAT)                   \
                 )                                       \
+            &&  0 != std::string((e).what()).compare    \
+                    (0                                  \
+                    ,std::string((e).what()).find('\n') \
+                    ,std::string(WHAT)                  \
+                    )                                   \
             )                                           \
             {                                           \
             lmi_test::error_stream()                    \
@@ -298,6 +328,7 @@ namespace lmi_test
         throw lmi_test::test::test_tools_exception() \
 
 // Revision History
+//  2005-11-23 GWC Improve exception-testing macro.
 //  2005-02-28 GWC Fix defective typeid comparison.
 //  2005-01-29 GWC Move #included '.cpp' files after declarations that
 //    were otherwise redundant, resolving a gcc warning.

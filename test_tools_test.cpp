@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: test_tools_test.cpp,v 1.2 2005-02-19 03:27:45 chicares Exp $
+// $Id: test_tools_test.cpp,v 1.3 2005-11-23 19:25:38 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -104,6 +104,22 @@ int test_main(int, char*[])
         << std::endl
         ;
     lmi_test::test::test_tools_errors = 0;
+
+    // This test, unlike the others above, should not fail. It makes
+    // sure that the anticipated and actually-thrown exceptions are
+    // treated as equivalent even though the latter has an extra
+    // terminal substring beginning with a newline.
+
+    BOOST_TEST_THROW
+        (throw_exception
+            (std::runtime_error
+                ("arbitrary"
+                "\n[a newline and anything following should be ignored]"
+                )
+            )
+        ,std::runtime_error
+        ,"arbitrary"
+        );
 
     return 0;
 }
