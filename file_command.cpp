@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: file_command.cpp,v 1.2 2005-05-13 23:58:10 chicares Exp $
+// $Id: file_command.cpp,v 1.3 2005-11-23 04:10:26 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -43,7 +43,7 @@ void file_command::operator()
     (std::string const& file
     ,std::string const& action
     ) const
-    {
+{
     file_command_callback()(file, action);
-    }
+}
 
