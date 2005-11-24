@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustration_document.cpp,v 1.2 2005-06-15 05:05:04 chicares Exp $
+// $Id: illustration_document.cpp,v 1.3 2005-11-24 05:22:23 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -30,8 +30,6 @@
 
 #include "alert.hpp"
 #include "illustration_view.hpp"
-
-#include <wx/log.h>
 
 #include <fstream>
 
@@ -67,13 +65,11 @@ wxHtmlWindow* IllustrationDocument::DominantViewWindow() const
         }
     if(!view)
         {
-// WX !! When wx handles exceptions more gracefully, throw here:
-        wxLogError("IllustrationDocument::DominantViewWindow(): null view.");
+        fatal_error() << "Illustration view not found." << LMI_FLUSH;
         }
     if(!view->html_window_)
         {
-// WX !! When wx handles exceptions more gracefully, throw here:
-        wxLogError("IllustrationDocument::DominantViewWindow(): null window.");
+        fatal_error() << "Illustration window not found." << LMI_FLUSH;
         }
     return view->html_window_;
 }

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustration_view.cpp,v 1.22 2005-09-12 01:32:19 chicares Exp $
+// $Id: illustration_view.cpp,v 1.23 2005-11-24 05:22:23 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -59,14 +59,11 @@
 #include <wx/app.h> // wxTheApp
 #include <wx/html/htmlwin.h>
 #include <wx/icon.h>
-#include <wx/log.h> // TODO ?? Debugging only: consider removing.
 #include <wx/menu.h>
-#include <wx/msgdlg.h>
 #include <wx/toolbar.h>
 #include <wx/xrc/xmlres.h>
 
 #include <cstdio>
-#include <fstream>
 #include <ios>
 #include <locale>
 
@@ -142,8 +139,12 @@ warning() << "That command should have been disabled." << LMI_FLUSH;
         {
         if(document().input_ != edited_lmi_input)
             {
-// wxLogMessage(document().input_.differing_fields(edited_lmi_input).c_str());
-// wxLog::FlushActive();
+/* TODO ?? Expunge this?
+            warning()
+                << document().input_.differing_fields(edited_lmi_input)
+                << LMI_FLUSH
+                ;
+*/
             document().input_ = edited_lmi_input;
             dirty = true;
             }
@@ -202,8 +203,10 @@ bool IllustrationView::OnCreate(wxDocument* doc, long flags)
 void IllustrationView::OnMenuOpen(wxMenuEvent&)
 {
 // TODO ?? WX !! Never gets called. Does this need to be in the document class?
-wxLogMessage("IllustrationView::OnMenuOpen() called.");
-wxLog::FlushActive();
+    warning()
+        << "This function apparently should not be called."
+        << LMI_FLUSH
+        ;
 
     wxMenuItem* file_save = MenuBar()->FindItem
         (XRCID("wxID_SAVE")
@@ -261,12 +264,13 @@ void IllustrationView::OnUpdateFileSave(wxUpdateUIEvent& e)
 void IllustrationView::OnUpdateFileSaveAs(wxUpdateUIEvent& e)
 {
 // TODO ?? Doesn't seem to get called.
+    warning()
+        << "This function apparently should not be called."
+        << LMI_FLUSH
+        ;
 
 // TODO ?? Is special logic required, here and elsewhere, to prevent
 // actions that don't make sense with style LMI_WX_CHILD_DOCUMENT?
-
-wxLogMessage("OnUpdateFileSaveAs");
-wxLog::FlushActive();
     e.Enable(!is_phony_);
 }
 

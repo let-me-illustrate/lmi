@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.241 2005-11-23 20:34:11 wboutin Exp $
+// $Id: ChangeLog,v 1.242 2005-11-24 05:22:23 chicares Exp $
 
 MAINTENANCE
 
@@ -4743,4 +4743,15 @@ Revert 20051122T2032Z change.
 
   mc_enum_test.cpp
 Fix broken unit test.
+
+20051124T0522Z <chicares@cox.net> [1228]
+
+  census_document.cpp
+  census_view.cpp
+  illustration_document.cpp
+  illustration_view.cpp
+  main_wx.cpp
+  text_doc.cpp
+  xml_notebook.cpp
+Use 'alert' facility instead of direct wxLog calls.
 

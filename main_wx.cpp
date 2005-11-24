@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_wx.cpp,v 1.24 2005-11-23 03:59:18 chicares Exp $
+// $Id: main_wx.cpp,v 1.25 2005-11-24 05:22:23 chicares Exp $
 
 // Portions of this file are derived from wxWindows files
 //   samples/docvwmdi/docview.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -39,6 +39,7 @@
 #include "main_wx.hpp"
 
 #include "about_dialog.hpp"
+#include "alert.hpp"
 #include "argv0.hpp"
 #include "census_document.hpp"
 #include "census_view.hpp"
@@ -63,7 +64,6 @@
 #include <wx/config.h>
 #include <wx/docmdi.h>
 #include <wx/image.h>
-#include <wx/log.h>
 #include <wx/menu.h>
 #include <wx/msgdlg.h>
 #include <wx/toolbar.h>
@@ -502,9 +502,7 @@ void lmi_wx_app::InitMenuBar()
     wxMenuBar* menu_bar = wxXmlResource::Get()->LoadMenuBar("main_menu");
     if(!menu_bar)
         {
-// WX !! When wx handles exceptions more gracefully, throw here:
-//        throw std::runtime_error("Unable to create menubar.");
-        wxLogError("Unable to create menubar.");
+        fatal_error() << "Unable to create menubar." << LMI_FLUSH;
         }
     else
         {
@@ -520,9 +518,7 @@ void lmi_wx_app::InitToolBar()
     wxToolBar* tool_bar = wxXmlResource::Get()->LoadToolBar(frame_, "toolbar");
     if(!tool_bar)
         {
-// WX !! When wx handles exceptions more gracefully, throw here:
-//        throw std::runtime_error("Unable to create toolbar.");
-        wxLogError("Unable to create toolbar.");
+        fatal_error() << "Unable to create toolbar." << LMI_FLUSH;
         }
     frame_->SetToolBar(tool_bar);
 }
@@ -597,23 +593,17 @@ bool lmi_wx_app::OnInit()
 
     if(!wxXmlResource::Get()->Load("xml_notebook.xrc"))
         {
-// WX !! When wx handles exceptions more gracefully, throw here:
-//        throw std::runtime_error("Unable to load xml resources.");
-        wxLogError("Unable to load xml resources.");
+        fatal_error() << "Unable to load xml resources." << LMI_FLUSH;
         }
 
     if(!wxXmlResource::Get()->Load("menus.xrc"))
         {
-// WX !! When wx handles exceptions more gracefully, throw here:
-//        throw std::runtime_error("Unable to load menubar.");
-        wxLogError("Unable to load menubar.");
+        fatal_error() << "Unable to load menubar." << LMI_FLUSH;
         }
 
     if(!wxXmlResource::Get()->Load("toolbar.xrc"))
         {
-// WX !! When wx handles exceptions more gracefully, throw here:
-//        throw std::runtime_error("Unable to load toolbar.");
-        wxLogError("Unable to load toolbar.");
+        fatal_error() << "Unable to load toolbar." << LMI_FLUSH;
         }
 
     wxInitAllImageHandlers();
