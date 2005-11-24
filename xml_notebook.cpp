@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xml_notebook.cpp,v 1.7 2005-11-23 03:59:16 chicares Exp $
+// $Id: xml_notebook.cpp,v 1.8 2005-11-24 05:22:23 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -35,16 +35,12 @@
 
 #include <wx/checkbox.h>
 #include <wx/ctrlsub.h>
-#include <wx/log.h>
-#include <wx/msgdlg.h>
 #include <wx/notebook.h>
 #include <wx/radiobox.h>
 #include <wx/textctrl.h>
 #include <wx/xrc/xmlres.h>
 
 #include <fstream> // TODO ?? Temporary--diagnostics only.
-#include <sstream>
-#include <stdexcept>
 
 // TODO ?? Development plans:
 //
@@ -123,9 +119,7 @@ XmlNotebook::XmlNotebook(wxWindow* parent, Input& input)
             )
         )
         {
-        // WX !! When wx handles exceptions more gracefully, throw here:
-        //   throw std::runtime_error("Unable to load dialog.");
-        wxLogError("Unable to load dialog.");
+        fatal_error() << "Unable to load dialog." << LMI_FLUSH;
         }
 
     // Iterate over the complete set of input class member names.
@@ -164,10 +158,8 @@ void XmlNotebook::Bind(std::string const& name, std::string& data)
     // input items for.
     if(!window)
         {
-        // WX !! When wx handles exceptions more gracefully, throw here:
-        //   throw std::runtime_error("("No control named '" + name + "'.").c_str());
 // This is not an error.
-//        wxLogError(("No control named '" + name + "'.").c_str());
+//        warning() << "No control named '" << name << "'." << LMI_FLUSH;;
         return;
         }
     Transferor t(data, name);
@@ -240,10 +232,7 @@ void XmlNotebook::ConditionallyEnableItems
     // find a way to use a dynamic cast.
     if(!base_datum)
         {
-        // WX !! When wx handles exceptions more gracefully, throw here:
-        //   throw std::runtime_error("Input data must be enumerative.");
-        wxLogError("Input data must be enumerative.");
-        return;
+        fatal_error() << "Input data must be enumerative." << LMI_FLUSH;
         }
 
     wxRadioBox* radiobox = dynamic_cast<wxRadioBox*>(&control);
@@ -279,7 +268,7 @@ void XmlNotebook::ConditionallyEnableItems
     else
         {
         // TODO ?? Improve this message. Really, it should be unreachable.
-        wxLogError("Unanticipated case.");
+        fatal_error() << "Unanticipated case." << LMI_FLUSH;
         }
     control.Enable(control_should_be_enabled);
 }
@@ -378,10 +367,7 @@ void XmlNotebook::SetupControlItems
     // find a way to use a dynamic cast.
     if(!base_datum)
         {
-        // WX !! When wx handles exceptions more gracefully, throw here:
-        //   throw std::runtime_error("Input data must be enumerative.");
-        wxLogError("Input data must be enumerative.");
-        return;
+        fatal_error() << "Input data must be enumerative." << LMI_FLUSH;
         }
 
     wxRadioBox* radiobox = dynamic_cast<wxRadioBox*>(&control);
@@ -394,8 +380,7 @@ void XmlNotebook::SetupControlItems
         {
         if(static_cast<int>(base_datum->cardinality()) != radiobox->GetCount())
             {
-            std::ostringstream oss;
-            oss
+            fatal_error()
                 << "Radiobox '"
                 << input_name
                 << "' has "
@@ -403,17 +388,14 @@ void XmlNotebook::SetupControlItems
                 << " items, but datatype expects "
                 << base_datum->cardinality()
                 << "."
+                << LMI_FLUSH
                 ;
-            wxLogMessage(oss.str().c_str());
-            wxLog::FlushActive();
-            return;
             }
         for(std::size_t j = 0; j < base_datum->cardinality(); ++j)
             {
             if(base_datum->str(j) != radiobox->GetString(j))
                 {
-                std::ostringstream oss;
-                oss
+                fatal_error()
                     << "Radiobox '"
                     << input_name
                     << "' button ["
@@ -423,10 +405,9 @@ void XmlNotebook::SetupControlItems
                     << "', but instead it is '"
                     << radiobox->GetString(j)
                     << "'."
+                    << LMI_FLUSH
                     ;
-                wxLogMessage(oss.str().c_str());
                 }
-            wxLog::FlushActive();
             radiobox->Enable(j, base_datum->is_allowed(j));
             }
         }
@@ -437,7 +418,7 @@ void XmlNotebook::SetupControlItems
     else
         {
         // TODO ?? Improve this message. Really, it should be unreachable.
-        wxLogError("Unanticipated case.");
+        fatal_error() << "Unanticipated case." << LMI_FLUSH;
         }
 }
 
@@ -692,13 +673,15 @@ void XmlNotebook::OnUpdateGUI(wxUpdateUIEvent& event)
             }
         }
 
+/*
     // Experimental. It is hypothesized that EVT_UPDATE_UI events
     // occur frequently enough that two control changes cannot be
     // simultaneous.
+TODO ?? ...except for changes the framework itself makes, which
+ought to be forced through somehow.
     if(1 < names_of_changed_controls.size())
         {
-        std::ostringstream oss;
-        oss << "Contents of more than one control changed, namely\n";
+        warning() << "Contents of more than one control changed, namely\n";
         std::vector<std::string>::const_iterator i;
         for
             (i = names_of_changed_controls.begin()
@@ -706,16 +689,11 @@ void XmlNotebook::OnUpdateGUI(wxUpdateUIEvent& event)
             ;++i
             )
             {
-            oss << *i << " changed" << '\n';
+            warning() << *i << " changed" << '\n';
             }
-        // This could be verbose, so flush any pending messages first.
-// TODO ?? Why does this pop up at all?
-/*
-        wxLog::FlushActive();
-        wxLogMessage(oss.str().c_str());
-        wxLog::FlushActive();
-*/
+        warning() << LMI_FLUSH;
         }
+*/
 
     input_.Harmonize();
 
@@ -757,7 +735,11 @@ os << "Only the following controls were processed correctly:" << std::endl;
                 )
             )
             {
-            wxLogMessage(w->GetName() + " not in member name list.");
+            warning()
+                << (w->GetName()
+                << " not in member name list."
+                << LMI_FLUSH
+                ;
             }
 */
         Transferor* t = dynamic_cast<Transferor*>(w->GetValidator());
@@ -860,24 +842,21 @@ void XmlNotebook::ValidateTextControl(wxWindow* w)
     Transferor* t = dynamic_cast<Transferor*>(textctrl->GetValidator());
     if(!t)
         {
-        // WX !! When wx handles exceptions more gracefully, throw here:
-        //   throw std::runtime_error("No transferror associated with control.");
-//        wxLogError("No transferror associated with control.");
+//        fatal_error() << "No transferor associated with control." << LMI_FLUSH;
 
 // TODO ?? This happens only on page losing focus, probably because
 // of an IsShown() conditional. Test on page gaining focus instead.
 
 /*
-        std::ostringstream oss;
-        oss
+        fatal_error()
             << "No transferror associated with control:\n"
             << textctrl->GetId() << " = GetId()\n"
             << textctrl->GetId() << " = GetId()\n"
             << textctrl->GetName() << " = GetName()\n"
             << textctrl->GetTitle() << " = GetTitle()\n"
             << textctrl->GetValue() << " = GetValue()\n"
+            << LMI_FLUSH
             ;
-        wxLogError(oss.str().c_str());
 */
         return;
         }
