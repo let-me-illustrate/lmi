@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: census_view.cpp,v 1.36 2005-11-05 03:57:22 chicares Exp $
+// $Id: census_view.cpp,v 1.37 2005-11-24 05:22:23 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -50,7 +50,6 @@
 #include <wx/xrc/xmlres.h>
 
 #include <sstream>
-#include <stdexcept>
 
 // TODO ?? Can't this macro be dispensed with?
 #define ID_LISTWINDOW 12345
@@ -369,13 +368,12 @@ int CensusView::selected_row()
         {
         row = 0;
 // TODO ?? Reserve for grid implementation.
-//        throw std::logic_error("No row selected.");
+//        fatal_error() << "No row selected." << LMI_FLUSH;
         }
     if(static_cast<int>(cell_parms().size()) <= row)
         {
 // TODO ?? OK if about to delete?
-//        throw std::logic_error("Invalid row selected.");
-//status() << "Invalid row selected." << LMI_FLUSH;
+//        fatal_error() << "Invalid row selected." << LMI_FLUSH;
         }
     return row;
 }
@@ -586,10 +584,7 @@ wxMenuBar* CensusView::MenuBar() const
     wxMenuBar* menu_bar = MenuBarFromXmlResource("census_view_menu");
     if(!menu_bar)
         {
-// TODO ?? Clean up.
-//        wxLogError("Unable to load 'census_view_menu'.");
-//        wxLog::FlushActive();
-        throw std::runtime_error("Unable to load 'census_view_menu'.");
+        fatal_error() << "Unable to load menubar." << LMI_FLUSH;
         };
     return menu_bar;
 }
@@ -1220,18 +1215,18 @@ convert_to_ihs(ihs_input, case_parms()[0]);
             static std::string const space(" ");
             if(std::string::npos == token.find_first_not_of(space))
                 {
-                std::ostringstream error;
-                error
+                warning()
                     << "Line #" << current_line << ": "
                     << " (" << line << ") "
                     << "has a value that contains no non-blank characters. "
                     << "Last valid value, if any: " << values.back()
+                    << LMI_FLUSH
                     ;
-// TODO ?? We'd like to do this:
-//                throw std::range_error(error.str());
-// but it segfaults with very long strings. So we do this instead:
-                warning() << error.str() << LMI_FLUSH;
-                throw std::range_error("Invalid input.");
+// TODO ?? It would be better to use fatal_error() instead of
+// warning() followed by fatal_error() with a short string, but
+// apparently that can segfault with very long strings. Is there
+// a limit on exception size that should be tested here?
+                fatal_error() << "Invalid input." << LMI_FLUSH;
                 }
 // warning() << "'" << token << "'" << "push_back value" << LMI_FLUSH;
             values.push_back(token);
@@ -1239,15 +1234,14 @@ convert_to_ihs(ihs_input, case_parms()[0]);
 
         if(values.size() != headers.size())
             {
-            std::ostringstream error;
-            error
+            fatal_error()
                 << "Line #" << current_line << ": "
                 << "  (" << line << ") "
                 << "should have one value per column. "
                 << "Number of values: " << values.size() << "; "
                 << "number expected: " << headers.size() << "."
+                << LMI_FLUSH
                 ;
-            throw std::range_error(error.str());
             }
 
         for(unsigned int j = 0; j < headers.size(); ++j)

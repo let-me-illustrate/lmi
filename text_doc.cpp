@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: text_doc.cpp,v 1.1 2005-03-11 03:09:22 chicares Exp $
+// $Id: text_doc.cpp,v 1.2 2005-11-24 05:22:23 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/doc.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -36,9 +36,9 @@
 
 #include "text_doc.hpp"
 
+#include "alert.hpp"
 #include "text_view.hpp"
 
-#include <wx/log.h>
 #include <wx/textctrl.h>
 
 IMPLEMENT_DYNAMIC_CLASS(TextEditDocument, wxDocument)
@@ -71,13 +71,11 @@ wxTextCtrl* TextEditDocument::DominantViewWindow() const
         }
     if(!view)
         {
-// WX !! When wx handles exceptions more gracefully, throw here:
-        wxLogError("TextEditDocument::DominantViewWindow(): null view.");
+        fatal_error() << "Text view not found." << LMI_FLUSH;
         }
     if(!view->text_window_)
         {
-// WX !! When wx handles exceptions more gracefully, throw here:
-        wxLogError("TextEditDocument::DominantViewWindow(): null window.");
+        fatal_error() << "Text window not found." << LMI_FLUSH;
         }
     return view->text_window_;
 }

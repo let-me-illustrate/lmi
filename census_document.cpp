@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: census_document.cpp,v 1.2 2005-04-15 13:57:21 chicares Exp $
+// $Id: census_document.cpp,v 1.3 2005-11-24 05:22:23 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -30,8 +30,6 @@
 
 #include "alert.hpp"
 #include "census_view.hpp"
-
-#include <wx/log.h>
 
 #include <fstream>
 
@@ -67,13 +65,11 @@ wxListView* CensusDocument::DominantViewWindow() const
         }
     if(!view)
         {
-// WX !! When wx handles exceptions more gracefully, throw here:
-        wxLogError("CensusDocument::DominantViewWindow(): null view.");
+        fatal_error() << "Census view not found." << LMI_FLUSH;
         }
     if(!view->list_window_)
         {
-// WX !! When wx handles exceptions more gracefully, throw here:
-        wxLogError("CensusDocument::DominantViewWindow(): null window.");
+        fatal_error() << "Census window not found." << LMI_FLUSH;
         }
     return view->list_window_;
 }
