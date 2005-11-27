@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xml_notebook.cpp,v 1.8 2005-11-24 05:22:23 chicares Exp $
+// $Id: xml_notebook.cpp,v 1.9 2005-11-27 01:40:12 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -27,6 +27,7 @@
 #endif // __BORLANDC__
 
 #include "xml_notebook.hpp"
+#include "xml_notebook.tpp"
 
 #include "alert.hpp"
 #include "input.hpp"
@@ -60,15 +61,21 @@
 // Perhaps the dependency on the collection of potentially-available
 // data cannot be removed.
 
-// Custom event to trigger a call to SetFocus(). This action requires
-// a custom event because wxFocusEvent does not change focus--it only
-// notifies the affected windows that focus changes have occurred.
-//
-// On the msw platform, ms cautions against changing focus in a
-// WM_?ETFOCUS handler, which can have dire results. Instead, use
-//   wxCommandEvent event0(wxEVT_REFOCUS_INVALID_CONTROL);
-//   wxPostEvent(pointer_to_window_to_get_focus, event0);
-//
+/// Custom event to trigger a call to SetFocus(). This action requires
+/// a custom event because wxFocusEvent does not change focus--it only
+/// notifies the affected windows that focus changes have occurred.
+///
+/// On the msw platform, ms cautions against changing focus in a
+/// WM_?ETFOCUS handler, which can have dire results; and focus
+/// messages are just informational and can't be vetoed, probably to
+/// prevent rogue applications from refusing to yield focus.
+///
+/// Usage: where focus has undesirably been lost, do:
+///   wxCommandEvent event0(wxEVT_REFOCUS_INVALID_CONTROL);
+///   wxPostEvent(pointer_to_window_to_get_focus, event0);
+/// and add a handler in the event table that invokes a function that
+/// calls SetFocus().
+
 wxEventType const wxEVT_REFOCUS_INVALID_CONTROL = wxNewEventType();
 
 #define EVT_REFOCUS_INVALID_CONTROL(id, fn) \
@@ -81,7 +88,7 @@ wxEventType const wxEVT_REFOCUS_INVALID_CONTROL = wxNewEventType();
                 (wxStaticCastEvent(wxCommandEventFunction, &fn) \
                 ) \
             ) \
-        ,(wxObject *) NULL \
+        ,0 \
         ),
 
 // Entries alphabetized by function name.
@@ -422,16 +429,11 @@ void XmlNotebook::SetupControlItems
         }
 }
 
-wxNotebookPage& XmlNotebook::CurrentPage()
+wxNotebookPage& XmlNotebook::CurrentPage() const
 {
     // INELEGANT !! This window could be held elsewhere, e.g. as a reference.
-    int id = XRCID("input_notebook");
-    wxNotebook* notebook = dynamic_cast<wxNotebook*>(FindWindow(id));
-    if(!notebook)
-        {
-        fatal_error() << "No notebook window." << LMI_FLUSH;
-        }
-    wxNotebookPage* page = notebook->GetPage(notebook->GetSelection());
+    wxNotebook& notebook = WindowFromXrcName<wxNotebook>("input_notebook");
+    wxNotebookPage* page = notebook.GetPage(notebook.GetSelection());
     if(!page)
         {
         fatal_error() << "No page selected in notebook." << LMI_FLUSH;
@@ -439,21 +441,9 @@ wxNotebookPage& XmlNotebook::CurrentPage()
     return *page;
 }
 
-// This might be cached, after verifying up front that the xml dialog
-// resource provides a static-text 'diagnostics' control on every tab.
-//
-wxStaticText* XmlNotebook::DiagnosticsWindow()
+wxStaticText& XmlNotebook::DiagnosticsWindow() const
 {
-    // Confirm that the xml dialog resource provides a static-text
-    // 'diagnostics' control.
-    wxStaticText* diagnostics_window = dynamic_cast<wxStaticText*>
-        (FindWindow(XRCID("diagnostics"))
-        );
-    if(!diagnostics_window)
-        {
-        fatal_error() << "No 'diagnostics' window." << LMI_FLUSH;
-        }
-    return diagnostics_window;
+    return WindowFromXrcName<wxStaticText>("diagnostics");
 }
 
 // OnUpdateGUI() doesn't handle focus changes, so this function is
@@ -650,7 +640,7 @@ void XmlNotebook::OnUpdateGUI(wxUpdateUIEvent& event)
         }
     cached_transfer_data_ = transfer_data_;
 
-    DiagnosticsWindow()->SetLabel("");
+    DiagnosticsWindow().SetLabel("");
     std::vector<std::string>::const_iterator i;
     std::vector<std::string> names_of_changed_controls;
     for(i = input_.member_names().begin(); i != input_.member_names().end(); ++i)
@@ -669,7 +659,7 @@ void XmlNotebook::OnUpdateGUI(wxUpdateUIEvent& event)
             }
         catch(std::exception const& e)
             {
-            DiagnosticsWindow()->SetLabel(*i + ": " + e.what());
+            DiagnosticsWindow().SetLabel(*i + ": " + e.what());
             }
         }
 
@@ -745,7 +735,9 @@ os << "Only the following controls were processed correctly:" << std::endl;
         Transferor* t = dynamic_cast<Transferor*>(w->GetValidator());
         if(t)
             {
-            if(w != FindWindow(XRCID(t->name().c_str())))
+            // INELEGANT !! Assert this once, upon construction e.g.,
+            // or perhaps when page changes.
+            if(w != &WindowFromXrcName<wxWindow>(t->name()))
                 {
                 fatal_error()
                     << "Input name '"
@@ -753,7 +745,7 @@ os << "Only the following controls were processed correctly:" << std::endl;
                     << "': window "
                     << w
                     << " being traversed doesn't match window "
-                    << FindWindow(XRCID(t->name().c_str()))
+                    << &WindowFromXrcName<wxWindow>(t->name())
                     << " found from wxxrc ID "
                     << XRCID(t->name().c_str())
                     << " ."
@@ -811,13 +803,13 @@ bool XmlNotebook::Validate()
     if(transfer_data_["comments"].size() < 7)
         {
         hold_focus_window_ = 0;
-        DiagnosticsWindow()->SetLabel("");
+        DiagnosticsWindow().SetLabel("");
         return true;
         }
     else
         {
-        hold_focus_window_ = FindWindow(XRCID("comments"));
-        DiagnosticsWindow()->SetLabel("Error:\nInput exceeds six characters.");
+        hold_focus_window_ = &WindowFromXrcName<wxWindow>("comments");
+        DiagnosticsWindow().SetLabel("Error:\nInput exceeds six characters.");
         return false;
         }
 */
@@ -869,12 +861,12 @@ void XmlNotebook::ValidateTextControl(wxWindow* w)
         )
         {
         hold_focus_window_ = 0;
-        DiagnosticsWindow()->SetLabel("");
+        DiagnosticsWindow().SetLabel("");
         }
     else
         {
         hold_focus_window_ = textctrl;
-//        DiagnosticsWindow()->SetLabel("Invalid.");
+//        DiagnosticsWindow().SetLabel("Invalid.");
         }
 }
 
