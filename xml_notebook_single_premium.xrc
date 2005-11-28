@@ -24,7 +24,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: xml_notebook_single_premium.xrc,v 1.4 2005-11-22 21:22:24 wboutin Exp $
+    $Id: xml_notebook_single_premium.xrc,v 1.5 2005-11-28 17:52:50 wboutin Exp $
 
     This version is generic. It strives to present every input field
     the system offers, in a way that suits the main developer's tastes.
@@ -194,7 +194,6 @@
                     <flag>wxGROW|wxALL</flag>
                     <border>40</border>
                     <object class="wxStaticText">
-                        <label></label>
                     </object>
                 </object>
                 <object class="sizeritem">
@@ -776,7 +775,6 @@
                                     <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxLEFT</flag>
                                     <border>4</border>
                                     <object class="wxStaticText">
-                                        <label></label>
                                     </object>
                                 </object>
                                 <object class="sizeritem">
@@ -835,7 +833,6 @@
                                     <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxLEFT</flag>
                                     <border>4</border>
                                     <object class="wxStaticText">
-                                        <label></label>
                                     </object>
                                 </object>
                                 <object class="sizeritem">
@@ -864,7 +861,6 @@
             <object class="wxFlexGridSizer">
                 <cols>2</cols>
                 <growablecols>1</growablecols>
-                <growablerows></growablerows>
                 <object class="sizeritem">
                     <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
                     <border>4</border>
