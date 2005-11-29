@@ -1,4 +1,4 @@
-// Life-insurance illustration input.
+// MVC Model for life-insurance illustrations.
 //
 // Copyright (C) 2004, 2005 Gregory W. Chicares.
 //
@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input.cpp,v 1.9 2005-10-21 16:58:23 chicares Exp $
+// $Id: input.cpp,v 1.10 2005-11-29 14:00:27 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
