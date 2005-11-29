@@ -1,4 +1,4 @@
-// Life-insurance illustration input.
+// MVC Model for life-insurance illustrations.
 //
 // Copyright (C) 2004, 2005 Gregory W. Chicares.
 //
@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input.hpp,v 1.7 2005-10-16 16:36:15 chicares Exp $
+// $Id: input.hpp,v 1.8 2005-11-29 14:00:27 chicares Exp $
 
 #ifndef input_hpp
 #define input_hpp
@@ -53,21 +53,19 @@ class InputSequence;
 
 /// Design notes for class input.
 ///
-/// TODO ?? Revise.
-/// This sample input class is part of a demonstration program that
-/// uses wxWindows and its xml resource library to implement dialogs
-/// that can be maintained through xml resources instead of C++ code.
+/// This class is the Model of the MVC framework for life-insurance
+/// input.
 ///
-/// Two separate input data structures are used. One is simply a
-/// std::map<std::string> > that captures user input exactly. The other
-/// is this class, which holds data of various types that a program
-/// would capture from GUI input and use downstream. These two data
-/// structures are distinct because conversion between them may not
-/// perfectly preserve value.
+/// The MVC framework uses two distinct data structures. One is simply
+/// a std::map<std::string>,std::string> > member of the Controller;
+/// it captures user input exactly. The other, this class, holds data
+/// of various types that a real program might capture from GUI input
+/// and use downstream. These two data structures are distinct because
+/// conversion between them may not perfectly preserve value.
 ///
 /// For example, "1.07" in a text control may be translated to
 ///   (double)(1.07)
-/// but the latter converted to a string, with the maximum precision
+/// but the latter, converted to a string, with the maximum precision
 /// the machine is capable of, would differ from the original "1.07".
 /// A user who reloads saved input from a file would likely protest
 /// "but I didn't say 1.0700000000001". Truncating to a 'reasonable'
@@ -78,21 +76,32 @@ class InputSequence;
 /// [Note: that example impedes interconvertibility. Adding floating-
 /// point text controls later will force us to grapple with that.]
 ///
-/// Members are of custom datatypes that express certain relationships
-/// among controls. For example:
-///   - discrete-valued controls like wxControlWithItems and wxRadioBox
-///     are mapped to an enumerative type that constrains assignment to
-///     values that are permissible within the overall context of the
-///     input object;
-///   - a radiobox might offer three choices, but allow only the first
-///     two if the input object is in a particular state determined by
-///     the contents of other controls.
+/// Data members are UDTs that help express certain relationships
+/// among the controls that represent them. For example:
+///  - discrete-valued controls like wxControlWithItems and wxRadioBox
+///    are mapped to an enumerative type that constrains assignment to
+///    values that are permissible within the overall context of the
+///    input object;
+///  - a radiobox might offer three choices, but allow only the first
+///    two if the input object is in a particular state determined by
+///    the contents of other controls;
+///  - a text control that represents a number might have a maximum
+///    and a minimum value.
+/// These UDTs bear values in a natural, more primitive type, provide
+/// for conversion to and from strings, and hold enablement state and
+/// other information for use by controls.
 ///
-/// TODO ?? Add functions to convert to and from a std::map<std::string> >?
+/// Harmonize() enforces rules governing relationships among data and
+/// their associated controls. Perhaps it should be factored into a
+/// const function that handles only enablement (which would entail
+/// making ancillary, non-value-bearing data members of the UDTs
+/// mutable) and a non-const function that forces changes in values.
 ///
 /// reset_database(): Reset database if necessary, i.e., if the
 /// product or any database axis changed. Conditionally update
 /// general-account rate (see implementation for details).
+///
+/// TODO ?? Add functions to convert to and from a std::map<std::string> >?
 
 class Input
     :public MemberSymbolTable<Input>
