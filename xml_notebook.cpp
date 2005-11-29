@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xml_notebook.cpp,v 1.9 2005-11-27 01:40:12 chicares Exp $
+// $Id: xml_notebook.cpp,v 1.10 2005-11-29 14:00:31 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -45,6 +45,8 @@
 
 // TODO ?? Development plans:
 //
+// Eventually, input will come from a document class.
+//
 // The eventual document class represents the whole input class.
 // The input class expresses all available data that can potentially
 // be used. Several alternative .xrc files may present different
@@ -60,6 +62,11 @@
 //
 // Perhaps the dependency on the collection of potentially-available
 // data cannot be removed.
+//
+// Rename this file and class to make it plain that it's an MVC
+// Controller.
+//
+// Idea: if no 'diagnostics' window found, use a messagebox e.g.
 
 /// Custom event to trigger a call to SetFocus(). This action requires
 /// a custom event because wxFocusEvent does not change focus--it only
@@ -139,8 +146,7 @@ XmlNotebook::XmlNotebook(wxWindow* parent, Input& input)
     std::vector<std::string>::const_iterator i;
     for(i = input_.member_names().begin(); i != input_.member_names().end(); ++i)
         {
-        transfer_data_[*i] = input_[*i].str();
-        Bind(*i, transfer_data_[*i]);
+        Bind(*i, transfer_data_[*i] = input_[*i].str());
         }
 }
 
@@ -157,7 +163,7 @@ XmlNotebook::~XmlNotebook()
 // class wxWindow, on which wxWindow::SetValidator() can be called
 // without knowing the control type.
 //
-void XmlNotebook::Bind(std::string const& name, std::string& data)
+void XmlNotebook::Bind(std::string const& name, std::string& data) const
 {
     wxWindow* window = FindWindow(XRCID(name.c_str()));
     // TODO ?? Don't throw--this isn't actually failure. Rather,
@@ -505,9 +511,11 @@ void XmlNotebook::OnChildFocus(wxChildFocusEvent&)
     // When this function is called by the framework, the control that
     // must be validated has already lost focus, and another window is
     // about to gain focus, but hasn't quite yet. Simply calling
-    // SetFocus() here would not work because focus would still shift
-    // to the other window that's about to gain focus. Posting an
-    // event to refocus the invalid window solves that problem.
+    // SetFocus() here would not work: as soon as the present function
+    // returns, focus would shift to the other window that's about to
+    // gain focus. Posting an event to refocus the invalid window,
+    // after this function has returned and after the the pending
+    // focus change has occurred, solves that problem.
     if(hold_focus_window_)
         {
         wxCommandEvent event0(wxEVT_REFOCUS_INVALID_CONTROL);
@@ -529,9 +537,9 @@ void XmlNotebook::OnInitDialog(wxInitDialogEvent&)
 
 // TODO ?? Remove this function when the kludge it contains becomes
 // needless.
-void XmlNotebook::OnOK(wxCommandEvent& e)
+void XmlNotebook::OnOK(wxCommandEvent& event)
 {
-    wxDialog::OnOK(e);
+    wxDialog::OnOK(event);
     if(0 == GetReturnCode())
         {
         return;
@@ -595,9 +603,7 @@ void XmlNotebook::OnPageChanging(wxNotebookEvent& event)
             }
         }
 
-// TODO ?? expunge Validate()?
-//    if(hold_focus_window_)
-    if(hold_focus_window_ || !Validate())
+    if(hold_focus_window_)
         {
         event.Veto();
         hold_focus_window_->SetFocus();
@@ -616,6 +622,7 @@ void XmlNotebook::OnPageChanging(wxNotebookEvent& event)
 
 void XmlNotebook::OnRefocusInvalidControl(wxCommandEvent&)
 {
+    LMI_ASSERT(hold_focus_window_);
     hold_focus_window_->SetFocus();
 }
 
@@ -657,9 +664,9 @@ void XmlNotebook::OnUpdateGUI(wxUpdateUIEvent& event)
                 input_[*i] = transfer_data_[*i];
                 }
             }
-        catch(std::exception const& e)
+        catch(std::exception const& event)
             {
-            DiagnosticsWindow().SetLabel(*i + ": " + e.what());
+            DiagnosticsWindow().SetLabel(*i + ": " + event.what());
             }
         }
 
@@ -774,48 +781,6 @@ bool XmlNotebook::TransferDataToWindow()
 return CurrentPage().wxWindow::TransferDataToWindow();
 }
 
-// TODO ?? Is this worth rewriting?
-//
-// WX !! This shows that wxDialog::Validate() isn't generally useful
-// for our purposes. The library calls it when the user signals that
-// input is complete, e.g. by pressing the 'OK' button. Even though we
-// call it here on notebook page changes too, this isn't ideal: users
-// shouldn't be able to leave an invalid field. Refocusing the invalid
-// field upon later detection of error isn't good enough: the user's
-// train of thought has already moved on.
-//
-bool XmlNotebook::Validate()
-{
-/*
-    // It's not obvious whether wxDialog::Validate() should be called
-    // here, or where in relation to other processing. Probably this
-    // is the right place; it doesn't matter much because we won't use
-    // this approach in production.
-    wxDialog::Validate();
-
-    // Don't signal an error when this function is called before the
-    // dialog is fully created.
-    if(updates_blocked_)
-        {
-        return true;
-        }
-
-    if(transfer_data_["comments"].size() < 7)
-        {
-        hold_focus_window_ = 0;
-        DiagnosticsWindow().SetLabel("");
-        return true;
-        }
-    else
-        {
-        hold_focus_window_ = &WindowFromXrcName<wxWindow>("comments");
-        DiagnosticsWindow().SetLabel("Error:\nInput exceeds six characters.");
-        return false;
-        }
-*/
-    return true;
-}
-
 void XmlNotebook::ValidateTextControl(wxWindow* w)
 {
     if(!w)
@@ -869,4 +834,11 @@ void XmlNotebook::ValidateTextControl(wxWindow* w)
 //        DiagnosticsWindow().SetLabel("Invalid.");
         }
 }
+
+#if !wxCHECK_VERSION(2,5,4)
+wxWindow* XmlNotebook::FindWindow(long int window_id) const
+{
+    return const_cast<XmlNotebook*>(this)->wxDialog::FindWindow(window_id);
+}
+#endif // !wxCHECK_VERSION(2,5,4)
 
