@@ -24,7 +24,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: xml_notebook.xrc,v 1.20 2005-09-19 19:52:21 wboutin Exp $
+    $Id: xml_notebook.xrc,v 1.21 2005-11-29 18:53:38 wboutin Exp $
 
     This version is generic. It strives to present every input field
     the system offers, in a way that suits the main developer's tastes.
@@ -634,7 +634,7 @@ demonstrate a defect in the wx library. See
                         </object>
                         <object class="sizeritem">
                             <flag>wxGROW</flag>
-                            <object class="wxTextCtrl" name="insured_name">
+                            <object class="wxTextCtrl" name="InsuredName">
                             </object>
                         </object>
                     </object>
@@ -832,7 +832,7 @@ demonstrate a defect in the wx library. See
                         </object>
                         <object class="sizeritem">
                             <flag>wxGROW</flag>
-                            <object class="wxTextCtrl" name="agent_name">
+                            <object class="wxTextCtrl" name="AgentName">
                             </object>
                         </object>
                     </object>

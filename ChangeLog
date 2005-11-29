@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.245 2005-11-29 14:00:31 chicares Exp $
+// $Id: ChangeLog,v 1.246 2005-11-29 18:53:38 wboutin Exp $
 
 MAINTENANCE
 
@@ -4778,4 +4778,9 @@ Improve documentation.
   xml_notebook.hpp
   xml_notebook.tpp
 Import selected changes from skeleton branch.
+
+20051129T1837Z <wboutin@massmutual.com> [1223]
+
+  xml_notebook.xrc
+Fix defect #14006.
 
