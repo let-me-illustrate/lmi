@@ -19,42 +19,241 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xml_notebook.hpp,v 1.5 2005-11-27 01:40:12 chicares Exp $
+// $Id: xml_notebook.hpp,v 1.6 2005-11-29 14:00:31 chicares Exp $
 
 #ifndef xml_notebook_hpp
 #define xml_notebook_hpp
 
 #include "config.hpp"
 
-#include "expimp.hpp"
-
 #include "obstruct_slicing.hpp"
 
 #include <boost/utility.hpp>
 
 #include <wx/dialog.h>
+#include <wx/notebook.h> // wxNotebookEvent, wxNotebookPage
 #include <wx/stattext.h>
 
 #include <map>
 #include <string>
 
+class Input;
 class mc_enum_base;
 class WXDLLEXPORT wxControlWithItems;
 
-// Unlike other event classes used here, class wxNotebookEvent is not
-// defined by including class wxDialog's header.
-class WXDLLEXPORT wxNotebookEvent;
+/// A Model-View-Controller (MVC) framework for validated wx input.
+///
+/// What it is.
+///
+/// This framework handles enablement rules and value constraints for
+/// GUI input in a dialog, or in a set of interrelated dialogs in a
+/// wx 'notebook'.
+///
+/// What it isn't.
+///
+/// MVC may suggest Doc-View to wx programmers. This is different. It
+/// has nothing to do with wxDocument and wxView, whose purpose is to
+/// mediate between files and applications. Here, the model needn't
+/// even be a document, and the purpose is to mediate between dialogs
+/// and data constrained by rules.
+///
+/// Event-driven programming: not.
+///
+/// Many frameworks encourage an event-driven implementation, which wx
+/// can of course support:
+///
+///   EVT_CHANGE_DATE(BirthDate,      Dialog::OnChangeBirthDate)
+///   EVT_CHANGE_DATE(MarriageDate,   Dialog::OnChangeMarriageDate)
+///   EVT_CHANGE_DATE(RetirementDate, Dialog::OnChangeRetirementDate)
+///
+///  - Dialog knows what controls it contains.
+///  - Dialog::OnChangeXXXDate() knows the semantics of its
+///      particular 'XXX' date instance.
+///  - Dialog::OnChangeXXXDate() knows the semantics of other controls
+///      that are affected by it: one date's value may affect another
+///      date's range, e.g., one may marry after retirement, but not
+///      before birth.
+///
+/// This is the "RAD" or "visual" approach. The programmer places a
+/// control on a dialog, then sets its "properties" or writes event
+/// handlers. It's easy to create a prototype this way, but it's easy
+/// to make mistakes, too. The example above has three separate event
+/// handlers that must do similar things, creating a temptation to use
+/// copy-and-paste programming; after a few years of changes, they may
+/// grow to look very different--especially if the controls are on
+/// different dialogs, which are generally implemented in different
+/// classes within different source files.
+///
+/// Each event handler probably resets the range of the other two
+/// controls. If that forces another control's out-of-range value to
+/// change, then that other control may emit events that trigger their
+/// own handlers, which can require semaphores to prevent circularity.
+///
+/// This approach may be okay for dialogs with no interdependency
+/// among controls, such as {name, address, city}. But if dependencies
+/// are present, where are they coded? In the paradigm
+///  - input is managed by dialogs
+///  - dialogs are in distinct translation units
+///  - dialogs have controls
+///  - controls have properties or event handlers
+/// it seems natural to code dependencies in event handlers. Logic to
+/// validate input is then scattered across many functions in many
+/// GUI-dependent translation units. If it later becomes necessary to
+/// validate input from another source such as a web server, or if the
+/// application is migrated to a different GUI framework, then all the
+/// validation code must be factored out of the GUI event handlers,
+/// which is no simple task. MVC prevents these problems.
+///
+/// Separation of concerns.
+///
+/// Everything is factored into three distinct classes with minimal
+/// interdependencies. Ideally,
+///  - only the Model knows problem-domain rules;
+///  - only the View knows which data a particular user sees, or
+///      what controls represent them;
+///  - the controller knows nothing except how to work with Models and
+///      Views generically;
+/// and this stringent separation of concerns makes the implementation
+/// smaller, more correct, and easier to understand and maintain, yet
+/// flexible. This ideal is not completely achieved here: see the
+/// "Shortcomings" section below.
+///
+/// Model: A class that contains all input parameters as data members,
+/// and implements all problem-domain rules. Parameters are UDTs that
+/// know what values are valid (date within some range, e.g.). One
+/// control's valid range or enablement often depends on another's
+/// value; member functions work with the parameter UDTs to handle
+/// that. One could wish for a prolog inference engine integrated with
+/// C++, because this is all about backward chaining over Horn clauses.
+///
+/// Each UDT embodies the desired enablement state of the associated
+/// control. Each numeric UDT embodies a range of allowable values.
+/// Each enumerative UDT embodies a subset of allowable enumerators.
+/// Collectively, these properties embody the problem-domain rules.
+///
+/// As implemented here, the Model uses a symbolic-member-name library
+/// so that, e.g.,
+///   Model["DateOfBirth"] maps to Model::DateOfBirth
+/// and a member function returns a list of all data members, which
+/// can be traversed with iterators. Similarly, its enumerative UDTs
+/// provide string names for each enumerator, e.g., so that
+///   Model["Gender"] = "Female";
+/// may be written without worrying about particular enum values.
+///
+/// View: An '.xrc' file that specifies control layout. Control names
+/// in the '.xrc' file must match the Model's data-member names: e.g.,
+///   <object class="wxDatePickerCtrl" name="DateOfBirth">
+/// requires
+///   wxDateTime Model::DateOfBirth; // Same name.
+/// which may be accessed by the same string:
+///   Model["DateOfBirth"] // As above.
+/// Furthermore, enumerative controls such as wxRadioBox or wxComboBox
+/// must use the exact strings provided by the Model; otherwise, it
+/// would be necessary either to depend on underlying enum values:
+///   // This breaks if the enum value changes.
+///   Model["Gender"] = 2;
+/// or to translate strings somehow:
+///   // Where would the translation table reside?
+///   Model["Gender"] = translate("Woman");
+/// either of which forces an undesirable dependency between the View
+/// and the Model.
+///
+/// TODO ?? It appears that the order of enumerators in a wxRadioBox
+/// must also match the Model's ordering, which seems too restrictive.
+///
+/// Control types must be compatible with data types. Some data types
+/// offer a choice:
+///  - numeric     UDTs: wxTextCtrl or perhaps wxSpinCtrl
+///  - enumerative UDTs: wxRadioBox or a wxControlWithItems derivative
+/// while others naturally map to a single control type:
+///  - string      UDTs: wxTextCtrl
+///  - date        UDTs: wxDatePickerCtrl
+///
+/// The View is a 'skin'. It can be customized for any set of users by
+/// changing the '.xrc' file, without changing the program. Each skin
+/// chooses among the compatible controls listed above, for each data
+/// member. Compatibility does not imply good taste: wxSpinCtrl may be
+/// a poor choice for an integer with a range [-10000, 10000], but the
+/// framework doesn't forbid it.
+///
+/// Skins may ignore data members, provided of course that the Model
+/// provides reasonable defaults.
+///
+/// The tabs in a 'notebook' are determined by the skin, as are the
+/// selection, order, and layout of controls on each tab.
+///
+/// At least for now, wxRadioBox is a special case: unlike other
+/// controls, the View must know what enumerative choices the Model
+/// offers. This makes layout predictable, because the area required
+/// to display a wxRadioBox depends on the number of enumerators and
+/// the length of each one's string name. And it does prevent nasty
+/// surprises, e.g., if one skin presents the names of all chemical
+/// elements in a wxComboBox, and another tries to use a wxRadioBox.
+/// However, it also creates a regrettable dependency between the
+/// Model and the View, so perhaps this design decision should be
+/// reconsidered.
+///
+/// This data-driven design precludes the use of wxButton in the View.
+/// Other controls are stateful substantives, but pushbuttons are
+/// stateless predicates. The framework could work around this, e.g.,
+/// by binding a pushbutton to a semaphore that's raised when the
+/// button is pressed and lowered when the Model has performed the
+/// appropriate action. In practice, lmi hasn't needed pushbuttons
+/// other than the usual {OK, Cancel, Help}, which are hardwired.
+///
+/// [Here, I'd like to say:
+/// Controller: A template class with a Model parameter
+///   Controller<ConcreteModel> : public wxDialog
+/// but can't yet; meanwhile...]
+///
+/// Controller: A class derived from wxDialog that mediates between
+/// the Model and the View.
+///
+/// The Controller's ctor gets the Model's list of data members and
+/// pairs them with IDs in the '.xrc' file, throwing an exception if
+/// the names don't match. The correspondence must be one-to-one, but
+/// but not necessarily onto: a View doesn't have to offer a control
+/// for every entity in the Model. Class Transferor, implemented and
+/// documented elsewhere, performs this pairing and implements
+/// bidirectional data transfer.
+///
+/// The Controller essentially polls controls and reacts to changes in
+/// their values. The polling is performed within wx, which generates
+/// wxUpdateUIEvent pseudoevents. The resemblance to an event-driven
+/// style is accidental: a fundamentally event-driven Controller would
+/// need to anticipate all the value-change events that the View might
+/// beget, and would suffer from the problems described above. Still,
+/// this wxUpdateUIEvent-driven Controller treats notebook-page-change
+/// and focus events as such, so that it can force a wxTextCtrl with
+/// invalid data to retain focus.
+///
+/// When control values change, the Controller passes them to the
+/// Model. The Model validates the change (described separately below)
+/// and updates its UDT members to reflect enablement and constraints
+/// on numeric ranges or enumerator availability. Then the Controller
+/// updates the View to correspond to the updated Model. Enablement
+/// and constraints (for example, the choices offered in a wxComboBox)
+/// as well as values may change in the View.
+///
+/// Validation.
+///
+/// [to be written--not well implemented yet]
+///
+/// Shortcomings.
+///
+/// These shortcomings are explained in detail above:
+///  - wxButton is not supported;
+///  - for wxRadioBox, the View must know the Model's enumerators;
+///  - the Model dictates enumeration strings: Views can't vary them;
+///  - numeric validation is not yet completely implemented;
+///  - the Controller should take the Model as a template parameter.
+/// Furthermore, no automated unit tests are implemented yet.
+///
+/// A future version should factor out wxNotebook dependencies. This
+/// class is derived only from wxDialog, so clearly it can work as
+/// well with a wxDialog or anything similar.
 
-// TODO ?? Explain--it's documented as a typedef by wx help.
-typedef wxWindow wxNotebookPage;
-
-class Input;
-
-// Member function
-//   Validate()
-// cannot be const because wxWindowBase::Validate() is a non-const
-// virtual, as perhaps it must be so that wx 'validators' can change
-// control contents, even though that capability is not useful here.
+namespace model_view_controller{} // doxygen workaround.
 
 // Text controls are validated when they lose focus. For at least one
 // (and perhaps all) of the platforms wx supports, it is not possible
@@ -69,6 +268,11 @@ class Input;
 // focus--unless it's a 'Cancel' button, which gains focus without
 // triggering validation of the control that lost focus.
 
+// Bind() associates a string key (shared with the Model) with a
+// string in data member transfer_data_, the latter being passed by
+// non-const reference because its identity is important as well as
+// its value.
+
 // DiagnosticsWindow() returns a wxStaticText& where a wxWindow& might
 // seem more general. Rationale: the implementation uses wxStaticText,
 // whose contents can be written only with GetLabel(); other controls
@@ -82,12 +286,14 @@ class XmlNotebook
     ,private boost::noncopyable
     ,virtual private obstruct_slicing<XmlNotebook>
 {
+    typedef std::map<std::string,std::string> string_map;
+
   public:
     XmlNotebook(wxWindow* parent, Input& input);
     ~XmlNotebook();
 
   private:
-    void Bind(std::string const& name, std::string& data);
+    void Bind(std::string const& name, std::string& data) const;
 
     void ConditionallyEnable();
 
@@ -140,15 +346,23 @@ class XmlNotebook
 
     // wxDialog overrides.
     virtual bool TransferDataToWindow();
-    virtual bool Validate(); // TODO ?? expunge?
 
     void ValidateTextControl(wxWindow*);
+
+    // Auxiliary functions to extend wxWindow::FindWindow().
+
+#if !wxCHECK_VERSION(2,5,4)
+    // Workaround: this function was not const until wx-2.5.4 .
+    wxWindow* FindWindow(long int window_id) const;
+#endif // !wxCHECK_VERSION(2,5,4)
 
     template<typename T>
     T& WindowFromXrcName(char const* name) const;
 
     template<typename T>
     T& WindowFromXrcName(std::string const& name) const;
+
+    // Data members.
 
     Input& input_;
 
@@ -157,8 +371,8 @@ class XmlNotebook
 
     bool updates_blocked_;
 
-    std::map<std::string, std::string> transfer_data_;
-    std::map<std::string, std::string> cached_transfer_data_;
+    string_map transfer_data_;
+    string_map cached_transfer_data_;
 
     DECLARE_EVENT_TABLE()
 };

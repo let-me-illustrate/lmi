@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.244 2005-11-28 17:52:50 wboutin Exp $
+// $Id: ChangeLog,v 1.245 2005-11-29 14:00:31 chicares Exp $
 
 MAINTENANCE
 
@@ -4767,4 +4767,15 @@ Import selected changes from skeleton branch.
   mingw_setup.make
   xml_notebook_single_premium.xrc
 Improve conformance.
+
+20051129T1400Z <chicares@cox.net> [1223]
+
+  input.cpp
+  input.hpp
+Improve documentation.
+
+  xml_notebook.cpp
+  xml_notebook.hpp
+  xml_notebook.tpp
+Import selected changes from skeleton branch.
 

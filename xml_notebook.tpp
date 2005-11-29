@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xml_notebook.tpp,v 1.1 2005-11-27 01:40:12 chicares Exp $
+// $Id: xml_notebook.tpp,v 1.2 2005-11-29 14:00:31 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -48,12 +48,7 @@ T& XmlNotebook::WindowFromXrcName(char const* name) const
         ||  boost::is_base_and_derived<wxWindow,T>::value
         ));
 
-#if wxCHECK_VERSION(2,5,4)
     T* ptr = dynamic_cast<T*>(FindWindow(XRCID(name)));
-#else  // !wxCHECK_VERSION(2,5,4)
-    // Work around a needless limitation removed in wx-2.5.4 .
-    T* ptr = dynamic_cast<T*>(const_cast<foo*>(this)->FindWindow(XRCID(name)));
-#endif // !wxCHECK_VERSION(2,5,4)
     if(!ptr)
         {
         fatal_error() << "No control named '" << name << "'." << LMI_FLUSH;
