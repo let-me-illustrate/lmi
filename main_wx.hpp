@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_wx.hpp,v 1.4 2005-11-23 04:10:26 chicares Exp $
+// $Id: main_wx.hpp,v 1.5 2005-11-30 01:36:41 chicares Exp $
 
 // Portions of this file are derived from wxWindows files
 //   samples/docvwmdi/docview.h (C) 1998 Julian Smart and Markus Holzem
@@ -53,7 +53,7 @@ class WXDLLEXPORT wxMDIChildFrame;
 
 class lmi_wx_app
     :public wxApp
-    ,virtual private boost::noncopyable
+    ,private boost::noncopyable
     ,virtual private obstruct_slicing<lmi_wx_app>
 {
   public:
