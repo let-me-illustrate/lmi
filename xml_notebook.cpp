@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xml_notebook.cpp,v 1.10 2005-11-29 14:00:31 chicares Exp $
+// $Id: xml_notebook.cpp,v 1.11 2005-11-30 01:36:45 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -563,14 +563,15 @@ void XmlNotebook::OnPageChanged(wxNotebookEvent& event)
     ConditionallyEnable();
     CurrentPage().TransferDataToWindow();
 
-    // WX !! If first control is disabled, keyboard navigation breaks.
-    // This doesn't fix it--makes it crash, actually:
-/*
-    if(!FindFocus()->IsEnabled())
+    // WX !! Normally, the first interactive control would have focus.
+    // But if that control was just disabled, then no window has
+    // focus--so focus the current tab. See:
+    //   http://lists.nongnu.org/archive/html/lmi/2005-11/msg00040.html
+
+    if(!FindFocus())
         {
-        FindWindow(wxID_OK)->SetFocus();
+        SetFocus();
         }
-*/
 }
 
 // Called when page is about to change, but hasn't yet.
@@ -632,6 +633,19 @@ void XmlNotebook::OnUpdateGUI(wxUpdateUIEvent& event)
     if(updates_blocked_)
         {
         return;
+        }
+
+    // These things "should never happen". But see:
+    //   http://lists.nongnu.org/archive/html/lmi/2005-11/msg00040.html
+    if(0 == FindFocus())
+        {
+        warning() << "No window has focus." << LMI_FLUSH;
+        SetFocus();
+        }
+    else if(!FindFocus()->IsEnabled())
+        {
+        warning() << "Disabled window has focus." << LMI_FLUSH;
+        SetFocus();
         }
 
     // Exit immediately if nothing changed. The library calls this
