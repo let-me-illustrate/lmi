@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.246 2005-11-29 18:53:38 wboutin Exp $
+// $Id: ChangeLog,v 1.247 2005-11-30 01:36:45 chicares Exp $
 
 MAINTENANCE
 
@@ -4783,4 +4783,13 @@ Import selected changes from skeleton branch.
 
   xml_notebook.xrc
 Fix defect #14006.
+
+20051130T0136Z <chicares@cox.net> [1223]
+
+  main_wx.hpp
+Remove unnecessary virtual inheritance.
+
+  xml_notebook.cpp
+Fix keyboard navigation error by ensuring that some window always has
+focus.
 
