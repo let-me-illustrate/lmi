@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustration_document.hpp,v 1.2 2005-06-15 05:05:04 chicares Exp $
+// $Id: illustration_document.hpp,v 1.3 2005-12-01 04:06:34 chicares Exp $
 
 // Because illustration windows have their own functions for loading
 // and saving files, override OnOpenDocument() and OnSaveDocument()
@@ -35,6 +35,7 @@
 
 #include <boost/utility.hpp>
 
+#include <wx/defs.h> // WXDLLEXPORT
 #include <wx/docview.h>
 
 /// WX !! The wx document-view implementation has no notion of 'child'
@@ -62,8 +63,10 @@ class IllustrationDocument
     IllustrationDocument();
     virtual ~IllustrationDocument();
 
+    IllustrationView& DominantView() const;
+
   private:
-    wxHtmlWindow* DominantViewWindow() const;
+    wxHtmlWindow& DominantViewWindow() const;
 
     // wxDocument overrides.
     virtual bool OnCreate(wxString const& filename, long int flags);

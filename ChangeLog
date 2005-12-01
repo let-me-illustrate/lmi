@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.247 2005-11-30 01:36:45 chicares Exp $
+// $Id: ChangeLog,v 1.248 2005-12-01 04:06:34 chicares Exp $
 
 MAINTENANCE
 
@@ -4792,4 +4792,21 @@ Remove unnecessary virtual inheritance.
   xml_notebook.cpp
 Fix keyboard navigation error by ensuring that some window always has
 focus.
+
+20051201T0406Z <chicares@cox.net> [1223]
+
+  census_document.cpp
+  census_document.hpp
+  census_view.cpp
+  census_view.hpp
+  illustration_document.cpp
+  illustration_document.hpp
+  illustration_view.cpp
+  illustration_view.hpp
+  main_wx.cpp
+  text_doc.cpp
+  text_doc.hpp
+  xml_notebook.cpp
+  xml_notebook.hpp
+Replace wxList::compatibility_iterator.
 

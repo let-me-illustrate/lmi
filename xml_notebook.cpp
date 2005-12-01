@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xml_notebook.cpp,v 1.11 2005-11-30 01:36:45 chicares Exp $
+// $Id: xml_notebook.cpp,v 1.12 2005-12-01 04:06:34 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -191,24 +191,22 @@ void XmlNotebook::ConditionallyEnable()
     // Solution: disable the optimization here, or have page changes
     // trigger a nonignorable UpdateUI event.
 
-    wxWindowList::compatibility_iterator node;
-    for
-        (node = CurrentPage().GetChildren().GetFirst()
-        ;node
-        ;node = node->GetNext()
-        )
+    wxWindowList wl = CurrentPage().GetChildren();
+    for(wxWindowList::const_iterator i = wl.begin(); i != wl.end(); ++i)
         {
-        // INELEGANT !! If this is too slow in practice, the enablement
-        // state could be cached, to indicate whether the GUI needs to
-        // be updated.
-        wxWindow* w = node->GetData();
-        Transferor* t = dynamic_cast<Transferor*>(w->GetValidator());
+        wxWindow* pw = *i;
+        LMI_ASSERT(0 != pw);
+        Transferor* t = dynamic_cast<Transferor*>(pw->GetValidator());
         if(t)
             {
+            // INELEGANT !! If this is too slow in practice (because
+            // refreshing item lists is expensive), then perhaps the
+            // enablement state could be cached.
+            //
             // TODO ?? The order of these two statements is probably
             // critical.
-            ConditionallyEnableControl(t->name(), *w);
-            ConditionallyEnableItems  (t->name(), *w);
+            ConditionallyEnableControl(t->name(), *pw);
+            ConditionallyEnableItems  (t->name(), *pw);
             }
         else
             {
@@ -527,7 +525,7 @@ void XmlNotebook::OnChildFocus(wxChildFocusEvent&)
 // wxNotebook instead of wxDialog.
 void XmlNotebook::OnInitDialog(wxInitDialogEvent&)
 {
-    Setup(GetChildren().GetFirst());
+    Setup(GetChildren());
 
     TransferDataToWindow();
 
@@ -714,7 +712,7 @@ ought to be forced through somehow.
     ConditionallyEnable();
 }
 
-void XmlNotebook::Setup(wxWindowList::compatibility_iterator initial_node)
+void XmlNotebook::Setup(wxWindowList const& wl)
 {
 /*
 // TODO ?? Temporary--diagnostics only.
@@ -728,43 +726,40 @@ std::ofstream os
 os << "Only the following controls were processed correctly:" << std::endl;
 */
 
-    wxWindowList::compatibility_iterator node;
-    for
-        (node = initial_node
-        ;node
-        ;node = node->GetNext()
-        )
+    for(wxWindowList::const_iterator i = wl.begin(); i != wl.end(); ++i)
         {
-        wxWindow* w = node->GetData();
+        wxWindow* pw = *i;
+        LMI_ASSERT(0 != pw);
+
 /*
         if
-            (   "-1" != w->GetName()
+            (   "-1" != pw->GetName()
             &&  input_.member_names().end() == std::find
                 (input_.member_names().begin()
                 ,input_.member_names().end()
-                ,w->GetName()
+                ,pw->GetName()
                 )
             )
             {
             warning()
-                << (w->GetName()
+                << (pw->GetName()
                 << " not in member name list."
                 << LMI_FLUSH
                 ;
             }
 */
-        Transferor* t = dynamic_cast<Transferor*>(w->GetValidator());
+        Transferor* t = dynamic_cast<Transferor*>(pw->GetValidator());
         if(t)
             {
             // INELEGANT !! Assert this once, upon construction e.g.,
             // or perhaps when page changes.
-            if(w != &WindowFromXrcName<wxWindow>(t->name()))
+            if(pw != &WindowFromXrcName<wxWindow>(t->name()))
                 {
                 fatal_error()
                     << "Input name '"
                     << t->name()
                     << "': window "
-                    << w
+                    << pw
                     << " being traversed doesn't match window "
                     << &WindowFromXrcName<wxWindow>(t->name())
                     << " found from wxxrc ID "
@@ -777,7 +772,7 @@ os << "Only the following controls were processed correctly:" << std::endl;
 os << t->name() << std::endl;
 os.flush();
 */
-            SetupControlItems(t->name(), *w);
+            SetupControlItems(t->name(), *pw);
             }
         else
             {
@@ -785,7 +780,7 @@ os.flush();
             // example, most static controls.
             ;
             }
-            Setup(w->GetChildren().GetFirst());
+        Setup(pw->GetChildren());
         }
 }
 

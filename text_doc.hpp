@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: text_doc.hpp,v 1.2 2005-03-12 16:46:03 chicares Exp $
+// $Id: text_doc.hpp,v 1.3 2005-12-01 04:06:34 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/doc.h (C) 1998 Julian Smart and Markus Holzem
@@ -29,7 +29,7 @@
 // class out of a larger file, and in the later years given in the
 // copyright notice above.
 
-// Since text windows have their own functions for loading and saving
+// Because text windows have their own functions for loading and saving
 // files, override OnOpenDocument() and OnSaveDocument() instead of
 // LoadObject and SaveObject.
 
@@ -56,7 +56,7 @@ class TextEditDocument
     virtual bool OnOpenDocument(wxString const& filename);
     virtual bool OnSaveDocument(wxString const& filename);
 
-    wxTextCtrl* DominantViewWindow() const;
+    wxTextCtrl& DominantViewWindow() const;
 
     DECLARE_DYNAMIC_CLASS(TextEditDocument)
 };

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: census_document.hpp,v 1.2 2005-11-06 15:28:25 chicares Exp $
+// $Id: census_document.hpp,v 1.3 2005-12-01 04:06:34 chicares Exp $
 
 // WX !! Override OnOpenDocument() and OnSaveDocument() instead of
 // LoadObject() and SaveObject(): the latter would probably work, but
@@ -54,7 +54,7 @@ class CensusDocument
     virtual ~CensusDocument();
 
   private:
-    wxListView* DominantViewWindow() const;
+    wxListView& DominantViewWindow() const;
 
     // wxDocument overrides.
     virtual bool OnCreate(wxString const& filename, long int flags);
