@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_wx.cpp,v 1.25 2005-11-24 05:22:23 chicares Exp $
+// $Id: main_wx.cpp,v 1.26 2005-12-01 04:06:34 chicares Exp $
 
 // Portions of this file are derived from wxWindows files
 //   samples/docvwmdi/docview.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -652,16 +652,11 @@ bool lmi_wx_app::OnInit()
     return true;
 }
 
-void lmi_wx_app::OnMenuOpen(wxMenuEvent& event)
+void lmi_wx_app::OnMenuOpen(wxMenuEvent&)
 {
-    // WX !! The wx-2.5.1 documentation says wxWindow::GetChildren()
-    // returns a wxList&, but it really returns a wxWindowList&.
     int child_frame_count = 0;
-    for
-        (wxWindowList::const_iterator i = frame_->GetChildren().begin()
-        ;i != frame_->GetChildren().end()
-        ;++i
-        )
+    wxWindowList wl = frame_->GetChildren();
+    for(wxWindowList::const_iterator i = wl.begin(); i != wl.end(); ++i)
         {
         child_frame_count += !!dynamic_cast<wxMDIChildFrame*>(*i);
         }

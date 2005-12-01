@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xml_notebook.hpp,v 1.6 2005-11-29 14:00:31 chicares Exp $
+// $Id: xml_notebook.hpp,v 1.7 2005-12-01 04:06:34 chicares Exp $
 
 #ifndef xml_notebook_hpp
 #define xml_notebook_hpp
@@ -286,6 +286,8 @@ class XmlNotebook
     ,private boost::noncopyable
     ,virtual private obstruct_slicing<XmlNotebook>
 {
+    friend class mvc_test;
+
     typedef std::map<std::string,std::string> string_map;
 
   public:
@@ -296,53 +298,34 @@ class XmlNotebook
     void Bind(std::string const& name, std::string& data) const;
 
     void ConditionallyEnable();
-
-    void ConditionallyEnableControl
-        (std::string const& input_name
-        ,wxWindow&          control
-        );
-
-    void ConditionallyEnableItems
-        (std::string const& input_name
-        ,wxWindow&          control
-        );
+    void ConditionallyEnableControl(std::string const&, wxWindow&);
+    void ConditionallyEnableItems  (std::string const&, wxWindow&);
 
     wxNotebookPage& CurrentPage() const;
     wxStaticText& DiagnosticsWindow() const;
 
-    bool ItemBoxNeedsRefreshing
-        (mc_enum_base*       base_datum
-        ,wxControlWithItems& itembox
-        );
+    bool ItemBoxNeedsRefreshing(mc_enum_base*, wxControlWithItems&);
 
     void OnChildFocus            (wxChildFocusEvent&);
 
-    // TODO ?? This hides wxWindow::OnInitDialog. Shouldn't that
-    // function be virtual in the base class? Should a different
-    // name be used here?
+    // TODO ?? This hides wxWindow::OnInitDialog. A different name
+    // should be used here.
     void OnInitDialog            (wxInitDialogEvent&);
 
-    // TODO ?? This hides wxDialog::OnOK, at least for gtk. Shouldn't
-    // that function be virtual in the base class? Should a different
-    // name be used here?
+    // TODO ?? This hides wxDialog::OnOK. A different name should
+    // be used here.
     void OnOK                    (wxCommandEvent&   );
 
-    void OnPageChanged           (wxNotebookEvent  &);
-    void OnPageChanging          (wxNotebookEvent  &);
-    void OnRefocusInvalidControl (wxCommandEvent   &);
-    void OnUpdateGUI             (wxUpdateUIEvent  &);
+    void OnPageChanged           (wxNotebookEvent&  );
+    void OnPageChanging          (wxNotebookEvent&  );
+    void OnRefocusInvalidControl (wxCommandEvent&   );
+    void OnUpdateGUI             (wxUpdateUIEvent&  );
 
-    void RefreshItemBox
-        (mc_enum_base*       base_datum
-        ,wxControlWithItems& itembox
-        );
+    void RefreshItemBox(mc_enum_base*, wxControlWithItems&);
 
-    void Setup(wxWindowList::compatibility_iterator);
+    void Setup(wxWindowList const&);
 
-    void SetupControlItems
-        (std::string const& input_name
-        ,wxWindow&          control
-        );
+    void SetupControlItems(std::string const&, wxWindow& control);
 
     // wxDialog overrides.
     virtual bool TransferDataToWindow();
@@ -357,10 +340,10 @@ class XmlNotebook
 #endif // !wxCHECK_VERSION(2,5,4)
 
     template<typename T>
-    T& WindowFromXrcName(char const* name) const;
+    T& WindowFromXrcName(char const*) const;
 
     template<typename T>
-    T& WindowFromXrcName(std::string const& name) const;
+    T& WindowFromXrcName(std::string const&) const;
 
     // Data members.
 

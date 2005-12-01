@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: census_view.cpp,v 1.37 2005-11-24 05:22:23 chicares Exp $
+// $Id: census_view.cpp,v 1.38 2005-12-01 04:06:34 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -860,7 +860,7 @@ void CensusView::OnPrintCell(wxCommandEvent&)
     // TODO ?? Is it desirable to create a view here, or would it be
     // better to print invisibly? If the latter, then probably
     // ViewOneCell() could be simplified to return void.
-    ViewOneCell(cell_number)->Pdf("print");
+    ViewOneCell(cell_number).Pdf("print");
 
     freeze(false);
 }
@@ -891,14 +891,14 @@ void CensusView::OnRunCell(wxCommandEvent&)
     ViewOneCell(cell_number);
 }
 
-IllustrationView* CensusView::ViewOneCell(int index)
+IllustrationView& CensusView::ViewOneCell(int index)
 {
     std::string file_name(serial_filename(index, "ill"));
-    IllustrationView* illview = MakeNewIllustrationDocAndView
+    IllustrationView& illview = MakeNewIllustrationDocAndView
         (document().GetDocumentManager()
         ,file_name.c_str()
         );
-    illview->Run(&cell_parms()[index]);
+    illview.Run(&cell_parms()[index]);
     return illview;
 }
 
@@ -916,15 +916,15 @@ void CensusView::ViewComposite()
     if(!was_canceled_)
         {
         std::string file_name(serial_filename(-1, "ill"));
-        IllustrationView* illview = MakeNewIllustrationDocAndView
+        IllustrationView& illview = MakeNewIllustrationDocAndView
             (document().GetDocumentManager()
             ,file_name.c_str()
             );
 
         // This is necessary for the view to be able to print.
-        illview->SetLedger(composite_ledger_);
+        illview.SetLedger(composite_ledger_);
 
-        illview->DisplaySelectedValuesAsHtml();
+        illview.DisplaySelectedValuesAsHtml();
         }
 }
 

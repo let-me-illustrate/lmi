@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: census_document.cpp,v 1.3 2005-11-24 05:22:23 chicares Exp $
+// $Id: census_document.cpp,v 1.4 2005-12-01 04:06:34 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -51,17 +51,19 @@ CensusDocument::~CensusDocument()
 // type is the one that contains the authoritative data.
 // TODO ?? Shouldn't MVC take care of that, if used correctly?
 //
-wxListView* CensusDocument::DominantViewWindow() const
+wxListView& CensusDocument::DominantViewWindow() const
 {
-    CensusView* view = 0;
-    while(wxList::compatibility_iterator node = GetViews().GetFirst())
+    CensusView const* view = 0;
+    wxList const& vl = GetViews();
+    for(wxList::const_iterator i = vl.begin(); i != vl.end(); ++i)
         {
-        if(node->GetData()->IsKindOf(CLASSINFO(CensusView)))
+        wxObject const* p = *i;
+        LMI_ASSERT(0 != p);
+        if(p->IsKindOf(CLASSINFO(CensusView)))
             {
-            view = dynamic_cast<CensusView*>(node->GetData());
+            view = dynamic_cast<CensusView const*>(p);
             break;
             }
-        node = node->GetNext();
         }
     if(!view)
         {
@@ -71,7 +73,7 @@ wxListView* CensusDocument::DominantViewWindow() const
         {
         fatal_error() << "Census window not found." << LMI_FLUSH;
         }
-    return view->list_window_;
+    return *view->list_window_;
 }
 
 bool CensusDocument::OnCreate(wxString const& filename, long int flags)
