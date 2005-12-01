@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: text_doc.cpp,v 1.2 2005-11-24 05:22:23 chicares Exp $
+// $Id: text_doc.cpp,v 1.3 2005-12-01 04:06:34 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/doc.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -57,17 +57,20 @@ TextEditDocument::~TextEditDocument()
 //
 // Somewhat naively, assume that the first view of the appropriate
 // type is the one that contains the authoritative data.
-wxTextCtrl* TextEditDocument::DominantViewWindow() const
+//
+wxTextCtrl& TextEditDocument::DominantViewWindow() const
 {
-    TextEditView* view = 0;
-    while(wxList::compatibility_iterator node = GetViews().GetFirst())
+    TextEditView const* view = 0;
+    wxList const& vl = GetViews();
+    for(wxList::const_iterator i = vl.begin(); i != vl.end(); ++i)
         {
-        if(node->GetData()->IsKindOf(CLASSINFO(TextEditView)))
+        wxObject const* p = *i;
+        LMI_ASSERT(0 != p);
+        if(p->IsKindOf(CLASSINFO(TextEditView)))
             {
-            view = dynamic_cast<TextEditView*>(node->GetData());
+            view = dynamic_cast<TextEditView const*>(p);
             break;
             }
-        node = node->GetNext();
         }
     if(!view)
         {
@@ -77,7 +80,7 @@ wxTextCtrl* TextEditDocument::DominantViewWindow() const
         {
         fatal_error() << "Text window not found." << LMI_FLUSH;
         }
-    return view->text_window_;
+    return *view->text_window_;
 }
 
 // When this function is called, a view may or may not exist.
@@ -94,7 +97,7 @@ bool TextEditDocument::IsModified() const
     bool is_modified = wxDocument::IsModified();
     if(GetViews().GetCount())
         {
-        is_modified = is_modified || DominantViewWindow()->IsModified();
+        is_modified = is_modified || DominantViewWindow().IsModified();
         }
     return is_modified;
 }
@@ -104,13 +107,13 @@ void TextEditDocument::Modify(bool mod)
     wxDocument::Modify(mod);
     if(!mod)
         {
-        DominantViewWindow()->DiscardEdits();
+        DominantViewWindow().DiscardEdits();
         }
 }
 
 bool TextEditDocument::OnOpenDocument(wxString const& filename)
 {
-    if(!DominantViewWindow()->LoadFile(filename))
+    if(!DominantViewWindow().LoadFile(filename))
         {
         return false;
         }
@@ -123,7 +126,7 @@ bool TextEditDocument::OnOpenDocument(wxString const& filename)
 
 bool TextEditDocument::OnSaveDocument(wxString const& filename)
 {
-    if(!DominantViewWindow()->SaveFile(filename))
+    if(!DominantViewWindow().SaveFile(filename))
         {
         return false;
         }

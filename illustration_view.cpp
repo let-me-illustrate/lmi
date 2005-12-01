@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustration_view.cpp,v 1.23 2005-11-24 05:22:23 chicares Exp $
+// $Id: illustration_view.cpp,v 1.24 2005-12-01 04:06:34 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -330,7 +330,7 @@ void IllustrationView::SetLedger(boost::shared_ptr<Ledger const> ledger)
 
 // This could be generalized as a function template if that ever
 // becomes useful.
-IllustrationView* MakeNewIllustrationDocAndView
+IllustrationView& MakeNewIllustrationDocAndView
     (wxDocManager* dm
     ,char const*   filename
     )
@@ -346,11 +346,15 @@ IllustrationView* MakeNewIllustrationDocAndView
         ,wxDOC_SILENT | LMI_WX_CHILD_DOCUMENT
         );
 
-    IllustrationDocument* illdoc = dynamic_cast<IllustrationDocument*>(new_document);
+    IllustrationDocument* illdoc = dynamic_cast<IllustrationDocument*>
+        (new_document
+        );
     if(0 == illdoc)
         {
-        fatal_error() << "dynamic_cast<IllustrationDocument*> failed." << LMI_FLUSH;
-        return 0;
+        fatal_error()
+            << "dynamic_cast<IllustrationDocument*> failed."
+            << LMI_FLUSH
+            ;
         }
 
     new_document->SetFilename(filename, true);
@@ -358,22 +362,7 @@ IllustrationView* MakeNewIllustrationDocAndView
     new_document->Modify(false);
     new_document->SetDocumentSaved(true);
 
-    IllustrationView* illview = 0;
-    while(wxList::compatibility_iterator node = new_document->GetViews().GetFirst())
-        {
-        if(node->GetData()->IsKindOf(CLASSINFO(IllustrationView)))
-            {
-            illview = dynamic_cast<IllustrationView*>(node->GetData());
-            break;
-            }
-        node = node->GetNext();
-        }
-    if(0 == illview)
-        {
-        fatal_error() << "dynamic_cast<IllustrationView*> failed." << LMI_FLUSH;
-        return 0;
-        }
-    return illview;
+    return illdoc->DominantView();
 }
 
 // Must follow document-manager initialization.
@@ -407,7 +396,7 @@ bool RunSpecialInputFileIfPresent(wxDocManager* dm)
                 // document template, even if the filename didn't
                 // match it.
                 f += ".ill";
-                IllustrationView* illview = MakeNewIllustrationDocAndView
+                IllustrationView& illview = MakeNewIllustrationDocAndView
                     (dm
                     ,f.c_str()
                     );
@@ -419,9 +408,9 @@ bool RunSpecialInputFileIfPresent(wxDocManager* dm)
                 // classes--than fretting over its symptoms.
                 Input x;
                 convert_from_ihs(input, x);
-                illview->Run(&x);
-                LMI_ASSERT(dynamic_cast<wxFrame*>(illview->GetFrame()));
-                dynamic_cast<wxFrame*>(illview->GetFrame())->Maximize();
+                illview.Run(&x);
+                LMI_ASSERT(dynamic_cast<wxFrame*>(illview.GetFrame()));
+                dynamic_cast<wxFrame*>(illview.GetFrame())->Maximize();
                 }
             }
         }

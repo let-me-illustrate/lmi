@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustration_document.cpp,v 1.3 2005-11-24 05:22:23 chicares Exp $
+// $Id: illustration_document.cpp,v 1.4 2005-12-01 04:06:34 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -44,34 +44,42 @@ IllustrationDocument::~IllustrationDocument()
 {
 }
 
-// INELEGANT !! This wants to be a template in a base class or at
-// least in a separate header.
-//
 // Somewhat naively, assume that the first view of the appropriate
 // type is the one that contains the authoritative data.
 // TODO ?? Shouldn't MVC take care of that, if used correctly?
 //
-wxHtmlWindow* IllustrationDocument::DominantViewWindow() const
+IllustrationView& IllustrationDocument::DominantView() const
 {
     IllustrationView* view = 0;
-    while(wxList::compatibility_iterator node = GetViews().GetFirst())
+    wxList const& vl = GetViews();
+    for(wxList::const_iterator i = vl.begin(); i != vl.end(); ++i)
         {
-        if(node->GetData()->IsKindOf(CLASSINFO(IllustrationView)))
+        wxObject* p = *i;
+        LMI_ASSERT(0 != p);
+        if(p->IsKindOf(CLASSINFO(IllustrationView)))
             {
-            view = dynamic_cast<IllustrationView*>(node->GetData());
+            view = dynamic_cast<IllustrationView*>(p);
             break;
             }
-        node = node->GetNext();
         }
     if(!view)
         {
         fatal_error() << "Illustration view not found." << LMI_FLUSH;
         }
-    if(!view->html_window_)
+    return *view;
+}
+
+// INELEGANT !! This wants to be a template in a base class or at
+// least in a separate header.
+//
+wxHtmlWindow& IllustrationDocument::DominantViewWindow() const
+{
+    IllustrationView const& view = DominantView();
+    if(!view.html_window_)
         {
         fatal_error() << "Illustration window not found." << LMI_FLUSH;
         }
-    return view->html_window_;
+    return *view.html_window_;
 }
 
 // TODO ?? Revise:
