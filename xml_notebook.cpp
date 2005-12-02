@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xml_notebook.cpp,v 1.13 2005-12-02 05:18:38 chicares Exp $
+// $Id: xml_notebook.cpp,v 1.14 2005-12-02 16:00:23 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -31,6 +31,7 @@
 
 #include "alert.hpp"
 #include "input.hpp"
+#include "map_lookup.hpp"
 #include "transferor.hpp"
 #include "wx_workarounds.hpp"
 
@@ -705,14 +706,13 @@ void XmlNotebook::OnUpdateGUI(wxUpdateUIEvent& event)
         {
         try
             {
-//            if(input_[*i].str() != transfer_data_[*i])
             if
-                (   input_[*i].str() != transfer_data_[*i]
-                &&  CurrentPage().FindWindow(XRCID(i->c_str()))
+                (   CurrentPage().FindWindow(XRCID(i->c_str()))
+                &&  input_[*i].str() != map_lookup(transfer_data_, *i)
                 )
                 {
                 names_of_changed_controls.push_back(*i);
-                input_[*i] = transfer_data_[*i];
+                input_[*i] = map_lookup(transfer_data_, *i);
                 }
             }
         catch(std::exception const& event)
@@ -869,7 +869,7 @@ void XmlNotebook::ValidateTextControl(wxWindow* w)
     // Assume that OnUpdateGUI() has already been called.
     if
         (input_[t->name()].cast_blithely<datum_base>()->is_valid
-            (transfer_data_[t->name()]
+            (map_lookup(transfer_data_, t->name())
             )
         )
         {
