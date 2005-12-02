@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: text_doc.hpp,v 1.3 2005-12-01 04:06:34 chicares Exp $
+// $Id: text_doc.hpp,v 1.4 2005-12-02 22:44:46 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/doc.h (C) 1998 Julian Smart and Markus Holzem
@@ -56,7 +56,7 @@ class TextEditDocument
     virtual bool OnOpenDocument(wxString const& filename);
     virtual bool OnSaveDocument(wxString const& filename);
 
-    wxTextCtrl& DominantViewWindow() const;
+    wxTextCtrl& PredominantViewWindow() const;
 
     DECLARE_DYNAMIC_CLASS(TextEditDocument)
 };
