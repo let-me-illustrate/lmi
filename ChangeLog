@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.248 2005-12-01 04:06:34 chicares Exp $
+// $Id: ChangeLog,v 1.249 2005-12-02 05:18:38 chicares Exp $
 
 MAINTENANCE
 
@@ -4809,4 +4809,10 @@ focus.
   xml_notebook.cpp
   xml_notebook.hpp
 Replace wxList::compatibility_iterator.
+
+20051202T0518Z <chicares@cox.net> [1223]
+
+  xml_notebook.cpp
+  xml_notebook.hpp
+Ensure optimal focus.
 
