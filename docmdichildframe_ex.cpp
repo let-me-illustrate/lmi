@@ -19,16 +19,11 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: docmdichildframe_ex.cpp,v 1.1 2005-03-11 03:09:22 chicares Exp $
+// $Id: docmdichildframe_ex.cpp,v 1.2 2005-12-02 06:00:34 chicares Exp $
 
 #include "docmdichildframe_ex.hpp"
 
 #include <wx/menu.h>
-
-// FSF !! Expunge this when wx is enhanced as specified below.
-#ifdef __WXMSW__
-#   include <wx/msw/wrapwin.h>
-#endif // __WXMSW__
 
 #include <stdexcept>
 
@@ -83,8 +78,8 @@ wxStatusBar* DocMDIChildFrameEx::GetStatusBar() const
 
 void DocMDIChildFrameEx::OnActivate(wxActivateEvent& event)
 {
-    wxDocMDIChildFrame::OnActivate(event);
     SetMdiWindowMenu();
+    event.Skip();
 }
 
 void DocMDIChildFrameEx::OnMenuHighlight(wxMenuEvent& event)
@@ -105,10 +100,15 @@ void DocMDIChildFrameEx::OnMenuHighlight(wxMenuEvent& event)
         }
 }
 
+// FSF !! Expunge this when we deprecate support for older versions
+// than wx-2.5.4 .
+
+#if wxCHECK_VERSION(2,5,4) || !defined __WXMSW__
+void DocMDIChildFrameEx::SetMdiWindowMenu() const {}
+#else // wx-msw prior to version 2.5.4 .
+#   include <wx/msw/wrapwin.h>
 void DocMDIChildFrameEx::SetMdiWindowMenu() const
 {
-// FSF !! Need this in the wx library for GNU/linux.
-#ifdef __WXMSW__
     wxMDIParentFrame* parent_frame = dynamic_cast<wxMDIParentFrame*>(GetParent());
     if(!parent_frame)
         {
@@ -125,12 +125,14 @@ void DocMDIChildFrameEx::SetMdiWindowMenu() const
     wxMenuBar* menu_bar = GetMenuBar();
     if(!menu_bar)
         {
+        throw std::runtime_error("Child frame has no menubar.");
         return;
         }
 
     int window_menu_index = menu_bar->FindMenu("Window");
     if(wxNOT_FOUND == window_menu_index)
         {
+        throw std::runtime_error("No 'Window' menu found.");
         return;
         }
 
@@ -139,6 +141,6 @@ void DocMDIChildFrameEx::SetMdiWindowMenu() const
 
     ::SendMessage(client_handle, WM_MDISETMENU, 0, (LPARAM)window_menu_handle);
     ::DrawMenuBar(client_handle);
-#endif // __WXMSW__
 }
+#endif // wx-msw prior to version 2.5.4 .
 
