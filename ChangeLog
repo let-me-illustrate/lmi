@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.251 2005-12-02 16:00:23 chicares Exp $
+// $Id: ChangeLog,v 1.252 2005-12-02 22:44:22 chicares Exp $
 
 MAINTENANCE
 
@@ -4829,4 +4829,18 @@ determine whether this entire file and its header should be expunged.
   objects.make
   xml_notebook.cpp
 Import selected changes from skeleton branch.
+
+20051202T2244Z <chicares@cox.net> [1221]
+
+  text_doc.cpp
+  text_doc.hpp
+  view_ex.tpp [new file]
+Import selected changes from skeleton branch.
+
+  census_document.cpp
+  census_document.hpp
+  illustration_document.cpp
+  illustration_document.hpp
+  illustration_view.cpp
+Refactor.
 
