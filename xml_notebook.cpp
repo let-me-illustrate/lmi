@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xml_notebook.cpp,v 1.12 2005-12-01 04:06:34 chicares Exp $
+// $Id: xml_notebook.cpp,v 1.13 2005-12-02 05:18:38 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -450,6 +450,56 @@ wxStaticText& XmlNotebook::DiagnosticsWindow() const
     return WindowFromXrcName<wxStaticText>("diagnostics");
 }
 
+/// Ideally, focus is on an enabled window that ought to accept focus.
+/// But sometimes that condition isn't ensured by wx, e.g., when a
+/// control that appropriately had focus becomes disabled. And it's
+/// possible for all controls on a notebook page to be disabled. This
+/// function either achieves the ideal, or does the best that can be
+/// done.
+///
+///  - If the ideal is already achieved, then exit immediately.
+///
+///  - Else, change focus to the best window possible, ideally not
+///    changing it to the notebook tab (the tab meets all the initial
+///    conditions, and would be perfect had the user selected it; but
+///    it is preferable to find a control that accepts input: an extra
+///    ideal condition that pertains only to focus changes made under
+///    program control):
+///
+///    - first, focus the notebook: this is always possible, and it's
+///      better than letting a disabled window keep the focus;
+///
+///    - then, focus the first child window that meets the ideal
+///      conditions, if any can be found;
+///
+///    - then, assert that at least subideal conditions have been
+///      achieved, viz., that an enabled window has focus: this
+///      outcome should always be feasible.
+
+void XmlNotebook::EnsureOptimalFocus()
+{
+    wxWindow* f = FindFocus();
+    if(f && f->IsEnabled() && f->AcceptsFocus())
+        {
+        return;
+        }
+
+    SetFocus();
+    wxWindowList wl = CurrentPage().GetChildren();
+    for(wxWindowList::const_iterator i = wl.begin(); i != wl.end(); ++i)
+        {
+        wxWindow* w = *i;
+        if(w && w->IsEnabled() && w->AcceptsFocus())
+            {
+            w->SetFocus();
+            break;
+            }
+        }
+
+    f = FindFocus();
+    LMI_ASSERT(f && f->IsEnabled());
+}
+
 // OnUpdateGUI() doesn't handle focus changes, so this function is
 // needed for text-control validation. It validates a child control
 // that has already lost focus; wx provides no way to perform the
@@ -555,7 +605,7 @@ void XmlNotebook::OnOK(wxCommandEvent& event)
         ;
 }
 
-// TODO ?? expunge?
+// TODO ?? Expunge? Aren't transfer and focus already managed elsewhere?
 void XmlNotebook::OnPageChanged(wxNotebookEvent& event)
 {
     ConditionallyEnable();
@@ -563,13 +613,10 @@ void XmlNotebook::OnPageChanged(wxNotebookEvent& event)
 
     // WX !! Normally, the first interactive control would have focus.
     // But if that control was just disabled, then no window has
-    // focus--so focus the current tab. See:
+    // focus--so focus might need to be reset now. See:
     //   http://lists.nongnu.org/archive/html/lmi/2005-11/msg00040.html
 
-    if(!FindFocus())
-        {
-        SetFocus();
-        }
+    EnsureOptimalFocus();
 }
 
 // Called when page is about to change, but hasn't yet.
@@ -633,18 +680,10 @@ void XmlNotebook::OnUpdateGUI(wxUpdateUIEvent& event)
         return;
         }
 
-    // These things "should never happen". But see:
+    // A disabled window might have focus:
     //   http://lists.nongnu.org/archive/html/lmi/2005-11/msg00040.html
-    if(0 == FindFocus())
-        {
-        warning() << "No window has focus." << LMI_FLUSH;
-        SetFocus();
-        }
-    else if(!FindFocus()->IsEnabled())
-        {
-        warning() << "Disabled window has focus." << LMI_FLUSH;
-        SetFocus();
-        }
+    // so make sure focus is valid now.
+    EnsureOptimalFocus();
 
     // Exit immediately if nothing changed. The library calls this
     // function continually in idle time, and it's pointless to fret

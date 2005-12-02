@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xml_notebook.hpp,v 1.7 2005-12-01 04:06:34 chicares Exp $
+// $Id: xml_notebook.hpp,v 1.8 2005-12-02 05:18:38 chicares Exp $
 
 #ifndef xml_notebook_hpp
 #define xml_notebook_hpp
@@ -303,6 +303,8 @@ class XmlNotebook
 
     wxNotebookPage& CurrentPage() const;
     wxStaticText& DiagnosticsWindow() const;
+
+    void EnsureOptimalFocus();
 
     bool ItemBoxNeedsRefreshing(mc_enum_base*, wxControlWithItems&);
 
