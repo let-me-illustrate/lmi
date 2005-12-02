@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.249 2005-12-02 05:18:38 chicares Exp $
+// $Id: ChangeLog,v 1.250 2005-12-02 06:00:34 chicares Exp $
 
 MAINTENANCE
 
@@ -4815,4 +4815,10 @@ Replace wxList::compatibility_iterator.
   xml_notebook.cpp
   xml_notebook.hpp
 Ensure optimal focus.
+
+20051202T0600Z <chicares@cox.net> [1223]
+
+  docmdichildframe_ex.cpp
+Fix the 'Window' menu, experimentally. More research is needed to
+determine whether this entire file and its header should be expunged.
 
