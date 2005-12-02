@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.250 2005-12-02 06:00:34 chicares Exp $
+// $Id: ChangeLog,v 1.251 2005-12-02 16:00:23 chicares Exp $
 
 MAINTENANCE
 
@@ -4821,4 +4821,12 @@ Ensure optimal focus.
   docmdichildframe_ex.cpp
 Fix the 'Window' menu, experimentally. More research is needed to
 determine whether this entire file and its header should be expunged.
+
+20051202T0600Z <chicares@cox.net> [1223]
+
+  map_lookup.hpp      [new file]
+  map_lookup_test.cpp [new file]
+  objects.make
+  xml_notebook.cpp
+Import selected changes from skeleton branch.
 
