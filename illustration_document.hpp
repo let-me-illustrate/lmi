@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustration_document.hpp,v 1.3 2005-12-01 04:06:34 chicares Exp $
+// $Id: illustration_document.hpp,v 1.4 2005-12-02 22:44:22 chicares Exp $
 
 // Because illustration windows have their own functions for loading
 // and saving files, override OnOpenDocument() and OnSaveDocument()
@@ -63,10 +63,10 @@ class IllustrationDocument
     IllustrationDocument();
     virtual ~IllustrationDocument();
 
-    IllustrationView& DominantView() const;
+    IllustrationView& PredominantView() const;
 
   private:
-    wxHtmlWindow& DominantViewWindow() const;
+    wxHtmlWindow& PredominantViewWindow() const;
 
     // wxDocument overrides.
     virtual bool OnCreate(wxString const& filename, long int flags);

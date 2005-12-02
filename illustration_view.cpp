@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustration_view.cpp,v 1.24 2005-12-01 04:06:34 chicares Exp $
+// $Id: illustration_view.cpp,v 1.25 2005-12-02 22:44:22 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -362,7 +362,7 @@ IllustrationView& MakeNewIllustrationDocAndView
     new_document->Modify(false);
     new_document->SetDocumentSaved(true);
 
-    return illdoc->DominantView();
+    return illdoc->PredominantView();
 }
 
 // Must follow document-manager initialization.

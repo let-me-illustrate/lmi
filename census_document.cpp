@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: census_document.cpp,v 1.4 2005-12-01 04:06:34 chicares Exp $
+// $Id: census_document.cpp,v 1.5 2005-12-02 22:44:22 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -27,6 +27,8 @@
 #endif
 
 #include "census_document.hpp"
+
+#include "view_ex.tpp"
 
 #include "alert.hpp"
 #include "census_view.hpp"
@@ -44,36 +46,12 @@ CensusDocument::~CensusDocument()
 {
 }
 
-// INELEGANT !! This wants to be a template in a base class or at
-// least in a separate header.
-//
-// Somewhat naively, assume that the first view of the appropriate
-// type is the one that contains the authoritative data.
-// TODO ?? Shouldn't MVC take care of that, if used correctly?
-//
-wxListView& CensusDocument::DominantViewWindow() const
+wxListView& CensusDocument::PredominantViewWindow() const
 {
-    CensusView const* view = 0;
-    wxList const& vl = GetViews();
-    for(wxList::const_iterator i = vl.begin(); i != vl.end(); ++i)
-        {
-        wxObject const* p = *i;
-        LMI_ASSERT(0 != p);
-        if(p->IsKindOf(CLASSINFO(CensusView)))
-            {
-            view = dynamic_cast<CensusView const*>(p);
-            break;
-            }
-        }
-    if(!view)
-        {
-        fatal_error() << "Census view not found." << LMI_FLUSH;
-        }
-    if(!view->list_window_)
-        {
-        fatal_error() << "Census window not found." << LMI_FLUSH;
-        }
-    return *view->list_window_;
+    return ::PredominantViewWindow<CensusView,wxListView>
+        (*this
+        ,&CensusView::list_window_
+        );
 }
 
 bool CensusDocument::OnCreate(wxString const& filename, long int flags)
