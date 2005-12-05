@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.253 2005-12-05 16:01:46 wboutin Exp $
+// $Id: ChangeLog,v 1.254 2005-12-05 17:50:17 chicares Exp $
 
 MAINTENANCE
 
@@ -4852,4 +4852,9 @@ Refactor.
   msw_msys.make
   posix_fhs.make
 Add xmllint.
+
+20051205T1750Z <chicares@cox.net> [1220]
+
+  workhorse.make
+Import selected changes from skeleton branch.
 
