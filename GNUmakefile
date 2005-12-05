@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: GNUmakefile,v 1.45 2005-11-23 03:59:07 chicares Exp $
+# $Id: GNUmakefile,v 1.46 2005-12-05 16:01:46 wboutin Exp $
 
 ###############################################################################
 
@@ -430,33 +430,6 @@ expected_source_files := $(wildcard *.ac *.?pp *.c *.h *.rc *.xrc *.xsl)
 # occurrences of proprietary names.
 
 supplemental_test_makefile = ../forbidden.make
-
-# TODO ?? Wendy--please move this elsewhere, treating it similarly to,
-# say, $(WGET). I seem to get a working xmllint with libxml2-2.4.22
-# but not with libxml2-2.6.19; have you had better luck? I'd rather do
-# this now despite these issues, lest we upgrade to 2.6.19 and later
-# find that it's become impossible. It might be nice to use xmllint's
-# '--format' option, though that does some goofy stuff in 2.4.22 at
-# least. It'd be really nice to have $(XMLLINT_INDENT), which was
-# introduced in libxml2-2.5.5; here's something (make it one line)
-# that'll let you work rectify the indenting with 2.4.22 so that you
-# can see the goofiness:
-#
-# /lmi/src/skeleton[0]$/xml/libxml2-2.4.22/xmllint --format xml_notebook.xrc
-#  |tr -d '\r'
-#  |sed
-#    -e '/<!--/,/-->/!{s/^  //'
-#    -e's/^  /\t/'
-#    -e :a
-#    -e's/\t  /\t\t/;ta'
-#    -e's/\t/    /g}'
-#  >eraseme
-#
-# then compare 'eraseme' to the input file (more stringently than with
-# '$(DIFF) --ignore-blank-lines': the gnu diff I'm using ignores much
-# more than blank lines with that option).
-
-XMLLINT := /xml/libxml2-2.4.22/xmllint
 
 .PHONY: check_conformity
 check_conformity: source_clean

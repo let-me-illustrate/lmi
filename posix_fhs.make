@@ -20,7 +20,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: posix_fhs.make,v 1.8 2005-09-09 04:36:22 wboutin Exp $
+# $Id: posix_fhs.make,v 1.9 2005-12-05 16:01:46 wboutin Exp $
 
 ################################################################################
 
@@ -41,33 +41,34 @@ WXCONFIG := wx-config
 platform_wx_libraries := $(shell $(WXCONFIG) --libs)
 wx_cxxflags := $(shell $(WXCONFIG) --cxxflags) -DwxUSE_STD_STRING
 
-AR     := ar
-CC     := gcc
-CPP    := cpp
-CXX    := g++
-LD     := g++
+AR      := ar
+CC      := gcc
+CPP     := cpp
+CXX     := g++
+LD      := g++
 
 # Don't set RC to anything: elsewhere, this is taken as indicating
 # that msw resources aren't used on this platform.
-RC     :=
+RC      :=
 
-CP     := cp
-DATE   := date
-ECHO   := echo
-LS     := ls
-MKDIR  := mkdir
-MV     := mv
-RM     := rm
-SED    := sed
-TAR    := tar
+CP      := cp
+DATE    := date
+ECHO    := echo
+LS      := ls
+MKDIR   := mkdir
+MV      := mv
+RM      := rm
+SED     := sed
+TAR     := tar
 
-BZIP2  := bzip2
-DIFF   := diff
-GREP   := grep
-GZIP   := gzip
-MD5SUM := md5sum
-PATCH  := patch
-TOUCH  := touch
-TR     := tr
-WC     := wc
-WGET   := wget
+BZIP2   := bzip2
+DIFF    := diff
+GREP    := grep
+GZIP    := gzip
+MD5SUM  := md5sum
+PATCH   := patch
+TOUCH   := touch
+TR      := tr
+WC      := wc
+WGET    := wget
+XMLLINT := xmllint

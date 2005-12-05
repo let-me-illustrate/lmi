@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: msw_msys.make,v 1.6 2005-09-09 04:36:22 wboutin Exp $
+# $Id: msw_msys.make,v 1.7 2005-12-05 16:01:46 wboutin Exp $
 
 ################################################################################
 
@@ -76,13 +76,13 @@ RC     := $(PATH_GCC)windres
 
 # Required in /bin (if anywhere) by FHS-2.2 .
 
-CP     := $(PATH_BIN)cp
-DATE   := $(PATH_BIN)date
-ECHO   := $(PATH_BIN)echo
-LS     := $(PATH_BIN)ls
-MKDIR  := $(PATH_BIN)mkdir
-MV     := $(PATH_BIN)mv
-RM     := $(PATH_BIN)rm
+CP      := $(PATH_BIN)cp
+DATE    := $(PATH_BIN)date
+ECHO    := $(PATH_BIN)echo
+LS      := $(PATH_BIN)ls
+MKDIR   := $(PATH_BIN)mkdir
+MV      := $(PATH_BIN)mv
+RM      := $(PATH_BIN)rm
 
 # TODO ?? Override MSYS's ancient sed. This is an experimental change.
 # If testing confirms that it works, then it should be explained better,
@@ -95,22 +95,23 @@ RM     := $(PATH_BIN)rm
 # you don't copy it into MSYS's own /bin/ directory: that's likely to
 # cause horrible problems.
 
-# SED    := $(PATH_BIN)sed
-SED    := /c/usr/bin/sed
+# SED     := $(PATH_BIN)sed
+SED     := /c/usr/bin/sed
 
 # FHS-2.2 would put these in /usr/bin .
 
-BZIP2  := $(PATH_USR_BIN)bzip2
-DIFF   := $(PATH_USR_BIN)diff
-GREP   := $(PATH_USR_BIN)grep
-GZIP   := $(PATH_USR_BIN)gzip
-MD5SUM := $(PATH_USR_BIN)md5sum
-PATCH  := $(PATH_USR_BIN)patch
-TAR    := $(PATH_USR_BIN)tar
-TOUCH  := $(PATH_USR_BIN)touch
-TR     := $(PATH_USR_BIN)tr
-WC     := $(PATH_USR_BIN)wc
-WGET   := $(PATH_USR_BIN)wget
+BZIP2   := $(PATH_USR_BIN)bzip2
+DIFF    := $(PATH_USR_BIN)diff
+GREP    := $(PATH_USR_BIN)grep
+GZIP    := $(PATH_USR_BIN)gzip
+MD5SUM  := $(PATH_USR_BIN)md5sum
+PATCH   := $(PATH_USR_BIN)patch
+TAR     := $(PATH_USR_BIN)tar
+TOUCH   := $(PATH_USR_BIN)touch
+TR      := $(PATH_USR_BIN)tr
+WC      := $(PATH_USR_BIN)wc
+WGET    := $(PATH_USR_BIN)wget
+XMLLINT := $(PATH_USR_BIN)xmllint
 
 ################################################################################
 

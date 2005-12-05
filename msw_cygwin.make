@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: msw_cygwin.make,v 1.4 2005-09-09 04:36:22 wboutin Exp $
+# $Id: msw_cygwin.make,v 1.5 2005-12-05 16:01:46 wboutin Exp $
 
 ################################################################################
 
@@ -43,12 +43,12 @@ endif
 
 # Compiler, linker, and so on.
 
-AR     := $(PATH_GCC)ar
-CC     := $(PATH_GCC)gcc
-CPP    := $(PATH_GCC)cpp
-CXX    := $(PATH_GCC)g++
-LD     := $(PATH_GCC)g++
-RC     := $(PATH_GCC)windres
+AR      := $(PATH_GCC)ar
+CC      := $(PATH_GCC)gcc
+CPP     := $(PATH_GCC)cpp
+CXX     := $(PATH_GCC)g++
+LD      := $(PATH_GCC)g++
+RC      := $(PATH_GCC)windres
 
 ################################################################################
 
@@ -56,28 +56,29 @@ RC     := $(PATH_GCC)windres
 
 # Required in /bin (if anywhere) by FHS-2.2 .
 
-CP     := $(PATH_BIN)cp
-DATE   := $(PATH_BIN)date
-ECHO   := $(PATH_BIN)echo
-LS     := $(PATH_BIN)ls
-MKDIR  := $(PATH_BIN)mkdir
-MV     := $(PATH_BIN)mv
-RM     := $(PATH_BIN)rm
-SED    := $(PATH_BIN)sed
+CP      := $(PATH_BIN)cp
+DATE    := $(PATH_BIN)date
+ECHO    := $(PATH_BIN)echo
+LS      := $(PATH_BIN)ls
+MKDIR   := $(PATH_BIN)mkdir
+MV      := $(PATH_BIN)mv
+RM      := $(PATH_BIN)rm
+SED     := $(PATH_BIN)sed
 
 # FHS-2.2 would put these in /usr/bin .
 
-BZIP2  := $(PATH_USR_BIN)bzip2
-DIFF   := $(PATH_USR_BIN)diff
-GREP   := $(PATH_USR_BIN)grep
-GZIP   := $(PATH_USR_BIN)gzip
-MD5SUM := $(PATH_USR_BIN)md5sum
-PATCH  := $(PATH_USR_BIN)patch
-TAR    := $(PATH_USR_BIN)tar
-TOUCH  := $(PATH_USR_BIN)touch
-TR     := $(PATH_USR_BIN)tr
-WC     := $(PATH_USR_BIN)wc
-WGET   := $(PATH_USR_BIN)wget
+BZIP2   := $(PATH_USR_BIN)bzip2
+DIFF    := $(PATH_USR_BIN)diff
+GREP    := $(PATH_USR_BIN)grep
+GZIP    := $(PATH_USR_BIN)gzip
+MD5SUM  := $(PATH_USR_BIN)md5sum
+PATCH   := $(PATH_USR_BIN)patch
+TAR     := $(PATH_USR_BIN)tar
+TOUCH   := $(PATH_USR_BIN)touch
+TR      := $(PATH_USR_BIN)tr
+WC      := $(PATH_USR_BIN)wc
+WGET    := $(PATH_USR_BIN)wget
+XMLLINT := $(PATH_USR_BIN)xmllint
 
 ################################################################################
 

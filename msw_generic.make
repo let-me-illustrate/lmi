@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: msw_generic.make,v 1.5 2005-09-09 04:36:22 wboutin Exp $
+# $Id: msw_generic.make,v 1.6 2005-12-05 16:01:46 wboutin Exp $
 
 ################################################################################
 
@@ -67,31 +67,32 @@ msys_utils_dir := $(system_root)/msys/1.0/bin
 
 # Required in /bin (if anywhere) by FHS-2.2 .
 
-CP     := $(gnu_utils_dir)/cp
+CP      := $(gnu_utils_dir)/cp
 # TODO ?? Build this from FSF sources and put it in the same
 # directory as everything else.
-#DATE   := $(gnu_utils_dir)/date
-DATE   ?= $(cygwin_dir)/bin/date
-ECHO   := $(gnu_utils_dir)/echo
-LS     := $(gnu_utils_dir)/ls
-MKDIR  := $(gnu_utils_dir)/mkdir
-MV     := $(gnu_utils_dir)/mv
-RM     := $(gnu_utils_dir)/rm
-SED    := $(gnu_utils_dir)/sed
+#DATE    := $(gnu_utils_dir)/date
+DATE    ?= $(cygwin_dir)/bin/date
+ECHO    := $(gnu_utils_dir)/echo
+LS      := $(gnu_utils_dir)/ls
+MKDIR   := $(gnu_utils_dir)/mkdir
+MV      := $(gnu_utils_dir)/mv
+RM      := $(gnu_utils_dir)/rm
+SED     := $(gnu_utils_dir)/sed
 
 # FHS-2.2 would put these in /usr/bin .
 
-BZIP2  := $(gnu_utils_dir)/bzip2
-DIFF   := $(gnu_utils_dir)/diff
-GREP   := $(gnu_utils_dir)/grep
-GZIP   := $(gnu_utils_dir)/gzip
-MD5SUM := $(gnu_utils_dir)/md5sum
-PATCH  := $(msys_utils_dir)/patch
-TAR    := $(gnu_utils_dir)/tar
-TOUCH  := $(gnu_utils_dir)/touch
-TR     := $(gnu_utils_dir)/tr
-WC     := $(gnu_utils_dir)/wc
-WGET   := $(msys_utils_dir)/wget
+BZIP2   := $(gnu_utils_dir)/bzip2
+DIFF    := $(gnu_utils_dir)/diff
+GREP    := $(gnu_utils_dir)/grep
+GZIP    := $(gnu_utils_dir)/gzip
+MD5SUM  := $(gnu_utils_dir)/md5sum
+PATCH   := $(msys_utils_dir)/patch
+TAR     := $(gnu_utils_dir)/tar
+TOUCH   := $(gnu_utils_dir)/touch
+TR      := $(gnu_utils_dir)/tr
+WC      := $(gnu_utils_dir)/wc
+WGET    := $(msys_utils_dir)/wget
+XMLLINT := $(gnu_utils_dir)/xmllint
 
 ################################################################################
 
