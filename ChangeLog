@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.252 2005-12-02 22:44:22 chicares Exp $
+// $Id: ChangeLog,v 1.253 2005-12-05 16:01:46 wboutin Exp $
 
 MAINTENANCE
 
@@ -4843,4 +4843,13 @@ Import selected changes from skeleton branch.
   illustration_document.hpp
   illustration_view.cpp
 Refactor.
+
+20051205T1541Z <wboutin@massmutual.com> [1220]
+
+  GNUmakefile
+  msw_cygwin.make
+  msw_generic.make
+  msw_msys.make
+  posix_fhs.make
+Add xmllint.
 
