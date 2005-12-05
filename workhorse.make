@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: workhorse.make,v 1.52 2005-11-23 03:59:21 chicares Exp $
+# $Id: workhorse.make,v 1.53 2005-12-05 17:50:17 chicares Exp $
 
 ###############################################################################
 
@@ -360,7 +360,7 @@ endif
 
 ################################################################################
 
-# Required libraries.
+# Libraries.
 #
 # The link command promiscuously mentions libxml2 for all targets.
 # Measurements show that this costs one-tenth of a second on
@@ -374,6 +374,10 @@ REQUIRED_LIBS := \
   $(platform_boost_libraries) \
   -lxmlwrapp \
   $(platform_libxml2_libraries) \
+
+wx_ldflags = \
+  $(platform_wx_libraries) \
+  $(platform_gui_ldflags) \
 
 ################################################################################
 
@@ -403,8 +407,10 @@ LDFLAGS = \
   $(gprof_flag) \
   -Wl,-Map,$@.map \
 
-# Always specify __WXDEBUG__:
+# Always specify '-D__WXDEBUG__':
 #   http://lists.nongnu.org/archive/html/lmi/2005-11/msg00026.html
+
+# '-DNO_GCC_PRAGMA' is required for wx-2.5.1, but not for 2.5.4 or later.
 
 REQUIRED_CPPFLAGS = \
   $(addprefix -I , $(all_include_directories)) \
@@ -412,6 +418,7 @@ REQUIRED_CPPFLAGS = \
   $(platform_defines) \
   -D__WXDEBUG__ \
   -DBOOST_STRICT_CONFIG \
+  -DNO_GCC_PRAGMA \
 
 REQUIRED_CFLAGS = \
   $(C_WARNINGS) \
@@ -442,20 +449,28 @@ REQUIRED_ARFLAGS = \
 # won't work, perhaps because gnu 'ld' finds its dll first and then
 # doesn't bother looking for its library.
 
+EXTRA_LDFLAGS =
+
+# Keep mpatrol at the end of the list.
 REQUIRED_LDFLAGS = \
   -L . \
   -L $(system_root)/opt/lmi/third_party/lib \
   -L $(system_root)/opt/lmi/third_party/bin \
   -L $(system_root)/usr/local/lib \
   -L $(system_root)/usr/local/bin \
+  $(EXTRA_LDFLAGS) \
   $(REQUIRED_LIBS) \
-  $(MPATROL_LIBS) \
+  $(MPATROL_LIBS)
 
 # The '--use-temp-file' windres option seems to be often helpful and
-# never harmful.
+# never harmful. The $(subst) workaround isn't needed with
+#   GNU windres 2.15.91 20040904
+# and later versions, but is needed with
+#   GNU windres 2.13.90 20030111
+# and earlier versions.
 
 REQUIRED_RCFLAGS = \
-  $(ALL_CPPFLAGS) \
+  $(subst -I,--include-dir ,$(ALL_CPPFLAGS)) \
   --use-temp-file \
 
 # To create msw import libraries, use '-Wl,--out-implib,$@.a'. There
@@ -529,6 +544,8 @@ lib%$(SHREXT)       : lmi_dllflag := -DLMI_BUILD_DLL
 lib%$(SHREXT)       : MPATROL_LIBS :=
 wx_new$(SHREXT)     : MPATROL_LIBS :=
 
+wx_new$(SHREXT)     : EXTRA_LDFLAGS =
+
                       lmi_wx_new_dllflag := -DLMI_WX_NEW_USING_DLL
 wx_new$(SHREXT)     : lmi_wx_new_dllflag := -DLMI_WX_NEW_BUILDING_DLL
 
@@ -538,14 +555,14 @@ libantediluvian.a libantediluvian$(SHREXT): $(antediluvian_common_objects)
 # TODO ?? 'lmi*' targets can be built either with a shared or a static
 # 'lmi' library. Choose one, or support both.
 
-lmi_wx_monolithic$(EXEEXT): REQUIRED_LDFLAGS += $(platform_wx_libraries) $(platform_gui_ldflags)
+lmi_wx_monolithic$(EXEEXT): EXTRA_LDFLAGS = $(wx_ldflags)
 lmi_wx_monolithic$(EXEEXT): $(lmi_wx_objects) $(lmi_common_objects) wx_new$(SHREXT)
 
 lmi_wx_shared$(EXEEXT): lmi_dllflag := -DLMI_USE_DLL
-lmi_wx_shared$(EXEEXT): REQUIRED_LDFLAGS += $(platform_wx_libraries) $(platform_gui_ldflags)
+lmi_wx_shared$(EXEEXT): EXTRA_LDFLAGS = $(wx_ldflags)
 lmi_wx_shared$(EXEEXT): $(lmi_wx_objects) liblmi$(SHREXT) wx_new$(SHREXT)
 
-lmi_wx_static$(EXEEXT): REQUIRED_LDFLAGS += $(platform_wx_libraries) $(platform_gui_ldflags)
+lmi_wx_static$(EXEEXT): EXTRA_LDFLAGS = $(wx_ldflags)
 lmi_wx_static$(EXEEXT): $(lmi_wx_objects) liblmi.a wx_new$(SHREXT)
 
 lmi_cli_monolithic$(EXEEXT): $(cli_objects) $(lmi_common_objects)
