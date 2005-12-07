@@ -5,7 +5,7 @@
 
 # http://savannah.nongnu.org/projects/lmi
 
-# $Id: mingw_setup.make,v 1.4 2005-11-28 17:52:50 wboutin Exp $
+# $Id: mingw_setup.make,v 1.5 2005-12-07 15:12:23 chicares Exp $
 
 # REVIEW: Here, say exactly what this makefile does, and what its
 # prerequisites are; and write some excruciatingly clear instructions
@@ -30,11 +30,15 @@ src_dir := $(CURDIR)
 
 system_root := /c
 
-# Path to compiler's root directory, i.e., bin/.. .
-mingw_dir  := $(system_root)/MinGW
+# Path to MinGW install directory.
+mingw_dir := $(system_root)/MinGW
 
 # REVIEW: This is configurable. Prefer to assign configurable
 # variables in one marked section, with appropriate instructions.
+#
+# OK, you've moved the preceding comment and the following line
+# here, right after $(mingw_dir). Are $(mingw_dir) and $(sf_mirror)
+# the only configurable variables?
 
 sf_mirror := http://umn.dl.sourceforge.net/sourceforge
 
@@ -48,34 +52,37 @@ sf_mirror := http://umn.dl.sourceforge.net/sourceforge
 # remove it hence. Then this file would look for all utilities in
 # /gnu/ ; let's use /usr/bin/ instead, because it's standard and
 # /gnu/ is just plain weird. (The same applies to all lmi makefiles
-# I'd guess.)
+# I'd guess.) [But see below for this one particular makefile only.]
 #
 # Then, consider how someone on the mailing list might use this.
 # Would they have MSYS installed already? Probably--or else they
 # could easily install it. That's the likeliest environment for
 # them to have, so let's default to that: that means setting the
-# root directory to '/c'.
-
-gnu_utils_dir  := $(system_root)/usr/bin/
+# root directory to '/c'. It also means that they already have almost
+# all the utilities we require, already on $(PATH), so we can just
+# assume that they're there--except for 'wget'...are there any other
+# exceptions? (Testing should reveal any.)
 
 # REVIEW: What happens if a required utility is unavailable?
 # Would it make sense to test each, e.g.,
 #   $(CP) --version >/dev/null 2>&1
-# ?
+# ? In light of the preceding paragraph, that should be done only for
+# 'wget' and anything else that MSYS doesn't automatically provide.
 
 # Required in /bin (if anywhere) by FHS-2.2 .
+# REVIEW: The comment on the preceding line is unnecessary and false.
 
-BZIP2  := $(gnu_utils_dir)/bzip2
-CP     := $(gnu_utils_dir)/cp
-ECHO   := $(gnu_utils_dir)/echo
-GZIP   := $(gnu_utils_dir)/gzip
+BZIP2  := bzip2
+CP     := cp
+ECHO   := echo
+GZIP   := gzip
 # REVIEW: $(MD5SUM) is never used, but should be, right?
-MD5SUM := $(gnu_utils_dir)/md5sum
-MKDIR  := $(gnu_utils_dir)/mkdir
-MV     := $(gnu_utils_dir)/mv
-RM     := $(gnu_utils_dir)/rm
-TAR    := $(gnu_utils_dir)/tar
-WGET   := $(gnu_utils_dir)/wget
+MD5SUM := md5sum
+MKDIR  := mkdir
+MV     := mv
+RM     := rm
+TAR    := tar
+WGET   := SUPPLY_AN_APPROPRIATE_PATH_HERE/wget
 
 ###############################################################################
 
