@@ -37,7 +37,7 @@
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
 // GWC added this RCS Id:
-// $Id: getopt.hpp,v 1.4 2005-05-27 08:16:09 chicares Exp $
+// $Id: getopt.hpp,v 1.5 2005-12-07 04:13:38 chicares Exp $
 
 // This version of 'getopt' appears to the caller like standard Unix 'getopt'
 // but it behaves differently for the user, since it allows the user
@@ -68,6 +68,8 @@
 #include <cstdio>
 // GWC added header for EXIT_SUCCESS.
 #include <cstdlib>
+// GWC added <iosfwd>
+#include <iosfwd>
 // GWC changed nonstandard to standard string class.
 //#include <String.h>
 #include <string>
@@ -362,6 +364,7 @@ public:
 
     // Added by GWC.
     void usage(int status = EXIT_SUCCESS);
+    void usage(std::ostream&);
 };
 
 // GWC removed an extraneous ';' that followed this function definition.

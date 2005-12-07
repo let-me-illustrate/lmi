@@ -37,7 +37,7 @@
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
 // GWC added this RCS Id:
-// $Id: getopt.cpp,v 1.5 2005-05-27 08:16:08 chicares Exp $
+// $Id: getopt.cpp,v 1.6 2005-12-07 04:13:38 chicares Exp $
 
 // GWC conditionalized gcc-specific pragma.
 #ifdef __GNUC__
@@ -100,6 +100,8 @@
 // GWC added this.
 #include <algorithm>     // std::max()
 // GWC added this for prototype of std::isalpha().
+#include <cctype>
+// GWC added this for definition of UCHAR_MAX.
 #include <cctype>
 // GWC added this.
 #include <cstdio>
@@ -885,9 +887,8 @@ GetOpt::next_arg (std::string &s)
 
 // Added by GWC.
 void
-GetOpt::usage(int status)
+GetOpt::usage(std::ostream& os)
 {
-    std::ostream& os(EXIT_SUCCESS == status ? std::cout : std::cerr);
     os
         << "Usage: "
         << nargv[0]
@@ -899,26 +900,26 @@ GetOpt::usage(int status)
     str_vec option_descriptions;
     for(Option const* i = nlongopts; 0 != i->name; ++i)
         {
-        std::string s("  ");
+        int const c = i->val;
+        std::string s;
         // GWC added test to ensure std::isalpha()'s behavior is defined.
-        // INELEGANT !! This useful idiom should be abstracted out.
-        if
-            (   0 == i->flag
-            &&  (EOF == i->val) || (0 <= i->val && i->val <= UCHAR_MAX)
-            &&  std::isalpha(i->val)
-            )
+        if(!((EOF == c || 0 <= c && c <= UCHAR_MAX) && std::isalpha(c)))
             {
-            s += "-";
-            s += static_cast<char>(i->val);
-            s += ", ";
+            // Don't show options with intentionally-bizarre 'val'.
+            continue;
+            }
+        else if(0 == i->flag && std::isalpha(c))
+            {
+            s += '-';
+            s += static_cast<char>(c);
+            s += ',';
             }
         else
             {
-            s += "    ";
+            s += "   ";
             }
-        s += "--";
+        s += "\t--";
         s += i->name;
-        s += "   ";
         max_name_length = std::max(max_name_length, s.size());
         option_names.push_back(s);
         option_descriptions.push_back(i->descr);
@@ -932,8 +933,15 @@ GetOpt::usage(int status)
         )
         {
         n->resize(max_name_length, ' ');
-        os << *n << *d << '\n';
+        os << "  " << *n << '\t' << *d << '\n';
         }
+}
+
+// Added by GWC.
+void
+GetOpt::usage(int status)
+{
+    usage(EXIT_SUCCESS == status ? std::cout : std::cerr);
     std::exit(status);
 }
 
