@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.256 2005-12-07 15:12:25 chicares Exp $
+// $Id: ChangeLog,v 1.257 2005-12-07 16:49:10 chicares Exp $
 
 MAINTENANCE
 
@@ -4906,4 +4906,9 @@ Conform to FHS-2.2 3.4.3, reverting the 20050618T0446Z change:
 because FHS-2.2 3.4.3 explicitly requires 'tar' in /bin/. Treat 'gzip'
 the same way for the same reason. Fix weird definitions of 'date',
 'patch', and 'wget'.
+
+20051207T1649Z <chicares@cox.net> [1215]
+
+  transferor.hpp
+Revise documentation.
 
