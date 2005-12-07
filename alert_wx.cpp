@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: alert_wx.cpp,v 1.4 2005-09-14 14:16:30 chicares Exp $
+// $Id: alert_wx.cpp,v 1.5 2005-12-07 04:28:11 chicares Exp $
 
 // TODO ?? Once this facility is tested, consider using it widely,
 // perhaps instead of using wx's logging classes directly at all.
@@ -35,7 +35,7 @@
 
 #include <wx/app.h> // wxTheApp
 #include <wx/frame.h>
-#include <wx/log.h>
+#include <wx/log.h> // wxSafeShowMessage()
 #include <wx/msgdlg.h>
 
 #include <stdexcept>
