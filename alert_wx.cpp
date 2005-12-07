@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: alert_wx.cpp,v 1.5 2005-12-07 04:28:11 chicares Exp $
+// $Id: alert_wx.cpp,v 1.6 2005-12-07 04:43:33 chicares Exp $
 
 // TODO ?? Once this facility is tested, consider using it widely,
 // perhaps instead of using wx's logging classes directly at all.
@@ -50,10 +50,10 @@ namespace
         );
 
 #if 0
-    // Alert messages could be lost if they're flushed before wx has
-    // initialized its logging facility. Here is an untested idea for
-    // a function that could be called prior to each use of that
-    // facility in this file.
+    /// Alert messages could be lost if they're flushed before wx has
+    /// initialized its logging facility. Here is an untested idea for
+    /// a function that could be called prior to each use of that
+    /// facility in this file.
     void show_safely_if_log_uninitialized(std::string const& s)
         {
         if(0 == wxLog::GetActiveTarget())
@@ -72,15 +72,12 @@ void status_alert(std::string const& s)
     // diagnostics static control on dialog if that exists.
 }
 
-// By design, wx buffers warning messages, and even discards them if
-// a (more severe) error message occurs later. This is an interesting
-// concept, and it prevents flurries of popup messageboxes. But until
-// these 'alert' classes are tested with legacy code that assumes a
-// different behavior, warnings are explicitly flushed here as soon as
-// they occur.
-//
-// TODO ?? Test and decide whether to adopt that wx behavior.
-//
+/// By design, wx buffers warning messages, and even discards them if
+/// a (more severe) error message occurs later. This design flushes
+/// warnings explicitly as soon as they occur, discarding none, as is
+/// more suitable in the intended problem domain; of course, that
+/// choice could be made configurable if desired.
+
 void warning_alert(std::string const& s)
 {
     wxLogWarning(s.c_str());
@@ -108,7 +105,7 @@ void hobsons_choice_alert(std::string const& s)
             // the user for choosing it?
             wxMessageBox
                 (s.c_str()
-                ,"Warning: the illustration may be invalid."
+                ,"Warning: the result may be invalid."
                 ,wxOK | wxICON_EXCLAMATION
                 ,wxTheApp->GetTopWindow()
                 );
