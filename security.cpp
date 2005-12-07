@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: security.cpp,v 1.5 2005-09-12 01:32:19 chicares Exp $
+// $Id: security.cpp,v 1.6 2005-12-07 04:28:11 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -65,7 +65,7 @@ TODO ?? Perhaps "alert*.?pp" should be extended to provide a behavior
 like this, for situations that call for unconditional termination:
 
 #include <wx/app.h>
-#include <wx/log.h>
+#include <wx/log.h> // wxSafeShowMessage()
 
         wxSafeShowMessage
             (diagnostic_message.c_str()
