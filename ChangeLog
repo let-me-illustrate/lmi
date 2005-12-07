@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.255 2005-12-07 05:19:09 chicares Exp $
+// $Id: ChangeLog,v 1.256 2005-12-07 15:12:25 chicares Exp $
 
 MAINTENANCE
 
@@ -4888,4 +4888,22 @@ Resolve gratuitous differences from skeleton branch.
   main_wx.cpp
   main_wx.hpp
 Rename class to facilitate comparison to skeleton branch.
+
+20051207T1512Z <chicares@cox.net> [1216]
+
+  workhorse.make
+Prevent a spurious error message.
+
+  mingw_setup.make
+Review.
+
+  msw_cygwin.make
+  msw_generic.make
+  msw_msys.make
+  posix_fhs.make
+Conform to FHS-2.2 3.4.3, reverting the 20050618T0446Z change:
+  "Expect 'tar' in /usr/bin/, not in /bin/ [FHS-2.2, 3.4.2]."
+because FHS-2.2 3.4.3 explicitly requires 'tar' in /bin/. Treat 'gzip'
+the same way for the same reason. Fix weird definitions of 'date',
+'patch', and 'wget'.
 
