@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_wx.hpp,v 1.6 2005-12-07 04:13:41 chicares Exp $
+// $Id: main_wx.hpp,v 1.7 2005-12-07 05:16:48 chicares Exp $
 
 // Portions of this file are derived from wxWindows files
 //   samples/docvwmdi/docview.h (C) 1998 Julian Smart and Markus Holzem
@@ -51,14 +51,14 @@ class WXDLLEXPORT wxDocMDIParentFrame;
 class WXDLLEXPORT wxDocument;
 class WXDLLEXPORT wxMDIChildFrame;
 
-class lmi_wx_app
+class Skeleton
     :public wxApp
     ,private boost::noncopyable
-    ,virtual private obstruct_slicing<lmi_wx_app>
+    ,virtual private obstruct_slicing<Skeleton>
 {
   public:
-    lmi_wx_app();
-    ~lmi_wx_app();
+    Skeleton();
+    ~Skeleton();
 
     // Called by view classes when they are instantiated.
     wxMDIChildFrame* CreateChildFrame(wxDocument*, ViewEx*);
@@ -97,7 +97,7 @@ class lmi_wx_app
     DECLARE_EVENT_TABLE()
 };
 
-DECLARE_APP(lmi_wx_app)
+DECLARE_APP(Skeleton)
 
 #endif // main_wx_hpp
 

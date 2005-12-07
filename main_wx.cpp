@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_wx.cpp,v 1.27 2005-12-07 04:13:41 chicares Exp $
+// $Id: main_wx.cpp,v 1.28 2005-12-07 05:16:48 chicares Exp $
 
 // Portions of this file are derived from wxWindows files
 //   samples/docvwmdi/docview.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -77,7 +77,7 @@
 #   include "lmi.xpm"
 #endif // !defined __WXMSW__
 
-IMPLEMENT_APP_NO_MAIN(lmi_wx_app)
+IMPLEMENT_APP_NO_MAIN(Skeleton)
 IMPLEMENT_WX_THEME_SUPPORT
 
 // Where a builtin wxID_X identifier exists, use it as such, even if
@@ -91,42 +91,42 @@ IMPLEMENT_WX_THEME_SUPPORT
 // EVT_UPDATE_UI(wxID_SAVE,...) handler here; that seems to require
 // the EVT_MENU_OPEN handler.
 //
-BEGIN_EVENT_TABLE(lmi_wx_app, wxApp)
- EVT_DROP_FILES(                             lmi_wx_app::OnDropFiles             )
- EVT_MENU(wxID_ABOUT                        ,lmi_wx_app::OnAbout                 )
- EVT_MENU(XRCID("window_cascade"           ),lmi_wx_app::OnWindowCascade         )
- EVT_MENU(XRCID("window_next"              ),lmi_wx_app::OnWindowNext            )
- EVT_MENU(XRCID("window_previous"          ),lmi_wx_app::OnWindowPrevious        )
- EVT_MENU(XRCID("window_tile_horizontally" ),lmi_wx_app::OnWindowTileHorizontally)
- EVT_MENU(XRCID("window_tile_vertically"   ),lmi_wx_app::OnWindowTileVertically  )
- EVT_MENU_OPEN(                              lmi_wx_app::OnMenuOpen              )
+BEGIN_EVENT_TABLE(Skeleton, wxApp)
+ EVT_DROP_FILES(                             Skeleton::OnDropFiles             )
+ EVT_MENU(wxID_ABOUT                        ,Skeleton::OnAbout                 )
+ EVT_MENU(XRCID("window_cascade"           ),Skeleton::OnWindowCascade         )
+ EVT_MENU(XRCID("window_next"              ),Skeleton::OnWindowNext            )
+ EVT_MENU(XRCID("window_previous"          ),Skeleton::OnWindowPrevious        )
+ EVT_MENU(XRCID("window_tile_horizontally" ),Skeleton::OnWindowTileHorizontally)
+ EVT_MENU(XRCID("window_tile_vertically"   ),Skeleton::OnWindowTileVertically  )
+ EVT_MENU_OPEN(                              Skeleton::OnMenuOpen              )
 // TODO ?? expunge
-// EVT_UPDATE_UI(wxID_ANY                     ,lmi_wx_app::OnUpdateUI              )
- EVT_UPDATE_UI(wxID_SAVE                    ,lmi_wx_app::OnUpdateFileSave        )
- EVT_UPDATE_UI(wxID_HELP                    ,lmi_wx_app::OnUpdateHelp            )
+// EVT_UPDATE_UI(wxID_ANY                     ,Skeleton::OnUpdateUI              )
+ EVT_UPDATE_UI(wxID_SAVE                    ,Skeleton::OnUpdateFileSave        )
+ EVT_UPDATE_UI(wxID_HELP                    ,Skeleton::OnUpdateHelp            )
 // TODO ?? expunge
 // Enabling this line prevents the menuitem from performing its required
 // action, whether or not the EVT_UPDATE_UI(wxID_SAVE...) handler is also
 // present.
-// EVT_UPDATE_UI(XRCID("wxID_SAVE"           ),lmi_wx_app::OnUpdateFileSave        )
+// EVT_UPDATE_UI(XRCID("wxID_SAVE"           ),Skeleton::OnUpdateFileSave        )
 
 // TODO ?? There has to be a better way.
 /*
-    EVT_UPDATE_UI(XRCID("edit_cell"        ),lmi_wx_app::OnUpdateInapplicable)
-    EVT_UPDATE_UI(XRCID("edit_class"       ),lmi_wx_app::OnUpdateInapplicable)
-    EVT_UPDATE_UI(XRCID("edit_case"        ),lmi_wx_app::OnUpdateInapplicable)
-    EVT_UPDATE_UI(XRCID("run_cell"         ),lmi_wx_app::OnUpdateInapplicable)
-    EVT_UPDATE_UI(XRCID("run_class"        ),lmi_wx_app::OnUpdateInapplicable)
-    EVT_UPDATE_UI(XRCID("run_case"         ),lmi_wx_app::OnUpdateInapplicable)
-    EVT_UPDATE_UI(XRCID("print_cell"       ),lmi_wx_app::OnUpdateInapplicable)
-    EVT_UPDATE_UI(XRCID("print_class"      ),lmi_wx_app::OnUpdateInapplicable)
-    EVT_UPDATE_UI(XRCID("print_case"       ),lmi_wx_app::OnUpdateInapplicable)
-    EVT_UPDATE_UI(XRCID("print_spreadsheet"),lmi_wx_app::OnUpdateInapplicable)
-    EVT_UPDATE_UI(XRCID("paste_census"     ),lmi_wx_app::OnUpdateInapplicable)
-    EVT_UPDATE_UI(XRCID("add_cell"         ),lmi_wx_app::OnUpdateInapplicable)
-    EVT_UPDATE_UI(XRCID("delete_cells"     ),lmi_wx_app::OnUpdateInapplicable)
-    EVT_UPDATE_UI(XRCID("expand_columns"   ),lmi_wx_app::OnUpdateInapplicable)
-    EVT_UPDATE_UI(XRCID("shrink_columns"   ),lmi_wx_app::OnUpdateInapplicable)
+    EVT_UPDATE_UI(XRCID("edit_cell"        ),Skeleton::OnUpdateInapplicable)
+    EVT_UPDATE_UI(XRCID("edit_class"       ),Skeleton::OnUpdateInapplicable)
+    EVT_UPDATE_UI(XRCID("edit_case"        ),Skeleton::OnUpdateInapplicable)
+    EVT_UPDATE_UI(XRCID("run_cell"         ),Skeleton::OnUpdateInapplicable)
+    EVT_UPDATE_UI(XRCID("run_class"        ),Skeleton::OnUpdateInapplicable)
+    EVT_UPDATE_UI(XRCID("run_case"         ),Skeleton::OnUpdateInapplicable)
+    EVT_UPDATE_UI(XRCID("print_cell"       ),Skeleton::OnUpdateInapplicable)
+    EVT_UPDATE_UI(XRCID("print_class"      ),Skeleton::OnUpdateInapplicable)
+    EVT_UPDATE_UI(XRCID("print_case"       ),Skeleton::OnUpdateInapplicable)
+    EVT_UPDATE_UI(XRCID("print_spreadsheet"),Skeleton::OnUpdateInapplicable)
+    EVT_UPDATE_UI(XRCID("paste_census"     ),Skeleton::OnUpdateInapplicable)
+    EVT_UPDATE_UI(XRCID("add_cell"         ),Skeleton::OnUpdateInapplicable)
+    EVT_UPDATE_UI(XRCID("delete_cells"     ),Skeleton::OnUpdateInapplicable)
+    EVT_UPDATE_UI(XRCID("expand_columns"   ),Skeleton::OnUpdateInapplicable)
+    EVT_UPDATE_UI(XRCID("shrink_columns"   ),Skeleton::OnUpdateInapplicable)
 */
 END_EVENT_TABLE()
 
@@ -166,7 +166,7 @@ int WINAPI WinMain
     //   "___mp_findsource"
     //   "___mp_init"
     // The third is traceable in 'mpatrol.log' with 'USEDEBUG' to
-    //   lmi_wx_app::GetEventHashTable() const
+    //   Skeleton::GetEventHashTable() const
     // (although stepping through the code in gdb suggests it's really
     // WinMain(), and mpatrol or libbfd just got the symbol wrong)
     // and seems to be triggered the first time the program allocates
@@ -241,7 +241,7 @@ bool security_validated(bool skip_validation)
 // desirable to maintain different configuration information in a
 // similar manner for other lmi user interfaces.
 
-lmi_wx_app::lmi_wx_app()
+Skeleton::Skeleton()
     :doc_manager_ (0)
     ,frame_       (0)
 {
@@ -250,11 +250,11 @@ lmi_wx_app::lmi_wx_app()
     config_ = wxConfigBase::Get();
 }
 
-lmi_wx_app::~lmi_wx_app()
+Skeleton::~Skeleton()
 {
 }
 
-wxMDIChildFrame* lmi_wx_app::CreateChildFrame
+wxMDIChildFrame* Skeleton::CreateChildFrame
     (wxDocument* doc
     ,ViewEx*     view
     )
@@ -284,7 +284,7 @@ wxMDIChildFrame* lmi_wx_app::CreateChildFrame
     return child_frame;
 }
 
-void lmi_wx_app::InitDocManager()
+void Skeleton::InitDocManager()
 {
     // WX !! At least in wx-2.5.1, this can't be created in the
     // constructor, because that would try to create an instance of
@@ -335,7 +335,7 @@ void lmi_wx_app::InitDocManager()
         );
 }
 
-void lmi_wx_app::InitIcon()
+void Skeleton::InitIcon()
 {
 #ifdef __WXMSW__
     // If a wxIcon rather than a wxIconBundle were used here, then
@@ -353,7 +353,7 @@ void lmi_wx_app::InitIcon()
 #endif // Not defined __WXMSW__.
 }
 
-void lmi_wx_app::InitMenuBar()
+void Skeleton::InitMenuBar()
 {
     wxMenuBar* menu_bar = wxXmlResource::Get()->LoadMenuBar("main_menu");
     if(!menu_bar)
@@ -369,7 +369,7 @@ void lmi_wx_app::InitMenuBar()
 
 // WX !! It seems odd that LoadMenuBar has two signatures, the simpler
 // of which requires no 'parent' argument, while LoadToolBar does not.
-void lmi_wx_app::InitToolBar()
+void Skeleton::InitToolBar()
 {
     wxToolBar* tool_bar = wxXmlResource::Get()->LoadToolBar(frame_, "toolbar");
     if(!tool_bar)
@@ -381,12 +381,12 @@ void lmi_wx_app::InitToolBar()
 
 // WX !! Predefined macro wxID_ABOUT could be mapped by default to
 // an OnAbout handler in the application or frame class.
-void lmi_wx_app::OnAbout(wxCommandEvent&)
+void Skeleton::OnAbout(wxCommandEvent&)
 {
     AboutDialog(frame_).ShowModal();
 }
 
-void lmi_wx_app::OnDropFiles(wxDropFilesEvent& event)
+void Skeleton::OnDropFiles(wxDropFilesEvent& event)
 {
     wxString const* filenames = event.GetFiles();
     for(int j = 0; j < event.GetNumberOfFiles(); ++j)
@@ -395,13 +395,14 @@ void lmi_wx_app::OnDropFiles(wxDropFilesEvent& event)
         }
 }
 
-bool lmi_wx_app::OnExceptionInMainLoop()
+bool Skeleton::OnExceptionInMainLoop()
 {
     try
         {
-        // This just rethrows the exception. It seems crucial that the
-        // exception be thrown from the same dll that caught it. This
-        // works only with a 'monolithic' wx dll.
+        // This just rethrows the exception. For msw at least, it
+        // seems crucial that the exception be thrown from the same
+        // shared library that caught it. This works only with a
+        // 'monolithic' wx shared library.
         return wxAppConsole::OnExceptionInMainLoop();
         }
     catch(hobsons_choice_exception&)
@@ -427,7 +428,7 @@ bool lmi_wx_app::OnExceptionInMainLoop()
         }
 }
 
-int lmi_wx_app::OnExit()
+int Skeleton::OnExit()
 {
     doc_manager_->FileHistorySave(*config_);
     delete doc_manager_;
@@ -435,7 +436,7 @@ int lmi_wx_app::OnExit()
     return 0;
 }
 
-bool lmi_wx_app::OnInit()
+bool Skeleton::OnInit()
 {
 // WX !! An exception thrown anywhere in this function, even right
 // before the 'return' statement at the end, gets caught by
@@ -519,7 +520,7 @@ bool lmi_wx_app::OnInit()
     return true;
 }
 
-void lmi_wx_app::OnMenuOpen(wxMenuEvent&)
+void Skeleton::OnMenuOpen(wxMenuEvent&)
 {
     int child_frame_count = 0;
     wxWindowList wl = frame_->GetChildren();
@@ -548,7 +549,7 @@ void lmi_wx_app::OnMenuOpen(wxMenuEvent&)
             }
 
         // Needed for (xrc) menu enablement: a
-        //   EVT_UPDATE_UI(XRCID("wxID_SAVE"),lmi_wx_app::OnUpdateFileSave)
+        //   EVT_UPDATE_UI(XRCID("wxID_SAVE"),Skeleton::OnUpdateFileSave)
         // handler fails to update enablement for that menu item.
         // However, enablement of an item with the same ID on the
         // toolbar apparently requires the EVT_UPDATE_UI technique.
@@ -576,7 +577,7 @@ void lmi_wx_app::OnMenuOpen(wxMenuEvent&)
 
 // WX !! The wx exception-handling code doesn't seem to permit
 // graceful handling here.
-void lmi_wx_app::OnUnhandledException()
+void Skeleton::OnUnhandledException()
 {
     wxSafeShowMessage("Terminating due to unhandled exception.", "Fatal error");
 }
@@ -588,7 +589,7 @@ void lmi_wx_app::OnUnhandledException()
 // the OnMenuOpen() handler above doesn't handle toolbar enablement,
 // even when the menu is pulled down; and, OTOH, this function alone
 // doesn't handle menuitem enablement.
-void lmi_wx_app::OnUpdateFileSave(wxUpdateUIEvent& event)
+void Skeleton::OnUpdateFileSave(wxUpdateUIEvent& event)
 {
     wxDocument *doc = doc_manager_->GetCurrentDocument();
     event.Enable(doc && doc->IsModified());
@@ -599,13 +600,13 @@ void lmi_wx_app::OnUpdateFileSave(wxUpdateUIEvent& event)
 //    event.Enable(doc && doc->IsModified());
 }
 
-void lmi_wx_app::OnUpdateHelp(wxUpdateUIEvent& e)
+void Skeleton::OnUpdateHelp(wxUpdateUIEvent& e)
 {
     e.Enable(false);
 }
 
 // TODO ?? An unsuccessful experiment.
-void lmi_wx_app::OnUpdateInapplicable(wxUpdateUIEvent& e)
+void Skeleton::OnUpdateInapplicable(wxUpdateUIEvent& e)
 {
 // This handler seems to override mdi childrens'.
 //    e.Enable(0 != frame_->GetChildren().GetCount());
@@ -625,26 +626,26 @@ This doesn't undo that override.
 // WX !! It seems that a function like this should be able to handle
 // all toolbar and menu enablement. But it appears that a much more
 // complex implementation is required for wxID_SAVE.
-void lmi_wx_app::OnUpdateUI(wxUpdateUIEvent& event)
+void Skeleton::OnUpdateUI(wxUpdateUIEvent&)
 {
 }
 
-void lmi_wx_app::OnWindowCascade(wxCommandEvent&)
+void Skeleton::OnWindowCascade(wxCommandEvent&)
 {
     frame_->Cascade();
 }
 
-void lmi_wx_app::OnWindowNext(wxCommandEvent&)
+void Skeleton::OnWindowNext(wxCommandEvent&)
 {
     frame_->ActivateNext();
 }
 
-void lmi_wx_app::OnWindowPrevious(wxCommandEvent&)
+void Skeleton::OnWindowPrevious(wxCommandEvent&)
 {
     frame_->ActivatePrevious();
 }
 
-void lmi_wx_app::OnWindowTileHorizontally(wxCommandEvent&)
+void Skeleton::OnWindowTileHorizontally(wxCommandEvent&)
 {
     frame_->Tile();
 }
@@ -652,7 +653,7 @@ void lmi_wx_app::OnWindowTileHorizontally(wxCommandEvent&)
 // FSF !! Need this in the wx library for GNU/linux.
 // WX !! A note in src/msw/mdi.cpp suggests adding an orientation
 // argument to Tile(); until that's done, use this workaround.
-void lmi_wx_app::OnWindowTileVertically(wxCommandEvent&)
+void Skeleton::OnWindowTileVertically(wxCommandEvent&)
 {
 #ifdef __WXMSW__
     ::SendMessage
@@ -664,7 +665,7 @@ void lmi_wx_app::OnWindowTileVertically(wxCommandEvent&)
 #endif // __WXMSW__
 }
 
-bool lmi_wx_app::ProcessCommandLine(int argc, char* argv[])
+bool Skeleton::ProcessCommandLine(int argc, char* argv[])
 {
     // TRICKY !! Some long options are aliased to unlikely octal values.
     static struct Option long_options[] =
