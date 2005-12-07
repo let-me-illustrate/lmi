@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_wx.hpp,v 1.5 2005-11-30 01:36:41 chicares Exp $
+// $Id: main_wx.hpp,v 1.6 2005-12-07 04:13:41 chicares Exp $
 
 // Portions of this file are derived from wxWindows files
 //   samples/docvwmdi/docview.h (C) 1998 Julian Smart and Markus Holzem
@@ -87,6 +87,8 @@ class lmi_wx_app
     virtual int  OnExit               ();
     virtual bool OnInit               ();
     virtual void OnUnhandledException ();
+
+    bool ProcessCommandLine(int argc, char* argv[]);
 
     wxConfigBase* config_;
     DocManagerEx* doc_manager_;
