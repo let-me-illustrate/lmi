@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: argv0_test.cpp,v 1.3 2005-05-11 23:25:24 chicares Exp $
+// $Id: argv0_test.cpp,v 1.4 2005-12-07 04:13:41 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -39,11 +39,7 @@ int test_main(int, char* argv[])
 //   fs::path path(argv[0], fs::native);
 // instead--why do otherwise here?
 
-#ifndef __WXMSW__
     fs::startup_path(argv[0]);
-#else // __WXMSW__ defined.
-    fs::startup_path(__argv[0]);
-#endif // __WXMSW__ defined.
 
     fs::initial_path();
 
