@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: wx_workarounds.hpp,v 1.2 2005-08-02 12:38:27 chicares Exp $
+// $Id: wx_workarounds.hpp,v 1.3 2005-12-07 16:56:36 chicares Exp $
 
 #ifndef wx_workarounds_hpp
 #define wx_workarounds_hpp
@@ -27,6 +27,10 @@
 #include "config.hpp"
 
 #include <wx/defs.h>
+
+// These string-comparison operators became unnecessary in wx-2.5.4,
+// and harmful in wx-2.6.0:
+//   http://lists.gnu.org/archive/html/lmi/2005-08/msg00002.html
 
 #if !wxCHECK_VERSION(2,5,4) // wx prior to version 2.5.4 .
 
