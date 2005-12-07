@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_wx.cpp,v 1.26 2005-12-01 04:06:34 chicares Exp $
+// $Id: main_wx.cpp,v 1.27 2005-12-07 04:13:41 chicares Exp $
 
 // Portions of this file are derived from wxWindows files
 //   samples/docvwmdi/docview.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -64,6 +64,7 @@
 #include <wx/config.h>
 #include <wx/docmdi.h>
 #include <wx/image.h>
+#include <wx/log.h> // wxSafeShowMessage()
 #include <wx/menu.h>
 #include <wx/msgdlg.h>
 #include <wx/toolbar.h>
@@ -129,7 +130,6 @@ BEGIN_EVENT_TABLE(lmi_wx_app, wxApp)
 */
 END_EVENT_TABLE()
 
-void process_command_line(int argc, char* argv[]);
 bool security_validated(bool skip_validation);
 
 #ifdef __WXMSW__
@@ -147,7 +147,6 @@ extern int wxEntry
 
 #ifndef __WXMSW__
 int main(int argc, char* argv[])
-{
 #else // __WXMSW__ defined.
 int WINAPI WinMain
     (HINSTANCE hInstance
@@ -155,11 +154,8 @@ int WINAPI WinMain
     ,LPSTR     lpCmdLine
     ,int       nCmdShow
     )
-{
-    int argc = __argc;
-    char** argv = __argv;
 #endif // __WXMSW__ defined.
-
+{
     // WX !! and MPATROL !! Using wx-2.5.1 and mpatrol-1.4.8, both
     // dynamically linked to this application built with gcc-3.2.3,
     // three memory leaks are reported with:
@@ -184,14 +180,6 @@ int WINAPI WinMain
         {
         initialize_application();
         initialize_filesystem();
-        process_command_line(argc, argv);
-
-        // The most privileged password bypasses security validation.
-        if(!security_validated(global_settings::instance().ash_nazg()))
-            {
-            throw std::runtime_error("Security validation failed.");
-            }
-
 #ifndef __WXMSW__
         result = wxEntry(argc, argv);
 #else // __WXMSW__ defined.
@@ -216,138 +204,6 @@ int WINAPI WinMain
     validate_fenv();
 
     return result;
-}
-
-// TODO ?? Can't use warning() here--it prevents wx's logging from
-// working downstream. Consider an additional 'alert' stream that's
-// always safe to use...and perhaps doesn't throw, so that it can
-// appropriately be used in dtors.
-
-void process_command_line(int argc, char* argv[])
-{
-    // TRICKY !! Some long options are aliased to unlikely octal values.
-    static struct Option long_options[] =
-      {
-        {"accept"    ,NO_ARG   ,0 ,'a' ,0 ,"accept license (-l to display)"},
-        {"ash_nazg"  ,NO_ARG   ,0 ,001 ,0 ,"ash nazg durbatulûk"},
-        {"ash_naz"   ,NO_ARG   ,0 ,003 ,0 ,"fraud"},
-        {"help"      ,NO_ARG   ,0 ,'h' ,0 ,"display this help and exit"},
-        {"license"   ,NO_ARG   ,0 ,'l' ,0 ,"display license and exit"},
-        {"mellon"    ,NO_ARG   ,0 ,002 ,0 ,"pedo mellon a minno"},
-        {"mello"     ,NO_ARG   ,0 ,003 ,0 ,"fraud"},
-        {"data_path" ,REQD_ARG ,0 ,'d' ,0 ,"path to data files"},
-        {"test_path" ,REQD_ARG ,0 ,'t' ,0 ,"path to test files"},
-        {"print_db"  ,NO_ARG   ,0 ,'p' ,0 ,"print product databases"},
-        {0           ,NO_ARG   ,0 ,0   ,0 ,""}
-      };
-
-    bool license_accepted = false;
-    bool show_license     = false;
-    bool show_help        = false;
-
-    int c;
-    int option_index = 0;
-    GetOpt getopt_long
-        (argc
-        ,argv
-        ,""
-        ,long_options
-        ,&option_index
-        ,true
-        );
-    getopt_long.opterr = false;
-    while(EOF != (c = getopt_long()))
-        {
-        switch(c)
-            {
-            case 001:
-                {
-                global_settings::instance().set_ash_nazg(true);
-                }
-                break;
-
-            case 002:
-                {
-                global_settings::instance().set_mellon(true);
-                }
-                break;
-
-            case 'a':
-                {
-                license_accepted = true;
-                }
-                break;
-
-            case 'd':
-                {
-                global_settings::instance().set_data_directory
-                    (getopt_long.optarg
-                    );
-                }
-                break;
-
-            case 'h':
-                {
-                show_help = true;
-                }
-                break;
-
-            case 'l':
-                {
-                show_license = true;
-                }
-                break;
-
-            case 'p':
-                {
-                print_databases();
-                }
-                break;
-
-            case 't':
-                {
-                global_settings::instance().set_regression_test_directory
-                    (getopt_long.optarg
-                    );
-                }
-                break;
-
-// TODO ?? GUI not started yet--no output from warning().
-
-            case '?':
-                {
-////                warning() << "Unrecognized option '";
-                int offset = getopt_long.optind - 1;
-                if(0 < offset)
-                    {
-////                    warning() << getopt_long.nargv[offset];
-                    }
-////                warning() << "'." << LMI_FLUSH;
-                }
-                break;
-
-            default:
-;
-////                warning() << "Unrecognized option '" << c << "'." << LMI_FLUSH;
-            }
-        }
-
-    if(!license_accepted)
-        {
-////        warning() << license_notices() << LMI_FLUSH;
-        }
-
-    if(show_license)
-        {
-////        warning() << license_as_text() << LMI_FLUSH;
-        }
-
-    if(show_help)
-        {
-// TODO ?? Doesn't work--why not?
-//::AllocConsole(); // msw workaround.
-        getopt_long.usage();
-        }
 }
 
 // TODO ?? This largely duplicates function validate_security(). Refactor.
@@ -589,6 +445,17 @@ bool lmi_wx_app::OnInit()
 //
 //    throw std::runtime_error("This does not get caught gracefully.");
 
+    if(false == ProcessCommandLine(argc, argv))
+        {
+        return false;
+        }
+
+    // The most privileged password bypasses security validation.
+    if(!security_validated(global_settings::instance().ash_nazg()))
+        {
+        throw std::runtime_error("Security validation failed.");
+        }
+
     wxXmlResource::Get()->InitAllHandlers();
 
     if(!wxXmlResource::Get()->Load("xml_notebook.xrc"))
@@ -795,5 +662,105 @@ void lmi_wx_app::OnWindowTileVertically(wxCommandEvent&)
         ,0
         );
 #endif // __WXMSW__
+}
+
+bool lmi_wx_app::ProcessCommandLine(int argc, char* argv[])
+{
+    // TRICKY !! Some long options are aliased to unlikely octal values.
+    static struct Option long_options[] =
+      {
+        {"ash_nazg"  ,NO_ARG   ,0 ,001 ,0 ,"ash nazg durbatulûk"},
+        {"ash_naz"   ,NO_ARG   ,0 ,003 ,0 ,"fraud"},
+        {"help"      ,NO_ARG   ,0 ,'h' ,0 ,"display this help and exit"},
+        {"mellon"    ,NO_ARG   ,0 ,002 ,0 ,"pedo mellon a minno"},
+        {"mello"     ,NO_ARG   ,0 ,003 ,0 ,"fraud"},
+        {"data_path" ,REQD_ARG ,0 ,'d' ,0 ,"path to data files"},
+        {"test_path" ,REQD_ARG ,0 ,'t' ,0 ,"path to test files"},
+        {"print_db"  ,NO_ARG   ,0 ,'p' ,0 ,"print product databases"},
+        {0           ,NO_ARG   ,0 ,0   ,0 ,""}
+      };
+
+    bool show_help        = false;
+
+    int option_index = 0;
+    GetOpt getopt_long
+        (argc
+        ,argv
+        ,""
+        ,long_options
+        ,&option_index
+        ,true
+        );
+    getopt_long.opterr = false;
+    int c;
+    while(EOF != (c = getopt_long()))
+        {
+        switch(c)
+            {
+            case 001:
+                {
+                global_settings::instance().set_ash_nazg(true);
+                }
+                break;
+
+            case 002:
+                {
+                global_settings::instance().set_mellon(true);
+                }
+                break;
+
+            case 'd':
+                {
+                global_settings::instance().set_data_directory
+                    (getopt_long.optarg
+                    );
+                }
+                break;
+
+            case 'h':
+                {
+                show_help = true;
+                }
+                break;
+
+            case 'p':
+                {
+                print_databases();
+                }
+                break;
+
+            case 't':
+                {
+                global_settings::instance().set_regression_test_directory
+                    (getopt_long.optarg
+                    );
+                }
+                break;
+
+            case '?':
+                {
+                warning() << "Unrecognized option '";
+                int offset = getopt_long.optind - 1;
+                if(0 < offset)
+                    {
+                    warning() << getopt_long.nargv[offset];
+                    }
+                warning() << "'." << std::flush;
+                }
+                break;
+
+            default:
+                warning() << "Unrecognized option '" << c << "'." << std::flush;
+            }
+        }
+
+    if(show_help)
+        {
+        getopt_long.usage(warning());
+        warning() << std::flush;
+        return false;
+        }
+
+    return true;
 }
 
