@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.254 2005-12-05 17:50:17 chicares Exp $
+// $Id: ChangeLog,v 1.255 2005-12-07 05:19:09 chicares Exp $
 
 MAINTENANCE
 
@@ -4857,4 +4857,35 @@ Add xmllint.
 
   workhorse.make
 Import selected changes from skeleton branch.
+
+20051207T0413Z <chicares@cox.net> [1217]
+
+  getopt.cpp
+  getopt.hpp
+Import selected changes from skeleton branch: generalize usage().
+
+  argv0_test.cpp
+  main_wx.cpp
+  main_wx.hpp
+Remove nonstandard '__arg[cv]'.
+
+20051207T0428Z <chicares@cox.net> [1217]
+
+  illustration_view.cpp
+Include a required header.
+
+  alert_wx.cpp
+  security.cpp
+Document reason for including a header.
+
+20051207T0443Z <chicares@cox.net> [1216]
+
+  alert_wx.cpp
+Resolve gratuitous differences from skeleton branch.
+
+20051207T0516Z <chicares@cox.net> [1216]
+
+  main_wx.cpp
+  main_wx.hpp
+Rename class to facilitate comparison to skeleton branch.
 
