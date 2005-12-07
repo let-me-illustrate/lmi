@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: transferor.cpp,v 1.4 2005-06-17 01:42:49 zeitlin Exp $
+// $Id: transferor.cpp,v 1.5 2005-12-07 18:24:34 chicares Exp $
 
 // Acknowledgment
 
@@ -453,15 +453,16 @@ if(!dropped)
     {
         if(td == from_string_to_control)
             {
-            // Remove wxDateTime's half-day noon adjustment.
+            // Astronomical JDN = chronological JDN - 0.5 .
             wxDateTime jdn(numeric_io_cast<double>(data) - 0.5);
             control.SetValue(jdn);
             }
         else
             {
+            // Chronological JDN = astronomical JDN + 0.5 .
             data = numeric_io_cast<std::string>
                 (static_cast<long int>
-                    (control.GetValue().GetJDN())
+                    (control.GetValue().GetJDN() + 0.5)
                 );
             }
         return true;
