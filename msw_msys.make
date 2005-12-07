@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: msw_msys.make,v 1.7 2005-12-05 16:01:46 wboutin Exp $
+# $Id: msw_msys.make,v 1.8 2005-12-07 15:12:25 chicares Exp $
 
 ################################################################################
 
@@ -79,6 +79,7 @@ RC     := $(PATH_GCC)windres
 CP      := $(PATH_BIN)cp
 DATE    := $(PATH_BIN)date
 ECHO    := $(PATH_BIN)echo
+GZIP    := $(PATH_BIN)gzip
 LS      := $(PATH_BIN)ls
 MKDIR   := $(PATH_BIN)mkdir
 MV      := $(PATH_BIN)mv
@@ -98,15 +99,15 @@ RM      := $(PATH_BIN)rm
 # SED     := $(PATH_BIN)sed
 SED     := /c/usr/bin/sed
 
+TAR     := $(PATH_BIN)tar
+
 # FHS-2.2 would put these in /usr/bin .
 
 BZIP2   := $(PATH_USR_BIN)bzip2
 DIFF    := $(PATH_USR_BIN)diff
 GREP    := $(PATH_USR_BIN)grep
-GZIP    := $(PATH_USR_BIN)gzip
 MD5SUM  := $(PATH_USR_BIN)md5sum
 PATCH   := $(PATH_USR_BIN)patch
-TAR     := $(PATH_USR_BIN)tar
 TOUCH   := $(PATH_USR_BIN)touch
 TR      := $(PATH_USR_BIN)tr
 WC      := $(PATH_USR_BIN)wc

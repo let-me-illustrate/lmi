@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: msw_generic.make,v 1.6 2005-12-05 16:01:46 wboutin Exp $
+# $Id: msw_generic.make,v 1.7 2005-12-07 15:12:25 chicares Exp $
 
 ################################################################################
 
@@ -63,35 +63,33 @@ RC  := $(mingw_dir)/bin/windres
 # Standard utilities.
 
 gnu_utils_dir  := $(system_root)/gnu
-msys_utils_dir := $(system_root)/msys/1.0/bin
 
 # Required in /bin (if anywhere) by FHS-2.2 .
 
 CP      := $(gnu_utils_dir)/cp
-# TODO ?? Build this from FSF sources and put it in the same
+# TODO ?? Build this from gnu.org sources and put it in the same
 # directory as everything else.
-#DATE    := $(gnu_utils_dir)/date
-DATE    ?= $(cygwin_dir)/bin/date
+DATE    := $(gnu_utils_dir)/date
 ECHO    := $(gnu_utils_dir)/echo
+GZIP    := $(gnu_utils_dir)/gzip
 LS      := $(gnu_utils_dir)/ls
 MKDIR   := $(gnu_utils_dir)/mkdir
 MV      := $(gnu_utils_dir)/mv
 RM      := $(gnu_utils_dir)/rm
 SED     := $(gnu_utils_dir)/sed
+TAR     := $(gnu_utils_dir)/tar
 
 # FHS-2.2 would put these in /usr/bin .
 
 BZIP2   := $(gnu_utils_dir)/bzip2
 DIFF    := $(gnu_utils_dir)/diff
 GREP    := $(gnu_utils_dir)/grep
-GZIP    := $(gnu_utils_dir)/gzip
 MD5SUM  := $(gnu_utils_dir)/md5sum
-PATCH   := $(msys_utils_dir)/patch
-TAR     := $(gnu_utils_dir)/tar
+PATCH   := $(gnu_utils_dir)/patch
 TOUCH   := $(gnu_utils_dir)/touch
 TR      := $(gnu_utils_dir)/tr
 WC      := $(gnu_utils_dir)/wc
-WGET    := $(msys_utils_dir)/wget
+WGET    := $(gnu_utils_dir)/wget
 XMLLINT := $(gnu_utils_dir)/xmllint
 
 ################################################################################
