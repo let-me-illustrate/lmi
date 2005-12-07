@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: workhorse.make,v 1.53 2005-12-05 17:50:17 chicares Exp $
+# $Id: workhorse.make,v 1.54 2005-12-07 15:12:21 chicares Exp $
 
 ###############################################################################
 
@@ -743,7 +743,10 @@ regression_test_md5sums  := $(test_dir)/md5sums-$(yyyymmddhhmm)
 regression_test: install
 	@$(ECHO) Regression test:
 	@-cd $(test_dir); \
-	  $(foreach z, $(addprefix *., $(test_result_suffixes)), $(RM) --force $z;)
+	  $(foreach z, \
+	    $(wildcard $(addprefix *., $(test_result_suffixes))) \
+	    , $(RM) --force $z; \
+	  )
 	@cd $(test_dir); \
 	  $(bin_dir)/lmi_cli_shared \
 	    --ash_nazg --accept --regress \
