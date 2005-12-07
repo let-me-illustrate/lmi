@@ -19,12 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xml_notebook.tpp,v 1.2 2005-11-29 14:00:31 chicares Exp $
-
-#ifdef __BORLANDC__
-#   include "pchfile.hpp"
-#   pragma hdrstop
-#endif // __BORLANDC__
+// $Id: xml_notebook.tpp,v 1.3 2005-12-07 16:56:36 chicares Exp $
 
 #include "xml_notebook.hpp"
 
