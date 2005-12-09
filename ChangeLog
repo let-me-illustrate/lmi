@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.259 2005-12-07 18:24:34 chicares Exp $
+// $Id: ChangeLog,v 1.260 2005-12-09 05:04:41 chicares Exp $
 
 MAINTENANCE
 
@@ -4922,4 +4922,9 @@ Import selected changes from skeleton branch.
 
   transferor.cpp
 Fix defect #13333.
+
+20051209T0504Z <chicares@cox.net> [1215]
+
+  workhorse.make
+Revert erroneous 20051207T1512Z change.
 
