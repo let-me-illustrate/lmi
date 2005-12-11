@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_wx.cpp,v 1.28 2005-12-07 05:16:48 chicares Exp $
+// $Id: main_wx.cpp,v 1.29 2005-12-11 08:55:15 chicares Exp $
 
 // Portions of this file are derived from wxWindows files
 //   samples/docvwmdi/docview.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -459,17 +459,17 @@ bool Skeleton::OnInit()
 
     wxXmlResource::Get()->InitAllHandlers();
 
-    if(!wxXmlResource::Get()->Load("xml_notebook.xrc"))
+    if(!wxXmlResource::Get()->Load(AddDataDir("xml_notebook.xrc")))
         {
         fatal_error() << "Unable to load xml resources." << LMI_FLUSH;
         }
 
-    if(!wxXmlResource::Get()->Load("menus.xrc"))
+    if(!wxXmlResource::Get()->Load(AddDataDir("menus.xrc")))
         {
         fatal_error() << "Unable to load menubar." << LMI_FLUSH;
         }
 
-    if(!wxXmlResource::Get()->Load("toolbar.xrc"))
+    if(!wxXmlResource::Get()->Load(AddDataDir("toolbar.xrc")))
         {
         fatal_error() << "Unable to load toolbar." << LMI_FLUSH;
         }

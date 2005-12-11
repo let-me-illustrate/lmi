@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: workhorse.make,v 1.55 2005-12-09 05:04:41 chicares Exp $
+# $Id: workhorse.make,v 1.56 2005-12-11 08:55:15 chicares Exp $
 
 ###############################################################################
 
@@ -585,12 +585,6 @@ lmi_cgi$(EXEEXT): $(cgi_objects) $(lmi_common_objects)
 
 # Install.
 
-# TODO ?? It's confusing to place
-#   $(data_files) in $(bin_dir), but other
-#   data files in $(data_dir).
-# And some of the files in $(data_dir) are found only in the ftp
-# area of savannah; should they be in cvs?
-
 # TODO ?? This line
 #   $(CP) --preserve --update $^
 # isn't quite right: running 'make install build_type=[...]' with
@@ -614,7 +608,8 @@ install: $(default_targets)
 	+@[ -d $(data_dir)       ] || $(MKDIR) --parents $(data_dir)
 	+@[ -d $(test_dir)       ] || $(MKDIR) --parents $(test_dir)
 	+@[ -d $(touchstone_dir) ] || $(MKDIR) --parents $(touchstone_dir)
-	@$(CP) --preserve --update $^ $(data_files) $(bin_dir)
+	@$(CP) --preserve --update $^ $(bin_dir)
+	@$(CP) --preserve --update $(data_files) $(data_dir)
 	@cd $(data_dir); $(bin_dir)/product_files
 
 ################################################################################
