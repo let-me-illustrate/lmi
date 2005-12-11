@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: alert_cli.cpp,v 1.5 2005-11-01 04:59:36 chicares Exp $
+// $Id: alert_cli.cpp,v 1.6 2005-12-11 21:24:17 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -42,7 +42,6 @@ namespace
         ,fatal_error_alert
         );
 
-    // Not referenced for now, except in an ifdef'd-out block.
     bool continue_anyway()
     {
         int c;
@@ -78,23 +77,24 @@ void warning_alert(std::string const& s)
 
 void hobsons_choice_alert(std::string const& s)
 {
-    throw std::runtime_error(s);
-#if 0
-    // If it seems desirable to offer a choice, the following tested
-    // code can be used. That seems a poor choice for applications
-    // that should run unattended, such as servers or regression
-    // tests.
+    // TODO ?? If it seems desirable to offer a choice, then this
+    // should be made a configurable option. This behavior is
+    // certainly a poor choice for applications that should run
+    // unattended, such as servers or regression tests.
     //
-    // TODO ?? This choice could be governed by
-    //   configurable_settings::instance().offer_hobsons_choice()
-    // if desired; otherwise, if this alternative behavior is never
-    // useful, then this code should be removed.
-    std::cerr << s << '\n' << hobsons_prompt() << std::endl;
-    if(continue_anyway())
+    static const volatile bool offer_hobsons_choice = false;
+    if(offer_hobsons_choice)
         {
-        throw hobsons_choice_exception();
+        std::cerr << s << '\n' << hobsons_prompt() << std::endl;
+        if(continue_anyway())
+            {
+            throw hobsons_choice_exception();
+            }
         }
-#endif // 0
+    else
+        {
+        throw std::runtime_error(s);
+        }
 }
 
 void fatal_error_alert(std::string const& s)
