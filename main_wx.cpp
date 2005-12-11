@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_wx.cpp,v 1.30 2005-12-11 14:07:58 chicares Exp $
+// $Id: main_wx.cpp,v 1.31 2005-12-11 14:18:49 chicares Exp $
 
 // Portions of this file are derived from wxWindows files
 //   samples/docvwmdi/docview.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -406,25 +406,18 @@ bool Skeleton::OnExceptionInMainLoop()
         }
     catch(hobsons_choice_exception&)
         {
-        return true;
+        // Show no message here: one was already shown, and the safe
+        // default action (throwing this exception) was accepted.
         }
     catch(std::exception& e)
         {
-        int z = wxMessageBox
-            (e.what()
-            ,"Attempt to continue?"
-            ,wxYES_NO | wxICON_QUESTION
-            );
-        return wxYES == z;
+        wxSafeShowMessage("Error", e.what());
         }
     catch(...)
         {
-        wxSafeShowMessage
-            ("Error caught in OnExceptionInMainLoop()."
-            ,"Unknown error"
-            );
-        return false;
+        wxSafeShowMessage("Error", "Unknown error");
         }
+        return true;
 }
 
 int Skeleton::OnExit()
