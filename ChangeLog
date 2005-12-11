@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.260 2005-12-09 05:04:41 chicares Exp $
+// $Id: ChangeLog,v 1.261 2005-12-11 08:55:15 chicares Exp $
 
 MAINTENANCE
 
@@ -4927,4 +4927,10 @@ Fix defect #13333.
 
   workhorse.make
 Revert erroneous 20051207T1512Z change.
+
+20051211T0854Z <chicares@cox.net> [1214]
+
+  main_wx.cpp
+  workhorse.make
+Relocate '.xrc' and '.xpm' files to data directory.
 
