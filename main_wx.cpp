@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_wx.cpp,v 1.29 2005-12-11 08:55:15 chicares Exp $
+// $Id: main_wx.cpp,v 1.30 2005-12-11 14:07:58 chicares Exp $
 
 // Portions of this file are derived from wxWindows files
 //   samples/docvwmdi/docview.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -174,7 +174,7 @@ int WINAPI WinMain
     // tracing this 'leak' becomes cumbersome and mysterious.
     std::string unused("Seems to trigger initialization of something.");
 
-    int result = EXIT_SUCCESS;
+    int result = EXIT_FAILURE;
 
     try
         {
@@ -188,17 +188,16 @@ int WINAPI WinMain
         }
     catch(hobsons_choice_exception&)
         {
-        return EXIT_FAILURE;
+        // Show no message here: one was already shown, and the safe
+        // default action (throwing this exception) was accepted.
         }
     catch(std::exception& e)
         {
         wxSafeShowMessage("Fatal error", e.what());
-        return EXIT_FAILURE;
         }
     catch(...)
         {
         wxSafeShowMessage("Fatal error", "Unknown error");
-        return EXIT_FAILURE;
         }
 
     validate_fenv();
@@ -407,7 +406,7 @@ bool Skeleton::OnExceptionInMainLoop()
         }
     catch(hobsons_choice_exception&)
         {
-        return EXIT_FAILURE;
+        return true;
         }
     catch(std::exception& e)
         {
