@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: alert.hpp,v 1.6 2005-09-14 14:16:30 chicares Exp $
+// $Id: alert.hpp,v 1.7 2005-12-11 21:24:17 chicares Exp $
 
 #ifndef alert_hpp
 #define alert_hpp
@@ -30,9 +30,10 @@
 
 // Instead of <iosfwd>, include <ostream> to make std::flush available
 // to modules that use the LMI_ASSERT macro.
+
+#include <exception>
 #include <ostream>
 #include <string>
-#include <exception>
 
 /// Print user messages in a manner appropriate to the interface and
 /// platform by writing to the std::ostreams these functions return.
@@ -146,10 +147,14 @@ void fatal_error_alert    (std::string const&);
 /// This function must be called exactly once. See platform-specific
 /// implementations.
 ///
-/// TODO ?? This function's actual return value doesn't matter, but it
-/// must exist because the implementation provided uses it to
-/// initialize a non-local object, thus ensuring that the pointers are
-/// initialized. This technique should be rethought.
+/// This function's actual return value doesn't matter, but it must
+/// exist because the implementation provided uses it to initialize a
+/// non-local object, thus ensuring that the pointers are initialized.
+/// TODO ?? See
+///   <news:1006352851.15484.0.nnrp-08.3e31d362@news.demon.co.uk>
+/// and Kanze's reply. The technique and its documentation could be
+/// improved as discussed here:
+///   http://lists.nongnu.org/archive/html/lmi/2005-11/msg00016.html
 
 bool LMI_EXPIMP set_alert_functions
     (void(*status_alert_function_pointer        )(std::string const&)
@@ -162,11 +167,13 @@ bool LMI_EXPIMP set_alert_functions
 /// Making this a function eliminates duplication and ensures that the
 /// question is always posed in the same terms.
 ///
-/// TODO ?? Sometimes it is inappropriate to ask a question and wait
-/// for a response. For unit tests, failure semantics would probably be
-/// more appropriate; without such an option, unit tests that would
-/// require intervention just won't be written. A server application
-/// probably should fail and write a message in a log file.
+/// Sometimes it is inappropriate to ask a question and wait for a
+/// response. When this facility is used in command-line unit tests
+/// of other code, failure semantics are more appropriate, because
+/// such tests should not require manual intervention; therefore, the
+/// implementation provided for a command-line interface writes to
+/// stderr and signals a fatal error. A server application probably
+/// should fail and write a message in a log file.
 
 std::string const& LMI_EXPIMP hobsons_prompt();
 

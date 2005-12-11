@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: alert.cpp,v 1.5 2005-11-07 01:30:24 chicares Exp $
+// $Id: alert.cpp,v 1.6 2005-12-11 21:24:17 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -88,13 +88,13 @@ bool set_alert_functions
     return true;
 }
 
-// Member function alert_buf::alert_string() provides get-reset-use
-// semantics to ensure that the std::stringbuf is reset even if an
-// exception is thrown by alert_buf::raise_alert(). Performing the
-// reset in alert_buf::sync() after calling alert_buf::raise_alert()
-// would give get-use-[throw]-reset semantics, which wouldn't work
-// correctly: in the event of an exception, the std::stringbuf would
-// not be cleared of its former contents.
+/// Member function alert_buf::alert_string() provides get-reset-use
+/// semantics to ensure that the std::stringbuf is reset even if an
+/// exception is thrown by alert_buf::raise_alert(). Performing the
+/// reset in alert_buf::sync() after calling alert_buf::raise_alert()
+/// would give get-use-[throw]-reset semantics, which wouldn't work
+/// correctly: in the event of an exception, the std::stringbuf would
+/// not be cleared of its former contents.
 
 class alert_buf
     :public std::stringbuf
@@ -166,12 +166,12 @@ class fatal_error_buf
         }
 };
 
-// Exceptions must be cleared here: otherwise, any prior exception
-// would cause this function to fail when it calls exceptions().
-//
-// Both 'failbit' [27.6.2.5.3/8] and 'badbit' [27.6.2.1/3] must be
-// specified in the call to exceptions().
-//
+/// Exceptions must be cleared here: otherwise, any prior exception
+/// would cause this function to fail when it calls exceptions().
+///
+/// Both 'failbit' [27.6.2.5.3/8] and 'badbit' [27.6.2.1/3] must be
+/// specified in the call to exceptions().
+
 template<typename T>
 inline std::ostream& alert_stream()
 {

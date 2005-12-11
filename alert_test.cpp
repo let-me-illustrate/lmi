@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: alert_test.cpp,v 1.2 2005-02-28 12:58:01 chicares Exp $
+// $Id: alert_test.cpp,v 1.3 2005-12-11 21:24:17 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -31,8 +31,9 @@
 #define BOOST_INCLUDE_MAIN
 #include "test_tools.hpp"
 
+#include <algorithm>
 #include <iterator>
-#include <typeinfo>
+#include <stdexcept>
 #include <vector>
 
 int test_main(int, char*[])
@@ -65,6 +66,8 @@ int test_main(int, char*[])
         ,v.end()
         ,std::ostream_iterator<double>(warning(), " ")
         );
+    warning() << '\n';
+    warning() << "File and line where this diagnostic arose:";
     warning() << LMI_FLUSH;
 
     // Run this 'fatal_error' test twice in order to ensure that the
