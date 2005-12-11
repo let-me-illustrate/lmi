@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_wx.cpp,v 1.31 2005-12-11 14:18:49 chicares Exp $
+// $Id: main_wx.cpp,v 1.32 2005-12-11 15:01:41 chicares Exp $
 
 // Portions of this file are derived from wxWindows files
 //   samples/docvwmdi/docview.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -132,6 +132,31 @@ END_EVENT_TABLE()
 
 bool security_validated(bool skip_validation);
 
+void report_exception()
+{
+    try
+        {
+        if(!std::uncaught_exception())
+            {
+            throw std::logic_error("Improper use of report_exception().");
+            }
+        throw;
+        }
+    catch(hobsons_choice_exception&)
+        {
+        // Show no message here: one was already shown, and the safe
+        // default action (throwing this exception) was accepted.
+        }
+    catch(std::exception& e)
+        {
+        wxSafeShowMessage("Error", e.what());
+        }
+    catch(...)
+        {
+        wxSafeShowMessage("Error", "Unknown error");
+        }
+}
+
 #ifdef __WXMSW__
 // WX !! Oddly enough, wx seems to require this declaration, even
 // though <wx/app.h> has been included and that header in turn
@@ -185,22 +210,12 @@ int WINAPI WinMain
 #else // __WXMSW__ defined.
         result = wxEntry(hInstance, hPrevInstance, lpCmdLine, nCmdShow);
 #endif // __WXMSW__ defined.
-        }
-    catch(hobsons_choice_exception&)
-        {
-        // Show no message here: one was already shown, and the safe
-        // default action (throwing this exception) was accepted.
-        }
-    catch(std::exception& e)
-        {
-        wxSafeShowMessage("Fatal error", e.what());
+        validate_fenv();
         }
     catch(...)
         {
-        wxSafeShowMessage("Fatal error", "Unknown error");
+        report_exception();
         }
-
-    validate_fenv();
 
     return result;
 }
@@ -404,20 +419,11 @@ bool Skeleton::OnExceptionInMainLoop()
         // 'monolithic' wx shared library.
         return wxAppConsole::OnExceptionInMainLoop();
         }
-    catch(hobsons_choice_exception&)
-        {
-        // Show no message here: one was already shown, and the safe
-        // default action (throwing this exception) was accepted.
-        }
-    catch(std::exception& e)
-        {
-        wxSafeShowMessage("Error", e.what());
-        }
     catch(...)
         {
-        wxSafeShowMessage("Error", "Unknown error");
+        report_exception();
         }
-        return true;
+    return true;
 }
 
 int Skeleton::OnExit()
