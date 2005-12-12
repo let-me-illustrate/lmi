@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: group_values.cpp,v 1.45 2005-11-05 03:57:23 chicares Exp $
+// $Id: group_values.cpp,v 1.46 2005-12-12 17:57:12 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -50,6 +50,8 @@
 #include <boost/shared_ptr.hpp>
 
 #include <algorithm> // std::max()
+#include <ios>
+#include <iterator>  // std::back_inserter()
 
 namespace
 {
@@ -185,13 +187,9 @@ bool run_census_in_series::operator()
                 ,emission_target
                 );
             }
-        catch(std::exception& e)
-            {
-            fatal_error() << "\nCaught exception: " << e.what() << LMI_FLUSH;
-            }
         catch(...)
             {
-            fatal_error() << "\nUnknown exception." << LMI_FLUSH;
+            report_exception();
             }
         if(!meter->reflect_progress())
             {
@@ -355,13 +353,9 @@ bool run_census_in_parallel::operator()
                 ;
             }
         }
-    catch(std::exception& e)
-        {
-        fatal_error() << "\nCaught exception: " << e.what() << LMI_FLUSH;
-        }
     catch(...)
         {
-        fatal_error() << "\nUnknown exception." << LMI_FLUSH;
+        report_exception();
         }
 
     std::vector<boost::shared_ptr<AccountValue> >::iterator i;
@@ -643,13 +637,9 @@ restart:
             }
 
         } // End for...try.
-    catch(std::exception& e)
-        {
-        fatal_error() << "\nCaught exception: " << e.what() << LMI_FLUSH;
-        }
     catch(...)
         {
-        fatal_error() << "\nUnknown exception." << LMI_FLUSH;
+        report_exception();
         }
 
     for(i = cell_values.begin(); i != cell_values.end(); ++i)

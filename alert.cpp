@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: alert.cpp,v 1.7 2005-12-12 04:36:38 chicares Exp $
+// $Id: alert.cpp,v 1.8 2005-12-12 17:57:12 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -221,6 +221,31 @@ std::string const& hobsons_prompt()
 
 hobsons_choice_exception::hobsons_choice_exception()
 {
+}
+
+void report_exception()
+{
+    try
+        {
+        if(!std::uncaught_exception())
+            {
+            throw std::logic_error("Improper use of report_exception().");
+            }
+        throw;
+        }
+    catch(hobsons_choice_exception&)
+        {
+        // Show no message here: one was already shown, and the safe
+        // default action (throwing this exception) was accepted.
+        }
+    catch(std::exception& e)
+        {
+        safely_show_message_function(e.what());
+        }
+    catch(...)
+        {
+        safely_show_message_function("Unknown error");
+        }
 }
 
 void LMI_EXPIMP test_status()
