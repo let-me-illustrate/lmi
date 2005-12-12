@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xrange.hpp,v 1.4 2005-11-07 01:30:24 chicares Exp $
+// $Id: xrange.hpp,v 1.5 2005-12-12 17:57:09 chicares Exp $
 
 #ifndef xrange_hpp
 #define xrange_hpp
@@ -113,6 +113,7 @@ Or should the semantic type do that?
 #   define BOOST_STATIC_ASSERT(deliberately_ignored) /##/
 #endif // Defined __BORLANDC__ .
 
+#include <exception>
 #include <iosfwd>
 #include <limits>
 #include <ostream>

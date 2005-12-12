@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xml_notebook.cpp,v 1.14 2005-12-02 16:00:23 chicares Exp $
+// $Id: xml_notebook.cpp,v 1.15 2005-12-12 17:57:09 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -42,6 +42,7 @@
 #include <wx/textctrl.h>
 #include <wx/xrc/xmlres.h>
 
+#include <exception>
 #include <fstream> // TODO ?? Temporary--diagnostics only.
 
 // TODO ?? Development plans:
