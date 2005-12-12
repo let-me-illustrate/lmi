@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: alert_cgi.cpp,v 1.3 2005-08-03 14:44:45 chicares Exp $
+// $Id: alert_cgi.cpp,v 1.4 2005-12-12 04:36:38 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -38,6 +38,7 @@ namespace
         ,warning_alert
         ,hobsons_choice_alert
         ,fatal_error_alert
+        ,safely_show_message
         );
 
 } // Unnamed namespace.
@@ -65,5 +66,10 @@ void hobsons_choice_alert(std::string const& s)
 void fatal_error_alert(std::string const& s)
 {
     throw std::runtime_error(s);
+}
+
+void safely_show_message(char const* message)
+{
+    std::cerr << message << std::endl;
 }
 
