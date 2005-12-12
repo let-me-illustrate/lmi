@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: alert.hpp,v 1.7 2005-12-11 21:24:17 chicares Exp $
+// $Id: alert.hpp,v 1.8 2005-12-12 04:36:38 chicares Exp $
 
 #ifndef alert_hpp
 #define alert_hpp
@@ -144,6 +144,12 @@ void warning_alert        (std::string const&);
 void hobsons_choice_alert (std::string const&);
 void fatal_error_alert    (std::string const&);
 
+/// Implement this function for each platform, in a manner that should
+/// always work safely and immediately. For instance, for the wx GUI
+/// library, use wxSafeShowMessage() and not wxMessageBox().
+
+void safely_show_message  (char const*);
+
 /// This function must be called exactly once. See platform-specific
 /// implementations.
 ///
@@ -161,6 +167,7 @@ bool LMI_EXPIMP set_alert_functions
     ,void(*warning_alert_function_pointer       )(std::string const&)
     ,void(*hobsons_choice_alert_function_pointer)(std::string const&)
     ,void(*fatal_error_alert_function_pointer   )(std::string const&)
+    ,void(*safely_show_message_function_pointer )(char const*)
     );
 
 /// Ask whether to continue or abort when Hobson's choice is offered.

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: alert.cpp,v 1.6 2005-12-11 21:24:17 chicares Exp $
+// $Id: alert.cpp,v 1.7 2005-12-12 04:36:38 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -47,6 +47,9 @@ alert_function_pointer warning_alert_function        = 0;
 alert_function_pointer hobsons_choice_alert_function = 0;
 alert_function_pointer fatal_error_alert_function    = 0;
 
+typedef void (*message_function_pointer)(char const*);
+message_function_pointer safely_show_message_function = 0;
+
 inline bool all_function_pointers_have_been_set()
 {
     return
@@ -54,6 +57,7 @@ inline bool all_function_pointers_have_been_set()
         &&  0 != warning_alert_function
         &&  0 != hobsons_choice_alert_function
         &&  0 != fatal_error_alert_function
+        &&  0 != safely_show_message_function
         ;
 }
 
@@ -64,6 +68,7 @@ inline bool any_function_pointer_has_been_set()
         ||  0 != warning_alert_function
         ||  0 != hobsons_choice_alert_function
         ||  0 != fatal_error_alert_function
+        ||  0 != safely_show_message_function
         ;
 }
 } // Unnamed namespace
@@ -73,6 +78,7 @@ bool set_alert_functions
     ,void(*warning_alert_function_pointer       )(std::string const&)
     ,void(*hobsons_choice_alert_function_pointer)(std::string const&)
     ,void(*fatal_error_alert_function_pointer   )(std::string const&)
+    ,void(*safely_show_message_function_pointer )(char const*)
     )
 {
     if(any_function_pointer_has_been_set())
@@ -85,6 +91,7 @@ bool set_alert_functions
     warning_alert_function        = warning_alert_function_pointer       ;
     hobsons_choice_alert_function = hobsons_choice_alert_function_pointer;
     fatal_error_alert_function    = fatal_error_alert_function_pointer   ;
+    safely_show_message_function  = safely_show_message_function_pointer ;
     return true;
 }
 
