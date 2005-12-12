@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.261 2005-12-11 08:55:15 chicares Exp $
+// $Id: ChangeLog,v 1.262 2005-12-12 17:57:15 chicares Exp $
 
 MAINTENANCE
 
@@ -4933,4 +4933,65 @@ Revert erroneous 20051207T1512Z change.
   main_wx.cpp
   workhorse.make
 Relocate '.xrc' and '.xpm' files to data directory.
+
+20051211T1407Z <chicares@cox.net> [1214]
+
+  main_wx.cpp
+Refactor.
+
+20051211T1418Z <chicares@cox.net> [1214]
+
+  main_wx.cpp
+Unconditionally resume when exception caught in main loop.
+
+20051211T1501Z <chicares@cox.net> [1214]
+
+  main_wx.cpp
+Refactor.
+
+20051211T2124Z <chicares@cox.net> [1213]
+
+  alert.cpp
+  alert.hpp
+  alert_cli.cpp
+  alert_test.cpp
+Import selected changes from skeleton branch.
+
+20051212T0120Z <chicares@cox.net> [1213]
+
+  so_attributes.hpp [new file]
+Import header with shared-library macros from skeleton branch. It will
+replace 'expimp.hpp' eventually.
+
+20051212T0436Z <chicares@cox.net> [1213]
+
+  alert.cpp
+  alert.hpp
+  alert_cgi.cpp
+  alert_cli.cpp
+  alert_test.cpp
+  alert_wx.cpp
+Add safely_show_message().
+
+20051212T1757Z <chicares@cox.net> [1212]
+
+  alert.cpp
+  alert.hpp
+  group_values.cpp
+  illustration_view.cpp
+  main_common_non_wx.cpp
+  main_wx.cpp
+Refactor.
+
+  mc_enum_test.cpp
+Include only appropriate headers.
+
+  ihs_server7702.cpp
+  main_cli.cpp
+  tn_range.tpp
+  tn_range_test.cpp
+  xml_notebook.cpp
+  xrange.hpp
+  xrange_test.cpp
+Include <exception> iff appropriate.
 
