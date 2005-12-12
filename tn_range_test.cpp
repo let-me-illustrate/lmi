@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: tn_range_test.cpp,v 1.3 2005-11-02 17:46:10 chicares Exp $
+// $Id: tn_range_test.cpp,v 1.4 2005-12-12 17:57:09 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -34,7 +34,6 @@
 #include "test_tools.hpp"
 
 #include <algorithm>
-#include <exception>
 #include <ios>
 #include <iterator>
 #include <sstream>

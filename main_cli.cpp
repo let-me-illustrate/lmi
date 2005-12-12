@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_cli.cpp,v 1.12 2005-06-23 15:22:04 chicares Exp $
+// $Id: main_cli.cpp,v 1.13 2005-12-12 17:57:09 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -50,7 +50,6 @@
 #include <algorithm>
 #include <cmath>
 #include <cstdio>  // std::printf()
-#include <exception>
 #include <ios>
 #include <iostream>
 #include <iterator>
