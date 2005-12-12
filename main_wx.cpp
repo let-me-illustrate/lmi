@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_wx.cpp,v 1.32 2005-12-11 15:01:41 chicares Exp $
+// $Id: main_wx.cpp,v 1.33 2005-12-12 17:57:12 chicares Exp $
 
 // Portions of this file are derived from wxWindows files
 //   samples/docvwmdi/docview.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -132,31 +132,6 @@ END_EVENT_TABLE()
 
 bool security_validated(bool skip_validation);
 
-void report_exception()
-{
-    try
-        {
-        if(!std::uncaught_exception())
-            {
-            throw std::logic_error("Improper use of report_exception().");
-            }
-        throw;
-        }
-    catch(hobsons_choice_exception&)
-        {
-        // Show no message here: one was already shown, and the safe
-        // default action (throwing this exception) was accepted.
-        }
-    catch(std::exception& e)
-        {
-        wxSafeShowMessage("Error", e.what());
-        }
-    catch(...)
-        {
-        wxSafeShowMessage("Error", "Unknown error");
-        }
-}
-
 #ifdef __WXMSW__
 // WX !! Oddly enough, wx seems to require this declaration, even
 // though <wx/app.h> has been included and that header in turn
@@ -214,6 +189,10 @@ int WINAPI WinMain
         }
     catch(...)
         {
+        // Return a failure code explicitly because validate_fenv()
+        // might have found a problem even after 'result' was
+        // assigned a value indicating success.
+        result = EXIT_FAILURE;
         report_exception();
         }
 
@@ -437,82 +416,90 @@ int Skeleton::OnExit()
 bool Skeleton::OnInit()
 {
 // WX !! An exception thrown anywhere in this function, even right
-// before the 'return' statement at the end, gets caught by
-//   OnUnhandledException()
-// instead of
-//   OnExceptionInMainLoop()
-//
-//    throw std::runtime_error("This does not get caught gracefully.");
+// before the 'return' statement at the end, either causes a crash
+// (wx-2.5.1) or gets caught by OnUnhandledException() (which loses
+// exception information) instead of by OnExceptionInMainLoop().
+// Therefore, exceptions must be trapped explicitly.
 
-    if(false == ProcessCommandLine(argc, argv))
+    try
         {
-        return false;
-        }
+        if(false == ProcessCommandLine(argc, argv))
+            {
+            return false;
+            }
 
-    // The most privileged password bypasses security validation.
-    if(!security_validated(global_settings::instance().ash_nazg()))
-        {
-        throw std::runtime_error("Security validation failed.");
-        }
+        // The most privileged password bypasses security validation.
+        if(!security_validated(global_settings::instance().ash_nazg()))
+            {
+            throw std::runtime_error("Security validation failed.");
+            }
 
-    wxXmlResource::Get()->InitAllHandlers();
+        wxXmlResource::Get()->InitAllHandlers();
 
-    if(!wxXmlResource::Get()->Load(AddDataDir("xml_notebook.xrc")))
-        {
-        fatal_error() << "Unable to load xml resources." << LMI_FLUSH;
-        }
+        if(!wxXmlResource::Get()->Load(AddDataDir("xml_notebook.xrc")))
+            {
+            fatal_error() << "Unable to load xml resources." << LMI_FLUSH;
+            }
 
-    if(!wxXmlResource::Get()->Load(AddDataDir("menus.xrc")))
-        {
-        fatal_error() << "Unable to load menubar." << LMI_FLUSH;
-        }
+        if(!wxXmlResource::Get()->Load(AddDataDir("menus.xrc")))
+            {
+            fatal_error() << "Unable to load menubar." << LMI_FLUSH;
+            }
 
-    if(!wxXmlResource::Get()->Load(AddDataDir("toolbar.xrc")))
-        {
-        fatal_error() << "Unable to load toolbar." << LMI_FLUSH;
-        }
+        if(!wxXmlResource::Get()->Load(AddDataDir("toolbar.xrc")))
+            {
+            fatal_error() << "Unable to load toolbar." << LMI_FLUSH;
+            }
 
-    wxInitAllImageHandlers();
-    InitDocManager();
+        wxInitAllImageHandlers();
+        InitDocManager();
 
-    frame_ = new(wx) wxDocMDIParentFrame
-        (doc_manager_
-        ,0     // Parent: always null.
-        ,-1    // Window ID.
-        ,"lmi"
-        ,wxDefaultPosition
-        ,wxDefaultSize
-        ,wxDEFAULT_FRAME_STYLE | wxFRAME_NO_WINDOW_MENU | wxHSCROLL | wxVSCROLL
-        );
+        frame_ = new(wx) wxDocMDIParentFrame
+            (doc_manager_
+            ,0     // Parent: always null.
+            ,-1    // Window ID.
+            ,"lmi"
+            ,wxDefaultPosition
+            ,wxDefaultSize
+            ,   wxDEFAULT_FRAME_STYLE
+            |   wxFRAME_NO_WINDOW_MENU
+            |   wxHSCROLL
+            |   wxVSCROLL
+            );
 
-    InitIcon();
-    InitMenuBar();
-    InitToolBar();
-    frame_->CreateStatusBar();
-// FSF !! Need to implement this in a generic way for GNU/linux.
+        InitIcon();
+        InitMenuBar();
+        InitToolBar();
+        frame_->CreateStatusBar();
+    // FSF !! Need to implement this in a generic way for GNU/linux.
 #ifdef __WXMSW__
-    frame_->DragAcceptFiles(true);
+        frame_->DragAcceptFiles(true);
 #endif // __WXMSW__ defined.
-    frame_->Centre(wxBOTH);
-    frame_->Maximize(true);
+        frame_->Centre(wxBOTH);
+        frame_->Maximize(true);
 
-    if(RunSpecialInputFileIfPresent(doc_manager_))
-        {
-        return false;
-        }
+        if(RunSpecialInputFileIfPresent(doc_manager_))
+            {
+            return false;
+            }
 
-    frame_->Show(true);
-    SetTopWindow(frame_);
+        frame_->Show(true);
+        SetTopWindow(frame_);
 
-    if
-        (!
-            (   global_settings::instance().ash_nazg()
-            ||  global_settings::instance().custom_io_0()
+        if
+            (!
+                (   global_settings::instance().ash_nazg()
+                ||  global_settings::instance().custom_io_0()
+                )
             )
-        )
+            {
+            wxCommandEvent event(wxEVT_COMMAND_MENU_SELECTED, wxID_ABOUT);
+            wxPostEvent(frame_, event);
+            }
+        }
+    catch(...)
         {
-        wxCommandEvent event(wxEVT_COMMAND_MENU_SELECTED, wxID_ABOUT);
-        wxPostEvent(frame_, event);
+        report_exception();
         }
 
     return true;

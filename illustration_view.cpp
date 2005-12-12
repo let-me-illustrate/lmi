@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustration_view.cpp,v 1.26 2005-12-07 04:28:09 chicares Exp $
+// $Id: illustration_view.cpp,v 1.27 2005-12-12 17:57:12 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -40,7 +40,6 @@
 
 #include "account_value.hpp"
 #include "alert.hpp"
-#include "argv0.hpp"
 #include "configurable_settings.hpp"
 #include "custom_io_0.hpp"
 #include "file_command.hpp"
@@ -48,25 +47,15 @@
 #include "ledger.hpp"
 #include "ledger_text_formats.hpp"
 #include "ledger_xsl.hpp"
-#include "miscellany.hpp"
 #include "system_command.hpp"
 #include "timer.hpp"
 #include "wx_new.hpp"
 #include "xml_notebook.hpp"
 
-#include <boost/filesystem/path.hpp>
-
-#include <wx/app.h> // wxTheApp
 #include <wx/html/htmlwin.h>
 #include <wx/icon.h>
-#include <wx/log.h> // wxSafeShowMessage()
 #include <wx/menu.h>
-#include <wx/toolbar.h>
 #include <wx/xrc/xmlres.h>
-
-#include <cstdio>
-#include <ios>
-#include <locale>
 
 IMPLEMENT_DYNAMIC_CLASS(IllustrationView, ViewEx)
 
@@ -415,14 +404,9 @@ bool RunSpecialInputFileIfPresent(wxDocManager* dm)
                 }
             }
         }
-    catch(std::exception& e)
-        {
-        wxSafeShowMessage("Fatal error", e.what());
-        throw;
-        }
     catch(...)
         {
-        wxSafeShowMessage("Fatal error", "Unknown error");
+        report_exception();
         throw;
         }
     return false;
