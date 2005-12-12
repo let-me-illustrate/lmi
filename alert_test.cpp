@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: alert_test.cpp,v 1.3 2005-12-11 21:24:17 chicares Exp $
+// $Id: alert_test.cpp,v 1.4 2005-12-12 04:36:38 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -38,6 +38,8 @@
 
 int test_main(int, char*[])
 {
+    safely_show_message("This message should be shown.");
+
     status()
         << "This should have no effect, because the handler for"
         << " the command-line interface gobbles status messages."

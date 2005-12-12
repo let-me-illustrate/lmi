@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: alert_wx.cpp,v 1.6 2005-12-07 04:43:33 chicares Exp $
+// $Id: alert_wx.cpp,v 1.7 2005-12-12 04:36:38 chicares Exp $
 
 // TODO ?? Once this facility is tested, consider using it widely,
 // perhaps instead of using wx's logging classes directly at all.
@@ -47,6 +47,7 @@ namespace
         ,warning_alert
         ,hobsons_choice_alert
         ,fatal_error_alert
+        ,safely_show_message
         );
 
 #if 0
@@ -120,5 +121,10 @@ void hobsons_choice_alert(std::string const& s)
 void fatal_error_alert(std::string const& s)
 {
     throw std::runtime_error(s);
+}
+
+void safely_show_message(char const* message)
+{
+    wxSafeShowMessage("Error", message);
 }
 
