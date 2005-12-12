@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_server7702.cpp,v 1.4 2005-05-27 10:37:06 chicares Exp $
+// $Id: ihs_server7702.cpp,v 1.5 2005-12-12 17:57:09 chicares Exp $
 
 // Known defects:
 // grep for "NEED DECISION"
@@ -44,6 +44,7 @@
 
 #include <cfloat>       // DBL_EPSILON
 #include <cstdlib>
+#include <exception>
 #include <iostream>
 #include <sstream>
 #include <string>
