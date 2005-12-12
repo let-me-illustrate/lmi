@@ -19,18 +19,12 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mc_enum_test.cpp,v 1.7 2005-11-23 20:34:11 wboutin Exp $
+// $Id: mc_enum_test.cpp,v 1.8 2005-12-12 17:57:07 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
 #   pragma hdrstop
 #endif // __BORLANDC__
-
-#include <algorithm>
-#include <exception>
-#include <ios>
-#include <iterator>
-#include <sstream>
 
 #include "mc_enum.hpp"
 #include "mc_enum.tpp" // Template class implementation.
@@ -38,6 +32,9 @@
 
 #define BOOST_INCLUDE_MAIN
 #include "test_tools.hpp"
+
+#include <sstream>
+#include <stdexcept>
 
 enum enum_island {i_Easter = 37, i_Pago_Pago = -17};
 extern enum_island const island_enums[] = {i_Easter, i_Pago_Pago};
