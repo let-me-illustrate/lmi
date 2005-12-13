@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.262 2005-12-12 17:57:15 chicares Exp $
+// $Id: ChangeLog,v 1.263 2005-12-13 00:06:10 chicares Exp $
 
 MAINTENANCE
 
@@ -4994,4 +4994,15 @@ Include only appropriate headers.
   xrange.hpp
   xrange_test.cpp
 Include <exception> iff appropriate.
+
+20051213T0006Z <chicares@cox.net> [1212]
+
+  alert.cpp
+  illustration_view.cpp
+Correct two errors committed 20051212T1757Z. With these changes, a
+static build, i.e.,
+  /opt/lmi/bin[0]$./lmi_wx_static --data_path=/opt/lmi/data
+works--all the tests hidden on its "Text" menu run correctly--but an
+msw dll build abends on tests that throw an exception, because most
+exceptions (in the tests, and in practice) cross a dll boundary.
 
