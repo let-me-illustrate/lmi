@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustration_view.cpp,v 1.27 2005-12-12 17:57:12 chicares Exp $
+// $Id: illustration_view.cpp,v 1.28 2005-12-13 00:06:07 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -407,7 +407,6 @@ bool RunSpecialInputFileIfPresent(wxDocManager* dm)
     catch(...)
         {
         report_exception();
-        throw;
         }
     return false;
 }
