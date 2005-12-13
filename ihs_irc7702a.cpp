@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_irc7702a.cpp,v 1.5 2005-09-12 01:32:19 chicares Exp $
+// $Id: ihs_irc7702a.cpp,v 1.6 2005-12-13 04:43:29 chicares Exp $
 
 // TODO ?? Make this a server app. Consider where to store DB, SA history.
 
@@ -308,7 +308,7 @@ void Irc7702A::Initialize7702A
         ,SavedAVBeforeMatChg // a_AVBeforeMatChg
         ,0.0                 // a_NecPrem
         );
-    CumSevenPP = SevenPP * (a_ContractYear + 0 != a_ContractMonth);
+    CumSevenPP = SevenPP * (a_ContractYear + (0 != a_ContractMonth));
 
     if(!Use7PPTable || !UseNSPTable)
         {
