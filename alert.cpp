@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: alert.cpp,v 1.8 2005-12-12 17:57:12 chicares Exp $
+// $Id: alert.cpp,v 1.9 2005-12-13 00:06:07 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -225,12 +225,12 @@ hobsons_choice_exception::hobsons_choice_exception()
 
 void report_exception()
 {
+    if(!std::uncaught_exception())
+        {
+        throw std::logic_error("Improper use of report_exception().");
+        }
     try
         {
-        if(!std::uncaught_exception())
-            {
-            throw std::logic_error("Improper use of report_exception().");
-            }
         throw;
         }
     catch(hobsons_choice_exception&)
