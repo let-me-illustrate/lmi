@@ -24,7 +24,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: xml_notebook.xrc,v 1.21 2005-11-29 18:53:38 wboutin Exp $
+    $Id: xml_notebook.xrc,v 1.22 2005-12-13 04:43:26 chicares Exp $
 
     This version is generic. It strives to present every input field
     the system offers, in a way that suits the main developer's tastes.
@@ -1191,9 +1191,10 @@ demonstrate a defect in the wx library. See
                                 </object>
                                 <object class="sizeritem">
                                     <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
-                                    <object class="wxTextCtrl" name="InforceYear">
+                                    <object class="wxSpinCtrl" name="InforceYear">
                                         <size>80,-1</size>
                                         <value>0</value>
+                                        <max>100</max>
                                     </object>
                                 </object>
                                 <object class="sizeritem">
@@ -1205,9 +1206,10 @@ demonstrate a defect in the wx library. See
                                 </object>
                                 <object class="sizeritem">
                                     <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
-                                    <object class="wxTextCtrl" name="InforceMonth">
+                                    <object class="wxSpinCtrl" name="InforceMonth">
                                         <size>80,-1</size>
                                         <value>0</value>
+                                        <max>100</max>
                                     </object>
                                 </object>
                                 <object class="sizeritem">
@@ -1429,12 +1431,12 @@ here, but it looks weird if we don't make this look like its siblings.
                                     <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
                                     <border>4</border>
                                     <object class="wxStaticText">
-                                        <label>Contract month</label>
+                                        <label>Contract year</label>
                                     </object>
                                 </object>
                                 <object class="sizeritem">
                                     <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
-                                    <object class="wxSpinCtrl" name="InforceContractMonth">
+                                    <object class="wxSpinCtrl" name="InforceContractYear">
                                         <size>80,-1</size>
                                         <max>100</max>
                                     </object>
@@ -1443,12 +1445,12 @@ here, but it looks weird if we don't make this look like its siblings.
                                     <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
                                     <border>4</border>
                                     <object class="wxStaticText">
-                                        <label>Contract year</label>
+                                        <label>Contract month</label>
                                     </object>
                                 </object>
                                 <object class="sizeritem">
                                     <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
-                                    <object class="wxSpinCtrl" name="InforceContractYear">
+                                    <object class="wxSpinCtrl" name="InforceContractMonth">
                                         <size>80,-1</size>
                                         <max>100</max>
                                     </object>
