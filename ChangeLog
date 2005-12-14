@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.264 2005-12-13 04:43:29 chicares Exp $
+// $Id: ChangeLog,v 1.265 2005-12-14 22:56:21 chicares Exp $
 
 MAINTENANCE
 
@@ -5009,9 +5009,27 @@ exceptions (in the tests, and in practice) cross a dll boundary.
 20051213T0443Z <chicares@cox.net> [1212]
 
   xml_notebook.xrc
-Fix some obvious shortcomings.
+Fix some obvious shortcomings. Fields denoting months are deliberately
+not constrained to [0, 11], however, even though that could be done
+here. Reason: limiting the range for numeric fields generically is an
+unimplemented feature that must be implemented in the program rather
+than in the xml, and making it appear that this feature has already
+been implemented for a few fields is at best a waste of effort and at
+worst deceptive. We should erect no Potemkin villages.
 
   ihs_irc7702a.cpp
-Hastily replace an obviously incorrect calculation with another that
-is not known to be incorrect, in order to meet an urgent businss need.
+Hastily replace an obviously incorrect calculation with another that's
+not known to be incorrect, in order to meet an urgent business need.
+
+20051214T2256Z <chicares@cox.net> [1212]
+
+  alert.cpp
+  alert.hpp
+  alert_cgi.cpp
+  alert_cli.cpp
+  alert_wx.cpp
+Refactor. The problem noted 20051213T0006Z remains: for instance,
+  File | New | Text
+  Test | ...shared... | ...standard exception
+still abends. These changes represent incremental progress only.
 
