@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: alert_wx.cpp,v 1.7 2005-12-12 04:36:38 chicares Exp $
+// $Id: alert_wx.cpp,v 1.8 2005-12-14 22:56:11 chicares Exp $
 
 // TODO ?? Once this facility is tested, consider using it widely,
 // perhaps instead of using wx's logging classes directly at all.
@@ -47,14 +47,15 @@ namespace
         ,warning_alert
         ,hobsons_choice_alert
         ,fatal_error_alert
-        ,safely_show_message
+        ,safe_message_alert
         );
 
 #if 0
     /// Alert messages could be lost if they're flushed before wx has
     /// initialized its logging facility. Here is an untested idea for
     /// a function that could be called prior to each use of that
-    /// facility in this file.
+    /// facility in this file. It's probably not correct to rely on
+    /// the particular condition tested here, though.
     void show_safely_if_log_uninitialized(std::string const& s)
         {
         if(0 == wxLog::GetActiveTarget())
@@ -123,7 +124,7 @@ void fatal_error_alert(std::string const& s)
     throw std::runtime_error(s);
 }
 
-void safely_show_message(char const* message)
+void safe_message_alert(char const* message)
 {
     wxSafeShowMessage("Error", message);
 }
