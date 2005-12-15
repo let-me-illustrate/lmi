@@ -20,7 +20,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: Makefile.am,v 1.8 2005-11-01 15:03:46 zeitlin Exp $
+# $Id: Makefile.am,v 1.9 2005-12-15 20:43:28 zeitlin Exp $
 
 ##############################################################################
 # All Targets
@@ -749,7 +749,6 @@ noinst_HEADERS = \
     census_view.hpp \
     comma_punct.hpp \
     config.hpp \
-    config_all.hpp \
     config_bc551.hpp \
     config_ming323.hpp \
     configurable_settings.hpp \
