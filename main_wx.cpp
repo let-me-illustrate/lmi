@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_wx.cpp,v 1.33 2005-12-12 17:57:12 chicares Exp $
+// $Id: main_wx.cpp,v 1.34 2005-12-15 02:45:25 chicares Exp $
 
 // Portions of this file are derived from wxWindows files
 //   samples/docvwmdi/docview.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -40,6 +40,7 @@
 
 #include "about_dialog.hpp"
 #include "alert.hpp"
+#include "armor.hpp"
 #include "argv0.hpp"
 #include "census_document.hpp"
 #include "census_view.hpp"
@@ -70,6 +71,7 @@
 #include <wx/toolbar.h>
 #include <wx/xrc/xmlres.h>
 
+#include <exception> // std::set_terminate()
 #include <stdexcept>
 #include <string>
 
@@ -156,6 +158,8 @@ int WINAPI WinMain
     )
 #endif // __WXMSW__ defined.
 {
+    std::set_terminate(lmi_terminate_handler);
+
     // WX !! and MPATROL !! Using wx-2.5.1 and mpatrol-1.4.8, both
     // dynamically linked to this application built with gcc-3.2.3,
     // three memory leaks are reported with:
@@ -185,16 +189,12 @@ int WINAPI WinMain
 #else // __WXMSW__ defined.
         result = wxEntry(hInstance, hPrevInstance, lpCmdLine, nCmdShow);
 #endif // __WXMSW__ defined.
-        validate_fenv();
         }
-    catch(...)
-        {
-        // Return a failure code explicitly because validate_fenv()
-        // might have found a problem even after 'result' was
-        // assigned a value indicating success.
-        result = EXIT_FAILURE;
-        report_exception();
-        }
+    LMI_CATCH_AND_REPORT_EXCEPTION;
+
+    validate_fenv();
+
+    fatal_error() << "Simulated fenv validation error" << LMI_FLUSH;
 
     return result;
 }
@@ -398,10 +398,7 @@ bool Skeleton::OnExceptionInMainLoop()
         // 'monolithic' wx shared library.
         return wxAppConsole::OnExceptionInMainLoop();
         }
-    catch(...)
-        {
-        report_exception();
-        }
+    LMI_CATCH_AND_REPORT_EXCEPTION;
     return true;
 }
 
@@ -497,11 +494,7 @@ bool Skeleton::OnInit()
             wxPostEvent(frame_, event);
             }
         }
-    catch(...)
-        {
-        report_exception();
-        }
-
+    LMI_CATCH_AND_REPORT_EXCEPTION;
     return true;
 }
 
