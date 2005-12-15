@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: test_tools.hpp,v 1.4 2005-11-23 19:25:38 chicares Exp $
+// $Id: test_tools.hpp,v 1.5 2005-12-15 15:13:49 chicares Exp $
 
 // This is a derived work based on Beman Dawes's boost test library
 // that bears the following copyright and license statement:
@@ -63,6 +63,7 @@
 
 #include "config.hpp"
 
+#include <cstdlib> // EXIT_SUCCESS, EXIT_FAILURE
 #include <exception>
 #include <ostream>
 #include <string>
@@ -328,6 +329,7 @@ namespace lmi_test
         throw lmi_test::test::test_tools_exception() \
 
 // Revision History
+//  2005-12-15 GWC Include <cstdlib> for EXIT_SUCCESS and EXIT_FAILURE.
 //  2005-11-23 GWC Improve exception-testing macro.
 //  2005-02-28 GWC Fix defective typeid comparison.
 //  2005-01-29 GWC Move #included '.cpp' files after declarations that
