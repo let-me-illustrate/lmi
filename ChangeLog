@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.271 2005-12-15 15:13:52 chicares Exp $
+// $Id: ChangeLog,v 1.272 2005-12-15 15:40:09 chicares Exp $
 
 MAINTENANCE
 
@@ -5087,4 +5087,16 @@ Include <cstdlib> for EXIT_SUCCESS and EXIT_FAILURE.
 
   main_cli.cpp
 Regularize exception handling.
+
+20051215T1540Z <chicares@cox.net> [1208]
+
+  main_common_non_wx.cpp
+Withdraw a comment.
+
+  fenv_lmi.cpp
+Improve safety.
+
+  main_wx.cpp
+Remove a simulated error after confirming that simulating replaced
+behavior does not cause an error.
 
