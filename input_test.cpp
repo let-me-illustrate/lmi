@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_test.cpp,v 1.5 2005-09-12 01:32:19 chicares Exp $
+// $Id: input_test.cpp,v 1.6 2005-12-15 13:25:18 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -28,7 +28,6 @@
 
 #include "inputillus.hpp"
 
-#include "fenv_lmi.hpp"
 #define BOOST_INCLUDE_MAIN
 #include "test_tools.hpp"
 
@@ -77,8 +76,6 @@ bool files_are_identical(std::string const& file0, std::string const& file1)
 
 int test_main(int, char*[])
 {
-    initialize_fpu();
-
     // Test IllusInputParms << and >> operators.
     IllusInputParms original;
     IllusInputParms replica;

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.269 2005-12-15 02:45:25 chicares Exp $
+// $Id: ChangeLog,v 1.270 2005-12-15 13:25:18 chicares Exp $
 
 MAINTENANCE
 
@@ -5064,4 +5064,12 @@ Improve documentation.
   main_common_non_wx.cpp
   main_wx.cpp
 Refactor, exposing a latent problem.
+
+20051215T1325Z <chicares@cox.net> [1210]
+
+  input_test.cpp
+  main_common.cpp
+  main_common_non_wx.cpp
+  main_wx.cpp
+Refactor.
 
