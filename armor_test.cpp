@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: armor_test.cpp,v 1.2 2005-12-15 01:46:14 chicares Exp $
+// $Id: armor_test.cpp,v 1.3 2005-12-15 01:56:42 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -33,16 +33,11 @@
 
 int test_main(int, char*[])
 {
-    // Can't call report_exception() when no exception is pending.
-    BOOST_TEST_THROW
-        (report_exception()
-        ,std::logic_error
-        ,"Improper use of report_exception()."
-        );
-
-    // Demonstrate a defect:
-    try {throw std::runtime_error("Test 0\n");}
+    try {throw std::runtime_error("Test 0a\n");}
     catch(...) {report_exception();}
+
+    try {throw std::runtime_error("Test 0b\n");}
+    LMI_CATCH_AND_REPORT_EXCEPTION;
 
     return 0;
 }
