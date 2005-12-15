@@ -19,15 +19,16 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: numeric_io_traits.hpp,v 1.13 2005-11-07 02:48:20 chicares Exp $
+// $Id: numeric_io_traits.hpp,v 1.14 2005-12-15 15:13:47 chicares Exp $
 
 #ifndef numeric_io_traits_hpp
 #define numeric_io_traits_hpp
 
 #include "config.hpp"
 
+#include <algorithm> // std::max()
 #include <cmath>
-#include <cstdlib>
+#include <cstdlib>   // std::strto*()
 #include <limits>
 #include <stdexcept>
 #include <string>
