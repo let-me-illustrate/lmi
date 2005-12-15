@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_wx.cpp,v 1.35 2005-12-15 13:25:18 chicares Exp $
+// $Id: main_wx.cpp,v 1.36 2005-12-15 15:40:12 chicares Exp $
 
 // Portions of this file are derived from wxWindows files
 //   samples/docvwmdi/docview.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -190,8 +190,6 @@ int WINAPI WinMain
     LMI_CATCH_AND_REPORT_EXCEPTION;
 
     validate_fenv();
-
-    fatal_error() << "Simulated fenv validation error" << LMI_FLUSH;
 
     return result;
 }
