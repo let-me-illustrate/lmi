@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: alert_cli.cpp,v 1.8 2005-12-14 22:56:11 chicares Exp $
+// $Id: alert_cli.cpp,v 1.9 2005-12-15 15:13:44 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -107,5 +107,11 @@ void fatal_error_alert(std::string const& s)
 void safe_message_alert(char const* message)
 {
     std::fputs(message, stderr);
+    std::fputc('\n', stderr);
+    // Flush explicitly. C99 7.19.3/7 says only that stderr is
+    // "not fully buffered", not that it is 'unbuffered'. See:
+    //   http://sourceforge.net/mailarchive/message.php?msg_id=10388832
+    //   http://sourceforge.net/mailarchive/message.php?msg_id=10826040
+    std::fflush(stderr);
 }
 
