@@ -21,7 +21,7 @@ dnl snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
 dnl === Prologue ===
 
-AC_REVISION($Id: configure.ac,v 1.11 2005-11-02 03:36:08 chicares Exp $)dnl
+AC_REVISION($Id: configure.ac,v 1.12 2005-12-15 19:55:19 zeitlin Exp $)dnl
 
 AC_PREREQ(2.59)
 AC_INIT(LMI, 1.0.0, [chicares@cox.net])
@@ -221,10 +221,11 @@ fi
 dnl the functions below are typically found in libm and not libc so make sure
 dnl we look there
 LIBS="$LIBS -lm"
-AC_CHECK_FUNCS(log10l fabsl strtold)
+AC_CHECK_FUNCS(log10l fabsl)
 
 dnl existing code already uses these macros so continue to use them instead of
 dnl the usual HAVE_EXPM1/HAVE_LOG1P
+AC_CHECK_FUNC(strtold, AC_DEFINE(LMI_COMPILER_PROVIDES_STRTOLD, [1], [Define this if you have strtold() function]))
 AC_CHECK_FUNC(expm1, AC_DEFINE(LMI_COMPILER_PROVIDES_EXPM1, [1], [Define this if you have expm1() function]))
 AC_CHECK_FUNC(log1p, AC_DEFINE(LMI_COMPILER_PROVIDES_LOG1P, [1], [Define this if you have log1p() function]))
 
