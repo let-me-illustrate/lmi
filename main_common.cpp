@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_common.cpp,v 1.2 2005-06-12 16:58:36 chicares Exp $
+// $Id: main_common.cpp,v 1.3 2005-12-15 13:25:18 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -28,32 +28,38 @@
 
 #include "main_common.hpp"
 
+#include "armor.hpp"
 #include "fenv_lmi.hpp"
 #include "sigfpe.hpp"
 
 #include <csignal>
+#include <exception> // std::set_terminate()
 #include <stdexcept>
 
-// TODO ?? Remove other uses of fenv_lmi, initialize_fpu()?
+/// Common application initialization.
+///
+/// Don't initialize boost::filesystem here, to avoid creating a
+/// dependency on its object files for applications that don't use it.
 
-//============================================================================
 void initialize_application()
 {
-    // This line forces mpatrol to link when it otherwise might not.
-    // It has no other effect according to C99 7.20.3.2/2, second
-    // sentence.
-    std::free(0);
-
-    // TODO ?? Instead, consider a singleton that checks the control
-    // word upon destruction, or a shared_ptr with a custom deleter
-    // that does that.
-    initialize_fpu();
-
-    if(SIG_ERR == std::signal(SIGFPE, floating_point_error_handler))
+    std::set_terminate(lmi_terminate_handler);
+    try
         {
-        throw std::runtime_error
-            ("Cannot install floating point error signal handler."
-            );
+        // This line forces mpatrol to link when it otherwise might not.
+        // It has no other effect according to C99 7.20.3.2/2, second
+        // sentence.
+        std::free(0);
+
+        initialize_fpu();
+
+        if(SIG_ERR == std::signal(SIGFPE, floating_point_error_handler))
+            {
+            throw std::runtime_error
+                ("Cannot install floating point error signal handler."
+                );
+            }
         }
+    LMI_CATCH_AND_REPORT_EXCEPTION;
 }
 
