@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: armor.hpp,v 1.1 2005-12-15 01:40:20 chicares Exp $
+// $Id: armor.hpp,v 1.2 2005-12-15 01:56:42 chicares Exp $
 
 #ifndef armor_hpp
 #define armor_hpp
@@ -53,6 +53,18 @@ inline void lmi_terminate_handler()
 /// Usage:
 ///   catch(...) {report_exception();}
 ///
+/// It may seem like a good idea to test std::uncaught_exception()
+/// right before the try block, as recommended here:
+///   http://groups.google.com/group/comp.lang.c++.moderated/msg/ec0ef69dd3949955
+///   "Before the try-block in report_exception, query
+///   std::uncaught_exception() to determine if an exception is
+///   active. If it is not, throw std::logic_error or some exception
+//    that you know that your framework will catch."
+/// but actually that's invalid--see:
+///   http://groups.google.com/group/comp.lang.c++.moderated/msg/aa7ce713ee90c044
+///   "The only problem with uncaught_exception is that it doesn't
+///   tell you when you're in a catch(...) { ... throw; } block"
+///
 /// Show no message when hobsons_choice_exception is caught. It's
 /// thrown only when
 ///  - an appropriate message was just shown, and then
@@ -65,10 +77,6 @@ inline void lmi_terminate_handler()
 
 inline void report_exception()
 {
-    if(!std::uncaught_exception())
-        {
-        throw std::logic_error("Improper use of report_exception().");
-        }
     try
         {
         throw;
