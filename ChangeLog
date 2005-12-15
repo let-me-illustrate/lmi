@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.265 2005-12-14 22:56:21 chicares Exp $
+// $Id: ChangeLog,v 1.266 2005-12-15 01:40:20 chicares Exp $
 
 MAINTENANCE
 
@@ -5032,4 +5032,11 @@ Refactor. The problem noted 20051213T0006Z remains: for instance,
   File | New | Text
   Test | ...shared... | ...standard exception
 still abends. These changes represent incremental progress only.
+
+20051215T0140Z <chicares@cox.net> [1212]
+
+  armor.hpp      [new file]
+  armor_test.cpp [new file]
+  objects.make
+Refactor, leaving a latent error in place.
 
