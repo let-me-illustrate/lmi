@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_wx.cpp,v 1.34 2005-12-15 02:45:25 chicares Exp $
+// $Id: main_wx.cpp,v 1.35 2005-12-15 13:25:18 chicares Exp $
 
 // Portions of this file are derived from wxWindows files
 //   samples/docvwmdi/docview.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -71,7 +71,6 @@
 #include <wx/toolbar.h>
 #include <wx/xrc/xmlres.h>
 
-#include <exception> // std::set_terminate()
 #include <stdexcept>
 #include <string>
 
@@ -158,8 +157,6 @@ int WINAPI WinMain
     )
 #endif // __WXMSW__ defined.
 {
-    std::set_terminate(lmi_terminate_handler);
-
     // WX !! and MPATROL !! Using wx-2.5.1 and mpatrol-1.4.8, both
     // dynamically linked to this application built with gcc-3.2.3,
     // three memory leaks are reported with:
