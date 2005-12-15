@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: fenv_lmi.cpp,v 1.6 2005-10-31 03:43:02 chicares Exp $
+// $Id: fenv_lmi.cpp,v 1.7 2005-12-15 15:40:09 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -29,6 +29,8 @@
 #include "fenv_lmi.hpp"
 
 #include "alert.hpp"
+
+#include <sstream>
 
 #ifdef __STDC_IEC_559__
     // In case the C++ compiler supports C99 7.6 facilities, assume
@@ -118,14 +120,18 @@ void validate_fenv()
 #endif // Unknown compiler or platform.
     if(!okay)
         {
-        fatal_error()
+        // Prefer this approach to fatal_error() because this function
+        // is intended to be called just before the program closes, at
+        // which time it may be unsafe to show messages by ordinary
+        // means.
+        std::ostringstream oss;
+        oss
             << "The floating-point control word is unexpectedly "
-            << std::hex << control_word
-            << ". This is a problem: results may be invalid. "
-            << "Probably some other program changed this crucial "
-            << "setting."
-            << LMI_FLUSH
+            << std::hex << control_word << " .\n"
+            << " This is a problem: results may be invalid.\n"
+            << " Probably some other program changed this crucial setting.\n"
             ;
+        safely_show_message(oss.str().c_str());
         }
 }
 
