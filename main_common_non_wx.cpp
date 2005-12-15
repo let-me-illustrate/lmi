@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_common_non_wx.cpp,v 1.5 2005-12-15 13:25:18 chicares Exp $
+// $Id: main_common_non_wx.cpp,v 1.6 2005-12-15 15:40:08 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -57,7 +57,6 @@ int main(int argc, char* argv[])
         }
     LMI_CATCH_AND_REPORT_EXCEPTION;
 
-    // TODO ?? It would be better to do this in a singleton's dtor.
     validate_fenv();
 
     // COMPILER !! MinGW doesn't reliably flush streams on exit, so
