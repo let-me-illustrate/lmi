@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: armor_test.cpp,v 1.1 2005-12-15 01:40:20 chicares Exp $
+// $Id: armor_test.cpp,v 1.2 2005-12-15 01:46:14 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -39,6 +39,10 @@ int test_main(int, char*[])
         ,std::logic_error
         ,"Improper use of report_exception()."
         );
+
+    // Demonstrate a defect:
+    try {throw std::runtime_error("Test 0\n");}
+    catch(...) {report_exception();}
 
     return 0;
 }
