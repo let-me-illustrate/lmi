@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_common_non_wx.cpp,v 1.3 2005-12-12 17:57:12 chicares Exp $
+// $Id: main_common_non_wx.cpp,v 1.4 2005-12-15 02:45:25 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -28,7 +28,7 @@
 
 #include "main_common.hpp"
 
-#include "alert.hpp" // report_exception()
+#include "armor.hpp"
 #include "fenv_lmi.hpp"
 
 #include <iostream>
@@ -50,17 +50,11 @@ int main(int argc, char* argv[])
         {
         initialize_application();
         result = try_main(argc, argv);
-        // TODO ?? It would be better to do this in a singleton's dtor.
-        validate_fenv();
         }
-    catch(...)
-        {
-        report_exception();
-        // Return a failure code explicitly because validate_fenv()
-        // might have found a problem even after 'result' was
-        // assigned a value indicating success.
-        result = EXIT_FAILURE;
-        }
+    LMI_CATCH_AND_REPORT_EXCEPTION;
+
+    // TODO ?? It would be better to do this in a singleton's dtor.
+    validate_fenv();
 
     // COMPILER !! MinGW doesn't reliably flush streams on exit, so
     // flush them explicitly. Do this outside the try block because

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.268 2005-12-15 01:56:42 chicares Exp $
+// $Id: ChangeLog,v 1.269 2005-12-15 02:45:25 chicares Exp $
 
 MAINTENANCE
 
@@ -5051,4 +5051,17 @@ Demonstrate the defect mentioned 20051215T0140Z.
   armor.hpp
   armor_test.cpp
 Remove the defect mentioned 20051215T0140Z.
+
+20051215T0246Z <chicares@cox.net> [1212]
+
+  armor.hpp
+Improve documentation.
+
+  alert.cpp
+  alert.hpp
+  group_values.cpp
+  illustration_view.cpp
+  main_common_non_wx.cpp
+  main_wx.cpp
+Refactor, exposing a latent problem.
 
