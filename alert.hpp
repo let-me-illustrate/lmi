@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: alert.hpp,v 1.10 2005-12-14 22:56:11 chicares Exp $
+// $Id: alert.hpp,v 1.11 2005-12-15 02:45:25 chicares Exp $
 
 #ifndef alert_hpp
 #define alert_hpp
@@ -202,15 +202,6 @@ class LMI_EXPIMP hobsons_choice_exception
   public:
     hobsons_choice_exception();
 };
-
-/// Rethrow an uncaught exception, catch it, and show a description.
-///
-/// Usage: call report_exception() in a 'catch(...)' block.
-///
-/// One might argue that this function belongs elsewhere, yet it is
-/// tailored to treat Hobson's choice specially.
-
-void report_exception();
 
 /// Functions for testing, intended to be implemented in a shared
 /// library to demonstrate that alerts can be raised there and

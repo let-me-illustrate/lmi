@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustration_view.cpp,v 1.28 2005-12-13 00:06:07 chicares Exp $
+// $Id: illustration_view.cpp,v 1.29 2005-12-15 02:45:25 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -40,6 +40,7 @@
 
 #include "account_value.hpp"
 #include "alert.hpp"
+#include "armor.hpp"
 #include "configurable_settings.hpp"
 #include "custom_io_0.hpp"
 #include "file_command.hpp"
@@ -404,10 +405,8 @@ bool RunSpecialInputFileIfPresent(wxDocManager* dm)
                 }
             }
         }
-    catch(...)
-        {
-        report_exception();
-        }
+    LMI_CATCH_AND_REPORT_EXCEPTION;
+
     return false;
 }
 

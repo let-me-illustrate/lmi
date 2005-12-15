@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: group_values.cpp,v 1.46 2005-12-12 17:57:12 chicares Exp $
+// $Id: group_values.cpp,v 1.47 2005-12-15 02:45:25 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -30,6 +30,7 @@
 
 #include "account_value.hpp"
 #include "alert.hpp"
+#include "armor.hpp"
 #include "configurable_settings.hpp"
 #include "database.hpp"
 #include "dbnames.hpp"
@@ -187,10 +188,8 @@ bool run_census_in_series::operator()
                 ,emission_target
                 );
             }
-        catch(...)
-            {
-            report_exception();
-            }
+        LMI_CATCH_AND_REPORT_EXCEPTION;
+
         if(!meter->reflect_progress())
             {
             return false;
@@ -353,10 +352,7 @@ bool run_census_in_parallel::operator()
                 ;
             }
         }
-    catch(...)
-        {
-        report_exception();
-        }
+    LMI_CATCH_AND_REPORT_EXCEPTION;
 
     std::vector<boost::shared_ptr<AccountValue> >::iterator i;
 
@@ -637,10 +633,7 @@ restart:
             }
 
         } // End for...try.
-    catch(...)
-        {
-        report_exception();
-        }
+    LMI_CATCH_AND_REPORT_EXCEPTION;
 
     for(i = cell_values.begin(); i != cell_values.end(); ++i)
         {
