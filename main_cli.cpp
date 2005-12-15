@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_cli.cpp,v 1.13 2005-12-12 17:57:09 chicares Exp $
+// $Id: main_cli.cpp,v 1.14 2005-12-15 15:13:52 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -28,8 +28,8 @@
 
 #include "alert.hpp"
 #include "argv0.hpp"
+#include "armor.hpp"
 #include "calculate.hpp"
-#include "catch_exceptions.hpp"
 #include "custom_io_0.hpp"
 #include "getopt.hpp"
 #include "global_settings.hpp"
@@ -62,12 +62,8 @@
 // and incompatible headers.
 void print_databases();
 
-// TODO ?? These 'RegressionTestOne*File' functions return an int
-// merely for compatibility with 'catch_exceptions', which probably
-// should be revised and then more widely used.
-
 //============================================================================
-int RegressionTestOneCensusFile(fs::directory_iterator i)
+void RegressionTestOneCensusFile(fs::directory_iterator i)
 {
     std::cout << "Regression testing: " << i->string() << std::endl;
     multiple_cell_document doc(i->string());
@@ -91,11 +87,10 @@ int RegressionTestOneCensusFile(fs::directory_iterator i)
         }
 
     run_census()(*i, emit_to_spew_file, doc.cell_parms());
-    return 0;
 }
 
 //============================================================================
-int RegressionTestOneIniFile(fs::directory_iterator i)
+void RegressionTestOneIniFile(fs::directory_iterator i)
 {
     std::cout << "Regression testing: " << i->string() << std::endl;
     IllusVal IV;
@@ -104,7 +99,6 @@ int RegressionTestOneIniFile(fs::directory_iterator i)
     IV.Run(&IP);
     fs::path out_file = fs::change_extension(*i, ".test0");
     PrintFormSpecial(IV.ledger(), out_file.string().c_str());
-    return 0;
 }
 
 //============================================================================
@@ -116,30 +110,26 @@ void RegressionTest()
     fs::directory_iterator end_i;
     for(; i != end_i; ++i)
         {
-        if(is_directory(*i))
+        try
             {
-            continue;
+            if(is_directory(*i))
+                {
+                continue;
+                }
+            else if(".cns" == fs::extension(*i))
+                {
+                RegressionTestOneCensusFile(i);
+                }
+            else if(".ini" == fs::extension(*i))
+                {
+                RegressionTestOneIniFile(i);
+                }
+            else
+                {
+                ; // Do nothing.
+                }
             }
-        else if(".cns" == fs::extension(*i))
-            {
-            lmi_test::catch_exceptions
-                (boost::bind(RegressionTestOneCensusFile, i)
-                ,std::cout
-                ,std::cerr
-                );
-            }
-        else if(".ini" == fs::extension(*i))
-            {
-            lmi_test::catch_exceptions
-                (boost::bind(RegressionTestOneIniFile, i)
-                ,std::cout
-                ,std::cerr
-                );
-            }
-        else
-            {
-            ; // Do nothing.
-            }
+        LMI_CATCH_AND_REPORT_EXCEPTION;
         }
 }
 

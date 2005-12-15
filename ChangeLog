@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.270 2005-12-15 13:25:18 chicares Exp $
+// $Id: ChangeLog,v 1.271 2005-12-15 15:13:52 chicares Exp $
 
 MAINTENANCE
 
@@ -5072,4 +5072,19 @@ Refactor, exposing a latent problem.
   main_common_non_wx.cpp
   main_wx.cpp
 Refactor.
+
+20051215T1513Z <chicares@cox.net> [1209]
+
+  alert_cgi.cpp
+  alert_cli.cpp
+Explicitly flush stderr for presumably-crucial messages.
+
+  numeric_io_traits.hpp
+Include appropriate headers.
+
+  test_tools.hpp
+Include <cstdlib> for EXIT_SUCCESS and EXIT_FAILURE.
+
+  main_cli.cpp
+Regularize exception handling.
 
