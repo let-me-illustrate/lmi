@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: armor.hpp,v 1.2 2005-12-15 01:56:42 chicares Exp $
+// $Id: armor.hpp,v 1.3 2005-12-15 02:45:22 chicares Exp $
 
 #ifndef armor_hpp
 #define armor_hpp
@@ -43,15 +43,12 @@ inline void lmi_terminate_handler()
     std::exit(EXIT_FAILURE);
 }
 
-/// Rethrow an uncaught exception, catch it, and show a description.
-///
-/// Purpose: Write generic exception-handling code once and only once.
-///
-/// Reference:
-///   http://groups.google.com/group/comp.lang.c++.moderated/msg/7ac8db2c59c34103
-///
-/// Usage:
+/// Handle an uncaught exception, showing a description if available
+/// readily through what(), with the following idiomatic usage:
 ///   catch(...) {report_exception();}
+/// which makes it possible to write generic exception-handling code
+/// once and only once. See:
+///   http://groups.google.com/group/comp.lang.c++.moderated/msg/7ac8db2c59c34103
 ///
 /// It may seem like a good idea to test std::uncaught_exception()
 /// right before the try block, as recommended here:
