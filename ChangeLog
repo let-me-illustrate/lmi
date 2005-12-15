@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.266 2005-12-15 01:40:20 chicares Exp $
+// $Id: ChangeLog,v 1.267 2005-12-15 01:46:14 chicares Exp $
 
 MAINTENANCE
 
@@ -5039,4 +5039,9 @@ still abends. These changes represent incremental progress only.
   armor_test.cpp [new file]
   objects.make
 Refactor, leaving a latent error in place.
+
+20051215T0146Z <chicares@cox.net> [1212]
+
+  armor_test.cpp
+Demonstrate the defect mentioned 20051215T0140Z.
 
