@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.274 2005-12-16 13:14:52 chicares Exp $
+// $Id: ChangeLog,v 1.275 2005-12-16 21:51:03 chicares Exp $
 
 MAINTENANCE
 
@@ -5101,6 +5101,11 @@ Remove a simulated error after confirming that simulating replaced
 behavior does not cause an error. This fixed the problem noted
 20051213T0006Z.
 
+20051215T2002Z <zeitlin> [1208]
+
+  illustration_document.hpp
+Forward declare friend class.
+
 20051216T1102Z <chicares@cox.net> [1208]
 
   generate_passkey.cpp
@@ -5115,4 +5120,14 @@ Rewrite security validation, making sure diagnostics are displayed.
   ihs_pios.hpp
   tn_range.hpp
 Add virtual dtors.
+
+20051216T2141Z <chicares@cox.net> [1208]
+
+  view_ex.cpp
+Replace deprecated wxWindow::SetTitle().
+
+20051216T2150Z <chicares@cox.net> [1208]
+
+  armor.hpp
+Demonstrate a simplification.
 
