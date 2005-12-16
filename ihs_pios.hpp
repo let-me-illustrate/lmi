@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_pios.hpp,v 1.2 2005-11-03 04:53:55 chicares Exp $
+// $Id: ihs_pios.hpp,v 1.3 2005-12-16 13:14:52 chicares Exp $
 
 // This is a derived work based on Joshua Rowe's
 //   "Really cool persistent object stream library"
@@ -247,6 +247,7 @@ protected:
 public:
   JrPs_pstreamable();
   JrPs_pstreamable(JrPs_pstreamableInit);
+  virtual ~JrPs_pstreamable() {}
 };
 
 class   JrPs_pstreamreg
