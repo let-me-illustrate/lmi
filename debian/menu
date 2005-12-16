@@ -1,0 +1,2 @@
+?package(lmi):needs="X11" section="Apps/Technical"\
+  title="lmi" command="/opt/lmi/bin/lmi_wx"
