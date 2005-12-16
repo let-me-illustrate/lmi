@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustration_view.hpp,v 1.11 2005-12-01 04:06:34 chicares Exp $
+// $Id: illustration_view.hpp,v 1.12 2005-12-16 23:39:35 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -36,7 +36,6 @@
 
 #include "view_ex.hpp"
 
-#include "illustration_document.hpp"
 #include "obstruct_slicing.hpp"
 
 #include <boost/shared_ptr.hpp>
@@ -46,6 +45,7 @@
 
 #include <string>
 
+class IllustrationDocument;
 class Input;
 class Ledger;
 class WXDLLEXPORT wxHtmlWindow;
