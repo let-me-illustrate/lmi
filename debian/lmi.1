@@ -1,0 +1,84 @@
+.\" Man page for lmi(1).
+.\"
+.\" Copyright (c) 2005 Vadim Zeitlin
+.\"
+.\" This program is free software; you can redistribute it and/or modify
+.\" it under the terms of the GNU General Public License version 2 as
+.\" published by the Free Software Foundation.
+.\"
+.\" This program is distributed in the hope that it will be useful,
+.\" but WITHOUT ANY WARRANTY; without even the implied warranty of
+.\" MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+.\" GNU General Public License for more details.
+.\"
+.\" You should have received a copy of the GNU General Public License
+.\" along with this program; if not, write to the Free Software
+.\" Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+.\"
+.\" http://savannah.nongnu.org/projects/lmi
+.\" email: <chicares@cox.net>
+.\" snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
+.\" $Id: lmi.1,v 1.1 2005-12-16 02:28:56 zeitlin Exp $
+.\"
+.\" Please update the date below whenever revising the manpage.
+.TH LMI 1 "November  1, 2005"
+.\"
+.SH NAME
+lmi \- Let Me Illustrate... is used to create illustrations for life insurance.
+.SH SYNOPSIS
+.B lmi_wx
+.RI [ options ]
+.br
+.B lmi_cli
+.RI [ options ]
+.SH DESCRIPTION
+This manual page documents briefly the
+.B lmi_wx
+and
+.B lmi_cli
+commands. They provide GUI and command-line interface to the same
+functionality: the former is a X11 version while the latter is a command-line
+one. We will refer to both of them as
+.B lmi
+below when the description is applicable to both versions.
+.PP
+\fBlmi\fP is a program allows you to create illustrations for life insurance.
+.SH OPTIONS
+These programs follow the usual GNU command line syntax, with long
+options starting with two dashes (`-').
+A summary of options is included below.
+.TP
+.B \-a, \-\-accept
+Accept license (use \fB-l\fP to see its text first) and don't show its text.
+.TP
+.B \-c, \-\-cnsfile
+Run census file.
+.TP
+.B \-d, \-\-data_path
+Specify the path to data files.
+.TP
+.B \-i, \-\-illfile
+Run illustration.
+.TP
+.B \-h, \-\-help
+Show summary of options.
+.TP
+.B \-l, \-\-license
+Show full license text and exit.
+.TP
+.B \-p, \-\-print_db
+Print the product databases.
+.TP
+.B \-r, \-\-regress
+Run the regression test.
+.TP
+.B \-s, \-\-selftest
+Perform self test and exit.
+.TP
+.B \-t, \-\-test_path
+Specify the path to test files.
+.SH AUTHOR
+lmi was written by Gregory W. Chicares <chicares@cox.net>.
+.PP
+This manual page was written by Vadim Zeitlin <vadim@wxwindows.org>,
+for the Debian project (but may be used by others).
