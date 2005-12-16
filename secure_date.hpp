@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: secure_date.hpp,v 1.5 2005-11-07 01:30:24 chicares Exp $
+// $Id: secure_date.hpp,v 1.6 2005-12-16 11:02:59 chicares Exp $
 
 #ifndef secure_date_hpp
 #define secure_date_hpp
@@ -67,8 +67,13 @@ class LMI_EXPIMP secure_date
     static secure_date* instance_;
 };
 
-// Return hex representation of an md5 sum as a string.
+/// Hex representation of an md5 sum as a string.
+
 std::string md5_hex_string(std::vector<unsigned char> const&);
+
+/// Name of file containing md5sums of secured files.
+
+inline char const* md5sum_file() {return "validated.md5";}
 
 #endif // secure_date_hpp
 

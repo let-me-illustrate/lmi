@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.272 2005-12-15 15:40:09 chicares Exp $
+// $Id: ChangeLog,v 1.273 2005-12-16 11:02:59 chicares Exp $
 
 MAINTENANCE
 
@@ -5098,5 +5098,15 @@ Improve safety.
 
   main_wx.cpp
 Remove a simulated error after confirming that simulating replaced
-behavior does not cause an error.
+behavior does not cause an error. This fixed the problem noted
+20051213T0006Z.
+
+20051216T1102Z <chicares@cox.net> [1208]
+
+  generate_passkey.cpp
+  passkey_test.cpp
+  secure_date.cpp
+  secure_date.hpp
+  security.cpp
+Rewrite security validation, making sure diagnostics are displayed.
 
