@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: generate_passkey.cpp,v 1.3 2005-06-12 16:58:36 chicares Exp $
+// $Id: generate_passkey.cpp,v 1.4 2005-12-16 11:02:59 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -36,19 +36,22 @@
 #include <iostream>
 #include <ostream>
 
-//============================================================================
-// Generate passkey as the md5 sum of the md5 sum of file 'validated.md5'.
-// Iterating the md5 operation twice provides modest security: it's easy
-// to forge if you know the trick; otherwise it's infeasibly hard, unless
-// you use this program.
+/// Generate passkey as the md5 sum of the md5 sum of a file
+/// containing md5 sums of secured files. Iterating the md5
+/// operation twice provides modest security: it's easy to forge
+/// if you know the trick (although this comment just might be
+/// deliberately misleading); otherwise it's infeasibly hard,
+/// unless you use this program (but then you might discover
+/// other obstacles that are undocumented).
+
 int try_main(int, char*[])
 {
     char c_passkey[md5len];
     unsigned char u_passkey[md5len];
-    FILE* md5sums_file = std::fopen("validated.md5", "rb");
+    FILE* md5sums_file = std::fopen(md5sum_file(), "rb");
     if(0 == md5sums_file)
         {
-        std::cerr << "File 'validated.md5' not found.";
+        std::cerr << "File '" << md5sum_file() << "' not found.\n";
         return EXIT_FAILURE;
         }
     md5_stream(md5sums_file, u_passkey);

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: secure_date.cpp,v 1.4 2005-07-06 00:48:24 chicares Exp $
+// $Id: secure_date.cpp,v 1.5 2005-12-16 11:02:59 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -191,7 +191,7 @@ std::string secure_date::validate
 
     // Validate all data files.
     chdir(path.string().c_str());
-    if(system_command("md5sum --check --status validated.md5"))
+    if(system_command("md5sum --check --status " + std::string(md5sum_file())))
         {
         oss
             << "At least one required file is missing, altered, or invalid."
@@ -200,16 +200,13 @@ std::string secure_date::validate
         return oss.str();
         }
 
-    // The passkey must match the md5 sum of the md5 sum of file
-    // 'validated.md5'. Iterating the md5 operation twice provides
-    // modest security: it's easy to forge if you know the trick;
-    // otherwise it's infeasibly hard. A strong public key system
-    // would be more secure.
+    // The passkey must match the md5 sum of the md5 sum of the file
+    // of md5 sums of secured files.
 
     char c_passkey[md5len];
     unsigned char u_passkey[md5len];
     FILE* md5sums_file = std::fopen
-        ((path / "validated.md5").string().c_str()
+        ((path / md5sum_file()).string().c_str()
         ,"rb"
         );
     md5_stream(md5sums_file, u_passkey);
