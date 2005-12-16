@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.275 2005-12-16 21:51:03 chicares Exp $
+// $Id: ChangeLog,v 1.276 2005-12-16 23:39:40 chicares Exp $
 
 MAINTENANCE
 
@@ -5130,4 +5130,23 @@ Replace deprecated wxWindow::SetTitle().
 
   armor.hpp
 Demonstrate a simplification.
+
+20051216T2339Z <chicares@cox.net> [1208]
+
+  illustration_view.cpp
+  illustration_view.hpp
+Include a header only where required.
+
+  stratified_charges.hpp
+Alphabetize friend declarations.
+
+  armor.hpp
+  armor_test.cpp
+  group_values.cpp
+  illustration_view.cpp
+  main_cli.cpp
+  main_common.cpp
+  main_common_non_wx.cpp
+  main_wx.cpp
+Simplify.
 
