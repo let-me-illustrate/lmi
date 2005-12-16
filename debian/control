@@ -1,0 +1,12 @@
+Source: lmi
+Section: misc
+Priority: optional
+Maintainer: Vadim Zeitlin <vadim@wxwindows.org>
+Build-Depends: debhelper (>= 4.0.0), autotools-dev
+Standards-Version: 3.6.2
+
+Package: lmi
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: Let me illustrate... creates life insurance illustrations
+ This program allows to create, edit and browse life insurance illustrations.
