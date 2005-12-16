@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: stratified_charges.hpp,v 1.4 2005-10-20 02:48:25 chicares Exp $
+// $Id: stratified_charges.hpp,v 1.5 2005-12-16 23:39:37 chicares Exp $
 
 #ifndef stratified_charges_hpp
 #define stratified_charges_hpp
@@ -63,8 +63,8 @@ enum e_stratified
 class LMI_EXPIMP stratified_entity
     :virtual private obstruct_slicing<stratified_entity>
 {
-    friend class TierView;
     friend class stratified_charges;
+    friend class TierView;
 
   public:
     stratified_entity();
