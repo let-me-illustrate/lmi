@@ -21,7 +21,7 @@ dnl snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
 dnl === Prologue ===
 
-AC_REVISION($Id: configure.ac,v 1.12 2005-12-15 19:55:19 zeitlin Exp $)dnl
+AC_REVISION($Id: configure.ac,v 1.13 2005-12-16 00:47:41 zeitlin Exp $)dnl
 
 AC_PREREQ(2.59)
 AC_INIT(LMI, 1.0.0, [chicares@cox.net])
@@ -228,26 +228,6 @@ dnl the usual HAVE_EXPM1/HAVE_LOG1P
 AC_CHECK_FUNC(strtold, AC_DEFINE(LMI_COMPILER_PROVIDES_STRTOLD, [1], [Define this if you have strtold() function]))
 AC_CHECK_FUNC(expm1, AC_DEFINE(LMI_COMPILER_PROVIDES_EXPM1, [1], [Define this if you have expm1() function]))
 AC_CHECK_FUNC(log1p, AC_DEFINE(LMI_COMPILER_PROVIDES_LOG1P, [1], [Define this if you have log1p() function]))
-
-if test "$USE_WINDOWS" = 1; then
-    AC_CACHE_CHECK([for __argc/__argv global variables],
-        lmi_cv_var__argc,
-        [
-            AC_TRY_COMPILE([],
-                [
-                    int ac = __argc;
-                    char **av = __argv;
-                ],
-                lmi_cv_var__argc=yes,
-                lmi_cv_var__argc=no
-            )
-        ]
-    )
-    if test "x$lmi_cv_var__argc" = "xyes"; then
-        AC_DEFINE([HAVE__ARGC], [1], [Define this if you have __argc and __argv global variables])
-    fi
-fi
-
 
 dnl === Library checks ===
 
