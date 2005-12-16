@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: armor.hpp,v 1.3 2005-12-15 02:45:22 chicares Exp $
+// $Id: armor.hpp,v 1.4 2005-12-16 21:51:03 chicares Exp $
 
 #ifndef armor_hpp
 #define armor_hpp
@@ -95,18 +95,23 @@ inline void report_exception()
 ///
 /// The last line eats a semicolon written after the macro invocation.
 
-#define LMI_CATCH_AND_REPORT_EXCEPTION                               \
-    catch(hobsons_choice_exception&)                                 \
-        {                                                            \
-        }                                                            \
-    catch(std::exception& e)                                         \
-        {                                                            \
-        safely_show_message(e.what());                               \
-        }                                                            \
-    catch(...)                                                       \
-        {                                                            \
-        safely_show_message("Unknown error");                        \
-        }                                                            \
+/// This demonstrates that the putative workaround is unnecessary,
+/// because inlining the function obviates the macro:
+
+#define LMI_CATCH_AND_REPORT_EXCEPTION catch(...) {report_exception();}
+
+#define EXPUNGE_THIS_SOON_LMI_CATCH_AND_REPORT_EXCEPTION        \
+    catch(hobsons_choice_exception&)          \
+        {                                     \
+        }                                     \
+    catch(std::exception& e)                  \
+        {                                     \
+        safely_show_message(e.what());        \
+        }                                     \
+    catch(...)                                \
+        {                                     \
+        safely_show_message("Unknown error"); \
+        }                                     \
     do {} while(0)
 
 #endif // armor_hpp
