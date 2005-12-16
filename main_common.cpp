@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_common.cpp,v 1.3 2005-12-15 13:25:18 chicares Exp $
+// $Id: main_common.cpp,v 1.4 2005-12-16 23:39:40 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -60,6 +60,9 @@ void initialize_application()
                 );
             }
         }
-    LMI_CATCH_AND_REPORT_EXCEPTION;
+    catch(...)
+        {
+        report_exception();
+        }
 }
 

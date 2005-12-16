@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: armor.hpp,v 1.4 2005-12-16 21:51:03 chicares Exp $
+// $Id: armor.hpp,v 1.5 2005-12-16 23:39:40 chicares Exp $
 
 #ifndef armor_hpp
 #define armor_hpp
@@ -68,9 +68,10 @@ inline void lmi_terminate_handler()
 ///  - the safe default action (throwing this exception) was accepted,
 /// in which case it's pointless to repeat the same message.
 ///
-/// Limitation: This idiom fails spectacularly when the rethrown
-/// exception crosses a dll boundary on the msw platform. To work
-/// around this limitation, use LMI_CATCH_AND_REPORT_EXCEPTION.
+/// See
+///   http://sourceforge.net/mailarchive/message.php?msg_id=14203568
+/// for a grave problem with msw dlls, which is avoided by writing
+/// this function inline.
 
 inline void report_exception()
 {
@@ -90,29 +91,6 @@ inline void report_exception()
         safely_show_message("Unknown error");
         }
 }
-
-/// Workaround for the msw-dll limitation of report_exception(), q.v.
-///
-/// The last line eats a semicolon written after the macro invocation.
-
-/// This demonstrates that the putative workaround is unnecessary,
-/// because inlining the function obviates the macro:
-
-#define LMI_CATCH_AND_REPORT_EXCEPTION catch(...) {report_exception();}
-
-#define EXPUNGE_THIS_SOON_LMI_CATCH_AND_REPORT_EXCEPTION        \
-    catch(hobsons_choice_exception&)          \
-        {                                     \
-        }                                     \
-    catch(std::exception& e)                  \
-        {                                     \
-        safely_show_message(e.what());        \
-        }                                     \
-    catch(...)                                \
-        {                                     \
-        safely_show_message("Unknown error"); \
-        }                                     \
-    do {} while(0)
 
 #endif // armor_hpp
 

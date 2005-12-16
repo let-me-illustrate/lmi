@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_cli.cpp,v 1.14 2005-12-15 15:13:52 chicares Exp $
+// $Id: main_cli.cpp,v 1.15 2005-12-16 23:39:40 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -129,7 +129,10 @@ void RegressionTest()
                 ; // Do nothing.
                 }
             }
-        LMI_CATCH_AND_REPORT_EXCEPTION;
+        catch(...)
+            {
+            report_exception();
+            }
         }
 }
 
