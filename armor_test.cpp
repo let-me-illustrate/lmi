@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: armor_test.cpp,v 1.3 2005-12-15 01:56:42 chicares Exp $
+// $Id: armor_test.cpp,v 1.4 2005-12-16 23:39:40 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -33,11 +33,16 @@
 
 int test_main(int, char*[])
 {
-    try {throw std::runtime_error("Test 0a\n");}
-    catch(...) {report_exception();}
-
-    try {throw std::runtime_error("Test 0b\n");}
-    LMI_CATCH_AND_REPORT_EXCEPTION;
+    try
+        {
+        BOOST_TEST(true);
+        throw std::runtime_error("  Test succeeded");
+        BOOST_TEST(false); // Shouldn't be reached.
+        }
+    catch(...)
+        {
+        report_exception();
+        }
 
     return 0;
 }

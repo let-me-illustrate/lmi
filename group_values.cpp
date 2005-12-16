@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: group_values.cpp,v 1.47 2005-12-15 02:45:25 chicares Exp $
+// $Id: group_values.cpp,v 1.48 2005-12-16 23:39:40 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -188,7 +188,10 @@ bool run_census_in_series::operator()
                 ,emission_target
                 );
             }
-        LMI_CATCH_AND_REPORT_EXCEPTION;
+        catch(...)
+            {
+            report_exception();
+            }
 
         if(!meter->reflect_progress())
             {
@@ -352,7 +355,10 @@ bool run_census_in_parallel::operator()
                 ;
             }
         }
-    LMI_CATCH_AND_REPORT_EXCEPTION;
+    catch(...)
+        {
+        report_exception();
+        }
 
     std::vector<boost::shared_ptr<AccountValue> >::iterator i;
 
@@ -633,7 +639,10 @@ restart:
             }
 
         } // End for...try.
-    LMI_CATCH_AND_REPORT_EXCEPTION;
+    catch(...)
+        {
+        report_exception();
+        }
 
     for(i = cell_values.begin(); i != cell_values.end(); ++i)
         {
