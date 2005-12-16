@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.273 2005-12-16 11:02:59 chicares Exp $
+// $Id: ChangeLog,v 1.274 2005-12-16 13:14:52 chicares Exp $
 
 MAINTENANCE
 
@@ -5109,4 +5109,10 @@ behavior does not cause an error. This fixed the problem noted
   secure_date.hpp
   security.cpp
 Rewrite security validation, making sure diagnostics are displayed.
+
+20051216T1314Z <chicares@cox.net> [1208]
+
+  ihs_pios.hpp
+  tn_range.hpp
+Add virtual dtors.
 

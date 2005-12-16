@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: tn_range.hpp,v 1.3 2005-11-07 01:30:24 chicares Exp $
+// $Id: tn_range.hpp,v 1.4 2005-12-16 13:14:52 chicares Exp $
 
 // Design notes for template class tn_range
 //
@@ -131,6 +131,10 @@ class trammel_base
 {
     template<typename Number, typename Trammel> friend class tn_range;
 
+  public:
+    virtual ~trammel_base() {}
+
+  private:
     void check_sanity();
     T maximum();
     T minimum();
