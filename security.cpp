@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: security.cpp,v 1.6 2005-12-07 04:28:11 chicares Exp $
+// $Id: security.cpp,v 1.7 2005-12-16 11:02:59 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -54,7 +54,7 @@ void validate_security(bool do_validate)
     //
     if(!diagnostic_message.empty())
         {
-        warning() << "Passkey validation failed." << LMI_FLUSH;
+        safely_show_message("Passkey validation failed.");
         std::exit(EXIT_FAILURE);
         }
 }

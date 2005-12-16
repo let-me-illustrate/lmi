@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: passkey_test.cpp,v 1.5 2005-09-03 00:20:46 chicares Exp $
+// $Id: passkey_test.cpp,v 1.6 2005-12-16 11:02:59 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -37,6 +37,7 @@
 #include <fstream>
 #include <ios>
 #include <string>
+#include <vector>
 
 // TODO ?? Add tests for diagnostics that aren't tested yet.
 
@@ -79,7 +80,7 @@ int test_main(int, char*[])
 
     {
     std::ofstream os
-        ("validated.md5"
+        (md5sum_file()
         ,   std::ios_base::out
           | std::ios_base::trunc
           | std::ios_base::binary
@@ -110,19 +111,19 @@ int test_main(int, char*[])
     std::cout << "  Result of 'md5sum --version':" << std::endl;
     BOOST_TEST_EQUAL(0, system_command("md5sum --version"));
 
-    // For production, we'll provide a file 'validated.md5' with md5
-    // sums of all data files. For this unit test, we'll treat file
-    // 'coleridge' as our only data file; its md5 sum is already in
-    // 'validated.md5' created above. Creating that file by running
-    // 'md5sum' is not trivial--that program emits its output to
-    // stdout, and redirection can be tricky.
+    // For production, we'll provide a file with md5 sums of all data
+    // files. For this unit test, we'll treat file 'coleridge' as our
+    // only data file; its md5 sum is already in the file created
+    // above. Creating that file by running 'md5sum' is not trivial:
+    // that program emits its output to stdout, and redirection can be
+    // tricky.
 
     BOOST_TEST_EQUAL
         (0
-        ,system_command("md5sum --check --status validated.md5")
+        ,system_command("md5sum --check --status " + std::string(md5sum_file()))
         );
 
-    FILE* md5 = std::fopen("validated.md5", "rb");
+    FILE* md5 = std::fopen(md5sum_file(), "rb");
     md5_stream(md5, result);
     std::fclose(md5);
 
@@ -242,7 +243,7 @@ int test_main(int, char*[])
     BOOST_TEST_EQUAL(0, std::remove("expiry"));
     BOOST_TEST_EQUAL(0, std::remove("passkey"));
     BOOST_TEST_EQUAL(0, std::remove("coleridge"));
-    BOOST_TEST_EQUAL(0, std::remove("validated.md5"));
+    BOOST_TEST_EQUAL(0, std::remove(md5sum_file()));
 
     return 0;
 }
