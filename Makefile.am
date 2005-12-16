@@ -20,7 +20,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: Makefile.am,v 1.9 2005-12-15 20:43:28 zeitlin Exp $
+# $Id: Makefile.am,v 1.9.2.1 2005-12-16 01:44:32 zeitlin Exp $
 
 ##############################################################################
 # All Targets
@@ -120,6 +120,7 @@ TESTS = \
     test_materially_equal \
     test_math_functors \
     test_mc_enum \
+    test_mdgrid \
     test_mpatrol_patch \
     test_name_value_pairs \
     test_ncnnnpnn \
@@ -175,6 +176,7 @@ lmi_wx_SOURCES = \
     main_wx.cpp \
     mc_enum.cpp \
     mc_enum_types.cpp \
+    multidimgrid.cpp \
     previewframe_ex.cpp \
     progress_meter_wx.cpp \
     text_doc.cpp \
@@ -576,6 +578,14 @@ test_mc_enum_LDADD =  \
   $(BOOST_LIBS) \
   libtest_commons.la
 
+test_mdgrid_SOURCES =    \
+  multidimgrid.cpp \
+  test_multidimgrid.cpp
+test_mdgrid_CXXFLAGS = $(WX_CXXFLAGS) $(AM_CXXFLAGS)
+test_mdgrid_LDADD = \
+  libtest_commons.la \
+  $(WX_LIBS)
+
 test_mpatrol_patch_SOURCES =    \
   mpatrol_patch_test.cpp
 test_mpatrol_patch_CXXFLAGS = $(AM_CXXFLAGS)
@@ -827,6 +837,7 @@ noinst_HEADERS = \
     md5.hpp \
     miscellany.hpp \
     mortality_rates.hpp \
+    multidimgrid.hpp \
     multiple_cell_document.hpp \
     name_value_pairs.hpp \
     ncnnnpnn.hpp \
