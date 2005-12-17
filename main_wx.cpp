@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_wx.cpp,v 1.37 2005-12-16 23:39:40 chicares Exp $
+// $Id: main_wx.cpp,v 1.38 2005-12-17 07:14:40 chicares Exp $
 
 // Portions of this file are derived from wxWindows files
 //   samples/docvwmdi/docview.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -360,6 +360,7 @@ void Skeleton::InitMenuBar()
 
 // WX !! It seems odd that LoadMenuBar has two signatures, the simpler
 // of which requires no 'parent' argument, while LoadToolBar does not.
+//
 void Skeleton::InitToolBar()
 {
     wxToolBar* tool_bar = wxXmlResource::Get()->LoadToolBar(frame_, "toolbar");
@@ -372,6 +373,7 @@ void Skeleton::InitToolBar()
 
 // WX !! Predefined macro wxID_ABOUT could be mapped by default to
 // an OnAbout handler in the application or frame class.
+//
 void Skeleton::OnAbout(wxCommandEvent&)
 {
     AboutDialog(frame_).ShowModal();
@@ -411,14 +413,14 @@ int Skeleton::OnExit()
     return 0;
 }
 
-bool Skeleton::OnInit()
-{
 // WX !! An exception thrown anywhere in this function, even right
 // before the 'return' statement at the end, either causes a crash
 // (wx-2.5.1) or gets caught by OnUnhandledException() (which loses
 // exception information) instead of by OnExceptionInMainLoop().
 // Therefore, exceptions must be trapped explicitly.
-
+//
+bool Skeleton::OnInit()
+{
     try
         {
         if(false == ProcessCommandLine(argc, argv))
@@ -498,6 +500,15 @@ bool Skeleton::OnInit()
     catch(...)
         {
         report_exception();
+        // Orderly termination: see
+        //   http://lists.gnu.org/archive/html/lmi/2005-12/msg00020.html
+        // Returning 'true' here without creating a frame would leave
+        // the application running as an apparent zombie.
+        if(GetTopWindow())
+            {
+            GetTopWindow()->Close();
+            }
+        return false;
         }
     return true;
 }
@@ -559,6 +570,7 @@ void Skeleton::OnMenuOpen(wxMenuEvent&)
 
 // WX !! The wx exception-handling code doesn't seem to permit
 // graceful handling here.
+//
 void Skeleton::OnUnhandledException()
 {
     wxSafeShowMessage("Terminating due to unhandled exception.", "Fatal error");
@@ -571,6 +583,7 @@ void Skeleton::OnUnhandledException()
 // the OnMenuOpen() handler above doesn't handle toolbar enablement,
 // even when the menu is pulled down; and, OTOH, this function alone
 // doesn't handle menuitem enablement.
+//
 void Skeleton::OnUpdateFileSave(wxUpdateUIEvent& event)
 {
     wxDocument *doc = doc_manager_->GetCurrentDocument();
@@ -608,6 +621,7 @@ This doesn't undo that override.
 // WX !! It seems that a function like this should be able to handle
 // all toolbar and menu enablement. But it appears that a much more
 // complex implementation is required for wxID_SAVE.
+//
 void Skeleton::OnUpdateUI(wxUpdateUIEvent&)
 {
 }
@@ -635,6 +649,7 @@ void Skeleton::OnWindowTileHorizontally(wxCommandEvent&)
 // FSF !! Need this in the wx library for GNU/linux.
 // WX !! A note in src/msw/mdi.cpp suggests adding an orientation
 // argument to Tile(); until that's done, use this workaround.
+//
 void Skeleton::OnWindowTileVertically(wxCommandEvent&)
 {
 #ifdef __WXMSW__
