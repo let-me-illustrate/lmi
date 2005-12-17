@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.277 2005-12-17 07:14:40 chicares Exp $
+// $Id: ChangeLog,v 1.278 2005-12-17 15:07:46 chicares Exp $
 
 MAINTENANCE
 
@@ -5154,4 +5154,14 @@ Simplify.
 
   main_wx.cpp
 Prevent apparent zombification.
+
+20051217T1507Z <chicares@cox.net> [1204]
+
+  alert_wx.cpp
+Record a defect as resolved.
+
+  main_wx.cpp
+  secure_date.hpp
+  security.cpp
+Improve security-validation error messages.
 

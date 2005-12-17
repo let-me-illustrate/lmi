@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_wx.cpp,v 1.38 2005-12-17 07:14:40 chicares Exp $
+// $Id: main_wx.cpp,v 1.39 2005-12-17 15:07:46 chicares Exp $
 
 // Portions of this file are derived from wxWindows files
 //   samples/docvwmdi/docview.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -57,7 +57,7 @@
 #include "license.hpp"
 #include "main_common.hpp"
 #include "miscellany.hpp"
-#include "secure_date.hpp"
+#include "security.hpp"
 #include "text_doc.hpp"
 #include "text_view.hpp"
 #include "wx_new.hpp"
@@ -131,8 +131,6 @@ BEGIN_EVENT_TABLE(Skeleton, wxApp)
 */
 END_EVENT_TABLE()
 
-bool security_validated(bool skip_validation);
-
 #ifdef __WXMSW__
 // WX !! Oddly enough, wx seems to require this declaration, even
 // though <wx/app.h> has been included and that header in turn
@@ -195,30 +193,6 @@ int WINAPI WinMain
     validate_fenv();
 
     return result;
-}
-
-// TODO ?? This largely duplicates function validate_security(). Refactor.
-bool security_validated(bool skip_validation)
-{
-    if(skip_validation)
-        {
-        return true;
-        }
-
-    std::string diagnostic_message = secure_date::instance()->validate
-        (calendar_date()
-        ,global_settings::instance().data_directory()
-        );
-
-    if(diagnostic_message.empty())
-        {
-        return true;
-        }
-    else
-        {
-        wxSafeShowMessage("Passkey: fatal error", diagnostic_message.c_str());
-        return false;
-        }
 }
 
 // 'config_' can't be initialized in the initializer list, because
@@ -428,11 +402,7 @@ bool Skeleton::OnInit()
             return false;
             }
 
-        // The most privileged password bypasses security validation.
-        if(!security_validated(global_settings::instance().ash_nazg()))
-            {
-            throw std::runtime_error("Security validation failed.");
-            }
+        validate_security(!global_settings::instance().ash_nazg());
 
         wxXmlResource::Get()->InitAllHandlers();
 
