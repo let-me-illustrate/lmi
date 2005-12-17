@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: security.cpp,v 1.7 2005-12-16 11:02:59 chicares Exp $
+// $Id: security.cpp,v 1.8 2005-12-17 15:07:46 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -48,29 +48,10 @@ void validate_security(bool do_validate)
         ,global_settings::instance().data_directory()
         );
 
-    // TODO ?? Instead of making this file depend on any gui, either
-    // add an untrappable exit facility to 'alert.hpp', or return
-    // a string.
-    //
     if(!diagnostic_message.empty())
         {
-        safely_show_message("Passkey validation failed.");
+        safely_show_message(diagnostic_message.c_str());
         std::exit(EXIT_FAILURE);
         }
 }
-
-# if 0
-
-TODO ?? Perhaps "alert*.?pp" should be extended to provide a behavior
-like this, for situations that call for unconditional termination:
-
-#include <wx/app.h>
-#include <wx/log.h> // wxSafeShowMessage()
-
-        wxSafeShowMessage
-            (diagnostic_message.c_str()
-            ,msg.str().c_str()
-            );
-        wxExit();
-#endif // 0
 
