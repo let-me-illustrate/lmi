@@ -19,10 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: alert_wx.cpp,v 1.8 2005-12-14 22:56:11 chicares Exp $
-
-// TODO ?? Once this facility is tested, consider using it widely,
-// perhaps instead of using wx's logging classes directly at all.
+// $Id: alert_wx.cpp,v 1.9 2005-12-17 15:07:43 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
