@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: secure_date.hpp,v 1.6 2005-12-16 11:02:59 chicares Exp $
+// $Id: secure_date.hpp,v 1.7 2005-12-17 15:07:46 chicares Exp $
 
 #ifndef secure_date_hpp
 #define secure_date_hpp
@@ -27,7 +27,6 @@
 #include "config.hpp"
 
 #include "calendar_date.hpp"
-#include "expimp.hpp"
 #include "obstruct_slicing.hpp"
 
 #include <boost/filesystem/path.hpp>
@@ -49,7 +48,7 @@ BOOST_STATIC_ASSERT(8 == CHAR_BIT || 16 == CHAR_BIT);
 // so md5 output is 128 bits == 16 8-bit bytes or 8 16-bit bytes:
 enum {md5len = 128 / CHAR_BIT};
 
-class LMI_EXPIMP secure_date
+class secure_date
     :public calendar_date
     ,private boost::noncopyable
     ,virtual private obstruct_slicing<secure_date>
