@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: census_view.cpp,v 1.38 2005-12-01 04:06:34 chicares Exp $
+// $Id: census_view.cpp,v 1.39 2005-12-18 17:19:07 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -930,19 +930,7 @@ void CensusView::ViewComposite()
 
 bool CensusView::DoAllCells(e_emission_target emission_target)
 {
-    mce_run_order order0 = (case_parms()[0]["RunOrder"]).cast<mce_run_order>();
-    mce_run_order order1 = (cell_parms()[0]["RunOrder"]).cast<mce_run_order>();
-    if(order0 != order1)
-        {
-        fatal_error()
-            << "Case-default run order '"
-            << order0
-            << "' differs from first cell's run order '"
-            << order1
-            << "'. Make them consistent then run again."
-            << LMI_FLUSH
-            ;
-        }
+    run_census::assert_consistency(case_parms()[0], cell_parms()[0]);
 
     // TODO ?? The census document already stores the cells as objects
     // of the class they're turned into here. They might be accessed
