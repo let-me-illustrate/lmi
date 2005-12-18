@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.280 2005-12-18 22:29:07 chicares Exp $
+// $Id: ChangeLog,v 1.281 2005-12-18 22:55:54 chicares Exp $
 
 MAINTENANCE
 
@@ -5181,4 +5181,11 @@ Refactor.
   streamable.cpp [new file]
   streamable.hpp
 Write destructors out of line.
+
+20051218T2255Z <chicares@cox.net> [1204]
+
+  workhorse.make
+Remove an unnecessary and harmful dependency. Without this change,
+  make install default_targets=lmi_wx_shared$(EXEEXT)
+can fail.
 

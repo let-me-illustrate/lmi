@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: workhorse.make,v 1.56 2005-12-11 08:55:15 chicares Exp $
+# $Id: workhorse.make,v 1.57 2005-12-18 22:55:54 chicares Exp $
 
 ###############################################################################
 
@@ -549,6 +549,7 @@ wx_new$(SHREXT)     : EXTRA_LDFLAGS =
                       lmi_wx_new_dllflag := -DLMI_WX_NEW_USING_DLL
 wx_new$(SHREXT)     : lmi_wx_new_dllflag := -DLMI_WX_NEW_BUILDING_DLL
 
+liblmi.a liblmi$(SHREXT): EXTRA_LDFLAGS =
 liblmi.a liblmi$(SHREXT): $(lmi_common_objects)
 libantediluvian.a libantediluvian$(SHREXT): $(antediluvian_common_objects)
 
