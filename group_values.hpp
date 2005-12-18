@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: group_values.hpp,v 1.9 2005-05-14 02:10:24 chicares Exp $
+// $Id: group_values.hpp,v 1.10 2005-12-18 17:19:07 chicares Exp $
 
 #ifndef group_values_hpp
 #define group_values_hpp
@@ -34,6 +34,7 @@
 #include <vector>
 
 class IllusInputParms;
+class Input;
 class Ledger;
 
 /// Output target for census runs.
@@ -60,6 +61,10 @@ enum e_emission_target
 /// normally arises when the target isn't known at the time the
 /// composite is generated, so adding an emit-composite-only flag here
 /// would make little sense.
+///
+/// assert_consistency() throws if an inconsistency is detected
+/// between a cell and its corresponding case default.
+/// TODO ?? Instead, this should be enforced when data is entered.
 
 class LMI_EXPIMP run_census
 {
@@ -74,6 +79,16 @@ class LMI_EXPIMP run_census
         );
 
     boost::shared_ptr<Ledger const> composite();
+
+    static void assert_consistency
+        (IllusInputParms const& case_default
+        ,IllusInputParms const& cell
+        );
+
+    static void assert_consistency
+        (Input const& case_default
+        ,Input const& cell
+        );
 
   private:
     boost::shared_ptr<Ledger> composite_;

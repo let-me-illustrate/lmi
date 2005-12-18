@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: group_values.cpp,v 1.48 2005-12-16 23:39:40 chicares Exp $
+// $Id: group_values.cpp,v 1.49 2005-12-18 17:19:07 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -36,6 +36,7 @@
 #include "dbnames.hpp"
 #include "file_command.hpp"
 #include "global_settings.hpp"
+#include "input.hpp"
 #include "inputillus.hpp"
 #include "ledger.hpp"
 #include "ledger_text_formats.hpp"
@@ -717,5 +718,46 @@ bool run_census::operator()
 boost::shared_ptr<Ledger const> run_census::composite()
 {
     return composite_;
+}
+
+//============================================================================
+// The run order depends on the first cell's parameters and ignores
+// any conflicting input for any individual cell. It might be cleaner
+// to offer this field (and certain others) only at the case level.
+//
+void run_census::assert_consistency
+    (IllusInputParms const& case_default
+    ,IllusInputParms const& cell
+    )
+{
+    if(case_default.RunOrder != cell.RunOrder)
+        {
+        fatal_error()
+            << "Case-default run order '"
+            << case_default.RunOrder
+            << "' differs from first cell's run order '"
+            << cell.RunOrder
+            << "'. Make them consistent before running illustrations."
+            << LMI_FLUSH
+            ;
+        }
+}
+
+void run_census::assert_consistency
+    (Input const& case_default
+    ,Input const& cell
+    )
+{
+    if(case_default["RunOrder"] != cell["RunOrder"])
+        {
+        fatal_error()
+            << "Case-default run order '"
+            << case_default["RunOrder"]
+            << "' differs from first cell's run order '"
+            << cell["RunOrder"]
+            << "'. Make them consistent before running illustrations."
+            << LMI_FLUSH
+            ;
+        }
 }
 
