@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: objects.make,v 1.57 2005-12-18 22:29:07 chicares Exp $
+# $Id: objects.make,v 1.58 2005-12-18 23:18:42 chicares Exp $
 
 ################################################################################
 
@@ -226,6 +226,10 @@ antediluvian_common_objects := \
 
 lmi_common_objects := \
   $(common_common_objects) \
+  ce_product_name.o \
+  datum_base.o \
+  datum_boolean.o \
+  datum_string.o \
   ihs_acctval.o \
   ihs_avdebug.o \
   ihs_avmly.o \
@@ -245,39 +249,34 @@ lmi_common_objects := \
   ihs_pios.o \
   ihs_proddata.o \
   ihs_rnddata.o \
+  input.o \
+  input_harmonization.o \
+  mc_enum.o \
+  mc_enum_types.o \
   md5.o \
   secure_date.o \
   security.o \
   stratified_algorithms.o \
   stratified_charges.o \
+  tn_range_types.o \
 
 lmi_wx_objects := \
   about_dialog.o \
   alert_wx.o \
-  ce_product_name.o \
   census_document.o \
   census_view.o \
   date_control.o \
-  datum_base.o \
-  datum_boolean.o \
-  datum_string.o \
   docmanager_ex.o \
   docmdichildframe_ex.o \
-  facets.o \
   file_command_wx.o \
   illustration_document.o \
   illustration_view.o \
-  input.o \
-  input_harmonization.o \
   main_common.o \
   main_wx.o \
-  mc_enum.o \
-  mc_enum_types.o \
   previewframe_ex.o \
   progress_meter_wx.o \
   text_doc.o \
   text_view.o \
-  tn_range_types.o \
   transferor.o \
   view_ex.o \
   wx_checks.o \
