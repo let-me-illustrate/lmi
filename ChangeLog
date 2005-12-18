@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.279 2005-12-18 17:19:07 chicares Exp $
+// $Id: ChangeLog,v 1.280 2005-12-18 22:29:07 chicares Exp $
 
 MAINTENANCE
 
@@ -5172,4 +5172,13 @@ Improve security-validation error messages.
   group_values.hpp
   main_cli.cpp
 Refactor.
+
+20051218T2228Z <chicares@cox.net> [1204]
+
+  input_sequence.cpp
+  input_sequence.hpp
+  objects.make
+  streamable.cpp [new file]
+  streamable.hpp
+Write destructors out of line.
 

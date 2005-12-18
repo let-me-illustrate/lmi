@@ -20,7 +20,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_sequence.cpp,v 1.5 2005-09-12 01:32:19 chicares Exp $
+// $Id: input_sequence.cpp,v 1.6 2005-12-18 22:29:06 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -264,6 +264,10 @@ InputSequence::InputSequence
             }
         }
     realize_vector();
+}
+
+InputSequence::~InputSequence()
+{
 }
 
 /*
