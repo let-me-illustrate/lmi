@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.281 2005-12-18 22:55:54 chicares Exp $
+// $Id: ChangeLog,v 1.282 2005-12-18 23:18:42 chicares Exp $
 
 MAINTENANCE
 
@@ -5188,4 +5188,12 @@ Write destructors out of line.
 Remove an unnecessary and harmful dependency. Without this change,
   make install default_targets=lmi_wx_shared$(EXEEXT)
 can fail.
+
+20051218T2318Z <chicares@cox.net> [1204]
+
+  objects.make
+Improve physical design. Class Input is intended to supersede the ihs
+legacy class IllusInputParms. It and its dependencies, which are free
+of any dependency on wx, belong not in the wx binary, but rather in
+the lmi library, which is intended to be run as a server soon.
 
