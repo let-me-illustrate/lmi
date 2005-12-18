@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_sequence.hpp,v 1.1 2005-01-14 19:47:45 chicares Exp $
+// $Id: input_sequence.hpp,v 1.2 2005-12-18 22:29:07 chicares Exp $
 
 // Motivation.
 //
@@ -200,6 +200,10 @@
 
 #include "config.hpp"
 
+#include "obstruct_slicing.hpp"
+
+#include <boost/utility.hpp>
+
 #include <iosfwd>
 #include <string>
 #include <sstream>
@@ -235,6 +239,8 @@ struct ValueInterval
 };
 
 class InputSequence
+    :private boost::noncopyable
+    ,virtual private obstruct_slicing<InputSequence>
 {
   public:
     InputSequence
@@ -262,6 +268,7 @@ class InputSequence
         ,std::vector<std::string> const&
         );
     InputSequence(double value_to_retirement, double value_from_retirement);
+    ~InputSequence();
 
     void realize_vector();
 

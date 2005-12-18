@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: streamable.hpp,v 1.3 2005-11-02 07:26:50 chicares Exp $
+// $Id: streamable.hpp,v 1.4 2005-12-18 22:29:07 chicares Exp $
 
 // This was originally designed to write data serially to iostreams,
 // in a format
@@ -64,7 +64,7 @@
 class LMI_EXPIMP streamable
 {
   public:
-    virtual ~streamable() {}
+    virtual ~streamable() = 0;
 
     virtual void read(xml::node&) = 0;
     virtual void write(xml::node&) const = 0;
