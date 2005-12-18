@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_cli.cpp,v 1.15 2005-12-16 23:39:40 chicares Exp $
+// $Id: main_cli.cpp,v 1.16 2005-12-18 17:19:07 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -67,25 +67,7 @@ void RegressionTestOneCensusFile(fs::directory_iterator i)
 {
     std::cout << "Regression testing: " << i->string() << std::endl;
     multiple_cell_document doc(i->string());
-
-// The run order depends on the first cell's parameters and ignores any
-// conflicting input for any individual cell. Perhaps we should detect
-// conflicting input and signal an error? It would probably be cleaner
-// to offer this input item (and a few similar ones) only at the case
-// level. TODO ?? Fix this, and remove duplicate code in the census
-// manager.
-    if(doc.case_parms()[0].RunOrder != doc.cell_parms()[0].RunOrder)
-        {
-        fatal_error()
-            << "Case-default run order '"
-            << doc.case_parms()[0].RunOrder
-            << "' differs from first cell's run order '"
-            << doc.cell_parms()[0].RunOrder
-            << "'. Make them consistent then run again."
-            << LMI_FLUSH
-            ;
-        }
-
+    run_census::assert_consistency(doc.case_parms()[0], doc.cell_parms()[0]);
     run_census()(*i, emit_to_spew_file, doc.cell_parms());
 }
 
