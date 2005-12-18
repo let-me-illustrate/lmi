@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: objects.make,v 1.56 2005-12-15 01:40:20 chicares Exp $
+# $Id: objects.make,v 1.57 2005-12-18 22:29:07 chicares Exp $
 
 ################################################################################
 
@@ -190,6 +190,7 @@ common_common_objects := \
   rounding_rules.o \
   sigfpe.o \
   single_cell_document.o \
+  streamable.o \
   surrchg_rates.o \
   system_command.o \
   timer.o \
@@ -499,6 +500,7 @@ input_test$(EXEEXT): \
   license.o \
   multiple_cell_document.o \
   single_cell_document.o \
+  streamable.o \
   xenumtypes.o \
   xrange.o \
   $(extra_libs) \
