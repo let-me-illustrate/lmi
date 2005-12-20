@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: calculate.hpp,v 1.13 2005-11-02 04:48:46 chicares Exp $
+// $Id: calculate.hpp,v 1.14 2005-12-20 00:46:38 chicares Exp $
 
 #ifndef calculate_hpp
 #define calculate_hpp
@@ -111,7 +111,7 @@ struct RunCensus
     explicit RunCensus(std::ostream& aOutputDest)
         :OutputDest           (aOutputDest)
 // TODO ?? Hardcoded ledger type must be changed later, but is it?
-        ,XXXComposite         (e_ledger_type(e_ill_reg), 100, true)
+        ,XXXComposite         ()
         ,time_for_calculations(0.0)
         ,time_for_output      (0.0)
         {}
@@ -221,12 +221,7 @@ struct RunCensusDeprecated
 
         timer.restart();
 
-        // COMPILER !! Don't write this as
-        //   Ledger XXXComposite(e_ledger_type(e_ill_reg), 100, true);
-        // because gcc versions 2.95, 3.2, and 3.3 erroneously parse
-        // its first argument as an erroneous function declaration.
-        static e_ledger_type const ill_reg_type(e_ill_reg);
-        Ledger XXXComposite(ill_reg_type, 100, true);
+        Ledger XXXComposite;
 
         for
             (std::vector<IllusInputParms>::iterator lives_it = lives.begin()

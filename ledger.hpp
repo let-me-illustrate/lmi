@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger.hpp,v 1.10 2005-11-10 15:59:23 chicares Exp $
+// $Id: ledger.hpp,v 1.11 2005-12-20 00:46:38 chicares Exp $
 
 #ifndef ledger_hpp
 #define ledger_hpp
@@ -63,6 +63,8 @@ class LMI_EXPIMP Ledger
     :virtual public streamable
 {
   public:
+    Ledger(); // TODO ?? Remove after expunging 'calculate.hpp'.
+
     // TODO ?? It's pretty weak to use 100 as a default max length.
     // But when running a composite, life by life, we don't know the max
     // length until we've initialized all lives. We could get the min age
