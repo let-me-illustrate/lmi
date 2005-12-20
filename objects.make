@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: objects.make,v 1.58 2005-12-18 23:18:42 chicares Exp $
+# $Id: objects.make,v 1.59 2005-12-20 00:46:41 chicares Exp $
 
 ################################################################################
 
@@ -35,6 +35,15 @@ boost_filesystem_objects := \
   exception.o \
   path_posix_windows.o \
   operations_posix_windows.o \
+
+# These object files are used in both an application and a shared
+# library that it links to, only for builds that use shared-library
+# 'attributes'. This workaround is used merely because we don't yet
+# build these objects as a library.
+
+ifneq (,$(USE_SO_ATTRIBUTES))
+  duplicated_objects = $(boost_filesystem_objects)
+endif
 
 # GNU cgicc.
 
@@ -125,6 +134,7 @@ main_auxiliary_common_objects := \
 
 cgi_objects := \
   $(cgicc_objects) \
+  $(duplicated_objects) \
   alert_cgi.o \
   file_command_cgi.o \
   main_cgi.o \
@@ -133,6 +143,7 @@ cgi_objects := \
   progress_meter_cgi.o \
 
 cli_objects := \
+  $(duplicated_objects) \
   alert_cli.o \
   file_command_cli.o \
   main_cli.o \
@@ -261,6 +272,7 @@ lmi_common_objects := \
   tn_range_types.o \
 
 lmi_wx_objects := \
+  $(duplicated_objects) \
   about_dialog.o \
   alert_wx.o \
   census_document.o \

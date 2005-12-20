@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mc_enum.hpp,v 1.7 2005-11-07 01:30:24 chicares Exp $
+// $Id: mc_enum.hpp,v 1.8 2005-12-20 00:46:41 chicares Exp $
 
 // Acknowledgment
 //
@@ -127,6 +127,8 @@
 
 #include "datum_base.hpp"
 
+#include "expimp.hpp"
+
 #include <boost/operators.hpp>
 
 #if !defined __BORLANDC__
@@ -139,7 +141,7 @@
 #include <cstddef>
 #include <vector>
 
-class mc_enum_base
+class LMI_EXPIMP mc_enum_base
     :public datum_base
 {
   public:

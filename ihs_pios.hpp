@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_pios.hpp,v 1.3 2005-12-16 13:14:52 chicares Exp $
+// $Id: ihs_pios.hpp,v 1.4 2005-12-20 00:46:41 chicares Exp $
 
 // This is a derived work based on Joshua Rowe's
 //   "Really cool persistent object stream library"
@@ -73,13 +73,13 @@ namespace JOSHUA_ROWE_PERSISTENT_STREAMS
 //typedef   void *  pvoid;
 //#endif
 
-class   LMI_EXPIMP JrPs_pstream;
-class   LMI_EXPIMP JrPs_opstream;
-class   LMI_EXPIMP JrPs_ipstream;
-class   LMI_EXPIMP JrPs_pstreamed;
-class   LMI_EXPIMP JrPs_pstreamable;
-class   LMI_EXPIMP JrPs_pstreamreg;
-class   LMI_EXPIMP JrPs_pstreambuf;
+class JrPs_pstream;
+class JrPs_opstream;
+class JrPs_ipstream;
+class JrPs_pstreamed;
+class JrPs_pstreamable;
+class JrPs_pstreamreg;
+class JrPs_pstreambuf;
 
 typedef JrPs_pstreamable * (*BUILDER)();
 
