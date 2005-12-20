@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_cli.cpp,v 1.16 2005-12-18 17:19:07 chicares Exp $
+// $Id: main_cli.cpp,v 1.17 2005-12-20 00:46:38 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -31,10 +31,12 @@
 #include "armor.hpp"
 #include "calculate.hpp"
 #include "custom_io_0.hpp"
+#include "expimp.hpp"
 #include "getopt.hpp"
 #include "global_settings.hpp"
 #include "group_values.hpp"
 #include "initialize_filesystem.hpp"
+#include "inputillus.hpp"
 #include "ledger_text_formats.hpp"
 #include "license.hpp"
 #include "main_common.hpp"
@@ -60,7 +62,7 @@
 // INELEGANT !! Prototype specified explicitly because the production
 // and antediluvian branches define it identically but in different
 // and incompatible headers.
-void print_databases();
+void LMI_EXPIMP print_databases();
 
 //============================================================================
 void RegressionTestOneCensusFile(fs::directory_iterator i)
@@ -122,16 +124,20 @@ void RegressionTest()
 void SelfTest()
 {
     IllusVal IV;
-    InputParms IP;
-    IP.Status[0].Gender  = e_male;
-    IP.Status[0].Smoking = e_nonsmoker;
-    IP.Status[0].Class = e_preferred;
+    IllusInputParms IP;
+    IP["Gender"           ] = "Male";
+    IP["Smoking"          ] = "Nonsmoker";
+    IP["UnderwritingClass"] = "Preferred";
+    IP.GenAcctIntRate = "0.12";
+    IP.propagate_changes_to_base_and_finalize();
+
     IP.EePremium.assign(IP.SpecAmt.size(), r_pmt(10000.0));
     IP.SpecAmt.assign(IP.SpecAmt.size(), r_spec_amt(1000000.0));
     double expected_value = 0.0;
     double observed_value = 0.0;
 
-    IP.SolveType = e_solve_none;
+    IP["SolveType"] = "SolveNone";
+
     expected_value = 29206514.78;
     IV.Run(&IP);
     observed_value = IV.ledger().GetCurrFull().AcctVal.back();
@@ -147,7 +153,7 @@ void SelfTest()
             ;
         }
 
-    IP.SolveType = e_solve_specamt;
+    IP["SolveType"] = "SolveSpecAmt";
     expected_value = 1827289;
     observed_value = IV.Run(&IP);
     if(.005 < std::fabs(expected_value - observed_value))
@@ -162,7 +168,7 @@ void SelfTest()
             ;
         }
 
-    IP.SolveType = e_solve_ee_prem;
+    IP["SolveType"] = "SolveEePrem";
     expected_value = 5498.99;
     observed_value = IV.Run(&IP);
     if(.005 < std::fabs(expected_value - observed_value))
