@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.282 2005-12-18 23:18:42 chicares Exp $
+// $Id: ChangeLog,v 1.283 2005-12-20 00:46:41 chicares Exp $
 
 MAINTENANCE
 
@@ -5196,4 +5196,31 @@ Improve physical design. Class Input is intended to supersede the ihs
 legacy class IllusInputParms. It and its dependencies, which are free
 of any dependency on wx, belong not in the wx binary, but rather in
 the lmi library, which is intended to be run as a server soon.
+
+20051220T0046Z <chicares@cox.net> [1205]
+
+  calculate.hpp
+  ledger.cpp
+  ledger.hpp
+  main_cgi.cpp
+  main_cli.cpp
+Simplify, making it possible to improve encapsulation by not exporting
+class template 'xenum' from a shared library.
+
+  alert.hpp
+  datum_base.hpp
+  file_command.hpp
+  getopt.hpp
+  ihs_fpios.hpp
+  ihs_pios.hpp
+  input.hpp
+  license.hpp
+  mc_enum.hpp
+  multiple_cell_document.hpp
+  objects.make
+  workhorse.make
+  xrange.hpp
+Optionally build with msw __declspec attributes. This facilitates
+supporting other msw compilers. It worked earlier in the year, but
+eroded due to lack of routine maintenance.
 

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_fpios.hpp,v 1.4 2005-11-06 15:28:28 chicares Exp $
+// $Id: ihs_fpios.hpp,v 1.5 2005-12-20 00:46:41 chicares Exp $
 
 // This is a derived work based on Joshua Rowe's
 //   "Really cool persistent object stream library"
@@ -62,15 +62,15 @@
 namespace JOSHUA_ROWE_PERSISTENT_STREAMS
 {
 
-class   LMI_EXPIMP JrPs_fdpstreambuf;
-class   LMI_EXPIMP JrPs_fdpstream;
-class   LMI_EXPIMP JrPs_ifdpstream;
-class   LMI_EXPIMP JrPs_ofdpstream;
-class   LMI_EXPIMP JrPs_fpstreambuf;
-class   LMI_EXPIMP JrPs_fpstream;
-class   LMI_EXPIMP JrPs_ifpstream;
-class   LMI_EXPIMP JrPs_ofpstream;
-class   LMI_EXPIMP JrPs_iofpstream;
+class JrPs_fdpstreambuf;
+class JrPs_fdpstream;
+class JrPs_ifdpstream;
+class JrPs_ofdpstream;
+class JrPs_fpstreambuf;
+class JrPs_fpstream;
+class JrPs_ifpstream;
+class JrPs_ofpstream;
+class JrPs_iofpstream;
 
 class LMI_EXPIMP JrPs_fdpstreambuf  : public JrPs_pstreambuf
 {
