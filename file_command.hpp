@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: file_command.hpp,v 1.2 2005-05-13 23:58:10 chicares Exp $
+// $Id: file_command.hpp,v 1.3 2005-12-20 00:46:41 chicares Exp $
 
 #ifndef file_command_hpp
 #define file_command_hpp
@@ -48,7 +48,7 @@
 
 typedef void (*file_command_fp_type)(std::string const&, std::string const&);
 
-bool file_command_initialize(file_command_fp_type);
+bool LMI_EXPIMP file_command_initialize(file_command_fp_type);
 
 struct LMI_EXPIMP file_command
     :private boost::noncopyable

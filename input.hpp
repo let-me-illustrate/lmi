@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input.hpp,v 1.8 2005-11-29 14:00:27 chicares Exp $
+// $Id: input.hpp,v 1.9 2005-12-20 00:46:41 chicares Exp $
 
 #ifndef input_hpp
 #define input_hpp
@@ -103,7 +103,7 @@ class InputSequence;
 ///
 /// TODO ?? Add functions to convert to and from a std::map<std::string> >?
 
-class Input
+class LMI_EXPIMP Input
     :public MemberSymbolTable<Input>
     ,private boost::equality_comparable<Input>
     ,virtual private obstruct_slicing<Input>
@@ -359,11 +359,17 @@ class Input
     mce_state                CachedStateOfJurisdiction       ;
 };
 
-void convert_to_ihs(IllusInputParms&, Input const&);
-void convert_to_ihs(std::vector<IllusInputParms>&, std::vector<Input> const&);
+void LMI_EXPIMP convert_to_ihs(IllusInputParms&, Input const&);
+void LMI_EXPIMP convert_to_ihs
+    (std::vector<IllusInputParms>&
+    ,std::vector<Input> const&
+    );
 
-void convert_from_ihs(IllusInputParms const&, Input&);
-void convert_from_ihs(std::vector<IllusInputParms> const&, std::vector<Input>&);
+void LMI_EXPIMP convert_from_ihs(IllusInputParms const&, Input&);
+void LMI_EXPIMP convert_from_ihs
+    (std::vector<IllusInputParms> const&
+    ,std::vector<Input>&
+    );
 
 #endif // input_hpp
 

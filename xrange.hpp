@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xrange.hpp,v 1.5 2005-12-12 17:57:09 chicares Exp $
+// $Id: xrange.hpp,v 1.6 2005-12-20 00:46:41 chicares Exp $
 
 #ifndef xrange_hpp
 #define xrange_hpp
@@ -102,6 +102,7 @@ Or should the semantic type do that?
 #include "config.hpp"
 
 #include "alert.hpp"
+#include "expimp.hpp"
 #include "value_cast.hpp"
 
 #include <boost/operators.hpp>
@@ -180,7 +181,7 @@ difficulties:
 // We factor this out and define it in a .cpp file so that we can set a
 // breakpoint on it, with debuggers that can't set a breakpoint in a
 // template function.
-std::string xrange_error_message
+std::string LMI_EXPIMP xrange_error_message
     (std::string const& bad_value
     ,std::string const& typeid_name
     ,std::string const& minimum

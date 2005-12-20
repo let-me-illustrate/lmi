@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: workhorse.make,v 1.57 2005-12-18 22:55:54 chicares Exp $
+# $Id: workhorse.make,v 1.58 2005-12-20 00:46:41 chicares Exp $
 
 ###############################################################################
 
@@ -91,8 +91,14 @@ default_targets := \
   liblmi$(SHREXT) \
   lmi_cli_shared$(EXEEXT) \
   lmi_wx_shared$(EXEEXT) \
-  product_files$(EXEEXT) \
   wx_new$(SHREXT) \
+
+# The product_files target doesn't build with shared-library
+# 'attributes'. That matters little because that target is deprecated.
+
+ifeq (,$(USE_SO_ATTRIBUTES))
+  default_targets += product_files$(EXEEXT)
+endif
 
 .PHONY: effective_default_target
 effective_default_target: $(default_targets)
@@ -415,6 +421,7 @@ LDFLAGS = \
 REQUIRED_CPPFLAGS = \
   $(addprefix -I , $(all_include_directories)) \
   $(lmi_wx_new_dllflag) \
+  $(so_attributes) \
   $(platform_defines) \
   -D__WXDEBUG__ \
   -DBOOST_STRICT_CONFIG \
@@ -515,8 +522,7 @@ ALL_RCFLAGS  = $(REQUIRED_RCFLAGS)  $(RCFLAGS)
 # TODO ?? Should target-specific dependencies reside in 'objects.make'
 # instead?
 
-# Reconsider writing $(lmi_dllflag) in $(REQUIRED_CPPFLAGS), in order
-# to use dll import and export attributes.
+# Define USE_SO_ATTRIBUTES to use shared-library 'attributes'.
 #
 # Such attributes are no longer needed for gcc-3.something. Omitting
 # them makes building slightly more efficient--see
@@ -533,6 +539,10 @@ ALL_RCFLAGS  = $(REQUIRED_RCFLAGS)  $(RCFLAGS)
 #
 # However, 'libwx_new.a' continues to use classic dll attributes,
 # because there's never a reason to build it as a static library.
+
+ifneq (,$(USE_SO_ATTRIBUTES))
+  so_attributes = $(lmi_dllflag)
+endif
 
 lib%.a              : lmi_dllflag :=
 lib%$(SHREXT)       : lmi_dllflag := -DLMI_BUILD_DLL
@@ -611,7 +621,11 @@ install: $(default_targets)
 	+@[ -d $(touchstone_dir) ] || $(MKDIR) --parents $(touchstone_dir)
 	@$(CP) --preserve --update $^ $(bin_dir)
 	@$(CP) --preserve --update $(data_files) $(data_dir)
+ifeq (,$(USE_SO_ATTRIBUTES))
 	@cd $(data_dir); $(bin_dir)/product_files
+else
+	@$(ECHO) "Can't build product_files$(EXEEXT) with USE_SO_ATTRIBUTES."
+endif
 
 ################################################################################
 
