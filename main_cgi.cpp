@@ -31,7 +31,7 @@
 // other reasons evident in cvs or explained in 'ChangeLog'. Any
 // defect should not reflect on Stephen F. Booth's reputation.
 
-// $Id: main_cgi.cpp,v 1.14 2005-09-12 01:32:19 chicares Exp $
+// $Id: main_cgi.cpp,v 1.15 2005-12-20 00:46:38 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -486,11 +486,12 @@ void ShowOutput(cgicc::Cgicc const& data)
     // TODO ?? More KLUDGE stuff.
     input.Status_IssueAge      = 45;
     input.Status_RetAge        = 65;
-    input.Status_Gender        = e_female;
-    input.Status_Smoking       = e_smoker;
-    input.Status_Class         = e_preferred;
-    input.Status_HasWP         = "No";
-    input.Status_HasADD        = "No";
+
+    input["Gender"]                        = "Female";
+    input["Smoking"]                       = "Smoker";
+    input["UnderwritingClass"]             = "Preferred";
+    input["WaiverOfPremiumBenefit"]        = "No";
+    input["AccidentalDeathBenefit"]        = "No";
 
     input["ProductName"]                   = GetValue(data, "ProductName" );
     input["IssueAge"]                      = GetValue(data, "IssueAge"    );
