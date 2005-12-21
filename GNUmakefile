@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: GNUmakefile,v 1.46 2005-12-05 16:01:46 wboutin Exp $
+# $Id: GNUmakefile,v 1.47 2005-12-21 01:23:17 chicares Exp $
 
 ###############################################################################
 
@@ -180,6 +180,7 @@ MAKETARGET = \
                          src_dir='$(src_dir)' \
                       build_type='$(build_type)' \
                platform-makefile='$(platform-makefile)' \
+               USE_SO_ATTRIBUTES='$(USE_SO_ATTRIBUTES)' \
                     yyyymmddhhmm='$(yyyymmddhhmm)' \
   $(MAKECMDGOALS)
 
@@ -562,7 +563,7 @@ cvs_ready: source_clean
 	-$(MAKE) check_conformity
 	-$(MAKE) check_idempotence
 	-$(MAKE) all test
-	-$(MAKE) all test build_type=mpatrol
+	-$(MAKE) all test build_type=mpatrol USE_SO_ATTRIBUTES=1
 
 ################################################################################
 
