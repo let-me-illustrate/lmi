@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.283 2005-12-20 00:46:41 chicares Exp $
+// $Id: ChangeLog,v 1.284 2005-12-21 01:23:17 chicares Exp $
 
 MAINTENANCE
 
@@ -5223,4 +5223,26 @@ class template 'xenum' from a shared library.
 Optionally build with msw __declspec attributes. This facilitates
 supporting other msw compilers. It worked earlier in the year, but
 eroded due to lack of routine maintenance.
+
+20051221T0122Z <chicares@cox.net> [1205]
+
+  GNUmakefile
+Ensure that shared-library attributes are routinely exercised.
+
+  database.cpp
+  database.hpp
+  ihs_database.cpp
+  ihs_dbvalue.cpp
+  ihs_dbvalue.hpp
+  ihs_pios.cpp
+  ihs_pios.hpp
+  loads_test.cpp
+Write inline functions out of line.
+
+  ihs_proddata.cpp
+  ihs_proddata.hpp
+Add a user-declared dtor.
+
+  streamable.hpp
+Remove shared-library attributes from inline functions.
 
