@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_database.cpp,v 1.7 2005-09-18 01:22:25 chicares Exp $
+// $Id: ihs_database.cpp,v 1.8 2005-12-21 01:22:48 chicares Exp $
 
 // TODO ?? Should length_ be dynamically reset when IssueAge is?
 // TODO ?? Should State be dynamically reset?
@@ -142,6 +142,18 @@ TDatabase::TDatabase(InputParms const& input)
 //============================================================================
 TDatabase::~TDatabase()
 {
+}
+
+//============================================================================
+e_state const& TDatabase::GetStateOfJurisdiction() const
+{
+    return State;
+}
+
+//============================================================================
+int TDatabase::length() const
+{
+    return length_;
 }
 
 //============================================================================

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_pios.hpp,v 1.4 2005-12-20 00:46:41 chicares Exp $
+// $Id: ihs_pios.hpp,v 1.5 2005-12-21 01:22:48 chicares Exp $
 
 // This is a derived work based on Joshua Rowe's
 //   "Really cool persistent object stream library"
@@ -125,7 +125,7 @@ public:
   void      close();
   void      error(int aerror);
   int       error();
-  int       good() {return 0 == err;}   // GWC added: compatibility with BI
+  int       good(); // GWC added: compatibility with BI
   int       lookup(const void* q); // Look up an already written object by
                   // its pointer.
   const JrPs_pstreamed* lookup(int id);   // Look up an already read object
@@ -247,7 +247,7 @@ protected:
 public:
   JrPs_pstreamable();
   JrPs_pstreamable(JrPs_pstreamableInit);
-  virtual ~JrPs_pstreamable() {}
+  virtual ~JrPs_pstreamable();
 };
 
 class   JrPs_pstreamreg

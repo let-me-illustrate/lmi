@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_dbvalue.hpp,v 1.2 2005-01-31 13:12:48 chicares Exp $
+// $Id: ihs_dbvalue.hpp,v 1.3 2005-12-21 01:22:48 chicares Exp $
 
 #ifndef ihs_dbvalue_hpp
 #define ihs_dbvalue_hpp
@@ -161,7 +161,7 @@ class LMI_EXPIMP TDBValue
 
   private:
     TDBValue(JRPS::JrPs_pstreamableInit);
-    virtual char const* streamableName() const {return "TDBValue";}
+    virtual char const* streamableName() const;
     enum {StreamingVersion = 1};
 };
 

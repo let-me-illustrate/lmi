@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: database.hpp,v 1.3 2005-10-17 15:48:06 chicares Exp $
+// $Id: database.hpp,v 1.4 2005-12-21 01:22:48 chicares Exp $
 
 #ifndef database_hpp
 #define database_hpp
@@ -57,11 +57,11 @@ class LMI_EXPIMP TDatabase
         );
     explicit TDatabase(InputParms const&);
     // Ctor for unit-testing support.
-    explicit TDatabase(int length) :length_(length) {}
+    explicit TDatabase(int length);
     ~TDatabase();
 
-    e_state const& GetStateOfJurisdiction() const {return State;}
-    int length() const {return length_;}
+    e_state const& GetStateOfJurisdiction() const;
+    int length() const;
 
     // Return scalar: use double because it's convertible to int, bool, etc.
     // We'd rather do something like
