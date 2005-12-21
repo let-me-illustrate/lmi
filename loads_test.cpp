@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: loads_test.cpp,v 1.4 2005-10-17 15:48:10 chicares Exp $
+// $Id: loads_test.cpp,v 1.5 2005-12-21 01:22:48 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -43,7 +43,9 @@
 // TODO ?? Consider factoring out these database stubs.
 
 #include "database.hpp"
+TDatabase::TDatabase(int length) :length_(length) {}
 TDatabase::~TDatabase() {}
+int TDatabase::length() const {return length_;}
 void TDatabase::Query(std::vector<double>& v, int) const {v.resize(length_);}
 double TDatabase::Query(int) const {return 0.0;}
 

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_dbvalue.cpp,v 1.8 2005-11-23 03:59:13 chicares Exp $
+// $Id: ihs_dbvalue.cpp,v 1.9 2005-12-21 01:22:48 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -763,5 +763,10 @@ void TDBValue::write(JRPS::JrPs_opstream& os) const
     os << extra_axes_values;
     os << extra_axes_names;
     os << data_values;
+}
+
+char const* TDBValue::streamableName() const
+{
+    return "TDBValue";
 }
 
