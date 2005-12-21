@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_pios.cpp,v 1.1 2005-01-14 19:47:45 chicares Exp $
+// $Id: ihs_pios.cpp,v 1.2 2005-12-21 01:22:48 chicares Exp $
 
 // This is a derived work based on Joshua Rowe's
 //   "Really cool persistent object stream library"
@@ -113,6 +113,12 @@ void    JrPs_pstream::error(int aerror)
 int JrPs_pstream::error()
 {
   return    err;
+}
+
+// GWC added: compatibility with BI
+int JrPs_pstream::good()
+{
+  return 0 == err;
 }
 
 int JrPs_pstream::lookup(const void* q)
@@ -548,6 +554,10 @@ JrPs_pstreamable::JrPs_pstreamable()
 }
 
 JrPs_pstreamable::JrPs_pstreamable(JrPs_pstreamableInit)
+{
+}
+
+JrPs_pstreamable::~JrPs_pstreamable()
 {
 }
 
