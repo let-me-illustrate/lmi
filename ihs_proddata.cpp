@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_proddata.cpp,v 1.9 2005-09-12 01:32:19 chicares Exp $
+// $Id: ihs_proddata.cpp,v 1.10 2005-12-21 01:22:51 chicares Exp $
 
 // This class contains names of files containing a product's tables as well
 // as strings that are the same for all instances of that product.
@@ -50,6 +50,11 @@
 
 //============================================================================
 TProductData::TProductData()
+{
+}
+
+//============================================================================
+TProductData::~TProductData()
 {
 }
 
