@@ -20,7 +20,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: Makefile.am,v 1.9.2.1 2005-12-16 01:44:32 zeitlin Exp $
+# $Id: Makefile.am,v 1.9.2.2 2005-12-22 14:35:10 zeitlin Exp $
 
 ##############################################################################
 # All Targets
@@ -191,7 +191,7 @@ if LMI_WINDOWS
 ## use old style suffix rule instead of the pattern one as automake only
 ## recognizes the old style rules
 .rc.o:
-	windres -I $(top_srcdir) -I $(WX_CPPFLAGS) $< $@
+	windres -I $(top_srcdir) $(WX_CPPFLAGS) $< $@
 
     lmi_wx_SOURCES += lmi.rc
     lmi_wx_CXXFLAGS += -DLMI_USE_DLL -mwindows
