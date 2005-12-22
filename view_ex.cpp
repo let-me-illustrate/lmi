@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: view_ex.cpp,v 1.6 2005-06-01 14:48:49 chicares Exp $
+// $Id: view_ex.cpp,v 1.6.2.1 2005-12-22 14:36:42 zeitlin Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -138,7 +138,7 @@ bool ViewEx::OnCreate(wxDocument* doc, long)
 {
     wxGetApp().CreateChildFrame(doc, this);
     DocManager().AssociateFileHistoryWithFileMenu(FrameWindow().GetMenuBar());
-    GetFrame()->SetTitle("Loading document...");
+    GetFrame()->SetLabel("Loading document...");
     CreateChildWindow()->SetFocus();
 
     // WX !! This should be done inside the library.
