@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_server7702.cpp,v 1.5 2005-12-12 17:57:09 chicares Exp $
+// $Id: ihs_server7702.cpp,v 1.6 2005-12-22 13:59:49 chicares Exp $
 
 // Known defects:
 // grep for "NEED DECISION"
@@ -77,7 +77,7 @@ int main()
 #ifndef LMI_MSW
 int main()
 #else // LMI_MSW
-extern "C" int LMI_EXPIMP __stdcall DllEntryPoint(HINSTANCE, uint32 a_Reason, void*)
+extern "C" int LMI_SO __stdcall DllEntryPoint(HINSTANCE, uint32 a_Reason, void*)
 #endif // LMI_MSW
 {
 #ifndef LMI_MSW
@@ -127,7 +127,7 @@ bool LeaveServer()
 
 //============================================================================
 // TODO ?? Should we make the directory an optional argument?
-extern "C" void LMI_EXPIMP InitializeServer7702()
+extern "C" void InitializeServer7702()
 {
     // Data directory where tables etc. are stored
 // TODO ?? This is obsolete; need a replacement. Either let main()
@@ -174,7 +174,7 @@ int RunServer7702()
 
 //============================================================================
 // Read from C struct, and return a different C struct
-extern "C" Server7702Output LMI_EXPIMP RunServer7702FromStruct(Server7702Input a_Input)
+extern "C" Server7702Output RunServer7702FromStruct(Server7702Input a_Input)
 {
     EnterServer();
     Server7702 contract(a_Input);
@@ -186,7 +186,7 @@ extern "C" Server7702Output LMI_EXPIMP RunServer7702FromStruct(Server7702Input a
 // Read from C string, and put result in a C string.
 // The caller must allocate sufficient space for the result; at present,
 // that means 444 bytes.
-extern "C" void LMI_EXPIMP RunServer7702FromString(char* i, char* o)
+extern "C" void RunServer7702FromString(char* i, char* o)
 {
     EnterServer();
     Server7702Input input;

@@ -19,14 +19,14 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: alert.hpp,v 1.12 2005-12-20 00:46:41 chicares Exp $
+// $Id: alert.hpp,v 1.13 2005-12-22 13:59:49 chicares Exp $
 
 #ifndef alert_hpp
 #define alert_hpp
 
 #include "config.hpp"
 
-#include "expimp.hpp"
+#include "so_attributes.hpp"
 
 // Instead of <iosfwd>, include <ostream> to make std::flush available
 // to modules that use the LMI_ASSERT macro.
@@ -128,12 +128,12 @@
 
 namespace alert_classes{} // doxygen workaround.
 
-std::ostream& LMI_EXPIMP status();
-std::ostream& LMI_EXPIMP warning();
-std::ostream& LMI_EXPIMP hobsons_choice();
-std::ostream& LMI_EXPIMP fatal_error();
+std::ostream& LMI_SO status();
+std::ostream& LMI_SO warning();
+std::ostream& LMI_SO hobsons_choice();
+std::ostream& LMI_SO fatal_error();
 
-void LMI_EXPIMP safely_show_message(char const*);
+void LMI_SO safely_show_message(char const*);
 
 // Implement these functions for each platform. Any might throw an
 // exception, which normally would be caught by the standard library
@@ -164,7 +164,7 @@ void safe_message_alert   (char const*);
 /// improved as discussed here:
 ///   http://lists.nongnu.org/archive/html/lmi/2005-11/msg00016.html
 
-bool LMI_EXPIMP set_alert_functions
+bool LMI_SO set_alert_functions
     (void(*status_alert_function_pointer        )(std::string const&)
     ,void(*warning_alert_function_pointer       )(std::string const&)
     ,void(*hobsons_choice_alert_function_pointer)(std::string const&)
@@ -184,7 +184,7 @@ bool LMI_EXPIMP set_alert_functions
 /// stderr and signals a fatal error. A server application probably
 /// should fail and write a message in a log file.
 
-std::string const& LMI_EXPIMP hobsons_prompt();
+std::string const& LMI_SO hobsons_prompt();
 
 /// Rejecting Hobson's Choice throws a distinctive exception. Design
 /// intention: a user interface can catch this and take appropriate
@@ -196,7 +196,7 @@ std::string const& LMI_EXPIMP hobsons_prompt();
 /// doesn't pop up the catch-all messagebox, which would seem
 /// redundant.
 
-class LMI_EXPIMP hobsons_choice_exception
+class LMI_SO hobsons_choice_exception
     :public std::exception
 {
   public:
@@ -207,12 +207,12 @@ class LMI_EXPIMP hobsons_choice_exception
 /// library to demonstrate that alerts can be raised there and
 /// processed in the main application.
 
-void LMI_EXPIMP test_status();
-void LMI_EXPIMP test_warning();
-void LMI_EXPIMP test_hobsons_choice();
-void LMI_EXPIMP test_fatal_error();
-void LMI_EXPIMP test_standard_exception();
-void LMI_EXPIMP test_arbitrary_exception();
+void LMI_SO test_status();
+void LMI_SO test_warning();
+void LMI_SO test_hobsons_choice();
+void LMI_SO test_fatal_error();
+void LMI_SO test_standard_exception();
+void LMI_SO test_arbitrary_exception();
 
 /// Write file name and line number to diagnostic stream, and flush.
 

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: group_values.cpp,v 1.49 2005-12-18 17:19:07 chicares Exp $
+// $Id: group_values.cpp,v 1.50 2005-12-22 13:59:49 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -110,7 +110,7 @@ void emit_ledger
 // reported for calculations and output combined; is it desirable to
 // separate those things?
 
-class LMI_EXPIMP run_census_in_series
+class run_census_in_series
 {
   public:
     explicit run_census_in_series()
@@ -124,7 +124,7 @@ class LMI_EXPIMP run_census_in_series
         );
 };
 
-class LMI_EXPIMP run_census_in_parallel
+class run_census_in_parallel
 {
   public:
     explicit run_census_in_parallel()

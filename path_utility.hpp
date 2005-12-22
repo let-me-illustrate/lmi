@@ -19,31 +19,31 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: path_utility.hpp,v 1.2 2005-05-01 00:50:28 chicares Exp $
+// $Id: path_utility.hpp,v 1.3 2005-12-22 13:59:49 chicares Exp $
 
 #ifndef path_utility_hpp
 #define path_utility_hpp
 
 #include "config.hpp"
 
-#include "expimp.hpp"
+#include "so_attributes.hpp"
 
 #include <boost/filesystem/path.hpp>
 
 #include <string>
 
-std::string LMI_EXPIMP serialize_extension
+std::string LMI_SO serialize_extension
     (int                serial_number
     ,std::string const& extension
     );
 
-fs::path LMI_EXPIMP serialized_file_path
+fs::path LMI_SO serialized_file_path
     (fs::path const&    exemplar
     ,int                serial_number
     ,std::string const& extension
     );
 
-fs::path LMI_EXPIMP unique_filepath
+fs::path LMI_SO unique_filepath
     (fs::path const&    original_filepath
     ,std::string const& extension
     );

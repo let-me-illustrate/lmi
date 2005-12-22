@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: dbdict.hpp,v 1.6 2005-06-14 21:37:20 chicares Exp $
+// $Id: dbdict.hpp,v 1.7 2005-12-22 13:59:49 chicares Exp $
 
 #ifndef dbdict_hpp
 #define dbdict_hpp
@@ -28,8 +28,8 @@
 
 #include "database.hpp"
 #include "dbvalue.hpp"
-#include "expimp.hpp"
 #include "obstruct_slicing.hpp"
+#include "so_attributes.hpp"
 
 #include <boost/utility.hpp>
 
@@ -64,7 +64,7 @@ class DBDictionary
 inline TDBDictionary const& DBDictionary::GetDictionary()
 {return *dictionary;}
 
-void LMI_EXPIMP print_databases();
+void LMI_SO print_databases();
 
 #endif // dbdict_hpp
 

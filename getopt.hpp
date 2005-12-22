@@ -37,7 +37,7 @@
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
 // GWC added this RCS Id:
-// $Id: getopt.hpp,v 1.6 2005-12-20 00:46:41 chicares Exp $
+// $Id: getopt.hpp,v 1.7 2005-12-22 13:59:49 chicares Exp $
 
 // This version of 'getopt' appears to the caller like standard Unix 'getopt'
 // but it behaves differently for the user, since it allows the user
@@ -62,8 +62,9 @@
 
 // GWC added this to conform to LMI standards.
 #include "config.hpp"
+
 // GWC added this.
-#include "expimp.hpp"
+#include "so_attributes.hpp"
 
 // GWC suppressed nonstandard <std.h> .
 //#include <std.h>
@@ -136,8 +137,8 @@ struct Option
     char const* descr;
 };
 
-// GWC added 'LMI_EXPIMP'.
-class LMI_EXPIMP GetOpt
+// GWC added 'LMI_SO'.
+class LMI_SO GetOpt
 {
 
 private:

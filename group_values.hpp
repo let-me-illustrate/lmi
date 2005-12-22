@@ -19,14 +19,14 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: group_values.hpp,v 1.10 2005-12-18 17:19:07 chicares Exp $
+// $Id: group_values.hpp,v 1.11 2005-12-22 13:59:49 chicares Exp $
 
 #ifndef group_values_hpp
 #define group_values_hpp
 
 #include "config.hpp"
 
-#include "expimp.hpp"
+#include "so_attributes.hpp"
 
 #include <boost/filesystem/path.hpp>
 #include <boost/shared_ptr.hpp>
@@ -66,7 +66,7 @@ enum e_emission_target
 /// between a cell and its corresponding case default.
 /// TODO ?? Instead, this should be enforced when data is entered.
 
-class LMI_EXPIMP run_census
+class LMI_SO run_census
 {
   public:
     explicit run_census()

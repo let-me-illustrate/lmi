@@ -19,14 +19,14 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: timer.hpp,v 1.8 2005-09-04 17:05:30 chicares Exp $
+// $Id: timer.hpp,v 1.9 2005-12-22 13:59:49 chicares Exp $
 
 #ifndef timer_hpp
 #define timer_hpp
 
 #include "config.hpp"
 
-#include "expimp.hpp"
+#include "so_attributes.hpp"
 
 #if defined LMI_POSIX
 #   include <sys/time.h> // gettimeofday()
@@ -77,7 +77,7 @@ template<typename F> std::string aliquot_timer(F, double = 1.0);
 ///
 /// elapsed_msec_str(), elapsed_usec(), stop(), restart(): nomen est omen.
 
-class LMI_EXPIMP Timer
+class LMI_SO Timer
     :private boost::noncopyable
 {
     template<typename F> friend std::string aliquot_timer(F, double);

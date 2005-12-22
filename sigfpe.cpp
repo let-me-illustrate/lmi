@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: sigfpe.cpp,v 1.2 2005-01-31 13:12:48 chicares Exp $
+// $Id: sigfpe.cpp,v 1.3 2005-12-22 13:59:49 chicares Exp $
 
 // This is not portable because a signal handler isn't guaranteed to
 // work if it does anything other than set a volatile global or static
@@ -39,7 +39,7 @@
 #include <csignal>
 #include <string>
 
-void LMI_EXPIMP floating_point_error_handler(int)
+void floating_point_error_handler(int)
 {
     hobsons_choice() << "Floating point error." << LMI_FLUSH;
 
@@ -54,7 +54,7 @@ void LMI_EXPIMP floating_point_error_handler(int)
 
 // TODO ?? Make this a standalone unit test.
 //
-void LMI_EXPIMP fpe_handler_test()
+void fpe_handler_test()
 {
 //    volatile int i0 = 0;
 //    volatile int i1 = 1;

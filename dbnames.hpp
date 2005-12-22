@@ -19,14 +19,14 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: dbnames.hpp,v 1.5 2005-09-27 16:49:11 chicares Exp $
+// $Id: dbnames.hpp,v 1.6 2005-12-22 13:59:49 chicares Exp $
 
 #ifndef dbnames_hpp
 #define dbnames_hpp
 
 #include "config.hpp"
 
-#include "expimp.hpp"
+#include "so_attributes.hpp"
 
 #include <vector>
 
@@ -454,7 +454,7 @@ struct db_names
     char const*         LongName;
 };
 
-std::vector<db_names> const& LMI_EXPIMP GetDBNames();
+std::vector<db_names> const& LMI_SO GetDBNames();
 
 #endif // dbnames_hpp
 

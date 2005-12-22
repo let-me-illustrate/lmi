@@ -19,26 +19,26 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: custom_io_0.hpp,v 1.3 2005-06-14 13:52:45 chicares Exp $
+// $Id: custom_io_0.hpp,v 1.4 2005-12-22 13:59:49 chicares Exp $
 
 #ifndef custom_io_0_hpp
 #define custom_io_0_hpp
 
 #include "config.hpp"
 
-#include "expimp.hpp"
+#include "so_attributes.hpp"
 
 class IllusInputParms;
 class Ledger;
 
-bool LMI_EXPIMP DoesSpecialInputFileExist();
+bool LMI_SO DoesSpecialInputFileExist();
 
-void LMI_EXPIMP PrintFormSpecial
+void LMI_SO PrintFormSpecial
     (Ledger const& ledger_values
     ,char const*   overridden_filename = 0
     );
 
-bool LMI_EXPIMP SetSpecialInput
+bool LMI_SO SetSpecialInput
     (IllusInputParms& ip
     ,char const*      overridden_filename = 0
     );

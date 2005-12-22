@@ -19,20 +19,20 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_proddata.hpp,v 1.3 2005-12-21 01:22:51 chicares Exp $
+// $Id: ihs_proddata.hpp,v 1.4 2005-12-22 13:59:49 chicares Exp $
 
 #ifndef proddata_hpp
 #define proddata_hpp
 
 #include "config.hpp"
 
-#include "expimp.hpp"
+#include "so_attributes.hpp"
 
 #include <string>
 
 // Filenames and other free-form offline data that vary by product.
 
-class LMI_EXPIMP TProductData
+class LMI_SO TProductData
 {
     friend class PolicyDoc;
     friend class PolicyView;

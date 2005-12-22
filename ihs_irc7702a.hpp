@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_irc7702a.hpp,v 1.3 2005-03-11 13:40:41 chicares Exp $
+// $Id: ihs_irc7702a.hpp,v 1.4 2005-12-22 13:59:49 chicares Exp $
 
 #ifndef irc7702a_hpp
 #define irc7702a_hpp
@@ -27,13 +27,13 @@
 #include "config.hpp"
 
 #include "enums7702.hpp"
-#include "expimp.hpp"
 #include "obstruct_slicing.hpp"
 #include "round_to.hpp"
+#include "so_attributes.hpp"
 
 #include <vector>
 
-void LMI_EXPIMP TestIrc7702A();
+void LMI_SO TestIrc7702A();
 
 // TODO ?? Known defects:
 //   need to handle withdrawals correctly;

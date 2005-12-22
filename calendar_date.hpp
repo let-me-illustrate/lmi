@@ -19,20 +19,20 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: calendar_date.hpp,v 1.2 2005-05-26 22:01:15 chicares Exp $
+// $Id: calendar_date.hpp,v 1.3 2005-12-22 13:59:49 chicares Exp $
 
 #ifndef calendar_date_hpp
 #define calendar_date_hpp
 
 #include "config.hpp"
 
-#include "expimp.hpp"
+#include "so_attributes.hpp"
 
 #include <boost/operators.hpp>
 
 #include <string>
 
-class LMI_EXPIMP calendar_date
+class LMI_SO calendar_date
     :boost::additive<calendar_date, int>
     ,boost::totally_ordered<calendar_date>
     ,boost::unit_steppable<calendar_date>

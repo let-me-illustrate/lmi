@@ -19,19 +19,19 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: sigfpe.hpp,v 1.1 2005-01-14 19:47:45 chicares Exp $
+// $Id: sigfpe.hpp,v 1.2 2005-12-22 13:59:49 chicares Exp $
 
 #ifndef sigfpe_hpp
 #define sigfpe_hpp
 
 #include "config.hpp"
 
-#include "expimp.hpp"
+#include "so_attributes.hpp"
 
-void LMI_EXPIMP floating_point_error_handler(int);
+void LMI_SO floating_point_error_handler(int);
 
 // TODO ?? Make the unit test a separate module.
-void LMI_EXPIMP fpe_handler_test();
+void LMI_SO fpe_handler_test();
 
 #endif // sigfpe_hpp
 

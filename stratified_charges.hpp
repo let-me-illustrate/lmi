@@ -19,15 +19,15 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: stratified_charges.hpp,v 1.5 2005-12-16 23:39:37 chicares Exp $
+// $Id: stratified_charges.hpp,v 1.6 2005-12-22 13:59:49 chicares Exp $
 
 #ifndef stratified_charges_hpp
 #define stratified_charges_hpp
 
 #include "config.hpp"
 
-#include "expimp.hpp"
 #include "obstruct_slicing.hpp"
+#include "so_attributes.hpp"
 #include "xenumtypes.hpp"
 
 #include <iosfwd>
@@ -60,7 +60,7 @@ enum e_stratified
 
 // Implicitly-declared special member functions do the right thing.
 
-class LMI_EXPIMP stratified_entity
+class LMI_SO stratified_entity
     :virtual private obstruct_slicing<stratified_entity>
 {
     friend class stratified_charges;
@@ -87,7 +87,7 @@ class LMI_EXPIMP stratified_entity
 
 // Implicitly-declared special member functions do the right thing.
 
-class LMI_EXPIMP stratified_charges
+class LMI_SO stratified_charges
     :virtual private obstruct_slicing<stratified_charges>
 {
     friend class TierDocument;
