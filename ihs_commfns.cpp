@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_commfns.cpp,v 1.5 2005-06-11 15:03:59 chicares Exp $
+// $Id: ihs_commfns.cpp,v 1.6 2005-12-22 13:59:49 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -272,7 +272,7 @@ void OLCommFns::OLCommFns()
 #include <memory>
 
 //============================================================================
-void LMI_EXPIMP ULCommFns::SelfTest()
+void ULCommFns::SelfTest()
 {
     std::ofstream os("ulcf.txt", std::ios_base::out | std::ios_base::trunc);
     static double const COI[30] =   // TSA XXIX, page 32, table 5
@@ -381,7 +381,7 @@ void LMI_EXPIMP ULCommFns::SelfTest()
 }
 
 //============================================================================
-void LMI_EXPIMP OLCommFns::SelfTest()
+void OLCommFns::SelfTest()
 {
     std::ofstream os("olcf.txt", std::ios_base::out | std::ios_base::trunc);
 

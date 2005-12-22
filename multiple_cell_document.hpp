@@ -19,15 +19,15 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: multiple_cell_document.hpp,v 1.5 2005-12-20 00:46:41 chicares Exp $
+// $Id: multiple_cell_document.hpp,v 1.6 2005-12-22 13:59:49 chicares Exp $
 
 #ifndef multiple_cell_document_hpp
 #define multiple_cell_document_hpp
 
 #include "config.hpp"
 
-#include "expimp.hpp"
 #include "obstruct_slicing.hpp"
+#include "so_attributes.hpp"
 
 #include <boost/utility.hpp>
 
@@ -48,7 +48,7 @@ namespace xml
     class init;
 }
 
-class LMI_EXPIMP multiple_cell_document
+class LMI_SO multiple_cell_document
     :private boost::noncopyable
     ,virtual private obstruct_slicing<multiple_cell_document>
 {

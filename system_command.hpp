@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: system_command.hpp,v 1.3 2005-01-29 02:47:42 chicares Exp $
+// $Id: system_command.hpp,v 1.4 2005-12-22 13:59:49 chicares Exp $
 
 // This is a cover function for std::system(). It simply forwards its
 // argument to std::system() on posix platforms. The msw implementation
@@ -39,11 +39,11 @@
 
 #include "config.hpp"
 
-#include "expimp.hpp"
+#include "so_attributes.hpp"
 
 #include <string>
 
-int LMI_EXPIMP system_command(std::string const& command_line);
+int LMI_SO system_command(std::string const& command_line);
 
 #endif // system_command_hpp
 

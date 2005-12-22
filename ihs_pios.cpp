@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_pios.cpp,v 1.2 2005-12-21 01:22:48 chicares Exp $
+// $Id: ihs_pios.cpp,v 1.3 2005-12-22 13:59:49 chicares Exp $
 
 // This is a derived work based on Joshua Rowe's
 //   "Really cool persistent object stream library"
@@ -221,109 +221,109 @@ void    JrPs_opstream::writestring(const char* s)
   delete[]temp;
 }
 
-LMI_EXPIMP JrPs_opstream& operator<< (JrPs_opstream & os, bool c)
+JrPs_opstream& operator<< (JrPs_opstream & os, bool c)
 {
   os.writebytes(&c, sizeof(c));
   return    os;
 }
 
-LMI_EXPIMP JrPs_opstream& operator<< (JrPs_opstream & os, char c)
+JrPs_opstream& operator<< (JrPs_opstream & os, char c)
 {
   os.writebyte(c);
   return    os;
 }
 
-LMI_EXPIMP JrPs_opstream& operator<< (JrPs_opstream & os, signed char c)
+JrPs_opstream& operator<< (JrPs_opstream & os, signed char c)
 {
   os.writebyte(c);
   return    os;
 }
 
-LMI_EXPIMP JrPs_opstream& operator<< (JrPs_opstream & os, unsigned char c)
+JrPs_opstream& operator<< (JrPs_opstream & os, unsigned char c)
 {
   os.writebyte(c);
   return    os;
 }
 
-LMI_EXPIMP JrPs_opstream& operator<< (JrPs_opstream & os, const char* s)
+JrPs_opstream& operator<< (JrPs_opstream & os, const char* s)
 {
   os.writestring(s);
   return    os;
 }
 
-LMI_EXPIMP JrPs_opstream& operator<< (JrPs_opstream & os, signed const char* s)
+JrPs_opstream& operator<< (JrPs_opstream & os, signed const char* s)
 {
   os.writestring(reinterpret_cast<const char*>(s));
   return    os;
 }
 
-LMI_EXPIMP JrPs_opstream& operator<< (JrPs_opstream & os, unsigned const char* s)
+JrPs_opstream& operator<< (JrPs_opstream & os, unsigned const char* s)
 {
   os.writestring(reinterpret_cast<const char*>(s));
   return    os;
 }
 
-LMI_EXPIMP JrPs_opstream& operator<< (JrPs_opstream & os, std::string const& s)
+JrPs_opstream& operator<< (JrPs_opstream & os, std::string const& s)
 {
   os.writestring(const_cast<char*>(s.c_str()));
   return    os;
 }
 
-LMI_EXPIMP JrPs_opstream& operator<< (JrPs_opstream & os, short int c)
+JrPs_opstream& operator<< (JrPs_opstream & os, short int c)
 {
   os.writebytes(&c, sizeof(c));
   return    os;
 }
 
-LMI_EXPIMP JrPs_opstream& operator<< (JrPs_opstream & os, unsigned short int c)
+JrPs_opstream& operator<< (JrPs_opstream & os, unsigned short int c)
 {
   os.writebytes(&c, sizeof(c));
   return    os;
 }
 
-LMI_EXPIMP JrPs_opstream& operator<< (JrPs_opstream & os, int c)
+JrPs_opstream& operator<< (JrPs_opstream & os, int c)
 {
   os.writebytes(&c, sizeof(c));
   return    os;
 }
 
-LMI_EXPIMP JrPs_opstream& operator<< (JrPs_opstream & os, unsigned int c)
+JrPs_opstream& operator<< (JrPs_opstream & os, unsigned int c)
 {
   os.writebytes(&c, sizeof(c));
   return    os;
 }
 
-LMI_EXPIMP JrPs_opstream& operator<< (JrPs_opstream & os, long c)
+JrPs_opstream& operator<< (JrPs_opstream & os, long c)
 {
   os.writebytes(&c, sizeof(c));
   return    os;
 }
 
-LMI_EXPIMP JrPs_opstream& operator<< (JrPs_opstream & os, unsigned long c)
+JrPs_opstream& operator<< (JrPs_opstream & os, unsigned long c)
 {
   os.writebytes(&c, sizeof(c));
   return    os;
 }
 
-LMI_EXPIMP JrPs_opstream& operator<< (JrPs_opstream & os, float c)
+JrPs_opstream& operator<< (JrPs_opstream & os, float c)
 {
   os.writebytes(&c, sizeof(c));
   return    os;
 }
 
-LMI_EXPIMP JrPs_opstream& operator<< (JrPs_opstream & os, double c)
+JrPs_opstream& operator<< (JrPs_opstream & os, double c)
 {
   os.writebytes(&c, sizeof(c));
   return    os;
 }
 
-LMI_EXPIMP JrPs_opstream& operator<< (JrPs_opstream & os, long double c)
+JrPs_opstream& operator<< (JrPs_opstream & os, long double c)
 {
   os.writebytes(&c, sizeof(c));
   return    os;
 }
 
-LMI_EXPIMP JrPs_opstream& operator<< (JrPs_opstream & os, const JrPs_pstreamable& x)
+JrPs_opstream& operator<< (JrPs_opstream & os, const JrPs_pstreamable& x)
 {
 //  os.writeobj(&x);    // GWC replaced this with the following
 // GWC: In the original code, this function did the same thing as
@@ -334,7 +334,7 @@ LMI_EXPIMP JrPs_opstream& operator<< (JrPs_opstream & os, const JrPs_pstreamable
   return    os;
 }
 
-LMI_EXPIMP JrPs_opstream& operator<< (JrPs_opstream & os, const JrPs_pstreamable* x)
+JrPs_opstream& operator<< (JrPs_opstream & os, const JrPs_pstreamable* x)
 {
   os.writeobj(x);
   return    os;
@@ -399,49 +399,49 @@ char *  JrPs_ipstream::readstring()
   return    s;
 }
 
-LMI_EXPIMP JrPs_ipstream& operator>> (JrPs_ipstream & is, bool &c)
+JrPs_ipstream& operator>> (JrPs_ipstream & is, bool &c)
 {
   is.readbytes(&c, sizeof(c));
   return    is;
 }
 
-LMI_EXPIMP JrPs_ipstream& operator>> (JrPs_ipstream & is, char &c)
+JrPs_ipstream& operator>> (JrPs_ipstream & is, char &c)
 {
   c = is.readbyte();
   return    is;
 }
 
-LMI_EXPIMP JrPs_ipstream& operator>> (JrPs_ipstream & is, signed char &c)
+JrPs_ipstream& operator>> (JrPs_ipstream & is, signed char &c)
 {
   c = is.readbyte();
   return    is;
 }
 
-LMI_EXPIMP JrPs_ipstream& operator>> (JrPs_ipstream & is, unsigned char &c)
+JrPs_ipstream& operator>> (JrPs_ipstream & is, unsigned char &c)
 {
   c = is.readbyte();
   return    is;
 }
 
-LMI_EXPIMP JrPs_ipstream& operator>> (JrPs_ipstream & is, char * &s)
+JrPs_ipstream& operator>> (JrPs_ipstream & is, char * &s)
 {
   s = is.readstring();
   return    is;
 }
 
-LMI_EXPIMP JrPs_ipstream& operator>> (JrPs_ipstream & is, signed char * &s)
+JrPs_ipstream& operator>> (JrPs_ipstream & is, signed char * &s)
 {
   s = reinterpret_cast<signed char*>(is.readstring());
   return    is;
 }
 
-LMI_EXPIMP JrPs_ipstream& operator>> (JrPs_ipstream & is, unsigned char * &s)
+JrPs_ipstream& operator>> (JrPs_ipstream & is, unsigned char * &s)
 {
   s = reinterpret_cast<unsigned char*>(is.readstring());
   return    is;
 }
 
-LMI_EXPIMP JrPs_ipstream& operator>> (JrPs_ipstream & is, std::string& s)
+JrPs_ipstream& operator>> (JrPs_ipstream & is, std::string& s)
 {
   char *    c   = is.readstring();
   s = c;
@@ -450,61 +450,61 @@ LMI_EXPIMP JrPs_ipstream& operator>> (JrPs_ipstream & is, std::string& s)
   return    is;
 }
 
-LMI_EXPIMP JrPs_ipstream& operator>> (JrPs_ipstream & is, short int &c)
+JrPs_ipstream& operator>> (JrPs_ipstream & is, short int &c)
 {
   is.readbytes(&c, sizeof(c));
   return    is;
 }
 
-LMI_EXPIMP JrPs_ipstream& operator>> (JrPs_ipstream & is, unsigned short int &c)
+JrPs_ipstream& operator>> (JrPs_ipstream & is, unsigned short int &c)
 {
   is.readbytes(&c, sizeof(c));
   return    is;
 }
 
-LMI_EXPIMP JrPs_ipstream& operator>> (JrPs_ipstream & is, int &c)
+JrPs_ipstream& operator>> (JrPs_ipstream & is, int &c)
 {
   is.readbytes(&c, sizeof(c));
   return    is;
 }
 
-LMI_EXPIMP JrPs_ipstream& operator>> (JrPs_ipstream & is, unsigned int &c)
+JrPs_ipstream& operator>> (JrPs_ipstream & is, unsigned int &c)
 {
   is.readbytes(&c, sizeof(c));
   return    is;
 }
 
-LMI_EXPIMP JrPs_ipstream& operator>> (JrPs_ipstream & is, long &c)
+JrPs_ipstream& operator>> (JrPs_ipstream & is, long &c)
 {
   is.readbytes(&c, sizeof(c));
   return    is;
 }
 
-LMI_EXPIMP JrPs_ipstream& operator>> (JrPs_ipstream & is, unsigned long &c)
+JrPs_ipstream& operator>> (JrPs_ipstream & is, unsigned long &c)
 {
   is.readbytes(&c, sizeof(c));
   return    is;
 }
 
-LMI_EXPIMP JrPs_ipstream& operator>> (JrPs_ipstream & is, float &c)
+JrPs_ipstream& operator>> (JrPs_ipstream & is, float &c)
 {
   is.readbytes(&c, sizeof(c));
   return    is;
 }
 
-LMI_EXPIMP JrPs_ipstream& operator>> (JrPs_ipstream & is, double &c)
+JrPs_ipstream& operator>> (JrPs_ipstream & is, double &c)
 {
   is.readbytes(&c, sizeof(c));
   return    is;
 }
 
-LMI_EXPIMP JrPs_ipstream& operator>> (JrPs_ipstream & is, long double &c)
+JrPs_ipstream& operator>> (JrPs_ipstream & is, long double &c)
 {
   is.readbytes(&c, sizeof(c));
   return    is;
 }
 
-LMI_EXPIMP JrPs_ipstream& operator>> (JrPs_ipstream & is, JrPs_pstreamable & x)
+JrPs_ipstream& operator>> (JrPs_ipstream & is, JrPs_pstreamable & x)
 {
   is.readbyte();
 //  is.readbyte();  // GWC: TODO ?? Isn't this second call erroneous?
@@ -515,7 +515,7 @@ LMI_EXPIMP JrPs_ipstream& operator>> (JrPs_ipstream & is, JrPs_pstreamable & x)
   return    is;
 }
 
-LMI_EXPIMP JrPs_ipstream& operator>> (JrPs_ipstream & is, const void*& x)
+JrPs_ipstream& operator>> (JrPs_ipstream & is, const void*& x)
 {
   char      c   = is.readbyte();
   switch (c)

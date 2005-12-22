@@ -19,18 +19,18 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: data_directory.hpp,v 1.1 2005-01-14 19:47:44 chicares Exp $
+// $Id: data_directory.hpp,v 1.2 2005-12-22 13:59:49 chicares Exp $
 
 #ifndef data_directory_hpp
 #define data_directory_hpp
 
 #include "config.hpp"
 
-#include "expimp.hpp"
+#include "so_attributes.hpp"
 
 #include <string>
 
-std::string LMI_EXPIMP AddDataDir(std::string const& filename);
+std::string LMI_SO AddDataDir(std::string const& filename);
 
 #endif // data_directory_hpp
 

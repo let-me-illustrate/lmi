@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_pios.hpp,v 1.5 2005-12-21 01:22:48 chicares Exp $
+// $Id: ihs_pios.hpp,v 1.6 2005-12-22 13:59:49 chicares Exp $
 
 // This is a derived work based on Joshua Rowe's
 //   "Really cool persistent object stream library"
@@ -47,7 +47,7 @@
 
 #include "config.hpp"
 
-#include "expimp.hpp"
+#include "so_attributes.hpp"
 
 //#ifndef __BORLANDC__
 #if 1
@@ -88,7 +88,7 @@ enum    JrPs_pstreamableInit
   JrPs_pstreamableinit
 };
 
-class LMI_EXPIMP JrPs_pstream
+class LMI_SO JrPs_pstream
 {
 protected:
   JrPs_pstreambuf*  buf;
@@ -133,7 +133,7 @@ public:
   int       operator !();     // Returns err
 };
 
-class LMI_EXPIMP JrPs_opstream  : virtual public JrPs_pstream
+class LMI_SO JrPs_opstream  : virtual public JrPs_pstream
 {
   JrPs_opstream(const JrPs_opstream&);
   JrPs_opstream& operator= (const JrPs_opstream&);
@@ -176,7 +176,7 @@ friend JrPs_opstream& operator<<    (JrPs_opstream& os, std::string const&);
 
 };
 
-class LMI_EXPIMP JrPs_ipstream  : virtual public JrPs_pstream
+class LMI_SO JrPs_ipstream  : virtual public JrPs_pstream
 {
   JrPs_ipstream(const JrPs_ipstream&);
   JrPs_ipstream& operator= (const JrPs_ipstream&);

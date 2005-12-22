@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_dbvalue.hpp,v 1.3 2005-12-21 01:22:48 chicares Exp $
+// $Id: ihs_dbvalue.hpp,v 1.4 2005-12-22 13:59:49 chicares Exp $
 
 #ifndef ihs_dbvalue_hpp
 #define ihs_dbvalue_hpp
@@ -31,7 +31,7 @@
 #include "config.hpp"
 
 #include "dbindex.hpp"
-#include "expimp.hpp"
+#include "so_attributes.hpp"
 
 #include "ihs_fpios.hpp"
 namespace JRPS = JOSHUA_ROWE_PERSISTENT_STREAMS;
@@ -49,12 +49,12 @@ enum e_IdxType
     ,e_Incremental
     };
 
-class LMI_EXPIMP TDBValue
+class LMI_SO TDBValue
     :private JRPS::JrPs_pstreamable
 {
   public:
-    friend std::istream& LMI_EXPIMP operator>>(std::istream&, TDBValue&);
-    friend std::ostream& LMI_EXPIMP operator<<(std::ostream&, TDBValue const&);
+    friend std::istream& operator>>(std::istream&, TDBValue&);
+    friend std::ostream& operator<<(std::ostream&, TDBValue const&);
 
     // Separate enumerators here facilitate compile-time assertions
     // in the database GUI, q.v.--an array could not be indexed to

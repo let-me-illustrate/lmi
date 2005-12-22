@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: configurable_settings.hpp,v 1.6 2005-08-02 21:23:17 chicares Exp $
+// $Id: configurable_settings.hpp,v 1.7 2005-12-22 13:59:49 chicares Exp $
 
 #ifndef configurable_settings_hpp
 #define configurable_settings_hpp
@@ -27,8 +27,8 @@
 #include "config.hpp"
 
 #include "any_member.hpp"
-#include "expimp.hpp"
 #include "obstruct_slicing.hpp"
+#include "so_attributes.hpp"
 
 #include <boost/utility.hpp>
 
@@ -72,7 +72,7 @@
 /// xsl_fo_directory_: Directory where xsl 'formatting objects'
 /// processor resides.
 
-class LMI_EXPIMP configurable_settings
+class LMI_SO configurable_settings
     :public MemberSymbolTable<configurable_settings>
     ,private boost::noncopyable
     ,virtual private obstruct_slicing<configurable_settings>

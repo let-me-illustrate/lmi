@@ -19,14 +19,13 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: name_value_pairs.hpp,v 1.3 2005-06-09 21:34:30 chicares Exp $
+// $Id: name_value_pairs.hpp,v 1.4 2005-12-22 13:59:49 chicares Exp $
 
 #ifndef name_value_pairs_hpp
 #define name_value_pairs_hpp
 
 #include "config.hpp"
 
-#include "expimp.hpp"
 #include "obstruct_slicing.hpp"
 
 #include <boost/utility.hpp>

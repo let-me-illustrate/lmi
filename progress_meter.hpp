@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: progress_meter.hpp,v 1.5 2005-10-05 13:43:40 chicares Exp $
+// $Id: progress_meter.hpp,v 1.6 2005-12-22 13:59:49 chicares Exp $
 
 /// Design notes for class progress_meter.
 ///
@@ -121,13 +121,13 @@
 
 #include "config.hpp"
 
-#include "expimp.hpp"
+#include "so_attributes.hpp"
 
 #include <boost/shared_ptr.hpp>
 
 #include <string>
 
-class LMI_EXPIMP progress_meter
+class LMI_SO progress_meter
 {
   public:
     bool reflect_progress();
@@ -148,7 +148,7 @@ class LMI_EXPIMP progress_meter
     std::string title_;
 };
 
-boost::shared_ptr<progress_meter> LMI_EXPIMP create_progress_meter
+boost::shared_ptr<progress_meter> LMI_SO create_progress_meter
     (int max_count
     ,std::string const& title = ""
     );
@@ -158,7 +158,7 @@ typedef boost::shared_ptr<progress_meter> (*progress_meter_creator_type)
     ,std::string const& title
     );
 
-bool LMI_EXPIMP set_progress_meter_creator(progress_meter_creator_type);
+bool LMI_SO set_progress_meter_creator(progress_meter_creator_type);
 
 #endif // progress_meter_hpp
 

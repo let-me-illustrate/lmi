@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: dbnames.cpp,v 1.2 2005-02-08 14:11:57 chicares Exp $
+// $Id: dbnames.cpp,v 1.3 2005-12-22 13:59:49 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -42,7 +42,7 @@ namespace
         }
 }
 
-std::vector<db_names> const& LMI_EXPIMP GetDBNames()
+std::vector<db_names> const& GetDBNames()
 {
     return static_get_db_names();
 }

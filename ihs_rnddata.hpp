@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_rnddata.hpp,v 1.1 2005-01-14 19:47:45 chicares Exp $
+// $Id: ihs_rnddata.hpp,v 1.2 2005-12-22 13:59:49 chicares Exp $
 
 #ifndef rnddata_hpp
 #define rnddata_hpp
@@ -28,11 +28,11 @@
 
 #include "rounding_rules.hpp"
 
-#include "expimp.hpp"
+#include "so_attributes.hpp"
 
 #include <string>
 
-class LMI_EXPIMP StreamableRoundingRules
+class LMI_SO StreamableRoundingRules
     :public rounding_rules
 {
     friend class RoundingDocument;

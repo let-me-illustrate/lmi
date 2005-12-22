@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: alert.cpp,v 1.12 2005-12-15 02:45:25 chicares Exp $
+// $Id: alert.cpp,v 1.13 2005-12-22 13:59:49 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -234,32 +234,32 @@ hobsons_choice_exception::hobsons_choice_exception()
 {
 }
 
-void LMI_EXPIMP test_status()
+void test_status()
 {
     status()         << "Test status()"         << LMI_FLUSH;
 }
 
-void LMI_EXPIMP test_warning()
+void test_warning()
 {
     warning()        << "Test warning()"        << LMI_FLUSH;
 }
 
-void LMI_EXPIMP test_hobsons_choice()
+void test_hobsons_choice()
 {
     hobsons_choice() << "Test hobsons_choice()" << LMI_FLUSH;
 }
 
-void LMI_EXPIMP test_fatal_error()
+void test_fatal_error()
 {
     fatal_error()    << "Test fatal_error()"    << LMI_FLUSH;
 }
 
-void LMI_EXPIMP test_standard_exception()
+void test_standard_exception()
 {
     throw std::runtime_error("Test a standard exception.");
 }
 
-void LMI_EXPIMP test_arbitrary_exception()
+void test_arbitrary_exception()
 {
     throw "Test an arbitrary exception.";
 }

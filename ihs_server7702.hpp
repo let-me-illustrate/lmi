@@ -19,15 +19,15 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_server7702.hpp,v 1.1 2005-01-14 19:47:45 chicares Exp $
+// $Id: ihs_server7702.hpp,v 1.2 2005-12-22 13:59:49 chicares Exp $
 
 #ifndef server7702_hpp
 #define server7702_hpp
 
 #include "config.hpp"
 
-#include "expimp.hpp"
 #include "ihs_server7702io.hpp"
+#include "so_attributes.hpp"
 
 #include <stdexcept>
 #include <string>
@@ -36,9 +36,9 @@ int RunServer7702();
 
 extern "C"
 {
-    void LMI_EXPIMP InitializeServer7702();
-    Server7702Output LMI_EXPIMP RunServer7702FromStruct(Server7702Input a_Input);
-    void LMI_EXPIMP RunServer7702FromString(char* i, char* o);
+    void LMI_SO InitializeServer7702();
+    Server7702Output LMI_SO RunServer7702FromStruct(Server7702Input a_Input);
+    void LMI_SO RunServer7702FromString(char* i, char* o);
 }
 
 class Server7702

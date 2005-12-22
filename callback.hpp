@@ -19,16 +19,15 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: callback.hpp,v 1.4 2005-11-07 01:30:24 chicares Exp $
+// $Id: callback.hpp,v 1.5 2005-12-22 13:59:49 chicares Exp $
 
 #ifndef callback_hpp
 #define callback_hpp
 
 #include "config.hpp"
 
-#include "expimp.hpp"
-
 #include "obstruct_slicing.hpp"
+#include "so_attributes.hpp"
 
 #if !defined __BORLANDC__
 #   include <boost/static_assert.hpp>
@@ -108,7 +107,7 @@
 /// 'alert*.?pp'.
 
 template<typename FunctionPointer>
-class LMI_EXPIMP callback
+class LMI_SO callback
     :private boost::noncopyable
     ,virtual private obstruct_slicing<callback<FunctionPointer> >
 {

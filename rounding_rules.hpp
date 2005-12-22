@@ -19,15 +19,15 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: rounding_rules.hpp,v 1.3 2005-08-28 21:36:56 chicares Exp $
+// $Id: rounding_rules.hpp,v 1.4 2005-12-22 13:59:49 chicares Exp $
 
 #ifndef rounding_rules_hpp
 #define rounding_rules_hpp
 
 #include "config.hpp"
 
-#include "expimp.hpp"
 #include "round_to.hpp"
+#include "so_attributes.hpp"
 
 // Design principle: round transactional changes to account value,
 // rather than rounding account value itself at each transaction.
@@ -36,7 +36,7 @@
 // Rounding is a property of the transaction, and not of the
 // variable it ultimately affects.
 
-class LMI_EXPIMP rounding_rules
+class LMI_SO rounding_rules
 {
     friend class StreamableRoundingRules;
     friend class RoundingDocument;

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.284 2005-12-21 01:23:17 chicares Exp $
+// $Id: ChangeLog,v 1.285 2005-12-22 13:59:49 chicares Exp $
 
 MAINTENANCE
 
@@ -5245,4 +5245,78 @@ Add a user-declared dtor.
 
   streamable.hpp
 Remove shared-library attributes from inline functions.
+
+20051222T1359Z <chicares@cox.net> [1205]
+
+  account_value.hpp
+  alert.cpp
+  alert.hpp
+  basic_values.hpp
+  calendar_date.hpp
+  callback.hpp
+  configurable_settings.hpp
+  crc32.hpp
+  custom_io_0.hpp
+  data_directory.hpp
+  database.hpp
+  datum_base.hpp
+  dbdict.hpp
+  dbnames.cpp
+  dbnames.hpp
+  expimp.hpp [expunged]
+  fenv_lmi.hpp
+  file_command.hpp
+  getopt.hpp
+  global_settings.hpp
+  group_values.cpp
+  group_values.hpp
+  ihs_commfns.cpp
+  ihs_commfns.hpp
+  ihs_dbdict.hpp
+  ihs_dbvalue.cpp
+  ihs_dbvalue.hpp
+  ihs_fpios.hpp
+  ihs_funddata.hpp
+  ihs_irc7702a.hpp
+  ihs_pios.cpp
+  ihs_pios.hpp
+  ihs_proddata.hpp
+  ihs_rnddata.hpp
+  ihs_server7702.cpp
+  ihs_server7702.hpp
+  input.hpp
+  inputillus.hpp
+  inputs.hpp
+  inputstatus.hpp
+  ledger.hpp
+  ledger_base.hpp
+  ledger_invariant.hpp
+  ledger_text_formats.hpp
+  ledger_variant.hpp
+  ledger_xsl.hpp
+  ledgervalues.hpp
+  license.hpp
+  main_cli.cpp
+  mc_enum.hpp
+  multiple_cell_document.hpp
+  name_value_pairs.hpp
+  path_utility.hpp
+  progress_meter.hpp
+  rounding_rules.hpp
+  security.hpp
+  sigfpe.cpp
+  sigfpe.hpp
+  single_cell_document.hpp
+  stratified_charges.hpp
+  streamable.hpp
+  system_command.hpp
+  timer.hpp
+  xrange.hpp
+Optionally build with elf visibility attributes. This is claimed to
+have major benefits for posix:
+  http://www.nedprod.com/programs/gccvisibility.html
+and costs nothing extra to set up because of its similarity to msw
+__declspec attributes; but it has not yet been tested on an elf
+system, and may need adjustment because the elf and msw attributes
+are not syntactically identical.
 

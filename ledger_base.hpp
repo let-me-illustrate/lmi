@@ -19,15 +19,15 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_base.hpp,v 1.3 2005-10-09 23:25:30 chicares Exp $
+// $Id: ledger_base.hpp,v 1.4 2005-12-22 13:59:49 chicares Exp $
 
 #ifndef ledger_base_hpp
 #define ledger_base_hpp
 
 #include "config.hpp"
 
-#include "expimp.hpp"
 #include "max_stream_precision.hpp"
+#include "so_attributes.hpp"
 
 #include <algorithm>
 #include <cfloat>
@@ -172,7 +172,7 @@ typedef std::map<std::string, std::vector<double>*, std::less<std::string> > dou
 typedef std::map<std::string, std::string*, std::less<std::string> > string_map;
 typedef std::map<std::string, double*, std::less<std::string> > scalar_map;
 
-class LMI_EXPIMP LedgerBase
+class LMI_SO LedgerBase
 {
     friend class Ledger;
 

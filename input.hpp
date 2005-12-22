@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input.hpp,v 1.9 2005-12-20 00:46:41 chicares Exp $
+// $Id: input.hpp,v 1.10 2005-12-22 13:59:49 chicares Exp $
 
 #ifndef input_hpp
 #define input_hpp
@@ -31,10 +31,10 @@
 #include "database.hpp"
 #include "datum_boolean.hpp"
 #include "datum_string.hpp"
-#include "expimp.hpp"
 #include "mc_enum.hpp"
 #include "mc_enum_types.hpp"
 #include "obstruct_slicing.hpp"
+#include "so_attributes.hpp"
 #include "tn_range.hpp"
 #include "tn_range_types.hpp"
 
@@ -44,7 +44,7 @@ class InputSequence;
 // TODO ?? Forward declaration doesn't work with std::auto_ptr?
 // Use one of boost's smart pointers instead. And lose the declspec,
 // which gcc-3.4.2 doesn't like to see on forward-declared classes.
-//class LMI_EXPIMP TDatabase;
+//class LMI_SO TDatabase;
 
 #include <boost/operators.hpp>
 
@@ -103,7 +103,7 @@ class InputSequence;
 ///
 /// TODO ?? Add functions to convert to and from a std::map<std::string> >?
 
-class LMI_EXPIMP Input
+class LMI_SO Input
     :public MemberSymbolTable<Input>
     ,private boost::equality_comparable<Input>
     ,virtual private obstruct_slicing<Input>
@@ -359,14 +359,14 @@ class LMI_EXPIMP Input
     mce_state                CachedStateOfJurisdiction       ;
 };
 
-void LMI_EXPIMP convert_to_ihs(IllusInputParms&, Input const&);
-void LMI_EXPIMP convert_to_ihs
+void LMI_SO convert_to_ihs(IllusInputParms&, Input const&);
+void LMI_SO convert_to_ihs
     (std::vector<IllusInputParms>&
     ,std::vector<Input> const&
     );
 
-void LMI_EXPIMP convert_from_ihs(IllusInputParms const&, Input&);
-void LMI_EXPIMP convert_from_ihs
+void LMI_SO convert_from_ihs(IllusInputParms const&, Input&);
+void LMI_SO convert_from_ihs
     (std::vector<IllusInputParms> const&
     ,std::vector<Input>&
     );

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_dbvalue.cpp,v 1.9 2005-12-21 01:22:48 chicares Exp $
+// $Id: ihs_dbvalue.cpp,v 1.10 2005-12-22 13:59:49 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -656,7 +656,7 @@ Implementation
 */
 
 //===========================================================================
-std::istream& LMI_EXPIMP operator>>(std::istream& is, TDBValue&)
+std::istream& operator>>(std::istream& is, TDBValue&)
 {
     // SOMEDAY !! Someday we should implement this.
     fatal_error()
@@ -667,7 +667,7 @@ std::istream& LMI_EXPIMP operator>>(std::istream& is, TDBValue&)
 }
 
 //===========================================================================
-std::ostream& LMI_EXPIMP operator<<(std::ostream& os, TDBValue const& z)
+std::ostream& operator<<(std::ostream& os, TDBValue const& z)
 {
     os
         << "key " << z.key

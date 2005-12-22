@@ -19,16 +19,15 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: single_cell_document.hpp,v 1.4 2005-03-07 11:47:05 chicares Exp $
+// $Id: single_cell_document.hpp,v 1.5 2005-12-22 13:59:49 chicares Exp $
 
 #ifndef single_cell_document_hpp
 #define single_cell_document_hpp
 
 #include "config.hpp"
 
-#include "expimp.hpp"
-
 #include "obstruct_slicing.hpp"
+#include "so_attributes.hpp"
 
 #include <boost/scoped_ptr.hpp>
 #include <boost/utility.hpp>
@@ -50,7 +49,7 @@ namespace xml
     class init;
 }
 
-class LMI_EXPIMP single_cell_document
+class LMI_SO single_cell_document
     :private boost::noncopyable
     ,virtual private obstruct_slicing<single_cell_document>
 {

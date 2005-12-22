@@ -19,15 +19,15 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: inputstatus.hpp,v 1.3 2005-02-13 23:17:18 chicares Exp $
+// $Id: inputstatus.hpp,v 1.4 2005-12-22 13:59:49 chicares Exp $
 
 #ifndef inputstatus_hpp
 #define inputstatus_hpp
 
 #include "config.hpp"
 
-#include "expimp.hpp"
 #include "obstruct_slicing.hpp"
+#include "so_attributes.hpp"
 #include "xenumtypes.hpp"
 #include "xrangetypes.hpp"
 
@@ -39,7 +39,7 @@
 
 // Implicitly-declared special member functions do the right thing.
 
-class LMI_EXPIMP InputStatus
+class LMI_SO InputStatus
     :virtual private obstruct_slicing<InputStatus>
 {
   public:

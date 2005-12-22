@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_commfns.hpp,v 1.4 2005-06-07 11:48:57 chicares Exp $
+// $Id: ihs_commfns.hpp,v 1.5 2005-12-22 13:59:49 chicares Exp $
 
 #ifndef commfns_hpp
 #define commfns_hpp
@@ -35,8 +35,8 @@
 // TODO ?? Should these two classes be factored into separate files?
 // Should they share an abstract base?
 
-#include "expimp.hpp"
 #include "obstruct_slicing.hpp"
+#include "so_attributes.hpp"
 #include "xenumtypes.hpp"    // e_defn_life_ins, e_dbopt
 
 #include <boost/utility.hpp>
@@ -45,7 +45,7 @@
 
 // Ordinary life commutation functions.
 
-class LMI_EXPIMP OLCommFns
+class LMI_SO OLCommFns
     :private boost::noncopyable
     ,virtual private obstruct_slicing<OLCommFns>
 {
@@ -80,7 +80,7 @@ class LMI_EXPIMP OLCommFns
 
 // Implicitly-declared special member functions do the right thing.
 
-class LMI_EXPIMP ULCommFns
+class LMI_SO ULCommFns
     :virtual private obstruct_slicing<ULCommFns>
 {
   public:

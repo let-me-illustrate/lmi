@@ -19,15 +19,15 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: inputs.hpp,v 1.8 2005-10-16 16:36:15 chicares Exp $
+// $Id: inputs.hpp,v 1.9 2005-12-22 13:59:49 chicares Exp $
 
 #ifndef inputs_hpp
 #define inputs_hpp
 
 #include "config.hpp"
 
-#include "expimp.hpp"
 #include "inputstatus.hpp"
+#include "so_attributes.hpp"
 #include "xenumtypes.hpp"
 #include "xrangetypes.hpp"
 
@@ -35,7 +35,7 @@
 #include <string>
 #include <vector>
 
-class LMI_EXPIMP InputParms
+class LMI_SO InputParms
 {
   public:
     InputParms();

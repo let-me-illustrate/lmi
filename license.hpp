@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: license.hpp,v 1.2 2005-12-20 00:46:41 chicares Exp $
+// $Id: license.hpp,v 1.3 2005-12-22 13:59:49 chicares Exp $
 
 // The module associated with this header provides the full text of
 // the GPL and appropriate notices for display at startup as required
@@ -35,13 +35,13 @@
 
 #include "config.hpp"
 
-#include "expimp.hpp"
+#include "so_attributes.hpp"
 
 #include <string>
 
-std::string const& LMI_EXPIMP license_as_html();
-std::string const& LMI_EXPIMP license_as_text();
-std::string const& LMI_EXPIMP license_notices();
+std::string const& LMI_SO license_as_html();
+std::string const& LMI_SO license_as_text();
+std::string const& LMI_SO license_notices();
 
 #endif // license_hpp
 

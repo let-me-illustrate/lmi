@@ -19,14 +19,14 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger.hpp,v 1.11 2005-12-20 00:46:38 chicares Exp $
+// $Id: ledger.hpp,v 1.12 2005-12-22 13:59:49 chicares Exp $
 
 #ifndef ledger_hpp
 #define ledger_hpp
 
 #include "config.hpp"
 
-#include "expimp.hpp"
+#include "so_attributes.hpp"
 #include "streamable.hpp"
 #include "xenumtypes.hpp"
 
@@ -59,7 +59,7 @@ class LedgerInvariant;
 class LedgerVariant;
 class ledger_map_holder;
 
-class LMI_EXPIMP Ledger
+class LMI_SO Ledger
     :virtual public streamable
 {
   public:

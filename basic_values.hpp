@@ -19,15 +19,15 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: basic_values.hpp,v 1.14 2005-10-20 15:27:32 chicares Exp $
+// $Id: basic_values.hpp,v 1.15 2005-12-22 13:59:49 chicares Exp $
 
 #ifndef basic_values_hpp
 #define basic_values_hpp
 
 #include "config.hpp"
 
-#include "expimp.hpp"
 #include "round_to.hpp"
+#include "so_attributes.hpp"
 #include "xenumtypes.hpp"
 #include "xrangetypes.hpp"
 
@@ -76,7 +76,7 @@ enum EBlend
     MustBlend
     };
 
-class LMI_EXPIMP BasicValues
+class LMI_SO BasicValues
 {
   public:
     BasicValues();

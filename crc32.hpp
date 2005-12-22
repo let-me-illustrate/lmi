@@ -19,20 +19,20 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: crc32.hpp,v 1.3 2005-05-27 10:37:06 chicares Exp $
+// $Id: crc32.hpp,v 1.4 2005-12-22 13:59:49 chicares Exp $
 
 #ifndef crc32_hpp
 #define crc32_hpp
 
 #include "config.hpp"
 
-#include "expimp.hpp"
+#include "so_attributes.hpp"
 
 #include <cstring> // std::strlen()
 #include <string>
 #include <vector>
 
-class LMI_EXPIMP CRC
+class LMI_SO CRC
 {
 public:
     CRC();
