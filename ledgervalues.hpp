@@ -19,15 +19,15 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledgervalues.hpp,v 1.10 2005-06-07 23:11:36 chicares Exp $
+// $Id: ledgervalues.hpp,v 1.11 2005-12-22 13:59:49 chicares Exp $
 
 #ifndef ledgervalues_hpp
 #define ledgervalues_hpp
 
 #include "config.hpp"
 
-#include "expimp.hpp"
 #include "obstruct_slicing.hpp"
+#include "so_attributes.hpp"
 
 #include <boost/shared_ptr.hpp>
 #include <boost/utility.hpp>
@@ -49,7 +49,7 @@ class LedgerVariant;
 // Inputs, but that class and class IllusVal itself are both targeted
 // for expunction, so a workaround here seems acceptable for now.
 
-class LMI_EXPIMP IllusVal
+class LMI_SO IllusVal
     :private boost::noncopyable
     ,virtual private obstruct_slicing<IllusVal>
 {

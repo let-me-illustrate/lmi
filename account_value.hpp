@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: account_value.hpp,v 1.41 2005-10-19 01:53:50 chicares Exp $
+// $Id: account_value.hpp,v 1.42 2005-12-22 13:59:48 chicares Exp $
 
 #ifndef account_value_hpp
 #define account_value_hpp
@@ -27,7 +27,7 @@
 #include "config.hpp"
 
 #include "basic_values.hpp"
-#include "expimp.hpp"
+#include "so_attributes.hpp"
 
 #include <boost/shared_ptr.hpp>
 #include <boost/utility.hpp>
@@ -49,7 +49,7 @@ class LedgerInvariant;
 class LedgerVariant;
 class DebugView;
 
-class LMI_EXPIMP AccountValue
+class LMI_SO AccountValue
     :protected BasicValues
     ,private boost::noncopyable
 {

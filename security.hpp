@@ -19,16 +19,16 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: security.hpp,v 1.1 2005-01-14 19:47:45 chicares Exp $
+// $Id: security.hpp,v 1.2 2005-12-22 13:59:49 chicares Exp $
 
 #ifndef security_hpp
 #define security_hpp
 
 #include "config.hpp"
 
-#include "expimp.hpp"
+#include "so_attributes.hpp"
 
-void LMI_EXPIMP validate_security(bool do_validate);
+void LMI_SO validate_security(bool do_validate);
 
 #endif // security_hpp
 

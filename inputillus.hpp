@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: inputillus.hpp,v 1.7 2005-10-16 16:36:15 chicares Exp $
+// $Id: inputillus.hpp,v 1.8 2005-12-22 13:59:49 chicares Exp $
 
 #ifndef inputillus_hpp
 #define inputillus_hpp
@@ -27,8 +27,8 @@
 #include "config.hpp"
 
 #include "any_member.hpp"
-#include "expimp.hpp"
 #include "inputs.hpp"
+#include "so_attributes.hpp"
 #include "streamable.hpp"
 #include "xenumtypes.hpp"
 #include "xrangetypes.hpp"
@@ -38,7 +38,7 @@
 #include <string>
 #include <vector>
 
-class LMI_EXPIMP IllusInputParms
+class LMI_SO IllusInputParms
     :virtual public streamable
     ,public InputParms
     ,public MemberSymbolTable<IllusInputParms>

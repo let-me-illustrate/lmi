@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: database.hpp,v 1.4 2005-12-21 01:22:48 chicares Exp $
+// $Id: database.hpp,v 1.5 2005-12-22 13:59:49 chicares Exp $
 
 #ifndef database_hpp
 #define database_hpp
@@ -27,8 +27,8 @@
 #include "config.hpp"
 
 #include "dbindex.hpp"
-#include "expimp.hpp"
 #include "obstruct_slicing.hpp"
+#include "so_attributes.hpp"
 #include "xenumtypes.hpp"
 
 #include <boost/utility.hpp>
@@ -41,7 +41,7 @@
 class TDBValue;
 class InputParms;
 
-class LMI_EXPIMP TDatabase
+class LMI_SO TDatabase
     :private boost::noncopyable
     ,virtual private obstruct_slicing<TDatabase>
 {

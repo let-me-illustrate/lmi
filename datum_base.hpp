@@ -19,21 +19,21 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: datum_base.hpp,v 1.4 2005-12-20 00:46:41 chicares Exp $
+// $Id: datum_base.hpp,v 1.5 2005-12-22 13:59:49 chicares Exp $
 
 #ifndef datum_base_hpp
 #define datum_base_hpp
 
 #include "config.hpp"
 
-#include "expimp.hpp"
+#include "so_attributes.hpp"
 
 #include <iosfwd>
 #include <string>
 
 // Implicitly-declared special member functions do the right thing.
 
-class LMI_EXPIMP datum_base
+class LMI_SO datum_base
 {
   public:
     datum_base();

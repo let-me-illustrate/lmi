@@ -19,15 +19,15 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: global_settings.hpp,v 1.10 2005-07-06 00:48:24 chicares Exp $
+// $Id: global_settings.hpp,v 1.11 2005-12-22 13:59:49 chicares Exp $
 
 #ifndef global_settings_hpp
 #define global_settings_hpp
 
 #include "config.hpp"
 
-#include "expimp.hpp"
 #include "obstruct_slicing.hpp"
+#include "so_attributes.hpp"
 
 #include <boost/filesystem/path.hpp>
 #include <boost/utility.hpp>
@@ -68,7 +68,7 @@
 /// store them e.g. in xml files, and because that enables 'set_'
 /// functions to validate their arguments.
 
-class LMI_EXPIMP global_settings
+class LMI_SO global_settings
     :private boost::noncopyable
     ,virtual private obstruct_slicing<global_settings>
 {

@@ -19,15 +19,15 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_invariant.hpp,v 1.6 2005-11-18 06:06:25 chicares Exp $
+// $Id: ledger_invariant.hpp,v 1.7 2005-12-22 13:59:49 chicares Exp $
 
 #ifndef ledger_invariant_hpp
 #define ledger_invariant_hpp
 
 #include "config.hpp"
 
-#include "expimp.hpp"
 #include "ledger_base.hpp"
+#include "so_attributes.hpp"
 #include "xenumtypes.hpp"
 
 #include <map>
@@ -41,7 +41,7 @@
 class BasicValues;
 class Ledger;
 
-class LMI_EXPIMP LedgerInvariant
+class LMI_SO LedgerInvariant
     :public LedgerBase
 {
   public:

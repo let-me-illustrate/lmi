@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_fpios.hpp,v 1.5 2005-12-20 00:46:41 chicares Exp $
+// $Id: ihs_fpios.hpp,v 1.6 2005-12-22 13:59:49 chicares Exp $
 
 // This is a derived work based on Joshua Rowe's
 //   "Really cool persistent object stream library"
@@ -48,8 +48,7 @@
 #include "config.hpp"
 
 #include "ihs_pios.hpp" // GWC arbitrarily changed .hh to .hpp
-
-#include "expimp.hpp"
+#include "so_attributes.hpp"
 
 #include <fcntl.h>
 #if defined LMI_MSW
@@ -72,7 +71,7 @@ class JrPs_ifpstream;
 class JrPs_ofpstream;
 class JrPs_iofpstream;
 
-class LMI_EXPIMP JrPs_fdpstreambuf  : public JrPs_pstreambuf
+class LMI_SO JrPs_fdpstreambuf  : public JrPs_pstreambuf
 {
 protected:
   int       fd;
@@ -88,7 +87,7 @@ public:
   virtual void  write(const void* d, int l);
 };
 
-class LMI_EXPIMP JrPs_fdpstream : virtual public JrPs_pstream
+class LMI_SO JrPs_fdpstream : virtual public JrPs_pstream
 {
   JrPs_fdpstream(const JrPs_fdpstream&);
   JrPs_fdpstream& operator= (const JrPs_fdpstream&);
@@ -99,7 +98,7 @@ public:
   void      open(int afd, int aflags = 0);
 };
 
-class LMI_EXPIMP JrPs_ifdpstream    : virtual public JrPs_fdpstream, virtual public JrPs_ipstream
+class LMI_SO JrPs_ifdpstream    : virtual public JrPs_fdpstream, virtual public JrPs_ipstream
 {
   JrPs_ifdpstream(const JrPs_ifdpstream&);
   JrPs_ifdpstream& operator= (const JrPs_ifdpstream&);
@@ -109,7 +108,7 @@ public:
   JrPs_ifdpstream(int afd, int aflags = 0);
 };
 
-class LMI_EXPIMP JrPs_ofdpstream    : virtual public JrPs_fdpstream, virtual public JrPs_opstream
+class LMI_SO JrPs_ofdpstream    : virtual public JrPs_fdpstream, virtual public JrPs_opstream
 {
   JrPs_ofdpstream(const JrPs_ofdpstream&);
   JrPs_ofdpstream& operator= (const JrPs_ofdpstream&);
@@ -119,7 +118,7 @@ public:
   JrPs_ofdpstream(int afd, int aflags = 0);
 };
 
-class LMI_EXPIMP JrPs_iofdpstream   : virtual public JrPs_ifdpstream, virtual public JrPs_ofdpstream
+class LMI_SO JrPs_iofdpstream   : virtual public JrPs_ifdpstream, virtual public JrPs_ofdpstream
 {
   JrPs_iofdpstream(const JrPs_iofdpstream&);
   JrPs_iofdpstream& operator= (const JrPs_iofdpstream&);
@@ -129,7 +128,7 @@ public:
   JrPs_iofdpstream(int afd, int aflags = 0);
 };
 
-class LMI_EXPIMP JrPs_fpstreambuf   : public JrPs_fdpstreambuf
+class LMI_SO JrPs_fpstreambuf   : public JrPs_fdpstreambuf
 {
 protected:
 public:
@@ -139,7 +138,7 @@ public:
   void      open(const char* aname, int aflags, int amode = 0644);
 };
 
-class LMI_EXPIMP JrPs_fpstream  : virtual public JrPs_fdpstream
+class LMI_SO JrPs_fpstream  : virtual public JrPs_fdpstream
 {
   JrPs_fpstream(const JrPs_fpstream&);
   JrPs_fpstream& operator= (const JrPs_fpstream&);
@@ -151,7 +150,7 @@ public:
   void      open(const char* aname, int aflags, int amode = 0644);
 };
 
-class LMI_EXPIMP JrPs_ifpstream : virtual public JrPs_fpstream, virtual public JrPs_ifdpstream
+class LMI_SO JrPs_ifpstream : virtual public JrPs_fpstream, virtual public JrPs_ifdpstream
 {
   JrPs_ifpstream(const JrPs_ifpstream&);
   JrPs_ifpstream& operator= (const JrPs_ifpstream&);
@@ -162,7 +161,7 @@ public:
   void      open(const char* aname, int aflags, int amode = 0644);
 };
 
-class LMI_EXPIMP JrPs_ofpstream : virtual public JrPs_fpstream, virtual public JrPs_ofdpstream
+class LMI_SO JrPs_ofpstream : virtual public JrPs_fpstream, virtual public JrPs_ofdpstream
 {
   JrPs_ofpstream(const JrPs_ofpstream&);
   JrPs_ofpstream& operator= (const JrPs_ofpstream&);
@@ -174,7 +173,7 @@ public:
   void      open(const char* aname, int aflags, int amode = 0644);
 };
 
-class LMI_EXPIMP JrPs_iofpstream    : virtual public JrPs_ifpstream, virtual public JrPs_ofpstream
+class LMI_SO JrPs_iofpstream    : virtual public JrPs_ifpstream, virtual public JrPs_ofpstream
 {
   JrPs_iofpstream(const JrPs_iofpstream&);
   JrPs_iofpstream& operator= (const JrPs_iofpstream&);

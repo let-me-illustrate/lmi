@@ -19,15 +19,15 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_funddata.hpp,v 1.5 2005-03-11 03:39:32 chicares Exp $
+// $Id: ihs_funddata.hpp,v 1.6 2005-12-22 13:59:49 chicares Exp $
 
 #ifndef funddata_hpp
 #define funddata_hpp
 
 #include "config.hpp"
 
-#include "expimp.hpp"
 #include "obstruct_slicing.hpp"
+#include "so_attributes.hpp"
 
 #include <boost/utility.hpp>
 
@@ -38,7 +38,7 @@
 
 // Implicitly-declared special member functions do the right thing.
 
-class LMI_EXPIMP FundInfo
+class LMI_SO FundInfo
     :virtual private obstruct_slicing<FundInfo>
 {
     friend class FundData;
@@ -62,7 +62,7 @@ class LMI_EXPIMP FundInfo
     std::string LongName_;
 };
 
-class LMI_EXPIMP FundData
+class LMI_SO FundData
     :private boost::noncopyable
     ,virtual private obstruct_slicing<FundData>
 {

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_cli.cpp,v 1.17 2005-12-20 00:46:38 chicares Exp $
+// $Id: main_cli.cpp,v 1.18 2005-12-22 13:59:49 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -31,7 +31,6 @@
 #include "armor.hpp"
 #include "calculate.hpp"
 #include "custom_io_0.hpp"
-#include "expimp.hpp"
 #include "getopt.hpp"
 #include "global_settings.hpp"
 #include "group_values.hpp"
@@ -41,6 +40,7 @@
 #include "license.hpp"
 #include "main_common.hpp"
 #include "miscellany.hpp"
+#include "so_attributes.hpp"
 #include "timer.hpp"
 #include "value_cast.hpp"
 
@@ -62,7 +62,7 @@
 // INELEGANT !! Prototype specified explicitly because the production
 // and antediluvian branches define it identically but in different
 // and incompatible headers.
-void LMI_EXPIMP print_databases();
+void LMI_SO print_databases();
 
 //============================================================================
 void RegressionTestOneCensusFile(fs::directory_iterator i)

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: fenv_lmi.hpp,v 1.4 2005-04-09 16:16:38 chicares Exp $
+// $Id: fenv_lmi.hpp,v 1.5 2005-12-22 13:59:49 chicares Exp $
 
 // Manage the floating-point environment, using C99 7.6 facilities
 // where available. Otherwise, use compiler- and platform-specific
@@ -31,14 +31,14 @@
 
 #include "config.hpp"
 
-#include "expimp.hpp"
+#include "so_attributes.hpp"
 
 // Initialize floating-point environment to reasonable settings.
-extern "C" void LMI_EXPIMP initialize_fpu();
+extern "C" void LMI_SO initialize_fpu();
 
 // Make sure current floating-point environment matches initial
 // settings; throw an exception if it doesn't.
-extern "C" void LMI_EXPIMP validate_fenv();
+extern "C" void LMI_SO validate_fenv();
 
 #endif // fenv_lmi_hpp
 
