@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.286 2005-12-27 15:36:50 chicares Exp $
+// $Id: ChangeLog,v 1.287 2005-12-27 16:52:44 chicares Exp $
 
 MAINTENANCE
 
@@ -5328,4 +5328,11 @@ are not syntactically identical.
   fenv_lmi_x86.hpp  [new file]
   objects.make
 Rewrite floating-point-environment management, adding unit tests.
+
+20051227T1652Z <chicares@cox.net> [1204]
+
+  fenv_lmi.cpp
+Fix a defect exposed by the recently-added unit test. This defect was
+observable with como, but not with gcc, which follows a different code
+path.
 
