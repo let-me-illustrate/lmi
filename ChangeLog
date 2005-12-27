@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.285 2005-12-22 13:59:49 chicares Exp $
+// $Id: ChangeLog,v 1.286 2005-12-27 15:36:50 chicares Exp $
 
 MAINTENANCE
 
@@ -5319,4 +5319,13 @@ and costs nothing extra to set up because of its similarity to msw
 __declspec attributes; but it has not yet been tested on an elf
 system, and may need adjustment because the elf and msw attributes
 are not syntactically identical.
+
+20051227T1536Z <chicares@cox.net> [1205]
+
+  fenv_lmi.cpp
+  fenv_lmi.hpp
+  fenv_lmi_test.cpp [new file]
+  fenv_lmi_x86.hpp  [new file]
+  objects.make
+Rewrite floating-point-environment management, adding unit tests.
 

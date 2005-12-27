@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: fenv_lmi.cpp,v 1.7 2005-12-15 15:40:09 chicares Exp $
+// $Id: fenv_lmi.cpp,v 1.8 2005-12-27 15:36:50 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -30,94 +30,61 @@
 
 #include "alert.hpp"
 
+#include <iomanip>
 #include <sstream>
-
-#ifdef __STDC_IEC_559__
-    // In case the C++ compiler supports C99 7.6 facilities, assume
-    // that it sets __STDC_IEC_559__ and puts prototypes in <fenv.h>
-    // but not in namespace std.
-#   include <fenv.h>
-#   if defined __GNUC__ && LMI_GCC_VERSION <= 40100
-        // As of 2005-04-08, the gcc manual here
-        // http://gcc.gnu.org/onlinedocs/gcc/Floating-point-implementation.html
-        // which "corresponds to GCC version 4.1.0" says "This pragma
-        // is not implemented".
-#   else  // Pragma STDC FENV_ACCESS implemented.
-#       pragma STDC FENV_ACCESS ON
-#   endif // Pragma STDC FENV_ACCESS implemented.
-#endif // __STDC_IEC_559__
 
 #if defined __BORLANDC__ || defined _MSC_VER
 #   include <float.h> // Nonstandard floating-point hardware control.
 #endif // defined __BORLANDC__ || defined _MSC_VER
 
-#include <iomanip>
-
-// Implementation note: the ms implementation of _control87(),
-// strangely enough, takes an argument that is not identical to the
-// hardware control word.
-//   http://groups.google.com/groups?selm=34775BB8.E10BA020%40tc.umn.edu
-// Instead of writing
-//   _control87(0x08001f,  0xffffffff);
-// which would be correct for ms but incorrect for borland and perhaps
-// for some other compilers, it is better to use these ms macros
-//   _MCW_EM _MCW_RC _MCW_PC
-// which are not defined by borland or presumably by other compilers
-// that use the intel control word as an argument.
-
 void initialize_fpu()
 {
-#if defined __GNUC__ && defined LMI_X86
+#ifdef __MINGW32__
+    fesetenv(FE_PC64_ENV);
+#elif defined __GNUC__ && defined LMI_X86
     volatile unsigned short int control_word = 0x037f;
     asm volatile("fldcw %0" : : "m" (control_word));
 #elif defined __BORLANDC__
     _control87(0x037f, 0xffff);
 #elif defined _MSC_VER
-    // Test _MSC_VER last because some non-ms compilers or libraries
-    // define it.
-    //
-    _control87(_MCW_EM,  _MCW_EM);
-    _control87(_RC_NEAR, _MCW_RC);
-    _control87(_PC_64,   _MCW_PC);
-#else // Unknown compiler or platform.
+    // Test _MSC_VER last: some non-ms compilers or libraries define it.
+    _control87(intel_to_msw(0x037f),  0x0ffffffff);
+#else  // Unknown compiler or platform.
 #   error Unknown compiler or platform. Please contribute an implementation.
 #endif // Unknown compiler or platform.
 
-// TODO ?? Duplicative and unclear. The code above should be unneeded
-// for a platform like MinGW that does everything in a standard way.
-// Need a unit test to prove that the code below works correctly.
-
+#if 0
     // The facilities offered by C99's <fenv.h> are useful, but not
     // sufficient: they require no standard facility to set hardware
     // precision, although 7.6/9 provides for extensions like mingw's
-    // FE_PC64_ENV.
-#ifdef __STDC_IEC_559__
-#   ifndef __MINGW32__
-    // Hardware precision not set.
+    // FE_PC64_ENV. This block shows what could be accomplished in
+    // standard C.
+#   ifdef __STDC_IEC_559__
     fenv_t save_env;
     feholdexcept(&save_env);
     fesetround(FE_TONEAREST);
-#   else // __MINGW32__
-    fesetenv(FE_PC64_ENV);
-#   endif // __MINGW32__
-#endif // __STDC_IEC_559__
+#   error Find a platform-specific way to set hardware precision if possible.
+#   endif // __STDC_IEC_559__
+#endif // 0
 }
 
-void validate_fenv()
+bool validate_fenv()
 {
     volatile unsigned short int control_word = 0x0;
 #if defined __GNUC__ && defined LMI_X86
     asm volatile("fstcw %0" : : "m" (control_word));
-    bool okay = 0x037f == control_word;
 #elif defined __BORLANDC__
     control_word = static_cast<unsigned short int>(_control87(0, 0));
-    bool okay = 0x037f == control_word;
 #elif defined _MSC_VER
+    // Test _MSC_VER last: some non-ms compilers or libraries define it.
+    // TODO ?? This never-tested code was always incorrect:
     control_word = static_cast<unsigned short int>(_control87(0, 0));
-    bool okay = (_MCW_EM | _MCW_RC | _MCW_PC) == control_word;
+    // Instead, use:
+//    control_word = msw_to_intel(_control87(0, 0));
 #else // Unknown compiler or platform.
 #   error Unknown compiler or platform. Please contribute an implementation.
 #endif // Unknown compiler or platform.
+    bool okay = 0x037f == control_word;
     if(!okay)
         {
         // Prefer this approach to fatal_error() because this function
@@ -126,12 +93,13 @@ void validate_fenv()
         // means.
         std::ostringstream oss;
         oss
-            << "The floating-point control word is unexpectedly "
-            << std::hex << control_word << " .\n"
-            << " This is a problem: results may be invalid.\n"
-            << " Probably some other program changed this crucial setting.\n"
+            << "The floating-point control word is unexpectedly '"
+            << std::hex << control_word << "'.\n"
+            << "Probably some other program changed this crucial setting.\n"
+            << "This is a real problem: results may be invalid.\n"
             ;
         safely_show_message(oss.str().c_str());
         }
+    return okay;
 }
 
