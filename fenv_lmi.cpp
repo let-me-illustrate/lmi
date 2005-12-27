@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: fenv_lmi.cpp,v 1.8 2005-12-27 15:36:50 chicares Exp $
+// $Id: fenv_lmi.cpp,v 1.9 2005-12-27 16:52:44 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -77,10 +77,7 @@ bool validate_fenv()
     control_word = static_cast<unsigned short int>(_control87(0, 0));
 #elif defined _MSC_VER
     // Test _MSC_VER last: some non-ms compilers or libraries define it.
-    // TODO ?? This never-tested code was always incorrect:
-    control_word = static_cast<unsigned short int>(_control87(0, 0));
-    // Instead, use:
-//    control_word = msw_to_intel(_control87(0, 0));
+    control_word = msw_to_intel(_control87(0, 0));
 #else // Unknown compiler or platform.
 #   error Unknown compiler or platform. Please contribute an implementation.
 #endif // Unknown compiler or platform.
