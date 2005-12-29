@@ -20,7 +20,10 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: Makefile.am,v 1.10 2005-12-22 14:40:06 zeitlin Exp $
+# $Id: Makefile.am,v 1.11 2005-12-29 20:17:49 zeitlin Exp $
+
+
+SUBDIRS = third_party
 
 ##############################################################################
 # All Targets
@@ -38,20 +41,20 @@ bin_PROGRAMS =   \
 
 # other programs which may or not be built depending on configure arguments
 EXTRA_PROGRAMS = \
-    antediluvian_cgi
+    antediluvian_cgi \
+    gpt_server
+#    gpt_server - does not contain no main() function, bug?..
+#    lmi_cgi - restore the target in the future
 
 # libtool libraries installed in lib
 lib_LTLIBRARIES =   \
-    liblmi.la   \
-    libwx_new.la
+    liblmi.la
 
 # libtool convenience libraries which are not installed at all
 noinst_LTLIBRARIES = \
-    liblmi_common.la \
-    libcli.la \
-    libmain_auxiliary_common.la \
-    libantediluvian.la
-
+    libantediluvian.la \
+    libwx_new.la \
+    libmain_auxiliary_common.la
 
 # data files
 #
@@ -112,6 +115,7 @@ TESTS = \
     test_comma_punct \
     test_crc32 \
     test_expression_template_0 \
+    test_fenv_lmi \
     test_financial \
     test_global_settings \
     test_input_seq \
@@ -146,6 +150,15 @@ TESTS = \
 check_PROGRAMS = $(TESTS)
 check_LTLIBRARIES = \
     libtest_commons.la
+
+####################################
+# On windows use auto import feature
+####################################
+if LMI_MSW
+    AM_LDFLAGS=--enable-auto-import
+else
+    AM_LDFLAGS=
+endif
 
 
 ##############################################################################
@@ -184,39 +197,51 @@ lmi_wx_SOURCES = \
     view_ex.cpp \
     xml_notebook.cpp
 
-lmi_wx_CXXFLAGS = $(WX_CXXFLAGS) $(CGICC_INCLUDE_FLAGS) $(XMLWRAPP_FLAGS) $(AM_CXXFLAGS)
-if LMI_WINDOWS
+lmi_wx_CXXFLAGS = $(WX_CXXFLAGS) $(XMLWRAPP_FLAGS) $(AM_CXXFLAGS)
+# $(CGICC_INCLUDE_FLAGS)
+
+if LMI_MSW
 ## use old style suffix rule instead of the pattern one as automake only
 ## recognizes the old style rules
 .rc.o:
 	windres -I $(top_srcdir) $(WX_CPPFLAGS) $< $@
 
     lmi_wx_SOURCES += lmi.rc
-    lmi_wx_CXXFLAGS += -DLMI_USE_DLL -mwindows
+    lmi_wx_CXXFLAGS += -mwindows
 endif
-
 lmi_wx_LDADD =  \
     liblmi.la \
-    liblmi_common.la \
-    libwx_new.la   \
+    libwx_new.la \
     $(BOOST_LIBS) \
     $(XMLWRAPP_LIBS) \
     $(WX_LIBS)
-
-lmi_cli_SOURCES = $(top_builddir)/dummy.cpp
-lmi_cli_CXXFLAGS=$(CGICC_INCLUDE_FLAGS)
-if LMI_WINDOWS
-    lmi_cli_CXXFLAGS += -DLMI_USE_DLL
+if LMI_MSW
+    lmi_wx_SOURCES += lmi.rc
+    lmi_wx_CXXFLAGS += -mwindows
 endif
+
+
+
+cli_sources = \
+    alert_cli.cpp \
+    file_command_cli.cpp \
+    main_cli.cpp \
+    main_common.cpp \
+    main_common_non_wx.cpp \
+    progress_meter_cli.cpp
+
+lmi_cli_SOURCES = \
+    $(cli_sources)
+lmi_cli_CXXFLAGS = $(AM_CXXFLAGS)
+# $(CGICC_INCLUDE_FLAGS)
 lmi_cli_LDADD = \
-    libcli.la \
     liblmi.la \
-    liblmi_common.la \
+    $(XMLWRAPP_LIBS) \
     $(BOOST_LIBS)
 
 # libraries
 
-liblmi_common_la_SOURCES = \
+liblmi_common_sources = \
     actuarial_table.cpp \
     alert.cpp \
     calendar_date.cpp \
@@ -226,6 +251,7 @@ liblmi_common_la_SOURCES = \
     data_directory.cpp \
     dbnames.cpp \
     death_benefits.cpp \
+    expm1.c \
     facets.cpp \
     fenv_lmi.cpp \
     file_command.cpp \
@@ -259,16 +285,13 @@ liblmi_common_la_SOURCES = \
     rounding_rules.cpp \
     sigfpe.cpp \
     single_cell_document.cpp \
+    streamable.cpp \
     surrchg_rates.cpp \
     system_command.cpp \
     timer.cpp \
     xenumtypes.cpp \
     xmlwrapp_ex.cpp \
     xrange.cpp
-liblmi_common_la_LDFLAGS = -no-undefined
-liblmi_common_la_LIBADD = \
-    $(BOOST_LIBS) \
-    $(XMLWRAPP_LIBS)
 
 libmain_auxiliary_common_la_SOURCES = \
     alert.cpp \
@@ -277,7 +300,7 @@ libmain_auxiliary_common_la_SOURCES = \
     main_common.cpp \
     main_common_non_wx.cpp \
     sigfpe.cpp
-
+libmain_auxiliary_common_la_CXXFLAGS = $(AM_CXXFLAGS)
 
 
 libantediluvian_la_SOURCES = \
@@ -290,8 +313,13 @@ libantediluvian_la_SOURCES = \
     dbvalue.cpp \
     inputillus_term_rider.cpp \
     mortality_rates.cpp \
-    solve.cpp
-libantediluvian_la_LIBADD = liblmi_common.la
+    solve.cpp \
+    $(liblmi_common_sources)
+libantediluvian_la_CXXFLAGS = $(AM_CXXFLAGS)
+libantediluvian_la_LDFLAGS = -no-undefined $(AM_LDFLAGS)
+libantediluvian_la_LIBADD = \
+    $(BOOST_LIBS)
+
 
 
 liblmi_la_SOURCES = \
@@ -318,9 +346,13 @@ liblmi_la_SOURCES = \
     secure_date.cpp \
     security.cpp \
     stratified_algorithms.cpp \
-    stratified_charges.cpp
-liblmi_la_LDFLAGS = -no-undefined
-liblmi_la_LIBADD = liblmi_common.la
+    stratified_charges.cpp \
+    $(liblmi_common_sources)
+liblmi_la_CXXFLAGS = $(AM_CXXFLAGS)
+liblmi_la_LDFLAGS = -no-undefined $(AM_LDFLAGS)
+liblmi_la_LIBADD = \
+    $(XMLWRAPP_LIBS) \
+    $(BOOST_LIBS)
 
 libcgi_la_SOURCES = \
     alert_cgi.cpp \
@@ -333,17 +365,10 @@ libcgi_la_SOURCES = \
 libcgi_la_CXXFLAGS = $(BOOST_INCLUDE_FLAGS) $(CGICC_INCLUDE_FLAGS) $(AM_CXXFLAGS)
 libcgi_la_LIBADD = $(CGICC_LIBS)
 
-libcli_la_SOURCES = \
-    alert_cli.cpp \
-    file_command_cli.cpp \
-    main_cli.cpp \
-    main_common.cpp \
-    main_common_non_wx.cpp \
-    progress_meter_cli.cpp
-libcli_la_LIBADD = -lncurses
+
 
 libwx_new_la_SOURCES = wx_new.cpp
-libwx_new_la_LDFLAGS = -no-undefined
+libwx_new_la_LDFLAGS = -no-undefined $(AM_LDFLAGS)
 libwx_new_la_LIBADD = $(WX_LIBS)
 
 
@@ -357,7 +382,13 @@ generate_passkey_SOURCES = \
     system_command.cpp
 generate_passkey_CXXFLAGS = $(AM_CXXFLAGS)
 generate_passkey_LDADD = \
-    $(BOOST_LIBS) libmain_auxiliary_common.la
+    $(BOOST_LIBS) \
+    libmain_auxiliary_common.la
+
+gpt_server_SOURCES = $(top_builddir)/dummy.cpp
+gpt_server_CXXFLAGS = $(AM_CXXFLAGS)
+gpt_server_LDADD = \
+    liblmi.la
 
 elapsed_time_SOURCES = \
     elapsed_time.cpp system_command.cpp timer.cpp
@@ -373,12 +404,12 @@ antediluvian_cgi_LDADD = \
     $(CGICC_LIBS) \
     $(BOOST_LIBS)
 
-antediluvian_cli_SOURCES = $(top_builddir)/dummy.cpp
+antediluvian_cli_SOURCES = \
+    $(cli_sources)
 antediluvian_cli_CXXFLAGS = $(AM_CXXFLAGS)
 antediluvian_cli_LDADD = \
-    libcli.la \
     libantediluvian.la  \
-    $(BOOST_LIBS)  \
+    $(BOOST_LIBS) \
     $(XMLWRAPP_LIBS)
 
 ihs_crc_comp_SOURCES = ihs_crc_comp.cpp
@@ -394,10 +425,6 @@ product_files_SOURCES = \
     my_rnd.cpp \
     my_tier.cpp \
     xenumtypes.cpp
-product_files_CXXFLAGS = $(AM_CXXFLAGS)
-if LMI_WINDOWS
-    product_files_CXXFLAGS += -DLMI_USE_DLL
-endif
 product_files_LDADD = \
     liblmi.la   \
     $(BOOST_LIBS)
@@ -421,7 +448,7 @@ test_actuarial_table_SOURCES = \
   timer.cpp
 test_actuarial_table_CXXFLAGS = $(AM_CXXFLAGS)
 test_actuarial_table_LDADD = \
-  $(BOOST_LIBS)    \
+  $(BOOST_LIBS) \
   libtest_commons.la
 
 test_alert_SOURCES = \
@@ -484,6 +511,13 @@ test_expression_template_0_SOURCES =    \
   timer.cpp
 test_expression_template_0_CXXFLAGS = $(AM_CXXFLAGS)
 test_expression_template_0_LDADD =    \
+  libtest_commons.la
+
+test_fenv_lmi_SOURCES = \
+  fenv_lmi.cpp \
+  fenv_lmi_test.cpp
+test_fenv_lmi_CXXFLAGS = $(AM_CXXFLAGS)
+test_fenv_lmi_LDADD = \
   libtest_commons.la
 
 test_financial_SOURCES =    \
@@ -770,9 +804,9 @@ noinst_HEADERS = \
     docmdichildframe_ex.hpp \
     enums7702.hpp \
     exit_codes.hpp \
-    expimp.hpp \
     facets.hpp \
     fenv_lmi.hpp \
+    fenv_lmi_x86.hpp \
     file_command.hpp \
     financial.hpp \
     getopt.hpp \
