@@ -21,9 +21,9 @@ dnl snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
 dnl === Prologue ===
 
-AC_REVISION($Id: configure.ac,v 1.13 2005-12-16 00:47:41 zeitlin Exp $)dnl
+AC_REVISION($Id: configure.ac,v 1.14 2005-12-29 20:17:49 zeitlin Exp $)dnl
 
-AC_PREREQ(2.59)
+AC_PREREQ(2.56)
 AC_INIT(LMI, 1.0.0, [chicares@cox.net])
 AM_INIT_AUTOMAKE()
 
@@ -52,7 +52,7 @@ case "${host}" in
         ;;
 esac
 
-AM_CONDITIONAL(LMI_WINDOWS, [test "$USE_WINDOWS" = 1])
+AM_CONDITIONAL(LMI_MSW, [test "$USE_WINDOWS" = 1])
 
 
 dnl === Command line options ===
@@ -63,6 +63,12 @@ AC_ARG_WITH(boost-headers,
 AC_ARG_WITH(boost-libs,
             [AC_HELP_STRING([--with-boost-libs=dir], [Boost libs installation directory])],
             lmi_boost_libs=$withval)
+AC_ARG_WITH(boost-toolkit,
+            [AC_HELP_STRING([--with-boost-toolkit=dir], [Boost installation toolkit (gcc, mgw, etc.)])],
+            lmi_boost_toolkit=$withval)
+AC_ARG_WITH(boost-filesystem-src,
+            [AC_HELP_STRING([--with-boost-filesystem-src=dir], [Boost filesystem library sources directory (./libs/filesystem/src directory in the boost default package). That option is only usefull for the in-project boost::filesystem library compilation])],
+            lmi_boost_filesystem_src=$withval)
 
 
 AC_ARG_WITH(wx,
@@ -223,6 +229,58 @@ dnl we look there
 LIBS="$LIBS -lm"
 AC_CHECK_FUNCS(log10l fabsl)
 
+dnl checking for snprintf or its remplacement
+dnl When compiling under gcc using -std= flag the standard headers do not
+dnl provide snprintf nor _snprintf.
+dnl We're not using the usuall AC_CHECK_FUNCS
+dnl   AC_CHECK_FUNCS([snprintf _snprintf], [break], [AC_MSG_ERROR(Fatal error : neither snprintf nor _snprintf is found on the system)])
+dnl because of various wrokarounds in platform_dependent.hpp
+dnl which make it possible to use snprintf or other "non standard" functions.
+AC_CACHE_CHECK([for snprintf],
+    lmi_cv_func_snprintf,
+    [
+        AC_LINK_IFELSE([AC_LANG_PROGRAM(
+                [[
+                #if defined __GNUC__ && defined __STRICT_ANSI__
+                #   undef __STRICT_ANSI__
+                #endif
+                #include <stdio.h>]],
+                [return snprintf("", 0, "");]
+            )],
+            lmi_cv_func_snprintf=yes,
+            lmi_cv_func_snprintf=no
+        )
+    ]
+)
+if test "x$lmi_cv_func_snprintf" = "xyes"; then
+    AC_DEFINE([HAVE_SNPRINTF], [1], [Define this if you have snprintf function])
+else
+    AC_CACHE_CHECK([for _snprintf],
+        lmi_cv_func__snprintf,
+        [
+            AC_LINK_IFELSE([AC_LANG_PROGRAM(
+                    [[
+                    #if defined __GNUC__ && defined __STRICT_ANSI__
+                    #   undef __STRICT_ANSI__
+                    #endif
+                    #include <stdio.h>]],
+                    [return _snprintf("", 0, "");]
+                )],
+                lmi_cv_func__snprintf=yes,
+                lmi_cv_func__snprintf=no
+            )                                                                                                                       
+        ]                                                                                                                           
+    )                                                                                                                               
+    if test "x$lmi_cv_func__snprintf" = "xyes"; then
+        AC_DEFINE([HAVE__SNPRINTF], [1], [Define this if you have _snprintf function])
+    else
+        AC_MSG_ERROR([Neither snprintf, nor _snprintf is found on your system])
+    fi
+fi
+
+AM_CONDITIONAL(HAVE_SNPRINTF, [test "x$lmi_cv_func_snprintf" == "xyes"])
+AM_CONDITIONAL(LMI_WITH_CGI, [test "x$lmi_cgicc_option" == "xyes"])
+
 dnl existing code already uses these macros so continue to use them instead of
 dnl the usual HAVE_EXPM1/HAVE_LOG1P
 AC_CHECK_FUNC(strtold, AC_DEFINE(LMI_COMPILER_PROVIDES_STRTOLD, [1], [Define this if you have strtold() function]))
@@ -235,12 +293,38 @@ dnl use C++ compiler as we're checking for C++ libraries/headers
 AC_LANG(C++)
 
 
+dnl --- curses.h
+AC_SEARCH_LIBS([getch], [ncurses], [], [], [])
+
+
+dnl === Configure libtool ===
+
+dnl We can't do this at the end because we need the correct values
+dnl for enable_shared/static variables which appears to be defined
+dnl by AC_PROG_LIBTOOL (for ex. with --disable-shared you get only
+dnl enable_shared=no before this point and enable_static=yes only after)
+dnl Wx configuration part needs exactly that feature to understand
+dnl what library type build we're using.
+AC_DISABLE_STATIC   dnl don't waste time on static build by default
+AC_PROG_LIBTOOL
+
 dnl --- wxWidgets ---
 
 AM_OPTIONS_WXCONFIG
 
 dnl normally we should get all we need from wx-config
-AM_PATH_WXCONFIG([2.6.0], [wx="yes"],[],[],[--unicode=no --debug=$debug_option])
+wx_config_params="--unicode=no --debug=$debug_option"
+dnl disable use of static libraries with --static=no
+if test "x$enable_static" == "xno"; then
+wx_config_params="$wx_config_params --static=no"
+fi
+dnl disable use of shared libraries with --static=yes
+if test "x$enable_shared" == "xno"; then
+wx_config_params="$wx_config_params --static=yes"
+fi
+dnl otherwise use any library type we have for wx
+
+AM_PATH_WXCONFIG([2.6.0], [wx="yes"],[],[],[$wx_config_params])
 
 dnl if we didn't (may happen under Windows), try to find wx headers and
 dnl libraries ourselves
@@ -416,10 +500,19 @@ AC_CHECK_HEADER([boost/type_traits.hpp],
 )
 
 
+if test "x$lmi_boost_toolkit" == "x"; then
+    if test "x$USE_MINGW32" = "x1"; then
+        lmi_boost_toolkit=mgw
+    else
+        lmi_boost_toolkit=gcc
+    fi
+fi
+
+dnl Boost library name should be guessed in a more sophisticated manner
 if test "x$USE_MINGW32" = "x1"; then
-    boost_libfs=boost_filesystem-mgw
+    boost_libfs="boost_filesystem-$lmi_boost_toolkit"
 else
-    boost_libfs=boost_filesystem
+    boost_libfs="boost_filesystem-$lmi_boost_toolkit-mt-s"
 fi
 
 save_LIBS=$LIBS
@@ -432,19 +525,55 @@ else
     errmsg="use --with-boost-libs=dir
 if it is installed in non default location"
 fi
-dnl usually when we want to just check for the library existence we use main()
-dnl as the function to test for but this doesn't work with -pedantic, so use
-dnl exit() which happens to be declared on configure-generated test fragment
-AC_CHECK_LIB([$boost_libfs], exit,
+
+dnl usually when we want to check for a library we use AC_CHECK_LIB and main()
+dnl but since under mingw with -pedantic and -std= options test does not pass
+dnl we are forced to use a bit more sophisticated construct
+LIBS="$LIBS -l$boost_libfs"
+LMI_BOOSTFS_BUILD=0
+AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <boost/filesystem/operations.hpp>]],
+    [[boost::filesystem::current_path()]])],
     [],
-    [AC_MSG_ERROR([Boost filesystem library $boost_libfs not found, $errmsg])]
+    [LMI_BOOSTFS_BUILD=1
+    AC_MSG_WARN([Boost filesystem library $boost_libfs not found, $errmsg])]
 )
 
 LDFLAGS=$save_LDFLAGS
 LIBS=$save_LIBS
-BOOST_LIBS="$BOOST_LDFLAGS-l$boost_libfs"
+
+if test "x$LMI_BOOSTFS_BUILD" == "x1"; then
+
+dnl we have no boost::filesystem library available on the machine - lets check for its sources
+LMI_BOOSTFS_SRC=$lmi_boost_filesystem_src
+dnl if the user has not specified --with-boost-filesystem-src then guess it using --with-boost-headers
+if test "x$LMI_BOOSTFS_SRC" == "x"; then
+    if test "x$lmi_boost_headers" != "x"; then
+        LMI_BOOSTFS_SRC="$lmi_boost_headers/../libs/filesystem/src"
+    fi
+fi
+if test "x$LMI_BOOSTFS_SRC" == "x"; then
+    LMI_BOOSTFS_SRC="."
+fi
+
+AC_CHECK_FILE([$LMI_BOOSTFS_SRC/convenience.cpp], [], [no_boost_fs=1])
+AC_CHECK_FILE([$LMI_BOOSTFS_SRC/exception.cpp], [], [no_boost_fs=1])
+AC_CHECK_FILE([$LMI_BOOSTFS_SRC/operations_posix_windows.cpp], [], [no_boost_fs=1])
+AC_CHECK_FILE([$LMI_BOOSTFS_SRC/path_posix_windows.cpp], [], [no_boost_fs=1])
+if test "x$no_boost_fs" == "x1"; then
+    AC_MSG_ERROR([no boost::filesystem source files found in ($LMI_BOOSTFS_SRC)])
+fi
+
+BOOST_LIBS=third_party/boostfs/libboost_filesystem.la
+else
+BOOST_LIBS="$BOOST_LDFLAGS -l$boost_libfs"
+fi
+dnl contains flags needed to link to externally or internally built boost::filesystem library
 AC_SUBST(BOOST_LIBS)
 
+dnl indicates weither do we need to build internally boost::filesystem library
+AM_CONDITIONAL([LMI_BOOSTFS_BUILD], [test "x$LMI_BOOSTFS_BUILD" == "x1"])
+dnl indicates the directory path where sources could be found
+AC_SUBST(LMI_BOOSTFS_SRC)
 
 dnl --- LIBXML (required) ---------------
 AC_CHECK_PROG(lmi_xml2_config, xml2-config, yes, no)
@@ -544,14 +673,6 @@ AC_SUBST(CGICC_INCLUDE_FLAGS)
 AC_SUBST(CGICC_LIBS)
 AC_SUBST(CGICC_LIB_LDADD)
 
-
-dnl === Configure libtool ===
-
-dnl do this at the end as this is the longest step so only do it if all the
-dnl rest succeeded
-AC_DISABLE_STATIC   dnl don't waste time on static build by default
-AC_PROG_LIBTOOL
-
 dnl === Generate output files ===
-AC_CONFIG_FILES([Makefile])
+AC_CONFIG_FILES([Makefile third_party/Makefile third_party/boostfs/Makefile])
 AC_OUTPUT

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: README.auto,v 1.2 2005-11-04 00:03:48 chicares Exp $
+// $Id: README.auto,v 1.3 2005-12-29 20:17:49 zeitlin Exp $
 
                   README file for building LMI with autotools
                   ===========================================
@@ -87,7 +87,7 @@ b) boost: static boost_filesystem library is available as a standard cygwin
 After a fresh cvs checkout you need to run autogen.sh once. For it to work,
 you need the following utilities:
 
-a) GNU autoconf >= 2.57 (2.59 known to work)
+a) GNU autoconf >= 2.56 (2.56 under mingw and 2.59 under cygwin are known to work)
 b) GNU automake >= 1.5 (at least; 1.7.9 and 1.9.6 known to work)
 c) GNU libtool >= 1.5 (1.5.20 known to work)
 
@@ -113,6 +113,8 @@ useful ones are:
 
     --prefix=/opt/lmi           to install /opt and not default /usr/local
     --with-wxdir=$wx-build      to use uninstalled wx version from $wx-build
+    --with-boost-filesystem-src to compile a custom boost_filesystem library
+                                using boost sources
     --enable-debug              to enable debugging (asserts...)
     --disable-shared            to build static libraries only (for deployment)
 
@@ -124,4 +126,4 @@ maintainer-clean" (don't use the latter if you don't have autotools installed
 as you won't be able to regenerate the makefile after it).
 
 
-Version: $Id: README.auto,v 1.2 2005-11-04 00:03:48 chicares Exp $
+Version: $Id: README.auto,v 1.3 2005-12-29 20:17:49 zeitlin Exp $
