@@ -19,9 +19,9 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_server7702test.c,v 1.1 2005-01-14 19:47:45 chicares Exp $
+// $Id: ihs_server7702test.c,v 1.2 2005-12-29 19:48:55 chicares Exp $
 
-#include "expimp.hpp"
+#include "so_attributes.hpp"
 
 #if defined LMI_POSIX
 #   include <dlfcn.h>   // dlopen()
@@ -117,8 +117,8 @@ struct output
     double      NewFaceAmount;
 };
 
-extern LMI_EXPIMP struct output RunServer7702FromStruct(struct input);
-extern LMI_EXPIMP void RunServer7702FromString(char*, char*);
+extern LMI_SO struct output RunServer7702FromStruct(struct input);
+extern LMI_SO void RunServer7702FromString(char*, char*);
 
 int main()
 {
