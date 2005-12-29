@@ -23,7 +23,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: autogen.sh,v 1.3 2005-10-31 02:55:51 zeitlin Exp $
+# $Id: autogen.sh,v 1.4 2005-12-29 20:15:59 zeitlin Exp $
 
 if [ ! -f configure.ac -o ! -f Makefile.am -o ! -f lmi.xpm ]; then
     echo "Please run this script from the lmi source directory."
@@ -31,14 +31,16 @@ if [ ! -f configure.ac -o ! -f Makefile.am -o ! -f lmi.xpm ]; then
 fi
 
 # use --foreign with automake because we lack standard GNU NEWS and AUTHOR
-# files, if they're added we can "upgrade" to (default) GNU strictness
+# files, if they're added we can "upgrade" to (default) GNU strictness.
+# use --copy to allow simultaneous use on windows under mingw and cygwin platforms.
+# Symlinking of files under mingw does not work out for cygwin and vice-versa.
 echo "Setting up build system for lmi:"
 echo " - aclocal " && aclocal ${wx+-I} $wx && \
-echo " - libtoolize " && libtoolize --automake && \
+echo " - libtoolize " && libtoolize --copy --automake && \
 echo " - autoconf " && autoconf && \
 echo " - autoheader " && autoheader && \
-echo " - automake " && automake -a --foreign && \
-echo "Build setup successful, type \"configure\" to configure lmi now."
+echo " - automake " && automake --add-missing --copy --foreign && \
+echo "Build setup successful, type \"configure\" to configure lmi now." && \
 exit 0
 
 echo "Automatic build files setup failed!"
