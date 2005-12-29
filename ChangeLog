@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.288 2005-12-29 00:23:45 chicares Exp $
+// $Id: ChangeLog,v 1.289 2005-12-29 19:48:55 chicares Exp $
 
 MAINTENANCE
 
@@ -5344,5 +5344,10 @@ Refine 'release_candidate' target.
   ihs_server7702.cpp
   objects.make
   workhorse.make
+Begin to resurrect the GPT server.
+
+20051229T1948Z <chicares@cox.net> [1204]
+
+  ihs_server7702test.c
 Begin to resurrect the GPT server.
 
