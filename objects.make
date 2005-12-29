@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: objects.make,v 1.60 2005-12-27 15:36:50 chicares Exp $
+# $Id: objects.make,v 1.61 2005-12-29 00:23:45 chicares Exp $
 
 ################################################################################
 
@@ -304,31 +304,35 @@ endif
 
 # Only these files are unique to the server application:
 
-gps_objects_unique_to_server := \
+gpt_objects_unique_to_server := \
   ihs_server7702.o \
   ihs_server7702io.o \
 
 # Only these files are directly concerned with the GPT:
 
-gps_objects_directly_concerned_with_gpt := \
+gpt_objects_directly_concerned_with_gpt := \
   ihs_irc7702a.o \
   ihs_irc7702.o \
 
 # These files provide general product support:
 
-gps_objects := \
-  $(gps_objects_unique_to_server) \
-  $(gps_objects_directly_concerned_with_gpt) \
+gpt_objects := \
+  $(boost_filesystem_objects) \
+  $(gpt_objects_unique_to_server) \
+  $(gpt_objects_directly_concerned_with_gpt) \
+  $(xmlwrapp_objects) \
   actuarial_table.o \
   alert.o \
   alert_cli.o \
   calendar_date.o \
+  configurable_settings.o \
   crc32.o \
   data_directory.o \
   dbnames.o \
   death_benefits.o \
   expm1.o \
   fenv_lmi.o \
+  global_settings.o \
   ihs_basicval.o \
   ihs_commfns.o \
   ihs_database.o \
@@ -353,6 +357,12 @@ gps_objects := \
   timer.o \
   xenumtypes.o \
   xrange.o \
+
+libgpt.a libgpt$(SHREXT): EXTRA_LDFLAGS =
+libgpt.a libgpt$(SHREXT): $(gpt_objects)
+gpt_server$(EXEEXT)     : $(gpt_objects)
+
+libgpt_so_test$(EXEEXT): server7702dlltest.c libgpt$(SHREXT)
 
 ################################################################################
 

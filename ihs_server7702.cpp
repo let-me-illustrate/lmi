@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_server7702.cpp,v 1.6 2005-12-22 13:59:49 chicares Exp $
+// $Id: ihs_server7702.cpp,v 1.7 2005-12-29 00:23:45 chicares Exp $
 
 // Known defects:
 // grep for "NEED DECISION"
@@ -36,13 +36,16 @@
 #include "calendar_date.hpp"
 #include "data_directory.hpp"
 #include "database.hpp"
+#include "fenv_lmi.hpp"
 #include "ihs_irc7702.hpp"
-#include "ihs_resetfpu.hpp"
 #include "ihs_rnddata.hpp"
 #include "ihs_server7702io.hpp"
 #include "ihs_x_type.hpp"
 
-#include <cfloat>       // DBL_EPSILON
+#ifdef LMI_MSW
+#   include <windows.h> // HINSTANCE etc.
+#endif // LMI_MSW
+
 #include <cstdlib>
 #include <exception>
 #include <iostream>
@@ -52,20 +55,6 @@
 //============================================================================
 int main()
 {
-    if(2.2204460492503131e-16 != DBL_EPSILON)
-    {
-    fatal_error()
-        << "Internal validity test failed.\n Please tell the"
-        << " developers to patch the compiler as described here:\n"
-        << "http://www.geocrawler.com/archives/3/6013/2001/4/100/5548198/"
-        << LMI_FLUSH
-        ;
-    throw std::logic_error();
-// TODO ?? We'd like to skip the explicit message and just throw something,
-// but we don't know where it would be caught for a shared library versus
-// an application binary.
-    }
-
     InitializeServer7702();
     // Read from std input, process, and write to std output
     return RunServer7702();
@@ -73,18 +62,18 @@ int main()
 }
 
 //============================================================================
-// TODO ?? It seems this never gets called.
+// TODO ?? It seems this never gets called. Would DllMain() work?
 #ifndef LMI_MSW
 int main()
 #else // LMI_MSW
-extern "C" int LMI_SO __stdcall DllEntryPoint(HINSTANCE, uint32 a_Reason, void*)
+extern "C" int LMI_SO __stdcall DllEntryPoint(HINSTANCE, DWORD reason, LPVOID)
 #endif // LMI_MSW
 {
 #ifndef LMI_MSW
     std::cout << "main() called\n";
 #else // LMI_MSW
     std::cout << "DllEntryPoint() called\n";
-    switch(a_Reason)
+    switch(reason)
         {
         case DLL_PROCESS_ATTACH:
             {
@@ -102,7 +91,7 @@ extern "C" int LMI_SO __stdcall DllEntryPoint(HINSTANCE, uint32 a_Reason, void*)
 //============================================================================
 void EnterServer()
 {
-    SetIntelDefaultNdpControlWord();
+    initialize_fpu();
 }
 
 /* erase
@@ -127,7 +116,7 @@ bool LeaveServer()
 
 //============================================================================
 // TODO ?? Should we make the directory an optional argument?
-extern "C" void InitializeServer7702()
+void InitializeServer7702()
 {
     // Data directory where tables etc. are stored
 // TODO ?? This is obsolete; need a replacement. Either let main()
@@ -174,7 +163,7 @@ int RunServer7702()
 
 //============================================================================
 // Read from C struct, and return a different C struct
-extern "C" Server7702Output RunServer7702FromStruct(Server7702Input a_Input)
+Server7702Output RunServer7702FromStruct(Server7702Input a_Input)
 {
     EnterServer();
     Server7702 contract(a_Input);
@@ -186,7 +175,7 @@ extern "C" Server7702Output RunServer7702FromStruct(Server7702Input a_Input)
 // Read from C string, and put result in a C string.
 // The caller must allocate sufficient space for the result; at present,
 // that means 444 bytes.
-extern "C" void RunServer7702FromString(char* i, char* o)
+void RunServer7702FromString(char* i, char* o)
 {
     EnterServer();
     Server7702Input input;
@@ -222,24 +211,12 @@ Server7702::Server7702(Server7702Input& a_Input)
 //============================================================================
 void Server7702::VerifyPrecision() const
 {
-    if(IntelDefaultNdpControlWord() != NdpControlWord())
+    if(!validate_fenv())
         {
-        std::ostringstream error;
-        error
-            << "Floating point control word was initially "
-            << std::hex << IntelDefaultNdpControlWord()
-            << ", but has been changed to "
-            << std::hex << NdpControlWord()
-            << " while this program was running, presumably "
-            << "due to another process. Shut down the rogue process, "
-            << "discard output, and rerun. Consider migrating to an "
-            << "operating system like GNU/Linux that virtualizes the
-            << "floating-point processor."
-            ;
-        throw server7702_precision_changed(error.str());
+        throw server7702_precision_changed
+            ("Floating-point precision changed: results are invalid."
+            );
         }
-    // Reset precision so that we can continue
-    EnterServer();
 }
 
 //============================================================================
@@ -262,6 +239,8 @@ void Server7702::Process()
         }
     catch(server7702_precision_changed& x)
         {
+        // TODO ?? Perhaps the control word should be changed and
+        // processing restarted.
         Output.Status |= precision_changed;
         std::cerr << Output.UniqueIdentifier << " error: " << x.what() << '\n';
         }
