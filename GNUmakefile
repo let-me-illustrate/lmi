@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: GNUmakefile,v 1.47 2005-12-21 01:23:17 chicares Exp $
+# $Id: GNUmakefile,v 1.48 2005-12-29 00:23:42 chicares Exp $
 
 ###############################################################################
 
@@ -547,7 +547,7 @@ check_conformity: source_clean
 	@$(GREP) \?\? $(licensed_files) | $(WC) -l
 	@$(TOUCH) --date=$(yyyymmdd) TODAY
 	@$(TOUCH) --date=$(yyyymm)00 BOM
-	@$(TOUCH) --date=$(yyyymm)23 CANDIDATE
+	@$(TOUCH) --date=$(yyyymm)22 CANDIDATE
 	@if [[ TODAY -nt CANDIDATE ]] && [[ version.hpp -ot BOM ]] \
 	  $(ECHO) "Is it time to 'make release_candidate'?"
 	@$(RM) --force CANDIDATE
