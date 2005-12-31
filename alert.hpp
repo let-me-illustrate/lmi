@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: alert.hpp,v 1.13 2005-12-22 13:59:49 chicares Exp $
+// $Id: alert.hpp,v 1.14 2005-12-31 16:59:39 chicares Exp $
 
 #ifndef alert_hpp
 #define alert_hpp
@@ -195,12 +195,12 @@ std::string const& LMI_SO hobsons_prompt();
 /// exception can be thrown--and caught in a special handler that
 /// doesn't pop up the catch-all messagebox, which would seem
 /// redundant.
+///
+/// Implicitly-declared special member functions do the right thing.
 
-class LMI_SO hobsons_choice_exception
+class hobsons_choice_exception
     :public std::exception
 {
-  public:
-    hobsons_choice_exception();
 };
 
 /// Functions for testing, intended to be implemented in a shared
