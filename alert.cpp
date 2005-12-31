@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: alert.cpp,v 1.13 2005-12-22 13:59:49 chicares Exp $
+// $Id: alert.cpp,v 1.14 2005-12-31 16:59:39 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -228,10 +228,6 @@ std::string const& hobsons_prompt()
         ("Stop the current operation and attempt to resume safely?"
         );
     return s;
-}
-
-hobsons_choice_exception::hobsons_choice_exception()
-{
 }
 
 void test_status()
