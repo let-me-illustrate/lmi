@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: workhorse.make,v 1.59 2005-12-29 00:23:45 chicares Exp $
+# $Id: workhorse.make,v 1.60 2005-12-31 16:59:42 chicares Exp $
 
 ###############################################################################
 
@@ -84,10 +84,6 @@ $(src_dir)/objects.make:: ;
 default_targets := \
   antediluvian_cgi$(EXEEXT) \
   antediluvian_cli$(EXEEXT) \
-  elapsed_time$(EXEEXT) \
-  generate_passkey$(EXEEXT) \
-  gpt_server$(EXEEXT) \
-  ihs_crc_comp$(EXEEXT) \
   libantediluvian$(SHREXT) \
   liblmi$(SHREXT) \
   lmi_cli_shared$(EXEEXT) \
@@ -96,9 +92,20 @@ default_targets := \
 
 # The product_files target doesn't build with shared-library
 # 'attributes'. That matters little because that target is deprecated.
+#
+# TODO ?? The gpt server, however, is important; it needs work anyway.
+# The other binaries should be reconsidered. The antediluvian $(EXEEXT)
+# targets won't build with $(USE_SO_ATTRIBUTES) because of known
+# problems with 'calculate.hpp', which is slated for replacement.
 
 ifeq (,$(USE_SO_ATTRIBUTES))
-  default_targets += product_files$(EXEEXT)
+  default_targets += \
+    elapsed_time$(EXEEXT) \
+    generate_passkey$(EXEEXT) \
+    gpt_server$(EXEEXT) \
+    ihs_crc_comp$(EXEEXT) \
+    product_files$(EXEEXT) \
+
 endif
 
 .PHONY: effective_default_target
@@ -419,10 +426,14 @@ LDFLAGS = \
 
 # '-DNO_GCC_PRAGMA' is required for wx-2.5.1, but not for 2.5.4 or later.
 
+ifneq (,$(USE_SO_ATTRIBUTES))
+  actually_used_lmi_so_attributes = -DLMI_USE_SO_ATTRIBUTES $(lmi_so_attributes)
+endif
+
 REQUIRED_CPPFLAGS = \
   $(addprefix -I , $(all_include_directories)) \
-  $(lmi_wx_new_dllflag) \
-  $(so_attributes) \
+  $(lmi_wx_new_so_attributes) \
+  $(actually_used_lmi_so_attributes) \
   $(platform_defines) \
   -D__WXDEBUG__ \
   -DBOOST_STRICT_CONFIG \
@@ -541,12 +552,8 @@ ALL_RCFLAGS  = $(REQUIRED_RCFLAGS)  $(RCFLAGS)
 # However, 'libwx_new.a' continues to use classic dll attributes,
 # because there's never a reason to build it as a static library.
 
-ifneq (,$(USE_SO_ATTRIBUTES))
-  so_attributes = $(lmi_dllflag)
-endif
-
-lib%.a              : lmi_dllflag :=
-lib%$(SHREXT)       : lmi_dllflag := -DLMI_BUILD_DLL
+lib%.a              : lmi_so_attributes :=
+lib%$(SHREXT)       : lmi_so_attributes := -DLMI_BUILD_SO
 
 # Don't use mpatrol when building a shared library to be used by an
 # application that uses mpatrol. See my postings to the mpatrol
@@ -557,8 +564,8 @@ wx_new$(SHREXT)     : MPATROL_LIBS :=
 
 wx_new$(SHREXT)     : EXTRA_LDFLAGS =
 
-                      lmi_wx_new_dllflag := -DLMI_WX_NEW_USING_DLL
-wx_new$(SHREXT)     : lmi_wx_new_dllflag := -DLMI_WX_NEW_BUILDING_DLL
+                      lmi_wx_new_so_attributes := -DLMI_WX_NEW_USE_SO
+wx_new$(SHREXT)     : lmi_wx_new_so_attributes := -DLMI_WX_NEW_BUILD_SO
 
 liblmi.a liblmi$(SHREXT): EXTRA_LDFLAGS =
 liblmi.a liblmi$(SHREXT): $(lmi_common_objects)
@@ -570,7 +577,7 @@ libantediluvian.a libantediluvian$(SHREXT): $(antediluvian_common_objects)
 lmi_wx_monolithic$(EXEEXT): EXTRA_LDFLAGS = $(wx_ldflags)
 lmi_wx_monolithic$(EXEEXT): $(lmi_wx_objects) $(lmi_common_objects) wx_new$(SHREXT)
 
-lmi_wx_shared$(EXEEXT): lmi_dllflag := -DLMI_USE_DLL
+lmi_wx_shared$(EXEEXT): lmi_so_attributes := -DLMI_USE_SO
 lmi_wx_shared$(EXEEXT): EXTRA_LDFLAGS = $(wx_ldflags)
 lmi_wx_shared$(EXEEXT): $(lmi_wx_objects) liblmi$(SHREXT) wx_new$(SHREXT)
 
@@ -579,13 +586,15 @@ lmi_wx_static$(EXEEXT): $(lmi_wx_objects) liblmi.a wx_new$(SHREXT)
 
 lmi_cli_monolithic$(EXEEXT): $(cli_objects) $(lmi_common_objects)
 
-lmi_cli_shared$(EXEEXT): lmi_dllflag := -DLMI_USE_DLL
+lmi_cli_shared$(EXEEXT): lmi_so_attributes := -DLMI_USE_SO
 lmi_cli_shared$(EXEEXT): $(cli_objects) liblmi$(SHREXT)
 
 lmi_cli_static$(EXEEXT): $(cli_objects) liblmi.a
 
+antediluvian_cgi$(EXEEXT): lmi_so_attributes := -DLMI_USE_SO
 antediluvian_cgi$(EXEEXT): $(cgi_objects) libantediluvian$(SHREXT)
 
+antediluvian_cli$(EXEEXT): lmi_so_attributes := -DLMI_USE_SO
 antediluvian_cli$(EXEEXT): $(cli_objects) libantediluvian$(SHREXT)
 
 wx_new$(SHREXT): wx_new.o
