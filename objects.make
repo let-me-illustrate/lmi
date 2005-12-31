@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: objects.make,v 1.61 2005-12-29 00:23:45 chicares Exp $
+# $Id: objects.make,v 1.62 2005-12-31 16:59:42 chicares Exp $
 
 ################################################################################
 
@@ -710,8 +710,6 @@ ihs_crc_comp$(EXEEXT): \
 # TODO ?? Experiment with writing all dependencies and target-specific
 # variable definitions here. If that works well, use the technique
 # elsewhere.
-
-product_files$(EXEEXT): lmi_dllflag := -DLMI_USE_DLL
 
 product_files$(EXEEXT): \
   $(main_auxiliary_common_objects) \
