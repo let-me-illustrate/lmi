@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: como_4_3_3.make,v 1.8 2005-11-12 19:05:22 chicares Exp $
+# $Id: como_4_3_3.make,v 1.9 2005-12-31 16:59:42 chicares Exp $
 
 toolset := como
 
@@ -65,8 +65,8 @@ CXX := como
 # Diagnostic 161: unrecognized pragma: frequent in wx.
 #
 # Diagnostic 654: supposed 'declspec' incompatibility: there seems to
-# be no way to avoid this warning here:
-#   LMI_WX_NEW_EXPIMP void* operator new  (std::size_t, wx_allocator);
+# be no way to avoid such a warning here:
+#   [declspec] void* operator new  (std::size_t, wx_allocator);
 #   void* operator new(std::size_t bytes, wx_allocator) {...}
 # Como requires that the decoration precede the return type in the
 # declaration, but doesn't allow it anywhere in the definition. With

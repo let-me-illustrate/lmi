@@ -1,4 +1,4 @@
-// Overloaded operator new to work around a wx and mpatrol problem.
+// Allocation functions to work around a wx, mpatrol, and msw problem.
 //
 // Copyright (C) 2004, 2005 Gregory W. Chicares.
 //
@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: wx_new.cpp,v 1.2 2005-03-07 11:47:27 chicares Exp $
+// $Id: wx_new.cpp,v 1.3 2005-12-31 16:59:42 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"

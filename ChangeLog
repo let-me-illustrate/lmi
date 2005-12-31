@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.289 2005-12-29 19:48:55 chicares Exp $
+// $Id: ChangeLog,v 1.290 2005-12-31 16:59:42 chicares Exp $
 
 MAINTENANCE
 
@@ -5350,4 +5350,21 @@ Begin to resurrect the GPT server.
 
   ihs_server7702test.c
 Begin to resurrect the GPT server.
+
+20051231T1659Z <chicares@cox.net> [1205]
+
+  GNUmakefile
+  como_4_3_3.make
+  objects.make
+  workhorse.make
+  wx_new.cpp
+  wx_new.hpp
+Refine work in progress on shared-library attributes. This command:
+  make lmi_wx_shared.exe USE_SO_ATTRIBUTES=1
+succeeds with MinGW gcc-3.4.2, but other targets need work, as noted
+in 'workhorse.make'.
+
+  alert.cpp
+  alert.hpp
+Implicitly define all members of class hobsons_choice_exception.
 

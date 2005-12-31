@@ -1,4 +1,4 @@
-// Overloaded operator new to work around a wx and mpatrol problem.
+// Allocation functions to work around a wx, mpatrol, and msw problem.
 //
 // Copyright (C) 2004, 2005 Gregory W. Chicares.
 //
@@ -19,39 +19,47 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: wx_new.hpp,v 1.3 2005-11-12 19:05:16 chicares Exp $
-
-// When wx is used as a dll, memory is allocated and freed across dll
-// boundaries, and that causes mpatrol to emit spurious diagnostics.
-// To work around that problem, use 'new(wx)' (implemented in another
-// dll) to allocate memory that will be freed by wx--for instance, a
-// frame window that's created in an application but (unavoidably)
-// freed by a wx dll. The purpose of this workaround is solely to
-// avoid spurious diagnostics; it is not suggested that this is a good
-// way to manage memory.
+// $Id: wx_new.hpp,v 1.4 2005-12-31 16:59:42 chicares Exp $
 
 #ifndef wx_new_hpp
 #define wx_new_hpp
 
 #include "config.hpp"
 
-#if defined LMI_MSW && defined LMI_WX_NEW_BUILDING_DLL
-#   define LMI_WX_NEW_EXPIMP __declspec(dllexport)
-#elif defined LMI_MSW && defined LMI_WX_NEW_USING_DLL
-#   define LMI_WX_NEW_EXPIMP __declspec(dllimport)
-#else // Neither building nor using as dll.
-#   define LMI_WX_NEW_EXPIMP
-#endif // Neither building nor using as dll.
-
 #include <cstddef> // std::size_t
+
+#if defined LMI_MSW
+#   if defined LMI_WX_NEW_BUILD_SO
+#       define LMI_WX_NEW_SO __declspec(dllexport)
+#   elif defined LMI_WX_NEW_USE_SO
+#       define LMI_WX_NEW_SO __declspec(dllimport)
+#   else  // !defined LMI_WX_NEW_BUILD_SO && !defined LMI_WX_NEW_USE_SO
+#       error Either LMI_WX_NEW_BUILD_SO or LMI_WX_NEW_USE_SO must be defined.
+#   endif // !defined LMI_WX_NEW_BUILD_SO && !defined LMI_WX_NEW_USE_SO
+#endif // defined LMI_MSW
+
+/// When wx is used as an msw dll, memory is allocated and freed
+/// across dll boundaries, and that causes mpatrol to emit spurious
+/// diagnostics.
+///
+/// To work around this problem, build these functions as a separate
+/// dll, and use 'new(wx)' to allocate memory that will be freed by
+/// wx--for instance, a frame window that's created in an application
+/// but (unavoidably) freed by a wx dll. The sole purpose of this
+/// workaround is to avoid spurious diagnostics; it is not suggested
+/// that this is a good way to manage memory.
+///
+/// It is assumed (but not known) that no such problem occurs on other
+/// platforms. Therefore, the macros above never use ELF visibility
+/// attributes.
 
 enum wx_allocator{wx};
 
-LMI_WX_NEW_EXPIMP void* operator new  (std::size_t, wx_allocator);
-LMI_WX_NEW_EXPIMP void* operator new[](std::size_t, wx_allocator);
+LMI_WX_NEW_SO void* operator new  (std::size_t, wx_allocator);
+LMI_WX_NEW_SO void* operator new[](std::size_t, wx_allocator);
 
-LMI_WX_NEW_EXPIMP void  operator delete  (void*, wx_allocator);
-LMI_WX_NEW_EXPIMP void  operator delete[](void*, wx_allocator);
+LMI_WX_NEW_SO void  operator delete  (void*, wx_allocator);
+LMI_WX_NEW_SO void  operator delete[](void*, wx_allocator);
 
 #endif // wx_new_hpp
 

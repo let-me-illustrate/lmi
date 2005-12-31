@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: GNUmakefile,v 1.48 2005-12-29 00:23:42 chicares Exp $
+# $Id: GNUmakefile,v 1.49 2005-12-31 16:59:42 chicares Exp $
 
 ###############################################################################
 
@@ -563,7 +563,8 @@ cvs_ready: source_clean
 	-$(MAKE) check_conformity
 	-$(MAKE) check_idempotence
 	-$(MAKE) all test
-	-$(MAKE) all test build_type=mpatrol USE_SO_ATTRIBUTES=1
+	-$(MAKE) all test build_type=mpatrol
+	-$(MAKE) lmi_wx_shared$(EXEEXT) build_type=so_test USE_SO_ATTRIBUTES=1
 
 ################################################################################
 
