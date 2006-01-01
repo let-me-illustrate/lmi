@@ -1,6 +1,6 @@
 dnl configure.ac script for lmi, process with autoconf to create configure
 dnl
-dnl Copyright (C) 2005 Vadim Zeitlin.
+dnl Copyright (C) 2005, 2006 Vadim Zeitlin.
 dnl
 dnl This program is free software; you can redistribute it and/or modify
 dnl it under the terms of the GNU General Public License version 2 as
@@ -21,7 +21,7 @@ dnl snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
 dnl === Prologue ===
 
-AC_REVISION($Id: configure.ac,v 1.14 2005-12-29 20:17:49 zeitlin Exp $)dnl
+AC_REVISION($Id: configure.ac,v 1.15 2006-01-01 18:20:08 chicares Exp $)dnl
 
 AC_PREREQ(2.56)
 AC_INIT(LMI, 1.0.0, [chicares@cox.net])
@@ -268,9 +268,9 @@ else
                 )],
                 lmi_cv_func__snprintf=yes,
                 lmi_cv_func__snprintf=no
-            )                                                                                                                       
-        ]                                                                                                                           
-    )                                                                                                                               
+            )
+        ]
+    )
     if test "x$lmi_cv_func__snprintf" = "xyes"; then
         AC_DEFINE([HAVE__SNPRINTF], [1], [Define this if you have _snprintf function])
     else
