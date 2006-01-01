@@ -1,6 +1,6 @@
 // Traits for conversion between arithmetic types and strings.
 //
-// Copyright (C) 2004, 2005 Gregory W. Chicares.
+// Copyright (C) 2004, 2005, 2006 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: numeric_io_traits.hpp,v 1.14 2005-12-15 15:13:47 chicares Exp $
+// $Id: numeric_io_traits.hpp,v 1.15 2006-01-01 18:15:42 chicares Exp $
 
 #ifndef numeric_io_traits_hpp
 #define numeric_io_traits_hpp
@@ -81,14 +81,15 @@ inline int floating_point_decimals(T t)
 // well as in 'round_to.hpp'.
 #if !defined __CYGWIN__
     long double z = std::numeric_limits<T>::epsilon() * fabsl(t);
+    return std::max(0, static_cast<int>(-log10l(z)));
 #else  // defined __CYGWIN__
-    long double z = std::numeric_limits<T>::epsilon();
+    long double z = std::numeric_limits<T>::epsilon() * t;
     if(t < 0.0)
         {
         z = -z;
         }
+    return std::max(0, static_cast<int>(-log10(z)));
 #endif // defined __CYGWIN__
-    return std::max(0, static_cast<int>(-log10l(z)));
 }
 
 // Simplify a formatted floating-point number.
