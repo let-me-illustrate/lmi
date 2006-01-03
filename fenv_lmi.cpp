@@ -1,6 +1,6 @@
 // Manage floating-point environment.
 //
-// Copyright (C) 2004, 2005 Gregory W. Chicares.
+// Copyright (C) 2004, 2005, 2006 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: fenv_lmi.cpp,v 1.9 2005-12-27 16:52:44 chicares Exp $
+// $Id: fenv_lmi.cpp,v 1.10 2006-01-03 21:21:04 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -33,24 +33,12 @@
 #include <iomanip>
 #include <sstream>
 
-#if defined __BORLANDC__ || defined _MSC_VER
-#   include <float.h> // Nonstandard floating-point hardware control.
-#endif // defined __BORLANDC__ || defined _MSC_VER
-
-void initialize_fpu()
+void fenv_initialize()
 {
-#ifdef __MINGW32__
-    fesetenv(FE_PC64_ENV);
-#elif defined __GNUC__ && defined LMI_X86
-    volatile unsigned short int control_word = 0x037f;
-    asm volatile("fldcw %0" : : "m" (control_word));
-#elif defined __BORLANDC__
-    _control87(0x037f, 0xffff);
-#elif defined _MSC_VER
-    // Test _MSC_VER last: some non-ms compilers or libraries define it.
-    _control87(intel_to_msw(0x037f),  0x0ffffffff);
+#ifdef LMI_X86
+    x87_control_word(default_x87_control_word());
 #else  // Unknown compiler or platform.
-#   error Unknown compiler or platform. Please contribute an implementation.
+#   error Unknown compiler or platform.
 #endif // Unknown compiler or platform.
 
 #if 0
@@ -68,20 +56,63 @@ void initialize_fpu()
 #endif // 0
 }
 
-bool validate_fenv()
+e_ieee754_precision fenv_precision()
 {
-    volatile unsigned short int control_word = 0x0;
-#if defined __GNUC__ && defined LMI_X86
-    asm volatile("fstcw %0" : : "m" (control_word));
-#elif defined __BORLANDC__
-    control_word = static_cast<unsigned short int>(_control87(0, 0));
-#elif defined _MSC_VER
-    // Test _MSC_VER last: some non-ms compilers or libraries define it.
-    control_word = msw_to_intel(_control87(0, 0));
-#else // Unknown compiler or platform.
-#   error Unknown compiler or platform. Please contribute an implementation.
+#if defined LMI_X86
+    return intel_control_word(x87_control_word()).pc();;
+#else  // Unknown compiler or platform.
+#   error Unknown compiler or platform.
 #endif // Unknown compiler or platform.
-    bool okay = 0x037f == control_word;
+}
+
+void fenv_precision(e_ieee754_precision precision_mode)
+{
+#if defined LMI_X86
+    intel_control_word control_word(x87_control_word());
+    control_word.pc(precision_mode);
+    x87_control_word(control_word.cw());
+#else  // Unknown compiler or platform.
+#   error Unknown compiler or platform.
+#endif // Unknown compiler or platform.
+}
+
+e_ieee754_rounding fenv_rounding()
+{
+#ifdef __STDC_IEC_559__
+    return fegetround(rounding_mode);
+#elif defined LMI_X86
+    return intel_control_word(x87_control_word()).rc();;
+#else  // Unknown compiler or platform.
+#   error Unknown compiler or platform.
+#endif // Unknown compiler or platform.
+}
+
+// This C99 function call
+//   fesetround(precision_mode);
+// is nearly equivalent, except that it takes an int argument.
+// It is not conditionally used here, because it seems unwise to
+// weaken the type safety C++ affords merely to implement this
+// one function when its kindred can't be implemented in C99.
+//
+void fenv_rounding(e_ieee754_rounding rounding_mode)
+{
+#if defined LMI_X86
+    intel_control_word control_word(x87_control_word());
+    control_word.rc(rounding_mode);
+    x87_control_word(control_word.cw());
+#else  // Unknown compiler or platform.
+#   error Unknown compiler or platform.
+#endif // Unknown compiler or platform.
+}
+
+bool fenv_validate()
+{
+#ifdef LMI_X86
+    bool okay = default_x87_control_word() == x87_control_word();
+#else  // Unknown compiler or platform.
+#   error Unknown compiler or platform.
+#endif // Unknown compiler or platform.
+
     if(!okay)
         {
         // Prefer this approach to fatal_error() because this function
@@ -91,7 +122,11 @@ bool validate_fenv()
         std::ostringstream oss;
         oss
             << "The floating-point control word is unexpectedly '"
-            << std::hex << control_word << "'.\n"
+#ifdef LMI_X86
+            << std::hex << x87_control_word() << "'.\n"
+#else  // Unknown compiler or platform.
+#   error Unknown compiler or platform.
+#endif // Unknown compiler or platform.
             << "Probably some other program changed this crucial setting.\n"
             << "This is a real problem: results may be invalid.\n"
             ;
