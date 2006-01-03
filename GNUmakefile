@@ -1,6 +1,6 @@
 # Top-level lmi makefile.
 #
-# Copyright (C) 2005 Gregory W. Chicares.
+# Copyright (C) 2005, 2006 Gregory W. Chicares.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: GNUmakefile,v 1.49 2005-12-31 16:59:42 chicares Exp $
+# $Id: GNUmakefile,v 1.50 2006-01-03 21:20:50 chicares Exp $
 
 ###############################################################################
 
@@ -487,7 +487,7 @@ check_conformity: source_clean
 	@# The sed commands are sorted alphabetically by group:
 	@#   {standard, platform-specific, compiler-specific, regrettable}
 	@# TODO ?? Use '[^_A-Za-z0-9]_\|__' to find more reserved
-	@# identifiers--then filter then with care.
+	@# identifiers--then filter them with care.
 	@$(GREP) \
 	    '__' \
 	    $(filter-out GNUmakefile,$(expected_source_files)) \
