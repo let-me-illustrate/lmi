@@ -1,6 +1,6 @@
 // Manage floating-point environment.
 //
-// Copyright (C) 2004, 2005 Gregory W. Chicares.
+// Copyright (C) 2004, 2005, 2006 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,12 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: fenv_lmi.hpp,v 1.6 2005-12-27 15:36:50 chicares Exp $
-
-// Manage the floating-point environment, using C99 7.6 facilities
-// where available. Otherwise, use compiler- and platform-specific
-// techniques where they are known: only intel hardware is fully
-// supported for now.
+// $Id: fenv_lmi.hpp,v 1.7 2006-01-03 21:21:04 chicares Exp $
 
 #ifndef fenv_lmi_hpp
 #define fenv_lmi_hpp
@@ -36,7 +31,7 @@
 #ifdef LMI_X86
 #   include "fenv_lmi_x86.hpp"
 #else  // Unknown compiler or platform.
-#   error Unknown compiler or platform. Please contribute an implementation.
+#   error Unknown compiler or platform.
 #endif // Unknown compiler or platform.
 
 #if defined __STDC_IEC_559__ || defined __MINGW32__
@@ -55,12 +50,46 @@
 #   endif // Pragma STDC FENV_ACCESS implemented.
 #endif // defined __STDC_IEC_559__ || defined __MINGW32__
 
-// Initialize floating-point environment to lmi default settings.
-void LMI_SO initialize_fpu();
+/// Manage the floating-point environment, using C99 7.6 facilities,
+/// where available, in the implementation. Otherwise, use compiler-
+/// and platform-specific techniques where they are known.
+///
+///   void fenv_initialize();
+/// Initialize floating-point environment to lmi default settings.
+///
+///   e_ieee754_rounding fenv_rounding();
+///   void fenv_rounding(e_ieee754_rounding);
+/// The rounding-mode functions are similar to C99 fe[gs]etround().
+/// Because this is C++, not C, no 'get-' and 'set-' lexemes are
+/// needed to simulate overloading, and exceptions obviate return
+/// codes (although it's not clear how such a function could ever fail
+/// with a valid argument, and invalid arguments can be disallowed by
+/// C++'s type system).
+///
+///   e_ieee754_precision fenv_precision();
+///   void fenv_precision(e_ieee754_precision);
+/// The precision functions similarly resemble GNU/Linux functions
+/// fe[gs]etprecision().
+///
+///   bool LMI_SO fenv_validate();
+/// Make sure current floating-point environment matches initial
+/// settings; display a message and return 'false' if it doesn't.
+/// No exception is thrown, so that this function can be called at
+/// program exit, outside any try block, without abending, which is
+/// crucial for GUI frameworks that don't handle exceptions
+/// gracefully during normal termination.
 
-// Make sure current floating-point environment matches initial
-// settings; display a message and return 'false' if it doesn't.
-bool LMI_SO validate_fenv();
+namespace floating_point_environment {} // doxygen workaround.
+
+void LMI_SO fenv_initialize();
+
+e_ieee754_precision LMI_SO fenv_precision();
+void                LMI_SO fenv_precision(e_ieee754_precision);
+
+e_ieee754_rounding LMI_SO fenv_rounding();
+void               LMI_SO fenv_rounding(e_ieee754_rounding);
+
+bool LMI_SO fenv_validate();
 
 #endif // fenv_lmi_hpp
 

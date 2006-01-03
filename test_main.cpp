@@ -1,6 +1,6 @@
 // Unit-test framework based on Beman Dawes's boost library.
 //
-// Copyright (C) 2004, 2005 Gregory W. Chicares.
+// Copyright (C) 2004, 2005, 2006 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: test_main.cpp,v 1.1 2005-01-14 19:47:45 chicares Exp $
+// $Id: test_main.cpp,v 1.2 2006-01-03 21:21:04 chicares Exp $
 
 // This is a derived work based on Beman Dawes's boost test library
 // that bears the following copyright and license statement:
@@ -110,7 +110,7 @@ int test_main(int argc, char* argv[]);  // Prototype for user's test_main().
 
 int cpp_main(int argc, char* argv[])
 {
-    initialize_fpu();
+    fenv_initialize();
 
     int result;
 // GWC suppressed this because the borland compiler correcly warns
@@ -158,23 +158,4 @@ int cpp_main(int argc, char* argv[])
 
     return result;
 }
-
-// Revision History
-//  2005-01-09 GWC Update email address
-//  2004-11-15 GWC Call initialize_fpu() at startup, in order to get a
-//    consistent floating-point configuration.
-//  2004-10-20 GWC Add error_stream() to improve versatility; remove
-//    former error-reporting functions. Include the header that gives
-//    prototypes for functions implemented here. Revise documentation.
-//    Rename namespace.
-//  2004-10-05 GWC Report number of successful tests.
-//  2004-10-04 GWC Add record_error().
-//  2004-08-03 GWC Prevent a warning that had been engendered by an
-//    attempt to prevent a warning.
-//  2004-05-05 GWC Remove carriage returns.
-//  2004-05-05 GWC Extract original library from boost-1.23.0, remove
-//    dependencies on other parts of boost, and adapt to lmi conventions.
-//  26 Feb 01  Numerous changes suggested during formal review. (Beman)
-//  22 Jan 01 Use boost/cpp_main.hpp as framework. (Beman)
-//   5 Nov 00 Initial boost version (Beman Dawes)
 
