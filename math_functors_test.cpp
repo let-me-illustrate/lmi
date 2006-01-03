@@ -1,6 +1,6 @@
 // Miscellaneous mathematical operations as function objects--unit test.
 //
-// Copyright (C) 2005 Gregory W. Chicares.
+// Copyright (C) 2005, 2006 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: math_functors_test.cpp,v 1.5 2005-11-01 04:59:40 chicares Exp $
+// $Id: math_functors_test.cpp,v 1.6 2006-01-03 21:21:04 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -28,6 +28,7 @@
 
 #include "math_functors.hpp"
 
+#include "fenv_lmi.hpp"
 #include "materially_equal.hpp"
 
 #define BOOST_INCLUDE_MAIN
@@ -140,27 +141,28 @@ struct coi_rate_from_q_naive
 //
 void sample_results()
 {
+    fenv_initialize();
+    fenv_precision(fe_ldblprec);
     std::cout
         << "\n  -0.004 upper 365 by various methods\n"
         << std::setprecision(20)
-        << "    64-bit mantissa, expm1 and log1p\n      "
+        << "    long double precision, expm1 and log1p\n      "
         << net_i_from_gross<double,365>()(0.0, 0.004, 0.0) << '\n'
-        << "    64-bit mantissa, pow\n      "
+        << "    long double precision, pow\n      "
         << net_i_from_gross_naive<double,365>()(0.0, 0.004, 0.0) << '\n'
         ;
-#if defined __GNUC__ && defined LMI_X86
-    volatile unsigned short int control_word = 0x027f;
-    asm volatile("fldcw %0" : : "m" (control_word));
+
+    fenv_initialize();
+    fenv_precision(fe_dblprec);
     std::cout
         << std::setprecision(20)
-        << "    53-bit mantissa, expm1 and log1p\n      "
+        << "    double precision, expm1 and log1p\n      "
         << net_i_from_gross<double,365>      ()(0.0, 0.004, 0.0) << '\n'
-        << "    53-bit mantissa, pow\n      "
+        << "    double precision, pow\n      "
         << net_i_from_gross_naive<double,365>()(0.0, 0.004, 0.0) << '\n'
         ;
-    control_word = 0x037f;
-    asm volatile("fldcw %0" : : "m" (control_word));
-#endif // defined __GNUC__ && defined LMI_X86
+
+    fenv_initialize();
 }
 
 // These 'meteN' functions perform the same set of operations using

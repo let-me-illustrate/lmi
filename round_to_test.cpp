@@ -1,6 +1,6 @@
 // Rounding--unit test.
 //
-// Copyright (C) 2001, 2004, 2005 Gregory W. Chicares.
+// Copyright (C) 2001, 2004, 2005, 2006 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: round_to_test.cpp,v 1.9 2005-06-07 14:21:16 chicares Exp $
+// $Id: round_to_test.cpp,v 1.10 2006-01-03 21:21:04 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -39,40 +39,22 @@
 #include <iostream>
 #include <ostream>
 
-#if defined BOOST_MSVC || defined __BORLANDC__ || defined LMI_COMO_WITH_MINGW
-#   include <cfloat> // Nonstandard floating-point hardware control.
-#endif // defined BOOST_MSVC || defined __BORLANDC__
-
 #ifdef __STDC_IEC_559__
     // In case the C++ compiler offers C99 fesetround(), assume that
-    // it sets __STDC_IEC_559__ and puts prototypes in <fenv.h> but
-    // not in namespace std. I have no such compiler, so those
-    // assumptions are untested.
-#   include <fenv.h>
-#endif // __STDC_IEC_559__
-
-#ifdef __STDC_IEC_559__
-    // In case the C++ compiler offers C99 fesetround(), assume that
-    // it doesn't support '#pragma STDC FENV_ACCESS ON' in C++ mode.
-    // (I have no such compiler, so that assumption and code that
-    // would use that pragma are untested.)
-    int const fe_towardzero = FE_TOWARDZERO;
-    int const fe_tonearest  = FE_TONEAREST;
-    int const fe_upward     = FE_UPWARD;
-    int const fe_downward   = FE_DOWNWARD;
-#elif defined BOOST_MSVC || defined LMI_COMO_WITH_MINGW
-    // These untested values seem necessary for msvc's _control87().
-    int const fe_towardzero = _RC_CHOP;
-    int const fe_tonearest  = _RC_NEAR;
-    int const fe_upward     = _RC_UP;
-    int const fe_downward   = _RC_DOWN;
-#else // intel generic
-    // These values should work with inline asm on any intel platform,
-    // regardless of the operating system.
-    int const fe_towardzero = 0x0c00;
-    int const fe_tonearest  = 0x0000;
-    int const fe_upward     = 0x0800;
-    int const fe_downward   = 0x0400;
+    // it defines __STDC_IEC_559__, but doesn't support
+    //   #pragma STDC FENV_ACCESS ON
+    // in C++ mode. (I have no such compiler, so that assumption and
+    // code that ought to use that pragma are untested.)
+    enum e_ieee754_rounding
+        {fe_tonearest  = FE_TONEAREST
+        ,fe_downward   = FE_DOWNWARD
+        ,fe_upward     = FE_UPWARD
+        ,fe_towardzero = FE_TOWARDZERO
+        };
+#elif defined LMI_X86
+    // "fenv_lmi_x86.hpp" provides the necessary values.
+#else  // No known way to set rounding style.
+#   error No known way to set rounding style.
 #endif // No known way to set rounding style.
 
 // Print name of software rounding style for diagnostics.
@@ -90,7 +72,7 @@ char const* get_name_of_style(rounding_style style)
 }
 
 // Print name of hardware rounding mode for diagnostics.
-char const* get_name_of_hardware_rounding_mode(int mode)
+char const* get_name_of_hardware_rounding_mode(e_ieee754_rounding mode)
 {
     return
           (fe_towardzero == mode) ? "toward zero"
@@ -123,26 +105,16 @@ template<> char const* get_name_of_float_type<long double>()
     return "(long double)";
 }
 
-void set_hardware_rounding_mode(int mode, bool synchronize)
+void set_hardware_rounding_mode(e_ieee754_rounding mode, bool synchronize)
 {
 #ifdef __STDC_IEC_559__
     fesetround(mode);
-#elif defined __GNUC__ && defined LMI_X86
-    volatile unsigned short int control_word;
-    asm volatile ("fnstcw %0" : "=m" (*&control_word));
-    control_word = mode | (control_word & ~0xc00);
-    asm volatile ("fldcw %0" : : "m" (*&control_word));
-#elif defined __BORLANDC__
-    _control87(mode,  MCW_RC);
-#elif defined BOOST_MSVC || defined LMI_COMO_WITH_MINGW
-    // Untested, but this appears to be the right nonstandard function.
-    _control87(mode,  _MCW_RC);
+#elif defined LMI_X86
+    fenv_rounding(mode);
 #else // No known way to set hardware rounding mode.
     std::cerr
         << "\nCannot set floating-point hardware rounding mode.\n"
         << "Results may be invalid.\n"
-        << "Please consider contributing an implementation\n"
-        << "for your compiler and platform.\n"
         ;
 #endif // No known way to set hardware rounding mode.
 
@@ -164,7 +136,7 @@ void set_hardware_rounding_mode(int mode, bool synchronize)
         }
     else
         {
-        // Don't synchronize softwared default rounding style with
+        // Don't synchronize software default rounding style with
         // hardware rounding mode; accordingly, set default style to
         // indeterminate.
         default_rounding_style() = r_indeterminate;
@@ -237,7 +209,7 @@ bool test_one_case
     // o(bserved) and e(xpected) as
     //   |(o-e)/e| if e nonzero, else
     //   |(o-e)/o| if o nonzero, else
-    //   0
+    //   zero
     // in order to avoid division by zero.
     max_prec_real rel_error(0.0);
     if(max_prec_real(0.0) != expected)
@@ -568,13 +540,12 @@ int test_all_modes(bool synchronize)
     // As stated above, we'd like this to be true for all
     // floating-point types:
     //   X == 1.0e0 * X * 1.0e-0
-    // But this is not generally true for long doubles with the
-    // www.mingw.org variant of gcc2.95.2-1, which uses a 80-bit
-    // 'extended-real' format with a 64-bit mantissa for long doubles,
-    // but by default initializes the floating-point hardware to use
-    // only a 53-bit mantissa. Until we have facilities like C99's
-    // <fenv.h>, we have to fix that in a nonstandard way.
-    initialize_fpu();
+    // But this is not generally true for long doubles with x86
+    // compilers, which may use an 80-bit 'extended-real' format for
+    // for long doubles, yet initialize the floating-point hardware
+    // to use only a 53-bit mantissa--so initialize the hardware
+    // explicitly.
+    fenv_initialize();
 
     // It is anticipated that a rounding functor will typically be
     // created once and used many times, like this:
@@ -587,7 +558,7 @@ int test_all_modes(bool synchronize)
         }
     // Most of this test suite is by its nature not typical in that sense.
 
-    int hardware_rounding_mode = fe_tonearest;
+    e_ieee754_rounding hardware_rounding_mode = fe_tonearest;
     set_hardware_rounding_mode(hardware_rounding_mode, synchronize);
     std::cout
         << "    hardware rounding mode: "

@@ -1,6 +1,6 @@
 // Manage floating-point environment--unit test.
 //
-// Copyright (C) 2005 Gregory W. Chicares.
+// Copyright (C) 2005, 2006 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: fenv_lmi_test.cpp,v 1.1 2005-12-27 15:36:50 chicares Exp $
+// $Id: fenv_lmi_test.cpp,v 1.2 2006-01-03 21:21:04 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -94,11 +94,11 @@ int test_main(int, char*[])
     // traps this upon conversion between different control-word
     // types, but not otherwise--it guards against accidental misuse,
     // not fraud such as:
-    //   e_intel_pc(0x01); // Poor at best.
-    //   e_msw_pc  (0x03); // Unspecified behavior: C++98 7.2/9 .
+    //   e_ieee754_precision(0x01); // Poor practice at best.
+    //   e_msw_pc           (0x03); // Unspecified behavior: C++98 7.2/9 .
 
     intel_control_word invalid_intel_control_word(0);
-    invalid_intel_control_word.pc(e_intel_pc(0x01));
+    invalid_intel_control_word.pc(e_ieee754_precision(0x01));
     BOOST_TEST_THROW
         (msw_control_word   msw_error  (invalid_intel_control_word)
         ,std::logic_error
@@ -122,7 +122,7 @@ int test_main(int, char*[])
     x87_control_word(default_x87_control_word());
     BOOST_TEST_EQUAL_BITS(0x037f, x87_control_word());
 
-    initialize_fpu();
+    fenv_initialize();
     BOOST_TEST_EQUAL_BITS(0x037f, x87_control_word());
 
 #   ifdef __MINGW32__
@@ -144,12 +144,48 @@ int test_main(int, char*[])
     BOOST_TEST_EQUAL_BITS(0x037f, x87_control_word());
 #   endif // __MINGW32__
 
+    // Test precision and rounding control. These spotchecks are
+    // complemented by the thorough generic tests below.
+
+    fenv_initialize();
+    fenv_precision(fe_dblprec);
+    BOOST_TEST_EQUAL_BITS(0x027f, x87_control_word());
+
+    fenv_initialize();
+    fenv_rounding(fe_towardzero);
+    BOOST_TEST_EQUAL_BITS(0x0f7f, x87_control_word());
+
 #else  // Unknown platform.
     throw std::runtime_error("Unknown platform.");
 #endif // Unknown platform.
 
-    initialize_fpu();
-    BOOST_TEST(validate_fenv());
+    // Test precision control.
+
+    fenv_precision  (fe_fltprec);
+    BOOST_TEST_EQUAL(fe_fltprec , fenv_precision());
+
+    fenv_precision  (fe_dblprec);
+    BOOST_TEST_EQUAL(fe_dblprec , fenv_precision());
+
+    fenv_precision  (fe_ldblprec);
+    BOOST_TEST_EQUAL(fe_ldblprec, fenv_precision());
+
+    // Test rounding control.
+
+    fenv_rounding   (fe_tonearest);
+    BOOST_TEST_EQUAL(fe_tonearest , fenv_rounding());
+
+    fenv_rounding   (fe_downward);
+    BOOST_TEST_EQUAL(fe_downward  , fenv_rounding());
+
+    fenv_rounding   (fe_upward);
+    BOOST_TEST_EQUAL(fe_upward    , fenv_rounding());
+
+    fenv_rounding   (fe_towardzero);
+    BOOST_TEST_EQUAL(fe_towardzero, fenv_rounding());
+
+    fenv_initialize();
+    BOOST_TEST(fenv_validate());
 
     return 0;
 }

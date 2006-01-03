@@ -1,6 +1,6 @@
 // Startup code common to all interfaces except wx.
 //
-// Copyright (C) 2005 Gregory W. Chicares.
+// Copyright (C) 2005, 2006 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_common_non_wx.cpp,v 1.7 2005-12-16 23:39:40 chicares Exp $
+// $Id: main_common_non_wx.cpp,v 1.8 2006-01-03 21:21:04 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -60,7 +60,7 @@ int main(int argc, char* argv[])
         report_exception();
         }
 
-    validate_fenv();
+    fenv_validate();
 
     // COMPILER !! MinGW doesn't reliably flush streams on exit, so
     // flush them explicitly. Do this outside the try block because

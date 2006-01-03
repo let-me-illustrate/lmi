@@ -1,6 +1,6 @@
 // Main file for life insurance illustrations with wx interface.
 //
-// Copyright (C) 2002, 2003, 2004, 2005 Gregory W. Chicares.
+// Copyright (C) 2002, 2003, 2004, 2005, 2006 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_wx.cpp,v 1.39 2005-12-17 15:07:46 chicares Exp $
+// $Id: main_wx.cpp,v 1.40 2006-01-03 21:21:04 chicares Exp $
 
 // Portions of this file are derived from wxWindows files
 //   samples/docvwmdi/docview.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -190,7 +190,7 @@ int WINAPI WinMain
         report_exception();
         }
 
-    validate_fenv();
+    fenv_validate();
 
     return result;
 }

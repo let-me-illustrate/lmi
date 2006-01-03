@@ -1,6 +1,6 @@
 // Manage floating-point environment: x86 implementation details.
 //
-// Copyright (C) 2005 Gregory W. Chicares.
+// Copyright (C) 2005, 2006 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: fenv_lmi_x86.hpp,v 1.1 2005-12-27 15:36:50 chicares Exp $
+// $Id: fenv_lmi_x86.hpp,v 1.2 2006-01-03 21:21:04 chicares Exp $
 
 #ifndef fenv_lmi_x86_hpp
 #define fenv_lmi_x86_hpp
@@ -94,30 +94,33 @@ struct msw_control_word_for_exposition_only
     unsigned int   :12; // Bits 20-31: reserved.
 };
 
-/// Precision-control values used by 80x87 hardware.
+/// Precision-control values used by 80x87 hardware. The enumerators
+/// are lowercase versions of the GNU/Linux <fenvwm.h> macros,
+/// although the constant-expressions may differ.
 
-enum e_intel_pc
-    {e_intel_float    = 0x00
-    ,e_intel_double   = 0x02
-    ,e_intel_extended = 0x03
+enum e_ieee754_precision
+    {fe_fltprec  = 0x00
+    ,fe_dblprec  = 0x02
+    ,fe_ldblprec = 0x03
     };
 
 /// Precision-control values used by ms C rtl, which differ
 /// gratuitously from hardware values.
 
 enum e_msw_pc
-    {e_msw_float    = 0x02
-    ,e_msw_double   = 0x01
-    ,e_msw_extended = 0x00
+    {msw_fltprec  = 0x02
+    ,msw_dblprec  = 0x01
+    ,msw_ldblprec = 0x00
     };
 
-/// Rounding-control values.
+/// Rounding-control values. The enumerators are lowercase versions of
+/// the C99 7.6/7 macros, although the constant-expressions may differ.
 
-enum e_rc
-    {e_msw_near  = 0x00
-    ,e_msw_down  = 0x01
-    ,e_msw_up    = 0x02
-    ,e_msw_trunc = 0x03
+enum e_ieee754_rounding
+    {fe_tonearest  = 0x00
+    ,fe_downward   = 0x01
+    ,fe_upward     = 0x02
+    ,fe_towardzero = 0x03
     };
 
 /// Parameters of 80x87 hardware control word.
@@ -133,7 +136,8 @@ struct intel_control_word_parameters
 {
     typedef unsigned short int integer_type;
     enum {nbits = 16};
-    typedef e_intel_pc pc_type;
+    typedef e_ieee754_precision pc_type;
+    typedef e_ieee754_rounding  rc_type;
     enum {reserved_values = 0x0040};
     enum {settable = 0x0f3f};
     enum {im_bit = 0};
@@ -144,9 +148,9 @@ struct intel_control_word_parameters
     enum {pm_bit = 5};
     enum {pc_bit0 = 8};
     enum {rc_bit0 = 10};
-    static pc_type pc24() {return e_intel_float;}
-    static pc_type pc53() {return e_intel_double;}
-    static pc_type pc64() {return e_intel_extended;}
+    static pc_type pc24() {return fe_fltprec ;}
+    static pc_type pc53() {return fe_dblprec ;}
+    static pc_type pc64() {return fe_ldblprec;}
     static pc_type pcerror() {throw std::logic_error("Invalid fpu PC value.");}
 };
 
@@ -164,7 +168,8 @@ struct msw_control_word_parameters
 {
     typedef unsigned int integer_type;
     enum {nbits = 32};
-    typedef e_msw_pc pc_type;
+    typedef e_msw_pc           pc_type;
+    typedef e_ieee754_rounding rc_type;
     enum {reserved_values = 0x0000};
     enum {settable = 0x000b031f};
     enum {im_bit = 4};
@@ -175,9 +180,9 @@ struct msw_control_word_parameters
     enum {pm_bit = 0};
     enum {pc_bit0 = 16};
     enum {rc_bit0 = 8};
-    static pc_type pc24() {return e_msw_float;}
-    static pc_type pc53() {return e_msw_double;}
-    static pc_type pc64() {return e_msw_extended;}
+    static pc_type pc24() {return msw_fltprec ;}
+    static pc_type pc53() {return msw_dblprec ;}
+    static pc_type pc64() {return msw_ldblprec;}
     static pc_type pcerror() {throw std::logic_error("Invalid fpu PC value.");}
 };
 
@@ -193,6 +198,7 @@ class control_word
 
     typedef typename ControlWordType::integer_type integer_type;
     typedef typename ControlWordType::pc_type pc_type;
+    typedef typename ControlWordType::rc_type rc_type;
     typedef typename std::bitset<ControlWordType::nbits>::reference ref_type;
 
   public:
@@ -219,6 +225,11 @@ class control_word
             );
         rc(x.rc());
         }
+
+    void pc(pc_type e) {pc1() = 0x02 & e; pc0() = 0x01 & e;}
+    void rc(rc_type e) {rc1() = 0x02 & e; rc0() = 0x01 & e;}
+    pc_type pc() const {return pc_type(pc0() + 2 * pc1());}
+    rc_type rc() const {return rc_type(rc0() + 2 * rc1());}
 
     integer_type cw() const {return static_cast<integer_type>(cw_.to_ulong());}
     std::bitset<ControlWordType::nbits> const& bits() const {return cw_;}
@@ -249,11 +260,6 @@ class control_word
     bool  pc1() const {return cw_.test(1 + ControlWordType::pc_bit0);}
     bool  rc0() const {return cw_.test(0 + ControlWordType::rc_bit0);}
     bool  rc1() const {return cw_.test(1 + ControlWordType::rc_bit0);}
-
-    void pc(pc_type e) {pc1() = 0x02 & e; pc0() = 0x01 & e;}
-    void rc(e_rc    e) {rc1() = 0x02 & e; rc0() = 0x01 & e;}
-    pc_type pc() const {return pc_type(pc0() + 2 * pc1());}
-    e_rc    rc() const {return e_rc   (rc0() + 2 * rc1());}
 
     std::bitset<ControlWordType::nbits> cw_;
 };
@@ -303,7 +309,7 @@ inline unsigned short int x87_control_word()
     // Test _MSC_VER last: some non-ms compilers or libraries define it.
     control_word = msw_to_intel(_control87(0, 0));
 #   else // Unknown compiler or platform.
-#       error Unknown compiler or platform. Please contribute an implementation.
+#       error Unknown compiler or platform.
 #   endif // Unknown compiler or platform.
     return control_word;
 }
@@ -321,7 +327,7 @@ inline void x87_control_word(unsigned short int cw)
     // Test _MSC_VER last: some non-ms compilers or libraries define it.
     _control87(intel_to_msw(cw),  0x0ffffffff);
 #   else // Unknown compiler or platform.
-#       error Unknown compiler or platform. Please contribute an implementation.
+#       error Unknown compiler or platform.
 #   endif // Unknown compiler or platform.
 }
 

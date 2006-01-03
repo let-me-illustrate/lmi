@@ -1,6 +1,6 @@
 // Startup code common to all interfaces.
 //
-// Copyright (C) 2005 Gregory W. Chicares.
+// Copyright (C) 2005, 2006 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_common.cpp,v 1.4 2005-12-16 23:39:40 chicares Exp $
+// $Id: main_common.cpp,v 1.5 2006-01-03 21:21:04 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -51,7 +51,7 @@ void initialize_application()
         // sentence.
         std::free(0);
 
-        initialize_fpu();
+        fenv_initialize();
 
         if(SIG_ERR == std::signal(SIGFPE, floating_point_error_handler))
             {

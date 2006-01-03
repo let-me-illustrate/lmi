@@ -1,6 +1,6 @@
 // GPT server.
 //
-// Copyright (C) 1998, 2001, 2002, 2003, 2004, 2005 Gregory W. Chicares.
+// Copyright (C) 1998, 2001, 2002, 2003, 2004, 2005, 2006 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_server7702.cpp,v 1.7 2005-12-29 00:23:45 chicares Exp $
+// $Id: ihs_server7702.cpp,v 1.8 2006-01-03 21:21:04 chicares Exp $
 
 // Known defects:
 // grep for "NEED DECISION"
@@ -77,40 +77,35 @@ extern "C" int LMI_SO __stdcall DllEntryPoint(HINSTANCE, DWORD reason, LPVOID)
         {
         case DLL_PROCESS_ATTACH:
             {
+            fenv_initialize();
             InitializeServer7702();
             std::cout << "DllEntryPoint() called with DLL_PROCESS_ATTACH\n";
+            }
+            break;
+        case DLL_PROCESS_DETACH:
+            {
+            fenv_validate();
             }
             break;
         default:
             ;   // do nothing
         }
 #endif // LMI_MSW
-  return true;
+    return true;
 }
 
 //============================================================================
 void EnterServer()
 {
-    initialize_fpu();
+    fenv_initialize();
 }
 
 /* erase
 //============================================================================
 bool LeaveServer()
 {
-    volatile unsigned short int cw;
-    __asm__ volatile("fstcw %0" : "=m" (*&cw));
-    bool ndp_ok = IntelDefaultNdpControlWord() == cw;
-    if(!ndp_ok)
-        {
-        std::cerr
-            << "Floating point precision changed during run, presumably "
-            << "by another process. Shut down other processes, "
-            << "discard output, and rerun. Consider migrating to a "
-            << "more reliable operating system.\n"
-            ;
-        }
-    return ndp_ok;
+    VerifyPrecision();
+    return fenv_validate();
 }
 */
 
@@ -211,7 +206,7 @@ Server7702::Server7702(Server7702Input& a_Input)
 //============================================================================
 void Server7702::VerifyPrecision() const
 {
-    if(!validate_fenv())
+    if(!fenv_validate())
         {
         throw server7702_precision_changed
             ("Floating-point precision changed: results are invalid."
