@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.291 2006-01-01 18:15:42 chicares Exp $
+// $Id: ChangeLog,v 1.292 2006-01-03 21:21:11 chicares Exp $
 
 MAINTENANCE
 
@@ -5375,4 +5375,25 @@ Remove superfluous blanks.
 
   numeric_io_traits.hpp
 Fix some cygwin problems.
+
+20060103T2120Z <chicares@cox.net> [1205]
+
+  GNUmakefile
+Correct a typo.
+
+  fenv_lmi.cpp
+  fenv_lmi.hpp
+  fenv_lmi_test.cpp
+  fenv_lmi_x86.hpp
+  ihs_server7702.cpp
+  main_common.cpp
+  main_common_non_wx.cpp
+  main_wx.cpp
+  math_functors_test.cpp
+  round_to_test.cpp
+  test_main.cpp
+Refactor.
+
+  illustration_view.cpp
+Close automatically on error in "special" input.
 
