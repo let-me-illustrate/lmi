@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.294 2006-01-06 13:46:27 wboutin Exp $
+// $Id: ChangeLog,v 1.295 2006-01-06 21:17:55 chicares Exp $
 
 MAINTENANCE
 
@@ -29,7 +29,11 @@ Please write entries this way:
 [2] [this line intentionally left blank]
 [3]   filename0
 [4]   filename1
-[5] Your comments.
+[5] Your comments: full English sentences beginning with a capital
+    letter and ending with a period.
+
+Limit lines to seventy characters so that they can be quoted and
+requoted in email without wrapping.
 
 Explanations:
 
@@ -5417,6 +5421,11 @@ Add validation and update an obsolete mirror.
 Add md5sums.
 
   mingw_setup.make
-Improve documentation. Restore path definition to
-make testing easier.
+Improve documentation. Restore path definition to make testing easier.
+
+20060106T2117Z <chicares@cox.net> [1204]
+
+  mingw_setup.make
+  setup.make
+Review.
 
