@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.293 2006-01-06 00:00:35 wboutin Exp $
+// $Id: ChangeLog,v 1.294 2006-01-06 13:46:27 wboutin Exp $
 
 MAINTENANCE
 
@@ -5397,9 +5397,26 @@ Refactor.
   illustration_view.cpp
 Close automatically on error in "special" input.
 
-20050105T2355Z <wboutin@massmutual.com> [1205]
+20060105T2355Z <wboutin@massmutual.com> [1205]
 
   mingw_setup.make
   setup.make
 Add validation and update an obsolete mirror.
+
+20060106T1227Z <wboutin@massmutual.com> [1204]
+
+  binutils-2.16.91-20050827-1.tar.gz.md5 [new file]
+  gcc-core-3.4.4-20050522-1.tar.gz.md5   [new file]
+  gcc-g++-3.4.4-20050522-1.tar.gz.md5    [new file]
+  GNUmakefile
+  mingw-runtime-3.8.tar.gz.md5           [new file]
+  w32api-3.3.tar.gz.md5                  [new file]
+  mingw32-make-3.80.0-3.tar.gz.md5       [new file]
+  mingw-utils-0.3.tar.gz.md5             [new file]
+  wget-1.9.1-mingwPORT.tar.bz2.md5       [new file]
+Add md5sums.
+
+  mingw_setup.make
+Improve documentation. Restore path definition to
+make testing easier.
 

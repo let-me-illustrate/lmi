@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: GNUmakefile,v 1.50 2006-01-03 21:20:50 chicares Exp $
+# $Id: GNUmakefile,v 1.51 2006-01-06 13:46:27 wboutin Exp $
 
 ###############################################################################
 
@@ -238,7 +238,7 @@ binary_graphics  := $(wildcard *.ico *.png)
 
 expungible_files := $(wildcard *~ *.bak *eraseme*)
 
-md5sum_files     := $(wildcard *md5sums)
+md5sum_files     := $(wildcard *md5sums *.md5)
 
 patch_files      := $(wildcard *patch)
 
