@@ -5,7 +5,7 @@
 
 # http://savannah.nongnu.org/projects/lmi
 
-# $Id: mingw_setup.make,v 1.6 2006-01-06 00:00:35 wboutin Exp $
+# $Id: mingw_setup.make,v 1.7 2006-01-06 13:46:27 wboutin Exp $
 
 # REVIEW: Here, say exactly what this makefile does, and what its
 # prerequisites are; and write some excruciatingly clear instructions
@@ -28,7 +28,7 @@ src_dir := $(CURDIR)
 # REVIEW: The following variables are customizable, so perhaps you
 # ought to say that and group them all in one section.
 
-system_root := /c
+system_root := c:
 
 # Path to MinGW install directory.
 mingw_dir := $(system_root)/MinGW
@@ -69,20 +69,16 @@ sf_mirror := http://easynews.dl.sourceforge.net/sourceforge
 # ? In light of the preceding paragraph, that should be done only for
 # 'wget' and anything else that MSYS doesn't automatically provide.
 
-# Required in /bin (if anywhere) by FHS-2.2 .
-# REVIEW: The comment on the preceding line is unnecessary and false.
-
 BZIP2  := bzip2
 CP     := cp
 ECHO   := echo
 GZIP   := gzip
-# REVIEW: $(MD5SUM) is never used, but should be, right?
 MD5SUM := md5sum
 MKDIR  := mkdir
 MV     := mv
 RM     := rm
 TAR    := tar
-WGET   := /c/msys/1.0/local/bin/wget
+WGET   := c:/msys/1.0/local/bin/wget
 
 ###############################################################################
 
@@ -99,6 +95,8 @@ setup: \
 # extraction is important. It follows these instructions:
 #   http://groups.yahoo.com/group/mingw32/message/1145
 # It is apparently fortuitous that the order is alphabetical.
+
+# Minimal installation requirements.
 
 mingw_requirements = \
   binutils-2.16.91-20050827-1.tar.gz \
@@ -120,7 +118,6 @@ mingw_extras = \
 # REVIEW: Shouldn't all issues marked 'TODO \?\?' be resolved before
 # this is shared with the MinGW community?
 
-# TODO ?? Downloaded files should be validated before extracting.
 %.tar.bz2:
 	[ -e $@ ] || $(WGET) --non-verbose $(sf_mirror)/mingw/$@
 	$(MD5SUM) --check $@.md5
@@ -169,11 +166,6 @@ install_mingw_current_from_tmp_dir: $(mingw_requirements) $(mingw_extras)
 	-$(RM) --recursive *.tar
 	$(MV) --force * $(mingw_dir)
 
-# REVIEW: Doesn't the following comment belong at the top of this section?
-# And is lmi at all relevant to the intended audience?
-
-# Minimal installation for building lmi with MinGW.
-
 .PHONY: mingw_20050827
 mingw_20050827:
 	$(MKDIR) --parents /tmp/$@
@@ -221,7 +213,7 @@ install_human_interactive_tools_from_tmp_dir: $(human_interactive_tools)
 
 ###############################################################################
 
-# Upgrade wget-1.9.1.tar.bz2 .
+# Upgrade wget-1.9.1-mingwPORT.tar.bz2 .
 
 # This target uses wget to install wget. That may seem silly on the
 # face of it, but it's actually useful for upgrading to a later
@@ -232,22 +224,19 @@ wget_mingwport = wget-1.9.1
 .PHONY: wget_mingwport
 wget_mingwport:
 	$(MAKE) \
-	  --directory=/tmp \
+	  --directory=c:/tmp \
 	  --file=$(src_dir)/mingw_setup.make \
 	    mingw_dir='$(mingw_dir)' \
 	      src_dir='$(src_dir)' \
 	  install_wget_mingwport_from_tmp_dir
 
-# REVIEW: Would the intended audience wish to copy this binary to
-# two different directories?
-
 .PHONY: install_wget_mingwport_from_tmp_dir
 install_wget_mingwport_from_tmp_dir:
 	$(WGET) --non-verbose $(sf_mirror)/mingw/$(wget_mingwport)-mingwPORT.tar.bz2
+	$(MD5SUM) --check wget-1.9.1-mingwport.tar.bz2.md5
 	$(BZIP2) --decompress --force --keep $(wget_mingwport)-mingwPORT.tar.bz2
 	$(TAR) --extract --file $(wget_mingwport)-mingwPORT.tar
-	$(CP) --preserve $(wget_mingwport)/mingwPORT/wget.exe /usr/bin/
-	$(CP) --preserve $(wget_mingwport)/mingwPORT/wget.exe /msys/local/bin/
+	$(CP) --preserve $(wget_mingwport)/mingwPORT/wget.exe /msys/1.0/local/bin/
 
 # REVIEW: How have you tested this makefile? How do you know that it's
 # correct? How could you tell that the installation has succeeded? Can
