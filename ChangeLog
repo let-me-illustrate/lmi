@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.292 2006-01-03 21:21:11 chicares Exp $
+// $Id: ChangeLog,v 1.293 2006-01-06 00:00:35 wboutin Exp $
 
 MAINTENANCE
 
@@ -5396,4 +5396,10 @@ Refactor.
 
   illustration_view.cpp
 Close automatically on error in "special" input.
+
+20050105T2355Z <wboutin@massmutual.com> [1205]
+
+  mingw_setup.make
+  setup.make
+Add validation and update an obsolete mirror.
 
