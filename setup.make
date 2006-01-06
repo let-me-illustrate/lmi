@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: setup.make,v 1.23 2006-01-06 00:00:35 wboutin Exp $
+# $Id: setup.make,v 1.24 2006-01-06 21:17:55 chicares Exp $
 
 .PHONY: all
 all: setup
@@ -262,6 +262,10 @@ install_frozen_libxml2_from_tmp_dir:
 	$(CP) --force --preserve libxml2-2.6.19/.libs/xmllint.exe /usr/bin/
 	$(RM) --force libxml2-2.6.19.tar libxml2-2.6.19.tar.bz2
 
+# REVIEW: Should we document the reason for using '.libs' in three of
+# the last four commands? I think we had concluded that it was an odd
+# usage, but that less odd ways (like 'make install'?) didn't work.
+
 ###############################################################################
 
 # Install sed-4.0.7 .
@@ -468,6 +472,12 @@ install_wget_mingwport_from_tmp_dir:
 	$(TAR) --extract --file $(wget_mingwport)-mingwPORT.tar
 	$(CP) --preserve $(wget_mingwport)/mingwPORT/wget.exe /usr/bin/
 	$(CP) --preserve $(wget_mingwport)/mingwPORT/wget.exe /msys/1.0/local/bin/
+
+# REVIEW: Can't the last command above fail if no local/bin/
+# subdirectory already exists in /msys/1.0/ ? I think that can easily
+# happen even though MSYS puts /usr/local/bin/ in $PATH. Is this the
+# exact place where Earnie recommends installing it? It might help to
+# explain why we're installing it in two places.
 
 ###############################################################################
 

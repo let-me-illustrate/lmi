@@ -5,7 +5,7 @@
 
 # http://savannah.nongnu.org/projects/lmi
 
-# $Id: mingw_setup.make,v 1.7 2006-01-06 13:46:27 wboutin Exp $
+# $Id: mingw_setup.make,v 1.8 2006-01-06 21:17:55 chicares Exp $
 
 # REVIEW: Here, say exactly what this makefile does, and what its
 # prerequisites are; and write some excruciatingly clear instructions
@@ -79,6 +79,16 @@ MV     := mv
 RM     := rm
 TAR    := tar
 WGET   := c:/msys/1.0/local/bin/wget
+
+# REVIEW: Why say "c:" in the definition of $(WGET) just above, or
+# in the 'wget_mingwport' target's "--directory=c:/tmp" far below?
+# Did that solve the problem you had observed with the msw temporary
+# directory? Why not use $(system_root) instead, if a drive letter
+# must be written? Would it be best to omit the drive letter, as is
+# done where "--directory" is used elsewhere? The original
+# 'environment' CD worked on any drive; perhaps that versatility
+# could be achieved by using $(TMP) instead of /tmp/, but not if
+# msw doesn't guarantee to define $(TMP) (I can't remember).
 
 ###############################################################################
 
