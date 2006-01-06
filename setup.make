@@ -1,6 +1,6 @@
 # Set up build environment.
 #
-# Copyright (C) 2005 Gregory W. Chicares.
+# Copyright (C) 2005, 2006 Gregory W. Chicares.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: setup.make,v 1.22 2005-11-04 13:44:14 chicares Exp $
+# $Id: setup.make,v 1.23 2006-01-06 00:00:35 wboutin Exp $
 
 .PHONY: all
 all: setup
@@ -61,7 +61,7 @@ third_party_include_dir := $(third_party_dir)/include
 third_party_lib_dir     := $(third_party_dir)/lib
 third_party_source_dir  := $(third_party_dir)/src
 
-sf_mirror := http://umn.dl.sourceforge.net/sourceforge
+sf_mirror := http://easynews.dl.sourceforge.net/sourceforge
 
 .PHONY: setup
 setup: \
@@ -259,6 +259,7 @@ install_frozen_libxml2_from_tmp_dir:
 	  $(third_party_bin_dir)
 	$(CP) --force --preserve libxml2-2.6.19/.libs/libxml2.dll.a \
 	  $(third_party_lib_dir)
+	$(CP) --force --preserve libxml2-2.6.19/.libs/xmllint.exe /usr/bin/
 	$(RM) --force libxml2-2.6.19.tar libxml2-2.6.19.tar.bz2
 
 ###############################################################################
@@ -375,12 +376,14 @@ mingw_extras = \
 # TODO ?? Downloaded files should be validated before extracting.
 %.tar.bz2:
 	[ -e $@ ] || $(WGET) --non-verbose $(sf_mirror)/mingw/$@
+	$(MD5SUM) --check $@.md5
 	$(CP) --force --preserve $@ $(mingw_dir)
 	$(BZIP2) --decompress --keep --force $@
 	$(TAR) --extract --file=$*.tar
 
 %.tar.gz:
 	[ -e $@ ] || $(WGET) --non-verbose $(sf_mirror)/mingw/$@
+	$(MD5SUM) --check $@.md5
 	$(CP) --force --preserve $@ $(mingw_dir)
 	$(GZIP) --decompress --force $@
 	$(TAR) --extract --file=$*.tar
@@ -464,7 +467,7 @@ install_wget_mingwport_from_tmp_dir:
 	$(BZIP2) --decompress --force --keep $(wget_mingwport)-mingwPORT.tar.bz2
 	$(TAR) --extract --file $(wget_mingwport)-mingwPORT.tar
 	$(CP) --preserve $(wget_mingwport)/mingwPORT/wget.exe /usr/bin/
-	$(CP) --preserve $(wget_mingwport)/mingwPORT/wget.exe /msys/1.0/bin/
+	$(CP) --preserve $(wget_mingwport)/mingwPORT/wget.exe /msys/1.0/local/bin/
 
 ###############################################################################
 
