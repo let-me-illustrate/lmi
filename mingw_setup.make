@@ -1,11 +1,11 @@
 # MinGW installation.
 #
-# This is public domain. It's not 'Copyright 2005', but including that
+# This is public domain. It's not 'Copyright 2006', but including that
 # quoted string keeps our cvs style-conformity script from complaining.
 
 # http://savannah.nongnu.org/projects/lmi
 
-# $Id: mingw_setup.make,v 1.5 2005-12-07 15:12:23 chicares Exp $
+# $Id: mingw_setup.make,v 1.6 2006-01-06 00:00:35 wboutin Exp $
 
 # REVIEW: Here, say exactly what this makefile does, and what its
 # prerequisites are; and write some excruciatingly clear instructions
@@ -40,7 +40,7 @@ mingw_dir := $(system_root)/MinGW
 # here, right after $(mingw_dir). Are $(mingw_dir) and $(sf_mirror)
 # the only configurable variables?
 
-sf_mirror := http://umn.dl.sourceforge.net/sourceforge
+sf_mirror := http://easynews.dl.sourceforge.net/sourceforge
 
 ###############################################################################
 
@@ -82,7 +82,7 @@ MKDIR  := mkdir
 MV     := mv
 RM     := rm
 TAR    := tar
-WGET   := SUPPLY_AN_APPROPRIATE_PATH_HERE/wget
+WGET   := /c/msys/1.0/local/bin/wget
 
 ###############################################################################
 
@@ -123,12 +123,14 @@ mingw_extras = \
 # TODO ?? Downloaded files should be validated before extracting.
 %.tar.bz2:
 	[ -e $@ ] || $(WGET) --non-verbose $(sf_mirror)/mingw/$@
+	$(MD5SUM) --check $@.md5
 	$(CP) --force --preserve $@ $(mingw_dir)
 	$(BZIP2) --decompress --keep --force $@
 	$(TAR) --extract --file=$*.tar
 
 %.tar.gz:
 	[ -e $@ ] || $(WGET) --non-verbose $(sf_mirror)/mingw/$@
+	$(MD5SUM) --check $@.md5
 	$(CP) --force --preserve $@ $(mingw_dir)
 	$(GZIP) --decompress --force $@
 	$(TAR) --extract --file=$*.tar
@@ -245,7 +247,7 @@ install_wget_mingwport_from_tmp_dir:
 	$(BZIP2) --decompress --force --keep $(wget_mingwport)-mingwPORT.tar.bz2
 	$(TAR) --extract --file $(wget_mingwport)-mingwPORT.tar
 	$(CP) --preserve $(wget_mingwport)/mingwPORT/wget.exe /usr/bin/
-	$(CP) --preserve $(wget_mingwport)/mingwPORT/wget.exe /msys/1.0/bin/
+	$(CP) --preserve $(wget_mingwport)/mingwPORT/wget.exe /msys/local/bin/
 
 # REVIEW: How have you tested this makefile? How do you know that it's
 # correct? How could you tell that the installation has succeeded? Can
