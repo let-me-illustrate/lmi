@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.295 2006-01-06 21:17:55 chicares Exp $
+// $Id: ChangeLog,v 1.296 2006-01-06 22:06:59 wboutin Exp $
 
 MAINTENANCE
 
@@ -5428,4 +5428,9 @@ Improve documentation. Restore path definition to make testing easier.
   mingw_setup.make
   setup.make
 Review.
+
+20060106T2200Z <wboutin@massmutual.com> [1204]
+
+  xml_notebook_single_premium.xrc
+Reformat.
 
