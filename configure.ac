@@ -21,7 +21,7 @@ dnl snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
 dnl === Prologue ===
 
-AC_REVISION($Id: configure.ac,v 1.15 2006-01-01 18:20:08 chicares Exp $)dnl
+AC_REVISION($Id: configure.ac,v 1.16 2006-01-10 14:33:39 zeitlin Exp $)dnl
 
 AC_PREREQ(2.56)
 AC_INIT(LMI, 1.0.0, [chicares@cox.net])
@@ -229,13 +229,11 @@ dnl we look there
 LIBS="$LIBS -lm"
 AC_CHECK_FUNCS(log10l fabsl)
 
-dnl checking for snprintf or its remplacement
-dnl When compiling under gcc using -std= flag the standard headers do not
-dnl provide snprintf nor _snprintf.
-dnl We're not using the usuall AC_CHECK_FUNCS
-dnl   AC_CHECK_FUNCS([snprintf _snprintf], [break], [AC_MSG_ERROR(Fatal error : neither snprintf nor _snprintf is found on the system)])
-dnl because of various wrokarounds in platform_dependent.hpp
-dnl which make it possible to use snprintf or other "non standard" functions.
+dnl check for snprintf: note that when compiling under gcc using -std= flag the
+dnl standard headers do not declare snprintf() and this is why we don't use
+dnl the usual AC_CHECK_FUNCS but reproduce the same workaround as used in
+dnl platform_dependent.hpp (see comment there) which makes it possible to
+dnl detect this function in all cases
 AC_CACHE_CHECK([for snprintf],
     lmi_cv_func_snprintf,
     [
@@ -255,27 +253,8 @@ AC_CACHE_CHECK([for snprintf],
 if test "x$lmi_cv_func_snprintf" = "xyes"; then
     AC_DEFINE([HAVE_SNPRINTF], [1], [Define this if you have snprintf function])
 else
-    AC_CACHE_CHECK([for _snprintf],
-        lmi_cv_func__snprintf,
-        [
-            AC_LINK_IFELSE([AC_LANG_PROGRAM(
-                    [[
-                    #if defined __GNUC__ && defined __STRICT_ANSI__
-                    #   undef __STRICT_ANSI__
-                    #endif
-                    #include <stdio.h>]],
-                    [return _snprintf("", 0, "");]
-                )],
-                lmi_cv_func__snprintf=yes,
-                lmi_cv_func__snprintf=no
-            )
-        ]
-    )
-    if test "x$lmi_cv_func__snprintf" = "xyes"; then
-        AC_DEFINE([HAVE__SNPRINTF], [1], [Define this if you have _snprintf function])
-    else
-        AC_MSG_ERROR([Neither snprintf, nor _snprintf is found on your system])
-    fi
+    dnl TODO: for MSVC support we should check for _snprintf()
+    AC_MSG_ERROR([The snprintf() function not found on your system])
 fi
 
 AM_CONDITIONAL(HAVE_SNPRINTF, [test "x$lmi_cv_func_snprintf" == "xyes"])
