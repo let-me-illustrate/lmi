@@ -1,6 +1,6 @@
 # Main lmi makefile, invoked by 'GNUmakefile'.
 #
-# Copyright (C) 2005 Gregory W. Chicares.
+# Copyright (C) 2005, 2006 Gregory W. Chicares.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: workhorse.make,v 1.60 2005-12-31 16:59:42 chicares Exp $
+# $Id: workhorse.make,v 1.61 2006-01-10 02:57:08 chicares Exp $
 
 ###############################################################################
 
@@ -697,12 +697,15 @@ run_unit_tests: unit_tests_not_built $(addsuffix -run,$(unit_test_targets))
 mpatrol.log:
 	@$(TOUCH) $@
 
+# MSYS !! The initial ';' in the first $(SED) command works around a
+# problem caused by MSYS.
+
 %$(EXEEXT)-run: mpatrol.log
 	@$(ECHO) "\nRunning $*:"
 	@-./$* --accept
 	@test -e mpatrol.log \
 	  && <mpatrol.log $(SED) \
-	  -e'/^total warnings\|^total errors/!d' \
+	  -e';/^total warnings\|^total errors/!d' \
 	  -e's/^\(.*$$\)/  mpatrol: \1/' \
 
 ################################################################################
@@ -725,15 +728,18 @@ cli_tests: antediluvian_cli$(EXEEXT)
 
 # This lightweight test emulates what a webserver would do.
 
+# MSYS !! The initial ';' in several $(SED) commands works around a
+# problem caused by MSYS.
+
 .PHONY: cgi_tests
 cgi_tests: antediluvian_cgi$(EXEEXT)
 	@$(ECHO) Test common gateway interface:
 	@./antediluvian_cgi$(EXEEXT) --write_content_string > /dev/null
 	@<$(src_dir)/expected.cgi.out \
-	  $(SED)    -e'/^[0-9. ]*$$/!d' -e'/[0-9]/!d' \
+	  $(SED)    -e';/^[0-9. ]*$$/!d' -e';/[0-9]/!d' \
 	  > cgi_touchstone
 	@./antediluvian_cgi$(EXEEXT) --enable_test <cgi.test.in \
-	  | $(SED)  -e'/^[0-9. ]*$$/!d' -e'/[0-9]/!d' \
+	  | $(SED)  -e';/^[0-9. ]*$$/!d' -e';/[0-9]/!d' \
 	  | $(DIFF) -w - cgi_touchstone \
 	  | $(WC)   -l \
 	  | $(SED)  -e's/^/  /' -e's/$$/ errors/'
