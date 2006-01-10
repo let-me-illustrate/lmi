@@ -1,6 +1,6 @@
-# Platform specifics: msw using MSYS.
+# Platform specifics: msw using MSYS. Study IMPORTANT NOTES below!
 #
-# Copyright (C) 2005 Gregory W. Chicares.
+# Copyright (C) 2005, 2006 Gregory W. Chicares.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 2 as
@@ -19,23 +19,55 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: msw_msys.make,v 1.8 2005-12-07 15:12:25 chicares Exp $
+# $Id: msw_msys.make,v 1.9 2006-01-10 02:57:05 chicares Exp $
 
 ################################################################################
 
-# MSYS !! MSYS-1.0.10 of 2004-05, the latest version as of 2005-01,
-# mangles several sed commands used in lmi makefiles. Details:
+# MSYS !! IMPORTANT NOTES.
+#
+# MSYS poses certain problems that must be worked around carefully.
+# These problems have been confirmed with MSYS-1.0.10 of 2004-05,
+# the latest "release" as of 2006-01. Studying this comment block
+# assiduously will save you time. Rereading it when something goes
+# wrong will also save you time.
+#
+# Its sed dates from 1998 and can't handle modern usage. It must be
+# replaced as follows:
+#  - Get the GNU sources for sed-4.0.7 (tested) or later (untested).
+#  - Build a new msw binary in MSYS with './configure && make'.
+#  - Copy it to MSYS path '/c/usr/bin/sed' to use the definition of
+#    $(SED) below.
+#
+# Do not copy this new sed binary into MSYS's own /bin/ or /usr/bin/
+# directories: that would certainly cause horrible problems. Hesitate
+# to place any file there: read the cautions in MSYS's /doc/msys/* .
+# Don't read '/doc/msys/README.rtf' alone and skip the rest: this
+# particular pitfall is documented in '/doc/msys/MSYS_WELCOME.rtf'.
+# Don't replace or delete the MSYS-provided '/bin/sed': that would
+# break your MSYS installation for packages that can use that ancient
+# version of sed.
+#
+# Replacing sed exposes a nasty problem in MSYS's bash port, which
+# "translates" any program argument it deems to be a path; details:
 #   http://sf.net/mailarchive/message.php?msg_id=10668423
 # Here's another example:
 #   http://sf.net/mailarchive/message.php?msg_id=9879502
-# The defect is apparently in the MSYS fork of bash. The most
-# important makefile targets work more or less correctly despite this
-# defect, but it breaks autodependency generation.
+# Follow those links to learn how to recognize this problem. AFAIK,
+# the problems have been worked around by changing sed commands
+# throughout the lmi makefiles in benign but ridiculous ways.
 #
-# TODO ?? These instructions, however:
-# # Get the GNU sources, for sed-4.0.7 or later; build a new msw binary
-# # with MSYS; and define $(SED) to point to it.
-# don't fix the problem. More work is needed.
+# If you modify MSYS's '/etc/fstab', end each line with '\n', and
+# don't insert any '\r' or use any editor that will do that. Check
+# your work carefully with 'od -t a /etc/fstab'.
+#
+# Don't ever use any path with embedded spaces anywhere.
+#
+# Don't attempt to mix cygwin and MSYS tools. Don't permit $PATH to
+# point to one when you want to use the other.
+#
+# Use this command
+#   echo '"\e[3~": delete-char' >>~/.inputrc
+# to make the Delete key work.
 
 ################################################################################
 
@@ -85,18 +117,6 @@ MKDIR   := $(PATH_BIN)mkdir
 MV      := $(PATH_BIN)mv
 RM      := $(PATH_BIN)rm
 
-# TODO ?? Override MSYS's ancient sed. This is an experimental change.
-# If testing confirms that it works, then it should be explained better,
-# and instructions for building a more modern sed should be given.
-#
-# Vadim--I merely downloaded the GNU project's sources for sed-4.0.7
-# and built them in MSYS in the normal './configure && make' way, then
-# copied the resulting binary to "C:\usr\bin\sed.exe". Maybe it should
-# go in a special directory in the lmi hierarchy instead. Just be sure
-# you don't copy it into MSYS's own /bin/ directory: that's likely to
-# cause horrible problems.
-
-# SED     := $(PATH_BIN)sed
 SED     := /c/usr/bin/sed
 
 TAR     := $(PATH_BIN)tar
@@ -112,7 +132,10 @@ TOUCH   := $(PATH_USR_BIN)touch
 TR      := $(PATH_USR_BIN)tr
 WC      := $(PATH_USR_BIN)wc
 WGET    := $(PATH_USR_BIN)wget
-XMLLINT := $(PATH_USR_BIN)xmllint
+
+# TODO ?? Where would libxml2 install this thing?
+# XMLLINT := $(PATH_USR_BIN)xmllint
+XMLLINT := /c/usr/bin/xmllint
 
 ################################################################################
 

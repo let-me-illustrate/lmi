@@ -1,6 +1,6 @@
 # Experimental makefile for fancy formatted reports.
 #
-# Copyright (C) 2005 Gregory W. Chicares.
+# Copyright (C) 2005, 2006 Gregory W. Chicares.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: fancy.make,v 1.1 2005-03-02 15:44:54 chicares Exp $
+# $Id: fancy.make,v 1.2 2006-01-10 02:57:05 chicares Exp $
 
 # This experimental makefile runs unit tests, filters out most routine
 # output, and summarizes results. It's handy, but abstruse. Usually,
@@ -78,6 +78,14 @@ begin_time:
 end_time:
 	@$(ECHO) Ended at $(volatile_time)
 
+# TODO ?? WENDY Would you please provide a definition of $(SLEEP) for
+# all platforms? For 'msw_generic.make', you can forward to the MSYS
+# implementation this way:
+#   C:/usr/bin[0]$cat sleep
+#   #! /usr/bin/sh
+#   /msys/1.0/bin/sleep "$@"
+SLEEP = /usr/bin/sleep
+
 # This target demonstrates the reason for $(print_end_time).
 #
 .PHONY: test_volatile_time
@@ -85,8 +93,8 @@ test_volatile_time:
 	$(print_begin_time)
 	@$(ECHO) __Begun at $(volatile_time)
 	# Do something that takes a while.
-	/usr/bin/sleep 10
-	# This isn't the right answer, because $(shell) is expanded when
+	@$(SLEEP) 10
+	# This isn't the right answer, because $$(shell) is expanded when
 	# the makefile is read, not when the commands are executed.
 	@$(ECHO) __Ended at $(shell $(DATE) -u +'%Y%m%dT%H%M%SZ')
 	# This gives the right answer.
