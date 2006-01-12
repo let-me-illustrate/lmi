@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: GNUmakefile,v 1.52 2006-01-10 02:57:08 chicares Exp $
+# $Id: GNUmakefile,v 1.53 2006-01-12 09:53:47 chicares Exp $
 
 ###############################################################################
 
@@ -232,9 +232,9 @@ patch_files      := $(wildcard *patch)
 # MSYS !! The initial ';' in the first $(SED) command works around a
 # problem caused by MSYS.
 
-subdirectories   := $(shell $(LS) --classify | $(SED) -e';/\//!d' -e's/\/$$//')
+subdirectories := $(shell $(LS) --classify | $(SED) -e ';/\//!d' -e 's/\/$$//')
 
-testing_files    := expected.cgi.out $(wildcard *touchstone*)
+testing_files := expected.cgi.out $(wildcard *touchstone*)
 
 never_source_files := \
   $(binary_graphics) \
@@ -464,17 +464,17 @@ check_conformity: source_clean
 	@for z in $(licensed_files) $(xpm_files); \
 	  do \
 	    $(ECHO) -n $$z; \
-	    <$$z $(TR) '\r' '\a' | $(SED) -e';/\a/!d' | $(WC) -l; \
-	  done | $(SED) -e';/ 0$$/d';
+	    <$$z $(TR) '\r' '\a' | $(SED) -e ';/\a/!d' | $(WC) -l; \
+	  done | $(SED) -e ';/ 0$$/d';
 	@$(ECHO) "  Headers that should include \"config.hpp\" first but don't:"
 	@for z in \
 	  $(filter-out config.hpp $(wildcard config_*.hpp),$(wildcard *.hpp)); \
 	  do \
 	    $(SED) \
-	    -e';/^#include "config.hpp"/,$$d' \
-	    -e';/#.*include/!d' \
-	    -e'0,1!d' \
-	    -e"s/^.*$$/$$z/" $$z \
+	    -e ';/^#include "config.hpp"/,$$d' \
+	    -e ';/#.*include/!d' \
+	    -e '0,1!d' \
+	    -e "s/^.*$$/$$z/" $$z \
 	    ; \
 	  done;
 	@$(ECHO) "  Files that use reserved identifiers:"
@@ -486,42 +486,42 @@ check_conformity: source_clean
 	    '__' \
 	    $(filter-out GNUmakefile,$(expected_source_files)) \
 	  | $(SED) \
-	    -e's/"[^"]*"//g' \
-	    -e';/__FILE__/d' \
-	    -e';/__LINE__/d' \
-	    -e';/__STDC__/d' \
-	    -e';/__STDC_IEC_559__/d' \
-	    -e';/__cplusplus/d' \
-	    -e';/__WIN32__/d' \
-	    -e';/__X__/d' \
-	    -e';/__arg[cv]/d' \
-	    -e';/__i386/d' \
-	    -e';/__unix__/d' \
-	    -e';/__BIG_ENDIAN/d' \
-	    -e';/__BORLANDC__/d' \
-	    -e';/__BYTE_ORDER/d' \
-	    -e';/__COMO__/d' \
-	    -e';/__CYGWIN__/d' \
-	    -e';/__GLIBCPP__/d' \
-	    -e';/__GNUC__/d' \
-	    -e';/__MINGW_H/d' \
-	    -e';/__MINGW32__/d' \
-	    -e';/__MINGW32_MAJOR_VERSION/d' \
-	    -e';/__MINGW32_MINOR_VERSION/d' \
-	    -e';/__MINGW32_VERSION/d' \
-	    -e';/__STRICT_ANSI__/d' \
-	    -e';/__asm__/d' \
-	    -e';/__attribute__/d' \
-	    -e';/__declspec/d' \
-	    -e';/__emit__/d' \
-	    -e';/__int64/d' \
-	    -e';/__stdcall/d' \
-	    -e';/__volatile__/d' \
-	    -e';/__WXMSW__/d' \
-	    -e';/__init_aux/d' \
-	    -e';/__pow/d' \
-	    -e';/____/d' \
-	    -e';/__/!d'
+	    -e 's/"[^"]*"//g' \
+	    -e ';/__FILE__/d' \
+	    -e ';/__LINE__/d' \
+	    -e ';/__STDC__/d' \
+	    -e ';/__STDC_IEC_559__/d' \
+	    -e ';/__cplusplus/d' \
+	    -e ';/__WIN32__/d' \
+	    -e ';/__X__/d' \
+	    -e ';/__arg[cv]/d' \
+	    -e ';/__i386/d' \
+	    -e ';/__unix__/d' \
+	    -e ';/__BIG_ENDIAN/d' \
+	    -e ';/__BORLANDC__/d' \
+	    -e ';/__BYTE_ORDER/d' \
+	    -e ';/__COMO__/d' \
+	    -e ';/__CYGWIN__/d' \
+	    -e ';/__GLIBCPP__/d' \
+	    -e ';/__GNUC__/d' \
+	    -e ';/__MINGW_H/d' \
+	    -e ';/__MINGW32__/d' \
+	    -e ';/__MINGW32_MAJOR_VERSION/d' \
+	    -e ';/__MINGW32_MINOR_VERSION/d' \
+	    -e ';/__MINGW32_VERSION/d' \
+	    -e ';/__STRICT_ANSI__/d' \
+	    -e ';/__asm__/d' \
+	    -e ';/__attribute__/d' \
+	    -e ';/__declspec/d' \
+	    -e ';/__emit__/d' \
+	    -e ';/__int64/d' \
+	    -e ';/__stdcall/d' \
+	    -e ';/__volatile__/d' \
+	    -e ';/__WXMSW__/d' \
+	    -e ';/__init_aux/d' \
+	    -e ';/__pow/d' \
+	    -e ';/____/d' \
+	    -e ';/__/!d'
 	@$(ECHO) "  Problems detected by xmllint:"
 	@for z in $(xml_files); \
 	  do \
@@ -534,9 +534,9 @@ check_conformity: source_clean
 	      || $(ECHO) "... in file $$z"; \
 	  done;
 	@$(ECHO) "Total lines of code:"
-	@$(WC) -l $(prerequisite_files) | $(SED) -e'/;[Tt]otal/!d' -e's/[^0-9]//'
+	@$(WC) -l $(prerequisite_files) | $(SED) -e ';/[Tt]otal/!d' -e 's/[^0-9]//'
 	@$(ECHO) "Number of source files:"
-	@$(WC) -l $(prerequisite_files) | $(SED) -e';/[Tt]otal/d' | $(WC) -l
+	@$(WC) -l $(prerequisite_files) | $(SED) -e ';/[Tt]otal/d' | $(WC) -l
 	@$(ECHO) "Number of marked defects:"
 	@$(GREP) \?\? $(licensed_files) | $(WC) -l
 	@$(TOUCH) --date=$(yyyymmdd) TODAY
