@@ -1,6 +1,6 @@
 // Configurable settings.
 //
-// Copyright (C) 2003, 2005 Gregory W. Chicares.
+// Copyright (C) 2003, 2005, 2006 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: configurable_settings.hpp,v 1.7 2005-12-22 13:59:49 chicares Exp $
+// $Id: configurable_settings.hpp,v 1.8 2006-01-12 09:53:44 chicares Exp $
 
 #ifndef configurable_settings_hpp
 #define configurable_settings_hpp
@@ -35,6 +35,9 @@
 #include <string>
 
 /// Design notes for class configurable_settings.
+///
+/// This is a simple Meyers singleton, with the expected threading and
+/// dead-reference issues.
 ///
 /// This class reads user-configurable settings from an xml file and
 /// makes them available to other modules.

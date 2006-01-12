@@ -1,6 +1,6 @@
 // Global settings.
 //
-// Copyright (C) 2003, 2004, 2005 Gregory W. Chicares.
+// Copyright (C) 2003, 2004, 2005, 2006 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: global_settings.hpp,v 1.11 2005-12-22 13:59:49 chicares Exp $
+// $Id: global_settings.hpp,v 1.12 2006-01-12 09:53:44 chicares Exp $
 
 #ifndef global_settings_hpp
 #define global_settings_hpp
@@ -36,8 +36,8 @@
 
 /// Design notes for class global_settings.
 ///
-/// A simple Meyers singleton, with the expected dead-reference and
-/// threading issues.
+/// This is a simple Meyers singleton, with the expected threading and
+/// dead-reference issues.
 ///
 /// Data members, in logical rather than alphabetical order:
 ///

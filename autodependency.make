@@ -1,6 +1,6 @@
 # Makefile: automatic dependencies.
 #
-# Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005 Gregory W. Chicares.
+# Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006 Gregory W. Chicares.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: autodependency.make,v 1.3 2005-08-06 02:40:29 chicares Exp $
+# $Id: autodependency.make,v 1.4 2006-01-12 09:53:44 chicares Exp $
 
 ################################################################################
 
@@ -206,7 +206,7 @@ $(src_dir)/configuration.make:: ;
 # gcc-3.x preprocessor. If you're still using a preprocessor older
 # than gcc-3.x's, change '-M -MT $@' to '-M' in $(MAKEDEPEND) below.
 
-# The sed command line that would normally be written
+# MSYS !! The sed command line that would normally be written
 #   -e 's/$$/ :/' \
 # is instead written
 #   -e 's|$$| :|' \
