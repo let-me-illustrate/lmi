@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.297 2006-01-10 02:57:08 chicares Exp $
+// $Id: ChangeLog,v 1.298 2006-01-12 09:53:50 chicares Exp $
 
 MAINTENANCE
 
@@ -5443,4 +5443,19 @@ Mark portability defects.
   GNUmakefile
   workhorse.make
 Rewrite 'sed' commands to work around an MSYS bash defect.
+
+20060112T0953Z <chicares@cox.net> [1204]
+
+  autodependency.make
+  configurable_settings.hpp
+  global_settings.hpp
+  setup.make
+Improve documentation.
+
+  GNUmakefile
+  workhorse.make
+Rewrite 'sed' commands to work around an MSYS bash defect.
+
+  fancy.make
+Rewrite 'sed' commands for uniformity.
 

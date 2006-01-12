@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: fancy.make,v 1.2 2006-01-10 02:57:05 chicares Exp $
+# $Id: fancy.make,v 1.3 2006-01-12 09:53:50 chicares Exp $
 
 # This experimental makefile runs unit tests, filters out most routine
 # output, and summarizes results. It's handy, but abstruse. Usually,
@@ -102,25 +102,25 @@ test_volatile_time:
 
 define REPORT_TIMING
 	@$(GREP) Elapsed $(1) \
-	  | $(SED) -e's/Elapsed time//' -e's/\(.*\):\(.*\)/\2   \1/' \
-	  | $(SED) 's/^/  /'
+	  | $(SED) -e 's/Elapsed time//' -e 's/\(.*\):\(.*\)/\2   \1/' \
+	  | $(SED) -e 's/^/  /'
 endef
 
 define REPORT_DIAGNOSTICS
-	@$(SED) -fdiagnostics.sed $(1) \
+	@$(SED) -f diagnostics.sed $(1) \
 	  | $(WC) -l \
-	  | $(SED) 's/^/  /' \
-	  | $(SED) -e's/$$/ diagnostics for all $(2) targets/'
+	  | $(SED) -e 's/^/  /' \
+	  | $(SED) -e 's/$$/ diagnostics for all $(2) targets/'
 endef
 
 define REPORT_ERRORS
 	@$(SED) -ferrors.sed $(1) \
 	  | $(WC) -l \
-	  | $(SED) 's/^/  /' \
-	  | $(SED) -e's/$$/ fatal errors for all $(2) targets/'
+	  | $(SED) -e 's/^/  /' \
+	  | $(SED) -e 's/$$/ fatal errors for all $(2) targets/'
 	@$(ECHO) Fatal errors by file:
 	@-$(GREP) '\*\*\*' $(1) \
-	  | $(SED) -ferrors.sed
+	  | $(SED) -f errors.sed
 	@$(ECHO) Fatal errors end.
 endef
 
@@ -137,6 +137,6 @@ unit_tests_fancy: #$(unit_test_targets)
 	@$(MAKE) -f $(src_dir)/GNUmakefile run_unit_tests >> $(unit_test_results)
 	@$(ECHO) $(words $(unit_test_targets)) unit tests attempted
 	@$(GREP) -c 'no errors detected' $(unit_test_results) \
-	  | $(SED) 's/$$/ unit tests passed/'
+	  | $(SED) -e 's/$$/ unit tests passed/'
 	$(print_end_time)
 
