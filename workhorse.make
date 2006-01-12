@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: workhorse.make,v 1.61 2006-01-10 02:57:08 chicares Exp $
+# $Id: workhorse.make,v 1.62 2006-01-12 09:53:47 chicares Exp $
 
 ###############################################################################
 
@@ -705,8 +705,8 @@ mpatrol.log:
 	@-./$* --accept
 	@test -e mpatrol.log \
 	  && <mpatrol.log $(SED) \
-	  -e';/^total warnings\|^total errors/!d' \
-	  -e's/^\(.*$$\)/  mpatrol: \1/' \
+	    -e ';/^total warnings\|^total errors/!d' \
+	    -e 's/^\(.*$$\)/  mpatrol: \1/' \
 
 ################################################################################
 
@@ -736,13 +736,13 @@ cgi_tests: antediluvian_cgi$(EXEEXT)
 	@$(ECHO) Test common gateway interface:
 	@./antediluvian_cgi$(EXEEXT) --write_content_string > /dev/null
 	@<$(src_dir)/expected.cgi.out \
-	  $(SED)    -e';/^[0-9. ]*$$/!d' -e';/[0-9]/!d' \
+	  $(SED)    -e ';/^[0-9. ]*$$/!d' -e ';/[0-9]/!d' \
 	  > cgi_touchstone
 	@./antediluvian_cgi$(EXEEXT) --enable_test <cgi.test.in \
-	  | $(SED)  -e';/^[0-9. ]*$$/!d' -e';/[0-9]/!d' \
+	  | $(SED)  -e ';/^[0-9. ]*$$/!d' -e ';/[0-9]/!d' \
 	  | $(DIFF) -w - cgi_touchstone \
 	  | $(WC)   -l \
-	  | $(SED)  -e's/^/  /' -e's/$$/ errors/'
+	  | $(SED)  -e 's/^/  /' -e 's/$$/ errors/'
 
 ################################################################################
 
@@ -779,13 +779,14 @@ regression_test: install
 	    $(addprefix *.,$(test_result_suffixes)) \
 	    >$(regression_test_md5sums); \
 	  for z in *.test; \
-	    { $(bin_dir)/ihs_crc_comp $$z $(touchstone_dir)/$$z \
-	      | $(SED) -e '/Summary/!d' -e"s|^ |$$z|" \
-	    } > $(regression_test_analysis)
+	    do \
+	      $(bin_dir)/ihs_crc_comp $$z $(touchstone_dir)/$$z \
+	      | $(SED) -e ';/Summary/!d' -e "s/^ /$$z/"; \
+	    done > $(regression_test_analysis);
 	@-< $(regression_test_analysis) $(SED) \
-	  -e'/rel err.*e-01[5-9]/d' \
-	  -e'/abs.*0\.00.*rel/d' \
-	  -e'/abs diff: 0 /d'
+	  -e ';/rel err.*e-01[5-9]/d' \
+	  -e ';/abs.*0\.00.*rel/d' \
+	  -e ';/abs diff: 0 /d'
 	@-$(DIFF) \
 	    --brief \
 	    --report-identical-files \
@@ -796,29 +797,29 @@ regression_test: install
 	@$(ECHO) Summarizing test results
 	@-<$(regression_test_diffs) \
 	  $(SED) \
-	    -e'/^Only in/d' \
+	    -e ';/^Only in/d' \
 	  | $(WC) -l \
-	  | $(SED) 's/^/  /' \
-	  | $(SED) -e's/$$/ regression-test files compared/'
+	  | $(SED) -e 's/^/  /' \
+	  | $(SED) -e 's/$$/ regression-test files compared/'
 	@-<$(regression_test_diffs) \
 	  $(SED) \
-	    -e'/^Files.*are identical$$/!d' \
+	    -e ';/^Files.*are identical$$/!d' \
 	  | $(WC) -l \
-	  | $(SED) 's/^/  /' \
-	  | $(SED) -e's/$$/ regression-test files match/'
+	  | $(SED) -e 's/^/  /' \
+	  | $(SED) -e 's/$$/ regression-test files match/'
 	@-<$(regression_test_diffs) \
 	  $(SED) \
-	    -e'/^Files.*are identical$$/d' \
-	    -e'/^Only in /d' \
+	    -e ';/^Files.*are identical$$/d' \
+	    -e ';/^Only in /d' \
 	  | $(WC) -l \
-	  | $(SED) 's/^/  /' \
-	  | $(SED) -e's/$$/ regression-test nonmatching files/'
+	  | $(SED) -e 's/^/  /' \
+	  | $(SED) -e 's/$$/ regression-test nonmatching files/'
 	@-<$(regression_test_diffs) \
 	  $(SED) \
-	    -e'/^Only in.*test\/touchstone/!d' \
+	    -e ';/^Only in.*test\/touchstone/!d' \
 	  | $(WC) -l \
-	  | $(SED) 's/^/  /' \
-	  | $(SED) -e's/$$/ regression-test missing files/'
+	  | $(SED) -e 's/^/  /' \
+	  | $(SED) -e 's/$$/ regression-test missing files/'
 	@$(ECHO) ...regression test completed.
 
 ################################################################################
