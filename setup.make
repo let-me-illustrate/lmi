@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: setup.make,v 1.24 2006-01-06 21:17:55 chicares Exp $
+# $Id: setup.make,v 1.25 2006-01-12 09:53:44 chicares Exp $
 
 .PHONY: all
 all: setup
@@ -270,14 +270,14 @@ install_frozen_libxml2_from_tmp_dir:
 
 # Install sed-4.0.7 .
 
-# There are several later versions. Building sed-4.1.4 fails
+# There are several later versions. Building sed-4.1.4 in MSYS fails
 # for several reasons:
-#  - it expects some natural language that's not present
-#      ("./configure --disable-nls" seems to fix that)
+#  - it expects some natural-language support that's not present
+#      workaround: "./configure --disable-nls"
 #  - it expects to find 'bcopy'
-#      (to fix that, "make CPPFLAGS='-DHAVE_STRING_H'")
+#      workaround: "make CPPFLAGS='-DHAVE_STRING_H'"
 #  - it can't resolve multibyte-character functions
-#      (to fix that, suppress "#define HAVE_MBRTOWC 1" in config.h)
+#      workaround: suppress "#define HAVE_MBRTOWC 1" in config.h
 # Those seem to be problems with MSYS or autotools, except that
 # the second one looks like a defect in the sed sources (a file
 # that uses 'bcopy' doesn't seem to include config.h).
