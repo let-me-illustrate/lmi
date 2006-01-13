@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: msw_msys.make,v 1.9 2006-01-10 02:57:05 chicares Exp $
+# $Id: msw_msys.make,v 1.10 2006-01-13 12:39:45 chicares Exp $
 
 ################################################################################
 
@@ -35,8 +35,8 @@
 # replaced as follows:
 #  - Get the GNU sources for sed-4.0.7 (tested) or later (untested).
 #  - Build a new msw binary in MSYS with './configure && make'.
-#  - Copy it to MSYS path '/c/usr/bin/sed' to use the definition of
-#    $(SED) below.
+#  - Copy it to MSYS path '$(system_root)/usr/bin/sed' to use the
+#    definition of $(SED) below (or supply your own definition).
 #
 # Do not copy this new sed binary into MSYS's own /bin/ or /usr/bin/
 # directories: that would certainly cause horrible problems. Hesitate
@@ -71,7 +71,10 @@
 
 ################################################################################
 
-system_root := /c
+# This may be overridden on the command line, or by providing a
+# definition in the environment, e.g., "export system_root='/d'".
+
+system_root ?= /c
 
 ################################################################################
 
@@ -117,7 +120,7 @@ MKDIR   := $(PATH_BIN)mkdir
 MV      := $(PATH_BIN)mv
 RM      := $(PATH_BIN)rm
 
-SED     := /c/usr/bin/sed
+SED     := $(system_root)/usr/bin/sed
 
 TAR     := $(PATH_BIN)tar
 
@@ -135,7 +138,7 @@ WGET    := $(PATH_USR_BIN)wget
 
 # TODO ?? Where would libxml2 install this thing?
 # XMLLINT := $(PATH_USR_BIN)xmllint
-XMLLINT := /c/usr/bin/xmllint
+XMLLINT := $(system_root)/usr/bin/xmllint
 
 ################################################################################
 
