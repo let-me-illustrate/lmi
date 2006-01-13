@@ -1,6 +1,6 @@
 // Instruct the operating system to execute a command.
 //
-// Copyright (C) 2001, 2002, 2003, 2004, 2005 Gregory W. Chicares.
+// Copyright (C) 2001, 2002, 2003, 2004, 2005, 2006 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: system_command.cpp,v 1.2 2005-01-15 20:17:29 chicares Exp $
+// $Id: system_command.cpp,v 1.3 2006-01-13 04:34:40 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -48,6 +48,12 @@ int system_command(std::string const& command_line)
 
 // For the msw platform, use this implementation to avoid the problem
 // described in the header that declares it.
+
+// TODO ?? Test whether saving and restoring the fpu control word
+// prevents a reported problem.
+
+#include "alert.hpp"
+#include "fenv_lmi.hpp"
 
 #include <windows.h>
 
@@ -82,6 +88,15 @@ int system_command(std::string const& command_line)
     ::WaitForSingleObject(process_info.hProcess, INFINITE);
     ::GetExitCodeProcess(process_info.hProcess, &exit_code);
     ::CloseHandle(process_info.hProcess);
+
+    if(!fenv_validate())
+        {
+        warning()
+            << "Caught suspected problem. Reinitializing control word."
+            << LMI_FLUSH
+            ;
+        fenv_initialize();
+        }
 
     return exit_code;
 }

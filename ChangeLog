@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.298 2006-01-12 09:53:50 chicares Exp $
+// $Id: ChangeLog,v 1.299 2006-01-13 04:34:40 chicares Exp $
 
 MAINTENANCE
 
@@ -5458,4 +5458,12 @@ Rewrite 'sed' commands to work around an MSYS bash defect.
 
   fancy.make
 Rewrite 'sed' commands for uniformity.
+
+20060113T0434Z <chicares@cox.net> [1205]
+
+  system_command.cpp
+Try to localize a reported problem. Pollution of the floating-point
+environment is detected on exit, sporadically, after printing. Check
+the control word immediately after printing, resetting it and printing
+a warning if a problem is found.
 
