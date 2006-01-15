@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.299 2006-01-13 04:34:40 chicares Exp $
+// $Id: ChangeLog,v 1.300 2006-01-15 12:45:07 chicares Exp $
 
 MAINTENANCE
 
@@ -5466,4 +5466,25 @@ Try to localize a reported problem. Pollution of the floating-point
 environment is detected on exit, sporadically, after printing. Check
 the control word immediately after printing, resetting it and printing
 a warning if a problem is found.
+
+20060113T1239Z <chicares@cox.net> [1205]
+
+  msw_msys.make
+Make it easier to override the system root.
+
+20060115T1243Z <chicares@cox.net> [1205]
+
+  initialize_filesystem.hpp [expunged]
+  main_cgi.cpp
+  main_cli.cpp
+  main_wx.cpp
+  path_utility.cpp
+  path_utility.hpp
+Merge boost::filesystem utilities. This would seem to be a mere
+refactoring, but it actually fixes a problem incidentally observed
+running 'make regression_test' with MSYS. See
+  http://sourceforge.net/mailarchive/message.php?msg_id=14476898
+and
+  http://lists.gnu.org/archive/html/lmi/2006-01/msg00031.html
+for details.
 

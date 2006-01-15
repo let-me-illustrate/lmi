@@ -1,6 +1,6 @@
 // Life insurance illustrations: command-line interface.
 //
-// Copyright (C) 2001, 2002, 2003, 2004, 2005 Gregory W. Chicares.
+// Copyright (C) 2001, 2002, 2003, 2004, 2005, 2006 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_cli.cpp,v 1.18 2005-12-22 13:59:49 chicares Exp $
+// $Id: main_cli.cpp,v 1.19 2006-01-15 12:45:07 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -34,12 +34,12 @@
 #include "getopt.hpp"
 #include "global_settings.hpp"
 #include "group_values.hpp"
-#include "initialize_filesystem.hpp"
 #include "inputillus.hpp"
 #include "ledger_text_formats.hpp"
 #include "license.hpp"
 #include "main_common.hpp"
 #include "miscellany.hpp"
+#include "path_utility.hpp"
 #include "so_attributes.hpp"
 #include "timer.hpp"
 #include "value_cast.hpp"

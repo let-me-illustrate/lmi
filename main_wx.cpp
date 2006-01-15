@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_wx.cpp,v 1.40 2006-01-03 21:21:04 chicares Exp $
+// $Id: main_wx.cpp,v 1.41 2006-01-15 12:45:07 chicares Exp $
 
 // Portions of this file are derived from wxWindows files
 //   samples/docvwmdi/docview.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -53,10 +53,10 @@
 #include "ihs_dbdict.hpp" // print_databases()
 #include "illustration_document.hpp"
 #include "illustration_view.hpp"
-#include "initialize_filesystem.hpp"
 #include "license.hpp"
 #include "main_common.hpp"
 #include "miscellany.hpp"
+#include "path_utility.hpp"
 #include "security.hpp"
 #include "text_doc.hpp"
 #include "text_view.hpp"
