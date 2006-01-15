@@ -1,6 +1,6 @@
 // Common gateway interface using gnu cgicc.
 //
-// Copyright (C) 1998, 2001, 2002, 2003, 2004, 2005 Gregory W. Chicares.
+// Copyright (C) 1998, 2001, 2002, 2003, 2004, 2005, 2006 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -31,7 +31,7 @@
 // other reasons evident in cvs or explained in 'ChangeLog'. Any
 // defect should not reflect on Stephen F. Booth's reputation.
 
-// $Id: main_cgi.cpp,v 1.15 2005-12-20 00:46:38 chicares Exp $
+// $Id: main_cgi.cpp,v 1.16 2006-01-15 12:45:07 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -41,10 +41,10 @@
 #include "alert.hpp"
 #include "argv0.hpp"
 #include "calculate.hpp"
-#include "initialize_filesystem.hpp"
 #include "inputillus.hpp"
 #include "inputs.hpp"
 #include "main_common.hpp"
+#include "path_utility.hpp"
 #include "platform_dependent.hpp" // putenv() [GWC]
 #include "timer.hpp"
 #include "value_cast.hpp"
