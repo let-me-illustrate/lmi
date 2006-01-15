@@ -1,6 +1,6 @@
 // Get startup path from argv[0] if available: unit test.
 //
-// Copyright (C) 2004, 2005 Gregory W. Chicares.
+// Copyright (C) 2004, 2005, 2006 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: argv0_test.cpp,v 1.4 2005-12-07 04:13:41 chicares Exp $
+// $Id: argv0_test.cpp,v 1.5 2006-01-15 15:46:53 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -33,11 +33,14 @@
 
 int test_main(int, char* argv[])
 {
-// TODO ?? In this message
-//   http://lists.boost.org/MailArchives/boost/msg47862.php
-// the author of the boost filesystem library recommends
-//   fs::path path(argv[0], fs::native);
-// instead--why do otherwise here?
+    // Initialize default name-checking policy to 'native'--see:
+    //   http://lists.boost.org/MailArchives/boost/msg47862.php
+    // This shouldn't be necessary, but is for MSYS's bash, which
+    // translates argv[0] to something like 'c:\foo\bar'. This
+    // initialization may fail if this test program is linked with a
+    // boost dll--see the documentation for initialize_filesystem().
+    //
+    fs::path::default_name_check(fs::native);
 
     fs::startup_path(argv[0]);
 
