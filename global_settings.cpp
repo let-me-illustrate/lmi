@@ -1,6 +1,6 @@
 // Global settings.
 //
-// Copyright (C) 2003, 2005 Gregory W. Chicares.
+// Copyright (C) 2003, 2005, 2006 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: global_settings.cpp,v 1.10 2005-09-12 01:32:19 chicares Exp $
+// $Id: global_settings.cpp,v 1.11 2006-01-16 00:08:43 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -100,10 +100,19 @@ namespace
         }
 } // Unnamed namespace.
 
-/// Initialize directory strings to ".", not an empty string. Reason:
+/// Initialize directory paths to ".", not an empty string. Reason:
 /// objects of the boost filesystem library's path class are created
 /// from these strings, which, if the strings were empty, would trigger
 /// exceptions when passed to that library's directory_iterator ctor.
+///
+/// 6.7/4 might seem to permit instance() to call this ctor before the
+/// first statement of main(); however, that is actually not permitted
+/// because it wouldn't meet the conditions of 3.6.2/2; cf.
+///   http://groups.google.com/group/comp.lang.c++.moderated/msg/f322587e93ce83fb
+/// Even if that were permitted, or if instance() is negligently
+/// called too early, then setting a default policy later with
+/// default_name_check() will throw an exception, so there's no need
+/// to guard against such things here in any event.
 
 global_settings::global_settings()
     :mellon_                    (false)
