@@ -1,6 +1,6 @@
 // Global settings--unit test.
 //
-// Copyright (C) 2005 Gregory W. Chicares.
+// Copyright (C) 2005, 2006 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: global_settings_test.cpp,v 1.5 2005-09-12 01:32:19 chicares Exp $
+// $Id: global_settings_test.cpp,v 1.6 2006-01-16 00:08:43 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -31,6 +31,7 @@
 #define BOOST_INCLUDE_MAIN
 #include "test_tools.hpp"
 
+#include <boost/filesystem/exception.hpp>
 #include <boost/filesystem/operations.hpp>
 #include <boost/filesystem/path.hpp>
 
@@ -90,7 +91,7 @@ void test_directory_exceptions()
 int test_main(int, char*[])
 {
     // Initial values of 'directory' data members must be valid: the
-    // operations tested here must not throw.
+    // operations tested here are required not to throw.
 
     global_settings::instance().set_data_directory
         (global_settings::instance().data_directory().string()
@@ -105,6 +106,16 @@ int test_main(int, char*[])
     // Certain other operations are required to throw.
 
     test_directory_exceptions();
+
+    // Attempting to set a default name-checking policy after creating
+    // an instance of class global_settings should throw. Test this in
+    // order to guard against changes to the boost filesystem library.
+
+    BOOST_TEST_THROW
+        (fs::path::default_name_check(fs::native)
+        ,fs::filesystem_error
+        ,""
+        );
 
     // 'ash_nazg' implies 'mellon'.
     global_settings::instance().set_mellon(false);

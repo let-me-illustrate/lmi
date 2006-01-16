@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.300 2006-01-15 12:45:07 chicares Exp $
+// $Id: ChangeLog,v 1.301 2006-01-16 00:08:43 chicares Exp $
 
 MAINTENANCE
 
@@ -5487,4 +5487,15 @@ running 'make regression_test' with MSYS. See
 and
   http://lists.gnu.org/archive/html/lmi/2006-01/msg00031.html
 for details.
+
+20060115T1546Z <chicares@cox.net> [1204]
+
+  argv0_test.cpp
+Work around an MSYS problem.
+
+20060116T0008Z <chicares@cox.net> [1204]
+
+  global_settings.cpp
+  global_settings_test.cpp
+Improve documentation and test its correctness.
 
