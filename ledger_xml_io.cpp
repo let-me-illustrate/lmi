@@ -1,6 +1,6 @@
 // Ledger xml input and output.
 //
-// Copyright (C) 2004, 2005 Gregory W. Chicares.
+// Copyright (C) 2004, 2005, 2006 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xml_io.cpp,v 1.29 2005-11-18 06:06:25 chicares Exp $
+// $Id: ledger_xml_io.cpp,v 1.30 2006-01-17 13:28:52 chicares Exp $
 
 #include "config.hpp"
 
@@ -36,7 +36,6 @@
 #include "security.hpp"
 #include "value_cast.hpp"
 #include "version.hpp"
-#include "xmlwrapp_ex.hpp"
 
 #ifdef USING_CURRENT_XMLWRAPP
 #   include <xmlwrapp/attributes.h>

@@ -1,7 +1,7 @@
 # Master automake makefile, run automake to generate Makefile.am from it (this
 # is also done by autogen.sh script)
 #
-# Copyright (C) 2005 Vadim Zeitlin.
+# Copyright (C) 2005, 2006 Vadim Zeitlin.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 2 as
@@ -20,7 +20,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: Makefile.am,v 1.11 2005-12-29 20:17:49 zeitlin Exp $
+# $Id: Makefile.am,v 1.12 2006-01-17 13:28:52 chicares Exp $
 
 
 SUBDIRS = third_party
@@ -290,7 +290,6 @@ liblmi_common_sources = \
     system_command.cpp \
     timer.cpp \
     xenumtypes.cpp \
-    xmlwrapp_ex.cpp \
     xrange.cpp
 
 libmain_auxiliary_common_la_SOURCES = \
@@ -567,7 +566,6 @@ test_input_SOURCES =    \
   multiple_cell_document.cpp \
   single_cell_document.cpp \
   xenumtypes.cpp \
-  xmlwrapp_ex.cpp \
   xrange.cpp
 
 test_input_CXXFLAGS = $(XMLWRAPP_FLAGS) $(AM_CXXFLAGS)
@@ -837,6 +835,7 @@ noinst_HEADERS = \
     inputstatus.hpp \
     interest_rates.hpp \
     is_sorted_.hpp \
+    istream_to_string.hpp \
     ledger.hpp \
     ledger_base.hpp \
     ledger_invariant.hpp \
@@ -906,7 +905,6 @@ noinst_HEADERS = \
     xenumfwd.hpp \
     xenumtypes.hpp \
     xml_notebook.hpp \
-    xmlwrapp_ex.hpp \
     xrange.hpp \
     xrangefwd.hpp \
     xrangetypes.hpp \
