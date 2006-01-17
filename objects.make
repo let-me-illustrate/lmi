@@ -1,6 +1,6 @@
 # Makefile: object lists.
 #
-# Copyright (C) 2005 Gregory W. Chicares.
+# Copyright (C) 2005, 2006 Gregory W. Chicares.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: objects.make,v 1.62 2005-12-31 16:59:42 chicares Exp $
+# $Id: objects.make,v 1.63 2006-01-17 13:28:52 chicares Exp $
 
 ################################################################################
 
@@ -108,8 +108,6 @@ ifdef HAVE_THIRD_PARTY_LIBRARIES
   cgicc_objects :=
   xmlwrapp_objects :=
 endif
-
-xmlwrapp_objects += xmlwrapp_ex.o
 
 ################################################################################
 

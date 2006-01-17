@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.301 2006-01-16 00:08:43 chicares Exp $
+// $Id: ChangeLog,v 1.302 2006-01-17 13:28:52 chicares Exp $
 
 MAINTENANCE
 
@@ -5498,4 +5498,22 @@ Work around an MSYS problem.
   global_settings.cpp
   global_settings_test.cpp
 Improve documentation and test its correctness.
+
+20060117T1328Z <chicares@cox.net> [1202]
+
+  expected.cgi.out
+Remove carriage returns. Now, no file in this cvs directory contains
+any carriage return.
+
+  Makefile.am
+  census_document.cpp
+  illustration_document.cpp
+  istream_to_string.hpp [new file]
+  ledger_xml_io.cpp
+  multiple_cell_document.cpp
+  objects.make
+  single_cell_document.cpp
+  xmlwrapp_ex.cpp [expunged]
+  xmlwrapp_ex.hpp [expunged]
+Refactor.
 
