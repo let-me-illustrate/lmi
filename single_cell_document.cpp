@@ -1,6 +1,6 @@
 // xml document for single-cell illustration.
 //
-// Copyright (C) 2002, 2003, 2005 Gregory W. Chicares.
+// Copyright (C) 2002, 2003, 2005, 2006 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: single_cell_document.cpp,v 1.4 2005-09-12 01:32:19 chicares Exp $
+// $Id: single_cell_document.cpp,v 1.5 2006-01-17 13:28:52 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -30,7 +30,7 @@
 
 #include "alert.hpp"
 #include "inputillus.hpp"
-#include "xmlwrapp_ex.hpp"
+#include "istream_to_string.hpp"
 
 #ifdef USING_CURRENT_XMLWRAPP
 #   include <xmlwrapp/document.h>
@@ -126,7 +126,8 @@ void single_cell_document::read(std::istream& is)
     // read the istream into a std::string via a std::ostringstream
     // and pass that to the xml::tree_parser ctor that takes a char* .
 
-    std::string s(istream_to_string(is));
+    std::string s;
+    istream_to_string(is, s);
     xml::init init;
 // XMLWRAPP !! See comment on parse() in header.
 //    parse(xml::tree_parser(s.c_str(), 1 + s.size()));

@@ -1,6 +1,6 @@
 // Document class for illustrations.
 //
-// Copyright (C) 2002, 2003, 2004, 2005 Gregory W. Chicares.
+// Copyright (C) 2002, 2003, 2004, 2005, 2006 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustration_document.cpp,v 1.5 2005-12-02 22:44:22 chicares Exp $
+// $Id: illustration_document.cpp,v 1.6 2006-01-17 13:28:52 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -92,7 +92,6 @@ wxHtmlWindow& IllustrationDocument::PredominantViewWindow() const
 bool IllustrationDocument::OnCreate(wxString const& filename, long int flags)
 {
 // TODO ?? Why not offer doc_.read(filename)?
-// TODO ?? Would a vector<char> help?
 
     if(LMI_WX_CHILD_DOCUMENT & flags)
         {
