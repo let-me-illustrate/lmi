@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: objects.make,v 1.63 2006-01-17 13:28:52 chicares Exp $
+# $Id: objects.make,v 1.64 2006-01-18 12:16:41 chicares Exp $
 
 ################################################################################
 
@@ -700,6 +700,11 @@ generate_passkey$(EXEEXT): \
 ihs_crc_comp$(EXEEXT): \
   $(main_auxiliary_common_objects) \
   ihs_crc_comp.o \
+
+test_coding_rules$(EXEEXT): \
+  $(boost_filesystem_objects) \
+  $(main_auxiliary_common_objects) \
+  test_coding_rules.o \
 
 ################################################################################
 
