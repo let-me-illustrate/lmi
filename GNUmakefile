@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: GNUmakefile,v 1.53 2006-01-12 09:53:47 chicares Exp $
+# $Id: GNUmakefile,v 1.54 2006-01-18 12:16:41 chicares Exp $
 
 ###############################################################################
 
@@ -401,6 +401,15 @@ clobber: source_clean
 
 ################################################################################
 
+# Custom tools built from source.
+
+.PHONY: custom_tools
+custom_tools:
+	@$(MAKE) test_coding_rules$(EXEEXT)
+	@$(CP) --update $(build_directory)/test_coding_rules$(EXEEXT) /usr/local/bin
+
+################################################################################
+
 # Check conformity to certain formatting rules; count lines and defects.
 
 # Arbitrarily but reasonably, files like scripts and makefiles aren't
@@ -426,7 +435,7 @@ supplemental_test_makefile = ../forbidden.make
 # problem caused by MSYS.
 
 .PHONY: check_conformity
-check_conformity: source_clean
+check_conformity: source_clean custom_tools
 	@-[ ! -e $(supplemental_test_makefile) ] \
 	  || $(MAKE) --no-print-directory -f $(supplemental_test_makefile)
 	@$(ECHO) "  Unexpected or oddly-named source files:"
@@ -460,12 +469,6 @@ check_conformity: source_clean
 	@$(GREP) --line-number ' $$' $(licensed_files)                 || true
 	@$(ECHO) "  Files that improperly contain physical tabs:"
 	@$(GREP) -l '	' $(filter-out $(makefiles),$(licensed_files)) || true
-	@$(ECHO) "  Files that contain carriage returns:"
-	@for z in $(licensed_files) $(xpm_files); \
-	  do \
-	    $(ECHO) -n $$z; \
-	    <$$z $(TR) '\r' '\a' | $(SED) -e ';/\a/!d' | $(WC) -l; \
-	  done | $(SED) -e ';/ 0$$/d';
 	@$(ECHO) "  Headers that should include \"config.hpp\" first but don't:"
 	@for z in \
 	  $(filter-out config.hpp $(wildcard config_*.hpp),$(wildcard *.hpp)); \
@@ -533,6 +536,8 @@ check_conformity: source_clean
 	      $$z - \
 	      || $(ECHO) "... in file $$z"; \
 	  done;
+	@$(ECHO) "  Miscellaneous problems:"
+	@-test_coding_rules $(licensed_files) $(xpm_files)
 	@$(ECHO) "Total lines of code:"
 	@$(WC) -l $(prerequisite_files) | $(SED) -e ';/[Tt]otal/!d' -e 's/[^0-9]//'
 	@$(ECHO) "Number of source files:"
