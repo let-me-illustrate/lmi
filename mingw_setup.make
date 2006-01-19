@@ -5,7 +5,7 @@
 
 # http://savannah.nongnu.org/projects/lmi
 
-# $Id: mingw_setup.make,v 1.8 2006-01-06 21:17:55 chicares Exp $
+# $Id: mingw_setup.make,v 1.9 2006-01-19 02:24:24 wboutin Exp $
 
 # REVIEW: Here, say exactly what this makefile does, and what its
 # prerequisites are; and write some excruciatingly clear instructions
@@ -130,14 +130,14 @@ mingw_extras = \
 
 %.tar.bz2:
 	[ -e $@ ] || $(WGET) --non-verbose $(sf_mirror)/mingw/$@
-	$(MD5SUM) --check $@.md5
+	$(MD5SUM) --check $(src_dir)/$@.md5
 	$(CP) --force --preserve $@ $(mingw_dir)
 	$(BZIP2) --decompress --keep --force $@
 	$(TAR) --extract --file=$*.tar
 
 %.tar.gz:
 	[ -e $@ ] || $(WGET) --non-verbose $(sf_mirror)/mingw/$@
-	$(MD5SUM) --check $@.md5
+	$(MD5SUM) --check $(src_dir)/$@.md5
 	$(CP) --force --preserve $@ $(mingw_dir)
 	$(GZIP) --decompress --force $@
 	$(TAR) --extract --file=$*.tar
