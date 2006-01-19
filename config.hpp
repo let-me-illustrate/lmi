@@ -1,6 +1,6 @@
 // Configuration.
 //
-// Copyright (C) 2001, 2004, 2005 Gregory W. Chicares.
+// Copyright (C) 2001, 2004, 2005, 2006 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: config.hpp,v 1.13 2005-11-12 19:05:22 chicares Exp $
+// $Id: config.hpp,v 1.14 2006-01-19 07:38:31 chicares Exp $
 
 // Configuration header for compiler quirks. Include at the beginning of
 // every .hpp file (and nowhere else).
@@ -67,7 +67,10 @@ namespace fs = boost::filesystem;
 //
 #include "platform_dependent.hpp"
 
-#if defined __GNUC__ && __GNUC__ < 3
+// It is impossible to compile lmi with g++ prior to version 3, but
+// old versions of gcc are adequate for C translation units.
+
+#if defined __GNUC__ && __GNUC__ < 3 && defined cplusplus
 #   error Obsolete compiler not supported.
 #endif // Ancient gcc compiler.
 
