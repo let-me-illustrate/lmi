@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.304 2006-01-19 02:24:24 wboutin Exp $
+// $Id: ChangeLog,v 1.305 2006-01-19 07:46:52 chicares Exp $
 
 MAINTENANCE
 
@@ -5528,4 +5528,26 @@ Quadruple the speed of 'make check_conformity'.
 
   mingw_setup.make
 Redefine '*.md5' location.
- 
+
+20060119T0738Z <chicares@cox.net> [1202]
+
+  config.hpp
+Remove an unnecessary restriction.
+
+  objects.make
+Remove disused variables.
+
+  system_command.cpp
+Try to localize a reported problem that the 20060113T0434Z change
+failed to pin down. Check the control word immediately before and
+immediately after printing operations, printing a diagnostic if a
+problem is found, but don't reset the control word.
+
+20060119T0746Z <chicares@cox.net> [1203]
+
+  input_harmonization.cpp
+Always inhibit certain underwriting types. Parmedical and nonmedical
+underwriting should be governed by database flags as are other
+underwriting types, but it is inconvenient to expand the database
+before the new product editor is deployed.
+
