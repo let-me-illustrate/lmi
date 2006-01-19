@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.303 2006-01-18 12:16:41 chicares Exp $
+// $Id: ChangeLog,v 1.304 2006-01-19 02:24:24 wboutin Exp $
 
 MAINTENANCE
 
@@ -5524,3 +5524,8 @@ Refactor.
   test_coding_rules.cpp [new file]
 Quadruple the speed of 'make check_conformity'.
 
+20060119T0204Z <wboutin@massmutual.com> [1202]
+
+  mingw_setup.make
+Redefine '*.md5' location.
+ 
