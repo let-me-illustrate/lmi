@@ -20,7 +20,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: Makefile.am,v 1.14 2006-01-19 01:58:22 zeitlin Exp $
+# $Id: Makefile.am,v 1.15 2006-01-19 02:00:59 zeitlin Exp $
 
 
 SUBDIRS = third_party
@@ -440,7 +440,9 @@ libtest_commons_la_SOURCES = \
     alert_cli.cpp \
     fenv_lmi.cpp \
     getopt.cpp \
-    license.cpp
+    license.cpp \
+    expm1.c
+libtest_commons_la_CFLAGS = $(AM_CFLAGS)
 
 test_actuarial_table_SOURCES = \
   actuarial_table.cpp \
