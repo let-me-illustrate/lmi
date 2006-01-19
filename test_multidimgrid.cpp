@@ -16,11 +16,15 @@
 #include <boost/tuple/tuple.hpp>
 #include <boost/tuple/tuple_comparison.hpp>
 
+#include <math.h> // for log10
+
 // needed by MultiDimIntAxisAdjuster to calculate its contols size
 #include <wx/dcclient.h>
 
+// to avoid using long ids (such as boost::filesystem::path)
 using namespace boost;
 
+// Option Type axis values enum
 enum OptionType
 {
     Option_Put,
@@ -28,6 +32,7 @@ enum OptionType
     Option_Max
 };
 
+// Option Exercise axis values enum
 enum OptionExercise
 {
     Exercise_European,
@@ -35,6 +40,7 @@ enum OptionExercise
     Exercise_Max
 };
 
+// Option exercise axis
 class ExerciseAxis : public MultiDimEnumAxis<OptionExercise>
 {
 public:
@@ -44,6 +50,7 @@ public:
     }
 };
 
+// Option type axis
 class TypeAxis : public MultiDimEnumAxis<OptionType>
 {
 public:
@@ -57,7 +64,7 @@ public:
 // forward MultiDimAdjustableIntAxis class declaration
 class MultiDimAdjustableIntAxis;
 
-// panel used by MultiDimAdjustableIntAxis class to adjust its values
+// adjustment control used by MultiDimAdjustableIntAxis class to adjust its values
 class MultiDimIntAxisAdjuster : public wxPanel
 {
 public:
@@ -70,13 +77,17 @@ private:
     wxTextCtrl * m_maxValue;
     wxButton * m_button;
 
+    // event handler function called when min/max value is changed
     void OnRangeChange( wxCommandEvent & event );
+    // event handler function called when 'apply' button is pushed
     void OnConfirm( wxCommandEvent & event );
 
     friend class MultiDimAdjustableIntAxis;
+    // function called by OnCofirm. applies adjustment values
     void DoOnConfirm();
 
-    // calculate minimal suitable size for a control with some text on it
+    // helper - calculate minimal suitable size for a control with some text
+    // needed to adjust min/max/apply controls size
     wxSize GetMinSizeForTextControl( wxWindow * win, int numLetters );
 
     DECLARE_NO_COPY_CLASS( MultiDimIntAxisAdjuster )
@@ -86,6 +97,10 @@ private:
 // --------------------------
 // MultiDimAdjustableIntAxis
 // --------------------------
+// Adjustable axis - the only difference with MultiDimIntAxis is that
+// it provides adjustment control and allows narrowing of value range
+// It stores m_minOriginal and m_maxOriginal values to allow the 'resetting'
+// of adjustments
 class MultiDimAdjustableIntAxis
     : public MultiDimAdjustableAxisAny< MultiDimIntAxisAdjuster >
 {
@@ -93,6 +108,7 @@ class MultiDimAdjustableIntAxis
 public:
     typedef int ValueType;
 
+    // see MultiDimIntAxis::MultiDimIntAxis constructor for details
     MultiDimAdjustableIntAxis(
         const wxString& name,
         int minValue,
@@ -102,24 +118,32 @@ public:
     : BaseClass(name), m_minOriginal(minValue), m_maxOriginal(maxValue),
     m_min(minValue), m_max(maxValue), m_step(step)
     {
+        wxASSERT_MSG( minValue <= maxValue,
+                      _T("minValue have to less or equal to maxValue") );
+        wxASSERT_MSG( step >= 1,
+                      _T("step has to be at least 1") );
     }
 
+    // the same as MultiDimIntAxis::GetCardinality
     virtual unsigned int GetCardinality() const
     {
-        return ( m_max - m_min ) / m_step;
+        return ( m_max - m_min ) / m_step + 1;
     }
 
+    // the same as MultiDimIntAxis::GetCardinality
     virtual wxString GetLabel(unsigned int n) const
     {
         return wxString::Format( _T( "%d" ), m_min + n * m_step );
     }
 
+    // the same as MultiDimIntAxis::GetCardinality
     virtual boost::any GetValue(unsigned int n) const
     {
         return boost::any( static_cast<int>( m_min + n * m_step ) );
     }
 
 protected:
+    // create the adjustment control
     MultiDimIntAxisAdjuster * DoGetAdjustControl( MultiDimGridAny *grid ) const
     {
         wxASSERT( grid != NULL );
@@ -129,12 +153,14 @@ protected:
         );
     }
 
+    // asks adjustment window to reapply its filters
     virtual void DoApplyAdjustment( MultiDimIntAxisAdjuster * win )
     {
         if( win != NULL )
             win->DoOnConfirm();
     }
 
+    // just restore the original values
     virtual void DoResetAdjustment( MultiDimIntAxisAdjuster * win )
     {
         m_min = m_minOriginal;
@@ -144,20 +170,29 @@ protected:
 private:
     friend class MultiDimIntAxisAdjuster;
 
+    // original range boundaries
     int m_minOriginal;
     int m_maxOriginal;
+    // working boundaries - could be altered by adjustment control
     int m_min;
     int m_max;
+    
     int m_step;
+
 
     void DoApplyAdjustment( int minValue, int maxValue )
     {
-        minValue = wxMin( minValue, m_maxOriginal - m_step + 1 );
-        minValue =
-            m_minOriginal + (int)((minValue - m_minOriginal) / m_step) * m_step;
+        // minValue should not be greater than m_maxOriginal
+        minValue = wxMin( minValue, m_maxOriginal );
+        // snap minValue to the step-grid
+        minValue = m_minOriginal
+                 + (int)(( minValue - m_minOriginal + m_step - 1 ) / m_step) * m_step;
+        // minValue should not be less than m_minOriginal
         minValue = wxMax( minValue, m_minOriginal );
 
+        // maxValue should not be greater than m_maxOriginal, nor less than minValue
         maxValue = wxMax( wxMin( maxValue, m_maxOriginal ), minValue );
+
         m_min = minValue;
         m_max = maxValue;
     }
@@ -189,6 +224,7 @@ wxSize MultiDimIntAxisAdjuster::GetMinSizeForTextControl( wxWindow * win, int nu
     {
         wxClientDC dc( win );
         dc.SetFont( win->GetFont() );
+        // taking the widest letter size
         dc.GetTextExtent( _T("W"), &w, &h );
     }
     wxSize size( w * numLetters, h );
@@ -222,17 +258,12 @@ MultiDimIntAxisAdjuster::MultiDimIntAxisAdjuster(MultiDimAdjustableIntAxis & aax
     sizer->Add( m_maxValue, wxSizerFlags().Expand().Border(wxLEFT, 4) );
     sizer->Add( m_button, wxSizerFlags().Expand().Border(wxLEFT, 3) );
 
-    // maximum possible number of digits for a number between in axis.m_min and axis.m_max
+    // maximum possible number of digits for a number in between axis.m_min and axis.m_max
     unsigned int numDigits = 0;
     {
         double maxValue = wxMax( axis.m_min > 0 ? axis.m_min : -axis.m_min,
-                              axis.m_max > 0 ? axis.m_max : -axis.m_max );
-        while( maxValue >= 1. )
-        {
-            maxValue = maxValue / 10.;
-            ++numDigits;
-        }
-        numDigits = wxMax( 1, numDigits );
+                                 axis.m_max > 0 ? axis.m_max : -axis.m_max );
+        numDigits = (int)log10( wxMax( 1, maxValue ) );
     }
 
     m_minValue->SetMinSize( GetMinSizeForTextControl( m_minValue, numDigits) );
@@ -249,61 +280,43 @@ void MultiDimIntAxisAdjuster::OnRangeChange( wxCommandEvent & event )
     if( m_button )
         m_button->Enable( m_minValue->Validate() && m_maxValue->Validate() );
 }
+
 void MultiDimIntAxisAdjuster::OnConfirm( wxCommandEvent & event )
 {
     return DoOnConfirm();
 }
+
 void MultiDimIntAxisAdjuster::DoOnConfirm( )
 {
     long minVal, maxVal;
     wxString minStr = m_minValue->GetValue();
     wxString maxStr = m_maxValue->GetValue();
-    if( ( minStr.Length() > 0 && !minStr.ToLong(&minVal) )
-        || ( maxStr.Length() > 0 && !maxStr.ToLong(&maxVal) ) )
+    if( ( !minStr.empty() && !minStr.ToLong(&minVal) )
+        || ( !maxStr.empty() && !maxStr.ToLong(&maxVal) ) )
     {
         wxMessageBox( _T("Invalid input - enter numbers only"),
                       _T("Invalid input"), wxOK | wxICON_ERROR, this );
     }
-    int minAdjusted;
-    int maxAdjusted;
-    if( minStr.Length() > 0 && minVal >= axis.m_minOriginal )
-    {
-        minAdjusted = minVal;
-    }
-    else
-    {
-        minAdjusted = axis.m_minOriginal;
-    }
-    if( maxStr.Length() > 0 && maxVal < axis.m_maxOriginal )
-    {
-        maxAdjusted = maxVal;
-    }
-    else
-    {
-        maxAdjusted = axis.m_maxOriginal - 1;
-    }
-    minAdjusted = wxMin( minAdjusted, axis.m_maxOriginal - 1 );
-    maxAdjusted = wxMax( maxAdjusted, axis.m_minOriginal );
-    if( minAdjusted <= maxAdjusted )
-    {
-        m_button->Enable( false );
+    int minAdjusted = !minStr.empty() ? minVal
+                                      : axis.m_minOriginal;
+    int maxAdjusted = !maxStr.empty() ? maxVal
+                                      : axis.m_maxOriginal;
 
-        axis.DoApplyAdjustment( minAdjusted, maxAdjusted );
+    m_button->Enable( false );
 
-        minStr.Clear();
-        minStr << axis.m_minOriginal;
-        m_minValue->SetValue( minStr );
-        maxStr.Clear();
-        maxStr << axis.m_maxOriginal;
-        m_maxValue->SetValue( maxStr );
-        grid.UpdateGridAxis( axis.GetName() );
-    }
-    else
+    axis.DoApplyAdjustment( minAdjusted, maxAdjusted );
+
+    // if entered boundary value was modified by the control - then show it
+    if( axis.m_min < minAdjusted || minAdjusted < axis.m_minOriginal )
     {
-        wxMessageBox(
-            _T("Upper bound value is less than the lower bound"),
-            _T("Invalid input"), wxOK | wxICON_ERROR, this );
+        m_minValue->SetValue( wxString::Format( _T("%d"), axis.m_min ) );
     }
+    // if entered boundary value was modified by the control - then show it
+    if( axis.m_max > maxAdjusted || maxAdjusted > axis.m_maxOriginal )
+    {
+        m_maxValue->SetValue( wxString::Format( _T("%d"), axis.m_max ) );
+    }
+    grid.UpdateGridAxis( axis.GetName() );
 }
 
 
@@ -387,7 +400,9 @@ IMPLEMENT_APP(TestApp)
 
 bool TestApp::OnInit()
 {
-    wxFrame * frame = new wxFrame(NULL, wxID_ANY, _T("MultiDimGridAny Test App"));
+    wxFrame * frame = new wxFrame(
+        NULL, wxID_ANY, _T("MultiDimGridAny Test App"),
+        wxPoint( 200, 200 ), wxSize( 600, 400) );
 
     shared_ptr<OptionTable> table(new OptionTable);
 
@@ -404,8 +419,11 @@ bool TestApp::OnInit()
     SetTopWindow(frame);
     frame->Layout();
 
-    grid->SetXAxisColour( wxColour(0, 0, 100) );
-    grid->SetYAxisColour( wxColour(0, 100, 0) );
+    frame->SetSize( wxSize( 600, 400) );
+
+//    Uncomment these lines if you want to get highlighting of axis selection
+//    grid->SetXAxisColour( wxColour(0, 0, 100) );
+//    grid->SetYAxisColour( wxColour(0, 100, 0) );
     return true;
 }
 

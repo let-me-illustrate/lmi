@@ -2,7 +2,7 @@
    @file multidimgrid.hpp
    @brief A control for editing multidimensional data and supporting classes.
    @author Vadim Zeitlin
-   @version $Id: multidimgrid.hpp,v 1.1.2.1 2005-12-16 01:44:32 zeitlin Exp $
+   @version $Id: multidimgrid.hpp,v 1.1.2.2 2006-01-19 02:21:10 zeitlin Exp $
    @date 2005-10-19
 
    The MultiDimGrid control can be used to edit N-dimensional data tables.
@@ -877,8 +877,8 @@ public:
        reorder them.
 
        @param name the name of the axis, for GetName() implementation
-       @param minValue the minimal axis value, e.g. 0
-       @param maxValue the maximal axis value, e.g. 100
+       @param minValue the minimal axis value (inclusive), e.g. 0
+       @param maxValue the maximal axis value (inclusive), e.g. 100
        @param step only values offset from minValue by a multiple of step are
                         valid values; step must be strictly positive
      */
@@ -891,12 +891,16 @@ public:
           m_max(maxValue),
           m_step(step)
     {
+        wxASSERT_MSG( minValue <= maxValue,
+                      _T("minValue have to less or equal to maxValue") );
+        wxASSERT_MSG( step >= 1,
+                      _T("step has to be at least 1") );
     }
 
 
     virtual unsigned int GetCardinality() const
     {
-        return (m_max - m_min) / m_step;
+        return ( m_max - m_min + m_step - 1 ) / m_step;
     }
 
     virtual wxString GetLabel(unsigned int n) const
