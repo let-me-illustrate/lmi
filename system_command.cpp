@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: system_command.cpp,v 1.3 2006-01-13 04:34:40 chicares Exp $
+// $Id: system_command.cpp,v 1.4 2006-01-19 07:38:34 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -50,7 +50,8 @@ int system_command(std::string const& command_line)
 // described in the header that declares it.
 
 // TODO ?? Test whether saving and restoring the fpu control word
-// prevents a reported problem.
+// prevents a reported problem, by means of the fenv_validate()
+// calls below.
 
 #include "alert.hpp"
 #include "fenv_lmi.hpp"
@@ -61,6 +62,11 @@ int system_command(std::string const& command_line)
 
 int system_command(std::string const& command_line)
 {
+    if(!fenv_validate())
+        {
+        safely_show_message("Caught suspected problem before system command.");
+        }
+
     STARTUPINFO startup_info;
     std::memset(&startup_info, 0, sizeof(STARTUPINFO));
     startup_info.cb = sizeof(STARTUPINFO);
@@ -91,11 +97,7 @@ int system_command(std::string const& command_line)
 
     if(!fenv_validate())
         {
-        warning()
-            << "Caught suspected problem. Reinitializing control word."
-            << LMI_FLUSH
-            ;
-        fenv_initialize();
+        safely_show_message("Caught suspected problem after system command.");
         }
 
     return exit_code;
