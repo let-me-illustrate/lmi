@@ -1,6 +1,6 @@
 // Life-insurance illustration input--control harmonization.
 //
-// Copyright (C) 2004, 2005 Gregory W. Chicares.
+// Copyright (C) 2004, 2005, 2006 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_harmonization.cpp,v 1.16 2005-11-05 03:57:23 chicares Exp $
+// $Id: input_harmonization.cpp,v 1.17 2006-01-19 07:46:52 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -263,9 +263,12 @@ void Input::Harmonize()
 
     RetireesCanEnroll.enable(database->Query(DB_AllowRetirees));
 
+    // TODO ?? There should be flags in the database to allow or
+    // forbid paramedical and nonmedical underwriting; arbitrarily,
+    // until they are added, those options are always inhibited.
     GroupUnderwritingType.allow(mce_medical, database->Query(DB_AllowFullUW));
-    GroupUnderwritingType.allow(mce_paramedical, database->Query(DB_AllowFullUW));
-    GroupUnderwritingType.allow(mce_nonmedical, database->Query(DB_AllowFullUW));
+    GroupUnderwritingType.allow(mce_paramedical, false);
+    GroupUnderwritingType.allow(mce_nonmedical, false);
     GroupUnderwritingType.allow(mce_simplified_issue, database->Query(DB_AllowSimpUW));
     GroupUnderwritingType.allow(mce_guaranteed_issue, database->Query(DB_AllowGuarUW));
 
