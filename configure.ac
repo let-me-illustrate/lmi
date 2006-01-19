@@ -21,7 +21,7 @@ dnl snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
 dnl === Prologue ===
 
-AC_REVISION($Id: configure.ac,v 1.16 2006-01-10 14:33:39 zeitlin Exp $)dnl
+AC_REVISION($Id: configure.ac,v 1.17 2006-01-19 01:50:36 zeitlin Exp $)dnl
 
 AC_PREREQ(2.56)
 AC_INIT(LMI, 1.0.0, [chicares@cox.net])
@@ -226,8 +226,13 @@ fi
 
 dnl the functions below are typically found in libm and not libc so make sure
 dnl we look there
-LIBS="$LIBS -lm"
-AC_CHECK_FUNCS(log10l fabsl)
+AC_SEARCH_LIBS([log10l], [m],
+    [AC_DEFINE(HAVE_LOG10L, [1], [Define this if you have log10l function])]
+)
+AC_SEARCH_LIBS([fabsl], [m],
+    [AC_DEFINE(HAVE_FABSL, [1], [Define this if you have fabsl function])]
+)
+
 
 dnl check for snprintf: note that when compiling under gcc using -std= flag the
 dnl standard headers do not declare snprintf() and this is why we don't use
