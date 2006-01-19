@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: objects.make,v 1.64 2006-01-18 12:16:41 chicares Exp $
+# $Id: objects.make,v 1.65 2006-01-19 07:38:33 chicares Exp $
 
 ################################################################################
 
@@ -498,9 +498,7 @@ input_seq_test$(EXEEXT): \
   input_seq_test.o \
   input_sequence.o \
 
-input_test$(EXEEXT): LIBS = $(LIBXML2_LIBS)
 input_test$(EXEEXT): \
-  $(LIBXML2_LIBS) \
   $(boost_filesystem_objects) \
   $(common_test_objects) \
   $(xmlwrapp_objects) \
