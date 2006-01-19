@@ -20,7 +20,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: Makefile.am,v 1.13 2006-01-19 01:56:20 zeitlin Exp $
+# $Id: Makefile.am,v 1.14 2006-01-19 01:58:22 zeitlin Exp $
 
 
 SUBDIRS = third_party
@@ -111,6 +111,7 @@ TESTS = \
     test_argv0 \
     test_calendar_date \
     test_callback \
+    test_coding_rules \
     test_commutation_functions \
     test_comma_punct \
     test_crc32 \
@@ -482,6 +483,13 @@ test_callback_SOURCES = \
 test_callback_CXXFLAGS = $(AM_CXXFLAGS)
 test_callback_LDADD = \
   libtest_commons.la
+
+test_coding_rules_SOURCES = \
+  test_coding_rules.cpp
+test_coding_rules_CXXFLAGS = $(BOOST_INCLUDE_FLAGS) $(AM_CXXFLAGS)
+test_coding_rules_LDADD = \
+  $(BOOST_LIBS) \
+  libmain_auxiliary_common.la
 
 test_commutation_functions_SOURCES =    \
   commutation_functions_test.cpp \
