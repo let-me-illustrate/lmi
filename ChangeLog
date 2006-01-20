@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.305 2006-01-19 07:46:52 chicares Exp $
+// $Id: ChangeLog,v 1.306 2006-01-20 05:59:50 chicares Exp $
 
 MAINTENANCE
 
@@ -5550,4 +5550,10 @@ Always inhibit certain underwriting types. Parmedical and nonmedical
 underwriting should be governed by database flags as are other
 underwriting types, but it is inconvenient to expand the database
 before the new product editor is deployed.
+
+20060120T0559Z <chicares@cox.net> [1203]
+
+  dbnames.xpp
+  ihs_dbdict.cpp
+Improve documentation and default value of 'DB_GuarIntSpread'.
 
