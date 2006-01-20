@@ -1,6 +1,6 @@
 // Product database.
 //
-// Copyright (C) 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005 Gregory W. Chicares.
+// Copyright (C) 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_dbdict.cpp,v 1.11 2005-09-27 16:49:11 chicares Exp $
+// $Id: ihs_dbdict.cpp,v 1.12 2006-01-20 05:59:50 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -215,6 +215,8 @@ void DBDictionary::InitDB()
 
     // Generally you would want a value such as 1/12 or 1/11 here.
     Add(TDBValue(DB_MaxMonthlyCoiRate   , 1.0 / 12.0));
+
+    Add(TDBValue(DB_GuarIntSpread, std::numeric_limits<double>::max()));
 
     Add(TDBValue(DB_CurrCOITable0Limit  , std::numeric_limits<double>::max()));
     Add(TDBValue(DB_CurrCOITable1       , 999));
