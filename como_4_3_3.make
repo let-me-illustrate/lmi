@@ -1,6 +1,6 @@
 # Limited support for a particular non-free compiler under msw only.
 
-# Copyright (C) 2004, 2005 Gregory W. Chicares.
+# Copyright (C) 2004, 2005, 2006 Gregory W. Chicares.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: como_4_3_3.make,v 1.9 2005-12-31 16:59:42 chicares Exp $
+# $Id: como_4_3_3.make,v 1.10 2006-01-20 06:23:37 chicares Exp $
 
 toolset := como
 
@@ -51,7 +51,7 @@ CPPFLAGS := \
   -D__WIN32__ \
   -D_X86_ \
 
-CC  := como
+CC  := gcc
 CXX := como
 
 # This compiler's '--strict' option is incompatible with MinGW system
@@ -93,7 +93,7 @@ strict_cxxflags := \
 # This compiler's strict mode is incompatible with many useful tools
 # such as boost::filesystem (if built from source).
 
-CXXFLAGS := $(nonstrict_cxxflags)
+CXXFLAGS := $(nonstrict_cxxflags) --no_prelink_verbose
 
 # For debugging on msw with gcc as the underlying C compiler, add
 #  /g
@@ -101,7 +101,13 @@ CXXFLAGS := $(nonstrict_cxxflags)
 
 LD := $(CXX)
 
-LDFLAGS :=
+# Library order is crucial. This compiler treats leading slashes
+# as option delimiters, so library names are prefixed with a drive
+# letter.
+
+REQUIRED_LIBS := \
+  c:/xml/libxml2-2.4.22/.libs/libxml2.a \
+  c:$(underlying_cc)/lib/libwsock32.a \
 
 MAKEDEPEND_0 :=
 
@@ -154,6 +160,8 @@ como_4_3_3.make:: ;
 #
 # The result is an ugly workaround that's probably quite fragile.
 
+MAKECMDGOALS ?= lmi_cli_monolithic.exe
+
 %: force
 	@sh -c " \
 	  path=(/usr/bin /como433/bin/ $(underlying_cc)/bin/); \
@@ -174,10 +182,12 @@ como_4_3_3.make:: ;
 	               CXXFLAGS='$(CXXFLAGS)' \
 	                     LD='$(LD)' \
                     LDFLAGS='$(LDFLAGS)' \
+              REQUIRED_LIBS='$(REQUIRED_LIBS)' \
 	           MAKEDEPEND_0='$(MAKEDEPEND_0)' \
 	           MAKEDEPEND_1='$(MAKEDEPEND_1)' \
 	           MPATROL_LIBS='$(MPATROL_LIBS)' \
-	    unit_tests; \
+           platform_defines='' \
+	    $(MAKECMDGOALS); \
 	"
 
 force: ;

@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: workhorse.make,v 1.62 2006-01-12 09:53:47 chicares Exp $
+# $Id: workhorse.make,v 1.63 2006-01-20 06:23:37 chicares Exp $
 
 ###############################################################################
 
@@ -596,6 +596,8 @@ antediluvian_cgi$(EXEEXT): $(cgi_objects) libantediluvian$(SHREXT)
 
 antediluvian_cli$(EXEEXT): lmi_so_attributes := -DLMI_USE_SO
 antediluvian_cli$(EXEEXT): $(cli_objects) libantediluvian$(SHREXT)
+
+antediluvian_cli_monolithic$(EXEEXT): $(cli_objects) $(antediluvian_common_objects)
 
 wx_new$(SHREXT): wx_new.o
 

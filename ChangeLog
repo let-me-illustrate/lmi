@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.306 2006-01-20 05:59:50 chicares Exp $
+// $Id: ChangeLog,v 1.307 2006-01-20 06:23:38 chicares Exp $
 
 MAINTENANCE
 
@@ -5556,4 +5556,11 @@ before the new product editor is deployed.
   dbnames.xpp
   ihs_dbdict.cpp
 Improve documentation and default value of 'DB_GuarIntSpread'.
+
+20060120T0623Z <chicares@cox.net> [1203]
+
+  como_4_3_3.make
+  workhorse.make
+Make one lmi target build with como. It doesn't run correctly yet,
+apparently because of problems identified by unit tests.
 
