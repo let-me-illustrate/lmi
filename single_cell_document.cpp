@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: single_cell_document.cpp,v 1.5 2006-01-17 13:28:52 chicares Exp $
+// $Id: single_cell_document.cpp,v 1.6 2006-01-23 14:48:43 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -52,9 +52,12 @@ single_cell_document::single_cell_document(IllusInputParms const& parms)
 {
 }
 
-//============================================================================
+/// This ctor doesn't use class IllusInputParms's defaults.
+/// It needn't, because it overrides those defaults anyway.
+/// It mustn't, because it's used to read those defaults.
+
 single_cell_document::single_cell_document(std::string const& filename)
-    :input_data_(new IllusInputParms())
+    :input_data_(new IllusInputParms(false))
 {
     xml::init init;
 // XMLWRAPP !! See comment on parse() in header.
