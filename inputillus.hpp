@@ -1,6 +1,6 @@
 // Input parameters.
 //
-// Copyright (C) 1998, 2001, 2002, 2003, 2004, 2005 Gregory W. Chicares.
+// Copyright (C) 1998, 2001, 2002, 2003, 2004, 2005, 2006 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: inputillus.hpp,v 1.8 2005-12-22 13:59:49 chicares Exp $
+// $Id: inputillus.hpp,v 1.9 2006-01-23 14:48:43 chicares Exp $
 
 #ifndef inputillus_hpp
 #define inputillus_hpp
@@ -47,7 +47,7 @@ class LMI_SO IllusInputParms
     typedef std::map<std::string,std::string>::const_iterator string_map_iterator;
 
   public:
-    IllusInputParms();
+    explicit IllusInputParms(bool use_defaults = true);
     IllusInputParms(IllusInputParms const&);
     virtual ~IllusInputParms();
 
