@@ -1,6 +1,6 @@
 // Product-specific fund data.
 //
-// Copyright (C) 2001, 2005 Gregory W. Chicares.
+// Copyright (C) 2001, 2005, 2006 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: my_tier.cpp,v 1.6 2005-08-29 14:17:31 chicares Exp $
+// $Id: my_tier.cpp,v 1.7 2006-01-23 14:48:41 chicares Exp $
 
 // This file is a template for embedding product-specific data. Doing
 // that creates a derived work covered by the GPL. But you may prefer
@@ -42,7 +42,6 @@
 #include "stratified_charges.hpp"
 
 #include "data_directory.hpp"
-#include "platform_dependent.hpp" // access()
 
 #include <cfloat> // DBL_MAX
 
