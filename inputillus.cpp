@@ -1,6 +1,6 @@
 // Life insurance illustration inputs.
 //
-// Copyright (C) 1998, 2001, 2002, 2003, 2004, 2005 Gregory W. Chicares.
+// Copyright (C) 1998, 2001, 2002, 2003, 2004, 2005, 2006 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: inputillus.cpp,v 1.14 2005-09-17 04:05:10 chicares Exp $
+// $Id: inputillus.cpp,v 1.15 2006-01-23 14:48:43 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -29,7 +29,11 @@
 #include "inputillus.hpp"
 
 #include "alert.hpp"
+#include "armor.hpp"
+#include "platform_dependent.hpp" // access()
+#include "single_cell_document.hpp"
 
+#include <cstdio> // std::remove()
 #include <fstream>
 #include <istream>
 #include <iterator>
@@ -37,8 +41,18 @@
 #include <ostream>
 #include <sstream>
 
-//============================================================================
-IllusInputParms::IllusInputParms()
+/// Default input is read from a default '.ill' file if one exists.
+/// Reading that file invokes this ctor, which has a parameter to
+/// prevent disastrous recursion.
+///
+/// USER !! Include this in user documentation:
+///
+/// A new '.cns' or '.ill' input file gets its settings from a default
+/// '.ill' file if one exists. Otherwise, it uses builtin defaults.
+/// If you want different settings, edit and save the default '.ill'
+/// file.
+
+IllusInputParms::IllusInputParms(bool use_defaults)
     :InputParms()
     ,AddonMonthlyCustodialFee         ("0")
     ,AddonCompOnAssets                ("0")
@@ -95,13 +109,46 @@ IllusInputParms::IllusInputParms()
     ,WithdrawalToAge                  (95)
     ,WithdrawalToAlternative          (e_kludge_toend)
     ,WithdrawalToDuration             (50)
-
     ,sSpecAmount (1000000.0)
     ,sDBOpt      (e_option1)
     ,sRetDBOpt   (e_option1)
     ,sEePremium  (0.0)
     ,sEeMode     (e_annual)
 {
+// TODO ?? Consider adding a menuitem to edit 'default.ill'.
+// TODO ?? Look for 'default.ill' in a configurable directory.
+
+    std::string const default_input_file = "/opt/lmi/data/default.ill";
+    if(use_defaults && 0 == access(default_input_file.c_str(), F_OK))
+        {
+        try
+            {
+            operator=(single_cell_document(default_input_file).input_data());
+            }
+        catch(...)
+            {
+            report_exception();
+            if(0 == std::remove(default_input_file.c_str()))
+                {
+                warning()
+                    << "Removed defective file '"
+                    << default_input_file
+                    << "'."
+                    << LMI_FLUSH
+                    ;
+                }
+            else
+                {
+                warning()
+                    << "Unable to remove defective file '"
+                    << default_input_file
+                    << "'. Make sure it is not write protected."
+                    << LMI_FLUSH
+                    ;
+                }
+            }
+        }
+
     propagate_changes_from_base_and_finalize();
     ascribe_members();
 // TODO ?? Debugging--expunge

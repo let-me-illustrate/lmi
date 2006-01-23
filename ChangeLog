@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.307 2006-01-20 06:23:38 chicares Exp $
+// $Id: ChangeLog,v 1.308 2006-01-23 14:48:43 chicares Exp $
 
 MAINTENANCE
 
@@ -5563,4 +5563,18 @@ Improve documentation and default value of 'DB_GuarIntSpread'.
   workhorse.make
 Make one lmi target build with como. It doesn't run correctly yet,
 apparently because of problems identified by unit tests.
+
+20060123T1448Z <chicares@cox.net> [1205]
+
+  workhorse.make
+Add experimental target to clean EDG prelinker files.
+
+  inputillus_xml_io.cpp
+  my_tier.cpp
+Remove unneeded #include directives.
+
+  inputillus.cpp
+  inputillus.hpp
+  single_cell_document.cpp
+Make default input configurable. Further work is planned.
 
