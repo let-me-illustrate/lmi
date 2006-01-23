@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: workhorse.make,v 1.63 2006-01-20 06:23:37 chicares Exp $
+# $Id: workhorse.make,v 1.64 2006-01-23 14:48:38 chicares Exp $
 
 ###############################################################################
 
@@ -856,7 +856,11 @@ check_idempotence: $(idempotent_files)
 
 # Clean.
 
+edg_prelinker_files := \
+  $(wildcard *.ii *.ti) \
+
 files_normally_created_by_running_make := \
+  $(edg_prelinker_files) \
   $(wildcard lib*.a) \
   $(wildcard *$(EXEEXT)) \
   $(wildcard *$(SHREXT)) \
@@ -873,6 +877,12 @@ clean distclean mostlyclean:
 
 .PHONY: maintainer-clean
 maintainer-clean: distclean
+
+# Remove EDG prelinker files. This is experimental and seems no panacea.
+
+.PHONY: clean_edg
+clean_edg:
+	@-$(RM) --force $(edg_prelinker_files)
 
 ################################################################################
 
