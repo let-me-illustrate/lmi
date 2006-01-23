@@ -1,6 +1,6 @@
 // Life insurance illustration inputs: xml I/O.
 //
-// Copyright (C) 1998, 2001, 2002, 2004, 2005 Gregory W. Chicares.
+// Copyright (C) 1998, 2001, 2002, 2004, 2005, 2006 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: inputillus_xml_io.cpp,v 1.8 2005-10-16 16:36:15 chicares Exp $
+// $Id: inputillus_xml_io.cpp,v 1.9 2006-01-23 14:48:41 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -38,7 +38,6 @@
 
 #include <xmlwrapp/init.h>
 #include <xmlwrapp/node.h>
-#include <xmlwrapp/tree_parser.h>
 
 #include <istream>
 #include <ostream>
