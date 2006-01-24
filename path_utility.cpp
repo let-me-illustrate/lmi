@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: path_utility.cpp,v 1.6 2006-01-15 12:45:07 chicares Exp $
+// $Id: path_utility.cpp,v 1.7 2006-01-24 07:11:47 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -33,6 +33,7 @@
 
 #include <boost/filesystem/convenience.hpp>
 #include <boost/filesystem/exception.hpp>
+#include <boost/filesystem/operations.hpp>
 
 #include <iomanip>
 #include <sstream>
@@ -40,6 +41,57 @@
 void initialize_filesystem()
 {
     fs::path::default_name_check(fs::native);
+    fs::initial_path();
+}
+
+void validate_directory
+    (std::string const& directory
+    ,std::string const& context
+    )
+{
+    fs::path path;
+    try
+        {
+        path = directory;
+        }
+    catch(fs::filesystem_error const& e)
+        {
+        fatal_error()
+            << context
+            << ": "
+            << e.what()
+            << LMI_FLUSH
+            ;
+        }
+
+    if(path.empty())
+        {
+        fatal_error()
+            << context
+            << " must not be empty."
+            << LMI_FLUSH
+            ;
+        }
+    if(!fs::exists(path))
+        {
+        fatal_error()
+            << context
+            << " '"
+            << path.string()
+            << "' not found."
+            << LMI_FLUSH
+            ;
+        }
+    if(!fs::is_directory(path))
+        {
+        fatal_error()
+            << context
+            << " '"
+            << path.string()
+            << "' is not a directory."
+            << LMI_FLUSH
+            ;
+        }
 }
 
 std::string serialize_extension
