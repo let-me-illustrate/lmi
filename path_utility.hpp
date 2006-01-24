@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: path_utility.hpp,v 1.4 2006-01-15 12:45:07 chicares Exp $
+// $Id: path_utility.hpp,v 1.5 2006-01-24 07:11:47 chicares Exp $
 
 #ifndef path_utility_hpp
 #define path_utility_hpp
@@ -32,12 +32,25 @@
 
 #include <string>
 
-/// Set "native" name-checking policy for boost filesystem library.
+/// Preserve initial path and set "native" name-checking policy for
+/// boost filesystem library.
 ///
 /// Applications that end users would normally run should call this
 /// function during initialization--before using this boost library
-/// in any other way, to ensure uniform name checking. This enables
-/// them to use nonportable paths, as some demand.
+/// in any other way, to ensure uniform name checking (which enables
+/// them to use nonportable paths, as some demand), and to make it
+/// potentially possible to protect them somewhat from the strange
+/// effects of inadvertent changes to the current working directory.
+/// As boost's documentation notes, msw may resolve relative paths as
+///   "complete( path, kinky ), where kinky is the current directory
+///   for the [path's] drive. This will be the current directory of
+///   that drive the last time it was set, and thus may well be
+///   residue left over from some prior program run by the command
+///   processor! Although these semantics are often useful, they are
+///   also very error-prone, and certainly deserve to be called
+///   'kinky'."
+/// although it's unclear whether there's any way to get msw to do
+/// this exactly when end users desire it and not otherwise.
 ///
 /// MSYS !! Call this function during initialization for any program
 /// that could be passed a path argument, even if the argument is a
@@ -55,8 +68,42 @@
 /// Resist the urge to write its simple implementation inline because
 /// that may fail with gcc on msw--see:
 ///   http://sourceforge.net/mailarchive/message.php?msg_id=14476898
+///
+/// The boost documentation says:
+///   "The preferred implementation would be to call initial_path()
+///   during program initialization, before the call to main().
+///   This is, however, not possible with changing the C++ runtime
+///   library."
+/// One could wish that they had expressed that in code instead of
+/// commentary: std::cout manages to work this way by using the
+/// so-called "nifty counter" technique, which perhaps ought to be
+/// used here.
 
 void LMI_SO initialize_filesystem();
+
+/// validate_directory() throws an informative exception if its
+/// 'directory' argument does not name a valid directory.
+///
+/// 'directory': directory-name to be validated.
+///
+/// 'context': semantic description of the directory to be named;
+/// used in the exception report.
+///
+/// Although a std::invalid_argument exception would seem more
+/// fitting in the context of this function, in the global context
+/// 'd' may be specified by users, so std::runtime_error is
+/// preferable.
+///
+/// Exceptions thrown from the boost filesystem library on path
+/// assignment are caught in order to rethrow with 'context'
+/// prepended.
+///
+/// TODO ?? Need unit tests.
+
+void LMI_SO validate_directory
+    (std::string const& directory
+    ,std::string const& context
+    );
 
 /// Prepend a serial number to a file extension. This is intended to
 /// be used for creating output file names for cells in a census. The
