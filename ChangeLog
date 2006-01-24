@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.308 2006-01-23 14:48:43 chicares Exp $
+// $Id: ChangeLog,v 1.309 2006-01-24 07:11:51 chicares Exp $
 
 MAINTENANCE
 
@@ -5577,4 +5577,22 @@ Remove unneeded #include directives.
   inputillus.hpp
   single_cell_document.cpp
 Make default input configurable. Further work is planned.
+
+20060124T0711Z <chicares@cox.net> [1205]
+
+  ledger_text_formats.cpp
+Remove unneeded #include directive.
+
+  global_settings.cpp
+  objects.make
+  path_utility.cpp
+  path_utility.hpp
+Refactor.
+
+  configurable_settings.cpp
+  configurable_settings.hpp
+  inputillus.cpp
+  inputs.cpp
+Add default-input filepath to xml configuration. Remove the former
+default-product entity, which this supersedes.
 
