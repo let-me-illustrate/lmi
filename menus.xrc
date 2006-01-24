@@ -5,7 +5,7 @@
 <!--
     Life insurance illustrations: wxWindows xml resources.
 
-    Copyright (C) 2003, 2004, 2005 Gregory W. Chicares.
+    Copyright (C) 2003, 2004, 2005, 2006 Gregory W. Chicares.
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License version 2 as
@@ -24,7 +24,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: menus.xrc,v 1.7 2005-10-01 17:52:50 chicares Exp $
+    $Id: menus.xrc,v 1.8 2006-01-24 12:12:27 chicares Exp $
 -->
 
 <!-- reusable menus -->
@@ -83,6 +83,12 @@
             <label>_Open...</label>
             <bitmap>open.xpm</bitmap>
             <help>Open an existing document</help>
+        </object>
+        <object class="separator"/>
+        <object class="wxMenuItem" name="edit_default_cell">
+            <label>_Default</label>
+            <bitmap>default_cell.xpm</bitmap>
+            <help>Edit default cell</help>
         </object>
         <object class="separator"/>
         <object class="wxMenuItem" name="wxID_EXIT">
@@ -150,6 +156,12 @@
             <label>Print pre_view</label>
             <bitmap>print-preview.xpm</bitmap>
             <help>See what this document will look like when printed</help>
+        </object>
+        <object class="separator"/>
+        <object class="wxMenuItem" name="edit_default_cell">
+            <label>_Default</label>
+            <bitmap>default_cell.xpm</bitmap>
+            <help>Edit default cell</help>
         </object>
         <object class="separator"/>
         <object class="wxMenuItem" name="wxID_EXIT">
@@ -327,6 +339,12 @@ Not supported yet: need to split columns into multiple pages.
             <help>See what this document will look like when printed</help>
         </object>
         <object class="separator"/>
+        <object class="wxMenuItem" name="edit_default_cell">
+            <label>_Default</label>
+            <bitmap>default_cell.xpm</bitmap>
+            <help>Edit default cell</help>
+        </object>
+        <object class="separator"/>
         <object class="wxMenuItem" name="wxID_EXIT">
             <label>E_xit</label>
             <bitmap>exit.xpm</bitmap>
@@ -378,6 +396,12 @@ Not supported yet: need to split columns into multiple pages.
             <label>Save _as...</label>
             <bitmap>saveas.xpm</bitmap>
             <help>Save this document under a new name</help>
+        </object>
+        <object class="separator"/>
+        <object class="wxMenuItem" name="edit_default_cell">
+            <label>_Default</label>
+            <bitmap>default_cell.xpm</bitmap>
+            <help>Edit default cell</help>
         </object>
         <object class="separator"/>
         <object class="wxMenuItem" name="wxID_EXIT">
