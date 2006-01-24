@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.309 2006-01-24 07:11:51 chicares Exp $
+// $Id: ChangeLog,v 1.310 2006-01-24 12:11:14 chicares Exp $
 
 MAINTENANCE
 
@@ -5595,4 +5595,11 @@ Refactor.
   inputs.cpp
 Add default-input filepath to xml configuration. Remove the former
 default-product entity, which this supersedes.
+
+20060124T1210Z <chicares@cox.net> [1205]
+
+  default_cell.xpm [new file]
+  main_wx.cpp
+  main_wx.hpp
+Add menuitem for editing default cell.
 

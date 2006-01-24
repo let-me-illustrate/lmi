@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_wx.cpp,v 1.41 2006-01-15 12:45:07 chicares Exp $
+// $Id: main_wx.cpp,v 1.42 2006-01-24 12:11:14 chicares Exp $
 
 // Portions of this file are derived from wxWindows files
 //   samples/docvwmdi/docview.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -44,6 +44,7 @@
 #include "argv0.hpp"
 #include "census_document.hpp"
 #include "census_view.hpp"
+#include "configurable_settings.hpp"
 #include "data_directory.hpp"
 #include "docmanager_ex.hpp"
 #include "docmdichildframe_ex.hpp"
@@ -100,6 +101,7 @@ BEGIN_EVENT_TABLE(Skeleton, wxApp)
  EVT_MENU(XRCID("window_previous"          ),Skeleton::OnWindowPrevious        )
  EVT_MENU(XRCID("window_tile_horizontally" ),Skeleton::OnWindowTileHorizontally)
  EVT_MENU(XRCID("window_tile_vertically"   ),Skeleton::OnWindowTileVertically  )
+ EVT_MENU(XRCID("edit_default_cell"        ),Skeleton::OnEditDefaultCell       )
  EVT_MENU_OPEN(                              Skeleton::OnMenuOpen              )
 // TODO ?? expunge
 // EVT_UPDATE_UI(wxID_ANY                     ,Skeleton::OnUpdateUI              )
@@ -360,6 +362,14 @@ void Skeleton::OnDropFiles(wxDropFilesEvent& event)
         {
         doc_manager_->CreateDocument(filenames[j], wxDOC_SILENT);
         }
+}
+
+void Skeleton::OnEditDefaultCell(wxCommandEvent&)
+{
+    doc_manager_->CreateDocument
+        (configurable_settings::instance().default_input_filename().c_str()
+        ,wxDOC_SILENT
+        );
 }
 
 bool Skeleton::OnExceptionInMainLoop()
