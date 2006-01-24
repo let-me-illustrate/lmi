@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.310 2006-01-24 12:11:14 chicares Exp $
+// $Id: ChangeLog,v 1.311 2006-01-24 16:47:36 chicares Exp $
 
 MAINTENANCE
 
@@ -5594,7 +5594,11 @@ Refactor.
   inputillus.cpp
   inputs.cpp
 Add default-input filepath to xml configuration. Remove the former
-default-product entity, which this supersedes.
+default-product entity, which this supersedes. This change makes it
+imperative to update old 'configurable_settings.xml' files, e.g.:
+-  <default_product>sample</default_product>
++  <default_input_filename>/etc/opt/lmi/x.ill</default_input_filename>
+where a more descriptive filename may be preferred.
 
 20060124T1210Z <chicares@cox.net> [1205]
 
@@ -5602,4 +5606,18 @@ default-product entity, which this supersedes.
   main_wx.cpp
   main_wx.hpp
 Add menuitem for editing default cell.
+
+20060124T1647Z <chicares@cox.net> [1205]
+
+  input_harmonization.cpp
+  inputillus_xml_io.cpp
+  xml_notebook.xrc
+Partially implement 'EffectiveDateToday'. If that checkbox is checked:
+disable 'EffectiveDate'; and set 'EffectiveDate' to the current date,
+only when an input file is read. Reading the default-input file counts
+as reading an input file. 'EffectiveDate' does not, however, change
+when the user checks 'EffectiveDateToday': the planned facility to
+force such changes has not yet been implemented. Without this change,
+new files created from default input would always bear the default
+file's 'EffectiveDate', which would discomfit end users.
 
