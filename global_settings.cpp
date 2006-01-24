@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: global_settings.cpp,v 1.11 2006-01-16 00:08:43 chicares Exp $
+// $Id: global_settings.cpp,v 1.12 2006-01-24 07:11:47 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -29,76 +29,7 @@
 #include "global_settings.hpp"
 
 #include "alert.hpp"
-
-#include <boost/filesystem/exception.hpp>
-#include <boost/filesystem/operations.hpp>
-
-namespace
-{
-    /// validate_directory() throws an informative exception if its
-    /// 'd' argument does not name a valid directory.
-    ///
-    /// 'd': directory-name to be validated.
-    ///
-    /// 'context': semantic description of the directory to be named;
-    /// used in the exception report.
-    ///
-    /// Although a std::invalid_argument exception would seem more
-    /// fitting in the context of this function, in the global context
-    /// 'd' may be specified by users, so std::runtime_error is
-    /// preferable.
-    ///
-    /// Exceptions thrown from the boost filesystem library on path
-    /// assignment are caught in order to rethrow with 'context'
-    /// prepended.
-
-    void validate_directory(std::string const& d, std::string const& context)
-        {
-        fs::path path;
-        try
-            {
-            path = d;
-            }
-        catch(fs::filesystem_error const& e)
-            {
-            fatal_error()
-                << context
-                << ": "
-                << e.what()
-                << LMI_FLUSH
-                ;
-            }
-
-        if(path.empty())
-            {
-            fatal_error()
-                << context
-                << " must not be empty."
-                << LMI_FLUSH
-                ;
-            }
-        if(!fs::exists(path))
-            {
-            fatal_error()
-                << context
-                << " '"
-                << path.string()
-                << "' not found."
-                << LMI_FLUSH
-                ;
-            }
-        if(!fs::is_directory(path))
-            {
-            fatal_error()
-                << context
-                << " '"
-                << path.string()
-                << "' is not a directory."
-                << LMI_FLUSH
-                ;
-            }
-        }
-} // Unnamed namespace.
+#include "path_utility.hpp"
 
 /// Initialize directory paths to ".", not an empty string. Reason:
 /// objects of the boost filesystem library's path class are created
