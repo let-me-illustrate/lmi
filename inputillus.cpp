@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: inputillus.cpp,v 1.15 2006-01-23 14:48:43 chicares Exp $
+// $Id: inputillus.cpp,v 1.16 2006-01-24 07:11:51 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -30,6 +30,7 @@
 
 #include "alert.hpp"
 #include "armor.hpp"
+#include "configurable_settings.hpp"
 #include "platform_dependent.hpp" // access()
 #include "single_cell_document.hpp"
 
@@ -116,9 +117,10 @@ IllusInputParms::IllusInputParms(bool use_defaults)
     ,sEeMode     (e_annual)
 {
 // TODO ?? Consider adding a menuitem to edit 'default.ill'.
-// TODO ?? Look for 'default.ill' in a configurable directory.
 
-    std::string const default_input_file = "/opt/lmi/data/default.ill";
+    std::string const default_input_file =
+        configurable_settings::instance().default_input_filename()
+        ;
     if(use_defaults && 0 == access(default_input_file.c_str(), F_OK))
         {
         try

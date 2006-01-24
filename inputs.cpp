@@ -1,6 +1,6 @@
 // Life insurance illustration inputs.
 //
-// Copyright (C) 1998, 2001, 2002, 2003, 2004, 2005 Gregory W. Chicares.
+// Copyright (C) 1998, 2001, 2002, 2003, 2004, 2005, 2006 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: inputs.cpp,v 1.11 2005-09-17 04:05:10 chicares Exp $
+// $Id: inputs.cpp,v 1.12 2006-01-24 07:11:51 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -29,7 +29,6 @@
 #include "inputs.hpp"
 
 #include "alert.hpp"
-#include "configurable_settings.hpp"
 #include "database.hpp"
 #include "dbnames.hpp"
 #include "inputillus.hpp"
@@ -54,7 +53,7 @@ namespace
 
 //============================================================================
 InputParms::InputParms()
-    :ProductName(configurable_settings::instance().default_product())
+    :ProductName                   ("sample")
     ,Plan                          (e_sample1)
     ,NumberOfLives                 (1)
     ,Dumpin                        (0.0)

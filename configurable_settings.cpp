@@ -1,6 +1,6 @@
 // Configurable settings.
 //
-// Copyright (C) 2003, 2005 Gregory W. Chicares.
+// Copyright (C) 2003, 2005, 2006 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: configurable_settings.cpp,v 1.8 2005-09-12 01:32:19 chicares Exp $
+// $Id: configurable_settings.cpp,v 1.9 2006-01-24 07:11:51 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -56,14 +56,14 @@ namespace
 } // Unnamed namespace.
 
 configurable_settings::configurable_settings()
-    :cgi_bin_log_filename_       ("cgi_bin.log")
-    ,custom_input_filename_      ("custom.ini" )
-    ,custom_output_filename_     ("custom.out" )
-    ,default_product_            ("sample"     )
-    ,offer_hobsons_choice_       (false)
-    ,spreadsheet_file_extension_ (".gnumeric"  )
-    ,xsl_fo_command_             ("fo"         )
-    ,xsl_fo_directory_           ("/usr/bin/fo")
+    :cgi_bin_log_filename_       ("cgi_bin.log"        )
+    ,custom_input_filename_      ("custom.ini"         )
+    ,custom_output_filename_     ("custom.out"         )
+    ,default_input_filename_     ("etc/opt/default.ini")
+    ,offer_hobsons_choice_       (false                )
+    ,spreadsheet_file_extension_ (".gnumeric"          )
+    ,xsl_fo_command_             ("fo"                 )
+    ,xsl_fo_directory_           ("/usr/bin/fo"        )
 {
     ascribe_members();
 
@@ -145,7 +145,7 @@ void configurable_settings::ascribe_members()
     ascribe("cgi_bin_log_filename"       ,&configurable_settings::cgi_bin_log_filename_      );
     ascribe("custom_input_filename"      ,&configurable_settings::custom_input_filename_     );
     ascribe("custom_output_filename"     ,&configurable_settings::custom_output_filename_    );
-    ascribe("default_product"            ,&configurable_settings::default_product_           );
+    ascribe("default_input_filename"     ,&configurable_settings::default_input_filename_    );
     ascribe("offer_hobsons_choice"       ,&configurable_settings::offer_hobsons_choice_      );
     ascribe("spreadsheet_file_extension" ,&configurable_settings::spreadsheet_file_extension_);
     ascribe("xsl_fo_command"             ,&configurable_settings::xsl_fo_command_            );
@@ -173,9 +173,9 @@ std::string const& configurable_settings::custom_output_filename() const
     return custom_output_filename_;
 }
 
-std::string const& configurable_settings::default_product() const
+std::string const& configurable_settings::default_input_filename() const
 {
-    return default_product_;
+    return default_input_filename_;
 }
 
 bool configurable_settings::offer_hobsons_choice() const
