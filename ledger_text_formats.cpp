@@ -1,6 +1,6 @@
 // Ledger formatting as text.
 //
-// Copyright (C) 2002, 2003, 2004, 2005 Gregory W. Chicares.
+// Copyright (C) 2002, 2003, 2004, 2005, 2006 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_text_formats.cpp,v 1.19 2005-11-10 16:09:15 chicares Exp $
+// $Id: ledger_text_formats.cpp,v 1.20 2006-01-24 07:11:46 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -30,7 +30,6 @@
 
 #include "calendar_date.hpp"
 #include "comma_punct.hpp"
-#include "configurable_settings.hpp"
 #include "financial.hpp"
 #include "global_settings.hpp"
 #include "input_sequence.hpp"
