@@ -5,7 +5,7 @@
 <!--
     Let me illustrate...: wxWindows xml input-notebook resources.
 
-    Copyright (C) 2003, 2004, 2005 Gregory W. Chicares.
+    Copyright (C) 2003, 2004, 2005, 2006 Gregory W. Chicares.
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License version 2 as
@@ -24,7 +24,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: xml_notebook.xrc,v 1.22 2005-12-13 04:43:26 chicares Exp $
+    $Id: xml_notebook.xrc,v 1.23 2006-01-24 16:47:36 chicares Exp $
 
     This version is generic. It strives to present every input field
     the system offers, in a way that suits the main developer's tastes.
@@ -214,7 +214,8 @@ demonstrate a defect in the wx library. See
                                 </object>
                                 <object class="sizeritem">
                                     <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
-                                    <object class="wxButton" name="case_effective_today">
+                                    <border>4</border>
+                                    <object class="wxCheckBox" name="EffectiveDateToday">
                                         <label>Case effective today</label>
                                     </object>
                                 </object>

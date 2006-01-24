@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: inputillus_xml_io.cpp,v 1.9 2006-01-23 14:48:41 chicares Exp $
+// $Id: inputillus_xml_io.cpp,v 1.10 2006-01-24 16:47:36 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -29,6 +29,7 @@
 #include "inputillus.hpp"
 
 #include "alert.hpp"
+#include "calendar_date.hpp"
 #include "miscellany.hpp"
 #include "value_cast.hpp"
 
@@ -225,6 +226,11 @@ using namespace xml;
         }
 
     propagate_changes_to_base_and_finalize();
+
+    if(EffectiveDateToday)
+        {
+        EffDate = calendar_date();
+        }
 
 // If you want to see the ones that didn't get assigned:
 //std::ostringstream oss;
