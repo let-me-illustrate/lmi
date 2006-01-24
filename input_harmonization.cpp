@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_harmonization.cpp,v 1.17 2006-01-19 07:46:52 chicares Exp $
+// $Id: input_harmonization.cpp,v 1.18 2006-01-24 16:47:36 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -322,6 +322,8 @@ void Input::Harmonize()
         (   enable_experience_rating
         &&  "Yes" == UseExperienceRating
         );
+
+    EffectiveDate.enable("No" == EffectiveDateToday);
 
     IssueAge        .enable("No"  == DeprecatedUseDOB);
     DateOfBirth     .enable("Yes" == DeprecatedUseDOB);
