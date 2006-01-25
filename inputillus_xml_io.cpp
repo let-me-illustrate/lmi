@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: inputillus_xml_io.cpp,v 1.10 2006-01-24 16:47:36 chicares Exp $
+// $Id: inputillus_xml_io.cpp,v 1.11 2006-01-25 08:03:41 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -30,6 +30,7 @@
 
 #include "alert.hpp"
 #include "calendar_date.hpp"
+#include "global_settings.hpp"
 #include "miscellany.hpp"
 #include "value_cast.hpp"
 
@@ -227,7 +228,7 @@ using namespace xml;
 
     propagate_changes_to_base_and_finalize();
 
-    if(EffectiveDateToday)
+    if(EffectiveDateToday && !global_settings::instance().regression_testing())
         {
         EffDate = calendar_date();
         }

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.312 2006-01-25 07:20:01 chicares Exp $
+// $Id: ChangeLog,v 1.313 2006-01-25 08:03:42 chicares Exp $
 
 MAINTENANCE
 
@@ -5627,4 +5627,14 @@ file's 'EffectiveDate', which would discomfit end users.
   system_command.hpp
 Restore floating-point precision setting if a command changed it. This
 addresses the irreproducible problem noted above (20060119T0738Z).
+
+20060125T0803Z <chicares@cox.net> [1204]
+
+  objects.make
+Fix a problem created 20060124T0711Z: several unit tests now need to
+link additional objects.
+
+  inputillus_xml_io.cpp
+Fix a problem created 20060124T1647Z: the system test must never use
+the current date.
 
