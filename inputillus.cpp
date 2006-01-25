@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: inputillus.cpp,v 1.16 2006-01-24 07:11:51 chicares Exp $
+// $Id: inputillus.cpp,v 1.17 2006-01-25 13:11:51 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -116,8 +116,6 @@ IllusInputParms::IllusInputParms(bool use_defaults)
     ,sEePremium  (0.0)
     ,sEeMode     (e_annual)
 {
-// TODO ?? Consider adding a menuitem to edit 'default.ill'.
-
     std::string const default_input_file =
         configurable_settings::instance().default_input_filename()
         ;
