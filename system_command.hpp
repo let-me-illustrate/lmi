@@ -1,6 +1,6 @@
 // Instruct the operating system to execute a command.
 //
-// Copyright (C) 2001, 2002, 2003, 2004, 2005 Gregory W. Chicares.
+// Copyright (C) 2001, 2002, 2003, 2004, 2005, 2006 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,20 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: system_command.hpp,v 1.4 2005-12-22 13:59:49 chicares Exp $
-
-// This is a cover function for std::system(). It simply forwards its
-// argument to std::system() on posix platforms. The msw implementation
-// works around a problem on that platform, where the standard function
-// generally assumes a shell that's drastically incompatible with posix.
-// One could write different commands for the msw platform everywhere,
-// but that is gratuitously tedious; it is far better to write commands
-// one way and make non-posix platforms interpret them correctly.
-//
-// The elaborate implementation provided for the msw platform does
-// not provide any capability that posix does not provide natively.
-// Instead, it works around a defect in common msw implementations
-// of std::system() that makes them incompatible with /bin/sh .
+// $Id: system_command.hpp,v 1.5 2006-01-25 07:20:01 chicares Exp $
 
 #ifndef system_command_hpp
 #define system_command_hpp
@@ -42,6 +29,35 @@
 #include "so_attributes.hpp"
 
 #include <string>
+
+/// This is a cover function for std::system(). On posix platforms, it
+/// simply forwards its argument to std::system(). On msw, however, it
+/// must work around two serious problems.
+///
+/// The standard function often is implemented on msw to invoke
+///   $ComSpec /c command
+/// , which of course may fail if $shell is aliased to $ComSpec,
+/// eliciting a diagnostic like
+///   /c: can't open input file: /c
+/// as described here:
+///   http://sourceforge.net/mailarchive/message.php?msg_id=13234342
+/// The only reliable alternative is to use a platform-specific system
+/// call.
+///
+/// Another msw problem is that an alien process may reset the fpu
+/// control word:
+///   http://lists.gnu.org/archive/html/lmi/2006-01/msg00025.html
+/// so the implementation tests the control word both before and after
+/// it issues the command. If the precision setting was changed by the
+/// command, it's restored to its desired value. This silently fixes
+/// the problem expected from a rogue process built with ms tools,
+/// which use the same settings as intel except for precision; that's
+/// the only problem actually observed. Any other discrepancy is
+/// reported.
+///
+/// Thus, the elaborate implementation provided for msw does not favor
+/// that platform: it just makes it do what a posix platform would do
+/// without such complicated workarounds.
 
 int LMI_SO system_command(std::string const& command_line);
 
