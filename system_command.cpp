@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: system_command.cpp,v 1.4 2006-01-19 07:38:34 chicares Exp $
+// $Id: system_command.cpp,v 1.5 2006-01-25 07:20:01 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -32,26 +32,12 @@
 
 #include <cstdlib>
 
-// For platforms not known to be broken, simply forward to std::system().
-//
-// The elaborate implementation provided for the msw platform does
-// not provide any capability that posix does not provide natively.
-// Instead, it works around a defect in common msw implementations
-// of std::system() that makes them incompatible with /bin/sh .
-
 int system_command(std::string const& command_line)
 {
     return std::system(command_line.c_str());
 }
 
 #else // defined LMI_MSW
-
-// For the msw platform, use this implementation to avoid the problem
-// described in the header that declares it.
-
-// TODO ?? Test whether saving and restoring the fpu control word
-// prevents a reported problem, by means of the fenv_validate()
-// calls below.
 
 #include "alert.hpp"
 #include "fenv_lmi.hpp"
@@ -62,10 +48,7 @@ int system_command(std::string const& command_line)
 
 int system_command(std::string const& command_line)
 {
-    if(!fenv_validate())
-        {
-        safely_show_message("Caught suspected problem before system command.");
-        }
+    fenv_validate();
 
     STARTUPINFO startup_info;
     std::memset(&startup_info, 0, sizeof(STARTUPINFO));
@@ -95,10 +78,12 @@ int system_command(std::string const& command_line)
     ::GetExitCodeProcess(process_info.hProcess, &exit_code);
     ::CloseHandle(process_info.hProcess);
 
-    if(!fenv_validate())
+    if(fe_dblprec == fenv_precision())
         {
-        safely_show_message("Caught suspected problem after system command.");
+        fenv_precision(fe_ldblprec);
         }
+
+    fenv_validate();
 
     return exit_code;
 }
