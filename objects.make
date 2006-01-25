@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: objects.make,v 1.66 2006-01-24 07:11:47 chicares Exp $
+# $Id: objects.make,v 1.67 2006-01-25 08:03:38 chicares Exp $
 
 ################################################################################
 
@@ -493,6 +493,8 @@ global_settings_test$(EXEEXT): \
   $(common_test_objects) \
   global_settings.o \
   global_settings_test.o \
+  miscellany.o \
+  path_utility.o \
 
 input_seq_test$(EXEEXT): \
   $(common_test_objects) \
@@ -522,7 +524,9 @@ input_test$(EXEEXT): \
   inputs.o \
   inputstatus.o \
   license.o \
+  miscellany.o \
   multiple_cell_document.o \
+  path_utility.o \
   single_cell_document.o \
   streamable.o \
   xenumtypes.o \
@@ -566,6 +570,8 @@ mc_enum_test$(EXEEXT): \
   mc_enum.o \
   mc_enum_test.o \
   mc_enum_test_aux.o \
+  miscellany.o \
+  path_utility.o \
 
 mpatrol_patch_test$(EXEEXT): \
   $(common_test_objects) \
