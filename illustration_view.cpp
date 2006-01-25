@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustration_view.cpp,v 1.31 2006-01-03 21:21:11 chicares Exp $
+// $Id: illustration_view.cpp,v 1.32 2006-01-25 13:11:53 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -369,7 +369,7 @@ bool RunSpecialInputFileIfPresent(wxDocManager* dm)
         {
         if(DoesSpecialInputFileExist())
             {
-            IllusInputParms input;
+            IllusInputParms input(false);
             bool close_when_done = SetSpecialInput(input);
             AccountValue av(input);
             av.RunAV();
