@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.311 2006-01-24 16:47:36 chicares Exp $
+// $Id: ChangeLog,v 1.312 2006-01-25 07:20:01 chicares Exp $
 
 MAINTENANCE
 
@@ -5620,4 +5620,11 @@ when the user checks 'EffectiveDateToday': the planned facility to
 force such changes has not yet been implemented. Without this change,
 new files created from default input would always bear the default
 file's 'EffectiveDate', which would discomfit end users.
+
+20060125T0719Z <chicares@cox.net> [1204]
+
+  system_command.cpp
+  system_command.hpp
+Restore floating-point precision setting if a command changed it. This
+addresses the irreproducible problem noted above (20060119T0738Z).
 
