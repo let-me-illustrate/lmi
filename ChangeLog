@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.313 2006-01-25 08:03:42 chicares Exp $
+// $Id: ChangeLog,v 1.314 2006-01-25 13:11:56 chicares Exp $
 
 MAINTENANCE
 
@@ -5595,10 +5595,19 @@ Refactor.
   inputs.cpp
 Add default-input filepath to xml configuration. Remove the former
 default-product entity, which this supersedes. This change makes it
-imperative to update old 'configurable_settings.xml' files, e.g.:
+imperative to update 'configurable_settings.xml', obligatorily
+removing 'default_product', e.g.,
 -  <default_product>sample</default_product>
-+  <default_input_filename>/etc/opt/lmi/x.ill</default_input_filename>
-where a more descriptive filename may be preferred.
+and optionally adding 'default_input_filename', e.g.
++  <default_input_filename>/foo/default.ill</default_input_filename>
+with a value that specifies a 'complete' 'file path' with extension
+'.ill', according to the definitions here:
+  http://boost.org/libs/filesystem/doc/index.htm#Definitions
+For GNU/Linux systems, '/etc/opt/lmi/default.ill' is suggested. For
+msw, one might use 'x:/d/default.ill' where 'x:' is the drive letter
+and '/d/' is some 'directory path'; omitting the drive letter can
+cause the "kinky" problem described here:
+  http://boost.org/libs/filesystem/doc/operations.htm#system_complete
 
 20060124T1210Z <chicares@cox.net> [1205]
 
@@ -5637,4 +5646,16 @@ link additional objects.
   inputillus_xml_io.cpp
 Fix a problem created 20060124T1647Z: the system test must never use
 the current date.
+
+20060125T1311Z <chicares@cox.net> [1203]
+
+  inputillus.cpp
+Remove a defect marker that has become inapplicable.
+
+  illustration_view.cpp
+  main_cli.cpp
+Ignore default-input file for "special" input.
+
+  version.hpp
+Mark release candidate.
 
