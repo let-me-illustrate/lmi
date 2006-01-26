@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: workhorse.make,v 1.64 2006-01-23 14:48:38 chicares Exp $
+# $Id: workhorse.make,v 1.65 2006-01-26 07:11:10 chicares Exp $
 
 ###############################################################################
 
@@ -676,6 +676,14 @@ archive_shared_data_files:
 
 .PHONY: test
 test: $(test_targets)
+
+# Some test targets require a '.pol' file to exist even though they
+# don't actually read its contents.
+
+$(test_targets): eraseme.pol
+
+eraseme.pol:
+	@$(TOUCH) $@
 
 ################################################################################
 
