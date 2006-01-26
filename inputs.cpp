@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: inputs.cpp,v 1.12 2006-01-24 07:11:51 chicares Exp $
+// $Id: inputs.cpp,v 1.13 2006-01-26 07:11:10 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -34,6 +34,7 @@
 #include "inputillus.hpp"
 #include "inputstatus.hpp"
 #include "is_sorted_.hpp"
+#include "product_names.hpp"
 
 #include <boost/bind.hpp>
 
@@ -53,7 +54,7 @@ namespace
 
 //============================================================================
 InputParms::InputParms()
-    :ProductName                   ("sample")
+    :ProductName                   (default_product_name())
     ,Plan                          (e_sample1)
     ,NumberOfLives                 (1)
     ,Dumpin                        (0.0)
