@@ -1,6 +1,6 @@
 // A value-Constrained Enumeration for product names.
 //
-// Copyright (C) 2005 Gregory W. Chicares.
+// Copyright (C) 2005, 2006 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,58 +19,13 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ce_product_name.cpp,v 1.3 2005-09-12 01:32:19 chicares Exp $
+// $Id: ce_product_name.cpp,v 1.4 2006-01-26 07:11:01 chicares Exp $
 
 #include "ce_product_name.hpp"
 
 #include "alert.hpp"
 #include "facets.hpp"
-#include "global_settings.hpp"
-#include "miscellany.hpp"
-
-#include <boost/filesystem/convenience.hpp>
-#include <boost/filesystem/operations.hpp>
-#include <boost/filesystem/path.hpp>
-
-#include <iterator>
-
-namespace
-{
-std::vector<std::string> fetch_product_names()
-{
-    fs::path path(global_settings::instance().data_directory());
-    std::vector<std::string> names;
-    fs::directory_iterator i(path);
-    fs::directory_iterator end_i;
-    for(; i != end_i; ++i)
-        {
-        if(is_directory(*i) || ".pol" != fs::extension(*i))
-            {
-            continue;
-            }
-        std::string name(basename(*i));
-        std::transform
-            (name.begin()
-            ,name.end()
-            ,name.begin()
-            ,lmi_tolower
-            );
-        names.push_back(name);
-        }
-
-    if(0 == names.size())
-        {
-        fatal_error()
-            << "Data directory '"
-            << path.string()
-            << "' contains no product files."
-            << LMI_FLUSH
-            ;
-        }
-
-    return names;
-}
-} // Unnamed namespace.
+#include "product_names.hpp"
 
 ce_product_name::ce_product_name()
     :mc_enum_base(product_names().size())
@@ -170,9 +125,8 @@ std::size_t ce_product_name::ordinal(std::string const& s) const
     return v;
 }
 
-std::vector<std::string> const& ce_product_name::product_names()const
+std::vector<std::string> const& ce_product_name::product_names() const
 {
-    static std::vector<std::string> names(fetch_product_names());
-    return names;
+    return ::product_names();
 }
 
