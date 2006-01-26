@@ -1,6 +1,6 @@
 // A value-Constrained Enumeration for product names.
 //
-// Copyright (C) 2005 Gregory W. Chicares.
+// Copyright (C) 2005, 2006 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,36 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ce_product_name.hpp,v 1.2 2005-04-09 16:15:24 chicares Exp $
-
-// This class encapsulates product names. Being derived from class
-// mc_enum_base, it presents an interface compatible with other
-// enumerative classes. It differs from most enumerative classes in
-// that its valid values are knowable only at run time, so that it
-// cannot associate an enum with each value; and in that all its
-// valid values are always allowable. Otherwise, its implementation
-// is similar to that of template class mc_enum.
-//
-// Because there is no enum to map to, there is no 'm' for "Mapped"
-// at the beginning of the class's or file's name.
-//
-// Valid values are the base names of policy ('.pol') files found
-// in the (configurable) data directory. They are read only once and
-// cached, not because of any measured improvement in run time, but in
-// order to keep the type from mutating with unknown consequences.
-//
-// TODO ?? Reconsider this. It seems desirable to recognize changes to
-// the data directory made by advanced users, but is that easily
-// possible without adjusting the base class's 'allowed_' vector and
-// perhaps changing the way ordinal() works?
-//
-// TODO ?? Policy-file names are read the first time this class is
-// instantiated. That's not the best time to do it, because an error
-// is reported if no such file is found. It would be better to test
-// that at startup. A simple singleton might be wanted if this
-// operation should really be performed only once. Alternatively, the
-// program might write the 'sample' product's files if it finds no
-// other product.
+// $Id: ce_product_name.hpp,v 1.3 2006-01-26 07:11:01 chicares Exp $
 
 #ifndef ce_product_name_hpp
 #define ce_product_name_hpp
@@ -57,11 +28,42 @@
 
 #include "mc_enum.hpp"
 
-#include <cstddef>
+#include <cstddef> // std::size_t
+#include <string>
 #include <vector>
 
-// TODO ?? Add unit tests.
-// TODO ?? Can't read() and write() be moved to the base class?
+/// This class encapsulates product names. Being derived from class
+/// mc_enum_base, it presents an interface compatible with other
+/// enumerative classes. It differs from most enumerative classes in
+/// that its valid values are knowable only at run time, so that it
+/// cannot associate an enum with each value; and in that all its
+/// valid values are always allowable. Otherwise, its implementation
+/// is similar to that of template class mc_enum.
+///
+/// Because there is no enum to map to, there is no 'm' for "Mapped"
+/// at the beginning of the class's or file's name.
+///
+/// Valid values are the base names of policy ('.pol') files found
+/// in the (configurable) data directory. They are read only once and
+/// cached, not because of any measured improvement in run time, but
+/// in order to keep the type from mutating with unknown consequences.
+///
+/// TODO ?? Reconsider this. It seems desirable to recognize changes
+/// to the data directory made by advanced users, but is that easily
+/// possible without adjusting the base class's 'allowed_' vector and
+/// perhaps changing the way ordinal() works?
+///
+/// TODO ?? Policy-file names are read the first time this class is
+/// instantiated. That's not the best time to do it, because an error
+/// is reported if no such file is found. It would be better to test
+/// that at startup. A simple singleton might be wanted if this
+/// operation should really be performed only once. Alternatively, the
+/// program might write the 'sample' product's files if it finds no
+/// other product.
+///
+/// TODO ?? Add unit tests.
+///
+/// TODO ?? Can't read() and write() be moved to the base class?
 
 class ce_product_name
     :public mc_enum_base
