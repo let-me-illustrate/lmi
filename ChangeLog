@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.314 2006-01-25 13:11:56 chicares Exp $
+// $Id: ChangeLog,v 1.315 2006-01-26 07:11:14 chicares Exp $
 
 MAINTENANCE
 
@@ -5655,6 +5655,22 @@ Remove a defect marker that has become inapplicable.
   illustration_view.cpp
   main_cli.cpp
 Ignore default-input file for "special" input.
+
+  version.hpp
+Mark release candidate.
+
+20060126T0710Z <chicares@cox.net> [1203]
+
+  ce_product_name.cpp
+  ce_product_name.hpp
+  product_names.cpp [new file]
+  product_names.hpp [new file]
+Make list of product names generally accessible.
+
+  inputs.cpp
+  objects.make
+  workhorse.make
+Use first product name found as default if "sample" not available.
 
   version.hpp
 Mark release candidate.
