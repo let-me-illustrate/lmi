@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_cli.cpp,v 1.20 2006-01-25 13:11:53 chicares Exp $
+// $Id: main_cli.cpp,v 1.21 2006-01-27 11:21:56 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -439,7 +439,7 @@ void process_command_line(int argc, char* argv[])
 
     if(!license_accepted)
         {
-        std::cerr << license_notices() << "\n\n";
+        std::cerr << license_notices_as_text() << "\n\n";
         }
 
     if(show_license)
