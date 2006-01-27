@@ -1,6 +1,6 @@
 // Unit-test framework based on Beman Dawes's boost library.
 //
-// Copyright (C) 2004, 2005 Gregory W. Chicares.
+// Copyright (C) 2004, 2005, 2006 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: catch_exceptions.hpp,v 1.1 2005-01-14 19:47:44 chicares Exp $
+// $Id: catch_exceptions.hpp,v 1.2 2006-01-27 11:21:52 chicares Exp $
 
 // This is a derived work based on Beman Dawes's boost test library
 // that bears the following copyright and license statement:
@@ -186,18 +186,6 @@ namespace lmi_test
     } // catch_exceptions()
 
 } // Namespace lmi_test.
-
-// Revision History
-//  2005-01-09 GWC Update email address
-//  2004-10-20 GWC Rename namespace.
-//  2004-05-06 GWC Remove carriage returns.
-//  2004-05-05 GWC Extract original library from boost-1.23.0, remove
-//    dependencies on other parts of boost, and adapt to lmi conventions.
-//  13 Jun 01 report_exception() made inline. (John Maddock, Jesse Jones)
-//  26 Feb 01 Numerous changes suggested during formal review. (Beman)
-//  25 Jan 01 catch_exceptions.hpp code factored out of cpp_main.cpp.
-//  22 Jan 01 Remove test_tools dependencies to reduce coupling.
-//   5 Nov 00 Initial boost version (Beman Dawes)
 
 #endif // catch_exceptions_hpp
 

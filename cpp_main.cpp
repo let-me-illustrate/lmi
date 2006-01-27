@@ -1,6 +1,6 @@
 // Unit-test framework based on Beman Dawes's boost library.
 //
-// Copyright (C) 2004, 2005 Gregory W. Chicares.
+// Copyright (C) 2004, 2005, 2006 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: cpp_main.cpp,v 1.2 2005-05-27 10:37:06 chicares Exp $
+// $Id: cpp_main.cpp,v 1.3 2006-01-27 11:21:52 chicares Exp $
 
 // This is a derived work based on Beman Dawes's boost test library
 // that bears the following copyright and license statement:
@@ -200,7 +200,7 @@ int main(int argc, char* argv[])
 
     if(!license_accepted)
         {
-        std::cout << license_notices() << "\n\n";
+        std::cout << license_notices_as_text() << "\n\n";
         }
 
     if(show_license)
@@ -221,17 +221,4 @@ int main(int argc, char* argv[])
         ,std::cerr
         );
 }
-
-// Revision History
-//  2004-10-20 GWC Rename namespace.
-//  2004-08-03 GWC Add getopt support to display GPL and the notices
-//    it requires.
-//  2004-05-06 GWC Add code to force mpatrol to link.
-//  2004-05-06 GWC Remove carriage returns.
-//  2004-05-05 GWC Extract original library from boost-1.23.0, remove
-//    dependencies on other parts of boost, and adapt to lmi conventions.
-//  26 Feb 01 Numerous changes suggested during formal review. (Beman)
-//  25 Jan 01 catch_exceptions.hpp code factored out.
-//  22 Jan 01 Remove test_tools dependencies to reduce coupling.
-//   5 Nov 00 Initial boost version (Beman Dawes)
 
