@@ -1,6 +1,6 @@
 // Configuration for borland bcc-5.5.1 .
 //
-// Copyright (C) 2001, 2003, 2004, 2005 Gregory W. Chicares.
+// Copyright (C) 2001, 2003, 2004, 2005, 2006 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: config_bc551.hpp,v 1.2 2005-11-09 05:00:33 chicares Exp $
+// $Id: config_bc551.hpp,v 1.3 2006-01-27 11:21:50 chicares Exp $
 
 // Configuration header for compiler quirks--bcc-5.5.1 .
 
@@ -36,7 +36,11 @@
 #   error Use this file only for borland version 5.5.1 or greater.
 #endif // Not borland 5.5.1+ .
 
-#define LMI_COMPILER_USES_PCH
+// Do not define this macro, even though the compiler supports pch.
+// The present pch file includes wx headers, but this compiler is
+// inadequate for lmi and is used only for non-wx unit tests.
+//
+// #define LMI_COMPILER_USES_PCH
 
 #include <cstdio>
     // COMPILER !! bc++5.5.1 Work around library bug: the 'stdin'
