@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: config.hpp,v 1.14 2006-01-19 07:38:31 chicares Exp $
+// $Id: config.hpp,v 1.15 2006-01-27 11:21:44 chicares Exp $
 
 // Configuration header for compiler quirks. Include at the beginning of
 // every .hpp file (and nowhere else).
@@ -70,7 +70,7 @@ namespace fs = boost::filesystem;
 // It is impossible to compile lmi with g++ prior to version 3, but
 // old versions of gcc are adequate for C translation units.
 
-#if defined __GNUC__ && __GNUC__ < 3 && defined cplusplus
+#if defined __GNUC__ && __GNUC__ < 3 && defined __cplusplus
 #   error Obsolete compiler not supported.
 #endif // Ancient gcc compiler.
 
