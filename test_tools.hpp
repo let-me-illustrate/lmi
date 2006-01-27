@@ -1,6 +1,6 @@
 // Unit-test framework based on Beman Dawes's boost library.
 //
-// Copyright (C) 2004, 2005 Gregory W. Chicares.
+// Copyright (C) 2004, 2005, 2006 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: test_tools.hpp,v 1.5 2005-12-15 15:13:49 chicares Exp $
+// $Id: test_tools.hpp,v 1.6 2006-01-27 11:21:52 chicares Exp $
 
 // This is a derived work based on Beman Dawes's boost test library
 // that bears the following copyright and license statement:
@@ -132,7 +132,7 @@
 /// but that complaint seems incorrect: the second argument is allowed
 /// to be npos, and only an invalid first argument can cause this
 /// exception, but the first argument here is always zero, which is
-/// always permissible. See C++98 21.3.6.8/3 and 21.3.1/4 and cf.
+/// always permissible. See C++98 21.3.6.8/3 and 21.3.1/4, and cf.
 /// Josuttis, TC++SL, 11.3.4 .
 
 #define BOOST_TEST_THROW(expression,TYPE,WHAT)          \
@@ -327,28 +327,6 @@ namespace lmi_test
             << BOOST_TEST_FLUSH                      \
             ;                                        \
         throw lmi_test::test::test_tools_exception() \
-
-// Revision History
-//  2005-12-15 GWC Include <cstdlib> for EXIT_SUCCESS and EXIT_FAILURE.
-//  2005-11-23 GWC Improve exception-testing macro.
-//  2005-02-28 GWC Fix defective typeid comparison.
-//  2005-01-29 GWC Move #included '.cpp' files after declarations that
-//    were otherwise redundant, resolving a gcc warning.
-//  2005-01-09 GWC Update email address
-//  2004-10-20 GWC Add macros to test equality and exceptions, and to
-//    invoke tests through subfunctions. Add error_stream() to improve
-//    versatility; remove former error-reporting functions. Revise
-//    documentation. Rename namespace.
-//  2004-10-05 GWC Report number of successful tests.
-//  2004-10-04 GWC Add record_error().
-//  2004-05-06 GWC Remove carriage returns.
-//  2004-05-05 GWC Extract original library from boost-1.23.0, remove
-//    dependencies on other parts of boost, and adapt to lmi conventions.
-//  26 Feb 01  Numerous changes suggested during formal review. (Beman)
-//   7 Feb 01  #include <boost/test/test_main.cpp> if requested. (Beman)
-//  22 Jan 01  Remove all header dependencies. (Beman)
-//   3 Dec 00  Remove function definitions. (Ed Brey)
-//   5 Nov 00  Initial boost version (Beman Dawes)
 
 #endif // test_tools_hpp
 
