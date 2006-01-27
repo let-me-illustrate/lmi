@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: GNUmakefile,v 1.54 2006-01-18 12:16:41 chicares Exp $
+# $Id: GNUmakefile,v 1.55 2006-01-27 11:21:56 chicares Exp $
 
 ###############################################################################
 
@@ -438,6 +438,10 @@ supplemental_test_makefile = ../forbidden.make
 check_conformity: source_clean custom_tools
 	@-[ ! -e $(supplemental_test_makefile) ] \
 	  || $(MAKE) --no-print-directory -f $(supplemental_test_makefile)
+	@$(TOUCH) --date=$(yyyy)0101 BOY
+	@$(TOUCH) --date=$(yyyymm)00 BOM
+	@$(TOUCH) --date=$(yyyymmdd) TODAY
+	@$(TOUCH) --date=$(yyyymm)22 CANDIDATE
 	@$(ECHO) "  Unexpected or oddly-named source files:"
 	@$(ECHO) $(filter-out $(expected_source_files),$(prerequisite_files))
 	@$(ECHO) "  Files with irregular defect markers:"
@@ -448,7 +452,6 @@ check_conformity: source_clean custom_tools
 	@$(GREP) --line-number '?\{3,\}' $(licensed_files)             || true
 	@$(ECHO) "  Files with lowercase 'c' in copyright symbol:"
 	@$(GREP) --files-with-match '(c) *[12]' $(licensed_files)      || true
-	@$(TOUCH) BOY --date=$(yyyy)0101
 	@$(ECHO) "  Files lacking current copyright year:"
 	@for z in $(licensed_files); \
 	  do \
@@ -456,7 +459,6 @@ check_conformity: source_clean custom_tools
 	      && $(GREP) --files-without-match "Copyright.*$(yyyy)" $$z \
 	         || true; \
 	  done;
-	@$(RM) --force BOY
 	@$(ECHO) "  Files that don't point to savannah:"
 	@$(GREP) --files-without-match savannah $(licensed_files)      || true
 	@$(ECHO) "  Files that lack an RCS Id:"
@@ -544,14 +546,14 @@ check_conformity: source_clean custom_tools
 	@$(WC) -l $(prerequisite_files) | $(SED) -e ';/[Tt]otal/d' | $(WC) -l
 	@$(ECHO) "Number of marked defects:"
 	@$(GREP) \?\? $(licensed_files) | $(WC) -l
-	@$(TOUCH) --date=$(yyyymmdd) TODAY
-	@$(TOUCH) --date=$(yyyymm)00 BOM
-	@$(TOUCH) --date=$(yyyymm)22 CANDIDATE
 	@[[ TODAY -nt CANDIDATE ]] && [[ version.hpp -ot BOM ]] \
 	  && $(ECHO) "Is it time to 'make release_candidate'?" || true
+	@[[ license.cpp -ot BOY ]] \
+	  && $(ECHO) "Update copyright notices in 'license.cpp'." || true
 	@$(RM) --force CANDIDATE
-	@$(RM) --force BOM
 	@$(RM) --force TODAY
+	@$(RM) --force BOM
+	@$(RM) --force BOY
 
 ################################################################################
 

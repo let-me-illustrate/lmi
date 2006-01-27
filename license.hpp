@@ -1,6 +1,6 @@
 // The GPL and the notices it requires.
 //
-// Copyright (C) 2004, 2005 Gregory W. Chicares.
+// Copyright (C) 2004, 2005, 2006 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: license.hpp,v 1.3 2005-12-22 13:59:49 chicares Exp $
+// $Id: license.hpp,v 1.4 2006-01-27 11:21:56 chicares Exp $
 
 // The module associated with this header provides the full text of
 // the GPL and appropriate notices for display at startup as required
@@ -41,7 +41,8 @@
 
 std::string const& LMI_SO license_as_html();
 std::string const& LMI_SO license_as_text();
-std::string const& LMI_SO license_notices();
+std::string const& LMI_SO license_notices_as_html();
+std::string const& LMI_SO license_notices_as_text();
 
 #endif // license_hpp
 

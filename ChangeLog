@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.315 2006-01-26 07:11:14 chicares Exp $
+// $Id: ChangeLog,v 1.316 2006-01-27 11:21:56 chicares Exp $
 
 MAINTENANCE
 
@@ -5674,4 +5674,32 @@ Use first product name found as default if "sample" not available.
 
   version.hpp
 Mark release candidate.
+
+20060127T1121Z <chicares@cox.net> [1202]
+
+  config.hpp
+Fix a problem created 20060119T0738Z: a standard name was misspelled.
+
+  msw_msys.make
+Expect libxml2 and non-ancient sed binaries in /usr/local/bin/ .
+
+  pchfile.hpp
+Note potential pch issues.
+
+  config_bc551.hpp
+Don't use pch with borland tools.
+
+  catch_exceptions.hpp
+  cpp_main.cpp
+  exit_codes.hpp
+  test_tools.hpp
+Remove revision history. This 'ChangeLog' makes it redundant.
+
+  GNUmakefile
+  about_dialog.cpp
+  cpp_main.cpp
+  license.cpp
+  license.hpp
+  main_cli.cpp
+Update copyright notices.
 
