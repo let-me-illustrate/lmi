@@ -20,7 +20,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: Makefile.am,v 1.15 2006-01-19 02:00:59 zeitlin Exp $
+# $Id: Makefile.am,v 1.16 2006-01-27 15:41:24 zeitlin Exp $
 
 
 SUBDIRS = third_party
@@ -66,6 +66,7 @@ dist_xrc_DATA = \
     census_view.xpm \
     close.xpm \
     delete-row.xpm \
+    default_cell.xpm \
     edit-case.xpm \
     edit-cell.xpm \
     edit-class.xpm \
@@ -282,6 +283,7 @@ liblmi_common_sources = \
     name_value_pairs.cpp \
     outlay.cpp \
     path_utility.cpp \
+    product_names.cpp \
     progress_meter.cpp \
     rounding_rules.cpp \
     sigfpe.cpp \
@@ -539,7 +541,9 @@ test_financial_LDADD =    \
 
 test_global_settings_SOURCES =  \
   global_settings.cpp \
-  global_settings_test.cpp
+  global_settings_test.cpp \
+  miscellany.cpp \
+  path_utility.cpp
 test_global_settings_CXXFLAGS = $(AM_CXXFLAGS)
 test_global_settings_LDADD =  \
   $(BOOST_LIBS) \
@@ -573,8 +577,12 @@ test_input_SOURCES =    \
   inputs.cpp \
   inputstatus.cpp \
   license.cpp \
+  miscellany.cpp \
   multiple_cell_document.cpp \
+  path_utility.cpp \
+  product_names.cpp \
   single_cell_document.cpp \
+  streamable.cpp \
   xenumtypes.cpp \
   xrange.cpp
 
@@ -612,7 +620,9 @@ test_mc_enum_SOURCES =  \
   global_settings.cpp \
   mc_enum.cpp \
   mc_enum_test.cpp \
-  mc_enum_test_aux.cpp
+  mc_enum_test_aux.cpp \
+  miscellany.cpp \
+  path_utility.cpp
 test_mc_enum_CXXFLAGS = $(AM_CXXFLAGS)
 test_mc_enum_LDADD =  \
   $(BOOST_LIBS) \
@@ -880,6 +890,7 @@ noinst_HEADERS = \
     pchfile.hpp \
     platform_dependent.hpp \
     previewframe_ex.hpp \
+    product_names.hpp \
     progress_meter.hpp \
     quiet_nan.hpp \
     round_to.hpp \
