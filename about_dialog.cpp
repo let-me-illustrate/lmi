@@ -1,6 +1,6 @@
 // State application's purpose and show GPL notices.
 //
-// Copyright (C) 2004, 2005 Gregory W. Chicares.
+// Copyright (C) 2004, 2005, 2006 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: about_dialog.cpp,v 1.2 2005-08-21 12:00:25 chicares Exp $
+// $Id: about_dialog.cpp,v 1.3 2006-01-27 11:21:56 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -98,24 +98,7 @@ int AboutDialog::ShowModal()
         ,wxHW_SCROLLBAR_AUTO | wxHW_NO_SELECTION
         );
     html_window->SetBorders(0);
-    html_window->SetPage
-        ("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 3.2 Final//EN\">"
-        "<html>"
-        "<head>"
-        "<meta http-equiv=\"Content-Type\" "
-        "content=\"text/html; charset=iso-8859-1\">"
-        "<title>About 'Let me illustrate...'</title>"
-        "</head>"
-        "<body>"
-        "<pre>"
-        "This program creates life insurance illustrations.\n\n"
-        "Copyright &copy; 1998, 1999, 2000, 2001, 2002, 2003, 2004, "
-        "2005 Gregory W. Chicares.\n\n"
-        + license_notices() +
-        "</pre>"
-        "</body>"
-        "</html>"
-        );
+    html_window->SetPage(license_notices_as_html());
     int width =
             html_window->GetInternalRepresentation()->GetWidth()
         +   wxSystemSettings::GetMetric(wxSYS_VSCROLL_X)
