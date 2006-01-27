@@ -1,6 +1,6 @@
 // Precompiled header file.
 //
-// Copyright (C) 2004, 2005 Gregory W. Chicares.
+// Copyright (C) 2004, 2005, 2006 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: pchfile.hpp,v 1.3 2005-04-07 15:04:28 chicares Exp $
+// $Id: pchfile.hpp,v 1.4 2006-01-27 11:21:47 chicares Exp $
 
 // Always include this header first in every '.cpp' file, before
 // anything else except comments and whitespace. Never include it in
@@ -31,8 +31,11 @@
 #include "config.hpp"
 
 #if defined LMI_COMPILER_USES_PCH && !defined LMI_IGNORE_PCH
-// For wx, one would include this:
-// #   include <wx/wxprec.h>
+// This is merely a casual guess, not supported by any measurement of
+// its effect on performance. The optimal set of headers to precompile
+// probably varies by compiler. Including wx headers might impair
+// performance for non-wx targets.
+#   include <wx/wxprec.h>
 #endif
 
 #endif // pchfile_hpp
