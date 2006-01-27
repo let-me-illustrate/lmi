@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: msw_msys.make,v 1.10 2006-01-13 12:39:45 chicares Exp $
+# $Id: msw_msys.make,v 1.11 2006-01-27 11:21:45 chicares Exp $
 
 ################################################################################
 
@@ -89,9 +89,10 @@ system_root ?= /c
 # has nothing to do with $(PATH).
 
 ifeq (,$(USE_STD_PATHS))
-  PATH_BIN     := /bin/
-  PATH_GCC     := /mingw/bin/
-  PATH_USR_BIN := /usr/bin/
+  PATH_BIN           := /bin/
+  PATH_GCC           := /mingw/bin/
+  PATH_USR_BIN       := /usr/bin/
+  PATH_USR_LOCAL_BIN := /usr/local/bin/
 endif
 
 ################################################################################
@@ -120,8 +121,6 @@ MKDIR   := $(PATH_BIN)mkdir
 MV      := $(PATH_BIN)mv
 RM      := $(PATH_BIN)rm
 
-SED     := $(system_root)/usr/bin/sed
-
 TAR     := $(PATH_BIN)tar
 
 # FHS-2.2 would put these in /usr/bin .
@@ -136,9 +135,15 @@ TR      := $(PATH_USR_BIN)tr
 WC      := $(PATH_USR_BIN)wc
 WGET    := $(PATH_USR_BIN)wget
 
-# TODO ?? Where would libxml2 install this thing?
-# XMLLINT := $(PATH_USR_BIN)xmllint
-XMLLINT := $(system_root)/usr/bin/xmllint
+# FHS-2.2 would put MSYS's own 'sed' in /bin/, but this points to a
+# later version as described above.
+
+SED     := $(PATH_USR_LOCAL_BIN)sed
+
+# FHS-2.2 doesn't prescribe a unique location for optional libraries,
+# but users would would normally build them in /usr/local/bin/ .
+
+XMLLINT := $(PATH_USR_LOCAL_BIN)xmllint
 
 ################################################################################
 
