@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: objects.make,v 1.68 2006-01-26 07:11:10 chicares Exp $
+# $Id: objects.make,v 1.69 2006-01-28 14:46:02 chicares Exp $
 
 ################################################################################
 
@@ -374,7 +374,6 @@ unit_test_targets := \
   alert_test$(EXEEXT) \
   any_member_test$(EXEEXT) \
   argv0_test$(EXEEXT) \
-  armor_test$(EXEEXT) \
   calendar_date_test$(EXEEXT) \
   callback_test$(EXEEXT) \
   commutation_functions_test$(EXEEXT) \
@@ -384,6 +383,7 @@ unit_test_targets := \
   fenv_lmi_test$(EXEEXT) \
   financial_test$(EXEEXT) \
   global_settings_test$(EXEEXT) \
+  handle_exceptions_test$(EXEEXT) \
   input_seq_test$(EXEEXT) \
   input_test$(EXEEXT) \
   irc7702a_test$(EXEEXT) \
@@ -444,10 +444,6 @@ argv0_test$(EXEEXT): \
   $(common_test_objects) \
   argv0_test.o \
 
-armor_test$(EXEEXT): \
-  $(common_test_objects) \
-  armor_test.o \
-
 calendar_date_test$(EXEEXT): \
   $(common_test_objects) \
   calendar_date.o \
@@ -497,6 +493,10 @@ global_settings_test$(EXEEXT): \
   global_settings_test.o \
   miscellany.o \
   path_utility.o \
+
+handle_exceptions_test$(EXEEXT): \
+  $(common_test_objects) \
+  handle_exceptions_test.o \
 
 input_seq_test$(EXEEXT): \
   $(common_test_objects) \

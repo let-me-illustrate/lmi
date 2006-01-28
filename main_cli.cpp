@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_cli.cpp,v 1.21 2006-01-27 11:21:56 chicares Exp $
+// $Id: main_cli.cpp,v 1.22 2006-01-28 14:46:02 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -28,12 +28,12 @@
 
 #include "alert.hpp"
 #include "argv0.hpp"
-#include "armor.hpp"
 #include "calculate.hpp"
 #include "custom_io_0.hpp"
 #include "getopt.hpp"
 #include "global_settings.hpp"
 #include "group_values.hpp"
+#include "handle_exceptions.hpp"
 #include "inputillus.hpp"
 #include "ledger_text_formats.hpp"
 #include "license.hpp"

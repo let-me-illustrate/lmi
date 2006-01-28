@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: inputillus.cpp,v 1.17 2006-01-25 13:11:51 chicares Exp $
+// $Id: inputillus.cpp,v 1.18 2006-01-28 14:46:02 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -29,8 +29,8 @@
 #include "inputillus.hpp"
 
 #include "alert.hpp"
-#include "armor.hpp"
 #include "configurable_settings.hpp"
+#include "handle_exceptions.hpp"
 #include "platform_dependent.hpp" // access()
 #include "single_cell_document.hpp"
 
