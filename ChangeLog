@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.316 2006-01-27 11:21:56 chicares Exp $
+// $Id: ChangeLog,v 1.317 2006-01-28 13:16:46 chicares Exp $
 
 MAINTENANCE
 
@@ -5702,4 +5702,9 @@ Remove revision history. This 'ChangeLog' makes it redundant.
   license.hpp
   main_cli.cpp
 Update copyright notices.
+
+20060128T1316Z <chicares@cox.net> [1202]
+
+  custom_io_0.cpp
+Change handling of interest rates for "special" input.
 
