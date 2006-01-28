@@ -1,6 +1,6 @@
 // Handlers for exceptional situations--unit test.
 //
-// Copyright (C) 2005 Gregory W. Chicares.
+// Copyright (C) 2005, 2006 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,14 +19,14 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: armor_test.cpp,v 1.4 2005-12-16 23:39:40 chicares Exp $
+// $Id: handle_exceptions_test.cpp,v 1.1 2006-01-28 14:46:02 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
 #   pragma hdrstop
 #endif // __BORLANDC__
 
-#include "armor.hpp"
+#include "handle_exceptions.hpp"
 
 #define BOOST_INCLUDE_MAIN
 #include "test_tools.hpp"

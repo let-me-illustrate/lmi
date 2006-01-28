@@ -1,6 +1,6 @@
 // Handlers for exceptional situations.
 //
-// Copyright (C) 2005 Gregory W. Chicares.
+// Copyright (C) 2005, 2006 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,10 +19,10 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: armor.hpp,v 1.5 2005-12-16 23:39:40 chicares Exp $
+// $Id: handle_exceptions.hpp,v 1.1 2006-01-28 14:46:02 chicares Exp $
 
-#ifndef armor_hpp
-#define armor_hpp
+#ifndef handle_exceptions_hpp
+#define handle_exceptions_hpp
 
 #include "config.hpp"
 
@@ -70,8 +70,10 @@ inline void lmi_terminate_handler()
 ///
 /// See
 ///   http://sourceforge.net/mailarchive/message.php?msg_id=14203568
-/// for a grave problem with msw dlls, which is avoided by writing
-/// this function inline.
+/// for a grave gcc problem with msw dlls, which is fixed
+///   http://sourceforge.net/mailarchive/message.php?msg_id=14436989
+/// in MinGW gcc-3.4.5; it is avoided altogether by writing this
+/// function inline, so this code works with earlier versions, too.
 
 inline void report_exception()
 {
@@ -92,5 +94,5 @@ inline void report_exception()
         }
 }
 
-#endif // armor_hpp
+#endif // handle_exceptions_hpp
 

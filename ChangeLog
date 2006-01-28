@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.318 2006-01-28 13:20:45 chicares Exp $
+// $Id: ChangeLog,v 1.319 2006-01-28 14:46:02 chicares Exp $
 
 MAINTENANCE
 
@@ -5712,4 +5712,21 @@ Change handling of interest rates for "special" input.
 
   version.hpp
 Mark release candidate.
+
+20060128T1445Z <chicares@cox.net> [1202]
+
+  armor.hpp                  [renamed to ledger_base.cpp]
+  armor_test.cpp             [renamed to ledger_base.cpp]
+  group_values.cpp
+  handle_exceptions.hpp      [new file]
+  handle_exceptions_test.cpp [new file]
+  illustration_view.cpp
+  inputillus.cpp
+  main_cli.cpp
+  main_common.cpp
+  main_common_non_wx.cpp
+  main_wx.cpp
+  objects.make
+  test_coding_rules.cpp
+Rename exception-handling files.
 
