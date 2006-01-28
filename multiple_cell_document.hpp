@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: multiple_cell_document.hpp,v 1.6 2005-12-22 13:59:49 chicares Exp $
+// $Id: multiple_cell_document.hpp,v 1.6.2.1 2006-01-28 01:41:59 etarassov Exp $
 
 #ifndef multiple_cell_document_hpp
 #define multiple_cell_document_hpp
@@ -31,6 +31,8 @@
 
 #include <boost/utility.hpp>
 
+#include "xmlpp.hpp"
+
 #include <istream>
 #include <ostream>
 #include <string>
@@ -38,15 +40,6 @@
 
 class IllusInputParms;
 
-// XMLWRAPP !! Recommend an xmlwrapp_fwd header to Peter. It might
-// contain all of the following (we don't use them all here):
-namespace xml
-{
-    class node;
-    class event_parser;
-    class tree_parser;
-    class init;
-}
 
 class LMI_SO multiple_cell_document
     :private boost::noncopyable
@@ -68,11 +61,7 @@ class LMI_SO multiple_cell_document
     void write(std::ostream& os) const;
 
   private:
-    // XMLWRAPP !! We'd like the argument to be const, but that
-    // doesn't work in xmlwrapp-0.2.0 because get_root_node()
-    // isn't const. Perhaps it should be, since it is logically
-    // although not physically const--discuss with Peter.
-    void parse(xml::tree_parser&);
+    void parse(const xmlpp::DomParser&);
     std::string xml_root_name() const;
 
     // Default parameters for the whole case, stored as a vector for

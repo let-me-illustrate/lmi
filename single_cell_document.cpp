@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: single_cell_document.cpp,v 1.6 2006-01-23 14:48:43 chicares Exp $
+// $Id: single_cell_document.cpp,v 1.6.2.1 2006-01-28 01:41:59 etarassov Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -32,11 +32,7 @@
 #include "inputillus.hpp"
 #include "istream_to_string.hpp"
 
-#ifdef USING_CURRENT_XMLWRAPP
-#   include <xmlwrapp/document.h>
-#endif // USING_CURRENT_XMLWRAPP defined.
-#include <xmlwrapp/init.h>
-#include <xmlwrapp/tree_parser.h>
+#include "xmlpp.hpp"
 
 #include <fstream>
 
@@ -59,10 +55,8 @@ single_cell_document::single_cell_document(IllusInputParms const& parms)
 single_cell_document::single_cell_document(std::string const& filename)
     :input_data_(new IllusInputParms(false))
 {
-    xml::init init;
-// XMLWRAPP !! See comment on parse() in header.
-//    parse(xml::tree_parser(filename.c_str()));
-    xml::tree_parser parser(filename.c_str());
+    xmlpp::DomParser parser;
+    parser.parse_file(filename);
     parse(parser);
 }
 
@@ -78,18 +72,14 @@ std::string single_cell_document::xml_root_name() const
 }
 
 //============================================================================
-void single_cell_document::parse(xml::tree_parser& parser)
+void single_cell_document::parse(const xmlpp::DomParser & parser)
 {
     if(!parser)
         {
         throw std::runtime_error("Error parsing XML file.");
         }
 
-#ifdef USING_CURRENT_XMLWRAPP
-    xml::node& root = parser.get_document().get_root_node();
-#else // USING_CURRENT_XMLWRAPP not defined.
-    xml::node& root = parser.get_root_node();
-#endif // USING_CURRENT_XMLWRAPP not defined.
+    xmlpp::Element& root = *parser.get_document()->get_root_node();
     if(xml_root_name() != root.get_name())
         {
         fatal_error()
@@ -102,48 +92,37 @@ void single_cell_document::parse(xml::tree_parser& parser)
             ;
         }
 
-// COMPILER !! Borland doesn't find operator==() in ns xml.
-#ifdef __BORLANDC__
-using namespace xml;
-#endif // __BORLANDC__
-
-// TODO ?? Seems like this should be a const iterator. OTOH, maybe
-// the streaming operators should take a node iterator rather than
-// a node as argument?
-    xml::node::iterator child = root.begin();
-    if(child->is_text())
-        {
-        // TODO ?? Explain what this does.
-        ++child;
-        }
-    if(!child->is_text())
+    // read from the first non textual node all the information
+    // in other words this 'single cell' document xml representation
+    // should contain one and only one xml node
+    xmlpp::Node::NodeList children = root.get_children();
+    for( xmlpp::Node::NodeList::iterator iter = children.begin();
+                                         iter != children.end();
+                                         ++iter )
+    {
+        xmlpp::Element* child = dynamic_cast< xmlpp::Element * >( *iter );
+        if( child )
         {
         *child >> *input_data_;
+        break;
         }
+    }
 }
 
 //============================================================================
 void single_cell_document::read(std::istream& is)
 {
-    // XMLWRAPP !! xmlwrapp-0.2.0 doesn't know about istreams yet, so
-    // read the istream into a std::string via a std::ostringstream
-    // and pass that to the xml::tree_parser ctor that takes a char* .
-
-    std::string s;
-    istream_to_string(is, s);
-    xml::init init;
-// XMLWRAPP !! See comment on parse() in header.
-//    parse(xml::tree_parser(s.c_str(), 1 + s.size()));
-    xml::tree_parser parser(s.c_str(), 1 + s.size());
+    xmlpp::DomParser parser;
+    parser.parse_stream(is);
     parse(parser);
 }
 
 //============================================================================
 void single_cell_document::write(std::ostream& os)
 {
-    xml::init init;
-    xml::node root(xml_root_name().c_str());
+    xmlpp::Document document;
+    xmlpp::Element & root = *document.create_root_node(xml_root_name());
     root << *input_data_;
-    os << root;
+    document.write_to_stream(os);
 }
 

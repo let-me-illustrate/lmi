@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: inputillus_xml_io.cpp,v 1.11 2006-01-25 08:03:41 chicares Exp $
+// $Id: inputillus_xml_io.cpp,v 1.11.2.1 2006-01-28 01:41:59 etarassov Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -34,12 +34,7 @@
 #include "miscellany.hpp"
 #include "value_cast.hpp"
 
-#ifdef USING_CURRENT_XMLWRAPP
-#   include <xmlwrapp/attributes.h>
-#endif
-
-#include <xmlwrapp/init.h>
-#include <xmlwrapp/node.h>
+#include "xmlpp.hpp"
 
 #include <istream>
 #include <ostream>
@@ -82,7 +77,7 @@ std::vector<std::string> const& detritus()
 } // Unnnamed namespace.
 
 //============================================================================
-void IllusInputParms::read(xml::node& x)
+void IllusInputParms::read(xmlpp::Element const& x)
 {
     if(xml_root_name() != x.get_name())
         {
@@ -98,17 +93,8 @@ void IllusInputParms::read(xml::node& x)
         }
 
     std::string cell_version_string;
-#ifdef USING_CURRENT_XMLWRAPP
-    xml::attributes const& attrs = x.get_attributes();
-    xml::attributes::const_iterator i = attrs.find("version");
-    if(i != attrs.end())
-        {
-        cell_version_string = i->get_value();
-        }
-    else
-#else
-    if(!x.get_attr("version", cell_version_string))
-#endif
+    xmlpp::Attribute const * version = x.get_attribute("version");
+    if( !version ) 
         {
         std::ostringstream msg;
         msg
@@ -120,25 +106,20 @@ void IllusInputParms::read(xml::node& x)
         }
     int cell_version = value_cast<int>(cell_version_string);
 
-    // "Use" this variable. Eventually we will. Until then we don't
-    // care to see warnings that it's unused.
-    (void)cell_version;
-
-// COMPILER !! Borland doesn't find operator==() in ns xml.
-#ifdef __BORLANDC__
-using namespace xml;
-#endif // __BORLANDC__
-
     std::map<std::string, std::string> detritus_map;
 
     std::vector<std::string> member_names
         (IllusInputParms::member_names()
         );
     std::vector<std::string>::iterator current_member;
-    xml::node::const_iterator child;
-    for(child = x.begin(); child != x.end(); ++child)
+    xmlpp::Node::NodeList const xNodeList = x.get_children();
+    for(xmlpp::Node::NodeList::const_iterator iter = xNodeList.begin();
+                                              iter != xNodeList.end();
+                                              ++iter)
         {
-        if(child->is_text())
+        xmlpp::Element const * child
+            = dynamic_cast< xmlpp::Element const * >( *iter );
+        if(!child) // child is a text node
             {
             continue;
             }
@@ -159,12 +140,7 @@ using namespace xml;
                     )
                 )
                 {
-                char const* content = child->get_content();
-                if(!content)
-                    {
-                    content = "";
-                    }
-                detritus_map[node_tag] = content;
+                detritus_map[node_tag] = xmlpp::LmiHelper::get_content( *child );
                 }
             else
                 {
@@ -177,12 +153,7 @@ using namespace xml;
                 }
             continue;
             }
-        char const* content = child->get_content();
-        if(!content)
-            {
-            content = "";
-            }
-        operator[](node_tag) = content;
+        (*this)[ node_tag ] = xmlpp::LmiHelper::get_content( *child );
         // TODO ?? Perhaps a std::list would perform better.
         member_names.erase(current_member);
         }
@@ -241,18 +212,11 @@ using namespace xml;
 }
 
 //============================================================================
-void IllusInputParms::write(xml::node& x) const
+void IllusInputParms::write(xmlpp::Element& x) const
 {
-    // TODO ?? Experimental.
-    xml::init init;
-    xml::node root(xml_root_name().c_str());
-// XMLWRAPP !! There's no way to set an integer attribute.
-#ifdef USING_CURRENT_XMLWRAPP
-    root.get_attributes().insert
-#else
-    root.set_attr
-#endif
-    ("version", value_cast<std::string>(class_version()).c_str());
+    xmlpp::Element & root = *x.add_child(xml_root_name());
+
+    root.set_attribute("version", value_cast<std::string>(class_version()).c_str());
 
     std::vector<std::string> const member_names
         (IllusInputParms::member_names()
@@ -262,10 +226,8 @@ void IllusInputParms::write(xml::node& x) const
         {
         std::string node_tag(*i);
         std::string value = operator[](*i).str();
-        root.push_back(xml::node(node_tag.c_str(), value.c_str()));
+        root.add_child( node_tag )->add_child_text( value );
         }
-
-    x.push_back(root);
 }
 
 //============================================================================

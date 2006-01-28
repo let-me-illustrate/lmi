@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: README.auto,v 1.3 2005-12-29 20:17:49 zeitlin Exp $
+// $Id: README.auto,v 1.3.2.1 2006-01-28 01:41:59 etarassov Exp $
 
                   README file for building LMI with autotools
                   ===========================================
@@ -80,6 +80,40 @@ b) boost: static boost_filesystem library is available as a standard cygwin
         3.4/4.0 so if you use the latter you *must* build from source or you
         get mysterious run-time crashes.
 
+c) libxml2: production and development packages are available as a standard
+        cygwin package.
+
+d) libxml++: the library depends on glibmm::ustring class form glibmm library.
+        If compiling from scratch it demands alot of efforts, notably to install
+        glibmm library and its dependencies which contains cyclic dependencies.
+		
+        Use the patch (http://bugzilla.gnome.org/attachment.cgi?id=54059) from
+        libxml++ bugzilla (http://bugzilla.gnome.org/show_bug.cgi?id=320197)
+        to avoid glibmm dependancy. You need to specify --without-ustring when
+        configuring libxml++.
+
+e) pkg-config (optional): If you are going to regenerate configure script
+        then you have to provide to autotools the pkg-config m4 file. If you
+        don't have pkg-config installed on your system you could add
+        "-I $pkg_m4_dir" to ACLOCAL_AMFLAGS environment variable where
+        $pkg_m4_dir is the directory containing pkg.m4 file.
+
+        Further more to configure the package you will need either:
+        - to install pkg-config, as it dramatically simplifies libxml++ package
+        configuration and library dependency tracking.
+        - or to supply LIBXMLPP_LIBS and LIBXMLPP_CFLAGS. Depending on whether
+        you have compiled libxml++ with glibmm or without:
+
+        LIBXMLPP_LIBS=-L<xml++_lib_dir> -lxml++-2.6 -lxml2 -lz -lm -liconv \
+            -lglibmm-2.4 -lgobject-2.0 -lsigc-2.0 -lglib-2.0 -lintl
+
+        LIBXMLPP_CFLAGS=-I<libxml++_includes_dir> -I<libxml2_includes_dir> \
+            -I<glibmm_include_dir> -I<sigc++_include_dir> -I<glib_include_dir>
+
+        The flags could be passed to configure script either in the command line
+        $> configure LIBXMLPP_LIBS=".." LIBXMLPP_CFLAGS=".."
+        or by exporting it to the environment
+        $> export LIBXMLPP_LIBS=".." && export LIBXMLPP_CFLAGS=".." && configure
 
 2. Build system setup
 ---------------------
@@ -102,6 +136,11 @@ alternative: ensure that "wx" environment variable exists and points to the
 (uninstalled) wx source tree which you want to use and set ACLOCAL_AMFLAGS
 environment variable to "-I $wx".
 
+Normally you must install pkg-config package for the configure to run properly.
+However it is possible to download pkg.m4 file (part of pkg-config distribution)
+to use it in the same way as for wxwin.m4 : add "-I $pkg_m4_dir"
+to ACLOCAL_AMFLAGS environment variable, where $pkg_m4_dir points
+to the directory containing pkg.m4 file.
 
 3. Build
 --------
@@ -126,4 +165,4 @@ maintainer-clean" (don't use the latter if you don't have autotools installed
 as you won't be able to regenerate the makefile after it).
 
 
-Version: $Id: README.auto,v 1.3 2005-12-29 20:17:49 zeitlin Exp $
+Version: $Id: README.auto,v 1.3.2.1 2006-01-28 01:41:59 etarassov Exp $

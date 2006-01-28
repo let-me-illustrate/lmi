@@ -20,7 +20,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: Makefile.am,v 1.16 2006-01-27 15:41:24 zeitlin Exp $
+# $Id: Makefile.am,v 1.16.2.1 2006-01-28 01:41:59 etarassov Exp $
 
 
 SUBDIRS = third_party
@@ -199,7 +199,7 @@ lmi_wx_SOURCES = \
     view_ex.cpp \
     xml_notebook.cpp
 
-lmi_wx_CXXFLAGS = $(WX_CXXFLAGS) $(XMLWRAPP_FLAGS) $(AM_CXXFLAGS)
+lmi_wx_CXXFLAGS = $(WX_CXXFLAGS) $(LIBXMLPP_CFLAGS) $(AM_CXXFLAGS)
 # $(CGICC_INCLUDE_FLAGS)
 
 if LMI_MSW
@@ -215,7 +215,7 @@ lmi_wx_LDADD =  \
     liblmi.la \
     libwx_new.la \
     $(BOOST_LIBS) \
-    $(XMLWRAPP_LIBS) \
+    $(LIBXMLPP_LIBS) \
     $(WX_LIBS)
 if LMI_MSW
     lmi_wx_SOURCES += lmi.rc
@@ -234,11 +234,11 @@ cli_sources = \
 
 lmi_cli_SOURCES = \
     $(cli_sources)
-lmi_cli_CXXFLAGS = $(AM_CXXFLAGS)
+lmi_cli_CXXFLAGS = $(LIBXMLPP_CFLAGS) $(AM_CXXFLAGS)
 # $(CGICC_INCLUDE_FLAGS)
 lmi_cli_LDADD = \
     liblmi.la \
-    $(XMLWRAPP_LIBS) \
+    $(LIBXMLPP_LIBS) \
     $(BOOST_LIBS)
 
 # libraries
@@ -293,6 +293,7 @@ liblmi_common_sources = \
     system_command.cpp \
     timer.cpp \
     xenumtypes.cpp \
+    xmlpp.cpp \
     xrange.cpp
 
 libmain_auxiliary_common_la_SOURCES = \
@@ -317,7 +318,7 @@ libantediluvian_la_SOURCES = \
     mortality_rates.cpp \
     solve.cpp \
     $(liblmi_common_sources)
-libantediluvian_la_CXXFLAGS = $(AM_CXXFLAGS)
+libantediluvian_la_CXXFLAGS = $(LIBXMLPP_CFLAGS) $(AM_CXXFLAGS)
 libantediluvian_la_LDFLAGS = -no-undefined $(AM_LDFLAGS)
 libantediluvian_la_LIBADD = \
     $(BOOST_LIBS)
@@ -350,10 +351,10 @@ liblmi_la_SOURCES = \
     stratified_algorithms.cpp \
     stratified_charges.cpp \
     $(liblmi_common_sources)
-liblmi_la_CXXFLAGS = $(AM_CXXFLAGS)
+liblmi_la_CXXFLAGS = $(LIBXMLPP_CFLAGS) $(AM_CXXFLAGS)
 liblmi_la_LDFLAGS = -no-undefined $(AM_LDFLAGS)
 liblmi_la_LIBADD = \
-    $(XMLWRAPP_LIBS) \
+    $(LIBXMLPP_LIBS) \
     $(BOOST_LIBS)
 
 libcgi_la_SOURCES = \
@@ -408,11 +409,11 @@ antediluvian_cgi_LDADD = \
 
 antediluvian_cli_SOURCES = \
     $(cli_sources)
-antediluvian_cli_CXXFLAGS = $(AM_CXXFLAGS)
+antediluvian_cli_CXXFLAGS = $(LIBXMLPP_CFLAGS) $(AM_CXXFLAGS)
 antediluvian_cli_LDADD = \
     libantediluvian.la  \
     $(BOOST_LIBS) \
-    $(XMLWRAPP_LIBS)
+    $(LIBXMLPP_LIBS)
 
 ihs_crc_comp_SOURCES = ihs_crc_comp.cpp
 ihs_crc_comp_LDADD = libmain_auxiliary_common.la
@@ -584,13 +585,14 @@ test_input_SOURCES =    \
   single_cell_document.cpp \
   streamable.cpp \
   xenumtypes.cpp \
+  xmlpp.cpp \
   xrange.cpp
 
-test_input_CXXFLAGS = $(XMLWRAPP_FLAGS) $(AM_CXXFLAGS)
+test_input_CXXFLAGS = $(LIBXMLPP_CFLAGS) $(AM_CXXFLAGS)
 test_input_LDADD =    \
   $(BOOST_LIBS) \
   libtest_commons.la \
-  $(XMLWRAPP_LIBS) \
+  $(LIBXMLPP_LIBS) \
   $(test_input_extra_libs)
 
 test_irc7702a_SOURCES = \
@@ -925,6 +927,7 @@ noinst_HEADERS = \
     xenumfwd.hpp \
     xenumtypes.hpp \
     xml_notebook.hpp \
+    xmlpp.hpp \
     xrange.hpp \
     xrangefwd.hpp \
     xrangetypes.hpp \

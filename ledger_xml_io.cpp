@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xml_io.cpp,v 1.30 2006-01-17 13:28:52 chicares Exp $
+// $Id: ledger_xml_io.cpp,v 1.30.2.1 2006-01-28 01:41:59 etarassov Exp $
 
 #include "config.hpp"
 
@@ -37,16 +37,7 @@
 #include "value_cast.hpp"
 #include "version.hpp"
 
-#ifdef USING_CURRENT_XMLWRAPP
-#   include <xmlwrapp/attributes.h>
-// TODO ?? Gross hack to be undone when USING_CURRENT_XMLWRAPP becomes
-// the only supported version.
-#   define set_attr get_attributes().insert
-#endif
-
-#include <xmlwrapp/init.h>
-#include <xmlwrapp/node.h>
-#include <xmlwrapp/tree_parser.h>
+#include "xmlpp.hpp"
 
 #include <fstream>
 #include <iomanip>
@@ -57,7 +48,7 @@
 #include <string>
 #include <utility>
 
-void Ledger::read(xml::node&)
+void Ledger::read(xmlpp::Element const&)
 {
     // TODO ?? Not yet implemented.
 }
@@ -241,7 +232,7 @@ bool format_exists(std::string const& s, std::string const& suffix, format_map_t
 
 } // Unnamed namespace.
 
-void Ledger::write(xml::node& x) const
+void Ledger::write(xmlpp::Element& x) const
 {
     title_map_t title_map;
 
@@ -910,15 +901,12 @@ void Ledger::write(xml::node& x) const
 //    bool             FullyInitialized;   // i.e. by Init(BasicValues* b)
 
 // Now we're ready to write the xml.
-
-    xml::init init;
-
 //  want: <?xml-stylesheet type="text/xsl" href="NewTransform.xsl"?>
 //  want: <!DOCTYPE sales []>
 // kludged in write(std::ostream& os) below
 
-    xml::node scalar("scalar");
-    xml::node data("data");
+    xmlpp::Element & scalar = *x.add_child("scalar");
+    xmlpp::Element & data = *x.add_child("data");
 /*
     for
         (scalar_map::const_iterator j = scalars.begin()
@@ -928,7 +916,7 @@ void Ledger::write(xml::node& x) const
         {
         std::string node_tag = j->first;
         std::string value = value_cast<std::string>(*j->second);
-        scalar.push_back(xml::node(node_tag.c_str(), value.c_str()));
+        scalar.push_back(xmlpp::node(node_tag.c_str(), value.c_str()));
         }
     for
         (string_map::const_iterator j = strings.begin()
@@ -938,7 +926,7 @@ void Ledger::write(xml::node& x) const
         {
         std::string node_tag = j->first;
         std::string value = value_cast<std::string>(*j->second);
-        scalar.push_back(xml::node(node_tag.c_str(), value.c_str()));
+        scalar.push_back(xmlpp::node(node_tag.c_str(), value.c_str()));
         }
     for
         (double_vector_map::const_iterator j = vectors.begin()
@@ -946,13 +934,13 @@ void Ledger::write(xml::node& x) const
         ;++j
         )
         {
-        xml::node newcolumn("newcolumn");
-        xml::node column("column");
+        xmlpp::node newcolumn("newcolumn");
+        xmlpp::node column("column");
         column.set_attr("name", j->first.c_str());
         std::vector<double> const& v = *j->second;
         for(unsigned int k = 0; k < v.size(); ++k)
             {
-            xml::node duration("duration");
+            xmlpp::node duration("duration");
             duration.set_attr("number", value_cast<std::string>(k).c_str());
             duration.set_attr("column_value", value_cast<std::string>(v[k]).c_str());
             column.push_back(duration);
@@ -970,7 +958,7 @@ void Ledger::write(xml::node& x) const
         {
         std::string node_tag = j->first;
         std::string value = j->second;
-        scalar.push_back(xml::node(node_tag.c_str(), value.c_str()));
+        scalar.add_child( node_tag )->add_child_text( value );
         }
     for
         (std::map<std::string,std::vector<std::string> >::const_iterator j = stringvectors.begin()
@@ -978,22 +966,19 @@ void Ledger::write(xml::node& x) const
         ;++j
         )
         {
-        xml::node newcolumn("newcolumn");
-        xml::node column("column");
-        column.set_attr("name", j->first.c_str());
+// TODO ?? Is <newcolumn> really useful?
+        xmlpp::Element & newcolumn = *data.add_child("newcolumn");
+        xmlpp::Element & column = *newcolumn.add_child("column");
+        column.set_attribute("name", j->first);
         std::vector<std::string> const& v = j->second;
 // TODO ?? InforceLives shows an extra value past the end; should it
 // be truncated here?
         for(unsigned int k = 0; k < v.size(); ++k)
             {
-            xml::node duration("duration");
-            duration.set_attr("number", value_cast<std::string>(k).c_str());
-            duration.set_attr("column_value", v[k].c_str());
-            column.push_back(duration);
+            xmlpp::Element & duration = *column.add_child("duration");
+            duration.set_attribute("number", value_cast<std::string>(k));
+            duration.set_attribute("column_value", v[k]);
             }
-// TODO ?? Is <newcolumn> really useful?
-        newcolumn.push_back(column);
-        data.push_back(newcolumn);
         }
 
     std::vector<std::string> SupplementalReportColumns;
@@ -1013,11 +998,11 @@ void Ledger::write(xml::node& x) const
         SupplementalReportColumns.push_back(ledger_invariant_->SupplementalReportColumn11);
         }
 
-    xml::node supplementalreport("supplementalreport");
+    xmlpp::Element & supplementalreport = *x.add_child("supplementalreport");
     if(ledger_invariant_->SupplementalReport)
         {
         // Eventually customize the report name.
-        supplementalreport.push_back(xml::node("title", "Supplemental Report"));
+        supplementalreport.add_child("title")->add_child_text("Supplemental Report");
 //warning() << "size " << ledger_invariant_->SupplementalReportColumns.size() << LMI_FLUSH;
 
         std::vector<std::string>::const_iterator j;
@@ -1028,10 +1013,9 @@ void Ledger::write(xml::node& x) const
             )
             {
 //warning() << "column " << *j << " title " << title_map[*j] << LMI_FLUSH;
-            xml::node columns("columns");
-            columns.push_back(xml::node("name", (*j).c_str()));
-            columns.push_back(xml::node("title", title_map[*j].c_str()));
-            supplementalreport.push_back(columns);
+            xmlpp::Element & columns = *supplementalreport.add_child("columns");
+            columns.add_child( "name" )->add_child_text( *j );
+            columns.add_child( "title" )->add_child_text( title_map[ *j ] );
             }
         }
 
@@ -1048,10 +1032,6 @@ void Ledger::write(xml::node& x) const
     </columns>
 </supplementalreport>
 */
-
-    x.push_back(scalar);
-    x.push_back(data);
-    x.push_back(supplementalreport);
 
     if
         (   GetIsComposite()
@@ -1109,14 +1089,13 @@ std::string Ledger::xml_root_name() const
 
 void Ledger::write(std::ostream& os) const
 {
-    xml::init init;
-    xml::node root(xml_root_name().c_str());
+    xmlpp::Document doc;
+    xmlpp::Element & root = *doc.create_root_node(xml_root_name());
     root << *this;
-// Need DOCTYPE support, which xmlwrapp lacks--so can't do this:
+// Need DOCTYPE support, which xml++ lacks--so can't do this:
 //    os << root;
 
-    std::string s;
-    root.node_to_string(s);
+    std::string s = doc.write_to_string();
     std::string token("<?xml version=\"1.0\"?>");
     std::string string_to_insert
         ("\n<!DOCTYPE sales [\n]>\n"
@@ -1129,7 +1108,4 @@ void Ledger::write(std::ostream& os) const
     os << s;
 }
 
-#ifdef USING_CURRENT_XMLWRAPP
-#   undef set_attr
-#endif
 
