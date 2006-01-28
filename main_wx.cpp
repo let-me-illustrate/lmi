@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_wx.cpp,v 1.42 2006-01-24 12:11:14 chicares Exp $
+// $Id: main_wx.cpp,v 1.43 2006-01-28 14:46:02 chicares Exp $
 
 // Portions of this file are derived from wxWindows files
 //   samples/docvwmdi/docview.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -40,7 +40,6 @@
 
 #include "about_dialog.hpp"
 #include "alert.hpp"
-#include "armor.hpp"
 #include "argv0.hpp"
 #include "census_document.hpp"
 #include "census_view.hpp"
@@ -51,6 +50,7 @@
 #include "fenv_lmi.hpp"
 #include "global_settings.hpp"
 #include "getopt.hpp"
+#include "handle_exceptions.hpp"
 #include "ihs_dbdict.hpp" // print_databases()
 #include "illustration_document.hpp"
 #include "illustration_view.hpp"

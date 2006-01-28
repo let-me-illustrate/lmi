@@ -1,6 +1,6 @@
 // Distinct and composite values for cells in a group.
 //
-// Copyright (C) 2005 Gregory W. Chicares.
+// Copyright (C) 2005, 2006 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: group_values.cpp,v 1.50 2005-12-22 13:59:49 chicares Exp $
+// $Id: group_values.cpp,v 1.51 2006-01-28 14:46:02 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -30,12 +30,12 @@
 
 #include "account_value.hpp"
 #include "alert.hpp"
-#include "armor.hpp"
 #include "configurable_settings.hpp"
 #include "database.hpp"
 #include "dbnames.hpp"
 #include "file_command.hpp"
 #include "global_settings.hpp"
+#include "handle_exceptions.hpp"
 #include "input.hpp"
 #include "inputillus.hpp"
 #include "ledger.hpp"

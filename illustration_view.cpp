@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustration_view.cpp,v 1.32 2006-01-25 13:11:53 chicares Exp $
+// $Id: illustration_view.cpp,v 1.33 2006-01-28 14:46:02 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -40,10 +40,10 @@
 
 #include "account_value.hpp"
 #include "alert.hpp"
-#include "armor.hpp"
 #include "configurable_settings.hpp"
 #include "custom_io_0.hpp"
 #include "file_command.hpp"
+#include "handle_exceptions.hpp"
 #include "illustration_document.hpp"
 #include "inputillus.hpp"
 #include "ledger.hpp"

@@ -19,14 +19,14 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: test_coding_rules.cpp,v 1.1 2006-01-18 12:16:41 chicares Exp $
+// $Id: test_coding_rules.cpp,v 1.2 2006-01-28 14:46:02 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
 #   pragma hdrstop
 #endif // __BORLANDC__
 
-#include "armor.hpp"
+#include "handle_exceptions.hpp"
 #include "istream_to_string.hpp"
 #include "main_common.hpp"
 
