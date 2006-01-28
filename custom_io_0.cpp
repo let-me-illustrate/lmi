@@ -1,6 +1,6 @@
 // A custom interface.
 //
-// Copyright (C) 2001, 2002, 2003, 2004, 2005 Gregory W. Chicares.
+// Copyright (C) 2001, 2002, 2003, 2004, 2005, 2006 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: custom_io_0.cpp,v 1.12 2005-09-12 01:32:19 chicares Exp $
+// $Id: custom_io_0.cpp,v 1.13 2006-01-28 13:16:46 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -33,6 +33,7 @@
 #include "database.hpp"
 #include "dbnames.hpp"
 #include "global_settings.hpp"
+#include "input_sequence.hpp"
 #include "inputillus.hpp"
 #include "inputstatus.hpp"
 #include "ledger.hpp"
@@ -45,7 +46,6 @@
 
 #include <map>
 #include <fstream>
-#include <sstream>
 #include <stdexcept>
 #include <string>
 #include <vector>
@@ -53,7 +53,6 @@
 // TODO ?? Eventually rename all this stuff. Explain that this file is
 // 'custom_io_0.cpp' because there'll be other customizations.
 
-//==============================================================================
 bool DoesSpecialInputFileExist()
 {
     return 0 == access
@@ -62,6 +61,144 @@ bool DoesSpecialInputFileExist()
         );
 }
 
+namespace
+{
+/// Set interest rates from "special" input.
+
+std::string adjust_interest_rates
+    (double                     first_year_general_account_rate
+    ,double                     renewal_year_general_account_rate
+    ,std::vector<double> const& declared_rate
+    )
+{
+    // The customer's front end provides two interest rates: one for
+    // the first year only, and another for all renewal years. It's
+    // our understanding that the "InterestRateOngoing" is enabled iff
+    // the wire date precedes the rate effective date.
+    //
+    // Some general-account products have a non-level declared-rate
+    // structure that doesn't fit that paradigm.
+
+    bool credited_rates_fit_customer_paradigm = each_equal
+        (1 + declared_rate.begin()
+        ,    declared_rate.end()
+        ,    declared_rate[1]
+        );
+
+    // For products that fit the customer paradigm, respect the
+    // 'ongoing' interest field if anything is entered there;
+    // otherwise, treat it as though
+    //   first-year field + delta
+    // had been entered, where
+    //   delta = (renewal credited rate - initial credited rate).
+    // Thus, entering the declared rate as "InterestRateFirstYr" while
+    // leaving "InterestRateOngoing" empty suffices for illustrating
+    // the declared scale; and entering a lower "InterestRateFirstYr"
+    // preserves the shape of the declared scale, offsetting it by a
+    // constant difference.
+    //
+    // This is always correct for products with a level declared rate.
+    // For products that follow the first-and-renewal paradigm, it's
+    // correct as long as delta doesn't change, and conservative if
+    // delta is understated, which it is if a current release of the
+    // product files (which embody the declared rate) is used to
+    // illustrate a contract issued before the current release's
+    // effective date--as long as delta has not become more positive.
+    // For example:
+    //
+    //   0.07 0.09 0.09 prior   declared rate: delta = 0.02
+    //   0.06 0.07 0.07 current declared rate: delta = 0.01
+    //   0.07 specified, leaving renewal field empty
+    //   0.07 0.08 0.08 illustrated: 0.09, (0.07 + 0.01)...
+    //
+    // This is not conservative, OTOH, if delta has "become more
+    // positive". That expression is used here instead of "increased"
+    // because delta may be either positive or negative, and some may
+    // say that a delta that changed from -0.04 to -0.03 has in their
+    // opinion "decreased" (it became closer to zero, hence smaller in
+    // absolute magnitude), while all should agree that it has become
+    // more positive (closer to +infinity).
+
+    // For products that don't fit the customer pardigm, input in
+    // "InterestRateFirstYr" or "InterestRateOngoing" is ignored,
+    // and the current declared rate is used. It is expected that
+    // this will not be acceptable for long.
+
+    LMI_ASSERT(!declared_rate.empty());
+    std::vector<double> general_account_rate(declared_rate);
+
+    if(credited_rates_fit_customer_paradigm)
+        {
+        if(0.0 == renewal_year_general_account_rate)
+            {
+            renewal_year_general_account_rate =
+                    first_year_general_account_rate
+                +   declared_rate.back()
+                -   declared_rate.front()
+                ;
+            }
+        general_account_rate.resize(2);
+        general_account_rate[0] = first_year_general_account_rate;
+        general_account_rate[1] = renewal_year_general_account_rate;
+        }
+    else
+        {
+        ; // Do nothing.
+        }
+    return InputSequence(general_account_rate).mathematical_representation();
+}
+
+void test_adjust_interest_rates()
+{
+    std::vector<double> declared_rate;
+    declared_rate.push_back(0.06);
+    warning()
+        << "  Expect level 0.06: "
+        << adjust_interest_rates(0.06, 0.00, declared_rate) << '\n'
+        ;
+    warning()
+        << "  Expect 0.06, 0.07...: "
+        << adjust_interest_rates(0.06, 0.07, declared_rate) << '\n'
+        ;
+    declared_rate.push_back(0.07);
+    warning()
+        << "  Expect 0.06, 0.07...: "
+        << adjust_interest_rates(0.06, 0.00, declared_rate) << '\n'
+        ;
+    warning()
+        << "  Expect 0.07, 0.08...: "
+        << adjust_interest_rates(0.07, 0.00, declared_rate) << '\n'
+        ;
+    warning()
+        << "  Expect 0.06, 0.07...: "
+        << adjust_interest_rates(0.06, 0.07, declared_rate) << '\n'
+        ;
+    warning()
+        << "  Expect 0.05, 0.08...: "
+        << adjust_interest_rates(0.05, 0.08, declared_rate) << '\n'
+        ;
+    declared_rate.push_back(0.08);
+    warning()
+        << "  Expect 0.06, 0.07, 0.08...: "
+        << adjust_interest_rates(0.00, 0.00, declared_rate) << '\n'
+        ;
+    warning()
+        << "  Expect 0.06, 0.07, 0.08...: "
+        << adjust_interest_rates(0.00, 0.09, declared_rate) << '\n'
+        ;
+    warning()
+        << "  Expect 0.06, 0.07, 0.08...: "
+        << adjust_interest_rates(0.05, 0.00, declared_rate) << '\n'
+        ;
+    warning()
+        << "  Expect 0.06, 0.07, 0.08...: "
+        << adjust_interest_rates(0.05, 0.09, declared_rate) << '\n'
+        ;
+    warning() << std::flush;
+}
+
+} // Unnamed namespace.
+
 /// Set custom input from a particular file.
 ///
 /// Normally, the filename is a constant string governed by the
@@ -69,7 +206,6 @@ bool DoesSpecialInputFileExist()
 /// convenient to let it be overridden; copying each test file in turn
 /// to the filename normally expected would seem less tasteful.
 
-//==============================================================================
 bool SetSpecialInput(IllusInputParms& ip, char const* overridden_filename)
 {
     // Set global flag to liberalize input restrictions slightly.
@@ -295,45 +431,17 @@ bool SetSpecialInput(IllusInputParms& ip, char const* overridden_filename)
         *   n_v_pairs.numeric_value("InterestRateOngoing")
         ;
 
-    // Respect the 'ongoing' interest field if anything is entered
-    // there; otherwise, set it to
-    //   first-year field + (current renewal rate - current first-year rate)
-    //
-    // The customer's front end enables its 'ongoing' field iff the
-    // wire date precedes the rate effective date. If it's disabled,
-    // we derive the value as above. If it's enabled, then we should
-    // get 'ongoing' input; if we happen not to, we'll just apply the
-    // current difference between first and renewal, which should be
-    // conservative in the case of the product we're designing this
-    // for. That product's credited rates vary only by first versus
-    // renewal year, as asserted below; the customer's interface
-    // doesn't implement any other kind of variation.
+    std::vector<double> declared_rate;
+    database.Query(declared_rate, DB_MaxGenAcctRate);
+    ip.GenAcctIntRate = adjust_interest_rates
+        (first_year_general_account_rate
+        ,renewal_year_general_account_rate
+        ,declared_rate
+        );
 
-    if(0.0 == renewal_year_general_account_rate)
-        {
-        std::vector<double> credited_rate;
-        database.Query(credited_rate, DB_MaxGenAcctRate);
-        LMI_ASSERT
-            (each_equal
-                (1 + credited_rate.begin()
-                ,credited_rate.end()
-                ,credited_rate[1]
-                )
-            );
-        renewal_year_general_account_rate =
-                first_year_general_account_rate
-            +   credited_rate[1]
-            -   credited_rate[0]
-            ;
-        }
-
-    std::ostringstream oss;
-    oss
-        << first_year_general_account_rate
-        << ';'
-        << renewal_year_general_account_rate
-        ;
-    ip.GenAcctIntRate = oss.str();
+// Reenable this line to test the interest calculation when changing it.
+// This doesn't merit a formal, permanent unit test for now.
+//    test_adjust_interest_rates();
 
 // TRICKY !! Other input methods distinguish the agent's first, middle,
 // and last names. This method uses a single field to meet customer
@@ -383,19 +491,19 @@ bool SetSpecialInput(IllusInputParms& ip, char const* overridden_filename)
     return "Y" == n_v_pairs.string_value("AutoClose");
 }
 
-//==============================================================================
-// Assumptions:
-//   values are all as of EOY
-//   "interest earned" is net interest credited, net of any spread
-//   "mortality cost" is sum of actual COIs deducted throughout the year
-//   "load" is premium load including any sales load and premium-based
-//      loads for premium tax and dac tax, but excluding policy fee
-//   "minimum premium" is a required premium as is typical of interest
-//      sensitive whole life, and should be zero for flexible premium
-//      universal life
-//   "surrender cost" is account value minus cash surrender value; if
-//      there is any refund in the early years, this value can be negative
-//
+/// Print special output for a particular customer.
+/// Assumptions:
+///   values are all as of EOY
+///   "interest earned" is net interest credited, net of any spread
+///   "mortality cost" is sum of actual COIs deducted throughout the year
+///   "load" is premium load including any sales load and premium-based
+///      loads for premium tax and dac tax, but excluding policy fee
+///   "minimum premium" is a required premium as is typical of interest
+///      sensitive whole life, and should be zero for flexible premium
+///      universal life
+///   "surrender cost" is account value minus cash surrender value; if
+///      there is any refund in the early years, this value can be negative
+
 void PrintFormSpecial
     (Ledger const& ledger_values
     ,char const*   overridden_filename
