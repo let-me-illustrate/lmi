@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.321 2006-01-29 14:48:55 chicares Exp $
+// $Id: ChangeLog,v 1.322 2006-01-29 15:23:52 chicares Exp $
 
 MAINTENANCE
 
@@ -6110,5 +6110,22 @@ Update address in license notice.
   README.auto
   text_to_html_strings.sed
   text_to_strings.sed
+Update address in license notice.
+
+20060129T1511Z <chicares@cox.net> [1202]
+
+  Makefile.am
+  configure.ac
+  getopt.cpp
+  getopt.hpp
+  md5.cpp
+  md5.hpp
+Update address in license notice.
+
+20060129T1523Z <chicares@cox.net> [1202]
+
+  GNUmakefile
+  license.cpp
+  mpatrol-mingw-GNUmakefile
 Update address in license notice.
 
