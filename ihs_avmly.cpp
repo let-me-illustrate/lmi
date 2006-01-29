@@ -1,6 +1,6 @@
 // Account value: monthiversary processing.
 //
-// Copyright (C) 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005 Gregory W. Chicares.
+// Copyright (C) 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006 Gregory W. Chicares.
 // Portions marked JLM Copyright (C) 2000 (BOLI), 2002 (MEC avoidance) Gregory W. Chicares and Joseph L. Murdzek.
 // Author is GWC except where specifically noted otherwise.
 //
@@ -14,14 +14,14 @@
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with this program; if not, write to the Free Software
-// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+// along with this program; if not, write to the Free Software Foundation,
+// Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
 // http://savannah.nongnu.org/projects/lmi
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avmly.cpp,v 1.49 2005-11-05 03:57:23 chicares Exp $
+// $Id: ihs_avmly.cpp,v 1.50 2006-01-29 13:52:00 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"

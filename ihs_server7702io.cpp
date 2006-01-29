@@ -1,6 +1,6 @@
 // GPT server I/O.
 //
-// Copyright (C) 2000, 2001, 2002, 2005 Gregory W. Chicares.
+// Copyright (C) 2000, 2001, 2002, 2005, 2006 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -12,14 +12,14 @@
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with this program; if not, write to the Free Software
-// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+// along with this program; if not, write to the Free Software Foundation,
+// Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
 // http://savannah.nongnu.org/projects/lmi
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_server7702io.cpp,v 1.1 2005-01-14 19:47:45 chicares Exp $
+// $Id: ihs_server7702io.cpp,v 1.2 2006-01-29 13:52:00 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
