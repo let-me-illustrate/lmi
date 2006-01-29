@@ -16,12 +16,13 @@
 
    You should have received a copy of the GNU General Public License
    along with this program; if not, write to the Free Software Foundation,
-   Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.  */
+   Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
+*/
 
 /* 2003-02 GWC got this code from
      http://www.nondot.org/gcc/md5_8h-source.html
    and modified it as indicated below by initials 'GWC'. Modifications are
-     Copyright (C) 2003, 2005 Gregory W. Chicares
+     Copyright (C) 2003, 2005, 2006 Gregory W. Chicares
    and licensed under the same terms as the original, as given above.
    This is a derived work. Any defect in it should not reflect on
    Ulrich Drepper's reputation.
@@ -30,14 +31,18 @@
    email: <chicares@cox.net>
    snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-   $Id: md5.hpp,v 1.3 2005-11-03 04:53:55 chicares Exp $
+   $Id: md5.hpp,v 1.4 2006-01-29 15:12:07 chicares Exp $
 
    GWC: File renamed md5.h --> md5.hpp so that grep whatever *.?pp
    can be used across the lmi project.
 
    GWC: Transplanting this code from a system library to application
    code makes original include guard "_MD5_H" problematic under C++98
-   17.4.3.1.2, so change it. */
+   17.4.3.1.2, so change it.
+
+For subsequent GWC modifications, see 'ChangeLog'.
+*/
+
 #ifndef LMI_MD5_H
 #define LMI_MD5_H 1
 

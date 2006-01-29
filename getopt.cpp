@@ -16,9 +16,9 @@
 // [Both URLs should work, but the second seemed to lack the full
 // contents when I revisited it later.]
 //
-// GWC modifications Copyright (C) 2001, 2002, 2003, 2004, 2005
-//   Gregory W. Chicares and released with the same licensing terms as
-//   the original, viz.:
+// GWC modifications are
+//   Copyright (C) 2001, 2002, 2003, 2004, 2005, 2006 Gregory W. Chicares
+// and released with the same licensing terms as the original, viz.:
 
 // This file is part of the GNU C++ Library.  This library is free
 // software; you can redistribute it and/or modify it under the terms of
@@ -28,16 +28,17 @@
 // that it will be useful, but WITHOUT ANY WARRANTY; without even the
 // implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 // PURPOSE.  See the GNU Library General Public License for more details.
-// You should have received a copy of the GNU Library General Public
-// License along with this library; if not, write to the Free Software
-// Foundation, 675 Mass Ave, Cambridge, MA 02139, USA.
+//
+// You should have received a copy of the GNU Library General Public License
+// along with this library; if not, write to the Free Software Foundation,
+// Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 
 // http://savannah.nongnu.org/projects/lmi
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
 // GWC added this RCS Id:
-// $Id: getopt.cpp,v 1.6 2005-12-07 04:13:38 chicares Exp $
+// $Id: getopt.cpp,v 1.7 2006-01-29 15:12:07 chicares Exp $
 
 // GWC conditionalized gcc-specific pragma.
 #ifdef __GNUC__

@@ -17,14 +17,15 @@
 
    You should have received a copy of the GNU General Public License
    along with this program; if not, write to the Free Software Foundation,
-   Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.  */
+   Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
+*/
 
 /* Written by Ulrich Drepper <drepper@gnu.ai.mit.edu>, 1995.  */
 
 /* 2003-02 GWC got this code from
      http://www.nondot.org/gcc/md5_8c-source.html
    and modified it as indicated below by initials 'GWC'. Modifications are
-     Copyright (C) 2003, 2005 Gregory W. Chicares
+     Copyright (C) 2003, 2005, 2006 Gregory W. Chicares
    and licensed under the same terms as the original, as given above.
    This is a derived work. Any defect in it should not reflect on
    Ulrich Drepper's reputation.
@@ -33,11 +34,13 @@
    email: <chicares@cox.net>
    snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-   $Id: md5.cpp,v 1.2 2005-01-31 13:12:48 chicares Exp $
+   $Id: md5.cpp,v 1.3 2006-01-29 15:12:07 chicares Exp $
 
    GWC: File renamed md5.c --> md5.cpp .
    GWC: Put C rtl functions in namespace std.
- */
+
+For subsequent GWC modifications, see 'ChangeLog'.
+*/
 
 #ifdef HAVE_CONFIG_H
 # include <config.h>

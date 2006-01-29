@@ -12,8 +12,8 @@ dnl MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 dnl GNU General Public License for more details.
 dnl
 dnl You should have received a copy of the GNU General Public License
-dnl along with this program; if not, write to the Free Software
-dnl Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+dnl along with this program; if not, write to the Free Software Foundation,
+dnl Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 dnl
 dnl http://savannah.nongnu.org/projects/lmi
 dnl email: <chicares@cox.net>
@@ -21,7 +21,7 @@ dnl snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
 dnl === Prologue ===
 
-AC_REVISION($Id: configure.ac,v 1.17 2006-01-19 01:50:36 zeitlin Exp $)dnl
+AC_REVISION($Id: configure.ac,v 1.18 2006-01-29 15:12:07 chicares Exp $)dnl
 
 AC_PREREQ(2.56)
 AC_INIT(LMI, 1.0.0, [chicares@cox.net])
