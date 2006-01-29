@@ -1,6 +1,6 @@
 // README for "Let me illustrate...".
 //
-// Copyright (C) 2005 Gregory W. Chicares.
+// Copyright (C) 2005, 2006 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -12,25 +12,25 @@
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with this program; if not, write to the Free Software
-// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+// along with this program; if not, write to the Free Software Foundation,
+// Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 //
 // http://savannah.nongnu.org/projects/lmi
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: README,v 1.1 2005-03-15 14:30:16 chicares Exp $
+// $Id: README,v 1.2 2006-01-29 14:48:55 chicares Exp $
 
 * Copyright and license notices for graphics files
 
 The following graphics files (*.ico *.xpm) in this directory are
-  Copyright (C) 2005 Gregory W. Chicares
-and subject to the
+subject to the
   GNU General Public License version 2
 as stated at the top of this file. They are original works except for
 the derived works noted below.
 
-Derived from the gnome-icon-theme/24x24 icon set:
+Derived from the gnome-icon-theme/24x24 icon set and
+  Copyright (C) 2005 Gregory W. Chicares
 
   about.xpm             from stock_about.png
   close.xpm             from stock_close.png
@@ -56,6 +56,11 @@ Derived from the gnome-icon-theme/24x24 icon set:
   saveas.xpm            from stock_save-as.png
   varying-width.xpm     from stock_insert-rows.png
   write_spreadsheet.xpm from stock_insert-rows.png
+
+Derived from the gnome-icon-theme/24x24 icon set and
+  Copyright (C) 2005 Gregory W. Chicares
+
+  default_cell.xpm      from stock_new.png
 
 Many of these icons are used by GNU emacs, and are in the emacs cvs at
 savannah.gnu.org . The original author of this gnome icon set is Jakub
