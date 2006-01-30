@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: license.cpp,v 1.4 2006-01-29 15:23:52 chicares Exp $
+// $Id: license.cpp,v 1.5 2006-01-30 04:58:40 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -49,9 +49,11 @@ namespace
 #   include "quoted_gpl_html"
         ;
 
-    // These required notices could be extracted from the GPL text file
-    // with appropriate 'sed' commands, but it is simpler to write them
-    // inline here:
+    // The boilerplate language here could be extracted from the GPL
+    // text file with appropriate 'sed' commands, but that would be
+    // fragile because the words surrounding them might change. The
+    // required notices are short, and it is simple enough to write
+    // them out in full here.
 
     char const notices_text[] =
         "'Let me illustrate...' creates life insurance illustrations.\n"
