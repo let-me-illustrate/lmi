@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.324 2006-01-30 04:58:41 chicares Exp $
+// $Id: ChangeLog,v 1.325 2006-01-30 05:26:14 chicares Exp $
 
 MAINTENANCE
 
@@ -6140,4 +6140,9 @@ Update address in license notice.
   license.cpp
   license.hpp
 Improve documentation.
+
+20060130T0458Z <chicares@cox.net> [1202]
+
+  tn_range_test.cpp
+Include only appropriate headers.
 
