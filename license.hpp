@@ -19,16 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: license.hpp,v 1.5 2006-01-29 13:52:00 chicares Exp $
-
-// The module associated with this header provides the full text of
-// the GPL and appropriate notices for display at startup as required
-// by GPL(2)(c). Of course, the GPL is provided in file 'COPYING', as
-// is customary, and this information might alternatively have been
-// read from that external file. Embedding it here in the source
-// ensures that the license and its required notices are available
-// independent of that file, with line endings that are platform
-// independent.
+// $Id: license.hpp,v 1.6 2006-01-30 04:58:41 chicares Exp $
 
 #ifndef license_hpp
 #define license_hpp
@@ -38,6 +29,14 @@
 #include "so_attributes.hpp"
 
 #include <string>
+
+// Provide the complete GPL and appropriate notices for display at
+// startup as required by GPL(2)(c), in both flat-text and html
+// formats. Of course, the GPL is provided in file 'COPYING' as well.
+// Much of this information might alternatively have been read at run
+// time from that external file; embedding it here in the source
+// ensures that the license and its required notices are available
+// unaltered.
 
 std::string const& LMI_SO license_as_html();
 std::string const& LMI_SO license_as_text();
