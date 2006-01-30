@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: GNUmakefile,v 1.57 2006-01-29 15:23:52 chicares Exp $
+# $Id: GNUmakefile,v 1.58 2006-01-30 23:31:04 wboutin Exp $
 
 ###############################################################################
 
@@ -594,12 +594,12 @@ circadian_log := log-lmi-circadian-$(yyyymmddhhmm)
 checkout:
 	$(MKDIR) --parents $(circadian_directory); \
 	cd $(circadian_directory); \
-	export CVS_RSH="ssh"; \
-	cvs -z3 -d:ext:anoncvs@savannah.gnu.org:/cvsroot/lmi co skeleton lmi; \
+	cvs -z3 co skeleton lmi; \
 
 .PHONY: circadian_test
 circadian_test: checkout
-	-$(MAKE) -C $(circadian_directory)/lmi cvs_ready >../$(circadian_log)
+	-$(MAKE) --directory="$(circadian_directory)/lmi" cvs_ready \
+	  >../$(circadian_log)
 
 ################################################################################
 
