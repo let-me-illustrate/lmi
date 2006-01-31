@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.326 2006-01-30 23:31:04 wboutin Exp $
+// $Id: ChangeLog,v 1.327 2006-01-31 16:16:16 wboutin Exp $
 
 MAINTENANCE
 
@@ -6150,4 +6150,9 @@ Include only appropriate headers.
 
   GNUmakefile
 Fix broken target.
+
+20060131T1611Z <wboutin@massmutual.com> [1202]
+
+  mingw_setup.make
+Improve documentation.
 
