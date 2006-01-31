@@ -5,7 +5,7 @@
 
 # http://savannah.nongnu.org/projects/lmi
 
-# $Id: mingw_setup.make,v 1.10 2006-01-31 16:16:16 wboutin Exp $
+# $Id: mingw_setup.make,v 1.11 2006-01-31 20:26:55 wboutin Exp $
 
 # REVIEW: Here, say exactly what this makefile does, and what its
 # prerequisites are; and write some excruciatingly clear instructions
@@ -78,7 +78,7 @@ MKDIR  := mkdir
 MV     := mv
 RM     := rm
 TAR    := tar
-WGET   := c:/msys/1.0/local/bin/wget
+WGET   := $(system_root)/msys/1.0/local/bin/wget
 
 # REVIEW: Why say "c:" in the definition of $(WGET) just above, or
 # in the 'wget_mingwport' target's "--directory=c:/tmp" far below?
@@ -152,13 +152,13 @@ mingw_extras = \
 
 .PHONY: mingw_current
 mingw_current:
-	$(MKDIR) --parents /tmp/$@
+	$(MKDIR) --parents $(TMPDIR)/$@
 	-@[ -e $(mingw_dir) ]
 	@$(ECHO) "Preserving your existing MinGW installation is\
 	  strongly recommended."
 	$(MKDIR) $(mingw_dir)
 	$(MAKE) \
-	  --directory=/tmp/$@ \
+	  --directory=$(TMPDIR)/$@ \
 	  --file=$(src_dir)/mingw_setup.make \
 	    mingw_dir='$(mingw_dir)' \
 	      src_dir='$(src_dir)' \
@@ -171,13 +171,13 @@ install_mingw_current_from_tmp_dir: $(mingw_requirements) $(mingw_extras)
 
 .PHONY: mingw_20050827
 mingw_20050827:
-	$(MKDIR) --parents /tmp/$@
+	$(MKDIR) --parents $(TMPDIR)/$@
 	-@[ -e $(mingw_dir) ]
 	@$(ECHO) "Preserving your existing MinGW installation is\
 	strongly recommended."
 	$(MKDIR) $(mingw_dir)
 	$(MAKE) \
-	  --directory=/tmp/$@ \
+	  --directory=$(TMPDIR)/$@ \
 	  --file=$(src_dir)/mingw_setup.make \
 	    mingw_dir='$(mingw_dir)' \
 	      src_dir='$(src_dir)' \
@@ -200,13 +200,14 @@ human_interactive_tools = \
 # Can't we prevent downloading it if it was already downloaded?
 
 %.exe:
-	$(WGET) --non-verbose $(sf_mirror)/mingw/$@
+	[ -e $@ ] || $(WGET) --non-verbose $(sf_mirror)/mingw/$@
+	$(MD5SUM) --check $(src_dir)/$@.md5
 	./$@
 
 .PHONY: human_interactive_setup
 human_interactive_setup:
 	$(MAKE) \
-	  --directory=/tmp \
+	  --directory=$(TMPDIR) \
 	  --file=$(src_dir)/mingw_setup.make \
 	    src_dir='$(src_dir)' \
 	  install_human_interactive_tools_from_tmp_dir
@@ -227,19 +228,21 @@ wget_mingwport = wget-1.9.1
 .PHONY: wget_mingwport
 wget_mingwport:
 	$(MAKE) \
-	  --directory=c:/tmp \
+	  --directory=$(TMPDIR) \
 	  --file=$(src_dir)/mingw_setup.make \
-	    mingw_dir='$(mingw_dir)' \
-	      src_dir='$(src_dir)' \
+	    src_dir='$(src_dir)' \
 	  install_wget_mingwport_from_tmp_dir
 
 .PHONY: install_wget_mingwport_from_tmp_dir
 install_wget_mingwport_from_tmp_dir:
-	$(WGET) --non-verbose $(sf_mirror)/mingw/$(wget_mingwport)-mingwPORT.tar.bz2
-	$(MD5SUM) --check wget-1.9.1-mingwport.tar.bz2.md5
-	$(BZIP2) --decompress --force --keep $(wget_mingwport)-mingwPORT.tar.bz2
+	[ -e $(wget_mingwport)-mingwPORT.tar.bz2 ] || $(WGET) --non-verbose \
+	  $(sf_mirror)/mingw/$(wget_mingwport)-mingwPORT.tar.bz2
+	$(MD5SUM) --check $(src_dir)/$(wget_mingwport)-mingwport.tar.bz2.md5
+	$(BZIP2) --decompress --force --keep \
+	  $(wget_mingwport)-mingwPORT.tar.bz2
 	$(TAR) --extract --file $(wget_mingwport)-mingwPORT.tar
-	$(CP) --preserve $(wget_mingwport)/mingwPORT/wget.exe /msys/1.0/local/bin/
+	$(CP) --preserve \
+	  $(wget_mingwport)/mingwPORT/wget.exe /msys/1.0/local/bin/
 
 # REVIEW: How have you tested this makefile? How do you know that it's
 # correct? How could you tell that the installation has succeeded? Can
