@@ -5,7 +5,7 @@
 
 # http://savannah.nongnu.org/projects/lmi
 
-# $Id: mingw_setup.make,v 1.9 2006-01-19 02:24:24 wboutin Exp $
+# $Id: mingw_setup.make,v 1.10 2006-01-31 16:16:16 wboutin Exp $
 
 # REVIEW: Here, say exactly what this makefile does, and what its
 # prerequisites are; and write some excruciatingly clear instructions
@@ -16,31 +16,31 @@
 # makefile system, but that seems justified for the purpose of
 # providing a MinGW installation for those not involved with lmi.
 
-# REVIEW: Is there any actual need for 'setup' in addition to 'all'?
-# The default target is the first encountered, and by convention it's
-# normally named 'all'.
+###############################################################################
 
-.PHONY: all
-all: setup
+# Configurable variables.
+
+# These variables can be configured at the command-line. This example shows how
+# MSYS users might benefit from configuring these variables:
+#   make -f mingw_setup.make mingw_current system_root="/c/"
+# Users who prefer multiple versions of MinGW would like this configuration:
+#   make -f mingw_setup.make mingw_current mingw_dir="/Mingw-344"
 
 src_dir := $(CURDIR)
-
-# REVIEW: The following variables are customizable, so perhaps you
-# ought to say that and group them all in one section.
 
 system_root := c:
 
 # Path to MinGW install directory.
 mingw_dir := $(system_root)/MinGW
 
-# REVIEW: This is configurable. Prefer to assign configurable
-# variables in one marked section, with appropriate instructions.
-#
-# OK, you've moved the preceding comment and the following line
-# here, right after $(mingw_dir). Are $(mingw_dir) and $(sf_mirror)
-# the only configurable variables?
-
 sf_mirror := http://easynews.dl.sourceforge.net/sourceforge
+
+TMPDIR  ?= $(system_root)/tmp
+$(TMPDIR):
+	+@[ -d $@ ] || $(MKDIR) --parents $@
+
+# Consider moving other configurable variables here, i.e., 'mingw_requirements'
+# and 'mingw_extras'.
 
 ###############################################################################
 
@@ -89,13 +89,6 @@ WGET   := c:/msys/1.0/local/bin/wget
 # 'environment' CD worked on any drive; perhaps that versatility
 # could be achieved by using $(TMP) instead of /tmp/, but not if
 # msw doesn't guarantee to define $(TMP) (I can't remember).
-
-###############################################################################
-
-.PHONY: setup
-setup: \
-  mingw_current \
-  human_interactive_setup \
 
 ###############################################################################
 
