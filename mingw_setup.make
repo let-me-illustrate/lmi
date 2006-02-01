@@ -5,7 +5,7 @@
 
 # http://savannah.nongnu.org/projects/lmi
 
-# $Id: mingw_setup.make,v 1.11 2006-01-31 20:26:55 wboutin Exp $
+# $Id: mingw_setup.make,v 1.12 2006-02-01 12:57:37 wboutin Exp $
 
 # REVIEW: Here, say exactly what this makefile does, and what its
 # prerequisites are; and write some excruciatingly clear instructions
@@ -80,16 +80,6 @@ RM     := rm
 TAR    := tar
 WGET   := $(system_root)/msys/1.0/local/bin/wget
 
-# REVIEW: Why say "c:" in the definition of $(WGET) just above, or
-# in the 'wget_mingwport' target's "--directory=c:/tmp" far below?
-# Did that solve the problem you had observed with the msw temporary
-# directory? Why not use $(system_root) instead, if a drive letter
-# must be written? Would it be best to omit the drive letter, as is
-# done where "--directory" is used elsewhere? The original
-# 'environment' CD worked on any drive; perhaps that versatility
-# could be achieved by using $(TMP) instead of /tmp/, but not if
-# msw doesn't guarantee to define $(TMP) (I can't remember).
-
 ###############################################################################
 
 # Install MinGW.
@@ -117,9 +107,6 @@ mingw_extras = \
   mingw-utils-0.3.tar.gz \
 
 # Download archives if they're out of date, then extract them.
-
-# REVIEW: Shouldn't all issues marked 'TODO \?\?' be resolved before
-# this is shared with the MinGW community?
 
 %.tar.bz2:
 	[ -e $@ ] || $(WGET) --non-verbose $(sf_mirror)/mingw/$@
@@ -197,7 +184,6 @@ human_interactive_tools = \
   MSYS-1.0.10.exe \
 
 # REVIEW: In what directory would the downloaded file be saved?
-# Can't we prevent downloading it if it was already downloaded?
 
 %.exe:
 	[ -e $@ ] || $(WGET) --non-verbose $(sf_mirror)/mingw/$@
