@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.328 2006-01-31 20:26:55 wboutin Exp $
+// $Id: ChangeLog,v 1.329 2006-02-01 12:57:37 wboutin Exp $
 
 MAINTENANCE
 
@@ -6165,4 +6165,9 @@ Add md5sums.
   mingw_setup.make
   wget-1.9.1-mingwPORT.tar.bz2.md5
 Tidy up 'wget' installation and fix validation.
+
+20060201T1245Z <wboutin@massmutual.com> [1202]
+
+  mingw_setup.make
+Improve documentation.
 
