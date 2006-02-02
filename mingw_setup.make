@@ -5,7 +5,7 @@
 
 # http://savannah.nongnu.org/projects/lmi
 
-# $Id: mingw_setup.make,v 1.12 2006-02-01 12:57:37 wboutin Exp $
+# $Id: mingw_setup.make,v 1.13 2006-02-02 21:08:39 wboutin Exp $
 
 # REVIEW: Here, say exactly what this makefile does, and what its
 # prerequisites are; and write some excruciatingly clear instructions
@@ -24,7 +24,7 @@
 # MSYS users might benefit from configuring these variables:
 #   make -f mingw_setup.make mingw_current system_root="/c/"
 # Users who prefer multiple versions of MinGW would like this configuration:
-#   make -f mingw_setup.make mingw_current mingw_dir="/Mingw-344"
+#   make -f mingw_setup.make mingw_current mingw_dir="/MinGW-344"
 
 src_dir := $(CURDIR)
 
@@ -33,7 +33,16 @@ system_root := c:
 # Path to MinGW install directory.
 mingw_dir := $(system_root)/MinGW
 
-sf_mirror := http://easynews.dl.sourceforge.net/sourceforge
+# All issues marked 'TODO \?\?' should be resolved before this is shared with
+# the MinGW community?
+
+# TODO ?? There isn't exactly one mirror that provides all the required files
+# for the MinGW installation. Consider how more than one mirror can be used.
+# The mirror actually used here contains the greatest number of needed files
+# from one mirror, but certainly not all of them; this unused mirror has the
+# remaining files.
+# sf_mirror := http://easynews.dl.sourceforge.net/sourceforge
+sf_mirror := http://internap.dl.sourceforge.net/sourceforge
 
 TMPDIR  ?= $(system_root)/tmp
 $(TMPDIR):
@@ -91,12 +100,31 @@ WGET   := $(system_root)/msys/1.0/local/bin/wget
 
 # Minimal installation requirements.
 
-mingw_requirements = \
+# TODO ?? Add md5sums for newer files that don't have them yet.
+
+mingw_requirements_20060117 = \
+  binutils-2.16.91-20050827-1.tar.gz \
+  gcc-core-3.4.5-20060117-1.tar.gz \
+  gcc-g++-3.4.5-20060117-1.tar.gz \
+  mingw-runtime-3.9.tar.gz \
+  w32api-3.6.tar.gz \
+
+mingw_requirements_20050827 = \
   binutils-2.16.91-20050827-1.tar.gz \
   gcc-core-3.4.4-20050522-1.tar.gz \
   gcc-g++-3.4.4-20050522-1.tar.gz \
   mingw-runtime-3.8.tar.gz \
   w32api-3.3.tar.gz \
+
+# These are the files used in production with lmi today. TODO ?? this comment
+# should probably be removed before sharing with the MinGW community, since
+# they don't really care.
+mingw_requirements_20040916 = \
+  binutils-2.15.91-20040904-1.tar.gz \
+  gcc-core-3.4.2-20040916-1.tar.gz \
+  gcc-g++-3.4.2-20040916-1.tar.gz \
+  mingw-runtime-3.7.tar.gz \
+  w32api-3.2.tar.gz \
 
 # These aren't necessary for compiling a C++ program with <windows.h>.
 # Although, they're included here in an attempt to reproduce a C++-only
@@ -114,6 +142,8 @@ mingw_extras = \
 	$(CP) --force --preserve $@ $(mingw_dir)
 	$(BZIP2) --decompress --keep --force $@
 	$(TAR) --extract --file=$*.tar
+
+# TODO ?? Preserve *.gz files so they aren't unnecessarily downloaded.
 
 %.tar.gz:
 	[ -e $@ ] || $(WGET) --non-verbose $(sf_mirror)/mingw/$@
@@ -137,8 +167,8 @@ mingw_extras = \
 # differences be factored out so that there are multiple dated
 # versions of $(mingw_requirements) but only one target?
 
-.PHONY: mingw_current
-mingw_current:
+.PHONY: mingw_20060117
+mingw_20060117:
 	$(MKDIR) --parents $(TMPDIR)/$@
 	-@[ -e $(mingw_dir) ]
 	@$(ECHO) "Preserving your existing MinGW installation is\
@@ -149,29 +179,12 @@ mingw_current:
 	  --file=$(src_dir)/mingw_setup.make \
 	    mingw_dir='$(mingw_dir)' \
 	      src_dir='$(src_dir)' \
-	  install_mingw_current_from_tmp_dir
+	  install_mingw_from_tmp_dir
 
-.PHONY: install_mingw_current_from_tmp_dir
-install_mingw_current_from_tmp_dir: $(mingw_requirements) $(mingw_extras)
-	-$(RM) --recursive *.tar
-	$(MV) --force * $(mingw_dir)
+# TODO ?? Use pattern rules here to avoid always installing '$(mingw_extras)'.
 
-.PHONY: mingw_20050827
-mingw_20050827:
-	$(MKDIR) --parents $(TMPDIR)/$@
-	-@[ -e $(mingw_dir) ]
-	@$(ECHO) "Preserving your existing MinGW installation is\
-	strongly recommended."
-	$(MKDIR) $(mingw_dir)
-	$(MAKE) \
-	  --directory=$(TMPDIR)/$@ \
-	  --file=$(src_dir)/mingw_setup.make \
-	    mingw_dir='$(mingw_dir)' \
-	      src_dir='$(src_dir)' \
-	  install_mingw_20050827_from_tmp_dir
-
-.PHONY: install_mingw_20050827_from_tmp_dir
-install_mingw_20050827_from_tmp_dir: $(mingw_requirements)
+.PHONY: install_mingw_from_tmp_dir
+install_mingw_from_tmp_dir: $(mingw_requirements_20060117) $(mingw_extras)
 	-$(RM) --recursive *.tar
 	$(MV) --force * $(mingw_dir)
 
