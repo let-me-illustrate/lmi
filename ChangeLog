@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.329 2006-02-01 12:57:37 wboutin Exp $
+// $Id: ChangeLog,v 1.330 2006-02-02 21:08:39 wboutin Exp $
 
 MAINTENANCE
 
@@ -6170,4 +6170,9 @@ Tidy up 'wget' installation and fix validation.
 
   mingw_setup.make
 Improve documentation.
+
+20060202T2101Z <wboutin@massmutual.com> [1207]
+
+  mingw_setup.make
+Refactor MinGW installation.
 
