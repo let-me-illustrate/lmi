@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_wx.hpp,v 1.9 2006-01-29 13:52:00 chicares Exp $
+// $Id: main_wx.hpp,v 1.10 2006-02-06 18:16:37 chicares Exp $
 
 // Portions of this file are derived from wxWindows files
 //   samples/docvwmdi/docview.h (C) 1998 Julian Smart and Markus Holzem
@@ -42,6 +42,7 @@
 
 #include <wx/app.h>
 #include <wx/defs.h> // WXDLLEXPORT
+#include <wx/timer.h>
 
 class DocManagerEx;
 class ViewEx;
@@ -73,6 +74,7 @@ class Skeleton
     void OnDropFiles              (wxDropFilesEvent&);
     void OnEditDefaultCell        (wxCommandEvent&);
     void OnMenuOpen               (wxMenuEvent&);
+    void OnTimer                  (wxTimerEvent&);
     void OnUpdateInapplicable     (wxUpdateUIEvent&);
     void OnUpdateFileSave         (wxUpdateUIEvent&);
     void OnUpdateUI               (wxUpdateUIEvent&);
@@ -94,6 +96,7 @@ class Skeleton
     wxConfigBase* config_;
     DocManagerEx* doc_manager_;
     wxDocMDIParentFrame* frame_;
+    wxTimer timer_;
 
     DECLARE_EVENT_TABLE()
 };
