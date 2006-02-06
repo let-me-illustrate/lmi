@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_wx.cpp,v 1.44 2006-01-29 13:52:00 chicares Exp $
+// $Id: main_wx.cpp,v 1.45 2006-02-06 18:16:37 chicares Exp $
 
 // Portions of this file are derived from wxWindows files
 //   samples/docvwmdi/docview.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -103,6 +103,7 @@ BEGIN_EVENT_TABLE(Skeleton, wxApp)
  EVT_MENU(XRCID("window_tile_vertically"   ),Skeleton::OnWindowTileVertically  )
  EVT_MENU(XRCID("edit_default_cell"        ),Skeleton::OnEditDefaultCell       )
  EVT_MENU_OPEN(                              Skeleton::OnMenuOpen              )
+ EVT_TIMER(wxID_ANY                         ,Skeleton::OnTimer                 )
 // TODO ?? expunge
 // EVT_UPDATE_UI(wxID_ANY                     ,Skeleton::OnUpdateUI              )
  EVT_UPDATE_UI(wxID_SAVE                    ,Skeleton::OnUpdateFileSave        )
@@ -211,10 +212,12 @@ int WINAPI WinMain
 Skeleton::Skeleton()
     :doc_manager_ (0)
     ,frame_       (0)
+    ,timer_       (this)
 {
     SetAppName("lmi_wx");
     SetVendorName("lmi");
     config_ = wxConfigBase::Get();
+    timer_.Start(100);
 }
 
 Skeleton::~Skeleton()
@@ -546,6 +549,13 @@ void Skeleton::OnMenuOpen(wxMenuEvent&)
         }
     // (else) Parent menu enablement could be handled here, but, for
     // now at least, none is required.
+}
+
+void Skeleton::OnTimer(wxTimerEvent&)
+{
+    static unsigned int u = 0;
+    fenv_validate();
+    status() << ++u << std::flush;
 }
 
 // WX !! The wx exception-handling code doesn't seem to permit

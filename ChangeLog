@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.330 2006-02-02 21:08:39 wboutin Exp $
+// $Id: ChangeLog,v 1.331 2006-02-06 18:16:37 chicares Exp $
 
 MAINTENANCE
 
@@ -6149,7 +6149,12 @@ Include only appropriate headers.
 20060130T2326Z <wboutin@massmutual.com> [1202]
 
   GNUmakefile
-Fix broken target.
+Reflect savannah change: anonymous ssh access no longer supported.
+The recommended method:
+  export CVS_RSH="ssh"
+  export CVSROOT=":pserver:anonymous@cvs.sv.nongnu.org:/sources/lmi"
+isn't compatible with all firewalls, so assume for now that those
+variables have been set appropriately in the environment.
 
 20060131T1611Z <wboutin@massmutual.com> [1202]
 
@@ -6175,4 +6180,14 @@ Improve documentation.
 
   mingw_setup.make
 Refactor MinGW installation.
+
+20060206T1816Z <chicares@cox.net> [1207]
+
+  illustration_view.cpp
+Remove unneeded header.
+
+  main_wx.cpp
+  main_wx.hpp
+Experimentally check fpu control word quite frequently, attempting to
+localize the problem mentioned above on 20060119T0738Z.
 
