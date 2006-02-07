@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.331 2006-02-06 18:16:37 chicares Exp $
+// $Id: ChangeLog,v 1.332 2006-02-07 01:02:38 chicares Exp $
 
 MAINTENANCE
 
@@ -6190,4 +6190,12 @@ Remove unneeded header.
   main_wx.hpp
 Experimentally check fpu control word quite frequently, attempting to
 localize the problem mentioned above on 20060119T0738Z.
+
+20060207T0102Z <chicares@cox.net> [1207]
+
+  main_wx.cpp
+Experimentally load system dlls at startup. With the 20060206T1816Z
+change, the problem is reliably reproducible, though only on certain
+machines. This change might prevent the problem; it needs to be tested
+on those machines.
 
