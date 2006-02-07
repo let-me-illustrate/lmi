@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_wx.cpp,v 1.45 2006-02-06 18:16:37 chicares Exp $
+// $Id: main_wx.cpp,v 1.46 2006-02-07 01:02:38 chicares Exp $
 
 // Portions of this file are derived from wxWindows files
 //   samples/docvwmdi/docview.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -72,12 +72,70 @@
 #include <wx/toolbar.h>
 #include <wx/xrc/xmlres.h>
 
+#ifdef __WXMSW__
+#   include <wx/msw/wrapwin.h> // For ::LoadLibrary().
+#endif // __WXMSW__ defined.
+
 #include <stdexcept>
 #include <string>
+#include <sstream> // For load_dll() only.
 
 #if !defined __WXMSW__
 #   include "lmi.xpm"
 #endif // !defined __WXMSW__
+
+#ifdef __WXMSW__
+namespace
+{
+void load_dll(char const* dll_name)
+{
+    if(0 == ::LoadLibrary(dll_name))
+        {
+        std::ostringstream oss;
+        oss
+            << "Failed to load '"
+            << dll_name
+            << "'."
+            ;
+        safely_show_message(oss.str().c_str());
+        }
+    if(!fenv_validate())
+        {
+        fenv_initialize();
+        std::ostringstream oss;
+        oss
+            << "Loading '"
+            << dll_name
+            << "' changed the floating-point control word."
+            << " It has been reset, so that loading this library later"
+            << " should not trigger this problem again."
+            << std::flush
+            ;
+        safely_show_message(oss.str().c_str());
+        }
+}
+
+void load_dlls()
+{
+    safely_show_message("Experimentally pre-loading system dlls.");
+    fenv_initialize();
+    load_dll("ADVAPI32.DLL");
+    load_dll("COMCTL32.DLL");
+    load_dll("COMDLG32.DLL");
+    load_dll("GDI32.dll");
+    load_dll("KERNEL32.dll");
+    load_dll("msvcrt.dll");
+    load_dll("OLE32.dll");
+    load_dll("OLEAUT32.DLL");
+    load_dll("RPCRT4.dll");
+    load_dll("SHELL32.DLL");
+    load_dll("USER32.dll");
+    load_dll("WINMM.DLL");
+    load_dll("WSOCK32.DLL");
+    fenv_validate();
+}
+} // Unnamed namespace.
+#endif // __WXMSW__ defined.
 
 IMPLEMENT_APP_NO_MAIN(Skeleton)
 IMPLEMENT_WX_THEME_SUPPORT
@@ -180,6 +238,9 @@ int WINAPI WinMain
 
     try
         {
+#ifdef __WXMSW__
+        load_dlls();
+#endif // __WXMSW__ defined.
         initialize_application();
         initialize_filesystem();
 #ifndef __WXMSW__
@@ -553,9 +614,10 @@ void Skeleton::OnMenuOpen(wxMenuEvent&)
 
 void Skeleton::OnTimer(wxTimerEvent&)
 {
-    static unsigned int u = 0;
-    fenv_validate();
-    status() << ++u << std::flush;
+    if(!fenv_validate())
+        {
+        fenv_initialize();
+        }
 }
 
 // WX !! The wx exception-handling code doesn't seem to permit
