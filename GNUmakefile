@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: GNUmakefile,v 1.58 2006-01-30 23:31:04 wboutin Exp $
+# $Id: GNUmakefile,v 1.59 2006-02-12 17:07:31 chicares Exp $
 
 ###############################################################################
 
@@ -522,7 +522,6 @@ check_conformity: source_clean custom_tools
 	    -e ';/__int64/d' \
 	    -e ';/__stdcall/d' \
 	    -e ';/__volatile__/d' \
-	    -e ';/__WXMSW__/d' \
 	    -e ';/__init_aux/d' \
 	    -e ';/__pow/d' \
 	    -e ';/____/d' \

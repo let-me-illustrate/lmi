@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.333 2006-02-12 16:54:08 chicares Exp $
+// $Id: ChangeLog,v 1.334 2006-02-12 17:07:31 chicares Exp $
 
 MAINTENANCE
 
@@ -6209,4 +6209,12 @@ calling any of this code.
 
   main_wx.cpp
 Revert most floating-point control-word changes since 20060206T1816Z.
+
+20060212T1707Z <chicares@cox.net> [1207]
+
+  GNUmakefile
+  docmdichildframe_ex.cpp
+  main_wx.cpp
+  transferor.cpp
+Replace wx's msw macro with lmi's.
 
