@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: transferor.cpp,v 1.6 2006-01-29 13:52:00 chicares Exp $
+// $Id: transferor.cpp,v 1.7 2006-02-12 17:07:31 chicares Exp $
 
 // Acknowledgment
 
@@ -60,9 +60,9 @@
 #include <wx/utils.h>
 
 // FSF !! Expunge this when wx is enhanced.
-#ifdef __WXMSW__
+#ifdef LMI_MSW
 #   include <wx/msw/wrapwin.h>
-#endif // __WXMSW__
+#endif // LMI_MSW
 
 IMPLEMENT_CLASS(Transferor, wxValidator)
 
@@ -308,11 +308,11 @@ namespace
             wxComboBox* p = dynamic_cast<wxComboBox*>(&control);
             if(p)
                 {
-#ifdef __WXMSW__
+#ifdef LMI_MSW
 // FSF !! Need this in the wx library for GNU/linux.
 bool dropped = ::SendMessage((HWND)(p->GetHandle()), CB_GETDROPPEDSTATE, 0, 0);
 if(!dropped)
-#endif // __WXMSW__
+#endif // LMI_MSW
 {
                 data = p->GetValue();
 }
