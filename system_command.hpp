@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: system_command.hpp,v 1.6 2006-01-29 13:52:00 chicares Exp $
+// $Id: system_command.hpp,v 1.7 2006-02-12 16:54:08 chicares Exp $
 
 #ifndef system_command_hpp
 #define system_command_hpp
@@ -32,7 +32,7 @@
 
 /// This is a cover function for std::system(). On posix platforms, it
 /// simply forwards its argument to std::system(). On msw, however, it
-/// must work around two serious problems.
+/// must work around a serious problem.
 ///
 /// The standard function often is implemented on msw to invoke
 ///   $ComSpec /c command
@@ -42,18 +42,7 @@
 /// as described here:
 ///   http://sourceforge.net/mailarchive/message.php?msg_id=13234342
 /// The only reliable alternative is to use a platform-specific system
-/// call.
-///
-/// Another msw problem is that an alien process may reset the fpu
-/// control word:
-///   http://lists.gnu.org/archive/html/lmi/2006-01/msg00025.html
-/// so the implementation tests the control word both before and after
-/// it issues the command. If the precision setting was changed by the
-/// command, it's restored to its desired value. This silently fixes
-/// the problem expected from a rogue process built with ms tools,
-/// which use the same settings as intel except for precision; that's
-/// the only problem actually observed. Any other discrepancy is
-/// reported.
+/// call instead of std::system().
 ///
 /// Thus, the elaborate implementation provided for msw does not favor
 /// that platform: it just makes it do what a posix platform would do

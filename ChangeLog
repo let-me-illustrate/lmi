@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.332 2006-02-07 01:02:38 chicares Exp $
+// $Id: ChangeLog,v 1.333 2006-02-12 16:54:08 chicares Exp $
 
 MAINTENANCE
 
@@ -5715,8 +5715,8 @@ Mark release candidate.
 
 20060128T1445Z <chicares@cox.net> [1202]
 
-  armor.hpp                  [renamed to ledger_base.cpp]
-  armor_test.cpp             [renamed to ledger_base.cpp]
+  armor.hpp                  [renamed to handle_exceptions.hpp]
+  armor_test.cpp             [renamed to handle_exceptions_test.cpp]
   group_values.cpp
   handle_exceptions.hpp      [new file]
   handle_exceptions_test.cpp [new file]
@@ -6198,4 +6198,15 @@ Experimentally load system dlls at startup. With the 20060206T1816Z
 change, the problem is reliably reproducible, though only on certain
 machines. This change might prevent the problem; it needs to be tested
 on those machines.
+
+20060212T1654Z <chicares@cox.net> [1207]
+
+  system_command.cpp
+  system_command.hpp
+Revert floating-point control-word changes since 20060113T0434Z. The
+reported problem has been reproduced on certain machines without
+calling any of this code.
+
+  main_wx.cpp
+Revert most floating-point control-word changes since 20060206T1816Z.
 

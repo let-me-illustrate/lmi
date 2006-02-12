@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: system_command.cpp,v 1.6 2006-01-29 13:52:00 chicares Exp $
+// $Id: system_command.cpp,v 1.7 2006-02-12 16:54:08 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -39,17 +39,12 @@ int system_command(std::string const& command_line)
 
 #else // defined LMI_MSW
 
-#include "alert.hpp"
-#include "fenv_lmi.hpp"
-
 #include <windows.h>
 
 #include <cstring>
 
 int system_command(std::string const& command_line)
 {
-    fenv_validate();
-
     STARTUPINFO startup_info;
     std::memset(&startup_info, 0, sizeof(STARTUPINFO));
     startup_info.cb = sizeof(STARTUPINFO);
@@ -77,13 +72,6 @@ int system_command(std::string const& command_line)
     ::WaitForSingleObject(process_info.hProcess, INFINITE);
     ::GetExitCodeProcess(process_info.hProcess, &exit_code);
     ::CloseHandle(process_info.hProcess);
-
-    if(fe_dblprec == fenv_precision())
-        {
-        fenv_precision(fe_ldblprec);
-        }
-
-    fenv_validate();
 
     return exit_code;
 }
