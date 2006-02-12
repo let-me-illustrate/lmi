@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_wx.cpp,v 1.47 2006-02-12 16:54:08 chicares Exp $
+// $Id: main_wx.cpp,v 1.48 2006-02-12 17:07:31 chicares Exp $
 
 // Portions of this file are derived from wxWindows files
 //   samples/docvwmdi/docview.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -75,9 +75,9 @@
 #include <stdexcept>
 #include <string>
 
-#if !defined __WXMSW__
+#if !defined LMI_MSW
 #   include "lmi.xpm"
-#endif // !defined __WXMSW__
+#endif // !defined LMI_MSW
 
 IMPLEMENT_APP_NO_MAIN(Skeleton)
 IMPLEMENT_WX_THEME_SUPPORT
@@ -134,7 +134,7 @@ BEGIN_EVENT_TABLE(Skeleton, wxApp)
 */
 END_EVENT_TABLE()
 
-#ifdef __WXMSW__
+#ifdef LMI_MSW
 // WX !! Oddly enough, wx seems to require this declaration, even
 // though <wx/app.h> has been included and that header in turn
 // includes <wx/msw/app.h>. Apparently the prototype in the latter
@@ -145,18 +145,18 @@ extern int wxEntry
     ,LPSTR     pCmdLine
     ,int       nCmdShow
     );
-#endif // __WXMSW__ defined.
+#endif // LMI_MSW defined.
 
-#ifndef __WXMSW__
+#ifndef LMI_MSW
 int main(int argc, char* argv[])
-#else // __WXMSW__ defined.
+#else // LMI_MSW defined.
 int WINAPI WinMain
     (HINSTANCE hInstance
     ,HINSTANCE hPrevInstance
     ,LPSTR     lpCmdLine
     ,int       nCmdShow
     )
-#endif // __WXMSW__ defined.
+#endif // LMI_MSW defined.
 {
     // WX !! and MPATROL !! Using wx-2.5.1 and mpatrol-1.4.8, both
     // dynamically linked to this application built with gcc-3.2.3,
@@ -182,12 +182,12 @@ int WINAPI WinMain
         {
         initialize_application();
         initialize_filesystem();
-#ifndef __WXMSW__
+#ifndef LMI_MSW
         // [insert code to preload dlls]
         result = wxEntry(argc, argv);
-#else // __WXMSW__ defined.
+#else // LMI_MSW defined.
         result = wxEntry(hInstance, hPrevInstance, lpCmdLine, nCmdShow);
-#endif // __WXMSW__ defined.
+#endif // LMI_MSW defined.
         }
     catch(...)
         {
@@ -308,7 +308,7 @@ void Skeleton::InitDocManager()
 
 void Skeleton::InitIcon()
 {
-#ifdef __WXMSW__
+#ifdef LMI_MSW
     // If a wxIcon rather than a wxIconBundle were used here, then
     // lossy shrinkage of a large icon could occur on msw; this
     // approach uses a smaller icon in the '.ico' file instead.
@@ -319,9 +319,9 @@ void Skeleton::InitIcon()
     // on msw, even though the 256-color 32x32 icon comes first in the
     // '.ico' file; but this shows the color icon:
     frame_->SetIcons(wxICON(AAAAAAAA));
-#else // Not defined __WXMSW__.
+#else // Not defined LMI_MSW.
     frame_->SetIcon(wxICON(lmi));
-#endif // Not defined __WXMSW__.
+#endif // Not defined LMI_MSW.
 }
 
 void Skeleton::InitMenuBar()
@@ -456,9 +456,9 @@ bool Skeleton::OnInit()
         InitToolBar();
         frame_->CreateStatusBar();
     // FSF !! Need to implement this in a generic way for GNU/linux.
-#ifdef __WXMSW__
+#ifdef LMI_MSW
         frame_->DragAcceptFiles(true);
-#endif // __WXMSW__ defined.
+#endif // LMI_MSW defined.
         frame_->Centre(wxBOTH);
         frame_->Maximize(true);
 
@@ -641,14 +641,14 @@ void Skeleton::OnWindowTileHorizontally(wxCommandEvent&)
 //
 void Skeleton::OnWindowTileVertically(wxCommandEvent&)
 {
-#ifdef __WXMSW__
+#ifdef LMI_MSW
     ::SendMessage
         ((HWND)frame_->GetClientWindow()->GetHWND()
         ,WM_MDITILE
         ,MDITILE_VERTICAL | MDITILE_SKIPDISABLED
         ,0
         );
-#endif // __WXMSW__
+#endif // LMI_MSW
 }
 
 bool Skeleton::ProcessCommandLine(int argc, char* argv[])

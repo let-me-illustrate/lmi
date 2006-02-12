@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: docmdichildframe_ex.cpp,v 1.3 2006-01-29 13:52:00 chicares Exp $
+// $Id: docmdichildframe_ex.cpp,v 1.4 2006-02-12 17:07:31 chicares Exp $
 
 #include "docmdichildframe_ex.hpp"
 
@@ -103,7 +103,7 @@ void DocMDIChildFrameEx::OnMenuHighlight(wxMenuEvent& event)
 // FSF !! Expunge this when we deprecate support for older versions
 // than wx-2.5.4 .
 
-#if wxCHECK_VERSION(2,5,4) || !defined __WXMSW__
+#if wxCHECK_VERSION(2,5,4) || !defined LMI_MSW
 void DocMDIChildFrameEx::SetMdiWindowMenu() const {}
 #else // wx-msw prior to version 2.5.4 .
 #   include <wx/msw/wrapwin.h>
