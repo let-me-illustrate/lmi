@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: fenv_lmi.hpp,v 1.8 2006-01-29 13:52:00 chicares Exp $
+// $Id: fenv_lmi.hpp,v 1.9 2006-02-13 05:30:27 chicares Exp $
 
 #ifndef fenv_lmi_hpp
 #define fenv_lmi_hpp
@@ -72,9 +72,15 @@
 /// fe[gs]etprecision().
 ///
 ///   bool LMI_SO fenv_validate();
-/// Make sure current floating-point environment matches initial
-/// settings; display a message and return 'false' if it doesn't.
-/// No exception is thrown, so that this function can be called at
+/// Make sure current floating-point environment matches lmi default.
+/// If it doesn't, then reset it to lmi default, display a message,
+/// and return 'false'.
+///
+/// Postcondition: floating-point environment matches lmi default.
+///
+/// Throws: nothing, unless displaying the error message fails, e.g.
+/// due to lack of memory. Failure is indicated by a return code
+/// rather than an exception, so that this function can be called at
 /// program exit, outside any try block, without abending, which is
 /// crucial for GUI frameworks that don't handle exceptions
 /// gracefully during normal termination.

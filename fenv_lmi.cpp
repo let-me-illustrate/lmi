@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: fenv_lmi.cpp,v 1.11 2006-01-29 13:52:00 chicares Exp $
+// $Id: fenv_lmi.cpp,v 1.12 2006-02-13 05:30:27 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -121,15 +121,20 @@ bool fenv_validate()
         // means.
         std::ostringstream oss;
         oss
-            << "The floating-point control word is unexpectedly '"
+            << "The floating-point control word was unexpectedly '"
 #ifdef LMI_X86
-            << std::hex << x87_control_word() << "'.\n"
+            << std::hex << x87_control_word()
 #else  // Unknown compiler or platform.
 #   error Unknown compiler or platform.
 #endif // Unknown compiler or platform.
-            << "Probably some other program changed this crucial setting.\n"
-            << "This is a real problem: results may be invalid.\n"
+            << "'."
+            << "\nProbably some other program changed this crucial setting."
+            << "\nIt has been reset correctly. Rerun any illustration that"
+            << "\nwas being run when this message appeared, because it may"
+            << "\nbe incorrect."
+            << "\n"
             ;
+        fenv_initialize();
         safely_show_message(oss.str().c_str());
         }
     return okay;
