@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.335 2006-02-13 05:30:27 chicares Exp $
+// $Id: ChangeLog,v 1.336 2006-02-13 18:59:07 chicares Exp $
 
 MAINTENANCE
 
@@ -6227,4 +6227,26 @@ Use smooth gauge for progress dialog.
   fenv_lmi.hpp
   fenv_lmi_test.cpp
 Reset floating-point control word upon detecting any change.
+
+20060213T1859Z <chicares@cox.net> [1209]
+
+  fenv_lmi.cpp
+  fenv_lmi.hpp
+Add function to test control-word validity silently.
+
+  configurable_settings.cpp
+  configurable_settings.hpp
+  main_wx.cpp
+  msw_workarounds.cpp [new file]
+  msw_workarounds.hpp [new file]
+  objects.make
+Preload msw dlls specified in 'configurable_settings.xml', e.g.:
+  <libraries_to_preload>foo.dll bar.dll</libraries_to_preload>
+This optional feature is intended to address the problem discussed
+above on these dates:
+  20060113T0434Z
+  20060119T0738Z
+  20060125T0719Z
+  20060206T1816Z
+  20060207T0102Z
 
