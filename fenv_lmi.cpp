@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: fenv_lmi.cpp,v 1.12 2006-02-13 05:30:27 chicares Exp $
+// $Id: fenv_lmi.cpp,v 1.13 2006-02-13 18:59:03 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -105,10 +105,19 @@ void fenv_rounding(e_ieee754_rounding rounding_mode)
 #endif // Unknown compiler or platform.
 }
 
+bool fenv_is_valid()
+{
+#ifdef LMI_X86
+    return default_x87_control_word() == x87_control_word();
+#else  // Unknown compiler or platform.
+#   error Unknown compiler or platform.
+#endif // Unknown compiler or platform.
+}
+
 bool fenv_validate()
 {
 #ifdef LMI_X86
-    bool okay = default_x87_control_word() == x87_control_word();
+    bool okay = fenv_is_valid();
 #else  // Unknown compiler or platform.
 #   error Unknown compiler or platform.
 #endif // Unknown compiler or platform.
