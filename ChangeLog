@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.334 2006-02-12 17:07:31 chicares Exp $
+// $Id: ChangeLog,v 1.335 2006-02-13 05:30:27 chicares Exp $
 
 MAINTENANCE
 
@@ -6217,4 +6217,14 @@ Revert most floating-point control-word changes since 20060206T1816Z.
   main_wx.cpp
   transferor.cpp
 Replace wx's msw macro with lmi's.
+
+20060213T0530Z <chicares@cox.net> [1207]
+
+  progress_meter_wx.cpp
+Use smooth gauge for progress dialog.
+
+  fenv_lmi.cpp
+  fenv_lmi.hpp
+  fenv_lmi_test.cpp
+Reset floating-point control word upon detecting any change.
 
