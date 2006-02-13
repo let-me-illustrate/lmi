@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: progress_meter_wx.cpp,v 1.2 2006-01-29 13:52:00 chicares Exp $
+// $Id: progress_meter_wx.cpp,v 1.3 2006-02-13 05:30:25 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -51,6 +51,7 @@ class concrete_progress_meter
             |   wxPD_CAN_ABORT
             |   wxPD_ELAPSED_TIME
             |   wxPD_ESTIMATED_TIME
+            |   wxPD_SMOOTH
             |   wxPD_REMAINING_TIME
         };
 
