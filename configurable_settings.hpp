@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: configurable_settings.hpp,v 1.10 2006-01-29 13:52:00 chicares Exp $
+// $Id: configurable_settings.hpp,v 1.11 2006-02-13 18:59:07 chicares Exp $
 
 #ifndef configurable_settings_hpp
 #define configurable_settings_hpp
@@ -35,9 +35,6 @@
 #include <string>
 
 /// Design notes for class configurable_settings.
-///
-/// This is a simple Meyers singleton, with the expected threading and
-/// dead-reference issues.
 ///
 /// This class reads user-configurable settings from an xml file and
 /// makes them available to other modules.
@@ -56,6 +53,9 @@
 ///
 /// default_input_filename_: Name of '.ill' file containing default
 /// input values for new '.ill' and '.cns' files.
+///
+/// libraries_to_preload_: Names of any libraries to be preloaded.
+/// Used to work around a defect of msw.
 ///
 /// offer_hobsons_choice_: Unsafely allow users the option to bypass
 /// error conditions. Setting this to 'false' prevents the system from
@@ -87,6 +87,7 @@ class LMI_SO configurable_settings
     std::string const& custom_input_filename     () const;
     std::string const& custom_output_filename    () const;
     std::string const& default_input_filename    () const;
+    std::string const& libraries_to_preload      () const;
     bool               offer_hobsons_choice      () const;
     std::string const& spreadsheet_file_extension() const;
     std::string const& xsl_fo_command            () const;
@@ -103,6 +104,7 @@ class LMI_SO configurable_settings
     std::string custom_input_filename_;
     std::string custom_output_filename_;
     std::string default_input_filename_;
+    std::string libraries_to_preload_;
     bool offer_hobsons_choice_;
     std::string spreadsheet_file_extension_;
     std::string xsl_fo_command_;

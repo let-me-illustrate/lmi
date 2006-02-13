@@ -1,0 +1,72 @@
+// Preload msw dlls to work around an operating-system defect.
+//
+// Copyright (C) 2006 Gregory W. Chicares.
+//
+// This program is free software; you can redistribute it and/or modify
+// it under the terms of the GNU General Public License version 2 as
+// published by the Free Software Foundation.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program; if not, write to the Free Software Foundation,
+// Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
+//
+// http://savannah.nongnu.org/projects/lmi
+// email: <chicares@cox.net>
+// snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
+
+// $Id: msw_workarounds.hpp,v 1.1 2006-02-13 18:59:07 chicares Exp $
+
+#ifndef msw_workarounds_hpp
+#define msw_workarounds_hpp
+
+#include "config.hpp"
+
+#include "obstruct_slicing.hpp"
+
+#include <boost/utility.hpp>
+
+#include <deque>
+#include <string>
+
+/// Design notes for class MswDllPreloader.
+///
+/// This class preloads msw dlls to work around an operating-system
+/// defect: some system libraries needlessly mangle the floating-point
+/// control word. For instance, 'DOCPROP2.DLL' is a known offender
+/// for msw '2000'.
+///
+/// It is implemented as a simple Meyers singleton, with the expected
+/// dead-reference and threading issues.
+///
+/// Preloading might have been performed in the ctor; performing it in
+/// member PreloadDesignatedDlls() allows the timing to be controlled.
+///
+/// The dtor unloads preloaded dlls in the reverse of the order in
+/// which they were loaded. The data member is of type std::deque
+/// in order to let this reversal be expressed more cleanly.
+
+class MswDllPreloader
+    :private boost::noncopyable
+    ,virtual private obstruct_slicing<MswDllPreloader>
+{
+  public:
+    static MswDllPreloader& instance();
+    void PreloadDesignatedDlls();
+
+  private:
+    MswDllPreloader();
+    ~MswDllPreloader();
+
+    void PreloadOneDll(std::string const& dll_name);
+    void UnloadOneDll (std::string const& dll_name);
+
+    std::deque<std::string> SuccessfullyPreloadedDlls_;
+};
+
+#endif // msw_workarounds_hpp
+
