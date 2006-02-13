@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: configurable_settings.cpp,v 1.10 2006-01-29 13:52:00 chicares Exp $
+// $Id: configurable_settings.cpp,v 1.11 2006-02-13 18:59:07 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -60,6 +60,7 @@ configurable_settings::configurable_settings()
     ,custom_input_filename_      ("custom.ini"         )
     ,custom_output_filename_     ("custom.out"         )
     ,default_input_filename_     ("etc/opt/default.ini")
+    ,libraries_to_preload_       (""                   )
     ,offer_hobsons_choice_       (false                )
     ,spreadsheet_file_extension_ (".gnumeric"          )
     ,xsl_fo_command_             ("fo"                 )
@@ -146,6 +147,7 @@ void configurable_settings::ascribe_members()
     ascribe("custom_input_filename"      ,&configurable_settings::custom_input_filename_     );
     ascribe("custom_output_filename"     ,&configurable_settings::custom_output_filename_    );
     ascribe("default_input_filename"     ,&configurable_settings::default_input_filename_    );
+    ascribe("libraries_to_preload"       ,&configurable_settings::libraries_to_preload_      );
     ascribe("offer_hobsons_choice"       ,&configurable_settings::offer_hobsons_choice_      );
     ascribe("spreadsheet_file_extension" ,&configurable_settings::spreadsheet_file_extension_);
     ascribe("xsl_fo_command"             ,&configurable_settings::xsl_fo_command_            );
@@ -176,6 +178,11 @@ std::string const& configurable_settings::custom_output_filename() const
 std::string const& configurable_settings::default_input_filename() const
 {
     return default_input_filename_;
+}
+
+std::string const& configurable_settings::libraries_to_preload() const
+{
+    return libraries_to_preload_;
 }
 
 bool configurable_settings::offer_hobsons_choice() const

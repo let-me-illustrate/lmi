@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_wx.cpp,v 1.48 2006-02-12 17:07:31 chicares Exp $
+// $Id: main_wx.cpp,v 1.49 2006-02-13 18:59:07 chicares Exp $
 
 // Portions of this file are derived from wxWindows files
 //   samples/docvwmdi/docview.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -57,6 +57,7 @@
 #include "license.hpp"
 #include "main_common.hpp"
 #include "miscellany.hpp"
+#include "msw_workarounds.hpp"
 #include "path_utility.hpp"
 #include "security.hpp"
 #include "text_doc.hpp"
@@ -72,7 +73,6 @@
 #include <wx/toolbar.h>
 #include <wx/xrc/xmlres.h>
 
-#include <stdexcept>
 #include <string>
 
 #if !defined LMI_MSW
@@ -183,9 +183,9 @@ int WINAPI WinMain
         initialize_application();
         initialize_filesystem();
 #ifndef LMI_MSW
-        // [insert code to preload dlls]
         result = wxEntry(argc, argv);
 #else // LMI_MSW defined.
+        MswDllPreloader::instance().PreloadDesignatedDlls();
         result = wxEntry(hInstance, hPrevInstance, lpCmdLine, nCmdShow);
 #endif // LMI_MSW defined.
         }
