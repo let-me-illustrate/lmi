@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: fenv_lmi.hpp,v 1.9 2006-02-13 05:30:27 chicares Exp $
+// $Id: fenv_lmi.hpp,v 1.10 2006-02-13 18:59:03 chicares Exp $
 
 #ifndef fenv_lmi_hpp
 #define fenv_lmi_hpp
@@ -71,10 +71,14 @@
 /// The precision functions similarly resemble GNU/Linux functions
 /// fe[gs]etprecision().
 ///
+///   bool LMI_SO fenv_is_valid()
+/// If current floating-point environment matches lmi default, then
+/// return 'true'; else return 'false'.
+///
 ///   bool LMI_SO fenv_validate();
 /// Make sure current floating-point environment matches lmi default.
 /// If it doesn't, then reset it to lmi default, display a message,
-/// and return 'false'.
+/// and return 'false'; else return 'true'.
 ///
 /// Postcondition: floating-point environment matches lmi default.
 ///
@@ -95,6 +99,7 @@ void                LMI_SO fenv_precision(e_ieee754_precision);
 e_ieee754_rounding LMI_SO fenv_rounding();
 void               LMI_SO fenv_rounding(e_ieee754_rounding);
 
+bool LMI_SO fenv_is_valid();
 bool LMI_SO fenv_validate();
 
 #endif // fenv_lmi_hpp
