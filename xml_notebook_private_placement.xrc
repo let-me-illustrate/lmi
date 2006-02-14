@@ -24,7 +24,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: xml_notebook_private_placement.xrc,v 1.6 2006-01-29 13:52:01 chicares Exp $
+    $Id: xml_notebook_private_placement.xrc,v 1.7 2006-02-14 20:46:00 wboutin Exp $
 
     This version is designed for private placement users; it omits input
     fields that seem irrelevant in that context, and reflects the
@@ -731,6 +731,19 @@
                                     <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT|wxTOP</flag>
                                     <border>4</border>
                                     <object class="wxStaticText">
+                                        <label>Current COI multiplier </label>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxGROW|wxBOTTOM|wxLEFT</flag>
+                                    <border>4</border>
+                                    <object class="wxTextCtrl" name="CurrentCoiMultiplier">
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT|wxTOP</flag>
+                                    <border>4</border>
+                                    <object class="wxStaticText">
                                         <label>Policy fee </label>
                                     </object>
                                 </object>
@@ -741,7 +754,7 @@
                                     </object>
                                 </object>
                                 <object class="sizeritem">
-                                    <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxRIGHT|wxBOTTOM</flag>
+                                    <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT|wxTOP</flag>
                                     <border>4</border>
                                     <object class="wxStaticText">
                                         <label>MEC avoidance</label>
