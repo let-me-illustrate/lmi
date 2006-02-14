@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.336 2006-02-13 18:59:07 chicares Exp $
+// $Id: ChangeLog,v 1.337 2006-02-14 20:46:01 wboutin Exp $
 
 MAINTENANCE
 
@@ -6249,4 +6249,10 @@ above on these dates:
   20060125T0719Z
   20060206T1816Z
   20060207T0102Z
+
+20060214T2006Z <wboutin@massmutual.com> [1209]
+
+  xml_notebook_private_placement.xrc
+  xml_notebook_single_premium.xrc
+Enhance 'Plan' and 'Client' tabs, respectively.
 
