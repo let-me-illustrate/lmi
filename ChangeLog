@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.337 2006-02-14 20:46:01 wboutin Exp $
+// $Id: ChangeLog,v 1.338 2006-02-16 13:24:15 chicares Exp $
 
 MAINTENANCE
 
@@ -29,8 +29,11 @@ Please write entries this way:
 [2] [this line intentionally left blank]
 [3]   filename0
 [4]   filename1
-[5] Your comments: full English sentences beginning with a capital
-    letter and ending with a period.
+[5] Terse comments: full English sentences beginning with a capital
+    letter and ending with a period. Prefer bare infinitives:
+    "Improve ISO 8601 conformance." instead of "Improved...." or
+    "The purpose of this change was to improve....". Single-word
+    sentences may be appropriate: "Refactor.".
 
 Limit lines to seventy characters so that they can be quoted and
 requoted in email without wrapping.
@@ -6255,4 +6258,16 @@ above on these dates:
   xml_notebook_private_placement.xrc
   xml_notebook_single_premium.xrc
 Enhance 'Plan' and 'Client' tabs, respectively.
+
+20060216T1324Z <chicares@cox.net> [1207]
+
+  GNUmakefile
+  workhorse.make
+Improve conformance to GNU standards.
+
+  platform_dependent.hpp
+Improve documentation.
+
+  msw_workarounds.cpp
+Remove testing scaffold.
 
