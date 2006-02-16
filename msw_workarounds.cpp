@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: msw_workarounds.cpp,v 1.1 2006-02-13 18:59:07 chicares Exp $
+// $Id: msw_workarounds.cpp,v 1.2 2006-02-16 13:24:15 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -35,7 +35,7 @@
 #include <boost/functional.hpp>
 
 #ifdef LMI_MSW
-#   include <wx/msw/wrapwin.h>
+#   include <windows.h>
 #endif // LMI_MSW defined.
 
 #include <algorithm>
@@ -88,10 +88,6 @@ void MswDllPreloader::PreloadOneDll(std::string const& dll_name)
     else
         {
         SuccessfullyPreloadedDlls_.push_front(dll_name);
-// TODO ?? expunge
-std::ostringstream oss;
-oss << "Loaded '" << dll_name << "'." << std::flush;
-safely_show_message(oss.str().c_str());
         if(fenv_is_valid())
             {
             std::ostringstream oss;
@@ -117,13 +113,6 @@ void MswDllPreloader::UnloadOneDll(std::string const& dll_name)
         std::ostringstream oss;
         oss << "Failed to unload '" << dll_name << "'." << std::flush;
         safely_show_message(oss.str().c_str());
-        }
-// TODO ?? expunge
-    else
-        {
-std::ostringstream oss;
-oss << "Unloaded '" << dll_name << "'." << std::flush;
-safely_show_message(oss.str().c_str());
         }
 #endif // LMI_MSW defined.
 }
