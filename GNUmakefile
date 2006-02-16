@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: GNUmakefile,v 1.59 2006-02-12 17:07:31 chicares Exp $
+# $Id: GNUmakefile,v 1.60 2006-02-16 13:24:11 chicares Exp $
 
 ###############################################################################
 
@@ -173,8 +173,8 @@ gpl_files := \
 
 MAKETARGET = \
   $(MAKE) \
-    -C $@ \
-    -f $(src_dir)/workhorse.make \
+    --directory=$@ \
+    --file=$(src_dir)/workhorse.make \
     --no-print-directory \
     $(flags_to_pass_from_environment) \
                          src_dir='$(src_dir)' \
@@ -395,6 +395,13 @@ gpl_notices := \
 source_clean:
 	@-$(RM) --force $(expungible_files)
 
+.PHONY: clean
+clean: source_clean
+	@-$(RM) --force --recursive $(build_directory)
+
+.PHONY: distclean mostlyclean maintainer-clean
+distclean mostlyclean maintainer-clean: clean
+
 .PHONY: clobber
 clobber: source_clean
 	@-$(RM) --force --recursive ../build
@@ -437,7 +444,7 @@ supplemental_test_makefile = ../forbidden.make
 .PHONY: check_conformity
 check_conformity: source_clean custom_tools
 	@-[ ! -e $(supplemental_test_makefile) ] \
-	  || $(MAKE) --no-print-directory -f $(supplemental_test_makefile)
+	  || $(MAKE) --no-print-directory --file=$(supplemental_test_makefile)
 	@$(TOUCH) --date=$(yyyy)0101 BOY
 	@$(TOUCH) --date=$(yyyymm)00 BOM
 	@$(TOUCH) --date=$(yyyymmdd) TODAY
@@ -607,7 +614,7 @@ circadian_test: checkout
 archname := lmi-$(yyyymmddhhmm)
 
 .PHONY: archive
-archive: source_clean
+archive: distclean
 	$(MKDIR) ../$(archname)
 	-$(CP) --force --preserve --recursive * ../$(archname)
 	$(TAR) --create --directory=.. --file=$(archname).tar $(archname)
