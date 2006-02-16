@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: platform_dependent.hpp,v 1.8 2006-01-29 13:52:00 chicares Exp $
+// $Id: platform_dependent.hpp,v 1.9 2006-02-16 13:24:12 chicares Exp $
 
 #ifndef platform_dependent_hpp
 #define platform_dependent_hpp
@@ -46,10 +46,11 @@
 //
 // Some of the functions made accessible here provide capabilities
 // that are useful but absent from the standard language: for example,
-// it is difficult to implement cgi-bin without putenv(). Some others,
-// like strdup(), should be avoided in general, but are required by
-// wx. Still others, like expm1(), are in C99 but not C++98, and the
-// way their prototypes are guarded varies by platform.
+// it is difficult to implement cgi-bin without putenv(). Some others:
+//   _wcsdup(), fileno(), strcasecmp(), strdup()
+// should be avoided in general, but are required by wx. Still others,
+// like expm1(), are in C99 but not C++98, and the way their prototypes
+// are guarded varies by platform.
 
 #if defined __GNUC__ && defined __STRICT_ANSI__
 #   define LMI_GNUC_STRICT_ANSI
@@ -71,7 +72,7 @@
 #   include <io.h>      // access(), R_OK
 #   include <stdio.h>   // fileno()
 #   include <stdlib.h>  // putenv()
-#   include <string.h>  // strdup()
+#   include <string.h>  // _wcsdup(), strcasecmp(), strdup()
 #   ifdef __BORLANDC__
 #       define R_OK 04
 #   endif // __BORLANDC__
@@ -80,8 +81,10 @@
     //   extern "C" int access(char const*, int);
     //   extern "C" int getch();
     //   extern "C" int chdir(char const*);
-    //   extern "C" int putenv(char const*);
-    // and worse to define R_OK
+    // especially when they may vary by platform:
+    //   extern "C" int putenv(char*);       // [posix]
+    //   extern "C" int putenv(char const*); // [msw]
+    // and worse to define R_OK:
     //   #define R_OK some_unknowable_value
     // so just complain.
 #   error "Unknown platform. Consider contributing support."
