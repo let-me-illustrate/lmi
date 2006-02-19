@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: GNUmakefile,v 1.60 2006-02-16 13:24:11 chicares Exp $
+# $Id: GNUmakefile,v 1.61 2006-02-19 20:26:07 chicares Exp $
 
 ###############################################################################
 
@@ -317,7 +317,7 @@ date_last_made: $(filter-out $@,$(prerequisite_files))
 release_candidate:
 	@$(ECHO) -e $(gpl_notices) '#define LMI_VERSION "$(yyyymmddhhmm)"' \
 	  | $(SED) -e 's/^ *//' \
-	  | $(TR) -d '\r' \
+	  | $(TR) --delete '\r' \
 	  > version.hpp
 	@$(ECHO) Version is $(yyyymmddhhmm) .
 	@$(ECHO) "  Tag a release this way:"
@@ -336,14 +336,14 @@ COPYING:
 
 quoted_gpl: COPYING
 	<$(src_dir)/COPYING \
-	$(SED) -f $(src_dir)/text_to_strings.sed \
-	| $(TR) -d '\r' \
+	$(SED) --file=$(src_dir)/text_to_strings.sed \
+	| $(TR) --delete '\r' \
 	>$(src_dir)/$@
 
 quoted_gpl_html: COPYING
 	<$(src_dir)/COPYING \
-	$(SED) -f $(src_dir)/text_to_html_strings.sed \
-	| $(TR) -d '\r' \
+	$(SED) --file=$(src_dir)/text_to_html_strings.sed \
+	| $(TR) --delete '\r' \
 	>$(src_dir)/$@
 
 gpl_notices := \
@@ -537,7 +537,7 @@ check_conformity: source_clean custom_tools
 	@for z in $(xml_files); \
 	  do \
 	    $(XMLLINT) $$z \
-	    | $(TR) -d '\r' \
+	    | $(TR) --delete '\r' \
 	    | $(DIFF) \
 	      --ignore-blank-lines \
 	      --unified=0 \
