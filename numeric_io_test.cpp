@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: numeric_io_test.cpp,v 1.10 2006-01-29 13:52:00 chicares Exp $
+// $Id: numeric_io_test.cpp,v 1.11 2006-02-19 20:26:11 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -153,7 +153,8 @@ int test_main(int, char*[])
         }
     std::cout
         << (1e6 * timer.stop().elapsed_usec() / iterations)
-        << " usec per iteration for boost::lexical_cast().\n"
+        << " usec per iteration for boost::lexical_cast()."
+        << std::endl
         ;
     (void) d;
 
@@ -186,10 +187,12 @@ int test_main(int, char*[])
     // arithmetic types as numeric values, so the value of ' ' might
     // correspond to the string literal "32", but never to a blank
     // string.
+    //
     BOOST_TEST_UNEQUAL(" ", numeric_io_cast<std::string>(' '));
     //
     // Furthermore, these expressions should throw because strtol
     // doesn't consider "A" valid.
+    //
     BOOST_TEST_THROW('A' == numeric_io_cast<char  >("A"), std::invalid_argument, "");
     BOOST_TEST_THROW(       numeric_io_cast<int   >("A"), std::invalid_argument, "");
     BOOST_TEST_THROW(       numeric_io_cast<double>("A"), std::invalid_argument, "");
@@ -252,18 +255,30 @@ int test_main(int, char*[])
     BOOST_TEST_THROW(numeric_io_cast<double>(  "1e"), std::invalid_argument, "");
 
     BOOST_TEST_THROW(numeric_io_cast<long double>(    ""), std::invalid_argument, "");
-    BOOST_TEST_THROW(numeric_io_cast<long double>(  "1e"), std::invalid_argument, "");
 
 #if defined __MINGW32__ && defined __GNUC__ && LMI_GCC_VERSION < 30404
     std::cerr
-        << "The preceding test fails with MinGW prior to gcc-3.4.4: see\n"
+        << "The following test fails with MinGW prior to gcc-3.4.4: see\n"
         << "  http://sf.net/mailarchive/message.php?msg_id=10706179\n"
         ;
 #endif // MinGW gcc version prior to 3.4.4 .
 
+    BOOST_TEST_THROW(numeric_io_cast<long double>(  "1e"), std::invalid_argument, "");
+
     // This shouldn't even throw, because adequate compilers detect
     // the error at compile time:
 //    BOOST_TEST_THROW(numeric_io_cast<double*>("0"), std::invalid_argument, "");
+
+    BOOST_TEST_THROW
+        (numeric_io_cast<std::string>((char const*)(0))
+        ,std::runtime_error
+        ,"Cannot convert (char const*)(0) to std::string."
+        );
+    BOOST_TEST_THROW
+        (numeric_io_cast<unsigned int>((char const*)(0))
+        ,std::runtime_error
+        ,"Cannot convert (char const*)(0) to number."
+        );
 
     BOOST_TEST_EQUAL("1", numeric_io_cast<std::string>(true));
     BOOST_TEST_EQUAL("0", numeric_io_cast<std::string>(false));

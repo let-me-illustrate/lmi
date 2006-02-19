@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.338 2006-02-16 13:24:15 chicares Exp $
+// $Id: ChangeLog,v 1.339 2006-02-19 20:26:11 chicares Exp $
 
 MAINTENANCE
 
@@ -6270,4 +6270,13 @@ Improve documentation.
 
   msw_workarounds.cpp
 Remove testing scaffold.
+
+20060219T2026Z <chicares@cox.net> [1207]
+
+  GNUmakefile
+Spell out $(TR) options.
+
+  numeric_io_cast.hpp
+  numeric_io_test.cpp
+Trap any attempted conversion from (char*)(0).
 

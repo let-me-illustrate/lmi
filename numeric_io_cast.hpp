@@ -19,59 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: numeric_io_cast.hpp,v 1.9 2006-01-29 13:52:00 chicares Exp $
-
-// Converts between arithmetic types and their std::string decimal
-// representations, in these cases only:
-//    to an arithmetic type from std::string or from char const*
-//    to std::string from an arithmetic type
-// and, trivially,
-//    to std::string from std::string or from char const*
-// Conversion between std::strings and other types can be supported by
-// extension.
-//
-// Octal-literals are treated as decimal: leading zeros are ignored.
-// The declared design goal is to implement decimal conversion, so
-// "077" means seventy-seven, not sixty-three.
-//
-// Exceptions:
-//
-//  - Types std::wstring and wchar_t are unsupported for now because I
-//    don't happen to use them.
-//
-//  - Type long double is unsupported for now because of problems with
-//    the standard library implementations I use.
-//
-// Template function numeric_io_cast() is superficially similar to,
-// but essentially different from, the well-known method
-//   double d;
-//   std::stringstream ss;
-//   ss << 2.718281828459045, ss >> d;
-// That method does whatever stream inserters and extractors do. For
-// floating-point types, it loses precision, for example truncating
-// the decimal value above to 2.71828 . For
-//   std::string s;
-//   std::stringstream ss;
-//   ss << "Truncated after first space.", ss >> s;
-// it returns "Truncated". And, as this discussion:
-//   http://www.gotw.ca/publications/mill19.htm
-// observes, it is generally much slower, probably because of memory-
-// allocation overhead and inefficient implementations of arithmetic
-// inserters and extractors. See the accompanying unit test for a way
-// to measure the speed difference.
-//
-// numeric_io_cast(), on the other hand, does whatever the strtoX()
-// family does (with decimal base for integers). It is specially
-// tailored for converting between std::string and arithmetic types,
-// and generally supports no other conversions. It preserves all
-// possible floating-point decimal precision. And it is faster than
-// the std::stringstream technique for all compilers tested in 2004.
-//
-// The behavior of numeric_io_cast() with character types may seem
-// surprising at first, because it treats them as decimal numbers.
-// Therefore, casting from std::string("1") to char returns '\1', and
-// casting that result back to std::string returns the original value,
-// but casting from std::string("A") to char is an error.
+// $Id: numeric_io_cast.hpp,v 1.10 2006-02-19 20:26:11 chicares Exp $
 
 #ifndef numeric_io_cast_hpp
 #define numeric_io_cast_hpp
@@ -92,6 +40,68 @@
 #else  // Defined __BORLANDC__ .
 #   define BOOST_STATIC_ASSERT(deliberately_ignored) /##/
 #endif // Defined __BORLANDC__ .
+
+/// Design notes for template function numeric_io_cast().
+///
+/// Converts between arithmetic types and their std::string decimal
+/// representations, in these cases only:
+///    to an arithmetic type from std::string or from char const*
+///    to std::string from an arithmetic type
+/// and, trivially,
+///    to std::string from std::string or from char const*
+/// Conversion between std::strings and other types can be supported
+/// by extension.
+///
+/// Octal-literals are treated as decimal: leading zeros are ignored.
+/// The declared design goal is to implement decimal conversion, so
+/// "077" means seventy-seven, not sixty-three.
+///
+/// Exceptions:
+///
+///  - Types std::wstring and wchar_t are unsupported for now because
+///    I don't happen to use them.
+///
+///  - Type long double is unsupported for now because of problems
+///    with the standard library implementations I use.
+///
+/// Template function numeric_io_cast() is superficially similar to,
+/// but essentially different from, the well-known method
+///   double d;
+///   std::stringstream ss;
+///   ss << 2.718281828459045, ss >> d;
+/// That method does whatever stream inserters and extractors do. For
+/// floating-point types, it loses precision, for example truncating
+/// the decimal value above to 2.71828 . For
+///   std::string s;
+///   std::stringstream ss;
+///   ss << "Truncated after first space.", ss >> s;
+/// it returns "Truncated". And, as this discussion:
+///   http://www.gotw.ca/publications/mill19.htm
+/// observes, it is generally much slower, probably because of memory-
+/// allocation overhead and inefficient implementations of arithmetic
+/// inserters and extractors. See the accompanying unit test for a way
+/// to measure the speed difference.
+///
+/// numeric_io_cast(), on the other hand, does whatever the strtoX()
+/// family does (with decimal base for integers). It is specially
+/// tailored for converting between std::string and arithmetic types,
+/// and generally supports no other conversions. It preserves all
+/// possible floating-point decimal precision. And it is faster than
+/// the std::stringstream technique for all compilers tested in 2004.
+///
+/// The behavior of numeric_io_cast() with builtin character types
+/// (e.g. char, as opposed to char const* or std::string) may seem
+/// surprising at first: it treats them as decimal numbers. Thus,
+/// casting from std::string("1") to char returns '\1', and casting
+/// that result back to std::string returns the original value, while
+/// casting from std::string("A") to char is an error. This follows
+/// C++98 3.9.1/7, which defines char as an integer type, along with
+/// int, bool, etc. Consistency is thus valued over the notion of a
+/// char as some sort of degenerate string capable of holding decimal
+/// integers in the severely restricted range [0, 9].
+
+template<typename To, typename From>
+To numeric_io_cast(From, To = To());
 
 // A compile-time failure iff this template is ever instantiated is
 // desired, but the straightforward
@@ -138,9 +148,9 @@ struct numeric_converter<To, std::string>
 #endif // ! defined __BORLANDC__
 
     typedef std::string From;
-    To operator()(From const& s) const
+    To operator()(From const& from) const
         {
-        char const* nptr = s.c_str();
+        char const* nptr = from.c_str();
         // Pointer to which strtoT()'s 'endptr' argument refers.
         char* rendptr;
         To value = numeric_conversion_traits<To>::strtoT(nptr, &rendptr);
@@ -149,7 +159,7 @@ struct numeric_converter<To, std::string>
             std::ostringstream err;
             err
                 << "Attempt to convert string '"
-                << s
+                << from
                 << "' from type "
                 << typeid(From).name()
                 << " to type "
@@ -163,7 +173,7 @@ struct numeric_converter<To, std::string>
             std::ostringstream err;
             err
                 << "Attempt to convert string '"
-                << s
+                << from
                 << "' from type "
                 << typeid(From).name()
                 << " to type "
@@ -185,10 +195,16 @@ template<typename To>
 struct numeric_converter<To, char const*>
 {
     typedef char const* From;
-    To operator()(From const& s) const
+    To operator()(From from) const
         {
+        if(0 == from)
+            {
+            throw std::runtime_error
+                ("Cannot convert (char const*)(0) to number."
+                );
+            }
         numeric_converter<To,std::string> z;
-        return z(s);
+        return z(from);
         }
 };
 
@@ -196,28 +212,30 @@ struct numeric_converter<To, char const*>
 // COMPILER !! The borland compiler fails to ignore top-level
 // cv-qualifiers as 14.8.2/1 requires. Reference:
 //   http://groups.google.com/groups?as_umsgid=4164c8f0@newsgroups.borland.com
+//
 template<typename To>
 struct numeric_converter<To, std::string const>
 {
     typedef std::string From;
-    To operator()(From const& s) const
+    To operator()(From const& from) const
         {
         numeric_converter<To,std::string> z;
-        return z(s);
+        return z(from);
         }
 };
 
 // COMPILER !! The borland compiler needs this to convert from a
 // string literal. It seems to type such constants as non-const char*,
 // ignoring 4.2/2 .
+//
 template<typename To>
 struct numeric_converter<To, char*>
 {
     typedef char const* From;
-    To operator()(From const& s) const
+    To operator()(From const& from) const
         {
         numeric_converter<To,std::string> z;
-        return z(s);
+        return z(from);
         }
 };
 #endif // defined __BORLANDC__
@@ -300,6 +318,7 @@ struct numeric_converter<std::string, std::string>
 // COMPILER !! The borland compiler needs this to convert from a
 // string literal. It seems to type such constants as non-const char*,
 // ignoring 4.2/2 .
+//
 template<>
 struct numeric_converter<std::string, char*>
 {
@@ -317,14 +336,20 @@ struct numeric_converter<std::string, char const*>
 {
     typedef char const* From;
     typedef std::string To;
-    To operator()(From const& from) const
+    To operator()(From from) const
         {
+        if(0 == from)
+            {
+            throw std::runtime_error
+                ("Cannot convert (char const*)(0) to std::string."
+                );
+            }
         return from;
         }
 };
 
 template<typename To, typename From>
-To numeric_io_cast(From from, To = To())
+To numeric_io_cast(From from, To)
 {
     numeric_converter<To,From> converter;
     return converter.operator()(from);
