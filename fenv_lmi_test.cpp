@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: fenv_lmi_test.cpp,v 1.4 2006-02-13 05:30:27 chicares Exp $
+// $Id: fenv_lmi_test.cpp,v 1.5 2006-02-20 16:23:47 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -61,7 +61,9 @@ std::bitset<CHAR_BIT * sizeof(unsigned long int)> bits(unsigned long int i)
 
 int test_main(int, char*[])
 {
-#ifdef LMI_X86
+#if defined __BORLANDC__
+    // Skip many tests that this defective compiler can't handle.
+#elif defined LMI_X86
     unsigned short int cw = 0x0000;
 
     BOOST_TEST_EQUAL_BITS(0x037f, msw_to_intel(0x0008001f));
