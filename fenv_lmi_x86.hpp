@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: fenv_lmi_x86.hpp,v 1.3 2006-01-29 13:52:00 chicares Exp $
+// $Id: fenv_lmi_x86.hpp,v 1.4 2006-02-20 16:23:47 chicares Exp $
 
 #ifndef fenv_lmi_x86_hpp
 #define fenv_lmi_x86_hpp
@@ -122,6 +122,10 @@ enum e_ieee754_rounding
     ,fe_upward     = 0x02
     ,fe_towardzero = 0x03
     };
+
+#if !defined __BORLANDC__
+// COMPILER !! Due to its poor support for non-type template
+// parameters, borland cannot compile this.
 
 /// Parameters of 80x87 hardware control word.
 ///
@@ -288,6 +292,8 @@ inline unsigned short int msw_to_intel(unsigned int m)
 {
     return msw_to_intel(msw_control_word(m));
 }
+
+#endif // !defined __BORLANDC__
 
 /// Default settings for x87 fpu.
 
