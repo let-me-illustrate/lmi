@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: fenv_lmi.hpp,v 1.10 2006-02-13 18:59:03 chicares Exp $
+// $Id: fenv_lmi.hpp,v 1.11 2006-02-20 16:23:43 chicares Exp $
 
 #ifndef fenv_lmi_hpp
 #define fenv_lmi_hpp
@@ -28,7 +28,7 @@
 
 #include "so_attributes.hpp"
 
-#ifdef LMI_X86
+#if defined LMI_X86
 #   include "fenv_lmi_x86.hpp"
 #else  // Unknown compiler or platform.
 #   error Unknown compiler or platform.
