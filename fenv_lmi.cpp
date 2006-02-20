@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: fenv_lmi.cpp,v 1.13 2006-02-13 18:59:03 chicares Exp $
+// $Id: fenv_lmi.cpp,v 1.14 2006-02-20 16:23:43 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -35,7 +35,7 @@
 
 void fenv_initialize()
 {
-#ifdef LMI_X86
+#if defined LMI_X86
     x87_control_word(default_x87_control_word());
 #else  // Unknown compiler or platform.
 #   error Unknown compiler or platform.
@@ -47,11 +47,11 @@ void fenv_initialize()
     // precision, although 7.6/9 provides for extensions like mingw's
     // FE_PC64_ENV. This block shows what could be accomplished in
     // standard C.
-#   ifdef __STDC_IEC_559__
+#   if defined __STDC_IEC_559__
     fenv_t save_env;
     feholdexcept(&save_env);
     fesetround(FE_TONEAREST);
-#   error Find a platform-specific way to set hardware precision if possible.
+#       error Find a platform-specific way to set hardware precision.
 #   endif // __STDC_IEC_559__
 #endif // 0
 }
@@ -78,7 +78,7 @@ void fenv_precision(e_ieee754_precision precision_mode)
 
 e_ieee754_rounding fenv_rounding()
 {
-#ifdef __STDC_IEC_559__
+#if defined __STDC_IEC_559__
     return fegetround(rounding_mode);
 #elif defined LMI_X86
     return intel_control_word(x87_control_word()).rc();;
@@ -107,7 +107,7 @@ void fenv_rounding(e_ieee754_rounding rounding_mode)
 
 bool fenv_is_valid()
 {
-#ifdef LMI_X86
+#if defined LMI_X86
     return default_x87_control_word() == x87_control_word();
 #else  // Unknown compiler or platform.
 #   error Unknown compiler or platform.
@@ -116,11 +116,7 @@ bool fenv_is_valid()
 
 bool fenv_validate()
 {
-#ifdef LMI_X86
     bool okay = fenv_is_valid();
-#else  // Unknown compiler or platform.
-#   error Unknown compiler or platform.
-#endif // Unknown compiler or platform.
 
     if(!okay)
         {
@@ -131,7 +127,7 @@ bool fenv_validate()
         std::ostringstream oss;
         oss
             << "The floating-point control word was unexpectedly '"
-#ifdef LMI_X86
+#if defined LMI_X86
             << std::hex << x87_control_word()
 #else  // Unknown compiler or platform.
 #   error Unknown compiler or platform.
