@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.341 2006-02-21 01:39:15 chicares Exp $
+// $Id: ChangeLog,v 1.342 2006-02-21 18:18:39 chicares Exp $
 
 MAINTENANCE
 
@@ -6278,7 +6278,7 @@ Spell out $(TR) options.
 
   numeric_io_cast.hpp
   numeric_io_test.cpp
-Trap any attempted conversion from (char*)(0).
+Trap any attempted conversion from (char*)(0) or (char const*)(0).
 
 20060220T1623Z <chicares@cox.net> [1207]
 
@@ -6295,4 +6295,10 @@ Conditionalize code that borland can't compile.
   fenv_lmi.cpp
   fenv_lmi_x86.hpp
 Add borland workarounds.
+
+20060219T2026Z <chicares@cox.net> [1206]
+
+  stream_cast.hpp
+  stream_cast_test.cpp
+Trap any attempted conversion from (char*)(0) or (char const*)(0).
 
