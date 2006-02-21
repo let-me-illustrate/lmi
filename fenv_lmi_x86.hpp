@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: fenv_lmi_x86.hpp,v 1.4 2006-02-20 16:23:47 chicares Exp $
+// $Id: fenv_lmi_x86.hpp,v 1.5 2006-02-21 01:39:15 chicares Exp $
 
 #ifndef fenv_lmi_x86_hpp
 #define fenv_lmi_x86_hpp
@@ -32,6 +32,18 @@
 #if defined __BORLANDC__ || defined _MSC_VER
 #   include <float.h> // Nonstandard floating-point hardware control.
 #endif // defined __BORLANDC__ || defined _MSC_VER
+
+#if defined __BORLANDC__
+inline unsigned short int fenv_precision_error()
+{
+    throw std::runtime_error("Invalid fpu PC value.");
+}
+
+inline unsigned short int fenv_rounding_error()
+{
+    throw std::runtime_error("Invalid fpu RC value.");
+}
+#endif // defined __BORLANDC__
 
 #ifdef LMI_X86
 /// These functions manipulate the x86 fpu (80x87) control word. This
@@ -125,7 +137,7 @@ enum e_ieee754_rounding
 
 #if !defined __BORLANDC__
 // COMPILER !! Due to its poor support for non-type template
-// parameters, borland cannot compile this.
+// parameters, borland cannot compile this implementation.
 
 /// Parameters of 80x87 hardware control word.
 ///
@@ -328,7 +340,7 @@ inline void x87_control_word(unsigned short int cw)
     volatile unsigned short int control_word = cw;
     asm volatile("fldcw %0" : : "m" (control_word));
 #   elif defined __BORLANDC__
-    _control87(cw, 0xffff);
+    _control87(cw, 0x0ffff);
 #   elif defined _MSC_VER
     // Test _MSC_VER last: some non-ms compilers or libraries define it.
     _control87(intel_to_msw(cw),  0x0ffffffff);
