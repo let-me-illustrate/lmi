@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: stream_cast_test.cpp,v 1.4 2006-01-29 13:52:00 chicares Exp $
+// $Id: stream_cast_test.cpp,v 1.5 2006-02-21 18:18:39 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -30,9 +30,6 @@
 
 #define BOOST_INCLUDE_MAIN
 #include "test_tools.hpp"
-
-// TODO ?? Consider adding tests in
-// http://www.boost.org/libs/conversion/lexical_cast_test.cpp
 
 int test_main(int, char*[])
 {
@@ -114,6 +111,26 @@ int test_main(int, char*[])
     BOOST_TEST_EQUAL(" !@ #$% ", s);
     s = stream_cast(r1, r1);
     BOOST_TEST_EQUAL("  ^&  *()  ", s);
+
+    // Attempting to construct a std::string from a null pointer to
+    // char or char const elicits undefined behavior. The volatile
+    // qualifier need not be tested because 27.6.2.5.4/3 does not
+    // apply to stream inserters for volatile pointers to char; as
+    // this message
+    //   http://groups.google.com/group/comp.lang.c++.moderated/msg/6022d0bc84207ff1
+    // explains, a conversion to bool is used instead.
+
+    BOOST_TEST_THROW
+        (stream_cast<std::string>((char*)(0))
+        ,std::runtime_error
+        ,"Cannot convert (char*)(0) to std::string."
+        );
+
+    BOOST_TEST_THROW
+        (stream_cast<std::string>((char const*)(0))
+        ,std::runtime_error
+        ,"Cannot convert (char const*)(0) to std::string."
+        );
 
     return 0;
 }
