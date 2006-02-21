@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: stream_cast.hpp,v 1.7 2006-01-29 13:52:00 chicares Exp $
+// $Id: stream_cast.hpp,v 1.8 2006-02-21 18:18:39 chicares Exp $
 
 // This is a derived work based on boost::lexical_cast, which bears
 // the following copyright and permissions notice:
@@ -43,39 +43,6 @@
 // and in any later year shown above; any defect here should not
 // reflect on Kevlin Henney's reputation.
 
-// Suppose a std::string is to be cast to a std::string, and suppose
-// it contains embedded whitespace. What is the least astonishing
-// behavior? The boost library is founded on passing data in and out
-// of a std::stringstream; it uses a standard extractor that breaks
-// the data at any whitespace. This implementation chooses instead to
-// preserve the string's value by replacing the default std::ctype
-// facet with one that does not treat blanks as whitespace.
-//
-// The boost library, at least in version 1.31.0, uses
-//   interpreter.unsetf(std::ios::skipws);
-// (as explained here:
-//    http://lists.boost.org/MailArchives/boost-users/msg03656.php
-// that change was intended to fix one problem, yet caused another)
-// but that fails for strings with embedded spaces, whereas the
-// approach used here does not. With the former option, that defect is
-// masked by the specializations here for std::string, but that option
-// would require those specializations for correctness; with the
-// option used here, they're merely optimizations.
-//
-// INELEGANT !! Specializations for conversion from string to string
-// here should be removed (value_cast is better), and the preceding
-// paragraph should be revised accordingly. It should be pointed out
-// that conversion from an empty string to another string fails even
-// with the current implementation unless both strings are of exact
-// type std::string (but it works with value_cast).
-//
-// Blank is the only whitespace character not treated as whitespace,
-// because blanks are more common than other whitespace characters in
-// std::strings.
-//
-// This technique is generally inappropriate for arithmetic types, and
-// especially for floating types: instead, use numeric_io_cast.
-
 #ifndef stream_cast_hpp
 #define stream_cast_hpp
 
@@ -86,22 +53,60 @@
 #if !defined __BORLANDC__
 #   include <boost/static_assert.hpp>
 #   include <boost/type_traits.hpp>
-#else  // Defined __BORLANDC__ .
+#else  // defined __BORLANDC__
 #   define BOOST_STATIC_ASSERT(deliberately_ignored) /##/
-#endif // Defined __BORLANDC__ .
+#endif // defined __BORLANDC__
 
 #include <sstream>
 #include <stdexcept>
 #include <string>
 #include <typeinfo>
 
+/// Design notes for function template stream_cast.
+///
+/// stream_cast converts between types as extractors and inserters do.
+///
+/// Suppose a std::string is to be cast to a std::string, and suppose
+/// it contains embedded whitespace. What is the least astonishing
+/// behavior? The boost library is founded on passing data in and out
+/// of a std::stringstream; it uses a standard extractor that breaks
+/// the data at any whitespace. This implementation chooses instead to
+/// preserve the string's value by replacing the default std::ctype
+/// facet with one that does not treat blanks as whitespace.
+///
+/// The boost library, at least in version 1.31.0, uses
+///   interpreter.unsetf(std::ios::skipws);
+/// (as explained here:
+///    http://lists.boost.org/MailArchives/boost-users/msg03656.php
+/// that change was intended to fix one problem, yet caused another)
+/// but that fails for strings with embedded spaces, whereas the
+/// approach used here does not. With the former option, that defect
+/// is masked by the specializations here for std::string, but that
+/// option would require those specializations for correctness; with
+/// the option used here, they're merely optimizations.
+///
+/// INELEGANT !! Specializations for conversion from string to string
+/// here should be removed (value_cast is better), and the preceding
+/// paragraph should be revised accordingly. It should be pointed out
+/// that conversion from an empty string to another string fails even
+/// with the current implementation unless both strings are of exact
+/// type std::string (but it works with value_cast).
+///
+/// Blank is the only whitespace character not treated as whitespace,
+/// because blanks are more common than other whitespace characters in
+/// std::strings.
+///
+/// This technique is generally inappropriate for arithmetic types,
+/// and especially for floating types: instead, use numeric_io_cast;
+/// better yet, use value_cast to select the most appropriate cast.
+
 template<typename To, typename From>
 To stream_cast(From from, To = To())
 {
-#ifndef __BORLANDC__
+#if !defined __BORLANDC__
     BOOST_STATIC_ASSERT(!boost::is_arithmetic<From>::value);
     BOOST_STATIC_ASSERT(!boost::is_arithmetic<To  >::value);
-#endif // ! defined __BORLANDC__
+#endif // !defined __BORLANDC__
     std::stringstream interpreter;
     std::ostringstream err;
     To result;
@@ -153,12 +158,24 @@ To stream_cast(From from, To = To())
 template<>
 inline std::string stream_cast<std::string>(char* from, std::string)
 {
+    if(0 == from)
+        {
+        throw std::runtime_error
+            ("Cannot convert (char*)(0) to std::string."
+            );
+        }
     return from;
 }
 
 template<>
 inline std::string stream_cast<std::string>(char const* from, std::string)
 {
+    if(0 == from)
+        {
+        throw std::runtime_error
+            ("Cannot convert (char const*)(0) to std::string."
+            );
+        }
     return from;
 }
 
@@ -189,7 +206,6 @@ inline std::string stream_cast
 {
     return from;
 }
-
 #endif // Defective borland compiler.
 
 #endif // stream_cast_hpp
