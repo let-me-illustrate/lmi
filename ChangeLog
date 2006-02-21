@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.340 2006-02-20 16:23:47 chicares Exp $
+// $Id: ChangeLog,v 1.341 2006-02-21 01:39:15 chicares Exp $
 
 MAINTENANCE
 
@@ -6284,9 +6284,15 @@ Trap any attempted conversion from (char*)(0).
 
   fenv_lmi.cpp
   fenv_lmi.hpp
-Rewrite conditionals to increase maitainability.
+Rewrite conditionals to increase maintainability.
 
   fenv_lmi_test.cpp
   fenv_lmi_x86.hpp
 Conditionalize code that borland can't compile.
+
+20060221T0139Z <chicares@cox.net> [1207]
+
+  fenv_lmi.cpp
+  fenv_lmi_x86.hpp
+Add borland workarounds.
 

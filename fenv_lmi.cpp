@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: fenv_lmi.cpp,v 1.14 2006-02-20 16:23:43 chicares Exp $
+// $Id: fenv_lmi.cpp,v 1.15 2006-02-21 01:39:15 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -58,7 +58,15 @@ void fenv_initialize()
 
 e_ieee754_precision fenv_precision()
 {
-#if defined LMI_X86
+#if defined __BORLANDC__
+    unsigned short int pc = (unsigned short int)(MCW_PC) & x87_control_word();
+    return
+          (PC_24 == pc) ? fe_fltprec
+        : (PC_53 == pc) ? fe_dblprec
+        : (PC_64 == pc) ? fe_ldblprec
+        : fenv_precision_error()
+        ;
+#elif defined LMI_X86
     return intel_control_word(x87_control_word()).pc();;
 #else  // Unknown compiler or platform.
 #   error Unknown compiler or platform.
@@ -67,7 +75,15 @@ e_ieee754_precision fenv_precision()
 
 void fenv_precision(e_ieee754_precision precision_mode)
 {
-#if defined LMI_X86
+#if defined __BORLANDC__
+    unsigned short int z =
+          (fe_fltprec  == precision_mode) ? (unsigned short int)(PC_24)
+        : (fe_dblprec  == precision_mode) ? (unsigned short int)(PC_53)
+        : (fe_ldblprec == precision_mode) ? (unsigned short int)(PC_64)
+        : fenv_precision_error()
+        ;
+    _control87(z, MCW_PC);
+#elif defined LMI_X86
     intel_control_word control_word(x87_control_word());
     control_word.pc(precision_mode);
     x87_control_word(control_word.cw());
@@ -80,6 +96,15 @@ e_ieee754_rounding fenv_rounding()
 {
 #if defined __STDC_IEC_559__
     return fegetround(rounding_mode);
+#elif defined __BORLANDC__
+    unsigned short int rc = (unsigned short int)(MCW_RC) & x87_control_word();
+    return
+          (RC_NEAR == rc) ? fe_tonearest
+        : (RC_DOWN == rc) ? fe_downward
+        : (RC_UP   == rc) ? fe_upward
+        : (RC_CHOP == rc) ? fe_towardzero
+        : fenv_rounding_error()
+        ;
 #elif defined LMI_X86
     return intel_control_word(x87_control_word()).rc();;
 #else  // Unknown compiler or platform.
@@ -96,7 +121,16 @@ e_ieee754_rounding fenv_rounding()
 //
 void fenv_rounding(e_ieee754_rounding rounding_mode)
 {
-#if defined LMI_X86
+#if defined __BORLANDC__
+    unsigned short int z =
+          (fe_tonearest  == rounding_mode) ? (unsigned short int)(RC_NEAR)
+        : (fe_downward   == rounding_mode) ? (unsigned short int)(RC_DOWN)
+        : (fe_upward     == rounding_mode) ? (unsigned short int)(RC_UP)
+        : (fe_towardzero == rounding_mode) ? (unsigned short int)(RC_CHOP)
+        : fenv_rounding_error()
+        ;
+    _control87(z, MCW_RC);
+#elif defined LMI_X86
     intel_control_word control_word(x87_control_word());
     control_word.rc(rounding_mode);
     x87_control_word(control_word.cw());
