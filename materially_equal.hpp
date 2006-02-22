@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: materially_equal.hpp,v 1.4 2006-01-29 13:52:00 chicares Exp $
+// $Id: materially_equal.hpp,v 1.5 2006-02-22 14:06:21 chicares Exp $
 
 #ifndef materially_equal_hpp
 #define materially_equal_hpp
@@ -34,11 +34,20 @@
 ///   they're actually equal; or
 ///   the absolute value of their difference is less than a specified
 ///     tolerance times the lesser in absolute value.
-/// The default tolerance is 1.0E-13 . I believe this is the
-/// algorithm used by the APL programming language.
+/// This is the "essentially equal to" operator defined in Knuth,
+/// TAOCP, volume 2, section 4.2.2, equation (34), on page 219 of the
+/// second edition.
+///
+/// The default tolerance is 1.0E-13, a popular default value for the
+/// APL language's 'comparison tolerance', and the only such value
+/// permitted in the A+ language.
 ///
 /// See the discussion in this usenet article:
 /// <41b09b41$2@newsgroups.borland.com>
+///
+/// See also
+///   http://groups.google.com/group/comp.lang.tcl/msg/3eee29ef533d73cd
+/// which suggests certain refinements.
 
 inline bool materially_equal
     (long double t
