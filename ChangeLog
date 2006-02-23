@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.343 2006-02-22 14:06:25 chicares Exp $
+// $Id: ChangeLog,v 1.344 2006-02-23 04:44:43 chicares Exp $
 
 MAINTENANCE
 
@@ -6310,4 +6310,16 @@ Improve documentation.
   value_cast.hpp
   value_cast_test.cpp
 Trap any attempted conversion from (char*)(0) or (char const*)(0).
+
+20060223T0444Z <chicares@cox.net> [1207]
+
+  multiple_cell_document.cpp
+Trap conversion from empty xml string to number.
+
+  configurable_settings.cpp
+Convert empty xml tags (those with no content) to empty strings.
+Formerly, processing an empty xml tag involved attempting to assign
+a null pointer to a string, eliciting undefined behavior, e.g. if
+  <libraries_to_preload></libraries_to_preload>
+appeared in file 'configurable_settings.xml'.
 
