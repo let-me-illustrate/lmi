@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: multiple_cell_document.cpp,v 1.8 2006-01-29 13:52:00 chicares Exp $
+// $Id: multiple_cell_document.cpp,v 1.9 2006-02-23 04:44:40 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -148,9 +148,9 @@ using namespace xml;
             << LMI_FLUSH
             ;
         }
-    unsigned int number_of_classes = value_cast<unsigned int>
-        (child->get_content()
-        );
+    char const* n_classes = child->get_content();
+    LMI_ASSERT(n_classes);
+    unsigned int number_of_classes = value_cast<unsigned int>(n_classes);
 
     // Parameters for each class.
     class_parms_.clear();
@@ -202,9 +202,9 @@ using namespace xml;
             << LMI_FLUSH
             ;
         }
-    unsigned int number_of_cells = value_cast<unsigned int>
-        (child->get_content()
-        );
+    char const* n_cells = child->get_content();
+    LMI_ASSERT(n_cells);
+    unsigned int number_of_cells = value_cast<unsigned int>(n_cells);
 
     // Parameters for each Cell.
     cell_parms_.clear();
