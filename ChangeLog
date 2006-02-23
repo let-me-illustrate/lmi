@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.345 2006-02-23 19:43:38 wboutin Exp $
+// $Id: ChangeLog,v 1.346 2006-02-23 23:04:28 chicares Exp $
 
 MAINTENANCE
 
@@ -6327,4 +6327,9 @@ appeared in file 'configurable_settings.xml'.
 
   xml_notebook_single_premium.xrc
 Revert to prior revision.
+
+20060223T2304Z <chicares@cox.net> [1207]
+
+  version.hpp
+Mark release candidate.
 
