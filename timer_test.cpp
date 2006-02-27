@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: timer_test.cpp,v 1.7 2006-01-29 13:52:00 chicares Exp $
+// $Id: timer_test.cpp,v 1.8 2006-02-27 15:11:08 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -37,9 +37,9 @@
 void foo()
 {
     volatile double d;
-    for(int j = 0; j < 10000; ++j)
+    for(unsigned int j = 0; j < 10000; ++j)
         {
-        d = std::log10(j * j);
+        d = std::log10(1U + j * j);
         }
 }
 
@@ -47,10 +47,9 @@ class X{};
 
 void goo(int i, X, X const&, X*)
 {
-    volatile double d;
-    for(int j = 0; j < i * 10000; ++j)
+    for(int j = 0; j < i; ++j)
         {
-        d = std::log10(j * j);
+        foo();
         }
 }
 
