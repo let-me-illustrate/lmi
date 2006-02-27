@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: materially_equal.hpp,v 1.5 2006-02-22 14:06:21 chicares Exp $
+// $Id: materially_equal.hpp,v 1.6 2006-02-27 15:11:03 chicares Exp $
 
 #ifndef materially_equal_hpp
 #define materially_equal_hpp
@@ -47,7 +47,9 @@
 ///
 /// See also
 ///   http://groups.google.com/group/comp.lang.tcl/msg/3eee29ef533d73cd
-/// which suggests certain refinements.
+/// which seems to differ from this implementation only in that it
+/// always treats nonzero quantities of opposite sign as materially
+/// different.
 
 inline bool materially_equal
     (long double t
