@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: GNUmakefile,v 1.61 2006-02-19 20:26:07 chicares Exp $
+# $Id: GNUmakefile,v 1.62 2006-02-27 15:11:11 chicares Exp $
 
 ###############################################################################
 
@@ -118,36 +118,13 @@ GNUmakefile $(src_dir)/GNUmakefile:: ;
 include $(src_dir)/configuration.make
 $(src_dir)/configuration.make:: ;
 
-################################################################################
+# Local options.
+#
+# See the documentation in 'local_options.sh'. Including this file
+# defines $(local_options), which is passed to submakefiles.
 
-# Pass customary flags to submakefiles if they're defined in the
-# environment. See these messages:
-#   http://lists.gnu.org/archive/html/help-make/2005-07/msg00023.html
-#   http://lists.gnu.org/archive/html/help-make/2005-07/msg00025.html
-
-ifeq "$(origin ARFLAGS)" "environment"
-  flags_to_pass_from_environment += ARFLAGS='$(ARFLAGS)'
-endif
-
-ifeq "$(origin CFLAGS)" "environment"
-  flags_to_pass_from_environment += CFLAGS='$(CFLAGS)'
-endif
-
-ifeq "$(origin CPPFLAGS)" "environment"
-  flags_to_pass_from_environment += CPPFLAGS='$(CPPFLAGS)'
-endif
-
-ifeq "$(origin CXXFLAGS)" "environment"
-  flags_to_pass_from_environment += CXXFLAGS='$(CXXFLAGS)'
-endif
-
-ifeq "$(origin LDFLAGS)" "environment"
-  flags_to_pass_from_environment += LDFLAGS='$(LDFLAGS)'
-endif
-
-ifeq "$(origin RCFLAGS)" "environment"
-  flags_to_pass_from_environment += RCFLAGS='$(RCFLAGS)'
-endif
+-include $(src_dir)/local_options.make
+$(src_dir)/local_options.make:: ;
 
 ################################################################################
 
@@ -171,12 +148,17 @@ gpl_files := \
   quoted_gpl \
   quoted_gpl_html \
 
+# $(MAKEOVERRIDES) is explicitly specified after $(local_options) when
+# a submakefile is invoked, in order to allow a variable definition on
+# the 'make' command line to override any definition of the same
+# variable in $(local_options).
+
 MAKETARGET = \
   $(MAKE) \
     --directory=$@ \
     --file=$(src_dir)/workhorse.make \
     --no-print-directory \
-    $(flags_to_pass_from_environment) \
+    $(local_options) $(MAKEOVERRIDES) \
                          src_dir='$(src_dir)' \
                       build_type='$(build_type)' \
                platform-makefile='$(platform-makefile)' \
@@ -244,6 +226,7 @@ never_source_files := \
   $(subdirectories) \
   $(testing_files) \
   date_last_made \
+  local_options.make \
 
 # Files that are source in some restrictive sense only:
 
