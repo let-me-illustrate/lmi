@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: materially_equal_test.cpp,v 1.3 2006-01-29 13:52:00 chicares Exp $
+// $Id: materially_equal_test.cpp,v 1.4 2006-02-27 15:11:06 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -80,6 +80,75 @@ int test_main(int, char*[])
     BOOST_TEST( materially_equal(1000000000L , 1000000001.0, 1.0E-9));
     BOOST_TEST( materially_equal(1000000000.0, 1000000001L , 1.0E-9));
     BOOST_TEST( materially_equal(1000000000L , 1000000001L , 1.0E-9));
+
+    long double bignum = std::numeric_limits<long double>::max();
+    BOOST_TEST( materially_equal(bignum, bignum, 0.0L   ));
+    BOOST_TEST( materially_equal(bignum, bignum, 1.0E-9L));
+    BOOST_TEST( materially_equal(bignum, bignum, 1.0L   ));
+    BOOST_TEST( materially_equal(bignum, bignum, 1.0E9L ));
+
+    long double smallnum = std::numeric_limits<long double>::min();
+    BOOST_TEST( materially_equal(smallnum, smallnum, 0.0L   ));
+    BOOST_TEST( materially_equal(smallnum, smallnum, 1.0E-9L));
+    BOOST_TEST( materially_equal(smallnum, smallnum, 1.0L   ));
+    BOOST_TEST( materially_equal(smallnum, smallnum, 1.0E9L ));
+
+    long double infinity = std::numeric_limits<long double>::infinity();
+    BOOST_TEST( materially_equal(infinity, infinity, 0.0L   ));
+    BOOST_TEST( materially_equal(infinity, infinity, 1.0E-9L));
+    BOOST_TEST( materially_equal(infinity, infinity, 1.0L   ));
+    BOOST_TEST( materially_equal(infinity, infinity, 1.0E9L ));
+
+    BOOST_TEST( materially_equal(bignum  , bignum  , smallnum));
+    BOOST_TEST( materially_equal(infinity, infinity, smallnum));
+    BOOST_TEST( materially_equal(smallnum, smallnum, bignum  ));
+    BOOST_TEST( materially_equal(infinity, infinity, bignum  ));
+    BOOST_TEST( materially_equal(bignum  , bignum  , infinity));
+    BOOST_TEST( materially_equal(smallnum, smallnum, infinity));
+
+    BOOST_TEST( materially_equal(0.0L    ,-0.0L    , smallnum));
+    BOOST_TEST( materially_equal(smallnum,-smallnum, 3.0L    ));
+
+    // NaNs should always compare unequal, at least for compilers
+    // that claim to implement them properly.
+
+    if(std::numeric_limits<double>::has_quiet_NaN)
+        {
+        double quiet_NaN = std::numeric_limits<double>::quiet_NaN();
+        if(quiet_NaN == quiet_NaN)
+            {
+            std::cout << "Defective compiler: qNaNs compare equal" << std::endl;
+            BOOST_TEST(  quiet_NaN != quiet_NaN );
+            }
+        else
+            {
+            BOOST_TEST(  quiet_NaN != quiet_NaN );
+            BOOST_TEST(!(quiet_NaN == quiet_NaN));
+            BOOST_TEST(!materially_equal(quiet_NaN, quiet_NaN, 0.0   ));
+            BOOST_TEST(!materially_equal(quiet_NaN, quiet_NaN, 1.0E-9));
+            BOOST_TEST(!materially_equal(quiet_NaN, quiet_NaN, 1.0   ));
+            BOOST_TEST(!materially_equal(quiet_NaN, quiet_NaN, 1.0E9 ));
+            }
+        }
+
+    if(std::numeric_limits<long double>::has_quiet_NaN)
+        {
+        long double quiet_NaN = std::numeric_limits<long double>::quiet_NaN();
+        if(quiet_NaN == quiet_NaN)
+            {
+            std::cout << "Defective compiler: qNaNs compare equal" << std::endl;
+            BOOST_TEST(  quiet_NaN != quiet_NaN );
+            }
+        else
+            {
+            BOOST_TEST(  quiet_NaN != quiet_NaN );
+            BOOST_TEST(!(quiet_NaN == quiet_NaN));
+            BOOST_TEST(!materially_equal(quiet_NaN, quiet_NaN, 0.0L   ));
+            BOOST_TEST(!materially_equal(quiet_NaN, quiet_NaN, 1.0E-9L));
+            BOOST_TEST(!materially_equal(quiet_NaN, quiet_NaN, 1.0L   ));
+            BOOST_TEST(!materially_equal(quiet_NaN, quiet_NaN, 1.0E9L ));
+            }
+        }
 
     // Test material_difference().
 
