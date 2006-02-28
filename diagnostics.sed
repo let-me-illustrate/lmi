@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 #
-# $Id: diagnostics.sed,v 1.10 2006-01-29 14:48:55 chicares Exp $
+# $Id: diagnostics.sed,v 1.11 2006-02-28 13:35:16 chicares Exp $
 #
   # Delete expected output from make.
 /Circular.*dependency dropped/d
@@ -50,8 +50,6 @@
   # Delete expected output from gnu cpp.
 /^[^ ]*CPP -x/d
 /^[^ ]*cpp -x/d
-  # TODO ?? Remove this workaround when we use a better shell
-/.*cpp.*-x/d
   # Delete expected output from gcc build.
 /^[^ ]*gcc.*-[Ico] /d
 /^[^ ]*g++.*-[Ico] /d
