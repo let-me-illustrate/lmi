@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: autodependency.make,v 1.5 2006-01-29 13:52:00 chicares Exp $
+# $Id: autodependency.make,v 1.6 2006-02-28 13:35:14 chicares Exp $
 
 ################################################################################
 
@@ -46,9 +46,7 @@ $(src_dir)/configuration.make:: ;
 # Any defect should not reflect on Paul D. Smith or Tom Tromey's
 # reputations.
 #
-# The most important changes are discussed below; the attempts to make
-# this work with ms shells are of historical interest only, and may be
-# taken as reasons to use a bourne-compatible shell on msw.
+# The most important changes are discussed below.
 
 # First, tell GNU cpp to pretend it's whatever compiler we're creating
 # automatic dependencies for. For gcc, this just means setting
@@ -58,14 +56,8 @@ $(src_dir)/configuration.make:: ;
 # and another set to mimic macros the other compiler predefines, such as
 #   -D _M_IX86=300 -D __BORLANDC__=0x500 -D _WIN32 -D __FLAT__
 # for borland C++ 5.02 . In either case, for a C++ project add
-#   -xc++
-# to let the preprocessor know it's handling C++. Note that
 #   -x c++
-# with an embedded space should be OK, and msw2000's CMD.EXE accepts it,
-# but msw95's COMMAND.COM does not.
-#
-# [Due to later revisions, don't assume that this method works with
-# any msw command interpreter. Get a bourne-compatble shell instead.]
+# to let the preprocessor know it's handling C++.
 #
 # I changed Paul's sed commands to work with msw almost as well as
 # with free operating systems. Here's a line by line explanation:
@@ -147,7 +139,7 @@ $(src_dir)/configuration.make:: ;
 # GWC 2001: Temporary (I hope) fix for cygwin. With the latest cygwin
 # as of 2001-06-15 (I find no version number in the download),
 # 'cpp -M' has two problems. First, it assumes that '/usr' maps to
-# '/Cygwin/usr', which doesn't work in shells provided by msw. Second,
+# '/Cygwin/usr', but we want to be able to use our own '/usr'. Second,
 # it refers to some headers as being in '/usr/lib', whereas they are
 # actually in Cygwin's '/lib', which is '/Cygwin/lib'. We use sed to
 # fix these problems.
@@ -160,12 +152,6 @@ $(src_dir)/configuration.make:: ;
 #   $(comp_autodependency_kludge)
 # TODO ?? That other file was replaced. Put this workaround in its
 # replacement if testing shows that cygwin still has this problem.
-
-# 2001-12-03 GWC replaced single quote with double quote throughout.
-# Required for msw2000; not tested with msw95. This change was later
-# reverted: the protean quoting behavior of msw shells is undocumented
-# and no simple solution can work for all of them, so just use a port
-# of a bourne-compatible shell on the msw platform.
 
 # 2003-05-04 GWC changed command option
 #    -M
@@ -225,7 +211,7 @@ autodependency_sed_commands = \
 
 MAKEDEPEND = \
   $(GNU_PREPROCESSOR) \
-    -xc++ \
+    -x c++ \
     $(ALL_CPPFLAGS) \
     $(comp_cpp_pretend_flags) \
     -M -MT $@ $< \
