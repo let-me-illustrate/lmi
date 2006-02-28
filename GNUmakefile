@@ -19,9 +19,9 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: GNUmakefile,v 1.62 2006-02-27 15:11:11 chicares Exp $
+# $Id: GNUmakefile,v 1.63 2006-02-28 13:35:12 chicares Exp $
 
-###############################################################################
+################################################################################
 
 # The general technique used in the 'Multiple build directories'
 # section is due to Paul D. Smith:
@@ -53,7 +53,7 @@ MAKECMDGOALS ?= all
 
 $(MAKECMDGOALS):
 
-###############################################################################
+################################################################################
 
 # Directives and such.
 
