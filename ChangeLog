@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.348 2006-02-28 00:00:46 chicares Exp $
+// $Id: ChangeLog,v 1.349 2006-02-28 13:35:24 chicares Exp $
 
 MAINTENANCE
 
@@ -6349,4 +6349,28 @@ Avoid overflow and singularities.
 Add script to set persistent options. This message
   http://lists.gnu.org/archive/html/lmi/2006-02/msg00009.html
 discusses the motivation.
+
+20060228T1335Z <chicares@cox.net> [1206]
+
+  GNUmakefile
+  workhorse.make
+Regularize section separators.
+
+  docmanager_ex.cpp
+  objects.make
+  single_choice_popup_menu.cpp [new file]
+  single_choice_popup_menu.hpp [new file]
+Refactor.
+
+  autodependency.make
+Revise documentation.
+
+  diagnostics.sed
+Remove an obsolete defect marker.
+
+  stream_cast.hpp
+Improve documentation.
+
+  stream_cast_test.cpp
+Remove obsolete tests that the implementation deliberately rejects.
 
