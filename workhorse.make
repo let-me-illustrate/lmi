@@ -19,9 +19,9 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: workhorse.make,v 1.67 2006-02-16 13:24:11 chicares Exp $
+# $Id: workhorse.make,v 1.68 2006-02-28 13:35:12 chicares Exp $
 
-###############################################################################
+################################################################################
 
 # This is not a top-level makefile.
 
@@ -29,7 +29,7 @@ ifeq (0,$(MAKELEVEL))
   $(error Don't use this as a top-level makefile)
 endif
 
-###############################################################################
+################################################################################
 
 # Directives and such.
 
