@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: docmanager_ex.cpp,v 1.6 2006-01-29 13:52:00 chicares Exp $
+// $Id: docmanager_ex.cpp,v 1.7 2006-02-28 13:35:24 chicares Exp $
 
 // This implementation is a derived work based on wxWindows code, viz.
 //   samples/printing/printing.cpp (C) 1995 Julian Smart
@@ -42,83 +42,13 @@
 #include "docmanager_ex.hpp"
 
 #include "previewframe_ex.hpp"
+#include "single_choice_popup_menu.hpp"
 #include "wx_new.hpp"
 
 #include <wx/app.h>
 #include <wx/menu.h>
 #include <wx/msgdlg.h>
 #include <wx/printdlg.h>
-
-/// A wxGetSingleChoiceIndex alternative. No distracting dialog frame.
-/// No needless OK button--requires only a single click or keystroke.
-///
-/// Warning: the first character in 'title' (if specified) seems to
-/// become an accelerator, interfering with any menuitem that uses the
-/// same character as its own accelerator.
-
-class wxSingleChoicePopupMenu
-    :public wxWindow
-{
-  public:
-    wxSingleChoicePopupMenu
-        (wxArrayString const& choices
-        ,wxString const& title = wxEmptyString
-        ,wxWindow* parent = wxTheApp->GetTopWindow()
-        );
-
-    virtual ~wxSingleChoicePopupMenu();
-
-    int Choose();
-
-  private:
-    void OnMenuChoice(wxCommandEvent&);
-
-    wxMenu menu_;
-    int selection_index_;
-};
-
-wxSingleChoicePopupMenu::wxSingleChoicePopupMenu
-    (wxArrayString const& choices
-    ,wxString const& title
-    ,wxWindow* parent
-    )
-    :wxWindow(parent, -1, wxDefaultPosition, wxSize(0, 0))
-    ,selection_index_(-1)
-{
-    if(!title.IsEmpty())
-        {
-        menu_.SetTitle(title);
-        }
-    for(unsigned int j = 0; j < choices.GetCount(); ++j)
-        {
-        wxString s = choices[j];
-        if(-1 == s.Find('&'))
-            s.Prepend('&');
-        menu_.Append(j, s);
-        }
-    Connect
-        (0
-        ,choices.GetCount()
-        ,wxEVT_COMMAND_MENU_SELECTED
-        ,(wxObjectEventFunction)(&wxSingleChoicePopupMenu::OnMenuChoice)
-        );
-}
-
-wxSingleChoicePopupMenu::~wxSingleChoicePopupMenu()
-{
-}
-
-// WX !! Can't be const because PopupMenu isn't.
-int wxSingleChoicePopupMenu::Choose()
-{
-    PopupMenu(&menu_, ScreenToClient(wxGetMousePosition()));
-    return selection_index_;
-}
-
-void wxSingleChoicePopupMenu::OnMenuChoice(wxCommandEvent& e)
-{
-    selection_index_ = e.GetId();
-}
 
 IMPLEMENT_DYNAMIC_CLASS(DocManagerEx, wxDocManager)
 
@@ -350,8 +280,7 @@ wxDocTemplate* DocManagerEx::SelectDocumentType
                             wxFindSuitableParent()
                           );
 */
-            int selection = wxSingleChoicePopupMenu(strings).Choose();
-
+            int selection = SingleChoicePopupMenu(strings).Choose();
             theTemplate = 0;
             if(-1 != selection)
                 {
