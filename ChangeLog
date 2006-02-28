@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.347 2006-02-27 15:11:11 chicares Exp $
+// $Id: ChangeLog,v 1.348 2006-02-28 00:00:46 chicares Exp $
 
 MAINTENANCE
 
@@ -6342,7 +6342,7 @@ Improve documentation.
 Test extreme and special values.
 
   timer_test.cpp
-Avoid overflow and singuarities.
+Avoid overflow and singularities.
 
   GNUmakefile
   local_options.sh [new file]
