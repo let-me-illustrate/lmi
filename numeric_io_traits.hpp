@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: numeric_io_traits.hpp,v 1.16 2006-01-29 13:52:00 chicares Exp $
+// $Id: numeric_io_traits.hpp,v 1.17 2006-03-01 17:00:25 chicares Exp $
 
 #ifndef numeric_io_traits_hpp
 #define numeric_io_traits_hpp
@@ -27,20 +27,28 @@
 #include "config.hpp"
 
 #include <algorithm> // std::max()
-#include <cmath>
+#include <cmath>     // C99 functions fabsl(), log10l(), strtold()
 #include <cstdlib>   // std::strto*()
 #include <limits>
 #include <stdexcept>
 #include <string>
 
-#include <boost/cast.hpp>
-
 #if !defined __BORLANDC__
+#   include <boost/cast.hpp>
 #   include <boost/static_assert.hpp>
 #   include <boost/type_traits.hpp>
-#else  // Defined __BORLANDC__ .
+#else  // defined __BORLANDC__
+// COMPILER !! Workarounds for defective borland compiler.
 #   define BOOST_STATIC_ASSERT(deliberately_ignored) /##/
-#endif // Defined __BORLANDC__ .
+namespace boost
+{
+    template<typename T, typename U>
+    T numeric_cast(U u)
+    {
+        return static_cast<T>(u);
+    }
+}
+#endif // defined __BORLANDC__
 
 // Number of exact decimal digits to the right of the decimal point.
 //
@@ -329,13 +337,10 @@ template<> struct numeric_conversion_traits<double>
 // COMPILER !! MinGW gcc-3.x doesn't support "%Lf" correctly because
 // it uses the defective ms C runtime library.
 
-// 'strtold' is written rather than 'std::strtold' because C++98
-// is unaware of that C99 function.
-
 #if !defined LMI_COMPILER_PROVIDES_STRTOLD
 // COMPILER !! This workaround is rather poor, of course.
 inline long double strtold(char const* nptr, char** endptr)
-{return strtod(nptr, endptr);}
+{return std::strtod(nptr, endptr);}
 #endif // !defined LMI_COMPILER_PROVIDES_STRTOLD
 
 template<> struct numeric_conversion_traits<long double>

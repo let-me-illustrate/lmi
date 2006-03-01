@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: numeric_io_test.cpp,v 1.11 2006-02-19 20:26:11 chicares Exp $
+// $Id: numeric_io_test.cpp,v 1.12 2006-03-01 17:00:25 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -32,7 +32,9 @@
 #include "test_tools.hpp"
 #include "timer.hpp"
 
-#include <boost/lexical_cast.hpp>
+#if !defined __BORLANDC__
+#   include <boost/lexical_cast.hpp>
+#endif // ! defined __BORLANDC__
 
 #include <cmath>
 
@@ -144,6 +146,7 @@ int test_main(int, char*[])
         << " usec per iteration for numeric_io_cast().\n"
         ;
 
+#if !defined __BORLANDC__
     timer.restart();
     iterations = 1000;
     for(int j = 0; j < iterations; ++j)
@@ -154,15 +157,17 @@ int test_main(int, char*[])
     std::cout
         << (1e6 * timer.stop().elapsed_usec() / iterations)
         << " usec per iteration for boost::lexical_cast()."
-        << std::endl
         ;
+#endif // ! defined __BORLANDC__
+
+    std::cout << std::endl;
     (void) d;
 
     // Interpreted as decimal, not as octal.
-    BOOST_TEST_EQUAL(77, numeric_io_cast<int>("077"));
+    BOOST_TEST_EQUAL(77, numeric_io_cast<int>( "077"));
 
     // Interpreted as valid decimal, not as invalid octal.
-    BOOST_TEST_EQUAL( 9, numeric_io_cast<int>( "09"));
+    BOOST_TEST_EQUAL(99, numeric_io_cast<int>("0099"));
 
     BOOST_TEST_EQUAL( "Z" , numeric_io_cast<std::string>( "Z" ));
     BOOST_TEST_EQUAL(" Z" , numeric_io_cast<std::string>(" Z" ));
