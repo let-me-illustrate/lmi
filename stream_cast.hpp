@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: stream_cast.hpp,v 1.9 2006-02-28 13:35:18 chicares Exp $
+// $Id: stream_cast.hpp,v 1.10 2006-03-01 15:52:17 chicares Exp $
 
 // This is a derived work based on boost::lexical_cast, which bears
 // the following copyright and permissions notice:
@@ -132,7 +132,7 @@ To stream_cast(From from, To = To())
         {
         err << "Unconverted data remains ";
         }
-#endif // Not defined LMI_COMO_WITH_MINGW .
+#endif // !defined LMI_COMO_WITH_MINGW
     else
         {
         ; // Nothing left to do.
