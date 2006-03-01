@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.350 2006-03-01 15:52:20 chicares Exp $
+// $Id: ChangeLog,v 1.351 2006-03-01 17:00:25 chicares Exp $
 
 MAINTENANCE
 
@@ -6381,4 +6381,10 @@ Rewrite a conditional to increase maintainability.
 
   numeric_io_cast.hpp
 Rewrite a conditionals; improve documentation.
+
+20060301T1700Z <chicares@cox.net> [1206]
+
+  numeric_io_test.cpp
+  numeric_io_traits.hpp
+Improve support for other compilers than gcc.
 
