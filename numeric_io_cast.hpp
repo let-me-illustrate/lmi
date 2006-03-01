@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: numeric_io_cast.hpp,v 1.10 2006-02-19 20:26:11 chicares Exp $
+// $Id: numeric_io_cast.hpp,v 1.11 2006-03-01 15:52:20 chicares Exp $
 
 #ifndef numeric_io_cast_hpp
 #define numeric_io_cast_hpp
@@ -37,11 +37,11 @@
 #if !defined __BORLANDC__
 #   include <boost/static_assert.hpp>
 #   include <boost/type_traits.hpp>
-#else  // Defined __BORLANDC__ .
+#else  // defined __BORLANDC__
 #   define BOOST_STATIC_ASSERT(deliberately_ignored) /##/
-#endif // Defined __BORLANDC__ .
+#endif // defined __BORLANDC__
 
-/// Design notes for template function numeric_io_cast().
+/// Design notes for function template numeric_io_cast().
 ///
 /// Converts between arithmetic types and their std::string decimal
 /// representations, in these cases only:
@@ -54,7 +54,8 @@
 ///
 /// Octal-literals are treated as decimal: leading zeros are ignored.
 /// The declared design goal is to implement decimal conversion, so
-/// "077" means seventy-seven, not sixty-three.
+/// "077" means seventy-seven, not sixty-three, while "099" is well
+/// defined and means ninety-nine.
 ///
 /// Exceptions:
 ///
@@ -90,15 +91,16 @@
 /// the std::stringstream technique for all compilers tested in 2004.
 ///
 /// The behavior of numeric_io_cast() with builtin character types
-/// (e.g. char, as opposed to char const* or std::string) may seem
-/// surprising at first: it treats them as decimal numbers. Thus,
-/// casting from std::string("1") to char returns '\1', and casting
-/// that result back to std::string returns the original value, while
-/// casting from std::string("A") to char is an error. This follows
-/// C++98 3.9.1/7, which defines char as an integer type, along with
-/// int, bool, etc. Consistency is thus valued over the notion of a
-/// char as some sort of degenerate string capable of holding decimal
-/// integers in the severely restricted range [0, 9].
+/// (e.g., char, as opposed to char const*, which is a pointer type,
+/// or std::string, which is not a builtin type) may seem surprising
+/// at first: it treats them as decimal numbers. Thus, casting from
+/// std::string("1") to char returns '\1', and casting that result
+/// back to std::string returns the original value, while casting from
+/// std::string("A") to char is an error. This follows C++98 3.9.1/7,
+/// which defines char as an integer type, along with int, bool, etc.
+/// Consistency is thus valued over the notion of a char as some sort
+/// of degenerate string capable of holding single-digit decimal
+/// integers as numerals.
 
 template<typename To, typename From>
 To numeric_io_cast(From, To = To());

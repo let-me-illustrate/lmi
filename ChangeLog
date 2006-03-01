@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.349 2006-02-28 13:35:24 chicares Exp $
+// $Id: ChangeLog,v 1.350 2006-03-01 15:52:20 chicares Exp $
 
 MAINTENANCE
 
@@ -6373,4 +6373,12 @@ Improve documentation.
 
   stream_cast_test.cpp
 Remove obsolete tests that the implementation deliberately rejects.
+
+20060301T1552Z <chicares@cox.net> [1206]
+
+  stream_cast.hpp
+Rewrite a conditional to increase maintainability.
+
+  numeric_io_cast.hpp
+Rewrite a conditionals; improve documentation.
 
