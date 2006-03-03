@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.351 2006-03-01 17:00:25 chicares Exp $
+// $Id: ChangeLog,v 1.352 2006-03-03 14:17:10 chicares Exp $
 
 MAINTENANCE
 
@@ -6387,4 +6387,13 @@ Rewrite a conditionals; improve documentation.
   numeric_io_test.cpp
   numeric_io_traits.hpp
 Improve support for other compilers than gcc.
+
+20060303T1417Z <chicares@cox.net> [1206]
+
+  objects.make
+Use minimal but sufficient object lists for unit tests.
+
+  value_cast.hpp
+  value_cast_test.cpp
+Improve documentation.
 

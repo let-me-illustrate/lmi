@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: value_cast_test.cpp,v 1.7 2006-02-22 14:06:25 chicares Exp $
+// $Id: value_cast_test.cpp,v 1.8 2006-03-03 14:17:10 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -116,7 +116,7 @@ int test_main(int, char*[])
 
     BOOST_TEST_EQUAL(e_stream , method(s, (char volatile*)(0)));
 #else  // defined __BORLANDC__
-    // Shut up compiler warnings for unused variables.
+    // Stifle compiler warning for unused variable.
     &cp;
 #endif // defined __BORLANDC__
 

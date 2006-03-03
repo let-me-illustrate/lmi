@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: value_cast.hpp,v 1.7 2006-02-22 14:06:25 chicares Exp $
+// $Id: value_cast.hpp,v 1.8 2006-03-03 14:17:10 chicares Exp $
 
 #ifndef value_cast_hpp
 #define value_cast_hpp
@@ -29,7 +29,7 @@
 #include "numeric_io_cast.hpp"
 #include "stream_cast.hpp"
 
-#ifndef __BORLANDC__
+#if !defined __BORLANDC__
 
 #include <boost/type_traits.hpp>
 
@@ -69,11 +69,12 @@
 /// performance.
 ///
 /// Because value_cast() automatically chooses the best algorithm, it
-/// is appropriate for general use, and direct use of numeric_io_cast
-/// or stream_cast should generally be avoided. But using one of those
-/// other casts directly when the types are known gives better results
-/// with poor compilers (e.g., borland) that can't handle the
-/// mainstream value_cast() implementation.
+/// is appropriate for general use. It is also appropriate to use the
+/// more-specialized numeric_io_cast() directly for conversions known
+/// to be within the scope of its design. Direct use of stream_cast()
+/// is to be avoided in general because of its poor performance, and
+/// to be avoided especially for numerics because of its poor
+/// accuracy.
 
 template<typename To, typename From>
 To value_cast(From from, To = To());
@@ -159,7 +160,7 @@ To value_cast(From from, To)
     return value_cast_chooser<To,From>()(from);
 }
 
-#else // __BORLANDC__
+#else // defined __BORLANDC__
 
 // COMPILER !! Precision of casts between string and arithmetic types
 // is poor because borland can't handle the default implementation.
@@ -172,7 +173,7 @@ To value_cast(From from, To = To())
     return stream_cast<To>(from);
 }
 
-#endif // __BORLANDC__
+#endif // defined __BORLANDC__
 
 #endif // value_cast_hpp
 
