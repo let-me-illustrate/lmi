@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: objects.make,v 1.72 2006-02-28 13:35:24 chicares Exp $
+# $Id: objects.make,v 1.73 2006-03-03 14:17:07 chicares Exp $
 
 ################################################################################
 
@@ -479,7 +479,6 @@ expression_template_0_test$(EXEEXT): \
 
 fenv_lmi_test$(EXEEXT): \
   $(common_test_objects) \
-  fenv_lmi.o \
   fenv_lmi_test.o \
 
 financial_test$(EXEEXT): \
@@ -527,7 +526,6 @@ input_test$(EXEEXT): \
   inputillus_xml_io.o \
   inputs.o \
   inputstatus.o \
-  license.o \
   miscellany.o \
   multiple_cell_document.o \
   path_utility.o \
