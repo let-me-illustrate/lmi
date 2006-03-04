@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: any_member.hpp,v 1.8 2006-01-29 13:52:00 chicares Exp $
+// $Id: any_member.hpp,v 1.9 2006-03-04 14:27:16 chicares Exp $
 
 // This is a derived work based on boost::any, which bears the following
 // copyright and permissions notice:
@@ -73,13 +73,13 @@
 
 // Design notes: numeric stream input and output
 //
-// Member function holder::write() explicitly invokes function
-// template value_cast() on its held object before writing it to
-// the std::ostream. This adds some overhead, which is probably
-// significant for held objects of type char*, but data members
-// generally should be of type std::string instead, so the cost seems
-// unimportant. The benefit is that arithmetic types are written with
-// all possible decimal precision.
+// Member function holder::write() explicitly converts its held
+// object to a std::string before writing it to the std::ostream.
+// This adds some overhead, which is probably significant for held
+// objects of type char*, but data members generally should be of
+// type std::string instead, so the cost seems unimportant. The
+// benefit is that arithmetic types are written with all achievable
+// decimal precision.
 
 #ifndef any_member_hpp
 #define any_member_hpp

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: stream_cast_test.cpp,v 1.6 2006-02-28 13:35:20 chicares Exp $
+// $Id: stream_cast_test.cpp,v 1.7 2006-03-04 14:27:16 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -40,9 +40,14 @@ int test_main(int, char*[])
     // This would fail if the type converted to were of a different
     // string-like type: the stream inserter would set failbit, and
     // that's an essential feature of the technique. In general,
-    // prefer template function value_cast, and specialize it for
+    // prefer function template value_cast, and specialize it for
     // string-like classes.
+
+    s = stream_cast<std::string>(s);
+    BOOST_TEST(s.empty());
+
     BOOST_TEST_EQUAL("", stream_cast<std::string>(""));
+
     s = "Not empty.";
     std::string empty("");
     s = stream_cast<std::string>(empty);
