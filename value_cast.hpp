@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: value_cast.hpp,v 1.8 2006-03-03 14:17:10 chicares Exp $
+// $Id: value_cast.hpp,v 1.9 2006-03-04 14:27:16 chicares Exp $
 
 #ifndef value_cast_hpp
 #define value_cast_hpp
@@ -75,20 +75,51 @@
 /// is to be avoided in general because of its poor performance, and
 /// to be avoided especially for numerics because of its poor
 /// accuracy.
+///
+/// Order of template and function parameters.
+///
+/// The order of template parameters is the same as for similar
+/// templates in boost (parameters and arguments altered here to
+/// emphasize similarity):
+///   template<typename To, typename From> To value_cast      (From );
+///   template<typename To, typename From> To lexical_cast    (From );
+///   template<typename To, typename From> To polymorphic_cast(From*);
+///   template<typename To, typename From> To numeric_cast    (From );
+///
+/// The alternative form
+///   template<typename To, typename From> To value_cast   (From, To);
+/// is handy when the type 'To' is easier to deduce than to specify.
+/// The order of template parameters is reversed for function
+/// parameters so that the 'To' function parameter can be elided.
+/// The same order-reversal would be necessary if a default function
+/// argument were used; that approach is not taken because actually
+/// using the default would gratuitously require type 'From' to be
+/// DefaultConstructible (although that requirement remains in effect
+/// when conversion is delegated to stream_cast(), in whose design it
+/// inheres). The last two boost templates mentioned above actually
+/// use such a default function argument, in boost-1.31.0 named
+/// BOOST_EXPLICIT_DEFAULT_TARGET, with the same order-reversal,
+/// although their rationale is not to increase the expressive power,
+/// but merely to work around a compiler defect.
+///
+/// All uses of class boost::is_convertible here are commented to avoid
+/// confusion due to the surprising order of its template parameters:
+/// compare
+///   boost::is_convertible<From,To>(From z)
+/// to the declarations above. Also see this comment:
+///   http://lists.boost.org/Archives/boost/2006/01/99722.php
+///   "BTW Its a real pain that the parameter order for is_convertible
+///   isnt the other way round IMO. Its confusing and error prone
+///   because casts go the other way."
 
 template<typename To, typename From>
-To value_cast(From from, To = To());
+To value_cast(From from);
 
 enum cast_method
     {e_direct
     ,e_numeric
     ,e_stream
     };
-
-// Note: boost::is_convertible<From,To> gives template arguments in
-// the opposite of the order used for boost::lexical_cast<To,From>.
-// The cast templates used here follow the latter order. All uses of
-// boost::is_convertible here are commented to avoid ambiguity.
 
 template<typename T>
 struct is_string
@@ -155,9 +186,15 @@ struct value_cast_chooser<To,From,e_stream>
 };
 
 template<typename To, typename From>
-To value_cast(From from, To)
+To value_cast(From from)
 {
     return value_cast_chooser<To,From>()(from);
+}
+
+template<typename To, typename From>
+To value_cast(From from, To)
+{
+    return value_cast<To,From>(from);
 }
 
 #else // defined __BORLANDC__

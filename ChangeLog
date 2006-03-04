@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.352 2006-03-03 14:17:10 chicares Exp $
+// $Id: ChangeLog,v 1.353 2006-03-04 14:27:16 chicares Exp $
 
 MAINTENANCE
 
@@ -6396,4 +6396,19 @@ Use minimal but sufficient object lists for unit tests.
   value_cast.hpp
   value_cast_test.cpp
 Improve documentation.
+
+20060304T1427Z <chicares@cox.net> [1206]
+
+  GNUmakefile
+  autodependency.make
+Refine makefiles. Reference:
+  [substitute URL when lists.gnu.org is back up]
+  [my 2006-03-03T23:43Z message to <help-make@gnu.org>]
+
+  any_member.hpp
+  datum_string.hpp
+  stream_cast_test.cpp
+  value_cast.hpp
+  value_cast_test.cpp
+Import selected changes from skeleton branch.
 

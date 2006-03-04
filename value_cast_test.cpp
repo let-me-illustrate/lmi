@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: value_cast_test.cpp,v 1.8 2006-03-03 14:17:10 chicares Exp $
+// $Id: value_cast_test.cpp,v 1.9 2006-03-04 14:27:16 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -37,7 +37,15 @@
 
 #include <cmath>   // std::pow()
 #include <cstring> // std::strcpy(), std::strcmp
+#include <istream>
 #include <limits>
+#include <ostream>
+
+class NotDefaultConstructible
+{
+  public:
+    NotDefaultConstructible(std::istream const&) {}
+};
 
 struct X {std::string s;};
 std::istream& operator>>(std::istream& is, X&       x) {is >> x.s; return is;}
@@ -82,6 +90,7 @@ int test_main(int, char*[])
     double d(1.23456);
     std::string s("test");
     X x;
+    NotDefaultConstructible n_d_c(std::cin);
 
 #if !defined __BORLANDC__
     // Test which conversion is used for type double.
@@ -115,6 +124,9 @@ int test_main(int, char*[])
     BOOST_TEST_EQUAL(e_stream,  method(x, s));
 
     BOOST_TEST_EQUAL(e_stream , method(s, (char volatile*)(0)));
+
+    n_d_c = value_cast<NotDefaultConstructible>(n_d_c);
+    n_d_c = value_cast(n_d_c, n_d_c);
 #else  // defined __BORLANDC__
     // Stifle compiler warning for unused variable.
     &cp;
@@ -146,6 +158,9 @@ int test_main(int, char*[])
 
     d = value_cast<double>(s);
     BOOST_TEST_EQUAL(s, value_cast<std::string>(d));
+
+    d = value_cast<double>("123.456");
+    BOOST_TEST_EQUAL(d, 123.456);
 
     std::string t("This is a test.");
     BOOST_TEST_EQUAL(t, value_cast<std::string>(t));
