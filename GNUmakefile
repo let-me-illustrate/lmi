@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: GNUmakefile,v 1.63 2006-02-28 13:35:12 chicares Exp $
+# $Id: GNUmakefile,v 1.64 2006-03-04 14:27:12 chicares Exp $
 
 ################################################################################
 
@@ -96,8 +96,8 @@ $(TMPDIR):
 GNUmakefile $(src_dir)/GNUmakefile:: ;
 
 # Included files that don't need to be remade are given explicit empty
-# commands, which significantly reduces by about one-third the number
-# of lines emitted by 'make -d', making debug output easier to read.
+# commands, which significantly reduces the number of lines emitted by
+# 'make -d', making debug output easier to read.
 #
 # Included makefiles are cited by absolute pathname, e.g.
 #   include $(src_dir)/included-file
@@ -171,7 +171,7 @@ $(build_directory): $(gpl_files) date_last_made
 	+@[ -d $@ ] || $(MKDIR) --parents $@
 	+@$(MAKETARGET)
 
-% :: $(build_directory) ;
+% :: $(build_directory) ; @:
 
 ################################################################################
 
@@ -587,7 +587,7 @@ checkout:
 
 .PHONY: circadian_test
 circadian_test: checkout
-	-$(MAKE) --directory="$(circadian_directory)/lmi" cvs_ready \
+	-$(MAKE) --directory=$(circadian_directory)/lmi cvs_ready \
 	  >../$(circadian_log)
 
 ################################################################################
