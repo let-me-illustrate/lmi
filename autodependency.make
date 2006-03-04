@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: autodependency.make,v 1.6 2006-02-28 13:35:14 chicares Exp $
+# $Id: autodependency.make,v 1.7 2006-03-04 14:27:12 chicares Exp $
 
 ################################################################################
 
@@ -240,5 +240,5 @@ MAKEDEPEND_1 = \
   $(RM) $*.d0; \
 
 -include *.d
-*.d: ;
+*.d:: ;
 
