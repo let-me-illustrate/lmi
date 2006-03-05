@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: value_cast.hpp,v 1.9 2006-03-04 14:27:16 chicares Exp $
+// $Id: value_cast.hpp,v 1.10 2006-03-05 10:47:27 chicares Exp $
 
 #ifndef value_cast_hpp
 #define value_cast_hpp
@@ -188,6 +188,7 @@ struct value_cast_chooser<To,From,e_stream>
 template<typename To, typename From>
 To value_cast(From from)
 {
+    BOOST_STATIC_ASSERT(!boost::is_pointer<To>::value);
     return value_cast_chooser<To,From>()(from);
 }
 

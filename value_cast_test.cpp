@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: value_cast_test.cpp,v 1.9 2006-03-04 14:27:16 chicares Exp $
+// $Id: value_cast_test.cpp,v 1.10 2006-03-05 10:47:27 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -125,6 +125,12 @@ int test_main(int, char*[])
 
     BOOST_TEST_EQUAL(e_stream , method(s, (char volatile*)(0)));
 
+    // Not convertible: stream_cast() forbids conversion to pointer.
+    BOOST_TEST_EQUAL(e_stream , method(cp, ccp));
+
+    // Not convertible: value_cast() forbids conversion to pointer.
+    BOOST_TEST_EQUAL(e_direct, method(ccp, cp));
+
     n_d_c = value_cast<NotDefaultConstructible>(n_d_c);
     n_d_c = value_cast(n_d_c, n_d_c);
 #else  // defined __BORLANDC__
@@ -132,12 +138,10 @@ int test_main(int, char*[])
     &cp;
 #endif // defined __BORLANDC__
 
-// INELEGANT !! This is forbidden, but perhaps should be allowed:
+    // Forbidden conversions to pointer, detected at compile time.
 //    cp = value_cast(d, cp);
-//    BOOST_TEST_EQUAL(cp, std::string("3.14159"));
-
-// TODO ?? This is allowed, but should be forbidden:
 //    cp = value_cast(ccp, cp);
+//    ccp = value_cast(cp, ccp);
 
     x = value_cast(s, x);
     BOOST_TEST_EQUAL(x.s, "test");
@@ -415,6 +419,10 @@ int extra_tests1()
 /// tests, as is proper. Such tests are suppressed here in order
 /// order to get a clean compile.
 ///
+/// Define TEST_BOOST_IMPLEMENTATION_TOO to DWISOTT. This macro is not
+/// defined by default because it's been measured to double the RAM
+/// and quintuple the time needed to build this module.
+///
 /// TODO ?? Many of the boost tests remain to be adapted.
 
 #if !defined __BORLANDC__
@@ -424,6 +432,7 @@ int boost_tests()
     // omitted. These tests might profitably be used for lmi's
     // stream_cast function template.
 
+#if defined TEST_BOOST_IMPLEMENTATION_TOO
     using boost::lexical_cast;
 
     // void test_conversion_to_char()
@@ -585,6 +594,7 @@ int boost_tests()
     // void test_conversion_to_pointer()
 
     BOOST_TEST_THROW(lexical_cast<char *>("Test"), boost::bad_lexical_cast, "");
+#endif // defined TEST_BOOST_IMPLEMENTATION_TOO
 
     // A roughly-equivalent value_cast test suite.
 
