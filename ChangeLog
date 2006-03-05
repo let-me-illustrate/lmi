@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.353 2006-03-04 14:27:16 chicares Exp $
+// $Id: ChangeLog,v 1.354 2006-03-05 10:47:27 chicares Exp $
 
 MAINTENANCE
 
@@ -6411,4 +6411,11 @@ Refine makefiles. Reference:
   value_cast.hpp
   value_cast_test.cpp
 Import selected changes from skeleton branch.
+
+20060305T1047Z <chicares@cox.net> [1205]
+
+  stream_cast.hpp
+  value_cast.hpp
+  value_cast_test.cpp
+Forbid conversion to pointers.
 
