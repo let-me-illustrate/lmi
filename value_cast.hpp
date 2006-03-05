@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: value_cast.hpp,v 1.10 2006-03-05 10:47:27 chicares Exp $
+// $Id: value_cast.hpp,v 1.11 2006-03-05 20:20:12 chicares Exp $
 
 #ifndef value_cast_hpp
 #define value_cast_hpp
@@ -31,8 +31,10 @@
 
 #if !defined __BORLANDC__
 
+#include <boost/cast.hpp>
 #include <boost/type_traits.hpp>
 
+#include <sstream>
 #include <stdexcept>
 
 // INELEGANT !! Test the runtime performance of value_cast() compared
@@ -52,9 +54,10 @@
 
 /// Function template value_cast() converts between types, choosing a
 /// conversion method in the following order of decreasing preference:
-///   direct conversion for directly convertible types
-///   numeric_io_cast   for number <--> string
-///   stream_cast       for all other cases
+///   numeric_value_cast  for number <--> number
+///   direct conversion   for intraconvertible types not both numeric
+///   numeric_io_cast     for number <--> string
+///   stream_cast         for all other cases
 ///
 /// Arithmetic types are handled more quickly and precisely by
 /// numeric_io_cast than by stream_cast. In boost-1.31.0, function
@@ -116,8 +119,9 @@ template<typename To, typename From>
 To value_cast(From from);
 
 enum cast_method
-    {e_direct
-    ,e_numeric
+    {e_both_numeric
+    ,e_direct
+    ,e_numeric_io
     ,e_stream
     };
 
@@ -142,26 +146,96 @@ void throw_if_null_pointer(T* t)
         }
 }
 
+/// Function template numeric_value_cast() wraps boost::numeric_cast
+/// to make it DWISOTT:
+///   "An exception is thrown when a runtime value-preservation check
+///   fails."
+/// The problem is that
+///   boost::numeric_cast<int>(2.71828);
+/// returns the integer 2 without throwing, but 2.71828 and 2 are
+/// different values. It seems unreasonable to call truncation a
+/// value-preserving relation.
+
+template<typename To, typename From>
+To numeric_value_cast(From from)
+{
+    To result = boost::numeric_cast<To>(from);
+    if(result == from)
+        {
+        return result;
+        }
+    else
+        {
+        std::ostringstream oss;
+        oss
+            << "Value not preserved converting "
+            << numeric_io_cast<std::string>(from)
+            << " to "
+            << numeric_io_cast<std::string>(result)
+            << " ."
+            ;
+        throw std::runtime_error(oss.str());
+        }
+}
+
+/// Class template value_cast_choice is an appurtenance of function
+/// template value_cast(); it selects the best conversion method.
+///
+/// Narrowing conversions are detected by boost::numeric_cast; in
+/// keeping with that function template's design, they are tested iff
+/// std::numeric_limits is specialized for both template parameters.
+/// Actually, numeric_value_cast (q.v.) is used for the conversion.
+///
+/// Numeric input and output conversions use the boost::is_arithmetic
+/// criterion to determine whether a parameter is of numeric type--a
+/// criterion that includes certain nonstandard integral types whether
+/// or not they have std::numeric_limits specializations.
+
 template<typename To, typename From>
 struct value_cast_choice
 {
     enum
+        {
+        // Here, is_convertible means 'From' is convertible to 'To'.
+        convertible = boost::is_convertible<From,To>::value
+        };
+
+    enum
+        {
+        both_numeric =
+                std::numeric_limits<To  >::is_specialized
+            &&  std::numeric_limits<From>::is_specialized
+        };
+
+    enum
+        {
+        one_numeric_one_string =
+                boost::is_arithmetic<From>::value && is_string<To  >::value
+            ||  boost::is_arithmetic<To  >::value && is_string<From>::value
+        };
+
+    enum
         {choice =
-            // Here, is_convertible means 'From' is convertible to 'To'.
-            boost::is_convertible<From,To>::value
-            ?e_direct
-            :   (
-                    boost::is_arithmetic<From>::value && is_string<To  >::value
-                ||  boost::is_arithmetic<To  >::value && is_string<From>::value
-                )
-                ?e_numeric
-                :e_stream
+            convertible
+                ?both_numeric
+                    ?e_both_numeric
+                    :e_direct
+                :one_numeric_one_string
+                    ?e_numeric_io
+                    :e_stream
         };
 };
 
 template<typename To, typename From, int = value_cast_choice<To,From>::choice>
 struct value_cast_chooser
 {
+};
+
+template<typename To, typename From>
+struct value_cast_chooser<To,From,e_both_numeric>
+{
+    static cast_method method() {return e_both_numeric;}
+    To operator()(From from)    {return numeric_value_cast<To>(from);}
 };
 
 template<typename To, typename From>
@@ -172,9 +246,9 @@ struct value_cast_chooser<To,From,e_direct>
 };
 
 template<typename To, typename From>
-struct value_cast_chooser<To,From,e_numeric>
+struct value_cast_chooser<To,From,e_numeric_io>
 {
-    static cast_method method() {return e_numeric;}
+    static cast_method method() {return e_numeric_io;}
     To operator()(From from)    {return numeric_io_cast<To>(from);}
 };
 

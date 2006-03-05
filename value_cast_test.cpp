@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: value_cast_test.cpp,v 1.10 2006-03-05 10:47:27 chicares Exp $
+// $Id: value_cast_test.cpp,v 1.11 2006-03-05 20:20:12 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -53,7 +53,7 @@ std::ostream& operator<<(std::ostream& os, X const& x) {os << x.s; return os;}
 
 #if !defined __BORLANDC__
 template<typename To, typename From>
-cast_method method(To, From)
+cast_method method(From, To)
 {
     return value_cast_chooser<To,From>::method();
 }
@@ -95,41 +95,41 @@ int test_main(int, char*[])
 #if !defined __BORLANDC__
     // Test which conversion is used for type double.
 
-    BOOST_TEST_EQUAL(e_direct,  method(d, d));
-    BOOST_TEST_EQUAL(e_direct,  method(d, i));
-    BOOST_TEST_EQUAL(e_numeric, method(d, s));
-    BOOST_TEST_EQUAL(e_numeric, method(d, cp));
-    BOOST_TEST_EQUAL(e_numeric, method(d, ccp));
-    BOOST_TEST_EQUAL(e_stream,  method(d, x));
+    BOOST_TEST_EQUAL(e_both_numeric ,method(d   ,d  ));
+    BOOST_TEST_EQUAL(e_both_numeric ,method(d   ,i  ));
+    BOOST_TEST_EQUAL(e_numeric_io   ,method(d   ,s  ));
+    BOOST_TEST_EQUAL(e_numeric_io   ,method(d   ,cp ));
+    BOOST_TEST_EQUAL(e_numeric_io   ,method(d   ,ccp));
+    BOOST_TEST_EQUAL(e_stream       ,method(d   ,x  ));
 
-    BOOST_TEST_EQUAL(e_direct,  method(d, d));
-    BOOST_TEST_EQUAL(e_direct,  method(i, d));
-    BOOST_TEST_EQUAL(e_numeric, method(s, d));
-    BOOST_TEST_EQUAL(e_numeric, method(cp, d));
-    BOOST_TEST_EQUAL(e_numeric, method(ccp, d));
-    BOOST_TEST_EQUAL(e_stream,  method(x, d));
+    BOOST_TEST_EQUAL(e_both_numeric ,method(d   ,d  ));
+    BOOST_TEST_EQUAL(e_both_numeric ,method(i   ,d  ));
+    BOOST_TEST_EQUAL(e_numeric_io   ,method(s   ,d  ));
+    BOOST_TEST_EQUAL(e_numeric_io   ,method(cp  ,d  ));
+    BOOST_TEST_EQUAL(e_numeric_io   ,method(ccp ,d  ));
+    BOOST_TEST_EQUAL(e_stream       ,method(x   ,d  ));
 
     // Test which conversion is used for type std::string.
 
-    BOOST_TEST_EQUAL(e_numeric, method(s, d));
-    BOOST_TEST_EQUAL(e_numeric, method(s, i));
-    BOOST_TEST_EQUAL(e_direct,  method(s, s));
-    BOOST_TEST_EQUAL(e_direct,  method(s, ccp));
-    BOOST_TEST_EQUAL(e_stream,  method(s, x));
+    BOOST_TEST_EQUAL(e_numeric_io   ,method(s   ,d  ));
+    BOOST_TEST_EQUAL(e_numeric_io   ,method(s   ,i  ));
+    BOOST_TEST_EQUAL(e_direct       ,method(s   ,s  ));
+    BOOST_TEST_EQUAL(e_stream       ,method(s   ,ccp));
+    BOOST_TEST_EQUAL(e_stream       ,method(s   ,x  ));
 
-    BOOST_TEST_EQUAL(e_numeric, method(d, s));
-    BOOST_TEST_EQUAL(e_numeric, method(i, s));
-    BOOST_TEST_EQUAL(e_direct,  method(s, s));
-    BOOST_TEST_EQUAL(e_stream,  method(ccp, s));
-    BOOST_TEST_EQUAL(e_stream,  method(x, s));
-
-    BOOST_TEST_EQUAL(e_stream , method(s, (char volatile*)(0)));
+    BOOST_TEST_EQUAL(e_numeric_io   ,method(d   ,s  ));
+    BOOST_TEST_EQUAL(e_numeric_io   ,method(i   ,s  ));
+    BOOST_TEST_EQUAL(e_direct       ,method(s   ,s  ));
+    BOOST_TEST_EQUAL(e_direct       ,method(ccp ,s  ));
+    BOOST_TEST_EQUAL(e_stream       ,method(x   ,s  ));
 
     // Not convertible: stream_cast() forbids conversion to pointer.
-    BOOST_TEST_EQUAL(e_stream , method(cp, ccp));
+    BOOST_TEST_EQUAL(e_stream       ,method(ccp ,cp ));
 
     // Not convertible: value_cast() forbids conversion to pointer.
-    BOOST_TEST_EQUAL(e_direct, method(ccp, cp));
+    BOOST_TEST_EQUAL(e_direct       ,method(cp  ,ccp));
+
+    BOOST_TEST_EQUAL(e_stream       ,method(s   ,(char volatile*)(0)));
 
     n_d_c = value_cast<NotDefaultConstructible>(n_d_c);
     n_d_c = value_cast(n_d_c, n_d_c);
@@ -149,10 +149,27 @@ int test_main(int, char*[])
     d = value_cast(ccp, d);
     BOOST_TEST_EQUAL(d, 2.71828);
 
-    // A decent compiler would give a warning here:
-//    i = value_cast<int>(d);
-    // Alternatively, boost::numeric_cast might be used to convert
-    // between arithmetic types.
+    // Forbidden narrowing conversions.
+
+    // A good compiler should warn about this conversion.
+//    value_cast<unsigned int>(-1);
+
+#if !defined __BORLANDC__
+    BOOST_TEST_THROW
+        (i = value_cast<int>(d)
+        ,std::runtime_error
+        ,"Value not preserved converting 2.71828 to 2 ."
+        );
+#endif // !defined __BORLANDC__
+
+    // This should throw according to the boost documentation, but
+    // it does not.
+    i = boost::numeric_cast<int>(2.71828);
+
+    // This conversion should work: value is exactly preserved.
+
+    i = value_cast<int>(2.0);
+    BOOST_TEST_EQUAL(i, 2);
 
     d = value_cast(i, d);
     BOOST_TEST_EQUAL(d, 2.0);
@@ -341,7 +358,7 @@ int extra_tests0()
 }
 
 /// These extra tests were originally used for template function
-/// stream_cast(), but represent cases for which value_cast() seems
+/// stream_cast(), but represent cases for which value_cast() is
 /// preferable.
 
 int extra_tests1()
