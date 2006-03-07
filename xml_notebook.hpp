@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xml_notebook.hpp,v 1.10 2006-03-07 14:30:29 chicares Exp $
+// $Id: xml_notebook.hpp,v 1.11 2006-03-07 18:10:35 chicares Exp $
 
 #ifndef xml_notebook_hpp
 #define xml_notebook_hpp
@@ -266,31 +266,48 @@ class WXDLLEXPORT wxControlWithItems;
 
 namespace model_view_controller{} // doxygen workaround.
 
-// Text controls are validated when they lose focus. For at least one
-// (and perhaps all) of the platforms wx supports, it is not possible
-// to block another control from gaining focus when the control losing
-// focus is determined to be invalid, so it is necessary to track
-// focus here in data members.
-//
-// Data member hold_focus_window_ points to a control that should
-// retain focus because its contents are invalid.
-//
-// Data member old_focused_window_ points to the window that last lost
-// focus--unless it's a 'Cancel' button, which gains focus without
-// triggering validation of the control that lost focus.
-
-// Bind() associates a string key (shared with the Model) with a
-// string in data member transfer_data_, the latter being passed by
-// non-const reference because its identity is important as well as
-// its value.
-
-// DiagnosticsWindow() returns a wxStaticText& where a wxWindow& might
-// seem more general. Rationale: the implementation uses wxStaticText,
-// whose contents can be written only with GetLabel(); other controls
-// that might be used instead may implement GetLabel() differently.
-//
-// INELEGANT !! It would be better to write diagnostics to a custom
-// stream.
+/// Design notes for class XmlNotebook.
+///
+/// TODO ?? Document every member here.
+///
+/// Bind() associates a string key (shared with the Model) with a
+/// string in data member transfer_data_, the latter being passed by
+/// non-const reference because its identity is important as well as
+/// its value.
+///
+/// DiagnosticsWindow() returns a wxStaticText& where a wxWindow&
+/// might seem more general. Rationale: the implementation uses
+/// wxStaticText, whose contents can be written only with GetLabel();
+/// other controls that might be used instead may implement GetLabel()
+/// differently.
+///
+/// INELEGANT !! It would be better to write diagnostics to a custom
+/// stream.
+///
+/// Data members that relate entities shared by Model and View--those
+/// for which a Transferor exists.
+///
+/// transfer_data_ maps each name shared by Model and View to a string
+/// that buffers the contents of controls in the View.
+///
+/// cached_transfer_data_ holds the prior contents of transfer_data_
+/// when the latter is refreshed. This caching makes it possible to
+/// determine which controls have changed.
+///
+/// Data members for managing focus.
+///
+/// Text controls are validated when they lose focus. For at least one
+/// (and perhaps all) of the platforms wx supports, it is not possible
+/// to block another control from gaining focus when the control
+/// losing focus is determined to contain invalid input, so it is
+/// necessary to track focus here in data members.
+///
+/// Data member hold_focus_window_ points to a control that should
+/// retain focus because its contents are invalid.
+///
+/// Data member old_focused_window_ points to the window that last lost
+/// focus--unless it's a 'Cancel' button, which gains focus without
+/// triggering validation of the control that lost focus.
 
 class XmlNotebook
     :public wxDialog
