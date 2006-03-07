@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xml_notebook.cpp,v 1.16 2006-01-29 13:52:01 chicares Exp $
+// $Id: xml_notebook.cpp,v 1.17 2006-03-07 14:30:29 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -146,9 +146,16 @@ XmlNotebook::XmlNotebook(wxWindow* parent, Input& input)
     // the input class. Some input-class members may not be bound to
     // any control for a particular xml resource dialog.
     std::vector<std::string>::const_iterator i;
-    for(i = input_.member_names().begin(); i != input_.member_names().end(); ++i)
+    for
+        (i = input_.member_names().begin()
+        ;i != input_.member_names().end()
+        ;++i
+        )
         {
-        Bind(*i, transfer_data_[*i] = input_[*i].str());
+        if(FindWindow(XRCID(i->c_str())))
+            {
+            Bind(*i, transfer_data_[*i] = input_[*i].str());
+            }
         }
 }
 
@@ -167,18 +174,8 @@ XmlNotebook::~XmlNotebook()
 //
 void XmlNotebook::Bind(std::string const& name, std::string& data) const
 {
-    wxWindow* window = FindWindow(XRCID(name.c_str()));
-    // TODO ?? Don't throw--this isn't actually failure. Rather,
-    // it's how we can get a complete list of controls that we have
-    // input items for.
-    if(!window)
-        {
-// This is not an error.
-//        warning() << "No control named '" << name << "'." << LMI_FLUSH;;
-        return;
-        }
-    Transferor t(data, name);
-    window->SetValidator(t);
+    Transferor transferor(data, name);
+    WindowFromXrcName<wxWindow>(name).SetValidator(transferor);
 }
 
 void XmlNotebook::ConditionallyEnable()
@@ -502,16 +499,16 @@ void XmlNotebook::EnsureOptimalFocus()
     LMI_ASSERT(f && f->IsEnabled());
 }
 
-// OnUpdateGUI() doesn't handle focus changes, so this function is
-// needed for text-control validation. It validates a child control
-// that has already lost focus; wx provides no way to perform the
-// validation before another control irrevocably begins to gain
-// focus.
-//
-// WX !! It seems surprising that calling GetWindow() on the
-// wxChildFocusEvent argument doesn't return the same thing as
-// FindFocus(): instead, it returns a pointer to the notebook tab.
-//
+/// OnUpdateGUI() doesn't handle focus changes, so this function is
+/// needed for text-control validation. It validates a child control
+/// that has already lost focus; wx provides no way to perform the
+/// validation before another control irrevocably begins to gain
+/// focus.
+///
+/// WX !! It seems surprising that calling GetWindow() on the
+/// wxChildFocusEvent argument doesn't return the same thing as
+/// FindFocus(): instead, it returns a pointer to the notebook tab.
+
 void XmlNotebook::OnChildFocus(wxChildFocusEvent&)
 {
     if(updates_blocked_)
@@ -701,24 +698,25 @@ void XmlNotebook::OnUpdateGUI(wxUpdateUIEvent& event)
     cached_transfer_data_ = transfer_data_;
 
     DiagnosticsWindow().SetLabel("");
-    std::vector<std::string>::const_iterator i;
     std::vector<std::string> names_of_changed_controls;
-    for(i = input_.member_names().begin(); i != input_.member_names().end(); ++i)
+    std::map<std::string,std::string>::const_iterator i;
+    for(i = transfer_data_.begin(); i != transfer_data_.end(); ++i)
         {
+        std::string const& name = i->first;
         try
             {
             if
-                (   CurrentPage().FindWindow(XRCID(i->c_str()))
-                &&  input_[*i].str() != map_lookup(transfer_data_, *i)
+                (   CurrentPage().FindWindow(XRCID(name.c_str()))
+                &&  input_[name].str() != i->second
                 )
                 {
-                names_of_changed_controls.push_back(*i);
-                input_[*i] = map_lookup(transfer_data_, *i);
+                names_of_changed_controls.push_back(name);
+                input_[name] = i->second;
                 }
             }
         catch(std::exception const& event)
             {
-            DiagnosticsWindow().SetLabel(*i + ": " + event.what());
+            DiagnosticsWindow().SetLabel(name + ": " + event.what());
             }
         }
 

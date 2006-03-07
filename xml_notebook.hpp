@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xml_notebook.hpp,v 1.9 2006-01-29 13:52:01 chicares Exp $
+// $Id: xml_notebook.hpp,v 1.10 2006-03-07 14:30:29 chicares Exp $
 
 #ifndef xml_notebook_hpp
 #define xml_notebook_hpp
@@ -91,40 +91,40 @@ class WXDLLEXPORT wxControlWithItems;
 ///
 /// This approach may be okay for dialogs with no interdependency
 /// among controls, such as {name, address, city}. But if dependencies
-/// are present, where are they coded? In the paradigm
-///  - input is managed by dialogs
-///  - dialogs are in distinct translation units
-///  - dialogs have controls
-///  - controls have properties or event handlers
-/// it seems natural to code dependencies in event handlers. Logic to
-/// validate input is then scattered across many functions in many
+/// are present, where are they coded? In the event-driven paradigm:
+///  - input is managed by dialogs;
+///  - dialogs are in distinct translation units;
+///  - dialogs have controls;
+///  - controls have properties or event handlers;
+/// and it seems natural to code dependencies in event handlers. Logic
+/// to validate input is then scattered across many functions in many
 /// GUI-dependent translation units. If it later becomes necessary to
 /// validate input from another source such as a web server, or if the
 /// application is migrated to a different GUI framework, then all the
 /// validation code must be factored out of the GUI event handlers,
-/// which is no simple task. MVC prevents these problems.
+/// which is no simple task. MVC can prevent these problems.
 ///
 /// Separation of concerns.
 ///
-/// Everything is factored into three distinct classes with minimal
-/// interdependencies. Ideally,
+/// In this MVC implementation, everything is factored into three
+/// distinct classes with minimal interdependencies. Ideally,
 ///  - only the Model knows problem-domain rules;
 ///  - only the View knows which data a particular user sees, or
 ///      what controls represent them;
 ///  - the controller knows nothing except how to work with Models and
 ///      Views generically;
 /// and this stringent separation of concerns makes the implementation
-/// smaller, more correct, and easier to understand and maintain, yet
-/// flexible. This ideal is not completely achieved here: see the
-/// "Shortcomings" section below.
+/// smaller, more likely to be correct, and easier to understand and
+/// maintain, yet flexible. This ideal is not completely achieved
+/// here: see the "Shortcomings" section below.
 ///
 /// Model: A class that contains all input parameters as data members,
 /// and implements all problem-domain rules. Parameters are UDTs that
 /// know what values are valid (date within some range, e.g.). One
-/// control's valid range or enablement often depends on another's
-/// value; member functions work with the parameter UDTs to handle
-/// that. One could wish for a prolog inference engine integrated with
-/// C++, because this is all about backward chaining over Horn clauses.
+/// control's valid range or enablement may depend on another's value;
+/// member functions work with the parameter UDTs to handle that. One
+/// could wish for a prolog inference engine integrated with C++,
+/// because this is all about backward chaining over Horn clauses.
 ///
 /// Each UDT embodies the desired enablement state of the associated
 /// control. Each numeric UDT embodies a range of allowable values.
@@ -158,11 +158,15 @@ class WXDLLEXPORT wxControlWithItems;
 /// either of which forces an undesirable dependency between the View
 /// and the Model.
 ///
+/// TODO ?? At least for now, control names must not be duplicated:
+/// only one control can be bound to a data member in the Model. Is
+/// this too restrictive?
+///
 /// TODO ?? It appears that the order of enumerators in a wxRadioBox
 /// must also match the Model's ordering, which seems too restrictive.
 ///
 /// Control types must be compatible with data types. Some data types
-/// offer a choice:
+/// are compatible with more than one control type:
 ///  - numeric     UDTs: wxTextCtrl or perhaps wxSpinCtrl
 ///  - enumerative UDTs: wxRadioBox or a wxControlWithItems derivative
 /// while others naturally map to a single control type:
@@ -188,10 +192,12 @@ class WXDLLEXPORT wxControlWithItems;
 /// to display a wxRadioBox depends on the number of enumerators and
 /// the length of each one's string name. And it does prevent nasty
 /// surprises, e.g., if one skin presents the names of all chemical
-/// elements in a wxComboBox, and another tries to use a wxRadioBox.
-/// However, it also creates a regrettable dependency between the
-/// Model and the View, so perhaps this design decision should be
-/// reconsidered.
+/// elements in a wxComboBox, and another tries to use a wxRadioBox
+/// that requires astonishingly more space on the screen.
+///
+/// TODO ?? However, treating wxRadioBox as a special case creates a
+/// regrettable dependency between the Model and the View, so perhaps
+/// this design decision should be reconsidered.
 ///
 /// This data-driven design precludes the use of wxButton in the View.
 /// Other controls are stateful substantives, but pushbuttons are
@@ -201,7 +207,7 @@ class WXDLLEXPORT wxControlWithItems;
 /// appropriate action. In practice, lmi hasn't needed pushbuttons
 /// other than the usual {OK, Cancel, Help}, which are hardwired.
 ///
-/// [Here, I'd like to say:
+/// [TODO ?? Here, I'd like to say:
 /// Controller: A template class with a Model parameter
 ///   Controller<ConcreteModel> : public wxDialog
 /// but can't yet; meanwhile...]
@@ -209,41 +215,46 @@ class WXDLLEXPORT wxControlWithItems;
 /// Controller: A class derived from wxDialog that mediates between
 /// the Model and the View.
 ///
-/// The Controller's ctor gets the Model's list of data members and
-/// pairs them with IDs in the '.xrc' file, throwing an exception if
-/// the names don't match. The correspondence must be one-to-one, but
-/// but not necessarily onto: a View doesn't have to offer a control
-/// for every entity in the Model. Class Transferor, implemented and
-/// documented elsewhere, performs this pairing and implements
-/// bidirectional data transfer.
+/// The Controller's ctor maps Model and View entities: it gets the
+/// Model's list of data members and pairs them with IDs in the View's
+/// '.xrc' file. This relation need not be onto in either direction:
+/// a particular View may well exclude some Model entities, and may
+/// also have entities (such as static-text labels) that are not
+/// present in the Model. However, for the intersection of the sets of
+/// Model and View entities, the relation is one-to-one and onto.
+/// Class Transferor, implemented and documented elsewhere, performs
+/// this pairing and implements bidirectional data transfer.
 ///
 /// The Controller essentially polls controls and reacts to changes in
 /// their values. The polling is performed within wx, which generates
 /// wxUpdateUIEvent pseudoevents. The resemblance to an event-driven
 /// style is accidental: a fundamentally event-driven Controller would
 /// need to anticipate all the value-change events that the View might
-/// beget, and would suffer from the problems described above. Still,
-/// this wxUpdateUIEvent-driven Controller treats notebook-page-change
-/// and focus events as such, so that it can force a wxTextCtrl with
-/// invalid data to retain focus.
+/// beget, and would suffer from the problems described above. Along
+/// with wxUpdateUIEvent pseudoevents, the Controller also handles
+/// focus and notebook-page-change events, merely so that it can force
+/// a wxTextCtrl with invalid data to retain focus--a capability that
+/// wx does not natively provide.
 ///
 /// When control values change, the Controller passes them to the
 /// Model. The Model validates the change (described separately below)
 /// and updates its UDT members to reflect enablement and constraints
-/// on numeric ranges or enumerator availability. Then the Controller
-/// updates the View to correspond to the updated Model. Enablement
-/// and constraints (for example, the choices offered in a wxComboBox)
-/// as well as values may change in the View.
+/// on numeric ranges or enumerator allowability. Then the Controller
+/// updates the View to correspond to the updated Model, potentially
+/// changing indicia of enablement or of constraints (such as the
+/// choices available in a wxComboBox) as well as values in the View.
 ///
 /// Validation.
 ///
-/// [to be written--not well implemented yet]
+/// [TODO ?? to be written--not well implemented yet]
 ///
 /// Shortcomings.
 ///
 /// These shortcomings are explained in detail above:
+///  - only one control may be mapped to a Model data member;
 ///  - wxButton is not supported;
 ///  - for wxRadioBox, the View must know the Model's enumerators;
+///  - for wxRadioBox, enumerators may not be reordered;
 ///  - the Model dictates enumeration strings: Views can't vary them;
 ///  - numeric validation is not yet completely implemented;
 ///  - the Controller should take the Model as a template parameter.
@@ -287,8 +298,6 @@ class XmlNotebook
     ,virtual private obstruct_slicing<XmlNotebook>
 {
     friend class mvc_test;
-
-    typedef std::map<std::string,std::string> string_map;
 
   public:
     XmlNotebook(wxWindow* parent, Input& input);
@@ -356,8 +365,8 @@ class XmlNotebook
 
     bool updates_blocked_;
 
-    string_map transfer_data_;
-    string_map cached_transfer_data_;
+    std::map<std::string,std::string> transfer_data_;
+    std::map<std::string,std::string> cached_transfer_data_;
 
     DECLARE_EVENT_TABLE()
 };
