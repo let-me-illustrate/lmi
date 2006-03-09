@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustration_view.hpp,v 1.14 2006-03-09 01:58:18 chicares Exp $
+// $Id: illustration_view.hpp,v 1.15 2006-03-09 12:37:24 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -86,15 +86,12 @@ class IllustrationView
     // ViewEx overrides.
     bool OnCreate              (wxDocument*, long);
 
-// TODO ?? WX NAME CONFLICT This apparently doesn't work anyway.
-    void OnMenuOpen            (wxMenuEvent&);
-
+    void UponMenuOpen            (wxMenuEvent&);
     void UponPreviewPdf        (wxCommandEvent&);
     void UponPrintPdf          (wxCommandEvent&);
     void UponProperties        (wxCommandEvent&);
     void UponUpdateFileSave    (wxUpdateUIEvent&);
-// TODO ?? WX NAME CONFLICT This apparently doesn't work anyway.
-    void OnUpdateFileSaveAs    (wxUpdateUIEvent&);
+    void UponUpdateFileSaveAs    (wxUpdateUIEvent&);
     void UponUpdateInapplicable(wxUpdateUIEvent&);
     void UponUpdateProperties  (wxUpdateUIEvent&);
 

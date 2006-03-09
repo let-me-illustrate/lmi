@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.358 2006-03-09 01:58:18 chicares Exp $
+// $Id: ChangeLog,v 1.359 2006-03-09 12:37:24 chicares Exp $
 
 MAINTENANCE
 
@@ -6465,4 +6465,17 @@ Rename event handlers. As these messages:
   http://lists.gnu.org/archive/html/lmi/2005-11/msg00037.html
 explain, this change prevents conflicts with wx names, even though
 it may be speculated that such conflicts are benign.
+
+20060309T1237Z <chicares@cox.net> [1207]
+
+  census_view.cpp
+  census_view.hpp
+  illustration_view.cpp
+  illustration_view.hpp
+  main_wx.cpp
+  main_wx.hpp
+  previewframe_ex.cpp
+  xml_notebook.cpp
+  xml_notebook.hpp
+Resolve conflicts with wx names.
 

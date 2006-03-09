@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xml_notebook.cpp,v 1.18 2006-03-09 01:58:18 chicares Exp $
+// $Id: xml_notebook.cpp,v 1.19 2006-03-09 12:37:24 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -102,9 +102,9 @@ wxEventType const wxEVT_REFOCUS_INVALID_CONTROL = wxNewEventType();
 
 // Entries alphabetized by function name.
 BEGIN_EVENT_TABLE(XmlNotebook, wxDialog)
-    EVT_BUTTON(wxID_OK, XmlNotebook::OnOK)
+    EVT_BUTTON(wxID_OK, XmlNotebook::OponOK)
     EVT_CHILD_FOCUS(XmlNotebook::UponChildFocus)
-    EVT_INIT_DIALOG(XmlNotebook::OnInitDialog)
+    EVT_INIT_DIALOG(XmlNotebook::UponInitDialog)
     EVT_NOTEBOOK_PAGE_CHANGED(XRCID("input_notebook"), XmlNotebook::UponPageChanged)
     EVT_NOTEBOOK_PAGE_CHANGING(XRCID("input_notebook"), XmlNotebook::UponPageChanging)
     EVT_REFOCUS_INVALID_CONTROL(-1, XmlNotebook::UponRefocusInvalidControl)
@@ -570,11 +570,11 @@ void XmlNotebook::UponChildFocus(wxChildFocusEvent&)
         }
 }
 
-// TODO ?? WX NAME CONFLICT Should this call Skip()?
+// TODO ?? As this is written, it can't call Skip() because it
+// changes the value of updates_blocked_ between the two actions
+// that the base-class handler would perform. Rethink this.
 
-// TODO ?? Or overload TransferDataToWindow(); or derive from
-// wxNotebook instead of wxDialog.
-void XmlNotebook::OnInitDialog(wxInitDialogEvent&)
+void XmlNotebook::UponInitDialog(wxInitDialogEvent&)
 {
     Setup(GetChildren());
 
@@ -584,11 +584,12 @@ void XmlNotebook::OnInitDialog(wxInitDialogEvent&)
     UpdateWindowUI(wxUPDATE_UI_RECURSE);
 }
 
-// TODO ?? WX NAME CONFLICT Should this call Skip()?
+// TODO ?? As this is written, it can't call Skip(). This design
+// should be rethought. It seems fragile to depend on the base-class
+// return code being initialized to zero. Anyway, this function exists
+// only because of a kludge that should be reworked.
 
-// TODO ?? Remove this function when the kludge it contains becomes
-// needless.
-void XmlNotebook::OnOK(wxCommandEvent& event)
+void XmlNotebook::OponOK(wxCommandEvent& event)
 {
     wxDialog::OnOK(event);
     if(0 == GetReturnCode())
