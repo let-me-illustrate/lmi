@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: previewframe_ex.cpp,v 1.3 2006-03-09 01:58:18 chicares Exp $
+// $Id: previewframe_ex.cpp,v 1.4 2006-03-09 12:37:24 chicares Exp $
 
 // This implementation is a derived work based on wxWindows code, viz.
 //   src/common/prntbase.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -74,14 +74,9 @@ void PreviewFrameEx::Initialize()
     wxTheApp->GetTopWindow()->Show(false);
 }
 
-/// TODO ?? WX NAME CONFLICT
-/// This augments wxPreviewFrame::OnCloseWindow(), but isn't a
-/// complete replacement. It calls that base-class function
-/// explicitly; would Skip() work here?
-
 void PreviewFrameEx::UponCloseWindow(wxCloseEvent& event)
 {
-    wxPreviewFrame::OnCloseWindow(event);
     wxTheApp->GetTopWindow()->Show(true);
+    event.Skip();
 }
 

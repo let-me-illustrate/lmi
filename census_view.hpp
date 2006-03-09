@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: census_view.hpp,v 1.15 2006-03-09 01:58:18 chicares Exp $
+// $Id: census_view.hpp,v 1.16 2006-03-09 12:37:24 chicares Exp $
 
 #ifndef census_view_hpp
 #define census_view_hpp
@@ -66,9 +66,6 @@ class CensusView
     virtual wxWindow* CreateChildWindow();
     virtual wxIcon Icon() const;
     virtual wxMenuBar* MenuBar() const;
-
-    // TODO ?? WX NAME CONFLICT Can this be expunged?
-    void OnUpdateFileSaveAs       (wxUpdateUIEvent&);
 
     void UponAddCell              (wxCommandEvent&);
     void UponBeginLabelEdit       (wxListEvent&); // TODO ?? Expunge.

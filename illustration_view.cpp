@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustration_view.cpp,v 1.36 2006-03-09 01:58:18 chicares Exp $
+// $Id: illustration_view.cpp,v 1.37 2006-03-09 12:37:24 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -65,9 +65,9 @@ BEGIN_EVENT_TABLE(IllustrationView, ViewEx)
     EVT_MENU(wxID_PREVIEW                   ,IllustrationView::UponPreviewPdf)
     EVT_MENU(wxID_PRINT                     ,IllustrationView::UponPrintPdf  )
     EVT_UPDATE_UI(wxID_SAVE                 ,IllustrationView::UponUpdateFileSave)
-//    EVT_UPDATE_UI(wxID_SAVEAS               ,IllustrationView::OnUpdateFileSaveAs)
-//    EVT_UPDATE_UI(XRCID("wxID_SAVEAS"      ),IllustrationView::OnUpdateFileSaveAs)
-    EVT_MENU_OPEN(                           IllustrationView::OnMenuOpen  )
+//    EVT_UPDATE_UI(wxID_SAVEAS               ,IllustrationView::UponUpdateFileSaveAs)
+//    EVT_UPDATE_UI(XRCID("wxID_SAVEAS"      ),IllustrationView::UponUpdateFileSaveAs)
+    EVT_MENU_OPEN(                           IllustrationView::UponMenuOpen  )
     EVT_UPDATE_UI(XRCID("edit_cell"        ),IllustrationView::UponUpdateProperties)
 
 // There has to be a better way.
@@ -193,9 +193,7 @@ bool IllustrationView::OnCreate(wxDocument* doc, long flags)
     return true;
 }
 
-// TODO ?? WX NAME CONFLICT This apparently doesn't work anyway.
-
-void IllustrationView::OnMenuOpen(wxMenuEvent&)
+void IllustrationView::UponMenuOpen(wxMenuEvent&)
 {
 // TODO ?? WX !! Never gets called. Does this need to be in the document class?
     warning()
@@ -259,9 +257,7 @@ void IllustrationView::UponUpdateFileSave(wxUpdateUIEvent& e)
     e.Enable(!is_phony_ && document().IsModified());
 }
 
-// TODO ?? WX NAME CONFLICT Can this be fixed?
-
-void IllustrationView::OnUpdateFileSaveAs(wxUpdateUIEvent& e)
+void IllustrationView::UponUpdateFileSaveAs(wxUpdateUIEvent& e)
 {
 // TODO ?? Doesn't seem to get called.
     warning()

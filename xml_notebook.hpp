@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xml_notebook.hpp,v 1.12 2006-03-09 01:58:18 chicares Exp $
+// $Id: xml_notebook.hpp,v 1.13 2006-03-09 12:37:24 chicares Exp $
 
 #ifndef xml_notebook_hpp
 #define xml_notebook_hpp
@@ -335,17 +335,8 @@ class XmlNotebook
     bool ItemBoxNeedsRefreshing(mc_enum_base*, wxControlWithItems&);
 
     void UponChildFocus            (wxChildFocusEvent&);
-
-// TODO ?? WX NAME CONFLICT Should this call Skip()?
-    // TODO ?? This hides wxWindow::OnInitDialog. A different name
-    // should be used here.
-    void OnInitDialog            (wxInitDialogEvent&);
-
-// TODO ?? WX NAME CONFLICT Should this call Skip()?
-    // TODO ?? This hides wxDialog::OnOK. A different name should
-    // be used here.
-    void OnOK                    (wxCommandEvent&   );
-
+    void UponInitDialog            (wxInitDialogEvent&);
+    void OponOK                    (wxCommandEvent&   );
     void UponPageChanged           (wxNotebookEvent&  );
     void UponPageChanging          (wxNotebookEvent&  );
     void UponRefocusInvalidControl (wxCommandEvent&   );
