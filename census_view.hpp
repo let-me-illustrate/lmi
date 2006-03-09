@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: census_view.hpp,v 1.14 2006-01-29 13:52:00 chicares Exp $
+// $Id: census_view.hpp,v 1.15 2006-03-09 01:58:18 chicares Exp $
 
 #ifndef census_view_hpp
 #define census_view_hpp
@@ -67,27 +67,27 @@ class CensusView
     virtual wxIcon Icon() const;
     virtual wxMenuBar* MenuBar() const;
 
-// TODO ?? expunge the first:
-    void OnBeginLabelEdit       (wxListEvent&);
+    // TODO ?? WX NAME CONFLICT Can this be expunged?
+    void OnUpdateFileSaveAs       (wxUpdateUIEvent&);
 
-    void OnAddCell              (wxCommandEvent&);
-    void OnDeleteCells          (wxCommandEvent&);
-    void OnEditCell             (wxCommandEvent&);
-    void OnEditClass            (wxCommandEvent&);
-    void OnEditCase             (wxCommandEvent&);
-    void OnExpandColWidths      (wxCommandEvent&);
-    void OnShrinkColWidths      (wxCommandEvent&);
-    void OnPasteCensus          (wxCommandEvent&);
-    void OnRightClick0          (wxCommandEvent&);
-    void OnRightClick1          (wxMouseEvent&);
-    void OnRightClick2          (wxContextMenuEvent&);
-    void OnPrintCell            (wxCommandEvent&);
-    void OnPrintCase            (wxCommandEvent&);
-    void OnRunCell              (wxCommandEvent&);
-    void OnRunCase              (wxCommandEvent&);
-    void OnRunCaseToSpreadsheet (wxCommandEvent&);
-    void OnUpdateApplicable     (wxUpdateUIEvent&);
-    void OnUpdateFileSaveAs     (wxUpdateUIEvent&);
+    void UponAddCell              (wxCommandEvent&);
+    void UponBeginLabelEdit       (wxListEvent&); // TODO ?? Expunge.
+    void UponDeleteCells          (wxCommandEvent&);
+    void UponEditCell             (wxCommandEvent&);
+    void UponEditClass            (wxCommandEvent&);
+    void UponEditCase             (wxCommandEvent&);
+    void UponExpandColWidths      (wxCommandEvent&);
+    void UponShrinkColWidths      (wxCommandEvent&);
+    void UponPasteCensus          (wxCommandEvent&);
+    void UponRightClick0          (wxCommandEvent&);
+    void UponRightClick1          (wxMouseEvent&);
+    void UponRightClick2          (wxContextMenuEvent&);
+    void UponPrintCell            (wxCommandEvent&);
+    void UponPrintCase            (wxCommandEvent&);
+    void UponRunCell              (wxCommandEvent&);
+    void UponRunCase              (wxCommandEvent&);
+    void UponRunCaseToSpreadsheet (wxCommandEvent&);
+    void UponUpdateApplicable     (wxUpdateUIEvent&);
 
     bool DoAllCells  (e_emission_target emission_target = emit_to_nowhere);
 

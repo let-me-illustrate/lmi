@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: text_view.cpp,v 1.7 2006-01-29 13:52:00 chicares Exp $
+// $Id: text_view.cpp,v 1.8 2006-03-09 01:58:18 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -50,18 +50,18 @@
 IMPLEMENT_DYNAMIC_CLASS(TextEditView, ViewEx)
 
 BEGIN_EVENT_TABLE(TextEditView, ViewEx)
-    EVT_MENU(XRCID("test_app_status_alert"         ),TextEditView::OnTestAppStatus)
-    EVT_MENU(XRCID("test_app_warning_alert"        ),TextEditView::OnTestAppWarning)
-    EVT_MENU(XRCID("test_app_hobsons_choice_alert" ),TextEditView::OnTestAppHobsons)
-    EVT_MENU(XRCID("test_app_fatal_error_alert"    ),TextEditView::OnTestAppFatal)
-    EVT_MENU(XRCID("test_app_standard_exception"   ),TextEditView::OnTestAppStandardException)
-    EVT_MENU(XRCID("test_app_arbitrary_exception"  ),TextEditView::OnTestAppArbitraryException)
-    EVT_MENU(XRCID("test_lib_status_alert"         ),TextEditView::OnTestLibStatus)
-    EVT_MENU(XRCID("test_lib_warning_alert"        ),TextEditView::OnTestLibWarning)
-    EVT_MENU(XRCID("test_lib_hobsons_choice_alert" ),TextEditView::OnTestLibHobsons)
-    EVT_MENU(XRCID("test_lib_fatal_error_alert"    ),TextEditView::OnTestLibFatal)
-    EVT_MENU(XRCID("test_lib_standard_exception"   ),TextEditView::OnTestLibStandardException)
-    EVT_MENU(XRCID("test_lib_arbitrary_exception"  ),TextEditView::OnTestLibArbitraryException)
+    EVT_MENU(XRCID("test_app_status_alert"         ),TextEditView::UponTestAppStatus)
+    EVT_MENU(XRCID("test_app_warning_alert"        ),TextEditView::UponTestAppWarning)
+    EVT_MENU(XRCID("test_app_hobsons_choice_alert" ),TextEditView::UponTestAppHobsons)
+    EVT_MENU(XRCID("test_app_fatal_error_alert"    ),TextEditView::UponTestAppFatal)
+    EVT_MENU(XRCID("test_app_standard_exception"   ),TextEditView::UponTestAppStandardException)
+    EVT_MENU(XRCID("test_app_arbitrary_exception"  ),TextEditView::UponTestAppArbitraryException)
+    EVT_MENU(XRCID("test_lib_status_alert"         ),TextEditView::UponTestLibStatus)
+    EVT_MENU(XRCID("test_lib_warning_alert"        ),TextEditView::UponTestLibWarning)
+    EVT_MENU(XRCID("test_lib_hobsons_choice_alert" ),TextEditView::UponTestLibHobsons)
+    EVT_MENU(XRCID("test_lib_fatal_error_alert"    ),TextEditView::UponTestLibFatal)
+    EVT_MENU(XRCID("test_lib_standard_exception"   ),TextEditView::UponTestLibStandardException)
+    EVT_MENU(XRCID("test_lib_arbitrary_exception"  ),TextEditView::UponTestLibArbitraryException)
 END_EVENT_TABLE()
 
 TextEditView::TextEditView()
@@ -96,62 +96,62 @@ wxMenuBar* TextEditView::MenuBar() const
     return MenuBarFromXmlResource("text_view_menu");
 }
 
-void TextEditView::OnTestAppStatus(wxCommandEvent&)
+void TextEditView::UponTestAppStatus(wxCommandEvent&)
 {
     status()         << "Test status()"         << LMI_FLUSH;
 }
 
-void TextEditView::OnTestAppWarning(wxCommandEvent&)
+void TextEditView::UponTestAppWarning(wxCommandEvent&)
 {
     warning()        << "Test warning()"        << LMI_FLUSH;
 }
 
-void TextEditView::OnTestAppHobsons(wxCommandEvent&)
+void TextEditView::UponTestAppHobsons(wxCommandEvent&)
 {
     hobsons_choice() << "Test hobsons_choice()" << LMI_FLUSH;
 }
 
-void TextEditView::OnTestAppFatal(wxCommandEvent&)
+void TextEditView::UponTestAppFatal(wxCommandEvent&)
 {
     fatal_error()    << "Test fatal_error()"    << LMI_FLUSH;
 }
 
-void TextEditView::OnTestAppStandardException(wxCommandEvent&)
+void TextEditView::UponTestAppStandardException(wxCommandEvent&)
 {
     throw std::runtime_error("Test a standard exception.");
 }
 
-void TextEditView::OnTestAppArbitraryException(wxCommandEvent&)
+void TextEditView::UponTestAppArbitraryException(wxCommandEvent&)
 {
     throw "Test an arbitrary exception.";
 }
 
-void TextEditView::OnTestLibStatus(wxCommandEvent&)
+void TextEditView::UponTestLibStatus(wxCommandEvent&)
 {
     test_status();
 }
 
-void TextEditView::OnTestLibWarning(wxCommandEvent&)
+void TextEditView::UponTestLibWarning(wxCommandEvent&)
 {
     test_warning();
 }
 
-void TextEditView::OnTestLibHobsons(wxCommandEvent&)
+void TextEditView::UponTestLibHobsons(wxCommandEvent&)
 {
     test_hobsons_choice();
 }
 
-void TextEditView::OnTestLibFatal(wxCommandEvent&)
+void TextEditView::UponTestLibFatal(wxCommandEvent&)
 {
     test_fatal_error();
 }
 
-void TextEditView::OnTestLibStandardException(wxCommandEvent&)
+void TextEditView::UponTestLibStandardException(wxCommandEvent&)
 {
     test_standard_exception();
 }
 
-void TextEditView::OnTestLibArbitraryException(wxCommandEvent&)
+void TextEditView::UponTestLibArbitraryException(wxCommandEvent&)
 {
     test_arbitrary_exception();
 }

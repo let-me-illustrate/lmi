@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xml_notebook.cpp,v 1.17 2006-03-07 14:30:29 chicares Exp $
+// $Id: xml_notebook.cpp,v 1.18 2006-03-09 01:58:18 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -103,12 +103,12 @@ wxEventType const wxEVT_REFOCUS_INVALID_CONTROL = wxNewEventType();
 // Entries alphabetized by function name.
 BEGIN_EVENT_TABLE(XmlNotebook, wxDialog)
     EVT_BUTTON(wxID_OK, XmlNotebook::OnOK)
-    EVT_CHILD_FOCUS(XmlNotebook::OnChildFocus)
+    EVT_CHILD_FOCUS(XmlNotebook::UponChildFocus)
     EVT_INIT_DIALOG(XmlNotebook::OnInitDialog)
-    EVT_NOTEBOOK_PAGE_CHANGED(XRCID("input_notebook"), XmlNotebook::OnPageChanged)
-    EVT_NOTEBOOK_PAGE_CHANGING(XRCID("input_notebook"), XmlNotebook::OnPageChanging)
-    EVT_REFOCUS_INVALID_CONTROL(-1, XmlNotebook::OnRefocusInvalidControl)
-    EVT_UPDATE_UI(XRCID("dialog_containing_notebook"), XmlNotebook::OnUpdateGUI)
+    EVT_NOTEBOOK_PAGE_CHANGED(XRCID("input_notebook"), XmlNotebook::UponPageChanged)
+    EVT_NOTEBOOK_PAGE_CHANGING(XRCID("input_notebook"), XmlNotebook::UponPageChanging)
+    EVT_REFOCUS_INVALID_CONTROL(-1, XmlNotebook::UponRefocusInvalidControl)
+    EVT_UPDATE_UI(XRCID("dialog_containing_notebook"), XmlNotebook::UponUpdateGUI)
 END_EVENT_TABLE()
 
 // WX !! wxDIALOG_EX_CONTEXTHELP is unknown to wxxrc.
@@ -499,7 +499,7 @@ void XmlNotebook::EnsureOptimalFocus()
     LMI_ASSERT(f && f->IsEnabled());
 }
 
-/// OnUpdateGUI() doesn't handle focus changes, so this function is
+/// UponUpdateGUI() doesn't handle focus changes, so this function is
 /// needed for text-control validation. It validates a child control
 /// that has already lost focus; wx provides no way to perform the
 /// validation before another control irrevocably begins to gain
@@ -509,7 +509,7 @@ void XmlNotebook::EnsureOptimalFocus()
 /// wxChildFocusEvent argument doesn't return the same thing as
 /// FindFocus(): instead, it returns a pointer to the notebook tab.
 
-void XmlNotebook::OnChildFocus(wxChildFocusEvent&)
+void XmlNotebook::UponChildFocus(wxChildFocusEvent&)
 {
     if(updates_blocked_)
         {
@@ -570,6 +570,8 @@ void XmlNotebook::OnChildFocus(wxChildFocusEvent&)
         }
 }
 
+// TODO ?? WX NAME CONFLICT Should this call Skip()?
+
 // TODO ?? Or overload TransferDataToWindow(); or derive from
 // wxNotebook instead of wxDialog.
 void XmlNotebook::OnInitDialog(wxInitDialogEvent&)
@@ -581,6 +583,8 @@ void XmlNotebook::OnInitDialog(wxInitDialogEvent&)
     updates_blocked_ = false;
     UpdateWindowUI(wxUPDATE_UI_RECURSE);
 }
+
+// TODO ?? WX NAME CONFLICT Should this call Skip()?
 
 // TODO ?? Remove this function when the kludge it contains becomes
 // needless.
@@ -605,7 +609,7 @@ void XmlNotebook::OnOK(wxCommandEvent& event)
 }
 
 // TODO ?? Expunge? Aren't transfer and focus already managed elsewhere?
-void XmlNotebook::OnPageChanged(wxNotebookEvent& event)
+void XmlNotebook::UponPageChanged(wxNotebookEvent& event)
 {
     ConditionallyEnable();
     CurrentPage().TransferDataToWindow();
@@ -620,7 +624,7 @@ void XmlNotebook::OnPageChanged(wxNotebookEvent& event)
 
 // Called when page is about to change, but hasn't yet.
 //
-void XmlNotebook::OnPageChanging(wxNotebookEvent& event)
+void XmlNotebook::UponPageChanging(wxNotebookEvent& event)
 {
     // Do nothing until the notebook has been fully created.
     if(updates_blocked_)
@@ -665,13 +669,13 @@ void XmlNotebook::OnPageChanging(wxNotebookEvent& event)
     CurrentPage().TransferDataFromWindow();
 }
 
-void XmlNotebook::OnRefocusInvalidControl(wxCommandEvent&)
+void XmlNotebook::UponRefocusInvalidControl(wxCommandEvent&)
 {
     LMI_ASSERT(hold_focus_window_);
     hold_focus_window_->SetFocus();
 }
 
-void XmlNotebook::OnUpdateGUI(wxUpdateUIEvent& event)
+void XmlNotebook::UponUpdateGUI(wxUpdateUIEvent& event)
 {
     // Do nothing until the notebook has been fully created.
     if(updates_blocked_)
@@ -865,7 +869,7 @@ void XmlNotebook::ValidateTextControl(wxWindow* w)
         return;
         }
 
-    // Assume that OnUpdateGUI() has already been called.
+    // Assume that UponUpdateGUI() has already been called.
     if
         (input_[t->name()].cast_blithely<datum_base>()->is_valid
             (map_lookup(transfer_data_, t->name())

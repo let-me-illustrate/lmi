@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustration_view.cpp,v 1.35 2006-02-06 18:16:33 chicares Exp $
+// $Id: illustration_view.cpp,v 1.36 2006-03-09 01:58:18 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -61,30 +61,30 @@
 IMPLEMENT_DYNAMIC_CLASS(IllustrationView, ViewEx)
 
 BEGIN_EVENT_TABLE(IllustrationView, ViewEx)
-    EVT_MENU(XRCID("edit_cell"             ),IllustrationView::OnProperties)
-    EVT_MENU(wxID_PREVIEW                   ,IllustrationView::OnPreviewPdf)
-    EVT_MENU(wxID_PRINT                     ,IllustrationView::OnPrintPdf  )
-    EVT_UPDATE_UI(wxID_SAVE                 ,IllustrationView::OnUpdateFileSave)
+    EVT_MENU(XRCID("edit_cell"             ),IllustrationView::UponProperties)
+    EVT_MENU(wxID_PREVIEW                   ,IllustrationView::UponPreviewPdf)
+    EVT_MENU(wxID_PRINT                     ,IllustrationView::UponPrintPdf  )
+    EVT_UPDATE_UI(wxID_SAVE                 ,IllustrationView::UponUpdateFileSave)
 //    EVT_UPDATE_UI(wxID_SAVEAS               ,IllustrationView::OnUpdateFileSaveAs)
 //    EVT_UPDATE_UI(XRCID("wxID_SAVEAS"      ),IllustrationView::OnUpdateFileSaveAs)
     EVT_MENU_OPEN(                           IllustrationView::OnMenuOpen  )
-    EVT_UPDATE_UI(XRCID("edit_cell"        ),IllustrationView::OnUpdateProperties)
+    EVT_UPDATE_UI(XRCID("edit_cell"        ),IllustrationView::UponUpdateProperties)
 
 // There has to be a better way.
-    EVT_UPDATE_UI(XRCID("edit_class"       ),IllustrationView::OnUpdateInapplicable)
-    EVT_UPDATE_UI(XRCID("edit_case"        ),IllustrationView::OnUpdateInapplicable)
-    EVT_UPDATE_UI(XRCID("run_cell"         ),IllustrationView::OnUpdateInapplicable)
-    EVT_UPDATE_UI(XRCID("run_class"        ),IllustrationView::OnUpdateInapplicable)
-    EVT_UPDATE_UI(XRCID("run_case"         ),IllustrationView::OnUpdateInapplicable)
-    EVT_UPDATE_UI(XRCID("print_cell"       ),IllustrationView::OnUpdateInapplicable)
-    EVT_UPDATE_UI(XRCID("print_class"      ),IllustrationView::OnUpdateInapplicable)
-    EVT_UPDATE_UI(XRCID("print_case"       ),IllustrationView::OnUpdateInapplicable)
-    EVT_UPDATE_UI(XRCID("print_spreadsheet"),IllustrationView::OnUpdateInapplicable)
-    EVT_UPDATE_UI(XRCID("paste_census"     ),IllustrationView::OnUpdateInapplicable)
-    EVT_UPDATE_UI(XRCID("add_cell"         ),IllustrationView::OnUpdateInapplicable)
-    EVT_UPDATE_UI(XRCID("delete_cells"     ),IllustrationView::OnUpdateInapplicable)
-    EVT_UPDATE_UI(XRCID("expand_columns"   ),IllustrationView::OnUpdateInapplicable)
-    EVT_UPDATE_UI(XRCID("shrink_columns"   ),IllustrationView::OnUpdateInapplicable)
+    EVT_UPDATE_UI(XRCID("edit_class"       ),IllustrationView::UponUpdateInapplicable)
+    EVT_UPDATE_UI(XRCID("edit_case"        ),IllustrationView::UponUpdateInapplicable)
+    EVT_UPDATE_UI(XRCID("run_cell"         ),IllustrationView::UponUpdateInapplicable)
+    EVT_UPDATE_UI(XRCID("run_class"        ),IllustrationView::UponUpdateInapplicable)
+    EVT_UPDATE_UI(XRCID("run_case"         ),IllustrationView::UponUpdateInapplicable)
+    EVT_UPDATE_UI(XRCID("print_cell"       ),IllustrationView::UponUpdateInapplicable)
+    EVT_UPDATE_UI(XRCID("print_class"      ),IllustrationView::UponUpdateInapplicable)
+    EVT_UPDATE_UI(XRCID("print_case"       ),IllustrationView::UponUpdateInapplicable)
+    EVT_UPDATE_UI(XRCID("print_spreadsheet"),IllustrationView::UponUpdateInapplicable)
+    EVT_UPDATE_UI(XRCID("paste_census"     ),IllustrationView::UponUpdateInapplicable)
+    EVT_UPDATE_UI(XRCID("add_cell"         ),IllustrationView::UponUpdateInapplicable)
+    EVT_UPDATE_UI(XRCID("delete_cells"     ),IllustrationView::UponUpdateInapplicable)
+    EVT_UPDATE_UI(XRCID("expand_columns"   ),IllustrationView::UponUpdateInapplicable)
+    EVT_UPDATE_UI(XRCID("shrink_columns"   ),IllustrationView::UponUpdateInapplicable)
 END_EVENT_TABLE()
 
 // WX !! The html string must be initialized here, because passing an
@@ -169,6 +169,8 @@ wxMenuBar* IllustrationView::MenuBar() const
     return menu_bar;
 }
 
+// This virtual function calls the base-class version explicitly.
+
 bool IllustrationView::OnCreate(wxDocument* doc, long flags)
 {
     if(flags & LMI_WX_CHILD_DOCUMENT)
@@ -190,6 +192,8 @@ bool IllustrationView::OnCreate(wxDocument* doc, long flags)
     Run();
     return true;
 }
+
+// TODO ?? WX NAME CONFLICT This apparently doesn't work anyway.
 
 void IllustrationView::OnMenuOpen(wxMenuEvent&)
 {
@@ -224,17 +228,17 @@ void IllustrationView::OnMenuOpen(wxMenuEvent&)
         }
 }
 
-void IllustrationView::OnPreviewPdf(wxCommandEvent&)
+void IllustrationView::UponPreviewPdf(wxCommandEvent&)
 {
     Pdf("open");
 }
 
-void IllustrationView::OnPrintPdf(wxCommandEvent&)
+void IllustrationView::UponPrintPdf(wxCommandEvent&)
 {
     Pdf("print");
 }
 
-void IllustrationView::OnProperties(wxCommandEvent&)
+void IllustrationView::UponProperties(wxCommandEvent&)
 {
 // may have to check is_phony_ here--but that's bogus
     if(is_phony_)
@@ -247,10 +251,15 @@ void IllustrationView::OnProperties(wxCommandEvent&)
         }
 }
 
-void IllustrationView::OnUpdateFileSave(wxUpdateUIEvent& e)
+/// This is completely replaces wxDocManager::OnUpdateFileSave(),
+/// and doesn't need to call Skip().
+
+void IllustrationView::UponUpdateFileSave(wxUpdateUIEvent& e)
 {
     e.Enable(!is_phony_ && document().IsModified());
 }
+
+// TODO ?? WX NAME CONFLICT Can this be fixed?
 
 void IllustrationView::OnUpdateFileSaveAs(wxUpdateUIEvent& e)
 {
@@ -265,13 +274,13 @@ void IllustrationView::OnUpdateFileSaveAs(wxUpdateUIEvent& e)
     e.Enable(!is_phony_);
 }
 
-void IllustrationView::OnUpdateInapplicable(wxUpdateUIEvent& e)
+void IllustrationView::UponUpdateInapplicable(wxUpdateUIEvent& e)
 {
     e.Enable(false);
 }
 
 // TODO ?? Doesn't seem to handle the menuitem--just the toolbar.
-void IllustrationView::OnUpdateProperties(wxUpdateUIEvent& e)
+void IllustrationView::UponUpdateProperties(wxUpdateUIEvent& e)
 {
     e.Enable(!is_phony_);
 }

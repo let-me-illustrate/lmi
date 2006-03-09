@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: docmdichildframe_ex.hpp,v 1.3 2006-01-29 13:52:00 chicares Exp $
+// $Id: docmdichildframe_ex.hpp,v 1.4 2006-03-09 01:58:18 chicares Exp $
 
 // Enhance class wxDocMDIChildFrame to support MDI without requiring
 // the parent MDI frame window to display a 'Window' menu when it has
@@ -35,13 +35,7 @@
 //
 // Because different child frames can have different menubars, each
 // child frame's 'Window' menu must become the system 'window menu'
-// upon activation. Member function OnActivate() accomplishes this.
-// Because it hides non-virtual wxDocMDIChildFrame::OnActivate(),
-// EVT_ACTIVATE must be registered in this class's response table,
-// and the base-class function must be called from the handler that
-// hides it with an explicit class-name specifier. A different name
-// was not chosen because of the possible elimination of the event
-// macro should the base class member ever be made virtual.
+// upon activation. Member function UponActivate() accomplishes this.
 //
 // At least for msw, creation does not trigger 'activation': more
 // precisely, WM_MDICREATE does not send WM_MDIACTIVATE. The MDI menu
@@ -118,9 +112,9 @@ class DocMDIChildFrameEx
     void SetMdiWindowMenu() const;
 
   private:
-    // WX !! Shouldn't these be virtual?
-    void OnActivate(wxActivateEvent&);
-    void OnMenuHighlight(wxMenuEvent&);
+    // WX !! Shouldn't OnActivate() and OnMenuHighlight() be virtual?
+    void UponActivate(wxActivateEvent&);
+    void UponMenuHighlight(wxMenuEvent&);
 
     // wxDocMDIChildFrame overrides.
     virtual wxStatusBar* GetStatusBar() const;

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.357 2006-03-07 18:10:35 chicares Exp $
+// $Id: ChangeLog,v 1.358 2006-03-09 01:58:18 chicares Exp $
 
 MAINTENANCE
 
@@ -6402,8 +6402,7 @@ Improve documentation.
   GNUmakefile
   autodependency.make
 Refine makefiles. Reference:
-  [substitute URL when lists.gnu.org is back up]
-  [my 2006-03-03T23:43Z message to <help-make@gnu.org>]
+  http://lists.gnu.org/archive/html/help-make/2006-03/msg00008.html
 
   any_member.hpp
   datum_string.hpp
@@ -6435,4 +6434,35 @@ Import selected changes from skeleton branch.
 
   xml_notebook.hpp
 Import selected changes from skeleton branch.
+
+20060309T0158Z <chicares@cox.net> [1224]
+
+  value_cast_test.cpp
+Add a new test.
+
+  about_dialog.cpp
+  about_dialog.hpp
+  census_view.cpp
+  census_view.hpp
+  docmanager_ex.cpp
+  docmanager_ex.hpp
+  docmdichildframe_ex.cpp
+  docmdichildframe_ex.hpp
+  illustration_view.cpp
+  illustration_view.hpp
+  main_wx.cpp
+  main_wx.hpp
+  previewframe_ex.cpp
+  previewframe_ex.hpp
+  single_choice_popup_menu.cpp
+  single_choice_popup_menu.hpp
+  text_view.cpp
+  text_view.hpp
+  xml_notebook.cpp
+  xml_notebook.hpp
+Rename event handlers. As these messages:
+  http://lists.gnu.org/archive/html/lmi/2005-11/msg00036.html
+  http://lists.gnu.org/archive/html/lmi/2005-11/msg00037.html
+explain, this change prevents conflicts with wx names, even though
+it may be speculated that such conflicts are benign.
 

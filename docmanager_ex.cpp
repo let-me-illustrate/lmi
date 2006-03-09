@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: docmanager_ex.cpp,v 1.7 2006-02-28 13:35:24 chicares Exp $
+// $Id: docmanager_ex.cpp,v 1.8 2006-03-09 01:58:18 chicares Exp $
 
 // This implementation is a derived work based on wxWindows code, viz.
 //   samples/printing/printing.cpp (C) 1995 Julian Smart
@@ -53,15 +53,15 @@
 IMPLEMENT_DYNAMIC_CLASS(DocManagerEx, wxDocManager)
 
 BEGIN_EVENT_TABLE(DocManagerEx, wxDocManager)
-    EVT_MENU(wxID_PREVIEW, DocManagerEx::OnPreview)
-    EVT_MENU(wxID_PRINT, DocManagerEx::OnPrint)
+    EVT_MENU(wxID_PREVIEW, DocManagerEx::UponPreview)
+    EVT_MENU(wxID_PRINT, DocManagerEx::UponPrint)
     // WX !! Propose adding wxID_PAGE_SETUP to the library.
     // In msw, 'Page setup' has superseded 'Print setup'. But wx
     // provides a builtin ID only for the former and not for the
     // latter. Yet wxxrc knows only builtin IDs. Therefore, to
     // make the modern 'Page setup' available with wxxrc,
     // wxID_PRINT_SETUP is hijacked and used for 'page setup'.
-    EVT_MENU(wxID_PRINT_SETUP, DocManagerEx::OnPageSetup)
+    EVT_MENU(wxID_PRINT_SETUP, DocManagerEx::UponPageSetup)
 END_EVENT_TABLE()
 
 DocManagerEx::DocManagerEx(long flags, bool initialize)
@@ -104,7 +104,7 @@ void DocManagerEx::DissociateFileHistoryFromFileMenu(wxMenuBar* menu_bar)
         }
 }
 
-void DocManagerEx::OnPageSetup(wxCommandEvent&)
+void DocManagerEx::UponPageSetup(wxCommandEvent&)
 {
     *page_setup_data_ = *print_data_;
 
@@ -118,7 +118,10 @@ void DocManagerEx::OnPageSetup(wxCommandEvent&)
     *page_setup_data_ = pageSetupDialog.GetPageSetupData();
 }
 
-void DocManagerEx::OnPreview(wxCommandEvent&)
+/// This is a complete replacement for wxDocManager::OnPreview(),
+/// and doesn't need to call the base-class version.
+
+void DocManagerEx::UponPreview(wxCommandEvent&)
 {
     wxView* view = GetCurrentView();
     if(!view)
@@ -157,7 +160,10 @@ void DocManagerEx::OnPreview(wxCommandEvent&)
     frame->Show(true);
 }
 
-void DocManagerEx::OnPrint(wxCommandEvent&)
+/// This is a complete replacement for wxDocManager::OnPrint(),
+/// and doesn't need to call the base-class version.
+
+void DocManagerEx::UponPrint(wxCommandEvent&)
 {
     wxView* view = GetCurrentView();
     if(!view)

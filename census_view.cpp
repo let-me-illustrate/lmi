@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: census_view.cpp,v 1.40 2006-01-29 13:52:00 chicares Exp $
+// $Id: census_view.cpp,v 1.41 2006-03-09 01:58:18 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -79,48 +79,48 @@ IMPLEMENT_DYNAMIC_CLASS(CensusView, ViewEx)
 
 BEGIN_EVENT_TABLE(CensusView, ViewEx)
 // TODO ?? Experimental: (Ask Vadim whether wxGTK supports this.)
-//    EVT_COMMAND_RIGHT_CLICK(ID_LISTWINDOW   ,CensusView::OnRightClick0)
+//    EVT_COMMAND_RIGHT_CLICK(ID_LISTWINDOW   ,CensusView::UponRightClick0)
 // TODO ?? No effect--dunno why; but prolly wanted for gtk:
-//    EVT_RIGHT_UP(                            CensusView::OnRightClick1)
-    EVT_CONTEXT_MENU(                        CensusView::OnRightClick2)
-    EVT_MENU(XRCID("edit_case"             ),CensusView::OnEditCase )
-    EVT_MENU(XRCID("edit_cell"             ),CensusView::OnEditCell )
-    EVT_MENU(XRCID("edit_class"            ),CensusView::OnEditClass)
-    EVT_MENU(XRCID("print_cell"            ),CensusView::OnPrintCell)
-//    EVT_MENU(XRCID("print_class"           ),CensusView::OnPrintClass) // TODO ?? expunge?
-    EVT_MENU(XRCID("print_case"            ),CensusView::OnPrintCase)
-    EVT_MENU(XRCID("run_cell"              ),CensusView::OnRunCell)
-//    EVT_MENU(XRCID("run_class"             ),CensusView::OnRunClass) // TODO ?? expunge?
-    EVT_MENU(XRCID("run_case"              ),CensusView::OnRunCase)
-    EVT_MENU(XRCID("paste_census"          ),CensusView::OnPasteCensus)
-    EVT_MENU(XRCID("add_cell"              ),CensusView::OnAddCell)
-    EVT_MENU(XRCID("delete_cells"          ),CensusView::OnDeleteCells)
-    EVT_MENU(XRCID("expand_columns"        ),CensusView::OnExpandColWidths)
-    EVT_MENU(XRCID("shrink_columns"        ),CensusView::OnShrinkColWidths)
-    EVT_MENU(XRCID("print_spreadsheet"     ),CensusView::OnRunCaseToSpreadsheet)
+//    EVT_RIGHT_UP(                            CensusView::UponRightClick1)
+    EVT_CONTEXT_MENU(                        CensusView::UponRightClick2)
+    EVT_MENU(XRCID("edit_case"             ),CensusView::UponEditCase )
+    EVT_MENU(XRCID("edit_cell"             ),CensusView::UponEditCell )
+    EVT_MENU(XRCID("edit_class"            ),CensusView::UponEditClass)
+    EVT_MENU(XRCID("print_cell"            ),CensusView::UponPrintCell)
+//    EVT_MENU(XRCID("print_class"           ),CensusView::UponPrintClass) // TODO ?? expunge?
+    EVT_MENU(XRCID("print_case"            ),CensusView::UponPrintCase)
+    EVT_MENU(XRCID("run_cell"              ),CensusView::UponRunCell)
+//    EVT_MENU(XRCID("run_class"             ),CensusView::UponRunClass) // TODO ?? expunge?
+    EVT_MENU(XRCID("run_case"              ),CensusView::UponRunCase)
+    EVT_MENU(XRCID("paste_census"          ),CensusView::UponPasteCensus)
+    EVT_MENU(XRCID("add_cell"              ),CensusView::UponAddCell)
+    EVT_MENU(XRCID("delete_cells"          ),CensusView::UponDeleteCells)
+    EVT_MENU(XRCID("expand_columns"        ),CensusView::UponExpandColWidths)
+    EVT_MENU(XRCID("shrink_columns"        ),CensusView::UponShrinkColWidths)
+    EVT_MENU(XRCID("print_spreadsheet"     ),CensusView::UponRunCaseToSpreadsheet)
 
 //    EVT_UPDATE_UI(XRCID("wxID_SAVEAS"      ),CensusView::OnUpdateFileSaveAs) // TODO ?? expunge
 
 // TODO ?? There has to be a better way than this.
-    EVT_UPDATE_UI(XRCID("edit_cell"        ),CensusView::OnUpdateApplicable)
-    EVT_UPDATE_UI(XRCID("edit_class"       ),CensusView::OnUpdateApplicable)
-    EVT_UPDATE_UI(XRCID("edit_case"        ),CensusView::OnUpdateApplicable)
-    EVT_UPDATE_UI(XRCID("run_cell"         ),CensusView::OnUpdateApplicable)
-    EVT_UPDATE_UI(XRCID("run_class"        ),CensusView::OnUpdateApplicable)
-    EVT_UPDATE_UI(XRCID("run_case"         ),CensusView::OnUpdateApplicable)
-    EVT_UPDATE_UI(XRCID("print_cell"       ),CensusView::OnUpdateApplicable)
-    EVT_UPDATE_UI(XRCID("print_class"      ),CensusView::OnUpdateApplicable)
-    EVT_UPDATE_UI(XRCID("print_case"       ),CensusView::OnUpdateApplicable)
-    EVT_UPDATE_UI(XRCID("print_spreadsheet"),CensusView::OnUpdateApplicable)
-    EVT_UPDATE_UI(XRCID("paste_census"     ),CensusView::OnUpdateApplicable)
-    EVT_UPDATE_UI(XRCID("add_cell"         ),CensusView::OnUpdateApplicable)
-    EVT_UPDATE_UI(XRCID("delete_cells"     ),CensusView::OnUpdateApplicable)
-    EVT_UPDATE_UI(XRCID("expand_columns"   ),CensusView::OnUpdateApplicable)
-    EVT_UPDATE_UI(XRCID("shrink_columns"   ),CensusView::OnUpdateApplicable)
+    EVT_UPDATE_UI(XRCID("edit_cell"        ),CensusView::UponUpdateApplicable)
+    EVT_UPDATE_UI(XRCID("edit_class"       ),CensusView::UponUpdateApplicable)
+    EVT_UPDATE_UI(XRCID("edit_case"        ),CensusView::UponUpdateApplicable)
+    EVT_UPDATE_UI(XRCID("run_cell"         ),CensusView::UponUpdateApplicable)
+    EVT_UPDATE_UI(XRCID("run_class"        ),CensusView::UponUpdateApplicable)
+    EVT_UPDATE_UI(XRCID("run_case"         ),CensusView::UponUpdateApplicable)
+    EVT_UPDATE_UI(XRCID("print_cell"       ),CensusView::UponUpdateApplicable)
+    EVT_UPDATE_UI(XRCID("print_class"      ),CensusView::UponUpdateApplicable)
+    EVT_UPDATE_UI(XRCID("print_case"       ),CensusView::UponUpdateApplicable)
+    EVT_UPDATE_UI(XRCID("print_spreadsheet"),CensusView::UponUpdateApplicable)
+    EVT_UPDATE_UI(XRCID("paste_census"     ),CensusView::UponUpdateApplicable)
+    EVT_UPDATE_UI(XRCID("add_cell"         ),CensusView::UponUpdateApplicable)
+    EVT_UPDATE_UI(XRCID("delete_cells"     ),CensusView::UponUpdateApplicable)
+    EVT_UPDATE_UI(XRCID("expand_columns"   ),CensusView::UponUpdateApplicable)
+    EVT_UPDATE_UI(XRCID("shrink_columns"   ),CensusView::UponUpdateApplicable)
 // TODO ?? Not label-edit.
-//    EVT_LIST_BEGIN_LABEL_EDIT(ID_LISTWINDOW,CensusView::OnBeginLabelEdit)
+//    EVT_LIST_BEGIN_LABEL_EDIT(ID_LISTWINDOW,CensusView::UponBeginLabelEdit)
 // Don't do this either--it's triggered by spacebar.
-//    EVT_LIST_ITEM_ACTIVATED(ID_LISTWINDOW  ,CensusView::OnBeginLabelEdit)
+//    EVT_LIST_ITEM_ACTIVATED(ID_LISTWINDOW  ,CensusView::UponBeginLabelEdit)
 END_EVENT_TABLE()
 
 CensusView::CensusView()
@@ -261,7 +261,7 @@ wxWindow* CensusView::CreateChildWindow()
     // Looks like the default is wider than we'd like (hardcoded number
     // in the following function). Do this or else "shrink" on a new
     // census will widen the columns.
-////    CensusView::OnShrinkColWidths();
+////    CensusView::UponShrinkColWidths();
 
     status() << std::flush;
 
@@ -591,8 +591,8 @@ wxMenuBar* CensusView::MenuBar() const
 
 ///* TODO expunge?
 // Double-click handler.
-// Factor out code: exact duplicate of CensusView::OnEditCell().
-void CensusView::OnBeginLabelEdit(wxListEvent& event)
+// Factor out code: exact duplicate of CensusView::UponEditCell().
+void CensusView::UponBeginLabelEdit(wxListEvent& event)
 {
     int cell_number = selected_row();
     Input& original_parms = cell_parms()[cell_number];
@@ -614,7 +614,7 @@ void CensusView::OnBeginLabelEdit(wxListEvent& event)
 }
 //*/
 
-void CensusView::OnEditCell(wxCommandEvent&)
+void CensusView::UponEditCell(wxCommandEvent&)
 {
     int cell_number = selected_row();
     Input& original_parms = cell_parms()[cell_number];
@@ -635,7 +635,7 @@ void CensusView::OnEditCell(wxCommandEvent&)
         }
 }
 
-void CensusView::OnEditClass(wxCommandEvent&)
+void CensusView::UponEditClass(wxCommandEvent&)
 {
     int cell_number = selected_row();
     std::string class_name = class_name_from_cell_number(cell_number);
@@ -664,7 +664,7 @@ void CensusView::OnEditClass(wxCommandEvent&)
         }
 }
 
-void CensusView::OnEditCase(wxCommandEvent&)
+void CensusView::UponEditCase(wxCommandEvent&)
 {
     Input& original_parms = case_parms()[0];
     Input temp_parms(original_parms);
@@ -700,7 +700,7 @@ void CensusView::OnEditCase(wxCommandEvent&)
 // TODO ?? Offer both ways of autosizing.
 // TODO ?? 'shrink' and 'expand' don't do what they sound like.
 //
-void CensusView::OnExpandColWidths(wxCommandEvent&)
+void CensusView::UponExpandColWidths(wxCommandEvent&)
 {
     freeze(true);
     for(int j = 0; j < list_window_->GetColumnCount(); ++j)
@@ -714,7 +714,7 @@ void CensusView::OnExpandColWidths(wxCommandEvent&)
 }
 
 // Shrink all nonfrozen columns to default width.
-void CensusView::OnShrinkColWidths(wxCommandEvent&)
+void CensusView::UponShrinkColWidths(wxCommandEvent&)
 {
     freeze(true);
     for(int j = 0; j < list_window_->GetColumnCount(); ++j)
@@ -728,9 +728,9 @@ void CensusView::OnShrinkColWidths(wxCommandEvent&)
 
 // TODO ?? Right-click handlers: pick one approach, and remove failed experiments.
 
-void CensusView::OnRightClick0(wxCommandEvent&)
+void CensusView::UponRightClick0(wxCommandEvent&)
 {
-    status() << "OnRightClick0()" << LMI_FLUSH;
+    status() << "UponRightClick0()" << LMI_FLUSH;
     wxMenuBar* menu_bar = MenuBar();
     if(menu_bar)
         {
@@ -748,9 +748,9 @@ void CensusView::OnRightClick0(wxCommandEvent&)
         }
 }
 
-void CensusView::OnRightClick1(wxMouseEvent& e)
+void CensusView::UponRightClick1(wxMouseEvent& e)
 {
-    status() << "OnRightClick1()" << LMI_FLUSH;
+    status() << "UponRightClick1()" << LMI_FLUSH;
     wxMenuBar* menu_bar = MenuBar();
     if(menu_bar)
         {
@@ -769,7 +769,7 @@ void CensusView::OnRightClick1(wxMouseEvent& e)
         }
 }
 
-void CensusView::OnRightClick2(wxContextMenuEvent& e)
+void CensusView::UponRightClick2(wxContextMenuEvent& e)
 {
     wxMenuBar* menu_bar = MenuBar();
     if(menu_bar)
@@ -787,10 +787,12 @@ void CensusView::OnRightClick2(wxContextMenuEvent& e)
         }
 }
 
-void CensusView::OnUpdateApplicable(wxUpdateUIEvent& e)
+void CensusView::UponUpdateApplicable(wxUpdateUIEvent& e)
 {
     e.Enable(true);
 }
+
+// TODO ?? WX NAME CONFLICT Can this be expunged?
 
 void CensusView::OnUpdateFileSaveAs(wxUpdateUIEvent& e)
 {
@@ -847,7 +849,7 @@ void CensusView::UpdatePreservingSelection()
     freeze(false);
 }
 
-void CensusView::OnPrintCell(wxCommandEvent&)
+void CensusView::UponPrintCell(wxCommandEvent&)
 {
 // TODO ?? Refactor.
     if(is_invalid())
@@ -865,12 +867,12 @@ void CensusView::OnPrintCell(wxCommandEvent&)
     freeze(false);
 }
 
-void CensusView::OnPrintCase(wxCommandEvent&)
+void CensusView::UponPrintCase(wxCommandEvent&)
 {
     DoAllCells(emit_to_printer);
 }
 
-void CensusView::OnRunCase(wxCommandEvent&)
+void CensusView::UponRunCase(wxCommandEvent&)
 {
     if(is_invalid())
         {
@@ -880,7 +882,7 @@ void CensusView::OnRunCase(wxCommandEvent&)
     ViewComposite();
 }
 
-void CensusView::OnRunCell(wxCommandEvent&)
+void CensusView::UponRunCell(wxCommandEvent&)
 {
     if(is_invalid())
         {
@@ -954,7 +956,7 @@ bool CensusView::DoAllCells(e_emission_target emission_target)
     return true;
 }
 
-void CensusView::OnAddCell(wxCommandEvent&)
+void CensusView::UponAddCell(wxCommandEvent&)
 {
     if(is_invalid())
         {
@@ -966,7 +968,7 @@ void CensusView::OnAddCell(wxCommandEvent&)
     document().Modify(true);
 }
 
-void CensusView::OnDeleteCells(wxCommandEvent&)
+void CensusView::UponDeleteCells(wxCommandEvent&)
 {
     if(is_invalid())
         {
@@ -1102,7 +1104,7 @@ std::string GetClipboardText()
 } // Unnamed namespace.
 
 // Print tab-delimited output to file loadable in spreadsheet programs.
-void CensusView::OnRunCaseToSpreadsheet(wxCommandEvent&)
+void CensusView::UponRunCaseToSpreadsheet(wxCommandEvent&)
 {
     std::string spreadsheet_filename =
             base_filename()
@@ -1112,7 +1114,7 @@ void CensusView::OnRunCaseToSpreadsheet(wxCommandEvent&)
     DoAllCells(emit_to_spreadsheet);
 }
 
-void CensusView::OnPasteCensus(wxCommandEvent&)
+void CensusView::UponPasteCensus(wxCommandEvent&)
 {
 // TODO ?? expunge debugging code in this function.
 
