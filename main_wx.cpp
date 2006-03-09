@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_wx.cpp,v 1.49 2006-02-13 18:59:07 chicares Exp $
+// $Id: main_wx.cpp,v 1.50 2006-03-09 01:58:18 chicares Exp $
 
 // Portions of this file are derived from wxWindows files
 //   samples/docvwmdi/docview.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -94,20 +94,20 @@ IMPLEMENT_WX_THEME_SUPPORT
 // the EVT_MENU_OPEN handler.
 //
 BEGIN_EVENT_TABLE(Skeleton, wxApp)
- EVT_DROP_FILES(                             Skeleton::OnDropFiles             )
- EVT_MENU(wxID_ABOUT                        ,Skeleton::OnAbout                 )
- EVT_MENU(XRCID("window_cascade"           ),Skeleton::OnWindowCascade         )
- EVT_MENU(XRCID("window_next"              ),Skeleton::OnWindowNext            )
- EVT_MENU(XRCID("window_previous"          ),Skeleton::OnWindowPrevious        )
- EVT_MENU(XRCID("window_tile_horizontally" ),Skeleton::OnWindowTileHorizontally)
- EVT_MENU(XRCID("window_tile_vertically"   ),Skeleton::OnWindowTileVertically  )
- EVT_MENU(XRCID("edit_default_cell"        ),Skeleton::OnEditDefaultCell       )
+ EVT_DROP_FILES(                             Skeleton::UponDropFiles             )
+ EVT_MENU(wxID_ABOUT                        ,Skeleton::UponAbout                 )
+ EVT_MENU(XRCID("window_cascade"           ),Skeleton::UponWindowCascade         )
+ EVT_MENU(XRCID("window_next"              ),Skeleton::UponWindowNext            )
+ EVT_MENU(XRCID("window_previous"          ),Skeleton::UponWindowPrevious        )
+ EVT_MENU(XRCID("window_tile_horizontally" ),Skeleton::UponWindowTileHorizontally)
+ EVT_MENU(XRCID("window_tile_vertically"   ),Skeleton::UponWindowTileVertically  )
+ EVT_MENU(XRCID("edit_default_cell"        ),Skeleton::UponEditDefaultCell       )
  EVT_MENU_OPEN(                              Skeleton::OnMenuOpen              )
- EVT_TIMER(wxID_ANY                         ,Skeleton::OnTimer                 )
+ EVT_TIMER(wxID_ANY                         ,Skeleton::UponTimer                 )
 // TODO ?? expunge
 // EVT_UPDATE_UI(wxID_ANY                     ,Skeleton::OnUpdateUI              )
  EVT_UPDATE_UI(wxID_SAVE                    ,Skeleton::OnUpdateFileSave        )
- EVT_UPDATE_UI(wxID_HELP                    ,Skeleton::OnUpdateHelp            )
+ EVT_UPDATE_UI(wxID_HELP                    ,Skeleton::UponUpdateHelp            )
 // TODO ?? expunge
 // Enabling this line prevents the menuitem from performing its required
 // action, whether or not the EVT_UPDATE_UI(wxID_SAVE...) handler is also
@@ -116,21 +116,21 @@ BEGIN_EVENT_TABLE(Skeleton, wxApp)
 
 // TODO ?? There has to be a better way.
 /*
-    EVT_UPDATE_UI(XRCID("edit_cell"        ),Skeleton::OnUpdateInapplicable)
-    EVT_UPDATE_UI(XRCID("edit_class"       ),Skeleton::OnUpdateInapplicable)
-    EVT_UPDATE_UI(XRCID("edit_case"        ),Skeleton::OnUpdateInapplicable)
-    EVT_UPDATE_UI(XRCID("run_cell"         ),Skeleton::OnUpdateInapplicable)
-    EVT_UPDATE_UI(XRCID("run_class"        ),Skeleton::OnUpdateInapplicable)
-    EVT_UPDATE_UI(XRCID("run_case"         ),Skeleton::OnUpdateInapplicable)
-    EVT_UPDATE_UI(XRCID("print_cell"       ),Skeleton::OnUpdateInapplicable)
-    EVT_UPDATE_UI(XRCID("print_class"      ),Skeleton::OnUpdateInapplicable)
-    EVT_UPDATE_UI(XRCID("print_case"       ),Skeleton::OnUpdateInapplicable)
-    EVT_UPDATE_UI(XRCID("print_spreadsheet"),Skeleton::OnUpdateInapplicable)
-    EVT_UPDATE_UI(XRCID("paste_census"     ),Skeleton::OnUpdateInapplicable)
-    EVT_UPDATE_UI(XRCID("add_cell"         ),Skeleton::OnUpdateInapplicable)
-    EVT_UPDATE_UI(XRCID("delete_cells"     ),Skeleton::OnUpdateInapplicable)
-    EVT_UPDATE_UI(XRCID("expand_columns"   ),Skeleton::OnUpdateInapplicable)
-    EVT_UPDATE_UI(XRCID("shrink_columns"   ),Skeleton::OnUpdateInapplicable)
+    EVT_UPDATE_UI(XRCID("edit_cell"        ),Skeleton::UponUpdateInapplicable)
+    EVT_UPDATE_UI(XRCID("edit_class"       ),Skeleton::UponUpdateInapplicable)
+    EVT_UPDATE_UI(XRCID("edit_case"        ),Skeleton::UponUpdateInapplicable)
+    EVT_UPDATE_UI(XRCID("run_cell"         ),Skeleton::UponUpdateInapplicable)
+    EVT_UPDATE_UI(XRCID("run_class"        ),Skeleton::UponUpdateInapplicable)
+    EVT_UPDATE_UI(XRCID("run_case"         ),Skeleton::UponUpdateInapplicable)
+    EVT_UPDATE_UI(XRCID("print_cell"       ),Skeleton::UponUpdateInapplicable)
+    EVT_UPDATE_UI(XRCID("print_class"      ),Skeleton::UponUpdateInapplicable)
+    EVT_UPDATE_UI(XRCID("print_case"       ),Skeleton::UponUpdateInapplicable)
+    EVT_UPDATE_UI(XRCID("print_spreadsheet"),Skeleton::UponUpdateInapplicable)
+    EVT_UPDATE_UI(XRCID("paste_census"     ),Skeleton::UponUpdateInapplicable)
+    EVT_UPDATE_UI(XRCID("add_cell"         ),Skeleton::UponUpdateInapplicable)
+    EVT_UPDATE_UI(XRCID("delete_cells"     ),Skeleton::UponUpdateInapplicable)
+    EVT_UPDATE_UI(XRCID("expand_columns"   ),Skeleton::UponUpdateInapplicable)
+    EVT_UPDATE_UI(XRCID("shrink_columns"   ),Skeleton::UponUpdateInapplicable)
 */
 END_EVENT_TABLE()
 
@@ -351,15 +351,12 @@ void Skeleton::InitToolBar()
     frame_->SetToolBar(tool_bar);
 }
 
-// WX !! Predefined macro wxID_ABOUT could be mapped by default to
-// an OnAbout handler in the application or frame class.
-//
-void Skeleton::OnAbout(wxCommandEvent&)
+void Skeleton::UponAbout(wxCommandEvent&)
 {
     AboutDialog(frame_).ShowModal();
 }
 
-void Skeleton::OnDropFiles(wxDropFilesEvent& event)
+void Skeleton::UponDropFiles(wxDropFilesEvent& event)
 {
     wxString const* filenames = event.GetFiles();
     for(int j = 0; j < event.GetNumberOfFiles(); ++j)
@@ -368,7 +365,7 @@ void Skeleton::OnDropFiles(wxDropFilesEvent& event)
         }
 }
 
-void Skeleton::OnEditDefaultCell(wxCommandEvent&)
+void Skeleton::UponEditDefaultCell(wxCommandEvent&)
 {
     doc_manager_->CreateDocument
         (configurable_settings::instance().default_input_filename().c_str()
@@ -497,6 +494,8 @@ bool Skeleton::OnInit()
     return true;
 }
 
+// TODO ?? WX NAME CONFLICT Should this call Skip()?
+
 void Skeleton::OnMenuOpen(wxMenuEvent&)
 {
     int child_frame_count = 0;
@@ -552,7 +551,7 @@ void Skeleton::OnMenuOpen(wxMenuEvent&)
     // now at least, none is required.
 }
 
-void Skeleton::OnTimer(wxTimerEvent&)
+void Skeleton::UponTimer(wxTimerEvent&)
 {
     fenv_validate();
 }
@@ -564,6 +563,8 @@ void Skeleton::OnUnhandledException()
 {
     wxSafeShowMessage("Terminating due to unhandled exception.", "Fatal error");
 }
+
+// TODO ?? WX NAME CONFLICT Should this call Skip()?
 
 // Required for toolbar enablement. Although '.xrc' files use the same
 // xrc Id:
@@ -584,13 +585,13 @@ void Skeleton::OnUpdateFileSave(wxUpdateUIEvent& event)
 //    event.Enable(doc && doc->IsModified());
 }
 
-void Skeleton::OnUpdateHelp(wxUpdateUIEvent& e)
+void Skeleton::UponUpdateHelp(wxUpdateUIEvent& e)
 {
     e.Enable(false);
 }
 
 // TODO ?? An unsuccessful experiment.
-void Skeleton::OnUpdateInapplicable(wxUpdateUIEvent& e)
+void Skeleton::UponUpdateInapplicable(wxUpdateUIEvent& e)
 {
 // This handler seems to override mdi childrens'.
 //    e.Enable(0 != frame_->GetChildren().GetCount());
@@ -607,6 +608,8 @@ This doesn't undo that override.
 // Presumably we need to use ProcessEvent(), somehow.
 }
 
+// TODO ?? WX NAME CONFLICT Should this be expunged?
+
 // WX !! It seems that a function like this should be able to handle
 // all toolbar and menu enablement. But it appears that a much more
 // complex implementation is required for wxID_SAVE.
@@ -615,22 +618,22 @@ void Skeleton::OnUpdateUI(wxUpdateUIEvent&)
 {
 }
 
-void Skeleton::OnWindowCascade(wxCommandEvent&)
+void Skeleton::UponWindowCascade(wxCommandEvent&)
 {
     frame_->Cascade();
 }
 
-void Skeleton::OnWindowNext(wxCommandEvent&)
+void Skeleton::UponWindowNext(wxCommandEvent&)
 {
     frame_->ActivateNext();
 }
 
-void Skeleton::OnWindowPrevious(wxCommandEvent&)
+void Skeleton::UponWindowPrevious(wxCommandEvent&)
 {
     frame_->ActivatePrevious();
 }
 
-void Skeleton::OnWindowTileHorizontally(wxCommandEvent&)
+void Skeleton::UponWindowTileHorizontally(wxCommandEvent&)
 {
     frame_->Tile();
 }
@@ -639,7 +642,7 @@ void Skeleton::OnWindowTileHorizontally(wxCommandEvent&)
 // WX !! A note in src/msw/mdi.cpp suggests adding an orientation
 // argument to Tile(); until that's done, use this workaround.
 //
-void Skeleton::OnWindowTileVertically(wxCommandEvent&)
+void Skeleton::UponWindowTileVertically(wxCommandEvent&)
 {
 #ifdef LMI_MSW
     ::SendMessage

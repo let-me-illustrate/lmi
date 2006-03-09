@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: about_dialog.hpp,v 1.2 2006-01-29 13:52:00 chicares Exp $
+// $Id: about_dialog.hpp,v 1.3 2006-03-09 01:58:18 chicares Exp $
 
 #ifndef about_dialog_hpp
 #define about_dialog_hpp
@@ -38,17 +38,11 @@ class AboutDialog
     AboutDialog(wxWindow* parent);
     virtual ~AboutDialog();
 
-    // TODO ?? Consider Sutter's advice to make member functions
-    // either public and nonvirtual, or nonpublic and virtual.
-    //
     // wxDialog overrides.
     virtual int ShowModal();
 
   private:
-    // WX !! Shouldn't OnOK() be virtual in wxDialog? If it were, then
-    // wouldn't overriding it here mean that this class wouldn't need
-    // an explicit event table?
-    void OnOK(wxCommandEvent&);
+    void UponOK(wxCommandEvent&);
 
     DECLARE_EVENT_TABLE()
 };

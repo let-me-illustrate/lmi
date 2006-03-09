@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: text_view.hpp,v 1.8 2006-01-29 13:52:00 chicares Exp $
+// $Id: text_view.hpp,v 1.9 2006-03-09 01:58:18 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.h (C) 1998 Julian Smart and Markus Holzem
@@ -50,7 +50,7 @@ class WXDLLEXPORT wxTextCtrl;
 /// purpose text editor.
 ///
 /// It's left in cvs, though, because it's a convenient place to test
-/// to test purely experimental features such as OnTest(). It might
+/// to test purely experimental features such as UponTest*(). It might
 /// be a valuable model for some other feature someday.
 
 class TextEditView
@@ -71,20 +71,20 @@ class TextEditView
     virtual wxMenuBar* MenuBar() const;
 
     // Test alerts from application.
-    void OnTestAppStatus             (wxCommandEvent&);
-    void OnTestAppWarning            (wxCommandEvent&);
-    void OnTestAppHobsons            (wxCommandEvent&);
-    void OnTestAppFatal              (wxCommandEvent&);
-    void OnTestAppStandardException  (wxCommandEvent&);
-    void OnTestAppArbitraryException (wxCommandEvent&);
+    void UponTestAppStatus             (wxCommandEvent&);
+    void UponTestAppWarning            (wxCommandEvent&);
+    void UponTestAppHobsons            (wxCommandEvent&);
+    void UponTestAppFatal              (wxCommandEvent&);
+    void UponTestAppStandardException  (wxCommandEvent&);
+    void UponTestAppArbitraryException (wxCommandEvent&);
 
     // Test alerts from shared library.
-    void OnTestLibStatus             (wxCommandEvent&);
-    void OnTestLibWarning            (wxCommandEvent&);
-    void OnTestLibHobsons            (wxCommandEvent&);
-    void OnTestLibFatal              (wxCommandEvent&);
-    void OnTestLibStandardException  (wxCommandEvent&);
-    void OnTestLibArbitraryException (wxCommandEvent&);
+    void UponTestLibStatus             (wxCommandEvent&);
+    void UponTestLibWarning            (wxCommandEvent&);
+    void UponTestLibHobsons            (wxCommandEvent&);
+    void UponTestLibFatal              (wxCommandEvent&);
+    void UponTestLibStandardException  (wxCommandEvent&);
+    void UponTestLibArbitraryException (wxCommandEvent&);
 
     wxTextCtrl* text_window_;
 

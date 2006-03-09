@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xml_notebook.hpp,v 1.11 2006-03-07 18:10:35 chicares Exp $
+// $Id: xml_notebook.hpp,v 1.12 2006-03-09 01:58:18 chicares Exp $
 
 #ifndef xml_notebook_hpp
 #define xml_notebook_hpp
@@ -62,17 +62,17 @@ class WXDLLEXPORT wxControlWithItems;
 /// Many frameworks encourage an event-driven implementation, which wx
 /// can of course support:
 ///
-///   EVT_CHANGE_DATE(BirthDate,      Dialog::OnChangeBirthDate)
-///   EVT_CHANGE_DATE(MarriageDate,   Dialog::OnChangeMarriageDate)
-///   EVT_CHANGE_DATE(RetirementDate, Dialog::OnChangeRetirementDate)
+///   EVT_CHANGE_DATE(BirthDate,      Dialog::UponChangeBirthDate)
+///   EVT_CHANGE_DATE(MarriageDate,   Dialog::UponChangeMarriageDate)
+///   EVT_CHANGE_DATE(RetirementDate, Dialog::UponChangeRetirementDate)
 ///
 ///  - Dialog knows what controls it contains.
-///  - Dialog::OnChangeXXXDate() knows the semantics of its
+///  - Dialog::UponChangeXXXDate() knows the semantics of its
 ///      particular 'XXX' date instance.
-///  - Dialog::OnChangeXXXDate() knows the semantics of other controls
-///      that are affected by it: one date's value may affect another
-///      date's range, e.g., one may marry after retirement, but not
-///      before birth.
+///  - Dialog::UponChangeXXXDate() knows the semantics of other
+///      controls that are affected by it: one date's value may affect
+///      another date's range, e.g., one may marry after retirement,
+///      but not before birth.
 ///
 /// This is the "RAD" or "visual" approach. The programmer places a
 /// control on a dialog, then sets its "properties" or writes event
@@ -334,20 +334,22 @@ class XmlNotebook
 
     bool ItemBoxNeedsRefreshing(mc_enum_base*, wxControlWithItems&);
 
-    void OnChildFocus            (wxChildFocusEvent&);
+    void UponChildFocus            (wxChildFocusEvent&);
 
+// TODO ?? WX NAME CONFLICT Should this call Skip()?
     // TODO ?? This hides wxWindow::OnInitDialog. A different name
     // should be used here.
     void OnInitDialog            (wxInitDialogEvent&);
 
+// TODO ?? WX NAME CONFLICT Should this call Skip()?
     // TODO ?? This hides wxDialog::OnOK. A different name should
     // be used here.
     void OnOK                    (wxCommandEvent&   );
 
-    void OnPageChanged           (wxNotebookEvent&  );
-    void OnPageChanging          (wxNotebookEvent&  );
-    void OnRefocusInvalidControl (wxCommandEvent&   );
-    void OnUpdateGUI             (wxUpdateUIEvent&  );
+    void UponPageChanged           (wxNotebookEvent&  );
+    void UponPageChanging          (wxNotebookEvent&  );
+    void UponRefocusInvalidControl (wxCommandEvent&   );
+    void UponUpdateGUI             (wxUpdateUIEvent&  );
 
     void RefreshItemBox(mc_enum_base*, wxControlWithItems&);
 

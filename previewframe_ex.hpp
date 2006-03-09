@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: previewframe_ex.hpp,v 1.2 2006-01-29 13:52:00 chicares Exp $
+// $Id: previewframe_ex.hpp,v 1.3 2006-03-09 01:58:18 chicares Exp $
 
 // This implementation is a derived work based on wxWindows code, viz.
 //   include/wx/prntbase.h (C) 1997 Julian Smart and Markus Holzem
@@ -60,8 +60,8 @@ class PreviewFrameEx
     virtual void Initialize();
 
   private:
-    // WX !! Should this function be virtual in the base class?
-    void OnCloseWindow(wxCloseEvent& event);
+    // WX !! Should OnCloseWindow() be virtual in the base class?
+    void UponCloseWindow(wxCloseEvent& event);
 
     DECLARE_CLASS(PreviewFrameEx)
     DECLARE_EVENT_TABLE()

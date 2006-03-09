@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: single_choice_popup_menu.hpp,v 1.1 2006-02-28 13:35:24 chicares Exp $
+// $Id: single_choice_popup_menu.hpp,v 1.2 2006-03-09 01:58:18 chicares Exp $
 
 #ifndef single_choice_popup_menu_hpp
 #define single_choice_popup_menu_hpp
@@ -56,7 +56,7 @@ class SingleChoicePopupMenu
     int Choose();
 
   private:
-    void OnMenuChoice(wxCommandEvent&);
+    void UponMenuChoice(wxCommandEvent&);
 
     wxMenu menu_;
     int selection_index_;

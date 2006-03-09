@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_wx.hpp,v 1.10 2006-02-06 18:16:37 chicares Exp $
+// $Id: main_wx.hpp,v 1.11 2006-03-09 01:58:18 chicares Exp $
 
 // Portions of this file are derived from wxWindows files
 //   samples/docvwmdi/docview.h (C) 1998 Julian Smart and Markus Holzem
@@ -70,20 +70,23 @@ class Skeleton
     void InitMenuBar();
     void InitToolBar();
 
-    void OnAbout                  (wxCommandEvent&);
-    void OnDropFiles              (wxDropFilesEvent&);
-    void OnEditDefaultCell        (wxCommandEvent&);
-    void OnMenuOpen               (wxMenuEvent&);
-    void OnTimer                  (wxTimerEvent&);
-    void OnUpdateInapplicable     (wxUpdateUIEvent&);
+    void UponAbout                  (wxCommandEvent&);
+    void UponDropFiles              (wxDropFilesEvent&);
+    void UponEditDefaultCell        (wxCommandEvent&);
+    // TODO ?? WX NAME CONFLICT Should this call Skip()?
+    void OnMenuOpen                 (wxMenuEvent&);
+    void UponTimer                  (wxTimerEvent&);
+    void UponUpdateInapplicable     (wxUpdateUIEvent&);
+    // TODO ?? WX NAME CONFLICT Should this call Skip()?
     void OnUpdateFileSave         (wxUpdateUIEvent&);
+    // TODO ?? WX NAME CONFLICT Should this be expunged?
     void OnUpdateUI               (wxUpdateUIEvent&);
-    void OnUpdateHelp             (wxUpdateUIEvent&);
-    void OnWindowCascade          (wxCommandEvent&);
-    void OnWindowNext             (wxCommandEvent&);
-    void OnWindowPrevious         (wxCommandEvent&);
-    void OnWindowTileHorizontally (wxCommandEvent&);
-    void OnWindowTileVertically   (wxCommandEvent&);
+    void UponUpdateHelp             (wxUpdateUIEvent&);
+    void UponWindowCascade          (wxCommandEvent&);
+    void UponWindowNext             (wxCommandEvent&);
+    void UponWindowPrevious         (wxCommandEvent&);
+    void UponWindowTileHorizontally (wxCommandEvent&);
+    void UponWindowTileVertically   (wxCommandEvent&);
 
     // wxApp overrides.
     virtual bool OnExceptionInMainLoop();

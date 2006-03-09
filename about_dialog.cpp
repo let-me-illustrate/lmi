@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: about_dialog.cpp,v 1.4 2006-01-29 13:52:00 chicares Exp $
+// $Id: about_dialog.cpp,v 1.5 2006-03-09 01:58:18 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -58,7 +58,7 @@
 // for consistency, so does the first.
 
 BEGIN_EVENT_TABLE(AboutDialog, wxDialog)
-    EVT_BUTTON(wxID_OK, AboutDialog::OnOK)
+    EVT_BUTTON(wxID_OK, AboutDialog::UponOK)
 END_EVENT_TABLE()
 
 AboutDialog::AboutDialog(wxWindow* parent)
@@ -76,6 +76,8 @@ AboutDialog::AboutDialog(wxWindow* parent)
 AboutDialog::~AboutDialog()
 {
 }
+
+// This virtual function calls the base-class version at the end.
 
 int AboutDialog::ShowModal()
 {
@@ -136,7 +138,10 @@ int AboutDialog::ShowModal()
     return wxDialog::ShowModal();
 }
 
-void AboutDialog::OnOK(wxCommandEvent&)
+/// This is a complete replacement for wxDialog::OnOK(), which need
+/// not be called.
+
+void AboutDialog::UponOK(wxCommandEvent&)
 {
     wxDialog dialog(this, -1, wxString("GNU General Public License"));
     wxHtmlWindow* html_window = new wxHtmlWindow
