@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xml_notebook.hpp,v 1.13 2006-03-09 12:37:24 chicares Exp $
+// $Id: xml_notebook.hpp,v 1.14 2006-03-09 13:30:15 chicares Exp $
 
 #ifndef xml_notebook_hpp
 #define xml_notebook_hpp
@@ -336,7 +336,7 @@ class XmlNotebook
 
     void UponChildFocus            (wxChildFocusEvent&);
     void UponInitDialog            (wxInitDialogEvent&);
-    void OponOK                    (wxCommandEvent&   );
+    void UponOK                    (wxCommandEvent&   );
     void UponPageChanged           (wxNotebookEvent&  );
     void UponPageChanging          (wxNotebookEvent&  );
     void UponRefocusInvalidControl (wxCommandEvent&   );

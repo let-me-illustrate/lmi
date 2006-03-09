@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.359 2006-03-09 12:37:24 chicares Exp $
+// $Id: ChangeLog,v 1.360 2006-03-09 13:30:15 chicares Exp $
 
 MAINTENANCE
 
@@ -6478,4 +6478,10 @@ it may be speculated that such conflicts are benign.
   xml_notebook.cpp
   xml_notebook.hpp
 Resolve conflicts with wx names.
+
+20060309T1330Z <chicares@cox.net> [1207]
+
+  xml_notebook.cpp
+  xml_notebook.hpp
+Import selected changes from skeleton branch.
 
