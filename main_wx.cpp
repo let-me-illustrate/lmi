@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_wx.cpp,v 1.50 2006-03-09 01:58:18 chicares Exp $
+// $Id: main_wx.cpp,v 1.51 2006-03-09 12:37:24 chicares Exp $
 
 // Portions of this file are derived from wxWindows files
 //   samples/docvwmdi/docview.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -102,17 +102,17 @@ BEGIN_EVENT_TABLE(Skeleton, wxApp)
  EVT_MENU(XRCID("window_tile_horizontally" ),Skeleton::UponWindowTileHorizontally)
  EVT_MENU(XRCID("window_tile_vertically"   ),Skeleton::UponWindowTileVertically  )
  EVT_MENU(XRCID("edit_default_cell"        ),Skeleton::UponEditDefaultCell       )
- EVT_MENU_OPEN(                              Skeleton::OnMenuOpen              )
+ EVT_MENU_OPEN(                              Skeleton::UponMenuOpen              )
  EVT_TIMER(wxID_ANY                         ,Skeleton::UponTimer                 )
 // TODO ?? expunge
-// EVT_UPDATE_UI(wxID_ANY                     ,Skeleton::OnUpdateUI              )
- EVT_UPDATE_UI(wxID_SAVE                    ,Skeleton::OnUpdateFileSave        )
+// EVT_UPDATE_UI(wxID_ANY                     ,Skeleton::UponUpdateUI              )
+ EVT_UPDATE_UI(wxID_SAVE                    ,Skeleton::UponUpdateFileSave        )
  EVT_UPDATE_UI(wxID_HELP                    ,Skeleton::UponUpdateHelp            )
 // TODO ?? expunge
 // Enabling this line prevents the menuitem from performing its required
 // action, whether or not the EVT_UPDATE_UI(wxID_SAVE...) handler is also
 // present.
-// EVT_UPDATE_UI(XRCID("wxID_SAVE"           ),Skeleton::OnUpdateFileSave        )
+// EVT_UPDATE_UI(XRCID("wxID_SAVE"           ),Skeleton::UponUpdateFileSave        )
 
 // TODO ?? There has to be a better way.
 /*
@@ -494,9 +494,9 @@ bool Skeleton::OnInit()
     return true;
 }
 
-// TODO ?? WX NAME CONFLICT Should this call Skip()?
+// TODO ?? Should this call Skip()?
 
-void Skeleton::OnMenuOpen(wxMenuEvent&)
+void Skeleton::UponMenuOpen(wxMenuEvent&)
 {
     int child_frame_count = 0;
     wxWindowList wl = frame_->GetChildren();
@@ -525,7 +525,7 @@ void Skeleton::OnMenuOpen(wxMenuEvent&)
             }
 
         // Needed for (xrc) menu enablement: a
-        //   EVT_UPDATE_UI(XRCID("wxID_SAVE"),Skeleton::OnUpdateFileSave)
+        //   EVT_UPDATE_UI(XRCID("wxID_SAVE"),Skeleton::UponUpdateFileSave)
         // handler fails to update enablement for that menu item.
         // However, enablement of an item with the same ID on the
         // toolbar apparently requires the EVT_UPDATE_UI technique.
@@ -564,17 +564,17 @@ void Skeleton::OnUnhandledException()
     wxSafeShowMessage("Terminating due to unhandled exception.", "Fatal error");
 }
 
-// TODO ?? WX NAME CONFLICT Should this call Skip()?
+// TODO ?? Should this call Skip()?
 
 // Required for toolbar enablement. Although '.xrc' files use the same
 // xrc Id:
 //   <object class="wxMenuItem" name="wxID_SAVE">
 //   <object class="tool"       name="wxID_SAVE">
-// the OnMenuOpen() handler above doesn't handle toolbar enablement,
+// the UponMenuOpen() handler above doesn't handle toolbar enablement,
 // even when the menu is pulled down; and, OTOH, this function alone
 // doesn't handle menuitem enablement.
 //
-void Skeleton::OnUpdateFileSave(wxUpdateUIEvent& event)
+void Skeleton::UponUpdateFileSave(wxUpdateUIEvent& event)
 {
     wxDocument *doc = doc_manager_->GetCurrentDocument();
     event.Enable(doc && doc->IsModified());
@@ -608,13 +608,13 @@ This doesn't undo that override.
 // Presumably we need to use ProcessEvent(), somehow.
 }
 
-// TODO ?? WX NAME CONFLICT Should this be expunged?
+// TODO ?? Should this be expunged?
 
 // WX !! It seems that a function like this should be able to handle
 // all toolbar and menu enablement. But it appears that a much more
 // complex implementation is required for wxID_SAVE.
 //
-void Skeleton::OnUpdateUI(wxUpdateUIEvent&)
+void Skeleton::UponUpdateUI(wxUpdateUIEvent&)
 {
 }
 

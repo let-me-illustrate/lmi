@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_wx.hpp,v 1.11 2006-03-09 01:58:18 chicares Exp $
+// $Id: main_wx.hpp,v 1.12 2006-03-09 12:37:24 chicares Exp $
 
 // Portions of this file are derived from wxWindows files
 //   samples/docvwmdi/docview.h (C) 1998 Julian Smart and Markus Holzem
@@ -73,14 +73,11 @@ class Skeleton
     void UponAbout                  (wxCommandEvent&);
     void UponDropFiles              (wxDropFilesEvent&);
     void UponEditDefaultCell        (wxCommandEvent&);
-    // TODO ?? WX NAME CONFLICT Should this call Skip()?
-    void OnMenuOpen                 (wxMenuEvent&);
+    void UponMenuOpen               (wxMenuEvent&);
     void UponTimer                  (wxTimerEvent&);
     void UponUpdateInapplicable     (wxUpdateUIEvent&);
-    // TODO ?? WX NAME CONFLICT Should this call Skip()?
-    void OnUpdateFileSave         (wxUpdateUIEvent&);
-    // TODO ?? WX NAME CONFLICT Should this be expunged?
-    void OnUpdateUI               (wxUpdateUIEvent&);
+    void UponUpdateFileSave         (wxUpdateUIEvent&);
+    void UponUpdateUI               (wxUpdateUIEvent&);
     void UponUpdateHelp             (wxUpdateUIEvent&);
     void UponWindowCascade          (wxCommandEvent&);
     void UponWindowNext             (wxCommandEvent&);

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: census_view.cpp,v 1.41 2006-03-09 01:58:18 chicares Exp $
+// $Id: census_view.cpp,v 1.42 2006-03-09 12:37:24 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -98,8 +98,6 @@ BEGIN_EVENT_TABLE(CensusView, ViewEx)
     EVT_MENU(XRCID("expand_columns"        ),CensusView::UponExpandColWidths)
     EVT_MENU(XRCID("shrink_columns"        ),CensusView::UponShrinkColWidths)
     EVT_MENU(XRCID("print_spreadsheet"     ),CensusView::UponRunCaseToSpreadsheet)
-
-//    EVT_UPDATE_UI(XRCID("wxID_SAVEAS"      ),CensusView::OnUpdateFileSaveAs) // TODO ?? expunge
 
 // TODO ?? There has to be a better way than this.
     EVT_UPDATE_UI(XRCID("edit_cell"        ),CensusView::UponUpdateApplicable)
@@ -788,13 +786,6 @@ void CensusView::UponRightClick2(wxContextMenuEvent& e)
 }
 
 void CensusView::UponUpdateApplicable(wxUpdateUIEvent& e)
-{
-    e.Enable(true);
-}
-
-// TODO ?? WX NAME CONFLICT Can this be expunged?
-
-void CensusView::OnUpdateFileSaveAs(wxUpdateUIEvent& e)
 {
     e.Enable(true);
 }
