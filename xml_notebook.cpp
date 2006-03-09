@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xml_notebook.cpp,v 1.19 2006-03-09 12:37:24 chicares Exp $
+// $Id: xml_notebook.cpp,v 1.20 2006-03-09 13:30:15 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -102,7 +102,7 @@ wxEventType const wxEVT_REFOCUS_INVALID_CONTROL = wxNewEventType();
 
 // Entries alphabetized by function name.
 BEGIN_EVENT_TABLE(XmlNotebook, wxDialog)
-    EVT_BUTTON(wxID_OK, XmlNotebook::OponOK)
+    EVT_BUTTON(wxID_OK, XmlNotebook::UponOK)
     EVT_CHILD_FOCUS(XmlNotebook::UponChildFocus)
     EVT_INIT_DIALOG(XmlNotebook::UponInitDialog)
     EVT_NOTEBOOK_PAGE_CHANGED(XRCID("input_notebook"), XmlNotebook::UponPageChanged)
@@ -589,7 +589,7 @@ void XmlNotebook::UponInitDialog(wxInitDialogEvent&)
 // return code being initialized to zero. Anyway, this function exists
 // only because of a kludge that should be reworked.
 
-void XmlNotebook::OponOK(wxCommandEvent& event)
+void XmlNotebook::UponOK(wxCommandEvent& event)
 {
     wxDialog::OnOK(event);
     if(0 == GetReturnCode())
@@ -719,9 +719,9 @@ void XmlNotebook::UponUpdateGUI(wxUpdateUIEvent& event)
                 input_[name] = i->second;
                 }
             }
-        catch(std::exception const& event)
+        catch(std::exception const& e)
             {
-            DiagnosticsWindow().SetLabel(name + ": " + event.what());
+            DiagnosticsWindow().SetLabel(name + ": " + e.what());
             }
         }
 
