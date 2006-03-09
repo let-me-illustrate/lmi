@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: docmdichildframe_ex.cpp,v 1.4 2006-02-12 17:07:31 chicares Exp $
+// $Id: docmdichildframe_ex.cpp,v 1.5 2006-03-09 01:58:18 chicares Exp $
 
 #include "docmdichildframe_ex.hpp"
 
@@ -30,8 +30,8 @@
 IMPLEMENT_CLASS(DocMDIChildFrameEx, wxDocMDIChildFrame)
 
 BEGIN_EVENT_TABLE(DocMDIChildFrameEx, wxDocMDIChildFrame)
-    EVT_ACTIVATE(DocMDIChildFrameEx::OnActivate)
-    EVT_MENU_HIGHLIGHT_ALL(DocMDIChildFrameEx::OnMenuHighlight)
+    EVT_ACTIVATE(DocMDIChildFrameEx::UponActivate)
+    EVT_MENU_HIGHLIGHT_ALL(DocMDIChildFrameEx::UponMenuHighlight)
 END_EVENT_TABLE()
 
 DocMDIChildFrameEx::DocMDIChildFrameEx
@@ -76,13 +76,20 @@ wxStatusBar* DocMDIChildFrameEx::GetStatusBar() const
     return 0;
 }
 
-void DocMDIChildFrameEx::OnActivate(wxActivateEvent& event)
+/// This function merely augments DocMDIChildFrameEx::OnActivate(),
+/// so it calls Skip() at the end.
+
+void DocMDIChildFrameEx::UponActivate(wxActivateEvent& event)
 {
     SetMdiWindowMenu();
     event.Skip();
 }
 
-void DocMDIChildFrameEx::OnMenuHighlight(wxMenuEvent& event)
+/// This augments wxDocMDIChildFrame::OnMenuHighlight(), but isn't a
+/// complete replacement. It calls that base-class function explicitly
+/// because Skip() wouldn't work here.
+
+void DocMDIChildFrameEx::UponMenuHighlight(wxMenuEvent& event)
 {
     try
         {

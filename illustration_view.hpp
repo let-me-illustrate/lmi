@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustration_view.hpp,v 1.13 2006-01-29 13:52:00 chicares Exp $
+// $Id: illustration_view.hpp,v 1.14 2006-03-09 01:58:18 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -84,19 +84,19 @@ class IllustrationView
     wxMenuBar* MenuBar() const;
 
     // ViewEx overrides.
-    bool OnCreate            (wxDocument*, long);
+    bool OnCreate              (wxDocument*, long);
 
-    // wxView overrides.
-// TODO ?? expunge    wxPrintout* OnCreatePrintout();
+// TODO ?? WX NAME CONFLICT This apparently doesn't work anyway.
+    void OnMenuOpen            (wxMenuEvent&);
 
-    void OnMenuOpen          (wxMenuEvent&);
-    void OnPreviewPdf        (wxCommandEvent&);
-    void OnPrintPdf          (wxCommandEvent&);
-    void OnProperties        (wxCommandEvent&);
-    void OnUpdateFileSave    (wxUpdateUIEvent&);
-    void OnUpdateFileSaveAs  (wxUpdateUIEvent&);
-    void OnUpdateInapplicable(wxUpdateUIEvent&);
-    void OnUpdateProperties  (wxUpdateUIEvent&);
+    void UponPreviewPdf        (wxCommandEvent&);
+    void UponPrintPdf          (wxCommandEvent&);
+    void UponProperties        (wxCommandEvent&);
+    void UponUpdateFileSave    (wxUpdateUIEvent&);
+// TODO ?? WX NAME CONFLICT This apparently doesn't work anyway.
+    void OnUpdateFileSaveAs    (wxUpdateUIEvent&);
+    void UponUpdateInapplicable(wxUpdateUIEvent&);
+    void UponUpdateProperties  (wxUpdateUIEvent&);
 
     wxHtmlWindow* html_window_;
     bool is_phony_;

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: single_choice_popup_menu.cpp,v 1.1 2006-02-28 13:35:24 chicares Exp $
+// $Id: single_choice_popup_menu.cpp,v 1.2 2006-03-09 01:58:18 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -57,7 +57,7 @@ SingleChoicePopupMenu::SingleChoicePopupMenu
         ,choices.GetCount()
         ,wxEVT_COMMAND_MENU_SELECTED
         ,reinterpret_cast<wxObjectEventFunction>
-            (&SingleChoicePopupMenu::OnMenuChoice
+            (&SingleChoicePopupMenu::UponMenuChoice
             )
         );
 }
@@ -73,7 +73,7 @@ int SingleChoicePopupMenu::Choose()
     return selection_index_;
 }
 
-void SingleChoicePopupMenu::OnMenuChoice(wxCommandEvent& e)
+void SingleChoicePopupMenu::UponMenuChoice(wxCommandEvent& e)
 {
     selection_index_ = e.GetId();
 }

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: docmanager_ex.hpp,v 1.4 2006-01-29 13:52:00 chicares Exp $
+// $Id: docmanager_ex.hpp,v 1.5 2006-03-09 01:58:18 chicares Exp $
 
 #ifndef docmanager_ex_hpp
 #define docmanager_ex_hpp
@@ -54,16 +54,15 @@ class DocManagerEx
     void DissociateFileHistoryFromFileMenu(wxMenuBar*);
 
   private:
-    void OnPageSetup(wxCommandEvent&);
-    // WX !! These functions don't seem to be virtual; shouldn't they be?
-    void OnPreview(wxCommandEvent&);
-    void OnPrint(wxCommandEvent&);
+    void UponPageSetup(wxCommandEvent&);
+    // WX !! OnPreview() and OnPrint() aren't virtual; shouldn't they be?
+    void UponPreview(wxCommandEvent&);
+    void UponPrint(wxCommandEvent&);
 
     // WX !! In msw, 'Page setup' has superseded 'Print setup', but wx
     // provides a builtin ID only for the former and not for the
     // latter. Shouldn't OnPageSetup() be added, and OnPrintSetup() be
     // deprecated unless it's wanted on other platforms?
-//    void OnPrintSetup(wxCommandEvent&);
 
     // wxDocManager overrides.
     virtual wxDocTemplate* SelectDocumentType
