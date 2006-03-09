@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: value_cast_test.cpp,v 1.11 2006-03-05 20:20:12 chicares Exp $
+// $Id: value_cast_test.cpp,v 1.12 2006-03-09 01:58:14 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -129,7 +129,10 @@ int test_main(int, char*[])
     // Not convertible: value_cast() forbids conversion to pointer.
     BOOST_TEST_EQUAL(e_direct       ,method(cp  ,ccp));
 
-    BOOST_TEST_EQUAL(e_stream       ,method(s   ,(char volatile*)(0)));
+    // Not convertible: value_cast() forbids conversion to pointer.
+    BOOST_TEST_EQUAL(e_stream       ,method(s, (char volatile*)(0)   ));
+
+    BOOST_TEST_EQUAL(e_stream       ,method(   (char volatile*)(0), s));
 
     n_d_c = value_cast<NotDefaultConstructible>(n_d_c);
     n_d_c = value_cast(n_d_c, n_d_c);
