@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_irc7702a.cpp,v 1.7 2006-01-29 13:52:00 chicares Exp $
+// $Id: ihs_irc7702a.cpp,v 1.8 2006-03-11 01:11:46 chicares Exp $
 
 // TODO ?? Make this a server app. Consider where to store DB, SA history.
 
@@ -687,7 +687,7 @@ double Irc7702A::UpdatePmt7702A
 //    LMI_ASSERT(0.0 == Pmts[TestPeriodDur]);
 
     // During the test period (only), we accumulate premiums and compare
-    // to the the seven-pay limit. We store premium history for this period(or longer?)
+    // to the seven-pay limit. We store premium history for this period(or longer?)
     // so that we can perform this comparison afresh in retrospect when
     // Bfts decreases.
     if(TestPeriodDur < TestPeriodLen)

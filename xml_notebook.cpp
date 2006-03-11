@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xml_notebook.cpp,v 1.20 2006-03-09 13:30:15 chicares Exp $
+// $Id: xml_notebook.cpp,v 1.21 2006-03-11 01:11:46 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -561,7 +561,7 @@ void XmlNotebook::UponChildFocus(wxChildFocusEvent&)
     // SetFocus() here would not work: as soon as the present function
     // returns, focus would shift to the other window that's about to
     // gain focus. Posting an event to refocus the invalid window,
-    // after this function has returned and after the the pending
+    // after this function has returned and after the pending
     // focus change has occurred, solves that problem.
     if(hold_focus_window_)
         {
