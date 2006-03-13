@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.364 2006-03-13 16:45:09 chicares Exp $
+// $Id: ChangeLog,v 1.365 2006-03-13 21:09:24 wboutin Exp $
 
 MAINTENANCE
 
@@ -6506,4 +6506,33 @@ Reformat.
   xml_notebook.cpp
 Remember focused control across task switches. See:
   [insert URL when mailing list updated]
+
+20060313T2028Z <wboutin@massmutual.com> [1207]
+
+  cgicc_3_1_4_patch                      [moved]
+  cgicc_md5sums                          [moved]
+  gdb-5.2.1-1.exe.md5                    [moved]
+  mingw-runtime-3.8.tar.gz.md5           [moved]
+  mingw-utils-0.3.tar.gz.md5             [moved]
+  mingw32-make-3.80.0-3.tar.gz.md5       [moved]
+  msys-1.0.10.exe.md5                    [moved]
+  w32api-3.3.tar.gz.md5                  [moved]
+  wget-1.9.1-mingwPORT.tar.bz2.md5       [moved]
+  xmlwrapp_0_2_0_patch                   [moved]
+  xmlwrapp_md5sums                       [moved]
+Move to new respective 'tools/' directory.
+
+  binutils-2.15.91-20050904-1.tar.gz.md5 [new file]
+  binutils-2.16.91-20050827-1.tar.gz.md5 [new file]
+  gcc-core-3.4.2-20040916-1.tar.gz.md5   [new file]
+  gcc-core-3.4.4-20050522-1.tar.gz.md5   [new file]
+  gcc-g++-3.4.2-20040916.tar.gz.md5      [new file]
+  gcc-g++-3.4.4-20050522-1.tar.gz.md5    [new file]
+  mingw-runtime-3.6.tar.gz.md5           [new file]
+  mingw_install.make                     [new file]
+  w32api-3.2.tar.gz.md5                  [new file]
+Add validation files.
+
+  setup.make
+Improve conformance.
 
