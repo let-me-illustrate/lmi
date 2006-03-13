@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xml_notebook.cpp,v 1.21 2006-03-11 01:11:46 chicares Exp $
+// $Id: xml_notebook.cpp,v 1.22 2006-03-13 14:13:58 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -436,10 +436,14 @@ wxNotebookPage& XmlNotebook::CurrentPage() const
 {
     // INELEGANT !! This window could be held elsewhere, e.g. as a reference.
     wxNotebook& notebook = WindowFromXrcName<wxNotebook>("input_notebook");
+    if(wxNOT_FOUND == notebook.GetSelection())
+        {
+        fatal_error() << "No page selected in notebook." << LMI_FLUSH;
+        }
     wxNotebookPage* page = notebook.GetPage(notebook.GetSelection());
     if(!page)
         {
-        fatal_error() << "No page selected in notebook." << LMI_FLUSH;
+        fatal_error() << "Selected notebook page is invalid." << LMI_FLUSH;
         }
     return *page;
 }
