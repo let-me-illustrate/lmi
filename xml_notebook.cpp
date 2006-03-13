@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xml_notebook.cpp,v 1.22 2006-03-13 14:13:58 chicares Exp $
+// $Id: xml_notebook.cpp,v 1.23 2006-03-13 16:45:09 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -35,6 +35,7 @@
 #include "transferor.hpp"
 #include "wx_workarounds.hpp"
 
+#include <wx/app.h> // wxTheApp
 #include <wx/checkbox.h>
 #include <wx/ctrlsub.h>
 #include <wx/notebook.h>
@@ -682,8 +683,11 @@ void XmlNotebook::UponRefocusInvalidControl(wxCommandEvent&)
 
 void XmlNotebook::UponUpdateGUI(wxUpdateUIEvent& event)
 {
-    // Do nothing until the notebook has been fully created.
-    if(updates_blocked_)
+    // Do nothing if
+    //  - the notebook has not been fully created, or
+    //  - updates are temporarily blocked, or
+    //  - the application is not active.
+    if(updates_blocked_ || !wxTheApp->IsActive())
         {
         return;
         }
