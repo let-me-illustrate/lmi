@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_rnddata.hpp,v 1.1 2005-01-14 19:47:45 chicares Exp $
+// $Id: ihs_rnddata.hpp,v 1.1.2.1 2006-03-13 19:56:52 etarassov Exp $
 
 #ifndef rnddata_hpp
 #define rnddata_hpp
@@ -36,6 +36,8 @@ class LMI_EXPIMP StreamableRoundingRules
     :public rounding_rules
 {
     friend class RoundingDocument;
+    // .rnd files editor needs access to the Write method
+    friend class PeditRND;
 
   public:
     explicit StreamableRoundingRules(std::string const& a_Filename);

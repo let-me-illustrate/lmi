@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: rounding_rules.hpp,v 1.3 2005-08-28 21:36:56 chicares Exp $
+// $Id: rounding_rules.hpp,v 1.3.2.1 2006-03-13 19:56:52 etarassov Exp $
 
 #ifndef rounding_rules_hpp
 #define rounding_rules_hpp
@@ -41,6 +41,8 @@ class LMI_EXPIMP rounding_rules
     friend class StreamableRoundingRules;
     friend class RoundingDocument;
     friend class RoundingView;
+    // .rnd files editor needs access to internal members (or Set* accessors)
+    friend class PeditRND;
 
   public:
     rounding_rules();

@@ -12,11 +12,13 @@
 #include <wx/app.h>
 
 #include <map>
+#include <bitset>
 
 #include <boost/tuple/tuple.hpp>
 #include <boost/tuple/tuple_comparison.hpp>
+#include <boost/preprocessor/repetition.hpp>
 
-#include <math.h> // for log10
+#include <cmath>     // std::log10()
 
 // needed by MultiDimIntAxisAdjuster to calculate its contols size
 #include <wx/dcclient.h>
@@ -44,8 +46,9 @@ enum OptionExercise
 class ExerciseAxis : public MultiDimEnumAxis<OptionExercise>
 {
 public:
-    ExerciseAxis() : MultiDimEnumAxis<OptionExercise>("Exercise type",
-                                      MakeArray("European", "American"))
+    ExerciseAxis()
+        : MultiDimEnumAxis<OptionExercise>("Exercise type",
+                                           MakeArray("European", "American"))
     {
     }
 };
@@ -60,7 +63,6 @@ public:
     }
 };
 
-
 // forward MultiDimAdjustableIntAxis class declaration
 class MultiDimAdjustableIntAxis;
 
@@ -68,14 +70,22 @@ class MultiDimAdjustableIntAxis;
 class MultiDimIntAxisAdjuster : public wxPanel
 {
 public:
-    MultiDimIntAxisAdjuster( MultiDimAdjustableIntAxis & axis, MultiDimGridAny & grid );
+    MultiDimIntAxisAdjuster( MultiDimAdjustableIntAxis & axis,
+                             MultiDimGrid & grid );
+    int GetMinValue() const;
+    int GetMaxValue() const;
+    void SetMinValue( int minValue );
+    void SetMaxValue( int maxValue );
+
 private:
-    MultiDimAdjustableIntAxis & axis;
-    MultiDimGridAny & grid;
+    MultiDimAdjustableIntAxis & m_axis;
 
     wxTextCtrl * m_minValue;
     wxTextCtrl * m_maxValue;
     wxButton * m_button;
+
+    /// number of digits needed to represent a value from the range [m_minValue, m_maxValue]
+    unsigned int m_numDigits;
 
     // event handler function called when min/max value is changed
     void OnRangeChange( wxCommandEvent & event );
@@ -83,6 +93,9 @@ private:
     void OnConfirm( wxCommandEvent & event );
 
     friend class MultiDimAdjustableIntAxis;
+
+    // function that really validates the input
+    bool DoValidateInput() const;
     // function called by OnCofirm. applies adjustment values
     void DoOnConfirm();
 
@@ -101,101 +114,75 @@ private:
 // it provides adjustment control and allows narrowing of value range
 // It stores m_minOriginal and m_maxOriginal values to allow the 'resetting'
 // of adjustments
-class MultiDimAdjustableIntAxis
-    : public MultiDimAdjustableAxisAny< MultiDimIntAxisAdjuster >
+class MultiDimAdjustableIntAxis : public MultiDimAdjustableAxis<
+                                                MultiDimIntAxisAdjuster,
+                                                MultiDimIntAxis >
 {
-    typedef MultiDimAdjustableAxisAny< MultiDimIntAxisAdjuster > BaseClass;
 public:
-    typedef int ValueType;
+    typedef MultiDimAdjustableAxis< MultiDimIntAxisAdjuster, MultiDimIntAxis >
+            BaseClass;
+
+    using MultiDimIntAxis::SetValues;
+    using MultiDimIntAxis::GetMinValue;
+    using MultiDimIntAxis::GetMaxValue;
+    using BaseClass::GetAdjustControl;
+    using BaseClass::ApplyAdjustment;
+    using BaseClass::RefreshAdjustment;
 
     // see MultiDimIntAxis::MultiDimIntAxis constructor for details
-    MultiDimAdjustableIntAxis(
-        const wxString& name,
-        int minValue,
-        int maxValue,
-        int step = 1
-    )
-    : BaseClass(name), m_minOriginal(minValue), m_maxOriginal(maxValue),
-    m_min(minValue), m_max(maxValue), m_step(step)
+    MultiDimAdjustableIntAxis( const wxString& name,
+                               int minValue,
+                               int maxValue,
+                               int step )
+    : BaseClass( name )
     {
-        wxASSERT_MSG( minValue <= maxValue,
-                      _T("minValue have to less or equal to maxValue") );
-        wxASSERT_MSG( step >= 1,
-                      _T("step has to be at least 1") );
+        SetValues( minValue, maxValue, step );
     }
 
-    // the same as MultiDimIntAxis::GetCardinality
-    virtual unsigned int GetCardinality() const
+    MultiDimAdjustableIntAxis( const wxString& name )
+    : BaseClass( name )
     {
-        return ( m_max - m_min ) / m_step + 1;
-    }
-
-    // the same as MultiDimIntAxis::GetCardinality
-    virtual wxString GetLabel(unsigned int n) const
-    {
-        return wxString::Format( _T( "%d" ), m_min + n * m_step );
-    }
-
-    // the same as MultiDimIntAxis::GetCardinality
-    virtual boost::any GetValue(unsigned int n) const
-    {
-        return boost::any( static_cast<int>( m_min + n * m_step ) );
+        SetValues( 0, 100, 1 );
     }
 
 protected:
     // create the adjustment control
-    MultiDimIntAxisAdjuster * DoGetAdjustControl( MultiDimGridAny *grid ) const
+    MultiDimIntAxisAdjuster * DoGetAdjustControl( MultiDimGrid & grid,
+                                                  MultiDimTableAny & table )
     {
-        wxASSERT( grid != NULL );
-        return new MultiDimIntAxisAdjuster(
-            *const_cast< MultiDimAdjustableIntAxis* >(this),
-            *grid
-        );
+        return new MultiDimIntAxisAdjuster( *this, grid );
     }
 
-    // asks adjustment window to reapply its filters
-    virtual void DoApplyAdjustment( MultiDimIntAxisAdjuster * win )
+    // queries adjustment window for a new range information
+    virtual bool DoApplyAdjustment( MultiDimIntAxisAdjuster * adjustWin,
+                                    unsigned int n )
     {
-        if( win != NULL )
-            win->DoOnConfirm();
+        if( adjustWin != NULL )
+        {
+            bool updated = adjustWin->GetMinValue() == GetMinValue();
+            updated = updated || adjustWin->GetMaxValue() == GetMaxValue();
+            SetValues( adjustWin->GetMinValue(), adjustWin->GetMaxValue(),
+                       GetStep() );
+            return updated;
+        }
+        return false;
     }
 
-    // just restore the original values
-    virtual void DoResetAdjustment( MultiDimIntAxisAdjuster * win )
+    // refreshes the adjustment window with the correct range information
+    virtual bool DoRefreshAdjustment( MultiDimIntAxisAdjuster * adjustWin,
+                                      unsigned int n )
     {
-        m_min = m_minOriginal;
-        m_max = m_maxOriginal;
+        if( adjustWin != NULL )
+        {
+            bool updated = adjustWin->GetMinValue() == GetMinValue();
+            updated = updated || adjustWin->GetMaxValue() == GetMaxValue();
+            adjustWin->SetMinValue( GetMinValue() );
+            adjustWin->SetMaxValue( GetMaxValue() );
+            return updated;
+        }
+        return false;
     }
 
-private:
-    friend class MultiDimIntAxisAdjuster;
-
-    // original range boundaries
-    int m_minOriginal;
-    int m_maxOriginal;
-    // working boundaries - could be altered by adjustment control
-    int m_min;
-    int m_max;
-    
-    int m_step;
-
-
-    void DoApplyAdjustment( int minValue, int maxValue )
-    {
-        // minValue should not be greater than m_maxOriginal
-        minValue = wxMin( minValue, m_maxOriginal );
-        // snap minValue to the step-grid
-        minValue = m_minOriginal
-                 + (int)(( minValue - m_minOriginal + m_step - 1 ) / m_step) * m_step;
-        // minValue should not be less than m_minOriginal
-        minValue = wxMax( minValue, m_minOriginal );
-
-        // maxValue should not be greater than m_maxOriginal, nor less than minValue
-        maxValue = wxMax( wxMin( maxValue, m_maxOriginal ), minValue );
-
-        m_min = minValue;
-        m_max = maxValue;
-    }
 };
 
 // --------------------------
@@ -210,9 +197,9 @@ public:
     }
 };
 
-// ----------------------------------
+// --------------------------------------
 // MultiDimIntAxisAdjuster implementation
-// ----------------------------------
+// --------------------------------------
 BEGIN_EVENT_TABLE( MultiDimIntAxisAdjuster, wxPanel )
     EVT_TEXT(wxID_ANY, MultiDimIntAxisAdjuster::OnRangeChange)
     EVT_BUTTON(wxID_ANY, MultiDimIntAxisAdjuster::OnConfirm)
@@ -232,12 +219,10 @@ wxSize MultiDimIntAxisAdjuster::GetMinSizeForTextControl( wxWindow * win, int nu
     return size;
 }
 
-MultiDimIntAxisAdjuster::MultiDimIntAxisAdjuster(MultiDimAdjustableIntAxis & aaxis,
-                                                 MultiDimGridAny & agrid )
-    : wxPanel(&agrid, -1, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL),
-      axis( aaxis ),
-      grid( agrid  ),
-      m_button( NULL )
+MultiDimIntAxisAdjuster::MultiDimIntAxisAdjuster( MultiDimAdjustableIntAxis & axis,
+                                                  MultiDimGrid & grid )
+    : wxPanel(&grid, -1, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL),
+      m_axis( axis ), m_button( NULL ), m_numDigits( 3 )
 {
     wxBoxSizer * sizer = new wxBoxSizer( wxHORIZONTAL );
 
@@ -258,16 +243,8 @@ MultiDimIntAxisAdjuster::MultiDimIntAxisAdjuster(MultiDimAdjustableIntAxis & aax
     sizer->Add( m_maxValue, wxSizerFlags().Expand().Border(wxLEFT, 4) );
     sizer->Add( m_button, wxSizerFlags().Expand().Border(wxLEFT, 3) );
 
-    // maximum possible number of digits for a number in between axis.m_min and axis.m_max
-    unsigned int numDigits = 0;
-    {
-        double maxValue = wxMax( axis.m_min > 0 ? axis.m_min : -axis.m_min,
-                                 axis.m_max > 0 ? axis.m_max : -axis.m_max );
-        numDigits = (int)log10( wxMax( 1, maxValue ) );
-    }
-
-    m_minValue->SetMinSize( GetMinSizeForTextControl( m_minValue, numDigits) );
-    m_maxValue->SetMinSize( GetMinSizeForTextControl( m_maxValue, numDigits) );
+    SetMinValue( 0 );
+    SetMaxValue( 0 );
 
     SetSizer( sizer );
     sizer->SetSizeHints( this );
@@ -278,7 +255,7 @@ MultiDimIntAxisAdjuster::MultiDimIntAxisAdjuster(MultiDimAdjustableIntAxis & aax
 void MultiDimIntAxisAdjuster::OnRangeChange( wxCommandEvent & event )
 {
     if( m_button )
-        m_button->Enable( m_minValue->Validate() && m_maxValue->Validate() );
+        m_button->Enable( DoValidateInput() );
 }
 
 void MultiDimIntAxisAdjuster::OnConfirm( wxCommandEvent & event )
@@ -286,47 +263,78 @@ void MultiDimIntAxisAdjuster::OnConfirm( wxCommandEvent & event )
     return DoOnConfirm();
 }
 
+int MultiDimIntAxisAdjuster::GetMinValue( ) const
+{
+    long minVal;
+    return m_minValue->GetValue().ToLong(&minVal) ? minVal : 0;
+}
+
+int MultiDimIntAxisAdjuster::GetMaxValue( ) const
+{
+    long maxVal;
+    return m_maxValue->GetValue().ToLong(&maxVal) ? maxVal : 0;
+}
+
+void MultiDimIntAxisAdjuster::SetMinValue( int minValue )
+{
+    m_minValue->SetValue( wxString::Format( _T("%d"), minValue ) );
+
+    // maximum possible number of digits for a number in between axis.m_min and axis.m_max
+    unsigned int numDigits = static_cast< unsigned int>( std::log10(
+                                wxMax( 1, wxMax( minValue, -minValue ) ) ) );
+    m_numDigits = wxMax( m_numDigits, numDigits );
+
+    m_minValue->SetMinSize( GetMinSizeForTextControl( m_minValue, m_numDigits) );
+}
+
+void MultiDimIntAxisAdjuster::SetMaxValue( int maxValue )
+{
+    m_maxValue->SetValue( wxString::Format( _T("%d"), maxValue ) );
+
+    // maximum possible number of digits for a number in between axis.m_min and axis.m_max
+    unsigned int numDigits = static_cast< unsigned int>( std::log10(
+                                wxMax( 1, wxMax( maxValue, -maxValue ) ) ) );
+    m_numDigits = wxMax( m_numDigits, numDigits );
+
+    m_maxValue->SetMinSize( GetMinSizeForTextControl( m_maxValue, m_numDigits) );
+}
+
+bool MultiDimIntAxisAdjuster::DoValidateInput() const
+{
+    if( !m_minValue->Validate() || !m_maxValue->Validate() )
+        return false;
+    long minVal, maxVal;
+    if( !m_minValue->GetValue().ToLong( &minVal )
+     || !m_maxValue->GetValue().ToLong( &maxVal ) )
+        return false;
+    return minVal <= maxVal;
+}
+
 void MultiDimIntAxisAdjuster::DoOnConfirm( )
 {
-    long minVal, maxVal;
-    wxString minStr = m_minValue->GetValue();
-    wxString maxStr = m_maxValue->GetValue();
-    if( ( !minStr.empty() && !minStr.ToLong(&minVal) )
-        || ( !maxStr.empty() && !maxStr.ToLong(&maxVal) ) )
+    if( !DoValidateInput() )
     {
         wxMessageBox( _T("Invalid input - enter numbers only"),
                       _T("Invalid input"), wxOK | wxICON_ERROR, this );
+        return;
     }
-    int minAdjusted = !minStr.empty() ? minVal
-                                      : axis.m_minOriginal;
-    int maxAdjusted = !maxStr.empty() ? maxVal
-                                      : axis.m_maxOriginal;
+    MultiDimGrid * grid = dynamic_cast<MultiDimGrid *>( GetParent() );
 
-    m_button->Enable( false );
-
-    axis.DoApplyAdjustment( minAdjusted, maxAdjusted );
-
-    // if entered boundary value was modified by the control - then show it
-    if( axis.m_min < minAdjusted || minAdjusted < axis.m_minOriginal )
+    if( grid )
     {
-        m_minValue->SetValue( wxString::Format( _T("%d"), axis.m_min ) );
+        grid->ApplyAxisAdjustment( m_axis.GetName() );
+
+        m_button->Enable( false );
     }
-    // if entered boundary value was modified by the control - then show it
-    if( axis.m_max > maxAdjusted || maxAdjusted > axis.m_maxOriginal )
-    {
-        m_maxValue->SetValue( wxString::Format( _T("%d"), axis.m_max ) );
-    }
-    grid.UpdateGridAxis( axis.GetName() );
 }
 
-
 // we handle only maturities 12 months ahead
-class MaturityAxis : public MultiDimAxisAny
+class MaturityAxis : public MultiDimAxis<wxDateTime>
 {
 public:
     typedef wxDateTime ValueType;
 
-    MaturityAxis() : MultiDimAxisAny("Maturity")
+    MaturityAxis() : MultiDimAxis<wxDateTime>("Maturity")
     {
     }
 
@@ -335,60 +343,199 @@ public:
     {
         return wxDateTime::GetMonthName(static_cast<wxDateTime::Month>(n));
     }
-    virtual boost::any GetValue(unsigned int n) const
+    virtual wxDateTime DoGetValue(unsigned int n) const
     {
         // we only interested in the month name
-        return boost::any(wxDateTime(
+        return wxDateTime(
                 static_cast<wxDateTime::wxDateTime_t>(1),
                 static_cast<wxDateTime::Month>(n),
                 1, 0, 0, 0, 0
-            ));
+            );
     }
 };
 
-typedef MultiDimGrid4<unsigned int,
-                      TypeAxis,
-                      ExerciseAxis,
-                      StrikeAxis,
-                      MaturityAxis> OptionGrid;
+// Template used by OptionTableDataComparator to inline a set of key comparisons
+template< int N, int n, typename Tuple, typename Varies >
+struct OptionTableDataComparatorHelper;
 
-// this is a trivial sparse table implementation
-class OptionTable : public MultiDimTable4<unsigned int,
-                                          OptionType,
-                                          OptionExercise,
-                                          int,
-                                          wxDateTime>
+// Specialisation for the last element in the keys (end of the comparison list)
+template< int N, typename Tuple, typename Varies >
+struct OptionTableDataComparatorHelper<N, N, Tuple, Varies>
+{
+    inline static
+    bool compare( Tuple const & k1, Tuple const & k2, Varies const & varies )
+    {   return false;   }
+};
+
+// Compare nth key element and recursivly call for the next element
+template< int N, int n, typename Tuple, typename Varies >
+struct OptionTableDataComparatorHelper
+{
+    inline static
+    bool compare( Tuple const & k1, Tuple const & k2, Varies const & varies )
+    {
+        if( varies.test( n ) )
+        {
+            if( k1.get<n>() < k2.get<n>() ) return true;
+            if( k2.get<n>() < k1.get<n>() ) return false;
+        }
+        return OptionTableDataComparatorHelper< N, n+1, Tuple, Varies >
+                                            ::compare( k1, k2, varies );
+    }
+};
+
+// Template for comparing tuples of length N.
+// Uses OptionTableDataComparatorHelper to generate the code
+template< int N, typename Tuple >
+class OptionTableDataComparator
 {
 public:
-    virtual unsigned int
-    GetValue(OptionType type,
-             OptionExercise exercise,
-             int strike,
-             wxDateTime maturity) const
+    typedef std::bitset<N> Varies;
+    explicit OptionTableDataComparator( Varies & varies )
+    : m_varies( varies ) {}
+    OptionTableDataComparator( OptionTableDataComparator const & comp )
+    : m_varies( comp.m_varies ) {}
+
+    OptionTableDataComparator & operator = ( OptionTableDataComparator const & comp )
+    {  return *this; }
+
+    bool operator() ( Tuple const & k1, Tuple const & k2 ) const
     {
-        const Values::const_iterator
-            i = m_values.find(make_tuple(type, exercise, strike, maturity));
-        return i == m_values.end() ? 0 : i->second;
+        return OptionTableDataComparatorHelper< N, 0, Tuple, Varies >
+                                                ::compare( k1, k2, m_varies );
     }
+private:
+    Varies const & m_varies;
+};
+
+
+// Trivial sparse table implementation
+// The reason to use multimap (instead of usual map container) is only
+// not to immediatly discard data when user disables
+// of the axis (means to disable and to enable an axis, discards no data)
+class OptionTable : public MultiDimTable4< unsigned int,
+                                           OptionType,
+                                           OptionExercise,
+                                           int,
+                                           wxDateTime >
+{
+public:
+    OptionTable();
+    virtual unsigned int
+    GetValue( OptionType type,
+              OptionExercise exercise,
+              int strike,
+              wxDateTime maturity ) const;
 
     virtual void
-    SetValue(OptionType type,
-             OptionExercise exercise,
-             int strike,
-             wxDateTime maturity,
-             const unsigned int& value)
-    {
-        m_values[make_tuple(type, exercise, strike, maturity)] = value;
-    }
+    SetValue( OptionType type,
+              OptionExercise exercise,
+              int strike,
+              wxDateTime maturity,
+              const unsigned int& value );
+
+    virtual bool VariesByDimension( unsigned int n ) const;
+    virtual void MakeVaryByDimension( unsigned int n, bool val );
+    virtual bool CanChangeVariationWith( unsigned int n ) const;
+
+    // keep the same empty implementation of these methods
+//    bool DoApplyAxisAdjustment( MultiDimAxisAny & axis, unsigned int n )
+//    bool DoRefreshAxisAdjustment( MultiDimAxisAny & axis, unsigned int n )
+
+protected:
+    virtual MultiDimAxis<OptionType> * GetAxis0()
+    {   return new TypeAxis();  }
+
+    virtual MultiDimAxis<OptionExercise> * GetAxis1()
+    {   return new ExerciseAxis();  }
+
+    virtual MultiDimAxis<int> * GetAxis2()
+    {   return new StrikeAxis();  }
+
+    virtual MultiDimAxis<wxDateTime> * GetAxis3()
+    {   return new MaturityAxis();  }
 
 private:
-    typedef std::map< tuple<OptionType, OptionExercise, int, wxDateTime>,
-                      unsigned int > Values;
+    // structure that hold data variation along different axis
+    // for every axis Varies[n] indicates whether data varies with that nth axis
+    typedef std::bitset<4> Varies;
 
+    typedef tuple<OptionType, OptionExercise, int, wxDateTime> ValueKey;
+
+    typedef OptionTableDataComparator< 4, ValueKey > Comparator;
+    typedef std::multimap< ValueKey, unsigned int, Comparator > Values;
+
+    // bitset holding data variation along dimentions
+    Varies m_varies;
+
+    // the actual data
     Values m_values;
 };
 
+OptionTable::OptionTable()
+: m_varies(), m_values( Comparator(m_varies) )
+{
+}
 
+unsigned int OptionTable::GetValue( OptionType type,
+                                    OptionExercise exercise,
+                                    int strike,
+                                    wxDateTime maturity ) const
+{
+    ValueKey tuple = make_tuple(type, exercise, strike, maturity);
+    const Values::const_iterator lower = m_values.lower_bound( tuple );
+    const Values::const_iterator upper = m_values.upper_bound( tuple );
+    
+    // disambiguate between [lower, upper) found elements
+    // take the one with the lowest key (in dictionary order)
+    unsigned int result = 0;
+    bool first = true;
+    for( Values::const_iterator cit = lower; cit != upper; ++cit )
+    {
+        if( first )
+        {
+            tuple = cit->first;
+            first = false;
+            result = cit->second;
+        }
+        else if( cit->first < tuple )
+        {
+            tuple = cit->first;
+            result = cit->second;
+        }
+    }
+    return result;
+}
+
+void OptionTable::SetValue( OptionType type,
+                            OptionExercise exercise,
+                            int strike,
+                            wxDateTime maturity,
+                            const unsigned int& value )
+{
+    // just erase old matching values and replace it with one entered value
+    ValueKey tuple = make_tuple(type, exercise, strike, maturity);
+    m_values.erase( m_values.lower_bound( tuple ), m_values.upper_bound( tuple ) );
+    m_values.insert( std::make_pair( tuple, value ) );
+}
+
+bool OptionTable::VariesByDimension( unsigned int n ) const
+{
+    wxASSERT_MSG( n < m_varies.size(), _T("incorrect dimension") );
+    return m_varies.test(n);
+}
+
+void OptionTable::MakeVaryByDimension( unsigned int n, bool val )
+{
+    wxASSERT_MSG( n < m_varies.size(), _T("incorrect dimension") );
+
+    m_varies.set( n, val );
+}
+
+bool OptionTable::CanChangeVariationWith( unsigned int n ) const
+{
+    return (n != 0);
+}
 
 class TestApp : public wxApp
 {
@@ -401,14 +548,16 @@ IMPLEMENT_APP(TestApp)
 bool TestApp::OnInit()
 {
     wxFrame * frame = new wxFrame(
-        NULL, wxID_ANY, _T("MultiDimGridAny Test App"),
+        NULL, wxID_ANY, _T("MultiDimGrid Test App"),
         wxPoint( 200, 200 ), wxSize( 600, 400) );
 
     shared_ptr<OptionTable> table(new OptionTable);
+    table->MakeVaryByDimension( 0, true );
+    table->MakeVaryByDimension( 2, true );
 
     wxBoxSizer * sizer = new wxBoxSizer( wxVERTICAL );
 
-    OptionGrid * grid = new OptionGrid(frame, table);
+    MultiDimGrid * grid = new MultiDimGrid(frame, table);
     sizer->Add( grid, wxSizerFlags().Proportion(1).Expand() );
 
     frame->SetSizerAndFit( sizer );
@@ -426,4 +575,3 @@ bool TestApp::OnInit()
 //    grid->SetYAxisColour( wxColour(0, 100, 0) );
     return true;
 }
-

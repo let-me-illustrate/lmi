@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_dbdict.hpp,v 1.5 2005-06-14 21:38:36 chicares Exp $
+// $Id: ihs_dbdict.hpp,v 1.5.2.1 2006-03-13 19:56:52 etarassov Exp $
 
 #ifndef ihs_dbdict_hpp
 #define ihs_dbdict_hpp
@@ -47,6 +47,10 @@ class LMI_EXPIMP DBDictionary
     ,virtual private obstruct_slicing<DBDictionary>
 {
     friend class DatabaseDocument;
+    // Product editor needs to have access to WriteDB() method
+    // and to some internal variables to be able to open multiple documents
+    // at the same time through the singleton class
+    friend class PeditDB4DBDocument;
 
   public:
     static DBDictionary& instance();

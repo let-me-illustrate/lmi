@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_proddata.hpp,v 1.2 2005-04-06 23:11:32 chicares Exp $
+// $Id: ihs_proddata.hpp,v 1.2.2.1 2006-03-13 19:56:52 etarassov Exp $
 
 #ifndef proddata_hpp
 #define proddata_hpp
@@ -36,6 +36,8 @@ class LMI_EXPIMP TProductData
 {
     friend class PolicyDoc;
     friend class PolicyView;
+    // PeditPOL (pol files editor) needs access to Write() method and variables
+    friend class PeditPOL;
 
   public:
     explicit TProductData(std::string const& a_Filename);

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: stratified_charges.hpp,v 1.4 2005-10-20 02:48:25 chicares Exp $
+// $Id: stratified_charges.hpp,v 1.4.2.1 2006-03-13 19:56:52 etarassov Exp $
 
 #ifndef stratified_charges_hpp
 #define stratified_charges_hpp
@@ -66,6 +66,9 @@ class LMI_EXPIMP stratified_entity
     friend class TierView;
     friend class stratified_charges;
 
+    /// adaptor/wrapper class from "tir" editing visual component schema
+    friend class TIRSEntity;
+
   public:
     stratified_entity();
     stratified_entity
@@ -92,6 +95,8 @@ class LMI_EXPIMP stratified_charges
 {
     friend class TierDocument;
     friend class TierView;
+    // friend class to open access to internal data of s_charges to .tir editor
+    friend class TIRSCharges;
 
   public:
     stratified_charges(std::string const& filename);

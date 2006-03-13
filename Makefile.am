@@ -20,7 +20,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: Makefile.am,v 1.9.2.2 2005-12-22 14:35:10 zeitlin Exp $
+# $Id: Makefile.am,v 1.9.2.3 2006-03-13 19:56:52 etarassov Exp $
 
 ##############################################################################
 # All Targets
@@ -128,6 +128,7 @@ TESTS = \
     test_obstruct_slicing \
     test_passkey \
     test_path_utility \
+    test_pedit \
     test_progress_meter \
     test_quiet_nan \
     test_round_to \
@@ -888,3 +889,18 @@ noinst_HEADERS = \
     xrangefwd.hpp \
     xrangetypes.hpp \
     zero.hpp
+
+test_pedit_SOURCES = \
+    multidimgrid.cpp \
+    pedit_config.cpp \
+    pedit.cpp \
+    pedit_db4.cpp \
+    pedit_tir.cpp \
+    pedit_pol.cpp \
+    pedit_rnd.cpp \
+    test_pedit.cpp
+test_pedit_CXXFLAGS = $(WX_CXXFLAGS) $(BOOST_INCLUDE_FLAGS) $(AM_CXXFLAGS)
+test_pedit_LDADD = \
+    $(BOOST_LIBS) \
+    $(WX_LIBS) \
+    liblmi.la
