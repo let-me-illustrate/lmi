@@ -19,12 +19,13 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: setup.make,v 1.26 2006-01-29 13:52:00 chicares Exp $
+# $Id: setup.make,v 1.27 2006-03-13 21:08:49 wboutin Exp $
 
 .PHONY: all
 all: setup
 
-src_dir := $(CURDIR)
+src_dir   := $(CURDIR)
+tools_dir := $(src_dir)/tools
 
 ################################################################################
 
@@ -146,8 +147,8 @@ dummy_libraries: $(third_party_bin_dir) $(third_party_lib_dir)
 .PHONY: frozen_boost
 frozen_boost:
 	$(MAKE) \
-	  -C /tmp \
-	  -f $(src_dir)/setup.make \
+	  --directory=/tmp \
+	  --file=$(src_dir)/setup.make \
 	                    src_dir='$(src_dir)' \
 	    third_party_include_dir='$(third_party_include_dir)' \
 	     third_party_source_dir='$(third_party_source_dir)' \
@@ -180,8 +181,8 @@ install_frozen_boost_from_tmp_dir:
 # REVIEW: Can 'frozen_.*' rules be combined? Untested idea:
 # frozen%: $(third_party_directories)
 # 	$(MAKE) \
-# 	  -C /tmp \
-# 	  -f $(src_dir)/setup.make \
+# 	  --directory=/tmp \
+# 	  --file=$(src_dir)/setup.make \
 # 	                    src_dir='$(src_dir)' \
 # 	    third_party_include_dir='$(third_party_include_dir)' \
 # 	     third_party_source_dir='$(third_party_source_dir)' \
@@ -191,11 +192,12 @@ install_frozen_boost_from_tmp_dir:
 .PHONY: frozen_cgicc
 frozen_cgicc:
 	$(MAKE) \
-	  -C /tmp \
-	  -f $(src_dir)/setup.make \
+	  --directory=/tmp \
+	  --file=$(src_dir)/setup.make \
 	                    src_dir='$(src_dir)' \
 	    third_party_include_dir='$(third_party_include_dir)' \
 	     third_party_source_dir='$(third_party_source_dir)' \
+                          tools_dir='$(tools_dir)' \
 	  install_frozen_cgicc_from_tmp_dir check_cgicc_md5sums
 
 # TODO ?? Make this target abend if it's not run in /tmp/ ?
@@ -209,7 +211,7 @@ install_frozen_cgicc_from_tmp_dir:
 	  |$(MD5SUM) --check
 	$(BZIP2) --decompress --keep cgicc-3.1.4.tar.bz2
 	$(TAR) --extract --file=cgicc-3.1.4.tar
-	$(PATCH) --strip=0 < $(src_dir)/cgicc_3_1_4_patch
+	$(PATCH) --strip=0 < $(tools_dir)/cgicc/cgicc_3_1_4_patch
 	$(MKDIR) --parents $(third_party_include_dir)/cgicc/
 	$(MKDIR) --parents $(third_party_source_dir)/cgicc/
 	$(CP) --preserve cgicc-3.1.4/cgicc/*.h \
@@ -221,7 +223,7 @@ install_frozen_cgicc_from_tmp_dir:
 .PHONY: check_cgicc_md5sums
 check_cgicc_md5sums: $(third_party_dir)
 	cd $(third_party_dir); \
-	$(MD5SUM) --check $(src_dir)/cgicc_md5sums
+	$(MD5SUM) --check $(tools_dir)/cgicc/cgicc_md5sums
 
 ###############################################################################
 # This version has not been formally tested and released for production with
@@ -233,8 +235,8 @@ check_cgicc_md5sums: $(third_party_dir)
 .PHONY: frozen_libxml2
 frozen_libxml2:
 	$(MAKE) \
-	  -C /tmp \
-	  -f $(src_dir)/setup.make \
+	  --directory=/tmp \
+	  --file=$(src_dir)/setup.make \
 	                    src_dir='$(src_dir)' \
 	        third_party_bin_dir='$(third_party_bin_dir)' \
 	    third_party_include_dir='$(third_party_include_dir)' \
@@ -285,8 +287,8 @@ install_frozen_libxml2_from_tmp_dir:
 .PHONY: frozen_sed
 frozen_sed:
 	$(MAKE) \
-	  -C /tmp/ \
-	  -f $(src_dir)/setup.make \
+	  --directory=/tmp/ \
+	  --file=$(src_dir)/setup.make \
 	  src_dir='$(src_dir)' \
           install_sed_from_tmp_dir
 
@@ -311,11 +313,12 @@ install_sed_from_tmp_dir:
 .PHONY: frozen_xmlwrapp
 frozen_xmlwrapp:
 	$(MAKE) \
-	  -C /tmp \
-	  -f $(src_dir)/setup.make \
+	  --directory=/tmp \
+	  --file=$(src_dir)/setup.make \
 	                    src_dir='$(src_dir)' \
 	    third_party_include_dir='$(third_party_include_dir)' \
 	     third_party_source_dir='$(third_party_source_dir)' \
+                          tools_dir='$(tools_dir)' \
 	  install_frozen_xmlwrapp_from_tmp_dir check_xmlwrapp_md5sums
 
 .PHONY: install_frozen_xmlwrapp_from_tmp_dir
@@ -343,7 +346,7 @@ install_frozen_xmlwrapp_from_tmp_dir:
 .PHONY: check_xmlwrapp_md5sums
 check_xmlwrapp_md5sums: $(third_party_dir)
 	cd $(third_party_dir) ; \
-	$(MD5SUM) --check $(src_dir)/xmlwrapp_md5sums
+	$(MD5SUM) --check $(tools_dir)/xmlwrapp/xmlwrapp_md5sums
 
 ###############################################################################
 
@@ -412,8 +415,8 @@ mingw_current:
 	  strongly recommended."
 	$(MKDIR) $(mingw_dir)
 	$(MAKE) \
-	  -C /tmp/$@ \
-	  -f $(src_dir)/setup.make \
+	  --directory=/tmp/$@ \
+	  --file=$(src_dir)/setup.make \
 	    mingw_dir='$(mingw_dir)' \
 	      src_dir='$(src_dir)' \
 	  install_mingw_current_from_tmp_dir
@@ -431,8 +434,8 @@ install_mingw_current_from_tmp_dir: $(mingw_requirements) $(mingw_extras)
 mingw_20050827:
 	$(MKDIR) --parents /tmp/$@
 	$(MAKE) \
-	  -C /tmp/$@ \
-	  -f $(src_dir)/setup.make \
+	  --directory=/tmp/$@ \
+	  --file=$(src_dir)/setup.make \
 	    mingw_dir='$(mingw_dir)' \
 	      src_dir='$(src_dir)' \
 	  install_mingw_20050827_from_tmp_dir
@@ -459,8 +462,8 @@ wget_mingwport = wget-1.9.1
 .PHONY: wget_mingwport
 wget_mingwport:
 	$(MAKE) \
-	  -C /tmp \
-	  -f $(src_dir)/setup.make \
+	  --directory=/tmp \
+	  --file=$(src_dir)/setup.make \
 	    mingw_dir='$(mingw_dir)' \
 	      src_dir='$(src_dir)' \
 	  install_wget_mingwport_from_tmp_dir
@@ -494,8 +497,8 @@ human_interactive_tools = \
 .PHONY: human_interactive_setup
 human_interactive_setup:
 	$(MAKE) \
-	  -C /tmp \
-	  -f $(src_dir)/setup.make \
+	  --directory=/tmp \
+	  --file=$(src_dir)/setup.make \
 	    src_dir='$(src_dir)' \
 	  install_human_interactive_tools_from_tmp_dir
 
