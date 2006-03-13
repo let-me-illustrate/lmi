@@ -1,0 +1,101 @@
+diff --recursive --context=2 old/cgicc/CgiDefs.h cgicc-3.1.4/cgicc/CgiDefs.h
+*** old/cgicc/CgiDefs.h	Sun Oct 15 12:03:07 2000
+--- cgicc-3.1.4/cgicc/CgiDefs.h	Wed Aug 31 10:05:08 2005
+***************
+*** 23,28 ****
+  #define _CGIDEFS_H_ 1
+  
+  // Include information from configure
+! #if HAVE_CONFIG_H
+  #  include "config.h"
+  #endif
+--- 23,31 ----
+  #define _CGIDEFS_H_ 1
+  
++ #  define HOST "Win32"
++ #  define VERSION "3.1.4"
++ 
+  // Include information from configure
+! #if defined HAVE_CONFIG_H && HAVE_CONFIG_H
+  #  include "config.h"
+  #endif
+diff --recursive --context=2 old/cgicc/CgiEnvironment.cpp cgicc-3.1.4/cgicc/CgiEnvironment.cpp
+*** old/cgicc/CgiEnvironment.cpp	Sun Oct 15 11:58:12 2000
+--- cgicc-3.1.4/cgicc/CgiEnvironment.cpp	Thu Feb 17 07:04:14 2005
+***************
+*** 59,63 ****
+      char *temp = new char[getContentLength()];
+      STDNS cin.read(temp, getContentLength());
+!     if(STDNS cin.gcount() != getContentLength()) {
+        delete [] temp;
+        throw STDNS runtime_error("I/O error");
+--- 59,64 ----
+      char *temp = new char[getContentLength()];
+      STDNS cin.read(temp, getContentLength());
+! 
+!     if(STDNS cin.gcount() != static_cast<long int>(getContentLength())) {
+        delete [] temp;
+        throw STDNS runtime_error("I/O error");
+diff --recursive --context=2 old/cgicc/CgiUtils.cpp cgicc-3.1.4/cgicc/CgiUtils.cpp
+*** old/cgicc/CgiUtils.cpp	Mon Aug  9 14:25:31 1999
+--- cgicc-3.1.4/cgicc/CgiUtils.cpp	Thu Feb 17 07:03:50 2005
+***************
+*** 184,188 ****
+    char *temp = new char[dataSize];
+    in.read(temp, dataSize);
+!   if(in.gcount() != dataSize) {
+      delete [] temp;
+      throw STDNS runtime_error("I/O error");
+--- 184,188 ----
+    char *temp = new char[dataSize];
+    in.read(temp, dataSize);
+!   if(in.gcount() != static_cast<long int>(dataSize)) {
+      delete [] temp;
+      throw STDNS runtime_error("I/O error");
+diff --recursive --context=2 old/cgicc/CgiUtils.h cgicc-3.1.4/cgicc/CgiUtils.h
+*** old/cgicc/CgiUtils.h	Mon Aug  9 19:03:41 1999
+--- cgicc-3.1.4/cgicc/CgiUtils.h	Wed Aug 31 10:06:18 2005
+***************
+*** 33,37 ****
+  #include "cgicc/CgiDefs.h"
+  
+! #if DEBUG
+  
+  extern ofstream gLogFile;
+--- 33,37 ----
+  #include "cgicc/CgiDefs.h"
+  
+! #if defined DEBUG && DEBUG
+  
+  extern ofstream gLogFile;
+diff --recursive --context=2 old/cgicc/Cgicc.cpp cgicc-3.1.4/cgicc/Cgicc.cpp
+*** old/cgicc/Cgicc.cpp	Sat Oct  2 15:10:10 1999
+--- cgicc-3.1.4/cgicc/Cgicc.cpp	Wed Aug 31 10:23:24 2005
+***************
+*** 28,32 ****
+  #include <iterator>
+  
+! #if (HAVE_SYS_TIME_H && TM_IN_SYS_TIME)
+  #include <sys/time.h>
+  #else
+--- 28,32 ----
+  #include <iterator>
+  
+! #if (defined HAVE_SYS_TIME_H && HAVE_SYS_TIME_H && defined TM_IN_SYS_TIME && TM_IN_SYS_TIME)
+  #include <sys/time.h>
+  #else
+***************
+*** 191,196 ****
+    : fEnvironment()
+  {
+! #if DEBUG
+! #if HAVE_STRFTIME
+    time_t 	now;
+    tm 		*date;
+--- 191,196 ----
+    : fEnvironment()
+  {
+! #if defined DEBUG && DEBUG
+! #if defined HAVE_STRFTIME && HAVE_STRFTIME
+    time_t 	now;
+    tm 		*date;
