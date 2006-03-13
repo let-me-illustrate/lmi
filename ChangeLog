@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.363 2006-03-13 14:21:43 chicares Exp $
+// $Id: ChangeLog,v 1.364 2006-03-13 16:45:09 chicares Exp $
 
 MAINTENANCE
 
@@ -6500,4 +6500,10 @@ Import an improvement from skeleton branch.
 
   illustration_view.hpp
 Reformat.
+
+20060313T1645Z <chicares@cox.net> [1207]
+
+  xml_notebook.cpp
+Remember focused control across task switches. See:
+  [insert URL when mailing list updated]
 
