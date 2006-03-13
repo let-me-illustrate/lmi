@@ -21,7 +21,7 @@ dnl snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
 dnl === Prologue ===
 
-AC_REVISION($Id: configure.ac,v 1.13 2005-12-16 00:47:41 zeitlin Exp $)dnl
+AC_REVISION($Id: configure.ac,v 1.13.2.1 2006-03-13 19:54:01 etarassov Exp $)dnl
 
 AC_PREREQ(2.59)
 AC_INIT(LMI, 1.0.0, [chicares@cox.net])
@@ -228,6 +228,10 @@ dnl the usual HAVE_EXPM1/HAVE_LOG1P
 AC_CHECK_FUNC(strtold, AC_DEFINE(LMI_COMPILER_PROVIDES_STRTOLD, [1], [Define this if you have strtold() function]))
 AC_CHECK_FUNC(expm1, AC_DEFINE(LMI_COMPILER_PROVIDES_EXPM1, [1], [Define this if you have expm1() function]))
 AC_CHECK_FUNC(log1p, AC_DEFINE(LMI_COMPILER_PROVIDES_LOG1P, [1], [Define this if you have log1p() function]))
+
+dnl NOTE: MDGRID branch specific workaround for:
+dnl Cygwin does not have log10l
+AC_CHECK_FUNC(log10l, [], AC_DEFINE(LMI_COMPILER_DOESNOT_PROVIDE_LOG10L, [1], [Define this if you do _not_ have log10l() function]))
 
 dnl === Library checks ===
 

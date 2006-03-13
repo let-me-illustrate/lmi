@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: numeric_io_traits.hpp,v 1.14 2005-12-15 15:13:47 chicares Exp $
+// $Id: numeric_io_traits.hpp,v 1.14.2.1 2006-03-13 19:54:01 etarassov Exp $
 
 #ifndef numeric_io_traits_hpp
 #define numeric_io_traits_hpp
@@ -41,6 +41,15 @@
 #else  // Defined __BORLANDC__ .
 #   define BOOST_STATIC_ASSERT(deliberately_ignored) /##/
 #endif // Defined __BORLANDC__ .
+
+// Cygwin does not have log10l, substitute log10 instead
+#if defined LMI_COMPILER_DOESNOT_PROVIDE_LOG10L
+// merely a replacement of log10l in terms of log10
+inline long double log10l(long double x)
+{
+    return static_cast< double >( log10( static_cast< double >( x ) ) );
+}
+#endif
 
 // Number of exact decimal digits to the right of the decimal point.
 //
