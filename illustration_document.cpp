@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustration_document.cpp,v 1.7 2006-01-29 13:52:00 chicares Exp $
+// $Id: illustration_document.cpp,v 1.8 2006-03-14 02:48:25 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -65,7 +65,7 @@ wxHtmlWindow& IllustrationDocument::PredominantViewWindow() const
 
 // Class IllustrationView overloads wxView::OnCreate() to display a
 // dialog that allow input parameters to be edited before the view is
-// shown. Canceling that dialog deliberately prevents that view from
+// shown. Cancelling that dialog deliberately prevents that view from
 // being created: it is not tasteful to show a blank view window
 // underneath the dialog and destroy it on wxID_CANCEL.
 //
@@ -78,7 +78,7 @@ wxHtmlWindow& IllustrationDocument::PredominantViewWindow() const
 // Resolution: Read document data in IllustrationDocument::OnCreate()
 // instead of in IllustrationDocument::OnOpenDocument(). Invoke
 // wxView::OnCreate() from IllustrationView::OnCreate() only when the
-// initial dialog is not canceled.
+// initial dialog is not cancelled.
 //
 // Alternative not used: Because wxDocument::OnCreate() simply creates
 // a view and does nothing else, another resolution is to call that

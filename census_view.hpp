@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: census_view.hpp,v 1.16 2006-03-09 12:37:24 chicares Exp $
+// $Id: census_view.hpp,v 1.17 2006-03-14 02:48:25 chicares Exp $
 
 #ifndef census_view_hpp
 #define census_view_hpp
@@ -152,7 +152,7 @@ class CensusView
 
     std::vector<std::string> headers_of_varying_parameters_;
 
-    bool was_canceled_;
+    bool was_cancelled_;
 
     wxListView* list_window_;
 
