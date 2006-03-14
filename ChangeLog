@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.366 2006-03-13 23:11:55 chicares Exp $
+// $Id: ChangeLog,v 1.367 2006-03-14 01:20:17 chicares Exp $
 
 MAINTENANCE
 
@@ -6507,7 +6507,7 @@ Reformat.
 Remember focused control across task switches. See:
   [insert URL when mailing list updated]
 
-20060313T2028Z <wboutin@massmutual.com> [1207]
+20060313T2109Z <wboutin@massmutual.com> [1207]
 
   cgicc_3_1_4_patch                      [moved]
   cgicc_md5sums                          [moved]
@@ -6531,8 +6531,14 @@ Move to new respective 'tools/' directory.
   mingw-runtime-3.6.tar.gz.md5           [new file]
   mingw_install.make                     [new file]
   w32api-3.2.tar.gz.md5                  [new file]
-Add validation files.
+Add validation files [to 'tools/*'].
 
   setup.make
 Improve conformance.
+
+20060314T0120Z <chicares@cox.net> [1207]
+
+  GNUmakefile
+Make 'checkout' target more robust. See:
+  http://sv.nongnu.org/task/index.php?func=detailitem&item_id=5228
 
