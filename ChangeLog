@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.367 2006-03-14 01:20:17 chicares Exp $
+// $Id: ChangeLog,v 1.368 2006-03-14 02:46:36 chicares Exp $
 
 MAINTENANCE
 
@@ -6541,4 +6541,11 @@ Improve conformance.
   GNUmakefile
 Make 'checkout' target more robust. See:
   http://sv.nongnu.org/task/index.php?func=detailitem&item_id=5228
+
+20060314T0246Z <chicares@cox.net> [1207]
+
+  census_view.cpp
+  census_view.hpp
+  illustration_document.cpp
+Regularize spelling.
 
