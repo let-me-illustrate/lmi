@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: census_view.cpp,v 1.42 2006-03-09 12:37:24 chicares Exp $
+// $Id: census_view.cpp,v 1.43 2006-03-14 02:48:25 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -125,7 +125,7 @@ CensusView::CensusView()
     :ViewEx                          ()
     ,all_changes_have_been_validated_(true)
     ,composite_is_available_         (false)
-    ,was_canceled_                   (false)
+    ,was_cancelled_                  (false)
     ,list_window_                    (0)
 {
 }
@@ -906,7 +906,7 @@ void CensusView::ViewComposite()
             }
         }
 
-    if(!was_canceled_)
+    if(!was_cancelled_)
         {
         std::string file_name(serial_filename(-1, "ill"));
         IllustrationView& illview = MakeNewIllustrationDocAndView
