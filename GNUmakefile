@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: GNUmakefile,v 1.64 2006-03-04 14:27:12 chicares Exp $
+# $Id: GNUmakefile,v 1.65 2006-03-14 01:20:17 chicares Exp $
 
 ################################################################################
 
@@ -576,6 +576,9 @@ cvs_ready: source_clean
 #   - Devise a simple way to test changes to this target without
 #       requiring 5 Mb of downloading and 10 minutes of crunching.
 
+CVS_RSH := ssh
+CVSROOT := :pserver:anonymous@cvs.sv.nongnu.org:/sources/lmi
+
 circadian_directory := $(TMPDIR)/lmi-circadian-$(yyyymmddhhmm)
 circadian_log := log-lmi-circadian-$(yyyymmddhhmm)
 
@@ -583,6 +586,8 @@ circadian_log := log-lmi-circadian-$(yyyymmddhhmm)
 checkout:
 	$(MKDIR) --parents $(circadian_directory); \
 	cd $(circadian_directory); \
+	export CVS_RSH='$(CVS_RSH)'; \
+	export CVSROOT='$(CVSROOT)'; \
 	cvs -z3 co skeleton lmi; \
 
 .PHONY: circadian_test
