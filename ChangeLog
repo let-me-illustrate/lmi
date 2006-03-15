@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.370 2006-03-14 18:48:32 wboutin Exp $
+// $Id: ChangeLog,v 1.371 2006-03-15 03:10:10 chicares Exp $
 
 MAINTENANCE
 
@@ -6505,33 +6505,22 @@ Reformat.
 
   xml_notebook.cpp
 Remember focused control across task switches. See:
-  [insert URL when mailing list updated]
+  http://lists.gnu.org/archive/html/lmi/2006-03/msg00006.html
 
 20060313T2109Z <wboutin@massmutual.com> [1207]
 
-  binutils-2.16.91-20050827-1.tar.gz.md5 [moved]
-  cgicc_3_1_4_patch                      [moved]
-  cgicc_md5sums                          [moved]
-  gcc-core-3.4.4-20050522-1.tar.gz.md5   [moved]
-  gcc-g++-3.4.4-20050522-1.tar.gz.md5    [moved]
-  gdb-5.2.1-1.exe.md5                    [moved]
-  mingw-runtime-3.8.tar.gz.md5           [moved]
-  mingw-utils-0.3.tar.gz.md5             [moved]
-  mingw32-make-3.80.0-3.tar.gz.md5       [moved]
-  msys-1.0.10.exe.md5                    [moved]
-  w32api-3.3.tar.gz.md5                  [moved]
-  wget-1.9.1-mingwPORT.tar.bz2.md5       [moved]
-  xmlwrapp_0_2_0_patch                   [moved]
-  xmlwrapp_md5sums                       [moved]
-Move to new respective 'tools/' directory.
-
-  binutils-2.15.91-20050904-1.tar.gz.md5 [new file]
-  gcc-core-3.4.2-20040916-1.tar.gz.md5   [new file]
-  gcc-g++-3.4.2-20040916.tar.gz.md5      [new file]
-  mingw-runtime-3.6.tar.gz.md5           [new file]
-  mingw_install.make                     [new file]
-  w32api-3.2.tar.gz.md5                  [new file]
-Add validation files [to 'tools/*'].
+  cgicc_3_1_4_patch                [moved to tools/cgicc]
+  cgicc_md5sums                    [moved to tools/cgicc]
+  gdb-5.2.1-1.exe.md5              [moved to tools/mingw]
+  mingw-runtime-3.8.tar.gz.md5     [moved to tools/mingw]
+  mingw-utils-0.3.tar.gz.md5       [moved to tools/mingw]
+  mingw32-make-3.80.0-3.tar.gz.md5 [moved to tools/mingw]
+  msys-1.0.10.exe.md5              [moved to tools/mingw]
+  w32api-3.3.tar.gz.md5            [moved to tools/mingw]
+  wget-1.9.1-mingwPORT.tar.bz2.md5 [moved to tools/mingw]
+  xmlwrapp_0_2_0_patch             [moved to tools/xmlwrapp]
+  xmlwrapp_md5sums                 [moved to tools/xmlwrapp]
+Redisorganize.
 
   setup.make
 Improve conformance.
@@ -6548,4 +6537,19 @@ Make 'checkout' target more robust. See:
   census_view.hpp
   illustration_document.cpp
 Regularize spelling.
+
+20060314T1848Z <wboutin@massmutual.com> [1207]
+
+  binutils-2.16.91-20050827-1.tar.gz.md5 [moved to tools/mingw]
+  gcc-core-3.4.4-20050522-1.tar.gz.md5   [moved to tools/mingw]
+  gcc-g++-3.4.4-20050522-1.tar.gz.md5    [moved to tools/mingw]
+Redisorganize.
+
+20060315T0309Z <chicares@cox.net> [1206]
+
+  GNUmakefile
+Reflect removal of '.md5' files.
+
+  xml_notebook.cpp
+Import selected changes from skeleton branch.
 

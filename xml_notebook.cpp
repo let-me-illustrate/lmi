@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xml_notebook.cpp,v 1.23 2006-03-13 16:45:09 chicares Exp $
+// $Id: xml_notebook.cpp,v 1.24 2006-03-15 03:10:10 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -101,7 +101,7 @@ wxEventType const wxEVT_REFOCUS_INVALID_CONTROL = wxNewEventType();
         ,0 \
         ),
 
-// Entries alphabetized by function name.
+// Entries alphabetized by event name rather than function name.
 BEGIN_EVENT_TABLE(XmlNotebook, wxDialog)
     EVT_BUTTON(wxID_OK, XmlNotebook::UponOK)
     EVT_CHILD_FOCUS(XmlNotebook::UponChildFocus)
@@ -470,7 +470,7 @@ wxStaticText& XmlNotebook::DiagnosticsWindow() const
 ///    ideal condition that pertains only to focus changes made under
 ///    program control):
 ///
-///    - first, focus the notebook: this is always possible, and it's
+///    - first, focus the dialog: this is always possible, and it's
 ///      better than letting a disabled window keep the focus;
 ///
 ///    - then, focus the first child window that meets the ideal
@@ -501,14 +501,44 @@ void XmlNotebook::EnsureOptimalFocus()
         }
 
     f = FindFocus();
-    LMI_ASSERT(f && f->IsEnabled());
+    if(!(f && f->IsEnabled()))
+        {
+        // This is a fatal error because a warning would repeat itself
+        // ad infinitum.
+        fatal_error() << "No enabled window to focus." << LMI_FLUSH;
+        }
 }
 
+/// Cause a text control to be validated upon losing focus.
+///
 /// UponUpdateGUI() doesn't handle focus changes, so this function is
-/// needed for text-control validation. It validates a child control
-/// that has already lost focus; wx provides no way to perform the
-/// validation before another control irrevocably begins to gain
-/// focus.
+/// needed for text-control validation.
+///
+/// At least for msw, it is not possible to veto focus loss before
+/// another control irrevocably begins to gain focus, and wx has no
+/// means to do that for any platform. Therefore, when wx calls this
+/// function, the control that must be validated has already lost
+/// focus, and another window is about to gain focus, but hasn't quite
+/// gained it yet. It is a design requirement of this MVC framework
+/// that focus be retained in the offending control if validation
+/// fails, but simply calling SetFocus() here would not work: as soon
+/// as the present function returns, focus would shift to the other
+/// window that's about to gain focus. Instead, a custom event
+/// (EVT_REFOCUS_INVALID_CONTROL) is posted: it reseizes focus for
+/// the window for which validation failed, after the present function
+/// has returned and after the pending focus change has occurred.
+///
+/// The 'Cancel' button is a special case. At least for msw, clicking
+/// 'Cancel' first focuses it upon depressing the mouse button down,
+/// then cancels the dialog upon releasing the mouse button. Because
+/// 'Cancel' must always be permitted even for invalid input, it must
+/// always be allowed to gain focus. However, focusing 'Cancel' does
+/// not trigger validation. Furthermore, 'Cancel' can acquire focus
+/// without cancelling the dialog, because the mouse may be moved
+/// before the mouse button is released. However, in that case,
+/// last_focused_window_ is not changed: to do so would serve no end,
+/// and to avoid doing so preserves the useful invariant that
+/// last_focused_window_ is the only window that may need validation.
 ///
 /// WX !! It seems surprising that calling GetWindow() on the
 /// wxChildFocusEvent argument doesn't return the same thing as
@@ -516,30 +546,24 @@ void XmlNotebook::EnsureOptimalFocus()
 
 void XmlNotebook::UponChildFocus(wxChildFocusEvent&)
 {
+    // Do nothing until the notebook has been fully created.
     if(updates_blocked_)
         {
-        // The diagnostics window may not yet exist if the notebook is
-        // under construction.
         return;
         }
 
     wxWindow* new_focused_window = FindFocus();
+
+    // Do nothing if focus hasn't changed. This case arises when
+    // another application is activated, and then this application
+    // is reactivated.
     if(old_focused_window_ == new_focused_window)
         {
-        // This do-nothing case arises e.g. when another application
-        // is activated and then this application is reactivated.
         return;
         }
 
     if(FindWindow(wxID_CANCEL) == new_focused_window)
         {
-        // Permit a 'Cancel' button to receive focus: otherwise, it
-        // couldn't be pressed. But leave the new and old focused-
-        // window pointers alone: 'Cancel' is a special case that
-        // should not trigger validation; and it is possible to focus
-        // the 'Cancel' button by clicking on it and releasing the
-        // click event elsewhere, but that causes no harm as long as
-        // those pointers are preserved.
         return;
         }
 
@@ -589,15 +613,14 @@ void XmlNotebook::UponInitDialog(wxInitDialogEvent&)
     UpdateWindowUI(wxUPDATE_UI_RECURSE);
 }
 
-// TODO ?? As this is written, it can't call Skip(). This design
-// should be rethought. It seems fragile to depend on the base-class
-// return code being initialized to zero. Anyway, this function exists
-// only because of a kludge that should be reworked.
+/// This augments wxDialog::UponOK(), but isn't a complete replacement.
+/// It calls that base-class function explicitly because Skip()
+/// wouldn't work here.
 
 void XmlNotebook::UponOK(wxCommandEvent& event)
 {
     wxDialog::OnOK(event);
-    if(0 == GetReturnCode())
+    if(wxID_OK != GetReturnCode())
         {
         return;
         }
@@ -628,8 +651,13 @@ void XmlNotebook::UponPageChanged(wxNotebookEvent& event)
     EnsureOptimalFocus();
 }
 
-// Called when page is about to change, but hasn't yet.
-//
+/// Veto a page change if Validate() fails--but never veto the very
+/// first page-change event, engendered by notebook creation, as doing
+/// so leads to a segfault, at least with wxmsw-2.5.4 . See
+///   http://lists.gnu.org/archive/html/lmi/2006-03/msg00000.html
+///
+/// Called when page is about to change, but hasn't yet.
+
 void XmlNotebook::UponPageChanging(wxNotebookEvent& event)
 {
     // Do nothing until the notebook has been fully created.
@@ -852,7 +880,7 @@ void XmlNotebook::ValidateTextControl(wxWindow* w)
     wxTextCtrl* textctrl = dynamic_cast<wxTextCtrl*>(w);
     if(!textctrl)
         {
-        // Only text controls are validating on losing focus.
+        // Only text controls are validated on losing focus.
         return;
         }
 
@@ -861,8 +889,8 @@ void XmlNotebook::ValidateTextControl(wxWindow* w)
         {
 //        fatal_error() << "No transferor associated with control." << LMI_FLUSH;
 
-// TODO ?? This happens only on page losing focus, probably because
-// of an IsShown() conditional. Test on page gaining focus instead.
+// TODO ?? This happens only on page losing focus, probably because of
+// an updates_blocked_ conditional. Test on page gaining focus instead.
 
 /*
         fatal_error()
