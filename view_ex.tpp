@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: view_ex.tpp,v 1.2 2006-01-29 13:52:01 chicares Exp $
+// $Id: view_ex.tpp,v 1.3 2006-03-18 02:42:19 chicares Exp $
 
 #include "alert.hpp"
 
@@ -42,7 +42,7 @@
 /// wxView::GetViewName() can't be used because it requires an object,
 /// whereas this function template is usable for reporting failure to
 /// create any such object. Attempting to default-construct such an
-/// object here could cause unbounded regression, probably resulting
+/// object here could cause unbounded recursion, probably resulting
 /// in a stack fault.
 ///
 /// As long as all function templates in the present file call
