@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_harmonization.cpp,v 1.19 2006-01-29 13:52:00 chicares Exp $
+// $Id: input_harmonization.cpp,v 1.20 2006-03-18 02:42:25 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -292,7 +292,6 @@ void Input::Harmonize()
 
     bool enable_experience_rating =
             database->Query(DB_AllowExpRating)
-        &&  !is_subject_to_ill_reg(database->Query(DB_LedgerType))
         &&  part_mort_used
         &&  mce_month_by_month == RunOrder
         ;
@@ -660,8 +659,8 @@ false // Silly workaround for now.
     UseAverageOfAllFunds.enable(!genacct_only);
     bool enable_custom_fund =
             !genacct_only
-        &&  ( database->Query(DB_AllowCustomFund)
-            || home_office_only
+        &&  (   database->Query(DB_AllowCustomFund)
+            ||  home_office_only
             )
         ;
     OverrideFundManagementFee.enable(enable_custom_fund);
@@ -1135,7 +1134,7 @@ void Input::TransferWithdrawalInputSequenceToSimpleControls
                     ||  0.0 == intervals[1].value_number
                     )
                 )
-            ||  (   3 == intervals.size()
+            ||  (   3   == intervals.size()
                 &&  0.0 == intervals[0].value_number
                 &&  0.0 == intervals[2].value_number
                 )

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.371 2006-03-15 03:10:10 chicares Exp $
+// $Id: ChangeLog,v 1.372 2006-03-18 02:42:25 chicares Exp $
 
 MAINTENANCE
 
@@ -6552,4 +6552,19 @@ Reflect removal of '.md5' files.
 
   xml_notebook.cpp
 Import selected changes from skeleton branch.
+
+20060318T0242Z <chicares@cox.net> [1205]
+
+  view_ex.tpp
+Fix a defective comment.
+
+  msw_msys.make
+Don't encourage makefile dependency on the environment. See the
+20060314T0120Z change and this message
+  http://sourceforge.net/mailarchive/message.php?msg_id=15102683
+for the rationale, and 'local_options.sh' for an alternative.
+
+  ihs_basicval.cpp
+  input_harmonization.cpp
+Don't forbid experience rating with illustration-reg products.
 
