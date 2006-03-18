@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: msw_msys.make,v 1.12 2006-01-29 13:52:00 chicares Exp $
+# $Id: msw_msys.make,v 1.13 2006-03-18 02:42:21 chicares Exp $
 
 ################################################################################
 
@@ -71,10 +71,7 @@
 
 ################################################################################
 
-# This may be overridden on the command line, or by providing a
-# definition in the environment, e.g., "export system_root='/d'".
-
-system_root ?= /c
+system_root := /c
 
 ################################################################################
 
