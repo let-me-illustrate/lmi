@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xml_notebook.hpp,v 1.14 2006-03-09 13:30:15 chicares Exp $
+// $Id: xml_notebook.hpp,v 1.15 2006-03-18 13:10:46 chicares Exp $
 
 #ifndef xml_notebook_hpp
 #define xml_notebook_hpp
@@ -284,30 +284,21 @@ namespace model_view_controller{} // doxygen workaround.
 /// INELEGANT !! It would be better to write diagnostics to a custom
 /// stream.
 ///
-/// Data members that relate entities shared by Model and View--those
-/// for which a Transferor exists.
+/// Data members.
 ///
-/// transfer_data_ maps each name shared by Model and View to a string
-/// that buffers the contents of controls in the View.
+/// hold_focus_window_: Points to a control that should retain focus
+/// because its contents are invalid.
 ///
-/// cached_transfer_data_ holds the prior contents of transfer_data_
+/// old_focused_window_: Points to the window that last lost focus,
+/// unless it's a 'Cancel' button, which gains focus without
+/// triggering validation of the control that lost focus.
+///
+/// transfer_data_: Maps each name shared by Model and View to a
+/// string that buffers the contents of controls in the View.
+///
+/// cached_transfer_data_: Holds the prior contents of transfer_data_
 /// when the latter is refreshed. This caching makes it possible to
 /// determine which controls have changed.
-///
-/// Data members for managing focus.
-///
-/// Text controls are validated when they lose focus. For at least one
-/// (and perhaps all) of the platforms wx supports, it is not possible
-/// to block another control from gaining focus when the control
-/// losing focus is determined to contain invalid input, so it is
-/// necessary to track focus here in data members.
-///
-/// Data member hold_focus_window_ points to a control that should
-/// retain focus because its contents are invalid.
-///
-/// Data member old_focused_window_ points to the window that last lost
-/// focus--unless it's a 'Cancel' button, which gains focus without
-/// triggering validation of the control that lost focus.
 
 class XmlNotebook
     :public wxDialog
@@ -365,8 +356,6 @@ class XmlNotebook
 
     template<typename T>
     T& WindowFromXrcName(std::string const&) const;
-
-    // Data members.
 
     Input& input_;
 

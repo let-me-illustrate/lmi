@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.372 2006-03-18 02:42:25 chicares Exp $
+// $Id: ChangeLog,v 1.373 2006-03-18 13:10:46 chicares Exp $
 
 MAINTENANCE
 
@@ -6567,4 +6567,9 @@ for the rationale, and 'local_options.sh' for an alternative.
   ihs_basicval.cpp
   input_harmonization.cpp
 Don't forbid experience rating with illustration-reg products.
+
+20060318T1310Z <chicares@cox.net> [1205]
+
+  xml_notebook.hpp
+Improve documentation.
 
