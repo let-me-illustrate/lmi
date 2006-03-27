@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.373 2006-03-18 13:10:46 chicares Exp $
+// $Id: ChangeLog,v 1.374 2006-03-27 12:28:24 chicares Exp $
 
 MAINTENANCE
 
@@ -6572,4 +6572,9 @@ Don't forbid experience rating with illustration-reg products.
 
   xml_notebook.hpp
 Improve documentation.
+
+20060327T1228Z <chicares@cox.net> [1205]
+
+  version.hpp
+Mark release candidate.
 
