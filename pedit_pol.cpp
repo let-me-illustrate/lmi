@@ -31,6 +31,7 @@ PeditFileFrame * PeditPOL::CreatePOLInstance( wxMDIParentFrame *parent,
         wxMessageBox( wxString::Format( _T("Error reading from %s"), filename.c_str() ),
                       _T("error") );
     }
+    return NULL;
 }
 
 PeditPOL::~PeditPOL() {}
