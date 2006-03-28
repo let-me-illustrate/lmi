@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: pedit_rnd.hpp,v 1.1.2.2 2006-03-28 00:40:40 etarassov Exp $
+// $Id: pedit_rnd.hpp,v 1.1.2.3 2006-03-28 00:46:24 etarassov Exp $
 
 #ifndef PEDIT_RND_HPP_
 #define PEDIT_RND_HPP_
@@ -31,7 +31,7 @@
 #include "ihs_rnddata.hpp"
 
 // some forward declarations
-class WXDLLEXPORT RNDStyleButtons;
+class RNDStyleButtons;
 class WXDLLEXPORT wxSpinCtrl;
 
 /**

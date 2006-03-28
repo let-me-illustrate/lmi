@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: pedit.hpp,v 1.1.2.2 2006-03-28 00:40:40 etarassov Exp $
+// $Id: pedit.hpp,v 1.1.2.3 2006-03-28 00:46:24 etarassov Exp $
 
 #ifndef PEDIT_HPP_
 #define PEDIT_HPP_
@@ -213,7 +213,7 @@ private:
 
    @sa MaxValueAdjuster
  */
-class WXDLLEXPORT MaxValueAdjusterChoice : public wxChoice
+class MaxValueAdjusterChoice : public wxChoice
 {
 public:
     MaxValueAdjusterChoice( MultiDimGrid & grid )
@@ -496,7 +496,7 @@ bool AdjustableMaxIntegralAxis<Integral>::DoRefreshAdjustment( Adjuster * adjust
     return updated;
 }
 
-class WXDLLEXPORT AutoSizeTreeCtrl : public wxTreeCtrl
+class AutoSizeTreeCtrl : public wxTreeCtrl
 {
 public:
     AutoSizeTreeCtrl() : wxTreeCtrl() {}

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: pedit_rnd.cpp,v 1.1.2.3 2006-03-28 00:40:40 etarassov Exp $
+// $Id: pedit_rnd.cpp,v 1.1.2.4 2006-03-28 00:46:24 etarassov Exp $
 
 #include "pedit_rnd.hpp"
 
@@ -47,7 +47,7 @@ wxSize GetMinPossibleSize( wxWindow * win, unsigned int numLetters = 1 )
     return size;
 }
 
-class WXDLLEXPORT RNDStyleButtons : public wxPanel
+class RNDStyleButtons : public wxPanel
 {
 public:
     RNDStyleButtons( wxWindow * parent, rounding_style style = r_indeterminate );

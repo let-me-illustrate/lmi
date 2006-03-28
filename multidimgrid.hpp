@@ -2,7 +2,7 @@
    @file multidimgrid.hpp
    @brief A control for editing multidimensional data and supporting classes.
    @author Vadim Zeitlin
-   @version $Id: multidimgrid.hpp,v 1.1.2.3 2006-03-13 19:56:52 etarassov Exp $
+   @version $Id: multidimgrid.hpp,v 1.1.2.4 2006-03-28 00:46:24 etarassov Exp $
    @date 2005-10-19
 
    The MultiDimGrid control can be used to edit N-dimensional data tables.
@@ -96,7 +96,7 @@ class WXDLLEXPORT wxStaticBoxSizer;
 class WXDLLEXPORT wxChoice;
 class WXDLLEXPORT wxGridBagSizer;
 // This class will be defined later in this header
-class WXDLLEXPORT MultiDimAxisAnyChoice;
+class MultiDimAxisAnyChoice;
 
 /**
    @def MAX_MULTIDIMGRID_MAKEARRAY
@@ -126,9 +126,9 @@ class WXDLLEXPORT MultiDimAxisAnyChoice;
 #endif
 
 // forward declarations
-class WXDLLEXPORT MultiDimAxisAny;
-class WXDLLEXPORT MultiDimTableAny;
-class WXDLLEXPORT MultiDimGrid;
+class MultiDimAxisAny;
+class MultiDimTableAny;
+class MultiDimGrid;
 
 // ----------------------------------------------------------------------------
 // type-unsafe classes using boost::any as value type
@@ -547,8 +547,8 @@ class RefreshCounter;
    can be only determined dynamically. Otherwise, a type-safe MultiDimGridN
    control declared below should be used.
  */
-class WXDLLEXPORT MultiDimGrid : public wxScrolledWindow,
-                                    protected wxGridTableBase
+class MultiDimGrid : public wxScrolledWindow,
+                     protected wxGridTableBase
 {
 public:
     /**
