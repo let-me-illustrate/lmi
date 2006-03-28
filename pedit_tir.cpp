@@ -19,11 +19,12 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: pedit_tir.cpp,v 1.1.2.2 2006-03-28 00:40:40 etarassov Exp $
+// $Id: pedit_tir.cpp,v 1.1.2.3 2006-03-28 00:48:44 etarassov Exp $
 
 #include "pedit_tir.hpp"
 #include "stratified_charges.xpp"
 
+#include <limits>
 #include <boost/shared_ptr.hpp>
 #include <wx/sizer.h>
 #include <wx/msgdlg.h>
