@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: pedit_db4.hpp,v 1.1.2.1 2006-03-13 19:56:52 etarassov Exp $
+// $Id: pedit_db4.hpp,v 1.1.2.2 2006-03-28 00:40:40 etarassov Exp $
 
 #ifndef PEDIT_DB4_HPP_
 #define PEDIT_DB4_HPP_
@@ -59,7 +59,7 @@ class DB4GenderAxis : public MultiDimEnumAxis<enum_gender>
 {
 public:
     DB4GenderAxis()
-    : MultiDimEnumAxis<enum_gender>( _T("Gender"),
+    : MultiDimEnumAxis<enum_gender>( _("Gender"),
             pedit::MakeArray( e_gender::all_strings() ) ) {}
 };
 
@@ -68,7 +68,7 @@ class DB4ClassAxis : public MultiDimEnumAxis<enum_class>
 {
 public:
     DB4ClassAxis()
-    : MultiDimEnumAxis<enum_class>( _T("Class"),
+    : MultiDimEnumAxis<enum_class>( _("Class"),
             pedit::MakeArray( e_class::all_strings() ) ) {}
 };
 
@@ -77,7 +77,7 @@ class DB4SmokingAxis : public MultiDimEnumAxis<enum_smoking>
 {
 public:
     DB4SmokingAxis()
-    : MultiDimEnumAxis<enum_smoking>( _T("Smoking"),
+    : MultiDimEnumAxis<enum_smoking>( _("Smoking"),
             pedit::MakeArray( e_smoking::all_strings() ) ) {}
 };
 
@@ -86,7 +86,7 @@ class DB4IssueAgeAxis : public MultiDimIntAxis
 {
 public:
     DB4IssueAgeAxis()
-    : MultiDimIntAxis( _T("Issue Age"), 0, 99, 1 ) {}
+    : MultiDimIntAxis( _("Issue Age"), 0, 99, 1 ) {}
 };
 
 /// DB4 UW Basis axis
@@ -94,7 +94,7 @@ class DB4UwBasisAxis : public MultiDimEnumAxis<enum_uw_basis>
 {
 public:
     DB4UwBasisAxis()
-    : MultiDimEnumAxis<enum_uw_basis>( _T("UW Basis"),
+    : MultiDimEnumAxis<enum_uw_basis>( _("UW Basis"),
             pedit::MakeArray( e_uw_basis::all_strings() ) ) {}
 };
 
@@ -103,7 +103,7 @@ class DB4StateAxis : public MultiDimEnumAxis<enum_state>
 {
 public:
     DB4StateAxis()
-    : MultiDimEnumAxis<enum_state>( _T("State"),
+    : MultiDimEnumAxis<enum_state>( _("State"),
             pedit::MakeArray( e_state::all_strings() ) ) {}
 };
 
@@ -115,7 +115,7 @@ class DB4DurationAxis : public AdjustableMaxIntegralAxis<int>
     int max_bound_duration = TDBValue::e_max_dim_duration - 1;
 public:
     DB4DurationAxis()
-    : BaseClass( _T("Duration"), 0, max_bound_duration, 1, max_bound_duration )
+    : BaseClass( _("Duration"), 0, max_bound_duration, 1, max_bound_duration )
     {}
 };
 
@@ -322,7 +322,7 @@ public:
     {
         PeditFileFrame::RegisterSubtype( PeditDB4::s_extension,
                                          PeditDB4::CreateDB4Instance,
-                                         _T("Database") );
+                                         _("Database") );
         return true; // a dummy value
     }
 

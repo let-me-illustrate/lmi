@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: pedit_rnd.hpp,v 1.1.2.1 2006-03-13 19:56:52 etarassov Exp $
+// $Id: pedit_rnd.hpp,v 1.1.2.2 2006-03-28 00:40:40 etarassov Exp $
 
 #ifndef PEDIT_RND_HPP_
 #define PEDIT_RND_HPP_
@@ -51,7 +51,7 @@ public:
     {
         PeditFileFrame::RegisterSubtype( PeditRND::s_extension,
                                          PeditRND::CreateRNDInstance,
-                                         _T("Rounding") );
+                                         _("Rounding") );
         return true; // a dummy value
     }
 

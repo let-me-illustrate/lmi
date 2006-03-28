@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: pedit_pol.hpp,v 1.1.2.1 2006-03-13 19:56:52 etarassov Exp $
+// $Id: pedit_pol.hpp,v 1.1.2.2 2006-03-28 00:40:40 etarassov Exp $
 
 #ifndef PEDIT_POL_HPP_
 #define PEDIT_POL_HPP_
@@ -50,7 +50,7 @@ public:
     {
         PeditFileFrame::RegisterSubtype( PeditPOL::s_extension,
                                          PeditPOL::CreatePOLInstance,
-                                         _T("Policy") );
+                                         _("Policy") );
         return true; // a dummy value
     }
 

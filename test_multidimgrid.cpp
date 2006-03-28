@@ -229,14 +229,14 @@ MultiDimIntAxisAdjuster::MultiDimIntAxisAdjuster( MultiDimAdjustableIntAxis & ax
     m_minValue = new wxTextCtrl( this, wxID_ANY,
             _T(""), wxDefaultPosition, wxDefaultSize, 0,
             wxTextValidator( wxFILTER_NUMERIC ) );
-    m_minValue->SetToolTip( _T("Lower bound for shown values") );
+    m_minValue->SetToolTip( _("Lower bound for shown values") );
 
     m_maxValue = new wxTextCtrl( this, wxID_ANY,
             _T(""), wxDefaultPosition, wxDefaultSize, 0,
             wxTextValidator( wxFILTER_NUMERIC ) );
-    m_maxValue->SetToolTip( _T("Upper bound for shown values") );
+    m_maxValue->SetToolTip( _("Upper bound for shown values") );
 
-    m_button = new wxButton(this, wxID_ANY, _T("&Apply"));
+    m_button = new wxButton(this, wxID_ANY, _("&Apply"));
     m_button->Enable( false );
 
     sizer->Add( m_minValue, wxSizerFlags().Expand().Border(wxLEFT, 4) );
@@ -314,8 +314,8 @@ void MultiDimIntAxisAdjuster::DoOnConfirm( )
 {
     if( !DoValidateInput() )
     {
-        wxMessageBox( _T("Invalid input - enter numbers only"),
-                      _T("Invalid input"), wxOK | wxICON_ERROR, this );
+        wxMessageBox( _("Invalid input - enter numbers only"),
+                      _("Invalid input"), wxOK | wxICON_ERROR, this );
         return;
     }
     MultiDimGrid * grid = dynamic_cast<MultiDimGrid *>( GetParent() );
@@ -548,7 +548,7 @@ IMPLEMENT_APP(TestApp)
 bool TestApp::OnInit()
 {
     wxFrame * frame = new wxFrame(
-        NULL, wxID_ANY, _T("MultiDimGrid Test App"),
+        NULL, wxID_ANY, _("MultiDimGrid Test App"),
         wxPoint( 200, 200 ), wxSize( 600, 400) );
 
     shared_ptr<OptionTable> table(new OptionTable);

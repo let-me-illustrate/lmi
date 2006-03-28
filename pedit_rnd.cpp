@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: pedit_rnd.cpp,v 1.1.2.2 2006-03-27 13:02:05 etarassov Exp $
+// $Id: pedit_rnd.cpp,v 1.1.2.3 2006-03-28 00:40:40 etarassov Exp $
 
 #include "pedit_rnd.hpp"
 
@@ -106,13 +106,13 @@ RNDStyleButtons::RNDStyleButtons( wxWindow * parent, rounding_style style )
 : wxPanel( parent, wxID_ANY ), m_style( r_indeterminate ), m_originalStyle( style )
 {
     m_btnNotAtAll = new wxToggleButton( this, ID_NOTATALL, _T("@") );
-    m_btnNotAtAll->SetToolTip( _T("does nothing") );
+    m_btnNotAtAll->SetToolTip( _("does nothing") );
     m_btnToNearest = new wxToggleButton( this, ID_TONEAREST, _T("x") );
-    m_btnToNearest->SetToolTip( _T("to the nearest") );
+    m_btnToNearest->SetToolTip( _("round to the nearest") );
     m_btnUpward = new wxToggleButton( this, ID_UPWARD, _T("A") );
-    m_btnUpward->SetToolTip( _T("upward") );
+    m_btnUpward->SetToolTip( _("round upward") );
     m_btnDownward = new wxToggleButton( this, ID_DOWNWARD, _T("V") );
-    m_btnDownward->SetToolTip( _T("downward") );
+    m_btnDownward->SetToolTip( _("round downward") );
 
     // lets calculate the minimal width for our toggle buttons
     wxSize btnSize = GetMinPossibleSize( m_btnNotAtAll, 3 );
@@ -209,12 +209,12 @@ PeditRND::PeditRND( wxMDIParentFrame *parent, std::string const & filename )
     // top labels
     sizer->AddStretchSpacer( 1 );
     sizer->AddSpacer( PeditRND_SIZER_HGAP );
-    sizer->Add( new wxStaticText( main, wxID_ANY, _T("Direction") ), flagsHeader );
-    sizer->Add( new wxStaticText( main, wxID_ANY, _T("Decimals") ), flagsHeader );
+    sizer->Add( new wxStaticText( main, wxID_ANY, _("Direction") ), flagsHeader );
+    sizer->Add( new wxStaticText( main, wxID_ANY, _("Decimals") ), flagsHeader );
     sizer->AddStretchSpacer( 1 );
     sizer->AddSpacer( PeditRND_SIZER_HGAP );
-    sizer->Add( new wxStaticText( main, wxID_ANY, _T("Direction") ), flagsHeader );
-    sizer->Add( new wxStaticText( main, wxID_ANY, _T("Decimals") ), flagsHeader );
+    sizer->Add( new wxStaticText( main, wxID_ANY, _("Direction") ), flagsHeader );
+    sizer->Add( new wxStaticText( main, wxID_ANY, _("Decimals") ), flagsHeader );
     sizer->AddStretchSpacer( 1 );
 
     // creates controls and read the data
@@ -239,20 +239,20 @@ void PeditRND::DoOnAllFields( bool populate, wxWindow * parent, wxSizer * sizer 
     };
     static unsigned int const FieldCount = 14;
     Field fields[FieldCount] = {
-    { _T("Special Amount"),     m_btnsSpecAmount,   m_spinSpecAmount,   rounding_rules::round_specamt_ },
-    { _T("Death benefit"),      m_btnsDeathBenefit, m_spinDeathBenefit, rounding_rules::round_death_benefit_ },
-    { _T("NAAR"),               m_btnsNAAR,         m_spinNAAR,         rounding_rules::round_naar_ },
-    { _T("COI rate"),           m_btnsCOIRate,      m_spinCOIRate,      rounding_rules::round_coi_rate_ },
-    { _T("Mortality charge"),   m_btnsMortality,    m_spinMortality,    rounding_rules::round_coi_charge_ },
-    { _T("Gross premium"),      m_btnsGrossPremium, m_spinGrossPremium, rounding_rules::round_gross_premium_ },
-    { _T("Net premium"),        m_btnsNetPremium,   m_spinNetPremium,   rounding_rules::round_net_premium_ },
-    { _T("Interest rate"),      m_btnsIntRate,      m_spinIntRate,      rounding_rules::round_interest_rate_ },
-    { _T("Intereset credit"),   m_btnsIntCredit,    m_spinIntCredit,    rounding_rules::round_interest_credit_ },
-    { _T("Withdrawal"),         m_btnsWithdrawal,   m_spinWithdrawal,   rounding_rules::round_withdrawal_ },
-    { _T("Loan"),               m_btnsLoan,         m_spinLoan,         rounding_rules::round_loan_ },
-    { _T("Non-7702 corridor"),  m_btns7702,         m_spin7702,         rounding_rules::round_corridor_factor_ },
-    { _T("Surrender charge"),   m_btnsSurrCharge,   m_spinSurrCharge,   rounding_rules::round_surrender_charge_ },
-    { _T("IRR"),                m_btnsIRR,          m_spinIRR,          rounding_rules::round_irr_ } };
+    { gettext_noop("Special Amount"),     m_btnsSpecAmount,   m_spinSpecAmount,   rounding_rules::round_specamt_ },
+    { gettext_noop("Death benefit"),      m_btnsDeathBenefit, m_spinDeathBenefit, rounding_rules::round_death_benefit_ },
+    { gettext_noop("NAAR"),               m_btnsNAAR,         m_spinNAAR,         rounding_rules::round_naar_ },
+    { gettext_noop("COI rate"),           m_btnsCOIRate,      m_spinCOIRate,      rounding_rules::round_coi_rate_ },
+    { gettext_noop("Mortality charge"),   m_btnsMortality,    m_spinMortality,    rounding_rules::round_coi_charge_ },
+    { gettext_noop("Gross premium"),      m_btnsGrossPremium, m_spinGrossPremium, rounding_rules::round_gross_premium_ },
+    { gettext_noop("Net premium"),        m_btnsNetPremium,   m_spinNetPremium,   rounding_rules::round_net_premium_ },
+    { gettext_noop("Interest rate"),      m_btnsIntRate,      m_spinIntRate,      rounding_rules::round_interest_rate_ },
+    { gettext_noop("Intereset credit"),   m_btnsIntCredit,    m_spinIntCredit,    rounding_rules::round_interest_credit_ },
+    { gettext_noop("Withdrawal"),         m_btnsWithdrawal,   m_spinWithdrawal,   rounding_rules::round_withdrawal_ },
+    { gettext_noop("Loan"),               m_btnsLoan,         m_spinLoan,         rounding_rules::round_loan_ },
+    { gettext_noop("Non-7702 corridor"),  m_btns7702,         m_spin7702,         rounding_rules::round_corridor_factor_ },
+    { gettext_noop("Surrender charge"),   m_btnsSurrCharge,   m_spinSurrCharge,   rounding_rules::round_surrender_charge_ },
+    { gettext_noop("IRR"),                m_btnsIRR,          m_spinIRR,          rounding_rules::round_irr_ } };
 
     if( populate )
     {
@@ -275,7 +275,7 @@ void PeditRND::DoOnAllFields( bool populate, wxWindow * parent, wxSizer * sizer 
             if( id < FieldCount )
             {
                 Field field = fields[id];
-                sizer->Add( new wxStaticText( parent, wxID_ANY, field.label ), flagsLabel );
+                sizer->Add( new wxStaticText( parent, wxID_ANY, _(field.label) ), flagsLabel );
                 sizer->Add( field.btns = new RNDStyleButtons( parent ), flagsButtons );
                 sizer->Add( field.spin = new wxSpinCtrl( parent ), flagsSpin );
 

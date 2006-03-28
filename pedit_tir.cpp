@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: pedit_tir.cpp,v 1.1.2.1 2006-03-13 19:56:52 etarassov Exp $
+// $Id: pedit_tir.cpp,v 1.1.2.2 2006-03-28 00:40:40 etarassov Exp $
 
 #include "pedit_tir.hpp"
 #include "stratified_charges.xpp"
@@ -261,8 +261,8 @@ wxString TIRPeditGrid::GetColLabelValue( int col )
     wxASSERT_MSG( col == TIRColumn_Limit || col == TIRColumn_Value,
                   _T("Grid has only two columns: Limit and Value") );
     if( col == TIRColumn_Limit )
-        return wxString(_T("Limit"));
-    return wxString(_T("Value"));
+        return wxString(_("Limit"));
+    return wxString(_("Value"));
 }
 
 DoublePair TIRPeditGrid::GetDoublePairValue( int row )
@@ -372,7 +372,7 @@ void PeditTIR::OnTreeSelChange( wxTreeEvent & event )
 
         bool isTopic = m_tree->GetChildrenCount( event.GetItem() );
         {
-            wxString statusText = isTopic ? _T("Topic: ") : _T("Item: ");
+            wxString statusText = isTopic ? _("Topic: ") : _("Item: ");
             statusText += data->GetDescription();
             SetStatusText( statusText );
         }

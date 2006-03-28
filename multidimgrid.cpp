@@ -8,6 +8,7 @@
 #include <wx/colour.h>
 #include <wx/checkbox.h>
 #include <wx/msgdlg.h>
+#include <wx/intl.h>
 
 #include <sstream>
 
@@ -304,7 +305,7 @@ MultiDimGrid::Create(wxWindow *parent,
     SetScrollbars( 0, 20, 0, 50 );
 
     wxStaticBoxSizer * stBoxSizer = new wxStaticBoxSizer(
-            wxHORIZONTAL, this, _T("Axis") );
+            wxHORIZONTAL, this, _("Axis") );
 
     // wxGridBagSizer( vgap, hgap )
     m_axisSizer = new wxGridBagSizer( MDGRID_SIZER_VGAP, MDGRID_SIZER_HGAP );
@@ -338,9 +339,9 @@ MultiDimGrid::Create(wxWindow *parent,
     }
 
     m_firstAxisChoice = CreateGridAxisSelection( ID_FIRST_AXIS_CHOICE,
-                                        _T("X axis"), m_selectedFirstColour );
+                                        _("X axis"), m_selectedFirstColour );
     m_secondAxisChoice = CreateGridAxisSelection( ID_SECOND_AXIS_CHOICE,
-                                        _T("Y axis"), m_selectedSecondColour );
+                                        _("Y axis"), m_selectedSecondColour );
 
     m_axisSizer->Add( new wxStaticText( this, wxID_ANY, _T(" ") ),
                       wxGBPosition( MDGridGetAxisLabelRow( m_dimension ), 0 ),
@@ -907,7 +908,7 @@ void MultiDimGrid::OnAxisVariesToggle( wxCommandEvent & event )
             
             int answer = wxMessageBox(
                 wxString::Format(
-                    _T("Disabling the axis \"%s\" could cause data loss."),
+                    _("Disabling the axis \"%s\" could cause data loss."),
                     m_axis[index]->GetName().c_str() ),
                 m_axis[index]->GetName(),
                 wxOK | wxCANCEL | wxICON_EXCLAMATION, this );

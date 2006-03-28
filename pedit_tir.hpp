@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: pedit_tir.hpp,v 1.1.2.1 2006-03-13 19:56:52 etarassov Exp $
+// $Id: pedit_tir.hpp,v 1.1.2.2 2006-03-28 00:40:40 etarassov Exp $
 
 #ifndef PEDIT_TIR_HPP_
 #define PEDIT_TIR_HPP_
@@ -43,7 +43,7 @@ class TIRBandAxis : public AdjustableMaxIntegralAxis<unsigned int>
     unsigned int max_bound_band = 99;
 public:
     TIRBandAxis()
-    : BaseClass( _T("# bands"), 0, max_bound_band, 0, max_bound_band )
+    : BaseClass( _("# bands"), 0, max_bound_band, 0, max_bound_band )
     {}
 };
 
@@ -67,7 +67,7 @@ public:
 
     /// Create a string representation of a value
     wxString ToString( DoublePair const & value ) const
-    {   return _T( "ERR" );   }
+    {   return _( "#ERR" );   }
 };
 
 /**

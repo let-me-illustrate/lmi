@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: pedit_pol.cpp,v 1.1.2.3 2006-03-27 13:02:05 etarassov Exp $
+// $Id: pedit_pol.cpp,v 1.1.2.4 2006-03-28 00:40:40 etarassov Exp $
 
 #include "pedit_pol.hpp"
 
@@ -51,8 +51,8 @@ PeditFileFrame * PeditPOL::CreatePOLInstance( wxMDIParentFrame *parent,
     }
     catch( std::exception & ex )
     {
-        wxMessageBox( wxString::Format( _T("Error reading from %s"), filename.c_str() ),
-                      _T("error") );
+        wxMessageBox( wxString::Format( _("Error reading from file %s"), filename.c_str() ),
+                      _("Error reading file") );
     }
     return NULL;
 }
@@ -78,7 +78,7 @@ PeditPOL::PeditPOL( wxMDIParentFrame * parent, std::string const & filename )
 
     // Right part of the panel
     wxPanel * rightPanel = new wxPanel( mainPanel, wxID_ANY );
-    wxBoxSizer * rightPanelSizer = new wxStaticBoxSizer( new wxStaticBox( rightPanel, wxID_ANY, _T("Tables") ), wxVERTICAL );
+    wxBoxSizer * rightPanelSizer = new wxStaticBoxSizer( new wxStaticBox( rightPanel, wxID_ANY, _("Tables") ), wxVERTICAL );
     wxFlexGridSizer * rightSizer = new wxFlexGridSizer( 8, 2, 2, 4 );
     rightPanelSizer->Add( rightSizer, wxSizerFlags().Expand().Proportion(1) );
     rightPanel->SetSizerAndFit( rightPanelSizer );
@@ -90,42 +90,42 @@ PeditPOL::PeditPOL( wxMDIParentFrame * parent, std::string const & filename )
     long textStyle = wxTE_LEFT;
     wxSizerFlags textFlags = wxSizerFlags().Expand().Proportion(1);
 
-    leftSizer->Add( new wxStaticText( leftPanel, wxID_ANY, _T("Database"), wxDefaultPosition, wxDefaultSize, labelStyle ), labelFlags );
+    leftSizer->Add( new wxStaticText( leftPanel, wxID_ANY, _("Database"), wxDefaultPosition, wxDefaultSize, labelStyle ), labelFlags );
     leftSizer->Add( m_paramDatabase = new wxTextCtrl( leftPanel, wxID_ANY, "", wxDefaultPosition, wxDefaultSize, textStyle ), textFlags );
-    leftSizer->Add( new wxStaticText( leftPanel, wxID_ANY, _T("Tiered"), wxDefaultPosition, wxDefaultSize, labelStyle ), labelFlags );
+    leftSizer->Add( new wxStaticText( leftPanel, wxID_ANY, _("Tiered"), wxDefaultPosition, wxDefaultSize, labelStyle ), labelFlags );
     leftSizer->Add( m_paramTiered = new wxTextCtrl( leftPanel, wxID_ANY, "", wxDefaultPosition, wxDefaultSize, textStyle ), textFlags );
-    leftSizer->Add( new wxStaticText( leftPanel, wxID_ANY, _T("Rounding"), wxDefaultPosition, wxDefaultSize, labelStyle ), labelFlags );
+    leftSizer->Add( new wxStaticText( leftPanel, wxID_ANY, _("Rounding"), wxDefaultPosition, wxDefaultSize, labelStyle ), labelFlags );
     leftSizer->Add( m_paramRounding = new wxTextCtrl( leftPanel, wxID_ANY, "", wxDefaultPosition, wxDefaultSize, textStyle ), textFlags );
-    leftSizer->Add( new wxStaticText( leftPanel, wxID_ANY, _T("Funds"), wxDefaultPosition, wxDefaultSize, labelStyle ), labelFlags );
+    leftSizer->Add( new wxStaticText( leftPanel, wxID_ANY, _("Funds"), wxDefaultPosition, wxDefaultSize, labelStyle ), labelFlags );
     leftSizer->Add( m_paramFunds = new wxTextCtrl( leftPanel, wxID_ANY, "", wxDefaultPosition, wxDefaultSize, textStyle ), textFlags );
 
-    leftSizer->Add( new wxStaticText( leftPanel, wxID_ANY, _T("Table Y"), wxDefaultPosition, wxDefaultSize, labelStyle ), labelFlags );
+    leftSizer->Add( new wxStaticText( leftPanel, wxID_ANY, _("Table Y"), wxDefaultPosition, wxDefaultSize, labelStyle ), labelFlags );
     leftSizer->Add( m_oldTableY = new wxTextCtrl( leftPanel, wxID_ANY, "", wxDefaultPosition, wxDefaultSize, textStyle | wxTE_READONLY ), textFlags );
-    leftSizer->Add( new wxStaticText( leftPanel, wxID_ANY, _T("Premium Tax"), wxDefaultPosition, wxDefaultSize, labelStyle ), labelFlags );
+    leftSizer->Add( new wxStaticText( leftPanel, wxID_ANY, _("Premium Tax"), wxDefaultPosition, wxDefaultSize, labelStyle ), labelFlags );
     leftSizer->Add( m_oldPremiumTax = new wxTextCtrl( leftPanel, wxID_ANY, "", wxDefaultPosition, wxDefaultSize, textStyle | wxTE_READONLY ), textFlags );
-    leftSizer->Add( new wxStaticText( leftPanel, wxID_ANY, _T("83 GAM"), wxDefaultPosition, wxDefaultSize, labelStyle ), labelFlags );
+    leftSizer->Add( new wxStaticText( leftPanel, wxID_ANY, _("83 GAM"), wxDefaultPosition, wxDefaultSize, labelStyle ), labelFlags );
     leftSizer->Add( m_old83GAM = new wxTextCtrl( leftPanel, wxID_ANY, "", wxDefaultPosition, wxDefaultSize, textStyle | wxTE_READONLY ), textFlags );
 
-    wxString const deprecatedTooltip = _T("Deprecated -- do not use");
+    wxString const deprecatedTooltip = _("Deprecated -- do not use");
     m_oldTableY->Disable();     m_oldTableY->SetToolTip( deprecatedTooltip );
     m_oldPremiumTax->Disable(); m_oldPremiumTax->SetToolTip( deprecatedTooltip );
     m_old83GAM->Disable();      m_old83GAM->SetToolTip( deprecatedTooltip );
 
-    rightSizer->Add( new wxStaticText( rightPanel, wxID_ANY, _T("Current COI"), wxDefaultPosition, wxDefaultSize, labelStyle ), labelFlags );
+    rightSizer->Add( new wxStaticText( rightPanel, wxID_ANY, _("Current COI"), wxDefaultPosition, wxDefaultSize, labelStyle ), labelFlags );
     rightSizer->Add( m_tableCurrentCOI = new wxTextCtrl( rightPanel, wxID_ANY, "", wxDefaultPosition, wxDefaultSize, textStyle ), textFlags );
-    rightSizer->Add( new wxStaticText( rightPanel, wxID_ANY, _T("Guaranteed COI"), wxDefaultPosition, wxDefaultSize, labelStyle ), labelFlags );
+    rightSizer->Add( new wxStaticText( rightPanel, wxID_ANY, _("Guaranteed COI"), wxDefaultPosition, wxDefaultSize, labelStyle ), labelFlags );
     rightSizer->Add( m_tableGuarranteedCOI = new wxTextCtrl( rightPanel, wxID_ANY, "", wxDefaultPosition, wxDefaultSize, textStyle ), textFlags );
-    rightSizer->Add( new wxStaticText( rightPanel, wxID_ANY, _T("Waiver of premium"), wxDefaultPosition, wxDefaultSize, labelStyle ), labelFlags );
+    rightSizer->Add( new wxStaticText( rightPanel, wxID_ANY, _("Waiver of premium"), wxDefaultPosition, wxDefaultSize, labelStyle ), labelFlags );
     rightSizer->Add( m_tableWaiverPremium = new wxTextCtrl( rightPanel, wxID_ANY, "", wxDefaultPosition, wxDefaultSize, textStyle ), textFlags );
-    rightSizer->Add( new wxStaticText( rightPanel, wxID_ANY, _T("AD&D"), wxDefaultPosition, wxDefaultSize, labelStyle ), labelFlags );
+    rightSizer->Add( new wxStaticText( rightPanel, wxID_ANY, _("AD&D"), wxDefaultPosition, wxDefaultSize, labelStyle ), labelFlags );
     rightSizer->Add( m_tableADD = new wxTextCtrl( rightPanel, wxID_ANY, "", wxDefaultPosition, wxDefaultSize, textStyle ), textFlags );
-    rightSizer->Add( new wxStaticText( rightPanel, wxID_ANY, _T("Term rider"), wxDefaultPosition, wxDefaultSize, labelStyle ), labelFlags );
+    rightSizer->Add( new wxStaticText( rightPanel, wxID_ANY, _("Term rider"), wxDefaultPosition, wxDefaultSize, labelStyle ), labelFlags );
     rightSizer->Add( m_tableTermRider = new wxTextCtrl( rightPanel, wxID_ANY, "", wxDefaultPosition, wxDefaultSize, textStyle ), textFlags );
-    rightSizer->Add( new wxStaticText( rightPanel, wxID_ANY, _T("CVAT corridor"), wxDefaultPosition, wxDefaultSize, labelStyle ), labelFlags );
+    rightSizer->Add( new wxStaticText( rightPanel, wxID_ANY, _("CVAT corridor"), wxDefaultPosition, wxDefaultSize, labelStyle ), labelFlags );
     rightSizer->Add( m_tableCVAT = new wxTextCtrl( rightPanel, wxID_ANY, "", wxDefaultPosition, wxDefaultSize, textStyle ), textFlags );
-    rightSizer->Add( new wxStaticText( rightPanel, wxID_ANY, _T("TAMRA 7 pay"), wxDefaultPosition, wxDefaultSize, labelStyle ), labelFlags );
+    rightSizer->Add( new wxStaticText( rightPanel, wxID_ANY, _("TAMRA 7 pay"), wxDefaultPosition, wxDefaultSize, labelStyle ), labelFlags );
     rightSizer->Add( m_tableTAMRA = new wxTextCtrl( rightPanel, wxID_ANY, "", wxDefaultPosition, wxDefaultSize, textStyle ), textFlags );
-    rightSizer->Add( new wxStaticText( rightPanel, wxID_ANY, _T("7702 and 7702A q"), wxDefaultPosition, wxDefaultSize, labelStyle ), labelFlags );
+    rightSizer->Add( new wxStaticText( rightPanel, wxID_ANY, _("7702 and 7702A q"), wxDefaultPosition, wxDefaultSize, labelStyle ), labelFlags );
     rightSizer->Add( m_table7702Q = new wxTextCtrl( rightPanel, wxID_ANY, "", wxDefaultPosition, wxDefaultSize, textStyle ), textFlags );
 
     SyncDataToUI();

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: pedit_db4.cpp,v 1.1.2.1 2006-03-13 19:56:52 etarassov Exp $
+// $Id: pedit_db4.cpp,v 1.1.2.2 2006-03-28 00:40:40 etarassov Exp $
 
 #include "pedit_db4.hpp"
 #include "dbnames.hpp"
@@ -98,8 +98,8 @@ bool DB4PeditTable::ConfirmOperation( unsigned int itemCount ) const
 {
     return itemCount < 1000000 // its not that bad to have 1M elements
         || wxYES == // user is aware of the memory consumption
-            wxMessageBox( wxString(_T("The resulting entity will have more than 1 million entries. Are you sure you want to continue?")),
-                          _T("Memory Consumption"),
+            wxMessageBox( wxString(_("The resulting entity will have more than 1 million entries. Are you sure you want to continue?")),
+                          _("Memory Consumption"),
                           wxYES_NO | wxICON_QUESTION );
 }
 
@@ -270,7 +270,8 @@ PeditDB4::PeditDB4( wxMDIParentFrame *parent, std::string const & filename )
     }
     catch( std::exception const & ex )
     {
-        wxMessageBox( _T("Error reading from .db4 file [%s]"), _T("Error") );
+        wxMessageBox( _("Error reading from .db4 file [%s]"),
+                      _("Error reading file") );
         throw;
     }
 
@@ -333,7 +334,7 @@ void PeditDB4::OnTreeSelChange( wxTreeEvent & event )
 
         bool isTopic = m_tree->GetChildrenCount( event.GetItem() );
         {
-            wxString statusText = isTopic ? _T("Topic: ") : _T("Item: ");
+            wxString statusText = isTopic ? _("Topic: ") : _("Item: ");
             statusText += data->GetDescription();
             SetStatusText( statusText );
         }

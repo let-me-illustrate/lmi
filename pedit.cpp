@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: pedit.cpp,v 1.1.2.1 2006-03-13 19:56:52 etarassov Exp $
+// $Id: pedit.cpp,v 1.1.2.2 2006-03-28 00:40:40 etarassov Exp $
 
 #include "pedit.hpp"
 #include "dbnames.hpp"
@@ -108,24 +108,24 @@ PeditFrame::PeditFrame( wxWindow *parent,
     {   // Menubar
         wxMenu *file_menu = new wxMenu;
     
-        file_menu->Append( MDI_OPEN_FILE,        _T("&Open\tCtrl-O"), _T("Opens data file into a new child data window") );
+        file_menu->Append( MDI_OPEN_FILE,        _("&Open\tCtrl-O"), _("Opens data file into a new child data window") );
         file_menu->AppendSeparator();
-        file_menu->Append( MDI_CLOSE_FILE,       _T("&Close\tCtrl-W"), _T("Close child window") );
-        file_menu->Append( MDI_CLOSE_ALL_FILES,  _T("C&lose All\tCtrl-Shift-W"), _T("Close all windows") );
+        file_menu->Append( MDI_CLOSE_FILE,       _("&Close\tCtrl-W"), _("Close child window") );
+        file_menu->Append( MDI_CLOSE_ALL_FILES,  _("C&lose All\tCtrl-Shift-W"), _("Close all windows") );
         file_menu->AppendSeparator();
-        file_menu->Append( MDI_SAVE_FILE,        _T("&Save\tCtrl-S"), _T("Save data file") );
-        file_menu->Append( MDI_SAVE_FILE_AS,     _T("Save &As..."), _T("Save data to another file") );
-        file_menu->Append( MDI_SAVE_ALL_FILES,   _T("Sav&e All\tCtrl-Shift-S"), _T("Save all data files") );
+        file_menu->Append( MDI_SAVE_FILE,        _("&Save\tCtrl-S"), _("Save data file") );
+        file_menu->Append( MDI_SAVE_FILE_AS,     _("Save &As..."), _("Save data to another file") );
+        file_menu->Append( MDI_SAVE_ALL_FILES,   _("Sav&e All\tCtrl-Shift-S"), _("Save all data files") );
         file_menu->AppendSeparator();
-        file_menu->Append( MDI_QUIT,             _T("E&xit\tCtrl-X"), _T("Quit the program") );
+        file_menu->Append( MDI_QUIT,             _("E&xit\tCtrl-X"), _("Quit the program") );
 
         wxMenu *help_menu = new wxMenu;
-        help_menu->Append( MDI_ABOUT, _T("&About\tF1") );
+        help_menu->Append( MDI_ABOUT, _("&About\tF1") );
 
         wxMenuBar *menu_bar = new wxMenuBar;
 
-        menu_bar->Append( file_menu, _T("&File") );
-        menu_bar->Append( help_menu, _T("&Help") );
+        menu_bar->Append( file_menu, _("&File") );
+        menu_bar->Append( help_menu, _("&Help") );
     
         SetMenuBar( menu_bar );
     }
@@ -139,14 +139,14 @@ PeditFrame::~PeditFrame()
 
 void PeditFrame::OnAbout( wxCommandEvent& WXUNUSED(event) )
 {
-    (void)wxMessageBox(_T("LMI Product Edito v0.1\n"),
-                       _T("About LMI Product Editor"));
+    (void)wxMessageBox(_("LMI Product Edito v0.1\n"),
+                       _("About LMI Product Editor"));
 }
 
 void PeditFrame::OnOpenFile( wxCommandEvent& WXUNUSED(event) )
 {
     wxString filename = 
-        ::wxFileSelector( _T("Open File"),
+        ::wxFileSelector( _("Open File"),
                           Pedit::config.ReadString( _T("filedir"), _T("") ), _T(""), _T(""),
                           PeditFileFrame::GetFilesWildcard().c_str(),
                           wxOPEN | wxFILE_MUST_EXIST );
@@ -192,11 +192,11 @@ void PeditFrame::OnSaveFileAs(wxCommandEvent& WXUNUSED(event) )
     std::string path_dir = filename.branch_path().string();
     std::string path_file = filename.leaf();
     wxString newFilename =
-        ::wxFileSelector( _T("Save As"),
+        ::wxFileSelector( _("Save As"),
                           Pedit::config.ReadString( _T("filedir"), _T("") ),
                           path_file.c_str(),
                           _T("db4"),
-                          _T("*.db4"),
+                          PeditFileFrame::GetFilesWildcard().c_str(),
                           wxSAVE | wxOVERWRITE_PROMPT,
                           this );
     if( newFilename.empty() )
@@ -387,27 +387,27 @@ PeditFileFrame * PeditFileFrame::CreateInstance( wxMDIParentFrame *parent,
         }
         catch( std::exception const & ex )
         {
-            wxMessageBox( wxString::Format( _T("Error %s\nwhile opening file\n %s"),
-                                              ex.what(), filename.c_str() ),
-                                              _T("Error opening file"), wxOK | wxICON_ERROR );
+            wxMessageBox( wxString::Format( _("Error %s\nwhile opening file\n %s"),
+                          ex.what(), filename.c_str() ),
+                          _("Error opening file"), wxOK | wxICON_ERROR );
         }
     }
     catch( boost::filesystem::filesystem_error const & ex )
     {
-        wxMessageBox( wxString::Format( _T("Error %s opening file %s"),
+        wxMessageBox( wxString::Format( _("Error %s opening file %s"),
                                         ex.what(), filename.c_str() ),
-                      _T("Invalid file"), wxOK | wxICON_ERROR );
+                      _("Invalid file"), wxOK | wxICON_ERROR );
     }
     catch( std::exception const & ex )
     {
-        wxMessageBox( wxString::Format( _T("Error %s opening file %s"),
+        wxMessageBox( wxString::Format( _("Error %s opening file %s"),
                                         ex.what(), filename.c_str() ),
-                      _T("Invalid file"), wxOK | wxICON_ERROR );
+                      _("Invalid file"), wxOK | wxICON_ERROR );
     }
     catch(...)
     {
-        wxMessageBox( wxString::Format(_T("Unknown exception opening %s"), filename.c_str() ),
-                      _T("Open"), wxOK | wxICON_ERROR );
+        wxMessageBox( wxString::Format(_("Unknown exception opening %s"), filename.c_str() ),
+                      _("File Opening Error"), wxOK | wxICON_ERROR );
     }
     return NULL;
 }
@@ -449,10 +449,10 @@ void PeditFileFrame::OnClose( wxCloseEvent & event )
         int style = wxYES_NO | wxICON_QUESTION;
         if( event.CanVeto() )
             style |= wxCANCEL;
-        int answer = wxMessageBox( wxString(_T("You have unsaved chages in\n"))
-                                   + _T("  ") + GetTitle() + _T("\n")
-                                   + _T("Do you want to save the changes?"),
-                                   _T("Unsaved changes"), style, this );
+        int answer = wxMessageBox( wxString::Format(
+            _("You have unsaved chages in\n  %s\n"
+              "Do you want to save the changes?"), GetTitle().c_str()),
+            _("Unsaved changes"), style, this );
         if( answer == wxCANCEL )
         {
             event.Veto();
@@ -474,9 +474,9 @@ void PeditFileFrame::OnClose( wxCloseEvent & event )
                     if( event.CanVeto() )
                         style |= wxCANCEL;
                     int retry = wxMessageBox( wxString::Format(
-                            _T("While saving into\n  %s\nerror\n  %s\nDo you want to retry (Yes) or abandon saving (No), losing changes?"),
+                            _("While saving into\n  %s\nerror\n  %s\nDo you want to retry (Yes) or abandon saving (No), losing changes?"),
                             GetFilename().c_str(), wxString( ex.what() ).c_str() ),
-                            _T("Error saving data"),
+                            _("Error saving data"),
                             style );
                     if( retry == wxCANCEL )
                     {
@@ -512,13 +512,13 @@ bool Pedit::OnInit()
         m_checker = new wxSingleInstanceChecker( name );
         if ( m_checker->IsAnotherRunning() )
         {
-            wxLogError( _T("Another program instance is already running.") );
+            wxLogError( _("Another program instance is already running.") );
 
             return false;
         }
     }
 
-    m_peditFrame = new PeditFrame( NULL, wxID_ANY, _T( "LMI Product Editor" ) );
+    m_peditFrame = new PeditFrame( NULL, wxID_ANY, _( "LMI Product Editor" ) );
 
     m_peditFrame->Show( true );
 

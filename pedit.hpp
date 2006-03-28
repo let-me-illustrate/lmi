@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: pedit.hpp,v 1.1.2.1 2006-03-13 19:56:52 etarassov Exp $
+// $Id: pedit.hpp,v 1.1.2.2 2006-03-28 00:40:40 etarassov Exp $
 
 #ifndef PEDIT_HPP_
 #define PEDIT_HPP_
@@ -35,6 +35,7 @@
 #include <wx/app.h>
 #include <wx/choice.h>
 #include <wx/treectrl.h>
+#include <wx/intl.h>
 
 /**
    Parent MDI frame in the product editor.
@@ -49,7 +50,7 @@ public:
     /// Constructor mimics the one of wxMDIParentFrame class
     PeditFrame( wxWindow *parent = NULL,
                 const wxWindowID id = wxID_ANY,
-                const wxString& title = _T("LMI Product Editor") );
+                const wxString& title = _("LMI Product Editor") );
 
     virtual ~PeditFrame();
 private:
@@ -283,7 +284,7 @@ MaxValueAdjuster<Integral>::MaxValueAdjuster( MultiDimAxisAny & axis,
   m_axis( axis ), m_lowerBound( lowerBound ), m_upperBound( upperBound )
 {
     wxASSERT( lowerBound <= upperBound );
-    SetToolTip( wxString::Format(_T("Upper bound for \"%s\" axis"), axis.GetName().c_str() ) );
+    SetToolTip( wxString::Format(_("Upper bound for \"%s\" axis"), axis.GetName().c_str() ) );
     for( Integral i = m_lowerBound; i <= m_upperBound; ++i )
         wxChoice::Append( wxString::Format( _T("%d"), i + 1 ) );
 }
