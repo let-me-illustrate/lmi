@@ -196,7 +196,7 @@ enum {
     ID_SECOND_AXIS_CHOICE
 };
 
-BEGIN_EVENT_TABLE(MultiDimGrid, wxControl)
+BEGIN_EVENT_TABLE(MultiDimGrid, wxScrolledWindow)
     EVT_CHOICE ( ID_FIRST_AXIS_CHOICE,  MultiDimGrid::OnSwitchSelectedAxis )
     EVT_CHOICE ( ID_SECOND_AXIS_CHOICE, MultiDimGrid::OnSwitchSelectedAxis )
     EVT_CHECKBOX ( wxID_ANY, MultiDimGrid::OnAxisVariesToggle )
