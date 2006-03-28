@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: pedit.hpp,v 1.1.2.3 2006-03-28 00:46:24 etarassov Exp $
+// $Id: pedit.hpp,v 1.1.2.4 2006-03-28 00:58:04 etarassov Exp $
 
 #ifndef PEDIT_HPP_
 #define PEDIT_HPP_
@@ -435,15 +435,15 @@ void AdjustableMaxIntegralAxis<Integral>::UpdateChoiceControl( wxWindow & choice
             static_cast<MultiDimAxisAnyChoice&>(choiceControl);
     Integral minValue = ProBaseClass::GetMinValue();
     Integral maxValue = ProBaseClass::GetMaxValue();
-    Integral newCount = maxValue - minValue + 1;
-    int commonCount = wxMin( choice.GetCount(), static_cast<int>( newCount ) );
+    unsigned int newCount = static_cast<unsigned int>( maxValue - minValue + 1 );
+    unsigned int commonCount = wxMin( choice.GetCount(), newCount );
     int selection = choice.GetSelection();
-    if( selection != wxNOT_FOUND && selection >= commonCount )
+    if( selection != wxNOT_FOUND && selection >= static_cast<int>( commonCount ) )
         selection = wxNOT_FOUND;
     while( choice.GetCount() > commonCount )
         choice.Delete( choice.GetCount() - 1 );
 
-    while( choice.GetCount() < static_cast<int>( newCount ) )
+    while( choice.GetCount() < newCount )
     {
         choice.Append( GetLabel( choice.GetCount() + minValue ) );
     }

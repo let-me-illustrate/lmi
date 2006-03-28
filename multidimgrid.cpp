@@ -685,7 +685,7 @@ void MultiDimGrid::DoSetGridAxisSelection( int axisId, int selection )
 
     if( selection != oldSelection )
     {
-        for( int i = 1; i < choice->GetCount(); ++i )
+        for( unsigned int i = 1; i < choice->GetCount(); ++i )
         {
             int cdata = reinterpret_cast<int>( choice->GetClientData( i ) );
             if( cdata == selection )
