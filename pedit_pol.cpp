@@ -19,9 +19,10 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: pedit_pol.cpp,v 1.1.2.4 2006-03-28 00:40:40 etarassov Exp $
+// $Id: pedit_pol.cpp,v 1.1.2.5 2006-03-29 11:00:34 etarassov Exp $
 
 #include "pedit_pol.hpp"
+#include "alert.hpp"
 
 #include <memory>
 #include <wx/sizer.h>
@@ -51,8 +52,13 @@ PeditFileFrame * PeditPOL::CreatePOLInstance( wxMDIParentFrame *parent,
     }
     catch( std::exception & ex )
     {
-        wxMessageBox( wxString::Format( _("Error reading from file %s"), filename.c_str() ),
-                      _("Error reading file") );
+        wxMessageBox( wxString::Format( _T("Error [%s] while reading from .pol file [%s]"),
+                                        ex.what(), filename.c_str() ),
+                      _("Error") );
+    }
+    catch( ... )
+    {
+        fatal_error() << _T("Unknown error while creating .pol editor");
     }
     return NULL;
 }

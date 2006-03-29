@@ -20,7 +20,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: Makefile.am,v 1.9.2.3 2006-03-13 19:56:52 etarassov Exp $
+# $Id: Makefile.am,v 1.9.2.4 2006-03-29 11:00:34 etarassov Exp $
 
 ##############################################################################
 # All Targets
@@ -891,6 +891,7 @@ noinst_HEADERS = \
     zero.hpp
 
 test_pedit_SOURCES = \
+    alert_wx.cpp \
     multidimgrid.cpp \
     pedit_config.cpp \
     pedit.cpp \
