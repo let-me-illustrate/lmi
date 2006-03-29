@@ -2,7 +2,7 @@
    @file multidimgrid.hpp
    @brief A control for editing multidimensional data and supporting classes.
    @author Vadim Zeitlin
-   @version $Id: multidimgrid.hpp,v 1.1.2.4 2006-03-28 00:46:24 etarassov Exp $
+   @version $Id: multidimgrid.hpp,v 1.1.2.5 2006-03-29 10:59:39 etarassov Exp $
    @date 2005-10-19
 
    The MultiDimGrid control can be used to edit N-dimensional data tables.
@@ -75,7 +75,7 @@
 #include <wx/control.h>
 #include <wx/scrolwin.h>
 #include <wx/grid.h>
-#include <wx/recguard.h>
+#include <wx/choice.h>
 
 #include <vector>
 #include <stdexcept>
