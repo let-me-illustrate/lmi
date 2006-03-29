@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: pedit_db4.cpp,v 1.1.2.2 2006-03-28 00:40:40 etarassov Exp $
+// $Id: pedit_db4.cpp,v 1.1.2.3 2006-03-29 11:02:56 etarassov Exp $
 
 #include "pedit_db4.hpp"
 #include "dbnames.hpp"
@@ -270,8 +270,9 @@ PeditDB4::PeditDB4( wxMDIParentFrame *parent, std::string const & filename )
     }
     catch( std::exception const & ex )
     {
-        wxMessageBox( _("Error reading from .db4 file [%s]"),
-                      _("Error reading file") );
+        wxMessageBox( wxString::Format( _("Error [%s] while reading from .db4 file [%s]"),
+                                        ex.what(), filename.c_str() ),
+                      _("Error") );
         throw;
     }
 

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: pedit_rnd.cpp,v 1.1.2.4 2006-03-28 00:46:24 etarassov Exp $
+// $Id: pedit_rnd.cpp,v 1.1.2.5 2006-03-29 11:02:56 etarassov Exp $
 
 #include "pedit_rnd.hpp"
 
@@ -30,6 +30,7 @@
 #include <wx/bmpbuttn.h>
 #include <wx/tglbtn.h>
 #include <wx/stattext.h>
+#include <wx/msgdlg.h>
 // needed by GetMinPossibleSize to calculate minimum size based on string length
 #include <wx/dcclient.h>
 
@@ -179,7 +180,17 @@ namespace
 PeditFileFrame * PeditRND::CreateRNDInstance( wxMDIParentFrame *parent,
                                               std::string const & filename )
 {
-    return new PeditRND( parent, filename );
+    try
+    {
+        return new PeditRND( parent, filename );
+    }
+    catch( std::exception const & ex )
+    {
+        wxMessageBox( wxString::Format( _("Error [%s] while reading from .rnd file [%s]"),
+                                        ex.what(), filename.c_str() ),
+                      _("Error") );
+        throw;
+    }
 }
 
 PeditRND::~PeditRND() {}

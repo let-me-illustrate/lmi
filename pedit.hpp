@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: pedit.hpp,v 1.1.2.4 2006-03-28 00:58:04 etarassov Exp $
+// $Id: pedit.hpp,v 1.1.2.5 2006-03-29 11:02:56 etarassov Exp $
 
 #ifndef PEDIT_HPP_
 #define PEDIT_HPP_
@@ -133,7 +133,21 @@ protected:
     virtual void DoSave() = 0;
     /// Whether the data is modified. Method to define in derived classes.
     virtual bool DoIsModified() const = 0;
-    
+
+    /// Options to pass into SaveChanges() method
+    enum {
+        /// Save even if !IsModified()
+        SAVE_FORCE = 1,
+        /// Use can click cancel and the event triggered the save will be vetoed
+        SAVE_CAN_VETO = 2,
+        /// After the operation any unsaved changes will be discarded
+        SAVE_OR_LOSE_CHANGES = 4
+    };
+    /// Save changes, handle std::exceptions, show error messages
+    /// @param saveType any combination of SAVE_FORCE, SAVE_CAN_VETO, SAVE_OR_LOSE_CHANGES
+    /// @return false if the operation is cancelled by user (vetoed)
+    bool SaveChanges( int saveType );
+
     /// Getter for the extension. Method to define in derived classes.
     virtual std::string const & DoGetExtension() const = 0;
 

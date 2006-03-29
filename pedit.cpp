@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: pedit.cpp,v 1.1.2.2 2006-03-28 00:40:40 etarassov Exp $
+// $Id: pedit.cpp,v 1.1.2.3 2006-03-29 11:02:56 etarassov Exp $
 
 #include "pedit.hpp"
 #include "dbnames.hpp"
@@ -151,27 +151,39 @@ void PeditFrame::OnOpenFile( wxCommandEvent& WXUNUSED(event) )
                           PeditFileFrame::GetFilesWildcard().c_str(),
                           wxOPEN | wxFILE_MUST_EXIST );
     if( filename.empty() )
-    { // canceled
+    { // canceled by the user
         return;
     }
 
     try
     {
         boost::filesystem::path path( filename.c_str() );
-        if( !boost::filesystem::is_directory( path ) )
-            path = path.branch_path();
+        path = path.branch_path();
         Pedit::config.WriteString( _T("filedir"), path.string() );
+
+        PeditFileFrame * child = PeditFileFrame::CreateInstance( this, filename.c_str() );
+        if( child )
+        {
+            // TODO: decorate the window apropriatly
+            // child->SetIcon(wxIcon( mondrian_xpm ));
+
+            // TODO(FIXME): GTK wx port seems to need this to show the child
+            child->Show();
+
+            child->Activate();
+        }
     }
     catch( boost::filesystem::filesystem_error const & fse )
     {
-        // Invalid filename selected - do not save directory into config
+        wxMessageBox( wxString::Format( _("Invalid filename specified [%s]:\n%s"),
+                                        filename.c_str(), fse.what() ),
+                      _("Invalid filename") );
     }
-
-    PeditFileFrame * child = PeditFileFrame::CreateInstance( this, filename.c_str() );
-    if( child )
+    catch( std::exception const & ex )
     {
-        // TODO: decorate the window apropriatly
-//        child->SetIcon(wxIcon( mondrian_xpm ));
+        wxMessageBox( wxString::Format( _("Error [%s] opening the file [%s]"),
+                                        ex.what(), filename.c_str() ),
+                      _("Error opening file") );
     }
 }
 
@@ -179,7 +191,9 @@ void PeditFrame::OnSaveFile(wxCommandEvent& WXUNUSED(event) )
 {
     PeditFileFrame * win = dynamic_cast<PeditFileFrame*>( GetActiveChild() );
     if( win )
-        win->Save();
+    {
+        win->SaveChanges( PeditFileFrame::SAVE_FORCE );
+    }
 }
 
 void PeditFrame::OnSaveFileAs(wxCommandEvent& WXUNUSED(event) )
@@ -210,14 +224,17 @@ void PeditFrame::OnSaveFileAs(wxCommandEvent& WXUNUSED(event) )
         if( !boost::filesystem::is_directory( path ) )
             path = path.branch_path();
         Pedit::config.WriteString( _T("filedir"), path.string() );
+
+        win->SetFilename( newFilename.c_str() );
+        win->SaveChanges( PeditFileFrame::SAVE_CAN_VETO );
     }
     catch( boost::filesystem::filesystem_error const & fse )
     {
         // Invalid filename selected - do not save directory into config
+        wxMessageBox( wxString::Format( _("Invalid filename selected: %s"),
+                                        fse.what() ),
+                      _("Invalid filename") );
     }
-
-    win->SetFilename( newFilename.c_str() );
-    win->Save();
 }
 
 void PeditFrame::OnSaveAllFiles( wxCommandEvent& WXUNUSED(event) )
@@ -230,6 +247,8 @@ void PeditFrame::OnSaveAllFiles( wxCommandEvent& WXUNUSED(event) )
         if( win )
         {
             win->Save();
+            if( !win->SaveChanges( PeditFileFrame::SAVE_CAN_VETO ) )
+                return;
         }
         node = node->GetNext();
     }
@@ -442,6 +461,46 @@ void PeditFileFrame::OnQuit( wxCommandEvent& WXUNUSED(event) )
     Close( true );
 }
 
+// return false if operation is cancelled by the user (event to veto)
+bool PeditFileFrame::SaveChanges( int saveType )
+{
+    if( !IsModified() && !( saveType & SAVE_FORCE ) )
+        return true;
+
+    for(;;)
+    {
+        try
+        {
+            Save();
+            return true;
+        }
+        catch( std::exception const & ex )
+        {
+            int style = wxYES_NO | wxICON_ERROR;
+            if( saveType & SAVE_CAN_VETO )
+                style |= wxCANCEL;
+            int retry = wxMessageBox( wxString::Format(
+                    (( saveType & SAVE_OR_LOSE_CHANGES)
+                        ? _("Error %s\nwhile saving into [%s].\nDo you want to retry (Yes) or discard changes (No)?")
+                        : _("Error %s\nwhile saving into [%s].\nDo you want to retry?") ),
+                    ex.what(), GetFilename().c_str() ),
+                    _("Error saving data"),
+                    style );
+            wxASSERT_MSG( !(retry == wxCANCEL && !(saveType & SAVE_CAN_VETO) ),
+                          _T("wxCANCEL generated but the source event can't be vetoed") );
+            if( retry == wxCANCEL )
+            {
+                return false;
+            }
+            if( retry == wxNO )
+            {
+                return true;
+            }
+            // (retry == wxYES) => continue
+        }
+    }
+}
+
 void PeditFileFrame::OnClose( wxCloseEvent & event )
 {
     if( IsModified() )
@@ -450,8 +509,7 @@ void PeditFileFrame::OnClose( wxCloseEvent & event )
         if( event.CanVeto() )
             style |= wxCANCEL;
         int answer = wxMessageBox( wxString::Format(
-            _("You have unsaved chages in\n  %s\n"
-              "Do you want to save the changes?"), GetTitle().c_str()),
+            _("You have unsaved chages in [%s] Do you want to save it?"), GetTitle().c_str()),
             _("Unsaved changes"), style, this );
         if( answer == wxCANCEL )
         {
@@ -460,37 +518,11 @@ void PeditFileFrame::OnClose( wxCloseEvent & event )
         }
         else if( answer == wxYES )
         {
-            for(;;)
+            bool success = SaveChanges( (event.CanVeto() ? SAVE_CAN_VETO : 0) | SAVE_OR_LOSE_CHANGES );
+            if( !success )
             {
-                try
-                {
-                    Save();
-                    // exit infinite loop after a successful save and close
-                    break;
-                }
-                catch( std::exception const & ex )
-                {
-                    int style = wxYES_NO | wxICON_ERROR;
-                    if( event.CanVeto() )
-                        style |= wxCANCEL;
-                    int retry = wxMessageBox( wxString::Format(
-                            _("While saving into\n  %s\nerror\n  %s\nDo you want to retry (Yes) or abandon saving (No), losing changes?"),
-                            GetFilename().c_str(), wxString( ex.what() ).c_str() ),
-                            _("Error saving data"),
-                            style );
-                    if( retry == wxCANCEL )
-                    {
-                        event.Veto();
-                        // Cancel - veto the event triggered the window closing,
-                        // don't close
-                        return;
-                    }
-                    if( retry == wxNO )
-                    {
-                        // No - discard changes, close and continue
-                        break;
-                    }
-                }
+                event.Veto();
+                return;
             }
         }
     }

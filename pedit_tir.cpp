@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: pedit_tir.cpp,v 1.1.2.3 2006-03-28 00:48:44 etarassov Exp $
+// $Id: pedit_tir.cpp,v 1.1.2.4 2006-03-29 11:02:56 etarassov Exp $
 
 #include "pedit_tir.hpp"
 #include "stratified_charges.xpp"
@@ -313,7 +313,17 @@ private:
 PeditTIR::PeditTIR( wxMDIParentFrame *parent, std::string const & filename )
 : PeditFileFrame( parent, filename, wxID_ANY, _T("") )
 {
-    TIRSCharges::ReadFromFile( filename );
+   try
+   {
+        TIRSCharges::ReadFromFile( filename );
+    }
+    catch( std::exception const & ex )
+    {
+        wxMessageBox( wxString::Format( _T("Error [%s] while reading from .tir file [%s]"),
+                                        ex.what(), filename.c_str() ),
+                      _("Error") );
+        throw;
+    }
 
     m_table.reset( new TIRPeditTable() );
 
@@ -396,8 +406,19 @@ void PeditTIR::OnTreeSelChange( wxTreeEvent & event )
 // Implement the abstract methods of PeditFileFrame interface
 void PeditTIR::DoSave()
 {
-    TIRSCharges::WriteToFile( GetFilename() );
-    return m_table->SetModified( false );
+    try
+    {
+        TIRSCharges::WriteToFile( GetFilename() );
+        m_table->SetModified( false );
+    }
+    catch( std::exception const & ex )
+    {
+        wxMessageBox( wxString::Format( _T("Writing into .tir file [%s]"),
+                                        GetFilename().c_str(),
+                                        ex.what() ),
+                      _T("Error") );
+        throw;
+    }
 }
 
 bool PeditTIR::DoIsModified() const
