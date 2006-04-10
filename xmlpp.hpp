@@ -1,6 +1,6 @@
-// LibxXml++ inclusion header.
+// Libxml++ inclusion header.
 //
-// Copyright (C) 2003, 2005 Gregory W. Chicares.
+// Copyright (C) 2005, 2006 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xmlpp.hpp,v 1.1.2.1 2006-01-28 01:41:59 etarassov Exp $
+// $Id: xmlpp.hpp,v 1.1.2.2 2006-04-10 20:30:08 etarassov Exp $
 
 #ifndef xmlpp_hpp
 #define xmlpp_hpp

@@ -1,6 +1,6 @@
 // libxml++ inclusion header.
 //
-// Copyright (C) 2003, 2005 Gregory W. Chicares.
+// Copyright (C) 2005, 2006 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xmlpp.cpp,v 1.1.2.1 2006-01-28 01:41:59 etarassov Exp $
+// $Id: xmlpp.cpp,v 1.1.2.2 2006-04-10 20:30:08 etarassov Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -40,7 +40,7 @@ namespace xmlpp
 
 /**
    Retrieve the text content of the node.
-   
+
    This function is not recursive, meaning that only the text-nodes
    directly attached to the node are taken into the account.
  */
@@ -94,8 +94,8 @@ const Element * LmiHelper::get_first_element(const Element & node)
 
 std::ostream & operator << ( std::ostream & os, Document & document )
 {
-	document.write_to_stream( os );
-	return os;
+    document.write_to_stream( os );
+    return os;
 }
 
 } // namespace xmlpp

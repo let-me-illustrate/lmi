@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: inputillus_xml_io.cpp,v 1.11.2.1 2006-01-28 01:41:59 etarassov Exp $
+// $Id: inputillus_xml_io.cpp,v 1.11.2.2 2006-04-10 20:30:08 etarassov Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -94,7 +94,7 @@ void IllusInputParms::read(xmlpp::Element const& x)
 
     std::string cell_version_string;
     xmlpp::Attribute const * version = x.get_attribute("version");
-    if( !version ) 
+    if( !version )
         {
         std::ostringstream msg;
         msg
