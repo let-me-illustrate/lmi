@@ -1,6 +1,6 @@
 // Product editor part for rnd file type.
 //
-// Copyright (C) 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005 Gregory W. Chicares.
+// Copyright (C) 2005, 2006 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: pedit_rnd.cpp,v 1.1.2.5 2006-03-29 11:02:56 etarassov Exp $
+// $Id: pedit_rnd.cpp,v 1.1.2.6 2006-04-10 20:26:03 etarassov Exp $
 
 #include "pedit_rnd.hpp"
 
@@ -52,9 +52,9 @@ class RNDStyleButtons : public wxPanel
 {
 public:
     RNDStyleButtons( wxWindow * parent, rounding_style style = r_indeterminate );
-    
+
     void SetStyle( rounding_style style );
-    
+
     rounding_style GetStyle() const;
 
     void SetConstraint( rounding_style style );
@@ -67,7 +67,7 @@ private:
     wxToggleButton * m_btnToNearest;
     wxToggleButton * m_btnUpward;
     wxToggleButton * m_btnDownward;
-    
+
     rounding_style m_originalStyle;
 
     void OnButtonClick( wxCommandEvent & event );
@@ -132,7 +132,7 @@ RNDStyleButtons::RNDStyleButtons( wxWindow * parent, rounding_style style )
 
     SetSizerAndFit( sizer );
     sizer->SetSizeHints( this );
-    
+
     SetStyle( style );
 }
 

@@ -1,6 +1,6 @@
 // Product editor.
 //
-// Copyright (C) 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005 Gregory W. Chicares.
+// Copyright (C) 2005, 2006 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: pedit.hpp,v 1.1.2.5 2006-03-29 11:02:56 etarassov Exp $
+// $Id: pedit.hpp,v 1.1.2.6 2006-04-10 20:26:03 etarassov Exp $
 
 #ifndef PEDIT_HPP_
 #define PEDIT_HPP_
@@ -39,7 +39,7 @@
 
 /**
    Parent MDI frame in the product editor.
-   
+
    It is a helper class that handles any universal
    (data format independent) things such as open a dialog when opening a file,
    or saving to another file, saving all windows, showing file menu, etc.
@@ -93,7 +93,7 @@ private:
 
 /**
    Child MDI frame window.
-   
+
    Its an abstract class and has to be derived from to be instantiated.
    The class provides two features:
     - base class for all data file editors
@@ -170,7 +170,7 @@ protected:
     typedef PeditFileFrame * (*FactoryMethod)( wxMDIParentFrame *parent,
                                                std::string const & filename );
     /// Register subtype class to provide extension and its factory method
-    static bool RegisterSubtype( std::string const & extension, 
+    static bool RegisterSubtype( std::string const & extension,
                                  FactoryMethod method,
                                  std::string const & description = "" );
 

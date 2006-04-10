@@ -2,7 +2,7 @@
    @file multidimgrid.hpp
    @brief A control for editing multidimensional data and supporting classes.
    @author Vadim Zeitlin
-   @version $Id: multidimgrid.hpp,v 1.1.2.5 2006-03-29 10:59:39 etarassov Exp $
+   @version $Id: multidimgrid.hpp,v 1.1.2.6 2006-04-10 20:26:03 etarassov Exp $
    @date 2005-10-19
 
    The MultiDimGrid control can be used to edit N-dimensional data tables.
@@ -276,7 +276,7 @@ public:
        from the adjustment control.
 
        @sa GetAdjustControl RefreshAdjustment
-       @sa MultiDimTableAny::ApplyAxisAdjustment MultiDimGrid::ApplyAxisAdjustment 
+       @sa MultiDimTableAny::ApplyAxisAdjustment MultiDimGrid::ApplyAxisAdjustment
 
        @param axis adjustment window previously constructed by GetAdjustControl()
        @param n axis index in the data-table
@@ -377,7 +377,7 @@ public:
        @return pointer to the axis
      */
     MultiDimAxisAny * GetAxisAny( unsigned int n )
-    {   
+    {
         if ( n >= GetDimension() )
             throw std::range_error("incorrect dimension");
         return DoGetAxisAny(n);
@@ -843,7 +843,7 @@ protected:
 
        Contrary to GetAxisIndexByName() it throws in case of unknown name
        (it does NOT return wxNOT_FOUND)
-       
+
        @param axisName name of the axis to find
        @return axis index
      */
@@ -1334,7 +1334,7 @@ public:
 
     /// for every M in 0..(N-1)
     virtual MultiDimAxis<VM> * GetAxisM() = 0;
-    
+
 protected:
     /// Implement base class pure virtual in terms of public GetValue()
     virtual boost::any DoGetValue(const Coords& coords) const

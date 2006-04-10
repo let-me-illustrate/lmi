@@ -1,6 +1,6 @@
 // Product editor part for db4 file type.
 //
-// Copyright (C) 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005 Gregory W. Chicares.
+// Copyright (C) 2005, 2006 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: pedit_db4.hpp,v 1.1.2.2 2006-03-28 00:40:40 etarassov Exp $
+// $Id: pedit_db4.hpp,v 1.1.2.3 2006-04-10 20:26:03 etarassov Exp $
 
 #ifndef PEDIT_DB4_HPP_
 #define PEDIT_DB4_HPP_
@@ -132,7 +132,7 @@ typedef MultiDimTable7< double,
 
 /**
    DB4 wrapper for TDBValue class
-   
+
    One could mention Adaptor pattern.
    It does not really owns the TDBValue instance which is passed to it.
    The boost::shared_ptr does.
@@ -235,7 +235,7 @@ private:
 
 /**
    Class is the version of MultiDimGrid customized for db4 file data.
-   
+
    Grid edit the data that depends upon 7 axis described in ihs_dbvalue.hpp
  */
 class DB4PeditGrid : public MultiDimGrid
@@ -258,9 +258,8 @@ public:
 /**
    Class opens the access to the internal TDBDictionary methods and variables.
 
-   It is declared as a friend of TDBDictionary class and allows us to use
-   Read/Write methods as long as to overcome the singleton nature
-   of the TDBDictionary class.
+   Declared as a friend of TDBDictionary class, to let it use Read/Write methods
+   and to workaround the singleton contraint of the TDBDictionary class.
  */
 class PeditDB4DBDocument
 {

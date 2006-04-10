@@ -1,3 +1,26 @@
+// Test case for multidimentional grid editor gui component.
+//
+// Copyright (C) 2005, 2006 Gregory W. Chicares.
+//
+// This program is free software; you can redistribute it and/or modify
+// it under the terms of the GNU General Public License version 2 as
+// published by the Free Software Foundation.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program; if not, write to the Free Software Foundation,
+// Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
+//
+// http://savannah.nongnu.org/projects/lmi
+// email: <chicares@cox.net>
+// snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
+
+// $Id: test_multidimgrid.cpp,v 1.1.2.5 2006-04-10 20:26:03 etarassov Exp $
+
 #include "multidimgrid.hpp"
 
 #include <wx/sizer.h>
@@ -485,7 +508,7 @@ unsigned int OptionTable::GetValue( OptionType type,
     ValueKey tuple = make_tuple(type, exercise, strike, maturity);
     const Values::const_iterator lower = m_values.lower_bound( tuple );
     const Values::const_iterator upper = m_values.upper_bound( tuple );
-    
+
     // disambiguate between [lower, upper) found elements
     // take the one with the lowest key (in dictionary order)
     unsigned int result = 0;

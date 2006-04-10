@@ -1,6 +1,6 @@
 // Product editor part for pol file type.
 //
-// Copyright (C) 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005 Gregory W. Chicares.
+// Copyright (C) 2005, 2006 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: pedit_pol.cpp,v 1.1.2.5 2006-03-29 11:00:34 etarassov Exp $
+// $Id: pedit_pol.cpp,v 1.1.2.6 2006-04-10 20:26:03 etarassov Exp $
 
 #include "pedit_pol.hpp"
 #include "alert.hpp"
@@ -150,16 +150,16 @@ void PeditPOL::SyncDataToUI()
     m_paramTiered->SetValue( TProductData::GetTierFilename() );
     m_paramRounding->SetValue( TProductData::GetRoundingFilename() );
     m_paramFunds->SetValue( TProductData::GetFundFilename() );
-    
+
     m_oldTableY->SetValue( TProductData::GetTableYFilename() );
     m_oldPremiumTax->SetValue( TProductData::GetPremTaxFilename() );
     m_old83GAM->SetValue( TProductData::GetGam83Filename() );
-    
+
     m_tableCurrentCOI->SetValue( TProductData::GetCurrCOIFilename() );
     m_tableGuarranteedCOI->SetValue( TProductData::GetGuarCOIFilename() );
     m_tableWaiverPremium->SetValue( TProductData::GetWPFilename() );
     m_tableADD->SetValue( TProductData::GetADDFilename() );
-    m_tableTermRider->SetValue( _T("?????") ); m_tableTermRider->Disable();
+    m_tableTermRider->SetValue( _T("#undefined#") ); m_tableTermRider->Disable();
     m_tableCVAT->SetValue( TProductData::GetCorridorFilename() );
     m_tableTAMRA->SetValue( TProductData::GetTAMRA7PayFilename() );
     m_table7702Q->SetValue( TProductData::GetIRC7702Filename() );
@@ -171,16 +171,16 @@ void PeditPOL::SyncUIToData()
     TProductData::TierFilename = m_paramTiered->GetValue().c_str();
     TProductData::RoundingFilename = m_paramRounding->GetValue().c_str();
     TProductData::FundFilename = m_paramFunds->GetValue().c_str();
-        
+
     TProductData::TableYFilename = m_oldTableY->GetValue().c_str();
     TProductData::PremTaxFilename = m_oldPremiumTax->GetValue().c_str();
     TProductData::Gam83Filename = m_old83GAM->GetValue().c_str();
-        
+
     TProductData::CurrCOIFilename = m_tableCurrentCOI->GetValue().c_str();
     TProductData::GuarCOIFilename = m_tableGuarranteedCOI->GetValue().c_str();
     TProductData::WPFilename = m_tableWaiverPremium->GetValue().c_str();
     TProductData::ADDFilename = m_tableADD->GetValue().c_str();
-//        m_tableTermRider->SetValue( _T("?????") ); m_tableTermRider->Disable();
+//        m_tableTermRider->SetValue( _T("#undefined#") ); m_tableTermRider->Disable();
     TProductData::CorridorFilename = m_tableCVAT->GetValue().c_str();
     TProductData::TAMRA7PayFilename = m_tableTAMRA->GetValue().c_str();
     TProductData::IRC7702Filename = m_table7702Q->GetValue().c_str();

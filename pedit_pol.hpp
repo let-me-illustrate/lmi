@@ -1,6 +1,6 @@
 // Product editor part for pol file type.
 //
-// Copyright (C) 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005 Gregory W. Chicares.
+// Copyright (C) 2005, 2006 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: pedit_pol.hpp,v 1.1.2.2 2006-03-28 00:40:40 etarassov Exp $
+// $Id: pedit_pol.hpp,v 1.1.2.3 2006-04-10 20:26:03 etarassov Exp $
 
 #ifndef PEDIT_POL_HPP_
 #define PEDIT_POL_HPP_
@@ -34,7 +34,6 @@
 class WXDLLEXPORT wxTextCtrl;
 /**
    MDI Child frame for POL files editing.
-   
  */
 class PeditPOL : public PeditFileFrame,
                  protected TProductData

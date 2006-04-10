@@ -1,6 +1,6 @@
 // Product editor part for db4 file type.
 //
-// Copyright (C) 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005 Gregory W. Chicares.
+// Copyright (C) 2005, 2006 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: pedit_db4.cpp,v 1.1.2.3 2006-03-29 11:02:56 etarassov Exp $
+// $Id: pedit_db4.cpp,v 1.1.2.4 2006-04-10 20:26:03 etarassov Exp $
 
 #include "pedit_db4.hpp"
 #include "dbnames.hpp"
@@ -293,14 +293,14 @@ PeditDB4::PeditDB4( wxMDIParentFrame *parent, std::string const & filename )
         {
             if( names[i].Idx == names[i].ParentIdx )
             {
-                wxTreeItemId id = 
+                wxTreeItemId id =
                     m_tree->AddRoot( _T("*") );
                 treeIds[ names[i].Idx ] = id;
             }
             else
             {
                 wxTreeItemId parent = treeIds[ names[i].ParentIdx ];
-                wxTreeItemId id = 
+                wxTreeItemId id =
                     m_tree->AppendItem( parent, names[i].ShortName, -1, -1,
                                         new MyTreeItemData( i, names[i].LongName ) );
                 treeIds[ names[i].Idx ] = id;

@@ -1,4 +1,12 @@
-// implementation of multidimensional data editor control
+/**
+   @file multidimgrid.cpp
+   @brief A control for editing multidimensional data and supporting classes.
+   @author Vadim Zeitlin
+   @version $Id: multidimgrid.cpp,v 1.1.2.6 2006-04-10 20:26:03 etarassov Exp $
+   @date 2005-10-19
+
+   Implementation of multidimensional data editor control
+*/
 #include "multidimgrid.hpp"
 #include <wx/sizer.h>
 #include <wx/gbsizer.h>
@@ -905,7 +913,7 @@ void MultiDimGrid::OnAxisVariesToggle( wxCommandEvent & event )
         if( !varies )
         {   // we are going to disable that axis - warn user about data loss
             wxString text;
-            
+
             int answer = wxMessageBox(
                 wxString::Format(
                     _("Disabling the axis \"%s\" could cause data loss."),

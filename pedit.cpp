@@ -1,6 +1,6 @@
-// Product editor.
+// Product editor prototype.
 //
-// Copyright (C) 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005 Gregory W. Chicares.
+// Copyright (C) 2005, 2006 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: pedit.cpp,v 1.1.2.3 2006-03-29 11:02:56 etarassov Exp $
+// $Id: pedit.cpp,v 1.1.2.4 2006-04-10 20:26:03 etarassov Exp $
 
 #include "pedit.hpp"
 #include "dbnames.hpp"
@@ -107,7 +107,7 @@ PeditFrame::PeditFrame( wxWindow *parent,
     }
     {   // Menubar
         wxMenu *file_menu = new wxMenu;
-    
+
         file_menu->Append( MDI_OPEN_FILE,        _("&Open\tCtrl-O"), _("Opens data file into a new child data window") );
         file_menu->AppendSeparator();
         file_menu->Append( MDI_CLOSE_FILE,       _("&Close\tCtrl-W"), _("Close child window") );
@@ -126,7 +126,7 @@ PeditFrame::PeditFrame( wxWindow *parent,
 
         menu_bar->Append( file_menu, _("&File") );
         menu_bar->Append( help_menu, _("&Help") );
-    
+
         SetMenuBar( menu_bar );
     }
     {   // Statusbar
@@ -145,7 +145,7 @@ void PeditFrame::OnAbout( wxCommandEvent& WXUNUSED(event) )
 
 void PeditFrame::OnOpenFile( wxCommandEvent& WXUNUSED(event) )
 {
-    wxString filename = 
+    wxString filename =
         ::wxFileSelector( _("Open File"),
                           Pedit::config.ReadString( _T("filedir"), _T("") ), _T(""), _T(""),
                           PeditFileFrame::GetFilesWildcard().c_str(),
@@ -288,7 +288,7 @@ void PeditFrame::OnClose( wxCloseEvent& event )
     {
         Pedit::config.WritePoint( _T("topwindow"),
                                   GetPosition() );
-        Pedit::config.WriteSize( _T("topwindow"), 
+        Pedit::config.WriteSize( _T("topwindow"),
                                  GetSize() );
     }
     if( maximized )
@@ -321,7 +321,7 @@ bool PeditFrame::CloseAllFiles( wxCloseEvent * event )
                     return false;
                 }
             }
-    
+
             ActivateNext();
             child = GetActiveChild();
         }
@@ -634,7 +634,7 @@ void AutoSizeTreeCtrl::DoGetBestSizePrivate( wxSize & size,
 //                size.y = rect.y + rect.height;
         }
     }
-    
+
     if ( node.IsOk() && GetChildrenCount(node) )
     {
         bool expanded = isRoot || IsExpanded(node);
