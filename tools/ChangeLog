@@ -1,0 +1,65 @@
+// ChangeLog for tools/*. See 'MAINTENANCE' after license.
+//
+// Copyright (C) 2005, 2006 Gregory W. Chicares.
+//
+// This program is free software; you can redistribute it and/or modify
+// it under the terms of the GNU General Public License version 2 as
+// published by the Free Software Foundation.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program; if not, write to the Free Software Foundation,
+// Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
+//
+// http://savannah.nongnu.org/projects/lmi
+// email: <chicares@cox.net>
+// snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
+
+// $Id:
+
+MAINTENANCE
+
+Please write entries this way:
+
+[1] YYYYMMDDTHHMMZ <yourname@domain.net> [defect-count]
+[2] [this line intentionally left blank]
+[3]   filename0
+[4]   filename1
+[5] Terse comments: full English sentences beginning with a capital
+    letter and ending with a period. Prefer bare infinitives:
+    "Improve ISO 8601 conformance." instead of "Improved...." or
+    "The purpose of this change was to improve....". Single-word
+    sentences may be appropriate: "Refactor.".
+
+Limit lines to seventy characters so that they can be quoted and
+requoted in email without wrapping.
+
+Explanations:
+
+[1] Write an ISO 8601 timestamp, using UTC because it sorts easily.
+Run 'make check_conformity' before committing to cvs. It identifies
+common problems, e.g., incorrect copyright statements.
+
+[3] Exact name of file changed, indented two spaces.
+[4] Write each file's name on a separate line. Write them in
+alphabetical order.
+
+[5] We aren't exactly following GNU standards here, but this one makes
+a lot of sense:
+  "If you think that a change calls for explanation, you're probably
+  right. Please do explain it--but please put the explanation in
+  comments in the code, where people will see it whenever they see the
+  code."
+If, as is often the case, the cvs commit message alone is sufficient,
+then just copy it here.
+
+//
+
+20060313T2109Z <wboutin@massmutual.com> [1]
+
+Establish tools/* directories.
+
