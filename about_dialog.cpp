@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: about_dialog.cpp,v 1.5 2006-03-09 01:58:18 chicares Exp $
+// $Id: about_dialog.cpp,v 1.6 2006-05-25 19:33:39 wboutin Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -36,26 +36,6 @@
 #include <wx/settings.h>
 #include <wx/sizer.h>
 #include <wx/string.h>
-
-// The 'about' dialog displays a wxHtmlWindow, and the license is
-// optionally shown in another wxHtmlWindow. The first does not need
-// scrolling; the second does. How should those windows interact with
-// the keyboard?
-//
-// Perhaps it would be ideal to let the html text be selected, and the
-// selection be copied, at least for the primary wxHtmlWindow, which
-// eventually will display a precise version number.
-//
-// Until selectable text is needed, it would seem sensible to disable
-// the primary wxHtmlWindow; but that would make the two wxHtmlWindows
-// behave differently.
-//
-// If both wxHtmlWindows are to behave similarly, then they cannot be
-// disabled, because that would prevent scrolling. And at least the
-// second wxHtmlWindow must receive initial focus (otherwise, tabbing
-// between it and the buttons might look better, but the normal
-// keystrokes for scrolling would, astonishingly, fail to work), and,
-// for consistency, so does the first.
 
 BEGIN_EVENT_TABLE(AboutDialog, wxDialog)
     EVT_BUTTON(wxID_OK, AboutDialog::UponOK)
