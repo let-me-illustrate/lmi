@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: datum_string.hpp,v 1.3 2006-03-04 14:27:16 chicares Exp $
+// $Id: datum_string.hpp,v 1.4 2006-05-30 20:07:30 wboutin Exp $
 
 #ifndef datum_string_hpp
 #define datum_string_hpp
@@ -31,6 +31,8 @@
 #include "value_cast.hpp"
 
 #include <boost/operators.hpp>
+
+#include <string>
 
 // Implicitly-declared special member functions do the right thing.
 
