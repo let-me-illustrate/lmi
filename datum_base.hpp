@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: datum_base.hpp,v 1.6 2006-01-29 13:52:00 chicares Exp $
+// $Id: datum_base.hpp,v 1.7 2006-05-30 20:07:30 wboutin Exp $
 
 #ifndef datum_base_hpp
 #define datum_base_hpp
@@ -28,8 +28,8 @@
 
 #include "so_attributes.hpp"
 
-#include <iosfwd>
-#include <string>
+#include <istream>
+#include <ostream>
 
 // Implicitly-declared special member functions do the right thing.
 

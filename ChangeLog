@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.376 2006-05-25 19:33:40 wboutin Exp $
+// $Id: ChangeLog,v 1.377 2006-05-30 20:07:30 wboutin Exp $
 
 MAINTENANCE
 
@@ -6589,4 +6589,12 @@ Mark release candidate.
   about_dialog.hpp
 Improve documentation.
 
+20060530T2007Z <wboutin@massmutual.com> [1205]
+
+  datum_base.cpp
+  datum_base.hpp
+  datum_boolean.cpp
+  datum_string.cpp
+  datum_string.hpp
+Change several #include directives.
 
