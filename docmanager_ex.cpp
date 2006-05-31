@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: docmanager_ex.cpp,v 1.8 2006-03-09 01:58:18 chicares Exp $
+// $Id: docmanager_ex.cpp,v 1.9 2006-05-31 14:45:53 wboutin Exp $
 
 // This implementation is a derived work based on wxWindows code, viz.
 //   samples/printing/printing.cpp (C) 1995 Julian Smart
@@ -64,7 +64,7 @@ BEGIN_EVENT_TABLE(DocManagerEx, wxDocManager)
     EVT_MENU(wxID_PRINT_SETUP, DocManagerEx::UponPageSetup)
 END_EVENT_TABLE()
 
-DocManagerEx::DocManagerEx(long flags, bool initialize)
+DocManagerEx::DocManagerEx(long int flags, bool initialize)
     :wxDocManager     (flags, initialize)
     ,print_data_      (new(wx) wxPrintData)
     ,page_setup_data_ (new(wx) wxPageSetupDialogData)
