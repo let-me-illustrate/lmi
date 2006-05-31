@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.377 2006-05-30 20:07:30 wboutin Exp $
+// $Id: ChangeLog,v 1.378 2006-05-31 14:45:53 wboutin Exp $
 
 MAINTENANCE
 
@@ -6597,4 +6597,12 @@ Improve documentation.
   datum_string.cpp
   datum_string.hpp
 Change several #include directives.
+
+20060531T1445Z <wboutin@massmutual.com> [1205]
+
+  docmanager_ex.cpp
+  docmanager_ex.hpp
+  previewframe_ex.cpp
+  previewframe_ex.hpp
+Use more specific long types.
 

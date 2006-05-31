@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: previewframe_ex.cpp,v 1.4 2006-03-09 12:37:24 chicares Exp $
+// $Id: previewframe_ex.cpp,v 1.5 2006-05-31 14:45:53 wboutin Exp $
 
 // This implementation is a derived work based on wxWindows code, viz.
 //   src/common/prntbase.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -48,7 +48,7 @@ PreviewFrameEx::PreviewFrameEx
     ,wxString     const& title
     ,wxPoint      const& pos
     ,wxSize       const& size
-    ,long                style
+    ,long int            style
     ,wxString     const& name
     )
     :wxPreviewFrame(preview, parent, title, pos, size, style, name)

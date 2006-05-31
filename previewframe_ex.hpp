@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: previewframe_ex.hpp,v 1.3 2006-03-09 01:58:18 chicares Exp $
+// $Id: previewframe_ex.hpp,v 1.4 2006-05-31 14:45:53 wboutin Exp $
 
 // This implementation is a derived work based on wxWindows code, viz.
 //   include/wx/prntbase.h (C) 1997 Julian Smart and Markus Holzem
@@ -50,7 +50,7 @@ class PreviewFrameEx
         ,wxString     const& title  = "Print preview"
         ,wxPoint      const& pos    = wxDefaultPosition
         ,wxSize       const& size   = wxTheApp->GetTopWindow()->GetSize()
-        ,long                style  = wxDEFAULT_FRAME_STYLE | wxFULL_REPAINT_ON_RESIZE
+        ,long int            style  = wxDEFAULT_FRAME_STYLE | wxFULL_REPAINT_ON_RESIZE
         ,wxString     const& name   = "Loading print preview..."
         );
     // WX !! Recommend marking the base class's dtor as virtual.
