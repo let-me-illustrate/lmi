@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: docmanager_ex.hpp,v 1.5 2006-03-09 01:58:18 chicares Exp $
+// $Id: docmanager_ex.hpp,v 1.6 2006-05-31 14:45:53 wboutin Exp $
 
 #ifndef docmanager_ex_hpp
 #define docmanager_ex_hpp
@@ -41,7 +41,7 @@ class DocManagerEx
 {
   public:
     explicit DocManagerEx
-        (long flags      = wxDEFAULT_DOCMAN_FLAGS
+        (long int flags  = wxDEFAULT_DOCMAN_FLAGS
         ,bool initialize = true
         );
     // WX !! Base class wxDocManager's dtor is virtual, but isn't
