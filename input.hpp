@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input.hpp,v 1.11 2006-01-29 13:52:00 chicares Exp $
+// $Id: input.hpp,v 1.12 2006-06-02 14:23:43 chicares Exp $
 
 #ifndef input_hpp
 #define input_hpp
@@ -91,11 +91,19 @@ class InputSequence;
 /// for conversion to and from strings, and hold enablement state and
 /// other information for use by controls.
 ///
-/// Harmonize() enforces rules governing relationships among data and
-/// their associated controls. Perhaps it should be factored into a
-/// const function that handles only enablement (which would entail
-/// making ancillary, non-value-bearing data members of the UDTs
-/// mutable) and a non-const function that forces changes in values.
+/// Harmonize() and Transmogrify() both enforce various relationships
+/// among data and their associated controls. Harmonize() updates
+/// range limits and conditional enablement, but does not affect the
+/// value of any datum. Transmogrify() changes data values as required
+/// to enforce consistency. Neither directly changes any control, of
+/// course: that's the Controller's job. Harmonize() is notionally
+/// const in that it must not change any datum's value--a condition
+/// that is tested carefully, and engenders an exception if violated.
+/// [TODO ?? No such exception is yet thrown in this trunk.]
+/// It cannot be physically const without making UDT members (other
+/// than the UDT's value) mutable, which they must not be because they
+/// affect the UDT's state, as observable by equality comparison or,
+/// often, by mere inspection of the View.
 ///
 /// reset_database(): Reset database if necessary, i.e., if the
 /// product or any database axis changed. Conditionally update
@@ -119,6 +127,7 @@ class LMI_SO Input
     std::string differing_fields(Input const&) const;
 
     void Harmonize();
+    void Transmogrify();
 
   private:
     // TODO ?? Is there no way around this? Maybe a virtual that's called
