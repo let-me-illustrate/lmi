@@ -21,7 +21,7 @@ dnl snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
 dnl === Prologue ===
 
-AC_REVISION($Id: configure.ac,v 1.18 2006-01-29 15:12:07 chicares Exp $)dnl
+AC_REVISION($Id: configure.ac,v 1.19 2006-06-02 14:21:13 chicares Exp $)dnl
 
 AC_PREREQ(2.56)
 AC_INIT(LMI, 1.0.0, [chicares@cox.net])
@@ -155,7 +155,6 @@ CFLAGS_gcc_common="\
     -Wconversion \
     -Wdeprecated-declarations \
     -Wdisabled-optimization \
-    -Wendif-labels \
     -Wimport \
     -Wmultichar \
     -Wno-long-long \
