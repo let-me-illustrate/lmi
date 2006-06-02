@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xml_notebook.cpp,v 1.24 2006-03-15 03:10:10 chicares Exp $
+// $Id: xml_notebook.cpp,v 1.25 2006-06-02 14:23:43 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -787,6 +787,22 @@ ought to be forced through somehow.
 
     // TODO ?? Experimental. A general solution is wanted instead.
     transfer_data_["GeneralAccountRate"] = input_["GeneralAccountRate"].str();
+
+    // TODO ?? Experimental. A general solution is wanted instead.
+    // This might fail astonishingly for a skin that has exactly one
+    // control from an {age, date} pair.
+    if("Yes" == input_["DeprecatedUseDOB"].str())
+        {
+        wxWindow& w = WindowFromXrcName<wxWindow>("IssueAge");
+        transfer_data_["IssueAge"] = input_["IssueAge"].str();
+        w.GetValidator()->TransferToWindow();
+        }
+    else
+        {
+        wxWindow& w = WindowFromXrcName<wxWindow>("DateOfBirth");
+        transfer_data_["DateOfBirth"] = input_["DateOfBirth"].str();
+        w.GetValidator()->TransferToWindow();
+        }
 
     ConditionallyEnable();
 }

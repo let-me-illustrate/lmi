@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_harmonization.cpp,v 1.20 2006-03-18 02:42:25 chicares Exp $
+// $Id: input_harmonization.cpp,v 1.21 2006-06-02 14:23:43 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -918,6 +918,51 @@ false // Silly workaround for now.
 
     SolveTargetCashSurrenderValue.enable(actually_solving && mce_solve_for_target == SolveTarget);
     DeprecatedSolveTgtAtWhich    .enable(actually_solving && mce_solve_for_target == SolveTarget);
+
+    Transmogrify(); // TODO ?? This obviously doesn't belong here.
+}
+
+void Input::Transmogrify()
+{
+    bool use_anb = database->Query(DB_AgeLastOrNearest);
+
+    // TODO ?? This syntax seems ugly. Should there be a ctor
+    // calendar_date(int)? Alternatively, should tnr_date use a
+    // calendar_date instead of an int?
+    calendar_date effective_date;
+    effective_date.julian_day_number(EffectiveDate.value());
+
+    calendar_date date_of_birth;
+    date_of_birth.julian_day_number(DateOfBirth.value());
+
+    if("Yes" == DeprecatedUseDOB)
+        {
+        IssueAge = calculate_age(date_of_birth, effective_date, use_anb);
+        }
+    else
+        {
+        // Note on initial values.
+        //
+        // A default-constructed instance of this class initially has
+        // date of birth set to the current date, which of course
+        // requires adjustment. From issue age, the year of birth can
+        // be deduced approximately, but the month or day cannot. In
+        // this case, a birthday is deemed to occur on the effective
+        // date--as good an assumption as any, and the simplest.
+        //
+        // Of course, when an instance is read from a file (either
+        // deliberately, or because 'default.ill' exists), then the
+        // date of birth is simply read from the file; the adjustment
+        // here has no effect as long as the file is consistent.
+
+        int apparent_age = calculate_age
+            (date_of_birth
+            ,effective_date
+            ,use_anb
+            );
+        date_of_birth.add_years(apparent_age - IssueAge.value(), use_anb);
+        DateOfBirth = date_of_birth.julian_day_number();
+        }
 }
 
 #if 0
