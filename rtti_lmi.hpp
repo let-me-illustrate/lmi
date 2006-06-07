@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id:
+// $Id: rtti_lmi.hpp,v 1.2 2006-06-07 17:07:43 wboutin Exp $
 
 #ifndef rtti_lmi_hpp
 #define rtti_lmi_hpp
