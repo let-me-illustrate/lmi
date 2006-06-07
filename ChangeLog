@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.382 2006-06-07 17:07:43 wboutin Exp $
+// $Id: ChangeLog,v 1.383 2006-06-07 19:33:12 chicares Exp $
 
 MAINTENANCE
 
@@ -6648,4 +6648,11 @@ Adapt to wx-2.7, preserving compatibility with older versions.
   rtti_lmi.hpp
   rtti_lmi_test.cpp
 Improve conformance.
+
+20060607T1933Z <chicares@cox.net> [1210]
+
+  input_harmonization.cpp
+  xml_notebook.cpp
+Coordinate RetirementAge and DateOfRetirement: a straightforward port
+of the legacy system's code.
 
