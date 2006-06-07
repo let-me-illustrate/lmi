@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.379 2006-06-02 14:26:19 chicares Exp $
+// $Id: ChangeLog,v 1.380 2006-06-07 15:42:07 wboutin Exp $
 
 MAINTENANCE
 
@@ -6624,4 +6624,12 @@ Conditionally include pch header.
   input_harmonization.cpp
   xml_notebook.cpp
 Coordinate IssueAge and DateOfBirth.
+
+20060607T1541Z <wboutin@massmutual.com> [1209]
+
+  GNUmakefile
+  objects.make
+  rtti_lmi.hpp      [new file]
+  rtti_lmi_test.cpp [new file]
+Add rtti extensions.
 
