@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xml_notebook.cpp,v 1.25 2006-06-02 14:23:43 chicares Exp $
+// $Id: xml_notebook.cpp,v 1.26 2006-06-07 16:27:07 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -238,7 +238,7 @@ void XmlNotebook::ConditionallyEnableItems
     //
     bool control_should_be_enabled = control.IsEnabled();
 
-    mc_enum_base* base_datum = input_[input_name].cast_blithely<mc_enum_base>();
+    mc_enum_base const* base_datum = input_[input_name].cast_blithely<mc_enum_base>();
     // TODO ?? Apparently this can never throw. Keep it in case we
     // find a way to use a dynamic cast.
     if(!base_datum)
@@ -288,7 +288,7 @@ void XmlNotebook::ConditionallyEnableItems
 // TODO ?? Doesn't need to be a member?
 // TODO ?? This can be further improved.
 bool XmlNotebook::ItemBoxNeedsRefreshing
-    (mc_enum_base*       base_datum
+    (mc_enum_base const* base_datum
     ,wxControlWithItems& itembox
     )
 {
@@ -328,7 +328,7 @@ bool XmlNotebook::ItemBoxNeedsRefreshing
 
 // TODO ?? Alphabetize.
 void XmlNotebook::RefreshItemBox
-    (mc_enum_base*       base_datum
+    (mc_enum_base const* base_datum
     ,wxControlWithItems& itembox
     )
 {
@@ -373,7 +373,7 @@ void XmlNotebook::SetupControlItems
     ,wxWindow&          control
     )
 {
-    mc_enum_base* base_datum = input_[input_name].cast_blithely<mc_enum_base>();
+    mc_enum_base const* base_datum = input_[input_name].cast_blithely<mc_enum_base>();
     // TODO ?? Apparently this can never throw. Keep it in case we
     // find a way to use a dynamic cast.
     if(!base_datum)

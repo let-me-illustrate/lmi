@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xml_notebook.hpp,v 1.15 2006-03-18 13:10:46 chicares Exp $
+// $Id: xml_notebook.hpp,v 1.16 2006-06-07 16:27:07 chicares Exp $
 
 #ifndef xml_notebook_hpp
 #define xml_notebook_hpp
@@ -323,7 +323,7 @@ class XmlNotebook
 
     void EnsureOptimalFocus();
 
-    bool ItemBoxNeedsRefreshing(mc_enum_base*, wxControlWithItems&);
+    bool ItemBoxNeedsRefreshing(mc_enum_base const*, wxControlWithItems&);
 
     void UponChildFocus            (wxChildFocusEvent&);
     void UponInitDialog            (wxInitDialogEvent&);
@@ -333,7 +333,7 @@ class XmlNotebook
     void UponRefocusInvalidControl (wxCommandEvent&   );
     void UponUpdateGUI             (wxUpdateUIEvent&  );
 
-    void RefreshItemBox(mc_enum_base*, wxControlWithItems&);
+    void RefreshItemBox(mc_enum_base const*, wxControlWithItems&);
 
     void Setup(wxWindowList const&);
 
