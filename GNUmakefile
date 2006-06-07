@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: GNUmakefile,v 1.66 2006-03-15 03:10:07 chicares Exp $
+# $Id: GNUmakefile,v 1.67 2006-06-07 15:42:07 wboutin Exp $
 
 ################################################################################
 
@@ -426,7 +426,7 @@ supplemental_test_makefile = ../forbidden.make
 
 .PHONY: check_conformity
 check_conformity: source_clean custom_tools
-	@-[ ! -e $(supplemental_test_makefile) ] \
+	@-[ ! -f $(supplemental_test_makefile) ] \
 	  || $(MAKE) --no-print-directory --file=$(supplemental_test_makefile)
 	@$(TOUCH) --date=$(yyyy)0101 BOY
 	@$(TOUCH) --date=$(yyyymm)00 BOM
@@ -445,7 +445,7 @@ check_conformity: source_clean custom_tools
 	@$(ECHO) "  Files lacking current copyright year:"
 	@for z in $(licensed_files); \
 	  do \
-	    [[ $$z -nt BOY ]] \
+	    [ $$z -nt BOY ] \
 	      && $(GREP) --files-without-match "Copyright.*$(yyyy)" $$z \
 	         || true; \
 	  done;
@@ -512,6 +512,7 @@ check_conformity: source_clean custom_tools
 	    -e ';/__int64/d' \
 	    -e ';/__stdcall/d' \
 	    -e ';/__volatile__/d' \
+	    -e ';/__cxa_demangle/d' \
 	    -e ';/__init_aux/d' \
 	    -e ';/__pow/d' \
 	    -e ';/____/d' \
@@ -537,7 +538,7 @@ check_conformity: source_clean custom_tools
 	@$(GREP) \?\? $(licensed_files) | $(WC) -l
 	@[[ TODAY -nt CANDIDATE ]] && [[ version.hpp -ot BOM ]] \
 	  && $(ECHO) "Is it time to 'make release_candidate'?" || true
-	@[[ license.cpp -ot BOY ]] \
+	@[ license.cpp -ot BOY ] \
 	  && $(ECHO) "Update copyright notices in 'license.cpp'." || true
 	@$(RM) --force CANDIDATE
 	@$(RM) --force TODAY
