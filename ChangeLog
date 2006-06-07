@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.380 2006-06-07 15:42:07 wboutin Exp $
+// $Id: ChangeLog,v 1.381 2006-06-07 16:59:55 chicares Exp $
 
 MAINTENANCE
 
@@ -6632,4 +6632,15 @@ Coordinate IssueAge and DateOfBirth.
   rtti_lmi.hpp      [new file]
   rtti_lmi_test.cpp [new file]
 Add rtti extensions.
+
+20060607T1627Z <chicares@cox.net> [1209]
+
+  xml_notebook.cpp
+  xml_notebook.hpp
+Prepare to port changes from 'skeleton' trunk.
+
+20060607T1659Z <chicares@cox.net> [1209]
+
+  xml_notebook.cpp
+Adapt to wx-2.7, preserving compatibility with older versions.
 
