@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xml_notebook.cpp,v 1.26 2006-06-07 16:27:07 chicares Exp $
+// $Id: xml_notebook.cpp,v 1.27 2006-06-07 16:59:14 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -299,7 +299,10 @@ bool XmlNotebook::ItemBoxNeedsRefreshing
 // No--just do it.
 //        return false;
         }
-    if(static_cast<unsigned int>(itembox.GetCount()) != base_datum->cardinality())
+    if
+        (   static_cast<std::size_t>(itembox.GetCount())
+        !=  base_datum->cardinality()
+        )
         {
 //        return false; // wrong, no?
         return true;
@@ -389,7 +392,10 @@ void XmlNotebook::SetupControlItems
         }
     if(radiobox)
         {
-        if(static_cast<int>(base_datum->cardinality()) != radiobox->GetCount())
+        if
+            (   static_cast<std::size_t>(radiobox->GetCount())
+            !=  base_datum->cardinality()
+            )
             {
             fatal_error()
                 << "Radiobox '"
