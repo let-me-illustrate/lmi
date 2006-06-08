@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: build_wx.make,v 1.1 2006-04-06 14:29:36 chicares Exp $
+# $Id: build_wx.make,v 1.2 2006-06-08 20:05:54 chicares Exp $
 
 # This makefile is designed to be run in MSYS: the native zsh port
 # we customarily use can't handle 'configure'. Care is taken to
@@ -28,13 +28,16 @@
 # the wx dll to 'C:\usr\bin\' instead of MSYS's '/usr/bin/', which
 # by default maps to 'C:\msys\1.0\bin' ('C:\msys\1.0\usr\bin' does
 # not actually exist).
+#
+# Typical usage:
+#   /c/any/directory/at/all $make --file=/c/lmi/src/gwc/build_wx.make
 
 # Configurable settings ########################################################
 
 prefix        := /c/usr/local/bin
 
-# 20060323 cvs snapshot for now.
-wx_dir        := /c/wx20060323/wxWidgets
+# 20060605 cvs snapshot for now.
+wx_dir        := /c/wx20060605/wxWidgets
 
 mingw_root    := /c
 mingw_dir     := /MinGW-20050120
