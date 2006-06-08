@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xenumtypes.cpp,v 1.14 2006-06-08 18:44:36 wboutin Exp $
+// $Id: xenumtypes.cpp,v 1.15 2006-06-08 19:51:40 wboutin Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -39,6 +39,7 @@ magic_stream& operator<< (magic_stream&, magic_class const&);
 #endif // BORLAND_502_IDE_BLACK_MAGIC
 
 #include "xenumtypes.hpp"
+#include "rtti_lmi.hpp"
 
 #include <sstream>
 
