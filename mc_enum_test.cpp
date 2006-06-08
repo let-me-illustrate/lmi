@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mc_enum_test.cpp,v 1.9 2006-01-29 13:52:00 chicares Exp $
+// $Id: mc_enum_test.cpp,v 1.10 2006-06-08 18:44:35 wboutin Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -188,9 +188,7 @@ int test_main(int, char*[])
     BOOST_TEST_THROW
         (e_island unknown("Borneo")
         ,std::runtime_error
-        ,   "Value 'Borneo' invalid for type '"
-        +   std::string(typeid(enum_island).name())
-        +   "'."
+        ,""
         );
 
     return 0;

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mc_enum.tpp,v 1.10 2006-01-29 13:52:00 chicares Exp $
+// $Id: mc_enum.tpp,v 1.11 2006-06-08 18:44:35 wboutin Exp $
 
 #include "config.hpp"
 
@@ -27,6 +27,7 @@
 
 #include "alert.hpp"
 #include "facets.hpp"
+#include "rtti_lmi.hpp"
 
 #include <algorithm> // std::find()
 #include <istream>
@@ -161,7 +162,7 @@ std::size_t mc_enum<T,n,e,c>::ordinal() const
             << "Value "
             << value_
             << " invalid for type '"
-            << typeid(T).name()
+            << lmi::TypeInfo(typeid(T))
             << "'."
             << LMI_FLUSH
             ;
@@ -180,7 +181,7 @@ std::size_t mc_enum<T,n,e,c>::ordinal(std::string const& s) const
             << "Value '"
             << s
             << "' invalid for type '"
-            << typeid(T).name()
+            << lmi::TypeInfo(typeid(T))
             << "'."
             << LMI_FLUSH
             ;
