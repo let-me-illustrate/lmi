@@ -19,9 +19,10 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: view_ex.tpp,v 1.3 2006-03-18 02:42:19 chicares Exp $
+// $Id: view_ex.tpp,v 1.4 2006-06-08 19:51:27 wboutin Exp $
 
 #include "alert.hpp"
+#include "rtti_lmi.hpp"
 
 #include <boost/static_assert.hpp>
 #include <boost/type_traits.hpp>
@@ -42,7 +43,7 @@
 /// wxView::GetViewName() can't be used because it requires an object,
 /// whereas this function template is usable for reporting failure to
 /// create any such object. Attempting to default-construct such an
-/// object here could cause unbounded recursion, probably resulting
+/// object here could cause unbounded regression, probably resulting
 /// in a stack fault.
 ///
 /// As long as all function templates in the present file call
@@ -53,7 +54,7 @@ std::string ViewName()
 {
     // Double parentheses: don't parse comma as a macro parameter separator.
     BOOST_STATIC_ASSERT((boost::is_base_and_derived<wxView,ViewType>::value));
-    return typeid(ViewType).name();
+    return lmi::TypeInfo(typeid(ViewType)).Name();
 }
 
 /// PredominantView() returns a reference to the natural view that
