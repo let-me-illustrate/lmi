@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xenumtypes.cpp,v 1.13 2006-01-29 13:52:01 chicares Exp $
+// $Id: xenumtypes.cpp,v 1.14 2006-06-08 18:44:36 wboutin Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -708,7 +708,7 @@ template<> void xenum<enum_yes_or_no, 2>::set_value(std::string const& s)
         error
             << s
             << " out of range for type "
-            << typeid(enum_yes_or_no).name()
+            << lmi::TypeInfo(typeid(enum_yes_or_no))
             ;
         throw std::range_error(error.str());
         }

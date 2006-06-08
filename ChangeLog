@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.383 2006-06-07 19:33:12 chicares Exp $
+// $Id: ChangeLog,v 1.384 2006-06-08 18:44:36 wboutin Exp $
 
 MAINTENANCE
 
@@ -6644,7 +6644,8 @@ Prepare to port changes from 'skeleton' trunk.
   xml_notebook.cpp
 Adapt to wx-2.7, preserving compatibility with older versions.
 
-20060607T1707Z <wboutin@massmutual.com [1209]
+20060607T1707Z <wboutin@massmutual.com> [1209]
+
   rtti_lmi.hpp
   rtti_lmi_test.cpp
 Improve conformance.
@@ -6655,4 +6656,17 @@ Improve conformance.
   xml_notebook.cpp
 Coordinate RetirementAge and DateOfRetirement: a straightforward port
 of the legacy system's code.
+
+20060608T1844Z <wboutin@massmutual.com> [1210]
+
+  any_member.hpp
+  mc_enum.tpp
+  mc_enum_test.cpp
+  numeric_io_cast.hpp
+  stream_cast.hpp
+  view_ex.hpp
+  xenum.cpp
+  xenumtypes.cpp
+  xrange.hpp
+Use libstdc++ demangler.
 
