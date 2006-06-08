@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xenum.cpp,v 1.4 2006-01-29 13:52:01 chicares Exp $
+// $Id: xenum.cpp,v 1.5 2006-06-08 18:44:36 wboutin Exp $
 
 // Definitions for template class xenum.
 
@@ -28,6 +28,7 @@
 #endif // OK_TO_COMPILE_XENUM_CPP
 
 #include "alert.hpp"
+#include "rtti_lmi.hpp"
 
 #include <ios>
 #include <istream>
@@ -121,7 +122,7 @@ std::string const& xenum<EnumType, N>::str() const
             << "Invalid enumerator: '"
             << representation
             << "' out of range for type '"
-            << typeid(EnumType).name()
+            << lmi::TypeInfo(typeid(EnumType))
             << "'."
             ;
 // TODO ?? Don't want to throw until code more stable....
@@ -131,7 +132,7 @@ std::string const& xenum<EnumType, N>::str() const
             << "Invalid enumerator: '"
             << representation
             << "' out of range for type '"
-            << typeid(EnumType).name()
+            << lmi::TypeInfo(typeid(EnumType))
             << "'."
             << LMI_FLUSH
             ;
@@ -182,7 +183,7 @@ void xenum<EnumType, N>::set_value(std::string const& s)
             << "'"
             << s
             << "' out of range for type '"
-            << typeid(EnumType).name()
+            << lmi::TypeInfo(typeid(EnumType))
             << "'."
             ;
 // TODO ?? Don't want to throw until code more stable....
@@ -192,7 +193,7 @@ void xenum<EnumType, N>::set_value(std::string const& s)
             << "'"
             << s
             << "' out of range for type '"
-            << typeid(EnumType).name()
+            << lmi::TypeInfo(typeid(EnumType))
             << "'."
             << LMI_FLUSH
             ;

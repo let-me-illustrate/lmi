@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xrange.hpp,v 1.8 2006-01-29 13:52:01 chicares Exp $
+// $Id: xrange.hpp,v 1.9 2006-06-08 18:44:36 wboutin Exp $
 
 #ifndef xrange_hpp
 #define xrange_hpp
@@ -102,6 +102,7 @@ Or should the semantic type do that?
 #include "config.hpp"
 
 #include "alert.hpp"
+#include "rtti_lmi.hpp"
 #include "so_attributes.hpp"
 #include "value_cast.hpp"
 
@@ -200,7 +201,7 @@ class xrange_error
         :std::range_error
             (xrange_error_message
                 (value_cast<std::string>(bad_value)
-                ,typeid(Essence).name()
+                ,lmi::TypeInfo(typeid(Essence)).Name()
                 ,value_cast<std::string>(Essence::range_limits().first)
                 ,value_cast<std::string>(Essence::range_limits().second)
                 )

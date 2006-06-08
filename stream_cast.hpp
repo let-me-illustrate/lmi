@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: stream_cast.hpp,v 1.11 2006-03-05 10:47:27 chicares Exp $
+// $Id: stream_cast.hpp,v 1.12 2006-06-08 18:44:35 wboutin Exp $
 
 // This is a derived work based on boost::lexical_cast, which bears
 // the following copyright and permissions notice:
@@ -49,6 +49,7 @@
 #include "config.hpp"
 
 #include "facets.hpp"
+#include "rtti_lmi.hpp"
 
 #if !defined __BORLANDC__
 #   include <boost/static_assert.hpp>
@@ -145,9 +146,9 @@ To stream_cast(From from, To = To())
             << "converting '"
             << from
             << "' from type '"
-            << typeid(From).name()
+            << lmi::TypeInfo(typeid(From))
             << "' to type '"
-            << typeid(To).name()
+            << lmi::TypeInfo(typeid(To))
             << "'."
             ;
         throw std::runtime_error(err.str());

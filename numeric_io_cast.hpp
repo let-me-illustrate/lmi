@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: numeric_io_cast.hpp,v 1.11 2006-03-01 15:52:20 chicares Exp $
+// $Id: numeric_io_cast.hpp,v 1.12 2006-06-08 18:44:35 wboutin Exp $
 
 #ifndef numeric_io_cast_hpp
 #define numeric_io_cast_hpp
@@ -27,6 +27,7 @@
 #include "config.hpp"
 
 #include "numeric_io_traits.hpp"
+#include "rtti_lmi.hpp"
 
 #include <sstream>
 #include <stdexcept>
@@ -130,9 +131,9 @@ struct numeric_converter
             << "Cannot convert '"
             << from
             << "' from type "
-            << typeid(From).name()
+            << lmi::TypeInfo(typeid(From))
             << " to type "
-            << typeid(To).name()
+            << lmi::TypeInfo(typeid(To))
             << "'."
             ;
         throw std::runtime_error(err.str());
@@ -163,9 +164,9 @@ struct numeric_converter<To, std::string>
                 << "Attempt to convert string '"
                 << from
                 << "' from type "
-                << typeid(From).name()
+                << lmi::TypeInfo(typeid(From))
                 << " to type "
-                << typeid(To).name()
+                << lmi::TypeInfo(typeid(To))
                 << " found nothing valid to convert."
                 ;
             throw std::invalid_argument(err.str());
@@ -177,9 +178,9 @@ struct numeric_converter<To, std::string>
                 << "Attempt to convert string '"
                 << from
                 << "' from type "
-                << typeid(From).name()
+                << lmi::TypeInfo(typeid(From))
                 << " to type "
-                << typeid(To).name()
+                << lmi::TypeInfo(typeid(To))
                 << " failed on terminal substring '"
                 << rendptr
                 << "'."

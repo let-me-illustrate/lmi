@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: any_member.hpp,v 1.9 2006-03-04 14:27:16 chicares Exp $
+// $Id: any_member.hpp,v 1.10 2006-06-08 18:44:35 wboutin Exp $
 
 // This is a derived work based on boost::any, which bears the following
 // copyright and permissions notice:
@@ -87,6 +87,7 @@
 #include "config.hpp"
 
 #include "obstruct_slicing.hpp"
+#include "rtti_lmi.hpp"
 #include "value_cast.hpp"
 
 #if !defined __BORLANDC__
@@ -299,7 +300,7 @@ ArbitraryType any_member<ClassType>::cast() const
             << "Cannot cast from '"
             << type().name()
             << "' to '"
-            << typeid(pmd_type).name()
+            << lmi::TypeInfo(typeid(pmd_type))
             << "'."
             ;
         throw std::runtime_error(oss.str());
@@ -437,7 +438,7 @@ any_member<ClassType>& MemberSymbolTable<ClassType>::operator[]
         std::ostringstream oss;
         oss
             << "Symbol table for class '"
-            << typeid(ClassType).name()
+            << lmi::TypeInfo(typeid(ClassType))
             << "' ascribes no member named '"
             << s
             << "'."
@@ -461,7 +462,7 @@ any_member<ClassType> const& MemberSymbolTable<ClassType>::operator[]
         std::ostringstream oss;
         oss
             << "Symbol table for class '"
-            << typeid(ClassType).name()
+            << lmi::TypeInfo(typeid(ClassType))
             << "' ascribes no member named '"
             << s
             << "'."
