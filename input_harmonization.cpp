@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_harmonization.cpp,v 1.22 2006-06-07 19:33:12 chicares Exp $
+// $Id: input_harmonization.cpp,v 1.23 2006-06-12 19:32:31 wboutin Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -935,31 +935,26 @@ void Input::Transmogrify()
     calendar_date date_of_birth;
     date_of_birth.julian_day_number(DateOfBirth.value());
 
-    calendar_date date_of_retirement;
-    date_of_retirement.julian_day_number(DateOfRetirement.value());
-
-    // Note on initial values.
-    //
-    // A default-constructed instance of this class initially has
-    // date of birth set to the current date, which of course
-    // requires adjustment. From issue age, the year of birth can
-    // be deduced approximately, but the month or day cannot. In
-    // this case, a birthday is deemed to occur on the effective
-    // date--as good an assumption as any, and the simplest.
-    //
-    // Of course, when an instance is read from a file (either
-    // deliberately, or because 'default.ill' exists), then the
-    // date of birth is simply read from the file; the adjustment
-    // here has no effect as long as the file is consistent.
-    //
-    // The same reasoning applies to retirement date and age.
-
     if("Yes" == DeprecatedUseDOB)
         {
         IssueAge = calculate_age(date_of_birth, effective_date, use_anb);
         }
     else
         {
+        // Note on initial values.
+        //
+        // A default-constructed instance of this class initially has
+        // date of birth set to the current date, which of course
+        // requires adjustment. From issue age, the year of birth can
+        // be deduced approximately, but the month or day cannot. In
+        // this case, a birthday is deemed to occur on the effective
+        // date--as good an assumption as any, and the simplest.
+        //
+        // Of course, when an instance is read from a file (either
+        // deliberately, or because 'default.ill' exists), then the
+        // date of birth is simply read from the file; the adjustment
+        // here has no effect as long as the file is consistent.
+
         int apparent_age = calculate_age
             (date_of_birth
             ,effective_date
@@ -967,32 +962,6 @@ void Input::Transmogrify()
             );
         date_of_birth.add_years(apparent_age - IssueAge.value(), use_anb);
         DateOfBirth = date_of_birth.julian_day_number();
-        }
-
-    if("Yes" == DeprecatedUseDOR)
-        {
-        // TODO ?? Is this right? It seems to say that if a retirement
-        // date is explicitly given, then attained age at retirement
-        // can be calculated from retirement and effective dates alone;
-        // but it would seem that birthdate should enter into that.
-        // Is it the case that we constrain retirement dates to birthdays?
-        //
-        // Furthermore, isn't this erroneous if retirement date precedes
-        // effective date?
-        //
-        // And couldn't a plainer algorithm be devised?
-        //
-        RetirementAge = IssueAge.value() + calculate_age(effective_date, date_of_retirement, use_anb);
-        }
-    else
-        {
-        int apparent_age_at_retirement = calculate_age
-            (date_of_birth
-            ,date_of_retirement
-            ,use_anb
-            );
-        date_of_retirement.add_years(RetirementAge.value() - apparent_age_at_retirement, use_anb);
-        DateOfRetirement = date_of_retirement.julian_day_number();
         }
 }
 
