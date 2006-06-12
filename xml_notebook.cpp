@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xml_notebook.cpp,v 1.28 2006-06-07 19:33:12 chicares Exp $
+// $Id: xml_notebook.cpp,v 1.29 2006-06-12 19:32:31 wboutin Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -807,19 +807,6 @@ ought to be forced through somehow.
         {
         wxWindow& w = WindowFromXrcName<wxWindow>("DateOfBirth");
         transfer_data_["DateOfBirth"] = input_["DateOfBirth"].str();
-        w.GetValidator()->TransferToWindow();
-        }
-
-    if("Yes" == input_["DeprecatedUseDOR"].str())
-        {
-        wxWindow& w = WindowFromXrcName<wxWindow>("RetirementAge");
-        transfer_data_["RetirementAge"] = input_["RetirementAge"].str();
-        w.GetValidator()->TransferToWindow();
-        }
-    else
-        {
-        wxWindow& w = WindowFromXrcName<wxWindow>("DateOfRetirement");
-        transfer_data_["DateOfRetirement"] = input_["DateOfRetirement"].str();
         w.GetValidator()->TransferToWindow();
         }
 
