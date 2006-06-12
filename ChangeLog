@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.386 2006-06-12 19:32:31 wboutin Exp $
+// $Id: ChangeLog,v 1.387 2006-06-12 21:03:10 wboutin Exp $
 
 MAINTENANCE
 
@@ -6689,4 +6689,9 @@ Adapt to wx-2.7 .
   input_harmonization.cpp
   xml_notebook.cpp
 Remove unwanted feature.
+
+20060612T2102Z <wboutin@massmutual.com> [1209]
+
+  input_harmonization.cpp
+Reformat.
 

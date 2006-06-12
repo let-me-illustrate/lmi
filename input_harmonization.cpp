@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_harmonization.cpp,v 1.23 2006-06-12 19:32:31 wboutin Exp $
+// $Id: input_harmonization.cpp,v 1.24 2006-06-12 21:03:10 wboutin Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -935,26 +935,26 @@ void Input::Transmogrify()
     calendar_date date_of_birth;
     date_of_birth.julian_day_number(DateOfBirth.value());
 
+    // Note on initial values.
+    //
+    // A default-constructed instance of this class initially has
+    // date of birth set to the current date, which of course
+    // requires adjustment. From issue age, the year of birth can
+    // be deduced approximately, but the month or day cannot. In
+    // this case, a birthday is deemed to occur on the effective
+    // date--as good an assumption as any, and the simplest.
+    //
+    // Of course, when an instance is read from a file (either
+    // deliberately, or because 'default.ill' exists), then the
+    // date of birth is simply read from the file; the adjustment
+    // here has no effect as long as the file is consistent.
+
     if("Yes" == DeprecatedUseDOB)
         {
         IssueAge = calculate_age(date_of_birth, effective_date, use_anb);
         }
     else
         {
-        // Note on initial values.
-        //
-        // A default-constructed instance of this class initially has
-        // date of birth set to the current date, which of course
-        // requires adjustment. From issue age, the year of birth can
-        // be deduced approximately, but the month or day cannot. In
-        // this case, a birthday is deemed to occur on the effective
-        // date--as good an assumption as any, and the simplest.
-        //
-        // Of course, when an instance is read from a file (either
-        // deliberately, or because 'default.ill' exists), then the
-        // date of birth is simply read from the file; the adjustment
-        // here has no effect as long as the file is consistent.
-
         int apparent_age = calculate_age
             (date_of_birth
             ,effective_date
