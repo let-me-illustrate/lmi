@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.385 2006-06-08 19:51:40 wboutin Exp $
+// $Id: ChangeLog,v 1.386 2006-06-12 19:32:31 wboutin Exp $
 
 MAINTENANCE
 
@@ -6676,4 +6676,17 @@ Use libstdc++ demangler.
 
   xenumtypes.cpp
 Include rtti header.
+
+20060612T1932Z <wboutin@massmutual.com> [1209]
+
+  xenumtypes.cpp
+Stylistic improvement.
+
+  main_wx.cpp
+  workhorse.make
+Adapt to wx-2.7 .
+
+  input_harmonization.cpp
+  xml_notebook.cpp
+Remove unwanted feature.
 
