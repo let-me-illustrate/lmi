@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: workhorse.make,v 1.68 2006-02-28 13:35:12 chicares Exp $
+# $Id: workhorse.make,v 1.69 2006-06-12 19:30:02 wboutin Exp $
 
 ################################################################################
 
@@ -113,12 +113,108 @@ effective_default_target: $(default_targets)
 
 ################################################################################
 
+gcc_version = $(shell $(CXX) -dumpversion)
+
+################################################################################
+
+# wx settings.
+
+# Set $(wx_dir) on the command line to use 'wx-config'.
+
+ifeq (,$(wx_dir))
+  # This section is deprecated and will be removed ere long.
+
+  # Always specify '-D__WXDEBUG__':
+  #   http://lists.nongnu.org/archive/html/lmi/2005-11/msg00026.html
+
+  # '-DNO_GCC_PRAGMA' is required for wx-2.5.1, but not for 2.5.4 or later.
+
+  wx_predefinitions := \
+    -D__WXDEBUG__ \
+    -DNO_GCC_PRAGMA \
+    -DWXUSINGDLL \
+
+else
+  wx_build_dir := $(wx_dir)/gcc$(subst .,,$(gcc_version))
+  wx_config_script := $(wx_build_dir)/wx-config
+
+  # The conventional autotools usage...
+  wx_config_cxxflags := $(shell $(wx_config_script) --cxxflags)
+  wx_config_libs     := $(shell $(wx_config_script) --libs)
+  # ...combines options that we prefer to keep separate.
+
+  wx_include_paths := \
+    $(shell \
+      $(ECHO) $(wx_config_cxxflags) \
+      | $(SED) \
+        -e 's/^/ /' \
+        -e 's/ -[^I][^ ]*//g' \
+        -e 's/ -I/ -I /g' \
+    )
+
+  wx_predefinitions := \
+    $(shell \
+      $(ECHO) $(wx_config_cxxflags) \
+      | $(SED) \
+        -e 's/^/ /' \
+        -e 's/ -[^DU][^ ]*//g' \
+    )
+
+  wx_library_paths := \
+    $(shell \
+      $(ECHO) $(wx_config_libs) \
+      | $(SED) \
+        -e 's/^/ /' \
+        -e 's/ -[^L][^ ]*//g' \
+        -e 's/ -L/ -L /g' \
+    )
+
+  wx_libraries := \
+    $(shell \
+      $(ECHO) $(wx_config_libs) \
+      | $(SED) \
+        -e 's/^/ /' \
+        -e 's/ -[^l][^ ]*//g' \
+    )
+
+  platform_wx_libraries := $(wx_library_paths) $(wx_libraries)
+endif
+
+# Target 'wx_config_check', and the variables that it alone uses,
+# are experimental and may disappear in a future release.
+
+wx_cxxflag_check := $(wx_include_paths) $(wx_predefinitions)
+wx_cxxflag_check := $(subst -I ,-I,$(wx_cxxflag_check))
+wx_cxxflag_check := $(subst -D ,-D,$(wx_cxxflag_check))
+wx_cxxflag_check := $(subst -U ,-U,$(wx_cxxflag_check))
+wx_libs_check    := $(wx_library_paths) $(wx_libraries)
+wx_libs_check    := $(subst -L ,-L,$(wx_libs_check))
+wx_libs_check    := $(subst -l ,-l,$(wx_libs_check))
+
+.PHONY: wx_config_check
+wx_config_check:
+	@$(ECHO) Omitted from 'wx-config --cxxflags':
+	@$(ECHO) $(filter-out $(wx_cxxflag_check), $(wx_config_cxxflags))
+	@$(ECHO) Omitted from 'wx-config --libs':
+	@$(ECHO) $(filter-out $(wx_libs_check), $(wx_config_libs))
+
+################################################################################
+
 # Location of include files and prerequisites.
 
 # Prefer the 'vpath' directive to the $(VPATH) variable because
 #  - it permits finer control; and
 #  - $(VPATH) requires a platform-dependent path separator, which
 #    makes it harder to write a cross-platform makefile.
+
+# Directories set in $(overriding_include_directories) are searched
+# before any others except the primary source directory. There seems
+# to be no conventional name for such a variable: automake has
+# deprecated $(INCLUDES) and recommends using $(CPPFLAGS) or a
+# prefixed variant, but $(CPPFLAGS) can't do the right thing for
+#   -D overrides, which must come at the end of a command, and
+#   -I overrides, which must come at the beginning
+# simultaneously, so distinct variables are necessary.
 
 # Treat certain external libraries as collections of source files to
 # be compiled and linked explicitly here, instead of building them
@@ -147,7 +243,9 @@ effective_default_target: $(default_targets)
 
 all_include_directories := \
   $(src_dir) \
+  $(overriding_include_directories) \
   $(compiler_include_directory) \
+  $(wx_include_paths) \
   $(system_root)/opt/lmi/third_party/include \
   $(system_root)/usr/local/include \
 
@@ -417,14 +515,13 @@ CFLAGS = \
 CXXFLAGS = \
   $(debug_flag) $(optimization_flag) $(gprof_flag) \
 
+# Explicitly disable the infelicitous auto-import default. See:
+#   http://sourceforge.net/mailarchive/message.php?msg_id=15705075
+
 LDFLAGS = \
   $(gprof_flag) \
   -Wl,-Map,$@.map \
-
-# Always specify '-D__WXDEBUG__':
-#   http://lists.nongnu.org/archive/html/lmi/2005-11/msg00026.html
-
-# '-DNO_GCC_PRAGMA' is required for wx-2.5.1, but not for 2.5.4 or later.
+  -Wl,--disable-auto-import \
 
 ifneq (,$(USE_SO_ATTRIBUTES))
   actually_used_lmi_so_attributes = -DLMI_USE_SO_ATTRIBUTES $(lmi_so_attributes)
@@ -435,9 +532,8 @@ REQUIRED_CPPFLAGS = \
   $(lmi_wx_new_so_attributes) \
   $(actually_used_lmi_so_attributes) \
   $(platform_defines) \
-  -D__WXDEBUG__ \
+  $(wx_predefinitions) \
   -DBOOST_STRICT_CONFIG \
-  -DNO_GCC_PRAGMA \
 
 REQUIRED_CFLAGS = \
   $(C_WARNINGS) \
@@ -455,28 +551,50 @@ REQUIRED_ARFLAGS = \
 # 'g++' because that takes care of linking the required libraries for
 # each language. Accordingly, pass GNU 'ld' options with '-Wl,'.
 
+# Directories set in $(overriding_library_directories) are searched
+# before any others except the current build directory. There seems
+# to be no conventional name for such a variable: automake recommends
+# $(LDADD) or a prefixed variant for both '-l' and '-L' options, but
+# $(LDADD) can't do the right thing in all cases: e.g., to override a
+# default mpatrol library with a custom build,
+#   -L overrides must come at the beginning of a command, but
+#   -l options must come at the end, so that mpatrol is linked last.
+# That is, in the typical automake usage
+#   $(LINK) $(LDFLAGS) $(OBJECTS) $(LDADD) $(LIBS)
+# no single variable can be changed to produce
+#   $(LINK) $(LDFLAGS) $(OBJECTS) -L custom_path $(LIBS) -l custom
+# for a custom version of a library whose default version is already
+# specified in $(LIBS). Thus, a distinct variable is necessary for
+# path overrides, so distinct variables are necessary.
+
 # Two subdirectories of /usr/local
 #   /usr/local/lib
 #   /usr/local/bin
 # are placed on the link path in order to accommodate msw dlls, for
 # which no canonical location is clearly specified by FHS, because
 # they're both binaries and libraries in a sense. These two
-# subdirectories seem to be the most popular choices; wx regards its
-# dll as a binary, while mpatrol regards its as a library. For msw,
-# it seems crucial to list these two subdirectories in exactly the
+# subdirectories seem to be the most popular choices, and usage
+# varies, at least for msw:
+#  - mpatrol puts its dll in bin/
+#  - wx-2.7.0 built with autotools puts its dll in lib/
+# so it is crucial to list these two subdirectories in exactly the
 # order given; if they're specified in reverse order, then mpatrol
-# won't work, perhaps because gnu 'ld' finds its dll first and then
-# doesn't bother looking for its library.
+# won't work, gnu 'ld' finds its dll first and then doesn't look for
+# its import library.
 
-EXTRA_LDFLAGS =
+all_library_directories := \
+  . \
+  $(overriding_library_directories) \
+  $(system_root)/opt/lmi/third_party/lib \
+  $(system_root)/opt/lmi/third_party/bin \
+  $(system_root)/usr/local/lib \
+  $(system_root)/usr/local/bin \
+
+EXTRA_LDFLAGS :=
 
 # Keep mpatrol at the end of the list.
 REQUIRED_LDFLAGS = \
-  -L . \
-  -L $(system_root)/opt/lmi/third_party/lib \
-  -L $(system_root)/opt/lmi/third_party/bin \
-  -L $(system_root)/usr/local/lib \
-  -L $(system_root)/usr/local/bin \
+  $(addprefix -L , $(all_library_directories)) \
   $(EXTRA_LDFLAGS) \
   $(REQUIRED_LIBS) \
   $(MPATROL_LIBS)
@@ -886,4 +1004,8 @@ show_flags:
 	@$(ECHO) src_dir                 = '$(src_dir)'
 	@$(ECHO) all_include_directories = '$(all_include_directories)'
 	@$(ECHO) all_source_directories  = '$(all_source_directories)'
+	@$(ECHO) wx_include_paths        = '$(wx_include_paths)'
+	@$(ECHO) wx_libraries            = '$(wx_libraries)'
+	@$(ECHO) wx_library_paths        = '$(wx_library_paths)'
+	@$(ECHO) wx_predefinitions       = '$(wx_predefinitions)'
 
