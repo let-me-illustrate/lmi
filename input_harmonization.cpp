@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_harmonization.cpp,v 1.24 2006-06-12 21:03:10 wboutin Exp $
+// $Id: input_harmonization.cpp,v 1.25 2006-06-12 21:19:23 wboutin Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -326,7 +326,17 @@ void Input::Harmonize()
 
     IssueAge        .enable("No"  == DeprecatedUseDOB);
     DateOfBirth     .enable("Yes" == DeprecatedUseDOB);
+// TODO ?? Begin kludge.
+    calendar_date effective_date;
+    effective_date.julian_day_number(EffectiveDate.value());
 
+    calendar_date min_date_of_birth;
+    min_date_of_birth.julian_day_number(EffectiveDate.value());
+    min_date_of_birth.add_years(-100, false);
+
+    DateOfBirth     .max_ = EffectiveDate.value();
+    DateOfBirth     .min_ = min_date_of_birth.julian_day_number();
+// End kludge.
     RetirementAge   .enable("No"  == DeprecatedUseDOR);
     DateOfRetirement.enable("Yes" == DeprecatedUseDOR);
 
