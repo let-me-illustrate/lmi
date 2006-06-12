@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xml_notebook.cpp,v 1.29 2006-06-12 19:32:31 wboutin Exp $
+// $Id: xml_notebook.cpp,v 1.30 2006-06-12 21:19:23 wboutin Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -38,6 +38,7 @@
 #include <wx/app.h> // wxTheApp
 #include <wx/checkbox.h>
 #include <wx/ctrlsub.h>
+#include <wx/datectrl.h>
 #include <wx/notebook.h>
 #include <wx/radiobox.h>
 #include <wx/textctrl.h>
@@ -799,15 +800,20 @@ ought to be forced through somehow.
     // control from an {age, date} pair.
     if("Yes" == input_["DeprecatedUseDOB"].str())
         {
-        wxWindow& w = WindowFromXrcName<wxWindow>("IssueAge");
+        wxDatePickerCtrl& date = WindowFromXrcName<wxDatePickerCtrl>("DateOfBirth");
+        tnr_date* dob = input_["DateOfBirth"].cast_blithely<tnr_date>();
+        LMI_ASSERT(dob);
+        date.SetRange((double)dob->min_, (double)dob->max_);
+
+        wxWindow& age = WindowFromXrcName<wxWindow>("IssueAge");
         transfer_data_["IssueAge"] = input_["IssueAge"].str();
-        w.GetValidator()->TransferToWindow();
+        age.GetValidator()->TransferToWindow();
         }
     else
         {
-        wxWindow& w = WindowFromXrcName<wxWindow>("DateOfBirth");
+        wxWindow& date = WindowFromXrcName<wxWindow>("DateOfBirth");
         transfer_data_["DateOfBirth"] = input_["DateOfBirth"].str();
-        w.GetValidator()->TransferToWindow();
+        date.GetValidator()->TransferToWindow();
         }
 
     ConditionallyEnable();

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: tn_range.hpp,v 1.5 2006-01-29 13:52:00 chicares Exp $
+// $Id: tn_range.hpp,v 1.6 2006-06-12 21:19:23 wboutin Exp $
 
 // Design notes for template class tn_range
 //
@@ -186,7 +186,9 @@ class tn_range
 
     Number value() const;
 
-  private:
+// TODO ?? Begin kludge.
+//  private:
+// End kludge.
     std::string str() const;
 
     Number max_;
