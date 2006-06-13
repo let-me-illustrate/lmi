@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.388 2006-06-12 21:19:23 wboutin Exp $
+// $Id: ChangeLog,v 1.389 2006-06-13 13:56:49 wboutin Exp $
 
 MAINTENANCE
 
@@ -6701,4 +6701,12 @@ Reformat.
   tn_range.hpp
   xml_notebook.cpp
 Add kludge to work around a testing problem.
+
+20060613T1356Z <wboutin@massmutual.com> [1211]
+
+  xml_notebook.xrc
+  xml_notebook_coli_boli.xrc
+  xml_notebook_private_placement.xrc
+  xml_notebook_single_premium.xrc
+Reformat and remove unwanted feature.
 
