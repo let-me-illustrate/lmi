@@ -24,7 +24,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: xml_notebook_coli_boli.xrc,v 1.12 2006-01-29 13:52:01 chicares Exp $
+    $Id: xml_notebook_coli_boli.xrc,v 1.13 2006-06-13 13:56:49 wboutin Exp $
 
     This version is designed for COLI and BOLI users; it omits input
     fields that seem irrelevant in that context, and reflects the
@@ -567,6 +567,7 @@
                     <border>4</border>
                     <object class="wxRadioBox" name="RunOrder">
                         <label>Processing order</label>
+                        <style>wxRA_SPECIFY_COLS</style>
                         <content>
                             <item>Life by life</item>
                             <item>Month by month</item>
@@ -920,53 +921,25 @@
                     </object>
                 </object>
                 <object class="sizeritem">
-                    <flag>wxALIGN_LEFT|wxGROW|wxLEFT|wxRIGHT</flag>
-                    <border>2</border>
-                    <object class="wxStaticBoxSizer">
-                        <orient>wxVERTICAL</orient>
-                        <label>Retirement age</label>
+                    <flag>wxALIGN_RIGHT|wxGROW|wxLEFT|wxTOP|wxBOTTOM</flag>
+                    <border>4</border>
+                    <object class="wxFlexGridSizer">
+                        <cols>0</cols>
+                        <rows>1</rows>
+                        <growablecols>0</growablecols>
+                        <growablerows>0,1</growablerows>
                         <object class="sizeritem">
-                            <flag>wxALIGN_LEFT|wxBOTTOM</flag>
-                            <border>0</border>
-                            <object class="wxFlexGridSizer">
-                                <cols>0</cols>
-                                <rows>2</rows>
-                                <growablecols>0</growablecols>
-                                <growablerows>0,1</growablerows>
-                                <object class="sizeritem">
-                                    <flag>wxALIGN_LEFT|wxALIGN_TOP|wxALL</flag>
-                                    <border>10</border>
-                                    <object class="wxSpinCtrl" name="RetirementAge">
-                                        <size>40,-1</size>
-                                    </object>
-                                </object>
-                                <object class="sizeritem">
-                                    <flag>wxALIGN_LEFT|wxGROW|wxLEFT|wxBOTTOM</flag>
-                                    <border>4</border>
-                                    <object class="wxRadioBox" name="DeprecatedUseDOR">
-                                        <style>wxRA_SPECIFY_COLS</style>
-                                        <label>Use date</label>
-                                        <content>
-                                            <item>Yes</item>
-                                            <item>No</item>
-                                        </content>
-                                    </object>
-                                </object>
-                                <object class="sizeritem">
-                                    <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL</flag>
-                                    <border>4</border>
-                                    <object class="wxGridSizer">
-                                        <cols>2</cols>
-                                        <rows>2</rows>
-                                    </object>
-                                </object>
-                                <object class="sizeritem">
-                                    <flag>wxALIGN_RIGHT|wxGROW|wxLEFT|wxTOP|wxBOTTOM</flag>
-                                    <border>4</border>
-                                    <object class="wxDatePickerCtrl" name="DateOfRetirement">
-                                        <size>90,-1</size>
-                                    </object>
-                                </object>
+                            <flag>wxALIGN_RIGHT|wxALIGN_TOP|wxALL</flag>
+                            <border>4</border>
+                            <object class="wxStaticText">
+                                <label>Retirement Age</label>
+                            </object>
+                        </object>
+                        <object class="sizeritem">
+                            <flag>wxALIGN_LEFT|wxALIGN_TOP|wxALL</flag>
+                            <border>4</border>
+                            <object class="wxSpinCtrl" name="RetirementAge">
+                                <size>40,-1</size>
                             </object>
                         </object>
                     </object>
@@ -1037,6 +1010,7 @@
                     <border>2</border>
                     <object class="wxRadioBox" name="Gender">
                         <label>Gender</label>
+                        <style>wxRA_SPECIFY_COLS</style>
                         <content>
                             <item>Female</item>
                             <item>Male</item>
@@ -1049,6 +1023,7 @@
                     <border>2</border>
                     <object class="wxRadioBox" name="Smoking">
                         <label>Tobacco</label>
+                        <style>wxRA_SPECIFY_COLS</style>
                         <content>
                             <item>Smoker</item>
                             <item>Nonsmoker</item>
@@ -1061,6 +1036,7 @@
                     <border>2</border>
                     <object class="wxRadioBox" name="UnderwritingClass">
                         <label>Class</label>
+                        <style>wxRA_SPECIFY_COLS</style>
                         <content>
                             <item>Preferred</item>
                             <item>Standard</item>
@@ -2074,6 +2050,7 @@
                             <border>4</border>
                             <object class="wxRadioBox" name="SolveBasis">
                                 <label>Basis</label>
+                                <style>wxRA_SPECIFY_COLS</style>
                                 <content>
                                     <item>Current basis</item>
                                     <item>Guaranteed basis</item>
@@ -2086,6 +2063,7 @@
                             <border>4</border>
                             <object class="wxRadioBox" name="SolveSeparateAccountBasis">
                                 <label>Sep acct rate</label>
+                                <style>wxRA_SPECIFY_COLS</style>
                                 <content>
                                     <item>Input %</item>
                                     <item>Zero %</item>
@@ -2369,6 +2347,7 @@
                                     <flag>wxALIGN_LEFT|wxALIGN_TOP|wxLEFT|wxBOTTOM</flag>
                                     <border>4</border>
                                     <object class="wxRadioBox" name="FundChoiceType">
+                                        <style>wxRA_SPECIFY_COLS</style>
                                         <content>
                                             <item>Average fund</item>
                                             <item>Override fund</item>

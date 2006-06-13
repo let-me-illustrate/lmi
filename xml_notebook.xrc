@@ -24,7 +24,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: xml_notebook.xrc,v 1.24 2006-01-29 13:52:01 chicares Exp $
+    $Id: xml_notebook.xrc,v 1.25 2006-06-13 13:56:49 wboutin Exp $
 
     This version is generic. It strives to present every input field
     the system offers, in a way that suits the main developer's tastes.
@@ -2253,6 +2253,7 @@ the other is perforce ignored.
                 <object class="sizeritem">
                     <flag>wxALIGN_CENTER_VERTICAL</flag>
                     <object class="wxRadioBox" name="FundChoiceType">
+                        <style>wxRA_SPECIFY_COLS</style>
                         <content>
                             <item>Average fund</item>
                             <item>Override fund</item>
