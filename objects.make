@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: objects.make,v 1.74 2006-06-07 15:42:07 wboutin Exp $
+# $Id: objects.make,v 1.75 2006-06-15 18:36:10 wboutin Exp $
 
 ################################################################################
 
@@ -398,13 +398,13 @@ unit_test_targets := \
   name_value_pairs_test$(EXEEXT) \
   ncnnnpnn_test$(EXEEXT) \
   numeric_io_test$(EXEEXT) \
-  rtti_lmi_test$(EXEEXT) \
   obstruct_slicing_test$(EXEEXT) \
   passkey_test$(EXEEXT) \
   path_utility_test$(EXEEXT) \
   progress_meter_test$(EXEEXT) \
   quiet_nan_test$(EXEEXT) \
   round_to_test$(EXEEXT) \
+  rtti_lmi_test$(EXEEXT) \
   snprintf_test$(EXEEXT) \
   stratified_algorithms_test$(EXEEXT) \
   stream_cast_test$(EXEEXT) \
@@ -595,10 +595,6 @@ numeric_io_test$(EXEEXT): \
   numeric_io_test.o \
   timer.o \
 
-rtti_lmi_test$(EXEEXT): \
-  $(common_test_objects) \
-  rtti_lmi_test.o \
-
 obstruct_slicing_test$(EXEEXT): \
   $(common_test_objects) \
   obstruct_slicing_test.o \
@@ -633,6 +629,10 @@ quiet_nan_test$(EXEEXT): \
 round_to_test$(EXEEXT): \
   $(common_test_objects) \
   round_to_test.o \
+
+rtti_lmi_test$(EXEEXT): \
+  $(common_test_objects) \
+  rtti_lmi_test.o \
 
 snprintf_test$(EXEEXT): \
   $(common_test_objects) \
