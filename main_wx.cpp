@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_wx.cpp,v 1.52 2006-06-12 19:30:02 wboutin Exp $
+// $Id: main_wx.cpp,v 1.53 2006-06-15 18:06:00 wboutin Exp $
 
 // Portions of this file are derived from wxWindows files
 //   samples/docvwmdi/docview.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -373,14 +373,21 @@ void Skeleton::UponEditDefaultCell(wxCommandEvent&)
         );
 }
 
+/// Rethrow an exception caught by wx into a local catch clause.
+///
+/// This virtual function exists only to be overridden. Calling the
+/// base-class implementation would be pointless.
+///
+/// For MinGW gcc-3.4.4 and earlier
+///   http://sourceforge.net/mailarchive/message.php?msg_id=14436989
+/// it is crucial that the exception be thrown from the same shared
+/// library that caught it. This workaround requires a 'monolithic'
+/// wx shared library.
+
 bool Skeleton::OnExceptionInMainLoop()
 {
     try
         {
-        // This just rethrows the exception. For msw at least, it
-        // seems crucial that the exception be thrown from the same
-        // shared library that caught it. This works only with a
-        // 'monolithic' wx shared library.
 #if !(defined __GNUC__ && LMI_GCC_VERSION < 30405)
         throw;
 #else  // defined __GNUC__ && LMI_GCC_VERSION < 30405
