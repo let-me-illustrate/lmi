@@ -24,7 +24,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: xml_notebook.xrc,v 1.25 2006-06-13 13:56:49 wboutin Exp $
+    $Id: xml_notebook.xrc,v 1.26 2006-06-15 20:35:50 wboutin Exp $
 
     This version is generic. It strives to present every input field
     the system offers, in a way that suits the main developer's tastes.
@@ -997,7 +997,7 @@ demonstrate a defect in the wx library. See
                                 </object>
                                 <object class="sizeritem">
                                     <flag>wxGROW</flag>
-                                    <object class="wxTextCtrl" name="IssueAge">
+                                    <object class="wxSpinCtrl" name="IssueAge">
                                         <size>10,-1</size>
                                     </object>
                                 </object>
@@ -1035,7 +1035,7 @@ demonstrate a defect in the wx library. See
                                 </object>
                                 <object class="sizeritem">
                                     <flag>wxGROW</flag>
-                                    <object class="wxTextCtrl" name="RetirementAge">
+                                    <object class="wxSpinCtrl" name="RetirementAge">
                                         <size>10,-1</size>
                                     </object>
                                 </object>
@@ -2497,14 +2497,12 @@ the other is perforce ignored.
     <object class="wxFlexGridSizer">
         <cols>1</cols>
         <growablerows>1</growablerows>
-
         <object class="sizeritem">
             <flag>wxALIGN_LEFT</flag>
             <object class="wxCheckBox" name="CreateSupplementalReport">
                 <label>Create supplemental report</label>
             </object>
         </object>
-
         <object class="sizeritem">
             <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
             <border>4</border>
