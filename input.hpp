@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input.hpp,v 1.12 2006-06-02 14:23:43 chicares Exp $
+// $Id: input.hpp,v 1.13 2006-06-15 18:06:00 wboutin Exp $
 
 #ifndef input_hpp
 #define input_hpp
@@ -162,7 +162,7 @@ class LMI_SO Input
     tnr_proportion           TermRiderProportion             ; // TODO ?? Not actually used?
     mce_yes_or_no            TermRiderUseProportion          ;
     tnr_date                 DateOfBirth                     ;
-    tnr_date                 DateOfRetirement                ;
+    tnr_date                 DateOfRetirement                ; // TODO ?? Expunge this everywhere.
     mce_table_rating         SubstandardTable                ;
     ce_product_name          ProductName                     ;
     tnr_nonnegative_double   Dumpin                          ;
