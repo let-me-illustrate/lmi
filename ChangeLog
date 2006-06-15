@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.391 2006-06-15 18:36:10 wboutin Exp $
+// $Id: ChangeLog,v 1.392 2006-06-15 20:36:14 wboutin Exp $
 
 MAINTENANCE
 
@@ -6722,4 +6722,19 @@ Improve documentation.
   objects.make
   xenumtypes.cpp
 Stylistic improvements.
+
+20060615T2034Z <wboutin@massmutual.com> [1211]
+
+  workhorse.make
+Optionally use libstdc++ safety features.
+
+20060615T2035Z <wboutin@massmutual.com> [1211]
+
+  xml_notebook.xrc
+Reformat.
+
+20060615T2036Z <wboutin@massmutual.com> [1211]
+
+  GNUmakefile
+Improve portability.
 
