@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: workhorse.make,v 1.69 2006-06-12 19:30:02 wboutin Exp $
+# $Id: workhorse.make,v 1.70 2006-06-15 20:34:58 wboutin Exp $
 
 ################################################################################
 
@@ -113,7 +113,7 @@ effective_default_target: $(default_targets)
 
 ################################################################################
 
-gcc_version = $(shell $(CXX) -dumpversion)
+gcc_version := $(shell $(CXX) -dumpversion)
 
 ################################################################################
 
@@ -344,8 +344,6 @@ wx_dependent_idempotent_files := \
 
 # Warning options for gcc.
 
-gcc_version = $(shell $(CXX) -dumpversion)
-
 # Specify $(gcc_version_specific_warnings) last, in order to override
 # other options.
 
@@ -447,12 +445,23 @@ CXX_WARNINGS = \
 
 ################################################################################
 
-# Build type governs optimization flags and use of mpatrol and gprof.
+# Build type governs
+#  - optimization flags
+#  - mpatrol
+#  - gprof
+#  - libstdc++ debugging and concept-checking macros
 
-# TODO ?? Also consider defining these libstdc++ macros:
-#   _GLIBCXX_DEBUG_ASSERT
-#   _GLIBCXX_DEBUG_PEDASSERT
-#   _GLIBCXX_DEBUG_VERIFY
+# libstdc++ debugging and concept-checking macros are given in the
+# intended '_GLIBCXX' forms first, and also in the '_GLIBCPP' forms
+# that apparently were used for gcc-3.3.x .
+#
+# '-D_GLIBXX_DEBUG_PEDANTIC' is required for gcc-3.4.x and gcc-4.0.0;
+# this known defect was later corrected.
+
+every_libstdcxx_warning_macro := \
+  -D_GLIBCXX_DEBUG -D_GLIBCXX_DEBUG_PEDANTIC -D_GLIBCXX_CONCEPT_CHECKS \
+  -D_GLIBCPP_DEBUG -D_GLIBCPP_DEBUG_PEDANTIC -D_GLIBCPP_CONCEPT_CHECKS \
+                   -D_GLIBXX_DEBUG_PEDANTIC \
 
 MPATROL_LIBS :=
 
@@ -466,7 +475,12 @@ else
     optimization_flag := -O0
     gprof_flag := -pg
   else
-    optimization_flag := -O2
+    ifeq (safestdlib,$(findstring safestdlib,$(build_type)))
+      optimization_flag := -O0
+      libstdcxx_warning_macros := $(every_libstdcxx_warning_macro)
+    else
+      optimization_flag := -O2
+    endif
   endif
 endif
 
@@ -499,13 +513,13 @@ wx_ldflags = \
 # that they reflect downstream conditional changes to the variables
 # they're composed from.
 
-debug_flag = -ggdb
+debug_flag := -ggdb
 
 # MinGW gcc-3.4.2 writes dwarf2 debug records if '-ggdb' is specified,
 # but the version of gdb packaged with it expects stabs format.
 #
 ifeq (3.4.2,$(gcc_version))
-  debug_flag = -g
+  debug_flag := -g
   gcc_version_specific_warnings := -Wno-uninitialized
 endif
 
@@ -532,6 +546,7 @@ REQUIRED_CPPFLAGS = \
   $(lmi_wx_new_so_attributes) \
   $(actually_used_lmi_so_attributes) \
   $(platform_defines) \
+  $(libstdcxx_warning_macros) \
   $(wx_predefinitions) \
   -DBOOST_STRICT_CONFIG \
 
@@ -680,26 +695,26 @@ lib%$(SHREXT)       : lmi_so_attributes := -DLMI_BUILD_SO
 lib%$(SHREXT)       : MPATROL_LIBS :=
 wx_new$(SHREXT)     : MPATROL_LIBS :=
 
-wx_new$(SHREXT)     : EXTRA_LDFLAGS =
+wx_new$(SHREXT)     : EXTRA_LDFLAGS :=
 
                       lmi_wx_new_so_attributes := -DLMI_WX_NEW_USE_SO
 wx_new$(SHREXT)     : lmi_wx_new_so_attributes := -DLMI_WX_NEW_BUILD_SO
 
-liblmi.a liblmi$(SHREXT): EXTRA_LDFLAGS =
+liblmi.a liblmi$(SHREXT): EXTRA_LDFLAGS :=
 liblmi.a liblmi$(SHREXT): $(lmi_common_objects)
 libantediluvian.a libantediluvian$(SHREXT): $(antediluvian_common_objects)
 
 # TODO ?? 'lmi*' targets can be built either with a shared or a static
 # 'lmi' library. Choose one, or support both.
 
-lmi_wx_monolithic$(EXEEXT): EXTRA_LDFLAGS = $(wx_ldflags)
+lmi_wx_monolithic$(EXEEXT): EXTRA_LDFLAGS := $(wx_ldflags)
 lmi_wx_monolithic$(EXEEXT): $(lmi_wx_objects) $(lmi_common_objects) wx_new$(SHREXT)
 
 lmi_wx_shared$(EXEEXT): lmi_so_attributes := -DLMI_USE_SO
-lmi_wx_shared$(EXEEXT): EXTRA_LDFLAGS = $(wx_ldflags)
+lmi_wx_shared$(EXEEXT): EXTRA_LDFLAGS := $(wx_ldflags)
 lmi_wx_shared$(EXEEXT): $(lmi_wx_objects) liblmi$(SHREXT) wx_new$(SHREXT)
 
-lmi_wx_static$(EXEEXT): EXTRA_LDFLAGS = $(wx_ldflags)
+lmi_wx_static$(EXEEXT): EXTRA_LDFLAGS := $(wx_ldflags)
 lmi_wx_static$(EXEEXT): $(lmi_wx_objects) liblmi.a wx_new$(SHREXT)
 
 lmi_cli_monolithic$(EXEEXT): $(cli_objects) $(lmi_common_objects)
@@ -831,7 +846,7 @@ mpatrol.log:
 %$(EXEEXT)-run: mpatrol.log
 	@$(ECHO) "\nRunning $*:"
 	@-./$* --accept
-	@test -e mpatrol.log \
+	@[ -f mpatrol.log ] \
 	  && <mpatrol.log $(SED) \
 	    -e ';/^total warnings\|^total errors/!d' \
 	    -e 's/^\(.*$$\)/  mpatrol: \1/' \
