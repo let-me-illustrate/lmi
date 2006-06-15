@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: GNUmakefile,v 1.67 2006-06-07 15:42:07 wboutin Exp $
+# $Id: GNUmakefile,v 1.68 2006-06-15 20:36:14 wboutin Exp $
 
 ################################################################################
 
@@ -536,7 +536,7 @@ check_conformity: source_clean custom_tools
 	@$(WC) -l $(prerequisite_files) | $(SED) -e ';/[Tt]otal/d' | $(WC) -l
 	@$(ECHO) "Number of marked defects:"
 	@$(GREP) \?\? $(licensed_files) | $(WC) -l
-	@[[ TODAY -nt CANDIDATE ]] && [[ version.hpp -ot BOM ]] \
+	@[ TODAY -nt CANDIDATE ] && [ version.hpp -ot BOM ] \
 	  && $(ECHO) "Is it time to 'make release_candidate'?" || true
 	@[ license.cpp -ot BOY ] \
 	  && $(ECHO) "Update copyright notices in 'license.cpp'." || true
