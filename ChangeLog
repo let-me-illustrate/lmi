@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.392 2006-06-15 20:36:14 wboutin Exp $
+// $Id: ChangeLog,v 1.393 2006-06-16 12:38:48 wboutin Exp $
 
 MAINTENANCE
 
@@ -6737,4 +6737,9 @@ Reformat.
 
   GNUmakefile
 Improve portability.
+
+20060616T1238Z <wboutin@massmutual.com> [1211]
+
+  xml_notebook.xrc
+Reformat.
 

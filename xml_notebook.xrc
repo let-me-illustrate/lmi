@@ -24,7 +24,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: xml_notebook.xrc,v 1.26 2006-06-15 20:35:50 wboutin Exp $
+    $Id: xml_notebook.xrc,v 1.27 2006-06-16 12:38:05 wboutin Exp $
 
     This version is generic. It strives to present every input field
     the system offers, in a way that suits the main developer's tastes.
@@ -2677,7 +2677,6 @@ the other is perforce ignored.
                         <style>wxCB_DROPDOWN|wxCB_READONLY</style>
                     </object>
                 </object>
-
             </object>
         </object>
     </object>
