@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.393 2006-06-16 12:38:48 wboutin Exp $
+// $Id: ChangeLog,v 1.394 2006-06-18 03:26:15 chicares Exp $
 
 MAINTENANCE
 
@@ -6742,4 +6742,19 @@ Improve portability.
 
   xml_notebook.xrc
 Reformat.
+
+20060618T0250Z <chicares@cox.net> [1211]
+
+  objects.make
+  wx_utility.cpp [new in this trunk]
+  wx_utility.hpp [new in this trunk]
+Import wx utilities from skeleton trunk.
+
+20060618T0326Z <chicares@cox.net> [1211]
+
+  transferor.cpp
+  wx_utility.cpp
+  wx_utility.hpp
+  xml_notebook.cpp
+Convert wx dates in a way that seems more reliable.
 

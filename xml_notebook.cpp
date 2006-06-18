@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xml_notebook.cpp,v 1.30 2006-06-12 21:19:23 wboutin Exp $
+// $Id: xml_notebook.cpp,v 1.31 2006-06-18 03:26:15 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -30,9 +30,11 @@
 #include "xml_notebook.tpp"
 
 #include "alert.hpp"
+#include "calendar_date.hpp"
 #include "input.hpp"
 #include "map_lookup.hpp"
 #include "transferor.hpp"
+#include "wx_utility.hpp"
 #include "wx_workarounds.hpp"
 
 #include <wx/app.h> // wxTheApp
@@ -803,7 +805,16 @@ ought to be forced through somehow.
         wxDatePickerCtrl& date = WindowFromXrcName<wxDatePickerCtrl>("DateOfBirth");
         tnr_date* dob = input_["DateOfBirth"].cast_blithely<tnr_date>();
         LMI_ASSERT(dob);
-        date.SetRange((double)dob->min_, (double)dob->max_);
+
+        calendar_date lmi_min_date;
+        lmi_min_date.julian_day_number(dob->min_);
+        wxDateTime wx_min_date = ConvertDateToWx(lmi_min_date);
+
+        calendar_date lmi_max_date;
+        lmi_max_date.julian_day_number(dob->max_);
+        wxDateTime wx_max_date = ConvertDateToWx(lmi_max_date);
+
+        date.SetRange(wx_min_date, wx_max_date);
 
         wxWindow& age = WindowFromXrcName<wxWindow>("IssueAge");
         transfer_data_["IssueAge"] = input_["IssueAge"].str();
