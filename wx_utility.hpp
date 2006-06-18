@@ -19,12 +19,14 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: wx_utility.hpp,v 1.1 2006-06-18 02:50:24 chicares Exp $
+// $Id: wx_utility.hpp,v 1.2 2006-06-18 03:26:15 chicares Exp $
 
 #ifndef wx_utility_hpp
 #define wx_utility_hpp
 
 #include "config.hpp"
+
+#include "so_attributes.hpp"
 
 #include <boost/static_assert.hpp>
 #include <boost/type_traits.hpp>
@@ -35,6 +37,8 @@
 #include <string>
 #include <vector>
 
+class LMI_SO calendar_date;
+class WXDLLEXPORT wxDateTime;
 class WXDLLEXPORT wxWindow;
 
 /// Function template c_cast() performs an explicit type conversion
@@ -77,6 +81,12 @@ void Connect
 
     object->Connect(id, event, c_cast<wxObjectEventFunction>(handler));
 }
+
+/// Convert wxDateTime to calendar_date.
+calendar_date ConvertDateFromWx(wxDateTime const&);
+
+/// Convert calendar_date to wxDateTime.
+wxDateTime ConvertDateToWx(calendar_date const&);
 
 /// Return a string comprising a window's id, label, and name.
 

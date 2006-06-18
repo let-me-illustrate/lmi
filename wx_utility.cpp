@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: wx_utility.cpp,v 1.1 2006-06-18 02:50:24 chicares Exp $
+// $Id: wx_utility.cpp,v 1.2 2006-06-18 03:26:15 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -29,10 +29,30 @@
 #include "wx_utility.hpp"
 
 #include "alert.hpp"
+#include "calendar_date.hpp"
 
+#include <wx/datetime.h>
 #include <wx/window.h>
 
 #include <sstream>
+
+calendar_date ConvertDateFromWx(wxDateTime const& wx_date)
+{
+    return calendar_date
+        (wx_date.GetYear()
+        ,wx_date.GetMonth() + 1
+        ,wx_date.GetDay()
+        );
+}
+
+wxDateTime ConvertDateToWx(calendar_date const& lmi_date)
+{
+    return wxDateTime
+        (lmi_date.day()
+        ,static_cast<wxDateTime::Month>(lmi_date.month() - 1)
+        ,lmi_date.year()
+        );
+}
 
 std::string Describe(wxWindow const* w)
 {

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: transferor.cpp,v 1.7 2006-02-12 17:07:31 chicares Exp $
+// $Id: transferor.cpp,v 1.8 2006-06-18 03:26:15 chicares Exp $
 
 // Acknowledgment
 
@@ -37,7 +37,9 @@
 #include "transferor.hpp"
 
 #include "alert.hpp"
+#include "calendar_date.hpp"
 #include "numeric_io_cast.hpp"
+#include "wx_utility.hpp"
 
 #include <wx/button.h>
 #include <wx/checkbox.h>
@@ -453,17 +455,16 @@ if(!dropped)
     {
         if(td == from_string_to_control)
             {
-            // Astronomical JDN = chronological JDN - 0.5 .
-            wxDateTime jdn(numeric_io_cast<double>(data) - 0.5);
-            control.SetValue(jdn);
+            calendar_date lmi_date;
+            lmi_date.julian_day_number(numeric_io_cast<int>(data));
+            wxDateTime wx_date = ConvertDateToWx(lmi_date);
+            control.SetValue(wx_date);
             }
         else
             {
-            // Chronological JDN = astronomical JDN + 0.5 .
-            data = numeric_io_cast<std::string>
-                (static_cast<long int>
-                    (control.GetValue().GetJDN() + 0.5)
-                );
+            wxDateTime wx_date = control.GetValue();
+            calendar_date lmi_date = ConvertDateFromWx(wx_date);
+            data = numeric_io_cast<std::string>(lmi_date.julian_day_number());
             }
         return true;
     }
