@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.394 2006-06-18 03:26:15 chicares Exp $
+// $Id: ChangeLog,v 1.395 2006-06-20 13:31:21 wboutin Exp $
 
 MAINTENANCE
 
@@ -6757,4 +6757,11 @@ Import wx utilities from skeleton trunk.
   wx_utility.hpp
   xml_notebook.cpp
 Convert wx dates in a way that seems more reliable.
+
+20060620T1331Z <wboutin@massmutual.com> [1211]
+
+  xml_notebook_coli_boli.xrc
+  xml_notebook_private_placement.xrc
+  xml_notebook_single_premium.xrc
+Reformat.
 
