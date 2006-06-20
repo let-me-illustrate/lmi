@@ -24,7 +24,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: xml_notebook_coli_boli.xrc,v 1.13 2006-06-13 13:56:49 wboutin Exp $
+    $Id: xml_notebook_coli_boli.xrc,v 1.14 2006-06-20 13:31:20 wboutin Exp $
 
     This version is designed for COLI and BOLI users; it omits input
     fields that seem irrelevant in that context, and reflects the
@@ -885,7 +885,7 @@
                                     <flag>wxALIGN_LEFT|wxALIGN_TOP|wxALL</flag>
                                     <border>10</border>
                                     <object class="wxSpinCtrl" name="IssueAge">
-                                        <size>40,-1</size>
+                                        <size>50,-1</size>
                                     </object>
                                 </object>
                                 <object class="sizeritem">
@@ -939,7 +939,7 @@
                             <flag>wxALIGN_LEFT|wxALIGN_TOP|wxALL</flag>
                             <border>4</border>
                             <object class="wxSpinCtrl" name="RetirementAge">
-                                <size>40,-1</size>
+                                <size>50,-1</size>
                             </object>
                         </object>
                     </object>

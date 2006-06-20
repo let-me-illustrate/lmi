@@ -24,7 +24,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: xml_notebook_single_premium.xrc,v 1.10 2006-06-13 13:56:49 wboutin Exp $
+    $Id: xml_notebook_single_premium.xrc,v 1.11 2006-06-20 13:31:21 wboutin Exp $
 
     This version is generic. It strives to present every input field
     the system offers, in a way that suits the main developer's tastes.
@@ -714,7 +714,7 @@
                                             <flag>wxALIGN_LEFT|wxALIGN_TOP|wxALL</flag>
                                             <border>10</border>
                                             <object class="wxSpinCtrl" name="IssueAge">
-                                                <size>40,-1</size>
+                                                <size>50,-1</size>
                                             </object>
                                         </object>
                                         <object class="sizeritem">

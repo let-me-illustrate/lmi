@@ -24,7 +24,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: xml_notebook_private_placement.xrc,v 1.8 2006-06-13 13:56:49 wboutin Exp $
+    $Id: xml_notebook_private_placement.xrc,v 1.9 2006-06-20 13:31:21 wboutin Exp $
 
     This version is designed for private placement users; it omits input
     fields that seem irrelevant in that context, and reflects the
@@ -173,7 +173,7 @@
                                     <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT|wxBOTTOM</flag>
                                     <border>4</border>
                                     <object class="wxSpinCtrl" name="IssueAge">
-                                        <size>40,-1</size>
+                                        <size>50,-1</size>
                                         <style>wxSP_ARROW_KEYS</style>
                                     </object>
                                 </object>
@@ -225,7 +225,7 @@
                             <flag>wxALIGN_LEFT|wxALIGN_TOP|wxALL</flag>
                             <border>2</border>
                             <object class="wxSpinCtrl" name="RetirementAge">
-                                <size>40,-1</size>
+                                <size>50,-1</size>
                                 <style>wxSP_ARROW_KEYS</style>
                             </object>
                         </object>
