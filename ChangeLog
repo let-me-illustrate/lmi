@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.395 2006-06-20 13:31:21 wboutin Exp $
+// $Id: ChangeLog,v 1.396 2006-06-23 18:14:36 wboutin Exp $
 
 MAINTENANCE
 
@@ -6764,4 +6764,12 @@ Convert wx dates in a way that seems more reliable.
   xml_notebook_private_placement.xrc
   xml_notebook_single_premium.xrc
 Reformat.
+
+20060623T1814Z <wboutin@massmutual.com> [1212]
+
+  calendar_date.cpp
+Suppress error message.
+
+  inputillus.cpp
+Synchronize census DateOfBirth and IssueAge.
 
