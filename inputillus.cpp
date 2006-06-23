@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: inputillus.cpp,v 1.19 2006-01-29 13:52:00 chicares Exp $
+// $Id: inputillus.cpp,v 1.20 2006-06-23 18:14:36 wboutin Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -488,6 +488,14 @@ void IllusInputParms::propagate_changes_from_base_and_finalize
     (bool report_errors
     )
 {
+    // TODO ?? For some unknown reason, doing this...
+    EnforceConsistency();
+    // ...makes things appear to "work". This should be superfluous.
+    // In fact, the function called shouldn't even exist: its mere
+    // existence demonstrates some deep defect somewhere that'll
+    // probably manifest itself in a new and alarming way someday.
+    // This class is too rotten to live; it can't be fixed, and must
+    // be completely replaced.
     propagate_status_to_alii();
     propagate_fund_allocations_to_string();
     realize_all_sequence_strings(report_errors);
