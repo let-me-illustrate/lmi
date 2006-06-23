@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: calendar_date.cpp,v 1.5 2006-01-29 13:52:00 chicares Exp $
+// $Id: calendar_date.cpp,v 1.6 2006-06-23 18:12:58 wboutin Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -369,7 +369,7 @@ int calculate_age
 {
     if(as_of_date < birthdate)
         {
-        throw std::runtime_error("Effective date precedes birthdate.");
+//        throw std::runtime_error("Effective date precedes birthdate.");
         }
 
     calendar_date last_birthday(birthdate);
