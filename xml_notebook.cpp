@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xml_notebook.cpp,v 1.31 2006-06-18 03:26:15 chicares Exp $
+// $Id: xml_notebook.cpp,v 1.32 2006-06-29 19:31:47 wboutin Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -807,11 +807,11 @@ ought to be forced through somehow.
         LMI_ASSERT(dob);
 
         calendar_date lmi_min_date;
-        lmi_min_date.julian_day_number(dob->min_);
+        lmi_min_date.julian_day_number(dob->minimum_);
         wxDateTime wx_min_date = ConvertDateToWx(lmi_min_date);
 
         calendar_date lmi_max_date;
-        lmi_max_date.julian_day_number(dob->max_);
+        lmi_max_date.julian_day_number(dob->maximum_);
         wxDateTime wx_max_date = ConvertDateToWx(lmi_max_date);
 
         date.SetRange(wx_min_date, wx_max_date);
