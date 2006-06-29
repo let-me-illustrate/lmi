@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.398 2006-06-29 18:21:17 wboutin Exp $
+// $Id: ChangeLog,v 1.399 2006-06-29 19:00:23 wboutin Exp $
 
 MAINTENANCE
 
@@ -6782,4 +6782,10 @@ Mark release candidate.
 
   tn_range.hpp
 Transpose documentation.
+
+20060629T1900Z <wboutin@massmutual.com> [1212]
+
+  tn_range.hpp
+  tn_range.tpp
+Rename some members of class template tn_range.
 

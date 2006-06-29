@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: tn_range.hpp,v 1.7 2006-06-29 18:21:17 wboutin Exp $
+// $Id: tn_range.hpp,v 1.8 2006-06-29 19:00:23 wboutin Exp $
 
 #ifndef tn_range_hpp
 #define tn_range_hpp
@@ -135,8 +135,8 @@ class trammel_base
 /// 2.13.3/1 permits any ordering of {z, 1.07} and doesn't require them
 /// to be equal, so a range type restricted to [0.0, 1.07] might, if
 /// naively implemented, deem 1.07 to be an invalid value. The
-/// implementation prevents this problem by adjusting the max_ and
-/// min_ data members upward and downward respectively by a factor of
+/// implementation prevents this problem by adjusting the maximum_ and
+/// minimum_ data members upward and downward respectively by a factor of
 /// one plus epsilon.
 
 /// Explicit instantiation
@@ -191,8 +191,8 @@ class tn_range
 // End kludge.
     std::string str() const;
 
-    Number max_;
-    Number min_;
+    Number maximum_;
+    Number minimum_;
     Number value_;
 };
 

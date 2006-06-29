@@ -1,4 +1,4 @@
-// Trammeled Numeric range type: template class implementation.
+// Trammeled Numeric range type: class template implementation.
 //
 // Copyright (C) 2004, 2005, 2006 Gregory W. Chicares.
 //
@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: tn_range.tpp,v 1.5 2006-01-29 13:52:00 chicares Exp $
+// $Id: tn_range.tpp,v 1.6 2006-06-29 19:00:23 wboutin Exp $
 
 #include "config.hpp"
 
@@ -35,12 +35,12 @@
 
 namespace
 {
-    // Signum, defined here to return 0 for NaNs.
-    //
-    // To handle unsigned types without warnings, the value zero is
-    // stored in a volatile variable, and the value negative one is
-    // cast to the argument type.
-    //
+    /// Signum, defined here to return 0 for NaNs.
+    ///
+    /// To handle unsigned types without warnings, the value zero is
+    /// stored in a volatile variable, and the value negative one is
+    /// cast to the argument type.
+
     template<typename T>
     T signum(T t)
     {
@@ -60,42 +60,42 @@ namespace
             }
     }
 
-    // TODO ?? These exact-integer template functions are experimental.
-    //
-    // Motivation: ascertaining whether a floating-point value lies
-    // within a range like [-1.07, +1.07] requires careful handling of
-    // the endpoints, but exact range limits don't.
-    //
-    // Without builtin language support, this is difficult. A floating
-    // literal that is inexact may be translated to a floating value
-    // that is. Perhaps requiring that the value be integral is wise,
-    // or perhaps not: for an IEEE754 64-bit double, integral values
-    // greater than 2^53 don't differ from their upper neighbors by
-    // unity, whereas 0.5 is exact and C++98 4.8/1 requires it to be
-    // treated as such.
-    //
-    // If C99's remainder() can be used, it's guaranteed to give an
-    // exact result; but in 2004-12, that's not part of C++.
-    //
-    // Maybe this refinement isn't worth the trouble.
+    /// TODO ?? These exact-integer template functions are experimental.
+    ///
+    /// Motivation: ascertaining whether a floating-point value lies
+    /// within a range like [-1.07, +1.07] requires careful handling of
+    /// the endpoints, but exact range limits don't.
+    ///
+    /// Without builtin language support, this is difficult. A floating
+    /// literal that is inexact may be translated to a floating value
+    /// that is. Perhaps requiring that the value be integral is wise,
+    /// or perhaps not: for an IEEE754 64-bit double, integral values
+    /// greater than 2^53 don't differ from their upper neighbors by
+    /// unity, whereas 0.5 is exact and C++98 4.8/1 requires it to be
+    /// treated as such.
+    ///
+    /// If C99's remainder() can be used, it's guaranteed to give an
+    /// exact result; but in 2004-12, that's not part of C++.
+    ///
+    /// Implementation.
+    ///
+    /// Determine whether a floating-point value represents an integer
+    /// exactly. This assumes is_iec559, without asserting it, because
+    /// some compilers would fail such an assertion even though the
+    /// underlying hardware conforms to that standard.
+    ///
+    /// This template function actually returns true iff
+    ///  - t is in the range that the floating-point type could
+    ///    represent exactly; and
+    ///  - t is in the range of long int; and
+    ///  - t equals static_cast<long int>(t)
+    /// Instead, type long long int might have been used, but it is
+    /// not yet part of standard C++ and not all compilers support it.
+    ///
+    /// See this discussion:
+    ///   http://groups.google.com/groups?th=1b868327b241fb74
+    ///   http://groups.google.com/groups?selm=3DF66B8D.F1C3D2C0%40sun.com
 
-    // Determine whether a floating-point value represents an integer
-    // exactly. This assumes is_iec559, without asserting it, because
-    // some compilers would fail such an assertion even though the
-    // underlying hardware conforms to that standard.
-    //
-    // This template function actually returns true iff
-    //  - t is in the range that the floating-point type could
-    //    represent exactly; and
-    //  - t is in the range of long int; and
-    //  - t equals static_cast<long int>(t)
-    // Instead, type long long int might have been used, but it is
-    // not yet part of standard C++ and not all compilers support it.
-    //
-    // See this discussion:
-    //   http://groups.google.com/groups?th=1b868327b241fb74
-    //   http://groups.google.com/groups?selm=3DF66B8D.F1C3D2C0%40sun.com
-    //
     template<typename T>
     bool floating_point_value_is_exact_integer(T t)
     {
@@ -134,18 +134,18 @@ namespace
         return floating_point_value_is_exact_integer(t);
     }
 
-    // Like C99 nextafter(), but prevents range error, and returns
-    // exact integral values unchanged.
-    //
-    // Using the straightforward
-    //    if(boost::is_float<T>::value)
-    // would cause compiler warnings that later statements are
-    // unreachable when the condition is true. Instead, the condition
-    // is stored in a volatile object. That object really ought to be
-    // const volatile, but, as discussed here:
-    //   http://www.google.com/groups?selm=4192bc30%241%40newsgroups.borland.com
-    // that would elicit a spurious warning from the borland compiler.
-    //
+    /// Like C99 nextafter(), but prevents range error, and returns
+    /// exact integral values unchanged.
+    ///
+    /// Using the straightforward
+    ///    if(boost::is_float<T>::value)
+    /// would cause compiler warnings that later statements are
+    /// unreachable when the condition is true. Instead, the condition
+    /// is stored in a volatile object. That object really ought to be
+    /// const volatile, but, as discussed here:
+    ///   http://www.google.com/groups?selm=4192bc30%241%40newsgroups.borland.com
+    /// that would elicit a spurious warning from the borland compiler.
+
     template<typename T>
     T adjust_bound(T t, T direction)
     {
@@ -243,11 +243,11 @@ T trammel_base<T>::maximum()
         );
 }
 
-// The second argument of adjust_bound() must be cast to T if it
-// is negative. Otherwise, an integral promotion [5.3.1/7] might
-// be performed, and that would prevent template resolution. And
-// '0 -' avoids a compiler warning about negating an unsigned value.
-//
+/// The second argument of adjust_bound() must be cast to T if it
+/// is negative. Otherwise, an integral promotion [5.3.1/7] might
+/// be performed, and that would prevent template resolution. And
+/// '0 -' avoids a compiler warning about negating an unsigned value.
+
 template<typename T>
 T trammel_base<T>::minimum()
 {
@@ -264,9 +264,9 @@ tn_range<Number,Trammel>::tn_range()
 {
     Trammel x;
     x.check_sanity();
-    max_   = x.maximum();
-    min_   = x.minimum();
-    value_ = x.default_value();
+    maximum_   = x.maximum();
+    minimum_   = x.minimum();
+    value_     = x.default_value();
 }
 
 template<typename Number, typename Trammel>
@@ -274,9 +274,9 @@ tn_range<Number,Trammel>::tn_range(Number n)
 {
     Trammel x;
     x.check_sanity();
-    max_   = x.maximum();
-    min_   = x.minimum();
-    value_ = trammel(n);
+    maximum_   = x.maximum();
+    minimum_   = x.minimum();
+    value_     = trammel(n);
 }
 
 template<typename Number, typename Trammel>
@@ -284,9 +284,9 @@ tn_range<Number,Trammel>::tn_range(std::string const& s)
 {
     Trammel x;
     x.check_sanity();
-    max_   = x.maximum();
-    min_   = x.minimum();
-    value_ = trammel(numeric_io_cast<Number>(s));
+    maximum_   = x.maximum();
+    minimum_   = x.minimum();
+    value_     = trammel(numeric_io_cast<Number>(s));
 }
 
 template<typename Number, typename Trammel>
@@ -324,7 +324,7 @@ bool tn_range<Number,Trammel>::operator==(std::string const& s) const
 template<typename Number, typename Trammel>
 bool tn_range<Number,Trammel>::is_valid(Number n) const
 {
-    return min_ <= n && n <= max_;
+    return minimum_ <= n && n <= maximum_;
 }
 
 template<typename Number, typename Trammel>
@@ -333,7 +333,7 @@ bool tn_range<Number,Trammel>::is_valid(std::string const& s) const
     try
         {
         Number n = numeric_io_cast<Number>(s);
-        return min_ <= n && n <= max_;
+        return minimum_ <= n && n <= maximum_;
         }
     catch(std::exception const& e)
         {
@@ -345,19 +345,19 @@ bool tn_range<Number,Trammel>::is_valid(std::string const& s) const
 template<typename Number, typename Trammel>
 std::pair<Number,Number> tn_range<Number,Trammel>::limits() const
 {
-    return std::make_pair(min_, max_);
+    return std::make_pair(minimum_, maximum_);
 }
 
 template<typename Number, typename Trammel>
 Number tn_range<Number,Trammel>::trammel(Number n) const
 {
-    if(max_ <= n)
+    if(maximum_ <= n)
         {
-        return max_;
+        return maximum_;
         }
-    else if(n <= min_)
+    else if(n <= minimum_)
         {
-        return min_;
+        return minimum_;
         }
     else
         {
