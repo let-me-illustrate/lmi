@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.400 2006-06-29 19:31:47 wboutin Exp $
+// $Id: ChangeLog,v 1.401 2006-06-29 19:47:29 wboutin Exp $
 
 MAINTENANCE
 
@@ -6794,4 +6794,10 @@ Rename some members of class template tn_range.
   input_harmonization.cpp
   xml_notebook.cpp
 Rename some members of class template tn_range.
+
+20060629T1947Z <wboutin@massmutual.com> [1212]
+
+  wx_checks.cpp
+  wx_checks.hpp [new file]
+Include config.hpp in headers only.
 

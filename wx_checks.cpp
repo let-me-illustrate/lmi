@@ -19,14 +19,14 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: wx_checks.cpp,v 1.5 2006-01-29 13:52:01 chicares Exp $
+// $Id: wx_checks.cpp,v 1.6 2006-06-29 19:47:29 wboutin Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
 #   pragma hdrstop
-#endif
+#endif // __BORLANDC__
 
-#include "config.hpp" // LMI_MSW
+#include "wx_checks.hpp"
 
 #include <wx/defs.h>
 
