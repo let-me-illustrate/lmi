@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.397 2006-06-23 18:18:21 wboutin Exp $
+// $Id: ChangeLog,v 1.398 2006-06-29 18:21:17 wboutin Exp $
 
 MAINTENANCE
 
@@ -6777,4 +6777,9 @@ Synchronize census DateOfBirth and IssueAge.
 
   version.hpp
 Mark release candidate.
+
+20060629T1821Z <wboutin@massmutual.com> [1212]
+
+  tn_range.hpp
+Transpose documentation.
 
