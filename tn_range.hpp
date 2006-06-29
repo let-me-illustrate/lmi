@@ -1,4 +1,4 @@
-// Trammeled Numeric range type: template class declaration.
+// Trammeled Numeric range type: class template declaration.
 //
 // Copyright (C) 2004, 2005, 2006 Gregory W. Chicares.
 //
@@ -19,94 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: tn_range.hpp,v 1.6 2006-06-12 21:19:23 wboutin Exp $
-
-// Design notes for template class tn_range
-//
-// Class tn_range encapsulates a numeric value with upper and lower
-// bounds. Attempting to construct, copy, or assign a value outside
-// the bounded range sets the tn_range object's value to the closest
-// bound.
-//
-// This class is intended primarily for use with GUI input. Generally,
-// it is desirable not to let input enter an invalid state, so the
-// value-changing semantics are preferable to throwing an exception.
-// To assist clients in validating input, limits can be queried, and
-// candidate values tested for conformity with the allowed range.
-
-// Implementation notes for template class tn_range
-//
-// It is contemplated that this template class will be instantiated
-// to create numerous types in one translation unit for use in other
-// translation units. Given that usage, it makes sense to instantiate
-// those types explicitly in that one translation unit, in order to
-// avoid bloat. See special note on explicit instantiation below.
-//
-// Range limits are held in a template class that is given as a
-// template parameter and must be derived from class trammel_base.
-// This derived 'trammel' class can be reused with different numeric
-// types, for instance to produce distinct integer and floating-point
-// percentage UDTs that are constrained to [0%, 100%].
-//
-// The implicitly-defined copy ctor and copy assignment operator do
-// the right thing.
-
-// Floating-point comparisons: given
-//   double const z = 1.07;
-// 2.13.3/1 permits any ordering of {z, 1.07} and doesn't require them
-// to be equal, so a range type restricted to [0.0, 1.07] might, if
-// naively implemented, deem 1.07 to be an invalid value. The
-// implementation prevents this problem by adjusting the max_ and
-// min_ data members upward and downward respectively by a factor of
-// one plus epsilon.
-
-// Explicit instantiation
-//
-// Specific types require one translation unit (TU) for the
-// instantiation and a header to make them available to other TUs.
-
-// Design notes for template class trammel_base
-//
-// Abstract class trammel_base encapsulates range limits. Classes
-// derived from it are intended to be used only with template class
-// tn_range, to which it grants friendship; having only private
-// members, it cannot be used otherwise.
-//
-// If range limits were always integral, then they might have been
-// implemented as non-type template parameters, but floating-point
-// limits are important and often must assume non-integral values, as
-// for interest rates.
-//
-// If range limits were always constant, then they might have been
-// implemented as static data or function members. However, limits
-// often must vary depending on dynamic context, so virtual behavior
-// is required.
-//
-// TODO ?? Dynamic context not yet implemented.
-//
-// The discussion under "Floating-point comparisons" explains why
-// floating-point limits must be adjusted. Derived classes must
-// implement the 'nominal' limit functions; this class implements
-// non-virtual functions that adjust the 'nominal' limits. Rationale:
-// placing that adjustment in this base class ensures that it will be
-// performed as long as template class tn_range calls only the non-
-// virtual limit functions; users can write derived classes without
-// worrying about this.
-//
-// This class also provides a default value, which derived classes
-// must implement, and a sanity check that tests the invariant
-//   minimum() <= default_value() <= maximum()
-//
-// TODO ?? The not-yet-implemented facility to set limits dynamically
-// must ensure that sanity is preserved.
-//
-// This class provides distinct maximum() and minimum() functions
-// because that fits the intended use most naturally. For the same
-// reason, template class tn_range provides limits as a std::pair:
-// when used with a GUI, both limits would be needed at the same time.
-//
-// The implicitly-defined copy ctor and copy assignment operator do
-// the right thing.
+// $Id: tn_range.hpp,v 1.7 2006-06-29 18:21:17 wboutin Exp $
 
 #ifndef tn_range_hpp
 #define tn_range_hpp
@@ -126,6 +39,49 @@
 
 #include <utility> // std::pair
 
+/// Design notes for class template trammel_base.
+///
+/// Abstract class trammel_base encapsulates range limits. Classes
+/// derived from it are intended to be used only with class template
+/// tn_range, to which it grants friendship; having only private
+/// members, it cannot be used otherwise.
+///
+/// If range limits were always integral, then they might have been
+/// implemented as non-type template parameters, but floating-point
+/// limits are important and often must assume non-integral values, as
+/// for interest rates.
+///
+/// If range limits were always constant, then they might have been
+/// implemented as static data or function members. However, limits
+/// often must vary depending on dynamic context, so virtual behavior
+/// is required.
+///
+/// TODO ?? Dynamic context not yet implemented.
+///
+/// The discussion under "Floating-point comparisons" explains why
+/// floating-point limits must be adjusted. Derived classes must
+/// implement the 'nominal' limit functions; this class implements
+/// non-virtual functions that adjust the 'nominal' limits. Rationale:
+/// placing that adjustment in this base class ensures that it will be
+/// performed as long as class template tn_range calls only the non-
+/// virtual limit functions; users can write derived classes without
+/// worrying about this.
+///
+/// This class also provides a default value, which derived classes
+/// must implement, and a sanity check that tests the invariant
+///   minimum() <= default_value() <= maximum()
+///
+/// TODO ?? The not-yet-implemented facility to set limits dynamically
+/// must ensure that sanity is preserved.
+///
+/// This class provides distinct maximum() and minimum() functions
+/// because that fits the intended use most naturally. For the same
+/// reason, class template tn_range provides limits as a std::pair:
+/// when used with a GUI, both limits would be needed at the same time.
+///
+/// The implicitly-defined copy ctor and copy assignment operator do
+/// the right thing.
+
 template<typename T>
 class trammel_base
 {
@@ -143,6 +99,50 @@ class trammel_base
     virtual T nominal_maximum() const = 0;
     virtual T nominal_minimum() const = 0;
 };
+
+/// Design notes for class template tn_range.
+///
+/// Class tn_range encapsulates a numeric value with upper and lower
+/// bounds. Attempting to construct, copy, or assign a value outside
+/// the bounded range sets the tn_range object's value to the closest
+/// bound.
+///
+/// This class is intended primarily for use with GUI input. Generally,
+/// it is desirable not to let input enter an invalid state, so the
+/// value-changing semantics are preferable to throwing an exception.
+/// To assist clients in validating input, limits can be queried, and
+/// candidate values tested for conformity with the allowed range.
+
+/// Implementation notes for class template tn_range.
+///
+/// It is contemplated that this class template will be instantiated
+/// to create numerous types in one translation unit for use in other
+/// translation units. Given that usage, it makes sense to instantiate
+/// those types explicitly in that one translation unit, in order to
+/// avoid bloat. See special note on explicit instantiation below.
+///
+/// Range limits are held in a class template that is given as a
+/// template parameter and must be derived from class trammel_base.
+/// This derived 'trammel' class can be reused with different numeric
+/// types, for instance to produce distinct integer and floating-point
+/// percentage UDTs that are constrained to [0%, 100%].
+///
+/// The implicitly-defined copy ctor and copy assignment operator do
+/// the right thing.
+
+/// Floating-point comparisons: given
+///   double const z = 1.07;
+/// 2.13.3/1 permits any ordering of {z, 1.07} and doesn't require them
+/// to be equal, so a range type restricted to [0.0, 1.07] might, if
+/// naively implemented, deem 1.07 to be an invalid value. The
+/// implementation prevents this problem by adjusting the max_ and
+/// min_ data members upward and downward respectively by a factor of
+/// one plus epsilon.
+
+/// Explicit instantiation
+///
+/// Specific types require one translation unit (TU) for the
+/// instantiation and a header to make them available to other TUs.
 
 template<typename Number, typename Trammel>
 class tn_range
