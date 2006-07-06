@@ -19,11 +19,12 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xml_notebook.tpp,v 1.4 2006-01-29 13:52:01 chicares Exp $
+// $Id: xml_notebook.tpp,v 1.5 2006-07-06 16:23:30 wboutin Exp $
 
 #include "xml_notebook.hpp"
 
 #include "alert.hpp"
+#include "rtti_lmi.hpp"
 
 #include <boost/static_assert.hpp>
 #include <boost/type_traits.hpp>
