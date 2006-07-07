@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.402 2006-07-06 16:23:30 wboutin Exp $
+// $Id: ChangeLog,v 1.403 2006-07-07 01:28:11 chicares Exp $
 
 MAINTENANCE
 
@@ -6805,4 +6805,14 @@ Include config.hpp in headers only.
 
   xml_notebook.tpp
 Include appropriate header.
+
+20060707T0105Z <chicares@cox.net> [1212]
+
+  transferor.cpp
+Refactor.
+
+20060707T0128Z <chicares@cox.net> [1212]
+
+  transferor.cpp
+Treat certain unrecoverable errors as fatal.
 

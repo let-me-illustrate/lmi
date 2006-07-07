@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: transferor.cpp,v 1.9 2006-07-07 01:05:10 chicares Exp $
+// $Id: transferor.cpp,v 1.10 2006-07-07 01:28:11 chicares Exp $
 
 // Acknowledgment
 
@@ -137,13 +137,12 @@ bool Transferor::PerformTransfer(transfer_direction td)
 {
     if(!m_validatorWindow)
         {
-        warning()
+        fatal_error()
             << "Validator for '"
             << name()
             << "' not bound to any control."
             << LMI_FLUSH
             ;
-        return false;
         }
     wxWindowBase* control = m_validatorWindow;
 
@@ -198,14 +197,14 @@ bool Transferor::PerformTransfer(transfer_direction td)
         return Transfer(td, data_,             *textctrl    );
     else
         {
-        warning()
+        fatal_error()
             << "Unrecognized control '"
             << name()
             << "'."
             << LMI_FLUSH
             ;
-        return false;
         }
+    return false; // Actually unreachable, but gcc doesn't discern that.
 }
 
 // TODO ?? Use TransferString() with class wxControlWithItems instead
@@ -341,14 +340,13 @@ if(!dropped)
     {
         if(!(wxLB_SINGLE & control.GetWindowStyle()))
             {
-            warning()
+            fatal_error()
                 << "CheckListBox"
 // TODO ?? Show the offending control's name (unavailable for now).
 //                << "Control '" << name() << "'"
                 << " must be constrained to a single selection."
                 << LMI_FLUSH
                 ;
-            return false;
             }
         return TransferString(td, data, control);
     }
@@ -362,14 +360,13 @@ if(!dropped)
     {
         if(!(wxCB_READONLY & control.GetWindowStyle()))
             {
-            warning()
+            fatal_error()
                 << "ComboBox"
 // TODO ?? Show the offending control's name (unavailable for now).
 //                << "Control '" << name() << "'"
                 << " must be read only."
                 << LMI_FLUSH
                 ;
-            return false;
             }
         return TransferString(td, data, control);
     }
@@ -401,14 +398,13 @@ if(!dropped)
     {
         if(!(wxLB_SINGLE & control.GetWindowStyle()))
             {
-            warning()
+            fatal_error()
                 << "ListBox"
 // TODO ?? Show the offending control's name (unavailable for now).
 //                << "Control '" << name() << "'"
                 << " must be constrained to a single selection."
                 << LMI_FLUSH
                 ;
-            return false;
             }
         return TransferString(td, data, control);
     }
