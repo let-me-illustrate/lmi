@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.403 2006-07-07 01:28:11 chicares Exp $
+// $Id: ChangeLog,v 1.404 2006-07-07 02:09:07 chicares Exp $
 
 MAINTENANCE
 
@@ -6815,4 +6815,9 @@ Refactor.
 
   transferor.cpp
 Treat certain unrecoverable errors as fatal.
+
+20060707T0208Z <chicares@cox.net> [1212]
+
+  xml_notebook.xrc
+Add employee class; fix certain range limits.
 
