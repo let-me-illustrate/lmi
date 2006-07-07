@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.404 2006-07-07 02:09:07 chicares Exp $
+// $Id: ChangeLog,v 1.405 2006-07-07 11:22:08 chicares Exp $
 
 MAINTENANCE
 
@@ -6820,4 +6820,15 @@ Treat certain unrecoverable errors as fatal.
 
   xml_notebook.xrc
 Add employee class; fix certain range limits.
+
+20060707T1122Z <chicares@cox.net> [1220]
+
+  mvc_controller.cpp
+  mvc_controller.hpp
+  mvc_controller.tpp
+  mvc_model.cpp
+  mvc_model.hpp
+  mvc_view.cpp
+  mvc_view.hpp
+Import Model-View-Controller files from skeleton trunk.
 
