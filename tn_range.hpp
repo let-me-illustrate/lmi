@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: tn_range.hpp,v 1.8 2006-06-29 19:00:23 wboutin Exp $
+// $Id: tn_range.hpp,v 1.9 2006-07-08 00:52:18 chicares Exp $
 
 #ifndef tn_range_hpp
 #define tn_range_hpp
@@ -37,7 +37,7 @@
 #   define BOOST_STATIC_ASSERT(deliberately_ignored) /##/
 #endif // Defined __BORLANDC__ .
 
-#include <utility> // std::pair
+#include <string>
 
 /// Design notes for class template trammel_base.
 ///
@@ -56,48 +56,89 @@
 /// often must vary depending on dynamic context, so virtual behavior
 /// is required.
 ///
-/// TODO ?? Dynamic context not yet implemented.
+/// Floating-point limits must be adjusted. Given
+///   double const z = 1.07;
+/// 2.13.3/1 permits any ordering of {z, 1.07} and doesn't require
+/// that they be equal, so a range type restricted to [0.0, 1.07]
+/// might, if naively implemented, deem 1.07 to be an invalid value.
+/// The present implementation prevents that problem by adjusting the
+/// nominal minimum and maximum downward and upward, respectively, by
+/// a factor of one plus epsilon.
 ///
-/// The discussion under "Floating-point comparisons" explains why
-/// floating-point limits must be adjusted. Derived classes must
-/// implement the 'nominal' limit functions; this class implements
-/// non-virtual functions that adjust the 'nominal' limits. Rationale:
-/// placing that adjustment in this base class ensures that it will be
-/// performed as long as class template tn_range calls only the non-
-/// virtual limit functions; users can write derived classes without
-/// worrying about this.
+/// Private pure virtuals provide the nominal limits and a default
+/// value. Public nonvirtuals forward the default value and adjust the
+/// nominal limits. Performing that adjustment in this class ensures
+/// that it always takes place, the unadjusted limits being externally
+/// inaccessible.
 ///
-/// This class also provides a default value, which derived classes
-/// must implement, and a sanity check that tests the invariant
-///   minimum() <= default_value() <= maximum()
-///
-/// TODO ?? The not-yet-implemented facility to set limits dynamically
-/// must ensure that sanity is preserved.
-///
-/// This class provides distinct maximum() and minimum() functions
-/// because that fits the intended use most naturally. For the same
-/// reason, class template tn_range provides limits as a std::pair:
-/// when used with a GUI, both limits would be needed at the same time.
-///
-/// The implicitly-defined copy ctor and copy assignment operator do
-/// the right thing.
+/// This class also provides a function asserting the postcondition
+///   nominal_minimum() <= default_value() <= nominal_maximum()
+/// which should be called in the most-derived object's ctor. This is
+/// the classic post-constructor problem, which has no tidy general
+/// solution. If anyone later adds a ctor to class template tn_range
+/// or uses a class derived from class template trammel_base in an
+/// unanticipated way, then the postcondition could be violated, but
+/// even then only by committing the separate mistake of writing
+/// limits that are actually inconsistent.
 
 template<typename T>
 class trammel_base
 {
-    template<typename Number, typename Trammel> friend class tn_range;
+    friend class tn_range_test;
 
   public:
     virtual ~trammel_base() {}
 
-  private:
-    void check_sanity();
-    T maximum();
-    T minimum();
+    void assert_sanity   () const;
+    T minimum_minimorum  () const;
+    T default_initializer() const;
+    T maximum_maximorum  () const;
 
-    virtual T default_value()   const = 0;
-    virtual T nominal_maximum() const = 0;
+  protected:
+    trammel_base() {}
+    trammel_base(trammel_base const&) {}
+    trammel_base& operator=(trammel_base const&) {return *this;}
+
+  private:
     virtual T nominal_minimum() const = 0;
+    virtual T default_value  () const = 0;
+    virtual T nominal_maximum() const = 0;
+};
+
+/// Design notes for class template tn_range_base.
+///
+/// This class's raison d'être is to permit its member functions to be
+/// called across a shared-library boundary, and through a base-class
+/// pointer without knowing the template arguments of a concrete
+/// instance of derived class tn_range_base.
+///
+/// Member functions.
+///
+/// operator==(): Forwards to equal_to(). This string comparison is
+/// the only equality operator needed by the MVC framework.
+///
+/// diagnose_invalidity(): Convert a string argument to a number, and
+/// verify that the converted number lies within the permitted range;
+/// return a std::string that either explains why such conversion or
+/// verification failed, or is empty if both succeeded.
+///
+/// enforce_limits(): Constrain a derived class's value to its range
+/// limits.
+///
+/// equal_to(): Compare a string representation of a number to a
+/// derived class's value.
+///
+/// Implicitly-declared special member functions do the right thing.
+
+class LMI_SO tn_range_base
+    :public datum_base
+{
+  public:
+    bool operator==(std::string const& s) const {return equal_to(s);}
+
+    virtual std::string diagnose_invalidity(std::string const&) const = 0;
+    virtual void enforce_limits() = 0;
+    virtual bool equal_to(std::string const&) const = 0;
 };
 
 /// Design notes for class template tn_range.
@@ -105,48 +146,46 @@ class trammel_base
 /// Class tn_range encapsulates a numeric value with upper and lower
 /// bounds. Attempting to construct, copy, or assign a value outside
 /// the bounded range sets the tn_range object's value to the closest
-/// bound.
+/// bound. Limits may be altered dynamically subject to
+///   nominal_minimum() <= minimum() <= maximum() <= nominal_maximum()
+/// where all four quantities are adjusted as in class trammel_base.
 ///
-/// This class is intended primarily for use with GUI input. Generally,
+/// This class is intended primarily for use with GUI input. To assist
+/// clients in validating input, limits can be queried, and candidate
+/// values tested for conformity with the allowed range. Generally,
 /// it is desirable not to let input enter an invalid state, so the
 /// value-changing semantics are preferable to throwing an exception.
-/// To assist clients in validating input, limits can be queried, and
-/// candidate values tested for conformity with the allowed range.
-
+/// Accordingly, the invariant
+///   minimum() <= value() <= maximum()
+/// is maintained as a postcondition by all member functions save only
+/// the non-const versions of minimum() and maximum(): those two
+/// functions forbear to modify the value in order to respect the MVC
+/// Model's separation of operations that mutate the value (performed
+/// in MvcModel::Transmogrify()) from those that do not (performed in
+/// MvcModel::Harmonize()).
+///
 /// Implementation notes for class template tn_range.
 ///
 /// It is contemplated that this class template will be instantiated
-/// to create numerous types in one translation unit for use in other
-/// translation units. Given that usage, it makes sense to instantiate
-/// those types explicitly in that one translation unit, in order to
-/// avoid bloat. See special note on explicit instantiation below.
+/// to create numerous types in a single translation unit for use in
+/// other translation units. Given that usage, it makes sense to
+/// instantiate those types explicitly in that single translation
+/// unit, in order to avoid bloat.
 ///
-/// Range limits are held in a class template that is given as a
-/// template parameter and must be derived from class trammel_base.
-/// This derived 'trammel' class can be reused with different numeric
-/// types, for instance to produce distinct integer and floating-point
-/// percentage UDTs that are constrained to [0%, 100%].
+/// Range limits are held in a template class that is specified as a
+/// template argument; the implementation enforces the requirement
+/// that it be derived from class template trammel_base. Different
+/// 'trammel' template classes can be instantiated from the same class
+/// template for different numeric types--for instance, to create
+/// distinct integer and floating-point percentage UDTs that are
+/// constrained to an equivalent [0%, 100%] range.
 ///
 /// The implicitly-defined copy ctor and copy assignment operator do
 /// the right thing.
 
-/// Floating-point comparisons: given
-///   double const z = 1.07;
-/// 2.13.3/1 permits any ordering of {z, 1.07} and doesn't require them
-/// to be equal, so a range type restricted to [0.0, 1.07] might, if
-/// naively implemented, deem 1.07 to be an invalid value. The
-/// implementation prevents this problem by adjusting the maximum_ and
-/// minimum_ data members upward and downward respectively by a factor of
-/// one plus epsilon.
-
-/// Explicit instantiation
-///
-/// Specific types require one translation unit (TU) for the
-/// instantiation and a header to make them available to other TUs.
-
 template<typename Number, typename Trammel>
 class tn_range
-    :public datum_base
+    :public tn_range_base
     ,private boost::equality_comparable<tn_range<Number,Trammel> >
     ,private boost::equality_comparable<tn_range<Number,Trammel>, Number>
     ,private boost::equality_comparable<tn_range<Number,Trammel>, std::string>
@@ -161,13 +200,16 @@ class tn_range
             >::value
         ));
 
-  public:
+    friend class tn_range_test;
+
     typedef Number number_type;
     typedef Trammel trammel_type;
 
+  public:
     tn_range();
     explicit tn_range(Number);
     explicit tn_range(std::string const&);
+    virtual ~tn_range();
 
     tn_range& operator=(Number);
     tn_range& operator=(std::string const&);
@@ -176,23 +218,40 @@ class tn_range
     bool operator==(Number) const;
     bool operator==(std::string const&) const;
 
-    bool is_valid(Number) const;
-    bool is_valid(std::string const&) const;
-    std::pair<Number,Number> limits() const;
-    Number trammel(Number) const;
+    void minimum(Number);
+    void maximum(Number);
 
-    std::istream& read (std::istream& is);
-    std::ostream& write(std::ostream& os) const;
-
+    Number minimum() const;
+    Number maximum() const;
     Number value() const;
 
-// TODO ?? Begin kludge.
-//  private:
-// End kludge.
-    std::string str() const;
+// TODO ?? EGREGIOUS_DEFECT
+    virtual bool is_valid(std::string const&) const;
 
-    Number maximum_;
+  private:
+    std::string format_limits_for_error_message() const;
+    bool is_valid(Number) const;
+    std::string str() const;
+    Number trammel(Number) const;
+
+    // datum_base required implementation.
+    virtual std::istream& read (std::istream&);
+    virtual std::ostream& write(std::ostream&) const;
+
+    // tn_range_base required implementation.
+    virtual std::string diagnose_invalidity(std::string const&) const;
+    virtual void enforce_limits();
+    virtual bool equal_to(std::string const&) const;
+
+    Trammel trammel_;
+
+// TODO ?? EGREGIOUS_DEFECT
+#if 1
+  public:
     Number minimum_;
+    Number maximum_;
+  private:
+#endif // 1
     Number value_;
 };
 
