@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mc_enum.hpp,v 1.10 2006-01-29 13:52:00 chicares Exp $
+// $Id: mc_enum.hpp,v 1.11 2006-07-08 00:17:11 chicares Exp $
 
 // Acknowledgment
 //
@@ -33,7 +33,7 @@
 // that article; any defect here should not reflect on Hyman Rosen's
 // reputation.
 
-// Design notes--template class mc_enum
+// Design notes--class template mc_enum
 //
 // This class encapsulates C++ enumerations in a class that pairs them
 // with symbolic names and constrains them to given values. The
@@ -71,9 +71,9 @@
 // associated with the control here. It may be better to assert that a
 // control with no permissible value is grayed out.
 
-// Implementation notes--template class mc_enum
+// Implementation notes--class template mc_enum
 //
-// It is contemplated that this template class will be instantiated
+// It is contemplated that this class template will be instantiated
 // to create numerous types in one translation unit for use in other
 // translation units. Given that usage, it makes sense to instantiate
 // those types explicitly in that one translation unit, in order to
@@ -127,8 +127,6 @@
 
 #include "datum_base.hpp"
 
-#include "so_attributes.hpp"
-
 #include <boost/operators.hpp>
 
 #if !defined __BORLANDC__
@@ -155,6 +153,7 @@ class LMI_SO mc_enum_base
 
     virtual std::size_t allowed_ordinal() const = 0;
     virtual std::size_t cardinality() const = 0;
+    virtual std::size_t ordinal() const = 0;
     virtual std::string str(int) const = 0;
 
   private:
@@ -187,21 +186,21 @@ class mc_enum
     bool operator==(T) const;
     bool operator==(std::string const&) const;
 
-    // datum_base overrides. Consider moving the implementation into
-    // the base class.
+    // datum_base required implementation.
+    // TODO ?? Consider moving the implementation into the base class.
     virtual std::istream& read (std::istream&);
     virtual std::ostream& write(std::ostream&) const;
 
-    // mc_enum_base overrides.
+    // mc_enum_base required implementation.
     virtual std::size_t allowed_ordinal() const;
     virtual std::size_t cardinality() const;
+    virtual std::size_t ordinal() const;
     virtual std::string str(int) const;
 
     std::string str() const;
     T value() const;
 
   private:
-    std::size_t ordinal() const;
     std::size_t ordinal(std::string const&) const;
 
     T value_;
