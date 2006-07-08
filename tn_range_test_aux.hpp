@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: tn_range_test_aux.hpp,v 1.3 2006-01-29 13:52:00 chicares Exp $
+// $Id: tn_range_test_aux.hpp,v 1.4 2006-07-08 00:52:18 chicares Exp $
 
 #ifndef tn_range_test_aux_hpp
 #define tn_range_test_aux_hpp
@@ -38,12 +38,12 @@
 // any non-integer operation.
 
 template<typename T>
-struct percentage_trammel
+class percentage_trammel
     :public trammel_base<T>
 {
-    T nominal_maximum() const {return 100;}
     T nominal_minimum() const {return   0;}
     T default_value()   const {return   0;}
+    T nominal_maximum() const {return 100;}
 };
 
 typedef tn_range<int, percentage_trammel<int> > r_int_percentage;

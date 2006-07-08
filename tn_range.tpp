@@ -19,9 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: tn_range.tpp,v 1.6 2006-06-29 19:00:23 wboutin Exp $
-
-#include "config.hpp"
+// $Id: tn_range.tpp,v 1.7 2006-07-08 00:52:18 chicares Exp $
 
 #include "tn_range.hpp"
 
@@ -31,7 +29,10 @@
 #include <cmath> // std::pow()
 #include <exception>
 #include <istream>
+#include <limits>
 #include <ostream>
+#include <sstream>
+#include <stdexcept>
 
 namespace
 {
@@ -60,13 +61,29 @@ namespace
             }
     }
 
-    /// TODO ?? These exact-integer template functions are experimental.
+    /// Exact-integer function templates.
     ///
-    /// Motivation: ascertaining whether a floating-point value lies
-    /// within a range like [-1.07, +1.07] requires careful handling of
-    /// the endpoints, but exact range limits don't.
+    /// Motivation: Ascertaining whether a floating-point value lies
+    /// within a range like [-1.07, +1.07] requires careful handling
+    /// of the endpoints, but exact range limits don't.
     ///
-    /// Without builtin language support, this is difficult. A floating
+    /// Certainly (double)(1.07) is inexact on a binary machine. It
+    /// is evaluated [C++98 2.13.3/1] as one of the two exactly-
+    /// representable doubles closest to the real number 1.07--either
+    /// the next higher (call it 1.07+) or the next lower (1.07-).
+    /// The choice between these values is not guaranteed to be more
+    /// predictable than completely random. Now, if an input value of
+    /// 1.07+ is compared to a range with upper limit 1.07-, the user
+    /// is confronted with a puzzling diagnostic claiming that 1.07
+    /// is too high because the upper limit is 1.07 . Exactly such a
+    /// problem has been observed in practice when the present
+    /// precautions are not taken.
+    ///
+    /// To prevent that serious usability problem, every inexact range
+    /// limit is mapped to a value that is certain to lie outside the
+    /// real-number range by less than two times epsilon.
+    ///
+    /// This is difficult without builtin language support. A floating
     /// literal that is inexact may be translated to a floating value
     /// that is. Perhaps requiring that the value be integral is wise,
     /// or perhaps not: for an IEEE754 64-bit double, integral values
@@ -84,7 +101,7 @@ namespace
     /// some compilers would fail such an assertion even though the
     /// underlying hardware conforms to that standard.
     ///
-    /// This template function actually returns true iff
+    /// This function template actually returns true iff
     ///  - t is in the range that the floating-point type could
     ///    represent exactly; and
     ///  - t is in the range of long int; and
@@ -161,8 +178,10 @@ namespace
         // Here, '0 -' avoids a compiler warning about negating an
         // unsigned value.
         if
-            (       std::numeric_limits<T>::max() == t
-            ||  0 - std::numeric_limits<T>::max() == t
+            (       std::numeric_limits<T>::max()      == t
+            ||  0 - std::numeric_limits<T>::max()      == t
+            ||      std::numeric_limits<T>::infinity() == t
+            ||  0 - std::numeric_limits<T>::infinity() == t
             )
             {
             return t;
@@ -190,103 +209,117 @@ namespace
             return t;
             }
     }
+
+    /// The second argument of adjust_bound() must be cast to T if it
+    /// is negative. Otherwise, an integral promotion [5.3.1/7] might
+    /// be performed, and that would prevent template resolution. And
+    /// '0 -' avoids a compiler warning about negating an unsigned
+    /// value.
+
+    template<typename T>
+    T adjust_minimum(T t)
+    {
+        static T const extremum = std::numeric_limits<T>::is_signed
+            ? static_cast<T>(0 - std::numeric_limits<T>::max())
+            : static_cast<T>(0)
+            ;
+        return adjust_bound(t, extremum);
+    }
+
+    template<typename T>
+    T adjust_maximum(T t)
+    {
+        static T const extremum = std::numeric_limits<T>::max();
+        return adjust_bound(t, extremum);
+    }
 } // Unnamed namespace.
 
 template<typename T>
-void trammel_base<T>::check_sanity()
+void trammel_base<T>::assert_sanity() const
 {
     if(!(nominal_minimum() <= nominal_maximum()))
         {
         fatal_error()
-            << "Lower bound '"
+            << "Lower bound "
             << nominal_minimum()
-            << "' exceeds upper bound '"
+            << " exceeds upper bound "
             << nominal_maximum()
-            << "'."
+            << " ."
             << LMI_FLUSH
             ;
         }
-    else if(!(nominal_minimum() <= default_value()))
+    if(!(nominal_minimum() <= default_value()))
         {
         fatal_error()
-            << "Lower bound '"
+            << "Lower bound "
             << nominal_minimum()
-            << "' exceeds default value '"
+            << " exceeds default value "
             << default_value()
-            << "'."
+            << " ."
             << LMI_FLUSH
             ;
         }
-    else if(!(default_value() <= nominal_maximum()))
+    if(!(default_value() <= nominal_maximum()))
         {
         fatal_error()
-            << "Default value '"
+            << "Default value "
             << default_value()
-            << "' exceeds upper bound '"
+            << " exceeds upper bound "
             << nominal_maximum()
-            << "'."
+            << " ."
             << LMI_FLUSH
             ;
-        }
-    else
-        {
-        return;
         }
 }
 
 template<typename T>
-T trammel_base<T>::maximum()
+T trammel_base<T>::default_initializer() const
 {
-    return adjust_bound
-        (nominal_maximum()
-        ,std::numeric_limits<T>::max()
-        );
+    return default_value();
 }
 
-/// The second argument of adjust_bound() must be cast to T if it
-/// is negative. Otherwise, an integral promotion [5.3.1/7] might
-/// be performed, and that would prevent template resolution. And
-/// '0 -' avoids a compiler warning about negating an unsigned value.
+template<typename T>
+T trammel_base<T>::minimum_minimorum() const
+{
+    return adjust_minimum(nominal_minimum());
+}
 
 template<typename T>
-T trammel_base<T>::minimum()
+T trammel_base<T>::maximum_maximorum() const
 {
-    return adjust_bound
-        (nominal_minimum()
-        ,std::numeric_limits<T>::is_signed
-            ? static_cast<T>(0 - std::numeric_limits<T>::max())
-            : static_cast<T>(0)
-        );
+    return adjust_maximum(nominal_maximum());
 }
 
 template<typename Number, typename Trammel>
 tn_range<Number,Trammel>::tn_range()
+    :minimum_ (trammel_.minimum_minimorum())
+    ,maximum_ (trammel_.maximum_maximorum())
+    ,value_   (trammel_.default_initializer())
 {
-    Trammel x;
-    x.check_sanity();
-    maximum_   = x.maximum();
-    minimum_   = x.minimum();
-    value_     = x.default_value();
+    trammel_.assert_sanity();
 }
 
 template<typename Number, typename Trammel>
 tn_range<Number,Trammel>::tn_range(Number n)
+    :minimum_ (trammel_.minimum_minimorum())
+    ,maximum_ (trammel_.maximum_maximorum())
+    ,value_   (trammel(n))
 {
-    Trammel x;
-    x.check_sanity();
-    maximum_   = x.maximum();
-    minimum_   = x.minimum();
-    value_     = trammel(n);
+    trammel_.assert_sanity();
 }
 
 template<typename Number, typename Trammel>
 tn_range<Number,Trammel>::tn_range(std::string const& s)
+    :minimum_ (trammel_.minimum_minimorum())
+    ,maximum_ (trammel_.maximum_maximorum())
+    ,value_   (trammel(numeric_io_cast<Number>(s)))
 {
-    Trammel x;
-    x.check_sanity();
-    maximum_   = x.maximum();
-    minimum_   = x.minimum();
-    value_     = trammel(numeric_io_cast<Number>(s));
+    trammel_.assert_sanity();
+}
+
+template<typename Number, typename Trammel>
+tn_range<Number,Trammel>::~tn_range()
+{
 }
 
 template<typename Number, typename Trammel>
@@ -322,11 +355,171 @@ bool tn_range<Number,Trammel>::operator==(std::string const& s) const
 }
 
 template<typename Number, typename Trammel>
+void tn_range<Number,Trammel>::enforce_limits()
+{
+    value_ = trammel(value_);
+}
+
+template<typename Number, typename Trammel>
+bool tn_range<Number,Trammel>::equal_to(std::string const& s) const
+{
+    return operator==(s);
+}
+
+/// Change minimum. Postcondition:
+///   minimum_minimorum() <= minimum() <= maximum()
+/// but value() is not necessarily limited by the new minimum.
+
+template<typename Number, typename Trammel>
+void tn_range<Number,Trammel>::minimum(Number n)
+{
+    if(minimum() == n)
+        {
+        return;
+        }
+
+    Number candidate(adjust_minimum(n));
+    if(!(trammel_.minimum_minimorum() <= candidate))
+        {
+        fatal_error()
+            << "Cannot change lower bound to "
+            << candidate
+            << ", which is less than infimum "
+            << trammel_.minimum_minimorum()
+            << " ."
+            << LMI_FLUSH
+            ;
+        }
+    if(!(candidate <= maximum()))
+        {
+        fatal_error()
+            << "Cannot change lower bound to "
+            << candidate
+            << ", which is greater than upper bound "
+            << maximum()
+            << " ."
+            << LMI_FLUSH
+            ;
+        }
+
+    minimum_ = candidate;
+}
+
+/// Change maximum. Postcondition:
+///   minimum() <= maximum() <= maximum_maximorum()
+/// but value() is not necessarily limited by the new maximum.
+
+template<typename Number, typename Trammel>
+void tn_range<Number,Trammel>::maximum(Number n)
+{
+    if(maximum() == n)
+        {
+        return;
+        }
+
+    Number candidate(adjust_maximum(n));
+    if(!(minimum() <= candidate))
+        {
+        fatal_error()
+            << "Cannot change upper bound to "
+            << candidate
+            << ", which is less than lower bound "
+            << minimum()
+            << " ."
+            << LMI_FLUSH
+            ;
+        }
+    if(!(candidate <= trammel_.maximum_maximorum()))
+        {
+        fatal_error()
+            << "Cannot change upper bound to "
+            << candidate
+            << ", which is greater than supremum "
+            << trammel_.maximum_maximorum()
+            << " ."
+            << LMI_FLUSH
+            ;
+        }
+
+    maximum_ = candidate;
+}
+
+template<typename Number, typename Trammel>
+Number tn_range<Number,Trammel>::minimum() const
+{
+    return minimum_;
+}
+
+template<typename Number, typename Trammel>
+Number tn_range<Number,Trammel>::maximum() const
+{
+    return maximum_;
+}
+
+template<typename Number, typename Trammel>
+Number tn_range<Number,Trammel>::value() const
+{
+    return value_;
+}
+
+/// Show limits in a way suitable only for a diagnostic.
+///
+/// The trivial implementation that displays both upper and lower
+/// limits is not always suitable. Sometimes there's effectively no
+/// limit other than that imposed by the floating-point number system.
+/// In that case, it is confusing to tell end users to enter a number
+/// between, say, 0.0 and 1.79769e+308; what they really need to know
+/// is that the value must not be less than zero.
+///
+/// This implementation assumes that an error has been detected, so
+/// it signals an error if the value is within bounds. It is therefore
+/// not suitable for displaying limits when the value is acceptable.
+
+template<typename Number, typename Trammel>
+std::string tn_range<Number,Trammel>::format_limits_for_error_message() const
+{
+    static Number const extremum = std::numeric_limits<Number>::max();
+    std::ostringstream oss;
+    bool bounded_above = maximum_ < extremum;
+    bool bounded_below = -extremum < minimum_;
+    if(bounded_above && bounded_below)
+        {
+        oss
+            << "value must be between "
+            << numeric_io_cast<std::string>(minimum_)
+            << " and "
+            << numeric_io_cast<std::string>(maximum_)
+            << " inclusive."
+            ;
+        }
+    else if(!bounded_above && bounded_below)
+        {
+        oss
+            << numeric_io_cast<std::string>(minimum_)
+            << " is the lower limit."
+            ;
+        }
+    else if(bounded_above && !bounded_below)
+        {
+        oss
+            << numeric_io_cast<std::string>(maximum_)
+            << " is the upper limit."
+            ;
+        }
+    else
+        {
+        fatal_error() << "Unanticipated case." << LMI_FLUSH;
+        }
+    return oss.str();
+}
+
+template<typename Number, typename Trammel>
 bool tn_range<Number,Trammel>::is_valid(Number n) const
 {
     return minimum_ <= n && n <= maximum_;
 }
 
+// TODO ?? EGREGIOUS_DEFECT
 template<typename Number, typename Trammel>
 bool tn_range<Number,Trammel>::is_valid(std::string const& s) const
 {
@@ -343,21 +536,21 @@ bool tn_range<Number,Trammel>::is_valid(std::string const& s) const
 }
 
 template<typename Number, typename Trammel>
-std::pair<Number,Number> tn_range<Number,Trammel>::limits() const
+std::string tn_range<Number,Trammel>::str() const
 {
-    return std::make_pair(minimum_, maximum_);
+    return numeric_io_cast<std::string>(value_);
 }
 
 template<typename Number, typename Trammel>
 Number tn_range<Number,Trammel>::trammel(Number n) const
 {
-    if(maximum_ <= n)
-        {
-        return maximum_;
-        }
-    else if(n <= minimum_)
+    if(n <= minimum_)
         {
         return minimum_;
+        }
+    else if(maximum_ <= n)
+        {
+        return maximum_;
         }
     else
         {
@@ -381,14 +574,61 @@ std::ostream& tn_range<Number,Trammel>::write(std::ostream& os) const
 }
 
 template<typename Number, typename Trammel>
-std::string tn_range<Number,Trammel>::str() const
+std::string tn_range<Number,Trammel>::diagnose_invalidity
+    (std::string const& s
+    ) const
 {
-    return numeric_io_cast<std::string>(value_);
-}
+    static Number const extremum = std::numeric_limits<Number>::max();
+    Number n;
+    try
+        {
+        n = numeric_io_cast<Number>(s);
+        }
+    catch(std::exception const&)
+        {
+        std::ostringstream oss;
+        oss << "'" << s << "' is ill formed.";
+        return oss.str();
+        }
 
-template<typename Number, typename Trammel>
-Number tn_range<Number,Trammel>::value() const
-{
-    return value_;
+    if(is_valid(n))
+        {
+        return "";
+        }
+    else if(n < -extremum || extremum < n)
+        {
+        // C99 7.20.1/1 .
+        std::ostringstream oss;
+        oss
+            << s
+            << " is not representable."
+            ;
+        return oss.str();
+        }
+    else if(n < minimum_)
+        {
+        std::ostringstream oss;
+        oss
+            << s
+            << " is too low: "
+            << format_limits_for_error_message()
+            ;
+        return oss.str();
+        }
+    else if(maximum_ < n)
+        {
+        std::ostringstream oss;
+        oss
+            << s
+            << " is too high: "
+            << format_limits_for_error_message()
+            ;
+        return oss.str();
+        }
+    else
+        {
+        fatal_error() << "Unanticipated case." << LMI_FLUSH;
+        throw std::logic_error("Unreachable"); // Silence compiler warning.
+        }
 }
 

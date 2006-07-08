@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: tn_range_test.cpp,v 1.6 2006-01-30 05:26:14 chicares Exp $
+// $Id: tn_range_test.cpp,v 1.7 2006-07-08 00:52:18 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -27,8 +27,8 @@
 #endif // __BORLANDC__
 
 #include "tn_range.hpp"
-#include "tn_range.tpp" // Template class implementation.
-#include "tn_range_test_aux.hpp"
+#include "tn_range.tpp"          // Class template implementation.
+#include "tn_range_test_aux.hpp" // Template class instantiation.
 
 #define BOOST_INCLUDE_MAIN
 #include "test_tools.hpp"
@@ -36,20 +36,35 @@
 #include <algorithm> // std::min()
 #include <sstream>
 
-template<typename T>
-struct nonnegative
-    :public trammel_base<T>
-{
-    T nominal_maximum() const {return std::numeric_limits<T>::max();}
-    T nominal_minimum() const {return 0.0;}
-    T default_value()   const {return 1.0;}
-};
-
 // This should fail to compile:
 //   template class tn_range<double, std::string>;
 
+template<typename T>
+class nonnegative
+    :public trammel_base<T>
+{
+    T nominal_minimum() const {return 0.0;}
+    T default_value()   const {return 1.0;}
+    T nominal_maximum() const {return std::numeric_limits<T>::max();}
+};
+
 template class tn_range<double, nonnegative<double> >;
 typedef tn_range<double, nonnegative<double> > r_nonnegative;
+
+/// One reasonable interpretation of an "unbounded" floating-point
+/// range encompasses only normalized values that are nonsingular.
+
+template<typename T>
+class unbounded
+    :public trammel_base<T>
+{
+    T nominal_minimum() const {return -std::numeric_limits<T>::max();}
+    T default_value()   const {return 0.0;}
+    T nominal_maximum() const {return  std::numeric_limits<T>::max();}
+};
+
+template class tn_range<double, unbounded<double> >;
+typedef tn_range<double, unbounded<double> > r_unbounded;
 
 // Range type 'r_int_percentage' is explicitly instantiated in a
 // different translation unit. A different template class with the
@@ -59,7 +74,7 @@ typedef tn_range<double, percentage_trammel<double> > r_double_percentage;
 template class tn_range<double, percentage_trammel<double> >;
 
 // Although character and unsigned types aren't expected to be very
-// useful as the first template parameter of template class tn_range,
+// useful as the first template parameter of class template tn_range,
 // instantiating and testing examples here ensures that they work.
 
 typedef tn_range<signed char, percentage_trammel<signed char> > r_signed_char_percentage;
@@ -72,27 +87,49 @@ template class tn_range<unsigned int, percentage_trammel<unsigned int> >;
 // See the inline discussion where it is tested.
 
 template<typename T>
-struct surd
+class surd
     :public trammel_base<T>
 {
-    T nominal_maximum() const {return 0.070000000000000001;}
     T nominal_minimum() const {return 0.069999999999999999;}
     T default_value()   const {return 0.07;}
+    T nominal_maximum() const {return 0.070000000000000001;}
 };
 
 template class tn_range<double, surd<double> >;
 typedef tn_range<double, surd<double> > r_surd;
 
-r_nonnegative r_zero  ( 0.00000);
-r_nonnegative r_one   ( 1.00000);
-r_nonnegative r_e     ( 2.71828);
-r_nonnegative r_pi    ( 3.14159);
-
-std::string const s_e ("2.71828");
-std::string const s_pi("3.14159");
+/// An exception should be thrown if an attempt is made to use an
+/// object of type 'r_absurd', because its limits are crossed.
 
 template<typename T>
-void test_auxiliary_functions(char const* file, int line)
+class absurd
+    :public trammel_base<T>
+{
+    T nominal_minimum() const {return 1;}
+    T default_value()   const {return 0;}
+    T nominal_maximum() const {return 0;}
+};
+
+template class tn_range<int, absurd<int> >;
+typedef tn_range<int, absurd<int> > r_absurd;
+
+struct tn_range_test
+{
+    template<typename T>
+    static void test_auxiliary_functions(char const* file, int line);
+
+    template<typename T>
+    static void test_percentages(char const* file, int line);
+
+    static void test_diagnostics();
+
+    static void test_absurd_limits();
+
+    static void test();
+};
+
+template<typename T>
+void tn_range_test::test_auxiliary_functions(char const* file, int line)
 {
     INVOKE_BOOST_TEST_EQUAL(-1, signum(T(-1)), file, line);
     INVOKE_BOOST_TEST_EQUAL( 0, signum(T( 0)), file, line);
@@ -130,12 +167,20 @@ void test_auxiliary_functions(char const* file, int line)
 
     if(!exact)
         {
+        // An inexact bound should be adjusted to a different value,
+        // and it should be adjusted in the appropriate direction.
+        // Test those requirements separately to make the cause of any
+        // failure more readily apparent.
+
+        // Test direction of adjustment.
+
         INVOKE_BOOST_TEST_RELATION(-1.07, <=, adjust_bound(T(-1.07), static_cast<T>( std::numeric_limits<T>::max())), file, line);
         INVOKE_BOOST_TEST_RELATION( 1.07, <=, adjust_bound(T( 1.07), static_cast<T>( std::numeric_limits<T>::max())), file, line);
 
         INVOKE_BOOST_TEST_RELATION(-1.07, >=, adjust_bound(T(-1.07), static_cast<T>(-std::numeric_limits<T>::max())), file, line);
         INVOKE_BOOST_TEST_RELATION( 1.07, >=, adjust_bound(T( 1.07), static_cast<T>(-std::numeric_limits<T>::max())), file, line);
 
+        // Test inequality of original and adjusted values.
 
         INVOKE_BOOST_TEST_RELATION(-1.07, <, adjust_bound(T(-1.07), static_cast<T>( std::numeric_limits<T>::max())), file, line);
         INVOKE_BOOST_TEST_RELATION( 1.07, <, adjust_bound(T( 1.07), static_cast<T>( std::numeric_limits<T>::max())), file, line);
@@ -149,8 +194,12 @@ void test_auxiliary_functions(char const* file, int line)
     if(is_iec559 && has_infinity)
         {
         T const infT = std::numeric_limits<T>::infinity();
+
         INVOKE_BOOST_TEST_EQUAL(-1, signum(-infT), file, line);
         INVOKE_BOOST_TEST_EQUAL( 1, signum( infT), file, line);
+
+        INVOKE_BOOST_TEST_EQUAL(-infT, adjust_bound(T(-infT), static_cast<T>( std::numeric_limits<T>::max())), file, line);
+        INVOKE_BOOST_TEST_EQUAL( infT, adjust_bound(T( infT), static_cast<T>( std::numeric_limits<T>::max())), file, line);
         }
 
 #if !defined __BORLANDC__
@@ -167,7 +216,7 @@ void test_auxiliary_functions(char const* file, int line)
 }
 
 template<typename T>
-void test_percentages(char const* file, int line)
+void tn_range_test::test_percentages(char const* file, int line)
 {
     // These workarounds for negative one permit running these tests
     // with unsigned percentage types, and avoid compiler warnings.
@@ -193,14 +242,14 @@ void test_percentages(char const* file, int line)
     INVOKE_BOOST_TEST( t_percentage.is_valid(100), file, line);
     INVOKE_BOOST_TEST(!t_percentage.is_valid(101), file, line);
 
-    INVOKE_BOOST_TEST(!t_percentage.is_valid(" -1"), file, line);
-    INVOKE_BOOST_TEST( t_percentage.is_valid("  0"), file, line);
-    INVOKE_BOOST_TEST( t_percentage.is_valid("  1"), file, line);
-    INVOKE_BOOST_TEST( t_percentage.is_valid("100"), file, line);
-    INVOKE_BOOST_TEST(!t_percentage.is_valid("101"), file, line);
+    INVOKE_BOOST_TEST(!t_percentage.diagnose_invalidity(" -1").empty(), file, line);
+    INVOKE_BOOST_TEST( t_percentage.diagnose_invalidity("  0").empty(), file, line);
+    INVOKE_BOOST_TEST( t_percentage.diagnose_invalidity("  1").empty(), file, line);
+    INVOKE_BOOST_TEST( t_percentage.diagnose_invalidity("100").empty(), file, line);
+    INVOKE_BOOST_TEST(!t_percentage.diagnose_invalidity("101").empty(), file, line);
 
-    INVOKE_BOOST_TEST_EQUAL(t_percentage.limits().first ,   0, file, line);
-    INVOKE_BOOST_TEST_EQUAL(t_percentage.limits().second, 100, file, line);
+    INVOKE_BOOST_TEST_EQUAL(t_percentage.minimum(),   0, file, line);
+    INVOKE_BOOST_TEST_EQUAL(t_percentage.maximum(), 100, file, line);
 
     INVOKE_BOOST_TEST_EQUAL(t_percentage.trammel(n10),   0, file, line);
     INVOKE_BOOST_TEST_EQUAL(t_percentage.trammel(  0),   0, file, line);
@@ -231,13 +280,21 @@ void test_percentages(char const* file, int line)
     INVOKE_BOOST_TEST_EQUAL(100, t_percentage, file, line);
 }
 
-int test_main(int, char*[])
+void tn_range_test::test()
 {
     test_auxiliary_functions<signed char>(__FILE__, __LINE__);
     test_auxiliary_functions<int        >(__FILE__, __LINE__);
     test_auxiliary_functions<float      >(__FILE__, __LINE__);
     test_auxiliary_functions<double     >(__FILE__, __LINE__);
     test_auxiliary_functions<long double>(__FILE__, __LINE__);
+
+    r_nonnegative const r_zero  ( 0.00000);
+    r_nonnegative const r_one   ( 1.00000);
+    r_nonnegative const r_e     ( 2.71828);
+    r_nonnegative const r_pi    ( 3.14159);
+
+    std::string const s_e ("2.71828");
+    std::string const s_pi("3.14159");
 
     // *** Construction.
 
@@ -327,8 +384,8 @@ int test_main(int, char*[])
 
     // Floating-point limits having an exact binary representation.
 
-    BOOST_TEST_EQUAL(range1.limits().first , 0.0);
-    BOOST_TEST_EQUAL(range1.limits().second, std::numeric_limits<double>::max());
+    BOOST_TEST_EQUAL(range1.minimum(), 0.0);
+    BOOST_TEST_EQUAL(range1.maximum(), std::numeric_limits<double>::max());
     BOOST_TEST( range1.is_valid( 1.0));
     BOOST_TEST( range1.is_valid( 0.0));
     BOOST_TEST( range1.is_valid(-0.0));
@@ -372,12 +429,12 @@ int test_main(int, char*[])
 
     // Validation of strings representing floating-point values.
 
-    BOOST_TEST( range1.is_valid("-0.0"));
-    BOOST_TEST( range1.is_valid(" -0."));
-    BOOST_TEST( range1.is_valid(" -.0"));
-    BOOST_TEST( range1.is_valid("-0e0"));
-    BOOST_TEST( range1.is_valid("-0E0"));
-    BOOST_TEST(!range1.is_valid("$123"));
+    BOOST_TEST( range1.diagnose_invalidity("-0.0").empty());
+    BOOST_TEST( range1.diagnose_invalidity(" -0.").empty());
+    BOOST_TEST( range1.diagnose_invalidity(" -.0").empty());
+    BOOST_TEST( range1.diagnose_invalidity("-0e0").empty());
+    BOOST_TEST( range1.diagnose_invalidity("-0E0").empty());
+    BOOST_TEST(!range1.diagnose_invalidity("$123").empty());
 
     // *** Stream operators.
     r_nonnegative const pi(r_pi);
@@ -410,6 +467,149 @@ int test_main(int, char*[])
 
     test_percentages<r_double_percentage>     (__FILE__, __LINE__);
 
+    test_diagnostics();
+
+    test_absurd_limits();
+}
+
+void tn_range_test::test_diagnostics()
+{
+    r_unbounded r;
+    std::string v;
+    std::string s;
+
+    // Test range [-1.07, 1.07].
+
+    r.minimum(-1.07);
+    r.maximum( 1.07);
+
+    v = r.diagnose_invalidity("  0.0");
+    BOOST_TEST_EQUAL("", v);
+
+    v = r.diagnose_invalidity(" 1.07");
+    BOOST_TEST_EQUAL("", v);
+
+    v = r.diagnose_invalidity("-1.07");
+    BOOST_TEST_EQUAL("", v);
+
+    v = r.diagnose_invalidity(" 1.070000000000001");
+    s = " 1.070000000000001 is too high: value must be between -1.07 and 1.07 inclusive.";
+    BOOST_TEST_EQUAL(s, v);
+
+    v = r.diagnose_invalidity("-1.070000000000001");
+    s = "-1.070000000000001 is too low: value must be between -1.07 and 1.07 inclusive.";
+    BOOST_TEST_EQUAL(s, v);
+
+    v = r.diagnose_invalidity(" 1e999999");
+    s = " 1e999999 is not representable.";
+    BOOST_TEST_EQUAL(s, v);
+
+    v = r.diagnose_invalidity("-1e999999");
+    s = "-1e999999 is not representable.";
+    BOOST_TEST_EQUAL(s, v);
+
+    v = r.diagnose_invalidity("$123");
+    s = "'$123' is ill formed.";
+    BOOST_TEST_EQUAL(s, v);
+
+    // Test range [2.0, DBL_MAX]. Note that the maximum must be
+    // changed first, lest the new minimum of 2.0 be rejected as
+    // exceeding the old maximum of 1.07 . This might appear to argue
+    // for an atomic operation to set both limits, though in practice
+    // that has not yet proved necessary.
+
+    r.maximum( std::numeric_limits<double>::max());
+    r.minimum(2.0);
+
+    v = r.diagnose_invalidity(" 1.07");
+    s = " 1.07 is too low: 2 is the lower limit.";
+    BOOST_TEST_EQUAL(s, v);
+
+    v = r.diagnose_invalidity("-1e999999");
+    s = "-1e999999 is not representable.";
+    BOOST_TEST_EQUAL(s, v);
+
+    v = r.diagnose_invalidity("1e999999");
+    s = "1e999999 is not representable.";
+    BOOST_TEST_EQUAL(s, v);
+
+    // Test range [-DBL_MAX, 2.0].
+
+    r.minimum(-std::numeric_limits<double>::max());
+    r.maximum(2.0);
+
+    v = r.diagnose_invalidity(" 2.718281828");
+    s = " 2.718281828 is too high: 2 is the upper limit.";
+    BOOST_TEST_EQUAL(s, v);
+
+    // Test range [-DBL_MAX, DBL_MAX].
+
+    r.minimum(-std::numeric_limits<double>::max());
+    r.maximum( std::numeric_limits<double>::max());
+
+    v = r.diagnose_invalidity("1e999999");
+    s = "1e999999 is not representable.";
+    BOOST_TEST_EQUAL(s, v);
+}
+
+void tn_range_test::test_absurd_limits()
+{
+    absurd<int> a;
+
+    BOOST_TEST_THROW
+        (a.assert_sanity()
+        ,std::runtime_error
+        ,"Lower bound 1 exceeds upper bound 0 ."
+        );
+
+    BOOST_TEST_THROW
+        (r_absurd a;
+        ,std::runtime_error
+        ,"Lower bound 1 exceeds upper bound 0 ."
+        );
+
+    r_double_percentage p0;
+    r_double_percentage p1;
+
+    p0.minimum(1.0);
+    p0.maximum(2.0);
+
+    BOOST_TEST_EQUAL(p0.minimum(),   1.0);
+    BOOST_TEST_EQUAL(p0.maximum(),   2.0);
+
+    BOOST_TEST_THROW
+        (p0.minimum(-1.0)
+        ,std::runtime_error
+        ,"Cannot change lower bound to -1, which is less than infimum 0 ."
+        );
+
+    BOOST_TEST_THROW
+        (p0.minimum(3.0)
+        ,std::runtime_error
+        ,"Cannot change lower bound to 3, which is greater than upper bound 2 ."
+        );
+
+    BOOST_TEST_THROW
+        (p0.maximum(0.0)
+        ,std::runtime_error
+        ,"Cannot change upper bound to 0, which is less than lower bound 1 ."
+        );
+
+    BOOST_TEST_THROW
+        (p0.maximum(101.0)
+        ,std::runtime_error
+        ,"Cannot change upper bound to 101, which is greater than supremum 100 ."
+        );
+
+    // Make sure p1's limits aren't affected by the change in p0's.
+
+    BOOST_TEST_EQUAL(p1.minimum(),   0.0);
+    BOOST_TEST_EQUAL(p1.maximum(), 100.0);
+}
+
+int test_main(int, char*[])
+{
+    tn_range_test::test();
     return 0;
 }
 
