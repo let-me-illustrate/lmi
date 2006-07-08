@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.405 2006-07-07 11:22:08 chicares Exp $
+// $Id: ChangeLog,v 1.406 2006-07-08 01:01:41 chicares Exp $
 
 MAINTENANCE
 
@@ -6823,12 +6823,35 @@ Add employee class; fix certain range limits.
 
 20060707T1122Z <chicares@cox.net> [1220]
 
-  mvc_controller.cpp
-  mvc_controller.hpp
-  mvc_controller.tpp
-  mvc_model.cpp
-  mvc_model.hpp
-  mvc_view.cpp
-  mvc_view.hpp
+  mvc_controller.cpp [new in this trunk]
+  mvc_controller.hpp [new in this trunk]
+  mvc_controller.tpp [new in this trunk]
+  mvc_model.cpp      [new in this trunk]
+  mvc_model.hpp      [new in this trunk]
+  mvc_view.cpp       [new in this trunk]
+  mvc_view.hpp       [new in this trunk]
 Import Model-View-Controller files from skeleton trunk.
+
+20060708T0017Z <chicares@cox.net> [1221]
+
+  mc_enum.hpp
+Make ordinal() a virtual member of base class.
+
+20060708T0020Z <chicares@cox.net> [1221]
+
+  any_entity.hpp [new in this trunk]
+Import a header file from skeleton trunk.
+
+20060708T0052Z <chicares@cox.net> [1220]
+
+  tn_range.hpp
+  tn_range.tpp
+  tn_range_test.cpp
+  tn_range_test_aux.hpp
+Import improved numeric-range class from skeleton trunk.
+
+20060708T0101Z <chicares@cox.net> [1220]
+
+  objects.make
+Compile recently-added MVC files.
 
