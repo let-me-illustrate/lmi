@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: rtti_lmi.hpp,v 1.3 2006-07-09 13:40:14 chicares Exp $
+// $Id: rtti_lmi.hpp,v 1.4 2006-07-09 15:57:30 chicares Exp $
 
 #ifndef rtti_lmi_hpp
 #define rtti_lmi_hpp
@@ -59,9 +59,9 @@ namespace lmi
         std::free(demangled_name);
         return s;
     }
-#else
+#else  // gcc-3.x or prior, or not gcc at all.
     inline std::string Demangle(char const* mangled_name) {return mangled_name;}
-#endif // defined __GNUC__
+#endif // gcc-3.x or prior, or not gcc at all.
   } // namespace detail
 
 /// This wrapper makes std::type_info generally useful.
