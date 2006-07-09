@@ -19,12 +19,14 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input.hpp,v 1.13 2006-06-15 18:06:00 wboutin Exp $
+// $Id: input.hpp,v 1.14 2006-07-09 17:27:05 chicares Exp $
 
 #ifndef input_hpp
 #define input_hpp
 
 #include "config.hpp"
+
+#include "mvc_model.hpp"
 
 #include "any_member.hpp"
 #include "ce_product_name.hpp"
@@ -61,20 +63,41 @@ class InputSequence;
 /// it captures user input exactly. The other, this class, holds data
 /// of various types that a real program might capture from GUI input
 /// and use downstream. These two data structures are distinct because
-/// conversion between them may not perfectly preserve value.
+/// this class's UDTs generally store arithmetic quantities as native
+/// arithmetic types, whereas it's simplest for the Controller to hold
+/// all data uniformly as strings in its map; and because conversion
+/// between them may not perfectly preserve value, notably in the case
+/// of floating-point quantities.
 ///
 /// For example, "1.07" in a text control may be translated to
-///   (double)(1.07)
+///   (double)(1.07) [an implementation-defined value: C++98 2.13.3/1]
 /// but the latter, converted to a string, with the maximum precision
-/// the machine is capable of, would differ from the original "1.07".
+/// the machine is capable of, could differ from the original "1.07".
 /// A user who reloads saved input from a file would likely protest
-/// "but I didn't say 1.0700000000001". Truncating to a 'reasonable'
-/// precision merely engenders complaints from other users who may
-/// enter pi to machine precision and expect more than "3.1416": there
-/// is no universally reasonable way to truncate numbers.
-///
-/// [Note: that example impedes interconvertibility. Adding floating-
-/// point text controls later will force us to grapple with that.]
+/// "but I didn't say 1.0700000000001". Truncating to less precision
+/// than is available merely engenders complaints from other users who
+/// may enter pi to machine precision and expect more than "3.1416".
+/// This framework uses function template numeric_io_cast() (which
+/// avoids this problem as well as is possible for decimal fractions)
+/// to convert what the user types to a native arithmetic type. Iff
+/// that changes the value, then user input is altered accordingly.
+/// For instance, on the author's machine, a number entered in an edit
+/// control as
+///   1.07000000000000081
+/// is transformed to
+///   1.070000000000001
+/// as soon as the edit control loses focus, because numeric_io_cast()
+/// converts them to different strings; but the input string
+///   1.07000000000000011
+/// is not altered. Formally, let
+///   N be numeric_io_cast<std::string>(double), and
+///   S be numeric_io_cast<double>(std::string);
+/// then
+///   S( 1.07000000000000081 ) == S( 1.070000000000001 )
+/// where both convert to "1.070000000000001", but
+///   N("1.07000000000000081") <> N("1.070000000000001")
+/// the relative error being epsilon. The general rule is that user
+/// (string) input X is altered to S(X) iff N(X) <> N(S(X)).
 ///
 /// Data members are UDTs that help express certain relationships
 /// among the controls that represent them. For example:
@@ -85,54 +108,41 @@ class InputSequence;
 ///  - a radiobox might offer three choices, but allow only the first
 ///    two if the input object is in a particular state determined by
 ///    the contents of other controls;
-///  - a text control that represents a number might have a maximum
-///    and a minimum value.
+///  - a text control that represents a number might have a minimum
+///    and a maximum value.
 /// These UDTs bear values in a natural, more primitive type, provide
 /// for conversion to and from strings, and hold enablement state and
 /// other information for use by controls.
 ///
-/// Harmonize() and Transmogrify() both enforce various relationships
-/// among data and their associated controls. Harmonize() updates
-/// range limits and conditional enablement, but does not affect the
-/// value of any datum. Transmogrify() changes data values as required
-/// to enforce consistency. Neither directly changes any control, of
-/// course: that's the Controller's job. Harmonize() is notionally
-/// const in that it must not change any datum's value--a condition
-/// that is tested carefully, and engenders an exception if violated.
-/// [TODO ?? No such exception is yet thrown in this trunk.]
-/// It cannot be physically const without making UDT members (other
-/// than the UDT's value) mutable, which they must not be because they
-/// affect the UDT's state, as observable by equality comparison or,
-/// often, by mere inspection of the View.
+/// Usually, data member names ending in a single '_' are preferred.
+/// However, this class's data members' names nominate Model entities
+/// that are referenced externally (in xml as well as C++ files)
+/// as strings (through base class template MemberSymbolTable), and
+/// therefore readability overcomes the usual convention.
 ///
-/// reset_database(): Reset database if necessary, i.e., if the
-/// product or any database axis changed. Conditionally update
-/// general-account rate (see implementation for details).
-///
-/// TODO ?? Add functions to convert to and from a std::map<std::string> >?
+/// ResetDatabase(): Reset database if necessary, i.e., if the product
+/// or any database axis changed. Conditionally update general-account
+/// rate (see implementation for details).
 
 class LMI_SO Input
-    :public MemberSymbolTable<Input>
+    :virtual private obstruct_slicing<Input>
+    ,public MvcModel
+    ,public MemberSymbolTable<Input>
     ,private boost::equality_comparable<Input>
-    ,virtual private obstruct_slicing<Input>
 {
   public:
     Input();
     Input(Input const&);
-    ~Input();
+    virtual ~Input();
 
     Input& operator=(Input const&);
     bool operator==(Input const&) const;
 
     std::string differing_fields(Input const&) const;
 
-    void Harmonize();
-    void Transmogrify();
-
   private:
-    // TODO ?? Is there no way around this? Maybe a virtual that's called
-    // in the base?
-    void ascribe_members();
+    void AscribeMembers();
+    void ResetDatabase();
 
     // TODO ?? Dubious stuff to support scalar alternative controls.
     void WithdrawalChanged();
@@ -142,9 +152,18 @@ class LMI_SO Input
         (InputSequence const& s
         );
 
-    void reset_database();
+    // MvcModel required implementation.
+    virtual datum_base const* DoBaseDatumPointer(std::string const&) const;
+    virtual any_entity      & DoEntity(std::string const&)      ;
+    virtual any_entity const& DoEntity(std::string const&) const;
+    virtual NamesType const& DoNames() const;
+    virtual StateType        DoState() const;
+    virtual void DoCustomizeInitialValues();
+    virtual void DoEnforceRangeLimit(std::string const&);
+    virtual void DoHarmonize();
+    virtual void DoTransmogrify();
 
-    std::auto_ptr<TDatabase> database                        ;
+    std::auto_ptr<TDatabase> database;
 
     // TODO ?? Temporary.
     typedef datum_string datum_sequence;
@@ -379,6 +398,66 @@ void LMI_SO convert_from_ihs
     (std::vector<IllusInputParms> const&
     ,std::vector<Input>&
     );
+
+/// Struct template reconstitutor specialization for all UDTs used in
+/// this Model. A single specialization suffices because all of these
+/// UDTs share a common base class.
+
+template<typename ClassType>
+struct reconstitutor<datum_base, ClassType>
+{
+    typedef datum_base DesiredType;
+    static DesiredType* reconstitute(any_member<ClassType>& m)
+        {
+        DesiredType* z = 0;
+        z = exact_cast<ce_product_name         >(m); if(z) return z;
+        z = exact_cast<datum_string            >(m); if(z) return z;
+        z = exact_cast<mce_basis               >(m); if(z) return z;
+        z = exact_cast<mce_class               >(m); if(z) return z;
+        z = exact_cast<mce_country             >(m); if(z) return z;
+        z = exact_cast<mce_dbopt               >(m); if(z) return z;
+        z = exact_cast<mce_defn_life_ins       >(m); if(z) return z;
+        z = exact_cast<mce_defn_material_change>(m); if(z) return z;
+        z = exact_cast<mce_from_point          >(m); if(z) return z;
+        z = exact_cast<mce_fund_input_method   >(m); if(z) return z;
+        z = exact_cast<mce_gender              >(m); if(z) return z;
+        z = exact_cast<mce_interest_rate_type  >(m); if(z) return z;
+        z = exact_cast<mce_loan_rate_type      >(m); if(z) return z;
+        z = exact_cast<mce_mec_avoid_method    >(m); if(z) return z;
+        z = exact_cast<mce_mode                >(m); if(z) return z;
+        z = exact_cast<mce_part_mort_table     >(m); if(z) return z;
+        z = exact_cast<mce_pmt_strategy        >(m); if(z) return z;
+        z = exact_cast<mce_premium_table       >(m); if(z) return z;
+        z = exact_cast<mce_report_column       >(m); if(z) return z;
+        z = exact_cast<mce_run_order           >(m); if(z) return z;
+        z = exact_cast<mce_sa_strategy         >(m); if(z) return z;
+        z = exact_cast<mce_sep_acct_basis      >(m); if(z) return z;
+        z = exact_cast<mce_smoking             >(m); if(z) return z;
+        z = exact_cast<mce_solve_from          >(m); if(z) return z;
+        z = exact_cast<mce_solve_target        >(m); if(z) return z;
+        z = exact_cast<mce_solve_tgt_at        >(m); if(z) return z;
+        z = exact_cast<mce_solve_to            >(m); if(z) return z;
+        z = exact_cast<mce_solve_type          >(m); if(z) return z;
+        z = exact_cast<mce_state               >(m); if(z) return z;
+        z = exact_cast<mce_survival_limit      >(m); if(z) return z;
+        z = exact_cast<mce_table_rating        >(m); if(z) return z;
+        z = exact_cast<mce_term_adj_method     >(m); if(z) return z;
+        z = exact_cast<mce_to_point            >(m); if(z) return z;
+        z = exact_cast<mce_uw_basis            >(m); if(z) return z;
+        z = exact_cast<mce_yes_or_no           >(m); if(z) return z;
+        z = exact_cast<tnr_attained_age        >(m); if(z) return z;
+        z = exact_cast<tnr_corridor_factor     >(m); if(z) return z;
+        z = exact_cast<tnr_date                >(m); if(z) return z;
+        z = exact_cast<tnr_duration            >(m); if(z) return z;
+        z = exact_cast<tnr_issue_age           >(m); if(z) return z;
+        z = exact_cast<tnr_month               >(m); if(z) return z;
+        z = exact_cast<tnr_nonnegative_double  >(m); if(z) return z;
+        z = exact_cast<tnr_nonnegative_integer >(m); if(z) return z;
+        z = exact_cast<tnr_proportion          >(m); if(z) return z;
+        z = exact_cast<tnr_unrestricted_double >(m); if(z) return z;
+        return z;
+        }
+};
 
 #endif // input_hpp
 
