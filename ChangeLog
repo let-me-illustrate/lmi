@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.406 2006-07-08 01:01:41 chicares Exp $
+// $Id: ChangeLog,v 1.407 2006-07-09 13:40:14 chicares Exp $
 
 MAINTENANCE
 
@@ -6854,4 +6854,9 @@ Import improved numeric-range class from skeleton trunk.
 
   objects.make
 Compile recently-added MVC files.
+
+20060709T1340Z <chicares@cox.net> [1220]
+
+  rtti_lmi.hpp
+Prevent segfault due to gcc defect.
 
