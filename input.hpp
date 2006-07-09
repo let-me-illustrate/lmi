@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input.hpp,v 1.14 2006-07-09 17:27:05 chicares Exp $
+// $Id: input.hpp,v 1.15 2006-07-09 18:39:07 chicares Exp $
 
 #ifndef input_hpp
 #define input_hpp
@@ -119,10 +119,6 @@ class InputSequence;
 /// that are referenced externally (in xml as well as C++ files)
 /// as strings (through base class template MemberSymbolTable), and
 /// therefore readability overcomes the usual convention.
-///
-/// ResetDatabase(): Reset database if necessary, i.e., if the product
-/// or any database axis changed. Conditionally update general-account
-/// rate (see implementation for details).
 
 class LMI_SO Input
     :virtual private obstruct_slicing<Input>
@@ -142,7 +138,6 @@ class LMI_SO Input
 
   private:
     void AscribeMembers();
-    void ResetDatabase();
 
     // TODO ?? Dubious stuff to support scalar alternative controls.
     void WithdrawalChanged();
@@ -153,6 +148,7 @@ class LMI_SO Input
         );
 
     // MvcModel required implementation.
+    virtual void DoAdaptExternalities();
     virtual datum_base const* DoBaseDatumPointer(std::string const&) const;
     virtual any_entity      & DoEntity(std::string const&)      ;
     virtual any_entity const& DoEntity(std::string const&) const;

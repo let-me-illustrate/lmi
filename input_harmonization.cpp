@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_harmonization.cpp,v 1.27 2006-07-09 17:27:05 chicares Exp $
+// $Id: input_harmonization.cpp,v 1.28 2006-07-09 18:39:07 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -49,7 +49,10 @@ namespace
         }
 } // Unnamed namespace.
 
-/// Implementation notes: general-account rate.
+/// Implementation notes: DoAdaptExternalities().
+///
+/// Reset database if necessary, i.e., if the product or any database
+/// axis changed. Conditionally update general-account rate.
 ///
 /// If the general-account interest-rate field holds the default value
 /// for the former product before the product changed, then change its
@@ -76,7 +79,7 @@ namespace
 /// that would only frustrate users running inforce or backdated
 /// illustrations.
 
-void Input::ResetDatabase()
+void Input::DoAdaptExternalities()
 {
     // This early-exit condition has to fail the first time this
     // function is called, because the product name is implicitly
@@ -143,8 +146,6 @@ void Input::ResetDatabase()
 
 void Input::DoHarmonize()
 {
-    ResetDatabase();
-
     bool anything_goes    = global_settings::instance().ash_nazg();
     bool home_office_only = global_settings::instance().mellon();
 
@@ -334,8 +335,8 @@ void Input::DoHarmonize()
     min_date_of_birth.julian_day_number(EffectiveDate.value());
     min_date_of_birth.add_years(-100, false);
 
-    DateOfBirth     .maximum_ = EffectiveDate.value();
     DateOfBirth     .minimum_ = min_date_of_birth.julian_day_number();
+    DateOfBirth     .maximum_ = EffectiveDate.value();
 // End kludge.
     RetirementAge   .enable("No"  == DeprecatedUseDOR);
     DateOfRetirement.enable("Yes" == DeprecatedUseDOR);
@@ -652,9 +653,9 @@ false // Silly workaround for now.
     SeparateAccountRateType.allow(mce_cred_rate , false);
     SeparateAccountRateType.allow(mce_net_rate  , anything_goes);
 
-    bool CurrIntRateSolve = false; // May be useful someday.
-    GeneralAccountRate .enable(!CurrIntRateSolve);
-    SeparateAccountRate.enable(!CurrIntRateSolve);
+    bool curr_int_rate_solve = false; // May be useful someday.
+    GeneralAccountRate .enable(!curr_int_rate_solve);
+    SeparateAccountRate.enable(!curr_int_rate_solve);
 
     // TODO ?? VLR not yet implemented.
     bool allow_vlr =
@@ -928,8 +929,6 @@ false // Silly workaround for now.
 
     SolveTargetCashSurrenderValue.enable(actually_solving && mce_solve_for_target == SolveTarget);
     DeprecatedSolveTgtAtWhich    .enable(actually_solving && mce_solve_for_target == SolveTarget);
-
-    DoTransmogrify(); // TODO ?? This obviously doesn't belong here.
 }
 
 void Input::DoTransmogrify()
