@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: rtti_lmi.hpp,v 1.2 2006-06-07 17:07:43 wboutin Exp $
+// $Id: rtti_lmi.hpp,v 1.3 2006-07-09 13:40:14 chicares Exp $
 
 #ifndef rtti_lmi_hpp
 #define rtti_lmi_hpp
@@ -44,9 +44,13 @@ namespace lmi
 
   namespace detail
   {
-    /// Demangle C++ names. Only gcc is supported at this time.
+    /// Demangle C++ names. Only gcc is supported at this time, and
+    /// only from version 4, because the gcc-3.x demangler so gravely
+    /// broken that it actually segfaults on some input: see
+    ///   http://sf.net/mailarchive/message.php?msg_id=17327824
+    ///   http://sf.net/tracker/?func=detail&atid=102435&aid=1504421&group_id=2435
 
-#if defined __GNUC__
+#if defined __GNUC__ && 40000 <= LMI_GCC_VERSION
     inline std::string Demangle(char const* mangled_name)
     {
         int status = 0;
