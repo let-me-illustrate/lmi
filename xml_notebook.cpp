@@ -1,4 +1,4 @@
-// Input 'notebook' (tabbed dialog) driven by xml resources.
+// Obsolescent MVC Controller for life insurance.
 //
 // Copyright (C) 2003, 2004, 2005, 2006 Gregory W. Chicares.
 //
@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xml_notebook.cpp,v 1.33 2006-07-09 17:27:05 chicares Exp $
+// $Id: xml_notebook.cpp,v 1.34 2006-07-09 23:16:41 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -221,17 +221,15 @@ void XmlNotebook::ConditionallyEnable()
 }
 
 void XmlNotebook::ConditionallyEnableControl
-    (std::string const& input_name
+    (std::string const& name
     ,wxWindow&          control
     )
 {
-    control.Enable
-        (input_[input_name].cast_blithely<datum_base>()->is_enabled()
-        );
+    control.Enable(input_[name].cast_blithely<datum_base>()->is_enabled());
 }
 
 void XmlNotebook::ConditionallyEnableItems
-    (std::string const& input_name
+    (std::string const& name
     ,wxWindow&          control
     )
 {
@@ -241,10 +239,10 @@ void XmlNotebook::ConditionallyEnableItems
     //
     bool control_should_be_enabled = control.IsEnabled();
 
-    mc_enum_base const* base_datum = input_[input_name].cast_blithely<mc_enum_base>();
+    mc_enum_base const* datum = input_[name].cast_blithely<mc_enum_base>();
     // TODO ?? Apparently this can never throw. Keep it in case we
     // find a way to use a dynamic cast.
-    if(!base_datum)
+    if(!datum)
         {
         fatal_error() << "Input data must be enumerative." << LMI_FLUSH;
         }
@@ -257,15 +255,15 @@ void XmlNotebook::ConditionallyEnableItems
         }
     if(radiobox)
         {
-        for(std::size_t j = 0; j < base_datum->cardinality(); ++j)
+        for(std::size_t j = 0; j < datum->cardinality(); ++j)
             {
-            radiobox->Enable(j, base_datum->is_allowed(j));
+            radiobox->Enable(j, datum->is_allowed(j));
             }
         // WX !! This looks like a library problem.
         // TODO ?? Defeats smooth keyboard navigation:
-        radiobox->SetSelection(base_datum->allowed_ordinal());
+        radiobox->SetSelection(datum->allowed_ordinal());
         // TODO ?? ...but this (alone) lets a disabled radiobutton be selected:
-        // base_datum->force_to_allowable_value();
+        // datum->force_to_allowable_value();
 
         // TODO ?? Need to do something like this:
         // input_["FundChoiceType"].cast_blithely<mc_enum_base>()->force_to_allowable_value();
@@ -273,11 +271,11 @@ void XmlNotebook::ConditionallyEnableItems
         }
     else if(itembox)
         {
-        if(ItemBoxNeedsRefreshing(base_datum, *itembox))
+        if(ItemBoxNeedsRefreshing(datum, *itembox))
             {
-            RefreshItemBox(base_datum, *itembox);
+            RefreshItemBox(datum, *itembox);
             }
-        itembox->Select(base_datum->allowed_ordinal());
+        itembox->Select(datum->allowed_ordinal());
         }
     else
         {
@@ -291,7 +289,7 @@ void XmlNotebook::ConditionallyEnableItems
 // TODO ?? Doesn't need to be a member?
 // TODO ?? This can be further improved.
 bool XmlNotebook::ItemBoxNeedsRefreshing
-    (mc_enum_base const* base_datum
+    (mc_enum_base const* datum
     ,wxControlWithItems& itembox
     )
 {
@@ -304,24 +302,24 @@ bool XmlNotebook::ItemBoxNeedsRefreshing
         }
     if
         (   static_cast<std::size_t>(itembox.GetCount())
-        !=  base_datum->cardinality()
+        !=  datum->cardinality()
         )
         {
 //        return false; // wrong, no?
         return true;
         }
-    for(std::size_t j = 0; j < base_datum->cardinality(); ++j)
+    for(std::size_t j = 0; j < datum->cardinality(); ++j)
         {
-        if(!base_datum->is_allowed(j))
+        if(!datum->is_allowed(j))
             {
             return true;
             }
 
-//        if(base_datum->is_allowed(j))
+//        if(datum->is_allowed(j))
             {
             // Isn't this condition too restrictive?
             // They won't align if any item is disabled.
-            if(itembox.GetString(j) != base_datum->str(j))
+            if(itembox.GetString(j) != datum->str(j))
                 {
 //                return false; // wrong, no?
                 return true;
@@ -334,7 +332,7 @@ bool XmlNotebook::ItemBoxNeedsRefreshing
 
 // TODO ?? Alphabetize.
 void XmlNotebook::RefreshItemBox
-    (mc_enum_base const* base_datum
+    (mc_enum_base const* datum
     ,wxControlWithItems& itembox
     )
 {
@@ -352,11 +350,11 @@ void XmlNotebook::RefreshItemBox
     // WX !! Append(wxArrayString const&) "may be much faster"
     // according to wx online help, but that seems untrue: its
     // implementation just uses a loop.
-    for(std::size_t j = 0; j < base_datum->cardinality(); ++j)
+    for(std::size_t j = 0; j < datum->cardinality(); ++j)
         {
-        if(base_datum->is_allowed(j))
+        if(datum->is_allowed(j))
             {
-            itembox.Append(base_datum->str(j));
+            itembox.Append(datum->str(j));
             }
         }
 
@@ -364,10 +362,10 @@ void XmlNotebook::RefreshItemBox
     // default item that would get chosen when all are impermissible.
     if(0 == itembox.GetCount())
         {
-        itembox.Append(base_datum->str(base_datum->allowed_ordinal()));
+        itembox.Append(datum->str(datum->allowed_ordinal()));
         }
     itembox.Select
-        (itembox.FindString(base_datum->str(base_datum->allowed_ordinal()))
+        (itembox.FindString(datum->str(datum->allowed_ordinal()))
         );
     itembox.Thaw();
     updates_blocked_ = updates_were_blocked;
@@ -375,14 +373,14 @@ void XmlNotebook::RefreshItemBox
 
 // TODO ?? Alphabetize.
 void XmlNotebook::SetupControlItems
-    (std::string const& input_name
+    (std::string const& name
     ,wxWindow&          control
     )
 {
-    mc_enum_base const* base_datum = input_[input_name].cast_blithely<mc_enum_base>();
+    mc_enum_base const* datum = input_[name].cast_blithely<mc_enum_base>();
     // TODO ?? Apparently this can never throw. Keep it in case we
     // find a way to use a dynamic cast.
-    if(!base_datum)
+    if(!datum)
         {
         fatal_error() << "Input data must be enumerative." << LMI_FLUSH;
         }
@@ -397,43 +395,43 @@ void XmlNotebook::SetupControlItems
         {
         if
             (   static_cast<std::size_t>(radiobox->GetCount())
-            !=  base_datum->cardinality()
+            !=  datum->cardinality()
             )
             {
             fatal_error()
                 << "Radiobox '"
-                << input_name
+                << name
                 << "' has "
                 << radiobox->GetCount()
                 << " items, but datatype expects "
-                << base_datum->cardinality()
+                << datum->cardinality()
                 << "."
                 << LMI_FLUSH
                 ;
             }
-        for(std::size_t j = 0; j < base_datum->cardinality(); ++j)
+        for(std::size_t j = 0; j < datum->cardinality(); ++j)
             {
-            if(base_datum->str(j) != radiobox->GetString(j))
+            if(datum->str(j) != radiobox->GetString(j))
                 {
                 fatal_error()
                     << "Radiobox '"
-                    << input_name
+                    << name
                     << "' button ["
                     << j
                     << "] must be '"
-                    << base_datum->str(j)
+                    << datum->str(j)
                     << "', but instead it is '"
                     << radiobox->GetString(j)
                     << "'."
                     << LMI_FLUSH
                     ;
                 }
-            radiobox->Enable(j, base_datum->is_allowed(j));
+            radiobox->Enable(j, datum->is_allowed(j));
             }
         }
     else if(itembox)
         {
-        RefreshItemBox(base_datum, *itembox);
+        RefreshItemBox(datum, *itembox);
         }
     else
         {
