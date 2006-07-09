@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_harmonization.cpp,v 1.26 2006-06-29 19:31:47 wboutin Exp $
+// $Id: input_harmonization.cpp,v 1.27 2006-07-09 17:27:05 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -76,7 +76,7 @@ namespace
 /// that would only frustrate users running inforce or backdated
 /// illustrations.
 
-void Input::reset_database()
+void Input::ResetDatabase()
 {
     // This early-exit condition has to fail the first time this
     // function is called, because the product name is implicitly
@@ -141,9 +141,9 @@ void Input::reset_database()
         }
 }
 
-void Input::Harmonize()
+void Input::DoHarmonize()
 {
-    reset_database();
+    ResetDatabase();
 
     bool anything_goes    = global_settings::instance().ash_nazg();
     bool home_office_only = global_settings::instance().mellon();
@@ -929,10 +929,10 @@ false // Silly workaround for now.
     SolveTargetCashSurrenderValue.enable(actually_solving && mce_solve_for_target == SolveTarget);
     DeprecatedSolveTgtAtWhich    .enable(actually_solving && mce_solve_for_target == SolveTarget);
 
-    Transmogrify(); // TODO ?? This obviously doesn't belong here.
+    DoTransmogrify(); // TODO ?? This obviously doesn't belong here.
 }
 
-void Input::Transmogrify()
+void Input::DoTransmogrify()
 {
     bool use_anb = database->Query(DB_AgeLastOrNearest);
 

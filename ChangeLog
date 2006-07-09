@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.408 2006-07-09 15:56:30 chicares Exp $
+// $Id: ChangeLog,v 1.409 2006-07-09 17:27:05 chicares Exp $
 
 MAINTENANCE
 
@@ -6867,4 +6867,20 @@ Prevent segfault due to gcc defect.
 Import and adapt selected changes from skeleton trunk. It is troubling
 that the unit test fails with como, though it passes with gcc and
 borland.
+
+20060709T1557Z <chicares@cox.net> [1216]
+
+  rtti_lmi.hpp
+Improve comments on conditionals.
+
+20060709T1727Z <chicares@cox.net> [1212]
+
+  input.cpp
+  input.hpp
+  input_harmonization.cpp
+  mvc_model.cpp
+  xml_notebook.cpp
+Derive class Input from class MvcModel. For the moment, some
+  "Harmonize() improperly forces values to change..."
+warnings occur, indicating a problem that needs to be fixed.
 
