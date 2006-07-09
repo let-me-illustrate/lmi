@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mvc_model.cpp,v 1.1 2006-07-07 11:22:08 chicares Exp $
+// $Id: mvc_model.cpp,v 1.2 2006-07-09 17:27:05 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -44,7 +44,7 @@ void ComplainAboutAnyDiscrepancies
         return;
         }
 
-    fatal_error() << description << '\n';
+    warning() << description << '\n';
     MvcModel::StateType::const_iterator i = old_values.begin();
     MvcModel::StateType::const_iterator j = new_values.begin();
     LMI_ASSERT(old_values.size() == new_values.size());
@@ -53,7 +53,7 @@ void ComplainAboutAnyDiscrepancies
         LMI_ASSERT(i->first == j->first);
         if(i->second != j->second)
             {
-            fatal_error()
+            warning()
                 << "  "
                 << i->first
                 << " must change from '"
@@ -64,7 +64,7 @@ void ComplainAboutAnyDiscrepancies
                 ;
             }
         }
-    fatal_error() << LMI_FLUSH;
+    warning() << LMI_FLUSH;
 }
 } // Unnamed namespace.
 

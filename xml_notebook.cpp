@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xml_notebook.cpp,v 1.32 2006-06-29 19:31:47 wboutin Exp $
+// $Id: xml_notebook.cpp,v 1.33 2006-07-09 17:27:05 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -792,7 +792,7 @@ ought to be forced through somehow.
         }
 */
 
-    input_.Harmonize();
+    input_.Reconcile();
 
     // TODO ?? Experimental. A general solution is wanted instead.
     transfer_data_["GeneralAccountRate"] = input_["GeneralAccountRate"].str();

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input.cpp,v 1.11 2006-01-29 13:52:00 chicares Exp $
+// $Id: input.cpp,v 1.12 2006-07-09 17:27:05 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -36,21 +36,17 @@
 // This probably requires two distinct yes-no types.
 
 Input::Input()
-//    :MemberSymbolTable<Input>() // TODO ?? Is this desirable?
     :CreateSupplementalReport("No")
 {
-    ascribe_members();
-}
-
-Input::~Input()
-{
+    AscribeMembers();
 }
 
 Input::Input(Input const& z)
     :obstruct_slicing<Input>()
+    ,MvcModel()
     ,MemberSymbolTable<Input>()
 {
-    ascribe_members();
+    AscribeMembers();
     std::vector<std::string>::const_iterator i;
     for(i = member_names().begin(); i != member_names().end(); ++i)
         {
@@ -62,6 +58,10 @@ Input::Input(Input const& z)
         // does that? Using str() here, passim, seems distateful.
         operator[](*i) = z[*i].str();
         }
+}
+
+Input::~Input()
+{
 }
 
 Input& Input::operator=(Input const& z)
@@ -123,7 +123,7 @@ std::string Input::differing_fields(Input const& z) const
 }
 
 // TODO ?? Decide what to do about commented-out members.
-void Input::ascribe_members()
+void Input::AscribeMembers()
 {
     ascribe("IssueAge"                              , &Input::IssueAge                              );
     ascribe("RetirementAge"                         , &Input::RetirementAge                         );
@@ -335,6 +335,47 @@ void Input::ascribe_members()
     ascribe("WithdrawalToAge"                       , &Input::WithdrawalToAge                       );
     ascribe("WithdrawalToAlternative"               , &Input::WithdrawalToAlternative               );
     ascribe("WithdrawalToDuration"                  , &Input::WithdrawalToDuration                  );
+}
+
+datum_base const* Input::DoBaseDatumPointer
+    (std::string const& name
+    ) const
+{
+    return member_cast<datum_base>(operator[](name));
+}
+
+any_entity& Input::DoEntity(std::string const& name)
+{
+    return MemberSymbolTable<Input>::operator[](name);
+}
+
+any_entity const& Input::DoEntity(std::string const& name) const
+{
+    return MemberSymbolTable<Input>::operator[](name);
+}
+
+MvcModel::NamesType const& Input::DoNames() const
+{
+    return member_names();
+}
+
+MvcModel::StateType Input::DoState() const
+{
+    return member_state(*this);
+}
+
+void Input::DoCustomizeInitialValues()
+{
+}
+
+void Input::DoEnforceRangeLimit(std::string const& name)
+{
+    datum_base* base_datum = member_cast<datum_base>(operator[](name));
+    tn_range_base* datum = dynamic_cast<tn_range_base*>(base_datum);
+    if(datum)
+        {
+        datum->enforce_limits();
+        }
 }
 
 void convert_to_ihs(IllusInputParms& ihs, Input const& lmi)
