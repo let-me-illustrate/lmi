@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: any_member.hpp,v 1.10 2006-06-08 18:44:35 wboutin Exp $
+// $Id: any_member.hpp,v 1.11 2006-07-09 15:56:30 chicares Exp $
 
 // This is a derived work based on boost::any, which bears the following
 // copyright and permissions notice:
@@ -43,33 +43,14 @@
 
 // Design notes--cast member templates
 //
-// Member template cast() is safe, but limited: it casts only to the
-// object's exact original type. Member template cast_blithely() casts
-// to any type, but cannot know whether that's safe.
+// Member template exact_cast() is safe, but limited: it casts only
+// to the object's exact original type. It is a private member, but
+// a corresponding free function template is generally accessible.
 //
-// Motivation. Consider a base class B with member function b(), and a
-// class D derived from B. Suppose that an instance d of D is held
-// here. If it is known that d is a D, then cast() can be used:
-// although the object's type is lost and dynamic_cast therefore can't
-// be used, static_cast performs the type conversion [5.2.9/9] and
-// RTTI ensures that the conversion is safe. But if it is known only
-// that d is a B, but not that it is also a D, then invoking d.b()
-// requires casting d blithely to a B, and the language provides no
-// builtin facility for validating that cast. The type D is known
-// inside class holder, and the type B is known to clients of class
-// any_member, but between them lies a placeholder* through which type
-// information can pass only through std::type_info, which cannot
-// validate that a D is a B. And 14.5.2/3 doesn't allow virtual member
-// templates, for reasons explained here:
-//   http://groups.google.com/groups?selm=7f6de0%24t1t%241%40nnrp1.dejanews.com
-//
-// Member template cast_blithely() returns a pointer so that virtual
-// functions of an abstract base class may be called through it--an
-// instance cannot be returned in that case.
-//
-// With the same lack of safety, a family of call() member templates
-// could be defined here. That seems less desirable because it would
-// require a potentially unbounded set of signatures.
+// Function template member_cast() is designed for general use. It
+// does everything exact_cast() does, and can also cast to a base
+// class of the object's actual type if an appropriate specialization
+// of class template reconstitutor is found.
 
 // Design notes: numeric stream input and output
 //
@@ -86,29 +67,46 @@
 
 #include "config.hpp"
 
+#include "any_entity.hpp"
+
 #include "obstruct_slicing.hpp"
 #include "rtti_lmi.hpp"
 #include "value_cast.hpp"
 
 #if !defined __BORLANDC__
 #   include <boost/static_assert.hpp>
-#   include <boost/type_traits/arithmetic_traits.hpp>
-#else  // Defined __BORLANDC__ .
+#   include <boost/type_traits.hpp>
+#else  // defined __BORLANDC__
 #   define BOOST_STATIC_ASSERT(deliberately_ignored) /##/
-#endif // Defined __BORLANDC__ .
+#endif // defined __BORLANDC__
 
 #include <boost/utility.hpp>
 
 #include <algorithm>
 #include <iosfwd>
 #include <map>
+#include <ostream> // std::flush
 #include <sstream>
 #include <stdexcept>
 #include <string>
 #include <typeinfo>
 #include <vector>
 
-// Declaration of class placeholder.
+#define LMI_SIMPLE_ASSERT(condition)                        \
+    if(!(condition))                                        \
+        {                                                   \
+        std::ostringstream oss;                             \
+        oss                                                 \
+            << "Assertion '" << (#condition) << "' failed." \
+            << "\n[file "  << __FILE__                      \
+            << ", line " << __LINE__ << "]\n"               \
+            << std::flush                                   \
+            ;                                               \
+        throw std::runtime_error(oss.str());                \
+        }                                                   \
+    do {} while(0)
+
+// Definition of class placeholder.
 
 // The implicitly-defined copy ctor and copy assignment operator do
 // the right thing.
@@ -124,18 +122,21 @@ class placeholder
 {
   public:
     virtual ~placeholder();
-    virtual placeholder& operator=(std::string const&) = 0;
+    virtual placeholder& assign(placeholder const&) = 0;
+    virtual placeholder& assign(std::string const&) = 0;
     virtual placeholder* clone() const = 0;
+    virtual bool equals(placeholder const&) const = 0;
     virtual std::type_info const& type() const = 0;
-    virtual std::ostream& write(std::ostream&) const = 0;
+    virtual void write(std::ostream&) const = 0;
 };
 
 // Implementation of class placeholder.
 
 inline placeholder::~placeholder()
-{}
+{
+}
 
-// Declaration of class holder.
+// Definition of class holder.
 
 template<typename ClassType, typename ValueType>
 class holder
@@ -149,11 +150,13 @@ class holder
   public:
     holder(ClassType*, ValueType const&);
 
-    // placeholder overrides.
-    virtual holder& operator=(std::string const&);
+    // placeholder required implementation.
+    virtual holder& assign(placeholder const&);
+    virtual holder& assign(std::string const&);
     virtual placeholder* clone() const;
+    virtual bool equals(placeholder const&) const;
     virtual std::type_info const& type() const;
-    virtual std::ostream& write(std::ostream&) const;
+    virtual void write(std::ostream&) const;
 
   private:
     ClassType* object_;
@@ -163,19 +166,31 @@ class holder
 // Implementation of class holder.
 
 template<typename ClassType, typename ValueType>
-holder<ClassType,ValueType>::holder
-    (ClassType* object
-    ,ValueType const& value
-    )
+holder<ClassType,ValueType>::holder(ClassType* object, ValueType const& value)
     :object_(object)
     ,held_(value)
 {}
 
 template<typename ClassType, typename ValueType>
-holder<ClassType,ValueType>& holder<ClassType,ValueType>::operator=
+holder<ClassType,ValueType>& holder<ClassType,ValueType>::assign
+    (placeholder const& other
+    )
+{
+    LMI_SIMPLE_ASSERT(other.type() == type());
+    typedef holder<ClassType,ValueType> holder_type;
+    holder_type const& z = static_cast<holder_type const&>(other);
+    LMI_SIMPLE_ASSERT(z.object_);
+    LMI_SIMPLE_ASSERT(object_);
+    object_->*held_ = (z.object_)->*(z.held_);
+    return *this;
+}
+
+template<typename ClassType, typename ValueType>
+holder<ClassType,ValueType>& holder<ClassType,ValueType>::assign
     (std::string const& s
     )
 {
+    LMI_SIMPLE_ASSERT(object_);
     object_->*held_ = value_cast(s, object_->*held_);
     return *this;
 }
@@ -187,33 +202,66 @@ placeholder* holder<ClassType,ValueType>::clone() const
 }
 
 template<typename ClassType, typename ValueType>
+bool holder<ClassType,ValueType>::equals(placeholder const& other) const
+{
+    // Deemed unequal if types differ or either object_ is null.
+    if(other.type() != type())
+        {
+        return false;
+        }
+    typedef holder<ClassType,ValueType> holder_type;
+    holder_type const& z = static_cast<holder_type const&>(other);
+    return object_ && z.object_ && (z.object_)->*(z.held_) == object_->*held_;
+}
+
+template<typename ClassType, typename ValueType>
 std::type_info const& holder<ClassType,ValueType>::type() const
 {
     return typeid(ValueType);
 }
 
 template<typename ClassType, typename ValueType>
-std::ostream& holder<ClassType,ValueType>::write(std::ostream& os) const
+void holder<ClassType,ValueType>::write(std::ostream& os) const
 {
+    LMI_SIMPLE_ASSERT(object_);
     os << value_cast<std::string>(object_->*held_);
-    return os;
 }
 
-// Declaration of class any_member.
+// Definition of class any_member.
 
 // This class is necessarily Assignable, so that a std::map can hold it.
 
-// It holds a pointer to a ClassType object only so for its cast
+// It holds a pointer to a ClassType object only to support its cast
 // operations.
+
+template<typename ClassType>
+class any_member;
+
+template<typename MemberType, typename ClassType>
+MemberType* exact_cast(any_member<ClassType>&);
+
+template<typename MemberType, typename ClassType>
+MemberType* member_cast(any_member<ClassType>&);
+
+struct any_member_test;
 
 template<typename ClassType>
 class any_member
     :virtual private obstruct_slicing<any_member<ClassType> >
+    ,public any_entity
 {
+    template<typename MemberType, typename CT>
+    friend MemberType* exact_cast(any_member<CT>&);
+
+    template<typename MemberType, typename CT>
+    friend MemberType* member_cast(any_member<CT>&);
+
+    friend struct any_member_test;
+
   public:
     any_member();
     any_member(any_member const&);
-    ~any_member();
+    virtual ~any_member();
 
     template<typename ValueType>
     any_member(ClassType*, ValueType const&);
@@ -221,18 +269,38 @@ class any_member
     any_member& swap(any_member&);
     any_member& operator=(any_member const&);
     any_member& operator=(std::string const&);
+    bool operator==(any_member const&) const;
+    bool operator!=(any_member const&) const;
 
-    template<typename ArbitraryType>
-    ArbitraryType cast() const;
+#if defined __BORLANDC__
+    // COMPILER !! The borland compiler, defectively it would seem,
+    // fails to recognize the friendship granted to function template
+    // member_cast() above.
+    template<typename ExactMemberType>
+    ExactMemberType* exact_cast();
+    virtual std::type_info const& type() const;
+#endif // defined __BORLANDC__
 
+    // TODO ?? EGREGIOUS_DEFECT This must be expunged.
     template<typename ArbitraryType>
     ArbitraryType* cast_blithely() const;
 
-    std::string str() const;
-    std::type_info const& type() const;
-    std::ostream& write(std::ostream&) const;
+    // any_entity required implementation.
+    virtual std::string str() const;
+    virtual void write(std::ostream&) const;
 
   private:
+#if !defined __BORLANDC__
+    template<typename ExactMemberType>
+    ExactMemberType* exact_cast();
+#endif // !defined __BORLANDC__
+
+    // any_entity required implementation.
+    virtual any_member& assign(std::string const&);
+#if !defined __BORLANDC__
+    virtual std::type_info const& type() const;
+#endif // !defined __BORLANDC__
+
     ClassType* object_;
     placeholder* content_;
 };
@@ -248,8 +316,9 @@ any_member<ClassType>::any_member()
 template<typename ClassType>
 any_member<ClassType>::any_member(any_member const& other)
     :obstruct_slicing<any_member<ClassType> >()
-    ,object_(other.object_)
-    ,content_(other.content_ ? other.content_->clone() : 0)
+    ,any_entity (other)
+    ,object_    (other.object_)
+    ,content_   (other.content_ ? other.content_->clone() : 0)
 {}
 
 template<typename ClassType>
@@ -274,44 +343,41 @@ any_member<ClassType>& any_member<ClassType>::swap(any_member& rhs)
 
 template<typename ClassType>
 any_member<ClassType>& any_member<ClassType>::operator=
-    (any_member<ClassType> const& rhs
+    (any_member<ClassType> const& other
     )
 {
-    any_member<ClassType>(rhs).swap(*this);
+    // This would be wrong:
+//    any_member<ClassType>(other).swap(*this);
+    // because it would swap the ClassType* object, bizarrely placing
+    // a pointer to a member of one object into another object's
+    // symbol table.
+    LMI_SIMPLE_ASSERT(other.content_);
+    LMI_SIMPLE_ASSERT(content_);
+    content_->assign(*other.content_);
     return *this;
 }
 
 template<typename ClassType>
 any_member<ClassType>& any_member<ClassType>::operator=(std::string const& s)
 {
-    content_->operator=(s);
-    return *this;
+    return assign(s);
 }
 
 template<typename ClassType>
-template<typename ArbitraryType>
-ArbitraryType any_member<ClassType>::cast() const
+bool any_member<ClassType>::operator==
+    (any_member<ClassType> const& other
+    ) const
 {
-    typedef ArbitraryType ClassType::* pmd_type;
-    if(type() != typeid(pmd_type))
-        {
-        std::ostringstream oss;
-        oss
-            << "Cannot cast from '"
-            << type().name()
-            << "' to '"
-            << lmi::TypeInfo(typeid(pmd_type))
-            << "'."
-            ;
-        throw std::runtime_error(oss.str());
-        }
-    typedef holder<ClassType,pmd_type> holder_type;
-    pmd_type pmd = static_cast<holder_type*>(content_)->held_;
-    return object_->*pmd;
+    return content_ && other.content_ && content_->equals(*other.content_);
 }
 
-// TODO ?? What if we pass a typed null pointer up to placeholder,
-// and try to convert it with dynamic_cast in holder?
+template<typename ClassType>
+bool any_member<ClassType>::operator!=
+    (any_member<ClassType> const& other
+    ) const
+{
+    return !operator==(other);
+}
 
 template<typename ClassType>
 template<typename ArbitraryType>
@@ -327,8 +393,46 @@ template<typename ClassType>
 std::string any_member<ClassType>::str() const
 {
     std::ostringstream oss;
+    LMI_SIMPLE_ASSERT(content_);
     content_->write(oss);
     return oss.str();
+}
+
+template<typename ClassType>
+void any_member<ClassType>::write(std::ostream& os) const
+{
+    content_->write(os);
+}
+
+template<typename ClassType>
+std::ostream& operator<<(std::ostream& os, any_member<ClassType> const& z)
+{
+    z.write(os);
+    return os;
+}
+
+template<typename ClassType>
+template<typename ExactMemberType>
+ExactMemberType* any_member<ClassType>::exact_cast()
+{
+    typedef ExactMemberType ClassType::* pmd_type;
+    if(type() != typeid(pmd_type))
+        {
+        return 0;
+        }
+    typedef holder<ClassType,pmd_type> holder_type;
+    LMI_SIMPLE_ASSERT(content_);
+    pmd_type pmd = static_cast<holder_type*>(content_)->held_;
+    LMI_SIMPLE_ASSERT(object_);
+    return &(object_->*pmd);
+}
+
+template<typename ClassType>
+any_member<ClassType>& any_member<ClassType>::assign(std::string const& s)
+{
+    LMI_SIMPLE_ASSERT(content_);
+    content_->assign(s);
+    return *this;
 }
 
 template<typename ClassType>
@@ -337,36 +441,110 @@ std::type_info const& any_member<ClassType>::type() const
     return content_ ? content_->type() : typeid(void);
 }
 
-template<typename ClassType>
-std::ostream& any_member<ClassType>::write(std::ostream& os) const
+/// Definition of class template reconstitutor.
+///
+/// Class template reconstitutor matches pointer-to-member types.
+/// It is intended as an auxiliary to class template any_member, to
+/// facilitate obtaining a pointer to a base class B from a pointer
+/// to member of a class D that is derived from B, particularly in
+/// order to call a virtual function declared in B.
+///
+/// If the MemberType argument is not an exact match, then it tries
+/// types derived from MemberType, using knowledge embedded in its
+/// reconstitute() member function. A specialization for a base class
+/// B can search derived types for an exact D ClassType::* match.
+///
+/// A pointer is returned rather than a reference for two reasons: the
+/// base class might be abstract; and a suitable conversion path might
+/// fail to exist, as in the default unspecialized case.
+///
+/// Motivation.
+///
+/// Suppose class D is derived from class B, and class T contains a D.
+/// There is no well-defined way to convert a D T::* to a B T::*: see
+///   http://groups.google.com/group/comp.std.c++/msg/9b9e23f038f63d63
+///
+/// Suppose it is desired to call virtual B::foo() on all members of T
+/// that are derived from B. With an object of class T, it is easy to
+/// ascertain that a member of type D is suitable, and to obtain a B*
+/// from it. However, when any_member<T> holds a D T::*, its typeid is
+/// available but its type is not, and obtaining a B* requires the
+/// series of conversions
+///   any_member<T> --> D T::* --> D --> B*
+/// which, notably, requires knowledge of the original type D. When
+/// many classes D0, D1,...Dn are derived from the same base B, it is
+/// necessary to test each Dk.
+
+template<typename MemberType, typename ClassType>
+struct reconstitutor
 {
-    return content_->write(os);
+    static MemberType* reconstitute(any_member<ClassType> const&)
+        {
+        return 0;
+        }
+};
+
+/// Implementation of free function template exact_cast().
+///
+/// Generally prefer free function template member_cast().
+
+template<typename MemberType, typename ClassType>
+MemberType* exact_cast(any_member<ClassType>& member)
+{
+    return member.template exact_cast<MemberType>();
 }
 
-template<typename ClassType>
-std::ostream& operator<<(std::ostream& os, any_member<ClassType> const& z)
+/// Implementation of free function template member_cast().
+///
+/// Hesitate to specialize this function. Instead, specialize class
+/// template reconstitutor. See:
+///   "Why Not Specialize Function Templates?"
+///   http://www.gotw.ca/publications/mill17.htm
+///
+/// Returns a pointer, of the specified type, to the held object.
+///
+/// Precondition: MemberType must be either the exact type of the held
+/// object, or a base class of that exact type.
+///
+/// Postcondition: The return value is not zero.
+///
+/// Throws if the return value would be zero.
+///
+/// This function template is not intended for testing convertibility,
+/// which can easily be done with member function type(). Instead, it
+/// is intended to perform a conversion that's known to be valid, and
+/// it validates that precondition--so obtaining a null pointer is
+/// treated as failure, and throws an exception.
+
+template<typename MemberType, typename ClassType>
+MemberType* member_cast(any_member<ClassType>& member)
 {
-    return z.write(os);
+    MemberType* z = (member.type() == typeid(MemberType ClassType::*))
+        ? member.template exact_cast<MemberType>()
+        : reconstitutor<MemberType,ClassType>::reconstitute(member)
+        ;
+    if(!z)
+        {
+        std::ostringstream oss;
+        oss
+            << "Cannot cast from '"
+            << lmi::TypeInfo(member.type())
+            << "' to '"
+            << lmi::TypeInfo(typeid(MemberType))
+            << "'."
+            ;
+        throw std::runtime_error(oss.str());
+        }
+    return z;
 }
 
-// Free functions that complement class any_member.
-
-// TODO ?? Also consider operator==(std::string), and boost::operators.
-
-template<typename ClassType>
-bool operator==(any_member<ClassType> const& lhs, any_member<ClassType> const& rhs)
+template<typename MemberType, typename ClassType>
+MemberType const* member_cast(any_member<ClassType> const& member)
 {
-// TODO ?? Compare contents directly instead.
-    return lhs.str() == rhs.str();
+    return member_cast<MemberType>(const_cast<any_member<ClassType>&>(member));
 }
 
-template<typename ClassType>
-bool operator!=(any_member<ClassType> const& lhs, any_member<ClassType> const& rhs)
-{
-    return !(lhs == rhs);
-}
-
-// Declaration of class MemberSymbolTable.
+// Definition of class MemberSymbolTable.
 
 // By its nature, this class is Noncopyable: it holds a map of
 // pointers to member, which need to be initialized instead of copied
@@ -374,9 +552,6 @@ bool operator!=(any_member<ClassType> const& lhs, any_member<ClassType> const& r
 // natively: deriving from boost::noncopyable would prevent class C
 // from deriving from MemberSymbolTable<C> and boost::noncopyable.
 //
-// TODO ?? Alternatively, one might define a copy ctor that
-// (automatically) ascribe()s all members to the appropriate object.
-
 // A do-nothing constructor is specified in order to prevent compilers
 // from warning of its absence. It's protected because this class
 // should not be instantiated as a most-derived object.
@@ -384,33 +559,51 @@ bool operator!=(any_member<ClassType> const& lhs, any_member<ClassType> const& r
 template<typename ClassType>
 class MemberSymbolTable
 {
-    typedef std::map<std::string, any_member<ClassType> > map_type;
-    typedef typename map_type::value_type map_value_type;
+    typedef std::map<std::string, any_member<ClassType> > member_map_type;
+    typedef typename member_map_type::value_type member_pair_type;
 
   public:
-    any_member<ClassType>& operator[](std::string const&);
+    any_member<ClassType>      & operator[](std::string const&)      ;
     any_member<ClassType> const& operator[](std::string const&) const;
+
+    MemberSymbolTable<ClassType>& assign(MemberSymbolTable<ClassType> const&);
+    bool equals(MemberSymbolTable<ClassType> const&) const;
     std::vector<std::string> const& member_names() const;
 
   protected:
     MemberSymbolTable();
-    template<typename ValueType, typename RelatedClassType>
-    void ascribe(std::string const&, ValueType RelatedClassType::*);
+
+#if !defined __BORLANDC__
+    template<typename ValueType, typename SameOrBaseClassType>
+    void ascribe(std::string const&, ValueType SameOrBaseClassType::*);
+#else  // !defined __BORLANDC__
+    template<typename ValueType, typename SameOrBaseClassType>
+    void ascribe(std::string const& s, ValueType SameOrBaseClassType::*p2m)
+        {
+        ClassType* class_object = static_cast<ClassType*>(this);
+        map_.insert
+            (member_pair_type(s, any_member<ClassType>(class_object, p2m))
+            );
+        member_names_.push_back(s);
+        }
+#endif // !defined __BORLANDC__
 
   private:
     MemberSymbolTable(MemberSymbolTable const&);
-    MemberSymbolTable const& operator=(MemberSymbolTable const&);
+    MemberSymbolTable& operator=(MemberSymbolTable const&);
 
-    std::vector<std::string> cached_member_names() const;
+    void complain_that_no_such_member_is_ascribed(std::string const&) const;
 
-    map_type map_;
-// TODO ?? With como-4.3.3, uncommenting this line moves a failure
-// from one unit test to another. It's a poor idea to assume this is
-// a compiler defect without investigating it carefully.
-//    std::vector<std::string> dummy_member_;
+    member_map_type map_;
+    std::vector<std::string> member_names_;
 };
 
 // Implementation of class MemberSymbolTable.
+
+// Data member 'member_names_' is an unsorted std::vector containing
+// member names in ascription order. The corresponding std::map has
+// the same names, but they're sorted because they're map keys.
+// Probably this doesn't matter; is it worth even documenting here?
 
 template<typename ClassType>
 MemberSymbolTable<ClassType>::MemberSymbolTable()
@@ -418,33 +611,36 @@ MemberSymbolTable<ClassType>::MemberSymbolTable()
 }
 
 // operator[]() returns a known member; unlike std::map::operator[](),
-// it never adds a new pair to the map.
+// it never adds a new pair to the map, and it complains if such an
+// addition is attempted.
 
-// INELEGANT !! The const and non-const operator[]() implementations
-// are nearly identical; what's commmon should be factored out.
+template<typename ClassType>
+void MemberSymbolTable<ClassType>::complain_that_no_such_member_is_ascribed
+    (std::string const& name
+    ) const
+{
+    std::ostringstream oss;
+    oss
+        << "Symbol table for class "
+        << lmi::TypeInfo(typeid(ClassType))
+        << " ascribes no member named '"
+        << name
+        << "'."
+        ;
+    throw std::runtime_error(oss.str());
+}
 
 template<typename ClassType>
 any_member<ClassType>& MemberSymbolTable<ClassType>::operator[]
     (std::string const& s
     )
 {
-    typename map_type::iterator i = map_.find(s);
-    if(map_.end() != i)
+    typename member_map_type::iterator i = map_.find(s);
+    if(map_.end() == i)
         {
-        return i->second;
+        complain_that_no_such_member_is_ascribed(s);
         }
-    else
-        {
-        std::ostringstream oss;
-        oss
-            << "Symbol table for class '"
-            << lmi::TypeInfo(typeid(ClassType))
-            << "' ascribes no member named '"
-            << s
-            << "'."
-            ;
-        throw std::runtime_error(oss.str());
-        }
+    return i->second;
 }
 
 template<typename ClassType>
@@ -452,37 +648,20 @@ any_member<ClassType> const& MemberSymbolTable<ClassType>::operator[]
     (std::string const& s
     ) const
 {
-    typename map_type::const_iterator i = map_.find(s);
-    if(map_.end() != i)
+    typename member_map_type::const_iterator i = map_.find(s);
+    if(map_.end() == i)
         {
-        return i->second;
+        complain_that_no_such_member_is_ascribed(s);
         }
-    else
-        {
-        std::ostringstream oss;
-        oss
-            << "Symbol table for class '"
-            << lmi::TypeInfo(typeid(ClassType))
-            << "' ascribes no member named '"
-            << s
-            << "'."
-            ;
-        throw std::runtime_error(oss.str());
-        }
+    return i->second;
 }
 
+#if !defined __BORLANDC__
 template<typename ClassType>
-std::vector<std::string> const& MemberSymbolTable<ClassType>::member_names() const
-{
-    static std::vector<std::string> member_name_vector(cached_member_names());
-    return member_name_vector;
-}
-
-template<typename ClassType>
-template<typename ValueType, typename RelatedClassType>
+template<typename ValueType, typename SameOrBaseClassType>
 void MemberSymbolTable<ClassType>::ascribe
     (std::string const& s
-    ,ValueType RelatedClassType::*p2m
+    ,ValueType SameOrBaseClassType::* p2m
     )
 {
     // Assert that the static_cast doesn't engender undefined behavior.
@@ -497,34 +676,92 @@ void MemberSymbolTable<ClassType>::ascribe
     BOOST_STATIC_ASSERT
         ((
             boost::is_same
-                <RelatedClassType
+                <SameOrBaseClassType
                 ,ClassType
                 >::value
         ||  boost::is_base_and_derived
-                <RelatedClassType
+                <SameOrBaseClassType
                 ,ClassType
                 >::value
         ));
-    ClassType* class_object = static_cast<ClassType*>(this);
-    map_.insert(map_value_type(s, any_member<ClassType>(class_object, p2m)));
-}
 
-// TODO ?? This is invalid if ascribe() is called after the first
-// invocation of cached_member_names(). If names are to be cached,
-// then they should be cached in a class member that ascribe() can
-// check and perhaps update directly.
+    // TODO ?? Reconsider this: don't both casts elicit undefined
+    // behavior? Class MemberSymbolTable is not polymorphic, and
+    // this member function is called in derived classes' ctors.
+    // See 5.2.7/6 and 5.2.9/5 .
+    //
+    // Here, the behavior of dynamic_cast is well defined, whereas
+    // static_cast might display undefined behavior if ClassType
+    // does not have MemberSymbolTable<ClassType> as a base class.
+    // But static_cast actually gives a diagnostic at compile time
+    // with gcc and comeau, so it seems safe as long as at least one
+    // of those compilers is used.
+#if 0
+    ClassType* class_object = dynamic_cast<ClassType*>(this);
+    // If this assertion fails, then MemberSymbolTable<ClassType> is
+    // not a base class of ClassType.
+    LMI_SIMPLE_ASSERT(class_object);
+#endif // 0
+    ClassType* class_object = static_cast<ClassType*>(this);
+    map_.insert(member_pair_type(s, any_member<ClassType>(class_object, p2m)));
+    member_names_.push_back(s);
+}
+#endif // !defined __BORLANDC__
 
 template<typename ClassType>
-std::vector<std::string> MemberSymbolTable<ClassType>::cached_member_names() const
+MemberSymbolTable<ClassType>& MemberSymbolTable<ClassType>::assign
+    (MemberSymbolTable<ClassType> const& z
+    )
 {
-    std::vector<std::string> member_name_vector;
-    member_name_vector.reserve(map_.size());
-    typename map_type::const_iterator i;
-    for(i = map_.begin(); i != map_.end(); ++i)
+    typedef std::vector<std::string>::const_iterator mnci;
+    for(mnci i = member_names_.begin(); i != member_names_.end(); ++i)
         {
-        member_name_vector.push_back(i->first);
+        operator[](*i) = z[*i];
         }
-    return member_name_vector;
+    return *this;
+}
+
+template<typename ClassType>
+bool MemberSymbolTable<ClassType>::equals
+    (MemberSymbolTable<ClassType> const& z
+    ) const
+{
+    typedef std::vector<std::string>::const_iterator mnci;
+    for(mnci i = member_names_.begin(); i != member_names_.end(); ++i)
+        {
+        if(z[*i] != operator[](*i))
+            {
+            return false;
+            }
+        }
+    return true;
+}
+
+template<typename ClassType>
+std::vector<std::string> const& MemberSymbolTable<ClassType>::member_names
+    (
+    ) const
+{
+    return member_names_;
+}
+
+/// Implementation of free function template member_state(), which
+/// maps each element of member_names() to a string representation of
+/// its current value: the derived-class object's current state.
+
+template<typename ClassType>
+std::map<std::string,std::string> member_state
+    (MemberSymbolTable<ClassType> const& object
+    )
+{
+    std::map<std::string,std::string> z;
+    std::vector<std::string> const& names = object.member_names();
+    typedef std::vector<std::string>::const_iterator mnci;
+    for(mnci i = names.begin(); i != names.end(); ++i)
+        {
+        z[*i] = object[*i].str();
+        }
+    return z;
 }
 
 #endif // any_member_hpp

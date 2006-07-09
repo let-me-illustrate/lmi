@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.407 2006-07-09 13:40:14 chicares Exp $
+// $Id: ChangeLog,v 1.408 2006-07-09 15:56:30 chicares Exp $
 
 MAINTENANCE
 
@@ -6859,4 +6859,12 @@ Compile recently-added MVC files.
 
   rtti_lmi.hpp
 Prevent segfault due to gcc defect.
+
+20060709T1556Z <chicares@cox.net> [1216]
+
+  any_member.hpp
+  any_member_test.cpp
+Import and adapt selected changes from skeleton trunk. It is troubling
+that the unit test fails with como, though it passes with gcc and
+borland.
 

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: any_member_test.cpp,v 1.11 2006-01-29 13:52:00 chicares Exp $
+// $Id: any_member_test.cpp,v 1.12 2006-07-09 15:56:30 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -41,8 +41,8 @@
 struct base_datum
 {
     base_datum() :sane(7) {}
-    virtual ~base_datum() {}              // Just to make it polymorphic.
-    virtual void abstract_function() = 0; // Just to make it abstract.
+    virtual ~base_datum() {}            // Just to make it polymorphic.
+    virtual int virtual_function() = 0; // Just to make it abstract.
     bool base_function()
         {
         std::cout << "base_datum::base_function() called " << sane << std::endl;
@@ -65,7 +65,9 @@ std::ostream& operator<<(std::ostream& os, base_datum const& z)
 struct derived_datum
     :public base_datum
 {
-    void abstract_function() {}
+    bool operator==(derived_datum const& z) const
+        {return 7 == sane && 7 == z.sane;}
+    virtual int virtual_function() {return 1729;}
 };
 
 // Unused stub.
@@ -83,6 +85,7 @@ struct X
 {
     X() {str_ = "ERROR";}
     X(double) {}
+    bool operator==(X const& x) const {return x.str_ == str_;}
     void set_str(std::string const& s) {str_ = s;}
     std::string const& str() const {return str_;}
     int foo(std::string s)
@@ -108,6 +111,10 @@ class S
 {
   public:
     S();
+
+    bool operator==(S const&) const;
+    bool operator!=(S const&) const;
+
     std::ostream& write(std::ostream&);
 
   public: // Exposed for testing.
@@ -131,6 +138,16 @@ S::S()
     ascribe("s0", &S::s0);
     ascribe("x0", &S::x0);
     ascribe("dd", &S::dd);
+}
+
+bool S::operator==(S const& s) const
+{
+    return MemberSymbolTable<S>::equals(s);
+}
+
+bool S::operator!=(S const& s) const
+{
+    return !operator==(s);
 }
 
 std::ostream& S::write(std::ostream& os)
@@ -189,6 +206,19 @@ struct T : public Q, public MemberSymbolTable<T>
 // Don't need to cast base-class members explicitly:
 //        ascribe("q0", static_cast<float T::*>(&T::q0));
         ascribe("q0", &T::q0);
+        }
+};
+
+template<typename ClassType>
+struct reconstitutor<base_datum, ClassType>
+{
+    typedef base_datum DesiredType;
+    static DesiredType* reconstitute(any_member<ClassType>& m)
+        {
+        DesiredType* z = 0;
+        z = exact_cast<DesiredType  >(m); if(z) return z;
+        z = exact_cast<derived_datum>(m); if(z) return z;
+        return z;
         }
 };
 
@@ -276,13 +306,197 @@ void test0()
 
     BOOST_TEST_THROW(r2["unknown_member"], std::runtime_error, "");
 
+#if !defined __BORLANDC__
     // Assigning a decimal-literal value to an integer isn't type
     // safe, and might require truncation, so it's forbidden.
     BOOST_TEST_THROW(r2["i0"] = "888e3", std::invalid_argument, "");
     BOOST_TEST_THROW(r2["i1"] = "999.9", std::invalid_argument, "");
+#endif // !defined __BORLANDC__
 }
 
-void optional_exploration()
+struct any_member_test
+{
+    static void test_any_member();
+    static void supplemental_test();
+};
+
+int test_main(int, char*[])
+{
+    any_member_test::test_any_member();
+    any_member_test::supplemental_test();
+    return 0;
+}
+
+void any_member_test::test_any_member()
+{
+    S s;
+    s["i0"] = "999";
+    BOOST_TEST_EQUAL(s.i0, 999);
+
+    s["i0"] = "077";   // Interpreted as decimal, not as octal.
+    BOOST_TEST_EQUAL(s.i0, 77);
+
+    s["i0"] = "09";    // Valid decimal, not invalid octal.
+    BOOST_TEST_EQUAL(s.i0, 9);
+
+    s["i1"] = "888000";
+    BOOST_TEST_EQUAL(s.i1, 888000);
+
+//  s["i0"] = "999.9"; // Invalid integer-literal.
+//  s["i1"] = "888e3"; // Invalid integer-literal.
+
+    s["d0"] = "777";
+    BOOST_TEST_EQUAL(s.d0, 777);
+
+    s["d0"] = "777.";
+    BOOST_TEST_EQUAL(s.d0, 777);
+
+    s["d0"] = "777E3";
+    BOOST_TEST_EQUAL(s.d0, 777000);
+
+    s["d0"] = ".777E3";
+    BOOST_TEST_EQUAL(s.d0, 777);
+
+    s["s0"] = "hello";
+    BOOST_TEST_EQUAL(s.s0, "hello");
+
+    std::stringstream ss;
+    s.write(ss);
+    BOOST_TEST_EQUAL(ss.str(), "9 888000 777 hello");
+
+    // Test const operator[]().
+
+    S const s_const;
+    BOOST_TEST_EQUAL("0", s_const["i0"].str());
+
+    // Test operator==() and operator!=().
+
+    // operator==(): same objects, same members.
+
+    BOOST_TEST(s_const["i0"] == s_const["i0"]);
+    BOOST_TEST(s_const["d0"] == s_const["d0"]);
+    BOOST_TEST(s_const["s0"] == s_const["s0"]);
+    BOOST_TEST(s_const["x0"] == s_const["x0"]);
+
+    // operator!=(): different objects.
+
+    BOOST_TEST(s["i0"] != s_const["i0"]);
+    BOOST_TEST(s["i1"] != s_const["i0"]);
+
+    // operator==(): different members of same type.
+
+    BOOST_TEST(s_const["i0"] == s_const["i1"]);
+
+    BOOST_TEST(s["i0"] != s["i1"]);
+
+    s["i0"] = s["i1"];
+    BOOST_TEST(s["i0"] == s["i1"]);
+
+    s["i0"] = s_const["i0"];
+    s["i1"] = s_const["i0"];
+    BOOST_TEST(s["i0"] == s["i1"]);
+
+    // operator==(): different objects, same member.
+
+    BOOST_TEST(s["i0"] == s_const["i0"]);
+
+    // operator==(): different objects, different members of same type.
+
+    BOOST_TEST(s["i1"] == s_const["i0"]);
+
+    // operator==(): different objects, different member types.
+
+    BOOST_TEST(s_const["x0"] != s["i0"]);
+    BOOST_TEST(s_const["x0"] != s["d0"]);
+    BOOST_TEST(s_const["x0"] != s["s0"]);
+
+    // operator==(): same object, different member types.
+
+    BOOST_TEST(s_const["x0"] != s_const["i0"]);
+
+    // Make sure distinct object identity is preserved by assignment.
+
+    s["i1"] = "909090";
+    BOOST_TEST(s["i1"] != s_const["i1"]);
+    s["i1"] = s_const["i1"];
+    BOOST_TEST(s["i1"] == s_const["i1"]);
+    s["i1"] = "909090";
+    BOOST_TEST(s["i1"] != s_const["i1"]);
+
+    s["i0"] = s["i1"];
+    BOOST_TEST(s["i0"] == s["i1"]);
+    s["i1"] = "9";
+    BOOST_TEST(s["i0"] != s["i1"]);
+
+    // Test MemberSymbolTable::equals().
+
+    BOOST_TEST(s_const == s_const);
+    BOOST_TEST(s_const != s      );
+    BOOST_TEST(s       == s      );
+
+    // Test MemberSymbolTable::assign().
+
+    s.MemberSymbolTable<S>::assign(s_const);
+    BOOST_TEST(s_const == s      );
+
+    // Test no-such-member diagnostic for both const and non-const
+    // subscripting operators.
+
+    std::string err
+        ("Symbol table for class S ascribes no member named 'nonexistent'."
+        );
+#if defined __GNUC__ && LMI_GCC_VERSION < 40000
+    err = "Symbol table for class 1S ascribes no member named 'nonexistent'.";
+#endif // defined __GNUC__ && LMI_GCC_VERSION < 40000
+
+    BOOST_TEST_THROW(s_const["nonexistent"], std::runtime_error, err);
+    BOOST_TEST_THROW(s      ["nonexistent"], std::runtime_error, err);
+
+    // Make sure numeric_io_cast is used for writing arithmetic types
+    // to std::string, for any compiler that has IEC 60559 doubles and
+    // can handle value_cast correctly (borland, for example, fails).
+
+    s.d0 = std::exp(1.0);
+    double d1 = *s["d0"].exact_cast<double>();
+    BOOST_TEST_EQUAL(numeric_io_cast<std::string>(d1), "2.718281828459045");
+#if !defined __BORLANDC__
+    // This test fails with (defective) borland tools, which cannot
+    // handle the numeric-conversion routines correctly.
+    BOOST_TEST_EQUAL(s["d0"].str(), "2.718281828459045");
+#endif // !defined __BORLANDC__
+
+// COMPILER !! The borland compiler can build the program with the
+// following line, but a run-time exception results.
+//    std::cout << lmi::TypeInfo(typeid(s["i0"])) << std::endl;
+// That crashes drmingw if it's installed as the jit debugger.
+//
+// However, no problem is observed with these two lines:
+//    std::cout << lmi::TypeInfo(typeid(int)) << std::endl;
+//    std::cout << lmi::TypeInfo(typeid(s["i0"])) << std::endl;
+// the second of which is identical to the offending line above.
+//
+// Because the problem seems confined to borland tools, I will guess
+// that it's simply a compiler defect.
+
+    // Want to be able to unify a subobject with a pmf, e.g.
+//    s["s0"].size();
+    // no matching function for call to `any_member<S>::size()
+    std::string str("xyzzy");
+
+//    std::mem_fun(&std::string::size);
+//    str.string_size();
+
+//    str.(std::mem_fun(&std::string::size));
+
+//    std::mem_fun_t sizer;
+//    std::mem_fun_t sizer();
+//    std::const_mem_fun_t(std::string::size);
+    std::mem_fun(&std::string::size)(&str);
+
+    test0();
+}
+
+void any_member_test::supplemental_test()
 {
     S s;
     X x;
@@ -321,34 +535,81 @@ void optional_exploration()
     }
 
     {
-    std::cout << "Testing member function cast().\n";
+    std::cout << "Testing member template exact_cast().\n";
     s.x0.set_str("Test 2");
 
-    s["x0"].cast<X>().foo("example 0");
+    s["x0"].exact_cast<X>()->foo("example 0");
 
-    X xx = s["x0"].cast<X>();
+    X xx = *s["x0"].exact_cast<X>();
     xx.foo("example 1");
 
-    (xx               .*&X::foo)("example 2");
-    (s["x0"].cast<X>().*&X::foo)("example 3");
+    (xx                      .*&X::foo)("example 2");
+    (s["x0"].exact_cast<X>()->*&X::foo)("example 3");
 
-    // Cast derived-class member to its base.
+    s["dd"].exact_cast<derived_datum>();
+    s["dd"].exact_cast<derived_datum>()->base_function();
+    }
 
-    s["dd"].cast<derived_datum>();
-    s["dd"].cast<derived_datum>().base_function();
+    {
+    std::cout << "Testing function template member_cast().\n";
+    s.x0.set_str("Test 3");
+
+    std::string err("Cannot cast from 'int S::*' to 'base_datum'.");
+#if defined __GNUC__ && LMI_GCC_VERSION < 40000
+    err = "Cannot cast from 'M1Si' to '10base_datum'.";
+#endif // defined __GNUC__ && LMI_GCC_VERSION < 40000
+
+    BOOST_TEST_THROW(member_cast<base_datum>(s["i0"]), std::runtime_error, err);
+
+    base_datum* bp1 = member_cast<base_datum>(s["dd"]);
+    BOOST_TEST_EQUAL(1729, bp1->virtual_function());
+
+    // This is appropriately forbidden: virtual_function() is not const.
+//    base_datum const* bp2 = member_cast<base_datum>(s["dd"]);
+//    BOOST_TEST_EQUAL(1729, bp2->virtual_function());
+
+#if !defined __BORLANDC__
+    // COMPILER !! The borland compiler doesn't find the const overload;
+    // presumably it is defective in this respect.
+    S const& r = s;
+    base_datum const* bp3 = member_cast<base_datum>(r["dd"]);
+    BOOST_TEST_EQUAL(7, bp3->sane);
+    // This is appropriately forbidden: virtual_function() is not const.
+//    BOOST_TEST_EQUAL(1729, bp3->virtual_function());
+#endif // !defined __BORLANDC__
+
+    // If the original type is known, an explicit exact_cast is possible.
+    BOOST_TEST_EQUAL(1729, s["dd"].exact_cast<derived_datum>()->virtual_function());
+
+    // If the original type isn't precisely unknown, but is known to
+    // derive from a particular base class, then function template
+    // member_cast() can reconstitute the actual pointer-to-member
+    // type and safely return a pointer to the base class, provided
+    // that it has sufficient knowledge of the inheritance hierarchy.
+    // This obviates writing the type of the member pointed to.
+    BOOST_TEST_EQUAL(1729, member_cast<base_datum>(s["dd"])->virtual_function());
+
+    // Of course, member_cast() should work with the exact type, too.
+    BOOST_TEST_EQUAL(1729, member_cast<derived_datum>(s["dd"])->virtual_function());
     }
 
     {
     std::cout << "Testing abstract-base-class member functions.\n";
-    s.x0.set_str("Test 3");
+    s.x0.set_str("Test 4");
 
     // Want to write something like:
     //   s["x0"].foo(); // no matching function for call to any_member<S>::foo()
     // but we need to supply the actual type:
-    //   s["x0"].cast<X>().foo("example 0");
+    //   s["x0"].exact_cast<X>()->foo("example 0");
+    // Yet we don't want to know the actual type of what 's["dd"]'
+    // designates, much less exact_cast it to that type.
 
     derived_datum S::* pmd = &S::dd;
-//    base_datum S::* pmdb = &S::dd; // invalid conversion
+    // invalid conversion from `derived_datum S::*' to `base_datum S::*':
+//    base_datum S::* pmdb = &S::dd;
+    // invalid static_cast from type `derived_datum S::*' to type `base_datum S::*':
+//    base_datum S::* pmdb = static_cast<base_datum S::*>(&S::dd);
+
     derived_datum datum = s.*pmd;
     dynamic_cast<base_datum&>(datum).base_function();
     // s["dd"]) --> any_member<S>
@@ -366,100 +627,7 @@ void optional_exploration()
     (s.*pmd.*pmf3)();
     (s.*&S::dd.*pmf3)();
 
-    // We don't want to know the actual type of what 's["dd"]' designates,
-    // much less cast to that type.
-
-    // Contravariance:
-    // 'T Base::*' -> 'T Derived::*' is a standard conversion
-    // 'T Derived::*' -> 'T Base::*' is not.
-    // The latter requires an explicit cast, which must [5.2.9/9]
-    // be a static_cast to map
-    //   Derived::*T --> Base::*T
-    // which is what we want to do with the function member. And
-    // 4.11/1 makes
-    //   Base::*T --> Derived::*T
-    // a standard conversion that needs no cast.
-
-//    s["dd"].cast<base_datum>();
-// Cannot cast from 'M1S13derived_datum' to 'M1S10base_datum'.
-//
-// /MinGW/bin/c++filt M1S13derived_datum
-// derived_datum S::*
-// /MinGW/bin/c++filt M1S10base_datum
-// base_datum S::*
-
     std::cout << std::endl;
     }
-}
-
-int test_main(int, char*[])
-{
-    S s;
-    s["i0"] = "999";
-    BOOST_TEST_EQUAL(s.i0, 999);
-
-    s["i0"] = "077";   // Interpreted as decimal, not as octal.
-    BOOST_TEST_EQUAL(s.i0, 77);
-
-    s["i0"] = "09";    // Valid decimal, not invalid octal.
-    BOOST_TEST_EQUAL(s.i0, 9);
-
-    s["i1"] = "888000";
-    BOOST_TEST_EQUAL(s.i1, 888000);
-
-//  s["i0"] = "999.9"; // Invalid integer-literal.
-//  s["i1"] = "888e3"; // Invalid integer-literal.
-
-    s["d0"] = "777";
-    BOOST_TEST_EQUAL(s.d0, 777);
-
-    s["d0"] = "777.";
-    BOOST_TEST_EQUAL(s.d0, 777);
-
-    s["d0"] = "777E3";
-    BOOST_TEST_EQUAL(s.d0, 777000);
-
-    s["d0"] = ".777E3";
-    BOOST_TEST_EQUAL(s.d0, 777);
-
-    s["s0"] = "hello";
-    BOOST_TEST_EQUAL(s.s0, "hello");
-
-    std::stringstream ss;
-    s.write(ss);
-    BOOST_TEST_EQUAL(ss.str(), "9 888000 777 hello");
-
-    // Test const operator[]().
-    S const s_const;
-    BOOST_TEST_EQUAL("0", s_const["i0"].str());
-
-    // Make sure numeric_io_cast is used for writing arithmetic types
-    // to std::string (this test assumes IEC 60559 doubles).
-
-    s.d0 = std::exp(1.0);
-    double d1 = s["d0"].cast<double>();
-    BOOST_TEST_EQUAL(numeric_io_cast<std::string>(d1), "2.718281828459045");
-    BOOST_TEST_EQUAL(s["d0"].str(), "2.718281828459045");
-
-    // Want to be able to unify a subobject with a pmf, e.g.
-//    s["s0"].size();
-    // no matching function for call to `any_member<S>::size()
-    std::string str("xyzzy");
-
-//    std::mem_fun(&std::string::size);
-//    str.string_size();
-
-//    str.(std::mem_fun(&std::string::size));
-
-//    std::mem_fun_t sizer;
-//    std::mem_fun_t sizer();
-//    std::const_mem_fun_t(std::string::size);
-    std::mem_fun(&std::string::size)(&str);
-
-    test0();
-// Uncomment this to explore various pointer-to-member techniques.
-//    optional_exploration();
-
-    return 0;
 }
 
