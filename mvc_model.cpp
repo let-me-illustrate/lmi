@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mvc_model.cpp,v 1.2 2006-07-09 17:27:05 chicares Exp $
+// $Id: mvc_model.cpp,v 1.3 2006-07-09 18:39:07 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -76,6 +76,11 @@ MvcModel::~MvcModel()
 {
 }
 
+void MvcModel::AdaptExternalities()
+{
+    DoAdaptExternalities();
+}
+
 datum_base const* MvcModel::BaseDatumPointer(std::string const& name) const
 {
     return DoBaseDatumPointer(name);
@@ -112,6 +117,7 @@ void MvcModel::Reconcile()
 
     for(; !okay && j < maximum_iterations; ++j)
         {
+        AdaptExternalities();
         Harmonize();
         Transmogrify();
         old_values.swap(new_values);
@@ -137,6 +143,7 @@ void MvcModel::TestInitialConsistency()
     StateType new_values;
 
     description = "Static initial values are inconsistent with rules:";
+    AdaptExternalities();
     old_values = State();
     Harmonize();
     Transmogrify();
@@ -145,6 +152,7 @@ void MvcModel::TestInitialConsistency()
 
     description = "Dynamic initial values are inconsistent with rules:";
     CustomizeInitialValues();
+    AdaptExternalities();
     old_values = State();
     Harmonize();
     Transmogrify();
@@ -155,6 +163,7 @@ void MvcModel::TestInitialConsistency()
 void MvcModel::CustomizeInitialValues()
 {
     DoCustomizeInitialValues();
+    AdaptExternalities();
     Harmonize();
     Transmogrify();
 }

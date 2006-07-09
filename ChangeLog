@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.409 2006-07-09 17:27:05 chicares Exp $
+// $Id: ChangeLog,v 1.410 2006-07-09 18:39:07 chicares Exp $
 
 MAINTENANCE
 
@@ -6883,4 +6883,12 @@ Improve comments on conditionals.
 Derive class Input from class MvcModel. For the moment, some
   "Harmonize() improperly forces values to change..."
 warnings occur, indicating a problem that needs to be fixed.
+
+20060709T1839Z <chicares@cox.net> [1211]
+
+  input.hpp
+  input_harmonization.cpp
+  mvc_model.cpp
+  mvc_model.hpp
+Fix the problem identified 20060709T1727Z.
 
