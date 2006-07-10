@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: wx_utility.hpp,v 1.2 2006-06-18 03:26:15 chicares Exp $
+// $Id: wx_utility.hpp,v 1.3 2006-07-10 13:15:31 chicares Exp $
 
 #ifndef wx_utility_hpp
 #define wx_utility_hpp
@@ -83,10 +83,19 @@ void Connect
 }
 
 /// Convert wxDateTime to calendar_date.
+
 calendar_date ConvertDateFromWx(wxDateTime const&);
 
 /// Convert calendar_date to wxDateTime.
+
 wxDateTime ConvertDateToWx(calendar_date const&);
+
+bool operator==(calendar_date const& lmi_date, wxDateTime const& wx_date);
+bool operator==(wxDateTime const& wx_date, calendar_date const& lmi_date);
+
+/// Test ConvertDateFromWx() and ConvertDateToWx().
+
+void TestDateConversions();
 
 /// Return a string comprising a window's id, label, and name.
 

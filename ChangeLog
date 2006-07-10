@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.411 2006-07-10 02:42:05 chicares Exp $
+// $Id: ChangeLog,v 1.412 2006-07-10 13:15:31 chicares Exp $
 
 MAINTENANCE
 
@@ -6908,4 +6908,38 @@ Use member_cast() (indirectly) instead of cast_blithely().
 
   any_member.hpp
 Eradicate cast_blithely().
+
+20060710T0316Z <chicares@cox.net> [1209]
+
+  xml_notebook.cpp
+Validate only controls that can require validation.
+
+20060710T1313Z <chicares@cox.net> [1205]
+
+  input_harmonization.cpp
+  tn_range.hpp
+  tn_range.tpp
+  xml_notebook.cpp
+Replace obsolete facilities for validation and range access.
+
+20060710T1314Z <chicares@cox.net> [1204]
+
+  datum_base.hpp
+  datum_boolean.cpp
+  datum_boolean.hpp
+  datum_string.cpp
+  datum_string.hpp
+  mc_enum.cpp
+  mc_enum.hpp
+Remove empty validation from classes that do no validation.
+
+20060710T1315Z <chicares@cox.net> [1204]
+
+  map_lookup.hpp
+  msw_common.make
+  test_tools.hpp
+  test_tools_test.cpp
+  wx_utility.cpp
+  wx_utility.hpp
+Import selected changes from skeleton trunk.
 

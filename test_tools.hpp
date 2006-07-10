@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: test_tools.hpp,v 1.7 2006-01-29 13:52:00 chicares Exp $
+// $Id: test_tools.hpp,v 1.8 2006-07-10 13:15:31 chicares Exp $
 
 // This is a derived work based on Beman Dawes's boost test library
 // that bears the following copyright and license statement:
@@ -119,8 +119,9 @@
 ///    - 'WHAT' is empty, or
 ///    - 'WHAT' exactly matches the actual exception's what(), or
 ///    - 'WHAT' matches the actual exception's what() up to but not
-///      including the first newline (because some lmi exceptions add
-///      a newline and the file name and line number).
+///      including any lmi exception-location string. (Some lmi
+///      exceptions add a newline and the file name and line number,
+///      always beginning "\n[file ").
 ///
 /// TODO ?? Probably the first element of the triple condition should
 /// be removed, and tests that rely on it strengthened.
@@ -135,64 +136,64 @@
 /// always permissible. See C++98 21.3.6.8/3 and 21.3.1/4, and cf.
 /// Josuttis, TC++SL, 11.3.4 .
 
-#define BOOST_TEST_THROW(expression,TYPE,WHAT)          \
-    try                                                 \
-        {                                               \
-        expression;                                     \
-        lmi_test::error_stream()                        \
-            << "Expression '"                           \
-            << #expression                              \
-            << "' failed to throw expected exception '" \
-            << #TYPE                                    \
-            << "'"                                      \
-            << BOOST_TEST_FLUSH                         \
-            ;                                           \
-        lmi_test::record_error();                       \
-        }                                               \
-    catch(std::exception const& e)                      \
-        {                                               \
-        if                                              \
-            (   typeid(e)                               \
-            !=  typeid(TYPE)                            \
-            )                                           \
-            {                                           \
-            lmi_test::error_stream()                    \
-                << "Caught exception of type\n    '"    \
-                << typeid(e).name()                     \
-                << "'\n  when type\n    '"              \
-                << typeid(TYPE).name()                  \
-                << "'\n  was expected."                 \
-                << BOOST_TEST_FLUSH                     \
-                ;                                       \
-            lmi_test::record_error();                   \
-            }                                           \
-        else if                                         \
-            (   std::string(WHAT).size()                \
-            &&  (   std::string((e).what())             \
-                !=  std::string(WHAT)                   \
-                )                                       \
-            &&  0 != std::string((e).what()).compare    \
-                    (0                                  \
-                    ,std::string((e).what()).find('\n') \
-                    ,std::string(WHAT)                  \
-                    )                                   \
-            )                                           \
-            {                                           \
-            lmi_test::error_stream()                    \
-                << "Caught exception\n    '"            \
-                << (e).what()                           \
-                << "'\n  when\n    '"                   \
-                << (WHAT)                               \
-                << "'\n  was expected."                 \
-                << BOOST_TEST_FLUSH                     \
-                ;                                       \
-            lmi_test::record_error();                   \
-            }                                           \
-        else                                            \
-            {                                           \
-            lmi_test::record_success();                 \
-            }                                           \
-        }                                               \
+#define BOOST_TEST_THROW(expression,TYPE,WHAT)                \
+    try                                                       \
+        {                                                     \
+        expression;                                           \
+        lmi_test::error_stream()                              \
+            << "Expression '"                                 \
+            << #expression                                    \
+            << "' failed to throw expected exception '"       \
+            << #TYPE                                          \
+            << "'"                                            \
+            << BOOST_TEST_FLUSH                               \
+            ;                                                 \
+        lmi_test::record_error();                             \
+        }                                                     \
+    catch(std::exception const& e)                            \
+        {                                                     \
+        if                                                    \
+            (   typeid(e)                                     \
+            !=  typeid(TYPE)                                  \
+            )                                                 \
+            {                                                 \
+            lmi_test::error_stream()                          \
+                << "Caught exception of type\n    '"          \
+                << typeid(e).name()                           \
+                << "'\n  when type\n    '"                    \
+                << typeid(TYPE).name()                        \
+                << "'\n  was expected."                       \
+                << BOOST_TEST_FLUSH                           \
+                ;                                             \
+            lmi_test::record_error();                         \
+            }                                                 \
+        else if                                               \
+            (   std::string(WHAT).size()                      \
+            &&  (   std::string((e).what())                   \
+                !=  std::string(WHAT)                         \
+                )                                             \
+            &&  0 != std::string((e).what()).compare          \
+                    (0                                        \
+                    ,std::string((e).what()).find("\n[file ") \
+                    ,std::string(WHAT)                        \
+                    )                                         \
+            )                                                 \
+            {                                                 \
+            lmi_test::error_stream()                          \
+                << "Caught exception\n    '"                  \
+                << (e).what()                                 \
+                << "'\n  when\n    '"                         \
+                << (WHAT)                                     \
+                << "'\n  was expected."                       \
+                << BOOST_TEST_FLUSH                           \
+                ;                                             \
+            lmi_test::record_error();                         \
+            }                                                 \
+        else                                                  \
+            {                                                 \
+            lmi_test::record_success();                       \
+            }                                                 \
+        }                                                     \
 
 #define INVOKE_BOOST_TEST(exp,file,line)  \
     if(!(exp))                            \
