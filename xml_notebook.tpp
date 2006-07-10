@@ -1,4 +1,4 @@
-// Input 'notebook' (tabbed dialog) driven by xml resources.
+// Obsolescent MVC Controller for life insurance.
 //
 // Copyright (C) 2003, 2004, 2005, 2006 Gregory W. Chicares.
 //
@@ -19,11 +19,12 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xml_notebook.tpp,v 1.5 2006-07-06 16:23:30 wboutin Exp $
+// $Id: xml_notebook.tpp,v 1.6 2006-07-10 02:31:05 chicares Exp $
 
 #include "xml_notebook.hpp"
 
 #include "alert.hpp"
+#include "input.hpp"
 #include "rtti_lmi.hpp"
 
 #include <boost/static_assert.hpp>
@@ -31,6 +32,41 @@
 
 #include <wx/window.h>
 #include <wx/xrc/xmlres.h>
+
+template<typename T>
+T const* XmlNotebook::ModelPointer(std::string const& name) const
+{
+    return dynamic_cast<T const*>(input_.BaseDatumPointer(name));
+}
+
+template<typename T>
+T const& XmlNotebook::ModelReference(std::string const& name) const
+{
+    T const* p = ModelPointer<T>(name);
+    if(!p)
+        {
+        fatal_error()
+            << "Cannot convert Model datum '"
+            << name
+            << "' of type '"
+            << lmi::TypeInfo(input_.Entity(name).type())
+            << "' to type '"
+            << lmi::TypeInfo(typeid(T))
+            << "'."
+            << LMI_FLUSH
+            ;
+        }
+    return *p;
+}
+
+// TODO ?? Consider a free-function implementation using static functions
+// FindWindowById() and FindWindowByName(). Then consider turning these:
+//   Bind()
+//   CurrentPage()
+//   DiagnosticsWindow()
+//   EnsureOptimalFocus()
+//   NameOfFocusedTextControl()
+// into free functions: "non-friend non-members are better than members".
 
 template<typename T>
 T& XmlNotebook::WindowFromXrcName(char const* name) const
@@ -44,12 +80,31 @@ T& XmlNotebook::WindowFromXrcName(char const* name) const
         ||  boost::is_base_and_derived<wxWindow,T>::value
         ));
 
-    T* ptr = dynamic_cast<T*>(FindWindow(XRCID(name)));
-    if(!ptr)
+    wxWindow* w = FindWindow(XRCID(name));
+    if(!w)
         {
-        fatal_error() << "No control named '" << name << "'." << LMI_FLUSH;
+        fatal_error()
+            << "Unable to find '"
+            << name
+            << "' in xml resources."
+            << LMI_FLUSH
+            ;
         }
-    return *ptr;
+
+    T* t = dynamic_cast<T*>(w);
+    if(!t)
+        {
+        fatal_error()
+            << "Unable to convert '"
+            << name
+            << "' to type '"
+            << lmi::TypeInfo(typeid(T))
+            << "'."
+            << LMI_FLUSH
+            ;
+        }
+
+    return *t;
 }
 
 template<typename T>

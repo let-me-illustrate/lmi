@@ -1,4 +1,4 @@
-// Input 'notebook' (tabbed dialog) driven by xml resources.
+// Obsolescent MVC Controller for life insurance.
 //
 // Copyright (C) 2003, 2004, 2005, 2006 Gregory W. Chicares.
 //
@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xml_notebook.hpp,v 1.16 2006-06-07 16:27:07 chicares Exp $
+// $Id: xml_notebook.hpp,v 1.17 2006-07-10 02:31:05 chicares Exp $
 
 #ifndef xml_notebook_hpp
 #define xml_notebook_hpp
@@ -324,6 +324,12 @@ class XmlNotebook
     void EnsureOptimalFocus();
 
     bool ItemBoxNeedsRefreshing(mc_enum_base const*, wxControlWithItems&);
+
+    template<typename T>
+    T const* ModelPointer(std::string const& name) const;
+
+    template<typename T>
+    T const& ModelReference(std::string const& name) const;
 
     void UponChildFocus            (wxChildFocusEvent&);
     void UponInitDialog            (wxInitDialogEvent&);
