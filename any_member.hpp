@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: any_member.hpp,v 1.11 2006-07-09 15:56:30 chicares Exp $
+// $Id: any_member.hpp,v 1.12 2006-07-10 02:42:05 chicares Exp $
 
 // This is a derived work based on boost::any, which bears the following
 // copyright and permissions notice:
@@ -281,10 +281,6 @@ class any_member
     virtual std::type_info const& type() const;
 #endif // defined __BORLANDC__
 
-    // TODO ?? EGREGIOUS_DEFECT This must be expunged.
-    template<typename ArbitraryType>
-    ArbitraryType* cast_blithely() const;
-
     // any_entity required implementation.
     virtual std::string str() const;
     virtual void write(std::ostream&) const;
@@ -377,16 +373,6 @@ bool any_member<ClassType>::operator!=
     ) const
 {
     return !operator==(other);
-}
-
-template<typename ClassType>
-template<typename ArbitraryType>
-ArbitraryType* any_member<ClassType>::cast_blithely() const
-{
-    typedef ArbitraryType ClassType::* pmd_type;
-    typedef holder<ClassType,pmd_type> holder_type;
-    pmd_type pmd = static_cast<holder_type*>(content_)->held_;
-    return &(object_->*pmd);
 }
 
 template<typename ClassType>
