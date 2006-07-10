@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.410 2006-07-09 18:39:07 chicares Exp $
+// $Id: ChangeLog,v 1.411 2006-07-10 02:42:05 chicares Exp $
 
 MAINTENANCE
 
@@ -6891,4 +6891,21 @@ warnings occur, indicating a problem that needs to be fixed.
   mvc_model.cpp
   mvc_model.hpp
 Fix the problem identified 20060709T1727Z.
+
+20060709T2316Z <chicares@cox.net> [1211]
+
+  xml_notebook.cpp
+Rename certain arguments and local variables.
+
+20060710T0231Z <chicares@cox.net> [1210]
+
+  xml_notebook.cpp
+  xml_notebook.hpp
+  xml_notebook.tpp
+Use member_cast() (indirectly) instead of cast_blithely().
+
+20060710T0242Z <chicares@cox.net> [1209]
+
+  any_member.hpp
+Eradicate cast_blithely().
 
