@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: map_lookup.hpp,v 1.2 2006-01-29 13:52:00 chicares Exp $
+// $Id: map_lookup.hpp,v 1.3 2006-07-10 13:15:31 chicares Exp $
 
 #ifndef map_lookup_hpp
 #define map_lookup_hpp
@@ -30,7 +30,8 @@
 #include <sstream>
 #include <stdexcept>
 
-// Here's why this isn't called 'operator[]() const':
+// The reason why this isn't called 'operator[]() const' is discussed
+// in the thread beginning here:
 //   http://groups.google.com/group/comp.std.c++/msg/c1df492f65f29c5a
 
 template<typename map_t>

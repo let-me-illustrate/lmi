@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: test_tools_test.cpp,v 1.4 2006-01-29 13:52:00 chicares Exp $
+// $Id: test_tools_test.cpp,v 1.5 2006-07-10 13:15:31 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -108,13 +108,14 @@ int test_main(int, char*[])
     // This test, unlike the others above, should not fail. It makes
     // sure that the anticipated and actually-thrown exceptions are
     // treated as equivalent even though the latter has an extra
-    // terminal substring beginning with a newline.
+    // terminal substring beginning with "\n[file ", which some lmi
+    // exceptions add.
 
     BOOST_TEST_THROW
         (throw_exception
             (std::runtime_error
                 ("arbitrary"
-                "\n[a newline and anything following should be ignored]"
+                "\n[file <remainder of terminal substring to ignore>]"
                 )
             )
         ,std::runtime_error
