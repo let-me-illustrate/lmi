@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: datum_string.hpp,v 1.4 2006-05-30 20:07:30 wboutin Exp $
+// $Id: datum_string.hpp,v 1.5 2006-07-10 13:14:34 chicares Exp $
 
 #ifndef datum_string_hpp
 #define datum_string_hpp
@@ -45,10 +45,11 @@ class datum_string
     explicit datum_string(std::string const&);
     virtual ~datum_string();
 
+    datum_string& operator=(std::string const&);
+
     std::string const& value() const;
 
     // datum_base required implementation.
-    virtual bool is_valid(std::string const&) const;
     virtual std::istream& read (std::istream&);
     virtual std::ostream& write(std::ostream&) const;
 
