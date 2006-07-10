@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: tn_range.hpp,v 1.9 2006-07-08 00:52:18 chicares Exp $
+// $Id: tn_range.hpp,v 1.10 2006-07-10 13:13:16 chicares Exp $
 
 #ifndef tn_range_hpp
 #define tn_range_hpp
@@ -225,9 +225,6 @@ class tn_range
     Number maximum() const;
     Number value() const;
 
-// TODO ?? EGREGIOUS_DEFECT
-    virtual bool is_valid(std::string const&) const;
-
   private:
     std::string format_limits_for_error_message() const;
     bool is_valid(Number) const;
@@ -245,13 +242,8 @@ class tn_range
 
     Trammel trammel_;
 
-// TODO ?? EGREGIOUS_DEFECT
-#if 1
-  public:
     Number minimum_;
     Number maximum_;
-  private:
-#endif // 1
     Number value_;
 };
 
