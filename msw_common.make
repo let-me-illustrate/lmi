@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: msw_common.make,v 1.9 2006-01-29 13:52:00 chicares Exp $
+# $Id: msw_common.make,v 1.10 2006-07-10 13:15:31 chicares Exp $
 
 ################################################################################
 
@@ -43,7 +43,6 @@ SHREXT := .dll
 platform_defines := \
   -DLIBXML_USE_DLL \
   -DSTRICT \
-  -DWXUSINGDLL \
 
 platform_boost_libraries := \
   -lboost_filesystem-mgw \
