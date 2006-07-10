@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: configurable_settings.hpp,v 1.11 2006-02-13 18:59:07 chicares Exp $
+// $Id: configurable_settings.hpp,v 1.12 2006-07-10 18:00:14 chicares Exp $
 
 #ifndef configurable_settings_hpp
 #define configurable_settings_hpp
@@ -57,11 +57,15 @@
 /// libraries_to_preload_: Names of any libraries to be preloaded.
 /// Used to work around a defect of msw.
 ///
+/// obsolescent_mvc_: Use obsolescent MVC implementation.
+///
 /// offer_hobsons_choice_: Unsafely allow users the option to bypass
 /// error conditions. Setting this to 'false' prevents the system from
 /// asking whether to bypass problems; that is the default, and
 /// changing it may have no effect with non-GUI interfaces. Eventually
 /// this option may be removed altogether.
+///
+/// skin_filename_: Name of '.xrc' interface skin.
 ///
 /// spreadsheet_file_extension_: File extension (beginning with a dot)
 /// typical for the user's preferred spreadsheet program, used to
@@ -88,7 +92,9 @@ class LMI_SO configurable_settings
     std::string const& custom_output_filename    () const;
     std::string const& default_input_filename    () const;
     std::string const& libraries_to_preload      () const;
+    bool               obsolescent_mvc           () const;
     bool               offer_hobsons_choice      () const;
+    std::string const& skin_filename             () const;
     std::string const& spreadsheet_file_extension() const;
     std::string const& xsl_fo_command            () const;
     std::string const& xsl_fo_directory          () const;
@@ -105,7 +111,9 @@ class LMI_SO configurable_settings
     std::string custom_output_filename_;
     std::string default_input_filename_;
     std::string libraries_to_preload_;
-    bool offer_hobsons_choice_;
+    bool        obsolescent_mvc_;
+    bool        offer_hobsons_choice_;
+    std::string skin_filename_;
     std::string spreadsheet_file_extension_;
     std::string xsl_fo_command_;
     std::string xsl_fo_directory_;
