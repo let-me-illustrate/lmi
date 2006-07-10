@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.412 2006-07-10 13:15:31 chicares Exp $
+// $Id: ChangeLog,v 1.413 2006-07-10 18:00:14 chicares Exp $
 
 MAINTENANCE
 
@@ -6942,4 +6942,20 @@ Remove empty validation from classes that do no validation.
   wx_utility.cpp
   wx_utility.hpp
 Import selected changes from skeleton trunk.
+
+20060710T1759Z <chicares@cox.net> [1204]
+
+  default_view.cpp [new file]
+  default_view.hpp [new file]
+  objects.make
+Implement a default MVC View.
+
+20060710T1800Z <chicares@cox.net> [1204]
+
+  census_view.cpp
+  configurable_settings.cpp
+  configurable_settings.hpp
+  illustration_view.cpp
+  main_wx.cpp
+Enable switching between MVC implementations.
 
