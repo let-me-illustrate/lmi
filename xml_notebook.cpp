@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xml_notebook.cpp,v 1.34 2006-07-09 23:16:41 chicares Exp $
+// $Id: xml_notebook.cpp,v 1.35 2006-07-10 02:31:05 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -225,7 +225,7 @@ void XmlNotebook::ConditionallyEnableControl
     ,wxWindow&          control
     )
 {
-    control.Enable(input_[name].cast_blithely<datum_base>()->is_enabled());
+    control.Enable(ModelReference<datum_base>(name).is_enabled());
 }
 
 void XmlNotebook::ConditionallyEnableItems
@@ -239,12 +239,10 @@ void XmlNotebook::ConditionallyEnableItems
     //
     bool control_should_be_enabled = control.IsEnabled();
 
-    mc_enum_base const* datum = input_[name].cast_blithely<mc_enum_base>();
-    // TODO ?? Apparently this can never throw. Keep it in case we
-    // find a way to use a dynamic cast.
+    mc_enum_base const* datum = ModelPointer<mc_enum_base>(name);
     if(!datum)
         {
-        fatal_error() << "Input data must be enumerative." << LMI_FLUSH;
+        return;
         }
 
     wxRadioBox* radiobox = dynamic_cast<wxRadioBox*>(&control);
@@ -266,7 +264,7 @@ void XmlNotebook::ConditionallyEnableItems
         // datum->force_to_allowable_value();
 
         // TODO ?? Need to do something like this:
-        // input_["FundChoiceType"].cast_blithely<mc_enum_base>()->force_to_allowable_value();
+        // ModelReference<mc_enum_base>("FundChoiceType").force_to_allowable_value();
         // transfer_data_["FundChoiceType"] = input_["FundChoiceType"].str();
         }
     else if(itembox)
@@ -377,12 +375,10 @@ void XmlNotebook::SetupControlItems
     ,wxWindow&          control
     )
 {
-    mc_enum_base const* datum = input_[name].cast_blithely<mc_enum_base>();
-    // TODO ?? Apparently this can never throw. Keep it in case we
-    // find a way to use a dynamic cast.
+    mc_enum_base const* datum = ModelPointer<mc_enum_base>(name);
     if(!datum)
         {
-        fatal_error() << "Input data must be enumerative." << LMI_FLUSH;
+        return;
         }
 
     wxRadioBox* radiobox = dynamic_cast<wxRadioBox*>(&control);
@@ -801,15 +797,14 @@ ought to be forced through somehow.
     if("Yes" == input_["DeprecatedUseDOB"].str())
         {
         wxDatePickerCtrl& date = WindowFromXrcName<wxDatePickerCtrl>("DateOfBirth");
-        tnr_date* dob = input_["DateOfBirth"].cast_blithely<tnr_date>();
-        LMI_ASSERT(dob);
+        tnr_date dob = ModelReference<tnr_date>("DateOfBirth");
 
         calendar_date lmi_min_date;
-        lmi_min_date.julian_day_number(dob->minimum_);
+        lmi_min_date.julian_day_number(dob.minimum_);
         wxDateTime wx_min_date = ConvertDateToWx(lmi_min_date);
 
         calendar_date lmi_max_date;
-        lmi_max_date.julian_day_number(dob->maximum_);
+        lmi_max_date.julian_day_number(dob.maximum_);
         wxDateTime wx_max_date = ConvertDateToWx(lmi_max_date);
 
         date.SetRange(wx_min_date, wx_max_date);
@@ -945,7 +940,7 @@ void XmlNotebook::ValidateTextControl(wxWindow* w)
 
     // Assume that UponUpdateGUI() has already been called.
     if
-        (input_[t->name()].cast_blithely<datum_base>()->is_valid
+        (ModelReference<tn_range_base>(t->name()).is_valid
             (map_lookup(transfer_data_, t->name())
             )
         )
