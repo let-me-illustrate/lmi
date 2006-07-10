@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: tn_range.tpp,v 1.7 2006-07-08 00:52:18 chicares Exp $
+// $Id: tn_range.tpp,v 1.8 2006-07-10 13:13:16 chicares Exp $
 
 #include "tn_range.hpp"
 
@@ -517,22 +517,6 @@ template<typename Number, typename Trammel>
 bool tn_range<Number,Trammel>::is_valid(Number n) const
 {
     return minimum_ <= n && n <= maximum_;
-}
-
-// TODO ?? EGREGIOUS_DEFECT
-template<typename Number, typename Trammel>
-bool tn_range<Number,Trammel>::is_valid(std::string const& s) const
-{
-    try
-        {
-        Number n = numeric_io_cast<Number>(s);
-        return minimum_ <= n && n <= maximum_;
-        }
-    catch(std::exception const& e)
-        {
-        // TODO ?? Also provide a string indicating the problem.
-        return false;
-        }
 }
 
 template<typename Number, typename Trammel>
