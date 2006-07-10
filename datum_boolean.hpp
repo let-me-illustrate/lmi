@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: datum_boolean.hpp,v 1.2 2006-01-29 13:52:00 chicares Exp $
+// $Id: datum_boolean.hpp,v 1.3 2006-07-10 13:14:34 chicares Exp $
 
 #ifndef datum_boolean_hpp
 #define datum_boolean_hpp
@@ -43,7 +43,6 @@ class datum_boolean
     bool value() const;
 
     // datum_base required implementation.
-    virtual bool is_valid(std::string const&) const;
     virtual std::istream& read (std::istream&);
     virtual std::ostream& write(std::ostream&) const;
 

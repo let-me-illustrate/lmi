@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mc_enum.cpp,v 1.7 2006-06-02 14:22:11 chicares Exp $
+// $Id: mc_enum.cpp,v 1.8 2006-07-10 13:14:34 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -47,15 +47,6 @@ bool mc_enum_base::is_allowed(int index) const
 {
     validate_index(index);
     return allowed_[index];
-}
-
-// TODO ?? Is it reasonable to provide this default implementation?
-// Perhaps the base class just needs to document what this function
-// means--is it for numeric ranges only?
-//
-bool mc_enum_base::is_valid(std::string const&) const
-{
-    return true;
 }
 
 void mc_enum_base::validate_index(int index) const

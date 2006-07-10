@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: datum_string.cpp,v 1.3 2006-05-30 20:07:30 wboutin Exp $
+// $Id: datum_string.cpp,v 1.4 2006-07-10 13:14:34 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -43,9 +43,10 @@ datum_string::~datum_string()
 {
 }
 
-bool datum_string::is_valid(std::string const&) const
+datum_string& datum_string::operator=(std::string const& s)
 {
-    return true;
+    value_ = s;
+    return *this;
 }
 
 std::string const& datum_string::value() const

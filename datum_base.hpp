@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: datum_base.hpp,v 1.7 2006-05-30 20:07:30 wboutin Exp $
+// $Id: datum_base.hpp,v 1.8 2006-07-10 13:14:34 chicares Exp $
 
 #ifndef datum_base_hpp
 #define datum_base_hpp
@@ -42,17 +42,12 @@ class LMI_SO datum_base
     void enable(bool);
     bool is_enabled() const;
 
-    virtual bool is_valid(std::string const&) const     = 0;
-
-    virtual std::istream& read (std::istream& is)       = 0;
-    virtual std::ostream& write(std::ostream& os) const = 0;
+    virtual std::istream& read (std::istream&)       = 0;
+    virtual std::ostream& write(std::ostream&) const = 0;
 
   private:
     bool enabled_;
 };
-
-// Templated streaming operators would necessitate member templates
-// for read() and write(), which might suggest a different design.
 
 inline std::istream& operator>>(std::istream& is, datum_base& z)
 {

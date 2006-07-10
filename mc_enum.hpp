@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mc_enum.hpp,v 1.11 2006-07-08 00:17:11 chicares Exp $
+// $Id: mc_enum.hpp,v 1.12 2006-07-10 13:14:34 chicares Exp $
 
 // Acknowledgment
 //
@@ -137,6 +137,7 @@
 #endif // Defined __BORLANDC__ .
 
 #include <cstddef>
+#include <string>
 #include <vector>
 
 class LMI_SO mc_enum_base
@@ -147,9 +148,6 @@ class LMI_SO mc_enum_base
 
     void allow(int, bool);
     bool is_allowed(int) const;
-
-    // datum_base overrides.
-    virtual bool is_valid(std::string const&) const;
 
     virtual std::size_t allowed_ordinal() const = 0;
     virtual std::size_t cardinality() const = 0;
