@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xml_notebook.cpp,v 1.35 2006-07-10 02:31:05 chicares Exp $
+// $Id: xml_notebook.cpp,v 1.36 2006-07-10 03:16:04 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -939,19 +939,16 @@ void XmlNotebook::ValidateTextControl(wxWindow* w)
         }
 
     // Assume that UponUpdateGUI() has already been called.
-    if
-        (ModelReference<tn_range_base>(t->name()).is_valid
-            (map_lookup(transfer_data_, t->name())
-            )
-        )
-        {
-        hold_focus_window_ = 0;
-        DiagnosticsWindow().SetLabel("");
-        }
-    else
+    tn_range_base const* datum = ModelPointer<tn_range_base>(t->name());
+    if(datum && !datum->is_valid(map_lookup(transfer_data_, t->name())))
         {
         hold_focus_window_ = textctrl;
 //        DiagnosticsWindow().SetLabel("Invalid.");
+        }
+    else
+        {
+        hold_focus_window_ = 0;
+        DiagnosticsWindow().SetLabel("");
         }
 }
 
