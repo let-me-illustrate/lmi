@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_harmonization.cpp,v 1.28 2006-07-09 18:39:07 chicares Exp $
+// $Id: input_harmonization.cpp,v 1.29 2006-07-10 13:13:16 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -335,8 +335,8 @@ void Input::DoHarmonize()
     min_date_of_birth.julian_day_number(EffectiveDate.value());
     min_date_of_birth.add_years(-100, false);
 
-    DateOfBirth     .minimum_ = min_date_of_birth.julian_day_number();
-    DateOfBirth     .maximum_ = EffectiveDate.value();
+    DateOfBirth     .minimum(min_date_of_birth.julian_day_number());
+    DateOfBirth     .maximum(EffectiveDate.value());
 // End kludge.
     RetirementAge   .enable("No"  == DeprecatedUseDOR);
     DateOfRetirement.enable("Yes" == DeprecatedUseDOR);

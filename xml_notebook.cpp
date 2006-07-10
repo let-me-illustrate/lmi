@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xml_notebook.cpp,v 1.36 2006-07-10 03:16:04 chicares Exp $
+// $Id: xml_notebook.cpp,v 1.37 2006-07-10 13:13:16 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -800,11 +800,11 @@ ought to be forced through somehow.
         tnr_date dob = ModelReference<tnr_date>("DateOfBirth");
 
         calendar_date lmi_min_date;
-        lmi_min_date.julian_day_number(dob.minimum_);
+        lmi_min_date.julian_day_number(dob.minimum());
         wxDateTime wx_min_date = ConvertDateToWx(lmi_min_date);
 
         calendar_date lmi_max_date;
-        lmi_max_date.julian_day_number(dob.maximum_);
+        lmi_max_date.julian_day_number(dob.maximum());
         wxDateTime wx_max_date = ConvertDateToWx(lmi_max_date);
 
         date.SetRange(wx_min_date, wx_max_date);
@@ -940,10 +940,16 @@ void XmlNotebook::ValidateTextControl(wxWindow* w)
 
     // Assume that UponUpdateGUI() has already been called.
     tn_range_base const* datum = ModelPointer<tn_range_base>(t->name());
-    if(datum && !datum->is_valid(map_lookup(transfer_data_, t->name())))
+    std::string const& view_value = map_lookup(transfer_data_, t->name());
+    std::string diagnosis;
+    if(datum)
+        {
+        diagnosis = datum->diagnose_invalidity(view_value);
+        }
+    if(!diagnosis.empty())
         {
         hold_focus_window_ = textctrl;
-//        DiagnosticsWindow().SetLabel("Invalid.");
+        DiagnosticsWindow().SetLabel(diagnosis);
         }
     else
         {
