@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: configurable_settings.cpp,v 1.12 2006-02-23 04:44:43 chicares Exp $
+// $Id: configurable_settings.cpp,v 1.13 2006-07-10 18:00:14 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -61,7 +61,9 @@ configurable_settings::configurable_settings()
     ,custom_output_filename_     ("custom.out"         )
     ,default_input_filename_     ("etc/opt/default.ini")
     ,libraries_to_preload_       (""                   )
+    ,obsolescent_mvc_            (true                 )
     ,offer_hobsons_choice_       (false                )
+    ,skin_filename_              ("xml_notebook.xrc"   )
     ,spreadsheet_file_extension_ (".gnumeric"          )
     ,xsl_fo_command_             ("fo"                 )
     ,xsl_fo_directory_           ("/usr/bin/fo"        )
@@ -153,7 +155,9 @@ void configurable_settings::ascribe_members()
     ascribe("custom_output_filename"     ,&configurable_settings::custom_output_filename_    );
     ascribe("default_input_filename"     ,&configurable_settings::default_input_filename_    );
     ascribe("libraries_to_preload"       ,&configurable_settings::libraries_to_preload_      );
+    ascribe("obsolescent_mvc"            ,&configurable_settings::obsolescent_mvc_           );
     ascribe("offer_hobsons_choice"       ,&configurable_settings::offer_hobsons_choice_      );
+    ascribe("skin_filename"              ,&configurable_settings::skin_filename_             );
     ascribe("spreadsheet_file_extension" ,&configurable_settings::spreadsheet_file_extension_);
     ascribe("xsl_fo_command"             ,&configurable_settings::xsl_fo_command_            );
     ascribe("xsl_fo_directory"           ,&configurable_settings::xsl_fo_directory_          );
@@ -190,9 +194,19 @@ std::string const& configurable_settings::libraries_to_preload() const
     return libraries_to_preload_;
 }
 
+bool configurable_settings::obsolescent_mvc() const
+{
+    return obsolescent_mvc_;
+}
+
 bool configurable_settings::offer_hobsons_choice() const
 {
     return offer_hobsons_choice_;
+}
+
+std::string const& configurable_settings::skin_filename() const
+{
+    return skin_filename_;
 }
 
 std::string const& configurable_settings::spreadsheet_file_extension() const

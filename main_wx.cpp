@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_wx.cpp,v 1.53 2006-06-15 18:06:00 wboutin Exp $
+// $Id: main_wx.cpp,v 1.54 2006-07-10 18:00:14 chicares Exp $
 
 // Portions of this file are derived from wxWindows files
 //   samples/docvwmdi/docview.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -45,6 +45,7 @@
 #include "census_view.hpp"
 #include "configurable_settings.hpp"
 #include "data_directory.hpp"
+#include "default_view.hpp"
 #include "docmanager_ex.hpp"
 #include "docmdichildframe_ex.hpp"
 #include "fenv_lmi.hpp"
@@ -432,7 +433,8 @@ bool Skeleton::OnInit()
 
         wxXmlResource::Get()->InitAllHandlers();
 
-        if(!wxXmlResource::Get()->Load(AddDataDir("xml_notebook.xrc")))
+        DefaultView const v;
+        if(!wxXmlResource::Get()->Load(AddDataDir(v.ResourceFileName())))
             {
             fatal_error() << "Unable to load xml resources." << LMI_FLUSH;
             }
