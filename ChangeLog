@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.416 2006-07-11 03:14:40 chicares Exp $
+// $Id: ChangeLog,v 1.417 2006-07-11 03:41:09 chicares Exp $
 
 MAINTENANCE
 
@@ -6979,4 +6979,15 @@ Handle enablement upon page change.
   input_harmonization.cpp
 Make 'EffectiveDateToday' work appropriately--only with the new MVC
 framework.
+
+20060711T0340Z <chicares@cox.net> [1204]
+
+  xml_notebook.xrc
+Fix type of 'SubstandardTable', which was inappropriate.
+
+20060711T0341Z <chicares@cox.net> [1204]
+
+  mvc_controller.cpp
+  mvc_controller.hpp
+Initialize control items upon dialog creation.
 
