@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mvc_controller.cpp,v 1.3 2006-07-11 03:09:31 chicares Exp $
+// $Id: mvc_controller.cpp,v 1.4 2006-07-11 03:41:09 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -185,10 +185,6 @@ void MvcController::ConditionallyEnable()
         Transferor* t = dynamic_cast<Transferor*>(pw->GetValidator());
         if(t)
             {
-            // INELEGANT !! Assert this once, upon construction e.g.,
-            // or perhaps when page changes.
-            LMI_ASSERT(pw == &WindowFromXrcName<wxWindow>(t->name()));
-
             // INELEGANT !! If this is too slow in practice (because
             // refreshing item lists is expensive), then perhaps the
             // enablement state could be cached.
@@ -382,6 +378,23 @@ void MvcController::EnsureOptimalFocus()
         }
 }
 
+void MvcController::Initialize()
+{
+    typedef std::vector<wxWindow*>::const_iterator wvci;
+    for(wvci i = lineage_.begin(); i != lineage_.end(); ++i)
+        {
+        wxWindow* pw = *i;
+        LMI_ASSERT(0 != pw);
+        Transferor* t = dynamic_cast<Transferor*>(pw->GetValidator());
+        if(t)
+            {
+            LMI_ASSERT(pw == &WindowFromXrcName<wxWindow>(t->name()));
+            ConditionallyEnableControl(t->name(), *pw);
+            ConditionallyEnableItems  (t->name(), *pw);
+            }
+        }
+}
+
 /// Ascertain equivalence of an entity's Model and View values.
 ///
 /// Verbatim equality implies equivalence. String representations of
@@ -535,6 +548,8 @@ void MvcController::UponChildFocus(wxChildFocusEvent& event)
 void MvcController::UponInitDialog(wxInitDialogEvent& event)
 {
     event.Skip();
+
+    Initialize();
 
     ::Connect
         (this

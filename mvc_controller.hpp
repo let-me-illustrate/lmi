@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mvc_controller.hpp,v 1.2 2006-07-11 03:09:31 chicares Exp $
+// $Id: mvc_controller.hpp,v 1.3 2006-07-11 03:41:09 chicares Exp $
 
 #ifndef mvc_controller_hpp
 #define mvc_controller_hpp
@@ -307,6 +307,9 @@ namespace model_view_controller{} // doxygen workaround.
 /// control, move focus to a window that can accept it--ideally, to a
 /// control that accepts keyboard input.
 ///
+/// Initialize(): Ensure that enumerative controls have appropriate
+/// items when the dialog is initialized.
+///
 /// ModelAndViewValuesEquivalent(): Ascertain equivalence of an
 /// entity's Model and View values.
 ///
@@ -422,6 +425,7 @@ class MvcController
     wxNotebookPage& CurrentPage() const;
     wxStaticText& DiagnosticsWindow() const;
     void EnsureOptimalFocus();
+    void Initialize();
     bool ModelAndViewValuesEquivalent(std::string const& name) const;
 
     template<typename T>
