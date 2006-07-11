@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_harmonization.cpp,v 1.29 2006-07-10 13:13:16 chicares Exp $
+// $Id: input_harmonization.cpp,v 1.30 2006-07-11 03:14:40 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -933,6 +933,11 @@ false // Silly workaround for now.
 
 void Input::DoTransmogrify()
 {
+    if("Yes" == EffectiveDateToday)
+        {
+        EffectiveDate = calendar_date().julian_day_number();
+        }
+
     bool use_anb = database->Query(DB_AgeLastOrNearest);
 
     // TODO ?? This syntax seems ugly. Should there be a ctor
