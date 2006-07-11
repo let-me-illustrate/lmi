@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mvc_controller.cpp,v 1.2 2006-07-11 02:33:14 chicares Exp $
+// $Id: mvc_controller.cpp,v 1.3 2006-07-11 03:09:31 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -555,6 +555,12 @@ void MvcController::UponInitDialog(wxInitDialogEvent& event)
         );
     ::Connect
         (this
+        ,wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED
+        ,&MvcController::UponPageChanged
+        ,XRCID(view_.BookControlName())
+        );
+    ::Connect
+        (this
         ,wxEVT_CHILD_FOCUS
         ,&MvcController::UponChildFocus
         );
@@ -598,6 +604,13 @@ void MvcController::UponOK(wxCommandEvent& event)
         }
 
     warning() << "Data transfer completed." << std::flush;
+}
+
+void MvcController::UponPageChanged(wxNotebookEvent& event)
+{
+    event.Skip();
+
+    ConditionallyEnable();
 }
 
 /// Veto a page change if Validate() fails--but never veto the very

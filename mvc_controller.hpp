@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mvc_controller.hpp,v 1.1 2006-07-07 11:22:08 chicares Exp $
+// $Id: mvc_controller.hpp,v 1.2 2006-07-11 03:09:31 chicares Exp $
 
 #ifndef mvc_controller_hpp
 #define mvc_controller_hpp
@@ -333,6 +333,11 @@ namespace model_view_controller{} // doxygen workaround.
 /// Model data. A real application would, of course, do something with
 /// the data.
 ///
+/// UponPageChanged(): Enable controls and control items appropriately
+/// when the notebook page changes. Enablement matters only on the
+/// current page, and performing it on other pages has been observed
+/// to make the system noticeably slower.
+///
 /// UponPageChanging(): Trigger validation of a text control when the
 /// notebook page is about to change; veto the page change if
 /// validation fails. This event handler is needed because
@@ -431,6 +436,7 @@ class MvcController
     void UponChildFocus            (wxChildFocusEvent&);
     void UponInitDialog            (wxInitDialogEvent&);
     void UponOK                    (wxCommandEvent&   );
+    void UponPageChanged           (wxNotebookEvent&  );
     void UponPageChanging          (wxNotebookEvent&  );
     void UponRefocusInvalidControl (wxCommandEvent&   );
     void UponUpdateUI              (wxUpdateUIEvent&  );
