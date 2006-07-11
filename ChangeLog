@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.413 2006-07-10 18:00:14 chicares Exp $
+// $Id: ChangeLog,v 1.414 2006-07-11 02:33:14 chicares Exp $
 
 MAINTENANCE
 
@@ -6958,4 +6958,13 @@ Implement a default MVC View.
   illustration_view.cpp
   main_wx.cpp
 Enable switching between MVC implementations.
+
+20060711T0233Z <chicares@cox.net> [1204]
+
+  mvc_controller.cpp
+Permit use of checkbox with enumerative type 'mce_yes_or_no'. Stronger
+consistency checking in the new MVC framework detects this apparent
+mismatch. This type was mistakenly created in 2002-05 to facilitate
+pasting from a spreadsheet; it would be better to treat 'Yes' and 'No'
+as special cases in the pasting code.
 
