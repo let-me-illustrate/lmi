@@ -24,7 +24,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: xml_notebook.xrc,v 1.28 2006-07-07 02:09:07 chicares Exp $
+    $Id: xml_notebook.xrc,v 1.29 2006-07-11 03:40:11 chicares Exp $
 
     This version is generic. It strives to present every input field
     the system offers, in a way that suits the main developer's tastes.
@@ -1075,8 +1075,8 @@ demonstrate a defect in the wx library. See
                         </object>
                         <object class="sizeritem">
                             <flag>wxGROW</flag>
-                            <object class="wxTextCtrl" name="SubstandardTable">
-                                <size>10,-1</size>
+                            <object class="wxComboBox" name="SubstandardTable">
+                                <style>wxCB_DROPDOWN|wxCB_READONLY</style>
                             </object>
                         </object>
                     </object>
