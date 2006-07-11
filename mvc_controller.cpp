@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mvc_controller.cpp,v 1.1 2006-07-07 11:22:08 chicares Exp $
+// $Id: mvc_controller.cpp,v 1.2 2006-07-11 02:33:14 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -43,6 +43,7 @@
 #include "wx_workarounds.hpp"
 
 #include <wx/app.h> // wxTheApp
+#include <wx/checkbox.h>
 #include <wx/ctrlsub.h>
 #include <wx/notebook.h>
 #include <wx/radiobox.h>
@@ -217,11 +218,14 @@ void MvcController::ConditionallyEnableItems
 {
     mc_enum_base const* datum = ModelPointer<mc_enum_base>(name);
 
+    wxCheckBox*         checkbox = dynamic_cast<wxCheckBox        *>(&control);
     wxRadioBox*         radiobox = dynamic_cast<wxRadioBox        *>(&control);
     wxControlWithItems* itembox  = dynamic_cast<wxControlWithItems*>(&control);
     bool const control_is_enumerative = radiobox || itembox;
 
-    if(!control_is_enumerative && !datum)
+    // Type 'mce_yes_or_no' is enumerative, but is often used with
+    // checkboxes.
+    if(checkbox || !control_is_enumerative && !datum)
         {
         return;
         }
