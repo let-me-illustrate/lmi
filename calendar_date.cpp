@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: calendar_date.cpp,v 1.6 2006-06-23 18:12:58 wboutin Exp $
+// $Id: calendar_date.cpp,v 1.7 2006-07-11 17:11:13 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -118,10 +118,6 @@ namespace
     }
 /*
 // TODO ?? Do we want functions like these?
-// Answer: Yes. Look elsewhere in lmi for corrected versions,
-// perhaps in 'date_control.cpp' (probably that file is otherwise
-// obsolete, but I know I corrected some defects and I think it
-// was there).
 
     int YyyyMmDdToJdn(int g)
     {

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.417 2006-07-11 03:41:09 chicares Exp $
+// $Id: ChangeLog,v 1.418 2006-07-11 17:11:13 chicares Exp $
 
 MAINTENANCE
 
@@ -6990,4 +6990,17 @@ Fix type of 'SubstandardTable', which was inappropriate.
   mvc_controller.cpp
   mvc_controller.hpp
 Initialize control items upon dialog creation.
+
+20060711T1644Z <chicares@cox.net> [1204]
+
+  calendar_date_test.cpp
+Import selected changes from skeleton trunk.
+
+20060711T1711Z <chicares@cox.net> [1201]
+
+  calendar_date.cpp
+  date_control.cpp [expunged]
+  date_control.hpp [expunged]
+  objects.make
+Expunge disused files and references to them.
 
