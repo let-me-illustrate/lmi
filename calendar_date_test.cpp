@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: calendar_date_test.cpp,v 1.5 2006-01-29 13:52:00 chicares Exp $
+// $Id: calendar_date_test.cpp,v 1.6 2006-07-11 16:44:14 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -30,19 +30,6 @@
 
 #define BOOST_INCLUDE_MAIN
 #include "test_tools.hpp"
-
-#define TEST_EQUALITY(a,b) \
-    if((a) != (b)) \
-        { \
-        std::cout \
-            << '\n' \
-            << "ERROR: " << (a) << " != " << (b) \
-            << " line " << __LINE__ \
-            << ", file " << __FILE__ \
-            << '\n' \
-            ; \
-        } \
-    BOOST_TEST((a) == (b));
 
 int test_main(int, char*[])
 {
@@ -73,40 +60,40 @@ int test_main(int, char*[])
 
     birth_date = calendar_date(2003,  1,  1);
     birth_date.add_years(1, false);
-    TEST_EQUALITY(birth_date, calendar_date(2004,  1,  1));
+    BOOST_TEST_EQUAL(birth_date, calendar_date(2004,  1,  1));
 
     birth_date = calendar_date(2003, 12, 31);
     birth_date.add_years(1, false);
-    TEST_EQUALITY(birth_date, calendar_date(2004, 12, 31));
+    BOOST_TEST_EQUAL(birth_date, calendar_date(2004, 12, 31));
 
     birth_date = calendar_date(1996,  2, 29);
     birth_date.add_years(1, false);
-    TEST_EQUALITY(birth_date, calendar_date(1997,  3,  1));
+    BOOST_TEST_EQUAL(birth_date, calendar_date(1997,  3,  1));
 
     birth_date = calendar_date(1996,  2, 29);
     birth_date.add_years(4, false);
-    TEST_EQUALITY(birth_date, calendar_date(2000,  2, 29));
+    BOOST_TEST_EQUAL(birth_date, calendar_date(2000,  2, 29));
     birth_date.add_years(1, false);
-    TEST_EQUALITY(birth_date, calendar_date(2001,  3,  1));
+    BOOST_TEST_EQUAL(birth_date, calendar_date(2001,  3,  1));
 
     // Curtate tests.
     birth_date = calendar_date(2003,  1,  1);
     birth_date.add_years(1, true);
-    TEST_EQUALITY(birth_date, calendar_date(2004,  1,  1));
+    BOOST_TEST_EQUAL(birth_date, calendar_date(2004,  1,  1));
 
     birth_date = calendar_date(2003, 12, 31);
     birth_date.add_years(1, true);
-    TEST_EQUALITY(birth_date, calendar_date(2004, 12, 31));
+    BOOST_TEST_EQUAL(birth_date, calendar_date(2004, 12, 31));
 
     birth_date = calendar_date(1996,  2, 29);
     birth_date.add_years(1, true);
-    TEST_EQUALITY(birth_date, calendar_date(1997,  2, 28));
+    BOOST_TEST_EQUAL(birth_date, calendar_date(1997,  2, 28));
 
     birth_date = calendar_date(1996,  2, 29);
     birth_date.add_years(4, true);
-    TEST_EQUALITY(birth_date, calendar_date(2000,  2, 29));
+    BOOST_TEST_EQUAL(birth_date, calendar_date(2000,  2, 29));
     birth_date.add_years(1, true);
-    TEST_EQUALITY(birth_date, calendar_date(2001,  2, 28));
+    BOOST_TEST_EQUAL(birth_date, calendar_date(2001,  2, 28));
 
     // Test incrementing by whole number of months and years.
 
@@ -114,85 +101,101 @@ int test_main(int, char*[])
 
     birth_date = calendar_date(1996,  1, 29);
     birth_date.add_years_and_months(0, 1, false);
-    TEST_EQUALITY(birth_date, calendar_date(1996,  2, 29));
+    BOOST_TEST_EQUAL(birth_date, calendar_date(1996,  2, 29));
     birth_date.add_years_and_months(4, 0, false);
-    TEST_EQUALITY(birth_date, calendar_date(2000,  2, 29));
+    BOOST_TEST_EQUAL(birth_date, calendar_date(2000,  2, 29));
     birth_date.add_years_and_months(1, 0, false);
-    TEST_EQUALITY(birth_date, calendar_date(2001,  3,  1));
+    BOOST_TEST_EQUAL(birth_date, calendar_date(2001,  3,  1));
 
     birth_date = calendar_date(1995,  3, 31);
     birth_date.add_years_and_months(0, 11, false);
-    TEST_EQUALITY(birth_date, calendar_date(1996,  3,  1));
+    BOOST_TEST_EQUAL(birth_date, calendar_date(1996,  3,  1));
 
     birth_date = calendar_date(1995,  3, 31);
     birth_date.add_years_and_months(1, -1, false);
-    TEST_EQUALITY(birth_date, calendar_date(1996,  3,  1));
+    BOOST_TEST_EQUAL(birth_date, calendar_date(1996,  3,  1));
 
     birth_date = calendar_date(1995,  3, 31);
     birth_date.add_years_and_months(-4, 11, false);
-    TEST_EQUALITY(birth_date, calendar_date(1992,  3,  1));
+    BOOST_TEST_EQUAL(birth_date, calendar_date(1992,  3,  1));
 
     birth_date = calendar_date(1995,  3, 31);
     birth_date.add_years_and_months(-3, -1, false);
-    TEST_EQUALITY(birth_date, calendar_date(1992,  3,  1));
+    BOOST_TEST_EQUAL(birth_date, calendar_date(1992,  3,  1));
 
     birth_date = calendar_date(1995,  3, 31);
     birth_date.add_years_and_months(0, -37, false);
-    TEST_EQUALITY(birth_date, calendar_date(1992,  3,  1));
+    BOOST_TEST_EQUAL(birth_date, calendar_date(1992,  3,  1));
 
     birth_date = calendar_date(1995,  3, 31);
     birth_date.add_years_and_months(0, 9, false);
-    TEST_EQUALITY(birth_date, calendar_date(1995, 12, 31));
+    BOOST_TEST_EQUAL(birth_date, calendar_date(1995, 12, 31));
 
     birth_date = calendar_date(1995,  3, 31);
     birth_date.add_years_and_months(0, 10, false);
-    TEST_EQUALITY(birth_date, calendar_date(1996,  1, 31));
+    BOOST_TEST_EQUAL(birth_date, calendar_date(1996,  1, 31));
 
     birth_date = calendar_date(1994,  3, 31);
     birth_date.add_years_and_months(0, 21, false);
-    TEST_EQUALITY(birth_date, calendar_date(1995, 12, 31));
+    BOOST_TEST_EQUAL(birth_date, calendar_date(1995, 12, 31));
+
+    birth_date = calendar_date(2001,  1, 31);
+    birth_date.add_years_and_months(0,  1, false);
+    BOOST_TEST_EQUAL(birth_date, calendar_date(2001,  3,  1));
+
+    birth_date = calendar_date(2001,  1, 31);
+    birth_date.add_years_and_months(0,  3, false);
+    BOOST_TEST_EQUAL(birth_date, calendar_date(2001,  5,  1));
 
     // Curtate tests.
 
     birth_date = calendar_date(1996,  1, 29);
     birth_date.add_years_and_months(0, 1, true);
-    TEST_EQUALITY(birth_date, calendar_date(1996,  2, 29));
+    BOOST_TEST_EQUAL(birth_date, calendar_date(1996,  2, 29));
     birth_date.add_years_and_months(4, 0, true);
-    TEST_EQUALITY(birth_date, calendar_date(2000,  2, 29));
+    BOOST_TEST_EQUAL(birth_date, calendar_date(2000,  2, 29));
     birth_date.add_years_and_months(1, 0, true);
-    TEST_EQUALITY(birth_date, calendar_date(2001,  2, 28));
+    BOOST_TEST_EQUAL(birth_date, calendar_date(2001,  2, 28));
 
     birth_date = calendar_date(1995,  3, 31);
     birth_date.add_years_and_months(0, 11, true);
-    TEST_EQUALITY(birth_date, calendar_date(1996,  2, 29));
+    BOOST_TEST_EQUAL(birth_date, calendar_date(1996,  2, 29));
 
     birth_date = calendar_date(1995,  3, 31);
     birth_date.add_years_and_months(1, -1, true);
-    TEST_EQUALITY(birth_date, calendar_date(1996,  2, 29));
+    BOOST_TEST_EQUAL(birth_date, calendar_date(1996,  2, 29));
 
     birth_date = calendar_date(1995,  3, 31);
     birth_date.add_years_and_months(-4, 11, true);
-    TEST_EQUALITY(birth_date, calendar_date(1992,  2, 29));
+    BOOST_TEST_EQUAL(birth_date, calendar_date(1992,  2, 29));
 
     birth_date = calendar_date(1995,  3, 31);
     birth_date.add_years_and_months(-3, -1, true);
-    TEST_EQUALITY(birth_date, calendar_date(1992,  2, 29));
+    BOOST_TEST_EQUAL(birth_date, calendar_date(1992,  2, 29));
 
     birth_date = calendar_date(1995,  3, 31);
     birth_date.add_years_and_months(0, -37, true);
-    TEST_EQUALITY(birth_date, calendar_date(1992,  2, 29));
+    BOOST_TEST_EQUAL(birth_date, calendar_date(1992,  2, 29));
 
     birth_date = calendar_date(1995,  3, 31);
-    birth_date.add_years_and_months(0, 9, false);
-    TEST_EQUALITY(birth_date, calendar_date(1995, 12, 31));
+    birth_date.add_years_and_months(0, 9, true);
+    BOOST_TEST_EQUAL(birth_date, calendar_date(1995, 12, 31));
 
     birth_date = calendar_date(1995,  3, 31);
-    birth_date.add_years_and_months(0, 10, false);
-    TEST_EQUALITY(birth_date, calendar_date(1996,  1, 31));
+    birth_date.add_years_and_months(0, 10, true);
+    BOOST_TEST_EQUAL(birth_date, calendar_date(1996,  1, 31));
 
     birth_date = calendar_date(1994,  3, 31);
-    birth_date.add_years_and_months(0, 21, false);
-    TEST_EQUALITY(birth_date, calendar_date(1995, 12, 31));
+    birth_date.add_years_and_months(0, 21, true);
+    BOOST_TEST_EQUAL(birth_date, calendar_date(1995, 12, 31));
+
+    birth_date = calendar_date(2001,  1, 31);
+    birth_date.add_years_and_months(0,  1, true);
+    BOOST_TEST_EQUAL(birth_date, calendar_date(2001,  2, 28));
+
+    birth_date = calendar_date(2001,  1, 31);
+    birth_date.add_years_and_months(0,  3, true);
+    BOOST_TEST_EQUAL(birth_date, calendar_date(2001,  4, 30));
 
     // Test the example in this comment block that appears in a
     // different translation unit:
@@ -207,11 +210,11 @@ int test_main(int, char*[])
 
     birth_date = calendar_date(2002,  3, 31);
     birth_date.add_years_and_months(0, 11, true);
-    TEST_EQUALITY(birth_date, calendar_date(2003,  2, 28));
+    BOOST_TEST_EQUAL(birth_date, calendar_date(2003,  2, 28));
 
     birth_date = calendar_date(2002,  3, 31);
     birth_date.add_years_and_months(0, 12, true);
-    TEST_EQUALITY(birth_date, calendar_date(2003,  3, 31));
+    BOOST_TEST_EQUAL(birth_date, calendar_date(2003,  3, 31));
 
     // Suppose
     //   1958-07-02 is my birthdate, and
@@ -225,14 +228,14 @@ int test_main(int, char*[])
     effective_date = calendar_date(2003,  1,  1);
 
     birth_date     = calendar_date(1958,  7,  2);
-    TEST_EQUALITY(45, calculate_age(birth_date, effective_date, anb));
-    TEST_EQUALITY(44, calculate_age(birth_date, effective_date, alb));
+    BOOST_TEST_EQUAL(45, calculate_age(birth_date, effective_date, anb));
+    BOOST_TEST_EQUAL(44, calculate_age(birth_date, effective_date, alb));
 
     // If birthdate is one day later, then ANB is one year less.
 
     birth_date     = calendar_date(1958,  7,  3);
-    TEST_EQUALITY(44, calculate_age(birth_date, effective_date, anb));
-    TEST_EQUALITY(44, calculate_age(birth_date, effective_date, alb));
+    BOOST_TEST_EQUAL(44, calculate_age(birth_date, effective_date, anb));
+    BOOST_TEST_EQUAL(44, calculate_age(birth_date, effective_date, alb));
 
     // In a leap year, effective date can be an equal number of days
     // away from the two birthdays that bracket it. We arbitrarily
@@ -251,46 +254,46 @@ int test_main(int, char*[])
     effective_date = calendar_date(2004,  1,  1);
 
     birth_date     = calendar_date(1958,  7,  2);
-    TEST_EQUALITY(46, calculate_age(birth_date, effective_date, anb));
-    TEST_EQUALITY(45, calculate_age(birth_date, effective_date, alb));
+    BOOST_TEST_EQUAL(46, calculate_age(birth_date, effective_date, anb));
+    BOOST_TEST_EQUAL(45, calculate_age(birth_date, effective_date, alb));
 
     // If birthdate is one day earlier,
     // then ANB is unambiguously forty-six.
 
     birth_date     = calendar_date(1958,  7,  1);
-    TEST_EQUALITY(46, calculate_age(birth_date, effective_date, anb));
-    TEST_EQUALITY(45, calculate_age(birth_date, effective_date, alb));
+    BOOST_TEST_EQUAL(46, calculate_age(birth_date, effective_date, anb));
+    BOOST_TEST_EQUAL(45, calculate_age(birth_date, effective_date, alb));
 
     // If birthdate is one day later,
     // then ANB is unambiguously forty-five.
 
     birth_date     = calendar_date(1958,  7,  3);
-    TEST_EQUALITY(45, calculate_age(birth_date, effective_date, anb));
-    TEST_EQUALITY(45, calculate_age(birth_date, effective_date, alb));
+    BOOST_TEST_EQUAL(45, calculate_age(birth_date, effective_date, anb));
+    BOOST_TEST_EQUAL(45, calculate_age(birth_date, effective_date, alb));
 
     // Test leap-day birthdate.
 
     birth_date     = calendar_date(1956,  2, 29);
 
     effective_date = calendar_date(2003,  8, 30);
-    TEST_EQUALITY(47, calculate_age(birth_date, effective_date, anb));
-    TEST_EQUALITY(47, calculate_age(birth_date, effective_date, alb));
+    BOOST_TEST_EQUAL(47, calculate_age(birth_date, effective_date, anb));
+    BOOST_TEST_EQUAL(47, calculate_age(birth_date, effective_date, alb));
 
     effective_date = calendar_date(2003,  8, 31);
-    TEST_EQUALITY(48, calculate_age(birth_date, effective_date, anb));
-    TEST_EQUALITY(47, calculate_age(birth_date, effective_date, alb));
+    BOOST_TEST_EQUAL(48, calculate_age(birth_date, effective_date, anb));
+    BOOST_TEST_EQUAL(47, calculate_age(birth_date, effective_date, alb));
 
     effective_date = calendar_date(2004,  2, 28);
-    TEST_EQUALITY(48, calculate_age(birth_date, effective_date, anb));
-    TEST_EQUALITY(47, calculate_age(birth_date, effective_date, alb));
+    BOOST_TEST_EQUAL(48, calculate_age(birth_date, effective_date, anb));
+    BOOST_TEST_EQUAL(47, calculate_age(birth_date, effective_date, alb));
 
     effective_date = calendar_date(2004,  2, 29);
-    TEST_EQUALITY(48, calculate_age(birth_date, effective_date, anb));
-    TEST_EQUALITY(48, calculate_age(birth_date, effective_date, alb));
+    BOOST_TEST_EQUAL(48, calculate_age(birth_date, effective_date, anb));
+    BOOST_TEST_EQUAL(48, calculate_age(birth_date, effective_date, alb));
 
     effective_date = calendar_date(2004,  3,  1);
-    TEST_EQUALITY(48, calculate_age(birth_date, effective_date, anb));
-    TEST_EQUALITY(48, calculate_age(birth_date, effective_date, alb));
+    BOOST_TEST_EQUAL(48, calculate_age(birth_date, effective_date, anb));
+    BOOST_TEST_EQUAL(48, calculate_age(birth_date, effective_date, alb));
 
     // Test leap-day effective date, even though many companies
     // probably forbid it.
@@ -298,12 +301,12 @@ int test_main(int, char*[])
     effective_date = calendar_date(2004,  2, 29);
 
     birth_date     = calendar_date(1958,  8, 30);
-    TEST_EQUALITY(46, calculate_age(birth_date, effective_date, anb));
-    TEST_EQUALITY(45, calculate_age(birth_date, effective_date, alb));
+    BOOST_TEST_EQUAL(46, calculate_age(birth_date, effective_date, anb));
+    BOOST_TEST_EQUAL(45, calculate_age(birth_date, effective_date, alb));
 
     birth_date     = calendar_date(1958,  8, 31);
-    TEST_EQUALITY(45, calculate_age(birth_date, effective_date, anb));
-    TEST_EQUALITY(45, calculate_age(birth_date, effective_date, alb));
+    BOOST_TEST_EQUAL(45, calculate_age(birth_date, effective_date, anb));
+    BOOST_TEST_EQUAL(45, calculate_age(birth_date, effective_date, alb));
 
     // Effective date mustn't precede birthdate--this should throw:
     birth_date     = calendar_date(2003,  1,  2);
