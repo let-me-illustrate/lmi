@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xrangetypes.hpp,v 1.2 2006-01-29 13:52:01 chicares Exp $
+// $Id: xrangetypes.hpp,v 1.3 2006-07-12 15:13:08 chicares Exp $
 
 #ifndef xrangetypes_hpp
 #define xrangetypes_hpp
@@ -547,7 +547,7 @@ struct range_date
     static std::pair<EssentialType,EssentialType> range_limits()
     {
         return std::pair<EssentialType,EssentialType>
-            (calendar_date(calendar_date::gregorian_epoch())
+            (calendar_date(gregorian_epoch())
             ,calendar_date(9999, 12, 31)
             );
     }

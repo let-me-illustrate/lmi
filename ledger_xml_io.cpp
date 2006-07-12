@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xml_io.cpp,v 1.31 2006-01-29 13:52:00 chicares Exp $
+// $Id: ledger_xml_io.cpp,v 1.32 2006-07-12 15:13:08 chicares Exp $
 
 #include "config.hpp"
 
@@ -744,7 +744,6 @@ void Ledger::write(xml::node& x) const
         {
         // Skip security validation for the most privileged password.
         validate_security(!global_settings::instance().ash_nazg());
-        prep_date = calendar_date();
         }
     else
         {
@@ -754,7 +753,7 @@ void Ledger::write(xml::node& x) const
         }
 
     std::string PrepYear  = value_cast<std::string>(prep_date.year());
-    std::string PrepMonth = calendar_date::month_name(prep_date.month());
+    std::string PrepMonth = month_name(prep_date.month());
     std::string PrepDay   = value_cast<std::string>(prep_date.day());
 
     strings["PrepYear" ] = &PrepYear;
