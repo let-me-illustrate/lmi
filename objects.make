@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: objects.make,v 1.79 2006-07-11 17:11:13 chicares Exp $
+# $Id: objects.make,v 1.80 2006-07-12 05:21:33 chicares Exp $
 
 ################################################################################
 
@@ -455,6 +455,7 @@ calendar_date_test$(EXEEXT): \
   $(common_test_objects) \
   calendar_date.o \
   calendar_date_test.o \
+  timer.o \
 
 callback_test$(EXEEXT): \
   $(common_test_objects) \
