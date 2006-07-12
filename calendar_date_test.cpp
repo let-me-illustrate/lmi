@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: calendar_date_test.cpp,v 1.6 2006-07-11 16:44:14 chicares Exp $
+// $Id: calendar_date_test.cpp,v 1.7 2006-07-12 05:11:11 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -31,24 +31,166 @@
 #define BOOST_INCLUDE_MAIN
 #include "test_tools.hpp"
 
+#include <sstream>
+
+// Function TestDateConversions() in 'wx_utility.cpp' validates the
+// mapping between {year, month, day} triplets and JDN against the
+// wx date-class implementation, for each date in the range
+// [1752-09-14, 9999-12-31].
+
+struct CalendarDateTest
+{
+    static void Test()
+        {
+        TestFundamentals();
+        TestYMDBounds();
+        TestYmdToJdnAndJdnToYmd();
+        TestLeapYear();
+        TestIncrementing();
+        TestAgeCalculations();
+        TestIo();
+        }
+
+    static void TestFundamentals();
+    static void TestYMDBounds();
+    static void TestYmdToJdnAndJdnToYmd();
+    static void TestLeapYear();
+    static void TestIncrementing();
+    static void TestAgeCalculations();
+    static void TestIo();
+};
+
 int test_main(int, char*[])
 {
-    calendar_date effective_date;
-    calendar_date birth_date;
+    CalendarDateTest::Test();
+    return 0;
+}
 
-    // If the third argument to calculate_age() is
-    //   true,  then calculate age nearest birthday (ANB)
-    //   false, then calculate age last birthday    (ALB)
-    bool const anb = true;
-    bool const alb = false;
+void CalendarDateTest::TestFundamentals()
+{
+    calendar_date dublin_epoch;
+    dublin_epoch.julian_day_number(2415020);
 
-    // Test leap year.
+    // *** Construction.
 
+    // Default ctor.
+    calendar_date const date0;
+    // This test is not performed because it can fail if midnight is
+    // crossed between it and the preceding statement, and also
+    // because its success proves nothing.
+//    BOOST_TEST_EQUAL(date0, today());
+
+    // Copy ctor.
+    calendar_date date1(date0);
+    BOOST_TEST_EQUAL(date0, date1);
+
+    // Construct from year, month, and day.
+    calendar_date date2(1899, 12, 31);
+    BOOST_TEST_EQUAL(dublin_epoch, date2);
+
+    // Construct from jdn_t.
+    calendar_date date3; date3.julian_day_number(2415020);
+    BOOST_TEST_EQUAL(dublin_epoch, date3);
+
+    // Construct from ymd_t.
+    calendar_date date4(1899, 12, 31);
+    BOOST_TEST_EQUAL(dublin_epoch, date4);
+
+    // *** Assignment.
+
+    // Copy assignment operator.
+    date1 = calendar_date::gregorian_epoch();
+    BOOST_TEST_EQUAL(calendar_date::gregorian_epoch(), date1);
+
+    // Assign from self.
+    date1 = date1;
+    BOOST_TEST_EQUAL(calendar_date::gregorian_epoch(), date1);
+
+    // Assign from jdn_t.
+    date2.julian_day_number(2361222);
+    BOOST_TEST_EQUAL(calendar_date::gregorian_epoch(), date2);
+
+    // Assign from ymd_t.
+    date3 = calendar_date(1752, 9, 14);
+    BOOST_TEST_EQUAL(calendar_date::gregorian_epoch(), date3);
+}
+
+void CalendarDateTest::TestYMDBounds()
+{
+    // Test arguments that are prima facie out of bounds.
+
+    BOOST_TEST_THROW
+        (calendar_date( 2000,  0,  1)
+        ,std::runtime_error
+        ,"Date 2000-0-1 is invalid. Perhaps 1999-12-1 was meant."
+        );
+
+    BOOST_TEST_THROW
+        (calendar_date( 2000, 13,  1)
+        ,std::runtime_error
+        ,"Date 2000-13-1 is invalid. Perhaps 2001-1-1 was meant."
+        );
+
+    BOOST_TEST_THROW
+        (calendar_date( 2000,  1,  0)
+        ,std::runtime_error
+        ,"Date 2000-1-0 is invalid. Perhaps 1999-12-31 was meant."
+        );
+
+    BOOST_TEST_THROW
+        (calendar_date( 2000,  1, 32)
+        ,std::runtime_error
+        ,"Date 2000-1-32 is invalid. Perhaps 2000-2-1 was meant."
+        );
+
+    // Test arguments that are out of bounds only in context.
+
+    BOOST_TEST_THROW
+        (calendar_date( 2000,  2, 30)
+        ,std::runtime_error
+        ,"Date 2000-2-30 is invalid. Perhaps 2000-3-1 was meant."
+        );
+
+    BOOST_TEST_THROW
+        (calendar_date( 1900,  2, 29)
+        ,std::runtime_error
+        ,"Date 1900-2-29 is invalid. Perhaps 1900-3-1 was meant."
+        );
+
+    BOOST_TEST_THROW
+        (calendar_date( 1999,  9, 31)
+        ,std::runtime_error
+        ,"Date 1999-9-31 is invalid. Perhaps 1999-10-1 was meant."
+        );
+}
+
+void CalendarDateTest::TestYmdToJdnAndJdnToYmd()
+{
+/*
+    BOOST_TEST_EQUAL(2361222, YmdToJdn(17520914).value());
+    BOOST_TEST_EQUAL(17520914, JdnToYmd(2361222).value());
+
+    BOOST_TEST_EQUAL(2400000, YmdToJdn(18581116).value());
+    BOOST_TEST_EQUAL(18581116, JdnToYmd(2400000).value());
+
+    ymd_t const z0(18581116);
+    BOOST_TEST_EQUAL(2400000, calendar_date(z0).julian_day_number());
+
+    jdn_t const z1(YmdToJdn(18581116));
+    BOOST_TEST_EQUAL(2400000, calendar_date(z1).julian_day_number());
+*/
+}
+
+void CalendarDateTest::TestLeapYear()
+{
     BOOST_TEST(!calendar_date(1900,  1,  1).is_leap_year());
     BOOST_TEST( calendar_date(2000,  1,  1).is_leap_year());
     BOOST_TEST(!calendar_date(2003,  1,  1).is_leap_year());
     BOOST_TEST( calendar_date(2004,  1,  1).is_leap_year());
+}
 
+void CalendarDateTest::TestIncrementing()
+{
     // Test incrementing by whole number of years. If a policy
     // anniversary falls on a nonexistent day of the month, then it's
     // moved to the last day of the month. This is just one arbitrary
@@ -57,6 +199,8 @@ int test_main(int, char*[])
     // they attain legal adulthood.
 
     // Non-curtate tests.
+
+    calendar_date birth_date;
 
     birth_date = calendar_date(2003,  1,  1);
     birth_date.add_years(1, false);
@@ -215,7 +359,10 @@ int test_main(int, char*[])
     birth_date = calendar_date(2002,  3, 31);
     birth_date.add_years_and_months(0, 12, true);
     BOOST_TEST_EQUAL(birth_date, calendar_date(2003,  3, 31));
+}
 
+void CalendarDateTest::TestAgeCalculations()
+{
     // Suppose
     //   1958-07-02 is my birthdate, and
     //   2003-01-01 is the effective date.
@@ -225,7 +372,14 @@ int test_main(int, char*[])
     // so I'm age forty-five (ANB) in non-leap year 2003. But if my
     // birthdate were one day later, I'd be age forty-four (ANB).
 
-    effective_date = calendar_date(2003,  1,  1);
+    calendar_date effective_date = calendar_date(2003,  1,  1);
+    calendar_date birth_date;
+
+    // If the third argument to calculate_age() is
+    //   true,  then calculate age nearest birthday (ANB)
+    //   false, then calculate age last birthday    (ALB)
+    bool const anb = true;
+    bool const alb = false;
 
     birth_date     = calendar_date(1958,  7,  2);
     BOOST_TEST_EQUAL(45, calculate_age(birth_date, effective_date, anb));
@@ -314,9 +468,45 @@ int test_main(int, char*[])
     BOOST_TEST_THROW
         (calculate_age(birth_date, effective_date, anb)
         ,std::runtime_error
-        ,""
+        ,"As-of date (2003-01-01) precedes birthdate (2003-01-02)."
+        );
+}
+
+void CalendarDateTest::TestIo()
+{
+    BOOST_TEST_EQUAL("1752-09-14", calendar_date(1752,  9, 14).str());
+    BOOST_TEST_EQUAL("2001-01-01", calendar_date(2001,  1,  1).str());
+
+    calendar_date z;
+    std::stringstream ss;
+    ss << calendar_date(1752, 9, 14);
+    ss >> z;
+    BOOST_TEST_EQUAL(calendar_date::gregorian_epoch(), z);
+
+    // Of course, a different locale might use different strings.
+    BOOST_TEST_EQUAL("January"  , calendar_date::month_name( 1));
+    BOOST_TEST_EQUAL("February" , calendar_date::month_name( 2));
+    BOOST_TEST_EQUAL("March"    , calendar_date::month_name( 3));
+    BOOST_TEST_EQUAL("April"    , calendar_date::month_name( 4));
+    BOOST_TEST_EQUAL("May"      , calendar_date::month_name( 5));
+    BOOST_TEST_EQUAL("June"     , calendar_date::month_name( 6));
+    BOOST_TEST_EQUAL("July"     , calendar_date::month_name( 7));
+    BOOST_TEST_EQUAL("August"   , calendar_date::month_name( 8));
+    BOOST_TEST_EQUAL("September", calendar_date::month_name( 9));
+    BOOST_TEST_EQUAL("October"  , calendar_date::month_name(10));
+    BOOST_TEST_EQUAL("November" , calendar_date::month_name(11));
+    BOOST_TEST_EQUAL("December" , calendar_date::month_name(12));
+
+    BOOST_TEST_THROW
+        (calendar_date::month_name( 0)
+        ,std::runtime_error
+        ,"Month 0 is outside the range [1, 12]."
         );
 
-    return 0;
+    BOOST_TEST_THROW
+        (calendar_date::month_name(13)
+        ,std::runtime_error
+        ,"Month 13 is outside the range [1, 12]."
+        );
 }
 
