@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.418 2006-07-11 17:11:13 chicares Exp $
+// $Id: ChangeLog,v 1.419 2006-07-12 15:13:12 chicares Exp $
 
 MAINTENANCE
 
@@ -7003,4 +7003,51 @@ Import selected changes from skeleton trunk.
   date_control.hpp [expunged]
   objects.make
 Expunge disused files and references to them.
+
+20060712T0457Z <chicares@cox.net> [1202]
+
+  calendar_date.cpp
+  input_harmonization.cpp
+Revert 20060623T1814Z workaround and substitute another.
+
+20060712T0511Z <chicares@cox.net> [1202]
+
+  calendar_date_test.cpp
+Copy and adapt improved unit test from skeleton trunk. For the nonce,
+some tests (for absent features) are suppressed, while others fail to
+reject absurd input like calendar_date( 2000, 1, 32).
+
+20060712T0521Z <chicares@cox.net> [1202]
+
+  calendar_date_test.cpp
+  objects.make
+Add speed test.
+
+20060712T1513Z <chicares@cox.net> [1198]
+
+  calendar_date.cpp
+  calendar_date.hpp
+Import improved calendar-date class from skeleton trunk.
+
+  ledger_xml_io.cpp
+  xrangetypes.hpp
+Adapt to revised calendar-date class.
+
+  calendar_date_test.cpp
+Resolve the issues noted 20060712T0511Z. This file is now identical to
+the latest revision in the skeleton trunk except for the additional
+speed measurements. All tests are passed with gcc, como, and borland.
+The overall speed difference is immaterial, as shown by these timings
+for gcc, presented in the same format as the test's output:
+
+                     new        old     ratio
+  Aggregate    :  4.66E-006  4.69E-006   0.99
+  Construct    :  5.62E-007  2.43E-007   2.31
+  Assign       :  6.34E-009  5.04E-009   1.26
+  Increment    :  8.92E-008  8.87E-009  10.06
+  Get y, m, d  :  1.46E-008  2.05E-007   0.07
+  Format       :  2.87E-006  3.04E-006   0.95
+  Calculate age:  8.44E-007  1.32E-006   0.64
+
+although the two implementations are obviously tuned differently.
 
