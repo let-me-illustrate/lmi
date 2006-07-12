@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: calendar_date_test.cpp,v 1.7 2006-07-12 05:11:11 chicares Exp $
+// $Id: calendar_date_test.cpp,v 1.8 2006-07-12 05:21:33 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -30,6 +30,7 @@
 
 #define BOOST_INCLUDE_MAIN
 #include "test_tools.hpp"
+#include "timer.hpp"
 
 #include <sstream>
 
@@ -49,6 +50,7 @@ struct CalendarDateTest
         TestIncrementing();
         TestAgeCalculations();
         TestIo();
+        TestSpeed();
         }
 
     static void TestFundamentals();
@@ -58,6 +60,7 @@ struct CalendarDateTest
     static void TestIncrementing();
     static void TestAgeCalculations();
     static void TestIo();
+    static void TestSpeed();
 };
 
 int test_main(int, char*[])
@@ -508,5 +511,62 @@ void CalendarDateTest::TestIo()
         ,std::runtime_error
         ,"Month 13 is outside the range [1, 12]."
         );
+}
+
+namespace
+{
+    calendar_date x;
+    calendar_date y(1899, 12, 31);
+
+    void mete()
+    {
+        calendar_date x;
+        calendar_date y(1899, 12, 31);
+        x = y;
+        x++;
+        std::string s = x.str();
+        x.add_years_and_months(1, 1, true);
+        calculate_age(y, x, false);
+    }
+
+    void mete_construct()
+    {
+        calendar_date x;
+        calendar_date y(1899, 12, 31);
+    }
+
+    void mete_assign()
+    {
+        x = y;
+    }
+
+    void mete_increment()
+    {
+        x++;
+    }
+
+    void mete_format()
+    {
+        std::string s = x.str();
+    }
+
+    void mete_calculate_age()
+    {
+        x.add_years_and_months(1, 1, true);
+        calculate_age(y, x, false);
+    }
+
+} // Unnamed namespace.
+
+void CalendarDateTest::TestSpeed()
+{
+    std::cout << "  Speed tests...\n"
+        << "  Aggregate    : " << aliquot_timer(mete              ) << '\n'
+        << "  Construct    : " << aliquot_timer(mete_construct    ) << '\n'
+        << "  Assign       : " << aliquot_timer(mete_assign       ) << '\n'
+        << "  Increment    : " << aliquot_timer(mete_increment    ) << '\n'
+        << "  Format       : " << aliquot_timer(mete_format       ) << '\n'
+        << "  Calculate age: " << aliquot_timer(mete_calculate_age) << '\n'
+        ;
 }
 
