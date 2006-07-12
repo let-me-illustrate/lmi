@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: calendar_date_test.cpp,v 1.8 2006-07-12 05:21:33 chicares Exp $
+// $Id: calendar_date_test.cpp,v 1.9 2006-07-12 15:13:12 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -92,30 +92,30 @@ void CalendarDateTest::TestFundamentals()
     BOOST_TEST_EQUAL(dublin_epoch, date2);
 
     // Construct from jdn_t.
-    calendar_date date3; date3.julian_day_number(2415020);
+    calendar_date date3(jdn_t(2415020));
     BOOST_TEST_EQUAL(dublin_epoch, date3);
 
     // Construct from ymd_t.
-    calendar_date date4(1899, 12, 31);
+    calendar_date date4(ymd_t(18991231));
     BOOST_TEST_EQUAL(dublin_epoch, date4);
 
     // *** Assignment.
 
     // Copy assignment operator.
-    date1 = calendar_date::gregorian_epoch();
-    BOOST_TEST_EQUAL(calendar_date::gregorian_epoch(), date1);
+    date1 = gregorian_epoch();
+    BOOST_TEST_EQUAL(gregorian_epoch(), date1);
 
     // Assign from self.
     date1 = date1;
-    BOOST_TEST_EQUAL(calendar_date::gregorian_epoch(), date1);
+    BOOST_TEST_EQUAL(gregorian_epoch(), date1);
 
     // Assign from jdn_t.
-    date2.julian_day_number(2361222);
-    BOOST_TEST_EQUAL(calendar_date::gregorian_epoch(), date2);
+    date2 = jdn_t(2361222);
+    BOOST_TEST_EQUAL(gregorian_epoch(), date2);
 
     // Assign from ymd_t.
-    date3 = calendar_date(1752, 9, 14);
-    BOOST_TEST_EQUAL(calendar_date::gregorian_epoch(), date3);
+    date3 = ymd_t(17520914);
+    BOOST_TEST_EQUAL(gregorian_epoch(), date3);
 }
 
 void CalendarDateTest::TestYMDBounds()
@@ -169,7 +169,6 @@ void CalendarDateTest::TestYMDBounds()
 
 void CalendarDateTest::TestYmdToJdnAndJdnToYmd()
 {
-/*
     BOOST_TEST_EQUAL(2361222, YmdToJdn(17520914).value());
     BOOST_TEST_EQUAL(17520914, JdnToYmd(2361222).value());
 
@@ -181,7 +180,6 @@ void CalendarDateTest::TestYmdToJdnAndJdnToYmd()
 
     jdn_t const z1(YmdToJdn(18581116));
     BOOST_TEST_EQUAL(2400000, calendar_date(z1).julian_day_number());
-*/
 }
 
 void CalendarDateTest::TestLeapYear()
@@ -484,30 +482,30 @@ void CalendarDateTest::TestIo()
     std::stringstream ss;
     ss << calendar_date(1752, 9, 14);
     ss >> z;
-    BOOST_TEST_EQUAL(calendar_date::gregorian_epoch(), z);
+    BOOST_TEST_EQUAL(gregorian_epoch(), z);
 
     // Of course, a different locale might use different strings.
-    BOOST_TEST_EQUAL("January"  , calendar_date::month_name( 1));
-    BOOST_TEST_EQUAL("February" , calendar_date::month_name( 2));
-    BOOST_TEST_EQUAL("March"    , calendar_date::month_name( 3));
-    BOOST_TEST_EQUAL("April"    , calendar_date::month_name( 4));
-    BOOST_TEST_EQUAL("May"      , calendar_date::month_name( 5));
-    BOOST_TEST_EQUAL("June"     , calendar_date::month_name( 6));
-    BOOST_TEST_EQUAL("July"     , calendar_date::month_name( 7));
-    BOOST_TEST_EQUAL("August"   , calendar_date::month_name( 8));
-    BOOST_TEST_EQUAL("September", calendar_date::month_name( 9));
-    BOOST_TEST_EQUAL("October"  , calendar_date::month_name(10));
-    BOOST_TEST_EQUAL("November" , calendar_date::month_name(11));
-    BOOST_TEST_EQUAL("December" , calendar_date::month_name(12));
+    BOOST_TEST_EQUAL("January"  , month_name( 1));
+    BOOST_TEST_EQUAL("February" , month_name( 2));
+    BOOST_TEST_EQUAL("March"    , month_name( 3));
+    BOOST_TEST_EQUAL("April"    , month_name( 4));
+    BOOST_TEST_EQUAL("May"      , month_name( 5));
+    BOOST_TEST_EQUAL("June"     , month_name( 6));
+    BOOST_TEST_EQUAL("July"     , month_name( 7));
+    BOOST_TEST_EQUAL("August"   , month_name( 8));
+    BOOST_TEST_EQUAL("September", month_name( 9));
+    BOOST_TEST_EQUAL("October"  , month_name(10));
+    BOOST_TEST_EQUAL("November" , month_name(11));
+    BOOST_TEST_EQUAL("December" , month_name(12));
 
     BOOST_TEST_THROW
-        (calendar_date::month_name( 0)
+        (month_name( 0)
         ,std::runtime_error
         ,"Month 0 is outside the range [1, 12]."
         );
 
     BOOST_TEST_THROW
-        (calendar_date::month_name(13)
+        (month_name(13)
         ,std::runtime_error
         ,"Month 13 is outside the range [1, 12]."
         );
@@ -545,6 +543,13 @@ namespace
         x++;
     }
 
+    void mete_get_y_m_d()
+    {
+        x.year();
+        x.month();
+        x.day();
+    }
+
     void mete_format()
     {
         std::string s = x.str();
@@ -565,6 +570,7 @@ void CalendarDateTest::TestSpeed()
         << "  Construct    : " << aliquot_timer(mete_construct    ) << '\n'
         << "  Assign       : " << aliquot_timer(mete_assign       ) << '\n'
         << "  Increment    : " << aliquot_timer(mete_increment    ) << '\n'
+        << "  Get y, m, d  : " << aliquot_timer(mete_get_y_m_d    ) << '\n'
         << "  Format       : " << aliquot_timer(mete_format       ) << '\n'
         << "  Calculate age: " << aliquot_timer(mete_calculate_age) << '\n'
         ;
