@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: calendar_date.cpp,v 1.8 2006-07-12 04:57:14 chicares Exp $
+// $Id: calendar_date.cpp,v 1.9 2006-07-12 15:13:04 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -28,44 +28,51 @@
 
 #include "calendar_date.hpp"
 
-#include "value_cast.hpp"
+#include "alert.hpp"
 
 #include <ctime>
 #include <iomanip>
 #include <istream>
+#include <iterator>
+#include <locale>
 #include <ostream>
 #include <sstream>
-#include <stdexcept>
-
-// TODO ?? It seems improbable that I've written a defect-free date
-// class. It might make sense to run this class's unit tests against
-// some other implementation--boost's, or perhaps this one:
-//   http://liblookdb.sourceforge.net/source/liblookdb/looktypes/lkdatetime.cpp
-// to make sure they agree. Using boost in the unit test would seem
-// ideal if it does the same job; and boost would have its own unit
-// tests, which might inspire more lmi tests.
-
-// TODO ?? Not everything here is exercised in the companion unit
-// test. For instance, calendar_date::str() isn't tested at all, and
-// indeed an earlier version of that function returned a non-ISO8601
-// string like "2005-9-2".
 
 namespace
 {
     int const gregorian_epoch_jdn = 2361222;
 
-    void regularize(int& year, int& month)
-        {
-        int origin_zero_month = month - 1;
-        year += origin_zero_month / 12;
-        origin_zero_month %= 12;
-        if(origin_zero_month < 0)
+    bool is_leap_year(int year)
+    {
+        bool divisible_by_4   = 0 == year % 4;
+        bool divisible_by_100 = 0 == year % 100;
+        bool divisible_by_400 = 0 == year % 400;
+        return divisible_by_400 || divisible_by_4 && !divisible_by_100;
+    }
+
+    int days_in_month(int month, bool leap_year)
+    {
+        static int month_lengths[12] =
+            {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31
+            };
+        if(!(0 < month && month < 13))
             {
-            year -= 1;
-            origin_zero_month += 12;
+            fatal_error()
+                << "Month "
+                << month
+                << " is outside the range [1, 12]."
+                << LMI_FLUSH
+                ;
             }
-        month = origin_zero_month + 1;
-        }
+        int n_days = month_lengths[month - 1];
+        if(leap_year && 2 == month)
+            {
+            ++n_days;
+            }
+        return n_days;
+    }
+
+    // Reference for jdn <-> gregorian conversions: ACM algorithm 199.
 
     int const jdn00010301 = 1721119;
     int const days_in_four_centuries = 146097;
@@ -116,69 +123,109 @@ namespace
             ++year;
             }
     }
-/*
-// TODO ?? Do we want functions like these?
 
-    int YyyyMmDdToJdn(int g)
+    int CheckedGregorianToJdn(int year, int month, int day)
     {
-        int year = g / 10000;
-        g -= year * 10000;
-        int month = g / 100;
-        g -= month * 100;
-        int day = g;
-        return GregorianToJdn(year, month, day);
+        int const original_year  = year;
+        int const original_month = month;
+        int const original_day   = day;
+        int const jdn = GregorianToJdn(year, month, day);
+        JdnToGregorian(jdn, year, month, day);
+        if
+            (   original_year  != year
+            ||  original_month != month
+            ||  original_day   != day
+            )
+            {
+            fatal_error()
+                << "Date "
+                << original_year << '-' << original_month << '-' << original_day
+                << " is invalid. Perhaps "
+                << year << '-' << month << '-' << day
+                << " was meant."
+                << LMI_FLUSH
+                ;
+            }
+        return jdn;
     }
-
-    int JdnToYyyyMmDd(int j)
-    {
-        int year;
-        int month;
-        int day;
-        JdnToGregorian(j, year, month, day);
-        return day + 100 * month + 10000 * year;
-    }
-
-    std::string JdnToYyyyMmDd(std::string const& j_str)
-    {
-        return value_cast<std::string>(JdnToYyyyMmDd(value_cast<int>(j_str)));
-    }
-*/
 } // Unnamed namespace.
 
 // Today's date.
 calendar_date::calendar_date()
+    :jdn_(today().julian_day_number())
 {
-    std::time_t t0 = time(0);
-    std::tm* t1 = std::localtime(&t0);
-    jdn_ = GregorianToJdn(1900 + t1->tm_year, 1 + t1->tm_mon, t1->tm_mday);
+    cache_gregorian_elements();
+}
+
+calendar_date::calendar_date(jdn_t z)
+    :jdn_(z.value())
+{
+    cache_gregorian_elements();
+}
+
+calendar_date::calendar_date(ymd_t z)
+    :jdn_(YmdToJdn(z).value())
+{
+    cache_gregorian_elements();
 }
 
 calendar_date::calendar_date(int year, int month, int day)
 {
-    jdn_ = GregorianToJdn(year, month, day);
+    assign_from_gregorian(year, month, day);
+}
+
+calendar_date& calendar_date::operator=(jdn_t j)
+{
+    jdn_ = j.value();
+    cache_gregorian_elements();
+    return *this;
+}
+
+calendar_date& calendar_date::operator=(ymd_t ymd)
+{
+    jdn_ = YmdToJdn(ymd).value();
+    cache_gregorian_elements();
+    return *this;
+}
+
+void calendar_date::assign_from_gregorian(int year, int month, int day)
+{
+    jdn_ = CheckedGregorianToJdn(year, month, day);
+    cached_year_  = year;
+    cached_month_ = month;
+    cached_day_   = day;
+}
+
+void calendar_date::cache_gregorian_elements() const
+{
+    JdnToGregorian(jdn_, cached_year_, cached_month_, cached_day_);
 }
 
 calendar_date& calendar_date::operator++()
 {
     ++jdn_;
+    cache_gregorian_elements();
     return *this;
 }
 
 calendar_date& calendar_date::operator--()
 {
     --jdn_;
+    cache_gregorian_elements();
     return *this;
 }
 
 calendar_date& calendar_date::operator+=(int i)
 {
     jdn_ += i;
+    cache_gregorian_elements();
     return *this;
 }
 
 calendar_date& calendar_date::operator-=(int i)
 {
     jdn_ -= i;
+    cache_gregorian_elements();
     return *this;
 }
 
@@ -200,6 +247,7 @@ int calendar_date::julian_day_number() const
 int calendar_date::julian_day_number(int z)
 {
     jdn_ = z;
+    cache_gregorian_elements();
     return jdn_;
 }
 
@@ -219,81 +267,24 @@ std::string calendar_date::str() const
     return oss.str();
 }
 
-// TODO ?? Fix the manifest i18n defect. Wouldn't the standard
-// library's time_get facet's get_monthname() take care of this
-// without requiring any third-party i18n library?
-std::string calendar_date::month_name(int month)
-{
-    if(!(0 < month && month < 13))
-        {
-        throw std::runtime_error("Month out of bounds in month_name().");
-        }
-    static char const* month_names[12] =
-        {"January"
-        ,"February"
-        ,"March"
-        ,"April"
-        ,"May"
-        ,"June"
-        ,"July"
-        ,"August"
-        ,"September"
-        ,"October"
-        ,"November"
-        ,"December"
-        };
-    return month_names[month - 1];
-}
-
-calendar_date calendar_date::gregorian_epoch()
-{
-    calendar_date z;
-    z.jdn_ = gregorian_epoch_jdn;
-    return z;
-}
-
 int calendar_date::year() const
 {
-    int year;
-    int month;
-    int day;
-    JdnToGregorian(jdn_, year, month, day);
-    return year;
+    return cached_year_;
 }
 
 int calendar_date::month() const
 {
-    int year;
-    int month;
-    int day;
-    JdnToGregorian(jdn_, year, month, day);
-    return month;
+    return cached_month_;
 }
 
 int calendar_date::day() const
 {
-    int year;
-    int month;
-    int day;
-    JdnToGregorian(jdn_, year, month, day);
-    return day;
+    return cached_day_;
 }
 
 int calendar_date::days_in_month() const
 {
-    static int month_lengths[12] =
-        {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31
-        };
-    int year;
-    int month;
-    int day;
-    JdnToGregorian(jdn_, year, month, day);
-    int n_days = month_lengths[month - 1];
-    if(is_leap_year() && 2 == month)
-        {
-        ++n_days;
-        }
-    return n_days;
+    return ::days_in_month(cached_month_, ::is_leap_year(cached_year_));
 }
 
 int calendar_date::days_in_year() const
@@ -303,60 +294,56 @@ int calendar_date::days_in_year() const
 
 bool calendar_date::is_leap_year() const
 {
-    int year;
-    int month;
-    int day;
-    JdnToGregorian(jdn_, year, month, day);
-    bool divisible_by_4   = 0 == year % 4;
-    bool divisible_by_100 = 0 == year % 100;
-    bool divisible_by_400 = 0 == year % 400;
-    return divisible_by_400 || divisible_by_4 && !divisible_by_100;
+    return ::is_leap_year(cached_year_);
 }
 
-// Add 'n_years' years and 'n_months' months.
+/// Increment by a given number of years and months.
+///
+/// What date is one month after 2001-01-31? Two answers are possible:
+///  - 2001-02-28 is 'curtate';
+///  - 2001-03-01 is not.
+
 calendar_date calendar_date::add_years_and_months
     (int n_years
     ,int n_months
     ,bool curtate
     )
 {
-    int year;
-    int month;
-    int day;
-    JdnToGregorian(jdn_, year, month, day);
+    int year  = cached_year_  + n_years;
+    int month = cached_month_ + n_months;
+    int day   = cached_day_;
 
-    year += n_years;
-    month += n_months;
-    regularize(year, month);
+    int origin_zero_month = month - 1;
+    year += origin_zero_month / 12;
+    origin_zero_month %= 12;
+    if(origin_zero_month < 0)
+        {
+        year              -=  1;
+        origin_zero_month += 12;
+        }
+    month = origin_zero_month + 1;
 
-    // Some months have only 28, 29, or 30 days, but the desired date
-    // cannot be later than the last day of the month. Set this date
-    // to the first day of the month, use that temporary value to
-    // ascertain the last day of the month, and limit the day to that
-    // maximum if curtate, else use the next day.
-    jdn_ = GregorianToJdn(year, month, 1);
-    int last_day_of_month = days_in_month();
+    int last_day_of_month = ::days_in_month(month, ::is_leap_year(year));
     bool no_such_day = last_day_of_month < day;
     if(no_such_day)
         {
         day = last_day_of_month;
         }
-    jdn_ = GregorianToJdn(year, month, day);
+    assign_from_gregorian(year, month, day);
     if(no_such_day && !curtate)
         {
         operator++();
         }
+    cache_gregorian_elements();
     return *this;
 }
 
-// Add 'n_years' years.
 calendar_date calendar_date::add_years(int n_years, bool curtate)
 {
     add_years_and_months(n_years, 0, curtate);
     return *this;
 }
 
-// Age on 'as_of_date' if born on 'birthdate'.
 int calculate_age
     (calendar_date const& birthdate
     ,calendar_date const& as_of_date
@@ -365,7 +352,14 @@ int calculate_age
 {
     if(as_of_date < birthdate)
         {
-        throw std::runtime_error("Effective date precedes birthdate.");
+        fatal_error()
+            << "As-of date ("
+            << as_of_date.str()
+            << ") precedes birthdate ("
+            << birthdate.str()
+            << ")."
+            << LMI_FLUSH
+            ;
         }
 
     calendar_date last_birthday(birthdate);
@@ -410,5 +404,74 @@ std::istream& operator>>(std::istream& is, calendar_date& date)
     is >> z;
     date.julian_day_number(z);
     return is;
+}
+
+calendar_date const& gregorian_epoch()
+{
+    static calendar_date const z((jdn_t(gregorian_epoch_jdn)));
+    return z;
+}
+
+calendar_date const& last_yyyy_date()
+{
+    static calendar_date const z(9999, 12, 31);
+    return z;
+}
+
+calendar_date today()
+{
+    std::time_t const t0 = time(0);
+    std::tm* const t1 = std::localtime(&t0);
+    return calendar_date
+        (1900 + t1->tm_year
+        ,   1 + t1->tm_mon
+        ,       t1->tm_mday
+        );
+}
+
+std::string month_name(int month)
+{
+    if(!(0 < month && month < 13))
+        {
+        fatal_error()
+            << "Month "
+            << month
+            << " is outside the range [1, 12]."
+            << LMI_FLUSH
+            ;
+        }
+    std::tm c_time;
+    c_time.tm_mon = month - 1;
+    char format[] = "%B";
+    std::ostringstream oss;
+    std::use_facet<std::time_put<char> >(oss.getloc()).put
+        (std::ostreambuf_iterator<char>(oss.rdbuf())
+        ,oss
+        ,'\0'
+        ,&c_time
+        ,format
+        ,format + std::char_traits<char>::length(format)
+        );
+    return oss.str();
+}
+
+ymd_t JdnToYmd(jdn_t z)
+{
+    int year;
+    int month;
+    int day;
+    JdnToGregorian(z.value(), year, month, day);
+    return day + 100 * month + 10000 * year;
+}
+
+jdn_t YmdToJdn(ymd_t z)
+{
+    int g = z.value();
+    int year = g / 10000;
+    g -= year * 10000;
+    int month = g / 100;
+    g -= month * 100;
+    int day = g;
+    return CheckedGregorianToJdn(year, month, day);
 }
 

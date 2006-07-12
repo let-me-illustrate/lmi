@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: calendar_date.hpp,v 1.4 2006-01-29 13:52:00 chicares Exp $
+// $Id: calendar_date.hpp,v 1.5 2006-07-12 15:13:04 chicares Exp $
 
 #ifndef calendar_date_hpp
 #define calendar_date_hpp
@@ -32,59 +32,127 @@
 
 #include <string>
 
+/// Julian day number, encapsulated in a class for use as a ctor
+/// argument for class calendar_date.
+///
+/// Implicitly-declared special member functions do the right thing.
+/// The implicitly-defined dtor being nonvirtual, this class of course
+/// should not be derived from.
+
+class jdn_t
+{
+  public:
+    jdn_t(int d) : value_(d) {}
+
+    int value() const {return value_;}
+
+  private:
+    int value_;
+};
+
+/// Year, month, and day packed into an integer, encapsulated in a
+/// class for use as a ctor argument for class calendar_date. The year
+/// must incorporate the century: '99' means 99 AD, not 1999.
+///
+/// Implicitly-declared special member functions do the right thing.
+/// The implicitly-defined dtor being nonvirtual, this class of course
+/// should not be derived from.
+
+class ymd_t
+{
+  public:
+    ymd_t(int d) : value_(d) {}
+
+    int value() const {return value_;}
+
+  private:
+    int value_;
+};
+
+/// Class calendar_date represents a gregorian-calendar date in the
+/// range [1752-09-14, 9999-12-31]. Date calculations are probably
+/// valid for later dates, and for earlier dates on the proleptic
+/// gregorian calendar, though only the given range is tested. The
+/// gregorian epoch is assumed to be 1752-09-14, the value predominant
+/// among the English-speaking peoples. The range limits are available
+/// as [gregorian_epoch(), last_yyyy_date()].
+///
+/// A date is internally represented as its 'julian day number', which
+/// is defined as number of days since January 1, 4713 BC according to
+/// the proleptic julian calendar. Seemingly-similar terms such as
+/// 'julian date' and 'julian day' are rendered irredeemably vague by
+/// diverse lay usage: they might be intended to mean the date on the
+/// julian as opposed to the gregorian calendar, or perhaps the number
+/// of days elapsed since the beginning of the current year. Which
+/// variant of julian day number the internal representation signifies
+/// need not be specified, and deliberately is not: astronomers may
+/// regard days as beginning at noon UTC, while most others probably
+/// think of days as beginning at midnight and respecting civil time
+/// in a local timezone, with appropriate daylight-saving adjustments.
+/// Such concerns are irrelevant to this class, which represents only
+/// a date, not a time of day.
+///
+/// The default ctor uses the current date.
+///
+/// By convention, the interface presents year, month, and day in
+/// origin one, so that concatenating their numeric representations as
+/// YYYYMMDD produces a valid ISO8601 date. Thus, the ranges of those
+/// elements are:
+///   year:  [1752 | 1753, 9999]
+///   month: [1, 12]
+///   day:   [1, 28 | 29 | 30 | 31]
+/// depending on context.
+///
+/// Functions that increment a date by a given number of months or
+/// years support two different conventions:
+///
+///  - A person born on a leap day attains legal majority on the first
+///    of March, not the twenty-eighth of February.
+///
+///  - Monthly business processes may be expected to occur in distinct
+///    calendar months. If the first occurrence falls on the thirty-
+///    first of January, then the third falls on the thirty-first of
+///    March, and therefore the second must fall on the twenty-eighth
+///    of February, not the first of March. This is defined as the
+///    curtate' case because the nonexistent thirty-first of February
+///    is shortened to the twenty-eighth.
+///
+/// Implicitly-declared special member functions do the right thing.
+
+ymd_t JdnToYmd(jdn_t);
+jdn_t YmdToJdn(ymd_t);
+
 class LMI_SO calendar_date
     :boost::additive<calendar_date, int>
     ,boost::totally_ordered<calendar_date>
     ,boost::unit_steppable<calendar_date>
 {
   public:
-    calendar_date(); // Defaults to today's date.
+    calendar_date();
+    explicit calendar_date(jdn_t);
+    explicit calendar_date(ymd_t);
     calendar_date(int year, int month, int day);
+
+    calendar_date& operator=(jdn_t);
+    calendar_date& operator=(ymd_t);
 
     calendar_date& operator++();
     calendar_date& operator--();
     calendar_date& operator+=(int);
     calendar_date& operator-=(int);
 
-    // At least two different conventions are needed for anniversaries
-    // and monthiversaries.
-    //
-    // If you were born on a leap day, then legally you become an
-    // adult on the first of March, not the twenty-eighth of February.
-    //
-    // On the other hand, the monthiversaries of UL contracts are
-    // expected to occur in distinct calendar months. If the effective
-    // date is January thirty-first, then the February monthiversary
-    // must occur on the twenty-eighth of February, not the first of
-    // March. We refer to this as the 'curtate' case because the
-    // thirty-first is shortened to the twenty-eighth.
-
     calendar_date add_years(int years, bool curtate);
     calendar_date add_years_and_months(int years, int months, bool curtate);
 
-    // Julian day number as defined by ACM algorithm 199.
-    //
-    // The terms 'julian date' and 'julian day' are in all too common
-    // use and irredeemably vague. They might mean the date on the
-    // Julian as opposed to the Gregorian calendar, or perhaps the
-    // number of days elapsed since the beginning of the current year.
-    // Here, we use Julian Day Number, which is the number of days
-    // since January 1, 4713 BC according to the proleptic Julian
-    // calendar. More precisely, we use Chronological Julian Day,
-    // which starts at midnight and respects local time, as opposed to
-    // Astronomical Julian Day, which starts at noon and follows UTC.
     int julian_day_number(int);
     int julian_day_number() const;
 
     bool operator==(calendar_date const&) const;
     bool operator<(calendar_date const&) const;
 
-    // Year, month, and day functions are origin one by convention,
-    // so that concatenating their representations as YYYYMMDD would
-    // produce a valid ISO8601 date.
-    int year() const;        // [1752 | 1753, 9999]
-    int month() const;       // [1, 12]
-    int day() const;         // [1, 28 | 29 | 30 | 31]
+    int year() const;
+    int month() const;
+    int day() const;
 
     int days_in_month() const;
     int days_in_year() const;
@@ -92,13 +160,14 @@ class LMI_SO calendar_date
 
     std::string str() const;
 
-    // Julian day number for 1752-09-14, the gregorian epoch
-    // predominant among the English-speaking peoples.
-    static calendar_date gregorian_epoch();
-    static std::string month_name(int);
-
   private:
+    void assign_from_gregorian(int year, int month, int day);
+    void cache_gregorian_elements() const;
+
     int jdn_;
+    mutable int cached_year_;
+    mutable int cached_month_;
+    mutable int cached_day_;
 };
 
 // gcc-3.x and bc5.51 do not work at all well with this technique
@@ -107,15 +176,23 @@ class LMI_SO calendar_date
 //    template struct boost::totally_ordered<calendar_date>;
 //    template struct boost::unit_steppable<calendar_date>;
 
-// Age on EffDate if born on DOB.
-int calculate_age
-    (calendar_date const& DOB
-    ,calendar_date const& EffDate
-    ,bool                 UseANB
-    );
-
 std::ostream& operator<<(std::ostream& os, calendar_date const&);
 std::istream& operator>>(std::istream& is, calendar_date&);
+
+/// Age on 'as_of_date' if born on 'birthdate'. Throws an exception
+/// if 'as_of_date' precedes 'birthdate'.
+
+int calculate_age
+    (calendar_date const& birthdate
+    ,calendar_date const& as_of_date
+    ,bool                 use_age_nearest_birthday
+    );
+
+calendar_date const& gregorian_epoch();
+calendar_date const& last_yyyy_date();
+calendar_date today();
+
+std::string month_name(int);
 
 #endif // calendar_date_hpp
 
