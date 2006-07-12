@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_harmonization.cpp,v 1.30 2006-07-11 03:14:40 chicares Exp $
+// $Id: input_harmonization.cpp,v 1.31 2006-07-12 04:57:14 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -963,17 +963,29 @@ void Input::DoTransmogrify()
     // date of birth is simply read from the file; the adjustment
     // here has no effect as long as the file is consistent.
 
+    // TODO ?? EGREGIOUS_DEFECT Temporary. Because the msw date
+    // control parses keyboard input one keystroke at a time and
+    // permits one- or two-digit years, typing "1999" as the year of
+    // birth causes the control's year to change to 2001 after the
+    // first keystroke and 2019 after the second--at which point an
+    // exception is thrown, because 2019 cannot be the birthdate of
+    // any living person as this is written in 2006. The only real
+    // solution is to validate date controls only on focus loss.
+    // However, for the nonce, forestall the exception...
+
+//    int apparent_age = calculate_age(date_of_birth, effective_date, use_anb);
+    int apparent_age =
+        date_of_birth < effective_date
+        ?  calculate_age(date_of_birth, effective_date, use_anb)
+        : -calculate_age(effective_date, date_of_birth, use_anb)
+        ;
+
     if("Yes" == DeprecatedUseDOB)
         {
-        IssueAge = calculate_age(date_of_birth, effective_date, use_anb);
+        IssueAge = apparent_age;
         }
     else
         {
-        int apparent_age = calculate_age
-            (date_of_birth
-            ,effective_date
-            ,use_anb
-            );
         date_of_birth.add_years(apparent_age - IssueAge.value(), use_anb);
         DateOfBirth = date_of_birth.julian_day_number();
         }
