@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: any_member_test.cpp,v 1.15 2006-07-13 13:12:41 chicares Exp $
+// $Id: any_member_test.cpp,v 1.16 2006-07-13 14:31:41 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -226,6 +226,7 @@ struct any_member_test
     static void test_any_member();
     static void supplemental_test0();
     static void supplemental_test1();
+    static void como_433_test();
 };
 
 int test_main(int, char*[])
@@ -233,6 +234,7 @@ int test_main(int, char*[])
     any_member_test::test_any_member();
     any_member_test::supplemental_test0();
     any_member_test::supplemental_test1();
+    any_member_test::como_433_test();
     return 0;
 }
 
@@ -556,15 +558,20 @@ void any_member_test::supplemental_test1()
     BOOST_TEST_EQUAL(5  , r0.i0);
     BOOST_TEST_EQUAL(0  , r0.i1);
     BOOST_TEST_EQUAL(0.0, r0.d0);
+    double T::*y = &T::d0;
+    r0.*y = 3.14159;
+    BOOST_TEST_EQUAL(3.14159, r0.d0);
 
     // Test writing through the map of ascribed member names.
     r0["i0"] = "999";
     r0["i1"] = "888000";
     r0["d0"] = "777";
+    r0["q0"] = "8.125";
     r0["s0"] = "hello";
     BOOST_TEST_EQUAL(999    , r0.i0);
     BOOST_TEST_EQUAL(888000 , r0.i1);
     BOOST_TEST_EQUAL(777.0  , r0.d0);
+    BOOST_TEST_EQUAL(8.125  , r0.q0);
     BOOST_TEST_EQUAL("hello", r0.s0);
 
     T r1;
@@ -632,5 +639,30 @@ void any_member_test::supplemental_test1()
     BOOST_TEST_THROW(r2["i0"] = "888e3", std::invalid_argument, "");
     BOOST_TEST_THROW(r2["i1"] = "999.9", std::invalid_argument, "");
 #endif // !defined __BORLANDC__
+}
+
+// This test detects a problem with the original distribution of
+// como-4.3.3 . I wrote to como on 2004-05-05T06:26Z, and got a
+// fixed binary in his email of 2004-05-05T23:04Z. This test
+// ensures that that fix is in use.
+
+template<typename ClassType> class Bar
+{
+    std::map<int, int> m_; // Works OK if you remove this line.
+};
+
+struct R : public Bar<R>
+{
+    char   c; // Works OK if you remove this line...
+    int    i; // ... or this one.
+    double d;
+};
+
+void any_member_test::como_433_test()
+{
+    R s;
+    BOOST_TEST_EQUAL(&(s.c), &(s.*&R::c)); // Succeeds.
+    BOOST_TEST_EQUAL(&(s.i), &(s.*&R::i)); // Succeeds.
+    BOOST_TEST_EQUAL(&(s.d), &(s.*&R::d)); // Fails with original como.
 }
 
