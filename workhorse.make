@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: workhorse.make,v 1.70 2006-06-15 20:34:58 wboutin Exp $
+# $Id: workhorse.make,v 1.71 2006-07-13 03:07:20 chicares Exp $
 
 ################################################################################
 
@@ -113,7 +113,9 @@ effective_default_target: $(default_targets)
 
 ################################################################################
 
-gcc_version := $(shell $(CXX) -dumpversion)
+ifeq (gcc,$(toolset))
+  gcc_version := $(shell $(CXX) -dumpversion)
+endif
 
 ################################################################################
 
@@ -139,8 +141,10 @@ else
   wx_config_script := $(wx_build_dir)/wx-config
 
   # The conventional autotools usage...
-  wx_config_cxxflags := $(shell $(wx_config_script) --cxxflags)
-  wx_config_libs     := $(shell $(wx_config_script) --libs)
+  ifeq (gcc,$(toolset))
+    wx_config_cxxflags := $(shell $(wx_config_script) --cxxflags)
+    wx_config_libs     := $(shell $(wx_config_script) --libs)
+  endif
   # ...combines options that we prefer to keep separate.
 
   wx_include_paths := \
