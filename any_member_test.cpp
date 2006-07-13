@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: any_member_test.cpp,v 1.14 2006-07-13 13:00:28 chicares Exp $
+// $Id: any_member_test.cpp,v 1.15 2006-07-13 13:12:41 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -221,108 +221,18 @@ template<> struct reconstitutor<base_datum, S>
         }
 };
 
-void test0()
-{
-    T r0;
-    BOOST_TEST_EQUAL(0  , r0.i0);
-    BOOST_TEST_EQUAL(0  , r0.i1);
-    BOOST_TEST_EQUAL(0.0, r0.d0);
-    BOOST_TEST_EQUAL("" , r0.s0);
-
-    // Test writing through a pointer to member.
-    int T::*x = &T::i0;
-    r0.*x = 5;
-    BOOST_TEST_EQUAL(5  , r0.i0);
-    BOOST_TEST_EQUAL(0  , r0.i1);
-    BOOST_TEST_EQUAL(0.0, r0.d0);
-
-    // Test writing through the map of ascribed member names.
-    r0["i0"] = "999";
-    r0["i1"] = "888000";
-    r0["d0"] = "777";
-    r0["s0"] = "hello";
-    BOOST_TEST_EQUAL(999    , r0.i0);
-    BOOST_TEST_EQUAL(888000 , r0.i1);
-    BOOST_TEST_EQUAL(777.0  , r0.d0);
-    BOOST_TEST_EQUAL("hello", r0.s0);
-
-    T r1;
-    r1["i0"] = "135";
-    r1["i1"] = "246";
-    r1["d0"] = "888";
-    r1["s0"] = "world";
-    BOOST_TEST_EQUAL(135    , r1.i0);
-    BOOST_TEST_EQUAL(246    , r1.i1);
-    BOOST_TEST_EQUAL(888.0  , r1.d0);
-    BOOST_TEST_EQUAL("world", r1.s0);
-
-    // Make sure that didn't affect the other instance of class T.
-    BOOST_TEST_EQUAL(999    , r0.i0);
-    BOOST_TEST_EQUAL(888e3  , r0.i1);
-    BOOST_TEST_EQUAL(777.0  , r0.d0);
-    BOOST_TEST_EQUAL("hello", r0.s0);
-
-    r0["i0"] = "1234567";
-    BOOST_TEST_EQUAL(1234567, r0.i0);
-    BOOST_TEST_EQUAL(888e3  , r0.i1);
-    BOOST_TEST_EQUAL(777.0  , r0.d0);
-    BOOST_TEST_EQUAL("hello", r0.s0);
-
-    // Make sure that didn't affect the other instance of class T.
-    BOOST_TEST_EQUAL(135    , r1.i0);
-    BOOST_TEST_EQUAL(246    , r1.i1);
-    BOOST_TEST_EQUAL(888.0  , r1.d0);
-    BOOST_TEST_EQUAL("world", r1.s0);
-
-    // Works for base class Q too.
-    T r2;
-    BOOST_TEST_EQUAL(0.0f, r2.q0);
-
-    r2["q0"] = "123.456";
-    BOOST_TEST_EQUAL(123.456f, r2.q0);
-
-    // Test equality operator.
-    BOOST_TEST(  r1["i0"] == r1["i0"]);
-    BOOST_TEST(  r1["i0"] != r0["i0"]);
-    BOOST_TEST(!(r1["i0"] == r0["i0"]));
-
-    BOOST_TEST(  r1["d0"] == r1["d0"]);
-    BOOST_TEST(  r1["d0"] != r0["d0"]);
-    BOOST_TEST(!(r1["d0"] == r0["d0"]));
-
-    r1["d0"] = r0["d0"];
-    BOOST_TEST(  r1["d0"] == r1["d0"]);
-    BOOST_TEST(  r1["d0"] == r0["d0"]);
-    BOOST_TEST(!(r1["d0"] != r0["d0"]));
-
-    // Test equality operator with empty strings--we once observed
-    // a problem in that case.
-    r1["s0"] = "";
-    BOOST_TEST(  r1["s0"] == r1["s0"]);
-    BOOST_TEST(  r1["s0"] != r0["s0"]);
-    BOOST_TEST(!(r1["s0"] != r1["s0"]));
-    BOOST_TEST(!(r1["s0"] == r0["s0"]));
-
-    BOOST_TEST_THROW(r2["unknown_member"], std::runtime_error, "");
-
-#if !defined __BORLANDC__
-    // Assigning a decimal-literal value to an integer isn't type
-    // safe, and might require truncation, so it's forbidden.
-    BOOST_TEST_THROW(r2["i0"] = "888e3", std::invalid_argument, "");
-    BOOST_TEST_THROW(r2["i1"] = "999.9", std::invalid_argument, "");
-#endif // !defined __BORLANDC__
-}
-
 struct any_member_test
 {
     static void test_any_member();
-    static void supplemental_test();
+    static void supplemental_test0();
+    static void supplemental_test1();
 };
 
 int test_main(int, char*[])
 {
     any_member_test::test_any_member();
-    any_member_test::supplemental_test();
+    any_member_test::supplemental_test0();
+    any_member_test::supplemental_test1();
     return 0;
 }
 
@@ -494,11 +404,9 @@ void any_member_test::test_any_member()
 //    std::mem_fun_t sizer();
 //    std::const_mem_fun_t(std::string::size);
     std::mem_fun(&std::string::size)(&str);
-
-    test0();
 }
 
-void any_member_test::supplemental_test()
+void any_member_test::supplemental_test0()
 {
     S s;
     X x;
@@ -632,5 +540,97 @@ void any_member_test::supplemental_test()
 
     std::cout << std::endl;
     }
+}
+
+void any_member_test::supplemental_test1()
+{
+    T r0;
+    BOOST_TEST_EQUAL(0  , r0.i0);
+    BOOST_TEST_EQUAL(0  , r0.i1);
+    BOOST_TEST_EQUAL(0.0, r0.d0);
+    BOOST_TEST_EQUAL("" , r0.s0);
+
+    // Test writing through a pointer to member.
+    int T::*x = &T::i0;
+    r0.*x = 5;
+    BOOST_TEST_EQUAL(5  , r0.i0);
+    BOOST_TEST_EQUAL(0  , r0.i1);
+    BOOST_TEST_EQUAL(0.0, r0.d0);
+
+    // Test writing through the map of ascribed member names.
+    r0["i0"] = "999";
+    r0["i1"] = "888000";
+    r0["d0"] = "777";
+    r0["s0"] = "hello";
+    BOOST_TEST_EQUAL(999    , r0.i0);
+    BOOST_TEST_EQUAL(888000 , r0.i1);
+    BOOST_TEST_EQUAL(777.0  , r0.d0);
+    BOOST_TEST_EQUAL("hello", r0.s0);
+
+    T r1;
+    r1["i0"] = "135";
+    r1["i1"] = "246";
+    r1["d0"] = "888";
+    r1["s0"] = "world";
+    BOOST_TEST_EQUAL(135    , r1.i0);
+    BOOST_TEST_EQUAL(246    , r1.i1);
+    BOOST_TEST_EQUAL(888.0  , r1.d0);
+    BOOST_TEST_EQUAL("world", r1.s0);
+
+    // Make sure that didn't affect the other instance of class T.
+    BOOST_TEST_EQUAL(999    , r0.i0);
+    BOOST_TEST_EQUAL(888e3  , r0.i1);
+    BOOST_TEST_EQUAL(777.0  , r0.d0);
+    BOOST_TEST_EQUAL("hello", r0.s0);
+
+    r0["i0"] = "1234567";
+    BOOST_TEST_EQUAL(1234567, r0.i0);
+    BOOST_TEST_EQUAL(888e3  , r0.i1);
+    BOOST_TEST_EQUAL(777.0  , r0.d0);
+    BOOST_TEST_EQUAL("hello", r0.s0);
+
+    // Make sure that didn't affect the other instance of class T.
+    BOOST_TEST_EQUAL(135    , r1.i0);
+    BOOST_TEST_EQUAL(246    , r1.i1);
+    BOOST_TEST_EQUAL(888.0  , r1.d0);
+    BOOST_TEST_EQUAL("world", r1.s0);
+
+    // Works for base class Q too.
+    T r2;
+    BOOST_TEST_EQUAL(0.0f, r2.q0);
+
+    r2["q0"] = "123.456";
+    BOOST_TEST_EQUAL(123.456f, r2.q0);
+
+    // Test equality operator.
+    BOOST_TEST(  r1["i0"] == r1["i0"]);
+    BOOST_TEST(  r1["i0"] != r0["i0"]);
+    BOOST_TEST(!(r1["i0"] == r0["i0"]));
+
+    BOOST_TEST(  r1["d0"] == r1["d0"]);
+    BOOST_TEST(  r1["d0"] != r0["d0"]);
+    BOOST_TEST(!(r1["d0"] == r0["d0"]));
+
+    r1["d0"] = r0["d0"];
+    BOOST_TEST(  r1["d0"] == r1["d0"]);
+    BOOST_TEST(  r1["d0"] == r0["d0"]);
+    BOOST_TEST(!(r1["d0"] != r0["d0"]));
+
+    // Test equality operator with empty strings--we once observed
+    // a problem in that case.
+    r1["s0"] = "";
+    BOOST_TEST(  r1["s0"] == r1["s0"]);
+    BOOST_TEST(  r1["s0"] != r0["s0"]);
+    BOOST_TEST(!(r1["s0"] != r1["s0"]));
+    BOOST_TEST(!(r1["s0"] == r0["s0"]));
+
+    BOOST_TEST_THROW(r2["unknown_member"], std::runtime_error, "");
+
+#if !defined __BORLANDC__
+    // Assigning a decimal-literal value to an integer isn't type
+    // safe, and might require truncation, so it's forbidden.
+    BOOST_TEST_THROW(r2["i0"] = "888e3", std::invalid_argument, "");
+    BOOST_TEST_THROW(r2["i1"] = "999.9", std::invalid_argument, "");
+#endif // !defined __BORLANDC__
 }
 
