@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input.hpp,v 1.15 2006-07-09 18:39:07 chicares Exp $
+// $Id: input.hpp,v 1.16 2006-07-13 03:13:07 chicares Exp $
 
 #ifndef input_hpp
 #define input_hpp
@@ -395,15 +395,13 @@ void LMI_SO convert_from_ihs
     ,std::vector<Input>&
     );
 
-/// Struct template reconstitutor specialization for all UDTs used in
-/// this Model. A single specialization suffices because all of these
-/// UDTs share a common base class.
+/// Specialization of struct template reconstitutor for this Model
+/// and the base class that all its UDTs share.
 
-template<typename ClassType>
-struct reconstitutor<datum_base, ClassType>
+template<> struct reconstitutor<datum_base, Input>
 {
     typedef datum_base DesiredType;
-    static DesiredType* reconstitute(any_member<ClassType>& m)
+    static DesiredType* reconstitute(any_member<Input>& m)
         {
         DesiredType* z = 0;
         z = exact_cast<ce_product_name         >(m); if(z) return z;

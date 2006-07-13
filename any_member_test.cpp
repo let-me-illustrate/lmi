@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: any_member_test.cpp,v 1.12 2006-07-09 15:56:30 chicares Exp $
+// $Id: any_member_test.cpp,v 1.13 2006-07-13 03:13:06 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -209,11 +209,10 @@ struct T : public Q, public MemberSymbolTable<T>
         }
 };
 
-template<typename ClassType>
-struct reconstitutor<base_datum, ClassType>
+template<> struct reconstitutor<base_datum, S>
 {
     typedef base_datum DesiredType;
-    static DesiredType* reconstitute(any_member<ClassType>& m)
+    static DesiredType* reconstitute(any_member<S>& m)
         {
         DesiredType* z = 0;
         z = exact_cast<DesiredType  >(m); if(z) return z;
