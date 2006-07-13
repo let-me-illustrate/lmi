@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: GNUmakefile,v 1.68 2006-06-15 20:36:14 wboutin Exp $
+# $Id: GNUmakefile,v 1.69 2006-07-13 03:07:20 chicares Exp $
 
 ################################################################################
 
@@ -160,6 +160,7 @@ MAKETARGET = \
     --no-print-directory \
     $(local_options) $(MAKEOVERRIDES) \
                          src_dir='$(src_dir)' \
+                         toolset='$(toolset)' \
                       build_type='$(build_type)' \
                platform-makefile='$(platform-makefile)' \
                USE_SO_ATTRIBUTES='$(USE_SO_ATTRIBUTES)' \
