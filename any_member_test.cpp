@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: any_member_test.cpp,v 1.13 2006-07-13 03:13:06 chicares Exp $
+// $Id: any_member_test.cpp,v 1.14 2006-07-13 13:00:28 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -441,11 +441,14 @@ void any_member_test::test_any_member()
     // Test no-such-member diagnostic for both const and non-const
     // subscripting operators.
 
+#if !(defined __GNUC__ && LMI_GCC_VERSION < 40000)
     std::string err
         ("Symbol table for class S ascribes no member named 'nonexistent'."
         );
-#if defined __GNUC__ && LMI_GCC_VERSION < 40000
-    err = "Symbol table for class 1S ascribes no member named 'nonexistent'.";
+#else  // defined __GNUC__ && LMI_GCC_VERSION < 40000
+    std::string err
+        ("Symbol table for class 1S ascribes no member named 'nonexistent'."
+        );
 #endif // defined __GNUC__ && LMI_GCC_VERSION < 40000
 
     BOOST_TEST_THROW(s_const["nonexistent"], std::runtime_error, err);
@@ -553,9 +556,10 @@ void any_member_test::supplemental_test()
     std::cout << "Testing function template member_cast().\n";
     s.x0.set_str("Test 3");
 
+#if !(defined __GNUC__ && LMI_GCC_VERSION < 40000)
     std::string err("Cannot cast from 'int S::*' to 'base_datum'.");
-#if defined __GNUC__ && LMI_GCC_VERSION < 40000
-    err = "Cannot cast from 'M1Si' to '10base_datum'.";
+#else  // defined __GNUC__ && LMI_GCC_VERSION < 40000
+    std::string err("Cannot cast from 'M1Si' to '10base_datum'.");
 #endif // defined __GNUC__ && LMI_GCC_VERSION < 40000
 
     BOOST_TEST_THROW(member_cast<base_datum>(s["i0"]), std::runtime_error, err);
