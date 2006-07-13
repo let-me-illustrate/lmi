@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.419 2006-07-12 15:13:12 chicares Exp $
+// $Id: ChangeLog,v 1.420 2006-07-13 15:59:40 chicares Exp $
 
 MAINTENANCE
 
@@ -6866,7 +6866,7 @@ Prevent segfault due to gcc defect.
   any_member_test.cpp
 Import and adapt selected changes from skeleton trunk. It is troubling
 that the unit test fails with como, though it passes with gcc and
-borland.
+borland. [But see 20060713T1431Z update below.]
 
 20060709T1557Z <chicares@cox.net> [1216]
 
@@ -7050,4 +7050,40 @@ for gcc, presented in the same format as the test's output:
   Calculate age:  8.44E-007  1.32E-006   0.64
 
 although the two implementations are obviously tuned differently.
+
+20060713T0307Z <chicares@cox.net> [1198]
+
+  GNUmakefile
+  workhorse.make
+Prevent bogus build diagnostics with compilers other than gcc. This
+corresponds to the skeleton trunk's 20060620T2326Z change.
+
+20060713T0313Z <chicares@cox.net> [1198]
+
+  any_member_test.cpp
+  input.hpp
+Avoid future conflicts by fully specializing 'reconstitutor'.
+
+20060713T0345Z <chicares@cox.net> [1198]
+
+  objects.make
+  sandbox_test.cpp [new in this trunk]
+Add generic unit test.
+
+20060713T1300Z <chicares@cox.net> [1198]
+
+  any_member_test.cpp
+Write gcc-version conditionals more clearly.
+
+20060713T1312Z <chicares@cox.net> [1198]
+
+  any_member_test.cpp
+Refactor.
+
+20060713T1431Z <chicares@cox.net> [1198]
+
+  any_member_test.cpp
+Add tests to detect outdated como binary. With an updated binary from
+the vendor, all tests in this translation unit are passed; this shows
+that the problem raised 20060709T1556Z was due to a compiler defect.
 
