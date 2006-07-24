@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.420 2006-07-13 15:59:40 chicares Exp $
+// $Id: ChangeLog,v 1.421 2006-07-24 14:37:44 chicares Exp $
 
 MAINTENANCE
 
@@ -7086,4 +7086,10 @@ Refactor.
 Add tests to detect outdated como binary. With an updated binary from
 the vendor, all tests in this translation unit are passed; this shows
 that the problem raised 20060709T1556Z was due to a compiler defect.
+
+20060724T1437Z <chicares@cox.net> [1198]
+
+  ledger_invariant.cpp
+  ledger_invariant.hpp
+Make first-line comments consistent.
 
