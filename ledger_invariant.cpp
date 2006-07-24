@@ -1,4 +1,4 @@
-// Ledger values that do not vary by basis.
+// Ledger data that do not vary by basis.
 //
 // Copyright (C) 1998, 2001, 2002, 2003, 2004, 2005, 2006 Gregory W. Chicares.
 //
@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_invariant.cpp,v 1.23 2006-01-29 13:52:00 chicares Exp $
+// $Id: ledger_invariant.cpp,v 1.24 2006-07-24 14:37:44 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
