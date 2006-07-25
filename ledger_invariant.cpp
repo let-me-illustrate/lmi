@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_invariant.cpp,v 1.24 2006-07-24 14:37:44 chicares Exp $
+// $Id: ledger_invariant.cpp,v 1.25 2006-07-25 14:23:37 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -358,9 +358,14 @@ void LedgerInvariant::Init(BasicValues* b)
 //    Internal1035Amount;
 //    Dumpin               =
 
-    NetWD           = b->Outlay_->withdrawals();
-    NewCashLoan     = b->Outlay_->new_cash_loans();
-
+    // Certain data members, including but almost certainly not
+    // limited to these, should not be initialized to any non-zero
+    // value here. Actual values are inserted in account-value
+    // processing, subject to various restrictions that often cause
+    // them to differ from input values. Notably, values need to be
+    // zero after lapse.
+//    NetWD           =
+//    NewCashLoan     =
 //    GptForceout     =
 //    NaarForceout    =
 //    ProducerCompensation =
