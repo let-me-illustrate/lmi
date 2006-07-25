@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avmly.cpp,v 1.50 2006-01-29 13:52:00 chicares Exp $
+// $Id: ihs_avmly.cpp,v 1.51 2006-07-25 13:08:22 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -2765,6 +2765,8 @@ void AccountValue::TxLoanInt()
 
     RegLnBal += RegLnIntAccrued;
     PrfLnBal += PrfLnIntAccrued;
+
+    YearsTotalLoanIntAccrued += RegLnIntAccrued + PrfLnIntAccrued;
 }
 
 //============================================================================
