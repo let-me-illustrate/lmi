@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.421 2006-07-24 14:37:44 chicares Exp $
+// $Id: ChangeLog,v 1.422 2006-07-25 13:08:22 chicares Exp $
 
 MAINTENANCE
 
@@ -7092,4 +7092,13 @@ that the problem raised 20060709T1556Z was due to a compiler defect.
   ledger_invariant.cpp
   ledger_invariant.hpp
 Make first-line comments consistent.
+
+20060725T1308Z <chicares@cox.net> [1198]
+
+  account_value.hpp
+  ihs_acctval.cpp
+  ihs_avmly.cpp
+  ledger_variant.cpp
+  ledger_variant.hpp
+Record each year's total loan interest in ledger.
 
