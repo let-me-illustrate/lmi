@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_acctval.cpp,v 1.82 2006-01-29 13:52:00 chicares Exp $
+// $Id: ihs_acctval.cpp,v 1.83 2006-07-25 13:08:22 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -928,6 +928,7 @@ void AccountValue::InitializeYear()
     YearsNetClaims              = 0.0;
     YearsTotalNetIntCredited    = 0.0;
     YearsTotalGrossIntCredited  = 0.0;
+    YearsTotalLoanIntAccrued    = 0.0;
     YearsTotalNetCoiCharges     = 0.0;
     YearsTotalPolicyFee         = 0.0;
     YearsTotalPremTaxLoad       = 0.0;
@@ -1339,6 +1340,7 @@ void AccountValue::FinalizeYear()
     VariantValues().NetClaims       [Year] = YearsNetClaims             ;
     VariantValues().NetIntCredited  [Year] = YearsTotalNetIntCredited   ;
     VariantValues().GrossIntCredited[Year] = YearsTotalGrossIntCredited ;
+    VariantValues().LoanIntAccrued  [Year] = YearsTotalLoanIntAccrued   ;
     VariantValues().NetCOICharge    [Year] = YearsTotalNetCoiCharges    ;
     VariantValues().PolicyFee       [Year] = YearsTotalPolicyFee        ;
     VariantValues().PremTaxLoad     [Year] = YearsTotalPremTaxLoad      ;

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_variant.cpp,v 1.13 2006-01-29 13:52:00 chicares Exp $
+// $Id: ledger_variant.cpp,v 1.14 2006-07-25 13:08:22 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -97,6 +97,7 @@ void LedgerVariant::Alloc(int len)
     BegYearVectors  ["AVRelOnDeath"         ] = &AVRelOnDeath           ;
     BegYearVectors  ["NetIntCredited"       ] = &NetIntCredited         ;
     BegYearVectors  ["GrossIntCredited"     ] = &GrossIntCredited       ;
+    BegYearVectors  ["LoanIntAccrued"       ] = &LoanIntAccrued         ;
 
     BegYearVectors  ["NetCOICharge"         ] = &NetCOICharge           ;
 

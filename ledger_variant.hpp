@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_variant.hpp,v 1.9 2006-01-29 13:52:00 chicares Exp $
+// $Id: ledger_variant.hpp,v 1.10 2006-07-25 13:08:22 chicares Exp $
 
 #ifndef ledger_variant_hpp
 #define ledger_variant_hpp
@@ -91,9 +91,8 @@ public:
     void UpdateCRC(CRC& a_crc) const;
     void Spew(std::ostream& os) const;
 
-// TODO ?? Make data private. Provide const accessors. Some values
-// (e.g., loan interest) could be calculated dynamically instead
-// of stored.
+// TODO ?? Make data private. Provide const accessors. Some of these
+// values could be calculated dynamically instead of stored.
 
     // BOY vectors.
     std::vector<double> COICharge;      // TODO ?? Never used?
@@ -101,6 +100,7 @@ public:
     std::vector<double> AVRelOnDeath;
     std::vector<double> NetIntCredited;
     std::vector<double> GrossIntCredited;
+    std::vector<double> LoanIntAccrued;
     std::vector<double> NetCOICharge;
     std::vector<double> PolicyFee;
     std::vector<double> PremTaxLoad;
