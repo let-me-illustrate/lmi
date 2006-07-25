@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.423 2006-07-25 14:23:37 chicares Exp $
+// $Id: ChangeLog,v 1.424 2006-07-25 19:17:02 chicares Exp $
 
 MAINTENANCE
 
@@ -7106,4 +7106,10 @@ Record each year's total loan interest in ledger.
 
   ledger_invariant.cpp
 Stop initializing certain ledger values from input.
+
+20060725T1917Z <chicares@cox.net> [1198]
+
+  ledger_invariant.cpp
+  ledger_invariant.hpp
+Add flags indicating whether input specifies loans or withdrawals.
 
