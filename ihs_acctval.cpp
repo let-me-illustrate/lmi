@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_acctval.cpp,v 1.83 2006-07-25 13:08:22 chicares Exp $
+// $Id: ihs_acctval.cpp,v 1.84 2006-07-26 01:21:27 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -1261,6 +1261,8 @@ void AccountValue::SetProjectedCoiCharge()
 //============================================================================
 void AccountValue::FinalizeYear()
 {
+    VariantValues().TotalLoanBalance[Year] = RegLnBal + PrfLnBal;
+
     double total_av = TotalAccountValue();
     double surr_chg = SurrChg();
     double csv_net =
