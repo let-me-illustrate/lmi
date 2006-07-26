@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.424 2006-07-25 19:17:02 chicares Exp $
+// $Id: ChangeLog,v 1.425 2006-07-26 01:21:28 chicares Exp $
 
 MAINTENANCE
 
@@ -7112,4 +7112,9 @@ Stop initializing certain ledger values from input.
   ledger_invariant.cpp
   ledger_invariant.hpp
 Add flags indicating whether input specifies loans or withdrawals.
+
+20060726T0121Z <chicares@cox.net> [1198]
+
+  ihs_acctval.cpp
+Post loan balance to ledger.
 
