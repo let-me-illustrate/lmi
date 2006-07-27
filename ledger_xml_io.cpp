@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xml_io.cpp,v 1.32 2006-07-12 15:13:08 chicares Exp $
+// $Id: ledger_xml_io.cpp,v 1.33 2006-07-27 22:33:12 chicares Exp $
 
 #include "config.hpp"
 
@@ -37,12 +37,12 @@
 #include "value_cast.hpp"
 #include "version.hpp"
 
-#ifdef USING_CURRENT_XMLWRAPP
+#if defined USING_CURRENT_XMLWRAPP
 #   include <xmlwrapp/attributes.h>
 // TODO ?? Gross hack to be undone when USING_CURRENT_XMLWRAPP becomes
 // the only supported version.
 #   define set_attr get_attributes().insert
-#endif
+#endif // defined USING_CURRENT_XMLWRAPP
 
 #include <xmlwrapp/init.h>
 #include <xmlwrapp/node.h>
@@ -231,7 +231,7 @@ bool format_exists(std::string const& s, std::string const& suffix, format_map_t
     else
         {
 (void)suffix;
-#ifdef SHOW_MISSING_FORMATS
+#if defined SHOW_MISSING_FORMATS
         std::ofstream ofs("missing_formats", std::ios_base::out | std::ios_base::ate | std::ios_base::app);
         ofs << s << suffix << "\n";
 #endif // defined SHOW_MISSING_FORMATS
@@ -326,6 +326,8 @@ void Ledger::write(xml::node& x) const
     title_map["IrrCsv_Guaranteed"               ] = " _____________ Guar IRR on CSV";
     title_map["IrrDb_Current"                   ] = " _____________ Curr IRR on DB";
     title_map["IrrDb_Guaranteed"                ] = " _____________ Guar IRR on DB";
+    title_map["LoanIntAccrued_Current"          ] = "Curr Loan Int Accrued";
+    title_map["LoanIntAccrued_Guaranteed"       ] = "Guar Loan Int Accrued";
     title_map["NewCashLoan"                     ] = " ________ Annual Loan";
     title_map["MlyGAIntRate_Current"            ] = "Curr Mon Gen Acct Int Rate";
     title_map["MlyGAIntRate_Guaranteed"         ] = "Guar Mon Gen Acct Int Rate";
@@ -407,7 +409,7 @@ void Ledger::write(xml::node& x) const
     title_map["TotalLoanBalance_Guaranteed"     ] = "Guar Tot Loan Balance";
 
     {
-#ifdef SHOW_MISSING_FORMATS
+#if defined SHOW_MISSING_FORMATS
     std::ofstream ofs("missing_formats", std::ios_base::out | std::ios_base::trunc);
     ofs << "No format found for the following numeric data.\n";
     ofs << "These data were therefore not written to xml.\n";
@@ -466,8 +468,6 @@ void Ledger::write(xml::node& x) const
     format_map["PremTaxRate"                       ] = f4;
     format_map["StatePremTaxRate"                  ] = f4;
 
-
-
 // F3: scaled by 100, zero decimals, with '%' at end:
 // > Format as percentage with no decimal places (##0%)
     format_map["GenAcctAllocation"                 ] = f3;
@@ -505,6 +505,8 @@ void Ledger::write(xml::node& x) const
     format_map["Has1035ExchCharge"                 ] = f1;
     format_map["HasADD"                            ] = f1;
     format_map["HasChildRider"                     ] = f1;
+    format_map["HasWD"                             ] = f1;
+    format_map["HasLoan"                           ] = f1;
     format_map["HasHoneymoon"                      ] = f1;
     format_map["HasSpouseRider"                    ] = f1;
     format_map["HasTerm"                           ] = f1;
@@ -635,6 +637,7 @@ void Ledger::write(xml::node& x) const
     format_map["Loads"                             ] = f1;
     format_map["NewCashLoan"                       ] = f1;
     format_map["LoanInt"                           ] = f1;
+    format_map["LoanIntAccrued"                    ] = f1;
     format_map["NaarForceout"                      ] = f1;
     format_map["NetClaims"                         ] = f1;
     format_map["NetCOICharge"                      ] = f1;
@@ -1128,7 +1131,7 @@ void Ledger::write(std::ostream& os) const
     os << s;
 }
 
-#ifdef USING_CURRENT_XMLWRAPP
+#if defined USING_CURRENT_XMLWRAPP
 #   undef set_attr
-#endif
+#endif // defined USING_CURRENT_XMLWRAPP
 
