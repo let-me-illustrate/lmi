@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xml_io.cpp,v 1.33 2006-07-27 22:33:12 chicares Exp $
+// $Id: ledger_xml_io.cpp,v 1.34 2006-07-27 22:58:26 chicares Exp $
 
 #include "config.hpp"
 
@@ -408,6 +408,44 @@ void Ledger::write(xml::node& x) const
     title_map["TotalLoanBalance_Current"        ] = "Curr Tot Loan Balance";
     title_map["TotalLoanBalance_Guaranteed"     ] = "Guar Tot Loan Balance";
 
+    // TODO ?? Titles ought to be read from an external file that
+    // permits flexible customization. Until that's done, they can be
+    // overridden here. It seems confusing to substitute "cash value"
+    // for "account value" in the title for 'AVRelOnDeath_Current',
+    // which is an account value rather than a surrender value; that
+    // was simply the title prescribed by one person in one sales
+    // department for one particular use.
+    //
+    // As long as column names are hardcoded, each has a unique value.
+    // End users may have saved cases with supplemental reports that
+    // use columns whose titles are overridden here; they may be
+    // surprised to see the titles change. Overriding a hardcoded
+    // value is an expedient that can work only once--for example,
+    // the title of the 'GrossPmt' column is changed to "Premium
+    // Outlay" here already, so "Cash Payment" can't be used for a
+    // different hardcoded report later.
+    //
+    // These changes also introduce inconsistencies: for example,
+    // this consistent pair
+//    title_map["ClaimsPaid_Current"              ] = " _____________ Curr Claims Paid";
+//    title_map["ClaimsPaid_Guaranteed"           ] = " _____________ Guar Claims Paid";
+    // becomes, inconsistently:
+//    title_map["ClaimsPaid_Current"              ] = "Death Proceeds Paid";
+//    title_map["ClaimsPaid_Guaranteed"           ] = " _____________ Guar Claims Paid";
+    //
+    // Furthermore, a compliance department might very well deem that
+    // 'AcctVal_Current' must be called "Cash Value" for one policy
+    // form, and "Account Value" for another, in order to match the
+    // terms used in the contract. Therefore, these titles probably
+    // belong in the product database, which permits variation by
+    // product--though it does not accommodate strings as this is
+    // written in 2006-07.
+
+    title_map["AVRelOnDeath_Current"            ] = "Cash Value Released __on Death";
+    title_map["ClaimsPaid_Current"              ] = "Death Proceeds Paid";
+    title_map["GrossPmt"                        ] = " _____________ Premium Outlay";
+    title_map["LoanIntAccrued_Current"          ] = "Annual Loan Interest";
+
     {
 #if defined SHOW_MISSING_FORMATS
     std::ofstream ofs("missing_formats", std::ios_base::out | std::ios_base::trunc);
@@ -730,6 +768,66 @@ void Ledger::write(xml::node& x) const
 
     vectors["FundNumbers"    ] = &ledger_invariant_->FundNumbers    ;
     vectors["FundAllocations"] = &ledger_invariant_->FundAllocations;
+
+    // The Ledger object should contain a basic minimal set of columns
+    // from which others may be derived. It must be kept small because
+    // its size imposes a practical limit on the number of lives that
+    // can be run as part of a single census.
+    //
+    // TODO ?? A really good design would give users the power to
+    // define and store their own derived-column definitions. For now,
+    // however, code changes are required, and this is as appropriate
+    // a place as any to make them.
+
+    LedgerVariant const& Curr_ = GetCurrFull();
+
+    // ET !! Easier to write as
+    //   std::vector<double> NetOutlay =
+    //     ledger_invariant_->GrossPmt - ledger_invariant_->NetWD - ledger_invariant_->NewCashLoan - Curr_.ClaimsPaid;
+    std::vector<double> NetOutlay(ledger_invariant_->GrossPmt);
+    std::transform
+        (NetOutlay.begin()
+        ,NetOutlay.end()
+        ,ledger_invariant_->NetWD.begin()
+        ,NetOutlay.begin()
+        ,std::minus<double>()
+        );
+    std::transform
+        (NetOutlay.begin()
+        ,NetOutlay.end()
+        ,ledger_invariant_->NewCashLoan.begin()
+        ,NetOutlay.begin()
+        ,std::minus<double>()
+        );
+    std::transform
+        (NetOutlay.begin()
+        ,NetOutlay.end()
+        ,Curr_.ClaimsPaid.begin()
+        ,NetOutlay.begin()
+        ,std::minus<double>()
+        );
+
+    vectors   ["NetOutlay"] = &NetOutlay;
+    title_map ["NetOutlay"] = "_____________ __Net Outlay";
+    format_map["NetOutlay"] = f1;
+
+    // ET !! Easier to write as
+    //   std::vector<double> NetDeathBenefit =
+    //     Curr_.EOYDeathBft - Curr_.TotalLoanBalance;
+    std::vector<double> NetDeathBenefit(Curr_.EOYDeathBft);
+    std::transform
+        (NetDeathBenefit.begin()
+        ,NetDeathBenefit.end()
+        ,Curr_.TotalLoanBalance.begin()
+        ,NetDeathBenefit.begin()
+        ,std::minus<double>()
+        );
+
+    vectors   ["NetDeathBenefit"] = &NetDeathBenefit ;
+    title_map ["NetDeathBenefit"] = "__Net __Death Benefit";
+    format_map["NetDeathBenefit"] = f1;
+
+    // [End of derived columns.]
 
     double Composite = GetIsComposite();
     scalars["Composite"] = &Composite;
