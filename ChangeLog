@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.425 2006-07-26 01:21:28 chicares Exp $
+// $Id: ChangeLog,v 1.426 2006-07-27 22:58:26 chicares Exp $
 
 MAINTENANCE
 
@@ -7117,4 +7117,14 @@ Add flags indicating whether input specifies loans or withdrawals.
 
   ihs_acctval.cpp
 Post loan balance to ledger.
+
+20060727T2233Z <chicares@cox.net> [1198]
+
+  ledger_xml_io.cpp
+Add titles and formats for recently-added ledger data.
+
+20060727T2258Z <chicares@cox.net> [1200]
+
+  ledger_xml_io.cpp
+Add some supplemental-report columns; brittlely override some titles.
 
