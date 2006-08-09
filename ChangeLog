@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.426 2006-07-27 22:58:26 chicares Exp $
+// $Id: ChangeLog,v 1.427 2006-08-09 13:10:39 chicares Exp $
 
 MAINTENANCE
 
@@ -7127,4 +7127,15 @@ Add titles and formats for recently-added ledger data.
 
   ledger_xml_io.cpp
 Add some supplemental-report columns; brittlely override some titles.
+
+20060809T1310Z <chicares@cox.net> [1200]
+
+  ihs_avmly.cpp
+Fix monthly-report withdrawals; experimentally address a 7702A defect.
+Formerly, the last nonzero withdrawal propagated forward into all
+future years; now it is set to zero when no withdrawal is taken. This
+was evident in the monthly-detail report, but the incorrect value was
+disregarded for other reports and for monthiversary processing. It did
+however affect 7702A calculations in a way that was the opposite of
+conservative.
 

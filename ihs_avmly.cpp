@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avmly.cpp,v 1.51 2006-07-25 13:08:22 chicares Exp $
+// $Id: ihs_avmly.cpp,v 1.52 2006-08-09 13:10:39 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -187,6 +187,19 @@ void AccountValue::DoMonthDR()
 
     TxAscertainDesiredPayment();
     TxLimitPayment(max_non_mec_premium);
+
+    if(0 == Month)
+        {
+        Irc7702A_->UpdatePmt7702A
+            (Dcv
+            ,-NetWD
+            ,false
+            ,AnnualTargetPrem
+            ,YearsTotLoadTgtLowestPremtax
+            ,YearsTotLoadExcLowestPremtax
+            ,kludge_account_value
+            );
+        }
 
     double gross_1035 = 0.0;
     if(0 == Year && 0 == Month)
@@ -1770,7 +1783,8 @@ void AccountValue::TxRecognizePaymentFor7702A
         // TODO ?? Not treated conditionally as for 1035, so it
         // pretty much has to be wrong. WD can be either less
         // than or greater than maximum necessary premium.
-        amount_paid_7702A -= NetWD;
+//        amount_paid_7702A -= NetWD;
+        // Experimentally, this is now handled elsewhere.
         }
 
     double kludge_account_value = std::max(TotalAccountValue(), HoneymoonValue);
@@ -2862,6 +2876,8 @@ void AccountValue::TxTakeWD()
         {
         SetMaxWD();
         }
+
+    NetWD = 0.0;
 
     // Nothing more to do if no withdrawal requested.
     if(0.0 == RequestedWD)
