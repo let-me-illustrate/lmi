@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: census_view.cpp,v 1.44 2006-07-10 18:00:14 chicares Exp $
+// $Id: census_view.cpp,v 1.45 2006-08-11 16:26:26 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -327,6 +327,7 @@ int CensusView::edit_parameters
         controller.SetTitle(name);
         rc = controller.ShowModal();
         }
+
     if(wxID_OK == rc)
         {
         if(lmi_input != edited_lmi_input)
