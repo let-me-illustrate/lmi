@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustration_view.cpp,v 1.38 2006-07-10 18:00:14 chicares Exp $
+// $Id: illustration_view.cpp,v 1.39 2006-08-11 16:26:26 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -137,6 +137,7 @@ warning() << "That command should have been disabled." << LMI_FLUSH;
         MvcController controller(GetFrame(), edited_lmi_input, default_view);
         rc = controller.ShowModal();
         }
+
     if(wxID_OK == rc)
         {
         if(document().input_ != edited_lmi_input)
@@ -254,6 +255,7 @@ void IllustrationView::UponProperties(wxCommandEvent&)
         {
 //        return;
         }
+
     if(wxID_OK == EditProperties())
         {
         Run();
