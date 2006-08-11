@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mvc_controller.cpp,v 1.4 2006-07-11 03:41:09 chicares Exp $
+// $Id: mvc_controller.cpp,v 1.5 2006-08-11 16:28:22 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -593,7 +593,7 @@ void MvcController::UponInitDialog(wxInitDialogEvent& event)
 /// This augments wxDialog::OnOK(), but isn't a complete replacement.
 /// It must call that base-class function explicitly (or do everything
 /// it would do, for each platform) in order to perform a conditional
-/// action (displaying input) depending on the base-class function's
+/// action (none for the nonce) depending on the base-class function's
 /// result. Skip(false) is written at the top to make it clear that
 /// not calling Skip with its default 'true' value is no oversight.
 
@@ -606,19 +606,8 @@ void MvcController::UponOK(wxCommandEvent& event)
         {
         return;
         }
-    warning()
-        << "Testing data transfer. A real application would do"
-        << " something meaningful with the data entered, but this"
-        << " demonstration merely displays them as a \"warning\".\n"
-        ;
-    MvcModel::StateType const state = model_.State();
-    typedef MvcModel::StateType::const_iterator stci;
-    for(stci i = state.begin(); i != state.end(); ++i)
-        {
-        warning() << "  " << i->first << ": " << i->second << '\n';
-        }
 
-    warning() << "Data transfer completed." << std::flush;
+    // Perform any needed postprocessing here.
 }
 
 void MvcController::UponPageChanged(wxNotebookEvent& event)
