@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_pios.cpp,v 1.4 2006-01-29 13:52:00 chicares Exp $
+// $Id: ihs_pios.cpp,v 1.5 2006-08-12 17:16:36 chicares Exp $
 
 // This is a derived work based on Joshua Rowe's
 //   "Really cool persistent object stream library"
@@ -251,13 +251,13 @@ JrPs_opstream& operator<< (JrPs_opstream & os, const char* s)
   return    os;
 }
 
-JrPs_opstream& operator<< (JrPs_opstream & os, signed const char* s)
+JrPs_opstream& operator<< (JrPs_opstream & os, signed char const* s)
 {
   os.writestring(reinterpret_cast<const char*>(s));
   return    os;
 }
 
-JrPs_opstream& operator<< (JrPs_opstream & os, unsigned const char* s)
+JrPs_opstream& operator<< (JrPs_opstream & os, unsigned char const* s)
 {
   os.writestring(reinterpret_cast<const char*>(s));
   return    os;
@@ -293,13 +293,13 @@ JrPs_opstream& operator<< (JrPs_opstream & os, unsigned int c)
   return    os;
 }
 
-JrPs_opstream& operator<< (JrPs_opstream & os, long c)
+JrPs_opstream& operator<< (JrPs_opstream & os, long int c)
 {
   os.writebytes(&c, sizeof(c));
   return    os;
 }
 
-JrPs_opstream& operator<< (JrPs_opstream & os, unsigned long c)
+JrPs_opstream& operator<< (JrPs_opstream & os, unsigned long int c)
 {
   os.writebytes(&c, sizeof(c));
   return    os;
@@ -474,13 +474,13 @@ JrPs_ipstream& operator>> (JrPs_ipstream & is, unsigned int &c)
   return    is;
 }
 
-JrPs_ipstream& operator>> (JrPs_ipstream & is, long &c)
+JrPs_ipstream& operator>> (JrPs_ipstream & is, long int &c)
 {
   is.readbytes(&c, sizeof(c));
   return    is;
 }
 
-JrPs_ipstream& operator>> (JrPs_ipstream & is, unsigned long &c)
+JrPs_ipstream& operator>> (JrPs_ipstream & is, unsigned long int &c)
 {
   is.readbytes(&c, sizeof(c));
   return    is;

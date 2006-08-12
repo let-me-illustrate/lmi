@@ -31,7 +31,7 @@
    email: <chicares@cox.net>
    snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-   $Id: md5.hpp,v 1.4 2006-01-29 15:12:07 chicares Exp $
+   $Id: md5.hpp,v 1.5 2006-08-12 17:16:36 chicares Exp $
 
    GWC: File renamed md5.h --> md5.hpp so that grep whatever *.?pp
    can be used across the lmi project.
@@ -87,10 +87,10 @@ typedef u_int32_t md5_uint32;
    typedef unsigned int md5_uint32;
 # else
 #  if SHRT_MAX == INT_MAX_32_BITS
-    typedef unsigned short md5_uint32;
+    typedef unsigned short int md5_uint32;
 #  else
 #   if LONG_MAX == INT_MAX_32_BITS
-     typedef unsigned long md5_uint32;
+     typedef unsigned long int md5_uint32;
 #   else
      /* The following line is intended to evoke an error.
         Using #error is not portable enough.  */
