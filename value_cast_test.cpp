@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: value_cast_test.cpp,v 1.12 2006-03-09 01:58:14 chicares Exp $
+// $Id: value_cast_test.cpp,v 1.13 2006-08-12 17:16:36 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -601,12 +601,12 @@ int boost_tests()
 
     // void test_conversion_from_to_wchar_t_alias()
 
-    BOOST_TEST_EQUAL(123u, lexical_cast<unsigned short>("123"));
-    BOOST_TEST_EQUAL(123u, lexical_cast<unsigned int>("123"));
-    BOOST_TEST_EQUAL(123u, lexical_cast<unsigned long>("123"));
+    BOOST_TEST_EQUAL(123u, lexical_cast<unsigned short int>("123"));
+    BOOST_TEST_EQUAL(123u, lexical_cast<unsigned       int>("123"));
+    BOOST_TEST_EQUAL(123u, lexical_cast<unsigned long  int>("123"));
     BOOST_TEST_EQUAL
         (std::string("123")
-        ,lexical_cast<std::string>(static_cast<unsigned short>(123))
+        ,lexical_cast<std::string>(static_cast<unsigned short int>(123))
         );
     BOOST_TEST_EQUAL(std::string("123"), lexical_cast<std::string>(123u));
     BOOST_TEST_EQUAL(std::string("123"), lexical_cast<std::string>(123ul));
@@ -746,12 +746,12 @@ int boost_tests()
     BOOST_TEST_EQUAL(" ", value_cast<std::string>(std::string(" ")));
     BOOST_TEST_EQUAL("", value_cast<std::string>(std::string("")));
 
-    BOOST_TEST_EQUAL(123u, value_cast<unsigned short>("123"));
-    BOOST_TEST_EQUAL(123u, value_cast<unsigned int>("123"));
-    BOOST_TEST_EQUAL(123u, value_cast<unsigned long>("123"));
+    BOOST_TEST_EQUAL(123u, value_cast<unsigned short int>("123"));
+    BOOST_TEST_EQUAL(123u, value_cast<unsigned       int>("123"));
+    BOOST_TEST_EQUAL(123u, value_cast<unsigned long  int>("123"));
     BOOST_TEST_EQUAL
         (std::string("123")
-        ,value_cast<std::string>(static_cast<unsigned short>(123))
+        ,value_cast<std::string>(static_cast<unsigned short int>(123))
         );
     BOOST_TEST_EQUAL(std::string("123"), value_cast<std::string>(123u));
     BOOST_TEST_EQUAL(std::string("123"), value_cast<std::string>(123ul));

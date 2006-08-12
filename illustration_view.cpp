@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustration_view.cpp,v 1.39 2006-08-11 16:26:26 chicares Exp $
+// $Id: illustration_view.cpp,v 1.40 2006-08-12 17:16:36 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -183,7 +183,7 @@ wxMenuBar* IllustrationView::MenuBar() const
 
 // This virtual function calls the base-class version explicitly.
 
-bool IllustrationView::OnCreate(wxDocument* doc, long flags)
+bool IllustrationView::OnCreate(wxDocument* doc, long int flags)
 {
     if(flags & LMI_WX_CHILD_DOCUMENT)
         {
