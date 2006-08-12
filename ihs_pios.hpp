@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_pios.hpp,v 1.7 2006-01-29 13:52:00 chicares Exp $
+// $Id: ihs_pios.hpp,v 1.8 2006-08-12 17:16:36 chicares Exp $
 
 // This is a derived work based on Joshua Rowe's
 //   "Really cool persistent object stream library"
@@ -154,7 +154,7 @@ friend  JrPs_opstream & operator <<(JrPs_opstream& os, const JrPs_pstreamable* x
     // for POD types
 friend JrPs_opstream& operator<<    (JrPs_opstream& os,                     bool    );
 friend JrPs_opstream& operator<<    (JrPs_opstream& os,                     char    );
-friend JrPs_opstream& operator<<    (JrPs_opstream& os, signed          char    );
+friend JrPs_opstream& operator<<    (JrPs_opstream& os, signed              char    );
 friend JrPs_opstream& operator<<    (JrPs_opstream& os, unsigned            char    );
 friend JrPs_opstream& operator<<    (JrPs_opstream& os,             short   int     );
 friend JrPs_opstream& operator<<    (JrPs_opstream& os, unsigned    short   int     );
@@ -167,9 +167,9 @@ friend JrPs_opstream& operator<<    (JrPs_opstream& os,                     doub
 friend JrPs_opstream& operator<<    (JrPs_opstream& os,             long    double  );
 
     // for C strings
-friend JrPs_opstream& operator<<    (JrPs_opstream& os,                     const char*);
-friend JrPs_opstream& operator<<    (JrPs_opstream& os, signed          const char*);
-friend JrPs_opstream& operator<<    (JrPs_opstream& os, unsigned            const char*);
+friend JrPs_opstream& operator<<    (JrPs_opstream& os,                     char const*);
+friend JrPs_opstream& operator<<    (JrPs_opstream& os, signed              char const*);
+friend JrPs_opstream& operator<<    (JrPs_opstream& os, unsigned            char const*);
 
     // for C++ strings
 friend JrPs_opstream& operator<<    (JrPs_opstream& os, std::string const&);

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: crc32.cpp,v 1.4 2006-01-29 13:52:00 chicares Exp $
+// $Id: crc32.cpp,v 1.5 2006-08-12 17:16:36 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -65,7 +65,7 @@
 // The table is simply the CRC of all possible eight bit values.  This is all
 // the information needed to generate CRC's on data a byte at a time for all
 // combinations of CRC register values and incoming bytes.  The table is
-// written to stdout as 256 long hexadecimal values in C language format.
+// written to stdout as 256 long-int hexadecimal values in C language format.
 //
 // [Mark Adler's original documentation ends.]
 //
@@ -79,10 +79,10 @@ namespace
         static int const n = 256;
         static unsigned int crc_array[n];
 
-        unsigned long c; // CRC shift register.
-        unsigned long e; // Polynomial exclusive-or pattern.
-        unsigned int i;  // Counter for all possible eight bit values.
-        int k;           // Byte being shifted into crc apparatus.
+        unsigned long int c; // CRC shift register.
+        unsigned long int e; // Polynomial exclusive-or pattern.
+        unsigned int i;      // Counter for all possible eight bit values.
+        int k;               // Byte being shifted into crc apparatus.
 
         // Terms of polynomial defining this crc (except x^32).
         static int p[] = {0,1,2,4,5,7,8,10,11,12,16,22,23,26};
