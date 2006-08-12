@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: workhorse.make,v 1.71 2006-07-13 03:07:20 chicares Exp $
+# $Id: workhorse.make,v 1.72 2006-08-12 17:16:42 chicares Exp $
 
 ################################################################################
 
@@ -301,7 +301,7 @@ idempotent_files := \
     $(filter-out config_%.hpp,\
       $(notdir \
         $(wildcard \
-          $(addprefix $(src_dir)/,*.h *.hpp *.tpp *.xpp \
+          $(addprefix $(src_dir)/,*.hpp *.tpp *.xpp \
           ) \
         ) \
       ) \
