@@ -1,0 +1,33 @@
+// Provide expm1() [C99 7.12.6.3] for toolsets that lack it.
+//
+// Copyright (C) 2006 Gregory W. Chicares.
+//
+// This program is free software; you can redistribute it and/or modify
+// it under the terms of the GNU General Public License version 2 as
+// published by the Free Software Foundation.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program; if not, write to the Free Software Foundation,
+// Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
+//
+// http://savannah.nongnu.org/projects/lmi
+// email: <chicares@cox.net>
+// snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
+
+// $Id: expm1.h,v 1.1 2006-08-12 17:16:39 chicares Exp $
+
+// The include guard has an 'lmi_' prefix to avoid conflict, because
+// 'expm1_h' is an obvious name that libraries might use.
+
+#ifndef lmi_expm1_h
+#define lmi_expm1_h
+
+#include "config.hpp"
+
+#endif // lmi_expm1_h
+
