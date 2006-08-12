@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: datum_boolean.cpp,v 1.4 2006-07-10 13:14:34 chicares Exp $
+// $Id: datum_boolean.cpp,v 1.5 2006-08-12 17:16:33 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -35,6 +35,12 @@ datum_boolean::datum_boolean(bool value)
 
 datum_boolean::~datum_boolean()
 {
+}
+
+datum_boolean& datum_boolean::operator=(bool b)
+{
+    value_ = b;
+    return *this;
 }
 
 bool datum_boolean::value() const

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: view_ex.cpp,v 1.8 2006-01-29 13:52:01 chicares Exp $
+// $Id: view_ex.cpp,v 1.9 2006-08-12 17:16:33 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -43,7 +43,7 @@
 // have expected it to be a pure virtual. Unfortunately, this seems to
 // mean that a view class cannot be physically decoupled from the main
 // application header, and indeed there are no wxView derivatives in
-// the framework.
+// the wx framework.
 
 #include "alert.hpp"
 #include "docmanager_ex.hpp"
@@ -134,7 +134,7 @@ bool ViewEx::OnClose(bool delete_window)
 // documented method doesn't work--whereas setting the focus upon
 // creation here does work.
 //
-bool ViewEx::OnCreate(wxDocument* doc, long)
+bool ViewEx::OnCreate(wxDocument* doc, long int)
 {
     wxGetApp().CreateChildFrame(doc, this);
     DocManager().AssociateFileHistoryWithFileMenu(FrameWindow().GetMenuBar());

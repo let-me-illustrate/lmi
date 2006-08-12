@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mvc_model.hpp,v 1.2 2006-07-09 18:39:07 chicares Exp $
+// $Id: mvc_model.hpp,v 1.3 2006-08-12 17:16:33 chicares Exp $
 
 #ifndef mvc_model_hpp
 #define mvc_model_hpp
@@ -42,8 +42,8 @@ class datum_base;
 /// State() maps each element of Names() to a string representation of
 /// its current value; this constitutes the Model's current state.
 ///
-/// AdaptExternalities() updates any objects outside this class to
-/// reflect its state.
+/// AdaptExternalities() updates objects outside this class to reflect
+/// its state.
 ///
 /// CustomizeInitialValues() facilitates dynamic initialization. As a
 /// motivating example, consider a derived class with calendar-date
@@ -131,8 +131,6 @@ class LMI_SO MvcModel
     void Harmonize();
     void Transmogrify();
 
-    virtual void DoAdaptExternalities() = 0;
-
     virtual datum_base const* DoBaseDatumPointer(std::string const&) const = 0;
 
     virtual any_entity      & DoEntity(std::string const&)       = 0;
@@ -141,6 +139,7 @@ class LMI_SO MvcModel
     virtual NamesType const& DoNames() const = 0;
     virtual StateType        DoState() const = 0;
 
+    virtual void DoAdaptExternalities    () = 0;
     virtual void DoCustomizeInitialValues() = 0;
     virtual void DoEnforceRangeLimit     (std::string const&) = 0;
     virtual void DoHarmonize             () = 0;
