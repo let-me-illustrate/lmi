@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.428 2006-08-11 16:28:22 chicares Exp $
+// $Id: ChangeLog,v 1.429 2006-08-12 00:53:08 chicares Exp $
 
 MAINTENANCE
 
@@ -7150,4 +7150,10 @@ Clarify control flow.
   mvc_controller.cpp
 Suppress unwanted messagebox. The information it would display is not
 valuable here, and apparently it's too large for wxmsw anyway.
+
+20060812T0053Z <chicares@cox.net> [1200]
+
+  main_wx.cpp
+  main_wx.hpp
+Reformat when pasting from a spreadsheet column into a text control.
 
