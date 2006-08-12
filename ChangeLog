@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.429 2006-08-12 00:53:08 chicares Exp $
+// $Id: ChangeLog,v 1.430 2006-08-12 17:16:42 chicares Exp $
 
 MAINTENANCE
 
@@ -7156,4 +7156,42 @@ valuable here, and apparently it's too large for wxmsw anyway.
   main_wx.cpp
   main_wx.hpp
 Reformat when pasting from a spreadsheet column into a text control.
+
+20060812T1716Z <chicares@cox.net> [1199]
+
+  GNUmakefile
+  any_entity.hpp
+  any_member.hpp
+  datum_boolean.cpp
+  datum_boolean.hpp
+  msw_common.make
+  mvc_controller.cpp
+  mvc_model.cpp
+  mvc_model.hpp
+  mvc_view.hpp
+  stream_cast.hpp
+  view_ex.cpp
+  view_ex.hpp
+  wx_checks.cpp
+  wx_utility.cpp
+  wx_utility.hpp
+Import selected changes from skeleton trunk.
+
+  crc32.cpp
+  ihs_pios.cpp
+  ihs_pios.hpp
+  illustration_view.cpp
+  illustration_view.hpp
+  md5.hpp
+  value_cast_test.cpp
+Spell fundamental types uniformly.
+
+  expm1.c
+  expm1.h [new file]
+  ledger_xml_io.cpp
+  mc_enum.tpp
+Include 'config.hpp' only where appropriate.
+
+  workhorse.make
+Temporarily suppress closure test for the new '.h' file.
 
