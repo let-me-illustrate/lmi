@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mvc_model.cpp,v 1.3 2006-07-09 18:39:07 chicares Exp $
+// $Id: mvc_model.cpp,v 1.4 2006-08-12 17:16:33 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -74,11 +74,6 @@ MvcModel::MvcModel()
 
 MvcModel::~MvcModel()
 {
-}
-
-void MvcModel::AdaptExternalities()
-{
-    DoAdaptExternalities();
 }
 
 datum_base const* MvcModel::BaseDatumPointer(std::string const& name) const
@@ -158,6 +153,11 @@ void MvcModel::TestInitialConsistency()
     Transmogrify();
     new_values = State();
     ComplainAboutAnyDiscrepancies(old_values, new_values, description);
+}
+
+void MvcModel::AdaptExternalities()
+{
+    DoAdaptExternalities();
 }
 
 void MvcModel::CustomizeInitialValues()

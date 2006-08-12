@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: msw_common.make,v 1.10 2006-07-10 13:15:31 chicares Exp $
+# $Id: msw_common.make,v 1.11 2006-08-12 17:16:33 chicares Exp $
 
 ################################################################################
 
@@ -34,11 +34,8 @@ SHREXT := .dll
 # platform, so copy libraries and their headers to /usr/local as FHS
 # prescribes.
 
-# TODO ?? At least as a temporary expedient, I copied setup.h to
-# /usr/local/include/wx from /wxXXX/lib/.../mswd; is that kosher?
-
-# Prefer to use shared-library versions of libxml2 and wx: they link
-# faster and rarely need to be changed.
+# Prefer to use a shared-library version of libxml2: it links faster
+# and rarely needs to be updated.
 
 platform_defines := \
   -DLIBXML_USE_DLL \

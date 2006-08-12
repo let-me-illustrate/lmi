@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: wx_checks.cpp,v 1.6 2006-06-29 19:47:29 wboutin Exp $
+// $Id: wx_checks.cpp,v 1.7 2006-08-12 17:16:33 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -29,6 +29,10 @@
 #include "wx_checks.hpp"
 
 #include <wx/defs.h>
+
+#if !wxCHECK_VERSION(2,5,4) // wx prior to version 2.5.4 .
+#   error Outdated library: wx-2.5.4 or greater is required.
+#endif // wx prior to version 2.5.4 .
 
 // Require certain optional wx components.
 

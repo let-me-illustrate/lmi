@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: wx_utility.cpp,v 1.3 2006-07-10 13:15:31 chicares Exp $
+// $Id: wx_utility.cpp,v 1.4 2006-08-12 17:16:33 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -38,8 +38,8 @@
 
 namespace
 {
-/// This MVC framework uses only dates, and ignores times, but wx
-/// combines both concepts in one class, the time portion of which,
+/// The MVC framework uses only dates, and ignores times, whereas wx
+/// combines both concepts in one class--the time portion of which,
 /// as used here, should always represent midnight. It is worthwhile
 /// to assert such a postcondition for date conversions: formerly,
 /// date conversions transformed wx's UTC AJDN to lmi's civil CJDN,
@@ -86,17 +86,6 @@ bool operator==(wxDateTime const& wx_date, calendar_date const& lmi_date)
     return lmi_date == ConvertDateFromWx(wx_date);
 }
 
-std::string Describe(wxWindow const* w)
-{
-    std::ostringstream oss;
-    oss
-        << "id "       << w->GetId   ()
-        << "; label '" << w->GetLabel() << "'"
-        << "; name '"  << w->GetName () << "'"
-        ;
-    return oss.str();
-}
-
 namespace
 {
 /// Replace contents of vector 'v' with lineage of window 'z'.
@@ -124,5 +113,21 @@ std::vector<wxWindow*> Lineage(wxWindow const* w)
     std::vector<wxWindow*> v;
     EnumerateLineage(w, v);
     return v;
+}
+
+std::string NameLabelId(wxWindow const* w)
+{
+    if(!w)
+        {
+        return "null window pointer";
+        }
+
+    std::ostringstream oss;
+    oss
+        << "window id " << w->GetId   ()
+        << "; label '"  << w->GetLabel() << "'"
+        << "; name '"   << w->GetName () << "'"
+        ;
+    return oss.str();
 }
 
