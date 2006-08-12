@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_wx.hpp,v 1.12 2006-03-09 12:37:24 chicares Exp $
+// $Id: main_wx.hpp,v 1.13 2006-08-12 00:53:08 chicares Exp $
 
 // Portions of this file are derived from wxWindows files
 //   samples/docvwmdi/docview.h (C) 1998 Julian Smart and Markus Holzem
@@ -74,6 +74,7 @@ class Skeleton
     void UponDropFiles              (wxDropFilesEvent&);
     void UponEditDefaultCell        (wxCommandEvent&);
     void UponMenuOpen               (wxMenuEvent&);
+    void UponPaste                  (wxClipboardTextEvent& event);
     void UponTimer                  (wxTimerEvent&);
     void UponUpdateInapplicable     (wxUpdateUIEvent&);
     void UponUpdateFileSave         (wxUpdateUIEvent&);

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_wx.cpp,v 1.54 2006-07-10 18:00:14 chicares Exp $
+// $Id: main_wx.cpp,v 1.55 2006-08-12 00:53:08 chicares Exp $
 
 // Portions of this file are derived from wxWindows files
 //   samples/docvwmdi/docview.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -65,12 +65,15 @@
 #include "text_view.hpp"
 #include "wx_new.hpp"
 
+#include <wx/clipbrd.h>
 #include <wx/config.h>
+#include <wx/dataobj.h>
 #include <wx/docmdi.h>
 #include <wx/image.h>
 #include <wx/log.h> // wxSafeShowMessage()
 #include <wx/menu.h>
 #include <wx/msgdlg.h>
+#include <wx/textctrl.h>
 #include <wx/toolbar.h>
 #include <wx/xrc/xmlres.h>
 
@@ -465,6 +468,13 @@ bool Skeleton::OnInit()
             |   wxVSCROLL
             );
 
+        // Intercept 'Text Paste' events for all windows.
+        Connect
+            (wxID_ANY
+            ,wxEVT_COMMAND_TEXT_PASTE
+            ,wxClipboardTextEventHandler(Skeleton::UponPaste)
+            );
+
         InitIcon();
         InitMenuBar();
         InitToolBar();
@@ -566,6 +576,78 @@ void Skeleton::UponMenuOpen(wxMenuEvent&)
         }
     // (else) Parent menu enablement could be handled here, but, for
     // now at least, none is required.
+}
+
+namespace
+{
+    std::string redelimit_with_semicolons(std::string const& original_text)
+        {
+        std::string new_text;
+        new_text.reserve(original_text.size());
+
+        std::insert_iterator<std::string> j(new_text, new_text.begin());
+        typedef std::string::const_iterator sci;
+        std::string::const_iterator i = original_text.begin();
+        for(sci i = original_text.begin(); i != original_text.end(); ++i)
+            {
+            switch(*i)
+                {
+                case '\n': {*j++ = ';';} break;
+                case '\r': {           } break;
+                case '\t': {*j++ = ' ';} break;
+                default  : {*j++ =  *i;}
+                }
+            }
+
+        new_text.resize(1 + new_text.find_last_not_of(';'));
+
+        return new_text;
+        }
+
+} // Unnamed namespace.
+
+/// Paste "\n"- or "\r\n"-delimited clipboard contents into a control,
+/// replacing nonterminal delimiters with semicolons to form an input
+/// sequence. The motivation is to permit pasting spreadsheet columns.
+///
+/// At least for now, this transformation is performed iff the paste
+/// target is a wxTextCtrl.
+
+void Skeleton::UponPaste(wxClipboardTextEvent& event)
+{
+    event.Skip();
+
+    wxTextCtrl* target = dynamic_cast<wxTextCtrl*>(event.GetEventObject());
+    if(!target)
+        {
+        return;
+        }
+
+    wxDataFormat link_data_format("Link");
+    if(!wxTheClipboard->IsSupported(link_data_format))
+        {
+        return;
+        }
+
+    wxClipboardLocker clipboard_locker;
+
+    wxCustomDataObject data_object(link_data_format);
+    wxTheClipboard->GetData(data_object);
+    wxCharBuffer buffer(data_object.GetDataSize(link_data_format));
+    if(!data_object.GetDataHere(link_data_format, buffer.data()))
+        {
+        return;
+        }
+
+    wxTextDataObject test_data;
+    if(!wxTheClipboard->GetData(test_data))
+        {
+        return;
+        }
+
+    target->WriteText(redelimit_with_semicolons(test_data.GetText()));
+
+    event.Skip(false);
 }
 
 void Skeleton::UponTimer(wxTimerEvent&)
