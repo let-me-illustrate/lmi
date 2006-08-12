@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mvc_controller.cpp,v 1.5 2006-08-11 16:28:22 chicares Exp $
+// $Id: mvc_controller.cpp,v 1.6 2006-08-12 17:16:33 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -460,7 +460,7 @@ void MvcController::TestModelViewConsistency() const
             &&  pw->GetId() != wxID_HELP
             )
             {
-            warning() << "No Model entity matches " << Describe(pw) << "\n";
+            warning() << "No Model entity matches " << NameLabelId(pw) << ".\n";
             }
         }
 

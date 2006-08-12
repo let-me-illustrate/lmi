@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: any_member.hpp,v 1.12 2006-07-10 02:42:05 chicares Exp $
+// $Id: any_member.hpp,v 1.13 2006-08-12 17:16:33 chicares Exp $
 
 // This is a derived work based on boost::any, which bears the following
 // copyright and permissions notice:
@@ -82,14 +82,11 @@
 
 #include <boost/utility.hpp>
 
-#include <algorithm>
-#include <iosfwd>
+#include <algorithm> // std::swap()
 #include <map>
-#include <ostream> // std::flush
+#include <ostream>   // std::flush
 #include <sstream>
 #include <stdexcept>
-#include <string>
-#include <typeinfo>
 #include <vector>
 
 #define LMI_SIMPLE_ASSERT(condition)                        \
@@ -133,8 +130,7 @@ class placeholder
 // Implementation of class placeholder.
 
 inline placeholder::~placeholder()
-{
-}
+{}
 
 // Definition of class holder.
 
@@ -149,6 +145,7 @@ class holder
 
   public:
     holder(ClassType*, ValueType const&);
+    virtual ~holder();
 
     // placeholder required implementation.
     virtual holder& assign(placeholder const&);
@@ -169,6 +166,10 @@ template<typename ClassType, typename ValueType>
 holder<ClassType,ValueType>::holder(ClassType* object, ValueType const& value)
     :object_(object)
     ,held_(value)
+{}
+
+template<typename ClassType, typename ValueType>
+holder<ClassType,ValueType>::~holder()
 {}
 
 template<typename ClassType, typename ValueType>
@@ -231,9 +232,6 @@ void holder<ClassType,ValueType>::write(std::ostream& os) const
 
 // This class is necessarily Assignable, so that a std::map can hold it.
 
-// It holds a pointer to a ClassType object only to support its cast
-// operations.
-
 template<typename ClassType>
 class any_member;
 
@@ -278,11 +276,11 @@ class any_member
     // member_cast() above.
     template<typename ExactMemberType>
     ExactMemberType* exact_cast();
-    virtual std::type_info const& type() const;
 #endif // defined __BORLANDC__
 
     // any_entity required implementation.
     virtual std::string str() const;
+    virtual std::type_info const& type() const;
     virtual void write(std::ostream&) const;
 
   private:
@@ -293,9 +291,6 @@ class any_member
 
     // any_entity required implementation.
     virtual any_member& assign(std::string const&);
-#if !defined __BORLANDC__
-    virtual std::type_info const& type() const;
-#endif // !defined __BORLANDC__
 
     ClassType* object_;
     placeholder* content_;
@@ -391,6 +386,12 @@ void any_member<ClassType>::write(std::ostream& os) const
 }
 
 template<typename ClassType>
+std::type_info const& any_member<ClassType>::type() const
+{
+    return content_ ? content_->type() : typeid(void);
+}
+
+template<typename ClassType>
 std::ostream& operator<<(std::ostream& os, any_member<ClassType> const& z)
 {
     z.write(os);
@@ -419,12 +420,6 @@ any_member<ClassType>& any_member<ClassType>::assign(std::string const& s)
     LMI_SIMPLE_ASSERT(content_);
     content_->assign(s);
     return *this;
-}
-
-template<typename ClassType>
-std::type_info const& any_member<ClassType>::type() const
-{
-    return content_ ? content_->type() : typeid(void);
 }
 
 /// Definition of class template reconstitutor.
@@ -549,6 +544,8 @@ class MemberSymbolTable
     typedef typename member_map_type::value_type member_pair_type;
 
   public:
+    virtual ~MemberSymbolTable();
+
     any_member<ClassType>      & operator[](std::string const&)      ;
     any_member<ClassType> const& operator[](std::string const&) const;
 
@@ -562,7 +559,9 @@ class MemberSymbolTable
 #if !defined __BORLANDC__
     template<typename ValueType, typename SameOrBaseClassType>
     void ascribe(std::string const&, ValueType SameOrBaseClassType::*);
-#else  // !defined __BORLANDC__
+#else  // defined __BORLANDC__
+    // The borland compiler defectively can't handle non-inline member
+    // function templates.
     template<typename ValueType, typename SameOrBaseClassType>
     void ascribe(std::string const& s, ValueType SameOrBaseClassType::*p2m)
         {
@@ -572,7 +571,7 @@ class MemberSymbolTable
             );
         member_names_.push_back(s);
         }
-#endif // !defined __BORLANDC__
+#endif // defined __BORLANDC__
 
   private:
     MemberSymbolTable(MemberSymbolTable const&);
@@ -593,8 +592,11 @@ class MemberSymbolTable
 
 template<typename ClassType>
 MemberSymbolTable<ClassType>::MemberSymbolTable()
-{
-}
+{}
+
+template<typename ClassType>
+MemberSymbolTable<ClassType>::~MemberSymbolTable()
+{}
 
 // operator[]() returns a known member; unlike std::map::operator[](),
 // it never adds a new pair to the map, and it complains if such an

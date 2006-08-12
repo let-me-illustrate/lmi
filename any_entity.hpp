@@ -19,19 +19,22 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: any_entity.hpp,v 1.1 2006-07-08 00:20:06 chicares Exp $
+// $Id: any_entity.hpp,v 1.2 2006-08-12 17:16:33 chicares Exp $
 
 #ifndef any_entity_hpp
 #define any_entity_hpp
 
 #include "config.hpp"
 
+#include <ostream>
 #include <string>
 #include <typeinfo>
 
 /// Abstract class any_entity specifies the interface required for
 /// entities in the MVC Model. Class any_member is derived from this
 /// class, but other implementations may be substituted.
+///
+/// Implicitly-declared special member functions do the right thing.
 
 class any_entity
 {

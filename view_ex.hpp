@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: view_ex.hpp,v 1.5 2006-01-29 13:52:01 chicares Exp $
+// $Id: view_ex.hpp,v 1.6 2006-08-12 17:16:33 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -143,7 +143,7 @@ class ViewEx
     //
     // wxView overrides.
     virtual bool OnClose(bool delete_window);
-    virtual bool OnCreate(wxDocument* doc, long flags);
+    virtual bool OnCreate(wxDocument* doc, long int flags);
     virtual void OnDraw(wxDC*);
 
   private:

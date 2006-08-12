@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: GNUmakefile,v 1.69 2006-07-13 03:07:20 chicares Exp $
+# $Id: GNUmakefile,v 1.70 2006-08-12 17:16:33 chicares Exp $
 
 ################################################################################
 
@@ -414,7 +414,18 @@ custom_tools:
 # avoid false positives that would arise when the current year appears
 # in an RCS Id but not in the copyright notice.
 
-expected_source_files := $(wildcard *.ac *.?pp *.c *.h *.rc *.xrc *.xsl)
+c_header_files   := $(wildcard *.h)
+c_source_files   := $(wildcard *.c)
+
+cxx_header_files := $(wildcard *.hpp)
+cxx_source_files := $(wildcard *.[^h]pp)
+
+expected_source_files := \
+  $(c_header_files) \
+  $(c_source_files) \
+  $(cxx_header_files) \
+  $(cxx_source_files) \
+  $(wildcard *.ac *.rc *.xrc *.xsl) \
 
 # Invoke a supplemental makefile, if it exists, to test things that
 # don't belong in the standard sources. For example, it might report
@@ -473,6 +484,11 @@ check_conformity: source_clean custom_tools
 	    -e "s/^.*$$/$$z/" $$z \
 	    ; \
 	  done;
+	@$(ECHO) "  Files that include \"config.hpp\" but shouldn't:"
+	@$(GREP) \
+	    '#include "config.hpp"' \
+	    $(c_source_files) $(cxx_source_files) \
+	  || true
 	@$(ECHO) "  Files that use reserved identifiers:"
 	@# The sed commands are sorted alphabetically by group:
 	@#   {standard, platform-specific, compiler-specific, regrettable}

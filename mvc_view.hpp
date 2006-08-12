@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mvc_view.hpp,v 1.1 2006-07-07 11:22:08 chicares Exp $
+// $Id: mvc_view.hpp,v 1.2 2006-08-12 17:16:33 chicares Exp $
 
 #ifndef mvc_view_hpp
 #define mvc_view_hpp
@@ -33,10 +33,10 @@
 /// xml resources.
 ///
 /// BookControlName(): Name of book control contained in the main
-/// dialog. At present, the Controller expects a wxNotebook.
+/// dialog.
 ///
 /// MainDialogName(): Name of main dialog. At present, the Controller
-/// expects a wxDialog that contains a wxNotebook.
+/// expects a wxDialog that contains a wxBookCtrlBase.
 ///
 /// ResourceFileName(): Name of file containing wxxrc resources.
 ///

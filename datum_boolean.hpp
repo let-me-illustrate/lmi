@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: datum_boolean.hpp,v 1.3 2006-07-10 13:14:34 chicares Exp $
+// $Id: datum_boolean.hpp,v 1.4 2006-08-12 17:16:33 chicares Exp $
 
 #ifndef datum_boolean_hpp
 #define datum_boolean_hpp
@@ -39,6 +39,8 @@ class datum_boolean
   public:
     explicit datum_boolean(bool = true);
     virtual ~datum_boolean();
+
+    datum_boolean& operator=(bool);
 
     bool value() const;
 
