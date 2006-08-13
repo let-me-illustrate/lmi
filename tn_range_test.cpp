@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: tn_range_test.cpp,v 1.7 2006-07-08 00:52:18 chicares Exp $
+// $Id: tn_range_test.cpp,v 1.8 2006-08-13 11:51:38 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -251,11 +251,11 @@ void tn_range_test::test_percentages(char const* file, int line)
     INVOKE_BOOST_TEST_EQUAL(t_percentage.minimum(),   0, file, line);
     INVOKE_BOOST_TEST_EQUAL(t_percentage.maximum(), 100, file, line);
 
-    INVOKE_BOOST_TEST_EQUAL(t_percentage.trammel(n10),   0, file, line);
-    INVOKE_BOOST_TEST_EQUAL(t_percentage.trammel(  0),   0, file, line);
-    INVOKE_BOOST_TEST_EQUAL(t_percentage.trammel(  1),   1, file, line);
-    INVOKE_BOOST_TEST_EQUAL(t_percentage.trammel(100), 100, file, line);
-    INVOKE_BOOST_TEST_EQUAL(t_percentage.trammel(101), 100, file, line);
+    INVOKE_BOOST_TEST_EQUAL(t_percentage.curb(n10),   0, file, line);
+    INVOKE_BOOST_TEST_EQUAL(t_percentage.curb(  0),   0, file, line);
+    INVOKE_BOOST_TEST_EQUAL(t_percentage.curb(  1),   1, file, line);
+    INVOKE_BOOST_TEST_EQUAL(t_percentage.curb(100), 100, file, line);
+    INVOKE_BOOST_TEST_EQUAL(t_percentage.curb(101), 100, file, line);
 
     T t0(n10);
     INVOKE_BOOST_TEST_EQUAL(  0, t0, file, line);
@@ -390,7 +390,7 @@ void tn_range_test::test()
     BOOST_TEST( range1.is_valid( 0.0));
     BOOST_TEST( range1.is_valid(-0.0));
     BOOST_TEST(!range1.is_valid(-1.0));
-    BOOST_TEST_EQUAL(range1.trammel( -1.0),   0.0);
+    BOOST_TEST_EQUAL(range1.curb( -1.0),   0.0);
 
     // Floating-point limits having no exact binary representation.
 
@@ -501,36 +501,34 @@ void tn_range_test::test_diagnostics()
     BOOST_TEST_EQUAL(s, v);
 
     v = r.diagnose_invalidity(" 1e999999");
-    s = " 1e999999 is not representable.";
+    s = " 1e999999 is not normalized.";
     BOOST_TEST_EQUAL(s, v);
 
     v = r.diagnose_invalidity("-1e999999");
-    s = "-1e999999 is not representable.";
+    s = "-1e999999 is not normalized.";
     BOOST_TEST_EQUAL(s, v);
 
     v = r.diagnose_invalidity("$123");
     s = "'$123' is ill formed.";
     BOOST_TEST_EQUAL(s, v);
 
-    // Test range [2.0, DBL_MAX]. Note that the maximum must be
-    // changed first, lest the new minimum of 2.0 be rejected as
-    // exceeding the old maximum of 1.07 . This might appear to argue
-    // for an atomic operation to set both limits, though in practice
-    // that has not yet proved necessary.
+    // Test range [2.0, DBL_MAX]. Changing first the minimum and then
+    // the maximum would not work: the new minimum of 2.0 exceeds the
+    // old maximum of 1.07 and would therefore be rejected. This is a
+    // motivating case for member function minimum_and_maximum().
 
-    r.maximum( std::numeric_limits<double>::max());
-    r.minimum(2.0);
+    r.minimum_and_maximum(2.0, std::numeric_limits<double>::max());
 
     v = r.diagnose_invalidity(" 1.07");
     s = " 1.07 is too low: 2 is the lower limit.";
     BOOST_TEST_EQUAL(s, v);
 
     v = r.diagnose_invalidity("-1e999999");
-    s = "-1e999999 is not representable.";
+    s = "-1e999999 is not normalized.";
     BOOST_TEST_EQUAL(s, v);
 
     v = r.diagnose_invalidity("1e999999");
-    s = "1e999999 is not representable.";
+    s = "1e999999 is not normalized.";
     BOOST_TEST_EQUAL(s, v);
 
     // Test range [-DBL_MAX, 2.0].
@@ -548,7 +546,7 @@ void tn_range_test::test_diagnostics()
     r.maximum( std::numeric_limits<double>::max());
 
     v = r.diagnose_invalidity("1e999999");
-    s = "1e999999 is not representable.";
+    s = "1e999999 is not normalized.";
     BOOST_TEST_EQUAL(s, v);
 }
 

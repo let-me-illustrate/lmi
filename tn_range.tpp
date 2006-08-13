@@ -19,12 +19,12 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: tn_range.tpp,v 1.8 2006-07-10 13:13:16 chicares Exp $
+// $Id: tn_range.tpp,v 1.9 2006-08-13 11:51:38 chicares Exp $
 
 #include "tn_range.hpp"
 
 #include "alert.hpp"
-#include "numeric_io_cast.hpp"
+#include "value_cast.hpp"
 
 #include <cmath> // std::pow()
 #include <exception>
@@ -303,7 +303,7 @@ template<typename Number, typename Trammel>
 tn_range<Number,Trammel>::tn_range(Number n)
     :minimum_ (trammel_.minimum_minimorum())
     ,maximum_ (trammel_.maximum_maximorum())
-    ,value_   (trammel(n))
+    ,value_   (curb(n))
 {
     trammel_.assert_sanity();
 }
@@ -312,7 +312,7 @@ template<typename Number, typename Trammel>
 tn_range<Number,Trammel>::tn_range(std::string const& s)
     :minimum_ (trammel_.minimum_minimorum())
     ,maximum_ (trammel_.maximum_maximorum())
-    ,value_   (trammel(numeric_io_cast<Number>(s)))
+    ,value_   (curb(value_cast<Number>(s)))
 {
     trammel_.assert_sanity();
 }
@@ -325,48 +325,23 @@ tn_range<Number,Trammel>::~tn_range()
 template<typename Number, typename Trammel>
 tn_range<Number,Trammel>& tn_range<Number,Trammel>::operator=(Number n)
 {
-    value_ = trammel(n);
+    value_ = curb(n);
     return *this;
 }
 
 template<typename Number, typename Trammel>
 tn_range<Number,Trammel>& tn_range<Number,Trammel>::operator=(std::string const& s)
 {
-    value_ = trammel(numeric_io_cast<Number>(s));
+    value_ = curb(value_cast<Number>(s));
     return *this;
 }
 
-template<typename Number, typename Trammel>
-bool tn_range<Number,Trammel>::operator==(tn_range<Number,Trammel> const& z) const
-{
-    return z.value_ == value_;
-}
-
-template<typename Number, typename Trammel>
-bool tn_range<Number,Trammel>::operator==(Number n) const
-{
-    return n == value_;
-}
-
-template<typename Number, typename Trammel>
-bool tn_range<Number,Trammel>::operator==(std::string const& s) const
-{
-    return numeric_io_cast<Number>(s) == value_;
-}
-
-template<typename Number, typename Trammel>
-void tn_range<Number,Trammel>::enforce_limits()
-{
-    value_ = trammel(value_);
-}
-
-template<typename Number, typename Trammel>
-bool tn_range<Number,Trammel>::equal_to(std::string const& s) const
-{
-    return operator==(s);
-}
-
-/// Change minimum. Postcondition:
+/// Change minimum.
+///
+/// Precondition:
+///   minimum_minimorum() <= n <= maximum()
+///
+/// Postcondition:
 ///   minimum_minimorum() <= minimum() <= maximum()
 /// but value() is not necessarily limited by the new minimum.
 
@@ -405,7 +380,12 @@ void tn_range<Number,Trammel>::minimum(Number n)
     minimum_ = candidate;
 }
 
-/// Change maximum. Postcondition:
+/// Change maximum.
+///
+/// Precondition:
+///   minimum() <= n <= maximum_maximorum()
+///
+/// Postcondition:
 ///   minimum() <= maximum() <= maximum_maximorum()
 /// but value() is not necessarily limited by the new maximum.
 
@@ -444,6 +424,31 @@ void tn_range<Number,Trammel>::maximum(Number n)
     maximum_ = candidate;
 }
 
+/// Set both minimum and maximum, atomically.
+///
+/// First set both limits to their extrema, then set both to the
+/// desired values. Otherwise, when changing between disjoint limit-
+/// pairs, limits momentarily cross, and that's detected as an error.
+///
+/// Example: Suppose it is desired to change the limits from [3, 5]
+/// to [0, 1] or [7, 9]. Because the minimum() and maximum() mutators
+/// both maintain the invariant
+///   minimum() <= maximum()
+/// calling them in either order consistently must fail for one of
+/// those ranges.
+
+template<typename Number, typename Trammel>
+void tn_range<Number,Trammel>::minimum_and_maximum
+    (Number n0
+    ,Number n1
+    )
+{
+    minimum_ = trammel_.minimum_minimorum();
+    maximum_ = trammel_.maximum_maximorum();
+    minimum(n0);
+    maximum(n1);
+}
+
 template<typename Number, typename Trammel>
 Number tn_range<Number,Trammel>::minimum() const
 {
@@ -457,9 +462,50 @@ Number tn_range<Number,Trammel>::maximum() const
 }
 
 template<typename Number, typename Trammel>
+bool tn_range<Number,Trammel>::operator==(tn_range<Number,Trammel> const& z) const
+{
+    return z.value_ == value_;
+}
+
+template<typename Number, typename Trammel>
+bool tn_range<Number,Trammel>::operator==(Number n) const
+{
+    return n == value_;
+}
+
+template<typename Number, typename Trammel>
+bool tn_range<Number,Trammel>::operator==(std::string const& s) const
+{
+    return value_cast<Number>(s) == value_;
+}
+
+template<typename Number, typename Trammel>
+Trammel const& tn_range<Number,Trammel>::trammel() const
+{
+    return trammel_;
+}
+
+template<typename Number, typename Trammel>
 Number tn_range<Number,Trammel>::value() const
 {
     return value_;
+}
+
+template<typename Number, typename Trammel>
+Number tn_range<Number,Trammel>::curb(Number n) const
+{
+    if(n <= minimum_)
+        {
+        return minimum_;
+        }
+    else if(maximum_ <= n)
+        {
+        return maximum_;
+        }
+    else
+        {
+        return n;
+        }
 }
 
 /// Show limits in a way suitable only for a diagnostic.
@@ -482,27 +528,27 @@ std::string tn_range<Number,Trammel>::format_limits_for_error_message() const
     std::ostringstream oss;
     bool bounded_above = maximum_ < extremum;
     bool bounded_below = -extremum < minimum_;
-    if(bounded_above && bounded_below)
+    if(bounded_below && bounded_above)
         {
         oss
             << "value must be between "
-            << numeric_io_cast<std::string>(minimum_)
+            << value_cast<std::string>(minimum_)
             << " and "
-            << numeric_io_cast<std::string>(maximum_)
+            << value_cast<std::string>(maximum_)
             << " inclusive."
             ;
         }
-    else if(!bounded_above && bounded_below)
+    else if(bounded_below && !bounded_above)
         {
         oss
-            << numeric_io_cast<std::string>(minimum_)
+            << value_cast<std::string>(minimum_)
             << " is the lower limit."
             ;
         }
-    else if(bounded_above && !bounded_below)
+    else if(!bounded_below && bounded_above)
         {
         oss
-            << numeric_io_cast<std::string>(maximum_)
+            << value_cast<std::string>(maximum_)
             << " is the upper limit."
             ;
         }
@@ -522,24 +568,7 @@ bool tn_range<Number,Trammel>::is_valid(Number n) const
 template<typename Number, typename Trammel>
 std::string tn_range<Number,Trammel>::str() const
 {
-    return numeric_io_cast<std::string>(value_);
-}
-
-template<typename Number, typename Trammel>
-Number tn_range<Number,Trammel>::trammel(Number n) const
-{
-    if(n <= minimum_)
-        {
-        return minimum_;
-        }
-    else if(maximum_ <= n)
-        {
-        return maximum_;
-        }
-    else
-        {
-        return n;
-        }
+    return value_cast<std::string>(value_);
 }
 
 template<typename Number, typename Trammel>
@@ -566,7 +595,7 @@ std::string tn_range<Number,Trammel>::diagnose_invalidity
     Number n;
     try
         {
-        n = numeric_io_cast<Number>(s);
+        n = value_cast<Number>(s);
         }
     catch(std::exception const&)
         {
@@ -581,11 +610,10 @@ std::string tn_range<Number,Trammel>::diagnose_invalidity
         }
     else if(n < -extremum || extremum < n)
         {
-        // C99 7.20.1/1 .
         std::ostringstream oss;
         oss
             << s
-            << " is not representable."
+            << " is not normalized."
             ;
         return oss.str();
         }
@@ -614,5 +642,29 @@ std::string tn_range<Number,Trammel>::diagnose_invalidity
         fatal_error() << "Unanticipated case." << LMI_FLUSH;
         throw std::logic_error("Unreachable"); // Silence compiler warning.
         }
+}
+
+template<typename Number, typename Trammel>
+void tn_range<Number,Trammel>::enforce_circumscription()
+{
+    value_ = curb(value_);
+}
+
+template<typename Number, typename Trammel>
+bool tn_range<Number,Trammel>::equal_to(std::string const& s) const
+{
+    return operator==(s);
+}
+
+template<typename Number, typename Trammel>
+double tn_range<Number,Trammel>::universal_minimum() const
+{
+    return value_cast<double>(minimum_);
+}
+
+template<typename Number, typename Trammel>
+double tn_range<Number,Trammel>::universal_maximum() const
+{
+    return value_cast<double>(maximum_);
 }
 

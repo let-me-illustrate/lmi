@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input.cpp,v 1.12 2006-07-09 17:27:05 chicares Exp $
+// $Id: input.cpp,v 1.13 2006-08-13 11:51:38 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -374,7 +374,7 @@ void Input::DoEnforceRangeLimit(std::string const& name)
     tn_range_base* datum = dynamic_cast<tn_range_base*>(base_datum);
     if(datum)
         {
-        datum->enforce_limits();
+        datum->enforce_circumscription();
         }
 }
 
