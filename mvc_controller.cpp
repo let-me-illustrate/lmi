@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mvc_controller.cpp,v 1.6 2006-08-12 17:16:33 chicares Exp $
+// $Id: mvc_controller.cpp,v 1.7 2006-08-13 13:13:23 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -31,6 +31,7 @@
 
 #include "alert.hpp"
 #include "any_entity.hpp"
+#include "calendar_date.hpp"
 #include "map_lookup.hpp"
 #include "mc_enum.hpp"
 #include "mvc_model.hpp"
@@ -45,8 +46,9 @@
 #include <wx/app.h> // wxTheApp
 #include <wx/checkbox.h>
 #include <wx/ctrlsub.h>
-#include <wx/notebook.h>
+#include <wx/datectrl.h>
 #include <wx/radiobox.h>
+#include <wx/spinctrl.h>
 #include <wx/textctrl.h>
 #include <wx/xrc/xmlres.h>
 
@@ -91,6 +93,8 @@ MvcController::MvcController
     ,unit_test_refocus_event_pending_     (false)
     ,unit_test_under_way_                 (false)
 {
+    model_.TestInitialConsistency();
+
     SetExtraStyle(GetExtraStyle() | wxDIALOG_EX_CONTEXTHELP);
     if(!wxXmlResource::Get()->LoadDialog(this, parent, view_.MainDialogName()))
         {
@@ -144,12 +148,21 @@ MvcController::~MvcController()
 /// Make the Model consistent, and change the View to comport with it.
 ///
 /// Argument 'name_to_ignore' allows callers to specify one entity to
-/// skip, so that NameOfTextControlRequiringValidation() can be
-/// ignored unless it has just been validated successfully.
+/// skip, so that NameOfControlToDeferEvaluating() can be passed over
+/// unless it has just been validated successfully.
 
 void MvcController::Assimilate(std::string const& name_to_ignore)
 {
-    model_.Reconcile();
+    try
+        {
+        model_.Reconcile();
+        }
+    catch(std::exception const& e)
+        {
+        DiagnosticsWindow().SetLabel(e.what());
+        }
+
+    ConditionallyEnable();
 
     typedef std::map<std::string,std::string>::const_iterator smci;
     for(smci i = transfer_data_.begin(); i != transfer_data_.end(); ++i)
@@ -165,14 +178,22 @@ void MvcController::Assimilate(std::string const& name_to_ignore)
         wxWindow& w = WindowFromXrcName<wxWindow>(name);
         w.GetValidator()->TransferToWindow();
         }
-
-    ConditionallyEnable();
 }
 
 void MvcController::Bind(std::string const& name, std::string& data) const
 {
     Transferor transferor(data, name);
     WindowFromXrcName<wxWindow>(name).SetValidator(transferor);
+}
+
+wxBookCtrlBase& MvcController::BookControl()
+{
+    return WindowFromXrcName<wxBookCtrlBase>(view_.BookControlName());
+}
+
+wxBookCtrlBase const& MvcController::BookControl() const
+{
+    return WindowFromXrcName<wxBookCtrlBase>(view_.BookControlName());
 }
 
 void MvcController::ConditionallyEnable()
@@ -271,15 +292,11 @@ void MvcController::ConditionallyEnableItems
             {
             radiobox->Enable(j, radiobox_enabled && datum->is_allowed(j));
             }
+        // TODO ?? Appparently the next line is not actually necessary.
         radiobox->SetSelection(datum->ordinal());
         }
     else if(itembox)
         {
-// WX !! Broken in wx-2.5.1:
-// http://cvs.wxwidgets.org/viewcvs.cgi/wxWidgets/include/wx/ctrlsub.h?annotate=1.20
-//                itembox->SetStringSelection("A");
-// WX !! Broken in wx-2.5.1:
-//                itembox->SetSelection(itembox->FindString("A"));
         // WX !! Freeze() doesn't seem to help much.
         itembox->Freeze();
         itembox->Clear();
@@ -302,15 +319,14 @@ void MvcController::ConditionallyEnableItems
         }
 }
 
-wxNotebookPage& MvcController::CurrentPage() const
+wxWindow& MvcController::CurrentPage() const
 {
-    // INELEGANT !! This window could be held elsewhere, e.g. as a reference.
-    wxNotebook& book = WindowFromXrcName<wxNotebook>(view_.BookControlName());
+    wxBookCtrlBase const& book = BookControl();
     if(wxNOT_FOUND == book.GetSelection())
         {
         fatal_error() << "No page selected in notebook." << LMI_FLUSH;
         }
-    wxNotebookPage* page = book.GetPage(book.GetSelection());
+    wxWindow* page = book.GetPage(book.GetSelection());
     if(!page)
         {
         fatal_error() << "Selected notebook page is invalid." << LMI_FLUSH;
@@ -345,9 +361,19 @@ wxStaticText& MvcController::DiagnosticsWindow() const
 ///    - then, focus the first child window that meets the ideal
 ///      conditions, if any can be found;
 ///
-///    - then, assert that at least subideal conditions have been
-///      achieved, viz., that an enabled window has focus: this
-///      outcome should always be feasible.
+///    - finally, test whether at least subideal conditions have been
+///      achieved, viz., that an enabled window has focus; cancel the
+///      dialog if this test fails.
+///
+/// It is possible for that test to fail, for example, if a messagebox
+/// is displayed and its parent is the (disabled) main frame window.
+/// In that case, the problem is not that the messagebox's parent is
+/// inappropriate, but rather that a messagebox is displayed at all.
+/// That's a logic error. The MVC framework should trap resumable
+/// errors and report them in the diagnostics window. A messagebox
+/// detectable here can only report a problem that has escaped its
+/// source, so termination semantics appropriately prevent the
+/// messagebox from reappearing ad infinitum.
 
 void MvcController::EnsureOptimalFocus()
 {
@@ -372,9 +398,13 @@ void MvcController::EnsureOptimalFocus()
     f = FindFocus();
     if(!(f && f->IsEnabled()))
         {
-        // This is a fatal error because a warning would repeat itself
-        // ad infinitum.
-        fatal_error() << "No enabled window to focus." << LMI_FLUSH;
+        EndModal(wxID_CANCEL);
+        fatal_error()
+            << "Dialog cancelled because a disabled or null window ("
+            << NameLabelId(f)
+            << ") improperly had focus."
+            << LMI_FLUSH
+            ;
         }
 }
 
@@ -422,9 +452,14 @@ bool MvcController::ModelAndViewValuesEquivalent(std::string const& name) const
     return equivalent;
 }
 
-std::string MvcController::NameOfTextControlRequiringValidation() const
+/// Test controls in presumed order of prevalence.
+
+std::string MvcController::NameOfControlToDeferEvaluating() const
 {
-    wxWindow         * w = dynamic_cast<wxTextCtrl*>(last_focused_window_);
+    wxWindow* w = dynamic_cast<wxTextCtrl*>(last_focused_window_);
+    if(!w)    w = dynamic_cast<wxSpinCtrl      *>(last_focused_window_);
+    if(!w)    w = dynamic_cast<wxDatePickerCtrl*>(last_focused_window_);
+
     wxValidator const* v = w ? w->GetValidator() : 0;
     Transferor  const* t = dynamic_cast<Transferor const*>(v);
     return (t && 0 != ModelPointer<tn_range_base>(t->name())) ? t->name() : "";
@@ -444,7 +479,7 @@ void MvcController::TestModelViewConsistency() const
         {
         if(!FindWindow(XRCID(i->c_str())))
             {
-            warning() << "No View entity matches '" << *i << "'\n";
+            warning() << "No View entity matches '" << *i << "'.\n";
             }
         }
 
@@ -465,6 +500,61 @@ void MvcController::TestModelViewConsistency() const
         }
 
     warning() << std::flush;
+}
+
+void MvcController::UpdateCircumscription
+    (wxWindow&          control
+    ,std::string const& name
+    )
+{
+    tn_range_base const* datum = ModelPointer<tn_range_base>(name);
+    if(!datum)
+        {
+        return;
+        }
+
+    int minimum_value = static_cast<int>(datum->universal_minimum());
+    int maximum_value = static_cast<int>(datum->universal_maximum());
+
+    wxDatePickerCtrl * datepicker = dynamic_cast<wxDatePickerCtrl*>(&control);
+// TODO ?? Support these controls as well:
+//    wxGauge          * gauge      = dynamic_cast<wxGauge         *>(&control);
+//    wxScrollBar      * scrollbar  = dynamic_cast<wxScrollBar     *>(&control);
+//    wxSlider         * slider     = dynamic_cast<wxSlider        *>(&control);
+//    wxSpinButton     * spinbutton = dynamic_cast<wxSpinButton    *>(&control);
+    wxSpinCtrl       * spinctrl   = dynamic_cast<wxSpinCtrl      *>(&control);
+    wxTextCtrl       * textctrl   = dynamic_cast<wxTextCtrl      *>(&control);
+
+    if(textctrl)
+        {
+        // Controls of type wxTextCtrl do not have range limits,
+        // although the underlying data may be of range-limited type.
+        return;
+        }
+    else if(datepicker)
+        {
+        datepicker->SetRange
+            (ConvertDateToWx(jdn_t(minimum_value))
+            ,ConvertDateToWx(jdn_t(maximum_value))
+            );
+        }
+    else if(spinctrl)
+        {
+        spinctrl->SetRange(minimum_value, maximum_value);
+        }
+    else
+        {
+        fatal_error()
+            << "Range limits not yet supported for control '"
+            << name
+            << "' of type '"
+            << lmi::TypeInfo(typeid(control))
+            << "', although the corresponding Model datum, of type '"
+            << lmi::TypeInfo(model_.Entity(name).type())
+            << "', has limits."
+            << LMI_FLUSH
+            ;
+        }
 }
 
 /// Cause a text control to be validated upon losing focus.
@@ -564,13 +654,13 @@ void MvcController::UponInitDialog(wxInitDialogEvent& event)
         );
     ::Connect
         (this
-        ,wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING
+        ,wxEVT_COMMAND_BOOKCTRL_PAGE_CHANGING
         ,&MvcController::UponPageChanging
         ,XRCID(view_.BookControlName())
         );
     ::Connect
         (this
-        ,wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED
+        ,wxEVT_COMMAND_BOOKCTRL_PAGE_CHANGED
         ,&MvcController::UponPageChanged
         ,XRCID(view_.BookControlName())
         );
@@ -610,7 +700,7 @@ void MvcController::UponOK(wxCommandEvent& event)
     // Perform any needed postprocessing here.
 }
 
-void MvcController::UponPageChanged(wxNotebookEvent& event)
+void MvcController::UponPageChanged(wxBookCtrlBaseEvent& event)
 {
     event.Skip();
 
@@ -625,7 +715,7 @@ void MvcController::UponPageChanged(wxNotebookEvent& event)
 /// Is is imperative to unset the 'skip' flag before vetoing: see
 ///   http://lists.gnu.org/archive/html/lmi/2006-04/msg00008.html
 
-void MvcController::UponPageChanging(wxNotebookEvent& event)
+void MvcController::UponPageChanging(wxBookCtrlBaseEvent& event)
 {
     event.Skip();
 
@@ -682,7 +772,7 @@ void MvcController::UponUpdateUI(wxUpdateUIEvent& event)
 
     DiagnosticsWindow().SetLabel("");
     std::vector<std::string> names_of_changed_controls;
-    std::string const name_to_ignore = NameOfTextControlRequiringValidation();
+    std::string const name_to_ignore = NameOfControlToDeferEvaluating();
     typedef std::map<std::string,std::string>::const_iterator smci;
     for(smci i = transfer_data_.begin(); i != transfer_data_.end(); ++i)
         {
@@ -751,7 +841,7 @@ void MvcController::UponUpdateUI(wxUpdateUIEvent& event)
 
 bool MvcController::Validate()
 {
-    std::string const name = NameOfTextControlRequiringValidation();
+    std::string const name = NameOfControlToDeferEvaluating();
     if(name.empty())
         {
         return true;

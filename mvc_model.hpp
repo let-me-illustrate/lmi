@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mvc_model.hpp,v 1.3 2006-08-12 17:16:33 chicares Exp $
+// $Id: mvc_model.hpp,v 1.4 2006-08-13 13:13:23 chicares Exp $
 
 #ifndef mvc_model_hpp
 #define mvc_model_hpp
@@ -58,13 +58,18 @@ class datum_base;
 /// verify in TestInitialConsistency() that the resulting state is
 /// consistent and stable.
 ///
-/// EnforceRangeLimit() changes a range-constrained numeric datum's
+/// EnforceCircumscription() changes a range-constrained numeric
 /// value, if necessary, to ensure that it lies between its limits.
-/// It is intended to be called by Transmogrify(), from which it is
-/// separate in order to permit separate overriding of implementation
-/// while enforcing invocation order. Generally, limits are changed in
-/// Harmonize() only, and enforced before the virtual implementation
-/// of Transmogrify() is called.
+///
+/// EnforceProscription() changes an enumerative value, if necessary
+/// and possible, to one that is allowed.
+///
+/// EnforceCircumscription() and EnforceProscription() are intended to
+/// be called by Transmogrify(). They are distinct functions in order
+/// to permit selective overriding of implementation while enforcing
+/// invocation order. Generally, range limits and allowable control
+/// items are changed in Harmonize() only, and forced changes occur
+/// only in Transmogrify() or in functions like these that it calls.
 ///
 /// Harmonize() and Transmogrify() both enforce various relationships
 /// among data and their associated controls. Harmonize() updates
@@ -86,17 +91,26 @@ class datum_base;
 /// criterion be more stringent? Why not require that iteration
 /// continue until no data member changes in any way?
 ///
-/// TestInitialConsistency(), if called in the derived class's ctor,
-/// ensures that its initial state is valid and stable. Stability
-/// means idempotence under the Harmonize() and Transmogrify()
-/// operations.
+/// TestInitialConsistency() ensures that the initial state is valid
+/// and stable--stability meaning idempotence under the operations
+/// performed by Reconcile(). In the MVC framework, it is invoked by
+/// the Controller's ctor. It might seem more natural for the Model's
+/// ctor to invoke it, but that would pose two problems:
 ///
-/// TODO ?? That should be ensured somehow. It's the postconstructor
-/// problem described here:
-///   http://groups.google.com/group/comp.lang.c++.moderated/msg/80ab79d85b150e17
-/// Maybe a bool flag should be set here when TestInitialConsistency()
-/// is called, and then checked in some function that's certain to be
-/// called, such as the dtor--or perhaps even in the Controller ctor.
+///  - because it can throw, defining any Model object at namespace
+///    scope would be perilous--the exception it uses to report any
+///    problems it diagnoses would not be caught, so the program would
+///    simply abend; and
+///
+///  - because it necessarily calls virtual member functions, it would
+///    need to be invoked by the derived class's ctor--but that's the
+///    classic postconstructor problem, which has no tidy solution.
+///
+/// The first problem is at least alleviated, and the second solved in
+/// the best way, by invoking this function once in the Controller's
+/// ctor instead of hoping that the author of every concrete Model
+/// class remembers to do so and avoids defining any Model object at
+/// namespace scope.
 ///
 /// Implicitly-declared special member functions do the right thing.
 
@@ -120,14 +134,13 @@ class LMI_SO MvcModel
     StateType        State() const;
 
     void Reconcile();
-
-  protected:
     void TestInitialConsistency();
 
   private:
     void AdaptExternalities();
     void CustomizeInitialValues();
-    void EnforceRangeLimit(std::string const&);
+    void EnforceCircumscription(std::string const&);
+    void EnforceProscription   (std::string const&);
     void Harmonize();
     void Transmogrify();
 
@@ -141,7 +154,8 @@ class LMI_SO MvcModel
 
     virtual void DoAdaptExternalities    () = 0;
     virtual void DoCustomizeInitialValues() = 0;
-    virtual void DoEnforceRangeLimit     (std::string const&) = 0;
+    virtual void DoEnforceCircumscription(std::string const&) = 0;
+    virtual void DoEnforceProscription   (std::string const&) = 0;
     virtual void DoHarmonize             () = 0;
     virtual void DoTransmogrify          () = 0;
 };
