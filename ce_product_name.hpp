@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ce_product_name.hpp,v 1.4 2006-01-29 13:52:00 chicares Exp $
+// $Id: ce_product_name.hpp,v 1.5 2006-08-13 11:51:38 chicares Exp $
 
 #ifndef ce_product_name_hpp
 #define ce_product_name_hpp
@@ -96,6 +96,9 @@ class ce_product_name
     std::size_t ordinal() const;
     std::size_t ordinal(std::string const&) const;
     std::vector<std::string> const& product_names() const;
+
+    // mc_enum_base required implementation.
+    virtual void enforce_proscription();
 
     std::string value_;
 };

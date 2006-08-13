@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mc_enum.tpp,v 1.12 2006-08-12 17:16:39 chicares Exp $
+// $Id: mc_enum.tpp,v 1.13 2006-08-13 11:51:38 chicares Exp $
 
 #include "mc_enum.hpp"
 
@@ -132,21 +132,18 @@ std::size_t mc_enum<T,n,e,c>::cardinality() const
 }
 
 template<typename T, std::size_t n, T const (&e)[n], char const*const (&c)[n]>
-std::string mc_enum<T,n,e,c>::str(int j) const
+void mc_enum<T,n,e,c>::enforce_proscription()
 {
-    return c[j];
-}
+    if(is_allowed(ordinal()))
+        {
+        return;
+        }
 
-template<typename T, std::size_t n, T const (&e)[n], char const*const (&c)[n]>
-std::string mc_enum<T,n,e,c>::str() const
-{
-    return c[ordinal()];
-}
-
-template<typename T, std::size_t n, T const (&e)[n], char const*const (&c)[n]>
-T mc_enum<T,n,e,c>::value() const
-{
-    return value_;
+    std::size_t z = first_allowed_ordinal();
+    if(z < cardinality())
+        {
+        value_ = e[z];
+        }
 }
 
 template<typename T, std::size_t n, T const (&e)[n], char const*const (&c)[n]>
@@ -169,6 +166,18 @@ std::size_t mc_enum<T,n,e,c>::ordinal() const
 }
 
 template<typename T, std::size_t n, T const (&e)[n], char const*const (&c)[n]>
+std::string mc_enum<T,n,e,c>::str(int j) const
+{
+    return c[j];
+}
+
+template<typename T, std::size_t n, T const (&e)[n], char const*const (&c)[n]>
+T mc_enum<T,n,e,c>::value() const
+{
+    return value_;
+}
+
+template<typename T, std::size_t n, T const (&e)[n], char const*const (&c)[n]>
 std::size_t mc_enum<T,n,e,c>::ordinal(std::string const& s) const
 {
 // TODO ?? Shouldn't this be ptrdiff_t?
@@ -185,5 +194,11 @@ std::size_t mc_enum<T,n,e,c>::ordinal(std::string const& s) const
             ;
         }
     return v;
+}
+
+template<typename T, std::size_t n, T const (&e)[n], char const*const (&c)[n]>
+std::string mc_enum<T,n,e,c>::str() const
+{
+    return c[ordinal()];
 }
 

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: tn_range.hpp,v 1.10 2006-07-10 13:13:16 chicares Exp $
+// $Id: tn_range.hpp,v 1.11 2006-08-13 11:51:38 chicares Exp $
 
 #ifndef tn_range_hpp
 #define tn_range_hpp
@@ -74,12 +74,13 @@
 /// This class also provides a function asserting the postcondition
 ///   nominal_minimum() <= default_value() <= nominal_maximum()
 /// which should be called in the most-derived object's ctor. This is
-/// the classic post-constructor problem, which has no tidy general
-/// solution. If anyone later adds a ctor to class template tn_range
-/// or uses a class derived from class template trammel_base in an
-/// unanticipated way, then the postcondition could be violated, but
-/// even then only by committing the separate mistake of writing
-/// limits that are actually inconsistent.
+/// the classic postconstructor problem:
+///   http://groups.google.com/group/comp.lang.c++.moderated/msg/80ab79d85b150e17
+/// which has no tidy general solution. If a maintainer later adds
+/// another ctor to class template tn_range, or uses a class derived
+/// from class template trammel_base in an unanticipated way, then the
+/// postcondition could be violated, but only if the separate mistake
+/// of writing limits that are actually inconsistent is also made.
 
 template<typename T>
 class trammel_base
@@ -122,11 +123,18 @@ class trammel_base
 /// return a std::string that either explains why such conversion or
 /// verification failed, or is empty if both succeeded.
 ///
-/// enforce_limits(): Constrain a derived class's value to its range
-/// limits.
+/// enforce_circumscription(): Constrain a derived class's value to
+/// its range limits.
 ///
 /// equal_to(): Compare a string representation of a number to a
 /// derived class's value.
+///
+/// universal_minimum(), universal_maximum(): Return a dynamic limit
+/// as type double, not as the actual type used in a derived class.
+/// The motivation is to allow a GUI application to set the limits of,
+/// e.g., a spin control, through a pointer to this abstract class.
+/// Range-limited controls in wx generally have limits of type int;
+/// type double is used here for greater generality.
 ///
 /// Implicitly-declared special member functions do the right thing.
 
@@ -137,8 +145,10 @@ class LMI_SO tn_range_base
     bool operator==(std::string const& s) const {return equal_to(s);}
 
     virtual std::string diagnose_invalidity(std::string const&) const = 0;
-    virtual void enforce_limits() = 0;
+    virtual void enforce_circumscription() = 0;
     virtual bool equal_to(std::string const&) const = 0;
+    virtual double universal_minimum() const = 0;
+    virtual double universal_maximum() const = 0;
 };
 
 /// Design notes for class template tn_range.
@@ -158,11 +168,50 @@ class LMI_SO tn_range_base
 /// Accordingly, the invariant
 ///   minimum() <= value() <= maximum()
 /// is maintained as a postcondition by all member functions save only
-/// the non-const versions of minimum() and maximum(): those two
+/// those that set the minimum or maximum explicitly: those member
 /// functions forbear to modify the value in order to respect the MVC
 /// Model's separation of operations that mutate the value (performed
 /// in MvcModel::Transmogrify()) from those that do not (performed in
 /// MvcModel::Harmonize()).
+///
+/// As an alternative considered but rejected, the minimum() and
+/// maximum() mutators might have been made private. It would suffice
+/// to offer only minimum_and_maximum(), which is more robust, as its
+/// documentation explains. Consider, though:
+///
+///    // Minimum and maximum ages must not be permitted to cross.
+///    age_minimum.minimum_and_maximum
+///        (age_minimum.trammel().minimum_minimorum()
+///        ,age_maximum.value()
+///        );
+///    age_maximum.minimum_and_maximum
+///        (age_minimum.value()
+///        ,age_maximum.trammel().maximum_maximorum()
+///        );
+///
+/// Requiring defaults to be spelled out makes the code less clear and
+/// novel mistakes more likely, particularly because the defaults bear
+/// no actual information. This straightforward implementation:
+///
+///    // Minimum and maximum ages must not be permitted to cross.
+///    age_minimum.maximum(age_maximum.value());
+///    age_maximum.minimum(age_minimum.value());
+///
+/// is far clearer, and, under the assumption that the a priori
+/// minimum minimorum and maximum maximorum are always suitable, not
+/// vulnerable to the problem that minimum_and_maximum() is designed
+/// to solve. OTOH, this example:
+///
+///    // This thing has a minimum.
+///    age.minimum(age_minimum.value());
+///    // Oh, and it has a maximum, too.
+///    age.maximum(age_maximum.value());
+///    // Hope the minimum and maximum don't cross!
+///
+/// is far better written as:
+///
+///    // This thing has a limited range.
+///    age.minimum_and_maximum(age_minimum.value(), age_maximum.value());
 ///
 /// Implementation notes for class template tn_range.
 ///
@@ -190,8 +239,6 @@ class tn_range
     ,private boost::equality_comparable<tn_range<Number,Trammel>, Number>
     ,private boost::equality_comparable<tn_range<Number,Trammel>, std::string>
 {
-    BOOST_STATIC_ASSERT(boost::is_arithmetic<Number>::value);
-
     // Double parentheses: don't parse comma as a macro parameter separator.
     BOOST_STATIC_ASSERT
         ((boost::is_base_and_derived
@@ -214,22 +261,25 @@ class tn_range
     tn_range& operator=(Number);
     tn_range& operator=(std::string const&);
 
+    void minimum(Number);
+    void maximum(Number);
+    void minimum_and_maximum(Number, Number);
+
+    Number minimum() const;
+    Number maximum() const;
+
     bool operator==(tn_range<Number,Trammel> const&) const;
     bool operator==(Number) const;
     bool operator==(std::string const&) const;
 
-    void minimum(Number);
-    void maximum(Number);
-
-    Number minimum() const;
-    Number maximum() const;
+    Trammel const& trammel() const;
     Number value() const;
 
   private:
+    Number curb(Number) const;
     std::string format_limits_for_error_message() const;
     bool is_valid(Number) const;
     std::string str() const;
-    Number trammel(Number) const;
 
     // datum_base required implementation.
     virtual std::istream& read (std::istream&);
@@ -237,8 +287,10 @@ class tn_range
 
     // tn_range_base required implementation.
     virtual std::string diagnose_invalidity(std::string const&) const;
-    virtual void enforce_limits();
+    virtual void enforce_circumscription();
     virtual bool equal_to(std::string const&) const;
+    virtual double universal_minimum() const;
+    virtual double universal_maximum() const;
 
     Trammel trammel_;
 

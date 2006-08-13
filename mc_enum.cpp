@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mc_enum.cpp,v 1.8 2006-07-10 13:14:34 chicares Exp $
+// $Id: mc_enum.cpp,v 1.9 2006-08-13 11:51:38 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -30,6 +30,7 @@
 
 #include "alert.hpp"
 
+#include <algorithm> // std::find()
 #include <typeinfo>
 
 mc_enum_base::mc_enum_base(int cardinality_of_the_enumeration)
@@ -41,6 +42,19 @@ void mc_enum_base::allow(int index, bool b)
 {
     validate_index(index);
     allowed_[index] = b;
+}
+
+void mc_enum_base::allow_all(bool b)
+{
+    for(std::size_t j = 0; j < cardinality(); ++j)
+        {
+        allow(j, b);
+        }
+}
+
+std::size_t mc_enum_base::first_allowed_ordinal() const
+{
+    return std::find(allowed_.begin(), allowed_.end(), true) - allowed_.begin();
 }
 
 bool mc_enum_base::is_allowed(int index) const

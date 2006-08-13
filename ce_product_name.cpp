@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ce_product_name.cpp,v 1.5 2006-01-29 13:52:00 chicares Exp $
+// $Id: ce_product_name.cpp,v 1.6 2006-08-13 11:51:38 chicares Exp $
 
 #include "ce_product_name.hpp"
 
@@ -128,5 +128,11 @@ std::size_t ce_product_name::ordinal(std::string const& s) const
 std::vector<std::string> const& ce_product_name::product_names() const
 {
     return ::product_names();
+}
+
+/// No product is ever proscribed.
+
+void ce_product_name::enforce_proscription()
+{
 }
 

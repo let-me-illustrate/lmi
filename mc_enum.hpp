@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mc_enum.hpp,v 1.12 2006-07-10 13:14:34 chicares Exp $
+// $Id: mc_enum.hpp,v 1.13 2006-08-13 11:51:38 chicares Exp $
 
 // Acknowledgment
 //
@@ -128,13 +128,8 @@
 #include "datum_base.hpp"
 
 #include <boost/operators.hpp>
-
-#if !defined __BORLANDC__
-#   include <boost/static_assert.hpp>
-#   include <boost/type_traits.hpp>
-#else  // Defined __BORLANDC__ .
-#   define BOOST_STATIC_ASSERT(deliberately_ignored) /##/
-#endif // Defined __BORLANDC__ .
+#include <boost/static_assert.hpp>
+#include <boost/type_traits.hpp>
 
 #include <cstddef>
 #include <string>
@@ -147,10 +142,13 @@ class LMI_SO mc_enum_base
     explicit mc_enum_base(int);
 
     void allow(int, bool);
+    void allow_all(bool);
+    std::size_t first_allowed_ordinal() const;
     bool is_allowed(int) const;
 
     virtual std::size_t allowed_ordinal() const = 0;
     virtual std::size_t cardinality() const = 0;
+    virtual void enforce_proscription() = 0;
     virtual std::size_t ordinal() const = 0;
     virtual std::string str(int) const = 0;
 
@@ -184,10 +182,7 @@ class mc_enum
     bool operator==(T) const;
     bool operator==(std::string const&) const;
 
-    // datum_base required implementation.
-    // TODO ?? Consider moving the implementation into the base class.
-    virtual std::istream& read (std::istream&);
-    virtual std::ostream& write(std::ostream&) const;
+    std::size_t ordinal(std::string const&) const;
 
     // mc_enum_base required implementation.
     virtual std::size_t allowed_ordinal() const;
@@ -199,7 +194,13 @@ class mc_enum
     T value() const;
 
   private:
-    std::size_t ordinal(std::string const&) const;
+    // datum_base required implementation.
+    // TODO ?? Consider moving the implementation into the base class.
+    virtual std::istream& read (std::istream&);
+    virtual std::ostream& write(std::ostream&) const;
+
+    // mc_enum_base required implementation.
+    virtual void enforce_proscription();
 
     T value_;
 };
