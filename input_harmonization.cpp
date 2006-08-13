@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_harmonization.cpp,v 1.31 2006-07-12 04:57:14 chicares Exp $
+// $Id: input_harmonization.cpp,v 1.32 2006-08-13 19:24:34 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -162,9 +162,10 @@ void Input::DoHarmonize()
     DefinitionOfLifeInsurance.allow(mce_cvat, database->Query(DB_AllowCVAT));
     DefinitionOfLifeInsurance.allow(mce_noncompliant, database->Query(DB_AllowNo7702));
 
+    DefinitionOfMaterialChange.enable(mce_noncompliant != DefinitionOfLifeInsurance);
     if(mce_noncompliant == DefinitionOfLifeInsurance)
         {
-        DefinitionOfMaterialChange.enable(false);
+        // Nothing to do: all choices ignored because control is disabled.
         }
     else if(mce_cvat == DefinitionOfLifeInsurance)
         {
@@ -923,12 +924,26 @@ false // Silly workaround for now.
     SolveBasis .allow(mce_mdpt_basis, actually_solving && is_subject_to_ill_reg(database->Query(DB_LedgerType)));
 
     SolveSeparateAccountBasis.enable(actually_solving);
-    SolveSeparateAccountBasis.allow(mce_sep_acct_full, actually_solving && allow_sep_acct);
+    SolveSeparateAccountBasis.allow(mce_sep_acct_full, actually_solving);
     SolveSeparateAccountBasis.allow(mce_sep_acct_zero, actually_solving && allow_sep_acct);
     SolveSeparateAccountBasis.allow(mce_sep_acct_half, actually_solving && allow_sep_acct && is_three_rate_nasd(database->Query(DB_LedgerType)));
 
     SolveTargetCashSurrenderValue.enable(actually_solving && mce_solve_for_target == SolveTarget);
     DeprecatedSolveTgtAtWhich    .enable(actually_solving && mce_solve_for_target == SolveTarget);
+
+    bool create_supplemental_report = "Yes" == CreateSupplementalReport;
+    SupplementalReportColumn00.enable(create_supplemental_report);
+    SupplementalReportColumn01.enable(create_supplemental_report);
+    SupplementalReportColumn02.enable(create_supplemental_report);
+    SupplementalReportColumn03.enable(create_supplemental_report);
+    SupplementalReportColumn04.enable(create_supplemental_report);
+    SupplementalReportColumn05.enable(create_supplemental_report);
+    SupplementalReportColumn06.enable(create_supplemental_report);
+    SupplementalReportColumn07.enable(create_supplemental_report);
+    SupplementalReportColumn08.enable(create_supplemental_report);
+    SupplementalReportColumn09.enable(create_supplemental_report);
+    SupplementalReportColumn10.enable(create_supplemental_report);
+    SupplementalReportColumn11.enable(create_supplemental_report);
 }
 
 void Input::DoTransmogrify()

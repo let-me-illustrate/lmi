@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.431 2006-08-13 13:13:23 chicares Exp $
+// $Id: ChangeLog,v 1.432 2006-08-13 19:24:34 chicares Exp $
 
 MAINTENANCE
 
@@ -7233,4 +7233,9 @@ age became '5' after the first keystroke (because the msw date control
 considers '1' to represent 2001), and didn't assume the desired value
 of '46' until the last keystroke was typed. Now, the age changes only
 after the date control loses focus.
+
+20060813T1924Z <chicares@cox.net> [1200]
+
+  input_harmonization.cpp
+Correct several control-enablement defects.
 
