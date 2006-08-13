@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mvc_model.cpp,v 1.4 2006-08-12 17:16:33 chicares Exp $
+// $Id: mvc_model.cpp,v 1.5 2006-08-13 13:13:23 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -182,7 +182,8 @@ void MvcModel::Transmogrify()
     typedef NamesType::const_iterator ntci;
     for(ntci i = Names().begin(); i != Names().end(); ++i)
         {
-        DoEnforceRangeLimit(*i);
+        DoEnforceCircumscription(*i);
+        DoEnforceProscription   (*i);
         }
     DoTransmogrify();
 }

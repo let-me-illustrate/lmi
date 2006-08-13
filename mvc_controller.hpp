@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mvc_controller.hpp,v 1.3 2006-07-11 03:41:09 chicares Exp $
+// $Id: mvc_controller.hpp,v 1.4 2006-08-13 13:13:23 chicares Exp $
 
 #ifndef mvc_controller_hpp
 #define mvc_controller_hpp
@@ -30,8 +30,8 @@
 
 #include <boost/utility.hpp>
 
+#include <wx/bookctrl.h> // wxBookCtrlBase, wxBookCtrlBaseEvent
 #include <wx/dialog.h>
-#include <wx/notebook.h> // wxNotebookEvent, wxNotebookPage
 #include <wx/stattext.h>
 
 #include <map>
@@ -255,9 +255,9 @@ class MvcView;
 ///  - the Controller should take the Model as a template parameter.
 /// Furthermore, automated unit tests are not yet fully implemented.
 ///
-/// A future version should factor out wxNotebook dependencies. This
-/// class is derived only from wxDialog, so clearly it can work as
-/// well with a wxDialog or anything similar.
+/// A future version should factor out wxBookCtrlBase dependencies.
+/// This class is derived only from wxDialog, so clearly it can work
+/// as well with a wxDialog or anything similar.
 
 namespace model_view_controller{} // doxygen workaround.
 
@@ -279,6 +279,8 @@ namespace model_view_controller{} // doxygen workaround.
 /// string in data member transfer_data_, the latter being passed by
 /// non-const reference because its identity is important as well as
 /// its value.
+///
+/// BookControl(): Return a reference to the book control.
 ///
 /// ConditionallyEnable(): Enforce Model enablement rules.
 ///
@@ -320,11 +322,18 @@ namespace model_view_controller{} // doxygen workaround.
 /// ModelReference(): Result of ModelPointer(), dereferenced if not
 /// null; throws if null.
 ///
-/// NameOfTextControlRequiringValidation(): Name of text control that
-/// requires validation (because it is last_focused_window_), if any;
-/// else, an empty string.
+/// NameOfControlToDeferEvaluating(): Name of control, if any, whose
+/// value is to be ignored temporarily, because it is of a type that
+/// accepts incremental input and it is the last_focused_window_;
+/// else, an empty string. A wxTextCtrl, for example, accepts input
+/// one character at a time, but if "1e-1" is entered, then it would
+/// be premature to consider the contents to constitute an invalid
+/// floating-point number after the second character is typed.
 ///
 /// RefocusLastFocusedWindow(): Move focus to last_focused_window_.
+///
+/// UpdateCircumscription(): Update numeric range limits for controls
+/// that have them.
 ///
 /// UponChildFocus(): Trigger validation of a text control when it
 /// loses focus. This event handler is needed because UponUpdateUI()
@@ -419,10 +428,12 @@ class MvcController
   private:
     void Assimilate(std::string const& name_to_ignore);
     void Bind(std::string const& name, std::string& data) const;
+    wxBookCtrlBase      & BookControl()      ;
+    wxBookCtrlBase const& BookControl() const;
     void ConditionallyEnable();
     void ConditionallyEnableControl(std::string const&, wxWindow&);
     void ConditionallyEnableItems  (std::string const&, wxWindow&);
-    wxNotebookPage& CurrentPage() const;
+    wxWindow& CurrentPage() const;
     wxStaticText& DiagnosticsWindow() const;
     void EnsureOptimalFocus();
     void Initialize();
@@ -434,16 +445,17 @@ class MvcController
     template<typename T>
     T const& ModelReference(std::string const& name) const;
 
-    std::string NameOfTextControlRequiringValidation() const;
+    std::string NameOfControlToDeferEvaluating() const;
     void RefocusLastFocusedWindow();
+    void UpdateCircumscription(wxWindow&, std::string const&);
 
-    void UponChildFocus            (wxChildFocusEvent&);
-    void UponInitDialog            (wxInitDialogEvent&);
-    void UponOK                    (wxCommandEvent&   );
-    void UponPageChanged           (wxNotebookEvent&  );
-    void UponPageChanging          (wxNotebookEvent&  );
-    void UponRefocusInvalidControl (wxCommandEvent&   );
-    void UponUpdateUI              (wxUpdateUIEvent&  );
+    void UponChildFocus            (wxChildFocusEvent&   );
+    void UponInitDialog            (wxInitDialogEvent&   );
+    void UponOK                    (wxCommandEvent&      );
+    void UponPageChanged           (wxBookCtrlBaseEvent& );
+    void UponPageChanging          (wxBookCtrlBaseEvent& );
+    void UponRefocusInvalidControl (wxCommandEvent&      );
+    void UponUpdateUI              (wxUpdateUIEvent&     );
 
     // wxWindow overrides.
     virtual bool Validate();
