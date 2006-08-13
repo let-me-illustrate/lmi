@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: calendar_date.hpp,v 1.5 2006-07-12 15:13:04 chicares Exp $
+// $Id: calendar_date.hpp,v 1.6 2006-08-13 11:22:09 chicares Exp $
 
 #ifndef calendar_date_hpp
 #define calendar_date_hpp
@@ -30,6 +30,7 @@
 
 #include <boost/operators.hpp>
 
+#include <iosfwd>
 #include <string>
 
 /// Julian day number, encapsulated in a class for use as a ctor
@@ -42,7 +43,7 @@
 class jdn_t
 {
   public:
-    jdn_t(int d) : value_(d) {}
+    explicit jdn_t(int d) : value_(d) {}
 
     int value() const {return value_;}
 
@@ -61,13 +62,16 @@ class jdn_t
 class ymd_t
 {
   public:
-    ymd_t(int d) : value_(d) {}
+    explicit ymd_t(int d) : value_(d) {}
 
     int value() const {return value_;}
 
   private:
     int value_;
 };
+
+ymd_t JdnToYmd(jdn_t);
+jdn_t YmdToJdn(ymd_t);
 
 /// Class calendar_date represents a gregorian-calendar date in the
 /// range [1752-09-14, 9999-12-31]. Date calculations are probably
@@ -114,13 +118,10 @@ class ymd_t
 ///    first of January, then the third falls on the thirty-first of
 ///    March, and therefore the second must fall on the twenty-eighth
 ///    of February, not the first of March. This is defined as the
-///    curtate' case because the nonexistent thirty-first of February
+///    'curtate' case because the nonexistent thirty-first of February
 ///    is shortened to the twenty-eighth.
 ///
 /// Implicitly-declared special member functions do the right thing.
-
-ymd_t JdnToYmd(jdn_t);
-jdn_t YmdToJdn(ymd_t);
 
 class LMI_SO calendar_date
     :boost::additive<calendar_date, int>
@@ -170,7 +171,7 @@ class LMI_SO calendar_date
     mutable int cached_day_;
 };
 
-// gcc-3.x and bc5.51 do not work at all well with this technique
+// gcc-3.x and bc-5.5.1 do not work at all well with this technique
 // suggested as a space optimization in the boost documentation:
 //    template struct boost::additive<calendar_date, int>;
 //    template struct boost::totally_ordered<calendar_date>;
@@ -188,11 +189,29 @@ int calculate_age
     ,bool                 use_age_nearest_birthday
     );
 
+/// Earliest birthdate consonant with a given age and as-of date.
+
+calendar_date minimum_birthdate
+    (int                  age
+    ,calendar_date const& as_of_date
+    ,bool                 use_age_nearest_birthday
+    );
+
+/// Latest birthdate consonant with a given age and as-of date.
+
+calendar_date maximum_birthdate
+    (int                  age
+    ,calendar_date const& as_of_date
+    ,bool                 use_age_nearest_birthday
+    );
+
+std::string month_name(int);
+
+// Some particularly useful dates.
+
 calendar_date const& gregorian_epoch();
 calendar_date const& last_yyyy_date();
 calendar_date today();
-
-std::string month_name(int);
 
 #endif // calendar_date_hpp
 

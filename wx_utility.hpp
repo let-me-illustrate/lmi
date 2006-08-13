@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: wx_utility.hpp,v 1.4 2006-08-12 17:16:33 chicares Exp $
+// $Id: wx_utility.hpp,v 1.5 2006-08-13 11:22:09 chicares Exp $
 
 #ifndef wx_utility_hpp
 #define wx_utility_hpp
@@ -38,6 +38,9 @@
 #include <vector>
 
 class LMI_SO calendar_date;
+class jdn_t;
+
+class WXDLLEXPORT wxBookCtrlBase;
 class WXDLLEXPORT wxDateTime;
 class WXDLLEXPORT wxWindow;
 
@@ -84,6 +87,7 @@ void Connect
 
 calendar_date ConvertDateFromWx(wxDateTime const&);
 wxDateTime ConvertDateToWx(calendar_date const&);
+wxDateTime ConvertDateToWx(jdn_t const&);
 
 bool operator==(calendar_date const& lmi_date, wxDateTime const& wx_date);
 bool operator==(wxDateTime const& wx_date, calendar_date const& lmi_date);
@@ -91,6 +95,13 @@ bool operator==(wxDateTime const& wx_date, calendar_date const& lmi_date);
 /// Test ConvertDateFromWx() and ConvertDateToWx().
 
 void TestDateConversions();
+
+/// Return a vector comprising the names of all book-control pages, in
+/// the order in which the pages appear. The motivation being to
+/// facilitate selecting pages by name, an exception is thrown if page
+/// names are not unique.
+
+std::vector<std::string> EnumerateBookPageNames(wxBookCtrlBase const&);
 
 /// Return a vector populated with a window's children, grandchildren,
 /// and so on, unto the ultimate generation: its entire lineage.
