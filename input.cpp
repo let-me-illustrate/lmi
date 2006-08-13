@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input.cpp,v 1.13 2006-08-13 11:51:38 chicares Exp $
+// $Id: input.cpp,v 1.14 2006-08-13 13:13:23 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -368,13 +368,26 @@ void Input::DoCustomizeInitialValues()
 {
 }
 
-void Input::DoEnforceRangeLimit(std::string const& name)
+void Input::DoEnforceCircumscription(std::string const& name)
 {
     datum_base* base_datum = member_cast<datum_base>(operator[](name));
     tn_range_base* datum = dynamic_cast<tn_range_base*>(base_datum);
     if(datum)
         {
         datum->enforce_circumscription();
+        }
+}
+
+void Input::DoEnforceProscription(std::string const& name)
+{
+    // Here one could handle special cases for which the generic
+    // behavior is not wanted.
+
+    datum_base* base_datum = member_cast<datum_base>(operator[](name));
+    mc_enum_base* datum = dynamic_cast<mc_enum_base*>(base_datum);
+    if(datum)
+        {
+        datum->enforce_proscription();
         }
 }
 

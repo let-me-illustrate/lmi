@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input.hpp,v 1.16 2006-07-13 03:13:07 chicares Exp $
+// $Id: input.hpp,v 1.17 2006-08-13 13:13:23 chicares Exp $
 
 #ifndef input_hpp
 #define input_hpp
@@ -155,7 +155,8 @@ class LMI_SO Input
     virtual NamesType const& DoNames() const;
     virtual StateType        DoState() const;
     virtual void DoCustomizeInitialValues();
-    virtual void DoEnforceRangeLimit(std::string const&);
+    virtual void DoEnforceCircumscription(std::string const&);
+    virtual void DoEnforceProscription   (std::string const&);
     virtual void DoHarmonize();
     virtual void DoTransmogrify();
 

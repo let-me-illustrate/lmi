@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.430 2006-08-12 17:16:42 chicares Exp $
+// $Id: ChangeLog,v 1.431 2006-08-13 13:13:23 chicares Exp $
 
 MAINTENANCE
 
@@ -7194,4 +7194,43 @@ Include 'config.hpp' only where appropriate.
 
   workhorse.make
 Temporarily suppress closure test for the new '.h' file.
+
+20060813T1122Z <chicares@cox.net> [1199]
+
+  calendar_date.cpp
+  calendar_date.hpp
+  calendar_date_test.cpp
+  wx_utility.cpp
+  wx_utility.hpp
+Import selected changes from skeleton trunk.
+
+20060813T1151Z <chicares@cox.net> [1199]
+
+  ce_product_name.cpp
+  ce_product_name.hpp
+  input.cpp
+  mc_enum.cpp
+  mc_enum.hpp
+  mc_enum.tpp
+  tn_range.hpp
+  tn_range.tpp
+  tn_range_test.cpp
+Import selected changes from skeleton trunk.
+
+20060813T1313Z <chicares@cox.net> [1200]
+
+  input.cpp
+  input.hpp
+  mvc_controller.cpp
+  mvc_controller.hpp
+  mvc_model.cpp
+  mvc_model.hpp
+Import selected changes from skeleton trunk. A notable difference in
+behavior is that changes in date and spin controls are recognized only
+upon loss of focus. Previously, e.g., typing '1960' into 'DateOfBirth'
+a keystroke at a time forced immediate but erratic 'IssueAge' changes:
+age became '5' after the first keystroke (because the msw date control
+considers '1' to represent 2001), and didn't assume the desired value
+of '46' until the last keystroke was typed. Now, the age changes only
+after the date control loses focus.
 
