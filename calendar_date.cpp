@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: calendar_date.cpp,v 1.9 2006-07-12 15:13:04 chicares Exp $
+// $Id: calendar_date.cpp,v 1.10 2006-08-13 11:22:09 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -150,7 +150,26 @@ namespace
     }
 } // Unnamed namespace.
 
-// Today's date.
+ymd_t JdnToYmd(jdn_t z)
+{
+    int year;
+    int month;
+    int day;
+    JdnToGregorian(z.value(), year, month, day);
+    return ymd_t(day + 100 * month + 10000 * year);
+}
+
+jdn_t YmdToJdn(ymd_t z)
+{
+    int g = z.value();
+    int year = g / 10000;
+    g -= year * 10000;
+    int month = g / 100;
+    g -= month * 100;
+    int day = g;
+    return jdn_t(CheckedGregorianToJdn(year, month, day));
+}
+
 calendar_date::calendar_date()
     :jdn_(today().julian_day_number())
 {
@@ -188,19 +207,6 @@ calendar_date& calendar_date::operator=(ymd_t ymd)
     return *this;
 }
 
-void calendar_date::assign_from_gregorian(int year, int month, int day)
-{
-    jdn_ = CheckedGregorianToJdn(year, month, day);
-    cached_year_  = year;
-    cached_month_ = month;
-    cached_day_   = day;
-}
-
-void calendar_date::cache_gregorian_elements() const
-{
-    JdnToGregorian(jdn_, cached_year_, cached_month_, cached_day_);
-}
-
 calendar_date& calendar_date::operator++()
 {
     ++jdn_;
@@ -229,16 +235,6 @@ calendar_date& calendar_date::operator-=(int i)
     return *this;
 }
 
-bool calendar_date::operator==(calendar_date const& z) const
-{
-    return jdn_ == z.jdn_;
-}
-
-bool calendar_date::operator<(calendar_date const& z) const
-{
-    return jdn_ < z.jdn_;
-}
-
 int calendar_date::julian_day_number() const
 {
     return jdn_;
@@ -251,20 +247,14 @@ int calendar_date::julian_day_number(int z)
     return jdn_;
 }
 
-// This could delegate to platform-specific code; for now, it just
-// returns ISO8601 with hyphens.
-//
-std::string calendar_date::str() const
+bool calendar_date::operator==(calendar_date const& z) const
 {
-    std::ostringstream oss;
-    oss
-        << std::setfill('0') << std::setw(4) << year()
-        << '-'
-        << std::setfill('0') << std::setw(2) << month()
-        << '-'
-        << std::setfill('0') << std::setw(2) << day()
-        ;
-    return oss.str();
+    return jdn_ == z.jdn_;
+}
+
+bool calendar_date::operator<(calendar_date const& z) const
+{
+    return jdn_ < z.jdn_;
 }
 
 int calendar_date::year() const
@@ -295,6 +285,48 @@ int calendar_date::days_in_year() const
 bool calendar_date::is_leap_year() const
 {
     return ::is_leap_year(cached_year_);
+}
+
+// This could delegate to platform-specific code; for now, it just
+// returns ISO8601 with hyphens.
+//
+std::string calendar_date::str() const
+{
+    std::ostringstream oss;
+    oss
+        << std::setfill('0') << std::setw(4) << year()
+        << '-'
+        << std::setfill('0') << std::setw(2) << month()
+        << '-'
+        << std::setfill('0') << std::setw(2) << day()
+        ;
+    return oss.str();
+}
+
+void calendar_date::assign_from_gregorian(int year, int month, int day)
+{
+    jdn_ = CheckedGregorianToJdn(year, month, day);
+    cached_year_  = year;
+    cached_month_ = month;
+    cached_day_   = day;
+}
+
+void calendar_date::cache_gregorian_elements() const
+{
+    JdnToGregorian(jdn_, cached_year_, cached_month_, cached_day_);
+}
+
+std::ostream& operator<<(std::ostream& os, calendar_date const& date)
+{
+    return os << date.julian_day_number();
+}
+
+std::istream& operator>>(std::istream& is, calendar_date& date)
+{
+    int z;
+    is >> z;
+    date.julian_day_number(z);
+    return is;
 }
 
 /// Increment by a given number of years and months.
@@ -393,42 +425,6 @@ int calculate_age
         }
 }
 
-std::ostream& operator<<(std::ostream& os, calendar_date const& date)
-{
-    return os << date.julian_day_number();
-}
-
-std::istream& operator>>(std::istream& is, calendar_date& date)
-{
-    int z;
-    is >> z;
-    date.julian_day_number(z);
-    return is;
-}
-
-calendar_date const& gregorian_epoch()
-{
-    static calendar_date const z((jdn_t(gregorian_epoch_jdn)));
-    return z;
-}
-
-calendar_date const& last_yyyy_date()
-{
-    static calendar_date const z(9999, 12, 31);
-    return z;
-}
-
-calendar_date today()
-{
-    std::time_t const t0 = time(0);
-    std::tm* const t1 = std::localtime(&t0);
-    return calendar_date
-        (1900 + t1->tm_year
-        ,   1 + t1->tm_mon
-        ,       t1->tm_mday
-        );
-}
-
 std::string month_name(int month)
 {
     if(!(0 < month && month < 13))
@@ -455,23 +451,26 @@ std::string month_name(int month)
     return oss.str();
 }
 
-ymd_t JdnToYmd(jdn_t z)
+calendar_date const& gregorian_epoch()
 {
-    int year;
-    int month;
-    int day;
-    JdnToGregorian(z.value(), year, month, day);
-    return day + 100 * month + 10000 * year;
+    static calendar_date const z((jdn_t(gregorian_epoch_jdn)));
+    return z;
 }
 
-jdn_t YmdToJdn(ymd_t z)
+calendar_date const& last_yyyy_date()
 {
-    int g = z.value();
-    int year = g / 10000;
-    g -= year * 10000;
-    int month = g / 100;
-    g -= month * 100;
-    int day = g;
-    return CheckedGregorianToJdn(year, month, day);
+    static calendar_date const z(9999, 12, 31);
+    return z;
+}
+
+calendar_date today()
+{
+    std::time_t const t0 = time(0);
+    std::tm* const t1 = std::localtime(&t0);
+    return calendar_date
+        (1900 + t1->tm_year
+        ,   1 + t1->tm_mon
+        ,       t1->tm_mday
+        );
 }
 

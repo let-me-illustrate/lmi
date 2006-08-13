@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: calendar_date_test.cpp,v 1.9 2006-07-12 15:13:12 chicares Exp $
+// $Id: calendar_date_test.cpp,v 1.10 2006-08-13 11:22:09 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -169,16 +169,16 @@ void CalendarDateTest::TestYMDBounds()
 
 void CalendarDateTest::TestYmdToJdnAndJdnToYmd()
 {
-    BOOST_TEST_EQUAL(2361222, YmdToJdn(17520914).value());
-    BOOST_TEST_EQUAL(17520914, JdnToYmd(2361222).value());
+    BOOST_TEST_EQUAL(2361222, YmdToJdn(ymd_t(17520914)).value());
+    BOOST_TEST_EQUAL(17520914, JdnToYmd(jdn_t(2361222)).value());
 
-    BOOST_TEST_EQUAL(2400000, YmdToJdn(18581116).value());
-    BOOST_TEST_EQUAL(18581116, JdnToYmd(2400000).value());
+    BOOST_TEST_EQUAL(2400000, YmdToJdn(ymd_t(18581116)).value());
+    BOOST_TEST_EQUAL(18581116, JdnToYmd(jdn_t(2400000)).value());
 
     ymd_t const z0(18581116);
     BOOST_TEST_EQUAL(2400000, calendar_date(z0).julian_day_number());
 
-    jdn_t const z1(YmdToJdn(18581116));
+    jdn_t const z1(YmdToJdn(ymd_t(18581116)));
     BOOST_TEST_EQUAL(2400000, calendar_date(z1).julian_day_number());
 }
 

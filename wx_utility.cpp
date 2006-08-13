@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: wx_utility.cpp,v 1.4 2006-08-12 17:16:33 chicares Exp $
+// $Id: wx_utility.cpp,v 1.5 2006-08-13 11:22:09 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -31,9 +31,12 @@
 #include "alert.hpp"
 #include "calendar_date.hpp"
 
+#include <wx/bookctrl.h>
 #include <wx/datetime.h>
 #include <wx/window.h>
 
+#include <algorithm> // std::find()
+#include <cstddef>   // std::size_t
 #include <sstream>
 
 namespace
@@ -76,6 +79,11 @@ wxDateTime ConvertDateToWx(calendar_date const& lmi_date)
     return wx_date;
 }
 
+wxDateTime ConvertDateToWx(jdn_t const& j)
+{
+    return ConvertDateToWx(calendar_date(j));
+}
+
 bool operator==(calendar_date const& lmi_date, wxDateTime const& wx_date)
 {
     return lmi_date == ConvertDateFromWx(wx_date);
@@ -84,6 +92,57 @@ bool operator==(calendar_date const& lmi_date, wxDateTime const& wx_date)
 bool operator==(wxDateTime const& wx_date, calendar_date const& lmi_date)
 {
     return lmi_date == ConvertDateFromWx(wx_date);
+}
+
+void TestDateConversions()
+{
+    const int low  = gregorian_epoch().julian_day_number();
+    const int high = last_yyyy_date ().julian_day_number();
+    status()
+        << "Testing conversion of all dates in the range ["
+        << low
+        << ", "
+        << high
+        << "]."
+        << std::flush
+        ;
+    for(int j = low; j <= high; ++j)
+        {
+        // Double parentheses circumvent the most vexing parse.
+        calendar_date const lmi_date0((jdn_t(j)));
+        calendar_date const lmi_date1 =
+            ConvertDateFromWx
+                (ConvertDateToWx
+                    (ConvertDateFromWx
+                        (ConvertDateToWx
+                            (lmi_date0
+                            )
+                        )
+                    )
+                );
+        if(lmi_date1 != lmi_date0)
+            {
+            fatal_error()
+                << "Date conversion failed:\n"
+                << "  original  date: " << lmi_date0.str() << '\n'
+                << "  converted date: " << lmi_date1.str() << '\n'
+                << LMI_FLUSH
+                ;
+            }
+        }
+    status() << "Date-conversion test succeeded." << std::flush;
+}
+
+std::vector<std::string> EnumerateBookPageNames(wxBookCtrlBase const& book)
+{
+    std::vector<std::string> z;
+    for(std::size_t j = 0; j < book.GetPageCount(); ++j)
+        {
+        std::string name(book.GetPageText(j));
+        LMI_ASSERT(z.end() == std::find(z.begin(), z.end(), name));
+        z.push_back(name);
+        }
+    return z;
 }
 
 namespace
