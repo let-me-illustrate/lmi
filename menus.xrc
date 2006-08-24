@@ -24,7 +24,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: menus.xrc,v 1.9 2006-01-29 13:52:00 chicares Exp $
+    $Id: menus.xrc,v 1.10 2006-08-24 00:22:27 wboutin Exp $
 -->
 
 <!-- reusable menus -->
@@ -352,7 +352,7 @@ Not supported yet: need to split columns into multiple pages.
         </object>
     </object>
     <object class="wxMenu" name="illustration">
-        <label>Illustration</label>
+        <label>_Illustration</label>
         <object class="wxMenuItem" name="edit_cell">
             <label>_Edit cell\tCtrl-E</label>
             <bitmap>edit-cell.xpm</bitmap>
