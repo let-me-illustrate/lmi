@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.433 2006-08-24 00:22:27 wboutin Exp $
+// $Id: ChangeLog,v 1.434 2006-08-25 20:52:31 wboutin Exp $
 
 MAINTENANCE
 
@@ -7243,4 +7243,9 @@ Correct several control-enablement defects.
 
   menus.xrc
 Improve menu item shortcut.
+
+20060825T2052 <wboutin@massmutual.com> [1200]
+
+  xml_notebook_coli_boli.xrc
+Populate 'PartialMortalityTable' value and improve consistency.
 
