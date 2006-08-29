@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mvc_controller.cpp,v 1.7 2006-08-13 13:13:23 chicares Exp $
+// $Id: mvc_controller.cpp,v 1.8 2006-08-29 19:21:37 wboutin Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -310,7 +310,7 @@ void MvcController::ConditionallyEnableItems
                 itembox->Append(datum->str(j));
                 }
             }
-        itembox->Select(datum->ordinal());
+        itembox->SetStringSelection(datum->str(datum->ordinal()));
         itembox->Thaw();
         }
     else
