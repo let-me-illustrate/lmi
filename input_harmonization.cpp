@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_harmonization.cpp,v 1.32 2006-08-13 19:24:34 chicares Exp $
+// $Id: input_harmonization.cpp,v 1.33 2006-08-29 19:19:42 wboutin Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -1004,6 +1004,18 @@ void Input::DoTransmogrify()
         date_of_birth.add_years(apparent_age - IssueAge.value(), use_anb);
         DateOfBirth = date_of_birth.julian_day_number();
         }
+
+     // TODO ?? WX PORT !! Icky kludge.
+     UseAverageOfAllFunds =
+         ("Average fund"  == FundChoiceType.str())
+         ? "Yes"
+         : "No"
+         ;
+     OverrideFundManagementFee =
+         ("Override fund" == FundChoiceType.str())
+         ? "Yes"
+         : "No"
+         ;
 }
 
 #if 0
