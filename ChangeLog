@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.435 2006-08-29 19:19:42 wboutin Exp $
+// $Id: ChangeLog,v 1.436 2006-08-29 19:21:37 wboutin Exp $
 
 MAINTENANCE
 
@@ -7253,4 +7253,9 @@ Populate 'PartialMortalityTable' value and improve consistency.
 
   input_harmonization.cpp
 Add kludge to work around a testing problem.
+
+20060829T1921Z <wboutin@massmutual.com> [1201]
+
+  mvc_controller.cpp
+Allow interchangeability between certain controls.
 
