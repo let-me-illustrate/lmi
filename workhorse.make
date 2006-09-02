@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: workhorse.make,v 1.72 2006-08-12 17:16:42 chicares Exp $
+# $Id: workhorse.make,v 1.73 2006-09-02 22:40:21 chicares Exp $
 
 ################################################################################
 
@@ -198,9 +198,9 @@ wx_libs_check    := $(subst -l ,-l,$(wx_libs_check))
 .PHONY: wx_config_check
 wx_config_check:
 	@$(ECHO) Omitted from 'wx-config --cxxflags':
-	@$(ECHO) $(filter-out $(wx_cxxflag_check), $(wx_config_cxxflags))
+	@$(ECHO) $(filter-out $(wx_cxxflag_check),$(wx_config_cxxflags))
 	@$(ECHO) Omitted from 'wx-config --libs':
-	@$(ECHO) $(filter-out $(wx_libs_check), $(wx_config_libs))
+	@$(ECHO) $(filter-out $(wx_libs_check),$(wx_config_libs))
 
 ################################################################################
 
@@ -288,7 +288,7 @@ quoted_gpl quoted_gpl_html:
 
 ################################################################################
 
-# Headers and template-instantiation files to test for idempotence.
+# Headers and template-instantiation files to test for physical closure.
 
 # Only files in the source directory are tested. Files that reside
 # elsewhere (e.g., headers accompanying libraries) are not tested.
@@ -296,12 +296,12 @@ quoted_gpl quoted_gpl_html:
 # Exclude headers named 'config_*.hpp': they are designed to signal
 # errors if they are used separately.
 
-idempotent_files := \
-  $(addsuffix .idempotent,\
+physical_closure_files := \
+  $(addsuffix .physical_closure,\
     $(filter-out config_%.hpp,\
       $(notdir \
         $(wildcard \
-          $(addprefix $(src_dir)/,*.hpp *.tpp *.xpp \
+          $(addprefix $(src_dir)/,*.h *.hpp *.tpp *.xpp \
           ) \
         ) \
       ) \
@@ -330,8 +330,8 @@ wx_dependent_objects := \
     ) \
   )
 
-wx_dependent_idempotent_files := \
-  $(addsuffix .idempotent,\
+wx_dependent_physical_closure_files := \
+  $(addsuffix .physical_closure,\
     $(notdir \
       $(shell $(GREP) \
         --files-with-matches \
@@ -393,12 +393,6 @@ gcc_cxx_warnings := \
   -Wpmf-conversions \
   -Wsynth \
 
-# TODO ?? VZ reports that
-#  -Winvalid-offsetof \
-# gives an error with GNU/Linux gcc-3.3 and 3.4, though that seems
-# to contradict the gcc manual. This should be investigated and
-# possibly reported on gcc bugzilla.
-
 # Too many warnings on correct code, e.g. exact comparison to zero:
 #  -Wfloat-equal \
 
@@ -412,8 +406,8 @@ gcc_common_extra_warnings := \
   -Wredundant-decls \
   -Wundef \
 
-$(wx_dependent_objects):          gcc_common_extra_warnings :=
-$(wx_dependent_idempotent_files): gcc_common_extra_warnings :=
+$(wx_dependent_objects):                gcc_common_extra_warnings :=
+$(wx_dependent_physical_closure_files): gcc_common_extra_warnings :=
 
 # Boost didn't remove an unused parameter in this file:
 
@@ -469,7 +463,7 @@ every_libstdcxx_warning_macro := \
 
 MPATROL_LIBS :=
 
-test_targets = unit_tests cgi_tests cli_tests
+test_targets := unit_tests cgi_tests cli_tests
 
 ifeq (mpatrol,$(findstring mpatrol,$(build_type)))
   optimization_flag := -O0
@@ -971,26 +965,37 @@ regression_test: install
 
 ################################################################################
 
-# Test idempotence of headers and template-instantiation files.
+# Test headers and template-instantiation files for physical closure
+# (see section 3.4 of Lakos, _Large-Scale C++ Software Design_).
 
-# When a file passes the idempotence test, create an empty file with
-# suffix '.idempotent' in the build directory to record that success,
-# and to prevent subsequent updates of this target from testing that
-# file again unless it changes.
-
-# TODO ?? Consider adding an autodependency mechanism--or is that
-# gilding the lily? Changing one header may cause another to become
-# nonidempotent, but the present test has no power to discover that.
+# When a file passes the closure test, create an empty file with
+# suffix '.physical_closure' in the build directory to record that
+# success, and to prevent subsequent updates of this target from
+# testing that file again unless it changes.
 
 # Treat '.h' files as C++. Some C++ headers use that suffix, though
-# this project's do not. By default, g++ reports idempotence defects
-# with this simple technique, but gcc does not, probably because it
-# strives for compatibility with pre-standard C.
+# this project's do not. By default, g++ reports closure defects with
+# this simple technique, but gcc does not, probably because it strives
+# for compatibility with pre-standard C. See
+#   http://sourceforge.net/mailarchive/message.php?msg_id=36344864
+# though, and
+#   http://gcc.gnu.org/bugzilla/show_bug.cgi?id=28528
+# which explains why that technique doesn't work for '.h' files with
+# gcc versions in [3.4, 4.1].
 
-.PHONY: check_idempotence
-check_idempotence: $(idempotent_files)
+physical_closure_files := \
+    $(filter-out %.h.physical_closure,$(physical_closure_files))
 
-%.idempotent: %
+# Changing one header may cause another that had the closure property
+# to lose it, but the present test has no power to discover that. An
+# autodependency mechanism could be created to fill that gap, but that
+# would be gilding the lily: a nychthemeral build from scratch
+# suffices to find closure problems before they can cause actual harm.
+
+.PHONY: check_physical_closure
+check_physical_closure: $(physical_closure_files)
+
+%.physical_closure: %
 	@$(CXX) \
 	  -DLMI_IGNORE_PCH \
 	  $(ALL_CPPFLAGS) $(ALL_CXXFLAGS) \
