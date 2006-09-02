@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_harmonization.cpp,v 1.33 2006-08-29 19:19:42 wboutin Exp $
+// $Id: input_harmonization.cpp,v 1.34 2006-09-02 22:19:09 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -58,7 +58,7 @@ namespace
 /// for the former product before the product changed, then change its
 /// contents to the new product's default value. What's tested is
 /// literal equality, not equivalence: even typing a blank at the end
-/// of the field makes in no longer equal to the default string.
+/// of the field makes it no longer equal to the default string.
 /// Similarly, given
 ///   product X: credited rate 0.052
 ///   product Y: credited rate 0.037
@@ -1005,17 +1005,17 @@ void Input::DoTransmogrify()
         DateOfBirth = date_of_birth.julian_day_number();
         }
 
-     // TODO ?? WX PORT !! Icky kludge.
-     UseAverageOfAllFunds =
-         ("Average fund"  == FundChoiceType.str())
-         ? "Yes"
-         : "No"
-         ;
-     OverrideFundManagementFee =
-         ("Override fund" == FundChoiceType.str())
-         ? "Yes"
-         : "No"
-         ;
+    // TODO ?? WX PORT !! Icky kludge.
+    UseAverageOfAllFunds =
+        ("Average fund"  == FundChoiceType.str())
+        ? "Yes"
+        : "No"
+        ;
+    OverrideFundManagementFee =
+        ("Override fund" == FundChoiceType.str())
+        ? "Yes"
+        : "No"
+        ;
 }
 
 #if 0
