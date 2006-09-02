@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: GNUmakefile,v 1.70 2006-08-12 17:16:33 chicares Exp $
+# $Id: GNUmakefile,v 1.71 2006-09-02 22:40:21 chicares Exp $
 
 ################################################################################
 
@@ -436,8 +436,8 @@ supplemental_test_makefile = ../forbidden.make
 # MSYS !! The initial ';' in some $(SED) commands below works around a
 # problem caused by MSYS.
 
-.PHONY: check_conformity
-check_conformity: source_clean custom_tools
+.PHONY: check_concinnity
+check_concinnity: source_clean custom_tools
 	@-[ ! -f $(supplemental_test_makefile) ] \
 	  || $(MAKE) --no-print-directory --file=$(supplemental_test_makefile)
 	@$(TOUCH) --date=$(yyyy)0101 BOY
@@ -568,15 +568,15 @@ check_conformity: source_clean custom_tools
 
 .PHONY: cvs_ready
 cvs_ready: source_clean
-	-$(MAKE) check_conformity
-	-$(MAKE) check_idempotence
+	-$(MAKE) check_concinnity
+	-$(MAKE) check_physical_closure
 	-$(MAKE) all test
 	-$(MAKE) all test build_type=mpatrol
 	-$(MAKE) lmi_wx_shared$(EXEEXT) build_type=so_test USE_SO_ATTRIBUTES=1
 
 ################################################################################
 
-# Routine circadian test. Others might call this the 'nightly build'
+# Routine nychthemeral test. Others might call this a 'nightly build'
 # or 'daily smoke test'. What's important is not whether it's run in
 # the daytime or in the nighttime, but rather that it's run something
 # like once every twenty-four hours.
@@ -597,21 +597,21 @@ cvs_ready: source_clean
 CVS_RSH := ssh
 CVSROOT := :pserver:anonymous@cvs.sv.nongnu.org:/sources/lmi
 
-circadian_directory := $(TMPDIR)/lmi-circadian-$(yyyymmddhhmm)
-circadian_log := log-lmi-circadian-$(yyyymmddhhmm)
+nychthemeral_directory := $(TMPDIR)/lmi-nychthemeral-$(yyyymmddhhmm)
+nychthemeral_log := log-lmi-nychthemeral-$(yyyymmddhhmm)
 
 .PHONY: checkout
 checkout:
-	$(MKDIR) --parents $(circadian_directory); \
-	cd $(circadian_directory); \
+	$(MKDIR) --parents $(nychthemeral_directory); \
+	cd $(nychthemeral_directory); \
 	export CVS_RSH='$(CVS_RSH)'; \
 	export CVSROOT='$(CVSROOT)'; \
 	cvs -z3 co skeleton lmi; \
 
-.PHONY: circadian_test
-circadian_test: checkout
-	-$(MAKE) --directory=$(circadian_directory)/lmi cvs_ready \
-	  >../$(circadian_log)
+.PHONY: nychthemeral_test
+nychthemeral_test: checkout
+	-$(MAKE) --directory=$(nychthemeral_directory)/lmi cvs_ready \
+	  >../$(nychthemeral_log)
 
 ################################################################################
 

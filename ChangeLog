@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.436 2006-08-29 19:21:37 wboutin Exp $
+// $Id: ChangeLog,v 1.437 2006-09-02 22:40:21 chicares Exp $
 
 MAINTENANCE
 
@@ -7258,4 +7258,30 @@ Add kludge to work around a testing problem.
 
   mvc_controller.cpp
 Allow interchangeability between certain controls.
+
+20060902T2219Z <chicares@cox.net> [1201]
+
+  input_harmonization.cpp
+Fix indentation in 20060829T1919Z change.
+
+20060902T2227Z <chicares@cox.net> [1202]
+
+  calendar_date.cpp
+Note a desirable enhancement.
+
+20060902T2230Z <chicares@cox.net> [1201]
+
+  ihs_avmly.cpp
+Confirm 20060809T1310Z change.
+
+20060902T2232Z <chicares@cox.net> [1201]
+
+  expm1.h
+Improve documentation.
+
+20060902T2240Z <chicares@cox.net> [1199]
+
+  GNUmakefile
+  workhorse.make
+Import selected changes from skeleton trunk.
 
