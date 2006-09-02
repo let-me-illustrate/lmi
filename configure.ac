@@ -21,7 +21,7 @@ dnl snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
 dnl === Prologue ===
 
-AC_REVISION($Id: configure.ac,v 1.20 2006-09-02 12:05:06 zeitlin Exp $)dnl
+AC_REVISION($Id: configure.ac,v 1.21 2006-09-02 12:07:17 zeitlin Exp $)dnl
 
 AC_PREREQ(2.56)
 AC_INIT(LMI, 1.0.0, [chicares@cox.net])
@@ -494,8 +494,10 @@ fi
 dnl Boost library name should be guessed in a more sophisticated manner
 if test "x$USE_MINGW32" = "x1"; then
     boost_libfs="boost_filesystem-$lmi_boost_toolkit"
-else
+elif test "x$USE_CYGWIN" = "x1"; then
     boost_libfs="boost_filesystem-$lmi_boost_toolkit-mt-s"
+else
+    boost_libfs="boost_filesystem"
 fi
 
 save_LIBS=$LIBS
