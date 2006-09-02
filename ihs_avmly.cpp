@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avmly.cpp,v 1.52 2006-08-09 13:10:39 chicares Exp $
+// $Id: ihs_avmly.cpp,v 1.53 2006-09-02 22:30:24 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -1774,19 +1774,6 @@ void AccountValue::TxRecognizePaymentFor7702A
 
     // Policy issue date is always a modal payment date.
 
-    // TODO ?? Not correct yet--need to test pmt less deductible WD; and
-    // shouldn't we deduct the *gross* WD?
-    double amount_paid_7702A = a_pmt;
-
-    if(0 == Month)
-        {
-        // TODO ?? Not treated conditionally as for 1035, so it
-        // pretty much has to be wrong. WD can be either less
-        // than or greater than maximum necessary premium.
-//        amount_paid_7702A -= NetWD;
-        // Experimentally, this is now handled elsewhere.
-        }
-
     double kludge_account_value = std::max(TotalAccountValue(), HoneymoonValue);
     if(0 == Year && 0 == Month)
         {
@@ -1799,6 +1786,10 @@ void AccountValue::TxRecognizePaymentFor7702A
 //          + std::max(0.0, ExpRatReserve) // This would be added if it existed.
         );
     LMI_ASSERT(0.0 <= Dcv);
+
+    // TODO ?? Not correct yet--need to test pmt less deductible WD; and
+    // shouldn't we deduct the *gross* WD?
+    double amount_paid_7702A = a_pmt;
     Irc7702A_->UpdatePmt7702A
         (Dcv
         ,amount_paid_7702A
