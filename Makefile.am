@@ -20,7 +20,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: Makefile.am,v 1.20 2006-09-02 12:31:16 zeitlin Exp $
+# $Id: Makefile.am,v 1.21 2006-09-02 13:00:20 zeitlin Exp $
 
 
 SUBDIRS = third_party
@@ -233,8 +233,7 @@ cli_sources = \
 
 lmi_cli_SOURCES = \
     $(cli_sources)
-lmi_cli_CXXFLAGS = $(AM_CXXFLAGS)
-# $(CGICC_INCLUDE_FLAGS)
+lmi_cli_CXXFLAGS = $(AM_CXXFLAGS) $(XMLWRAPP_FLAGS)
 lmi_cli_LDADD = \
     liblmi.la \
     $(XMLWRAPP_LIBS) \
@@ -316,7 +315,7 @@ libantediluvian_la_SOURCES = \
     mortality_rates.cpp \
     solve.cpp \
     $(liblmi_common_sources)
-libantediluvian_la_CXXFLAGS = $(AM_CXXFLAGS)
+libantediluvian_la_CXXFLAGS = $(AM_CXXFLAGS) $(XMLWRAPP_FLAGS)
 libantediluvian_la_LDFLAGS = -no-undefined $(AM_LDFLAGS)
 libantediluvian_la_LIBADD = \
     $(BOOST_LIBS)
@@ -398,10 +397,7 @@ elapsed_time_LDADD = \
     libmain_auxiliary_common.la
 
 antediluvian_cgi_SOURCES = $(top_builddir)/dummy.cpp
-antediluvian_cgi_CXXFLAGS = \
-    $(AM_CXXFLAGS) \
-    $(BOOST_INCLUDE_FLAGS) \
-    $(XMLWRAPP_FLAGS)
+antediluvian_cgi_CXXFLAGS = $(AM_CXXFLAGS) $(BOOST_INCLUDE_FLAGS)
 antediluvian_cgi_LDADD = \
     libcgi.la \
     libantediluvian.la   \
@@ -410,7 +406,7 @@ antediluvian_cgi_LDADD = \
 
 antediluvian_cli_SOURCES = \
     $(cli_sources)
-antediluvian_cli_CXXFLAGS = $(AM_CXXFLAGS)
+antediluvian_cli_CXXFLAGS = $(AM_CXXFLAGS) $(XMLWRAPP_FLAGS)
 antediluvian_cli_LDADD = \
     libantediluvian.la  \
     $(BOOST_LIBS) \
@@ -431,7 +427,8 @@ product_files_SOURCES = \
     xenumtypes.cpp
 product_files_LDADD = \
     liblmi.la   \
-    $(BOOST_LIBS)
+    $(BOOST_LIBS) \
+    $(XMLWRAPP_LIBS)
 
 
 dummy.cpp:
