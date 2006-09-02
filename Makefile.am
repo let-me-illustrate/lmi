@@ -20,7 +20,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: Makefile.am,v 1.19 2006-09-02 12:29:16 zeitlin Exp $
+# $Id: Makefile.am,v 1.20 2006-09-02 12:31:16 zeitlin Exp $
 
 
 SUBDIRS = third_party
@@ -174,7 +174,6 @@ lmi_wx_SOURCES = \
     ce_product_name.cpp \
     census_document.cpp \
     census_view.cpp \
-    date_control.cpp \
     datum_base.cpp \
     datum_boolean.cpp \
     datum_string.cpp \
