@@ -20,7 +20,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: Makefile.am,v 1.21 2006-09-02 13:00:20 zeitlin Exp $
+# $Id: Makefile.am,v 1.22 2006-09-02 13:00:38 zeitlin Exp $
 
 
 SUBDIRS = third_party
@@ -808,7 +808,6 @@ noinst_HEADERS = \
     custom_io_0.hpp \
     data_directory.hpp \
     database.hpp \
-    date_control.hpp \
     datum_base.hpp \
     datum_boolean.hpp \
     datum_string.hpp \
