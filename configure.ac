@@ -21,7 +21,7 @@ dnl snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
 dnl === Prologue ===
 
-AC_REVISION($Id: configure.ac,v 1.19 2006-06-02 14:21:13 chicares Exp $)dnl
+AC_REVISION($Id: configure.ac,v 1.20 2006-09-02 12:05:06 zeitlin Exp $)dnl
 
 AC_PREREQ(2.56)
 AC_INIT(LMI, 1.0.0, [chicares@cox.net])
@@ -38,17 +38,17 @@ USE_LINUX=0
 USE_WINDOWS=0
 case "${host}" in
     *-*-linux* )
-        USE_LINUX=1;
+        USE_LINUX=1
         ;;
 
     *-*-cygwin* )
-        USE_CYGWIN=1;
-        USE_WINDOWS=1;
+        USE_CYGWIN=1
+        USE_WINDOWS=1
         ;;
 
     *-*-mingw32* )
-        USE_MINGW32=1;
-        USE_WINDOWS=1;
+        USE_MINGW32=1
+        USE_WINDOWS=1
         ;;
 esac
 
@@ -399,7 +399,7 @@ for lmi_wx_version in $lmi_wx_version_guess; do
                             AC_CHECK_FILE("$lmi_wx_libs/$lmi_wx_lib_prefix$lmi_wx_lib_needed$lmi_wx_lib_suffix", [],
                             [ok_wx_libs=""])
                             if test "x$ok_wx_libs" == "x"; then
-                                break;
+                                break
                             fi
                         done
                         if test "x$ok_wx_libs" != "x"; then
@@ -410,7 +410,7 @@ for lmi_wx_version in $lmi_wx_version_guess; do
                             echo "  - setup.h         $ok_wx_setup/wx/setup.h"
                             echo "  - headers         $ok_wx_headers"
                             echo "  - libraries       $ok_wx_libs"
-                            break;
+                            break
                         fi
                     done
                 fi
