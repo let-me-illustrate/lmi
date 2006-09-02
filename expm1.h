@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: expm1.h,v 1.1 2006-08-12 17:16:39 chicares Exp $
+// $Id: expm1.h,v 1.2 2006-09-02 22:32:03 chicares Exp $
 
 // The include guard has an 'lmi_' prefix to avoid conflict, because
 // 'expm1_h' is an obvious name that libraries might use.
@@ -28,6 +28,9 @@
 #define lmi_expm1_h
 
 #include "config.hpp"
+
+// This header provides no prototype for exmpm1() because that
+// should be the job of <cmath>, once C++ adopts C99 extensions.
 
 #endif // lmi_expm1_h
 
