@@ -20,7 +20,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: Makefile.am,v 1.18 2006-09-02 12:10:54 zeitlin Exp $
+# $Id: Makefile.am,v 1.19 2006-09-02 12:29:16 zeitlin Exp $
 
 
 SUBDIRS = third_party
@@ -399,7 +399,10 @@ elapsed_time_LDADD = \
     libmain_auxiliary_common.la
 
 antediluvian_cgi_SOURCES = $(top_builddir)/dummy.cpp
-antediluvian_cgi_CXXFLAGS = $(BOOST_INCLUDE_FLAGS) $(AM_CXXFLAGS)
+antediluvian_cgi_CXXFLAGS = \
+    $(AM_CXXFLAGS) \
+    $(BOOST_INCLUDE_FLAGS) \
+    $(XMLWRAPP_FLAGS)
 antediluvian_cgi_LDADD = \
     libcgi.la \
     libantediluvian.la   \
