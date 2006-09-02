@@ -20,7 +20,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: Makefile.am,v 1.17 2006-01-29 15:12:07 chicares Exp $
+# $Id: Makefile.am,v 1.18 2006-09-02 12:10:54 zeitlin Exp $
 
 
 SUBDIRS = third_party
@@ -350,7 +350,7 @@ liblmi_la_SOURCES = \
     stratified_algorithms.cpp \
     stratified_charges.cpp \
     $(liblmi_common_sources)
-liblmi_la_CXXFLAGS = $(AM_CXXFLAGS)
+liblmi_la_CXXFLAGS = $(AM_CXXFLAGS) $(XMLWRAPP_FLAGS)
 liblmi_la_LDFLAGS = -no-undefined $(AM_LDFLAGS)
 liblmi_la_LIBADD = \
     $(XMLWRAPP_LIBS) \
