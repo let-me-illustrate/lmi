@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xml_io.cpp,v 1.35 2006-08-12 17:16:39 chicares Exp $
+// $Id: ledger_xml_io.cpp,v 1.36 2006-09-03 00:09:15 chicares Exp $
 
 #include "ledger.hpp"
 
@@ -283,8 +283,8 @@ void Ledger::write(xml::node& x) const
     title_map["CSVNet_Guaranteed"               ] = "Guar Net Cash Surr Value";
     title_map["CV7702_Current"                  ] = "Curr 7702 Cash Value";
     title_map["CV7702_Guaranteed"               ] = "Guar 7702 Cash Value";
-    title_map["ClaimsPaid_Current"              ] = " _____________ Curr Claims Paid";
-    title_map["ClaimsPaid_Guaranteed"           ] = " _____________ Guar Claims Paid";
+    title_map["ClaimsPaid_Current"              ] = " _______ Curr ___Claims ___Paid";
+    title_map["ClaimsPaid_Guaranteed"           ] = " _______ Guar ___Claims ___Paid";
     title_map["CorpTaxBracket"                  ] = " _____________ Corp Tax Bracket";
     title_map["CorridorFactor"                  ] = " _____________ Corridor Factor";
     title_map["CurrMandE"                       ] = "Mortality and Expense";
@@ -325,8 +325,8 @@ void Ledger::write(xml::node& x) const
     title_map["IrrCsv_Guaranteed"               ] = " _____________ Guar IRR on CSV";
     title_map["IrrDb_Current"                   ] = " _____________ Curr IRR on DB";
     title_map["IrrDb_Guaranteed"                ] = " _____________ Guar IRR on DB";
-    title_map["LoanIntAccrued_Current"          ] = "Curr Loan Int Accrued";
-    title_map["LoanIntAccrued_Guaranteed"       ] = "Guar Loan Int Accrued";
+    title_map["LoanIntAccrued_Current"          ] = "____Curr Loan Int __Accrued";
+    title_map["LoanIntAccrued_Guaranteed"       ] = "____Guar Loan Int __Accrued";
     title_map["NewCashLoan"                     ] = " ________ Annual Loan";
     title_map["MlyGAIntRate_Current"            ] = "Curr Mon Gen Acct Int Rate";
     title_map["MlyGAIntRate_Guaranteed"         ] = "Guar Mon Gen Acct Int Rate";
@@ -408,42 +408,14 @@ void Ledger::write(xml::node& x) const
     title_map["TotalLoanBalance_Guaranteed"     ] = "Guar Tot Loan Balance";
 
     // TODO ?? Titles ought to be read from an external file that
-    // permits flexible customization. Until that's done, they can be
-    // overridden here. It seems confusing to substitute "cash value"
-    // for "account value" in the title for 'AVRelOnDeath_Current',
-    // which is an account value rather than a surrender value; that
-    // was simply the title prescribed by one person in one sales
-    // department for one particular use.
-    //
-    // As long as column names are hardcoded, each has a unique value.
-    // End users may have saved cases with supplemental reports that
-    // use columns whose titles are overridden here; they may be
-    // surprised to see the titles change. Overriding a hardcoded
-    // value is an expedient that can work only once--for example,
-    // the title of the 'GrossPmt' column is changed to "Premium
-    // Outlay" here already, so "Cash Payment" can't be used for a
-    // different hardcoded report later.
-    //
-    // These changes also introduce inconsistencies: for example,
-    // this consistent pair
-//    title_map["ClaimsPaid_Current"              ] = " _____________ Curr Claims Paid";
-//    title_map["ClaimsPaid_Guaranteed"           ] = " _____________ Guar Claims Paid";
-    // becomes, inconsistently:
-//    title_map["ClaimsPaid_Current"              ] = "Death Proceeds Paid";
-//    title_map["ClaimsPaid_Guaranteed"           ] = " _____________ Guar Claims Paid";
-    //
-    // Furthermore, a compliance department might very well deem that
-    // 'AcctVal_Current' must be called "Cash Value" for one policy
-    // form, and "Account Value" for another, in order to match the
-    // terms used in the contract. Therefore, these titles probably
+    // permits flexible customization. Compliance might require that
+    // 'AcctVal_Current' be called "Cash Value" for one policy form,
+    // and "Account Value" for another, in order to match the terms
+    // used in the contract exactly. Therefore, these titles probably
     // belong in the product database, which permits variation by
     // product--though it does not accommodate strings as this is
-    // written in 2006-07.
-
-    title_map["AVRelOnDeath_Current"            ] = "Cash Value Released __on Death";
-    title_map["ClaimsPaid_Current"              ] = "Death Proceeds Paid";
-    title_map["GrossPmt"                        ] = " _____________ Premium Outlay";
-    title_map["LoanIntAccrued_Current"          ] = "Annual Loan Interest";
+    // written in 2006-07. DATABASE !! So consider adding them there
+    // when the database is revamped.
 
     {
 #if defined SHOW_MISSING_FORMATS
@@ -542,8 +514,6 @@ void Ledger::write(xml::node& x) const
     format_map["Has1035ExchCharge"                 ] = f1;
     format_map["HasADD"                            ] = f1;
     format_map["HasChildRider"                     ] = f1;
-    format_map["HasWD"                             ] = f1;
-    format_map["HasLoan"                           ] = f1;
     format_map["HasHoneymoon"                      ] = f1;
     format_map["HasSpouseRider"                    ] = f1;
     format_map["HasTerm"                           ] = f1;
@@ -779,36 +749,6 @@ void Ledger::write(xml::node& x) const
     // a place as any to make them.
 
     LedgerVariant const& Curr_ = GetCurrFull();
-
-    // ET !! Easier to write as
-    //   std::vector<double> NetOutlay =
-    //     ledger_invariant_->GrossPmt - ledger_invariant_->NetWD - ledger_invariant_->NewCashLoan - Curr_.ClaimsPaid;
-    std::vector<double> NetOutlay(ledger_invariant_->GrossPmt);
-    std::transform
-        (NetOutlay.begin()
-        ,NetOutlay.end()
-        ,ledger_invariant_->NetWD.begin()
-        ,NetOutlay.begin()
-        ,std::minus<double>()
-        );
-    std::transform
-        (NetOutlay.begin()
-        ,NetOutlay.end()
-        ,ledger_invariant_->NewCashLoan.begin()
-        ,NetOutlay.begin()
-        ,std::minus<double>()
-        );
-    std::transform
-        (NetOutlay.begin()
-        ,NetOutlay.end()
-        ,Curr_.ClaimsPaid.begin()
-        ,NetOutlay.begin()
-        ,std::minus<double>()
-        );
-
-    vectors   ["NetOutlay"] = &NetOutlay;
-    title_map ["NetOutlay"] = "_____________ __Net Outlay";
-    format_map["NetOutlay"] = f1;
 
     // ET !! Easier to write as
     //   std::vector<double> NetDeathBenefit =
