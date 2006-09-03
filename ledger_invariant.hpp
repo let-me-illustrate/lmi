@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_invariant.hpp,v 1.10 2006-07-25 19:17:02 chicares Exp $
+// $Id: ledger_invariant.hpp,v 1.11 2006-09-03 01:09:35 chicares Exp $
 
 #ifndef ledger_invariant_hpp
 #define ledger_invariant_hpp
@@ -185,8 +185,6 @@ class LMI_SO LedgerInvariant
     double          HasChildRider;
     double          HasSpouseRider;
     double          SpouseIssueAge;
-    double          HasWD;
-    double          HasLoan;
     double          HasHoneymoon;
     double          AllowDbo3;
     double          IsInforce;
