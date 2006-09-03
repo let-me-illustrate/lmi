@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_variant.hpp,v 1.10 2006-07-25 13:08:22 chicares Exp $
+// $Id: ledger_variant.hpp,v 1.11 2006-09-03 22:49:09 chicares Exp $
 
 #ifndef ledger_variant_hpp
 #define ledger_variant_hpp
@@ -108,6 +108,7 @@ public:
     std::vector<double> SpecAmtLoad;
     std::vector<double> SepAcctLoad;
     std::vector<double> ClaimsPaid;
+    std::vector<double> DeathProceedsPaid;
     std::vector<double> NetClaims;
     std::vector<double> NetPmt;
 
