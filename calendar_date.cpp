@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: calendar_date.cpp,v 1.11 2006-09-02 22:27:12 chicares Exp $
+// $Id: calendar_date.cpp,v 1.12 2006-09-03 22:47:14 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -415,7 +415,7 @@ int calculate_age
             as_of_date.julian_day_number()
         -   last_birthday.julian_day_number()
         ;
-// TODO ?? DATABASE !! The way ties are resolves should be configurable.
+// TODO ?? DATABASE !! The way ties are resolved should be configurable.
     if(use_age_nearest_birthday && half_a_year <= diff)
         {
         return 1 + age_last_birthday;
