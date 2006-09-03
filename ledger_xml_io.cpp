@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xml_io.cpp,v 1.36 2006-09-03 00:09:15 chicares Exp $
+// $Id: ledger_xml_io.cpp,v 1.37 2006-09-03 22:49:09 chicares Exp $
 
 #include "ledger.hpp"
 
@@ -293,6 +293,8 @@ void Ledger::write(xml::node& x) const
     title_map["DacTaxLoad_Guaranteed"           ] = " _____________ Guar DAC Tax Load";
     title_map["DacTaxRsv_Current"               ] = "Curr DAC Tax Reserve";
     title_map["DacTaxRsv_Guaranteed"            ] = "Guar DAC Tax Reserve";
+    title_map["DeathProceedsPaid_Current"       ] = "Curr Death Proceeds Paid";
+    title_map["DeathProceedsPaid_Guaranteed"    ] = "Guar Death Proceeds Paid";
     title_map["EOYDeathBft_Current"             ] = "Curr EOY Death Benefit";
     title_map["EOYDeathBft_Guaranteed"          ] = "Guar EOY Death Benefit";
     title_map["EeGrossPmt"                      ] = "______ EE Gross Payment";
@@ -625,6 +627,7 @@ void Ledger::write(xml::node& x) const
     format_map["CV7702"                            ] = f1;
     format_map["DacTaxLoad"                        ] = f1;
     format_map["DacTaxRsv"                         ] = f1;
+    format_map["DeathProceedsPaid"                 ] = f1;
     format_map["EeGrossPmt"                        ] = f1;
 //    format_map["EeMode"                            ] = f1; // Not numeric.
     format_map["EePmt"                             ] = f1;
