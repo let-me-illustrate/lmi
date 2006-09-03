@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.438 2006-09-03 01:09:35 chicares Exp $
+// $Id: ChangeLog,v 1.439 2006-09-03 13:33:14 chicares Exp $
 
 MAINTENANCE
 
@@ -7295,4 +7295,13 @@ Revert infelicitous changes.
   ledger_invariant.cpp
   ledger_invariant.hpp
 Revert infelicitous changes.
+
+20060903T1333Z <chicares@cox.net> [1199]
+
+  mc_enum_types.cpp
+  mc_enum_types.hpp
+  mc_enum_types.xpp
+Offer more supplemental-report columns. Not all are yet implemented.
+However, it is of interest to offer unimplemented columns temporarily
+in order to ensure that they are ignored gracefully.
 
