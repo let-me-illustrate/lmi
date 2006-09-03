@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xml_io.cpp,v 1.39 2006-09-03 23:10:18 chicares Exp $
+// $Id: ledger_xml_io.cpp,v 1.40 2006-09-03 23:43:20 chicares Exp $
 
 #include "ledger.hpp"
 
@@ -276,24 +276,18 @@ void Ledger::write(xml::node& x) const
     title_map["EOYDeathBft_Guaranteed"          ] = "Guar EOY Death Benefit";
     title_map["EeGrossPmt"                      ] = "______ EE Gross Payment";
     title_map["EeMode"                          ] = "EE Payment Mode";
-// TODO ?? This is incorrect.
-// STEVEN This can't be a mode. I don't know how it differs from 'EeGrossPmt' above.
+// TODO ?? This can't be a mode. I don't know how it differs from 'EeGrossPmt' above.
     title_map["EePmt"                           ] = "EE Payment Mode";
     title_map["ErGrossPmt"                      ] = "______ ER Gross Payment";
     title_map["ErMode"                          ] = "ER Payment Mode";
-// TODO ?? This is incorrect.
-// STEVEN This can't be a mode. I don't know how it differs from 'ErGrossPmt' above.
+// TODO ?? This can't be a mode. I don't know how it differs from 'ErGrossPmt' above.
     title_map["ErPmt"                           ] = "ER Payment Mode";
     title_map["ExcessLoan_Current"              ] = " _ Curr Excess Loan";
     title_map["ExcessLoan_Guaranteed"           ] = "Guar Excess Loan";
     title_map["ExperienceReserve_Current"       ] = " _____________ Mortality Reserve";
     title_map["ExpenseCharges_Current"          ] = "Curr Expense Charge";
     title_map["ExpenseCharges_Guaranteed"       ] = "Guar Expense Charge";
-// STEVEN Can you make this one word?
-//   s/Force Out/Forceout/
-// which is the conventional spelling of the noun.
-// ('force out' is the conventional spelling of the verb phrase.)
-    title_map["GptForceout"                     ] = " _____________ GPT __Force Out";
+    title_map["GptForceout"                     ] = "Forceout";
     title_map["GrossIntCredited_Current"        ] = "Curr Gross Int Credited";
     title_map["GrossIntCredited_Guaranteed"     ] = "Guar Gross Int Credited";
     title_map["GrossPmt"                        ] = " _____________ Gross Payment";
@@ -316,34 +310,7 @@ void Ledger::write(xml::node& x) const
     title_map["MlySAIntRate_Current"            ] = "Curr Mon Sep Acct Int Rate";
     title_map["MlySAIntRate_Guaranteed"         ] = "Guar Mon Sep Acct Int Rate";
     title_map["MonthlyFlatExtra"                ] = " _____________ Monthly Flat Extra";
-// STEVEN s/Force Out/Forceout/ as above, and can you distinguish the two?
-// The one above is a GPT forceout, and I consider 'Forceout' clear enough
-// for that.
-//
-// This one's different. In the high-net-worth market, often the availability
-// of reinsurance constrains the NAAR we'll permit. But neither NAAR nor DB
-// is a free variable: only specamt and payments are, so we constrain those.
-// The specamt constraint is trivial. Payments are limited in two ways: we
-// won't accept a payment that results immediately in a greater NAAR than our
-// internal retention and reinsurance combined; and if NAAR ever increases
-// past that limit as a downstream consequence of the corridor, say, then
-// we'll...uh...push money out of the policy to avoid that.
-//
-// When you're desigining such a feature, you're tempted to call it a
-// "forceout" because it's sort of like a real forceout--a GPT forceout.
-// Give in to that temptation, forgetting what Confucius said about the
-// rectification of names, and you cause confusion later on. I don't much
-// like "NAAR forceout" because it's awfully cryptic; but "forced withdrawal"
-// is arguably even worse, and I can't think of any better name right now.
-// But somehow the present concept must be distinguished.
-//
-// BTW, this feature has never been implemented, and the column would
-// presumably always be zero, though I'd be prepared for surprise.
-// If sales ever take off in this market, we'll need to add this quickly.
-
-// Greg--I conclude that we should comment this line out for now, since it is not
-//  used, but be prepared to add it in the future
-//    title_map["NaarForceout"                    ] = "Net Amt At Risk __Force Out";
+//    title_map["NaarForceout"                    ] = "Forced Withdrawal due to NAAR Limit";
     title_map["NetCOICharge_Current"            ] = " _____________ Curr Net COI Charge";
     title_map["NetCOICharge_Guaranteed"         ] = " _____________ Guar Net COI Charge";
     title_map["NetClaims_Current"               ] = " _____________ Curr Net Claims";
@@ -364,12 +331,7 @@ void Ledger::write(xml::node& x) const
     title_map["PrefLoanBalance_Guaranteed"      ] = "Guar Preferred Loan Bal";
     title_map["PremTaxLoad_Current"             ] = "Curr Premium Tax Load";
     title_map["PremTaxLoad_Guaranteed"          ] = "Guar Premium Tax Load";
-// STEVEN Implemented only for two products, and defectively at that.
-// Greg-- 1) Keep in and limit use in input interface? (ideal)
-//        2) Keep in and add for other products?
-//        3) Keep in with obvious warts? (preferred given time constraints)
-//        4) Comment out for now until a more comprehensive implementation?
-// TODO ?? It's defective, so it's excluded for now.
+// TODO ?? Excluded because it's defectively implemented:
 //    title_map["ProducerCompensation"            ] = " _____________ Producer Comp";
     title_map["RefundableSalesLoad"             ] = " _____________ Refundable Sales Load";
     title_map["Salary"                          ] = " _____________  _____________ Salary";
@@ -699,8 +661,8 @@ void Ledger::write(xml::node& x) const
         AttainedAge[j] = 1 + j + issue_age;
         }
 
-// STEVEN What about the composite? I think you want to avoid using
-// an attained-age column there, because it'd be meaningless.
+// TODO ?? An attained-age column is meaningless in a composite. So
+// are several others--notably those affected by partial mortaility.
     vectors["AttainedAge"] = &AttainedAge;
     vectors["PolicyYear" ] = &PolicyYear ;
 
@@ -787,7 +749,7 @@ void Ledger::write(xml::node& x) const
     std::string ScaleUnit = ledger_invariant_->ScaleUnit();
     strings["ScaleUnit"] = &ScaleUnit;
 
-    // STEVEN Presumably you're translating this to a string in xsl;
+    // TODO ?? Presumably this is translated to a string in xsl;
     // why not use the first element of <DbOpt>, which is already
     // so formatted? Wouldn't that rule out any possibility of
     // inconsistency between xsl's and the program's translations?
@@ -888,10 +850,9 @@ void Ledger::write(xml::node& x) const
     stringvectors["ErMode"] = enum_vector_to_string_vector(ledger_invariant_->ErMode);
     stringvectors["DBOpt"]  = enum_vector_to_string_vector(ledger_invariant_->DBOpt );
 
-// STEVEN Here I copied some stuff from the ledger class files: the
+// TODO ?? Here I copied some stuff from the ledger class files: the
 // parts that speak of odd members that aren't in those class's
-// maps. Take a look--it's a crosscheck against the systems analysis
-// you've done.
+// maps. This may reveal incomplete or incorrect systems analysis.
 
 // Invariant
 //
@@ -1047,7 +1008,7 @@ void Ledger::write(xml::node& x) const
 
 /*
 <supplementalreport>
-    <title>Steve's Report</title>
+    <title>Some Report</title>
     <columns>
       <name>NetDeathBft_Current</name>
       <title>Curr Net Death Benefit</title>
