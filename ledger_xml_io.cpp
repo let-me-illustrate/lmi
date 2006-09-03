@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xml_io.cpp,v 1.38 2006-09-03 23:07:04 chicares Exp $
+// $Id: ledger_xml_io.cpp,v 1.39 2006-09-03 23:10:18 chicares Exp $
 
 #include "ledger.hpp"
 
@@ -122,29 +122,6 @@ std::vector<std::string> format(std::vector<double> dv, std::pair<int,bool> f)
         {
         sv.push_back(format(dv[j], f));
         }
-/* Broken:
-    std::vector<std::string> sv;
-    std::stringstream interpreter;
-    std::locale loc;
-    std::locale new_loc(loc, new comma_punct);
-    interpreter.imbue(new_loc);
-    interpreter.setf(std::ios_base::fixed, std::ios_base::floatfield);
-    interpreter.precision(f.first);
-    for(unsigned int j = 0; j < dv.size(); ++j)
-        {
-        std::string s;
-        if(f.second) dv[j] *= 100;
-        interpreter << dv[j];
-        interpreter >> s;
-        if(f.second) s += '%';
-        if(!interpreter.eof())
-            {
-            fatal_error << "Format error" << LMI_FLUSH;
-            }
-        interpreter.str("");
-        sv.push_back(s);
-        }
-*/
     return sv;
 }
 
@@ -586,16 +563,6 @@ void Ledger::write(xml::node& x) const
     format_map["IrrDb_Guaranteed"                  ] = f4;
     format_map["IrrCsv_Current"                    ] = f4;
     format_map["IrrDb_Current"                     ] = f4;
-
-    // Duplicative clutter.
-    format_map["IrrCsv_GuaranteedZero" ] = f4;
-    format_map["IrrDb_GuaranteedZero"  ] = f4;
-    format_map["IrrCsv_CurrentZero"    ] = f4;
-    format_map["IrrDb_CurrentZero"     ] = f4;
-    format_map["IrrCsv_Guaranteed"     ] = f4;
-    format_map["IrrDb_Guaranteed"      ] = f4;
-    format_map["IrrCsv_Current"        ] = f4;
-    format_map["IrrDb_Current"         ] = f4;
 
     format_map["MlyGAIntRate"                      ] = f4;
     format_map["MlyHoneymoonValueRate"             ] = f4;
