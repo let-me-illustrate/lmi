@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_invariant.cpp,v 1.26 2006-07-25 19:17:02 chicares Exp $
+// $Id: ledger_invariant.cpp,v 1.27 2006-09-03 01:09:35 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -169,8 +169,6 @@ void LedgerInvariant::Alloc(int len)
     OtherScalars    ["HasChildRider"         ] = &HasChildRider          ;
     OtherScalars    ["HasSpouseRider"        ] = &HasSpouseRider         ;
     OtherScalars    ["SpouseIssueAge"        ] = &SpouseIssueAge         ;
-    OtherScalars    ["HasWD"                 ] = &HasWD                  ;
-    OtherScalars    ["HasLoan"               ] = &HasLoan                ;
     OtherScalars    ["HasHoneymoon"          ] = &HasHoneymoon           ;
     OtherScalars    ["AllowDbo3"             ] = &AllowDbo3              ;
     OtherScalars    ["StatePremTaxLoad"      ] = &StatePremTaxLoad       ;
@@ -519,21 +517,6 @@ void LedgerInvariant::Init(BasicValues* b)
     HasSpouseRider          = Input_.HasSpouseRider;
     SpouseIssueAge          = Input_.SpouseIssueAge;
 
-    HasWD = !each_equal
-        (b->Outlay_->withdrawals().begin()
-        ,b->Outlay_->withdrawals().end()
-        ,0.0
-        );
-    // If withdrawal history becomes available for inforce cases, then
-    // it should be reflected here, as is done for loans below.
-
-    HasLoan = !each_equal
-        (b->Outlay_->new_cash_loans().begin()
-        ,b->Outlay_->new_cash_loans().end()
-        ,0.0
-        );
-    HasLoan = HasLoan || Input_.InforceRegLnBal || Input_.InforcePrfLnBal;
-
     HasHoneymoon            = Input_.HasHoneymoon;
     AllowDbo3               = b->Database_->Query(DB_AllowDBO3);
     PostHoneymoonSpread     = Input_.PostHoneymoonSpread;
@@ -853,8 +836,6 @@ LedgerInvariant& LedgerInvariant::PlusEq(LedgerInvariant const& a_Addend)
 // TODO ?? For some ages, we use min; for others, max; how about this one?
 //    SpouseIssueAge     =
 
-    HasWD        = HasWD        || a_Addend.HasWD        ;
-    HasLoan      = HasLoan      || a_Addend.HasLoan      ;
     HasHoneymoon = HasHoneymoon || a_Addend.HasHoneymoon ;
     AllowDbo3    = AllowDbo3    || a_Addend.AllowDbo3    ;
 

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.437 2006-09-02 22:40:21 chicares Exp $
+// $Id: ChangeLog,v 1.438 2006-09-03 01:09:35 chicares Exp $
 
 MAINTENANCE
 
@@ -7284,4 +7284,15 @@ Improve documentation.
   GNUmakefile
   workhorse.make
 Import selected changes from skeleton trunk.
+
+20060903T0009Z <chicares@cox.net> [1199]
+
+  ledger_xml_io.cpp
+Revert infelicitous changes.
+
+20060903T0109Z <chicares@cox.net> [1199]
+
+  ledger_invariant.cpp
+  ledger_invariant.hpp
+Revert infelicitous changes.
 
