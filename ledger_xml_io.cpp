@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xml_io.cpp,v 1.37 2006-09-03 22:49:09 chicares Exp $
+// $Id: ledger_xml_io.cpp,v 1.38 2006-09-03 23:07:04 chicares Exp $
 
 #include "ledger.hpp"
 
@@ -587,6 +587,16 @@ void Ledger::write(xml::node& x) const
     format_map["IrrCsv_Current"                    ] = f4;
     format_map["IrrDb_Current"                     ] = f4;
 
+    // Duplicative clutter.
+    format_map["IrrCsv_GuaranteedZero" ] = f4;
+    format_map["IrrDb_GuaranteedZero"  ] = f4;
+    format_map["IrrCsv_CurrentZero"    ] = f4;
+    format_map["IrrDb_CurrentZero"     ] = f4;
+    format_map["IrrCsv_Guaranteed"     ] = f4;
+    format_map["IrrDb_Guaranteed"      ] = f4;
+    format_map["IrrCsv_Current"        ] = f4;
+    format_map["IrrDb_Current"         ] = f4;
+
     format_map["MlyGAIntRate"                      ] = f4;
     format_map["MlyHoneymoonValueRate"             ] = f4;
     format_map["MlyPostHoneymoonRate"              ] = f4;
@@ -670,15 +680,6 @@ void Ledger::write(xml::node& x) const
     format_map["TermSpecAmt"                       ] = f1;
     format_map["TgtPrem"                           ] = f1;
     format_map["TotalLoanBalance"                  ] = f1;
-
-    format_map["IrrCsv_GuaranteedZero" ] = f4;
-    format_map["IrrDb_GuaranteedZero"  ] = f4;
-    format_map["IrrCsv_CurrentZero"    ] = f4;
-    format_map["IrrDb_CurrentZero"     ] = f4;
-    format_map["IrrCsv_Guaranteed"     ] = f4;
-    format_map["IrrDb_Guaranteed"      ] = f4;
-    format_map["IrrCsv_Current"        ] = f4;
-    format_map["IrrDb_Current"         ] = f4;
 
     // This is a little tricky. We have some stuff that
     // isn't in the maps inside the ledger classes. We're going to
