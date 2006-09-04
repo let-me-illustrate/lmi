@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xml_io.cpp,v 1.41 2006-09-04 00:01:32 chicares Exp $
+// $Id: ledger_xml_io.cpp,v 1.42 2006-09-04 00:06:18 chicares Exp $
 
 #include "ledger.hpp"
 
@@ -554,6 +554,8 @@ void Ledger::write(xml::node& x) const
 // >
     format_map["AddonMonthlyFee"                   ] = f2;
     format_map["MonthlyFlatExtra"                  ] = f2;
+// TODO ?? This precision is inadequate; is every other format OK?
+    format_map["InforceLives"                      ] = f2;
     format_map["KFactor"                           ] = f2;
 // >
 // F1: zero decimals, commas
@@ -590,8 +592,6 @@ void Ledger::write(xml::node& x) const
     format_map["GptForceout"                       ] = f1;
     format_map["GrossIntCredited"                  ] = f1;
     format_map["GrossPmt"                          ] = f1;
-// TODO ?? This precision is inadequate; are all the others OK?
-    format_map["InforceLives"                      ] = f1;
     format_map["Loads"                             ] = f1;
     format_map["NewCashLoan"                       ] = f1;
     format_map["LoanInt"                           ] = f1;
