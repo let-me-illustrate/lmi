@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_text_formats.cpp,v 1.21 2006-01-29 13:52:00 chicares Exp $
+// $Id: ledger_text_formats.cpp,v 1.22 2006-09-04 00:45:44 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -49,6 +49,10 @@
 #include <locale>
 #include <sstream>
 #include <vector>
+
+// TODO ?? Work around this problem
+//   http://sv.nongnu.org/bugs/index.php?func=detailitem&item_id=13856
+// here, as was done in 'ledger_xml_io.cpp' revision 1.45 .
 
 std::string FormatSelectedValuesAsHtml(Ledger const& ledger_values)
 {
