@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xml_io.cpp,v 1.40 2006-09-03 23:43:20 chicares Exp $
+// $Id: ledger_xml_io.cpp,v 1.41 2006-09-04 00:01:32 chicares Exp $
 
 #include "ledger.hpp"
 
@@ -233,6 +233,12 @@ void Ledger::write(xml::node& x) const
 
 //  Here are the columns to be listed in the user interface
 //  as well as their corresponding titles.
+
+    // Current and guaranteed variants are generally given for columns
+    // that vary by basis. Some offer only a current variant because
+    // they are defined only on a current basis--experience-rating
+    // columns, e.g.
+
     title_map["AVRelOnDeath_Current"            ] = "Acct Val Rel on Death";
     title_map["SepAcctLoad_Current"             ] = "Curr Sep Acct Load";
     title_map["SepAcctLoad_Guaranteed"          ] = "Guar Sep Acct Load";
@@ -298,6 +304,7 @@ void Ledger::write(xml::node& x) const
     title_map["IrrCsv_Guaranteed"               ] = " _____________ Guar IRR on CSV";
     title_map["IrrDb_Current"                   ] = " _____________ Curr IRR on DB";
     title_map["IrrDb_Guaranteed"                ] = " _____________ Guar IRR on DB";
+    title_map["KFactor_Current"                 ] = "Experience Rating K Factor";
     title_map["LoanIntAccrued_Current"          ] = "____Curr Loan Int __Accrued";
     title_map["LoanIntAccrued_Guaranteed"       ] = "____Guar Loan Int __Accrued";
     title_map["NewCashLoan"                     ] = " ________ Annual Loan";
@@ -333,6 +340,7 @@ void Ledger::write(xml::node& x) const
     title_map["PremTaxLoad_Guaranteed"          ] = "Guar Premium Tax Load";
 // TODO ?? Excluded because it's defectively implemented:
 //    title_map["ProducerCompensation"            ] = " _____________ Producer Comp";
+    title_map["ProjectedCoiCharge_Current"      ] = "Experience Rating Projected COI Charge";
     title_map["RefundableSalesLoad"             ] = " _____________ Refundable Sales Load";
     title_map["Salary"                          ] = " _____________  _____________ Salary";
     title_map["SpecAmt"                         ] = " _____________ Specified Amount";
@@ -546,6 +554,7 @@ void Ledger::write(xml::node& x) const
 // >
     format_map["AddonMonthlyFee"                   ] = f2;
     format_map["MonthlyFlatExtra"                  ] = f2;
+    format_map["KFactor"                           ] = f2;
 // >
 // F1: zero decimals, commas
 // > Format as a number with thousand separators and no decimal places (#,###,##0)
@@ -599,6 +608,7 @@ void Ledger::write(xml::node& x) const
     format_map["PrefLoanBalance"                   ] = f1;
     format_map["PremTaxLoad"                       ] = f1;
     format_map["ProducerCompensation"              ] = f1;
+    format_map["ProjectedCoiCharge"                ] = f1;
     format_map["RefundableSalesLoad"               ] = f1;
     format_map["Salary"                            ] = f1;
     format_map["SpecAmt"                           ] = f1;
