@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xml_io.cpp,v 1.45 2006-09-04 00:45:44 chicares Exp $
+// $Id: ledger_xml_io.cpp,v 1.46 2006-09-04 13:15:14 chicares Exp $
 
 #include "ledger.hpp"
 
@@ -339,8 +339,6 @@ void Ledger::write(xml::node& x) const
     title_map["NetCOICharge_Guaranteed"         ] = " _____________ Guar Net COI Charge";
     title_map["NetClaims_Current"               ] = " _____________ Curr Net Claims";
     title_map["NetClaims_Guaranteed"            ] = " _____________ Guar Net Claims";
-    title_map["NetDeathBft_Current"             ] = "Curr Net Death Benefit";
-    title_map["NetDeathBft_Guaranteed"          ] = "Guar Net Death Benefit";
     title_map["NetIntCredited_Current"          ] = " _____________ Curr Net Int Credited";
     title_map["NetIntCredited_Guaranteed"       ] = " _____________ Guar Net Int Credited";
     title_map["NetPmt_Current"                  ] = " _____________ Curr Net Payment";
@@ -617,7 +615,6 @@ void Ledger::write(xml::node& x) const
     format_map["NaarForceout"                      ] = f1;
     format_map["NetClaims"                         ] = f1;
     format_map["NetCOICharge"                      ] = f1;
-    format_map["NetDeathBft"                       ] = f1;
     format_map["NetIntCredited"                    ] = f1;
     format_map["NetPmt"                            ] = f1;
     format_map["NetWD"                             ] = f1;
@@ -1039,8 +1036,8 @@ void Ledger::write(xml::node& x) const
 <supplementalreport>
     <title>Some Report</title>
     <columns>
-      <name>NetDeathBft_Current</name>
-      <title>Curr Net Death Benefit</title>
+      <name>TotalLoanBalance_Current</name>
+      <title>Curr Tot Loan Balance</title>
     </columns>
     <columns>
       <name>etc...</name>
