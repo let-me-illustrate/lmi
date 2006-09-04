@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_variant.hpp,v 1.11 2006-09-03 22:49:09 chicares Exp $
+// $Id: ledger_variant.hpp,v 1.12 2006-09-04 13:15:14 chicares Exp $
 
 #ifndef ledger_variant_hpp
 #define ledger_variant_hpp
@@ -95,7 +95,7 @@ public:
 // values could be calculated dynamically instead of stored.
 
     // BOY vectors.
-    std::vector<double> COICharge;      // TODO ?? Never used?
+    std::vector<double> COICharge;
     std::vector<double> ExpenseCharges;
     std::vector<double> AVRelOnDeath;
     std::vector<double> NetIntCredited;
@@ -122,7 +122,6 @@ public:
     std::vector<double> PrefLoanBalance; // Not used yet.
     std::vector<double> TotalLoanBalance;
     std::vector<double> ExcessLoan;
-    std::vector<double> NetDeathBft;     // TODO ?? Never used?
     std::vector<double> AvgDeathBft;     // TODO ?? Never used?
     std::vector<double> SurrChg;         // TODO ?? Never used?
     std::vector<double> TermPurchased;
