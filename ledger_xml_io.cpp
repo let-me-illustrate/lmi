@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xml_io.cpp,v 1.43 2006-09-04 00:15:04 chicares Exp $
+// $Id: ledger_xml_io.cpp,v 1.44 2006-09-04 00:20:28 chicares Exp $
 
 #include "ledger.hpp"
 
@@ -162,13 +162,11 @@ typedef std::map<std::string, std::string> title_map_t;
 // > Format as a number with thousand separators and no decimal places (#,###,##0)
 // >
 // > AcctVal_*
-// > SepAcctLoad_*
 // > AccumulatedPremium
 //
 // I translated that into
 //
 //    format_map["AcctVal"                           ] = f1;
-//    format_map["SepAcctLoad"                       ] = f1;
 //    format_map["AccumulatedPremium"                ] = f1;
 //
 // where 'f1' is one of several formats I abstracted from your specs
@@ -240,8 +238,6 @@ void Ledger::write(xml::node& x) const
     // columns, e.g.
 
     title_map["AVRelOnDeath_Current"            ] = "Acct Val Rel on Death";
-    title_map["SepAcctLoad_Current"             ] = "Curr Sep Acct Load";
-    title_map["SepAcctLoad_Guaranteed"          ] = "Guar Sep Acct Load";
     title_map["AcctVal_Current"                 ] = "Curr Account Value";
     title_map["AcctVal_Guaranteed"              ] = "Guar Account Value";
     title_map["AddonCompOnAssets"               ] = "Additional Comp on Assets";
@@ -343,6 +339,8 @@ void Ledger::write(xml::node& x) const
     title_map["ProjectedCoiCharge_Current"      ] = "Experience Rating Projected COI Charge";
     title_map["RefundableSalesLoad"             ] = " _____________ Refundable Sales Load";
     title_map["Salary"                          ] = " _____________  _____________ Salary";
+    title_map["SepAcctLoad_Current"             ] = "Curr Sep Acct Load";
+    title_map["SepAcctLoad_Guaranteed"          ] = "Guar Sep Acct Load";
     title_map["SpecAmt"                         ] = " _____________ Specified Amount";
     title_map["SpecAmtLoad_Current"             ] = " _____________ Curr Spec Amt Load";
     title_map["SpecAmtLoad_Guaranteed"          ] = " _____________ Guar Spec Amt Load";
@@ -562,7 +560,6 @@ void Ledger::write(xml::node& x) const
 // > Format as a number with thousand separators and no decimal places (#,###,##0)
 // >
     format_map["AcctVal"                           ] = f1;
-    format_map["SepAcctLoad"                       ] = f1;
     format_map["AccumulatedPremium"                ] = f1;
     format_map["AddonCompOnAssets"                 ] = f1;
     format_map["AddonCompOnPremium"                ] = f1;
@@ -611,6 +608,7 @@ void Ledger::write(xml::node& x) const
     format_map["ProjectedCoiCharge"                ] = f1;
     format_map["RefundableSalesLoad"               ] = f1;
     format_map["Salary"                            ] = f1;
+    format_map["SepAcctLoad"                       ] = f1;
     format_map["SpecAmt"                           ] = f1;
     format_map["SpecAmtLoad"                       ] = f1;
     format_map["SpouseRiderAmount"                 ] = f1;
