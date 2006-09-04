@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.439 2006-09-03 13:33:14 chicares Exp $
+// $Id: ChangeLog,v 1.440 2006-09-04 00:20:28 chicares Exp $
 
 MAINTENANCE
 
@@ -7304,4 +7304,56 @@ Revert infelicitous changes.
 Offer more supplemental-report columns. Not all are yet implemented.
 However, it is of interest to offer unimplemented columns temporarily
 in order to ensure that they are ignored gracefully.
+
+20060903T2247Z <chicares@cox.net> [1199]
+
+  calendar_date.cpp
+Correct a typo in a comment.
+
+20060903T2249Z <chicares@cox.net> [1199]
+
+  ledger_variant.cpp
+  ledger_variant.hpp
+  ledger_xml_io.cpp
+Add a placeholder for a not-yet-calculated new column.
+
+20060903T2307Z <chicares@cox.net> [1199]
+
+  ledger_xml_io.cpp
+Transpose a group of lines to reveal duplication.
+
+20060903T2310Z <chicares@cox.net> [1199]
+
+  ledger_xml_io.cpp
+Remove clutter.
+
+20060903T2343Z <chicares@cox.net> [1202]
+
+  ledger_xml_io.cpp
+Fix some trivial defects; regularize marking of others.
+
+20060904T0001Z <chicares@cox.net> [1202]
+
+  ledger_xml_io.cpp
+Add formats and titles for two new columns.
+
+20060904T0006Z <chicares@cox.net> [1202]
+
+  ledger_xml_io.cpp
+Show somewhat greater (but still inadequate) precision for one column.
+The problem needs to be understood generally before it can be solved.
+
+20060904T0015Z <chicares@cox.net> [1202]
+
+  ledger_xml_io.cpp
+Clarify two columns' titles to conform to a compliance requirement.
+This is intended to conform to the interpretation under
+  "§21.2206(1)(I)-(M), (O), (Q)-(S) and (U)-(V) Supplemental - Other"
+in the 1998-09-25 Texas Register, however counterintuitive its reading
+of "out-of-pocket" may be.
+
+20060904T0020Z <chicares@cox.net> [1202]
+
+  ledger_xml_io.cpp
+Fix an alphabetization defect.
 
