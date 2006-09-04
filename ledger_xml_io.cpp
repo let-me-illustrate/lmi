@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xml_io.cpp,v 1.44 2006-09-04 00:20:28 chicares Exp $
+// $Id: ledger_xml_io.cpp,v 1.45 2006-09-04 00:45:44 chicares Exp $
 
 #include "ledger.hpp"
 
@@ -104,14 +104,35 @@ std::string format(double d, std::pair<int,bool> f)
     interpreter.setf(std::ios_base::fixed, std::ios_base::floatfield);
     interpreter.precision(f.first);
     std::string s;
-    if(f.second) d *= 100;
+    if(f.second)
+        {
+        d *= 100;
+        }
     interpreter << d;
     interpreter >> s;
-    if(f.second) s += '%';
     if(!interpreter.eof())
         {
-        fatal_error() << "Format error" << LMI_FLUSH;
+        fatal_error() << "Formatting error." << LMI_FLUSH;
         }
+
+    if(f.second)
+        {
+        s += '%';
+        }
+
+#if defined __GNUC__ && LMI_GCC_VERSION <= 40001
+    // COMPILER !! Work around a gcc defect fixed in gcc-4.0.1: see
+    //   http://gcc.gnu.org/bugzilla/show_bug.cgi?id=20914
+    static std::string const old_string("-,");
+    static std::string const new_string("-");
+    std::string::size_type position = s.find(old_string);
+    while(position != std::string::npos)
+        {
+        s.replace(position, old_string.length(), new_string);
+        position = s.find(old_string, 1 + position);
+        }
+#endif // gcc version less than 4.0.1 .
+
     return s;
 }
 
