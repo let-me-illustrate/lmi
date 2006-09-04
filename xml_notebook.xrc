@@ -24,7 +24,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: xml_notebook.xrc,v 1.29 2006-07-11 03:40:11 chicares Exp $
+    $Id: xml_notebook.xrc,v 1.30 2006-09-04 14:37:11 chicares Exp $
 
     This version is generic. It strives to present every input field
     the system offers, in a way that suits the main developer's tastes.
@@ -341,7 +341,7 @@ demonstrate a defect in the wx library. See
                                             <flag>wxGROW|wxALL</flag>
                                             <border>4</border>
                                             <object class="wxTextCtrl" name="MaleProportion">
-                                                <size>20,-1</size>
+                                                <size>40,-1</size>
                                                 <value>1</value>
                                             </object>
                                         </object>
@@ -356,7 +356,7 @@ demonstrate a defect in the wx library. See
                                             <flag>wxGROW|wxALL</flag>
                                             <border>4</border>
                                             <object class="wxTextCtrl" name="NonsmokerProportion">
-                                                <size>20,-1</size>
+                                                <size>40,-1</size>
                                                 <value>1</value>
                                             </object>
                                         </object>
@@ -512,7 +512,7 @@ demonstrate a defect in the wx library. See
                             <flag>wxGROW|wxALL</flag>
                             <object class="wxRadioBox" name="SurviveToType">
                                 <style>wxRA_SPECIFY_COLS</style>
-                                <label>Limit survival to expectancy</label>
+                                <label>Survival limit</label>
                                 <content>
                                     <item>No survival limit</item>
                                     <item>Survive to age limit</item>
