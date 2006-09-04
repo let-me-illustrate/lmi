@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xml_io.cpp,v 1.42 2006-09-04 00:06:18 chicares Exp $
+// $Id: ledger_xml_io.cpp,v 1.43 2006-09-04 00:15:04 chicares Exp $
 
 #include "ledger.hpp"
 
@@ -296,7 +296,7 @@ void Ledger::write(xml::node& x) const
     title_map["GptForceout"                     ] = "Forceout";
     title_map["GrossIntCredited_Current"        ] = "Curr Gross Int Credited";
     title_map["GrossIntCredited_Guaranteed"     ] = "Guar Gross Int Credited";
-    title_map["GrossPmt"                        ] = " _____________ Gross Payment";
+    title_map["GrossPmt"                        ] = " _____________ Premium Outlay";
     title_map["HoneymoonValueSpread"            ] = "Honeymoon Value Spread";
     title_map["IndvTaxBracket"                  ] = " _____________ EE Tax Bracket";
     title_map["InforceLives"                    ] = " _____ BOY Lives Inforce";
@@ -329,7 +329,7 @@ void Ledger::write(xml::node& x) const
     title_map["NetPmt_Current"                  ] = " _____________ Curr Net Payment";
     title_map["NetPmt_Guaranteed"               ] = " _____________ Guar Net Payment";
     title_map["NetWD"                           ] = " _____________  _____________ Withdrawal";
-    title_map["Outlay"                          ] = " _____________ Premium Outlay";
+    title_map["Outlay"                          ] = " _____________ Net Outlay";
     title_map["PartMortTableMult"               ] = "Partial Mortality Muliplier";
     title_map["PolicyFee_Current"               ] = "Curr ____Policy Fee";
     title_map["PolicyFee_Guaranteed"            ] = "Guar ____Policy Fee";
