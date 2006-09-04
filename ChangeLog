@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.440 2006-09-04 00:20:28 chicares Exp $
+// $Id: ChangeLog,v 1.441 2006-09-04 00:45:44 chicares Exp $
 
 MAINTENANCE
 
@@ -7356,4 +7356,12 @@ of "out-of-pocket" may be.
 
   ledger_xml_io.cpp
 Fix an alphabetization defect.
+
+20060904T0045Z <chicares@cox.net> [1203]
+
+  ledger_text_formats.cpp
+  ledger_xml_io.cpp
+Work around this compiler defect:
+  http://sv.nongnu.org/bugs/index.php?func=detailitem&item_id=13856
+in one file, noting that the defect remains unaddressed in the other.
 
