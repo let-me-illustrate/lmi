@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.441 2006-09-04 00:45:44 chicares Exp $
+// $Id: ChangeLog,v 1.442 2006-09-04 15:00:36 chicares Exp $
 
 MAINTENANCE
 
@@ -7364,4 +7364,22 @@ Fix an alphabetization defect.
 Work around this compiler defect:
   http://sv.nongnu.org/bugs/index.php?func=detailitem&item_id=13856
 in one file, noting that the defect remains unaddressed in the other.
+
+20060904T1315Z <chicares@cox.net> [1201]
+
+  ledger_variant.cpp
+  ledger_variant.hpp
+  ledger_xml_io.cpp
+Remove 'NetDeathBft', which had never been used. Use 'NetDeathBenefit'
+instead.
+
+20060904T1437Z <chicares@cox.net> [1201]
+
+  xml_notebook.xrc
+Widen two fields, and improve another's description.
+
+20060904T1500Z <chicares@cox.net> [1201]
+
+  xml_notebook.xrc
+Distinguish loaned AV from loan balance.
 
