@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.443 2006-09-05 13:59:22 chicares Exp $
+// $Id: ChangeLog,v 1.444 2006-09-05 16:59:39 chicares Exp $
 
 MAINTENANCE
 
@@ -7393,4 +7393,14 @@ Calculate death proceeds--the column set up 20060903T2249Z.
 
   ihs_avdebug.cpp
 Update documentation.
+
+20060905T1419Z <chicares@cox.net> [1202]
+
+  msw_workarounds.cpp
+Remove pleonasms.
+
+20060905T1659Z <chicares@cox.net> [1202]
+
+  ledger_xml_io.cpp
+Improve column titles.
 
