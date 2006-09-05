@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.442 2006-09-04 15:00:36 chicares Exp $
+// $Id: ChangeLog,v 1.443 2006-09-05 13:59:22 chicares Exp $
 
 MAINTENANCE
 
@@ -7382,4 +7382,15 @@ Widen two fields, and improve another's description.
 
   xml_notebook.xrc
 Distinguish loaned AV from loan balance.
+
+20060905T1358Z <chicares@cox.net> [1202]
+
+  account_value.hpp
+  ihs_acctval.cpp
+Calculate death proceeds--the column set up 20060903T2249Z.
+
+20060905T1359Z <chicares@cox.net> [1202]
+
+  ihs_avdebug.cpp
+Update documentation.
 
