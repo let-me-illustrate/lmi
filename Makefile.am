@@ -20,7 +20,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: Makefile.am,v 1.22 2006-09-02 13:00:38 zeitlin Exp $
+# $Id: Makefile.am,v 1.23 2006-09-05 11:13:55 etarassov Exp $
 
 
 SUBDIRS = third_party
@@ -177,6 +177,7 @@ lmi_wx_SOURCES = \
     datum_base.cpp \
     datum_boolean.cpp \
     datum_string.cpp \
+    default_view.cpp \
     docmanager_ex.cpp \
     docmdichildframe_ex.cpp \
     facets.cpp \
@@ -189,13 +190,19 @@ lmi_wx_SOURCES = \
     main_wx.cpp \
     mc_enum.cpp \
     mc_enum_types.cpp \
+    msw_workarounds.cpp \
+    mvc_controller.cpp \
+    mvc_view.cpp \
     previewframe_ex.cpp \
     progress_meter_wx.cpp \
+    single_choice_popup_menu.cpp \
     text_doc.cpp \
     text_view.cpp \
     tn_range_types.cpp \
     transferor.cpp \
     view_ex.cpp \
+    wx_checks.cpp \
+    wx_utility.cpp \
     xml_notebook.cpp
 
 lmi_wx_CXXFLAGS = $(WX_CXXFLAGS) $(XMLWRAPP_FLAGS) $(AM_CXXFLAGS)
@@ -343,6 +350,7 @@ liblmi_la_SOURCES = \
     ihs_proddata.cpp \
     ihs_rnddata.cpp \
     md5.cpp \
+    mvc_model.cpp \
     secure_date.cpp \
     security.cpp \
     stratified_algorithms.cpp \
@@ -816,6 +824,7 @@ noinst_HEADERS = \
     dbnames.hpp \
     dbvalue.hpp \
     death_benefits.hpp \
+    default_view.hpp \
     docmanager_ex.hpp \
     docmdichildframe_ex.hpp \
     enums7702.hpp \
@@ -874,6 +883,9 @@ noinst_HEADERS = \
     mc_enum_test_aux_enums.hpp \
     mc_enum_type_enums.hpp \
     mc_enum_types.hpp \
+    msw_workarounds.hpp \
+    mvc_controller.hpp \
+    mvc_view.hpp \
     md5.hpp \
     miscellany.hpp \
     mortality_rates.hpp \
@@ -897,6 +909,7 @@ noinst_HEADERS = \
     security.hpp \
     sigfpe.hpp \
     single_cell_document.hpp \
+    single_choice_popup_menu.hpp \
     stratified_algorithms.hpp \
     stratified_charges.hpp \
     stream_cast.hpp \
@@ -916,7 +929,9 @@ noinst_HEADERS = \
     value_cast.hpp \
     version.hpp \
     view_ex.hpp \
+    wx_checks.hpp \
     wx_new.hpp \
+    wx_utility.hpp \
     wx_workarounds.hpp \
     xenum.hpp \
     xenum_sample.hpp \
