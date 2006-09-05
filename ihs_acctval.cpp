@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_acctval.cpp,v 1.84 2006-07-26 01:21:27 chicares Exp $
+// $Id: ihs_acctval.cpp,v 1.85 2006-09-05 13:58:36 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -924,7 +924,9 @@ void AccountValue::InitializeYear()
 
     YearsTotalCoiCharge         = 0.0;
     YearsAVRelOnDeath           = 0.0;
+    YearsLoanRepaidOnDeath      = 0.0;
     YearsGrossClaims            = 0.0;
+    YearsDeathProceeds          = 0.0;
     YearsNetClaims              = 0.0;
     YearsTotalNetIntCredited    = 0.0;
     YearsTotalGrossIntCredited  = 0.0;
@@ -1191,6 +1193,29 @@ double AccountValue::SurrChg()
 }
 
 //============================================================================
+/// Amounts such as claims and account value released on death are
+/// multiplied by the beginning-of-year inforce factor when a
+/// composite is produced; it would be incorrect to multiply them by
+/// the inforce factor here because individual-cell ledgers do not
+/// reflect partial mortality. This calculation assumes that partial
+/// mortality is curtate.
+///
+/// It is assumed that the death benefit is sufficient to repay the
+/// loan and loan interest--or, at least, that no company would
+/// attempt to recover any excess.
+///
+/// material_difference() is used to subtract amounts that may be
+/// materially equal--and, for consistency, in parallel cases where
+/// the difference is unlikely to be nearly zero.
+///
+/// TODO ?? This function is designed to be called at the end of a
+/// year, when 'DBReflectingCorr' probably equals the death benefit as
+/// of the beginning of the twelfth month, but its end-of-year value
+/// (as of the end of the twelfth month) is needed--so the death
+/// benefit is updated explicitly. This seems inelegant, and is an
+/// obstacle to showing amounts affected by partial mortality on the
+/// monthly-detail report.
+
 void AccountValue::SetClaims()
 {
     if(!Input_->UsePartialMort || ItLapsed || BasicValues::GetLength() <= Year)
@@ -1198,24 +1223,20 @@ void AccountValue::SetClaims()
         return;
         }
 
-    // Update death benefit. 'DBReflectingCorr' currently equals the
-    // death benefit as of the beginning of the twelfth month, but its
-    // end-of-year value (as of the end of the twelfth month) is
-    // needed.
-
     TxSetDeathBft(true);
     TxSetTermAmt();
 
-    // Amounts such as claims and account value released on death
-    // are multiplied by the beginning-of-year inforce factor when
-    // a composite is produced; it would be incorrect to multiply
-    // them by the inforce factor here because individual-cell
-    // ledgers do not reflect partial mortality. This calculation
-    // assumes that partial mortality is curtate.
-
-    YearsGrossClaims =  partial_mortality_q[Year] * DBReflectingCorr;
-    YearsAVRelOnDeath = partial_mortality_q[Year] * TotalAccountValue();
-    YearsNetClaims = material_difference(YearsGrossClaims, YearsAVRelOnDeath);
+    YearsGrossClaims       = partial_mortality_q[Year] * DBReflectingCorr;
+    YearsAVRelOnDeath      = partial_mortality_q[Year] * TotalAccountValue();
+    YearsLoanRepaidOnDeath = partial_mortality_q[Year] * (RegLnBal + PrfLnBal);
+    YearsDeathProceeds = material_difference
+        (YearsGrossClaims
+        ,YearsLoanRepaidOnDeath
+        );
+    YearsNetClaims = material_difference
+        (YearsGrossClaims
+        ,YearsAVRelOnDeath
+        );
 }
 
 //============================================================================
@@ -1336,19 +1357,20 @@ void AccountValue::FinalizeYear()
     // TODO ?? This is done only if the policy is in force at the end of the
     // year; but if it lapses during the year, should things that happened
     // during the year of lapse be included in a composite?
-    VariantValues().COICharge       [Year] = YearsTotalCoiCharge        ;
-    VariantValues().AVRelOnDeath    [Year] = YearsAVRelOnDeath          ;
-    VariantValues().ClaimsPaid      [Year] = YearsGrossClaims           ;
-    VariantValues().NetClaims       [Year] = YearsNetClaims             ;
-    VariantValues().NetIntCredited  [Year] = YearsTotalNetIntCredited   ;
-    VariantValues().GrossIntCredited[Year] = YearsTotalGrossIntCredited ;
-    VariantValues().LoanIntAccrued  [Year] = YearsTotalLoanIntAccrued   ;
-    VariantValues().NetCOICharge    [Year] = YearsTotalNetCoiCharges    ;
-    VariantValues().PolicyFee       [Year] = YearsTotalPolicyFee        ;
-    VariantValues().PremTaxLoad     [Year] = YearsTotalPremTaxLoad      ;
-    VariantValues().DacTaxLoad      [Year] = YearsTotalDacTaxLoad       ;
-    VariantValues().SpecAmtLoad     [Year] = YearsTotalSpecAmtLoad      ;
-    VariantValues().SepAcctLoad     [Year] = YearsTotalSepAcctLoad      ;
+    VariantValues().COICharge         [Year] = YearsTotalCoiCharge        ;
+    VariantValues().AVRelOnDeath      [Year] = YearsAVRelOnDeath          ;
+    VariantValues().ClaimsPaid        [Year] = YearsGrossClaims           ;
+    VariantValues().DeathProceedsPaid [Year] = YearsDeathProceeds         ;
+    VariantValues().NetClaims         [Year] = YearsNetClaims             ;
+    VariantValues().NetIntCredited    [Year] = YearsTotalNetIntCredited   ;
+    VariantValues().GrossIntCredited  [Year] = YearsTotalGrossIntCredited ;
+    VariantValues().LoanIntAccrued    [Year] = YearsTotalLoanIntAccrued   ;
+    VariantValues().NetCOICharge      [Year] = YearsTotalNetCoiCharges    ;
+    VariantValues().PolicyFee         [Year] = YearsTotalPolicyFee        ;
+    VariantValues().PremTaxLoad       [Year] = YearsTotalPremTaxLoad      ;
+    VariantValues().DacTaxLoad        [Year] = YearsTotalDacTaxLoad       ;
+    VariantValues().SpecAmtLoad       [Year] = YearsTotalSpecAmtLoad      ;
+    VariantValues().SepAcctLoad       [Year] = YearsTotalSepAcctLoad      ;
 
     // Record dynamic interest rate in ledger object.
     //
