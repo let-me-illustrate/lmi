@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: fenv_lmi_x86.hpp,v 1.5 2006-02-21 01:39:15 chicares Exp $
+// $Id: fenv_lmi_x86.hpp,v 1.6 2006-09-08 23:11:37 chicares Exp $
 
 #ifndef fenv_lmi_x86_hpp
 #define fenv_lmi_x86_hpp
@@ -33,19 +33,7 @@
 #   include <float.h> // Nonstandard floating-point hardware control.
 #endif // defined __BORLANDC__ || defined _MSC_VER
 
-#if defined __BORLANDC__
-inline unsigned short int fenv_precision_error()
-{
-    throw std::runtime_error("Invalid fpu PC value.");
-}
-
-inline unsigned short int fenv_rounding_error()
-{
-    throw std::runtime_error("Invalid fpu RC value.");
-}
-#endif // defined __BORLANDC__
-
-#ifdef LMI_X86
+#if defined LMI_X86
 /// These functions manipulate the x86 fpu (80x87) control word. This
 /// shouldn't be as difficult as it actually is. Part of the problem
 /// is that C was strangely slow to adopt sophisticated numerics:
@@ -135,7 +123,7 @@ enum e_ieee754_rounding
     ,fe_towardzero = 0x03
     };
 
-#if !defined __BORLANDC__
+#   if !defined __BORLANDC__
 // COMPILER !! Due to its poor support for non-type template
 // parameters, borland cannot compile this implementation.
 
@@ -305,7 +293,7 @@ inline unsigned short int msw_to_intel(unsigned int m)
     return msw_to_intel(msw_control_word(m));
 }
 
-#endif // !defined __BORLANDC__
+#   endif // !defined __BORLANDC__
 
 /// Default settings for x87 fpu.
 
