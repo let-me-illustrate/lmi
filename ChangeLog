@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.444 2006-09-05 16:59:39 chicares Exp $
+// $Id: ChangeLog,v 1.445 2006-09-08 17:50:30 chicares Exp $
 
 MAINTENANCE
 
@@ -7403,4 +7403,14 @@ Remove pleonasms.
 
   ledger_xml_io.cpp
 Improve column titles.
+
+20060908T1749Z <chicares@cox.net> [1202]
+
+  ledger_xml_io.cpp
+Regularize layout of column titles.
+
+ <chicares@cox.net> [1202]
+
+  version.hpp
+Mark release candidate.
 
