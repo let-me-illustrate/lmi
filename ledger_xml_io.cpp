@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xml_io.cpp,v 1.47 2006-09-05 16:59:39 chicares Exp $
+// $Id: ledger_xml_io.cpp,v 1.48 2006-09-08 17:49:38 chicares Exp $
 
 #include "ledger.hpp"
 
@@ -258,50 +258,50 @@ void Ledger::write(xml::node& x) const
     // they are defined only on a current basis--experience-rating
     // columns, e.g.
 
-    title_map["AVRelOnDeath_Current"            ] = "Account Value Released on Death";
-    title_map["AcctVal_Current"                 ] = "Curr Account Value";
-    title_map["AcctVal_Guaranteed"              ] = "Guar Account Value";
+    title_map["AVRelOnDeath_Current"            ] = "Account Value ____Released on Death";
+    title_map["AcctVal_Current"                 ] = " _____________ Curr Account Value";
+    title_map["AcctVal_Guaranteed"              ] = " _____________ Guar Account Value";
     title_map["AddonCompOnAssets"               ] = "Additional Comp on Assets";
     title_map["AddonCompOnPremium"              ] = "Additional Comp on Premium";
     title_map["AddonMonthlyFee"                 ] = "Additional Monthly Fee";
-    title_map["AnnGAIntRate_Current"            ] = "Curr Ann Gen Acct Int Rate";
-    title_map["AnnGAIntRate_Guaranteed"         ] = "Guar Ann Gen Acct Int Rate";
+    title_map["AnnGAIntRate_Current"            ] = " _____________ Curr Ann Gen Acct Int Rate";
+    title_map["AnnGAIntRate_Guaranteed"         ] = " _____________ Guar Ann Gen Acct Int Rate";
     title_map["AnnHoneymoonValueRate_Current"   ] = "Curr Ann Honeymoon Value Rate";
     title_map["AnnHoneymoonValueRate_Guaranteed"] = "Guar Ann Honeymoon Value Rate";
     title_map["AnnPostHoneymoonRate_Current"    ] = "Curr Post Honeymoon Rate";
     title_map["AnnPostHoneymoonRate_Guaranteed" ] = "Guar Post Honeymoon Rate";
-    title_map["AnnSAIntRate_Current"            ] = "Curr Ann Sep Acct Int Rate";
-    title_map["AnnSAIntRate_Guaranteed"         ] = "Guar Ann Sep Acct Int Rate";
-    title_map["AttainedAge"                     ] = " _____________ End of __Year Age";
+    title_map["AnnSAIntRate_Current"            ] = " _____________ Curr Ann Sep Acct Int Rate";
+    title_map["AnnSAIntRate_Guaranteed"         ] = " _____________ Guar Ann Sep Acct Int Rate";
+    title_map["AttainedAge"                     ] = " _____________ _____________ End of __Year Age";
     title_map["AvgDeathBft_Current"             ] = "Curr Avg Death Benefit";
     title_map["AvgDeathBft_Guaranteed"          ] = "Guar Avg Death Benefit";
-    title_map["BaseDeathBft_Current"            ] = "Curr Base Death Benefit";
-    title_map["BaseDeathBft_Guaranteed"         ] = "Guar Base Death Benefit";
-    title_map["COICharge_Current"               ] = " _____________ Curr COI Charge";
-    title_map["COICharge_Guaranteed"            ] = " _____________ Guar COI Charge";
-    title_map["CSVNet_Current"                  ] = "Curr Net Cash Surr Value";
-    title_map["CSVNet_Guaranteed"               ] = "Guar Net Cash Surr Value";
+    title_map["BaseDeathBft_Current"            ] = " _____________ Curr Base Death Benefit";
+    title_map["BaseDeathBft_Guaranteed"         ] = " _____________ Guar Base Death Benefit";
+    title_map["COICharge_Current"               ] = " _____________ _____________ Curr COI Charge";
+    title_map["COICharge_Guaranteed"            ] = " _____________ _____________ Guar COI Charge";
+    title_map["CSVNet_Current"                  ] = " _____________ Curr Net Cash Surr Value";
+    title_map["CSVNet_Guaranteed"               ] = " _____________ Guar Net Cash Surr Value";
     title_map["CV7702_Current"                  ] = "Curr 7702 Cash Value";
     title_map["CV7702_Guaranteed"               ] = "Guar 7702 Cash Value";
-    title_map["ClaimsPaid_Current"              ] = " _______ Curr ___Claims ___Paid";
-    title_map["ClaimsPaid_Guaranteed"           ] = " _______ Guar ___Claims ___Paid";
+    title_map["ClaimsPaid_Current"              ] = " _____________ _______ Curr ___Claims ___Paid";
+    title_map["ClaimsPaid_Guaranteed"           ] = " _____________ _______ Guar ___Claims ___Paid";
     title_map["CorpTaxBracket"                  ] = " _____________ Corp Tax Bracket";
-    title_map["CorridorFactor"                  ] = " _____________ Corridor Factor";
+    title_map["CorridorFactor"                  ] = " _____________ _____________ Corridor Factor";
     title_map["CurrMandE"                       ] = "Mortality and Expense Charge";
     title_map["DBOpt"                           ] = "Death Benefit Option";
     title_map["DacTaxLoad_Current"              ] = " _____________ Curr DAC Tax Load";
     title_map["DacTaxLoad_Guaranteed"           ] = " _____________ Guar DAC Tax Load";
     title_map["DacTaxRsv_Current"               ] = "Curr DAC Tax Reserve";
     title_map["DacTaxRsv_Guaranteed"            ] = "Guar DAC Tax Reserve";
-    title_map["DeathProceedsPaid_Current"       ] = "Curr Death Proceeds Paid";
-    title_map["DeathProceedsPaid_Guaranteed"    ] = "Guar Death Proceeds Paid";
-    title_map["EOYDeathBft_Current"             ] = "Curr EOY Death Benefit";
-    title_map["EOYDeathBft_Guaranteed"          ] = "Guar EOY Death Benefit";
-    title_map["EeGrossPmt"                      ] = "______ EE Gross Payment";
+    title_map["DeathProceedsPaid_Current"       ] = " _____________ Curr Death Proceeds Paid";
+    title_map["DeathProceedsPaid_Guaranteed"    ] = " _____________ Guar Death Proceeds Paid";
+    title_map["EOYDeathBft_Current"             ] = " _____________ Curr EOY Death Benefit";
+    title_map["EOYDeathBft_Guaranteed"          ] = " _____________ Guar EOY Death Benefit";
+    title_map["EeGrossPmt"                      ] = " _____________ ______ EE Gross Payment";
     title_map["EeMode"                          ] = "EE Payment Mode";
 // TODO ?? This can't be a mode. I don't know how it differs from 'EeGrossPmt' above.
     title_map["EePmt"                           ] = "EE Payment Mode";
-    title_map["ErGrossPmt"                      ] = "______ ER Gross Payment";
+    title_map["ErGrossPmt"                      ] = " _____________ ______ ER Gross Payment";
     title_map["ErMode"                          ] = "ER Payment Mode";
 // TODO ?? This can't be a mode. I don't know how it differs from 'ErGrossPmt' above.
     title_map["ErPmt"                           ] = "ER Payment Mode";
@@ -309,21 +309,21 @@ void Ledger::write(xml::node& x) const
     title_map["ExcessLoan_Guaranteed"           ] = "Guar Excess Loan";
     title_map["ExpenseCharges_Current"          ] = "Curr Expense Charge";
     title_map["ExpenseCharges_Guaranteed"       ] = "Guar Expense Charge";
-    title_map["ExperienceReserve_Current"       ] = "Experience Rating Reserve";
+    title_map["ExperienceReserve_Current"       ] = " _____________ Experience Rating Reserve";
     title_map["GptForceout"                     ] = "Forceout";
     title_map["GrossIntCredited_Current"        ] = "Curr Gross Int Credited";
     title_map["GrossIntCredited_Guaranteed"     ] = "Guar Gross Int Credited";
-    title_map["GrossPmt"                        ] = " _____________ Premium Outlay";
+    title_map["GrossPmt"                        ] = " _____________ _____________ Premium Outlay";
     title_map["HoneymoonValueSpread"            ] = "Honeymoon Value Spread";
     title_map["IndvTaxBracket"                  ] = " _____________ EE Tax Bracket";
-    title_map["InforceLives"                    ] = " _____ BOY Lives Inforce";
-    title_map["IrrCsv_Current"                  ] = " _____________ Curr IRR on CSV";
-    title_map["IrrCsv_Guaranteed"               ] = " _____________ Guar IRR on CSV";
-    title_map["IrrDb_Current"                   ] = " _____________ Curr IRR on DB";
-    title_map["IrrDb_Guaranteed"                ] = " _____________ Guar IRR on DB";
-    title_map["KFactor_Current"                 ] = "Experience Rating K Factor";
-    title_map["LoanIntAccrued_Current"          ] = "____Curr Loan Int __Accrued";
-    title_map["LoanIntAccrued_Guaranteed"       ] = "____Guar Loan Int __Accrued";
+    title_map["InforceLives"                    ] = " _____________ ______BOY _______Lives _______Inforce";
+    title_map["IrrCsv_Current"                  ] = " _____________ _____________ Curr IRR on CSV";
+    title_map["IrrCsv_Guaranteed"               ] = " _____________ _____________ Guar IRR on CSV";
+    title_map["IrrDb_Current"                   ] = " _____________ _____________ Curr IRR on DB";
+    title_map["IrrDb_Guaranteed"                ] = " _____________ _____________ Guar IRR on DB";
+    title_map["KFactor_Current"                 ] = " _____________ Experience _______Rating K Factor";
+    title_map["LoanIntAccrued_Current"          ] = " _____________ ____Curr Loan Int __Accrued";
+    title_map["LoanIntAccrued_Guaranteed"       ] = " _____________ ____Guar Loan Int __Accrued";
     title_map["MlyGAIntRate_Current"            ] = "Curr Monthly Gen Acct Int Rate";
     title_map["MlyGAIntRate_Guaranteed"         ] = "Guar Monthly Gen Acct Int Rate";
     title_map["MlyHoneymoonValueRate_Current"   ] = "Curr Monthly Honeymoon Value Rate";
@@ -334,20 +334,20 @@ void Ledger::write(xml::node& x) const
     title_map["MlySAIntRate_Guaranteed"         ] = "Guar Monthly Sep Acct Int Rate";
     title_map["MonthlyFlatExtra"                ] = " _____________ Monthly Flat Extra";
 //    title_map["NaarForceout"                    ] = "Forced Withdrawal due to NAAR Limit";
-    title_map["NetCOICharge_Current"            ] = "Experience Rating Net COI Charge";
-    title_map["NetClaims_Current"               ] = " _____________ Curr Net Claims";
-    title_map["NetClaims_Guaranteed"            ] = " _____________ Guar Net Claims";
+    title_map["NetCOICharge_Current"            ] = "Experience _______Rating _______Net COI Charge";
+    title_map["NetClaims_Current"               ] = " _____________ _____________ Curr Net Claims";
+    title_map["NetClaims_Guaranteed"            ] = " _____________ _____________ Guar Net Claims";
     title_map["NetIntCredited_Current"          ] = " _____________ Curr Net Int Credited";
     title_map["NetIntCredited_Guaranteed"       ] = " _____________ Guar Net Int Credited";
     title_map["NetPmt_Current"                  ] = " _____________ Curr Net Payment";
     title_map["NetPmt_Guaranteed"               ] = " _____________ Guar Net Payment";
-    title_map["NetWD"                           ] = " _____________  _____________ Withdrawal";
-    title_map["NewCashLoan"                     ] = " ________ Annual Loan";
-    title_map["Outlay"                          ] = " _____________ Net Outlay";
+    title_map["NetWD"                           ] = " _____________ _____________ _____________ Withdrawal";
+    title_map["NewCashLoan"                     ] = " _____________ _____________ Annual Loan";
+    title_map["Outlay"                          ] = " _____________ _____________ ____Net Outlay";
     title_map["PartMortTableMult"               ] = "Partial Mortality Muliplier";
     title_map["PolicyFee_Current"               ] = "Curr ____Policy Fee";
     title_map["PolicyFee_Guaranteed"            ] = "Guar ____Policy Fee";
-    title_map["PolicyYear"                      ] = " _____________ Policy __Year";
+    title_map["PolicyYear"                      ] = " _____________ _____________ Policy __Year";
     title_map["PrefLoanBalance_Current"         ] = "Curr Preferred Loan Bal";
     title_map["PrefLoanBalance_Guaranteed"      ] = "Guar Preferred Loan Bal";
     title_map["PremTaxLoad_Current"             ] = "Curr Premium Tax Load";
@@ -356,21 +356,21 @@ void Ledger::write(xml::node& x) const
 //    title_map["ProducerCompensation"            ] = " _____________ Producer Compensation";
     title_map["ProjectedCoiCharge_Current"      ] = "Experience Rating Projected COI Charge";
     title_map["RefundableSalesLoad"             ] = " _____________ Refundable Sales Load";
-    title_map["Salary"                          ] = " _____________  _____________ Salary";
+    title_map["Salary"                          ] = " _____________ _____________ Salary";
     title_map["SepAcctLoad_Current"             ] = "Curr Sep Acct Load";
     title_map["SepAcctLoad_Guaranteed"          ] = "Guar Sep Acct Load";
-    title_map["SpecAmt"                         ] = " _____________ Specified Amount";
+    title_map["SpecAmt"                         ] = " _____________ _____________ Specified Amount";
     title_map["SpecAmtLoad_Current"             ] = " _____________ Curr Spec Amt Load";
     title_map["SpecAmtLoad_Guaranteed"          ] = " _____________ Guar Spec Amt Load";
     title_map["SurrChg_Current"                 ] = " _____________ Curr Surr Charge";
     title_map["SurrChg_Guaranteed"              ] = " _____________ Guar Surr Charge";
-    title_map["TermPurchased_Current"           ] = "Curr Term Amt Purchased";
-    title_map["TermPurchased_Guaranteed"        ] = "Guar Term Amt Purchased";
-    title_map["TermSpecAmt"                     ] = "Term Specified Amount";
+    title_map["TermPurchased_Current"           ] = " _____________ Curr Term Amt Purchased";
+    title_map["TermPurchased_Guaranteed"        ] = " _____________ Guar Term Amt Purchased";
+    title_map["TermSpecAmt"                     ] = " _____________ Term Specified Amount";
     title_map["TgtPrem"                         ] = " _____________ Target Premium";
     title_map["TotalIMF"                        ] = "Total Investment Mgt Fee";
-    title_map["TotalLoanBalance_Current"        ] = "Curr Total Loan Balance";
-    title_map["TotalLoanBalance_Guaranteed"     ] = "Guar Total Loan Balance";
+    title_map["TotalLoanBalance_Current"        ] = " _____________ Curr Total Loan Balance";
+    title_map["TotalLoanBalance_Guaranteed"     ] = " _____________ Guar Total Loan Balance";
 
     // TODO ?? Titles ought to be read from an external file that
     // permits flexible customization. Compliance might require that
@@ -719,7 +719,7 @@ void Ledger::write(xml::node& x) const
         );
 
     vectors   ["NetDeathBenefit"] = &NetDeathBenefit ;
-    title_map ["NetDeathBenefit"] = "__Net __Death Benefit";
+    title_map ["NetDeathBenefit"] = " _____________ __Net __Death Benefit";
     format_map["NetDeathBenefit"] = f1;
 
     // [End of derived columns.]
