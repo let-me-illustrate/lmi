@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: math_functors.hpp,v 1.9 2006-01-29 13:52:00 chicares Exp $
+// $Id: math_functors.hpp,v 1.10 2006-09-08 22:10:03 chicares Exp $
 
 #ifndef math_functors_hpp
 #define math_functors_hpp
@@ -36,6 +36,7 @@
 #include <algorithm>
 #include <cmath>
 #include <functional>
+#include <stdexcept>
 
 #if !defined LMI_COMPILER_PROVIDES_EXPM1
 extern "C" double expm1(double);
@@ -71,19 +72,19 @@ struct lesser_of
         }
 };
 
-// Calculate mean as
-//   (half of x) plus (half of y)
-// instead of
-//   half of (x plus y)
-// because the addition in the latter can overflow. Generally,
-// hardware deals better with underflow than with overflow.
-//
-// The domain is restricted to floating point because integers would
-// give surprising results. For instance, the integer mean of one and
-// two would be truncated to one upon either returning an integer or
-// assigning the result to one. Returning a long double in all cases
-// is the best that could be done, but that seems unnatural.
-//
+/// Calculate mean as
+///   (half of x) plus (half of y)
+/// instead of
+///   half of (x plus y)
+/// because the addition in the latter can overflow. Generally,
+/// hardware deals better with underflow than with overflow.
+///
+/// The domain is restricted to floating point because integers would
+/// give surprising results. For instance, the integer mean of one and
+/// two would be truncated to one upon either returning an integer or
+/// assigning the result to one. Returning a long double in all cases
+/// is the best that could be done, but that seems unnatural.
+
 template<typename T>
 struct mean
     :public std::binary_function<T, T, T>
@@ -185,12 +186,12 @@ struct d_upper_12_from_i
         }
 };
 
-// Annual net from annual gross rate, with two different kinds of
-// decrements. See the interest-rate class for the motivation.
-//
-// Additional precondition: arguments are not such as to cause the
-// result to be less than -1.0 .
-//
+/// Annual net from annual gross rate, with two different kinds of
+/// decrements. See the interest-rate class for the motivation.
+///
+/// Additional precondition: arguments are not such as to cause the
+/// result to be less than -1.0 .
+
 template<typename T, int n>
 struct net_i_from_gross
 {
@@ -210,18 +211,27 @@ struct net_i_from_gross
         }
 };
 
-// Convert q to a monthly COI rate. The COI charge is assessed against
-// all insureds who are alive at the beginning of the month. Assuming
-// that deaths occur at the end of the month, the monthly-equivalent
-// q should be divided by one minus itself to obtain the COI rate.
-//
-// The value of 'q' might exceed unity, for example if guaranteed COI
-// rates for simplified issue are 120% of 1980 CSO, so that case is
-// accommodated. A value of zero might arise from a partial-mortality
-// multiplier that equals zero for some or all durations, and that
-// case arises often enough to merit a special optimization. Negative
-// values of the arguments are not plausible and are not tested.
-//
+/// Convert q to a monthly COI rate. The COI charge is assessed against
+/// all insureds who are alive at the beginning of the month. Assuming
+/// that deaths occur at the end of the month, the monthly-equivalent
+/// q should be divided by one minus itself to obtain the COI rate.
+///
+/// The value of 'q' might exceed unity, for example if guaranteed COI
+/// rates for simplified issue are 120% of 1980 CSO, so that case is
+/// accommodated. A value of zero might arise from a partial-mortality
+/// multiplier that equals zero for some or all durations, and that
+/// case arises often enough to merit a special optimization.
+///
+/// Preconditions:
+///   'max_coi' is in [0.0, 1.0]
+///   'q' is nonnegative
+/// An exception is thrown if any precondition is violated.
+///
+/// If 'q' exceeds unity, then 'max_coi' is returned. Notionally, 'q'
+/// is a probability and cannot exceed unity, but it doesn't seem
+/// implausible to most actuaries to set q to 125% of 1980 CSO and
+/// expect it to limit itself.
+
 template<typename T>
 struct coi_rate_from_q
     :public std::binary_function<T,T,T>
@@ -229,6 +239,16 @@ struct coi_rate_from_q
     BOOST_STATIC_ASSERT(boost::is_float<T>::value);
     T operator()(T const& q, T const& max_coi) const
         {
+        if(!(0.0 <= max_coi && max_coi <= 1.0))
+            {
+            throw std::runtime_error("Maximum COI rate out of range.");
+            }
+
+        if(q < 0.0)
+            {
+            throw std::runtime_error("q is negative.");
+            }
+
         if(0.0 == q)
             {
             return 0.0;
@@ -241,10 +261,12 @@ struct coi_rate_from_q
             {
             static long double const reciprocal_12 = 1.0L / 12;
             long double monthly_q = -expm1(log1p(-q) * reciprocal_12);
-            return std::min
-                (max_coi
-                ,static_cast<T>(monthly_q / (1.0L - monthly_q))
-                );
+            if(1.0L == monthly_q)
+                {
+                throw std::logic_error("Monthly q equals unity.");
+                }
+            monthly_q = monthly_q / (1.0L - monthly_q);
+            return std::min(max_coi, static_cast<T>(monthly_q));
             }
         }
 };
