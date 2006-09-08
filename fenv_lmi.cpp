@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: fenv_lmi.cpp,v 1.16 2006-09-08 22:11:35 chicares Exp $
+// $Id: fenv_lmi.cpp,v 1.17 2006-09-08 23:11:37 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -64,7 +64,7 @@ e_ieee754_precision fenv_precision()
           (PC_24 == pc) ? fe_fltprec
         : (PC_53 == pc) ? fe_dblprec
         : (PC_64 == pc) ? fe_ldblprec
-        : fenv_precision_error()
+        : throw std::runtime_error("Failed to determine hardware precision.")
         ;
 #elif defined LMI_X86
     return intel_control_word(x87_control_word()).pc();;
@@ -80,7 +80,7 @@ void fenv_precision(e_ieee754_precision precision_mode)
           (fe_fltprec  == precision_mode) ? (unsigned short int)(PC_24)
         : (fe_dblprec  == precision_mode) ? (unsigned short int)(PC_53)
         : (fe_ldblprec == precision_mode) ? (unsigned short int)(PC_64)
-        : fenv_precision_error()
+        : throw std::runtime_error("Failed to set hardware precision.")
         ;
     _control87(z, MCW_PC);
 #elif defined LMI_X86
@@ -101,7 +101,7 @@ e_ieee754_rounding fenv_rounding()
         : (FE_DOWNWARD   == z) ? fe_downward
         : (FE_UPWARD     == z) ? fe_upward
         : (FE_TOWARDZERO == z) ? fe_towardzero
-        : throw std::runtime_error("Unknown rounding mode.");
+        : throw std::runtime_error("Failed to determine rounding mode.")
         ;
 #elif defined __BORLANDC__
     unsigned short int rc = (unsigned short int)(MCW_RC) & x87_control_word();
@@ -110,7 +110,7 @@ e_ieee754_rounding fenv_rounding()
         : (RC_DOWN == rc) ? fe_downward
         : (RC_UP   == rc) ? fe_upward
         : (RC_CHOP == rc) ? fe_towardzero
-        : fenv_rounding_error() // TODO ?? Replace with throw-expression.
+        : throw std::runtime_error("Failed to determine rounding mode.")
         ;
 #elif defined LMI_X86
     return intel_control_word(x87_control_word()).rc();;
@@ -134,7 +134,7 @@ void fenv_rounding(e_ieee754_rounding rounding_mode)
         : (fe_downward   == rounding_mode) ? FE_DOWNWARD
         : (fe_upward     == rounding_mode) ? FE_UPWARD
         : (fe_towardzero == rounding_mode) ? FE_TOWARDZERO
-        : throw std::runtime_error("Unknown rounding mode.");
+        : throw std::runtime_error("Failed to set rounding mode.")
         ;
     fesetround(z);
 #elif defined __BORLANDC__
@@ -143,7 +143,7 @@ void fenv_rounding(e_ieee754_rounding rounding_mode)
         : (fe_downward   == rounding_mode) ? (unsigned short int)(RC_DOWN)
         : (fe_upward     == rounding_mode) ? (unsigned short int)(RC_UP)
         : (fe_towardzero == rounding_mode) ? (unsigned short int)(RC_CHOP)
-        : fenv_rounding_error() // TODO ?? Replace with throw-expression.
+        : throw std::runtime_error("Failed to set rounding mode.")
         ;
     _control87(z, MCW_RC);
 #elif defined LMI_X86
