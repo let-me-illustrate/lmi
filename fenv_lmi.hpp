@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: fenv_lmi.hpp,v 1.11 2006-02-20 16:23:43 chicares Exp $
+// $Id: fenv_lmi.hpp,v 1.12 2006-09-09 01:27:03 chicares Exp $
 
 #ifndef fenv_lmi_hpp
 #define fenv_lmi_hpp
@@ -50,9 +50,7 @@
 #   endif // Pragma STDC FENV_ACCESS implemented.
 #endif // defined __STDC_IEC_559__ || defined __MINGW32__
 
-/// Manage the floating-point environment, using C99 7.6 facilities,
-/// where available, in the implementation. Otherwise, use compiler-
-/// and platform-specific techniques where they are known.
+/// These functions manage the floating-point environment.
 ///
 ///   void fenv_initialize();
 /// Initialize floating-point environment to lmi default settings.
