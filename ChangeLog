@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.447 2006-09-08 18:55:21 rericksberg Exp $
+// $Id: ChangeLog,v 1.448 2006-09-09 01:27:03 chicares Exp $
 
 MAINTENANCE
 
@@ -7418,4 +7418,26 @@ Mark release candidate.
 
   version.hpp
 Mark release candidate.
+
+20060908T2210Z <chicares@cox.net> [1202]
+
+  math_functors.hpp
+Improve safety.
+
+20060908T2211Z <chicares@cox.net> [1204]
+
+  fenv_lmi.cpp
+Fix a GNU/Linux problem, noting two newly-observed defects.
+
+20060908T2311Z <chicares@cox.net> [1202]
+
+  fenv_lmi.cpp
+  fenv_lmi_x86.hpp
+Remove the defects noted 20060908T2211Z.
+
+20060909T0127Z <chicares@cox.net> [1202]
+
+  fenv_lmi.cpp
+  fenv_lmi.hpp
+Improve documentation.
 

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: fenv_lmi.cpp,v 1.17 2006-09-08 23:11:37 chicares Exp $
+// $Id: fenv_lmi.cpp,v 1.18 2006-09-09 01:27:03 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -33,18 +33,41 @@
 #include <iomanip>
 #include <sstream>
 
+/// Manage the floating-point environment, generally using compiler-
+/// and platform-specific techniques.
+///
+/// SOMEDAY !! The facilities added in C99's <fenv.h> could handle
+/// some of this work, but not all: notably, they don't address
+/// hardware precision. Some C99 implementations are written here, but
+/// commented out, in case they are useful for some new architecture
+/// or compiler someday. They have not been tested with any compiler
+/// that supports C99 fully, and in particular
+///   #pragma STDC FENV_ACCESS ON
+/// must be added to avoid undefined behavior. Furthermore, return
+/// codes of these C99 functions are not checked; perhaps one day C++
+/// will be extended to provide cover functions that throw exceptions
+/// on failure instead.
+///
+/// C99 <fenv.h> facilities are not used here in the cases for which
+/// they are sufficient, in order to maintain consistency with cases
+/// for which they are not. Another reason for this design decision
+/// is type safety: for instance,
+///   fesetround(int);
+/// accepts any integer, whereas
+///   void fenv_rounding(e_ieee754_rounding rounding_mode)
+/// accepts only the arguments we allow.
+
+namespace floating_point_environment {} // doxygen workaround.
+
 void fenv_initialize()
 {
 #if 0 && defined __STDC_IEC_559__
-    // The facilities offered by C99's <fenv.h> are useful, but not
-    // sufficient: they require no standard facility to set hardware
-    // precision, although 7.6/9 provides for extensions like mingw's
-    //   fesetenv(FE_PC64_ENV);
-    // This block shows what could be accomplished in standard C.
     fenv_t save_env;
     feholdexcept(&save_env);
     fesetround(FE_TONEAREST);
 #   if defined __MINGW32__
+    // Here is an example of a C99 7.6/9 extension that controls
+    // hardware precision.
     fesetenv(FE_PC64_ENV);
 #   else  // !defined __MINGW32__
 #       error Find a platform-specific way to set hardware precision.
@@ -119,13 +142,6 @@ e_ieee754_rounding fenv_rounding()
 #endif // Unknown compiler or platform.
 }
 
-// This C99 function call
-//   fesetround(rounding_mode);
-// is nearly equivalent, except that it takes an int argument.
-// It is not conditionally used here, because it seems unwise to
-// weaken the type safety C++ affords merely to implement this
-// one function when its kindred can't be implemented in C99.
-//
 void fenv_rounding(e_ieee754_rounding rounding_mode)
 {
 #if 0 && defined __STDC_IEC_559__
