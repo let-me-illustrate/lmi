@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: fenv_lmi_test.cpp,v 1.5 2006-02-20 16:23:47 chicares Exp $
+// $Id: fenv_lmi_test.cpp,v 1.6 2006-09-14 18:30:25 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -174,17 +174,44 @@ int test_main(int, char*[])
 
     // Test rounding control.
 
+    // This would be a compile-time error:
+//    fenv_rounding   (99999);
+
     fenv_rounding   (fe_tonearest);
     BOOST_TEST_EQUAL(fe_tonearest , fenv_rounding());
+#if defined LMI_COMPILER_PROVIDES_RINT
+    BOOST_TEST_EQUAL(-2, rint(-2.5));
+    BOOST_TEST_EQUAL(-2, rint(-1.5));
+    BOOST_TEST_EQUAL( 2, rint( 1.5));
+    BOOST_TEST_EQUAL( 2, rint( 2.5));
+#endif // defined LMI_COMPILER_PROVIDES_RINT
 
     fenv_rounding   (fe_downward);
     BOOST_TEST_EQUAL(fe_downward  , fenv_rounding());
+#if defined LMI_COMPILER_PROVIDES_RINT
+    BOOST_TEST_EQUAL(-3, rint(-2.5));
+    BOOST_TEST_EQUAL(-2, rint(-1.5));
+    BOOST_TEST_EQUAL( 1, rint( 1.5));
+    BOOST_TEST_EQUAL( 2, rint( 2.5));
+#endif // defined LMI_COMPILER_PROVIDES_RINT
 
     fenv_rounding   (fe_upward);
     BOOST_TEST_EQUAL(fe_upward    , fenv_rounding());
+#if defined LMI_COMPILER_PROVIDES_RINT
+    BOOST_TEST_EQUAL(-2, rint(-2.5));
+    BOOST_TEST_EQUAL(-1, rint(-1.5));
+    BOOST_TEST_EQUAL( 2, rint( 1.5));
+    BOOST_TEST_EQUAL( 3, rint( 2.5));
+#endif // defined LMI_COMPILER_PROVIDES_RINT
 
     fenv_rounding   (fe_towardzero);
     BOOST_TEST_EQUAL(fe_towardzero, fenv_rounding());
+#if defined LMI_COMPILER_PROVIDES_RINT
+    BOOST_TEST_EQUAL(-2, rint(-2.5));
+    BOOST_TEST_EQUAL(-1, rint(-1.5));
+    BOOST_TEST_EQUAL( 1, rint( 1.5));
+    BOOST_TEST_EQUAL( 2, rint( 2.5));
+#endif // defined LMI_COMPILER_PROVIDES_RINT
 
     fenv_initialize();
     BOOST_TEST(fenv_validate());
