@@ -21,7 +21,7 @@ dnl snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
 dnl === Prologue ===
 
-AC_REVISION($Id: configure.ac,v 1.21 2006-09-02 12:07:17 zeitlin Exp $)dnl
+AC_REVISION($Id: configure.ac,v 1.22 2006-09-14 18:30:25 chicares Exp $)dnl
 
 AC_PREREQ(2.56)
 AC_INIT(LMI, 1.0.0, [chicares@cox.net])
@@ -269,6 +269,7 @@ dnl the usual HAVE_EXPM1/HAVE_LOG1P
 AC_CHECK_FUNC(strtold, AC_DEFINE(LMI_COMPILER_PROVIDES_STRTOLD, [1], [Define this if you have strtold() function]))
 AC_CHECK_FUNC(expm1, AC_DEFINE(LMI_COMPILER_PROVIDES_EXPM1, [1], [Define this if you have expm1() function]))
 AC_CHECK_FUNC(log1p, AC_DEFINE(LMI_COMPILER_PROVIDES_LOG1P, [1], [Define this if you have log1p() function]))
+AC_CHECK_FUNC(rint, AC_DEFINE(LMI_COMPILER_PROVIDES_RINT, [1], [Define this if you have rint() function]))
 
 dnl === Library checks ===
 
