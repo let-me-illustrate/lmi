@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.448 2006-09-09 01:27:03 chicares Exp $
+// $Id: ChangeLog,v 1.449 2006-09-14 18:30:25 chicares Exp $
 
 MAINTENANCE
 
@@ -7440,4 +7440,11 @@ Remove the defects noted 20060908T2211Z.
   fenv_lmi.cpp
   fenv_lmi.hpp
 Improve documentation.
+
+20060914T1830Z <chicares@cox.net> [1202]
+
+  config_ming323.hpp
+  configure.ac
+  fenv_lmi_test.cpp
+Improve rounding-control tests.
 

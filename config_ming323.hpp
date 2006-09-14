@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: config_ming323.hpp,v 1.5 2006-01-29 13:52:00 chicares Exp $
+// $Id: config_ming323.hpp,v 1.6 2006-09-14 18:30:25 chicares Exp $
 
 // Configuration header for compiler quirks--mingw gcc-3.2.3 .
 
@@ -40,6 +40,9 @@
 // departures from C++98, whether positive (such as providing C99
 // functions) or negative.
 
+// Version numbers are in 'include/_mingw.h' here:
+//   http://cygwin.com/cgi-bin/cvsweb.cgi/src/winsup/mingw/?cvsroot=src
+
 #if 308 <= LMI_MINGW_VERSION
 #   define LMI_COMPILER_PROVIDES_EXPM1
 #endif // 308 <= LMI_MINGW_VERSION
@@ -47,6 +50,10 @@
 #if 202 <= LMI_MINGW_VERSION
 #   define LMI_COMPILER_PROVIDES_LOG1P
 #endif // 202 <= LMI_MINGW_VERSION
+
+#if 200 <= LMI_MINGW_VERSION
+#   define LMI_COMPILER_PROVIDES_RINT
+#endif // 200 <= LMI_MINGW_VERSION
 
 #if 204 <= LMI_MINGW_VERSION
 #   define LMI_COMPILER_PROVIDES_STRTOLD
