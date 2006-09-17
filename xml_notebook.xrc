@@ -24,7 +24,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: xml_notebook.xrc,v 1.31 2006-09-04 15:00:36 chicares Exp $
+    $Id: xml_notebook.xrc,v 1.32 2006-09-17 00:19:50 chicares Exp $
 
     This version is generic. It strives to present every input field
     the system offers, in a way that suits the main developer's tastes.
@@ -1741,13 +1741,12 @@ here, but it looks weird if we don't make this look like its siblings.
                                                 <object class="sizeritem">
                                                     <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                                                     <object class="wxStaticText">
-                                                        <label>Age </label>
+                                                        <label>Year </label>
                                                     </object>
                                                 </object>
                                                 <object class="sizeritem">
                                                     <flag>wxGROW</flag>
-<!-- Really want something like "SolveFromAge"; this is a temporary kludge. -->
-                                                    <object class="wxSpinCtrl" name="SolveBeginYear">
+                                                    <object class="wxSpinCtrl" name="SolveBeginTime">
                                                         <size>10,-1</size>
                                                         <max>100</max>
                                                         <value>99</value>
@@ -1756,12 +1755,13 @@ here, but it looks weird if we don't make this look like its siblings.
                                                 <object class="sizeritem">
                                                     <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                                                     <object class="wxStaticText">
-                                                        <label>Year </label>
+                                                        <label>Age </label>
                                                     </object>
                                                 </object>
                                                 <object class="sizeritem">
                                                     <flag>wxGROW</flag>
-                                                    <object class="wxSpinCtrl" name="SolveBeginTime">
+<!-- Really want something like "SolveFromAge"; this is a temporary kludge. -->
+                                                    <object class="wxSpinCtrl" name="SolveBeginYear">
                                                         <size>10,-1</size>
                                                         <max>100</max>
                                                         <value>99</value>
@@ -1798,13 +1798,12 @@ here, but it looks weird if we don't make this look like its siblings.
                                                 <object class="sizeritem">
                                                     <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                                                     <object class="wxStaticText">
-                                                        <label>Age </label>
+                                                        <label>Year </label>
                                                     </object>
                                                 </object>
                                                 <object class="sizeritem">
                                                     <flag>wxGROW</flag>
-<!-- Really want something like "SolveToAge"; this is a temporary kludge. -->
-                                                    <object class="wxSpinCtrl" name="SolveEndYear">
+                                                    <object class="wxSpinCtrl" name="SolveEndTime">
                                                         <size>10,-1</size>
                                                         <max>100</max>
                                                         <value>99</value>
@@ -1813,12 +1812,13 @@ here, but it looks weird if we don't make this look like its siblings.
                                                 <object class="sizeritem">
                                                     <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                                                     <object class="wxStaticText">
-                                                        <label>Year </label>
+                                                        <label>Age </label>
                                                     </object>
                                                 </object>
                                                 <object class="sizeritem">
                                                     <flag>wxGROW</flag>
-                                                    <object class="wxSpinCtrl" name="SolveEndTime">
+<!-- Really want something like "SolveToAge"; this is a temporary kludge. -->
+                                                    <object class="wxSpinCtrl" name="SolveEndYear">
                                                         <size>10,-1</size>
                                                         <max>100</max>
                                                         <value>99</value>
@@ -1855,13 +1855,12 @@ here, but it looks weird if we don't make this look like its siblings.
                                                 <object class="sizeritem">
                                                     <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                                                     <object class="wxStaticText">
-                                                        <label>Age </label>
+                                                        <label>Year </label>
                                                     </object>
                                                 </object>
                                                 <object class="sizeritem">
                                                     <flag>wxGROW</flag>
-<!-- Really want something like "SolveAtAge"; this is a temporary kludge. -->
-                                                    <object class="wxSpinCtrl" name="SolveTargetYear">
+                                                    <object class="wxSpinCtrl" name="SolveTargetTime">
                                                         <size>10,-1</size>
                                                         <max>100</max>
                                                         <value>99</value>
@@ -1870,12 +1869,13 @@ here, but it looks weird if we don't make this look like its siblings.
                                                 <object class="sizeritem">
                                                     <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                                                     <object class="wxStaticText">
-                                                        <label>Year </label>
+                                                        <label>Age </label>
                                                     </object>
                                                 </object>
                                                 <object class="sizeritem">
                                                     <flag>wxGROW</flag>
-                                                    <object class="wxSpinCtrl" name="SolveTargetTime">
+<!-- Really want something like "SolveAtAge"; this is a temporary kludge. -->
+                                                    <object class="wxSpinCtrl" name="SolveTargetYear">
                                                         <size>10,-1</size>
                                                         <max>100</max>
                                                         <value>99</value>
