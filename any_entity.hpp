@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: any_entity.hpp,v 1.2 2006-08-12 17:16:33 chicares Exp $
+// $Id: any_entity.hpp,v 1.3 2006-09-19 02:55:39 chicares Exp $
 
 #ifndef any_entity_hpp
 #define any_entity_hpp
@@ -49,6 +49,21 @@ class any_entity
   private:
     virtual any_entity& assign(std::string const&) = 0;
 };
+
+/// Design notes: numeric stream output.
+///
+/// This stream inserter explicitly converts every any_entity object
+/// to a std::string. Motivating reason: the implementation provided
+/// by class any_member writes arithmetic types with all achievable
+/// decimal precision, using functions that return a std::string for
+/// safety; and a uniform interface is wanted for all types. This adds
+/// some overhead for entities of type char*, but such a type probably
+/// ought to be avoided anyway, so the cost seems unimportant.
+
+inline std::ostream& operator<<(std::ostream& os, any_entity const& z)
+{
+    return os << z.str();
+}
 
 #endif // any_entity_hpp
 

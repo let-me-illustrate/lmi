@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: any_member.hpp,v 1.13 2006-08-12 17:16:33 chicares Exp $
+// $Id: any_member.hpp,v 1.14 2006-09-19 02:55:39 chicares Exp $
 
 // This is a derived work based on boost::any, which bears the following
 // copyright and permissions notice:
@@ -51,16 +51,6 @@
 // does everything exact_cast() does, and can also cast to a base
 // class of the object's actual type if an appropriate specialization
 // of class template reconstitutor is found.
-
-// Design notes: numeric stream input and output
-//
-// Member function holder::write() explicitly converts its held
-// object to a std::string before writing it to the std::ostream.
-// This adds some overhead, which is probably significant for held
-// objects of type char*, but data members generally should be of
-// type std::string instead, so the cost seems unimportant. The
-// benefit is that arithmetic types are written with all achievable
-// decimal precision.
 
 #ifndef any_member_hpp
 #define any_member_hpp
@@ -123,8 +113,8 @@ class placeholder
     virtual placeholder& assign(std::string const&) = 0;
     virtual placeholder* clone() const = 0;
     virtual bool equals(placeholder const&) const = 0;
+    virtual std::string str() const = 0;
     virtual std::type_info const& type() const = 0;
-    virtual void write(std::ostream&) const = 0;
 };
 
 // Implementation of class placeholder.
@@ -152,8 +142,8 @@ class holder
     virtual holder& assign(std::string const&);
     virtual placeholder* clone() const;
     virtual bool equals(placeholder const&) const;
+    virtual std::string str() const;
     virtual std::type_info const& type() const;
-    virtual void write(std::ostream&) const;
 
   private:
     ClassType* object_;
@@ -216,16 +206,16 @@ bool holder<ClassType,ValueType>::equals(placeholder const& other) const
 }
 
 template<typename ClassType, typename ValueType>
-std::type_info const& holder<ClassType,ValueType>::type() const
+std::string holder<ClassType,ValueType>::str() const
 {
-    return typeid(ValueType);
+    LMI_SIMPLE_ASSERT(object_);
+    return value_cast<std::string>(object_->*held_);
 }
 
 template<typename ClassType, typename ValueType>
-void holder<ClassType,ValueType>::write(std::ostream& os) const
+std::type_info const& holder<ClassType,ValueType>::type() const
 {
-    LMI_SIMPLE_ASSERT(object_);
-    os << value_cast<std::string>(object_->*held_);
+    return typeid(ValueType);
 }
 
 // Definition of class any_member.
@@ -281,7 +271,6 @@ class any_member
     // any_entity required implementation.
     virtual std::string str() const;
     virtual std::type_info const& type() const;
-    virtual void write(std::ostream&) const;
 
   private:
 #if !defined __BORLANDC__
@@ -373,29 +362,14 @@ bool any_member<ClassType>::operator!=
 template<typename ClassType>
 std::string any_member<ClassType>::str() const
 {
-    std::ostringstream oss;
     LMI_SIMPLE_ASSERT(content_);
-    content_->write(oss);
-    return oss.str();
-}
-
-template<typename ClassType>
-void any_member<ClassType>::write(std::ostream& os) const
-{
-    content_->write(os);
+    return content_->str();
 }
 
 template<typename ClassType>
 std::type_info const& any_member<ClassType>::type() const
 {
     return content_ ? content_->type() : typeid(void);
-}
-
-template<typename ClassType>
-std::ostream& operator<<(std::ostream& os, any_member<ClassType> const& z)
-{
-    z.write(os);
-    return os;
 }
 
 template<typename ClassType>
@@ -563,7 +537,7 @@ class MemberSymbolTable
     // The borland compiler defectively can't handle non-inline member
     // function templates.
     template<typename ValueType, typename SameOrBaseClassType>
-    void ascribe(std::string const& s, ValueType SameOrBaseClassType::*p2m)
+    void ascribe(std::string const& s, ValueType SameOrBaseClassType::* p2m)
         {
         ClassType* class_object = static_cast<ClassType*>(this);
         map_.insert
@@ -673,23 +647,6 @@ void MemberSymbolTable<ClassType>::ascribe
                 >::value
         ));
 
-    // TODO ?? Reconsider this: don't both casts elicit undefined
-    // behavior? Class MemberSymbolTable is not polymorphic, and
-    // this member function is called in derived classes' ctors.
-    // See 5.2.7/6 and 5.2.9/5 .
-    //
-    // Here, the behavior of dynamic_cast is well defined, whereas
-    // static_cast might display undefined behavior if ClassType
-    // does not have MemberSymbolTable<ClassType> as a base class.
-    // But static_cast actually gives a diagnostic at compile time
-    // with gcc and comeau, so it seems safe as long as at least one
-    // of those compilers is used.
-#if 0
-    ClassType* class_object = dynamic_cast<ClassType*>(this);
-    // If this assertion fails, then MemberSymbolTable<ClassType> is
-    // not a base class of ClassType.
-    LMI_SIMPLE_ASSERT(class_object);
-#endif // 0
     ClassType* class_object = static_cast<ClassType*>(this);
     map_.insert(member_pair_type(s, any_member<ClassType>(class_object, p2m)));
     member_names_.push_back(s);

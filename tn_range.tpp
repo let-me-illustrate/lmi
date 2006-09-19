@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: tn_range.tpp,v 1.9 2006-08-13 11:51:38 chicares Exp $
+// $Id: tn_range.tpp,v 1.10 2006-09-19 02:57:41 chicares Exp $
 
 #include "tn_range.hpp"
 
@@ -36,6 +36,72 @@
 
 namespace
 {
+    /// Clearer diagnostics can be written if it is ascertainable
+    /// whether a candidate value lies strictly between its type's
+    /// extrema. If a value is constrained to be positive, e.g., and a
+    /// negative candidate is to be tested, then it is unhelpful to
+    /// tell users that the proper range is something like:
+    ///    [0.0, 1.7976931348623157E+308] // IEC 60559 double.
+    ///    [0, 32767] // Minimum INT_MAX that C99 E.1 allows.
+    /// because they are not likely to recognize those maximum values
+    /// as such. Any value of a type for which std::numeric_traits is
+    /// not specialized is treated as lying strictly between extrema
+    /// for this purpose, because that generally yields an appropriate
+    /// outcome, though of course a different behavior can be obtained
+    /// by adding a specialization.
+    ///
+    /// It is significant that floating-point variables can hold
+    /// values outside the normalized extrema.
+
+    template
+        <typename T
+        ,bool=std::numeric_limits<T>::is_specialized
+        ,bool=boost::is_float<T>::value
+        >
+    struct strictly_between_extrema_tester
+    {};
+
+    // Type is not fundamental (and therefore not floating).
+
+    template<typename T>
+    struct strictly_between_extrema_tester<T,false,false>
+    {
+        bool operator()(T) {return true;}
+    };
+
+    // Type is fundamental but not floating, and therefore integral
+    // (or void, which would naturally be improper).
+
+    template<typename T>
+    struct strictly_between_extrema_tester<T,true,false>
+    {
+        bool operator()(T t)
+            {
+            static T const lower_limit = std::numeric_limits<T>::min();
+            static T const upper_limit = std::numeric_limits<T>::max();
+            return lower_limit < t && t < upper_limit;
+            }
+    };
+
+    // Type is floating.
+
+    template<typename T>
+    struct strictly_between_extrema_tester<T,true,true>
+    {
+        bool operator()(T t)
+            {
+            static T const lower_limit = -std::numeric_limits<T>::max();
+            static T const upper_limit =  std::numeric_limits<T>::max();
+            return lower_limit < t && t < upper_limit;
+            }
+    };
+
+    template<typename T>
+    bool is_strictly_between_extrema(T t)
+    {
+        return strictly_between_extrema_tester<T>()(t);
+    }
+
     /// Signum, defined here to return 0 for NaNs.
     ///
     /// To handle unsigned types without warnings, the value zero is
@@ -61,7 +127,7 @@ namespace
             }
     }
 
-    /// Exact-integer function templates.
+    /// Exact-integer determination for floating types.
     ///
     /// Motivation: Ascertaining whether a floating-point value lies
     /// within a range like [-1.07, +1.07] requires careful handling
@@ -101,76 +167,63 @@ namespace
     /// some compilers would fail such an assertion even though the
     /// underlying hardware conforms to that standard.
     ///
-    /// This function template actually returns true iff
-    ///  - t is in the range that the floating-point type could
+    /// A value of floating type is considered exact iff
+    ///  - it is in the range that the floating-point type could
     ///    represent exactly; and
-    ///  - t is in the range of long int; and
-    ///  - t equals static_cast<long int>(t)
-    /// Instead, type long long int might have been used, but it is
-    /// not yet part of standard C++ and not all compilers support it.
+    ///  - it is in the range of long int; and
+    ///  - converting it to type long int preserves its value.
+    /// Type long long int might have been used instead, but it is not
+    /// yet part of standard C++ and not all compilers support it.
+    ///
+    /// No nonfundamental type is considered exact.
     ///
     /// See this discussion:
     ///   http://groups.google.com/groups?th=1b868327b241fb74
     ///   http://groups.google.com/groups?selm=3DF66B8D.F1C3D2C0%40sun.com
 
+    template<typename T, bool=boost::is_float<T>::value>
+    struct is_exact_integer_tester
+    {};
+
     template<typename T>
-    bool floating_point_value_is_exact_integer(T t)
+    struct is_exact_integer_tester<T,false>
+    {
+        bool operator()(T) {return std::numeric_limits<T>::is_exact;}
+    };
+
+    template<typename T>
+    struct is_exact_integer_tester<T,true>
     {
         BOOST_STATIC_ASSERT(boost::is_float<T>::value);
-        static T z0 = std::pow
-            (static_cast<T>(std::numeric_limits<T>::radix)
-            ,static_cast<T>(std::numeric_limits<T>::digits)
-            );
-        long int z1 = std::numeric_limits<long int>::max();
-        return
-                -z0 < t
-            &&        t < z0
-            &&  -z1 < t
-            &&        t < z1
-            && t == static_cast<long int>(t);
-    }
+        bool operator()(T t)
+            {
+            static T z0 = std::pow
+                (static_cast<T>(std::numeric_limits<T>::radix)
+                ,static_cast<T>(std::numeric_limits<T>::digits)
+                );
+            long int z1 = std::numeric_limits<long int>::max();
+            return
+                    -z0 < t
+                &&        t < z0
+                &&  -z1 < t
+                &&        t < z1
+                && t == static_cast<long int>(t);
+            }
+    };
 
     template<typename T>
-    bool is_exact_integer(T)
+    bool is_exact_integer(T t)
     {
-        return std::numeric_limits<T>::is_exact;
-    }
-
-    template<> bool is_exact_integer(float t)
-    {
-        return floating_point_value_is_exact_integer(t);
-    }
-
-    template<> bool is_exact_integer(double t)
-    {
-        return floating_point_value_is_exact_integer(t);
-    }
-
-    template<> bool is_exact_integer(long double t)
-    {
-        return floating_point_value_is_exact_integer(t);
+        return is_exact_integer_tester<T>()(t);
     }
 
     /// Like C99 nextafter(), but prevents range error, and returns
     /// exact integral values unchanged.
-    ///
-    /// Using the straightforward
-    ///    if(boost::is_float<T>::value)
-    /// would cause compiler warnings that later statements are
-    /// unreachable when the condition is true. Instead, the condition
-    /// is stored in a volatile object. That object really ought to be
-    /// const volatile, but, as discussed here:
-    ///   http://www.google.com/groups?selm=4192bc30%241%40newsgroups.borland.com
-    /// that would elicit a spurious warning from the borland compiler.
 
     template<typename T>
     T adjust_bound(T t, T direction)
     {
-        bool volatile is_float = boost::is_float<T>::value;
-        if(!is_float)
-            {
-            return t;
-            }
+        BOOST_STATIC_ASSERT(boost::is_float<T>::value);
         if(is_exact_integer(t))
             {
             return t;
@@ -210,27 +263,48 @@ namespace
             }
     }
 
-    /// The second argument of adjust_bound() must be cast to T if it
-    /// is negative. Otherwise, an integral promotion [5.3.1/7] might
-    /// be performed, and that would prevent template resolution. And
-    /// '0 -' avoids a compiler warning about negating an unsigned
-    /// value.
+    template<typename T, int>
+    struct bound_adjuster
+    {};
+
+    template<typename T>
+    struct bound_adjuster<T,0>
+    {
+        T operator()(T t) {return t;}
+    };
+
+    template<typename T>
+    struct bound_adjuster<T,-1>
+    {
+        BOOST_STATIC_ASSERT(boost::is_float<T>::value);
+        T operator()(T t)
+            {
+            static T const extremum = -std::numeric_limits<T>::max();
+            return adjust_bound(t, extremum);
+            }
+    };
+
+    template<typename T>
+    struct bound_adjuster<T,1>
+    {
+        BOOST_STATIC_ASSERT(boost::is_float<T>::value);
+        T operator()(T t)
+            {
+            static T const extremum = std::numeric_limits<T>::max();
+            return adjust_bound(t, extremum);
+            }
+    };
 
     template<typename T>
     T adjust_minimum(T t)
     {
-        static T const extremum = std::numeric_limits<T>::is_signed
-            ? static_cast<T>(0 - std::numeric_limits<T>::max())
-            : static_cast<T>(0)
-            ;
-        return adjust_bound(t, extremum);
+        return bound_adjuster<T,boost::is_float<T>::value ? -1 : 0>()(t);
     }
 
     template<typename T>
     T adjust_maximum(T t)
     {
-        static T const extremum = std::numeric_limits<T>::max();
-        return adjust_bound(t, extremum);
+        return bound_adjuster<T,boost::is_float<T>::value ? 1 : 0>()(t);
     }
 } // Unnamed namespace.
 
@@ -524,10 +598,9 @@ Number tn_range<Number,Trammel>::curb(Number n) const
 template<typename Number, typename Trammel>
 std::string tn_range<Number,Trammel>::format_limits_for_error_message() const
 {
-    static Number const extremum = std::numeric_limits<Number>::max();
     std::ostringstream oss;
-    bool bounded_above = maximum_ < extremum;
-    bool bounded_below = -extremum < minimum_;
+    bool bounded_below = is_strictly_between_extrema(minimum_);
+    bool bounded_above = is_strictly_between_extrema(maximum_);
     if(bounded_below && bounded_above)
         {
         oss
@@ -591,7 +664,6 @@ std::string tn_range<Number,Trammel>::diagnose_invalidity
     (std::string const& s
     ) const
 {
-    static Number const extremum = std::numeric_limits<Number>::max();
     Number n;
     try
         {
@@ -608,7 +680,7 @@ std::string tn_range<Number,Trammel>::diagnose_invalidity
         {
         return "";
         }
-    else if(n < -extremum || extremum < n)
+    else if(!is_strictly_between_extrema(n))
         {
         std::ostringstream oss;
         oss
