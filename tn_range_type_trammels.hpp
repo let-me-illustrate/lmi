@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: tn_range_type_trammels.hpp,v 1.5 2006-01-29 13:52:00 chicares Exp $
+// $Id: tn_range_type_trammels.hpp,v 1.6 2006-09-19 02:59:19 chicares Exp $
 
 #ifndef tn_range_type_trammels_hpp
 #define tn_range_type_trammels_hpp
@@ -33,42 +33,42 @@
 // TODO ?? Move this one to a 'test' file.
 
 template<typename T>
-struct percentage_trammel
+class percentage_trammel
     :public trammel_base<T>
 {
-    T nominal_maximum() const {return 100;}
     T nominal_minimum() const {return   0;}
     T default_value()   const {return   0;}
+    T nominal_maximum() const {return 100;}
 };
 
 // TODO ?? Consider generating these with macros, e.g.
 //   TRAMMEL(1,0,0)
 
 template<typename T>
-struct proportion_trammel
+class proportion_trammel
     :public trammel_base<T>
 {
+    T nominal_minimum() const {return 0;}
+    T default_value()   const {return 0;}
     T nominal_maximum() const {return 1;}
-    T nominal_minimum() const {return 0;}
-    T default_value()   const {return 0;}
 };
 
 template<typename T>
-struct unrestricted_trammel
+class unrestricted_trammel
     :public trammel_base<T>
 {
-    T nominal_maximum() const {return  std::numeric_limits<T>::max();}
     T nominal_minimum() const {return -std::numeric_limits<T>::max();}
-    T default_value()   const {return 0;}
+    T default_value()   const {return  0;}
+    T nominal_maximum() const {return  std::numeric_limits<T>::max();}
 };
 
 template<typename T>
-struct nonnegative_trammel
+class nonnegative_trammel
     :public trammel_base<T>
 {
-    T nominal_maximum() const {return std::numeric_limits<T>::max();}
     T nominal_minimum() const {return 0;}
     T default_value()   const {return 0;}
+    T nominal_maximum() const {return std::numeric_limits<T>::max();}
 };
 
 // TODO ?? These three
@@ -79,57 +79,57 @@ struct nonnegative_trammel
 // limit semantics above can be added later.
 
 template<typename T>
-struct issue_age_trammel
+class issue_age_trammel
     :public trammel_base<T>
 {
+    T nominal_minimum() const {return  0;}
+    T default_value()   const {return  0;}
     T nominal_maximum() const {return 99;}
-    T nominal_minimum() const {return 0;}
-    T default_value()   const {return 0;}
 };
 
 template<typename T>
-struct attained_age_trammel
+class attained_age_trammel
     :public trammel_base<T>
 {
+    T nominal_minimum() const {return  0;}
+    T default_value()   const {return  0;}
     T nominal_maximum() const {return 99;}
-    T nominal_minimum() const {return 0;}
-    T default_value()   const {return 0;}
 };
 
 template<typename T>
-struct duration_trammel
+class duration_trammel
     :public trammel_base<T>
 {
+    T nominal_minimum() const {return  0;}
+    T default_value()   const {return  0;}
     T nominal_maximum() const {return 99;}
-    T nominal_minimum() const {return 0;}
-    T default_value()   const {return 0;}
 };
 
 template<typename T>
-struct month_trammel
+class month_trammel
     :public trammel_base<T>
 {
+    T nominal_minimum() const {return  0;}
+    T default_value()   const {return  0;}
     T nominal_maximum() const {return 11;}
-    T nominal_minimum() const {return 0;}
-    T default_value()   const {return 0;}
 };
 
 template<typename T>
-struct corridor_factor_trammel
+class corridor_factor_trammel
     :public trammel_base<T>
 {
-    T nominal_maximum() const {return std::numeric_limits<T>::max();}
     T nominal_minimum() const {return 1;}
     T default_value()   const {return 1;}
+    T nominal_maximum() const {return std::numeric_limits<T>::max();}
 };
 
 template<typename T>
-struct date_trammel
+class date_trammel
     :public trammel_base<T>
 {
-    T nominal_maximum() const {return 5373484;} // 9999-12-31 .
     T nominal_minimum() const {return 2361222;} // Gregorian epoch (English).
     T default_value()   const {return 2453371;} // 2004-12-31 .
+    T nominal_maximum() const {return 5373484;} // 9999-12-31 .
 };
 
 #endif // tn_range_type_trammels_hpp
