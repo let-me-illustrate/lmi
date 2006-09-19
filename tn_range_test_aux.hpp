@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: tn_range_test_aux.hpp,v 1.4 2006-07-08 00:52:18 chicares Exp $
+// $Id: tn_range_test_aux.hpp,v 1.5 2006-09-19 02:57:41 chicares Exp $
 
 #ifndef tn_range_test_aux_hpp
 #define tn_range_test_aux_hpp
@@ -27,6 +27,9 @@
 #include "config.hpp"
 
 #include "tn_range_fwd.hpp"
+
+#include <istream>
+#include <ostream>
 
 // The derived trammel class must be defined here so that its size is
 // known to all translation units that might use it.
@@ -47,6 +50,50 @@ class percentage_trammel
 };
 
 typedef tn_range<int, percentage_trammel<int> > r_int_percentage;
+
+/// Class RangeUDT demonstrates the requirements for the Number
+/// parameter of class template tn_range. It must be:
+///  - DefaultConstructible
+///  - Streamable
+///  - Constructible from an arithmetic scalar
+///  - EqualityComparable
+///  - LessThanComparable
+///  - LessThanOrEqualComparable
+
+class RangeUDT
+{
+  public:
+    RangeUDT(): f_(3.14) {}
+    RangeUDT(float f): f_(f) {}
+
+    bool operator==(RangeUDT const&) const {return true;}
+    bool operator<( RangeUDT const&) const {return true;}
+    bool operator<=(RangeUDT const&) const {return true;}
+
+    float f_;
+};
+
+inline std::ostream& operator<<(std::ostream& os, RangeUDT const& z)
+{
+    return os << z.f_;
+}
+
+inline std::istream& operator>>(std::istream& is, RangeUDT& z)
+{
+    is >> z.f_;
+    return is;
+}
+
+template<typename T>
+class range_udt_trammel
+    :public trammel_base<T>
+{
+    T nominal_minimum() const {return   0;}
+    T default_value()   const {return   0;}
+    T nominal_maximum() const {return 100;}
+};
+
+typedef tn_range<RangeUDT, range_udt_trammel<RangeUDT> > r_range_udt;
 
 #endif // tn_range_test_aux_hpp
 

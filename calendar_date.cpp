@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: calendar_date.cpp,v 1.12 2006-09-03 22:47:14 chicares Exp $
+// $Id: calendar_date.cpp,v 1.13 2006-09-19 03:01:12 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -29,7 +29,23 @@
 #include "calendar_date.hpp"
 
 #include "alert.hpp"
+#include "zero.hpp"
 
+#if !defined __BORLANDC__
+#   include <boost/cast.hpp>
+#else  // defined __BORLANDC__
+// COMPILER !! Workaround for defective borland compiler.
+namespace boost
+{
+    template<typename T, typename U>
+    T numeric_cast(U u)
+    {
+        return static_cast<T>(u);
+    }
+}
+#endif // defined __BORLANDC__
+
+#include <algorithm> // std::max(), std::min()
 #include <ctime>
 #include <iomanip>
 #include <istream>
@@ -41,6 +57,19 @@
 namespace
 {
     int const gregorian_epoch_jdn = 2361222;
+
+    std::string format_yyyy_mm_dd_with_hyphens(int year, int month, int day)
+    {
+        std::ostringstream oss;
+        oss
+            << std::setfill('0') << std::setw(4) << year
+            << '-'
+            << std::setfill('0') << std::setw(2) << month
+            << '-'
+            << std::setfill('0') << std::setw(2) << day
+            ;
+        return oss.str();
+    }
 
     bool is_leap_year(int year)
     {
@@ -139,9 +168,17 @@ namespace
             {
             fatal_error()
                 << "Date "
-                << original_year << '-' << original_month << '-' << original_day
+                << format_yyyy_mm_dd_with_hyphens
+                    (original_year
+                    ,original_month
+                    ,original_day
+                    )
                 << " is invalid. Perhaps "
-                << year << '-' << month << '-' << day
+                << format_yyyy_mm_dd_with_hyphens
+                    (year
+                    ,month
+                    ,day
+                    )
                 << " was meant."
                 << LMI_FLUSH
                 ;
@@ -292,15 +329,7 @@ bool calendar_date::is_leap_year() const
 //
 std::string calendar_date::str() const
 {
-    std::ostringstream oss;
-    oss
-        << std::setfill('0') << std::setw(4) << year()
-        << '-'
-        << std::setfill('0') << std::setw(2) << month()
-        << '-'
-        << std::setfill('0') << std::setw(2) << day()
-        ;
-    return oss.str();
+    return format_yyyy_mm_dd_with_hyphens(year(), month(), day());
 }
 
 void calendar_date::assign_from_gregorian(int year, int month, int day)
@@ -329,21 +358,31 @@ std::istream& operator>>(std::istream& is, calendar_date& date)
     return is;
 }
 
+calendar_date add_years
+    (calendar_date const& date
+    ,int                  n_years
+    ,bool                 is_curtate
+    )
+{
+    return add_years_and_months(date, n_years, 0, is_curtate);
+}
+
 /// Increment by a given number of years and months.
 ///
 /// What date is one month after 2001-01-31? Two answers are possible:
 ///  - 2001-02-28 is 'curtate';
 ///  - 2001-03-01 is not.
 
-calendar_date calendar_date::add_years_and_months
-    (int n_years
-    ,int n_months
-    ,bool curtate
+calendar_date add_years_and_months
+    (calendar_date const& date
+    ,int                  n_years
+    ,int                  n_months
+    ,bool                 is_curtate
     )
 {
-    int year  = cached_year_  + n_years;
-    int month = cached_month_ + n_months;
-    int day   = cached_day_;
+    int year  = date.year () + n_years ;
+    int month = date.month() + n_months;
+    int day   = date.day  ()           ;
 
     int origin_zero_month = month - 1;
     year += origin_zero_month / 12;
@@ -361,22 +400,78 @@ calendar_date calendar_date::add_years_and_months
         {
         day = last_day_of_month;
         }
-    assign_from_gregorian(year, month, day);
-    if(no_such_day && !curtate)
+    if(no_such_day && !is_curtate)
         {
-        operator++();
+        return ++calendar_date(year, month, day);
         }
-    cache_gregorian_elements();
-    return *this;
+    else
+        {
+        return calendar_date(year, month, day);
+        }
 }
 
-calendar_date calendar_date::add_years(int n_years, bool curtate)
+namespace
 {
-    add_years_and_months(n_years, 0, curtate);
-    return *this;
-}
+/// Determine attained age without regard to its sign.
+///
+/// Negative ages often indicate logic errors. This function is kept
+/// in an unnamed namespace to prevent unsafe external use.
 
-int calculate_age
+int notional_age
+    (calendar_date const& birthdate
+    ,calendar_date const& as_of_date
+    ,bool                 use_age_nearest_birthday
+    )
+{
+    calendar_date some_neighboring_birthday = add_years
+        (birthdate
+        ,as_of_date.year() - birthdate.year()
+        ,false
+        );
+    calendar_date last_birthday =
+        as_of_date < some_neighboring_birthday
+        ?   add_years(some_neighboring_birthday, -1, false)
+        :   some_neighboring_birthday
+        ;
+    calendar_date next_birthday =
+        as_of_date < some_neighboring_birthday
+        ?   some_neighboring_birthday
+        :   add_years(some_neighboring_birthday,  1, false)
+        ;
+    LMI_ASSERT(last_birthday <= as_of_date && as_of_date <= next_birthday);
+
+    int days_since_last_birthday =
+            as_of_date   .julian_day_number()
+        -   last_birthday.julian_day_number()
+        ;
+    int days_until_next_birthday =
+            next_birthday.julian_day_number()
+        -   as_of_date   .julian_day_number()
+        ;
+    LMI_ASSERT
+        (   0 <= days_since_last_birthday && days_since_last_birthday <= 366
+        &&  0 <= days_until_next_birthday && days_until_next_birthday <= 366
+        );
+
+    int age_last_birthday = last_birthday.year() - birthdate.year();
+
+    if(!use_age_nearest_birthday)
+        {
+        return age_last_birthday;
+        }
+// TODO ?? DATABASE !! The way ties are resolved should be configurable.
+    else if(days_since_last_birthday < days_until_next_birthday)
+        {
+        return age_last_birthday;
+        }
+    else
+        {
+        return 1 + age_last_birthday;
+        }
+}
+} // Unnamed namespace.
+
+int attained_age
     (calendar_date const& birthdate
     ,calendar_date const& as_of_date
     ,bool                 use_age_nearest_birthday
@@ -394,36 +489,155 @@ int calculate_age
             ;
         }
 
-    calendar_date last_birthday(birthdate);
-    last_birthday.add_years(as_of_date.year() - birthdate.year(), false);
+    return notional_age(birthdate, as_of_date, use_age_nearest_birthday);
+}
 
-    if(as_of_date < last_birthday)
+calendar_date minimum_as_of_date
+    (int                  maximum_age
+    ,calendar_date const& epoch
+    )
+{
+    calendar_date z = --add_years(epoch, 1 + maximum_age, false);
+    if(z < epoch)
         {
-        last_birthday.add_years(-1, false);
+        z = epoch;
+        }
+    return z;
+}
+
+namespace
+{
+/// Determine a birthdate limit, iteratively.
+///
+/// To be age A on date D, one must have been born on a date B in
+/// [Bmin, Bmax]. Problem: to find Bmin or Bmax, given A and D.
+///
+/// Postconditions: Attained age equals A on date D if born on the
+/// date returned as a result, but does not equal A if born a day
+/// earlier in the minimum case or a day later in the maximum case.
+/// Furthermore,
+///   a_priori_minimum_ <= result <= a_priori_maximum_
+/// , and also
+///   result <= D
+/// because a negative attained age would be improper.
+///
+/// Leap-year days may occur between B or D, in either's neighborhood,
+/// giving rise to four special cases, each of which must be treated
+/// correctly for age last birthday as well as for every definition of
+/// age nearest birthday. Presumably an analytic solution exists for
+/// each case. However: half a dozen such definitions have been
+/// reported; analyzing each requires deep thought and testing; and
+/// the number of cases is large. Therefore, speed not being crucial,
+/// an iterative approach is chosen for easy and robust extensibility.
+///
+/// Details of iterative root finding.
+///
+/// A priori limits are set to the generally-useful range
+///   [gregorian_epoch(), last_yyyy_date()]
+/// augmented by 366 days on each end in order to ensure that they
+/// bracket a root. The number 366 is chosen on the assumption that
+/// no plausible age-nearest-birthday definition can skew results
+/// more than that.
+///
+/// INELEGANT !! The a priori limits restrict this functor's range
+/// in a way that is appropriate for the MVC framework, which cannot
+/// accommodate values outside that range. Greater generality would
+/// be desirable.
+///
+/// The objective function for which a root is to be found is the
+/// difference between the (integral) notional age and the desired
+/// age, plus an offset. The offset is a small value chosen to be
+/// less than the fraction of a year that a single day represents;
+/// its algebraic sign varies according to whether a minimum or a
+/// maximum birthdate is sought. The effect of the offset is to
+/// ensure that the function has no root, so that the root-finding
+/// algorithm will find the nearest bound in the desired direction.
+///
+/// INELEGANT !! Transforming the objective function by using the
+/// offset described above makes iteration slower than it need be.
+/// Calculating a floating instead of a fractional age would make the
+/// code clearer and speed convergence.
+
+class birthdate_limit
+{
+  public:
+    birthdate_limit
+        (calendar_date as_of_date
+        ,int           limit_age
+        ,bool          use_anb
+        ,root_bias     bias
+        )
+        :as_of_date_       (as_of_date)
+        ,limit_age_        (limit_age)
+        ,use_anb_          (use_anb)
+        ,bias_             (bias)
+        ,a_priori_minimum_ (gregorian_epoch().julian_day_number())
+        ,a_priori_maximum_ (last_yyyy_date ().julian_day_number())
+        {
+        if(bias_lower == bias_)
+            {
+            offset_ = -0.0001;
+            }
+        else if(bias_higher == bias_)
+            {
+            offset_ =  0.0001;
+            }
+        else
+            {
+            fatal_error() << "Unexpected case." << LMI_FLUSH;
+            }
         }
 
-    int age_last_birthday = last_birthday.year() - birthdate.year();
-
-    if(!use_age_nearest_birthday)
+    double operator()(double candidate)
         {
-        return age_last_birthday;
+        calendar_date z((jdn_t(boost::numeric_cast<int>(candidate))));
+        return offset_ + notional_age(z, as_of_date_, use_anb_) - limit_age_;
         }
 
-    double half_a_year = .5 * as_of_date.days_in_year();
+    calendar_date operator()()
+        {
+        root_type z = decimal_root
+            (-366 + a_priori_minimum_
+            , 366 + a_priori_maximum_
+            ,bias_
+            ,0
+            ,*this
+            );
+        LMI_ASSERT(root_not_bracketed != z.second);
+        int j = boost::numeric_cast<int>(z.first);
+        j = std::min(j, as_of_date_.julian_day_number());
+        j = std::max(j, a_priori_minimum_);
+        j = std::min(j, a_priori_maximum_);
+        return calendar_date(jdn_t(j));
+        }
 
-    int diff =
-            as_of_date.julian_day_number()
-        -   last_birthday.julian_day_number()
-        ;
-// TODO ?? DATABASE !! The way ties are resolved should be configurable.
-    if(use_age_nearest_birthday && half_a_year <= diff)
-        {
-        return 1 + age_last_birthday;
-        }
-    else
-        {
-        return age_last_birthday;
-        }
+  private:
+    calendar_date as_of_date_;
+    int           limit_age_;
+    bool          use_anb_;
+    root_bias     bias_;
+    int           a_priori_minimum_;
+    int           a_priori_maximum_;
+    double        offset_;
+};
+} // Unnamed namespace.
+
+calendar_date minimum_birthdate
+    (int                  minimum_age
+    ,calendar_date const& as_of_date
+    ,bool                 anb
+    )
+{
+    return birthdate_limit(as_of_date, minimum_age, anb, bias_lower)();
+}
+
+calendar_date maximum_birthdate
+    (int                  maximum_age
+    ,calendar_date const& as_of_date
+    ,bool                 anb
+    )
+{
+    return birthdate_limit(as_of_date, maximum_age, anb, bias_higher)();
 }
 
 std::string month_name(int month)
