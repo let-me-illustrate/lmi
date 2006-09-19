@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: calendar_date.hpp,v 1.6 2006-08-13 11:22:09 chicares Exp $
+// $Id: calendar_date.hpp,v 1.7 2006-09-19 03:01:12 chicares Exp $
 
 #ifndef calendar_date_hpp
 #define calendar_date_hpp
@@ -142,9 +142,6 @@ class LMI_SO calendar_date
     calendar_date& operator+=(int);
     calendar_date& operator-=(int);
 
-    calendar_date add_years(int years, bool curtate);
-    calendar_date add_years_and_months(int years, int months, bool curtate);
-
     int julian_day_number(int);
     int julian_day_number() const;
 
@@ -180,13 +177,33 @@ class LMI_SO calendar_date
 std::ostream& operator<<(std::ostream& os, calendar_date const&);
 std::istream& operator>>(std::istream& is, calendar_date&);
 
+calendar_date add_years
+    (calendar_date const& date
+    ,int                  n_years
+    ,bool                 is_curtate
+    );
+
+calendar_date add_years_and_months
+    (calendar_date const& date
+    ,int                  n_years
+    ,int                  n_months
+    ,bool                 is_curtate
+    );
+
 /// Age on 'as_of_date' if born on 'birthdate'. Throws an exception
 /// if 'as_of_date' precedes 'birthdate'.
 
-int calculate_age
+int attained_age
     (calendar_date const& birthdate
     ,calendar_date const& as_of_date
     ,bool                 use_age_nearest_birthday
+    );
+
+/// Earliest as-of date consonant with a given maximum age and epoch.
+
+calendar_date minimum_as_of_date
+    (int                  maximum_age
+    ,calendar_date const& epoch
     );
 
 /// Earliest birthdate consonant with a given age and as-of date.

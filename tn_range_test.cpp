@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: tn_range_test.cpp,v 1.8 2006-08-13 11:51:38 chicares Exp $
+// $Id: tn_range_test.cpp,v 1.9 2006-09-19 02:57:41 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -119,11 +119,16 @@ struct tn_range_test
     static void test_auxiliary_functions(char const* file, int line);
 
     template<typename T>
+    static void test_floating_auxiliary_functions(char const* file, int line);
+
+    template<typename T>
     static void test_percentages(char const* file, int line);
 
     static void test_diagnostics();
 
     static void test_absurd_limits();
+
+    static void test_nonfundamental_number_type();
 
     static void test();
 };
@@ -131,11 +136,15 @@ struct tn_range_test
 template<typename T>
 void tn_range_test::test_auxiliary_functions(char const* file, int line)
 {
+    T const maxT = std::numeric_limits<T>::max();
+    INVOKE_BOOST_TEST(!is_strictly_between_extrema(maxT), file, line);
+    // This test would fail for type bool.
+    INVOKE_BOOST_TEST( is_strictly_between_extrema(   1), file, line);
+
     INVOKE_BOOST_TEST_EQUAL(-1, signum(T(-1)), file, line);
     INVOKE_BOOST_TEST_EQUAL( 0, signum(T( 0)), file, line);
     INVOKE_BOOST_TEST_EQUAL( 1, signum(T( 1)), file, line);
 
-    T const maxT = std::numeric_limits<T>::max();
     INVOKE_BOOST_TEST_EQUAL(-1, signum(-maxT), file, line);
     INVOKE_BOOST_TEST_EQUAL( 1, signum( maxT), file, line);
 
@@ -148,45 +157,8 @@ void tn_range_test::test_auxiliary_functions(char const* file, int line)
     bool volatile exact = std::numeric_limits<T>::is_exact;
     if(!exact)
         {
-        INVOKE_BOOST_TEST_EQUAL(false, is_exact_integer(static_cast<T>( 0.5)), file, line);
-        INVOKE_BOOST_TEST_EQUAL(false, is_exact_integer(static_cast<T>(1.07)), file, line);
-        }
-
-    // The second argument of adjust_bound() must be cast to T if it
-    // is negative. Otherwise, an integral promotion [5.3.1/7] might
-    // be performed, and that would prevent template resolution. For
-    // parallelism, the cast is performed for positive arguments too.
-
-    INVOKE_BOOST_TEST_EQUAL(-1, adjust_bound(T(-1), static_cast<T>( std::numeric_limits<T>::max())), file, line);
-    INVOKE_BOOST_TEST_EQUAL( 0, adjust_bound(T( 0), static_cast<T>( std::numeric_limits<T>::max())), file, line);
-    INVOKE_BOOST_TEST_EQUAL( 1, adjust_bound(T( 1), static_cast<T>( std::numeric_limits<T>::max())), file, line);
-
-    INVOKE_BOOST_TEST_EQUAL(-1, adjust_bound(T(-1), static_cast<T>(-std::numeric_limits<T>::max())), file, line);
-    INVOKE_BOOST_TEST_EQUAL( 0, adjust_bound(T( 0), static_cast<T>(-std::numeric_limits<T>::max())), file, line);
-    INVOKE_BOOST_TEST_EQUAL( 1, adjust_bound(T( 1), static_cast<T>(-std::numeric_limits<T>::max())), file, line);
-
-    if(!exact)
-        {
-        // An inexact bound should be adjusted to a different value,
-        // and it should be adjusted in the appropriate direction.
-        // Test those requirements separately to make the cause of any
-        // failure more readily apparent.
-
-        // Test direction of adjustment.
-
-        INVOKE_BOOST_TEST_RELATION(-1.07, <=, adjust_bound(T(-1.07), static_cast<T>( std::numeric_limits<T>::max())), file, line);
-        INVOKE_BOOST_TEST_RELATION( 1.07, <=, adjust_bound(T( 1.07), static_cast<T>( std::numeric_limits<T>::max())), file, line);
-
-        INVOKE_BOOST_TEST_RELATION(-1.07, >=, adjust_bound(T(-1.07), static_cast<T>(-std::numeric_limits<T>::max())), file, line);
-        INVOKE_BOOST_TEST_RELATION( 1.07, >=, adjust_bound(T( 1.07), static_cast<T>(-std::numeric_limits<T>::max())), file, line);
-
-        // Test inequality of original and adjusted values.
-
-        INVOKE_BOOST_TEST_RELATION(-1.07, <, adjust_bound(T(-1.07), static_cast<T>( std::numeric_limits<T>::max())), file, line);
-        INVOKE_BOOST_TEST_RELATION( 1.07, <, adjust_bound(T( 1.07), static_cast<T>( std::numeric_limits<T>::max())), file, line);
-
-        INVOKE_BOOST_TEST_RELATION(-1.07, >, adjust_bound(T(-1.07), static_cast<T>(-std::numeric_limits<T>::max())), file, line);
-        INVOKE_BOOST_TEST_RELATION( 1.07, >, adjust_bound(T( 1.07), static_cast<T>(-std::numeric_limits<T>::max())), file, line);
+        INVOKE_BOOST_TEST_EQUAL(false, is_exact_integer( 0.5), file, line);
+        INVOKE_BOOST_TEST_EQUAL(false, is_exact_integer(1.07), file, line);
         }
 
     bool volatile is_iec559 = std::numeric_limits<T>::is_iec559;
@@ -194,12 +166,8 @@ void tn_range_test::test_auxiliary_functions(char const* file, int line)
     if(is_iec559 && has_infinity)
         {
         T const infT = std::numeric_limits<T>::infinity();
-
         INVOKE_BOOST_TEST_EQUAL(-1, signum(-infT), file, line);
         INVOKE_BOOST_TEST_EQUAL( 1, signum( infT), file, line);
-
-        INVOKE_BOOST_TEST_EQUAL(-infT, adjust_bound(T(-infT), static_cast<T>( std::numeric_limits<T>::max())), file, line);
-        INVOKE_BOOST_TEST_EQUAL( infT, adjust_bound(T( infT), static_cast<T>( std::numeric_limits<T>::max())), file, line);
         }
 
 #if !defined __BORLANDC__
@@ -213,6 +181,54 @@ void tn_range_test::test_auxiliary_functions(char const* file, int line)
         INVOKE_BOOST_TEST_EQUAL( 0, signum( qnanT), file, line);
         }
 #endif // Not borland compiler.
+}
+
+template<typename T>
+void tn_range_test::test_floating_auxiliary_functions(char const* file, int line)
+{
+    INVOKE_BOOST_TEST_EQUAL(-1, adjust_bound(T(-1),  std::numeric_limits<T>::max()), file, line);
+    INVOKE_BOOST_TEST_EQUAL( 0, adjust_bound(T( 0),  std::numeric_limits<T>::max()), file, line);
+    INVOKE_BOOST_TEST_EQUAL( 1, adjust_bound(T( 1),  std::numeric_limits<T>::max()), file, line);
+
+    INVOKE_BOOST_TEST_EQUAL(-1, adjust_bound(T(-1), -std::numeric_limits<T>::max()), file, line);
+    INVOKE_BOOST_TEST_EQUAL( 0, adjust_bound(T( 0), -std::numeric_limits<T>::max()), file, line);
+    INVOKE_BOOST_TEST_EQUAL( 1, adjust_bound(T( 1), -std::numeric_limits<T>::max()), file, line);
+
+    bool volatile exact = std::numeric_limits<T>::is_exact;
+    if(!exact)
+        {
+        // An inexact bound should be adjusted to a different value,
+        // and it should be adjusted in the appropriate direction.
+        // Test those requirements separately to make the cause of any
+        // failure more readily apparent.
+
+        // Test direction of adjustment.
+
+        INVOKE_BOOST_TEST_RELATION(-1.07, <=, adjust_bound(T(-1.07),  std::numeric_limits<T>::max()), file, line);
+        INVOKE_BOOST_TEST_RELATION( 1.07, <=, adjust_bound(T( 1.07),  std::numeric_limits<T>::max()), file, line);
+
+        INVOKE_BOOST_TEST_RELATION(-1.07, >=, adjust_bound(T(-1.07), -std::numeric_limits<T>::max()), file, line);
+        INVOKE_BOOST_TEST_RELATION( 1.07, >=, adjust_bound(T( 1.07), -std::numeric_limits<T>::max()), file, line);
+
+        // Test inequality of original and adjusted values.
+
+        INVOKE_BOOST_TEST_RELATION(-1.07, <,  adjust_bound(T(-1.07),  std::numeric_limits<T>::max()), file, line);
+        INVOKE_BOOST_TEST_RELATION( 1.07, <,  adjust_bound(T( 1.07),  std::numeric_limits<T>::max()), file, line);
+
+        INVOKE_BOOST_TEST_RELATION(-1.07, >,  adjust_bound(T(-1.07), -std::numeric_limits<T>::max()), file, line);
+        INVOKE_BOOST_TEST_RELATION( 1.07, >,  adjust_bound(T( 1.07), -std::numeric_limits<T>::max()), file, line);
+        }
+
+    bool volatile is_iec559 = std::numeric_limits<T>::is_iec559;
+    bool volatile has_infinity = std::numeric_limits<T>::has_infinity;
+    if(is_iec559 && has_infinity)
+        {
+        T const infT = std::numeric_limits<T>::infinity();
+        INVOKE_BOOST_TEST_EQUAL(-infT, adjust_bound(T(-infT),  std::numeric_limits<T>::max()), file, line);
+        INVOKE_BOOST_TEST_EQUAL( infT, adjust_bound(T( infT),  std::numeric_limits<T>::max()), file, line);
+        INVOKE_BOOST_TEST_EQUAL(-infT, adjust_bound(T(-infT), -std::numeric_limits<T>::max()), file, line);
+        INVOKE_BOOST_TEST_EQUAL( infT, adjust_bound(T( infT), -std::numeric_limits<T>::max()), file, line);
+        }
 }
 
 template<typename T>
@@ -287,6 +303,10 @@ void tn_range_test::test()
     test_auxiliary_functions<float      >(__FILE__, __LINE__);
     test_auxiliary_functions<double     >(__FILE__, __LINE__);
     test_auxiliary_functions<long double>(__FILE__, __LINE__);
+
+    test_floating_auxiliary_functions<float      >(__FILE__, __LINE__);
+    test_floating_auxiliary_functions<double     >(__FILE__, __LINE__);
+    test_floating_auxiliary_functions<long double>(__FILE__, __LINE__);
 
     r_nonnegative const r_zero  ( 0.00000);
     r_nonnegative const r_one   ( 1.00000);
@@ -390,7 +410,7 @@ void tn_range_test::test()
     BOOST_TEST( range1.is_valid( 0.0));
     BOOST_TEST( range1.is_valid(-0.0));
     BOOST_TEST(!range1.is_valid(-1.0));
-    BOOST_TEST_EQUAL(range1.curb( -1.0),   0.0);
+    BOOST_TEST_EQUAL(range1.curb( -1.0), 0.0);
 
     // Floating-point limits having no exact binary representation.
 
@@ -470,6 +490,8 @@ void tn_range_test::test()
     test_diagnostics();
 
     test_absurd_limits();
+
+    test_nonfundamental_number_type();
 }
 
 void tn_range_test::test_diagnostics()
@@ -603,6 +625,11 @@ void tn_range_test::test_absurd_limits()
 
     BOOST_TEST_EQUAL(p1.minimum(),   0.0);
     BOOST_TEST_EQUAL(p1.maximum(), 100.0);
+}
+
+void tn_range_test::test_nonfundamental_number_type()
+{
+    r_range_udt r0;
 }
 
 int test_main(int, char*[])
