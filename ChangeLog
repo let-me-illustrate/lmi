@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.451 2006-09-19 03:01:16 chicares Exp $
+// $Id: ChangeLog,v 1.452 2006-09-19 21:37:16 chicares Exp $
 
 MAINTENANCE
 
@@ -7487,4 +7487,9 @@ Import changes from skeleton trunk.
   input_harmonization.cpp
   inputstatus.cpp
 Adapt to revised calendar-date class, noting two latent defects.
+
+20060919T2137Z <chicares@cox.net> [1203]
+
+  main_wx.cpp
+Permit building with 0==wxUSE_STL .
 
