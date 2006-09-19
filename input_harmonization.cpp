@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_harmonization.cpp,v 1.34 2006-09-02 22:19:09 chicares Exp $
+// $Id: input_harmonization.cpp,v 1.35 2006-09-19 03:01:16 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -334,7 +334,7 @@ void Input::DoHarmonize()
 
     calendar_date min_date_of_birth;
     min_date_of_birth.julian_day_number(EffectiveDate.value());
-    min_date_of_birth.add_years(-100, false);
+    min_date_of_birth = add_years(min_date_of_birth, -100, false);
 
     DateOfBirth     .minimum(min_date_of_birth.julian_day_number());
     DateOfBirth     .maximum(EffectiveDate.value());
@@ -946,6 +946,20 @@ false // Silly workaround for now.
     SupplementalReportColumn11.enable(create_supplemental_report);
 }
 
+// Note on initial date values.
+//
+// A default-constructed instance of this class initially has
+// date of birth set to the current date, which of course
+// requires adjustment. From issue age, the year of birth can
+// be deduced approximately, but the month or day cannot. In
+// this case, a birthday is deemed to occur on the effective
+// date--as good an assumption as any, and the simplest.
+//
+// Of course, when an instance is read from a file (either
+// deliberately, or because 'default.ill' exists), then the
+// date of birth is simply read from the file; the adjustment
+// here has no effect as long as the file is consistent.
+
 void Input::DoTransmogrify()
 {
     if("Yes" == EffectiveDateToday)
@@ -953,7 +967,7 @@ void Input::DoTransmogrify()
         EffectiveDate = calendar_date().julian_day_number();
         }
 
-    bool use_anb = database->Query(DB_AgeLastOrNearest);
+    bool const use_anb = database->Query(DB_AgeLastOrNearest);
 
     // TODO ?? This syntax seems ugly. Should there be a ctor
     // calendar_date(int)? Alternatively, should tnr_date use a
@@ -963,20 +977,6 @@ void Input::DoTransmogrify()
 
     calendar_date date_of_birth;
     date_of_birth.julian_day_number(DateOfBirth.value());
-
-    // Note on initial values.
-    //
-    // A default-constructed instance of this class initially has
-    // date of birth set to the current date, which of course
-    // requires adjustment. From issue age, the year of birth can
-    // be deduced approximately, but the month or day cannot. In
-    // this case, a birthday is deemed to occur on the effective
-    // date--as good an assumption as any, and the simplest.
-    //
-    // Of course, when an instance is read from a file (either
-    // deliberately, or because 'default.ill' exists), then the
-    // date of birth is simply read from the file; the adjustment
-    // here has no effect as long as the file is consistent.
 
     // TODO ?? EGREGIOUS_DEFECT Temporary. Because the msw date
     // control parses keyboard input one keystroke at a time and
@@ -988,11 +988,11 @@ void Input::DoTransmogrify()
     // solution is to validate date controls only on focus loss.
     // However, for the nonce, forestall the exception...
 
-//    int apparent_age = calculate_age(date_of_birth, effective_date, use_anb);
+//    int apparent_age = attained_age(date_of_birth, effective_date, use_anb);
     int apparent_age =
         date_of_birth < effective_date
-        ?  calculate_age(date_of_birth, effective_date, use_anb)
-        : -calculate_age(effective_date, date_of_birth, use_anb)
+        ?  attained_age(date_of_birth, effective_date, use_anb)
+        : -attained_age(effective_date, date_of_birth, use_anb)
         ;
 
     if("Yes" == DeprecatedUseDOB)
@@ -1001,7 +1001,11 @@ void Input::DoTransmogrify()
         }
     else
         {
-        date_of_birth.add_years(apparent_age - IssueAge.value(), use_anb);
+        date_of_birth = add_years
+            (date_of_birth
+            ,apparent_age - IssueAge.value()
+            ,use_anb // TODO ?? Apparently this should be 'false'.
+            );
         DateOfBirth = date_of_birth.julian_day_number();
         }
 
