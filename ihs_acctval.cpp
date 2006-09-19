@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_acctval.cpp,v 1.85 2006-09-05 13:58:36 chicares Exp $
+// $Id: ihs_acctval.cpp,v 1.86 2006-09-19 03:01:16 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -1781,10 +1781,16 @@ void AccountValue::CoordinateCounters()
 
     if(daily_interest_accounting)
         {
-        calendar_date current_anniversary = Input_->EffDate;
-        current_anniversary.add_years(Year, true);
-        calendar_date next_anniversary = Input_->EffDate;
-        next_anniversary.add_years(1 + Year, true);
+        calendar_date current_anniversary = add_years
+            (Input_->EffDate
+            ,Year
+            ,true
+            );
+        calendar_date next_anniversary = add_years
+            (Input_->EffDate
+            ,1 + Year
+            ,true
+            );
         // This alternative
         //   days_in_policy_year = current_anniversary.days_in_year();
         // is not used: a policy issued in a leap year after its leap
@@ -1796,10 +1802,18 @@ void AccountValue::CoordinateCounters()
             ;
         LMI_ASSERT(365 <= days_in_policy_year && days_in_policy_year <= 366);
 
-        calendar_date current_monthiversary = Input_->EffDate;
-        current_monthiversary.add_years_and_months(Year, Month, true);
-        calendar_date next_monthiversary = Input_->EffDate;
-        next_monthiversary.add_years_and_months(Year, 1 + Month, true);
+        calendar_date current_monthiversary = add_years_and_months
+            (Input_->EffDate
+            ,Year
+            ,Month
+            ,true
+            );
+        calendar_date next_monthiversary = add_years_and_months
+            (Input_->EffDate
+            ,Year
+            ,1 + Month
+            ,true
+            );
         days_in_policy_month =
                 next_monthiversary.julian_day_number()
             -   current_monthiversary.julian_day_number()
