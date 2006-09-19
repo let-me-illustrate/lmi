@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.450 2006-09-17 00:19:50 chicares Exp $
+// $Id: ChangeLog,v 1.451 2006-09-19 03:01:16 chicares Exp $
 
 MAINTENANCE
 
@@ -7452,4 +7452,39 @@ Improve rounding-control tests.
 
   xml_notebook.xrc
 Improve concinnity.
+
+20060919T0255Z <chicares@cox.net> [1201]
+
+  any_entity.hpp
+  any_member.hpp
+Import changes from skeleton trunk.
+
+20060919T0257Z <chicares@cox.net> [1201]
+
+  tn_range.tpp
+  tn_range_test.cpp
+  tn_range_test_aux.hpp
+Import changes from skeleton trunk.
+
+  objects.make
+Add an object file that is now needed for 'tn_range_test'.
+
+20060919T0259Z <chicares@cox.net> [1201]
+
+  tn_range_type_trammels.hpp
+Override virtual members of class trammel_base privately. Generally
+favor logical number-line order over alphabetic where doing so
+increases clarity.
+
+20060919T0301Z <chicares@cox.net> [1203]
+
+  calendar_date.cpp
+  calendar_date.hpp
+  calendar_date_test.cpp
+Import changes from skeleton trunk.
+
+  ihs_acctval.cpp
+  input_harmonization.cpp
+  inputstatus.cpp
+Adapt to revised calendar-date class, noting two latent defects.
 

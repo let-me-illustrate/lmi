@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: inputstatus.cpp,v 1.3 2006-01-29 13:52:00 chicares Exp $
+// $Id: inputstatus.cpp,v 1.4 2006-09-19 03:01:16 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -102,6 +102,13 @@ int InputStatus::YearsToRetirement() const
 }
 
 //============================================================================
+
+/// TODO ?? Presumably the last argument to add_years() should be
+/// 'false' in both instances below.
+///
+/// A person born on a leap-year day attains legal majority on the
+/// first of March, not the twenty-eighth of February.
+
 void InputStatus::MakeAgesAndDatesConsistent
     (calendar_date const& EffDate
     ,bool                 UseANB
@@ -110,7 +117,7 @@ void InputStatus::MakeAgesAndDatesConsistent
     if(UseDOB)
         {
         r_iss_age& mutable_issue_age = const_cast<r_iss_age&>(IssueAge);
-        mutable_issue_age = calculate_age(DOB, EffDate, UseANB);
+        mutable_issue_age = attained_age(DOB, EffDate, UseANB);
         }
     else
         {
@@ -119,8 +126,9 @@ void InputStatus::MakeAgesAndDatesConsistent
             );
         // If no DOB is supplied, a birthday is assumed to occur on the
         // issue date--as good an assumption as any, and the simplest.
-        mutable_dob.add_years
-            (calculate_age(DOB, EffDate, UseANB) - IssueAge
+        mutable_dob = add_years
+            (mutable_dob
+            ,attained_age(DOB, EffDate, UseANB) - IssueAge
             ,true
             );
         }
@@ -133,15 +141,16 @@ void InputStatus::MakeAgesAndDatesConsistent
         // can be calculated from retirement and effective dates alone;
         // but it would seem that birthdate should enter into that.
         // Is it the case that we constrain retirement dates to birthdays?
-        mutable_ret_age = IssueAge + calculate_age(EffDate, DOR, UseANB);
+        mutable_ret_age = IssueAge + attained_age(EffDate, DOR, UseANB);
         }
     else
         {
         calendar_date& mutable_dor = const_cast<calendar_date&>
             (DOR.operator calendar_date const&()
             );
-        mutable_dor.add_years
-            (RetAge - calculate_age(DOB, DOR, UseANB)
+        mutable_dor = add_years
+            (mutable_dor
+            ,RetAge - attained_age(DOB, DOR, UseANB)
             ,true
             );
         }
