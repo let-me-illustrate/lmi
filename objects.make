@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: objects.make,v 1.81 2006-07-13 03:45:05 chicares Exp $
+# $Id: objects.make,v 1.82 2006-09-19 02:57:43 chicares Exp $
 
 ################################################################################
 
@@ -669,6 +669,7 @@ timer_test$(EXEEXT): \
 tn_range_test$(EXEEXT): \
   $(common_test_objects) \
   datum_base.o \
+  facets.o \
   tn_range_test.o \
   tn_range_test_aux.o \
 
