@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: census_view.cpp,v 1.45 2006-08-11 16:26:26 chicares Exp $
+// $Id: census_view.cpp,v 1.46 2006-09-20 16:06:24 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -40,7 +40,6 @@
 #include "miscellany.hpp" // is_ok_for_cctype()
 #include "mvc_controller.hpp"
 #include "wx_new.hpp"
-#include "xml_notebook.hpp"
 
 #include <wx/app.h>     // wxTheApp
 #include <wx/clipbrd.h> // Used only by GetClipboardText().
@@ -313,21 +312,10 @@ int CensusView::edit_parameters
     bool dirty = document().IsModified();
 
     Input edited_lmi_input = lmi_input;
-    int rc = false;
-    if(configurable_settings::instance().obsolescent_mvc())
-        {
-        XmlNotebook xml_notebook(GetFrame(), edited_lmi_input);
-        xml_notebook.SetTitle(name);
-        rc = xml_notebook.ShowModal();
-        }
-    else
-        {
-        DefaultView const default_view;
-        MvcController controller(GetFrame(), edited_lmi_input, default_view);
-        controller.SetTitle(name);
-        rc = controller.ShowModal();
-        }
-
+    DefaultView const default_view;
+    MvcController controller(GetFrame(), edited_lmi_input, default_view);
+    controller.SetTitle(name);
+    int rc = controller.ShowModal();
     if(wxID_OK == rc)
         {
         if(lmi_input != edited_lmi_input)
