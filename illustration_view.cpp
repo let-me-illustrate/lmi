@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustration_view.cpp,v 1.40 2006-08-12 17:16:36 chicares Exp $
+// $Id: illustration_view.cpp,v 1.41 2006-09-20 16:06:24 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -53,7 +53,6 @@
 #include "mvc_controller.hpp"
 #include "timer.hpp"
 #include "wx_new.hpp"
-#include "xml_notebook.hpp"
 
 #include <wx/html/htmlwin.h>
 #include <wx/icon.h>
@@ -125,19 +124,9 @@ warning() << "That command should have been disabled." << LMI_FLUSH;
     bool dirty = document().IsModified();
 
     Input edited_lmi_input = document().input_;
-    int rc = false;
-    if(configurable_settings::instance().obsolescent_mvc())
-        {
-        XmlNotebook xml_notebook(GetFrame(), edited_lmi_input);
-        rc = xml_notebook.ShowModal();
-        }
-    else
-        {
-        DefaultView const default_view;
-        MvcController controller(GetFrame(), edited_lmi_input, default_view);
-        rc = controller.ShowModal();
-        }
-
+    DefaultView const default_view;
+    MvcController controller(GetFrame(), edited_lmi_input, default_view);
+    int rc = controller.ShowModal();
     if(wxID_OK == rc)
         {
         if(document().input_ != edited_lmi_input)
