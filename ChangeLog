@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.452 2006-09-19 21:37:16 chicares Exp $
+// $Id: ChangeLog,v 1.453 2006-09-20 16:06:24 chicares Exp $
 
 MAINTENANCE
 
@@ -801,7 +801,7 @@ Fix malformed comment markers. Add test to detect them.
   xml_notebook.xrc
 Add new GUI files.
 
-  cgimain.cpp [expunged]
+  cgimain.cpp  [expunged]
   main_cgi.cpp [new file]
 Rename 'cgimain.cpp' to 'main_cgi.cpp'.
 
@@ -7492,4 +7492,16 @@ Adapt to revised calendar-date class, noting two latent defects.
 
   main_wx.cpp
 Permit building with 0==wxUSE_STL .
+
+20060920T1606Z <chicares@cox.net> [1172]
+
+  census_view.cpp
+  configurable_settings.cpp
+  configurable_settings.hpp
+  illustration_view.cpp
+  objects.make
+  xml_notebook.cpp [expunged]
+  xml_notebook.hpp [expunged]
+  xml_notebook.tpp [expunged]
+Remove obsolete MVC implementation.
 
