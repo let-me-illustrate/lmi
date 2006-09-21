@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_harmonization.cpp,v 1.35 2006-09-19 03:01:16 chicares Exp $
+// $Id: input_harmonization.cpp,v 1.36 2006-09-21 17:05:19 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -328,17 +328,54 @@ void Input::DoHarmonize()
 
     IssueAge        .enable("No"  == DeprecatedUseDOB);
     DateOfBirth     .enable("Yes" == DeprecatedUseDOB);
-// TODO ?? Begin kludge.
+
+    // The ranges of both EffectiveDate and IssueAge are treated as
+    // independent, to prevent one's value from affecting the other's
+    // range and therefore possibly forcing its value to change. Thus,
+    // if the maximum conceivable IssueAge is 100, then the earliest
+    // permitted EffectiveDate is approximately the centennial of the
+    // gregorian epoch.
+
+    IssueAge.minimum_and_maximum
+        (static_cast<int>(database->Query(DB_MinIssAge))
+        ,static_cast<int>(database->Query(DB_MaxIssAge))
+        );
+
+#if 0
+// TODO ?? This is what we'd like to write:
+    EffectiveDate.minimum
+        (minimum_as_of_date
+            (     IssueAge.trammel().maximum_maximorum()
+            ,EffectiveDate.trammel().minimum_minimorum()
+            )
+        );
+#else // 1
+//    but for now this is necessary:
+    EffectiveDate.minimum
+        (minimum_as_of_date
+            (     IssueAge.trammel().maximum_maximorum()
+            ,calendar_date(jdn_t(EffectiveDate.trammel().minimum_minimorum()))
+            ).julian_day_number()
+        );
+#endif // 1
+
+    bool const use_anb = database->Query(DB_AgeLastOrNearest);
+#if 0
+// TODO ?? This is what we'd like to write:
+    DateOfBirth.minimum_and_maximum
+        (minimum_birthdate(IssueAge.maximum(), EffectiveDate.value(), use_anb)
+        ,maximum_birthdate(IssueAge.minimum(), EffectiveDate.value(), use_anb)
+        );
+#else // 1
+//    but for now this is necessary:
     calendar_date effective_date;
     effective_date.julian_day_number(EffectiveDate.value());
+    DateOfBirth.minimum_and_maximum
+        (minimum_birthdate(IssueAge.maximum(), effective_date, use_anb).julian_day_number()
+        ,maximum_birthdate(IssueAge.minimum(), effective_date, use_anb).julian_day_number()
+        );
+#endif // 1
 
-    calendar_date min_date_of_birth;
-    min_date_of_birth.julian_day_number(EffectiveDate.value());
-    min_date_of_birth = add_years(min_date_of_birth, -100, false);
-
-    DateOfBirth     .minimum(min_date_of_birth.julian_day_number());
-    DateOfBirth     .maximum(EffectiveDate.value());
-// End kludge.
     RetirementAge   .enable("No"  == DeprecatedUseDOR);
     DateOfRetirement.enable("Yes" == DeprecatedUseDOR);
 
