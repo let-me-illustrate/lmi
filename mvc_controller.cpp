@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mvc_controller.cpp,v 1.8 2006-08-29 19:21:37 wboutin Exp $
+// $Id: mvc_controller.cpp,v 1.9 2006-09-21 17:03:33 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -211,6 +211,9 @@ void MvcController::ConditionallyEnable()
             // enablement state could be cached.
             ConditionallyEnableControl(t->name(), *pw);
             ConditionallyEnableItems  (t->name(), *pw);
+            // TODO ?? This seems not to belong here, but only because
+            // the calling function needs a different name.
+            UpdateCircumscription     (*pw, t->name());
             }
         else
             {
