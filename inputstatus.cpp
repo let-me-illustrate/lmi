@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: inputstatus.cpp,v 1.4 2006-09-19 03:01:16 chicares Exp $
+// $Id: inputstatus.cpp,v 1.5 2006-09-24 14:28:51 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -133,6 +133,13 @@ void InputStatus::MakeAgesAndDatesConsistent
             );
         }
 
+#if 0
+// TODO ?? Either make this work correctly, or expunge it and remove
+// retirement date completely. Making it work requires fixing the
+// problem noted below, and modifying
+//   Input::DoTransmogrify()
+//   Input::DoHarmonize()
+// accordingly.
     if(UseDOR)
         {
         r_ret_age& mutable_ret_age = const_cast<r_ret_age&>(RetAge);
@@ -154,6 +161,7 @@ void InputStatus::MakeAgesAndDatesConsistent
             ,true
             );
         }
+#endif // 0
 }
 
 //============================================================================

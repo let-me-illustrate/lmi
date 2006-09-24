@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: tn_range_types.hpp,v 1.5 2006-01-29 13:52:00 chicares Exp $
+// $Id: tn_range_types.hpp,v 1.6 2006-09-24 14:28:51 chicares Exp $
 
 #ifndef tn_range_types_hpp
 #define tn_range_types_hpp
@@ -31,19 +31,19 @@
 
 // TODO ?? Move these two to a 'test' file.
 
-typedef tn_range<int   , percentage_trammel<int   > > r_int_percentage;
-typedef tn_range<double, percentage_trammel<double> > r_double_percentage;
+typedef tn_range<int          , percentage_trammel     <int          > > r_int_percentage;
+typedef tn_range<double       , percentage_trammel     <double       > > r_double_percentage;
 
-typedef tn_range<double, unrestricted_trammel   <double> > tnr_unrestricted_double;
-typedef tn_range<double, proportion_trammel     <double> > tnr_proportion;
-typedef tn_range<double, nonnegative_trammel    <double> > tnr_nonnegative_double;
-typedef tn_range<int   , nonnegative_trammel    <int   > > tnr_nonnegative_integer;
-typedef tn_range<int   , issue_age_trammel      <int   > > tnr_issue_age;
-typedef tn_range<int   , attained_age_trammel   <int   > > tnr_attained_age;
-typedef tn_range<int   , duration_trammel       <int   > > tnr_duration;
-typedef tn_range<int   , month_trammel          <int   > > tnr_month;
-typedef tn_range<double, corridor_factor_trammel<double> > tnr_corridor_factor;
-typedef tn_range<int   , date_trammel           <int   > > tnr_date;
+typedef tn_range<double       , unrestricted_trammel   <double       > > tnr_unrestricted_double;
+typedef tn_range<double       , proportion_trammel     <double       > > tnr_proportion;
+typedef tn_range<double       , nonnegative_trammel    <double       > > tnr_nonnegative_double;
+typedef tn_range<int          , nonnegative_trammel    <int          > > tnr_nonnegative_integer;
+typedef tn_range<int          , issue_age_trammel      <int          > > tnr_issue_age;
+typedef tn_range<int          , attained_age_trammel   <int          > > tnr_attained_age;
+typedef tn_range<int          , duration_trammel       <int          > > tnr_duration;
+typedef tn_range<int          , month_trammel          <int          > > tnr_month;
+typedef tn_range<double       , corridor_factor_trammel<double       > > tnr_corridor_factor;
+typedef tn_range<calendar_date, date_trammel           <calendar_date> > tnr_date;
 
 #endif // tn_range_types_hpp
 
