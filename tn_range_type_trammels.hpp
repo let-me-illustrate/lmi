@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: tn_range_type_trammels.hpp,v 1.6 2006-09-19 02:59:19 chicares Exp $
+// $Id: tn_range_type_trammels.hpp,v 1.7 2006-09-24 14:28:51 chicares Exp $
 
 #ifndef tn_range_type_trammels_hpp
 #define tn_range_type_trammels_hpp
@@ -27,6 +27,15 @@
 #include "config.hpp"
 
 #include "tn_range_fwd.hpp"
+
+#include "calendar_date.hpp"
+
+#if !defined __BORLANDC__
+#   include <boost/static_assert.hpp>
+#   include <boost/type_traits.hpp>
+#else  // Defined __BORLANDC__ .
+#   define BOOST_STATIC_ASSERT(deliberately_ignored) /##/
+#endif // Defined __BORLANDC__ .
 
 #include <limits>
 
@@ -127,9 +136,12 @@ template<typename T>
 class date_trammel
     :public trammel_base<T>
 {
-    T nominal_minimum() const {return 2361222;} // Gregorian epoch (English).
-    T default_value()   const {return 2453371;} // 2004-12-31 .
-    T nominal_maximum() const {return 5373484;} // 9999-12-31 .
+    // Double parentheses: don't parse comma as a macro parameter separator.
+    BOOST_STATIC_ASSERT((boost::is_same<calendar_date,T>::value));
+
+    T nominal_minimum() const {return gregorian_epoch();}
+    T default_value()   const {return today          ();}
+    T nominal_maximum() const {return last_yyyy_date ();}
 };
 
 #endif // tn_range_type_trammels_hpp

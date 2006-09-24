@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mvc_controller.cpp,v 1.9 2006-09-21 17:03:33 chicares Exp $
+// $Id: mvc_controller.cpp,v 1.10 2006-09-24 14:28:51 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -213,6 +213,30 @@ void MvcController::ConditionallyEnable()
             ConditionallyEnableItems  (t->name(), *pw);
             // TODO ?? This seems not to belong here, but only because
             // the calling function needs a different name.
+// ...and it needs to be done for all controls--see below.
+//            UpdateCircumscription     (*pw, t->name());
+            }
+        else
+            {
+            // Do nothing. Some windows don't have validators--for
+            // example, most static controls.
+            }
+        }
+
+    // TODO ?? This is ugly. The real problem, as was speculated
+    // above, is that ConditionallyEnableItems() is too slow. It is
+    // necessary to enforce range limits on all tabs--otherwise,
+    // date ranges fail to work, and the observable symptom is quite
+    // spectacular.
+
+    typedef std::vector<wxWindow*>::const_iterator wvci;
+    for(wvci i = lineage_.begin(); i != lineage_.end(); ++i)
+        {
+        wxWindow* pw = *i;
+        LMI_ASSERT(0 != pw);
+        Transferor* t = dynamic_cast<Transferor*>(pw->GetValidator());
+        if(t)
+            {
             UpdateCircumscription     (*pw, t->name());
             }
         else
