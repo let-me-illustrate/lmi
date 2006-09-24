@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.453 2006-09-20 16:06:24 chicares Exp $
+// $Id: ChangeLog,v 1.454 2006-09-24 14:28:51 chicares Exp $
 
 MAINTENANCE
 
@@ -7504,4 +7504,24 @@ Permit building with 0==wxUSE_STL .
   xml_notebook.hpp [expunged]
   xml_notebook.tpp [expunged]
 Remove obsolete MVC implementation.
+
+20060921T1703Z <chicares@cox.net> [1173]
+
+  mvc_controller.cpp
+Update control limits dynamically.
+
+20060921T1705Z <chicares@cox.net> [1174]
+
+  input_harmonization.cpp
+Set some date and age limits dynamically.
+
+20060924T1428Z <chicares@cox.net> [1173]
+
+  input_harmonization.cpp
+  inputstatus.cpp
+  mvc_controller.cpp
+  tn_range_type_trammels.hpp
+  tn_range_types.cpp
+  tn_range_types.hpp
+Use date class as date-range UDT's underlying type.
 

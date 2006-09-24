@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_harmonization.cpp,v 1.36 2006-09-21 17:05:19 chicares Exp $
+// $Id: input_harmonization.cpp,v 1.37 2006-09-24 14:28:51 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -341,40 +341,18 @@ void Input::DoHarmonize()
         ,static_cast<int>(database->Query(DB_MaxIssAge))
         );
 
-#if 0
-// TODO ?? This is what we'd like to write:
     EffectiveDate.minimum
         (minimum_as_of_date
             (     IssueAge.trammel().maximum_maximorum()
             ,EffectiveDate.trammel().minimum_minimorum()
             )
         );
-#else // 1
-//    but for now this is necessary:
-    EffectiveDate.minimum
-        (minimum_as_of_date
-            (     IssueAge.trammel().maximum_maximorum()
-            ,calendar_date(jdn_t(EffectiveDate.trammel().minimum_minimorum()))
-            ).julian_day_number()
-        );
-#endif // 1
 
     bool const use_anb = database->Query(DB_AgeLastOrNearest);
-#if 0
-// TODO ?? This is what we'd like to write:
     DateOfBirth.minimum_and_maximum
         (minimum_birthdate(IssueAge.maximum(), EffectiveDate.value(), use_anb)
         ,maximum_birthdate(IssueAge.minimum(), EffectiveDate.value(), use_anb)
         );
-#else // 1
-//    but for now this is necessary:
-    calendar_date effective_date;
-    effective_date.julian_day_number(EffectiveDate.value());
-    DateOfBirth.minimum_and_maximum
-        (minimum_birthdate(IssueAge.maximum(), effective_date, use_anb).julian_day_number()
-        ,maximum_birthdate(IssueAge.minimum(), effective_date, use_anb).julian_day_number()
-        );
-#endif // 1
 
     RetirementAge   .enable("No"  == DeprecatedUseDOR);
     DateOfRetirement.enable("Yes" == DeprecatedUseDOR);
@@ -983,67 +961,63 @@ false // Silly workaround for now.
     SupplementalReportColumn11.enable(create_supplemental_report);
 }
 
-// Note on initial date values.
-//
-// A default-constructed instance of this class initially has
-// date of birth set to the current date, which of course
-// requires adjustment. From issue age, the year of birth can
-// be deduced approximately, but the month or day cannot. In
-// this case, a birthday is deemed to occur on the effective
-// date--as good an assumption as any, and the simplest.
-//
-// Of course, when an instance is read from a file (either
-// deliberately, or because 'default.ill' exists), then the
-// date of birth is simply read from the file; the adjustment
-// here has no effect as long as the file is consistent.
+/// Change values as required for consistency.
+///
+/// 'EffectiveDateToday' might have been a pushbutton, except that the
+/// MVC implementation doesn't support pushbuttons: it's driven by
+/// control state, and pushbuttons have no state. That may seem to be
+/// a harsh limitation, but, as in this case, it can also suggest the
+/// richer behavior that results from using a checkbox instead. While
+/// the checkbox is checked, 'EffectiveDate' is bound to the current
+/// date, even if the current date changes (e.g., because a saved file
+/// is reloaded)--a behavior not available with a pushbutton. To force
+/// today's date without leaving the date control bound to the current
+/// date, the checkbox can be checked and then unchecked, producing
+/// the same behavior as a pushbutton. This creates a relationship
+/// between the checkbox and the date control that requires resetting
+/// the latter's value as well as the ranges of other controls that
+/// depend on it; that's not just Transmogrification or Harmonization,
+/// but a different relationship that partakes of both, and should
+/// perhaps be handled separately from both.
+///
+/// A default-constructed instance of this class initially has date of
+/// birth set to the current date, which of course needs adjustment.
+/// From issue age, the year of birth can be deduced approximately,
+/// but the month or day cannot. In this case, a birthday is deemed to
+/// occur on the effective date--as good an assumption as any, and the
+/// simplest. Of course, when an instance is read from a file (either
+/// deliberately, or because 'default.ill' exists), then the date of
+/// birth is simply read from the file; the adjustment here has no
+/// effect as long as the file is consistent.
 
 void Input::DoTransmogrify()
 {
     if("Yes" == EffectiveDateToday)
         {
-        EffectiveDate = calendar_date().julian_day_number();
+        EffectiveDate = calendar_date();
+        // TODO ?? Consider factoring out date calculations and making
+        // them conditional, if justified by measurement of their cost.
+        DoHarmonize();
         }
 
     bool const use_anb = database->Query(DB_AgeLastOrNearest);
 
-    // TODO ?? This syntax seems ugly. Should there be a ctor
-    // calendar_date(int)? Alternatively, should tnr_date use a
-    // calendar_date instead of an int?
-    calendar_date effective_date;
-    effective_date.julian_day_number(EffectiveDate.value());
-
-    calendar_date date_of_birth;
-    date_of_birth.julian_day_number(DateOfBirth.value());
-
-    // TODO ?? EGREGIOUS_DEFECT Temporary. Because the msw date
-    // control parses keyboard input one keystroke at a time and
-    // permits one- or two-digit years, typing "1999" as the year of
-    // birth causes the control's year to change to 2001 after the
-    // first keystroke and 2019 after the second--at which point an
-    // exception is thrown, because 2019 cannot be the birthdate of
-    // any living person as this is written in 2006. The only real
-    // solution is to validate date controls only on focus loss.
-    // However, for the nonce, forestall the exception...
-
-//    int apparent_age = attained_age(date_of_birth, effective_date, use_anb);
-    int apparent_age =
-        date_of_birth < effective_date
-        ?  attained_age(date_of_birth, effective_date, use_anb)
-        : -attained_age(effective_date, date_of_birth, use_anb)
-        ;
-
-    if("Yes" == DeprecatedUseDOB)
+    int apparent_age = attained_age
+        (DateOfBirth.value()
+        ,EffectiveDate.value()
+        ,use_anb
+        );
+    if("No" == DeprecatedUseDOB)
         {
-        IssueAge = apparent_age;
+        DateOfBirth = add_years
+            (DateOfBirth.value()
+            ,apparent_age - IssueAge.value()
+            ,false // TODO ?? Is 'false' always right?
+            );
         }
     else
         {
-        date_of_birth = add_years
-            (date_of_birth
-            ,apparent_age - IssueAge.value()
-            ,use_anb // TODO ?? Apparently this should be 'false'.
-            );
-        DateOfBirth = date_of_birth.julian_day_number();
+        IssueAge = apparent_age;
         }
 
     // TODO ?? WX PORT !! Icky kludge.

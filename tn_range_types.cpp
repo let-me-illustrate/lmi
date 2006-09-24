@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: tn_range_types.cpp,v 1.5 2006-01-29 13:52:00 chicares Exp $
+// $Id: tn_range_types.cpp,v 1.6 2006-09-24 14:28:51 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -35,17 +35,17 @@
 
 // TODO ?? Move these two to a 'test' file.
 
-template class tn_range<int   , percentage_trammel<int   > >;
-template class tn_range<double, percentage_trammel<double> >;
+template class tn_range<int          , percentage_trammel     <int          > >;
+template class tn_range<double       , percentage_trammel     <double       > >;
 
-template class tn_range<double, unrestricted_trammel   <double> >;
-template class tn_range<double, proportion_trammel     <double> >;
-template class tn_range<double, nonnegative_trammel    <double> >;
-template class tn_range<int   , nonnegative_trammel    <int   > >;
-template class tn_range<int   , issue_age_trammel      <int   > >;
-template class tn_range<int   , attained_age_trammel   <int   > >;
-template class tn_range<int   , duration_trammel       <int   > >;
-template class tn_range<int   , month_trammel          <int   > >;
-template class tn_range<double, corridor_factor_trammel<double> >;
-template class tn_range<int   , date_trammel           <int   > >;
+template class tn_range<double       , unrestricted_trammel   <double       > >;
+template class tn_range<double       , proportion_trammel     <double       > >;
+template class tn_range<double       , nonnegative_trammel    <double       > >;
+template class tn_range<int          , nonnegative_trammel    <int          > >;
+template class tn_range<int          , issue_age_trammel      <int          > >;
+template class tn_range<int          , attained_age_trammel   <int          > >;
+template class tn_range<int          , duration_trammel       <int          > >;
+template class tn_range<int          , month_trammel          <int          > >;
+template class tn_range<double       , corridor_factor_trammel<double       > >;
+template class tn_range<calendar_date, date_trammel           <calendar_date> >;
 
