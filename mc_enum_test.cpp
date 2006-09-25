@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mc_enum_test.cpp,v 1.10 2006-06-08 18:44:35 wboutin Exp $
+// $Id: mc_enum_test.cpp,v 1.11 2006-09-25 14:10:15 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -45,7 +45,18 @@ typedef mc_enum<enum_island, 2, island_enums, island_strings> e_island;
 // Enumerative type 'e_holiday' is explicitly instantiated in a
 // different translation unit.
 
+struct mc_enum_test
+{
+    static void test();
+};
+
 int test_main(int, char*[])
+{
+    mc_enum_test::test();
+    return 0;
+}
+
+void mc_enum_test::test()
 {
     // Default ctor.
     e_holiday holiday0;
@@ -106,9 +117,8 @@ int test_main(int, char*[])
     BOOST_TEST_UNEQUAL(s_Pentecost, holiday4);
     BOOST_TEST_UNEQUAL("Pentecost", holiday4);
 
-    // Ordinal. Function ordinal() itself is not tested because it's
-    // private, but this is equivalent here.
-    BOOST_TEST_EQUAL(holiday4.allowed_ordinal(), 1);
+    // Ordinal.
+    BOOST_TEST_EQUAL(holiday4.ordinal(), 1);
 
     // Explicit conversion to std::string.
     BOOST_TEST_EQUAL(holiday4.str(), "Easter");
@@ -132,28 +142,38 @@ int test_main(int, char*[])
     BOOST_TEST_EQUAL("Easter"   , holiday4.str(1));
     BOOST_TEST_EQUAL("Pentecost", holiday4.str(2));
 
-    // Allowed ordinal. By default, any conceivable value is allowed,
-    // conceivability meaning 0 <= value < cardinality.
-    BOOST_TEST_EQUAL(holiday4.allowed_ordinal(), 1);
+    // Forced validity.
+    holiday3.enforce_proscription();
+    BOOST_TEST_EQUAL(holiday3, "Pentecost");
 
     // If current value isn't allowed, pick the first one that is.
-    holiday4.allow(1, false);
-    BOOST_TEST(!holiday4.is_allowed(1));
-    BOOST_TEST_EQUAL(holiday4.allowed_ordinal(), 0);
+    holiday3.allow(2, false);
+    BOOST_TEST(!holiday3.is_allowed(2));
+    BOOST_TEST( holiday4.is_allowed(2));
+    BOOST_TEST_EQUAL(holiday3, "Pentecost");
+    holiday3.enforce_proscription();
+    BOOST_TEST_EQUAL(holiday3, "Theophany");
 
-    holiday4.allow(0, false);
-    BOOST_TEST(!holiday4.is_allowed(0));
-    BOOST_TEST_EQUAL(holiday4.allowed_ordinal(), 2);
+    holiday3.allow(0, false);
+    BOOST_TEST_EQUAL(holiday3, "Theophany");
+    holiday3.enforce_proscription();
+    BOOST_TEST_EQUAL(holiday3, "Easter");
 
-    // If no value is allowed, return the current ordinal.
-    holiday4.allow(2, false);
-    BOOST_TEST(!holiday4.is_allowed(2));
-    BOOST_TEST_EQUAL(holiday4.allowed_ordinal(), 1);
+    // If no value is allowed, pick the current ordinal.
+    holiday3.allow(1, false);
+    BOOST_TEST_EQUAL(holiday3, "Easter");
+    holiday3.enforce_proscription();
+    BOOST_TEST_EQUAL(holiday3, "Easter");
 
     // That which is inconceivable is not to be allowed.
-    BOOST_TEST_THROW(holiday4.allow( 3, false), std::runtime_error, "");
-    BOOST_TEST_THROW(holiday4.allow(17, false), std::runtime_error, "");
-    BOOST_TEST_THROW(holiday4.allow(-1, false), std::runtime_error, "");
+    BOOST_TEST_THROW(holiday3.allow( 3, false), std::out_of_range, "");
+    BOOST_TEST_THROW(holiday3.allow(17, false), std::out_of_range, "");
+    BOOST_TEST_THROW(holiday3.allow(-1, false), std::out_of_range, "");
+
+    // Strings.
+    BOOST_TEST_EQUAL("Theophany", holiday4.str(0));
+    BOOST_TEST_EQUAL("Easter"   , holiday4.str(1));
+    BOOST_TEST_EQUAL("Pentecost", holiday4.str(2));
 
     // Stream operators.
     e_holiday const Easter(h_Easter);
@@ -190,7 +210,5 @@ int test_main(int, char*[])
         ,std::runtime_error
         ,""
         );
-
-    return 0;
 }
 
