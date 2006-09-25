@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ce_product_name.cpp,v 1.6 2006-08-13 11:51:38 chicares Exp $
+// $Id: ce_product_name.cpp,v 1.7 2006-09-25 13:52:05 chicares Exp $
 
 #include "ce_product_name.hpp"
 
@@ -55,21 +55,6 @@ bool ce_product_name::operator==(std::string const& s) const
     return s == str();
 }
 
-std::istream& ce_product_name::read(std::istream& is)
-{
-    std::locale old_locale = is.imbue(blank_is_not_whitespace_locale());
-    std::string s;
-    is >> s;
-    operator=(s);
-    is.imbue(old_locale);
-    return is;
-}
-
-std::ostream& ce_product_name::write(std::ostream& os) const
-{
-    return os << str();
-}
-
 std::size_t ce_product_name::allowed_ordinal() const
 {
     return ordinal();
@@ -78,21 +63,6 @@ std::size_t ce_product_name::allowed_ordinal() const
 std::size_t ce_product_name::cardinality() const
 {
     return product_names().size();
-}
-
-std::string ce_product_name::str(int j) const
-{
-    return product_names()[j];
-}
-
-std::string ce_product_name::str() const
-{
-    return value_;
-}
-
-std::string ce_product_name::value() const
-{
-    return value_;
 }
 
 std::size_t ce_product_name::ordinal() const
@@ -125,9 +95,39 @@ std::size_t ce_product_name::ordinal(std::string const& s) const
     return v;
 }
 
+std::string ce_product_name::str(int j) const
+{
+    return product_names()[j];
+}
+
+std::string ce_product_name::str() const
+{
+    return value_;
+}
+
+std::string ce_product_name::value() const
+{
+    return value_;
+}
+
 std::vector<std::string> const& ce_product_name::product_names() const
 {
     return ::product_names();
+}
+
+std::istream& ce_product_name::read(std::istream& is)
+{
+    std::locale old_locale = is.imbue(blank_is_not_whitespace_locale());
+    std::string s;
+    is >> s;
+    operator=(s);
+    is.imbue(old_locale);
+    return is;
+}
+
+std::ostream& ce_product_name::write(std::ostream& os) const
+{
+    return os << str();
 }
 
 /// No product is ever proscribed.
