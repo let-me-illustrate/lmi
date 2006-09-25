@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mc_enum.hpp,v 1.13 2006-08-13 11:51:38 chicares Exp $
+// $Id: mc_enum.hpp,v 1.14 2006-09-25 14:10:15 chicares Exp $
 
 // Acknowledgment
 //
@@ -48,28 +48,6 @@
 // which can be recovered for general use by removing the derivation
 // from the base (and optionally making function members such as
 // as cardinality() static instead of virtual).
-
-// Design notes: member function mc_enum_base::allowed_ordinal().
-//
-// Motivation: When an enumerative control is displayed, one choice
-// must be selected. Some choices are not permissible in context.
-//
-// TODO ?? The 'ordinal' is the index in the array of conceivable
-// values at which the current value is found. Is this the right
-// abstraction? Radiobuttons display all conceivable values, but
-// listboxes display only permissible values.
-//
-// If the context has changed to make the current choice permissible,
-// then another must be selected if possible. This function doesn't
-// change the value of the associated variable: the framework does
-// that when it later reads the control.
-//
-// If no choice is permissible, then the current choice is left alone.
-// In that case, presumably the control is grayed out.
-//
-// TODO ?? It may be better to mutate the value of the variable
-// associated with the control here. It may be better to assert that a
-// control with no permissible value is grayed out.
 
 // Implementation notes--class template mc_enum
 //
@@ -132,8 +110,9 @@
 #include <boost/type_traits.hpp>
 
 #include <cstddef>
+#include <deque>
+#include <iosfwd>
 #include <string>
-#include <vector>
 
 class LMI_SO mc_enum_base
     :public datum_base
@@ -146,16 +125,13 @@ class LMI_SO mc_enum_base
     std::size_t first_allowed_ordinal() const;
     bool is_allowed(int) const;
 
-    virtual std::size_t allowed_ordinal() const = 0;
     virtual std::size_t cardinality() const = 0;
     virtual void enforce_proscription() = 0;
     virtual std::size_t ordinal() const = 0;
     virtual std::string str(int) const = 0;
 
   private:
-    void validate_index(int) const;
-
-    std::vector<int> allowed_;
+    std::deque<bool> allowed_;
 };
 
 template<typename T, std::size_t n, T const (&e)[n], char const*const (&c)[n]>
@@ -167,6 +143,8 @@ class mc_enum
 {
     BOOST_STATIC_ASSERT(boost::is_enum<T>::value);
     BOOST_STATIC_ASSERT(0 < n);
+
+    friend class mc_enum_test;
 
   public:
     typedef T enum_type;
@@ -182,10 +160,9 @@ class mc_enum
     bool operator==(T) const;
     bool operator==(std::string const&) const;
 
-    std::size_t ordinal(std::string const&) const;
+    static std::size_t ordinal(std::string const&);
 
     // mc_enum_base required implementation.
-    virtual std::size_t allowed_ordinal() const;
     virtual std::size_t cardinality() const;
     virtual std::size_t ordinal() const;
     virtual std::string str(int) const;

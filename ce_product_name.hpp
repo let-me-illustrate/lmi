@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ce_product_name.hpp,v 1.6 2006-09-25 13:52:05 chicares Exp $
+// $Id: ce_product_name.hpp,v 1.7 2006-09-25 14:10:15 chicares Exp $
 
 #ifndef ce_product_name_hpp
 #define ce_product_name_hpp
@@ -79,24 +79,23 @@ class ce_product_name
     bool operator==(ce_product_name const&) const;
     bool operator==(std::string const&) const;
 
-    std::size_t ordinal(std::string const&) const;
+    static std::size_t ordinal(std::string const&);
 
-    // mc_enum_base overrides.
-    virtual std::size_t allowed_ordinal() const;
+    // mc_enum_base required implementation.
     virtual std::size_t cardinality() const;
-    std::size_t ordinal() const;
+    virtual std::size_t ordinal() const;
     virtual std::string str(int) const;
 
     std::string str() const;
     std::string value() const;
 
   private:
-    std::vector<std::string> const& product_names() const;
+    static std::vector<std::string> const& product_names();
 
-    // datum_base overrides. Consider moving the implementation into
-    // the base class.
-    virtual std::istream& read (std::istream& is);
-    virtual std::ostream& write(std::ostream& os) const;
+    // datum_base required implementation.
+    // TODO ?? Consider moving the implementation into the base class.
+    virtual std::istream& read (std::istream&);
+    virtual std::ostream& write(std::ostream&) const;
 
     // mc_enum_base required implementation.
     virtual void enforce_proscription();

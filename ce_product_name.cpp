@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ce_product_name.cpp,v 1.7 2006-09-25 13:52:05 chicares Exp $
+// $Id: ce_product_name.cpp,v 1.8 2006-09-25 14:10:15 chicares Exp $
 
 #include "ce_product_name.hpp"
 
@@ -30,14 +30,12 @@
 ce_product_name::ce_product_name()
     :mc_enum_base(product_names().size())
     ,value_(product_names().front())
-{
-}
+{}
 
 ce_product_name::ce_product_name(std::string const& s)
     :mc_enum_base(product_names().size())
     ,value_(product_names()[ordinal(s)])
-{
-}
+{}
 
 ce_product_name& ce_product_name::operator=(std::string const& s)
 {
@@ -55,11 +53,6 @@ bool ce_product_name::operator==(std::string const& s) const
     return s == str();
 }
 
-std::size_t ce_product_name::allowed_ordinal() const
-{
-    return ordinal();
-}
-
 std::size_t ce_product_name::cardinality() const
 {
     return product_names().size();
@@ -70,7 +63,7 @@ std::size_t ce_product_name::ordinal() const
     return ordinal(value_);
 }
 
-std::size_t ce_product_name::ordinal(std::string const& s) const
+std::size_t ce_product_name::ordinal(std::string const& s)
 {
 // TODO ?? Shouldn't this be ptrdiff_t?
     std::size_t v =
@@ -110,7 +103,7 @@ std::string ce_product_name::value() const
     return value_;
 }
 
-std::vector<std::string> const& ce_product_name::product_names() const
+std::vector<std::string> const& ce_product_name::product_names()
 {
     return ::product_names();
 }
@@ -133,6 +126,5 @@ std::ostream& ce_product_name::write(std::ostream& os) const
 /// No product is ever proscribed.
 
 void ce_product_name::enforce_proscription()
-{
-}
+{}
 
