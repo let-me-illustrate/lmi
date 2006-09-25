@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mc_enum.cpp,v 1.9 2006-08-13 11:51:38 chicares Exp $
+// $Id: mc_enum.cpp,v 1.10 2006-09-25 14:10:15 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -28,10 +28,7 @@
 
 #include "mc_enum.hpp"
 
-#include "alert.hpp"
-
 #include <algorithm> // std::find()
-#include <typeinfo>
 
 mc_enum_base::mc_enum_base(int cardinality_of_the_enumeration)
     :allowed_(cardinality_of_the_enumeration, true)
@@ -40,8 +37,7 @@ mc_enum_base::mc_enum_base(int cardinality_of_the_enumeration)
 
 void mc_enum_base::allow(int index, bool b)
 {
-    validate_index(index);
-    allowed_[index] = b;
+    allowed_.at(index) = b;
 }
 
 void mc_enum_base::allow_all(bool b)
@@ -59,50 +55,6 @@ std::size_t mc_enum_base::first_allowed_ordinal() const
 
 bool mc_enum_base::is_allowed(int index) const
 {
-    validate_index(index);
-    return allowed_[index];
-}
-
-void mc_enum_base::validate_index(int index) const
-{
-    if(index < 0)
-        {
-        fatal_error()
-            << "Index "
-            << index
-            << " is invalid for type '"
-            << typeid(*this).name()
-            << "': it must not be less than zero."
-            << LMI_FLUSH
-            ;
-        }
-
-    if(static_cast<int>(cardinality()) <= index)
-        {
-        fatal_error()
-            << "Index "
-            << index
-            << " is invalid for type '"
-            << typeid(*this).name()
-            << "': it must less than "
-            << cardinality()
-            << "."
-            << LMI_FLUSH
-            ;
-        }
-
-    if(cardinality() != allowed_.size())
-        {
-        fatal_error()
-            << "Number of allowable flags for type '"
-            << typeid(*this).name()
-            << "' is "
-            << allowed_.size()
-            << " but it should be "
-            << cardinality()
-            << " instead."
-            << LMI_FLUSH
-            ;
-        }
+    return allowed_.at(index);
 }
 
