@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: inputillus.cpp,v 1.20 2006-06-23 18:14:36 wboutin Exp $
+// $Id: inputillus.cpp,v 1.21 2006-09-30 13:07:31 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -508,6 +508,8 @@ void IllusInputParms::propagate_changes_to_base_and_finalize
     )
 {
     propagate_status_from_alii();
+    EnforceConsistency();
+    propagate_status_to_alii();
     propagate_fund_allocations_from_string();
     realize_all_sequence_strings(report_errors);
     make_term_rider_consistent();
