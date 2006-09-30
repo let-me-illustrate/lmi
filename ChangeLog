@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.455 2006-09-25 14:10:15 chicares Exp $
+// $Id: ChangeLog,v 1.456 2006-09-30 13:07:31 chicares Exp $
 
 MAINTENANCE
 
@@ -7545,4 +7545,17 @@ Reorder member functions.
   mc_enum.tpp
   mc_enum_test.cpp
 Import selected changes from skeleton trunk.
+
+20060930T1307Z <chicares@cox.net> [1172]
+
+  inputillus.cpp
+Synchronize DateOfBirth and IssueAge. Two distinct but interrelated
+classes represented input data in the legacy system that lmi replaced.
+Changes to one must be reflected in the other, but, defectively, dates
+and ages were not always kept consistent. This change complements the
+change made 20060623T1814Z, for the opposite order of reflection. Both
+classes were copied into lmi for compatibility with other copied code.
+Both should be removed: lmi's own MVC Model class handles reflection
+of dates and ages, as well as other data relationships, more naturally
+and reliably.
 
