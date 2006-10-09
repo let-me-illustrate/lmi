@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_harmonization.cpp,v 1.37 2006-09-24 14:28:51 chicares Exp $
+// $Id: input_harmonization.cpp,v 1.38 2006-10-09 16:53:36 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -336,10 +336,14 @@ void Input::DoHarmonize()
     // permitted EffectiveDate is approximately the centennial of the
     // gregorian epoch.
 
+#if 0
+// TODO ?? Temporarily suppress this while exploring automatic-
+// enforcement options in the skeleton trunk.
     IssueAge.minimum_and_maximum
         (static_cast<int>(database->Query(DB_MinIssAge))
         ,static_cast<int>(database->Query(DB_MaxIssAge))
         );
+#endif // 0
 
     EffectiveDate.minimum
         (minimum_as_of_date
