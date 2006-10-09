@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: about_dialog.hpp,v 1.4 2006-05-25 19:33:40 wboutin Exp $
+// $Id: about_dialog.hpp,v 1.5 2006-10-09 23:44:30 chicares Exp $
 
 #ifndef about_dialog_hpp
 #define about_dialog_hpp
@@ -35,7 +35,7 @@
 /// The 'about' dialog displays a wxHtmlWindow, and the license is
 /// optionally shown in another wxHtmlWindow. The first does not need
 /// scrolling; the second does. How should those windows interact with
-/// the keyboard?
+/// the keyboard for scrolling and text selection?
 ///
 /// Perhaps it would be ideal to let the html text be selected, and
 /// the selection be copied, at least for the primary wxHtmlWindow,
@@ -64,7 +64,7 @@ class AboutDialog
     virtual int ShowModal();
 
   private:
-    void UponOK(wxCommandEvent&);
+    void UponReadLicense(wxCommandEvent&);
 
     DECLARE_EVENT_TABLE()
 };
