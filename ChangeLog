@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.456 2006-09-30 13:07:31 chicares Exp $
+// $Id: ChangeLog,v 1.457 2006-10-09 16:53:36 chicares Exp $
 
 MAINTENANCE
 
@@ -7558,4 +7558,10 @@ classes were copied into lmi for compatibility with other copied code.
 Both should be removed: lmi's own MVC Model class handles reflection
 of dates and ages, as well as other data relationships, more naturally
 and reliably.
+
+20061009T1653Z <chicares@cox.net> [1173]
+
+  input_harmonization.cpp
+Temporarily suppress product-specific age limits, in order to explore
+options for handling their enforcement.
 
