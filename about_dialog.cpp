@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: about_dialog.cpp,v 1.6 2006-05-25 19:33:39 wboutin Exp $
+// $Id: about_dialog.cpp,v 1.7 2006-10-09 23:44:30 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -38,7 +38,7 @@
 #include <wx/string.h>
 
 BEGIN_EVENT_TABLE(AboutDialog, wxDialog)
-    EVT_BUTTON(wxID_OK, AboutDialog::UponOK)
+    EVT_BUTTON(wxID_ABOUT, AboutDialog::UponReadLicense)
 END_EVENT_TABLE()
 
 AboutDialog::AboutDialog(wxWindow* parent)
@@ -57,15 +57,10 @@ AboutDialog::~AboutDialog()
 {
 }
 
-// This virtual function calls the base-class version at the end.
+/// This virtual function calls the base-class version at the end.
 
 int AboutDialog::ShowModal()
 {
-// WX !! Help for wxHtmlWindow mentions
-//   wxHP_SCROLLBAR_AUTO
-//   wxHP_NO_SELECTION
-// but apparently both should begin 'wxHW'.
-
 // WX !! Style wxHW_NO_SELECTION must be set at creation. Trying to
 // change it later, e.g.
 //    html_window->SetWindowStyle(html_window->GetWindowStyle() | wxHW_NO_SELECTION);
@@ -90,15 +85,15 @@ int AboutDialog::ShowModal()
 
     wxButton* license_button = new wxButton
         (this
-        ,wxID_OK
+        ,wxID_ABOUT
         ,"Read the GNU General Public License"
         );
+    license_button->SetDefault();
     wxButton* cancel_button = new wxButton
         (this
         ,wxID_CANCEL
         ,"Let me illustrate"
         );
-    license_button->SetDefault();
 
     wxFlexGridSizer* sizer1 = new wxFlexGridSizer(0, 1);
     sizer1->AddGrowableCol(0);
@@ -109,7 +104,7 @@ int AboutDialog::ShowModal()
     wxFlexGridSizer* sizer0 = new wxFlexGridSizer(1, 0);
     sizer0->AddGrowableRow(0);
     sizer0->Add(html_window, 1, wxALL, 10);
-    sizer0->Add(sizer1, 1, wxALL, 10);
+    sizer0->Add(sizer1     , 1, wxALL, 10);
 
     SetAutoLayout(true);
     SetSizer(sizer0);
@@ -118,10 +113,7 @@ int AboutDialog::ShowModal()
     return wxDialog::ShowModal();
 }
 
-/// This is a complete replacement for wxDialog::OnOK(), which need
-/// not be called.
-
-void AboutDialog::UponOK(wxCommandEvent&)
+void AboutDialog::UponReadLicense(wxCommandEvent&)
 {
     wxDialog dialog(this, -1, wxString("GNU General Public License"));
     wxHtmlWindow* html_window = new wxHtmlWindow
@@ -145,8 +137,8 @@ void AboutDialog::UponOK(wxCommandEvent&)
     button->SetDefault();
 
     wxBoxSizer* sizer = new wxBoxSizer(wxVERTICAL);
-    sizer->Add(html_window, 1, wxALL, 10);
-    sizer->Add(button, 0, wxALL|wxALIGN_RIGHT, 10);
+    sizer->Add(html_window, 1, wxALL              , 10);
+    sizer->Add(button     , 0, wxALL|wxALIGN_RIGHT, 10);
 
     dialog.SetAutoLayout(true);
     dialog.SetSizer(sizer);
