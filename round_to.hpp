@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: round_to.hpp,v 1.8 2006-01-29 13:52:00 chicares Exp $
+// $Id: round_to.hpp,v 1.9 2006-10-09 23:40:41 chicares Exp $
 
 #ifndef round_to_hpp
 #define round_to_hpp
@@ -208,7 +208,7 @@ enum rounding_style
     // as in the C99 remainder() function [7.12.10.2/2], instead of
     // rounding halfway cases away from zero, as the C99 round()
     // function does [7.12.9.6/2]. See the HTML documentation.
-};
+    };
 
 // See HTML documentation.
 inline rounding_style& default_rounding_style()
