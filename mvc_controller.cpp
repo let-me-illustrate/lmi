@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mvc_controller.cpp,v 1.10 2006-09-24 14:28:51 chicares Exp $
+// $Id: mvc_controller.cpp,v 1.11 2006-10-10 00:12:48 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -675,12 +675,6 @@ void MvcController::UponInitDialog(wxInitDialogEvent& event)
         );
     ::Connect
         (this
-        ,wxEVT_COMMAND_BUTTON_CLICKED
-        ,&MvcController::UponOK
-        ,wxID_OK
-        );
-    ::Connect
-        (this
         ,wxEVT_COMMAND_BOOKCTRL_PAGE_CHANGING
         ,&MvcController::UponPageChanging
         ,XRCID(view_.BookControlName())
@@ -702,29 +696,6 @@ void MvcController::UponInitDialog(wxInitDialogEvent& event)
         ,&MvcController::UponUpdateUI
         ,XRCID(view_.MainDialogName())
         );
-}
-
-/// Validate a text control if necessary, then display all Model data.
-/// Validation is handled by the base-class function.
-///
-/// This augments wxDialog::OnOK(), but isn't a complete replacement.
-/// It must call that base-class function explicitly (or do everything
-/// it would do, for each platform) in order to perform a conditional
-/// action (none for the nonce) depending on the base-class function's
-/// result. Skip(false) is written at the top to make it clear that
-/// not calling Skip with its default 'true' value is no oversight.
-
-void MvcController::UponOK(wxCommandEvent& event)
-{
-    event.Skip(false);
-
-    wxDialog::OnOK(event);
-    if(wxID_OK != GetReturnCode())
-        {
-        return;
-        }
-
-    // Perform any needed postprocessing here.
 }
 
 void MvcController::UponPageChanged(wxBookCtrlBaseEvent& event)
