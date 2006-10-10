@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mvc_controller.hpp,v 1.4 2006-08-13 13:13:23 chicares Exp $
+// $Id: mvc_controller.hpp,v 1.5 2006-10-10 00:12:48 chicares Exp $
 
 #ifndef mvc_controller_hpp
 #define mvc_controller_hpp
@@ -341,10 +341,6 @@ namespace model_view_controller{} // doxygen workaround.
 ///
 /// UponInitDialog(): Doesn't do much yet....
 ///
-/// UponOK(): Validate a text control if necessary, then display all
-/// Model data. A real application would, of course, do something with
-/// the data.
-///
 /// UponPageChanged(): Enable controls and control items appropriately
 /// when the notebook page changes. Enablement matters only on the
 /// current page, and performing it on other pages has been observed
@@ -451,7 +447,6 @@ class MvcController
 
     void UponChildFocus            (wxChildFocusEvent&   );
     void UponInitDialog            (wxInitDialogEvent&   );
-    void UponOK                    (wxCommandEvent&      );
     void UponPageChanged           (wxBookCtrlBaseEvent& );
     void UponPageChanging          (wxBookCtrlBaseEvent& );
     void UponRefocusInvalidControl (wxCommandEvent&      );
