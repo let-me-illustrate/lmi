@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: tn_range.tpp,v 1.10 2006-09-19 02:57:41 chicares Exp $
+// $Id: tn_range.tpp,v 1.11 2006-10-10 23:24:26 chicares Exp $
 
 #include "tn_range.hpp"
 
@@ -28,9 +28,7 @@
 
 #include <cmath> // std::pow()
 #include <exception>
-#include <istream>
 #include <limits>
-#include <ostream>
 #include <sstream>
 #include <stdexcept>
 
