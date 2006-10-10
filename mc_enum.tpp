@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mc_enum.tpp,v 1.14 2006-09-25 14:10:15 chicares Exp $
+// $Id: mc_enum.tpp,v 1.15 2006-10-10 23:24:26 chicares Exp $
 
 #include "mc_enum.hpp"
 
@@ -28,8 +28,6 @@
 #include "rtti_lmi.hpp"
 
 #include <algorithm> // std::find()
-#include <istream>
-#include <ostream>
 #include <typeinfo>
 
 // TODO ?? Should there be a runtime check that all elements in 'e'
