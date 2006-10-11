@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.459 2006-10-10 00:12:48 chicares Exp $
+// $Id: ChangeLog,v 1.460 2006-10-11 00:37:50 chicares Exp $
 
 MAINTENANCE
 
@@ -7584,4 +7584,21 @@ Remove reference to wxDialog::OnOK(), for wx-2.7 compatibility. See:
 Remove unneeded wxID_OK handler and its reference to wxDialog::OnOK(),
 for wx-2.7 compatibility. See:
   http://lists.gnu.org/archive/html/lmi/2006-09/msg00017.html
+
+20061010T2323Z <chicares@cox.net> [1173]
+
+  mc_enum_test.cpp
+Remove duplicated code.
+
+20061010T2324Z <chicares@cox.net> [1173]
+
+  mc_enum.hpp
+  mc_enum.tpp
+  tn_range.tpp
+Remove headers necessarily included by base class.
+
+20061011T0037Z <chicares@cox.net> [1173]
+
+  mc_enum.hpp
+Improve documentation.
 
