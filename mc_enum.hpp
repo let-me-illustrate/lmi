@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mc_enum.hpp,v 1.15 2006-10-10 23:24:26 chicares Exp $
+// $Id: mc_enum.hpp,v 1.16 2006-10-11 00:37:50 chicares Exp $
 
 // Acknowledgment
 //
@@ -32,71 +32,6 @@
 // implementation descends from work GWC did in 1998, which predates
 // that article; any defect here should not reflect on Hyman Rosen's
 // reputation.
-
-// Design notes--class template mc_enum
-//
-// This class encapsulates C++ enumerations in a class that pairs them
-// with symbolic names and constrains them to given values. The
-// underlying enumeration must have a non-empty enumerator-list.
-
-// Design notes--class mc_enum_base
-//
-// This abstract non-template base class serves two design purposes.
-// It permits calling virtual member functions for arbitrary mc_enum
-// instances through a base-class pointer. And it adds capabilities
-// useful in GUI applications without polluting the enumeration class,
-// which can be recovered for general use by removing the derivation
-// from the base (and optionally making function members such as
-// as cardinality() static instead of virtual).
-
-// Implementation notes--class template mc_enum
-//
-// It is contemplated that this class template will be instantiated
-// to create numerous types in one translation unit for use in other
-// translation units. Given that usage, it makes sense to instantiate
-// those types explicitly in that one translation unit, in order to
-// avoid bloat. See special note on explicit instantiation below.
-//
-// The implicitly-defined copy ctor and copy assignment operator do
-// the right thing.
-
-// Explicit instantiation
-//
-// Careful attention to detail enables compile-time checking of the
-// sizes of the arrays used as non-type parameters. If too many
-// initializers are given, the compiler must emit a diagnostic
-// [8.5.1/6]. Supplying too few is acceptable [8.5.1/7] to the
-// language, but likely to cause run-time errors--which can be
-// turned into compile-time errors by the technique presented here.
-//
-// Specific types require one translation unit (TU) for the
-// instantiation and a header to make them available to other TUs.
-//
-// The header should have a typedef declaration, which requires
-// declarations of the arrays used as non-type arguments. Those array
-// declarations must specify bounds explicitly, because an array of
-// unknown bound is an incomplete type that prevents instantiation of
-// the class template--and initializers must not be specified in the
-// header, otherwise including it in two TUs would violate the ODR.
-//
-// The instantiation TU, however, should omit the bound specifiers,
-// causing the bounds to be 'calculated' [8.3.4/3]. Passing them as
-// non-type arguments, as '(&array)[n]' rather than as 'array[n], then
-// causes explicit instantiation to fail if the calculated bounds do
-// not match the size explicitly specified as a template parameter.
-// Limitation: this safeguard is ineffective in the case of a TU other
-// than the instantiation TU that includes both the header and the
-// code in the accompanying '.tpp' file that implements the template
-// class, because implicit instantiation would occur; but that is
-// easily avoided in the physical design.
-//
-// Because both the header and the instantiation TU require the
-// definition of the underlying enum type, that type must be defined
-// in a separate header that both these files include.
-//
-// The same benefit could of course be realized through consistent use
-// of a macro. This built-in approach is preferred because it avoids
-// using the preprocessor and its compile-time checking is automatic.
 
 #ifndef mc_enum_hpp
 #define mc_enum_hpp
@@ -112,6 +47,24 @@
 #include <cstddef>
 #include <deque>
 #include <string>
+
+/// This abstract non-template base class serves two design purposes.
+/// It permits calling virtual member functions for arbitrary mc_enum
+/// instances through a base-class pointer. And it adds capabilities
+/// useful in GUI applications without polluting the enumeration class
+/// (which can be recovered for general use by removing the derivation
+/// from the base, and optionally making function members such as
+/// cardinality() static instead of virtual).
+///
+///   ordinal()
+/// The 'ordinal' is the index of the current value in the array of
+/// conceivable values--some of which might not be allowed in context.
+/// Radiobuttons display all conceivable values, but listboxes display
+/// only permissible values.
+///
+///   enforce_proscription()
+/// If the current value is impermissible in context, then change it,
+/// iff possible, to one that's permissible.
 
 class LMI_SO mc_enum_base
     :public datum_base
@@ -132,6 +85,57 @@ class LMI_SO mc_enum_base
   private:
     std::deque<bool> allowed_;
 };
+
+/// M C Enums: string-Mapped, value-Constrained Enumerations.
+///
+/// Encapsulate C++ enumerations in a class template that pairs them
+/// with symbolic names and constrains them to given values. The
+/// underlying enumeration must have a non-empty enumerator-list.
+///
+/// The implicitly-defined copy ctor and copy assignment operator do
+/// the right thing.
+///
+/// It is contemplated that this class template will be instantiated
+/// to create numerous types in one translation unit for use in other
+/// translation units. Given that usage, it makes sense to instantiate
+/// those types explicitly in that one translation unit, in order to
+/// avoid bloat.
+///
+/// Careful attention to detail enables compile-time checking of the
+/// sizes of the arrays used as non-type parameters. If too many
+/// initializers are given, the compiler must emit a diagnostic
+/// [8.5.1/6]. Supplying too few is acceptable [8.5.1/7] to the
+/// language, but likely to cause run-time errors--which can be
+/// turned into compile-time errors by the technique presented here.
+///
+/// Specific types require one translation unit (TU) for the
+/// instantiation and a header to make them available to other TUs.
+///
+/// The header should have a typedef declaration, which requires
+/// declarations of the arrays used as non-type arguments. Those array
+/// declarations must specify bounds explicitly, because an array of
+/// unknown bound is an incomplete type that prevents instantiation of
+/// the class template--and initializers must not be specified in the
+/// header, because including it in two TUs would violate the ODR.
+///
+/// The instantiation TU, however, should omit the bound specifiers,
+/// causing the bounds to be 'calculated' [8.3.4/3]. Passing them as
+/// non-type arguments, as '(&array)[n]' rather than as 'array[n],
+/// then causes explicit instantiation to fail if the calculated
+/// bounds do not match the size explicitly specified as a template
+/// parameter. Limitation: this safeguard is ineffective for a TU
+/// other than the instantiation TU that includes both the header and
+/// the code in the accompanying '.tpp' file that implements the
+/// template class, because implicit instantiation would occur; but
+/// that is easily avoided in the physical design.
+///
+/// Because both the header and the instantiation TU require the
+/// definition of the underlying enum type, that type must be defined
+/// in a separate header that both these files include.
+///
+/// The same benefit could be realized through consistent use of a
+/// macro. This built-in approach is preferred because it avoids using
+/// the preprocessor and its compile-time checking is automatic.
 
 template<typename T, std::size_t n, T const (&e)[n], char const*const (&c)[n]>
 class mc_enum
