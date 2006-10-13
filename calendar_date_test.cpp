@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: calendar_date_test.cpp,v 1.11 2006-09-19 03:01:12 chicares Exp $
+// $Id: calendar_date_test.cpp,v 1.12 2006-10-13 23:52:04 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -197,7 +197,7 @@ void CalendarDateTest::TestLeapYear()
 
 void CalendarDateTest::TestIncrementing()
 {
-    // Test incrementing by whole number of years. If a policy
+    // Test incrementing by a whole number of years. If a policy
     // anniversary falls on a nonexistent day of the month, then it's
     // moved to the last day of the month. This is just one arbitrary
     // rule, and others are possible. For instance, people born on
@@ -245,7 +245,7 @@ void CalendarDateTest::TestIncrementing()
     birth_date = add_years(birth_date, 1, true);
     BOOST_TEST_EQUAL(birth_date, calendar_date(2001,  2, 28));
 
-    // Test incrementing by whole number of months and years.
+    // Test incrementing by a whole number of months and years.
 
     // Non-curtate tests.
 
@@ -365,6 +365,44 @@ void CalendarDateTest::TestIncrementing()
     birth_date = calendar_date(2002,  3, 31);
     birth_date = add_years_and_months(birth_date, 0, 12, true);
     BOOST_TEST_EQUAL(birth_date, calendar_date(2003,  3, 31));
+
+    // Test constructing a plausible birthdate, given an as-of date
+    // and an attained age only. Because the month and date of birth
+    // aren't knowable, copy them from the as-of date, adjusting as
+    // necessary.
+
+    // Here, the desired age is one. This incidentally tests
+    // incrementing by a negative whole number of years.
+
+    calendar_date const as_of_date = calendar_date(1996,  2, 29);
+
+    // A non-curtate calculation would be incorrect. As this case
+    // shows, the resulting age does not equal the intended age.
+
+    birth_date = add_years(as_of_date, -1, false);
+    BOOST_TEST_EQUAL(birth_date, calendar_date(1995,  3,  1));
+    BOOST_TEST_UNEQUAL(1, attained_age(birth_date, as_of_date, false));
+
+    // A "curtate" calculation gives a correct answer.
+
+    birth_date = add_years(as_of_date, -1, true);
+    BOOST_TEST_EQUAL(birth_date, calendar_date(1995,  2, 28));
+    BOOST_TEST_EQUAL(1, attained_age(birth_date, as_of_date, false));
+
+    // It is important not to overgeneralize and suppose that curtate
+    // calculations somehow fit best with negative increments: that's
+    // not the case, as can be seen by repeating the last example
+    // starting from an earlier date.
+
+    calendar_date const some_other_date = calendar_date(1956,  2, 29);
+
+    birth_date = add_years(some_other_date, 39, false);
+    BOOST_TEST_EQUAL(birth_date, calendar_date(1995,  3,  1));
+    BOOST_TEST_UNEQUAL(1, attained_age(birth_date, as_of_date, false));
+
+    birth_date = add_years(some_other_date, 39, true);
+    BOOST_TEST_EQUAL(birth_date, calendar_date(1995,  2, 28));
+    BOOST_TEST_EQUAL(1, attained_age(birth_date, as_of_date, false));
 }
 
 void CalendarDateTest::TestAgeCalculations()
