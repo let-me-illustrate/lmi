@@ -24,7 +24,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: xml_notebook_coli_boli.xrc,v 1.15 2006-08-25 20:52:31 wboutin Exp $
+    $Id: xml_notebook_coli_boli.xrc,v 1.16 2006-10-13 23:53:11 chicares Exp $
 
     This version is designed for COLI and BOLI users; it omits input
     fields that seem irrelevant in that context, and reflects the
@@ -674,19 +674,6 @@
                     <flag>wxGROW|wxALL</flag>
                     <border>2</border>
                     <object class="wxTextCtrl" name="CurrentCoiMultiplier">
-                    </object>
-                </object>
-                <object class="sizeritem">
-                    <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL</flag>
-                    <border>4</border>
-                    <object class="wxStaticText">
-                        <label>Current COI grading</label>
-                    </object>
-                </object>
-                <object class="sizeritem">
-                    <flag>wxGROW|wxALL</flag>
-                    <border>2</border>
-                    <object class="wxTextCtrl" name="CurrentCoiGrading">
                     </object>
                 </object>
                 <object class="sizeritem">
