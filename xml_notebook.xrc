@@ -24,7 +24,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: xml_notebook.xrc,v 1.32 2006-09-17 00:19:50 chicares Exp $
+    $Id: xml_notebook.xrc,v 1.33 2006-10-13 23:53:11 chicares Exp $
 
     This version is generic. It strives to present every input field
     the system offers, in a way that suits the main developer's tastes.
@@ -368,6 +368,7 @@ demonstrate a defect in the wx library. See
                 </object>
                 <object class="sizeritem">
                     <flag>wxGROW|wxALL</flag>
+                    <border>4</border>
                     <object class="wxFlexGridSizer">
                         <cols>1</cols>
                         <growablecols>0</growablecols>
@@ -575,19 +576,6 @@ demonstrate a defect in the wx library. See
                 <object class="sizeritem">
                     <flag>wxGROW</flag>
                     <object class="wxTextCtrl" name="CurrentCoiMultiplier">
-                        <size>180,-1</size>
-                    </object>
-                </object>
-                <object class="sizeritem">
-                    <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
-                    <border>4</border>
-                    <object class="wxStaticText">
-                        <label>Current COI grading</label>
-                    </object>
-                </object>
-                <object class="sizeritem">
-                    <flag>wxGROW</flag>
-                    <object class="wxTextCtrl" name="CurrentCoiGrading">
                         <size>180,-1</size>
                     </object>
                 </object>

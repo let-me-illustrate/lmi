@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.460 2006-10-11 00:37:50 chicares Exp $
+// $Id: ChangeLog,v 1.461 2006-10-13 23:53:11 chicares Exp $
 
 MAINTENANCE
 
@@ -7601,4 +7601,15 @@ Remove headers necessarily included by base class.
 
   mc_enum.hpp
 Improve documentation.
+
+20061013T2352Z <chicares@cox.net> [1173]
+
+  calendar_date_test.cpp
+Import selected changes from skeleton branch.
+
+20061013T2353Z <chicares@cox.net> [1173]
+
+  xml_notebook.xrc
+  xml_notebook_coli_boli.xrc
+Remove 'CurrentCoiGrading' from GUI skins.
 
