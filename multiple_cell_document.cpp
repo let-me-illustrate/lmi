@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: multiple_cell_document.cpp,v 1.9.2.1 2006-10-15 17:29:06 chicares Exp $
+// $Id: multiple_cell_document.cpp,v 1.9.2.2 2006-10-15 23:29:43 etarassov Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -275,6 +275,6 @@ void multiple_cell_document::write(std::ostream& os) const
         root << cell_parms_[j];
         }
 
-    doc.write_to_stream(os);
+    os << doc;
 }
 

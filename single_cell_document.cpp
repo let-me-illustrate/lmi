@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: single_cell_document.cpp,v 1.7.2.1 2006-10-15 17:29:06 chicares Exp $
+// $Id: single_cell_document.cpp,v 1.7.2.2 2006-10-15 23:29:43 etarassov Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -123,6 +123,6 @@ void single_cell_document::write(std::ostream& os)
     xmlpp::Document document;
     xmlpp::Element & root = *document.create_root_node(xml_root_name());
     root << *input_data_;
-    document.write_to_stream(os);
+    os << document;
 }
 

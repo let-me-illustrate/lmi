@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_test.cpp,v 1.7.2.1 2006-10-15 17:29:06 chicares Exp $
+// $Id: input_test.cpp,v 1.7.2.2 2006-10-15 23:29:43 etarassov Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -138,7 +138,7 @@ int test_main(int, char*[])
     xmlpp::Document xml_doc1;
     xmlpp::Element & xml_root1 = *xml_doc1.create_root_node("root");
     xml_root1 << replica;
-    xml_doc1.write_to_stream(os1);
+    os1 << xml_doc1;
     os1.close();
 
     BOOST_TEST(original == replica);
