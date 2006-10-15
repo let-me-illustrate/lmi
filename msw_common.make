@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: msw_common.make,v 1.11 2006-08-12 17:16:33 chicares Exp $
+# $Id: msw_common.make,v 1.11.2.1 2006-10-15 17:29:06 chicares Exp $
 
 ################################################################################
 
@@ -44,8 +44,12 @@ platform_defines := \
 platform_boost_libraries := \
   -lboost_filesystem-mgw \
 
+# TODO ?? Is this alone sufficient, and '-lxml2.dll' unnecessary?
+# TODO ?? Not '-2':  -lxml++-2.6-2.dll
+# ...so would it be better to link the actual dll directly?
 platform_libxml2_libraries := \
   -lxml2.dll \
+  -lxml++-2.6.dll \
 
 platform_mpatrol_libraries := \
   -limagehlp \

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger.hpp,v 1.13 2006-01-29 13:52:00 chicares Exp $
+// $Id: ledger.hpp,v 1.13.2.1 2006-10-15 17:29:06 chicares Exp $
 
 #ifndef ledger_hpp
 #define ledger_hpp
@@ -27,6 +27,7 @@
 #include "config.hpp"
 
 #include "so_attributes.hpp"
+#include "xml_lmi.hpp"
 #include "streamable.hpp"
 #include "xenumtypes.hpp"
 
@@ -107,8 +108,8 @@ class LMI_SO Ledger
     unsigned int CalculateCRC() const;
     void Spew(std::ostream& os) const;
 
-    void read(xml::node&);
-    void write(xml::node&) const;
+    void read(xmlpp::Element const&);
+    void write(xmlpp::Element&) const;
     int class_version() const;
     std::string xml_root_name() const;
 

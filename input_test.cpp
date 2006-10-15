@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_test.cpp,v 1.7 2006-01-29 13:52:00 chicares Exp $
+// $Id: input_test.cpp,v 1.7.2.1 2006-10-15 17:29:06 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -31,8 +31,7 @@
 #define BOOST_INCLUDE_MAIN
 #include "test_tools.hpp"
 
-#include <xmlwrapp/init.h>
-#include <xmlwrapp/node.h>
+#include "xml_lmi.hpp"
 
 #if defined BOOST_MSVC || defined __BORLANDC__
 #   include <cfloat> // floating-point hardware control
@@ -116,25 +115,19 @@ int test_main(int, char*[])
 */
     original.propagate_changes_to_base_and_finalize();
 
-    xml::init init;
-    xml::node xml_root0("root");
+    xmlpp::Document doc;
+    xmlpp::Element & xml_root0 = *doc.create_root_node("root");
     xml_root0 << original;
-    os0 << xml_root0;
+    os0 << doc;
     os0.close();
 
-    xml::node xml_node;
-    xml::node::iterator child = xml_root0.begin();
-    if(child->is_text())
-        {
-        // TODO ?? Explain what this does.
-        ++child;
-        }
-    if(!child->is_text())
-        {
-        xml_node = *child;
-        }
+    {
+        xmlpp::Element * xml_node = xmlpp::LmiHelper::get_first_element(xml_root0);
 
-    xml_node >> replica;
+        BOOST_TEST(!!xml_node);
+
+        *xml_node >> replica;
+    }
     std::ofstream os1
         ("eraseme1.xml"
         ,   std::ios_base::out
@@ -142,9 +135,10 @@ int test_main(int, char*[])
           | std::ios_base::binary
         );
     BOOST_TEST(!!os1);
-    xml::node xml_root1("root");
+    xmlpp::Document xml_doc1;
+    xmlpp::Element & xml_root1 = *xml_doc1.create_root_node("root");
     xml_root1 << replica;
-    os1 << xml_root1;
+    xml_doc1.write_to_stream(os1);
     os1.close();
 
     BOOST_TEST(original == replica);

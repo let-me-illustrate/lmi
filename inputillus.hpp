@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: inputillus.hpp,v 1.10 2006-01-29 13:52:00 chicares Exp $
+// $Id: inputillus.hpp,v 1.10.2.1 2006-10-15 17:29:06 chicares Exp $
 
 #ifndef inputillus_hpp
 #define inputillus_hpp
@@ -56,8 +56,8 @@ class LMI_SO IllusInputParms
 
     void ascribe_members();
 
-    void read(xml::node&);
-    void write(xml::node&) const;
+    void read(xmlpp::Element const&);
+    void write(xmlpp::Element&) const;
     int class_version() const;
     std::string xml_root_name() const;
 

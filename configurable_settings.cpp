@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: configurable_settings.cpp,v 1.14 2006-09-20 16:06:24 chicares Exp $
+// $Id: configurable_settings.cpp,v 1.14.2.1 2006-10-15 17:29:06 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -33,12 +33,7 @@
 #include "miscellany.hpp"
 #include "platform_dependent.hpp" // access()
 
-#ifdef USING_CURRENT_XMLWRAPP
-#   include <xmlwrapp/document.h>
-#endif // USING_CURRENT_XMLWRAPP defined.
-#include <xmlwrapp/init.h>
-#include <xmlwrapp/node.h>
-#include <xmlwrapp/tree_parser.h>
+#include "xml_lmi.hpp"
 
 #include <algorithm>
 #include <iterator>
@@ -87,8 +82,19 @@ configurable_settings::configurable_settings()
             }
         }
 
-    xml::init init;
-    xml::tree_parser parser(filename.c_str());
+    xmlpp::DomParser parser;
+    try {
+        parser.parse_file(filename);
+    }
+    catch(const std::exception & ex)
+    {
+        fatal_error() << "Exception while reading '"
+                      << configuration_filename()
+                      << "'."
+                      << "(" << ex.what() << ")"
+                      << LMI_FLUSH;
+    }
+
     if(!parser)
         {
         fatal_error()
@@ -98,11 +104,7 @@ configurable_settings::configurable_settings()
             << LMI_FLUSH
             ;
         }
-#ifdef USING_CURRENT_XMLWRAPP
-    xml::node& root = parser.get_document().get_root_node();
-#else // USING_CURRENT_XMLWRAPP not defined.
-    xml::node& root = parser.get_root_node();
-#endif // USING_CURRENT_XMLWRAPP not defined.
+    xmlpp::Element & root = *parser.get_document()->get_root_node();
     if(xml_root_name() != root.get_name())
         {
         fatal_error()
@@ -117,25 +119,19 @@ configurable_settings::configurable_settings()
             ;
         }
 
-// COMPILER !! Borland doesn't find operator==() in ns xml.
-#ifdef __BORLANDC__
-    using namespace xml;
-#endif // __BORLANDC__
-
-    xml::node::const_iterator child = root.begin();
-    for(; child != root.end(); ++child)
-        {
-        if(child->is_text())
+    xmlpp::Node::NodeList const children = root.get_children();
+    for( xmlpp::Node::NodeList::const_iterator iter = children.begin();
+                                               iter != children.end();
+                                               ++iter )
+    {
+        xmlpp::Element const * child =
+            dynamic_cast< xmlpp::Element const * >( *iter );
+        if( !child )
             {
             continue;
             }
-        char const* content = child->get_content();
-        if(!content)
-            {
-            content = "";
-            }
-        operator[](child->get_name()) = content;
-        }
+        (*this)[ child->get_name() ] = xmlpp::LmiHelper::get_content( *child );
+    }
 }
 
 configurable_settings::~configurable_settings()

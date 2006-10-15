@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: workhorse.make,v 1.73 2006-09-02 22:40:21 chicares Exp $
+# $Id: workhorse.make,v 1.73.2.1 2006-10-15 17:29:06 chicares Exp $
 
 ################################################################################
 
@@ -227,8 +227,6 @@ wx_config_check:
 # boost: the build system provided is not free.
 #
 # cgicc: './configure && make' fails in the MSYS environment.
-#
-# xmlwrapp: avoid the nonstandard build system provided.
 
 # Path to libraries from www.boost.org : most required boost libraries
 # are implemented exclusively in headers. It seems common in the *nix
@@ -496,7 +494,6 @@ endif
 
 REQUIRED_LIBS := \
   $(platform_boost_libraries) \
-  -lxmlwrapp \
   $(platform_libxml2_libraries) \
 
 wx_ldflags = \
@@ -594,6 +591,8 @@ REQUIRED_ARFLAGS = \
 # order given; if they're specified in reverse order, then mpatrol
 # won't work, gnu 'ld' finds its dll first and then doesn't look for
 # its import library.
+
+# TODO ?? Can third_party be removed now?
 
 all_library_directories := \
   . \

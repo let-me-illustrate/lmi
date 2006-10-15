@@ -20,7 +20,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: posix_fhs.make,v 1.11 2006-01-29 13:52:00 chicares Exp $
+# $Id: posix_fhs.make,v 1.11.2.1 2006-10-15 17:29:06 chicares Exp $
 
 ################################################################################
 
@@ -31,8 +31,11 @@ SHREXT := .so
 platform_boost_libraries := \
   -lboost_filesystem-gcc \
 
+# TODO ?? Evgeniy--I find no 'libxml++-config'. How should that
+# library be handled here?
 platform_libxml2_libraries := \
   $(shell xml2-config --libs) \
+  $(shell xslt-config --libs) \
 
 # Let the user override this on the make command line to use a
 # non-default wx configuration.

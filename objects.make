@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: objects.make,v 1.83 2006-09-20 16:06:24 chicares Exp $
+# $Id: objects.make,v 1.83.2.1 2006-10-15 17:29:06 chicares Exp $
 
 ################################################################################
 
@@ -86,16 +86,7 @@ cgicc_3_1_4_objects = \
   HTTPHeaders.o \
   MStreamable.o \
 
-# xmlwrapp library from pmade.org .
-
-xmlwrapp_objects := \
-  event_parser.o \
-  init.o \
-  node.o \
-  node_iterator.o \
-  tree_parser.o \
-
-# For systems that already have boost, cgicc, and xmlwrapp libraries
+# For systems that already have libraries like boost and cgicc
 # installed, define 'HAVE_THIRD_PARTY_LIBRARIES' to use them instead
 # of using the workarounds above.
 #
@@ -106,7 +97,6 @@ xmlwrapp_objects := \
 ifdef HAVE_THIRD_PARTY_LIBRARIES
   boost_filesystem_objects :=
   cgicc_objects :=
-  xmlwrapp_objects :=
 endif
 
 ################################################################################
@@ -155,7 +145,6 @@ cli_objects := \
 
 common_common_objects := \
   $(boost_filesystem_objects) \
-  $(xmlwrapp_objects) \
   actuarial_table.o \
   alert.o \
   calendar_date.o \
@@ -205,6 +194,7 @@ common_common_objects := \
   system_command.o \
   timer.o \
   xenumtypes.o \
+  xml_lmi.o \
   xrange.o \
 
 ################################################################################
@@ -324,7 +314,6 @@ gpt_objects := \
   $(boost_filesystem_objects) \
   $(gpt_objects_unique_to_server) \
   $(gpt_objects_directly_concerned_with_gpt) \
-  $(xmlwrapp_objects) \
   actuarial_table.o \
   alert.o \
   alert_cli.o \
@@ -362,6 +351,7 @@ gpt_objects := \
   surrchg_rates.o \
   timer.o \
   xenumtypes.o \
+  xml_lmi.o \
   xrange.o \
 
 libgpt.a libgpt$(SHREXT): EXTRA_LDFLAGS =
@@ -513,7 +503,6 @@ input_seq_test$(EXEEXT): \
 input_test$(EXEEXT): \
   $(boost_filesystem_objects) \
   $(common_test_objects) \
-  $(xmlwrapp_objects) \
   calendar_date.o \
   configurable_settings.o \
   data_directory.o \
@@ -539,6 +528,7 @@ input_test$(EXEEXT): \
   single_cell_document.o \
   streamable.o \
   xenumtypes.o \
+  xml_lmi.o \
   xrange.o \
   $(extra_libs) \
 

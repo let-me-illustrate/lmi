@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.462.2.2 2006-10-15 17:15:44 chicares Exp $
+// $Id: ChangeLog,v 1.462.2.3 2006-10-15 17:29:06 chicares Exp $
 
 MAINTENANCE
 
@@ -7629,4 +7629,23 @@ Test committing to 'gnome-xml-branch' branch.
   xml_lmi.hpp [new file]
 Add libxml++ helpers, based on 'xmlpp.cpp' and 'xmlpp.hpp' in the
 'libxmlpp_branch' branch.
+
+20061015T1729Z <chicares@cox.net> [1173]
+
+  configurable_settings.cpp
+  input_test.cpp
+  inputillus.hpp
+  inputillus_xml_io.cpp
+  ledger.hpp
+  ledger_xml_io.cpp
+  msw_common.make
+  multiple_cell_document.cpp
+  multiple_cell_document.hpp
+  objects.make
+  posix_fhs.make
+  single_cell_document.cpp
+  single_cell_document.hpp
+  streamable.hpp
+  workhorse.make
+Replace xmlwrapp with libxml++, merging 'libxmlpp_branch' branch.
 

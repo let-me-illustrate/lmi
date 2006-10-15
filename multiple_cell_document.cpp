@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: multiple_cell_document.cpp,v 1.9 2006-02-23 04:44:40 chicares Exp $
+// $Id: multiple_cell_document.cpp,v 1.9.2.1 2006-10-15 17:29:06 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -33,11 +33,7 @@
 #include "istream_to_string.hpp"
 #include "value_cast.hpp"
 
-#ifdef USING_CURRENT_XMLWRAPP
-#   include <xmlwrapp/document.h>
-#endif // USING_CURRENT_XMLWRAPP defined.
-#include <xmlwrapp/init.h>
-#include <xmlwrapp/tree_parser.h>
+#include "xml_lmi.hpp"
 
 #include <fstream>
 
@@ -52,10 +48,8 @@ multiple_cell_document::multiple_cell_document()
 //============================================================================
 multiple_cell_document::multiple_cell_document(std::string const& filename)
 {
-    xml::init init;
-// XMLWRAPP !! See comment on parse() in header.
-//    parse(xml::tree_parser(filename.c_str()));
-    xml::tree_parser parser(filename.c_str());
+    xmlpp::DomParser parser;
+    parser.parse_file(filename);
     parse(parser);
 }
 
@@ -71,18 +65,14 @@ std::string multiple_cell_document::xml_root_name() const
 }
 
 //============================================================================
-void multiple_cell_document::parse(xml::tree_parser& parser)
+void multiple_cell_document::parse(const xmlpp::DomParser & parser)
 {
     if(!parser)
         {
         fatal_error() << "Error parsing XML file." << LMI_FLUSH;
         }
 
-#ifdef USING_CURRENT_XMLWRAPP
-    xml::node& root = parser.get_document().get_root_node();
-#else // USING_CURRENT_XMLWRAPP not defined.
-    xml::node& root = parser.get_root_node();
-#endif // USING_CURRENT_XMLWRAPP not defined.
+    const xmlpp::Element & root = *parser.get_document()->get_root_node();
     if(xml_root_name() != root.get_name())
         {
         fatal_error()
@@ -95,11 +85,6 @@ void multiple_cell_document::parse(xml::tree_parser& parser)
             ;
         }
 
-// COMPILER !! Borland doesn't find operator==() in ns xml.
-#ifdef __BORLANDC__
-using namespace xml;
-#endif // __BORLANDC__
-
 // TODO ?? It doesn't seem right to depend on node order.
 // See note below--perhaps do something like this:
 //    int NumberOfCases;
@@ -111,17 +96,32 @@ using namespace xml;
     // Case default parameters.
 
     case_parms_.clear();
-    xml::node::iterator child = root.begin();
-    if(child->is_text())
+
+    typedef xmlpp::Node::NodeList XmlppNodes;
+    typedef std::list<xmlpp::Element *> XmlppElements;
+
+    XmlppElements elements;
+    {
+        // fill elements list with element nodes of the root
+        XmlppNodes const rootNodes = root.get_children();
+        for( XmlppNodes::const_iterator iter = rootNodes.begin();
+                                        iter != rootNodes.end();
+                                        ++iter )
         {
-        // TODO ?? Explain what this does (passim).
-        ++child;
+            xmlpp::Element const * el = dynamic_cast<xmlpp::Element const *>(*iter);
+            if(el)
+                elements.push_back(const_cast<xmlpp::Element *>(el));
         }
-    if(std::string("cell") != child->get_name())
+    }
+
+    XmlppElements::const_iterator iter = elements.begin();
+    xmlpp::Element * child = 0;
+
+    if(iter == elements.end() || (child = *iter)->get_name() != "cell")
         {
         fatal_error()
             << "XML node name is '"
-            << child->get_name()
+            << (iter == elements.end() ? "no node" : child->get_name())
             << "' but '"
             << "cell"
             << "' was expected."
@@ -132,42 +132,31 @@ using namespace xml;
     case_parms_.push_back(temp);
 
     // Number of classes.
-    ++child;
-    if(child->is_text())
-        {
-        ++child;
-        }
-    if(std::string("NumberOfClasses") != child->get_name())
+    ++iter;
+    if(iter == elements.end() || (child = *iter)->get_name() != "NumberOfClasses")
         {
         fatal_error()
             << "XML node name is '"
-            << child->get_name()
+            << (iter == elements.end() ? "no node" : child->get_name())
             << "' but '"
             << "NumberOfClasses"
             << "' was expected."
             << LMI_FLUSH
             ;
         }
-    char const* n_classes = child->get_content();
-    LMI_ASSERT(n_classes);
-    unsigned int number_of_classes = value_cast<unsigned int>(n_classes);
+    unsigned int number_of_classes = value_cast<unsigned int>
+        (xmlpp::LmiHelper::get_content(*child)
+        );
 
     // Parameters for each class.
     class_parms_.clear();
     class_parms_.reserve(number_of_classes);
 
-    ++child;
-    if(child->is_text())
+    for(;++iter != elements.end();)
         {
-        ++child;
-        }
-    for(; child != root.end(); ++child)
-        {
-        if(!child->is_text())
-            {
-            (*child) >> temp;
-            class_parms_.push_back(temp);
-            }
+        child = *iter;
+        (*child) >> temp;
+        class_parms_.push_back(temp);
         if(class_parms_.size() == number_of_classes)
             {
             break;
@@ -186,39 +175,29 @@ using namespace xml;
         }
 
     // Number of cells.
-    ++child;
-    if(child->is_text())
-        {
-        ++child;
-        }
-    if(std::string("NumberOfCells") != child->get_name())
+    ++iter;
+    if( iter == elements.end() || (child = *iter)->get_name() != "NumberOfCells" )
         {
         fatal_error()
             << "XML node name is '"
-            << child->get_name()
+            << (iter == elements.end() ? "no node" : child->get_name())
             << "' but '"
             << "NumberOfCells"
             << "' was expected."
             << LMI_FLUSH
             ;
         }
-    char const* n_cells = child->get_content();
-    LMI_ASSERT(n_cells);
-    unsigned int number_of_cells = value_cast<unsigned int>(n_cells);
+    unsigned int number_of_cells = value_cast<unsigned int>
+        (xmlpp::LmiHelper::get_content(*child)
+        );
 
     // Parameters for each Cell.
     cell_parms_.clear();
     cell_parms_.reserve(number_of_cells);
 
-    ++child;
-    if(child->is_text())
+    for(; ++iter != elements.end();)
         {
-        ++child;
-        }
-    for(; child != root.end(); ++child)
-        {
-        if(!child->is_text())
-            {
+            child = *iter;
             (*child) >> temp;
             cell_parms_.push_back(temp);
             status()
@@ -229,7 +208,6 @@ using namespace xml;
                 << " lives."
                 << std::flush
                 ;
-            }
         if(cell_parms_.size() == number_of_cells)
             {
             break;
@@ -247,12 +225,7 @@ using namespace xml;
             ;
         }
 
-    ++child;
-    if(child->is_text())
-        {
-        ++child;
-        }
-    if(child != root.end())
+    if(++iter != elements.end())
         {
         fatal_error()
             << "Read all data expected in XML document, "
@@ -265,60 +238,43 @@ using namespace xml;
 //============================================================================
 void multiple_cell_document::read(std::istream& is)
 {
-    // XMLWRAPP !! xmlwrapp-0.2.0 doesn't know about istreams yet, so
-    // read the istream into a std::string via a std::ostringstream
-    // and pass that to the xml::tree_parser ctor that takes a char* .
-
-    std::string s;
-    istream_to_string(is, s);
-    xml::init init;
+    xmlpp::DomParser parser;
+    parser.parse_stream(is);
 // XMLWRAPP !! See comment on parse() in header.
-//    parse(xml::tree_parser(s.c_str(), 1 + s.size()));
-    xml::tree_parser parser(s.c_str(), 1 + s.size());
     parse(parser);
 }
 
 //============================================================================
 void multiple_cell_document::write(std::ostream& os) const
 {
-    xml::init init;
-    xml::node root(xml_root_name().c_str());
+    xmlpp::Document doc;
+    xmlpp::Element & root = *doc.create_root_node(xml_root_name());
 
 // TODO ?? Diagnostics will be cryptic if the xml doesn't follow
 // the required layout. Perhaps they could be improved. Maybe it
 // would be better to restructure the document so that each set
 // of cells, with its cardinal number, is a distinct node.
 //
-//    root.push_back
-//        (xml::node
-//            ("NumberOfCases"
-//            ,value_cast<std::string>(case_parms_.size()).c_str()
-//            )
-//        );
+//    root.add_child("NumberOfCases")
+//        ->add_child_text(value_cast<std::string>(case_parms_.size()));
     root << case_parms_[0];
 
-    root.push_back
-        (xml::node
-            ("NumberOfClasses"
-            ,value_cast<std::string>(class_parms_.size()).c_str()
-            )
-        );
+    root.add_child( "NumberOfClasses" )
+        ->add_child_text( value_cast< std::string >(
+            class_parms_.size() ) );
     for(unsigned int j = 0; j < class_parms_.size(); j++)
         {
         root << class_parms_[j];
         }
 
-    root.push_back
-        (xml::node
-            ("NumberOfCells"
-            ,value_cast<std::string>(cell_parms_.size()).c_str()
-            )
-        );
+    root.add_child("NumberOfCells")
+        ->add_child_text( value_cast<std::string>(
+            cell_parms_.size() ) );
     for(unsigned int j = 0; j < cell_parms_.size(); j++)
         {
         root << cell_parms_[j];
         }
 
-    os << root;
+    doc.write_to_stream(os);
 }
 
