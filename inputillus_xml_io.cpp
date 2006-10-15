@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: inputillus_xml_io.cpp,v 1.12.2.1 2006-10-15 17:29:06 chicares Exp $
+// $Id: inputillus_xml_io.cpp,v 1.12.2.2 2006-10-15 23:27:37 etarassov Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -92,9 +92,8 @@ void IllusInputParms::read(xmlpp::Element const& x)
         throw std::runtime_error(msg.str());
         }
 
-    std::string cell_version_string;
-    xmlpp::Attribute const * version = x.get_attribute("version");
-    if( !version )
+    xmlpp::Attribute const * cell_version_node = x.get_attribute("version");
+    if( !cell_version_node )
         {
         std::ostringstream msg;
         msg
@@ -104,7 +103,7 @@ void IllusInputParms::read(xmlpp::Element const& x)
             ;
         throw std::runtime_error(msg.str());
         }
-    int cell_version = value_cast<int>(cell_version_string);
+    int cell_version = value_cast<int>(cell_version_node->get_value());
 
     std::map<std::string, std::string> detritus_map;
 
