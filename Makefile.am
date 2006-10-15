@@ -20,7 +20,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: Makefile.am,v 1.23.2.1 2006-10-15 23:26:24 etarassov Exp $
+# $Id: Makefile.am,v 1.23.2.2 2006-10-15 23:56:01 etarassov Exp $
 
 
 SUBDIRS = third_party
@@ -202,8 +202,7 @@ lmi_wx_SOURCES = \
     transferor.cpp \
     view_ex.cpp \
     wx_checks.cpp \
-    wx_utility.cpp \
-    xml_notebook.cpp
+    wx_utility.cpp
 
 lmi_wx_CXXFLAGS = $(WX_CXXFLAGS) $(LIBXMLPP_CFLAGS) $(AM_CXXFLAGS)
 # $(CGICC_INCLUDE_FLAGS)
