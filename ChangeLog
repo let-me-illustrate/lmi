@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.462 2006-10-15 14:52:27 chicares Exp $
+// $Id: ChangeLog,v 1.463 2006-10-15 16:21:23 chicares Exp $
 
 MAINTENANCE
 
@@ -7617,4 +7617,9 @@ Remove 'CurrentCoiGrading' from GUI skins.
 
   version.hpp
 Mark release candidate.
+
+20061015T1621Z <chicares@cox.net> [1173]
+
+  [ChangeLog only]
+Test committing to 'gnome-xml-branch' branch.
 
