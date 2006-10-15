@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.462.2.1 2006-10-15 16:52:30 chicares Exp $
+// $Id: ChangeLog,v 1.462.2.2 2006-10-15 17:15:44 chicares Exp $
 
 MAINTENANCE
 
@@ -7622,4 +7622,11 @@ Mark release candidate.
 
   [ChangeLog only]
 Test committing to 'gnome-xml-branch' branch.
+
+20061015T1715Z <chicares@cox.net> [1173]
+
+  xml_lmi.cpp [new file]
+  xml_lmi.hpp [new file]
+Add libxml++ helpers, based on 'xmlpp.cpp' and 'xmlpp.hpp' in the
+'libxmlpp_branch' branch.
 
