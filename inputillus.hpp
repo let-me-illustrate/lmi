@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: inputillus.hpp,v 1.10.2.1 2006-10-15 17:29:06 chicares Exp $
+// $Id: inputillus.hpp,v 1.10.2.2 2006-10-16 16:24:33 chicares Exp $
 
 #ifndef inputillus_hpp
 #define inputillus_hpp
@@ -56,10 +56,11 @@ class LMI_SO IllusInputParms
 
     void ascribe_members();
 
-    void read(xmlpp::Element const&);
-    void write(xmlpp::Element&) const;
-    int class_version() const;
-    std::string xml_root_name() const;
+    // Class 'streamable' required implementation.
+    virtual void read(xmlpp::Element const&);
+    virtual void write(xmlpp::Element&) const;
+    virtual int class_version() const;
+    virtual std::string xml_root_name() const;
 
     void propagate_changes_from_base_and_finalize(bool report_errors = true);
     void propagate_changes_to_base_and_finalize(bool report_errors = true);
