@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.462.2.4 2006-10-16 01:33:42 chicares Exp $
+// $Id: ChangeLog,v 1.462.2.5 2006-10-16 16:56:11 chicares Exp $
 
 MAINTENANCE
 
@@ -7714,4 +7714,24 @@ with a particular compiler when other compilers may properly reject
 it. Using #include <...> for case 5 seems at least as good as the
 alternative with double quotes; boost chose this policy after much
 discussion.
+
+20061016T1624Z <chicares@cox.net> [1171]
+
+  inputillus.hpp
+  ledger.hpp
+Mark virtuals explicitly.
+
+20061016T1656Z <chicares@cox.net> [1171]
+
+  configurable_settings.cpp
+  input_test.cpp
+  inputillus.hpp
+  inputillus_xml_io.cpp
+  ledger_xml_io.cpp
+  multiple_cell_document.cpp
+  single_cell_document.cpp
+  single_cell_document.hpp
+  xml_lmi.cpp
+  xml_lmi.hpp
+Include only appropriate headers.
 

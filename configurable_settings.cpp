@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: configurable_settings.cpp,v 1.14.2.2 2006-10-16 01:33:42 chicares Exp $
+// $Id: configurable_settings.cpp,v 1.14.2.3 2006-10-16 16:56:11 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -29,14 +29,11 @@
 #include "configurable_settings.hpp"
 
 #include "alert.hpp"
-#include "data_directory.hpp"
-#include "miscellany.hpp"
+#include "data_directory.hpp"     // AddDataDir()
 #include "platform_dependent.hpp" // access()
 #include "xml_lmi.hpp"
 
-#include <algorithm>
-#include <iterator>
-#include <vector>
+#include <exception>
 
 // TODO ?? Need unit tests.
 

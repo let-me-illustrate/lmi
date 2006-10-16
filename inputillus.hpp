@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: inputillus.hpp,v 1.10.2.2 2006-10-16 16:24:33 chicares Exp $
+// $Id: inputillus.hpp,v 1.10.2.3 2006-10-16 16:56:11 chicares Exp $
 
 #ifndef inputillus_hpp
 #define inputillus_hpp
@@ -33,7 +33,6 @@
 #include "xenumtypes.hpp"
 #include "xrangetypes.hpp"
 
-#include <iosfwd>
 #include <map>
 #include <string>
 #include <vector>

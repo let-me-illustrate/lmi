@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: inputillus_xml_io.cpp,v 1.12.2.3 2006-10-16 01:33:42 chicares Exp $
+// $Id: inputillus_xml_io.cpp,v 1.12.2.4 2006-10-16 16:56:11 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -35,8 +35,8 @@
 #include "value_cast.hpp"
 #include "xml_lmi.hpp"
 
-#include <istream>
-#include <ostream>
+#include <algorithm>
+#include <sstream>
 #include <stdexcept>
 
 // Entities that were present in older versions and then removed

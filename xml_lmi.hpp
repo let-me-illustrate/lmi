@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xml_lmi.hpp,v 1.1.2.1 2006-10-15 17:15:44 chicares Exp $
+// $Id: xml_lmi.hpp,v 1.1.2.2 2006-10-16 16:56:11 chicares Exp $
 
 #ifndef xml_lmi_hpp
 #define xml_lmi_hpp
@@ -28,8 +28,8 @@
 
 #include <libxml++/libxml++.h>
 
+#include <iosfwd>
 #include <string>
-#include <istream>
 
 // injecting into xmlpp namespace
 namespace xmlpp

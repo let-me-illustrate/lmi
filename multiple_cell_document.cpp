@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: multiple_cell_document.cpp,v 1.9.2.3 2006-10-16 01:33:42 chicares Exp $
+// $Id: multiple_cell_document.cpp,v 1.9.2.4 2006-10-16 16:56:11 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -30,11 +30,7 @@
 
 #include "alert.hpp"
 #include "inputillus.hpp"
-#include "istream_to_string.hpp"
 #include "value_cast.hpp"
-#include "xml_lmi.hpp"
-
-#include <fstream>
 
 //============================================================================
 multiple_cell_document::multiple_cell_document()

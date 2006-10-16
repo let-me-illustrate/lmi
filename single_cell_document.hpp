@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: single_cell_document.hpp,v 1.6.2.2 2006-10-16 01:33:42 chicares Exp $
+// $Id: single_cell_document.hpp,v 1.6.2.3 2006-10-16 16:56:11 chicares Exp $
 
 #ifndef single_cell_document_hpp
 #define single_cell_document_hpp
@@ -34,7 +34,6 @@
 #include <boost/utility.hpp>
 
 #include <istream>
-#include <memory>
 #include <ostream>
 #include <string>
 

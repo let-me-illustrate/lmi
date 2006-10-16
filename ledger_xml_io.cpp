@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xml_io.cpp,v 1.48.2.2 2006-10-16 01:33:42 chicares Exp $
+// $Id: ledger_xml_io.cpp,v 1.48.2.3 2006-10-16 16:56:11 chicares Exp $
 
 #include "ledger.hpp"
 
@@ -41,9 +41,7 @@
 #include <iomanip>
 #include <ios>
 #include <locale>
-#include <numeric>
 #include <sstream>
-#include <string>
 #include <utility>
 
 void Ledger::read(xmlpp::Element const&)

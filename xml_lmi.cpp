@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xml_lmi.cpp,v 1.1.2.2 2006-10-15 23:29:43 etarassov Exp $
+// $Id: xml_lmi.cpp,v 1.1.2.3 2006-10-16 16:56:11 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -28,11 +28,7 @@
 
 #include "xml_lmi.hpp"
 
-#include <cstddef>
-#include <ios>
-#include <iterator>
-#include <stdexcept>
-#include <vector>
+#include <ostream>
 #include <sstream>
 
 namespace xmlpp
