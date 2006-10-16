@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: multiple_cell_document.hpp,v 1.7.2.2 2006-10-16 01:33:42 chicares Exp $
+// $Id: multiple_cell_document.hpp,v 1.7.2.3 2006-10-16 19:21:11 chicares Exp $
 
 #ifndef multiple_cell_document_hpp
 #define multiple_cell_document_hpp
@@ -38,7 +38,6 @@
 #include <vector>
 
 class IllusInputParms;
-
 
 class LMI_SO multiple_cell_document
     :private boost::noncopyable
@@ -60,7 +59,7 @@ class LMI_SO multiple_cell_document
     void write(std::ostream& os) const;
 
   private:
-    void parse(const xmlpp::DomParser&);
+    void parse(xmlpp::DomParser const&);
     std::string xml_root_name() const;
 
     // Default parameters for the whole case, stored as a vector for

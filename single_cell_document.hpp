@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: single_cell_document.hpp,v 1.6.2.3 2006-10-16 16:56:11 chicares Exp $
+// $Id: single_cell_document.hpp,v 1.6.2.4 2006-10-16 19:21:11 chicares Exp $
 
 #ifndef single_cell_document_hpp
 #define single_cell_document_hpp
@@ -57,7 +57,7 @@ class LMI_SO single_cell_document
     void write(std::ostream& os);
 
   private:
-    void parse( const xmlpp::DomParser& );
+    void parse( xmlpp::DomParser const& );
     std::string xml_root_name() const;
 
     boost::scoped_ptr<IllusInputParms> const input_data_;

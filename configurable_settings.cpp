@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: configurable_settings.cpp,v 1.14.2.3 2006-10-16 16:56:11 chicares Exp $
+// $Id: configurable_settings.cpp,v 1.14.2.4 2006-10-16 19:21:11 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -82,7 +82,7 @@ configurable_settings::configurable_settings()
     try {
         parser.parse_file(filename);
     }
-    catch(const std::exception & ex)
+    catch(std::exception const& ex)
     {
         fatal_error() << "Exception while reading '"
                       << configuration_filename()

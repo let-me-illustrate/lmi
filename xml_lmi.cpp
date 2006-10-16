@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xml_lmi.cpp,v 1.1.2.3 2006-10-16 16:56:11 chicares Exp $
+// $Id: xml_lmi.cpp,v 1.1.2.4 2006-10-16 19:21:11 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -40,7 +40,7 @@ namespace xmlpp
    This function is not recursive, meaning that only the text-nodes
    directly attached to the node are taken into the account.
  */
-std::string LmiHelper::get_content(const Element & node)
+std::string LmiHelper::get_content(Element const& node)
 {
     std::ostringstream buf;
     Node::NodeList const nodeChildren = node.get_children();
@@ -73,7 +73,7 @@ Element * LmiHelper::get_first_element(Element & node)
     return 0;
 }
 
-const Element * LmiHelper::get_first_element(const Element & node)
+Element const* LmiHelper::get_first_element(Element const& node)
 {
     Node::NodeList const nodeList = node.get_children();
     for( Node::NodeList::const_iterator iter = nodeList.begin();
@@ -86,7 +86,6 @@ const Element * LmiHelper::get_first_element(const Element & node)
     }
     return 0;
 }
-
 
 std::ostream & operator << ( std::ostream & os, Document & document )
 {

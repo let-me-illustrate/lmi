@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xml_lmi.hpp,v 1.1.2.2 2006-10-16 16:56:11 chicares Exp $
+// $Id: xml_lmi.hpp,v 1.1.2.3 2006-10-16 19:21:11 chicares Exp $
 
 #ifndef xml_lmi_hpp
 #define xml_lmi_hpp
@@ -39,11 +39,11 @@ namespace xmlpp
     {
     public:
         // retrieves the full textual content of the xml node
-        static std::string get_content(const Element & node);
+        static std::string get_content(Element const& node);
 
         // gets first non-textual node element of the parent and its const version
         static Element * get_first_element(Element & node);
-        static const Element * get_first_element(const Element & node);
+        static Element const* get_first_element(Element const& node);
     };
 
     // prefer os << document; over document.write_to_stream(os);

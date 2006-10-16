@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: multiple_cell_document.cpp,v 1.9.2.4 2006-10-16 16:56:11 chicares Exp $
+// $Id: multiple_cell_document.cpp,v 1.9.2.5 2006-10-16 19:21:11 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -60,14 +60,14 @@ std::string multiple_cell_document::xml_root_name() const
 }
 
 //============================================================================
-void multiple_cell_document::parse(const xmlpp::DomParser & parser)
+void multiple_cell_document::parse(xmlpp::DomParser const& parser)
 {
     if(!parser)
         {
         fatal_error() << "Error parsing XML file." << LMI_FLUSH;
         }
 
-    const xmlpp::Element & root = *parser.get_document()->get_root_node();
+    xmlpp::Element const& root = *parser.get_document()->get_root_node();
     if(xml_root_name() != root.get_name())
         {
         fatal_error()

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.462.2.5 2006-10-16 16:56:11 chicares Exp $
+// $Id: ChangeLog,v 1.462.2.6 2006-10-16 19:21:11 chicares Exp $
 
 MAINTENANCE
 
@@ -7734,4 +7734,17 @@ Mark virtuals explicitly.
   xml_lmi.cpp
   xml_lmi.hpp
 Include only appropriate headers.
+
+20061016T1921Z <chicares@cox.net> [1171]
+
+  configurable_settings.cpp
+  multiple_cell_document.cpp
+  multiple_cell_document.hpp
+  single_cell_document.cpp
+  single_cell_document.hpp
+  xml_lmi.cpp
+  xml_lmi.hpp
+Place const after the base type it modifies: item 6.7 in the coding
+guidelines proposed for boost in 2001. See also:
+  http://www.slack.net/~ant/cpp/const_style.html
 
