@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: multiple_cell_document.hpp,v 1.7.2.1 2006-10-15 17:29:06 chicares Exp $
+// $Id: multiple_cell_document.hpp,v 1.7.2.2 2006-10-16 01:33:42 chicares Exp $
 
 #ifndef multiple_cell_document_hpp
 #define multiple_cell_document_hpp
@@ -28,10 +28,9 @@
 
 #include "obstruct_slicing.hpp"
 #include "so_attributes.hpp"
+#include "xml_lmi.hpp"
 
 #include <boost/utility.hpp>
-
-#include "xml_lmi.hpp"
 
 #include <istream>
 #include <ostream>

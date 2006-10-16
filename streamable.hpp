@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: streamable.hpp,v 1.7.2.1 2006-10-15 17:29:06 chicares Exp $
+// $Id: streamable.hpp,v 1.7.2.2 2006-10-16 01:33:42 chicares Exp $
 
 // This was originally designed to write data serially to iostreams,
 // in a format
@@ -56,7 +56,6 @@
 #include "config.hpp"
 
 #include "so_attributes.hpp"
-
 #include "xml_lmi.hpp"
 
 #include <string>

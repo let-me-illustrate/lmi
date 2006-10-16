@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.462.2.3 2006-10-15 17:29:06 chicares Exp $
+// $Id: ChangeLog,v 1.462.2.4 2006-10-16 01:33:42 chicares Exp $
 
 MAINTENANCE
 
@@ -7630,7 +7630,7 @@ Test committing to 'gnome-xml-branch' branch.
 Add libxml++ helpers, based on 'xmlpp.cpp' and 'xmlpp.hpp' in the
 'libxmlpp_branch' branch.
 
-20061015T1729Z <chicares@cox.net> [1173]
+20061015T1729Z <chicares@cox.net> [1171]
 
   configurable_settings.cpp
   input_test.cpp
@@ -7648,4 +7648,70 @@ Add libxml++ helpers, based on 'xmlpp.cpp' and 'xmlpp.hpp' in the
   streamable.hpp
   workhorse.make
 Replace xmlwrapp with libxml++, merging 'libxmlpp_branch' branch.
+
+20061015T2326Z <etarassov@tt-solutions.com> [1171]
+
+  configure.ac
+Fix autotools files to use libxml++ instead of xmlwrapp library, and
+add xml_lmi.?pp files.
+
+20061015T2327Z <etarassov@tt-solutions.com> [1171]
+
+  inputillus_xml_io.cpp
+Fix cell_version reading code in
+InputIllusParams::read(xml::Element const&).
+
+20061015T2329Z <etarassov@tt-solutions.com> [1171]
+
+  input_test.cpp
+  multiple_cell_document.cpp
+  single_cell_document.cpp
+  xml_lmi.cpp
+Fix xml output encoding to be "utf-8" instead of an empty one "", and
+make other code use operator<<(ostream&,xml::Document const&) instead
+of a direct call to xml::Document::write_to_stream(ostream&).
+
+20061015T2331Z <etarassov@tt-solutions.com> [1171]
+
+  wx_new.hpp
+Fix wx_new.hpp to correctly handle autotools build process and the
+usual makefiles build process.
+
+20061015T2356Z <etarassov@tt-solutions.com> [1171]
+
+  Makefile.am
+Remove xml_notebook.cpp file from 'Makefile.am'.
+
+20061016T0133Z <chicares@cox.net> [1171]
+
+  configurable_settings.cpp
+  input_test.cpp
+  inputillus_xml_io.cpp
+  ledger.hpp
+  ledger_xml_io.cpp
+  multiple_cell_document.cpp
+  multiple_cell_document.hpp
+  single_cell_document.cpp
+  single_cell_document.hpp
+  streamable.hpp
+Regularize header order and grouping. Coding guidelines shared after
+the original changes say:
+
+Group included headers in the following order, sorted alphabetically
+within each group, with one blank line between groups.
+
+    * 1 pch file, for '.cpp' files only
+    * 2 'config.hpp', for '.hpp' files only
+    * 3 class header, only for '.cpp' files that implement a class
+          (usually both files have the same name except for the
+          '.cpp' versus '.hpp' suffix)
+    * 4 files included with #include "..."
+    * 5 headers for third-party libraries (use #include <...> here)
+    * 6 headers defined in the standard
+
+This unmasks implicit dependencies that can make code appear valid
+with a particular compiler when other compilers may properly reject
+it. Using #include <...> for case 5 seems at least as good as the
+alternative with double quotes; boost chose this policy after much
+discussion.
 

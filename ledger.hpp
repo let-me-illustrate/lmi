@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger.hpp,v 1.13.2.1 2006-10-15 17:29:06 chicares Exp $
+// $Id: ledger.hpp,v 1.13.2.2 2006-10-16 01:33:42 chicares Exp $
 
 #ifndef ledger_hpp
 #define ledger_hpp
@@ -27,9 +27,9 @@
 #include "config.hpp"
 
 #include "so_attributes.hpp"
-#include "xml_lmi.hpp"
 #include "streamable.hpp"
 #include "xenumtypes.hpp"
+#include "xml_lmi.hpp"
 
 #include <boost/shared_ptr.hpp>
 

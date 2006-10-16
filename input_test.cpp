@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_test.cpp,v 1.7.2.2 2006-10-15 23:29:43 etarassov Exp $
+// $Id: input_test.cpp,v 1.7.2.3 2006-10-16 01:33:42 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -30,7 +30,6 @@
 
 #define BOOST_INCLUDE_MAIN
 #include "test_tools.hpp"
-
 #include "xml_lmi.hpp"
 
 #if defined BOOST_MSVC || defined __BORLANDC__
