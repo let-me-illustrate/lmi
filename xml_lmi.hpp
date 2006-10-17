@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xml_lmi.hpp,v 1.1.2.3 2006-10-16 19:21:11 chicares Exp $
+// $Id: xml_lmi.hpp,v 1.1.2.4 2006-10-17 12:13:09 chicares Exp $
 
 #ifndef xml_lmi_hpp
 #define xml_lmi_hpp
@@ -42,12 +42,12 @@ namespace xmlpp
         static std::string get_content(Element const& node);
 
         // gets first non-textual node element of the parent and its const version
-        static Element * get_first_element(Element & node);
+        static Element      * get_first_element(Element      & node);
         static Element const* get_first_element(Element const& node);
     };
 
     // prefer os << document; over document.write_to_stream(os);
-    std::ostream & operator << ( std::ostream & os, Document & document );
+    std::ostream& operator<<(std::ostream &os, Document &document);
 }
 
 #endif //xml_lmi_hpp

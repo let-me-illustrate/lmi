@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: inputillus_xml_io.cpp,v 1.12.2.4 2006-10-16 16:56:11 chicares Exp $
+// $Id: inputillus_xml_io.cpp,v 1.12.2.5 2006-10-17 12:13:09 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -91,8 +91,8 @@ void IllusInputParms::read(xmlpp::Element const& x)
         throw std::runtime_error(msg.str());
         }
 
-    xmlpp::Attribute const * cell_version_node = x.get_attribute("version");
-    if( !cell_version_node )
+    xmlpp::Attribute const* cell_version_node = x.get_attribute("version");
+    if(!cell_version_node)
         {
         std::ostringstream msg;
         msg
@@ -115,8 +115,8 @@ void IllusInputParms::read(xmlpp::Element const& x)
                                               iter != xNodeList.end();
                                               ++iter)
         {
-        xmlpp::Element const * child
-            = dynamic_cast< xmlpp::Element const * >( *iter );
+        xmlpp::Element const* child
+            = dynamic_cast<xmlpp::Element const*>(*iter);
         if(!child) // child is a text node
             {
             continue;
@@ -138,7 +138,7 @@ void IllusInputParms::read(xmlpp::Element const& x)
                     )
                 )
                 {
-                detritus_map[node_tag] = xmlpp::LmiHelper::get_content( *child );
+                detritus_map[node_tag] = xmlpp::LmiHelper::get_content(*child);
                 }
             else
                 {
@@ -151,7 +151,7 @@ void IllusInputParms::read(xmlpp::Element const& x)
                 }
             continue;
             }
-        (*this)[ node_tag ] = xmlpp::LmiHelper::get_content( *child );
+        (*this)[node_tag] = xmlpp::LmiHelper::get_content(*child);
         // TODO ?? Perhaps a std::list would perform better.
         member_names.erase(current_member);
         }
@@ -212,7 +212,7 @@ void IllusInputParms::read(xmlpp::Element const& x)
 //============================================================================
 void IllusInputParms::write(xmlpp::Element& x) const
 {
-    xmlpp::Element & root = *x.add_child(xml_root_name());
+    xmlpp::Element& root = *x.add_child(xml_root_name());
 
     root.set_attribute("version", value_cast<std::string>(class_version()).c_str());
 
@@ -224,7 +224,7 @@ void IllusInputParms::write(xmlpp::Element& x) const
         {
         std::string node_tag(*i);
         std::string value = operator[](*i).str();
-        root.add_child( node_tag )->add_child_text( value );
+        root.add_child(node_tag)->add_child_text(value);
         }
 }
 

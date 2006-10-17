@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_test.cpp,v 1.7.2.4 2006-10-16 16:56:11 chicares Exp $
+// $Id: input_test.cpp,v 1.7.2.5 2006-10-17 12:13:09 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -114,16 +114,14 @@ int test_main(int, char*[])
     original.propagate_changes_to_base_and_finalize();
 
     xmlpp::Document doc;
-    xmlpp::Element & xml_root0 = *doc.create_root_node("root");
+    xmlpp::Element& xml_root0 = *doc.create_root_node("root");
     xml_root0 << original;
     os0 << doc;
     os0.close();
 
     {
-        xmlpp::Element * xml_node = xmlpp::LmiHelper::get_first_element(xml_root0);
-
+        xmlpp::Element* xml_node = xmlpp::LmiHelper::get_first_element(xml_root0);
         BOOST_TEST(!!xml_node);
-
         *xml_node >> replica;
     }
     std::ofstream os1
@@ -134,7 +132,7 @@ int test_main(int, char*[])
         );
     BOOST_TEST(!!os1);
     xmlpp::Document xml_doc1;
-    xmlpp::Element & xml_root1 = *xml_doc1.create_root_node("root");
+    xmlpp::Element& xml_root1 = *xml_doc1.create_root_node("root");
     xml_root1 << replica;
     os1 << xml_doc1;
     os1.close();

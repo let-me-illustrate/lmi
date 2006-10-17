@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xml_io.cpp,v 1.48.2.3 2006-10-16 16:56:11 chicares Exp $
+// $Id: ledger_xml_io.cpp,v 1.48.2.4 2006-10-17 12:13:09 chicares Exp $
 
 #include "ledger.hpp"
 
@@ -895,8 +895,8 @@ void Ledger::write(xmlpp::Element& x) const
 //  want: <!DOCTYPE sales []>
 // kludged in write(std::ostream& os) below
 
-    xmlpp::Element & scalar = *x.add_child("scalar");
-    xmlpp::Element & data = *x.add_child("data");
+    xmlpp::Element& scalar = *x.add_child("scalar");
+    xmlpp::Element& data   = *x.add_child("data"  );
 /*
     for
         (scalar_map::const_iterator j = scalars.begin()
@@ -948,7 +948,7 @@ void Ledger::write(xmlpp::Element& x) const
         {
         std::string node_tag = j->first;
         std::string value = j->second;
-        scalar.add_child( node_tag )->add_child_text( value );
+        scalar.add_child(node_tag)->add_child_text(value);
         }
     for
         (std::map<std::string,std::vector<std::string> >::const_iterator j = stringvectors.begin()
@@ -957,15 +957,15 @@ void Ledger::write(xmlpp::Element& x) const
         )
         {
 // TODO ?? Is <newcolumn> really useful?
-        xmlpp::Element & newcolumn = *data.add_child("newcolumn");
-        xmlpp::Element & column = *newcolumn.add_child("column");
+        xmlpp::Element& newcolumn = *data.add_child("newcolumn");
+        xmlpp::Element& column = *newcolumn.add_child("column");
         column.set_attribute("name", j->first);
         std::vector<std::string> const& v = j->second;
 // TODO ?? InforceLives shows an extra value past the end; should it
 // be truncated here?
         for(unsigned int k = 0; k < v.size(); ++k)
             {
-            xmlpp::Element & duration = *column.add_child("duration");
+            xmlpp::Element& duration = *column.add_child("duration");
             duration.set_attribute("number", value_cast<std::string>(k));
             duration.set_attribute("column_value", v[k]);
             }
@@ -988,7 +988,7 @@ void Ledger::write(xmlpp::Element& x) const
         SupplementalReportColumns.push_back(ledger_invariant_->SupplementalReportColumn11);
         }
 
-    xmlpp::Element & supplementalreport = *x.add_child("supplementalreport");
+    xmlpp::Element& supplementalreport = *x.add_child("supplementalreport");
     if(ledger_invariant_->SupplementalReport)
         {
         // Eventually customize the report name.
@@ -1003,9 +1003,9 @@ void Ledger::write(xmlpp::Element& x) const
             )
             {
 //warning() << "column " << *j << " title " << title_map[*j] << LMI_FLUSH;
-            xmlpp::Element & columns = *supplementalreport.add_child("columns");
-            columns.add_child( "name" )->add_child_text( *j );
-            columns.add_child( "title" )->add_child_text( title_map[ *j ] );
+            xmlpp::Element& columns = *supplementalreport.add_child("columns");
+            columns.add_child("name" )->add_child_text(          *j );
+            columns.add_child("title")->add_child_text(title_map[*j]);
             }
         }
 
@@ -1080,9 +1080,9 @@ std::string Ledger::xml_root_name() const
 void Ledger::write(std::ostream& os) const
 {
     xmlpp::Document doc;
-    xmlpp::Element & root = *doc.create_root_node(xml_root_name());
+    xmlpp::Element& root = *doc.create_root_node(xml_root_name());
     root << *this;
-// Need DOCTYPE support, which xml++ lacks--so can't do this:
+//   Need DOCTYPE support, which xml++ lacks--so can't do this:
 //    os << root;
 
     std::string s = doc.write_to_string();

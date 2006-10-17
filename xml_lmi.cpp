@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xml_lmi.cpp,v 1.1.2.4 2006-10-16 19:21:11 chicares Exp $
+// $Id: xml_lmi.cpp,v 1.1.2.5 2006-10-17 12:13:09 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -44,12 +44,12 @@ std::string LmiHelper::get_content(Element const& node)
 {
     std::ostringstream buf;
     Node::NodeList const nodeChildren = node.get_children();
-    for( Node::NodeList::const_iterator iter = nodeChildren.begin();
+    for(Node::NodeList::const_iterator iter = nodeChildren.begin();
                                         iter != nodeChildren.end();
-                                        ++iter )
+                                        ++iter)
     {
-        xmlpp::TextNode const * textNode
-            = dynamic_cast<xmlpp::TextNode const *>(*iter);
+        xmlpp::TextNode const* textNode
+            = dynamic_cast<xmlpp::TextNode const*>(*iter);
         // maybe we should add CdataNode also?
         if(textNode)
         {
@@ -59,14 +59,14 @@ std::string LmiHelper::get_content(Element const& node)
     return buf.str();
 }
 
-Element * LmiHelper::get_first_element(Element & node)
+Element* LmiHelper::get_first_element(Element& node)
 {
     Node::NodeList const nodeList = node.get_children();
-    for( Node::NodeList::const_iterator iter = nodeList.begin();
+    for(Node::NodeList::const_iterator iter = nodeList.begin();
                                         iter != nodeList.end();
-                                        ++iter )
+                                        ++iter)
     {
-        Element const * pChild = dynamic_cast<Element const *>(*iter);
+        Element const* pChild = dynamic_cast<Element const*>(*iter);
         if(pChild)
             return const_cast<Element*>(pChild);
     }
@@ -76,20 +76,20 @@ Element * LmiHelper::get_first_element(Element & node)
 Element const* LmiHelper::get_first_element(Element const& node)
 {
     Node::NodeList const nodeList = node.get_children();
-    for( Node::NodeList::const_iterator iter = nodeList.begin();
+    for(Node::NodeList::const_iterator iter = nodeList.begin();
                                                iter != nodeList.end();
-                                               ++iter )
+                                               ++iter)
     {
-        Element const * pChild = dynamic_cast<Element const *>(*iter);
+        Element const* pChild = dynamic_cast<Element const*>(*iter);
         if(pChild)
             return pChild;
     }
     return 0;
 }
 
-std::ostream & operator << ( std::ostream & os, Document & document )
+std::ostream& operator<<(std::ostream& os, Document& document)
 {
-    document.write_to_stream( os, "utf-8" );
+    document.write_to_stream(os, "utf-8");
     return os;
 }
 

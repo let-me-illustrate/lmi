@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: configurable_settings.cpp,v 1.14.2.4 2006-10-16 19:21:11 chicares Exp $
+// $Id: configurable_settings.cpp,v 1.14.2.5 2006-10-17 12:13:09 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -100,7 +100,7 @@ configurable_settings::configurable_settings()
             << LMI_FLUSH
             ;
         }
-    xmlpp::Element & root = *parser.get_document()->get_root_node();
+    xmlpp::Element& root = *parser.get_document()->get_root_node();
     if(xml_root_name() != root.get_name())
         {
         fatal_error()
@@ -116,17 +116,17 @@ configurable_settings::configurable_settings()
         }
 
     xmlpp::Node::NodeList const children = root.get_children();
-    for( xmlpp::Node::NodeList::const_iterator iter = children.begin();
+    for(xmlpp::Node::NodeList::const_iterator iter = children.begin();
                                                iter != children.end();
-                                               ++iter )
+                                               ++iter)
     {
-        xmlpp::Element const * child =
-            dynamic_cast< xmlpp::Element const * >( *iter );
-        if( !child )
+        xmlpp::Element const* child =
+            dynamic_cast<xmlpp::Element const*>(*iter);
+        if(!child)
             {
             continue;
             }
-        (*this)[ child->get_name() ] = xmlpp::LmiHelper::get_content( *child );
+        (*this)[child->get_name()] = xmlpp::LmiHelper::get_content(*child);
     }
 }
 

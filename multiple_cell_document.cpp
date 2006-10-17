@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: multiple_cell_document.cpp,v 1.9.2.5 2006-10-16 19:21:11 chicares Exp $
+// $Id: multiple_cell_document.cpp,v 1.9.2.6 2006-10-17 12:13:09 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -93,24 +93,24 @@ void multiple_cell_document::parse(xmlpp::DomParser const& parser)
     case_parms_.clear();
 
     typedef xmlpp::Node::NodeList XmlppNodes;
-    typedef std::list<xmlpp::Element *> XmlppElements;
+    typedef std::list<xmlpp::Element*> XmlppElements;
 
     XmlppElements elements;
     {
         // fill elements list with element nodes of the root
         XmlppNodes const rootNodes = root.get_children();
-        for( XmlppNodes::const_iterator iter = rootNodes.begin();
+        for(XmlppNodes::const_iterator iter = rootNodes.begin();
                                         iter != rootNodes.end();
-                                        ++iter )
+                                        ++iter)
         {
-            xmlpp::Element const * el = dynamic_cast<xmlpp::Element const *>(*iter);
+            xmlpp::Element const* el = dynamic_cast<xmlpp::Element const*>(*iter);
             if(el)
-                elements.push_back(const_cast<xmlpp::Element *>(el));
+                elements.push_back(const_cast<xmlpp::Element*>(el));
         }
     }
 
     XmlppElements::const_iterator iter = elements.begin();
-    xmlpp::Element * child = 0;
+    xmlpp::Element* child = 0;
 
     if(iter == elements.end() || (child = *iter)->get_name() != "cell")
         {
@@ -171,7 +171,7 @@ void multiple_cell_document::parse(xmlpp::DomParser const& parser)
 
     // Number of cells.
     ++iter;
-    if( iter == elements.end() || (child = *iter)->get_name() != "NumberOfCells" )
+    if(iter == elements.end() || (child = *iter)->get_name() != "NumberOfCells")
         {
         fatal_error()
             << "XML node name is '"
@@ -243,7 +243,7 @@ void multiple_cell_document::read(std::istream& is)
 void multiple_cell_document::write(std::ostream& os) const
 {
     xmlpp::Document doc;
-    xmlpp::Element & root = *doc.create_root_node(xml_root_name());
+    xmlpp::Element& root = *doc.create_root_node(xml_root_name());
 
 // TODO ?? Diagnostics will be cryptic if the xml doesn't follow
 // the required layout. Perhaps they could be improved. Maybe it
@@ -254,9 +254,9 @@ void multiple_cell_document::write(std::ostream& os) const
 //        ->add_child_text(value_cast<std::string>(case_parms_.size()));
     root << case_parms_[0];
 
-    root.add_child( "NumberOfClasses" )
-        ->add_child_text( value_cast< std::string >(
-            class_parms_.size() ) );
+    root.add_child("NumberOfClasses")
+        ->add_child_text(value_cast<std::string>(
+            class_parms_.size()));
     for(unsigned int j = 0; j < class_parms_.size(); j++)
         {
         root << class_parms_[j];
@@ -264,7 +264,7 @@ void multiple_cell_document::write(std::ostream& os) const
 
     root.add_child("NumberOfCells")
         ->add_child_text( value_cast<std::string>(
-            cell_parms_.size() ) );
+            cell_parms_.size()));
     for(unsigned int j = 0; j < cell_parms_.size(); j++)
         {
         root << cell_parms_[j];
