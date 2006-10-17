@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.462.2.7 2006-10-17 12:31:15 chicares Exp $
+// $Id: ChangeLog,v 1.462.2.8 2006-10-17 13:53:26 chicares Exp $
 
 MAINTENANCE
 
@@ -7744,8 +7744,11 @@ Include only appropriate headers.
   single_cell_document.hpp
   xml_lmi.cpp
   xml_lmi.hpp
-Place const after the base type it modifies: item 6.7 in the coding
-guidelines proposed for boost in 2001. See also:
+Place const after the base type it modifies--item 6.7 in the coding
+guidelines proposed for boost in 2001:
+  http://cvs.sourceforge.net/cgi-bin/viewcvs.cgi/boost/boost/more/\
+    Attic/coding_guidelines.html?rev=1.1.2.5
+See also:
   http://www.slack.net/~ant/cpp/const_style.html
 
 20061017T1213Z <chicares@cox.net> [1171]
@@ -7765,8 +7768,23 @@ sections 3.1 through 3.4 and 6.2 of the 2001 boost guidelines. Don't
 add spaces before or after '()', '[]', and '<>', except when needed
 for vertical alignment that improves readability.
 
-20061017T1230Z <chicares@cox.net> [1173]
+20061017T1231Z <chicares@cox.net> [1173]
 
   ledger_xml_io.cpp
 Raise some questions about old comments.
+
+20061017T1353Z <chicares@cox.net> [1173]
+
+  configurable_settings.cpp
+  inputillus_xml_io.cpp
+  multiple_cell_document.cpp
+  single_cell_document.cpp
+  xml_lmi.cpp
+  xml_lmi.hpp
+Regularize alignment. Follow these parts of the 2001 boost guidelines:
+  4.8, but use two spaces
+  5.1, 5.5
+  5.2, but indent braces same as *next* line
+  5.6 and 5.7, but but write '{}' around all dependent clauses
+and section 17 of the lmi coding standard.
 

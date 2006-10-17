@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xml_lmi.hpp,v 1.1.2.4 2006-10-17 12:13:09 chicares Exp $
+// $Id: xml_lmi.hpp,v 1.1.2.5 2006-10-17 13:53:26 chicares Exp $
 
 #ifndef xml_lmi_hpp
 #define xml_lmi_hpp
@@ -37,7 +37,7 @@ namespace xmlpp
     // Helper class containing some frequently used operations
     class LmiHelper
     {
-    public:
+      public:
         // retrieves the full textual content of the xml node
         static std::string get_content(Element const& node);
 

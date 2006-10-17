@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xml_lmi.cpp,v 1.1.2.5 2006-10-17 12:13:09 chicares Exp $
+// $Id: xml_lmi.cpp,v 1.1.2.6 2006-10-17 13:53:26 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -44,46 +44,55 @@ std::string LmiHelper::get_content(Element const& node)
 {
     std::ostringstream buf;
     Node::NodeList const nodeChildren = node.get_children();
-    for(Node::NodeList::const_iterator iter = nodeChildren.begin();
-                                        iter != nodeChildren.end();
-                                        ++iter)
-    {
-        xmlpp::TextNode const* textNode
-            = dynamic_cast<xmlpp::TextNode const*>(*iter);
+    for
+        (Node::NodeList::const_iterator iter = nodeChildren.begin()
+        ;iter != nodeChildren.end()
+        ;++iter
+        )
+        {
+        xmlpp::TextNode const* textNode = dynamic_cast<xmlpp::TextNode const*>(*iter);
         // maybe we should add CdataNode also?
         if(textNode)
-        {
+            {
             buf << textNode->get_content();
+            }
         }
-    }
     return buf.str();
 }
 
 Element* LmiHelper::get_first_element(Element& node)
 {
     Node::NodeList const nodeList = node.get_children();
-    for(Node::NodeList::const_iterator iter = nodeList.begin();
-                                        iter != nodeList.end();
-                                        ++iter)
-    {
+    for
+        (Node::NodeList::const_iterator iter = nodeList.begin()
+        ;iter != nodeList.end()
+        ;++iter
+        )
+        {
         Element const* pChild = dynamic_cast<Element const*>(*iter);
         if(pChild)
+            {
             return const_cast<Element*>(pChild);
-    }
+            }
+        }
     return 0;
 }
 
 Element const* LmiHelper::get_first_element(Element const& node)
 {
     Node::NodeList const nodeList = node.get_children();
-    for(Node::NodeList::const_iterator iter = nodeList.begin();
-                                               iter != nodeList.end();
-                                               ++iter)
-    {
+    for
+        (Node::NodeList::const_iterator iter = nodeList.begin()
+        ;iter != nodeList.end()
+        ;++iter
+        )
+        {
         Element const* pChild = dynamic_cast<Element const*>(*iter);
         if(pChild)
+            {
             return pChild;
-    }
+            }
+        }
     return 0;
 }
 

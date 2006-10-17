@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: inputillus_xml_io.cpp,v 1.12.2.5 2006-10-17 12:13:09 chicares Exp $
+// $Id: inputillus_xml_io.cpp,v 1.12.2.6 2006-10-17 13:53:26 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -111,12 +111,13 @@ void IllusInputParms::read(xmlpp::Element const& x)
         );
     std::vector<std::string>::iterator current_member;
     xmlpp::Node::NodeList const xNodeList = x.get_children();
-    for(xmlpp::Node::NodeList::const_iterator iter = xNodeList.begin();
-                                              iter != xNodeList.end();
-                                              ++iter)
+    for
+        (xmlpp::Node::NodeList::const_iterator iter = xNodeList.begin()
+        ;iter != xNodeList.end()
+        ;++iter
+        )
         {
-        xmlpp::Element const* child
-            = dynamic_cast<xmlpp::Element const*>(*iter);
+        xmlpp::Element const* child = dynamic_cast<xmlpp::Element const*>(*iter);
         if(!child) // child is a text node
             {
             continue;

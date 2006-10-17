@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: configurable_settings.cpp,v 1.14.2.5 2006-10-17 12:13:09 chicares Exp $
+// $Id: configurable_settings.cpp,v 1.14.2.6 2006-10-17 13:53:26 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -79,17 +79,22 @@ configurable_settings::configurable_settings()
         }
 
     xmlpp::DomParser parser;
-    try {
+    try
+        {
         parser.parse_file(filename);
-    }
+        }
     catch(std::exception const& ex)
-    {
-        fatal_error() << "Exception while reading '"
-                      << configuration_filename()
-                      << "'."
-                      << "(" << ex.what() << ")"
-                      << LMI_FLUSH;
-    }
+        {
+        fatal_error()
+            << "Exception while reading '"
+            << configuration_filename()
+            << "'."
+            << "("
+            << ex.what()
+            << ")"
+            << LMI_FLUSH
+            ;
+        }
 
     if(!parser)
         {
@@ -100,6 +105,7 @@ configurable_settings::configurable_settings()
             << LMI_FLUSH
             ;
         }
+
     xmlpp::Element& root = *parser.get_document()->get_root_node();
     if(xml_root_name() != root.get_name())
         {
@@ -116,18 +122,19 @@ configurable_settings::configurable_settings()
         }
 
     xmlpp::Node::NodeList const children = root.get_children();
-    for(xmlpp::Node::NodeList::const_iterator iter = children.begin();
-                                               iter != children.end();
-                                               ++iter)
-    {
-        xmlpp::Element const* child =
-            dynamic_cast<xmlpp::Element const*>(*iter);
+    for
+        (xmlpp::Node::NodeList::const_iterator iter = children.begin()
+        ;iter != children.end()
+        ;++iter
+        )
+        {
+        xmlpp::Element const* child = dynamic_cast<xmlpp::Element const*>(*iter);
         if(!child)
             {
             continue;
             }
         (*this)[child->get_name()] = xmlpp::LmiHelper::get_content(*child);
-    }
+        }
 }
 
 configurable_settings::~configurable_settings()

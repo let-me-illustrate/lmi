@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: single_cell_document.cpp,v 1.7.2.6 2006-10-17 12:13:09 chicares Exp $
+// $Id: single_cell_document.cpp,v 1.7.2.7 2006-10-17 13:53:26 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -91,17 +91,19 @@ void single_cell_document::parse(xmlpp::DomParser const& parser)
     // in other words this 'single cell' document xml representation
     // should contain one and only one xml node
     xmlpp::Node::NodeList children = root.get_children();
-    for(xmlpp::Node::NodeList::iterator iter = children.begin();
-                                         iter != children.end();
-                                         ++iter)
-    {
+    for
+        (xmlpp::Node::NodeList::iterator iter = children.begin()
+        ;iter != children.end()
+        ;++iter
+        )
+        {
         xmlpp::Element* child = dynamic_cast<xmlpp::Element*>(*iter);
         if(child)
-        {
-        *child >> *input_data_;
-        break;
+            {
+            *child >> *input_data_;
+            break;
+            }
         }
-    }
 }
 
 //============================================================================

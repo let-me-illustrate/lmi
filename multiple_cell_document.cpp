@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: multiple_cell_document.cpp,v 1.9.2.6 2006-10-17 12:13:09 chicares Exp $
+// $Id: multiple_cell_document.cpp,v 1.9.2.7 2006-10-17 13:53:26 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -99,14 +99,18 @@ void multiple_cell_document::parse(xmlpp::DomParser const& parser)
     {
         // fill elements list with element nodes of the root
         XmlppNodes const rootNodes = root.get_children();
-        for(XmlppNodes::const_iterator iter = rootNodes.begin();
-                                        iter != rootNodes.end();
-                                        ++iter)
-        {
+        for
+            (XmlppNodes::const_iterator iter = rootNodes.begin()
+            ;iter != rootNodes.end()
+            ;++iter
+            )
+            {
             xmlpp::Element const* el = dynamic_cast<xmlpp::Element const*>(*iter);
             if(el)
+                {
                 elements.push_back(const_cast<xmlpp::Element*>(el));
-        }
+                }
+            }
     }
 
     XmlppElements::const_iterator iter = elements.begin();
@@ -147,7 +151,7 @@ void multiple_cell_document::parse(xmlpp::DomParser const& parser)
     class_parms_.clear();
     class_parms_.reserve(number_of_classes);
 
-    for(;++iter != elements.end();)
+    for(; ++iter != elements.end();)
         {
         child = *iter;
         (*child) >> temp;
@@ -250,21 +254,22 @@ void multiple_cell_document::write(std::ostream& os) const
 // would be better to restructure the document so that each set
 // of cells, with its cardinal number, is a distinct node.
 //
-//    root.add_child("NumberOfCases")
-//        ->add_child_text(value_cast<std::string>(case_parms_.size()));
+//    root.add_child("NumberOfCases")->add_child_text
+//        (value_cast<std::string>(case_parms_.size())
+//        );
     root << case_parms_[0];
 
-    root.add_child("NumberOfClasses")
-        ->add_child_text(value_cast<std::string>(
-            class_parms_.size()));
+    root.add_child("NumberOfClasses")->add_child_text
+        (value_cast<std::string>(class_parms_.size())
+        );
     for(unsigned int j = 0; j < class_parms_.size(); j++)
         {
         root << class_parms_[j];
         }
 
-    root.add_child("NumberOfCells")
-        ->add_child_text( value_cast<std::string>(
-            cell_parms_.size()));
+    root.add_child("NumberOfCells")->add_child_text
+        (value_cast<std::string>(cell_parms_.size())
+        );
     for(unsigned int j = 0; j < cell_parms_.size(); j++)
         {
         root << cell_parms_[j];
