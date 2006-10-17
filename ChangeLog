@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.462.2.6 2006-10-16 19:21:11 chicares Exp $
+// $Id: ChangeLog,v 1.462.2.7 2006-10-17 12:31:15 chicares Exp $
 
 MAINTENANCE
 
@@ -7747,4 +7747,26 @@ Include only appropriate headers.
 Place const after the base type it modifies: item 6.7 in the coding
 guidelines proposed for boost in 2001. See also:
   http://www.slack.net/~ant/cpp/const_style.html
+
+20061017T1213Z <chicares@cox.net> [1171]
+
+  configurable_settings.cpp
+  input_test.cpp
+  inputillus_xml_io.cpp
+  ledger_xml_io.cpp
+  multiple_cell_document.cpp
+  single_cell_document.cpp
+  single_cell_document.hpp
+  streamable.hpp
+  xml_lmi.cpp
+  xml_lmi.hpp
+Regularize spacing in declarations and statements. Generally follow
+sections 3.1 through 3.4 and 6.2 of the 2001 boost guidelines. Don't
+add spaces before or after '()', '[]', and '<>', except when needed
+for vertical alignment that improves readability.
+
+20061017T1230Z <chicares@cox.net> [1173]
+
+  ledger_xml_io.cpp
+Raise some questions about old comments.
 

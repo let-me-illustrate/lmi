@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xml_io.cpp,v 1.48.2.4 2006-10-17 12:13:09 chicares Exp $
+// $Id: ledger_xml_io.cpp,v 1.48.2.5 2006-10-17 12:31:15 chicares Exp $
 
 #include "ledger.hpp"
 
@@ -898,6 +898,8 @@ void Ledger::write(xmlpp::Element& x) const
     xmlpp::Element& scalar = *x.add_child("scalar");
     xmlpp::Element& data   = *x.add_child("data"  );
 /*
+// TODO ?? This old block uses xmlwrapp instead of libxml++. It should
+// be expunged if it can be demonstrated that it has no value.
     for
         (scalar_map::const_iterator j = scalars.begin()
         ;j != scalars.end()
@@ -906,7 +908,7 @@ void Ledger::write(xmlpp::Element& x) const
         {
         std::string node_tag = j->first;
         std::string value = value_cast<std::string>(*j->second);
-        scalar.push_back(xmlpp::node(node_tag.c_str(), value.c_str()));
+        scalar.push_back(xml::node(node_tag.c_str(), value.c_str()));
         }
     for
         (string_map::const_iterator j = strings.begin()
@@ -916,7 +918,7 @@ void Ledger::write(xmlpp::Element& x) const
         {
         std::string node_tag = j->first;
         std::string value = value_cast<std::string>(*j->second);
-        scalar.push_back(xmlpp::node(node_tag.c_str(), value.c_str()));
+        scalar.push_back(xml::node(node_tag.c_str(), value.c_str()));
         }
     for
         (double_vector_map::const_iterator j = vectors.begin()
@@ -924,13 +926,13 @@ void Ledger::write(xmlpp::Element& x) const
         ;++j
         )
         {
-        xmlpp::node newcolumn("newcolumn");
-        xmlpp::node column("column");
+        xml::node newcolumn("newcolumn");
+        xml::node column("column");
         column.set_attr("name", j->first.c_str());
         std::vector<double> const& v = *j->second;
         for(unsigned int k = 0; k < v.size(); ++k)
             {
-            xmlpp::node duration("duration");
+            xml::node duration("duration");
             duration.set_attr("number", value_cast<std::string>(k).c_str());
             duration.set_attr("column_value", value_cast<std::string>(v[k]).c_str());
             column.push_back(duration);
@@ -1082,8 +1084,10 @@ void Ledger::write(std::ostream& os) const
     xmlpp::Document doc;
     xmlpp::Element& root = *doc.create_root_node(xml_root_name());
     root << *this;
-//   Need DOCTYPE support, which xml++ lacks--so can't do this:
+// TODO ?? Does the following comment about xmlwrapp...
+//   Need DOCTYPE support, which xmlwrapp lacks--so can't do this:
 //    os << root;
+// ...apply to libxml++ as well?
 
     std::string s = doc.write_to_string();
     std::string token("<?xml version=\"1.0\"?>");
