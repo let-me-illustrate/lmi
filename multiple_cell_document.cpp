@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: multiple_cell_document.cpp,v 1.9.2.7 2006-10-17 13:53:26 chicares Exp $
+// $Id: multiple_cell_document.cpp,v 1.9.2.8 2006-10-18 01:20:16 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -43,7 +43,7 @@ multiple_cell_document::multiple_cell_document()
 //============================================================================
 multiple_cell_document::multiple_cell_document(std::string const& filename)
 {
-    xmlpp::DomParser parser;
+    xml_lmi::DomParser parser;
     parser.parse_file(filename);
     parse(parser);
 }
@@ -60,14 +60,14 @@ std::string multiple_cell_document::xml_root_name() const
 }
 
 //============================================================================
-void multiple_cell_document::parse(xmlpp::DomParser const& parser)
+void multiple_cell_document::parse(xml_lmi::DomParser const& parser)
 {
     if(!parser)
         {
         fatal_error() << "Error parsing XML file." << LMI_FLUSH;
         }
 
-    xmlpp::Element const& root = *parser.get_document()->get_root_node();
+    xml_lmi::Element const& root = *parser.get_document()->get_root_node();
     if(xml_root_name() != root.get_name())
         {
         fatal_error()
@@ -92,29 +92,28 @@ void multiple_cell_document::parse(xmlpp::DomParser const& parser)
 
     case_parms_.clear();
 
-    typedef xmlpp::Node::NodeList XmlppNodes;
-    typedef std::list<xmlpp::Element*> XmlppElements;
+    typedef std::list<xml_lmi::Element*> XmlppElements;
 
     XmlppElements elements;
     {
         // fill elements list with element nodes of the root
-        XmlppNodes const rootNodes = root.get_children();
+        xml_lmi::NodeContainer const rootNodes = root.get_children();
         for
-            (XmlppNodes::const_iterator iter = rootNodes.begin()
+            (xml_lmi::NodeContainer::const_iterator iter = rootNodes.begin()
             ;iter != rootNodes.end()
             ;++iter
             )
             {
-            xmlpp::Element const* el = dynamic_cast<xmlpp::Element const*>(*iter);
+            xml_lmi::Element const* el = dynamic_cast<xml_lmi::Element const*>(*iter);
             if(el)
                 {
-                elements.push_back(const_cast<xmlpp::Element*>(el));
+                elements.push_back(const_cast<xml_lmi::Element*>(el));
                 }
             }
     }
 
     XmlppElements::const_iterator iter = elements.begin();
-    xmlpp::Element* child = 0;
+    xml_lmi::Element* child = 0;
 
     if(iter == elements.end() || (child = *iter)->get_name() != "cell")
         {
@@ -144,7 +143,7 @@ void multiple_cell_document::parse(xmlpp::DomParser const& parser)
             ;
         }
     unsigned int number_of_classes = value_cast<unsigned int>
-        (xmlpp::LmiHelper::get_content(*child)
+        (xml_lmi::get_content(*child)
         );
 
     // Parameters for each class.
@@ -187,7 +186,7 @@ void multiple_cell_document::parse(xmlpp::DomParser const& parser)
             ;
         }
     unsigned int number_of_cells = value_cast<unsigned int>
-        (xmlpp::LmiHelper::get_content(*child)
+        (xml_lmi::get_content(*child)
         );
 
     // Parameters for each Cell.
@@ -237,7 +236,7 @@ void multiple_cell_document::parse(xmlpp::DomParser const& parser)
 //============================================================================
 void multiple_cell_document::read(std::istream& is)
 {
-    xmlpp::DomParser parser;
+    xml_lmi::DomParser parser;
     parser.parse_stream(is);
 // XMLWRAPP !! See comment on parse() in header.
     parse(parser);
@@ -246,8 +245,8 @@ void multiple_cell_document::read(std::istream& is)
 //============================================================================
 void multiple_cell_document::write(std::ostream& os) const
 {
-    xmlpp::Document doc;
-    xmlpp::Element& root = *doc.create_root_node(xml_root_name());
+    xml_lmi::Document doc;
+    xml_lmi::Element& root = *doc.create_root_node(xml_root_name());
 
 // TODO ?? Diagnostics will be cryptic if the xml doesn't follow
 // the required layout. Perhaps they could be improved. Maybe it

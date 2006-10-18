@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xml_io.cpp,v 1.48.2.5 2006-10-17 12:31:15 chicares Exp $
+// $Id: ledger_xml_io.cpp,v 1.48.2.6 2006-10-18 01:20:16 chicares Exp $
 
 #include "ledger.hpp"
 
@@ -44,7 +44,7 @@
 #include <sstream>
 #include <utility>
 
-void Ledger::read(xmlpp::Element const&)
+void Ledger::read(xml_lmi::Element const&)
 {
     // TODO ?? Not yet implemented.
 }
@@ -224,7 +224,7 @@ bool format_exists(std::string const& s, std::string const& suffix, format_map_t
 
 } // Unnamed namespace.
 
-void Ledger::write(xmlpp::Element& x) const
+void Ledger::write(xml_lmi::Element& x) const
 {
     title_map_t title_map;
 
@@ -895,8 +895,8 @@ void Ledger::write(xmlpp::Element& x) const
 //  want: <!DOCTYPE sales []>
 // kludged in write(std::ostream& os) below
 
-    xmlpp::Element& scalar = *x.add_child("scalar");
-    xmlpp::Element& data   = *x.add_child("data"  );
+    xml_lmi::Element& scalar = *x.add_child("scalar");
+    xml_lmi::Element& data   = *x.add_child("data"  );
 /*
 // TODO ?? This old block uses xmlwrapp instead of libxml++. It should
 // be expunged if it can be demonstrated that it has no value.
@@ -959,15 +959,15 @@ void Ledger::write(xmlpp::Element& x) const
         )
         {
 // TODO ?? Is <newcolumn> really useful?
-        xmlpp::Element& newcolumn = *data.add_child("newcolumn");
-        xmlpp::Element& column = *newcolumn.add_child("column");
+        xml_lmi::Element& newcolumn = *data.add_child("newcolumn");
+        xml_lmi::Element& column = *newcolumn.add_child("column");
         column.set_attribute("name", j->first);
         std::vector<std::string> const& v = j->second;
 // TODO ?? InforceLives shows an extra value past the end; should it
 // be truncated here?
         for(unsigned int k = 0; k < v.size(); ++k)
             {
-            xmlpp::Element& duration = *column.add_child("duration");
+            xml_lmi::Element& duration = *column.add_child("duration");
             duration.set_attribute("number", value_cast<std::string>(k));
             duration.set_attribute("column_value", v[k]);
             }
@@ -990,7 +990,7 @@ void Ledger::write(xmlpp::Element& x) const
         SupplementalReportColumns.push_back(ledger_invariant_->SupplementalReportColumn11);
         }
 
-    xmlpp::Element& supplementalreport = *x.add_child("supplementalreport");
+    xml_lmi::Element& supplementalreport = *x.add_child("supplementalreport");
     if(ledger_invariant_->SupplementalReport)
         {
         // Eventually customize the report name.
@@ -1005,7 +1005,7 @@ void Ledger::write(xmlpp::Element& x) const
             )
             {
 //warning() << "column " << *j << " title " << title_map[*j] << LMI_FLUSH;
-            xmlpp::Element& columns = *supplementalreport.add_child("columns");
+            xml_lmi::Element& columns = *supplementalreport.add_child("columns");
             columns.add_child("name" )->add_child_text(          *j );
             columns.add_child("title")->add_child_text(title_map[*j]);
             }
@@ -1081,8 +1081,8 @@ std::string Ledger::xml_root_name() const
 
 void Ledger::write(std::ostream& os) const
 {
-    xmlpp::Document doc;
-    xmlpp::Element& root = *doc.create_root_node(xml_root_name());
+    xml_lmi::Document doc;
+    xml_lmi::Element& root = *doc.create_root_node(xml_root_name());
     root << *this;
 // TODO ?? Does the following comment about xmlwrapp...
 //   Need DOCTYPE support, which xmlwrapp lacks--so can't do this:

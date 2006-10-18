@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.462.2.8 2006-10-17 13:53:26 chicares Exp $
+// $Id: ChangeLog,v 1.462.2.9 2006-10-18 01:20:16 chicares Exp $
 
 MAINTENANCE
 
@@ -7787,4 +7787,22 @@ Regularize alignment. Follow these parts of the 2001 boost guidelines:
   5.2, but indent braces same as *next* line
   5.6 and 5.7, but but write '{}' around all dependent clauses
 and section 17 of the lmi coding standard.
+
+20061018T0120Z <chicares@cox.net> [1173]
+
+  configurable_settings.cpp
+  input_test.cpp
+  inputillus.hpp
+  inputillus_xml_io.cpp
+  ledger.hpp
+  ledger_xml_io.cpp
+  multiple_cell_document.cpp
+  multiple_cell_document.hpp
+  single_cell_document.cpp
+  single_cell_document.hpp
+  streamable.hpp
+  xml_lmi.cpp
+  xml_lmi.hpp
+Begin to abstract the interface to libxml++, replacing libxml++ types
+with typedefs, and moving helper functions into a new namespace.
 

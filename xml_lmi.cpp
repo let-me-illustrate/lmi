@@ -1,4 +1,4 @@
-// libxml++ inclusion header.
+// Interface to libxml++ .
 //
 // Copyright (C) 2006 Gregory W. Chicares.
 //
@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xml_lmi.cpp,v 1.1.2.6 2006-10-17 13:53:26 chicares Exp $
+// $Id: xml_lmi.cpp,v 1.1.2.7 2006-10-18 01:20:16 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -31,21 +31,15 @@
 #include <ostream>
 #include <sstream>
 
-namespace xmlpp
+namespace xml_lmi
 {
 
-/**
-   Retrieve the text content of the node.
-
-   This function is not recursive, meaning that only the text-nodes
-   directly attached to the node are taken into the account.
- */
-std::string LmiHelper::get_content(Element const& node)
+std::string xml_lmi::get_content(Element const& element)
 {
     std::ostringstream buf;
-    Node::NodeList const nodeChildren = node.get_children();
+    xml_lmi::NodeContainer const nodeChildren = element.get_children();
     for
-        (Node::NodeList::const_iterator iter = nodeChildren.begin()
+        (xml_lmi::NodeContainer::const_iterator iter = nodeChildren.begin()
         ;iter != nodeChildren.end()
         ;++iter
         )
@@ -60,11 +54,11 @@ std::string LmiHelper::get_content(Element const& node)
     return buf.str();
 }
 
-Element* LmiHelper::get_first_element(Element& node)
+Element* xml_lmi::get_first_element(Element& parent)
 {
-    Node::NodeList const nodeList = node.get_children();
+    xml_lmi::NodeContainer const nodeList = parent.get_children();
     for
-        (Node::NodeList::const_iterator iter = nodeList.begin()
+        (xml_lmi::NodeContainer::const_iterator iter = nodeList.begin()
         ;iter != nodeList.end()
         ;++iter
         )
@@ -78,11 +72,11 @@ Element* LmiHelper::get_first_element(Element& node)
     return 0;
 }
 
-Element const* LmiHelper::get_first_element(Element const& node)
+Element const* xml_lmi::get_first_element(Element const& parent)
 {
-    Node::NodeList const nodeList = node.get_children();
+    xml_lmi::NodeContainer const nodeList = parent.get_children();
     for
-        (Node::NodeList::const_iterator iter = nodeList.begin()
+        (xml_lmi::NodeContainer::const_iterator iter = nodeList.begin()
         ;iter != nodeList.end()
         ;++iter
         )
@@ -96,11 +90,11 @@ Element const* LmiHelper::get_first_element(Element const& node)
     return 0;
 }
 
-std::ostream& operator<<(std::ostream& os, Document& document)
+} // Namespace xml_lmi.
+
+std::ostream& operator<<(std::ostream& os, xml_lmi::Document& document)
 {
     document.write_to_stream(os, "utf-8");
     return os;
 }
-
-} // namespace xmlpp
 

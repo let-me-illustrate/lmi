@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: single_cell_document.cpp,v 1.7.2.7 2006-10-17 13:53:26 chicares Exp $
+// $Id: single_cell_document.cpp,v 1.7.2.8 2006-10-18 01:20:16 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -50,7 +50,7 @@ single_cell_document::single_cell_document(IllusInputParms const& parms)
 single_cell_document::single_cell_document(std::string const& filename)
     :input_data_(new IllusInputParms(false))
 {
-    xmlpp::DomParser parser;
+    xml_lmi::DomParser parser;
     parser.parse_file(filename);
     parse(parser);
 }
@@ -67,14 +67,14 @@ std::string single_cell_document::xml_root_name() const
 }
 
 //============================================================================
-void single_cell_document::parse(xmlpp::DomParser const& parser)
+void single_cell_document::parse(xml_lmi::DomParser const& parser)
 {
     if(!parser)
         {
         throw std::runtime_error("Error parsing XML file.");
         }
 
-    xmlpp::Element& root = *parser.get_document()->get_root_node();
+    xml_lmi::Element& root = *parser.get_document()->get_root_node();
     if(xml_root_name() != root.get_name())
         {
         fatal_error()
@@ -90,14 +90,14 @@ void single_cell_document::parse(xmlpp::DomParser const& parser)
     // read from the first non textual node all the information
     // in other words this 'single cell' document xml representation
     // should contain one and only one xml node
-    xmlpp::Node::NodeList children = root.get_children();
+    xml_lmi::NodeContainer children = root.get_children();
     for
-        (xmlpp::Node::NodeList::iterator iter = children.begin()
+        (xml_lmi::NodeContainer::iterator iter = children.begin()
         ;iter != children.end()
         ;++iter
         )
         {
-        xmlpp::Element* child = dynamic_cast<xmlpp::Element*>(*iter);
+        xml_lmi::Element* child = dynamic_cast<xml_lmi::Element*>(*iter);
         if(child)
             {
             *child >> *input_data_;
@@ -109,7 +109,7 @@ void single_cell_document::parse(xmlpp::DomParser const& parser)
 //============================================================================
 void single_cell_document::read(std::istream& is)
 {
-    xmlpp::DomParser parser;
+    xml_lmi::DomParser parser;
     parser.parse_stream(is);
     parse(parser);
 }
@@ -117,8 +117,8 @@ void single_cell_document::read(std::istream& is)
 //============================================================================
 void single_cell_document::write(std::ostream& os)
 {
-    xmlpp::Document document;
-    xmlpp::Element& root = *document.create_root_node(xml_root_name());
+    xml_lmi::Document document;
+    xml_lmi::Element& root = *document.create_root_node(xml_root_name());
     root << *input_data_;
     os << document;
 }

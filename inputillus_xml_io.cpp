@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: inputillus_xml_io.cpp,v 1.12.2.6 2006-10-17 13:53:26 chicares Exp $
+// $Id: inputillus_xml_io.cpp,v 1.12.2.7 2006-10-18 01:20:16 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -76,7 +76,7 @@ std::vector<std::string> const& detritus()
 } // Unnnamed namespace.
 
 //============================================================================
-void IllusInputParms::read(xmlpp::Element const& x)
+void IllusInputParms::read(xml_lmi::Element const& x)
 {
     if(xml_root_name() != x.get_name())
         {
@@ -91,7 +91,7 @@ void IllusInputParms::read(xmlpp::Element const& x)
         throw std::runtime_error(msg.str());
         }
 
-    xmlpp::Attribute const* cell_version_node = x.get_attribute("version");
+    xml_lmi::Attribute const* cell_version_node = x.get_attribute("version");
     if(!cell_version_node)
         {
         std::ostringstream msg;
@@ -110,14 +110,14 @@ void IllusInputParms::read(xmlpp::Element const& x)
         (IllusInputParms::member_names()
         );
     std::vector<std::string>::iterator current_member;
-    xmlpp::Node::NodeList const xNodeList = x.get_children();
+    xml_lmi::NodeContainer const xNodeList = x.get_children();
     for
-        (xmlpp::Node::NodeList::const_iterator iter = xNodeList.begin()
+        (xml_lmi::NodeContainer::const_iterator iter = xNodeList.begin()
         ;iter != xNodeList.end()
         ;++iter
         )
         {
-        xmlpp::Element const* child = dynamic_cast<xmlpp::Element const*>(*iter);
+        xml_lmi::Element const* child = dynamic_cast<xml_lmi::Element const*>(*iter);
         if(!child) // child is a text node
             {
             continue;
@@ -139,7 +139,7 @@ void IllusInputParms::read(xmlpp::Element const& x)
                     )
                 )
                 {
-                detritus_map[node_tag] = xmlpp::LmiHelper::get_content(*child);
+                detritus_map[node_tag] = xml_lmi::get_content(*child);
                 }
             else
                 {
@@ -152,7 +152,7 @@ void IllusInputParms::read(xmlpp::Element const& x)
                 }
             continue;
             }
-        (*this)[node_tag] = xmlpp::LmiHelper::get_content(*child);
+        (*this)[node_tag] = xml_lmi::get_content(*child);
         // TODO ?? Perhaps a std::list would perform better.
         member_names.erase(current_member);
         }
@@ -211,9 +211,9 @@ void IllusInputParms::read(xmlpp::Element const& x)
 }
 
 //============================================================================
-void IllusInputParms::write(xmlpp::Element& x) const
+void IllusInputParms::write(xml_lmi::Element& x) const
 {
-    xmlpp::Element& root = *x.add_child(xml_root_name());
+    xml_lmi::Element& root = *x.add_child(xml_root_name());
 
     root.set_attribute("version", value_cast<std::string>(class_version()).c_str());
 
