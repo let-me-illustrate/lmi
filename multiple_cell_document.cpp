@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: multiple_cell_document.cpp,v 1.9.2.8 2006-10-18 01:20:16 chicares Exp $
+// $Id: multiple_cell_document.cpp,v 1.9.2.9 2006-10-18 02:03:05 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -97,10 +97,10 @@ void multiple_cell_document::parse(xml_lmi::DomParser const& parser)
     XmlppElements elements;
     {
         // fill elements list with element nodes of the root
-        xml_lmi::NodeContainer const rootNodes = root.get_children();
+        xml_lmi::NodeContainer const c = root.get_children();
         for
-            (xml_lmi::NodeContainer::const_iterator iter = rootNodes.begin()
-            ;iter != rootNodes.end()
+            (xml_lmi::NodeContainer::const_iterator iter = c.begin()
+            ;iter != c.end()
             ;++iter
             )
             {

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xml_lmi.cpp,v 1.1.2.7 2006-10-18 01:20:16 chicares Exp $
+// $Id: xml_lmi.cpp,v 1.1.2.8 2006-10-18 02:03:05 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -37,18 +37,18 @@ namespace xml_lmi
 std::string xml_lmi::get_content(Element const& element)
 {
     std::ostringstream buf;
-    xml_lmi::NodeContainer const nodeChildren = element.get_children();
+    xml_lmi::NodeContainer const direct_children = element.get_children();
     for
-        (xml_lmi::NodeContainer::const_iterator iter = nodeChildren.begin()
-        ;iter != nodeChildren.end()
+        (xml_lmi::NodeContainer::const_iterator iter = direct_children.begin()
+        ;iter != direct_children.end()
         ;++iter
         )
         {
-        xmlpp::TextNode const* textNode = dynamic_cast<xmlpp::TextNode const*>(*iter);
+        xmlpp::TextNode const* t = dynamic_cast<xmlpp::TextNode const*>(*iter);
         // maybe we should add CdataNode also?
-        if(textNode)
+        if(t)
             {
-            buf << textNode->get_content();
+            buf << t->get_content();
             }
         }
     return buf.str();
@@ -56,17 +56,17 @@ std::string xml_lmi::get_content(Element const& element)
 
 Element* xml_lmi::get_first_element(Element& parent)
 {
-    xml_lmi::NodeContainer const nodeList = parent.get_children();
+    xml_lmi::NodeContainer const direct_children = parent.get_children();
     for
-        (xml_lmi::NodeContainer::const_iterator iter = nodeList.begin()
-        ;iter != nodeList.end()
+        (xml_lmi::NodeContainer::const_iterator iter = direct_children.begin()
+        ;iter != direct_children.end()
         ;++iter
         )
         {
-        Element const* pChild = dynamic_cast<Element const*>(*iter);
-        if(pChild)
+        Element const* e = dynamic_cast<Element const*>(*iter);
+        if(e)
             {
-            return const_cast<Element*>(pChild);
+            return const_cast<Element*>(e);
             }
         }
     return 0;
@@ -74,17 +74,17 @@ Element* xml_lmi::get_first_element(Element& parent)
 
 Element const* xml_lmi::get_first_element(Element const& parent)
 {
-    xml_lmi::NodeContainer const nodeList = parent.get_children();
+    xml_lmi::NodeContainer const direct_children = parent.get_children();
     for
-        (xml_lmi::NodeContainer::const_iterator iter = nodeList.begin()
-        ;iter != nodeList.end()
+        (xml_lmi::NodeContainer::const_iterator iter = direct_children.begin()
+        ;iter != direct_children.end()
         ;++iter
         )
         {
-        Element const* pChild = dynamic_cast<Element const*>(*iter);
-        if(pChild)
+        Element const* e = dynamic_cast<Element const*>(*iter);
+        if(e)
             {
-            return pChild;
+            return e;
             }
         }
     return 0;

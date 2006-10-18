@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.462.2.9 2006-10-18 01:20:16 chicares Exp $
+// $Id: ChangeLog,v 1.462.2.10 2006-10-18 02:03:05 chicares Exp $
 
 MAINTENANCE
 
@@ -7805,4 +7805,11 @@ and section 17 of the lmi coding standard.
   xml_lmi.hpp
 Begin to abstract the interface to libxml++, replacing libxml++ types
 with typedefs, and moving helper functions into a new namespace.
+
+20061018T0203Z <chicares@cox.net> [1173]
+
+  inputillus_xml_io.cpp
+  multiple_cell_document.cpp
+  xml_lmi.cpp
+avoidAddingCamelCaseNames.
 
