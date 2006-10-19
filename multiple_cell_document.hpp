@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: multiple_cell_document.hpp,v 1.7.2.4 2006-10-18 01:20:16 chicares Exp $
+// $Id: multiple_cell_document.hpp,v 1.7.2.5 2006-10-19 00:59:26 chicares Exp $
 
 #ifndef multiple_cell_document_hpp
 #define multiple_cell_document_hpp
@@ -59,7 +59,7 @@ class LMI_SO multiple_cell_document
     void write(std::ostream& os) const;
 
   private:
-    void parse(xml_lmi::DomParser const&);
+    void parse(xml_lmi::Element const& root);
     std::string xml_root_name() const;
 
     // Default parameters for the whole case, stored as a vector for

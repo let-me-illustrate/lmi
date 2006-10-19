@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.462.2.10 2006-10-18 02:03:05 chicares Exp $
+// $Id: ChangeLog,v 1.462.2.11 2006-10-19 00:59:26 chicares Exp $
 
 MAINTENANCE
 
@@ -7812,4 +7812,15 @@ with typedefs, and moving helper functions into a new namespace.
   multiple_cell_document.cpp
   xml_lmi.cpp
 avoidAddingCamelCaseNames.
+
+ <chicares@cox.net> [1173]
+
+  configurable_settings.cpp
+  multiple_cell_document.cpp
+  multiple_cell_document.hpp
+  single_cell_document.cpp
+  single_cell_document.hpp
+  xml_lmi.cpp
+  xml_lmi.hpp
+Refactor, abstracting out the DOM parser.
 

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: configurable_settings.cpp,v 1.14.2.7 2006-10-18 01:20:16 chicares Exp $
+// $Id: configurable_settings.cpp,v 1.14.2.8 2006-10-19 00:59:26 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -78,49 +78,8 @@ configurable_settings::configurable_settings()
             }
         }
 
-    xml_lmi::DomParser parser;
-    try
-        {
-        parser.parse_file(filename);
-        }
-    catch(std::exception const& ex)
-        {
-        fatal_error()
-            << "Exception while reading '"
-            << configuration_filename()
-            << "'."
-            << "("
-            << ex.what()
-            << ")"
-            << LMI_FLUSH
-            ;
-        }
-
-    if(!parser)
-        {
-        fatal_error()
-            << "Error parsing '"
-            << configuration_filename()
-            << "'."
-            << LMI_FLUSH
-            ;
-        }
-
-    xml_lmi::Element& root = *parser.get_document()->get_root_node();
-    if(xml_root_name() != root.get_name())
-        {
-        fatal_error()
-            << "File '"
-            << configuration_filename()
-            << "': xml node name is '"
-            << root.get_name()
-            << "' but '"
-            << xml_root_name()
-            << "' was expected. Try reinstalling."
-            << LMI_FLUSH
-            ;
-        }
-
+    xml_lmi::dom_parser parser(filename);
+    xml_lmi::Element const& root = parser.root_node(xml_root_name());
     xml_lmi::NodeContainer const children = root.get_children();
     for
         (xml_lmi::NodeContainer::const_iterator iter = children.begin()

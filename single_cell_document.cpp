@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: single_cell_document.cpp,v 1.7.2.8 2006-10-18 01:20:16 chicares Exp $
+// $Id: single_cell_document.cpp,v 1.7.2.9 2006-10-19 00:59:26 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -50,9 +50,8 @@ single_cell_document::single_cell_document(IllusInputParms const& parms)
 single_cell_document::single_cell_document(std::string const& filename)
     :input_data_(new IllusInputParms(false))
 {
-    xml_lmi::DomParser parser;
-    parser.parse_file(filename);
-    parse(parser);
+    xml_lmi::dom_parser parser(filename);
+    parse(parser.root_node(xml_root_name()));
 }
 
 //============================================================================
@@ -67,26 +66,8 @@ std::string single_cell_document::xml_root_name() const
 }
 
 //============================================================================
-void single_cell_document::parse(xml_lmi::DomParser const& parser)
+void single_cell_document::parse(xml_lmi::Element const& root)
 {
-    if(!parser)
-        {
-        throw std::runtime_error("Error parsing XML file.");
-        }
-
-    xml_lmi::Element& root = *parser.get_document()->get_root_node();
-    if(xml_root_name() != root.get_name())
-        {
-        fatal_error()
-            << "XML node name is '"
-            << root.get_name()
-            << "' but '"
-            << xml_root_name()
-            << "' was expected."
-            << LMI_FLUSH
-            ;
-        }
-
     // read from the first non textual node all the information
     // in other words this 'single cell' document xml representation
     // should contain one and only one xml node
@@ -109,9 +90,8 @@ void single_cell_document::parse(xml_lmi::DomParser const& parser)
 //============================================================================
 void single_cell_document::read(std::istream& is)
 {
-    xml_lmi::DomParser parser;
-    parser.parse_stream(is);
-    parse(parser);
+    xml_lmi::dom_parser parser(is);
+    parse(parser.root_node(xml_root_name()));
 }
 
 //============================================================================

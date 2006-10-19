@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: multiple_cell_document.cpp,v 1.9.2.9 2006-10-18 02:03:05 chicares Exp $
+// $Id: multiple_cell_document.cpp,v 1.9.2.10 2006-10-19 00:59:26 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -43,9 +43,8 @@ multiple_cell_document::multiple_cell_document()
 //============================================================================
 multiple_cell_document::multiple_cell_document(std::string const& filename)
 {
-    xml_lmi::DomParser parser;
-    parser.parse_file(filename);
-    parse(parser);
+    xml_lmi::dom_parser parser(filename);
+    parse(parser.root_node(xml_root_name()));
 }
 
 //============================================================================
@@ -60,26 +59,8 @@ std::string multiple_cell_document::xml_root_name() const
 }
 
 //============================================================================
-void multiple_cell_document::parse(xml_lmi::DomParser const& parser)
+void multiple_cell_document::parse(xml_lmi::Element const& root)
 {
-    if(!parser)
-        {
-        fatal_error() << "Error parsing XML file." << LMI_FLUSH;
-        }
-
-    xml_lmi::Element const& root = *parser.get_document()->get_root_node();
-    if(xml_root_name() != root.get_name())
-        {
-        fatal_error()
-            << "XML node name is '"
-            << root.get_name()
-            << "' but '"
-            << xml_root_name()
-            << "' was expected."
-            << LMI_FLUSH
-            ;
-        }
-
 // TODO ?? It doesn't seem right to depend on node order.
 // See note below--perhaps do something like this:
 //    int NumberOfCases;
@@ -236,10 +217,8 @@ void multiple_cell_document::parse(xml_lmi::DomParser const& parser)
 //============================================================================
 void multiple_cell_document::read(std::istream& is)
 {
-    xml_lmi::DomParser parser;
-    parser.parse_stream(is);
-// XMLWRAPP !! See comment on parse() in header.
-    parse(parser);
+    xml_lmi::dom_parser parser(is);
+    parse(parser.root_node(xml_root_name()));
 }
 
 //============================================================================

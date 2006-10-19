@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xml_lmi.hpp,v 1.1.2.6 2006-10-18 01:20:16 chicares Exp $
+// $Id: xml_lmi.hpp,v 1.1.2.7 2006-10-19 00:59:26 chicares Exp $
 
 #ifndef xml_lmi_hpp
 #define xml_lmi_hpp
@@ -38,6 +38,21 @@ namespace xml_lmi
     typedef xmlpp::DomParser      DomParser;
     typedef xmlpp::Element        Element;
     typedef xmlpp::Node::NodeList NodeContainer;
+
+    class dom_parser
+    {
+      public:
+        dom_parser(std::string const& filename);
+        dom_parser(std::istream&);
+        ~dom_parser();
+
+        DomParser const& parser() const;
+        Element const& root_node(std::string const& expected_name) const;
+
+      private:
+        std::string error_context_;
+        DomParser parser_;
+    };
 
     /// Retrieve an xml element's full text-node contents.
     ///
