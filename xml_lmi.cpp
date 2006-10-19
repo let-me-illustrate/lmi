@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xml_lmi.cpp,v 1.1.2.9 2006-10-19 00:59:26 chicares Exp $
+// $Id: xml_lmi.cpp,v 1.1.2.10 2006-10-19 22:37:35 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -85,11 +85,6 @@ xml_lmi::dom_parser::dom_parser(std::istream& is)
 
 xml_lmi::dom_parser::~dom_parser()
 {}
-
-xml_lmi::DomParser const& xml_lmi::dom_parser::parser() const
-{
-    return parser_;
-}
 
 xml_lmi::Element const& xml_lmi::dom_parser::root_node
     (std::string const& expected_name
