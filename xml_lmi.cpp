@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xml_lmi.cpp,v 1.1.2.11 2006-10-20 00:25:12 chicares Exp $
+// $Id: xml_lmi.cpp,v 1.1.2.12 2006-10-20 02:13:34 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -38,6 +38,17 @@
 
 namespace xml_lmi
 {
+
+/// Parse an xml file.
+///
+/// Precondition: argument names an accessible xml file.
+///
+/// Postconditions: member parser_ is a non-null pointer; the object
+/// it points to is valid in that its operator bool() returns true.
+///
+/// Throws: std::runtime_error, via fatal_error(), if a precondition
+/// is violated, or if xml-library calls throw an exception derived
+/// from std::exception.
 
 xml_lmi::dom_parser::dom_parser(std::string const& filename)
 {
@@ -65,6 +76,17 @@ xml_lmi::dom_parser::dom_parser(std::string const& filename)
         }
 }
 
+/// Parse an xml stream.
+///
+/// Precondition: argument is an xml stream.
+///
+/// Postconditions: member parser_ is a non-null pointer; the object
+/// it points to is valid in that its operator bool() returns true.
+///
+/// Throws: std::runtime_error, via fatal_error(), if a precondition
+/// is violated, or if xml-library calls throw an exception derived
+/// from std::exception.
+
 xml_lmi::dom_parser::dom_parser(std::istream& is)
 {
     try
@@ -87,8 +109,21 @@ xml_lmi::dom_parser::dom_parser(std::istream& is)
         }
 }
 
+/// Throws: nothing unless member parser_'s destructor does.
+
 xml_lmi::dom_parser::~dom_parser()
 {}
+
+/// Return the parsed document's root node.
+///
+/// Preconditions: member parser_ has a document that is not null and
+/// has a root node; the argument, if not empty, matches the name of
+/// that root node.
+///
+/// Throws: std::runtime_error, via fatal_error(), if a precondition
+/// is violated, or if xml-library calls throw an exception derived
+/// from std::exception. Ctor postconditions are assumed to have been
+/// satisfied and are not tested.
 
 xml_lmi::Element const& xml_lmi::dom_parser::root_node
     (std::string const& expected_name
@@ -139,6 +174,7 @@ std::string xml_lmi::get_content(Element const& element)
         )
         {
         xmlpp::TextNode const* t = dynamic_cast<xmlpp::TextNode const*>(*iter);
+        // TODO ?? Resolve this issue:
         // maybe we should add CdataNode also?
         if(t)
             {

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.462.2.12 2006-10-20 00:25:12 chicares Exp $
+// $Id: ChangeLog,v 1.462.2.13 2006-10-20 02:13:34 chicares Exp $
 
 MAINTENANCE
 
@@ -7841,4 +7841,10 @@ Remove an unnecessary member function.
   xml_lmi.cpp
   xml_lmi.hpp
 Decrease header coupling by forward-declaring libxml++ types.
+
+20061020T0213Z <chicares@cox.net> [1174]
+
+  xml_lmi.cpp
+  xml_lmi.hpp
+Improve documentation.
 
