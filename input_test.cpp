@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_test.cpp,v 1.7.2.6 2006-10-18 01:20:16 chicares Exp $
+// $Id: input_test.cpp,v 1.7.2.7 2006-10-20 00:25:12 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -31,6 +31,8 @@
 #define BOOST_INCLUDE_MAIN
 #include "test_tools.hpp"
 #include "xml_lmi.hpp"
+
+#include <libxml++/libxml++.h>
 
 #if defined BOOST_MSVC || defined __BORLANDC__
 #   include <cfloat> // floating-point hardware control

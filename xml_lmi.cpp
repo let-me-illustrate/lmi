@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xml_lmi.cpp,v 1.1.2.10 2006-10-19 22:37:35 chicares Exp $
+// $Id: xml_lmi.cpp,v 1.1.2.11 2006-10-20 00:25:12 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -29,6 +29,8 @@
 #include "xml_lmi.hpp"
 
 #include "alert.hpp"
+
+#include <libxml++/libxml++.h>
 
 #include <ostream>
 #include <sstream>
@@ -41,24 +43,25 @@ xml_lmi::dom_parser::dom_parser(std::string const& filename)
 {
     try
         {
-        error_context_ = "Error--xml file '" + filename + "': ";
+        error_context_ = "Unable to parse xml file '" + filename + "': ";
         if(filename.empty())
             {
             throw std::runtime_error("File name is empty.");
             }
-        parser_.parse_file(filename);
-        if(!parser_)
+        parser_.reset(new DomParser);
+        if(0 == parser_.get())
+            {
+            throw std::runtime_error("Parser not initialized.");
+            }
+        parser_->parse_file(filename);
+        if(0 == parser_->operator bool())
             {
             throw std::runtime_error("Parser failed.");
             }
         }
     catch(std::exception const& e)
         {
-        fatal_error()
-            << error_context_
-            << e.what()
-            << LMI_FLUSH
-            ;
+        fatal_error() << error_context_ << e.what() << LMI_FLUSH;
         }
 }
 
@@ -66,20 +69,21 @@ xml_lmi::dom_parser::dom_parser(std::istream& is)
 {
     try
         {
-        error_context_ = "Error--xml stream: ";
-        parser_.parse_stream(is);
-        if(!parser_)
+        error_context_ = "Unable to parse xml stream: ";
+        parser_.reset(new DomParser);
+        if(0 == parser_.get())
+            {
+            throw std::runtime_error("Parser not initialized.");
+            }
+        parser_->parse_stream(is);
+        if(0 == parser_->operator bool())
             {
             throw std::runtime_error("Parser failed.");
             }
         }
     catch(std::exception const& e)
         {
-        fatal_error()
-            << error_context_
-            << e.what()
-            << LMI_FLUSH
-            ;
+        fatal_error() << error_context_ << e.what() << LMI_FLUSH;
         }
 }
 
@@ -90,38 +94,38 @@ xml_lmi::Element const& xml_lmi::dom_parser::root_node
     (std::string const& expected_name
     ) const
 {
-    xmlpp::Document const* document = parser_.get_document();
-    if(!document)
+    try
         {
-        fatal_error()
-            << error_context_
-            << "Document is null."
-            << LMI_FLUSH
-            ;
-        }
-    xml_lmi::Element const* root = document->get_root_node();
-    if(!root)
-        {
-        fatal_error()
-            << error_context_
-            << "Document has no root node."
-            << LMI_FLUSH
-            ;
-        }
-    if(!expected_name.empty() && expected_name != root->get_name())
-        {
-        fatal_error()
-            << error_context_
-            << "Root-node name is '"
-            << root->get_name()
-            << "', but '"
-            << expected_name
-            << "' was expected."
-            << LMI_FLUSH
-            ;
-        }
+        xml_lmi::Document const* document = parser_->get_document();
+        if(!document)
+            {
+            throw std::runtime_error("Parsed document is null.");
+            }
+        xml_lmi::Element const* root = document->get_root_node();
+        if(!root)
+            {
+            throw std::runtime_error("Document has no root node.");
+            }
+        if(!expected_name.empty() && expected_name != root->get_name())
+            {
+            std::ostringstream oss;
+            oss
+                << "Root-node name is '"
+                << root->get_name()
+                << "', but '"
+                << expected_name
+                << "' was expected."
+                ;
+            throw std::runtime_error(oss.str());
+            }
 
-    return *root;
+        return *root;
+        }
+    catch(std::exception const& e)
+        {
+        fatal_error() << error_context_ << e.what() << LMI_FLUSH;
+        throw std::logic_error("Unreachable"); // Silence compiler warning.
+        }
 }
 
 std::string xml_lmi::get_content(Element const& element)
@@ -180,7 +184,7 @@ Element const* xml_lmi::get_first_element(Element const& parent)
     return 0;
 }
 
-} // Namespace xml_lmi.
+} // namespace xml_lmi
 
 std::ostream& operator<<(std::ostream& os, xml_lmi::Document& document)
 {

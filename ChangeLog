@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.462.2.11 2006-10-19 00:59:26 chicares Exp $
+// $Id: ChangeLog,v 1.462.2.12 2006-10-20 00:25:12 chicares Exp $
 
 MAINTENANCE
 
@@ -7813,7 +7813,7 @@ with typedefs, and moving helper functions into a new namespace.
   xml_lmi.cpp
 avoidAddingCamelCaseNames.
 
- <chicares@cox.net> [1173]
+20061019T0059Z <chicares@cox.net> [1173]
 
   configurable_settings.cpp
   multiple_cell_document.cpp
@@ -7823,4 +7823,22 @@ avoidAddingCamelCaseNames.
   xml_lmi.cpp
   xml_lmi.hpp
 Refactor, abstracting out the DOM parser.
+
+20061019T2237Z <chicares@cox.net> [1173]
+
+  xml_lmi.cpp
+  xml_lmi.hpp
+Remove an unnecessary member function.
+
+20061020T0025Z <chicares@cox.net> [1173]
+
+  configurable_settings.cpp
+  input_test.cpp
+  inputillus_xml_io.cpp
+  ledger_xml_io.cpp
+  multiple_cell_document.cpp
+  single_cell_document.cpp
+  xml_lmi.cpp
+  xml_lmi.hpp
+Decrease header coupling by forward-declaring libxml++ types.
 

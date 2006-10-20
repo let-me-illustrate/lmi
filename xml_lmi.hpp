@@ -19,28 +19,49 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xml_lmi.hpp,v 1.1.2.8 2006-10-19 22:37:35 chicares Exp $
+// $Id: xml_lmi.hpp,v 1.1.2.9 2006-10-20 00:25:12 chicares Exp $
 
 #ifndef xml_lmi_hpp
 #define xml_lmi_hpp
 
 #include "config.hpp"
 
-#include <libxml++/libxml++.h>
+#include <boost/scoped_ptr.hpp>
 
 #include <iosfwd>
+#include <list>
 #include <string>
+
+namespace xmlpp
+{
+    class Attribute;
+    class Document;
+    class DomParser;
+    class Element;
+    class Node;
+} // namespace xmlpp
+
+/// Interface to libxml++ .
 
 namespace xml_lmi
 {
-    typedef xmlpp::Attribute      Attribute;
-    typedef xmlpp::Document       Document;
-    typedef xmlpp::DomParser      DomParser;
-    typedef xmlpp::Element        Element;
-    typedef xmlpp::Node::NodeList NodeContainer;
+    typedef xmlpp::Attribute Attribute;
+    typedef xmlpp::Document  Document;
+    typedef xmlpp::Element   Element;
+
+    /// LIBXMLPP !! Type xmlpp::Node::NodeList is used in libxml++'s
+    /// interface, but cannot be forward declared because it is a
+    /// typedef inside a class. This is the typedef declaration as of
+    /// libxml++-2.14.0 . Presumably the compiler will warn if the
+    /// libxml++ maintainers ever change it, but it would be better to
+    /// persuade them to provide a forwarding header themselves.
+
+    typedef std::list<xmlpp::Node*> NodeContainer;
 
     class dom_parser
     {
+        typedef xmlpp::DomParser DomParser;
+
       public:
         dom_parser(std::string const& filename);
         dom_parser(std::istream&);
@@ -50,7 +71,7 @@ namespace xml_lmi
 
       private:
         std::string error_context_;
-        DomParser parser_;
+        boost::scoped_ptr<DomParser> parser_;
     };
 
     /// Retrieve an xml element's full text-node contents.
@@ -65,7 +86,7 @@ namespace xml_lmi
 
     Element      * get_first_element(Element      & parent);
     Element const* get_first_element(Element const& parent);
-}
+} // namespace xml_lmi
 
 /// Streaming operator for xml documents.
 ///

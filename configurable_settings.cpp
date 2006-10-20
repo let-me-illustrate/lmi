@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: configurable_settings.cpp,v 1.14.2.8 2006-10-19 00:59:26 chicares Exp $
+// $Id: configurable_settings.cpp,v 1.14.2.9 2006-10-20 00:25:12 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -32,6 +32,8 @@
 #include "data_directory.hpp"     // AddDataDir()
 #include "platform_dependent.hpp" // access()
 #include "xml_lmi.hpp"
+
+#include <libxml++/libxml++.h>
 
 #include <exception>
 
