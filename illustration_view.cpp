@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustration_view.cpp,v 1.41.2.1 2006-10-20 12:45:18 etarassov Exp $
+// $Id: illustration_view.cpp,v 1.41.2.2 2006-10-20 14:14:38 etarassov Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -302,7 +302,6 @@ void IllustrationView::Pdf(std::string const& action) const
 
 void IllustrationView::Run(Input* overriding_input)
 {
-    std::stringstream report;
     Timer timer;
 
     if(overriding_input)
@@ -318,18 +317,19 @@ void IllustrationView::Run(Input* overriding_input)
     av.SetDebugFilename(base_filename() + ".debug");
     av.RunAV();
 
-    report << "Calculate: " << timer.stop().elapsed_msec_str();
+    std::stringstream oss;
+    oss << "Calculate: " << timer.stop().elapsed_msec_str();
     timer.restart();
 
     ledger_values_ = av.ledger_from_av();
 
-    report << "; Prepare: " << timer.stop().elapsed_msec_str();
+    oss << "; Prepare: " << timer.stop().elapsed_msec_str();
     timer.restart();
 
     DisplaySelectedValuesAsHtml();
 
-    report << "; Format: " << timer.stop().elapsed_msec_str();
-    status() << report.str() << std::flush;
+    oss << "; Format: " << timer.stop().elapsed_msec_str();
+    status() << oss.str() << std::flush;
 }
 
 void IllustrationView::SetLedger(boost::shared_ptr<Ledger const> ledger)
