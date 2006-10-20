@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xml_io.cpp,v 1.48.2.8 2006-10-20 17:46:02 etarassov Exp $
+// $Id: ledger_xml_io.cpp,v 1.48.2.9 2006-10-20 18:03:05 etarassov Exp $
 
 #include "ledger.hpp"
 
@@ -515,8 +515,8 @@ void Ledger::do_write(xml_lmi::Element& illustration, bool light_version) const
         AttainedAge[j] = 1 + j + issue_age;
         }
 
-// STEVEN What about the composite? I think you want to avoid using
-// an attained-age column there, because it'd be meaningless.
+// TODO ?? An attained-age column is meaningless in a composite. So
+// are several others--notably those affected by partial mortaility.
     vectors["AttainedAge"] = &AttainedAge;
     vectors["PolicyYear" ] = &PolicyYear ;
 

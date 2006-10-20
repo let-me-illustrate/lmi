@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.462.2.17 2006-10-20 17:46:02 etarassov Exp $
+// $Id: ChangeLog,v 1.462.2.18 2006-10-20 18:03:05 etarassov Exp $
 
 MAINTENANCE
 
@@ -7891,4 +7891,9 @@ Initialize underlying DomParser to substitue entities and skip DTD validation.
   tab_delimited.xsl
   xml_resources_test.cpp
 Initial commit of Calculation summary patch.
+
+20061020T1901Z <etarassov@tt-solutions.com> [1174]
+
+  ledger_xml_io.cpp
+Roll back an incorrect modification.
 
