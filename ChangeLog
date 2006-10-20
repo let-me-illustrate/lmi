@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.462.2.13 2006-10-20 02:13:34 chicares Exp $
+// $Id: ChangeLog,v 1.462.2.14 2006-10-20 03:24:30 chicares Exp $
 
 MAINTENANCE
 
@@ -7845,6 +7845,10 @@ Decrease header coupling by forward-declaring libxml++ types.
 20061020T0213Z <chicares@cox.net> [1174]
 
   xml_lmi.cpp
-  xml_lmi.hpp
 Improve documentation.
+
+20061020T0324Z <chicares@cox.net> [1174]
+
+  xml_lmi.cpp
+Test state of xml input stream before parsing it.
 

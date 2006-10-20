@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xml_lmi.cpp,v 1.1.2.12 2006-10-20 02:13:34 chicares Exp $
+// $Id: xml_lmi.cpp,v 1.1.2.13 2006-10-20 03:24:30 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -78,7 +78,7 @@ xml_lmi::dom_parser::dom_parser(std::string const& filename)
 
 /// Parse an xml stream.
 ///
-/// Precondition: argument is an xml stream.
+/// Precondition: argument is an xml stream for which 0 == rdstate().
 ///
 /// Postconditions: member parser_ is a non-null pointer; the object
 /// it points to is valid in that its operator bool() returns true.
@@ -92,6 +92,10 @@ xml_lmi::dom_parser::dom_parser(std::istream& is)
     try
         {
         error_context_ = "Unable to parse xml stream: ";
+        if(0 != is.rdstate())
+            {
+            throw std::runtime_error("Stream state is not 'good'.");
+            }
         parser_.reset(new DomParser);
         if(0 == parser_.get())
             {
