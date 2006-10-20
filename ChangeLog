@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.462.2.14 2006-10-20 03:24:30 chicares Exp $
+// $Id: ChangeLog,v 1.462.2.15 2006-10-20 12:45:18 etarassov Exp $
 
 MAINTENANCE
 
@@ -7851,4 +7851,10 @@ Improve documentation.
 
   xml_lmi.cpp
 Test state of xml input stream before parsing it.
+
+20061020T1302Z <etarassov@tt-solutions.com> [1174]
+
+  illustration_view.cpp
+Put more performance information into the status bar after the calculation
+summary is generated.
 
