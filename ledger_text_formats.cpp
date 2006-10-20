@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_text_formats.cpp,v 1.22 2006-09-04 00:45:44 chicares Exp $
+// $Id: ledger_text_formats.cpp,v 1.22.2.1 2006-10-20 17:46:02 etarassov Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -30,6 +30,7 @@
 
 #include "calendar_date.hpp"
 #include "comma_punct.hpp"
+#include "configurable_settings.hpp"
 #include "financial.hpp"
 #include "global_settings.hpp"
 #include "input_sequence.hpp"
@@ -39,6 +40,16 @@
 #include "miscellany.hpp"
 #include "security.hpp"
 #include "value_cast.hpp"
+
+#include <boost/filesystem/exception.hpp>
+#include <boost/filesystem/path.hpp>
+#include <boost/scoped_array.hpp>
+#include <libxml/globals.h>
+#include <libxml/HTMLtree.h>
+#include <libxml/parser.h>
+#include <libxml++/libxml++.h>
+#include <libxslt/transform.h>
+#include <libxslt/xsltInternals.h>
 
 #include <algorithm>
 #include <fstream>
@@ -50,466 +61,347 @@
 #include <sstream>
 #include <vector>
 
-// TODO ?? Work around this problem
-//   http://sv.nongnu.org/bugs/index.php?func=detailitem&item_id=13856
-// here, as was done in 'ledger_xml_io.cpp' revision 1.45 .
-
-std::string FormatSelectedValuesAsHtml(Ledger const& ledger_values)
+//=============================================================================
+LedgerFormatterFactory & LedgerFormatterFactory::Instance()
 {
-    LedgerInvariant const& Invar = ledger_values.GetLedgerInvariant();
-    LedgerVariant   const& Curr_ = ledger_values.GetCurrFull();
-    LedgerVariant   const& Guar_ = ledger_values.GetGuarFull();
-    int max_length = ledger_values.GetMaxLength();
-
-    std::ostringstream oss;
-
-    std::locale loc;
-    std::locale new_loc(loc, new comma_punct);
-    oss.imbue(new_loc);
-    oss.setf(std::ios_base::fixed, std::ios_base::floatfield);
-
-    oss
-        << "<html>"
-        << "<head><title>Let me illustrate...</title></head>"
-        << "<body>"
-
-        << "<p>"
-        << "Calculation summary for "
-        ;
-
-    if(ledger_values.GetIsComposite())
-        {
-        oss
-            << " composite<br>"
-            ;
-        }
-    else
-        {
-        oss
-            << Invar.Insured1
-            << "<br>"
-            << Invar.Gender << ", " << Invar.Smoker
-            << std::setprecision(0)
-            << ", age " << Invar.Age
-            << std::setprecision(2)
-            << "<br>"
-            ;
-
-        if(is_subject_to_ill_reg(ledger_values.GetLedgerType()))
-            {
-            oss
-                << Invar.GuarPrem << "   guaranteed premium<br>"
-                ;
-            }
-
-        oss
-            << "<br>"
-            << Invar.InitGLP          << "   initial guideline level premium<br>"
-            << Invar.InitGSP          << "   initial guideline single premium<br>"
-            << Invar.InitSevenPayPrem << "   initial seven-pay premium<br>"
-            << ((Invar.IsMec) ? "MEC" : "Non-MEC") << "<br>"
-            << "<br>"
-            << Invar.InitTgtPrem      << "   initial target premium<br>"
-            << Invar.InitBaseSpecAmt  << "   initial base specified amount<br>"
-            << Invar.InitTermSpecAmt  << "   initial term specified amount<br>"
-            << Invar.InitBaseSpecAmt + Invar.InitTermSpecAmt << "   initial total specified amount<br>"
-            << Invar.GetStatePostalAbbrev() << "   state of jurisdiction<br>"
-            ;
-        }
-
-    oss
-        << "</p>"
-
-        << "<hr>"
-        << "<table align=right>"
-        << "  <tr>"
-        << "    <th></th>    <th></th>"
-        << "    <th>Guaranteed</th> <th>Guaranteed</th> <th>Guaranteed</th>"
-        << "    <th>Current</th>    <th>Current</th>    <th>Current</th>"
-        << "  </tr>"
-        << "  <tr>"
-        << "    <th></th>    <th></th>"
-        << "    <th>Account</th>    <th>Surrender</th>  <th>Death</th>"
-        << "    <th>Account</th>    <th>Surrender</th>  <th>Death</th>"
-        << "  </tr>"
-        << "  <tr>"
-        << "    <th>Age</th> <th>Outlay</th>"
-        << "    <th>Value</th>      <th>Value</th>      <th>Benefit</th>"
-        << "    <th>Value</th>      <th>Value</th>      <th>Benefit</th>"
-        << "  </tr>"
-        ;
-
-    for(int j = 0; j < max_length; ++j)
-        {
-        oss
-            << "<tr>"
-            << std::setprecision(0)
-            << "<td>" << j + Invar.Age        << "</td>"
-            << std::setprecision(2)
-            << "<td>" << Invar.Outlay[j]      << "</td>"
-            << "<td>" << Guar_.AcctVal[j]     << "</td>"
-            << "<td>" << Guar_.CSVNet[j]      << "</td>"
-            << "<td>" << Guar_.EOYDeathBft[j] << "</td>"
-            << "<td>" << Curr_.AcctVal[j]     << "</td>"
-            << "<td>" << Curr_.CSVNet[j]      << "</td>"
-            << "<td>" << Curr_.EOYDeathBft[j] << "</td>"
-            << "</tr>"
-            ;
-        }
-
-    oss
-        << "</table>"
-        << "</body>"
-        ;
-    return oss.str();
+    static LedgerFormatterFactory factory;
+    return factory;
 }
 
-//==============================================================================
-void PrintFormTabDelimited
-    (Ledger const& ledger_values
-    ,std::string const& file_name
-    )
+//=============================================================================
+LedgerFormatterFactory::LedgerFormatterFactory()
 {
-    LedgerInvariant const& Invar = ledger_values.GetLedgerInvariant();
-    LedgerVariant   const& Curr_ = ledger_values.GetCurrFull();
-    LedgerVariant   const& Guar_ = ledger_values.GetGuarFull();
+}
 
-    int max_length = ledger_values.GetMaxLength();
+//=============================================================================
+LedgerFormatter LedgerFormatterFactory::CreateFormatter(Ledger const & ledger_values)
+{
+    return LedgerFormatter(ledger_values);
+}
 
-    std::vector<double> net_payment(Invar.Outlay);
-
-    std::vector<double> real_claims;
-    if(ledger_values.GetIsComposite())
+//=============================================================================
+xsltStylesheetPtr LedgerFormatterFactory::GetStylesheet(std::string const & filename)
+{
+    Stylesheets::const_iterator it = stylesheets.find(filename);
+    if (it != stylesheets.end())
         {
-        real_claims = Curr_.ClaimsPaid;
+        return it->second;
         }
-    else
+
+    if (stylesheets.empty())
         {
-        real_claims.assign(Curr_.ClaimsPaid.size(), 0.0);
+        // initialize libxml for libxslt
+        xmlSubstituteEntitiesDefault(1);
+        xmlLoadExtDtdDefaultValue = 0;
         }
 
-    std::vector<double> cash_flow;
-    cash_flow.push_back(0.0); // No claims paid on issue date.
-    std::copy
-        (real_claims.begin()
-        ,real_claims.end()
-        ,std::inserter(cash_flow, cash_flow.end())
-        );
-    // ET !! This is tricky: incompatible lengths.
-    // ET !! cash_flow = catenate(0.0, -real_claims);
-    std::transform
-        (cash_flow.begin()
-        ,cash_flow.end()
-        ,cash_flow.begin()
-        ,std::negate<double>()
-        );
-    // ET !! This is tricky: incompatible lengths.
-    // ET !! drop(-1, cash_flow) = net_payment;
-    std::transform
-        (net_payment.begin()
-        ,net_payment.end()
-        ,cash_flow.begin()
-        ,cash_flow.begin()
-        ,std::plus<double>()
-        );
-
-    cash_flow.pop_back(); // Here we no longer need cash_flow[omega].
-
-    // ET !! std::vector<double> csv_plus_claims = Curr_.CSVNet + real_claims;
-    std::vector<double> csv_plus_claims(Curr_.CSVNet);
-    std::transform
-        (csv_plus_claims.begin()
-        ,csv_plus_claims.end()
-        ,real_claims.begin()
-        ,csv_plus_claims.begin()
-        ,std::plus<double>()
-        );
-// TODO ?? Is this irr valid?
-    std::vector<double> irr_on_surrender(Curr_.CSVNet.size());
-    if(!Invar.IsInforce)
+    std::string full_name;
+    try
         {
-        irr
-            (cash_flow
-            ,csv_plus_claims
-            ,irr_on_surrender
-            ,static_cast<std::vector<double>::size_type>(Curr_.LapseYear)
-            ,max_length
-            ,Invar.irr_precision
+        boost::filesystem::path xslt_directory
+            (configurable_settings::instance().xslt_directory()
             );
-
-#ifdef DEBUGGING_IRR
-std::ofstream os
-        ("irr.txt"
-        ,   std::ios_base::out
-          | std::ios_base::ate
-          | std::ios_base::app
-        );
-os
-<< "  PrintFormTabDelimited():\n"
-        << "\n\tcash_flow.size() = " << cash_flow.size()
-        << "\n\tcsv_plus_claims.size() = " << csv_plus_claims.size()
-        << "\n\tirr_on_surrender.size() = " << irr_on_surrender.size()
-        << "\n\tCurr_.LapseYear = " << Curr_.LapseYear
-        << "\n\tmax_length = " << max_length
-        ;
-os << "\n\tcash_flow = ";
-std::copy(cash_flow.begin(), cash_flow.end(), std::ostream_iterator<double>(os, " "));
-os << "\n\tcsv_plus_claims = ";
-std::copy(csv_plus_claims.begin(), csv_plus_claims.end(), std::ostream_iterator<double>(os, " "));
-os << "\n\tirr_on_surrender = ";
-std::copy(irr_on_surrender.begin(), irr_on_surrender.end(), std::ostream_iterator<double>(os, " "));
-os << "\n\n" ;
-#endif // DEBUGGING_IRR
+        full_name = (xslt_directory / filename).string();
         }
-
-    // ET !! std::vector<double> db_plus_claims = Curr_.EOYDeathBft + real_claims;
-    std::vector<double> db_plus_claims(Curr_.EOYDeathBft);
-    std::transform
-        (db_plus_claims.begin()
-        ,db_plus_claims.end()
-        ,real_claims.begin()
-        ,db_plus_claims.begin()
-        ,std::plus<double>()
-        );
-    std::vector<double> irr_on_death(Curr_.EOYDeathBft.size(), -1.0);
-    if(!Invar.IsInforce)
+    catch(boost::filesystem::filesystem_error const & e)
         {
-        irr
-            (cash_flow
-            ,db_plus_claims
-            ,irr_on_death
-            ,static_cast<std::vector<double>::size_type>(Curr_.LapseYear)
-            ,max_length
-            ,Invar.irr_precision
-            );
+        hobsons_choice()
+            << "Invalid file name '"
+            << filename
+            << "' or directory '"
+            << configurable_settings::instance().xslt_directory()
+            << "'."
+            << LMI_FLUSH
+            ;
+        return NULL;
         }
 
-    std::ofstream os
-        (file_name.c_str()
-        ,  std::ios_base::out
-         | std::ios_base::ate
-         | std::ios_base::app
+    xsltStylesheetPtr stylesheet
+        (xsltParseStylesheetFile(reinterpret_cast<xmlChar const*>(full_name.c_str()))
         );
 
-    os << "\n\nFOR BROKER-DEALER USE ONLY. NOT TO BE SHARED WITH CLIENTS.\n\n";
-
-    os << "ProducerName\t\t"      << Invar.value_str("ProducerName"   ) << '\n';
-    os << "ProducerStreet\t\t"    << Invar.value_str("ProducerStreet" ) << '\n';
-    os << "ProducerCity\t\t"      << Invar.value_str("ProducerCity"   ) << '\n';
-    os << "CorpName\t\t"          << Invar.value_str("CorpName"       ) << '\n';
-    os << "Insured1\t\t"          << Invar.value_str("Insured1"       ) << '\n';
-    os << "Gender\t\t"            << Invar.value_str("Gender"         ) << '\n';
-    os << "Smoker\t\t"            << Invar.value_str("Smoker"         ) << '\n';
-    os << "IssueAge\t\t"          << Invar.value_str("Age"            ) << '\n';
-    os << "InitBaseSpecAmt\t\t"   << Invar.value_str("InitBaseSpecAmt") << '\n';
-    os << "InitTermSpecAmt\t\t"   << Invar.value_str("InitTermSpecAmt") << '\n';
-    double total_spec_amt = Invar.InitBaseSpecAmt + Invar.InitTermSpecAmt;
-    os << "  Total:\t\t"     << value_cast<std::string>(total_spec_amt) << '\n';
-    os << "PolicyMktgName\t\t"    << Invar.value_str("PolicyMktgName" ) << '\n';
-    os << "PolicyLegalName\t\t"   << Invar.value_str("PolicyLegalName") << '\n';
-    os << "PolicyForm\t\t"        << Invar.value_str("PolicyForm"     ) << '\n';
-    os << "UWClass\t\t"           << Invar.value_str("UWClass"        ) << '\n';
-    os << "UWType\t\t"            << Invar.value_str("UWType"         ) << '\n';
-
-    // We surround the date in single quotes because one popular
-    // spreadsheet would otherwise interpret it as a date, which
-    // is likely not to fit in a default-width cell.
-    if(!global_settings::instance().regression_testing())
+    if (!stylesheet)
         {
-        // Skip security validation for the most privileged password.
-        validate_security(!global_settings::instance().ash_nazg());
-        os << "DatePrepared\t\t'" << calendar_date().str() << "'\n";
+        hobsons_choice()
+            << "Can't load xslt file '"
+            << filename
+            << "' in directory '"
+            << configurable_settings::instance().xslt_directory()
+            << "'."
+            << LMI_FLUSH
+            ;
+        return NULL;
         }
-    else
-        {
-        // For regression tests, use EffDate as date prepared,
-        // in order to avoid gratuitous failures.
-        os << "DatePrepared\t\t'" << Invar.EffDate << "'\n";
-        }
+    stylesheets[filename] = stylesheet;
+    return stylesheet;
+}
 
-        os << '\n';
+/// Custom deleter for xmlDocPtr shared_ptr
+///
+/// Use this class in a shared_ptr to free an xml document pointer using
+/// xmlFree method.
+/// The pointer to be freed should be allocated using libxml functions.
+///
+/// See boost::shared_ptr requirements for a deleter class:
+/// >> D  must be CopyConstructible.
+/// >> The copy constructor and destructor of D must not throw.
+/// >> The expression d(p) must be well-formed, must not invoke undefined
+/// >> behavior, and must not throw exceptions.
 
-    char const* cheaders[] =
-        {"PolicyYear"
-        ,"AttainedAge"
-        ,"DeathBenefitOption"
-        ,"EmployeeGrossPremium"
-        ,"CorporationGrossPremium"
-        ,"GrossWithdrawal"
-        ,"NewCashLoan"
-        ,"LoanBalance"
-// TODO ?? Add loan interest?
-        ,"Outlay"
-        ,"NetPremium"
-        ,"PremiumTaxLoad"
-        ,"DacTaxLoad"
-// TODO ?? Also:
-//   M&E
-//   stable value
-//   DAC- and premium-tax charge
-//   comp
-//   IMF
-//   custodial expense?
-//   account value released?
-        ,"PolicyFee"
-        ,"SpecifiedAmountLoad"
-        ,"MonthlyFlatExtra"
-        ,"MortalityCharge"
-        ,"NetMortalityCharge"
-        ,"AccountValueLoadAfterMonthlyDeduction"
-        ,"CurrentSeparateAccountInterestRate"
-        ,"CurrentGeneralAccountInterestRate"
-        ,"CurrentGrossInterestCredited"
-        ,"CurrentNetInterestCredited"
-        ,"GuaranteedAccountValue"
-        ,"GuaranteedNetCashSurrenderValue"
-        ,"GuaranteedYearEndDeathBenefit"
-        ,"CurrentAccountValue"
-        ,"CurrentNetCashSurrenderValue"
-        ,"CurrentYearEndDeathBenefit"
-        ,"IrrOnSurrender"
-        ,"IrrOnDeath"
-        ,"YearEndInforceLives"
-        ,"ClaimsPaid"
-        ,"NetClaims"
-        ,"ExperienceReserve"
-        ,"ProjectedMortalityCharge"
-        ,"KFactor"
-        ,"NetMortalityCharge0Int"
-        ,"NetClaims0Int"
-        ,"ExperienceReserve0Int"
-        ,"ProjectedMortalityCharge0Int"
-        ,"KFactor0Int"
-        ,"ProducerCompensation"
-        };
-
-    std::vector<std::vector<std::string> > sheaders;
-
-    unsigned int max_header_rows = 0;
-    for(unsigned int j = 0; j < lmi_array_size(cheaders); ++j)
-        {
-        std::istringstream iss(cheaders[j]);
-        std::vector<std::string> v;
-        std::copy
-            (std::istream_iterator<std::string>(iss)
-            ,std::istream_iterator<std::string>()
-            ,std::back_inserter(v)
-            );
-        sheaders.push_back(v);
-        max_header_rows = std::max(max_header_rows, v.size());
-        }
-    std::vector<std::vector<std::string> >::iterator shi;
-    for(shi = sheaders.begin(); shi != sheaders.end(); ++shi)
-        {
-        std::reverse(shi->begin(), shi->end());
-        shi->resize(max_header_rows);
-        std::reverse(shi->begin(), shi->end());
-        }
-    for(unsigned int j = 0; j < max_header_rows; ++j)
-        {
-        for(shi = sheaders.begin(); shi != sheaders.end(); ++shi)
+class XmlDocSharedPtrDeleter
+{
+  public:
+    void operator () (xmlDocPtr xml_doc)
+    {
+        try
             {
-            os << (*shi)[j] << '\t';
+            xmlFreeDoc(xml_doc);
             }
-        os << '\n';
-        }
-    os << '\n';
-
-    for(int j = 0; j < max_length; ++j)
-        {
-        os << (j + 1                                    ) << '\t';
-        os << (j + Invar.Age                            ) << '\t';
-
-        os << Invar.DBOpt[j]                              << '\t';
-
-        os << Invar.value_str("EeGrossPmt"            ,j) << '\t';
-        os << Invar.value_str("ErGrossPmt"            ,j) << '\t';
-        os << Invar.value_str("NetWD"                 ,j) << '\t'; // TODO ?? It's *gross* WD.
-        os << Invar.value_str("NewCashLoan"           ,j) << '\t';
-        os << Curr_.value_str("TotalLoanBalance"      ,j) << '\t';
-        os << Invar.value_str("Outlay"                ,j) << '\t';
-
-        os << Curr_.value_str("NetPmt"                ,j) << '\t';
-
-        os << Curr_.value_str("PremTaxLoad"           ,j) << '\t';
-        os << Curr_.value_str("DacTaxLoad"            ,j) << '\t';
-        os << Curr_.value_str("PolicyFee"             ,j) << '\t';
-        os << Curr_.value_str("SpecAmtLoad"           ,j) << '\t';
-        os << Invar.value_str("MonthlyFlatExtra"      ,j) << '\t';
-        os << Curr_.value_str("COICharge"             ,j) << '\t';
-        os << Curr_.value_str("NetCOICharge"          ,j) << '\t';
-        os << Curr_.value_str("SepAcctLoad"           ,j) << '\t';
-
-        os << Curr_.value_str("AnnSAIntRate"          ,j) << '\t';
-        os << Curr_.value_str("AnnGAIntRate"          ,j) << '\t';
-        os << Curr_.value_str("GrossIntCredited"      ,j) << '\t';
-        os << Curr_.value_str("NetIntCredited"        ,j) << '\t';
-
-        os << Guar_.value_str("AcctVal"               ,j) << '\t';
-        os << Guar_.value_str("CSVNet"                ,j) << '\t';
-        os << Guar_.value_str("EOYDeathBft"           ,j) << '\t';
-        os << Curr_.value_str("AcctVal"               ,j) << '\t';
-        os << Curr_.value_str("CSVNet"                ,j) << '\t';
-        os << Curr_.value_str("EOYDeathBft"           ,j) << '\t';
-
-        if(Invar.IsInforce)
+        catch(...)
             {
-            os << "(inforce)"                             << '\t';
-            os << "(inforce)"                             << '\t';
-            }
-        else
-            {
-            os << irr_on_surrender[j]                     << '\t';
-            os << irr_on_death[j]                         << '\t';
-            }
-
-        // First element of InforceLives is BOY--show only EOY.
-        os << value_cast<std::string>(Invar.InforceLives[1 + j]) << '\t';
-
-        os << Curr_.value_str("ClaimsPaid"            ,j) << '\t';
-        os << Curr_.value_str("NetClaims"             ,j) << '\t';
-        os << Curr_.value_str("ExperienceReserve"     ,j) << '\t';
-        os << Curr_.value_str("ProjectedCoiCharge"    ,j) << '\t';
-        os << Curr_.value_str("KFactor"               ,j) << '\t';
-
-        // Show experience-rating columns for current-expense, zero-
-        // interest basis if used, to support testing.
-        std::vector<e_run_basis> const& bases(ledger_values.GetRunBases());
-        if
-            (   bases.end()
-            !=  std::find(bases.begin(), bases.end(), e_run_curr_basis_sa_zero)
-            )
-            {
-            LedgerVariant const& Curr0 = ledger_values.GetCurrZero();
-            os << Curr0.value_str("NetCOICharge"          ,j) << '\t';
-            os << Curr0.value_str("NetClaims"             ,j) << '\t';
-            os << Curr0.value_str("ExperienceReserve"     ,j) << '\t';
-            os << Curr0.value_str("ProjectedCoiCharge"    ,j) << '\t';
-            os << Curr0.value_str("KFactor"               ,j) << '\t';
-            }
-        else
-            {
-            os << "0\t";
-            os << "0\t";
-            os << "0\t";
-            os << "0\t";
-            os << "0\t";
-            }
-
-        if
-            (   bases.end()
-            !=  std::find(bases.begin(), bases.end(), e_run_curr_basis_sa_half)
-            )
-            {
-            fatal_error()
-                << "Three-rate illustrations not supported."
+            warning()
+                << "A call to xmlFreeDoc failed."
                 << LMI_FLUSH
                 ;
             }
+    }
+    // default ctor, dtor and copy-ctor are ok
+};
 
-        os << Invar.value_str("ProducerCompensation"  ,j) << '\t';
+//=============================================================================
+LedgerFormatter::LedgerFormatter()
+    :ledger_values_(NULL)
+{
+}
 
-        os << '\n';
+//=============================================================================
+LedgerFormatter::LedgerFormatter(Ledger const & ledger_values)
+    :ledger_values_(&ledger_values)
+{
+}
+
+//=============================================================================
+LedgerFormatter::LedgerFormatter(LedgerFormatter const & rhs)
+    :ledger_values_(rhs.ledger_values_)
+{
+}
+
+//=============================================================================
+LedgerFormatter & LedgerFormatter::operator = (LedgerFormatter const & rhs)
+{
+    if (this != &rhs && ledger_values_ != rhs.ledger_values_)
+        {
+        ledger_values_ = rhs.ledger_values_;
+        xmlpp_document_light_ = rhs.xmlpp_document_light_;
+        xmlpp_document_heavy_ = rhs.xmlpp_document_heavy_;
+        }
+    return *this;
+}
+
+//=============================================================================
+xsltStylesheetPtr LedgerFormatter::GetStylesheet(std::string const & filename) const
+{
+    return LedgerFormatterFactory::Instance().GetStylesheet(filename);
+}
+
+//=============================================================================
+void LedgerFormatter::ResetXmlData()
+{
+    xmlpp_document_light_.reset();
+    xmlpp_document_heavy_.reset();
+}
+
+//=============================================================================
+xmlDoc const* LedgerFormatter::GetXmlDocLight() const
+{
+    if (!xmlpp_document_light_)
+    {
+        xmlpp_document_light_ = DoGenerateXml(true); // light_version
+        if (!xmlpp_document_light_)
+            return NULL;
+    }
+
+    return xmlpp_document_light_->cobj();
+}
+
+//=============================================================================
+xmlDoc const* LedgerFormatter::GetXmlDocHeavy() const
+{
+    if (!xmlpp_document_heavy_)
+    {
+        xmlpp_document_heavy_ = DoGenerateXml(true); // light_version
+        if (!xmlpp_document_heavy_)
+            return NULL;
+    }
+
+    return xmlpp_document_heavy_->cobj();
+}
+
+//=============================================================================
+LedgerFormatter::XmlDocumentSharedPtr LedgerFormatter::DoGenerateXml
+    (bool light_version
+    ) const
+{
+    if (ledger_values_)
+        {
+        XmlDocumentSharedPtr doc(new xml_lmi::Document);
+        xml_lmi::Element & root
+            = *(doc->create_root_node(ledger_values_->xml_root_name()));
+
+        ledger_values_->do_write(root, light_version);
+
+        return doc;
+        }
+
+    return XmlDocumentSharedPtr();
+}
+
+//=============================================================================
+void LedgerFormatter::FormatAsHtml(std::ostream & str) const
+{
+    XmlDocSharedPtr transformed_data = DoFormatAs
+        (configurable_settings::instance().xslt_html_filename()
+        ,GetXmlDocLight()
+        );
+
+    if (!transformed_data.get())
+        return;
+
+    char* buffer = NULL;
+    int bytes_written;
+
+    htmlDocDumpMemoryFormat
+        (transformed_data.get()         // xml document to write
+        ,reinterpret_cast<xmlChar**>(&buffer) // text buffer pointer, we own it
+        ,&bytes_written                 // text buffer size
+        ,true                           // indent the output
+        );
+    if(bytes_written >= 0)
+        {
+        boost::scoped_array<char> buffer_guard(buffer);
+
+        str.write(buffer, bytes_written);
         }
 }
 
+//=============================================================================
+void LedgerFormatter::FormatAsTabDelimited(std::ostream & str) const
+{
+    XmlDocSharedPtr transformed_data = DoFormatAs
+        (configurable_settings::instance().xslt_tab_delimited_filename()
+        ,GetXmlDocLight()
+        );
+
+    if (!transformed_data.get())
+        return;
+
+    char* buffer = NULL;
+    int bytes_written;
+
+    htmlDocDumpMemoryFormat
+        (transformed_data.get()         // xml document to write
+        ,reinterpret_cast<xmlChar**>(&buffer) // text buffer pointer, we own it
+        ,&bytes_written                 // text buffer size
+        ,false                          // do _not_ indent the output
+        );
+    if(bytes_written >= 0)
+        {
+        boost::scoped_array<char> buffer_guard(buffer);
+
+        str.write(buffer, bytes_written);
+        }
+}
+
+//=============================================================================
+void LedgerFormatter::FormatAsXslFo(std::ostream & str) const
+{
+    // xsl template to use depends on the ledger type
+    XmlDocSharedPtr transformed_data = DoFormatAs
+        (ledger_values_->GetLedgerType().str() + ".xsl"
+        ,GetXmlDocHeavy()
+        );
+
+    if (!transformed_data.get())
+        return;
+
+    char* buffer = NULL;
+    int bytes_written;
+
+    xmlDocDumpFormatMemory
+        (transformed_data.get()         // xml document to write
+        ,reinterpret_cast<xmlChar**>(&buffer) // text buffer pointer, we own it
+        ,&bytes_written                 // text buffer size
+        ,false                          // do _not_ indent the output
+        );
+    if(bytes_written >= 0)
+        {
+        boost::scoped_array<char> buffer_guard(buffer);
+
+        str.write(buffer, bytes_written);
+        }
+}
+
+//=============================================================================
+LedgerFormatter::XmlDocSharedPtr LedgerFormatter::DoFormatAs
+    (std::string const & xslt_filename
+    ,xmlDoc const* xml_doc
+    ) const
+{
+    if(xml_doc)
+        {
+        try
+            {
+            xsltStylesheetPtr stylesheet = GetStylesheet(xslt_filename);
+
+            xmlDocPtr transformed_data
+                (xsltApplyStylesheet
+                    (stylesheet
+                    ,const_cast<xmlDoc*>(xml_doc)
+                    ,NULL
+                    )
+                );
+
+            if (!transformed_data)
+                {
+                hobsons_choice()
+                    << "Error in xsltApplyStylesheet('"
+                    << xslt_filename
+                    << "', <ledger_xml_doc>)."
+                    << LMI_FLUSH
+                    ;
+                }
+
+            return XmlDocSharedPtr
+                (transformed_data
+                ,XmlDocSharedPtrDeleter()
+                );
+            }
+        catch(std::exception const & ex)
+            {
+            hobsons_choice()
+                << "Error while formatting xml data '"
+                << ex.what()
+                << "'."
+                << LMI_FLUSH;
+            }
+        }
+
+    return XmlDocSharedPtr();
+}
+
+//=============================================================================
+void LMI_SO PrintFormTabDelimited
+    (Ledger const&      ledger_values
+    ,std::string const& file_name
+    )
+{
+    LedgerFormatter formatter
+        (LedgerFormatterFactory::Instance().CreateFormatter(ledger_values)
+        );
+
+    std::ofstream ofs
+        (file_name.c_str()
+        ,std::ios_base::out | std::ios_base::trunc
+        );
+    formatter.FormatAsHtml(ofs);
+}

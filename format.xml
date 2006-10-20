@@ -1,0 +1,726 @@
+<?xml version="1.0"?>
+<!--
+    Column formatting information like number-formatting, title, etc.
+
+    Copyright (C) 2002, 2003, 2004, 2005, 2006 Gregory W. Chicares.
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License version 2 as
+    published by the Free Software Foundation.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+
+    http://savannah.nongnu.org/projects/lmi
+    email: <chicares@cox.net>
+    snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
+
+    $Id: format.xml,v 1.1.2.1 2006-10-20 17:46:02 etarassov Exp $
+
+    TODO Add default namespace declaration using our XMLSchema
+
+    TODO ?? Titles ought to be read from an external file that
+    permits flexible customization. Compliance might require that
+    'AcctVal_Current' be called "Cash Value" for one policy form,
+    and "Account Value" for another, in order to match the terms
+    used in the contract exactly. Therefore, these titles probably
+    belong in the product database, which permits variation by
+    product - though it does not accommodate strings as this is
+    written in 2006-07. DATABASE !! So consider adding them there
+    when the database is revamped.
+-->
+<columns xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="file:schema.xsd">
+    <column name="GuarMaxMandE">
+        <format>f4</format>
+    </column>
+    <column name="InitAnnGenAcctInt">
+        <format>f4</format>
+    </column>
+    <column name="InitAnnLoanCredRate">
+        <format>f4</format>
+    </column>
+    <column name="InitAnnLoanDueRate">
+        <format>f4</format>
+    </column>
+    <column name="InitAnnSepAcctGrossInt">
+        <format>f4</format>
+    </column>
+    <column name="InitAnnSepAcctCurrGross0Rate">
+        <format>f4</format>
+    </column>
+    <column name="InitAnnSepAcctCurrGrossHalfRate">
+        <format>f4</format>
+    </column>
+    <column name="InitAnnSepAcctNetInt">
+        <format>f4</format>
+    </column>
+    <column name="InitAnnSepAcctCurrNet0Rate">
+        <format>f4</format>
+    </column>
+    <column name="InitAnnSepAcctCurrNetHalfRate">
+        <format>f4</format>
+    </column>
+    <column name="InitAnnSepAcctGuarGross0Rate">
+        <format>f4</format>
+    </column>
+    <column name="InitAnnSepAcctGuarGrossHalfRate">
+        <format>f4</format>
+    </column>
+    <column name="InitAnnSepAcctGuarNet0Rate">
+        <format>f4</format>
+    </column>
+    <column name="InitAnnSepAcctGuarNetHalfRate">
+        <format>f4</format>
+    </column>
+    <column name="PostHoneymoonSpread">
+        <format>f4</format>
+    </column>
+    <column name="Preferred">
+        <format>f4</format>
+    </column>
+    <column name="PremTaxLoad">
+        <title basis="run_curr_basis">Curr Premium Tax Load</title>
+        <title basis="run_guar_basis">Guar Premium Tax Load</title>
+        <format>f4</format>
+    </column>
+    <column name="PremTaxRate">
+        <format>f4</format>
+    </column>
+    <column name="StatePremTaxRate">
+        <format>f4</format>
+    </column>
+
+    <!--
+        F3: scaled by 100, zero decimals, with '%' at end:
+        Format as percentage with no decimal places (##0%)
+    -->
+    <column name="GenAcctAllocation">
+        <format>f3</format>
+    </column>
+    <column name="SalesLoadRefund">
+        <format>f3</format>
+    </column>
+    <column name="SalesLoadRefundRate0">
+        <format>f3</format>
+    </column>
+    <column name="SalesLoadRefundRate1">
+        <format>f3</format>
+    </column>
+
+    <!--
+        F2: two decimals, commas
+        Format as a number with thousand separators and two decimal places (#,###,###.00)
+    -->
+    <column name="CountryCOIMultiplier">
+        <format>f2</format>
+    </column>
+    <column name="GuarPrem">
+        <format>f2</format>
+    </column>
+    <column name="InitGLP">
+        <format>f2</format>
+    </column>
+    <column name="InitGSP">
+        <format>f2</format>
+    </column>
+    <column name="InitPrem">
+        <format>f2</format>
+    </column>
+    <column name="InitSevenPayPrem">
+        <format>f2</format>
+    </column>
+    <column name="InitTgtPrem">
+        <format>f2</format>
+    </column>
+
+    <!--
+        F1: zero decimals, commas
+        Format as a number with thousand separators and no decimal places (#,###,###)
+    -->
+    <column name="Age">
+        <format>f1</format>
+    </column>
+    <column name="AvgFund">
+        <format>f1</format>
+    </column>
+    <column name="AllowDbo3">
+        <format>f1</format>
+    </column>
+    <column name="ChildRiderAmount">
+        <format>f1</format>
+    </column>
+    <column name="CustomFund">
+        <format>f1</format>
+    </column>
+    <column name="SupplementalReport">
+        <format>f1</format>
+    </column>
+    <column name="DBOptInitInteger">
+        <format>f1</format>
+    </column>
+    <column name="Dumpin">
+        <format>f1</format>
+    </column>
+    <column name="EndtAge">
+        <format>f1</format>
+    </column>
+    <column name="External1035Amount">
+        <format>f1</format>
+    </column>
+    <column name="GenderBlended">
+        <format>f1</format>
+    </column>
+    <column name="GenderDistinct">
+        <format>f1</format>
+    </column>
+    <column name="Has1035ExchCharge">
+        <format>f1</format>
+    </column>
+    <column name="HasADD">
+        <format>f1</format>
+    </column>
+    <column name="HasChildRider">
+        <format>f1</format>
+    </column>
+    <column name="HasHoneymoon">
+        <format>f1</format>
+    </column>
+    <column name="HasSpouseRider">
+        <format>f1</format>
+    </column>
+    <column name="HasTerm">
+        <format>f1</format>
+    </column>
+    <column name="HasWP">
+        <format>f1</format>
+    </column>
+    <column name="InforceMonth">
+        <format>f1</format>
+    </column>
+    <column name="InforceYear">
+        <format>f1</format>
+    </column>
+    <column name="InitBaseSpecAmt">
+        <format>f1</format>
+    </column>
+    <column name="InitTermSpecAmt">
+        <format>f1</format>
+    </column>
+    <column name="InitTotalSA">
+        <format>f1</format>
+    </column>
+    <column name="InforceIsMec">
+        <format>f1</format>
+    </column>
+    <column name="Internal1035Amount">
+        <format>f1</format>
+    </column>
+    <column name="IsInforce">
+        <format>f1</format>
+    </column>
+    <column name="IsMec">
+        <format>f1</format>
+    </column>
+    <column name="IsSubjectToIllustrationReg">
+        <format>f1</format>
+    </column>
+    <column name="LapseMonth">
+        <format>f1</format>
+    </column>
+    <column name="LapseYear">
+        <format>f1</format>
+    </column>
+    <column name="MaxDuration">
+        <format>f1</format>
+    </column>
+    <column name="MecMonth">
+        <format>f1</format>
+    </column>
+    <column name="MecYear">
+        <format>f1</format>
+    </column>
+    <column name="NoLapse">
+        <format>f1</format>
+    </column>
+    <column name="NoLapseAlwaysActive">
+        <format>f1</format>
+    </column>
+    <column name="NoLapseMinAge">
+        <format>f1</format>
+    </column>
+    <column name="NoLapseMinDur">
+        <format>f1</format>
+    </column>
+    <column name="NominallyPar">
+        <format>f1</format>
+    </column>
+    <column name="PremiumTaxLoadIsTiered">
+        <format>f1</format>
+    </column>
+    <column name="RetAge">
+        <format>f1</format>
+    </column>
+    <column name="SmokerBlended">
+        <format>f1</format>
+    </column>
+    <column name="SmokerDistinct">
+        <format>f1</format>
+    </column>
+    <column name="SpouseIssueAge">
+        <format>f1</format>
+    </column>
+    <column name="StatePremTaxLoad">
+        <format>f1</format>
+    </column>
+    <column name="UseExperienceRating">
+        <format>f1</format>
+    </column>
+    <column name="UsePartialMort">
+        <format>f1</format>
+    </column>
+
+    <!--
+        F3: scaled by 100, zero decimals, with '%' at end:
+        Format as percentage with no decimal places (##0%)
+    -->
+    <column name="CorridorFactor">
+        <title>Corridor Factor</title><!-- _____________ Corridor Factor -->
+        <format>f3</format>
+    </column>
+    <column name="FundAllocations">
+        <format>f3</format>
+    </column>
+    <column name="MaleProportion">
+        <format>f3</format>
+    </column>
+    <column name="NonsmokerProportion">
+        <format>f3</format>
+    </column>
+    <column name="PartMortTableMult">
+        <title>Partial Mortality Muliplier</title>
+        <format>f3</format>
+    </column>
+
+    <!--
+        F4: scaled by 100, two decimals, with '%' at end:
+        Format as percentage with two decimal places (##0.00%)
+    -->
+    <column name="AnnGAIntRate">
+        <title basis="run_curr_basis">Curr Ann Gen Acct Int Rate</title><!-- Curr Ann Gen Acct Int Rate -->
+        <title basis="run_guar_basis">Guar Ann Gen Acct Int Rate</title>
+        <format>f4</format>
+    </column>
+    <column name="AnnHoneymoonValueRate">
+        <title basis="run_curr_basis">Curr Ann Honeymoon Value Rate</title>
+        <title basis="run_guar_basis">Guar Ann Honeymoon Value Rate</title>
+        <format>f4</format>
+    </column>
+    <column name="AnnPostHoneymoonRate">
+        <title basis="run_curr_basis">Curr Post Honeymoon Rate</title>
+        <title basis="run_guar_basis">Guar Post Honeymoon Rate</title>
+        <format>f4</format>
+    </column>
+    <column name="AnnSAIntRate">
+        <title basis="run_curr_basis">Curr Ann Sep Acct Int Rate</title>
+        <title basis="run_guar_basis">Guar Ann Sep Acct Int Rate</title>
+        <format>f4</format>
+    </column>
+    <column name="CashFlowIRR">
+        <format>f4</format>
+    </column>
+    <column name="CorpTaxBracket">
+        <title>Corp Tax Bracket</title><!--  _____________ Corp Tax Bracket -->
+        <format>f4</format>
+    </column>
+    <column name="CurrMandE">
+        <title>Mortality and Expense Charge</title>
+        <format>f4</format>
+    </column>
+    <column name="DacTaxPremLoadRate">
+        <format>f4</format>
+    </column>
+    <column name="HoneymoonValueSpread">
+        <title>Honeymoon Value Spread</title>
+        <format>f4</format>
+    </column>
+    <column name="IndvTaxBracket">
+        <title>EE Tax Bracket</title><!-- _____________ EE Tax Bracket -->
+        <format>f4</format>
+    </column>
+    <column name="InforceHMVector">
+        <format>f4</format>
+    </column>
+
+    <column name="IrrCsv">
+        <title basis="run_curr_basis">Curr IRR on CSV</title><!-- _____________ Curr IRR on CSV -->
+        <title basis="run_guar_basis">Guar IRR on CSV</title><!-- _____________ Guar IRR on CSV -->
+        <format>f4</format>
+    </column>
+    <column name="IrrDb">
+        <title basis="run_curr_basis">Curr IRR on DB</title><!-- _____________ Curr IRR on DB -->
+        <title basis="run_guar_basis">Guar IRR on DB</title><!-- _____________ Guar IRR on DB -->
+        <format>f4</format>
+    </column>
+    <!--
+        Comment from ledger_xml_io.cpp
+    // TODO ?? This precision is inadequate; are all the others OK?
+    -->
+    <column name="KFactor">
+        <title basis="run_curr_basis">Experience Rating K Factor</title>
+        <format>f2</format>
+    </column>
+    <column name="LoanIntAccrued">
+        <title basis="run_curr_basis">Curr Loan Int Accrued</title>
+        <title basis="run_guar_basis">Guar Loan Int Accrued</title>
+        <format>f1</format>
+    </column>
+
+    <column name="MlyGAIntRate">
+        <title basis="run_curr_basis">Curr Monthly Gen Acct Int Rate</title>
+        <title basis="run_guar_basis">Guar Monthly Gen Acct Int Rate</title>
+        <format>f4</format>
+    </column>
+    <column name="MlyHoneymoonValueRate">
+        <title basis="run_curr_basis">Curr Monthly Honeymoon Val Rate</title>
+        <title basis="run_guar_basis">Guar Monthly Honeymoon Val Rate</title>
+        <format>f4</format>
+    </column>
+    <column name="MlyPostHoneymoonRate">
+        <title basis="run_curr_basis">Curr Monthly Post HM Rate</title>
+        <title basis="run_guar_basis">Guar Monthly Post HM Rate</title>
+        <format>f4</format>
+    </column>
+    <column name="MlySAIntRate">
+        <title basis="run_curr_basis">Curr Monthly Sep Acct Int Rate</title>
+        <title basis="run_guar_basis">Guar Monthly Sep Acct Int Rate</title>
+        <format>f4</format>
+    </column>
+    <column name="TotalIMF">
+        <title>Total Investment Mgt Fee</title>
+        <format>f4</format>
+    </column>
+
+    <!--
+        F0: zero decimals
+        Format as a number no thousand separator or decimal point (##0%)
+    -->
+    <column name="AttainedAge">
+        <title>End of Year Age</title><!-- _____________ End of __Year Age -->
+        <format>f1</format>
+    </column>
+    <!--
+        Comment form ledger_xml_io.cpp
+        // Not numeric.
+    -->
+    <column name="DBOpt">
+        <title>Death Benefit Option</title>
+    </column>
+    <column name="Duration">
+        <format>f1</format>
+    </column>
+    <column name="LapseYears">
+        <format>f1</format>
+    </column>
+    <column name="PolicyYear">
+        <title>Policy Year</title><!--  _____________ Policy __Year -->
+        <format>f1</format>
+    </column>
+
+    <!--
+        F2: two decimals, commas
+        Format as a number with thousand separators and two decimal places (#,###,###.00)
+    -->
+    <column name="AddonMonthlyFee">
+        <title>Additional Monthly Fee</title>
+        <format>f2</format>
+    </column>
+    <column name="MonthlyFlatExtra">
+        <title>Monthly Flat Extra</title><!-- _____________ Monthly Flat Extra -->
+        <format>f2</format>
+    </column>
+
+    <!--
+        F1: zero decimals, commas
+        Format as a number with thousand separators and no decimal places (#,###,##0)
+    -->
+    <column name="AcctVal">
+        <title basis="run_curr_basis">Curr Account Value</title>
+        <title basis="run_guar_basis">Guar Account Value</title>
+        <format>f1</format>
+    </column>
+    <column name="SepAcctLoad">
+        <title basis="run_curr_basis">Curr Sep Acct Load</title>
+        <title basis="run_guar_basis">Guar Sep Acct Load</title>
+        <format>f1</format>
+    </column>
+    <column name="AccumulatedPremium">
+        <format>f1</format>
+    </column>
+    <column name="AddonCompOnAssets">
+        <title>Additional Comp on Assets</title>
+        <format>f1</format>
+    </column>
+    <column name="AddonCompOnPremium">
+        <title>Additional Comp on Premium</title>
+        <format>f1</format>
+    </column>
+    <column name="AvgDeathBft">
+        <title basis="run_curr_basis">Curr Avg Death Benefit</title>
+        <title basis="run_guar_basis">Guar Avg Death Benefit</title>
+        <format>f1</format>
+    </column>
+    <column name="AVRelOnDeath">
+        <title basis="run_curr_basis">Account Value Released on Death</title><!-- Account Value ____Released on Death -->
+        <format>f1</format>
+    </column>
+    <column name="BaseDeathBft">
+        <title basis="run_curr_basis">Curr Base Death Benefit</title>
+        <title basis="run_guar_basis">Guar Base Death Benefit</title>
+        <format>f1</format>
+    </column>
+    <column name="BOYAssets">
+        <format>f1</format>
+    </column>
+    <column name="ClaimsPaid">
+        <title basis="run_curr_basis">Curr Claims Paid</title><!-- _____________ Curr Claims Paid -->
+        <title basis="run_guar_basis">Guar Claims Paid</title><!-- _____________ Guar Claims Paid -->
+        <format>f1</format>
+    </column>
+    <column name="COICharge">
+        <title basis="run_curr_basis">Curr COI Charge</title><!-- _____________ Curr COI Charge -->
+        <title basis="run_guar_basis">Guar COI Charge</title><!-- _____________ Guar COI Charge -->
+        <format>f1</format>
+    </column>
+    <column name="Composite">
+        <format>f1</format>
+    </column>
+    <column name="CSVNet">
+        <title basis="run_curr_basis">Curr Net Cash Surr Value</title>
+        <title basis="run_guar_basis">Guar Net Cash Surr Value</title>
+        <format>f1</format>
+    </column>
+    <column name="CV7702">
+        <title basis="run_curr_basis">Curr 7702 Cash Value</title>
+        <title basis="run_guar_basis">Guar 7702 Cash Value</title>
+        <format>f1</format>
+    </column>
+    <column name="DacTaxLoad">
+        <title basis="run_curr_basis">Curr DAC Tax Load</title><!-- _____________ Curr DAC Tax Load -->
+        <title basis="run_guar_basis">Guar DAC Tax Load</title><!-- _____________ Guar DAC Tax Load -->
+        <format>f1</format>
+    </column>
+    <column name="DacTaxRsv">
+        <title basis="run_curr_basis">Curr DAC Tax Reserve</title>
+        <title basis="run_guar_basis">Guar DAC Tax Reserve</title>
+        <format>f1</format>
+    </column>
+    <column name="DeathProceedsPaid">
+        <title basis="run_curr_basis">Curr Death Proceeds Paid</title>
+        <title basis="run_guar_basis">Guar Death Proceeds Paid</title>
+        <format>f1</format>
+    </column>
+    <column name="EeGrossPmt">
+        <title>EE Gross Payment</title><!-- ______ EE Gross Payment -->
+        <format>f1</format>
+    </column>
+    <!--
+        Comment from ledger_xml_io.cpp
+        // Not numeric.
+    -->
+    <column name="EeMode">
+        <title>EE Payment Mode</title>
+        <format>f1</format>
+    </column>
+    <!--
+        Comment from ledger_xml_io.cpp
+        // TODO ?? This can't be a mode. I don't know how it differs from 'EeGrossPmt' above.
+    -->
+    <column name="EePmt">
+        <title>EE Payment Mode</title>
+        <format>f1</format>
+    </column>
+    <column name="EOYDeathBft">
+        <title basis="run_curr_basis">Curr EOY Death Benefit</title>
+        <title basis="run_guar_basis">Guar EOY Death Benefit</title>
+        <format>f1</format>
+    </column>
+    <column name="ErGrossPmt">
+        <title>ER Gross Payment</title><!-- ______ ER Gross Payment -->
+        <format>f1</format>
+    </column>
+    <!--
+        Comment from ledger_xml_io.cpp
+        // Not numeric.
+    -->
+    <column name="ErMode">
+        <title>ER Payment Mode</title>
+        <format>f1</format>
+    </column>
+    <!--
+        Comment from ledger_xml_io.cpp
+        // TODO ?? This can't be a mode. I don't know how it differs from 'ErGrossPmt' above.
+    -->
+    <column name="ErPmt">
+        <title>ER Payment Mode</title>
+        <format>f1</format>
+    </column>
+    <column name="ExcessLoan">
+        <title basis="run_curr_basis">Curr Excess Loan</title>
+        <title basis="run_guar_basis">Guar Excess Loan</title>
+        <format>f1</format>
+    </column>
+    <column name="ExpenseCharges">
+        <title basis="run_curr_basis">Curr Expense Charge</title>
+        <title basis="run_guar_basis">Guar Expense Charge</title>
+        <format>f1</format>
+    </column>
+    <column name="ExperienceReserve">
+        <title basis="run_curr_basis">Experience Rating Reserve</title>
+        <format>f1</format>
+    </column>
+    <column name="FundNumbers">
+        <format>f1</format>
+    </column>
+    <column name="GptForceout">
+        <title>ForceOut</title>
+        <format>f1</format>
+    </column>
+    <column name="GrossIntCredited">
+        <title basis="run_curr_basis">Curr Gross Int Credited</title>
+        <title basis="run_guar_basis">Guar Gross Int Credited</title>
+        <format>f1</format>
+    </column>
+    <column name="GrossPmt">
+        <title>Premium Outlay</title>
+        <format>f1</format>
+    </column>
+    <!--
+        Comment from ledger_xml_io.cpp
+    // TODO ?? This precision is inadequate; are all the others OK?
+    -->
+    <column name="InforceLives">
+        <title>BOY Lives Inforce</title><!-- _____ BOY Lives Inforce -->
+        <format>f2</format>
+    </column>
+    <column name="Loads">
+        <format>f1</format>
+    </column>
+    <column name="NewCashLoan">
+        <title>Annual Loan</title><!-- ________ Annual Loan -->
+        <format>f1</format>
+    </column>
+    <column name="LoanInt">
+        <format>f1</format>
+    </column>
+    <!--
+    <column name="NaarForceout">
+        <title>Forced Withdrawal due to NAAR Limit</title>
+        <format>f1</format>
+    </column>
+    -->
+    <column name="NetClaims">
+        <title basis="run_curr_basis">Curr Net Claims</title><!-- _____________ Curr Net Claims -->
+        <title basis="run_guar_basis">Guar Net Claims</title><!-- _____________ Guar Net Claims -->
+        <format>f1</format>
+    </column>
+    <column name="NetCOICharge">
+        <title basis="run_curr_basis">Curr Net COI Charge</title><!-- _____________ Curr Net COI Charge -->
+        <format>f1</format>
+    </column>
+    <column name="NetDeathBenefit">
+        <title>Net Death Benefit</title>
+        <format>f1</format>
+    </column>
+    <column name="NetIntCredited">
+        <title basis="run_curr_basis">Curr Net Int Credited</title><!-- _____________ Curr Net Int Credited -->
+        <title basis="run_guar_basis">Guar Net Int Credited</title><!-- _____________ Guar Net Int Credited -->
+        <format>f1</format>
+    </column>
+    <column name="NetPmt">
+        <title basis="run_curr_basis">Curr Net Payment</title><!-- _____________ Curr Net Payment -->
+        <title basis="run_guar_basis">Guar Net Payment</title><!-- _____________ Guar Net Payment -->
+        <format>f1</format>
+    </column>
+    <column name="NetWD">
+        <title>Withdrawal</title><!-- _____________  _____________ Withdrawal -->
+        <format>f1</format>
+    </column>
+    <column name="Outlay">
+        <title>Net Outlay</title>
+        <format>f1</format>
+    </column>
+    <column name="PolicyFee">
+        <title basis="run_curr_basis">Curr Policy Fee</title><!-- Curr ____Policy Fee -->
+        <title basis="run_guar_basis">Guar Policy Fee</title><!-- Guar ____Policy Fee -->
+        <format>f1</format>
+    </column>
+    <column name="PrefLoanBalance">
+        <title basis="run_curr_basis">Curr Preferred Loan Bal</title>
+        <title basis="run_guar_basis">Guar Preferred Loan Bal</title>
+        <format>f1</format>
+    </column>
+    <!--
+        Comment from ledger_xml_io.cpp
+        // TODO ?? Excluded because it's defectively implemented
+    -->
+    <column name="ProducerCompensation">
+        <!--
+        <title>Producer Compensation</title>
+        -->
+        <format>f1</format>
+    </column>
+    <column name="ProjectedCoiCharge">
+        <title basis="run_curr_basis">Experience Rating Projected COI Charge</title>
+        <format>f1</format>
+    </column>
+    <column name="RefundableSalesLoad">
+        <title>Refundable Sales Load</title><!-- _____________ Refundable Sales Load -->
+        <format>f1</format>
+    </column>
+    <column name="Salary">
+        <title>Salary</title><!-- _____________  _____________ Salary -->
+        <format>f1</format>
+    </column>
+    <column name="SpecAmt">
+        <title>Specified Amount</title><!-- _____________ Specified Amount -->
+        <format>f1</format>
+    </column>
+    <column name="SpecAmtLoad">
+        <title basis="run_curr_basis">Curr Spec Amt Load</title><!-- _____________ Curr Spec Amt Load -->
+        <title basis="run_guar_basis">Guar Spec Amt Load</title><!-- _____________ Guar Spec Amt Load -->
+        <format>f1</format>
+    </column>
+    <column name="SpouseRiderAmount">
+        <format>f1</format>
+    </column>
+    <column name="SurrChg">
+        <title basis="run_curr_basis">Curr Surr Charge</title><!-- _____________ Curr Surr Charge -->
+        <title basis="run_guar_basis">Guar Surr Charge</title><!-- _____________ Guar Surr Charge -->
+        <format>f1</format>
+    </column>
+    <column name="TermPurchased">
+        <title basis="run_curr_basis">Curr Term Amt Purchased</title>
+        <title basis="run_guar_basis">Guar Term Amt Purchased</title>
+        <format>f1</format>
+    </column>
+    <column name="TermSpecAmt">
+        <title>Term Specified Amount</title>
+        <format>f1</format>
+    </column>
+    <column name="TgtPrem">
+        <title>Target Premium</title><!-- _____________ Target Premium -->
+        <format>f1</format>
+    </column>
+    <column name="TotalLoanBalance">
+        <title basis="run_curr_basis">Curr Total Loan Balance</title>
+        <title basis="run_guar_basis">Guar Total Loan Balance</title>
+        <format>f1</format>
+    </column>
+</columns>

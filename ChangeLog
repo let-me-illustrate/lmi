@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.462.2.16 2006-10-20 14:14:37 etarassov Exp $
+// $Id: ChangeLog,v 1.462.2.17 2006-10-20 17:46:02 etarassov Exp $
 
 MAINTENANCE
 
@@ -7862,4 +7862,33 @@ summary is generated.
 
   illustration_view.cpp
 Use ostringstream instead of stringstream.
+
+20061020T1559Z <etarassov@tt-solutions.com> [1174]
+
+  xml_lmi.hpp
+  xml_lmi.cpp
+Initialize underlying DomParser to substitue entities and skip DTD validation.
+
+20061020T1838Z <etarassov@tt-solutions.com> [1174]
+
+  common.xsl
+  configurable_settings.cpp
+  configurable_settings.hpp
+  configure.ac
+  format.xml
+  GNUMakefile
+  html.xsl
+  illustration_view.cpp
+  illustration_view.hpp
+  ledger.hpp
+  ledger_text_formats.cpp
+  ledger_text_formats.hpp
+  ledger_xml_io.cpp
+  ledger_xsl.cpp
+  Makefile.am
+  objects.make
+  schema.xsd
+  tab_delimited.xsl
+  xml_resources_test.cpp
+Initial commit of Calculation summary patch.
 

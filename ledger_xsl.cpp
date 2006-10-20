@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xsl.cpp,v 1.10 2006-01-29 13:52:00 chicares Exp $
+// $Id: ledger_xsl.cpp,v 1.10.2.1 2006-10-20 17:46:02 etarassov Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -31,6 +31,7 @@
 #include "alert.hpp"
 #include "configurable_settings.hpp"
 #include "ledger.hpp"
+#include "ledger_text_formats.hpp"
 #include "path_utility.hpp"
 #include "system_command.hpp"
 
@@ -40,28 +41,6 @@
 
 #include <ios>
 #include <sstream>
-
-namespace
-{
-fs::path xsl_filepath(Ledger const& ledger)
-{
-    std::string xsl_name = ledger.GetLedgerType().str() + ".xsl";
-    fs::path fo_dir(configurable_settings::instance().xsl_fo_directory());
-    fs::path xsl_file(fo_dir / xsl_name);
-    if(!fs::exists(xsl_file))
-        {
-        fatal_error()
-            << "Unable to read file '"
-            << xsl_file.string()
-            << "' required for ledger type '"
-            << ledger.GetLedgerType()
-            << "'."
-            << LMI_FLUSH
-            ;
-        }
-    return xsl_file;
-}
-} // Unnamed namespace.
 
 std::string write_ledger_to_pdf
     (Ledger const&      ledger
@@ -96,9 +75,8 @@ std::string write_ledger_to_pdf
         :   "output"
         );
 
-    fs::path xml_out_file = unique_filepath(fo_dir / real_filename, ".xml");
+    fs::path xsl_fo_out_file = unique_filepath(fo_dir / real_filename, ".xml");
 
-    fs::ofstream ofs(xml_out_file, std::ios_base::out | std::ios_base::trunc);
     // Scale a copy of the 'ledger' argument. The original must not be
     // modified because scaling is not reentrant. TODO ?? However,
     // that problem is not avoided here, because what is scaled is
@@ -106,19 +84,25 @@ std::string write_ledger_to_pdf
     // of problems in the ledger-class implementation.
     Ledger scaled_ledger(ledger);
     scaled_ledger.AutoScale();
-    scaled_ledger.write(ofs);
-    ofs.close();
 
-    fs::path xsl_file = xsl_filepath(ledger);
+    LedgerFormatter formatter
+        (LedgerFormatterFactory::Instance().CreateFormatter(scaled_ledger)
+        );
+
+    fs::ofstream ofs
+        (xsl_fo_out_file
+        ,std::ios_base::out | std::ios_base::trunc
+        );
+    formatter.FormatAsXslFo(ofs);
+    ofs.close();
 
     fs::path pdf_out_file = unique_filepath(fo_dir / real_filename, ".pdf");
 
     std::ostringstream oss;
     oss
         << configurable_settings::instance().xsl_fo_command()
-        << " -xsl "  << '"' << xsl_file.string()     << '"'
-        << " -xml "  << '"' << xml_out_file.string() << '"'
-        << " "       << '"' << pdf_out_file.string() << '"'
+        << " -fo "  << '"' << xsl_fo_out_file.string() << '"'
+        << " -pdf " << '"' << pdf_out_file.string()    << '"'
         ;
 
     int rc = system_command(oss.str());

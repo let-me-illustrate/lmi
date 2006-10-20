@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger.hpp,v 1.13.2.4 2006-10-18 01:20:16 chicares Exp $
+// $Id: ledger.hpp,v 1.13.2.5 2006-10-20 17:46:02 etarassov Exp $
 
 #ifndef ledger_hpp
 #define ledger_hpp
@@ -140,6 +140,14 @@ class LMI_SO Ledger
     // iterating across all bases without exposing the map's data_type,
     // from which we want to shield other classes where possible.
     std::vector<e_run_basis> run_bases_;
+
+  private:
+    friend class LedgerFormatter;
+
+    // We need to generate different variants of xml:
+    // - light version, when the speed is crucial
+    // - heavy variant, when we need all the information
+    void do_write(xml_lmi::Element&, bool light_version) const;
 };
 
 inline ledger_map_holder const& Ledger::GetLedgerMap() const

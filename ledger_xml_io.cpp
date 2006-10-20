@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xml_io.cpp,v 1.48.2.7 2006-10-20 00:25:12 chicares Exp $
+// $Id: ledger_xml_io.cpp,v 1.48.2.8 2006-10-20 17:46:02 etarassov Exp $
 
 #include "ledger.hpp"
 
@@ -37,6 +37,8 @@
 #include "version.hpp"
 #include "xml_lmi.hpp"
 
+#include <boost/filesystem/exception.hpp>
+#include <boost/filesystem/path.hpp>
 #include <libxml++/libxml++.h>
 
 #include <fstream>
@@ -53,19 +55,24 @@ void Ledger::read(xml_lmi::Element const&)
 
 namespace
 {
+
+typedef std::vector< double      > double_vector_t;
+typedef std::vector< std::string > string_vector_t;
+
 int const n = 7;
 
+// TODO ?? consider using shortcuts such as 'curr', 'guar', etc.
 char const* char_p_suffixes[n] =
-    {"_Current"        // e_run_curr_basis
-    ,"_Guaranteed"     // e_run_guar_basis
-    ,"_Midpoint"       // e_run_mdpt_basis
-    ,"_CurrentZero"    // e_run_curr_basis_sa_zero
-    ,"_GuaranteedZero" // e_run_guar_basis_sa_zero
-    ,"_CurrentHalf"    // e_run_curr_basis_sa_half
-    ,"_GuaranteedHalf" // e_run_guar_basis_sa_half
+    {"run_curr_basis"         // e_run_curr_basis
+    ,"run_guar_basis"         // e_run_guar_basis
+    ,"run_mdpt_basis"         // e_run_mdpt_basis
+    ,"run_curr_basis_sa_zero" // e_run_curr_basis_sa_zero
+    ,"run_guar_basis_sa_zero" // e_run_guar_basis_sa_zero
+    ,"run_curr_basis_sa_half" // e_run_curr_basis_sa_half
+    ,"run_guar_basis_sa_half" // e_run_guar_basis_sa_half
     };
 
-std::vector<std::string> const suffixes
+string_vector_t const suffixes
     (char_p_suffixes
     ,char_p_suffixes + n
     );
@@ -75,7 +82,7 @@ std::vector<std::string> enum_vector_to_string_vector
     (std::vector<xenum<EnumType, N> > const& ve
     )
 {
-    std::vector<std::string> vs;
+    string_vector_t vs;
     typename std::vector<xenum<EnumType, N> >::const_iterator ve_i;
     for(ve_i = ve.begin(); ve_i != ve.end(); ++ve_i)
         {
@@ -84,60 +91,47 @@ std::vector<std::string> enum_vector_to_string_vector
     return vs;
 }
 
-// The std::pair argument is notionally <int precision, bool percentage>.
-std::string format(double d, std::pair<int,bool> f)
+/// double_formatter_t implements the double number formatting into strings
+///
+/// Internally define a set of allowed formats (f1, f2, f3, f4, bp?).
+/// Make sure this list corresponds to formats described in 'schema.xsd' file.
+/// At initialisation read column formats from 'format.xml'.
+///
+/// if SHOW_MISSING_FORMATS is defined, log all missing format requests
+/// into 'missing_formats' file
+
+class double_formatter_t
 {
-    std::stringstream interpreter;
-    std::locale loc;
-    std::locale new_loc(loc, new comma_punct);
-    interpreter.imbue(new_loc);
-    interpreter.setf(std::ios_base::fixed, std::ios_base::floatfield);
-    interpreter.precision(f.first);
-    std::string s;
-    if(f.second)
-        {
-        d *= 100;
-        }
-    interpreter << d;
-    interpreter >> s;
-    if(!interpreter.eof())
-        {
-        fatal_error() << "Formatting error." << LMI_FLUSH;
-        }
+  public:
+    double_formatter_t();
 
-    if(f.second)
-        {
-        s += '%';
-        }
+    bool            has_format(std::string const & s) const;
+    std::string     format(std::string const & s, double d) const;
+    string_vector_t format(std::string const & s, double_vector_t const & dv) const;
 
-#if defined __GNUC__ && LMI_GCC_VERSION <= 40001
-    // COMPILER !! Work around a gcc defect fixed in gcc-4.0.1: see
-    //   http://gcc.gnu.org/bugzilla/show_bug.cgi?id=20914
-    static std::string const old_string("-,");
-    static std::string const new_string("-");
-    std::string::size_type position = s.find(old_string);
-    while(position != std::string::npos)
-        {
-        s.replace(position, old_string.length(), new_string);
-        position = s.find(old_string, 1 + position);
-        }
-#endif // gcc version less than 4.0.1 .
+  private:
+    // Double conversion units
+    // It is a <double coefficient, string suffix>.
+    typedef std::pair<double,std::string> unit_t;
+    // Double to string conversion format.
+    // It is notionally <int precision, unit_t units>.
+    typedef std::pair<int,unit_t> format_t;
 
-    return s;
-}
+    // Map value name to the corresponding format
+    typedef std::map<std::string, format_t> format_map_t;
 
-std::vector<std::string> format(std::vector<double> dv, std::pair<int,bool> f)
-{
-    std::vector<std::string> sv;
-    for(unsigned int j = 0; j < dv.size(); ++j)
-        {
-        sv.push_back(format(dv[j], f));
-        }
-    return sv;
-}
+    format_map_t format_map;
 
-typedef std::map<std::string, std::pair<int, bool> > format_map_t;
-typedef std::map<std::string, std::string> title_map_t;
+    format_t get_format(std::string const & s) const;
+    std::string do_format(double d, format_t const & f) const;
+
+#if SHOW_MISSING_FORMATS
+    static std::string missing_formats_filename()
+    {
+        return "missing_formats";
+    }
+#endif // SHOW_MISSING_FORMATS
+};
 
 // Look at file 'missing_formats'. It's important. You want
 // it to be empty; once it is, you can suppress the code that creates
@@ -172,19 +166,19 @@ typedef std::map<std::string, std::string> title_map_t;
 //
 // > Format as a number with thousand separators and no decimal places (#,###,##0)
 // >
-// > AcctVal_*
+// > AcctVal
+// > SepAcctLoad
 // > AccumulatedPremium
 //
 // I translated that into
 //
 //    format_map["AcctVal"                           ] = f1;
+//    format_map["SepAcctLoad"                       ] = f1;
 //    format_map["AccumulatedPremium"                ] = f1;
 //
 // where 'f1' is one of several formats I abstracted from your specs
 // at the top level. For names formed as
-//   basename + '_' + suffix
-// the map needs only the basename, which makes things a lot
-// terser, simpler, and likelier to be right.
+//   basename
 //
 // This translation is just text transformations on your specs.
 // I imported your specs and then did regex search-and-replace
@@ -196,432 +190,278 @@ typedef std::map<std::string, std::string> title_map_t;
 // Searching for the first occurrence of, say, 'f1' will take you
 // to the section where I analyze your formats. It's marked with
 // your name in caps so that you can find it easily.
-//
-// BTW, part of your specs included suffixes like "_Current", but
-// for the most part you omitted them. I didn't rectify that, so
-// would you please do the honors? For instance:
-//    format_map["AnnHoneymoonValueRate_Current"     ] = f4;
-//    format_map["AnnPostHoneymoonRate"              ] = f4;
-// Right now, the second gets formatted, but the first doesn't.
-// Lookups in the format map are strict, and they have to be,
-// else one key like "A" would match anything beginning with
-// that letter.
 
-bool format_exists(std::string const& s, std::string const& suffix, format_map_t const& m)
+double_formatter_t::double_formatter_t()
 {
-    if(m.end() != m.find(s))
-        {
-        return true;
-        }
-    else
-        {
-(void)suffix;
-#if defined SHOW_MISSING_FORMATS
-        std::ofstream ofs("missing_formats", std::ios_base::out | std::ios_base::ate | std::ios_base::app);
-        ofs << s << suffix << "\n";
-#endif // defined SHOW_MISSING_FORMATS
-        return false;
-        }
-}
-
-} // Unnamed namespace.
-
-void Ledger::write(xml_lmi::Element& x) const
-{
-    title_map_t title_map;
-
-// Can't seem to get a literal &nbsp; into the output.
-
-// Original:   title_map["AttainedAge"                     ] = " &#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0; End of &#xA0;&#xA0;Year Age";
-// No good:    title_map["AttainedAge"                     ] = " &&#xA0;&&#xA0;&&#xA0;&&#xA0;&&#xA0;&&#xA0;&&#xA0;&&#xA0;&&#xA0;&&#xA0;&&#xA0;&&#xA0;&&#xA0; End of &&#xA0;&&#xA0;Year Age";
-// No good:    title_map["AttainedAge"                     ] = " &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; End of &nbsp;&nbsp;Year Age";
-// No good:    title_map["AttainedAge"                     ] = " &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; End of &amp;nbsp;&amp;nbsp;Year Age";
-// No good:    title_map["AttainedAge"                     ] = "<![CDATA[ &#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0; End of &#xA0;&#xA0;Year Age]]>";
-// No good:    title_map["AttainedAge"                     ] = " בבבבבבבבבבבבב End of בבYear Age";
-// No good:    title_map["AttainedAge"                     ] = " &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; End of &#160;&#160;Year Age";
-
-//  Here are the columns to be listed in the user interface
-//  as well as their corresponding titles.
-
-    // Current and guaranteed variants are generally given for columns
-    // that vary by basis. Some offer only a current variant because
-    // they are defined only on a current basis--experience-rating
-    // columns, e.g.
-
-    title_map["AVRelOnDeath_Current"            ] = "Account Value ____Released on Death";
-    title_map["AcctVal_Current"                 ] = " _____________ Curr Account Value";
-    title_map["AcctVal_Guaranteed"              ] = " _____________ Guar Account Value";
-    title_map["AddonCompOnAssets"               ] = "Additional Comp on Assets";
-    title_map["AddonCompOnPremium"              ] = "Additional Comp on Premium";
-    title_map["AddonMonthlyFee"                 ] = "Additional Monthly Fee";
-    title_map["AnnGAIntRate_Current"            ] = " _____________ Curr Ann Gen Acct Int Rate";
-    title_map["AnnGAIntRate_Guaranteed"         ] = " _____________ Guar Ann Gen Acct Int Rate";
-    title_map["AnnHoneymoonValueRate_Current"   ] = "Curr Ann Honeymoon Value Rate";
-    title_map["AnnHoneymoonValueRate_Guaranteed"] = "Guar Ann Honeymoon Value Rate";
-    title_map["AnnPostHoneymoonRate_Current"    ] = "Curr Post Honeymoon Rate";
-    title_map["AnnPostHoneymoonRate_Guaranteed" ] = "Guar Post Honeymoon Rate";
-    title_map["AnnSAIntRate_Current"            ] = " _____________ Curr Ann Sep Acct Int Rate";
-    title_map["AnnSAIntRate_Guaranteed"         ] = " _____________ Guar Ann Sep Acct Int Rate";
-    title_map["AttainedAge"                     ] = " _____________ _____________ End of __Year Age";
-    title_map["AvgDeathBft_Current"             ] = "Curr Avg Death Benefit";
-    title_map["AvgDeathBft_Guaranteed"          ] = "Guar Avg Death Benefit";
-    title_map["BaseDeathBft_Current"            ] = " _____________ Curr Base Death Benefit";
-    title_map["BaseDeathBft_Guaranteed"         ] = " _____________ Guar Base Death Benefit";
-    title_map["COICharge_Current"               ] = " _____________ _____________ Curr COI Charge";
-    title_map["COICharge_Guaranteed"            ] = " _____________ _____________ Guar COI Charge";
-    title_map["CSVNet_Current"                  ] = " _____________ Curr Net Cash Surr Value";
-    title_map["CSVNet_Guaranteed"               ] = " _____________ Guar Net Cash Surr Value";
-    title_map["CV7702_Current"                  ] = "Curr 7702 Cash Value";
-    title_map["CV7702_Guaranteed"               ] = "Guar 7702 Cash Value";
-    title_map["ClaimsPaid_Current"              ] = " _____________ _______ Curr ___Claims ___Paid";
-    title_map["ClaimsPaid_Guaranteed"           ] = " _____________ _______ Guar ___Claims ___Paid";
-    title_map["CorpTaxBracket"                  ] = " _____________ Corp Tax Bracket";
-    title_map["CorridorFactor"                  ] = " _____________ _____________ Corridor Factor";
-    title_map["CurrMandE"                       ] = "Mortality and Expense Charge";
-    title_map["DBOpt"                           ] = "Death Benefit Option";
-    title_map["DacTaxLoad_Current"              ] = " _____________ Curr DAC Tax Load";
-    title_map["DacTaxLoad_Guaranteed"           ] = " _____________ Guar DAC Tax Load";
-    title_map["DacTaxRsv_Current"               ] = "Curr DAC Tax Reserve";
-    title_map["DacTaxRsv_Guaranteed"            ] = "Guar DAC Tax Reserve";
-    title_map["DeathProceedsPaid_Current"       ] = " _____________ Curr Death Proceeds Paid";
-    title_map["DeathProceedsPaid_Guaranteed"    ] = " _____________ Guar Death Proceeds Paid";
-    title_map["EOYDeathBft_Current"             ] = " _____________ Curr EOY Death Benefit";
-    title_map["EOYDeathBft_Guaranteed"          ] = " _____________ Guar EOY Death Benefit";
-    title_map["EeGrossPmt"                      ] = " _____________ ______ EE Gross Payment";
-    title_map["EeMode"                          ] = "EE Payment Mode";
-// TODO ?? This can't be a mode. I don't know how it differs from 'EeGrossPmt' above.
-    title_map["EePmt"                           ] = "EE Payment Mode";
-    title_map["ErGrossPmt"                      ] = " _____________ ______ ER Gross Payment";
-    title_map["ErMode"                          ] = "ER Payment Mode";
-// TODO ?? This can't be a mode. I don't know how it differs from 'ErGrossPmt' above.
-    title_map["ErPmt"                           ] = "ER Payment Mode";
-    title_map["ExcessLoan_Current"              ] = " _ Curr Excess Loan";
-    title_map["ExcessLoan_Guaranteed"           ] = "Guar Excess Loan";
-    title_map["ExpenseCharges_Current"          ] = "Curr Expense Charge";
-    title_map["ExpenseCharges_Guaranteed"       ] = "Guar Expense Charge";
-    title_map["ExperienceReserve_Current"       ] = " _____________ Experience Rating Reserve";
-    title_map["GptForceout"                     ] = "Forceout";
-    title_map["GrossIntCredited_Current"        ] = "Curr Gross Int Credited";
-    title_map["GrossIntCredited_Guaranteed"     ] = "Guar Gross Int Credited";
-    title_map["GrossPmt"                        ] = " _____________ _____________ Premium Outlay";
-    title_map["HoneymoonValueSpread"            ] = "Honeymoon Value Spread";
-    title_map["IndvTaxBracket"                  ] = " _____________ EE Tax Bracket";
-    title_map["InforceLives"                    ] = " _____________ ______BOY _______Lives _______Inforce";
-    title_map["IrrCsv_Current"                  ] = " _____________ _____________ Curr IRR on CSV";
-    title_map["IrrCsv_Guaranteed"               ] = " _____________ _____________ Guar IRR on CSV";
-    title_map["IrrDb_Current"                   ] = " _____________ _____________ Curr IRR on DB";
-    title_map["IrrDb_Guaranteed"                ] = " _____________ _____________ Guar IRR on DB";
-    title_map["KFactor_Current"                 ] = " _____________ Experience _______Rating K Factor";
-    title_map["LoanIntAccrued_Current"          ] = " _____________ ____Curr Loan Int __Accrued";
-    title_map["LoanIntAccrued_Guaranteed"       ] = " _____________ ____Guar Loan Int __Accrued";
-    title_map["MlyGAIntRate_Current"            ] = "Curr Monthly Gen Acct Int Rate";
-    title_map["MlyGAIntRate_Guaranteed"         ] = "Guar Monthly Gen Acct Int Rate";
-    title_map["MlyHoneymoonValueRate_Current"   ] = "Curr Monthly Honeymoon Value Rate";
-    title_map["MlyHoneymoonValueRate_Guaranteed"] = "Guar Monthly Honeymoon Value Rate";
-    title_map["MlyPostHoneymoonRate_Current"    ] = "Curr Monthly Post Honeymoon Rate";
-    title_map["MlyPostHoneymoonRate_Guaranteed" ] = "Guar Monthly Post Honeymoon Rate";
-    title_map["MlySAIntRate_Current"            ] = "Curr Monthly Sep Acct Int Rate";
-    title_map["MlySAIntRate_Guaranteed"         ] = "Guar Monthly Sep Acct Int Rate";
-    title_map["MonthlyFlatExtra"                ] = " _____________ Monthly Flat Extra";
-//    title_map["NaarForceout"                    ] = "Forced Withdrawal due to NAAR Limit";
-    title_map["NetCOICharge_Current"            ] = "Experience _______Rating _______Net COI Charge";
-    title_map["NetClaims_Current"               ] = " _____________ _____________ Curr Net Claims";
-    title_map["NetClaims_Guaranteed"            ] = " _____________ _____________ Guar Net Claims";
-    title_map["NetIntCredited_Current"          ] = " _____________ Curr Net Int Credited";
-    title_map["NetIntCredited_Guaranteed"       ] = " _____________ Guar Net Int Credited";
-    title_map["NetPmt_Current"                  ] = " _____________ Curr Net Payment";
-    title_map["NetPmt_Guaranteed"               ] = " _____________ Guar Net Payment";
-    title_map["NetWD"                           ] = " _____________ _____________ _____________ Withdrawal";
-    title_map["NewCashLoan"                     ] = " _____________ _____________ Annual Loan";
-    title_map["Outlay"                          ] = " _____________ _____________ ____Net Outlay";
-    title_map["PartMortTableMult"               ] = "Partial Mortality Muliplier";
-    title_map["PolicyFee_Current"               ] = "Curr ____Policy Fee";
-    title_map["PolicyFee_Guaranteed"            ] = "Guar ____Policy Fee";
-    title_map["PolicyYear"                      ] = " _____________ _____________ Policy __Year";
-    title_map["PrefLoanBalance_Current"         ] = "Curr Preferred Loan Bal";
-    title_map["PrefLoanBalance_Guaranteed"      ] = "Guar Preferred Loan Bal";
-    title_map["PremTaxLoad_Current"             ] = "Curr Premium Tax Load";
-    title_map["PremTaxLoad_Guaranteed"          ] = "Guar Premium Tax Load";
-// TODO ?? Excluded because it's defectively implemented:
-//    title_map["ProducerCompensation"            ] = " _____________ Producer Compensation";
-    title_map["ProjectedCoiCharge_Current"      ] = "Experience Rating Projected COI Charge";
-    title_map["RefundableSalesLoad"             ] = " _____________ Refundable Sales Load";
-    title_map["Salary"                          ] = " _____________ _____________ Salary";
-    title_map["SepAcctLoad_Current"             ] = "Curr Sep Acct Load";
-    title_map["SepAcctLoad_Guaranteed"          ] = "Guar Sep Acct Load";
-    title_map["SpecAmt"                         ] = " _____________ _____________ Specified Amount";
-    title_map["SpecAmtLoad_Current"             ] = " _____________ Curr Spec Amt Load";
-    title_map["SpecAmtLoad_Guaranteed"          ] = " _____________ Guar Spec Amt Load";
-    title_map["SurrChg_Current"                 ] = " _____________ Curr Surr Charge";
-    title_map["SurrChg_Guaranteed"              ] = " _____________ Guar Surr Charge";
-    title_map["TermPurchased_Current"           ] = " _____________ Curr Term Amt Purchased";
-    title_map["TermPurchased_Guaranteed"        ] = " _____________ Guar Term Amt Purchased";
-    title_map["TermSpecAmt"                     ] = " _____________ Term Specified Amount";
-    title_map["TgtPrem"                         ] = " _____________ Target Premium";
-    title_map["TotalIMF"                        ] = "Total Investment Mgt Fee";
-    title_map["TotalLoanBalance_Current"        ] = " _____________ Curr Total Loan Balance";
-    title_map["TotalLoanBalance_Guaranteed"     ] = " _____________ Guar Total Loan Balance";
-
-    // TODO ?? Titles ought to be read from an external file that
-    // permits flexible customization. Compliance might require that
-    // 'AcctVal_Current' be called "Cash Value" for one policy form,
-    // and "Account Value" for another, in order to match the terms
-    // used in the contract exactly. Therefore, these titles probably
-    // belong in the product database, which permits variation by
-    // product--though it does not accommodate strings as this is
-    // written in 2006-07. DATABASE !! So consider adding them there
-    // when the database is revamped.
-
+#ifdef SHOW_MISSING_FORMATS
     {
-#if defined SHOW_MISSING_FORMATS
-    std::ofstream ofs("missing_formats", std::ios_base::out | std::ios_base::trunc);
+    std::ofstream ofs(missing_formats_filename().c_str(), std::ios_base::out | std::ios_base::trunc);
     ofs << "No format found for the following numeric data.\n";
     ofs << "These data were therefore not written to xml.\n";
-#endif // defined SHOW_MISSING_FORMATS
     }
+#endif // defined SHOW_MISSING_FORMATS
 
 // Here's my top-level analysis of the formatting specification.
 //
 // Formats
 //
-// F0: zero decimals
-// F1: zero decimals, commas
-// F2: two decimals, commas
-// F3: scaled by 100, zero decimals, with '%' at end:
-// F4: scaled by 100, two decimals, with '%' at end:
+// f0: zero decimals
+// f1: zero decimals, commas
+// f2: two decimals, commas
+// f3: scaled by 100, zero decimals, with '%' at end:
+// f4: scaled by 100, two decimals, with '%' at end:
+// bp: scaled by 10000, two decimals, with 'bp' at end:
 //
 // Presumably all use commas as thousands-separators, so that
 // an IRR of 12345.67% would be formatted as "12,345.67%".
 //
 // So the differences are:
-//   'precision' (number of decimal places)
-//   percentage (scaled by 100, '%' at end) or not
+//   'precision'      (number of decimal places)
+//   'scaling factor' (1 by default, 100 for percents, 1000 for 'bp')
+//   'units'          (empty by default, '%' for percents, 'bp' for bp)
 // and therefore F0 is equivalent to F1
 
-    std::pair<int, bool> f1(0, false);
-    std::pair<int, bool> f2(2, false);
-    std::pair<int, bool> f3(0, true);
-    std::pair<int, bool> f4(2, true);
+    unit_t units_default  (1.    , ""  );
+    unit_t units_percents (100.  , "%" );
+    unit_t units_bp       (10000., "bp");
 
-    format_map_t format_map;
+    format_t f1(0, units_default );
+    format_t f2(2, units_default );
+    format_t f3(0, units_percents);
+    format_t f4(2, units_percents);
+    format_t bp(2, units_bp      );
 
-// > Special Formatting for Scalar Items
-// >
-// F4: scaled by 100, two decimals, with '%' at end:
-// > Format as percentage "0.00%"
-// >
-    format_map["GuarMaxMandE"                      ] = f4;
-    format_map["InitAnnGenAcctInt"                 ] = f4;
-    format_map["InitAnnLoanCredRate"               ] = f4;
-    format_map["InitAnnLoanDueRate"                ] = f4;
-    format_map["InitAnnSepAcctCurrGross0Rate"      ] = f4;
-    format_map["InitAnnSepAcctCurrGrossHalfRate"   ] = f4;
-    format_map["InitAnnSepAcctCurrNet0Rate"        ] = f4;
-    format_map["InitAnnSepAcctCurrNetHalfRate"     ] = f4;
-    format_map["InitAnnSepAcctGrossInt"            ] = f4;
-    format_map["InitAnnSepAcctGuarGross0Rate"      ] = f4;
-    format_map["InitAnnSepAcctGuarGrossHalfRate"   ] = f4;
-    format_map["InitAnnSepAcctGuarNet0Rate"        ] = f4;
-    format_map["InitAnnSepAcctGuarNetHalfRate"     ] = f4;
-    format_map["InitAnnSepAcctNetInt"              ] = f4;
-    format_map["PostHoneymoonSpread"               ] = f4;
-    format_map["Preferred"                         ] = f4;
-    format_map["PremTaxLoad"                       ] = f4;
-    format_map["PremTaxRate"                       ] = f4;
-    format_map["StatePremTaxRate"                  ] = f4;
+    std::map<std::string, format_t> known_formats;
 
-// F3: scaled by 100, zero decimals, with '%' at end:
-// > Format as percentage with no decimal places (##0%)
-    format_map["GenAcctAllocation"                 ] = f3;
-    format_map["SalesLoadRefund"                   ] = f3;
-    format_map["SalesLoadRefundRate0"              ] = f3;
-    format_map["SalesLoadRefundRate1"              ] = f3;
+    known_formats["f0"] = f1;
+    known_formats["f1"] = f1;
+    known_formats["f2"] = f2;
+    known_formats["f3"] = f3;
+    known_formats["f4"] = f4;
+    known_formats["bp"] = bp;
 
-// >
-// F2: two decimals, commas
-// > Format as a number with thousand separators and two decimal places (#,###,###.00)
-// >
-    format_map["CountryCOIMultiplier"              ] = f2;
-    format_map["GuarPrem"                          ] = f2;
-    format_map["InitGLP"                           ] = f2;
-    format_map["InitGSP"                           ] = f2;
-    format_map["InitPrem"                          ] = f2;
-    format_map["InitSevenPayPrem"                  ] = f2;
-    format_map["InitTgtPrem"                       ] = f2;
-// >
-// F1: zero decimals, commas
-// > Format as a number with thousand separators and no decimal places (#,###,###)
-// >
-    format_map["Age"                               ] = f1;
-    format_map["AllowDbo3"                         ] = f1;
-    format_map["AvgFund"                           ] = f1;
-    format_map["ChildRiderAmount"                  ] = f1;
-    format_map["CustomFund"                        ] = f1;
-    format_map["DBOptInitInteger"                  ] = f1;
-    format_map["Dumpin"                            ] = f1;
-    format_map["EndtAge"                           ] = f1;
-    format_map["External1035Amount"                ] = f1;
-    format_map["GenderBlended"                     ] = f1;
-    format_map["GenderDistinct"                    ] = f1;
-    format_map["Has1035ExchCharge"                 ] = f1;
-    format_map["HasADD"                            ] = f1;
-    format_map["HasChildRider"                     ] = f1;
-    format_map["HasHoneymoon"                      ] = f1;
-    format_map["HasSpouseRider"                    ] = f1;
-    format_map["HasTerm"                           ] = f1;
-    format_map["HasWP"                             ] = f1;
-    format_map["InforceIsMec"                      ] = f1;
-    format_map["InforceMonth"                      ] = f1;
-    format_map["InforceYear"                       ] = f1;
-    format_map["InitBaseSpecAmt"                   ] = f1;
-    format_map["InitTermSpecAmt"                   ] = f1;
-    format_map["InitTotalSA"                       ] = f1;
-    format_map["Internal1035Amount"                ] = f1;
-    format_map["IsInforce"                         ] = f1;
-    format_map["IsMec"                             ] = f1;
-    format_map["LapseMonth"                        ] = f1;
-    format_map["LapseYear"                         ] = f1;
-    format_map["MaxDuration"                       ] = f1;
-    format_map["MecMonth"                          ] = f1;
-    format_map["MecYear"                           ] = f1;
-    format_map["NoLapse"                           ] = f1;
-    format_map["NoLapseAlwaysActive"               ] = f1;
-    format_map["NoLapseMinAge"                     ] = f1;
-    format_map["NoLapseMinDur"                     ] = f1;
-    format_map["NominallyPar"                      ] = f1;
-    format_map["PremiumTaxLoadIsTiered"            ] = f1;
-    format_map["RetAge"                            ] = f1;
-    format_map["SmokerBlended"                     ] = f1;
-    format_map["SmokerDistinct"                    ] = f1;
-    format_map["SpouseIssueAge"                    ] = f1;
-    format_map["StatePremTaxLoad"                  ] = f1;
-    format_map["SupplementalReport"                ] = f1;
-    format_map["UseExperienceRating"               ] = f1;
-    format_map["UsePartialMort"                    ] = f1;
+    // read all the formatting information from "format.xml" file
+    std::string format_path;
+    try
+    {
+        boost::filesystem::path xslt_directory = configurable_settings::instance().xslt_directory();
+        format_path  =
+            (xslt_directory / configurable_settings::instance().xslt_format_xml_filename()
+            ).string();
+    }
+    catch(boost::filesystem::filesystem_error const & e)
+    {
+        hobsons_choice()
+            << "Invalid directory '"
+            << configurable_settings::instance().xslt_directory()
+            << "' or filename '"
+            << configurable_settings::instance().xslt_format_xml_filename()
+            << "' specified."
+            << e.what()
+            << LMI_FLUSH
+            ;
+    }
 
-// > Vector Formatting
-// >
-// > Here are the vectors enumerated
-// >
-// F3: scaled by 100, zero decimals, with '%' at end:
-// > Format as percentage with no decimal places (##0%)
-// >
-    format_map["CorridorFactor"                    ] = f3;
-    format_map["FundAllocations"                   ] = f3;
-    format_map["MaleProportion"                    ] = f3;
-    format_map["NonsmokerProportion"               ] = f3;
-    format_map["PartMortTableMult"                 ] = f3;
+    try
+        {
+        xml_lmi::dom_parser parser(format_path);
 
-// >
-// F4: scaled by 100, two decimals, with '%' at end:
-// > Format as percentage with two decimal places (##0.00%)
-// >
-    format_map["AnnGAIntRate"                      ] = f4;
-    format_map["AnnHoneymoonValueRate"             ] = f4;
-    format_map["AnnPostHoneymoonRate"              ] = f4;
-    format_map["AnnSAIntRate"                      ] = f4;
-    format_map["CashFlowIRR"                       ] = f4;
-    format_map["CorpTaxBracket"                    ] = f4;
-    format_map["CurrMandE"                         ] = f4;
-    format_map["DacTaxPremLoadRate"                ] = f4;
-    format_map["HoneymoonValueSpread"              ] = f4;
-    format_map["IndvTaxBracket"                    ] = f4;
-    format_map["InforceHMVector"                   ] = f4;
+        // We will not check 'format.xml' for validity here. It should be done during tests.
+        xml_lmi::Element const& root_node = parser.root_node("columns");
 
-    format_map["IrrCsv_Current"                    ] = f4;
-    format_map["IrrCsv_CurrentZero"                ] = f4;
-    format_map["IrrCsv_Guaranteed"                 ] = f4;
-    format_map["IrrCsv_GuaranteedZero"             ] = f4;
-    format_map["IrrDb_Current"                     ] = f4;
-    format_map["IrrDb_CurrentZero"                 ] = f4;
-    format_map["IrrDb_Guaranteed"                  ] = f4;
-    format_map["IrrDb_GuaranteedZero"              ] = f4;
+        xml_lmi::NodeContainer const columns = root_node.get_children("column");
+        for
+            (xml_lmi::NodeContainer::const_iterator it = columns.begin()
+            ,end = columns.end()
+            ;it != end
+            ;++it
+            )
+            {
+            xml_lmi::Element const* column_element
+                = dynamic_cast<xml_lmi::Element const*>(*it);
+            // a 'column' node is not an element node, skip it
+            if(!column_element)
+                {
+                continue;
+                }
 
-    format_map["MlyGAIntRate"                      ] = f4;
-    format_map["MlyHoneymoonValueRate"             ] = f4;
-    format_map["MlyPostHoneymoonRate"              ] = f4;
-    format_map["MlySAIntRate"                      ] = f4;
-    format_map["TotalIMF"                          ] = f4;
-// >
-// F0: zero decimals
-// > Format as a number no thousand separator or decimal point (##0%)
-// >
-    format_map["AttainedAge"                       ] = f1;
-    format_map["Duration"                          ] = f1;
-    format_map["LapseYears"                        ] = f1;
-    format_map["PolicyYear"                        ] = f1;
-// >
-// F2: two decimals, commas
-// > Format as a number with thousand separators and two decimal places (#,###,###.00)
-// >
-    format_map["AddonMonthlyFee"                   ] = f2;
-// TODO ?? The precision of 'InforceLives' and 'KFactor' is inadequate.
-// Is every other format OK?
-    format_map["InforceLives"                      ] = f2;
-    format_map["KFactor"                           ] = f2;
-    format_map["MonthlyFlatExtra"                  ] = f2;
-// >
-// F1: zero decimals, commas
-// > Format as a number with thousand separators and no decimal places (#,###,##0)
-// >
-    format_map["AcctVal"                           ] = f1;
-    format_map["AccumulatedPremium"                ] = f1;
-    format_map["AddonCompOnAssets"                 ] = f1;
-    format_map["AddonCompOnPremium"                ] = f1;
-    format_map["AvgDeathBft"                       ] = f1;
-    format_map["AVRelOnDeath"                      ] = f1;
-    format_map["BaseDeathBft"                      ] = f1;
-    format_map["BOYAssets"                         ] = f1;
-    format_map["ClaimsPaid"                        ] = f1;
-    format_map["COICharge"                         ] = f1;
-    format_map["Composite"                         ] = f1;
-    format_map["CSVNet"                            ] = f1;
-    format_map["CV7702"                            ] = f1;
-    format_map["DacTaxLoad"                        ] = f1;
-    format_map["DacTaxRsv"                         ] = f1;
-    format_map["DeathProceedsPaid"                 ] = f1;
-    format_map["EeGrossPmt"                        ] = f1;
-//    format_map["EeMode"                            ] = f1; // Not numeric.
-    format_map["EePmt"                             ] = f1;
-    format_map["EOYDeathBft"                       ] = f1;
-    format_map["ErGrossPmt"                        ] = f1;
-//    format_map["ErMode"                            ] = f1; // Not numeric.
-    format_map["ErPmt"                             ] = f1;
-    format_map["ExcessLoan"                        ] = f1;
-    format_map["ExpenseCharges"                    ] = f1;
-    format_map["ExperienceReserve"                 ] = f1;
-    format_map["FundNumbers"                       ] = f1;
-    format_map["GptForceout"                       ] = f1;
-    format_map["GrossIntCredited"                  ] = f1;
-    format_map["GrossPmt"                          ] = f1;
-    format_map["Loads"                             ] = f1;
-    format_map["LoanInt"                           ] = f1;
-    format_map["LoanIntAccrued"                    ] = f1;
-    format_map["NaarForceout"                      ] = f1;
-    format_map["NetClaims"                         ] = f1;
-    format_map["NetCOICharge"                      ] = f1;
-    format_map["NetIntCredited"                    ] = f1;
-    format_map["NetPmt"                            ] = f1;
-    format_map["NetWD"                             ] = f1;
-    format_map["NewCashLoan"                       ] = f1;
-    format_map["Outlay"                            ] = f1;
-    format_map["PolicyFee"                         ] = f1;
-    format_map["PrefLoanBalance"                   ] = f1;
-    format_map["PremTaxLoad"                       ] = f1;
-    format_map["ProducerCompensation"              ] = f1;
-    format_map["ProjectedCoiCharge"                ] = f1;
-    format_map["RefundableSalesLoad"               ] = f1;
-    format_map["Salary"                            ] = f1;
-    format_map["SepAcctLoad"                       ] = f1;
-    format_map["SpecAmt"                           ] = f1;
-    format_map["SpecAmtLoad"                       ] = f1;
-    format_map["SpouseRiderAmount"                 ] = f1;
-    format_map["SurrChg"                           ] = f1;
-    format_map["TermPurchased"                     ] = f1;
-    format_map["TermSpecAmt"                       ] = f1;
-    format_map["TgtPrem"                           ] = f1;
-    format_map["TotalLoanBalance"                  ] = f1;
+            xml_lmi::Attribute const* name_attribute = column_element->get_attribute("name");
+            // a 'column' node has to have @name attribute
+            if(!name_attribute)
+                {
+                continue;
+                }
+            std::string const name = name_attribute->get_value();
 
+            xml_lmi::NodeContainer const formats = (*it)->get_children("format");
+            // skip nodes without format information
+            if(formats.empty())
+                {
+                continue;
+                }
+
+            xml_lmi::Element const* format_element
+                = dynamic_cast<xml_lmi::Element const*>(*formats.begin());
+            // a 'column/format' node is not an element node, skip it
+            if(!format_element)
+                {
+                continue;
+                }
+
+            // format has already been specified. show a warning and continue
+            if(format_map.find(name) != format_map.end())
+                {
+                warning()
+                    << "Formats file '"
+                    << format_path
+                    << "' contains more than one format definition for '"
+                    << name
+                    << "' on line "
+                    << format_element->get_line()
+                    << "."
+                    << LMI_FLUSH;
+                }
+
+            std::string const format_name = xml_lmi::get_content(*format_element);
+
+            // unknown format specified
+            if(known_formats.find(format_name) == known_formats.end())
+                {
+                warning()
+                    << "Unknown format '"
+                    << format_name
+                    << "' specified in '"
+                    << format_path
+                    << "'."
+                    << LMI_FLUSH;
+                }
+            format_map[name] = known_formats[format_name];
+            }
+
+        if(format_map.empty())
+            {
+            std::ostringstream oss;
+            oss
+                << "Could not read no format definitions from '"
+                << format_path
+                << "'. File is empty or has invalid format."
+                ;
+            throw std::runtime_error(oss.str());
+            }
+        }
+    catch(std::exception const & e)
+        {
+        warning()
+            << "Error reading format information from '"
+            << format_path
+            << "'. Error: "
+            << e.what()
+            << LMI_FLUSH
+            ;
+        }
+}
+
+bool double_formatter_t::has_format(std::string const & s) const
+{
+    format_map_t::const_iterator it = format_map.find(s);
+    if (it == format_map.end())
+    {
+#ifdef SHOW_MISSING_FORMATS
+        std::ofstream ofs("missing_formats", std::ios_base::out | std::ios_base::ate | std::ios_base::app);
+        ofs << s << "\n";
+#endif // defined SHOW_MISSING_FORMATS
+        return false;
+    }
+    return true;
+}
+
+double_formatter_t::format_t
+double_formatter_t::get_format(std::string const & s) const
+{
+    format_map_t::const_iterator it = format_map.find(s);
+    if (it == format_map.end())
+        {
+        hobsons_choice()
+            << "Unknown column name '"
+            << s
+            << "' encountered."
+            << LMI_FLUSH
+            ;
+        // use default format
+        return format_t(2, unit_t(1., ""));
+        }
+    return it->second;
+}
+
+std::string double_formatter_t::format(std::string const & name, double d) const
+{
+    format_t f = get_format(name);
+
+    return do_format(d, f);
+}
+
+string_vector_t double_formatter_t::format(std::string const & s, double_vector_t const & dv) const
+{
+    format_t f = get_format(s);
+    string_vector_t sv;
+    for(double_vector_t::const_iterator it = dv.begin(),
+                                       end = dv.end();
+                                       it != end; ++it)
+        {
+        sv.push_back( do_format(*it, f) );
+        }
+    return sv;
+}
+
+std::string double_formatter_t::do_format(double d, format_t const & f) const
+{
+    std::stringstream interpreter;
+    std::locale loc;
+    std::locale new_loc(loc, new comma_punct);
+    interpreter.imbue(new_loc);
+    interpreter.setf(std::ios_base::fixed, std::ios_base::floatfield);
+    interpreter.precision(f.first);
+    std::string s;
+    unit_t const & units = f.second;
+    if(units.first != 1.) d *= units.first;
+    interpreter << d;
+    interpreter >> s;
+    if(!units.second.empty()) s += units.second;
+    if(!interpreter.eof())
+        {
+        fatal_error() << "Format error" << LMI_FLUSH;
+        }
+    return s;
+}
+
+// --------------------------------------------------------------
+// a column is identified by its name and an optional basis value
+// --------------------------------------------------------------
+typedef std::pair<std::string, std::string const*> value_id;
+
+value_id make_value_id(std::string const & name)
+{
+    return value_id(name, NULL);
+}
+
+value_id make_value_id(std::string const & name, e_run_basis const & basis)
+{
+    return value_id(name, &suffixes[basis]);
+}
+
+} // Unnamed namespace.
+
+// ---------------------
+// Ledger implementation
+// ---------------------
+void Ledger::write(xml_lmi::Element& illustration) const
+{
+    // by default generate a full version (not a light_version)
+    do_write(illustration, false);
+}
+
+void Ledger::do_write(xml_lmi::Element& illustration, bool light_version) const
+{
     // This is a little tricky. We have some stuff that
     // isn't in the maps inside the ledger classes. We're going to
     // stuff it into a copy of the invariant-ledger class's data.
@@ -631,28 +471,30 @@ void Ledger::write(xml_lmi::Element& x) const
     //
     // First we make a copy of the invariant ledger:
 
-    double_vector_map   vectors = ledger_invariant_->AllVectors;
-    scalar_map          scalars = ledger_invariant_->AllScalars;
-    string_map          strings = ledger_invariant_->Strings;
+    double_vector_map vectors = ledger_invariant_->AllVectors;
+    scalar_map        scalars = ledger_invariant_->AllScalars;
+    string_map        strings = ledger_invariant_->Strings;
 
     // Now we add the stuff that wasn't in the invariant
     // ledger's class's maps (indexable by name). Because we're
     // working with maps of pointers, we need pointers here.
     //
-    // The IRRs are the worst of all.
-
-    if(!ledger_invariant_->IsInforce)
+    // The IRRs are the worst of all. Only calculate it if e_xml_variant_heavy.
+    if(!light_version)
         {
-        ledger_invariant_->CalculateIrrs(*this);
+        if(!ledger_invariant_->IsInforce)
+            {
+            ledger_invariant_->CalculateIrrs(*this);
+            }
+        vectors["IrrCsv_GuaranteedZero" ] = &ledger_invariant_->IrrCsvGuar0    ;
+        vectors["IrrDb_GuaranteedZero"  ] = &ledger_invariant_->IrrDbGuar0     ;
+        vectors["IrrCsv_CurrentZero"    ] = &ledger_invariant_->IrrCsvCurr0    ;
+        vectors["IrrDb_CurrentZero"     ] = &ledger_invariant_->IrrDbCurr0     ;
+        vectors["IrrCsv_Guaranteed"     ] = &ledger_invariant_->IrrCsvGuarInput;
+        vectors["IrrDb_Guaranteed"      ] = &ledger_invariant_->IrrDbGuarInput ;
+        vectors["IrrCsv_Current"        ] = &ledger_invariant_->IrrCsvCurrInput;
+        vectors["IrrDb_Current"         ] = &ledger_invariant_->IrrDbCurrInput ;
         }
-    vectors["IrrCsv_GuaranteedZero" ] = &ledger_invariant_->IrrCsvGuar0    ;
-    vectors["IrrDb_GuaranteedZero"  ] = &ledger_invariant_->IrrDbGuar0     ;
-    vectors["IrrCsv_CurrentZero"    ] = &ledger_invariant_->IrrCsvCurr0    ;
-    vectors["IrrDb_CurrentZero"     ] = &ledger_invariant_->IrrDbCurr0     ;
-    vectors["IrrCsv_Guaranteed"     ] = &ledger_invariant_->IrrCsvGuarInput;
-    vectors["IrrDb_Guaranteed"      ] = &ledger_invariant_->IrrDbGuarInput ;
-    vectors["IrrCsv_Current"        ] = &ledger_invariant_->IrrCsvCurrInput;
-    vectors["IrrDb_Current"         ] = &ledger_invariant_->IrrDbCurrInput ;
 
 // GetMaxLength() is max *composite* length.
 //    int max_length = GetMaxLength();
@@ -673,8 +515,8 @@ void Ledger::write(xml_lmi::Element& x) const
         AttainedAge[j] = 1 + j + issue_age;
         }
 
-// TODO ?? An attained-age column is meaningless in a composite. So
-// are several others--notably those affected by partial mortaility.
+// STEVEN What about the composite? I think you want to avoid using
+// an attained-age column there, because it'd be meaningless.
     vectors["AttainedAge"] = &AttainedAge;
     vectors["PolicyYear" ] = &PolicyYear ;
 
@@ -692,9 +534,7 @@ void Ledger::write(xml_lmi::Element& x) const
     // define and store their own derived-column definitions. For now,
     // however, code changes are required, and this is as appropriate
     // a place as any to make them.
-
     LedgerVariant const& Curr_ = GetCurrFull();
-
     // ET !! Easier to write as
     //   std::vector<double> NetDeathBenefit =
     //     Curr_.EOYDeathBft - Curr_.TotalLoanBalance;
@@ -706,13 +546,8 @@ void Ledger::write(xml_lmi::Element& x) const
         ,NetDeathBenefit.begin()
         ,std::minus<double>()
         );
-
-    vectors   ["NetDeathBenefit"] = &NetDeathBenefit ;
-    title_map ["NetDeathBenefit"] = " _____________ __Net __Death Benefit";
-    format_map["NetDeathBenefit"] = f1;
-
+    vectors["NetDeathBenefit"] = &NetDeathBenefit ;
     // [End of derived columns.]
-
     double Composite = GetIsComposite();
     scalars["Composite"] = &Composite;
 
@@ -758,6 +593,10 @@ void Ledger::write(xml_lmi::Element& x) const
     scalars["SalesLoadRefundRate0"] = &SalesLoadRefundRate0;
     scalars["SalesLoadRefundRate1"] = &SalesLoadRefundRate1;
 
+    // IsSubjectToIllustrationReg
+    double IsSubjectToIllustrationReg = is_subject_to_ill_reg(GetLedgerType());
+    scalars["IsSubjectToIllustrationReg"] = &IsSubjectToIllustrationReg;
+
     std::string ScaleUnit = ledger_invariant_->ScaleUnit();
     strings["ScaleUnit"] = &ScaleUnit;
 
@@ -777,27 +616,37 @@ void Ledger::write(xml_lmi::Element& x) const
     std::string LmiVersion(LMI_VERSION);
     strings["LmiVersion"] = &LmiVersion;
 
-    // Maps to hold the results of formatting numeric data.
+    // Maps to hold the numeric data.
 
-    std::map<std::string, std::string> stringscalars;
-    std::map<std::string, std::vector<std::string> > stringvectors;
+    typedef std::pair<std::string, std::string const*> value_id;
 
-    stringvectors["FundNames"] = ledger_invariant_->FundNames;
+    typedef std::map<value_id, double>            double_scalar_map_t;
+    typedef std::map<value_id, double_vector_t >  double_vector_map_t;
+    typedef std::map<value_id, std::string>       string_scalar_map_t;
+    typedef std::map<value_id, string_vector_t >  string_vector_map_t;
+
+    double_scalar_map_t double_scalars;
+    double_vector_map_t double_vectors;
+    string_scalar_map_t string_scalars;
+    string_vector_map_t string_vectors;
+
+    string_vectors[ make_value_id("FundNames") ] = ledger_invariant_->FundNames;
 
     // Map the data, formatting it as necessary.
+
+    // initialize number formatting facility
+    double_formatter_t formatter;
 
     // First we'll get the invariant stuff--the copy we made,
     // along with all the stuff we plugged into it above.
 
-    std::string suffix = "";
     for
         (scalar_map::const_iterator j = scalars.begin()
         ;j != scalars.end()
         ;++j
         )
         {
-        if(format_exists(j->first, suffix, format_map))
-            stringscalars[j->first + suffix] = format(*j->second, format_map[j->first]);
+        double_scalars[ make_value_id( j->first ) ] = *j->second;
         }
     for
         (string_map::const_iterator j = strings.begin()
@@ -805,7 +654,7 @@ void Ledger::write(xml_lmi::Element& x) const
         ;++j
         )
         {
-        stringscalars[j->first + suffix] = *j->second;
+        string_scalars[ make_value_id( j->first ) ] = *j->second;
         }
     for
         (double_vector_map::const_iterator j = vectors.begin()
@@ -813,13 +662,12 @@ void Ledger::write(xml_lmi::Element& x) const
         ;++j
         )
         {
-        if(format_exists(j->first, suffix, format_map))
-            stringvectors[j->first + suffix] = format(*j->second, format_map[j->first]);
+        double_vectors[ make_value_id( j->first ) ] = *j->second;
         }
 
-//    stringscalars["GuarMaxMandE"] = format(*scalars["GuarMaxMandE"], 2, true);
-//    stringvectors["CorridorFactor"] = format(*vectors["CorridorFactor"], 0, true);
-//    stringscalars["InitAnnGenAcctInt_Current"] = format(*scalars["InitAnnGenAcctInt_Current"], 0, true);
+//    doublescalars[make_value_id("GuarMaxMandE")] = *scalars[make_value_id("GuarMaxMandE")];
+//    stringvectors[make_value_id("CorridorFactor")] = double_vector_to_string_vector(*vectors[make_value_id("CorridorFactor")]);
+//    doublescalars[make_value_id("InitAnnGenAcctInt", e_run_curr_basis)] = *scalars[make_value_id("InitAnnGenAcctInt", e_run_curr_basis)];
 
     // That was the tricky part. Now it's all downhill.
 
@@ -827,24 +675,23 @@ void Ledger::write(xml_lmi::Element& x) const
     ledger_map::const_iterator i = l_map_rep.begin();
     for(;i != l_map_rep.end(); i++)
         {
-        std::string suffix = suffixes[i->first];
         for
             (scalar_map::const_iterator j = i->second.AllScalars.begin()
             ;j != i->second.AllScalars.end()
             ;++j
             )
             {
-//            scalars[j->first + suffix] = j->second;
-            if(format_exists(j->first, suffix, format_map))
-                stringscalars[j->first + suffix] = format(*j->second, format_map[j->first]);
+            double_scalars[ make_value_id( j->first, i->first ) ] = *j->second;
             }
+        // TODO ?? 'strings' variable is not going to be referenced by the rest
+        // of the code, why do we want to modify it here?
         for
             (string_map::const_iterator j = i->second.Strings.begin()
             ;j != i->second.Strings.end()
             ;++j
             )
             {
-            strings[j->first + suffix] = j->second;
+            strings[j->first] = j->second;
             }
         for
             (double_vector_map::const_iterator j = i->second.AllVectors.begin()
@@ -852,20 +699,17 @@ void Ledger::write(xml_lmi::Element& x) const
             ;++j
             )
             {
-//            vectors[j->first + suffix] = j->second;
-            if(format_exists(j->first, suffix, format_map))
-                stringvectors[j->first + suffix] = format(*j->second, format_map[j->first]);
+            double_vectors[ make_value_id( j->first, i->first ) ] = *j->second;
             }
         }
 
-    stringvectors["EeMode"] = enum_vector_to_string_vector(ledger_invariant_->EeMode);
-    stringvectors["ErMode"] = enum_vector_to_string_vector(ledger_invariant_->ErMode);
-    stringvectors["DBOpt"]  = enum_vector_to_string_vector(ledger_invariant_->DBOpt );
+    string_vectors[make_value_id("EeMode")] = enum_vector_to_string_vector( ledger_invariant_->EeMode );
+    string_vectors[make_value_id("ErMode")] = enum_vector_to_string_vector( ledger_invariant_->ErMode );
+    string_vectors[make_value_id("DBOpt")]  = enum_vector_to_string_vector( ledger_invariant_->DBOpt  );
 
 // TODO ?? Here I copied some stuff from the ledger class files: the
 // parts that speak of odd members that aren't in those class's
 // maps. This may reveal incomplete or incorrect systems analysis.
-
 // Invariant
 //
 //    // Special-case vectors (not <double>, or different length than others).
@@ -893,91 +737,95 @@ void Ledger::write(xml_lmi::Element& x) const
 //    bool             FullyInitialized;   // i.e. by Init(BasicValues* b)
 
 // Now we're ready to write the xml.
-//  want: <?xml-stylesheet type="text/xsl" href="NewTransform.xsl"?>
-//  want: <!DOCTYPE sales []>
-// kludged in write(std::ostream& os) below
 
-    xml_lmi::Element& scalar = *x.add_child("scalar");
-    xml_lmi::Element& data   = *x.add_child("data"  );
-/*
-// TODO ?? This old block uses xmlwrapp instead of libxml++. It should
-// be expunged if it can be demonstrated that it has no value.
+    // string scalars
     for
-        (scalar_map::const_iterator j = scalars.begin()
-        ;j != scalars.end()
+        (string_scalar_map_t::const_iterator j = string_scalars.begin()
+        ;j != string_scalars.end()
         ;++j
         )
         {
-        std::string node_tag = j->first;
-        std::string value = value_cast<std::string>(*j->second);
-        scalar.push_back(xml::node(node_tag.c_str(), value.c_str()));
+        xml_lmi::Element & string_scalar = *illustration.add_child("string_scalar");
+        value_id const & id = j->first;
+        string_scalar.set_attribute("name", id.first);
+        if (id.second)
+            string_scalar.set_attribute("basis", *id.second);
+        string_scalar.add_child_text( j->second );
         }
+    // double scalars
     for
-        (string_map::const_iterator j = strings.begin()
-        ;j != strings.end()
+        (double_scalar_map_t::const_iterator j = double_scalars.begin()
+        ;j != double_scalars.end()
         ;++j
         )
         {
-        std::string node_tag = j->first;
-        std::string value = value_cast<std::string>(*j->second);
-        scalar.push_back(xml::node(node_tag.c_str(), value.c_str()));
-        }
-    for
-        (double_vector_map::const_iterator j = vectors.begin()
-        ;j != vectors.end()
-        ;++j
-        )
-        {
-        xml::node newcolumn("newcolumn");
-        xml::node column("column");
-        column.set_attr("name", j->first.c_str());
-        std::vector<double> const& v = *j->second;
-        for(unsigned int k = 0; k < v.size(); ++k)
+        value_id const & id = j->first;
+        if ( formatter.has_format( id.first ) )
             {
-            xml::node duration("duration");
-            duration.set_attr("number", value_cast<std::string>(k).c_str());
-            duration.set_attr("column_value", value_cast<std::string>(v[k]).c_str());
-            column.push_back(duration);
+            xml_lmi::Element & double_scalar = *illustration.add_child("double_scalar");
+            double_scalar.set_attribute("name", id.first);
+            if (id.second)
+                double_scalar.set_attribute("basis", *id.second);
+            double_scalar.add_child_text( formatter.format( id.first, j->second ) );
             }
-// TODO ?? Is <newcolumn> really useful?
-        newcolumn.push_back(column);
-        data.push_back(newcolumn);
         }
-*/
+    // vectors of strings
     for
-        (std::map<std::string,std::string>::const_iterator j = stringscalars.begin()
-        ;j != stringscalars.end()
+        (string_vector_map_t::const_iterator j = string_vectors.begin()
+        ;j != string_vectors.end()
         ;++j
         )
         {
-        std::string node_tag = j->first;
-        std::string value = j->second;
-        scalar.add_child(node_tag)->add_child_text(value);
+        xml_lmi::Element & svector = *illustration.add_child("string_vector");
+        value_id const & id = j->first;
+        svector.set_attribute("name", id.first);
+        if (id.second)
+            svector.set_attribute("basis", *id.second);
+        string_vector_t const & v = j->second;
+        for
+            (string_vector_t::const_iterator k = v.begin()
+            ;k != v.end()
+            ;++k
+            )
+            {
+            xml_lmi::Element & duration = *svector.add_child("duration");
+            duration.add_child_text(*k);
+            }
         }
+    // vectors of doubles
     for
-        (std::map<std::string,std::vector<std::string> >::const_iterator j = stringvectors.begin()
-        ;j != stringvectors.end()
+        (double_vector_map_t::const_iterator j = double_vectors.begin()
+        ;j != double_vectors.end()
         ;++j
         )
         {
-// TODO ?? Is <newcolumn> really useful?
-        xml_lmi::Element& newcolumn = *data.add_child("newcolumn");
-        xml_lmi::Element& column = *newcolumn.add_child("column");
-        column.set_attribute("name", j->first);
-        std::vector<std::string> const& v = j->second;
+        value_id const & id = j->first;
+        if ( formatter.has_format( id.first ) )
+            {
+            xml_lmi::Element & dvector = *illustration.add_child("double_vector");
+            dvector.set_attribute("name", id.first);
+            if (id.second)
+                dvector.set_attribute("basis", *id.second);
+            string_vector_t v = formatter.format( id.first, j->second );
 // TODO ?? InforceLives shows an extra value past the end; should it
 // be truncated here?
-        for(unsigned int k = 0; k < v.size(); ++k)
-            {
-            xml_lmi::Element& duration = *column.add_child("duration");
-            duration.set_attribute("number", value_cast<std::string>(k));
-            duration.set_attribute("column_value", v[k]);
+            for
+                (string_vector_t::const_iterator k = v.begin()
+                ;k != v.end()
+                ;++k
+                )
+                {
+                xml_lmi::Element & duration = *dvector.add_child("duration");
+                duration.add_child_text(*k);
+                }
             }
         }
 
-    std::vector<std::string> SupplementalReportColumns;
     if(ledger_invariant_->SupplementalReport)
         {
+        // prepare supplement report column list
+        string_vector_t SupplementalReportColumns;
+
         SupplementalReportColumns.push_back(ledger_invariant_->SupplementalReportColumn00);
         SupplementalReportColumns.push_back(ledger_invariant_->SupplementalReportColumn01);
         SupplementalReportColumns.push_back(ledger_invariant_->SupplementalReportColumn02);
@@ -990,83 +838,29 @@ void Ledger::write(xml_lmi::Element& x) const
         SupplementalReportColumns.push_back(ledger_invariant_->SupplementalReportColumn09);
         SupplementalReportColumns.push_back(ledger_invariant_->SupplementalReportColumn10);
         SupplementalReportColumns.push_back(ledger_invariant_->SupplementalReportColumn11);
-        }
 
-    xml_lmi::Element& supplementalreport = *x.add_child("supplementalreport");
-    if(ledger_invariant_->SupplementalReport)
-        {
+        // now put this information into the xml
+        xml_lmi::Element & supplemental_report = *illustration.add_child("supplemental_report");
+
         // Eventually customize the report name.
-        supplementalreport.add_child("title")->add_child_text("Supplemental Report");
-//warning() << "size " << ledger_invariant_->SupplementalReportColumns.size() << LMI_FLUSH;
+        supplemental_report.add_child("title")->add_child_text("Supplemental Report");
 
-        std::vector<std::string>::const_iterator j;
+        string_vector_t::const_iterator j;
         for
             (j = SupplementalReportColumns.begin()
             ;j != SupplementalReportColumns.end()
             ;++j
             )
             {
-//warning() << "column " << *j << " title " << title_map[*j] << LMI_FLUSH;
-            xml_lmi::Element& columns = *supplementalreport.add_child("columns");
-            columns.add_child("name" )->add_child_text(          *j );
-            columns.add_child("title")->add_child_text(title_map[*j]);
-            }
-        }
-
-/*
-<supplementalreport>
-    <title>Some Report</title>
-    <columns>
-      <name>TotalLoanBalance_Current</name>
-      <title>Curr Total Loan Balance</title>
-    </columns>
-    <columns>
-      <name>etc...</name>
-      <title>etc...</title>
-    </columns>
-</supplementalreport>
-*/
-
-    if
-        (   GetIsComposite()
-        &&  std::string::npos != ledger_invariant_->Comments.find("idiosyncrasy_spreadsheet")
-        )
-        {
-        std::ofstream ofs
-            (("values" + configurable_settings::instance().spreadsheet_file_extension()).c_str()
-            ,std::ios_base::out | std::ios_base::trunc
-            );
-        for
-            (std::map<std::string,std::vector<std::string> >::const_iterator j = stringvectors.begin()
-            ;j != stringvectors.end()
-            ;++j
-            )
-            {
-            ofs << j->first.c_str() << '\t';
-            }
-        ofs << '\n';
-
-        for(unsigned int i = 0; i < static_cast<unsigned int>(GetMaxLength()); ++i)
-            {
-            for
-                (std::map<std::string,std::vector<std::string> >::const_iterator j = stringvectors.begin()
-                ;j != stringvectors.end()
-                ;++j
-                )
+            // FIXME find a better way of determining if it is an empty column
+            if ( *j == "[None]" )
                 {
-                std::vector<std::string> const& v = j->second;
-// TODO ?? InforceLives shows an extra value past the end; should it
-// be truncated here?
-                if(i < v.size())
-                    {
-                    ofs << v[i].c_str() << '\t';
-                    }
-                else
-                    {
-                    ofs << '\t';
-                    }
+                supplemental_report.add_child("spacer");
                 }
-            ofs << '\n';
+            else // *j != "[None]"
+                {
+                supplemental_report.add_child("column")->add_child_text( *j );
+                }
             }
         }
 }
@@ -1086,21 +880,9 @@ void Ledger::write(std::ostream& os) const
     xml_lmi::Document doc;
     xml_lmi::Element& root = *doc.create_root_node(xml_root_name());
     root << *this;
-// TODO ?? Does the following comment about xmlwrapp...
-//   Need DOCTYPE support, which xmlwrapp lacks--so can't do this:
-//    os << root;
-// ...apply to libxml++ as well?
 
-    std::string s = doc.write_to_string();
-    std::string token("<?xml version=\"1.0\"?>");
-    std::string string_to_insert
-        ("\n<!DOCTYPE sales [\n]>\n"
-        "<?xml-stylesheet type=\"text/xsl\" href=\"NewTransform.xsl\"?>"
-        );
-    s.insert
-        (s.find(token) + token.length()
-        ,string_to_insert
-        );
-    os << s;
+    root.set_namespace_declaration("http://www.w3.org/2001/XMLSchema-instance", "xsi");
+    root.set_attribute("noNamespaceSchemaLocation", "file:schema.xsd", "xsi");
+
+    os << doc;
 }
-

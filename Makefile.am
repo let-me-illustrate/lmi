@@ -20,7 +20,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: Makefile.am,v 1.23.2.2 2006-10-15 23:56:01 etarassov Exp $
+# $Id: Makefile.am,v 1.23.2.3 2006-10-20 17:46:02 etarassov Exp $
 
 
 SUBDIRS = third_party
@@ -146,6 +146,7 @@ TESTS = \
     test_vector \
     test_lib_wx_new \
     test_xenum \
+    test_xml_resources \
     test_xrange \
     test_zero
 
@@ -204,7 +205,7 @@ lmi_wx_SOURCES = \
     wx_checks.cpp \
     wx_utility.cpp
 
-lmi_wx_CXXFLAGS = $(WX_CXXFLAGS) $(LIBXMLPP_CFLAGS) $(AM_CXXFLAGS)
+lmi_wx_CXXFLAGS = $(AM_CXXFLAGS) $(WX_CXXFLAGS) $(LIBXMLPP_CFLAGS) $(LIBXSLT_CFLAGS) $(LIBXML_CFLAGS)
 # $(CGICC_INCLUDE_FLAGS)
 
 if LMI_MSW
@@ -219,8 +220,10 @@ endif
 lmi_wx_LDADD =  \
     liblmi.la \
     libwx_new.la \
-    $(BOOST_LIBS) \
     $(LIBXMLPP_LIBS) \
+    $(LIBXSLT_LIBS) \
+    $(LIBXML_LIBS) \
+    $(BOOST_LIBS) \
     $(WX_LIBS)
 if LMI_MSW
     lmi_wx_SOURCES += lmi.rc
@@ -239,7 +242,7 @@ cli_sources = \
 
 lmi_cli_SOURCES = \
     $(cli_sources)
-lmi_cli_CXXFLAGS = $(AM_CXXFLAGS) $(LIBXMLPP_CFLAGS)
+lmi_cli_CXXFLAGS = $(AM_CXXFLAGS) $(LIBXMLPP_CFLAGS) $(LIBXSLT_CFLAGS) $(LIBXML_CFLAGS)
 lmi_cli_LDADD = \
     liblmi.la \
     $(LIBXMLPP_LIBS) \
@@ -322,7 +325,7 @@ libantediluvian_la_SOURCES = \
     mortality_rates.cpp \
     solve.cpp \
     $(liblmi_common_sources)
-libantediluvian_la_CXXFLAGS = $(AM_CXXFLAGS) $(LIBXMLPP_CFLAGS)
+libantediluvian_la_CXXFLAGS = $(AM_CXXFLAGS) $(LIBXMLPP_CFLAGS) $(LIBXSLT_CFLAGS) $(LIBXML_CFLAGS)
 libantediluvian_la_LDFLAGS = -no-undefined $(AM_LDFLAGS)
 libantediluvian_la_LIBADD = \
     $(BOOST_LIBS)
@@ -356,10 +359,12 @@ liblmi_la_SOURCES = \
     stratified_algorithms.cpp \
     stratified_charges.cpp \
     $(liblmi_common_sources)
-liblmi_la_CXXFLAGS = $(AM_CXXFLAGS) $(LIBXMLPP_CFLAGS)
+liblmi_la_CXXFLAGS = $(AM_CXXFLAGS) $(LIBXMLPP_CFLAGS) $(LIBXSLT_CFLAGS) $(LIBXML_CFLAGS)
 liblmi_la_LDFLAGS = -no-undefined $(AM_LDFLAGS)
 liblmi_la_LIBADD = \
     $(LIBXMLPP_LIBS) \
+    $(LIBXSLT_LIBS) \
+    $(LIBXML_LIBS) \
     $(BOOST_LIBS)
 
 libcgi_la_SOURCES = \
@@ -414,7 +419,7 @@ antediluvian_cgi_LDADD = \
 
 antediluvian_cli_SOURCES = \
     $(cli_sources)
-antediluvian_cli_CXXFLAGS = $(AM_CXXFLAGS) $(LIBXMLPP_CFLAGS)
+antediluvian_cli_CXXFLAGS = $(AM_CXXFLAGS) $(LIBXMLPP_CFLAGS) $(LIBXSLT_CFLAGS) $(LIBXML_CFLAGS)
 antediluvian_cli_LDADD = \
     libantediluvian.la  \
     $(BOOST_LIBS) \
@@ -596,7 +601,7 @@ test_input_SOURCES =    \
   xml_lmi.cpp \
   xrange.cpp
 
-test_input_CXXFLAGS = $(LIBXMLPP_CFLAGS) $(AM_CXXFLAGS)
+test_input_CXXFLAGS = $(AM_CXXFLAGS) $(LIBXMLPP_CFLAGS) $(LIBXSLT_CFLAGS) $(LIBXML_CFLAGS)
 test_input_LDADD =    \
   $(BOOST_LIBS) \
   libtest_commons.la \
@@ -775,6 +780,19 @@ test_xenum_SOURCES =    \
   xenum_test.cpp
 test_xenum_CXXFLAGS = $(AM_CXXFLAGS)
 test_xenum_LDADD =    \
+  libtest_commons.la
+
+test_xml_resources_SOURCES = \
+  alert.cpp \
+  alert_cli.cpp \
+  xml_resources_test.cpp
+test_xml_resources_CXXFLAGS = $(AM_CXXFLAGS) $(LIBXMLPP_CFLAGS) $(LIBXSLT_CFLAGS) $(LIBXML_CFLAGS)
+test_xml_resources_LDADD = \
+  $(BOOST_LIBS) \
+  $(LIBXMLPP_LIBS) \
+  $(LIBXML_LIBS) \
+  $(LIBXSLT_LIBS) \
+  liblmi.la \
   libtest_commons.la
 
 test_xrange_SOURCES =   \

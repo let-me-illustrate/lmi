@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: configurable_settings.hpp,v 1.13 2006-09-20 16:06:24 chicares Exp $
+// $Id: configurable_settings.hpp,v 1.13.2.1 2006-10-20 17:46:02 etarassov Exp $
 
 #ifndef configurable_settings_hpp
 #define configurable_settings_hpp
@@ -69,6 +69,9 @@
 /// typical for the user's preferred spreadsheet program, used to
 /// determine mimetype or msw 'file association'.
 ///
+/// xml_schema_filename_: XMLSchema describing the format of ledger xml data
+/// and format.xml file. Used in calculation summary to validate xml resources.
+///
 /// xsl_fo_command_: Command to execute xsl 'formatting objects'
 /// processor. Making this an external command permits using a program
 /// with a free but not GPL-compatible license, such as apache fop,
@@ -76,6 +79,18 @@
 ///
 /// xsl_fo_directory_: Directory where xsl 'formatting objects'
 /// processor resides.
+///
+/// xsl_directory_: Directory where xsl templates, schema.xsd
+/// and format.xml reside.
+///
+/// xslt_format_xml_filename_: xml file containing column titles and
+/// value formats used in calculation summary.
+///
+/// xslt_html_filename_: xsl template that produces calculation summary
+/// html output for a ledger xml data.
+///
+/// xslt_tab_delimited_filename_: xsl template that produces calculation
+/// summary tab delimited output suitable for pasting into excel.
 
 class LMI_SO configurable_settings
     :public MemberSymbolTable<configurable_settings>
@@ -85,16 +100,21 @@ class LMI_SO configurable_settings
   public:
     static configurable_settings& instance();
 
-    std::string const& cgi_bin_log_filename      () const;
-    std::string const& custom_input_filename     () const;
-    std::string const& custom_output_filename    () const;
-    std::string const& default_input_filename    () const;
-    std::string const& libraries_to_preload      () const;
-    bool               offer_hobsons_choice      () const;
-    std::string const& skin_filename             () const;
-    std::string const& spreadsheet_file_extension() const;
-    std::string const& xsl_fo_command            () const;
-    std::string const& xsl_fo_directory          () const;
+    std::string const& cgi_bin_log_filename       () const;
+    std::string const& custom_input_filename      () const;
+    std::string const& custom_output_filename     () const;
+    std::string const& default_input_filename     () const;
+    std::string const& libraries_to_preload       () const;
+    bool               offer_hobsons_choice       () const;
+    std::string const& skin_filename              () const;
+    std::string const& spreadsheet_file_extension () const;
+    std::string const& xml_schema_filename        () const;
+    std::string const& xsl_fo_command             () const;
+    std::string const& xsl_fo_directory           () const;
+    std::string const& xslt_directory             () const;
+    std::string const& xslt_format_xml_filename   () const;
+    std::string const& xslt_html_filename         () const;
+    std::string const& xslt_tab_delimited_filename() const;
 
   private:
     configurable_settings();
@@ -111,8 +131,13 @@ class LMI_SO configurable_settings
     bool        offer_hobsons_choice_;
     std::string skin_filename_;
     std::string spreadsheet_file_extension_;
+    std::string xml_schema_filename_;
     std::string xsl_fo_command_;
     std::string xsl_fo_directory_;
+    std::string xslt_directory_;
+    std::string xslt_format_xml_filename_;
+    std::string xslt_html_filename_;
+    std::string xslt_tab_delimited_filename_;
 
 #ifdef __BORLANDC__
 // COMPILER !! Borland compilers defectively [11/5] require a public dtor; see:

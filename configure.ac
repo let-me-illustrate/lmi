@@ -21,7 +21,7 @@ dnl snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
 dnl === Prologue ===
 
-AC_REVISION($Id: configure.ac,v 1.22.2.1 2006-10-15 23:26:24 etarassov Exp $)dnl
+AC_REVISION($Id: configure.ac,v 1.22.2.2 2006-10-20 17:46:02 etarassov Exp $)dnl
 
 AC_PREREQ(2.56)
 AC_INIT(LMI, 1.0.0, [chicares@cox.net])
@@ -561,19 +561,14 @@ AM_CONDITIONAL([LMI_BOOSTFS_BUILD], [test "x$LMI_BOOSTFS_BUILD" == "x1"])
 dnl indicates the directory path where sources could be found
 AC_SUBST(LMI_BOOSTFS_SRC)
 
-dnl --- LIBXML (required) ---------------
-AC_CHECK_PROG(lmi_xml2_config, xml2-config, yes, no)
-if test "x$lmi_xml2_config" != "xyes"; then
-    AC_MSG_ERROR([Unable to find libxml configuration program xml2-config in the path.])
-fi
-LIBXML_FLAGS=`xml2-config --cflags`
-LIBXML_LIBS=`xml2-config --libtool-libs`
+dnl --- libxml (required) -------------------
+PKG_CHECK_MODULES(LIBXML, libxml-2.0 >= 2.6.0)
 
-AC_SUBST(LIBXML_FLAGS)
-AC_SUBST(LIBXML_LIBS)
+dnl --- libxslt (required) -------------------
+PKG_CHECK_MODULES(LIBXSLT, libxslt >= 1.1.0)
 
 dnl --- libxml++ (required) -------------------
-PKG_CHECK_MODULES(LIBXMLPP, libxml++-2.6 >= 2.6.0)
+PKG_CHECK_MODULES(LIBXMLPP, libxml++-2.6 >= 2.14.0)
 
 dnl --- CGICC (optional) ----------------
 if test "x$lmi_cgicc_option" != "xno"; then

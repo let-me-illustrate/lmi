@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustration_view.hpp,v 1.17 2006-08-12 17:16:36 chicares Exp $
+// $Id: illustration_view.hpp,v 1.17.2.1 2006-10-20 17:46:02 etarassov Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -37,10 +37,10 @@
 #include "view_ex.hpp"
 
 #include "obstruct_slicing.hpp"
+#include "ledger_text_formats.hpp"
 
 #include <boost/shared_ptr.hpp>
 #include <boost/utility.hpp>
-
 #include <wx/event.h>
 
 #include <string>
@@ -73,6 +73,8 @@ class IllustrationView
     void Run(Input* = 0);
     void SetLedger(boost::shared_ptr<Ledger const>);
 
+    void CopyLedgerValues();
+
   private:
     IllustrationDocument& document() const;
 
@@ -98,6 +100,7 @@ class IllustrationView
     wxHtmlWindow* html_window_;
     bool is_phony_;
     boost::shared_ptr<Ledger const> ledger_values_;
+    LedgerFormatter ledger_formatter_;
     std::string selected_values_as_html_;
 
     DECLARE_DYNAMIC_CLASS(IllustrationView)

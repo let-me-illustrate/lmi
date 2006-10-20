@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: configurable_settings.cpp,v 1.14.2.9 2006-10-20 00:25:12 chicares Exp $
+// $Id: configurable_settings.cpp,v 1.14.2.10 2006-10-20 17:46:02 etarassov Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -57,8 +57,13 @@ configurable_settings::configurable_settings()
     ,offer_hobsons_choice_       (false                )
     ,skin_filename_              ("xml_notebook.xrc"   )
     ,spreadsheet_file_extension_ (".gnumeric"          )
+    ,xml_schema_filename_        ("schema.xsd"         )
     ,xsl_fo_command_             ("fo"                 )
     ,xsl_fo_directory_           ("/usr/bin/fo"        )
+    ,xslt_directory_             (""                   )
+    ,xslt_format_xml_filename_   ("format.xml"         )
+    ,xslt_html_filename_         ("html.xsl"           )
+    ,xslt_tab_delimited_filename_("tab_delimited.xsl"  )
 {
     ascribe_members();
 
@@ -117,8 +122,13 @@ void configurable_settings::ascribe_members()
     ascribe("offer_hobsons_choice"       ,&configurable_settings::offer_hobsons_choice_      );
     ascribe("skin_filename"              ,&configurable_settings::skin_filename_             );
     ascribe("spreadsheet_file_extension" ,&configurable_settings::spreadsheet_file_extension_);
+    ascribe("xml_schema_filename"        ,&configurable_settings::xml_schema_filename_          );
     ascribe("xsl_fo_command"             ,&configurable_settings::xsl_fo_command_            );
     ascribe("xsl_fo_directory"           ,&configurable_settings::xsl_fo_directory_          );
+    ascribe("xslt_directory"             ,&configurable_settings::xslt_directory_               );
+    ascribe("xslt_format_xml_filename"   ,&configurable_settings::xslt_format_xml_filename_     );
+    ascribe("xslt_html_filename"         ,&configurable_settings::xslt_html_filename_           );
+    ascribe("xslt_tab_delimited_filename",&configurable_settings::xslt_tab_delimited_filename_  );
 }
 
 std::string const& configurable_settings::configuration_filename()
@@ -167,6 +177,11 @@ std::string const& configurable_settings::spreadsheet_file_extension() const
     return spreadsheet_file_extension_;
 }
 
+std::string const& configurable_settings::xml_schema_filename() const
+{
+    return xml_schema_filename_;
+}
+
 std::string const& configurable_settings::xsl_fo_command() const
 {
     return xsl_fo_command_;
@@ -177,3 +192,22 @@ std::string const& configurable_settings::xsl_fo_directory() const
     return xsl_fo_directory_;
 }
 
+std::string const& configurable_settings::xslt_directory() const
+{
+    return xslt_directory_;
+}
+
+std::string const& configurable_settings::xslt_format_xml_filename() const
+{
+    return xslt_format_xml_filename_;
+}
+
+std::string const& configurable_settings::xslt_html_filename() const
+{
+    return xslt_html_filename_;
+}
+
+std::string const& configurable_settings::xslt_tab_delimited_filename() const
+{
+    return xslt_tab_delimited_filename_;
+}
