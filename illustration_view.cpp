@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustration_view.cpp,v 1.41.2.2 2006-10-20 14:14:38 etarassov Exp $
+// $Id: illustration_view.cpp,v 1.41.2.3 2006-10-20 14:17:36 etarassov Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -317,7 +317,7 @@ void IllustrationView::Run(Input* overriding_input)
     av.SetDebugFilename(base_filename() + ".debug");
     av.RunAV();
 
-    std::stringstream oss;
+    std::ostringstream oss;
     oss << "Calculate: " << timer.stop().elapsed_msec_str();
     timer.restart();
 
