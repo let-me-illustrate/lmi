@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xml_lmi.cpp,v 1.1.2.13 2006-10-20 03:24:30 chicares Exp $
+// $Id: xml_lmi.cpp,v 1.1.2.14 2006-10-20 17:45:06 etarassov Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -59,11 +59,7 @@ xml_lmi::dom_parser::dom_parser(std::string const& filename)
             {
             throw std::runtime_error("File name is empty.");
             }
-        parser_.reset(new DomParser);
-        if(0 == parser_.get())
-            {
-            throw std::runtime_error("Parser not initialized.");
-            }
+        create_xml_dom_parser();
         parser_->parse_file(filename);
         if(0 == parser_->operator bool())
             {
@@ -96,11 +92,7 @@ xml_lmi::dom_parser::dom_parser(std::istream& is)
             {
             throw std::runtime_error("Stream state is not 'good'.");
             }
-        parser_.reset(new DomParser);
-        if(0 == parser_.get())
-            {
-            throw std::runtime_error("Parser not initialized.");
-            }
+        create_xml_dom_parser();
         parser_->parse_stream(is);
         if(0 == parser_->operator bool())
             {
@@ -165,6 +157,27 @@ xml_lmi::Element const& xml_lmi::dom_parser::root_node
         fatal_error() << error_context_ << e.what() << LMI_FLUSH;
         throw std::logic_error("Unreachable"); // Silence compiler warning.
         }
+}
+
+/// Create and initialize a new DomParser object.
+///
+/// Created parser does not validate documents against any DTD, it also
+/// substitutes entities in the xml document to make the output as simple as possible.
+///
+/// Postconditions: member parser_ is a non-null pointer to a new DomParser.
+///
+/// Throws: std::runtime_error, if failed to allocate a DomParser.
+
+void xml_lmi::dom_parser::create_xml_dom_parser()
+{
+    parser_.reset();
+    parser_.reset(new DomParser);
+    if(0 == parser_.get())
+        {
+        throw std::runtime_error("Parser not initialized.");
+        }
+    parser_->set_validate(false);
+    parser_->set_substitute_entities(true);
 }
 
 std::string xml_lmi::get_content(Element const& element)
