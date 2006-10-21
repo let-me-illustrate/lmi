@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_text_formats.cpp,v 1.22.2.1 2006-10-20 17:46:02 etarassov Exp $
+// $Id: ledger_text_formats.cpp,v 1.22.2.2 2006-10-21 23:38:32 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -192,8 +192,8 @@ LedgerFormatter & LedgerFormatter::operator = (LedgerFormatter const & rhs)
     if (this != &rhs && ledger_values_ != rhs.ledger_values_)
         {
         ledger_values_ = rhs.ledger_values_;
-        xmlpp_document_light_ = rhs.xmlpp_document_light_;
-        xmlpp_document_heavy_ = rhs.xmlpp_document_heavy_;
+        xml_document_light_ = rhs.xml_document_light_;
+        xml_document_heavy_ = rhs.xml_document_heavy_;
         }
     return *this;
 }
@@ -207,34 +207,34 @@ xsltStylesheetPtr LedgerFormatter::GetStylesheet(std::string const & filename) c
 //=============================================================================
 void LedgerFormatter::ResetXmlData()
 {
-    xmlpp_document_light_.reset();
-    xmlpp_document_heavy_.reset();
+    xml_document_light_.reset();
+    xml_document_heavy_.reset();
 }
 
 //=============================================================================
 xmlDoc const* LedgerFormatter::GetXmlDocLight() const
 {
-    if (!xmlpp_document_light_)
+    if (!xml_document_light_)
     {
-        xmlpp_document_light_ = DoGenerateXml(true); // light_version
-        if (!xmlpp_document_light_)
+        xml_document_light_ = DoGenerateXml(true); // light_version
+        if (!xml_document_light_)
             return NULL;
     }
 
-    return xmlpp_document_light_->cobj();
+    return xml_document_light_->cobj();
 }
 
 //=============================================================================
 xmlDoc const* LedgerFormatter::GetXmlDocHeavy() const
 {
-    if (!xmlpp_document_heavy_)
+    if (!xml_document_heavy_)
     {
-        xmlpp_document_heavy_ = DoGenerateXml(true); // light_version
-        if (!xmlpp_document_heavy_)
+        xml_document_heavy_ = DoGenerateXml(true); // light_version
+        if (!xml_document_heavy_)
             return NULL;
     }
 
-    return xmlpp_document_heavy_->cobj();
+    return xml_document_heavy_->cobj();
 }
 
 //=============================================================================

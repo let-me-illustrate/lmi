@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_text_formats.hpp,v 1.5.2.1 2006-10-20 17:46:02 etarassov Exp $
+// $Id: ledger_text_formats.hpp,v 1.5.2.2 2006-10-21 23:38:32 chicares Exp $
 
 #ifndef ledger_text_formats_hpp
 #define ledger_text_formats_hpp
@@ -95,8 +95,8 @@ class LMI_SO LedgerFormatter
 
     // light and heavy version of xml data, mutable is needed to allow
     // its lazy initialisation
-    mutable XmlDocumentSharedPtr xmlpp_document_heavy_;
-    mutable XmlDocumentSharedPtr xmlpp_document_light_;
+    mutable XmlDocumentSharedPtr xml_document_heavy_;
+    mutable XmlDocumentSharedPtr xml_document_light_;
 
     // clear xml data
     void ResetXmlData();

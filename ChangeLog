@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.462.2.23 2006-10-21 18:10:16 chicares Exp $
+// $Id: ChangeLog,v 1.462.2.24 2006-10-21 23:38:32 chicares Exp $
 
 MAINTENANCE
 
@@ -7925,4 +7925,13 @@ Flag excessively-long lines in 'ChangeLog'.
 
   msw_common.make
 Link libxslt, noting another unresolved issue.
+
+20061021T2338Z <chicares@cox.net> [1162]
+
+  ledger_text_formats.cpp
+  ledger_text_formats.hpp
+Rename two data members. Direct use of libxml++ has been sequestered
+into 'xml_lmi.?pp', and it seems desirable to keep it so by forbidding
+the string 'xmlpp' in any other file, since libxml++'s facilities are
+offered through namespace xmlpp.
 
