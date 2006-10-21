@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.462.2.18 2006-10-20 18:03:05 etarassov Exp $
+// $Id: ChangeLog,v 1.462.2.19 2006-10-21 15:26:10 chicares Exp $
 
 MAINTENANCE
 
@@ -41,11 +41,14 @@ requoted in email without wrapping.
 Explanations:
 
 [1] Write an ISO 8601 timestamp, using UTC because it sorts easily.
-Run 'make check_conformity' before committing to cvs. It identifies
-common problems, e.g., incorrect copyright statements. It reports the
-"Number of marked defects" shown as [defect-count] above.
+Use the actual commit time, so that others can confidently match log
+entries against cvs changes. Run 'make check_concinnity' before
+committing to cvs: it identifies common problems such as incorrect
+copyright statements, and reports the "Number of marked defects" shown
+as [defect-count] above.
 
 [3] Exact name of file changed, indented two spaces.
+
 [4] Write each file's name on a separate line. Write them in
 alphabetical order.
 
@@ -7852,24 +7855,25 @@ Improve documentation.
   xml_lmi.cpp
 Test state of xml input stream before parsing it.
 
-20061020T1302Z <etarassov@tt-solutions.com> [1174]
+20061020T1245Z <etarassov@tt-solutions.com> [1174]
 
   illustration_view.cpp
-Put more performance information into the status bar after the calculation
-summary is generated.
+Put more performance information into the status bar after the
+calculation summary is generated.
 
-20061020T1558Z <etarassov@tt-solutions.com> [1174]
+20061020T1414Z <etarassov@tt-solutions.com> [1174]
 
   illustration_view.cpp
 Use ostringstream instead of stringstream.
 
-20061020T1559Z <etarassov@tt-solutions.com> [1174]
+20061020T1745Z <etarassov@tt-solutions.com> [1174]
 
   xml_lmi.hpp
   xml_lmi.cpp
-Initialize underlying DomParser to substitue entities and skip DTD validation.
+Initialize underlying DomParser to substitute entities and skip DTD
+validation.
 
-20061020T1838Z <etarassov@tt-solutions.com> [1174]
+20061020T1746Z <etarassov@tt-solutions.com> [1161]
 
   common.xsl
   configurable_settings.cpp
@@ -7890,10 +7894,15 @@ Initialize underlying DomParser to substitue entities and skip DTD validation.
   schema.xsd
   tab_delimited.xsl
   xml_resources_test.cpp
-Initial commit of Calculation summary patch.
+Initial commit of calculation summary patch.
 
-20061020T1901Z <etarassov@tt-solutions.com> [1174]
+20061020T1803Z <etarassov@tt-solutions.com> [1161]
 
   ledger_xml_io.cpp
 Roll back an incorrect modification.
+
+20061021T1526Z <chicares@cox.net> [1161]
+
+  [ChangeLog only]
+Add a guideline: use commit time for 'ChangeLog' timestamp.
 
