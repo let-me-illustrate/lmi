@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.462.2.19 2006-10-21 15:26:10 chicares Exp $
+// $Id: ChangeLog,v 1.462.2.20 2006-10-21 15:40:25 chicares Exp $
 
 MAINTENANCE
 
@@ -7905,4 +7905,9 @@ Roll back an incorrect modification.
 
   [ChangeLog only]
 Add a guideline: use commit time for 'ChangeLog' timestamp.
+
+20061021T1540Z <chicares@cox.net> [1161]
+
+  ledger_xml_io.cpp
+Fix a defect: undefined macro in conditional directive.
 

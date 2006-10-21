@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xml_io.cpp,v 1.48.2.9 2006-10-20 18:03:05 etarassov Exp $
+// $Id: ledger_xml_io.cpp,v 1.48.2.10 2006-10-21 15:40:25 chicares Exp $
 
 #include "ledger.hpp"
 
@@ -125,12 +125,12 @@ class double_formatter_t
     format_t get_format(std::string const & s) const;
     std::string do_format(double d, format_t const & f) const;
 
-#if SHOW_MISSING_FORMATS
+#if defined SHOW_MISSING_FORMATS
     static std::string missing_formats_filename()
     {
         return "missing_formats";
     }
-#endif // SHOW_MISSING_FORMATS
+#endif // defined SHOW_MISSING_FORMATS
 };
 
 // Look at file 'missing_formats'. It's important. You want
