@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.462.2.20 2006-10-21 15:40:25 chicares Exp $
+// $Id: ChangeLog,v 1.462.2.21 2006-10-21 16:54:19 chicares Exp $
 
 MAINTENANCE
 
@@ -7910,4 +7910,9 @@ Add a guideline: use commit time for 'ChangeLog' timestamp.
 
   ledger_xml_io.cpp
 Fix a defect: undefined macro in conditional directive.
+
+20061021T1654Z <chicares@cox.net> [1161]
+
+  GNUmakefile
+Treat what is clean as normal, and what is unclean as exceptional.
 

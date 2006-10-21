@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: GNUmakefile,v 1.71.2.1 2006-10-20 17:46:02 etarassov Exp $
+# $Id: GNUmakefile,v 1.71.2.2 2006-10-21 16:54:19 chicares Exp $
 
 ################################################################################
 
@@ -242,12 +242,14 @@ makefiles := \
 
 scripts := $(wildcard *.sed *.sh)
 
-# TODO ?? The '.xsl' files need to be cleaned up.
-# xml_files := $(wildcard *.xrc *.xsl)
-xml_files := \
-  $(wildcard *.xrc) \
-  schema.xsd \
-  format.xml \
+# TODO ?? These old '.xsl' files need to be cleaned up.
+unclean_xsl_files := \
+  illustration_reg.xsl \
+  individual_private_placement.xsl \
+  nasd.xsl \
+
+xml_files := $(wildcard *.xml *.xrc *.xsd *.xsl)
+xml_files := $(filter-out $(unclean_xsl_files),$(xml_files))
 
 xpm_files := $(wildcard *.xpm)
 
@@ -428,9 +430,9 @@ expected_source_files := \
   $(c_source_files) \
   $(cxx_header_files) \
   $(cxx_source_files) \
-  $(wildcard *.ac *.rc *.xrc *.xsl) \
-  schema.xsd \
-  format.xml \
+  $(unclean_xsl_files) \
+  $(xml_files) \
+  $(wildcard *.ac *.rc) \
 
 # Invoke a supplemental makefile, if it exists, to test things that
 # don't belong in the standard sources. For example, it might report
