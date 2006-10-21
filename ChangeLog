@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.462.2.22 2006-10-21 17:03:20 chicares Exp $
+// $Id: ChangeLog,v 1.462.2.23 2006-10-21 18:10:16 chicares Exp $
 
 MAINTENANCE
 
@@ -7920,4 +7920,9 @@ Treat what is clean as normal, and what is unclean as exceptional.
 
   GNUmakefile
 Flag excessively-long lines in 'ChangeLog'.
+
+20061021T1810Z <chicares@cox.net> [1162]
+
+  msw_common.make
+Link libxslt, noting another unresolved issue.
 
