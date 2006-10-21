@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.462.2.21 2006-10-21 16:54:19 chicares Exp $
+// $Id: ChangeLog,v 1.462.2.22 2006-10-21 17:03:20 chicares Exp $
 
 MAINTENANCE
 
@@ -7915,4 +7915,9 @@ Fix a defect: undefined macro in conditional directive.
 
   GNUmakefile
 Treat what is clean as normal, and what is unclean as exceptional.
+
+20061021T1703Z <chicares@cox.net> [1161]
+
+  GNUmakefile
+Flag excessively-long lines in 'ChangeLog'.
 
