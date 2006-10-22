@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.462.2.25 2006-10-22 01:30:32 chicares Exp $
+// $Id: ChangeLog,v 1.462.2.26 2006-10-22 01:49:47 chicares Exp $
 
 MAINTENANCE
 
@@ -7944,4 +7944,9 @@ Prefer 'spreadsheet' to the name of a proprietary program.
 
   xml_resources_test.cpp
 Update FSF address and copyright date.
+
+20061022T0149Z <chicares@cox.net> [1162]
+
+  xml_resources_test.cpp
+Change cvs substitution mode to default '-kkv'.
 
