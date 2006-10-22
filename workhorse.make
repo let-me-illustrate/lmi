@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: workhorse.make,v 1.73.2.1 2006-10-15 17:29:06 chicares Exp $
+# $Id: workhorse.make,v 1.73.2.2 2006-10-22 13:51:06 zeitlin Exp $
 
 ################################################################################
 
@@ -544,6 +544,7 @@ REQUIRED_CPPFLAGS = \
   $(libstdcxx_warning_macros) \
   $(wx_predefinitions) \
   -DBOOST_STRICT_CONFIG \
+  -DLIBXMLPP_USE_STD_STRING \
 
 REQUIRED_CFLAGS = \
   $(C_WARNINGS) \
