@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.462.2.27 2006-10-22 02:00:50 chicares Exp $
+// $Id: ChangeLog,v 1.462.2.28 2006-10-22 02:08:16 chicares Exp $
 
 MAINTENANCE
 
@@ -7961,4 +7961,11 @@ the command sequence
   cvs add -kkv
   cvs commit
 because 'cvs admin' didn't work on 20061022T0149Z.]
+
+20061022T0208Z <chicares@cox.net> [1162]
+
+  xml_resources_test.cpp
+Change cvs substitution mode to default '-kkv'. [The Id didn't get
+updated on 20061022T0200Z, so change it to an empty string and commit
+again.]
 
