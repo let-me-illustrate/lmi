@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: configurable_settings.hpp,v 1.13.2.1 2006-10-20 17:46:02 etarassov Exp $
+// $Id: configurable_settings.hpp,v 1.13.2.2 2006-10-22 01:29:27 chicares Exp $
 
 #ifndef configurable_settings_hpp
 #define configurable_settings_hpp
@@ -69,8 +69,8 @@
 /// typical for the user's preferred spreadsheet program, used to
 /// determine mimetype or msw 'file association'.
 ///
-/// xml_schema_filename_: XMLSchema describing the format of ledger xml data
-/// and format.xml file. Used in calculation summary to validate xml resources.
+/// xml_schema_filename_: xsd for ledger xml data and 'format.xml',
+/// used in calculation summary to validate xml resources.
 ///
 /// xsl_fo_command_: Command to execute xsl 'formatting objects'
 /// processor. Making this an external command permits using a program
@@ -80,17 +80,18 @@
 /// xsl_fo_directory_: Directory where xsl 'formatting objects'
 /// processor resides.
 ///
-/// xsl_directory_: Directory where xsl templates, schema.xsd
-/// and format.xml reside.
+/// xsl_directory_: Directory where xsl templates, 'schema.xsd'
+/// and 'format.xml' reside.
 ///
 /// xslt_format_xml_filename_: xml file containing column titles and
 /// value formats used in calculation summary.
 ///
-/// xslt_html_filename_: xsl template that produces calculation summary
-/// html output for a ledger xml data.
+/// xslt_html_filename_: xsl template that produces calculation-
+/// summary html output from ledger xml data.
 ///
-/// xslt_tab_delimited_filename_: xsl template that produces calculation
-/// summary tab delimited output suitable for pasting into excel.
+/// xslt_tab_delimited_filename_: xsl template that produces
+/// calculation-summary tab-delimited output suitable for pasting into
+/// a spreadsheet.
 
 class LMI_SO configurable_settings
     :public MemberSymbolTable<configurable_settings>
