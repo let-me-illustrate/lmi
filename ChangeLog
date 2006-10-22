@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.462.2.24 2006-10-21 23:38:32 chicares Exp $
+// $Id: ChangeLog,v 1.462.2.25 2006-10-22 01:30:32 chicares Exp $
 
 MAINTENANCE
 
@@ -7934,4 +7934,14 @@ Rename two data members. Direct use of libxml++ has been sequestered
 into 'xml_lmi.?pp', and it seems desirable to keep it so by forbidding
 the string 'xmlpp' in any other file, since libxml++'s facilities are
 offered through namespace xmlpp.
+
+20061022T0129Z <chicares@cox.net> [1162]
+
+  configurable_settings.hpp
+Prefer 'spreadsheet' to the name of a proprietary program.
+
+20061022T0130Z <chicares@cox.net> [1162]
+
+  xml_resources_test.cpp
+Update FSF address and copyright date.
 
