@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_text_formats.hpp,v 1.5.2.2 2006-10-21 23:38:32 chicares Exp $
+// $Id: ledger_text_formats.hpp,v 1.5.2.3 2006-10-24 13:23:57 etarassov Exp $
 
 #ifndef ledger_text_formats_hpp
 #define ledger_text_formats_hpp
@@ -47,15 +47,18 @@ class LedgerFormatter;
 
 class LMI_SO LedgerFormatterFactory
 {
+    typedef boost::shared_ptr<xml_lmi::Stylesheet>  XmlStylesheetPtr;
+    typedef std::map<std::string, XmlStylesheetPtr> XmlStylesheets;
+
   public:
     static LedgerFormatterFactory & Instance();
 
-    LedgerFormatter   CreateFormatter(Ledger const & ledger_values);
-    xsltStylesheetPtr GetStylesheet(std::string const & filename);
+    LedgerFormatter CreateFormatter(Ledger const & ledger_values);
+
+    xml_lmi::Stylesheet const& GetStylesheet(std::string const & filename);
 
   private:
-    typedef std::map<std::string, xsltStylesheetPtr> Stylesheets;
-    Stylesheets stylesheets;
+    XmlStylesheets stylesheets_;
 
     LedgerFormatterFactory();
 };
@@ -64,8 +67,8 @@ class LMI_SO LedgerFormatterFactory
 ///
 /// Implements ledger_values formatting into various media types
 /// such as html, csv, xsl-fo.
-/// It has value semantics.
-/// Instances of the class could only be obtained through LedgerFormatterFactory.
+/// It has value semantics. Instances of the class could only be obtained
+/// through LedgerFormatterFactory.
 
 class LMI_SO LedgerFormatter
 {
@@ -90,7 +93,6 @@ class LMI_SO LedgerFormatter
   private:
     Ledger const* ledger_values_;
 
-    typedef boost::shared_ptr<xmlDoc> XmlDocSharedPtr;
     typedef boost::shared_ptr<xml_lmi::Document> XmlDocumentSharedPtr;
 
     // light and heavy version of xml data, mutable is needed to allow
@@ -102,19 +104,14 @@ class LMI_SO LedgerFormatter
     void ResetXmlData();
 
     // generate the corresponding xml data if it was not already done
-    xmlDoc const* GetXmlDocHeavy() const;
-    xmlDoc const* GetXmlDocLight() const;
+    xml_lmi::Document const& GetXmlDocHeavy() const;
+    xml_lmi::Document const& GetXmlDocLight() const;
 
     XmlDocumentSharedPtr DoGenerateXml(bool light_version) const;
 
-    // load the xsl template specified and apply it to the ledger_data
-    XmlDocSharedPtr DoFormatAs
-        (std::string const & xslt_filename
-        ,xmlDoc const*
+    xml_lmi::Stylesheet const& GetStylesheet
+        (std::string const& filename
         ) const;
-
-    // load the xsl template into memory
-    xsltStylesheetPtr GetStylesheet(std::string const & filename) const;
 
     friend class LedgerFormatterFactory;
 

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xml_lmi.cpp,v 1.1.2.14 2006-10-20 17:45:06 etarassov Exp $
+// $Id: xml_lmi.cpp,v 1.1.2.15 2006-10-24 13:23:57 etarassov Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -30,11 +30,55 @@
 
 #include "alert.hpp"
 
+#include <boost/shared_ptr.hpp>
+#include <boost/scoped_array.hpp>
+
+#include <libxml/globals.h>
+#include <libxml/HTMLtree.h>
+#include <libxml/parser.h>
 #include <libxml++/libxml++.h>
+#include <libxslt/transform.h>
+#include <libxslt/xsltInternals.h>
 
 #include <ostream>
 #include <sstream>
 #include <stdexcept>
+
+namespace
+{
+/// Custom deleter for xmlDocPtr shared_ptr
+///
+/// Use this class in a shared_ptr to free an xml document pointer using
+/// xmlFree method.
+/// The pointer to be freed should be allocated using libxml functions.
+///
+/// See boost::shared_ptr requirements for a deleter class:
+/// >> D  must be CopyConstructible.
+/// >> The copy constructor and destructor of D must not throw.
+/// >> The expression d(p) must be well-formed, must not invoke undefined
+/// >> behavior, and must not throw exceptions.
+
+class XmlDocSharedPtrDeleter
+{
+  public:
+    void operator () (xmlDocPtr xml_doc)
+    {
+        try
+            {
+            xmlFreeDoc(xml_doc);
+            }
+        catch(...)
+            {
+            warning()
+                << "A call to xmlFreeDoc failed."
+                << LMI_FLUSH
+                ;
+            }
+    }
+    // default ctor, dtor and copy-ctor are ok
+};
+
+} // anonymous namespace
 
 namespace xml_lmi
 {
@@ -235,6 +279,158 @@ Element const* xml_lmi::get_first_element(Element const& parent)
             }
         }
     return 0;
+}
+
+xml_lmi::Stylesheet::Stylesheet(std::string const& filename)
+:stylesheet_(NULL)
+{
+    try
+        {
+        error_context_ = "Unable to parse xsl stylesheet file '" + filename + "': ";
+        if(filename.empty())
+            {
+            throw std::runtime_error("File name is empty.");
+            }
+
+        // set global options in libxml for libxslt
+        int substitute_entities_copy = xmlSubstituteEntitiesDefault(1);
+        int load_ext_dtd_default_copy = xmlLoadExtDtdDefaultValue;
+        xmlLoadExtDtdDefaultValue = 0;
+
+        set_stylesheet
+            (xsltParseStylesheetFile(reinterpret_cast<xmlChar const*>(filename.c_str()))
+            );
+
+        // reset global options in libxml for libxslt
+        xmlSubstituteEntitiesDefault(substitute_entities_copy);
+        xmlLoadExtDtdDefaultValue = load_ext_dtd_default_copy;
+
+        if(0 == stylesheet_)
+            {
+            throw std::runtime_error("Parser failed.");
+            }
+        }
+    catch(std::exception const& e)
+        {
+        fatal_error() << error_context_ << e.what() << LMI_FLUSH;
+        }
+}
+
+xml_lmi::Stylesheet::Stylesheet(Document const& document)
+:stylesheet_(NULL)
+{
+    try
+        {
+        error_context_ = "Unable to parse xsl stylesheet document from xml: ";
+        if(0 == document.cobj())
+            {
+            throw std::runtime_error("Document is empty.");
+            }
+        set_stylesheet(xsltParseStylesheetDoc(const_cast<xmlDoc*>(document.cobj())));
+
+        if(0 == stylesheet_)
+            {
+            throw std::runtime_error("Parsing failed.");
+            }
+        }
+    catch(std::exception const& e)
+        {
+        fatal_error() << error_context_ << e.what() << LMI_FLUSH;
+        }
+}
+
+xml_lmi::Stylesheet::~Stylesheet()
+{
+    set_stylesheet(NULL);
+}
+
+void xml_lmi::Stylesheet::transform
+    (Document const& document
+    ,std::ostream& os
+    ,enum_output_type output_type
+    ) const
+{
+    std::string error_context = "Unable to apply xsl stylesheet to xml document: ";
+    try
+        {
+        if(0 == stylesheet_)
+            {
+            throw std::runtime_error("Can't apply a NULL stylesheet.");
+            }
+
+        boost::shared_ptr<xmlDoc> xml_document_ptr
+            (xsltApplyStylesheet
+                (stylesheet_
+                ,const_cast<xmlDoc*>(document.cobj())
+                ,NULL
+                )
+            );
+        if(0 == xml_document_ptr.get())
+            {
+            throw std::runtime_error("Failed to apply stylesheet.");
+            }
+
+        char* buffer = NULL;
+        int buffer_size = 0;
+
+        // a pointer suitable for passing it to libxslt functions
+        xmlChar** buffer_ptr = reinterpret_cast<xmlChar**>(&buffer);
+
+        if(e_output_xml == output_type)
+            {
+            xmlDocDumpFormatMemory
+                (xml_document_ptr.get() // xml document to write
+                ,buffer_ptr         // text buffer pointer, we own it
+                ,&buffer_size       // text buffer size
+                ,true               // indent xml output
+                );
+            }
+        else if(e_output_html == output_type)
+            {
+            htmlDocDumpMemoryFormat
+                (xml_document_ptr.get() // xml document to write
+                ,buffer_ptr         // text buffer pointer, we own it
+                ,&buffer_size       // text buffer size
+                ,true               // indent html output
+                );
+            }
+        else if(e_output_text == output_type)
+            {
+            htmlDocDumpMemoryFormat
+                (xml_document_ptr.get() // xml document to write
+                ,buffer_ptr         // text buffer pointer, we own it
+                ,&buffer_size       // text buffer size
+                ,false              // do _not_ indent the output
+                );
+            }
+        else
+            {
+            throw std::runtime_error("Invalid output type specified.");
+            }
+
+        boost::scoped_array<char> buffer_guard(buffer);
+
+        if(buffer_size <= 0)
+            {
+            throw std::runtime_error("Empty output.");
+            }
+
+        os.write(buffer, buffer_size);
+        }
+    catch(std::exception const& e)
+        {
+        fatal_error() << error_context << e.what() << LMI_FLUSH;
+        }
+}
+
+void xml_lmi::Stylesheet::set_stylesheet(stylesheet_ptr_t stylesheet)
+{
+    if(0 != stylesheet_)
+        {
+        // free the current stylesheet
+        xsltFreeStylesheet(stylesheet_);
+        }
+    stylesheet_ = stylesheet;
 }
 
 } // namespace xml_lmi

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.462.2.31 2006-10-24 13:09:33 etarassov Exp $
+// $Id: ChangeLog,v 1.462.2.32 2006-10-24 13:26:26 etarassov Exp $
 
 MAINTENANCE
 
@@ -7984,4 +7984,13 @@ Add a header that must be included explicitly because of the
 
   configurea.ac
 Add profiling code with --enable-profiling.
+
+20061024T1523Z <etarassov@tt-solutions.com> [1162]
+
+  xml_lmi.cpp
+  xml_lmi.hpp
+  ledger_text_formats.cpp
+  ledger_text_formats.hpp
+Add C++ interface for libxslt. Move the code using libxslt from
+ledger_text_format.?pp to xml_lmi.?pp files.
 

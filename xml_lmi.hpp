@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xml_lmi.hpp,v 1.1.2.10 2006-10-20 17:45:06 etarassov Exp $
+// $Id: xml_lmi.hpp,v 1.1.2.11 2006-10-24 13:23:57 etarassov Exp $
 
 #ifndef xml_lmi_hpp
 #define xml_lmi_hpp
@@ -27,9 +27,11 @@
 #include "config.hpp"
 
 #include <boost/scoped_ptr.hpp>
+#include <boost/utility.hpp>
 
 #include <iosfwd>
 #include <list>
+#include <map>
 #include <string>
 
 namespace xmlpp
@@ -40,6 +42,8 @@ namespace xmlpp
     class Element;
     class Node;
 } // namespace xmlpp
+
+struct _xsltStylesheet;
 
 /// Interface to libxml++ .
 
@@ -59,6 +63,7 @@ namespace xml_lmi
     typedef std::list<xmlpp::Node*> NodeContainer;
 
     class dom_parser
+        :private boost::noncopyable
     {
         typedef xmlpp::DomParser DomParser;
 
@@ -88,6 +93,35 @@ namespace xml_lmi
 
     Element      * get_first_element(Element      & parent);
     Element const* get_first_element(Element const& parent);
+
+    class Stylesheet
+        :private boost::noncopyable
+    {
+        typedef _xsltStylesheet * stylesheet_ptr_t;
+
+      public:
+        Stylesheet(std::string const& filename);
+        Stylesheet(Document const&);
+        ~Stylesheet();
+
+        enum enum_output_type
+            {e_output_xml
+            ,e_output_html
+            ,e_output_text
+            };
+
+        void transform
+            (Document const&
+            ,std::ostream&
+            ,enum_output_type
+            ) const;
+
+      private:
+        std::string error_context_;
+        stylesheet_ptr_t stylesheet_;
+
+        void set_stylesheet(stylesheet_ptr_t stylesheet);
+    };
 } // namespace xml_lmi
 
 /// Streaming operator for xml documents.
