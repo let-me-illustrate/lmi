@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: workhorse.make,v 1.73.2.2 2006-10-22 13:51:06 zeitlin Exp $
+# $Id: workhorse.make,v 1.73.2.3 2006-10-24 00:43:25 chicares Exp $
 
 ################################################################################
 
@@ -238,6 +238,15 @@ wx_config_check:
 # TODO ?? If the "common" practice above turns out to be universal,
 # then conform to it.
 
+# A default installation places gnome xml-library headers here:
+#  libxml++: /usr/local/include/libxml++-2.6/libxml++
+#  libxml2:  /usr/local/include/libxml2/libxml
+#  libxslt:  /usr/local/include/libxslt
+# The first provides no '*-config' script at all. The last two provide
+# '*-config' scripts that don't respect an overriding $(prefix): they
+# apparently hardcode that paths above, so there's no point in calling
+# them.
+
 # Directory /usr/local/include/ is searched for headers, but only
 # after the special directory for third-party libraries, in order to
 # make it easier to test or use later library versions that have
@@ -250,6 +259,8 @@ all_include_directories := \
   $(wx_include_paths) \
   $(system_root)/opt/lmi/third_party/include \
   $(system_root)/usr/local/include \
+  $(system_root)/usr/local/include/libxml++-2.6 \
+  $(system_root)/usr/local/include/libxml2 \
 
 all_source_directories := \
   $(src_dir) \
