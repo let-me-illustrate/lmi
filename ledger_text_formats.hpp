@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_text_formats.hpp,v 1.5.2.3 2006-10-24 13:23:57 etarassov Exp $
+// $Id: ledger_text_formats.hpp,v 1.5.2.4 2006-10-24 13:35:37 etarassov Exp $
 
 #ifndef ledger_text_formats_hpp
 #define ledger_text_formats_hpp
@@ -51,11 +51,11 @@ class LMI_SO LedgerFormatterFactory
     typedef std::map<std::string, XmlStylesheetPtr> XmlStylesheets;
 
   public:
-    static LedgerFormatterFactory & Instance();
+    static LedgerFormatterFactory& Instance();
 
-    LedgerFormatter CreateFormatter(Ledger const & ledger_values);
+    LedgerFormatter CreateFormatter(Ledger const& ledger_values);
 
-    xml_lmi::Stylesheet const& GetStylesheet(std::string const & filename);
+    xml_lmi::Stylesheet const& GetStylesheet(std::string const& filename);
 
   private:
     XmlStylesheets stylesheets_;
@@ -76,12 +76,12 @@ class LMI_SO LedgerFormatter
     // default empty constructor does nothing
     LedgerFormatter();
 
-    LedgerFormatter(LedgerFormatter const & rhs);
-    LedgerFormatter & operator = (LedgerFormatter const & rhs);
+    LedgerFormatter(LedgerFormatter const& rhs);
+    LedgerFormatter& operator = (LedgerFormatter const& rhs);
 
-    void FormatAsHtml         (std::ostream & str) const;
-    void FormatAsTabDelimited (std::ostream & str) const;
-    void FormatAsXslFo        (std::ostream & str) const;
+    void FormatAsHtml         (std::ostream& str) const;
+    void FormatAsTabDelimited (std::ostream& str) const;
+    void FormatAsXslFo        (std::ostream& str) const;
 
     Ledger const* GetLedger() const { return ledger_values_; }
 
@@ -116,7 +116,7 @@ class LMI_SO LedgerFormatter
     friend class LedgerFormatterFactory;
 
     // copy ctor, accessible to LedgerFormatterFactory only
-    LedgerFormatter(Ledger const & ledger_values);
+    LedgerFormatter(Ledger const& ledger_values);
 };
 
 // A shortcut method, that opens a file for writing and uses a fresh instance

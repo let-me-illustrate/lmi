@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_text_formats.cpp,v 1.22.2.3 2006-10-24 13:23:57 etarassov Exp $
+// $Id: ledger_text_formats.cpp,v 1.22.2.4 2006-10-24 13:35:37 etarassov Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -58,7 +58,7 @@
 #include <vector>
 
 //=============================================================================
-LedgerFormatterFactory & LedgerFormatterFactory::Instance()
+LedgerFormatterFactory& LedgerFormatterFactory::Instance()
 {
     static LedgerFormatterFactory factory;
     return factory;
@@ -79,7 +79,7 @@ LedgerFormatter LedgerFormatterFactory::CreateFormatter
 
 //=============================================================================
 xml_lmi::Stylesheet const& LedgerFormatterFactory::GetStylesheet
-    (std::string const & filename
+    (std::string const& filename
     )
 {
     XmlStylesheets::const_iterator it = stylesheets_.find(filename);
@@ -123,19 +123,19 @@ LedgerFormatter::LedgerFormatter()
 }
 
 //=============================================================================
-LedgerFormatter::LedgerFormatter(Ledger const & ledger_values)
+LedgerFormatter::LedgerFormatter(Ledger const& ledger_values)
     :ledger_values_(&ledger_values)
 {
 }
 
 //=============================================================================
-LedgerFormatter::LedgerFormatter(LedgerFormatter const & rhs)
+LedgerFormatter::LedgerFormatter(LedgerFormatter const& rhs)
     :ledger_values_(rhs.ledger_values_)
 {
 }
 
 //=============================================================================
-LedgerFormatter & LedgerFormatter::operator = (LedgerFormatter const & rhs)
+LedgerFormatter& LedgerFormatter::operator = (LedgerFormatter const& rhs)
 {
     if (this != &rhs && ledger_values_ != rhs.ledger_values_)
         {
@@ -194,7 +194,7 @@ LedgerFormatter::XmlDocumentSharedPtr LedgerFormatter::DoGenerateXml
         }
 
     XmlDocumentSharedPtr doc(new xml_lmi::Document);
-    xml_lmi::Element & root
+    xml_lmi::Element& root
         = *(doc->create_root_node(ledger_values_->xml_root_name()));
 
     ledger_values_->do_write(root, light_version);
@@ -203,7 +203,7 @@ LedgerFormatter::XmlDocumentSharedPtr LedgerFormatter::DoGenerateXml
 }
 
 //=============================================================================
-void LedgerFormatter::FormatAsHtml(std::ostream & str) const
+void LedgerFormatter::FormatAsHtml(std::ostream& str) const
 {
     try
         {
@@ -229,7 +229,7 @@ void LedgerFormatter::FormatAsHtml(std::ostream & str) const
 }
 
 //=============================================================================
-void LedgerFormatter::FormatAsTabDelimited(std::ostream & str) const
+void LedgerFormatter::FormatAsTabDelimited(std::ostream& str) const
 {
     try
         {
@@ -255,7 +255,7 @@ void LedgerFormatter::FormatAsTabDelimited(std::ostream & str) const
 }
 
 //=============================================================================
-void LedgerFormatter::FormatAsXslFo(std::ostream & str) const
+void LedgerFormatter::FormatAsXslFo(std::ostream& str) const
 {
     try
         {

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.462.2.32 2006-10-24 13:26:26 etarassov Exp $
+// $Id: ChangeLog,v 1.462.2.33 2006-10-24 13:36:16 etarassov Exp $
 
 MAINTENANCE
 
@@ -7993,4 +7993,12 @@ Add profiling code with --enable-profiling.
   ledger_text_formats.hpp
 Add C++ interface for libxslt. Move the code using libxslt from
 ledger_text_format.?pp to xml_lmi.?pp files.
+
+20061024T1535Z <etarassov@tt-solutions.com> [1162]
+
+  ledger_text_formats.cpp
+  ledger_text_formats.hpp
+  ledger_xml_io.cpp
+  xml_resources_test.cpp
+Remove spaces before '&' in types.
 

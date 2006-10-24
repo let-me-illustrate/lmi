@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xml_io.cpp,v 1.48.2.10 2006-10-21 15:40:25 chicares Exp $
+// $Id: ledger_xml_io.cpp,v 1.48.2.11 2006-10-24 13:35:37 etarassov Exp $
 
 #include "ledger.hpp"
 
@@ -105,9 +105,9 @@ class double_formatter_t
   public:
     double_formatter_t();
 
-    bool            has_format(std::string const & s) const;
-    std::string     format(std::string const & s, double d) const;
-    string_vector_t format(std::string const & s, double_vector_t const & dv) const;
+    bool            has_format(std::string const& s) const;
+    std::string     format(std::string const& s, double d) const;
+    string_vector_t format(std::string const& s, double_vector_t const& dv) const;
 
   private:
     // Double conversion units
@@ -122,8 +122,8 @@ class double_formatter_t
 
     format_map_t format_map;
 
-    format_t get_format(std::string const & s) const;
-    std::string do_format(double d, format_t const & f) const;
+    format_t get_format(std::string const& s) const;
+    std::string do_format(double d, format_t const& f) const;
 
 #if defined SHOW_MISSING_FORMATS
     static std::string missing_formats_filename()
@@ -249,7 +249,7 @@ double_formatter_t::double_formatter_t()
             (xslt_directory / configurable_settings::instance().xslt_format_xml_filename()
             ).string();
     }
-    catch(boost::filesystem::filesystem_error const & e)
+    catch(boost::filesystem::filesystem_error const& e)
     {
         hobsons_choice()
             << "Invalid directory '"
@@ -349,7 +349,7 @@ double_formatter_t::double_formatter_t()
             throw std::runtime_error(oss.str());
             }
         }
-    catch(std::exception const & e)
+    catch(std::exception const& e)
         {
         warning()
             << "Error reading format information from '"
@@ -361,7 +361,7 @@ double_formatter_t::double_formatter_t()
         }
 }
 
-bool double_formatter_t::has_format(std::string const & s) const
+bool double_formatter_t::has_format(std::string const& s) const
 {
     format_map_t::const_iterator it = format_map.find(s);
     if (it == format_map.end())
@@ -376,7 +376,7 @@ bool double_formatter_t::has_format(std::string const & s) const
 }
 
 double_formatter_t::format_t
-double_formatter_t::get_format(std::string const & s) const
+double_formatter_t::get_format(std::string const& s) const
 {
     format_map_t::const_iterator it = format_map.find(s);
     if (it == format_map.end())
@@ -393,14 +393,14 @@ double_formatter_t::get_format(std::string const & s) const
     return it->second;
 }
 
-std::string double_formatter_t::format(std::string const & name, double d) const
+std::string double_formatter_t::format(std::string const& name, double d) const
 {
     format_t f = get_format(name);
 
     return do_format(d, f);
 }
 
-string_vector_t double_formatter_t::format(std::string const & s, double_vector_t const & dv) const
+string_vector_t double_formatter_t::format(std::string const& s, double_vector_t const& dv) const
 {
     format_t f = get_format(s);
     string_vector_t sv;
@@ -413,7 +413,7 @@ string_vector_t double_formatter_t::format(std::string const & s, double_vector_
     return sv;
 }
 
-std::string double_formatter_t::do_format(double d, format_t const & f) const
+std::string double_formatter_t::do_format(double d, format_t const& f) const
 {
     std::stringstream interpreter;
     std::locale loc;
@@ -422,7 +422,7 @@ std::string double_formatter_t::do_format(double d, format_t const & f) const
     interpreter.setf(std::ios_base::fixed, std::ios_base::floatfield);
     interpreter.precision(f.first);
     std::string s;
-    unit_t const & units = f.second;
+    unit_t const& units = f.second;
     if(units.first != 1.) d *= units.first;
     interpreter << d;
     interpreter >> s;
@@ -439,12 +439,12 @@ std::string double_formatter_t::do_format(double d, format_t const & f) const
 // --------------------------------------------------------------
 typedef std::pair<std::string, std::string const*> value_id;
 
-value_id make_value_id(std::string const & name)
+value_id make_value_id(std::string const& name)
 {
     return value_id(name, NULL);
 }
 
-value_id make_value_id(std::string const & name, e_run_basis const & basis)
+value_id make_value_id(std::string const& name, e_run_basis const& basis)
 {
     return value_id(name, &suffixes[basis]);
 }
@@ -745,8 +745,8 @@ void Ledger::do_write(xml_lmi::Element& illustration, bool light_version) const
         ;++j
         )
         {
-        xml_lmi::Element & string_scalar = *illustration.add_child("string_scalar");
-        value_id const & id = j->first;
+        xml_lmi::Element& string_scalar = *illustration.add_child("string_scalar");
+        value_id const& id = j->first;
         string_scalar.set_attribute("name", id.first);
         if (id.second)
             string_scalar.set_attribute("basis", *id.second);
@@ -759,10 +759,10 @@ void Ledger::do_write(xml_lmi::Element& illustration, bool light_version) const
         ;++j
         )
         {
-        value_id const & id = j->first;
+        value_id const& id = j->first;
         if ( formatter.has_format( id.first ) )
             {
-            xml_lmi::Element & double_scalar = *illustration.add_child("double_scalar");
+            xml_lmi::Element& double_scalar = *illustration.add_child("double_scalar");
             double_scalar.set_attribute("name", id.first);
             if (id.second)
                 double_scalar.set_attribute("basis", *id.second);
@@ -776,19 +776,19 @@ void Ledger::do_write(xml_lmi::Element& illustration, bool light_version) const
         ;++j
         )
         {
-        xml_lmi::Element & svector = *illustration.add_child("string_vector");
-        value_id const & id = j->first;
+        xml_lmi::Element& svector = *illustration.add_child("string_vector");
+        value_id const& id = j->first;
         svector.set_attribute("name", id.first);
         if (id.second)
             svector.set_attribute("basis", *id.second);
-        string_vector_t const & v = j->second;
+        string_vector_t const& v = j->second;
         for
             (string_vector_t::const_iterator k = v.begin()
             ;k != v.end()
             ;++k
             )
             {
-            xml_lmi::Element & duration = *svector.add_child("duration");
+            xml_lmi::Element& duration = *svector.add_child("duration");
             duration.add_child_text(*k);
             }
         }
@@ -799,10 +799,10 @@ void Ledger::do_write(xml_lmi::Element& illustration, bool light_version) const
         ;++j
         )
         {
-        value_id const & id = j->first;
+        value_id const& id = j->first;
         if ( formatter.has_format( id.first ) )
             {
-            xml_lmi::Element & dvector = *illustration.add_child("double_vector");
+            xml_lmi::Element& dvector = *illustration.add_child("double_vector");
             dvector.set_attribute("name", id.first);
             if (id.second)
                 dvector.set_attribute("basis", *id.second);
@@ -815,7 +815,7 @@ void Ledger::do_write(xml_lmi::Element& illustration, bool light_version) const
                 ;++k
                 )
                 {
-                xml_lmi::Element & duration = *dvector.add_child("duration");
+                xml_lmi::Element& duration = *dvector.add_child("duration");
                 duration.add_child_text(*k);
                 }
             }
@@ -840,7 +840,7 @@ void Ledger::do_write(xml_lmi::Element& illustration, bool light_version) const
         SupplementalReportColumns.push_back(ledger_invariant_->SupplementalReportColumn11);
 
         // now put this information into the xml
-        xml_lmi::Element & supplemental_report = *illustration.add_child("supplemental_report");
+        xml_lmi::Element& supplemental_report = *illustration.add_child("supplemental_report");
 
         // Eventually customize the report name.
         supplemental_report.add_child("title")->add_child_text("Supplemental Report");

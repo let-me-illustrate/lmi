@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xml_resources_test.cpp,v 1.1.2.7 2006-10-24 11:48:25 chicares Exp $
+// $Id: xml_resources_test.cpp,v 1.1.2.8 2006-10-24 13:35:37 etarassov Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -43,14 +43,14 @@
 namespace
 {
 
-std::string prepend_xslt_directory(std::string const & filename)
+std::string prepend_xslt_directory(std::string const& filename)
 {
     boost::filesystem::path dir;
     try
         {
         dir = configurable_settings::instance().xslt_directory();
         }
-    catch(boost::filesystem::filesystem_error const & err)
+    catch(boost::filesystem::filesystem_error const& err)
         {
         std::ostringstream oss;
         oss
@@ -66,7 +66,7 @@ std::string prepend_xslt_directory(std::string const & filename)
         boost::filesystem::path const file = dir / filename;
         return file.string();
         }
-    catch(boost::filesystem::filesystem_error const & err)
+    catch(boost::filesystem::filesystem_error const& err)
         {
         std::ostringstream oss;
         oss
@@ -96,10 +96,10 @@ class LedgerOutput
 
     // put scalar value
     LedgerOutput& set
-        (std::string const & node
-        ,std::string const & name
-        ,std::string const & basis // empty means no basis
-        ,std::string const & value
+        (std::string const& node
+        ,std::string const& name
+        ,std::string const& basis // empty means no basis
+        ,std::string const& value
         )
     {
         scalars_[std::make_pair(node, std::make_pair(name, basis))] = value;
@@ -107,10 +107,10 @@ class LedgerOutput
     }
     // put vector value
     LedgerOutput& set
-        (std::string const & node
-        ,std::string const & name
-        ,std::string const & basis // empty means no basis
-        ,std::vector<std::string> const & values
+        (std::string const& node
+        ,std::string const& name
+        ,std::string const& basis // empty means no basis
+        ,std::vector<std::string> const& values
     )
     {
         vectors_[std::make_pair(node, std::make_pair(name, basis))] = values;
@@ -120,7 +120,7 @@ class LedgerOutput
     std::string output() const
     {
         xml_lmi::Document doc;
-        xml_lmi::Element & root = *doc.create_root_node("illustration");
+        xml_lmi::Element& root = *doc.create_root_node("illustration");
 
         for
             (scalars_t::const_iterator sit = scalars_.begin()
@@ -129,9 +129,9 @@ class LedgerOutput
             ;++sit
             )
             {
-            node_t const & node = sit->first;
+            node_t const& node = sit->first;
 
-            xml_lmi::Element & scalar = *root.add_child(node.first);
+            xml_lmi::Element& scalar = *root.add_child(node.first);
             scalar.set_attribute("name", node.second.first);
             if (!node.second.second.empty())
                 {
@@ -147,9 +147,9 @@ class LedgerOutput
             ;++vit
             )
             {
-            node_t const & node = vit->first;
+            node_t const& node = vit->first;
 
-            xml_lmi::Element & vector_node = *root.add_child(node.first);
+            xml_lmi::Element& vector_node = *root.add_child(node.first);
             vector_node.set_attribute("name", node.second.first);
             if (!node.second.second.empty())
                 {
@@ -200,14 +200,14 @@ bool validate_xml_doc_against_schema(xmlDocPtr doc, xmlSchemaPtr schema)
     return (ret == 0);
 }
 
-bool validate_ledger_against_schema(LedgerOutput const & output, xmlSchemaPtr schema)
+bool validate_ledger_against_schema(LedgerOutput const& output, xmlSchemaPtr schema)
 {
     std::string xml = output.output();
     xmlDocPtr doc = xmlParseMemory(xml.c_str(), xml.size());
     return validate_xml_doc_against_schema(doc, schema);
 }
 
-bool apply_xslt_to_doc(std::string const & filename, xmlDocPtr doc)
+bool apply_xslt_to_doc(std::string const& filename, xmlDocPtr doc)
 {
     xsltStylesheetPtr xsl = LedgerFormatterFactory::Instance().GetStylesheet(filename);
     xmlDocPtr res = xsltApplyStylesheet(xsl, doc, NULL);
@@ -220,7 +220,7 @@ bool apply_xslt_to_doc(std::string const & filename, xmlDocPtr doc)
 
 int test_main(int, char*[])
 {
-    configurable_settings const & cs
+    configurable_settings const& cs
         (configurable_settings::instance()
         );
 
