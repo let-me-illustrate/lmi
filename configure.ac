@@ -21,7 +21,7 @@ dnl snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
 dnl === Prologue ===
 
-AC_REVISION($Id: configure.ac,v 1.22.2.2 2006-10-20 17:46:02 etarassov Exp $)dnl
+AC_REVISION($Id: configure.ac,v 1.22.2.3 2006-10-24 13:05:12 etarassov Exp $)dnl
 
 AC_PREREQ(2.56)
 AC_INIT(LMI, 1.0.0, [chicares@cox.net])
@@ -111,6 +111,16 @@ AC_ARG_ENABLE(optimize,
                  xno) optimize_option=no ;;
                    *) AC_MSG_ERROR(bad value ${enableval} for --enable-optimize) ;;
              esac], [optimize_option=default])
+
+AC_ARG_ENABLE(profiling,
+             [AC_HELP_STRING([--enable-profiling],
+                             [generate a code suitable for profiling (note: linux only, using gprof)])],
+             [case "x${enableval}" in
+                   x) profiling_option=no ;;
+                xyes) profiling_option=yes ;;
+                 xno) profiling_option=no ;;
+                   *) AC_MSG_ERROR(bad value ${enableval} for --enable-profiling) ;;
+             esac], [optimize_profiling=default])
 
 AC_ARG_ENABLE(mpatrol,
              [AC_HELP_STRING([--with-mpatrol],
@@ -210,8 +220,23 @@ if test "$optimize_option" = "yes"; then
 
     CFLAGS="$CFLAGS $OPT_FLAG"
     CXXFLAGS="$CXXFLAGS $OPT_FLAG"
+
+    dnl disable profiling by default when optimizing but don't disable it
+    dnl if explicit --enable-profiling was given
+    if test "$profiling_option" != "yes"; then
+        profiling_option="no"
+    fi
 fi
 
+dnl add profiling information if necessary
+if test "$profiling_option" = "yes"; then
+    case "$CC" in
+        cl) PROFILING_FLAG="";;
+        *)  PROFILING_FLAG="-pg";;
+    esac
+
+    LDFLAGS="$LDFLAGS $PROFILING_FLAG"
+fi
 
 dnl === Checks for standard headers/functions ===
 

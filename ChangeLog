@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.462.2.30 2006-10-24 11:48:25 chicares Exp $
+// $Id: ChangeLog,v 1.462.2.31 2006-10-24 13:09:33 etarassov Exp $
 
 MAINTENANCE
 
@@ -7979,4 +7979,9 @@ Adapt to new versions of gnome xml libraries, canonically installed.
   xml_resources_test.cpp
 Add a header that must be included explicitly because of the
 20061020T0025Z changes.
+
+20061024T1505Z <etarassov@tt-solutions.com> [1162]
+
+  configurea.ac
+Add profiling code with --enable-profiling.
 
