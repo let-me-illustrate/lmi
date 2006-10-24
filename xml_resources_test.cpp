@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xml_resources_test.cpp,v 1.1.2.6 2006-10-22 02:08:16 chicares Exp $
+// $Id: xml_resources_test.cpp,v 1.1.2.7 2006-10-24 11:48:25 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -35,7 +35,9 @@
 
 #include <boost/filesystem/exception.hpp>
 #include <boost/filesystem/path.hpp>
+
 #include <libxml/xmlschemas.h>
+#include <libxml++/libxml++.h>
 #include <libxslt/transform.h>
 
 namespace
@@ -306,3 +308,4 @@ int test_main(int, char*[])
 
     return EXIT_SUCCESS;
 }
+
