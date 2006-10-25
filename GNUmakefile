@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: GNUmakefile,v 1.71.2.3 2006-10-21 17:03:19 chicares Exp $
+# $Id: GNUmakefile,v 1.71.2.4 2006-10-25 22:42:53 chicares Exp $
 
 ################################################################################
 
@@ -163,6 +163,7 @@ MAKETARGET = \
                          toolset='$(toolset)' \
                       build_type='$(build_type)' \
                platform-makefile='$(platform-makefile)' \
+                    xsl_fo_files='$(xsl_fo_files)' \
                USE_SO_ATTRIBUTES='$(USE_SO_ATTRIBUTES)' \
                     yyyymmddhhmm='$(yyyymmddhhmm)' \
   $(MAKECMDGOALS)
@@ -242,14 +243,17 @@ makefiles := \
 
 scripts := $(wildcard *.sed *.sh)
 
-# TODO ?? These old '.xsl' files need to be cleaned up.
-unclean_xsl_files := \
+xsl_fo_files := \
   illustration_reg.xsl \
   individual_private_placement.xsl \
   nasd.xsl \
 
+# TODO ?? Clean up these files: they fail 'make check_concinnity'.
+unclean_xml_files := \
+  $(xsl_fo_files) \
+
 xml_files := $(wildcard *.xml *.xrc *.xsd *.xsl)
-xml_files := $(filter-out $(unclean_xsl_files),$(xml_files))
+xml_files := $(filter-out $(unclean_xml_files),$(xml_files))
 
 xpm_files := $(wildcard *.xpm)
 
@@ -430,7 +434,7 @@ expected_source_files := \
   $(c_source_files) \
   $(cxx_header_files) \
   $(cxx_source_files) \
-  $(unclean_xsl_files) \
+  $(unclean_xml_files) \
   $(xml_files) \
   $(wildcard *.ac *.rc) \
 

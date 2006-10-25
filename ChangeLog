@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.462.2.38 2006-10-25 14:59:49 chicares Exp $
+// $Id: ChangeLog,v 1.462.2.39 2006-10-25 22:42:53 chicares Exp $
 
 MAINTENANCE
 
@@ -8037,4 +8037,10 @@ Correct a typo.
 
   posix_fhs.make
 Amend a marker.
+
+20061025T2242Z <chicares@cox.net> [1161]
+
+  GNUmakefile
+  workhorse.make
+Include xml files in 'install' target.
 
