@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xml_resources_test.cpp,v 1.1.2.8 2006-10-24 13:35:37 etarassov Exp $
+// $Id: xml_resources_test.cpp,v 1.1.2.9 2006-10-25 11:20:30 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -209,6 +209,8 @@ bool validate_ledger_against_schema(LedgerOutput const& output, xmlSchemaPtr sch
 
 bool apply_xslt_to_doc(std::string const& filename, xmlDocPtr doc)
 {
+    // EVGENIY Here, I get
+    //   error: cannot convert `const xml_lmi::Stylesheet' to `xsltStylesheet*'
     xsltStylesheetPtr xsl = LedgerFormatterFactory::Instance().GetStylesheet(filename);
     xmlDocPtr res = xsltApplyStylesheet(xsl, doc, NULL);
     bool result = (res != NULL);
