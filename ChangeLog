@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.462.2.35 2006-10-25 11:20:30 chicares Exp $
+// $Id: ChangeLog,v 1.462.2.36 2006-10-25 12:15:47 chicares Exp $
 
 MAINTENANCE
 
@@ -8014,4 +8014,11 @@ Note a compiler diagnostic. Experimentally mark the comment with the
 name of the developer, who can remove the comment when revising the
 code (if the comment turns out not to be invalid); let's see how we
 like that method.
+
+20061025T1215Z <chicares@cox.net> [1162]
+
+  ihs_irc7702.cpp
+  ledger_text_formats.cpp
+  ledger_text_formats.hpp
+Prefer to write no spaces in operator-function names.
 

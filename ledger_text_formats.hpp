@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_text_formats.hpp,v 1.5.2.4 2006-10-24 13:35:37 etarassov Exp $
+// $Id: ledger_text_formats.hpp,v 1.5.2.5 2006-10-25 12:15:47 chicares Exp $
 
 #ifndef ledger_text_formats_hpp
 #define ledger_text_formats_hpp
@@ -77,7 +77,7 @@ class LMI_SO LedgerFormatter
     LedgerFormatter();
 
     LedgerFormatter(LedgerFormatter const& rhs);
-    LedgerFormatter& operator = (LedgerFormatter const& rhs);
+    LedgerFormatter& operator=(LedgerFormatter const& rhs);
 
     void FormatAsHtml         (std::ostream& str) const;
     void FormatAsTabDelimited (std::ostream& str) const;

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_text_formats.cpp,v 1.22.2.4 2006-10-24 13:35:37 etarassov Exp $
+// $Id: ledger_text_formats.cpp,v 1.22.2.5 2006-10-25 12:15:47 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -135,7 +135,7 @@ LedgerFormatter::LedgerFormatter(LedgerFormatter const& rhs)
 }
 
 //=============================================================================
-LedgerFormatter& LedgerFormatter::operator = (LedgerFormatter const& rhs)
+LedgerFormatter& LedgerFormatter::operator=(LedgerFormatter const& rhs)
 {
     if (this != &rhs && ledger_values_ != rhs.ledger_values_)
         {
