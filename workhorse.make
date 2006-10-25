@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: workhorse.make,v 1.73.2.4 2006-10-24 12:46:42 zeitlin Exp $
+# $Id: workhorse.make,v 1.73.2.5 2006-10-25 14:59:11 chicares Exp $
 
 ################################################################################
 
@@ -244,7 +244,7 @@ wx_config_check:
 #  libxslt:  /usr/local/include/libxslt
 # The first provides no '*-config' script at all. The last two provide
 # '*-config' scripts that don't respect an overriding $(prefix): they
-# apparently hardcode that paths above, so there's no point in calling
+# apparently hardcode the paths above, so there's no point in calling
 # them.
 
 # Directory /usr/local/include/ is searched for headers, but only
