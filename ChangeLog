@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.462.2.36 2006-10-25 12:15:47 chicares Exp $
+// $Id: ChangeLog,v 1.462.2.37 2006-10-25 13:00:22 chicares Exp $
 
 MAINTENANCE
 
@@ -8021,4 +8021,10 @@ like that method.
   ledger_text_formats.cpp
   ledger_text_formats.hpp
 Prefer to write no spaces in operator-function names.
+
+20061025T1300Z <chicares@cox.net> [1162]
+
+  alert.hpp
+  illustration_view.cpp
+Document and simplify alert-stream usage.
 
