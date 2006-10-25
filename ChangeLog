@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.462.2.37 2006-10-25 13:00:22 chicares Exp $
+// $Id: ChangeLog,v 1.462.2.38 2006-10-25 14:59:49 chicares Exp $
 
 MAINTENANCE
 
@@ -8027,4 +8027,14 @@ Prefer to write no spaces in operator-function names.
   alert.hpp
   illustration_view.cpp
 Document and simplify alert-stream usage.
+
+20061025T1459Z <chicares@cox.net> [1162]
+
+  workhorse.make
+Correct a typo.
+
+20061025T1459Z <chicares@cox.net> [1161]
+
+  posix_fhs.make
+Amend a marker.
 

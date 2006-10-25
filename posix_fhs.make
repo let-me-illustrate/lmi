@@ -20,7 +20,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: posix_fhs.make,v 1.11.2.1 2006-10-15 17:29:06 chicares Exp $
+# $Id: posix_fhs.make,v 1.11.2.2 2006-10-25 14:59:49 chicares Exp $
 
 ################################################################################
 
@@ -31,7 +31,7 @@ SHREXT := .so
 platform_boost_libraries := \
   -lboost_filesystem-gcc \
 
-# TODO ?? Evgeniy--I find no 'libxml++-config'. How should that
+# EVGENIY I find no 'libxml++-config'. How should that
 # library be handled here?
 platform_libxml2_libraries := \
   $(shell xml2-config --libs) \
