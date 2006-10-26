@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: objects.make,v 1.83.2.2 2006-10-20 17:46:02 etarassov Exp $
+# $Id: objects.make,v 1.83.2.3 2006-10-26 22:46:47 chicares Exp $
 
 ################################################################################
 
@@ -682,9 +682,15 @@ xenum_test$(EXEEXT): \
   xenum_test.o \
 
 xml_resources_test$(EXEEXT): \
+  $(boost_filesystem_objects) \
   $(common_test_objects) \
+  configurable_settings.o \
+  data_directory.o \
+  global_settings.o \
+  miscellany.o \
+  path_utility.o \
+  xml_lmi.o \
   xml_resources_test.o \
-  liblmi.a \
 
 xrange_test$(EXEEXT): \
   $(common_test_objects) \
