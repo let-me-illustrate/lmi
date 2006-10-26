@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: workhorse.make,v 1.73.2.6 2006-10-25 22:42:53 chicares Exp $
+# $Id: workhorse.make,v 1.73.2.7 2006-10-26 01:08:26 chicares Exp $
 
 ################################################################################
 
@@ -230,13 +230,9 @@ wx_config_check:
 
 # Path to libraries from www.boost.org : most required boost libraries
 # are implemented exclusively in headers. It seems common in the *nix
-# world to leave those headers in the subdirectory of /whatever/src/
-# to which the boost distribution is extracted, probably because boost
-# does not put all its headers in an include/ subdirectory. But that
-# seems broken, so instead copy those headers to /usr/local/include .
-#
-# TODO ?? If the "common" practice above turns out to be universal,
-# then conform to it.
+# world to place those headers in /usr/[local/]include/boost/ . For
+# msw, mimic that by copying those headers to /usr/local/include; see:
+#   http://lists.gnu.org/archive/html/lmi/2006-10/msg00046.html
 
 # A default installation places gnome xml-library headers here:
 #  libxml++: /usr/local/include/libxml++-2.6/libxml++
