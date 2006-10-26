@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: configurable_settings.cpp,v 1.14.2.10 2006-10-20 17:46:02 etarassov Exp $
+// $Id: configurable_settings.cpp,v 1.14.2.11 2006-10-26 12:52:25 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -34,8 +34,6 @@
 #include "xml_lmi.hpp"
 
 #include <libxml++/libxml++.h>
-
-#include <exception>
 
 // TODO ?? Need unit tests.
 

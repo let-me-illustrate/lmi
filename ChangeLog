@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.462.2.40 2006-10-26 01:08:26 chicares Exp $
+// $Id: ChangeLog,v 1.462.2.41 2006-10-26 12:52:25 chicares Exp $
 
 MAINTENANCE
 
@@ -8042,4 +8042,11 @@ Amend a marker.
 
   workhorse.make
 Improve documentation of boost header installation for msw.
+
+20061026T1252Z <chicares@cox.net> [1160]
+
+  configurable_settings.cpp
+  ledger.hpp
+  xml_lmi.hpp
+Include only appropriate headers.
 

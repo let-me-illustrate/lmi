@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger.hpp,v 1.13.2.5 2006-10-20 17:46:02 etarassov Exp $
+// $Id: ledger.hpp,v 1.13.2.6 2006-10-26 12:52:25 chicares Exp $
 
 #ifndef ledger_hpp
 #define ledger_hpp
@@ -29,7 +29,6 @@
 #include "so_attributes.hpp"
 #include "streamable.hpp"
 #include "xenumtypes.hpp"
-#include "xml_lmi.hpp"
 
 #include <boost/shared_ptr.hpp>
 
@@ -144,6 +143,17 @@ class LMI_SO Ledger
   private:
     friend class LedgerFormatter;
 
+    // EVGENIY Can we use a different name for this function?
+    // To me, 'do_' suggests that it's virtual:
+    //
+    // http://groups.google.com/group/comp.lang.c++.moderated/msg/f834bd9d73053566
+    // | There is a de facto naming convention that
+    // | prefixes the private virtual function with a "do"
+    //
+    // Would this:
+    //       void write(xml_lmi::Element&, bool light_version) const;
+    // be bad?
+    //
     // We need to generate different variants of xml:
     // - light version, when the speed is crucial
     // - heavy variant, when we need all the information

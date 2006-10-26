@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xml_lmi.hpp,v 1.1.2.11 2006-10-24 13:23:57 etarassov Exp $
+// $Id: xml_lmi.hpp,v 1.1.2.12 2006-10-26 12:52:25 chicares Exp $
 
 #ifndef xml_lmi_hpp
 #define xml_lmi_hpp
@@ -31,7 +31,6 @@
 
 #include <iosfwd>
 #include <list>
-#include <map>
 #include <string>
 
 namespace xmlpp
