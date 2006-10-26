@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: build_libxmlpp.make,v 1.2 2006-10-26 00:48:00 chicares Exp $
+# $Id: build_libxmlpp.make,v 1.3 2006-10-26 01:56:49 chicares Exp $
 
 # This makefile is designed to be run in MSYS: the native zsh port
 # we customarily use can't handle 'configure'. Care is taken to
@@ -151,7 +151,7 @@ $(libraries):
 	cd $(xml_dir)/$(notdir $@); \
 	  ./configure --prefix=$(prefix) $($(notdir $@)_options) >>$$LOG 2>&1; \
 	  $(MAKE)                                                >>$$LOG 2>&1; \
-	  $(MAKE) prefix=$(prefix) install                       >>$$LOG 2>&1; \
+	  $(MAKE)                                                >>$$LOG 2>&1; \
 
 .PHONY: libxslt/1.1/libxslt-1.1.17
 libxslt/1.1/libxslt-1.1.17: patch_libxslt
