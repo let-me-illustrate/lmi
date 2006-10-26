@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: inputillus_xml_io.cpp,v 1.12.2.9 2006-10-20 00:25:12 chicares Exp $
+// $Id: inputillus_xml_io.cpp,v 1.12.2.10 2006-10-26 13:15:46 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -154,7 +154,7 @@ void IllusInputParms::read(xml_lmi::Element const& x)
                 }
             continue;
             }
-        (*this)[node_tag] = xml_lmi::get_content(*child);
+        operator[](node_tag) = xml_lmi::get_content(*child);
         // TODO ?? Perhaps a std::list would perform better.
         member_names.erase(current_member);
         }
