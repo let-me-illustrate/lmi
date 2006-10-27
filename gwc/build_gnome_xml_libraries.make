@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: build_gnome_xml_libraries.make,v 1.3 2006-10-27 15:24:09 chicares Exp $
+# $Id: build_gnome_xml_libraries.make,v 1.4 2006-10-27 22:28:05 chicares Exp $
 
 # This makefile is designed to be run in MSYS: the native zsh port
 # we customarily use can't handle 'configure'. Care is taken to
@@ -144,7 +144,7 @@ wget_whence := $(host)/$(host_path)
 
 .PHONY: $(libraries)
 $(libraries):
-	export PATH=$(mingw_bin_dir):$$PATH:$(prefix)/bin ; \
+	export PATH=$(mingw_bin_dir):$(prefix)/bin:$$PATH ; \
 	export LOG=log-$(date); \
 	$($(notdir $@)_exports) \
 	$(RM) --force $$LOG; \
