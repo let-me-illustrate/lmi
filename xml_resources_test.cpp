@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xml_resources_test.cpp,v 1.1.2.10 2006-10-27 00:34:37 etarassov Exp $
+// $Id: xml_resources_test.cpp,v 1.1.2.11 2006-10-27 12:36:42 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -117,7 +117,7 @@ class LedgerOutput
         return *this;
     }
 
-    void output(xml_lmi::Document & doc) const
+    void output(xml_lmi::Document& doc) const
     {
         xml_lmi::Element& root = *doc.create_root_node("illustration");
 
@@ -137,7 +137,7 @@ class LedgerOutput
                 scalar.set_attribute("basis", node.second.second);
                 }
 
-            scalar.add_child_text( sit->second );
+            scalar.add_child_text(sit->second);
             }
         for
             (vectors_t::const_iterator vit = vectors_.begin()
@@ -162,7 +162,7 @@ class LedgerOutput
                 ;++dit
                 )
                 {
-                vector_node.add_child("duration")->add_child_text( *dit );
+                vector_node.add_child("duration")->add_child_text(*dit);
                 }
             }
     }
@@ -214,7 +214,7 @@ bool validate_ledger_against_schema
 
 bool apply_xslt_to_document
     (std::string const& filename
-    ,xml_lmi::Document const & document
+    ,xml_lmi::Document const& document
     )
 {
     try
@@ -230,6 +230,15 @@ bool apply_xslt_to_document
         }
     catch(std::exception const&)
         {
+        // EVGENIY--An empty catch-clause seems a little unusual here.
+        // Is there any objection to moving 'return false;' from below
+        // up into the body of the catch-clause--e.g., does any modern
+        // compiler issue a warning about that?
+        //
+        // Below, a different catch-clause has this body:
+        //   BOOST_TEST(false);
+        // Would it be appropriate to add that here, or is failure
+        // of the try-block actually a recoverable error?
         }
     return false;
 }
@@ -269,6 +278,9 @@ int test_main(int, char*[])
     try
         {
         xml_lmi::dom_parser dom_parser(format_xml_filename);
+        // EVGENIY--Here I get
+        //   error: 'class xml_lmi::dom_parser' has no member named 'document'
+        // Might you have added such a member in your local tree?
         xml_lmi::Document const& document = dom_parser.document();
         BOOST_TEST(validate_xml_doc_against_schema(document, schema));
         }
@@ -292,40 +304,40 @@ int test_main(int, char*[])
     // Must fail: scalar node is not defined
     LedgerOutput ledger1 = ledger0;
     ledger1.set("scalar", "name", "", "45");
-    BOOST_TEST( !validate_ledger_against_schema(ledger1, schema));
+    BOOST_TEST(!validate_ledger_against_schema(ledger1, schema));
 
     // Must fail: 'basis' is unknown basis value
     LedgerOutput ledger2 = ledger0;
     ledger2.set("string_scalar", "Age", "basis", "45");
-    BOOST_TEST( !validate_ledger_against_schema(ledger2, schema));
+    BOOST_TEST(!validate_ledger_against_schema(ledger2, schema));
 
     // Must fail: name 'Age' has to be unique across all types of values
-    // TODO ?? add the correct uniqueness constrint to the schema
+    // TODO ?? add the correct uniqueness constraint to the schema
     LedgerOutput ledger3 = ledger0;
     ledger3.set("string_scalar", "Age", "", "10");
-    BOOST_TEST( !validate_ledger_against_schema(ledger3, schema));
+    BOOST_TEST(!validate_ledger_against_schema(ledger3, schema));
 
     // Must fail: invalid numeric value '10.000,00' supplied for 'Age'
     LedgerOutput ledger4 = ledger0;
     ledger4.set("double_scalar", "Age", "", "10.000,00");
-    BOOST_TEST( !validate_ledger_against_schema(ledger4, schema));
+    BOOST_TEST(!validate_ledger_against_schema(ledger4, schema));
 
     // Must fail: node 'Age' is string_vector, but has a scalar value
     LedgerOutput ledger5 = ledger0;
     ledger5.set("string_vector", "Age", "", "45");
-    BOOST_TEST( !validate_ledger_against_schema(ledger5, schema));
+    BOOST_TEST(!validate_ledger_against_schema(ledger5, schema));
 
     // Must fail: node 'Age' is string_scalar, but has a vector value
     LedgerOutput ledger6 = ledger0;
     ledger6.set("string_scalar", "Age", "", str_vector_t(1, "45"));
-    BOOST_TEST( !validate_ledger_against_schema(ledger6, schema));
+    BOOST_TEST(!validate_ledger_against_schema(ledger6, schema));
 
     // take a valid simple xml output and test xsl templates on it
     xml_lmi::Document document;
     ledger0.output(document);
 
     // test html.xsl
-    BOOST_TEST( apply_xslt_to_document(cs.xslt_html_filename(), document) );
+    BOOST_TEST(apply_xslt_to_document(cs.xslt_html_filename(), document));
 
     // test tab_delimited.xsl on output.xml
     BOOST_TEST
@@ -333,7 +345,7 @@ int test_main(int, char*[])
         );
 
     // test <xsl-fo>.xsl files on output.xml
-    // BOOST_TEST( apply_xslt_to_document(cs.xslt_html_filename(), output_doc) );
+    // BOOST_TEST(apply_xslt_to_document(cs.xslt_html_filename(), output_doc));
 
     return EXIT_SUCCESS;
 }
