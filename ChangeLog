@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.462.2.43 2006-10-26 22:46:47 chicares Exp $
+// $Id: ChangeLog,v 1.462.2.44 2006-10-27 00:06:28 chicares Exp $
 
 MAINTENANCE
 
@@ -8062,4 +8062,9 @@ Prefer a consistent style for calling this->operator[]().
   objects.make
 Build unit tests from object files only. See:
   http://lists.gnu.org/archive/html/lmi/2006-01/msg00009.html
+
+20061027T0006Z <chicares@cox.net> [1160]
+
+  objects.make
+Remove an undefined variable.
 
