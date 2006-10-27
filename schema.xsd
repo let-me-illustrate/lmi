@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: schema.xsd,v 1.1.2.1 2006-10-20 17:46:02 etarassov Exp $
+    $Id: schema.xsd,v 1.1.2.2 2006-10-27 15:52:19 etarassov Exp $
 
     TODO:
     - add uniqueness constraints for (name,basis) in every document
@@ -276,8 +276,12 @@
                 - an optional "basis" attribute
             </xs:documentation>
         </xs:annotation>
-        <xs:attribute name="name" type="name_type" use="required" />
-        <xs:attribute name="basis" type="basis_type" use="optional" />
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute name="name" type="name_type" use="required" />
+                <xs:attribute name="basis" type="basis_type" use="optional" />
+            </xs:extension>
+        </xs:simpleContent>
     </xs:complexType>
 
     <xs:complexType name="report_spacer_type">
@@ -376,6 +380,7 @@
             <xs:element name="format" type="column_format_type" minOccurs="0" maxOccurs="1" />
         </xs:sequence>
         <xs:attribute name="name" type="name_type" use="required" />
+        <xs:attribute name="calculation_summary" type="xs:boolean" default="false" use="optional" />
     </xs:complexType>
 
     <xs:complexType name="columns_type">

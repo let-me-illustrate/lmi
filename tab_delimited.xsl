@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: tab_delimited.xsl,v 1.1.2.1 2006-10-20 17:46:02 etarassov Exp $
+    $Id: tab_delimited.xsl,v 1.1.2.2 2006-10-27 15:52:19 etarassov Exp $
 
     Uses format.xml - column titles, number-formatting and other information.
 -->
@@ -37,7 +37,7 @@
 
 <xsl:include href="common.xsl" />
 
-<xsl:variable name="headers_xml">
+<xsl:variable name="basic_columns_xml">
     <header name="DBOpt" title="DeathBenefitOption" />
     <header name="EeGrossPmt" title="EmployeeGrossPremium" />
     <header name="ErGrossPmt" title="CorporationGrossPremium" />
@@ -129,41 +129,26 @@
     taken as an xml file.
     XPath construct "document('')" references the stylesheet itself taken as XML file.
 -->
-<xsl:variable name="headers" select="document('tab_delimited.xsl')/xsl:stylesheet/xsl:variable[@name='headers_xml']/header" />
+<xsl:variable name="basic_columns" select="document('tab_delimited.xsl')/xsl:stylesheet/xsl:variable[@name='basic_columns_xml']/header" />
 
-<!-- look below for some comments on $illustration -->
-<xsl:template name="vector_item"
-    ><xsl:param name="illustration"
-   /><xsl:param name="position"
-   /><xsl:param name="name"
-   /><xsl:param name="basis"
-   /><xsl:choose
-        ><xsl:when test="$basis"
-            ><xsl:choose
-                ><xsl:when test="count($illustration/double_vector[@name=$name][@basis=$basis]/duration) != 0"
-                    ><xsl:value-of select="$illustration/double_vector[@name=$name][@basis=$basis]/duration[$position]"
-                /></xsl:when
-                ><xsl:otherwise
-                    ><xsl:value-of select="$illustration/string_vector[@name=$name][@basis=$basis]/duration[$position]"
-                /></xsl:otherwise
-            ></xsl:choose
-        ></xsl:when
-        ><xsl:otherwise
-            ><xsl:choose
-                ><xsl:when test="count($illustration/double_vector[@name=$name]/duration) != 0"
-                    ><xsl:value-of select="$illustration/double_vector[@name=$name]/duration[$position]"
-                /></xsl:when
-                ><xsl:otherwise
-                    ><xsl:value-of select="$illustration/string_vector[@name=$name]/duration[$position]"
-                /></xsl:otherwise
-            ></xsl:choose
-        ></xsl:otherwise
-    ></xsl:choose
+<xsl:variable name="all_columns" select="$basic_columns | $supplemental_columns" />
+
+<!-- Print a non-empty value, and puts '0' for an empty (non-existing) value. -->
+<xsl:template name="print_value"
+   ><xsl:param name="value"
+
+  /><xsl:choose
+       ><xsl:when test="not($value)"
+           ><xsl:text>0</xsl:text
+       ></xsl:when
+       ><xsl:otherwise
+           ><xsl:value-of select="$value"
+      /></xsl:otherwise
+   ></xsl:choose
 ></xsl:template>
 
 <xsl:template match="/illustration"
     ><xsl:text>&nl;</xsl:text><xsl:text>&nl;</xsl:text
-
 
     >FOR BROKER-DEALER USE ONLY. NOT TO BE SHARED WITH CLIENTS.<xsl:text>&nl;</xsl:text><xsl:text>&nl;</xsl:text
 
@@ -219,88 +204,108 @@
     >DatePrepared<xsl:text>&tab;</xsl:text><xsl:text>&tab;</xsl:text
     >'<xsl:value-of select="string_scalar[@name='PrepMonth']" /> <xsl:value-of select="string_scalar[@name='PrepDay']" />, <xsl:value-of select="string_scalar[@name='PrepYear']" />'<xsl:text>&nl;</xsl:text
 
-    ><xsl:variable name="loop_variable" select="'Outlay'"></xsl:variable
-    ><xsl:variable name="start_age" select="number(double_scalar[@name='Age'])"></xsl:variable
+    ><xsl:call-template name="data_table"
+        ><xsl:with-param name="pos" select="1"
+       /><xsl:with-param name="columns" select="$all_columns"
+       /><xsl:with-param name="headers" select="$empty_nodeset"
+       /><xsl:with-param name="vectors" select="$empty_nodeset"
+   /></xsl:call-template
 
+></xsl:template>
 
-    >PolicyYear<xsl:text>&tab;</xsl:text
-    >AttainedAge<xsl:text>&tab;</xsl:text
+<!--
+    The template to be called from 'data_table'. See 'data_table' for parameter
+    description.
+    It generates the tab delimited table of values.
+-->
+<xsl:template name="do_data_table"
+   ><xsl:param name="headers"
+  /><xsl:param name="vectors"
 
-    ><xsl:for-each select="$headers"
-        ><xsl:value-of select="@title" /><xsl:text>&tab;</xsl:text
-        ><!--
-         TODO Prefer calling the title template instead of using hardcoded title names
-         <xsl:call-template name="title"
-            ><xsl:with-param name="name" select="@name"
-           /><xsl:with-param name="basis" select="5"
-       /></xsl:call-template
-    >
-  --></xsl:for-each
-    ><xsl:text>&nl;</xsl:text
+  /><xsl:variable name="start_age" select="number($illustration/double_scalar[@name='Age'])"></xsl:variable
 
-    ><!--
-         In an inner loop below we are iterating over a node set from some other document.
-         For some reason the root node '/' becomes bound to that other document
-         and we cannot use '/illustration' no longer to acces our xml data.
-         Therefore bind '/illustration' to a variable '$illustration' and pass it
-         as a parameter to a template.
-  --><xsl:variable name="illustration" select="/illustration"></xsl:variable
+   ><!--
+    Table: Headers
+    ==============
+ -->PolicyYear<xsl:text>&tab;</xsl:text
+   >AttainedAge<xsl:text>&tab;</xsl:text
 
-    ><xsl:for-each select="double_vector[@name=$loop_variable]/duration"
-        ><xsl:variable name="position" select="number(position())"></xsl:variable
+   ><xsl:for-each select="$headers"
+       ><xsl:choose
+           ><!-- a spacer
+         --><xsl:when test="./@name"
+               ><xsl:text><!-- leave the cell empty for a spacer column --></xsl:text
+           ></xsl:when
 
-        ><xsl:value-of select="$position + 1" /><xsl:text>&tab;</xsl:text
-        ><xsl:value-of select="$start_age + $position" /><xsl:text>&tab;</xsl:text
+           ><!-- if the title is specified directly, then use it
+         --><xsl:when test="./@title"
+               ><xsl:value-of select="./@title"
+          /></xsl:when
 
-        ><xsl:for-each select="$headers"
-            ><!--
+           ><!-- otherwise get it from 'format.xml'
+         --><xsl:otherwise
+               ><xsl:call-template name="title"
+                   ><xsl:with-param name="name" select="@name"
+                  /><xsl:with-param name="basis" select="@basis"
+                  /><xsl:with-param name="column" select="."
+              /></xsl:call-template
+           ></xsl:otherwise
+       ></xsl:choose
+   ><xsl:text>&tab;</xsl:text
+   ></xsl:for-each
+   ><xsl:text>&nl;</xsl:text
+
+   ><!--
+    Table: Data
+    ===========
+ --><xsl:variable name="is_inforce" select="number($illustration/double_scalar[@name='IsInforce'])"
+  /><xsl:for-each select="$vectors[1]/duration"
+       ><xsl:variable name="position" select="number(position())"></xsl:variable
+
+       ><xsl:value-of select="$position + 1" /><xsl:text>&tab;</xsl:text
+       ><xsl:value-of select="$start_age + $position" /><xsl:text>&tab;</xsl:text
+
+       ><xsl:for-each select="$vectors"
+           ><xsl:variable name="name" select="@name"
+          /><xsl:variable name="basis" select="@basis"
+
+          /><xsl:choose
+               ><!--
                  deal with uncommon column cases in here
-          --><xsl:choose
-                ><xsl:when test="(@name='IrrOnSurrender' or @name='IrrOnDeath') and number($illustration/double_scalar[@name='IsInforce'])!=0"
-                    ><xsl:text>(inforce)</xsl:text
-                ></xsl:when
+             --><xsl:when test="$is_inforce > 0 and ($name='IrrOnSurrender' or $name='IrrOnDeath')"
+                   ><xsl:text>(inforce)</xsl:text
+               ></xsl:when
+               ><xsl:when test="$name='InforceLives'"
+                   ><xsl:value-of select="$vectors[@name=$name]/duration[$position + 1]"
+              /></xsl:when
 
-                ><xsl:when test="@title='InforceLives'"
-                   ><xsl:value-of select="number($illustration/double_vector[@name='InforceLives']/duration[$position + 1])"
-               /></xsl:when
-
-                ><!--xsl:when test="@title=''"
-// Show experience-rating columns for current-expense, zero-
-// interest basis if used, to support testing.
-std::vector<e_run_basis> const& bases(ledger_values.GetRunBases());
-if
-   (   bases.end()
-   !=  std::find(bases.begin(), bases.end(), e_run_curr_basis_sa_zero)
-   )
-   {
-   LedgerVariant const& Curr0 = ledger_values.GetCurrZero();
-   os << Curr0.value_str("NetCOICharge"          ,j) << '\t';
-   os << Curr0.value_str("NetClaims"             ,j) << '\t';
-   os << Curr0.value_str("ExperienceReserve"     ,j) << '\t';
-   os << Curr0.value_str("ProjectedCoiCharge"    ,j) << '\t';
-   os << Curr0.value_str("KFactor"               ,j) << '\t';
-   }
-else
-   {
-   os << "0\t";
-   os << "0\t";
-   os << "0\t";
-   os << "0\t";
-   os << "0\t";
-   }
-                ></xsl:when
-              --><xsl:otherwise
-                    ><xsl:call-template name="vector_item"
-                        ><xsl:with-param name="illustration" select="$illustration"
-                       /><xsl:with-param name="name" select="@name"
-                       /><xsl:with-param name="basis" select="@basis"
-                       /><xsl:with-param name="position" select="$position"
-                   /></xsl:call-template
-                ></xsl:otherwise
+               ><!--
+                 the general case
+             --><xsl:otherwise
+                   ><xsl:choose
+                       ><xsl:when test="not($name)"
+                           ><xsl:text><!-- just an empty cell for a spacer column --></xsl:text
+                       ></xsl:when
+                       ><xsl:when test="not($basis)"
+                           ><xsl:call-template name="print_value"
+                               ><xsl:with-param name="value" select="$vectors[@name=$name]/duration[$position]"
+                          /></xsl:call-template
+                       ></xsl:when
+                       ><xsl:otherwise
+                           ><xsl:call-template name="print_value"
+                               ><xsl:with-param name="value" select="$vectors[@name=$name][@basis=$basis]/duration[$position]"
+                          /></xsl:call-template
+                       ></xsl:otherwise
+                   ></xsl:choose
+               ></xsl:otherwise
             ></xsl:choose
+
             ><xsl:text>&tab;</xsl:text
+
         ></xsl:for-each
+
         ><xsl:text>&nl;</xsl:text
+
       ></xsl:for-each
 ></xsl:template>
 

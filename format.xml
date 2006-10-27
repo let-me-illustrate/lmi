@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: format.xml,v 1.1.2.1 2006-10-20 17:46:02 etarassov Exp $
+    $Id: format.xml,v 1.1.2.2 2006-10-27 15:52:19 etarassov Exp $
 
     TODO Add default namespace declaration using our XMLSchema
 
@@ -450,7 +450,7 @@
         F1: zero decimals, commas
         Format as a number with thousand separators and no decimal places (#,###,##0)
     -->
-    <column name="AcctVal">
+    <column name="AcctVal" calculation_summary="true">
         <title basis="run_curr_basis">Curr Account Value</title>
         <title basis="run_guar_basis">Guar Account Value</title>
         <format>f1</format>
@@ -501,7 +501,7 @@
     <column name="Composite">
         <format>f1</format>
     </column>
-    <column name="CSVNet">
+    <column name="CSVNet" calculation_summary="true">
         <title basis="run_curr_basis">Curr Net Cash Surr Value</title>
         <title basis="run_guar_basis">Guar Net Cash Surr Value</title>
         <format>f1</format>
@@ -546,7 +546,7 @@
         <title>EE Payment Mode</title>
         <format>f1</format>
     </column>
-    <column name="EOYDeathBft">
+    <column name="EOYDeathBft" calculation_summary="true">
         <title basis="run_curr_basis">Curr EOY Death Benefit</title>
         <title basis="run_guar_basis">Guar EOY Death Benefit</title>
         <format>f1</format>
@@ -619,12 +619,10 @@
     <column name="LoanInt">
         <format>f1</format>
     </column>
-    <!--
     <column name="NaarForceout">
         <title>Forced Withdrawal due to NAAR Limit</title>
         <format>f1</format>
     </column>
-    -->
     <column name="NetClaims">
         <title basis="run_curr_basis">Curr Net Claims</title><!-- _____________ Curr Net Claims -->
         <title basis="run_guar_basis">Guar Net Claims</title><!-- _____________ Guar Net Claims -->
@@ -652,7 +650,7 @@
         <title>Withdrawal</title><!-- _____________  _____________ Withdrawal -->
         <format>f1</format>
     </column>
-    <column name="Outlay">
+    <column name="Outlay" calculation_summary="true">
         <title>Net Outlay</title>
         <format>f1</format>
     </column>
