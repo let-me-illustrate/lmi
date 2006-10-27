@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xml_lmi.cpp,v 1.1.2.15 2006-10-24 13:23:57 etarassov Exp $
+// $Id: xml_lmi.cpp,v 1.1.2.16 2006-10-27 15:02:33 etarassov Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -153,6 +153,35 @@ xml_lmi::dom_parser::dom_parser(std::istream& is)
 
 xml_lmi::dom_parser::~dom_parser()
 {}
+
+/// Return  the parsed document.
+///
+/// Preconditions: member parser_ has a document that is not null and
+/// has a root node; the argument, if not empty, matches the name of
+/// that root node.
+///
+/// Throws: std::runtime_error, via fatal_error(), if a precondition
+/// is violated, or if xml-library calls throw an exception derived
+/// from std::exception. Ctor postconditions are assumed to have been
+/// satisfied and are not tested.
+
+xml_lmi::Document const& xml_lmi::dom_parser::document() const
+{
+    try
+        {
+        xml_lmi::Document const* document = parser_->get_document();
+        if(!document)
+            {
+            throw std::runtime_error("Parsed document is null.");
+            }
+        return *document;
+        }
+    catch(std::exception const& e)
+        {
+        fatal_error() << error_context_ << e.what() << LMI_FLUSH;
+        throw std::logic_error("Unreachable"); // Silence compiler warning.
+        }
+}
 
 /// Return the parsed document's root node.
 ///

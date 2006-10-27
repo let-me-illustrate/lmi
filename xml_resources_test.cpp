@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xml_resources_test.cpp,v 1.1.2.11 2006-10-27 12:36:42 chicares Exp $
+// $Id: xml_resources_test.cpp,v 1.1.2.12 2006-10-27 15:02:33 etarassov Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -212,6 +212,9 @@ bool validate_ledger_against_schema
     return validate_xml_doc_against_schema(document, schema);
 }
 
+// Test if the xsl template from 'filename' could be applied
+// to the document. Return true on success.
+
 bool apply_xslt_to_document
     (std::string const& filename
     ,xml_lmi::Document const& document
@@ -230,17 +233,10 @@ bool apply_xslt_to_document
         }
     catch(std::exception const&)
         {
-        // EVGENIY--An empty catch-clause seems a little unusual here.
-        // Is there any objection to moving 'return false;' from below
-        // up into the body of the catch-clause--e.g., does any modern
-        // compiler issue a warning about that?
-        //
-        // Below, a different catch-clause has this body:
-        //   BOOST_TEST(false);
-        // Would it be appropriate to add that here, or is failure
-        // of the try-block actually a recoverable error?
+        // This method will always be called from within BOOST_TEST
+        // therefore return false and don't use BOOST_TEST(false)
+        return false;
         }
-    return false;
 }
 
 } // Unnamed namespace.
@@ -278,9 +274,6 @@ int test_main(int, char*[])
     try
         {
         xml_lmi::dom_parser dom_parser(format_xml_filename);
-        // EVGENIY--Here I get
-        //   error: 'class xml_lmi::dom_parser' has no member named 'document'
-        // Might you have added such a member in your local tree?
         xml_lmi::Document const& document = dom_parser.document();
         BOOST_TEST(validate_xml_doc_against_schema(document, schema));
         }
