@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xml_resources_test.cpp,v 1.1.2.9 2006-10-25 11:20:30 chicares Exp $
+// $Id: xml_resources_test.cpp,v 1.1.2.10 2006-10-27 00:34:37 etarassov Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -32,13 +32,13 @@
 #define BOOST_INCLUDE_MAIN
 #include "test_tools.hpp"
 #include "timer.hpp"
+#include "xml_lmi.hpp"
 
 #include <boost/filesystem/exception.hpp>
 #include <boost/filesystem/path.hpp>
 
 #include <libxml/xmlschemas.h>
 #include <libxml++/libxml++.h>
-#include <libxslt/transform.h>
 
 namespace
 {
@@ -117,9 +117,8 @@ class LedgerOutput
         return *this;
     }
 
-    std::string output() const
+    void output(xml_lmi::Document & doc) const
     {
-        xml_lmi::Document doc;
         xml_lmi::Element& root = *doc.create_root_node("illustration");
 
         for
@@ -165,11 +164,7 @@ class LedgerOutput
                 {
                 vector_node.add_child("duration")->add_child_text( *dit );
                 }
-        }
-
-        std::ostringstream oss;
-        oss << doc;
-        return oss.str();
+            }
     }
 
   private:
@@ -183,10 +178,16 @@ class LedgerOutput
     vectors_t vectors_;
 };
 
-bool validate_xml_doc_against_schema(xmlDocPtr doc, xmlSchemaPtr schema)
+bool validate_xml_doc_against_schema
+    (xml_lmi::Document const& document
+    ,xmlSchemaPtr schema
+    )
 {
-    if(!doc || !schema)
+    if(!schema)
+        {
         return false;
+        }
+
     xmlSchemaValidCtxtPtr vctxt
         = xmlSchemaNewValidCtxt(schema);
     xmlSchemaSetValidErrors
@@ -195,27 +196,42 @@ bool validate_xml_doc_against_schema(xmlDocPtr doc, xmlSchemaPtr schema)
         ,(xmlSchemaValidityWarningFunc) fprintf
         ,stderr
         );
-    int ret = xmlSchemaValidateDoc(vctxt, doc);
+    int ret
+        = xmlSchemaValidateDoc(vctxt, const_cast<xmlDoc*>(document.cobj()));
     xmlSchemaFreeValidCtxt(vctxt);
     return (ret == 0);
 }
 
-bool validate_ledger_against_schema(LedgerOutput const& output, xmlSchemaPtr schema)
+bool validate_ledger_against_schema
+    (LedgerOutput const& output
+    ,xmlSchemaPtr schema
+    )
 {
-    std::string xml = output.output();
-    xmlDocPtr doc = xmlParseMemory(xml.c_str(), xml.size());
-    return validate_xml_doc_against_schema(doc, schema);
+    xml_lmi::Document document;
+    output.output(document);
+    return validate_xml_doc_against_schema(document, schema);
 }
 
-bool apply_xslt_to_doc(std::string const& filename, xmlDocPtr doc)
+bool apply_xslt_to_document
+    (std::string const& filename
+    ,xml_lmi::Document const & document
+    )
 {
-    // EVGENIY Here, I get
-    //   error: cannot convert `const xml_lmi::Stylesheet' to `xsltStylesheet*'
-    xsltStylesheetPtr xsl = LedgerFormatterFactory::Instance().GetStylesheet(filename);
-    xmlDocPtr res = xsltApplyStylesheet(xsl, doc, NULL);
-    bool result = (res != NULL);
-    xmlFreeDoc(res);
-    return result;
+    try
+        {
+        xml_lmi::Stylesheet stylesheet(filename);
+        std::ostringstream oss;
+        stylesheet.transform
+            (document
+            ,oss
+            ,xml_lmi::Stylesheet::e_output_xml
+            );
+        return true;
+        }
+    catch(std::exception const&)
+        {
+        }
+    return false;
 }
 
 } // Unnamed namespace.
@@ -250,8 +266,16 @@ int test_main(int, char*[])
     std::string format_xml_filename
         (prepend_xslt_directory(cs.xslt_format_xml_filename())
         );
-    xmlDocPtr format_xml = xmlParseFile(format_xml_filename.c_str());
-    BOOST_TEST(validate_xml_doc_against_schema(format_xml, schema));
+    try
+        {
+        xml_lmi::dom_parser dom_parser(format_xml_filename);
+        xml_lmi::Document const& document = dom_parser.document();
+        BOOST_TEST(validate_xml_doc_against_schema(document, schema));
+        }
+    catch(std::exception const&)
+        {
+        BOOST_TEST(false);
+        }
 
     // Must validate
     typedef std::vector<std::string> str_vector_t;
@@ -276,13 +300,14 @@ int test_main(int, char*[])
     BOOST_TEST( !validate_ledger_against_schema(ledger2, schema));
 
     // Must fail: name 'Age' has to be unique across all types of values
+    // TODO ?? add the correct uniqueness constrint to the schema
     LedgerOutput ledger3 = ledger0;
     ledger3.set("string_scalar", "Age", "", "10");
     BOOST_TEST( !validate_ledger_against_schema(ledger3, schema));
 
     // Must fail: invalid numeric value '10.000,00' supplied for 'Age'
     LedgerOutput ledger4 = ledger0;
-    ledger4.set("string_scalar", "Age", "", "10.000,00");
+    ledger4.set("double_scalar", "Age", "", "10.000,00");
     BOOST_TEST( !validate_ledger_against_schema(ledger4, schema));
 
     // Must fail: node 'Age' is string_vector, but has a scalar value
@@ -296,17 +321,19 @@ int test_main(int, char*[])
     BOOST_TEST( !validate_ledger_against_schema(ledger6, schema));
 
     // take a valid simple xml output and test xsl templates on it
-    std::string output_xml = ledger0.output();
-    xmlDocPtr output_doc = xmlParseMemory(output_xml.c_str(), output_xml.size());
+    xml_lmi::Document document;
+    ledger0.output(document);
 
     // test html.xsl
-    BOOST_TEST( apply_xslt_to_doc(cs.xslt_html_filename(), output_doc) );
+    BOOST_TEST( apply_xslt_to_document(cs.xslt_html_filename(), document) );
 
     // test tab_delimited.xsl on output.xml
-    BOOST_TEST( apply_xslt_to_doc(cs.xslt_tab_delimited_filename(), output_doc) );
+    BOOST_TEST
+        (apply_xslt_to_document(cs.xslt_tab_delimited_filename(), document)
+        );
 
     // test <xsl-fo>.xsl files on output.xml
-    // BOOST_TEST( apply_xslt_to_doc(cs.xslt_html_filename(), output_doc) );
+    // BOOST_TEST( apply_xslt_to_document(cs.xslt_html_filename(), output_doc) );
 
     return EXIT_SUCCESS;
 }
