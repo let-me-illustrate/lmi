@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: build_gnome_xml_libraries.make,v 1.1 2006-10-27 03:06:53 chicares Exp $
+# $Id: build_gnome_xml_libraries.make,v 1.2 2006-10-27 14:10:10 chicares Exp $
 
 # This makefile is designed to be run in MSYS: the native zsh port
 # we customarily use can't handle 'configure'. Care is taken to
@@ -79,23 +79,10 @@ libxml++-2.14.0_options := \
 # Setting $(prefix) in the environment appears to have no effect on
 # the autotools files, so this alternative seems to be necessary.
 
-ifdef THIS_REALLY_WAS_NECESSARY
-
-libxslt-1.1.17_exports := \
-  export LIBXML_CFLAGS="-I$(prefix)/include/libxml2"; \
-  export   LIBXML_LIBS="-L$(prefix)/lib -lxml2 -lws2_32"; \
-
 libxml++-2.14.0_exports := \
-  export PKG_CONFIG=pkg-config ; \
   export LIBXML_CFLAGS="-I$(prefix)/include/libxml2"; \
   export   LIBXML_LIBS="-L$(prefix)/lib/ -lxml2"; \
-
-else
-
-libxml++-2.14.0_exports := \
   export PKG_CONFIG=pkg-config ; \
-
-endif
 
 # Utilities ####################################################################
 
@@ -122,9 +109,12 @@ wget_missing = \
 libraries := $(source_archives:.tar.bz2=)
 
 .PHONY: all
-all: $(source_archives) $(libraries)
+all: clobber $(source_archives) $(libraries)
 
+# Simulated order-only prerequisites.
+$(libraries): $(source_archives)
 $(source_archives): initial_setup
+initial_setup: clobber
 
 .PHONY: initial_setup
 initial_setup:
@@ -203,7 +193,13 @@ setup_libxml++:
 
 .PHONY: clobber
 clobber:
-	for z in $(notdir $(libraries)); \
+	-for z in $(notdir $(libraries)); \
 	  do cd $(xml_dir)/$$z && make clean uninstall; \
+	  done;
+	-for z in $(notdir $(libraries)); \
+	  do \
+	    cd $(xml_dir)/$$z; \
+	    shopt -s extglob; \
+	    { for f in '!(log-*)'; do rm --recursive $$f; done; }; \
 	  done;
 
