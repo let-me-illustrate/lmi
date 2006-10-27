@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: build_gnome_xml_libraries.make,v 1.2 2006-10-27 14:10:10 chicares Exp $
+# $Id: build_gnome_xml_libraries.make,v 1.3 2006-10-27 15:24:09 chicares Exp $
 
 # This makefile is designed to be run in MSYS: the native zsh port
 # we customarily use can't handle 'configure'. Care is taken to
@@ -198,8 +198,7 @@ clobber:
 	  done;
 	-for z in $(notdir $(libraries)); \
 	  do \
-	    cd $(xml_dir)/$$z; \
 	    shopt -s extglob; \
-	    { for f in '!(log-*)'; do rm --recursive $$f; done; }; \
+	    { for f in '$(xml_dir)/$$z/!(log-*)'; do rm --recursive $$f; done; }; \
 	  done;
 
