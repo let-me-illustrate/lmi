@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: actuarial_table_test.cpp,v 1.6 2006-01-29 13:52:00 chicares Exp $
+// $Id: actuarial_table_test.cpp,v 1.6.2.1 2006-10-28 04:20:53 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -71,7 +71,7 @@ std::vector<double> table_47_age_89()
 
 void mete()
 {
-    std::string const table_name("/opt/lmi/qx_cso");
+    std::string const table_name("/opt/lmi/data/qx_cso");
 
     std::vector<double> rates00 = actuarial_table(table_name, 42,  0, 100);
     std::vector<double> rates01 = actuarial_table(table_name, 42, 35,  65);
@@ -89,7 +89,7 @@ void assay_speed()
 int test_main(int, char*[])
 {
 // TODO ?? Use whatever directory FHS would suggest instead.
-    std::string const table_name("/opt/lmi/qx_cso");
+    std::string const table_name("/opt/lmi/data/qx_cso");
 
 // TODO ?? Also test a 'duration' table--has SOA published any?
 
