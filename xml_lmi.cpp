@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xml_lmi.cpp,v 1.1.2.17 2006-10-28 00:01:14 chicares Exp $
+// $Id: xml_lmi.cpp,v 1.1.2.18 2006-10-28 12:05:57 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -160,9 +160,7 @@ xml_lmi::dom_parser::~dom_parser()
 
 /// Return the parsed document.
 ///
-/// Preconditions: member parser_ has a document that is not null and
-/// has a root node; the argument, if not empty, matches the name of
-/// that root node.
+/// Preconditions: member parser_ has a document that is not null.
 ///
 /// Throws: std::runtime_error, via fatal_error(), if a precondition
 /// is violated, or if xml-library calls throw an exception derived

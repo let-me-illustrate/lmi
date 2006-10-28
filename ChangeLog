@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.462.2.46 2006-10-28 00:01:14 chicares Exp $
+// $Id: ChangeLog,v 1.462.2.47 2006-10-28 12:05:34 chicares Exp $
 
 MAINTENANCE
 
@@ -8077,4 +8077,14 @@ Add review comments; make a few stylistic changes.
 
   xml_lmi.cpp
 Add a review comment; order headers alphabetically.
+
+20061028T0420Z <chicares@cox.net> [1161]
+
+  actuarial_table_test.cpp
+Look for data files on the default installation path.
+
+20061028T1205Z <chicares@cox.net> [1161]
+
+  xml_resources_test.cpp
+Revise documentation.
 
