@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: build_gnome_xml_libraries.make,v 1.4 2006-10-27 22:28:05 chicares Exp $
+# $Id: build_gnome_xml_libraries.make,v 1.5 2006-10-28 03:24:04 chicares Exp $
 
 # This makefile is designed to be run in MSYS: the native zsh port
 # we customarily use can't handle 'configure'. Care is taken to
@@ -84,6 +84,41 @@ libxml++-2.14.0_exports := \
   export   LIBXML_LIBS="-L$(prefix)/lib/ -lxml2"; \
   export PKG_CONFIG=pkg-config ; \
 
+# Variables that emphatically be left alone ####################################
+
+# It is dangerous to change this setting.
+
+# MSYS by default prepends this:
+#   .:/usr/local/bin:/mingw/bin:/bin:
+# to the OS PATH, yielding its $PATH. If the OS PATH has spaces or is
+# excessively long, then building these libraries can fail in puzzling
+# ways. Therefore, the OS PATH is disregarded, and what MSYS would add
+# to it is written explicitly here.
+
+# From that MSYS default is removed
+#   /mingw/bin
+# to ensure that the configurable compiler version specified above
+# is used, and # in order to avoid the problem described here:
+#   http://lists.gnu.org/archive/html/lmi/2005-11/msg00018.html
+
+# To that MSYS default is prepended the compiler path. It is added
+# before the MSYS default in case a user has inappropriately placed
+# compiler binaries in an MSYS system directory.
+
+# To that MSYS default is appended $(prefix)/bin, which by default is
+#   /c/usr/local/bin
+# That is added after the MSYS default in order to ensure that MSYS
+# utilities (notably 'sed') are not overridden by any native builds
+# installed in $(prefix)/bin .
+
+# Even MSYS's weird '.' is significant to the proper operation of
+# this makefile.
+
+# For further discussion of MSYS problems, see 'lmi/msw_msys.make'.
+
+overriding_path = \
+  export PATH=$(mingw_bin_dir):.:/usr/local/bin:/bin:$(prefix)/bin
+
 # Utilities ####################################################################
 
 CP     := cp
@@ -144,7 +179,10 @@ wget_whence := $(host)/$(host_path)
 
 .PHONY: $(libraries)
 $(libraries):
-	export PATH=$(mingw_bin_dir):$(prefix)/bin:$$PATH ; \
+	$(overriding_path) ; \
+	echo "PATH is: $$PATH" ; \
+	echo "sed version is:"; sed --version; \
+	echo "sed location is:"; type -p sed; \
 	export LOG=log-$(date); \
 	$($(notdir $@)_exports) \
 	$(RM) --force $$LOG; \
@@ -193,12 +231,28 @@ setup_libxml++:
 
 .PHONY: clobber
 clobber:
-	-for z in $(notdir $(libraries)); \
-	  do cd $(xml_dir)/$$z && make clean uninstall; \
+	-$(overriding_path) ; \
+	for z in $(notdir $(libraries)); \
+	  do cd $(xml_dir)/$$z && make uninstall maintainer-clean; \
 	  done;
 	-for z in $(notdir $(libraries)); \
 	  do \
 	    shopt -s extglob; \
-	    { for f in '$(xml_dir)/$$z/!(log-*)'; do rm --recursive $$f; done; }; \
+	    echo "Removing non-log files in $$z"; \
+	    { for f in $(xml_dir)/$$z/'!(log-*)'; \
+	      do \
+	        rm --recursive $$f; \
+	      done; \
+	    }; \
 	  done;
+
+# At least with the current version of MSYS as of 2006-10-28,
+# 'GNU sed version 3.02' in '/bin/sed' is wanted.
+
+.PHONY: print_setup
+print_setup:
+	$(overriding_path) ; \
+	echo "PATH is: $$PATH" ; \
+	echo "sed version is:"; sed --version; \
+	echo "sed location is:"; type -p sed; \
 
