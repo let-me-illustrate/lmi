@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xml_lmi.cpp,v 1.1.2.16 2006-10-27 15:02:33 etarassov Exp $
+// $Id: xml_lmi.cpp,v 1.1.2.17 2006-10-28 00:01:14 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -30,8 +30,8 @@
 
 #include "alert.hpp"
 
-#include <boost/shared_ptr.hpp>
 #include <boost/scoped_array.hpp>
+#include <boost/shared_ptr.hpp>
 
 #include <libxml/globals.h>
 #include <libxml/HTMLtree.h>
@@ -44,6 +44,9 @@
 #include <sstream>
 #include <stdexcept>
 
+// EVGENIY Has 'XmlDocSharedPtrDeleter' become
+// dead code that could now be removed?
+#if defined OKAY_TO_REMOVE_XmlDocSharedPtrDeleter
 namespace
 {
 /// Custom deleter for xmlDocPtr shared_ptr
@@ -79,6 +82,7 @@ class XmlDocSharedPtrDeleter
 };
 
 } // anonymous namespace
+#endif // defined OKAY_TO_REMOVE_XmlDocSharedPtrDeleter
 
 namespace xml_lmi
 {
@@ -154,7 +158,7 @@ xml_lmi::dom_parser::dom_parser(std::istream& is)
 xml_lmi::dom_parser::~dom_parser()
 {}
 
-/// Return  the parsed document.
+/// Return the parsed document.
 ///
 /// Preconditions: member parser_ has a document that is not null and
 /// has a root node; the argument, if not empty, matches the name of

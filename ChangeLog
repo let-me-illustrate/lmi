@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.462.2.45 2006-10-27 12:36:42 chicares Exp $
+// $Id: ChangeLog,v 1.462.2.46 2006-10-28 00:01:14 chicares Exp $
 
 MAINTENANCE
 
@@ -8072,4 +8072,9 @@ Remove an undefined variable.
 
   xml_resources_test.cpp
 Add review comments; make a few stylistic changes.
+
+20061028T0001Z <chicares@cox.net> [1161]
+
+  xml_lmi.cpp
+Add a review comment; order headers alphabetically.
 
