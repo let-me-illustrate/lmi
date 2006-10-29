@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xml_lmi.hpp,v 1.1.2.13 2006-10-27 15:02:33 etarassov Exp $
+// $Id: xml_lmi.hpp,v 1.1.2.14 2006-10-29 01:14:24 chicares Exp $
 
 #ifndef xml_lmi_hpp
 #define xml_lmi_hpp
@@ -89,10 +89,13 @@ namespace xml_lmi
 
     std::string get_content(Element const& element);
 
-    /// Get the first non-text node element under a parent node.
+    /// Return an element node's first child element.
+    ///
+    /// Throws: std::runtime_error, via fatal_error(), if no child
+    /// element exists.
 
-    Element      * get_first_element(Element      & parent);
-    Element const* get_first_element(Element const& parent);
+    Element      & get_first_element(Element      & parent);
+    Element const& get_first_element(Element const& parent);
 
     class Stylesheet
         :private boost::noncopyable

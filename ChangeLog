@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.462.2.47 2006-10-28 12:05:34 chicares Exp $
+// $Id: ChangeLog,v 1.462.2.48 2006-10-29 01:14:24 chicares Exp $
 
 MAINTENANCE
 
@@ -8085,6 +8085,20 @@ Look for data files on the default installation path.
 
 20061028T1205Z <chicares@cox.net> [1161]
 
-  xml_resources_test.cpp
+  xml_lmi.cpp
 Revise documentation.
+
+20061029T0028Z <chicares@cox.net> [1161]
+
+  input_test.cpp
+Assert that a pointer is not NULL before dereferencing it. Merely
+testing it with BOOST_TEST makes a segfault possible.
+
+20061029T0114Z <chicares@cox.net> [1161]
+
+  input_test.cpp
+  xml_lmi.cpp
+  xml_lmi.hpp
+Make sure a pointer is dereferenceable before returning it. Throw an
+exception if it is not.
 

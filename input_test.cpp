@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_test.cpp,v 1.7.2.8 2006-10-29 00:28:42 chicares Exp $
+// $Id: input_test.cpp,v 1.7.2.9 2006-10-29 01:14:24 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -122,11 +122,8 @@ int test_main(int, char*[])
     os0 << doc;
     os0.close();
 
-    {
-        xml_lmi::Element* xml_node = xml_lmi::get_first_element(xml_root0);
-        LMI_ASSERT(!!xml_node);
-        *xml_node >> replica;
-    }
+    xml_lmi::get_first_element(xml_root0) >> replica;
+
     std::ofstream os1
         ("eraseme1.xml"
         ,   std::ios_base::out

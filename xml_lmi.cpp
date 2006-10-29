@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xml_lmi.cpp,v 1.1.2.18 2006-10-28 12:05:57 chicares Exp $
+// $Id: xml_lmi.cpp,v 1.1.2.19 2006-10-29 01:14:24 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -276,7 +276,7 @@ std::string xml_lmi::get_content(Element const& element)
     return oss.str();
 }
 
-Element* xml_lmi::get_first_element(Element& parent)
+Element& xml_lmi::get_first_element(Element& parent)
 {
     xml_lmi::NodeContainer const direct_children = parent.get_children();
     for
@@ -288,13 +288,17 @@ Element* xml_lmi::get_first_element(Element& parent)
         Element const* e = dynamic_cast<Element const*>(*iter);
         if(e)
             {
-            return const_cast<Element*>(e);
+            return *const_cast<Element*>(e);
             }
         }
-    return 0;
+    fatal_error()
+        << "A child element was expected, but none was found."
+        << LMI_FLUSH
+        ;
+    throw std::logic_error("Unreachable"); // Silence compiler warning.
 }
 
-Element const* xml_lmi::get_first_element(Element const& parent)
+Element const& xml_lmi::get_first_element(Element const& parent)
 {
     xml_lmi::NodeContainer const direct_children = parent.get_children();
     for
@@ -306,10 +310,14 @@ Element const* xml_lmi::get_first_element(Element const& parent)
         Element const* e = dynamic_cast<Element const*>(*iter);
         if(e)
             {
-            return e;
+            return *e;
             }
         }
-    return 0;
+    fatal_error()
+        << "A child element was expected, but none was found."
+        << LMI_FLUSH
+        ;
+    throw std::logic_error("Unreachable"); // Silence compiler warning.
 }
 
 xml_lmi::Stylesheet::Stylesheet(std::string const& filename)
