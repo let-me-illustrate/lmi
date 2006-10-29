@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_test.cpp,v 1.7.2.9 2006-10-29 01:14:24 chicares Exp $
+// $Id: input_test.cpp,v 1.7.2.10 2006-10-29 08:52:22 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -31,7 +31,11 @@
 #include "alert.hpp"
 #define BOOST_INCLUDE_MAIN
 #include "test_tools.hpp"
+#include "timer.hpp"
 #include "xml_lmi.hpp"
+
+#include <boost/bind.hpp>
+#include <boost/ref.hpp>
 
 #include <libxml++/libxml++.h>
 
@@ -72,6 +76,47 @@ bool files_are_identical(std::string const& file0, std::string const& file1)
     std::ifstream is0(file0.c_str());
     std::ifstream is1(file1.c_str());
     return streams_are_identical(is0, is1);
+}
+
+void mete_overhead()
+{
+    static IllusInputParms raw_data;
+    xml_lmi::Document document;
+    xml_lmi::Element* root = document.create_root_node("root");
+    LMI_ASSERT(root);
+}
+
+void mete_read(xml_lmi::Element& xml_data)
+{
+    static IllusInputParms raw_data;
+    xml_data >> raw_data;
+}
+
+void mete_write()
+{
+    static IllusInputParms raw_data;
+    xml_lmi::Document document;
+    xml_lmi::Element* root = document.create_root_node("root");
+    LMI_ASSERT(root);
+    *root << raw_data;
+}
+
+void assay_speed()
+{
+    IllusInputParms raw_data;
+    xml_lmi::Document document;
+    xml_lmi::Element* root = document.create_root_node("root");
+    LMI_ASSERT(root);
+    *root << raw_data;
+    typedef boost::reference_wrapper<xml_lmi::Element> er;
+    er e(xml_lmi::get_first_element(*root));
+
+    std::cout
+        << "  Speed tests...\n"
+        << "  Overhead: " << aliquot_timer(mete_overhead) << '\n'
+        << "  Read    : " << aliquot_timer(boost::bind(mete_read, e)) << '\n'
+        << "  Write   : " << aliquot_timer(mete_write   ) << '\n'
+        ;
 }
 
 int test_main(int, char*[])
@@ -194,6 +239,8 @@ std::cout << "replica.FundAllocs.size() is " << replica.FundAllocs.size() << '\n
     BOOST_TEST(std::string("Angela") == copy1   .InsdFirstName);
     BOOST_TEST(std::string("Actually Full Name")  == original.InsdFirstName);
 
-    return 0;
+    assay_speed();
+
+    return EXIT_SUCCESS;
 }
 
