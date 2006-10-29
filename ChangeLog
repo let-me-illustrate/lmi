@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.462.2.48 2006-10-29 01:14:24 chicares Exp $
+// $Id: ChangeLog,v 1.462.2.49 2006-10-29 01:48:14 chicares Exp $
 
 MAINTENANCE
 
@@ -8101,4 +8101,9 @@ testing it with BOOST_TEST makes a segfault possible.
   xml_lmi.hpp
 Make sure a pointer is dereferenceable before returning it. Throw an
 exception if it is not.
+
+20061029T0148Z <chicares@cox.net> [1161]
+
+  xml_lmi.cpp
+Avoid casting away constness.
 

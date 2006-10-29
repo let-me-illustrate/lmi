@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xml_lmi.cpp,v 1.1.2.19 2006-10-29 01:14:24 chicares Exp $
+// $Id: xml_lmi.cpp,v 1.1.2.20 2006-10-29 01:48:14 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -278,17 +278,17 @@ std::string xml_lmi::get_content(Element const& element)
 
 Element& xml_lmi::get_first_element(Element& parent)
 {
-    xml_lmi::NodeContainer const direct_children = parent.get_children();
+    xml_lmi::NodeContainer direct_children = parent.get_children();
     for
-        (xml_lmi::NodeContainer::const_iterator iter = direct_children.begin()
+        (xml_lmi::NodeContainer::iterator iter = direct_children.begin()
         ;iter != direct_children.end()
         ;++iter
         )
         {
-        Element const* e = dynamic_cast<Element const*>(*iter);
+        Element* e = dynamic_cast<Element*>(*iter);
         if(e)
             {
-            return *const_cast<Element*>(e);
+            return *e;
             }
         }
     fatal_error()
