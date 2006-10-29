@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_test.cpp,v 1.7.2.7 2006-10-20 00:25:12 chicares Exp $
+// $Id: input_test.cpp,v 1.7.2.8 2006-10-29 00:28:42 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -28,6 +28,7 @@
 
 #include "inputillus.hpp"
 
+#include "alert.hpp"
 #define BOOST_INCLUDE_MAIN
 #include "test_tools.hpp"
 #include "xml_lmi.hpp"
@@ -123,7 +124,7 @@ int test_main(int, char*[])
 
     {
         xml_lmi::Element* xml_node = xml_lmi::get_first_element(xml_root0);
-        BOOST_TEST(!!xml_node);
+        LMI_ASSERT(!!xml_node);
         *xml_node >> replica;
     }
     std::ofstream os1
