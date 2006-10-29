@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_test.cpp,v 1.7.2.11 2006-10-29 08:55:22 chicares Exp $
+// $Id: input_test.cpp,v 1.7.2.12 2006-10-29 21:24:40 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -86,6 +86,11 @@ void mete_overhead()
     LMI_ASSERT(root);
 }
 
+void mete_vector(xml_lmi::Element& xml_data)
+{
+    xml_lmi::child_elements(xml_data);
+}
+
 void mete_read(xml_lmi::Element& xml_data)
 {
     static IllusInputParms raw_data;
@@ -113,9 +118,10 @@ void assay_speed()
 
     std::cout
         << "  Speed tests...\n"
-        << "  Overhead: " << aliquot_timer(mete_overhead) << '\n'
-        << "  Read    : " << aliquot_timer(boost::bind(mete_read, e)) << '\n'
-        << "  Write   : " << aliquot_timer(mete_write   ) << '\n'
+        << "  Overhead: " << aliquot_timer(mete_overhead              ) << '\n'
+        << "  Vector  : " << aliquot_timer(boost::bind(mete_vector, e)) << '\n'
+        << "  Read    : " << aliquot_timer(boost::bind(mete_read  , e)) << '\n'
+        << "  Write   : " << aliquot_timer(mete_write                 ) << '\n'
         ;
 }
 
