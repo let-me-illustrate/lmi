@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.462.2.50 2006-10-29 08:55:22 chicares Exp $
+// $Id: ChangeLog,v 1.462.2.51 2006-10-29 21:28:31 chicares Exp $
 
 MAINTENANCE
 
@@ -8117,4 +8117,23 @@ Test xml read and write speed.
 
   input_test.cpp
 Regularize names.
+
+20061029T2123Z <chicares@cox.net> [1161]
+
+  xml_lmi.cpp
+  xml_lmi.hpp
+Add a function to create a container of child elements.
+
+20061029T2124Z <chicares@cox.net> [1161]
+
+  input_test.cpp
+Show that the function added 20061029T2123Z has negligible overhead:
+approximately three percent of total xml read time.
+
+20061029T2128Z <chicares@cox.net> [1161]
+
+  inputillus_xml_io.cpp
+Use the function added 20061029T2123Z. The difference in total read
+time is so small that its sign can't be determined reliably, probably
+because the slight extra overhead is offset by faster iteration.
 

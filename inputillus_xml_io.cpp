@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: inputillus_xml_io.cpp,v 1.12.2.10 2006-10-26 13:15:46 chicares Exp $
+// $Id: inputillus_xml_io.cpp,v 1.12.2.11 2006-10-29 21:28:31 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -112,18 +112,11 @@ void IllusInputParms::read(xml_lmi::Element const& x)
         (IllusInputParms::member_names()
         );
     std::vector<std::string>::iterator current_member;
-    xml_lmi::NodeContainer const c = x.get_children();
-    for
-        (xml_lmi::NodeContainer::const_iterator iter = c.begin()
-        ;iter != c.end()
-        ;++iter
-        )
+    xml_lmi::ElementContainer const elements(xml_lmi::child_elements(x));
+    typedef xml_lmi::ElementContainer::const_iterator eci;
+    for(eci i = elements.begin(); i != elements.end(); ++i)
         {
-        xml_lmi::Element const* child = dynamic_cast<xml_lmi::Element const*>(*iter);
-        if(!child) // child is a text node
-            {
-            continue;
-            }
+        xml_lmi::Element const* child = *i;
         std::string node_tag(child->get_name());
         current_member = std::find
             (member_names.begin()
