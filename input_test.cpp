@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_test.cpp,v 1.7.2.10 2006-10-29 08:52:22 chicares Exp $
+// $Id: input_test.cpp,v 1.7.2.11 2006-10-29 08:55:22 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -161,10 +161,10 @@ int test_main(int, char*[])
 */
     original.propagate_changes_to_base_and_finalize();
 
-    xml_lmi::Document doc;
-    xml_lmi::Element& xml_root0 = *doc.create_root_node("root");
+    xml_lmi::Document document;
+    xml_lmi::Element& xml_root0 = *document.create_root_node("root");
     xml_root0 << original;
-    os0 << doc;
+    os0 << document;
     os0.close();
 
     xml_lmi::get_first_element(xml_root0) >> replica;

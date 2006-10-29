@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.462.2.49 2006-10-29 01:48:14 chicares Exp $
+// $Id: ChangeLog,v 1.462.2.50 2006-10-29 08:55:22 chicares Exp $
 
 MAINTENANCE
 
@@ -8106,4 +8106,15 @@ exception if it is not.
 
   xml_lmi.cpp
 Avoid casting away constness.
+
+20061029T0852Z <chicares@cox.net> [1161]
+
+  input_test.cpp
+  objects.make
+Test xml read and write speed.
+
+20061029T0855Z <chicares@cox.net> [1161]
+
+  input_test.cpp
+Regularize names.
 
