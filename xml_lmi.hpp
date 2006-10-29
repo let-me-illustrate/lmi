@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xml_lmi.hpp,v 1.1.2.14 2006-10-29 01:14:24 chicares Exp $
+// $Id: xml_lmi.hpp,v 1.1.2.15 2006-10-29 21:23:20 chicares Exp $
 
 #ifndef xml_lmi_hpp
 #define xml_lmi_hpp
@@ -32,6 +32,7 @@
 #include <iosfwd>
 #include <list>
 #include <string>
+#include <vector>
 
 namespace xmlpp
 {
@@ -41,6 +42,9 @@ namespace xmlpp
     class Element;
     class Node;
 } // namespace xmlpp
+
+/// Forward declaration of a libxslt struct. The name is reserved,
+/// but that's libxslt's fault.
 
 struct _xsltStylesheet;
 
@@ -60,6 +64,8 @@ namespace xml_lmi
     /// persuade them to provide a forwarding header themselves.
 
     typedef std::list<xmlpp::Node*> NodeContainer;
+
+    typedef std::vector<Element*> ElementContainer;
 
     class dom_parser
         :private boost::noncopyable
@@ -81,21 +87,36 @@ namespace xml_lmi
         void create_xml_dom_parser();
     };
 
+    /// Create a container of pointers to an element's child elements.
+    ///
+    /// Only direct children are considered: children of child nodes
+    /// are not. Only child nodes that are elements are placed in the
+    /// container; other types of nodes are not.
+    ///
+    /// Precondition: No child element pointer returned by xml-library
+    /// calls is null.
+    ///
+    /// Throws: an exception, via fatal_error(), if a precondition is
+    /// violated, or if xml-library calls throw an exception derived
+    /// from std::exception.
+
+    ElementContainer child_elements(Element const&);
+
     /// Retrieve an xml element's full text-node contents.
     ///
     /// The contents of all text-node children are concatenated and
     /// returned. Only direct children are considered: children of
     /// child nodes are not.
 
-    std::string get_content(Element const& element);
+    std::string get_content(Element const&);
 
     /// Return an element node's first child element.
     ///
     /// Throws: std::runtime_error, via fatal_error(), if no child
     /// element exists.
 
-    Element      & get_first_element(Element      & parent);
-    Element const& get_first_element(Element const& parent);
+    Element      & get_first_element(Element      &);
+    Element const& get_first_element(Element const&);
 
     class Stylesheet
         :private boost::noncopyable

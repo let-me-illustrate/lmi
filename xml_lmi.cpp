@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xml_lmi.cpp,v 1.1.2.20 2006-10-29 01:48:14 chicares Exp $
+// $Id: xml_lmi.cpp,v 1.1.2.21 2006-10-29 21:23:20 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -255,6 +255,36 @@ void xml_lmi::dom_parser::create_xml_dom_parser()
     parser_->set_substitute_entities(true);
 }
 
+xml_lmi::ElementContainer xml_lmi::child_elements
+    (xml_lmi::Element const& parent
+    )
+{
+    try
+        {
+        xml_lmi::ElementContainer z;
+        xml_lmi::NodeContainer const& direct_children = parent.get_children();
+        typedef xml_lmi::NodeContainer::const_iterator nci;
+        for(nci i = direct_children.begin(); i != direct_children.end(); ++i)
+            {
+            if(!*i)
+                {
+                throw std::runtime_error("Null child element.");
+                }
+            xml_lmi::Element* e = dynamic_cast<xml_lmi::Element*>(*i);
+            if(e)
+                {
+                z.push_back(e);
+                }
+            }
+        return z;
+        }
+    catch(std::exception const& e)
+        {
+        fatal_error() << e.what() << LMI_FLUSH;
+        throw std::logic_error("Unreachable"); // Silence compiler warning.
+        }
+}
+
 std::string xml_lmi::get_content(Element const& element)
 {
     std::ostringstream oss;
@@ -267,7 +297,9 @@ std::string xml_lmi::get_content(Element const& element)
         {
         xmlpp::TextNode const* t = dynamic_cast<xmlpp::TextNode const*>(*iter);
         // TODO ?? Resolve this issue:
-        // maybe we should add CdataNode also?
+        // EVGENIY--You had commented:
+        //   maybe we should add CdataNode also?
+        // Have we found any need for that?
         if(t)
             {
             oss << t->get_content();
