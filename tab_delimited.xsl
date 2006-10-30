@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: tab_delimited.xsl,v 1.1.2.2 2006-10-27 15:52:19 etarassov Exp $
+    $Id: tab_delimited.xsl,v 1.1.2.3 2006-10-30 12:46:13 etarassov Exp $
 
     Uses format.xml - column titles, number-formatting and other information.
 -->
@@ -31,7 +31,10 @@
     <!ENTITY nl  "&#xA;">
 ]>
 <xsl:stylesheet version="1.0"
-	      xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+    xmlns:lmi="http://www.letmeillustrate.com"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+    xsi:schemaLocation="http://www.letmeillustrate.com schema.xsd">
 
 <xsl:output method="text" />
 

@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: schema.xsd,v 1.1.2.2 2006-10-27 15:52:19 etarassov Exp $
+    $Id: schema.xsd,v 1.1.2.3 2006-10-30 12:46:13 etarassov Exp $
 
     TODO:
     - add uniqueness constraints for (name,basis) in every document
@@ -29,7 +29,12 @@
     - add a custom namespace header to the Schema and
         to the data XML files.
 -->
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+<xs:schema
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    targetNamespace="http://www.letmeillustrate.com"
+    xmlns:lmi="http://www.letmeillustrate.com"
+    elementFormDefault="qualified"
+    attributeFormDefault="unqualified">
     <xs:annotation>
         <xs:documentation>
             This document describes the structure of illustration data
@@ -160,9 +165,9 @@
             </xs:documentation>
         </xs:annotation>
         <xs:simpleContent>
-            <xs:extension base="string_data_type">
-                <xs:attribute name="name" type="name_type" use="required" />
-                <xs:attribute name="basis" type="basis_type" use="optional" />
+            <xs:extension base="lmi:string_data_type">
+                <xs:attribute name="name" type="lmi:name_type" use="required" />
+                <xs:attribute name="basis" type="lmi:basis_type" use="optional" />
             </xs:extension>
         </xs:simpleContent>
     </xs:complexType>
@@ -178,9 +183,9 @@
             </xs:documentation>
         </xs:annotation>
         <xs:simpleContent>
-            <xs:extension base="double_data_type">
-                <xs:attribute name="name" type="name_type" use="required" />
-                <xs:attribute name="basis" type="basis_type" use="optional" />
+            <xs:extension base="lmi:double_data_type">
+                <xs:attribute name="name" type="lmi:name_type" use="required" />
+                <xs:attribute name="basis" type="lmi:basis_type" use="optional" />
             </xs:extension>
         </xs:simpleContent>
     </xs:complexType>
@@ -199,7 +204,7 @@
             </xs:documentation>
         </xs:annotation>
         <xs:choice minOccurs="0" maxOccurs="unbounded">
-            <xs:element name="duration" type="double_data_type">
+            <xs:element name="duration" type="lmi:double_data_type">
                 <xs:annotation>
                     <xs:documentation>
                         Node representing a particular value of a vector.
@@ -210,8 +215,8 @@
                 </xs:annotation>
             </xs:element>
         </xs:choice>
-        <xs:attribute name="name" type="name_type" use="required" />
-        <xs:attribute name="basis" type="basis_type" use="optional" />
+        <xs:attribute name="name" type="lmi:name_type" use="required" />
+        <xs:attribute name="basis" type="lmi:basis_type" use="optional" />
     </xs:complexType>
 
     <xs:complexType name="string_vector_type">
@@ -228,7 +233,7 @@
             </xs:documentation>
         </xs:annotation>
         <xs:choice minOccurs="0" maxOccurs="unbounded">
-            <xs:element name="duration" type="string_data_type">
+            <xs:element name="duration" type="lmi:string_data_type">
                 <xs:annotation>
                     <xs:documentation>
                         Node representing a particular value of a vector.
@@ -239,8 +244,8 @@
                 </xs:annotation>
             </xs:element>
         </xs:choice>
-        <xs:attribute name="name" type="name_type" use="required" />
-        <xs:attribute name="basis" type="basis_type" use="optional" />
+        <xs:attribute name="name" type="lmi:name_type" use="required" />
+        <xs:attribute name="basis" type="lmi:basis_type" use="optional" />
     </xs:complexType>
 
     <xs:complexType name="supplemental_report_type">
@@ -261,8 +266,8 @@
         <xs:sequence>
             <xs:element name="title" type="xs:string" />
             <xs:choice maxOccurs="unbounded">
-                <xs:element name="column" type="report_column_type" />
-                <xs:element name="spacer" type="report_spacer_type" />
+                <xs:element name="column" type="lmi:report_column_type" />
+                <xs:element name="spacer" type="lmi:report_spacer_type" />
             </xs:choice>
         </xs:sequence>
     </xs:complexType>
@@ -278,8 +283,8 @@
         </xs:annotation>
         <xs:simpleContent>
             <xs:extension base="xs:string">
-                <xs:attribute name="name" type="name_type" use="required" />
-                <xs:attribute name="basis" type="basis_type" use="optional" />
+                <xs:attribute name="name" type="lmi:name_type" use="required" />
+                <xs:attribute name="basis" type="lmi:basis_type" use="optional" />
             </xs:extension>
         </xs:simpleContent>
     </xs:complexType>
@@ -308,17 +313,17 @@
         </xs:annotation>
         <xs:sequence>
             <xs:choice maxOccurs="unbounded">
-                <xs:element name="string_scalar" type="string_scalar_type" />
-                <xs:element name="double_scalar" type="double_scalar_type" />
-                <xs:element name="string_vector" type="string_vector_type" />
-                <xs:element name="double_vector" type="double_vector_type" />
+                <xs:element name="string_scalar" type="lmi:string_scalar_type" />
+                <xs:element name="double_scalar" type="lmi:double_scalar_type" />
+                <xs:element name="string_vector" type="lmi:string_vector_type" />
+                <xs:element name="double_vector" type="lmi:double_vector_type" />
             </xs:choice>
-            <xs:element name="supplemental_report" type="supplemental_report_type"
+            <xs:element name="supplemental_report" type="lmi:supplemental_report_type"
                 minOccurs="0" maxOccurs="1" />
         </xs:sequence>
     </xs:complexType>
 
-    <xs:element name="illustration" type="illustration_type" />
+    <xs:element name="illustration" type="lmi:illustration_type" />
 
 <!--
     *************************************
@@ -336,7 +341,7 @@
         </xs:annotation>
         <xs:simpleContent>
             <xs:extension base="xs:string">
-                <xs:attribute name="basis" type="basis_type" use="optional" />
+                <xs:attribute name="basis" type="lmi:basis_type" use="optional" />
             </xs:extension>
         </xs:simpleContent>
     </xs:complexType>
@@ -376,10 +381,10 @@
             </xs:documentation>
         </xs:annotation>
         <xs:sequence>
-            <xs:element name="title" type="column_title_type" minOccurs="0" maxOccurs="unbounded" />
-            <xs:element name="format" type="column_format_type" minOccurs="0" maxOccurs="1" />
+            <xs:element name="title" type="lmi:column_title_type" minOccurs="0" maxOccurs="unbounded" />
+            <xs:element name="format" type="lmi:column_format_type" minOccurs="0" maxOccurs="1" />
         </xs:sequence>
-        <xs:attribute name="name" type="name_type" use="required" />
+        <xs:attribute name="name" type="lmi:name_type" use="required" />
         <xs:attribute name="calculation_summary" type="xs:boolean" default="false" use="optional" />
     </xs:complexType>
 
@@ -392,11 +397,11 @@
             </xs:documentation>
         </xs:annotation>
         <xs:choice>
-            <xs:element name="column" type="column_type"
+            <xs:element name="column" type="lmi:column_type"
                 minOccurs="0" maxOccurs="unbounded" />
         </xs:choice>
     </xs:complexType>
 
-    <xs:element name="columns" type="columns_type" />
+    <xs:element name="columns" type="lmi:columns_type" />
 
 </xs:schema>

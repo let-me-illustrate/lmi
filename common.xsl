@@ -21,12 +21,15 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: common.xsl,v 1.1.2.2 2006-10-27 15:52:19 etarassov Exp $
+    $Id: common.xsl,v 1.1.2.3 2006-10-30 12:46:13 etarassov Exp $
 
     Uses format.xml - column titles, number-formatting and other information.
 -->
 <xsl:stylesheet version="1.0"
-	      xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+    xmlns:lmi="http://www.letmeillustrate.com"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+    xsi:schemaLocation="http://www.letmeillustrate.com schema.xsd">
 
     <!--
         Print this message if title is not found for a column.
@@ -38,7 +41,7 @@
         Read the column information (title, forma-string, etc.) from format.xml file.
         Used in 'title' and 'get_column_format' templates.
     -->
-    <xsl:variable name="columns_format_info" select="document('format.xml')/columns/column" />
+    <xsl:variable name="columns_format_info" select="document('format.xml')/lmi:columns/lmi:column" />
 
     <!--
         An empty node. Pass it as initial empty nodeset to a template
@@ -93,14 +96,14 @@
                ><xsl:call-template name="do_title"
                    ><xsl:with-param name="name" select="$name"
                   /><xsl:with-param name="basis" select="$basis"
-                  /><xsl:with-param name="title" select="$columns_format_info[@name=$name]/title[@basis=$basis]/text()"
+                  /><xsl:with-param name="title" select="$columns_format_info[@name=$name]/lmi:title[@basis=$basis]/text()"
               /></xsl:call-template
            ></xsl:when
            ><xsl:otherwise
                ><xsl:call-template name="do_title"
                    ><xsl:with-param name="name" select="$name"
                   /><xsl:with-param name="basis" select="$basis"
-                  /><xsl:with-param name="title" select="$columns_format_info[@name=$name]/title/text()"
+                  /><xsl:with-param name="title" select="$columns_format_info[@name=$name]/lmi:title/text()"
               /></xsl:call-template
            ></xsl:otherwise
        ></xsl:choose

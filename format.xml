@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: format.xml,v 1.1.2.2 2006-10-27 15:52:19 etarassov Exp $
+    $Id: format.xml,v 1.1.2.3 2006-10-30 12:46:13 etarassov Exp $
 
     TODO Add default namespace declaration using our XMLSchema
 
@@ -35,8 +35,9 @@
     written in 2006-07. DATABASE !! So consider adding them there
     when the database is revamped.
 -->
-<columns xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:noNamespaceSchemaLocation="file:schema.xsd">
+<columns xmlns="http://www.letmeillustrate.com"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://www.letmeillustrate.com schema.xsd">
     <column name="GuarMaxMandE">
         <format>f4</format>
     </column>
