@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.462.2.55 2006-10-30 13:07:34 etarassov Exp $
+// $Id: ChangeLog,v 1.462.2.56 2006-10-30 13:08:59 etarassov Exp $
 
 MAINTENANCE
 
@@ -8094,9 +8094,9 @@ functions. Fix stylistic mistakes in xml_resources_test.cpp.
   html.xsl
   schema.xsd
   tab_delimited.xsl
-Boost xsl transformation stripped. Add comments. Add calculation_summary
-attribute to 'format.xml'. Move common method and common global
-variables to 'common.xsl'.
+Boost xsl transformation stripped. Add comments. Add
+calculation_summary attribute to 'format.xml'. Move common method
+and common global variables to 'common.xsl'.
 
 20061028T0001Z <chicares@cox.net> [1161]
 
