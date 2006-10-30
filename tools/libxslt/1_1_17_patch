@@ -1,0 +1,67 @@
+diff -u -r libxslt-1.1.17/libexslt/Makefile.am libxslt-try/libexslt/Makefile.am
+--- libxslt-1.1.17/libexslt/Makefile.am	Sun Mar 13 20:38:02 2005
++++ libxslt-try/libexslt/Makefile.am	Mon Oct 23 15:49:45 2006
+@@ -28,8 +28,8 @@
+ 	libexslt.h			\
+ 	dynamic.c
+ 
+-libexslt_la_LIBADD = $(top_builddir)/libxslt/libxslt.la $(EXTRA_LIBS)
+-libexslt_la_LDFLAGS = -version-info @LIBEXSLT_VERSION_INFO@ $(LIBGCRYPT_LIBS)
++libexslt_la_LIBADD = $(top_builddir)/libxslt/libxslt.la $(EXTRA_LIBS) @WIN32_EXTRA_LIBADD@
++libexslt_la_LDFLAGS = @WIN32_EXTRA_LDFLAGS@ -version-info @LIBEXSLT_VERSION_INFO@ $(LIBGCRYPT_LIBS)
+ 
+ man_MANS = libexslt.3
+ 
+diff -u -r libxslt-1.1.17/libxslt/Makefile.am libxslt-try/libxslt/Makefile.am
+--- libxslt-1.1.17/libxslt/Makefile.am	Sun Oct  2 11:25:22 2005
++++ libxslt-try/libxslt/Makefile.am	Mon Oct 23 15:48:12 2006
+@@ -50,8 +50,8 @@
+ 	xsltwin32config.h.in		\
+ 	libxslt.h
+ 
+-libxslt_la_LIBADD = $(EXTRA_LIBS)
+-libxslt_la_LDFLAGS = -version-info @LIBXSLT_VERSION_INFO@
++libxslt_la_LIBADD = $(EXTRA_LIBS) @WIN32_EXTRA_LIBADD@
++libxslt_la_LDFLAGS = @WIN32_EXTRA_LDFLAGS@ -version-info @LIBXSLT_VERSION_INFO@
+ 
+ man_MANS = libxslt.3
+ 
+diff -u -r libxslt-1.1.17/libexslt/Makefile.in libxslt-try/libexslt/Makefile.in
+--- libxslt-1.1.17/libexslt/Makefile.in	Tue Jun  6 17:20:28 2006
++++ libxslt-try/libexslt/Makefile.in	Mon Oct 23 15:52:36 2006
+@@ -268,8 +268,8 @@
+ 	libexslt.h			\
+ 	dynamic.c
+ 
+-libexslt_la_LIBADD = $(top_builddir)/libxslt/libxslt.la $(EXTRA_LIBS)
+-libexslt_la_LDFLAGS = -version-info @LIBEXSLT_VERSION_INFO@ $(LIBGCRYPT_LIBS)
++libexslt_la_LIBADD = $(top_builddir)/libxslt/libxslt.la $(EXTRA_LIBS) @WIN32_EXTRA_LIBADD@
++libexslt_la_LDFLAGS = @WIN32_EXTRA_LDFLAGS@ -version-info @LIBEXSLT_VERSION_INFO@ $(LIBGCRYPT_LIBS)
+ man_MANS = libexslt.3
+ EXTRA_DIST = $(man_MANS)
+ all: all-am
+diff -u -r libxslt-1.1.17/libxslt/Makefile.in libxslt-try/libxslt/Makefile.in
+--- libxslt-1.1.17/libxslt/Makefile.in	Tue Jun  6 17:20:30 2006
++++ libxslt-try/libxslt/Makefile.in	Mon Oct 23 15:52:15 2006
+@@ -292,8 +292,8 @@
+ 	xsltwin32config.h.in		\
+ 	libxslt.h
+ 
+-libxslt_la_LIBADD = $(EXTRA_LIBS)
+-libxslt_la_LDFLAGS = -version-info @LIBXSLT_VERSION_INFO@
++libxslt_la_LIBADD = $(EXTRA_LIBS) @WIN32_EXTRA_LIBADD@
++libxslt_la_LDFLAGS = @WIN32_EXTRA_LDFLAGS@ -version-info @LIBXSLT_VERSION_INFO@
+ man_MANS = libxslt.3
+ EXTRA_DIST = $(man_MANS) trio.h triodef.h
+ all: all-am
+diff -u -r libxslt-1.1.17/libxslt/xsltInternals.h libxslt-try/libxslt/xsltInternals.h
+--- libxslt-1.1.17/libxslt/xsltInternals.h	Wed May 31 16:20:12 2006
++++ libxslt-try/libxslt/xsltInternals.h	Mon Oct 23 15:54:26 2006
+@@ -398,6 +398,7 @@
+     XSLT_FUNC_LITERAL_RESULT_ELEMENT,
+     XSLT_FUNC_UNKOWN_FORWARDS_COMPAT,
+ #endif
++    XSLT_FUNC_MAX // dummy element to prevent 'comma at end of enumerator list'
+ } xsltStyleType;
+ 
+ /**

@@ -1,0 +1,712 @@
+diff -u -r -N HEAD/configure.in final/configure.in
+--- HEAD/configure.in	Mon Mar 13 16:56:58 2006
++++ final/configure.in	Tue Oct 24 16:15:26 2006
+@@ -90,15 +90,31 @@
+ 
+ AC_CHECK_HEADERS(string list map, , exit)
+ 
+-PKG_CHECK_MODULES(LIBXML, libxml-2.0 >= 2.6.1 glibmm-2.4 >= 2.4.0)
++PKG_CHECK_MODULES(LIBXML, libxml-2.0 >= 2.6.1)
+ 
+-GLIBMM_CHECK_PERL([5.6.0])
++AC_ARG_WITH(ustring,
++    AC_HELP_STRING([--without-ustring],
++                   [use std::string instead of Glib::ustring]),
++    ac_cv_use_glibustring="$withval"
++)
++if test "$ac_cv_use_glibustring" != "no"; then
++    PKG_CHECK_MODULES(GLIBMM, glibmm-2.4 >= 2.4.0, ,
++        AC_MSG_ERROR([
++${GLIBMM_PKG_ERRORS-Glib::ustring needed but not available: please see error message above}.
++
++You may specify --without-ustring to use std::string instead of Glib::ustring.])
++    )
++    GLIBMM_CHECK_PERL([5.6.0])
++    LIBXMLPP_USE_STD_STRING=0
++else
++    LIBXMLPP_USE_STD_STRING=1
++fi
++AC_SUBST(LIBXMLPP_USE_STD_STRING)
+ 
+ # Dummy conditional just to make automake-1.4 happy.
+ # We need an always-false condition in docs/Makefile.am.
+ AM_CONDITIONAL(LIBXMLCPP_FALSE,[false])
+ 
+-
+ AC_OUTPUT(
+   Makefile
+   libxml++/Makefile
+@@ -107,6 +123,7 @@
+     libxml++/nodes/Makefile
+     libxml++/io/Makefile
+     libxml++/validators/Makefile
++    libxml++/xmlppversion.h
+     
+   docs/Makefile
+     docs/reference/Makefile
+diff -u -r -N HEAD/docs/manual/libxml++_without_code.xml final/docs/manual/libxml++_without_code.xml
+--- HEAD/docs/manual/libxml++_without_code.xml	Mon Mar 13 16:56:58 2006
++++ final/docs/manual/libxml++_without_code.xml	Tue Oct 24 16:15:26 2006
+@@ -54,6 +54,15 @@
+     <para>Because Standard C++ has no string class that can fully handle UTF-8, libxml++ uses the Glib::ustring class from the glibmm library. Glib::ustring has almost exactly the same API as std::string, but methods such as length() and operator[] deal with whole UTF-8 characters rather than raw bytes.</para>
+     <para>There are implicit conversions between std::string and Glib::ustring, so you can use std::string wherever you see a Glib::ustring in the API, if you really don't care about any locale other than English. However, that is unlikely in today's connected world.</para>
+     <para>glibmm also provides useful API to convert between encodings and locales.</para>
++    <para>
++        All this being said, if you are absolutely sure that you don't need any
++        extra functionality of Glib::ustring, you can build the library without
++        glibmm and its dependencies. Under Unix this is done by specifying
++        <literal>--without-ustring</literal> in configure arguments and under
++        Windows you have to ensure that <literal>LIBXMLPP_USE_STD_STRING</literal>
++        is defined in your project options and the directory glibmm is in the
++        compiler include path.
++    </para>
+     </sect2>
+ 
+     <sect2>
+diff -u -r -N HEAD/examples/Makefile.am_fragment final/examples/Makefile.am_fragment
+--- HEAD/examples/Makefile.am_fragment	Mon Mar 13 16:56:58 2006
++++ final/examples/Makefile.am_fragment	Tue Oct 24 16:15:26 2006
+@@ -1,5 +1,5 @@
+ #Where to find the header files needed by the source files:
+-INCLUDES =  -I$(top_srcdir) @LIBXML_CFLAGS@
++INCLUDES =  -I$(top_builddir) -I$(top_srcdir) @LIBXML_CFLAGS@ @GLIBMM_CFLAGS@
+ 
+ #The libraries that the executable needs to link against:
+-LIBS = $(top_builddir)/libxml++/libxml++-2.6.la @LIBS@ @LIBXML_LIBS@
++LIBS = $(top_builddir)/libxml++/libxml++-2.6.la @LIBS@ @LIBXML_LIBS@ @GLIBMM_LIBS@
+diff -u -r -N HEAD/examples/dom_parser_raw/main.cc final/examples/dom_parser_raw/main.cc
+--- HEAD/examples/dom_parser_raw/main.cc	Mon Mar 13 16:56:58 2006
++++ final/examples/dom_parser_raw/main.cc	Tue Oct 24 16:15:26 2006
+@@ -23,7 +23,10 @@
+ 
+ #include <iostream>
+ #include <fstream>
+-#include <glibmm/convert.h>
++
++#ifndef LIBXMLPP_USE_STD_STRING
++  #include <glibmm/convert.h>
++#endif
+ 
+ 
+ void print_node(const xmlpp::Node* node, unsigned int indentation = 0)
+@@ -76,6 +79,20 @@
+     std::string contents = read_from_disk(filepath);
+     std::string contents_ucs2;
+ 
++#ifdef LIBXMLPP_USE_STD_STRING
++    size_t wcSize = mbstowcs(NULL, contents.c_str(), 0);
++    wchar_t *ws = new wchar_t[wcSize+1];
++    if ( mbstowcs(ws, contents.c_str(), wcSize) == (size_t)-1 )
++    {
++      std::cerr << "mbstowcs() failed" << std::endl;
++    }
++    else
++    {
++      const char * const s = (char *)ws;
++      contents_ucs2.assign(s, s + wcslen(ws)*sizeof(wchar_t)/sizeof(char) + 1);
++    }
++    delete [] ws;
++#else // !LIBXMLPP_USE_STD_STRING
+     try
+     {
+       contents_ucs2 = Glib::convert(contents, "UCS-2", "UTF-8");
+@@ -84,6 +101,7 @@
+     {
+       std::cerr << "Glib::convert failed: " << ex.what() << std::endl;
+     }
++#endif // LIBXMLPP_USE_STD_STRING/!LIBXMLPP_USE_STD_STRING
+ 
+     parser.parse_memory_raw((const unsigned char*)contents_ucs2.c_str(), contents_ucs2.size());
+ 
+diff -u -r -N HEAD/examples/import_node/main.cc final/examples/import_node/main.cc
+--- HEAD/examples/import_node/main.cc	Mon Mar 13 16:56:58 2006
++++ final/examples/import_node/main.cc	Tue Oct 24 16:15:26 2006
+@@ -1,6 +1,5 @@
+ #include <iostream>
+ #include <stdexcept>
+-#include <glibmm/ustring.h>
+ #include <cstdlib>
+ #include <libxml++/libxml++.h>
+ 
+diff -u -r -N HEAD/examples/sax_parser_build_dom/svgelement.h final/examples/sax_parser_build_dom/svgelement.h
+--- HEAD/examples/sax_parser_build_dom/svgelement.h	Mon Mar 13 16:56:58 2006
++++ final/examples/sax_parser_build_dom/svgelement.h	Tue Oct 24 16:15:26 2006
+@@ -24,7 +24,6 @@
+ #ifndef __LIBXMLPP_SVGELEMENT_H
+ #define __LIBXMLPP_SVGELEMENT_H
+ 
+-#include <glibmm/ustring.h>
+ #include <libxml++/libxml++.h>
+ #include <libxml/tree.h>
+ 
+diff -u -r -N HEAD/examples/sax_parser_build_dom/svgparser.h final/examples/sax_parser_build_dom/svgparser.h
+--- HEAD/examples/sax_parser_build_dom/svgparser.h	Mon Mar 13 16:56:58 2006
++++ final/examples/sax_parser_build_dom/svgparser.h	Tue Oct 24 16:15:26 2006
+@@ -25,7 +25,6 @@
+ #define __LIBXMLPP_SVGPARSER_H
+ 
+ #include <stack>
+-#include <glibmm/ustring.h>
+ #include <libxml++/libxml++.h>
+ 
+ namespace SVG {
+diff -u -r -N HEAD/examples/sax_parser_build_dom/svgpath.h final/examples/sax_parser_build_dom/svgpath.h
+--- HEAD/examples/sax_parser_build_dom/svgpath.h	Mon Mar 13 16:56:58 2006
++++ final/examples/sax_parser_build_dom/svgpath.h	Tue Oct 24 16:15:26 2006
+@@ -24,7 +24,6 @@
+ #ifndef __LIBXMLPP_SVGPATH_H
+ #define __LIBXMLPP_SVGPATH_H
+ 
+-#include <glibmm/ustring.h>
+ #include <libxml++/libxml++.h>
+ #include "svgelement.h"
+ 
+diff -u -r -N HEAD/libxml++/Makefile.am final/libxml++/Makefile.am
+--- HEAD/libxml++/Makefile.am	Mon Mar 13 16:56:58 2006
++++ final/libxml++/Makefile.am	Tue Oct 24 16:15:26 2006
+@@ -1,8 +1,8 @@
+ SUBDIRS = parsers exceptions nodes io validators
+ 
+-INCLUDES = -I$(top_srcdir) @LIBXML_CFLAGS@
++INCLUDES = -I$(top_builddir) -I$(top_srcdir) @LIBXML_CFLAGS@ @GLIBMM_CFLAGS@
+ 
+-h_sources_public = libxml++.h attribute.h dtd.h document.h noncopyable.h keepblanks.h
++h_sources_public = libxml++.h attribute.h dtd.h document.h noncopyable.h keepblanks.h xmlstring.h xmlppversion.h
+ h_sources_private = 
+ cc_sources = attribute.cc dtd.cc document.cc noncopyable.cc keepblanks.cc
+ cc_sources_private =
+@@ -21,7 +21,8 @@
+                          exceptions/libexceptions.la \
+                          nodes/libnodes.la \
+                          io/libio.la \
+-						 @LIBXML_LIBS@
++                         @LIBXML_LIBS@ \
++                         @GLIBMM_LIBS@
+ libxml___2_6_la_SOURCES = $(cc_sources) $(h_sources_public) $(h_sources_private) $(cc_sources_private)
+ 
+ # Install the headers:
+diff -u -r -N HEAD/libxml++/attribute.h final/libxml++/attribute.h
+--- HEAD/libxml++/attribute.h	Mon Mar 13 16:56:58 2006
++++ final/libxml++/attribute.h	Tue Oct 24 16:15:26 2006
+@@ -8,8 +8,7 @@
+ #define __LIBXMLPP_ATTRIBUTE_H
+ 
+ 
+-#include <glibmm/ustring.h>
+-
++#include <libxml++/xmlstring.h>
+ #include <libxml++/nodes/node.h>
+ 
+ #ifndef DOXYGEN_SHOULD_SKIP_THIS
+diff -u -r -N HEAD/libxml++/exceptions/Makefile.am final/libxml++/exceptions/Makefile.am
+--- HEAD/libxml++/exceptions/Makefile.am	Mon Mar 13 16:56:58 2006
++++ final/libxml++/exceptions/Makefile.am	Tue Oct 24 16:15:26 2006
+@@ -1,4 +1,4 @@
+-INCLUDES = -I$(top_srcdir) @LIBXML_CFLAGS@
++INCLUDES = -I$(top_builddir) -I$(top_srcdir) @LIBXML_CFLAGS@ @GLIBMM_CFLAGS@
+ 
+ h_sources_public = exception.h parse_error.h validity_error.h internal_error.h
+ cc_sources = exception.cc parse_error.cc validity_error.cc internal_error.cc
+diff -u -r -N HEAD/libxml++/exceptions/exception.h final/libxml++/exceptions/exception.h
+--- HEAD/libxml++/exceptions/exception.h	Mon Mar 13 16:56:58 2006
++++ final/libxml++/exceptions/exception.h	Tue Oct 24 16:15:26 2006
+@@ -23,7 +23,8 @@
+ #define __LIBXMLPP_EXCEPTION_H
+ 
+ #include <exception>
+-#include <glibmm/ustring.h>
++
++#include <libxml++/xmlstring.h>
+ 
+ namespace xmlpp
+ {
+diff -u -r -N HEAD/libxml++/exceptions/internal_error.h final/libxml++/exceptions/internal_error.h
+--- HEAD/libxml++/exceptions/internal_error.h	Mon Mar 13 16:56:58 2006
++++ final/libxml++/exceptions/internal_error.h	Tue Oct 24 16:15:26 2006
+@@ -24,9 +24,6 @@
+ 
+ #include <libxml++/exceptions/exception.h>
+ 
+-#include <exception>
+-#include <glibmm/ustring.h>
+-
+ namespace xmlpp {
+   
+ class internal_error: public exception
+diff -u -r -N HEAD/libxml++/exceptions/parse_error.h final/libxml++/exceptions/parse_error.h
+--- HEAD/libxml++/exceptions/parse_error.h	Mon Mar 13 16:56:58 2006
++++ final/libxml++/exceptions/parse_error.h	Tue Oct 24 16:15:26 2006
+@@ -24,9 +24,6 @@
+ 
+ #include <libxml++/exceptions/exception.h>
+ 
+-#include <exception>
+-#include <glibmm/ustring.h>
+-
+ namespace xmlpp
+ {
+ 
+diff -u -r -N HEAD/libxml++/io/Makefile.am final/libxml++/io/Makefile.am
+--- HEAD/libxml++/io/Makefile.am	Mon Mar 13 16:56:58 2006
++++ final/libxml++/io/Makefile.am	Tue Oct 24 16:15:26 2006
+@@ -1,4 +1,4 @@
+-INCLUDES = -I$(top_srcdir) @LIBXML_CFLAGS@
++INCLUDES = -I$(top_builddir) -I$(top_srcdir) @LIBXML_CFLAGS@ @GLIBMM_CFLAGS@
+ 
+ h_sources_public = \
+   istreamparserinputbuffer.h \
+diff -u -r -N HEAD/libxml++/io/outputbuffer.h final/libxml++/io/outputbuffer.h
+--- HEAD/libxml++/io/outputbuffer.h	Mon Mar 13 16:56:58 2006
++++ final/libxml++/io/outputbuffer.h	Tue Oct 24 16:15:26 2006
+@@ -10,7 +10,7 @@
+ #ifndef __LIBXMLPP_OUTPUTBUFFER_H
+ #define __LIBXMLPP_OUTPUTBUFFER_H
+ 
+-#include <glibmm/ustring.h>
++#include <libxml++/xmlstring.h>
+ #include <libxml++/noncopyable.h>
+ 
+ #ifndef DOXYGEN_SHOULD_SKIP_THIS
+diff -u -r -N HEAD/libxml++/nodes/Makefile.am final/libxml++/nodes/Makefile.am
+--- HEAD/libxml++/nodes/Makefile.am	Mon Mar 13 16:56:58 2006
++++ final/libxml++/nodes/Makefile.am	Tue Oct 24 16:15:26 2006
+@@ -1,4 +1,4 @@
+-INCLUDES = -I$(top_srcdir) @LIBXML_CFLAGS@
++INCLUDES = -I$(top_builddir) -I$(top_srcdir) @LIBXML_CFLAGS@ @GLIBMM_CFLAGS@
+ 
+ h_sources_public = \
+ 	cdatanode.h \
+diff -u -r -N HEAD/libxml++/nodes/node.h final/libxml++/nodes/node.h
+--- HEAD/libxml++/nodes/node.h	Mon Mar 13 16:56:58 2006
++++ final/libxml++/nodes/node.h	Tue Oct 24 16:15:26 2006
+@@ -9,7 +9,8 @@
+ 
+ #include <libxml++/noncopyable.h>
+ #include <libxml++/exceptions/exception.h>
+-#include <glibmm/ustring.h>
++#include <libxml++/xmlstring.h>
++
+ #include <list>
+ #include <map>
+ #include <vector>
+diff -u -r -N HEAD/libxml++/parsers/Makefile.am final/libxml++/parsers/Makefile.am
+--- HEAD/libxml++/parsers/Makefile.am	Mon Mar 13 16:56:58 2006
++++ final/libxml++/parsers/Makefile.am	Tue Oct 24 16:15:26 2006
+@@ -1,4 +1,4 @@
+-INCLUDES = -I$(top_srcdir) @LIBXML_CFLAGS@
++INCLUDES = -I$(top_builddir) -I$(top_srcdir) @LIBXML_CFLAGS@ @GLIBMM_CFLAGS@
+ 
+ h_sources_public = parser.h saxparser.h domparser.h textreader.h
+ cc_sources = parser.cc saxparser.cc domparser.cc textreader.cc
+@@ -9,4 +9,4 @@
+ 
+ # Install the headers:
+ library_includedir=$(includedir)/libxml++-2.6/libxml++/parsers
+-library_include_HEADERS = $(h_sources_public)
+\ No newline at end of file
++library_include_HEADERS = $(h_sources_public)
+diff -u -r -N HEAD/libxml++/parsers/domparser.cc final/libxml++/parsers/domparser.cc
+--- HEAD/libxml++/parsers/domparser.cc	Mon Mar 13 16:56:58 2006
++++ final/libxml++/parsers/domparser.cc	Tue Oct 24 16:15:26 2006
+@@ -80,7 +80,7 @@
+ 
+ void DomParser::parse_memory(const Glib::ustring& contents)
+ {
+-  parse_memory_raw((const unsigned char*)contents.c_str(), contents.bytes());
++  parse_memory_raw((const unsigned char*)contents.c_str(), String::bytes(contents));
+ }
+ 
+ void DomParser::parse_context()
+diff -u -r -N HEAD/libxml++/parsers/parser.h final/libxml++/parsers/parser.h
+--- HEAD/libxml++/parsers/parser.h	Mon Mar 13 16:56:58 2006
++++ final/libxml++/parsers/parser.h	Tue Oct 24 16:15:26 2006
+@@ -8,7 +8,12 @@
+ #define __LIBXMLPP_PARSER_H
+ 
+ #ifdef WIN32 //TODO: Why do we do this? murrayc.
++#ifdef _MSC_VER
++// warning: identifier was truncated to 255 characters in the debug information
++// Disable the warning, because it is useless and is due to compiler limitation
++// and there is nothing we can do about it.
+ #pragma warning (disable : 4786)
++#endif // _MSC_VER
+ #endif
+ 
+ #include <libxml++/nodes/element.h>
+diff -u -r -N HEAD/libxml++/validators/validator.h final/libxml++/validators/validator.h
+--- HEAD/libxml++/validators/validator.h	Mon Mar 13 16:56:58 2006
++++ final/libxml++/validators/validator.h	Tue Oct 24 16:35:09 2006
+@@ -9,7 +9,12 @@
+ #define __LIBXMLPP_VALIDATOR_H
+ 
+ #ifdef WIN32 //TODO: Why do we do this? murrayc.
++#ifdef _MSC_VER
++// warning: identifier was truncated to 255 characters in the debug information
++// Disable the warning, because it is useless and is due to compiler limitation
++// and there is nothing we can do about it.
+ #pragma warning (disable : 4786)
++#endif // _MSC_VER
+ #endif
+ 
+ #include <libxml++/nodes/element.h>
+diff -u -r -N HEAD/libxml++/parsers/saxparser.cc final/libxml++/parsers/saxparser.cc
+--- HEAD/libxml++/parsers/saxparser.cc	Mon Mar 13 16:56:58 2006
++++ final/libxml++/parsers/saxparser.cc	Tue Oct 24 16:15:26 2006
+@@ -186,7 +186,7 @@
+   
+ void SaxParser::parse_memory(const Glib::ustring& contents)
+ {
+-  parse_memory_raw((const unsigned char*)contents.c_str(), contents.bytes());
++  parse_memory_raw((const unsigned char*)contents.c_str(), String::bytes(contents));
+ }
+ 
+ void SaxParser::parse_stream(std::istream& in)
+@@ -242,7 +242,7 @@
+   }
+   
+   if(!exception_)
+-    xmlParseChunk(context_, chunk.c_str(), chunk.bytes(), 0 /* don't terminate */);
++    xmlParseChunk(context_, chunk.c_str(), String::bytes(chunk), 0 /* don't terminate */);
+ 
+   check_for_exception();
+ }
+diff -u -r -N HEAD/libxml++/parsers/textreader.h final/libxml++/parsers/textreader.h
+--- HEAD/libxml++/parsers/textreader.h	Mon Mar 13 16:56:58 2006
++++ final/libxml++/parsers/textreader.h	Tue Oct 24 16:15:26 2006
+@@ -9,8 +9,7 @@
+ 
+ #include <libxml++/noncopyable.h>
+ #include <libxml++/nodes/node.h>
+-
+-#include <glibmm/ustring.h>
++#include <libxml++/xmlstring.h>
+ 
+ extern "C"
+ {
+diff -u -r -N HEAD/libxml++/validators/Makefile.am final/libxml++/validators/Makefile.am
+--- HEAD/libxml++/validators/Makefile.am	Mon Mar 13 16:56:58 2006
++++ final/libxml++/validators/Makefile.am	Tue Oct 24 16:15:26 2006
+@@ -1,4 +1,4 @@
+-INCLUDES = -I$(top_srcdir) @LIBXML_CFLAGS@
++INCLUDES = -I$(top_builddir) -I$(top_srcdir) @LIBXML_CFLAGS@ @GLIBMM_CFLAGS@
+ 
+ h_sources_public = validator.h dtdvalidator.h
+ cc_sources = validator.cc dtdvalidator.cc
+diff -u -r -N HEAD/libxml++/xmlppversion.h final/libxml++/xmlppversion.h
+--- HEAD/libxml++/xmlppversion.h	Thu Jan  1 01:00:00 1970
++++ final/libxml++/xmlppversion.h	Tue Oct 24 16:15:26 2006
+@@ -0,0 +1,22 @@
++/* libxml++/xmlstring.h
++ * this file is part of libxml++
++ *
++ * copyright (C) 2005 by the libxml++ development team
++ *
++ * this file is covered by the GNU Lesser General Public License,
++ * which should be included with libxml++ as the file COPYING.
++ */
++
++#ifndef __LIBXMLPP_VERSION_H__
++#define __LIBXMLPP_VERSION_H__
++
++/**
++ * LIBXMLPP_USE_STD_STRING:
++ *
++ * Define this to use std::string instead of Glib::ustring
++ */
++#if 0
++#define LIBXMLPP_USE_STD_STRING 
++#endif
++
++#endif /* __LIBXMLPP_VERSION_H__ */
+diff -u -r -N HEAD/libxml++/xmlppversion.h.in final/libxml++/xmlppversion.h.in
+--- HEAD/libxml++/xmlppversion.h.in	Thu Jan  1 01:00:00 1970
++++ final/libxml++/xmlppversion.h.in	Tue Oct 24 16:15:26 2006
+@@ -0,0 +1,22 @@
++/* libxml++/xmlstring.h
++ * this file is part of libxml++
++ *
++ * copyright (C) 2005 by the libxml++ development team
++ *
++ * this file is covered by the GNU Lesser General Public License,
++ * which should be included with libxml++ as the file COPYING.
++ */
++
++#ifndef __LIBXMLPP_VERSION_H__
++#define __LIBXMLPP_VERSION_H__
++
++/**
++ * LIBXMLPP_USE_STD_STRING:
++ *
++ * Define this to use std::string instead of Glib::ustring
++ */
++#if @LIBXMLPP_USE_STD_STRING@
++#define LIBXMLPP_USE_STD_STRING 
++#endif
++
++#endif /* __LIBXMLPP_VERSION_H__ */
+diff -u -r -N HEAD/libxml++/xmlstring.h final/libxml++/xmlstring.h
+--- HEAD/libxml++/xmlstring.h	Thu Jan  1 01:00:00 1970
++++ final/libxml++/xmlstring.h	Tue Oct 24 16:15:26 2006
+@@ -0,0 +1,63 @@
++/* libxml++/xmlstring.h
++ * this file is part of libxml++
++ *
++ * copyright (C) 2005 by the libxml++ development team
++ *
++ * this file is covered by the GNU Lesser General Public License,
++ * which should be included with libxml++ as the file COPYING.
++ */
++
++/*
++   This header either just forwards to glibmm/ustring.h or, if we're configured
++   to not use Glib::ustring, defines a replacement class using std::string.
++ */
++#ifndef LIBXMLPP_XMLSTRING_H_
++#define LIBXMLPP_XMLSTRING_H_
++
++#include <libxml++/xmlppversion.h>
++
++#include <stdlib.h>
++
++#ifdef LIBXMLPP_USE_STD_STRING
++
++#include <string>
++
++namespace Glib { typedef std::string ustring; }
++
++namespace xmlpp
++{
++
++/**
++    Helper functions for working with strings.
++ */
++namespace String
++{
++
++/**
++    Returns the size in bytes of the given string.
++ */
++inline size_t bytes(const std::string& s) { return s.size(); }
++
++}
++
++}
++
++#else // use Glib::ustring
++
++#include <glibmm/ustring.h>
++
++namespace xmlpp
++{
++
++namespace String
++{
++
++inline size_t bytes(const Glib::ustring& s) { return s.bytes(); }
++
++}
++
++}
++
++#endif // std::string/Glib::ustring
++
++#endif // LIBXMLPP_XMLSTRING_H_
+diff -u -r -N HEAD/pkg-config final/pkg-config
+--- HEAD/pkg-config	Thu Jan  1 01:00:00 1970
++++ final/pkg-config	Tue Oct 24 16:12:51 2006
+@@ -0,0 +1 @@
++#!/bin/sh
+diff -u -r -N HEAD/pkg.m4 final/pkg.m4
+--- HEAD/pkg.m4	Thu Jan  1 01:00:00 1970
++++ final/pkg.m4	Tue Oct 24 16:12:07 2006
+@@ -0,0 +1,156 @@
++# pkg.m4 - Macros to locate and utilise pkg-config.            -*- Autoconf -*-
++# 
++# Copyright © 2004 Scott James Remnant <scott@netsplit.com>.
++#
++# This program is free software; you can redistribute it and/or modify
++# it under the terms of the GNU General Public License as published by
++# the Free Software Foundation; either version 2 of the License, or
++# (at your option) any later version.
++#
++# This program is distributed in the hope that it will be useful, but
++# WITHOUT ANY WARRANTY; without even the implied warranty of
++# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++# General Public License for more details.
++#
++# You should have received a copy of the GNU General Public License
++# along with this program; if not, write to the Free Software
++# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
++#
++# As a special exception to the GNU General Public License, if you
++# distribute this file as part of a program that contains a
++# configuration script generated by Autoconf, you may include it under
++# the same distribution terms that you use for the rest of that program.
++
++# PKG_PROG_PKG_CONFIG([MIN-VERSION])
++# ----------------------------------
++AC_DEFUN([PKG_PROG_PKG_CONFIG],
++[m4_pattern_forbid([^_?PKG_[A-Z_]+$])
++m4_pattern_allow([^PKG_CONFIG(_PATH)?$])
++AC_ARG_VAR([PKG_CONFIG], [path to pkg-config utility])dnl
++if test "x$ac_cv_env_PKG_CONFIG_set" != "xset"; then
++	AC_PATH_TOOL([PKG_CONFIG], [pkg-config])
++fi
++if test -n "$PKG_CONFIG"; then
++	_pkg_min_version=m4_default([$1], [0.9.0])
++	AC_MSG_CHECKING([pkg-config is at least version $_pkg_min_version])
++	if $PKG_CONFIG --atleast-pkgconfig-version $_pkg_min_version; then
++		AC_MSG_RESULT([yes])
++	else
++		AC_MSG_RESULT([no])
++		PKG_CONFIG=""
++	fi
++		
++fi[]dnl
++])# PKG_PROG_PKG_CONFIG
++
++# PKG_CHECK_EXISTS(MODULES, [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND])
++#
++# Check to see whether a particular set of modules exists.  Similar
++# to PKG_CHECK_MODULES(), but does not set variables or print errors.
++#
++#
++# Similar to PKG_CHECK_MODULES, make sure that the first instance of
++# this or PKG_CHECK_MODULES is called, or make sure to call
++# PKG_CHECK_EXISTS manually
++# --------------------------------------------------------------
++AC_DEFUN([PKG_CHECK_EXISTS],
++[AC_REQUIRE([PKG_PROG_PKG_CONFIG])dnl
++if test -n "$PKG_CONFIG" && \
++    AC_RUN_LOG([$PKG_CONFIG --exists --print-errors "$1"]); then
++  m4_ifval([$2], [$2], [:])
++m4_ifvaln([$3], [else
++  $3])dnl
++fi])
++
++
++# _PKG_CONFIG([VARIABLE], [COMMAND], [MODULES])
++# ---------------------------------------------
++m4_define([_PKG_CONFIG],
++[if test -n "$PKG_CONFIG"; then
++    if test -n "$$1"; then
++        pkg_cv_[]$1="$$1"
++    else
++        PKG_CHECK_EXISTS([$3],
++                         [pkg_cv_[]$1=`$PKG_CONFIG --[]$2 "$3" 2>/dev/null`],
++			 [pkg_failed=yes])
++    fi
++else
++	pkg_failed=untried
++fi[]dnl
++])# _PKG_CONFIG
++
++# _PKG_SHORT_ERRORS_SUPPORTED
++# -----------------------------
++AC_DEFUN([_PKG_SHORT_ERRORS_SUPPORTED],
++[AC_REQUIRE([PKG_PROG_PKG_CONFIG])
++if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
++        _pkg_short_errors_supported=yes
++else
++        _pkg_short_errors_supported=no
++fi[]dnl
++])# _PKG_SHORT_ERRORS_SUPPORTED
++
++
++# PKG_CHECK_MODULES(VARIABLE-PREFIX, MODULES, [ACTION-IF-FOUND],
++# [ACTION-IF-NOT-FOUND])
++#
++#
++# Note that if there is a possibility the first call to
++# PKG_CHECK_MODULES might not happen, you should be sure to include an
++# explicit call to PKG_PROG_PKG_CONFIG in your configure.ac
++#
++#
++# --------------------------------------------------------------
++AC_DEFUN([PKG_CHECK_MODULES],
++[AC_REQUIRE([PKG_PROG_PKG_CONFIG])dnl
++AC_ARG_VAR([$1][_CFLAGS], [C compiler flags for $1, overriding pkg-config])dnl
++AC_ARG_VAR([$1][_LIBS], [linker flags for $1, overriding pkg-config])dnl
++
++pkg_failed=no
++AC_MSG_CHECKING([for $1])
++
++_PKG_CONFIG([$1][_CFLAGS], [cflags], [$2])
++_PKG_CONFIG([$1][_LIBS], [libs], [$2])
++
++m4_define([_PKG_TEXT], [Alternatively, you may set the environment variables $1[]_CFLAGS
++and $1[]_LIBS to avoid the need to call pkg-config.
++See the pkg-config man page for more details.])
++
++if test $pkg_failed = yes; then
++        _PKG_SHORT_ERRORS_SUPPORTED
++        if test $_pkg_short_errors_supported = yes; then
++	        $1[]_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "$2"`
++        else 
++	        $1[]_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "$2"`
++        fi
++	# Put the nasty error message in config.log where it belongs
++	echo "$$1[]_PKG_ERRORS" >&AS_MESSAGE_LOG_FD
++
++	ifelse([$4], , [AC_MSG_ERROR(dnl
++[Package requirements ($2) were not met:
++
++$$1_PKG_ERRORS
++
++Consider adjusting the PKG_CONFIG_PATH environment variable if you
++installed software in a non-standard prefix.
++
++_PKG_TEXT
++])],
++		[$4])
++elif test $pkg_failed = untried; then
++	ifelse([$4], , [AC_MSG_FAILURE(dnl
++[The pkg-config script could not be found or is too old.  Make sure it
++is in your PATH or set the PKG_CONFIG environment variable to the full
++path to pkg-config.
++
++_PKG_TEXT
++
++To get pkg-config, see <http://www.freedesktop.org/software/pkgconfig>.])],
++		[$4])
++else
++	$1[]_CFLAGS=$pkg_cv_[]$1[]_CFLAGS
++	$1[]_LIBS=$pkg_cv_[]$1[]_LIBS
++        AC_MSG_RESULT([yes])
++	ifelse([$3], , :, [$3])
++fi[]dnl
++])# PKG_CHECK_MODULES
+diff -u -r -N HEAD/stub.m4 final/stub.m4
+--- HEAD/stub.m4	Thu Jan  1 01:00:00 1970
++++ final/stub.m4	Tue Oct 24 16:12:09 2006
+@@ -0,0 +1,8 @@
++======= stub.m4 =========
++dnl
++dnl Empty stub for an unused macro GLIBMM_CHECK_PERL
++dnl
++
++AC_DEFUN([GLIBMM_CHECK_PERL],
++[
++])
+diff -u -r -N HEAD/examples/Makefile.am final/examples/Makefile.am
+--- HEAD/examples/Makefile.am	2005-09-08 10:27:24.000000000 +0200
++++ final/examples/Makefile.am	22:45:57.900507224 +0200
+@@ -1,5 +1,5 @@
+ SUBDIRS = dom_build dom_parser dom_parser_raw dom_parse_entities dom_read_write dom_xpath \
+-          sax_parser sax_parser_entities sax_exception sax_parser_build_dom \
++          sax_parser sax_parser_entities sax_parser_build_dom \
+           import_node textreader dtdvalidation
+ 
+ EXTRA_DIST = README Makefile.am_fragment
+diff -u -r -N HEAD/Makefile.am final/Makefile.am
+--- HEAD/Makefile.am	Mon Mar 13 16:56:58 2006
++++ final/Makefile.am	Thu Oct 26 23:48:38 2006
+@@ -1,6 +1,6 @@
+ ## Process this file with automake to produce Makefile.in
+ 
+-SUBDIRS = libxml++ docs examples MSVC_Net2003
++SUBDIRS = libxml++ examples MSVC_Net2003
+ 
+ EXTRA_DIST = libxml++-2.6.pc.in libxml++.spec.in
+ 
+
