@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.462.2.54 2006-10-30 12:47:41 etarassov Exp $
+// $Id: ChangeLog,v 1.462.2.55 2006-10-30 13:07:34 etarassov Exp $
 
 MAINTENANCE
 
@@ -8151,4 +8151,13 @@ Regularize names.
   tab_delimited.xsl
   schema.xsd
 Add lmi namespace.
+
+20061030T1206Z <etarassov@tt-solutions.com> [1161]
+
+  common.xsl
+  format.xml
+  html.xsl
+  tab_delimited.xsl
+  schema.xsd
+Fix $id: $ tag.
 
