@@ -63,3 +63,7 @@ then just copy it here.
 
 Establish tools/* directories.
 
+20061030T2058Z <wboutin@massmutual.com> [1]
+
+Add two patches to use with 'build_gnome_xml_libraries.make'.
+
