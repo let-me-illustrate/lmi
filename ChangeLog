@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.462.2.65 2006-10-30 23:44:18 chicares Exp $
+// $Id: ChangeLog,v 1.462.2.66 2006-10-30 23:46:14 chicares Exp $
 
 MAINTENANCE
 
@@ -8246,4 +8246,9 @@ by that target.
 
   GNUmakefile
 Temporarily exclude xml files from 'make check_concinnity'.
+
+20061030T2346Z <chicares@cox.net> [1167]
+
+  ledger_xml_io.cpp
+Fix problems identified by 'make check_concinnity'.
 

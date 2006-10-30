@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xml_io.cpp,v 1.48.2.13 2006-10-30 18:36:26 etarassov Exp $
+// $Id: ledger_xml_io.cpp,v 1.48.2.14 2006-10-30 23:46:14 chicares Exp $
 
 #include "ledger.hpp"
 
@@ -669,7 +669,7 @@ string_vector_t double_formatter_t::format
 {
     string_vector_t sv;
 
-    // Calculation summary only needs the values from 'cs_set'. 
+    // Calculation summary only needs the values from 'cs_set'.
     if(xml_version == Ledger::e_xml_light && cs_set.find(id.name()) == cs_set.end())
         {
         static std::string const zero = "0";
@@ -1090,7 +1090,7 @@ void Ledger::do_write(xml_lmi::Element& illustration, enum_xml_version xml_versi
             {
             xml_lmi::Element& dvector
                 = *illustration.add_child("double_vector");
-            
+
             id.set_to_xml_element(dvector);
 
             string_vector_t v
