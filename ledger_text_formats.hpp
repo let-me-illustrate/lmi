@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_text_formats.hpp,v 1.5.2.5 2006-10-25 12:15:47 chicares Exp $
+// $Id: ledger_text_formats.hpp,v 1.5.2.6 2006-10-30 17:38:29 etarassov Exp $
 
 #ifndef ledger_text_formats_hpp
 #define ledger_text_formats_hpp
@@ -93,12 +93,12 @@ class LMI_SO LedgerFormatter
   private:
     Ledger const* ledger_values_;
 
-    typedef boost::shared_ptr<xml_lmi::Document> XmlDocumentSharedPtr;
+    typedef boost::shared_ptr<xml_lmi::Document> XmlDocumentPtr;
 
     // light and heavy version of xml data, mutable is needed to allow
     // its lazy initialisation
-    mutable XmlDocumentSharedPtr xml_document_heavy_;
-    mutable XmlDocumentSharedPtr xml_document_light_;
+    mutable XmlDocumentPtr xml_document_heavy_;
+    mutable XmlDocumentPtr xml_document_light_;
 
     // clear xml data
     void ResetXmlData();
@@ -107,7 +107,7 @@ class LMI_SO LedgerFormatter
     xml_lmi::Document const& GetXmlDocHeavy() const;
     xml_lmi::Document const& GetXmlDocLight() const;
 
-    XmlDocumentSharedPtr DoGenerateXml(bool light_version) const;
+    XmlDocumentPtr DoGenerateXml(bool light_version) const;
 
     xml_lmi::Stylesheet const& GetStylesheet
         (std::string const& filename

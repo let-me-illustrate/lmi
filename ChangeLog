@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.462.2.60 2006-10-30 17:27:36 etarassov Exp $
+// $Id: ChangeLog,v 1.462.2.61 2006-10-30 17:39:22 etarassov Exp $
 
 MAINTENANCE
 
@@ -8212,4 +8212,12 @@ Refactor use of xml_lmi::NodeContainer.
   schema.xsd
 Change cvs substitution mode to default to '-kkv'. Fix RCS Id again.
 The previous change 20061030T1206Z did not work.
+
+20061030T1738Z <etarassov@tt-solutions.com> [1161]
+
+  illustration_view.cpp
+  ledger_text_formats.cpp
+  ledger_text_formats.hpp
+  ledger_xml_io.cpp
+Boost ledger xml data generation. Add value_id class.
 

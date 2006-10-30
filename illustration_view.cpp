@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustration_view.cpp,v 1.41.2.5 2006-10-25 13:00:22 chicares Exp $
+// $Id: illustration_view.cpp,v 1.41.2.6 2006-10-30 17:38:29 etarassov Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -344,8 +344,13 @@ void IllustrationView::CopyLedgerValues()
     if(!clipboardLocker)
         return;
 
+    Timer timer;
+
     std::ostringstream oss;
     ledger_formatter_.FormatAsTabDelimited(oss);
+
+    status() << "Format: " << timer.stop().elapsed_msec_str() << std::flush;
+
     wxTextDataObject* testDataObject = new wxTextDataObject(oss.str());
 
     // clipboard owns the data
@@ -404,9 +409,6 @@ void IllustrationView::SetLedger(boost::shared_ptr<Ledger const> ledger)
     if (ledger_values_.get())
         {
         ledger_formatter_ = LedgerFormatterFactory::Instance().CreateFormatter(*ledger_values_);
-        // in advance generate xml data for the calculation summary
-        ledger_formatter_.PrepareXmlDataForHtml();
-        ledger_formatter_.PrepareXmlDataForTabDelimited();
         }
     else
         {

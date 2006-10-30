@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xml_io.cpp,v 1.48.2.11 2006-10-24 13:35:37 etarassov Exp $
+// $Id: ledger_xml_io.cpp,v 1.48.2.12 2006-10-30 17:38:29 etarassov Exp $
 
 #include "ledger.hpp"
 
@@ -41,10 +41,13 @@
 #include <boost/filesystem/path.hpp>
 #include <libxml++/libxml++.h>
 
+#include <algorithm>
 #include <fstream>
 #include <iomanip>
 #include <ios>
 #include <locale>
+#include <map>
+#include <set>
 #include <sstream>
 #include <utility>
 
@@ -61,7 +64,6 @@ typedef std::vector< std::string > string_vector_t;
 
 int const n = 7;
 
-// TODO ?? consider using shortcuts such as 'curr', 'guar', etc.
 char const* char_p_suffixes[n] =
     {"run_curr_basis"         // e_run_curr_basis
     ,"run_guar_basis"         // e_run_guar_basis
@@ -76,6 +78,219 @@ string_vector_t const suffixes
     (char_p_suffixes
     ,char_p_suffixes + n
     );
+
+/// A ledger value id.
+///
+/// A ledger value is identified by a (name, basis) pair, where
+/// name is required and basis is optional.
+/// Name is stored by value and basis is stored as a pointer to an element
+/// of the static vector of strings 'suffixes' which corresponds to
+/// enum_run_basis.
+
+class value_id
+{
+  public:
+    value_id();
+    value_id(value_id const& rhs);
+    // assignment opr is ok
+
+    static value_id empty_value();
+    static value_id from_name(std::string const&);
+    static value_id from_name_basis(std::string const&, std::string const*);
+    static value_id from_name_basis(std::string const&, enum_run_basis);
+    static value_id from_report_column_title(std::string const&);
+    static value_id from_xml_element(xml_lmi::Element const&);
+
+    std::string const& name() const { return name_; }
+    std::string const* basis() const { return basis_; }
+
+    bool empty() const;
+
+    void set_to_xml_element(xml_lmi::Element& element) const;
+    void get_from_xml_element(xml_lmi::Element const&);
+
+    bool operator<(value_id const&) const;
+  private:
+    std::string name_;
+    std::string const* basis_;
+
+    value_id(std::string const& name, std::string const* basis = 0);
+};
+
+value_id value_id::empty_value()
+{
+    return value_id("", 0);
+}
+
+value_id value_id::from_name(std::string const& name)
+{
+    return value_id(name, 0);
+}
+
+value_id value_id::from_name_basis
+    (std::string const& name
+    ,std::string const* basis
+    )
+{
+    return value_id(name, basis);
+}
+
+value_id value_id::from_name_basis
+    (std::string const& name
+    ,enum_run_basis basis
+    )
+{
+    return value_id(name, &suffixes[basis]);
+}
+
+value_id::value_id()
+    :basis_(0)
+{
+}
+
+value_id::value_id(std::string const& name, std::string const* basis)
+    :name_(name)
+    ,basis_(basis)
+{
+}
+
+value_id::value_id(value_id const& rhs)
+    :name_(rhs.name_)
+    ,basis_(rhs.basis_)
+{
+}
+
+bool value_id::empty() const
+{
+    return name_.empty();
+}
+
+bool string_ends_with(std::string const& name, std::string const& suffix)
+{
+    if(name.length() < suffix.length())
+        {
+        return false;
+        }
+
+    return (0 == name.compare(name.length() - suffix.length(), suffix.length(), suffix));
+}
+
+/// Convert an old value identifier from report_column_NAMES
+/// (in mc_enum_types.xpp) into a value_id.
+///
+/// This function looks for a suffix it knows and, if it is found,
+/// strips it and adds the corresponding basis value.
+///
+/// The special value "[none]" is converted into an empty name.
+
+value_id value_id::from_report_column_title(std::string const& title)
+{
+    typedef std::map<std::string, e_run_basis> suffix_map_t;
+    static suffix_map_t suffix_map;
+    if(suffix_map.empty())
+    {
+        suffix_map["_Current"       ] = e_run_curr_basis;
+        suffix_map["_Guaranteed"    ] = e_run_guar_basis;
+        suffix_map["_Midpoint"      ] = e_run_mdpt_basis;
+        suffix_map["_CurrentZero"   ] = e_run_curr_basis_sa_zero;
+        suffix_map["_GuaranteedZero"] = e_run_guar_basis_sa_zero;
+        suffix_map["_CurrentHalf"   ] = e_run_curr_basis_sa_half;
+        suffix_map["_GuaranteedHalf"] = e_run_guar_basis_sa_half;
+    }
+
+    for
+        (suffix_map_t::const_iterator it = suffix_map.begin()
+        ;it != suffix_map.end()
+        ;++it
+        )
+        {
+        if(string_ends_with(title, it->first))
+            {
+            return value_id::from_name_basis
+                    (title.substr
+                        (0
+                        ,title.length() - it->first.length()
+                        )
+                    ,it->second
+                    );
+            }
+        }
+
+    // the magic "[none]" means no value at all
+    if(title == "[none]")
+        {
+        return value_id::empty_value();
+        }
+
+    return value_id::from_name(title);
+}
+
+value_id value_id::from_xml_element(xml_lmi::Element const& element)
+{
+    value_id id;
+    id.get_from_xml_element(element);
+    return id;
+}
+
+void value_id::set_to_xml_element(xml_lmi::Element& element) const
+{
+    if(!empty())
+        {
+        element.set_attribute("name", name());
+        if(basis())
+            {
+            element.set_attribute("basis", *basis());
+            }
+        }
+}
+
+void value_id::get_from_xml_element(xml_lmi::Element const& element)
+{
+    name_ = "";
+    basis_ = 0;
+
+    xml_lmi::Attribute const* name_attribute
+        = element.get_attribute("name");
+    if(0 == name_attribute)
+        {
+        return;
+        }
+    name_ = name_attribute->get_value();
+
+    xml_lmi::Attribute const* basis_attribute
+        = element.get_attribute("basis");
+    if(0 == basis_attribute)
+        {
+        return;
+        }
+
+    std::string const basis_value = basis_attribute->get_value();
+    string_vector_t::const_iterator it = std::find
+        (suffixes.begin()
+        ,suffixes.end()
+        ,basis_value
+        );
+    if(it != suffixes.end())
+        {
+        basis_ = &*it;
+        }
+}
+
+bool value_id::operator<(value_id const& rhs) const
+{
+    int names_compared = name_.compare(rhs.name_);
+
+    if(names_compared < 0)
+        {
+        return true;
+        }
+    if(0 == names_compared)
+        {
+        return basis_ < rhs.basis_;
+        }
+
+    return false;
+}
 
 template<typename EnumType, int N>
 std::vector<std::string> enum_vector_to_string_vector
@@ -106,8 +321,18 @@ class double_formatter_t
     double_formatter_t();
 
     bool            has_format(std::string const& s) const;
-    std::string     format(std::string const& s, double d) const;
-    string_vector_t format(std::string const& s, double_vector_t const& dv) const;
+    std::string     format
+        (std::string const& s
+        ,double d
+        ,bool is_for_calculation_summary
+        ) const;
+    string_vector_t format
+        (std::string const& s
+        ,double_vector_t const& dv
+        ,bool is_for_calculation_summary
+        ) const;
+
+    void set_supplemental_columns_list(std::vector<value_id> const& columns);
 
   private:
     // Double conversion units
@@ -120,7 +345,11 @@ class double_formatter_t
     // Map value name to the corresponding format
     typedef std::map<std::string, format_t> format_map_t;
 
+    // Set of calculation summary values
+    typedef std::set<std::string> calculation_summary_fields_t;
+
     format_map_t format_map;
+    calculation_summary_fields_t cs_set;
 
     format_t get_format(std::string const& s) const;
     std::string do_format(double d, format_t const& f) const;
@@ -285,13 +514,24 @@ double_formatter_t::double_formatter_t()
                 continue;
                 }
 
-            xml_lmi::Attribute const* name_attribute = column_element->get_attribute("name");
+            value_id id = value_id::from_xml_element(*column_element);
+
             // a 'column' node has to have @name attribute
-            if(!name_attribute)
+            if(id.empty())
                 {
                 continue;
                 }
-            std::string const name = name_attribute->get_value();
+
+            xml_lmi::Attribute const* cs_attribute
+                = column_element->get_attribute("calculation_summary");
+            if(0 != cs_attribute)
+                {
+                std::string const cs_value = cs_attribute->get_value();
+                if(cs_value == "true" || cs_value == "1")
+                    {
+                    cs_set.insert(id.name());
+                    }
+                }
 
             xml_lmi::NodeContainer const formats = (*it)->get_children("format");
             // skip nodes without format information
@@ -309,13 +549,13 @@ double_formatter_t::double_formatter_t()
                 }
 
             // format has already been specified. show a warning and continue
-            if(format_map.find(name) != format_map.end())
+            if(format_map.find(id.name()) != format_map.end())
                 {
                 warning()
                     << "Formats file '"
                     << format_path
                     << "' contains more than one format definition for '"
-                    << name
+                    << id.name()
                     << "' on line "
                     << format_element->get_line()
                     << "."
@@ -335,7 +575,7 @@ double_formatter_t::double_formatter_t()
                     << "'."
                     << LMI_FLUSH;
                 }
-            format_map[name] = known_formats[format_name];
+            format_map[id.name()] = known_formats[format_name];
             }
 
         if(format_map.empty())
@@ -361,13 +601,30 @@ double_formatter_t::double_formatter_t()
         }
 }
 
+void double_formatter_t::set_supplemental_columns_list
+    (std::vector<value_id> const& columns
+    )
+{
+    for
+        (std::vector<value_id>::const_iterator it = columns.begin()
+        ;it != columns.end()
+        ;++it
+        )
+        {
+        cs_set.insert(it->name());
+        }
+}
+
 bool double_formatter_t::has_format(std::string const& s) const
 {
     format_map_t::const_iterator it = format_map.find(s);
     if (it == format_map.end())
     {
 #ifdef SHOW_MISSING_FORMATS
-        std::ofstream ofs("missing_formats", std::ios_base::out | std::ios_base::ate | std::ios_base::app);
+        std::ofstream ofs
+            ("missing_formats"
+            ,std::ios_base::out | std::ios_base::ate | std::ios_base::app
+            );
         ofs << s << "\n";
 #endif // defined SHOW_MISSING_FORMATS
         return false;
@@ -393,17 +650,33 @@ double_formatter_t::get_format(std::string const& s) const
     return it->second;
 }
 
-std::string double_formatter_t::format(std::string const& name, double d) const
+std::string double_formatter_t::format
+    (std::string const& name
+    ,double d
+    ,bool // is_for_calculation_summary, not used currently
+    ) const
 {
     format_t f = get_format(name);
 
     return do_format(d, f);
 }
 
-string_vector_t double_formatter_t::format(std::string const& s, double_vector_t const& dv) const
+string_vector_t double_formatter_t::format
+    (std::string const& name
+    ,double_vector_t const& dv
+    ,bool is_for_calculation_summary
+    ) const
 {
-    format_t f = get_format(s);
     string_vector_t sv;
+
+    if(is_for_calculation_summary && cs_set.find(name) == cs_set.end())
+        {
+        static std::string const zero = "0";
+        sv.resize(dv.size(), zero);
+        return sv;
+        }
+
+    format_t f = get_format(name);
     for(double_vector_t::const_iterator it = dv.begin(),
                                        end = dv.end();
                                        it != end; ++it)
@@ -434,21 +707,6 @@ std::string double_formatter_t::do_format(double d, format_t const& f) const
     return s;
 }
 
-// --------------------------------------------------------------
-// a column is identified by its name and an optional basis value
-// --------------------------------------------------------------
-typedef std::pair<std::string, std::string const*> value_id;
-
-value_id make_value_id(std::string const& name)
-{
-    return value_id(name, NULL);
-}
-
-value_id make_value_id(std::string const& name, e_run_basis const& basis)
-{
-    return value_id(name, &suffixes[basis]);
-}
-
 } // Unnamed namespace.
 
 // ---------------------
@@ -462,6 +720,30 @@ void Ledger::write(xml_lmi::Element& illustration) const
 
 void Ledger::do_write(xml_lmi::Element& illustration, bool light_version) const
 {
+    // initialize number formatting facility
+    double_formatter_t formatter;
+
+    // Generate the supplemental report column list
+    std::vector<value_id> supplemental_report_columns;
+    if(ledger_invariant_->SupplementalReport)
+        {
+        // prepare supplement report column list
+        supplemental_report_columns.push_back(value_id::from_report_column_title(ledger_invariant_->SupplementalReportColumn00));
+        supplemental_report_columns.push_back(value_id::from_report_column_title(ledger_invariant_->SupplementalReportColumn01));
+        supplemental_report_columns.push_back(value_id::from_report_column_title(ledger_invariant_->SupplementalReportColumn02));
+        supplemental_report_columns.push_back(value_id::from_report_column_title(ledger_invariant_->SupplementalReportColumn03));
+        supplemental_report_columns.push_back(value_id::from_report_column_title(ledger_invariant_->SupplementalReportColumn04));
+        supplemental_report_columns.push_back(value_id::from_report_column_title(ledger_invariant_->SupplementalReportColumn05));
+        supplemental_report_columns.push_back(value_id::from_report_column_title(ledger_invariant_->SupplementalReportColumn06));
+        supplemental_report_columns.push_back(value_id::from_report_column_title(ledger_invariant_->SupplementalReportColumn07));
+        supplemental_report_columns.push_back(value_id::from_report_column_title(ledger_invariant_->SupplementalReportColumn08));
+        supplemental_report_columns.push_back(value_id::from_report_column_title(ledger_invariant_->SupplementalReportColumn09));
+        supplemental_report_columns.push_back(value_id::from_report_column_title(ledger_invariant_->SupplementalReportColumn10));
+        supplemental_report_columns.push_back(value_id::from_report_column_title(ledger_invariant_->SupplementalReportColumn11));
+
+        //formatter.set_supplemental_columns(SupplementalReportColumns);
+        }
+
     // This is a little tricky. We have some stuff that
     // isn't in the maps inside the ledger classes. We're going to
     // stuff it into a copy of the invariant-ledger class's data.
@@ -618,8 +900,6 @@ void Ledger::do_write(xml_lmi::Element& illustration, bool light_version) const
 
     // Maps to hold the numeric data.
 
-    typedef std::pair<std::string, std::string const*> value_id;
-
     typedef std::map<value_id, double>            double_scalar_map_t;
     typedef std::map<value_id, double_vector_t >  double_vector_map_t;
     typedef std::map<value_id, std::string>       string_scalar_map_t;
@@ -630,12 +910,10 @@ void Ledger::do_write(xml_lmi::Element& illustration, bool light_version) const
     string_scalar_map_t string_scalars;
     string_vector_map_t string_vectors;
 
-    string_vectors[ make_value_id("FundNames") ] = ledger_invariant_->FundNames;
+    string_vectors[value_id::from_name("FundNames")]
+        = ledger_invariant_->FundNames;
 
     // Map the data, formatting it as necessary.
-
-    // initialize number formatting facility
-    double_formatter_t formatter;
 
     // First we'll get the invariant stuff--the copy we made,
     // along with all the stuff we plugged into it above.
@@ -646,7 +924,7 @@ void Ledger::do_write(xml_lmi::Element& illustration, bool light_version) const
         ;++j
         )
         {
-        double_scalars[ make_value_id( j->first ) ] = *j->second;
+        double_scalars[value_id::from_name(j->first)] = *j->second;
         }
     for
         (string_map::const_iterator j = strings.begin()
@@ -654,7 +932,7 @@ void Ledger::do_write(xml_lmi::Element& illustration, bool light_version) const
         ;++j
         )
         {
-        string_scalars[ make_value_id( j->first ) ] = *j->second;
+        string_scalars[value_id::from_name(j->first)] = *j->second;
         }
     for
         (double_vector_map::const_iterator j = vectors.begin()
@@ -662,12 +940,12 @@ void Ledger::do_write(xml_lmi::Element& illustration, bool light_version) const
         ;++j
         )
         {
-        double_vectors[ make_value_id( j->first ) ] = *j->second;
+        double_vectors[value_id::from_name(j->first)] = *j->second;
         }
 
-//    doublescalars[make_value_id("GuarMaxMandE")] = *scalars[make_value_id("GuarMaxMandE")];
-//    stringvectors[make_value_id("CorridorFactor")] = double_vector_to_string_vector(*vectors[make_value_id("CorridorFactor")]);
-//    doublescalars[make_value_id("InitAnnGenAcctInt", e_run_curr_basis)] = *scalars[make_value_id("InitAnnGenAcctInt", e_run_curr_basis)];
+//    doublescalars[value_id::from_name("GuarMaxMandE")] = *scalars[value_id::from_name("GuarMaxMandE")];
+//    stringvectors[value_id::from_name("CorridorFactor")] = double_vector_to_string_vector(*vectors[value_id::from_name("CorridorFactor")]);
+//    doublescalars[value_id::from_name_basis("InitAnnGenAcctInt", e_run_curr_basis)] = *scalars[value_id::from_name_basis("InitAnnGenAcctInt", e_run_curr_basis)];
 
     // That was the tricky part. Now it's all downhill.
 
@@ -681,7 +959,8 @@ void Ledger::do_write(xml_lmi::Element& illustration, bool light_version) const
             ;++j
             )
             {
-            double_scalars[ make_value_id( j->first, i->first ) ] = *j->second;
+            double_scalars[value_id::from_name_basis(j->first, i->first)]
+                = *j->second;
             }
         // TODO ?? 'strings' variable is not going to be referenced by the rest
         // of the code, why do we want to modify it here?
@@ -699,13 +978,17 @@ void Ledger::do_write(xml_lmi::Element& illustration, bool light_version) const
             ;++j
             )
             {
-            double_vectors[ make_value_id( j->first, i->first ) ] = *j->second;
+            double_vectors[value_id::from_name_basis(j->first, i->first)]
+                = *j->second;
             }
         }
 
-    string_vectors[make_value_id("EeMode")] = enum_vector_to_string_vector( ledger_invariant_->EeMode );
-    string_vectors[make_value_id("ErMode")] = enum_vector_to_string_vector( ledger_invariant_->ErMode );
-    string_vectors[make_value_id("DBOpt")]  = enum_vector_to_string_vector( ledger_invariant_->DBOpt  );
+    string_vectors[value_id::from_name("EeMode")]
+        = enum_vector_to_string_vector( ledger_invariant_->EeMode );
+    string_vectors[value_id::from_name("ErMode")]
+        = enum_vector_to_string_vector( ledger_invariant_->ErMode );
+    string_vectors[value_id::from_name("DBOpt")]
+        = enum_vector_to_string_vector( ledger_invariant_->DBOpt  );
 
 // TODO ?? Here I copied some stuff from the ledger class files: the
 // parts that speak of odd members that aren't in those class's
@@ -745,12 +1028,12 @@ void Ledger::do_write(xml_lmi::Element& illustration, bool light_version) const
         ;++j
         )
         {
-        xml_lmi::Element& string_scalar = *illustration.add_child("string_scalar");
-        value_id const& id = j->first;
-        string_scalar.set_attribute("name", id.first);
-        if (id.second)
-            string_scalar.set_attribute("basis", *id.second);
-        string_scalar.add_child_text( j->second );
+        xml_lmi::Element& string_scalar
+            = *illustration.add_child("string_scalar");
+
+        j->first.set_to_xml_element(string_scalar);
+
+        string_scalar.add_child_text(j->second);
         }
     // double scalars
     for
@@ -760,13 +1043,16 @@ void Ledger::do_write(xml_lmi::Element& illustration, bool light_version) const
         )
         {
         value_id const& id = j->first;
-        if ( formatter.has_format( id.first ) )
+        if(formatter.has_format(id.name()))
             {
-            xml_lmi::Element& double_scalar = *illustration.add_child("double_scalar");
-            double_scalar.set_attribute("name", id.first);
-            if (id.second)
-                double_scalar.set_attribute("basis", *id.second);
-            double_scalar.add_child_text( formatter.format( id.first, j->second ) );
+            xml_lmi::Element& double_scalar
+                = *illustration.add_child("double_scalar");
+
+            id.set_to_xml_element(double_scalar);
+
+            double_scalar.add_child_text
+                (formatter.format(id.name(), j->second, light_version)
+                );
             }
         }
     // vectors of strings
@@ -777,10 +1063,9 @@ void Ledger::do_write(xml_lmi::Element& illustration, bool light_version) const
         )
         {
         xml_lmi::Element& svector = *illustration.add_child("string_vector");
-        value_id const& id = j->first;
-        svector.set_attribute("name", id.first);
-        if (id.second)
-            svector.set_attribute("basis", *id.second);
+
+        j->first.set_to_xml_element(svector);
+
         string_vector_t const& v = j->second;
         for
             (string_vector_t::const_iterator k = v.begin()
@@ -800,13 +1085,15 @@ void Ledger::do_write(xml_lmi::Element& illustration, bool light_version) const
         )
         {
         value_id const& id = j->first;
-        if ( formatter.has_format( id.first ) )
+        if (formatter.has_format(id.name()))
             {
-            xml_lmi::Element& dvector = *illustration.add_child("double_vector");
-            dvector.set_attribute("name", id.first);
-            if (id.second)
-                dvector.set_attribute("basis", *id.second);
-            string_vector_t v = formatter.format( id.first, j->second );
+            xml_lmi::Element& dvector
+                = *illustration.add_child("double_vector");
+            
+            id.set_to_xml_element(dvector);
+
+            string_vector_t v
+                = formatter.format(id.name(), j->second, light_version);
 // TODO ?? InforceLives shows an extra value past the end; should it
 // be truncated here?
             for
@@ -823,43 +1110,40 @@ void Ledger::do_write(xml_lmi::Element& illustration, bool light_version) const
 
     if(ledger_invariant_->SupplementalReport)
         {
-        // prepare supplement report column list
-        string_vector_t SupplementalReportColumns;
-
-        SupplementalReportColumns.push_back(ledger_invariant_->SupplementalReportColumn00);
-        SupplementalReportColumns.push_back(ledger_invariant_->SupplementalReportColumn01);
-        SupplementalReportColumns.push_back(ledger_invariant_->SupplementalReportColumn02);
-        SupplementalReportColumns.push_back(ledger_invariant_->SupplementalReportColumn03);
-        SupplementalReportColumns.push_back(ledger_invariant_->SupplementalReportColumn04);
-        SupplementalReportColumns.push_back(ledger_invariant_->SupplementalReportColumn05);
-        SupplementalReportColumns.push_back(ledger_invariant_->SupplementalReportColumn06);
-        SupplementalReportColumns.push_back(ledger_invariant_->SupplementalReportColumn07);
-        SupplementalReportColumns.push_back(ledger_invariant_->SupplementalReportColumn08);
-        SupplementalReportColumns.push_back(ledger_invariant_->SupplementalReportColumn09);
-        SupplementalReportColumns.push_back(ledger_invariant_->SupplementalReportColumn10);
-        SupplementalReportColumns.push_back(ledger_invariant_->SupplementalReportColumn11);
+        // now pop back trailing empty supplemental report columns
+        while
+            (!supplemental_report_columns.empty()
+            && supplemental_report_columns.back().empty()
+            )
+            {
+            supplemental_report_columns.pop_back();
+            }
 
         // now put this information into the xml
-        xml_lmi::Element& supplemental_report = *illustration.add_child("supplemental_report");
+        xml_lmi::Element& supplemental_report
+            = *illustration.add_child("supplemental_report");
 
         // Eventually customize the report name.
-        supplemental_report.add_child("title")->add_child_text("Supplemental Report");
+        supplemental_report
+            .add_child("title")
+                ->add_child_text("Supplemental Report");
 
-        string_vector_t::const_iterator j;
+        std::vector<value_id>::const_iterator j;
         for
-            (j = SupplementalReportColumns.begin()
-            ;j != SupplementalReportColumns.end()
+            (j = supplemental_report_columns.begin()
+            ;j != supplemental_report_columns.end()
             ;++j
             )
             {
-            // FIXME find a better way of determining if it is an empty column
-            if ( *j == "[None]" )
+            if(j->empty())
                 {
                 supplemental_report.add_child("spacer");
                 }
             else // *j != "[None]"
                 {
-                supplemental_report.add_child("column")->add_child_text( *j );
+                j->set_to_xml_element
+                    (*supplemental_report.add_child("column")
+                    );
                 }
             }
         }
@@ -881,8 +1165,11 @@ void Ledger::write(std::ostream& os) const
     xml_lmi::Element& root = *doc.create_root_node(xml_root_name());
     root << *this;
 
+    std::string const lmi_namespace("http://www.letmeillustrate.com");
+
+    root.set_namespace_declaration(lmi_namespace);
     root.set_namespace_declaration("http://www.w3.org/2001/XMLSchema-instance", "xsi");
-    root.set_attribute("noNamespaceSchemaLocation", "file:schema.xsd", "xsi");
+    root.set_attribute("noNamespaceSchemaLocation", lmi_namespace + " schema.xsd", "xsi");
 
     os << doc;
 }

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_text_formats.cpp,v 1.22.2.5 2006-10-25 12:15:47 chicares Exp $
+// $Id: ledger_text_formats.cpp,v 1.22.2.6 2006-10-30 17:38:29 etarassov Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -164,10 +164,7 @@ void LedgerFormatter::ResetXmlData()
 //=============================================================================
 xml_lmi::Document const& LedgerFormatter::GetXmlDocLight() const
 {
-    if (!xml_document_light_)
-    {
-        xml_document_light_ = DoGenerateXml(true); // light_version
-    }
+    xml_document_light_ = DoGenerateXml(true); // light_version
 
     return *xml_document_light_;
 }
@@ -175,16 +172,13 @@ xml_lmi::Document const& LedgerFormatter::GetXmlDocLight() const
 //=============================================================================
 xml_lmi::Document const& LedgerFormatter::GetXmlDocHeavy() const
 {
-    if (!xml_document_heavy_)
-    {
-        xml_document_heavy_ = DoGenerateXml(false); // !light_version
-    }
+    xml_document_heavy_ = DoGenerateXml(false); // !light_version
 
     return *xml_document_heavy_;
 }
 
 //=============================================================================
-LedgerFormatter::XmlDocumentSharedPtr LedgerFormatter::DoGenerateXml
+LedgerFormatter::XmlDocumentPtr LedgerFormatter::DoGenerateXml
     (bool light_version
     ) const
 {
@@ -193,7 +187,7 @@ LedgerFormatter::XmlDocumentSharedPtr LedgerFormatter::DoGenerateXml
         throw std::runtime_error("Can't generate xml for a NULL ledger.");
         }
 
-    XmlDocumentSharedPtr doc(new xml_lmi::Document);
+    XmlDocumentPtr doc(new xml_lmi::Document);
     xml_lmi::Element& root
         = *(doc->create_root_node(ledger_values_->xml_root_name()));
 
@@ -203,7 +197,7 @@ LedgerFormatter::XmlDocumentSharedPtr LedgerFormatter::DoGenerateXml
 }
 
 //=============================================================================
-void LedgerFormatter::FormatAsHtml(std::ostream& str) const
+void LedgerFormatter::FormatAsHtml(std::ostream& os) const
 {
     try
         {
@@ -213,7 +207,7 @@ void LedgerFormatter::FormatAsHtml(std::ostream& str) const
 
         stylesheet.transform
             (GetXmlDocLight()
-            ,str
+            ,os
             ,xml_lmi::Stylesheet::e_output_html
             );
         }
@@ -229,7 +223,7 @@ void LedgerFormatter::FormatAsHtml(std::ostream& str) const
 }
 
 //=============================================================================
-void LedgerFormatter::FormatAsTabDelimited(std::ostream& str) const
+void LedgerFormatter::FormatAsTabDelimited(std::ostream& os) const
 {
     try
         {
@@ -239,7 +233,7 @@ void LedgerFormatter::FormatAsTabDelimited(std::ostream& str) const
 
         stylesheet.transform
             (GetXmlDocLight()
-            ,str
+            ,os
             ,xml_lmi::Stylesheet::e_output_text
             );
         }
@@ -255,7 +249,7 @@ void LedgerFormatter::FormatAsTabDelimited(std::ostream& str) const
 }
 
 //=============================================================================
-void LedgerFormatter::FormatAsXslFo(std::ostream& str) const
+void LedgerFormatter::FormatAsXslFo(std::ostream& os) const
 {
     try
         {
@@ -265,7 +259,7 @@ void LedgerFormatter::FormatAsXslFo(std::ostream& str) const
 
         stylesheet.transform
             (GetXmlDocHeavy()
-            ,str
+            ,os
             ,xml_lmi::Stylesheet::e_output_xml
             );
         }
