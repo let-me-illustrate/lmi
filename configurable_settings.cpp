@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: configurable_settings.cpp,v 1.14.2.12 2006-10-26 13:15:46 chicares Exp $
+// $Id: configurable_settings.cpp,v 1.14.2.13 2006-10-30 14:40:23 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -30,10 +30,13 @@
 
 #include "alert.hpp"
 #include "data_directory.hpp"     // AddDataDir()
+#include "handle_exceptions.hpp"
 #include "platform_dependent.hpp" // access()
 #include "xml_lmi.hpp"
 
 #include <libxml++/libxml++.h>
+
+#include <stdexcept>
 
 // TODO ?? Need unit tests.
 
@@ -106,8 +109,17 @@ configurable_settings::~configurable_settings()
 
 configurable_settings& configurable_settings::instance()
 {
-    static configurable_settings z;
-    return z;
+    try
+        {
+        static configurable_settings z;
+        return z;
+        }
+    catch(...)
+        {
+        report_exception();
+        fatal_error() << "Instantiation failed." << LMI_FLUSH;
+        throw std::logic_error("Unreachable"); // Silence compiler warning.
+        }
 }
 
 void configurable_settings::ascribe_members()

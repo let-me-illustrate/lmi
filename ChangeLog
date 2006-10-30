@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.462.2.57 2006-10-30 13:10:01 etarassov Exp $
+// $Id: ChangeLog,v 1.462.2.58 2006-10-30 14:40:23 chicares Exp $
 
 MAINTENANCE
 
@@ -8071,7 +8071,7 @@ Remove an undefined variable.
 20061027T0034Z <etarassov@tt-solutions.com> [1160]
 
   xml_resources_test.cpp
-Fix the $id: $ in the header. Use the new interface from xml_lmi.?pp
+Fix the RCS Id in the header. Use the new interface from 'xml_lmi.?pp'
 to apply xsl templates.
 
 20061027T1236Z <chicares@cox.net> [1161]
@@ -8094,9 +8094,9 @@ functions. Fix stylistic mistakes in xml_resources_test.cpp.
   html.xsl
   schema.xsd
   tab_delimited.xsl
-Boost xsl transformation stripped. Add comments. Add
-calculation_summary attribute to 'format.xml'. Move common method
-and common global variables to 'common.xsl'.
+Boost xsl transformation speed. Add comments. Add calculation_summary
+attribute to 'format.xml'. Move common method and common global
+variables to 'common.xsl'.
 
 20061028T0001Z <chicares@cox.net> [1161]
 
@@ -8143,6 +8143,25 @@ Test xml read and write speed.
   input_test.cpp
 Regularize names.
 
+20061029T2123Z <chicares@cox.net> [1161]
+
+  xml_lmi.cpp
+  xml_lmi.hpp
+Add a function to create a container of child elements.
+
+20061029T2124Z <chicares@cox.net> [1161]
+
+  input_test.cpp
+Show that the function added 20061029T2123Z has negligible overhead:
+approximately three percent of total xml read time.
+
+20061029T2128Z <chicares@cox.net> [1161]
+
+  inputillus_xml_io.cpp
+Use the function added 20061029T2123Z. The difference in total read
+time is so small that its sign can't be determined reliably, probably
+because the slight extra overhead is offset by faster iteration.
+
 20061030T1146Z <etarassov@tt-solutions.com> [1161]
 
   common.xsl
@@ -8159,10 +8178,23 @@ Add lmi namespace.
   html.xsl
   tab_delimited.xsl
   schema.xsd
-Fix $id: $ tag.
+Fix RCS Id.
 
 20061030T1208Z <etarassov@tt-solutions.com> [1161]
 
   ChangeLog
-Fix excessivly-long line.
+Fix excessively-long line.
+
+20061030T1438Z <chicares@cox.net> [1161]
+
+  handle_exceptions.hpp
+  handle_exceptions_test.cpp
+Include only appropriate headers.
+
+20061030T1440Z <chicares@cox.net> [1161]
+
+  configurable_settings.cpp
+  global_settings.cpp
+  msw_workarounds.cpp
+Catch private-ctor exceptions in instance(), making singletons safer.
 
