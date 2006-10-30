@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.462.2.53 2006-10-30 12:46:59 etarassov Exp $
+// $Id: ChangeLog,v 1.462.2.54 2006-10-30 12:47:41 etarassov Exp $
 
 MAINTENANCE
 
@@ -8143,7 +8143,7 @@ Test xml read and write speed.
   input_test.cpp
 Regularize names.
 
-20061030T1146Z <etarassov@tt-solutions.com>
+20061030T1146Z <etarassov@tt-solutions.com> [1161]
 
   common.xsl
   format.xml
