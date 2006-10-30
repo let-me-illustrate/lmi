@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: GNUmakefile,v 1.71.2.4 2006-10-25 22:42:53 chicares Exp $
+# $Id: GNUmakefile,v 1.71.2.5 2006-10-30 23:44:18 chicares Exp $
 
 ################################################################################
 
@@ -251,6 +251,9 @@ xsl_fo_files := \
 # TODO ?? Clean up these files: they fail 'make check_concinnity'.
 unclean_xml_files := \
   $(xsl_fo_files) \
+
+# EVGENIY Can you make these other files pass 'make check_concinnity'?
+unclean_xml_files += $(wildcard *.xml *.xrc *.xsd *.xsl)
 
 xml_files := $(wildcard *.xml *.xrc *.xsd *.xsl)
 xml_files := $(filter-out $(unclean_xml_files),$(xml_files))

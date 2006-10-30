@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.462.2.64 2006-10-30 23:40:29 chicares Exp $
+// $Id: ChangeLog,v 1.462.2.65 2006-10-30 23:44:18 chicares Exp $
 
 MAINTENANCE
 
@@ -8241,4 +8241,9 @@ a string name.
 Include xml files in 'make check_concinnity' defect count. I had been
 keeping them out of my local tree because of other problems identified
 by that target.
+
+20061030T2344Z <chicares@cox.net> [1167]
+
+  GNUmakefile
+Temporarily exclude xml files from 'make check_concinnity'.
 
