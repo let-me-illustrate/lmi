@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: configurable_settings.cpp,v 1.14.2.13 2006-10-30 14:40:23 chicares Exp $
+// $Id: configurable_settings.cpp,v 1.14.2.14 2006-10-30 17:14:37 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -88,19 +88,11 @@ configurable_settings::configurable_settings()
 
     xml_lmi::dom_parser parser(filename);
     xml_lmi::Element const& root = parser.root_node(xml_root_name());
-    xml_lmi::NodeContainer const children = root.get_children();
-    for
-        (xml_lmi::NodeContainer::const_iterator iter = children.begin()
-        ;iter != children.end()
-        ;++iter
-        )
+    xml_lmi::ElementContainer const elements(xml_lmi::child_elements(root));
+    typedef xml_lmi::ElementContainer::const_iterator eci;
+    for(eci i = elements.begin(); i != elements.end(); ++i)
         {
-        xml_lmi::Element const* child = dynamic_cast<xml_lmi::Element const*>(*iter);
-        if(!child)
-            {
-            continue;
-            }
-        operator[](child->get_name()) = xml_lmi::get_content(*child);
+        operator[]((*i)->get_name()) = xml_lmi::get_content(**i);
         }
 }
 

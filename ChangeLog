@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.462.2.58 2006-10-30 14:40:23 chicares Exp $
+// $Id: ChangeLog,v 1.462.2.59 2006-10-30 17:14:37 chicares Exp $
 
 MAINTENANCE
 
@@ -8197,4 +8197,9 @@ Include only appropriate headers.
   global_settings.cpp
   msw_workarounds.cpp
 Catch private-ctor exceptions in instance(), making singletons safer.
+
+20061030T1714Z <chicares@cox.net> [1161]
+
+  configurable_settings.cpp
+Refactor use of xml_lmi::NodeContainer.
 
