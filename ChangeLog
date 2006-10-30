@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.462.2.59 2006-10-30 17:14:37 chicares Exp $
+// $Id: ChangeLog,v 1.462.2.60 2006-10-30 17:27:36 etarassov Exp $
 
 MAINTENANCE
 
@@ -8202,4 +8202,14 @@ Catch private-ctor exceptions in instance(), making singletons safer.
 
   configurable_settings.cpp
 Refactor use of xml_lmi::NodeContainer.
+
+20061030T1725Z <etarassov@tt-solutions.com> [1161]
+
+  common.xsl
+  format.xml
+  html.xsl
+  tab_delimited.xsl
+  schema.xsd
+Change cvs substitution mode to default to '-kkv'. Fix RCS Id again.
+The previous change 20061030T1206Z did not work.
 

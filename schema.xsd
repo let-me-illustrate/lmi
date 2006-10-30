@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: schema.xsd,v 1.1.2.4 2006-10-30 13:06:39 etarassov Exp $
+    $Id: schema.xsd,v 1.1.2.5 2006-10-30 17:25:15 etarassov Exp $
 
     TODO:
     - add uniqueness constraints for (name,basis) in every document

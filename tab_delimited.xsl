@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: tab_delimited.xsl,v 1.1.2.4 2006-10-30 13:06:39 etarassov Exp $
+    $Id: tab_delimited.xsl,v 1.1.2.5 2006-10-30 17:25:15 etarassov Exp $
 
     Uses format.xml - column titles, number-formatting and other information.
 -->
