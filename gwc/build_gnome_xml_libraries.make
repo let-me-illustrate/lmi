@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: build_gnome_xml_libraries.make,v 1.5 2006-10-28 03:24:04 chicares Exp $
+# $Id: build_gnome_xml_libraries.make,v 1.6 2006-10-30 22:12:36 wboutin Exp $
 
 # This makefile is designed to be run in MSYS: the native zsh port
 # we customarily use can't handle 'configure'. Care is taken to
@@ -212,12 +212,12 @@ libxml++/2.14/libxml++-2.14.0: libxslt/1.1/libxslt-1.1.17
 .PHONY: patch_libxslt
 patch_libxslt: libxslt/1.1/libxslt-1.1.17.tar.bz2
 	cd $(xml_dir)/libxslt-1.1.17; \
-	  $(PATCH) --batch --forward --strip=1 < $(CURDIR)/libxslt-1.1.17.patch; \
+	  $(PATCH) --batch --forward --strip=1 < $(CURDIR)/1_1_17_patch; \
 
 .PHONY: patch_libxml++
 patch_libxml++: libxml++/2.14/libxml++-2.14.0.tar.bz2
 	cd $(xml_dir)/libxml++-2.14.0; \
-	  $(PATCH) --batch --forward --strip=1 < $(CURDIR)/libxml++-2.14.0.patch; \
+	  $(PATCH) --batch --forward --strip=1 < $(CURDIR)/2_14_0_patch; \
 	  $(CP) --preserve --update $(CURDIR)/pkg.m4 .; \
 	  $(CP) --preserve --update $(CURDIR)/stub.m4 .; \
 
