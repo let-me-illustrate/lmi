@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.462.2.62 2006-10-30 17:41:37 etarassov Exp $
+// $Id: ChangeLog,v 1.462.2.63 2006-10-30 18:37:07 etarassov Exp $
 
 MAINTENANCE
 
@@ -8225,4 +8225,13 @@ Boost ledger xml data generation. Add value_id class.
 
   schema.xsd
 Fix 'bp' scaling factor to 1000 in comments.
+
+20061030T1836Z <etarassov@tt-solutions.com> [1159]
+
+  ledger_text_formats.cpp
+  ledger_text_formats.hpp
+  ledger_xml_io.cpp
+  ledger.hpp
+Replace bool parameter by an enumeration. Use value_id instead of
+a string name.
 

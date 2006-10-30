@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_text_formats.cpp,v 1.22.2.6 2006-10-30 17:38:29 etarassov Exp $
+// $Id: ledger_text_formats.cpp,v 1.22.2.7 2006-10-30 18:36:26 etarassov Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -34,7 +34,6 @@
 #include "financial.hpp"
 #include "global_settings.hpp"
 #include "input_sequence.hpp"
-#include "ledger.hpp"
 #include "ledger_invariant.hpp"
 #include "ledger_variant.hpp"
 #include "miscellany.hpp"
@@ -164,7 +163,7 @@ void LedgerFormatter::ResetXmlData()
 //=============================================================================
 xml_lmi::Document const& LedgerFormatter::GetXmlDocLight() const
 {
-    xml_document_light_ = DoGenerateXml(true); // light_version
+    xml_document_light_ = DoGenerateXml(Ledger::e_xml_light);
 
     return *xml_document_light_;
 }
@@ -172,14 +171,14 @@ xml_lmi::Document const& LedgerFormatter::GetXmlDocLight() const
 //=============================================================================
 xml_lmi::Document const& LedgerFormatter::GetXmlDocHeavy() const
 {
-    xml_document_heavy_ = DoGenerateXml(false); // !light_version
+    xml_document_heavy_ = DoGenerateXml(Ledger::e_xml_full);
 
     return *xml_document_heavy_;
 }
 
 //=============================================================================
 LedgerFormatter::XmlDocumentPtr LedgerFormatter::DoGenerateXml
-    (bool light_version
+    (Ledger::enum_xml_version xml_version
     ) const
 {
     if(!ledger_values_)
@@ -191,7 +190,7 @@ LedgerFormatter::XmlDocumentPtr LedgerFormatter::DoGenerateXml
     xml_lmi::Element& root
         = *(doc->create_root_node(ledger_values_->xml_root_name()));
 
-    ledger_values_->do_write(root, light_version);
+    ledger_values_->do_write(root, xml_version);
 
     return doc;
 }

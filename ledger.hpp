@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger.hpp,v 1.13.2.6 2006-10-26 12:52:25 chicares Exp $
+// $Id: ledger.hpp,v 1.13.2.7 2006-10-30 18:36:26 etarassov Exp $
 
 #ifndef ledger_hpp
 #define ledger_hpp
@@ -115,6 +115,14 @@ class LMI_SO Ledger
 
     void write(std::ostream& os) const;
 
+    // We need to generate different variants of xml:
+    // - a light version, when the speed is crucial (calculation summary)
+    // - a full version, when we need all the information
+    enum enum_xml_version
+        {e_xml_light
+        ,e_xml_full
+        };
+
   private:
     LedgerVariant const& GetOneVariantLedger(enum_run_basis) const;
     void SetRunBases(int a_Length);
@@ -151,13 +159,9 @@ class LMI_SO Ledger
     // | prefixes the private virtual function with a "do"
     //
     // Would this:
-    //       void write(xml_lmi::Element&, bool light_version) const;
+    //       void write(xml_lmi::Element&, enum_xml_version) const;
     // be bad?
-    //
-    // We need to generate different variants of xml:
-    // - light version, when the speed is crucial
-    // - heavy variant, when we need all the information
-    void do_write(xml_lmi::Element&, bool light_version) const;
+    void do_write(xml_lmi::Element&, enum_xml_version) const;
 };
 
 inline ledger_map_holder const& Ledger::GetLedgerMap() const

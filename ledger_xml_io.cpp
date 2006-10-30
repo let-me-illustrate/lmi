@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xml_io.cpp,v 1.48.2.12 2006-10-30 17:38:29 etarassov Exp $
+// $Id: ledger_xml_io.cpp,v 1.48.2.13 2006-10-30 18:36:26 etarassov Exp $
 
 #include "ledger.hpp"
 
@@ -320,16 +320,16 @@ class double_formatter_t
   public:
     double_formatter_t();
 
-    bool            has_format(std::string const& s) const;
+    bool            has_format(value_id const&) const;
     std::string     format
-        (std::string const& s
+        (value_id const&
         ,double d
-        ,bool is_for_calculation_summary
+        ,Ledger::enum_xml_version
         ) const;
     string_vector_t format
-        (std::string const& s
+        (value_id const&
         ,double_vector_t const& dv
-        ,bool is_for_calculation_summary
+        ,Ledger::enum_xml_version
         ) const;
 
     void set_supplemental_columns_list(std::vector<value_id> const& columns);
@@ -351,7 +351,7 @@ class double_formatter_t
     format_map_t format_map;
     calculation_summary_fields_t cs_set;
 
-    format_t get_format(std::string const& s) const;
+    format_t get_format(value_id const&) const;
     std::string do_format(double d, format_t const& f) const;
 
 #if defined SHOW_MISSING_FORMATS
@@ -615,9 +615,9 @@ void double_formatter_t::set_supplemental_columns_list
         }
 }
 
-bool double_formatter_t::has_format(std::string const& s) const
+bool double_formatter_t::has_format(value_id const& id) const
 {
-    format_map_t::const_iterator it = format_map.find(s);
+    format_map_t::const_iterator it = format_map.find(id.name());
     if (it == format_map.end())
     {
 #ifdef SHOW_MISSING_FORMATS
@@ -625,7 +625,7 @@ bool double_formatter_t::has_format(std::string const& s) const
             ("missing_formats"
             ,std::ios_base::out | std::ios_base::ate | std::ios_base::app
             );
-        ofs << s << "\n";
+        ofs << id.name() << "\n";
 #endif // defined SHOW_MISSING_FORMATS
         return false;
     }
@@ -633,14 +633,14 @@ bool double_formatter_t::has_format(std::string const& s) const
 }
 
 double_formatter_t::format_t
-double_formatter_t::get_format(std::string const& s) const
+double_formatter_t::get_format(value_id const& id) const
 {
-    format_map_t::const_iterator it = format_map.find(s);
+    format_map_t::const_iterator it = format_map.find(id.name());
     if (it == format_map.end())
         {
         hobsons_choice()
             << "Unknown column name '"
-            << s
+            << id.name()
             << "' encountered."
             << LMI_FLUSH
             ;
@@ -651,32 +651,33 @@ double_formatter_t::get_format(std::string const& s) const
 }
 
 std::string double_formatter_t::format
-    (std::string const& name
+    (value_id const& id
     ,double d
-    ,bool // is_for_calculation_summary, not used currently
+    ,Ledger::enum_xml_version // not used currently
     ) const
 {
-    format_t f = get_format(name);
+    format_t f = get_format(id);
 
     return do_format(d, f);
 }
 
 string_vector_t double_formatter_t::format
-    (std::string const& name
+    (value_id const& id
     ,double_vector_t const& dv
-    ,bool is_for_calculation_summary
+    ,Ledger::enum_xml_version xml_version
     ) const
 {
     string_vector_t sv;
 
-    if(is_for_calculation_summary && cs_set.find(name) == cs_set.end())
+    // Calculation summary only needs the values from 'cs_set'. 
+    if(xml_version == Ledger::e_xml_light && cs_set.find(id.name()) == cs_set.end())
         {
         static std::string const zero = "0";
         sv.resize(dv.size(), zero);
         return sv;
         }
 
-    format_t f = get_format(name);
+    format_t f = get_format(id);
     for(double_vector_t::const_iterator it = dv.begin(),
                                        end = dv.end();
                                        it != end; ++it)
@@ -714,11 +715,11 @@ std::string double_formatter_t::do_format(double d, format_t const& f) const
 // ---------------------
 void Ledger::write(xml_lmi::Element& illustration) const
 {
-    // by default generate a full version (not a light_version)
-    do_write(illustration, false);
+    // by default generate a complete version of xml data
+    do_write(illustration, Ledger::e_xml_full);
 }
 
-void Ledger::do_write(xml_lmi::Element& illustration, bool light_version) const
+void Ledger::do_write(xml_lmi::Element& illustration, enum_xml_version xml_version) const
 {
     // initialize number formatting facility
     double_formatter_t formatter;
@@ -762,7 +763,7 @@ void Ledger::do_write(xml_lmi::Element& illustration, bool light_version) const
     // working with maps of pointers, we need pointers here.
     //
     // The IRRs are the worst of all. Only calculate it if e_xml_variant_heavy.
-    if(!light_version)
+    if(xml_version == Ledger::e_xml_full)
         {
         if(!ledger_invariant_->IsInforce)
             {
@@ -1043,7 +1044,7 @@ void Ledger::do_write(xml_lmi::Element& illustration, bool light_version) const
         )
         {
         value_id const& id = j->first;
-        if(formatter.has_format(id.name()))
+        if(formatter.has_format(id))
             {
             xml_lmi::Element& double_scalar
                 = *illustration.add_child("double_scalar");
@@ -1051,7 +1052,7 @@ void Ledger::do_write(xml_lmi::Element& illustration, bool light_version) const
             id.set_to_xml_element(double_scalar);
 
             double_scalar.add_child_text
-                (formatter.format(id.name(), j->second, light_version)
+                (formatter.format(id, j->second, xml_version)
                 );
             }
         }
@@ -1085,7 +1086,7 @@ void Ledger::do_write(xml_lmi::Element& illustration, bool light_version) const
         )
         {
         value_id const& id = j->first;
-        if (formatter.has_format(id.name()))
+        if (formatter.has_format(id))
             {
             xml_lmi::Element& dvector
                 = *illustration.add_child("double_vector");
@@ -1093,7 +1094,7 @@ void Ledger::do_write(xml_lmi::Element& illustration, bool light_version) const
             id.set_to_xml_element(dvector);
 
             string_vector_t v
-                = formatter.format(id.name(), j->second, light_version);
+                = formatter.format(id, j->second, xml_version);
 // TODO ?? InforceLives shows an extra value past the end; should it
 // be truncated here?
             for
