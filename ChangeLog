@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.462.2.72 2006-10-31 14:08:14 etarassov Exp $
+// $Id: ChangeLog,v 1.462.2.73 2006-10-31 16:23:31 etarassov Exp $
 
 MAINTENANCE
 
@@ -8275,7 +8275,7 @@ Replace 0 as a null pointer by NULL.
   html.xsl
   tab_delimited.xsl
   schema.xsd
-Fix line ending to LF. Make files to pass 'make check_concinnity' test.
+Fix line ending to LF. Make files to pass 'make check_concinnity'.
 
 20061031T1205Z <etarassov@tt-solutions.com> [1167]
 
@@ -8291,4 +8291,9 @@ Fix typo s/LR/LF/.
 
   ledger_xml_io.cpp
 Use fatal_error() instead of hobsons_choice().
+
+20061031T1623Z <etarassov@tt-solutions.com> [1167]
+
+  ChangeLog
+Fix excessively-long line.
 
