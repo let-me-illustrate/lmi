@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xml_lmi.cpp,v 1.1.2.21 2006-10-29 21:23:20 chicares Exp $
+// $Id: xml_lmi.cpp,v 1.1.2.22 2006-10-31 12:05:05 etarassov Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -43,46 +43,6 @@
 #include <ostream>
 #include <sstream>
 #include <stdexcept>
-
-// EVGENIY Has 'XmlDocSharedPtrDeleter' become
-// dead code that could now be removed?
-#if defined OKAY_TO_REMOVE_XmlDocSharedPtrDeleter
-namespace
-{
-/// Custom deleter for xmlDocPtr shared_ptr
-///
-/// Use this class in a shared_ptr to free an xml document pointer using
-/// xmlFree method.
-/// The pointer to be freed should be allocated using libxml functions.
-///
-/// See boost::shared_ptr requirements for a deleter class:
-/// >> D  must be CopyConstructible.
-/// >> The copy constructor and destructor of D must not throw.
-/// >> The expression d(p) must be well-formed, must not invoke undefined
-/// >> behavior, and must not throw exceptions.
-
-class XmlDocSharedPtrDeleter
-{
-  public:
-    void operator () (xmlDocPtr xml_doc)
-    {
-        try
-            {
-            xmlFreeDoc(xml_doc);
-            }
-        catch(...)
-            {
-            warning()
-                << "A call to xmlFreeDoc failed."
-                << LMI_FLUSH
-                ;
-            }
-    }
-    // default ctor, dtor and copy-ctor are ok
-};
-
-} // anonymous namespace
-#endif // defined OKAY_TO_REMOVE_XmlDocSharedPtrDeleter
 
 namespace xml_lmi
 {
