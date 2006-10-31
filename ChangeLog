@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.462.2.73 2006-10-31 16:23:31 etarassov Exp $
+// $Id: ChangeLog,v 1.462.2.74 2006-10-31 16:28:25 etarassov Exp $
 
 MAINTENANCE
 
@@ -8296,4 +8296,13 @@ Use fatal_error() instead of hobsons_choice().
 
   ChangeLog
 Fix excessively-long line.
+
+20061031T1628Z <etarassov@tt-solutions.com> [1167]
+
+  common.xsl
+  format.xml
+  html.xsl
+  tab_delimited.xsl
+  schema.xsd
+Update FSF address.
 

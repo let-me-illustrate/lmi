@@ -14,14 +14,14 @@
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
-    along with this program; if not, write to the Free Software
-    Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+    along with this program; if not, write to the Free Software Foundation,
+    Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 
     http://savannah.nongnu.org/projects/lmi
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: common.xsl,v 1.1.2.6 2006-10-31 01:01:15 etarassov Exp $
+    $Id: common.xsl,v 1.1.2.7 2006-10-31 16:28:02 etarassov Exp $
 
     Uses format.xml - column titles, number-formatting and other information.
 -->
