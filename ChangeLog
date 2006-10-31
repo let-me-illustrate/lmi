@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.462.2.74 2006-10-31 16:28:25 etarassov Exp $
+// $Id: ChangeLog,v 1.462.2.75 2006-10-31 16:59:11 chicares Exp $
 
 MAINTENANCE
 
@@ -8305,4 +8305,13 @@ Fix excessively-long line.
   tab_delimited.xsl
   schema.xsd
 Update FSF address.
+
+20061031T1659Z <chicares@cox.net> [1167]
+
+  GNUmakefile
+  input_test.cpp
+  sample.cns [new file]
+  sample.ill [new file]
+  workhorse.make
+Add document-io tests, which don't pass yet.
 

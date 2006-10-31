@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: workhorse.make,v 1.73.2.7 2006-10-26 01:08:26 chicares Exp $
+# $Id: workhorse.make,v 1.73.2.8 2006-10-31 16:59:11 chicares Exp $
 
 ################################################################################
 
@@ -829,8 +829,15 @@ eraseme.pol:
 
 # Unit tests.
 
+unit_test_data_files := \
+  sample.cns \
+  sample.ill \
+
+$(unit_test_data_files):
+	@$(CP) --preserve --update $(addprefix $(src_dir)/,$@) .
+
 .PHONY: unit_tests
-unit_tests: $(unit_test_targets) run_unit_tests
+unit_tests: $(unit_test_data_files) $(unit_test_targets) run_unit_tests
 
 .PHONY: unit_tests_not_built
 unit_tests_not_built:

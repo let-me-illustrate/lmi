@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: GNUmakefile,v 1.71.2.5 2006-10-30 23:44:18 chicares Exp $
+# $Id: GNUmakefile,v 1.71.2.6 2006-10-31 16:59:11 chicares Exp $
 
 ################################################################################
 
@@ -218,7 +218,7 @@ patch_files      := $(wildcard *patch)
 
 subdirectories := $(shell $(LS) --classify | $(SED) -e ';/\//!d' -e 's/\/$$//')
 
-testing_files := expected.cgi.out $(wildcard *touchstone*)
+testing_files := expected.cgi.out $(wildcard *.cns *.ill *touchstone*)
 
 never_source_files := \
   $(binary_graphics) \
@@ -249,13 +249,16 @@ xsl_fo_files := \
   nasd.xsl \
 
 # TODO ?? Clean up these files: they fail 'make check_concinnity'.
+# The only concern 'xmllint' seems to have with '.cns' and '.ill'
+# files is that they spell out opening and closing tags even when
+# they might be compressed (<empty/>, e.g.). The xsl-fo files need
+# to be rewritten altogether.
+
 unclean_xml_files := \
   $(xsl_fo_files) \
+  $(wildcard *.cns *.ill) \
 
-# EVGENIY Can you make these other files pass 'make check_concinnity'?
-unclean_xml_files += $(wildcard *.xml *.xrc *.xsd *.xsl)
-
-xml_files := $(wildcard *.xml *.xrc *.xsd *.xsl)
+xml_files := $(wildcard *.cns *.ill *.xml *.xrc *.xsd *.xsl)
 xml_files := $(filter-out $(unclean_xml_files),$(xml_files))
 
 xpm_files := $(wildcard *.xpm)
