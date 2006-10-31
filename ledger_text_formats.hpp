@@ -19,14 +19,13 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_text_formats.hpp,v 1.5.2.7 2006-10-30 18:36:26 etarassov Exp $
+// $Id: ledger_text_formats.hpp,v 1.5.2.8 2006-10-31 00:25:10 chicares Exp $
 
 #ifndef ledger_text_formats_hpp
 #define ledger_text_formats_hpp
 
 #include "config.hpp"
 
-#include "ledger.hpp"
 #include "so_attributes.hpp"
 #include "xml_lmi.hpp"
 
@@ -37,8 +36,8 @@
 #include <ostream>
 #include <string>
 
+class Ledger;
 class LedgerFormatter;
-
 
 /// LedgerFormatterFactory class
 ///
@@ -107,7 +106,7 @@ class LMI_SO LedgerFormatter
     xml_lmi::Document const& GetXmlDocHeavy() const;
     xml_lmi::Document const& GetXmlDocLight() const;
 
-    XmlDocumentPtr DoGenerateXml(Ledger::enum_xml_version) const;
+    XmlDocumentPtr DoGenerateXml(enum_xml_version) const;
 
     xml_lmi::Stylesheet const& GetStylesheet
         (std::string const& filename

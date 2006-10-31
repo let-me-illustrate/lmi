@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.462.2.66 2006-10-30 23:46:14 chicares Exp $
+// $Id: ChangeLog,v 1.462.2.67 2006-10-31 00:25:10 chicares Exp $
 
 MAINTENANCE
 
@@ -8251,4 +8251,15 @@ Temporarily exclude xml files from 'make check_concinnity'.
 
   ledger_xml_io.cpp
 Fix problems identified by 'make check_concinnity'.
+
+20061031T0025Z <chicares@cox.net> [1167]
+
+  ledger.hpp
+  ledger_text_formats.cpp
+  ledger_text_formats.hpp
+  ledger_xml_io.cpp
+  xml_lmi.hpp
+Move an enumeration declaration, preserving an opportunity to simplify
+the physical-dependency graph later by adding a forward-declaration
+header for xml work.
 

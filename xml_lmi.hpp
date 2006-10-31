@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xml_lmi.hpp,v 1.1.2.15 2006-10-29 21:23:20 chicares Exp $
+// $Id: xml_lmi.hpp,v 1.1.2.16 2006-10-31 00:25:10 chicares Exp $
 
 #ifndef xml_lmi_hpp
 #define xml_lmi_hpp
@@ -33,6 +33,14 @@
 #include <list>
 #include <string>
 #include <vector>
+
+// We need to generate different variants of xml:
+// - a light version, when speed is crucial (calculation summary)
+// - a full version, when we need all the information
+enum enum_xml_version
+    {e_xml_light
+    ,e_xml_full
+    };
 
 namespace xmlpp
 {

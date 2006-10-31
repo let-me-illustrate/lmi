@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger.hpp,v 1.13.2.7 2006-10-30 18:36:26 etarassov Exp $
+// $Id: ledger.hpp,v 1.13.2.8 2006-10-31 00:25:10 chicares Exp $
 
 #ifndef ledger_hpp
 #define ledger_hpp
@@ -29,6 +29,7 @@
 #include "so_attributes.hpp"
 #include "streamable.hpp"
 #include "xenumtypes.hpp"
+#include "xml_lmi.hpp"
 
 #include <boost/shared_ptr.hpp>
 
@@ -114,14 +115,6 @@ class LMI_SO Ledger
     virtual std::string xml_root_name() const;
 
     void write(std::ostream& os) const;
-
-    // We need to generate different variants of xml:
-    // - a light version, when the speed is crucial (calculation summary)
-    // - a full version, when we need all the information
-    enum enum_xml_version
-        {e_xml_light
-        ,e_xml_full
-        };
 
   private:
     LedgerVariant const& GetOneVariantLedger(enum_run_basis) const;

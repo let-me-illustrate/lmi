@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xml_io.cpp,v 1.48.2.14 2006-10-30 23:46:14 chicares Exp $
+// $Id: ledger_xml_io.cpp,v 1.48.2.15 2006-10-31 00:25:10 chicares Exp $
 
 #include "ledger.hpp"
 
@@ -324,12 +324,12 @@ class double_formatter_t
     std::string     format
         (value_id const&
         ,double d
-        ,Ledger::enum_xml_version
+        ,enum_xml_version
         ) const;
     string_vector_t format
         (value_id const&
         ,double_vector_t const& dv
-        ,Ledger::enum_xml_version
+        ,enum_xml_version
         ) const;
 
     void set_supplemental_columns_list(std::vector<value_id> const& columns);
@@ -653,7 +653,7 @@ double_formatter_t::get_format(value_id const& id) const
 std::string double_formatter_t::format
     (value_id const& id
     ,double d
-    ,Ledger::enum_xml_version // not used currently
+    ,enum_xml_version // not used currently
     ) const
 {
     format_t f = get_format(id);
@@ -664,13 +664,13 @@ std::string double_formatter_t::format
 string_vector_t double_formatter_t::format
     (value_id const& id
     ,double_vector_t const& dv
-    ,Ledger::enum_xml_version xml_version
+    ,enum_xml_version xml_version
     ) const
 {
     string_vector_t sv;
 
     // Calculation summary only needs the values from 'cs_set'.
-    if(xml_version == Ledger::e_xml_light && cs_set.find(id.name()) == cs_set.end())
+    if(xml_version == e_xml_light && cs_set.find(id.name()) == cs_set.end())
         {
         static std::string const zero = "0";
         sv.resize(dv.size(), zero);
@@ -716,7 +716,7 @@ std::string double_formatter_t::do_format(double d, format_t const& f) const
 void Ledger::write(xml_lmi::Element& illustration) const
 {
     // by default generate a complete version of xml data
-    do_write(illustration, Ledger::e_xml_full);
+    do_write(illustration, e_xml_full);
 }
 
 void Ledger::do_write(xml_lmi::Element& illustration, enum_xml_version xml_version) const
@@ -763,7 +763,7 @@ void Ledger::do_write(xml_lmi::Element& illustration, enum_xml_version xml_versi
     // working with maps of pointers, we need pointers here.
     //
     // The IRRs are the worst of all. Only calculate it if e_xml_variant_heavy.
-    if(xml_version == Ledger::e_xml_full)
+    if(xml_version == e_xml_full)
         {
         if(!ledger_invariant_->IsInforce)
             {
