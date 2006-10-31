@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: format.xml,v 1.1.2.5 2006-10-30 17:25:15 etarassov Exp $
+    $Id: format.xml,v 1.1.2.6 2006-10-31 01:01:15 etarassov Exp $
 
     TODO ?? Titles ought to be read from an external file that
     permits flexible customization. Compliance might require that
@@ -33,9 +33,7 @@
     written in 2006-07. DATABASE !! So consider adding them there
     when the database is revamped.
 -->
-<columns xmlns="http://www.letmeillustrate.com"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://www.letmeillustrate.com schema.xsd">
+<columns xmlns="http://www.letmeillustrate.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.letmeillustrate.com schema.xsd">
     <column name="GuarMaxMandE">
         <format>f4</format>
     </column>
