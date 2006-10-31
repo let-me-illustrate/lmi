@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.462.2.71 2006-10-31 13:21:54 etarassov Exp $
+// $Id: ChangeLog,v 1.462.2.72 2006-10-31 14:08:14 etarassov Exp $
 
 MAINTENANCE
 
@@ -8286,4 +8286,9 @@ Remove dead code.
 
   ChangeLog
 Fix typo s/LR/LF/.
+
+20061031T1406Z <etarassov@tt-solutions.com> [1167]
+
+  ledger_xml_io.cpp
+Use fatal_error() instead of hobsons_choice().
 

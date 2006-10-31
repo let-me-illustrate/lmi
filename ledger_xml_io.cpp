@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xml_io.cpp,v 1.48.2.16 2006-10-31 00:56:50 etarassov Exp $
+// $Id: ledger_xml_io.cpp,v 1.48.2.17 2006-10-31 14:06:38 etarassov Exp $
 
 #include "ledger.hpp"
 
@@ -480,7 +480,7 @@ double_formatter_t::double_formatter_t()
     }
     catch(boost::filesystem::filesystem_error const& e)
     {
-        hobsons_choice()
+        fatal_error()
             << "Invalid directory '"
             << configurable_settings::instance().xslt_directory()
             << "' or filename '"
@@ -638,7 +638,7 @@ double_formatter_t::get_format(value_id const& id) const
     format_map_t::const_iterator it = format_map.find(id.name());
     if (it == format_map.end())
         {
-        hobsons_choice()
+        fatal_error()
             << "Unknown column name '"
             << id.name()
             << "' encountered."
