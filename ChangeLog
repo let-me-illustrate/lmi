@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.462.2.68 2006-10-31 00:58:50 etarassov Exp $
+// $Id: ChangeLog,v 1.462.2.69 2006-10-31 01:02:56 etarassov Exp $
 
 MAINTENANCE
 
@@ -8267,4 +8267,13 @@ header for xml work.
 
   ledger_xml_io.cpp
 Replace 0 as a null pointer by NULL.
+
+20061031T0101Z <etarassov@tt-solutions.com> [1167]
+
+  common.xsl
+  format.xml
+  html.xsl
+  tab_delimited.xsl
+  schema.xsd
+Fix line ending to LR. Make files to pass 'make check_concinnity' test.
 
