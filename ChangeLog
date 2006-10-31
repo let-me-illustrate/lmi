@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.462.2.70 2006-10-31 12:05:35 etarassov Exp $
+// $Id: ChangeLog,v 1.462.2.71 2006-10-31 13:21:54 etarassov Exp $
 
 MAINTENANCE
 
@@ -8275,10 +8275,15 @@ Replace 0 as a null pointer by NULL.
   html.xsl
   tab_delimited.xsl
   schema.xsd
-Fix line ending to LR. Make files to pass 'make check_concinnity' test.
+Fix line ending to LF. Make files to pass 'make check_concinnity' test.
 
 20061031T1205Z <etarassov@tt-solutions.com> [1167]
 
   xml_lmi.cpp
 Remove dead code.
+
+20061031T1321Z <etarassov@tt-solutions.com> [1167]
+
+  ChangeLog
+Fix typo s/LR/LF/.
 
