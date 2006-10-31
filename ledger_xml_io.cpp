@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xml_io.cpp,v 1.48.2.15 2006-10-31 00:25:10 chicares Exp $
+// $Id: ledger_xml_io.cpp,v 1.48.2.16 2006-10-31 00:56:50 etarassov Exp $
 
 #include "ledger.hpp"
 
@@ -114,17 +114,17 @@ class value_id
     std::string name_;
     std::string const* basis_;
 
-    value_id(std::string const& name, std::string const* basis = 0);
+    value_id(std::string const& name, std::string const* basis = NULL);
 };
 
 value_id value_id::empty_value()
 {
-    return value_id("", 0);
+    return value_id("", NULL);
 }
 
 value_id value_id::from_name(std::string const& name)
 {
-    return value_id(name, 0);
+    return value_id(name, NULL);
 }
 
 value_id value_id::from_name_basis
@@ -144,7 +144,7 @@ value_id value_id::from_name_basis
 }
 
 value_id::value_id()
-    :basis_(0)
+    :basis_(NULL)
 {
 }
 
@@ -247,11 +247,11 @@ void value_id::set_to_xml_element(xml_lmi::Element& element) const
 void value_id::get_from_xml_element(xml_lmi::Element const& element)
 {
     name_ = "";
-    basis_ = 0;
+    basis_ = NULL;
 
     xml_lmi::Attribute const* name_attribute
         = element.get_attribute("name");
-    if(0 == name_attribute)
+    if(NULL == name_attribute)
         {
         return;
         }
@@ -259,7 +259,7 @@ void value_id::get_from_xml_element(xml_lmi::Element const& element)
 
     xml_lmi::Attribute const* basis_attribute
         = element.get_attribute("basis");
-    if(0 == basis_attribute)
+    if(NULL == basis_attribute)
         {
         return;
         }
@@ -524,7 +524,7 @@ double_formatter_t::double_formatter_t()
 
             xml_lmi::Attribute const* cs_attribute
                 = column_element->get_attribute("calculation_summary");
-            if(0 != cs_attribute)
+            if(NULL != cs_attribute)
                 {
                 std::string const cs_value = cs_attribute->get_value();
                 if(cs_value == "true" || cs_value == "1")

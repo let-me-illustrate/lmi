@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.462.2.67 2006-10-31 00:25:10 chicares Exp $
+// $Id: ChangeLog,v 1.462.2.68 2006-10-31 00:58:50 etarassov Exp $
 
 MAINTENANCE
 
@@ -8262,4 +8262,9 @@ Fix problems identified by 'make check_concinnity'.
 Move an enumeration declaration, preserving an opportunity to simplify
 the physical-dependency graph later by adding a forward-declaration
 header for xml work.
+
+20061031T0056Z <etarassov@tt-solutions.com> [1167]
+
+  ledger_xml_io.cpp
+Replace 0 as a null pointer by NULL.
 
