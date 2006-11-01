@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: common.xsl,v 1.1.2.7 2006-10-31 16:28:02 etarassov Exp $
+    $Id: common.xsl,v 1.1.2.8 2006-11-01 01:55:40 etarassov Exp $
 
     Uses format.xml - column titles, number-formatting and other information.
 -->
@@ -29,7 +29,7 @@
 
     <!--
         Print this message if title is not found for a column.
-        TODO: find a way to conditionally use it only in the debug mode
+        TODO ?? find a way to conditionally use it only in the debug mode
     -->
     <xsl:variable name="no_title_error" select="'Title is not defined for a column!'"/>
 
@@ -77,15 +77,53 @@
                      or from column list. If its content is not empty,
                      then it will be used as a title.
     -->
-    <xsl:template name="title"><xsl:param name="name"/><xsl:param name="basis"/><xsl:param name="column"/><xsl:choose><xsl:when test="$column/text()"><xsl:value-of select="$column/text()"/></xsl:when><xsl:when test="not($name)"><!-- An empty column. Put nothing for a spacer.
-         --></xsl:when><xsl:when test="$basis"><xsl:call-template name="do_title"><xsl:with-param name="name" select="$name"/><xsl:with-param name="basis" select="$basis"/><xsl:with-param name="title" select="$columns_format_info[@name=$name]/lmi:title[@basis=$basis]/text()"/></xsl:call-template></xsl:when><xsl:otherwise><xsl:call-template name="do_title"><xsl:with-param name="name" select="$name"/><xsl:with-param name="basis" select="$basis"/><xsl:with-param name="title" select="$columns_format_info[@name=$name]/lmi:title/text()"/></xsl:call-template></xsl:otherwise></xsl:choose></xsl:template>
+    <xsl:template name="title">
+        <xsl:param name="name"/>
+        <xsl:param name="basis"/>
+        <xsl:param name="column"/>
+        <xsl:choose>
+            <xsl:when test="$column/text()">
+                <xsl:value-of select="$column/text()"/>
+            </xsl:when>
+            <xsl:when test="not($name)">
+                <!-- An empty column. Put nothing for a spacer. -->
+            </xsl:when>
+            <xsl:when test="$basis">
+                <xsl:call-template name="do_title">
+                    <xsl:with-param name="name" select="$name"/>
+                    <xsl:with-param name="basis" select="$basis"/>
+                    <xsl:with-param name="title" select="$columns_format_info[@name=$name]/lmi:title[@basis=$basis]/text()"/>
+                </xsl:call-template>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:call-template name="do_title">
+                    <xsl:with-param name="name" select="$name"/>
+                    <xsl:with-param name="basis" select="$basis"/>
+                    <xsl:with-param name="title" select="$columns_format_info[@name=$name]/lmi:title/text()"/>
+                </xsl:call-template>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:template>
 
     <!--
         Helper for "title" template.
         Shows an error message if '$no_title_error' is defined.
     -->
-    <xsl:template name="do_title"><xsl:param name="name"/><xsl:param name="basis"/><xsl:param name="title"/><xsl:if test="$title!=''"><xsl:value-of select="$title"/></xsl:if><xsl:if test="$title='' and $no_title_error"><!-- no title, show error
-         --><xsl:value-of select="$no_title_error"/><xsl:value-of select="$name"/>_<xsl:value-of select="$basis"/></xsl:if></xsl:template>
+    <xsl:template name="do_title">
+        <xsl:param name="name"/>
+        <xsl:param name="basis"/>
+        <xsl:param name="title"/>
+        <xsl:if test="$title and $title!=''">
+            <xsl:value-of select="$title"/>
+        </xsl:if>
+        <xsl:if test="(not($title) or $title='') and $no_title_error">
+            <!-- no title, show error -->
+            <xsl:value-of select="$no_title_error"/>
+            <xsl:value-of select="$name"/>
+            <xsl:text>_</xsl:text>
+            <xsl:value-of select="$basis"/>
+        </xsl:if>
+    </xsl:template>
 
     <!--
         The template wrapper used to prepare nodeset variable for a table data
@@ -111,11 +149,53 @@
         Therefore additional efforts are needed in the calling template
         to find the correspondence between '$headers' and '$vectors'.
     -->
-    <xsl:template name="data_table"><xsl:param name="pos"/><xsl:param name="columns"/><xsl:param name="headers"/><xsl:param name="vectors"/><xsl:choose><xsl:when test="$pos &gt; count($columns)"><!-- Call the user-defined template 'do_data_table'.
-             --><xsl:call-template name="do_data_table"><xsl:with-param name="headers" select="$headers"/><xsl:with-param name="vectors" select="$vectors"/></xsl:call-template></xsl:when><xsl:otherwise><xsl:variable name="name" select="$columns[$pos]/@name"/><xsl:variable name="basis" select="$columns[$pos]/@basis"/><xsl:choose><!-- a spacer
-                 --><xsl:when test="not($name)"><xsl:call-template name="data_table"><xsl:with-param name="pos" select="$pos + 1"/><xsl:with-param name="columns" select="$columns"/><xsl:with-param name="headers" select="$headers | $columns[$pos]"/><!-- Use $columns[$pos] as a dummy node to push into '$vectors'
-                         --><xsl:with-param name="vectors" select="$vectors | $columns[$pos]"/></xsl:call-template></xsl:when><!-- column with without no basis
-                 --><xsl:when test="not($basis)"><xsl:call-template name="data_table"><xsl:with-param name="pos" select="$pos + 1"/><xsl:with-param name="columns" select="$columns"/><xsl:with-param name="headers" select="$headers | $columns[$pos]"/><xsl:with-param name="vectors" select="$vectors | $illustration/*[@name=$name]"/></xsl:call-template></xsl:when><!-- column name and basis are specified
-                 --><xsl:otherwise><xsl:call-template name="data_table"><xsl:with-param name="pos" select="$pos + 1"/><xsl:with-param name="columns" select="$columns"/><xsl:with-param name="headers" select="$headers | $columns[$pos]"/><xsl:with-param name="vectors" select="$vectors | $illustration/*[@name=$name][@basis=$basis]"/></xsl:call-template></xsl:otherwise></xsl:choose></xsl:otherwise></xsl:choose></xsl:template>
-
+    <xsl:template name="data_table">
+        <xsl:param name="pos"/>
+        <xsl:param name="columns"/>
+        <xsl:param name="headers"/>
+        <xsl:param name="vectors"/>
+        <xsl:choose>
+            <xsl:when test="$pos &gt; count($columns)">
+                <!-- Call the user-defined template 'do_data_table'. -->
+                <xsl:call-template name="do_data_table">
+                    <xsl:with-param name="headers" select="$headers"/>
+                    <xsl:with-param name="vectors" select="$vectors"/>
+                </xsl:call-template>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:variable name="name" select="$columns[$pos]/@name"/>
+                <xsl:variable name="basis" select="$columns[$pos]/@basis"/>
+                <xsl:choose>
+                    <!-- a spacer -->
+                    <xsl:when test="not($name)">
+                        <xsl:call-template name="data_table">
+                            <xsl:with-param name="pos" select="$pos + 1"/>
+                            <xsl:with-param name="columns" select="$columns"/>
+                            <xsl:with-param name="headers" select="$headers | $columns[$pos]"/>
+                            <!-- Use $columns[$pos] as a dummy node to push into '$vectors' -->
+                            <xsl:with-param name="vectors" select="$vectors | $columns[$pos]"/>
+                        </xsl:call-template>
+                    </xsl:when>
+                    <!-- column with without no basis -->
+                    <xsl:when test="not($basis)">
+                        <xsl:call-template name="data_table">
+                            <xsl:with-param name="pos" select="$pos + 1"/>
+                            <xsl:with-param name="columns" select="$columns"/>
+                            <xsl:with-param name="headers" select="$headers | $columns[$pos]"/>
+                            <xsl:with-param name="vectors" select="$vectors | $illustration/*[@name=$name]"/>
+                        </xsl:call-template>
+                    </xsl:when>
+                    <!-- column name and basis are specified -->
+                    <xsl:otherwise>
+                        <xsl:call-template name="data_table">
+                            <xsl:with-param name="pos" select="$pos + 1"/>
+                            <xsl:with-param name="columns" select="$columns"/>
+                            <xsl:with-param name="headers" select="$headers | $columns[$pos]"/>
+                            <xsl:with-param name="vectors" select="$vectors | $illustration/*[@name=$name][@basis=$basis]"/>
+                        </xsl:call-template>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:template>
 </xsl:stylesheet>

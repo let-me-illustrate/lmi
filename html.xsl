@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: html.xsl,v 1.1.2.7 2006-10-31 16:28:02 etarassov Exp $
+    $Id: html.xsl,v 1.1.2.8 2006-11-01 01:55:40 etarassov Exp $
 
     Uses format.xml - column titles, number-formatting and other information.
 -->
@@ -161,7 +161,7 @@
 
         <hr/>
 
-        <table border="1" cellpadding="4" cellspacing="0" width="100%">
+        <table border="0" cellpadding="4" cellspacing="0" width="100%">
 
         <!-- Call 'data_table' template defined in 'common.xsl'. -->
         <xsl:call-template name="data_table">

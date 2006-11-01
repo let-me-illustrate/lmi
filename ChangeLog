@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.462.2.75 2006-10-31 16:59:11 chicares Exp $
+// $Id: ChangeLog,v 1.462.2.76 2006-11-01 01:55:40 etarassov Exp $
 
 MAINTENANCE
 
@@ -8314,4 +8314,13 @@ Update FSF address.
   sample.ill [new file]
   workhorse.make
 Add document-io tests, which don't pass yet.
+
+20061101T0155Z <etarassov@tt-solutions.com> [1170]
+
+  common.xsl
+  html.xsl
+  schema.xsd
+  tab_delimited.xsl
+Reformat files. Fix TODO markers. Remove calculation summary table
+border.
 
