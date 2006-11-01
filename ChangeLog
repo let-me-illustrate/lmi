@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.462.2.76 2006-11-01 01:55:40 etarassov Exp $
+// $Id: ChangeLog,v 1.462.2.77 2006-11-01 03:17:07 chicares Exp $
 
 MAINTENANCE
 
@@ -8323,4 +8323,19 @@ Add document-io tests, which don't pass yet.
   tab_delimited.xsl
 Reformat files. Fix TODO markers. Remove calculation summary table
 border.
+
+20061101T0315Z <chicares@cox.net> [1170]
+
+  xml_lmi.cpp
+  xml_lmi.hpp
+Write human-readable files, using libxml2's "formatted" functions.
+Incidentally, this makes it easier to analyze the unit-test issues
+noted 20061031T1659Z.
+
+20061101T0317Z <chicares@cox.net> [1170]
+
+  any_member.hpp
+Maintain a sorted vector of member names. The algorithm is probably
+O(N^2), yet this change does not make the system noticeably slower.
+This resolves one of the two unit-test issues noted 20061031T1659Z.
 
