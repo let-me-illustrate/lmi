@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.462.2.79 2006-11-01 14:29:19 chicares Exp $
+// $Id: ChangeLog,v 1.462.2.80 2006-11-01 21:11:41 chicares Exp $
 
 MAINTENANCE
 
@@ -8352,4 +8352,14 @@ vector of fund allocations. This resolves the last of the issues noted
   multiple_cell_document.cpp
   single_cell_document.cpp
 Refactor use of xml_lmi::NodeContainer.
+
+20061101T2111Z <chicares@cox.net> [1168]
+
+  ledger_xml_io.cpp
+  xml_lmi.cpp
+  xml_lmi.hpp
+Experimentally retrieve only element nodes with a given name, in order
+to refactor use of xml_lmi::NodeContainer. Tentative code that needs
+Evgeniy's review and approval is sequestered in '#if 0' blocks to
+prevent accidentally damaging the build.
 

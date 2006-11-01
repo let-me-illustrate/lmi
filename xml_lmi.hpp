@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xml_lmi.hpp,v 1.1.2.17 2006-11-01 03:15:30 chicares Exp $
+// $Id: xml_lmi.hpp,v 1.1.2.18 2006-11-01 21:11:41 chicares Exp $
 
 #ifndef xml_lmi_hpp
 #define xml_lmi_hpp
@@ -97,6 +97,9 @@ namespace xml_lmi
 
     /// Create a container of pointers to an element's child elements.
     ///
+    /// If the second argument is specified, then only elements having
+    /// the given name are placed in the container.
+    ///
     /// Only direct children are considered: children of child nodes
     /// are not. Only child nodes that are elements are placed in the
     /// container; other types of nodes are not.
@@ -104,11 +107,16 @@ namespace xml_lmi
     /// Precondition: No child element pointer returned by xml-library
     /// calls is null.
     ///
+    /// Postcondition: The container holds no null pointers.
+    ///
     /// Throws: an exception, via fatal_error(), if a precondition is
     /// violated, or if xml-library calls throw an exception derived
     /// from std::exception.
 
-    ElementContainer child_elements(Element const&);
+    ElementContainer child_elements
+        (Element const&
+        ,std::string const& name = std::string()
+        );
 
     /// Retrieve an xml element's full text-node contents.
     ///
