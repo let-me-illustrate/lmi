@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_test.cpp,v 1.7.2.13 2006-10-31 16:59:11 chicares Exp $
+// $Id: input_test.cpp,v 1.7.2.14 2006-11-01 03:46:07 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -273,7 +273,7 @@ std::cout << "replica.FundAllocs.size() is " << replica.FundAllocs.size() << '\n
     original.propagate_changes_to_base_and_finalize();
     IllusInputParms copy0(original);
     copy0.propagate_changes_from_base_and_finalize();
-//    BOOST_TEST(original == copy0); // TODO ?? Fails.
+    BOOST_TEST(original == copy0);
     copy0["InsuredName"] = "Claude Proulx";
     BOOST_TEST(std::string("Claude Proulx") == copy0   .InsdFirstName);
     BOOST_TEST(std::string("Actually Full Name") == original.InsdFirstName);
@@ -292,7 +292,7 @@ std::cout << "replica.FundAllocs.size() is " << replica.FundAllocs.size() << '\n
     original.propagate_changes_to_base_and_finalize();
     copy1 = original;
     copy1.propagate_changes_from_base_and_finalize();
-//    BOOST_TEST(original == copy1); // TODO ?? Fails.
+    BOOST_TEST(original == copy1);
     copy1["InsuredName"] = "Angela";
     BOOST_TEST(std::string("Angela") == copy1   .InsdFirstName);
     BOOST_TEST(std::string("Actually Full Name")  == original.InsdFirstName);

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.462.2.77 2006-11-01 03:17:07 chicares Exp $
+// $Id: ChangeLog,v 1.462.2.78 2006-11-01 03:46:07 chicares Exp $
 
 MAINTENANCE
 
@@ -8338,4 +8338,12 @@ noted 20061031T1659Z.
 Maintain a sorted vector of member names. The algorithm is probably
 O(N^2), yet this change does not make the system noticeably slower.
 This resolves one of the two unit-test issues noted 20061031T1659Z.
+
+20061101T0346Z <chicares@cox.net> [1168]
+
+  input_test.cpp
+  inputillus.cpp
+Fix a long-standing defect: unintended zeros had been appended to the
+vector of fund allocations. This resolves the last of the issues noted
+20061031T1659Z.
 
