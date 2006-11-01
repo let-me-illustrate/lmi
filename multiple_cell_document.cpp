@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: multiple_cell_document.cpp,v 1.9.2.11 2006-10-20 00:25:12 chicares Exp $
+// $Id: multiple_cell_document.cpp,v 1.9.2.12 2006-11-01 14:29:19 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -71,72 +71,55 @@ void multiple_cell_document::parse(xml_lmi::Element const& root)
 
     IllusInputParms temp;
 
+    xml_lmi::ElementContainer const elements(xml_lmi::child_elements(root));
+    typedef xml_lmi::ElementContainer::const_iterator eci;
+    eci i = elements.begin();
+
     // Case default parameters.
 
     case_parms_.clear();
 
-    typedef std::list<xml_lmi::Element*> XmlppElements;
-
-    XmlppElements elements;
-    {
-        // fill elements list with element nodes of the root
-        xml_lmi::NodeContainer const c = root.get_children();
-        for
-            (xml_lmi::NodeContainer::const_iterator iter = c.begin()
-            ;iter != c.end()
-            ;++iter
-            )
-            {
-            xml_lmi::Element const* el = dynamic_cast<xml_lmi::Element const*>(*iter);
-            if(el)
-                {
-                elements.push_back(const_cast<xml_lmi::Element*>(el));
-                }
-            }
-    }
-
-    XmlppElements::const_iterator iter = elements.begin();
-    xml_lmi::Element* child = 0;
-
-    if(iter == elements.end() || (child = *iter)->get_name() != "cell")
+    LMI_ASSERT(i != elements.end());
+    if("cell" != (*i)->get_name())
         {
         fatal_error()
             << "XML node name is '"
-            << (iter == elements.end() ? "no node" : child->get_name())
+            << (*i)->get_name()
             << "' but '"
             << "cell"
             << "' was expected."
             << LMI_FLUSH
             ;
         }
-    (*child) >> temp;
+    (**i) >> temp;
     case_parms_.push_back(temp);
 
     // Number of classes.
-    ++iter;
-    if(iter == elements.end() || (child = *iter)->get_name() != "NumberOfClasses")
+    ++i;
+    LMI_ASSERT(i != elements.end());
+    if("NumberOfClasses" != (*i)->get_name())
         {
         fatal_error()
             << "XML node name is '"
-            << (iter == elements.end() ? "no node" : child->get_name())
+            << (*i)->get_name()
             << "' but '"
             << "NumberOfClasses"
             << "' was expected."
             << LMI_FLUSH
             ;
         }
-    unsigned int number_of_classes = value_cast<unsigned int>
-        (xml_lmi::get_content(*child)
-        );
+    std::string const n_classes = xml_lmi::get_content(**i);
+    LMI_ASSERT(!n_classes.empty());
+    unsigned int number_of_classes = value_cast<unsigned int>(n_classes);
 
     // Parameters for each class.
     class_parms_.clear();
     class_parms_.reserve(number_of_classes);
 
-    for(; ++iter != elements.end();)
+    ++i;
+    for(; i != elements.end(); ++i)
         {
-        child = *iter;
-        (*child) >> temp;
+        (**i) >> temp;
         class_parms_.push_back(temp);
         if(class_parms_.size() == number_of_classes)
             {
@@ -156,39 +139,40 @@ void multiple_cell_document::parse(xml_lmi::Element const& root)
         }
 
     // Number of cells.
-    ++iter;
-    if(iter == elements.end() || (child = *iter)->get_name() != "NumberOfCells")
+    ++i;
+    LMI_ASSERT(i != elements.end());
+    if("NumberOfCells" != (*i)->get_name())
         {
         fatal_error()
             << "XML node name is '"
-            << (iter == elements.end() ? "no node" : child->get_name())
+            << (*i)->get_name()
             << "' but '"
             << "NumberOfCells"
             << "' was expected."
             << LMI_FLUSH
             ;
         }
-    unsigned int number_of_cells = value_cast<unsigned int>
-        (xml_lmi::get_content(*child)
-        );
+    std::string const n_cells = xml_lmi::get_content(**i);
+    LMI_ASSERT(!n_cells.empty());
+    unsigned int number_of_cells = value_cast<unsigned int>(n_cells);
 
-    // Parameters for each Cell.
+    // Parameters for each cell.
     cell_parms_.clear();
     cell_parms_.reserve(number_of_cells);
 
-    for(; ++iter != elements.end();)
+    ++i;
+    for(; i != elements.end(); ++i)
         {
-            child = *iter;
-            (*child) >> temp;
-            cell_parms_.push_back(temp);
-            status()
-                << "Read "
-                << cell_parms_.size()
-                << " of "
-                << number_of_cells
-                << " lives."
-                << std::flush
-                ;
+        (**i) >> temp;
+        cell_parms_.push_back(temp);
+        status()
+            << "Read "
+            << cell_parms_.size()
+            << " of "
+            << number_of_cells
+            << " lives."
+            << std::flush
+            ;
         if(cell_parms_.size() == number_of_cells)
             {
             break;
@@ -206,7 +190,8 @@ void multiple_cell_document::parse(xml_lmi::Element const& root)
             ;
         }
 
-    if(++iter != elements.end())
+    ++i;
+    if(i != elements.end())
         {
         fatal_error()
             << "Read all data expected in XML document, "

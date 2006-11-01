@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.462.2.78 2006-11-01 03:46:07 chicares Exp $
+// $Id: ChangeLog,v 1.462.2.79 2006-11-01 14:29:19 chicares Exp $
 
 MAINTENANCE
 
@@ -8346,4 +8346,10 @@ This resolves one of the two unit-test issues noted 20061031T1659Z.
 Fix a long-standing defect: unintended zeros had been appended to the
 vector of fund allocations. This resolves the last of the issues noted
 20061031T1659Z.
+
+20061101T1429Z <chicares@cox.net> [1168]
+
+  multiple_cell_document.cpp
+  single_cell_document.cpp
+Refactor use of xml_lmi::NodeContainer.
 

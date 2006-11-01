@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: single_cell_document.cpp,v 1.7.2.10 2006-10-20 00:25:12 chicares Exp $
+// $Id: single_cell_document.cpp,v 1.7.2.11 2006-11-01 14:29:19 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -70,23 +70,9 @@ std::string single_cell_document::xml_root_name() const
 //============================================================================
 void single_cell_document::parse(xml_lmi::Element const& root)
 {
-    // read from the first non textual node all the information
-    // in other words this 'single cell' document xml representation
-    // should contain one and only one xml node
-    xml_lmi::NodeContainer children = root.get_children();
-    for
-        (xml_lmi::NodeContainer::iterator iter = children.begin()
-        ;iter != children.end()
-        ;++iter
-        )
-        {
-        xml_lmi::Element* child = dynamic_cast<xml_lmi::Element*>(*iter);
-        if(child)
-            {
-            *child >> *input_data_;
-            break;
-            }
-        }
+    xml_lmi::ElementContainer const elements(xml_lmi::child_elements(root));
+    LMI_ASSERT(1 == elements.size());
+    *elements[0] >> *input_data_;
 }
 
 //============================================================================
