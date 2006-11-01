@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xml_lmi.cpp,v 1.1.2.22 2006-10-31 12:05:05 etarassov Exp $
+// $Id: xml_lmi.cpp,v 1.1.2.23 2006-11-01 03:15:30 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -466,9 +466,27 @@ void xml_lmi::Stylesheet::set_stylesheet(stylesheet_ptr_t stylesheet)
 
 } // namespace xml_lmi
 
+/// Streaming operator for xml documents.
+///
+/// Formerly, this alternative was used:
+///   document.write_to_stream(os, "utf-8");
+/// and care taken to specify an encoding because libxml++'s default
+/// is incorrect--see:
+///   http://lists.gnu.org/archive/html/lmi/2006-10/msg00023.html
+/// EVGENIY This isn't worth patching ourselves, but should we at
+/// least report it to the maintainers, as it appears to be a
+/// libxml++ defect?
+///
+/// The libxml++ function now used instead has no such defect, and
+/// measurements show it to be as fast. Formatted output is preferred
+/// because it is readable by humans. The libxml++ documentation warns
+/// that it "may insert unwanted significant whitespaces", but the
+/// same libxml2 function has been used for years through xmlwrapp and
+/// no such problem has been observed.
+
 std::ostream& operator<<(std::ostream& os, xml_lmi::Document& document)
 {
-    document.write_to_stream(os, "utf-8");
+    os << document.write_to_string_formatted();
     return os;
 }
 

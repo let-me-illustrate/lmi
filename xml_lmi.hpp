@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xml_lmi.hpp,v 1.1.2.16 2006-10-31 00:25:10 chicares Exp $
+// $Id: xml_lmi.hpp,v 1.1.2.17 2006-11-01 03:15:30 chicares Exp $
 
 #ifndef xml_lmi_hpp
 #define xml_lmi_hpp
@@ -155,11 +155,6 @@ namespace xml_lmi
         void set_stylesheet(stylesheet_ptr_t stylesheet);
     };
 } // namespace xml_lmi
-
-/// Streaming operator for xml documents.
-///
-/// Avoid using libxml++'s write_to_stream() directly: see
-///   http://lists.gnu.org/archive/html/lmi/2006-10/msg00023.html
 
 std::ostream& operator<<(std::ostream&, xml_lmi::Document&);
 
