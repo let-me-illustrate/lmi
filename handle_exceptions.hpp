@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: handle_exceptions.hpp,v 1.2 2006-01-29 13:52:00 chicares Exp $
+// $Id: handle_exceptions.hpp,v 1.3 2006-11-02 18:13:47 chicares Exp $
 
 #ifndef handle_exceptions_hpp
 #define handle_exceptions_hpp
@@ -30,7 +30,6 @@
 
 #include <cstdlib>   // std::exit()
 #include <exception>
-#include <stdexcept>
 
 /// This function, of type std::terminate_handler, is intended to be
 /// used as the argument of std::set_terminate().
