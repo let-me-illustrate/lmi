@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.464 2006-11-02 17:39:16 chicares Exp $
+// $Id: ChangeLog,v 1.465 2006-11-02 19:19:07 chicares Exp $
 
 MAINTENANCE
 
@@ -7630,4 +7630,55 @@ Test committing to 'gnome-xml-branch' branch.
 
   [ChangeLog only]
 Add a guideline: use commit time for 'ChangeLog' timestamp.
+
+20061102T1743Z <chicares@cox.net> [1172]
+
+  workhorse.make
+Adapt to canonical libxml2 installation.
+
+20061102T1800Z <chicares@cox.net> [1171]
+
+  actuarial_table_test.cpp
+Look for data files on the default installation path.
+
+20061102T1812Z <chicares@cox.net> [1171]
+
+  alert.hpp
+Improve documentation.
+
+20061102T1813Z <chicares@cox.net> [1171]
+
+  handle_exceptions.hpp
+  handle_exceptions_test.cpp
+Include only appropriate headers.
+
+20061102T1815Z <chicares@cox.net> [1171]
+
+  ihs_dbvalue.cpp
+Prefer a consistent style for calling this->operator[]().
+
+20061102T1816Z <chicares@cox.net> [1171]
+
+  ihs_irc7702.cpp
+Prefer to write no spaces in operator-function names.
+
+20061102T1844Z <chicares@cox.net> [1171]
+
+  inputillus.hpp
+  ledger.hpp
+Mark virtuals explicitly.
+
+20061102T1845Z <chicares@cox.net> [1169]
+
+  input_test.cpp
+  inputillus.cpp
+Fix a long-standing defect: unintended zeros had been appended to the
+vector of fund allocations.
+
+20061102T1919Z <chicares@cox.net> [1169]
+
+  configurable_settings.cpp
+  global_settings.cpp
+  msw_workarounds.cpp
+Catch private-ctor exceptions in instance(), making singletons safer.
 
