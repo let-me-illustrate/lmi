@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.465 2006-11-02 19:19:07 chicares Exp $
+// $Id: ChangeLog,v 1.466 2006-11-02 19:37:36 chicares Exp $
 
 MAINTENANCE
 
@@ -7681,4 +7681,15 @@ vector of fund allocations.
   global_settings.cpp
   msw_workarounds.cpp
 Catch private-ctor exceptions in instance(), making singletons safer.
+
+20061102T1937Z <chicares@cox.net> [1169]
+
+  illustration_view.cpp
+Display more timing data.
+
+20061102T1937Z <chicares@cox.net> [1169]
+
+  configure.ac
+  Makefile.am
+Import autotools files from 'gnome-xml-branch'.
 
