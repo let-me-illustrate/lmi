@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: workhorse.make,v 1.74 2006-11-02 17:43:30 chicares Exp $
+# $Id: workhorse.make,v 1.75 2006-11-02 19:56:20 chicares Exp $
 
 ################################################################################
 
@@ -503,7 +503,7 @@ endif
 REQUIRED_LIBS := \
   $(platform_boost_libraries) \
   -lxmlwrapp \
-  $(platform_libxml2_libraries) \
+  $(platform_gnome_xml_libraries) \
 
 wx_ldflags = \
   $(platform_wx_libraries) \
