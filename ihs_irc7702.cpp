@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_irc7702.cpp,v 1.11 2006-01-29 13:52:00 chicares Exp $
+// $Id: ihs_irc7702.cpp,v 1.12 2006-11-02 18:16:18 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -1152,7 +1152,7 @@ int main()
 // timing to construct Irc7702:
 // RW: about 37 msec
 // OS: about 93 msec; about 41 if we disable index checking
-//   in std::vector operator []
+//   in std::vector operator[]()
     std::vector<double>q            (Q, Q + lmi_array_size(Q));
     std::vector<double>i            (100, 0.07);
     std::vector<double>LoadTgt      (100, 0.05);
