@@ -20,7 +20,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: posix_fhs.make,v 1.12 2006-11-02 19:45:18 chicares Exp $
+# $Id: posix_fhs.make,v 1.13 2006-11-02 19:56:20 chicares Exp $
 
 ################################################################################
 
@@ -33,7 +33,7 @@ platform_boost_libraries := \
 
 # EVGENIY I find no 'libxml++-config'. How should that
 # library be handled here?
-platform_libxml2_libraries := \
+platform_gnome_xml_libraries := \
   $(shell xml2-config --libs) \
   $(shell xslt-config --libs) \
 
