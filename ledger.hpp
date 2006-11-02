@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger.hpp,v 1.13 2006-01-29 13:52:00 chicares Exp $
+// $Id: ledger.hpp,v 1.14 2006-11-02 18:44:32 chicares Exp $
 
 #ifndef ledger_hpp
 #define ledger_hpp
@@ -107,10 +107,11 @@ class LMI_SO Ledger
     unsigned int CalculateCRC() const;
     void Spew(std::ostream& os) const;
 
-    void read(xml::node&);
-    void write(xml::node&) const;
-    int class_version() const;
-    std::string xml_root_name() const;
+    // Class 'streamable' required implementation.
+    virtual void read(xml::node&);
+    virtual void write(xml::node&) const;
+    virtual int class_version() const;
+    virtual std::string xml_root_name() const;
 
     void write(std::ostream& os) const;
 
