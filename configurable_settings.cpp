@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: configurable_settings.cpp,v 1.14 2006-09-20 16:06:24 chicares Exp $
+// $Id: configurable_settings.cpp,v 1.15 2006-11-02 19:19:07 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -29,8 +29,8 @@
 #include "configurable_settings.hpp"
 
 #include "alert.hpp"
-#include "data_directory.hpp"
-#include "miscellany.hpp"
+#include "data_directory.hpp"     // AddDataDir()
+#include "handle_exceptions.hpp"
 #include "platform_dependent.hpp" // access()
 
 #ifdef USING_CURRENT_XMLWRAPP
@@ -40,9 +40,7 @@
 #include <xmlwrapp/node.h>
 #include <xmlwrapp/tree_parser.h>
 
-#include <algorithm>
-#include <iterator>
-#include <vector>
+#include <stdexcept>
 
 // TODO ?? Need unit tests.
 
@@ -143,8 +141,17 @@ configurable_settings::~configurable_settings()
 
 configurable_settings& configurable_settings::instance()
 {
-    static configurable_settings z;
-    return z;
+    try
+        {
+        static configurable_settings z;
+        return z;
+        }
+    catch(...)
+        {
+        report_exception();
+        fatal_error() << "Instantiation failed." << LMI_FLUSH;
+        throw std::logic_error("Unreachable"); // Silence compiler warning.
+        }
 }
 
 void configurable_settings::ascribe_members()

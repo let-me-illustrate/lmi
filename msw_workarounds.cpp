@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: msw_workarounds.cpp,v 1.3 2006-09-05 14:19:19 chicares Exp $
+// $Id: msw_workarounds.cpp,v 1.4 2006-11-02 19:19:07 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -31,6 +31,7 @@
 #include "alert.hpp"
 #include "configurable_settings.hpp"
 #include "fenv_lmi.hpp"
+#include "handle_exceptions.hpp"
 
 #include <boost/functional.hpp>
 
@@ -41,6 +42,7 @@
 #include <algorithm>
 #include <iterator>
 #include <sstream>
+#include <stdexcept>
 
 MswDllPreloader::MswDllPreloader()
 {
@@ -57,8 +59,17 @@ MswDllPreloader::~MswDllPreloader()
 
 MswDllPreloader& MswDllPreloader::instance()
 {
-    static MswDllPreloader z;
-    return z;
+    try
+        {
+        static MswDllPreloader z;
+        return z;
+        }
+    catch(...)
+        {
+        report_exception();
+        fatal_error() << "Instantiation failed." << LMI_FLUSH;
+        throw std::logic_error("Unreachable"); // Silence compiler warning.
+        }
 }
 
 void MswDllPreloader::PreloadDesignatedDlls()
