@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_test.cpp,v 1.7 2006-01-29 13:52:00 chicares Exp $
+// $Id: input_test.cpp,v 1.8 2006-11-02 18:45:34 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -42,7 +42,6 @@
 #include <ios>
 #include <istream>
 #include <iterator>
-#include <ostream>
 
 // This function is a derived work adapted from usenet article
 // <1eo2sct.ggkc9z84ko0eN%cbarron3@ix.netcom.com>. GWC rewrote it
@@ -180,7 +179,7 @@ std::cout << "replica.FundAllocs.size() is " << replica.FundAllocs.size() << '\n
     original.propagate_changes_to_base_and_finalize();
     IllusInputParms copy0(original);
     copy0.propagate_changes_from_base_and_finalize();
-//    BOOST_TEST(original == copy0); // TODO ?? Fails.
+    BOOST_TEST(original == copy0);
     copy0["InsuredName"] = "Claude Proulx";
     BOOST_TEST(std::string("Claude Proulx") == copy0   .InsdFirstName);
     BOOST_TEST(std::string("Actually Full Name") == original.InsdFirstName);
@@ -199,11 +198,11 @@ std::cout << "replica.FundAllocs.size() is " << replica.FundAllocs.size() << '\n
     original.propagate_changes_to_base_and_finalize();
     copy1 = original;
     copy1.propagate_changes_from_base_and_finalize();
-//    BOOST_TEST(original == copy1); // TODO ?? Fails.
+    BOOST_TEST(original == copy1);
     copy1["InsuredName"] = "Angela";
     BOOST_TEST(std::string("Angela") == copy1   .InsdFirstName);
     BOOST_TEST(std::string("Actually Full Name")  == original.InsdFirstName);
 
-    return 0;
+    return EXIT_SUCCESS;
 }
 

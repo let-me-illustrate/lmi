@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: inputillus.cpp,v 1.21 2006-09-30 13:07:31 chicares Exp $
+// $Id: inputillus.cpp,v 1.22 2006-11-02 18:45:34 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -569,10 +569,14 @@ void IllusInputParms::propagate_fund_allocations_from_string()
 {
     std::istringstream iss(FundAllocations);
     std::vector<r_fund> v;
-    while(!!iss && !iss.eof())
+    for(;;)
         {
         int i;
         iss >> i;
+        if(!iss || iss.eof())
+            {
+            break;
+            }
         v.push_back(r_fund(i));
         }
     FundAllocs = v;
