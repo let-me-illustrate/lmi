@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: global_settings.cpp,v 1.13 2006-01-29 13:52:00 chicares Exp $
+// $Id: global_settings.cpp,v 1.14 2006-11-02 19:19:07 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -29,7 +29,10 @@
 #include "global_settings.hpp"
 
 #include "alert.hpp"
+#include "handle_exceptions.hpp"
 #include "path_utility.hpp"
+
+#include <stdexcept>
 
 /// Initialize directory paths to ".", not an empty string. Reason:
 /// objects of the boost filesystem library's path class are created
@@ -59,8 +62,17 @@ global_settings::~global_settings()
 
 global_settings& global_settings::instance()
 {
-    static global_settings z;
-    return z;
+    try
+        {
+        static global_settings z;
+        return z;
+        }
+    catch(...)
+        {
+        report_exception();
+        fatal_error() << "Instantiation failed." << LMI_FLUSH;
+        throw std::logic_error("Unreachable"); // Silence compiler warning.
+        }
 }
 
 void global_settings::set_mellon(bool b)
