@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: GNUmakefile,v 1.72 2006-11-02 20:44:06 chicares Exp $
+# $Id: GNUmakefile,v 1.73 2006-11-02 20:52:03 chicares Exp $
 
 ################################################################################
 
@@ -545,8 +545,11 @@ check_concinnity: source_clean custom_tools
 	      $$z - \
 	      || $(ECHO) "... in file $$z"; \
 	  done;
+	@$(ECHO) "  Excessively-long lines in 'ChangeLog':"
+	@$(SED) -e '0,/savannah/d;{/.\{71,\}/!d}' ChangeLog
 	@$(ECHO) "  Miscellaneous problems:"
 	@-test_coding_rules $(licensed_files) $(xpm_files)
+	@$(ECHO) " "
 	@$(ECHO) "Total lines of code:"
 	@$(WC) -l $(prerequisite_files) | $(SED) -e ';/[Tt]otal/!d' -e 's/[^0-9]//'
 	@$(ECHO) "Number of source files:"
