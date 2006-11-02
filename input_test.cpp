@@ -19,17 +19,24 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_test.cpp,v 1.8 2006-11-02 18:45:34 chicares Exp $
+// $Id: input_test.cpp,v 1.9 2006-11-02 20:44:06 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
 #   pragma hdrstop
 #endif // __BORLANDC__
 
+// Facilities offered by all three of these headers are tested here.
 #include "inputillus.hpp"
+#include "multiple_cell_document.hpp"
+#include "single_cell_document.hpp"
 
 #define BOOST_INCLUDE_MAIN
 #include "test_tools.hpp"
+#include "timer.hpp"
+
+#include <boost/bind.hpp>
+#include <boost/ref.hpp>
 
 #include <xmlwrapp/init.h>
 #include <xmlwrapp/node.h>
@@ -71,6 +78,102 @@ bool files_are_identical(std::string const& file0, std::string const& file1)
     std::ifstream is0(file0.c_str());
     std::ifstream is1(file1.c_str());
     return streams_are_identical(is0, is1);
+}
+
+template<typename DocumentClass>
+void test_document_io
+    (std::string const& original_filename
+    ,std::string const& replica_filename
+    ,char const*        file
+    ,int                line
+    ,bool               test_speed_only
+    )
+{
+    DocumentClass document(original_filename);
+    std::ofstream ofs
+        (replica_filename.c_str()
+        ,   std::ios_base::out
+          | std::ios_base::trunc
+          | std::ios_base::binary
+        );
+    document.write(ofs);
+    if(test_speed_only)
+        {
+        return;
+        }
+    ofs.close();
+    bool okay = files_are_identical(original_filename, replica_filename);
+    INVOKE_BOOST_TEST(okay, file, line);
+    // Leave the file for analysis if it didn't match.
+    if(okay)
+        {
+        BOOST_TEST(0 == std::remove(replica_filename.c_str()));
+        }
+}
+
+void mete_cns_io()
+{
+    typedef multiple_cell_document M;
+    test_document_io<M>("sample.cns", "replica.cns", __FILE__, __LINE__, true);
+}
+
+void mete_ill_io()
+{
+    typedef single_cell_document S;
+    test_document_io<S>("sample.ill", "replica.ill", __FILE__, __LINE__, true);
+}
+#if 0 // Deferred until later.
+void mete_overhead()
+{
+    static IllusInputParms raw_data;
+    xml_lmi::Document document;
+    xml_lmi::Element* root = document.create_root_node("root");
+    LMI_ASSERT(root);
+}
+
+void mete_vector(xml_lmi::Element& xml_data)
+{
+    xml_lmi::child_elements(xml_data);
+}
+
+void mete_read(xml_lmi::Element& xml_data)
+{
+    static IllusInputParms raw_data;
+    xml_data >> raw_data;
+}
+
+void mete_write()
+{
+    static IllusInputParms raw_data;
+    xml_lmi::Document document;
+    xml_lmi::Element* root = document.create_root_node("root");
+    LMI_ASSERT(root);
+    *root << raw_data;
+}
+#endif // Deferred until later.
+void assay_speed()
+{
+#if 0 // Deferred until later.
+    IllusInputParms raw_data;
+    xml_lmi::Document document;
+    xml_lmi::Element* root = document.create_root_node("root");
+    LMI_ASSERT(root);
+    *root << raw_data;
+    typedef boost::reference_wrapper<xml_lmi::Element> er;
+    er e(xml_lmi::get_first_element(*root));
+#endif // Deferred until later.
+
+    std::cout
+        << "  Speed tests...\n"
+#if 0 // Deferred until later.
+        << "  Overhead: " << aliquot_timer(mete_overhead              ) << '\n'
+        << "  Vector  : " << aliquot_timer(boost::bind(mete_vector, e)) << '\n'
+        << "  Read    : " << aliquot_timer(boost::bind(mete_read  , e)) << '\n'
+        << "  Write   : " << aliquot_timer(mete_write                 ) << '\n'
+#endif // Deferred until later.
+        << "  'cns' io: " << aliquot_timer(mete_cns_io                ) << '\n'
+        << "  'ill' io: " << aliquot_timer(mete_ill_io                ) << '\n'
+        ;
 }
 
 int test_main(int, char*[])
@@ -147,7 +250,14 @@ int test_main(int, char*[])
     os1.close();
 
     BOOST_TEST(original == replica);
-    BOOST_TEST(files_are_identical("eraseme0.xml", "eraseme1.xml"));
+    bool okay = files_are_identical("eraseme0.xml", "eraseme1.xml");
+    BOOST_TEST(okay);
+    // Leave the files for analysis if they didn't match.
+    if(okay)
+        {
+        BOOST_TEST(0 == std::remove("eraseme0.xml"));
+        BOOST_TEST(0 == std::remove("eraseme1.xml"));
+        }
 
     BOOST_TEST(0.03125 == original.SepAcctRate[0]);
     BOOST_TEST(0.03125 == replica.SepAcctRate[0]);
@@ -161,9 +271,6 @@ std::cout << "replica.FundAllocs[0] is " << replica.FundAllocs[0] << '\n';
 std::cout << "original.FundAllocs.size() is " << original.FundAllocs.size() << '\n';
 std::cout << "replica.FundAllocs.size() is " << replica.FundAllocs.size() << '\n';
 */
-
-    BOOST_TEST(0 == std::remove("eraseme0.xml"));
-    BOOST_TEST(0 == std::remove("eraseme1.xml"));
 
     BOOST_TEST(0 == original.InforceYear);
     original["InforceYear"] = std::string("3");
@@ -202,6 +309,13 @@ std::cout << "replica.FundAllocs.size() is " << replica.FundAllocs.size() << '\n
     copy1["InsuredName"] = "Angela";
     BOOST_TEST(std::string("Angela") == copy1   .InsdFirstName);
     BOOST_TEST(std::string("Actually Full Name")  == original.InsdFirstName);
+
+    assay_speed();
+
+    typedef multiple_cell_document M;
+    test_document_io<M>("sample.cns", "replica.cns", __FILE__, __LINE__, false);
+    typedef single_cell_document S;
+    test_document_io<S>("sample.ill", "replica.ill", __FILE__, __LINE__, false);
 
     return EXIT_SUCCESS;
 }
