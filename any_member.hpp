@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: any_member.hpp,v 1.14 2006-09-19 02:55:39 chicares Exp $
+// $Id: any_member.hpp,v 1.15 2006-11-02 20:41:18 chicares Exp $
 
 // This is a derived work based on boost::any, which bears the following
 // copyright and permissions notice:
@@ -72,7 +72,7 @@
 
 #include <boost/utility.hpp>
 
-#include <algorithm> // std::swap()
+#include <algorithm> // std::lower_bound(), std::swap()
 #include <map>
 #include <ostream>   // std::flush
 #include <sstream>
@@ -543,7 +543,9 @@ class MemberSymbolTable
         map_.insert
             (member_pair_type(s, any_member<ClassType>(class_object, p2m))
             );
-        member_names_.push_back(s);
+        typedef std::vector<std::string>::iterator svi;
+        svi i = std::lower_bound(member_names_.begin(), member_names_.end(), s);
+        member_names_.insert(i, s);
         }
 #endif // defined __BORLANDC__
 
@@ -558,11 +560,6 @@ class MemberSymbolTable
 };
 
 // Implementation of class MemberSymbolTable.
-
-// Data member 'member_names_' is an unsorted std::vector containing
-// member names in ascription order. The corresponding std::map has
-// the same names, but they're sorted because they're map keys.
-// Probably this doesn't matter; is it worth even documenting here?
 
 template<typename ClassType>
 MemberSymbolTable<ClassType>::MemberSymbolTable()
@@ -649,7 +646,10 @@ void MemberSymbolTable<ClassType>::ascribe
 
     ClassType* class_object = static_cast<ClassType*>(this);
     map_.insert(member_pair_type(s, any_member<ClassType>(class_object, p2m)));
-    member_names_.push_back(s);
+    typedef std::vector<std::string>::iterator svi;
+    // TODO ?? This would appear to be O(N^2).
+    svi i = std::lower_bound(member_names_.begin(), member_names_.end(), s);
+    member_names_.insert(i, s);
 }
 #endif // !defined __BORLANDC__
 
@@ -659,7 +659,7 @@ MemberSymbolTable<ClassType>& MemberSymbolTable<ClassType>::assign
     )
 {
     typedef std::vector<std::string>::const_iterator mnci;
-    for(mnci i = member_names_.begin(); i != member_names_.end(); ++i)
+    for(mnci i = member_names().begin(); i != member_names().end(); ++i)
         {
         operator[](*i) = z[*i];
         }
@@ -672,7 +672,7 @@ bool MemberSymbolTable<ClassType>::equals
     ) const
 {
     typedef std::vector<std::string>::const_iterator mnci;
-    for(mnci i = member_names_.begin(); i != member_names_.end(); ++i)
+    for(mnci i = member_names().begin(); i != member_names().end(); ++i)
         {
         if(z[*i] != operator[](*i))
             {
