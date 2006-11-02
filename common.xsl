@@ -21,17 +21,23 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: common.xsl,v 1.1.2.8 2006-11-01 01:55:40 etarassov Exp $
+    $Id: common.xsl,v 1.1.2.9 2006-11-02 13:34:23 etarassov Exp $
 
     Uses format.xml - column titles, number-formatting and other information.
 -->
 <xsl:stylesheet xmlns:lmi="http://www.letmeillustrate.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0" xsi:schemaLocation="http://www.letmeillustrate.com schema.xsd">
 
+    <xsl:param name="debug"/>
+
     <!--
         Print this message if title is not found for a column.
         TODO ?? find a way to conditionally use it only in the debug mode
     -->
-    <xsl:variable name="no_title_error" select="'Title is not defined for a column!'"/>
+    <xsl:variable name="no_title_error">
+        <xsl:if test="$debug">
+            Title is not defined for :
+        </xsl:if>
+    </xsl:variable>
 
     <!--
         Read the column information (title, forma-string, etc.) from format.xml file.
@@ -61,6 +67,11 @@
         Use the global variable '$illustration' to access the data.
     -->
     <xsl:variable name="illustration" select="/illustration"/>
+
+    <!--
+        The calculation summary columns which come from 'configurable_settings.xml'.
+    -->
+    <xsl:variable name="calculation_summary_columns" select="/illustration/calculation_summary_columns/column"/>
 
     <!--
         The supplemental report columns. Keep it here so that whenever
@@ -116,12 +127,16 @@
         <xsl:if test="$title and $title!=''">
             <xsl:value-of select="$title"/>
         </xsl:if>
-        <xsl:if test="(not($title) or $title='') and $no_title_error">
+        <xsl:if test="(not($title) or $title='') and $debug">
             <!-- no title, show error -->
             <xsl:value-of select="$no_title_error"/>
+            <xsl:text>[</xsl:text>
             <xsl:value-of select="$name"/>
-            <xsl:text>_</xsl:text>
-            <xsl:value-of select="$basis"/>
+            <xsl:if test="$basis">
+                <xsl:text>_</xsl:text>
+                <xsl:value-of select="$basis"/>
+            </xsl:if>
+            <xsl:text>]</xsl:text>
         </xsl:if>
     </xsl:template>
 

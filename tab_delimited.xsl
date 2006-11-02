@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: tab_delimited.xsl,v 1.1.2.8 2006-11-01 01:55:40 etarassov Exp $
+    $Id: tab_delimited.xsl,v 1.1.2.9 2006-11-02 13:34:23 etarassov Exp $
 
     Uses format.xml - column titles, number-formatting and other information.
 -->
@@ -95,7 +95,7 @@
 -->
 <xsl:variable name="basic_columns" select="document('tab_delimited.xsl')/xsl:stylesheet/xsl:variable[@name='basic_columns_xml']/column"/>
 
-<xsl:variable name="all_columns" select="$basic_columns | $supplemental_columns"/>
+<xsl:variable name="all_columns" select="$calculation_summary_columns | $basic_columns | $supplemental_columns"/>
 
 <!-- Print a non-empty value, and puts '0' for an empty (non-existing) value. -->
 <xsl:template name="print_value">
@@ -190,7 +190,6 @@
             </xsl:when>
             <!-- otherwise get it from 'format.xml' -->
             <xsl:otherwise>
-                <xsl:value-of select="@name"/>
                 <xsl:call-template name="title">
                     <xsl:with-param name="name" select="@name"/>
                     <xsl:with-param name="basis" select="@basis"/>
@@ -211,7 +210,7 @@
             <xsl:text>&tab;</xsl:text>
             <xsl:value-of select="$start_age + $position - 1"/>
             <xsl:text>&tab;</xsl:text>
-            <xsl:for-each select="$vectors">
+            <xsl:for-each select="$headers">
                 <xsl:variable name="name" select="@name"/>
                 <xsl:variable name="basis" select="@basis"/>
                 <xsl:choose>

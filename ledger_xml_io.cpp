@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xml_io.cpp,v 1.48.2.18 2006-11-01 21:11:41 chicares Exp $
+// $Id: ledger_xml_io.cpp,v 1.48.2.19 2006-11-02 13:34:23 etarassov Exp $
 
 #include "ledger.hpp"
 
@@ -332,7 +332,7 @@ class double_formatter_t
         ,enum_xml_version
         ) const;
 
-    void set_supplemental_columns_list(std::vector<value_id> const& columns);
+    void add_columns_to_format(std::vector<value_id> const& columns);
 
   private:
     // Double conversion units
@@ -345,7 +345,7 @@ class double_formatter_t
     // Map value name to the corresponding format
     typedef std::map<std::string, format_t> format_map_t;
 
-    // Set of calculation summary values
+    // Set of calculation summary names
     typedef std::set<std::string> calculation_summary_fields_t;
 
     format_map_t format_map;
@@ -532,6 +532,8 @@ double_formatter_t::double_formatter_t()
                 continue;
                 }
 
+            // add columns explicitly marked by the 'calculation_summary' flag
+            // to the calculation_summary column set
             xml_lmi::Attribute const* cs_attribute
                 = column_element->get_attribute("calculation_summary");
             if(NULL != cs_attribute)
@@ -634,7 +636,7 @@ double_formatter_t::double_formatter_t()
         }
 }
 
-void double_formatter_t::set_supplemental_columns_list
+void double_formatter_t::add_columns_to_format
     (std::vector<value_id> const& columns
     )
 {
@@ -775,7 +777,55 @@ void Ledger::do_write(xml_lmi::Element& illustration, enum_xml_version xml_versi
         supplemental_report_columns.push_back(value_id::from_report_column_title(ledger_invariant_->SupplementalReportColumn10));
         supplemental_report_columns.push_back(value_id::from_report_column_title(ledger_invariant_->SupplementalReportColumn11));
 
-        //formatter.set_supplemental_columns(SupplementalReportColumns);
+        formatter.add_columns_to_format(supplemental_report_columns);
+        }
+
+    // read 'calculation_summary_colums' from configurable_settings.xml
+    std::vector<value_id> calculation_summary_columns;
+    try
+        {
+        std::istringstream iss
+            (configurable_settings::instance().calculation_summary_colums()
+            );
+        std::vector<std::string> columns;
+        // split column names list by spaces and put int columns vector
+        std::copy
+            (std::istream_iterator<std::string>(iss)
+            ,std::istream_iterator<std::string>()
+            ,std::back_inserter(columns)
+            );
+        std::vector<std::string>::const_iterator it = columns.begin();
+        for(; it != columns.end(); ++it)
+            {
+            try
+                {
+                value_id id = value_id::from_report_column_title(*it);
+                calculation_summary_columns.push_back(id);
+                }
+            catch(std::exception const& ex)
+                {
+                std::ostringstream oss;
+                oss
+                    << "Invalid column name '"
+                    << *it
+                    << "' ("
+                    << ex.what()
+                    << ")"
+                    ;
+                throw std::runtime_error(oss.str());
+                }
+            }
+
+        formatter.add_columns_to_format(calculation_summary_columns);
+        }
+    catch(std::exception const& e)
+        {
+        warning()
+            << "Cannot read calculation summary columns "
+            << "from 'configurable_settings.xml'. Error: "
+            << e.what()
+            << LMI_FLUSH
+            ;
         }
 
     // This is a little tricky. We have some stuff that
@@ -1139,6 +1189,24 @@ void Ledger::do_write(xml_lmi::Element& illustration, enum_xml_version xml_versi
                 xml_lmi::Element& duration = *dvector.add_child("duration");
                 duration.add_child_text(*k);
                 }
+            }
+        }
+
+    // insert calculation_summary_columns list into xml
+    if(!calculation_summary_columns.empty())
+        {
+        xml_lmi::Element& calculation_summary
+            = *illustration.add_child("calculation_summary_columns");
+        std::vector<value_id>::const_iterator j;
+        for
+            (j = calculation_summary_columns.begin()
+            ;j !=  calculation_summary_columns.end()
+            ;++j
+            )
+            {
+            j->set_to_xml_element
+                (*calculation_summary.add_child("column")
+                );
             }
         }
 

@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: html.xsl,v 1.1.2.8 2006-11-01 01:55:40 etarassov Exp $
+    $Id: html.xsl,v 1.1.2.9 2006-11-02 13:34:23 etarassov Exp $
 
     Uses format.xml - column titles, number-formatting and other information.
 -->
@@ -48,6 +48,8 @@
     Use '$basic_columns' to get the parsed list of nodes.
 -->
 <xsl:variable name="basic_columns_xml">
+<!-- Disable column list in here in favour of 'configurable_settings.xml' -->
+<!--
     <column name="Outlay"/>
     <column name="AcctVal" basis="run_guar_basis"/>
     <column name="CSVNet" basis="run_guar_basis"/>
@@ -55,37 +57,12 @@
     <column name="AcctVal" basis="run_curr_basis"/>
     <column name="CSVNet" basis="run_curr_basis"/>
     <column name="EOYDeathBft" basis="run_curr_basis"/>
+-->
 </xsl:variable>
 <xsl:variable name="basic_columns" select="document('')/xsl:stylesheet/xsl:variable[@name='basic_columns_xml']/column"/>
 
 <!-- Basic columns and columns from supplemental report -->
-<xsl:variable name="all_columns" select="$basic_columns | $supplemental_columns"/>
-
-<!--
-    Replace spaces by line breaks (<br /> in html) in a title.
-    TODO ?? Is it really needed?
--->
-<xsl:template name="replace_space_by_line_breaks">
-    <xsl:param name="title"/>
-    <xsl:value-of select="$title"/>
-<!--
-    <xsl:variable name="br"><br /></xsl:variable>
-    <xsl:choose>
-        <xsl:when test="contains($title, ' ')">
-            <xsl:call-template name="replace_space_by_line_breaks">
-                <xsl:with-param name="title" select="substring-before($title, ' ')" />
-            </xsl:call-template>
-            <br />
-            <xsl:call-template name="replace_space_by_line_breaks">
-                <xsl:with-param name="title" select="substring-after($title, ' ')" />
-            </xsl:call-template>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:value-of select="$title" />
-        </xsl:otherwise>
-    </xsl:choose>
--->
-</xsl:template>
+<xsl:variable name="all_columns" select="$calculation_summary_columns | $basic_columns | $supplemental_columns"/>
 
 <!-- Main template. -->
 <xsl:template match="/illustration">
@@ -192,9 +169,9 @@
 
     <xsl:variable name="width" select="format-number(100. div (count($headers) + 1), '###.##')"/>
     <tr align="right">
-        <th width="{$width}%">Age</th>
+        <th width="{$width}%" valign="top">Age</th>
     <xsl:for-each select="$headers">
-        <th width="{$width}%">
+        <th width="{$width}%" valign="top">
         <xsl:choose>
             <!-- a spacer -->
             <xsl:when test="not(@name)">
@@ -202,16 +179,10 @@
             </xsl:when>
             <!-- a normal column -->
             <xsl:otherwise>
-                <!-- xsl:value-of select="@name" / -->
-                <xsl:variable name="tmp">
-                    <xsl:call-template name="title">
-                        <xsl:with-param name="name" select="@name"/>
-                        <xsl:with-param name="basis" select="@basis"/>
-                        <xsl:with-param name="column" select="."/>
-                    </xsl:call-template>
-                </xsl:variable>
-                <xsl:call-template name="replace_space_by_line_breaks">
-                    <xsl:with-param name="title" select="normalize-space($tmp)"/>
+                <xsl:call-template name="title">
+                    <xsl:with-param name="name" select="@name"/>
+                    <xsl:with-param name="basis" select="@basis"/>
+                    <xsl:with-param name="column" select="."/>
                 </xsl:call-template>
             </xsl:otherwise>
         </xsl:choose>
@@ -230,8 +201,8 @@
                 <xsl:value-of select="$age + $position - 1"/>
             </td>
             <xsl:for-each select="$headers">
-                <xsl:variable name="name" select="./@name"/>
-                <xsl:variable name="basis" select="./@basis"/>
+                <xsl:variable name="name" select="@name"/>
+                <xsl:variable name="basis" select="@basis"/>
                 <td>
                     <xsl:choose>
                         <xsl:when test="not($name)">

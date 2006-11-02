@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: configurable_settings.cpp,v 1.14.2.14 2006-10-30 17:14:37 chicares Exp $
+// $Id: configurable_settings.cpp,v 1.14.2.15 2006-11-02 13:34:23 etarassov Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -47,10 +47,16 @@ namespace
         static std::string s("configurable_settings");
         return s;
     }
+
+    // the defualt value for configurable_settings::calculation_summary_colums
+    std::string calculation_summary_colums_default_value
+        = "Outlay AcctVal_Guaranteed CSVNet_Guaranteed EOYDeathBft_Guaranteed "
+          "AcctVal_Current CSVNet_Current EOYDeathBft_Current";
 } // Unnamed namespace.
 
 configurable_settings::configurable_settings()
-    :cgi_bin_log_filename_       ("cgi_bin.log"        )
+    :calculation_summary_colums_ (calculation_summary_colums_default_value)
+    ,cgi_bin_log_filename_       ("cgi_bin.log"        )
     ,custom_input_filename_      ("custom.ini"         )
     ,custom_output_filename_     ("custom.out"         )
     ,default_input_filename_     ("etc/opt/default.ini")
@@ -116,6 +122,7 @@ configurable_settings& configurable_settings::instance()
 
 void configurable_settings::ascribe_members()
 {
+    ascribe("calculation_summary_colums" ,&configurable_settings::calculation_summary_colums_);
     ascribe("cgi_bin_log_filename"       ,&configurable_settings::cgi_bin_log_filename_      );
     ascribe("custom_input_filename"      ,&configurable_settings::custom_input_filename_     );
     ascribe("custom_output_filename"     ,&configurable_settings::custom_output_filename_    );
@@ -213,3 +220,9 @@ std::string const& configurable_settings::xslt_tab_delimited_filename() const
 {
     return xslt_tab_delimited_filename_;
 }
+
+std::string const& configurable_settings::calculation_summary_colums() const
+{
+    return calculation_summary_colums_;
+}
+
