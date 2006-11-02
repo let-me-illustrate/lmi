@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: alert.hpp,v 1.15 2006-01-29 13:52:00 chicares Exp $
+// $Id: alert.hpp,v 1.16 2006-11-02 18:12:39 chicares Exp $
 
 #ifndef alert_hpp
 #define alert_hpp
@@ -78,6 +78,15 @@
 /// easier to write, e.g.
 ///   warning() << "error: " << some_data << " is invalid";
 ///   warning() << " in context " << some_other_data << std::flush;
+///
+/// Usage notes.
+///
+/// The 'lmi' project is gradually striving to favor fatal_error()
+/// over warning() and hobsons_choice(). For temporary debugging code,
+/// warning() is often useful, but production code should generally
+/// avoid warning() and especially hobsons_choice(). Already, option
+/// 'offer_hobsons_choice' in 'configurable_settings.?pp', if set as
+/// recommended, removes the user choice from hobsons_choice().
 ///
 /// Design decisions, and paths not taken.
 ///
