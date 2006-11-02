@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_dbvalue.cpp,v 1.11 2006-01-29 13:52:00 chicares Exp $
+// $Id: ihs_dbvalue.cpp,v 1.12 2006-11-02 18:15:24 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -490,7 +490,7 @@ void TDBValue::Reshape(std::vector<int> const& a_dims)
             ,src_idx.begin()
             ,lesser_of<int>()
             );
-        new_object[dst_idx] = (*this)[src_idx];
+        new_object[dst_idx] = operator[](src_idx);
         }
 
 // erase    (*this) = new_object;
