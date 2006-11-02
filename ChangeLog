@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.466 2006-11-02 19:37:36 chicares Exp $
+// $Id: ChangeLog,v 1.467 2006-11-02 20:52:03 chicares Exp $
 
 MAINTENANCE
 
@@ -7692,4 +7692,36 @@ Display more timing data.
   configure.ac
   Makefile.am
 Import autotools files from 'gnome-xml-branch'.
+
+20061102T1945Z <chicares@cox.net> [1169]
+
+  posix_fhs.make
+Import changes from 'gnome-xml-branch'.
+
+20061102T1956Z <chicares@cox.net> [1169]
+
+  msw_common.make
+  posix_fhs.make
+  workhorse.make
+Link additional gnome xml libraries.
+
+20061102T2041Z <chicares@cox.net> [1170]
+
+  any_member.hpp
+Maintain a sorted vector of member names.
+
+20061102T2044Z <chicares@cox.net> [1170]
+
+  GNUmakefile
+  input_test.cpp
+  objects.make
+  sample.cns [new file]
+  sample.ill [new file]
+  workhorse.make
+Test xml read and write speed.
+
+20061102T2052Z <chicares@cox.net> [1170]
+
+  GNUmakefile
+Flag excessively-long lines in 'ChangeLog'.
 
