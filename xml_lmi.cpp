@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xml_lmi.cpp,v 1.1.2.24 2006-11-01 21:11:41 chicares Exp $
+// $Id: xml_lmi.cpp,v 1.1.2.25 2006-11-02 18:24:50 etarassov Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -383,6 +383,16 @@ void xml_lmi::Stylesheet::transform
     ,enum_output_type output_type
     ) const
 {
+    transform(document, os, output_type, std::map<std::string,std::string>());
+}
+
+void xml_lmi::Stylesheet::transform
+    (Document const& document
+    ,std::ostream& os
+    ,enum_output_type output_type
+    ,std::map<std::string,std::string> const& parameters
+    ) const
+{
     std::string error_context = "Unable to apply xsl stylesheet to xml document: ";
     try
         {
@@ -391,11 +401,50 @@ void xml_lmi::Stylesheet::transform
             throw std::runtime_error("Can't apply a NULL stylesheet.");
             }
 
+        // parameters buffer
+        static std::vector<char const*> params;
+        // container for string that need to be &quote; escaped
+        static std::vector<std::string> params_container;
+        // parameters pointer to pass to the libxslt engine
+        char const** params_ptr = NULL;
+
+        // if there are any parameters, pass it to the transformation
+        if(!parameters.empty())
+            {
+            params.clear();
+            params.reserve(parameters.size() * 2 + 1);
+
+            params_container.clear();
+            params_container.reserve(parameters.size());
+
+            std::map<std::string,std::string>::const_iterator ci;
+            for(ci = parameters.begin(); ci != parameters.end(); ++ci)
+                {
+                // add parameter name
+                params.push_back(ci->first.c_str());
+
+                // parameter value has to be &quote; escaped
+                std::string str(ci->second);
+                std::size_t pos = 0;
+                while(std::string::npos != (pos = str.find('\'', pos)))
+                    {
+                    str.replace(pos, 1, "&quote;");
+                    }
+                // add surrounding quotes
+                params_container.push_back("'" + str + "'");
+                // finally add parameter value
+                params.push_back(params_container.back().c_str());
+                }
+            // parameters array passed to libxslt has to be NULL terminated
+            params.push_back(NULL);
+            params_ptr = &params[0];
+            }
+
         boost::shared_ptr<xmlDoc> xml_document_ptr
             (xsltApplyStylesheet
                 (stylesheet_
                 ,const_cast<xmlDoc*>(document.cobj())
-                ,NULL
+                ,params_ptr
                 )
             );
         if(0 == xml_document_ptr.get())

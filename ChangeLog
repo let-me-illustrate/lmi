@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.462.2.82 2006-11-02 15:41:22 etarassov Exp $
+// $Id: ChangeLog,v 1.462.2.83 2006-11-02 18:25:15 etarassov Exp $
 
 MAINTENANCE
 
@@ -8385,4 +8385,17 @@ Fix 'tab_delimited.xsl' data table generation.
   tab_delimited.xsl
 Change lmi XML namespace URI to
 'http://savannah.nongnu.org/projects/lmi'.
+
+20061102T1824Z <etarassov@tt-solutions.com> [1167]
+
+  illustration_view.cpp
+  illustration_view.hpp
+  ledger_text_formats.cpp
+  ledger_text_formats.hpp
+  menus.xrc
+  tab_delimited.xsl
+  xml_lmi.cpp
+  xml_lmi.hpp
+Add calculation summary print preview and copy to clipboard. Remove
+dead HtmlWindow class.
 

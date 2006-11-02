@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xml_lmi.hpp,v 1.1.2.18 2006-11-01 21:11:41 chicares Exp $
+// $Id: xml_lmi.hpp,v 1.1.2.19 2006-11-02 18:24:50 etarassov Exp $
 
 #ifndef xml_lmi_hpp
 #define xml_lmi_hpp
@@ -31,6 +31,7 @@
 
 #include <iosfwd>
 #include <list>
+#include <map>
 #include <string>
 #include <vector>
 
@@ -154,6 +155,13 @@ namespace xml_lmi
             (Document const&
             ,std::ostream&
             ,enum_output_type
+            ) const;
+
+        void transform
+            (Document const&
+            ,std::ostream&
+            ,enum_output_type
+            ,std::map<std::string,std::string> const& parameters
             ) const;
 
       private:

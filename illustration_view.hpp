@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustration_view.hpp,v 1.17.2.1 2006-10-20 17:46:02 etarassov Exp $
+// $Id: illustration_view.hpp,v 1.17.2.2 2006-11-02 18:24:50 etarassov Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -73,11 +73,15 @@ class IllustrationView
     void Run(Input* = 0);
     void SetLedger(boost::shared_ptr<Ledger const>);
 
-    void CopyLedgerValues();
-
   private:
     IllustrationDocument& document() const;
 
+    enum enum_copy_options
+        {e_copy_values
+        ,e_copy_calculation_summary
+        };
+
+    void CopyLedgerIntoClipboard(enum_copy_options);
     int EditProperties();
 
     // ViewEx required implementation.
@@ -88,8 +92,12 @@ class IllustrationView
     // ViewEx overrides.
     bool OnCreate              (wxDocument*, long int);
 
+    void UponCopyLedgerValues  (wxCommandEvent&);
+    void UponCopyLedgerCalculationSummary(wxCommandEvent&);
     void UponMenuOpen          (wxMenuEvent&);
+    void UponPreviewCS         (wxCommandEvent&);
     void UponPreviewPdf        (wxCommandEvent&);
+    void UponPrintCS           (wxCommandEvent&);
     void UponPrintPdf          (wxCommandEvent&);
     void UponProperties        (wxCommandEvent&);
     void UponUpdateFileSave    (wxUpdateUIEvent&);

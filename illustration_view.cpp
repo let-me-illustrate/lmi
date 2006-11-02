@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustration_view.cpp,v 1.41.2.6 2006-10-30 17:38:29 etarassov Exp $
+// $Id: illustration_view.cpp,v 1.41.2.7 2006-11-02 18:24:50 etarassov Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -57,6 +57,7 @@
 #include <wx/clipbrd.h>
 #include <wx/dataobj.h>
 #include <wx/html/htmlwin.h>
+#include <wx/html/htmprint.h>
 #include <wx/icon.h>
 #include <wx/menu.h>
 #include <wx/xrc/xmlres.h>
@@ -66,7 +67,10 @@
 IMPLEMENT_DYNAMIC_CLASS(IllustrationView, ViewEx)
 
 BEGIN_EVENT_TABLE(IllustrationView, ViewEx)
+    EVT_MENU(wxID_COPY                      ,IllustrationView::UponCopyLedgerValues)
+    EVT_MENU(XRCID("copy_illustration"     ),IllustrationView::UponCopyLedgerCalculationSummary)
     EVT_MENU(XRCID("edit_cell"             ),IllustrationView::UponProperties)
+    EVT_MENU(XRCID("preview_illustration"  ),IllustrationView::UponPreviewCS )
     EVT_MENU(wxID_PREVIEW                   ,IllustrationView::UponPreviewPdf)
     EVT_MENU(wxID_PRINT                     ,IllustrationView::UponPrintPdf  )
     EVT_UPDATE_UI(wxID_SAVE                 ,IllustrationView::UponUpdateFileSave)
@@ -92,52 +96,6 @@ BEGIN_EVENT_TABLE(IllustrationView, ViewEx)
     EVT_UPDATE_UI(XRCID("shrink_columns"   ),IllustrationView::UponUpdateInapplicable)
 END_EVENT_TABLE()
 
-class HtmlWindow
-    :public wxHtmlWindow
-{
-  public:
-    HtmlWindow(IllustrationView* lview, wxWindow* parent);
-    virtual ~HtmlWindow();
-
-  private:
-    IllustrationView* lview_;
-
-    void OnKeyUp(wxKeyEvent& event);
-
-    DECLARE_EVENT_TABLE()
-};
-
-BEGIN_EVENT_TABLE(HtmlWindow, wxHtmlWindow)
-    EVT_KEY_UP(HtmlWindow::OnKeyUp)
-END_EVENT_TABLE()
-
-HtmlWindow::HtmlWindow(IllustrationView* lview, wxWindow* parent)
-    :wxHtmlWindow(parent), lview_(lview)
-{
-}
-
-HtmlWindow::~HtmlWindow()
-{
-}
-
-// WX !! This code is taken from html/htmlwin.h. wxHtml does not seem
-// to generate clipboard copy/paste events.
-// Etarassov -- Update (20/10/2006): wxHtmlWindow is modified now to generate
-// clipboard copy event properly. As soon as the patch makes into wx HEAD,
-// i will fix this code to properly use copy event.
-
-void HtmlWindow::OnKeyUp(wxKeyEvent& event)
-{
-    if(event.GetKeyCode() == 'C' && event.CmdDown())
-        {
-        lview_->CopyLedgerValues();
-        }
-    else
-        {
-        event.Skip();
-        }
-}
-
 // WX !! The html string must be initialized here, because passing an
 // empty string to wxHtmlWindow::SetPage() would crash the application.
 //
@@ -160,7 +118,7 @@ IllustrationDocument& IllustrationView::document() const
 
 wxWindow* IllustrationView::CreateChildWindow()
 {
-    return html_window_ = new(wx) HtmlWindow(this, GetFrame());
+    return html_window_ = new(wx) wxHtmlWindow(GetFrame());
 }
 
 int IllustrationView::EditProperties()
@@ -281,6 +239,31 @@ void IllustrationView::UponMenuOpen(wxMenuEvent&)
         }
 }
 
+void IllustrationView::UponCopyLedgerValues(wxCommandEvent&)
+{
+    CopyLedgerIntoClipboard(e_copy_values);
+}
+
+void IllustrationView::UponCopyLedgerCalculationSummary(wxCommandEvent&)
+{
+    CopyLedgerIntoClipboard(e_copy_calculation_summary);
+}
+
+void IllustrationView::UponPreviewCS(wxCommandEvent&)
+{
+    std::string disclaimer
+        ("FOR BROKER-DEALER USE ONLY. NOT TO BE SHARED WITH CLIENTS."
+        );
+    wxHtmlEasyPrinting* m_Prn
+        = new wxHtmlEasyPrinting("Calculation Summary", html_window_);
+    m_Prn->SetHeader
+        (disclaimer + wxT(" (@PAGENUM@/@PAGESCNT@)<hr />")
+        ,wxPAGE_ALL
+        );
+    m_Prn->PreviewText(selected_values_as_html_.c_str());
+    delete m_Prn;
+}
+
 void IllustrationView::UponPreviewPdf(wxCommandEvent&)
 {
     Pdf("open");
@@ -337,7 +320,7 @@ void IllustrationView::UponUpdateProperties(wxUpdateUIEvent& e)
     e.Enable(!is_phony_);
 }
 
-void IllustrationView::CopyLedgerValues()
+void IllustrationView::CopyLedgerIntoClipboard(enum_copy_options options)
 {
     wxClipboardLocker clipboardLocker;
 
@@ -347,7 +330,14 @@ void IllustrationView::CopyLedgerValues()
     Timer timer;
 
     std::ostringstream oss;
-    ledger_formatter_.FormatAsTabDelimited(oss);
+    if(options == e_copy_values)
+        {
+        ledger_formatter_.FormatAsTabDelimited(oss);
+        }
+    else
+        {
+        ledger_formatter_.FormatAsCSTabDelimited(oss);
+        }
 
     status() << "Format: " << timer.stop().elapsed_msec_str() << std::flush;
 

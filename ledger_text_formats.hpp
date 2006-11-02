@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_text_formats.hpp,v 1.5.2.8 2006-10-31 00:25:10 chicares Exp $
+// $Id: ledger_text_formats.hpp,v 1.5.2.9 2006-11-02 18:24:50 etarassov Exp $
 
 #ifndef ledger_text_formats_hpp
 #define ledger_text_formats_hpp
@@ -75,12 +75,13 @@ class LMI_SO LedgerFormatter
     // default empty constructor does nothing
     LedgerFormatter();
 
-    LedgerFormatter(LedgerFormatter const& rhs);
-    LedgerFormatter& operator=(LedgerFormatter const& rhs);
+    LedgerFormatter(LedgerFormatter const&);
+    LedgerFormatter& operator=(LedgerFormatter const&);
 
-    void FormatAsHtml         (std::ostream& str) const;
-    void FormatAsTabDelimited (std::ostream& str) const;
-    void FormatAsXslFo        (std::ostream& str) const;
+    void FormatAsHtml          (std::ostream&) const;
+    void FormatAsTabDelimited  (std::ostream&) const;
+    void FormatAsCSTabDelimited(std::ostream&) const;
+    void FormatAsXslFo         (std::ostream&) const;
 
     Ledger const* GetLedger() const { return ledger_values_; }
 

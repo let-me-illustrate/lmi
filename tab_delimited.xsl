@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: tab_delimited.xsl,v 1.1.2.10 2006-11-02 15:40:09 etarassov Exp $
+    $Id: tab_delimited.xsl,v 1.1.2.11 2006-11-02 18:24:50 etarassov Exp $
 
     Uses format.xml - column titles, number-formatting and other information.
 -->
@@ -32,6 +32,8 @@
 <xsl:stylesheet xmlns:lmi="http://savannah.nongnu.org/projects/lmi" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0" xsi:schemaLocation="http://savannah.nongnu.org/projects/lmi schema.xsd">
 
 <xsl:output method="text"/>
+
+<xsl:param name="only_show_calculation_summary"/>
 
 <xsl:include href="common.xsl"/>
 
@@ -156,12 +158,24 @@
         <xsl:text>, </xsl:text>
         <xsl:value-of select="string_scalar[@name='PrepYear']"/>
     <xsl:text>'</xsl:text><xsl:text>&nl;</xsl:text>
-    <xsl:call-template name="data_table">
-        <xsl:with-param name="pos" select="1"/>
-        <xsl:with-param name="columns" select="$all_columns"/>
-        <xsl:with-param name="headers" select="$empty_nodeset"/>
-        <xsl:with-param name="vectors" select="$empty_nodeset"/>
-    </xsl:call-template>
+    <xsl:choose>
+        <xsl:when test="$only_show_calculation_summary='1'">
+            <xsl:call-template name="data_table">
+                <xsl:with-param name="pos" select="1"/>
+                <xsl:with-param name="columns" select="$calculation_summary_columns"/>
+                <xsl:with-param name="headers" select="$empty_nodeset"/>
+                <xsl:with-param name="vectors" select="$empty_nodeset"/>
+            </xsl:call-template>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:call-template name="data_table">
+                <xsl:with-param name="pos" select="1"/>
+                <xsl:with-param name="columns" select="$all_columns"/>
+                <xsl:with-param name="headers" select="$empty_nodeset"/>
+                <xsl:with-param name="vectors" select="$empty_nodeset"/>
+            </xsl:call-template>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 <!--

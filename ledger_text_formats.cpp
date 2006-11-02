@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_text_formats.cpp,v 1.22.2.8 2006-10-31 00:25:10 chicares Exp $
+// $Id: ledger_text_formats.cpp,v 1.22.2.9 2006-11-02 18:24:50 etarassov Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -235,6 +235,34 @@ void LedgerFormatter::FormatAsTabDelimited(std::ostream& os) const
             (GetXmlDocLight()
             ,os
             ,xml_lmi::Stylesheet::e_output_text
+            );
+        }
+    catch(std::exception const& e)
+        {
+        warning()
+            << "Error formatting ledger values as tsv: '"
+            << e.what()
+            << "'."
+            << LMI_FLUSH
+            ;
+        }
+}
+
+void LedgerFormatter::FormatAsCSTabDelimited(std::ostream& os) const
+{
+    try
+        {
+        xml_lmi::Stylesheet const& stylesheet = GetStylesheet
+            (configurable_settings::instance().xslt_tab_delimited_filename()
+            );
+
+        std::map<std::string,std::string> params;
+        params["only_show_calculation_summary"] = "1";
+        stylesheet.transform
+            (GetXmlDocLight()
+            ,os
+            ,xml_lmi::Stylesheet::e_output_text
+            ,params
             );
         }
     catch(std::exception const& e)
