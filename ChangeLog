@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.463 2006-10-15 16:21:23 chicares Exp $
+// $Id: ChangeLog,v 1.464 2006-11-02 17:39:16 chicares Exp $
 
 MAINTENANCE
 
@@ -41,11 +41,14 @@ requoted in email without wrapping.
 Explanations:
 
 [1] Write an ISO 8601 timestamp, using UTC because it sorts easily.
-Run 'make check_conformity' before committing to cvs. It identifies
-common problems, e.g., incorrect copyright statements. It reports the
-"Number of marked defects" shown as [defect-count] above.
+Use the actual commit time, so that others can confidently match log
+entries against cvs changes. Run 'make check_concinnity' before
+committing to cvs: it identifies common problems such as incorrect
+copyright statements, and reports the "Number of marked defects" shown
+as [defect-count] above.
 
 [3] Exact name of file changed, indented two spaces.
+
 [4] Write each file's name on a separate line. Write them in
 alphabetical order.
 
@@ -7622,4 +7625,9 @@ Mark release candidate.
 
   [ChangeLog only]
 Test committing to 'gnome-xml-branch' branch.
+
+20061102T1739Z <chicares@cox.net> [1173]
+
+  [ChangeLog only]
+Add a guideline: use commit time for 'ChangeLog' timestamp.
 
