@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xml_io.cpp,v 1.48.2.19 2006-11-02 13:34:23 etarassov Exp $
+// $Id: ledger_xml_io.cpp,v 1.48.2.20 2006-11-02 15:40:09 etarassov Exp $
 
 #include "ledger.hpp"
 
@@ -1267,7 +1267,7 @@ void Ledger::write(std::ostream& os) const
     xml_lmi::Element& root = *doc.create_root_node(xml_root_name());
     root << *this;
 
-    std::string const lmi_namespace("http://www.letmeillustrate.com");
+    std::string const lmi_namespace("http://savannah.nongnu.org/projects/lmi");
 
     root.set_namespace_declaration(lmi_namespace);
     root.set_namespace_declaration("http://www.w3.org/2001/XMLSchema-instance", "xsi");

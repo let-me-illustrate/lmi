@@ -21,11 +21,11 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: schema.xsd,v 1.1.2.9 2006-11-01 01:55:40 etarassov Exp $
+    $Id: schema.xsd,v 1.1.2.10 2006-11-02 15:40:09 etarassov Exp $
 
     TODO ?? add uniqueness constraints for (name,basis)
 -->
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:lmi="http://www.letmeillustrate.com" targetNamespace="http://www.letmeillustrate.com" elementFormDefault="qualified" attributeFormDefault="unqualified">
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:lmi="http://savannah.nongnu.org/projects/lmi" targetNamespace="http://savannah.nongnu.org/projects/lmi" elementFormDefault="qualified" attributeFormDefault="unqualified">
     <xs:annotation>
         <xs:documentation>
             This document describes the structure of illustration data

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.462.2.81 2006-11-02 13:35:06 etarassov Exp $
+// $Id: ChangeLog,v 1.462.2.82 2006-11-02 15:41:22 etarassov Exp $
 
 MAINTENANCE
 
@@ -8374,4 +8374,15 @@ prevent accidentally damaging the build.
 Add calculation summary columns list to configurable_settings.xml.
 Change error message for unknown column name in xsl templates.
 Fix 'tab_delimited.xsl' data table generation.
+
+20061102T1540Z <etarassov@tt-solutions.com> [1167]
+
+  common.xsl
+  format.xml
+  html.xsl
+  ledger_xml_io.cpp
+  schema.xsd
+  tab_delimited.xsl
+Change lmi XML namespace URI to
+'http://savannah.nongnu.org/projects/lmi'.
 
