@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: objects.make,v 1.83 2006-09-20 16:06:24 chicares Exp $
+# $Id: objects.make,v 1.84 2006-11-02 20:44:06 chicares Exp $
 
 ################################################################################
 
@@ -538,9 +538,9 @@ input_test$(EXEEXT): \
   product_names.o \
   single_cell_document.o \
   streamable.o \
+  timer.o \
   xenumtypes.o \
   xrange.o \
-  $(extra_libs) \
 
 irc7702a_test$(EXEEXT): \
   $(common_test_objects) \

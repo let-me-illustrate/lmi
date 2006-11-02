@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: GNUmakefile,v 1.71 2006-09-02 22:40:21 chicares Exp $
+# $Id: GNUmakefile,v 1.72 2006-11-02 20:44:06 chicares Exp $
 
 ################################################################################
 
@@ -217,7 +217,7 @@ patch_files      := $(wildcard *patch)
 
 subdirectories := $(shell $(LS) --classify | $(SED) -e ';/\//!d' -e 's/\/$$//')
 
-testing_files := expected.cgi.out $(wildcard *touchstone*)
+testing_files := expected.cgi.out $(wildcard *.cns *.ill *touchstone*)
 
 never_source_files := \
   $(binary_graphics) \
