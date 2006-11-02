@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: inputillus.hpp,v 1.10 2006-01-29 13:52:00 chicares Exp $
+// $Id: inputillus.hpp,v 1.11 2006-11-02 18:44:32 chicares Exp $
 
 #ifndef inputillus_hpp
 #define inputillus_hpp
@@ -33,7 +33,6 @@
 #include "xenumtypes.hpp"
 #include "xrangetypes.hpp"
 
-#include <iosfwd>
 #include <map>
 #include <string>
 #include <vector>
@@ -56,10 +55,11 @@ class LMI_SO IllusInputParms
 
     void ascribe_members();
 
-    void read(xml::node&);
-    void write(xml::node&) const;
-    int class_version() const;
-    std::string xml_root_name() const;
+    // Class 'streamable' required implementation.
+    virtual void read(xml::node&);
+    virtual void write(xml::node&) const;
+    virtual int class_version() const;
+    virtual std::string xml_root_name() const;
 
     void propagate_changes_from_base_and_finalize(bool report_errors = true);
     void propagate_changes_to_base_and_finalize(bool report_errors = true);
