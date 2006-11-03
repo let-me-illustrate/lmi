@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.462.2.84 2006-11-03 13:13:41 etarassov Exp $
+// $Id: ChangeLog,v 1.462.2.85 2006-11-03 15:04:27 etarassov Exp $
 
 MAINTENANCE
 
@@ -8403,4 +8403,11 @@ dead HtmlWindow class.
 
   html.xsl
 Repeat table headers every 10 rows to improve readability.
+
+20061103T1503Z <etarassov@tt-solutions.com> [1166]
+
+  xml_lmi.cpp
+  xml_lmi.hpp
+Make xml_lmi::get_content retrive content xmlpp::CdataNode nodes. Add
+processing flags to xml_lmi::get_content.
 

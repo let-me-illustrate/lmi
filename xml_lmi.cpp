@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xml_lmi.cpp,v 1.1.2.25 2006-11-02 18:24:50 etarassov Exp $
+// $Id: xml_lmi.cpp,v 1.1.2.26 2006-11-03 15:03:58 etarassov Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -37,6 +37,7 @@
 #include <libxml/HTMLtree.h>
 #include <libxml/parser.h>
 #include <libxml++/libxml++.h>
+#include <libxml++/nodes/cdatanode.h>
 #include <libxslt/transform.h>
 #include <libxslt/xsltInternals.h>
 
@@ -247,9 +248,23 @@ xml_lmi::ElementContainer xml_lmi::child_elements
         }
 }
 
-std::string xml_lmi::get_content(Element const& element)
+std::string xml_lmi::get_content(Element const& element, enum_content content)
 {
     std::ostringstream oss;
+    get_content(element, oss, content);
+    return oss.str();
+}
+
+// Read text content of an xml_lmi::Element.
+// Include whitespaces if e_content_include_whitespace is specified.
+// Read content recursivly if e_content_recursivly is specified.
+
+void xml_lmi::get_content
+    (Element const& element
+    ,std::ostream& os
+    ,enum_content content
+    )
+{
     xml_lmi::NodeContainer const direct_children = element.get_children();
     for
         (xml_lmi::NodeContainer::const_iterator iter = direct_children.begin()
@@ -257,17 +272,34 @@ std::string xml_lmi::get_content(Element const& element)
         ;++iter
         )
         {
-        xmlpp::TextNode const* t = dynamic_cast<xmlpp::TextNode const*>(*iter);
-        // TODO ?? Resolve this issue:
-        // EVGENIY--You had commented:
-        //   maybe we should add CdataNode also?
-        // Have we found any need for that?
-        if(t)
+        xmlpp::ContentNode const* contentNode
+            = dynamic_cast<xmlpp::ContentNode const*>(*iter);
+        if(!contentNode)
             {
-            oss << t->get_content();
+            xmlpp::Element const* elementNode
+                = dynamic_cast<xmlpp::Element const*>(*iter);
+            if
+                (  elementNode
+                && (content & e_content_recursivly)
+                )
+                {
+                get_content(*elementNode, os, content);
+                }
+            }
+        else if
+            (  dynamic_cast<xmlpp::TextNode const*>(contentNode)
+            || dynamic_cast<xmlpp::CdataNode const*>(contentNode)
+            )
+            {
+            if
+                (  !contentNode->is_white_space()
+                || (content & e_content_include_whitespace)
+                )
+                {
+                os << contentNode->get_content();
+                }
             }
         }
-    return oss.str();
 }
 
 Element& xml_lmi::get_first_element(Element& parent)

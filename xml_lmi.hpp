@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xml_lmi.hpp,v 1.1.2.19 2006-11-02 18:24:50 etarassov Exp $
+// $Id: xml_lmi.hpp,v 1.1.2.20 2006-11-03 15:03:58 etarassov Exp $
 
 #ifndef xml_lmi_hpp
 #define xml_lmi_hpp
@@ -119,13 +119,32 @@ namespace xml_lmi
         ,std::string const& name = std::string()
         );
 
+    /// Content retrieval mode for get_content.
+    /// Constants are powers of 2, so more than 1 could be specified at a time.
+    /// e_content_recursivly - read text content of all the descendants
+    /// e_content_include_whitespace - include indentation nodes too
+
+    enum enum_content
+        {e_content_direct_not_empty = 0
+        ,e_content_recursivly = 1
+        ,e_content_include_whitespace = 2
+        };
+
     /// Retrieve an xml element's full text-node contents.
     ///
     /// The contents of all text-node children are concatenated and
-    /// returned. Only direct children are considered: children of
-    /// child nodes are not.
+    /// returned.
 
-    std::string get_content(Element const&);
+    std::string get_content
+        (Element const&
+        ,enum_content content = e_content_direct_not_empty
+        );
+
+    void get_content
+        (Element const&
+        ,std::ostream&
+        ,enum_content content
+        );
 
     /// Return an element node's first child element.
     ///
