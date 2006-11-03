@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.462.2.85 2006-11-03 15:04:27 etarassov Exp $
+// $Id: ChangeLog,v 1.462.2.86 2006-11-03 16:21:58 etarassov Exp $
 
 MAINTENANCE
 
@@ -8410,4 +8410,10 @@ Repeat table headers every 10 rows to improve readability.
   xml_lmi.hpp
 Make xml_lmi::get_content retrive content xmlpp::CdataNode nodes. Add
 processing flags to xml_lmi::get_content.
+
+20061103T1621Z <etarassov@tt-solutions.com> [1166]
+
+  html.xsl
+Revert back the change on 20061103T1313Z. Insert a blank row after
+every 5 rows.
 

@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: html.xsl,v 1.1.2.11 2006-11-03 13:13:10 etarassov Exp $
+    $Id: html.xsl,v 1.1.2.12 2006-11-03 16:21:30 etarassov Exp $
 
     Uses format.xml - column titles, number-formatting and other information.
 -->
@@ -167,23 +167,37 @@
     <xsl:param name="headers"/>
     <xsl:param name="vectors"/>
 
-<!--
-    <xsl:call-template name="do_data_table_headers">
-        <xsl:with-param name="headers" select="$headers"/>
-    </xsl:call-template>
--->
+    <xsl:variable name="width" select="format-number(100. div (count($headers) + 1), '###.##')"/>
+    <tr align="right">
+        <th width="{$width}%" valign="top">Age</th>
+    <xsl:for-each select="$headers">
+        <th width="{$width}%" valign="top">
+        <xsl:choose>
+            <!-- a spacer -->
+            <xsl:when test="not(@name)">
+            <!-- leave the cell empty for a spacer column -->
+            </xsl:when>
+            <!-- a normal column -->
+            <xsl:otherwise>
+                <xsl:call-template name="title">
+                    <xsl:with-param name="name" select="@name"/>
+                    <xsl:with-param name="basis" select="@basis"/>
+                    <xsl:with-param name="column" select="."/>
+                </xsl:call-template>
+            </xsl:otherwise>
+        </xsl:choose>
+        </th>
+    </xsl:for-each>
+    </tr>
+
     <xsl:variable name="age" select="number(double_scalar[@name='Age'])"/>
     <!--
         We know that all the columns have the same length. Let's pick one for iteration.
     -->
-    <xsl:variable name="total" select="count($vectors[1]/duration)"/>
+    <xsl:variable name="cols_total" select="count($vectors)"/>
+    <xsl:variable name="rows_total" select="count($vectors[1]/duration)"/>
     <xsl:for-each select="$vectors[1]/duration">
         <xsl:variable name="position" select="position()"/>
-        <xsl:if test="$position mod 10 = 1">
-            <xsl:call-template name="do_data_table_headers">
-                <xsl:with-param name="headers" select="$headers"/>
-            </xsl:call-template>
-        </xsl:if>
         <tr align="right">
             <td>
                 <xsl:value-of select="$age + $position - 1"/>
@@ -206,37 +220,12 @@
                 </td>
             </xsl:for-each>
         </tr>
+        <xsl:if test="$position mod 5 = 0 and not($position = $rows_total)">
+            <tr>
+                <td colspan="{$cols_total}"><br/></td>
+            </tr>
+        </xsl:if>
     </xsl:for-each>
-    <xsl:call-template name="do_data_table_headers">
-        <xsl:with-param name="headers" select="$headers"/>
-    </xsl:call-template>
-</xsl:template>
-
-<xsl:template name="do_data_table_headers">
-    <xsl:param name="headers"/>
-
-    <xsl:variable name="width" select="format-number(100. div (count($headers) + 1), '###.##')"/>
-    <tr align="right">
-        <th align="left" width="{$width}%" valign="top">Age</th>
-    <xsl:for-each select="$headers">
-        <th align="left" width="{$width}%" valign="top">
-        <xsl:choose>
-            <!-- a spacer -->
-            <xsl:when test="not(@name)">
-            <!-- leave the cell empty for a spacer column -->
-            </xsl:when>
-            <!-- a normal column -->
-            <xsl:otherwise>
-                <xsl:call-template name="title">
-                    <xsl:with-param name="name" select="@name"/>
-                    <xsl:with-param name="basis" select="@basis"/>
-                    <xsl:with-param name="column" select="."/>
-                </xsl:call-template>
-            </xsl:otherwise>
-        </xsl:choose>
-        </th>
-    </xsl:for-each>
-    </tr>
 </xsl:template>
 
 </xsl:stylesheet>
