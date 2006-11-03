@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: stream_cast.hpp,v 1.13 2006-08-12 17:16:33 chicares Exp $
+// $Id: stream_cast.hpp,v 1.14 2006-11-03 02:24:13 chicares Exp $
 
 // This is a derived work based on boost::lexical_cast, which bears
 // the following copyright and permissions notice:
@@ -142,7 +142,12 @@ To stream_cast(From from, To = To())
         ; // Nothing left to do.
         }
 
+#if !defined LMI_COMO_WITH_MINGW
     if(!interpreter || !interpreter.eof())
+#else  // defined LMI_COMO_WITH_MINGW
+    // COMPILER !! This appears to be a defect in libcomo.
+    if(!interpreter)
+#endif // defined LMI_COMO_WITH_MINGW
         {
         err
             << "converting '"
