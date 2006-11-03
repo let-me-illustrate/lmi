@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.467 2006-11-02 20:52:03 chicares Exp $
+// $Id: ChangeLog,v 1.468 2006-11-03 02:25:11 chicares Exp $
 
 MAINTENANCE
 
@@ -7724,4 +7724,16 @@ Test xml read and write speed.
 
   GNUmakefile
 Flag excessively-long lines in 'ChangeLog'.
+
+20061103T0224Z <chicares@cox.net> [1171]
+
+  como_4_3_3.make
+  input_test.cpp
+  stream_cast.hpp
+Make a unit test work with como and a canonical libxml2 installation.
+
+20061103T0225Z <chicares@cox.net> [1171]
+
+  diagnostics.sed
+Squeeze multiple blank lines--useful for filtering como output.
 
