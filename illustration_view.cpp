@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustration_view.cpp,v 1.41.2.7 2006-11-02 18:24:50 etarassov Exp $
+// $Id: illustration_view.cpp,v 1.41.2.8 2006-11-03 16:46:06 etarassov Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -54,6 +54,8 @@
 #include "timer.hpp"
 #include "wx_new.hpp"
 
+#include <boost/scoped_ptr.hpp>
+
 #include <wx/clipbrd.h>
 #include <wx/dataobj.h>
 #include <wx/html/htmlwin.h>
@@ -72,6 +74,7 @@ BEGIN_EVENT_TABLE(IllustrationView, ViewEx)
     EVT_MENU(XRCID("edit_cell"             ),IllustrationView::UponProperties)
     EVT_MENU(XRCID("preview_illustration"  ),IllustrationView::UponPreviewCS )
     EVT_MENU(wxID_PREVIEW                   ,IllustrationView::UponPreviewPdf)
+    EVT_MENU(XRCID("print_illustration"    ),IllustrationView::UponPrintCS   )
     EVT_MENU(wxID_PRINT                     ,IllustrationView::UponPrintPdf  )
     EVT_UPDATE_UI(wxID_SAVE                 ,IllustrationView::UponUpdateFileSave)
 //    EVT_UPDATE_UI(wxID_SAVEAS               ,IllustrationView::UponUpdateFileSaveAs)
@@ -251,17 +254,35 @@ void IllustrationView::UponCopyLedgerCalculationSummary(wxCommandEvent&)
 
 void IllustrationView::UponPreviewCS(wxCommandEvent&)
 {
+    PrintCS(e_print_preview);
+}
+
+void IllustrationView::UponPrintCS(wxCommandEvent&)
+{
+    PrintCS(e_print_printer);
+}
+
+void IllustrationView::PrintCS(enum_print_options options) const
+{
     std::string disclaimer
         ("FOR BROKER-DEALER USE ONLY. NOT TO BE SHARED WITH CLIENTS."
         );
-    wxHtmlEasyPrinting* m_Prn
-        = new wxHtmlEasyPrinting("Calculation Summary", html_window_);
-    m_Prn->SetHeader
-        (disclaimer + wxT(" (@PAGENUM@/@PAGESCNT@)<hr />")
+    boost::scoped_ptr<wxHtmlEasyPrinting> printer
+        (new wxHtmlEasyPrinting("Calculation Summary", html_window_)
+        );
+
+    printer->SetHeader
+        (disclaimer + " (@PAGENUM@/@PAGESCNT@)<hr />"
         ,wxPAGE_ALL
         );
-    m_Prn->PreviewText(selected_values_as_html_.c_str());
-    delete m_Prn;
+    if(options == e_print_printer)
+        {
+        printer->PrintText(selected_values_as_html_.c_str());
+        }
+    else
+        {
+        printer->PreviewText(selected_values_as_html_.c_str());
+        }
 }
 
 void IllustrationView::UponPreviewPdf(wxCommandEvent&)

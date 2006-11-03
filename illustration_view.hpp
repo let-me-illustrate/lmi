@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustration_view.hpp,v 1.17.2.2 2006-11-02 18:24:50 etarassov Exp $
+// $Id: illustration_view.hpp,v 1.17.2.3 2006-11-03 16:46:06 etarassov Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -83,6 +83,13 @@ class IllustrationView
 
     void CopyLedgerIntoClipboard(enum_copy_options);
     int EditProperties();
+
+    enum enum_print_options
+        {e_print_printer
+        ,e_print_preview
+        };
+    // Print HTML code to the printer or preview.
+    void PrintCS(enum_print_options) const;
 
     // ViewEx required implementation.
     wxWindow* CreateChildWindow();

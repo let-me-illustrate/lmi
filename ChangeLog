@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.462.2.86 2006-11-03 16:21:58 etarassov Exp $
+// $Id: ChangeLog,v 1.462.2.87 2006-11-03 16:46:59 etarassov Exp $
 
 MAINTENANCE
 
@@ -8416,4 +8416,11 @@ processing flags to xml_lmi::get_content.
   html.xsl
 Revert back the change on 20061103T1313Z. Insert a blank row after
 every 5 rows.
+
+20061103T1646Z <etarassov@tt-solutions.com> [1166]
+
+  illustration_view.cpp
+  illustration_view.hpp
+  menus.xrc
+Fix menu items in Illustration menu. Correct the code in PrintCS.
 
