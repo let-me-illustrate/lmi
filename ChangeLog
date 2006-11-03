@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.462.2.83 2006-11-02 18:25:15 etarassov Exp $
+// $Id: ChangeLog,v 1.462.2.84 2006-11-03 13:13:41 etarassov Exp $
 
 MAINTENANCE
 
@@ -8398,4 +8398,9 @@ Change lmi XML namespace URI to
   xml_lmi.hpp
 Add calculation summary print preview and copy to clipboard. Remove
 dead HtmlWindow class.
+
+20061103T1313Z <etarassov@tt-solutions.com> [1167]
+
+  html.xsl
+Repeat table headers every 10 rows to improve readability.
 
