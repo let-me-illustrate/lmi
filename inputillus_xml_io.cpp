@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: inputillus_xml_io.cpp,v 1.13 2006-11-04 03:14:24 chicares Exp $
+// $Id: inputillus_xml_io.cpp,v 1.14 2006-11-04 03:33:11 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -41,9 +41,7 @@
 #include <xmlwrapp/init.h>
 #include <xmlwrapp/node.h>
 
-#include <istream>
-#include <ostream>
-#include <stdexcept>
+#include <algorithm> // std::find()
 
 // Entities that were present in older versions and then removed
 // are recognized and ignored. If they're resurrected in a later
@@ -86,15 +84,14 @@ void IllusInputParms::read(xml::node const& x)
 {
     if(xml_root_name() != x.get_name())
         {
-        std::ostringstream msg;
-        msg
+        fatal_error()
             << "XML node name is '"
             << x.get_name()
             << "' but '"
             << xml_root_name()
             << "' was expected."
+            << LMI_FLUSH
             ;
-        throw std::runtime_error(msg.str());
         }
 
     std::string cell_version_string;
@@ -110,13 +107,12 @@ void IllusInputParms::read(xml::node const& x)
     if(!x.get_attr("version", cell_version_string))
 #endif
         {
-        std::ostringstream msg;
-        msg
+        fatal_error()
             << "XML tag <"
             << xml_root_name()
             << "> lacks required version attribute."
+            << LMI_FLUSH
             ;
-        throw std::runtime_error(msg.str());
         }
     int cell_version = value_cast<int>(cell_version_string);
 
