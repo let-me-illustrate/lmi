@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: configurable_settings.cpp,v 1.15 2006-11-02 19:19:07 chicares Exp $
+// $Id: configurable_settings.cpp,v 1.16 2006-11-04 14:27:06 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -32,12 +32,12 @@
 #include "data_directory.hpp"     // AddDataDir()
 #include "handle_exceptions.hpp"
 #include "platform_dependent.hpp" // access()
+#include "xml_lmi.hpp"
 
 #ifdef USING_CURRENT_XMLWRAPP
 #   include <xmlwrapp/document.h>
 #endif // USING_CURRENT_XMLWRAPP defined.
 #include <xmlwrapp/init.h>
-#include <xmlwrapp/node.h>
 #include <xmlwrapp/tree_parser.h>
 
 #include <stdexcept>
@@ -97,9 +97,9 @@ configurable_settings::configurable_settings()
             ;
         }
 #ifdef USING_CURRENT_XMLWRAPP
-    xml::node& root = parser.get_document().get_root_node();
+    xml_lmi::Element& root = parser.get_document().get_root_node();
 #else // USING_CURRENT_XMLWRAPP not defined.
-    xml::node& root = parser.get_root_node();
+    xml_lmi::Element& root = parser.get_root_node();
 #endif // USING_CURRENT_XMLWRAPP not defined.
     if(xml_root_name() != root.get_name())
         {
