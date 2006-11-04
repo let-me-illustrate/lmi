@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: single_cell_document.hpp,v 1.6 2006-01-29 13:52:00 chicares Exp $
+// $Id: single_cell_document.hpp,v 1.7 2006-11-04 04:03:42 chicares Exp $
 
 #ifndef single_cell_document_hpp
 #define single_cell_document_hpp
@@ -67,11 +67,7 @@ class LMI_SO single_cell_document
     void write(std::ostream& os);
 
   private:
-    // XMLWRAPP !! We'd like the argument to be const, but that
-    // doesn't work in xmlwrapp-0.2.0 because get_root_node()
-    // isn't const. Perhaps it should be, since it is logically
-    // although not physically const--discuss with Peter.
-    void parse(xml::tree_parser&);
+    void parse(xml::node const&);
     std::string xml_root_name() const;
 
     boost::scoped_ptr<IllusInputParms> const input_data_;
