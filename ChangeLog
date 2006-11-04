@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.468 2006-11-03 02:25:11 chicares Exp $
+// $Id: ChangeLog,v 1.469 2006-11-04 04:57:26 chicares Exp $
 
 MAINTENANCE
 
@@ -7736,4 +7736,39 @@ Make a unit test work with como and a canonical libxml2 installation.
 
   diagnostics.sed
 Squeeze multiple blank lines--useful for filtering como output.
+
+20061104T0314Z <chicares@cox.net> [1171]
+
+  inputillus.hpp
+  inputillus_xml_io.cpp
+  ledger.hpp
+  ledger_xml_io.cpp
+  streamable.hpp
+Increase const correctness.
+
+20061104T0333Z <chicares@cox.net> [1171]
+
+  inputillus_xml_io.cpp
+Use fatal_error() instead of throwing an exception directly.
+
+20061104T0403Z <chicares@cox.net> [1171]
+
+  multiple_cell_document.cpp
+  multiple_cell_document.hpp
+  single_cell_document.cpp
+  single_cell_document.hpp
+Refactor, removing the DOM parser class out of the interface. The
+repetitious code in the implementation will be refactored later.
+
+20061104T0457Z <chicares@cox.net> [1171]
+
+  inputillus.hpp
+  ledger.hpp
+  multiple_cell_document.cpp
+  multiple_cell_document.hpp
+  single_cell_document.cpp
+  single_cell_document.hpp
+  streamable.hpp
+  xml_lmi_fwd.hpp [new file]
+Replace xml-library types with typedefs in headers.
 
