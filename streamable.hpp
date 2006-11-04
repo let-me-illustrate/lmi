@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: streamable.hpp,v 1.8 2006-11-04 03:14:24 chicares Exp $
+// $Id: streamable.hpp,v 1.9 2006-11-04 04:57:26 chicares Exp $
 
 // This was originally designed to write data serially to iostreams,
 // in a format
@@ -56,8 +56,7 @@
 #include "config.hpp"
 
 #include "so_attributes.hpp"
-
-#include <xmlwrapp/node.h>
+#include "xml_lmi_fwd.hpp"
 
 #include <string>
 
@@ -66,20 +65,26 @@ class LMI_SO streamable
   public:
     virtual ~streamable() = 0;
 
-    virtual void read(xml::node const&) = 0;
-    virtual void write(xml::node&) const = 0;
+    virtual void read(xml_lmi::Element const&) = 0;
+    virtual void write(xml_lmi::Element&) const = 0;
 
     virtual int class_version() const = 0;
     virtual std::string xml_root_name() const = 0;
 };
 
-inline xml::node const& operator>>(xml::node const& x, streamable& z)
+inline xml_lmi::Element const& operator>>
+    (xml_lmi::Element const& x
+    ,streamable& z
+    )
 {
     z.read(x);
     return x;
 }
 
-inline xml::node& operator<<(xml::node& x, streamable const& z)
+inline xml_lmi::Element& operator<<
+    (xml_lmi::Element& x
+    ,streamable const& z
+    )
 {
     z.write(x);
     return x;
