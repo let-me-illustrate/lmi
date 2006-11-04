@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: objects.make,v 1.84 2006-11-02 20:44:06 chicares Exp $
+# $Id: objects.make,v 1.85 2006-11-04 19:49:15 chicares Exp $
 
 ################################################################################
 
@@ -205,6 +205,7 @@ common_common_objects := \
   system_command.o \
   timer.o \
   xenumtypes.o \
+  xml_lmi.o \
   xrange.o \
 
 ################################################################################
@@ -362,6 +363,7 @@ gpt_objects := \
   surrchg_rates.o \
   timer.o \
   xenumtypes.o \
+  xml_lmi.o \
   xrange.o \
 
 libgpt.a libgpt$(SHREXT): EXTRA_LDFLAGS =
@@ -540,6 +542,7 @@ input_test$(EXEEXT): \
   streamable.o \
   timer.o \
   xenumtypes.o \
+  xml_lmi.o \
   xrange.o \
 
 irc7702a_test$(EXEEXT): \

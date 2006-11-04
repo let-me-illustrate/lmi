@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.470 2006-11-04 14:27:06 chicares Exp $
+// $Id: ChangeLog,v 1.471 2006-11-04 19:49:15 chicares Exp $
 
 MAINTENANCE
 
@@ -7787,4 +7787,12 @@ Add xmlwrapp wrapper.
   multiple_cell_document.cpp
   single_cell_document.cpp
 Replace an xml-library type with a typedef in the implementation.
+
+20061104T1949Z <chicares@cox.net> [1170]
+
+  objects.make
+  single_cell_document.cpp
+  xml_lmi.cpp
+  xml_lmi.hpp
+Begin to refactor xml parsing.
 
