@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: single_cell_document.cpp,v 1.7 2006-01-29 13:52:00 chicares Exp $
+// $Id: single_cell_document.cpp,v 1.8 2006-11-04 04:03:42 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -60,26 +60,7 @@ single_cell_document::single_cell_document(std::string const& filename)
     :input_data_(new IllusInputParms(false))
 {
     xml::init init;
-// XMLWRAPP !! See comment on parse() in header.
-//    parse(xml::tree_parser(filename.c_str()));
     xml::tree_parser parser(filename.c_str());
-    parse(parser);
-}
-
-//============================================================================
-single_cell_document::~single_cell_document()
-{
-}
-
-//============================================================================
-std::string single_cell_document::xml_root_name() const
-{
-    return "single_cell_document";
-}
-
-//============================================================================
-void single_cell_document::parse(xml::tree_parser& parser)
-{
     if(!parser)
         {
         throw std::runtime_error("Error parsing XML file.");
@@ -101,7 +82,23 @@ void single_cell_document::parse(xml::tree_parser& parser)
             << LMI_FLUSH
             ;
         }
+    parse(root);
+}
 
+//============================================================================
+single_cell_document::~single_cell_document()
+{
+}
+
+//============================================================================
+std::string single_cell_document::xml_root_name() const
+{
+    return "single_cell_document";
+}
+
+//============================================================================
+void single_cell_document::parse(xml::node const& root)
+{
 // COMPILER !! Borland doesn't find operator==() in ns xml.
 #ifdef __BORLANDC__
 using namespace xml;
@@ -110,7 +107,7 @@ using namespace xml;
 // TODO ?? Seems like this should be a const iterator. OTOH, maybe
 // the streaming operators should take a node iterator rather than
 // a node as argument?
-    xml::node::iterator child = root.begin();
+    xml::node::const_iterator child = root.begin();
     if(child->is_text())
         {
         // TODO ?? Explain what this does.
@@ -132,10 +129,29 @@ void single_cell_document::read(std::istream& is)
     std::string s;
     istream_to_string(is, s);
     xml::init init;
-// XMLWRAPP !! See comment on parse() in header.
-//    parse(xml::tree_parser(s.c_str(), 1 + s.size()));
     xml::tree_parser parser(s.c_str(), 1 + s.size());
-    parse(parser);
+    if(!parser)
+        {
+        throw std::runtime_error("Error parsing XML file.");
+        }
+
+#ifdef USING_CURRENT_XMLWRAPP
+    xml::node& root = parser.get_document().get_root_node();
+#else // USING_CURRENT_XMLWRAPP not defined.
+    xml::node& root = parser.get_root_node();
+#endif // USING_CURRENT_XMLWRAPP not defined.
+    if(xml_root_name() != root.get_name())
+        {
+        fatal_error()
+            << "XML node name is '"
+            << root.get_name()
+            << "' but '"
+            << xml_root_name()
+            << "' was expected."
+            << LMI_FLUSH
+            ;
+        }
+    parse(root);
 }
 
 //============================================================================
