@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xml_io.cpp,v 1.49 2006-11-04 03:14:24 chicares Exp $
+// $Id: ledger_xml_io.cpp,v 1.50 2006-11-04 14:27:06 chicares Exp $
 
 #include "ledger.hpp"
 
@@ -35,6 +35,7 @@
 #include "security.hpp"
 #include "value_cast.hpp"
 #include "version.hpp"
+#include "xml_lmi.hpp"
 
 #if defined USING_CURRENT_XMLWRAPP
 #   include <xmlwrapp/attributes.h>
@@ -44,7 +45,6 @@
 #endif // defined USING_CURRENT_XMLWRAPP
 
 #include <xmlwrapp/init.h>
-#include <xmlwrapp/node.h>
 #include <xmlwrapp/tree_parser.h>
 
 #include <fstream>
@@ -56,7 +56,7 @@
 #include <string>
 #include <utility>
 
-void Ledger::read(xml::node const&)
+void Ledger::read(xml_lmi::Element const&)
 {
     // TODO ?? Not yet implemented.
 }
@@ -236,7 +236,7 @@ bool format_exists(std::string const& s, std::string const& suffix, format_map_t
 
 } // Unnamed namespace.
 
-void Ledger::write(xml::node& x) const
+void Ledger::write(xml_lmi::Element& x) const
 {
     title_map_t title_map;
 
@@ -911,8 +911,8 @@ void Ledger::write(xml::node& x) const
 //  want: <!DOCTYPE sales []>
 // kludged in write(std::ostream& os) below
 
-    xml::node scalar("scalar");
-    xml::node data("data");
+    xml_lmi::Element scalar("scalar");
+    xml_lmi::Element data("data");
 /*
     for
         (scalar_map::const_iterator j = scalars.begin()
@@ -922,7 +922,7 @@ void Ledger::write(xml::node& x) const
         {
         std::string node_tag = j->first;
         std::string value = value_cast<std::string>(*j->second);
-        scalar.push_back(xml::node(node_tag.c_str(), value.c_str()));
+        scalar.push_back(xml_lmi::Element(node_tag.c_str(), value.c_str()));
         }
     for
         (string_map::const_iterator j = strings.begin()
@@ -932,7 +932,7 @@ void Ledger::write(xml::node& x) const
         {
         std::string node_tag = j->first;
         std::string value = value_cast<std::string>(*j->second);
-        scalar.push_back(xml::node(node_tag.c_str(), value.c_str()));
+        scalar.push_back(xml_lmi::Element(node_tag.c_str(), value.c_str()));
         }
     for
         (double_vector_map::const_iterator j = vectors.begin()
@@ -940,13 +940,13 @@ void Ledger::write(xml::node& x) const
         ;++j
         )
         {
-        xml::node newcolumn("newcolumn");
-        xml::node column("column");
+        xml_lmi::Element newcolumn("newcolumn");
+        xml_lmi::Element column("column");
         column.set_attr("name", j->first.c_str());
         std::vector<double> const& v = *j->second;
         for(unsigned int k = 0; k < v.size(); ++k)
             {
-            xml::node duration("duration");
+            xml_lmi::Element duration("duration");
             duration.set_attr("number", value_cast<std::string>(k).c_str());
             duration.set_attr("column_value", value_cast<std::string>(v[k]).c_str());
             column.push_back(duration);
@@ -964,7 +964,7 @@ void Ledger::write(xml::node& x) const
         {
         std::string node_tag = j->first;
         std::string value = j->second;
-        scalar.push_back(xml::node(node_tag.c_str(), value.c_str()));
+        scalar.push_back(xml_lmi::Element(node_tag.c_str(), value.c_str()));
         }
     for
         (std::map<std::string,std::vector<std::string> >::const_iterator j = stringvectors.begin()
@@ -972,15 +972,15 @@ void Ledger::write(xml::node& x) const
         ;++j
         )
         {
-        xml::node newcolumn("newcolumn");
-        xml::node column("column");
+        xml_lmi::Element newcolumn("newcolumn");
+        xml_lmi::Element column("column");
         column.set_attr("name", j->first.c_str());
         std::vector<std::string> const& v = j->second;
 // TODO ?? InforceLives shows an extra value past the end; should it
 // be truncated here?
         for(unsigned int k = 0; k < v.size(); ++k)
             {
-            xml::node duration("duration");
+            xml_lmi::Element duration("duration");
             duration.set_attr("number", value_cast<std::string>(k).c_str());
             duration.set_attr("column_value", v[k].c_str());
             column.push_back(duration);
@@ -1007,11 +1007,11 @@ void Ledger::write(xml::node& x) const
         SupplementalReportColumns.push_back(ledger_invariant_->SupplementalReportColumn11);
         }
 
-    xml::node supplementalreport("supplementalreport");
+    xml_lmi::Element supplementalreport("supplementalreport");
     if(ledger_invariant_->SupplementalReport)
         {
         // Eventually customize the report name.
-        supplementalreport.push_back(xml::node("title", "Supplemental Report"));
+        supplementalreport.push_back(xml_lmi::Element("title", "Supplemental Report"));
 //warning() << "size " << ledger_invariant_->SupplementalReportColumns.size() << LMI_FLUSH;
 
         std::vector<std::string>::const_iterator j;
@@ -1022,9 +1022,9 @@ void Ledger::write(xml::node& x) const
             )
             {
 //warning() << "column " << *j << " title " << title_map[*j] << LMI_FLUSH;
-            xml::node columns("columns");
-            columns.push_back(xml::node("name", (*j).c_str()));
-            columns.push_back(xml::node("title", title_map[*j].c_str()));
+            xml_lmi::Element columns("columns");
+            columns.push_back(xml_lmi::Element("name", (*j).c_str()));
+            columns.push_back(xml_lmi::Element("title", title_map[*j].c_str()));
             supplementalreport.push_back(columns);
             }
         }
@@ -1104,7 +1104,7 @@ std::string Ledger::xml_root_name() const
 void Ledger::write(std::ostream& os) const
 {
     xml::init init;
-    xml::node root(xml_root_name().c_str());
+    xml_lmi::Element root(xml_root_name().c_str());
     root << *this;
 // Need DOCTYPE support, which xmlwrapp lacks--so can't do this:
 //    os << root;
