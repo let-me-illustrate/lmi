@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xml_io.cpp,v 1.48 2006-09-08 17:49:38 chicares Exp $
+// $Id: ledger_xml_io.cpp,v 1.49 2006-11-04 03:14:24 chicares Exp $
 
 #include "ledger.hpp"
 
@@ -56,7 +56,7 @@
 #include <string>
 #include <utility>
 
-void Ledger::read(xml::node&)
+void Ledger::read(xml::node const&)
 {
     // TODO ?? Not yet implemented.
 }

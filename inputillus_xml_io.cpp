@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: inputillus_xml_io.cpp,v 1.12 2006-01-29 13:52:00 chicares Exp $
+// $Id: inputillus_xml_io.cpp,v 1.13 2006-11-04 03:14:24 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -82,7 +82,7 @@ std::vector<std::string> const& detritus()
 } // Unnnamed namespace.
 
 //============================================================================
-void IllusInputParms::read(xml::node& x)
+void IllusInputParms::read(xml::node const& x)
 {
     if(xml_root_name() != x.get_name())
         {
