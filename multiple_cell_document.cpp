@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: multiple_cell_document.cpp,v 1.10 2006-11-04 04:03:42 chicares Exp $
+// $Id: multiple_cell_document.cpp,v 1.11 2006-11-04 04:57:26 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -37,6 +37,7 @@
 #   include <xmlwrapp/document.h>
 #endif // USING_CURRENT_XMLWRAPP defined.
 #include <xmlwrapp/init.h>
+#include <xmlwrapp/node.h>
 #include <xmlwrapp/tree_parser.h>
 
 #include <fstream>

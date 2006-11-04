@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: single_cell_document.hpp,v 1.7 2006-11-04 04:03:42 chicares Exp $
+// $Id: single_cell_document.hpp,v 1.8 2006-11-04 04:57:26 chicares Exp $
 
 #ifndef single_cell_document_hpp
 #define single_cell_document_hpp
@@ -28,26 +28,16 @@
 
 #include "obstruct_slicing.hpp"
 #include "so_attributes.hpp"
+#include "xml_lmi_fwd.hpp"
 
 #include <boost/scoped_ptr.hpp>
 #include <boost/utility.hpp>
 
 #include <istream>
-#include <memory>
 #include <ostream>
 #include <string>
 
 class IllusInputParms;
-
-// XMLWRAPP !! Recommend an xmlwrapp_fwd header to Peter. It might
-// contain all of the following (we don't use them all here):
-namespace xml
-{
-    class node;
-    class event_parser;
-    class tree_parser;
-    class init;
-}
 
 class LMI_SO single_cell_document
     :private boost::noncopyable
@@ -67,7 +57,7 @@ class LMI_SO single_cell_document
     void write(std::ostream& os);
 
   private:
-    void parse(xml::node const&);
+    void parse(xml_lmi::Element const&);
     std::string xml_root_name() const;
 
     boost::scoped_ptr<IllusInputParms> const input_data_;
