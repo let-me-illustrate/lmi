@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: inputillus_xml_io.cpp,v 1.14 2006-11-04 03:33:11 chicares Exp $
+// $Id: inputillus_xml_io.cpp,v 1.15 2006-11-04 14:27:06 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -33,13 +33,13 @@
 #include "global_settings.hpp"
 #include "miscellany.hpp"
 #include "value_cast.hpp"
+#include "xml_lmi.hpp"
 
 #ifdef USING_CURRENT_XMLWRAPP
 #   include <xmlwrapp/attributes.h>
 #endif
 
 #include <xmlwrapp/init.h>
-#include <xmlwrapp/node.h>
 
 #include <algorithm> // std::find()
 
@@ -80,7 +80,7 @@ std::vector<std::string> const& detritus()
 } // Unnnamed namespace.
 
 //============================================================================
-void IllusInputParms::read(xml::node const& x)
+void IllusInputParms::read(xml_lmi::Element const& x)
 {
     if(xml_root_name() != x.get_name())
         {
@@ -237,11 +237,11 @@ using namespace xml;
 }
 
 //============================================================================
-void IllusInputParms::write(xml::node& x) const
+void IllusInputParms::write(xml_lmi::Element& x) const
 {
     // TODO ?? Experimental.
     xml::init init;
-    xml::node root(xml_root_name().c_str());
+    xml_lmi::Element root(xml_root_name().c_str());
 // XMLWRAPP !! There's no way to set an integer attribute.
 #ifdef USING_CURRENT_XMLWRAPP
     root.get_attributes().insert
@@ -258,7 +258,7 @@ void IllusInputParms::write(xml::node& x) const
         {
         std::string node_tag(*i);
         std::string value = operator[](*i).str();
-        root.push_back(xml::node(node_tag.c_str(), value.c_str()));
+        root.push_back(xml_lmi::Element(node_tag.c_str(), value.c_str()));
         }
 
     x.push_back(root);

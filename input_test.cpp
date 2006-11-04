@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_test.cpp,v 1.10 2006-11-03 02:24:13 chicares Exp $
+// $Id: input_test.cpp,v 1.11 2006-11-04 14:27:06 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -34,12 +34,12 @@
 #define BOOST_INCLUDE_MAIN
 #include "test_tools.hpp"
 #include "timer.hpp"
+#include "xml_lmi.hpp"
 
 #include <boost/bind.hpp>
 #include <boost/ref.hpp>
 
 #include <xmlwrapp/init.h>
-#include <xmlwrapp/node.h>
 
 #if defined BOOST_MSVC || defined __BORLANDC__
 #   include <cfloat> // floating-point hardware control
@@ -219,12 +219,12 @@ int test_main(int, char*[])
     original.propagate_changes_to_base_and_finalize();
 
     xml::init init;
-    xml::node xml_root0("root");
+    xml_lmi::Element xml_root0("root");
     xml_root0 << original;
     os0 << xml_root0;
     os0.close();
 
-    xml::node xml_node;
+    xml_lmi::Element xml_node;
     xml::node::iterator child = xml_root0.begin();
     if(child->is_text())
         {
@@ -244,7 +244,7 @@ int test_main(int, char*[])
           | std::ios_base::binary
         );
     BOOST_TEST(!!os1);
-    xml::node xml_root1("root");
+    xml_lmi::Element xml_root1("root");
     xml_root1 << replica;
     os1 << xml_root1;
     os1.close();

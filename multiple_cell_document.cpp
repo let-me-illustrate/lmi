@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: multiple_cell_document.cpp,v 1.11 2006-11-04 04:57:26 chicares Exp $
+// $Id: multiple_cell_document.cpp,v 1.12 2006-11-04 14:27:06 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -32,15 +32,13 @@
 #include "inputillus.hpp"
 #include "istream_to_string.hpp"
 #include "value_cast.hpp"
+#include "xml_lmi.hpp"
 
 #ifdef USING_CURRENT_XMLWRAPP
 #   include <xmlwrapp/document.h>
 #endif // USING_CURRENT_XMLWRAPP defined.
 #include <xmlwrapp/init.h>
-#include <xmlwrapp/node.h>
 #include <xmlwrapp/tree_parser.h>
-
-#include <fstream>
 
 //============================================================================
 multiple_cell_document::multiple_cell_document()
@@ -61,9 +59,9 @@ multiple_cell_document::multiple_cell_document(std::string const& filename)
         }
 
 #ifdef USING_CURRENT_XMLWRAPP
-    xml::node& root = parser.get_document().get_root_node();
+    xml_lmi::Element& root = parser.get_document().get_root_node();
 #else // USING_CURRENT_XMLWRAPP not defined.
-    xml::node& root = parser.get_root_node();
+    xml_lmi::Element& root = parser.get_root_node();
 #endif // USING_CURRENT_XMLWRAPP not defined.
     if(xml_root_name() != root.get_name())
         {
@@ -91,7 +89,7 @@ std::string multiple_cell_document::xml_root_name() const
 }
 
 //============================================================================
-void multiple_cell_document::parse(xml::node const& root)
+void multiple_cell_document::parse(xml_lmi::Element const& root)
 {
 // COMPILER !! Borland doesn't find operator==() in ns xml.
 #ifdef __BORLANDC__
@@ -277,9 +275,9 @@ void multiple_cell_document::read(std::istream& is)
         }
 
 #ifdef USING_CURRENT_XMLWRAPP
-    xml::node& root = parser.get_document().get_root_node();
+    xml_lmi::Element& root = parser.get_document().get_root_node();
 #else // USING_CURRENT_XMLWRAPP not defined.
-    xml::node& root = parser.get_root_node();
+    xml_lmi::Element& root = parser.get_root_node();
 #endif // USING_CURRENT_XMLWRAPP not defined.
     if(xml_root_name() != root.get_name())
         {
@@ -299,7 +297,7 @@ void multiple_cell_document::read(std::istream& is)
 void multiple_cell_document::write(std::ostream& os) const
 {
     xml::init init;
-    xml::node root(xml_root_name().c_str());
+    xml_lmi::Element root(xml_root_name().c_str());
 
 // TODO ?? Diagnostics will be cryptic if the xml doesn't follow
 // the required layout. Perhaps they could be improved. Maybe it
@@ -307,7 +305,7 @@ void multiple_cell_document::write(std::ostream& os) const
 // of cells, with its cardinal number, is a distinct node.
 //
 //    root.push_back
-//        (xml::node
+//        (xml_lmi::Element
 //            ("NumberOfCases"
 //            ,value_cast<std::string>(case_parms_.size()).c_str()
 //            )
@@ -315,7 +313,7 @@ void multiple_cell_document::write(std::ostream& os) const
     root << case_parms_[0];
 
     root.push_back
-        (xml::node
+        (xml_lmi::Element
             ("NumberOfClasses"
             ,value_cast<std::string>(class_parms_.size()).c_str()
             )
@@ -326,7 +324,7 @@ void multiple_cell_document::write(std::ostream& os) const
         }
 
     root.push_back
-        (xml::node
+        (xml_lmi::Element
             ("NumberOfCells"
             ,value_cast<std::string>(cell_parms_.size()).c_str()
             )

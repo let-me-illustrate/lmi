@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: single_cell_document.cpp,v 1.9 2006-11-04 04:57:26 chicares Exp $
+// $Id: single_cell_document.cpp,v 1.10 2006-11-04 14:27:06 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -31,15 +31,13 @@
 #include "alert.hpp"
 #include "inputillus.hpp"
 #include "istream_to_string.hpp"
+#include "xml_lmi.hpp"
 
 #ifdef USING_CURRENT_XMLWRAPP
 #   include <xmlwrapp/document.h>
 #endif // USING_CURRENT_XMLWRAPP defined.
 #include <xmlwrapp/init.h>
-#include <xmlwrapp/node.h>
 #include <xmlwrapp/tree_parser.h>
-
-#include <fstream>
 
 //============================================================================
 single_cell_document::single_cell_document()
@@ -68,9 +66,9 @@ single_cell_document::single_cell_document(std::string const& filename)
         }
 
 #ifdef USING_CURRENT_XMLWRAPP
-    xml::node& root = parser.get_document().get_root_node();
+    xml_lmi::Element& root = parser.get_document().get_root_node();
 #else // USING_CURRENT_XMLWRAPP not defined.
-    xml::node& root = parser.get_root_node();
+    xml_lmi::Element& root = parser.get_root_node();
 #endif // USING_CURRENT_XMLWRAPP not defined.
     if(xml_root_name() != root.get_name())
         {
@@ -98,7 +96,7 @@ std::string single_cell_document::xml_root_name() const
 }
 
 //============================================================================
-void single_cell_document::parse(xml::node const& root)
+void single_cell_document::parse(xml_lmi::Element const& root)
 {
 // COMPILER !! Borland doesn't find operator==() in ns xml.
 #ifdef __BORLANDC__
@@ -137,9 +135,9 @@ void single_cell_document::read(std::istream& is)
         }
 
 #ifdef USING_CURRENT_XMLWRAPP
-    xml::node& root = parser.get_document().get_root_node();
+    xml_lmi::Element& root = parser.get_document().get_root_node();
 #else // USING_CURRENT_XMLWRAPP not defined.
-    xml::node& root = parser.get_root_node();
+    xml_lmi::Element& root = parser.get_root_node();
 #endif // USING_CURRENT_XMLWRAPP not defined.
     if(xml_root_name() != root.get_name())
         {
@@ -159,7 +157,7 @@ void single_cell_document::read(std::istream& is)
 void single_cell_document::write(std::ostream& os)
 {
     xml::init init;
-    xml::node root(xml_root_name().c_str());
+    xml_lmi::Element root(xml_root_name().c_str());
     root << *input_data_;
     os << root;
 }
