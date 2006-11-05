@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: configurable_settings.cpp,v 1.16 2006-11-04 14:27:06 chicares Exp $
+// $Id: configurable_settings.cpp,v 1.17 2006-11-05 04:12:28 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -33,12 +33,6 @@
 #include "handle_exceptions.hpp"
 #include "platform_dependent.hpp" // access()
 #include "xml_lmi.hpp"
-
-#ifdef USING_CURRENT_XMLWRAPP
-#   include <xmlwrapp/document.h>
-#endif // USING_CURRENT_XMLWRAPP defined.
-#include <xmlwrapp/init.h>
-#include <xmlwrapp/tree_parser.h>
 
 #include <stdexcept>
 
@@ -85,54 +79,18 @@ configurable_settings::configurable_settings()
             }
         }
 
-    xml::init init;
-    xml::tree_parser parser(filename.c_str());
-    if(!parser)
+    xml_lmi::dom_parser parser(filename);
+    xml_lmi::Element const& root = parser.root_node(xml_root_name());
+    xml_lmi::ElementContainer const elements(xml_lmi::child_elements(root));
+    typedef xml_lmi::ElementContainer::const_iterator eci;
+    for(eci i = elements.begin(); i != elements.end(); ++i)
         {
-        fatal_error()
-            << "Error parsing '"
-            << configuration_filename()
-            << "'."
-            << LMI_FLUSH
-            ;
-        }
-#ifdef USING_CURRENT_XMLWRAPP
-    xml_lmi::Element& root = parser.get_document().get_root_node();
-#else // USING_CURRENT_XMLWRAPP not defined.
-    xml_lmi::Element& root = parser.get_root_node();
-#endif // USING_CURRENT_XMLWRAPP not defined.
-    if(xml_root_name() != root.get_name())
-        {
-        fatal_error()
-            << "File '"
-            << configuration_filename()
-            << "': xml node name is '"
-            << root.get_name()
-            << "' but '"
-            << xml_root_name()
-            << "' was expected. Try reinstalling."
-            << LMI_FLUSH
-            ;
-        }
-
-// COMPILER !! Borland doesn't find operator==() in ns xml.
-#ifdef __BORLANDC__
-    using namespace xml;
-#endif // __BORLANDC__
-
-    xml::node::const_iterator child = root.begin();
-    for(; child != root.end(); ++child)
-        {
-        if(child->is_text())
-            {
-            continue;
-            }
-        char const* content = child->get_content();
+        char const* content = (*i)->get_content();
         if(!content)
             {
             content = "";
             }
-        operator[](child->get_name()) = content;
+        operator[]((*i)->get_name()) = content;
         }
 }
 
