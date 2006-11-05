@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: multiple_cell_document.cpp,v 1.13 2006-11-05 01:23:04 chicares Exp $
+// $Id: multiple_cell_document.cpp,v 1.14 2006-11-05 16:37:06 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -79,11 +79,11 @@ void multiple_cell_document::parse(xml_lmi::Element const& root)
     case_parms_.clear();
 
     LMI_ASSERT(i != elements.end());
-    if(std::string("cell") != (*i)->get_name())
+    if("cell" != xml_lmi::get_name(**i))
         {
         fatal_error()
             << "XML node name is '"
-            << (*i)->get_name()
+            << xml_lmi::get_name(**i)
             << "' but '"
             << "cell"
             << "' was expected."
@@ -96,19 +96,19 @@ void multiple_cell_document::parse(xml_lmi::Element const& root)
     // Number of classes.
     ++i;
     LMI_ASSERT(i != elements.end());
-    if(std::string("NumberOfClasses") != (*i)->get_name())
+    if("NumberOfClasses" != xml_lmi::get_name(**i))
         {
         fatal_error()
             << "XML node name is '"
-            << (*i)->get_name()
+            << xml_lmi::get_name(**i)
             << "' but '"
             << "NumberOfClasses"
             << "' was expected."
             << LMI_FLUSH
             ;
         }
-    char const* n_classes = (*i)->get_content();
-    LMI_ASSERT(n_classes);
+    std::string const n_classes = xml_lmi::get_content(**i);
+    LMI_ASSERT(!n_classes.empty());
     unsigned int number_of_classes = value_cast<unsigned int>(n_classes);
 
     // Parameters for each class.
@@ -141,19 +141,19 @@ void multiple_cell_document::parse(xml_lmi::Element const& root)
     LMI_ASSERT(i != elements.end());
     ++i;
     LMI_ASSERT(i != elements.end());
-    if(std::string("NumberOfCells") != (*i)->get_name())
+    if("NumberOfCells" != xml_lmi::get_name(**i))
         {
         fatal_error()
             << "XML node name is '"
-            << (*i)->get_name()
+            << xml_lmi::get_name(**i)
             << "' but '"
             << "NumberOfCells"
             << "' was expected."
             << LMI_FLUSH
             ;
         }
-    char const* n_cells = (*i)->get_content();
-    LMI_ASSERT(n_cells);
+    std::string const n_cells = xml_lmi::get_content(**i);
+    LMI_ASSERT(!n_cells.empty());
     unsigned int number_of_cells = value_cast<unsigned int>(n_cells);
 
     // Parameters for each cell.

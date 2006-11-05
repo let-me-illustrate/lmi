@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xml_lmi.hpp,v 1.4 2006-11-05 02:54:32 chicares Exp $
+// $Id: xml_lmi.hpp,v 1.5 2006-11-05 16:37:07 chicares Exp $
 
 #ifndef xml_lmi_hpp
 #define xml_lmi_hpp
@@ -92,6 +92,19 @@ namespace xml_lmi
         (Element const&
         ,std::string const& name = std::string()
         );
+
+    /// Retrieve an xml element's full text-node contents.
+    ///
+    /// The contents of all text-node children are concatenated.
+    ///
+    /// Only direct children are considered: children of child nodes
+    /// are not.
+
+    std::string get_content(Element const&);
+
+    /// Retrieve an xml element's name.
+
+    std::string get_name(Element const&);
 } // namespace xml_lmi
 
 #endif //xml_lmi_hpp
