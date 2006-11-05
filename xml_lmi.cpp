@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xml_lmi.cpp,v 1.3 2006-11-04 19:49:15 chicares Exp $
+// $Id: xml_lmi.cpp,v 1.4 2006-11-05 02:54:32 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -54,7 +54,7 @@ namespace xml_lmi
 /// from std::exception.
 
 xml_lmi::dom_parser::dom_parser(std::string const& filename)
-    :initializer_(new xml::init)
+    :initializer_(new Initializer)
 {
     try
         {
@@ -87,6 +87,12 @@ xml_lmi::dom_parser::dom_parser(std::string const& filename)
 
 /// Parse an xml stream.
 ///
+/// XMLWRAPP !! xmlwrapp has no such ctor as
+///   xml::tree_parser(std::istream&)
+/// Therefore, read the std::istream into a std::string with
+/// istream_to_string(), and pass that to the xml::tree_parser ctor
+/// that takes a char* and a byte count.
+///
 /// Precondition: argument is an xml stream for which 0 == rdstate().
 ///
 /// Postconditions: member parser_ is a non-null pointer; the object
@@ -97,16 +103,10 @@ xml_lmi::dom_parser::dom_parser(std::string const& filename)
 /// from std::exception.
 
 xml_lmi::dom_parser::dom_parser(std::istream& is)
-    :initializer_(new xml::init)
+    :initializer_(new Initializer)
 {
     try
         {
-        // XMLWRAPP !! xmlwrapp has no such ctor as
-        //   xml::tree_parser(std::istream&)
-        // Therefore, read the std::istream into a std::string with
-        // istream_to_string(), and pass that to the xml::tree_parser
-        // ctor that takes a char* and a byte count.
-
         error_context_ = "Unable to parse xml stream: ";
         if(0 != is.rdstate())
             {
@@ -219,8 +219,7 @@ xml_lmi::ElementContainer child_elements
     try
         {
         xml_lmi::ElementContainer z;
-        typedef Element::const_iterator eci;
-        for(eci i = parent.begin(); i != parent.end(); ++i)
+        for(NodeConstIterator i = parent.begin(); i != parent.end(); ++i)
             {
             if(!i->is_text())
                 {

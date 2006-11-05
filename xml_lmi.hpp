@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xml_lmi.hpp,v 1.3 2006-11-04 19:49:15 chicares Exp $
+// $Id: xml_lmi.hpp,v 1.4 2006-11-05 02:54:32 chicares Exp $
 
 #ifndef xml_lmi_hpp
 #define xml_lmi_hpp
@@ -41,6 +41,7 @@
 
 namespace xml_lmi
 {
+    typedef xml::node::const_iterator   NodeConstIterator;
     typedef xml::node::const_iterator   ElementPointer;
     typedef std::vector<ElementPointer> ElementContainer;
 
@@ -48,6 +49,7 @@ namespace xml_lmi
         :private boost::noncopyable
     {
         typedef xml::tree_parser DomParser;
+        typedef xml::init        Initializer;
 
       public:
         dom_parser(std::string const& filename);
@@ -60,9 +62,9 @@ namespace xml_lmi
         Element const& root_node(std::string const& expected_name) const;
 
       private:
-        std::string                  error_context_;
-        boost::scoped_ptr<xml::init> initializer_;
-        boost::scoped_ptr<DomParser> parser_;
+        std::string                    error_context_;
+        boost::scoped_ptr<Initializer> initializer_;
+        boost::scoped_ptr<DomParser>   parser_;
     };
 
     /// Create a container of pointers to an element's child elements.
