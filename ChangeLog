@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.471 2006-11-04 19:49:15 chicares Exp $
+// $Id: ChangeLog,v 1.472 2006-11-05 04:12:28 chicares Exp $
 
 MAINTENANCE
 
@@ -7795,4 +7795,20 @@ Replace an xml-library type with a typedef in the implementation.
   xml_lmi.cpp
   xml_lmi.hpp
 Begin to refactor xml parsing.
+
+20061105T0123Z <chicares@cox.net> [1169]
+
+  multiple_cell_document.cpp
+Refactor xml parsing.
+
+20061105T0254Z <chicares@cox.net> [1169]
+
+  xml_lmi.cpp
+  xml_lmi.hpp
+Refactor.
+
+20061105T0412Z <chicares@cox.net> [1169]
+
+  configurable_settings.cpp
+Refactor xml parsing.
 
