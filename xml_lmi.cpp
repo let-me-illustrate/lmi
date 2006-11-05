@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xml_lmi.cpp,v 1.4 2006-11-05 02:54:32 chicares Exp $
+// $Id: xml_lmi.cpp,v 1.5 2006-11-05 16:37:07 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -234,6 +234,40 @@ xml_lmi::ElementContainer child_elements
                 }
             }
         return z;
+        }
+    catch(std::exception const& e)
+        {
+        fatal_error() << e.what() << LMI_FLUSH;
+        throw std::logic_error("Unreachable"); // Silence compiler warning.
+        }
+}
+
+std::string get_content(Element const& element)
+{
+    try
+        {
+        std::ostringstream oss;
+        for(NodeConstIterator i = element.begin(); i != element.end(); ++i)
+            {
+            if(i->is_text())
+                {
+                oss << i->get_content();
+                }
+            }
+        return oss.str();
+        }
+    catch(std::exception const& e)
+        {
+        fatal_error() << e.what() << LMI_FLUSH;
+        throw std::logic_error("Unreachable"); // Silence compiler warning.
+        }
+}
+
+std::string get_name(Element const& element)
+{
+    try
+        {
+        return element.get_name();
         }
     catch(std::exception const& e)
         {
