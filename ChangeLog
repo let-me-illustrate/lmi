@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.472 2006-11-05 04:12:28 chicares Exp $
+// $Id: ChangeLog,v 1.473 2006-11-06 00:57:26 chicares Exp $
 
 MAINTENANCE
 
@@ -7811,4 +7811,24 @@ Refactor.
 
   configurable_settings.cpp
 Refactor xml parsing.
+
+20061105T1637Z <chicares@cox.net> [1169]
+
+  multiple_cell_document.cpp
+  xml_lmi.cpp
+  xml_lmi.hpp
+Refactor.
+
+20061105T1714Z <chicares@cox.net> [1169]
+
+  xml_lmi.cpp
+Guard against null pointers.
+
+20061106T0057Z <chicares@cox.net> [1167]
+
+  inputillus_xml_io.cpp
+  ledger_xml_io.cpp
+  xml_lmi.cpp
+  xml_lmi.hpp
+Refactor xml attribute handling.
 
