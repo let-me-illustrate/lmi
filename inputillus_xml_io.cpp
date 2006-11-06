@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: inputillus_xml_io.cpp,v 1.17 2006-11-06 02:08:10 chicares Exp $
+// $Id: inputillus_xml_io.cpp,v 1.18 2006-11-06 02:51:47 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -134,12 +134,7 @@ using namespace xml;
                     )
                 )
                 {
-                char const* content = child->get_content();
-                if(!content)
-                    {
-                    content = "";
-                    }
-                detritus_map[node_tag] = content;
+                detritus_map[node_tag] = xml_lmi::get_content(*child);
                 }
             else
                 {
@@ -152,12 +147,7 @@ using namespace xml;
                 }
             continue;
             }
-        char const* content = child->get_content();
-        if(!content)
-            {
-            content = "";
-            }
-        operator[](node_tag) = content;
+        operator[](node_tag) = xml_lmi::get_content(*child);
         // TODO ?? Perhaps a std::list would perform better.
         member_names.erase(current_member);
         }
