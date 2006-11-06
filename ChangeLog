@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.473 2006-11-06 00:57:26 chicares Exp $
+// $Id: ChangeLog,v 1.474 2006-11-06 02:51:47 chicares Exp $
 
 MAINTENANCE
 
@@ -7831,4 +7831,16 @@ Guard against null pointers.
   xml_lmi.cpp
   xml_lmi.hpp
 Refactor xml attribute handling.
+
+20061106T0208Z <chicares@cox.net> [1167]
+
+  input_test.cpp
+  inputillus_xml_io.cpp
+Remove directly-used xmlwrapp types.
+
+20061106T0251Z <chicares@cox.net> [1167]
+
+  configurable_settings.cpp
+  inputillus_xml_io.cpp
+Use xml::get_content() wrapper.
 
