@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_test.cpp,v 1.11 2006-11-04 14:27:06 chicares Exp $
+// $Id: input_test.cpp,v 1.12 2006-11-06 02:08:10 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -38,8 +38,6 @@
 
 #include <boost/bind.hpp>
 #include <boost/ref.hpp>
-
-#include <xmlwrapp/init.h>
 
 #if defined BOOST_MSVC || defined __BORLANDC__
 #   include <cfloat> // floating-point hardware control
@@ -218,14 +216,13 @@ int test_main(int, char*[])
 */
     original.propagate_changes_to_base_and_finalize();
 
-    xml::init init;
     xml_lmi::Element xml_root0("root");
     xml_root0 << original;
     os0 << xml_root0;
     os0.close();
 
     xml_lmi::Element xml_node;
-    xml::node::iterator child = xml_root0.begin();
+    xml_lmi::NodeConstIterator child = xml_root0.begin();
     if(child->is_text())
         {
         // TODO ?? Explain what this does.
