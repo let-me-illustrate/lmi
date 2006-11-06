@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xml_io.cpp,v 1.50 2006-11-04 14:27:06 chicares Exp $
+// $Id: ledger_xml_io.cpp,v 1.51 2006-11-06 00:57:26 chicares Exp $
 
 #include "ledger.hpp"
 
@@ -36,16 +36,6 @@
 #include "value_cast.hpp"
 #include "version.hpp"
 #include "xml_lmi.hpp"
-
-#if defined USING_CURRENT_XMLWRAPP
-#   include <xmlwrapp/attributes.h>
-// TODO ?? Gross hack to be undone when USING_CURRENT_XMLWRAPP becomes
-// the only supported version.
-#   define set_attr get_attributes().insert
-#endif // defined USING_CURRENT_XMLWRAPP
-
-#include <xmlwrapp/init.h>
-#include <xmlwrapp/tree_parser.h>
 
 #include <fstream>
 #include <iomanip>
@@ -905,8 +895,6 @@ void Ledger::write(xml_lmi::Element& x) const
 
 // Now we're ready to write the xml.
 
-    xml::init init;
-
 //  want: <?xml-stylesheet type="text/xsl" href="NewTransform.xsl"?>
 //  want: <!DOCTYPE sales []>
 // kludged in write(std::ostream& os) below
@@ -942,13 +930,13 @@ void Ledger::write(xml_lmi::Element& x) const
         {
         xml_lmi::Element newcolumn("newcolumn");
         xml_lmi::Element column("column");
-        column.set_attr("name", j->first.c_str());
+        xml_lmi::set_attr(column, "name", j->first.c_str());
         std::vector<double> const& v = *j->second;
         for(unsigned int k = 0; k < v.size(); ++k)
             {
             xml_lmi::Element duration("duration");
-            duration.set_attr("number", value_cast<std::string>(k).c_str());
-            duration.set_attr("column_value", value_cast<std::string>(v[k]).c_str());
+            xml_lmi::set_attr(duration, "number", value_cast<std::string>(k).c_str());
+            xml_lmi::set_attr(duration, "column_value", value_cast<std::string>(v[k]).c_str());
             column.push_back(duration);
             }
 // TODO ?? Is <newcolumn> really useful?
@@ -974,15 +962,15 @@ void Ledger::write(xml_lmi::Element& x) const
         {
         xml_lmi::Element newcolumn("newcolumn");
         xml_lmi::Element column("column");
-        column.set_attr("name", j->first.c_str());
+        xml_lmi::set_attr(column, "name", j->first.c_str());
         std::vector<std::string> const& v = j->second;
 // TODO ?? InforceLives shows an extra value past the end; should it
 // be truncated here?
         for(unsigned int k = 0; k < v.size(); ++k)
             {
             xml_lmi::Element duration("duration");
-            duration.set_attr("number", value_cast<std::string>(k).c_str());
-            duration.set_attr("column_value", v[k].c_str());
+            xml_lmi::set_attr(duration, "number", value_cast<std::string>(k).c_str());
+            xml_lmi::set_attr(duration, "column_value", v[k].c_str());
             column.push_back(duration);
             }
 // TODO ?? Is <newcolumn> really useful?
@@ -1103,7 +1091,6 @@ std::string Ledger::xml_root_name() const
 
 void Ledger::write(std::ostream& os) const
 {
-    xml::init init;
     xml_lmi::Element root(xml_root_name().c_str());
     root << *this;
 // Need DOCTYPE support, which xmlwrapp lacks--so can't do this:
@@ -1122,8 +1109,4 @@ void Ledger::write(std::ostream& os) const
         );
     os << s;
 }
-
-#if defined USING_CURRENT_XMLWRAPP
-#   undef set_attr
-#endif // defined USING_CURRENT_XMLWRAPP
 
