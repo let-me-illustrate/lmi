@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xml_lmi.hpp,v 1.5 2006-11-05 16:37:07 chicares Exp $
+// $Id: xml_lmi.hpp,v 1.6 2006-11-06 00:57:26 chicares Exp $
 
 #ifndef xml_lmi_hpp
 #define xml_lmi_hpp
@@ -105,6 +105,26 @@ namespace xml_lmi
     /// Retrieve an xml element's name.
 
     std::string get_name(Element const&);
+
+    // Attribute functions.
+
+    /// Get a given attribute of an xml element.
+    ///
+    /// Return false if the element has no such attribute.
+
+    bool get_attr
+        (Element const&
+        ,std::string const& name
+        ,std::string&       value
+        );
+
+    /// Set a given attribute of an xml element.
+
+    void set_attr
+        (Element&
+        ,std::string const& name
+        ,std::string const& value
+        );
 } // namespace xml_lmi
 
 #endif //xml_lmi_hpp

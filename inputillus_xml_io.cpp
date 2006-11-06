@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: inputillus_xml_io.cpp,v 1.15 2006-11-04 14:27:06 chicares Exp $
+// $Id: inputillus_xml_io.cpp,v 1.16 2006-11-06 00:57:26 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -34,12 +34,6 @@
 #include "miscellany.hpp"
 #include "value_cast.hpp"
 #include "xml_lmi.hpp"
-
-#ifdef USING_CURRENT_XMLWRAPP
-#   include <xmlwrapp/attributes.h>
-#endif
-
-#include <xmlwrapp/init.h>
 
 #include <algorithm> // std::find()
 
@@ -95,17 +89,7 @@ void IllusInputParms::read(xml_lmi::Element const& x)
         }
 
     std::string cell_version_string;
-#ifdef USING_CURRENT_XMLWRAPP
-    xml::attributes const& attrs = x.get_attributes();
-    xml::attributes::const_iterator i = attrs.find("version");
-    if(i != attrs.end())
-        {
-        cell_version_string = i->get_value();
-        }
-    else
-#else
-    if(!x.get_attr("version", cell_version_string))
-#endif
+    if(!xml_lmi::get_attr(x, "version", cell_version_string))
         {
         fatal_error()
             << "XML tag <"
@@ -115,10 +99,6 @@ void IllusInputParms::read(xml_lmi::Element const& x)
             ;
         }
     int cell_version = value_cast<int>(cell_version_string);
-
-    // "Use" this variable. Eventually we will. Until then we don't
-    // care to see warnings that it's unused.
-    (void)cell_version;
 
 // COMPILER !! Borland doesn't find operator==() in ns xml.
 #ifdef __BORLANDC__
@@ -239,16 +219,13 @@ using namespace xml;
 //============================================================================
 void IllusInputParms::write(xml_lmi::Element& x) const
 {
-    // TODO ?? Experimental.
-    xml::init init;
     xml_lmi::Element root(xml_root_name().c_str());
 // XMLWRAPP !! There's no way to set an integer attribute.
-#ifdef USING_CURRENT_XMLWRAPP
-    root.get_attributes().insert
-#else
-    root.set_attr
-#endif
-    ("version", value_cast<std::string>(class_version()).c_str());
+    xml_lmi::set_attr
+        (root
+        ,"version"
+        ,value_cast<std::string>(class_version()).c_str()
+        );
 
     std::vector<std::string> const member_names
         (IllusInputParms::member_names()

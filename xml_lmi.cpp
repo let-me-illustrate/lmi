@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xml_lmi.cpp,v 1.6 2006-11-05 17:14:35 chicares Exp $
+// $Id: xml_lmi.cpp,v 1.7 2006-11-06 00:57:26 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -32,6 +32,7 @@
 #include "istream_to_string.hpp"
 
 #if defined USING_CURRENT_XMLWRAPP
+#   include <xmlwrapp/attributes.h>
 #   include <xmlwrapp/document.h>
 #endif // defined USING_CURRENT_XMLWRAPP
 #include <xmlwrapp/init.h>
@@ -273,6 +274,58 @@ std::string get_name(Element const& element)
         {
         char const* name = element.get_name();
         return name ? name : "";
+        }
+    catch(std::exception const& e)
+        {
+        fatal_error() << e.what() << LMI_FLUSH;
+        throw std::logic_error("Unreachable"); // Silence compiler warning.
+        }
+}
+
+bool get_attr
+    (Element const&     element
+    ,std::string const& name
+    ,std::string&       value
+    )
+{
+    try
+        {
+#if defined USING_CURRENT_XMLWRAPP
+        xml::attributes const& attrs = element.get_attributes();
+        xml::attributes::const_iterator i = attrs.find(name.c_str());
+        if(i != attrs.end())
+            {
+            value = i->get_value();
+            return true;
+            }
+        else
+            {
+            return false;
+            }
+#else  // !defined USING_CURRENT_XMLWRAPP
+        return element.get_attr(name.c_str(), value);
+#endif // !defined USING_CURRENT_XMLWRAPP
+        }
+    catch(std::exception const& e)
+        {
+        fatal_error() << e.what() << LMI_FLUSH;
+        throw std::logic_error("Unreachable"); // Silence compiler warning.
+        }
+}
+
+void set_attr
+    (Element&           element
+    ,std::string const& name
+    ,std::string const& value
+    )
+{
+    try
+        {
+#if defined USING_CURRENT_XMLWRAPP
+        element.get_attributes().insert(name.c_str(), value.c_str());
+#else  // !defined USING_CURRENT_XMLWRAPP
+        element.set_attr(name.c_str(), value.c_str());
+#endif // !defined USING_CURRENT_XMLWRAPP
         }
     catch(std::exception const& e)
         {
