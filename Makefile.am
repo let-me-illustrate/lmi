@@ -20,7 +20,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: Makefile.am,v 1.23.2.3 2006-10-20 17:46:02 etarassov Exp $
+# $Id: Makefile.am,v 1.23.2.4 2006-11-07 01:47:59 etarassov Exp $
 
 
 SUBDIRS = third_party
@@ -196,6 +196,8 @@ lmi_wx_SOURCES = \
     mvc_view.cpp \
     previewframe_ex.cpp \
     progress_meter_wx.cpp \
+    properties_model.cpp \
+    properties_view.cpp \
     single_choice_popup_menu.cpp \
     text_doc.cpp \
     text_view.cpp \

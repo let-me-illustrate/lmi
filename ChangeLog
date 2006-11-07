@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.462.2.87 2006-11-03 16:46:59 etarassov Exp $
+// $Id: ChangeLog,v 1.462.2.88 2006-11-07 01:48:39 etarassov Exp $
 
 MAINTENANCE
 
@@ -8423,4 +8423,22 @@ every 5 rows.
   illustration_view.hpp
   menus.xrc
 Fix menu items in Illustration menu. Correct the code in PrintCS.
+
+20061107T0147Z <etarassov@tt-solutions.com> [1167]
+
+  configurable_settings.cpp
+  configurable_settings.hpp
+  main_wx.cpp
+  main_wx.hpp
+  Makefile.am
+  menus.xrc
+  objects.make
+  properties_model.cpp
+  properties_model.hpp
+  properties_view.cpp
+  properties_view.hpp
+  xml_notebook.xrc
+Allow user modify configurable_settings calculation summary columns
+list using GUI interface. Store modified values back into
+'configurable_settings.xml'.
 

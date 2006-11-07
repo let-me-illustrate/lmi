@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_wx.cpp,v 1.56 2006-09-19 21:37:16 chicares Exp $
+// $Id: main_wx.cpp,v 1.56.2.1 2006-11-07 01:47:59 etarassov Exp $
 
 // Portions of this file are derived from wxWindows files
 //   samples/docvwmdi/docview.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -60,10 +60,15 @@
 #include "miscellany.hpp"
 #include "msw_workarounds.hpp"
 #include "path_utility.hpp"
+#include "properties_model.hpp"
+#include "properties_view.hpp"
 #include "security.hpp"
 #include "text_doc.hpp"
 #include "text_view.hpp"
 #include "wx_new.hpp"
+
+// todo
+#include "mvc_controller.hpp"
 
 #include <wx/clipbrd.h>
 #include <wx/config.h>
@@ -100,6 +105,7 @@ IMPLEMENT_WX_THEME_SUPPORT
 BEGIN_EVENT_TABLE(Skeleton, wxApp)
  EVT_DROP_FILES(                             Skeleton::UponDropFiles             )
  EVT_MENU(wxID_ABOUT                        ,Skeleton::UponAbout                 )
+ EVT_MENU(XRCID("properties"               ),Skeleton::UponProperties            )
  EVT_MENU(XRCID("window_cascade"           ),Skeleton::UponWindowCascade         )
  EVT_MENU(XRCID("window_next"              ),Skeleton::UponWindowNext            )
  EVT_MENU(XRCID("window_previous"          ),Skeleton::UponWindowPrevious        )
@@ -358,6 +364,20 @@ void Skeleton::InitToolBar()
 void Skeleton::UponAbout(wxCommandEvent&)
 {
     AboutDialog(frame_).ShowModal();
+}
+
+void Skeleton::UponProperties(wxCommandEvent&)
+{
+    PropertiesModel properties;
+    PropertiesView const properties_view;
+    MvcController controller(frame_, properties, properties_view);
+    controller.SetTitle("Edit Properties...");
+    int const rc = controller.ShowModal();
+    if(wxID_OK == rc && properties.IsModified())
+        {
+        properties.SaveToSettings();
+        configurable_settings::instance().save_to_file();
+        }
 }
 
 void Skeleton::UponDropFiles(wxDropFilesEvent& event)

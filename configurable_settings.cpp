@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: configurable_settings.cpp,v 1.14.2.15 2006-11-02 13:34:23 etarassov Exp $
+// $Id: configurable_settings.cpp,v 1.14.2.16 2006-11-07 01:47:59 etarassov Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -36,7 +36,9 @@
 
 #include <libxml++/libxml++.h>
 
+#include <fstream>
 #include <stdexcept>
+#include <vector>
 
 // TODO ?? Need unit tests.
 
@@ -54,7 +56,7 @@ namespace
           "AcctVal_Current CSVNet_Current EOYDeathBft_Current";
 } // Unnamed namespace.
 
-configurable_settings::configurable_settings()
+configurable_settings::configurable_settings(bool load_values_from_file)
     :calculation_summary_colums_ (calculation_summary_colums_default_value)
     ,cgi_bin_log_filename_       ("cgi_bin.log"        )
     ,custom_input_filename_      ("custom.ini"         )
@@ -73,6 +75,22 @@ configurable_settings::configurable_settings()
     ,xslt_tab_delimited_filename_("tab_delimited.xsl"  )
 {
     ascribe_members();
+    if(load_values_from_file)
+        {
+        load_from_file();
+        }
+}
+
+void configurable_settings::load_from_file()
+{
+    // first of all reset all values to default
+    configurable_settings const defaults(false);
+    std::vector<std::string>::const_iterator i;
+    for(i = member_names().begin(); i != member_names().end(); ++i)
+        {
+        std::string const default_value = defaults[*i].str();
+        operator[](*i) = default_value;
+        }
 
     // Look for the configuration file first where FHS would put it.
     // To support non-FHS platforms, if it's not found there, then
@@ -102,6 +120,50 @@ configurable_settings::configurable_settings()
         }
 }
 
+void configurable_settings::save_to_file() const
+{
+    // Look for the configuration file first where FHS would put it.
+    // To support non-FHS platforms, if it's not found there, then
+    // look in the data directory.
+    std::string filename = "/etc/opt/lmi/" + configuration_filename();
+    if(access(filename.c_str(), W_OK))
+        {
+        filename = AddDataDir(configuration_filename());
+        if(access(filename.c_str(), W_OK))
+            {
+            fatal_error()
+                << "No writeable file '"
+                << configuration_filename()
+                << "' exists."
+                << LMI_FLUSH
+                ;
+            }
+        }
+
+    // we dont want to write default values back into xml file
+    // create an empty default instance of the class and compare current values
+    // against the default ones, and write only modified values
+    configurable_settings const defaults(false);
+
+    xml_lmi::Document document;
+    xml_lmi::Element& root = *document.create_root_node(xml_root_name());
+    std::vector<std::string>::const_iterator i;
+    for(i = member_names().begin(); i != member_names().end(); ++i)
+        {
+        std::string const content = operator[](*i).str();
+        if(content != defaults[*i].str())
+            {
+            root.add_child(*i)->add_child_text(content);
+            }
+        }
+
+    std::ofstream ofs
+        (filename.c_str()
+        ,std::ios_base::out | std::ios_base::trunc
+        );
+    ofs << document;
+}
+
 configurable_settings::~configurable_settings()
 {}
 
@@ -109,6 +171,8 @@ configurable_settings& configurable_settings::instance()
 {
     try
         {
+        // default parameter to constructor is true, which means to autoload
+        // values from the xml file
         static configurable_settings z;
         return z;
         }
@@ -140,7 +204,12 @@ void configurable_settings::ascribe_members()
     ascribe("xslt_tab_delimited_filename",&configurable_settings::xslt_tab_delimited_filename_  );
 }
 
-std::string const& configurable_settings::configuration_filename()
+std::string const& configurable_settings::calculation_summary_colums() const
+{
+    return calculation_summary_colums_;
+}
+
+std::string const& configurable_settings::configuration_filename() const
 {
     static std::string s("configurable_settings.xml");
     return s;
@@ -221,8 +290,10 @@ std::string const& configurable_settings::xslt_tab_delimited_filename() const
     return xslt_tab_delimited_filename_;
 }
 
-std::string const& configurable_settings::calculation_summary_colums() const
+void configurable_settings::set_calculation_summary_colums
+    (std::string const& value
+    )
 {
-    return calculation_summary_colums_;
+    calculation_summary_colums_ = value;
 }
 

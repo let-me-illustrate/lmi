@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: configurable_settings.hpp,v 1.13.2.3 2006-11-02 13:34:23 etarassov Exp $
+// $Id: configurable_settings.hpp,v 1.13.2.4 2006-11-07 01:47:59 etarassov Exp $
 
 #ifndef configurable_settings_hpp
 #define configurable_settings_hpp
@@ -118,12 +118,19 @@ class LMI_SO configurable_settings
     std::string const& xslt_html_filename         () const;
     std::string const& xslt_tab_delimited_filename() const;
 
+    void set_calculation_summary_colums (std::string const&);
+
+    void load_from_file();
+    void save_to_file() const;
+
   private:
-    configurable_settings();
+    // bool parameters are evil, but in this case ctor is part of the private
+    // interface, so its ok
+    configurable_settings(bool load_values_from_file = true);
 
     void ascribe_members();
 
-    std::string const& configuration_filename();
+    std::string const& configuration_filename() const;
 
     std::string calculation_summary_colums_;
     std::string cgi_bin_log_filename_;

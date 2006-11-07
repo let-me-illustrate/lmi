@@ -24,7 +24,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: menus.xrc,v 1.10.2.2 2006-11-03 16:46:06 etarassov Exp $
+    $Id: menus.xrc,v 1.10.2.3 2006-11-07 01:47:59 etarassov Exp $
 -->
 
 <!-- reusable menus -->
@@ -91,6 +91,10 @@
             <help>Edit default cell</help>
         </object>
         <object class="separator"/>
+        <object class="wxMenuItem" name="properties">
+            <label>Prop_erties...</label>
+            <help>Open global properties dialog</help>
+        </object>
         <object class="wxMenuItem" name="wxID_EXIT">
             <label>E_xit</label>
             <bitmap>exit.xpm</bitmap>
