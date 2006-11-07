@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xml_lmi.cpp,v 1.7 2006-11-06 00:57:26 chicares Exp $
+// $Id: xml_lmi.cpp,v 1.8 2006-11-07 03:23:21 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -27,6 +27,10 @@
 #endif // __BORLANDC__
 
 #include "xml_lmi.hpp"
+
+#if defined USING_LIBXMLPP
+#   include "xmlpp_lmi.cpp"
+#else // !defined USING_LIBXMLPP
 
 #include "alert.hpp"
 #include "istream_to_string.hpp"
@@ -334,4 +338,6 @@ void set_attr
         }
 }
 } // namespace xml_lmi
+
+#endif // !defined USING_LIBXMLPP
 
