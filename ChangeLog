@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.476 2006-11-07 03:56:26 chicares Exp $
+// $Id: ChangeLog,v 1.477 2006-11-07 04:38:15 chicares Exp $
 
 MAINTENANCE
 
@@ -7864,4 +7864,14 @@ Enable switching among C++ libxml2 wrappers.
   xml_lmi.cpp
   xml_lmi.hpp
 Refactor xml document handling.
+
+20061107T0438Z <chicares@cox.net> [1167]
+
+  inputillus_xml_io.cpp
+  ledger_xml_io.cpp
+  multiple_cell_document.cpp
+  xml_lmi.cpp
+  xml_lmi.hpp
+Refactor xml node addition. The macros show an essential difference
+between libxml++ and xmlwrapp that neither's API can bridge.
 
