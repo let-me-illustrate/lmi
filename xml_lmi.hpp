@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xml_lmi.hpp,v 1.7 2006-11-07 03:23:21 chicares Exp $
+// $Id: xml_lmi.hpp,v 1.8 2006-11-07 03:56:26 chicares Exp $
 
 #ifndef xml_lmi_hpp
 #define xml_lmi_hpp
@@ -69,6 +69,35 @@ namespace xml_lmi
         std::string                    error_context_;
         boost::scoped_ptr<Initializer> initializer_;
         boost::scoped_ptr<DomParser>   parser_;
+    };
+
+    class xml_document
+        :private boost::noncopyable
+    {
+        typedef xml::init Initializer;
+
+      public:
+        xml_document(std::string const& root_node_name);
+        ~xml_document();
+
+#if defined USING_CURRENT_XMLWRAPP
+        Document const& document() const {return *document_;}
+#else  // !defined USING_CURRENT_XMLWRAPP
+        Element  const& document() const {return *root_;}
+#endif // !defined USING_CURRENT_XMLWRAPP
+
+        Element& root_node();
+
+        std::string str();
+
+      private:
+        std::string                    error_context_;
+        boost::scoped_ptr<Initializer> initializer_;
+#if defined USING_CURRENT_XMLWRAPP
+        boost::scoped_ptr<Document>    document_;
+#else  // !defined USING_CURRENT_XMLWRAPP
+        boost::scoped_ptr<Element>     root_;
+#endif // !defined USING_CURRENT_XMLWRAPP
     };
 
     /// Create a container of pointers to an element's child elements.
@@ -130,6 +159,8 @@ namespace xml_lmi
         ,std::string const& value
         );
 } // namespace xml_lmi
+
+std::ostream& operator<<(std::ostream&, xml_lmi::xml_document const&);
 
 #endif // !defined USING_LIBXMLPP
 

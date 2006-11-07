@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xml_lmi.cpp,v 1.8 2006-11-07 03:23:21 chicares Exp $
+// $Id: xml_lmi.cpp,v 1.9 2006-11-07 03:56:26 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -42,6 +42,7 @@
 #include <xmlwrapp/init.h>
 #include <xmlwrapp/tree_parser.h>
 
+#include <ostream>
 #include <sstream>
 #include <stdexcept>
 
@@ -215,6 +216,41 @@ xml_lmi::Element const& xml_lmi::dom_parser::root_node
         }
 }
 
+xml_lmi::xml_document::xml_document(std::string const& root_node_name)
+    :initializer_(new Initializer)
+#if defined USING_CURRENT_XMLWRAPP
+    ,document_   (new xml_lmi::Document(root_node_name.c_str()))
+#else  // !defined USING_CURRENT_XMLWRAPP
+    ,root_       (new xml_lmi::Element (root_node_name.c_str()))
+#endif // !defined USING_CURRENT_XMLWRAPP
+{
+}
+
+xml_lmi::xml_document::~xml_document()
+{}
+
+xml_lmi::Element& xml_lmi::xml_document::root_node()
+{
+#if defined USING_CURRENT_XMLWRAPP
+    return document_->get_root_node();
+#else  // !defined USING_CURRENT_XMLWRAPP
+    return *root_;
+#endif // !defined USING_CURRENT_XMLWRAPP
+}
+
+std::string xml_lmi::xml_document::str()
+{
+#if defined USING_CURRENT_XMLWRAPP
+    std::string s;
+    document_->save_to_string(s);
+    return s;
+#else  // !defined USING_CURRENT_XMLWRAPP
+    std::string s;
+    root_->node_to_string(s);
+    return s;
+#endif // !defined USING_CURRENT_XMLWRAPP
+}
+
 // TODO ?? Second argument not yet implemented.
 xml_lmi::ElementContainer child_elements
     (xml_lmi::Element const& parent
@@ -338,6 +374,12 @@ void set_attr
         }
 }
 } // namespace xml_lmi
+
+std::ostream& operator<<(std::ostream& os, xml_lmi::xml_document const& d)
+{
+    os << d.document();
+    return os;
+}
 
 #endif // !defined USING_LIBXMLPP
 
