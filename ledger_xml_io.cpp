@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xml_io.cpp,v 1.51 2006-11-06 00:57:26 chicares Exp $
+// $Id: ledger_xml_io.cpp,v 1.52 2006-11-07 03:56:26 chicares Exp $
 
 #include "ledger.hpp"
 
@@ -1091,13 +1091,14 @@ std::string Ledger::xml_root_name() const
 
 void Ledger::write(std::ostream& os) const
 {
-    xml_lmi::Element root(xml_root_name().c_str());
+    xml_lmi::xml_document document(xml_root_name());
+    xml_lmi::Element& root = document.root_node();
+
     root << *this;
 // Need DOCTYPE support, which xmlwrapp lacks--so can't do this:
 //    os << root;
 
-    std::string s;
-    root.node_to_string(s);
+    std::string s = document.str();
     std::string token("<?xml version=\"1.0\"?>");
     std::string string_to_insert
         ("\n<!DOCTYPE sales [\n]>\n"
