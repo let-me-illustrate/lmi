@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: inputillus_xml_io.cpp,v 1.19 2006-11-07 04:38:15 chicares Exp $
+// $Id: inputillus_xml_io.cpp,v 1.20 2006-11-07 04:51:20 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -111,12 +111,11 @@ using namespace xml;
         (IllusInputParms::member_names()
         );
     std::vector<std::string>::iterator current_member;
-    for(xml_lmi::NodeConstIterator child = x.begin(); child != x.end(); ++child)
+    xml_lmi::ElementContainer const elements(xml_lmi::child_elements(x));
+    typedef xml_lmi::ElementContainer::const_iterator eci;
+    for(eci i = elements.begin(); i != elements.end(); ++i)
         {
-        if(child->is_text())
-            {
-            continue;
-            }
+        xml_lmi::ElementPointer const& child = *i;
         std::string node_tag(child->get_name());
         current_member = std::find
             (member_names.begin()

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.477 2006-11-07 04:38:15 chicares Exp $
+// $Id: ChangeLog,v 1.478 2006-11-07 04:51:20 chicares Exp $
 
 MAINTENANCE
 
@@ -7874,4 +7874,10 @@ Refactor xml document handling.
   xml_lmi.hpp
 Refactor xml node addition. The macros show an essential difference
 between libxml++ and xmlwrapp that neither's API can bridge.
+
+20061107T0451Z <chicares@cox.net> [1167]
+
+  inputillus_xml_io.cpp
+Remove one last libxml++ incompatibility. Run the unit test to see the
+cost of virtualization.
 
