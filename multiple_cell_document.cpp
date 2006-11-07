@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: multiple_cell_document.cpp,v 1.15 2006-11-07 03:56:26 chicares Exp $
+// $Id: multiple_cell_document.cpp,v 1.16 2006-11-07 04:38:15 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -228,22 +228,20 @@ void multiple_cell_document::write(std::ostream& os) const
 //        );
     root << case_parms_[0];
 
-    root.push_back
-        (xml_lmi::Element
-            ("NumberOfClasses"
-            ,value_cast<std::string>(class_parms_.size()).c_str()
-            )
+    xml_lmi::add_node
+        (root
+        ,"NumberOfClasses"
+        ,value_cast<std::string>(class_parms_.size()).c_str()
         );
     for(unsigned int j = 0; j < class_parms_.size(); j++)
         {
         root << class_parms_[j];
         }
 
-    root.push_back
-        (xml_lmi::Element
-            ("NumberOfCells"
-            ,value_cast<std::string>(cell_parms_.size()).c_str()
-            )
+    xml_lmi::add_node
+        (root
+        ,"NumberOfCells"
+        ,value_cast<std::string>(cell_parms_.size()).c_str()
         );
     for(unsigned int j = 0; j < cell_parms_.size(); j++)
         {

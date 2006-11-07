@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xml_lmi.cpp,v 1.9 2006-11-07 03:56:26 chicares Exp $
+// $Id: xml_lmi.cpp,v 1.10 2006-11-07 04:38:15 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -249,6 +249,15 @@ std::string xml_lmi::xml_document::str()
     root_->node_to_string(s);
     return s;
 #endif // !defined USING_CURRENT_XMLWRAPP
+}
+
+void add_node
+    (Element&           element
+    ,std::string const& name
+    ,std::string const& content
+    )
+{
+    element.push_back(xml_lmi::Element(name.c_str(), content.c_str()));
 }
 
 // TODO ?? Second argument not yet implemented.
