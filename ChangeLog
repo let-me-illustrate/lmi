@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.478 2006-11-07 04:51:20 chicares Exp $
+// $Id: ChangeLog,v 1.479 2006-11-07 18:47:23 chicares Exp $
 
 MAINTENANCE
 
@@ -7880,4 +7880,9 @@ between libxml++ and xmlwrapp that neither's API can bridge.
   inputillus_xml_io.cpp
 Remove one last libxml++ incompatibility. Run the unit test to see the
 cost of virtualization.
+
+20061107T1847Z <chicares@cox.net> [1167]
+
+  objects.make
+Make conditionals backward-compatible with older versions of 'make'.
 
