@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: html.xsl,v 1.1.2.12 2006-11-03 16:21:30 etarassov Exp $
+    $Id: html.xsl,v 1.1.2.13 2006-11-07 16:29:03 etarassov Exp $
 
     Uses format.xml - column titles, number-formatting and other information.
 -->
@@ -62,7 +62,7 @@
 <xsl:variable name="basic_columns" select="document('')/xsl:stylesheet/xsl:variable[@name='basic_columns_xml']/column"/>
 
 <!-- Basic columns and columns from supplemental report -->
-<xsl:variable name="all_columns" select="$calculation_summary_columns | $basic_columns | $supplemental_columns"/>
+<xsl:variable name="all_columns" select="$basic_columns | $calculation_summary_columns"/>
 
 <!-- Main template. -->
 <xsl:template match="/illustration">

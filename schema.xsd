@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: schema.xsd,v 1.1.2.10 2006-11-02 15:40:09 etarassov Exp $
+    $Id: schema.xsd,v 1.1.2.11 2006-11-07 16:29:02 etarassov Exp $
 
     TODO ?? add uniqueness constraints for (name,basis)
 -->
@@ -382,7 +382,6 @@
             <xs:element name="format" type="lmi:column_format_type" minOccurs="0" maxOccurs="1"/>
         </xs:sequence>
         <xs:attribute name="name" type="lmi:name_type" use="required"/>
-        <xs:attribute name="calculation_summary" type="xs:boolean" default="false" use="optional"/>
     </xs:complexType>
 
     <xs:complexType name="columns_type">

@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: tab_delimited.xsl,v 1.1.2.11 2006-11-02 18:24:50 etarassov Exp $
+    $Id: tab_delimited.xsl,v 1.1.2.12 2006-11-07 16:29:03 etarassov Exp $
 
     Uses format.xml - column titles, number-formatting and other information.
 -->
@@ -31,11 +31,7 @@
 ]>
 <xsl:stylesheet xmlns:lmi="http://savannah.nongnu.org/projects/lmi" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0" xsi:schemaLocation="http://savannah.nongnu.org/projects/lmi schema.xsd">
 
-<xsl:output method="text"/>
-
-<xsl:param name="only_show_calculation_summary"/>
-
-<xsl:include href="common.xsl"/>
+<xsl:include href="tsv_common.xsl"/>
 
 <xsl:variable name="basic_columns_xml">
     <column name="DBOpt">DeathBenefitOption</column>
@@ -97,20 +93,7 @@
 -->
 <xsl:variable name="basic_columns" select="document('tab_delimited.xsl')/xsl:stylesheet/xsl:variable[@name='basic_columns_xml']/column"/>
 
-<xsl:variable name="all_columns" select="$calculation_summary_columns | $basic_columns | $supplemental_columns"/>
-
-<!-- Print a non-empty value, and puts '0' for an empty (non-existing) value. -->
-<xsl:template name="print_value">
-    <xsl:param name="value"/>
-    <xsl:choose>
-        <xsl:when test="not($value)">
-            <xsl:text>0</xsl:text>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:value-of select="$value"/>
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:template>
+<xsl:variable name="all_columns" select="$basic_columns | $calculation_summary_columns"/>
 
 <xsl:template match="/illustration">
     <xsl:text>&nl;</xsl:text>
@@ -158,106 +141,29 @@
         <xsl:text>, </xsl:text>
         <xsl:value-of select="string_scalar[@name='PrepYear']"/>
     <xsl:text>'</xsl:text><xsl:text>&nl;</xsl:text>
-    <xsl:choose>
-        <xsl:when test="$only_show_calculation_summary='1'">
-            <xsl:call-template name="data_table">
-                <xsl:with-param name="pos" select="1"/>
-                <xsl:with-param name="columns" select="$calculation_summary_columns"/>
-                <xsl:with-param name="headers" select="$empty_nodeset"/>
-                <xsl:with-param name="vectors" select="$empty_nodeset"/>
-            </xsl:call-template>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:call-template name="data_table">
-                <xsl:with-param name="pos" select="1"/>
-                <xsl:with-param name="columns" select="$all_columns"/>
-                <xsl:with-param name="headers" select="$empty_nodeset"/>
-                <xsl:with-param name="vectors" select="$empty_nodeset"/>
-            </xsl:call-template>
-        </xsl:otherwise>
-    </xsl:choose>
+    <xsl:call-template name="data_table">
+        <xsl:with-param name="pos" select="1"/>
+        <xsl:with-param name="columns" select="$all_columns"/>
+        <xsl:with-param name="headers" select="$empty_nodeset"/>
+        <xsl:with-param name="vectors" select="$empty_nodeset"/>
+    </xsl:call-template>
 </xsl:template>
 
+<xsl:variable name="start_age" select="number($illustration/double_scalar[@name='Age'])"/>
 <!--
-    The template to be called from 'data_table'. See 'data_table' for parameter
-    description.
-    It generates the tab delimited table of values.
+    Templates to be called from 'do_data_table' for every row in a table.
+    The purpose is to generate some static columns in the table.
 -->
-<xsl:template name="do_data_table">
-    <xsl:param name="headers"/>
-    <xsl:param name="vectors"/>
-    <xsl:variable name="start_age" select="number($illustration/double_scalar[@name='Age'])"/>
-    <!--
-        Table: Headers
-    -->
+<xsl:template name="do_data_table_pre_headers">
     <xsl:text>PolicyYear&tab;</xsl:text>
     <xsl:text>AttainedAge&tab;</xsl:text>
-    <xsl:for-each select="$headers">
-        <xsl:choose>
-            <!-- a spacer -->
-            <xsl:when test="not(@name)">
-                <!-- leave the cell empty for a spacer column -->
-            </xsl:when>
-            <!-- if the title is specified directly, then use it -->
-            <xsl:when test="./text()">
-                <xsl:value-of select="./text()"/>
-            </xsl:when>
-            <!-- otherwise get it from 'format.xml' -->
-            <xsl:otherwise>
-                <xsl:call-template name="title">
-                    <xsl:with-param name="name" select="@name"/>
-                    <xsl:with-param name="basis" select="@basis"/>
-                    <xsl:with-param name="column" select="."/>
-                </xsl:call-template>
-            </xsl:otherwise>
-        </xsl:choose>
-        <xsl:text>&tab;</xsl:text>
-    </xsl:for-each>
-    <xsl:text>&nl;</xsl:text>
-    <!--
-        Table: Data
-    -->
-    <xsl:variable name="is_inforce" select="number($illustration/double_scalar[@name='IsInforce'])"/>
-        <xsl:for-each select="$vectors[1]/duration">
-            <xsl:variable name="position" select="number(position())"/>
-            <xsl:value-of select="$position"/>
-            <xsl:text>&tab;</xsl:text>
-            <xsl:value-of select="$start_age + $position - 1"/>
-            <xsl:text>&tab;</xsl:text>
-            <xsl:for-each select="$headers">
-                <xsl:variable name="name" select="@name"/>
-                <xsl:variable name="basis" select="@basis"/>
-                <xsl:choose>
-                    <!-- deal with uncommon column cases in here -->
-                    <xsl:when test="$is_inforce &gt; 0 and ($name='IrrOnSurrender' or $name='IrrOnDeath')">
-                        <xsl:text>(inforce)</xsl:text>
-                    </xsl:when>
-                    <xsl:when test="$name='InforceLives'">
-                        <xsl:value-of select="$vectors[@name=$name]/duration[$position + 1]"/>
-                    </xsl:when>
-                    <!-- the general case -->
-                    <xsl:otherwise>
-                        <xsl:choose>
-                            <xsl:when test="not($name)">
-                                <!-- just an empty cell for a spacer column -->
-                            </xsl:when>
-                            <xsl:when test="not($basis)">
-                                <xsl:call-template name="print_value">
-                                    <xsl:with-param name="value" select="$vectors[@name=$name]/duration[$position]"/>
-                                </xsl:call-template>
-                            </xsl:when>
-                            <xsl:otherwise>
-                                <xsl:call-template name="print_value">
-                                    <xsl:with-param name="value" select="$vectors[@name=$name][@basis=$basis]/duration[$position]"/>
-                                </xsl:call-template>
-                            </xsl:otherwise>
-                        </xsl:choose>
-                    </xsl:otherwise>
-                </xsl:choose>
-                <xsl:text>&tab;</xsl:text>
-            </xsl:for-each>
-            <xsl:text>&nl;</xsl:text>
-        </xsl:for-each>
-    </xsl:template>
+</xsl:template>
+<xsl:template name="do_data_table_pre_data">
+    <xsl:param name="position"/>
+    <xsl:value-of select="$position"/>
+    <xsl:text>&tab;</xsl:text>
+    <xsl:value-of select="$start_age + $position - 1"/>
+    <xsl:text>&tab;</xsl:text>
+</xsl:template>
 
 </xsl:stylesheet>

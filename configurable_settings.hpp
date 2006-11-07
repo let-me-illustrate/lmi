@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: configurable_settings.hpp,v 1.13.2.4 2006-11-07 01:47:59 etarassov Exp $
+// $Id: configurable_settings.hpp,v 1.13.2.5 2006-11-07 16:29:02 etarassov Exp $
 
 #ifndef configurable_settings_hpp
 #define configurable_settings_hpp
@@ -101,22 +101,23 @@ class LMI_SO configurable_settings
   public:
     static configurable_settings& instance();
 
-    std::string const& calculation_summary_colums () const;
-    std::string const& cgi_bin_log_filename       () const;
-    std::string const& custom_input_filename      () const;
-    std::string const& custom_output_filename     () const;
-    std::string const& default_input_filename     () const;
-    std::string const& libraries_to_preload       () const;
-    bool               offer_hobsons_choice       () const;
-    std::string const& skin_filename              () const;
-    std::string const& spreadsheet_file_extension () const;
-    std::string const& xml_schema_filename        () const;
-    std::string const& xsl_fo_command             () const;
-    std::string const& xsl_fo_directory           () const;
-    std::string const& xslt_directory             () const;
-    std::string const& xslt_format_xml_filename   () const;
-    std::string const& xslt_html_filename         () const;
-    std::string const& xslt_tab_delimited_filename() const;
+    std::string const& calculation_summary_colums       () const;
+    std::string const& cgi_bin_log_filename             () const;
+    std::string const& custom_input_filename            () const;
+    std::string const& custom_output_filename           () const;
+    std::string const& default_input_filename           () const;
+    std::string const& libraries_to_preload             () const;
+    bool               offer_hobsons_choice             () const;
+    std::string const& skin_filename                    () const;
+    std::string const& spreadsheet_file_extension       () const;
+    std::string const& xml_schema_filename              () const;
+    std::string const& xsl_fo_command                   () const;
+    std::string const& xsl_fo_directory                 () const;
+    std::string const& xslt_directory                   () const;
+    std::string const& xslt_format_xml_filename         () const;
+    std::string const& xslt_html_filename               () const;
+    std::string const& xslt_light_tab_delimited_filename() const;
+    std::string const& xslt_tab_delimited_filename      () const;
 
     void set_calculation_summary_colums (std::string const&);
 
@@ -147,6 +148,7 @@ class LMI_SO configurable_settings
     std::string xslt_directory_;
     std::string xslt_format_xml_filename_;
     std::string xslt_html_filename_;
+    std::string xslt_light_tab_delimited_filename_;
     std::string xslt_tab_delimited_filename_;
 
 #ifdef __BORLANDC__

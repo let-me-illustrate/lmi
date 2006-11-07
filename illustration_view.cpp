@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustration_view.cpp,v 1.41.2.8 2006-11-03 16:46:06 etarassov Exp $
+// $Id: illustration_view.cpp,v 1.41.2.9 2006-11-07 16:29:02 etarassov Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -357,7 +357,7 @@ void IllustrationView::CopyLedgerIntoClipboard(enum_copy_options options)
         }
     else
         {
-        ledger_formatter_.FormatAsCSTabDelimited(oss);
+        ledger_formatter_.FormatAsLightTSV(oss);
         }
 
     status() << "Format: " << timer.stop().elapsed_msec_str() << std::flush;

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.462.2.88 2006-11-07 01:48:39 etarassov Exp $
+// $Id: ChangeLog,v 1.462.2.89 2006-11-07 16:29:59 etarassov Exp $
 
 MAINTENANCE
 
@@ -8441,4 +8441,23 @@ Fix menu items in Illustration menu. Correct the code in PrintCS.
 Allow user modify configurable_settings calculation summary columns
 list using GUI interface. Store modified values back into
 'configurable_settings.xml'.
+
+20061107T1629Z <etarassov@tt-solutions.com> [1199]
+
+  configurable_settings.cpp
+  configurable_settings.hpp
+  cs_tsv.xsl
+  format.xml
+  html.xsl
+  illustration_view.cpp
+  ledger_text_formats.cpp
+  ledger_text_formats.hpp
+  ledger_xml_io.cpp
+  schema.xsd
+  tab_delimited.xsl
+  tsv_common.xsl
+Remove supplemental report columns from calculation summary. Fix the
+TSV version of calculation summary output to be exactly the same as
+HTML output. Add a new 'cs_tsv.xsl' filename to
+'configurable_settings'.
 

@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: format.xml,v 1.1.2.8 2006-11-02 15:40:09 etarassov Exp $
+    $Id: format.xml,v 1.1.2.9 2006-11-07 16:29:03 etarassov Exp $
 
     TODO ?? Titles ought to be read from an external file that
     permits flexible customization. Compliance might require that
@@ -447,7 +447,7 @@
         F1: zero decimals, commas
         Format as a number with thousand separators and no decimal places (#,###,##0)
     -->
-    <column name="AcctVal" calculation_summary="true">
+    <column name="AcctVal">
         <title basis="run_curr_basis">Curr Account Value</title>
         <title basis="run_guar_basis">Guar Account Value</title>
         <format>f1</format>
@@ -498,7 +498,7 @@
     <column name="Composite">
         <format>f1</format>
     </column>
-    <column name="CSVNet" calculation_summary="true">
+    <column name="CSVNet">
         <title basis="run_curr_basis">Curr Net Cash Surr Value</title>
         <title basis="run_guar_basis">Guar Net Cash Surr Value</title>
         <format>f1</format>
@@ -543,7 +543,7 @@
         <title>EE Payment Mode</title>
         <format>f1</format>
     </column>
-    <column name="EOYDeathBft" calculation_summary="true">
+    <column name="EOYDeathBft">
         <title basis="run_curr_basis">Curr EOY Death Benefit</title>
         <title basis="run_guar_basis">Guar EOY Death Benefit</title>
         <format>f1</format>
@@ -647,7 +647,7 @@
         <title>Withdrawal</title><!-- _____________  _____________ Withdrawal -->
         <format>f1</format>
     </column>
-    <column name="Outlay" calculation_summary="true">
+    <column name="Outlay">
         <title>Net Outlay</title>
         <format>f1</format>
     </column>

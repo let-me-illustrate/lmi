@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xml_io.cpp,v 1.48.2.20 2006-11-02 15:40:09 etarassov Exp $
+// $Id: ledger_xml_io.cpp,v 1.48.2.21 2006-11-07 16:29:03 etarassov Exp $
 
 #include "ledger.hpp"
 
@@ -333,6 +333,7 @@ class double_formatter_t
         ) const;
 
     void add_columns_to_format(std::vector<value_id> const& columns);
+    bool wants_column(value_id const& id) const;
 
   private:
     // Double conversion units
@@ -531,20 +532,6 @@ double_formatter_t::double_formatter_t()
                 {
                 continue;
                 }
-
-            // add columns explicitly marked by the 'calculation_summary' flag
-            // to the calculation_summary column set
-            xml_lmi::Attribute const* cs_attribute
-                = column_element->get_attribute("calculation_summary");
-            if(NULL != cs_attribute)
-                {
-                std::string const cs_value = cs_attribute->get_value();
-                if(cs_value == "true" || cs_value == "1")
-                    {
-                    cs_set.insert(id.name());
-                    }
-                }
-
 #if 1
             xml_lmi::NodeContainer const formats = (*it)->get_children("format");
             // skip nodes without format information
@@ -696,6 +683,11 @@ std::string double_formatter_t::format
     return do_format(d, f);
 }
 
+bool double_formatter_t::wants_column(value_id const& id) const
+{
+    return cs_set.find(id.name()) != cs_set.end();
+}
+
 string_vector_t double_formatter_t::format
     (value_id const& id
     ,double_vector_t const& dv
@@ -704,21 +696,22 @@ string_vector_t double_formatter_t::format
 {
     string_vector_t sv;
 
-    // Calculation summary only needs the values from 'cs_set'.
-    if(xml_version == e_xml_light && cs_set.find(id.name()) == cs_set.end())
+    // Include column only if it is a full xml version or if the column is in
+    // the calculation summary.
+    if(xml_version == e_xml_full || wants_column(id))
         {
-        static std::string const zero = "0";
-        sv.resize(dv.size(), zero);
+        format_t f = get_format(id);
+        for(double_vector_t::const_iterator it = dv.begin(),
+                                           end = dv.end();
+                                           it != end; ++it)
+            {
+            sv.push_back( do_format(*it, f) );
+            }
         return sv;
         }
 
-    format_t f = get_format(id);
-    for(double_vector_t::const_iterator it = dv.begin(),
-                                       end = dv.end();
-                                       it != end; ++it)
-        {
-        sv.push_back( do_format(*it, f) );
-        }
+    static std::string const zero = "0";
+    sv.resize(dv.size(), zero);
     return sv;
 }
 
@@ -776,8 +769,6 @@ void Ledger::do_write(xml_lmi::Element& illustration, enum_xml_version xml_versi
         supplemental_report_columns.push_back(value_id::from_report_column_title(ledger_invariant_->SupplementalReportColumn09));
         supplemental_report_columns.push_back(value_id::from_report_column_title(ledger_invariant_->SupplementalReportColumn10));
         supplemental_report_columns.push_back(value_id::from_report_column_title(ledger_invariant_->SupplementalReportColumn11));
-
-        formatter.add_columns_to_format(supplemental_report_columns);
         }
 
     // read 'calculation_summary_colums' from configurable_settings.xml
@@ -846,7 +837,11 @@ void Ledger::do_write(xml_lmi::Element& illustration, enum_xml_version xml_versi
     // working with maps of pointers, we need pointers here.
     //
     // The IRRs are the worst of all. Only calculate it if e_xml_variant_heavy.
-    if(xml_version == e_xml_full)
+    if
+        (  xml_version == e_xml_full
+        || formatter.wants_column(value_id::from_name("IrrCsv"))
+        || formatter.wants_column(value_id::from_name("IrrDb"))
+        )
         {
         if(!ledger_invariant_->IsInforce)
             {
@@ -1008,7 +1003,7 @@ void Ledger::do_write(xml_lmi::Element& illustration, enum_xml_version xml_versi
         ;++j
         )
         {
-        double_scalars[value_id::from_name(j->first)] = *j->second;
+        double_scalars[value_id::from_report_column_title(j->first)] = *j->second;
         }
     for
         (string_map::const_iterator j = strings.begin()
@@ -1016,7 +1011,7 @@ void Ledger::do_write(xml_lmi::Element& illustration, enum_xml_version xml_versi
         ;++j
         )
         {
-        string_scalars[value_id::from_name(j->first)] = *j->second;
+        string_scalars[value_id::from_report_column_title(j->first)] = *j->second;
         }
     for
         (double_vector_map::const_iterator j = vectors.begin()
@@ -1024,7 +1019,7 @@ void Ledger::do_write(xml_lmi::Element& illustration, enum_xml_version xml_versi
         ;++j
         )
         {
-        double_vectors[value_id::from_name(j->first)] = *j->second;
+        double_vectors[value_id::from_report_column_title(j->first)] = *j->second;
         }
 
 //    doublescalars[value_id::from_name("GuarMaxMandE")] = *scalars[value_id::from_name("GuarMaxMandE")];
