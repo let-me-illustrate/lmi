@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: objects.make,v 1.86 2006-11-07 03:23:21 chicares Exp $
+# $Id: objects.make,v 1.87 2006-11-07 18:47:23 chicares Exp $
 
 ################################################################################
 
@@ -102,7 +102,9 @@ xmlwrapp_objects := \
   tree_parser.o \
   utility.o \
 
-else ifeq (xmlwrapp_0_2_0,$(findstring xmlwrapp_0_2_0,$(xml_wrapper)))
+else
+  ifeq (xmlwrapp_0_2_0,$(findstring xmlwrapp_0_2_0,$(xml_wrapper)))
+
 xmlwrapp_objects := \
   event_parser.o \
   init.o \
@@ -110,6 +112,7 @@ xmlwrapp_objects := \
   node_iterator.o \
   tree_parser.o \
 
+  endif
 endif
 
 # For systems that already have boost, cgicc, and xmlwrapp libraries
