@@ -1,4 +1,4 @@
-// Interface to xmlwrapp.
+// Interface to libxml++ .
 //
 // Copyright (C) 2006 Gregory W. Chicares.
 //
@@ -19,62 +19,94 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xml_lmi.hpp,v 1.7 2006-11-07 03:23:21 chicares Exp $
+// $Id: xmlpp_lmi.hpp,v 1.1 2006-11-07 03:23:21 chicares Exp $
 
-#ifndef xml_lmi_hpp
-#define xml_lmi_hpp
+#ifndef xmlpp_lmi_hpp
+#define xmlpp_lmi_hpp
 
 #include "config.hpp"
 
 #include "xml_lmi_fwd.hpp"
 
 #if defined USING_LIBXMLPP
-#   include "xmlpp_lmi.hpp"
-#else // !defined USING_LIBXMLPP
 
 #include <boost/scoped_ptr.hpp>
 #include <boost/utility.hpp>
 
-#include <xmlwrapp/node.h> // xml::node::const_iterator
+#include <libxml++/libxml++.h>
 
 #include <iosfwd>
+#include <list>
 #include <string>
 #include <vector>
 
-/// Interface to xmlwrapp.
+/// Interface to libxml++ .
 
 namespace xml_lmi
 {
-    typedef xml::node::const_iterator   NodeConstIterator;
-    typedef xml::node::const_iterator   ElementPointer;
+    /// LIBXMLPP !! Type xmlpp::Node::NodeList is used in libxml++'s
+    /// interface, but cannot be forward declared because it is a
+    /// typedef inside a class. This is the typedef declaration as of
+    /// libxml++-2.14.0 . Presumably the compiler will warn if the
+    /// libxml++ maintainers ever change it, but it would be better to
+    /// persuade them to provide a forwarding header themselves.
+
+    typedef std::list<xmlpp::Node*> NodeContainer;
+
+    typedef Element*                    ElementPointer;
     typedef std::vector<ElementPointer> ElementContainer;
 
     class dom_parser
         :private boost::noncopyable
     {
-        typedef xml::tree_parser DomParser;
-        typedef xml::init        Initializer;
+        typedef xmlpp::DomParser DomParser;
 
       public:
         dom_parser(std::string const& filename);
         dom_parser(std::istream&);
         ~dom_parser();
 
-#if defined USING_CURRENT_XMLWRAPP
         Document const& document() const;
-#endif // defined USING_CURRENT_XMLWRAPP
         Element const& root_node(std::string const& expected_name) const;
 
       private:
-        std::string                    error_context_;
-        boost::scoped_ptr<Initializer> initializer_;
-        boost::scoped_ptr<DomParser>   parser_;
+        void create_xml_dom_parser();
+
+        std::string error_context_;
+        boost::scoped_ptr<DomParser> parser_;
     };
 
+    class xml_document
+        :private boost::noncopyable
+    {
+      public:
+        xml_document(std::string const& root_node_name);
+        ~xml_document();
+
+        Document      & document()       {return *document_;}
+        Document const& document() const {return *document_;}
+
+        Element& root_node();
+
+        std::string str();
+
+      private:
+        std::string                    error_context_;
+        boost::scoped_ptr<Document>    document_;
+    };
+
+#define ADD_NODE_0(element, variable_name, node_name) \
+    xml_lmi::Element& variable_name = *element.add_child(node_name);
+
+#define ADD_NODE_1(element, variable_name, node_name)
+
+    void add_node
+        (Element&
+        ,std::string const& name
+        ,std::string const& content
+        );
+
     /// Create a container of pointers to an element's child elements.
-    /// The contents are notionally pointers, but actually iterators,
-    /// because that's the abstraction xmlwrapp provides; they seem to
-    /// function as incrementable smart pointers.
     ///
     /// If the second argument is specified, then only elements having
     /// the given name are placed in the container.
@@ -106,6 +138,14 @@ namespace xml_lmi
 
     std::string get_content(Element const&);
 
+    /// Return an element node's first child element.
+    ///
+    /// Throws: std::runtime_error, via fatal_error(), if no child
+    /// element exists.
+
+    Element      & get_first_element(Element      &);
+    Element const& get_first_element(Element const&);
+
     /// Retrieve an xml element's name.
 
     std::string get_name(Element const&);
@@ -131,7 +171,10 @@ namespace xml_lmi
         );
 } // namespace xml_lmi
 
-#endif // !defined USING_LIBXMLPP
+std::ostream& operator<<(std::ostream&, xml_lmi::Document&);
+std::ostream& operator<<(std::ostream&, xml_lmi::xml_document&);
 
-#endif //xml_lmi_hpp
+#endif // defined USING_LIBXMLPP
+
+#endif //xmlpp_lmi_hpp
 

@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: workhorse.make,v 1.76 2006-11-02 20:44:06 chicares Exp $
+# $Id: workhorse.make,v 1.77 2006-11-07 03:23:21 chicares Exp $
 
 ################################################################################
 
@@ -116,6 +116,8 @@ effective_default_target: $(default_targets)
 ifeq (gcc,$(toolset))
   gcc_version := $(shell $(CXX) -dumpversion)
 endif
+
+xml_wrapper ?= xmlwrapp_0_2_0
 
 ################################################################################
 
@@ -250,20 +252,38 @@ wx_config_check:
 # make it easier to test or use later library versions that have
 # already been installed in the former directory.
 
+ifeq (xmlwrapp_0_5_0,$(findstring xmlwrapp_0_5_0,$(xml_wrapper)))
+  xmlwrapp_include_directory := xmlwrapp050
+endif
+
+ifeq (libxmlpp,$(findstring libxmlpp,$(xml_wrapper)))
+  libxmlpp_include_directory := $(system_root)/usr/local/include/libxml++-2.6
+endif
+
 all_include_directories := \
   $(src_dir) \
   $(overriding_include_directories) \
   $(compiler_include_directory) \
   $(wx_include_paths) \
+  $(system_root)/opt/lmi/third_party/include/$(xmlwrapp_include_directory) \
   $(system_root)/opt/lmi/third_party/include \
   $(system_root)/usr/local/include \
+  $(libxmlpp_include_directory) \
   $(system_root)/usr/local/include/libxml2 \
+
+ifeq (xmlwrapp_0_5_0,$(findstring xmlwrapp_0_5_0,$(xml_wrapper)))
+  xmlwrapp_source_directory := xmlwrapp050/libxml
+endif
+
+ifeq (xmlwrapp_0_2_0,$(findstring xmlwrapp_0_2_0,$(xml_wrapper)))
+  xmlwrapp_source_directory := libxml
+endif
 
 all_source_directories := \
   $(src_dir) \
   $(system_root)/opt/lmi/third_party/src/boost/libs/filesystem/src \
   $(system_root)/opt/lmi/third_party/src/cgicc \
-  $(system_root)/opt/lmi/third_party/src/libxml \
+  $(system_root)/opt/lmi/third_party/src/$(xmlwrapp_source_directory) \
 
 vpath lib%.a          $(CURDIR)
 vpath %.o             $(CURDIR)
@@ -500,9 +520,13 @@ endif
 # TODO ?? Consider refining it anyway, because it's unclean: libxml2
 # isn't actually required for all targets.
 
+ifneq (libxmlpp,$(findstring libxmlpp,$(xml_wrapper)))
+  xml_wrapper_library := -lxmlwrapp
+endif
+
 REQUIRED_LIBS := \
   $(platform_boost_libraries) \
-  -lxmlwrapp \
+  $(xml_wrapper_library) \
   $(platform_gnome_xml_libraries) \
 
 wx_ldflags = \
@@ -527,11 +551,19 @@ ifeq (3.4.2,$(gcc_version))
   gcc_version_specific_warnings := -Wno-uninitialized
 endif
 
+ifeq (xmlwrapp_0_5_0,$(findstring xmlwrapp_0_5_0,$(xml_wrapper)))
+  short_term_workaround := -DUSING_CURRENT_XMLWRAPP
+endif
+
+ifeq (libxmlpp,$(findstring libxmlpp,$(xml_wrapper)))
+  short_term_workaround := -DUSING_LIBXMLPP
+endif
+
 CFLAGS = \
   $(debug_flag) $(optimization_flag) $(gprof_flag) \
 
 CXXFLAGS = \
-  $(debug_flag) $(optimization_flag) $(gprof_flag) \
+  $(short_term_workaround) $(debug_flag) $(optimization_flag) $(gprof_flag) \
 
 # Explicitly disable the infelicitous auto-import default. See:
 #   http://sourceforge.net/mailarchive/message.php?msg_id=15705075
