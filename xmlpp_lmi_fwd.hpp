@@ -1,4 +1,4 @@
-// Interface to xmlwrapp: forward declarations.
+// Interface to libxml++ : forward declarations.
 //
 // Copyright (C) 2006 Gregory W. Chicares.
 //
@@ -19,44 +19,32 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xml_lmi_fwd.hpp,v 1.2 2006-11-07 03:23:21 chicares Exp $
+// $Id: xmlpp_lmi_fwd.hpp,v 1.1 2006-11-07 03:23:21 chicares Exp $
 
-#ifndef xml_lmi_fwd_hpp
-#define xml_lmi_fwd_hpp
+#ifndef xmlpp_lmi_fwd_hpp
+#define xmlpp_lmi_fwd_hpp
 
 #include "config.hpp"
 
 #if defined USING_LIBXMLPP
-#   include "xmlpp_lmi_fwd.hpp"
-#else // !defined USING_LIBXMLPP
 
-namespace xml // This is xmlwrapp's namespace.
+namespace xmlpp
 {
-#if defined USING_CURRENT_XMLWRAPP
-    class attributes;
-    class document;
-#endif // defined USING_CURRENT_XMLWRAPP
-    class init;
-    class node;
-    class tree_parser;
-} // Namespace xml.
-
-/// Interface to xmlwrapp.
+    class Attribute;
+    class Document;
+    class DomParser;
+    class Element;
+    class Node;
+} // namespace xmlpp
 
 namespace xml_lmi
 {
-#if defined USING_CURRENT_XMLWRAPP
-    typedef xml::attributes Attribute;
-    typedef xml::document   Document;
-#endif // defined USING_CURRENT_XMLWRAPP
-    typedef xml::node       Element;
-
-// Something like this might be useful:
-//    typedef std::vector<xml::node::const_iterator> ElementContainer;
-// but a nested class can't be forward declared.
+    typedef xmlpp::Attribute Attribute;
+    typedef xmlpp::Document  Document;
+    typedef xmlpp::Element   Element;
 } // namespace xml_lmi
 
-#endif // !defined USING_LIBXMLPP
+#endif // defined USING_LIBXMLPP
 
-#endif //xml_lmi_fwd_hpp
+#endif //xmlpp_lmi_fwd_hpp
 

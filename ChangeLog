@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.474 2006-11-06 02:51:47 chicares Exp $
+// $Id: ChangeLog,v 1.475 2006-11-07 03:23:21 chicares Exp $
 
 MAINTENANCE
 
@@ -7843,4 +7843,16 @@ Remove directly-used xmlwrapp types.
   configurable_settings.cpp
   inputillus_xml_io.cpp
 Use xml::get_content() wrapper.
+
+20061107T0323Z <chicares@cox.net> [1167]
+
+  objects.make
+  workhorse.make
+  xml_lmi.cpp
+  xml_lmi.hpp
+  xml_lmi_fwd.hpp
+  xmlpp_lmi.cpp     [new file]
+  xmlpp_lmi.hpp     [new file]
+  xmlpp_lmi_fwd.hpp [new file]
+Enable switching among C++ libxml2 wrappers.
 
