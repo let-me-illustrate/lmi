@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: multiple_cell_document.cpp,v 1.14 2006-11-05 16:37:06 chicares Exp $
+// $Id: multiple_cell_document.cpp,v 1.15 2006-11-07 03:56:26 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -212,7 +212,8 @@ void multiple_cell_document::read(std::istream& is)
 //============================================================================
 void multiple_cell_document::write(std::ostream& os) const
 {
-    xml_lmi::Element root(xml_root_name().c_str());
+    xml_lmi::xml_document document(xml_root_name());
+    xml_lmi::Element& root = document.root_node();
 
 // TODO ?? Diagnostics will be cryptic if the xml doesn't follow
 // the required layout. Perhaps they could be improved. Maybe it
@@ -249,6 +250,6 @@ void multiple_cell_document::write(std::ostream& os) const
         root << cell_parms_[j];
         }
 
-    os << root;
+    os << document;
 }
 

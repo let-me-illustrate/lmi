@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.475 2006-11-07 03:23:21 chicares Exp $
+// $Id: ChangeLog,v 1.476 2006-11-07 03:56:26 chicares Exp $
 
 MAINTENANCE
 
@@ -7855,4 +7855,13 @@ Use xml::get_content() wrapper.
   xmlpp_lmi.hpp     [new file]
   xmlpp_lmi_fwd.hpp [new file]
 Enable switching among C++ libxml2 wrappers.
+
+20061107T0356Z <chicares@cox.net> [1167]
+
+  ledger_xml_io.cpp
+  multiple_cell_document.cpp
+  single_cell_document.cpp
+  xml_lmi.cpp
+  xml_lmi.hpp
+Refactor xml document handling.
 
