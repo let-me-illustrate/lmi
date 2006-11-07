@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xml_lmi.hpp,v 1.8 2006-11-07 03:56:26 chicares Exp $
+// $Id: xml_lmi.hpp,v 1.9 2006-11-07 04:38:15 chicares Exp $
 
 #ifndef xml_lmi_hpp
 #define xml_lmi_hpp
@@ -99,6 +99,18 @@ namespace xml_lmi
         boost::scoped_ptr<Element>     root_;
 #endif // !defined USING_CURRENT_XMLWRAPP
     };
+
+#define ADD_NODE_0(element, variable_name, node_name) \
+    xml_lmi::Element variable_name(node_name); \
+
+#define ADD_NODE_1(element, variable_name, node_name) \
+    element.push_back(variable_name);
+
+    void add_node
+        (Element&
+        ,std::string const& name
+        ,std::string const& content
+        );
 
     /// Create a container of pointers to an element's child elements.
     /// The contents are notionally pointers, but actually iterators,
