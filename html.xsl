@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: html.xsl,v 1.1.2.15 2006-11-08 02:23:44 etarassov Exp $
+    $Id: html.xsl,v 1.1.2.16 2006-11-08 19:03:28 etarassov Exp $
 
     Uses format.xml - column titles, number-formatting and other information.
 -->
@@ -72,18 +72,18 @@
         <title>Let me illustrate...</title>
     </head>
     <body>
-        Calculation summary for<br/>
+        Calculation summary for:
         <xsl:choose>
             <xsl:when test="double_scalar[@name='Composite']='1'">
-                composite<br/>
+                composite
             </xsl:when>
             <xsl:otherwise>
                 <xsl:value-of select="string_scalar[@name='Insured1']"/><br/>
                 <br/>
-                <table border="0" cellpadding="4">
+                <table border="0" cellpadding="0" cellspacing="8">
                 <tr>
                 <td valign="top" align="left">
-                <table valign="top">
+                <table valign="top" cellpadding="0" cellspacing="0">
                 <!-- Here goes all the scalars for the LEFT bucket -->
                     <tr><td align="right" nowrap="1"><xsl:value-of select="double_scalar[@name='InitGLP']"/></td>
                         <td align="left" nowrap="1">initial guideline level premium</td></tr>
@@ -109,8 +109,9 @@
                 <!-- End: Here goes all the scalars for the LEFT bucket -->
                 </table>
                 </td>
+                <td width="10%"><br/></td>
                 <td valign="top" align="left">
-                <table valign="top">
+                <table valign="top" border="0" cellpadding="0" cellspacing="0">
                 <!-- Here goes all the scalars for the RIGHT bucket -->
 
                     <tr><td colspan="2" align="left" nowrap="1"><xsl:value-of select="string_scalar[@name='Gender']"/>,
@@ -149,7 +150,7 @@
 
         <hr/>
 
-        <table border="0" cellpadding="4" cellspacing="0" width="100%">
+        <table border="0" cellpadding="2" cellspacing="0" width="100%">
 
         <!-- Call 'data_table' template defined in 'common.xsl'. -->
         <xsl:call-template name="data_table">
@@ -210,13 +211,13 @@
     <xsl:for-each select="$vectors[1]/duration">
         <xsl:variable name="position" select="position()"/>
         <tr align="right">
-            <td>
+            <td nowrap="1">
                 <xsl:value-of select="$age + $position - 1"/>
             </td>
             <xsl:for-each select="$headers">
                 <xsl:variable name="name" select="@name"/>
                 <xsl:variable name="basis" select="@basis"/>
-                <td>
+                <td nowrap="1">
                     <xsl:choose>
                         <xsl:when test="not($name)">
                         <!-- leave the cell empty for a spacer column -->
