@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: data_directory.cpp,v 1.4 2006-01-29 13:52:00 chicares Exp $
+// $Id: data_directory.cpp,v 1.4.2.1 2006-11-08 00:42:55 etarassov Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -29,8 +29,10 @@
 #include "data_directory.hpp"
 
 #include "alert.hpp"
+#include "configurable_settings.hpp"
 #include "global_settings.hpp"
 
+#include <boost/filesystem/exception.hpp>
 #include <boost/filesystem/convenience.hpp>
 #include <boost/filesystem/path.hpp>
 
@@ -44,3 +46,36 @@ std::string AddDataDir(std::string const& a_filename)
     return path.string();
 }
 
+//============================================================================
+std::string AddXmlDirectory(std::string const& a_filename)
+{
+    try
+    {
+        fs::path path(a_filename);
+        if(!path.is_complete())
+            {
+            path = configurable_settings::instance().xslt_directory() / path;
+            if(!path.is_complete())
+                {
+                path = global_settings::instance().data_directory() / path;
+                }
+            }
+
+        return path.string();
+    }
+    catch(fs::filesystem_error const& e)
+    {
+        std::ostringstream oss;
+        oss
+            << "Invalid filename '"
+            << a_filename
+            << "' or directory '"
+            << configurable_settings::instance().xslt_directory()
+            << "', or '"
+            << global_settings::instance().data_directory().string()
+            << "'. "
+            << e.what()
+            ;
+        throw std::runtime_error(oss.str());
+    }
+}

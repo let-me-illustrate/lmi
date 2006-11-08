@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xml_lmi.hpp,v 1.1.2.20 2006-11-03 15:03:58 etarassov Exp $
+// $Id: xml_lmi.hpp,v 1.1.2.21 2006-11-08 00:42:55 etarassov Exp $
 
 #ifndef xml_lmi_hpp
 #define xml_lmi_hpp
@@ -39,7 +39,8 @@
 // - a light version, when speed is crucial (calculation summary)
 // - a full version, when we need all the information
 enum enum_xml_version
-    {e_xml_light
+    {e_xml_calculation_summary
+    ,e_xml_detailed
     ,e_xml_full
     };
 
@@ -87,6 +88,7 @@ namespace xml_lmi
         ~dom_parser();
 
         Document const& document() const;
+        Document      & document();
         Element const& root_node(std::string const& expected_name) const;
 
       private:
@@ -189,6 +191,7 @@ namespace xml_lmi
 
         void set_stylesheet(stylesheet_ptr_t stylesheet);
     };
+
 } // namespace xml_lmi
 
 std::ostream& operator<<(std::ostream&, xml_lmi::Document&);

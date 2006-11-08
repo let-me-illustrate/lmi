@@ -21,9 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: schema.xsd,v 1.1.2.11 2006-11-07 16:29:02 etarassov Exp $
-
-    TODO ?? add uniqueness constraints for (name,basis)
+    $Id: schema.xsd,v 1.1.2.12 2006-11-08 00:42:55 etarassov Exp $
 -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:lmi="http://savannah.nongnu.org/projects/lmi" targetNamespace="http://savannah.nongnu.org/projects/lmi" elementFormDefault="qualified" attributeFormDefault="unqualified">
     <xs:annotation>
@@ -246,10 +244,8 @@
             </xs:documentation>
         </xs:annotation>
         <xs:sequence>
-            <xs:element name="title" type="xs:string"/>
             <xs:choice maxOccurs="unbounded">
-                <xs:element name="column" type="lmi:column_type"/>
-                <xs:element name="spacer" type="lmi:report_spacer_type"/>
+                <xs:element name="column" type="lmi:column_ref_type"/>
             </xs:choice>
         </xs:sequence>
     </xs:complexType>
@@ -263,13 +259,13 @@
         <xs:sequence>
             <xs:element name="title" type="xs:string"/>
             <xs:choice maxOccurs="unbounded">
-                <xs:element name="column" type="lmi:column_type"/>
+                <xs:element name="column" type="lmi:column_ref_type"/>
                 <xs:element name="spacer" type="lmi:report_spacer_type"/>
             </xs:choice>
         </xs:sequence>
     </xs:complexType>
 
-    <xs:complexType name="column_type">
+    <xs:complexType name="column_ref_type">
         <xs:annotation>
             <xs:documentation>
                 A reference to a column to be included into the report.
@@ -320,7 +316,13 @@
         </xs:sequence>
     </xs:complexType>
 
-    <xs:element name="illustration" type="lmi:illustration_type"/>
+    <xs:element name="illustration" type="lmi:illustration_type">
+        <xs:unique name="unique_name_basis">
+            <xs:selector xpath="lmi:string_scalar | lmi:double_scalar | lmi:string_vector | lmi:double_vector"/>
+            <xs:field xpath="./@name"/>
+            <xs:field xpath="./@basis"/>
+        </xs:unique>
+    </xs:element>
 
 <!--
     *************************************

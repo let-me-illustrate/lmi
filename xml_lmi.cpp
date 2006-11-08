@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xml_lmi.cpp,v 1.1.2.26 2006-11-03 15:03:58 etarassov Exp $
+// $Id: xml_lmi.cpp,v 1.1.2.27 2006-11-08 00:42:55 etarassov Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -133,6 +133,24 @@ xml_lmi::Document const& xml_lmi::dom_parser::document() const
     try
         {
         xml_lmi::Document const* document = parser_->get_document();
+        if(!document)
+            {
+            throw std::runtime_error("Parsed document is null.");
+            }
+        return *document;
+        }
+    catch(std::exception const& e)
+        {
+        fatal_error() << error_context_ << e.what() << LMI_FLUSH;
+        throw std::logic_error("Unreachable"); // Silence compiler warning.
+        }
+}
+
+xml_lmi::Document& xml_lmi::dom_parser::document()
+{
+    try
+        {
+        xml_lmi::Document* document = parser_->get_document();
         if(!document)
             {
             throw std::runtime_error("Parsed document is null.");

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: data_directory.hpp,v 1.3 2006-01-29 13:52:00 chicares Exp $
+// $Id: data_directory.hpp,v 1.3.2.1 2006-11-08 00:42:55 etarassov Exp $
 
 #ifndef data_directory_hpp
 #define data_directory_hpp
@@ -30,7 +30,13 @@
 
 #include <string>
 
+/// Add data directory location to a data resource filename.
+
 std::string LMI_SO AddDataDir(std::string const& filename);
+
+/// Add xml data directory location to an xml related resource filename.
+
+std::string LMI_SO AddXmlDirectory(std::string const& filename);
 
 #endif // data_directory_hpp
 

@@ -19,7 +19,12 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xml_resources_test.cpp,v 1.1.2.12 2006-10-27 15:02:33 etarassov Exp $
+// $Id: xml_resources_test.cpp,v 1.1.2.13 2006-11-08 00:42:55 etarassov Exp $
+
+// TODO ?? Verify that the tests do test the things they claim to test, but
+// not some side effect.
+// Example of an incorrect test: test for name:basis uniqueness fails because
+// of an incorrect(not allowed) node order.
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -27,59 +32,47 @@
 #endif // __BORLANDC__
 
 #include "configurable_settings.hpp"
+#include "data_directory.hpp"
 #include "ledger.hpp"
 #include "ledger_text_formats.hpp"
+#include "path_utility.hpp"
 #define BOOST_INCLUDE_MAIN
 #include "test_tools.hpp"
 #include "timer.hpp"
 #include "xml_lmi.hpp"
 
 #include <boost/filesystem/exception.hpp>
+#include <boost/filesystem/operations.hpp>
 #include <boost/filesystem/path.hpp>
 
 #include <libxml/xmlschemas.h>
 #include <libxml++/libxml++.h>
 
+#include <fstream>
+
 namespace
 {
 
-std::string prepend_xslt_directory(std::string const& filename)
+std::string SafeAddXmlDirectory(std::string const& filename)
 {
-    boost::filesystem::path dir;
+    std::string path;
     try
         {
-        dir = configurable_settings::instance().xslt_directory();
+        path = AddXmlDirectory(filename);
         }
-    catch(boost::filesystem::filesystem_error const& err)
+    catch(std::exception const& e)
         {
         std::ostringstream oss;
         oss
-            << "Xslt directory is invalid '"
-            << configurable_settings::instance().xslt_directory()
-            << "'."
-            ;
-        BOOST_CRITICAL_ERROR(oss.str());
-        }
-
-    try
-        {
-        boost::filesystem::path const file = dir / filename;
-        return file.string();
-        }
-    catch(boost::filesystem::filesystem_error const& err)
-        {
-        std::ostringstream oss;
-        oss
-            << "Filename '"
+            << "Filename is invalid '"
             << filename
-            << "' can not be appended to xslt_directory '"
-            << configurable_settings::instance().xslt_directory()
-            << "'."
+            << "'. "
+            << e.what()
             ;
         BOOST_CRITICAL_ERROR(oss.str());
         }
 
-    return filename;
+    return path;
 }
 
 /// Class that allows us generate xml output similar to that of Ledger
@@ -120,6 +113,7 @@ class LedgerOutput
     void output(xml_lmi::Document& doc) const
     {
         xml_lmi::Element& root = *doc.create_root_node("illustration");
+        root.set_namespace_declaration("http://savannah.nongnu.org/projects/lmi");
 
         for
             (scalars_t::const_iterator sit = scalars_.begin()
@@ -178,8 +172,31 @@ class LedgerOutput
     vectors_t vectors_;
 };
 
+class temp_file_guard
+{
+  public:
+    temp_file_guard(boost::filesystem::path & filename)
+        :filename_(filename), active_(true)
+    {
+    }
+    ~temp_file_guard()
+    {
+        if(active_)
+            {
+            boost::filesystem::remove(filename_);
+            }
+    }
+    void dispose()
+    {
+        active_ = false;
+    }
+  private:
+    boost::filesystem::path & filename_;
+    bool active_;
+};
+
 bool validate_xml_doc_against_schema
-    (xml_lmi::Document const& document
+    (xml_lmi::Document & document
     ,xmlSchemaPtr schema
     )
 {
@@ -196,8 +213,22 @@ bool validate_xml_doc_against_schema
         ,(xmlSchemaValidityWarningFunc) fprintf
         ,stderr
         );
-    int ret
-        = xmlSchemaValidateDoc(vctxt, const_cast<xmlDoc*>(document.cobj()));
+    // we need to write into a file first
+    std::string content = document.write_to_string_formatted();
+
+    boost::filesystem::path temp_filename
+        = unique_filepath("temporary", ".xml");
+        {
+        std::ofstream ofs
+            (temp_filename.string().c_str()
+            ,std::ios_base::out | std::ios_base::trunc
+            );
+        ofs << content;
+        }
+    temp_file_guard guard(temp_filename);
+
+    int ret = xmlSchemaValidateFile(vctxt, temp_filename.string().c_str(), 0);
+
     xmlSchemaFreeValidCtxt(vctxt);
     return (ret == 0);
 }
@@ -209,6 +240,13 @@ bool validate_ledger_against_schema
 {
     xml_lmi::Document document;
     output.output(document);
+
+    static std::string a = "file";
+    a += "_a";
+
+    std::ofstream ofs((a + ".xml").c_str(), std::ios_base::out | std::ios_base::trunc);
+    ofs << document.write_to_string_formatted();
+
     return validate_xml_doc_against_schema(document, schema);
 }
 
@@ -220,23 +258,14 @@ bool apply_xslt_to_document
     ,xml_lmi::Document const& document
     )
 {
-    try
-        {
-        xml_lmi::Stylesheet stylesheet(filename);
-        std::ostringstream oss;
-        stylesheet.transform
-            (document
-            ,oss
-            ,xml_lmi::Stylesheet::e_output_xml
-            );
-        return true;
-        }
-    catch(std::exception const&)
-        {
-        // This method will always be called from within BOOST_TEST
-        // therefore return false and don't use BOOST_TEST(false)
-        return false;
-        }
+    xml_lmi::Stylesheet stylesheet(SafeAddXmlDirectory(filename));
+    std::ostringstream oss;
+    stylesheet.transform
+        (document
+        ,oss
+        ,xml_lmi::Stylesheet::e_output_xml
+        );
+    return true;
 }
 
 } // Unnamed namespace.
@@ -250,7 +279,7 @@ int test_main(int, char*[])
     // test schema.xsd itself
     // ----------------------
     std::string const schema_filename
-        (prepend_xslt_directory(cs.xml_schema_filename())
+        (SafeAddXmlDirectory(cs.xml_schema_filename())
         );
 
     xmlSchemaParserCtxtPtr schema_ctxt
@@ -269,12 +298,12 @@ int test_main(int, char*[])
     BOOST_TEST(schema != NULL);
 
     std::string format_xml_filename
-        (prepend_xslt_directory(cs.xslt_format_xml_filename())
+        (SafeAddXmlDirectory(cs.xslt_format_xml_filename())
         );
     try
         {
         xml_lmi::dom_parser dom_parser(format_xml_filename);
-        xml_lmi::Document const& document = dom_parser.document();
+        xml_lmi::Document& document = dom_parser.document();
         BOOST_TEST(validate_xml_doc_against_schema(document, schema));
         }
     catch(std::exception const&)
@@ -289,8 +318,8 @@ int test_main(int, char*[])
         .set("string_scalar", "AvName", "", "Account")
         .set("double_scalar", "InitAnnGenAcctInt", "run_curr_basis", "6.00%")
         .set("double_scalar", "Age", "", "45")
-        .set("double_vector", "Outlay", "", str_vector_t(10, "20,000"))
         .set("string_vector", "DBOpt", "", str_vector_t(10, "A"))
+        .set("double_vector", "Outlay", "", str_vector_t(10, "20,000"))
         ;
     BOOST_TEST(validate_ledger_against_schema(ledger0, schema));
 
@@ -304,11 +333,26 @@ int test_main(int, char*[])
     ledger2.set("string_scalar", "Age", "basis", "45");
     BOOST_TEST(!validate_ledger_against_schema(ledger2, schema));
 
-    // Must fail: name 'Age' has to be unique across all types of values
-    // TODO ?? add the correct uniqueness constraint to the schema
-    LedgerOutput ledger3 = ledger0;
-    ledger3.set("string_scalar", "Age", "", "10");
-    BOOST_TEST(!validate_ledger_against_schema(ledger3, schema));
+//    TODO ?? the uniqueness of a pair of attributes cannot be expressed
+//    easily in XMLSchema if one of the attributes are optional. Which is
+//    the case for 'name:basis' pair of attributes. That's why we can catch
+//    a not unique 'name:basis', but can't check for duplications of
+//    a 'name' only for columns where basis do not apply.
+//
+//    // Must fail: name 'Age' has to be unique
+//    LedgerOutput ledger3a = ledger0;
+//    ledger3a.set("double_value", "Age", "", "20,000");
+//    BOOST_TEST(!validate_ledger_against_schema(ledger3a, schema));
+
+    // Must fail: 'InitAnnGenAcctInt:run_curr_basis' has to be unique
+    LedgerOutput ledger3b = ledger0;
+    ledger3b.set
+        ("double_vector"
+        ,"InitAnnGenAcctInt"
+        ,"run_curr_basis"
+        ,str_vector_t(10, "20,000")
+        );
+    BOOST_TEST(!validate_ledger_against_schema(ledger3b, schema));
 
     // Must fail: invalid numeric value '10.000,00' supplied for 'Age'
     LedgerOutput ledger4 = ledger0;

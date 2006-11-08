@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xml_io.cpp,v 1.48.2.21 2006-11-07 16:29:03 etarassov Exp $
+// $Id: ledger_xml_io.cpp,v 1.48.2.22 2006-11-08 00:42:55 etarassov Exp $
 
 #include "ledger.hpp"
 
@@ -27,6 +27,7 @@
 #include "calendar_date.hpp"
 #include "comma_punct.hpp"
 #include "configurable_settings.hpp"
+#include "data_directory.hpp"
 #include "global_settings.hpp"
 #include "ledger_base.hpp"
 #include "ledger_invariant.hpp"
@@ -474,19 +475,16 @@ double_formatter_t::double_formatter_t()
     std::string format_path;
     try
     {
-        boost::filesystem::path xslt_directory = configurable_settings::instance().xslt_directory();
-        format_path  =
-            (xslt_directory / configurable_settings::instance().xslt_format_xml_filename()
-            ).string();
+        format_path = AddXmlDirectory
+            (configurable_settings::instance().xslt_format_xml_filename()
+            );
     }
-    catch(boost::filesystem::filesystem_error const& e)
+    catch(fs::filesystem_error const& e)
     {
         fatal_error()
-            << "Invalid directory '"
-            << configurable_settings::instance().xslt_directory()
-            << "' or filename '"
+            << "Invalid xml file '"
             << configurable_settings::instance().xslt_format_xml_filename()
-            << "' specified."
+            << "' specified. "
             << e.what()
             << LMI_FLUSH
             ;

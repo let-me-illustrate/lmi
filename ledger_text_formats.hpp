@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_text_formats.hpp,v 1.5.2.10 2006-11-07 16:29:03 etarassov Exp $
+// $Id: ledger_text_formats.hpp,v 1.5.2.11 2006-11-08 00:42:55 etarassov Exp $
 
 #ifndef ledger_text_formats_hpp
 #define ledger_text_formats_hpp
@@ -85,29 +85,15 @@ class LMI_SO LedgerFormatter
 
     Ledger const* GetLedger() const { return ledger_values_; }
 
-    // calculate corresponding XML data if needed
-    void PrepareXmlDataForHtml()         { GetXmlDocLight(); }
-    void PrepareXmlDataForTabDelimited() { GetXmlDocLight(); }
-    void PrepareXmlDataForXslFo()        { GetXmlDocHeavy(); }
-
   private:
     Ledger const* ledger_values_;
 
     typedef boost::shared_ptr<xml_lmi::Document> XmlDocumentPtr;
 
-    // light and heavy version of xml data, mutable is needed to allow
-    // its lazy initialisation
-    mutable XmlDocumentPtr xml_document_heavy_;
-    mutable XmlDocumentPtr xml_document_light_;
-
-    // clear xml data
-    void ResetXmlData();
+    mutable std::map<enum_xml_version,XmlDocumentPtr> cached_xml_docs_;
 
     // generate the corresponding xml data if it was not already done
-    xml_lmi::Document const& GetXmlDocHeavy() const;
-    xml_lmi::Document const& GetXmlDocLight() const;
-
-    XmlDocumentPtr DoGenerateXml(enum_xml_version) const;
+    xml_lmi::Document const& GetXmlDoc(enum_xml_version) const;
 
     xml_lmi::Stylesheet const& GetStylesheet
         (std::string const& filename
