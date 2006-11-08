@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: html.xsl,v 1.1.2.14 2006-11-08 02:20:53 etarassov Exp $
+    $Id: html.xsl,v 1.1.2.15 2006-11-08 02:23:44 etarassov Exp $
 
     Uses format.xml - column titles, number-formatting and other information.
 -->
@@ -86,25 +86,25 @@
                 <table valign="top">
                 <!-- Here goes all the scalars for the LEFT bucket -->
                     <tr><td align="right" nowrap="1"><xsl:value-of select="double_scalar[@name='InitGLP']"/></td>
-                        <td align="left"  nowrap="1">initial guideline level premium</td></tr>
+                        <td align="left" nowrap="1">initial guideline level premium</td></tr>
 
                     <tr><td align="right" nowrap="1"><xsl:value-of select="double_scalar[@name='InitGSP']"/></td>
-                        <td align="left"  nowrap="1">initial guideline single premium</td></tr>
+                        <td align="left" nowrap="1">initial guideline single premium</td></tr>
 
                     <tr><td align="right" nowrap="1"><xsl:value-of select="double_scalar[@name='InitSevenPayPrem']"/></td>
-                        <td align="left"  nowrap="1">initial seven-pay premium</td></tr>
+                        <td align="left" nowrap="1">initial seven-pay premium</td></tr>
 
                     <tr><td align="right" nowrap="1"><xsl:value-of select="double_scalar[@name='InitBaseSpecAmt']"/></td>
-                        <td align="left"  nowrap="1">initial base specified amount</td></tr>
-    
+                        <td align="left" nowrap="1">initial base specified amount</td></tr>
+
                     <tr><td align="right" nowrap="1"><xsl:value-of select="double_scalar[@name='InitTermSpecAmt']"/></td>
-                        <td align="left"  nowrap="1">initial term specified amount</td></tr>
-    
+                        <td align="left" nowrap="1">initial term specified amount</td></tr>
+
                     <tr><td align="right" nowrap="1"><xsl:value-of select="double_scalar[@name='InitTotalSA']"/></td>
-                        <td align="left"  nowrap="1">initial total specified amount</td></tr>
-    
+                        <td align="left" nowrap="1">initial total specified amount</td></tr>
+
                     <tr><td align="right" nowrap="1"><xsl:value-of select="string_scalar[@name='StatePostalAbbrev']"/></td>
-                        <td align="left"  nowrap="1">state of jurisdiction</td></tr>
+                        <td align="left" nowrap="1">state of jurisdiction</td></tr>
 
                 <!-- End: Here goes all the scalars for the LEFT bucket -->
                 </table>
@@ -137,7 +137,7 @@
                     </td></tr>
 
                     <tr><td align="right" nowrap="1"><xsl:value-of select="double_scalar[@name='InitTgtPrem']"/></td>
-                        <td align="left"  nowrap="1">initial target premium</td></tr>
+                        <td align="left" nowrap="1">initial target premium</td></tr>
 
                 <!-- End: Here goes all the scalars for the RIGHT bucket -->
                 </table>
