@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.462.2.89 2006-11-07 16:29:59 etarassov Exp $
+// $Id: ChangeLog,v 1.462.2.90 2006-11-08 00:36:25 etarassov Exp $
 
 MAINTENANCE
 
@@ -8442,7 +8442,7 @@ Allow user modify configurable_settings calculation summary columns
 list using GUI interface. Store modified values back into
 'configurable_settings.xml'.
 
-20061107T1629Z <etarassov@tt-solutions.com> [1199]
+20061107T1629Z <etarassov@tt-solutions.com> [1167]
 
   configurable_settings.cpp
   configurable_settings.hpp
@@ -8460,4 +8460,9 @@ Remove supplemental report columns from calculation summary. Fix the
 TSV version of calculation summary output to be exactly the same as
 HTML output. Add a new 'cs_tsv.xsl' filename to
 'configurable_settings'.
+
+20061108T0036Z <etarassov@tt-solutions.com> [1167]
+
+  ChangeLog
+Fix broken defect-count for the 20061107T1629Z change.
 
