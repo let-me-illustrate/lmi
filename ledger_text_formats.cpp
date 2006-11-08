@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_text_formats.cpp,v 1.22.2.11 2006-11-08 00:42:55 etarassov Exp $
+// $Id: ledger_text_formats.cpp,v 1.22.2.12 2006-11-08 01:04:35 etarassov Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -163,7 +163,7 @@ xml_lmi::Document const& LedgerFormatter::GetXmlDoc
     xml_lmi::Element& root
         = *(document_ptr->create_root_node(ledger_values_->xml_root_name()));
 
-    ledger_values_->do_write(root, xml_version);
+    ledger_values_->write_version_of_xml(root, xml_version);
 
     cached_xml_docs_[xml_version] = document_ptr;
 

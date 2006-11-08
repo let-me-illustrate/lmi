@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xml_io.cpp,v 1.48.2.22 2006-11-08 00:42:55 etarassov Exp $
+// $Id: ledger_xml_io.cpp,v 1.48.2.23 2006-11-08 01:04:35 etarassov Exp $
 
 #include "ledger.hpp"
 
@@ -742,10 +742,13 @@ std::string double_formatter_t::do_format(double d, format_t const& f) const
 void Ledger::write(xml_lmi::Element& illustration) const
 {
     // by default generate a complete version of xml data
-    do_write(illustration, e_xml_full);
+    write_version_of_xml(illustration, e_xml_full);
 }
 
-void Ledger::do_write(xml_lmi::Element& illustration, enum_xml_version xml_version) const
+void Ledger::write_version_of_xml
+    (xml_lmi::Element& illustration
+    ,enum_xml_version xml_version
+    ) const
 {
     // initialize number formatting facility
     double_formatter_t formatter;

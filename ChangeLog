@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.462.2.92 2006-11-08 00:57:38 etarassov Exp $
+// $Id: ChangeLog,v 1.462.2.93 2006-11-08 01:05:09 etarassov Exp $
 
 MAINTENANCE
 
@@ -8485,4 +8485,11 @@ Update tests for xml resources.
 
   menus.xrc
 Add 'File->Properties' menu item to every menubar.
+
+20061108T0104Z <etarassov@tt-solutions.com> [1167]
+
+  ledger_text_formats.cpp
+  ledger_xml_io.cpp
+  ledger.hpp
+Change method name do_write into write_version_of_xml.
 

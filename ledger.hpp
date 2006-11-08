@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger.hpp,v 1.13.2.8 2006-10-31 00:25:10 chicares Exp $
+// $Id: ledger.hpp,v 1.13.2.9 2006-11-08 01:04:35 etarassov Exp $
 
 #ifndef ledger_hpp
 #define ledger_hpp
@@ -144,17 +144,7 @@ class LMI_SO Ledger
   private:
     friend class LedgerFormatter;
 
-    // EVGENIY Can we use a different name for this function?
-    // To me, 'do_' suggests that it's virtual:
-    //
-    // http://groups.google.com/group/comp.lang.c++.moderated/msg/f834bd9d73053566
-    // | There is a de facto naming convention that
-    // | prefixes the private virtual function with a "do"
-    //
-    // Would this:
-    //       void write(xml_lmi::Element&, enum_xml_version) const;
-    // be bad?
-    void do_write(xml_lmi::Element&, enum_xml_version) const;
+    void write_version_of_xml(xml_lmi::Element&, enum_xml_version) const;
 };
 
 inline ledger_map_holder const& Ledger::GetLedgerMap() const
