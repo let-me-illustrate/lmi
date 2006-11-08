@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.462.2.99 2006-11-08 19:03:56 etarassov Exp $
+// $Id: ChangeLog,v 1.462.2.100 2006-11-08 22:17:50 etarassov Exp $
 
 MAINTENANCE
 
@@ -8522,4 +8522,9 @@ Remove unused parameters.
 
   html.xsl
 Reduce header height. Fix staggered formatting.
+
+20061108T2216Z <etarassov@tt-solutions.com> [1168]
+
+  xml_resources_test.xsl
+Remove improper debug code.
 

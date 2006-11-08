@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xml_resources_test.cpp,v 1.1.2.13 2006-11-08 00:42:55 etarassov Exp $
+// $Id: xml_resources_test.cpp,v 1.1.2.14 2006-11-08 22:16:43 etarassov Exp $
 
 // TODO ?? Verify that the tests do test the things they claim to test, but
 // not some side effect.
@@ -240,12 +240,6 @@ bool validate_ledger_against_schema
 {
     xml_lmi::Document document;
     output.output(document);
-
-    static std::string a = "file";
-    a += "_a";
-
-    std::ofstream ofs((a + ".xml").c_str(), std::ios_base::out | std::ios_base::trunc);
-    ofs << document.write_to_string_formatted();
 
     return validate_xml_doc_against_schema(document, schema);
 }
