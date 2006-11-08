@@ -24,7 +24,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: menus.xrc,v 1.10.2.3 2006-11-07 01:47:59 etarassov Exp $
+    $Id: menus.xrc,v 1.10.2.4 2006-11-08 00:57:08 etarassov Exp $
 -->
 
 <!-- reusable menus -->
@@ -168,6 +168,10 @@
             <help>Edit default cell</help>
         </object>
         <object class="separator"/>
+        <object class="wxMenuItem" name="properties">
+            <label>Prop_erties...</label>
+            <help>Open global properties dialog</help>
+        </object>
         <object class="wxMenuItem" name="wxID_EXIT">
             <label>E_xit</label>
             <bitmap>exit.xpm</bitmap>
@@ -349,6 +353,10 @@ Not supported yet: need to split columns into multiple pages.
             <help>Edit default cell</help>
         </object>
         <object class="separator"/>
+        <object class="wxMenuItem" name="properties">
+            <label>Prop_erties...</label>
+            <help>Open global properties dialog</help>
+        </object>
         <object class="wxMenuItem" name="wxID_EXIT">
             <label>E_xit</label>
             <bitmap>exit.xpm</bitmap>
@@ -428,6 +436,10 @@ Not supported yet: need to split columns into multiple pages.
             <help>Edit default cell</help>
         </object>
         <object class="separator"/>
+        <object class="wxMenuItem" name="properties">
+            <label>Prop_erties...</label>
+            <help>Open global properties dialog</help>
+        </object>
         <object class="wxMenuItem" name="wxID_EXIT">
             <label>E_xit</label>
             <bitmap>exit.xpm</bitmap>

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.462.2.91 2006-11-08 00:43:28 etarassov Exp $
+// $Id: ChangeLog,v 1.462.2.92 2006-11-08 00:57:38 etarassov Exp $
 
 MAINTENANCE
 
@@ -8480,4 +8480,9 @@ Fix broken defect-count for the 20061107T1629Z change.
 Look for xml resources in data directory. Add detailed xml version
 for TSV data. Add 'name:basis' uniqueness constraint to XMLSchema.
 Update tests for xml resources.
+
+20061108T0057Z <etarassov@tt-solutions.com> [1167]
+
+  menus.xrc
+Add 'File->Properties' menu item to every menubar.
 
