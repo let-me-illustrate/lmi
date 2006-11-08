@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.462.2.95 2006-11-08 02:24:15 etarassov Exp $
+// $Id: ChangeLog,v 1.462.2.96 2006-11-08 17:36:44 etarassov Exp $
 
 MAINTENANCE
 
@@ -8502,4 +8502,9 @@ Rearrange scalar values into buckets in html.
 
   html.xsl
 Remove blank lines and reformat to pass 'make check_concinnity'.
+
+20061108T1736Z <etarassov@tt-solutions.com> [1167]
+
+  configure.ac
+Add '-Werror' option and fix checking for 'snprintf'.
 

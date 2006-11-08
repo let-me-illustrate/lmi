@@ -21,7 +21,7 @@ dnl snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
 dnl === Prologue ===
 
-AC_REVISION($Id: configure.ac,v 1.22.2.3 2006-10-24 13:05:12 etarassov Exp $)dnl
+AC_REVISION($Id: configure.ac,v 1.22.2.4 2006-11-08 17:36:20 etarassov Exp $)dnl
 
 AC_PREREQ(2.56)
 AC_INIT(LMI, 1.0.0, [chicares@cox.net])
@@ -161,6 +161,7 @@ dnl enable all possible warnings for gcc/g++
 CFLAGS_gcc_common="\
     -pedantic \
     -Wall \
+    -Werror \
     -Wcast-align \
     -Wconversion \
     -Wdeprecated-declarations \
@@ -272,7 +273,7 @@ AC_CACHE_CHECK([for snprintf],
                 #   undef __STRICT_ANSI__
                 #endif
                 #include <stdio.h>]],
-                [return snprintf("", 0, "");]
+                [char buffer[[1]]; return snprintf(buffer, 1, "%s", "");]
             )],
             lmi_cv_func_snprintf=yes,
             lmi_cv_func_snprintf=no
