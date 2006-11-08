@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xml_lmi.cpp,v 1.1.2.27 2006-11-08 00:42:55 etarassov Exp $
+// $Id: xml_lmi.cpp,v 1.1.2.28 2006-11-08 23:10:56 etarassov Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -164,29 +164,24 @@ xml_lmi::Document& xml_lmi::dom_parser::document()
         }
 }
 
-/// Return the parsed document's root node.
-///
-/// Preconditions: member parser_ has a document that is not null and
-/// has a root node; the argument, if not empty, matches the name of
-/// that root node.
-///
-/// Throws: std::runtime_error, via fatal_error(), if a precondition
-/// is violated, or if xml-library calls throw an exception derived
-/// from std::exception. Ctor postconditions are assumed to have been
-/// satisfied and are not tested.
+/// Template implementation of xml_lmi::dom_parser::root_node methods.
 
-xml_lmi::Element const& xml_lmi::dom_parser::root_node
-    (std::string const& expected_name
-    ) const
+template
+    <class DomParserType
+    ,class DocumentType
+    ,class ElementType
+    >
+ElementType&
+get_root_node_from_dom_parser
+    (DomParserType& dom_parser
+    ,std::string const& expected_name
+    ,std::string const& error_context
+    )
 {
     try
         {
-        xml_lmi::Document const* document = parser_->get_document();
-        if(!document)
-            {
-            throw std::runtime_error("Parsed document is null.");
-            }
-        xml_lmi::Element const* root = document->get_root_node();
+        DocumentType& document = dom_parser.document();
+        ElementType* root = document.get_root_node();
         if(!root)
             {
             throw std::runtime_error("Document has no root node.");
@@ -208,9 +203,50 @@ xml_lmi::Element const& xml_lmi::dom_parser::root_node
         }
     catch(std::exception const& e)
         {
-        fatal_error() << error_context_ << e.what() << LMI_FLUSH;
+        fatal_error() << error_context << e.what() << LMI_FLUSH;
         throw std::logic_error("Unreachable"); // Silence compiler warning.
         }
+}
+
+/// Return the parsed document's root node.
+///
+/// Preconditions: member parser_ has a document that is not null and
+/// has a root node; the argument, if not empty, matches the name of
+/// that root node.
+///
+/// Throws: std::runtime_error, via fatal_error(), if a precondition
+/// is violated, or if xml-library calls throw an exception derived
+/// from std::exception. Ctor postconditions are assumed to have been
+/// satisfied and are not tested.
+
+xml_lmi::Element const& xml_lmi::dom_parser::root_node
+    (std::string const& expected_name
+    ) const
+{
+    return get_root_node_from_dom_parser
+        <xml_lmi::dom_parser const
+        ,xml_lmi::Document const
+        ,xml_lmi::Element const
+        >
+        (*this
+        ,expected_name
+        ,error_context_
+        );
+}
+
+xml_lmi::Element& xml_lmi::dom_parser::root_node
+    (std::string const& expected_name
+    )
+{
+    return get_root_node_from_dom_parser
+        <xml_lmi::dom_parser
+        ,xml_lmi::Document
+        ,xml_lmi::Element
+        >
+        (*this
+        ,expected_name
+        ,error_context_
+        );
 }
 
 /// Create and initialize a new DomParser object.

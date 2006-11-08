@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: configurable_settings.hpp,v 1.13.2.5 2006-11-07 16:29:02 etarassov Exp $
+// $Id: configurable_settings.hpp,v 1.13.2.6 2006-11-08 23:10:56 etarassov Exp $
 
 #ifndef configurable_settings_hpp
 #define configurable_settings_hpp
@@ -125,6 +125,9 @@ class LMI_SO configurable_settings
     void save_to_file() const;
 
   private:
+    // original file name, settings were loaded from
+    std::string xml_filename_;
+
     // bool parameters are evil, but in this case ctor is part of the private
     // interface, so its ok
     configurable_settings(bool load_values_from_file = true);

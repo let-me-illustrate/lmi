@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xml_lmi.hpp,v 1.1.2.21 2006-11-08 00:42:55 etarassov Exp $
+// $Id: xml_lmi.hpp,v 1.1.2.22 2006-11-08 23:10:56 etarassov Exp $
 
 #ifndef xml_lmi_hpp
 #define xml_lmi_hpp
@@ -65,6 +65,7 @@ namespace xml_lmi
     typedef xmlpp::Attribute Attribute;
     typedef xmlpp::Document  Document;
     typedef xmlpp::Element   Element;
+    typedef xmlpp::Node      Node;
 
     /// LIBXMLPP !! Type xmlpp::Node::NodeList is used in libxml++'s
     /// interface, but cannot be forward declared because it is a
@@ -90,6 +91,7 @@ namespace xml_lmi
         Document const& document() const;
         Document      & document();
         Element const& root_node(std::string const& expected_name) const;
+        Element      & root_node(std::string const& expected_name);
 
       private:
         std::string error_context_;

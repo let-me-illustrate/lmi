@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.462.2.100 2006-11-08 22:17:50 etarassov Exp $
+// $Id: ChangeLog,v 1.462.2.101 2006-11-08 23:11:23 etarassov Exp $
 
 MAINTENANCE
 
@@ -8527,4 +8527,13 @@ Reduce header height. Fix staggered formatting.
 
   xml_resources_test.xsl
 Remove improper debug code.
+
+20061108T2310Z <etarassov@tt-solutions.com> [1168]
+
+  configurable_settings.cpp
+  configurable_settings.hpp
+  xml_lmi.cpp
+  xml_lmi.hpp
+Improve the logic for 'configurable_settings.xml' modification code.
+Add non-const version for dom_parser::root_node method.
 

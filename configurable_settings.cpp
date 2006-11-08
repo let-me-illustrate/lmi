@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: configurable_settings.cpp,v 1.14.2.17 2006-11-07 16:29:03 etarassov Exp $
+// $Id: configurable_settings.cpp,v 1.14.2.18 2006-11-08 23:10:56 etarassov Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -34,6 +34,7 @@
 #include "platform_dependent.hpp" // access()
 #include "xml_lmi.hpp"
 
+#include <boost/filesystem/operations.hpp>
 #include <libxml++/libxml++.h>
 
 #include <fstream>
@@ -84,15 +85,6 @@ configurable_settings::configurable_settings(bool load_values_from_file)
 
 void configurable_settings::load_from_file()
 {
-    // first of all reset all values to default
-    configurable_settings const defaults(false);
-    std::vector<std::string>::const_iterator i;
-    for(i = member_names().begin(); i != member_names().end(); ++i)
-        {
-        std::string const default_value = defaults[*i].str();
-        operator[](*i) = default_value;
-        }
-
     // Look for the configuration file first where FHS would put it.
     // To support non-FHS platforms, if it's not found there, then
     // look in the data directory.
@@ -111,7 +103,19 @@ void configurable_settings::load_from_file()
             }
         }
 
-    xml_lmi::dom_parser parser(filename);
+    // first of all reset all members to default values
+    configurable_settings const defaults(false);
+    std::vector<std::string>::const_iterator i;
+    for(i = member_names().begin(); i != member_names().end(); ++i)
+        {
+        std::string const default_value = defaults[*i].str();
+        operator[](*i) = default_value;
+        }
+
+    // save the filename to be used in the save_to_file
+    xml_filename_ = filename;
+
+    xml_lmi::dom_parser parser(xml_filename_);
     xml_lmi::Element const& root = parser.root_node(xml_root_name());
     xml_lmi::ElementContainer const elements(xml_lmi::child_elements(root));
     typedef xml_lmi::ElementContainer::const_iterator eci;
@@ -119,26 +123,48 @@ void configurable_settings::load_from_file()
         {
         operator[]((*i)->get_name()) = xml_lmi::get_content(**i);
         }
+
+    // Store the absolute file path so that if $(pwd) is changed,
+    // the xml_filename_ is not affected.
+    try
+        {
+        xml_filename_
+            = boost::filesystem::system_complete(xml_filename_).string();
+        }
+    catch(std::exception const& e)
+        {
+        warning()
+            << "Configurable settings file name seems to be invalid '"
+            << xml_filename_
+            << "'. "
+            << e.what()
+            << LMI_FLUSH
+            ;
+        }
 }
 
 void configurable_settings::save_to_file() const
 {
-    // Look for the configuration file first where FHS would put it.
-    // To support non-FHS platforms, if it's not found there, then
-    // look in the data directory.
-    std::string filename = "/etc/opt/lmi/" + configuration_filename();
-    if(access(filename.c_str(), W_OK))
+    if(xml_filename_.empty())
         {
-        filename = AddDataDir(configuration_filename());
-        if(access(filename.c_str(), W_OK))
-            {
-            fatal_error()
-                << "No writeable file '"
-                << configuration_filename()
-                << "' exists."
-                << LMI_FLUSH
-                ;
-            }
+        fatal_error()
+            << "Configuration settings file was not loaded. "
+            << "Can not write back settings."
+            << LMI_FLUSH
+            ;
+        }
+
+    if(access(xml_filename_.c_str(), W_OK))
+        {
+        // User could choose to ignore this error and the only thing he risks
+        // in that case is configurable settings not saved.
+        fatal_error()
+            << "Configuration settings file '"
+            << xml_filename_
+            << "' is not writeable."
+            << LMI_FLUSH
+            ;
+        return; // unreachable code
         }
 
     // we dont want to write default values back into xml file
@@ -146,20 +172,67 @@ void configurable_settings::save_to_file() const
     // against the default ones, and write only modified values
     configurable_settings const defaults(false);
 
-    xml_lmi::Document document;
-    xml_lmi::Element& root = *document.create_root_node(xml_root_name());
+    xml_lmi::dom_parser parser(xml_filename_);
+    xml_lmi::Document& document = parser.document();
+    xml_lmi::Element& root = parser.root_node(xml_root_name());
+
     std::vector<std::string>::const_iterator i;
     for(i = member_names().begin(); i != member_names().end(); ++i)
         {
-        std::string const content = operator[](*i).str();
-        if(content != defaults[*i].str())
+        std::string const& name = *i;
+        std::string const content = operator[](name).str();
+        xml_lmi::Element* element = NULL;
+
+        xml_lmi::ElementContainer elements
+            (xml_lmi::child_elements(root, name)
+            );
+
+        // Now write the new (or the same old) value to the last node with
+        // the name. The motivation is to allow multiple nodes with the same
+        // name in the file, while only the last one determines the value.
+        // If no node exists we will need to create a new fresh node.
+        if(elements.empty())
             {
-            root.add_child(*i)->add_child_text(content);
+            // but if the value is the default one, then...
+            if(content == defaults[name].str())
+                {
+                // ..., because the original xml file does not contain
+                // the corresponding node, we should not create it.
+                continue;
+                }
+            element = root.add_child(name);
             }
+        else
+            {
+            // the element with the 'name' exist, we have to clear it up
+            element = elements.back();
+            xml_lmi::NodeContainer nodes = element->get_children();
+            xml_lmi::NodeContainer::iterator it;
+            for(it = nodes.begin(); it != nodes.end(); ++it)
+                {
+                element->remove_child(*it);
+                }
+            }
+
+        if(!element)
+            {
+            fatal_error()
+                << "Cannot create a new node '"
+                << name
+                << "' and write its value '"
+                << content
+                << "' into '"
+                << xml_filename_
+                << "'."
+                << LMI_FLUSH
+                ;
+            }
+        // finally put the new value into the element
+        element->add_child_text(content);
         }
 
     std::ofstream ofs
-        (filename.c_str()
+        (xml_filename_.c_str()
         ,std::ios_base::out | std::ios_base::trunc
         );
     ofs << document;
