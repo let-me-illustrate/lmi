@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.462.2.93 2006-11-08 01:05:09 etarassov Exp $
+// $Id: ChangeLog,v 1.462.2.94 2006-11-08 02:22:22 etarassov Exp $
 
 MAINTENANCE
 
@@ -8492,4 +8492,9 @@ Add 'File->Properties' menu item to every menubar.
   ledger_xml_io.cpp
   ledger.hpp
 Change method name do_write into write_version_of_xml.
+
+20061108T0220Z <etarassov@tt-solutions.com> [1167]
+
+  html.xsl
+Rearrange scalar values into buckets in html.
 

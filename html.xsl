@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: html.xsl,v 1.1.2.13 2006-11-07 16:29:03 etarassov Exp $
+    $Id: html.xsl,v 1.1.2.14 2006-11-08 02:20:53 etarassov Exp $
 
     Uses format.xml - column titles, number-formatting and other information.
 -->
@@ -79,60 +79,71 @@
             </xsl:when>
             <xsl:otherwise>
                 <xsl:value-of select="string_scalar[@name='Insured1']"/><br/>
-
-                <xsl:value-of select="string_scalar[@name='Gender']"/>,
-                <xsl:value-of select="string_scalar[@name='Smoker']"/>,
-                age <xsl:value-of select="double_scalar[@name='Age']"/>
                 <br/>
+                <table border="0" cellpadding="4">
+                <tr>
+                <td valign="top" align="left">
+                <table valign="top">
+                <!-- Here goes all the scalars for the LEFT bucket -->
+                    <tr><td align="right" nowrap="1"><xsl:value-of select="double_scalar[@name='InitGLP']"/></td>
+                        <td align="left"  nowrap="1">initial guideline level premium</td></tr>
 
-                <xsl:if test="double_scalar[@name='IsSubjectToIllustrationReg']='1'">
-                    <xsl:value-of select="double_scalar[@name='GuarPrem']"/>
-                    guaranteed premium
-                    <br/>
-                </xsl:if>
-                <br/>
+                    <tr><td align="right" nowrap="1"><xsl:value-of select="double_scalar[@name='InitGSP']"/></td>
+                        <td align="left"  nowrap="1">initial guideline single premium</td></tr>
 
-                <xsl:value-of select="double_scalar[@name='InitGLP']"/>
-                initial guideline level premium
-                <br/>
+                    <tr><td align="right" nowrap="1"><xsl:value-of select="double_scalar[@name='InitSevenPayPrem']"/></td>
+                        <td align="left"  nowrap="1">initial seven-pay premium</td></tr>
 
-                <xsl:value-of select="double_scalar[@name='InitGSP']"/>
-                initial guideline single premium
-                <br/>
+                    <tr><td align="right" nowrap="1"><xsl:value-of select="double_scalar[@name='InitBaseSpecAmt']"/></td>
+                        <td align="left"  nowrap="1">initial base specified amount</td></tr>
+    
+                    <tr><td align="right" nowrap="1"><xsl:value-of select="double_scalar[@name='InitTermSpecAmt']"/></td>
+                        <td align="left"  nowrap="1">initial term specified amount</td></tr>
+    
+                    <tr><td align="right" nowrap="1"><xsl:value-of select="double_scalar[@name='InitTotalSA']"/></td>
+                        <td align="left"  nowrap="1">initial total specified amount</td></tr>
+    
+                    <tr><td align="right" nowrap="1"><xsl:value-of select="string_scalar[@name='StatePostalAbbrev']"/></td>
+                        <td align="left"  nowrap="1">state of jurisdiction</td></tr>
 
-                <xsl:value-of select="double_scalar[@name='InitSevenPayPrem']"/>
-                initial seven-pay premium
-                <br/>
+                <!-- End: Here goes all the scalars for the LEFT bucket -->
+                </table>
+                </td>
+                <td valign="top" align="left">
+                <table valign="top">
+                <!-- Here goes all the scalars for the RIGHT bucket -->
 
-                <xsl:choose>
-                    <xsl:when test="double_scalar[@name='IsMec']='1'">
-                        MEC
-                    </xsl:when>
-                    <xsl:otherwise>
-                        Non-MEC
-                    </xsl:otherwise>
-                </xsl:choose>
-                <br/><br/>
+                    <tr><td colspan="2" align="left" nowrap="1"><xsl:value-of select="string_scalar[@name='Gender']"/>,
+                    <xsl:value-of select="string_scalar[@name='Smoker']"/>,
+                    age <xsl:value-of select="double_scalar[@name='Age']"/>
+                    </td></tr>
 
-                <xsl:value-of select="double_scalar[@name='InitTgtPrem']"/>
-                initial target premium
-                <br/>
+                    <xsl:if test="double_scalar[@name='IsSubjectToIllustrationReg']='1'">
+                        <tr><td colspan="2" align="left" nowrap="1">
+                            <xsl:value-of select="double_scalar[@name='GuarPrem']"/>
+                            guaranteed premium
+                        </td></tr>
+                    </xsl:if>
 
-                <xsl:value-of select="double_scalar[@name='InitBaseSpecAmt']"/>
-                initial base specified amount
-                <br/>
+                    <tr><td colspan="2" align="left" nowrap="1">
+                    <xsl:choose>
+                        <xsl:when test="double_scalar[@name='IsMec']='1'">
+                            MEC
+                        </xsl:when>
+                        <xsl:otherwise>
+                            Non-MEC
+                        </xsl:otherwise>
+                    </xsl:choose>
+                    </td></tr>
 
-                <xsl:value-of select="double_scalar[@name='InitTermSpecAmt']"/>
-                initial term specified amount
-                <br/>
+                    <tr><td align="right" nowrap="1"><xsl:value-of select="double_scalar[@name='InitTgtPrem']"/></td>
+                        <td align="left"  nowrap="1">initial target premium</td></tr>
 
-                <xsl:value-of select="double_scalar[@name='InitTotalSA']"/>
-                initial total specified amount
-                <br/>
-
-                <xsl:value-of select="string_scalar[@name='StatePostalAbbrev']"/>
-                state of jurisdiction
-                <br/>
+                <!-- End: Here goes all the scalars for the RIGHT bucket -->
+                </table>
+                </td>
+                </tr>
+                </table>
             </xsl:otherwise>
         </xsl:choose>
 
