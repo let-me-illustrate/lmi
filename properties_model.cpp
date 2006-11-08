@@ -105,11 +105,11 @@ void PropertiesModel::DoCustomizeInitialValues()
 {
 }
 
-void PropertiesModel::DoEnforceCircumscription(std::string const& name)
+void PropertiesModel::DoEnforceCircumscription(std::string const&)
 {
 }
 
-void PropertiesModel::DoEnforceProscription(std::string const& name)
+void PropertiesModel::DoEnforceProscription(std::string const&)
 {
 }
 
