@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.462.2.96 2006-11-08 17:36:44 etarassov Exp $
+// $Id: ChangeLog,v 1.462.2.97 2006-11-08 18:28:47 etarassov Exp $
 
 MAINTENANCE
 
@@ -8507,4 +8507,9 @@ Remove blank lines and reformat to pass 'make check_concinnity'.
 
   configure.ac
 Add '-Werror' option and fix checking for 'snprintf'.
+
+20061108T1827Z <etarassov@tt-solutions.com> [1168]
+
+  ledger_xml_io.cpp
+Add column list for e_xml_detailed.
 

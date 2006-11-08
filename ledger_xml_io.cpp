@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xml_io.cpp,v 1.48.2.23 2006-11-08 01:04:35 etarassov Exp $
+// $Id: ledger_xml_io.cpp,v 1.48.2.24 2006-11-08 18:27:09 etarassov Exp $
 
 #include "ledger.hpp"
 
@@ -818,6 +818,65 @@ void Ledger::write_version_of_xml
             << e.what()
             << LMI_FLUSH
             ;
+        }
+
+    // If it is a detailed xml version (for detailed TSV data)
+    // then add hardcoded list of columns.
+    // TODO ?? read that list from tab_delimited.xsl, or find another, better
+    // way of retrieving the list of columns
+    if(xml_version == e_xml_detailed)
+        {
+        std::vector<value_id> detailed_ids;
+        detailed_ids.push_back(value_id::from_name("DBOpt"));
+        detailed_ids.push_back(value_id::from_name("EeGrossPmt"));
+        detailed_ids.push_back(value_id::from_name("ErGrossPmt"));
+        detailed_ids.push_back(value_id::from_name("NetWD"));
+        detailed_ids.push_back(value_id::from_name("NewCashLoan"));
+        detailed_ids.push_back(value_id::from_name_basis("TotalLoanBalance", e_run_curr_basis));
+        detailed_ids.push_back(value_id::from_name("Outlay"));
+
+        detailed_ids.push_back(value_id::from_name_basis("NetPmt", e_run_curr_basis));
+
+        detailed_ids.push_back(value_id::from_name_basis("PremTaxLoad", e_run_curr_basis));
+        detailed_ids.push_back(value_id::from_name_basis("DacTaxLoad", e_run_curr_basis));
+        detailed_ids.push_back(value_id::from_name_basis("PolicyFee", e_run_curr_basis));
+        detailed_ids.push_back(value_id::from_name_basis("SpecAmtLoad", e_run_curr_basis));
+        detailed_ids.push_back(value_id::from_name("MonthlyFlatExtra"));
+        detailed_ids.push_back(value_id::from_name_basis("COICharge", e_run_curr_basis));
+        detailed_ids.push_back(value_id::from_name_basis("NetCOICharge", e_run_curr_basis));
+        detailed_ids.push_back(value_id::from_name_basis("SepAcctLoad", e_run_curr_basis));
+
+        detailed_ids.push_back(value_id::from_name_basis("AnnSAIntRate", e_run_curr_basis));
+        detailed_ids.push_back(value_id::from_name_basis("AnnGAIntRate", e_run_curr_basis));
+        detailed_ids.push_back(value_id::from_name_basis("GrossIntCredited", e_run_curr_basis));
+        detailed_ids.push_back(value_id::from_name_basis("NetIntCredited", e_run_curr_basis));
+
+        detailed_ids.push_back(value_id::from_name_basis("AcctVal", e_run_guar_basis));
+        detailed_ids.push_back(value_id::from_name_basis("CSVNet", e_run_guar_basis));
+        detailed_ids.push_back(value_id::from_name_basis("EOYDeathBft", e_run_guar_basis));
+        detailed_ids.push_back(value_id::from_name_basis("AcctVal", e_run_curr_basis));
+        detailed_ids.push_back(value_id::from_name_basis("CSVNet", e_run_curr_basis));
+        detailed_ids.push_back(value_id::from_name_basis("EOYDeathBft", e_run_curr_basis));
+
+        detailed_ids.push_back(value_id::from_name("IrrOnSurrender"));
+        detailed_ids.push_back(value_id::from_name("IrrOnDeath"));
+
+        detailed_ids.push_back(value_id::from_name("InforceLives"));
+
+        detailed_ids.push_back(value_id::from_name_basis("ClaimsPaid", e_run_curr_basis));
+        detailed_ids.push_back(value_id::from_name_basis("NetClaims", e_run_curr_basis));
+        detailed_ids.push_back(value_id::from_name_basis("ExperienceReserve", e_run_curr_basis));
+        detailed_ids.push_back(value_id::from_name_basis("ProjectedCoiCharge", e_run_curr_basis));
+        detailed_ids.push_back(value_id::from_name_basis("KFactor", e_run_curr_basis));
+
+        detailed_ids.push_back(value_id::from_name_basis("NetCOICharge", e_run_curr_basis_sa_zero));
+        detailed_ids.push_back(value_id::from_name_basis("NetClaims", e_run_curr_basis_sa_zero));
+        detailed_ids.push_back(value_id::from_name_basis("ExperienceReserve", e_run_curr_basis_sa_zero));
+        detailed_ids.push_back(value_id::from_name_basis("ProjectedCoiCharge", e_run_curr_basis_sa_zero));
+        detailed_ids.push_back(value_id::from_name_basis("KFactor", e_run_curr_basis_sa_zero));
+
+        detailed_ids.push_back(value_id::from_name("ProducerCompensation"));
+        formatter.add_columns_to_format(detailed_ids);
         }
 
     // This is a little tricky. We have some stuff that
