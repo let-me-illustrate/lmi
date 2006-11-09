@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: any_member.hpp,v 1.14.2.1 2006-11-01 03:17:07 chicares Exp $
+// $Id: any_member.hpp,v 1.14.2.2 2006-11-09 20:17:43 chicares Exp $
 
 // This is a derived work based on boost::any, which bears the following
 // copyright and permissions notice:
@@ -647,6 +647,7 @@ void MemberSymbolTable<ClassType>::ascribe
     ClassType* class_object = static_cast<ClassType*>(this);
     map_.insert(member_pair_type(s, any_member<ClassType>(class_object, p2m)));
     typedef std::vector<std::string>::iterator svi;
+    // TODO ?? This would appear to be O(N^2).
     svi i = std::lower_bound(member_names_.begin(), member_names_.end(), s);
     member_names_.insert(i, s);
 }

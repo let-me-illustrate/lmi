@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: actuarial_table_test.cpp,v 1.6.2.1 2006-10-28 04:20:53 chicares Exp $
+// $Id: actuarial_table_test.cpp,v 1.6.2.2 2006-11-09 20:17:43 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -88,7 +88,6 @@ void assay_speed()
 
 int test_main(int, char*[])
 {
-// TODO ?? Use whatever directory FHS would suggest instead.
     std::string const table_name("/opt/lmi/data/qx_cso");
 
 // TODO ?? Also test a 'duration' table--has SOA published any?

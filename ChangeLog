@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.462.2.104 2006-11-09 17:43:38 etarassov Exp $
+// $Id: ChangeLog,v 1.462.2.105 2006-11-09 20:17:43 chicares Exp $
 
 MAINTENANCE
 
@@ -8563,4 +8563,17 @@ Remove the dummy file from the repository.
   main_wx.hpp
 Update calculation summary when calculation summary columns selection
 is changed.
+
+20061109T2017Z <chicares@cox.net> [1168]
+
+  actuarial_table_test.cpp
+  any_member.hpp
+  como_4_3_3.make
+  config_como_mingw.hpp
+  diagnostics.sed
+  multiple_cell_document.hpp
+  single_cell_document.hpp
+  stream_cast.hpp
+  wx_new.hpp
+Resolve trivial differences between MAIN and 'gnome-xml-branch'.
 

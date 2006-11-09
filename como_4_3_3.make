@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: como_4_3_3.make,v 1.11 2006-01-29 13:52:00 chicares Exp $
+# $Id: como_4_3_3.make,v 1.11.2.1 2006-11-09 20:17:43 chicares Exp $
 
 toolset := como
 
@@ -106,7 +106,8 @@ LD := $(CXX)
 # letter.
 
 REQUIRED_LIBS := \
-  c:/xml/libxml2-2.4.22/.libs/libxml2.a \
+  c:/usr/local/lib/libxslt.dll.a \
+  c:/usr/local/lib/libxml2.dll.a \
   c:$(underlying_cc)/lib/libwsock32.a \
 
 MAKEDEPEND_0 :=
@@ -164,7 +165,7 @@ MAKECMDGOALS ?= lmi_cli_monolithic.exe
 
 %: force
 	@sh -c " \
-	  path=(/usr/bin /como433/bin/ $(underlying_cc)/bin/); \
+	  path=(/usr/bin /como433/bin/ $(underlying_cc)/bin/ /usr/local/bin/); \
 	  export COMO_MIN_INCLUDE=$(underlying_cc)/include; \
 	  ComSpec=C:\\\\WINDOWS\\\\SYSTEM32\\\\CMD.EXE; \
 	  $(MAKE) \

@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 #
-# $Id: diagnostics.sed,v 1.11 2006-02-28 13:35:16 chicares Exp $
+# $Id: diagnostics.sed,v 1.11.2.1 2006-11-09 20:17:43 chicares Exp $
 #
   # Delete expected output from make.
 /Circular.*dependency dropped/d
@@ -85,4 +85,6 @@
 /^mdpt charges,/d
 /^Calculating all cells/d
 /^no errors detected/d
+  # Delete multiple blank lines.
+/./,/^$/!d
 
