@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_wx.hpp,v 1.13.2.1 2006-11-07 01:47:59 etarassov Exp $
+// $Id: main_wx.hpp,v 1.13.2.2 2006-11-09 17:42:24 etarassov Exp $
 
 // Portions of this file are derived from wxWindows files
 //   samples/docvwmdi/docview.h (C) 1998 Julian Smart and Markus Holzem
@@ -86,6 +86,8 @@ class Skeleton
     void UponWindowPrevious         (wxCommandEvent&);
     void UponWindowTileHorizontally (wxCommandEvent&);
     void UponWindowTileVertically   (wxCommandEvent&);
+
+    void OnUpdateProperties();
 
     // wxApp overrides.
     virtual bool OnExceptionInMainLoop();

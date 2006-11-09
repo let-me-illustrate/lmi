@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_wx.cpp,v 1.56.2.1 2006-11-07 01:47:59 etarassov Exp $
+// $Id: main_wx.cpp,v 1.56.2.2 2006-11-09 17:42:24 etarassov Exp $
 
 // Portions of this file are derived from wxWindows files
 //   samples/docvwmdi/docview.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -78,6 +78,7 @@
 #include <wx/log.h> // wxSafeShowMessage()
 #include <wx/menu.h>
 #include <wx/msgdlg.h>
+#include <wx/progdlg.h>
 #include <wx/textctrl.h>
 #include <wx/toolbar.h>
 #include <wx/xrc/xmlres.h>
@@ -377,6 +378,48 @@ void Skeleton::UponProperties(wxCommandEvent&)
         {
         properties.SaveToSettings();
         configurable_settings::instance().save_to_file();
+        OnUpdateProperties();
+        }
+}
+
+// The brutal approach for updating calculation summary, when 'calculation
+// summary columns selection' was changed by user.
+// Show a progress dialog in case there are many open windows that needs to be
+// updated.
+
+void Skeleton::OnUpdateProperties()
+{
+    LMI_ASSERT(frame_);
+    wxWindowList& children = frame_->GetChildren();
+    if(children.empty())
+        {
+        return;
+        }
+
+    wxProgressDialog progress_dialog
+        ("Updating views"
+        ,"Updating Calculation summary for opened windows..."
+        ,children.size()
+        ,frame_
+        ,wxPD_APP_MODAL | wxPD_AUTO_HIDE
+        );
+    progress_dialog.Show();
+    int progress = 0;
+    wxWindowList::iterator it;
+    for(it = children.begin(); it != children.end(); ++it)
+        {
+        wxDocMDIChildFrame* mdi_child_frame
+            = dynamic_cast<wxDocMDIChildFrame*>(*it);
+        if(mdi_child_frame)
+            {
+            IllustrationView* illustration
+                = dynamic_cast<IllustrationView*>(mdi_child_frame->GetView());
+            if(illustration)
+                {
+                illustration->DisplaySelectedValuesAsHtml();
+                }
+            }
+        progress_dialog.Update(progress++);
         }
 }
 

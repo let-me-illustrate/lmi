@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.462.2.103 2006-11-09 17:34:48 etarassov Exp $
+// $Id: ChangeLog,v 1.462.2.104 2006-11-09 17:43:38 etarassov Exp $
 
 MAINTENANCE
 
@@ -8556,4 +8556,11 @@ Change key substitution mode to '-kkv' for the dummy file.
 
   cvs_substitution_mode_test.txt
 Remove the dummy file from the repository.
+
+20061109T1742Z <etarassov@tt-solutions.com> [1168]
+
+  main_wx.cpp
+  main_wx.hpp
+Update calculation summary when calculation summary columns selection
+is changed.
 
