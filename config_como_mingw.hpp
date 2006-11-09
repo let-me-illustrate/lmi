@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: config_como_mingw.hpp,v 1.4 2006-01-29 13:52:00 chicares Exp $
+// $Id: config_como_mingw.hpp,v 1.5 2006-11-09 15:42:31 chicares Exp $
 
 // Configuration header for compiler quirks.
 
@@ -52,6 +52,7 @@
 #   error Reconsider como configuration to reflect recent libmingwex.
 #else  // LMI_MINGW_VERSION < 202
 #   define snprintf _snprintf
+#   define vsnprintf _vsnprintf
 #endif // LMI_MINGW_VERSION < 202
 
 #endif // config_como_mingw_hpp
