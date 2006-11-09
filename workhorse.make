@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: workhorse.make,v 1.77 2006-11-07 03:23:21 chicares Exp $
+# $Id: workhorse.make,v 1.78 2006-11-09 15:41:15 chicares Exp $
 
 ################################################################################
 
@@ -551,19 +551,11 @@ ifeq (3.4.2,$(gcc_version))
   gcc_version_specific_warnings := -Wno-uninitialized
 endif
 
-ifeq (xmlwrapp_0_5_0,$(findstring xmlwrapp_0_5_0,$(xml_wrapper)))
-  short_term_workaround := -DUSING_CURRENT_XMLWRAPP
-endif
-
-ifeq (libxmlpp,$(findstring libxmlpp,$(xml_wrapper)))
-  short_term_workaround := -DUSING_LIBXMLPP
-endif
-
 CFLAGS = \
   $(debug_flag) $(optimization_flag) $(gprof_flag) \
 
 CXXFLAGS = \
-  $(short_term_workaround) $(debug_flag) $(optimization_flag) $(gprof_flag) \
+  $(debug_flag) $(optimization_flag) $(gprof_flag) \
 
 # Explicitly disable the infelicitous auto-import default. See:
 #   http://sourceforge.net/mailarchive/message.php?msg_id=15705075
@@ -591,8 +583,17 @@ REQUIRED_CFLAGS = \
 
 # TODO ?? Define $(wx_cxxflags) for msw as well as posix.
 
+ifeq (xmlwrapp_0_5_0,$(findstring xmlwrapp_0_5_0,$(xml_wrapper)))
+  short_term_workaround := -DUSING_CURRENT_XMLWRAPP
+endif
+
+ifeq (libxmlpp,$(findstring libxmlpp,$(xml_wrapper)))
+  short_term_workaround := -DUSING_LIBXMLPP
+endif
+
 REQUIRED_CXXFLAGS = \
   $(CXX_WARNINGS) \
+  $(short_term_workaround) \
   $(wx_cxxflags) \
 
 REQUIRED_ARFLAGS = \
