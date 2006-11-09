@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.480 2006-11-09 15:45:25 chicares Exp $
+// $Id: ChangeLog,v 1.481 2006-11-09 19:48:24 chicares Exp $
 
 MAINTENANCE
 
@@ -7901,4 +7901,17 @@ Let vsnprintf() be used with como, because new xml libraries use it.
 
   input_test.cpp
 Virtualize xml-library usage.
+
+20061109T1946Z <chicares@cox.net> [1166]
+
+  wx_new.hpp
+Autoconfiscate.
+
+20061109T1948Z <chicares@cox.net> [1166]
+
+  .cvsignore
+  inputillus.hpp
+  ledger.hpp
+  streamable.hpp
+Resolve trivial differences between MAIN and 'gnome-xml-branch'.
 
