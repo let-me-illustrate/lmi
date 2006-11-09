@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.479 2006-11-07 18:47:23 chicares Exp $
+// $Id: ChangeLog,v 1.480 2006-11-09 15:45:25 chicares Exp $
 
 MAINTENANCE
 
@@ -7885,4 +7885,20 @@ cost of virtualization.
 
   objects.make
 Make conditionals backward-compatible with older versions of 'make'.
+
+20061109T1541Z <chicares@cox.net> [1167]
+
+  workhorse.make
+Move xml-library-selection macro to $(REQUIRED_CXXFLAGS), because it
+actually is required.
+
+20061109T1542Z <chicares@cox.net> [1167]
+
+  config_como_mingw.hpp
+Let vsnprintf() be used with como, because new xml libraries use it.
+
+20061109T1545Z <chicares@cox.net> [1166]
+
+  input_test.cpp
+Virtualize xml-library usage.
 

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_test.cpp,v 1.12 2006-11-06 02:08:10 chicares Exp $
+// $Id: input_test.cpp,v 1.13 2006-11-09 15:45:25 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -37,7 +37,6 @@
 #include "xml_lmi.hpp"
 
 #include <boost/bind.hpp>
-#include <boost/ref.hpp>
 
 #if defined BOOST_MSVC || defined __BORLANDC__
 #   include <cfloat> // floating-point hardware control
@@ -47,6 +46,16 @@
 #include <ios>
 #include <istream>
 #include <iterator>
+
+#if defined USING_LIBXMLPP
+    #define GET_FIRST_ELEMENT(child,parent) \
+    xml_lmi::Element const& child = get_first_element((parent));
+#else  // !defined USING_LIBXMLPP
+    #define GET_FIRST_ELEMENT(child,parent) \
+    xml_lmi::NodeConstIterator xyzzy = (parent).begin(); \
+    LMI_ASSERT(!(xyzzy)->is_text()); \
+    xml_lmi::Element const& child = *(xyzzy);
+#endif // !defined USING_LIBXMLPP
 
 // This function is a derived work adapted from usenet article
 // <1eo2sct.ggkc9z84ko0eN%cbarron3@ix.netcom.com>. GWC rewrote it
@@ -120,13 +129,13 @@ void mete_ill_io()
     typedef single_cell_document S;
     test_document_io<S>("sample.ill", "replica.ill", __FILE__, __LINE__, true);
 }
-#if 0 // Deferred until later.
+
 void mete_overhead()
 {
     static IllusInputParms raw_data;
-    xml_lmi::Document document;
-    xml_lmi::Element* root = document.create_root_node("root");
-    LMI_ASSERT(root);
+    xml_lmi::xml_document document("root");
+    xml_lmi::Element& root = document.root_node();
+    (void)root;
 }
 
 void mete_vector(xml_lmi::Element& xml_data)
@@ -143,32 +152,25 @@ void mete_read(xml_lmi::Element& xml_data)
 void mete_write()
 {
     static IllusInputParms raw_data;
-    xml_lmi::Document document;
-    xml_lmi::Element* root = document.create_root_node("root");
-    LMI_ASSERT(root);
-    *root << raw_data;
+    xml_lmi::xml_document document("root");
+    xml_lmi::Element& root = document.root_node();
+    root << raw_data;
 }
-#endif // Deferred until later.
+
 void assay_speed()
 {
-#if 0 // Deferred until later.
     IllusInputParms raw_data;
-    xml_lmi::Document document;
-    xml_lmi::Element* root = document.create_root_node("root");
-    LMI_ASSERT(root);
-    *root << raw_data;
-    typedef boost::reference_wrapper<xml_lmi::Element> er;
-    er e(xml_lmi::get_first_element(*root));
-#endif // Deferred until later.
+    xml_lmi::xml_document document("root");
+    xml_lmi::Element& root = document.root_node();
+    root << raw_data;
+    GET_FIRST_ELEMENT(e,root)
 
     std::cout
         << "  Speed tests...\n"
-#if 0 // Deferred until later.
         << "  Overhead: " << aliquot_timer(mete_overhead              ) << '\n'
         << "  Vector  : " << aliquot_timer(boost::bind(mete_vector, e)) << '\n'
         << "  Read    : " << aliquot_timer(boost::bind(mete_read  , e)) << '\n'
         << "  Write   : " << aliquot_timer(mete_write                 ) << '\n'
-#endif // Deferred until later.
         << "  'cns' io: " << aliquot_timer(mete_cns_io                ) << '\n'
         << "  'ill' io: " << aliquot_timer(mete_ill_io                ) << '\n'
         ;
@@ -216,22 +218,13 @@ int test_main(int, char*[])
 */
     original.propagate_changes_to_base_and_finalize();
 
-    xml_lmi::Element xml_root0("root");
+    xml_lmi::xml_document xml_document0("root");
+    xml_lmi::Element& xml_root0 = xml_document0.root_node();
     xml_root0 << original;
-    os0 << xml_root0;
+    os0 << xml_document0;
     os0.close();
 
-    xml_lmi::Element xml_node;
-    xml_lmi::NodeConstIterator child = xml_root0.begin();
-    if(child->is_text())
-        {
-        // TODO ?? Explain what this does.
-        ++child;
-        }
-    if(!child->is_text())
-        {
-        xml_node = *child;
-        }
+    GET_FIRST_ELEMENT(xml_node,xml_root0)
 
     xml_node >> replica;
     std::ofstream os1
@@ -241,9 +234,12 @@ int test_main(int, char*[])
           | std::ios_base::binary
         );
     BOOST_TEST(!!os1);
-    xml_lmi::Element xml_root1("root");
+
+    xml_lmi::xml_document xml_document1("root");
+    xml_lmi::Element& xml_root1 = xml_document1.root_node();
     xml_root1 << replica;
-    os1 << xml_root1;
+    os1 << xml_document1;
+    os1.close();
     os1.close();
 
     BOOST_TEST(original == replica);
