@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: wx_new.hpp,v 1.5 2006-01-29 13:52:01 chicares Exp $
+// $Id: wx_new.hpp,v 1.6 2006-11-09 19:46:24 chicares Exp $
 
 #ifndef wx_new_hpp
 #define wx_new_hpp
@@ -28,7 +28,10 @@
 
 #include <cstddef> // std::size_t
 
-#if defined LMI_MSW
+#if defined HAVE_CONFIG_H
+// For msw, rely on the 'auto-import' kludge favored by autotools.
+#   define LMI_WX_NEW_SO
+#elif defined LMI_MSW
 #   if defined LMI_WX_NEW_BUILD_SO
 #       define LMI_WX_NEW_SO __declspec(dllexport)
 #   elif defined LMI_WX_NEW_USE_SO
@@ -36,7 +39,9 @@
 #   else  // !defined LMI_WX_NEW_BUILD_SO && !defined LMI_WX_NEW_USE_SO
 #       error Either LMI_WX_NEW_BUILD_SO or LMI_WX_NEW_USE_SO must be defined.
 #   endif // !defined LMI_WX_NEW_BUILD_SO && !defined LMI_WX_NEW_USE_SO
-#endif // defined LMI_MSW
+#else  // !defined HAVE_CONFIG_H && !defined LMI_MSW
+#   error Unknown platform and build system.
+#endif // !defined HAVE_CONFIG_H && !defined LMI_MSW
 
 /// When wx is used as an msw dll, memory is allocated and freed
 /// across dll boundaries, and that causes mpatrol to emit spurious
