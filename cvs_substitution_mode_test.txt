@@ -1,0 +1,2 @@
+This file was created only to test how to change keyword substitution mode
+under cvs.
