@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.462.2.101 2006-11-08 23:11:23 etarassov Exp $
+// $Id: ChangeLog,v 1.462.2.102 2006-11-09 00:56:00 etarassov Exp $
 
 MAINTENANCE
 
@@ -8536,4 +8536,9 @@ Remove improper debug code.
   xml_lmi.hpp
 Improve the logic for 'configurable_settings.xml' modification code.
 Add non-const version for dom_parser::root_node method.
+
+20061109T0055Z <etarassov@tt-solutions.com> [1168]
+
+  html.xsl
+Fix 'guaranteed premium' value alignment.
 

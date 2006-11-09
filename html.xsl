@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: html.xsl,v 1.1.2.16 2006-11-08 19:03:28 etarassov Exp $
+    $Id: html.xsl,v 1.1.2.17 2006-11-09 00:55:23 etarassov Exp $
 
     Uses format.xml - column titles, number-formatting and other information.
 -->
@@ -120,11 +120,12 @@
                     </td></tr>
 
                     <xsl:if test="double_scalar[@name='IsSubjectToIllustrationReg']='1'">
-                        <tr><td colspan="2" align="left" nowrap="1">
-                            <xsl:value-of select="double_scalar[@name='GuarPrem']"/>
-                            guaranteed premium
-                        </td></tr>
+                        <tr><td align="right" nowrap="1"><xsl:value-of select="double_scalar[@name='GuarPrem']"/></td>
+                            <td align="left" nowrap="1">guaranteed premium</td></tr>
                     </xsl:if>
+
+                    <tr><td align="right" nowrap="1"><xsl:value-of select="double_scalar[@name='InitTgtPrem']"/></td>
+                        <td align="left" nowrap="1">initial target premium</td></tr>
 
                     <tr><td colspan="2" align="left" nowrap="1">
                     <xsl:choose>
@@ -136,9 +137,6 @@
                         </xsl:otherwise>
                     </xsl:choose>
                     </td></tr>
-
-                    <tr><td align="right" nowrap="1"><xsl:value-of select="double_scalar[@name='InitTgtPrem']"/></td>
-                        <td align="left" nowrap="1">initial target premium</td></tr>
 
                 <!-- End: Here goes all the scalars for the RIGHT bucket -->
                 </table>
