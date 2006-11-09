@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.462.2.102 2006-11-09 00:56:00 etarassov Exp $
+// $Id: ChangeLog,v 1.462.2.103 2006-11-09 17:34:48 etarassov Exp $
 
 MAINTENANCE
 
@@ -8541,4 +8541,19 @@ Add non-const version for dom_parser::root_node method.
 
   html.xsl
 Fix 'guaranteed premium' value alignment.
+
+20061109T0103Z <etarassov@tt-solutions.com> [1168]
+
+  cvs_substitution_mode_test.txt
+Initial commit of the dummy file with '-kk' key substitution mode.
+
+20061109T0104Z <etarassov@tt-solutions.com> [1168]
+
+  cvs_substitution_mode_test.txt
+Change key substitution mode to '-kkv' for the dummy file.
+
+20061109T0106Z <etarassov@tt-solutions.com> [1168]
+
+  cvs_substitution_mode_test.txt
+Remove the dummy file from the repository.
 
