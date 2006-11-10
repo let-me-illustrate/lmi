@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: path_utility.cpp,v 1.8 2006-01-29 13:52:00 chicares Exp $
+// $Id: path_utility.cpp,v 1.9 2006-11-10 16:26:43 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -43,6 +43,12 @@ void initialize_filesystem()
     fs::path::default_name_check(fs::native);
     fs::initial_path();
 }
+
+// TODO ?? Refactor duplication:
+//   validate_directory()
+//   validate_filepath()
+// Also rename 'validate_directory' --> 'validate_directory_path',
+// and add unit tests.
 
 void validate_directory
     (std::string const& directory
@@ -89,6 +95,56 @@ void validate_directory
             << " '"
             << path.string()
             << "' is not a directory."
+            << LMI_FLUSH
+            ;
+        }
+}
+
+void validate_filepath
+    (std::string const& filepath
+    ,std::string const& context
+    )
+{
+    fs::path path;
+    try
+        {
+        path = filepath;
+        }
+    catch(fs::filesystem_error const& e)
+        {
+        fatal_error()
+            << context
+            << ": "
+            << e.what()
+            << LMI_FLUSH
+            ;
+        }
+
+    if(path.empty())
+        {
+        fatal_error()
+            << context
+            << " must not be empty."
+            << LMI_FLUSH
+            ;
+        }
+    if(!fs::exists(path))
+        {
+        fatal_error()
+            << context
+            << " '"
+            << path.string()
+            << "' not found."
+            << LMI_FLUSH
+            ;
+        }
+    if(fs::is_directory(path))
+        {
+        fatal_error()
+            << context
+            << " '"
+            << path.string()
+            << "' is a directory."
             << LMI_FLUSH
             ;
         }
