@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: configurable_settings.cpp,v 1.20 2006-11-10 14:54:35 chicares Exp $
+// $Id: configurable_settings.cpp,v 1.21 2006-11-10 16:28:08 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -31,8 +31,12 @@
 #include "alert.hpp"
 #include "data_directory.hpp"     // AddDataDir()
 #include "handle_exceptions.hpp"
+#include "path_utility.hpp"
 #include "platform_dependent.hpp" // access()
 #include "xml_lmi.hpp"
+
+#include <boost/filesystem/operations.hpp>
+#include <boost/filesystem/path.hpp>
 
 #include <stdexcept>
 
@@ -44,6 +48,43 @@ namespace
     {
         static std::string s("configurable_settings.xml");
         return s;
+    }
+
+    /// Store the complete configuration-file path at startup, in case
+    /// it's non-complete--as is typical msw usage.
+    ///
+    /// Look for the configuration file first where FHS would have it.
+    /// To support non-FHS platforms, if it's not found there, then
+    /// look in the data directory.
+    ///
+    /// TODO ?? Should write access be checked here? What if the first
+    /// file found is read-only, but the second is read-write?
+
+    fs::path const& configuration_filepath()
+    {
+        static fs::path complete_path;
+        if(!complete_path.empty())
+            {
+            return complete_path;
+            }
+
+        std::string filename = "/etc/opt/lmi/" + configuration_filename();
+        if(access(filename.c_str(), R_OK))
+            {
+            filename = AddDataDir(configuration_filename());
+            if(access(filename.c_str(), R_OK))
+                {
+                fatal_error()
+                    << "No readable file '"
+                    << configuration_filename()
+                    << "' exists."
+                    << LMI_FLUSH
+                    ;
+                }
+            }
+        validate_filepath(filename, "Configurable-settings file");
+        complete_path = fs::system_complete(filename);
+        return complete_path;
     }
 
     std::string const& default_calculation_summary_columns()
@@ -87,33 +128,7 @@ configurable_settings::configurable_settings()
     ,xslt_tab_delimited_filename_      ("tab_delimited.xsl"  )
 {
     ascribe_members();
-
-    // Look for the configuration file first where FHS would put it.
-    // To support non-FHS platforms, if it's not found there, then
-    // look in the data directory.
-    std::string filename = "/etc/opt/lmi/" + configuration_filename();
-    if(access(filename.c_str(), R_OK))
-        {
-        filename = AddDataDir(configuration_filename());
-        if(access(filename.c_str(), R_OK))
-            {
-            fatal_error()
-                << "No readable file '"
-                << configuration_filename()
-                << "' exists."
-                << LMI_FLUSH
-                ;
-            }
-        }
-
-    xml_lmi::dom_parser parser(filename);
-    xml_lmi::Element const& root = parser.root_node(xml_root_name());
-    xml_lmi::ElementContainer const elements(xml_lmi::child_elements(root));
-    typedef xml_lmi::ElementContainer::const_iterator eci;
-    for(eci i = elements.begin(); i != elements.end(); ++i)
-        {
-        operator[]((*i)->get_name()) = xml_lmi::get_content(**i);
-        }
+    load();
 }
 
 configurable_settings::~configurable_settings()
@@ -157,7 +172,14 @@ void configurable_settings::ascribe_members()
 
 void configurable_settings::load()
 {
-    // TODO ?? Implementation required.
+    xml_lmi::dom_parser parser(configuration_filepath().string());
+    xml_lmi::Element const& root = parser.root_node(xml_root_name());
+    xml_lmi::ElementContainer const elements(xml_lmi::child_elements(root));
+    typedef xml_lmi::ElementContainer::const_iterator eci;
+    for(eci i = elements.begin(); i != elements.end(); ++i)
+        {
+        operator[]((*i)->get_name()) = xml_lmi::get_content(**i);
+        }
 }
 
 void configurable_settings::save() const
