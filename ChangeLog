@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.462.2.105 2006-11-09 20:17:43 chicares Exp $
+// $Id: ChangeLog,v 1.462.2.106 2006-11-10 17:57:02 rericksberg Exp $
 
 MAINTENANCE
 
@@ -8576,4 +8576,9 @@ is changed.
   stream_cast.hpp
   wx_new.hpp
 Resolve trivial differences between MAIN and 'gnome-xml-branch'.
+
+20061110T1756Z <rericksberg@massmutual.com> [1168]
+
+  html.xsl
+Rearranged the display of the header info on the Calculation Summary.
 
