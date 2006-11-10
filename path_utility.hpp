@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: path_utility.hpp,v 1.6 2006-01-29 13:52:00 chicares Exp $
+// $Id: path_utility.hpp,v 1.7 2006-11-10 16:26:43 chicares Exp $
 
 #ifndef path_utility_hpp
 #define path_utility_hpp
@@ -102,6 +102,11 @@ void LMI_SO initialize_filesystem();
 
 void LMI_SO validate_directory
     (std::string const& directory
+    ,std::string const& context
+    );
+
+void LMI_SO validate_filepath
+    (std::string const& filepath
     ,std::string const& context
     );
 
