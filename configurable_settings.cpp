@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: configurable_settings.cpp,v 1.18 2006-11-06 02:51:47 chicares Exp $
+// $Id: configurable_settings.cpp,v 1.19 2006-11-10 14:09:38 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -45,19 +45,40 @@ namespace
         static std::string s("configurable_settings");
         return s;
     }
+
+    std::string const& default_calculation_summary_columns()
+    {
+        static std::string s
+            ("Outlay"
+            " AcctVal_Guaranteed"
+            " CSVNet_Guaranteed"
+            " EOYDeathBft_Guaranteed"
+            " AcctVal_Current"
+            " CSVNet_Current"
+            " EOYDeathBft_Current"
+            );
+        return s;
+    }
 } // Unnamed namespace.
 
 configurable_settings::configurable_settings()
-    :cgi_bin_log_filename_       ("cgi_bin.log"        )
-    ,custom_input_filename_      ("custom.ini"         )
-    ,custom_output_filename_     ("custom.out"         )
-    ,default_input_filename_     ("etc/opt/default.ini")
-    ,libraries_to_preload_       (""                   )
-    ,offer_hobsons_choice_       (false                )
-    ,skin_filename_              ("xml_notebook.xrc"   )
-    ,spreadsheet_file_extension_ (".gnumeric"          )
-    ,xsl_fo_command_             ("fo"                 )
-    ,xsl_fo_directory_           ("/usr/bin/fo"        )
+    :calculation_summary_columns_      (default_calculation_summary_columns())
+    ,cgi_bin_log_filename_             ("cgi_bin.log"        )
+    ,custom_input_filename_            ("custom.ini"         )
+    ,custom_output_filename_           ("custom.out"         )
+    ,default_input_filename_           ("etc/opt/default.ini")
+    ,libraries_to_preload_             (""                   )
+    ,offer_hobsons_choice_             (false                )
+    ,skin_filename_                    ("xml_notebook.xrc"   )
+    ,spreadsheet_file_extension_       (".gnumeric"          )
+    ,xml_schema_filename_              ("schema.xsd"         )
+    ,xsl_fo_command_                   ("fo"                 )
+    ,xsl_fo_directory_                 ("/usr/bin/fo"        )
+    ,xsl_directory_                    (""                   )
+    ,xslt_format_xml_filename_         ("format.xml"         )
+    ,xslt_html_filename_               ("html.xsl"           )
+    ,xslt_light_tab_delimited_filename_("cs_tsv.xsl"         )
+    ,xslt_tab_delimited_filename_      ("tab_delimited.xsl"  )
 {
     ascribe_members();
 
@@ -109,22 +130,34 @@ configurable_settings& configurable_settings::instance()
 
 void configurable_settings::ascribe_members()
 {
-    ascribe("cgi_bin_log_filename"       ,&configurable_settings::cgi_bin_log_filename_      );
-    ascribe("custom_input_filename"      ,&configurable_settings::custom_input_filename_     );
-    ascribe("custom_output_filename"     ,&configurable_settings::custom_output_filename_    );
-    ascribe("default_input_filename"     ,&configurable_settings::default_input_filename_    );
-    ascribe("libraries_to_preload"       ,&configurable_settings::libraries_to_preload_      );
-    ascribe("offer_hobsons_choice"       ,&configurable_settings::offer_hobsons_choice_      );
-    ascribe("skin_filename"              ,&configurable_settings::skin_filename_             );
-    ascribe("spreadsheet_file_extension" ,&configurable_settings::spreadsheet_file_extension_);
-    ascribe("xsl_fo_command"             ,&configurable_settings::xsl_fo_command_            );
-    ascribe("xsl_fo_directory"           ,&configurable_settings::xsl_fo_directory_          );
+    ascribe("calculation_summary_columns"      ,&configurable_settings::calculation_summary_columns_      );
+    ascribe("cgi_bin_log_filename"             ,&configurable_settings::cgi_bin_log_filename_             );
+    ascribe("custom_input_filename"            ,&configurable_settings::custom_input_filename_            );
+    ascribe("custom_output_filename"           ,&configurable_settings::custom_output_filename_           );
+    ascribe("default_input_filename"           ,&configurable_settings::default_input_filename_           );
+    ascribe("libraries_to_preload"             ,&configurable_settings::libraries_to_preload_             );
+    ascribe("offer_hobsons_choice"             ,&configurable_settings::offer_hobsons_choice_             );
+    ascribe("skin_filename"                    ,&configurable_settings::skin_filename_                    );
+    ascribe("spreadsheet_file_extension"       ,&configurable_settings::spreadsheet_file_extension_       );
+    ascribe("xml_schema_filename"              ,&configurable_settings::xml_schema_filename_              );
+    ascribe("xsl_fo_command"                   ,&configurable_settings::xsl_fo_command_                   );
+    ascribe("xsl_fo_directory"                 ,&configurable_settings::xsl_fo_directory_                 );
+    ascribe("xsl_directory"                    ,&configurable_settings::xsl_directory_                    );
+    ascribe("xslt_format_xml_filename"         ,&configurable_settings::xslt_format_xml_filename_         );
+    ascribe("xslt_html_filename"               ,&configurable_settings::xslt_html_filename_               );
+    ascribe("xslt_light_tab_delimited_filename",&configurable_settings::xslt_light_tab_delimited_filename_);
+    ascribe("xslt_tab_delimited_filename"      ,&configurable_settings::xslt_tab_delimited_filename_      );
 }
 
-std::string const& configurable_settings::configuration_filename()
+std::string const& configurable_settings::configuration_filename() const
 {
     static std::string s("configurable_settings.xml");
     return s;
+}
+
+std::string const& configurable_settings::calculation_summary_columns() const
+{
+    return calculation_summary_columns_;
 }
 
 std::string const& configurable_settings::cgi_bin_log_filename() const
@@ -167,6 +200,11 @@ std::string const& configurable_settings::spreadsheet_file_extension() const
     return spreadsheet_file_extension_;
 }
 
+std::string const& configurable_settings::xml_schema_filename() const
+{
+    return xml_schema_filename_;
+}
+
 std::string const& configurable_settings::xsl_fo_command() const
 {
     return xsl_fo_command_;
@@ -175,5 +213,30 @@ std::string const& configurable_settings::xsl_fo_command() const
 std::string const& configurable_settings::xsl_fo_directory() const
 {
     return xsl_fo_directory_;
+}
+
+std::string const& configurable_settings::xsl_directory() const
+{
+    return xsl_directory_;
+}
+
+std::string const& configurable_settings::xslt_format_xml_filename() const
+{
+    return xslt_format_xml_filename_;
+}
+
+std::string const& configurable_settings::xslt_html_filename() const
+{
+    return xslt_html_filename_;
+}
+
+std::string const& configurable_settings::xslt_light_tab_delimited_filename() const
+{
+    return xslt_light_tab_delimited_filename_;
+}
+
+std::string const& configurable_settings::xslt_tab_delimited_filename() const
+{
+    return xslt_tab_delimited_filename_;
 }
 
