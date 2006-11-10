@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: configurable_settings.hpp,v 1.14 2006-11-10 14:09:38 chicares Exp $
+// $Id: configurable_settings.hpp,v 1.15 2006-11-10 14:54:35 chicares Exp $
 
 #ifndef configurable_settings_hpp
 #define configurable_settings_hpp
@@ -123,6 +123,11 @@ class LMI_SO configurable_settings
   public:
     static configurable_settings& instance();
 
+    void load();
+    void save() const;
+
+    void calculation_summary_columns(std::string const&);
+
     std::string const& calculation_summary_columns      () const;
     std::string const& cgi_bin_log_filename             () const;
     std::string const& custom_input_filename            () const;
@@ -145,8 +150,6 @@ class LMI_SO configurable_settings
     configurable_settings();
 
     void ascribe_members();
-
-    std::string const& configuration_filename() const;
 
     std::string calculation_summary_columns_;
     std::string cgi_bin_log_filename_;

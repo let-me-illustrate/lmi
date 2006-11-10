@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: configurable_settings.cpp,v 1.19 2006-11-10 14:09:38 chicares Exp $
+// $Id: configurable_settings.cpp,v 1.20 2006-11-10 14:54:35 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -40,9 +40,9 @@
 
 namespace
 {
-    std::string const& xml_root_name()
+    std::string const& configuration_filename()
     {
-        static std::string s("configurable_settings");
+        static std::string s("configurable_settings.xml");
         return s;
     }
 
@@ -57,6 +57,12 @@ namespace
             " CSVNet_Current"
             " EOYDeathBft_Current"
             );
+        return s;
+    }
+
+    std::string const& xml_root_name()
+    {
+        static std::string s("configurable_settings");
         return s;
     }
 } // Unnamed namespace.
@@ -149,10 +155,22 @@ void configurable_settings::ascribe_members()
     ascribe("xslt_tab_delimited_filename"      ,&configurable_settings::xslt_tab_delimited_filename_      );
 }
 
-std::string const& configurable_settings::configuration_filename() const
+void configurable_settings::load()
 {
-    static std::string s("configurable_settings.xml");
-    return s;
+    // TODO ?? Implementation required.
+}
+
+void configurable_settings::save() const
+{
+    // TODO ?? Implementation required.
+}
+
+/// Precondition: Argument is semantically valid; ultimately this will
+/// be validated elsewhere.
+
+void configurable_settings::calculation_summary_columns(std::string const& s)
+{
+    calculation_summary_columns_ = s;
 }
 
 std::string const& configurable_settings::calculation_summary_columns() const
