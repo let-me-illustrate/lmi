@@ -1,0 +1,295 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<resource xmlns="http://www.wxwindows.org/wxxrc" version="2.3.0.1">
+
+<!--
+    Let me illustrate...: wxWindows xml resources for user preferences.
+
+    Copyright (C) 2003, 2004, 2005, 2006 Gregory W. Chicares.
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License version 2 as
+    published by the Free Software Foundation.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software Foundation,
+    Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
+
+    http://savannah.nongnu.org/projects/lmi
+    email: <chicares@cox.net>
+    snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
+
+    $Id: preferences_view.xrc,v 1.1 2006-11-11 01:35:32 chicares Exp $
+-->
+
+<object class="wxPanel" name="calculation_summary_panel">
+    <object class="wxFlexGridSizer">
+        <cols>1</cols>
+        <growablerows>1</growablerows>
+        <object class="sizeritem">
+            <flag>wxALIGN_LEFT</flag>
+            <object class="wxCheckBox" name="UseBuiltinDefaults">
+                <label>Use built-in defaults</label>
+            </object>
+        </object>
+        <object class="sizeritem">
+            <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+            <border>4</border>
+            <object class="wxFlexGridSizer">
+                <cols>2</cols>
+                <growablecols>0,1</growablecols>
+                <object class="sizeritem">
+                    <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                    <border>4</border>
+                    <object class="wxStaticText">
+                        <label>Column 0</label>
+                    </object>
+                </object>
+                <object class="sizeritem">
+                    <flag>wxGROW</flag>
+                    <object class="wxComboBox" name="CalculationSummaryColumn00">
+                        <size>200,20</size>
+                        <style>wxCB_DROPDOWN|wxCB_READONLY</style>
+                    </object>
+                </object>
+                <object class="sizeritem">
+                    <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                    <border>4</border>
+                    <object class="wxStaticText">
+                        <label>Column 1</label>
+                    </object>
+                </object>
+                <object class="sizeritem">
+                    <flag>wxGROW</flag>
+                    <object class="wxComboBox" name="CalculationSummaryColumn01">
+                        <size>200,20</size>
+                        <style>wxCB_DROPDOWN|wxCB_READONLY</style>
+                    </object>
+                </object>
+                <object class="sizeritem">
+                    <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                    <border>4</border>
+                    <object class="wxStaticText">
+                        <label>Column 2</label>
+                    </object>
+                </object>
+                <object class="sizeritem">
+                    <flag>wxGROW</flag>
+                    <object class="wxComboBox" name="CalculationSummaryColumn02">
+                        <size>200,20</size>
+                        <style>wxCB_DROPDOWN|wxCB_READONLY</style>
+                    </object>
+                </object>
+                <object class="sizeritem">
+                    <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                    <border>4</border>
+                    <object class="wxStaticText">
+                        <label>Column 3</label>
+                    </object>
+                </object>
+                <object class="sizeritem">
+                    <flag>wxGROW</flag>
+                    <object class="wxComboBox" name="CalculationSummaryColumn03">
+                        <size>200,20</size>
+                        <style>wxCB_DROPDOWN|wxCB_READONLY</style>
+                    </object>
+                </object>
+                <object class="sizeritem">
+                    <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                    <border>4</border>
+                    <object class="wxStaticText">
+                        <label>Column 4</label>
+                    </object>
+                </object>
+                <object class="sizeritem">
+                    <flag>wxGROW</flag>
+                    <object class="wxComboBox" name="CalculationSummaryColumn04">
+                        <size>200,20</size>
+                        <style>wxCB_DROPDOWN|wxCB_READONLY</style>
+                    </object>
+                </object>
+                <object class="sizeritem">
+                    <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                    <border>4</border>
+                    <object class="wxStaticText">
+                        <label>Column 5</label>
+                    </object>
+                </object>
+                <object class="sizeritem">
+                    <flag>wxGROW</flag>
+                    <object class="wxComboBox" name="CalculationSummaryColumn05">
+                        <size>200,20</size>
+                        <style>wxCB_DROPDOWN|wxCB_READONLY</style>
+                    </object>
+                </object>
+                <object class="sizeritem">
+                    <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                    <border>4</border>
+                    <object class="wxStaticText">
+                        <label>Column 6</label>
+                    </object>
+                </object>
+                <object class="sizeritem">
+                    <flag>wxGROW</flag>
+                    <object class="wxComboBox" name="CalculationSummaryColumn06">
+                        <size>200,20</size>
+                        <style>wxCB_DROPDOWN|wxCB_READONLY</style>
+                    </object>
+                </object>
+                <object class="sizeritem">
+                    <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                    <border>4</border>
+                    <object class="wxStaticText">
+                        <label>Column 7</label>
+                    </object>
+                </object>
+                <object class="sizeritem">
+                    <flag>wxGROW</flag>
+                    <object class="wxComboBox" name="CalculationSummaryColumn07">
+                        <size>200,20</size>
+                        <style>wxCB_DROPDOWN|wxCB_READONLY</style>
+                    </object>
+                </object>
+                <object class="sizeritem">
+                    <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                    <border>4</border>
+                    <object class="wxStaticText">
+                        <label>Column 8</label>
+                    </object>
+                </object>
+                <object class="sizeritem">
+                    <flag>wxGROW</flag>
+                    <object class="wxComboBox" name="CalculationSummaryColumn08">
+                        <size>200,20</size>
+                        <style>wxCB_DROPDOWN|wxCB_READONLY</style>
+                    </object>
+                </object>
+                <object class="sizeritem">
+                    <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                    <border>4</border>
+                    <object class="wxStaticText">
+                        <label>Column 9</label>
+                    </object>
+                </object>
+                <object class="sizeritem">
+                    <flag>wxGROW</flag>
+                    <object class="wxComboBox" name="CalculationSummaryColumn09">
+                        <size>200,20</size>
+                        <style>wxCB_DROPDOWN|wxCB_READONLY</style>
+                    </object>
+                </object>
+                <object class="sizeritem">
+                    <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                    <border>4</border>
+                    <object class="wxStaticText">
+                        <label>Column 10</label>
+                    </object>
+                </object>
+                <object class="sizeritem">
+                    <flag>wxGROW</flag>
+                    <object class="wxComboBox" name="CalculationSummaryColumn10">
+                        <size>200,20</size>
+                        <style>wxCB_DROPDOWN|wxCB_READONLY</style>
+                    </object>
+                </object>
+                <object class="sizeritem">
+                    <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                    <border>4</border>
+                    <object class="wxStaticText">
+                        <label>Column 11</label>
+                    </object>
+                </object>
+                <object class="sizeritem">
+                    <flag>wxGROW</flag>
+                    <object class="wxComboBox" name="CalculationSummaryColumn11">
+                        <size>200,20</size>
+                        <style>wxCB_DROPDOWN|wxCB_READONLY</style>
+                    </object>
+                </object>
+            </object>
+        </object>
+    </object>
+</object>
+
+<object class="wxDialog" name="dialog_containing_preferences_notebook">
+    <title>Preferences</title>
+    <style>wxCAPTION|wxRESIZE_BORDER|wxSYSTEM_MENU</style>
+    <exstyle>wxWS_EX_VALIDATE_RECURSIVELY</exstyle>
+<!-- WX !! This style flag is unknown to wxxrc:
+    <exstyle>wxDIALOG_EX_CONTEXTHELP</exstyle>
+-->
+    <centered>1</centered>
+    <object class="wxFlexGridSizer">
+        <cols>1</cols>
+        <rows>0</rows>
+        <vgap>0</vgap>
+        <hgap>0</hgap>
+        <growablecols>0</growablecols>
+        <growablerows>0</growablerows>
+        <object class="sizeritem">
+            <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+            <border>4</border>
+            <object class="wxNotebook" name="preferences_notebook">
+                <usenotebooksizer>1</usenotebooksizer>
+                <size>100,100</size>
+                <object class="notebookpage">
+                    <label>Calculation summary columns</label>
+                    <object_ref ref="calculation_summary_panel"/>
+                </object>
+            </object>
+        </object>
+        <object class="sizeritem">
+            <flag>wxGROW|wxALL</flag>
+            <border>4</border>
+            <object class="wxFlexGridSizer">
+                <cols>2</cols>
+                <growablecols>0</growablecols>
+                <growablerows>0</growablerows>
+                <object class="sizeritem">
+                    <border>4</border>
+                    <flag>wxGROW|wxRIGHT</flag>
+                    <object class="wxStaticText" name="diagnostics">
+                        <style>wxSUNKEN_BORDER|wxST_NO_AUTORESIZE</style>
+                        <label>[diagnostics]</label>
+                    </object>
+                </object>
+                <object class="sizeritem">
+                    <flag>wxALIGN_RIGHT</flag>
+                    <object class="wxBoxSizer">
+                        <orient>wxVERTICAL</orient>
+                        <object class="sizeritem">
+                            <flag>wxALL</flag>
+                            <object class="wxButton" name="wxID_OK">
+                                <label>OK</label>
+                                <default>1</default>
+<!-- WX !! 'default' seems not to work all the time, e.g. when a
+notebook panel contains only checkboxes.
+-->
+                            </object>
+                        </object>
+                        <object class="sizeritem">
+                            <flag>wxALL</flag>
+                            <object class="wxButton" name="wxID_CANCEL">
+                                <label>Cancel</label>
+                            </object>
+                        </object>
+                        <object class="sizeritem">
+                            <flag>wxALL</flag>
+                            <object class="wxButton" name="wxID_HELP">
+                                <label>Help</label>
+                            </object>
+                        </object>
+                    </object>
+                </object>
+            </object>
+        </object>
+    </object>
+</object>
+
+</resource>
+
