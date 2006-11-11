@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: preferences_model.cpp,v 1.2 2006-11-11 02:12:13 chicares Exp $
+// $Id: preferences_model.cpp,v 1.3 2006-11-11 02:42:19 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -62,7 +62,7 @@ PreferencesModel::PreferencesModel()
     :UseBuiltinDefaults("No")
 {
     AscribeMembers();
-    LoadFromSettings();
+    Load();
 }
 
 PreferencesModel::~PreferencesModel()
@@ -140,7 +140,7 @@ void PreferencesModel::DoTransmogrify()
 bool PreferencesModel::IsModified() const
 {
     PreferencesModel unchanged;
-    unchanged.LoadFromSettings();
+    unchanged.Load();
     std::vector<std::string>::const_iterator i;
     for(i = member_names().begin(); i != member_names().end(); ++i)
         {
@@ -156,7 +156,7 @@ bool PreferencesModel::IsModified() const
 
 // TODO ?? CALCULATION_SUMMARY Warn if zero columns selected.
 
-void PreferencesModel::LoadFromSettings()
+void PreferencesModel::Load()
 {
     std::istringstream iss
         (configurable_settings::instance().calculation_summary_columns()
@@ -184,7 +184,7 @@ void PreferencesModel::LoadFromSettings()
         }
 }
 
-void PreferencesModel::SaveToSettings() const
+void PreferencesModel::Save() const
 {
     std::ostringstream oss;
     std::vector<std::string>::const_iterator i;

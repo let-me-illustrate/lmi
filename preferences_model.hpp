@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: preferences_model.hpp,v 1.2 2006-11-11 02:12:13 chicares Exp $
+// $Id: preferences_model.hpp,v 1.3 2006-11-11 02:42:19 chicares Exp $
 
 #ifndef preferences_model_hpp
 #define preferences_model_hpp
@@ -48,9 +48,11 @@ class LMI_SO PreferencesModel
     PreferencesModel();
     virtual ~PreferencesModel();
 
+    // TODO ?? Use operator==() instead of IsModified(), once column
+    // selections are stored individually.
     bool IsModified() const;
-    void LoadFromSettings();
-    void SaveToSettings() const;
+    void Load();
+    void Save() const;
 
   private:
     void AscribeMembers();
