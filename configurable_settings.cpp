@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: configurable_settings.cpp,v 1.23 2006-11-11 20:13:08 chicares Exp $
+// $Id: configurable_settings.cpp,v 1.24 2006-11-11 21:12:13 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -130,6 +130,9 @@ configurable_settings::configurable_settings()
 {
     ascribe_members();
     load();
+    // TODO ?? Something like this:
+//    validate_directory(print_directory_, "Print directory");
+    // might be appropriate here.
 }
 
 configurable_settings::~configurable_settings()
