@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: configurable_settings.cpp,v 1.21 2006-11-10 16:28:08 chicares Exp $
+// $Id: configurable_settings.cpp,v 1.22 2006-11-11 02:12:13 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -57,8 +57,9 @@ namespace
     /// To support non-FHS platforms, if it's not found there, then
     /// look in the data directory.
     ///
-    /// TODO ?? Should write access be checked here? What if the first
-    /// file found is read-only, but the second is read-write?
+    /// TODO ?? CALCULATION_SUMMARY Should write access be checked
+    /// here? What if the first file found is read-only, but the
+    /// second is read-write?
 
     fs::path const& configuration_filepath()
     {
@@ -172,6 +173,10 @@ void configurable_settings::ascribe_members()
 
 void configurable_settings::load()
 {
+    // TODO ?? CALCULATION_SUMMARY In 'gnome-xml-branch', all settings
+    // were first reinitialized from hardcoded defaults. What problem
+    // would that solve?
+
     xml_lmi::dom_parser parser(configuration_filepath().string());
     xml_lmi::Element const& root = parser.root_node(xml_root_name());
     xml_lmi::ElementContainer const elements(xml_lmi::child_elements(root));
@@ -184,7 +189,8 @@ void configurable_settings::load()
 
 void configurable_settings::save() const
 {
-    // TODO ?? Implementation required.
+    // TODO ?? CALCULATION_SUMMARY Implementation required.
+    warning() << "Settings not saved: not yet implemented." << LMI_FLUSH;
 }
 
 /// Precondition: Argument is semantically valid; ultimately this will
