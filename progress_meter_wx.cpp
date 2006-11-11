@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: progress_meter_wx.cpp,v 1.3 2006-02-13 05:30:25 chicares Exp $
+// $Id: progress_meter_wx.cpp,v 1.4 2006-11-11 05:07:21 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -68,6 +68,11 @@ class concrete_progress_meter
     mutable wxProgressDialog progress_dialog;
 };
 
+// WX !! A wxProgressDialog created with maximum = 0 is displayed even
+// though that's apparently just a nuisance. Calling Update(0) right
+// after creation seems to be a reasonable workaround, but it would be
+// better to change this in the library itself.
+
 concrete_progress_meter::concrete_progress_meter
     (int max_count
     ,std::string const& title
@@ -81,6 +86,10 @@ concrete_progress_meter::concrete_progress_meter
         ,progress_dialog_style
         )
 {
+    if(0 == max_count)
+        {
+        progress_dialog.Update(0);
+        }
 }
 
 concrete_progress_meter::~concrete_progress_meter()
