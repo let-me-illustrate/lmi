@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.481 2006-11-09 19:48:24 chicares Exp $
+// $Id: ChangeLog,v 1.482 2006-11-11 01:35:32 chicares Exp $
 
 MAINTENANCE
 
@@ -7914,4 +7914,47 @@ Autoconfiscate.
   ledger.hpp
   streamable.hpp
 Resolve trivial differences between MAIN and 'gnome-xml-branch'.
+
+20061110T1409Z <chicares@cox.net> [1169]
+
+  configurable_settings.cpp
+  configurable_settings.hpp
+Add calculation-summary elements.
+
+20061110T1454Z <chicares@cox.net> [1171]
+
+  configurable_settings.cpp
+  configurable_settings.hpp
+Add stubs to support modifying settings; refactor.
+
+20061110T1626Z <chicares@cox.net> [1172]
+
+  path_utility.cpp
+  path_utility.hpp
+Add a filepath-validating function.
+
+20061110T1628Z <chicares@cox.net> [1172]
+
+  configurable_settings.cpp
+Refactor.
+
+20061111T0132Z <chicares@cox.net> [1172]
+
+  default_view.hpp
+Improve documentation.
+
+20061111T0135Z <chicares@cox.net> [1178]
+
+  main_wx.cpp
+  main_wx.hpp
+  menus.xrc
+  objects.make
+  preferences.xpm       [new file]
+  preferences_model.cpp [new file]
+  preferences_model.hpp [new file]
+  preferences_view.cpp  [new file]
+  preferences_view.hpp  [new file]
+  preferences_view.xrc  [new file]
+  toolbar.xrc
+Use the MVC framework to edit a configurable setting.
 
