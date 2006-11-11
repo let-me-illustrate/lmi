@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: default_view.hpp,v 1.1 2006-07-10 17:59:18 chicares Exp $
+// $Id: default_view.hpp,v 1.2 2006-11-11 01:32:24 chicares Exp $
 
 #ifndef default_view_hpp
 #define default_view_hpp
@@ -30,7 +30,7 @@
 
 /// Design notes for class DefaultView.
 ///
-/// This concrete class implements a default MvcView designed for
+/// This concrete class implements a default MVC View designed for
 /// life-insurance illustrations.
 ///
 /// Implicitly-declared special member functions do the right thing.
@@ -43,6 +43,7 @@ class DefaultView
     virtual ~DefaultView();
 
   private:
+    // MvcView required implementation.
     virtual char const* DoBookControlName () const;
     virtual char const* DoMainDialogName  () const;
     virtual char const* DoResourceFileName() const;
