@@ -24,7 +24,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: menus.xrc,v 1.10 2006-08-24 00:22:27 wboutin Exp $
+    $Id: menus.xrc,v 1.11 2006-11-11 01:35:32 chicares Exp $
 -->
 
 <!-- reusable menus -->
@@ -89,6 +89,11 @@
             <label>_Default</label>
             <bitmap>default_cell.xpm</bitmap>
             <help>Edit default cell</help>
+        </object>
+        <object class="wxMenuItem" name="preferences">
+            <label>Pr_eferences</label>
+            <bitmap>preferences.xpm</bitmap>
+            <help>Manage preferences</help>
         </object>
         <object class="separator"/>
         <object class="wxMenuItem" name="wxID_EXIT">
@@ -162,6 +167,11 @@
             <label>_Default</label>
             <bitmap>default_cell.xpm</bitmap>
             <help>Edit default cell</help>
+        </object>
+        <object class="wxMenuItem" name="preferences">
+            <label>Pr_eferences</label>
+            <bitmap>preferences.xpm</bitmap>
+            <help>Manage preferences</help>
         </object>
         <object class="separator"/>
         <object class="wxMenuItem" name="wxID_EXIT">
@@ -344,6 +354,11 @@ Not supported yet: need to split columns into multiple pages.
             <bitmap>default_cell.xpm</bitmap>
             <help>Edit default cell</help>
         </object>
+        <object class="wxMenuItem" name="preferences">
+            <label>Pr_eferences</label>
+            <bitmap>preferences.xpm</bitmap>
+            <help>Manage preferences</help>
+        </object>
         <object class="separator"/>
         <object class="wxMenuItem" name="wxID_EXIT">
             <label>E_xit</label>
@@ -402,6 +417,11 @@ Not supported yet: need to split columns into multiple pages.
             <label>_Default</label>
             <bitmap>default_cell.xpm</bitmap>
             <help>Edit default cell</help>
+        </object>
+        <object class="wxMenuItem" name="preferences">
+            <label>Pr_eferences</label>
+            <bitmap>preferences.xpm</bitmap>
+            <help>Manage preferences</help>
         </object>
         <object class="separator"/>
         <object class="wxMenuItem" name="wxID_EXIT">

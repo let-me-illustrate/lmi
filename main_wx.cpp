@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_wx.cpp,v 1.56 2006-09-19 21:37:16 chicares Exp $
+// $Id: main_wx.cpp,v 1.57 2006-11-11 01:35:32 chicares Exp $
 
 // Portions of this file are derived from wxWindows files
 //   samples/docvwmdi/docview.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -59,7 +59,10 @@
 #include "main_common.hpp"
 #include "miscellany.hpp"
 #include "msw_workarounds.hpp"
+#include "mvc_controller.hpp"
 #include "path_utility.hpp"
+#include "preferences_model.hpp"
+#include "preferences_view.hpp"
 #include "security.hpp"
 #include "text_doc.hpp"
 #include "text_view.hpp"
@@ -100,12 +103,13 @@ IMPLEMENT_WX_THEME_SUPPORT
 BEGIN_EVENT_TABLE(Skeleton, wxApp)
  EVT_DROP_FILES(                             Skeleton::UponDropFiles             )
  EVT_MENU(wxID_ABOUT                        ,Skeleton::UponAbout                 )
+ EVT_MENU(XRCID("edit_default_cell"        ),Skeleton::UponEditDefaultCell       )
+ EVT_MENU(XRCID("preferences"              ),Skeleton::UponPreferences           )
  EVT_MENU(XRCID("window_cascade"           ),Skeleton::UponWindowCascade         )
  EVT_MENU(XRCID("window_next"              ),Skeleton::UponWindowNext            )
  EVT_MENU(XRCID("window_previous"          ),Skeleton::UponWindowPrevious        )
  EVT_MENU(XRCID("window_tile_horizontally" ),Skeleton::UponWindowTileHorizontally)
  EVT_MENU(XRCID("window_tile_vertically"   ),Skeleton::UponWindowTileVertically  )
- EVT_MENU(XRCID("edit_default_cell"        ),Skeleton::UponEditDefaultCell       )
  EVT_MENU_OPEN(                              Skeleton::UponMenuOpen              )
  EVT_TIMER(wxID_ANY                         ,Skeleton::UponTimer                 )
 // TODO ?? expunge
@@ -436,8 +440,14 @@ bool Skeleton::OnInit()
 
         wxXmlResource::Get()->InitAllHandlers();
 
-        DefaultView const v;
-        if(!wxXmlResource::Get()->Load(AddDataDir(v.ResourceFileName())))
+        DefaultView const v0;
+        if(!wxXmlResource::Get()->Load(AddDataDir(v0.ResourceFileName())))
+            {
+            fatal_error() << "Unable to load xml resources." << LMI_FLUSH;
+            }
+
+        PreferencesView const v1;
+        if(!wxXmlResource::Get()->Load(AddDataDir(v1.ResourceFileName())))
             {
             fatal_error() << "Unable to load xml resources." << LMI_FLUSH;
             }
@@ -651,6 +661,21 @@ void Skeleton::UponPaste(wxClipboardTextEvent& event)
     event.Skip(false);
 }
 
+void Skeleton::UponPreferences(wxCommandEvent&)
+{
+    PreferencesModel preferences;
+    PreferencesView const preferences_view;
+    MvcController controller(frame_, preferences, preferences_view);
+    controller.SetTitle("Preferences");
+    int const rc = controller.ShowModal();
+    if(wxID_OK == rc && preferences.IsModified())
+        {
+        preferences.SaveToSettings();
+        configurable_settings::instance().save();
+        UpdateViews();
+        }
+}
+
 void Skeleton::UponTimer(wxTimerEvent&)
 {
     fenv_validate();
@@ -852,5 +877,11 @@ bool Skeleton::ProcessCommandLine(int argc, char* argv[])
         }
 
     return true;
+}
+
+void Skeleton::UpdateViews()
+{
+    // TODO ?? CALCULATION_SUMMARY Implementation required.
+    warning() << "Views not updated: not yet implemented." << LMI_FLUSH;
 }
 
