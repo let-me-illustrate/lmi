@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: workhorse.make,v 1.78 2006-11-09 15:41:15 chicares Exp $
+# $Id: workhorse.make,v 1.79 2006-11-11 20:07:51 chicares Exp $
 
 ################################################################################
 
@@ -792,7 +792,7 @@ test_dir       := $(exec_prefix)/test
 touchstone_dir := $(exec_prefix)/touchstone
 
 data_files := \
-  $(wildcard $(addprefix $(src_dir)/,*.xrc *.xpm)) \
+  $(wildcard $(addprefix $(src_dir)/,*.xml *.xpm *.xrc *.xsd *.xsl)) \
 
 .PHONY: install
 install: $(default_targets)
