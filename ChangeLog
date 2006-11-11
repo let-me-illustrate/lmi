@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.482 2006-11-11 01:35:32 chicares Exp $
+// $Id: ChangeLog,v 1.483 2006-11-11 05:08:12 chicares Exp $
 
 MAINTENANCE
 
@@ -7957,4 +7957,39 @@ Improve documentation.
   preferences_view.xrc  [new file]
   toolbar.xrc
 Use the MVC framework to edit a configurable setting.
+
+20061111T0212Z <chicares@cox.net> [1181]
+
+  configurable_settings.cpp
+  main_wx.cpp
+  preferences_model.cpp
+  preferences_model.hpp
+Improve documentation.
+
+20061111T0242Z <chicares@cox.net> [1182]
+
+  main_wx.cpp
+  preferences_model.cpp
+  preferences_model.hpp
+Refactor.
+
+20061111T0505Z <chicares@cox.net> [1182]
+
+  group_values.cpp
+Improve documentation.
+
+20061111T0506Z <chicares@cox.net> [1182]
+
+  menus.xrc
+Change an accelerator.
+
+20061111T0507Z <chicares@cox.net> [1182]
+
+  progress_meter_wx.cpp
+Suppress display if there's nothing to do.
+
+20061111T0508Z <chicares@cox.net> [1183]
+
+  main_wx.cpp
+Update all open calculation-summary windows when preferences change.
 

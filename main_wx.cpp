@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_wx.cpp,v 1.59 2006-11-11 02:42:19 chicares Exp $
+// $Id: main_wx.cpp,v 1.60 2006-11-11 05:08:12 chicares Exp $
 
 // Portions of this file are derived from wxWindows files
 //   samples/docvwmdi/docview.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -63,6 +63,7 @@
 #include "path_utility.hpp"
 #include "preferences_model.hpp"
 #include "preferences_view.hpp"
+#include "progress_meter.hpp"
 #include "security.hpp"
 #include "text_doc.hpp"
 #include "text_view.hpp"
@@ -881,9 +882,37 @@ bool Skeleton::ProcessCommandLine(int argc, char* argv[])
 // TODO ?? CALCULATION_SUMMARY It would probably be in much better
 // taste to use wxView::OnUpdate() for this purpose.
 
+// TODO ?? The progress meter's count is wrong. Consider writing a
+// function to get a container of pointers to children of a given
+// type.
+
+#include <wx/utils.h> // wxMilliSleep() [temporary]
+
 void Skeleton::UpdateViews()
 {
-    // TODO ?? CALCULATION_SUMMARY Implementation required.
-    warning() << "Views not updated: not yet implemented." << LMI_FLUSH;
+    wxWindowList wl = frame_->GetChildren();
+    boost::shared_ptr<progress_meter> meter
+        (create_progress_meter
+            (wl.size()
+            ,"Updating calculation summaries"
+            )
+        );
+    for(wxWindowList::const_iterator i = wl.begin(); i != wl.end(); ++i)
+        {
+        wxDocMDIChildFrame const* c = dynamic_cast<wxDocMDIChildFrame*>(*i);
+        if(c)
+            {
+            IllustrationView* v = dynamic_cast<IllustrationView*>(c->GetView());
+            if(v)
+                {
+                v->DisplaySelectedValuesAsHtml();
+wxMilliSleep(1000); // TODO ?? Remove this when updating really does something.
+                }
+            }
+        if(!meter->reflect_progress())
+            {
+            break;
+            }
+        }
 }
 
