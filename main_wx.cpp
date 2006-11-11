@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_wx.cpp,v 1.57 2006-11-11 01:35:32 chicares Exp $
+// $Id: main_wx.cpp,v 1.58 2006-11-11 02:12:13 chicares Exp $
 
 // Portions of this file are derived from wxWindows files
 //   samples/docvwmdi/docview.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -878,6 +878,9 @@ bool Skeleton::ProcessCommandLine(int argc, char* argv[])
 
     return true;
 }
+
+// TODO ?? CALCULATION_SUMMARY It would probably be in much better
+// taste to use wxView::OnUpdate() for this purpose.
 
 void Skeleton::UpdateViews()
 {

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: preferences_model.cpp,v 1.1 2006-11-11 01:35:32 chicares Exp $
+// $Id: preferences_model.cpp,v 1.2 2006-11-11 02:12:13 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -39,13 +39,22 @@
 
 namespace
 {
-// TODO ?? Evgeniy has asked: what is the proper way to retrieve the
-// magic "[none]" value? Answer: I guess I'd copy some similar code,
-// like configuration_filename() in 'configurable_settings.cpp, just
-// for consistency; and then, most of all, search for every use of
-// that string in every other module and replace them all with calls
-// to a function like this--which therefore might belong in some
+// TODO ?? CALCULATION_SUMMARY Evgeniy has asked:
+// what is the proper way to retrieve the magic "[none]" value?
+//
+// Answer: I guess I'd clone some similar code, like
+// configuration_filename() in 'configurable_settings.cpp', just for
+// consistency; and then, what is most important, search for every use
+// of that string in every other module and replace them all with
+// calls to a function like that--which therefore might belong in some
 // other module.
+//
+// However, it would be even better to reimplement this class to
+// configure every data member in class configurable_settings, and
+// store the twelve instances of mce_report_column here the same way
+// that class 'Input' stores its twelve in its xml file. Then the
+// whole issue would vanish.
+
 std::string magic_null_column_name("[none]");
 }
 
