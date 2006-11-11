@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.483 2006-11-11 05:08:12 chicares Exp $
+// $Id: ChangeLog,v 1.484 2006-11-11 20:13:08 chicares Exp $
 
 MAINTENANCE
 
@@ -7992,4 +7992,31 @@ Suppress display if there's nothing to do.
 
   main_wx.cpp
 Update all open calculation-summary windows when preferences change.
+
+20061111T1409Z <chicares@cox.net> [1183]
+
+  input_test.cpp
+Work around a libxml++ inconvenience.
+
+20061111T1410Z <chicares@cox.net> [1183]
+
+  basicvalues.cpp
+Look for data files on the default installation path.
+
+20061111T2007Z <chicares@cox.net> [1183]
+
+  workhorse.make
+Install all xml files to '$(exec_prefix)/data', to which '.xrc' files
+have always been installed.
+
+20061111T2013Z <chicares@cox.net> [1186]
+
+  configurable_settings.cpp
+  configurable_settings.hpp
+  ledger_xsl.cpp
+Replace 'xsl_fo_directory' with 'print_directory'. It had been
+documented as the location of the xsl-fo processor, but had been used
+only as a directory for xsl-fo input and output files. The path to the
+xsl-fo processor is not needed per se, because 'xsl_fo_command' can
+specify a complete path.
 

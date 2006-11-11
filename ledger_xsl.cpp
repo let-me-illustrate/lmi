@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xsl.cpp,v 1.10 2006-01-29 13:52:00 chicares Exp $
+// $Id: ledger_xsl.cpp,v 1.11 2006-11-11 20:13:08 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -43,10 +43,12 @@
 
 namespace
 {
+/// File path for xsl-fo file appropriate for the given ledger.
+
 fs::path xsl_filepath(Ledger const& ledger)
 {
     std::string xsl_name = ledger.GetLedgerType().str() + ".xsl";
-    fs::path fo_dir(configurable_settings::instance().xsl_fo_directory());
+    fs::path fo_dir(configurable_settings::instance().print_directory());
     fs::path xsl_file(fo_dir / xsl_name);
     if(!fs::exists(xsl_file))
         {
@@ -68,7 +70,7 @@ std::string write_ledger_to_pdf
     ,std::string const& filename
     )
 {
-    fs::path fo_dir(configurable_settings::instance().xsl_fo_directory());
+    fs::path print_dir(configurable_settings::instance().print_directory());
 
     // Ensure that the output filename is portable. Apache fop rejects
     // some names for '-xml' that it accepts for pdf output, without
@@ -96,9 +98,8 @@ std::string write_ledger_to_pdf
         :   "output"
         );
 
-    fs::path xml_out_file = unique_filepath(fo_dir / real_filename, ".xml");
+    fs::path xml_out_file = unique_filepath(print_dir / real_filename, ".xml");
 
-    fs::ofstream ofs(xml_out_file, std::ios_base::out | std::ios_base::trunc);
     // Scale a copy of the 'ledger' argument. The original must not be
     // modified because scaling is not reentrant. TODO ?? However,
     // that problem is not avoided here, because what is scaled is
@@ -106,20 +107,41 @@ std::string write_ledger_to_pdf
     // of problems in the ledger-class implementation.
     Ledger scaled_ledger(ledger);
     scaled_ledger.AutoScale();
+
+    fs::ofstream ofs(xml_out_file, std::ios_base::out | std::ios_base::trunc);
+// TODO ?? CALCULATION_SUMMARY Make this change after porting the new
+// ledger-formatting code:
+#if 1
     scaled_ledger.write(ofs);
+#else  // not 1
+    LedgerFormatter formatter
+        (LedgerFormatterFactory::Instance().CreateFormatter(scaled_ledger)
+        );
+    formatter.FormatAsXslFo(ofs);
+#endif // not 1
     ofs.close();
 
     fs::path xsl_file = xsl_filepath(ledger);
 
-    fs::path pdf_out_file = unique_filepath(fo_dir / real_filename, ".pdf");
+    fs::path pdf_out_file = unique_filepath(print_dir / real_filename, ".pdf");
 
     std::ostringstream oss;
+// TODO ?? CALCULATION_SUMMARY Make this change after porting the new
+// ledger-formatting code and making sure that it works:
+#if 1
     oss
         << configurable_settings::instance().xsl_fo_command()
         << " -xsl "  << '"' << xsl_file.string()     << '"'
         << " -xml "  << '"' << xml_out_file.string() << '"'
         << " "       << '"' << pdf_out_file.string() << '"'
         ;
+#else  // not 1
+    oss
+        << configurable_settings::instance().xsl_fo_command()
+        << " -fo "  << '"' << xml_out_file.string() << '"'
+        << " -pdf " << '"' << pdf_out_file.string()    << '"'
+        ;
+#endif // not 1
 
     int rc = system_command(oss.str());
 

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: configurable_settings.hpp,v 1.15 2006-11-10 14:54:35 chicares Exp $
+// $Id: configurable_settings.hpp,v 1.16 2006-11-11 20:13:08 chicares Exp $
 
 #ifndef configurable_settings_hpp
 #define configurable_settings_hpp
@@ -66,6 +66,9 @@
 /// changing it may have no effect with non-GUI interfaces. Eventually
 /// this option may be removed altogether.
 ///
+/// print_directory_: Directory to which xsl-fo input and output are
+/// written.
+///
 /// skin_filename_: Name of '.xrc' interface skin.
 ///
 /// spreadsheet_file_extension_: File extension (beginning with a dot)
@@ -80,11 +83,10 @@
 /// with a free but not GPL-compatible license, such as apache fop,
 /// which cannot be linked with a GPL version 2 program.
 ///
-/// xsl_fo_directory_: Directory where xsl 'formatting objects'
-/// processor resides.
-///
 /// xsl_directory_: Directory where xsl templates, 'schema.xsd'
-/// and 'format.xml' reside.
+/// and 'format.xml' reside. TODO ?? CALCULATION_SUMMARY Should this
+/// be expunged? FHS would seem to suggest '/usr/share/sgml' (does
+/// anyone really use that?).
 ///
 /// xslt_format_xml_filename_: xml file containing column titles and
 /// value formats used by calculation summary.
@@ -135,11 +137,11 @@ class LMI_SO configurable_settings
     std::string const& default_input_filename           () const;
     std::string const& libraries_to_preload             () const;
     bool               offer_hobsons_choice             () const;
+    std::string const& print_directory                  () const;
     std::string const& skin_filename                    () const;
     std::string const& spreadsheet_file_extension       () const;
     std::string const& xml_schema_filename              () const;
     std::string const& xsl_fo_command                   () const;
-    std::string const& xsl_fo_directory                 () const;
     std::string const& xsl_directory                    () const;
     std::string const& xslt_format_xml_filename         () const;
     std::string const& xslt_html_filename               () const;
@@ -158,11 +160,11 @@ class LMI_SO configurable_settings
     std::string default_input_filename_;
     std::string libraries_to_preload_;
     bool        offer_hobsons_choice_;
+    std::string print_directory_;
     std::string skin_filename_;
     std::string spreadsheet_file_extension_;
     std::string xml_schema_filename_;
     std::string xsl_fo_command_;
-    std::string xsl_fo_directory_;
     std::string xsl_directory_;
     std::string xslt_format_xml_filename_;
     std::string xslt_html_filename_;
