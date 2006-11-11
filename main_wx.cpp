@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_wx.cpp,v 1.58 2006-11-11 02:12:13 chicares Exp $
+// $Id: main_wx.cpp,v 1.59 2006-11-11 02:42:19 chicares Exp $
 
 // Portions of this file are derived from wxWindows files
 //   samples/docvwmdi/docview.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -666,11 +666,10 @@ void Skeleton::UponPreferences(wxCommandEvent&)
     PreferencesModel preferences;
     PreferencesView const preferences_view;
     MvcController controller(frame_, preferences, preferences_view);
-    controller.SetTitle("Preferences");
     int const rc = controller.ShowModal();
     if(wxID_OK == rc && preferences.IsModified())
         {
-        preferences.SaveToSettings();
+        preferences.Save();
         configurable_settings::instance().save();
         UpdateViews();
         }
