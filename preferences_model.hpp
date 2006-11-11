@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: preferences_model.hpp,v 1.1 2006-11-11 01:35:32 chicares Exp $
+// $Id: preferences_model.hpp,v 1.2 2006-11-11 02:12:13 chicares Exp $
 
 #ifndef preferences_model_hpp
 #define preferences_model_hpp
@@ -33,6 +33,11 @@
 #include "mc_enum_types.hpp"
 #include "obstruct_slicing.hpp"
 #include "so_attributes.hpp"
+
+// TODO ?? This class, as originally built, doesn't actually need the
+// 'LMI_SO' decoration. It will someday, though, when it is merged
+// with class configurable_settings; the merged class belongs in a
+// shared library.
 
 class LMI_SO PreferencesModel
     :virtual private obstruct_slicing<PreferencesModel>
