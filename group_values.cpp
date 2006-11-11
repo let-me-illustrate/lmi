@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: group_values.cpp,v 1.52 2006-01-29 13:52:00 chicares Exp $
+// $Id: group_values.cpp,v 1.53 2006-11-11 05:05:02 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -106,7 +106,7 @@ void emit_ledger
 // implement friendship.
 
 // TODO ?? Consider adding timing code to these functors, even perhaps
-// by adding it the class progress_meter. At present, timings are
+// by adding it to class progress_meter. At present, timings are
 // reported for calculations and output combined; is it desirable to
 // separate those things?
 
