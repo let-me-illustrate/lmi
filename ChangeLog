@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.484 2006-11-11 20:13:08 chicares Exp $
+// $Id: ChangeLog,v 1.485 2006-11-11 21:13:26 chicares Exp $
 
 MAINTENANCE
 
@@ -8019,4 +8019,14 @@ documented as the location of the xsl-fo processor, but had been used
 only as a directory for xsl-fo input and output files. The path to the
 xsl-fo processor is not needed per se, because 'xsl_fo_command' can
 specify a complete path.
+
+20061111T2112Z <chicares@cox.net> [1187]
+
+  configurable_settings.cpp
+Note a plausible idea.
+
+20061111T2113Z <chicares@cox.net> [1188]
+
+  ledger_xsl.cpp
+Look for xsl-fo files in '$(exec_prefix)/data'.
 
