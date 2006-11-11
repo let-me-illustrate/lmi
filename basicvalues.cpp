@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: basicvalues.cpp,v 1.11 2006-01-29 13:52:00 chicares Exp $
+// $Id: basicvalues.cpp,v 1.12 2006-11-11 14:10:16 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -44,11 +44,10 @@
 #include <algorithm> // std::max()
 #include <cmath>     // std::pow()
 
-// TODO ??  Instead of this hardcoded path, use either the location
-// FHS would recommend, or a configuration file.
+// TODO ??  Instead of this hardcoded path, use a configuration file.
 //
-char const* CurrentTableFile()    {return "/opt/lmi/sample";}
-char const* GuaranteedTableFile() {return "/opt/lmi/qx_cso";}
+char const* CurrentTableFile()    {return "/opt/lmi/data/sample";}
+char const* GuaranteedTableFile() {return "/opt/lmi/data/qx_cso";}
 
 // INELEGANT !! Many member variables are initialized not in ctors,
 // but rather in common initialization functions.
