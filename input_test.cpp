@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_test.cpp,v 1.13 2006-11-09 15:45:25 chicares Exp $
+// $Id: input_test.cpp,v 1.14 2006-11-11 14:09:29 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -48,10 +48,11 @@
 #include <iterator>
 
 #if defined USING_LIBXMLPP
-    #define GET_FIRST_ELEMENT(child,parent) \
-    xml_lmi::Element const& child = get_first_element((parent));
+#   include <boost/ref.hpp>
+#   define GET_FIRST_ELEMENT(child,parent) \
+    boost::reference_wrapper<xml_lmi::Element> child(xml_lmi::get_first_element((parent)));
 #else  // !defined USING_LIBXMLPP
-    #define GET_FIRST_ELEMENT(child,parent) \
+#   define GET_FIRST_ELEMENT(child,parent) \
     xml_lmi::NodeConstIterator xyzzy = (parent).begin(); \
     LMI_ASSERT(!(xyzzy)->is_text()); \
     xml_lmi::Element const& child = *(xyzzy);
