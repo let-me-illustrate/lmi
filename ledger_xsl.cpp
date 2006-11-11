@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xsl.cpp,v 1.11 2006-11-11 20:13:08 chicares Exp $
+// $Id: ledger_xsl.cpp,v 1.12 2006-11-11 21:13:26 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -30,6 +30,7 @@
 
 #include "alert.hpp"
 #include "configurable_settings.hpp"
+#include "global_settings.hpp"
 #include "ledger.hpp"
 #include "path_utility.hpp"
 #include "system_command.hpp"
@@ -48,8 +49,18 @@ namespace
 fs::path xsl_filepath(Ledger const& ledger)
 {
     std::string xsl_name = ledger.GetLedgerType().str() + ".xsl";
+#if 0 // TODO ?? CALCULATION_SUMMARY expunge
+    // This was the original behavior:
     fs::path fo_dir(configurable_settings::instance().print_directory());
     fs::path xsl_file(fo_dir / xsl_name);
+
+    // This is what should be used instead if xml files are to be kept
+    // in a separate directory:
+    fs::path xsl_dir(configurable_settings::instance().xsl_directory());
+    fs::path xsl_file(xsl_dir / xsl_name);
+#else  // not 0
+    fs::path xsl_file(global_settings::instance().data_directory() / xsl_name);
+#endif // not 0
     if(!fs::exists(xsl_file))
         {
         fatal_error()
