@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustration_view.hpp,v 1.17 2006-08-12 17:16:36 chicares Exp $
+// $Id: illustration_view.hpp,v 1.18 2006-11-12 21:07:39 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -36,6 +36,7 @@
 
 #include "view_ex.hpp"
 
+#include "ledger_formatter.hpp"
 #include "obstruct_slicing.hpp"
 
 #include <boost/shared_ptr.hpp>
@@ -76,7 +77,20 @@ class IllustrationView
   private:
     IllustrationDocument& document() const;
 
+    enum enum_copy_options
+        {e_copy_values
+        ,e_copy_calculation_summary
+        };
+
+    void CopyLedgerIntoClipboard(enum_copy_options);
     int EditProperties();
+
+    enum enum_print_options
+        {e_print_printer
+        ,e_print_preview
+        };
+    // Print HTML code to the printer or preview.
+    void PrintCS(enum_print_options) const;
 
     // ViewEx required implementation.
     wxWindow* CreateChildWindow();
@@ -86,8 +100,12 @@ class IllustrationView
     // ViewEx overrides.
     bool OnCreate              (wxDocument*, long int);
 
+    void UponCopyLedgerValues  (wxCommandEvent&);
+    void UponCopyLedgerCalculationSummary(wxCommandEvent&);
     void UponMenuOpen          (wxMenuEvent&);
+    void UponPreviewCS         (wxCommandEvent&);
     void UponPreviewPdf        (wxCommandEvent&);
+    void UponPrintCS           (wxCommandEvent&);
     void UponPrintPdf          (wxCommandEvent&);
     void UponProperties        (wxCommandEvent&);
     void UponUpdateFileSave    (wxUpdateUIEvent&);
@@ -98,6 +116,7 @@ class IllustrationView
     wxHtmlWindow* html_window_;
     bool is_phony_;
     boost::shared_ptr<Ledger const> ledger_values_;
+    LedgerFormatter ledger_formatter_;
     std::string selected_values_as_html_;
 
     DECLARE_DYNAMIC_CLASS(IllustrationView)

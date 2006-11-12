@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.487 2006-11-12 19:56:51 chicares Exp $
+// $Id: ChangeLog,v 1.488 2006-11-12 21:07:39 chicares Exp $
 
 MAINTENANCE
 
@@ -8070,4 +8070,11 @@ Rectify comments on preprocessor conditionals.
   xslt_lmi.cpp         [new file]
   xslt_lmi.hpp         [new file]
 Import new code from 'gnome-xml-branch'.
+
+20061112T2107Z <chicares@cox.net> [1198]
+
+  illustration_view.cpp
+  illustration_view.hpp
+  menus.xrc
+Import changes from 'gnome-xml-branch'.
 
