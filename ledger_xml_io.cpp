@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xml_io.cpp,v 1.54 2006-11-12 17:52:26 chicares Exp $
+// $Id: ledger_xml_io.cpp,v 1.55 2006-11-12 19:54:18 chicares Exp $
 
 #include "ledger.hpp"
 
@@ -46,10 +46,12 @@
 #include <string>
 #include <utility>
 
+#if !defined LMI_USE_NEW_REPORTS
 void Ledger::read(xml_lmi::Element const&)
 {
     // TODO ?? Not yet implemented.
 }
+#endif // !defined LMI_USE_NEW_REPORTS
 
 namespace
 {
@@ -1083,6 +1085,7 @@ void Ledger::write(xml_lmi::Element& x) const
 #endif // !defined LMI_USE_NEW_REPORTS
 }
 
+#if !defined LMI_USE_NEW_REPORTS
 int Ledger::class_version() const
 {
     return 0;
@@ -1092,6 +1095,7 @@ std::string Ledger::xml_root_name() const
 {
     return "illustration";
 }
+#endif // !defined LMI_USE_NEW_REPORTS
 
 // TODO ?? Can this function be removed when LMI_USE_NEW_REPORTS is
 // defined? It seems to be used only by write_ledger_to_pdf(), and
