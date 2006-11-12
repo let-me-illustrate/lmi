@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xsl.cpp,v 1.13 2006-11-12 17:52:26 chicares Exp $
+// $Id: ledger_xsl.cpp,v 1.14 2006-11-12 19:55:12 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -34,7 +34,7 @@
 #include "ledger.hpp"
 #if defined LMI_USE_NEW_REPORTS
 #   include "ledger_formatter.hpp"
-#endif // !defined LMI_USE_NEW_REPORTS
+#endif // defined LMI_USE_NEW_REPORTS
 #include "path_utility.hpp"
 #include "system_command.hpp"
 
