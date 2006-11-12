@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xsl.cpp,v 1.12 2006-11-11 21:13:26 chicares Exp $
+// $Id: ledger_xsl.cpp,v 1.13 2006-11-12 17:52:26 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -32,6 +32,9 @@
 #include "configurable_settings.hpp"
 #include "global_settings.hpp"
 #include "ledger.hpp"
+#if defined LMI_USE_NEW_REPORTS
+#   include "ledger_formatter.hpp"
+#endif // !defined LMI_USE_NEW_REPORTS
 #include "path_utility.hpp"
 #include "system_command.hpp"
 
@@ -120,16 +123,14 @@ std::string write_ledger_to_pdf
     scaled_ledger.AutoScale();
 
     fs::ofstream ofs(xml_out_file, std::ios_base::out | std::ios_base::trunc);
-// TODO ?? CALCULATION_SUMMARY Make this change after porting the new
-// ledger-formatting code:
-#if 1
-    scaled_ledger.write(ofs);
-#else  // not 1
+#if defined LMI_USE_NEW_REPORTS
     LedgerFormatter formatter
         (LedgerFormatterFactory::Instance().CreateFormatter(scaled_ledger)
         );
     formatter.FormatAsXslFo(ofs);
-#endif // not 1
+#else  // !defined LMI_USE_NEW_REPORTS
+    scaled_ledger.write(ofs);
+#endif // !defined LMI_USE_NEW_REPORTS
     ofs.close();
 
     fs::path xsl_file = xsl_filepath(ledger);
@@ -137,22 +138,20 @@ std::string write_ledger_to_pdf
     fs::path pdf_out_file = unique_filepath(print_dir / real_filename, ".pdf");
 
     std::ostringstream oss;
-// TODO ?? CALCULATION_SUMMARY Make this change after porting the new
-// ledger-formatting code and making sure that it works:
-#if 1
+#if defined LMI_USE_NEW_REPORTS
+    oss
+        << configurable_settings::instance().xsl_fo_command()
+        << " -fo "  << '"' << xml_out_file.string() << '"'
+        << " -pdf " << '"' << pdf_out_file.string()    << '"'
+        ;
+#else  // !defined LMI_USE_NEW_REPORTS
     oss
         << configurable_settings::instance().xsl_fo_command()
         << " -xsl "  << '"' << xsl_file.string()     << '"'
         << " -xml "  << '"' << xml_out_file.string() << '"'
         << " "       << '"' << pdf_out_file.string() << '"'
         ;
-#else  // not 1
-    oss
-        << configurable_settings::instance().xsl_fo_command()
-        << " -fo "  << '"' << xml_out_file.string() << '"'
-        << " -pdf " << '"' << pdf_out_file.string()    << '"'
-        ;
-#endif // not 1
+#endif // !defined LMI_USE_NEW_REPORTS
 
     int rc = system_command(oss.str());
 
