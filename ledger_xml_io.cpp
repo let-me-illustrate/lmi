@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xml_io.cpp,v 1.53 2006-11-07 04:38:15 chicares Exp $
+// $Id: ledger_xml_io.cpp,v 1.54 2006-11-12 17:52:26 chicares Exp $
 
 #include "ledger.hpp"
 
@@ -228,6 +228,9 @@ bool format_exists(std::string const& s, std::string const& suffix, format_map_t
 
 void Ledger::write(xml_lmi::Element& x) const
 {
+#if defined LMI_USE_NEW_REPORTS
+    writeXXX(x);
+#else  // !defined LMI_USE_NEW_REPORTS
     title_map_t title_map;
 
 // Can't seem to get a literal &nbsp; into the output.
@@ -1077,6 +1080,7 @@ void Ledger::write(xml_lmi::Element& x) const
             ofs << '\n';
             }
         }
+#endif // !defined LMI_USE_NEW_REPORTS
 }
 
 int Ledger::class_version() const
@@ -1089,8 +1093,15 @@ std::string Ledger::xml_root_name() const
     return "illustration";
 }
 
+// TODO ?? Can this function be removed when LMI_USE_NEW_REPORTS is
+// defined? It seems to be used only by write_ledger_to_pdf(), and
+// there only if LMI_USE_NEW_REPORTS is not defined.
+
 void Ledger::write(std::ostream& os) const
 {
+#if defined LMI_USE_NEW_REPORTS
+    writeXXX(os);
+#else  // !defined LMI_USE_NEW_REPORTS
     xml_lmi::xml_document document(xml_root_name());
     xml_lmi::Element& root = document.root_node();
 
@@ -1109,5 +1120,6 @@ void Ledger::write(std::ostream& os) const
         ,string_to_insert
         );
     os << s;
+#endif // !defined LMI_USE_NEW_REPORTS
 }
 
