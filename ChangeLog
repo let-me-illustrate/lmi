@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.486 2006-11-12 17:52:26 chicares Exp $
+// $Id: ChangeLog,v 1.487 2006-11-12 19:56:51 chicares Exp $
 
 MAINTENANCE
 
@@ -8049,4 +8049,25 @@ Import an enumeration from 'gnome-xml-branch'.
 Prepare to merge 'gnome-xml-branch'. Unfinished code from the branch
 is conditional on macro LMI_USE_NEW_REPORTS; unfinished replacement
 functions are named with suffix 'XXX'.
+
+20061112T1954Z <chicares@cox.net> [1188]
+
+  ledger_xml_io.cpp
+Prepare to merge 'gnome-xml-branch': conditionalize duplicated code.
+
+20061112T1955Z <chicares@cox.net> [1188]
+
+  ledger_text_formats.cpp
+  ledger_xsl.cpp
+Rectify comments on preprocessor conditionals.
+
+20061112T1956Z <chicares@cox.net> [1198]
+
+  ledger_formatter.cpp [new file]
+  ledger_formatter.hpp [new file]
+  ledger_xml_io2.cpp   [new file]
+  objects.make
+  xslt_lmi.cpp         [new file]
+  xslt_lmi.hpp         [new file]
+Import new code from 'gnome-xml-branch'.
 
