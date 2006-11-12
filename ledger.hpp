@@ -19,13 +19,14 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger.hpp,v 1.17 2006-11-09 19:48:24 chicares Exp $
+// $Id: ledger.hpp,v 1.18 2006-11-12 17:52:26 chicares Exp $
 
 #ifndef ledger_hpp
 #define ledger_hpp
 
 #include "config.hpp"
 
+#include "ledger_excerpt.hpp" // enum_xml_version
 #include "so_attributes.hpp"
 #include "streamable.hpp"
 #include "xenumtypes.hpp"
@@ -114,6 +115,11 @@ class LMI_SO Ledger
     virtual std::string xml_root_name() const;
 
     void write(std::ostream& os) const;
+
+    void write_excerpt(xml_lmi::Element&, enum_xml_version) const;
+
+    void writeXXX(xml_lmi::Element&) const;
+    void writeXXX(std::ostream& os) const;
 
   private:
     LedgerVariant const& GetOneVariantLedger(enum_run_basis) const;

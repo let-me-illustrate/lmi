@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.485 2006-11-11 21:13:26 chicares Exp $
+// $Id: ChangeLog,v 1.486 2006-11-12 17:52:26 chicares Exp $
 
 MAINTENANCE
 
@@ -8029,4 +8029,24 @@ Note a plausible idea.
 
   ledger_xsl.cpp
 Look for xsl-fo files in '$(exec_prefix)/data'.
+
+20061112T1746Z <chicares@cox.net> [1188]
+
+  toolbar.xrc
+Add a print-preview button.
+
+20061112T1749Z <chicares@cox.net> [1189]
+
+  ledger_excerpt.hpp [new file]
+Import an enumeration from 'gnome-xml-branch'.
+
+20061112T1752Z <chicares@cox.net> [1188]
+
+  ledger.hpp
+  ledger_text_formats.cpp
+  ledger_xml_io.cpp
+  ledger_xsl.cpp
+Prepare to merge 'gnome-xml-branch'. Unfinished code from the branch
+is conditional on macro LMI_USE_NEW_REPORTS; unfinished replacement
+functions are named with suffix 'XXX'.
 
