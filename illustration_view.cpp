@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustration_view.cpp,v 1.42 2006-11-02 19:37:08 chicares Exp $
+// $Id: illustration_view.cpp,v 1.43 2006-11-12 21:07:39 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -54,16 +54,27 @@
 #include "timer.hpp"
 #include "wx_new.hpp"
 
+#include <boost/scoped_ptr.hpp>
+
+#include <wx/clipbrd.h>
+#include <wx/dataobj.h>
 #include <wx/html/htmlwin.h>
+#include <wx/html/htmprint.h>
 #include <wx/icon.h>
 #include <wx/menu.h>
 #include <wx/xrc/xmlres.h>
 
+#include <sstream>
+
 IMPLEMENT_DYNAMIC_CLASS(IllustrationView, ViewEx)
 
 BEGIN_EVENT_TABLE(IllustrationView, ViewEx)
+    EVT_MENU(wxID_COPY                      ,IllustrationView::UponCopyLedgerValues)
+    EVT_MENU(XRCID("copy_illustration"     ),IllustrationView::UponCopyLedgerCalculationSummary)
     EVT_MENU(XRCID("edit_cell"             ),IllustrationView::UponProperties)
+    EVT_MENU(XRCID("preview_illustration"  ),IllustrationView::UponPreviewCS )
     EVT_MENU(wxID_PREVIEW                   ,IllustrationView::UponPreviewPdf)
+    EVT_MENU(XRCID("print_illustration"    ),IllustrationView::UponPrintCS   )
     EVT_MENU(wxID_PRINT                     ,IllustrationView::UponPrintPdf  )
     EVT_UPDATE_UI(wxID_SAVE                 ,IllustrationView::UponUpdateFileSave)
 //    EVT_UPDATE_UI(wxID_SAVEAS               ,IllustrationView::UponUpdateFileSaveAs)
@@ -148,7 +159,11 @@ warning() << "That command should have been disabled." << LMI_FLUSH;
 void IllustrationView::DisplaySelectedValuesAsHtml()
 {
     LMI_ASSERT(ledger_values_.get());
-    selected_values_as_html_ = FormatSelectedValuesAsHtml(*ledger_values_);
+
+    std::ostringstream oss;
+    ledger_formatter_.FormatAsHtml(oss);
+    selected_values_as_html_ = oss.str();
+
     html_window_->SetPage(selected_values_as_html_.c_str());
 }
 
@@ -227,6 +242,49 @@ void IllustrationView::UponMenuOpen(wxMenuEvent&)
         }
 }
 
+void IllustrationView::UponCopyLedgerValues(wxCommandEvent&)
+{
+    CopyLedgerIntoClipboard(e_copy_values);
+}
+
+void IllustrationView::UponCopyLedgerCalculationSummary(wxCommandEvent&)
+{
+    CopyLedgerIntoClipboard(e_copy_calculation_summary);
+}
+
+void IllustrationView::UponPreviewCS(wxCommandEvent&)
+{
+    PrintCS(e_print_preview);
+}
+
+void IllustrationView::UponPrintCS(wxCommandEvent&)
+{
+    PrintCS(e_print_printer);
+}
+
+void IllustrationView::PrintCS(enum_print_options options) const
+{
+    std::string disclaimer
+        ("FOR BROKER-DEALER USE ONLY. NOT TO BE SHARED WITH CLIENTS."
+        );
+    boost::scoped_ptr<wxHtmlEasyPrinting> printer
+        (new wxHtmlEasyPrinting("Calculation Summary", html_window_)
+        );
+
+    printer->SetHeader
+        (disclaimer + " (@PAGENUM@/@PAGESCNT@)<hr />"
+        ,wxPAGE_ALL
+        );
+    if(options == e_print_printer)
+        {
+        printer->PrintText(selected_values_as_html_.c_str());
+        }
+    else
+        {
+        printer->PreviewText(selected_values_as_html_.c_str());
+        }
+}
+
 void IllustrationView::UponPreviewPdf(wxCommandEvent&)
 {
     Pdf("open");
@@ -283,6 +341,33 @@ void IllustrationView::UponUpdateProperties(wxUpdateUIEvent& e)
     e.Enable(!is_phony_);
 }
 
+void IllustrationView::CopyLedgerIntoClipboard(enum_copy_options options)
+{
+    wxClipboardLocker clipboardLocker;
+
+    if(!clipboardLocker)
+        return;
+
+    Timer timer;
+
+    std::ostringstream oss;
+    if(options == e_copy_values)
+        {
+        ledger_formatter_.FormatAsTabDelimited(oss);
+        }
+    else
+        {
+        ledger_formatter_.FormatAsLightTSV(oss);
+        }
+
+    status() << "Format: " << timer.stop().elapsed_msec_str() << std::flush;
+
+    wxTextDataObject* testDataObject = new wxTextDataObject(oss.str());
+
+    // clipboard owns the data
+    wxTheClipboard->SetData(testDataObject);
+}
+
 void IllustrationView::Pdf(std::string const& action) const
 {
     LMI_ASSERT(ledger_values_.get());
@@ -318,11 +403,13 @@ void IllustrationView::Run(Input* overriding_input)
     status() << "Calculate: " << timer.stop().elapsed_msec_str();
     timer.restart();
 
-    ledger_values_ = av.ledger_from_av();
+    SetLedger(av.ledger_from_av());
+
     status() << "; prepare: " << timer.stop().elapsed_msec_str();
     timer.restart();
 
     DisplaySelectedValuesAsHtml();
+
     status() << "; format: " << timer.stop().elapsed_msec_str();
     status() << std::flush;
 }
@@ -330,6 +417,14 @@ void IllustrationView::Run(Input* overriding_input)
 void IllustrationView::SetLedger(boost::shared_ptr<Ledger const> ledger)
 {
     ledger_values_ = ledger;
+    if (ledger_values_.get())
+        {
+        ledger_formatter_ = LedgerFormatterFactory::Instance().CreateFormatter(*ledger_values_);
+        }
+    else
+        {
+        ledger_formatter_ = LedgerFormatter();
+        }
 }
 
 // This could be generalized as a function template if that ever

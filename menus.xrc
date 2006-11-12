@@ -24,7 +24,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: menus.xrc,v 1.12 2006-11-11 05:06:09 chicares Exp $
+    $Id: menus.xrc,v 1.13 2006-11-12 21:07:39 chicares Exp $
 -->
 
 <!-- reusable menus -->
@@ -372,6 +372,24 @@ Not supported yet: need to split columns into multiple pages.
             <label>_Edit cell\tCtrl-E</label>
             <bitmap>edit-cell.xpm</bitmap>
             <help>Edit this cell</help>
+        </object>
+        <object class="separator"/>
+        <object class="wxMenuItem" name="copy_illustration">
+            <label>_Copy calculation summary\tCtrl-C</label>
+            <help>Copy calculation summary to the clipboard</help>
+        </object>
+        <object class="wxMenuItem" name="wxID_COPY">
+            <label>Copy full illustration _data\tCtrl-D</label>
+            <help>Copy full illustration data to the clipboard</help>
+        </object>
+        <object class="separator"/>
+        <object class="wxMenuItem" name="preview_illustration">
+            <label>Pre_view calculation summary\tCtrl-V</label>
+            <help>Preview calculation summary</help>
+        </object>
+        <object class="wxMenuItem" name="print_illustration">
+            <label>_Print calculation summary\tCtrl-P</label>
+            <help>Print calculation summary</help>
         </object>
     </object>
     <object_ref name="window_menu" ref="window_menu_ref"/>
