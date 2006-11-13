@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustration_view.cpp,v 1.45 2006-11-13 03:58:13 chicares Exp $
+// $Id: illustration_view.cpp,v 1.46 2006-11-13 05:01:27 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -262,6 +262,9 @@ void IllustrationView::UponPrintSummary(wxCommandEvent&)
     PrintSummary(e_print_printer);
 }
 
+// TODO ?? CALCULATION_SUMMARY This should use either the code or the
+// ideas in DocManagerEx::UponPreview().
+
 void IllustrationView::PrintSummary(enum_print_options options) const
 {
     std::string disclaimer
@@ -279,6 +282,8 @@ void IllustrationView::PrintSummary(enum_print_options options) const
         {
         printer->PrintText(selected_values_as_html_.c_str());
         }
+    // TODO ?? CALCULATION_SUMMARY This assumes, without asserting,
+    // that the enumeration has exactly two enumerators.
     else
         {
         printer->PreviewText(selected_values_as_html_.c_str());
@@ -355,6 +360,8 @@ void IllustrationView::CopyLedgerIntoClipboard(enum_copy_options options)
         {
         ledger_formatter_.FormatAsTabDelimited(oss);
         }
+    // TODO ?? CALCULATION_SUMMARY This assumes, without asserting,
+    // that the enumeration has exactly two enumerators.
     else
         {
         ledger_formatter_.FormatAsLightTSV(oss);
