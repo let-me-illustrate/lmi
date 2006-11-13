@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustration_view.cpp,v 1.46 2006-11-13 05:01:27 chicares Exp $
+// $Id: illustration_view.cpp,v 1.47 2006-11-13 05:27:22 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -244,28 +244,28 @@ void IllustrationView::UponMenuOpen(wxMenuEvent&)
 
 void IllustrationView::UponCopyLedgerValues(wxCommandEvent&)
 {
-    CopyLedgerIntoClipboard(e_copy_values);
+    CopyLedgerToClipboard(e_copy_full);
 }
 
 void IllustrationView::UponCopySummary(wxCommandEvent&)
 {
-    CopyLedgerIntoClipboard(e_copy_summary);
+    CopyLedgerToClipboard(e_copy_summary);
 }
 
 void IllustrationView::UponPreviewSummary(wxCommandEvent&)
 {
-    PrintSummary(e_print_preview);
+    PrintOrPreviewHtmlSummary(e_print_preview);
 }
 
 void IllustrationView::UponPrintSummary(wxCommandEvent&)
 {
-    PrintSummary(e_print_printer);
+    PrintOrPreviewHtmlSummary(e_print_printer);
 }
 
 // TODO ?? CALCULATION_SUMMARY This should use either the code or the
 // ideas in DocManagerEx::UponPreview().
 
-void IllustrationView::PrintSummary(enum_print_options options) const
+void IllustrationView::PrintOrPreviewHtmlSummary(enum_print_option option) const
 {
     std::string disclaimer
         ("FOR BROKER-DEALER USE ONLY. NOT TO BE SHARED WITH CLIENTS."
@@ -278,7 +278,7 @@ void IllustrationView::PrintSummary(enum_print_options options) const
         (disclaimer + " (@PAGENUM@/@PAGESCNT@)<hr />"
         ,wxPAGE_ALL
         );
-    if(options == e_print_printer)
+    if(option == e_print_printer)
         {
         printer->PrintText(selected_values_as_html_.c_str());
         }
@@ -346,7 +346,7 @@ void IllustrationView::UponUpdateProperties(wxUpdateUIEvent& e)
     e.Enable(!is_phony_);
 }
 
-void IllustrationView::CopyLedgerIntoClipboard(enum_copy_options options)
+void IllustrationView::CopyLedgerToClipboard(enum_copy_option option)
 {
     wxClipboardLocker clipboardLocker;
 
@@ -356,7 +356,7 @@ void IllustrationView::CopyLedgerIntoClipboard(enum_copy_options options)
     Timer timer;
 
     std::ostringstream oss;
-    if(options == e_copy_values)
+    if(option == e_copy_full)
         {
         ledger_formatter_.FormatAsTabDelimited(oss);
         }
