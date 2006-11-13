@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_wx.cpp,v 1.56.2.2 2006-11-09 17:42:24 etarassov Exp $
+// $Id: main_wx.cpp,v 1.56.2.3 2006-11-13 14:00:49 etarassov Exp $
 
 // Portions of this file are derived from wxWindows files
 //   samples/docvwmdi/docview.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -84,6 +84,7 @@
 #include <wx/xrc/xmlres.h>
 
 #include <string>
+#include <vector>
 
 #if !defined LMI_MSW
 #   include "lmi.xpm"
@@ -373,12 +374,44 @@ void Skeleton::UponProperties(wxCommandEvent&)
     PropertiesView const properties_view;
     MvcController controller(frame_, properties, properties_view);
     controller.SetTitle("Edit Properties...");
-    int const rc = controller.ShowModal();
-    if(wxID_OK == rc && properties.IsModified())
+    while(wxID_OK == controller.ShowModal())
         {
-        properties.SaveToSettings();
-        configurable_settings::instance().save_to_file();
-        OnUpdateProperties();
+        std::vector<std::string> errors;
+        if(properties.HasErrors(errors))
+            {
+            std::stringstream oss;
+            if(errors.empty())
+                {
+                oss << "The values specified are invalid. Please, correct it.";
+                }
+            else
+                {
+                oss << "Incorrect values:\n";
+                std::vector<std::string>::const_iterator ei;
+                for(ei = errors.begin(); ei != errors.end(); ++ei)
+                    {
+                    oss << (*ei) << "\n";
+                    }
+                }
+            wxMessageDialog message
+                (frame_
+                ,oss.str()
+                ,"Error"
+                ,wxOK | wxICON_ERROR
+                );
+            message.ShowModal();
+            }
+        else
+            {
+            // input values are ok
+            if(properties.IsModified())
+                {
+                properties.SaveToSettings();
+                configurable_settings::instance().save_to_file();
+                OnUpdateProperties();
+                }
+            break;
+            }
         }
 }
 

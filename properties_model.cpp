@@ -121,6 +121,28 @@ void PropertiesModel::DoTransmogrify()
 {
 }
 
+bool PropertiesModel::HasErrors(std::vector<std::string>& errors) const
+{
+    unsigned int not_empty_columns_count = 0;
+    std::vector<std::string>::const_iterator i;
+    for(i = member_names().begin(); i != member_names().end(); ++i)
+        {
+        std::string const column = operator[](*i).str();
+        if(column != magic_null_column_name)
+            {
+            ++not_empty_columns_count;
+            }
+        }
+    if(0 == not_empty_columns_count)
+        {
+        errors.push_back("Select at least one column");
+        return true;
+        }
+
+    // no errors, everything is fine
+    return false;
+}
+
 bool PropertiesModel::IsModified() const
 {
     PropertiesModel unchanged;

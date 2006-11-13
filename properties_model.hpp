@@ -42,6 +42,7 @@ class LMI_SO PropertiesModel
     PropertiesModel();
     ~PropertiesModel();
 
+    bool HasErrors(std::vector<std::string>& errors) const;
     bool IsModified() const;
     void LoadFromSettings();
     void SaveToSettings() const;
