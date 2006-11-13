@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustration_view.cpp,v 1.43 2006-11-12 21:07:39 chicares Exp $
+// $Id: illustration_view.cpp,v 1.44 2006-11-13 01:07:19 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -70,11 +70,11 @@ IMPLEMENT_DYNAMIC_CLASS(IllustrationView, ViewEx)
 
 BEGIN_EVENT_TABLE(IllustrationView, ViewEx)
     EVT_MENU(wxID_COPY                      ,IllustrationView::UponCopyLedgerValues)
-    EVT_MENU(XRCID("copy_illustration"     ),IllustrationView::UponCopyLedgerCalculationSummary)
+    EVT_MENU(XRCID("copy_summary"          ),IllustrationView::UponCopyLedgerCalculationSummary)
     EVT_MENU(XRCID("edit_cell"             ),IllustrationView::UponProperties)
-    EVT_MENU(XRCID("preview_illustration"  ),IllustrationView::UponPreviewCS )
+    EVT_MENU(XRCID("preview_summary"       ),IllustrationView::UponPreviewCS )
     EVT_MENU(wxID_PREVIEW                   ,IllustrationView::UponPreviewPdf)
-    EVT_MENU(XRCID("print_illustration"    ),IllustrationView::UponPrintCS   )
+    EVT_MENU(XRCID("print_summary"         ),IllustrationView::UponPrintCS   )
     EVT_MENU(wxID_PRINT                     ,IllustrationView::UponPrintPdf  )
     EVT_UPDATE_UI(wxID_SAVE                 ,IllustrationView::UponUpdateFileSave)
 //    EVT_UPDATE_UI(wxID_SAVEAS               ,IllustrationView::UponUpdateFileSaveAs)
