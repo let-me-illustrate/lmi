@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustration_view.hpp,v 1.21 2006-11-13 05:01:27 chicares Exp $
+// $Id: illustration_view.hpp,v 1.22 2006-11-13 05:27:22 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -63,12 +63,12 @@ class IllustrationView
 
     // TODO ?? CALCULATION_SUMMARY Couldn't enum_xml_version be used
     // instead?
-    enum enum_copy_options
-        {e_copy_values
+    enum enum_copy_option
+        {e_copy_full
         ,e_copy_summary
         };
 
-    enum enum_print_options
+    enum enum_print_option
         {e_print_printer
         ,e_print_preview
         };
@@ -89,11 +89,9 @@ class IllustrationView
   private:
     IllustrationDocument& document() const;
 
-    void CopyLedgerIntoClipboard(enum_copy_options);
+    void CopyLedgerToClipboard(enum_copy_option);
     int EditProperties();
-
-    // Print HTML code to the printer or preview.
-    void PrintSummary(enum_print_options) const;
+    void PrintOrPreviewHtmlSummary(enum_print_option) const;
 
     // ViewEx required implementation.
     wxWindow* CreateChildWindow();
