@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: configurable_settings.cpp,v 1.24 2006-11-11 21:12:13 chicares Exp $
+// $Id: configurable_settings.cpp,v 1.25 2006-11-13 16:46:31 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -92,9 +92,6 @@ namespace
     {
         static std::string s
             ("Outlay"
-            " AcctVal_Guaranteed"
-            " CSVNet_Guaranteed"
-            " EOYDeathBft_Guaranteed"
             " AcctVal_Current"
             " CSVNet_Current"
             " EOYDeathBft_Current"
