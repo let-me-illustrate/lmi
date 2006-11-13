@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustration_view.hpp,v 1.18 2006-11-12 21:07:39 chicares Exp $
+// $Id: illustration_view.hpp,v 1.19 2006-11-13 03:27:07 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -61,6 +61,16 @@ class IllustrationView
 {
     friend class IllustrationDocument;
 
+    enum enum_copy_options
+        {e_copy_values
+        ,e_copy_calculation_summary
+        };
+
+    enum enum_print_options
+        {e_print_printer
+        ,e_print_preview
+        };
+
   public:
     IllustrationView();
     virtual ~IllustrationView();
@@ -77,18 +87,9 @@ class IllustrationView
   private:
     IllustrationDocument& document() const;
 
-    enum enum_copy_options
-        {e_copy_values
-        ,e_copy_calculation_summary
-        };
-
     void CopyLedgerIntoClipboard(enum_copy_options);
     int EditProperties();
 
-    enum enum_print_options
-        {e_print_printer
-        ,e_print_preview
-        };
     // Print HTML code to the printer or preview.
     void PrintCS(enum_print_options) const;
 
