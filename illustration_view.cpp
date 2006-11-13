@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustration_view.cpp,v 1.48 2006-11-13 05:35:17 chicares Exp $
+// $Id: illustration_view.cpp,v 1.49 2006-11-13 13:56:45 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -351,7 +351,9 @@ void IllustrationView::CopyLedgerToClipboard(enum_copy_option option)
     wxClipboardLocker clipboardLocker;
 
     if(!clipboardLocker)
+        {
         return;
+        }
 
     Timer timer;
 
