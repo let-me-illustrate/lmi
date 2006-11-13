@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustration_view.cpp,v 1.47 2006-11-13 05:27:22 chicares Exp $
+// $Id: illustration_view.cpp,v 1.48 2006-11-13 05:35:17 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -69,7 +69,7 @@
 IMPLEMENT_DYNAMIC_CLASS(IllustrationView, ViewEx)
 
 BEGIN_EVENT_TABLE(IllustrationView, ViewEx)
-    EVT_MENU(wxID_COPY                      ,IllustrationView::UponCopyLedgerValues)
+    EVT_MENU(wxID_COPY                      ,IllustrationView::UponCopyFull)
     EVT_MENU(XRCID("copy_summary"          ),IllustrationView::UponCopySummary)
     EVT_MENU(XRCID("edit_cell"             ),IllustrationView::UponProperties)
     EVT_MENU(XRCID("preview_summary"       ),IllustrationView::UponPreviewSummary)
@@ -242,7 +242,7 @@ void IllustrationView::UponMenuOpen(wxMenuEvent&)
         }
 }
 
-void IllustrationView::UponCopyLedgerValues(wxCommandEvent&)
+void IllustrationView::UponCopyFull(wxCommandEvent&)
 {
     CopyLedgerToClipboard(e_copy_full);
 }
