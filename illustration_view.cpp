@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustration_view.cpp,v 1.51 2006-11-13 14:07:43 chicares Exp $
+// $Id: illustration_view.cpp,v 1.52 2006-11-13 15:16:46 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -65,6 +65,9 @@
 #include <wx/xrc/xmlres.h>
 
 #include <sstream>
+
+// TODO ?? Reorder member functions; probably they should follow the
+// order used in the header.
 
 IMPLEMENT_DYNAMIC_CLASS(IllustrationView, ViewEx)
 
@@ -158,8 +161,16 @@ warning() << "That command should have been disabled." << LMI_FLUSH;
 
 void IllustrationView::DisplaySelectedValuesAsHtml()
 {
+    // EVGENIY This assertion seems no longer to serve any purpose:
+    // the object is no longer used here. Instead, shouldn't the
+    // validity of ledger_formatter_ be asserted?
     LMI_ASSERT(ledger_values_.get());
 
+    // EVGENIY Is a stream the best abstraction for LedgerFormatter?
+    // Apparently std::ostream.write() is the only stream function
+    // that actually gets called. This code could be simpler if a
+    // std::string were used instead; is there a reason to do
+    // otherwise?
     std::ostringstream oss;
     ledger_formatter_.FormatAsHtml(oss);
     selected_values_as_html_ = oss.str();
@@ -265,6 +276,17 @@ void IllustrationView::UponPrintSummary(wxCommandEvent&)
 // TODO ?? CALCULATION_SUMMARY This should use either the code or the
 // ideas in DocManagerEx::UponPreview().
 
+// TODO ?? EVGENIY Is it necessary to use scoped_ptr here? The wx
+// documentation says
+//   "Do not create this class on the stack only. You should create an
+//   instance on app startup and use this instance for all printing
+//   operations. The reason is that this class stores various settings
+//   in it."
+// But that reason doesn't hold here: settings don't persist anyway,
+// because the printing object is deleted as soon as this function
+// returns. Is there a different, unstated reason why we shouldn't
+// create it on the stack?
+
 void IllustrationView::PrintOrPreviewHtmlSummary(enum_print_option option) const
 {
     std::string disclaimer
@@ -349,7 +371,6 @@ void IllustrationView::UponUpdateProperties(wxUpdateUIEvent& e)
 void IllustrationView::CopyLedgerToClipboard(enum_copy_option option)
 {
     wxClipboardLocker clipboardLocker;
-
     if(!clipboardLocker)
         {
         return;
@@ -371,6 +392,8 @@ void IllustrationView::CopyLedgerToClipboard(enum_copy_option option)
 
     status() << "Format: " << timer.stop().elapsed_msec_str() << std::flush;
 
+    // TODO ?? Probably operator new(std::size_t, wx_allocator) should
+    // be used here.
     wxTextDataObject* testDataObject = new wxTextDataObject(oss.str());
 
     // clipboard owns the data
@@ -422,6 +445,26 @@ void IllustrationView::Run(Input* overriding_input)
     status() << "; format: " << timer.stop().elapsed_msec_str();
     status() << std::flush;
 }
+
+// TODO ?? EVGENIY This function was created merely as a kludge: class
+// CensusView calls MakeNewIllustrationDocAndView(), and for some
+// forgotten reason I didn't find a better way to pass the 'ledger'
+// shared_ptr.
+//
+// I'd prefer not to call it anywhere else, because that makes it
+// harder to remove the kludge.
+//
+// Anyway, I think that it's an error if '0 == get()' for that
+// shared_ptr argument, and that I should have asserted that here.
+//
+// Therefore, I think we can avoid the else-statement, which seems
+// suspicious anyway: how would a default-constructed LedgerFormatter
+// behave when we try to use it?
+//
+// And should ledger_formatter_ be held by value anyway? Why not use a
+// shared_ptr for it, as is done for ledger_values_, or probably a
+// scoped_ptr member instead? Then "ledger_formatter.hpp" could be
+// removed from the header, simplifying the physical design.
 
 void IllustrationView::SetLedger(boost::shared_ptr<Ledger const> ledger)
 {
