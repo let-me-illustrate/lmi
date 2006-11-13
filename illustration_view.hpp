@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustration_view.hpp,v 1.19 2006-11-13 03:27:07 chicares Exp $
+// $Id: illustration_view.hpp,v 1.20 2006-11-13 03:58:13 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -63,7 +63,7 @@ class IllustrationView
 
     enum enum_copy_options
         {e_copy_values
-        ,e_copy_calculation_summary
+        ,e_copy_summary
         };
 
     enum enum_print_options
@@ -91,7 +91,7 @@ class IllustrationView
     int EditProperties();
 
     // Print HTML code to the printer or preview.
-    void PrintCS(enum_print_options) const;
+    void PrintSummary(enum_print_options) const;
 
     // ViewEx required implementation.
     wxWindow* CreateChildWindow();
@@ -102,11 +102,11 @@ class IllustrationView
     bool OnCreate              (wxDocument*, long int);
 
     void UponCopyLedgerValues  (wxCommandEvent&);
-    void UponCopyLedgerCalculationSummary(wxCommandEvent&);
+    void UponCopySummary       (wxCommandEvent&);
     void UponMenuOpen          (wxMenuEvent&);
-    void UponPreviewCS         (wxCommandEvent&);
+    void UponPreviewSummary    (wxCommandEvent&);
     void UponPreviewPdf        (wxCommandEvent&);
-    void UponPrintCS           (wxCommandEvent&);
+    void UponPrintSummary      (wxCommandEvent&);
     void UponPrintPdf          (wxCommandEvent&);
     void UponProperties        (wxCommandEvent&);
     void UponUpdateFileSave    (wxUpdateUIEvent&);
