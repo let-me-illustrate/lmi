@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: html.xsl,v 1.1.2.18 2006-11-10 17:57:02 rericksberg Exp $
+    $Id: html.xsl,v 1.1.2.19 2006-11-13 12:45:11 etarassov Exp $
 
     Uses format.xml - column titles, number-formatting and other information.
 -->
@@ -167,7 +167,7 @@
 
     <xsl:variable name="width" select="format-number(100. div (count($headers) + 1), '###.##')"/>
     <tr align="right">
-        <th width="{$width}%" valign="top">Age</th>
+    <th width="{$width}%" valign="top">Policy Year</th>
     <xsl:for-each select="$headers">
         <th width="{$width}%" valign="top">
         <xsl:choose>
@@ -188,7 +188,6 @@
     </xsl:for-each>
     </tr>
 
-    <xsl:variable name="age" select="number(double_scalar[@name='Age'])"/>
     <!--
         We know that all the columns have the same length. Let's pick one for iteration.
     -->
@@ -196,32 +195,34 @@
     <xsl:variable name="rows_total" select="count($vectors[1]/duration)"/>
     <xsl:for-each select="$vectors[1]/duration">
         <xsl:variable name="position" select="position()"/>
-        <tr align="right">
-            <td nowrap="1">
-                <xsl:value-of select="$age + $position - 1"/>
-            </td>
-            <xsl:for-each select="$headers">
-                <xsl:variable name="name" select="@name"/>
-                <xsl:variable name="basis" select="@basis"/>
+        <xsl:if test="$position &lt;= $max_lapse_year">
+            <tr align="right">
                 <td nowrap="1">
-                    <xsl:choose>
-                        <xsl:when test="not($name)">
-                        <!-- leave the cell empty for a spacer column -->
-                        </xsl:when>
-                        <xsl:when test="not($basis)">
-                            <xsl:value-of select="$vectors[@name=$name]/duration[$position]/text()"/>
-                        </xsl:when>
-                        <xsl:otherwise>
-                            <xsl:value-of select="$vectors[@name=$name][@basis=$basis]/duration[$position]/text()"/>
-                        </xsl:otherwise>
-                    </xsl:choose>
+                    <xsl:value-of select="$policy_year/duration[$position]"/>
                 </td>
-            </xsl:for-each>
-        </tr>
-        <xsl:if test="$position mod 5 = 0 and not($position = $rows_total)">
-            <tr>
-                <td colspan="{$cols_total}"><br/></td>
+                <xsl:for-each select="$headers">
+                    <xsl:variable name="name" select="@name"/>
+                    <xsl:variable name="basis" select="@basis"/>
+                    <td nowrap="1">
+                        <xsl:choose>
+                            <xsl:when test="not($name)">
+                            <!-- leave the cell empty for a spacer column -->
+                            </xsl:when>
+                            <xsl:when test="not($basis)">
+                                <xsl:value-of select="$vectors[@name=$name]/duration[$position]/text()"/>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:value-of select="$vectors[@name=$name][@basis=$basis]/duration[$position]/text()"/>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                    </td>
+                </xsl:for-each>
             </tr>
+            <xsl:if test="$position mod 5 = 0 and not($position = $rows_total)">
+                <tr>
+                    <td colspan="{$cols_total}"><br/></td>
+                </tr>
+            </xsl:if>
         </xsl:if>
     </xsl:for-each>
 </xsl:template>

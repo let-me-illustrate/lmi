@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: common.xsl,v 1.1.2.10 2006-11-02 15:40:09 etarassov Exp $
+    $Id: common.xsl,v 1.1.2.11 2006-11-13 12:45:10 etarassov Exp $
 
     Uses format.xml - column titles, number-formatting and other information.
 -->
@@ -139,6 +139,51 @@
             <xsl:text>]</xsl:text>
         </xsl:if>
     </xsl:template>
+
+    <!--
+        Calculate the maximum LapseYear. It determines the number of rows in the data table
+        for the calculation summary.
+    -->
+    <xsl:variable name="lapse_year_nodes" select="$illustration/double_scalar[@name='LapseYear']"/>
+    <xsl:template name="get_max_lapse_year">
+        <xsl:param name="max_value"/>
+        <xsl:param name="pos"/>
+        <xsl:choose>
+            <xsl:when test="$pos &gt; count($lapse_year_nodes)">
+                <xsl:value-of select="$value"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:variable name="ly" select="number($lapse_year_nodes[$pos])"/>
+                <xsl:choose>
+                    <xsl:when test="$value &gt;= $ly">
+                        <xsl:call-template name="get_max_lapse_year">
+                            <xsl:with-param name="value" select="$value"/>
+                            <xsl:with-param name="pos" select="$pos+1"/>
+                        </xsl:call-template>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:call-template name="get_max_lapse_year">
+                            <xsl:with-param name="value" select="$ly"/>
+                            <xsl:with-param name="pos" select="$pos+1"/>
+                        </xsl:call-template>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:template>
+    <xsl:variable name="max_lapse_year_text">
+        <xsl:call-template name="get_max_lapse_year">
+            <xsl:with-param name="value" select="0"/>
+            <xsl:with-param name="pos" select="1"/>
+        </xsl:call-template>
+    </xsl:variable>
+    <xsl:variable name="max_lapse_year" select="number($max_lapse_year_text)"/>
+
+    <!--
+        Double vector node carrying the first column values for the calculation
+        summary table.
+    -->
+    <xsl:variable name="policy_year" select="$illustration/double_vector[@name='PolicyYear']"/>
 
     <!--
         The template wrapper used to prepare nodeset variable for a table data

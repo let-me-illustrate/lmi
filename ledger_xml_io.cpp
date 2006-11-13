@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xml_io.cpp,v 1.48.2.24 2006-11-08 18:27:09 etarassov Exp $
+// $Id: ledger_xml_io.cpp,v 1.48.2.25 2006-11-13 12:45:10 etarassov Exp $
 
 #include "ledger.hpp"
 
@@ -771,6 +771,11 @@ void Ledger::write_version_of_xml
         supplemental_report_columns.push_back(value_id::from_report_column_title(ledger_invariant_->SupplementalReportColumn10));
         supplemental_report_columns.push_back(value_id::from_report_column_title(ledger_invariant_->SupplementalReportColumn11));
         }
+
+    // unconditionally add these columns to the output XML
+    std::vector<value_id> base_columns;
+    base_columns.push_back(value_id::from_name("PolicyYear"));
+    formatter.add_columns_to_format(base_columns);
 
     // read 'calculation_summary_colums' from configurable_settings.xml
     std::vector<value_id> calculation_summary_columns;

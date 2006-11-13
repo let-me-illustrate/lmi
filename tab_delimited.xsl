@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: tab_delimited.xsl,v 1.1.2.12 2006-11-07 16:29:03 etarassov Exp $
+    $Id: tab_delimited.xsl,v 1.1.2.13 2006-11-13 12:45:11 etarassov Exp $
 
     Uses format.xml - column titles, number-formatting and other information.
 -->
@@ -149,20 +149,16 @@
     </xsl:call-template>
 </xsl:template>
 
-<xsl:variable name="start_age" select="number($illustration/double_scalar[@name='Age'])"/>
 <!--
     Templates to be called from 'do_data_table' for every row in a table.
     The purpose is to generate some static columns in the table.
 -->
 <xsl:template name="do_data_table_pre_headers">
     <xsl:text>PolicyYear&tab;</xsl:text>
-    <xsl:text>AttainedAge&tab;</xsl:text>
 </xsl:template>
 <xsl:template name="do_data_table_pre_data">
     <xsl:param name="position"/>
-    <xsl:value-of select="$position"/>
-    <xsl:text>&tab;</xsl:text>
-    <xsl:value-of select="$start_age + $position - 1"/>
+    <xsl:value-of select="$policy_year/duration[$position]"/>
     <xsl:text>&tab;</xsl:text>
 </xsl:template>
 

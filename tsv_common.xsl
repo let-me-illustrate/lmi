@@ -88,42 +88,44 @@
     <xsl:variable name="is_inforce" select="number($illustration/double_scalar[@name='IsInforce'])"/>
         <xsl:for-each select="$vectors[1]/duration">
             <xsl:variable name="position" select="number(position())"/>
-            <xsl:call-template name="do_data_table_pre_data">
-                <xsl:with-param name="position" select="$position"/>
-            </xsl:call-template>
-            <xsl:for-each select="$headers">
-                <xsl:variable name="name" select="@name"/>
-                <xsl:variable name="basis" select="@basis"/>
-                <xsl:choose>
-                    <!-- deal with uncommon column cases in here -->
-                    <xsl:when test="$is_inforce &gt; 0 and ($name='IrrOnSurrender' or $name='IrrOnDeath')">
-                        <xsl:text>(inforce)</xsl:text>
-                    </xsl:when>
-                    <xsl:when test="$name='InforceLives'">
-                        <xsl:value-of select="$vectors[@name=$name]/duration[$position + 1]"/>
-                    </xsl:when>
-                    <!-- the general case -->
-                    <xsl:otherwise>
-                        <xsl:choose>
-                            <xsl:when test="not($name)">
-                                <!-- just an empty cell for a spacer column -->
-                            </xsl:when>
-                            <xsl:when test="not($basis)">
-                                <xsl:call-template name="print_value">
-                                    <xsl:with-param name="value" select="$vectors[@name=$name]/duration[$position]"/>
-                                </xsl:call-template>
-                            </xsl:when>
-                            <xsl:otherwise>
-                                <xsl:call-template name="print_value">
-                                    <xsl:with-param name="value" select="$vectors[@name=$name][@basis=$basis]/duration[$position]"/>
-                                </xsl:call-template>
-                            </xsl:otherwise>
-                        </xsl:choose>
-                    </xsl:otherwise>
-                </xsl:choose>
-                <xsl:text>&tab;</xsl:text>
-            </xsl:for-each>
-            <xsl:text>&nl;</xsl:text>
+            <xsl:if test="$position &lt;= $max_lapse_year">
+                <xsl:call-template name="do_data_table_pre_data">
+                    <xsl:with-param name="position" select="$position"/>
+                </xsl:call-template>
+                <xsl:for-each select="$headers">
+                    <xsl:variable name="name" select="@name"/>
+                    <xsl:variable name="basis" select="@basis"/>
+                    <xsl:choose>
+                        <!-- deal with uncommon column cases in here -->
+                        <xsl:when test="$is_inforce &gt; 0 and ($name='IrrOnSurrender' or $name='IrrOnDeath')">
+                            <xsl:text>(inforce)</xsl:text>
+                        </xsl:when>
+                        <xsl:when test="$name='InforceLives'">
+                            <xsl:value-of select="$vectors[@name=$name]/duration[$position + 1]"/>
+                        </xsl:when>
+                        <!-- the general case -->
+                        <xsl:otherwise>
+                            <xsl:choose>
+                                <xsl:when test="not($name)">
+                                    <!-- just an empty cell for a spacer column -->
+                                </xsl:when>
+                                <xsl:when test="not($basis)">
+                                    <xsl:call-template name="print_value">
+                                        <xsl:with-param name="value" select="$vectors[@name=$name]/duration[$position]"/>
+                                    </xsl:call-template>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:call-template name="print_value">
+                                        <xsl:with-param name="value" select="$vectors[@name=$name][@basis=$basis]/duration[$position]"/>
+                                    </xsl:call-template>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                    <xsl:text>&tab;</xsl:text>
+                </xsl:for-each>
+                <xsl:text>&nl;</xsl:text>
+            </xsl:if>
         </xsl:for-each>
     </xsl:template>
 

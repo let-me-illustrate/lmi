@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.462.2.106 2006-11-10 17:57:02 rericksberg Exp $
+// $Id: ChangeLog,v 1.462.2.107 2006-11-13 12:45:32 etarassov Exp $
 
 MAINTENANCE
 
@@ -8581,4 +8581,15 @@ Resolve trivial differences between MAIN and 'gnome-xml-branch'.
 
   html.xsl
 Rearranged the display of the header info on the Calculation Summary.
+
+20061113T1245Z <etarassov@tt-solutions.com> [1168]
+
+  common.xsl
+  cs_tsv.xsl
+  html.xsl
+  ledger_xml_io.cpp
+  tab_delimited.xsl
+  tsv_common.xsl
+Replace 'Age' column with 'PolicyAge' in the calculation summary.
+Show only up to 'LapseYear' rows in the calculation summary.
 
