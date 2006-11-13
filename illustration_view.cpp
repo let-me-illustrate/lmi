@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustration_view.cpp,v 1.49 2006-11-13 13:56:45 chicares Exp $
+// $Id: illustration_view.cpp,v 1.50 2006-11-13 14:02:43 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -426,7 +426,7 @@ void IllustrationView::Run(Input* overriding_input)
 void IllustrationView::SetLedger(boost::shared_ptr<Ledger const> ledger)
 {
     ledger_values_ = ledger;
-    if (ledger_values_.get())
+    if(ledger_values_.get())
         {
         ledger_formatter_ = LedgerFormatterFactory::Instance().CreateFormatter(*ledger_values_);
         }
