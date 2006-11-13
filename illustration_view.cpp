@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustration_view.cpp,v 1.44 2006-11-13 01:07:19 chicares Exp $
+// $Id: illustration_view.cpp,v 1.45 2006-11-13 03:58:13 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -70,11 +70,11 @@ IMPLEMENT_DYNAMIC_CLASS(IllustrationView, ViewEx)
 
 BEGIN_EVENT_TABLE(IllustrationView, ViewEx)
     EVT_MENU(wxID_COPY                      ,IllustrationView::UponCopyLedgerValues)
-    EVT_MENU(XRCID("copy_summary"          ),IllustrationView::UponCopyLedgerCalculationSummary)
+    EVT_MENU(XRCID("copy_summary"          ),IllustrationView::UponCopySummary)
     EVT_MENU(XRCID("edit_cell"             ),IllustrationView::UponProperties)
-    EVT_MENU(XRCID("preview_summary"       ),IllustrationView::UponPreviewCS )
+    EVT_MENU(XRCID("preview_summary"       ),IllustrationView::UponPreviewSummary)
     EVT_MENU(wxID_PREVIEW                   ,IllustrationView::UponPreviewPdf)
-    EVT_MENU(XRCID("print_summary"         ),IllustrationView::UponPrintCS   )
+    EVT_MENU(XRCID("print_summary"         ),IllustrationView::UponPrintSummary)
     EVT_MENU(wxID_PRINT                     ,IllustrationView::UponPrintPdf  )
     EVT_UPDATE_UI(wxID_SAVE                 ,IllustrationView::UponUpdateFileSave)
 //    EVT_UPDATE_UI(wxID_SAVEAS               ,IllustrationView::UponUpdateFileSaveAs)
@@ -247,22 +247,22 @@ void IllustrationView::UponCopyLedgerValues(wxCommandEvent&)
     CopyLedgerIntoClipboard(e_copy_values);
 }
 
-void IllustrationView::UponCopyLedgerCalculationSummary(wxCommandEvent&)
+void IllustrationView::UponCopySummary(wxCommandEvent&)
 {
-    CopyLedgerIntoClipboard(e_copy_calculation_summary);
+    CopyLedgerIntoClipboard(e_copy_summary);
 }
 
-void IllustrationView::UponPreviewCS(wxCommandEvent&)
+void IllustrationView::UponPreviewSummary(wxCommandEvent&)
 {
-    PrintCS(e_print_preview);
+    PrintSummary(e_print_preview);
 }
 
-void IllustrationView::UponPrintCS(wxCommandEvent&)
+void IllustrationView::UponPrintSummary(wxCommandEvent&)
 {
-    PrintCS(e_print_printer);
+    PrintSummary(e_print_printer);
 }
 
-void IllustrationView::PrintCS(enum_print_options options) const
+void IllustrationView::PrintSummary(enum_print_options options) const
 {
     std::string disclaimer
         ("FOR BROKER-DEALER USE ONLY. NOT TO BE SHARED WITH CLIENTS."
