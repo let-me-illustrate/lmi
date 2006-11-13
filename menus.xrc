@@ -24,7 +24,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: menus.xrc,v 1.14 2006-11-13 00:47:05 chicares Exp $
+    $Id: menus.xrc,v 1.15 2006-11-13 01:07:19 chicares Exp $
 -->
 
 <!-- reusable menus -->
@@ -357,7 +357,7 @@ Not supported yet: need to split columns into multiple pages.
             <help>Edit this cell</help>
         </object>
         <object class="separator"/>
-        <object class="wxMenuItem" name="copy_illustration">
+        <object class="wxMenuItem" name="copy_summary">
             <label>_Copy calculation summary\tCtrl-C</label>
             <help>Copy calculation summary to the clipboard</help>
         </object>
@@ -366,11 +366,11 @@ Not supported yet: need to split columns into multiple pages.
             <help>Copy full illustration data to the clipboard</help>
         </object>
         <object class="separator"/>
-        <object class="wxMenuItem" name="preview_illustration">
+        <object class="wxMenuItem" name="preview_summary">
             <label>Pre_view calculation summary\tCtrl-V</label>
             <help>Preview calculation summary</help>
         </object>
-        <object class="wxMenuItem" name="print_illustration">
+        <object class="wxMenuItem" name="print_summary">
             <label>_Print calculation summary\tCtrl-P</label>
             <help>Print calculation summary</help>
         </object>
