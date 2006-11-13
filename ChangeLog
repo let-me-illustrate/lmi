@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.489 2006-11-13 16:07:40 chicares Exp $
+// $Id: ChangeLog,v 1.490 2006-11-13 16:46:31 chicares Exp $
 
 MAINTENANCE
 
@@ -8149,4 +8149,9 @@ Rectify names.
 
   ledger_xml_io2.cpp
 Require policy-year column.
+
+20061113T1646Z <chicares@cox.net> [1206]
+
+  configurable_settings.cpp
+By default, display only columns of universal interest.
 
