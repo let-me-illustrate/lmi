@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustration_view.cpp,v 1.50 2006-11-13 14:02:43 chicares Exp $
+// $Id: illustration_view.cpp,v 1.51 2006-11-13 14:07:43 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -278,7 +278,7 @@ void IllustrationView::PrintOrPreviewHtmlSummary(enum_print_option option) const
         (disclaimer + " (@PAGENUM@/@PAGESCNT@)<hr />"
         ,wxPAGE_ALL
         );
-    if(option == e_print_printer)
+    if(e_print_printer == option)
         {
         printer->PrintText(selected_values_as_html_.c_str());
         }
@@ -358,7 +358,7 @@ void IllustrationView::CopyLedgerToClipboard(enum_copy_option option)
     Timer timer;
 
     std::ostringstream oss;
-    if(option == e_copy_full)
+    if(e_copy_full == option)
         {
         ledger_formatter_.FormatAsTabDelimited(oss);
         }
