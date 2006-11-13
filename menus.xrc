@@ -24,7 +24,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: menus.xrc,v 1.13 2006-11-12 21:07:39 chicares Exp $
+    $Id: menus.xrc,v 1.14 2006-11-13 00:47:05 chicares Exp $
 -->
 
 <!-- reusable menus -->
@@ -72,10 +72,6 @@
         <label>_File</label>
         <object class="wxMenuItem" name="wxID_NEW">
             <label>_New</label>
-<!--
-            To add an accelerator, just do it here; no code change needed:
-            <label>_New...\tCtrl-N</label>
--->
             <help>Create a new document</help>
             <bitmap>new.xpm</bitmap>
         </object>
@@ -91,7 +87,7 @@
             <help>Edit default cell</help>
         </object>
         <object class="wxMenuItem" name="preferences">
-            <label>Pre_ferences</label>
+            <label>Pre_ferences\tCtrl-F</label>
             <bitmap>preferences.xpm</bitmap>
             <help>Manage preferences</help>
         </object>
@@ -169,7 +165,7 @@
             <help>Edit default cell</help>
         </object>
         <object class="wxMenuItem" name="preferences">
-            <label>Pre_ferences</label>
+            <label>Pre_ferences\tCtrl-F</label>
             <bitmap>preferences.xpm</bitmap>
             <help>Manage preferences</help>
         </object>
@@ -182,19 +178,6 @@
     </object>
     <object class="wxMenu" name="census_menu">
         <label>_Census</label>
-<!--
-examples begin
-            To add an accelerator, just do it here; no code change needed:
-            <label>_New...\tCtrl-N</label>
-
-            To add status-line help text, use the <help> tag:
-
-        <object class="wxMenuItem" name="menu_command_with_help_text">
-            <label>Some menu command</label>
-            <help>This text appears on the status line.</help>
-        </object>
-examples end
--->
         <object class="wxMenuItem" name="edit_cell">
             <label>_Edit cell\tCtrl-E</label>
             <bitmap>edit-cell.xpm</bitmap>
@@ -355,7 +338,7 @@ Not supported yet: need to split columns into multiple pages.
             <help>Edit default cell</help>
         </object>
         <object class="wxMenuItem" name="preferences">
-            <label>Pre_ferences</label>
+            <label>Pre_ferences\tCtrl-F</label>
             <bitmap>preferences.xpm</bitmap>
             <help>Manage preferences</help>
         </object>
@@ -437,7 +420,7 @@ Not supported yet: need to split columns into multiple pages.
             <help>Edit default cell</help>
         </object>
         <object class="wxMenuItem" name="preferences">
-            <label>Pre_ferences</label>
+            <label>Pre_ferences\tCtrl-F</label>
             <bitmap>preferences.xpm</bitmap>
             <help>Manage preferences</help>
         </object>
