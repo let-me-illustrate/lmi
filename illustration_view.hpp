@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustration_view.hpp,v 1.20 2006-11-13 03:58:13 chicares Exp $
+// $Id: illustration_view.hpp,v 1.21 2006-11-13 05:01:27 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -61,6 +61,8 @@ class IllustrationView
 {
     friend class IllustrationDocument;
 
+    // TODO ?? CALCULATION_SUMMARY Couldn't enum_xml_version be used
+    // instead?
     enum enum_copy_options
         {e_copy_values
         ,e_copy_summary
