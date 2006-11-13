@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.488 2006-11-12 21:07:39 chicares Exp $
+// $Id: ChangeLog,v 1.489 2006-11-13 16:07:40 chicares Exp $
 
 MAINTENANCE
 
@@ -8077,4 +8077,76 @@ Import new code from 'gnome-xml-branch'.
   illustration_view.hpp
   menus.xrc
 Import changes from 'gnome-xml-branch'.
+
+20061113T0047Z <chicares@cox.net> [1198]
+
+  menus.xrc
+Add an accelerator; remove pointless comments.
+
+20061113T0107Z <chicares@cox.net> [1198]
+
+  illustration_view.cpp
+  menus.xrc
+Make resource identifiers more descriptive.
+
+20061113T0327Z <chicares@cox.net> [1198]
+
+  illustration_view.hpp
+Move private enumerations to top of class definition.
+
+20061113T0358Z <chicares@cox.net> [1198]
+
+  illustration_view.cpp
+  illustration_view.hpp
+Rectify names.
+
+20061113T0501Z <chicares@cox.net> [1202]
+
+  illustration_view.cpp
+  illustration_view.hpp
+Document defects.
+
+20061113T0527Z <chicares@cox.net> [1202]
+
+  illustration_view.cpp
+  illustration_view.hpp
+Rectify names.
+
+20061113T0535Z <chicares@cox.net> [1202]
+
+  illustration_view.cpp
+  illustration_view.hpp
+Rectify names.
+
+20061113T1356Z <chicares@cox.net> [1202]
+
+  illustration_view.cpp
+Follow coding standard: all dependent clauses must be blocks.
+
+20061113T1402Z <chicares@cox.net> [1202]
+
+  illustration_view.cpp
+Follow coding standard: write no space between a keyword and a
+following '('.
+
+20061113T1407Z <chicares@cox.net> [1202]
+
+  illustration_view.cpp
+Follow coding standard: write equality comparisons with any constant
+on the left.
+
+20061113T1516Z <chicares@cox.net> [1206]
+
+  illustration_view.cpp
+Add review comments.
+
+20061113T1533Z <chicares@cox.net> [1206]
+
+  illustration_view.cpp
+Rectify names.
+
+20061113T1607Z <chicares@cox.net> [1206]
+
+  ledger_xml_io2.cpp
+Require policy-year column.
 
