@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: preferences_model.cpp,v 1.3 2006-11-11 02:42:19 chicares Exp $
+// $Id: preferences_model.cpp,v 1.4 2006-11-14 02:02:26 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -131,6 +131,19 @@ void PreferencesModel::DoEnforceProscription(std::string const&)
 
 void PreferencesModel::DoHarmonize()
 {
+    bool do_not_use_builtin_defaults = "No" == UseBuiltinDefaults;
+    CalculationSummaryColumn00.enable(do_not_use_builtin_defaults);
+    CalculationSummaryColumn01.enable(do_not_use_builtin_defaults);
+    CalculationSummaryColumn02.enable(do_not_use_builtin_defaults);
+    CalculationSummaryColumn03.enable(do_not_use_builtin_defaults);
+    CalculationSummaryColumn04.enable(do_not_use_builtin_defaults);
+    CalculationSummaryColumn05.enable(do_not_use_builtin_defaults);
+    CalculationSummaryColumn06.enable(do_not_use_builtin_defaults);
+    CalculationSummaryColumn07.enable(do_not_use_builtin_defaults);
+    CalculationSummaryColumn08.enable(do_not_use_builtin_defaults);
+    CalculationSummaryColumn09.enable(do_not_use_builtin_defaults);
+    CalculationSummaryColumn10.enable(do_not_use_builtin_defaults);
+    CalculationSummaryColumn11.enable(do_not_use_builtin_defaults);
 }
 
 void PreferencesModel::DoTransmogrify()
