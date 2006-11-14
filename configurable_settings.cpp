@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: configurable_settings.cpp,v 1.25 2006-11-13 16:46:31 chicares Exp $
+// $Id: configurable_settings.cpp,v 1.26 2006-11-14 02:34:17 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -117,6 +117,7 @@ configurable_settings::configurable_settings()
     ,print_directory_                  ("/var/opt/lmi/spool" )
     ,skin_filename_                    ("xml_notebook.xrc"   )
     ,spreadsheet_file_extension_       (".gnumeric"          )
+    ,use_builtin_calculation_summary_  (false                )
     ,xml_schema_filename_              ("schema.xsd"         )
     ,xsl_fo_command_                   ("fo"                 )
     ,xsl_directory_                    (""                   )
@@ -162,6 +163,7 @@ void configurable_settings::ascribe_members()
     ascribe("print_directory"                  ,&configurable_settings::print_directory_                  );
     ascribe("skin_filename"                    ,&configurable_settings::skin_filename_                    );
     ascribe("spreadsheet_file_extension"       ,&configurable_settings::spreadsheet_file_extension_       );
+    ascribe("use_builtin_calculation_summary"  ,&configurable_settings::use_builtin_calculation_summary_  );
     ascribe("xml_schema_filename"              ,&configurable_settings::xml_schema_filename_              );
     ascribe("xsl_fo_command"                   ,&configurable_settings::xsl_fo_command_                   );
     ascribe("xsl_directory"                    ,&configurable_settings::xsl_directory_                    );
@@ -199,6 +201,11 @@ void configurable_settings::save() const
 void configurable_settings::calculation_summary_columns(std::string const& s)
 {
     calculation_summary_columns_ = s;
+}
+
+void configurable_settings::use_builtin_calculation_summary(bool b)
+{
+    use_builtin_calculation_summary_ = b;
 }
 
 std::string const& configurable_settings::calculation_summary_columns() const
@@ -251,6 +258,11 @@ std::string const& configurable_settings::spreadsheet_file_extension() const
     return spreadsheet_file_extension_;
 }
 
+bool configurable_settings::use_builtin_calculation_summary() const
+{
+    return use_builtin_calculation_summary_;
+}
+
 std::string const& configurable_settings::xml_schema_filename() const
 {
     return xml_schema_filename_;
@@ -284,5 +296,15 @@ std::string const& configurable_settings::xslt_light_tab_delimited_filename() co
 std::string const& configurable_settings::xslt_tab_delimited_filename() const
 {
     return xslt_tab_delimited_filename_;
+}
+
+std::string const& effective_calculation_summary_columns()
+{
+    configurable_settings const& z = configurable_settings::instance();
+    return
+        z.use_builtin_calculation_summary()
+        ? default_calculation_summary_columns()
+        : z.calculation_summary_columns()
+        ;
 }
 
