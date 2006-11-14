@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: configurable_settings.hpp,v 1.16 2006-11-11 20:13:08 chicares Exp $
+// $Id: configurable_settings.hpp,v 1.17 2006-11-14 02:34:17 chicares Exp $
 
 #ifndef configurable_settings_hpp
 #define configurable_settings_hpp
@@ -45,7 +45,8 @@
 /// Configurable data members:
 ///
 /// calculation_summary_columns_: Whitespace-delimited list of columns
-/// to be shown on the calculation summary.
+/// to be shown on the calculation summary, unless overridden by
+/// use_builtin_calculation_summary_.
 ///
 /// cgi_bin_log_filename_: Name of log file used for cgicc's debugging
 /// facility.
@@ -74,6 +75,9 @@
 /// spreadsheet_file_extension_: File extension (beginning with a dot)
 /// typical for the user's preferred spreadsheet program, used to
 /// determine mimetype or msw 'file association'.
+///
+/// use_builtin_calculation_summary_: If true, then use built-in
+/// defaults instead of calculation_summary_columns_.
 ///
 /// xml_schema_filename_: xsd for ledger xml data and 'format.xml',
 /// used by calculation summary to validate xml resources.
@@ -129,6 +133,7 @@ class LMI_SO configurable_settings
     void save() const;
 
     void calculation_summary_columns(std::string const&);
+    void use_builtin_calculation_summary(bool);
 
     std::string const& calculation_summary_columns      () const;
     std::string const& cgi_bin_log_filename             () const;
@@ -140,6 +145,7 @@ class LMI_SO configurable_settings
     std::string const& print_directory                  () const;
     std::string const& skin_filename                    () const;
     std::string const& spreadsheet_file_extension       () const;
+    bool               use_builtin_calculation_summary  () const;
     std::string const& xml_schema_filename              () const;
     std::string const& xsl_fo_command                   () const;
     std::string const& xsl_directory                    () const;
@@ -163,6 +169,7 @@ class LMI_SO configurable_settings
     std::string print_directory_;
     std::string skin_filename_;
     std::string spreadsheet_file_extension_;
+    bool        use_builtin_calculation_summary_;
     std::string xml_schema_filename_;
     std::string xsl_fo_command_;
     std::string xsl_directory_;
@@ -179,6 +186,8 @@ class LMI_SO configurable_settings
 #endif // __BORLANDC__
     ~configurable_settings();
 };
+
+std::string const& effective_calculation_summary_columns();
 
 #endif // configurable_settings_hpp
 

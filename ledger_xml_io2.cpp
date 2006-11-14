@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xml_io2.cpp,v 1.2 2006-11-13 16:07:57 chicares Exp $
+// $Id: ledger_xml_io2.cpp,v 1.3 2006-11-14 02:34:17 chicares Exp $
 
 #include "ledger.hpp"
 
@@ -773,6 +773,9 @@ void Ledger::write_excerpt
         supplemental_report_columns.push_back(value_id::from_report_column_title(ledger_invariant_->SupplementalReportColumn11));
         }
 
+    // TODO ?? CALCULATION_SUMMARY EVGENIY--I think it would be better
+    // to move this to 'configurable_settings.cpp', perhaps adding it
+    // to effective_calculation_summary_columns(); would that work?
     std::vector<value_id> required_columns;
     required_columns.push_back(value_id::from_name("PolicyYear"));
     formatter.add_columns_to_format(required_columns);
@@ -780,9 +783,7 @@ void Ledger::write_excerpt
     std::vector<value_id> calculation_summary_columns;
     try
         {
-        std::istringstream iss
-            (configurable_settings::instance().calculation_summary_columns()
-            );
+        std::istringstream iss(effective_calculation_summary_columns());
         std::vector<std::string> columns;
         // split column names list by spaces and put int columns vector
         std::copy
