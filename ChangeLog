@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.491 2006-11-14 03:00:41 chicares Exp $
+// $Id: ChangeLog,v 1.492 2006-11-14 04:35:28 chicares Exp $
 
 MAINTENANCE
 
@@ -8183,4 +8183,10 @@ Remove obsolete delay.
 
   preferences_model.cpp
 Implement option to use built-in calculation-summary columns.
+
+20061114T0435Z <chicares@cox.net> [1207]
+
+  configurable_settings.cpp
+  preferences_model.cpp
+Save configurable settings currently offered for customization.
 
