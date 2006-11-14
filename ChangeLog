@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.493 2006-11-14 04:52:35 chicares Exp $
+// $Id: ChangeLog,v 1.494 2006-11-14 11:29:46 wboutin Exp $
 
 MAINTENANCE
 
@@ -8194,4 +8194,9 @@ Save configurable settings currently offered for customization.
 
   preferences_model.cpp
 Warn if no column is selected.
+
+20061114T1129Z <wboutin@massmutual.com [12007]
+
+  version.hpp
+Mark release candidate.
 
