@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: preferences_model.cpp,v 1.5 2006-11-14 02:16:33 chicares Exp $
+// $Id: preferences_model.cpp,v 1.6 2006-11-14 03:00:41 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -154,6 +154,10 @@ bool PreferencesModel::IsModified() const
 {
     PreferencesModel unchanged;
     unchanged.Load();
+    if(unchanged.UseBuiltinCalculationSummary != UseBuiltinCalculationSummary)
+        {
+        return true;
+        }
     std::vector<std::string>::const_iterator i;
     for(i = member_names().begin(); i != member_names().end(); ++i)
         {
@@ -169,15 +173,17 @@ bool PreferencesModel::IsModified() const
 
 void PreferencesModel::Load()
 {
-    std::istringstream iss
-        (configurable_settings::instance().calculation_summary_columns()
-        );
+    configurable_settings& z = configurable_settings::instance();
+    std::istringstream iss(z.calculation_summary_columns());
     std::vector<std::string> columns;
     std::copy
         (std::istream_iterator<std::string>(iss)
         ,std::istream_iterator<std::string>()
         ,std::back_inserter(columns)
         );
+
+    bool b = z.use_builtin_calculation_summary();
+    UseBuiltinCalculationSummary = b ? "Yes" : "No";
 
     // TODO ?? CALCULATION_SUMMARY '-1 +' is a poor way of ignoring
     // 'UseBuiltinCalculationSummary'.
@@ -194,8 +200,6 @@ void PreferencesModel::Load()
             }
         }
 }
-
-// TODO ?? CALCULATION_SUMMARY Save 'UseBuiltinCalculationSummary'.
 
 void PreferencesModel::Save() const
 {
@@ -214,6 +218,8 @@ void PreferencesModel::Save() const
             oss << column << "\n";
             }
         }
-    configurable_settings::instance().calculation_summary_columns(oss.str());
+    configurable_settings& z = configurable_settings::instance();
+    z.calculation_summary_columns(oss.str());
+    z.use_builtin_calculation_summary("Yes" == UseBuiltinCalculationSummary);
 }
 

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.490 2006-11-13 16:46:31 chicares Exp $
+// $Id: ChangeLog,v 1.491 2006-11-14 03:00:41 chicares Exp $
 
 MAINTENANCE
 
@@ -8154,4 +8154,33 @@ Require policy-year column.
 
   configurable_settings.cpp
 By default, display only columns of universal interest.
+
+20061114T0202Z <chicares@cox.net> [1206]
+
+  preferences_model.cpp
+Conditionally enable calculation-summary column selection.
+
+20061114T0216Z <chicares@cox.net> [1206]
+
+  preferences_model.cpp
+  preferences_model.hpp
+  preferences_view.xrc
+Rename a member to reduce difference from class configurable_settings.
+
+20061114T0234Z <chicares@cox.net> [1207]
+
+  configurable_settings.cpp
+  configurable_settings.hpp
+  ledger_xml_io2.cpp
+Implement option to use built-in calculation-summary columns.
+
+20061114T0236Z <chicares@cox.net> [1207]
+
+  main_wx.cpp
+Remove obsolete delay.
+
+20061114T0300Z <chicares@cox.net> [1206]
+
+  preferences_model.cpp
+Implement option to use built-in calculation-summary columns.
 
