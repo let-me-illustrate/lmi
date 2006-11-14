@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: preferences_model.cpp,v 1.7 2006-11-14 04:35:28 chicares Exp $
+// $Id: preferences_model.cpp,v 1.8 2006-11-14 04:52:35 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -217,6 +217,13 @@ void PreferencesModel::Save() const
             {
             oss << column << " ";
             }
+        }
+    if(oss.str().empty() && "Yes" != UseBuiltinCalculationSummary)
+        {
+        warning()
+            << "Calculation summary will be empty: no columns chosen."
+            << LMI_FLUSH
+            ;
         }
     configurable_settings& z = configurable_settings::instance();
     z.calculation_summary_columns(oss.str());
