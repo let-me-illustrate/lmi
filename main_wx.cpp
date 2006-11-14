@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_wx.cpp,v 1.60 2006-11-11 05:08:12 chicares Exp $
+// $Id: main_wx.cpp,v 1.61 2006-11-14 02:36:33 chicares Exp $
 
 // Portions of this file are derived from wxWindows files
 //   samples/docvwmdi/docview.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -885,8 +885,10 @@ bool Skeleton::ProcessCommandLine(int argc, char* argv[])
 // TODO ?? The progress meter's count is wrong. Consider writing a
 // function to get a container of pointers to children of a given
 // type.
-
-#include <wx/utils.h> // wxMilliSleep() [temporary]
+//
+// TODO ?? Instead, why not just update the topmost window first,
+// then update other windows, putting some progress indication on
+// the statusbar?
 
 void Skeleton::UpdateViews()
 {
@@ -906,7 +908,6 @@ void Skeleton::UpdateViews()
             if(v)
                 {
                 v->DisplaySelectedValuesAsHtml();
-wxMilliSleep(1000); // TODO ?? Remove this when updating really does something.
                 }
             }
         if(!meter->reflect_progress())
