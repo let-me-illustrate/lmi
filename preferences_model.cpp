@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: preferences_model.cpp,v 1.6 2006-11-14 03:00:41 chicares Exp $
+// $Id: preferences_model.cpp,v 1.7 2006-11-14 04:35:28 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -215,7 +215,7 @@ void PreferencesModel::Save() const
         std::string const column = operator[](*i).str();
         if(column != magic_null_column_name)
             {
-            oss << column << "\n";
+            oss << column << " ";
             }
         }
     configurable_settings& z = configurable_settings::instance();
