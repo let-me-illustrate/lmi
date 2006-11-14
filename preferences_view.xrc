@@ -24,7 +24,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: preferences_view.xrc,v 1.1 2006-11-11 01:35:32 chicares Exp $
+    $Id: preferences_view.xrc,v 1.2 2006-11-14 02:16:33 chicares Exp $
 -->
 
 <object class="wxPanel" name="calculation_summary_panel">
@@ -33,8 +33,8 @@
         <growablerows>1</growablerows>
         <object class="sizeritem">
             <flag>wxALIGN_LEFT</flag>
-            <object class="wxCheckBox" name="UseBuiltinDefaults">
-                <label>Use built-in defaults</label>
+            <object class="wxCheckBox" name="UseBuiltinCalculationSummary">
+                <label>Use built-in calculation summary</label>
             </object>
         </object>
         <object class="sizeritem">

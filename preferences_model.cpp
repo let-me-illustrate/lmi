@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: preferences_model.cpp,v 1.4 2006-11-14 02:02:26 chicares Exp $
+// $Id: preferences_model.cpp,v 1.5 2006-11-14 02:16:33 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -59,7 +59,7 @@ std::string magic_null_column_name("[none]");
 }
 
 PreferencesModel::PreferencesModel()
-    :UseBuiltinDefaults("No")
+    :UseBuiltinCalculationSummary("No")
 {
     AscribeMembers();
     Load();
@@ -71,19 +71,19 @@ PreferencesModel::~PreferencesModel()
 
 void PreferencesModel::AscribeMembers()
 {
-    ascribe("UseBuiltinDefaults"        , &PreferencesModel::UseBuiltinDefaults        );
-    ascribe("CalculationSummaryColumn00", &PreferencesModel::CalculationSummaryColumn00);
-    ascribe("CalculationSummaryColumn01", &PreferencesModel::CalculationSummaryColumn01);
-    ascribe("CalculationSummaryColumn02", &PreferencesModel::CalculationSummaryColumn02);
-    ascribe("CalculationSummaryColumn03", &PreferencesModel::CalculationSummaryColumn03);
-    ascribe("CalculationSummaryColumn04", &PreferencesModel::CalculationSummaryColumn04);
-    ascribe("CalculationSummaryColumn05", &PreferencesModel::CalculationSummaryColumn05);
-    ascribe("CalculationSummaryColumn06", &PreferencesModel::CalculationSummaryColumn06);
-    ascribe("CalculationSummaryColumn07", &PreferencesModel::CalculationSummaryColumn07);
-    ascribe("CalculationSummaryColumn08", &PreferencesModel::CalculationSummaryColumn08);
-    ascribe("CalculationSummaryColumn09", &PreferencesModel::CalculationSummaryColumn09);
-    ascribe("CalculationSummaryColumn10", &PreferencesModel::CalculationSummaryColumn10);
-    ascribe("CalculationSummaryColumn11", &PreferencesModel::CalculationSummaryColumn11);
+    ascribe("UseBuiltinCalculationSummary", &PreferencesModel::UseBuiltinCalculationSummary);
+    ascribe("CalculationSummaryColumn00"  , &PreferencesModel::CalculationSummaryColumn00);
+    ascribe("CalculationSummaryColumn01"  , &PreferencesModel::CalculationSummaryColumn01);
+    ascribe("CalculationSummaryColumn02"  , &PreferencesModel::CalculationSummaryColumn02);
+    ascribe("CalculationSummaryColumn03"  , &PreferencesModel::CalculationSummaryColumn03);
+    ascribe("CalculationSummaryColumn04"  , &PreferencesModel::CalculationSummaryColumn04);
+    ascribe("CalculationSummaryColumn05"  , &PreferencesModel::CalculationSummaryColumn05);
+    ascribe("CalculationSummaryColumn06"  , &PreferencesModel::CalculationSummaryColumn06);
+    ascribe("CalculationSummaryColumn07"  , &PreferencesModel::CalculationSummaryColumn07);
+    ascribe("CalculationSummaryColumn08"  , &PreferencesModel::CalculationSummaryColumn08);
+    ascribe("CalculationSummaryColumn09"  , &PreferencesModel::CalculationSummaryColumn09);
+    ascribe("CalculationSummaryColumn10"  , &PreferencesModel::CalculationSummaryColumn10);
+    ascribe("CalculationSummaryColumn11"  , &PreferencesModel::CalculationSummaryColumn11);
 }
 
 void PreferencesModel::DoAdaptExternalities()
@@ -131,7 +131,7 @@ void PreferencesModel::DoEnforceProscription(std::string const&)
 
 void PreferencesModel::DoHarmonize()
 {
-    bool do_not_use_builtin_defaults = "No" == UseBuiltinDefaults;
+    bool do_not_use_builtin_defaults = "No" == UseBuiltinCalculationSummary;
     CalculationSummaryColumn00.enable(do_not_use_builtin_defaults);
     CalculationSummaryColumn01.enable(do_not_use_builtin_defaults);
     CalculationSummaryColumn02.enable(do_not_use_builtin_defaults);
@@ -165,8 +165,6 @@ bool PreferencesModel::IsModified() const
     return false;
 }
 
-// TODO ?? CALCULATION_SUMMARY Implement 'UseBuiltinDefaults'.
-
 // TODO ?? CALCULATION_SUMMARY Warn if zero columns selected.
 
 void PreferencesModel::Load()
@@ -182,7 +180,7 @@ void PreferencesModel::Load()
         );
 
     // TODO ?? CALCULATION_SUMMARY '-1 +' is a poor way of ignoring
-    // 'UseBuiltinDefaults'.
+    // 'UseBuiltinCalculationSummary'.
     for(std::size_t i = 0; i < -1 + member_names().size(); ++i)
         {
         std::string const& name = member_names()[i];
@@ -197,6 +195,8 @@ void PreferencesModel::Load()
         }
 }
 
+// TODO ?? CALCULATION_SUMMARY Save 'UseBuiltinCalculationSummary'.
+
 void PreferencesModel::Save() const
 {
     std::ostringstream oss;
@@ -204,7 +204,7 @@ void PreferencesModel::Save() const
     for(i = member_names().begin(); i != member_names().end(); ++i)
         {
         // TODO ?? CALCULATION_SUMMARY This is poor.
-        if("UseBuiltinDefaults" == *i)
+        if("UseBuiltinCalculationSummary" == *i)
             {
             continue;
             }

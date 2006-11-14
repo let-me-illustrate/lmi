@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: preferences_model.hpp,v 1.3 2006-11-11 02:42:19 chicares Exp $
+// $Id: preferences_model.hpp,v 1.4 2006-11-14 02:16:33 chicares Exp $
 
 #ifndef preferences_model_hpp
 #define preferences_model_hpp
@@ -70,7 +70,7 @@ class LMI_SO PreferencesModel
     virtual void DoHarmonize();
     virtual void DoTransmogrify();
 
-    mce_yes_or_no     UseBuiltinDefaults;
+    mce_yes_or_no     UseBuiltinCalculationSummary;
     mce_report_column CalculationSummaryColumn00;
     mce_report_column CalculationSummaryColumn01;
     mce_report_column CalculationSummaryColumn02;
