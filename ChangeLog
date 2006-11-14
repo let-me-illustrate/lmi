@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.492 2006-11-14 04:35:28 chicares Exp $
+// $Id: ChangeLog,v 1.493 2006-11-14 04:52:35 chicares Exp $
 
 MAINTENANCE
 
@@ -8189,4 +8189,9 @@ Implement option to use built-in calculation-summary columns.
   configurable_settings.cpp
   preferences_model.cpp
 Save configurable settings currently offered for customization.
+
+20061114T0452Z <chicares@cox.net> [1207]
+
+  preferences_model.cpp
+Warn if no column is selected.
 
