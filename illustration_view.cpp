@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustration_view.cpp,v 1.53 2006-11-13 15:33:50 chicares Exp $
+// $Id: illustration_view.cpp,v 1.53.2.1 2006-11-15 19:40:27 rericksberg Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -302,6 +302,9 @@ void IllustrationView::PrintOrPreviewHtmlSummary(enum_print_option option) const
         );
     if(e_print_printer == option)
         {
+        wxPrintData *printer_settings = printer->GetPrintData();
+        // Default to 8.5 X 11 Letter Size
+        printer_settings->SetPaperId(wxPAPER_LETTER);
         printer->PrintText(selected_values_as_html_.c_str());
         }
     // TODO ?? CALCULATION_SUMMARY This assumes, without asserting,
