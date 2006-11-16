@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustration_view.cpp,v 1.53 2006-11-13 15:33:50 chicares Exp $
+// $Id: illustration_view.cpp,v 1.54 2006-11-16 18:11:16 rericksberg Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -300,6 +300,15 @@ void IllustrationView::PrintOrPreviewHtmlSummary(enum_print_option option) const
         (disclaimer + " (@PAGENUM@/@PAGESCNT@)<hr />"
         ,wxPAGE_ALL
         );
+
+    // TODO ?? CALCULATION_SUMMARY The print dialog under wx
+    // defaults to A4, a European paper size. Override the default
+    // with a US 8.5 X 11 letter size. wx should eventually be
+    // upgraded so that system printer settings presist regardless
+    // of which print function updates them [e.g. 'Page setup']
+    wxPrintData *printer_settings = printer->GetPrintData();
+    printer_settings->SetPaperId(wxPAPER_LETTER);
+
     if(e_print_printer == option)
         {
         printer->PrintText(selected_values_as_html_.c_str());
