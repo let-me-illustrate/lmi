@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.494 2006-11-14 11:29:46 wboutin Exp $
+// $Id: ChangeLog,v 1.495 2006-11-16 18:11:16 rericksberg Exp $
 
 MAINTENANCE
 
@@ -8195,8 +8195,13 @@ Save configurable settings currently offered for customization.
   preferences_model.cpp
 Warn if no column is selected.
 
-20061114T1129Z <wboutin@massmutual.com [12007]
+20061114T1129Z <wboutin@massmutual.com> [1207]
 
   version.hpp
 Mark release candidate.
+
+20061116T1811Z <rericksberg@massmutual.com> [1208]
+
+  illustration_view.cpp
+Default to 8.5 X 11 Letter Size printing Calculation Summary
 
