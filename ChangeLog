@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.494.2.4 2006-11-20 10:46:17 etarassov Exp $
+// $Id: ChangeLog,v 1.494.2.5 2006-11-20 10:48:14 etarassov Exp $
 
 MAINTENANCE
 
@@ -8224,4 +8224,9 @@ Add autotools generated files.
   illustration_view.hpp
 Fix IllustrationView to use the DocManagerEx printing methods for
 the calculation summary.
+
+20061120T1047Z <etarassov@tt-solutions.com> [1204]
+
+  configure.ac
+Add -Werror. Fix snprintf detection.
 
