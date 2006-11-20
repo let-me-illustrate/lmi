@@ -19,22 +19,24 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_excerpt.hpp,v 1.1 2006-11-12 17:49:45 chicares Exp $
+// $Id: ledger_excerpt.hpp,v 1.1.2.1 2006-11-20 12:18:08 etarassov Exp $
 
 #ifndef ledger_excerpt_hpp
 #define ledger_excerpt_hpp
 
 #include "config.hpp"
 
-/// We need to generate different variants of xml:
-/// - a light version, when speed is crucial (calculation summary)
-/// - a detailed version
-///   TODO ?? EVGENIY--What does e_xml_detailed mean?
-/// - a full version, when we need all the information
+/// We need to generate different versions of xml data:
+/// - e_xml_calculation_summary
+///     a light version, when speed is crucial (calculation summary)
+/// - e_xml_spreadsheet
+///     a detailed version, the data subset for TSV output (to a spreadsheet)
+/// - e_xml_full
+///     a full version, when we need all the information
 
 enum enum_xml_version
     {e_xml_calculation_summary
-    ,e_xml_detailed
+    ,e_xml_spreadsheet
     ,e_xml_full
     };
 

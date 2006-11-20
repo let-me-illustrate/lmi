@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_formatter.cpp,v 1.1 2006-11-12 19:56:51 chicares Exp $
+// $Id: ledger_formatter.cpp,v 1.1.2.1 2006-11-20 12:18:08 etarassov Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -234,7 +234,7 @@ void LedgerFormatter::FormatAsTabDelimited(std::ostream& os) const
             );
 
         stylesheet.transform
-            (GetXmlDoc(e_xml_detailed)
+            (GetXmlDoc(e_xml_spreadsheet)
             ,os
             ,xslt_lmi::Stylesheet::e_output_text
             );

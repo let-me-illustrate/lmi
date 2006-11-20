@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.494.2.5 2006-11-20 10:48:14 etarassov Exp $
+// $Id: ChangeLog,v 1.494.2.6 2006-11-20 12:18:43 etarassov Exp $
 
 MAINTENANCE
 
@@ -8229,4 +8229,11 @@ the calculation summary.
 
   configure.ac
 Add -Werror. Fix snprintf detection.
+
+20061120T1218Z <etarassov@tt-solutions.com> [1203]
+
+  ledger_excerpt.hpp
+  ledger_formatter.cpp
+  ledger_xml_io2.cpp
+Rename e_xml_detailed to e_xml_spreadsheet. Add a comment.
 

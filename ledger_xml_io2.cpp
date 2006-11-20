@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xml_io2.cpp,v 1.3 2006-11-14 02:34:17 chicares Exp $
+// $Id: ledger_xml_io2.cpp,v 1.3.2.1 2006-11-20 12:18:08 etarassov Exp $
 
 #include "ledger.hpp"
 
@@ -829,7 +829,7 @@ void Ledger::write_excerpt
     // then add hardcoded list of columns.
     // TODO ?? read that list from tab_delimited.xsl, or find another, better
     // way of retrieving the list of columns
-    if(xml_version == e_xml_detailed)
+    if(xml_version == e_xml_spreadsheet)
         {
         std::vector<value_id> detailed_ids;
         detailed_ids.push_back(value_id::from_name("DBOpt"));
