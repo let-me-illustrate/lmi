@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustration_view.hpp,v 1.23.2.2 2006-11-20 13:17:34 etarassov Exp $
+// $Id: illustration_view.hpp,v 1.23.2.3 2006-11-20 15:32:29 etarassov Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -63,9 +63,21 @@ class IllustrationView
 
     // TODO ?? CALCULATION_SUMMARY Couldn't enum_xml_version be used
     // instead?
-    enum enum_copy_option
-        {e_copy_full
-        ,e_copy_summary
+    //
+    // EVGENIY: IMHO it is better keep two separate enums, because even though
+    // enum_tsv_copy_option and enum_xml_version are related, it is an indirect
+    // relation, and this could possibly evaluate into two completly
+    // different option sets.
+    // As of 20/11/2006 enum_xml_version has already one more value than
+    // enum_tsv_copy_option.
+    // Two values e_xml_calculation_summary and e_xml_spreadsheet (which seem
+    // to directly corespond to e_tsv_copy_full and e_tsv_copy_summary) could
+    // merge into one single option, while enum_copy_option will keep distinct
+    // values since its options correspond to distinct TSV outputs, which could
+    // be generated using the same underlying xml data.
+    enum enum_tsv_copy_option
+        {e_tsv_copy_full
+        ,e_tsv_copy_summary
         };
 
   public:
@@ -84,7 +96,7 @@ class IllustrationView
   private:
     IllustrationDocument& document() const;
 
-    void CopyLedgerToClipboard(enum_copy_option);
+    void CopyLedgerTSVToClipboard(enum_tsv_copy_option);
     int EditProperties();
 
     // ViewEx required implementation.

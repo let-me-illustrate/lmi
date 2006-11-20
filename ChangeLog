@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.494.2.9 2006-11-20 13:38:58 etarassov Exp $
+// $Id: ChangeLog,v 1.494.2.10 2006-11-20 15:33:04 etarassov Exp $
 
 MAINTENANCE
 
@@ -8253,4 +8253,11 @@ code for lazy evaluation.
   illustration_view.cpp
 Add a comment to a EVGENIY marker concerning
 LedgerFormatter::FormatAsHtml interface contract.
+
+20061120T1532Z <etarassov@tt-solutions.com> [1200]
+
+  illustration_view.cpp
+  illustration_view.hpp
+Rename enum_copy_option to enum_tsv_copy_option. Add a comment. Use
+wx_allocator to create a wxTextDataObject.
 

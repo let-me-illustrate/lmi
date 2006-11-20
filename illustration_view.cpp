@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustration_view.cpp,v 1.53.2.4 2006-11-20 13:38:26 etarassov Exp $
+// $Id: illustration_view.cpp,v 1.53.2.5 2006-11-20 15:32:29 etarassov Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -295,12 +295,12 @@ void IllustrationView::UponMenuOpen(wxMenuEvent&)
 
 void IllustrationView::UponCopyFull(wxCommandEvent&)
 {
-    CopyLedgerToClipboard(e_copy_full);
+    CopyLedgerTSVToClipboard(e_tsv_copy_full);
 }
 
 void IllustrationView::UponCopySummary(wxCommandEvent&)
 {
-    CopyLedgerToClipboard(e_copy_summary);
+    CopyLedgerTSVToClipboard(e_tsv_copy_summary);
 }
 
 void IllustrationView::UponPreviewSummary(wxCommandEvent&)
@@ -377,7 +377,7 @@ void IllustrationView::UponUpdateProperties(wxUpdateUIEvent& e)
     e.Enable(!is_phony_);
 }
 
-void IllustrationView::CopyLedgerToClipboard(enum_copy_option option)
+void IllustrationView::CopyLedgerTSVToClipboard(enum_tsv_copy_option option)
 {
     wxClipboardLocker clipboardLocker;
     if(!clipboardLocker)
@@ -393,22 +393,27 @@ void IllustrationView::CopyLedgerToClipboard(enum_copy_option option)
         }
 
     std::ostringstream oss;
-    if(e_copy_full == option)
+    switch(option)
+      {
+      case e_tsv_copy_full:
         {
         LedgerFormatter::instance().FormatAsTabDelimited(*ledger_values_, oss);
+        break;
         }
-    // TODO ?? CALCULATION_SUMMARY This assumes, without asserting,
-    // that the enumeration has exactly two enumerators.
-    else
+      case e_tsv_copy_summary:
         {
         LedgerFormatter::instance().FormatAsLightTSV(*ledger_values_, oss);
+        break;
         }
+      default:
+        {
+        fatal_error() << "Unknown enum_tsv_copy_option value" << LMI_FLUSH;
+        }
+      }
 
     status() << "Format: " << timer.stop().elapsed_msec_str() << std::flush;
 
-    // TODO ?? Probably operator new(std::size_t, wx_allocator) should
-    // be used here.
-    wxTextDataObject* TextDataObject = new wxTextDataObject(oss.str());
+    wxTextDataObject* TextDataObject = new(wx) wxTextDataObject(oss.str());
 
     // clipboard owns the data
     wxTheClipboard->SetData(TextDataObject);
