@@ -21,7 +21,7 @@ dnl snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
 dnl === Prologue ===
 
-AC_REVISION($Id: configure.ac,v 1.23 2006-11-02 19:37:36 chicares Exp $)dnl
+AC_REVISION($Id: configure.ac,v 1.23.2.1 2006-11-20 10:27:49 etarassov Exp $)dnl
 
 AC_PREREQ(2.56)
 AC_INIT(LMI, 1.0.0, [chicares@cox.net])
@@ -133,6 +133,30 @@ AC_ARG_ENABLE(mpatrol,
              esac], lmi_mpatrol_option=no)
 AM_CONDITIONAL(LMI_WITH_MEMORY_DEBUG, [ test "x$lmi_mpatrol_option" = "xyes" ])
 
+AC_ARG_ENABLE(xmlpp,
+             [AC_HELP_STRING([--enable-xmlpp],
+                             [use libxml++ library wrapper (incompatible with --enable-xmlwrapp)])],
+             [case "x${enableval}" in
+                   x) xmlpp_option=yes ;;
+                xyes) xmlpp_option=yes ;;
+                 xno) xmlpp_option=no ;;
+                   *) AC_MSG_ERROR(bad value ${enableval} for --enable-xmlpp) ;;
+             esac], [xmlpp_option=yes])
+
+AC_ARG_ENABLE(xmlwrapp,
+             [AC_HELP_STRING([--enable-xmlwrapp],
+                             [use xmlwrapp library wrapper (incompatible with --enable-xmlpp)])],
+             [case "x${enableval}" in
+                   x) xmlwrapp_option=yes ;;
+                xyes) xmlwrapp_option=yes ;;
+                 xno) xmlwrapp_option=no ;;
+                   *) AC_MSG_ERROR(bad value ${enableval} for --enable-xmlwrapp) ;;
+             esac], [if test "x$xmlpp_option" = "xyes"; then
+                         xmlwrapp_option=no
+                     else
+                         xmlwrapp_option=yes
+                     fi])
+
 AC_ARG_ENABLE(cgicc,
              [AC_HELP_STRING([--enable-cgicc],
                              [build cgi targets using installed cgicc.])],
@@ -143,6 +167,15 @@ AC_ARG_ENABLE(cgicc,
                    *) AC_MSG_ERROR(bad value ${enableval} for --enable-cgicc[=yes|no]) ;;
              esac],
              lmi_cgicc_option=no)
+
+dnl === Consistency check for some options ===
+
+dnl better do that check earlier
+
+dnl exactly one xml wrapper has to be used
+if test "x$xmlpp_option" = "x$xmlwrapp_option"; then
+    AC_MSG_ERROR([Use exactly one xml wrapper: xmlwrapp (--enable-xmlwrapp) or libxml++ (--enable-xmlpp)])
+fi
 
 dnl === Program checks ===
 
@@ -592,8 +625,48 @@ PKG_CHECK_MODULES(LIBXML, libxml-2.0 >= 2.6.0)
 dnl --- libxslt (required) -------------------
 PKG_CHECK_MODULES(LIBXSLT, libxslt >= 1.1.0)
 
-dnl --- libxml++ (required) -------------------
-PKG_CHECK_MODULES(LIBXMLPP, libxml++-2.6 >= 2.14.0)
+dnl --- libxml++ (configurable) -------------------
+if test "x$xmlpp_option" = "xyes"; then
+    PKG_CHECK_MODULES(LIBXMLPP, libxml++-2.6 >= 2.14.0)
+    AC_DEFINE([USING_LIBXMLPP], [1], [Define this if you are using libxml++])
+fi
+
+dnl --- xmlwrapp (configurable) -------------------
+if test "x$xmlwrapp_option" = "xyes"; then
+    AC_CHECK_PROG(lmi_xmlwrapp_config, xmlwrapp-config, yes, no)
+    if test "x$lmi_xmlwrapp_config" != "xyes"; then
+        AC_MSG_ERROR([Unable to find libxmlwrapp configuration program xmlwrapp-config in the path.])
+    fi
+
+    XMLWRAPP_CFLAGS=`xmlwrapp-config --cxxflags`
+    XMLWRAPP_LIBS=`xmlwrapp-config --libs`
+
+    AC_CACHE_CHECK([if we are using recent version of xmlwrapp],
+        lmi_cv_lib_xmlwrapp_recent,
+        [
+            save_CXXFLAGS=$CXXFLAGS
+            CXXFLAGS="$CXXFLAGS $XMLWRAPP_CFLAGS"
+            AC_TRY_COMPILE([#include <xmlwrapp/document.h>
+                #include <xmlwrapp/tree_parser.h>
+                #include <xmlwrapp/node.h>],
+                [
+                    xml::tree_parser parser("");
+                    parser.get_document().get_root_node();
+                ],
+                lmi_cv_lib_xmlwrapp_recent=yes,
+                lmi_cv_lib_xmlwrapp_recent=no
+            )
+        ]
+    )
+    if test "x$lmi_cv_lib_xmlwrapp_recent" = "xyes"; then
+        AC_DEFINE([USING_CURRENT_XMLWRAPP], [1], [Define this if you have the latest version of libxmlwrapp])
+    fi
+fi
+
+LMIXML_CFLAGS="$LIBXMLPP_CFLAGS $XMLWRAPP_CFLAGS $LIBXSLT_CFLAGS $LIBXML_CFLAGS"
+LMIXML_LIBS="  $LIBXMLPP_LIBS   $XMLWRAPP_LIBS   $LIBXSLT_LIBS   $LIBXML_LIBS"
+AC_SUBST(LMIXML_CFLAGS)
+AC_SUBST(LMIXML_LIBS)
 
 dnl --- CGICC (optional) ----------------
 if test "x$lmi_cgicc_option" != "xno"; then

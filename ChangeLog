@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.494.2.1 2006-11-15 19:40:27 rericksberg Exp $
+// $Id: ChangeLog,v 1.494.2.2 2006-11-20 10:28:12 etarassov Exp $
 
 MAINTENANCE
 
@@ -8204,4 +8204,10 @@ Mark release candidate.
 
   illustration_view.cpp
 Default to 8.5 X 11 Letter Size paper when printing Calculation Summary.
+
+20061120T1027Z <etarassov@tt-solutions.com> [1207]
+
+  configure.ac
+  Makefile.am
+Update autotools files to deal with different xml wrappers.
 

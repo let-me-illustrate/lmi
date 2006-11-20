@@ -20,7 +20,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: Makefile.am,v 1.24 2006-11-02 19:37:36 chicares Exp $
+# $Id: Makefile.am,v 1.24.2.1 2006-11-20 10:27:49 etarassov Exp $
 
 
 SUBDIRS = third_party
@@ -194,6 +194,8 @@ lmi_wx_SOURCES = \
     msw_workarounds.cpp \
     mvc_controller.cpp \
     mvc_view.cpp \
+    preferences_model.cpp \
+    preferences_view.cpp \
     previewframe_ex.cpp \
     progress_meter_wx.cpp \
     single_choice_popup_menu.cpp \
@@ -205,7 +207,7 @@ lmi_wx_SOURCES = \
     wx_checks.cpp \
     wx_utility.cpp
 
-lmi_wx_CXXFLAGS = $(AM_CXXFLAGS) $(WX_CXXFLAGS) $(LIBXMLPP_CFLAGS) $(LIBXSLT_CFLAGS) $(LIBXML_CFLAGS)
+lmi_wx_CXXFLAGS = $(AM_CXXFLAGS) $(WX_CXXFLAGS) $(LMIXML_CFLAGS)
 # $(CGICC_INCLUDE_FLAGS)
 
 if LMI_MSW
@@ -220,9 +222,7 @@ endif
 lmi_wx_LDADD =  \
     liblmi.la \
     libwx_new.la \
-    $(LIBXMLPP_LIBS) \
-    $(LIBXSLT_LIBS) \
-    $(LIBXML_LIBS) \
+    $(LMIXML_LIBS) \
     $(BOOST_LIBS) \
     $(WX_LIBS)
 if LMI_MSW
@@ -242,10 +242,10 @@ cli_sources = \
 
 lmi_cli_SOURCES = \
     $(cli_sources)
-lmi_cli_CXXFLAGS = $(AM_CXXFLAGS) $(LIBXMLPP_CFLAGS) $(LIBXSLT_CFLAGS) $(LIBXML_CFLAGS)
+lmi_cli_CXXFLAGS = $(AM_CXXFLAGS) $(LMIXML_CFLAGS)
 lmi_cli_LDADD = \
     liblmi.la \
-    $(LIBXMLPP_LIBS) \
+    $(LMIXML_LIBS) \
     $(BOOST_LIBS)
 
 # libraries
@@ -277,10 +277,12 @@ liblmi_common_sources = \
     interest_rates.cpp \
     ledger.cpp \
     ledger_base.cpp \
+    ledger_formatter.cpp \
     ledger_invariant.cpp \
     ledger_text_formats.cpp \
     ledger_variant.cpp \
     ledger_xml_io.cpp \
+    ledger_xml_io2.cpp \
     ledger_xsl.cpp \
     ledgervalues.cpp \
     license.cpp \
@@ -301,6 +303,7 @@ liblmi_common_sources = \
     timer.cpp \
     xenumtypes.cpp \
     xml_lmi.cpp \
+    xslt_lmi.cpp \
     xrange.cpp
 
 libmain_auxiliary_common_la_SOURCES = \
@@ -325,7 +328,7 @@ libantediluvian_la_SOURCES = \
     mortality_rates.cpp \
     solve.cpp \
     $(liblmi_common_sources)
-libantediluvian_la_CXXFLAGS = $(AM_CXXFLAGS) $(LIBXMLPP_CFLAGS) $(LIBXSLT_CFLAGS) $(LIBXML_CFLAGS)
+libantediluvian_la_CXXFLAGS = $(AM_CXXFLAGS) $(LMIXML_CFLAGS)
 libantediluvian_la_LDFLAGS = -no-undefined $(AM_LDFLAGS)
 libantediluvian_la_LIBADD = \
     $(BOOST_LIBS)
@@ -359,12 +362,10 @@ liblmi_la_SOURCES = \
     stratified_algorithms.cpp \
     stratified_charges.cpp \
     $(liblmi_common_sources)
-liblmi_la_CXXFLAGS = $(AM_CXXFLAGS) $(LIBXMLPP_CFLAGS) $(LIBXSLT_CFLAGS) $(LIBXML_CFLAGS)
+liblmi_la_CXXFLAGS = $(AM_CXXFLAGS) $(LMIXML_CFLAGS)
 liblmi_la_LDFLAGS = -no-undefined $(AM_LDFLAGS)
 liblmi_la_LIBADD = \
-    $(LIBXMLPP_LIBS) \
-    $(LIBXSLT_LIBS) \
-    $(LIBXML_LIBS) \
+    $(LMIXML_LIBS) \
     $(BOOST_LIBS)
 
 libcgi_la_SOURCES = \
@@ -419,11 +420,11 @@ antediluvian_cgi_LDADD = \
 
 antediluvian_cli_SOURCES = \
     $(cli_sources)
-antediluvian_cli_CXXFLAGS = $(AM_CXXFLAGS) $(LIBXMLPP_CFLAGS) $(LIBXSLT_CFLAGS) $(LIBXML_CFLAGS)
+antediluvian_cli_CXXFLAGS = $(AM_CXXFLAGS) $(LMIXML_CFLAGS)
 antediluvian_cli_LDADD = \
     libantediluvian.la  \
     $(BOOST_LIBS) \
-    $(LIBXMLPP_LIBS)
+    $(LMIXML_LIBS)
 
 ihs_crc_comp_SOURCES = ihs_crc_comp.cpp
 ihs_crc_comp_LDADD = libmain_auxiliary_common.la
@@ -441,7 +442,7 @@ product_files_SOURCES = \
 product_files_LDADD = \
     liblmi.la   \
     $(BOOST_LIBS) \
-    $(LIBXMLPP_LIBS)
+    $(LMIXML_LIBS)
 
 
 dummy.cpp:
@@ -601,11 +602,11 @@ test_input_SOURCES =    \
   xml_lmi.cpp \
   xrange.cpp
 
-test_input_CXXFLAGS = $(AM_CXXFLAGS) $(LIBXMLPP_CFLAGS) $(LIBXSLT_CFLAGS) $(LIBXML_CFLAGS)
+test_input_CXXFLAGS = $(AM_CXXFLAGS) $(LMIXML_CFLAGS)
 test_input_LDADD =    \
   $(BOOST_LIBS) \
   libtest_commons.la \
-  $(LIBXMLPP_LIBS) \
+  $(LMIXML_LIBS) \
   $(test_input_extra_libs)
 
 test_irc7702a_SOURCES = \
@@ -786,12 +787,10 @@ test_xml_resources_SOURCES = \
   alert.cpp \
   alert_cli.cpp \
   xml_resources_test.cpp
-test_xml_resources_CXXFLAGS = $(AM_CXXFLAGS) $(LIBXMLPP_CFLAGS) $(LIBXSLT_CFLAGS) $(LIBXML_CFLAGS)
+test_xml_resources_CXXFLAGS = $(AM_CXXFLAGS) $(LMIXML_CFLAGS)
 test_xml_resources_LDADD = \
   $(BOOST_LIBS) \
-  $(LIBXMLPP_LIBS) \
-  $(LIBXML_LIBS) \
-  $(LIBXSLT_LIBS) \
+  $(LMIXML_LIBS) \
   liblmi.la \
   libtest_commons.la
 
@@ -885,6 +884,7 @@ noinst_HEADERS = \
     istream_to_string.hpp \
     ledger.hpp \
     ledger_base.hpp \
+    ledger_formatter.hpp \
     ledger_invariant.hpp \
     ledger_text_formats.hpp \
     ledger_variant.hpp \
@@ -920,6 +920,8 @@ noinst_HEADERS = \
     path_utility.hpp \
     pchfile.hpp \
     platform_dependent.hpp \
+    preferences_model.hpp \
+    preferences_view.hpp \
     previewframe_ex.hpp \
     product_names.hpp \
     progress_meter.hpp \
@@ -960,6 +962,11 @@ noinst_HEADERS = \
     xenumtypes.hpp \
     xml_notebook.hpp \
     xml_lmi.hpp \
+    xml_lmi_fwd.hpp \
+    xmlpp_lmi.cpp \
+    xmlpp_lmi.hpp \
+    xmlpp_lmi_fwd.hpp \
+    xslt_lmi.hpp \
     xrange.hpp \
     xrangefwd.hpp \
     xrangetypes.hpp \
