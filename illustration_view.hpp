@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustration_view.hpp,v 1.23 2006-11-13 05:35:17 chicares Exp $
+// $Id: illustration_view.hpp,v 1.23.2.1 2006-11-20 10:45:53 etarassov Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -50,6 +50,7 @@ class IllustrationDocument;
 class Input;
 class Ledger;
 class WXDLLEXPORT wxHtmlWindow;
+class WXDLLEXPORT wxPrintout;
 
 // TODO ?? Consider adding an input reference member. Here, it's used
 // only for edit and run; in the census view class, it's used widely.
@@ -66,11 +67,6 @@ class IllustrationView
     enum enum_copy_option
         {e_copy_full
         ,e_copy_summary
-        };
-
-    enum enum_print_option
-        {e_print_printer
-        ,e_print_preview
         };
 
   public:
@@ -91,7 +87,6 @@ class IllustrationView
 
     void CopyLedgerToClipboard(enum_copy_option);
     int EditProperties();
-    void PrintOrPreviewHtmlSummary(enum_print_option) const;
 
     // ViewEx required implementation.
     wxWindow* CreateChildWindow();
@@ -99,6 +94,7 @@ class IllustrationView
     wxMenuBar* MenuBar() const;
 
     // ViewEx overrides.
+    virtual wxPrintout* OnCreatePrintout();
     bool OnCreate              (wxDocument*, long int);
 
     void UponCopyFull          (wxCommandEvent&);

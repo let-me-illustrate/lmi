@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: docmanager_ex.hpp,v 1.6 2006-05-31 14:45:53 wboutin Exp $
+// $Id: docmanager_ex.hpp,v 1.6.4.1 2006-11-20 10:45:53 etarassov Exp $
 
 #ifndef docmanager_ex_hpp
 #define docmanager_ex_hpp
@@ -52,6 +52,10 @@ class DocManagerEx
 
     void AssociateFileHistoryWithFileMenu(wxMenuBar*);
     void DissociateFileHistoryFromFileMenu(wxMenuBar*);
+
+    // Print or preview the specified view
+    void PrintView(wxView*);
+    void PreviewView(wxView*);
 
   private:
     void UponPageSetup(wxCommandEvent&);

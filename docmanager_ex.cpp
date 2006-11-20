@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: docmanager_ex.cpp,v 1.9 2006-05-31 14:45:53 wboutin Exp $
+// $Id: docmanager_ex.cpp,v 1.9.4.1 2006-11-20 10:45:53 etarassov Exp $
 
 // This implementation is a derived work based on wxWindows code, viz.
 //   samples/printing/printing.cpp (C) 1995 Julian Smart
@@ -128,7 +128,11 @@ void DocManagerEx::UponPreview(wxCommandEvent&)
         {
         return;
         }
+    PreviewView(view);
+}
 
+void DocManagerEx::PreviewView(wxView* view)
+{
     wxPrintout *printout = view->OnCreatePrintout();
     if(!printout)
         {
@@ -170,7 +174,11 @@ void DocManagerEx::UponPrint(wxCommandEvent&)
         {
         return;
         }
+    PrintView(view);
+}
 
+void DocManagerEx::PrintView(wxView* view)
+{
     wxPrintout* printout = view->OnCreatePrintout();
     if(!printout)
         {

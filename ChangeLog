@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.494.2.3 2006-11-20 10:29:59 etarassov Exp $
+// $Id: ChangeLog,v 1.494.2.4 2006-11-20 10:46:17 etarassov Exp $
 
 MAINTENANCE
 
@@ -8215,4 +8215,13 @@ Update autotools files to deal with different xml wrappers.
 
   GNUmakefile
 Add autotools generated files.
+
+20061120T1045Z <etarassov@tt-solutions.com> [1204]
+
+  docmanager_ex.cpp
+  docmanager_ex.hpp
+  illustration_view.cpp
+  illustration_view.hpp
+Fix IllustrationView to use the DocManagerEx printing methods for
+the calculation summary.
 

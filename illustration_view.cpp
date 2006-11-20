@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustration_view.cpp,v 1.53.2.1 2006-11-15 19:40:27 rericksberg Exp $
+// $Id: illustration_view.cpp,v 1.53.2.2 2006-11-20 10:45:53 etarassov Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -43,6 +43,7 @@
 #include "configurable_settings.hpp"
 #include "custom_io_0.hpp"
 #include "default_view.hpp"
+#include "docmanager_ex.hpp"
 #include "file_command.hpp"
 #include "handle_exceptions.hpp"
 #include "illustration_document.hpp"
@@ -196,6 +197,25 @@ wxMenuBar* IllustrationView::MenuBar() const
     return menu_bar;
 }
 
+// Provide a preconfigured Html printout for an illustration document.
+// This method is called by the DocManager, when it needs to print (or preview)
+// the corresponding illustration document.
+
+wxPrintout* IllustrationView::OnCreatePrintout()
+{
+    static std::string const disclaimer
+        ("FOR BROKER-DEALER USE ONLY. NOT TO BE SHARED WITH CLIENTS."
+        );
+    wxHtmlPrintout* printout = new wxHtmlPrintout("Calculation Summary");
+
+    printout->SetHeader
+        (disclaimer + " (@PAGENUM@/@PAGESCNT@)<hr />"
+        ,wxPAGE_ALL
+        );
+    printout->SetHtmlText(selected_values_as_html_.c_str());
+    return printout;
+}
+
 // This virtual function calls the base-class version explicitly.
 
 bool IllustrationView::OnCreate(wxDocument* doc, long int flags)
@@ -265,54 +285,20 @@ void IllustrationView::UponCopySummary(wxCommandEvent&)
 
 void IllustrationView::UponPreviewSummary(wxCommandEvent&)
 {
-    PrintOrPreviewHtmlSummary(e_print_preview);
+    DocManagerEx* doc_manager
+        = dynamic_cast<DocManagerEx*>(GetDocumentManager());
+    LMI_ASSERT(doc_manager);
+
+    doc_manager->PreviewView(this);
 }
 
 void IllustrationView::UponPrintSummary(wxCommandEvent&)
 {
-    PrintOrPreviewHtmlSummary(e_print_printer);
-}
+    DocManagerEx* doc_manager
+        = dynamic_cast<DocManagerEx*>(GetDocumentManager());
+    LMI_ASSERT(doc_manager);
 
-// TODO ?? CALCULATION_SUMMARY This should use either the code or the
-// ideas in DocManagerEx::UponPreview().
-
-// TODO ?? EVGENIY Is it necessary to use scoped_ptr here? The wx
-// documentation says
-//   "Do not create this class on the stack only. You should create an
-//   instance on app startup and use this instance for all printing
-//   operations. The reason is that this class stores various settings
-//   in it."
-// But that reason doesn't hold here: settings don't persist anyway,
-// because the printing object is deleted as soon as this function
-// returns. Is there a different, unstated reason why we shouldn't
-// create it on the stack?
-
-void IllustrationView::PrintOrPreviewHtmlSummary(enum_print_option option) const
-{
-    std::string disclaimer
-        ("FOR BROKER-DEALER USE ONLY. NOT TO BE SHARED WITH CLIENTS."
-        );
-    boost::scoped_ptr<wxHtmlEasyPrinting> printer
-        (new wxHtmlEasyPrinting("Calculation Summary", html_window_)
-        );
-
-    printer->SetHeader
-        (disclaimer + " (@PAGENUM@/@PAGESCNT@)<hr />"
-        ,wxPAGE_ALL
-        );
-    if(e_print_printer == option)
-        {
-        wxPrintData *printer_settings = printer->GetPrintData();
-        // Default to 8.5 X 11 Letter Size
-        printer_settings->SetPaperId(wxPAPER_LETTER);
-        printer->PrintText(selected_values_as_html_.c_str());
-        }
-    // TODO ?? CALCULATION_SUMMARY This assumes, without asserting,
-    // that the enumeration has exactly two enumerators.
-    else
-        {
-        printer->PreviewText(selected_values_as_html_.c_str());
-        }
+    doc_manager->PrintView(this);
 }
 
 void IllustrationView::UponPreviewPdf(wxCommandEvent&)
