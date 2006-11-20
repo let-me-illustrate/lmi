@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.494.2.2 2006-11-20 10:28:12 etarassov Exp $
+// $Id: ChangeLog,v 1.494.2.3 2006-11-20 10:29:59 etarassov Exp $
 
 MAINTENANCE
 
@@ -8210,4 +8210,9 @@ Default to 8.5 X 11 Letter Size paper when printing Calculation Summary.
   configure.ac
   Makefile.am
 Update autotools files to deal with different xml wrappers.
+
+20061120T1029Z <etarassov@tt-solutions.com> [1207]
+
+  GNUmakefile
+Add autotools generated files.
 

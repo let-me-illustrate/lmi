@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: GNUmakefile,v 1.73 2006-11-02 20:52:03 chicares Exp $
+# $Id: GNUmakefile,v 1.73.2.1 2006-11-20 10:29:42 etarassov Exp $
 
 ################################################################################
 
@@ -201,6 +201,22 @@ date:
 
 # Files that can't be source in any useful sense:
 
+# Files produced by autotools:
+
+autotools_generated_files := \
+  $(wildcard *.cache) \
+  aclocal.m4 \
+  compile \
+  config.guess \
+  config.h.in \
+  config.sub \
+  configure \
+  depcomp \
+  install-sh \
+  ltmain.sh \
+  Makefile.in \
+  missing \
+
 # Graphics files whose format doesn't permit embedding copyright and
 # license notices:
 
@@ -220,6 +236,7 @@ subdirectories := $(shell $(LS) --classify | $(SED) -e ';/\//!d' -e 's/\/$$//')
 testing_files := expected.cgi.out $(wildcard *.cns *.ill *touchstone*)
 
 never_source_files := \
+  $(autotools_generated_files) \
   $(binary_graphics) \
   $(expungible_files) \
   $(md5sum_files) \
