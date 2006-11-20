@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.494.2.8 2006-11-20 13:19:58 etarassov Exp $
+// $Id: ChangeLog,v 1.494.2.9 2006-11-20 13:38:58 etarassov Exp $
 
 MAINTENANCE
 
@@ -8247,4 +8247,10 @@ Rename e_xml_detailed to e_xml_spreadsheet. Add a comment.
   ledger_xsl.cpp
 Merge LedgerFormatter and LedgerFormatterFactory. Remove the dead
 code for lazy evaluation.
+
+20061120T1338Z <etarassov@tt-solutions.com> [1202]
+
+  illustration_view.cpp
+Add a comment to a EVGENIY marker concerning
+LedgerFormatter::FormatAsHtml interface contract.
 

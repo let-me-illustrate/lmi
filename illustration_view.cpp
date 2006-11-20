@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustration_view.cpp,v 1.53.2.3 2006-11-20 13:17:34 etarassov Exp $
+// $Id: illustration_view.cpp,v 1.53.2.4 2006-11-20 13:38:26 etarassov Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -173,6 +173,25 @@ void IllustrationView::DisplaySelectedValuesAsHtml()
     // that actually gets called. This code could be simpler if a
     // std::string were used instead; is there a reason to do
     // otherwise?
+    //
+    //
+    // IMHO the best way to hide the implementation details is to pass
+    // std::ostream as an output sink. I think, that if one day we will need
+    // to optimize the performance, this approach will show itself more
+    // flexible.
+    // If we change the contract to be
+    //   std::string FormatAsHtml(Ledger&)
+    // then lately, if we start manipulating a considerable amount of data,
+    // it could show itself too restrictive, as it does not allow a direct
+    // (buffered) output into a file on disk, we will need to keep the whole
+    // output in memory.
+    // Another thing is that if we simplify the code in here, then anyway this
+    // conversion will be pushed into some inner method: simplifying here,
+    // will complicate the code someplace else.
+    // I would keep the interface contract intact, since if one day we need
+    // to boost the code performance, we could do it without any changes to
+    // LedgerFormatter interface.
+
     std::ostringstream oss;
     LedgerFormatter::instance().FormatAsHtml(*ledger_values_, oss);
     selected_values_as_html_ = oss.str();
