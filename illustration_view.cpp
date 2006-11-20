@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustration_view.cpp,v 1.53.2.2 2006-11-20 10:45:53 etarassov Exp $
+// $Id: illustration_view.cpp,v 1.53.2.3 2006-11-20 13:17:34 etarassov Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -49,6 +49,7 @@
 #include "illustration_document.hpp"
 #include "inputillus.hpp"
 #include "ledger.hpp"
+#include "ledger_formatter.hpp"
 #include "ledger_text_formats.hpp"
 #include "ledger_xsl.hpp"
 #include "mvc_controller.hpp"
@@ -162,10 +163,10 @@ warning() << "That command should have been disabled." << LMI_FLUSH;
 
 void IllustrationView::DisplaySelectedValuesAsHtml()
 {
-    // EVGENIY This assertion seems no longer to serve any purpose:
-    // the object is no longer used here. Instead, shouldn't the
-    // validity of ledger_formatter_ be asserted?
-    LMI_ASSERT(ledger_values_.get());
+    if(!ledger_values_)
+        {
+        fatal_error() << "A ledger has to be non-null." << LMI_FLUSH;
+        }
 
     // EVGENIY Is a stream the best abstraction for LedgerFormatter?
     // Apparently std::ostream.write() is the only stream function
@@ -173,7 +174,7 @@ void IllustrationView::DisplaySelectedValuesAsHtml()
     // std::string were used instead; is there a reason to do
     // otherwise?
     std::ostringstream oss;
-    ledger_formatter_.FormatAsHtml(oss);
+    LedgerFormatter::instance().FormatAsHtml(*ledger_values_, oss);
     selected_values_as_html_ = oss.str();
 
     html_window_->SetPage(selected_values_as_html_.c_str());
@@ -367,16 +368,21 @@ void IllustrationView::CopyLedgerToClipboard(enum_copy_option option)
 
     Timer timer;
 
+    if(!ledger_values_)
+        {
+        fatal_error() << "A ledger has to be non-null." << LMI_FLUSH;
+        }
+
     std::ostringstream oss;
     if(e_copy_full == option)
         {
-        ledger_formatter_.FormatAsTabDelimited(oss);
+        LedgerFormatter::instance().FormatAsTabDelimited(*ledger_values_, oss);
         }
     // TODO ?? CALCULATION_SUMMARY This assumes, without asserting,
     // that the enumeration has exactly two enumerators.
     else
         {
-        ledger_formatter_.FormatAsLightTSV(oss);
+        LedgerFormatter::instance().FormatAsLightTSV(*ledger_values_, oss);
         }
 
     status() << "Format: " << timer.stop().elapsed_msec_str() << std::flush;
@@ -435,37 +441,9 @@ void IllustrationView::Run(Input* overriding_input)
     status() << std::flush;
 }
 
-// TODO ?? EVGENIY This function was created merely as a kludge: class
-// CensusView calls MakeNewIllustrationDocAndView(), and for some
-// forgotten reason I didn't find a better way to pass the 'ledger'
-// shared_ptr.
-//
-// I'd prefer not to call it anywhere else, because that makes it
-// harder to remove the kludge.
-//
-// Anyway, I think that it's an error if '0 == get()' for that
-// shared_ptr argument, and that I should have asserted that here.
-//
-// Therefore, I think we can avoid the else-statement, which seems
-// suspicious anyway: how would a default-constructed LedgerFormatter
-// behave when we try to use it?
-//
-// And should ledger_formatter_ be held by value anyway? Why not use a
-// shared_ptr for it, as is done for ledger_values_, or probably a
-// scoped_ptr member instead? Then "ledger_formatter.hpp" could be
-// removed from the header, simplifying the physical design.
-
 void IllustrationView::SetLedger(boost::shared_ptr<Ledger const> ledger)
 {
     ledger_values_ = ledger;
-    if(ledger_values_.get())
-        {
-        ledger_formatter_ = LedgerFormatterFactory::Instance().CreateFormatter(*ledger_values_);
-        }
-    else
-        {
-        ledger_formatter_ = LedgerFormatter();
-        }
 }
 
 // This could be generalized as a function template if that ever

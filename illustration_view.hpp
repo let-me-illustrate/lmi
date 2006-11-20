@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustration_view.hpp,v 1.23.2.1 2006-11-20 10:45:53 etarassov Exp $
+// $Id: illustration_view.hpp,v 1.23.2.2 2006-11-20 13:17:34 etarassov Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -36,7 +36,6 @@
 
 #include "view_ex.hpp"
 
-#include "ledger_formatter.hpp"
 #include "obstruct_slicing.hpp"
 
 #include <boost/shared_ptr.hpp>
@@ -113,7 +112,6 @@ class IllustrationView
     wxHtmlWindow* html_window_;
     bool is_phony_;
     boost::shared_ptr<Ledger const> ledger_values_;
-    LedgerFormatter ledger_formatter_;
     std::string selected_values_as_html_;
 
     DECLARE_DYNAMIC_CLASS(IllustrationView)

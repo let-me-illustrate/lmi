@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_formatter.cpp,v 1.1.2.1 2006-11-20 12:18:08 etarassov Exp $
+// $Id: ledger_formatter.cpp,v 1.1.2.2 2006-11-20 13:17:34 etarassov Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -59,27 +59,19 @@
 #include <vector>
 
 //=============================================================================
-LedgerFormatterFactory& LedgerFormatterFactory::Instance()
+LedgerFormatter& LedgerFormatter::instance()
 {
-    static LedgerFormatterFactory factory;
-    return factory;
+    static LedgerFormatter formatter;
+    return formatter;
 }
 
 //=============================================================================
-LedgerFormatterFactory::LedgerFormatterFactory()
+LedgerFormatter::LedgerFormatter()
 {
 }
 
 //=============================================================================
-LedgerFormatter LedgerFormatterFactory::CreateFormatter
-    (Ledger const& ledger_values
-    )
-{
-    return LedgerFormatter(ledger_values);
-}
-
-//=============================================================================
-xslt_lmi::Stylesheet const& LedgerFormatterFactory::GetStylesheet
+xslt_lmi::Stylesheet const& LedgerFormatter::GetStylesheet
     (std::string const& filename
     )
 {
@@ -113,65 +105,28 @@ xslt_lmi::Stylesheet const& LedgerFormatterFactory::GetStylesheet
     return *stylesheet_ptr.get();
 }
 
-//=============================================================================
-LedgerFormatter::LedgerFormatter()
-    :ledger_values_(NULL)
-{
-}
+/// Returns a non-null pointer to a newly created xml_lmi::Document containing
+/// the xml data requested
 
-//=============================================================================
-LedgerFormatter::LedgerFormatter(Ledger const& ledger_values)
-    :ledger_values_(&ledger_values)
+LedgerFormatter::XmlDocumentPtr LedgerFormatter::GenerateXmlData
+    (Ledger const& ledger_values
+    ,enum_xml_version xml_version
+    )
 {
-}
-
-//=============================================================================
-LedgerFormatter::LedgerFormatter(LedgerFormatter const& rhs)
-    :ledger_values_(rhs.ledger_values_)
-{
-}
-
-//=============================================================================
-LedgerFormatter& LedgerFormatter::operator=(LedgerFormatter const& rhs)
-{
-    if (this != &rhs && ledger_values_ != rhs.ledger_values_)
-        {
-        ledger_values_ = rhs.ledger_values_;
-        }
-    return *this;
-}
-
-//=============================================================================
-xslt_lmi::Stylesheet const& LedgerFormatter::GetStylesheet
-    (std::string const& filename
-    ) const
-{
-    return LedgerFormatterFactory::Instance().GetStylesheet(filename);
-}
-
-//=============================================================================
-xml_lmi::Document const& LedgerFormatter::GetXmlDoc
-    (enum_xml_version xml_version
-    ) const
-{
-    if(!ledger_values_)
-        {
-        throw std::runtime_error("Can't generate xml for a NULL ledger.");
-        }
-
     XmlDocumentPtr document_ptr(new xml_lmi::Document);
     xml_lmi::Element& root
-        = *(document_ptr->create_root_node(ledger_values_->xml_root_name()));
+        = *(document_ptr->create_root_node(ledger_values.xml_root_name()));
 
-    ledger_values_->write_excerpt(root, xml_version);
+    ledger_values.write_excerpt(root, xml_version);
 
-    cached_xml_docs_[xml_version] = document_ptr;
-
-    return *document_ptr;
+    return document_ptr;
 }
 
 //=============================================================================
-void LedgerFormatter::FormatAsHtml(std::ostream& os) const
+void LedgerFormatter::FormatAsHtml
+    (Ledger const& ledger_values
+    ,std::ostream& os
+    )
 {
     try
         {
@@ -180,7 +135,7 @@ void LedgerFormatter::FormatAsHtml(std::ostream& os) const
             );
 
         stylesheet.transform
-            (GetXmlDoc(e_xml_calculation_summary)
+            (*GenerateXmlData(ledger_values, e_xml_calculation_summary)
             ,os
             ,xslt_lmi::Stylesheet::e_output_html
             );
@@ -197,7 +152,10 @@ void LedgerFormatter::FormatAsHtml(std::ostream& os) const
 }
 
 //=============================================================================
-void LedgerFormatter::FormatAsLightTSV(std::ostream& os) const
+void LedgerFormatter::FormatAsLightTSV
+    (Ledger const& ledger_values
+    ,std::ostream& os
+    )
 {
     try
         {
@@ -206,9 +164,8 @@ void LedgerFormatter::FormatAsLightTSV(std::ostream& os) const
                 .xslt_light_tab_delimited_filename()
             );
 
-        std::map<std::string,std::string> params;
         stylesheet.transform
-            (GetXmlDoc(e_xml_calculation_summary)
+            (*GenerateXmlData(ledger_values, e_xml_calculation_summary)
             ,os
             ,xslt_lmi::Stylesheet::e_output_text
             );
@@ -225,7 +182,10 @@ void LedgerFormatter::FormatAsLightTSV(std::ostream& os) const
 }
 
 //=============================================================================
-void LedgerFormatter::FormatAsTabDelimited(std::ostream& os) const
+void LedgerFormatter::FormatAsTabDelimited
+    (Ledger const& ledger_values
+    ,std::ostream& os
+    )
 {
     try
         {
@@ -234,7 +194,7 @@ void LedgerFormatter::FormatAsTabDelimited(std::ostream& os) const
             );
 
         stylesheet.transform
-            (GetXmlDoc(e_xml_spreadsheet)
+            (*GenerateXmlData(ledger_values, e_xml_spreadsheet)
             ,os
             ,xslt_lmi::Stylesheet::e_output_text
             );
@@ -251,16 +211,19 @@ void LedgerFormatter::FormatAsTabDelimited(std::ostream& os) const
 }
 
 //=============================================================================
-void LedgerFormatter::FormatAsXslFo(std::ostream& os) const
+void LedgerFormatter::FormatAsXslFo
+    (Ledger const& ledger_values
+    ,std::ostream& os
+    )
 {
     try
         {
         xslt_lmi::Stylesheet const& stylesheet = GetStylesheet
-            (ledger_values_->GetLedgerType().str() + ".xsl"
+            (ledger_values.GetLedgerType().str() + ".xsl"
             );
 
         stylesheet.transform
-            (GetXmlDoc(e_xml_full)
+            (*GenerateXmlData(ledger_values, e_xml_full)
             ,os
             ,xslt_lmi::Stylesheet::e_output_xml
             );
@@ -282,14 +245,11 @@ void LMI_SO PrintFormTabDelimitedXXX
     ,std::string const& file_name
     )
 {
-    LedgerFormatter formatter
-        (LedgerFormatterFactory::Instance().CreateFormatter(ledger_values)
-        );
-
     std::ofstream ofs
         (file_name.c_str()
         ,std::ios_base::out | std::ios_base::trunc
         );
-    formatter.FormatAsHtml(ofs);
+
+    LedgerFormatter::instance().FormatAsHtml(ledger_values, ofs);
 }
 

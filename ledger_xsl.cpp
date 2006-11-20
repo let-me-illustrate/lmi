@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xsl.cpp,v 1.14 2006-11-12 19:55:12 chicares Exp $
+// $Id: ledger_xsl.cpp,v 1.14.2.1 2006-11-20 13:17:34 etarassov Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -124,10 +124,7 @@ std::string write_ledger_to_pdf
 
     fs::ofstream ofs(xml_out_file, std::ios_base::out | std::ios_base::trunc);
 #if defined LMI_USE_NEW_REPORTS
-    LedgerFormatter formatter
-        (LedgerFormatterFactory::Instance().CreateFormatter(scaled_ledger)
-        );
-    formatter.FormatAsXslFo(ofs);
+    LedgerFormatter::instance().FormatAsXslFo(scaled_ledger, ofs);
 #else  // !defined LMI_USE_NEW_REPORTS
     scaled_ledger.write(ofs);
 #endif // !defined LMI_USE_NEW_REPORTS

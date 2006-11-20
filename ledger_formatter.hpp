@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_formatter.hpp,v 1.1 2006-11-12 19:56:51 chicares Exp $
+// $Id: ledger_formatter.hpp,v 1.1.2.1 2006-11-20 13:17:34 etarassov Exp $
 
 #ifndef ledger_formatter_hpp
 #define ledger_formatter_hpp
@@ -42,71 +42,37 @@
 class Ledger;
 class LedgerFormatter;
 
-/// LedgerFormatterFactory class
-///
-/// This singleton class manages XSL templates used by instances
-/// of LedgerFormatter class.
-
-class LMI_SO LedgerFormatterFactory
-{
-    typedef boost::shared_ptr<xslt_lmi::Stylesheet>  XmlStylesheetPtr;
-    typedef std::map<std::string, XmlStylesheetPtr> XmlStylesheets;
-
-  public:
-    static LedgerFormatterFactory& Instance();
-
-    LedgerFormatter CreateFormatter(Ledger const& ledger_values);
-
-    xslt_lmi::Stylesheet const& GetStylesheet(std::string const& filename);
-
-  private:
-    XmlStylesheets stylesheets_;
-
-    LedgerFormatterFactory();
-};
-
 /// LedgerFormatter class
 ///
 /// Implements ledger_values formatting into various media types
 /// such as html, csv, xsl-fo.
 ///
-/// It has value semantics. Instances of the class could only be obtained
-/// through LedgerFormatterFactory.
+/// Singleton. It caches XSL templates in memory.
 
 class LMI_SO LedgerFormatter
 {
   public:
-    // default empty constructor does nothing
-    LedgerFormatter();
+    static LedgerFormatter& instance();
 
-    LedgerFormatter(LedgerFormatter const&);
-    LedgerFormatter& operator=(LedgerFormatter const&);
-
-    void FormatAsHtml          (std::ostream&) const;
-    void FormatAsLightTSV      (std::ostream&) const;
-    void FormatAsTabDelimited  (std::ostream&) const;
-    void FormatAsXslFo         (std::ostream&) const;
-
-    Ledger const* GetLedger() const { return ledger_values_; }
+    void FormatAsHtml         (Ledger const&, std::ostream&);
+    void FormatAsLightTSV     (Ledger const&, std::ostream&);
+    void FormatAsTabDelimited (Ledger const&, std::ostream&);
+    void FormatAsXslFo        (Ledger const&, std::ostream&);
 
   private:
-    Ledger const* ledger_values_;
+    typedef boost::shared_ptr<xslt_lmi::Stylesheet> XmlStylesheetPtr;
+    typedef std::map<std::string, XmlStylesheetPtr> XmlStylesheets;
+
+    XmlStylesheets stylesheets_;
+
+    LedgerFormatter();
+
+    xslt_lmi::Stylesheet const& GetStylesheet(std::string const& filename);
 
     typedef boost::shared_ptr<xml_lmi::Document> XmlDocumentPtr;
 
-    mutable std::map<enum_xml_version,XmlDocumentPtr> cached_xml_docs_;
-
-    // generate the corresponding xml data if it was not already done
-    xml_lmi::Document const& GetXmlDoc(enum_xml_version) const;
-
-    xslt_lmi::Stylesheet const& GetStylesheet
-        (std::string const& filename
-        ) const;
-
-    friend class LedgerFormatterFactory;
-
-    // copy ctor, accessible to LedgerFormatterFactory only
-    LedgerFormatter(Ledger const& ledger_values);
+    // generate the corresponding xml data
+    XmlDocumentPtr GenerateXmlData(Ledger const&, enum_xml_version);
 };
 
 // A shortcut method, that opens a file for writing and uses a fresh instance
