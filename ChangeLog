@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.495 2006-11-16 18:11:16 rericksberg Exp $
+// $Id: ChangeLog,v 1.496 2006-11-22 15:48:22 rericksberg Exp $
 
 MAINTENANCE
 
@@ -8203,5 +8203,10 @@ Mark release candidate.
 20061116T1811Z <rericksberg@massmutual.com> [1208]
 
   illustration_view.cpp
-Default to 8.5 X 11 Letter Size printing Calculation Summary
+Default to 8.5 X 11 Letter Size printing Calculation Summary.
+
+20061122T1546Z <rericksberg@massmutual.com> [1208]
+
+  version.hpp
+Mark release candidate.
 
