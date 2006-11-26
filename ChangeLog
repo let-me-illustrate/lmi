@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.496 2006-11-22 15:48:22 rericksberg Exp $
+// $Id: ChangeLog,v 1.497 2006-11-26 20:56:37 chicares Exp $
 
 MAINTENANCE
 
@@ -8209,4 +8209,21 @@ Default to 8.5 X 11 Letter Size printing Calculation Summary.
 
   version.hpp
 Mark release candidate.
+
+20061126T2051Z <chicares@cox.net> [1208]
+
+  xml_lmi_fwd.hpp
+  xmlpp_lmi_fwd.hpp
+Forward-declare wrapper classes.
+
+20061126T2052Z <chicares@cox.net> [1209]
+
+  illustration_view.hpp
+Mark a defect in the physical design.
+
+20061126T2056Z <chicares@cox.net> [1210]
+
+  ledger_formatter.cpp
+  ledger_formatter.hpp
+Use available wrapper for a libxml++ type.
 

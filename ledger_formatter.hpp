@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_formatter.hpp,v 1.1 2006-11-12 19:56:51 chicares Exp $
+// $Id: ledger_formatter.hpp,v 1.2 2006-11-26 20:56:37 chicares Exp $
 
 #ifndef ledger_formatter_hpp
 #define ledger_formatter_hpp
@@ -72,6 +72,8 @@ class LMI_SO LedgerFormatterFactory
 ///
 /// It has value semantics. Instances of the class could only be obtained
 /// through LedgerFormatterFactory.
+/// TODO ?? CALCULATION_SUMMARY Is that so? Doesn't the default ctor
+/// create an instance?
 
 class LMI_SO LedgerFormatter
 {
@@ -92,12 +94,13 @@ class LMI_SO LedgerFormatter
   private:
     Ledger const* ledger_values_;
 
-    typedef boost::shared_ptr<xml_lmi::Document> XmlDocumentPtr;
-
-    mutable std::map<enum_xml_version,XmlDocumentPtr> cached_xml_docs_;
+    mutable std::map
+        <enum_xml_version
+        ,boost::shared_ptr<xml_lmi::xml_document>
+        > cached_xml_docs_;
 
     // generate the corresponding xml data if it was not already done
-    xml_lmi::Document const& GetXmlDoc(enum_xml_version) const;
+    xml_lmi::xml_document const& GetXmlDoc(enum_xml_version) const;
 
     xslt_lmi::Stylesheet const& GetStylesheet
         (std::string const& filename
