@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustration_view.hpp,v 1.23 2006-11-13 05:35:17 chicares Exp $
+// $Id: illustration_view.hpp,v 1.24 2006-11-26 20:52:25 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -36,7 +36,7 @@
 
 #include "view_ex.hpp"
 
-#include "ledger_formatter.hpp"
+#include "ledger_formatter.hpp" // TODO ?? CALCULATION_SUMMARY Avoid including this here.
 #include "obstruct_slicing.hpp"
 
 #include <boost/shared_ptr.hpp>
