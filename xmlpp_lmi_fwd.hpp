@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xmlpp_lmi_fwd.hpp,v 1.1 2006-11-07 03:23:21 chicares Exp $
+// $Id: xmlpp_lmi_fwd.hpp,v 1.2 2006-11-26 20:51:05 chicares Exp $
 
 #ifndef xmlpp_lmi_fwd_hpp
 #define xmlpp_lmi_fwd_hpp
@@ -39,6 +39,9 @@ namespace xmlpp
 
 namespace xml_lmi
 {
+    class dom_parser;
+    class xml_document;
+
     typedef xmlpp::Attribute Attribute;
     typedef xmlpp::Document  Document;
     typedef xmlpp::Element   Element;
