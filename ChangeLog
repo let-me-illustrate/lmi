@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.498 2006-11-27 03:55:47 chicares Exp $
+// $Id: ChangeLog,v 1.499 2006-11-27 05:27:44 chicares Exp $
 
 MAINTENANCE
 
@@ -8242,4 +8242,22 @@ other removed along with these macros.
 
   ledger_xml_io2.cpp
 Refactor addition of nodes, making it library independent.
+
+20061127T0457Z <chicares@cox.net> [1211]
+
+  xml_lmi.hpp
+  xmlpp_lmi.hpp
+Document a guarantee.
+
+20061127T0459Z <chicares@cox.net> [1212]
+
+  ledger_xml_io2.cpp
+Refactor attribute manipulation, making it library independent.
+
+20061127T0527Z <chicares@cox.net> [1213]
+
+  ledger_xml_io2.cpp
+Refactor iteration across elements, making it library independent.
+See:
+  http://lists.gnu.org/archive/html/lmi/2006-11/msg00046.html
 

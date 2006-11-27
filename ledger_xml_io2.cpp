@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xml_io2.cpp,v 1.5 2006-11-27 04:59:19 chicares Exp $
+// $Id: ledger_xml_io2.cpp,v 1.6 2006-11-27 05:27:44 chicares Exp $
 
 #include "ledger.hpp"
 
@@ -491,58 +491,23 @@ double_formatter_t::double_formatter_t()
         xml_lmi::dom_parser parser(format_path);
 
         // We will not check 'format.xml' for validity here. It should be done during tests.
-#if 1
-        xml_lmi::Element const& root_node = parser.root_node("columns");
+        // TODO ?? CALCULATION_SUMMARY Add a unit test for that.
 
-        xml_lmi::NodeContainer const columns = root_node.get_children("column");
-        for
-            (xml_lmi::NodeContainer::const_iterator it = columns.begin()
-            ,end = columns.end()
-            ;it != end
-            ;++it
-            )
-#else // not 1
-// EVGENIY This section is for your review.
         xml_lmi::Element const& root_node = parser.root_node("columns");
         xml_lmi::ElementContainer const columns
             (xml_lmi::child_elements(root_node, "column")
             );
         typedef xml_lmi::ElementContainer::const_iterator eci;
         for(eci it = columns.begin(); it != columns.end(); ++it)
-#endif // not 1
             {
-            xml_lmi::Element const* column_element
-                = dynamic_cast<xml_lmi::Element const*>(*it);
-            // a 'column' node is not an element node, skip it
-            if(!column_element)
-                {
-                continue;
-                }
-
-            value_id id = value_id::from_xml_element(*column_element);
+            value_id id = value_id::from_xml_element(**it);
 
             // a 'column' node has to have @name attribute
             if(id.empty())
                 {
                 continue;
                 }
-#if 1
-            xml_lmi::NodeContainer const formats = (*it)->get_children("format");
-            // skip nodes without format information
-            if(formats.empty())
-                {
-                continue;
-                }
 
-            xml_lmi::Element const* format_element
-                = dynamic_cast<xml_lmi::Element const*>(*formats.begin());
-            // a 'column/format' node is not an element node, skip it
-            if(!format_element)
-                {
-                continue;
-                }
-#else // not 1
-// EVGENIY This section is for your review.
             xml_lmi::ElementContainer const formats
                 (xml_lmi::child_elements(**it, "format")
                 );
@@ -553,16 +518,7 @@ double_formatter_t::double_formatter_t()
                 continue;
                 }
 
-            xml_lmi::Element const* format_element = formats[0];
-            // EVGENIY What does the following statement actually do?
-            // I don't understand how the if-condition can ever be true.
-            //
-            // a 'column/format' node is not an element node, skip it
-            if(!format_element)
-                {
-                continue;
-                }
-#endif // not 1
+            xml_lmi::Element const& format_element = *formats[0];
 
             // format has already been specified. show a warning and continue
             if(format_map.find(id.name()) != format_map.end())
@@ -573,12 +529,13 @@ double_formatter_t::double_formatter_t()
                     << "' contains more than one format definition for '"
                     << id.name()
                     << "' on line "
-                    << format_element->get_line()
+                    << format_element.get_line()
                     << "."
-                    << LMI_FLUSH;
+                    << LMI_FLUSH
+                    ;
                 }
 
-            std::string const format_name = xml_lmi::get_content(*format_element);
+            std::string const format_name = xml_lmi::get_content(format_element);
 
             // unknown format specified
             if(known_formats.find(format_name) == known_formats.end())
@@ -598,7 +555,7 @@ double_formatter_t::double_formatter_t()
             {
             std::ostringstream oss;
             oss
-                << "Could not read no format definitions from '"
+                << "Could not read any format definitions from '"
                 << format_path
                 << "'. File is empty or has invalid format."
                 ;
