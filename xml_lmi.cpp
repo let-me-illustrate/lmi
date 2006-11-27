@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xml_lmi.cpp,v 1.10 2006-11-07 04:38:15 chicares Exp $
+// $Id: xml_lmi.cpp,v 1.11 2006-11-27 15:40:16 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -260,10 +260,9 @@ void add_node
     element.push_back(xml_lmi::Element(name.c_str(), content.c_str()));
 }
 
-// TODO ?? Second argument not yet implemented.
 xml_lmi::ElementContainer child_elements
     (xml_lmi::Element const& parent
-    ,std::string const& // name
+    ,std::string const& name
     )
 {
     try
@@ -271,12 +270,10 @@ xml_lmi::ElementContainer child_elements
         xml_lmi::ElementContainer z;
         for(NodeConstIterator i = parent.begin(); i != parent.end(); ++i)
             {
-            if(!i->is_text())
+            if(!i->is_text() && (name.empty() || name == i->get_name()))
                 {
 #if defined USING_CURRENT_XMLWRAPP
-// Note that this:
-//   z.push_back(&*i);
-// does not work.
+                // Note that 'z.push_back(&*i);' does not work.
                 z.push_back(i->self());
 #else  // !defined USING_CURRENT_XMLWRAPP
                 z.push_back(ElementPointer(i));
