@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xml_lmi.hpp,v 1.11 2006-11-27 04:57:40 chicares Exp $
+// $Id: xml_lmi.hpp,v 1.12 2006-11-27 16:51:21 chicares Exp $
 
 #ifndef xml_lmi_hpp
 #define xml_lmi_hpp
@@ -60,9 +60,7 @@ namespace xml_lmi
         dom_parser(std::istream&);
         ~dom_parser();
 
-#if defined USING_CURRENT_XMLWRAPP
         Document const& document() const;
-#endif // defined USING_CURRENT_XMLWRAPP
         Element const& root_node(std::string const& expected_name) const;
 
       private:
@@ -80,24 +78,14 @@ namespace xml_lmi
         xml_document(std::string const& root_node_name);
         ~xml_document();
 
-#if defined USING_CURRENT_XMLWRAPP
         Document const& document() const {return *document_;}
-#else  // !defined USING_CURRENT_XMLWRAPP
-        Element  const& document() const {return *root_;}
-#endif // !defined USING_CURRENT_XMLWRAPP
-
         Element& root_node();
-
         std::string str();
 
       private:
         std::string                    error_context_;
         boost::scoped_ptr<Initializer> initializer_;
-#if defined USING_CURRENT_XMLWRAPP
         boost::scoped_ptr<Document>    document_;
-#else  // !defined USING_CURRENT_XMLWRAPP
-        boost::scoped_ptr<Element>     root_;
-#endif // !defined USING_CURRENT_XMLWRAPP
     };
 
 #define ADD_NODE_0(element, variable_name, node_name) \
