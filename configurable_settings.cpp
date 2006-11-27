@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: configurable_settings.cpp,v 1.27 2006-11-14 04:35:27 chicares Exp $
+// $Id: configurable_settings.cpp,v 1.28 2006-11-27 15:41:42 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -190,35 +190,15 @@ void configurable_settings::load()
         }
 }
 
-// TODO ?? CALCULATION_SUMMARY This function must be rewritten.
 void configurable_settings::save() const
 {
-// TODO ?? CALCULATION_SUMMARY If we want to do this up front, then
-// it should be done in configuration_filepath(). It may be better,
-// though, to detect failure at the bottom of the function than to
-// predict it at the top.
-#if 0
-    if(access(configuration_filepath().c_str(), W_OK))
-        {
-        // User could choose to ignore this error and the only thing he risks
-        // in that case is configurable settings not saved.
-        fatal_error()
-            << "Configuration settings file '"
-            << configuration_filepath()
-            << "' is not writeable."
-            << LMI_FLUSH
-            ;
-        return; // unreachable code
-        }
-#endif // 0
-
-    xml_lmi::dom_parser parser(configuration_filepath().string());
-    xml_lmi::Document& document = const_cast<xml_lmi::Document&>(parser.document());
-    xml_lmi::Element& root = const_cast<xml_lmi::Element&>(parser.root_node(xml_root_name()));
+    xml_lmi::xml_document document(xml_root_name());
+    xml_lmi::Element& root = document.root_node();
 
     std::vector<std::string>::const_iterator i;
     for(i = member_names().begin(); i != member_names().end(); ++i)
         {
+        // TODO ?? Move these things to class global_settings.
         if("xml_schema_filename"               == *i) continue;
         if("xsl_directory"                     == *i) continue;
         if("xslt_format_xml_filename"          == *i) continue;
@@ -226,50 +206,9 @@ void configurable_settings::save() const
         if("xslt_light_tab_delimited_filename" == *i) continue;
         if("xslt_tab_delimited_filename"       == *i) continue;
 
-        std::string const& name = *i;
-        std::string const content = operator[](name).str();
-        xml_lmi::Element* element = NULL;
-
-        xml_lmi::ElementContainer elements
-            (xml_lmi::child_elements(root, name)
-            );
-
-        // Now write the new (or the same old) value to the last node with
-        // the name. The motivation is to allow multiple nodes with the same
-        // name in the file, while only the last one determines the value.
-        // If no node exists we will need to create a new fresh node.
-        if(elements.empty())
-            {
-            element = root.add_child(name);
-            }
-        else
-            {
-            // the element with the 'name' exist, we have to clear it up
-            element = elements.back();
-            xml_lmi::NodeContainer nodes = element->get_children();
-            xml_lmi::NodeContainer::iterator it;
-            for(it = nodes.begin(); it != nodes.end(); ++it)
-                {
-                element->remove_child(*it);
-                }
-            }
-
-        if(!element)
-            {
-            fatal_error()
-                << "Cannot create a new node '"
-                << name
-                << "' and write its value '"
-                << content
-                << "' into '"
-                << configuration_filepath().string()
-                << "'."
-                << LMI_FLUSH
-                ;
-            }
-        // finally put the new value into the element
-        element->add_child_text(content);
+        xml_lmi::add_node(root, *i, operator[](*i).str());
         }
+
 #if 0
     fs::ofstream ofs
         (configuration_filepath()
