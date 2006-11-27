@@ -19,12 +19,20 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xslt_lmi.cpp,v 1.1 2006-11-12 19:56:51 chicares Exp $
+// $Id: xslt_lmi.cpp,v 1.2 2006-11-27 06:23:50 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
 #   pragma hdrstop
 #endif // __BORLANDC__
+
+// TODO ?? CALCULATION_SUMMARY Obviously this must be rewritten.
+// Probably xsltwrapp should replace this entire facility.
+#if !defined USING_LIBXMLPP
+#   define private public
+#   include <xmlwrapp/document.h>
+#   undef private
+#endif // !defined USING_LIBXMLPP
 
 #include "xslt_lmi.hpp"
 
@@ -43,6 +51,15 @@
 
 namespace xslt_lmi
 {
+xmlDoc* raw_document(Document const& document)
+{
+#if defined USING_LIBXMLPP
+    return const_cast<xmlDoc*>(document.cobj());
+#else  // !defined USING_LIBXMLPP
+    return reinterpret_cast<xmlDoc*>(const_cast<Document&>(document).get_doc_data());
+#endif // !defined USING_LIBXMLPP
+}
+
 xslt_lmi::Stylesheet::Stylesheet(std::string const& filename)
     :stylesheet_(NULL)
 {
@@ -84,11 +101,11 @@ xslt_lmi::Stylesheet::Stylesheet(Document const& document)
     try
         {
         error_context_ = "Unable to parse xsl stylesheet document from xml: ";
-        if(0 == document.cobj())
+        if(0 == raw_document(document))
             {
             throw std::runtime_error("Document is empty.");
             }
-        set_stylesheet(xsltParseStylesheetDoc(const_cast<xmlDoc*>(document.cobj())));
+        set_stylesheet(xsltParseStylesheetDoc(raw_document(document)));
 
         if(0 == stylesheet_)
             {
@@ -172,7 +189,7 @@ void xslt_lmi::Stylesheet::transform
         boost::shared_ptr<xmlDoc> xml_document_ptr
             (xsltApplyStylesheet
                 (stylesheet_
-                ,const_cast<xmlDoc*>(document.cobj())
+                ,raw_document(document)
                 ,params_ptr
                 )
             );

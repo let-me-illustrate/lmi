@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.499 2006-11-27 05:27:44 chicares Exp $
+// $Id: ChangeLog,v 1.500 2006-11-27 06:23:50 chicares Exp $
 
 MAINTENANCE
 
@@ -8260,4 +8260,14 @@ Refactor attribute manipulation, making it library independent.
 Refactor iteration across elements, making it library independent.
 See:
   http://lists.gnu.org/archive/html/lmi/2006-11/msg00046.html
+
+20061127T0554Z <chicares@cox.net> [1214]
+
+  ledger_xml_io2.cpp
+Remove vestiges of xml-library dependence.
+
+20061127T0623Z <chicares@cox.net> [1215]
+
+  xslt_lmi.cpp
+Remove xml-library dependence.
 
