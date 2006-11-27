@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.501 2006-11-27 15:41:42 chicares Exp $
+// $Id: ChangeLog,v 1.502 2006-11-27 16:51:21 chicares Exp $
 
 MAINTENANCE
 
@@ -8283,4 +8283,11 @@ Simplify writing the configuration file--see
   "What have we done that should be undone?"
 here:
   http://lists.gnu.org/archive/html/lmi/2006-11/msg00050.html
+
+20061127T1651Z <chicares@cox.net> [1213]
+
+  xml_lmi.cpp
+  xml_lmi.hpp
+  xml_lmi_fwd.hpp
+Remove support for any but the latest version of xmlwrapp.
 
