@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xml_lmi.cpp,v 1.11 2006-11-27 15:40:16 chicares Exp $
+// $Id: xml_lmi.cpp,v 1.12 2006-11-27 16:51:21 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -35,10 +35,8 @@
 #include "alert.hpp"
 #include "istream_to_string.hpp"
 
-#if defined USING_CURRENT_XMLWRAPP
-#   include <xmlwrapp/attributes.h>
-#   include <xmlwrapp/document.h>
-#endif // defined USING_CURRENT_XMLWRAPP
+#include <xmlwrapp/attributes.h>
+#include <xmlwrapp/document.h>
 #include <xmlwrapp/init.h>
 #include <xmlwrapp/tree_parser.h>
 
@@ -76,13 +74,9 @@ xml_lmi::dom_parser::dom_parser(std::string const& filename)
             }
         if(true == parser_->operator!())
             {
-#if defined USING_CURRENT_XMLWRAPP
             throw std::runtime_error
                 ("Parser failed: " + parser_->get_error_message()
                 );
-#else  // !defined USING_CURRENT_XMLWRAPP
-            throw std::runtime_error("Parser failed.");
-#endif // !defined USING_CURRENT_XMLWRAPP
             }
         }
     catch(std::exception const& e)
@@ -127,13 +121,9 @@ xml_lmi::dom_parser::dom_parser(std::istream& is)
             }
         if(true == parser_->operator!())
             {
-#if defined USING_CURRENT_XMLWRAPP
             throw std::runtime_error
                 ("Parser failed: " + parser_->get_error_message()
                 );
-#else  // !defined USING_CURRENT_XMLWRAPP
-            throw std::runtime_error("Parser failed.");
-#endif // !defined USING_CURRENT_XMLWRAPP
             }
         }
     catch(std::exception const& e)
@@ -147,7 +137,6 @@ xml_lmi::dom_parser::dom_parser(std::istream& is)
 xml_lmi::dom_parser::~dom_parser()
 {}
 
-#if defined USING_CURRENT_XMLWRAPP
 /// Return the parsed document.
 ///
 /// Preconditions: member parser_ has a document.
@@ -169,7 +158,6 @@ xml_lmi::Document const& xml_lmi::dom_parser::document() const
         throw std::logic_error("Unreachable"); // Silence compiler warning.
         }
 }
-#endif // defined USING_CURRENT_XMLWRAPP
 
 /// Return the parsed document's root node.
 ///
@@ -188,12 +176,8 @@ xml_lmi::Element const& xml_lmi::dom_parser::root_node
 {
     try
         {
-#if defined USING_CURRENT_XMLWRAPP
         xml_lmi::Document const& document = parser_->get_document();
         xml_lmi::Element const& root = document.get_root_node();
-#else  // !defined USING_CURRENT_XMLWRAPP
-        xml_lmi::Element const& root = parser_->get_root_node();
-#endif // !defined USING_CURRENT_XMLWRAPP
         if(!expected_name.empty() && expected_name != root.get_name())
             {
             std::ostringstream oss;
@@ -218,11 +202,7 @@ xml_lmi::Element const& xml_lmi::dom_parser::root_node
 
 xml_lmi::xml_document::xml_document(std::string const& root_node_name)
     :initializer_(new Initializer)
-#if defined USING_CURRENT_XMLWRAPP
     ,document_   (new xml_lmi::Document(root_node_name.c_str()))
-#else  // !defined USING_CURRENT_XMLWRAPP
-    ,root_       (new xml_lmi::Element (root_node_name.c_str()))
-#endif // !defined USING_CURRENT_XMLWRAPP
 {
 }
 
@@ -231,24 +211,14 @@ xml_lmi::xml_document::~xml_document()
 
 xml_lmi::Element& xml_lmi::xml_document::root_node()
 {
-#if defined USING_CURRENT_XMLWRAPP
     return document_->get_root_node();
-#else  // !defined USING_CURRENT_XMLWRAPP
-    return *root_;
-#endif // !defined USING_CURRENT_XMLWRAPP
 }
 
 std::string xml_lmi::xml_document::str()
 {
-#if defined USING_CURRENT_XMLWRAPP
     std::string s;
     document_->save_to_string(s);
     return s;
-#else  // !defined USING_CURRENT_XMLWRAPP
-    std::string s;
-    root_->node_to_string(s);
-    return s;
-#endif // !defined USING_CURRENT_XMLWRAPP
 }
 
 void add_node
@@ -272,12 +242,8 @@ xml_lmi::ElementContainer child_elements
             {
             if(!i->is_text() && (name.empty() || name == i->get_name()))
                 {
-#if defined USING_CURRENT_XMLWRAPP
                 // Note that 'z.push_back(&*i);' does not work.
                 z.push_back(i->self());
-#else  // !defined USING_CURRENT_XMLWRAPP
-                z.push_back(ElementPointer(i));
-#endif // !defined USING_CURRENT_XMLWRAPP
                 }
             }
         return z;
@@ -336,7 +302,6 @@ bool get_attr
 {
     try
         {
-#if defined USING_CURRENT_XMLWRAPP
         xml::attributes const& attrs = element.get_attributes();
         xml::attributes::const_iterator i = attrs.find(name.c_str());
         if(i != attrs.end())
@@ -348,9 +313,6 @@ bool get_attr
             {
             return false;
             }
-#else  // !defined USING_CURRENT_XMLWRAPP
-        return element.get_attr(name.c_str(), value);
-#endif // !defined USING_CURRENT_XMLWRAPP
         }
     catch(std::exception const& e)
         {
@@ -367,11 +329,7 @@ void set_attr
 {
     try
         {
-#if defined USING_CURRENT_XMLWRAPP
         element.get_attributes().insert(name.c_str(), value.c_str());
-#else  // !defined USING_CURRENT_XMLWRAPP
-        element.set_attr(name.c_str(), value.c_str());
-#endif // !defined USING_CURRENT_XMLWRAPP
         }
     catch(std::exception const& e)
         {

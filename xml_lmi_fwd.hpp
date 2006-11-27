@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xml_lmi_fwd.hpp,v 1.3 2006-11-26 20:51:05 chicares Exp $
+// $Id: xml_lmi_fwd.hpp,v 1.4 2006-11-27 16:51:21 chicares Exp $
 
 #ifndef xml_lmi_fwd_hpp
 #define xml_lmi_fwd_hpp
@@ -32,10 +32,8 @@
 
 namespace xml // This is xmlwrapp's namespace.
 {
-#if defined USING_CURRENT_XMLWRAPP
     class attributes;
     class document;
-#endif // defined USING_CURRENT_XMLWRAPP
     class init;
     class node;
     class tree_parser;
@@ -48,10 +46,8 @@ namespace xml_lmi
     class dom_parser;
     class xml_document;
 
-#if defined USING_CURRENT_XMLWRAPP
     typedef xml::attributes Attribute;
     typedef xml::document   Document;
-#endif // defined USING_CURRENT_XMLWRAPP
     typedef xml::node       Element;
 
 // Something like this might be useful:
