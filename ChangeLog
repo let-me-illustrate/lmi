@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.497 2006-11-26 20:56:37 chicares Exp $
+// $Id: ChangeLog,v 1.498 2006-11-27 03:55:47 chicares Exp $
 
 MAINTENANCE
 
@@ -8226,4 +8226,20 @@ Mark a defect in the physical design.
   ledger_formatter.cpp
   ledger_formatter.hpp
 Use available wrapper for a libxml++ type.
+
+20061127T0352Z <chicares@cox.net> [1210]
+
+  xml_lmi.hpp
+  xmlpp_lmi.hpp
+Add more macros to address differing library philosophies: xmlwrapp
+permits creating whole branches of new elements and grafting them onto
+the DOM tree later, whereas libxml++ permits building new branches
+from an existing trunk, and neither seems to accommodate the other's
+method. Soon a single xml library will be chosen and support for the
+other removed along with these macros.
+
+20061127T0355Z <chicares@cox.net> [1211]
+
+  ledger_xml_io2.cpp
+Refactor addition of nodes, making it library independent.
 
