@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xml_io2.cpp,v 1.4 2006-11-27 03:55:47 chicares Exp $
+// $Id: ledger_xml_io2.cpp,v 1.5 2006-11-27 04:59:19 chicares Exp $
 
 #include "ledger.hpp"
 
@@ -40,7 +40,6 @@
 
 #include <boost/filesystem/exception.hpp>
 #include <boost/filesystem/path.hpp>
-#include <libxml++/libxml++.h>
 
 #include <algorithm>
 #include <fstream>
@@ -239,10 +238,10 @@ void value_id::set_to_xml_element(xml_lmi::Element& element) const
 {
     if(!empty())
         {
-        element.set_attribute("name", name());
+        xml_lmi::set_attr(element, "name", name());
         if(basis())
             {
-            element.set_attribute("basis", *basis());
+            xml_lmi::set_attr(element, "basis", *basis());
             }
         }
 }
@@ -252,22 +251,17 @@ void value_id::get_from_xml_element(xml_lmi::Element const& element)
     name_ = "";
     basis_ = NULL;
 
-    xml_lmi::Attribute const* name_attribute
-        = element.get_attribute("name");
-    if(NULL == name_attribute)
-        {
-        return;
-        }
-    name_ = name_attribute->get_value();
-
-    xml_lmi::Attribute const* basis_attribute
-        = element.get_attribute("basis");
-    if(NULL == basis_attribute)
+    if(!xml_lmi::get_attr(element, "name", name_))
         {
         return;
         }
 
-    std::string const basis_value = basis_attribute->get_value();
+    std::string basis_value;
+    if(!xml_lmi::get_attr(element, "basis", basis_value))
+        {
+        return;
+        }
+
     string_vector_t::const_iterator it = std::find
         (suffixes.begin()
         ,suffixes.end()
@@ -1330,10 +1324,14 @@ void Ledger::writeXXX(std::ostream& os) const
     root << *this;
 
     std::string const lmi_namespace("http://savannah.nongnu.org/projects/lmi");
-
+// TODO ?? CALCULATION_SUMMARY XMLWRAPP !! Consider adding namespace
+// support to xmlwrapp.
+#if 0 && defined USING_LIBXMLPP
     root.set_namespace_declaration(lmi_namespace);
     root.set_namespace_declaration("http://www.w3.org/2001/XMLSchema-instance", "xsi");
-    root.set_attribute("noNamespaceSchemaLocation", lmi_namespace + " schema.xsd", "xsi");
+    xml_lmi::set_attr(root, "noNamespaceSchemaLocation", lmi_namespace + " schema.xsd", "xsi");
+#endif // defined USING_LIBXMLPP
+    xml_lmi::set_attr(root, "noNamespaceSchemaLocation", lmi_namespace + " schema.xsd");
 
     os << doc;
 }
