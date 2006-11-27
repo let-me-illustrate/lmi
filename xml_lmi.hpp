@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xml_lmi.hpp,v 1.10 2006-11-27 03:52:44 chicares Exp $
+// $Id: xml_lmi.hpp,v 1.11 2006-11-27 04:57:40 chicares Exp $
 
 #ifndef xml_lmi_hpp
 #define xml_lmi_hpp
@@ -161,7 +161,8 @@ namespace xml_lmi
 
     /// Get a given attribute of an xml element.
     ///
-    /// Return false if the element has no such attribute.
+    /// If the element has no such attribute, then return false and
+    /// guarantee not to modify 'value'.
 
     bool get_attr
         (Element const&
