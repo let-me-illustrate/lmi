@@ -19,16 +19,12 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xml_lmi_fwd.hpp,v 1.4 2006-11-27 16:51:21 chicares Exp $
+// $Id: xml_lmi_fwd.hpp,v 1.5 2006-11-28 05:19:45 chicares Exp $
 
 #ifndef xml_lmi_fwd_hpp
 #define xml_lmi_fwd_hpp
 
 #include "config.hpp"
-
-#if defined USING_LIBXMLPP
-#   include "xmlpp_lmi_fwd.hpp"
-#else // !defined USING_LIBXMLPP
 
 namespace xml // This is xmlwrapp's namespace.
 {
@@ -54,8 +50,6 @@ namespace xml_lmi
 //    typedef std::vector<xml::node::const_iterator> ElementContainer;
 // but a nested class can't be forward declared.
 } // namespace xml_lmi
-
-#endif // !defined USING_LIBXMLPP
 
 #endif //xml_lmi_fwd_hpp
 

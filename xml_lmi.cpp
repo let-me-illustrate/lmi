@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xml_lmi.cpp,v 1.12 2006-11-27 16:51:21 chicares Exp $
+// $Id: xml_lmi.cpp,v 1.13 2006-11-28 05:19:45 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -27,10 +27,6 @@
 #endif // __BORLANDC__
 
 #include "xml_lmi.hpp"
-
-#if defined USING_LIBXMLPP
-#   include "xmlpp_lmi.cpp"
-#else // !defined USING_LIBXMLPP
 
 #include "alert.hpp"
 #include "istream_to_string.hpp"
@@ -344,6 +340,4 @@ std::ostream& operator<<(std::ostream& os, xml_lmi::xml_document const& d)
     os << d.document();
     return os;
 }
-
-#endif // !defined USING_LIBXMLPP
 

@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: workhorse.make,v 1.79 2006-11-11 20:07:51 chicares Exp $
+# $Id: workhorse.make,v 1.80 2006-11-28 05:19:45 chicares Exp $
 
 ################################################################################
 
@@ -116,8 +116,6 @@ effective_default_target: $(default_targets)
 ifeq (gcc,$(toolset))
   gcc_version := $(shell $(CXX) -dumpversion)
 endif
-
-xml_wrapper ?= xmlwrapp_0_2_0
 
 ################################################################################
 
@@ -239,51 +237,31 @@ wx_config_check:
 #   http://lists.gnu.org/archive/html/lmi/2006-10/msg00046.html
 
 # A default installation places gnome xml-library headers here:
-#  libxml++: /usr/local/include/libxml++-2.6/libxml++
 #  libxml2:  /usr/local/include/libxml2/libxml
 #  libxslt:  /usr/local/include/libxslt
-# The first provides no '*-config' script at all. The last two provide
-# '*-config' scripts that don't respect an overriding $(prefix): they
-# apparently hardcode the paths above, so there's no point in calling
-# them.
+# Both those libraries provide '*-config' scripts that don't respect
+# an overriding $(prefix): they apparently hardcode the paths above,
+# so there's no point in calling them.
 
 # Directory /usr/local/include/ is searched for headers, but only
 # after the special directory for third-party libraries, in order to
 # make it easier to test or use later library versions that have
 # already been installed in the former directory.
 
-ifeq (xmlwrapp_0_5_0,$(findstring xmlwrapp_0_5_0,$(xml_wrapper)))
-  xmlwrapp_include_directory := xmlwrapp050
-endif
-
-ifeq (libxmlpp,$(findstring libxmlpp,$(xml_wrapper)))
-  libxmlpp_include_directory := $(system_root)/usr/local/include/libxml++-2.6
-endif
-
 all_include_directories := \
   $(src_dir) \
   $(overriding_include_directories) \
   $(compiler_include_directory) \
   $(wx_include_paths) \
-  $(system_root)/opt/lmi/third_party/include/$(xmlwrapp_include_directory) \
   $(system_root)/opt/lmi/third_party/include \
   $(system_root)/usr/local/include \
-  $(libxmlpp_include_directory) \
   $(system_root)/usr/local/include/libxml2 \
-
-ifeq (xmlwrapp_0_5_0,$(findstring xmlwrapp_0_5_0,$(xml_wrapper)))
-  xmlwrapp_source_directory := xmlwrapp050/libxml
-endif
-
-ifeq (xmlwrapp_0_2_0,$(findstring xmlwrapp_0_2_0,$(xml_wrapper)))
-  xmlwrapp_source_directory := libxml
-endif
 
 all_source_directories := \
   $(src_dir) \
   $(system_root)/opt/lmi/third_party/src/boost/libs/filesystem/src \
   $(system_root)/opt/lmi/third_party/src/cgicc \
-  $(system_root)/opt/lmi/third_party/src/$(xmlwrapp_source_directory) \
+  $(system_root)/opt/lmi/third_party/src/libxml \
 
 vpath lib%.a          $(CURDIR)
 vpath %.o             $(CURDIR)
@@ -520,13 +498,9 @@ endif
 # TODO ?? Consider refining it anyway, because it's unclean: libxml2
 # isn't actually required for all targets.
 
-ifneq (libxmlpp,$(findstring libxmlpp,$(xml_wrapper)))
-  xml_wrapper_library := -lxmlwrapp
-endif
-
 REQUIRED_LIBS := \
+  -lxmlwrapp \
   $(platform_boost_libraries) \
-  $(xml_wrapper_library) \
   $(platform_gnome_xml_libraries) \
 
 wx_ldflags = \
@@ -583,17 +557,8 @@ REQUIRED_CFLAGS = \
 
 # TODO ?? Define $(wx_cxxflags) for msw as well as posix.
 
-ifeq (xmlwrapp_0_5_0,$(findstring xmlwrapp_0_5_0,$(xml_wrapper)))
-  short_term_workaround := -DUSING_CURRENT_XMLWRAPP
-endif
-
-ifeq (libxmlpp,$(findstring libxmlpp,$(xml_wrapper)))
-  short_term_workaround := -DUSING_LIBXMLPP
-endif
-
 REQUIRED_CXXFLAGS = \
   $(CXX_WARNINGS) \
-  $(short_term_workaround) \
   $(wx_cxxflags) \
 
 REQUIRED_ARFLAGS = \
