@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: objects.make,v 1.90 2006-11-28 03:30:40 chicares Exp $
+# $Id: objects.make,v 1.91 2006-11-28 05:19:45 chicares Exp $
 
 ################################################################################
 
@@ -88,7 +88,6 @@ cgicc_3_1_4_objects = \
 
 # xmlwrapp library from pmade.org .
 
-ifeq (xmlwrapp_0_5_0,$(findstring xmlwrapp_0_5_0,$(xml_wrapper)))
 xmlwrapp_objects := \
   ait_impl.o \
   attributes.o \
@@ -101,19 +100,6 @@ xmlwrapp_objects := \
   node_manip.o \
   tree_parser.o \
   utility.o \
-
-else
-  ifeq (xmlwrapp_0_2_0,$(findstring xmlwrapp_0_2_0,$(xml_wrapper)))
-
-xmlwrapp_objects := \
-  event_parser.o \
-  init.o \
-  node.o \
-  node_iterator.o \
-  tree_parser.o \
-
-  endif
-endif
 
 # For systems that already have boost, cgicc, and xmlwrapp libraries
 # installed, define 'HAVE_THIRD_PARTY_LIBRARIES' to use them instead

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xslt_lmi.cpp,v 1.2 2006-11-27 06:23:50 chicares Exp $
+// $Id: xslt_lmi.cpp,v 1.3 2006-11-28 05:19:45 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -28,11 +28,9 @@
 
 // TODO ?? CALCULATION_SUMMARY Obviously this must be rewritten.
 // Probably xsltwrapp should replace this entire facility.
-#if !defined USING_LIBXMLPP
-#   define private public
-#   include <xmlwrapp/document.h>
-#   undef private
-#endif // !defined USING_LIBXMLPP
+#define private public
+#include <xmlwrapp/document.h>
+#undef private
 
 #include "xslt_lmi.hpp"
 
@@ -53,11 +51,7 @@ namespace xslt_lmi
 {
 xmlDoc* raw_document(Document const& document)
 {
-#if defined USING_LIBXMLPP
-    return const_cast<xmlDoc*>(document.cobj());
-#else  // !defined USING_LIBXMLPP
     return reinterpret_cast<xmlDoc*>(const_cast<Document&>(document).get_doc_data());
-#endif // !defined USING_LIBXMLPP
 }
 
 xslt_lmi::Stylesheet::Stylesheet(std::string const& filename)

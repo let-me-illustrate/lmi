@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xml_lmi.hpp,v 1.12 2006-11-27 16:51:21 chicares Exp $
+// $Id: xml_lmi.hpp,v 1.13 2006-11-28 05:19:45 chicares Exp $
 
 #ifndef xml_lmi_hpp
 #define xml_lmi_hpp
@@ -27,10 +27,6 @@
 #include "config.hpp"
 
 #include "xml_lmi_fwd.hpp"
-
-#if defined USING_LIBXMLPP
-#   include "xmlpp_lmi.hpp"
-#else // !defined USING_LIBXMLPP
 
 #include <boost/scoped_ptr.hpp>
 #include <boost/utility.hpp>
@@ -168,8 +164,6 @@ namespace xml_lmi
 } // namespace xml_lmi
 
 std::ostream& operator<<(std::ostream&, xml_lmi::xml_document const&);
-
-#endif // !defined USING_LIBXMLPP
 
 #endif //xml_lmi_hpp
 

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xml_io2.cpp,v 1.7 2006-11-27 05:54:26 chicares Exp $
+// $Id: ledger_xml_io2.cpp,v 1.8 2006-11-28 05:19:45 chicares Exp $
 
 #include "ledger.hpp"
 
@@ -529,10 +529,10 @@ double_formatter_t::double_formatter_t()
                     << "' contains more than one format definition for '"
                     << id.name()
 // TODO ?? CALCULATION_SUMMARY Consider adding this to xmlwrapp.
-#if defined USING_LIBXMLPP
+#if 0
                     << "' on line "
                     << format_element.get_line()
-#endif // defined USING_LIBXMLPP
+#endif // 0
                     << "."
                     << LMI_FLUSH
                     ;
@@ -1286,11 +1286,11 @@ void Ledger::writeXXX(std::ostream& os) const
     std::string const lmi_namespace("http://savannah.nongnu.org/projects/lmi");
 // TODO ?? CALCULATION_SUMMARY XMLWRAPP !! Consider adding namespace
 // support to xmlwrapp.
-#if 0 && defined USING_LIBXMLPP
+#if 0
     root.set_namespace_declaration(lmi_namespace);
     root.set_namespace_declaration("http://www.w3.org/2001/XMLSchema-instance", "xsi");
     xml_lmi::set_attr(root, "noNamespaceSchemaLocation", lmi_namespace + " schema.xsd", "xsi");
-#endif // defined USING_LIBXMLPP
+#endif // 0
     xml_lmi::set_attr(root, "noNamespaceSchemaLocation", lmi_namespace + " schema.xsd");
 
     os << document;
