@@ -21,7 +21,7 @@ dnl snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
 dnl === Prologue ===
 
-AC_REVISION($Id: configure.ac,v 1.23 2006-11-02 19:37:36 chicares Exp $)dnl
+AC_REVISION($Id: configure.ac,v 1.24 2006-11-28 15:50:42 chicares Exp $)dnl
 
 AC_PREREQ(2.56)
 AC_INIT(LMI, 1.0.0, [chicares@cox.net])
@@ -592,8 +592,39 @@ PKG_CHECK_MODULES(LIBXML, libxml-2.0 >= 2.6.0)
 dnl --- libxslt (required) -------------------
 PKG_CHECK_MODULES(LIBXSLT, libxslt >= 1.1.0)
 
-dnl --- libxml++ (required) -------------------
-PKG_CHECK_MODULES(LIBXMLPP, libxml++-2.6 >= 2.14.0)
+dnl --- XMLWRAPP (required) -------------------
+AC_CHECK_PROG(lmi_xmlwrapp_config, xmlwrapp-config, yes, no)
+if test "x$lmi_xmlwrapp_config" != "xyes"; then
+    AC_MSG_ERROR([Unable to find libxmlwrapp configuration program xmlwrapp-config in the path.])
+fi
+dnl TODO: Pass --debug option and so on (depends on the actual build)
+
+XMLWRAPP_FLAGS=`xmlwrapp-config --cxxflags`
+XMLWRAPP_LIBS=`xmlwrapp-config --libs`
+
+AC_SUBST(XMLWRAPP_FLAGS)
+AC_SUBST(XMLWRAPP_LIBS)
+
+AC_CACHE_CHECK([if we are using recent version of xmlwrapp],
+    lmi_cv_lib_xmlwrapp_recent,
+    [
+        save_CXXFLAGS=$CXXFLAGS
+        CXXFLAGS="$CXXFLAGS $XMLWRAPP_FLAGS"
+        AC_TRY_COMPILE([#include <xmlwrapp/document.h>
+            #include <xmlwrapp/tree_parser.h>
+            #include <xmlwrapp/node.h>],
+            [
+                xml::tree_parser parser("");
+                parser.get_document().get_root_node();
+            ],
+            lmi_cv_lib_xmlwrapp_recent=yes,
+            lmi_cv_lib_xmlwrapp_recent=no
+        )
+    ]
+)
+if test "x$lmi_cv_lib_xmlwrapp_recent" = "xyes"; then
+    AC_DEFINE([USING_CURRENT_XMLWRAPP], [1], [Define this if you have the latest version of libxmlwrapp])
+fi
 
 dnl --- CGICC (optional) ----------------
 if test "x$lmi_cgicc_option" != "xno"; then

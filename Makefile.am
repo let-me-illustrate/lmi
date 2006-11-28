@@ -20,7 +20,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: Makefile.am,v 1.24 2006-11-02 19:37:36 chicares Exp $
+# $Id: Makefile.am,v 1.25 2006-11-28 15:50:42 chicares Exp $
 
 
 SUBDIRS = third_party
@@ -205,7 +205,7 @@ lmi_wx_SOURCES = \
     wx_checks.cpp \
     wx_utility.cpp
 
-lmi_wx_CXXFLAGS = $(AM_CXXFLAGS) $(WX_CXXFLAGS) $(LIBXMLPP_CFLAGS) $(LIBXSLT_CFLAGS) $(LIBXML_CFLAGS)
+lmi_wx_CXXFLAGS = $(AM_CXXFLAGS) $(WX_CXXFLAGS) $(XMLWRAPP_FLAGS) $(LIBXSLT_CFLAGS) $(LIBXML_CFLAGS)
 # $(CGICC_INCLUDE_FLAGS)
 
 if LMI_MSW
@@ -220,7 +220,7 @@ endif
 lmi_wx_LDADD =  \
     liblmi.la \
     libwx_new.la \
-    $(LIBXMLPP_LIBS) \
+    $(XMLWRAPP_LIBS) \
     $(LIBXSLT_LIBS) \
     $(LIBXML_LIBS) \
     $(BOOST_LIBS) \
@@ -242,10 +242,10 @@ cli_sources = \
 
 lmi_cli_SOURCES = \
     $(cli_sources)
-lmi_cli_CXXFLAGS = $(AM_CXXFLAGS) $(LIBXMLPP_CFLAGS) $(LIBXSLT_CFLAGS) $(LIBXML_CFLAGS)
+lmi_cli_CXXFLAGS = $(AM_CXXFLAGS) $(XMLWRAPP_FLAGS) $(LIBXSLT_CFLAGS) $(LIBXML_CFLAGS)
 lmi_cli_LDADD = \
     liblmi.la \
-    $(LIBXMLPP_LIBS) \
+    $(XMLWRAPP_LIBS) \
     $(BOOST_LIBS)
 
 # libraries
@@ -325,7 +325,7 @@ libantediluvian_la_SOURCES = \
     mortality_rates.cpp \
     solve.cpp \
     $(liblmi_common_sources)
-libantediluvian_la_CXXFLAGS = $(AM_CXXFLAGS) $(LIBXMLPP_CFLAGS) $(LIBXSLT_CFLAGS) $(LIBXML_CFLAGS)
+libantediluvian_la_CXXFLAGS = $(AM_CXXFLAGS) $(XMLWRAPP_FLAGS) $(LIBXSLT_CFLAGS) $(LIBXML_CFLAGS)
 libantediluvian_la_LDFLAGS = -no-undefined $(AM_LDFLAGS)
 libantediluvian_la_LIBADD = \
     $(BOOST_LIBS)
@@ -359,10 +359,10 @@ liblmi_la_SOURCES = \
     stratified_algorithms.cpp \
     stratified_charges.cpp \
     $(liblmi_common_sources)
-liblmi_la_CXXFLAGS = $(AM_CXXFLAGS) $(LIBXMLPP_CFLAGS) $(LIBXSLT_CFLAGS) $(LIBXML_CFLAGS)
+liblmi_la_CXXFLAGS = $(AM_CXXFLAGS) $(XMLWRAPP_FLAGS) $(LIBXSLT_CFLAGS) $(LIBXML_CFLAGS)
 liblmi_la_LDFLAGS = -no-undefined $(AM_LDFLAGS)
 liblmi_la_LIBADD = \
-    $(LIBXMLPP_LIBS) \
+    $(XMLWRAPP_LIBS) \
     $(LIBXSLT_LIBS) \
     $(LIBXML_LIBS) \
     $(BOOST_LIBS)
@@ -419,11 +419,11 @@ antediluvian_cgi_LDADD = \
 
 antediluvian_cli_SOURCES = \
     $(cli_sources)
-antediluvian_cli_CXXFLAGS = $(AM_CXXFLAGS) $(LIBXMLPP_CFLAGS) $(LIBXSLT_CFLAGS) $(LIBXML_CFLAGS)
+antediluvian_cli_CXXFLAGS = $(AM_CXXFLAGS) $(XMLWRAPP_FLAGS) $(LIBXSLT_CFLAGS) $(LIBXML_CFLAGS)
 antediluvian_cli_LDADD = \
     libantediluvian.la  \
     $(BOOST_LIBS) \
-    $(LIBXMLPP_LIBS)
+    $(XMLWRAPP_LIBS)
 
 ihs_crc_comp_SOURCES = ihs_crc_comp.cpp
 ihs_crc_comp_LDADD = libmain_auxiliary_common.la
@@ -441,7 +441,7 @@ product_files_SOURCES = \
 product_files_LDADD = \
     liblmi.la   \
     $(BOOST_LIBS) \
-    $(LIBXMLPP_LIBS)
+    $(XMLWRAPP_LIBS)
 
 
 dummy.cpp:
@@ -601,11 +601,11 @@ test_input_SOURCES =    \
   xml_lmi.cpp \
   xrange.cpp
 
-test_input_CXXFLAGS = $(AM_CXXFLAGS) $(LIBXMLPP_CFLAGS) $(LIBXSLT_CFLAGS) $(LIBXML_CFLAGS)
+test_input_CXXFLAGS = $(AM_CXXFLAGS) $(XMLWRAPP_FLAGS) $(LIBXSLT_CFLAGS) $(LIBXML_CFLAGS)
 test_input_LDADD =    \
   $(BOOST_LIBS) \
   libtest_commons.la \
-  $(LIBXMLPP_LIBS) \
+  $(XMLWRAPP_LIBS) \
   $(test_input_extra_libs)
 
 test_irc7702a_SOURCES = \
@@ -786,10 +786,10 @@ test_xml_resources_SOURCES = \
   alert.cpp \
   alert_cli.cpp \
   xml_resources_test.cpp
-test_xml_resources_CXXFLAGS = $(AM_CXXFLAGS) $(LIBXMLPP_CFLAGS) $(LIBXSLT_CFLAGS) $(LIBXML_CFLAGS)
+test_xml_resources_CXXFLAGS = $(AM_CXXFLAGS) $(XMLWRAPP_FLAGS) $(LIBXSLT_CFLAGS) $(LIBXML_CFLAGS)
 test_xml_resources_LDADD = \
   $(BOOST_LIBS) \
-  $(LIBXMLPP_LIBS) \
+  $(XMLWRAPP_LIBS) \
   $(LIBXML_LIBS) \
   $(LIBXSLT_LIBS) \
   liblmi.la \
