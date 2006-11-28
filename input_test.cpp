@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_test.cpp,v 1.14 2006-11-11 14:09:29 chicares Exp $
+// $Id: input_test.cpp,v 1.15 2006-11-28 05:19:45 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -46,17 +46,6 @@
 #include <ios>
 #include <istream>
 #include <iterator>
-
-#if defined USING_LIBXMLPP
-#   include <boost/ref.hpp>
-#   define GET_FIRST_ELEMENT(child,parent) \
-    boost::reference_wrapper<xml_lmi::Element> child(xml_lmi::get_first_element((parent)));
-#else  // !defined USING_LIBXMLPP
-#   define GET_FIRST_ELEMENT(child,parent) \
-    xml_lmi::NodeConstIterator xyzzy = (parent).begin(); \
-    LMI_ASSERT(!(xyzzy)->is_text()); \
-    xml_lmi::Element const& child = *(xyzzy);
-#endif // !defined USING_LIBXMLPP
 
 // This function is a derived work adapted from usenet article
 // <1eo2sct.ggkc9z84ko0eN%cbarron3@ix.netcom.com>. GWC rewrote it
@@ -164,7 +153,10 @@ void assay_speed()
     xml_lmi::xml_document document("root");
     xml_lmi::Element& root = document.root_node();
     root << raw_data;
-    GET_FIRST_ELEMENT(e,root)
+
+    xml_lmi::NodeConstIterator i = root.begin();
+    LMI_ASSERT(!i->is_text());
+    xml_lmi::Element const& e = *i;
 
     std::cout
         << "  Speed tests...\n"
@@ -225,7 +217,9 @@ int test_main(int, char*[])
     os0 << xml_document0;
     os0.close();
 
-    GET_FIRST_ELEMENT(xml_node,xml_root0)
+    xml_lmi::NodeConstIterator i = xml_root0.begin();
+    LMI_ASSERT(!i->is_text());
+    xml_lmi::Element const& xml_node = *i;
 
     xml_node >> replica;
     std::ofstream os1

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.502 2006-11-27 16:51:21 chicares Exp $
+// $Id: ChangeLog,v 1.503 2006-11-28 05:19:45 chicares Exp $
 
 MAINTENANCE
 
@@ -8290,4 +8290,26 @@ here:
   xml_lmi.hpp
   xml_lmi_fwd.hpp
 Remove support for any but the latest version of xmlwrapp.
+
+20061128T0330Z <chicares@cox.net> [1213]
+
+  objects.make
+Move an MVC Model to the most fitting place.
+
+20061128T0519Z <chicares@cox.net> [1213]
+
+  input_test.cpp
+  ledger_xml_io2.cpp
+  msw_common.make
+  objects.make
+  posix_fhs.make
+  workhorse.make
+  xml_lmi.cpp
+  xml_lmi.hpp
+  xml_lmi_fwd.hpp
+  xmlpp_lmi.cpp     [expunged]
+  xmlpp_lmi.hpp     [expunged]
+  xmlpp_lmi_fwd.hpp [expunged]
+  xslt_lmi.cpp
+Remove support for libxml++ .
 
