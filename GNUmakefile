@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: GNUmakefile,v 1.73 2006-11-02 20:52:03 chicares Exp $
+# $Id: GNUmakefile,v 1.74 2006-11-28 15:52:28 chicares Exp $
 
 ################################################################################
 
@@ -463,8 +463,8 @@ check_concinnity: source_clean custom_tools
 	  done;
 	@$(ECHO) "  Files that don't point to savannah:"
 	@$(GREP) --files-without-match savannah $(licensed_files)      || true
-	@$(ECHO) "  Files that lack an RCS Id:"
-	@$(GREP) --files-without-match '$$Id.*$$' $(licensed_files)    || true
+	@$(ECHO) "  Files that lack a well-formed RCS Id:"
+	@$(GREP) --files-without-match '\$$Id: GNUmakefile,v 1.74 2006-11-28 15:52:28 chicares Exp $$' $(licensed_files)|| true
 	@$(ECHO) "  Files with malformed RCS Ids:"
 	@$(GREP) --files-with-match '$$Id[^$$]*$$' $(licensed_files)   || true
 	@$(ECHO) "  Files that contain non-empty blank lines:"
