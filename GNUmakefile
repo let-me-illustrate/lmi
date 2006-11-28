@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: GNUmakefile,v 1.75 2006-11-28 16:25:57 chicares Exp $
+# $Id: GNUmakefile,v 1.76 2006-11-28 16:31:27 chicares Exp $
 
 ################################################################################
 
@@ -242,9 +242,23 @@ makefiles := \
 
 scripts := $(wildcard *.sed *.sh)
 
-# TODO ?? The '.xsl' files need to be cleaned up.
-# xml_files := $(wildcard *.xrc *.xsl)
-xml_files := $(wildcard *.xrc)
+xsl_fo_files := \
+  illustration_reg.xsl \
+  individual_private_placement.xsl \
+  nasd.xsl \
+
+# TODO ?? Clean up these files: they fail 'make check_concinnity'.
+# The only concern 'xmllint' seems to have with '.cns' and '.ill'
+# files is that they spell out opening and closing tags even when
+# they might be compressed (<empty/>, e.g.). The xsl-fo files need
+# to be rewritten altogether.
+
+unclean_xml_files := \
+  $(xsl_fo_files) \
+  $(wildcard *.cns *.ill) \
+
+xml_files := $(wildcard *.cns *.ill *.xml *.xrc *.xsd *.xsl)
+xml_files := $(filter-out $(unclean_xml_files),$(xml_files))
 
 xpm_files := $(wildcard *.xpm)
 
@@ -425,7 +439,9 @@ expected_source_files := \
   $(c_source_files) \
   $(cxx_header_files) \
   $(cxx_source_files) \
-  $(wildcard *.ac *.rc *.xrc *.xsl) \
+  $(unclean_xml_files) \
+  $(xml_files) \
+  $(wildcard *.ac *.rc) \
 
 # Invoke a supplemental makefile, if it exists, to test things that
 # don't belong in the standard sources. For example, it might report
