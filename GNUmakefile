@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: GNUmakefile,v 1.74 2006-11-28 15:52:28 chicares Exp $
+# $Id: GNUmakefile,v 1.75 2006-11-28 16:25:57 chicares Exp $
 
 ################################################################################
 
@@ -447,13 +447,13 @@ check_concinnity: source_clean custom_tools
 	@$(ECHO) "  Unexpected or oddly-named source files:"
 	@$(ECHO) $(filter-out $(expected_source_files),$(prerequisite_files))
 	@$(ECHO) "  Files with irregular defect markers:"
-	@$(GREP) --line-number '[A-Za-z]!!' $(licensed_files)          || true
-	@$(GREP) --line-number '[A-Za-z] !![A-Za-z]' $(licensed_files) || true
+	@$(GREP) --line-number '[A-Za-z]!!' $(licensed_files)                || true
+	@$(GREP) --line-number '[A-Za-z] !![A-Za-z]' $(licensed_files)       || true
 	@$(GREP) --line-number \?\? $(licensed_files) | $(SED) -e ';/TODO \?\?/d'
-	@$(GREP) --line-number \?\?'[A-Za-z]' $(licensed_files)        || true
-	@$(GREP) --line-number '?\{3,\}' $(licensed_files)             || true
+	@$(GREP) --line-number \?\?'[A-Za-z]' $(licensed_files)              || true
+	@$(GREP) --line-number '?\{3,\}' $(licensed_files)                   || true
 	@$(ECHO) "  Files with lowercase 'c' in copyright symbol:"
-	@$(GREP) --files-with-match '(c) *[12]' $(licensed_files)      || true
+	@$(GREP) --files-with-match '(c) *[12]' $(licensed_files)            || true
 	@$(ECHO) "  Files lacking current copyright year:"
 	@for z in $(licensed_files); \
 	  do \
@@ -462,17 +462,17 @@ check_concinnity: source_clean custom_tools
 	         || true; \
 	  done;
 	@$(ECHO) "  Files that don't point to savannah:"
-	@$(GREP) --files-without-match savannah $(licensed_files)      || true
+	@$(GREP) --files-without-match savannah $(licensed_files)            || true
 	@$(ECHO) "  Files that lack a well-formed RCS Id:"
-	@$(GREP) --files-without-match '\$$Id: GNUmakefile,v 1.74 2006-11-28 15:52:28 chicares Exp $$' $(licensed_files)|| true
+	@$(GREP) --files-without-match '\$$Id[:].* \$$' $(licensed_files)    || true
 	@$(ECHO) "  Files with malformed RCS Ids:"
-	@$(GREP) --files-with-match '$$Id[^$$]*$$' $(licensed_files)   || true
+	@$(GREP) --files-with-match '$$Id[^$$]*$$' $(licensed_files)         || true
 	@$(ECHO) "  Files that contain non-empty blank lines:"
-	@$(GREP) --line-number '^ \+$$' $(licensed_files)              || true
+	@$(GREP) --line-number '^ \+$$' $(licensed_files)                    || true
 	@$(ECHO) "  Files with blanks at end of line:"
-	@$(GREP) --line-number ' $$' $(licensed_files)                 || true
+	@$(GREP) --line-number ' $$' $(licensed_files)                       || true
 	@$(ECHO) "  Files that improperly contain physical tabs:"
-	@$(GREP) -l '	' $(filter-out $(makefiles),$(licensed_files)) || true
+	@$(GREP) -l '	' $(filter-out $(makefiles),$(licensed_files))       || true
 	@$(ECHO) "  Headers that should include \"config.hpp\" first but don't:"
 	@for z in \
 	  $(filter-out config.hpp $(wildcard config_*.hpp),$(wildcard *.hpp)); \
