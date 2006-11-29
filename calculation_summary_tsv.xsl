@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: calculation_summary_tsv.xsl,v 1.1 2006-11-29 14:08:24 chicares Exp $
+    $Id: calculation_summary_tsv.xsl,v 1.2 2006-11-29 15:37:24 chicares Exp $
 
     Uses format.xml - column titles, number-formatting and other information.
 -->
@@ -68,7 +68,8 @@
 
             <xsl:choose>
                 <xsl:when test="double_scalar[@name='IsMec']='1'">
-                    <xsl:text>MEC</xsl:text>
+                    <xsl:text>MEC year </xsl:text>
+                    <xsl:value-of select="double_scalar[@name='MecYear']+1"/>
                 </xsl:when>
                 <xsl:otherwise>
                     <xsl:text>Non-MEC</xsl:text>
