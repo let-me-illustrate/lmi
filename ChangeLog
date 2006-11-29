@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.503 2006-11-28 05:19:45 chicares Exp $
+// $Id: ChangeLog,v 1.504 2006-11-29 14:59:49 chicares Exp $
 
 MAINTENANCE
 
@@ -8312,4 +8312,48 @@ Move an MVC Model to the most fitting place.
   xmlpp_lmi_fwd.hpp [expunged]
   xslt_lmi.cpp
 Remove support for libxml++ .
+
+20061128T1550Z <chicares@cox.net> [1213]
+
+  configure.ac
+  Makefile.am
+Use xmlwrapp instead of libxml++ .
+
+20061128T1552Z <chicares@cox.net> [1213]
+
+  GNUmakefile
+Strengthen a safeguard against invalid RCS Ids.
+
+20061128T1625Z <chicares@cox.net> [1213]
+
+  GNUmakefile
+Obstruct an undesired substitution that occurred on cvs checkout.
+
+20061128T1631Z <chicares@cox.net> [1213]
+
+  GNUmakefile
+Refine source-file categorization.
+
+20061129T1408Z <chicares@cox.net> [1221]
+
+  calculation_summary_html.xsl [new file] (from html.xsl)
+  calculation_summary_tsv.xsl  [new file] (from cs_tsv.xsl)
+  ledger.xsd                   [new file] (from schema.xsd)
+  ledger_columns.xml           [new file] (from format.xml)
+  ledger_common.xsl            [new file] (from common.xsl)
+  ledger_common_tsv.xsl        [new file] (from tsv_common.xsl)
+  microcosm_tsv.xsl            [new file] (from tab_delimited.xsl)
+Import xml files from 'gnome-xml-branch', changing only the file
+names, copyright dates, and RCS Ids. The "from" column above shows the
+corresponding file names in the branch.
+
+20061129T1459Z <chicares@cox.net> [1222]
+
+  ledger_columns.xml [renamed to ledger_formats.xml]
+Make file name more descriptive. Even though this file contains only
+<column> elements, they don't all correspond to columns: e.g.,
+    <column name="LapseYear">
+        <format>f1</format>
+    </column>
+is a scalar and couldn't be shown as a column.
 
