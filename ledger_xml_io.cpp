@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xml_io.cpp,v 1.55 2006-11-12 19:54:18 chicares Exp $
+// $Id: ledger_xml_io.cpp,v 1.56 2006-11-29 15:29:47 chicares Exp $
 
 #include "ledger.hpp"
 
@@ -431,7 +431,6 @@ void Ledger::write(xml_lmi::Element& x) const
     format_map["InitAnnSepAcctNetInt"              ] = f4;
     format_map["PostHoneymoonSpread"               ] = f4;
     format_map["Preferred"                         ] = f4;
-    format_map["PremTaxLoad"                       ] = f4;
     format_map["PremTaxRate"                       ] = f4;
     format_map["StatePremTaxRate"                  ] = f4;
 
