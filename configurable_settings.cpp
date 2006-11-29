@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: configurable_settings.cpp,v 1.29 2006-11-29 16:08:32 chicares Exp $
+// $Id: configurable_settings.cpp,v 1.30 2006-11-29 18:39:31 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -40,6 +40,7 @@
 #include <boost/filesystem/path.hpp>
 
 #include <algorithm> // std::find()
+#include <sstream>
 #include <stdexcept>
 
 // TODO ?? Need unit tests.
@@ -183,6 +184,7 @@ void configurable_settings::ascribe_members()
 
 void configurable_settings::load()
 {
+    std::ostringstream oss;
     xml_lmi::dom_parser parser(configuration_filepath().string());
     xml_lmi::Element const& root = parser.root_node(xml_root_name());
     xml_lmi::ElementContainer const elements(xml_lmi::child_elements(root));
@@ -199,15 +201,20 @@ void configurable_settings::load()
             }
         else
             {
-            warning()
-                << "Configurable-settings file '"
-                << configuration_filepath().string()
-                << "' contains unrecognized element '"
-                << name
-                << "'."
-                << LMI_FLUSH
-                ;
+            oss << "  '" << name << "'\n";
             }
+        }
+    if(!oss.str().empty())
+        {
+        std::ostringstream oss2;
+        oss2
+            << "Configurable-settings file '"
+            << configuration_filepath().string()
+            << "':\n"
+            << oss.str()
+            << "not recognized."
+            ;
+        safely_show_message(oss2.str().c_str());
         }
 }
 

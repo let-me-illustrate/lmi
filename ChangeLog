@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.504 2006-11-29 14:59:49 chicares Exp $
+// $Id: ChangeLog,v 1.505 2006-11-29 18:39:31 chicares Exp $
 
 MAINTENANCE
 
@@ -8356,4 +8356,27 @@ Make file name more descriptive. Even though this file contains only
         <format>f1</format>
     </column>
 is a scalar and couldn't be shown as a column.
+
+20061129T1529Z <chicares@cox.net> [1222]
+
+  ledger_formats.xml
+  ledger_xml_io.cpp
+Fix incorrect format for 'PremTaxLoad'. See:
+  http://lists.gnu.org/archive/html/lmi/2006-11/msg00063.html
+
+20061129T1537Z <chicares@cox.net> [1222]
+
+  calculation_summary_html.xsl
+  calculation_summary_tsv.xsl
+Display MEC year.
+
+20061129T1608Z <chicares@cox.net> [1223]
+
+  configurable_settings.cpp
+Ignore unrecognized elements, issuing a warning.
+
+20061129T1839Z <chicares@cox.net> [1223]
+
+  configurable_settings.cpp
+Show unrecognized-element warnings in a single messagebox.
 
