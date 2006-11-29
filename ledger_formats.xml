@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <!--
-    Column formatting information like number-formatting, title, etc.
+    Formatting specifications and column titles.
 
     Copyright (C) 2004, 2005, 2006 Gregory W. Chicares.
 
@@ -21,7 +21,12 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: ledger_columns.xml,v 1.1 2006-11-29 14:08:24 chicares Exp $
+    $Id: ledger_formats.xml,v 1.1 2006-11-29 14:59:49 chicares Exp $
+
+    TODO ?? This file contains only 'column' elements, but they don't
+    all correspond to columns: e.g., 'LapseYear' is a scalar and
+    couldn't be shown as a column. Either a more-generic entity name
+    should be used, or columns and scalars should be distinguished.
 
     TODO ?? Titles ought to be read from an external file that
     permits flexible customization. Compliance might require that
