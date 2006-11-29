@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: ledger_formats.xml,v 1.1 2006-11-29 14:59:49 chicares Exp $
+    $Id: ledger_formats.xml,v 1.2 2006-11-29 15:29:47 chicares Exp $
 
     TODO ?? This file contains only 'column' elements, but they don't
     all correspond to columns: e.g., 'LapseYear' is a scalar and
@@ -85,11 +85,6 @@
         <format>f4</format>
     </column>
     <column name="Preferred">
-        <format>f4</format>
-    </column>
-    <column name="PremTaxLoad">
-        <title basis="run_curr_basis">Curr Premium Tax Load</title>
-        <title basis="run_guar_basis">Guar Premium Tax Load</title>
         <format>f4</format>
     </column>
     <column name="PremTaxRate">
@@ -664,6 +659,11 @@
     <column name="PrefLoanBalance">
         <title basis="run_curr_basis">Curr Preferred Loan Bal</title>
         <title basis="run_guar_basis">Guar Preferred Loan Bal</title>
+        <format>f1</format>
+    </column>
+    <column name="PremTaxLoad">
+        <title basis="run_curr_basis">Curr Premium Tax Load</title>
+        <title basis="run_guar_basis">Guar Premium Tax Load</title>
         <format>f1</format>
     </column>
     <!--
