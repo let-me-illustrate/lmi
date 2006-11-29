@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: configurable_settings.cpp,v 1.28 2006-11-27 15:41:42 chicares Exp $
+// $Id: configurable_settings.cpp,v 1.29 2006-11-29 16:08:32 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -39,6 +39,7 @@
 #include <boost/filesystem/operations.hpp>
 #include <boost/filesystem/path.hpp>
 
+#include <algorithm> // std::find()
 #include <stdexcept>
 
 // TODO ?? Need unit tests.
@@ -174,19 +175,39 @@ void configurable_settings::ascribe_members()
     ascribe("xslt_tab_delimited_filename"      ,&configurable_settings::xslt_tab_delimited_filename_      );
 }
 
+// TODO ?? Class template any_member should expose a has_element()
+// function.
+
+// TODO ?? Use the 'detritus_map' technique found elsewhere to ignore
+// obsolete elements silently.
+
 void configurable_settings::load()
 {
-    // TODO ?? CALCULATION_SUMMARY In 'gnome-xml-branch', all settings
-    // were first reinitialized from hardcoded defaults. What problem
-    // would that solve?
-
     xml_lmi::dom_parser parser(configuration_filepath().string());
     xml_lmi::Element const& root = parser.root_node(xml_root_name());
     xml_lmi::ElementContainer const elements(xml_lmi::child_elements(root));
     typedef xml_lmi::ElementContainer::const_iterator eci;
     for(eci i = elements.begin(); i != elements.end(); ++i)
         {
-        operator[]((*i)->get_name()) = xml_lmi::get_content(**i);
+        std::string name = (*i)->get_name();
+        if
+            (   member_names().end()
+            !=  std::find(member_names().begin(), member_names().end(), name)
+            )
+            {
+            operator[]((*i)->get_name()) = xml_lmi::get_content(**i);
+            }
+        else
+            {
+            warning()
+                << "Configurable-settings file '"
+                << configuration_filepath().string()
+                << "' contains unrecognized element '"
+                << name
+                << "'."
+                << LMI_FLUSH
+                ;
+            }
         }
 }
 
@@ -226,7 +247,7 @@ void configurable_settings::save() const
         // User could choose to ignore this error and the only thing he risks
         // in that case is configurable settings not saved.
         warning()
-            << "Configuration settings file '"
+            << "Configurable-settings file '"
             << configuration_filepath().string()
             << "' is not writeable."
             << LMI_FLUSH
