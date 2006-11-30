@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input.hpp,v 1.17 2006-08-13 13:13:23 chicares Exp $
+// $Id: input.hpp,v 1.18 2006-11-30 18:29:26 chicares Exp $
 
 #ifndef input_hpp
 #define input_hpp
@@ -115,10 +115,10 @@ class InputSequence;
 /// other information for use by controls.
 ///
 /// Usually, data member names ending in a single '_' are preferred.
-/// However, this class's data members' names nominate Model entities
-/// that are referenced externally (in xml as well as C++ files)
-/// as strings (through base class template MemberSymbolTable), and
-/// therefore readability overcomes the usual convention.
+/// Some of this class's data members' names nominate Model entities
+/// that are referenced externally (in xml as well as C++ files) as
+/// strings (through base class template MemberSymbolTable), though;
+/// for them, readability overcomes the usual convention.
 
 class LMI_SO Input
     :virtual private obstruct_slicing<Input>
@@ -160,7 +160,15 @@ class LMI_SO Input
     virtual void DoHarmonize();
     virtual void DoTransmogrify();
 
-    std::auto_ptr<TDatabase> database;
+    std::auto_ptr<TDatabase> database_;
+
+    ce_product_name          CachedProductName_          ;
+    mce_gender               CachedGender_               ;
+    mce_class                CachedUnderwritingClass_    ;
+    mce_smoking              CachedSmoking_              ;
+    tnr_issue_age            CachedIssueAge_             ;
+    mce_uw_basis             CachedGroupUnderwritingType_;
+    mce_state                CachedStateOfJurisdiction_  ;
 
     // TODO ?? Temporary.
     typedef datum_string datum_sequence;
@@ -374,14 +382,6 @@ class LMI_SO Input
     tnr_attained_age         WithdrawalToAge                 ;
     mce_to_point             WithdrawalToAlternative         ;
     tnr_duration             WithdrawalToDuration            ;
-
-    ce_product_name          CachedProductName               ;
-    mce_gender               CachedGender                    ;
-    mce_class                CachedUnderwritingClass         ;
-    mce_smoking              CachedSmoking                   ;
-    tnr_issue_age            CachedIssueAge                  ;
-    mce_uw_basis             CachedGroupUnderwritingType     ;
-    mce_state                CachedStateOfJurisdiction       ;
 };
 
 void LMI_SO convert_to_ihs(IllusInputParms&, Input const&);
