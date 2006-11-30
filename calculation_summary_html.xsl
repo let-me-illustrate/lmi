@@ -21,14 +21,14 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: calculation_summary_html.xsl,v 1.3 2006-11-30 05:10:33 chicares Exp $
+    $Id: calculation_summary_html.xsl,v 1.4 2006-11-30 05:58:26 chicares Exp $
 -->
 
-<xsl:stylesheet xmlns:lmi="http://savannah.nongnu.org/projects/lmi" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0" xsi:schemaLocation="http://savannah.nongnu.org/projects/lmi schema.xsd">
+<xsl:stylesheet xmlns:lmi="http://savannah.nongnu.org/projects/lmi" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0" xsi:schemaLocation="http://savannah.nongnu.org/projects/lmi ledger.xsd">
 
 <xsl:output method="html" encoding="iso-8859-1" indent="yes"/>
 
-<xsl:include href="common.xsl"/>
+<xsl:include href="ledger_common.xsl"/>
 
 <!--
     The list of columns to be shown.

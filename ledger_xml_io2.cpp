@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xml_io2.cpp,v 1.9 2006-11-30 05:10:33 chicares Exp $
+// $Id: ledger_xml_io2.cpp,v 1.10 2006-11-30 05:58:26 chicares Exp $
 
 #include "ledger.hpp"
 
@@ -1291,15 +1291,21 @@ void Ledger::writeXXX(std::ostream& os) const
     xml_lmi::Element& root = document.root_node();
     root << *this;
 
-    std::string const lmi_namespace("http://savannah.nongnu.org/projects/lmi");
+    std::string const lmi_xml_ns("http://savannah.nongnu.org/projects/lmi");
+
+    configurable_settings const& z = configurable_settings::instance();
+    std::string const xml_schema = lmi_xml_ns + " " + z.xml_schema_filename();
+
 // TODO ?? CALCULATION_SUMMARY XMLWRAPP !! Consider adding namespace
 // support to xmlwrapp.
 #if 0
-    root.set_namespace_declaration(lmi_namespace);
-    root.set_namespace_declaration("http://www.w3.org/2001/XMLSchema-instance", "xsi");
-    xml_lmi::set_attr(root, "noNamespaceSchemaLocation", lmi_namespace + " schema.xsd", "xsi");
+    std::string const w3("http://www.w3.org/2001/XMLSchema-instance");
+
+    root.set_namespace_declaration(lmi_xml_ns);
+    root.set_namespace_declaration(w3, "xsi");
+    xml_lmi::set_attr(root, "noNamespaceSchemaLocation", xml_schema, "xsi");
 #endif // 0
-    xml_lmi::set_attr(root, "noNamespaceSchemaLocation", lmi_namespace + " schema.xsd");
+    xml_lmi::set_attr(root, "noNamespaceSchemaLocation", xml_schema);
 
     os << document;
 }
