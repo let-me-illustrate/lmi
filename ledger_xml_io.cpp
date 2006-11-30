@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xml_io.cpp,v 1.57 2006-11-30 00:35:17 chicares Exp $
+// $Id: ledger_xml_io.cpp,v 1.58 2006-11-30 16:58:24 chicares Exp $
 
 #include "ledger.hpp"
 
@@ -36,6 +36,10 @@
 #include "value_cast.hpp"
 #include "version.hpp"
 #include "xml_lmi.hpp"
+
+#include <boost/filesystem/fstream.hpp>
+#include <boost/filesystem/operations.hpp>
+#include <boost/filesystem/path.hpp>
 
 #include <fstream>
 #include <iomanip>
@@ -1001,10 +1005,14 @@ void Ledger::write(xml_lmi::Element& x) const
         &&  std::string::npos != ledger_invariant_->Comments.find("idiosyncrasy_spreadsheet")
         )
         {
-        std::ofstream ofs
-            (("values" + configurable_settings::instance().spreadsheet_file_extension()).c_str()
-            ,std::ios_base::out | std::ios_base::trunc
+        configurable_settings const& z = configurable_settings::instance();
+        fs::path filepath
+            (   z.print_directory()
+            +   "/values"
+            +   z.spreadsheet_file_extension()
             );
+        fs::ofstream ofs(filepath, std::ios_base::out | std::ios_base::trunc);
+
         for
             (std::map<std::string,std::vector<std::string> >::const_iterator j = stringvectors.begin()
             ;j != stringvectors.end()
@@ -1036,6 +1044,14 @@ void Ledger::write(xml_lmi::Element& x) const
                     }
                 }
             ofs << '\n';
+            }
+        if(!ofs)
+            {
+            warning()
+                << "Unable to write "
+                << fs::system_complete(filepath).string()
+                << LMI_FLUSH
+                ;
             }
         }
 #endif // !defined LMI_USE_NEW_REPORTS
