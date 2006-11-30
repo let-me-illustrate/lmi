@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustration_view.cpp,v 1.54 2006-11-16 18:11:16 rericksberg Exp $
+// $Id: illustration_view.cpp,v 1.55 2006-11-30 17:40:19 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -73,32 +73,32 @@ IMPLEMENT_DYNAMIC_CLASS(IllustrationView, ViewEx)
 
 BEGIN_EVENT_TABLE(IllustrationView, ViewEx)
     EVT_MENU(wxID_COPY                      ,IllustrationView::UponCopyFull)
+    EVT_MENU(wxID_PREVIEW                   ,IllustrationView::UponPreviewPdf)
+    EVT_MENU(wxID_PRINT                     ,IllustrationView::UponPrintPdf  )
     EVT_MENU(XRCID("copy_summary"          ),IllustrationView::UponCopySummary)
     EVT_MENU(XRCID("edit_cell"             ),IllustrationView::UponProperties)
     EVT_MENU(XRCID("preview_summary"       ),IllustrationView::UponPreviewSummary)
-    EVT_MENU(wxID_PREVIEW                   ,IllustrationView::UponPreviewPdf)
     EVT_MENU(XRCID("print_summary"         ),IllustrationView::UponPrintSummary)
-    EVT_MENU(wxID_PRINT                     ,IllustrationView::UponPrintPdf  )
+    EVT_MENU_OPEN(                           IllustrationView::UponMenuOpen  )
     EVT_UPDATE_UI(wxID_SAVE                 ,IllustrationView::UponUpdateFileSave)
 //    EVT_UPDATE_UI(wxID_SAVEAS               ,IllustrationView::UponUpdateFileSaveAs)
 //    EVT_UPDATE_UI(XRCID("wxID_SAVEAS"      ),IllustrationView::UponUpdateFileSaveAs)
-    EVT_MENU_OPEN(                           IllustrationView::UponMenuOpen  )
     EVT_UPDATE_UI(XRCID("edit_cell"        ),IllustrationView::UponUpdateProperties)
 
-// There has to be a better way.
-    EVT_UPDATE_UI(XRCID("edit_class"       ),IllustrationView::UponUpdateInapplicable)
-    EVT_UPDATE_UI(XRCID("edit_case"        ),IllustrationView::UponUpdateInapplicable)
-    EVT_UPDATE_UI(XRCID("run_cell"         ),IllustrationView::UponUpdateInapplicable)
-    EVT_UPDATE_UI(XRCID("run_class"        ),IllustrationView::UponUpdateInapplicable)
-    EVT_UPDATE_UI(XRCID("run_case"         ),IllustrationView::UponUpdateInapplicable)
-    EVT_UPDATE_UI(XRCID("print_cell"       ),IllustrationView::UponUpdateInapplicable)
-    EVT_UPDATE_UI(XRCID("print_class"      ),IllustrationView::UponUpdateInapplicable)
-    EVT_UPDATE_UI(XRCID("print_case"       ),IllustrationView::UponUpdateInapplicable)
-    EVT_UPDATE_UI(XRCID("print_spreadsheet"),IllustrationView::UponUpdateInapplicable)
-    EVT_UPDATE_UI(XRCID("paste_census"     ),IllustrationView::UponUpdateInapplicable)
+// There has to be a better way to inhibit these inapplicable ids.
     EVT_UPDATE_UI(XRCID("add_cell"         ),IllustrationView::UponUpdateInapplicable)
     EVT_UPDATE_UI(XRCID("delete_cells"     ),IllustrationView::UponUpdateInapplicable)
+    EVT_UPDATE_UI(XRCID("edit_case"        ),IllustrationView::UponUpdateInapplicable)
+    EVT_UPDATE_UI(XRCID("edit_class"       ),IllustrationView::UponUpdateInapplicable)
     EVT_UPDATE_UI(XRCID("expand_columns"   ),IllustrationView::UponUpdateInapplicable)
+    EVT_UPDATE_UI(XRCID("run_case"         ),IllustrationView::UponUpdateInapplicable)
+    EVT_UPDATE_UI(XRCID("run_cell"         ),IllustrationView::UponUpdateInapplicable)
+    EVT_UPDATE_UI(XRCID("run_class"        ),IllustrationView::UponUpdateInapplicable)
+    EVT_UPDATE_UI(XRCID("paste_census"     ),IllustrationView::UponUpdateInapplicable)
+    EVT_UPDATE_UI(XRCID("print_case"       ),IllustrationView::UponUpdateInapplicable)
+    EVT_UPDATE_UI(XRCID("print_cell"       ),IllustrationView::UponUpdateInapplicable)
+    EVT_UPDATE_UI(XRCID("print_class"      ),IllustrationView::UponUpdateInapplicable)
+    EVT_UPDATE_UI(XRCID("print_spreadsheet"),IllustrationView::UponUpdateInapplicable)
     EVT_UPDATE_UI(XRCID("shrink_columns"   ),IllustrationView::UponUpdateInapplicable)
 END_EVENT_TABLE()
 
@@ -220,6 +220,16 @@ bool IllustrationView::OnCreate(wxDocument* doc, long int flags)
     return true;
 }
 
+void IllustrationView::UponCopyFull(wxCommandEvent&)
+{
+    CopyLedgerToClipboard(e_copy_full);
+}
+
+void IllustrationView::UponCopySummary(wxCommandEvent&)
+{
+    CopyLedgerToClipboard(e_copy_summary);
+}
+
 void IllustrationView::UponMenuOpen(wxMenuEvent&)
 {
 // TODO ?? WX !! Never gets called. Does this need to be in the document class?
@@ -253,14 +263,9 @@ void IllustrationView::UponMenuOpen(wxMenuEvent&)
         }
 }
 
-void IllustrationView::UponCopyFull(wxCommandEvent&)
+void IllustrationView::UponPreviewPdf(wxCommandEvent&)
 {
-    CopyLedgerToClipboard(e_copy_full);
-}
-
-void IllustrationView::UponCopySummary(wxCommandEvent&)
-{
-    CopyLedgerToClipboard(e_copy_summary);
+    Pdf("open");
 }
 
 void IllustrationView::UponPreviewSummary(wxCommandEvent&)
@@ -268,67 +273,14 @@ void IllustrationView::UponPreviewSummary(wxCommandEvent&)
     PrintOrPreviewHtmlSummary(e_print_preview);
 }
 
-void IllustrationView::UponPrintSummary(wxCommandEvent&)
-{
-    PrintOrPreviewHtmlSummary(e_print_printer);
-}
-
-// TODO ?? CALCULATION_SUMMARY This should use either the code or the
-// ideas in DocManagerEx::UponPreview().
-
-// TODO ?? EVGENIY Is it necessary to use scoped_ptr here? The wx
-// documentation says
-//   "Do not create this class on the stack only. You should create an
-//   instance on app startup and use this instance for all printing
-//   operations. The reason is that this class stores various settings
-//   in it."
-// But that reason doesn't hold here: settings don't persist anyway,
-// because the printing object is deleted as soon as this function
-// returns. Is there a different, unstated reason why we shouldn't
-// create it on the stack?
-
-void IllustrationView::PrintOrPreviewHtmlSummary(enum_print_option option) const
-{
-    std::string disclaimer
-        ("FOR BROKER-DEALER USE ONLY. NOT TO BE SHARED WITH CLIENTS."
-        );
-    boost::scoped_ptr<wxHtmlEasyPrinting> printer
-        (new wxHtmlEasyPrinting("Calculation Summary", html_window_)
-        );
-
-    printer->SetHeader
-        (disclaimer + " (@PAGENUM@/@PAGESCNT@)<hr />"
-        ,wxPAGE_ALL
-        );
-
-    // TODO ?? CALCULATION_SUMMARY The print dialog under wx
-    // defaults to A4, a European paper size. Override the default
-    // with a US 8.5 X 11 letter size. wx should eventually be
-    // upgraded so that system printer settings presist regardless
-    // of which print function updates them [e.g. 'Page setup']
-    wxPrintData *printer_settings = printer->GetPrintData();
-    printer_settings->SetPaperId(wxPAPER_LETTER);
-
-    if(e_print_printer == option)
-        {
-        printer->PrintText(selected_values_as_html_.c_str());
-        }
-    // TODO ?? CALCULATION_SUMMARY This assumes, without asserting,
-    // that the enumeration has exactly two enumerators.
-    else
-        {
-        printer->PreviewText(selected_values_as_html_.c_str());
-        }
-}
-
-void IllustrationView::UponPreviewPdf(wxCommandEvent&)
-{
-    Pdf("open");
-}
-
 void IllustrationView::UponPrintPdf(wxCommandEvent&)
 {
     Pdf("print");
+}
+
+void IllustrationView::UponPrintSummary(wxCommandEvent&)
+{
+    PrintOrPreviewHtmlSummary(e_print_printer);
 }
 
 void IllustrationView::UponProperties(wxCommandEvent&)
@@ -422,6 +374,54 @@ void IllustrationView::Pdf(std::string const& action) const
         ,document_file
         );
     file_command()(pdf_out_file, action);
+}
+
+// TODO ?? CALCULATION_SUMMARY This should use either the code or the
+// ideas in DocManagerEx::UponPreview().
+
+// TODO ?? EVGENIY Is it necessary to use scoped_ptr here? The wx
+// documentation says
+//   "Do not create this class on the stack only. You should create an
+//   instance on app startup and use this instance for all printing
+//   operations. The reason is that this class stores various settings
+//   in it."
+// But that reason doesn't hold here: settings don't persist anyway,
+// because the printing object is deleted as soon as this function
+// returns. Is there a different, unstated reason why we shouldn't
+// create it on the stack?
+
+void IllustrationView::PrintOrPreviewHtmlSummary(enum_print_option option) const
+{
+    std::string disclaimer
+        ("FOR BROKER-DEALER USE ONLY. NOT TO BE SHARED WITH CLIENTS."
+        );
+    boost::scoped_ptr<wxHtmlEasyPrinting> printer
+        (new wxHtmlEasyPrinting("Calculation Summary", html_window_)
+        );
+
+    printer->SetHeader
+        (disclaimer + " (@PAGENUM@/@PAGESCNT@)<hr />"
+        ,wxPAGE_ALL
+        );
+
+    // TODO ?? CALCULATION_SUMMARY The print dialog under wx
+    // defaults to A4, a European paper size. Override the default
+    // with a US 8.5 X 11 letter size. wx should eventually be
+    // upgraded so that system printer settings presist regardless
+    // of which print function updates them [e.g. 'Page setup']
+    wxPrintData *printer_settings = printer->GetPrintData();
+    printer_settings->SetPaperId(wxPAPER_LETTER);
+
+    if(e_print_printer == option)
+        {
+        printer->PrintText(selected_values_as_html_.c_str());
+        }
+    // TODO ?? CALCULATION_SUMMARY This assumes, without asserting,
+    // that the enumeration has exactly two enumerators.
+    else
+        {
+        printer->PreviewText(selected_values_as_html_.c_str());
+        }
 }
 
 void IllustrationView::Run(Input* overriding_input)
