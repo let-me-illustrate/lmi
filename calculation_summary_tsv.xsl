@@ -21,10 +21,9 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: calculation_summary_tsv.xsl,v 1.2 2006-11-29 15:37:24 chicares Exp $
-
-    Uses format.xml - column titles, number-formatting and other information.
+    $Id: calculation_summary_tsv.xsl,v 1.3 2006-11-30 05:10:33 chicares Exp $
 -->
+
 <!DOCTYPE xsl:stylesheet [
 <!ENTITY tab "&#x9;">
 <!ENTITY nl "&#xA;">

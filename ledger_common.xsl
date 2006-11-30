@@ -21,10 +21,10 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: ledger_common.xsl,v 1.1 2006-11-29 14:08:24 chicares Exp $
+    $Id: ledger_common.xsl,v 1.2 2006-11-30 05:10:33 chicares Exp $
 
-    Uses format.xml - column titles, number-formatting and other information.
 -->
+
 <xsl:stylesheet xmlns:lmi="http://savannah.nongnu.org/projects/lmi" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0" xsi:schemaLocation="http://savannah.nongnu.org/projects/lmi schema.xsd">
 
     <xsl:param name="debug"/>
@@ -40,7 +40,7 @@
     </xsl:variable>
 
     <!--
-        Read the column information (title, forma-string, etc.) from format.xml file.
+        Read formatting specifications from a separate file.
         Used in 'title' and 'get_column_format' templates.
     -->
     <xsl:variable name="columns_format_info" select="document('format.xml')/lmi:columns/lmi:column"/>
@@ -59,8 +59,9 @@
     <!--
         In some xsl:for-each loop we could iterate over a node set from some
         other document (not the current document being transformed, for example
-        we could iterate over a list of columns from 'format.xml' to generate
-        a list of available columns).
+        we could iterate over a list of columns from the separate format file
+        to generate a list of available columns).
+
         In such a case inside the loop the root node '/' binds to the root node
         of that external document and we cannot use '/illustration' no longer
         to acces our current xml data.
@@ -202,8 +203,8 @@
         When both lists are constructed the template calls 'do_data_table'
         template passing it newly constructed $headers and $vectors.
 
-        The 'do_data_table' is implementation specific and has to be defined
-        in the calling template (so far 'html.xsl' and 'tab_delimited.xsl').
+        'do_data_table' is implementation specific and has to be defined
+        in the calling template.
 
         Note: the order of nodes in the resulting nodeset is arbitrary(!).
         Therefore additional efforts are needed in the calling template

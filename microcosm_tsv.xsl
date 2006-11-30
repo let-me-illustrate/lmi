@@ -21,10 +21,9 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: microcosm_tsv.xsl,v 1.1 2006-11-29 14:08:24 chicares Exp $
-
-    Uses format.xml - column titles, number-formatting and other information.
+    $Id: microcosm_tsv.xsl,v 1.2 2006-11-30 05:10:33 chicares Exp $
 -->
+
 <!DOCTYPE xsl:stylesheet [
 <!ENTITY tab "&#x9;">
 <!ENTITY nl "&#xA;">
@@ -91,6 +90,14 @@
     taken as an xml file.
     XPath construct "document('')" references the stylesheet itself taken as XML file.
 -->
+
+<!--
+    TODO ?? CALCULATION_SUMMARY EVGENIY: This document references
+    itself by name; is that intentional? See:
+http://cvs.savannah.gnu.org/viewcvs/lmi/lmi/Attic/tab_delimited.xsl?annotate=1.1.2.13&sortby=date&only_with_tag=gnome-xml-branch
+    for the original document, which does likewise.
+-->
+
 <xsl:variable name="basic_columns" select="document('tab_delimited.xsl')/xsl:stylesheet/xsl:variable[@name='basic_columns_xml']/column"/>
 
 <xsl:variable name="all_columns" select="$basic_columns | $calculation_summary_columns"/>

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: configurable_settings.hpp,v 1.17 2006-11-14 02:34:17 chicares Exp $
+// $Id: configurable_settings.hpp,v 1.18 2006-11-30 05:10:33 chicares Exp $
 
 #ifndef configurable_settings_hpp
 #define configurable_settings_hpp
@@ -79,18 +79,17 @@
 /// use_builtin_calculation_summary_: If true, then use built-in
 /// defaults instead of calculation_summary_columns_.
 ///
-/// xml_schema_filename_: xsd for ledger xml data and 'format.xml',
-/// used by calculation summary to validate xml resources.
+/// xml_schema_filename_: xsd for xslt_format_xml_filename_ and xml
+/// ledger data.
 ///
 /// xsl_fo_command_: Command to execute xsl 'formatting objects'
 /// processor. Making this an external command permits using a program
 /// with a free but not GPL-compatible license, such as apache fop,
 /// which cannot be linked with a GPL version 2 program.
 ///
-/// xsl_directory_: Directory where xsl templates, 'schema.xsd'
-/// and 'format.xml' reside. TODO ?? CALCULATION_SUMMARY Should this
-/// be expunged? FHS would seem to suggest '/usr/share/sgml' (does
-/// anyone really use that?).
+/// xsl_directory_: Directory where xml and xsl files reside.
+/// TODO ?? CALCULATION_SUMMARY Should this be expunged, since these
+/// files actually reside in the data directory?
 ///
 /// xslt_format_xml_filename_: xml file containing column titles and
 /// value formats used by calculation summary.

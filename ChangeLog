@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.505 2006-11-29 18:39:31 chicares Exp $
+// $Id: ChangeLog,v 1.506 2006-11-30 05:10:33 chicares Exp $
 
 MAINTENANCE
 
@@ -8340,6 +8340,7 @@ Refine source-file categorization.
   calculation_summary_tsv.xsl  [new file] (from cs_tsv.xsl)
   ledger.xsd                   [new file] (from schema.xsd)
   ledger_columns.xml           [new file] (from format.xml)
+    [Changed to 'ledger_formats.xml' on 20061129T1459Z.]
   ledger_common.xsl            [new file] (from common.xsl)
   ledger_common_tsv.xsl        [new file] (from tsv_common.xsl)
   microcosm_tsv.xsl            [new file] (from tab_delimited.xsl)
@@ -8379,4 +8380,23 @@ Ignore unrecognized elements, issuing a warning.
 
   configurable_settings.cpp
 Show unrecognized-element warnings in a single messagebox.
+
+20061130T0035Z <chicares@cox.net> [1222]
+
+  ledger_xml_io.cpp
+Remove obsolete code that had been commented out since revision 1.1 .
+
+20061130T0510Z <chicares@cox.net> [1225]
+
+  calculation_summary_html.xsl
+  calculation_summary_tsv.xsl
+  configurable_settings.hpp
+  ledger.xsd
+  ledger_common.xsl
+  ledger_common_tsv.xsl
+  ledger_xml_io2.cpp
+  microcosm_tsv.xsl
+Avoid specifying one source file's name in another as a mere matter of
+documentation. Any clarity that practice adds is often outweighed by
+the cost of correct maintenance and the risk of incorrect maintenance.
 
