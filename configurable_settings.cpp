@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: configurable_settings.cpp,v 1.30 2006-11-29 18:39:31 chicares Exp $
+// $Id: configurable_settings.cpp,v 1.31 2006-11-30 05:58:26 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -111,23 +111,23 @@ namespace
 
 configurable_settings::configurable_settings()
     :calculation_summary_columns_      (default_calculation_summary_columns())
-    ,cgi_bin_log_filename_             ("cgi_bin.log"        )
-    ,custom_input_filename_            ("custom.ini"         )
-    ,custom_output_filename_           ("custom.out"         )
-    ,default_input_filename_           ("etc/opt/default.ini")
-    ,libraries_to_preload_             (""                   )
-    ,offer_hobsons_choice_             (false                )
-    ,print_directory_                  ("/var/opt/lmi/spool" )
-    ,skin_filename_                    ("xml_notebook.xrc"   )
-    ,spreadsheet_file_extension_       (".gnumeric"          )
-    ,use_builtin_calculation_summary_  (false                )
-    ,xml_schema_filename_              ("schema.xsd"         )
-    ,xsl_fo_command_                   ("fo"                 )
-    ,xsl_directory_                    (""                   )
-    ,xslt_format_xml_filename_         ("format.xml"         )
-    ,xslt_html_filename_               ("html.xsl"           )
-    ,xslt_light_tab_delimited_filename_("cs_tsv.xsl"         )
-    ,xslt_tab_delimited_filename_      ("tab_delimited.xsl"  )
+    ,cgi_bin_log_filename_             ("cgi_bin.log"                 )
+    ,custom_input_filename_            ("custom.ini"                  )
+    ,custom_output_filename_           ("custom.out"                  )
+    ,default_input_filename_           ("etc/opt/default.ini"         )
+    ,libraries_to_preload_             (""                            )
+    ,offer_hobsons_choice_             (false                         )
+    ,print_directory_                  ("/var/opt/lmi/spool"          )
+    ,skin_filename_                    ("xml_notebook.xrc"            )
+    ,spreadsheet_file_extension_       (".gnumeric"                   )
+    ,use_builtin_calculation_summary_  (false                         )
+    ,xml_schema_filename_              ("ledger.xsd"                  )
+    ,xsl_fo_command_                   ("fo"                          )
+    ,xsl_directory_                    (""                            )
+    ,xslt_format_xml_filename_         ("ledger_formats.xml"          )
+    ,xslt_html_filename_               ("calculation_summary_html.xsl")
+    ,xslt_light_tab_delimited_filename_("calculation_summary_tsv.xsl" )
+    ,xslt_tab_delimited_filename_      ("microcosm_tsv.xsl"           )
 {
     ascribe_members();
     load();

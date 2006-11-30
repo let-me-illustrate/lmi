@@ -21,16 +21,16 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: microcosm_tsv.xsl,v 1.2 2006-11-30 05:10:33 chicares Exp $
+    $Id: microcosm_tsv.xsl,v 1.3 2006-11-30 05:58:26 chicares Exp $
 -->
 
 <!DOCTYPE xsl:stylesheet [
 <!ENTITY tab "&#x9;">
 <!ENTITY nl "&#xA;">
 ]>
-<xsl:stylesheet xmlns:lmi="http://savannah.nongnu.org/projects/lmi" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0" xsi:schemaLocation="http://savannah.nongnu.org/projects/lmi schema.xsd">
+<xsl:stylesheet xmlns:lmi="http://savannah.nongnu.org/projects/lmi" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0" xsi:schemaLocation="http://savannah.nongnu.org/projects/lmi ledger.xsd">
 
-<xsl:include href="tsv_common.xsl"/>
+<xsl:include href="ledger_common_tsv.xsl"/>
 
 <xsl:variable name="basic_columns_xml">
     <column name="DBOpt">DeathBenefitOption</column>
@@ -98,7 +98,7 @@ http://cvs.savannah.gnu.org/viewcvs/lmi/lmi/Attic/tab_delimited.xsl?annotate=1.1
     for the original document, which does likewise.
 -->
 
-<xsl:variable name="basic_columns" select="document('tab_delimited.xsl')/xsl:stylesheet/xsl:variable[@name='basic_columns_xml']/column"/>
+<xsl:variable name="basic_columns" select="document('microcosm_tsv.xsl')/xsl:stylesheet/xsl:variable[@name='basic_columns_xml']/column"/>
 
 <xsl:variable name="all_columns" select="$basic_columns | $calculation_summary_columns"/>
 
