@@ -21,10 +21,9 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: calculation_summary_html.xsl,v 1.2 2006-11-29 15:37:24 chicares Exp $
-
-    Uses format.xml - column titles, number-formatting and other information.
+    $Id: calculation_summary_html.xsl,v 1.3 2006-11-30 05:10:33 chicares Exp $
 -->
+
 <xsl:stylesheet xmlns:lmi="http://savannah.nongnu.org/projects/lmi" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0" xsi:schemaLocation="http://savannah.nongnu.org/projects/lmi schema.xsd">
 
 <xsl:output method="html" encoding="iso-8859-1" indent="yes"/>
@@ -42,7 +41,7 @@
 
     will generate a column with values from AcctVal:run_guar_basis column with
     'Guaranteed Account Value' as its title instead of the default
-    'Guar Account Value' title from 'format.xml'.
+    'Guar Account Value' title from the xml format file.
 
     Note: the variable '$basic_columns_xml' contains the unparsed XML as text.
     Use '$basic_columns' to get the parsed list of nodes.
@@ -138,7 +137,7 @@
 
         <table border="0" cellpadding="2" cellspacing="0" width="100%">
 
-        <!-- Call 'data_table' template defined in 'common.xsl'. -->
+        <!-- Call 'data_table' template defined in another file. -->
         <xsl:call-template name="data_table">
             <xsl:with-param name="pos" select="1"/>
             <xsl:with-param name="columns" select="$all_columns"/>

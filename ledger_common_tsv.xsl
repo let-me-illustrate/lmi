@@ -21,10 +21,9 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: ledger_common_tsv.xsl,v 1.1 2006-11-29 14:08:24 chicares Exp $
-
-    Uses format.xml - column titles, number-formatting and other information.
+    $Id: ledger_common_tsv.xsl,v 1.2 2006-11-30 05:10:33 chicares Exp $
 -->
+
 <!DOCTYPE xsl:stylesheet [
 <!ENTITY tab "&#x9;">
 <!ENTITY nl "&#xA;">
@@ -64,13 +63,13 @@
         <xsl:choose>
             <!-- a spacer -->
             <xsl:when test="not(@name)">
-                <!-- leave the cell empty for a spacer column -->
+                <!-- Leave the cell empty for a spacer column. -->
             </xsl:when>
-            <!-- if the title is specified directly, then use it -->
+            <!-- If the title is specified directly, then use it. -->
             <xsl:when test="./text()">
                 <xsl:value-of select="./text()"/>
             </xsl:when>
-            <!-- otherwise get it from 'format.xml' -->
+            <!-- Otherwise, get it from the xml format file. -->
             <xsl:otherwise>
                 <xsl:call-template name="title">
                     <xsl:with-param name="name" select="@name"/>
