@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.507 2006-11-30 05:58:26 chicares Exp $
+// $Id: ChangeLog,v 1.508 2006-11-30 18:29:26 chicares Exp $
 
 MAINTENANCE
 
@@ -8411,4 +8411,27 @@ the cost of correct maintenance and the risk of incorrect maintenance.
   ledger_xml_io2.cpp
   microcosm_tsv.xsl
 Reflect the 20061129T1408Z and 20061129T1459Z renaming.
+
+20061130T1658Z <chicares@cox.net> [1225]
+
+  ledger_xml_io.cpp
+Write 'idiosyncrasy_spreadsheet' file to configurable print directory,
+warning if it could not be written.
+
+20061130T1740Z <chicares@cox.net> [1225]
+
+  illustration_view.cpp
+  illustration_view.hpp
+Alphabetize event handlers.
+
+20061130T1801Z <chicares@cox.net> [1224]
+
+  illustration_view.cpp
+Revise comments.
+
+20061130T1829Z <chicares@cox.net> [1224]
+
+  input.hpp
+  input_harmonization.cpp
+Improve member names.
 

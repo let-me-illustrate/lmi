@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_harmonization.cpp,v 1.38 2006-10-09 16:53:36 chicares Exp $
+// $Id: input_harmonization.cpp,v 1.39 2006-11-30 18:29:26 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -51,7 +51,7 @@ namespace
 
 /// Implementation notes: DoAdaptExternalities().
 ///
-/// Reset database if necessary, i.e., if the product or any database
+/// Reset database_ if necessary, i.e., if the product or any database
 /// axis changed. Conditionally update general-account rate.
 ///
 /// If the general-account interest-rate field holds the default value
@@ -87,13 +87,13 @@ void Input::DoAdaptExternalities()
     // product.
     if
         (
-            CachedProductName           == ProductName
-        &&  CachedGender                == Gender
-        &&  CachedUnderwritingClass     == UnderwritingClass
-        &&  CachedSmoking               == Smoking
-        &&  CachedIssueAge              == IssueAge
-        &&  CachedGroupUnderwritingType == GroupUnderwritingType
-        &&  CachedStateOfJurisdiction   == StateOfJurisdiction
+            CachedProductName_           == ProductName
+        &&  CachedGender_                == Gender
+        &&  CachedUnderwritingClass_     == UnderwritingClass
+        &&  CachedSmoking_               == Smoking
+        &&  CachedIssueAge_              == IssueAge
+        &&  CachedGroupUnderwritingType_ == GroupUnderwritingType
+        &&  CachedStateOfJurisdiction_   == StateOfJurisdiction
         )
         {
         return;
@@ -101,18 +101,18 @@ void Input::DoAdaptExternalities()
 
     std::string cached_credited_rate;
 
-    if(database.get())
+    if(database_.get())
         {
-        cached_credited_rate = current_credited_rate(*database);
+        cached_credited_rate = current_credited_rate(*database_);
         }
 
-    CachedProductName           = ProductName          ;
-    CachedGender                = Gender               ;
-    CachedUnderwritingClass     = UnderwritingClass    ;
-    CachedSmoking               = Smoking              ;
-    CachedIssueAge              = IssueAge             ;
-    CachedGroupUnderwritingType = GroupUnderwritingType;
-    CachedStateOfJurisdiction   = StateOfJurisdiction  ;
+    CachedProductName_           = ProductName          ;
+    CachedGender_                = Gender               ;
+    CachedUnderwritingClass_     = UnderwritingClass    ;
+    CachedSmoking_               = Smoking              ;
+    CachedIssueAge_              = IssueAge             ;
+    CachedGroupUnderwritingType_ = GroupUnderwritingType;
+    CachedStateOfJurisdiction_   = StateOfJurisdiction  ;
 
     std::string const IhsProductName(ProductName            .str());
     e_gender const    IhsGender     (Gender                 .str());
@@ -123,7 +123,7 @@ void Input::DoAdaptExternalities()
     e_state const     IhsState      (StateOfJurisdiction    .str());
 
     // TODO ?? Can the copy be avoided?
-    database = std::auto_ptr<TDatabase>
+    database_ = std::auto_ptr<TDatabase>
         (new TDatabase
             (IhsProductName
             ,IhsGender
@@ -140,7 +140,7 @@ void Input::DoAdaptExternalities()
         ||  cached_credited_rate == GeneralAccountRate.value()
         )
         {
-        GeneralAccountRate = datum_string(current_credited_rate(*database));
+        GeneralAccountRate = datum_string(current_credited_rate(*database_));
         }
 }
 
@@ -149,18 +149,18 @@ void Input::DoHarmonize()
     bool anything_goes    = global_settings::instance().ash_nazg();
     bool home_office_only = global_settings::instance().mellon();
 
-    bool allow_sep_acct = database->Query(DB_AllowSepAcct);
-    bool allow_gen_acct = database->Query(DB_AllowGenAcct);
+    bool allow_sep_acct = database_->Query(DB_AllowSepAcct);
+    bool allow_gen_acct = database_->Query(DB_AllowGenAcct);
 
     bool sepacct_only = allow_sep_acct && !allow_gen_acct;
     bool genacct_only = allow_gen_acct && !allow_sep_acct;
 
-    bool wd_allowed = database->Query(DB_AllowWD);
-    bool loan_allowed = database->Query(DB_AllowLoan);
+    bool wd_allowed = database_->Query(DB_AllowWD);
+    bool loan_allowed = database_->Query(DB_AllowLoan);
 
-    DefinitionOfLifeInsurance.allow(mce_gpt, database->Query(DB_AllowGPT));
-    DefinitionOfLifeInsurance.allow(mce_cvat, database->Query(DB_AllowCVAT));
-    DefinitionOfLifeInsurance.allow(mce_noncompliant, database->Query(DB_AllowNo7702));
+    DefinitionOfLifeInsurance.allow(mce_gpt, database_->Query(DB_AllowGPT));
+    DefinitionOfLifeInsurance.allow(mce_cvat, database_->Query(DB_AllowCVAT));
+    DefinitionOfLifeInsurance.allow(mce_noncompliant, database_->Query(DB_AllowNo7702));
 
     DefinitionOfMaterialChange.enable(mce_noncompliant != DefinitionOfLifeInsurance);
     if(mce_noncompliant == DefinitionOfLifeInsurance)
@@ -258,21 +258,21 @@ void Input::DoHarmonize()
 
     MaximumNaar.enable(anything_goes);
 
-    AmortizePremiumLoad.enable(database->Query(DB_AllowAmortPremLoad));
-    ExtraCompensationOnAssets .enable(database->Query(DB_AllowExtraAssetComp));
-    ExtraCompensationOnPremium.enable(database->Query(DB_AllowExtraPremComp));
+    AmortizePremiumLoad.enable(database_->Query(DB_AllowAmortPremLoad));
+    ExtraCompensationOnAssets .enable(database_->Query(DB_AllowExtraAssetComp));
+    ExtraCompensationOnPremium.enable(database_->Query(DB_AllowExtraPremComp));
     OffshoreCorridorFactor.enable(mce_noncompliant == DefinitionOfLifeInsurance);
 
-    RetireesCanEnroll.enable(database->Query(DB_AllowRetirees));
+    RetireesCanEnroll.enable(database_->Query(DB_AllowRetirees));
 
     // TODO ?? There should be flags in the database to allow or
     // forbid paramedical and nonmedical underwriting; arbitrarily,
     // until they are added, those options are always inhibited.
-    GroupUnderwritingType.allow(mce_medical, database->Query(DB_AllowFullUW));
+    GroupUnderwritingType.allow(mce_medical, database_->Query(DB_AllowFullUW));
     GroupUnderwritingType.allow(mce_paramedical, false);
     GroupUnderwritingType.allow(mce_nonmedical, false);
-    GroupUnderwritingType.allow(mce_simplified_issue, database->Query(DB_AllowSimpUW));
-    GroupUnderwritingType.allow(mce_guaranteed_issue, database->Query(DB_AllowGuarUW));
+    GroupUnderwritingType.allow(mce_simplified_issue, database_->Query(DB_AllowSimpUW));
+    GroupUnderwritingType.allow(mce_guaranteed_issue, database_->Query(DB_AllowGuarUW));
 
     bool part_mort_used = "Yes" == UsePartialMortality;
 
@@ -293,7 +293,7 @@ void Input::DoHarmonize()
     SurviveToAge              .enable(part_mort_used && mce_survive_to_age  == SurviveToType);
 
     bool enable_experience_rating =
-            database->Query(DB_AllowExpRating)
+            database_->Query(DB_AllowExpRating)
         &&  part_mort_used
         &&  mce_month_by_month == RunOrder
         ;
@@ -340,8 +340,8 @@ void Input::DoHarmonize()
 // TODO ?? Temporarily suppress this while exploring automatic-
 // enforcement options in the skeleton trunk.
     IssueAge.minimum_and_maximum
-        (static_cast<int>(database->Query(DB_MinIssAge))
-        ,static_cast<int>(database->Query(DB_MaxIssAge))
+        (static_cast<int>(database_->Query(DB_MinIssAge))
+        ,static_cast<int>(database_->Query(DB_MaxIssAge))
         );
 #endif // 0
 
@@ -352,7 +352,7 @@ void Input::DoHarmonize()
             )
         );
 
-    bool const use_anb = database->Query(DB_AgeLastOrNearest);
+    bool const use_anb = database_->Query(DB_AgeLastOrNearest);
     DateOfBirth.minimum_and_maximum
         (minimum_birthdate(IssueAge.maximum(), EffectiveDate.value(), use_anb)
         ,maximum_birthdate(IssueAge.minimum(), EffectiveDate.value(), use_anb)
@@ -361,8 +361,8 @@ void Input::DoHarmonize()
     RetirementAge   .enable("No"  == DeprecatedUseDOR);
     DateOfRetirement.enable("Yes" == DeprecatedUseDOR);
 
-    UnderwritingClass.allow(mce_ultrapreferred, database->Query(DB_AllowUltraPrefClass));
-    UnderwritingClass.allow(mce_preferred     , database->Query(DB_AllowPreferredClass));
+    UnderwritingClass.allow(mce_ultrapreferred, database_->Query(DB_AllowUltraPrefClass));
+    UnderwritingClass.allow(mce_preferred     , database_->Query(DB_AllowPreferredClass));
 
     // It would seem generally reasonable to forbid table ratings on
     // guaranteed-issue contracts. No such principle is hardcoded here
@@ -385,7 +385,7 @@ void Input::DoHarmonize()
     // might connote, and realize that to the table-access code they
     // are simply lookup axes.
     //
-    UnderwritingClass.allow(mce_rated, database->Query(DB_AllowSubstdTable));
+    UnderwritingClass.allow(mce_rated, database_->Query(DB_AllowSubstdTable));
 
     // TODO ?? WX PORT !! Nasty interaction here.
     SubstandardTable.enable(mce_rated == UnderwritingClass);
@@ -411,26 +411,26 @@ void Input::DoHarmonize()
         (   allow_custom_coi_multiplier
         &&  "Yes" == OverrideCoiMultiplier
         );
-    FlatExtra.enable(database->Query(DB_AllowFlatExtras));
+    FlatExtra.enable(database_->Query(DB_AllowFlatExtras));
 
-    BlendGender.enable(database->Query(DB_AllowMortBlendSex));
+    BlendGender.enable(database_->Query(DB_AllowMortBlendSex));
     bool blend_mortality_by_gender = "Yes" == BlendGender;
 
-    BlendSmoking.enable(database->Query(DB_AllowMortBlendSmoke));
+    BlendSmoking.enable(database_->Query(DB_AllowMortBlendSmoke));
     bool blend_mortality_by_smoking = "Yes" == BlendSmoking;
 
     MaleProportion     .enable(blend_mortality_by_gender);
     NonsmokerProportion.enable(blend_mortality_by_smoking);
 
-    bool allow_gender_distinct = database->Query(DB_AllowSexDistinct);
-    bool allow_unisex          = database->Query(DB_AllowUnisex);
+    bool allow_gender_distinct = database_->Query(DB_AllowSexDistinct);
+    bool allow_unisex          = database_->Query(DB_AllowUnisex);
 
     Gender.allow(mce_female, !blend_mortality_by_gender && allow_gender_distinct);
     Gender.allow(mce_male  , !blend_mortality_by_gender && allow_gender_distinct);
     Gender.allow(mce_unisex,  blend_mortality_by_gender || allow_unisex);
 
-    bool allow_smoker_distinct = database->Query(DB_AllowSmokeDistinct);
-    bool allow_unismoke        = database->Query(DB_AllowUnismoke);
+    bool allow_smoker_distinct = database_->Query(DB_AllowSmokeDistinct);
+    bool allow_unismoke        = database_->Query(DB_AllowUnismoke);
 
     Smoking.allow(mce_smoker,    !blend_mortality_by_smoking && allow_smoker_distinct);
     Smoking.allow(mce_nonsmoker, !blend_mortality_by_smoking && allow_smoker_distinct);
@@ -454,7 +454,7 @@ void Input::DoHarmonize()
     bool specamt_solve = mce_solve_specamt == SolveType;
 
     bool specamt_from_term_proportion =
-           database->Query(DB_AllowTerm)
+           database_->Query(DB_AllowTerm)
         && "Yes" == TermRiderUseProportion
         && "Yes" == TermRider
         ;
@@ -497,7 +497,7 @@ false // Silly workaround for now.
     bool inhibit_sequence = specamt_solve || specamt_from_term_proportion;
     SpecifiedAmount.enable(!inhibit_sequence);
 
-    bool never_retire = database->Query(DB_EndtAge) <= RetirementAge.value();
+    bool never_retire = database_->Query(DB_EndtAge) <= RetirementAge.value();
 /*
 // TODO ?? WX PORT !! Figure out how to handle the next line:
     if(!is_specamt_simply_representable)
@@ -553,10 +553,10 @@ false // Silly workaround for now.
 
     DeathBenefitOptionFromRetirement.allow(mce_option1, is_dbopt_simply_representable);
     DeathBenefitOptionFromRetirement.allow(mce_option2, is_dbopt_simply_representable);
-    DeathBenefitOptionFromRetirement.allow(mce_rop    , is_dbopt_simply_representable && database->Query(DB_AllowDBO3));
+    DeathBenefitOptionFromRetirement.allow(mce_rop    , is_dbopt_simply_representable && database_->Query(DB_AllowDBO3));
     DeathBenefitOptionFromIssue     .allow(mce_option1, is_dbopt_simply_representable && !never_retire);
-    DeathBenefitOptionFromIssue     .allow(mce_option2, is_dbopt_simply_representable && !never_retire && (database->Query(DB_AllowChangeToDBO2) || mce_option2 == DeathBenefitOptionFromRetirement));
-    DeathBenefitOptionFromIssue     .allow(mce_rop    , is_dbopt_simply_representable && !never_retire && database->Query(DB_AllowDBO3));
+    DeathBenefitOptionFromIssue     .allow(mce_option2, is_dbopt_simply_representable && !never_retire && (database_->Query(DB_AllowChangeToDBO2) || mce_option2 == DeathBenefitOptionFromRetirement));
+    DeathBenefitOptionFromIssue     .allow(mce_rop    , is_dbopt_simply_representable && !never_retire && database_->Query(DB_AllowDBO3));
 
 /*
     // TODO ?? WX PORT !! Figure out how to do this properly.
@@ -680,7 +680,7 @@ false // Silly workaround for now.
     // TODO ?? VLR not yet implemented.
     bool allow_vlr =
         (   loan_allowed
-        &&  (   database->Query(DB_AllowVLR)
+        &&  (   database_->Query(DB_AllowVLR)
             ||  anything_goes
             )
         );
@@ -690,7 +690,7 @@ false // Silly workaround for now.
     UseAverageOfAllFunds.enable(!genacct_only);
     bool enable_custom_fund =
             !genacct_only
-        &&  (   database->Query(DB_AllowCustomFund)
+        &&  (   database_->Query(DB_AllowCustomFund)
             ||  home_office_only
             )
         ;
@@ -795,7 +795,7 @@ false // Silly workaround for now.
     LoanToAge          .enable(!loan_inhibit_simple && mce_to_age    == LoanToAlternative);
     LoanToDuration     .enable(!loan_inhibit_simple && mce_to_year   == LoanToAlternative);
 
-    TermRider.enable(database->Query(DB_AllowTerm));
+    TermRider.enable(database_->Query(DB_AllowTerm));
 
     bool enable_term = "Yes" == TermRider;
 
@@ -829,8 +829,8 @@ false // Silly workaround for now.
     TERM_PROPORTION     ->EnableWindow(enable_term && !term_use_amount);
 */
 
-    WaiverOfPremiumBenefit.enable(database->Query(DB_AllowWP));
-    AccidentalDeathBenefit.enable(database->Query(DB_AllowADD));
+    WaiverOfPremiumBenefit.enable(database_->Query(DB_AllowWP));
+    AccidentalDeathBenefit.enable(database_->Query(DB_AllowADD));
 
     // TODO ?? Logic differs from term rider handling above.
     // Which is better? Check it out. For term, choose a policy
@@ -845,14 +845,14 @@ false // Silly workaround for now.
     // actual effect (it shouldn't, but I don't know what really
     // happens).
 
-    ChildRider       .enable(database->Query(DB_AllowChild));
+    ChildRider       .enable(database_->Query(DB_AllowChild));
     ChildRiderAmount .enable("Yes" == ChildRider);
-    SpouseRider      .enable(database->Query(DB_AllowSpouse));
+    SpouseRider      .enable(database_->Query(DB_AllowSpouse));
     SpouseRiderAmount.enable("Yes" == SpouseRider);
     SpouseIssueAge   .enable("Yes" == SpouseRider);
 
 
-    HoneymoonEndorsement .enable(database->Query(DB_AllowHoneymoon));
+    HoneymoonEndorsement .enable(database_->Query(DB_AllowHoneymoon));
     PostHoneymoonSpread  .enable("Yes" == HoneymoonEndorsement);
     HoneymoonValueSpread .enable("Yes" == HoneymoonEndorsement);
 
@@ -940,12 +940,12 @@ false // Silly workaround for now.
     SolveBasis .enable(actually_solving);
     SolveBasis .allow(mce_curr_basis, actually_solving);
     SolveBasis .allow(mce_guar_basis, actually_solving);
-    SolveBasis .allow(mce_mdpt_basis, actually_solving && is_subject_to_ill_reg(database->Query(DB_LedgerType)));
+    SolveBasis .allow(mce_mdpt_basis, actually_solving && is_subject_to_ill_reg(database_->Query(DB_LedgerType)));
 
     SolveSeparateAccountBasis.enable(actually_solving);
     SolveSeparateAccountBasis.allow(mce_sep_acct_full, actually_solving);
     SolveSeparateAccountBasis.allow(mce_sep_acct_zero, actually_solving && allow_sep_acct);
-    SolveSeparateAccountBasis.allow(mce_sep_acct_half, actually_solving && allow_sep_acct && is_three_rate_nasd(database->Query(DB_LedgerType)));
+    SolveSeparateAccountBasis.allow(mce_sep_acct_half, actually_solving && allow_sep_acct && is_three_rate_nasd(database_->Query(DB_LedgerType)));
 
     SolveTargetCashSurrenderValue.enable(actually_solving && mce_solve_for_target == SolveTarget);
     DeprecatedSolveTgtAtWhich    .enable(actually_solving && mce_solve_for_target == SolveTarget);
@@ -1004,7 +1004,7 @@ void Input::DoTransmogrify()
         DoHarmonize();
         }
 
-    bool const use_anb = database->Query(DB_AgeLastOrNearest);
+    bool const use_anb = database_->Query(DB_AgeLastOrNearest);
 
     int apparent_age = attained_age
         (DateOfBirth.value()
@@ -1120,7 +1120,7 @@ void Input::TransferWithdrawalSimpleControlsToInputSequence()
         case enumerator_fromret:
             {
             if(IssueAge < RetirementAge)
-// TODO ??            RetirementAge < database->Query(DB_EndtAge)
+// TODO ??            RetirementAge < database_->Query(DB_EndtAge)
                 {
                 s += "0, retirement";
                 s += "; ";
@@ -1130,7 +1130,7 @@ void Input::TransferWithdrawalSimpleControlsToInputSequence()
         case enumerator_fromage:
             {
             if(IssueAge < local_rep->WDBegTime)
-// TODO ??            local_rep->WDBegTime < database->Query(DB_EndtAge)
+// TODO ??            local_rep->WDBegTime < database_->Query(DB_EndtAge)
                 {
                 s += "0, @" + value_cast<std::string>(local_rep->WDBegTime);
                 s += "; ";
@@ -1141,7 +1141,7 @@ void Input::TransferWithdrawalSimpleControlsToInputSequence()
             {
             if(0 < local_rep->WDBegTime)
 // TODO ??                ( IssueAge + local_rep->WDBegTime
-// TODO ??                < database->Query(DB_EndtAge)
+// TODO ??                < database_->Query(DB_EndtAge)
 // TODO ??                )
                 {
                 s += "0, " + value_cast<std::string>(local_rep->WDBegTime);
@@ -1174,7 +1174,7 @@ void Input::TransferWithdrawalSimpleControlsToInputSequence()
         {
         case enumerator_toret:
             {
-            if(RetirementAge < database->Query(DB_EndtAge))
+            if(RetirementAge < database_->Query(DB_EndtAge))
                 {
                 s += ", retirement";
                 s += "; 0";
@@ -1183,7 +1183,7 @@ void Input::TransferWithdrawalSimpleControlsToInputSequence()
             break;
         case enumerator_toage:
             {
-            if(local_rep->WDEndTime < database->Query(DB_EndtAge))
+            if(local_rep->WDEndTime < database_->Query(DB_EndtAge))
                 {
                 s += ", @" + value_cast<std::string>(local_rep->WDEndTime);
                 s += "; 0";
@@ -1194,7 +1194,7 @@ void Input::TransferWithdrawalSimpleControlsToInputSequence()
             {
             if
                 ( IssueAge + local_rep->WDEndTime
-                < database->Query(DB_EndtAge)
+                < database_->Query(DB_EndtAge)
                 )
                 {
                 s += ", " + value_cast<std::string>(local_rep->WDEndTime);
