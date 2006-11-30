@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.506 2006-11-30 05:10:33 chicares Exp $
+// $Id: ChangeLog,v 1.507 2006-11-30 05:58:26 chicares Exp $
 
 MAINTENANCE
 
@@ -8399,4 +8399,16 @@ Remove obsolete code that had been commented out since revision 1.1 .
 Avoid specifying one source file's name in another as a mere matter of
 documentation. Any clarity that practice adds is often outweighed by
 the cost of correct maintenance and the risk of incorrect maintenance.
+
+20061130T0558Z <chicares@cox.net> [1225]
+
+  calculation_summary_html.xsl
+  calculation_summary_tsv.xsl
+  configurable_settings.cpp
+  ledger_common.xsl
+  ledger_common_tsv.xsl
+  ledger_formats.xml
+  ledger_xml_io2.cpp
+  microcosm_tsv.xsl
+Reflect the 20061129T1408Z and 20061129T1459Z renaming.
 

@@ -21,11 +21,10 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: ledger_common.xsl,v 1.2 2006-11-30 05:10:33 chicares Exp $
-
+    $Id: ledger_common.xsl,v 1.3 2006-11-30 05:58:26 chicares Exp $
 -->
 
-<xsl:stylesheet xmlns:lmi="http://savannah.nongnu.org/projects/lmi" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0" xsi:schemaLocation="http://savannah.nongnu.org/projects/lmi schema.xsd">
+<xsl:stylesheet xmlns:lmi="http://savannah.nongnu.org/projects/lmi" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0" xsi:schemaLocation="http://savannah.nongnu.org/projects/lmi ledger.xsd">
 
     <xsl:param name="debug"/>
 
@@ -43,7 +42,7 @@
         Read formatting specifications from a separate file.
         Used in 'title' and 'get_column_format' templates.
     -->
-    <xsl:variable name="columns_format_info" select="document('format.xml')/lmi:columns/lmi:column"/>
+    <xsl:variable name="columns_format_info" select="document('ledger_formats.xml')/lmi:columns/lmi:column"/>
 
     <!--
         An empty node. Pass it as initial empty nodeset to a template
