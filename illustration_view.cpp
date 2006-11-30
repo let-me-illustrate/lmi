@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustration_view.cpp,v 1.55 2006-11-30 17:40:19 chicares Exp $
+// $Id: illustration_view.cpp,v 1.56 2006-11-30 18:01:40 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -65,9 +65,6 @@
 #include <wx/xrc/xmlres.h>
 
 #include <sstream>
-
-// TODO ?? Reorder member functions; probably they should follow the
-// order used in the header.
 
 IMPLEMENT_DYNAMIC_CLASS(IllustrationView, ViewEx)
 
@@ -297,7 +294,7 @@ void IllustrationView::UponProperties(wxCommandEvent&)
         }
 }
 
-/// This is completely replaces wxDocManager::OnUpdateFileSave(),
+/// This completely replaces wxDocManager::OnUpdateFileSave(),
 /// and doesn't need to call Skip().
 
 void IllustrationView::UponUpdateFileSave(wxUpdateUIEvent& e)
@@ -353,8 +350,8 @@ void IllustrationView::CopyLedgerToClipboard(enum_copy_option option)
 
     status() << "Format: " << timer.stop().elapsed_msec_str() << std::flush;
 
-    // TODO ?? Probably operator new(std::size_t, wx_allocator) should
-    // be used here.
+    // TODO ?? MPATROL !! Probably operator new(std::size_t, wx_allocator)
+    // should be used here.
     wxTextDataObject* TextDataObject = new wxTextDataObject(oss.str());
 
     // clipboard owns the data
