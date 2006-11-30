@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xml_io.cpp,v 1.56 2006-11-29 15:29:47 chicares Exp $
+// $Id: ledger_xml_io.cpp,v 1.57 2006-11-30 00:35:17 chicares Exp $
 
 #include "ledger.hpp"
 
@@ -905,49 +905,6 @@ void Ledger::write(xml_lmi::Element& x) const
 
     ADD_NODE_0(x,scalar,"scalar")
     ADD_NODE_0(x,data,"data")
-/*
-    for
-        (scalar_map::const_iterator j = scalars.begin()
-        ;j != scalars.end()
-        ;++j
-        )
-        {
-        std::string node_tag = j->first;
-        std::string value = value_cast<std::string>(*j->second);
-        scalar.push_back(xml_lmi::Element(node_tag.c_str(), value.c_str()));
-        }
-    for
-        (string_map::const_iterator j = strings.begin()
-        ;j != strings.end()
-        ;++j
-        )
-        {
-        std::string node_tag = j->first;
-        std::string value = value_cast<std::string>(*j->second);
-        scalar.push_back(xml_lmi::Element(node_tag.c_str(), value.c_str()));
-        }
-    for
-        (double_vector_map::const_iterator j = vectors.begin()
-        ;j != vectors.end()
-        ;++j
-        )
-        {
-        xml_lmi::Element newcolumn("newcolumn");
-        xml_lmi::Element column("column");
-        xml_lmi::set_attr(column, "name", j->first.c_str());
-        std::vector<double> const& v = *j->second;
-        for(unsigned int k = 0; k < v.size(); ++k)
-            {
-            xml_lmi::Element duration("duration");
-            xml_lmi::set_attr(duration, "number", value_cast<std::string>(k).c_str());
-            xml_lmi::set_attr(duration, "column_value", value_cast<std::string>(v[k]).c_str());
-            column.push_back(duration);
-            }
-// TODO ?? Is <newcolumn> really useful?
-        newcolumn.push_back(column);
-        data.push_back(newcolumn);
-        }
-*/
     for
         (std::map<std::string,std::string>::const_iterator j = stringscalars.begin()
         ;j != stringscalars.end()
