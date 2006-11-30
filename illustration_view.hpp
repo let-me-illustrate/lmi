@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustration_view.hpp,v 1.24 2006-11-26 20:52:25 chicares Exp $
+// $Id: illustration_view.hpp,v 1.25 2006-11-30 17:40:19 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -104,10 +104,10 @@ class IllustrationView
     void UponCopyFull          (wxCommandEvent&);
     void UponCopySummary       (wxCommandEvent&);
     void UponMenuOpen          (wxMenuEvent&);
-    void UponPreviewSummary    (wxCommandEvent&);
     void UponPreviewPdf        (wxCommandEvent&);
-    void UponPrintSummary      (wxCommandEvent&);
+    void UponPreviewSummary    (wxCommandEvent&);
     void UponPrintPdf          (wxCommandEvent&);
+    void UponPrintSummary      (wxCommandEvent&);
     void UponProperties        (wxCommandEvent&);
     void UponUpdateFileSave    (wxUpdateUIEvent&);
     void UponUpdateFileSaveAs  (wxUpdateUIEvent&);
