@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xml_io2.cpp,v 1.8 2006-11-28 05:19:45 chicares Exp $
+// $Id: ledger_xml_io2.cpp,v 1.9 2006-11-30 05:10:33 chicares Exp $
 
 #include "ledger.hpp"
 
@@ -306,11 +306,20 @@ std::vector<std::string> enum_vector_to_string_vector
 /// double_formatter_t implements the double number formatting into strings
 ///
 /// Internally define a set of allowed formats (f1, f2, f3, f4, bp?).
-/// Make sure this list corresponds to formats described in 'schema.xsd' file.
-/// At initialisation read column formats from 'format.xml'.
+/// At initialization read column formats from an external xml file.
 ///
-/// if SHOW_MISSING_FORMATS is defined, log all missing format requests
-/// into 'missing_formats' file
+/// TODO ?? CALCULATION_SUMMARY Get rid of hardcoded formats: instead,
+/// specify precision and scaling separately.
+///
+/// If SHOW_MISSING_FORMATS is defined, write all missing formats
+/// to a 'missing_formats' file.
+///
+/// TODO ?? Why not do something like SHOW_MISSING_FORMATS does by
+/// default, but make it a runtime warning instead, or validate it in
+/// 'make cvs_ready'?
+///
+/// TODO ?? CALCULATION_SUMMARY If the external xml file should be
+/// validated, then do that automatically, e.g. in 'make cvs_ready'.
 
 class double_formatter_t
 {
@@ -467,7 +476,7 @@ double_formatter_t::double_formatter_t()
     known_formats["f4"] = f4;
     known_formats["bp"] = bp;
 
-    // read all the formatting information from "format.xml" file
+    // Read formatting information from an external xml file.
     std::string format_path;
     try
     {
@@ -489,9 +498,6 @@ double_formatter_t::double_formatter_t()
     try
         {
         xml_lmi::dom_parser parser(format_path);
-
-        // We will not check 'format.xml' for validity here. It should be done during tests.
-        // TODO ?? CALCULATION_SUMMARY Add a unit test for that.
 
         xml_lmi::Element const& root_node = parser.root_node("columns");
         xml_lmi::ElementContainer const columns
@@ -779,10 +785,12 @@ void Ledger::write_excerpt
             ;
         }
 
-    // If it is a detailed xml version (for detailed TSV data)
-    // then add hardcoded list of columns.
-    // TODO ?? read that list from tab_delimited.xsl, or find another, better
-    // way of retrieving the list of columns
+    // If an xml "microcosm" is desired, then use this hardcoded
+    // list of columns.
+    //
+    // TODO ?? Find a better way: e.g., read the list from an
+    // appropriate xml file.
+
     if(xml_version == e_xml_detailed)
         {
         std::vector<value_id> detailed_ids;

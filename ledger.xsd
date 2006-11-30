@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <!--
-    Xml data structure description. XMLSchema for lmi project.
+    Schema for ledger data.
 
     Copyright (C) 2006 Gregory W. Chicares.
 
@@ -21,26 +21,18 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: ledger.xsd,v 1.1 2006-11-29 14:08:24 chicares Exp $
+    $Id: ledger.xsd,v 1.2 2006-11-30 05:10:33 chicares Exp $
 -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:lmi="http://savannah.nongnu.org/projects/lmi" targetNamespace="http://savannah.nongnu.org/projects/lmi" elementFormDefault="qualified" attributeFormDefault="unqualified">
     <xs:annotation>
         <xs:documentation>
-            This document describes the structure of illustration data
-            XML file and other XML files containing information used
-            in a report generation.
-            Files:
-            - data.xml - illustration data generated for a particular user. It
-                could be rendered as an XML file or kept in memory
-                during processing.
-            - format.xml - XML file containing for each column its titles and
-                format strings for columns with numerical data.
-            - schema.xsd - current document. Describes the structure
-                of previously mentioned files.
-            - [media].xsl - XSL template files used to render data.xml.
-                These templates use format.xml file to render
-                data.xml file data in a human readable way for the [media]
-                (media: html, csv, xsl-fo, etc)
+            This schema describes xml files that contain ledger data
+            or are used to create reports:
+             - [data].xml: illustration data for a particular case.
+                 May be a memory image rather than a physical file.
+             - An xml file specifying formats and column titles.
+             - [medium].xsl: xslt files used to render [data].xml .
+                 medium: {html | tsv | xsl-fo}
         </xs:documentation>
     </xs:annotation>
 
