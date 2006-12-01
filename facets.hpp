@@ -19,16 +19,18 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: facets.hpp,v 1.2 2006-01-29 13:52:00 chicares Exp $
+// $Id: facets.hpp,v 1.3 2006-12-01 13:50:18 chicares Exp $
 
 #ifndef facets_hpp
 #define facets_hpp
 
 #include "config.hpp"
 
+#include "so_attributes.hpp"
+
 #include <locale>
 
-std::locale const& blank_is_not_whitespace_locale();
+std::locale const& LMI_SO blank_is_not_whitespace_locale();
 
 #endif // facets_hpp
 

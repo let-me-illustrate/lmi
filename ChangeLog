@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.509 2006-12-01 12:05:27 chicares Exp $
+// $Id: ChangeLog,v 1.510 2006-12-01 13:50:18 chicares Exp $
 
 MAINTENANCE
 
@@ -8447,4 +8447,11 @@ created other than by the default ctor.
 
   census_view.cpp
 Test birthdate consistency when a census is pasted.
+
+20061201T1350Z <chicares@cox.net> [1227]
+
+  calendar_date.hpp
+  facets.hpp
+Add visibility attributes to certain free functions, fixing some
+problems with 'build_type=so_test'.
 
