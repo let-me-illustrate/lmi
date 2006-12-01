@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: calendar_date.hpp,v 1.7 2006-09-19 03:01:12 chicares Exp $
+// $Id: calendar_date.hpp,v 1.8 2006-12-01 13:50:18 chicares Exp $
 
 #ifndef calendar_date_hpp
 #define calendar_date_hpp
@@ -174,8 +174,8 @@ class LMI_SO calendar_date
 //    template struct boost::totally_ordered<calendar_date>;
 //    template struct boost::unit_steppable<calendar_date>;
 
-std::ostream& operator<<(std::ostream& os, calendar_date const&);
-std::istream& operator>>(std::istream& is, calendar_date&);
+std::ostream& LMI_SO operator<<(std::ostream& os, calendar_date const&);
+std::istream& LMI_SO operator>>(std::istream& is, calendar_date&);
 
 calendar_date add_years
     (calendar_date const& date
@@ -226,9 +226,9 @@ std::string month_name(int);
 
 // Some particularly useful dates.
 
-calendar_date const& gregorian_epoch();
-calendar_date const& last_yyyy_date();
-calendar_date today();
+calendar_date const& LMI_SO gregorian_epoch();
+calendar_date const& LMI_SO last_yyyy_date();
+calendar_date        LMI_SO today();
 
 #endif // calendar_date_hpp
 
