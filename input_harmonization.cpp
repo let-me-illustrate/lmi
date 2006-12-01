@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_harmonization.cpp,v 1.39 2006-11-30 18:29:26 chicares Exp $
+// $Id: input_harmonization.cpp,v 1.40 2006-12-01 12:04:25 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -82,12 +82,12 @@ namespace
 void Input::DoAdaptExternalities()
 {
     // This early-exit condition has to fail the first time this
-    // function is called, because the product name is implicitly
-    // initialized to an empty string, which cannot match any actual
-    // product.
+    // function is called, because the database is initialized only
+    // here.
     if
         (
-            CachedProductName_           == ProductName
+            database_.get()
+        &&  CachedProductName_           == ProductName
         &&  CachedGender_                == Gender
         &&  CachedUnderwritingClass_     == UnderwritingClass
         &&  CachedSmoking_               == Smoking
@@ -1018,6 +1018,11 @@ void Input::DoTransmogrify()
             ,apparent_age - IssueAge.value()
             ,false // TODO ?? Is 'false' always right?
             );
+// TODO ?? Above, it appears that 'true' is always right. Inspect work
+// done in the 'skeleton' trunk around 2006-10 carefully to confirm
+// this; then correct the code above, and validate all other usage of
+// add_years(), paying special attention to the apparently-incorrect
+// comment on apparently-correct code in 'inputstatus.cpp'.
         }
     else
         {
