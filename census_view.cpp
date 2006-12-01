@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: census_view.cpp,v 1.46 2006-09-20 16:06:24 chicares Exp $
+// $Id: census_view.cpp,v 1.47 2006-12-01 12:05:26 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -1106,6 +1106,8 @@ void CensusView::UponRunCaseToSpreadsheet(wxCommandEvent&)
     DoAllCells(emit_to_spreadsheet);
 }
 
+// TODO ?? Add unit tests for this function.
+
 void CensusView::UponPasteCensus(wxCommandEvent&)
 {
 // TODO ?? expunge debugging code in this function.
@@ -1239,6 +1241,24 @@ convert_to_ihs(ihs_input, case_parms()[0]);
         ihs_input.propagate_changes_to_base_and_finalize();
 Input lmi_input;
 convert_from_ihs(ihs_input, lmi_input);
+  {
+// TODO ?? Test this. If the test fails, then something like
+//        ihs_input.EnforceConsistency();
+//        ihs_input.propagate_changes_from_base_and_finalize();
+// might be needed above.
+  std::string const ihs_date = ihs_input.Status[0].DOB.str();
+  std::string const lmi_date = lmi_input["DateOfBirth"].str();
+  if(ihs_date != lmi_date)
+    {
+    warning()
+        << "Birthdates differ: "
+        << ihs_date
+        << " versus "
+        << lmi_date
+        << LMI_FLUSH
+        ;
+    }
+  }
         cells.push_back(lmi_input);
 // warning() << "Life added." << LMI_FLUSH;
 
