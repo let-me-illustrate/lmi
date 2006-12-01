@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.508 2006-11-30 18:29:26 chicares Exp $
+// $Id: ChangeLog,v 1.509 2006-12-01 12:05:27 chicares Exp $
 
 MAINTENANCE
 
@@ -8434,4 +8434,17 @@ Revise comments.
   input.hpp
   input_harmonization.cpp
 Improve member names.
+
+20061201T1204Z <chicares@cox.net> [1225]
+
+  input_harmonization.cpp
+Make sure database is initialized. The extra test now added appeared
+unnecessary according to the specious reasoning of a comment now
+removed; the flaw in that reasoning is that class instances can be
+created other than by the default ctor.
+
+20061201T1205Z <chicares@cox.net> [1227]
+
+  census_view.cpp
+Test birthdate consistency when a census is pasted.
 
