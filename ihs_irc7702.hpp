@@ -1,4 +1,4 @@
-// Internal Revenue Code section 7702A (definition of life insurance).
+// Internal Revenue Code section 7702 (definition of life insurance).
 //
 // Copyright (C) 1998, 2001, 2002, 2003, 2004, 2005, 2006 Gregory W. Chicares.
 //
@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_irc7702.hpp,v 1.5 2006-01-29 13:52:00 chicares Exp $
+// $Id: ihs_irc7702.hpp,v 1.6 2006-12-02 22:37:38 chicares Exp $
 
 #ifndef irc7702_hpp
 #define irc7702_hpp
