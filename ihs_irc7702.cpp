@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_irc7702.cpp,v 1.13 2006-12-02 22:37:38 chicares Exp $
+// $Id: ihs_irc7702.cpp,v 1.14 2006-12-02 22:51:26 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -29,7 +29,7 @@
 #include "ihs_irc7702.hpp"
 
 #include "alert.hpp"
-#include "basic_values.hpp"     // for target premium callback
+#include "basic_values.hpp" // For target-premium callback.
 #include "ihs_rnddata.hpp"
 #include "materially_equal.hpp"
 #include "zero.hpp"
@@ -39,7 +39,6 @@
 #include <functional>
 #include <iterator>
 #include <limits>
-#include <memory>
 #include <numeric>
 
 // The corridor factor may as well reside on the client system: it's
@@ -1160,7 +1159,7 @@ int main()
     std::vector<double>MlyChgADD    (100, 0.00);
     std::vector<double>PolFee       (100, 5.00);
 
-    std::auto_ptr<Timer> timer(new Timer);
+    Timer timer;
 
     Irc7702* Irc7702_ = new Irc7702
         (CVAT
@@ -1176,7 +1175,7 @@ int main()
         ,10000000.0
         ,PolFee
         );
-    cout << timer->stop().elapsed_msec_str();
+    cout << timer.stop().elapsed_msec_str();
     delete Irc7702_;
 }
 #endif  // TESTING
