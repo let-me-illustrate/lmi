@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.510 2006-12-01 13:50:18 chicares Exp $
+// $Id: ChangeLog,v 1.511 2006-12-03 18:07:34 chicares Exp $
 
 MAINTENANCE
 
@@ -8454,4 +8454,35 @@ Test birthdate consistency when a census is pasted.
   facets.hpp
 Add visibility attributes to certain free functions, fixing some
 problems with 'build_type=so_test'.
+
+20061202T2237Z <chicares@cox.net> [1227]
+
+  ihs_irc7702.cpp
+  ihs_irc7702.hpp
+Improve documentation.
+
+20061202T2251Z <chicares@cox.net> [1227]
+
+  ihs_irc7702.cpp
+Use std::auto_ptr only when ownership-transfer semantics are wanted.
+
+20061203T0736Z <chicares@cox.net> [1227]
+
+  preferences_view.xrc
+  xml_notebook.xrc
+  xml_notebook_coli_boli.xrc
+  xml_notebook_private_placement.xrc
+  xml_notebook_single_premium.xrc
+Remove obsolete and erroneous elements. The <usenotebooksizer> element
+obsolete. Hardcoded <size> elements for
+  <object class="wxNotebook" name=[whatever]>
+were always defective, and wx-2.8 no longer ignores them as earlier
+versions did.
+
+20061203T1807Z <chicares@cox.net> [1228]
+
+  inputillus_sequences.cpp
+Demonstrate boost::minmax_element, which should be used generally.
+A deliberate side effect of this change is that the system no longer
+compiles with boost-1.31 .
 

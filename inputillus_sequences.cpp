@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: inputillus_sequences.cpp,v 1.10 2006-01-29 13:52:00 chicares Exp $
+// $Id: inputillus_sequences.cpp,v 1.11 2006-12-03 18:07:34 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -33,6 +33,8 @@
 #include "dbnames.hpp"
 #include "global_settings.hpp"
 #include "input_seq_helpers.hpp"
+
+#include <boost/algorithm/minmax_element.hpp>
 
 #include <algorithm>
 #include <sstream>
@@ -447,6 +449,16 @@ std::string IllusInputParms::realize_sequence_string_for_current_coi_grading()
         (VectorCurrentCoiGrading.begin()
         ,VectorCurrentCoiGrading.end()
         );
+
+    // TODO ?? Use this boost facility generally.
+    typedef std::vector<double>::iterator extremum_t;
+    std::pair<extremum_t,extremum_t> test = boost::minmax_element
+        (VectorCurrentCoiGrading.begin()
+        ,VectorCurrentCoiGrading.end()
+        );
+    LMI_ASSERT(*test.first  == lowest );
+    LMI_ASSERT(*test.second == highest);
+
     // SOMEDAY !! If we add a production like
     //   numeric-value: numeric-literal %
     // then we might say "between 0% and 100%." here.
