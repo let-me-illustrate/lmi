@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_irc7702.hpp,v 1.7 2006-12-03 22:34:19 chicares Exp $
+// $Id: ihs_irc7702.hpp,v 1.8 2006-12-03 23:02:38 chicares Exp $
 
 #ifndef irc7702_hpp
 #define irc7702_hpp
@@ -43,14 +43,13 @@
 // as needed, being sure to round conservatively if at all. Unrounded
 // values are especially needed for the iterative specamt calculation.
 
-#include "ihs_commfns.hpp"
 #include "round_to.hpp"
 #include "obstruct_slicing.hpp"
 #include "xenumtypes.hpp"    // e_defn_life_ins, e_dbopt
 
+#include <boost/scoped_ptr.hpp>
 #include <boost/utility.hpp>
 
-#include <memory>
 #include <vector>
 
 class BasicValues;
@@ -244,11 +243,16 @@ class Irc7702
     mutable double             CumPmts;    // Cumulative payments
 
     // Commutation functions
-    std::auto_ptr<ULCommFns>  CommFns     [NumIOBases];
+// TODO ?? Apparently the original reason for using smart pointers
+// was to minimize stack usage in a 16-bit environment; clearly that
+// doesn't matter anymore.
+//
+// TODO ?? Consider using std::vector instead of array members.
+    boost::scoped_ptr<ULCommFns> CommFns       [NumIOBases];
     // After the Init- functions have executed, we can delete the
     // rather sizeable ULCommFns objects, as long as we keep the
     // endowment-year value of D for each basis.
-    double                     DEndt       [NumIOBases];
+    double                     DEndt           [NumIOBases];
 
     // GPT corridor factors for attained ages [IssueAge, 100]
     std::vector<double>        GptCorridor;
