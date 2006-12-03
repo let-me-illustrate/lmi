@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: docmanager_ex.cpp,v 1.9 2006-05-31 14:45:53 wboutin Exp $
+// $Id: docmanager_ex.cpp,v 1.10 2006-12-03 22:33:17 chicares Exp $
 
 // This implementation is a derived work based on wxWindows code, viz.
 //   samples/printing/printing.cpp (C) 1995 Julian Smart
@@ -46,6 +46,7 @@
 #include "wx_new.hpp"
 
 #include <wx/app.h>
+#include <wx/cmndata.h>
 #include <wx/menu.h>
 #include <wx/msgdlg.h>
 #include <wx/printdlg.h>
