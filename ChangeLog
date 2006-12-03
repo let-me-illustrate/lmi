@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.511 2006-12-03 18:07:34 chicares Exp $
+// $Id: ChangeLog,v 1.512 2006-12-03 22:34:19 chicares Exp $
 
 MAINTENANCE
 
@@ -8465,6 +8465,7 @@ Improve documentation.
 
   ihs_irc7702.cpp
 Use std::auto_ptr only when ownership-transfer semantics are wanted.
+Here, local objects are preferably created on the stack.
 
 20061203T0736Z <chicares@cox.net> [1227]
 
@@ -8485,4 +8486,22 @@ versions did.
 Demonstrate boost::minmax_element, which should be used generally.
 A deliberate side effect of this change is that the system no longer
 compiles with boost-1.31 .
+
+20061203T2233Z <chicares@cox.net> [1228]
+
+  docmanager_ex.cpp
+  docmanager_ex.hpp
+Use std::auto_ptr only when ownership-transfer semantics are wanted.
+Here, boost::scoped_ptr is used to share instances of wx objects,
+created with new(wx), across member functions of an lmi class.
+
+20061203T2234Z <chicares@cox.net> [1228]
+
+  ihs_irc7702.hpp
+Prevent "grand theft pointer"
+  http://www.gotw.ca/gotw/062.htm
+by making a class with a std::auto_ptr member noncopyable. Classes
+that don't need to be copied should generally be noncopyable. This
+case provides sufficient motivation for reevaluating all use of
+std::auto_ptr.
 
