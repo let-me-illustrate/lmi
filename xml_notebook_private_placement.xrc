@@ -24,7 +24,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: xml_notebook_private_placement.xrc,v 1.9 2006-06-20 13:31:21 wboutin Exp $
+    $Id: xml_notebook_private_placement.xrc,v 1.10 2006-12-03 07:36:43 chicares Exp $
 
     This version is designed for private placement users; it omits input
     fields that seem irrelevant in that context, and reflects the
@@ -2133,8 +2133,6 @@
             <flag>wxGROW | wxALIGN_CENTER_VERTICAL | wxALL</flag>
             <border>4</border>
             <object class="wxNotebook" name="input_notebook">
-                <usenotebooksizer>1</usenotebooksizer>
-                <size>100,100</size>
                 <object class="notebookpage">
                     <label>Client</label>
                     <object_ref ref="client_panel"/>
