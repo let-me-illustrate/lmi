@@ -19,21 +19,22 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: docmanager_ex.hpp,v 1.6 2006-05-31 14:45:53 wboutin Exp $
+// $Id: docmanager_ex.hpp,v 1.7 2006-12-03 22:33:17 chicares Exp $
 
 #ifndef docmanager_ex_hpp
 #define docmanager_ex_hpp
 
 #include "config.hpp"
 
+#include <boost/scoped_ptr.hpp>
 #include <boost/utility.hpp>
 
 #include <wx/defs.h> // WXDLLEXPORT
 #include <wx/docview.h>
 
-#include <memory>
-
 class WXDLLEXPORT wxMenuBar;
+class WXDLLEXPORT wxPageSetupDialogData;
+class WXDLLEXPORT wxPrintData;
 
 class DocManagerEx
     :public wxDocManager
@@ -71,8 +72,8 @@ class DocManagerEx
         ,bool            sort
         );
 
-    std::auto_ptr<wxPrintData> print_data_;
-    std::auto_ptr<wxPageSetupDialogData> page_setup_data_;
+    boost::scoped_ptr<wxPrintData> print_data_;
+    boost::scoped_ptr<wxPageSetupDialogData> page_setup_data_;
 
     DECLARE_DYNAMIC_CLASS(DocManagerEx)
     DECLARE_EVENT_TABLE()
