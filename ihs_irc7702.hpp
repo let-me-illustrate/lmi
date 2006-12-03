@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_irc7702.hpp,v 1.6 2006-12-02 22:37:38 chicares Exp $
+// $Id: ihs_irc7702.hpp,v 1.7 2006-12-03 22:34:19 chicares Exp $
 
 #ifndef irc7702_hpp
 #define irc7702_hpp
@@ -48,16 +48,17 @@
 #include "obstruct_slicing.hpp"
 #include "xenumtypes.hpp"    // e_defn_life_ins, e_dbopt
 
+#include <boost/utility.hpp>
+
 #include <memory>
 #include <vector>
 
 class BasicValues;
 class ULCommFns;
 
-// Implicitly-declared special member functions do the right thing.
-
 class Irc7702
-    :virtual private obstruct_slicing<Irc7702>
+    :private boost::noncopyable
+    ,virtual private obstruct_slicing<Irc7702>
 {
     friend class FindSpecAmt;
 
