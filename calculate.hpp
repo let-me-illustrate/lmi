@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: calculate.hpp,v 1.15 2006-01-29 13:52:00 chicares Exp $
+// $Id: calculate.hpp,v 1.16 2006-12-04 06:56:26 chicares Exp $
 
 #ifndef calculate_hpp
 #define calculate_hpp
@@ -37,11 +37,15 @@
 #include "single_cell_document.hpp"
 #include "timer.hpp"
 
+// TODO ?? Apparently the original reason for using smart pointers
+// was to minimize stack usage in a 16-bit environment; clearly that
+// doesn't matter anymore.
+#include <boost/scoped_ptr.hpp>
+
 #include <fstream>
 #include <functional>
 #include <ios>
 #include <iostream>
-#include <memory>
 #include <stdexcept>
 #include <string>
 #include <vector>
@@ -130,7 +134,7 @@ struct RunCensus
             ;++lives_it
             )
             {
-            std::auto_ptr<IllusVal> IV(new IllusVal());
+            boost::scoped_ptr<IllusVal> IV(new IllusVal());
             IV->Run(&*lives_it);
 // TODO ?? Pick one:
 //            Composite.operator+=(IV->ledger());
@@ -229,7 +233,7 @@ struct RunCensusDeprecated
             ;++lives_it
             )
             {
-            std::auto_ptr<IllusVal> IV(new IllusVal());
+            boost::scoped_ptr<IllusVal> IV(new IllusVal());
             IV->Run(&*lives_it);
             XXXComposite.PlusEq(IV->ledger());
             }
