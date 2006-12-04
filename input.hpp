@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input.hpp,v 1.18 2006-11-30 18:29:26 chicares Exp $
+// $Id: input.hpp,v 1.19 2006-12-04 08:16:21 chicares Exp $
 
 #ifndef input_hpp
 #define input_hpp
@@ -30,7 +30,6 @@
 
 #include "any_member.hpp"
 #include "ce_product_name.hpp"
-#include "database.hpp"
 #include "datum_boolean.hpp"
 #include "datum_string.hpp"
 #include "mc_enum.hpp"
@@ -42,15 +41,11 @@
 
 class IllusInputParms;
 class InputSequence;
-
-// TODO ?? Forward declaration doesn't work with std::auto_ptr?
-// Use one of boost's smart pointers instead. And lose the declspec,
-// which gcc-3.4.2 doesn't like to see on forward-declared classes.
-//class LMI_SO TDatabase;
+class TDatabase;
 
 #include <boost/operators.hpp>
+#include <boost/scoped_ptr.hpp>
 
-#include <memory>
 #include <vector>
 
 /// Design notes for class input.
@@ -160,7 +155,12 @@ class LMI_SO Input
     virtual void DoHarmonize();
     virtual void DoTransmogrify();
 
-    std::auto_ptr<TDatabase> database_;
+    // TODO ?? Reconsider this. A default-constructed database_ holds
+    // a null pointer. Perhaps the envelope-letter idiom should be
+    // used to factor out these implementation details (variables
+    // whose names end in an underscore), which are intended to be
+    // managed by DoAdaptExternalities().
+    boost::scoped_ptr<TDatabase> database_;
 
     ce_product_name          CachedProductName_          ;
     mce_gender               CachedGender_               ;

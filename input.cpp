@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input.cpp,v 1.14 2006-08-13 13:13:23 chicares Exp $
+// $Id: input.cpp,v 1.15 2006-12-04 08:16:21 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -29,6 +29,7 @@
 #include "input.hpp"
 
 #include "alert.hpp"
+#include "database.hpp" // Needed only for database_'s dtor.
 #include "inputillus.hpp"
 #include "timer.hpp"
 

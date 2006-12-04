@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.513 2006-12-03 23:02:38 chicares Exp $
+// $Id: ChangeLog,v 1.514 2006-12-04 08:16:21 chicares Exp $
 
 MAINTENANCE
 
@@ -8513,4 +8513,69 @@ Use std::auto_ptr only when ownership-transfer semantics are wanted.
 Here, boost::scoped_ptr is used instead of std::auto_ptr; it would
 probably be better to use no smart pointer at all, but this class has
 no unit test and needs a thorough rewrite anyway.
+
+20061204T0619Z <chicares@cox.net> [1231]
+
+  secure_date.cpp
+Use std::auto_ptr only when ownership-transfer semantics are wanted.
+Here, boost::scoped_ptr isn't a much better choice than std::auto_ptr;
+this class really needs to be rewritten, and no smart pointer should
+be used at all.
+
+20061204T0635Z <chicares@cox.net> [1232]
+
+  ihs_commfns.cpp
+Use std::auto_ptr only when ownership-transfer semantics are wanted.
+Here, boost::scoped_ptr is now used instead of std::auto_ptr. It would
+probably be better to use no smart pointer at all, but the code
+modified is an ancient unit test that's defectively not called, and
+needs deeper reconsideration--including an investigation of the
+memory-leak issues noted inline, which might have been mere artifacts
+of a poor pre-standard auto_ptr implementation.
+
+20061204T0649Z <chicares@cox.net> [1233]
+
+  ihs_server7702.cpp
+Use std::auto_ptr only when ownership-transfer semantics are wanted.
+Here, boost::scoped_ptr is now used instead of std::auto_ptr; it would
+probably be better to use no smart pointer at all, but this class has
+no unit test and needs a thorough rewrite anyway.
+
+20061204T0650Z <chicares@cox.net> [1233]
+
+  ihs_standalone.cpp
+Use std::auto_ptr only when ownership-transfer semantics are wanted.
+Here, it seemed safe to eliminate the smart pointers altogether
+because of parallel changes in other classes that are well tested.
+
+20061204T0656Z <chicares@cox.net> [1234]
+
+  calculate.hpp
+Use std::auto_ptr only when ownership-transfer semantics are wanted.
+Here, boost::scoped_ptr is now used instead of std::auto_ptr; it would
+probably be better to use no smart pointer at all, but this class has
+no unit test and needs a thorough rewrite anyway.
+
+20061204T0715Z <chicares@cox.net> [1234]
+
+  inputillus.cpp
+Remove an unneeded header.
+
+20061204T0716Z <chicares@cox.net> [1233]
+
+  inputs.cpp
+Use std::auto_ptr only when ownership-transfer semantics are wanted.
+Here, boost::scoped_ptr is now used instead of std::auto_ptr; it would
+probably be better to use a single smart-pointer member instead of
+multiple local smart pointers, but this class is slated for retirement
+and doesn't deserve such profound revision.
+
+20061204T0816Z <chicares@cox.net> [1232]
+
+  input.cpp
+  input.hpp
+  input_harmonization.cpp
+Use std::auto_ptr only when ownership-transfer semantics are wanted.
+Here, boost::scoped_ptr is now used to share an instance of the
+database class across member functions.
 
