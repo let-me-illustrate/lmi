@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: secure_date.cpp,v 1.6 2006-01-29 13:52:00 chicares Exp $
+// $Id: secure_date.cpp,v 1.7 2006-12-04 06:19:20 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -34,18 +34,20 @@
 #include "system_command.hpp"
 
 #include <boost/filesystem/fstream.hpp>
+#include <boost/scoped_ptr.hpp>
 
 #include <cstdio>
 #include <cstring>
 #include <iomanip>
-#include <memory>
 #include <sstream>
 
 // TODO ?? Known security hole: data files can be modified after we've
 // validated them with md5sum . This will become a bigger problem when
 // we replace the binary database files with xml.
 
-std::auto_ptr<secure_date> foo(secure_date::instance());
+// TODO ?? Get rid of this coding horror--rewrite this class,
+// following the Meyers-singleton pattern used elsewhere.
+boost::scoped_ptr<secure_date> foo(secure_date::instance());
 
 secure_date* secure_date::instance_ = 0;
 
