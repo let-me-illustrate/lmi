@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_commfns.cpp,v 1.7 2006-01-29 13:52:00 chicares Exp $
+// $Id: ihs_commfns.cpp,v 1.8 2006-12-04 06:35:29 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -262,14 +262,19 @@ void OLCommFns::OLCommFns()
 
 // TODO ?? Factor this out into a unit-test module, if it's even useful.
 
+// TODO ?? Apparently the original reason for using smart pointers
+// was to minimize stack usage in a 16-bit environment; clearly that
+// doesn't matter anymore.
+
 #include "miscellany.hpp"
 #include "timer.hpp"
+
+#include <boost/scoped_ptr.hpp>
 
 #include <algorithm>
 #include <fstream>
 #include <iomanip>
 #include <ios>
-#include <memory>
 
 //============================================================================
 void ULCommFns::SelfTest()
@@ -287,7 +292,7 @@ void ULCommFns::SelfTest()
     std::vector<double>ic           (coi.size(), i_upper_12_over_12_from_i<double>()(0.10));
     std::vector<double>ig           (coi.size(), i_upper_12_over_12_from_i<double>()(0.04));
 
-    std::auto_ptr<ULCommFns> CF
+    boost::scoped_ptr<ULCommFns> CF
         (new ULCommFns
             (coi
             ,ic
@@ -307,7 +312,7 @@ void ULCommFns::SelfTest()
         coi[j] = 1.0 - std::pow(1.0 - coi[j], 12.0);
         }
 
-    std::auto_ptr<Timer> timer(new Timer);
+    Timer timer;
 
 // 0 extra leaks if #ifdef out remainder of fn
     int const trials = 1000;
@@ -323,22 +328,22 @@ void ULCommFns::SelfTest()
             ,e_mode(e_monthly)
             );
         }
-//timer->stop();
-//timer->elapsed_msec_str();
+//timer.stop();
+//timer.elapsed_msec_str();
 //string xxx = foo();
 // 1 extra leaks if #ifdef out remainder of fn
     os
         << "Commutation function calculation time for "
         << trials
         << " trials: "
-        << timer->stop().elapsed_msec_str()
-//      << timer->elapsed_msec_str()
+        << timer.stop().elapsed_msec_str()
+//      << timer.elapsed_msec_str()
 ///     << xxx
         << "\n\n"
         ;
 
 // 1 extra leak if #ifdef out remainder of fn
-    std::auto_ptr<ULCommFns> CF
+    boost::scoped_ptr<ULCommFns> CF
         (new ULCommFns
             (coi
             ,ic
@@ -402,7 +407,7 @@ void OLCommFns::SelfTest()
     std::vector<double>q                (Q, Q + lmi_array_size(Q));
     std::vector<double>i                (100, 0.04);
 
-    std::auto_ptr<OLCommFns> CF(new OLCommFns(q, i));
+    boost::scoped_ptr<OLCommFns> CF(new OLCommFns(q, i));
 
     os << "Ordinary life commutation functions\n";
     os
