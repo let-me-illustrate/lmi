@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: inputs.cpp,v 1.14 2006-01-29 13:52:00 chicares Exp $
+// $Id: inputs.cpp,v 1.15 2006-12-04 07:16:15 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -37,11 +37,11 @@
 #include "product_names.hpp"
 
 #include <boost/bind.hpp>
+#include <boost/scoped_ptr.hpp>
 
 #include <algorithm>
 #include <functional>
 #include <istream>
-#include <memory>
 #include <numeric>
 #include <ostream>
 #include <stdexcept>
@@ -199,7 +199,7 @@ InputParms::InputParms()
     Status.resize(NumberOfLives.value());
     Length = YearsToMaturity();
 
-    std::auto_ptr<TDatabase> temp_database
+    boost::scoped_ptr<TDatabase> temp_database
         (new TDatabase
             (ProductName
             ,Status[0].Gender
@@ -576,7 +576,7 @@ bool InputParms::operator==(InputParms const& z) const
 //============================================================================
 int InputParms::YearsToMaturity() const
 {
-    std::auto_ptr<TDatabase> temp_database
+    boost::scoped_ptr<TDatabase> temp_database
         (new TDatabase
             (ProductName
             ,Status[0].Gender
@@ -630,7 +630,7 @@ void InputParms::SetSolveDurations() const
     r_solve_beg_year& mutable_solve_beg_year = const_cast<r_solve_beg_year&>(SolveBegYear);
     r_solve_end_year& mutable_solve_end_year = const_cast<r_solve_end_year&>(SolveEndYear);
 
-    std::auto_ptr<TDatabase> temp_database
+    boost::scoped_ptr<TDatabase> temp_database
         (new TDatabase
             (ProductName
             ,Status[0].Gender
@@ -775,7 +775,7 @@ void InputParms::EnforceConsistency()
         throw std::runtime_error("Internal error: ProductName is empty.");
         }
 
-    std::auto_ptr<TDatabase> temp_database
+    boost::scoped_ptr<TDatabase> temp_database
         (new TDatabase
             (ProductName
             ,Status[0].Gender
@@ -852,8 +852,7 @@ bool InputParms::NeedLoanRates() const
 // change to option B conditionally not allowed.
 bool InputParms::CheckAllowChangeToDBO2() const
 {
-// TODO ?? Prolly want a member fn like 'TDatabase* get_database() const'
-    std::auto_ptr<TDatabase> temp_database
+    boost::scoped_ptr<TDatabase> temp_database
         (new TDatabase
             (ProductName
             ,Status[0].Gender
@@ -893,7 +892,7 @@ bool InputParms::CheckAllowChangeToDBO2() const
 // ROP conditionally not allowed.
 bool InputParms::CheckAllowDBO3() const
 {
-    std::auto_ptr<TDatabase> temp_database
+    boost::scoped_ptr<TDatabase> temp_database
         (new TDatabase
             (ProductName
             ,Status[0].Gender
@@ -926,9 +925,9 @@ bool InputParms::CheckAllowDBO3() const
 
 e_ledger_type InputParms::LedgerType() const
 {
-// TODO ?? This class should have a shared_ptr<TDatabase> instead of
+// TODO ?? This class should use a smart-pointer member instead of
 // creating objects like this repeatedly.
-    std::auto_ptr<TDatabase> temp_database
+    boost::scoped_ptr<TDatabase> temp_database
         (new TDatabase
             (ProductName
             ,Status[0].Gender
