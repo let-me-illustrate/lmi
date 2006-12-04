@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_server7702.cpp,v 1.9 2006-01-29 13:52:00 chicares Exp $
+// $Id: ihs_server7702.cpp,v 1.10 2006-12-04 06:49:41 chicares Exp $
 
 // Known defects:
 // grep for "NEED DECISION"
@@ -42,9 +42,14 @@
 #include "ihs_server7702io.hpp"
 #include "ihs_x_type.hpp"
 
-#ifdef LMI_MSW
+// TODO ?? Apparently the original reason for using smart pointers
+// was to minimize stack usage in a 16-bit environment; clearly that
+// doesn't matter anymore.
+#include <boost/scoped_ptr.hpp>
+
+#if defined LMI_MSW
 #   include <windows.h> // HINSTANCE etc.
-#endif // LMI_MSW
+#endif // defined LMI_MSW
 
 #include <cstdlib>
 #include <exception>
@@ -533,7 +538,7 @@ void Server7702::ProcessAdjustableEvent()
 //============================================================================
 void Server7702::SetDoleBentsenValuesA()
 {
-    std::auto_ptr<BasicValues> basic_values_A
+    boost::scoped_ptr<BasicValues> basic_values_A
         (new BasicValues
             (Input.ProductName
             ,Input.OldGender
@@ -568,7 +573,7 @@ void Server7702::SetDoleBentsenValuesA()
 //============================================================================
 void Server7702::SetDoleBentsenValuesBC()
 {
-    std::auto_ptr<BasicValues> basic_values_B
+    boost::scoped_ptr<BasicValues> basic_values_B
         (new BasicValues
             (Input.ProductName
             ,Input.NewGender
@@ -599,7 +604,7 @@ void Server7702::SetDoleBentsenValuesBC()
         ,Input.NewSpecifiedAmount
         );
 
-    std::auto_ptr<BasicValues> basic_values_C
+    boost::scoped_ptr<BasicValues> basic_values_C
         (new BasicValues
             (Input.ProductName
             ,Input.OldGender

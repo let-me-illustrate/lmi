@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_standalone.cpp,v 1.7 2006-01-29 13:52:00 chicares Exp $
+// $Id: ihs_standalone.cpp,v 1.8 2006-12-04 06:50:24 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -49,7 +49,6 @@
 #include <iostream>
 #include <ostream>
 #include <string>
-#include <memory>
 #include <vector>
 
 //============================================================================
@@ -82,26 +81,24 @@ GPT_BasicValues::GPT_BasicValues
 //============================================================================
 void GPT_BasicValues::Init()
 {
-    std::auto_ptr<TDatabase> local_database
-        (new TDatabase
-            (ProductName
-            ,Gender
-            ,UnderwritingClass
-            ,Smoker
-            ,IssueAge
-            ,UnderwritingBasis
-            ,StateOfJurisdiction
-            )
+    TDatabase local_database
+        (ProductName
+        ,Gender
+        ,UnderwritingClass
+        ,Smoker
+        ,IssueAge
+        ,UnderwritingBasis
+        ,StateOfJurisdiction
         );
 
-    if(IssueAge < local_database->Query(DB_MinIssAge))
+    if(IssueAge < local_database.Query(DB_MinIssAge))
         {
         throw server7702_product_rule_violated
             (
             std::string("Issue age less than minimum")
             );
         }
-    if(local_database->Query(DB_MaxIssAge) < IssueAge)
+    if(local_database.Query(DB_MaxIssAge) < IssueAge)
         {
         throw server7702_product_rule_violated
             (
@@ -111,7 +108,7 @@ void GPT_BasicValues::Init()
 
     // TODO ?? It would be good to test other rules too.
 
-    Length = static_cast<int>(local_database->Query(DB_EndtAge)) -IssueAge;
+    Length = static_cast<int>(local_database.Query(DB_EndtAge)) -IssueAge;
 
 #error TODO ?? Fix this--it should go through the rounding GUI.
     round_to<double> const round_int_rate(8, r_to_nearest);
@@ -120,18 +117,16 @@ void GPT_BasicValues::Init()
 //        (Values.GetRoundingRules().round_interest_rate()
 //        );
 
-    std::auto_ptr<Loads> local_loads
-        (new Loads
-            (Length
-            // TODO ?? BOLI products that amortize premium loads will
-            // need to set this flag. An implementation is provided
-            // in class Loads.
-            ,false  // AmortizePremLoad
-            ,0.0    // a_ScalarExtraCompLoad // TODO ?? Fix this.
-            ,0.0    // a_ScalarExtraAssetComp // TODO ?? Fix this.
-            ,local_database.get()
-            ,round_int_rate // TODO ?? Fix this.
-            )
+    Loads local_loads
+        (Length
+        // TODO ?? BOLI products that amortize premium loads will
+        // need to set this flag. An implementation is provided
+        // in class Loads.
+        ,false  // AmortizePremLoad
+        ,0.0    // a_ScalarExtraCompLoad // TODO ?? Fix this.
+        ,0.0    // a_ScalarExtraAssetComp // TODO ?? Fix this.
+        ,local_database
+        ,round_int_rate // TODO ?? Fix this.
         );
 
 //  StreamableRoundingRules = new StreamableRoundingRules
@@ -144,7 +139,7 @@ void GPT_BasicValues::Init()
     std::vector<double> q_irc_7702 = actuarial_table
 //      ("data/qx_cso"
         (AddDataDir("qx_cso")
-        ,local_database->Query(DB_IRC7702QTable)
+        ,local_database.Query(DB_IRC7702QTable)
         ,IssueAge
         ,Length
         );
@@ -152,13 +147,13 @@ void GPT_BasicValues::Init()
     a7pp7702A = actuarial_table
 //      ("data/mm_lcm"
         (AddDataDir("mm_lcm")
-        ,local_database->Query(DB_TAMRA7PayTable)
+        ,local_database.Query(DB_TAMRA7PayTable)
         ,IssueAge
         ,Length
         );
 
     TargetPremiumType =
-        static_cast<e_modal_prem_type>(local_database->Query(DB_TgtPremType));
+        static_cast<e_modal_prem_type>(local_database.Query(DB_TgtPremType));
 
     // ET !! std::vector<double> mly7702qc = q_irc_7702 (12.0 - q_irc_7702);
     std::vector<double> mly7702qc(q_irc_7702);
@@ -179,7 +174,7 @@ void GPT_BasicValues::Init()
     std::vector<double> mly7702ic(Length, i12_7702);
 
     std::vector<double> mly7702ig;
-    local_database->Query(mly7702ig, DB_NAARDiscount);
+    local_database.Query(mly7702ig, DB_NAARDiscount);
 
     // ET !! mly7702ig = -1.0 + 1.0 / mly7702ig;
     std::transform(mly7702ig.begin(), mly7702ig.end(), mly7702ig.begin(),
@@ -193,13 +188,13 @@ void GPT_BasicValues::Init()
     // monthly load on SA and
     // ADD charge
     std::vector<double> local_mly_charge_sa
-        (local_loads->specified_amount_load(e_currbasis)
+        (local_loads.specified_amount_load(e_currbasis)
         );
     if(ADDInForce)
         {
         mAddRates = actuarial_table
             (AddDataDir("mm_lcm")
-            ,local_database->Query(DB_ADDTable)
+            ,local_database.Query(DB_ADDTable)
             ,IssueAge
             ,Length
             );
@@ -223,11 +218,11 @@ void GPT_BasicValues::Init()
             // TODO ?? NEED DECISION on definition of face amount
             ,FaceAmount // TODO ?? Must include term amount.
             ,DBOpt
-            ,local_loads->annual_policy_fee(e_currbasis)
-            ,local_loads->monthly_policy_fee(e_currbasis)
+            ,local_loads.annual_policy_fee(e_currbasis)
+            ,local_loads.monthly_policy_fee(e_currbasis)
             ,local_mly_charge_sa
-            ,local_loads->target_total_load(e_currbasis)
-            ,local_loads->excess_total_load(e_currbasis)
+            ,local_loads.target_total_load(e_currbasis)
+            ,local_loads.excess_total_load(e_currbasis)
             );
 
 // if database inconsistent, then
