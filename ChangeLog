@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.514 2006-12-04 08:16:21 chicares Exp $
+// $Id: ChangeLog,v 1.515 2006-12-05 14:43:37 chicares Exp $
 
 MAINTENANCE
 
@@ -8578,4 +8578,15 @@ and doesn't deserve such profound revision.
 Use std::auto_ptr only when ownership-transfer semantics are wanted.
 Here, boost::scoped_ptr is now used to share an instance of the
 database class across member functions.
+
+20061205T1442Z <chicares@cox.net> [1232]
+
+  input_harmonization.cpp
+Improve documentation.
+
+20061205T1443Z <chicares@cox.net> [1231]
+
+  input.cpp
+  input.hpp
+Always initialize shared-pointer member.
 

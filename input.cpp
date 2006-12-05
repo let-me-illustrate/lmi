@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input.cpp,v 1.15 2006-12-04 08:16:21 chicares Exp $
+// $Id: input.cpp,v 1.16 2006-12-05 14:43:37 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -40,6 +40,7 @@ Input::Input()
     :CreateSupplementalReport("No")
 {
     AscribeMembers();
+    DoAdaptExternalities();
 }
 
 Input::Input(Input const& z)
@@ -59,6 +60,7 @@ Input::Input(Input const& z)
         // does that? Using str() here, passim, seems distateful.
         operator[](*i) = z[*i].str();
         }
+    DoAdaptExternalities();
 }
 
 Input::~Input()
@@ -72,6 +74,7 @@ Input& Input::operator=(Input const& z)
         {
         operator[](*i) = z[*i].str();
         }
+    DoAdaptExternalities();
     return *this;
 }
 
