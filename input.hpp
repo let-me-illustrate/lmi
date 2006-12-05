@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input.hpp,v 1.19 2006-12-04 08:16:21 chicares Exp $
+// $Id: input.hpp,v 1.20 2006-12-05 14:43:37 chicares Exp $
 
 #ifndef input_hpp
 #define input_hpp
@@ -155,11 +155,6 @@ class LMI_SO Input
     virtual void DoHarmonize();
     virtual void DoTransmogrify();
 
-    // TODO ?? Reconsider this. A default-constructed database_ holds
-    // a null pointer. Perhaps the envelope-letter idiom should be
-    // used to factor out these implementation details (variables
-    // whose names end in an underscore), which are intended to be
-    // managed by DoAdaptExternalities().
     boost::scoped_ptr<TDatabase> database_;
 
     ce_product_name          CachedProductName_          ;
