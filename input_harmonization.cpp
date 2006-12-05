@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_harmonization.cpp,v 1.41 2006-12-04 08:16:21 chicares Exp $
+// $Id: input_harmonization.cpp,v 1.42 2006-12-05 14:42:44 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -83,8 +83,7 @@ namespace
 void Input::DoAdaptExternalities()
 {
     // This early-exit condition has to fail the first time this
-    // function is called, because the database is initialized only
-    // here.
+    // function is called, because database_ is initialized only here.
     if
         (
             database_.get()
