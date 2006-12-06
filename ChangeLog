@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.515 2006-12-05 14:43:37 chicares Exp $
+// $Id: ChangeLog,v 1.516 2006-12-06 02:19:17 chicares Exp $
 
 MAINTENANCE
 
@@ -8589,4 +8589,17 @@ Improve documentation.
   input.cpp
   input.hpp
 Always initialize shared-pointer member.
+
+20061206T0218Z <chicares@cox.net> [1231]
+
+  commutation_functions_test.cpp
+Rewrite, removing a requirement that class ULCommFns be copyable. It
+may be argued whether the rewritten code is less obscure or merely
+more verbose, but not whether the boost lambda documentation clearly
+warns of this implicit requirement or explains how to overcome it.
+
+20061206T0219Z <chicares@cox.net> [1231]
+
+  ihs_commfns.hpp
+Make class ULCommFns noncopyable.
 
