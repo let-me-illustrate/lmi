@@ -19,15 +19,14 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: build_wx.make,v 1.2 2006-06-08 20:05:54 chicares Exp $
+# $Id: build_wx.make,v 1.3 2006-12-06 17:02:03 chicares Exp $
 
 # This makefile is designed to be run in MSYS: the native zsh port
 # we customarily use can't handle 'configure'. Care is taken to
 # ensure that the resulting binaries, however, are suitable for use
-# with that zsh port. For instance, the default $(prefix) installs
-# the wx dll to 'C:\usr\bin\' instead of MSYS's '/usr/bin/', which
-# by default maps to 'C:\msys\1.0\bin' ('C:\msys\1.0\usr\bin' does
-# not actually exist).
+# with that zsh port or any other shell. For instance, the default
+# $(prefix) installs the wx dll to 'C:\usr\local\bin\' instead of some
+# directory in MSYS's own filesystem.
 #
 # Typical usage:
 #   /c/any/directory/at/all $make --file=/c/lmi/src/gwc/build_wx.make
