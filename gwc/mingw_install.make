@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: mingw_install.make,v 1.3 2006-12-06 16:50:40 chicares Exp $
+# $Id: mingw_install.make,v 1.4 2006-12-06 16:53:13 chicares Exp $
 
 # Configurable settings ########################################################
 
@@ -51,14 +51,14 @@ mingw_20050827 = \
 
 # Utilities ####################################################################
 
-ECHO   = echo
-GREP   = grep
-MD5SUM = md5sum
-MKDIR  = mkdir
-MV     = mv
-RM     = rm
-TAR    = tar
-WGET   = wget
+ECHO   := echo
+GREP   := grep
+MD5SUM := md5sum
+MKDIR  := mkdir
+MV     := mv
+RM     := rm
+TAR    := tar
+WGET   := wget
 
 # Error messages ###############################################################
 
