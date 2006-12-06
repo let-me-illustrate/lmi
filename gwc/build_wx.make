@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: build_wx.make,v 1.4 2006-12-06 17:12:24 chicares Exp $
+# $Id: build_wx.make,v 1.5 2006-12-06 17:16:42 chicares Exp $
 
 # This makefile is designed to be run in MSYS: the native zsh port
 # we customarily use can't handle 'configure'. Care is taken to
@@ -35,11 +35,11 @@
 
 prefix        := /c/usr/local/bin
 
-# 20060605 cvs snapshot for now.
-wx_dir        := /c/wx20060605/wxWidgets
+# 20061204 cvs snapshot for now.
+wx_dir        := /c/wx20061204/wxWidgets-2006-12-04
 
 mingw_root    := /c
-mingw_dir     := /MinGW-20050120
+mingw_dir     := /MinGW-20050827
 
 config_options = \
   --disable-gif \
@@ -55,6 +55,7 @@ config_options = \
   --enable-debug_info \
   --enable-commondlg \
   --disable-compat24 \
+  --disable-vararg_macros \
   VENDOR='$(vendor)' \
 
 # Utilities ####################################################################
