@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: comma_punct_test.cpp,v 1.4 2006-01-29 13:52:00 chicares Exp $
+// $Id: comma_punct_test.cpp,v 1.5 2006-12-06 16:23:17 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -28,7 +28,6 @@
 
 #include "comma_punct.hpp"
 
-#define BOOST_INCLUDE_MAIN
 #include "test_tools.hpp"
 
 #include <iomanip>

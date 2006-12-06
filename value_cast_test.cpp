@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: value_cast_test.cpp,v 1.13 2006-08-12 17:16:36 chicares Exp $
+// $Id: value_cast_test.cpp,v 1.14 2006-12-06 16:23:17 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -28,7 +28,6 @@
 
 #include "value_cast.hpp"
 
-#define BOOST_INCLUDE_MAIN
 #include "test_tools.hpp"
 
 #if !defined __BORLANDC__
