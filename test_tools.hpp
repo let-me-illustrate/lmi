@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: test_tools.hpp,v 1.8 2006-07-10 13:15:31 chicares Exp $
+// $Id: test_tools.hpp,v 1.9 2006-12-06 16:23:17 chicares Exp $
 
 // This is a derived work based on Beman Dawes's boost test library
 // that bears the following copyright and license statement:
@@ -273,8 +273,11 @@ namespace lmi_test
     // Effect: increment test_tools_errors counter.
 } // Namespace lmi_test.
 
-// For convenience, allow the user to request inclusion of lower-level layers.
-#ifdef BOOST_INCLUDE_MAIN
+// For convenience, include lower-level layers. The original boost
+// library did this only if BOOST_INCLUDE_MAIN had been defined; that
+// macro is retained here as documentation of this change.
+#define BOOST_INCLUDE_MAIN
+#if defined BOOST_INCLUDE_MAIN
 #   include "cpp_main.cpp"
 #   include "test_main.cpp"
 #endif // BOOST_INCLUDE_MAIN

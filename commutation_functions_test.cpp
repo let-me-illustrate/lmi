@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: commutation_functions_test.cpp,v 1.9 2006-12-06 02:18:27 chicares Exp $
+// $Id: commutation_functions_test.cpp,v 1.10 2006-12-06 16:23:17 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -27,8 +27,8 @@
 #endif // __BORLANDC__
 
 #include "ihs_commfns.hpp"
+
 #include "math_functors.hpp"
-#define BOOST_INCLUDE_MAIN
 #include "test_tools.hpp"
 #include "timer.hpp"
 

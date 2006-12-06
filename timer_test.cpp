@@ -19,16 +19,16 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: timer_test.cpp,v 1.8 2006-02-27 15:11:08 chicares Exp $
+// $Id: timer_test.cpp,v 1.9 2006-12-06 16:23:17 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
 #   pragma hdrstop
 #endif // __BORLANDC__
 
-#define BOOST_INCLUDE_MAIN
-#include "test_tools.hpp"
 #include "timer.hpp"
+
+#include "test_tools.hpp"
 
 #include <boost/bind.hpp>
 

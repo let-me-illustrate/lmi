@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: stratified_algorithms_test.cpp,v 1.4 2006-01-29 13:52:00 chicares Exp $
+// $Id: stratified_algorithms_test.cpp,v 1.5 2006-12-06 16:23:17 chicares Exp $
 
 // TODO ?? Add tests for tiered_product<>() and tiered_rate<>().
 
@@ -32,8 +32,6 @@
 
 #include "materially_equal.hpp"
 #include "miscellany.hpp" // lmi_array_size()
-
-#define BOOST_INCLUDE_MAIN
 #include "test_tools.hpp"
 
 #include <cmath>          // std::fabs()

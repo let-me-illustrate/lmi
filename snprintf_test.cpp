@@ -19,14 +19,13 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: snprintf_test.cpp,v 1.6 2006-01-29 13:52:00 chicares Exp $
+// $Id: snprintf_test.cpp,v 1.7 2006-12-06 16:23:17 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
 #   pragma hdrstop
 #endif // __BORLANDC__
 
-#define BOOST_INCLUDE_MAIN
 #include "test_tools.hpp"
 
 #include <stdio.h> // snprintf() (C99, not C++98).

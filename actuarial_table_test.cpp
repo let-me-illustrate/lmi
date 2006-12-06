@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: actuarial_table_test.cpp,v 1.7 2006-11-02 18:00:30 chicares Exp $
+// $Id: actuarial_table_test.cpp,v 1.8 2006-12-06 16:23:17 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -27,7 +27,7 @@
 #endif // __BORLANDC__
 
 #include "actuarial_table.hpp"
-#define BOOST_INCLUDE_MAIN
+
 #include "test_tools.hpp"
 #include "timer.hpp"
 
