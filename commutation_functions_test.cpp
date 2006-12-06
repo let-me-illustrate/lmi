@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: commutation_functions_test.cpp,v 1.8 2006-01-29 13:52:00 chicares Exp $
+// $Id: commutation_functions_test.cpp,v 1.9 2006-12-06 02:18:27 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -32,9 +32,7 @@
 #include "test_tools.hpp"
 #include "timer.hpp"
 
-#include <boost/lambda/algorithm.hpp>
-#include <boost/lambda/bind.hpp>
-#include <boost/lambda/construct.hpp>
+#include <boost/bind.hpp>
 
 #include <algorithm>
 #include <functional>
@@ -66,6 +64,37 @@ std::vector<double> const& sample_q()
 }
 } // Unnamed namespace.
 
+void mete_ulcf
+    (std::vector<double> const& q
+    ,std::vector<double> const& ic
+    ,std::vector<double> const& ig
+    )
+{
+    ULCommFns
+        (q
+        ,ic
+        ,ig
+        ,e_dbopt(e_option1)
+        ,e_mode (e_annual)
+        ,e_mode (e_annual)
+        ,e_mode (e_monthly)
+        );
+}
+
+void mete_corridor
+    (ULCommFns const&     ulcf
+    ,std::vector<double>& cvat_corridor
+    )
+{
+    std::transform
+        (ulcf.aD().begin()
+        ,ulcf.aD().end() - 1
+        ,ulcf.kM().begin()
+        ,cvat_corridor.begin()
+        ,std::divides<double>()
+        );
+}
+
 // TODO ?? This doesn't actually test its results.
 
 int test_main(int, char*[])
@@ -89,9 +118,9 @@ int test_main(int, char*[])
         ,ig
         ,ig
         ,e_dbopt(e_option1)
-        ,e_mode(e_monthly)
-        ,e_mode(e_monthly)
-        ,e_mode(e_monthly)
+        ,e_mode (e_monthly)
+        ,e_mode (e_monthly)
+        ,e_mode (e_monthly)
         );
     std::vector<double> cvat_corridor;
     std::transform
@@ -107,15 +136,11 @@ int test_main(int, char*[])
     std::cout
         << "  Speed test: generate UL commutation functions\n    "
         << aliquot_timer
-            (boost::lambda::bind
-                (boost::lambda::constructor<ULCommFns>()
+            (boost::bind
+                (mete_ulcf
                 ,q
                 ,ic
                 ,ig
-                ,e_dbopt(e_option1)
-                ,e_mode(e_annual)
-                ,e_mode(e_annual)
-                ,e_mode(e_monthly)
                 )
             )
         << '\n'
@@ -124,13 +149,10 @@ int test_main(int, char*[])
     std::cout
         << "  Speed test: calculate CVAT corridor factors\n    "
         << aliquot_timer
-            (boost::lambda::bind
-                (boost::lambda::ll::transform()
-                ,ulcf.aD().begin()
-                ,ulcf.aD().end() - 1
-                ,ulcf.kM().begin()
-                ,cvat_corridor.begin()
-                ,std::divides<double>()
+            (boost::bind
+                (mete_corridor
+                ,boost::ref(ulcf)
+                ,cvat_corridor
                 )
             )
         << '\n'
