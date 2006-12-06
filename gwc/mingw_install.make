@@ -19,17 +19,17 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: mingw_install.make,v 1.2 2006-02-09 13:58:06 chicares Exp $
+# $Id: mingw_install.make,v 1.3 2006-12-06 16:50:40 chicares Exp $
 
-# Configurable settings #######################################################
+# Configurable settings ########################################################
 
 file_list = $(mingw_20060119)
 
-mirror = http://easynews.dl.sourceforge.net/sourceforge/mingw
+mirror    = http://easynews.dl.sourceforge.net/sourceforge/mingw
 
-prefix = /c/mingw
+prefix    = /c/mingw
 
-# File lists ##################################################################
+# File lists ###################################################################
 
 mingw_20060119 = \
   binutils-2.16.91-20060119-1.tar.gz \
@@ -49,7 +49,7 @@ mingw_20050827 = \
 
 # TODO ?? Add file lists for earlier releases.
 
-# Utilities ###################################################################
+# Utilities ####################################################################
 
 ECHO   = echo
 GREP   = grep
@@ -60,7 +60,7 @@ RM     = rm
 TAR    = tar
 WGET   = wget
 
-# Error messages ##############################################################
+# Error messages ###############################################################
 
 wget_missing = \
   "\nError: Unable to find '$(WGET)', which is required for" \
@@ -82,7 +82,7 @@ scratch_exists = \
   "\nit might contain." \
   "\n"
 
-# Targets #####################################################################
+# Targets ######################################################################
 
 .PHONY: all
 all: $(file_list)
@@ -107,7 +107,7 @@ initial_setup:
 	@[ -e $@ ] || $(WGET) --non-verbose --timestamping $(mirror)/$@
 	@$(TAR) --extract $(decompress) --directory=scratch --file=$@
 
-# Test ########################################################################
+# Test #########################################################################
 
 this_makefile = mingw_install.make
 
