@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_commfns.hpp,v 1.6 2006-01-29 13:52:00 chicares Exp $
+// $Id: ihs_commfns.hpp,v 1.7 2006-12-06 02:19:17 chicares Exp $
 
 #ifndef commfns_hpp
 #define commfns_hpp
@@ -43,7 +43,7 @@
 
 #include <vector>
 
-// Ordinary life commutation functions.
+/// Ordinary-life commutation functions.
 
 class LMI_SO OLCommFns
     :private boost::noncopyable
@@ -76,12 +76,11 @@ class LMI_SO OLCommFns
     std::vector<double>        n;
 };
 
-// UL commutation functions: see Eckley, TSA XXXIX, page 18.
-
-// Implicitly-declared special member functions do the right thing.
+/// Universal-life commutation functions: Eckley, TSA XXXIX, page 18.
 
 class LMI_SO ULCommFns
-    :virtual private obstruct_slicing<ULCommFns>
+    :private boost::noncopyable
+    ,virtual private obstruct_slicing<ULCommFns>
 {
   public:
     ULCommFns
