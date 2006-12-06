@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: calendar_date_test.cpp,v 1.12 2006-10-13 23:52:04 chicares Exp $
+// $Id: calendar_date_test.cpp,v 1.13 2006-12-06 16:23:17 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -28,7 +28,6 @@
 
 #include "calendar_date.hpp"
 
-#define BOOST_INCLUDE_MAIN
 #include "test_tools.hpp"
 #include "timer.hpp"
 

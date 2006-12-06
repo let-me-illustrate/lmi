@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.516 2006-12-06 02:19:17 chicares Exp $
+// $Id: ChangeLog,v 1.517 2006-12-06 16:23:17 chicares Exp $
 
 MAINTENANCE
 
@@ -8602,4 +8602,55 @@ warns of this implicit requirement or explains how to overcome it.
 
   ihs_commfns.hpp
 Make class ULCommFns noncopyable.
+
+20061206T1623Z <chicares@cox.net> [1231]
+
+  actuarial_table_test.cpp
+  alert_test.cpp
+  any_member_test.cpp
+  argv0_test.cpp
+  calendar_date_test.cpp
+  callback_test.cpp
+  comma_punct_test.cpp
+  commutation_functions_test.cpp
+  crc32_test.cpp
+  expression_template_0_test.cpp
+  fenv_lmi_test.cpp
+  financial_test.cpp
+  global_settings_test.cpp
+  handle_exceptions_test.cpp
+  input_seq_test.cpp
+  input_test.cpp
+  irc7702a_test.cpp
+  loads_test.cpp
+  map_lookup_test.cpp
+  materially_equal_test.cpp
+  math_functors_test.cpp
+  mc_enum_test.cpp
+  mpatrol_patch_test.cpp
+  name_value_pairs_test.cpp
+  ncnnnpnn_test.cpp
+  numeric_io_test.cpp
+  obstruct_slicing_test.cpp
+  passkey_test.cpp
+  path_utility_test.cpp
+  progress_meter_test.cpp
+  quiet_nan_test.cpp
+  round_to_test.cpp
+  rtti_lmi_test.cpp
+  sandbox_test.cpp
+  snprintf_test.cpp
+  stratified_algorithms_test.cpp
+  stream_cast_test.cpp
+  test_tools.hpp
+  test_tools_test.cpp
+  timer_test.cpp
+  tn_range_test.cpp
+  value_cast_test.cpp
+  vector_test.cpp
+  wx_new_test.cpp
+  xenum_test.cpp
+  xrange_test.cpp
+  zero_test.cpp
+Define BOOST_INCLUDE_MAIN by default, to simplify writing unit tests.
 

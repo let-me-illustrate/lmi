@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: any_member_test.cpp,v 1.16 2006-07-13 14:31:41 chicares Exp $
+// $Id: any_member_test.cpp,v 1.17 2006-12-06 16:23:17 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -28,7 +28,6 @@
 
 #include "any_member.hpp"
 
-#define BOOST_INCLUDE_MAIN
 #include "test_tools.hpp"
 
 #include <cmath> // std::exp()

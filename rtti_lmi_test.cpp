@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: rtti_lmi_test.cpp,v 1.2 2006-06-07 17:07:43 wboutin Exp $
+// $Id: rtti_lmi_test.cpp,v 1.3 2006-12-06 16:23:17 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -28,7 +28,6 @@
 
 #include "rtti_lmi.hpp"
 
-#define BOOST_INCLUDE_MAIN
 #include "test_tools.hpp"
 
 #include <map>

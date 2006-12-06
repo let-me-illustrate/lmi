@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: tn_range_test.cpp,v 1.9 2006-09-19 02:57:41 chicares Exp $
+// $Id: tn_range_test.cpp,v 1.10 2006-12-06 16:23:17 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -30,7 +30,6 @@
 #include "tn_range.tpp"          // Class template implementation.
 #include "tn_range_test_aux.hpp" // Template class instantiation.
 
-#define BOOST_INCLUDE_MAIN
 #include "test_tools.hpp"
 
 #include <algorithm> // std::min()

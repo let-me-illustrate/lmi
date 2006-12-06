@@ -19,14 +19,13 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: test_tools_test.cpp,v 1.5 2006-07-10 13:15:31 chicares Exp $
+// $Id: test_tools_test.cpp,v 1.6 2006-12-06 16:23:17 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
 #   pragma hdrstop
 #endif // __BORLANDC__
 
-#define BOOST_INCLUDE_MAIN
 #include "test_tools.hpp"
 
 #include <iostream>

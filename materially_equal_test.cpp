@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: materially_equal_test.cpp,v 1.4 2006-02-27 15:11:06 chicares Exp $
+// $Id: materially_equal_test.cpp,v 1.5 2006-12-06 16:23:17 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -28,7 +28,6 @@
 
 #include "materially_equal.hpp"
 
-#define BOOST_INCLUDE_MAIN
 #include "test_tools.hpp"
 
 #include <limits>

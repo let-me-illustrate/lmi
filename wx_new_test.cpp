@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: wx_new_test.cpp,v 1.4 2006-01-29 13:52:01 chicares Exp $
+// $Id: wx_new_test.cpp,v 1.5 2006-12-06 16:23:17 chicares Exp $
 
 // This unit test proves little, but including it in the unit-test
 // suite ensures that it'll be compiled with stronger warning options
@@ -35,7 +35,6 @@
 // resulting in an object that wouldn't necessarily work here.
 #include "wx_new.cpp"
 
-#define BOOST_INCLUDE_MAIN
 #include "test_tools.hpp"
 
 int test_main(int, char*[])
