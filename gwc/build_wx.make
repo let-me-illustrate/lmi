@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: build_wx.make,v 1.3 2006-12-06 17:02:03 chicares Exp $
+# $Id: build_wx.make,v 1.4 2006-12-06 17:12:24 chicares Exp $
 
 # This makefile is designed to be run in MSYS: the native zsh port
 # we customarily use can't handle 'configure'. Care is taken to
@@ -57,6 +57,13 @@ config_options = \
   --disable-compat24 \
   VENDOR='$(vendor)' \
 
+# Utilities ####################################################################
+
+CP     := cp
+MKDIR  := mkdir
+SED    := sed
+TR     := tr
+
 # Dependent variables ##########################################################
 
 date           = $(shell date -u +'%Y%m%dT%H%MZ')
@@ -91,19 +98,19 @@ endif
 # relied upon never to use carriage returns in line endings.
 
 wx_config_fix = \
-  cp --preserve $(1) $(2); \
+  $(CP) --preserve $(1) $(2); \
   <$(2) \
-    sed \
+    $(SED) \
       -e 's|printf|echo|' \
       -e 's|check_dirname "/\([A-Za-z]\)/|check_dirname "\1:/|' \
-    | tr --delete '\r' \
+    | $(TR) --delete '\r' \
   >$(1)
 
 # Targets ######################################################################
 
 .PHONY: all
 all:
-	mkdir --parents $(build_dir)
+	$(MKDIR) --parents $(build_dir)
 	export PATH=$(mingw_bin_dir):$$PATH ; \
 	$(MAKE) --file=$(self) --directory=$(build_dir) wx
 
@@ -111,6 +118,6 @@ all:
 wx:
 	../configure $(config_options) >config_log_$(date) 2>config_err_$(date)
 	$(MAKE) >build_log_$(date) 2>build_err_$(date)
-	cp --interactive --preserve lib/*.dll $(prefix)
+	$(CP) --interactive --preserve lib/*.dll $(prefix)
 	$(call wx_config_fix,wx-config,wx-config-original)
 
