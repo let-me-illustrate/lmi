@@ -19,17 +19,31 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: mingw_install.make,v 1.4 2006-12-06 16:53:13 chicares Exp $
+# $Id: mingw_install.make,v 1.5 2006-12-06 17:24:13 chicares Exp $
 
 # Configurable settings ########################################################
 
-file_list = $(mingw_20060119)
+# Use the 2005-08-27 version by default.
+
+file_list = $(mingw_20050827)
 
 mirror    = http://easynews.dl.sourceforge.net/sourceforge/mingw
 
 prefix    = /c/mingw
 
 # File lists ###################################################################
+
+# 'Candidate' versions from
+#   Chris Sutcliffe's 2006-11-19T02:27Z email to MinGW-dvlpr,
+# revised according to
+#   Keith MARSHALL's 2006-12-02T20:30Z email to Mingw-users:
+
+mingw_20061119 = \
+  binutils-2.16.91-20060119-1.tar.gz \
+  gcc-core-3.4.5-20060117-1.tar.gz \
+  gcc-g++-3.4.5-20060117-1.tar.gz \
+  mingw-runtime-3.11-20061202-1-src.tar.gz \
+  w32api-3.8.tar.gz \
 
 mingw_20060119 = \
   binutils-2.16.91-20060119-1.tar.gz \
