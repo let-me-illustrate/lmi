@@ -19,9 +19,15 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: mingw_install.make,v 1.6 2006-12-07 17:30:46 chicares Exp $
+# $Id: mingw_install.make,v 1.7 2006-12-07 22:14:40 chicares Exp $
 
 # Configurable settings ########################################################
+
+# Use the 2005-08-27 version by default.
+
+version  := MinGW-20050827
+
+file_list = $($(version))
 
 # Prefer to set $(prefix) to anything but '/mingw', in order to avoid
 # the problem described here:
@@ -29,13 +35,13 @@
 #   http://sourceforge.net/mailarchive/message.php?msg_id=10581810
 # when multiple versions of MinGW gcc are installed.
 
-# Use the 2005-08-27 version by default.
+prefix   := /c/$(version)
 
-file_list = $(mingw_20050827)
-
-mirror    = http://easynews.dl.sourceforge.net/sourceforge/mingw
-
-prefix    = /c/MinGW-20050827
+# In the past, it seemed necessary to specify a mirror, e.g.:
+#  mirror := http://easynews.dl.sourceforge.net/sourceforge/mingw
+# but as of about 2006-12 sf.net seems to select one automatically
+# when this is passed to wget:
+mirror   := http://downloads.sourceforge.net/mingw
 
 # File lists ###################################################################
 
@@ -44,14 +50,14 @@ prefix    = /c/MinGW-20050827
 # revised according to
 #   Keith MARSHALL's 2006-12-02T20:30Z email to Mingw-users:
 
-mingw_20061119 = \
+MinGW-20061119 = \
   binutils-2.16.91-20060119-1.tar.gz \
   gcc-core-3.4.5-20060117-1.tar.gz \
   gcc-g++-3.4.5-20060117-1.tar.gz \
   mingw-runtime-3.11-20061202-1-src.tar.gz \
   w32api-3.8.tar.gz \
 
-mingw_20060119 = \
+MinGW-20060119 = \
   binutils-2.16.91-20060119-1.tar.gz \
   gcc-core-3.4.5-20060117-1.tar.gz \
   gcc-g++-3.4.5-20060117-1.tar.gz \
@@ -60,7 +66,7 @@ mingw_20060119 = \
 
 # This, I think, is equivalent to the C++ portion of 'MinGW-5.0.0.exe'.
 
-mingw_20050827 = \
+MinGW-20050827 = \
   binutils-2.16.91-20050827-1.tar.gz \
   gcc-core-3.4.4-20050522-1.tar.gz \
   gcc-g++-3.4.4-20050522-1.tar.gz \
