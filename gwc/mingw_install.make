@@ -19,9 +19,15 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: mingw_install.make,v 1.5 2006-12-06 17:24:13 chicares Exp $
+# $Id: mingw_install.make,v 1.6 2006-12-07 17:30:46 chicares Exp $
 
 # Configurable settings ########################################################
+
+# Prefer to set $(prefix) to anything but '/mingw', in order to avoid
+# the problem described here:
+#   http://sourceforge.net/mailarchive/message.php?msg_id=10579421
+#   http://sourceforge.net/mailarchive/message.php?msg_id=10581810
+# when multiple versions of MinGW gcc are installed.
 
 # Use the 2005-08-27 version by default.
 
@@ -29,7 +35,7 @@ file_list = $(mingw_20050827)
 
 mirror    = http://easynews.dl.sourceforge.net/sourceforge/mingw
 
-prefix    = /c/mingw
+prefix    = /c/MinGW-20050827
 
 # File lists ###################################################################
 
