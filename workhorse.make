@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: workhorse.make,v 1.80 2006-11-28 05:19:45 chicares Exp $
+# $Id: workhorse.make,v 1.81 2006-12-07 16:26:15 chicares Exp $
 
 ################################################################################
 
@@ -138,7 +138,17 @@ ifeq (,$(wx_dir))
 
 else
   wx_build_dir := $(wx_dir)/gcc$(subst .,,$(gcc_version))
-  wx_config_script := $(wx_build_dir)/wx-config
+
+  # Use our '-portable' script if it exists; else fall back on the
+  # script wx provides.
+
+  wx_config_script := \
+    $(firstword \
+      $(wildcard \
+        $(addprefix $(wx_build_dir)/,wx-config-portable wx-config \
+        ) \
+      ) \
+    )
 
   # The conventional autotools usage...
   ifeq (gcc,$(toolset))
@@ -201,6 +211,10 @@ wx_config_check:
 	@$(ECHO) $(filter-out $(wx_cxxflag_check),$(wx_config_cxxflags))
 	@$(ECHO) Omitted from 'wx-config --libs':
 	@$(ECHO) $(filter-out $(wx_libs_check),$(wx_config_libs))
+	@$(ECHO) Result of 'wx-config --cxxflags':
+	@$(ECHO) "  " $(wx_config_cxxflags)
+	@$(ECHO) Result of 'wx-config --libs':
+	@$(ECHO) "  " $(wx_config_libs)
 
 ################################################################################
 
