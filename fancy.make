@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: fancy.make,v 1.4 2006-01-29 13:52:00 chicares Exp $
+# $Id: fancy.make,v 1.5 2006-12-08 07:21:40 chicares Exp $
 
 # This experimental makefile runs unit tests, filters out most routine
 # output, and summarizes results. It's handy, but abstruse. Usually,
@@ -134,7 +134,7 @@ unit_tests_fancy: #$(unit_test_targets)
 	$(call REPORT_TIMING,$(unit_test_results))
 	$(call REPORT_DIAGNOSTICS,$(unit_test_results),"unit test")
 	$(call REPORT_ERRORS,$(unit_test_results),"unit test")
-	@$(MAKE) -f $(src_dir)/GNUmakefile run_unit_tests >> $(unit_test_results)
+	@$(MAKE) -f $(src_dir)/GNUmakefile run_unit_tests >> $(unit_test_results) 2>&1
 	@$(ECHO) $(words $(unit_test_targets)) unit tests attempted
 	@$(GREP) -c 'no errors detected' $(unit_test_results) \
 	  | $(SED) -e 's/$$/ unit tests passed/'
