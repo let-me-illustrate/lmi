@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: mingw_install.make,v 1.7 2006-12-07 22:14:40 chicares Exp $
+# $Id: mingw_install.make,v 1.8 2006-12-09 04:53:04 chicares Exp $
 
 # Configurable settings ########################################################
 
@@ -125,13 +125,34 @@ initial_setup:
 	@$(RM) --force --recursive $(prefix)
 	@$(MKDIR) --parents scratch
 
-%.tar.bz2: decompress = --bzip2
-%.tar.gz:  decompress = --gzip
+# Some gcc archives distributed by MinGW contain a version of
+# 'libiberty.a' that's incompatible with the version provided with
+# binutils. See:
+#   http://sourceforge.net/mailarchive/message.php?msg_id=4456861
+# to learn why this may matter a great deal.
+#
+# Other conflicts like that have been known to occur. For instance,
+# these archives
+#   binutils-2.16.91-20050827-1.tar.gz
+#   gcc-core-3.4.4-20050522-1.tar.gz
+# contain 'info/dir' files that differ.
+#
+# For the moment, gcc's 'libiberty.a' is explicitly excluded because
+# it has sometimes been significantly wrong, and it seems reasonable
+# to expect binutils to provide a 'libiberty.a' that works with the
+# 'libbfd.a' it also provides. However, other conflicts are managed by
+# specifying '--keep-old-files' and permitting 'tar' to fail with an
+# error message identifying any conflict.
+
+TARFLAGS := --keep-old-files
+%.tar.bz2: TARFLAGS += --bzip2
+%.tar.gz:  TARFLAGS += --gzip
+gcc%:      TARFLAGS += --exclude 'libiberty.a'
 
 .PHONY: %.tar.bz2 %.tar.gz
 %.tar.bz2 %.tar.gz:
 	@[ -e $@ ] || $(WGET) --non-verbose --timestamping $(mirror)/$@
-	@$(TAR) --extract $(decompress) --directory=scratch --file=$@
+	-@$(TAR) --extract $(TARFLAGS) --directory=scratch --file=$@
 
 # Test #########################################################################
 
