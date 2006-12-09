@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: workhorse.make,v 1.81 2006-12-07 16:26:15 chicares Exp $
+# $Id: workhorse.make,v 1.82 2006-12-09 04:56:37 chicares Exp $
 
 ################################################################################
 
@@ -479,11 +479,15 @@ every_libstdcxx_warning_macro := \
   -D_GLIBCPP_DEBUG -D_GLIBCPP_DEBUG_PEDANTIC -D_GLIBCPP_CONCEPT_CHECKS \
                    -D_GLIBXX_DEBUG_PEDANTIC \
 
-MPATROL_LIBS :=
+MPATROL_LDFLAGS :=
+MPATROL_LIBS    :=
 
 test_targets := unit_tests cgi_tests cli_tests
 
 ifeq (mpatrol,$(findstring mpatrol,$(build_type)))
+  ifeq (3.4.4,$(gcc_version))
+    MPATROL_LDFLAGS := -Wl,--allow-multiple-definition
+  endif
   optimization_flag := -O0
   MPATROL_LIBS := -lmpatrol -lbfd -liberty $(platform_mpatrol_libraries)
 else
@@ -628,7 +632,8 @@ REQUIRED_LDFLAGS = \
   $(addprefix -L , $(all_library_directories)) \
   $(EXTRA_LDFLAGS) \
   $(REQUIRED_LIBS) \
-  $(MPATROL_LIBS)
+  $(MPATROL_LDFLAGS) \
+  $(MPATROL_LIBS) \
 
 # The '--use-temp-file' windres option seems to be often helpful and
 # never harmful. The $(subst) workaround isn't needed with
