@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.518 2006-12-09 04:56:37 chicares Exp $
+// $Id: ChangeLog,v 1.519 2006-12-09 17:13:14 chicares Exp $
 
 MAINTENANCE
 
@@ -8668,4 +8668,17 @@ Capture stderr as well as stdout for postprocessing.
 
   workhorse.make
 Make mpatrol work with 20050827 MinGW toolchain.
+
+20061209T1553Z <chicares@cox.net> [1231]
+
+  timer.cpp
+In elapsed_msec_str(), emit no trailing space.
+
+20061209T1713Z <chicares@cox.net> [1231]
+
+  illustration_document.cpp
+  multiple_cell_document.cpp
+  multiple_cell_document.hpp
+Include class definitions where forward declarations don't suffice.
+These problems were found with libstdc++'s debug mode.
 
