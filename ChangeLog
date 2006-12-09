@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.517 2006-12-06 16:23:17 chicares Exp $
+// $Id: ChangeLog,v 1.518 2006-12-09 04:56:37 chicares Exp $
 
 MAINTENANCE
 
@@ -8653,4 +8653,19 @@ Make class ULCommFns noncopyable.
   xrange_test.cpp
   zero_test.cpp
 Define BOOST_INCLUDE_MAIN by default, to simplify writing unit tests.
+
+20061207T1626Z <chicares@cox.net> [1231]
+
+  workhorse.make
+Prefer a portable alternative to 'wx-config'.
+
+20061208T0721Z <chicares@cox.net> [1231]
+
+  fancy.make
+Capture stderr as well as stdout for postprocessing.
+
+20061209T0456Z <chicares@cox.net> [1231]
+
+  workhorse.make
+Make mpatrol work with 20050827 MinGW toolchain.
 
