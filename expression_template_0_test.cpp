@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: expression_template_0_test.cpp,v 1.5 2006-12-06 16:23:17 chicares Exp $
+// $Id: expression_template_0_test.cpp,v 1.6 2006-12-09 21:25:31 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -96,7 +96,6 @@ void mete_c()
 void mete_stl_naive()
 {
     std::vector<double> tmp0;
-    // Omitting the call to reserve() greatly impairs performance.
     tmp0.reserve(100);
     std::transform
         (sv1a.begin()
@@ -154,7 +153,7 @@ void mete_stl_smart()
         (sv0b.begin()
         ,sv0b.end()
         ,sv1b.begin()
-        ,tmp0.begin()
+        ,std::back_inserter(tmp0)
         ,boost::bind
             (std::minus<double>()
             ,_1

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.519 2006-12-09 17:13:14 chicares Exp $
+// $Id: ChangeLog,v 1.520 2006-12-09 21:25:31 chicares Exp $
 
 MAINTENANCE
 
@@ -8681,4 +8681,16 @@ In elapsed_msec_str(), emit no trailing space.
   multiple_cell_document.hpp
 Include class definitions where forward declarations don't suffice.
 These problems were found with libstdc++'s debug mode.
+
+20061209T2124Z <chicares@cox.net> [1231]
+
+  input_test.cpp
+Don't attempt to dereference an end-of-stream istreambuf_iterator.
+This problems was found with libstdc++'s debug mode.
+
+20061209T2125Z <chicares@cox.net> [1231]
+
+  expression_template_0_test.cpp
+Correct an error found with libstdc++'s debug mode, and remove a
+specious comment.
 
