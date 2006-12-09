@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_test.cpp,v 1.16 2006-12-06 16:23:17 chicares Exp $
+// $Id: input_test.cpp,v 1.17 2006-12-09 21:24:16 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -66,7 +66,7 @@ bool streams_are_identical(std::istream& is0, std::istream& is1)
             return false;
             }
         }
-    return *i == *j;
+    return end == i && end == j;
 }
 
 bool files_are_identical(std::string const& file0, std::string const& file1)
