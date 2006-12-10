@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: miscellany.hpp,v 1.5 2006-01-29 13:52:00 chicares Exp $
+// $Id: miscellany.hpp,v 1.6 2006-12-10 16:19:22 chicares Exp $
 
 #ifndef miscellany_hpp
 #define miscellany_hpp
@@ -40,7 +40,7 @@
 template<typename InputIterator, typename T>
 bool each_equal(InputIterator first, InputIterator last, T const& t)
 {
-// TODO ?? Remove this old implentation after testing:
+// TODO ?? Remove this old implementation after testing:
     bool rc = true;
     for(InputIterator i = first; i != last; ++i)
         {
@@ -55,6 +55,10 @@ bool each_equal(InputIterator first, InputIterator last, T const& t)
 
     return std::distance(first, last) == std::count(first, last, t);
 }
+
+/// Test whether two files are identical. Arguments are filenames.
+
+bool files_are_identical(std::string const&, std::string const&);
 
 // Omitting colons yields a valid posix path.
 std::string iso_8601_datestamp_terse();

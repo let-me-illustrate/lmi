@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_test.cpp,v 1.17 2006-12-09 21:24:16 chicares Exp $
+// $Id: input_test.cpp,v 1.18 2006-12-10 16:19:22 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -31,6 +31,7 @@
 #include "multiple_cell_document.hpp"
 #include "single_cell_document.hpp"
 
+#include "miscellany.hpp" // files_are_identical()
 #include "test_tools.hpp"
 #include "timer.hpp"
 #include "xml_lmi.hpp"
@@ -43,38 +44,6 @@
 #include <cstdio> // std::remove()
 #include <fstream>
 #include <ios>
-#include <istream>
-#include <iterator>
-
-// This function is a derived work adapted from usenet article
-// <1eo2sct.ggkc9z84ko0eN%cbarron3@ix.netcom.com>. GWC rewrote it
-// in 2005. Any defect should not reflect on Carl Barron's reputation.
-//
-// TODO ?? Test; consider making generally available; consider whether
-// the std::istream version is separately useful.
-//
-bool streams_are_identical(std::istream& is0, std::istream& is1)
-{
-    std::istreambuf_iterator<char> i(is0);
-    std::istreambuf_iterator<char> j(is1);
-    std::istreambuf_iterator<char> end;
-
-    for(; end != i && end != j; ++i, ++j)
-        {
-        if(*i != *j)
-            {
-            return false;
-            }
-        }
-    return end == i && end == j;
-}
-
-bool files_are_identical(std::string const& file0, std::string const& file1)
-{
-    std::ifstream is0(file0.c_str());
-    std::ifstream is1(file1.c_str());
-    return streams_are_identical(is0, is1);
-}
 
 template<typename DocumentClass>
 void test_document_io
