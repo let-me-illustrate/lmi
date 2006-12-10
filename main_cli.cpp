@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_cli.cpp,v 1.23 2006-01-29 13:52:00 chicares Exp $
+// $Id: main_cli.cpp,v 1.24 2006-12-10 12:58:06 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -127,18 +127,18 @@ void SelfTest()
     IllusInputParms IP;
     IP["Gender"           ] = "Male";
     IP["Smoking"          ] = "Nonsmoker";
-    IP["UnderwritingClass"] = "Preferred";
-    IP.GenAcctIntRate = "0.12";
+    IP["UnderwritingClass"] = "Standard";
+    IP.GenAcctIntRate = "0.06";
     IP.propagate_changes_to_base_and_finalize();
 
-    IP.EePremium.assign(IP.SpecAmt.size(), r_pmt(10000.0));
+    IP.EePremium.assign(IP.SpecAmt.size(), r_pmt(20000.0));
     IP.SpecAmt.assign(IP.SpecAmt.size(), r_spec_amt(1000000.0));
     double expected_value = 0.0;
     double observed_value = 0.0;
 
     IP["SolveType"] = "SolveNone";
 
-    expected_value = 29206514.78;
+    expected_value = 6305652.52;
     IV.Run(&IP);
     observed_value = IV.ledger().GetCurrFull().AcctVal.back();
     if(.005 < std::fabs(expected_value - observed_value))
@@ -154,7 +154,7 @@ void SelfTest()
         }
 
     IP["SolveType"] = "SolveSpecAmt";
-    expected_value = 1827289;
+    expected_value = 1884064;
     observed_value = IV.Run(&IP);
     if(.005 < std::fabs(expected_value - observed_value))
         {
@@ -169,7 +169,7 @@ void SelfTest()
         }
 
     IP["SolveType"] = "SolveEePrem";
-    expected_value = 5498.99;
+    expected_value = 10673.51;
     observed_value = IV.Run(&IP);
     if(.005 < std::fabs(expected_value - observed_value))
         {
