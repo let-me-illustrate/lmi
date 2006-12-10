@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: objects.make,v 1.91 2006-11-28 05:19:45 chicares Exp $
+# $Id: objects.make,v 1.92 2006-12-10 17:35:38 chicares Exp $
 
 ################################################################################
 
@@ -388,6 +388,7 @@ libgpt_so_test$(EXEEXT): server7702dlltest.c libgpt$(SHREXT)
 # Unit tests.
 
 unit_test_targets := \
+  account_value_test$(EXEEXT) \
   actuarial_table_test$(EXEEXT) \
   alert_test$(EXEEXT) \
   any_member_test$(EXEEXT) \
@@ -405,6 +406,7 @@ unit_test_targets := \
   input_seq_test$(EXEEXT) \
   input_test$(EXEEXT) \
   irc7702a_test$(EXEEXT) \
+  ledger_test$(EXEEXT) \
   loads_test$(EXEEXT) \
   map_lookup_test$(EXEEXT) \
   materially_equal_test$(EXEEXT) \
@@ -442,6 +444,10 @@ common_test_objects := \
   fenv_lmi.o \
   getopt.o \
   license.o \
+
+account_value_test$(EXEEXT): \
+  $(common_test_objects) \
+  account_value_test.o \
 
 actuarial_table_test$(EXEEXT): \
   $(boost_filesystem_objects) \
@@ -561,6 +567,10 @@ irc7702a_test$(EXEEXT): \
   ihs_irc7702a.o \
   irc7702a_test.o \
   stratified_algorithms.o \
+
+ledger_test$(EXEEXT): \
+  $(common_test_objects) \
+  ledger_test.o \
 
 loads_test$(EXEEXT): \
   $(common_test_objects) \
