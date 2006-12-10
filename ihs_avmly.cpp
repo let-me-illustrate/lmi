@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avmly.cpp,v 1.53 2006-09-02 22:30:24 chicares Exp $
+// $Id: ihs_avmly.cpp,v 1.54 2006-12-10 12:57:09 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -2664,6 +2664,7 @@ void AccountValue::TxCreditInt()
     // Accrue interest on unloaned and loaned account value separately,
     // but do not charge interest on negative account value.
 
+    // TODO ?? This variable is unused.
     double sa_int_spread = 0.0;
 
     double gross_sep_acct_rate = i_upper_12_over_12_from_i<double>()
