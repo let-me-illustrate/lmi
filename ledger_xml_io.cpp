@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xml_io.cpp,v 1.58 2006-11-30 16:58:24 chicares Exp $
+// $Id: ledger_xml_io.cpp,v 1.59 2006-12-11 17:25:22 chicares Exp $
 
 #include "ledger.hpp"
 
@@ -907,8 +907,8 @@ void Ledger::write(xml_lmi::Element& x) const
 //  want: <!DOCTYPE sales []>
 // kludged in write(std::ostream& os) below
 
-    ADD_NODE_0(x,scalar,"scalar")
-    ADD_NODE_0(x,data,"data")
+    xml_lmi::Element scalar("scalar");
+    xml_lmi::Element data("data");
     for
         (std::map<std::string,std::string>::const_iterator j = stringscalars.begin()
         ;j != stringscalars.end()
@@ -925,22 +925,22 @@ void Ledger::write(xml_lmi::Element& x) const
         ;++j
         )
         {
-        ADD_NODE_0(data,newcolumn,"newcolumn")
-        ADD_NODE_0(newcolumn,column,"column")
+        xml_lmi::Element newcolumn("newcolumn");
+        xml_lmi::Element column("column");
         xml_lmi::set_attr(column, "name", j->first.c_str());
         std::vector<std::string> const& v = j->second;
 // TODO ?? InforceLives shows an extra value past the end; should it
 // be truncated here?
         for(unsigned int k = 0; k < v.size(); ++k)
             {
-            ADD_NODE_0(column,duration,"duration")
+            xml_lmi::Element duration("duration");
             xml_lmi::set_attr(duration, "number", value_cast<std::string>(k).c_str());
             xml_lmi::set_attr(duration, "column_value", v[k].c_str());
-            ADD_NODE_1(column,duration,"duration")
+            column.push_back(duration);
             }
 // TODO ?? Is <newcolumn> really useful?
-        ADD_NODE_1(newcolumn,column,"column")
-        ADD_NODE_1(data,newcolumn,"newcolumn")
+        newcolumn.push_back(column);
+        data.push_back(newcolumn);
         }
 
     std::vector<std::string> SupplementalReportColumns;
@@ -960,7 +960,7 @@ void Ledger::write(xml_lmi::Element& x) const
         SupplementalReportColumns.push_back(ledger_invariant_->SupplementalReportColumn11);
         }
 
-    ADD_NODE_0(x,supplementalreport,"supplementalreport")
+    xml_lmi::Element supplementalreport("supplementalreport");
     if(ledger_invariant_->SupplementalReport)
         {
         // Eventually customize the report name.
@@ -975,10 +975,10 @@ void Ledger::write(xml_lmi::Element& x) const
             )
             {
 //warning() << "column " << *j << " title " << title_map[*j] << LMI_FLUSH;
-            ADD_NODE_0(supplementalreport,columns,"columns")
+            xml_lmi::Element columns("columns");
             xml_lmi::add_node(columns, "name", (*j).c_str());
             xml_lmi::add_node(columns, "title", title_map[*j].c_str());
-            ADD_NODE_1(supplementalreport,columns,"columns")
+            supplementalreport.push_back(columns);
             }
         }
 
@@ -996,9 +996,9 @@ void Ledger::write(xml_lmi::Element& x) const
 </supplementalreport>
 */
 
-    ADD_NODE_1(x,scalar,"scalar")
-    ADD_NODE_1(x,data,"data")
-    ADD_NODE_1(x,supplementalreport,"supplementalreport")
+    x.push_back(scalar);
+    x.push_back(data);
+    x.push_back(supplementalreport);
 
     if
         (   GetIsComposite()
