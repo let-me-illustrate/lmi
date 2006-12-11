@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xml_io2.cpp,v 1.10 2006-11-30 05:58:26 chicares Exp $
+// $Id: ledger_xml_io2.cpp,v 1.11 2006-12-11 17:25:22 chicares Exp $
 
 #include "ledger.hpp"
 
@@ -1134,9 +1134,9 @@ void Ledger::write_excerpt
         ;++j
         )
         {
-        ADD_NODE_WITH_TEXT_0(illustration,string_scalar,"string_scalar",j->second.c_str())
+        xml_lmi::Element string_scalar("string_scalar", j->second.c_str());
         j->first.set_to_xml_element(string_scalar);
-        ADD_NODE_WITH_TEXT_1(illustration,string_scalar,"string_scalar",j->second.c_str())
+        illustration.push_back(string_scalar);
         }
     // double scalars
     for
@@ -1149,9 +1149,9 @@ void Ledger::write_excerpt
         if(formatter.has_format(id))
             {
             std::string f = formatter.format(id, j->second, xml_version);
-            ADD_NODE_WITH_TEXT_0(illustration,double_scalar,"double_scalar",f.c_str())
+            xml_lmi::Element double_scalar("double_scalar", f.c_str());
             id.set_to_xml_element(double_scalar);
-            ADD_NODE_WITH_TEXT_1(illustration,double_scalar,"double_scalar",f.c_str())
+            illustration.push_back(double_scalar);
             }
         }
     // vectors of strings
@@ -1161,7 +1161,7 @@ void Ledger::write_excerpt
         ;++j
         )
         {
-        ADD_NODE_0(illustration,svector,"string_vector")
+        xml_lmi::Element svector("string_vector");
 
         j->first.set_to_xml_element(svector);
 
@@ -1174,7 +1174,7 @@ void Ledger::write_excerpt
             {
             xml_lmi::add_node(svector, "duration", *k);
             }
-        ADD_NODE_1(illustration,svector,"string_vector")
+        illustration.push_back(svector);
         }
     // vectors of doubles
     for
@@ -1186,7 +1186,7 @@ void Ledger::write_excerpt
         value_id const& id = j->first;
         if(formatter.has_format(id))
             {
-            ADD_NODE_0(illustration,dvector,"double_vector")
+            xml_lmi::Element dvector("double_vector");
 
             id.set_to_xml_element(dvector);
 
@@ -1202,14 +1202,14 @@ void Ledger::write_excerpt
                 {
                 xml_lmi::add_node(dvector, "duration", *k);
                 }
-            ADD_NODE_1(illustration,dvector,"double_vector")
+            illustration.push_back(dvector);
             }
         }
 
     // insert calculation_summary_columns list into xml
     if(!calculation_summary_columns.empty())
         {
-        ADD_NODE_0(illustration,calculation_summary,"calculation_summary_columns")
+        xml_lmi::Element calculation_summary("calculation_summary_columns");
         std::vector<value_id>::const_iterator j;
         for
             (j = calculation_summary_columns.begin()
@@ -1217,16 +1217,16 @@ void Ledger::write_excerpt
             ;++j
             )
             {
-            ADD_NODE_0(calculation_summary,column,"column")
+            xml_lmi::Element column("column");
             j->set_to_xml_element(column);
-            ADD_NODE_1(calculation_summary,column,"column")
+            calculation_summary.push_back(column);
             }
-        ADD_NODE_1(illustration,calculation_summary,"calculation_summary_columns")
+        illustration.push_back(calculation_summary);
         }
 
 // EVGENIY You had changed /supplementalreport/supplemental_report/,
 // but we have stylesheets that don't expect any such change.
-    ADD_NODE_0(illustration,supplemental_report,"supplementalreport")
+    xml_lmi::Element supplemental_report("supplementalreport");
     if(ledger_invariant_->SupplementalReport)
         {
         // now pop back trailing empty supplemental report columns
@@ -1259,18 +1259,18 @@ void Ledger::write_excerpt
             {
             if(j->empty())
                 {
-                ADD_NODE_0(supplemental_report,spacer,"spacer")
-                ADD_NODE_1(supplemental_report,spacer,"spacer")
+                xml_lmi::Element spacer("spacer");
+                supplemental_report.push_back(spacer);
                 }
             else // *j != "[None]"
                 {
-                ADD_NODE_0(supplemental_report,column,"column")
+                xml_lmi::Element column("column");
                 j->set_to_xml_element(column);
-                ADD_NODE_1(supplemental_report,column,"column")
+                supplemental_report.push_back(column);
                 }
             }
         }
-    ADD_NODE_1(illustration,supplemental_report,"supplementalreport")
+    illustration.push_back(supplemental_report);
 }
 
 #if defined LMI_USE_NEW_REPORTS
