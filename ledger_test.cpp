@@ -19,13 +19,14 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_test.cpp,v 1.2 2006-12-11 14:31:37 chicares Exp $
+// $Id: ledger_test.cpp,v 1.3 2006-12-11 16:51:27 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
 #   pragma hdrstop
 #endif // __BORLANDC__
 
+// Facilities offered by both these headers are tested here.
 #include "ledger.hpp"
 #include "ledger_formatter.hpp"
 
@@ -33,9 +34,12 @@
 #include "alert.hpp"
 #include "global_settings.hpp"
 #include "inputillus.hpp"
+#include "miscellany.hpp" // files_are_identical()
 #include "single_cell_document.hpp"
 #include "test_tools.hpp"
 
+#include <boost/filesystem/fstream.hpp>
+#include <boost/filesystem/path.hpp>
 #include <boost/shared_ptr.hpp>
 
 #include <ios>
@@ -46,6 +50,7 @@ class LedgerTest
     LedgerTest();
 
     void Test() const;
+    void ValidateFile(fs::path const&, char const* file, int line) const;
 
   private:
     boost::shared_ptr<Ledger const> ledger_;
@@ -63,6 +68,10 @@ LedgerTest::LedgerTest()
     ledger_ = av.ledger_from_av();
 }
 
+/// This test compares the files it creates to touchstones that, for
+/// now at least, are saved in a particular directory, but in the
+/// future might be put in cvs.
+
 void LedgerTest::Test() const
 {
     LMI_ASSERT(ledger_.get());
@@ -74,24 +83,58 @@ void LedgerTest::Test() const
         |   std::ios_base::binary
         ;
 
-    std::ofstream ofs0("sample.xml", open_flags);
+    fs::path filepath0("sample.xml");
+    fs::ofstream ofs0(filepath0, open_flags);
     ledger.write(ofs0);
     BOOST_TEST(ofs0.good());
+    ofs0.close();
+    ValidateFile(filepath0, __FILE__, __LINE__);
 
     LedgerFormatterFactory& factory = LedgerFormatterFactory::Instance();
     LedgerFormatter ledger_formatter = factory.CreateFormatter(ledger);
 
-    std::ofstream ofs1("calculation_summary.html", open_flags);
+    fs::path filepath1("calculation_summary.html");
+    fs::ofstream ofs1(filepath1, open_flags);
     ledger_formatter.FormatAsHtml(ofs1);
     BOOST_TEST(ofs1.good());
+    ofs1.close();
+    ValidateFile(filepath1, __FILE__, __LINE__);
 
-    std::ofstream ofs2("calculation_summary.tsv", open_flags);
+    fs::path filepath2("calculation_summary.tsv");
+    fs::ofstream ofs2(filepath2, open_flags);
     ledger_formatter.FormatAsLightTSV(ofs2);
     BOOST_TEST(ofs2.good());
+    ofs2.close();
+    ValidateFile(filepath2, __FILE__, __LINE__);
 
-    std::ofstream ofs3("microcosm.tsv", open_flags);
+    fs::path filepath3("microcosm.tsv");
+    fs::ofstream ofs3(filepath3, open_flags);
     ledger_formatter.FormatAsTabDelimited(ofs3);
     BOOST_TEST(ofs3.good());
+    ofs3.close();
+    ValidateFile(filepath3, __FILE__, __LINE__);
+}
+
+void LedgerTest::ValidateFile
+    (fs::path const& p
+    ,char const* file
+    ,int line
+    ) const
+{
+    fs::path testpath("/opt/lmi/stuff");
+    fs::path testfile = testpath / p;
+    bool okay = files_are_identical(p.string(), testfile.string());
+
+    INVOKE_BOOST_TEST(okay, file, line);
+    // Leave the file for analysis if it didn't match.
+    if(okay)
+        {
+        INVOKE_BOOST_TEST
+            (0 == std::remove(p.string().c_str())
+            ,file
+            ,line
+            );
+        }
 }
 
 int test_main(int, char*[])
