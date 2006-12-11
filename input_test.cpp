@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_test.cpp,v 1.19 2006-12-11 16:45:16 chicares Exp $
+// $Id: input_test.cpp,v 1.20 2006-12-11 18:21:29 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -126,7 +126,7 @@ void assay_speed()
     xml_lmi::Element& root = document.root_node();
     root << raw_data;
 
-    xml_lmi::NodeConstIterator i = root.begin();
+    xml::node::const_iterator i = root.begin();
     LMI_ASSERT(!i->is_text());
     xml_lmi::Element const& e = *i;
 
@@ -189,7 +189,7 @@ int test_main(int, char*[])
     os0 << xml_document0;
     os0.close();
 
-    xml_lmi::NodeConstIterator i = xml_root0.begin();
+    xml::node::const_iterator i = xml_root0.begin();
     LMI_ASSERT(!i->is_text());
     xml_lmi::Element const& xml_node = *i;
 
@@ -206,7 +206,6 @@ int test_main(int, char*[])
     xml_lmi::Element& xml_root1 = xml_document1.root_node();
     xml_root1 << replica;
     os1 << xml_document1;
-    os1.close();
     os1.close();
 
     BOOST_TEST(original == replica);
