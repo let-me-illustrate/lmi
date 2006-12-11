@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustration_view.cpp,v 1.56 2006-11-30 18:01:40 chicares Exp $
+// $Id: illustration_view.cpp,v 1.57 2006-12-11 23:47:21 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -158,11 +158,13 @@ warning() << "That command should have been disabled." << LMI_FLUSH;
 
 void IllustrationView::DisplaySelectedValuesAsHtml()
 {
+    // TODO ?? CALCULATION_SUMMARY Resolve this issue.
     // EVGENIY This assertion seems no longer to serve any purpose:
     // the object is no longer used here. Instead, shouldn't the
     // validity of ledger_formatter_ be asserted?
     LMI_ASSERT(ledger_values_.get());
 
+    // TODO ?? CALCULATION_SUMMARY Resolve this issue.
     // EVGENIY Is a stream the best abstraction for LedgerFormatter?
     // Apparently std::ostream.write() is the only stream function
     // that actually gets called. This code could be simpler if a
@@ -328,9 +330,10 @@ void IllustrationView::UponUpdateProperties(wxUpdateUIEvent& e)
 
 void IllustrationView::CopyLedgerToClipboard(enum_copy_option option)
 {
-    wxClipboardLocker clipboardLocker;
-    if(!clipboardLocker)
+    wxClipboardLocker clipboard_locker;
+    if(!clipboard_locker)
         {
+        // TODO ?? CALCULATION_SUMMARY Should there be a diagnostic?
         return;
         }
 
@@ -354,7 +357,7 @@ void IllustrationView::CopyLedgerToClipboard(enum_copy_option option)
     // should be used here.
     wxTextDataObject* TextDataObject = new wxTextDataObject(oss.str());
 
-    // clipboard owns the data
+    // The clipboard owns the data.
     wxTheClipboard->SetData(TextDataObject);
 }
 
@@ -376,7 +379,8 @@ void IllustrationView::Pdf(std::string const& action) const
 // TODO ?? CALCULATION_SUMMARY This should use either the code or the
 // ideas in DocManagerEx::UponPreview().
 
-// TODO ?? EVGENIY Is it necessary to use scoped_ptr here? The wx
+// TODO ?? CALCULATION_SUMMARY Resolve this issue.
+// EVGENIY Is it necessary to use scoped_ptr here? The wx
 // documentation says
 //   "Do not create this class on the stack only. You should create an
 //   instance on app startup and use this instance for all printing
@@ -392,6 +396,8 @@ void IllustrationView::PrintOrPreviewHtmlSummary(enum_print_option option) const
     std::string disclaimer
         ("FOR BROKER-DEALER USE ONLY. NOT TO BE SHARED WITH CLIENTS."
         );
+    // TODO ?? MPATROL !! Probably operator new(std::size_t, wx_allocator)
+    // should be used here.
     boost::scoped_ptr<wxHtmlEasyPrinting> printer
         (new wxHtmlEasyPrinting("Calculation Summary", html_window_)
         );
@@ -403,9 +409,8 @@ void IllustrationView::PrintOrPreviewHtmlSummary(enum_print_option option) const
 
     // TODO ?? CALCULATION_SUMMARY The print dialog under wx
     // defaults to A4, a European paper size. Override the default
-    // with a US 8.5 X 11 letter size. wx should eventually be
-    // upgraded so that system printer settings presist regardless
-    // of which print function updates them [e.g. 'Page setup']
+    // with a US 8-1/2 by 11 inch letter size.
+    // WX !! Printer settings should be set globally, OAOO.
     wxPrintData *printer_settings = printer->GetPrintData();
     printer_settings->SetPaperId(wxPAPER_LETTER);
 
@@ -441,6 +446,9 @@ void IllustrationView::Run(Input* overriding_input)
     status() << "Calculate: " << timer.stop().elapsed_msec_str();
     timer.restart();
 
+// TODO ?? CALCULATION_SUMMARY Consider restoring this line:
+//    ledger_values_ = av.ledger_from_av();
+// in place of the following, which is discussed below:
     SetLedger(av.ledger_from_av());
 
     status() << "; prepare: " << timer.stop().elapsed_msec_str();
@@ -477,7 +485,8 @@ void IllustrationView::SetLedger(boost::shared_ptr<Ledger const> ledger)
     ledger_values_ = ledger;
     if(ledger_values_.get())
         {
-        ledger_formatter_ = LedgerFormatterFactory::Instance().CreateFormatter(*ledger_values_);
+        LedgerFormatterFactory& factory = LedgerFormatterFactory::Instance();
+        ledger_formatter_ = factory.CreateFormatter(*ledger_values_);
         }
     else
         {
