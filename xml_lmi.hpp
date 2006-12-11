@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xml_lmi.hpp,v 1.13 2006-11-28 05:19:45 chicares Exp $
+// $Id: xml_lmi.hpp,v 1.14 2006-12-11 17:25:22 chicares Exp $
 
 #ifndef xml_lmi_hpp
 #define xml_lmi_hpp
@@ -83,18 +83,6 @@ namespace xml_lmi
         boost::scoped_ptr<Initializer> initializer_;
         boost::scoped_ptr<Document>    document_;
     };
-
-#define ADD_NODE_0(element, variable_name, node_name) \
-    xml_lmi::Element variable_name(node_name); \
-
-#define ADD_NODE_1(element, variable_name, node_name) \
-    element.push_back(variable_name); \
-
-#define ADD_NODE_WITH_TEXT_0(element, variable_name, node_name, text) \
-    xml_lmi::Element variable_name((node_name),(text)); \
-
-#define ADD_NODE_WITH_TEXT_1(element, variable_name, node_name, text) \
-    element.push_back(variable_name); \
 
     void add_node
         (Element&

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: inputillus_xml_io.cpp,v 1.20 2006-11-07 04:51:20 chicares Exp $
+// $Id: inputillus_xml_io.cpp,v 1.21 2006-12-11 17:25:22 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -207,7 +207,7 @@ using namespace xml;
 //============================================================================
 void IllusInputParms::write(xml_lmi::Element& x) const
 {
-    ADD_NODE_0(x,root,xml_root_name().c_str())
+    xml_lmi::Element root(xml_root_name().c_str());
 
 // XMLWRAPP !! There's no way to set an integer attribute.
     xml_lmi::set_attr
@@ -227,7 +227,7 @@ void IllusInputParms::write(xml_lmi::Element& x) const
         xml_lmi::add_node(root, node_tag.c_str(), value.c_str());
         }
 
-    ADD_NODE_1(x,root,xml_root_name().c_str())
+    x.push_back(root);
 }
 
 //============================================================================
