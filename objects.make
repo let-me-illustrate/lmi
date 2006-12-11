@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: objects.make,v 1.92 2006-12-10 17:35:38 chicares Exp $
+# $Id: objects.make,v 1.93 2006-12-11 14:31:37 chicares Exp $
 
 ################################################################################
 
@@ -178,8 +178,8 @@ common_common_objects := \
   getopt.o \
   global_settings.o \
   group_values.o \
-  input_sequence.o \
   input_seq_helpers.o \
+  input_sequence.o \
   inputillus.o \
   inputillus_sequences.o \
   inputillus_xml_io.o \
@@ -387,6 +387,12 @@ libgpt_so_test$(EXEEXT): server7702dlltest.c libgpt$(SHREXT)
 
 # Unit tests.
 
+# List required object files explicitly for each test unless several
+# dozen are required. List only object files, not libraries, to avoid
+# the overhead of creating libraries: a particular unit test may be
+# built and run many times in succession during iterative development,
+# and any unnecessary overhead is unwelcome.
+
 unit_test_targets := \
   account_value_test$(EXEEXT) \
   actuarial_table_test$(EXEEXT) \
@@ -570,6 +576,7 @@ irc7702a_test$(EXEEXT): \
 
 ledger_test$(EXEEXT): \
   $(common_test_objects) \
+  $(lmi_common_objects) \
   ledger_test.o \
 
 loads_test$(EXEEXT): \
