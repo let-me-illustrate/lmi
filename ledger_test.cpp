@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_test.cpp,v 1.1 2006-12-10 17:35:38 chicares Exp $
+// $Id: ledger_test.cpp,v 1.2 2006-12-11 14:31:37 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -27,32 +27,78 @@
 #endif // __BORLANDC__
 
 #include "ledger.hpp"
+#include "ledger_formatter.hpp"
 
 #include "account_value.hpp"
-#include "inputs.hpp"
+#include "alert.hpp"
+#include "global_settings.hpp"
+#include "inputillus.hpp"
+#include "single_cell_document.hpp"
 #include "test_tools.hpp"
 
 #include <boost/shared_ptr.hpp>
 
-struct LedgerTest
+#include <ios>
+
+class LedgerTest
 {
+  public:
     LedgerTest();
 
+    void Test() const;
+
+  private:
     boost::shared_ptr<Ledger const> ledger_;
-    static void Test();
 };
 
 LedgerTest::LedgerTest()
 {
+    global_settings::instance().set_data_directory("/opt/lmi/data");
+
+    single_cell_document document("sample.ill");
+    AccountValue av(document.input_data());
+    av.RunAV();
+    // TODO ?? Should this be an invariant postcondition?
+    LMI_ASSERT(av.ledger_from_av().get());
+    ledger_ = av.ledger_from_av();
 }
 
-void LedgerTest::Test()
+void LedgerTest::Test() const
 {
+    LMI_ASSERT(ledger_.get());
+    Ledger const& ledger = *ledger_.get();
+
+    std::ios_base::openmode const open_flags =
+            std::ios_base::out
+        |   std::ios_base::trunc
+        |   std::ios_base::binary
+        ;
+
+    std::ofstream ofs0("sample.xml", open_flags);
+    ledger.write(ofs0);
+    BOOST_TEST(ofs0.good());
+
+    LedgerFormatterFactory& factory = LedgerFormatterFactory::Instance();
+    LedgerFormatter ledger_formatter = factory.CreateFormatter(ledger);
+
+    std::ofstream ofs1("calculation_summary.html", open_flags);
+    ledger_formatter.FormatAsHtml(ofs1);
+    BOOST_TEST(ofs1.good());
+
+    std::ofstream ofs2("calculation_summary.tsv", open_flags);
+    ledger_formatter.FormatAsLightTSV(ofs2);
+    BOOST_TEST(ofs2.good());
+
+    std::ofstream ofs3("microcosm.tsv", open_flags);
+    ledger_formatter.FormatAsTabDelimited(ofs3);
+    BOOST_TEST(ofs3.good());
 }
 
 int test_main(int, char*[])
 {
-    LedgerTest::Test();
+    LedgerTest tester;
+    tester.Test();
+
     return EXIT_SUCCESS;
 }
 
