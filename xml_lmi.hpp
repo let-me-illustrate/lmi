@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xml_lmi.hpp,v 1.15 2006-12-11 18:21:29 chicares Exp $
+// $Id: xml_lmi.hpp,v 1.16 2006-12-11 23:13:14 chicares Exp $
 
 #ifndef xml_lmi_hpp
 #define xml_lmi_hpp
@@ -41,8 +41,7 @@
 
 namespace xml_lmi
 {
-    typedef xml::node::const_iterator   ElementPointer;
-    typedef std::vector<ElementPointer> ElementContainer;
+    typedef std::vector<xml::node::const_iterator> ElementContainer;
 
     class dom_parser
         :private boost::noncopyable
