@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_test.cpp,v 1.18 2006-12-10 16:19:22 chicares Exp $
+// $Id: input_test.cpp,v 1.19 2006-12-11 16:45:16 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -72,7 +72,11 @@ void test_document_io
     // Leave the file for analysis if it didn't match.
     if(okay)
         {
-        BOOST_TEST(0 == std::remove(replica_filename.c_str()));
+        INVOKE_BOOST_TEST
+            (0 == std::remove(replica_filename.c_str())
+            ,file
+            ,line
+            );
         }
 }
 
