@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xsl.cpp,v 1.14 2006-11-12 19:55:12 chicares Exp $
+// $Id: ledger_xsl.cpp,v 1.15 2006-12-12 10:48:19 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -52,18 +52,7 @@ namespace
 fs::path xsl_filepath(Ledger const& ledger)
 {
     std::string xsl_name = ledger.GetLedgerType().str() + ".xsl";
-#if 0 // TODO ?? CALCULATION_SUMMARY expunge
-    // This was the original behavior:
-    fs::path fo_dir(configurable_settings::instance().print_directory());
-    fs::path xsl_file(fo_dir / xsl_name);
-
-    // This is what should be used instead if xml files are to be kept
-    // in a separate directory:
-    fs::path xsl_dir(configurable_settings::instance().xsl_directory());
-    fs::path xsl_file(xsl_dir / xsl_name);
-#else  // not 0
     fs::path xsl_file(global_settings::instance().data_directory() / xsl_name);
-#endif // not 0
     if(!fs::exists(xsl_file))
         {
         fatal_error()
@@ -114,6 +103,7 @@ std::string write_ledger_to_pdf
 
     fs::path xml_out_file = unique_filepath(print_dir / real_filename, ".xml");
 
+    fs::ofstream ofs(xml_out_file, std::ios_base::out | std::ios_base::trunc);
     // Scale a copy of the 'ledger' argument. The original must not be
     // modified because scaling is not reentrant. TODO ?? However,
     // that problem is not avoided here, because what is scaled is
@@ -121,12 +111,9 @@ std::string write_ledger_to_pdf
     // of problems in the ledger-class implementation.
     Ledger scaled_ledger(ledger);
     scaled_ledger.AutoScale();
-
-    fs::ofstream ofs(xml_out_file, std::ios_base::out | std::ios_base::trunc);
 #if defined LMI_USE_NEW_REPORTS
-    LedgerFormatter formatter
-        (LedgerFormatterFactory::Instance().CreateFormatter(scaled_ledger)
-        );
+    LedgerFormatterFactory& factory = LedgerFormatterFactory::Instance();
+    LedgerFormatter formatter(factory.CreateFormatter(scaled_ledger));
     formatter.FormatAsXslFo(ofs);
 #else  // !defined LMI_USE_NEW_REPORTS
     scaled_ledger.write(ofs);
