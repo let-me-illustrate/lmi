@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: inputillus_xml_io.cpp,v 1.23 2006-12-12 13:21:18 chicares Exp $
+// $Id: inputillus_xml_io.cpp,v 1.24 2006-12-12 13:44:51 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -111,11 +111,25 @@ using namespace xml;
         (IllusInputParms::member_names()
         );
     std::vector<std::string>::iterator current_member;
+// XMLWRAPP !! The unit test demonstrates that the suppressed code is
+// twenty-five percent slower. What would be really desirable is an
+// (efficient) element-iterator class.
+//
+#if 0
     xml_lmi::ElementContainer const elements(xml_lmi::child_elements(x));
     typedef xml_lmi::ElementContainer::const_iterator eci;
     for(eci i = elements.begin(); i != elements.end(); ++i)
         {
         xml::node::const_iterator const& child = *i;
+#else  // not 0
+    xml::node::const_iterator child;
+    for(child = x.begin(); child != x.end(); ++child)
+        {
+#endif // not 0
+        if(child->is_text())
+            {
+            continue;
+            }
         std::string node_tag(child->get_name());
         current_member = std::find
             (member_names.begin()
