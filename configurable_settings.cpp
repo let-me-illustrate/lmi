@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: configurable_settings.cpp,v 1.31 2006-11-30 05:58:26 chicares Exp $
+// $Id: configurable_settings.cpp,v 1.32 2006-12-12 11:52:24 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -131,7 +131,7 @@ configurable_settings::configurable_settings()
 {
     ascribe_members();
     load();
-    // TODO ?? Something like this:
+    // TODO ?? CALCULATION_SUMMARY Something like this:
 //    validate_directory(print_directory_, "Print directory");
     // might be appropriate here.
 }
@@ -176,11 +176,11 @@ void configurable_settings::ascribe_members()
     ascribe("xslt_tab_delimited_filename"      ,&configurable_settings::xslt_tab_delimited_filename_      );
 }
 
-// TODO ?? Class template any_member should expose a has_element()
-// function.
+// TODO ?? CALCULATION_SUMMARY Class template any_member should expose
+// a has_element() function.
 
-// TODO ?? Use the 'detritus_map' technique found elsewhere to ignore
-// obsolete elements silently.
+// TODO ?? CALCULATION_SUMMARY Use the 'detritus_map' technique found
+// elsewhere to ignore obsolete elements silently.
 
 void configurable_settings::load()
 {
@@ -226,7 +226,8 @@ void configurable_settings::save() const
     std::vector<std::string>::const_iterator i;
     for(i = member_names().begin(); i != member_names().end(); ++i)
         {
-        // TODO ?? Move these things to class global_settings.
+        // TODO ?? CALCULATION_SUMMARY Move these things to class
+        // global_settings.
         if("xml_schema_filename"               == *i) continue;
         if("xsl_directory"                     == *i) continue;
         if("xslt_format_xml_filename"          == *i) continue;
@@ -237,6 +238,7 @@ void configurable_settings::save() const
         xml_lmi::add_node(root, *i, operator[](*i).str());
         }
 
+// TODO ?? CALCULATION_SUMMARY Choose one fstream class.
 #if 0
     fs::ofstream ofs
         (configuration_filepath()
@@ -251,8 +253,6 @@ void configurable_settings::save() const
     ofs << document;
     if(!ofs)
         {
-        // User could choose to ignore this error and the only thing he risks
-        // in that case is configurable settings not saved.
         warning()
             << "Configurable-settings file '"
             << configuration_filepath().string()
@@ -262,6 +262,7 @@ void configurable_settings::save() const
         }
 }
 
+// TODO ?? CALCULATION_SUMMARY Address the validation issue:
 /// Precondition: Argument is semantically valid; ultimately this will
 /// be validated elsewhere.
 
