@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_formatter.hpp,v 1.2 2006-11-26 20:56:37 chicares Exp $
+// $Id: ledger_formatter.hpp,v 1.3 2006-12-12 10:46:36 chicares Exp $
 
 #ifndef ledger_formatter_hpp
 #define ledger_formatter_hpp
@@ -46,23 +46,29 @@ class LedgerFormatter;
 ///
 /// This singleton class manages XSL templates used by instances
 /// of LedgerFormatter class.
+///
+/// TODO ?? CALCULATION_SUMMARY Wouldn't it be better to make
+///   CreateFormatter()
+///   GetStylesheet()
+/// const, and
+///   stylesheets_
+/// mutable? Even if not, shouldn't at least CreateFormatter() be const?
 
 class LMI_SO LedgerFormatterFactory
 {
-    typedef boost::shared_ptr<xslt_lmi::Stylesheet>  XmlStylesheetPtr;
+    typedef boost::shared_ptr<xslt_lmi::Stylesheet> XmlStylesheetPtr;
     typedef std::map<std::string, XmlStylesheetPtr> XmlStylesheets;
 
   public:
     static LedgerFormatterFactory& Instance();
 
     LedgerFormatter CreateFormatter(Ledger const& ledger_values);
-
     xslt_lmi::Stylesheet const& GetStylesheet(std::string const& filename);
 
   private:
-    XmlStylesheets stylesheets_;
-
     LedgerFormatterFactory();
+
+    XmlStylesheets stylesheets_;
 };
 
 /// LedgerFormatter class
