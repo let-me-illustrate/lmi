@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: preferences_model.cpp,v 1.8 2006-11-14 04:52:35 chicares Exp $
+// $Id: preferences_model.cpp,v 1.9 2006-12-12 01:21:19 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -168,8 +168,6 @@ bool PreferencesModel::IsModified() const
         }
     return false;
 }
-
-// TODO ?? CALCULATION_SUMMARY Warn if zero columns selected.
 
 void PreferencesModel::Load()
 {
