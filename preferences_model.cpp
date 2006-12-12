@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: preferences_model.cpp,v 1.9 2006-12-12 01:21:19 chicares Exp $
+// $Id: preferences_model.cpp,v 1.10 2006-12-12 10:39:46 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -171,7 +171,7 @@ bool PreferencesModel::IsModified() const
 
 void PreferencesModel::Load()
 {
-    configurable_settings& z = configurable_settings::instance();
+    configurable_settings const& z = configurable_settings::instance();
     std::istringstream iss(z.calculation_summary_columns());
     std::vector<std::string> columns;
     std::copy
