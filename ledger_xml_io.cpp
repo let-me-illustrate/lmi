@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xml_io.cpp,v 1.59 2006-12-11 17:25:22 chicares Exp $
+// $Id: ledger_xml_io.cpp,v 1.60 2006-12-12 13:01:27 chicares Exp $
 
 #include "ledger.hpp"
 
@@ -917,7 +917,7 @@ void Ledger::write(xml_lmi::Element& x) const
         {
         std::string node_tag = j->first;
         std::string value = j->second;
-        xml_lmi::add_node(scalar, node_tag.c_str(), value.c_str());
+        scalar.push_back(xml_lmi::Element(node_tag.c_str(), value.c_str()));
         }
     for
         (std::map<std::string,std::vector<std::string> >::const_iterator j = stringvectors.begin()
@@ -964,7 +964,7 @@ void Ledger::write(xml_lmi::Element& x) const
     if(ledger_invariant_->SupplementalReport)
         {
         // Eventually customize the report name.
-        xml_lmi::add_node(supplementalreport, "title", "Supplemental Report");
+        supplementalreport.push_back(xml_lmi::Element("title", "Supplemental Report"));
 //warning() << "size " << ledger_invariant_->SupplementalReportColumns.size() << LMI_FLUSH;
 
         std::vector<std::string>::const_iterator j;
@@ -976,8 +976,8 @@ void Ledger::write(xml_lmi::Element& x) const
             {
 //warning() << "column " << *j << " title " << title_map[*j] << LMI_FLUSH;
             xml_lmi::Element columns("columns");
-            xml_lmi::add_node(columns, "name", (*j).c_str());
-            xml_lmi::add_node(columns, "title", title_map[*j].c_str());
+            columns.push_back(xml_lmi::Element("name", (*j).c_str()));
+            columns.push_back(xml_lmi::Element("title", title_map[*j].c_str()));
             supplementalreport.push_back(columns);
             }
         }
