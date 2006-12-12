@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: inputillus_xml_io.cpp,v 1.24 2006-12-12 13:44:51 chicares Exp $
+// $Id: inputillus_xml_io.cpp,v 1.25 2006-12-12 23:50:14 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -136,33 +136,32 @@ using namespace xml;
             ,member_names.end()
             ,node_tag
             );
-        if(member_names.end() == current_member)
+        if(member_names.end() != current_member)
+            {
+            operator[](node_tag) = xml_lmi::get_content(*child);
+            // TODO ?? Perhaps a std::list would perform better.
+            member_names.erase(current_member);
+            }
+        else if
+            (detritus().end() != std::find
+                (detritus().begin()
+                ,detritus().end()
+                ,node_tag
+                )
+            )
             {
             // Hold certain obsolete entities that must be translated.
-            if
-                (detritus().end() != std::find
-                    (detritus().begin()
-                    ,detritus().end()
-                    ,node_tag
-                    )
-                )
-                {
-                detritus_map[node_tag] = xml_lmi::get_content(*child);
-                }
-            else
-                {
-                warning()
-                    << "XML tag '"
-                    << node_tag
-                    << "' not recognized by this version of the program."
-                    << LMI_FLUSH
-                    ;
-                }
-            continue;
+            detritus_map[node_tag] = xml_lmi::get_content(*child);
             }
-        operator[](node_tag) = xml_lmi::get_content(*child);
-        // TODO ?? Perhaps a std::list would perform better.
-        member_names.erase(current_member);
+        else
+            {
+            warning()
+                << "XML tag '"
+                << node_tag
+                << "' not recognized by this version of the program."
+                << LMI_FLUSH
+                ;
+            }
         }
 
     if(0 == cell_version)
@@ -224,11 +223,8 @@ void IllusInputParms::write(xml_lmi::Element& x) const
     xml_lmi::Element root(xml_root_name().c_str());
 
 // XMLWRAPP !! There's no way to set an integer attribute.
-    xml_lmi::set_attr
-        (root
-        ,"version"
-        ,value_cast<std::string>(class_version()).c_str()
-        );
+    std::string const version(value_cast<std::string>(class_version()));
+    xml_lmi::set_attr(root, "version", version.c_str());
 
     std::vector<std::string> const member_names
         (IllusInputParms::member_names()
