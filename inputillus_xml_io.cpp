@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: inputillus_xml_io.cpp,v 1.22 2006-12-11 23:13:14 chicares Exp $
+// $Id: inputillus_xml_io.cpp,v 1.23 2006-12-12 13:21:18 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -224,7 +224,7 @@ void IllusInputParms::write(xml_lmi::Element& x) const
         {
         std::string node_tag(*i);
         std::string value = operator[](*i).str();
-        xml_lmi::add_node(root, node_tag.c_str(), value.c_str());
+        root.push_back(xml_lmi::Element(node_tag.c_str(), value.c_str()));
         }
 
     x.push_back(root);
