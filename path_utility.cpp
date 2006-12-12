@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: path_utility.cpp,v 1.9 2006-11-10 16:26:43 chicares Exp $
+// $Id: path_utility.cpp,v 1.10 2006-12-12 11:16:19 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -44,7 +44,7 @@ void initialize_filesystem()
     fs::initial_path();
 }
 
-// TODO ?? Refactor duplication:
+// TODO ?? CALCULATION_SUMMARY Refactor duplication:
 //   validate_directory()
 //   validate_filepath()
 // Also rename 'validate_directory' --> 'validate_directory_path',
