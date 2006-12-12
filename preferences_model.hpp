@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: preferences_model.hpp,v 1.4 2006-11-14 02:16:33 chicares Exp $
+// $Id: preferences_model.hpp,v 1.5 2006-12-12 01:21:19 chicares Exp $
 
 #ifndef preferences_model_hpp
 #define preferences_model_hpp
@@ -34,11 +34,6 @@
 #include "obstruct_slicing.hpp"
 #include "so_attributes.hpp"
 
-// TODO ?? This class, as originally built, doesn't actually need the
-// 'LMI_SO' decoration. It will someday, though, when it is merged
-// with class configurable_settings; the merged class belongs in a
-// shared library.
-
 class LMI_SO PreferencesModel
     :virtual private obstruct_slicing<PreferencesModel>
     ,public MvcModel
@@ -48,8 +43,8 @@ class LMI_SO PreferencesModel
     PreferencesModel();
     virtual ~PreferencesModel();
 
-    // TODO ?? Use operator==() instead of IsModified(), once column
-    // selections are stored individually.
+    // TODO ?? CALCULATION_SUMMARY Use operator==() instead of
+    // IsModified(), once column selections are stored individually.
     bool IsModified() const;
     void Load();
     void Save() const;
