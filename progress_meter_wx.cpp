@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: progress_meter_wx.cpp,v 1.4 2006-11-11 05:07:21 chicares Exp $
+// $Id: progress_meter_wx.cpp,v 1.5 2006-12-12 10:46:36 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -68,6 +68,7 @@ class concrete_progress_meter
     mutable wxProgressDialog progress_dialog;
 };
 
+// TODO ?? CALCULATION_SUMMARY Resolve this issue.
 // WX !! A wxProgressDialog created with maximum = 0 is displayed even
 // though that's apparently just a nuisance. Calling Update(0) right
 // after creation seems to be a reasonable workaround, but it would be
