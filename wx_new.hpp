@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: wx_new.hpp,v 1.6 2006-11-09 19:46:24 chicares Exp $
+// $Id: wx_new.hpp,v 1.7 2006-12-12 11:16:19 chicares Exp $
 
 #ifndef wx_new_hpp
 #define wx_new_hpp
@@ -27,6 +27,9 @@
 #include "config.hpp"
 
 #include <cstddef> // std::size_t
+
+// TODO ?? CALCULATION_SUMMARY Revise in light of this message:
+//   http://lists.nongnu.org/archive/html/lmi/2006-10/msg00024.html
 
 #if defined HAVE_CONFIG_H
 // For msw, rely on the 'auto-import' kludge favored by autotools.
