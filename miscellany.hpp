@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: miscellany.hpp,v 1.6 2006-12-10 16:19:22 chicares Exp $
+// $Id: miscellany.hpp,v 1.7 2006-12-13 13:26:20 chicares Exp $
 
 #ifndef miscellany_hpp
 #define miscellany_hpp
@@ -29,6 +29,7 @@
 #include <algorithm>
 #include <cctype>
 #include <cstddef>
+#include <ios>
 #include <iterator>
 #include <string>
 
@@ -59,6 +60,32 @@ bool each_equal(InputIterator first, InputIterator last, T const& t)
 /// Test whether two files are identical. Arguments are filenames.
 
 bool files_are_identical(std::string const&, std::string const&);
+
+inline std::ios_base::openmode ios_in_binary()
+{
+    return
+          std::ios_base::in
+        | std::ios_base::binary
+        ;
+}
+
+inline std::ios_base::openmode ios_out_app_binary()
+{
+    return
+          std::ios_base::out
+        | std::ios_base::app
+        | std::ios_base::binary
+        ;
+}
+
+inline std::ios_base::openmode ios_out_trunc_binary()
+{
+    return
+          std::ios_base::out
+        | std::ios_base::trunc
+        | std::ios_base::binary
+        ;
+}
 
 // Omitting colons yields a valid posix path.
 std::string iso_8601_datestamp_terse();
