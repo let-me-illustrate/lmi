@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: actuarial_table.cpp,v 1.13 2006-01-29 13:52:00 chicares Exp $
+// $Id: actuarial_table.cpp,v 1.14 2006-12-13 13:56:17 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -29,6 +29,7 @@
 #include "actuarial_table.hpp"
 
 #include "alert.hpp"
+#include "miscellany.hpp"
 
 #include <boost/cstdint.hpp>
 #include <boost/filesystem/convenience.hpp>
@@ -248,7 +249,7 @@ std::vector<double> actuarial_table
 
     fs::path index_path(a_table_filename);
     index_path = fs::change_extension(index_path, ".ndx");
-    fs::ifstream index_ifs(index_path, std::ios_base::in | std::ios_base::binary);
+    fs::ifstream index_ifs(index_path, ios_in_binary());
 
     // Index records have fixed length:
     //   4-byte integer:     table number
@@ -352,7 +353,7 @@ std::vector<double> actuarial_table
 
     fs::path data_path(a_table_filename);
     data_path = fs::change_extension(data_path, ".dat");
-    fs::ifstream data_ifs(data_path, std::ios_base::in | std::ios_base::binary);
+    fs::ifstream data_ifs(data_path, ios_in_binary());
 
     data_ifs.seekg(table_offset, std::ios::beg);
     LMI_ASSERT(table_offset == data_ifs.tellg());
