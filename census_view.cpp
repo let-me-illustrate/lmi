@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: census_view.cpp,v 1.47 2006-12-01 12:05:26 chicares Exp $
+// $Id: census_view.cpp,v 1.48 2006-12-13 13:57:16 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -1148,7 +1148,7 @@ void CensusView::UponPasteCensus(wxCommandEvent&)
     std::vector<std::string> headers;
     std::vector<Input> cells;
 
-    std::istringstream iss_census(census_data, std::ios_base::in);
+    std::istringstream iss_census(census_data);
 // warning() << census_data << "entire clipboard text" << LMI_FLUSH;
     std::string line;
 
@@ -1158,7 +1158,7 @@ void CensusView::UponPasteCensus(wxCommandEvent&)
 // warning() << "'" << line << "'" << "header line" << LMI_FLUSH;
         iss_census >> std::ws;
 
-        std::istringstream iss_line(line, std::ios_base::in);
+        std::istringstream iss_line(line);
         std::string token;
 
         while(std::getline(iss_line, token, '\t'))
@@ -1190,7 +1190,7 @@ convert_to_ihs(ihs_input, case_parms()[0]);
 // TODO ?? expunge?
 //        IllusInputParms input(case_parms()[0]);
 
-        std::istringstream iss_line(line, std::ios_base::in);
+        std::istringstream iss_line(line);
         std::string token;
         std::vector<std::string> values;
 

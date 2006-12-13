@@ -31,7 +31,7 @@
 // other reasons evident in cvs or explained in 'ChangeLog'. Any
 // defect should not reflect on Stephen F. Booth's reputation.
 
-// $Id: main_cgi.cpp,v 1.17 2006-01-29 13:52:00 chicares Exp $
+// $Id: main_cgi.cpp,v 1.18 2006-12-13 13:57:16 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -575,7 +575,7 @@ void ShowCensusOutput
     std::vector<std::string> headers;
     std::vector<IllusInputParms> lives;
 
-    std::istringstream iss_census(a_census, std::ios_base::in);
+    std::istringstream iss_census(a_census);
     std::string line;
 
     // Get header line; parse into field names.
@@ -583,7 +583,7 @@ void ShowCensusOutput
         {
         iss_census >> std::ws;
 
-        std::istringstream iss_line(line, std::ios_base::in);
+        std::istringstream iss_line(line);
         std::string token;
 
         while(std::getline(iss_line, token, '\t'))
@@ -601,7 +601,7 @@ void ShowCensusOutput
         iss_census >> std::ws;
 
         IllusInputParms input(a_input);
-        std::istringstream iss_line(line, std::ios_base::in);
+        std::istringstream iss_line(line);
         std::string token;
         std::vector<std::string> values;
 
