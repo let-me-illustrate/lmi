@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xml_lmi_fwd.hpp,v 1.5 2006-11-28 05:19:45 chicares Exp $
+// $Id: xml_lmi_fwd.hpp,v 1.6 2006-12-13 01:01:38 chicares Exp $
 
 #ifndef xml_lmi_fwd_hpp
 #define xml_lmi_fwd_hpp
@@ -33,6 +33,11 @@ namespace xml // This is xmlwrapp's namespace.
     class init;
     class node;
     class tree_parser;
+
+    /// XMLWRAPP !! It is useful to distinguish elements from DOM
+    /// nodes that are not elements; xmlwrapp doesn't make this
+    /// distinction, but a future replacement might.
+    typedef xml::node element;
 } // Namespace xml.
 
 /// Interface to xmlwrapp.
@@ -44,7 +49,6 @@ namespace xml_lmi
 
     typedef xml::attributes Attribute;
     typedef xml::document   Document;
-    typedef xml::node       Element;
 
 // Something like this might be useful:
 //    typedef std::vector<xml::node::const_iterator> ElementContainer;

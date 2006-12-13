@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xml_lmi.cpp,v 1.14 2006-12-11 18:21:29 chicares Exp $
+// $Id: xml_lmi.cpp,v 1.15 2006-12-13 01:01:38 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -166,14 +166,14 @@ xml_lmi::Document const& xml_lmi::dom_parser::document() const
 /// from std::exception. Ctor postconditions are assumed to have been
 /// satisfied and are not tested.
 
-xml_lmi::Element const& xml_lmi::dom_parser::root_node
+xml::element const& xml_lmi::dom_parser::root_node
     (std::string const& expected_name
     ) const
 {
     try
         {
         xml_lmi::Document const& document = parser_->get_document();
-        xml_lmi::Element const& root = document.get_root_node();
+        xml::element const& root = document.get_root_node();
         if(!expected_name.empty() && expected_name != root.get_name())
             {
             std::ostringstream oss;
@@ -205,7 +205,7 @@ xml_lmi::xml_document::xml_document(std::string const& root_node_name)
 xml_lmi::xml_document::~xml_document()
 {}
 
-xml_lmi::Element& xml_lmi::xml_document::root_node()
+xml::element& xml_lmi::xml_document::root_node()
 {
     return document_->get_root_node();
 }
@@ -218,17 +218,17 @@ std::string xml_lmi::xml_document::str()
 }
 
 void add_node
-    (Element&           element
+    (xml::element&      element
     ,std::string const& name
     ,std::string const& content
     )
 {
-    element.push_back(xml_lmi::Element(name.c_str(), content.c_str()));
+    element.push_back(xml::element(name.c_str(), content.c_str()));
 }
 
 xml_lmi::ElementContainer child_elements
-    (xml_lmi::Element const& parent
-    ,std::string const& name
+    (xml::element const& parent
+    ,std::string  const& name
     )
 {
     try
@@ -252,7 +252,7 @@ xml_lmi::ElementContainer child_elements
         }
 }
 
-std::string get_content(Element const& element)
+std::string get_content(xml::element const& element)
 {
     try
         {
@@ -278,7 +278,7 @@ std::string get_content(Element const& element)
         }
 }
 
-std::string get_name(Element const& element)
+std::string get_name(xml::element const& element)
 {
     try
         {
@@ -293,9 +293,9 @@ std::string get_name(Element const& element)
 }
 
 bool get_attr
-    (Element const&     element
-    ,std::string const& name
-    ,std::string&       value
+    (xml::element const& element
+    ,std::string const&  name
+    ,std::string&        value
     )
 {
     try
@@ -320,7 +320,7 @@ bool get_attr
 }
 
 void set_attr
-    (Element&           element
+    (xml::element&      element
     ,std::string const& name
     ,std::string const& value
     )

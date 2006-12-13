@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger.hpp,v 1.18 2006-11-12 17:52:26 chicares Exp $
+// $Id: ledger.hpp,v 1.19 2006-12-13 01:01:38 chicares Exp $
 
 #ifndef ledger_hpp
 #define ledger_hpp
@@ -109,16 +109,16 @@ class LMI_SO Ledger
     void Spew(std::ostream& os) const;
 
     // Class 'streamable' required implementation.
-    virtual void read (xml_lmi::Element const&);
-    virtual void write(xml_lmi::Element&) const;
+    virtual void read (xml::element const&);
+    virtual void write(xml::element&) const;
     virtual int class_version() const;
     virtual std::string xml_root_name() const;
 
     void write(std::ostream& os) const;
 
-    void write_excerpt(xml_lmi::Element&, enum_xml_version) const;
+    void write_excerpt(xml::element&, enum_xml_version) const;
 
-    void writeXXX(xml_lmi::Element&) const;
+    void writeXXX(xml::element&) const;
     void writeXXX(std::ostream& os) const;
 
   private:
