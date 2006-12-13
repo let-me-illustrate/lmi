@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: inputillus_xml_io.cpp,v 1.25 2006-12-12 23:50:14 chicares Exp $
+// $Id: inputillus_xml_io.cpp,v 1.26 2006-12-13 01:01:38 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -74,7 +74,7 @@ std::vector<std::string> const& detritus()
 } // Unnnamed namespace.
 
 //============================================================================
-void IllusInputParms::read(xml_lmi::Element const& x)
+void IllusInputParms::read(xml::element const& x)
 {
     if(xml_root_name() != x.get_name())
         {
@@ -218,9 +218,9 @@ using namespace xml;
 }
 
 //============================================================================
-void IllusInputParms::write(xml_lmi::Element& x) const
+void IllusInputParms::write(xml::element& x) const
 {
-    xml_lmi::Element root(xml_root_name().c_str());
+    xml::element root(xml_root_name().c_str());
 
 // XMLWRAPP !! There's no way to set an integer attribute.
     std::string const version(value_cast<std::string>(class_version()));
@@ -234,7 +234,7 @@ void IllusInputParms::write(xml_lmi::Element& x) const
         {
         std::string node_tag(*i);
         std::string value = operator[](*i).str();
-        root.push_back(xml_lmi::Element(node_tag.c_str(), value.c_str()));
+        root.push_back(xml::element(node_tag.c_str(), value.c_str()));
         }
 
     x.push_back(root);

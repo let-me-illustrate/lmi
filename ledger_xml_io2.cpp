@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xml_io2.cpp,v 1.11 2006-12-11 17:25:22 chicares Exp $
+// $Id: ledger_xml_io2.cpp,v 1.12 2006-12-13 01:01:38 chicares Exp $
 
 #include "ledger.hpp"
 
@@ -52,7 +52,7 @@
 #include <utility>
 
 #if defined LMI_USE_NEW_REPORTS
-void Ledger::read(xml_lmi::Element const&)
+void Ledger::read(xml::element const&)
 {
     // TODO ?? Not yet implemented.
 }
@@ -101,15 +101,15 @@ class value_id
     static value_id from_name_basis(std::string const&, std::string const*);
     static value_id from_name_basis(std::string const&, enum_run_basis);
     static value_id from_report_column_title(std::string const&);
-    static value_id from_xml_element(xml_lmi::Element const&);
+    static value_id from_xml_element(xml::element const&);
 
     std::string const& name() const { return name_; }
     std::string const* basis() const { return basis_; }
 
     bool empty() const;
 
-    void set_to_xml_element(xml_lmi::Element& element) const;
-    void get_from_xml_element(xml_lmi::Element const&);
+    void set_to_xml_element(xml::element&) const;
+    void get_from_xml_element(xml::element const&);
 
     bool operator<(value_id const&) const;
   private:
@@ -227,14 +227,14 @@ value_id value_id::from_report_column_title(std::string const& title)
     return value_id::from_name(title);
 }
 
-value_id value_id::from_xml_element(xml_lmi::Element const& element)
+value_id value_id::from_xml_element(xml::element const& element)
 {
     value_id id;
     id.get_from_xml_element(element);
     return id;
 }
 
-void value_id::set_to_xml_element(xml_lmi::Element& element) const
+void value_id::set_to_xml_element(xml::element& element) const
 {
     if(!empty())
         {
@@ -246,7 +246,7 @@ void value_id::set_to_xml_element(xml_lmi::Element& element) const
         }
 }
 
-void value_id::get_from_xml_element(xml_lmi::Element const& element)
+void value_id::get_from_xml_element(xml::element const& element)
 {
     name_ = "";
     basis_ = NULL;
@@ -499,7 +499,7 @@ double_formatter_t::double_formatter_t()
         {
         xml_lmi::dom_parser parser(format_path);
 
-        xml_lmi::Element const& root_node = parser.root_node("columns");
+        xml::element const& root_node = parser.root_node("columns");
         xml_lmi::ElementContainer const columns
             (xml_lmi::child_elements(root_node, "column")
             );
@@ -524,7 +524,7 @@ double_formatter_t::double_formatter_t()
                 continue;
                 }
 
-            xml_lmi::Element const& format_element = *formats[0];
+            xml::element const& format_element = *formats[0];
 
             // format has already been specified. show a warning and continue
             if(format_map.find(id.name()) != format_map.end())
@@ -700,14 +700,14 @@ std::string double_formatter_t::do_format(double d, format_t const& f) const
 
 // TODO ?? Consider factoring out everything above into a separate file.
 
-void Ledger::writeXXX(xml_lmi::Element& illustration) const
+void Ledger::writeXXX(xml::element& illustration) const
 {
     // by default generate a complete version of xml data
     write_excerpt(illustration, e_xml_full);
 }
 
 void Ledger::write_excerpt
-    (xml_lmi::Element& illustration
+    (xml::element&    illustration
     ,enum_xml_version xml_version
     ) const
 {
@@ -1134,7 +1134,7 @@ void Ledger::write_excerpt
         ;++j
         )
         {
-        xml_lmi::Element string_scalar("string_scalar", j->second.c_str());
+        xml::element string_scalar("string_scalar", j->second.c_str());
         j->first.set_to_xml_element(string_scalar);
         illustration.push_back(string_scalar);
         }
@@ -1149,7 +1149,7 @@ void Ledger::write_excerpt
         if(formatter.has_format(id))
             {
             std::string f = formatter.format(id, j->second, xml_version);
-            xml_lmi::Element double_scalar("double_scalar", f.c_str());
+            xml::element double_scalar("double_scalar", f.c_str());
             id.set_to_xml_element(double_scalar);
             illustration.push_back(double_scalar);
             }
@@ -1161,7 +1161,7 @@ void Ledger::write_excerpt
         ;++j
         )
         {
-        xml_lmi::Element svector("string_vector");
+        xml::element svector("string_vector");
 
         j->first.set_to_xml_element(svector);
 
@@ -1186,7 +1186,7 @@ void Ledger::write_excerpt
         value_id const& id = j->first;
         if(formatter.has_format(id))
             {
-            xml_lmi::Element dvector("double_vector");
+            xml::element dvector("double_vector");
 
             id.set_to_xml_element(dvector);
 
@@ -1209,7 +1209,7 @@ void Ledger::write_excerpt
     // insert calculation_summary_columns list into xml
     if(!calculation_summary_columns.empty())
         {
-        xml_lmi::Element calculation_summary("calculation_summary_columns");
+        xml::element calculation_summary("calculation_summary_columns");
         std::vector<value_id>::const_iterator j;
         for
             (j = calculation_summary_columns.begin()
@@ -1217,7 +1217,7 @@ void Ledger::write_excerpt
             ;++j
             )
             {
-            xml_lmi::Element column("column");
+            xml::element column("column");
             j->set_to_xml_element(column);
             calculation_summary.push_back(column);
             }
@@ -1226,7 +1226,7 @@ void Ledger::write_excerpt
 
 // EVGENIY You had changed /supplementalreport/supplemental_report/,
 // but we have stylesheets that don't expect any such change.
-    xml_lmi::Element supplemental_report("supplementalreport");
+    xml::element supplemental_report("supplementalreport");
     if(ledger_invariant_->SupplementalReport)
         {
         // now pop back trailing empty supplemental report columns
@@ -1243,8 +1243,9 @@ void Ledger::write_excerpt
 // unconditionally, outside this conditional block. Making it
 // conditional might break existing stylesheets.
         // now put this information into the xml
-        xml_lmi::Element& supplemental_report
-            = *illustration.add_child("supplemental_report");
+        xml::element& supplemental_report = *illustration.add_child
+            ("supplemental_report"
+            );
 #endif // 0
 
         // Eventually customize the report name.
@@ -1259,12 +1260,12 @@ void Ledger::write_excerpt
             {
             if(j->empty())
                 {
-                xml_lmi::Element spacer("spacer");
+                xml::element spacer("spacer");
                 supplemental_report.push_back(spacer);
                 }
             else // *j != "[None]"
                 {
-                xml_lmi::Element column("column");
+                xml::element column("column");
                 j->set_to_xml_element(column);
                 supplemental_report.push_back(column);
                 }
@@ -1288,7 +1289,7 @@ std::string Ledger::xml_root_name() const
 void Ledger::writeXXX(std::ostream& os) const
 {
     xml_lmi::xml_document document(xml_root_name());
-    xml_lmi::Element& root = document.root_node();
+    xml::element& root = document.root_node();
     root << *this;
 
     std::string const lmi_xml_ns("http://savannah.nongnu.org/projects/lmi");

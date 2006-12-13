@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xml_io.cpp,v 1.60 2006-12-12 13:01:27 chicares Exp $
+// $Id: ledger_xml_io.cpp,v 1.61 2006-12-13 01:01:38 chicares Exp $
 
 #include "ledger.hpp"
 
@@ -51,7 +51,7 @@
 #include <utility>
 
 #if !defined LMI_USE_NEW_REPORTS
-void Ledger::read(xml_lmi::Element const&)
+void Ledger::read(xml::element const&)
 {
     // TODO ?? Not yet implemented.
 }
@@ -232,7 +232,7 @@ bool format_exists(std::string const& s, std::string const& suffix, format_map_t
 
 } // Unnamed namespace.
 
-void Ledger::write(xml_lmi::Element& x) const
+void Ledger::write(xml::element& x) const
 {
 #if defined LMI_USE_NEW_REPORTS
     writeXXX(x);
@@ -907,8 +907,8 @@ void Ledger::write(xml_lmi::Element& x) const
 //  want: <!DOCTYPE sales []>
 // kludged in write(std::ostream& os) below
 
-    xml_lmi::Element scalar("scalar");
-    xml_lmi::Element data("data");
+    xml::element scalar("scalar");
+    xml::element data("data");
     for
         (std::map<std::string,std::string>::const_iterator j = stringscalars.begin()
         ;j != stringscalars.end()
@@ -917,7 +917,7 @@ void Ledger::write(xml_lmi::Element& x) const
         {
         std::string node_tag = j->first;
         std::string value = j->second;
-        scalar.push_back(xml_lmi::Element(node_tag.c_str(), value.c_str()));
+        scalar.push_back(xml::element(node_tag.c_str(), value.c_str()));
         }
     for
         (std::map<std::string,std::vector<std::string> >::const_iterator j = stringvectors.begin()
@@ -925,15 +925,15 @@ void Ledger::write(xml_lmi::Element& x) const
         ;++j
         )
         {
-        xml_lmi::Element newcolumn("newcolumn");
-        xml_lmi::Element column("column");
+        xml::element newcolumn("newcolumn");
+        xml::element column("column");
         xml_lmi::set_attr(column, "name", j->first.c_str());
         std::vector<std::string> const& v = j->second;
 // TODO ?? InforceLives shows an extra value past the end; should it
 // be truncated here?
         for(unsigned int k = 0; k < v.size(); ++k)
             {
-            xml_lmi::Element duration("duration");
+            xml::element duration("duration");
             xml_lmi::set_attr(duration, "number", value_cast<std::string>(k).c_str());
             xml_lmi::set_attr(duration, "column_value", v[k].c_str());
             column.push_back(duration);
@@ -960,11 +960,11 @@ void Ledger::write(xml_lmi::Element& x) const
         SupplementalReportColumns.push_back(ledger_invariant_->SupplementalReportColumn11);
         }
 
-    xml_lmi::Element supplementalreport("supplementalreport");
+    xml::element supplementalreport("supplementalreport");
     if(ledger_invariant_->SupplementalReport)
         {
         // Eventually customize the report name.
-        supplementalreport.push_back(xml_lmi::Element("title", "Supplemental Report"));
+        supplementalreport.push_back(xml::element("title", "Supplemental Report"));
 //warning() << "size " << ledger_invariant_->SupplementalReportColumns.size() << LMI_FLUSH;
 
         std::vector<std::string>::const_iterator j;
@@ -975,9 +975,9 @@ void Ledger::write(xml_lmi::Element& x) const
             )
             {
 //warning() << "column " << *j << " title " << title_map[*j] << LMI_FLUSH;
-            xml_lmi::Element columns("columns");
-            columns.push_back(xml_lmi::Element("name", (*j).c_str()));
-            columns.push_back(xml_lmi::Element("title", title_map[*j].c_str()));
+            xml::element columns("columns");
+            columns.push_back(xml::element("name", (*j).c_str()));
+            columns.push_back(xml::element("title", title_map[*j].c_str()));
             supplementalreport.push_back(columns);
             }
         }
@@ -1079,7 +1079,7 @@ void Ledger::write(std::ostream& os) const
     writeXXX(os);
 #else  // !defined LMI_USE_NEW_REPORTS
     xml_lmi::xml_document document(xml_root_name());
-    xml_lmi::Element& root = document.root_node();
+    xml::element& root = document.root_node();
 
     root << *this;
 // Need DOCTYPE support, which xmlwrapp lacks--so can't do this:

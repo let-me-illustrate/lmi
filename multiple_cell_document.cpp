@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: multiple_cell_document.cpp,v 1.17 2006-12-09 17:13:14 chicares Exp $
+// $Id: multiple_cell_document.cpp,v 1.18 2006-12-13 01:01:38 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -59,7 +59,7 @@ std::string multiple_cell_document::xml_root_name() const
 }
 
 //============================================================================
-void multiple_cell_document::parse(xml_lmi::Element const& root)
+void multiple_cell_document::parse(xml::element const& root)
 {
 // TODO ?? It doesn't seem right to depend on node order.
 // See note below--perhaps do something like this:
@@ -212,7 +212,7 @@ void multiple_cell_document::read(std::istream& is)
 void multiple_cell_document::write(std::ostream& os) const
 {
     xml_lmi::xml_document document(xml_root_name());
-    xml_lmi::Element& root = document.root_node();
+    xml::element& root = document.root_node();
 
 // TODO ?? Diagnostics will be cryptic if the xml doesn't follow
 // the required layout. Perhaps they could be improved. Maybe it
@@ -220,7 +220,7 @@ void multiple_cell_document::write(std::ostream& os) const
 // of cells, with its cardinal number, is a distinct node, e.g.:
 //
 //    root.push_back
-//        (xml_lmi::Element
+//        (xml::element
 //            ("NumberOfCases"
 //            ,value_cast<std::string>(case_parms_.size()).c_str()
 //            )
