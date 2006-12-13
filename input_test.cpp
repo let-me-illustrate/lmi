@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_test.cpp,v 1.20 2006-12-11 18:21:29 chicares Exp $
+// $Id: input_test.cpp,v 1.21 2006-12-13 01:01:38 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -96,16 +96,16 @@ void mete_overhead()
 {
     static IllusInputParms raw_data;
     xml_lmi::xml_document document("root");
-    xml_lmi::Element& root = document.root_node();
+    xml::element& root = document.root_node();
     (void)root;
 }
 
-void mete_vector(xml_lmi::Element& xml_data)
+void mete_vector(xml::element& xml_data)
 {
     xml_lmi::child_elements(xml_data);
 }
 
-void mete_read(xml_lmi::Element& xml_data)
+void mete_read(xml::element& xml_data)
 {
     static IllusInputParms raw_data;
     xml_data >> raw_data;
@@ -115,7 +115,7 @@ void mete_write()
 {
     static IllusInputParms raw_data;
     xml_lmi::xml_document document("root");
-    xml_lmi::Element& root = document.root_node();
+    xml::element& root = document.root_node();
     root << raw_data;
 }
 
@@ -123,12 +123,12 @@ void assay_speed()
 {
     IllusInputParms raw_data;
     xml_lmi::xml_document document("root");
-    xml_lmi::Element& root = document.root_node();
+    xml::element& root = document.root_node();
     root << raw_data;
 
     xml::node::const_iterator i = root.begin();
     LMI_ASSERT(!i->is_text());
-    xml_lmi::Element const& e = *i;
+    xml::element const& e = *i;
 
     std::cout
         << "  Speed tests...\n"
@@ -184,14 +184,14 @@ int test_main(int, char*[])
     original.propagate_changes_to_base_and_finalize();
 
     xml_lmi::xml_document xml_document0("root");
-    xml_lmi::Element& xml_root0 = xml_document0.root_node();
+    xml::element& xml_root0 = xml_document0.root_node();
     xml_root0 << original;
     os0 << xml_document0;
     os0.close();
 
     xml::node::const_iterator i = xml_root0.begin();
     LMI_ASSERT(!i->is_text());
-    xml_lmi::Element const& xml_node = *i;
+    xml::element const& xml_node = *i;
 
     xml_node >> replica;
     std::ofstream os1
@@ -203,7 +203,7 @@ int test_main(int, char*[])
     BOOST_TEST(!!os1);
 
     xml_lmi::xml_document xml_document1("root");
-    xml_lmi::Element& xml_root1 = xml_document1.root_node();
+    xml::element& xml_root1 = xml_document1.root_node();
     xml_root1 << replica;
     os1 << xml_document1;
     os1.close();

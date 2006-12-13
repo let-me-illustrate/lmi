@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: configurable_settings.cpp,v 1.32 2006-12-12 11:52:24 chicares Exp $
+// $Id: configurable_settings.cpp,v 1.33 2006-12-13 01:01:38 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -186,7 +186,7 @@ void configurable_settings::load()
 {
     std::ostringstream oss;
     xml_lmi::dom_parser parser(configuration_filepath().string());
-    xml_lmi::Element const& root = parser.root_node(xml_root_name());
+    xml::element const& root = parser.root_node(xml_root_name());
     xml_lmi::ElementContainer const elements(xml_lmi::child_elements(root));
     typedef xml_lmi::ElementContainer::const_iterator eci;
     for(eci i = elements.begin(); i != elements.end(); ++i)
@@ -221,7 +221,7 @@ void configurable_settings::load()
 void configurable_settings::save() const
 {
     xml_lmi::xml_document document(xml_root_name());
-    xml_lmi::Element& root = document.root_node();
+    xml::element& root = document.root_node();
 
     std::vector<std::string>::const_iterator i;
     for(i = member_names().begin(); i != member_names().end(); ++i)

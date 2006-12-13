@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_formatter.cpp,v 1.2 2006-11-26 20:56:37 chicares Exp $
+// $Id: ledger_formatter.cpp,v 1.3 2006-12-13 01:01:38 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -161,7 +161,7 @@ xml_lmi::xml_document const& LedgerFormatter::GetXmlDoc
     boost::shared_ptr<xml_lmi::xml_document> document
         (new xml_lmi::xml_document(ledger_values_->xml_root_name())
         );
-    xml_lmi::Element& root = document->root_node();
+    xml::element& root = document->root_node();
 
     ledger_values_->write_excerpt(root, xml_version);
 

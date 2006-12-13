@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xml_lmi.hpp,v 1.16 2006-12-11 23:13:14 chicares Exp $
+// $Id: xml_lmi.hpp,v 1.17 2006-12-13 01:01:38 chicares Exp $
 
 #ifndef xml_lmi_hpp
 #define xml_lmi_hpp
@@ -55,7 +55,7 @@ namespace xml_lmi
         ~dom_parser();
 
         Document const& document() const;
-        Element const& root_node(std::string const& expected_name) const;
+        xml::element const& root_node(std::string const& expected_name) const;
 
       private:
         std::string                    error_context_;
@@ -73,7 +73,7 @@ namespace xml_lmi
         ~xml_document();
 
         Document const& document() const {return *document_;}
-        Element& root_node();
+        xml::element& root_node();
         std::string str();
 
       private:
@@ -83,7 +83,7 @@ namespace xml_lmi
     };
 
     void add_node
-        (Element&
+        (xml::element&
         ,std::string const& name
         ,std::string const& content
         );
@@ -110,7 +110,7 @@ namespace xml_lmi
     /// from std::exception.
 
     ElementContainer child_elements
-        (Element const&
+        (xml::element const&
         ,std::string const& name = std::string()
         );
 
@@ -121,11 +121,11 @@ namespace xml_lmi
     /// Only direct children are considered: children of child nodes
     /// are not.
 
-    std::string get_content(Element const&);
+    std::string get_content(xml::element const&);
 
     /// Retrieve an xml element's name.
 
-    std::string get_name(Element const&);
+    std::string get_name(xml::element const&);
 
     // Attribute functions.
 
@@ -135,7 +135,7 @@ namespace xml_lmi
     /// guarantee not to modify 'value'.
 
     bool get_attr
-        (Element const&
+        (xml::element const&
         ,std::string const& name
         ,std::string&       value
         );
@@ -143,7 +143,7 @@ namespace xml_lmi
     /// Set a given attribute of an xml element.
 
     void set_attr
-        (Element&
+        (xml::element&
         ,std::string const& name
         ,std::string const& value
         );
