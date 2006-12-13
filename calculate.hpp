@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: calculate.hpp,v 1.16 2006-12-04 06:56:26 chicares Exp $
+// $Id: calculate.hpp,v 1.17 2006-12-13 13:56:17 chicares Exp $
 
 #ifndef calculate_hpp
 #define calculate_hpp
@@ -33,6 +33,7 @@
 #include "ledger_invariant.hpp"
 #include "ledger_variant.hpp"
 #include "ledgervalues.hpp"
+#include "miscellany.hpp"
 #include "multiple_cell_document.hpp"
 #include "single_cell_document.hpp"
 #include "timer.hpp"
@@ -87,11 +88,7 @@ struct RunIllustrationFromFile
     void operator()(std::string a_filename)
         {
         Timer timer;
-        std::ifstream is
-            (a_filename.c_str()
-            ,   std::ios_base::in
-              | std::ios_base::binary
-            );
+        std::ifstream is(a_filename.c_str(), ios_in_binary());
 /* TODO ?? expunge
         IllusInputParms input;
         is >> input;
@@ -169,11 +166,7 @@ struct RunCensusDeprecated
     void operator()(std::string const& a_filename)
         {
         Timer timer;
-        std::ifstream is
-            (a_filename.c_str()
-            ,   std::ios_base::in
-              | std::ios_base::binary
-            );
+        std::ifstream is(a_filename.c_str(), ios_in_binary());
         if(!is)
             {
             throw std::runtime_error("Unable to open file " + a_filename);
