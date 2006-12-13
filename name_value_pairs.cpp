@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: name_value_pairs.cpp,v 1.3 2006-01-29 13:52:00 chicares Exp $
+// $Id: name_value_pairs.cpp,v 1.4 2006-12-13 13:57:16 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -39,7 +39,7 @@ name_value_pairs::name_value_pairs(std::string const& filename)
     std::string line;
     while(std::getline(is, line))
         {
-        std::istringstream iss_line(line, std::ios_base::in);
+        std::istringstream iss_line(line);
         if(std::string::npos == line.find_first_of('='))
             {
             continue;
