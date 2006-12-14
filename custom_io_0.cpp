@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: custom_io_0.cpp,v 1.14 2006-01-29 13:52:00 chicares Exp $
+// $Id: custom_io_0.cpp,v 1.15 2006-12-14 01:17:40 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -514,6 +514,8 @@ void PrintFormSpecial
         ? overridden_filename
         : configurable_settings::instance().custom_output_filename()
         ;
+    // Don't specify 'binary' here: the file is to be read by another
+    // program that probably expects platform-specific behavior.
     std::ofstream os
         (filename.c_str()
         ,std::ios_base::out | std::ios_base::trunc
