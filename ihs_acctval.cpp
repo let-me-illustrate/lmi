@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_acctval.cpp,v 1.86 2006-09-19 03:01:16 chicares Exp $
+// $Id: ihs_acctval.cpp,v 1.87 2006-12-14 03:57:35 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -46,6 +46,7 @@
 #include "ledger_variant.hpp"
 #include "loads.hpp"
 #include "materially_equal.hpp"
+#include "miscellany.hpp"
 #include "mortality_rates.hpp"
 #include "outlay.hpp"
 #include "stratified_algorithms.hpp"
@@ -196,10 +197,7 @@ Then run other bases.
     FinalizeLifeAllBases();
     if(std::string::npos != Input_->Comments.find("idiosyncrasy_spew"))
         {
-        std::ofstream os
-            ("raw_output"
-            ,std::ios_base::out | std::ios_base::trunc
-            );
+        std::ofstream os("raw_output", ios_out_trunc_binary());
         ledger_->Spew(os);
         }
 

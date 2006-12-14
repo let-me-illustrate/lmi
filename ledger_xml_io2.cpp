@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xml_io2.cpp,v 1.12 2006-12-13 01:01:38 chicares Exp $
+// $Id: ledger_xml_io2.cpp,v 1.13 2006-12-14 03:57:35 chicares Exp $
 
 #include "ledger.hpp"
 
@@ -431,7 +431,7 @@ double_formatter_t::double_formatter_t()
 {
 #ifdef SHOW_MISSING_FORMATS
     {
-    std::ofstream ofs(missing_formats_filename().c_str(), std::ios_base::out | std::ios_base::trunc);
+    std::ofstream ofs(missing_formats_filename().c_str(), ios_out_trunc_binary());
     ofs << "No format found for the following numeric data.\n";
     ofs << "These data were therefore not written to xml.\n";
     }

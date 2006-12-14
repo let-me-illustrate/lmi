@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_formatter.cpp,v 1.3 2006-12-13 01:01:38 chicares Exp $
+// $Id: ledger_formatter.cpp,v 1.4 2006-12-14 03:57:35 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -286,10 +286,7 @@ void LMI_SO PrintFormTabDelimitedXXX
         (LedgerFormatterFactory::Instance().CreateFormatter(ledger_values)
         );
 
-    std::ofstream ofs
-        (file_name.c_str()
-        ,std::ios_base::out | std::ios_base::trunc
-        );
+    std::ofstream ofs(file_name.c_str(), ios_out_trunc_binary());
     formatter.FormatAsHtml(ofs);
 }
 
