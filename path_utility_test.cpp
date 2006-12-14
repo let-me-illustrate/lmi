@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: path_utility_test.cpp,v 1.4 2006-12-06 16:23:17 chicares Exp $
+// $Id: path_utility_test.cpp,v 1.5 2006-12-14 04:10:26 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -28,6 +28,7 @@
 
 #include "path_utility.hpp"
 
+#include "miscellany.hpp"
 #include "platform_dependent.hpp" // access()
 #include "test_tools.hpp"
 
@@ -87,10 +88,7 @@ void test_normal_operation()
     // Open a file for writing, and leave it open, preventing it from
     // being erased and therefore forcing unique_filepath() to use a
     // different name. This behavior isn't guaranteed on toy OS's.
-    fs::ofstream keep_open
-        (path1
-        ,std::ios_base::out | std::ios_base::ate | std::ios_base::app
-        );
+    fs::ofstream keep_open(path1, ios_out_app_binary());
 
     fs::path path2 = unique_filepath(fs::path(p), ".xyzzy");
     BOOST_TEST_UNEQUAL(path2.string(), q);

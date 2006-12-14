@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xml_io2.cpp,v 1.13 2006-12-14 03:57:35 chicares Exp $
+// $Id: ledger_xml_io2.cpp,v 1.14 2006-12-14 04:10:26 chicares Exp $
 
 #include "ledger.hpp"
 
@@ -601,16 +601,13 @@ bool double_formatter_t::has_format(value_id const& id) const
 {
     format_map_t::const_iterator it = format_map.find(id.name());
     if (it == format_map.end())
-    {
+        {
 #ifdef SHOW_MISSING_FORMATS
-        std::ofstream ofs
-            ("missing_formats"
-            ,std::ios_base::out | std::ios_base::ate | std::ios_base::app
-            );
+        std::ofstream ofs("missing_formats", ios_out_app_binary());
         ofs << id.name() << "\n";
 #endif // defined SHOW_MISSING_FORMATS
         return false;
-    }
+        }
     return true;
 }
 

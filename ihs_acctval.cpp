@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_acctval.cpp,v 1.87 2006-12-14 03:57:35 chicares Exp $
+// $Id: ihs_acctval.cpp,v 1.88 2006-12-14 04:10:26 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -1067,12 +1067,7 @@ void AccountValue::AddSurrChgLayer(int year, double delta_specamt)
 
 #ifdef DEBUGGING_SC
 double target_premium_rate = MortalityRates_->TargetPremiumRates()[year];
-std::ofstream os
-        ("surrchg.txt"
-        ,   std::ios_base::out
-          | std::ios_base::ate
-          | std::ios_base::app
-        );
+std::ofstream os("surrchg.txt", ios_out_app_binary());
 os
 << "AccountValue::AddSurrChgLayer(): \n   "
         << "\n\t delta_specamt = " << delta_specamt
@@ -1101,12 +1096,7 @@ os << "\n\n";
 void AccountValue::ReduceSurrChg(int year, double partial_surrchg)
 {
 #ifdef DEBUGGING_SC
-    std::ofstream os
-        ("trace.txt"
-        ,   std::ios_base::out
-          | std::ios_base::ate
-          | std::ios_base::app
-        );
+    std::ofstream os("trace.txt", ios_out_app_binary());
     int year0 = std::min(0 + year, BasicValues::GetLength());
     int year1 = std::min(1 + year, BasicValues::GetLength());
     int year2 = std::min(2 + year, BasicValues::GetLength());
