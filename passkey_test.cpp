@@ -19,19 +19,23 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: passkey_test.cpp,v 1.9 2006-12-14 01:54:15 chicares Exp $
+// $Id: passkey_test.cpp,v 1.10 2006-12-14 23:39:29 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
 #   pragma hdrstop
 #endif // __BORLANDC__
 
+// Facilities offered by both these headers are tested here.
 #include "md5.hpp"
 #include "secure_date.hpp"
 
 #include "miscellany.hpp"
 #include "system_command.hpp"
 #include "test_tools.hpp"
+
+#include <boost/filesystem/fstream.hpp>
+#include <boost/filesystem/operations.hpp>
 
 #include <cstdio>
 #include <cstring> // std::memcmp(), std::memcpy()
@@ -59,8 +63,28 @@ char const coleridge[] =
     "Eftsoons his hand dropt he.\n\n"
     ;
 
+void remove_test_files(char const* file, int line)
+{
+    std::vector<std::string> filenames;
+    filenames.push_back("expiry");
+    filenames.push_back("passkey");
+    filenames.push_back("coleridge");
+    filenames.push_back(md5sum_file());
+    typedef std::vector<std::string>::const_iterator aut0;
+    for(aut0 i = filenames.begin(); i != filenames.end(); ++i)
+        {
+        std::remove(i->c_str());
+        INVOKE_BOOST_TEST(!fs::exists(*i), file, line);
+        }
+}
+
 int test_main(int, char*[])
 {
+    // First, remove test files that may be left over from a previous
+    // run that failed to complete. Failing to remove them can cause
+    // spurious error reports.
+    remove_test_files(__FILE__, __LINE__);
+
     {
     std::ofstream os("coleridge", ios_out_trunc_binary());
     BOOST_TEST(!!os);
@@ -211,15 +235,12 @@ int test_main(int, char*[])
     os << "This file has the wrong md5sum.";
     }
     BOOST_TEST_EQUAL
-        ("At least one required file is missing, altered, or invalid. "
-        "Try reinstalling."
+        ("At least one required file is missing, altered, or invalid."
+        " Try reinstalling."
         ,secure_date::instance()->validate(candidate, pwd)
         );
 
-    BOOST_TEST_EQUAL(0, std::remove("expiry"));
-    BOOST_TEST_EQUAL(0, std::remove("passkey"));
-    BOOST_TEST_EQUAL(0, std::remove("coleridge"));
-    BOOST_TEST_EQUAL(0, std::remove(md5sum_file()));
+    remove_test_files(__FILE__, __LINE__);
 
     return 0;
 }
