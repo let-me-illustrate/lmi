@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avmly.cpp,v 1.55 2006-12-14 03:57:35 chicares Exp $
+// $Id: ihs_avmly.cpp,v 1.56 2006-12-14 04:10:26 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -1005,12 +1005,7 @@ void AccountValue::IncreaseSpecAmtToAvoidMec()
         }
 
 #ifdef DEBUGGING_MEC_AVOIDANCE
-    std::ofstream os
-        ("trace.txt"
-        ,   std::ios_base::out
-          | std::ios_base::ate
-          | std::ios_base::app
-        );
+    std::ofstream os("trace.txt", ios_out_app_binary());
     os
         << "Year = " << Year
         << ", Month = " << Month
@@ -3135,12 +3130,7 @@ void AccountValue::TxTakeWD()
     InvariantValues().NetWD[Year] = NetWD;
 
 #ifdef DEBUGGING_SC
-    std::ofstream os
-        ("trace.txt"
-        ,   std::ios_base::out
-          | std::ios_base::ate
-          | std::ios_base::app
-        );
+    std::ofstream os("trace.txt", ios_out_app_binary());
     os
         << "\n TxTakeWD():"
         << "\n Year = " << Year
