@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_dbdict.cpp,v 1.13 2006-01-29 13:52:00 chicares Exp $
+// $Id: ihs_dbdict.cpp,v 1.14 2006-12-14 03:57:35 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -29,9 +29,10 @@
 #include "ihs_dbdict.hpp"
 
 #include "alert.hpp"
+#include "data_directory.hpp"
 #include "dbnames.hpp"
 #include "global_settings.hpp"
-#include "data_directory.hpp"
+#include "miscellany.hpp"
 #include "xenumtypes.hpp"
 
 #include <boost/filesystem/convenience.hpp>
@@ -620,7 +621,7 @@ void print_databases()
 
         DBDictionary::instance().Init(i->string());
         fs::path out_file = fs::change_extension(*i, ".dbt");
-        fs::ofstream os(out_file, std::ios_base::out | std::ios_base::trunc);
+        fs::ofstream os(out_file, ios_out_trunc_binary());
         dict_map& dictionary = DBDictionary::instance().GetDictionary();
         // std::ostream_iterator not used because it doesn't work
         // nicely with std::map (a name-lookup issue).

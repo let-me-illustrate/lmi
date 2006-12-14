@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xsl.cpp,v 1.15 2006-12-12 10:48:19 chicares Exp $
+// $Id: ledger_xsl.cpp,v 1.16 2006-12-14 03:57:35 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -35,6 +35,7 @@
 #if defined LMI_USE_NEW_REPORTS
 #   include "ledger_formatter.hpp"
 #endif // defined LMI_USE_NEW_REPORTS
+#include "miscellany.hpp"
 #include "path_utility.hpp"
 #include "system_command.hpp"
 
@@ -103,7 +104,7 @@ std::string write_ledger_to_pdf
 
     fs::path xml_out_file = unique_filepath(print_dir / real_filename, ".xml");
 
-    fs::ofstream ofs(xml_out_file, std::ios_base::out | std::ios_base::trunc);
+    fs::ofstream ofs(xml_out_file, ios_out_trunc_binary());
     // Scale a copy of the 'ledger' argument. The original must not be
     // modified because scaling is not reentrant. TODO ?? However,
     // that problem is not avoided here, because what is scaled is

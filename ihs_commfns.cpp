@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_commfns.cpp,v 1.8 2006-12-04 06:35:29 chicares Exp $
+// $Id: ihs_commfns.cpp,v 1.9 2006-12-14 03:57:35 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -279,7 +279,7 @@ void OLCommFns::OLCommFns()
 //============================================================================
 void ULCommFns::SelfTest()
 {
-    std::ofstream os("ulcf.txt", std::ios_base::out | std::ios_base::trunc);
+    std::ofstream os("ulcf.txt", ios_out_trunc_binary());
     static double const COI[30] =   // TSA XXIX, page 32, table 5
         {
         .00018,.00007,.00007,.00006,.00006,.00006,.00006,.00005,.00005,.00005,
@@ -388,7 +388,7 @@ void ULCommFns::SelfTest()
 //============================================================================
 void OLCommFns::SelfTest()
 {
-    std::ofstream os("olcf.txt", std::ios_base::out | std::ios_base::trunc);
+    std::ofstream os("olcf.txt", ios_out_trunc_binary());
 
     static double const Q[100] =    // I think this is unisex unismoke ANB 80CSO
         {

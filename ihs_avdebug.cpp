@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avdebug.cpp,v 1.23 2006-09-05 13:59:22 chicares Exp $
+// $Id: ihs_avdebug.cpp,v 1.24 2006-12-14 03:57:35 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -42,6 +42,7 @@
 #include "ledger_invariant.hpp"
 #include "ledger_variant.hpp"
 #include "loads.hpp"
+#include "miscellany.hpp"
 #include "outlay.hpp"
 #include "value_cast.hpp"
 
@@ -281,10 +282,7 @@ void AccountValue::DebugPrintInit()
         return;
         }
 
-    DebugStream.open
-        (DebugFilename.c_str()
-        ,std::ios_base::out | std::ios_base::trunc
-        );
+    DebugStream.open(DebugFilename.c_str(), ios_out_trunc_binary());
     std::copy
         (DebugColHeaders().begin()
         ,DebugColHeaders().end()
