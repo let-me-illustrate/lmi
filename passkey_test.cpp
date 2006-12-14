@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: passkey_test.cpp,v 1.8 2006-12-06 16:23:17 chicares Exp $
+// $Id: passkey_test.cpp,v 1.9 2006-12-14 01:54:15 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -29,6 +29,7 @@
 #include "md5.hpp"
 #include "secure_date.hpp"
 
+#include "miscellany.hpp"
 #include "system_command.hpp"
 #include "test_tools.hpp"
 
@@ -61,12 +62,7 @@ char const coleridge[] =
 int test_main(int, char*[])
 {
     {
-    std::ofstream os
-        ("coleridge"
-        ,   std::ios_base::out
-          | std::ios_base::trunc
-          | std::ios_base::binary
-        );
+    std::ofstream os("coleridge", ios_out_trunc_binary());
     BOOST_TEST(!!os);
     os << coleridge;
     }
@@ -79,12 +75,7 @@ int test_main(int, char*[])
     std::memcpy(expected, result, md5len);
 
     {
-    std::ofstream os
-        (md5sum_file()
-        ,   std::ios_base::out
-          | std::ios_base::trunc
-          | std::ios_base::binary
-        );
+    std::ofstream os(md5sum_file(), ios_out_trunc_binary());
     BOOST_TEST(!!os);
     os << md5_hex_string
         (std::vector<unsigned char>(expected, expected + md5len)
@@ -148,12 +139,7 @@ int test_main(int, char*[])
         );
 
     {
-    std::ofstream os
-        ("passkey"
-        ,   std::ios_base::out
-          | std::ios_base::trunc
-          | std::ios_base::binary
-        );
+    std::ofstream os("passkey", ios_out_trunc_binary());
     BOOST_TEST(!!os);
     os << md5_hex_string
         (std::vector<unsigned char>(u_passkey, u_passkey + md5len)
@@ -204,12 +190,7 @@ int test_main(int, char*[])
 
     // Test with incorrect passkey. This is intended to fail--but see below.
     {
-    std::ofstream os
-        ("passkey"
-        ,   std::ios_base::out
-          | std::ios_base::trunc
-          | std::ios_base::binary
-        );
+    std::ofstream os("passkey", ios_out_trunc_binary());
     BOOST_TEST(!!os);
     std::vector<unsigned char> const wrong(md5len);
     os << md5_hex_string(wrong);
@@ -225,12 +206,7 @@ int test_main(int, char*[])
 
     // Test with altered data file. This is intended to fail.
     {
-    std::ofstream os
-        ("coleridge"
-        ,   std::ios_base::out
-          | std::ios_base::trunc
-          | std::ios_base::binary
-        );
+    std::ofstream os("coleridge", ios_out_trunc_binary());
     BOOST_TEST(!!os);
     os << "This file has the wrong md5sum.";
     }

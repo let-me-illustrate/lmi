@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_test.cpp,v 1.21 2006-12-13 01:01:38 chicares Exp $
+// $Id: input_test.cpp,v 1.22 2006-12-14 01:54:15 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -55,12 +55,7 @@ void test_document_io
     )
 {
     DocumentClass document(original_filename);
-    std::ofstream ofs
-        (replica_filename.c_str()
-        ,   std::ios_base::out
-          | std::ios_base::trunc
-          | std::ios_base::binary
-        );
+    std::ofstream ofs(replica_filename.c_str(), ios_out_trunc_binary());
     document.write(ofs);
     if(test_speed_only)
         {
@@ -147,12 +142,7 @@ int test_main(int, char*[])
     IllusInputParms original;
     IllusInputParms replica;
 
-    std::ofstream os0
-        ("eraseme0.xml"
-        ,   std::ios_base::out
-          | std::ios_base::trunc
-          | std::ios_base::binary
-        );
+    std::ofstream os0("eraseme0.xml", ios_out_trunc_binary());
     BOOST_TEST(!!os0);
 
     // The obsolete first-, middle-, and last-name fields live on
@@ -194,12 +184,7 @@ int test_main(int, char*[])
     xml::element const& xml_node = *i;
 
     xml_node >> replica;
-    std::ofstream os1
-        ("eraseme1.xml"
-        ,   std::ios_base::out
-          | std::ios_base::trunc
-          | std::ios_base::binary
-        );
+    std::ofstream os1("eraseme1.xml", ios_out_trunc_binary());
     BOOST_TEST(!!os1);
 
     xml_lmi::xml_document xml_document1("root");

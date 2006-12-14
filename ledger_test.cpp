@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_test.cpp,v 1.3 2006-12-11 16:51:27 chicares Exp $
+// $Id: ledger_test.cpp,v 1.4 2006-12-14 01:54:15 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -77,14 +77,8 @@ void LedgerTest::Test() const
     LMI_ASSERT(ledger_.get());
     Ledger const& ledger = *ledger_.get();
 
-    std::ios_base::openmode const open_flags =
-            std::ios_base::out
-        |   std::ios_base::trunc
-        |   std::ios_base::binary
-        ;
-
     fs::path filepath0("sample.xml");
-    fs::ofstream ofs0(filepath0, open_flags);
+    fs::ofstream ofs0(filepath0, ios_out_trunc_binary());
     ledger.write(ofs0);
     BOOST_TEST(ofs0.good());
     ofs0.close();
@@ -94,21 +88,21 @@ void LedgerTest::Test() const
     LedgerFormatter ledger_formatter = factory.CreateFormatter(ledger);
 
     fs::path filepath1("calculation_summary.html");
-    fs::ofstream ofs1(filepath1, open_flags);
+    fs::ofstream ofs1(filepath1, ios_out_trunc_binary());
     ledger_formatter.FormatAsHtml(ofs1);
     BOOST_TEST(ofs1.good());
     ofs1.close();
     ValidateFile(filepath1, __FILE__, __LINE__);
 
     fs::path filepath2("calculation_summary.tsv");
-    fs::ofstream ofs2(filepath2, open_flags);
+    fs::ofstream ofs2(filepath2, ios_out_trunc_binary());
     ledger_formatter.FormatAsLightTSV(ofs2);
     BOOST_TEST(ofs2.good());
     ofs2.close();
     ValidateFile(filepath2, __FILE__, __LINE__);
 
     fs::path filepath3("microcosm.tsv");
-    fs::ofstream ofs3(filepath3, open_flags);
+    fs::ofstream ofs3(filepath3, ios_out_trunc_binary());
     ledger_formatter.FormatAsTabDelimited(ofs3);
     BOOST_TEST(ofs3.good());
     ofs3.close();

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: group_values.cpp,v 1.54 2006-12-13 13:29:16 chicares Exp $
+// $Id: group_values.cpp,v 1.55 2006-12-14 01:54:15 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -42,6 +42,7 @@
 #include "ledger_text_formats.hpp"
 #include "ledger_xsl.hpp"
 #include "materially_equal.hpp"
+#include "miscellany.hpp"
 #include "path_utility.hpp"
 #include "progress_meter.hpp"
 #include "timer.hpp"
@@ -84,9 +85,7 @@ void emit_ledger
         {
         fs::ofstream ofs
             (serialized_file_path(file, index, "test")
-            ,   std::ios_base::out
-            |   std::ios_base::binary
-            |   std::ios_base::trunc
+            ,ios_out_trunc_binary()
             );
         ledger.Spew(ofs);
         }

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: name_value_pairs_test.cpp,v 1.5 2006-12-06 16:23:17 chicares Exp $
+// $Id: name_value_pairs_test.cpp,v 1.6 2006-12-14 01:54:15 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -28,6 +28,7 @@
 
 #include "name_value_pairs.hpp"
 
+#include "miscellany.hpp"
 #include "test_tools.hpp"
 
 #include <cstdio> // std::remove()
@@ -38,12 +39,7 @@ int test_main(int, char*[])
     std::string filename0("/tmp/eraseme");
 
     {
-    std::ofstream os
-        (filename0.c_str()
-        ,   std::ios_base::out
-          | std::ios_base::trunc
-          | std::ios_base::binary
-        );
+    std::ofstream os(filename0.c_str(), ios_out_trunc_binary());
     BOOST_TEST(!!os);
 
     os
