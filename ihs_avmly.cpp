@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avmly.cpp,v 1.54 2006-12-10 12:57:09 chicares Exp $
+// $Id: ihs_avmly.cpp,v 1.55 2006-12-14 03:57:35 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -46,6 +46,7 @@
 #include "loads.hpp"
 #include "materially_equal.hpp"
 #include "math_functors.hpp"
+#include "miscellany.hpp"
 #include "mortality_rates.hpp"
 #include "outlay.hpp"
 #include "stratified_algorithms.hpp"
@@ -987,11 +988,7 @@ void AccountValue::IncreaseSpecAmtToAvoidMec()
 #ifdef DEBUGGING_MEC_AVOIDANCE
     if(0 == Month && 0 == Year && e_run_curr_basis == RateBasis)
         {
-        std::ofstream os
-            ("trace.txt"
-            ,   std::ios_base::out
-              | std::ios_base::trunc
-            );
+        std::ofstream os("trace.txt", ios_out_trunc_binary());
         }
 #endif // DEBUGGING_MEC_AVOIDANCE
 

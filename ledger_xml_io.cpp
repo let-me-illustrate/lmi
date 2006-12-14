@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xml_io.cpp,v 1.61 2006-12-13 01:01:38 chicares Exp $
+// $Id: ledger_xml_io.cpp,v 1.62 2006-12-14 03:57:35 chicares Exp $
 
 #include "ledger.hpp"
 
@@ -383,7 +383,7 @@ void Ledger::write(xml::element& x) const
 
     {
 #if defined SHOW_MISSING_FORMATS
-    std::ofstream ofs("missing_formats", std::ios_base::out | std::ios_base::trunc);
+    std::ofstream ofs("missing_formats", ios_out_trunc_binary());
     ofs << "No format found for the following numeric data.\n";
     ofs << "These data were therefore not written to xml.\n";
 #endif // defined SHOW_MISSING_FORMATS
@@ -1011,7 +1011,7 @@ void Ledger::write(xml::element& x) const
             +   "/values"
             +   z.spreadsheet_file_extension()
             );
-        fs::ofstream ofs(filepath, std::ios_base::out | std::ios_base::trunc);
+        fs::ofstream ofs(filepath, ios_out_trunc_binary());
 
         for
             (std::map<std::string,std::vector<std::string> >::const_iterator j = stringvectors.begin()

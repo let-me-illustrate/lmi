@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: configurable_settings.cpp,v 1.33 2006-12-13 01:01:38 chicares Exp $
+// $Id: configurable_settings.cpp,v 1.34 2006-12-14 03:57:35 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -31,6 +31,7 @@
 #include "alert.hpp"
 #include "data_directory.hpp"     // AddDataDir()
 #include "handle_exceptions.hpp"
+#include "miscellany.hpp"
 #include "path_utility.hpp"
 #include "platform_dependent.hpp" // access()
 #include "xml_lmi.hpp"
@@ -240,14 +241,11 @@ void configurable_settings::save() const
 
 // TODO ?? CALCULATION_SUMMARY Choose one fstream class.
 #if 0
-    fs::ofstream ofs
-        (configuration_filepath()
-        ,std::ios_base::out | std::ios_base::trunc
-        );
+    fs::ofstream ofs(configuration_filepath(), ios_out_trunc_binary());
 #else // not 0
     std::ofstream ofs
         (configuration_filepath().string().c_str()
-        ,std::ios_base::out | std::ios_base::trunc
+        ,ios_out_trunc_binary()
         );
 #endif
     ofs << document;
