@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_text_formats.cpp,v 1.24 2006-11-12 19:55:12 chicares Exp $
+// $Id: ledger_text_formats.cpp,v 1.25 2006-12-14 04:10:26 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -244,12 +244,7 @@ void PrintFormTabDelimited
             );
 
 #ifdef DEBUGGING_IRR
-std::ofstream os
-        ("irr.txt"
-        ,   std::ios_base::out
-          | std::ios_base::ate
-          | std::ios_base::app
-        );
+std::ofstream os("irr.txt", ios_out_app_binary());
 os
 << "  PrintFormTabDelimited():\n"
         << "\n\tcash_flow.size() = " << cash_flow.size()
@@ -290,12 +285,7 @@ os << "\n\n" ;
             );
         }
 
-    std::ofstream os
-        (file_name.c_str()
-        ,  std::ios_base::out
-         | std::ios_base::ate
-         | std::ios_base::app
-        );
+    std::ofstream os(file_name.c_str(), ios_out_app_binary());
 
     os << "\n\nFOR BROKER-DEALER USE ONLY. NOT TO BE SHARED WITH CLIENTS.\n\n";
 

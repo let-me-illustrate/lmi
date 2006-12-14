@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.522 2006-12-13 01:01:38 chicares Exp $
+// $Id: ChangeLog,v 1.523 2006-12-14 04:10:26 chicares Exp $
 
 MAINTENANCE
 
@@ -8843,4 +8843,70 @@ Refactor.
   xml_lmi_fwd.hpp
 Partially remove xml-library virtualization, preserving a useful
 distinction between xml elements and DOM nodes.
+
+20061213T1326Z <chicares@cox.net> [1239]
+
+  miscellany.hpp
+Add std::ios_base::openmode convenience functions to promote terseness
+and correctness.
+
+20061213T1329Z <chicares@cox.net> [1239]
+
+  group_values.cpp
+Correct a thinko that happened to be innocuous.
+
+20061213T1356Z <chicares@cox.net> [1239]
+
+  actuarial_table.cpp
+  calculate.hpp
+Use std::ios_base::openmode convenience functions.
+
+20061213T1357Z <chicares@cox.net> [1239]
+
+  census_view.cpp
+  main_cgi.cpp
+  name_value_pairs.cpp
+Use default std::ios_base::openmode for std::istringstream. If binary
+mode were wanted, then it would be more appropriate to use the
+underlying std::stringbuf directly.
+
+20061214T0117Z <chicares@cox.net> [1239]
+
+  custom_io_0.cpp
+Mark lack of std::ios_base::openmode 'binary' as being appropriate.
+
+20061214T0154Z <chicares@cox.net> [1239]
+
+  group_values.cpp
+  input_test.cpp
+  ledger_test.cpp
+  main_cgi.cpp
+  name_value_pairs_test.cpp
+  passkey_test.cpp
+Replace file-open modes with equivalent convenience functions.
+
+20061214T0357Z <chicares@cox.net> [1239]
+
+  configurable_settings.cpp
+  ihs_acctval.cpp
+  ihs_avdebug.cpp
+  ihs_avmly.cpp
+  ihs_commfns.cpp
+  ihs_dbdict.cpp
+  ledger_formatter.cpp
+  ledger_xml_io.cpp
+  ledger_xml_io2.cpp
+  ledger_xsl.cpp
+Add 'binary' to 'trunc' file-write mode, using convenience functions.
+
+20061214T0410Z <chicares@cox.net> [1239]
+
+  ihs_acctval.cpp
+  ihs_avmly.cpp
+  ledger_text_formats.cpp
+  ledger_xml_io.cpp
+  ledger_xml_io2.cpp
+  path_utility_test.cpp
+Add 'binary' to 'app' file-write mode, using convenience functions;
+eliminate the curiously half-baked 'ate' mode.
 
