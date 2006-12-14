@@ -31,7 +31,7 @@
 // other reasons evident in cvs or explained in 'ChangeLog'. Any
 // defect should not reflect on Stephen F. Booth's reputation.
 
-// $Id: main_cgi.cpp,v 1.18 2006-12-13 13:57:16 chicares Exp $
+// $Id: main_cgi.cpp,v 1.19 2006-12-14 01:54:15 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -44,6 +44,7 @@
 #include "inputillus.hpp"
 #include "inputs.hpp"
 #include "main_common.hpp"
+#include "miscellany.hpp"
 #include "path_utility.hpp"
 #include "platform_dependent.hpp" // putenv() [GWC]
 #include "timer.hpp"
@@ -76,7 +77,7 @@
 // To use logging, the variable gLogFile MUST be defined, and it _must_
 // be an ofstream
 #if defined DEBUG && DEBUG
-  std::ofstream gLogFile( cgi_bin_log_filename().c_str(), std::ios_base::app );
+  std::ofstream gLogFile(cgi_bin_log_filename().c_str(), ios_out_app_binary());
 #endif
 
 // Function prototypes
@@ -95,12 +96,7 @@ int try_main(int argc, char* argv[])
     if(argc == 2 && argv[1] == std::string("--capture"))
         {
         std::system("set > settings");
-        std::ofstream os
-            ("stdin.txt"
-            ,   std::ios_base::out
-              | std::ios_base::binary
-              | std::ios_base::trunc
-            );
+        std::ofstream os("stdin.txt", ios_out_trunc_binary());
         os << std::cin.rdbuf();
         std::cout
             << "Environment and QUERY_STRING captured for later use\n"
@@ -151,12 +147,7 @@ int try_main(int argc, char* argv[])
     // program for standalone test.
     if(argc == 2 && argv[1] == std::string("--write_content_string"))
         {
-        std::ofstream os
-            ("cgi.test.in"
-            ,   std::ios_base::out
-              | std::ios_base::binary
-              | std::ios_base::trunc
-            );
+        std::ofstream os("cgi.test.in", ios_out_trunc_binary());
         os << content_string;
         return EXIT_SUCCESS;
         }
