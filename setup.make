@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: setup.make,v 1.27 2006-03-13 21:08:49 wboutin Exp $
+# $Id: setup.make,v 1.28 2006-12-15 19:23:22 wboutin Exp $
 
 .PHONY: all
 all: setup
@@ -70,6 +70,7 @@ setup: \
   frozen_boost \
   frozen_cgicc \
   frozen_libxml2 \
+  frozen_make \
   frozen_sed \
   frozen_xmlwrapp \
   mingw_20050827 \
@@ -142,7 +143,7 @@ dummy_libraries: $(third_party_bin_dir) $(third_party_lib_dir)
 
 ###############################################################################
 
-# Install boost-1.31.0 .
+# Install boost-1.33.0 .
 
 .PHONY: frozen_boost
 frozen_boost:
@@ -156,20 +157,20 @@ frozen_boost:
 
 .PHONY: install_frozen_boost_from_tmp_dir
 install_frozen_boost_from_tmp_dir:
-	[ -e boost_1_31_0.tar.bz2 ] \
+	[ -e boost_1_33_0.tar.bz2 ] \
 	  || $(WGET) --non-verbose \
-	  $(sf_mirror)/boost/boost_1_31_0.tar.bz2
-	$(ECHO) "8cc183538eaa5cfc53d88d0e94bd2fd4  boost_1_31_0.tar.bz2" \
+	  $(sf_mirror)/boost/boost_1_33_0.tar.bz2
+	$(ECHO) "43d87bbd827a8299f408df5efe5f0fd8  boost_1_33_0.tar.bz2" \
 	  |$(MD5SUM) --check
-	$(BZIP2) --decompress --keep boost_1_31_0.tar.bz2
-	$(TAR) --extract --file=boost_1_31_0.tar
+	$(BZIP2) --decompress --keep boost_1_33_0.tar.bz2
+	$(TAR) --extract --file=boost_1_33_0.tar
 	$(MKDIR) --parents $(third_party_include_dir)/boost/
 	$(MKDIR) --parents $(third_party_source_dir)/boost/
-	-$(CP) --force --preserve --recursive boost_1_31_0/boost/* \
+	-$(CP) --force --preserve --recursive boost_1_33_0/boost/* \
 	  $(third_party_include_dir)/boost/
-	-$(CP) --force --preserve --recursive boost_1_31_0/* \
+	-$(CP) --force --preserve --recursive boost_1_33_0/* \
 	  $(third_party_source_dir)/boost/
-	$(RM) --force boost_1_31_0.tar boost_1_31_0.tar.bz2
+	$(RM) --force boost_1_33_0.tar boost_1_33_0.tar.bz2
 
 ###############################################################################
 
@@ -269,6 +270,33 @@ install_frozen_libxml2_from_tmp_dir:
 # usage, but that less odd ways (like 'make install'?) didn't work.
 
 ###############################################################################
+# This version has not been formally tested and released for production with
+
+# Install make-3.81 .
+
+.PHONY: frozen_make
+frozen_make:
+	$(MAKE) \
+	  --directory=/tmp \
+	  --file=$(src_dir)/setup.make \
+            src_dir='$(src_dir)' \
+	  install_frozen_make_from_tmp_dir
+
+.PHONY: install_frozen_make_from_tmp_dir
+install_frozen_make_from_tmp_dir:
+	[ -e make-3.81.tar.bz2 ] \
+	  || $(WGET) --non-verbose \
+	  http://ftp.gnu.org/gnu/make/make-3.81.tar.bz2
+	$(ECHO) "354853e0b2da90c527e35aabb8d6f1e6  make-3.81.tar.bz2" \
+	  |$(MD5SUM) --check
+	$(BZIP2) --decompress --keep make-3.81.tar.bz2
+	$(TAR) --extract --file=make-3.81.tar
+	cd make-3.81; \
+	/msys/1.0/bin/sh.exe ./configure && /msys/1.0/bin/make
+	$(CP) --force --preserve /make-3.81/make.exe /usr/bin/
+	$(RM) --force make-3.81.tar make-3.81.tar.bz2
+
+###############################################################################
 
 # Install sed-4.0.7 .
 
@@ -330,18 +358,17 @@ install_frozen_xmlwrapp_from_tmp_dir:
 
 # The following assumes 'xmlwrapp-0.2.0.tar.gz' exists in '/tmp/' already.
 	[ -e xmlwrapp-0.2.0.tar.gz ]
-	$(ECHO) "f142e8bc349597ecbaebb4a8e246b65a  xmlwrapp-0.2.0.tar.gz" \
+	$(ECHO) "b8a07e77f8f8af9ca96bccab7d9dd310  xmlwrapp-0.5.0.tar.gz" \
 	  |$(MD5SUM) --check
-	$(GZIP) --decompress xmlwrapp-0.2.0.tar.gz
-	$(TAR) --extract --verbose --file=xmlwrapp-0.2.0.tar
-	$(PATCH) --strip=0 < $(src_dir)/xmlwrapp_0_2_0_patch
+	$(GZIP) --decompress xmlwrapp-0.5.0.tar.gz
+	$(TAR) --extract --verbose --file=xmlwrapp-0.5.0.tar
 	$(MKDIR) --parents $(third_party_include_dir)/xmlwrapp/
 	$(MKDIR) --parents $(third_party_source_dir)/libxml/
-	$(CP) --preserve xmlwrapp-0.2.0/include/xmlwrapp/*.h \
+	$(CP) --preserve xmlwrapp-0.5.0/include/xmlwrapp/*.h \
 	  $(third_party_include_dir)/xmlwrapp/
-	$(CP) --preserve xmlwrapp-0.2.0/src/libxml/* \
+	$(CP) --preserve xmlwrapp-0.5.0/src/libxml/* \
 	  $(third_party_source_dir)/libxml/
-	$(RM) --force xmlwrapp-0.2.0.tar xmlwrapp-0.2.0.tar.gz
+	$(RM) --force xmlwrapp-0.5.0.tar xmlwrapp-0.5.0.tar.gz
 
 .PHONY: check_xmlwrapp_md5sums
 check_xmlwrapp_md5sums: $(third_party_dir)
