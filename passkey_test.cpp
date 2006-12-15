@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: passkey_test.cpp,v 1.10 2006-12-14 23:39:29 chicares Exp $
+// $Id: passkey_test.cpp,v 1.11 2006-12-15 03:33:16 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -186,6 +186,51 @@ int test_main(int, char*[])
     BOOST_TEST(!!os);
     os << millenium << ' ' << (millenium + 2);
     }
+
+    // Test validation from a remote directory (using a valid date).
+    // This should not alter the current directory.
+    pwd = fs::current_path();
+    candidate.julian_day_number(millenium );
+
+    fs::path const remote_dir_0(fs::complete("/tmp"));
+    BOOST_TEST(fs::exists(remote_dir_0) && fs::is_directory(remote_dir_0));
+    BOOST_TEST_EQUAL(0, chdir(remote_dir_0.string().c_str()));
+    BOOST_TEST_EQUAL(remote_dir_0.string(), fs::current_path().string());
+    BOOST_TEST_EQUAL("", secure_date::instance()->validate(candidate, pwd));
+    BOOST_TEST_EQUAL(remote_dir_0.string(), fs::current_path().string());
+    BOOST_TEST_EQUAL(0, chdir(pwd.string().c_str()));
+    BOOST_TEST_EQUAL(pwd.string(), fs::current_path().string());
+
+#if defined LMI_MSW
+    // Cause the cached date to change, to make downstream tests work
+    // as intended. Without this step, the next test would succeed
+    // even if file 'passkey' were mangled at this point.
+// TODO ?? Instead, add a function to purge the cache.
+    candidate.julian_day_number(millenium + 1);
+    BOOST_TEST_EQUAL("", secure_date::instance()->validate(candidate, pwd));
+    candidate.julian_day_number(millenium);
+
+    // Try the root directory on a different drive, on a multiple-root
+    // system. This is perforce platform specific; msw is used because
+    // it happens to be common. This test assumes that an 'E:' drive
+    // exists and is not the "current" drive.
+    fs::path const remote_dir_1(fs::complete(fs::path("E:/", fs::native)));
+    BOOST_TEST(fs::exists(remote_dir_1) && fs::is_directory(remote_dir_1));
+    BOOST_TEST_EQUAL(0, chdir(remote_dir_1.string().c_str()));
+    BOOST_TEST_EQUAL(remote_dir_1.string(), fs::current_path().string());
+    BOOST_TEST_EQUAL("", secure_date::instance()->validate(candidate, pwd));
+    BOOST_TEST_EQUAL(remote_dir_1.string(), fs::current_path().string());
+    BOOST_TEST_EQUAL(0, chdir(pwd.string().c_str()));
+    BOOST_TEST_EQUAL(pwd.string(), fs::current_path().string());
+#endif // defined LMI_MSW
+
+    // Cause the cached date to change, to make downstream tests work
+    // as intended. Without this step, the next test would succeed
+    // even if file 'passkey' were mangled at this point.
+// TODO ?? Instead, add a function to purge the cache.
+    candidate.julian_day_number(millenium + 1);
+    BOOST_TEST_EQUAL("", secure_date::instance()->validate(candidate, pwd));
+    candidate.julian_day_number(millenium);
 
     // The first day of the valid period should work.
     candidate.julian_day_number(millenium);
