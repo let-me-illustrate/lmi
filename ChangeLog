@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.523 2006-12-14 04:10:26 chicares Exp $
+// $Id: ChangeLog,v 1.524 2006-12-15 04:07:21 chicares Exp $
 
 MAINTENANCE
 
@@ -8909,4 +8909,21 @@ Add 'binary' to 'trunc' file-write mode, using convenience functions.
   path_utility_test.cpp
 Add 'binary' to 'app' file-write mode, using convenience functions;
 eliminate the curiously half-baked 'ate' mode.
+
+20061214T2339Z <chicares@cox.net> [1239]
+
+  passkey_test.cpp
+Guard against certain spurious unit-test error reports.
+
+20061215T0333Z <chicares@cox.net> [1241]
+
+  passkey_test.cpp
+Demonstrate a problem: security validation changes the current working
+directory--an undesirable side effect that interferes with proper
+operation of the ledger-class unit test.
+
+20061215T0407Z <chicares@cox.net> [1241]
+
+  secure_date.cpp
+Resolve the problem noted 20061215T0333Z.
 

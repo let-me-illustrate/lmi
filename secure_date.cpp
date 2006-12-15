@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: secure_date.cpp,v 1.7 2006-12-04 06:19:20 chicares Exp $
+// $Id: secure_date.cpp,v 1.8 2006-12-15 04:07:21 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -34,6 +34,7 @@
 #include "system_command.hpp"
 
 #include <boost/filesystem/fstream.hpp>
+#include <boost/filesystem/operations.hpp>
 #include <boost/scoped_ptr.hpp>
 
 #include <cstdio>
@@ -192,12 +193,30 @@ std::string secure_date::validate
         }
 
     // Validate all data files.
-    chdir(path.string().c_str());
+    fs::path original_path(fs::current_path());
+    if(0 != chdir(path.string().c_str()))
+        {
+        oss
+            << "Unable to change directory to '"
+            << path.string()
+            << "'. Try reinstalling."
+            ;
+        return oss.str();
+        }
     if(system_command("md5sum --check --status " + std::string(md5sum_file())))
         {
         oss
             << "At least one required file is missing, altered, or invalid."
             << " Try reinstalling."
+            ;
+        return oss.str();
+        }
+    if(0 != chdir(original_path.string().c_str()))
+        {
+        oss
+            << "Unable to restore directory to '"
+            << original_path.string()
+            << "'. Try reinstalling."
             ;
         return oss.str();
         }
