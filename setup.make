@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: setup.make,v 1.28 2006-12-15 19:23:22 wboutin Exp $
+# $Id: setup.make,v 1.29 2006-12-15 20:42:15 wboutin Exp $
 
 .PHONY: all
 all: setup
@@ -293,7 +293,9 @@ install_frozen_make_from_tmp_dir:
 	$(TAR) --extract --file=make-3.81.tar
 	cd make-3.81; \
 	/msys/1.0/bin/sh.exe ./configure && /msys/1.0/bin/make
-	$(CP) --force --preserve /make-3.81/make.exe /usr/bin/
+# TODO ?? Apparently, because make is being used for this, it cannot
+# be overwritten, so an alternative should be considered.
+	$(CP) --force --preserve $(CURDIR)/make-3.81/make.exe /usr/bin/
 	$(RM) --force make-3.81.tar make-3.81.tar.bz2
 
 ###############################################################################
