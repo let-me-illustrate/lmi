@@ -1,4 +1,4 @@
-// Moderately secure system date validation--tells whether system has expired.
+// Permit running the system iff data files and date are valid.
 //
 // Copyright (C) 2003, 2004, 2005, 2006 Gregory W. Chicares.
 //
@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: secure_date.cpp,v 1.8 2006-12-15 04:07:21 chicares Exp $
+// $Id: secure_date.cpp,v 1.9 2006-12-16 15:36:23 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -29,56 +29,58 @@
 #include "secure_date.hpp"
 
 #include "alert.hpp"
+#include "handle_exceptions.hpp"
 #include "md5.hpp"
 #include "platform_dependent.hpp" // chdir()
 #include "system_command.hpp"
 
 #include <boost/filesystem/fstream.hpp>
 #include <boost/filesystem/operations.hpp>
-#include <boost/scoped_ptr.hpp>
 
 #include <cstdio>
 #include <cstring>
 #include <iomanip>
 #include <sstream>
+#include <stdexcept>
 
-// TODO ?? Known security hole: data files can be modified after we've
-// validated them with md5sum . This will become a bigger problem when
-// we replace the binary database files with xml.
-
-// TODO ?? Get rid of this coding horror--rewrite this class,
-// following the Meyers-singleton pattern used elsewhere.
-boost::scoped_ptr<secure_date> foo(secure_date::instance());
-
-secure_date* secure_date::instance_ = 0;
+// TODO ?? Known security hole: data files can be modified after they
+// have been validated with 'md5sum'. This problem will grow worse
+// when the binary database files are replaced with xml.
 
 namespace
 {
     int const chars_per_formatted_hex_byte = CHAR_BIT / 4;
 }
 
-//============================================================================
-secure_date* secure_date::instance()
-{
-    if(0 == instance_)
-        {
-        instance_ = new secure_date;
-        }
-    return instance_;
-}
+/// Initialize to julian day number zero (4713 BC), which is treated
+/// as always invalid. Rationale: if the validation code ratifies the
+/// default date through some unanticipated defect, then the value is
+/// still recognizably implausible.
 
-//============================================================================
-// Initialize to julian day number zero, which is 4713 BC, a date we
-// will treat as always invalid. It is important to have such a known
-// and implausible initial value in case the validation code fails in
-// some unanticipated way that 'ratifies' the default date.
-secure_date::secure_date()
+SecurityValidator::SecurityValidator()
 {
     julian_day_number(0);
 }
 
-//============================================================================
-std::string secure_date::validate
+SecurityValidator::~SecurityValidator()
+{}
+
+SecurityValidator& SecurityValidator::Instance()
+{
+    try
+        {
+        static SecurityValidator z;
+        return z;
+        }
+    catch(...)
+        {
+        report_exception();
+        fatal_error() << "Instantiation failed." << LMI_FLUSH;
+        throw std::logic_error("Unreachable"); // Silence compiler warning.
+        }
+}
+
+std::string SecurityValidator::Validate
     (calendar_date const& candidate
     ,fs::path const&      path
     )
@@ -86,7 +88,7 @@ std::string secure_date::validate
     // The date last validated is valid unless it's JDN zero.
     if
         (  0 != candidate.julian_day_number()
-        && candidate == dynamic_cast<calendar_date const&>(*instance())
+        && candidate == dynamic_cast<calendar_date const&>(Instance())
         )
         {
         return "";
@@ -248,11 +250,10 @@ std::string secure_date::validate
         return oss.str();
         }
     // Cache the validated date.
-    dynamic_cast<calendar_date&>(*instance()) = candidate;
+    dynamic_cast<calendar_date&>(Instance()) = candidate;
     return "";
 }
 
-//============================================================================
 std::string md5_hex_string(std::vector<unsigned char> const& vuc)
 {
     LMI_ASSERT(md5len == vuc.size());

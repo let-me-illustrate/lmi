@@ -1,4 +1,4 @@
-// Moderately secure system date validation--tells whether system has expired.
+// Permit running the system iff data files and date are valid.
 //
 // Copyright (C) 2003, 2005, 2006 Gregory W. Chicares.
 //
@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: secure_date.hpp,v 1.8 2006-01-29 13:52:00 chicares Exp $
+// $Id: secure_date.hpp,v 1.9 2006-12-16 15:36:23 chicares Exp $
 
 #ifndef secure_date_hpp
 #define secure_date_hpp
@@ -48,22 +48,26 @@ BOOST_STATIC_ASSERT(8 == CHAR_BIT || 16 == CHAR_BIT);
 // so md5 output is 128 bits == 16 8-bit bytes or 8 16-bit bytes:
 enum {md5len = 128 / CHAR_BIT};
 
-class secure_date
+/// Permit running the system iff data files and date are valid.
+///
+/// Implemented as a simple Meyers singleton, with the expected
+/// dead-reference and threading issues.
+
+class SecurityValidator
     :public calendar_date
     ,private boost::noncopyable
-    ,virtual private obstruct_slicing<secure_date>
+    ,virtual private obstruct_slicing<SecurityValidator>
 {
   public:
-    static secure_date* instance();
-    static std::string validate
+    static SecurityValidator& Instance();
+    static std::string Validate
         (calendar_date const& candidate
         ,fs::path const&      path
         );
 
   private:
-    secure_date();
-
-    static secure_date* instance_;
+    SecurityValidator();
+    ~SecurityValidator();
 };
 
 /// Hex representation of an md5 sum as a string.
