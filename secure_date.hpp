@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: secure_date.hpp,v 1.10 2006-12-16 16:49:12 chicares Exp $
+// $Id: secure_date.hpp,v 1.11 2006-12-16 17:08:15 chicares Exp $
 
 #ifndef secure_date_hpp
 #define secure_date_hpp
@@ -58,6 +58,8 @@ class SecurityValidator
     ,private boost::noncopyable
     ,virtual private obstruct_slicing<SecurityValidator>
 {
+    friend class PasskeyTest;
+
   public:
     static SecurityValidator& Instance();
     static std::string Validate
@@ -68,6 +70,8 @@ class SecurityValidator
   private:
     SecurityValidator();
     ~SecurityValidator();
+
+    static void PurgeCache();
 };
 
 /// Hex representation of an md5 sum as a string.
