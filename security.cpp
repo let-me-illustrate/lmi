@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: security.cpp,v 1.10 2006-12-16 15:36:23 chicares Exp $
+// $Id: security.cpp,v 1.11 2006-12-16 17:39:24 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -43,11 +43,14 @@ void validate_security(bool do_validate)
         return;
         }
 
-    std::string diagnostic_message = SecurityValidator::Validate
+    std::string const diagnostic_message = SecurityValidator::Validate
         (calendar_date()
         ,global_settings::instance().data_directory()
         );
-    if(!diagnostic_message.empty())
+    if
+        (  "validated" != diagnostic_message
+        && "cached"    != diagnostic_message
+        )
         {
         safely_show_message(diagnostic_message.c_str());
         std::exit(EXIT_FAILURE);
