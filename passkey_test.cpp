@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: passkey_test.cpp,v 1.17 2006-12-16 17:39:24 chicares Exp $
+// $Id: passkey_test.cpp,v 1.18 2006-12-16 17:55:28 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -231,8 +231,7 @@ void PasskeyTest::Test1() const
     BOOST_TEST(fs::exists(remote_dir_0) && fs::is_directory(remote_dir_0));
     BOOST_TEST_EQUAL(0, chdir(remote_dir_0.string().c_str()));
     BOOST_TEST_EQUAL(remote_dir_0.string(), fs::current_path().string());
-// TODO ?? Caching inadvertently blocks validation here, so this test
-// cannot fail even if it ought to.
+    SecurityValidator::PurgeCache();
     BOOST_TEST_EQUAL("validated", SecurityValidator::Validate(candidate_, pwd));
     SecurityValidator::PurgeCache();
     BOOST_TEST_EQUAL(remote_dir_0.string(), fs::current_path().string());
