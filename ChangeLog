@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.526 2006-12-15 20:42:15 wboutin Exp $
+// $Id: ChangeLog,v 1.527 2006-12-16 15:36:23 chicares Exp $
 
 MAINTENANCE
 
@@ -8936,4 +8936,24 @@ Upgrade several tools.
 
   setup.make
 Mark a defect.
+
+20061216T1252Z <chicares@cox.net> [1242]
+
+  passkey_test.cpp
+Rectify names in anticipation of refactoring.
+
+20061216T1311Z <chicares@cox.net> [1242]
+
+  passkey_test.cpp
+Refactor.
+
+20061216T1536Z <chicares@cox.net> [1241]
+
+  passkey_test.cpp
+  secure_date.cpp
+  secure_date.hpp
+  security.cpp
+Refactor: rectify names; replace aberrant singleton idiom. Increased
+concinnity made it obvious that the 20061102T1919Z change was wanted
+here as well.
 

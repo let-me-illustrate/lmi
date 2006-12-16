@@ -19,17 +19,16 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: passkey_test.cpp,v 1.13 2006-12-16 13:11:41 chicares Exp $
+// $Id: passkey_test.cpp,v 1.14 2006-12-16 15:36:23 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
 #   pragma hdrstop
 #endif // __BORLANDC__
 
-// Facilities offered by both these headers are tested here.
-#include "md5.hpp"
 #include "secure_date.hpp"
 
+#include "md5.hpp"
 #include "miscellany.hpp"
 #include "system_command.hpp"
 #include "test_tools.hpp"
@@ -180,7 +179,7 @@ void PasskeyTest::InitializeData() const
     // Test with no passkey file. This is intended to fail.
     BOOST_TEST_EQUAL
         ("Unable to read passkey file 'passkey'. Try reinstalling."
-        ,secure_date::instance()->validate(candidate, pwd)
+        ,SecurityValidator::Validate(candidate, pwd)
         );
 
     {
@@ -202,7 +201,7 @@ void PasskeyTest::Test0() const
     candidate = calendar_date();
     BOOST_TEST_EQUAL
         ("Unable to read expiry file 'expiry'. Try reinstalling."
-        ,secure_date::instance()->validate(candidate, pwd)
+        ,SecurityValidator::Validate(candidate, pwd)
         );
 
     // Test with real dates. The current millenium began on 20010101,
@@ -213,7 +212,7 @@ void PasskeyTest::Test0() const
     os << millenium << ' ' << (millenium + 2);
     }
     candidate.julian_day_number(millenium);
-    BOOST_TEST_EQUAL("", secure_date::instance()->validate(candidate, pwd));
+    BOOST_TEST_EQUAL("", SecurityValidator::Validate(candidate, pwd));
 }
 
 void PasskeyTest::Test1() const
@@ -227,7 +226,7 @@ void PasskeyTest::Test1() const
     BOOST_TEST(fs::exists(remote_dir_0) && fs::is_directory(remote_dir_0));
     BOOST_TEST_EQUAL(0, chdir(remote_dir_0.string().c_str()));
     BOOST_TEST_EQUAL(remote_dir_0.string(), fs::current_path().string());
-    BOOST_TEST_EQUAL("", secure_date::instance()->validate(candidate, pwd));
+    BOOST_TEST_EQUAL("", SecurityValidator::Validate(candidate, pwd));
     BOOST_TEST_EQUAL(remote_dir_0.string(), fs::current_path().string());
     BOOST_TEST_EQUAL(0, chdir(pwd.string().c_str()));
     BOOST_TEST_EQUAL(pwd.string(), fs::current_path().string());
@@ -238,7 +237,7 @@ void PasskeyTest::Test1() const
     // even if file 'passkey' were mangled at this point.
 // TODO ?? Instead, add a function to purge the cache.
     candidate.julian_day_number(millenium + 1);
-    BOOST_TEST_EQUAL("", secure_date::instance()->validate(candidate, pwd));
+    BOOST_TEST_EQUAL("", SecurityValidator::Validate(candidate, pwd));
     candidate.julian_day_number(millenium);
 
     // Try the root directory on a different drive, on a multiple-root
@@ -249,7 +248,7 @@ void PasskeyTest::Test1() const
     BOOST_TEST(fs::exists(remote_dir_1) && fs::is_directory(remote_dir_1));
     BOOST_TEST_EQUAL(0, chdir(remote_dir_1.string().c_str()));
     BOOST_TEST_EQUAL(remote_dir_1.string(), fs::current_path().string());
-    BOOST_TEST_EQUAL("", secure_date::instance()->validate(candidate, pwd));
+    BOOST_TEST_EQUAL("", SecurityValidator::Validate(candidate, pwd));
     BOOST_TEST_EQUAL(remote_dir_1.string(), fs::current_path().string());
     BOOST_TEST_EQUAL(0, chdir(pwd.string().c_str()));
     BOOST_TEST_EQUAL(pwd.string(), fs::current_path().string());
@@ -260,32 +259,32 @@ void PasskeyTest::Test1() const
     // even if file 'passkey' were mangled at this point.
 // TODO ?? Instead, add a function to purge the cache.
     candidate.julian_day_number(millenium + 1);
-    BOOST_TEST_EQUAL("", secure_date::instance()->validate(candidate, pwd));
+    BOOST_TEST_EQUAL("", SecurityValidator::Validate(candidate, pwd));
     candidate.julian_day_number(millenium);
 
     // The first day of the valid period should work.
     candidate.julian_day_number(millenium);
-    BOOST_TEST_EQUAL("", secure_date::instance()->validate(candidate, pwd));
+    BOOST_TEST_EQUAL("", SecurityValidator::Validate(candidate, pwd));
     // Repeat the test: stepping through the called function with a
     // debugger should show an early exit because the date was cached.
-    BOOST_TEST_EQUAL("", secure_date::instance()->validate(candidate, pwd));
+    BOOST_TEST_EQUAL("", SecurityValidator::Validate(candidate, pwd));
     // The last day of the valid period should work.
     candidate.julian_day_number(millenium + 1);
-    BOOST_TEST_EQUAL("", secure_date::instance()->validate(candidate, pwd));
+    BOOST_TEST_EQUAL("", SecurityValidator::Validate(candidate, pwd));
     // Test one day before the period, and one day after.
     candidate.julian_day_number(millenium - 1);
     BOOST_TEST_EQUAL
         ("Current date '2000-12-30' is invalid:"
         " this system cannot be used before '2000-12-31'."
         " Contact the home office."
-        ,secure_date::instance()->validate(candidate, pwd)
+        ,SecurityValidator::Validate(candidate, pwd)
         );
     candidate.julian_day_number(millenium + 2);
     BOOST_TEST_EQUAL
         ("Current date '2001-01-02' is invalid:"
         " this system expired on '2001-01-02'."
         " Contact the home office."
-        ,secure_date::instance()->validate(candidate, pwd)
+        ,SecurityValidator::Validate(candidate, pwd)
         );
 
     // Test with incorrect passkey. This is intended to fail--but see below.
@@ -297,11 +296,11 @@ void PasskeyTest::Test1() const
     }
     // But it shouldn't fail if the date was previously cached as valid.
     candidate.julian_day_number(millenium + 1);
-    BOOST_TEST_EQUAL("", secure_date::instance()->validate(candidate, pwd));
+    BOOST_TEST_EQUAL("", SecurityValidator::Validate(candidate, pwd));
     candidate.julian_day_number(millenium);
     BOOST_TEST_EQUAL
         ("Passkey is incorrect for this version. Contact the home office."
-        ,secure_date::instance()->validate(candidate, pwd)
+        ,SecurityValidator::Validate(candidate, pwd)
         );
 
     // Test with altered data file. This is intended to fail.
@@ -313,7 +312,7 @@ void PasskeyTest::Test1() const
     BOOST_TEST_EQUAL
         ("At least one required file is missing, altered, or invalid."
         " Try reinstalling."
-        ,secure_date::instance()->validate(candidate, pwd)
+        ,SecurityValidator::Validate(candidate, pwd)
         );
 
     RemoveTestFiles(__FILE__, __LINE__);
