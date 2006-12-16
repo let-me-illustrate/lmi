@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: secure_date.cpp,v 1.9 2006-12-16 15:36:23 chicares Exp $
+// $Id: secure_date.cpp,v 1.10 2006-12-16 16:49:12 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -82,7 +82,7 @@ SecurityValidator& SecurityValidator::Instance()
 
 std::string SecurityValidator::Validate
     (calendar_date const& candidate
-    ,fs::path const&      path
+    ,fs::path const&      data_path
     )
 {
     // The date last validated is valid unless it's JDN zero.
@@ -104,7 +104,7 @@ std::string SecurityValidator::Validate
     // Read saved passkey from file.
     std::string passkey;
     {
-    fs::path passkey_path(path / "passkey");
+    fs::path passkey_path(data_path / "passkey");
     fs::ifstream is(passkey_path);
     if(!is)
         {
@@ -146,7 +146,7 @@ std::string SecurityValidator::Validate
     calendar_date begin;
     calendar_date end;
     {
-    fs::path expiry_path(path / "expiry");
+    fs::path expiry_path(data_path / "expiry");
     fs::ifstream is(expiry_path);
     if(!is)
         {
@@ -196,11 +196,11 @@ std::string SecurityValidator::Validate
 
     // Validate all data files.
     fs::path original_path(fs::current_path());
-    if(0 != chdir(path.string().c_str()))
+    if(0 != chdir(data_path.string().c_str()))
         {
         oss
             << "Unable to change directory to '"
-            << path.string()
+            << data_path.string()
             << "'. Try reinstalling."
             ;
         return oss.str();
@@ -229,7 +229,7 @@ std::string SecurityValidator::Validate
     char c_passkey[md5len];
     unsigned char u_passkey[md5len];
     FILE* md5sums_file = std::fopen
-        ((path / md5sum_file()).string().c_str()
+        ((data_path / md5sum_file()).string().c_str()
         ,"rb"
         );
     md5_stream(md5sums_file, u_passkey);
