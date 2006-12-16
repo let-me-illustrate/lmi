@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: passkey_test.cpp,v 1.11 2006-12-15 03:33:16 chicares Exp $
+// $Id: passkey_test.cpp,v 1.12 2006-12-16 12:52:23 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -46,7 +46,7 @@
 
 // TODO ?? Add tests for diagnostics that aren't tested yet.
 
-char const coleridge[] =
+char const rime[] =
     "It is an ancient Mariner,\n"
     "And he stoppeth one of three.\n"
     "'By thy long grey beard and glittering eye,\n"
@@ -63,7 +63,7 @@ char const coleridge[] =
     "Eftsoons his hand dropt he.\n\n"
     ;
 
-void remove_test_files(char const* file, int line)
+void RemoveTestFiles(char const* file, int line)
 {
     std::vector<std::string> filenames;
     filenames.push_back("expiry");
@@ -83,17 +83,17 @@ int test_main(int, char*[])
     // First, remove test files that may be left over from a previous
     // run that failed to complete. Failing to remove them can cause
     // spurious error reports.
-    remove_test_files(__FILE__, __LINE__);
+    RemoveTestFiles(__FILE__, __LINE__);
 
     {
     std::ofstream os("coleridge", ios_out_trunc_binary());
     BOOST_TEST(!!os);
-    os << coleridge;
+    os << rime;
     }
 
     unsigned char result[md5len];
     // We need '-1 +' to avoid the trailing null character.
-    md5_buffer(coleridge, -1 + static_cast<int>(sizeof coleridge), result);
+    md5_buffer(rime, -1 + static_cast<int>(sizeof rime), result);
 
     unsigned char expected[md5len];
     std::memcpy(expected, result, md5len);
@@ -285,7 +285,7 @@ int test_main(int, char*[])
         ,secure_date::instance()->validate(candidate, pwd)
         );
 
-    remove_test_files(__FILE__, __LINE__);
+    RemoveTestFiles(__FILE__, __LINE__);
 
     return 0;
 }
