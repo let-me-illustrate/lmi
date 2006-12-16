@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: passkey_test.cpp,v 1.15 2006-12-16 16:49:12 chicares Exp $
+// $Id: passkey_test.cpp,v 1.16 2006-12-16 17:08:15 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -232,19 +232,12 @@ void PasskeyTest::Test1() const
     BOOST_TEST_EQUAL(0, chdir(remote_dir_0.string().c_str()));
     BOOST_TEST_EQUAL(remote_dir_0.string(), fs::current_path().string());
     BOOST_TEST_EQUAL("", SecurityValidator::Validate(candidate_, pwd));
+    SecurityValidator::PurgeCache();
     BOOST_TEST_EQUAL(remote_dir_0.string(), fs::current_path().string());
     BOOST_TEST_EQUAL(0, chdir(pwd.string().c_str()));
     BOOST_TEST_EQUAL(pwd.string(), fs::current_path().string());
 
 #if defined LMI_MSW
-    // Cause the cached date to change, to make downstream tests work
-    // as intended. Without this step, the next test would succeed
-    // even if file 'passkey' were mangled at this point.
-// TODO ?? Instead, add a function to purge the cache.
-    candidate_.julian_day_number(begin_jdn_ + 1);
-    BOOST_TEST_EQUAL("", SecurityValidator::Validate(candidate_, pwd));
-    candidate_.julian_day_number(begin_jdn_);
-
     // Try the root directory on a different drive, on a multiple-root
     // system. This is perforce platform specific; msw is used because
     // it happens to be common. This test assumes that an 'E:' drive
@@ -254,18 +247,11 @@ void PasskeyTest::Test1() const
     BOOST_TEST_EQUAL(0, chdir(remote_dir_1.string().c_str()));
     BOOST_TEST_EQUAL(remote_dir_1.string(), fs::current_path().string());
     BOOST_TEST_EQUAL("", SecurityValidator::Validate(candidate_, pwd));
+    SecurityValidator::PurgeCache();
     BOOST_TEST_EQUAL(remote_dir_1.string(), fs::current_path().string());
     BOOST_TEST_EQUAL(0, chdir(pwd.string().c_str()));
     BOOST_TEST_EQUAL(pwd.string(), fs::current_path().string());
 #endif // defined LMI_MSW
-
-    // Cause the cached date to change, to make downstream tests work
-    // as intended. Without this step, the next test would succeed
-    // even if file 'passkey' were mangled at this point.
-// TODO ?? Instead, add a function to purge the cache.
-    candidate_.julian_day_number(begin_jdn_ + 1);
-    BOOST_TEST_EQUAL("", SecurityValidator::Validate(candidate_, pwd));
-    candidate_.julian_day_number(begin_jdn_);
 
     // The first day of the valid period should work.
     candidate_.julian_day_number(begin_jdn_);
