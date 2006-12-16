@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: secure_date.cpp,v 1.10 2006-12-16 16:49:12 chicares Exp $
+// $Id: secure_date.cpp,v 1.11 2006-12-16 17:08:15 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -78,6 +78,11 @@ SecurityValidator& SecurityValidator::Instance()
         fatal_error() << "Instantiation failed." << LMI_FLUSH;
         throw std::logic_error("Unreachable"); // Silence compiler warning.
         }
+}
+
+void SecurityValidator::PurgeCache()
+{
+    dynamic_cast<calendar_date&>(Instance()).julian_day_number(0);
 }
 
 std::string SecurityValidator::Validate
