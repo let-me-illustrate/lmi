@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: passkey_test.cpp,v 1.12 2006-12-16 12:52:23 chicares Exp $
+// $Id: passkey_test.cpp,v 1.13 2006-12-16 13:11:41 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -46,6 +46,28 @@
 
 // TODO ?? Add tests for diagnostics that aren't tested yet.
 
+class PasskeyTest
+{
+  public:
+    PasskeyTest();
+
+    void InitializeData() const;
+    void RemoveTestFiles(char const* file, int line) const;
+    void Test() const;
+    void Test0() const;
+    void Test1() const;
+
+  private:
+    int const millenium;
+    mutable calendar_date candidate;
+};
+
+PasskeyTest::PasskeyTest()
+    :millenium(2451910L)
+{
+    InitializeData();
+}
+
 char const rime[] =
     "It is an ancient Mariner,\n"
     "And he stoppeth one of three.\n"
@@ -63,7 +85,7 @@ char const rime[] =
     "Eftsoons his hand dropt he.\n\n"
     ;
 
-void RemoveTestFiles(char const* file, int line)
+void PasskeyTest::RemoveTestFiles(char const* file, int line) const
 {
     std::vector<std::string> filenames;
     filenames.push_back("expiry");
@@ -78,7 +100,7 @@ void RemoveTestFiles(char const* file, int line)
         }
 }
 
-int test_main(int, char*[])
+void PasskeyTest::InitializeData() const
 {
     // First, remove test files that may be left over from a previous
     // run that failed to complete. Failing to remove them can cause
@@ -156,7 +178,6 @@ int test_main(int, char*[])
     fs::path pwd(".");
 
     // Test with no passkey file. This is intended to fail.
-    calendar_date candidate;
     BOOST_TEST_EQUAL
         ("Unable to read passkey file 'passkey'. Try reinstalling."
         ,secure_date::instance()->validate(candidate, pwd)
@@ -169,10 +190,16 @@ int test_main(int, char*[])
         (std::vector<unsigned char>(u_passkey, u_passkey + md5len)
         );
     }
+}
+
+void PasskeyTest::Test0() const
+{
+    fs::path pwd(".");
 
     // Test with default dates, which are used if file 'expiry' fails
     // to exist, e.g. because it was deliberately deleted. This is
     // intended to fail.
+    candidate = calendar_date();
     BOOST_TEST_EQUAL
         ("Unable to read expiry file 'expiry'. Try reinstalling."
         ,secure_date::instance()->validate(candidate, pwd)
@@ -180,17 +207,21 @@ int test_main(int, char*[])
 
     // Test with real dates. The current millenium began on 20010101,
     // twelve hours into JDN 2451910; that's as good a date as any.
-    long int millenium = 2451910L;
     {
     std::ofstream os("expiry");
     BOOST_TEST(!!os);
     os << millenium << ' ' << (millenium + 2);
     }
+    candidate.julian_day_number(millenium);
+    BOOST_TEST_EQUAL("", secure_date::instance()->validate(candidate, pwd));
+}
 
+void PasskeyTest::Test1() const
+{
     // Test validation from a remote directory (using a valid date).
     // This should not alter the current directory.
-    pwd = fs::current_path();
-    candidate.julian_day_number(millenium );
+    fs::path pwd = fs::current_path();
+    candidate.julian_day_number(millenium);
 
     fs::path const remote_dir_0(fs::complete("/tmp"));
     BOOST_TEST(fs::exists(remote_dir_0) && fs::is_directory(remote_dir_0));
@@ -286,7 +317,19 @@ int test_main(int, char*[])
         );
 
     RemoveTestFiles(__FILE__, __LINE__);
+}
 
-    return 0;
+void PasskeyTest::Test() const
+{
+    Test0();
+    Test1();
+}
+
+int test_main(int, char*[])
+{
+    PasskeyTest tester;
+    tester.Test();
+
+    return EXIT_SUCCESS;
 }
 
