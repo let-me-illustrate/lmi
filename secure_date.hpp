@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: secure_date.hpp,v 1.9 2006-12-16 15:36:23 chicares Exp $
+// $Id: secure_date.hpp,v 1.10 2006-12-16 16:49:12 chicares Exp $
 
 #ifndef secure_date_hpp
 #define secure_date_hpp
@@ -62,7 +62,7 @@ class SecurityValidator
     static SecurityValidator& Instance();
     static std::string Validate
         (calendar_date const& candidate
-        ,fs::path const&      path
+        ,fs::path const&      data_path
         );
 
   private:
