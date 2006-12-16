@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: secure_date.cpp,v 1.11 2006-12-16 17:08:15 chicares Exp $
+// $Id: secure_date.cpp,v 1.12 2006-12-16 17:39:24 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -96,7 +96,7 @@ std::string SecurityValidator::Validate
         && candidate == dynamic_cast<calendar_date const&>(Instance())
         )
         {
-        return "";
+        return "cached";
         }
 
     std::ostringstream oss;
@@ -256,7 +256,7 @@ std::string SecurityValidator::Validate
         }
     // Cache the validated date.
     dynamic_cast<calendar_date&>(Instance()) = candidate;
-    return "";
+    return "validated";
 }
 
 std::string md5_hex_string(std::vector<unsigned char> const& vuc)
