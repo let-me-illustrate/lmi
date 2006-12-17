@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: passkey_test.cpp,v 1.18 2006-12-16 17:55:28 chicares Exp $
+// $Id: passkey_test.cpp,v 1.19 2006-12-17 03:23:22 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -57,8 +57,8 @@ class PasskeyTest
     void Test1() const;
 
   private:
-    int const begin_jdn_;
-    int const end_jdn_;
+    calendar_date const BeginDate_;
+    calendar_date const EndDate_;
     mutable calendar_date candidate_;
 };
 
@@ -67,8 +67,8 @@ class PasskeyTest
 /// any for this test.
 
 PasskeyTest::PasskeyTest()
-    :begin_jdn_(2451910L + 0L)
-    ,end_jdn_  (2451910L + 2L)
+    :BeginDate_(jdn_t(2451910L + 0L))
+    ,EndDate_  (jdn_t(2451910L + 2L))
 {
     InitializeData();
 }
@@ -214,9 +214,9 @@ void PasskeyTest::Test0() const
     {
     std::ofstream os("expiry");
     BOOST_TEST(!!os);
-    os << begin_jdn_ << ' ' << end_jdn_;
+    os << BeginDate_ << ' ' << EndDate_;
     }
-    candidate_.julian_day_number(begin_jdn_);
+    candidate_ = BeginDate_;
     BOOST_TEST_EQUAL("validated", SecurityValidator::Validate(candidate_, pwd));
 }
 
@@ -225,7 +225,7 @@ void PasskeyTest::Test1() const
     // Test validation from a remote directory (using a valid date).
     // This should not alter the current directory.
     fs::path pwd = fs::current_path();
-    candidate_.julian_day_number(begin_jdn_);
+    candidate_ = BeginDate_;
 
     fs::path const remote_dir_0(fs::complete("/tmp"));
     BOOST_TEST(fs::exists(remote_dir_0) && fs::is_directory(remote_dir_0));
@@ -255,22 +255,23 @@ void PasskeyTest::Test1() const
 #endif // defined LMI_MSW
 
     // The first day of the valid period should work.
-    candidate_.julian_day_number(begin_jdn_);
+    candidate_ = BeginDate_;
     BOOST_TEST_EQUAL("validated", SecurityValidator::Validate(candidate_, pwd));
     // Repeat the test to validate caching.
-    BOOST_TEST_EQUAL("cached", SecurityValidator::Validate(candidate_, pwd));
+    BOOST_TEST_EQUAL("cached"   , SecurityValidator::Validate(candidate_, pwd));
     // The last day of the valid period should work.
-    candidate_.julian_day_number(begin_jdn_ + 1);
+    candidate_ = BeginDate_ + 1;
     BOOST_TEST_EQUAL("validated", SecurityValidator::Validate(candidate_, pwd));
+    BOOST_TEST_EQUAL("cached"   , SecurityValidator::Validate(candidate_, pwd));
     // Test one day before the period, and one day after.
-    candidate_.julian_day_number(begin_jdn_ - 1);
+    candidate_ = BeginDate_ - 1;
     BOOST_TEST_EQUAL
         ("Current date '2000-12-30' is invalid:"
         " this system cannot be used before '2000-12-31'."
         " Contact the home office."
         ,SecurityValidator::Validate(candidate_, pwd)
         );
-    candidate_.julian_day_number(end_jdn_);
+    candidate_ = EndDate_;
     BOOST_TEST_EQUAL
         ("Current date '2001-01-02' is invalid:"
         " this system expired on '2001-01-02'."
@@ -286,9 +287,9 @@ void PasskeyTest::Test1() const
     os << md5_hex_string(wrong);
     }
     // But it shouldn't fail if the date was previously cached as valid.
-    candidate_.julian_day_number(begin_jdn_ + 1);
+    candidate_ = BeginDate_ + 1;
     BOOST_TEST_EQUAL("cached", SecurityValidator::Validate(candidate_, pwd));
-    candidate_.julian_day_number(begin_jdn_);
+    candidate_ = BeginDate_;
     BOOST_TEST_EQUAL
         ("Passkey is incorrect for this version. Contact the home office."
         ,SecurityValidator::Validate(candidate_, pwd)
