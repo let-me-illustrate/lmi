@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: secure_date.cpp,v 1.12 2006-12-16 17:39:24 chicares Exp $
+// $Id: secure_date.cpp,v 1.13 2006-12-17 15:55:42 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -52,14 +52,11 @@ namespace
     int const chars_per_formatted_hex_byte = CHAR_BIT / 4;
 }
 
-/// Initialize to julian day number zero (4713 BC), which is treated
-/// as always invalid. Rationale: if the validation code ratifies the
-/// default date through some unanticipated defect, then the value is
-/// still recognizably implausible.
+/// Initialize cached date to JDN zero, which is peremptorily invalid.
 
 SecurityValidator::SecurityValidator()
+    :cached_date_(jdn_t(0))
 {
-    julian_day_number(0);
 }
 
 SecurityValidator::~SecurityValidator()
@@ -82,7 +79,7 @@ SecurityValidator& SecurityValidator::Instance()
 
 void SecurityValidator::PurgeCache()
 {
-    dynamic_cast<calendar_date&>(Instance()).julian_day_number(0);
+    Instance().cached_date_ = jdn_t(0);
 }
 
 std::string SecurityValidator::Validate
@@ -90,10 +87,11 @@ std::string SecurityValidator::Validate
     ,fs::path const&      data_path
     )
 {
-    // The date last validated is valid unless it's JDN zero.
+    // The cached date is valid unless it's the peremptorily-invalid
+    // default value of JDN zero.
     if
-        (  0 != candidate.julian_day_number()
-        && candidate == dynamic_cast<calendar_date const&>(Instance())
+        (  calendar_date(jdn_t(0)) != Instance().cached_date_
+        && candidate               == Instance().cached_date_
         )
         {
         return "cached";
@@ -255,7 +253,7 @@ std::string SecurityValidator::Validate
         return oss.str();
         }
     // Cache the validated date.
-    dynamic_cast<calendar_date&>(Instance()) = candidate;
+    Instance().cached_date_ = candidate;
     return "validated";
 }
 
