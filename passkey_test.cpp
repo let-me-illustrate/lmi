@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: passkey_test.cpp,v 1.26 2006-12-17 19:02:19 chicares Exp $
+// $Id: passkey_test.cpp,v 1.27 2006-12-17 19:32:40 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -61,13 +61,9 @@ class PasskeyTest
     calendar_date const EndDate_;
 };
 
-/// Set valid date range. The current millenium began on 20010101,
-/// which is AJDN 2451910; that date plus [0, 2) is as good a range as
-/// any for this test.
-
 PasskeyTest::PasskeyTest()
-    :BeginDate_(jdn_t(2451910L + 0L))
-    ,EndDate_  (jdn_t(2451910L + 2L))
+    :BeginDate_(ymd_t(20010101))
+    ,EndDate_  (ymd_t(20010103))
 {
     InitializeData();
 }
@@ -263,16 +259,22 @@ void PasskeyTest::Test1() const
     BOOST_TEST_EQUAL("cached"   , SecurityValidator::Validate(last_date, pwd));
     // Test one day before the period, and one day after.
     BOOST_TEST_EQUAL
-        ("Current date '2000-12-30' is invalid:"
-        " this system cannot be used before '2000-12-31'."
+        ("Current date '2000-12-31' is invalid:"
+        " this system cannot be used before '2001-01-01'."
         " Contact the home office."
         ,SecurityValidator::Validate(BeginDate_ - 1, pwd)
         );
     BOOST_TEST_EQUAL
-        ("Current date '2001-01-02' is invalid:"
-        " this system expired on '2001-01-02'."
+        ("Current date '2001-01-03' is invalid:"
+        " this system expired on '2001-01-03'."
         " Contact the home office."
         ,SecurityValidator::Validate(EndDate_, pwd)
+        );
+    BOOST_TEST_EQUAL
+        ("Current date '2001-01-13' is invalid:"
+        " this system expired on '2001-01-03'."
+        " Contact the home office."
+        ,SecurityValidator::Validate(EndDate_ + 10, pwd)
         );
     // Make sure that the last-successfully-validated date is not
     // inadvertently accepted due only to caching. It should be
