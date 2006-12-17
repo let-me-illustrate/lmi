@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: secure_date.hpp,v 1.11 2006-12-16 17:08:15 chicares Exp $
+// $Id: secure_date.hpp,v 1.12 2006-12-17 15:55:42 chicares Exp $
 
 #ifndef secure_date_hpp
 #define secure_date_hpp
@@ -52,10 +52,12 @@ enum {md5len = 128 / CHAR_BIT};
 ///
 /// Implemented as a simple Meyers singleton, with the expected
 /// dead-reference and threading issues.
+///
+/// 'cached_date_' holds the most-recently-validated date, or a
+/// peremptorily-invalid default value of JDN zero.
 
 class SecurityValidator
-    :public calendar_date
-    ,private boost::noncopyable
+    :private boost::noncopyable
     ,virtual private obstruct_slicing<SecurityValidator>
 {
     friend class PasskeyTest;
@@ -72,6 +74,8 @@ class SecurityValidator
     ~SecurityValidator();
 
     static void PurgeCache();
+
+    mutable calendar_date cached_date_;
 };
 
 /// Hex representation of an md5 sum as a string.
