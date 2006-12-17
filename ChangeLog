@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.528 2006-12-16 17:55:28 chicares Exp $
+// $Id: ChangeLog,v 1.529 2006-12-17 18:36:31 chicares Exp $
 
 MAINTENANCE
 
@@ -8984,4 +8984,51 @@ sort of defect possible.
 
   passkey_test.cpp
 Resolve the immediate problem noted 20061216T1739Z.
+
+20061217T0323Z <chicares@cox.net> [1239]
+
+  passkey_test.cpp
+Refactor, preferring to express calendar dates directly as such.
+
+20061217T0331Z <chicares@cox.net> [1239]
+
+  passkey_test.cpp
+Simplify.
+
+20061217T0346Z <chicares@cox.net> [1239]
+
+  passkey_test.cpp
+Simplify, eliminating a dubious mutable member.
+
+20061217T1459Z <chicares@cox.net> [1239]
+
+  passkey_test.cpp
+Express the last valid date more robustly.
+
+20061217T1531Z <chicares@cox.net> [1241]
+
+  passkey_test.cpp
+Demonstrate an issue: validation failure should reset cache.
+
+20061217T1555Z <chicares@cox.net> [1241]
+
+  secure_date.cpp
+  secure_date.hpp
+Prefer containment to inheritance.
+
+20061217T1759Z <chicares@cox.net> [1241]
+
+  passkey_test.cpp
+  secure_date.cpp
+  secure_date.hpp
+Rename member function PurgeCache() to ResetCache() for clarity.
+'Purging' suggests that the cache's cardinality is reduced to zero,
+but this function actually resets the cached value to JDN zero.
+
+20061217T1836Z <chicares@cox.net> [1239]
+
+  passkey_test.cpp
+  secure_date.cpp
+Resolve the issue noted 20061217T1531Z by resetting the cache whenever
+validation fails.
 
