@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: passkey_test.cpp,v 1.21 2006-12-17 03:46:23 chicares Exp $
+// $Id: passkey_test.cpp,v 1.22 2006-12-17 14:59:30 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -255,8 +255,9 @@ void PasskeyTest::Test1() const
     // Repeat the test to validate caching.
     BOOST_TEST_EQUAL("cached"   , SecurityValidator::Validate(BeginDate_, pwd));
     // The last day of the valid period should work.
-    BOOST_TEST_EQUAL("validated", SecurityValidator::Validate(BeginDate_ + 1, pwd));
-    BOOST_TEST_EQUAL("cached"   , SecurityValidator::Validate(BeginDate_ + 1, pwd));
+    calendar_date const last_date = EndDate_ - 1;
+    BOOST_TEST_EQUAL("validated", SecurityValidator::Validate(last_date, pwd));
+    BOOST_TEST_EQUAL("cached"   , SecurityValidator::Validate(last_date, pwd));
     // Test one day before the period, and one day after.
     BOOST_TEST_EQUAL
         ("Current date '2000-12-30' is invalid:"
