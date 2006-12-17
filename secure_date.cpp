@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: secure_date.cpp,v 1.14 2006-12-17 17:59:27 chicares Exp $
+// $Id: secure_date.cpp,v 1.15 2006-12-17 18:36:31 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -96,6 +96,8 @@ std::string SecurityValidator::Validate
         {
         return "cached";
         }
+
+    ResetCache();
 
     std::ostringstream oss;
 
