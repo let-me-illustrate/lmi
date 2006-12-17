@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: passkey_test.cpp,v 1.23 2006-12-17 15:31:51 chicares Exp $
+// $Id: passkey_test.cpp,v 1.24 2006-12-17 17:59:27 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -227,9 +227,9 @@ void PasskeyTest::Test1() const
     BOOST_TEST(fs::exists(remote_dir_0) && fs::is_directory(remote_dir_0));
     BOOST_TEST_EQUAL(0, chdir(remote_dir_0.string().c_str()));
     BOOST_TEST_EQUAL(remote_dir_0.string(), fs::current_path().string());
-    SecurityValidator::PurgeCache();
+    SecurityValidator::ResetCache();
     BOOST_TEST_EQUAL("validated", SecurityValidator::Validate(BeginDate_, pwd));
-    SecurityValidator::PurgeCache();
+    SecurityValidator::ResetCache();
     BOOST_TEST_EQUAL(remote_dir_0.string(), fs::current_path().string());
     BOOST_TEST_EQUAL(0, chdir(pwd.string().c_str()));
     BOOST_TEST_EQUAL(pwd.string(), fs::current_path().string());
@@ -244,7 +244,7 @@ void PasskeyTest::Test1() const
     BOOST_TEST_EQUAL(0, chdir(remote_dir_1.string().c_str()));
     BOOST_TEST_EQUAL(remote_dir_1.string(), fs::current_path().string());
     BOOST_TEST_EQUAL("validated", SecurityValidator::Validate(BeginDate_, pwd));
-    SecurityValidator::PurgeCache();
+    SecurityValidator::ResetCache();
     BOOST_TEST_EQUAL(remote_dir_1.string(), fs::current_path().string());
     BOOST_TEST_EQUAL(0, chdir(pwd.string().c_str()));
     BOOST_TEST_EQUAL(pwd.string(), fs::current_path().string());
@@ -275,7 +275,7 @@ void PasskeyTest::Test1() const
 // But retesting with a different date "succeeds" due to caching:
 BOOST_TEST_EQUAL("cached", SecurityValidator::Validate(BeginDate_ + 1, pwd));
 // Isn't that unreasonable? Shouldn't failure reset the cache?
-SecurityValidator::PurgeCache();
+SecurityValidator::ResetCache();
 
     // Test with incorrect passkey. This is intended to fail--but see below.
     {

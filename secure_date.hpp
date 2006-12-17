@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: secure_date.hpp,v 1.12 2006-12-17 15:55:42 chicares Exp $
+// $Id: secure_date.hpp,v 1.13 2006-12-17 17:59:27 chicares Exp $
 
 #ifndef secure_date_hpp
 #define secure_date_hpp
@@ -73,7 +73,7 @@ class SecurityValidator
     SecurityValidator();
     ~SecurityValidator();
 
-    static void PurgeCache();
+    static void ResetCache();
 
     mutable calendar_date cached_date_;
 };
