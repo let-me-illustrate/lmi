@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: passkey_test.cpp,v 1.20 2006-12-17 03:31:12 chicares Exp $
+// $Id: passkey_test.cpp,v 1.21 2006-12-17 03:46:23 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -59,7 +59,6 @@ class PasskeyTest
   private:
     calendar_date const BeginDate_;
     calendar_date const EndDate_;
-    mutable calendar_date candidate_;
 };
 
 /// Set valid date range. The current millenium began on 20010101,
@@ -252,28 +251,24 @@ void PasskeyTest::Test1() const
 #endif // defined LMI_MSW
 
     // The first day of the valid period should work.
-    candidate_ = BeginDate_;
-    BOOST_TEST_EQUAL("validated", SecurityValidator::Validate(candidate_, pwd));
+    BOOST_TEST_EQUAL("validated", SecurityValidator::Validate(BeginDate_, pwd));
     // Repeat the test to validate caching.
-    BOOST_TEST_EQUAL("cached"   , SecurityValidator::Validate(candidate_, pwd));
+    BOOST_TEST_EQUAL("cached"   , SecurityValidator::Validate(BeginDate_, pwd));
     // The last day of the valid period should work.
-    candidate_ = BeginDate_ + 1;
-    BOOST_TEST_EQUAL("validated", SecurityValidator::Validate(candidate_, pwd));
-    BOOST_TEST_EQUAL("cached"   , SecurityValidator::Validate(candidate_, pwd));
+    BOOST_TEST_EQUAL("validated", SecurityValidator::Validate(BeginDate_ + 1, pwd));
+    BOOST_TEST_EQUAL("cached"   , SecurityValidator::Validate(BeginDate_ + 1, pwd));
     // Test one day before the period, and one day after.
-    candidate_ = BeginDate_ - 1;
     BOOST_TEST_EQUAL
         ("Current date '2000-12-30' is invalid:"
         " this system cannot be used before '2000-12-31'."
         " Contact the home office."
-        ,SecurityValidator::Validate(candidate_, pwd)
+        ,SecurityValidator::Validate(BeginDate_ - 1, pwd)
         );
-    candidate_ = EndDate_;
     BOOST_TEST_EQUAL
         ("Current date '2001-01-02' is invalid:"
         " this system expired on '2001-01-02'."
         " Contact the home office."
-        ,SecurityValidator::Validate(candidate_, pwd)
+        ,SecurityValidator::Validate(EndDate_, pwd)
         );
 
     // Test with incorrect passkey. This is intended to fail--but see below.
@@ -284,8 +279,7 @@ void PasskeyTest::Test1() const
     os << md5_hex_string(wrong);
     }
     // But it shouldn't fail if the date was previously cached as valid.
-    candidate_ = BeginDate_ + 1;
-    BOOST_TEST_EQUAL("cached", SecurityValidator::Validate(candidate_, pwd));
+    BOOST_TEST_EQUAL("cached", SecurityValidator::Validate(BeginDate_ + 1, pwd));
     BOOST_TEST_EQUAL
         ("Passkey is incorrect for this version. Contact the home office."
         ,SecurityValidator::Validate(BeginDate_, pwd)
