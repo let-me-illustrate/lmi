@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: passkey_test.cpp,v 1.19 2006-12-17 03:23:22 chicares Exp $
+// $Id: passkey_test.cpp,v 1.20 2006-12-17 03:31:12 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -185,7 +185,7 @@ void PasskeyTest::InitializeData() const
     // Test with no passkey file. This is intended to fail.
     BOOST_TEST_EQUAL
         ("Unable to read passkey file 'passkey'. Try reinstalling."
-        ,SecurityValidator::Validate(candidate_, pwd)
+        ,SecurityValidator::Validate(BeginDate_, pwd)
         );
 
     {
@@ -204,10 +204,9 @@ void PasskeyTest::Test0() const
     // Test with default dates, which are used if file 'expiry' fails
     // to exist, e.g. because it was deliberately deleted. This is
     // intended to fail.
-    candidate_ = calendar_date();
     BOOST_TEST_EQUAL
         ("Unable to read expiry file 'expiry'. Try reinstalling."
-        ,SecurityValidator::Validate(candidate_, pwd)
+        ,SecurityValidator::Validate(BeginDate_, pwd)
         );
 
     // Create file 'expiry' and test with a real date.
@@ -216,8 +215,7 @@ void PasskeyTest::Test0() const
     BOOST_TEST(!!os);
     os << BeginDate_ << ' ' << EndDate_;
     }
-    candidate_ = BeginDate_;
-    BOOST_TEST_EQUAL("validated", SecurityValidator::Validate(candidate_, pwd));
+    BOOST_TEST_EQUAL("validated", SecurityValidator::Validate(BeginDate_, pwd));
 }
 
 void PasskeyTest::Test1() const
@@ -225,14 +223,13 @@ void PasskeyTest::Test1() const
     // Test validation from a remote directory (using a valid date).
     // This should not alter the current directory.
     fs::path pwd = fs::current_path();
-    candidate_ = BeginDate_;
 
     fs::path const remote_dir_0(fs::complete("/tmp"));
     BOOST_TEST(fs::exists(remote_dir_0) && fs::is_directory(remote_dir_0));
     BOOST_TEST_EQUAL(0, chdir(remote_dir_0.string().c_str()));
     BOOST_TEST_EQUAL(remote_dir_0.string(), fs::current_path().string());
     SecurityValidator::PurgeCache();
-    BOOST_TEST_EQUAL("validated", SecurityValidator::Validate(candidate_, pwd));
+    BOOST_TEST_EQUAL("validated", SecurityValidator::Validate(BeginDate_, pwd));
     SecurityValidator::PurgeCache();
     BOOST_TEST_EQUAL(remote_dir_0.string(), fs::current_path().string());
     BOOST_TEST_EQUAL(0, chdir(pwd.string().c_str()));
@@ -247,7 +244,7 @@ void PasskeyTest::Test1() const
     BOOST_TEST(fs::exists(remote_dir_1) && fs::is_directory(remote_dir_1));
     BOOST_TEST_EQUAL(0, chdir(remote_dir_1.string().c_str()));
     BOOST_TEST_EQUAL(remote_dir_1.string(), fs::current_path().string());
-    BOOST_TEST_EQUAL("validated", SecurityValidator::Validate(candidate_, pwd));
+    BOOST_TEST_EQUAL("validated", SecurityValidator::Validate(BeginDate_, pwd));
     SecurityValidator::PurgeCache();
     BOOST_TEST_EQUAL(remote_dir_1.string(), fs::current_path().string());
     BOOST_TEST_EQUAL(0, chdir(pwd.string().c_str()));
@@ -289,10 +286,9 @@ void PasskeyTest::Test1() const
     // But it shouldn't fail if the date was previously cached as valid.
     candidate_ = BeginDate_ + 1;
     BOOST_TEST_EQUAL("cached", SecurityValidator::Validate(candidate_, pwd));
-    candidate_ = BeginDate_;
     BOOST_TEST_EQUAL
         ("Passkey is incorrect for this version. Contact the home office."
-        ,SecurityValidator::Validate(candidate_, pwd)
+        ,SecurityValidator::Validate(BeginDate_, pwd)
         );
 
     // Test with altered data file. This is intended to fail.
@@ -304,7 +300,7 @@ void PasskeyTest::Test1() const
     BOOST_TEST_EQUAL
         ("At least one required file is missing, altered, or invalid."
         " Try reinstalling."
-        ,SecurityValidator::Validate(candidate_, pwd)
+        ,SecurityValidator::Validate(BeginDate_, pwd)
         );
 
     RemoveTestFiles(__FILE__, __LINE__);
