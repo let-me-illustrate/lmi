@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: secure_date.cpp,v 1.13 2006-12-17 15:55:42 chicares Exp $
+// $Id: secure_date.cpp,v 1.14 2006-12-17 17:59:27 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -77,7 +77,7 @@ SecurityValidator& SecurityValidator::Instance()
         }
 }
 
-void SecurityValidator::PurgeCache()
+void SecurityValidator::ResetCache()
 {
     Instance().cached_date_ = jdn_t(0);
 }
