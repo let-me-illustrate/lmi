@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: passkey_test.cpp,v 1.24 2006-12-17 17:59:27 chicares Exp $
+// $Id: passkey_test.cpp,v 1.25 2006-12-17 18:36:31 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -271,28 +271,31 @@ void PasskeyTest::Test1() const
         " Contact the home office."
         ,SecurityValidator::Validate(EndDate_, pwd)
         );
-// TODO ?? This attempted validation failed because the system had expired.
-// But retesting with a different date "succeeds" due to caching:
-BOOST_TEST_EQUAL("cached", SecurityValidator::Validate(BeginDate_ + 1, pwd));
-// Isn't that unreasonable? Shouldn't failure reset the cache?
-SecurityValidator::ResetCache();
+    // Make sure that the last-successfully-validated date is not
+    // inadvertently accepted due only to caching. It should be
+    // accepted, but only after the data files and the date have been
+    // tested afresh.
+    BOOST_TEST_UNEQUAL("cached", SecurityValidator::Validate(last_date, pwd));
+    // Now that a valid date has been cached, caching should again
+    // work normally.
+    BOOST_TEST_EQUAL  ("cached", SecurityValidator::Validate(last_date, pwd));
 
-    // Test with incorrect passkey. This is intended to fail--but see below.
+    // Test with an incorrect passkey. Caching can prevent this from
+    // being detected: that's its purpose, because it is expensive to
+    // test the data files. To demonstrate this: first validate the
+    // date, in order to get it cached; then write an incorrect
+    // 'passkey' file and retest.
+    BOOST_TEST_EQUAL("validated", SecurityValidator::Validate(BeginDate_, pwd));
     {
     std::ofstream os("passkey", ios_out_trunc_binary());
     BOOST_TEST(!!os);
     std::vector<unsigned char> const wrong(md5len);
     os << md5_hex_string(wrong);
     }
-    // But it shouldn't fail if the date was previously cached as valid.
-// TODO ?? Really? The last attempted validation failed because the
-// system had expired. Once validation has failed, why should it later
-// succeed due to caching, without revalidating all data? In this
-// particular case, the 'passkey' file has been altered, making it
-// invalid, and the last tested date was invalid as well--so in what
-// sense does the system remain "valid"? Isn't the caching too
-// aggressive?
-    BOOST_TEST_EQUAL("cached", SecurityValidator::Validate(BeginDate_ + 1, pwd));
+    // Testing with the same date succeeds due to caching.
+    BOOST_TEST_EQUAL("cached"   , SecurityValidator::Validate(BeginDate_, pwd));
+    // Reset the cache, and the incorrect passkey is detected.
+    SecurityValidator::ResetCache();
     BOOST_TEST_EQUAL
         ("Passkey is incorrect for this version. Contact the home office."
         ,SecurityValidator::Validate(BeginDate_, pwd)
