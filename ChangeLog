@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.530 2006-12-17 19:02:19 chicares Exp $
+// $Id: ChangeLog,v 1.531 2006-12-17 19:32:40 chicares Exp $
 
 MAINTENANCE
 
@@ -9039,4 +9039,11 @@ Reset the cache before each test that does not assume caching. This
 generalization of the 20061216T1755Z change makes the test suite more
 robust: it is easier to maintain each test's preconditions locally
 than to ensure local preconditions by managing the global state.
+
+20061217T1932Z <chicares@cox.net> [1239]
+
+  passkey_test.cpp
+Revise values that disagreed with documentation. It is better to
+specify a YYYYMMDD date than to specify a JDN and document its
+desired meaning.
 
