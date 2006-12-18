@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: passkey_test.cpp,v 1.35 2006-12-18 17:41:46 chicares Exp $
+// $Id: passkey_test.cpp,v 1.36 2006-12-18 21:18:51 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -60,7 +60,7 @@ class PasskeyTest
     ~PasskeyTest();
 
     void InitializeDataFile() const;
-    void InitializeMd5sumOfDataFile() const;
+    void InitializeAndTestMd5sumOfDataFile() const;
     void InitializeMd5sumFile() const;
     void InitializePasskeyFile() const;
     void RemoveTestFiles(char const* file, int line) const;
@@ -91,7 +91,7 @@ PasskeyTest::PasskeyTest()
     RemoveTestFiles(__FILE__, __LINE__);
 
     InitializeDataFile();
-    InitializeMd5sumOfDataFile();
+    InitializeAndTestMd5sumOfDataFile();
     InitializeMd5sumFile();
     InitializePasskeyFile();
 }
@@ -153,18 +153,18 @@ void PasskeyTest::InitializeDataFile() const
     BOOST_TEST_EQUAL("bf039dbb0e8061971a2c322c8336199c", md5_str(expected));
 }
 
-void PasskeyTest::InitializeMd5sumOfDataFile() const
+void PasskeyTest::InitializeAndTestMd5sumOfDataFile() const
 {
+    BOOST_TEST_EQUAL("bf039dbb0e8061971a2c322c8336199c", md5_str(RimeMd5sum_));
+
     std::ofstream os(md5sum_file(), ios_out_trunc_binary());
     BOOST_TEST(!!os);
     os << md5_hex_string
         (std::vector<unsigned char>(RimeMd5sum_, RimeMd5sum_ + md5len)
         );
     os << "  coleridge\n";
-}
+    os.close();
 
-void PasskeyTest::InitializeMd5sumFile() const
-{
     // Ascertain whether 'md5sum' program is available. Regrettably,
     // this writes to stdout, but without this test, it's hard to tell
     // whether errors in subsequent tests stem from incorrect md5sums
@@ -183,7 +183,10 @@ void PasskeyTest::InitializeMd5sumFile() const
         (0
         ,system_command("md5sum --check --status " + std::string(md5sum_file()))
         );
+}
 
+void PasskeyTest::InitializeMd5sumFile() const
+{
     BOOST_TEST_EQUAL("bf039dbb0e8061971a2c322c8336199c", md5_str(RimeMd5sum_));
 
     FILE* md5 = std::fopen(md5sum_file(), "rb");
@@ -195,6 +198,8 @@ void PasskeyTest::InitializeMd5sumFile() const
 
 void PasskeyTest::InitializePasskeyFile() const
 {
+    BOOST_TEST_EQUAL("efb7a0a972b88bb5b9ac6f60390d61bf", md5_str(RimeMd5sum_));
+
     // Passkey is the md5 sum of the md5 sum of the '.md5' file.
     // A more secure alternative could be wrought if wanted.
 
