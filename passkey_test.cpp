@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: passkey_test.cpp,v 1.30 2006-12-18 13:54:32 chicares Exp $
+// $Id: passkey_test.cpp,v 1.31 2006-12-18 14:14:54 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -51,7 +51,10 @@ class PasskeyTest
     PasskeyTest();
     ~PasskeyTest();
 
-    void InitializeData() const;
+    void Initialize0() const;
+    void Initialize1() const;
+    void Initialize2() const;
+    void Initialize3() const;
     void RemoveTestFiles(char const* file, int line) const;
     void Test() const;
     void Test0() const;
@@ -79,30 +82,16 @@ PasskeyTest::PasskeyTest()
     // spurious error reports.
     RemoveTestFiles(__FILE__, __LINE__);
 
-    InitializeData();
+    Initialize0();
+    Initialize1();
+    Initialize2();
+    Initialize3();
 }
 
 PasskeyTest::~PasskeyTest()
 {
     RemoveTestFiles(__FILE__, __LINE__);
 }
-
-char const rime[] =
-    "It is an ancient Mariner,\n"
-    "And he stoppeth one of three.\n"
-    "'By thy long grey beard and glittering eye,\n"
-    "Now wherefore stopp'st thou me?\n\n"
-
-    "The Bridegroom's doors are opened wide,\n"
-    "And I am next of kin;\n"
-    "The guests are met, the feast is set:\n"
-    "May'st hear the merry din.'\n\n"
-
-    "He holds him with his skinny hand,\n"
-    "'There was a ship,' quoth he.\n"
-    "'Hold off! unhand me, grey-beard loon!'\n"
-    "Eftsoons his hand dropt he.\n\n"
-    ;
 
 void PasskeyTest::RemoveTestFiles(char const* file, int line) const
 {
@@ -119,17 +108,35 @@ void PasskeyTest::RemoveTestFiles(char const* file, int line) const
         }
 }
 
-void PasskeyTest::InitializeData() const
+void PasskeyTest::Initialize0() const
 {
-    {
+    char const rime[] =
+        "It is an ancient Mariner,\n"
+        "And he stoppeth one of three.\n"
+        "'By thy long grey beard and glittering eye,\n"
+        "Now wherefore stopp'st thou me?\n\n"
+
+        "The Bridegroom's doors are opened wide,\n"
+        "And I am next of kin;\n"
+        "The guests are met, the feast is set:\n"
+        "May'st hear the merry din.'\n\n"
+
+        "He holds him with his skinny hand,\n"
+        "'There was a ship,' quoth he.\n"
+        "'Hold off! unhand me, grey-beard loon!'\n"
+        "Eftsoons his hand dropt he.\n\n"
+        ;
+
     std::ofstream os("coleridge", ios_out_trunc_binary());
     BOOST_TEST(!!os);
     os << rime;
-    }
 
-    // We need '-1 +' to avoid the trailing null character.
+    // Here, '-1 +' excludes the trailing null character.
     md5_buffer(rime, -1 + static_cast<int>(sizeof rime), RimeMd5sum_);
+}
 
+void PasskeyTest::Initialize1() const
+{
     unsigned char expected[md5len];
     std::memcpy(expected, RimeMd5sum_, md5len);
 
@@ -153,7 +160,10 @@ void PasskeyTest::InitializeData() const
     md5_stream(in, RimeMd5sum_);
     std::fclose(in);
     BOOST_TEST_EQUAL(0, std::memcmp(expected, RimeMd5sum_, sizeof expected));
+}
 
+void PasskeyTest::Initialize2() const
+{
     // Ascertain whether 'md5sum' program is available. Regrettably,
     // this writes to stdout, but without this test, it's hard to tell
     // whether errors in subsequent tests stem from incorrect md5sums
@@ -176,7 +186,10 @@ void PasskeyTest::InitializeData() const
     FILE* md5 = std::fopen(md5sum_file(), "rb");
     md5_stream(md5, RimeMd5sum_);
     std::fclose(md5);
+}
 
+void PasskeyTest::Initialize3() const
+{
     // Passkey is the md5 sum of the md5 sum of the '.md5' file.
     // A more secure alternative could be wrought if wanted.
 
@@ -194,13 +207,11 @@ void PasskeyTest::InitializeData() const
         ,SecurityValidator::Validate(BeginDate_, ".")
         );
 
-    {
     std::ofstream os("passkey", ios_out_trunc_binary());
     BOOST_TEST(!!os);
     os << md5_hex_string
         (std::vector<unsigned char>(u_passkey, u_passkey + md5len)
         );
-    }
 }
 
 void PasskeyTest::Test0() const
