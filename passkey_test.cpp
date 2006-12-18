@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: passkey_test.cpp,v 1.32 2006-12-18 14:32:51 chicares Exp $
+// $Id: passkey_test.cpp,v 1.33 2006-12-18 16:20:17 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -51,10 +51,10 @@ class PasskeyTest
     PasskeyTest();
     ~PasskeyTest();
 
-    void Initialize0() const;
-    void Initialize1() const;
-    void Initialize2() const;
-    void Initialize3() const;
+    void InitializeDataFile() const;
+    void InitializeMd5sumOfDataFile() const;
+    void InitializeMd5sumFile() const;
+    void InitializePasskeyFile() const;
     void RemoveTestFiles(char const* file, int line) const;
     void Test() const;
     void Test0() const;
@@ -82,10 +82,10 @@ PasskeyTest::PasskeyTest()
     // spurious error reports.
     RemoveTestFiles(__FILE__, __LINE__);
 
-    Initialize0();
-    Initialize1();
-    Initialize2();
-    Initialize3();
+    InitializeDataFile();
+    InitializeMd5sumOfDataFile();
+    InitializeMd5sumFile();
+    InitializePasskeyFile();
 }
 
 PasskeyTest::~PasskeyTest()
@@ -108,7 +108,7 @@ void PasskeyTest::RemoveTestFiles(char const* file, int line) const
         }
 }
 
-void PasskeyTest::Initialize0() const
+void PasskeyTest::InitializeDataFile() const
 {
     char const rime[] =
         "It is an ancient Mariner,\n"
@@ -135,7 +135,7 @@ void PasskeyTest::Initialize0() const
     md5_buffer(rime, -1 + static_cast<int>(sizeof rime), RimeMd5sum_);
 }
 
-void PasskeyTest::Initialize1() const
+void PasskeyTest::InitializeMd5sumOfDataFile() const
 {
     unsigned char expected[md5len];
     std::memcpy(expected, RimeMd5sum_, md5len);
@@ -155,7 +155,7 @@ void PasskeyTest::Initialize1() const
     BOOST_TEST_EQUAL(0, std::memcmp(expected, RimeMd5sum_, sizeof expected));
 }
 
-void PasskeyTest::Initialize2() const
+void PasskeyTest::InitializeMd5sumFile() const
 {
     // Ascertain whether 'md5sum' program is available. Regrettably,
     // this writes to stdout, but without this test, it's hard to tell
@@ -181,7 +181,7 @@ void PasskeyTest::Initialize2() const
     std::fclose(md5);
 }
 
-void PasskeyTest::Initialize3() const
+void PasskeyTest::InitializePasskeyFile() const
 {
     // Passkey is the md5 sum of the md5 sum of the '.md5' file.
     // A more secure alternative could be wrought if wanted.
