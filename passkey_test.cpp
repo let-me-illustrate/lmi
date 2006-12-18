@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: passkey_test.cpp,v 1.34 2006-12-18 16:26:24 chicares Exp $
+// $Id: passkey_test.cpp,v 1.35 2006-12-18 17:41:46 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -138,31 +138,29 @@ void PasskeyTest::InitializeDataFile() const
     std::ofstream os("coleridge", ios_out_trunc_binary());
     BOOST_TEST(!!os);
     os << rime;
+    os.close();
 
     // Here, '-1 +' excludes the trailing null character.
     md5_buffer(rime, -1 + static_cast<int>(sizeof rime), RimeMd5sum_);
     BOOST_TEST_EQUAL("bf039dbb0e8061971a2c322c8336199c", md5_str(RimeMd5sum_));
+
+    // Make sure the file's md5sum equals the buffer's.
+    unsigned char expected[md5len];
+    FILE* in = std::fopen("coleridge", "rb");
+    md5_stream(in, expected);
+    std::fclose(in);
+    BOOST_TEST_EQUAL(0, std::memcmp(expected, RimeMd5sum_, sizeof expected));
+    BOOST_TEST_EQUAL("bf039dbb0e8061971a2c322c8336199c", md5_str(expected));
 }
 
 void PasskeyTest::InitializeMd5sumOfDataFile() const
 {
-    unsigned char expected[md5len];
-    std::memcpy(expected, RimeMd5sum_, md5len);
-
-    {
     std::ofstream os(md5sum_file(), ios_out_trunc_binary());
     BOOST_TEST(!!os);
     os << md5_hex_string
-        (std::vector<unsigned char>(expected, expected + md5len)
+        (std::vector<unsigned char>(RimeMd5sum_, RimeMd5sum_ + md5len)
         );
     os << "  coleridge\n";
-    }
-
-    FILE* in = std::fopen("coleridge", "rb");
-    md5_stream(in, RimeMd5sum_);
-    std::fclose(in);
-    BOOST_TEST_EQUAL(0, std::memcmp(expected, RimeMd5sum_, sizeof expected));
-    BOOST_TEST_EQUAL("bf039dbb0e8061971a2c322c8336199c", md5_str(RimeMd5sum_));
 }
 
 void PasskeyTest::InitializeMd5sumFile() const
