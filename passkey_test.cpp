@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: passkey_test.cpp,v 1.36 2006-12-18 21:18:51 chicares Exp $
+// $Id: passkey_test.cpp,v 1.37 2006-12-18 22:17:16 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -53,23 +53,28 @@ std::string md5_str(T(&md5sum)[n])
     return md5_hex_string(svuc(md5sum, md5sum + md5len));
 }
 
+/// Data-file and date validation--unit test.
+///
+/// Non-special public members are declared in invocation order.
+
 class PasskeyTest
 {
   public:
     PasskeyTest();
     ~PasskeyTest();
 
+    void RemoveTestFiles(char const* file, int line) const;
+
     void InitializeDataFile() const;
     void InitializeAndTestMd5sumOfDataFile() const;
     void InitializeMd5sumFile() const;
     void InitializePasskeyFile() const;
-    void RemoveTestFiles(char const* file, int line) const;
-    void Test() const;
+    void InitializeExpiryFile() const;
+
     void Test0() const;
     void Test1() const;
     void Test2() const;
     void Test3() const;
-    void Test4() const;
 
   private:
     calendar_date const  BeginDate_;
@@ -94,6 +99,7 @@ PasskeyTest::PasskeyTest()
     InitializeAndTestMd5sumOfDataFile();
     InitializeMd5sumFile();
     InitializePasskeyFile();
+    InitializeExpiryFile();
 }
 
 PasskeyTest::~PasskeyTest()
@@ -228,7 +234,7 @@ void PasskeyTest::InitializePasskeyFile() const
         );
 }
 
-void PasskeyTest::Test0() const
+void PasskeyTest::InitializeExpiryFile() const
 {
     // Test with default dates, which are used if file 'expiry' fails
     // to exist, e.g. because it was deliberately deleted. This is
@@ -249,7 +255,7 @@ void PasskeyTest::Test0() const
     BOOST_TEST_EQUAL("validated", SecurityValidator::Validate(BeginDate_, Pwd_));
 }
 
-void PasskeyTest::Test1() const
+void PasskeyTest::Test0() const
 {
     // Test validation from a remote directory (using a valid date).
     // This should not alter the current directory.
@@ -280,7 +286,7 @@ void PasskeyTest::Test1() const
 #endif // defined LMI_MSW
 }
 
-void PasskeyTest::Test2() const
+void PasskeyTest::Test1() const
 {
     // The first day of the valid period should work.
     SecurityValidator::ResetCache();
@@ -320,7 +326,7 @@ void PasskeyTest::Test2() const
     BOOST_TEST_EQUAL  ("cached", SecurityValidator::Validate(last_date, Pwd_));
 }
 
-void PasskeyTest::Test3() const
+void PasskeyTest::Test2() const
 {
     // Test with an incorrect passkey. Caching can prevent this from
     // being detected: that's its purpose, because it is expensive to
@@ -345,7 +351,7 @@ void PasskeyTest::Test3() const
         );
 }
 
-void PasskeyTest::Test4() const
+void PasskeyTest::Test3() const
 {
     // Test with altered data file. This is intended to fail.
     {
@@ -361,19 +367,13 @@ void PasskeyTest::Test4() const
         );
 }
 
-void PasskeyTest::Test() const
-{
-    Test0();
-    Test1();
-    Test2();
-    Test3();
-    Test4();
-}
-
 int test_main(int, char*[])
 {
     PasskeyTest tester;
-    tester.Test();
+    tester.Test0();
+    tester.Test1();
+    tester.Test2();
+    tester.Test3();
 
     return EXIT_SUCCESS;
 }
