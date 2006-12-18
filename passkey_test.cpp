@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: passkey_test.cpp,v 1.27 2006-12-17 19:32:40 chicares Exp $
+// $Id: passkey_test.cpp,v 1.28 2006-12-18 03:46:14 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -59,11 +59,13 @@ class PasskeyTest
   private:
     calendar_date const BeginDate_;
     calendar_date const EndDate_;
+    fs::path const      Pwd_;
 };
 
 PasskeyTest::PasskeyTest()
     :BeginDate_(ymd_t(20010101))
     ,EndDate_  (ymd_t(20010103))
+    ,Pwd_      (fs::current_path())
 {
     InitializeData();
 }
@@ -164,9 +166,8 @@ void PasskeyTest::InitializeData() const
     md5_stream(md5, result);
     std::fclose(md5);
 
-    // We'll use the md5 sum of the md5 sum of the .md5 file as our
-    // our passkey for now. It's not at all secure, but it can be
-    // made secure e.g. with a strong public key system.
+    // Passkey is the md5 sum of the md5 sum of the '.md5' file.
+    // A more secure alternative could be wrought if wanted.
 
     char c_passkey[md5len];
     unsigned char u_passkey[md5len];
@@ -175,13 +176,11 @@ void PasskeyTest::InitializeData() const
     std::memcpy(c_passkey, u_passkey, md5len);
     md5_buffer(c_passkey, md5len, u_passkey);
 
-    fs::path pwd(".");
-
     // Test with no passkey file. This is intended to fail.
     SecurityValidator::ResetCache();
     BOOST_TEST_EQUAL
         ("Unable to read passkey file 'passkey'. Try reinstalling."
-        ,SecurityValidator::Validate(BeginDate_, pwd)
+        ,SecurityValidator::Validate(BeginDate_, ".")
         );
 
     {
@@ -195,15 +194,13 @@ void PasskeyTest::InitializeData() const
 
 void PasskeyTest::Test0() const
 {
-    fs::path pwd(".");
-
     // Test with default dates, which are used if file 'expiry' fails
     // to exist, e.g. because it was deliberately deleted. This is
     // intended to fail.
     SecurityValidator::ResetCache();
     BOOST_TEST_EQUAL
         ("Unable to read expiry file 'expiry'. Try reinstalling."
-        ,SecurityValidator::Validate(BeginDate_, pwd)
+        ,SecurityValidator::Validate(BeginDate_, ".")
         );
 
     // Create file 'expiry' and test with a real date.
@@ -213,24 +210,22 @@ void PasskeyTest::Test0() const
     os << BeginDate_ << ' ' << EndDate_;
     }
     SecurityValidator::ResetCache();
-    BOOST_TEST_EQUAL("validated", SecurityValidator::Validate(BeginDate_, pwd));
+    BOOST_TEST_EQUAL("validated", SecurityValidator::Validate(BeginDate_, Pwd_));
 }
 
 void PasskeyTest::Test1() const
 {
     // Test validation from a remote directory (using a valid date).
     // This should not alter the current directory.
-    fs::path pwd = fs::current_path();
-
     fs::path const remote_dir_0(fs::complete("/tmp"));
     BOOST_TEST(fs::exists(remote_dir_0) && fs::is_directory(remote_dir_0));
     BOOST_TEST_EQUAL(0, chdir(remote_dir_0.string().c_str()));
     BOOST_TEST_EQUAL(remote_dir_0.string(), fs::current_path().string());
     SecurityValidator::ResetCache();
-    BOOST_TEST_EQUAL("validated", SecurityValidator::Validate(BeginDate_, pwd));
+    BOOST_TEST_EQUAL("validated", SecurityValidator::Validate(BeginDate_, Pwd_));
     BOOST_TEST_EQUAL(remote_dir_0.string(), fs::current_path().string());
-    BOOST_TEST_EQUAL(0, chdir(pwd.string().c_str()));
-    BOOST_TEST_EQUAL(pwd.string(), fs::current_path().string());
+    BOOST_TEST_EQUAL(0, chdir(Pwd_.string().c_str()));
+    BOOST_TEST_EQUAL(Pwd_.string(), fs::current_path().string());
 
 #if defined LMI_MSW
     // Try the root directory on a different drive, on a multiple-root
@@ -242,48 +237,48 @@ void PasskeyTest::Test1() const
     BOOST_TEST_EQUAL(0, chdir(remote_dir_1.string().c_str()));
     BOOST_TEST_EQUAL(remote_dir_1.string(), fs::current_path().string());
     SecurityValidator::ResetCache();
-    BOOST_TEST_EQUAL("validated", SecurityValidator::Validate(BeginDate_, pwd));
+    BOOST_TEST_EQUAL("validated", SecurityValidator::Validate(BeginDate_, Pwd_));
     BOOST_TEST_EQUAL(remote_dir_1.string(), fs::current_path().string());
-    BOOST_TEST_EQUAL(0, chdir(pwd.string().c_str()));
-    BOOST_TEST_EQUAL(pwd.string(), fs::current_path().string());
+    BOOST_TEST_EQUAL(0, chdir(Pwd_.string().c_str()));
+    BOOST_TEST_EQUAL(Pwd_.string(), fs::current_path().string());
 #endif // defined LMI_MSW
 
     // The first day of the valid period should work.
     SecurityValidator::ResetCache();
-    BOOST_TEST_EQUAL("validated", SecurityValidator::Validate(BeginDate_, pwd));
+    BOOST_TEST_EQUAL("validated", SecurityValidator::Validate(BeginDate_, Pwd_));
     // Repeat the test to validate caching.
-    BOOST_TEST_EQUAL("cached"   , SecurityValidator::Validate(BeginDate_, pwd));
+    BOOST_TEST_EQUAL("cached"   , SecurityValidator::Validate(BeginDate_, Pwd_));
     // The last day of the valid period should work.
     calendar_date const last_date = EndDate_ - 1;
-    BOOST_TEST_EQUAL("validated", SecurityValidator::Validate(last_date, pwd));
-    BOOST_TEST_EQUAL("cached"   , SecurityValidator::Validate(last_date, pwd));
+    BOOST_TEST_EQUAL("validated", SecurityValidator::Validate(last_date, Pwd_));
+    BOOST_TEST_EQUAL("cached"   , SecurityValidator::Validate(last_date, Pwd_));
     // Test one day before the period, and one day after.
     BOOST_TEST_EQUAL
         ("Current date '2000-12-31' is invalid:"
         " this system cannot be used before '2001-01-01'."
         " Contact the home office."
-        ,SecurityValidator::Validate(BeginDate_ - 1, pwd)
+        ,SecurityValidator::Validate(BeginDate_ - 1, Pwd_)
         );
     BOOST_TEST_EQUAL
         ("Current date '2001-01-03' is invalid:"
         " this system expired on '2001-01-03'."
         " Contact the home office."
-        ,SecurityValidator::Validate(EndDate_, pwd)
+        ,SecurityValidator::Validate(EndDate_, Pwd_)
         );
     BOOST_TEST_EQUAL
         ("Current date '2001-01-13' is invalid:"
         " this system expired on '2001-01-03'."
         " Contact the home office."
-        ,SecurityValidator::Validate(EndDate_ + 10, pwd)
+        ,SecurityValidator::Validate(EndDate_ + 10, Pwd_)
         );
     // Make sure that the last-successfully-validated date is not
     // inadvertently accepted due only to caching. It should be
     // accepted, but only after the data files and the date have been
     // tested afresh.
-    BOOST_TEST_UNEQUAL("cached", SecurityValidator::Validate(last_date, pwd));
+    BOOST_TEST_UNEQUAL("cached", SecurityValidator::Validate(last_date, Pwd_));
     // Now that a valid date has been cached, caching should again
     // work normally.
-    BOOST_TEST_EQUAL  ("cached", SecurityValidator::Validate(last_date, pwd));
+    BOOST_TEST_EQUAL  ("cached", SecurityValidator::Validate(last_date, Pwd_));
 
     // Test with an incorrect passkey. Caching can prevent this from
     // being detected: that's its purpose, because it is expensive to
@@ -291,7 +286,7 @@ void PasskeyTest::Test1() const
     // date, in order to get it cached; then write an incorrect
     // 'passkey' file and retest.
     SecurityValidator::ResetCache();
-    BOOST_TEST_EQUAL("validated", SecurityValidator::Validate(BeginDate_, pwd));
+    BOOST_TEST_EQUAL("validated", SecurityValidator::Validate(BeginDate_, Pwd_));
     {
     std::ofstream os("passkey", ios_out_trunc_binary());
     BOOST_TEST(!!os);
@@ -299,12 +294,12 @@ void PasskeyTest::Test1() const
     os << md5_hex_string(wrong);
     }
     // Testing with the same date succeeds due to caching.
-    BOOST_TEST_EQUAL("cached"   , SecurityValidator::Validate(BeginDate_, pwd));
+    BOOST_TEST_EQUAL("cached"   , SecurityValidator::Validate(BeginDate_, Pwd_));
     // Reset the cache, and the incorrect passkey is detected.
     SecurityValidator::ResetCache();
     BOOST_TEST_EQUAL
         ("Passkey is incorrect for this version. Contact the home office."
-        ,SecurityValidator::Validate(BeginDate_, pwd)
+        ,SecurityValidator::Validate(BeginDate_, Pwd_)
         );
 
     // Test with altered data file. This is intended to fail.
@@ -317,7 +312,7 @@ void PasskeyTest::Test1() const
     BOOST_TEST_EQUAL
         ("At least one required file is missing, altered, or invalid."
         " Try reinstalling."
-        ,SecurityValidator::Validate(BeginDate_, pwd)
+        ,SecurityValidator::Validate(BeginDate_, Pwd_)
         );
 
     RemoveTestFiles(__FILE__, __LINE__);

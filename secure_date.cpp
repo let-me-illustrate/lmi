@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: secure_date.cpp,v 1.15 2006-12-17 18:36:31 chicares Exp $
+// $Id: secure_date.cpp,v 1.16 2006-12-18 03:46:14 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -55,7 +55,7 @@ namespace
 /// Initialize cached date to JDN zero, which is peremptorily invalid.
 
 SecurityValidator::SecurityValidator()
-    :cached_date_(jdn_t(0))
+    :CachedDate_(jdn_t(0))
 {
 }
 
@@ -79,7 +79,7 @@ SecurityValidator& SecurityValidator::Instance()
 
 void SecurityValidator::ResetCache()
 {
-    Instance().cached_date_ = jdn_t(0);
+    Instance().CachedDate_ = jdn_t(0);
 }
 
 std::string SecurityValidator::Validate
@@ -90,8 +90,8 @@ std::string SecurityValidator::Validate
     // The cached date is valid unless it's the peremptorily-invalid
     // default value of JDN zero.
     if
-        (  calendar_date(jdn_t(0)) != Instance().cached_date_
-        && candidate               == Instance().cached_date_
+        (  calendar_date(jdn_t(0)) != Instance().CachedDate_
+        && candidate               == Instance().CachedDate_
         )
         {
         return "cached";
@@ -255,7 +255,7 @@ std::string SecurityValidator::Validate
         return oss.str();
         }
     // Cache the validated date.
-    Instance().cached_date_ = candidate;
+    Instance().CachedDate_ = candidate;
     return "validated";
 }
 

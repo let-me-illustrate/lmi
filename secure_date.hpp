@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: secure_date.hpp,v 1.13 2006-12-17 17:59:27 chicares Exp $
+// $Id: secure_date.hpp,v 1.14 2006-12-18 03:46:14 chicares Exp $
 
 #ifndef secure_date_hpp
 #define secure_date_hpp
@@ -75,7 +75,7 @@ class SecurityValidator
 
     static void ResetCache();
 
-    mutable calendar_date cached_date_;
+    mutable calendar_date CachedDate_;
 };
 
 /// Hex representation of an md5 sum as a string.
