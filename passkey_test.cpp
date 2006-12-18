@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: passkey_test.cpp,v 1.33 2006-12-18 16:20:17 chicares Exp $
+// $Id: passkey_test.cpp,v 1.34 2006-12-18 16:26:24 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -44,6 +44,14 @@
 #include <vector>
 
 // TODO ?? Add tests for diagnostics that aren't tested yet.
+
+template<typename T, std::size_t n>
+std::string md5_str(T(&md5sum)[n])
+{
+    LMI_ASSERT(n == md5len);
+    typedef std::vector<unsigned char> svuc;
+    return md5_hex_string(svuc(md5sum, md5sum + md5len));
+}
 
 class PasskeyTest
 {
@@ -133,6 +141,7 @@ void PasskeyTest::InitializeDataFile() const
 
     // Here, '-1 +' excludes the trailing null character.
     md5_buffer(rime, -1 + static_cast<int>(sizeof rime), RimeMd5sum_);
+    BOOST_TEST_EQUAL("bf039dbb0e8061971a2c322c8336199c", md5_str(RimeMd5sum_));
 }
 
 void PasskeyTest::InitializeMd5sumOfDataFile() const
@@ -153,6 +162,7 @@ void PasskeyTest::InitializeMd5sumOfDataFile() const
     md5_stream(in, RimeMd5sum_);
     std::fclose(in);
     BOOST_TEST_EQUAL(0, std::memcmp(expected, RimeMd5sum_, sizeof expected));
+    BOOST_TEST_EQUAL("bf039dbb0e8061971a2c322c8336199c", md5_str(RimeMd5sum_));
 }
 
 void PasskeyTest::InitializeMd5sumFile() const
@@ -176,9 +186,13 @@ void PasskeyTest::InitializeMd5sumFile() const
         ,system_command("md5sum --check --status " + std::string(md5sum_file()))
         );
 
+    BOOST_TEST_EQUAL("bf039dbb0e8061971a2c322c8336199c", md5_str(RimeMd5sum_));
+
     FILE* md5 = std::fopen(md5sum_file(), "rb");
     md5_stream(md5, RimeMd5sum_);
     std::fclose(md5);
+
+    BOOST_TEST_EQUAL("efb7a0a972b88bb5b9ac6f60390d61bf", md5_str(RimeMd5sum_));
 }
 
 void PasskeyTest::InitializePasskeyFile() const
@@ -189,9 +203,13 @@ void PasskeyTest::InitializePasskeyFile() const
     char c_passkey[md5len];
     unsigned char u_passkey[md5len];
     std::memcpy(c_passkey, RimeMd5sum_, md5len);
+    BOOST_TEST_EQUAL("efb7a0a972b88bb5b9ac6f60390d61bf", md5_str(c_passkey));
     md5_buffer(c_passkey, md5len, u_passkey);
+    BOOST_TEST_EQUAL("8a4829bf31de9437c95aedaeead398d7", md5_str(u_passkey));
     std::memcpy(c_passkey, u_passkey, md5len);
+    BOOST_TEST_EQUAL("8a4829bf31de9437c95aedaeead398d7", md5_str(c_passkey));
     md5_buffer(c_passkey, md5len, u_passkey);
+    BOOST_TEST_EQUAL("3ff4953dbddf009634922fa52a342bfe", md5_str(u_passkey));
 
     // Test with no passkey file. This is intended to fail.
     SecurityValidator::ResetCache();

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.531 2006-12-17 19:32:40 chicares Exp $
+// $Id: ChangeLog,v 1.532 2006-12-18 16:26:53 chicares Exp $
 
 MAINTENANCE
 
@@ -9046,4 +9046,41 @@ than to ensure local preconditions by managing the global state.
 Revise values that disagreed with documentation. It is better to
 specify a YYYYMMDD date than to specify a JDN and document its
 desired meaning.
+
+20061218T0346Z <chicares@cox.net> [1239]
+
+  passkey_test.cpp
+  secure_date.cpp
+  secure_date.hpp
+Refactor, rectifying some names.
+
+20061218T0413Z <chicares@cox.net> [1239]
+
+  passkey_test.cpp
+Refactor, dissevering a monolithic function.
+
+20061218T1354Z <chicares@cox.net> [1239]
+
+  passkey_test.cpp
+Refactor, replacing a local variable with a data member.
+
+20061218T1414Z <chicares@cox.net> [1239]
+
+  passkey_test.cpp
+Refactor, dissevering a monolithic function.
+
+20061218T1432Z <chicares@cox.net> [1239]
+
+  passkey_test.cpp
+Remove a superannuated oddity.
+
+20061218T1620Z <chicares@cox.net> [1239]
+
+  passkey_test.cpp
+Rectify names.
+
+20061218T1626Z <chicares@cox.net> [1239]
+
+  passkey_test.cpp
+Increase clarity by testing md5sum values explicitly.
 
