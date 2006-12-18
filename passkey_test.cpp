@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: passkey_test.cpp,v 1.28 2006-12-18 03:46:14 chicares Exp $
+// $Id: passkey_test.cpp,v 1.29 2006-12-18 04:13:21 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -49,12 +49,16 @@ class PasskeyTest
 {
   public:
     PasskeyTest();
+    ~PasskeyTest();
 
     void InitializeData() const;
     void RemoveTestFiles(char const* file, int line) const;
     void Test() const;
     void Test0() const;
     void Test1() const;
+    void Test2() const;
+    void Test3() const;
+    void Test4() const;
 
   private:
     calendar_date const BeginDate_;
@@ -67,7 +71,17 @@ PasskeyTest::PasskeyTest()
     ,EndDate_  (ymd_t(20010103))
     ,Pwd_      (fs::current_path())
 {
+    // Remove test files that may be left over from a previous run
+    // that failed to complete. Failing to remove them can cause
+    // spurious error reports.
+    RemoveTestFiles(__FILE__, __LINE__);
+
     InitializeData();
+}
+
+PasskeyTest::~PasskeyTest()
+{
+    RemoveTestFiles(__FILE__, __LINE__);
 }
 
 char const rime[] =
@@ -104,11 +118,6 @@ void PasskeyTest::RemoveTestFiles(char const* file, int line) const
 
 void PasskeyTest::InitializeData() const
 {
-    // First, remove test files that may be left over from a previous
-    // run that failed to complete. Failing to remove them can cause
-    // spurious error reports.
-    RemoveTestFiles(__FILE__, __LINE__);
-
     {
     std::ofstream os("coleridge", ios_out_trunc_binary());
     BOOST_TEST(!!os);
@@ -242,7 +251,10 @@ void PasskeyTest::Test1() const
     BOOST_TEST_EQUAL(0, chdir(Pwd_.string().c_str()));
     BOOST_TEST_EQUAL(Pwd_.string(), fs::current_path().string());
 #endif // defined LMI_MSW
+}
 
+void PasskeyTest::Test2() const
+{
     // The first day of the valid period should work.
     SecurityValidator::ResetCache();
     BOOST_TEST_EQUAL("validated", SecurityValidator::Validate(BeginDate_, Pwd_));
@@ -279,7 +291,10 @@ void PasskeyTest::Test1() const
     // Now that a valid date has been cached, caching should again
     // work normally.
     BOOST_TEST_EQUAL  ("cached", SecurityValidator::Validate(last_date, Pwd_));
+}
 
+void PasskeyTest::Test3() const
+{
     // Test with an incorrect passkey. Caching can prevent this from
     // being detected: that's its purpose, because it is expensive to
     // test the data files. To demonstrate this: first validate the
@@ -301,7 +316,10 @@ void PasskeyTest::Test1() const
         ("Passkey is incorrect for this version. Contact the home office."
         ,SecurityValidator::Validate(BeginDate_, Pwd_)
         );
+}
 
+void PasskeyTest::Test4() const
+{
     // Test with altered data file. This is intended to fail.
     {
     std::ofstream os("coleridge", ios_out_trunc_binary());
@@ -314,14 +332,15 @@ void PasskeyTest::Test1() const
         " Try reinstalling."
         ,SecurityValidator::Validate(BeginDate_, Pwd_)
         );
-
-    RemoveTestFiles(__FILE__, __LINE__);
 }
 
 void PasskeyTest::Test() const
 {
     Test0();
     Test1();
+    Test2();
+    Test3();
+    Test4();
 }
 
 int test_main(int, char*[])
