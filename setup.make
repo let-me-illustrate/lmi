@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: setup.make,v 1.29 2006-12-15 20:42:15 wboutin Exp $
+# $Id: setup.make,v 1.30 2006-12-18 22:32:40 wboutin Exp $
 
 .PHONY: all
 all: setup
@@ -62,7 +62,7 @@ third_party_include_dir := $(third_party_dir)/include
 third_party_lib_dir     := $(third_party_dir)/lib
 third_party_source_dir  := $(third_party_dir)/src
 
-sf_mirror := http://easynews.dl.sourceforge.net/sourceforge
+sf_mirror := http://downloads.sourceforge.net
 
 .PHONY: setup
 setup: \
@@ -74,6 +74,7 @@ setup: \
   frozen_sed \
   frozen_xmlwrapp \
   mingw_20050827 \
+  msys_make \
   test_setup \
 
 # REVIEW: Could these be combined? Untested idea:
@@ -164,6 +165,10 @@ install_frozen_boost_from_tmp_dir:
 	  |$(MD5SUM) --check
 	$(BZIP2) --decompress --keep boost_1_33_0.tar.bz2
 	$(TAR) --extract --file=boost_1_33_0.tar
+# This safeguards against any older files interfering with new ones
+# installed to the same directory.
+	$(RM) --force $(third_party_include_dir)/boost/
+	$(RM) --force $(third_party_source_dir)/boost/
 	$(MKDIR) --parents $(third_party_include_dir)/boost/
 	$(MKDIR) --parents $(third_party_source_dir)/boost/
 	-$(CP) --force --preserve --recursive boost_1_33_0/boost/* \
@@ -270,7 +275,6 @@ install_frozen_libxml2_from_tmp_dir:
 # usage, but that less odd ways (like 'make install'?) didn't work.
 
 ###############################################################################
-# This version has not been formally tested and released for production with
 
 # Install make-3.81 .
 
@@ -297,6 +301,28 @@ install_frozen_make_from_tmp_dir:
 # be overwritten, so an alternative should be considered.
 	$(CP) --force --preserve $(CURDIR)/make-3.81/make.exe /usr/bin/
 	$(RM) --force make-3.81.tar make-3.81.tar.bz2
+
+# This updates make in MSYS.
+.PHONY: msys_make
+msys_make:
+	$(MAKE) \
+	  --directory=/tmp \
+	  --file=$(src_dir)/setup.make \
+            src_dir='$(src_dir)' \
+	  install_msys_make_from_tmp_dir
+
+.PHONY: install_msys_make_from_tmp_dir
+install_msys_make_from_tmp_dir:
+	[ -e make-3.81-MSYS-1.0.11-snapshot.tar.bz2 ] \
+	  || $(WGET) --non-verbose \
+	  $(sf_mirror)/mingw/make-3.81-MSYS-1.0.11-snapshot.tar.bz2
+	$(ECHO) "d2540add01b0b232722b0d358c6ee1ef  make-3.81-MSYS-1.0.11-snapshot.tar.bz2" \
+	  |$(MD5SUM) --check
+	$(BZIP2) --decompress --keep make-3.81-MSYS-1.0.11-snapshot.tar.bz2
+	$(TAR) --extract --file=make-3.81-MSYS-1.0.11-snapshot.tar
+	$(CP) --force --preserve $(CURDIR)/make-3.81/bin/make.exe /msys/1.0/bin/
+	$(RM) --force make-3.81-MSYS-1.0.11-snapshot.tar \
+	  make-3.81-MSYS-1.0.11-snapshot.tar.bz2
 
 ###############################################################################
 
@@ -338,7 +364,7 @@ install_sed_from_tmp_dir:
 
 ###############################################################################
 
-# Install and patch xmlwrapp-0.2.0 .
+# Install and patch xmlwrapp-0.5.0 .
 
 .PHONY: frozen_xmlwrapp
 frozen_xmlwrapp:
@@ -349,21 +375,19 @@ frozen_xmlwrapp:
 	    third_party_include_dir='$(third_party_include_dir)' \
 	     third_party_source_dir='$(third_party_source_dir)' \
                           tools_dir='$(tools_dir)' \
-	  install_frozen_xmlwrapp_from_tmp_dir check_xmlwrapp_md5sums
+	  install_frozen_xmlwrapp_from_tmp_dir
 
 .PHONY: install_frozen_xmlwrapp_from_tmp_dir
 install_frozen_xmlwrapp_from_tmp_dir:
-# This command won't work because there's no longer a valid URL for the
-# version currently used in production:
-# 	|| $(WGET) --non-verbose \
-# 	http://pmade.org/software/xmlwrapp/download/xmlwrapp-0.2.0.tar.gz
-
-# The following assumes 'xmlwrapp-0.2.0.tar.gz' exists in '/tmp/' already.
-	[ -e xmlwrapp-0.2.0.tar.gz ]
+	[ -e xmlwrapp-0.5.0.tar.gz ] \
+	  || $(WGET) --non-verbose \
+          http://www.mirrorservice.org/sites/ftp.freebsd.org/pub/FreeBSD/distfiles/xmlwrapp-0.5.0.tar.gz
 	$(ECHO) "b8a07e77f8f8af9ca96bccab7d9dd310  xmlwrapp-0.5.0.tar.gz" \
 	  |$(MD5SUM) --check
 	$(GZIP) --decompress xmlwrapp-0.5.0.tar.gz
 	$(TAR) --extract --verbose --file=xmlwrapp-0.5.0.tar
+	$(RM) --force --recursive $(third_party_include_dir)/xmlwrapp/
+	$(RM) --force --recursive $(third_party_source_dir)/libxml/
 	$(MKDIR) --parents $(third_party_include_dir)/xmlwrapp/
 	$(MKDIR) --parents $(third_party_source_dir)/libxml/
 	$(CP) --preserve xmlwrapp-0.5.0/include/xmlwrapp/*.h \
@@ -371,11 +395,6 @@ install_frozen_xmlwrapp_from_tmp_dir:
 	$(CP) --preserve xmlwrapp-0.5.0/src/libxml/* \
 	  $(third_party_source_dir)/libxml/
 	$(RM) --force xmlwrapp-0.5.0.tar xmlwrapp-0.5.0.tar.gz
-
-.PHONY: check_xmlwrapp_md5sums
-check_xmlwrapp_md5sums: $(third_party_dir)
-	cd $(third_party_dir) ; \
-	$(MD5SUM) --check $(tools_dir)/xmlwrapp/xmlwrapp_md5sums
 
 ###############################################################################
 
@@ -539,5 +558,5 @@ install_human_interactive_tools_from_tmp_dir: $(human_interactive_tools)
 # Validate setup files.
 
 .PHONY: test_setup
-test_setup: check_cgicc_md5sums check_xmlwrapp_md5sums
+test_setup: check_cgicc_md5sums
 
