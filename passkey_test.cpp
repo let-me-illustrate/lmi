@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: passkey_test.cpp,v 1.31 2006-12-18 14:14:54 chicares Exp $
+// $Id: passkey_test.cpp,v 1.32 2006-12-18 14:32:51 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -147,13 +147,6 @@ void PasskeyTest::Initialize1() const
         (std::vector<unsigned char>(expected, expected + md5len)
         );
     os << "  coleridge\n";
-    // Test whether we can initialize a string with the result of
-    // md5_hex_string(), because ming29521 seems to have a problem
-    // with it, which we suspect is due to nonconformance of the
-    // <sstream> implementation we added to it.
-    std::string s = md5_hex_string
-        (std::vector<unsigned char>(expected, expected + md5len)
-        );
     }
 
     FILE* in = std::fopen("coleridge", "rb");
