@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.532 2006-12-18 16:26:53 chicares Exp $
+// $Id: ChangeLog,v 1.533 2006-12-18 22:32:40 wboutin Exp $
 
 MAINTENANCE
 
@@ -9083,4 +9083,9 @@ Rectify names.
 
   passkey_test.cpp
 Increase clarity by testing md5sum values explicitly.
+
+20061218T2232Z <wboutin@massmutual.com> [1239]
+
+  setup.make
+Add msys make upgrade and improve documentation.
 
