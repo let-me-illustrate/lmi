@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: passkey_test.cpp,v 1.41 2006-12-19 02:25:22 chicares Exp $
+// $Id: passkey_test.cpp,v 1.42 2006-12-19 15:18:30 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -71,10 +71,10 @@ class PasskeyTest
     void InitializePasskeyFile() const;
     void InitializeExpiryFile() const;
 
-    void Test0() const;
-    void Test1() const;
-    void Test2() const;
-    void Test3() const;
+    void TestFromAfar() const;
+    void TestDate() const;
+    void TestPasskey() const;
+    void TestDataFile() const;
 
   private:
     calendar_date const  BeginDate_;
@@ -261,7 +261,7 @@ void PasskeyTest::InitializeExpiryFile() const
     BOOST_TEST_EQUAL("validated", SecurityValidator::Validate(BeginDate_, Pwd_));
 }
 
-void PasskeyTest::Test0() const
+void PasskeyTest::TestFromAfar() const
 {
     // Test validation from a remote directory (using a valid date).
     // This should not alter the current directory.
@@ -294,7 +294,7 @@ void PasskeyTest::Test0() const
 #endif // defined LMI_MSW
 }
 
-void PasskeyTest::Test1() const
+void PasskeyTest::TestDate() const
 {
     // The first day of the valid period should work. Repeating the
     // test immediately validates caching.
@@ -344,7 +344,7 @@ void PasskeyTest::Test1() const
     BOOST_TEST_EQUAL  ("cached", SecurityValidator::Validate(last_date, Pwd_));
 }
 
-void PasskeyTest::Test2() const
+void PasskeyTest::TestPasskey() const
 {
     // Test with an incorrect passkey. Caching can prevent this from
     // being detected--intentionally, because it is expensive to test
@@ -401,7 +401,7 @@ void PasskeyTest::Test2() const
     BOOST_TEST_EQUAL("validated", SecurityValidator::Validate(BeginDate_, Pwd_));
 }
 
-void PasskeyTest::Test3() const
+void PasskeyTest::TestDataFile() const
 {
     // Test with an altered data file. This is intended to fail.
 
@@ -421,10 +421,10 @@ void PasskeyTest::Test3() const
 int test_main(int, char*[])
 {
     PasskeyTest tester;
-    tester.Test0();
-    tester.Test1();
-    tester.Test2();
-    tester.Test3();
+    tester.TestFromAfar();
+    tester.TestDate();
+    tester.TestPasskey();
+    tester.TestDataFile();
 
     return EXIT_SUCCESS;
 }
