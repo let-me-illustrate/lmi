@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: passkey_test.cpp,v 1.37 2006-12-18 22:17:16 chicares Exp $
+// $Id: passkey_test.cpp,v 1.38 2006-12-19 00:42:18 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -85,14 +85,15 @@ class PasskeyTest
 
 unsigned char PasskeyTest::RimeMd5sum_[md5len];
 
+/// Before writing any test file, remove any old copy that may be left
+/// over from a previous run that failed to complete, because old
+/// copies can cause spurious error reports.
+
 PasskeyTest::PasskeyTest()
     :BeginDate_(ymd_t(20010101))
     ,EndDate_  (ymd_t(20010103))
     ,Pwd_      (fs::current_path())
 {
-    // Remove test files that may be left over from a previous run
-    // that failed to complete. Failing to remove them can cause
-    // spurious error reports.
     RemoveTestFiles(__FILE__, __LINE__);
 
     InitializeDataFile();
@@ -147,10 +148,12 @@ void PasskeyTest::InitializeDataFile() const
     os.close();
 
     // Here, '-1 +' excludes the trailing null character.
+
     md5_buffer(rime, -1 + static_cast<int>(sizeof rime), RimeMd5sum_);
     BOOST_TEST_EQUAL("bf039dbb0e8061971a2c322c8336199c", md5_str(RimeMd5sum_));
 
     // Make sure the file's md5sum equals the buffer's.
+
     unsigned char expected[md5len];
     FILE* in = std::fopen("coleridge", "rb");
     md5_stream(in, expected);
@@ -171,19 +174,23 @@ void PasskeyTest::InitializeAndTestMd5sumOfDataFile() const
     os << "  coleridge\n";
     os.close();
 
-    // Ascertain whether 'md5sum' program is available. Regrettably,
-    // this writes to stdout, but without this test, it's hard to tell
-    // whether errors in subsequent tests stem from incorrect md5sums
-    // or absence of the 'md5sum' program.
+    // Make sure an 'md5sum' program is available. Regrettably,
+    // invoking that program here writes its output to stdout; but
+    // without this test, it would be difficult to tell whether errors
+    // in subsequent tests stem from incorrect md5sums or from that
+    // program's absence.
+
     std::cout << "  Result of 'md5sum --version':" << std::endl;
     BOOST_TEST_EQUAL(0, system_command("md5sum --version"));
 
-    // For production, we'll provide a file with md5 sums of all data
-    // files. For this unit test, we'll treat file 'coleridge' as our
-    // only data file; its md5 sum is already in the file created
-    // above. Creating that file by running 'md5sum' is not trivial:
-    // that program emits its output to stdout, and redirection can be
-    // tricky.
+    // For production, a file with md5 sums of all data files is
+    // provided. For this unit test, treat file 'coleridge' as the
+    // only data file. Its md5 sum is embedded in the file created
+    // above. Creating that file portably here by running 'md5sum'
+    // would be no trivial task, as it would require redirection, so
+    // the effect of 'md5sum' was instead emulated; testing that file
+    // here with 'md5sum' validates that emulation and guards against
+    // a bogus 'md5sum' program.
 
     BOOST_TEST_EQUAL
         (0
@@ -206,8 +213,9 @@ void PasskeyTest::InitializePasskeyFile() const
 {
     BOOST_TEST_EQUAL("efb7a0a972b88bb5b9ac6f60390d61bf", md5_str(RimeMd5sum_));
 
-    // Passkey is the md5 sum of the md5 sum of the '.md5' file.
-    // A more secure alternative could be wrought if wanted.
+    // The passkey is the md5 sum of the md5 sum of the '.md5' file.
+    // A more secure alternative could be wrought if wanted, but the
+    // present method is enough to stymie the unsophisticated.
 
     char c_passkey[md5len];
     unsigned char u_passkey[md5len];
@@ -221,6 +229,7 @@ void PasskeyTest::InitializePasskeyFile() const
     BOOST_TEST_EQUAL("3ff4953dbddf009634922fa52a342bfe", md5_str(u_passkey));
 
     // Test with no passkey file. This is intended to fail.
+
     SecurityValidator::ResetCache();
     BOOST_TEST_EQUAL
         ("Unable to read passkey file 'passkey'. Try reinstalling."
@@ -239,6 +248,7 @@ void PasskeyTest::InitializeExpiryFile() const
     // Test with default dates, which are used if file 'expiry' fails
     // to exist, e.g. because it was deliberately deleted. This is
     // intended to fail.
+
     SecurityValidator::ResetCache();
     BOOST_TEST_EQUAL
         ("Unable to read expiry file 'expiry'. Try reinstalling."
@@ -246,11 +256,12 @@ void PasskeyTest::InitializeExpiryFile() const
         );
 
     // Create file 'expiry' and test with a real date.
-    {
+
     std::ofstream os("expiry");
     BOOST_TEST(!!os);
     os << BeginDate_ << ' ' << EndDate_;
-    }
+    os.close();
+
     SecurityValidator::ResetCache();
     BOOST_TEST_EQUAL("validated", SecurityValidator::Validate(BeginDate_, Pwd_));
 }
@@ -259,6 +270,7 @@ void PasskeyTest::Test0() const
 {
     // Test validation from a remote directory (using a valid date).
     // This should not alter the current directory.
+
     fs::path const remote_dir_0(fs::complete("/tmp"));
     BOOST_TEST(fs::exists(remote_dir_0) && fs::is_directory(remote_dir_0));
     BOOST_TEST_EQUAL(0, chdir(remote_dir_0.string().c_str()));
@@ -274,6 +286,7 @@ void PasskeyTest::Test0() const
     // system. This is perforce platform specific; msw is used because
     // it happens to be common. This test assumes that an 'E:' drive
     // exists and is not the "current" drive.
+
     fs::path const remote_dir_1(fs::complete(fs::path("E:/", fs::native)));
     BOOST_TEST(fs::exists(remote_dir_1) && fs::is_directory(remote_dir_1));
     BOOST_TEST_EQUAL(0, chdir(remote_dir_1.string().c_str()));
@@ -288,16 +301,22 @@ void PasskeyTest::Test0() const
 
 void PasskeyTest::Test1() const
 {
-    // The first day of the valid period should work.
+    // The first day of the valid period should work. Repeating the
+    // test immediately validates caching.
+
     SecurityValidator::ResetCache();
     BOOST_TEST_EQUAL("validated", SecurityValidator::Validate(BeginDate_, Pwd_));
-    // Repeat the test to validate caching.
     BOOST_TEST_EQUAL("cached"   , SecurityValidator::Validate(BeginDate_, Pwd_));
+
     // The last day of the valid period should work.
+
     calendar_date const last_date = EndDate_ - 1;
     BOOST_TEST_EQUAL("validated", SecurityValidator::Validate(last_date, Pwd_));
     BOOST_TEST_EQUAL("cached"   , SecurityValidator::Validate(last_date, Pwd_));
-    // Test one day before the period, and one day after.
+
+    // Test one day before the valid period, one day after, and
+    // another day a bit later.
+
     BOOST_TEST_EQUAL
         ("Current date '2000-12-31' is invalid:"
         " this system cannot be used before '2001-01-01'."
@@ -316,34 +335,42 @@ void PasskeyTest::Test1() const
         " Contact the home office."
         ,SecurityValidator::Validate(EndDate_ + 10, Pwd_)
         );
+
     // Make sure that the last-successfully-validated date is not
     // inadvertently accepted due only to caching. It should be
     // accepted, but only after the data files and the date have been
     // tested afresh.
+
     BOOST_TEST_UNEQUAL("cached", SecurityValidator::Validate(last_date, Pwd_));
+
     // Now that a valid date has been cached, caching should again
     // work normally.
+
     BOOST_TEST_EQUAL  ("cached", SecurityValidator::Validate(last_date, Pwd_));
 }
 
 void PasskeyTest::Test2() const
 {
     // Test with an incorrect passkey. Caching can prevent this from
-    // being detected: that's its purpose, because it is expensive to
-    // test the data files. To demonstrate this: first validate the
-    // date, in order to get it cached; then write an incorrect
-    // 'passkey' file and retest.
+    // being detected--intentionally, because it is expensive to test
+    // the data files. To demonstrate this: first validate the date,
+    // in order to get it cached; then write an incorrect 'passkey'
+    // file and retest.
+
     SecurityValidator::ResetCache();
     BOOST_TEST_EQUAL("validated", SecurityValidator::Validate(BeginDate_, Pwd_));
-    {
     std::ofstream os("passkey", ios_out_trunc_binary());
     BOOST_TEST(!!os);
     std::vector<unsigned char> const wrong(md5len);
     os << md5_hex_string(wrong);
-    }
+    os.close();
+
     // Testing with the same date succeeds due to caching.
+
     BOOST_TEST_EQUAL("cached"   , SecurityValidator::Validate(BeginDate_, Pwd_));
+
     // Reset the cache, and the incorrect passkey is detected.
+
     SecurityValidator::ResetCache();
     BOOST_TEST_EQUAL
         ("Passkey is incorrect for this version. Contact the home office."
@@ -353,12 +380,13 @@ void PasskeyTest::Test2() const
 
 void PasskeyTest::Test3() const
 {
-    // Test with altered data file. This is intended to fail.
-    {
+    // Test with an altered data file. This is intended to fail.
+
     std::ofstream os("coleridge", ios_out_trunc_binary());
     BOOST_TEST(!!os);
     os << "This file has the wrong md5sum.";
-    }
+    os.close();
+
     SecurityValidator::ResetCache();
     BOOST_TEST_EQUAL
         ("At least one required file is missing, altered, or invalid."
