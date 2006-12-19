@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: passkey_test.cpp,v 1.38 2006-12-19 00:42:18 chicares Exp $
+// $Id: passkey_test.cpp,v 1.39 2006-12-19 01:03:48 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -36,10 +36,10 @@
 #include <boost/filesystem/fstream.hpp>
 #include <boost/filesystem/operations.hpp>
 
+#include <cstddef> // std::size_t
 #include <cstdio>
 #include <cstring> // std::memcmp(), std::memcpy()
 #include <fstream>
-#include <ios>
 #include <string>
 #include <vector>
 
