@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.533 2006-12-18 22:32:40 wboutin Exp $
+// $Id: ChangeLog,v 1.534 2006-12-19 15:24:20 chicares Exp $
 
 MAINTENANCE
 
@@ -9084,8 +9084,53 @@ Rectify names.
   passkey_test.cpp
 Increase clarity by testing md5sum values explicitly.
 
+20061218T1741Z <chicares@cox.net> [1239]
+
+  passkey_test.cpp
+Refactor.
+
+20061218T2118Z <chicares@cox.net> [1239]
+
+  passkey_test.cpp
+Refactor.
+
+20061218T2217Z <chicares@cox.net> [1239]
+
+  passkey_test.cpp
+Refactor.
+
 20061218T2232Z <wboutin@massmutual.com> [1239]
 
   setup.make
 Add msys make upgrade and improve documentation.
+
+20061219T0042Z <chicares@cox.net> [1239]
+
+  passkey_test.cpp
+Refactor; improve documentation.
+
+20061219T0103Z <chicares@cox.net> [1239]
+
+  passkey_test.cpp
+Include only appropriate headers.
+
+20061219T0144Z <chicares@cox.net> [1239]
+
+  passkey_test.cpp
+Use distinct variables for distinct purposes: don't recycle.
+
+20061219T0225Z <chicares@cox.net> [1239]
+
+  passkey_test.cpp
+Refactor; add another test.
+
+20061219T1518Z <chicares@cox.net> [1239]
+
+  passkey_test.cpp
+Rectify names.
+
+20061219T1524Z <chicares@cox.net> [1239]
+
+  version.hpp
+Mark release candidate.
 
