@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: passkey_test.cpp,v 1.40 2006-12-19 01:44:16 chicares Exp $
+// $Id: passkey_test.cpp,v 1.41 2006-12-19 02:25:22 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -231,14 +231,6 @@ void PasskeyTest::InitializePasskeyFile() const
     md5_buffer(c_passkey, md5len, u_passkey);
     BOOST_TEST_EQUAL("3ff4953dbddf009634922fa52a342bfe", md5_str(u_passkey));
 
-    // Test with no passkey file. This is intended to fail.
-
-    SecurityValidator::ResetCache();
-    BOOST_TEST_EQUAL
-        ("Unable to read passkey file 'passkey'. Try reinstalling."
-        ,SecurityValidator::Validate(BeginDate_, ".")
-        );
-
     std::ofstream os("passkey", ios_out_trunc_binary());
     BOOST_TEST(!!os);
     os << md5_hex_string
@@ -362,11 +354,11 @@ void PasskeyTest::Test2() const
 
     SecurityValidator::ResetCache();
     BOOST_TEST_EQUAL("validated", SecurityValidator::Validate(BeginDate_, Pwd_));
-    std::ofstream os("passkey", ios_out_trunc_binary());
-    BOOST_TEST(!!os);
+    std::ofstream os0("passkey", ios_out_trunc_binary());
+    BOOST_TEST(!!os0);
     std::vector<unsigned char> const wrong(md5len);
-    os << md5_hex_string(wrong);
-    os.close();
+    os0 << md5_hex_string(wrong);
+    os0.close();
 
     // Testing with the same date succeeds due to caching.
 
@@ -379,6 +371,34 @@ void PasskeyTest::Test2() const
         ("Passkey is incorrect for this version. Contact the home office."
         ,SecurityValidator::Validate(BeginDate_, Pwd_)
         );
+
+    // Testing with no passkey file produces a different diagnostic.
+
+    std::remove("passkey");
+    BOOST_TEST(!fs::exists("passkey"));
+    SecurityValidator::ResetCache();
+    BOOST_TEST_EQUAL
+        ("Unable to read passkey file 'passkey'. Try reinstalling."
+        ,SecurityValidator::Validate(BeginDate_, ".")
+        );
+
+    // Testing with a passkey file of incorrect length produces yet
+    // another diagnostic.
+
+    std::ofstream os1("passkey", ios_out_trunc_binary());
+    os1 << "wrong";
+    BOOST_TEST(!!os1);
+    os1.close();
+    SecurityValidator::ResetCache();
+    BOOST_TEST_EQUAL
+        ("Length of passkey 'wrong' is 5 but should be 32. Try reinstalling."
+        ,SecurityValidator::Validate(BeginDate_, Pwd_)
+        );
+
+    // Fix the passkey, and everything works again.
+
+    InitializePasskeyFile();
+    BOOST_TEST_EQUAL("validated", SecurityValidator::Validate(BeginDate_, Pwd_));
 }
 
 void PasskeyTest::Test3() const
