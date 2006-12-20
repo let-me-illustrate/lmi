@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: passkey_test.cpp,v 1.45 2006-12-20 12:51:33 chicares Exp $
+// $Id: passkey_test.cpp,v 1.46 2006-12-20 14:20:14 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -71,7 +71,8 @@ class PasskeyTest
     void InitializePasskeyFile() const;
     void InitializeExpiryFile() const;
 
-    void TestNominal() const;
+    void CheckNominal(char const* file, int line) const;
+
     void TestFromAfar() const;
     void TestDate() const;
     void TestPasskey() const;
@@ -106,10 +107,13 @@ PasskeyTest::PasskeyTest()
     InitializeMd5sumFile();
     InitializePasskeyFile();
     InitializeExpiryFile();
+
+    CheckNominal(__FILE__, __LINE__);
 }
 
 PasskeyTest::~PasskeyTest()
 {
+    CheckNominal(__FILE__, __LINE__);
     RemoveTestFiles(__FILE__, __LINE__);
 }
 
@@ -248,14 +252,26 @@ void PasskeyTest::InitializeExpiryFile() const
     os.close();
 }
 
-void PasskeyTest::TestNominal() const
+/// This check succeeds as
+///   - a postcondition of the ctor,
+///   - a precondition of the dtor, and
+///   - a precondition and postcondition of every 'Test*' function.
+
+void PasskeyTest::CheckNominal(char const* file, int line) const
 {
     SecurityValidator::ResetCache();
-    BOOST_TEST_EQUAL("validated", SecurityValidator::Validate(BeginDate_, Pwd_));
+    INVOKE_BOOST_TEST_EQUAL
+        ("validated"
+        ,SecurityValidator::Validate(BeginDate_, Pwd_)
+        ,file
+        ,line
+        );
 }
 
 void PasskeyTest::TestFromAfar() const
 {
+    CheckNominal(__FILE__, __LINE__);
+
     // Test validation from a remote directory (using a valid date).
     // This should not alter the current directory.
 
@@ -270,6 +286,8 @@ void PasskeyTest::TestFromAfar() const
     BOOST_TEST_EQUAL(Pwd_.string(), fs::current_path().string());
 
 #if defined LMI_MSW
+    CheckNominal(__FILE__, __LINE__);
+
     // Try the root directory on a different drive, on a multiple-root
     // system. This is perforce platform specific; msw is used because
     // it happens to be common. This test assumes that an 'E:' drive
@@ -285,10 +303,14 @@ void PasskeyTest::TestFromAfar() const
     BOOST_TEST_EQUAL(0, chdir(Pwd_.string().c_str()));
     BOOST_TEST_EQUAL(Pwd_.string(), fs::current_path().string());
 #endif // defined LMI_MSW
+
+    CheckNominal(__FILE__, __LINE__);
 }
 
 void PasskeyTest::TestDate() const
 {
+    CheckNominal(__FILE__, __LINE__);
+
     // The first day of the valid period should work. Repeating the
     // test immediately validates caching.
 
@@ -335,10 +357,14 @@ void PasskeyTest::TestDate() const
     // work normally.
 
     BOOST_TEST_EQUAL  ("cached", SecurityValidator::Validate(last_date, Pwd_));
+
+    CheckNominal(__FILE__, __LINE__);
 }
 
 void PasskeyTest::TestPasskey() const
 {
+    CheckNominal(__FILE__, __LINE__);
+
     // Test with an incorrect passkey. Caching can prevent this from
     // being detected--intentionally, because it is expensive to test
     // the data files. To demonstrate this: first validate the date,
@@ -388,15 +414,13 @@ void PasskeyTest::TestPasskey() const
         ,SecurityValidator::Validate(BeginDate_, Pwd_)
         );
 
-    // Fix the passkey, and everything works again.
-
     InitializePasskeyFile();
-    BOOST_TEST_EQUAL("validated", SecurityValidator::Validate(BeginDate_, Pwd_));
+    CheckNominal(__FILE__, __LINE__);
 }
 
 void PasskeyTest::TestDataFile() const
 {
-    // Test with an altered data file. This is intended to fail.
+    CheckNominal(__FILE__, __LINE__);
 
     std::ofstream os("coleridge", ios_out_trunc_binary());
     BOOST_TEST(!!os);
@@ -409,10 +433,15 @@ void PasskeyTest::TestDataFile() const
         " Try reinstalling."
         ,SecurityValidator::Validate(BeginDate_, Pwd_)
         );
+
+    InitializeDataFile();
+    CheckNominal(__FILE__, __LINE__);
 }
 
 void PasskeyTest::TestExpiry() const
 {
+    CheckNominal(__FILE__, __LINE__);
+
     std::remove("expiry");
     BOOST_TEST(!fs::exists("expiry"));
     SecurityValidator::ResetCache();
@@ -430,12 +459,14 @@ void PasskeyTest::TestExpiry() const
         ("Error reading expiry file 'expiry'. Try reinstalling."
         ,SecurityValidator::Validate(BeginDate_, ".")
         );
+
+    InitializeExpiryFile();
+    CheckNominal(__FILE__, __LINE__);
 }
 
 int test_main(int, char*[])
 {
     PasskeyTest tester;
-    tester.TestNominal();
     tester.TestFromAfar();
     tester.TestDate();
     tester.TestPasskey();
