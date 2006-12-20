@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: passkey_test.cpp,v 1.47 2006-12-20 15:51:22 chicares Exp $
+// $Id: passkey_test.cpp,v 1.48 2006-12-20 17:41:15 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -132,6 +132,11 @@ void PasskeyTest::RemoveTestFiles(char const* file, int line) const
         }
 }
 
+/// Write a data file for testing; calculate and store its md5sum.
+/// Weakly test the md5 routines for consistency by making sure the
+/// file's md5sum equals that of the character string from which it is
+/// created, taking care to ignore that string's terminating null.
+
 void PasskeyTest::InitializeDataFile() const
 {
     char const rime[] =
@@ -156,12 +161,8 @@ void PasskeyTest::InitializeDataFile() const
     os << rime;
     os.close();
 
-    // Here, '-1 +' excludes the trailing null character.
-
     md5_buffer(rime, -1 + static_cast<int>(sizeof rime), DataMd5sum_);
     BOOST_TEST_EQUAL("bf039dbb0e8061971a2c322c8336199c", md5_str(DataMd5sum_));
-
-    // Make sure the file's md5sum equals the buffer's.
 
     unsigned char expected[md5len];
     FILE* in = std::fopen("coleridge", "rb");
@@ -218,13 +219,13 @@ void PasskeyTest::InitializeMd5sumFile() const
     BOOST_TEST_EQUAL("efb7a0a972b88bb5b9ac6f60390d61bf", md5_str(FileMd5sum_));
 }
 
+/// The passkey is the md5 sum of the md5 sum of the '.md5' file.
+/// A more secure alternative could be wrought if wanted, but the
+/// present method is enough to stymie the unsophisticated.
+
 void PasskeyTest::InitializePasskeyFile() const
 {
     BOOST_TEST_EQUAL("efb7a0a972b88bb5b9ac6f60390d61bf", md5_str(FileMd5sum_));
-
-    // The passkey is the md5 sum of the md5 sum of the '.md5' file.
-    // A more secure alternative could be wrought if wanted, but the
-    // present method is enough to stymie the unsophisticated.
 
     char c_passkey[md5len];
     unsigned char u_passkey[md5len];
@@ -268,12 +269,17 @@ void PasskeyTest::CheckNominal(char const* file, int line) const
         );
 }
 
+/// Authenticate from a remote directory. The current directory should
+/// be the same after authentication as it was before.
+///
+/// Authenticate also from the root directory on a different drive, on
+/// a multiple-root system. This is perforce platform specific; msw is
+/// used because it happens to be common. This test assumes that an
+/// 'E:' drive exists and is not the "current" drive.
+
 void PasskeyTest::TestFromAfar() const
 {
     CheckNominal(__FILE__, __LINE__);
-
-    // Test validation from a remote directory (using a valid date).
-    // This should not alter the current directory.
 
     fs::path const remote_dir_0(fs::complete("/tmp"));
     BOOST_TEST(fs::exists(remote_dir_0) && fs::is_directory(remote_dir_0));
@@ -287,11 +293,6 @@ void PasskeyTest::TestFromAfar() const
 
 #if defined LMI_MSW
     CheckNominal(__FILE__, __LINE__);
-
-    // Try the root directory on a different drive, on a multiple-root
-    // system. This is perforce platform specific; msw is used because
-    // it happens to be common. This test assumes that an 'E:' drive
-    // exists and is not the "current" drive.
 
     fs::path const remote_dir_1(fs::complete(fs::path("E:/", fs::native)));
     BOOST_TEST(fs::exists(remote_dir_1) && fs::is_directory(remote_dir_1));
