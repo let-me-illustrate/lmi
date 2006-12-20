@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: passkey_test.cpp,v 1.43 2006-12-20 03:24:17 chicares Exp $
+// $Id: passkey_test.cpp,v 1.44 2006-12-20 03:58:34 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -71,6 +71,7 @@ class PasskeyTest
     void InitializePasskeyFile() const;
     void InitializeExpiryFile() const;
 
+    void TestNominal() const;
     void TestFromAfar() const;
     void TestDate() const;
     void TestPasskey() const;
@@ -241,13 +242,14 @@ void PasskeyTest::InitializePasskeyFile() const
 
 void PasskeyTest::InitializeExpiryFile() const
 {
-    // Create file 'expiry' and test with a real date.
-
     std::ofstream os("expiry");
     BOOST_TEST(!!os);
     os << BeginDate_ << ' ' << EndDate_;
     os.close();
+}
 
+void PasskeyTest::TestNominal() const
+{
     SecurityValidator::ResetCache();
     BOOST_TEST_EQUAL("validated", SecurityValidator::Validate(BeginDate_, Pwd_));
 }
@@ -423,6 +425,7 @@ void PasskeyTest::TestExpiry() const
 int test_main(int, char*[])
 {
     PasskeyTest tester;
+    tester.TestNominal();
     tester.TestFromAfar();
     tester.TestDate();
     tester.TestPasskey();
