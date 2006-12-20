@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: passkey_test.cpp,v 1.46 2006-12-20 14:20:14 chicares Exp $
+// $Id: passkey_test.cpp,v 1.47 2006-12-20 15:51:22 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -361,37 +361,32 @@ void PasskeyTest::TestDate() const
     CheckNominal(__FILE__, __LINE__);
 }
 
+/// Caching can prevent an incorrect or missing passkey from being
+/// detected. That's deliberate: testing the data files is expensive,
+/// so they're tested once, and not retested as long as the cached
+/// date doesn't change.
+///
+/// Precondition: the system is valid for more than one day, so that
+/// a valid date change may be tested.
+
 void PasskeyTest::TestPasskey() const
 {
     CheckNominal(__FILE__, __LINE__);
 
-    // Test with an incorrect passkey. Caching can prevent this from
-    // being detected--intentionally, because it is expensive to test
-    // the data files. To demonstrate this: first validate the date,
-    // in order to get it cached; then write an incorrect 'passkey'
-    // file and retest.
+    calendar_date const last_date = EndDate_ - 1;
+    BOOST_TEST_EQUAL("validated", SecurityValidator::Validate(last_date, Pwd_));
 
-    SecurityValidator::ResetCache();
-    BOOST_TEST_EQUAL("validated", SecurityValidator::Validate(BeginDate_, Pwd_));
     std::ofstream os0("passkey", ios_out_trunc_binary());
     BOOST_TEST(!!os0);
     std::vector<unsigned char> const wrong(md5len);
     os0 << md5_hex_string(wrong);
     os0.close();
-
-    // Testing with the same date succeeds due to caching.
-
-    BOOST_TEST_EQUAL("cached"   , SecurityValidator::Validate(BeginDate_, Pwd_));
-
-    // Reset the cache, and the incorrect passkey is detected.
-
-    SecurityValidator::ResetCache();
+    BOOST_TEST_EQUAL("cached"   , SecurityValidator::Validate(last_date, Pwd_));
+    BOOST_TEST(last_date != BeginDate_);
     BOOST_TEST_EQUAL
         ("Passkey is incorrect for this version. Contact the home office."
         ,SecurityValidator::Validate(BeginDate_, Pwd_)
         );
-
-    // Testing with no passkey file produces a different diagnostic.
 
     std::remove("passkey");
     BOOST_TEST(!fs::exists("passkey"));
@@ -400,9 +395,6 @@ void PasskeyTest::TestPasskey() const
         ("Unable to read passkey file 'passkey'. Try reinstalling."
         ,SecurityValidator::Validate(BeginDate_, ".")
         );
-
-    // Testing with a passkey file of incorrect length produces yet
-    // another diagnostic.
 
     std::ofstream os1("passkey", ios_out_trunc_binary());
     os1 << "wrong";
