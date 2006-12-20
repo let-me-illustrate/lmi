@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: passkey_test.cpp,v 1.48 2006-12-20 17:41:15 chicares Exp $
+// $Id: passkey_test.cpp,v 1.49 2006-12-20 17:57:37 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -308,25 +308,23 @@ void PasskeyTest::TestFromAfar() const
     CheckNominal(__FILE__, __LINE__);
 }
 
+/// When authentication succeeds, the date is cached. Reauthenticating
+/// on the same date succeeds without testing the data files afresh.
+///
+/// When authentication fails, the cache is reset, and any subsequent
+/// authentication tests the data files as well as the date.
+
 void PasskeyTest::TestDate() const
 {
     CheckNominal(__FILE__, __LINE__);
-
-    // The first day of the valid period should work. Repeating the
-    // test immediately validates caching.
 
     SecurityValidator::ResetCache();
     BOOST_TEST_EQUAL("validated", SecurityValidator::Validate(BeginDate_, Pwd_));
     BOOST_TEST_EQUAL("cached"   , SecurityValidator::Validate(BeginDate_, Pwd_));
 
-    // The last day of the valid period should work.
-
     calendar_date const last_date = EndDate_ - 1;
     BOOST_TEST_EQUAL("validated", SecurityValidator::Validate(last_date, Pwd_));
     BOOST_TEST_EQUAL("cached"   , SecurityValidator::Validate(last_date, Pwd_));
-
-    // Test one day before the valid period, one day after, and
-    // another day a bit later.
 
     BOOST_TEST_EQUAL
         ("Current date '2000-12-31' is invalid:"
@@ -347,16 +345,7 @@ void PasskeyTest::TestDate() const
         ,SecurityValidator::Validate(EndDate_ + 10, Pwd_)
         );
 
-    // Make sure that the last-successfully-validated date is not
-    // inadvertently accepted due only to caching. It should be
-    // accepted, but only after the data files and the date have been
-    // tested afresh.
-
     BOOST_TEST_UNEQUAL("cached", SecurityValidator::Validate(last_date, Pwd_));
-
-    // Now that a valid date has been cached, caching should again
-    // work normally.
-
     BOOST_TEST_EQUAL  ("cached", SecurityValidator::Validate(last_date, Pwd_));
 
     CheckNominal(__FILE__, __LINE__);
