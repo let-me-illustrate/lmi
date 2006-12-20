@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: passkey_test.cpp,v 1.42 2006-12-19 15:18:30 chicares Exp $
+// $Id: passkey_test.cpp,v 1.43 2006-12-20 03:24:17 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -75,6 +75,7 @@ class PasskeyTest
     void TestDate() const;
     void TestPasskey() const;
     void TestDataFile() const;
+    void TestExpiry() const;
 
   private:
     calendar_date const  BeginDate_;
@@ -240,16 +241,6 @@ void PasskeyTest::InitializePasskeyFile() const
 
 void PasskeyTest::InitializeExpiryFile() const
 {
-    // Test with default dates, which are used if file 'expiry' fails
-    // to exist, e.g. because it was deliberately deleted. This is
-    // intended to fail.
-
-    SecurityValidator::ResetCache();
-    BOOST_TEST_EQUAL
-        ("Unable to read expiry file 'expiry'. Try reinstalling."
-        ,SecurityValidator::Validate(BeginDate_, ".")
-        );
-
     // Create file 'expiry' and test with a real date.
 
     std::ofstream os("expiry");
@@ -418,6 +409,17 @@ void PasskeyTest::TestDataFile() const
         );
 }
 
+void PasskeyTest::TestExpiry() const
+{
+    std::remove("expiry");
+    BOOST_TEST(!fs::exists("expiry"));
+    SecurityValidator::ResetCache();
+    BOOST_TEST_EQUAL
+        ("Unable to read expiry file 'expiry'. Try reinstalling."
+        ,SecurityValidator::Validate(BeginDate_, ".")
+        );
+}
+
 int test_main(int, char*[])
 {
     PasskeyTest tester;
@@ -425,6 +427,7 @@ int test_main(int, char*[])
     tester.TestDate();
     tester.TestPasskey();
     tester.TestDataFile();
+    tester.TestExpiry();
 
     return EXIT_SUCCESS;
 }
