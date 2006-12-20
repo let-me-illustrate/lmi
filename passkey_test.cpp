@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: passkey_test.cpp,v 1.44 2006-12-20 03:58:34 chicares Exp $
+// $Id: passkey_test.cpp,v 1.45 2006-12-20 12:51:33 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -418,6 +418,16 @@ void PasskeyTest::TestExpiry() const
     SecurityValidator::ResetCache();
     BOOST_TEST_EQUAL
         ("Unable to read expiry file 'expiry'. Try reinstalling."
+        ,SecurityValidator::Validate(BeginDate_, ".")
+        );
+
+    std::ofstream os("expiry");
+    BOOST_TEST(!!os);
+    os << "bogus dates";
+    os.close();
+    SecurityValidator::ResetCache();
+    BOOST_TEST_EQUAL
+        ("Error reading expiry file 'expiry'. Try reinstalling."
         ,SecurityValidator::Validate(BeginDate_, ".")
         );
 }
