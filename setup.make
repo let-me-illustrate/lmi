@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: setup.make,v 1.30 2006-12-18 22:32:40 wboutin Exp $
+# $Id: setup.make,v 1.31 2006-12-21 22:59:20 wboutin Exp $
 
 .PHONY: all
 all: setup
@@ -63,6 +63,21 @@ third_party_lib_dir     := $(third_party_dir)/lib
 third_party_source_dir  := $(third_party_dir)/src
 
 sf_mirror := http://downloads.sourceforge.net
+
+# Current versions used in production.
+boost    := boost_1_33_0
+
+# TODO ?? Test these thoroughly before moving above. For now, they
+# show tools' versions at a glance.
+#
+# cgicc    := cgicc-3.1.4
+# gdb      := gdb-5.2.1-1
+# libxml2  := libxml2-2.6.19
+# make     := make-3.81
+# msys     := MSYS-1.0.10
+# sed      := sed-4.0.7
+# xmlwrapp := xmlwrapp-0.5.0
+# wget     := wget-1.9.1
 
 .PHONY: setup
 setup: \
@@ -144,7 +159,7 @@ dummy_libraries: $(third_party_bin_dir) $(third_party_lib_dir)
 
 ###############################################################################
 
-# Install boost-1.33.0 .
+# Install boost.
 
 .PHONY: frozen_boost
 frozen_boost:
@@ -158,24 +173,25 @@ frozen_boost:
 
 .PHONY: install_frozen_boost_from_tmp_dir
 install_frozen_boost_from_tmp_dir:
-	[ -e boost_1_33_0.tar.bz2 ] \
+	[ -e $(boost).tar.bz2 ] \
 	  || $(WGET) --non-verbose \
-	  $(sf_mirror)/boost/boost_1_33_0.tar.bz2
-	$(ECHO) "43d87bbd827a8299f408df5efe5f0fd8  boost_1_33_0.tar.bz2" \
+	  $(sf_mirror)/boost/$(boost).tar.bz2
+	$(ECHO) "43d87bbd827a8299f408df5efe5f0fd8  $(boost).tar.bz2" \
 	  |$(MD5SUM) --check
-	$(BZIP2) --decompress --keep boost_1_33_0.tar.bz2
-	$(TAR) --extract --file=boost_1_33_0.tar
+	$(RM) --force --recursive ./$(boost)
+	$(BZIP2) --decompress --keep $(boost).tar.bz2
+	$(TAR) --extract --file=$(boost).tar
 # This safeguards against any older files interfering with new ones
 # installed to the same directory.
-	$(RM) --force $(third_party_include_dir)/boost/
-	$(RM) --force $(third_party_source_dir)/boost/
+	$(RM) --force --recursive $(third_party_include_dir)/boost/
 	$(MKDIR) --parents $(third_party_include_dir)/boost/
+	$(RM) --force --recursive $(third_party_source_dir)/boost/
 	$(MKDIR) --parents $(third_party_source_dir)/boost/
-	-$(CP) --force --preserve --recursive boost_1_33_0/boost/* \
+	-$(CP) --force --preserve --recursive $(boost)/boost/* \
 	  $(third_party_include_dir)/boost/
-	-$(CP) --force --preserve --recursive boost_1_33_0/* \
+	-$(CP) --force --preserve --recursive $(boost)/* \
 	  $(third_party_source_dir)/boost/
-	$(RM) --force boost_1_33_0.tar boost_1_33_0.tar.bz2
+	$(RM) --force $(boost).tar $(boost).tar.bz2
 
 ###############################################################################
 
@@ -364,7 +380,7 @@ install_sed_from_tmp_dir:
 
 ###############################################################################
 
-# Install and patch xmlwrapp-0.5.0 .
+# Install xmlwrapp-0.5.0 .
 
 .PHONY: frozen_xmlwrapp
 frozen_xmlwrapp:
