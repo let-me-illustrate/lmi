@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: passkey_test.cpp,v 1.52 2006-12-21 15:39:27 chicares Exp $
+// $Id: passkey_test.cpp,v 1.53 2006-12-21 15:56:50 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -38,7 +38,7 @@
 
 #include <cstddef> // std::size_t
 #include <cstdio>
-#include <cstring> // std::memcmp(), std::memcpy()
+#include <cstring> // std::memcpy()
 #include <fstream>
 #include <string>
 #include <vector>
@@ -84,11 +84,9 @@ class PasskeyTest
     calendar_date const  EndDate_;
     fs::path const       Pwd_;
 
-    static unsigned char DataMd5sum_[];
     static unsigned char FileMd5sum_[];
 };
 
-unsigned char PasskeyTest::DataMd5sum_[md5len];
 unsigned char PasskeyTest::FileMd5sum_[md5len];
 
 /// Before writing any test file, remove any old copy that may be left
@@ -143,10 +141,10 @@ void PasskeyTest::RemoveTestFiles(char const* file, int line) const
         }
 }
 
-/// Write a data file for testing; calculate and store its md5sum.
-/// Weakly test the md5 routines for consistency by making sure the
-/// file's md5sum equals that of the character string from which it is
-/// created, taking care to ignore that string's terminating null.
+/// Write a data file for testing.
+///
+/// Calculate and verify the md5 sum of the string from which the file
+/// is created, taking care to ignore that string's terminating null.
 
 void PasskeyTest::InitializeDataFile() const
 {
@@ -172,15 +170,9 @@ void PasskeyTest::InitializeDataFile() const
     os << rime;
     os.close();
 
-    md5_buffer(rime, -1 + static_cast<int>(sizeof rime), DataMd5sum_);
-    BOOST_TEST_EQUAL("bf039dbb0e8061971a2c322c8336199c", md5_str(DataMd5sum_));
-
-    unsigned char expected[md5len];
-    FILE* in = std::fopen("coleridge", "rb");
-    md5_stream(in, expected);
-    std::fclose(in);
-    BOOST_TEST_EQUAL(0, std::memcmp(expected, DataMd5sum_, sizeof expected));
-    BOOST_TEST_EQUAL("bf039dbb0e8061971a2c322c8336199c", md5_str(expected));
+    unsigned char sum[md5len];
+    md5_buffer(rime, -1 + static_cast<int>(sizeof rime), sum);
+    BOOST_TEST_EQUAL("bf039dbb0e8061971a2c322c8336199c", md5_str(sum));
 }
 
 /// Write a data file to be passed to the 'md5sum' program.
@@ -199,13 +191,15 @@ void PasskeyTest::InitializeDataFile() const
 
 void PasskeyTest::InitializeMd5sumFile() const
 {
-    BOOST_TEST_EQUAL("bf039dbb0e8061971a2c322c8336199c", md5_str(DataMd5sum_));
+    unsigned char sum[md5len];
+    FILE* in = std::fopen("coleridge", "rb");
+    md5_stream(in, sum);
+    std::fclose(in);
+    BOOST_TEST_EQUAL("bf039dbb0e8061971a2c322c8336199c", md5_str(sum));
 
     std::ofstream os(md5sum_file(), ios_out_trunc_binary());
     BOOST_TEST(!!os);
-    os << md5_hex_string
-        (std::vector<unsigned char>(DataMd5sum_, DataMd5sum_ + md5len)
-        );
+    os << md5_hex_string(std::vector<unsigned char>(sum, sum + md5len));
     os << "  coleridge\n";
     os.close();
 
