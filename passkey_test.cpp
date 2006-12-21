@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: passkey_test.cpp,v 1.51 2006-12-21 14:49:44 chicares Exp $
+// $Id: passkey_test.cpp,v 1.52 2006-12-21 15:39:27 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -67,7 +67,6 @@ class PasskeyTest
     void RemoveTestFiles(char const* file, int line) const;
 
     void InitializeDataFile() const;
-    void InitializeMd5sumOfDataFile() const;
     void InitializeMd5sumFile() const;
     void InitializePasskeyFile() const;
     void InitializeExpiryFile() const;
@@ -105,7 +104,6 @@ PasskeyTest::PasskeyTest()
     RemoveTestFiles(__FILE__, __LINE__);
 
     InitializeDataFile();
-    InitializeMd5sumOfDataFile();
     InitializeMd5sumFile();
     InitializePasskeyFile();
     InitializeExpiryFile();
@@ -199,7 +197,7 @@ void PasskeyTest::InitializeDataFile() const
 ///
 /// Postcondition: the file passes a test with the 'md5sum' program.
 
-void PasskeyTest::InitializeMd5sumOfDataFile() const
+void PasskeyTest::InitializeMd5sumFile() const
 {
     BOOST_TEST_EQUAL("bf039dbb0e8061971a2c322c8336199c", md5_str(DataMd5sum_));
 
@@ -215,21 +213,16 @@ void PasskeyTest::InitializeMd5sumOfDataFile() const
     BOOST_TEST_EQUAL(0, system_command(s));
 }
 
-void PasskeyTest::InitializeMd5sumFile() const
-{
-    FILE* md5 = std::fopen(md5sum_file(), "rb");
-    md5_stream(md5, FileMd5sum_);
-    std::fclose(md5);
-
-    BOOST_TEST_EQUAL("efb7a0a972b88bb5b9ac6f60390d61bf", md5_str(FileMd5sum_));
-}
-
 /// The passkey is the md5 sum of the md5 sum of the '.md5' file.
 /// A more secure alternative could be wrought if wanted, but the
 /// present method is enough to stymie the unsophisticated.
 
 void PasskeyTest::InitializePasskeyFile() const
 {
+    FILE* md5 = std::fopen(md5sum_file(), "rb");
+    md5_stream(md5, FileMd5sum_);
+    std::fclose(md5);
+
     BOOST_TEST_EQUAL("efb7a0a972b88bb5b9ac6f60390d61bf", md5_str(FileMd5sum_));
 
     char c_passkey[md5len];
