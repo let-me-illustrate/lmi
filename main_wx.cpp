@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_wx.cpp,v 1.62 2006-12-12 01:21:19 chicares Exp $
+// $Id: main_wx.cpp,v 1.63 2006-12-21 17:50:34 chicares Exp $
 
 // Portions of this file are derived from wxWindows files
 //   samples/docvwmdi/docview.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -41,6 +41,7 @@
 #include "about_dialog.hpp"
 #include "alert.hpp"
 #include "argv0.hpp"
+#include "authenticity.hpp"
 #include "census_document.hpp"
 #include "census_view.hpp"
 #include "configurable_settings.hpp"
@@ -64,7 +65,6 @@
 #include "preferences_model.hpp"
 #include "preferences_view.hpp"
 #include "progress_meter.hpp"
-#include "security.hpp"
 #include "text_doc.hpp"
 #include "text_view.hpp"
 #include "wx_new.hpp"
@@ -437,7 +437,7 @@ bool Skeleton::OnInit()
             return false;
             }
 
-        validate_security(!global_settings::instance().ash_nazg());
+        authenticate_system();
 
         wxXmlResource::Get()->InitAllHandlers();
 

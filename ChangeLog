@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.535 2006-12-20 03:58:34 chicares Exp $
+// $Id: ChangeLog,v 1.536 2006-12-21 17:50:34 chicares Exp $
 
 MAINTENANCE
 
@@ -9143,4 +9143,82 @@ Refactor, removing an incorrect comment.
 
   passkey_test.cpp
 Refactor; remove a jejune comment.
+
+20061220T1251Z <chicares@cox.net> [1239]
+
+  passkey_test.cpp
+Add another test.
+
+20061220T1420Z <chicares@cox.net> [1239]
+
+  passkey_test.cpp
+Establish preconditions and postconditions.
+
+20061220T1551Z <chicares@cox.net> [1239]
+
+  passkey_test.cpp
+Strengthen one test; improve documentation.
+
+20061220T1741Z <chicares@cox.net> [1239]
+
+  passkey_test.cpp
+Improve documentation.
+
+20061220T1757Z <chicares@cox.net> [1239]
+
+  passkey_test.cpp
+Improve documentation.
+
+20061221T1445Z <chicares@cox.net> [1239]
+
+  passkey_test.cpp
+Refactor, testing a general precondition earlier.
+
+20061221T1449Z <chicares@cox.net> [1239]
+
+  passkey_test.cpp
+Remove a pointless and misplaced test.
+
+20061221T1539Z <chicares@cox.net> [1239]
+
+  passkey_test.cpp
+Refactor: simplify, and rectify names.
+
+20061221T1556Z <chicares@cox.net> [1239]
+
+  passkey_test.cpp
+Refactor, increasing encapsulation.
+
+20061221T1601Z <chicares@cox.net> [1239]
+
+  passkey_test.cpp
+Refactor, increasing encapsulation.
+
+20061221T1750Z <chicares@cox.net> [1239]
+
+  authenticity.cpp      [new file]
+  authenticity.hpp      [new file]
+  authenticity_test.cpp [new file]
+Rectify names; combine and rename files, copying
+  from secure_date.cpp and security.cpp to authenticity.cpp
+  from secure_date.hpp and security.hpp to authenticity.hpp
+  from passkey_test.cpp                 to authenticity_test.cpp
+in anticipation of expunging the files copied from.
+
+  passkey_test.cpp [expunged]
+  secure_date.cpp  [expunged]
+  secure_date.hpp  [expunged]
+  security.cpp     [expunged]
+  security.hpp     [expunged]
+Expunge files that have been renamed.
+
+  antediluvian_stubs.cpp
+  generate_passkey.cpp
+  ledger_formatter.cpp
+  ledger_text_formats.cpp
+  ledger_xml_io.cpp
+  ledger_xml_io2.cpp
+  main_wx.cpp
+  objects.make
+Reflect file renaming.
 

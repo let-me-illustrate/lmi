@@ -19,16 +19,16 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: antediluvian_stubs.cpp,v 1.5 2006-01-29 13:52:00 chicares Exp $
+// $Id: antediluvian_stubs.cpp,v 1.6 2006-12-21 17:50:34 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
 #   pragma hdrstop
 #endif // __BORLANDC__
 
-#include "security.hpp"
+#include "authenticity.hpp"
 
-void validate_security(bool)
+void authenticate_system()
 {
 }
 
