@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: passkey_test.cpp,v 1.49 2006-12-20 17:57:37 chicares Exp $
+// $Id: passkey_test.cpp,v 1.50 2006-12-21 14:45:15 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -63,10 +63,11 @@ class PasskeyTest
     PasskeyTest();
     ~PasskeyTest();
 
+    void EnsureMd5sumBinaryIsFound() const;
     void RemoveTestFiles(char const* file, int line) const;
 
     void InitializeDataFile() const;
-    void InitializeAndTestMd5sumOfDataFile() const;
+    void InitializeMd5sumOfDataFile() const;
     void InitializeMd5sumFile() const;
     void InitializePasskeyFile() const;
     void InitializeExpiryFile() const;
@@ -100,10 +101,11 @@ PasskeyTest::PasskeyTest()
     ,EndDate_  (ymd_t(20010103))
     ,Pwd_      (fs::current_path())
 {
+    EnsureMd5sumBinaryIsFound();
     RemoveTestFiles(__FILE__, __LINE__);
 
     InitializeDataFile();
-    InitializeAndTestMd5sumOfDataFile();
+    InitializeMd5sumOfDataFile();
     InitializeMd5sumFile();
     InitializePasskeyFile();
     InitializeExpiryFile();
@@ -115,6 +117,17 @@ PasskeyTest::~PasskeyTest()
 {
     CheckNominal(__FILE__, __LINE__);
     RemoveTestFiles(__FILE__, __LINE__);
+}
+
+/// Regrettably, invoking 'md5sum' through a shell just to confirm its
+/// availability writes its output to stdout; however, without this
+/// test, it would be difficult to tell whether downstream errors stem
+/// from that program's absence.
+
+void PasskeyTest::EnsureMd5sumBinaryIsFound() const
+{
+    std::cout << "  Result of 'md5sum --version':" << std::endl;
+    BOOST_TEST_EQUAL(0, system_command("md5sum --version"));
 }
 
 void PasskeyTest::RemoveTestFiles(char const* file, int line) const
@@ -172,7 +185,21 @@ void PasskeyTest::InitializeDataFile() const
     BOOST_TEST_EQUAL("bf039dbb0e8061971a2c322c8336199c", md5_str(expected));
 }
 
-void PasskeyTest::InitializeAndTestMd5sumOfDataFile() const
+/// Write a data file to be passed to the 'md5sum' program.
+///
+/// For production, a file with md5 sums of crucial files is provided.
+/// For this unit test, file 'coleridge' is the sole crucial file.
+///
+/// This file consists of the md5 sum of the data file followed by two
+/// spaces and the name of the data file. Creating that file portably
+/// here by running 'md5sum' would require redirection, which isn't
+/// part of the standard C++ library, so the effect of 'md5sum' is
+/// instead emulated; testing that file here with 'md5sum' validates
+/// that emulation and guards against a bogus 'md5sum' program.
+///
+/// Postcondition: the file passes a test with the 'md5sum' program.
+
+void PasskeyTest::InitializeMd5sumOfDataFile() const
 {
     BOOST_TEST_EQUAL("bf039dbb0e8061971a2c322c8336199c", md5_str(DataMd5sum_));
 
@@ -184,28 +211,8 @@ void PasskeyTest::InitializeAndTestMd5sumOfDataFile() const
     os << "  coleridge\n";
     os.close();
 
-    // Make sure an 'md5sum' program is available. Regrettably,
-    // invoking that program here writes its output to stdout; but
-    // without this test, it would be difficult to tell whether errors
-    // in subsequent tests stem from incorrect md5sums or from that
-    // program's absence.
-
-    std::cout << "  Result of 'md5sum --version':" << std::endl;
-    BOOST_TEST_EQUAL(0, system_command("md5sum --version"));
-
-    // For production, a file with md5 sums of all data files is
-    // provided. For this unit test, treat file 'coleridge' as the
-    // only data file. Its md5 sum is embedded in the file created
-    // above. Creating that file portably here by running 'md5sum'
-    // would be no trivial task, as it would require redirection, so
-    // the effect of 'md5sum' was instead emulated; testing that file
-    // here with 'md5sum' validates that emulation and guards against
-    // a bogus 'md5sum' program.
-
-    BOOST_TEST_EQUAL
-        (0
-        ,system_command("md5sum --check --status " + std::string(md5sum_file()))
-        );
+    std::string s = "md5sum --check --status " + std::string(md5sum_file());
+    BOOST_TEST_EQUAL(0, system_command(s));
 }
 
 void PasskeyTest::InitializeMd5sumFile() const
