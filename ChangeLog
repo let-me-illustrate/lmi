@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.536 2006-12-21 17:50:34 chicares Exp $
+// $Id: ChangeLog,v 1.537 2006-12-21 22:59:20 wboutin Exp $
 
 MAINTENANCE
 
@@ -9221,4 +9221,9 @@ Expunge files that have been renamed.
   main_wx.cpp
   objects.make
 Reflect file renaming.
+
+20061221T2259Z <wboutin@massmutual.com> [1240]
+
+  setup.make
+Improve boost installation and documentation.
 
