@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: objects.make,v 1.93 2006-12-11 14:31:37 chicares Exp $
+# $Id: objects.make,v 1.94 2006-12-21 17:50:34 chicares Exp $
 
 ################################################################################
 
@@ -246,6 +246,7 @@ antediluvian_common_objects := \
 
 lmi_common_objects := \
   $(common_common_objects) \
+  authenticity.o \
   ce_product_name.o \
   datum_base.o \
   datum_boolean.o \
@@ -276,8 +277,6 @@ lmi_common_objects := \
   md5.o \
   mvc_model.o \
   preferences_model.o \
-  secure_date.o \
-  security.o \
   stratified_algorithms.o \
   stratified_charges.o \
   tn_range_types.o \
@@ -399,6 +398,7 @@ unit_test_targets := \
   alert_test$(EXEEXT) \
   any_member_test$(EXEEXT) \
   argv0_test$(EXEEXT) \
+  authenticity_test$(EXEEXT) \
   calendar_date_test$(EXEEXT) \
   callback_test$(EXEEXT) \
   commutation_functions_test$(EXEEXT) \
@@ -423,7 +423,6 @@ unit_test_targets := \
   ncnnnpnn_test$(EXEEXT) \
   numeric_io_test$(EXEEXT) \
   obstruct_slicing_test$(EXEEXT) \
-  passkey_test$(EXEEXT) \
   path_utility_test$(EXEEXT) \
   progress_meter_test$(EXEEXT) \
   quiet_nan_test$(EXEEXT) \
@@ -475,6 +474,18 @@ argv0_test$(EXEEXT): \
   $(boost_filesystem_objects) \
   $(common_test_objects) \
   argv0_test.o \
+
+authenticity_test$(EXEEXT): \
+  $(boost_filesystem_objects) \
+  $(common_test_objects) \
+  authenticity.o \
+  authenticity_test.o \
+  calendar_date.o \
+  global_settings.o \
+  md5.o \
+  miscellany.o \
+  path_utility.o \
+  system_command.o \
 
 calendar_date_test$(EXEEXT): \
   $(common_test_objects) \
@@ -636,15 +647,6 @@ obstruct_slicing_test$(EXEEXT): \
   obstruct_slicing_test.o \
   timer.o \
 
-passkey_test$(EXEEXT): \
-  $(boost_filesystem_objects) \
-  $(common_test_objects) \
-  calendar_date.o \
-  md5.o \
-  passkey_test.o \
-  secure_date.o \
-  system_command.o \
-
 path_utility_test$(EXEEXT): \
   $(boost_filesystem_objects) \
   $(common_test_objects) \
@@ -745,10 +747,13 @@ elapsed_time$(EXEEXT): \
 generate_passkey$(EXEEXT): \
   $(boost_filesystem_objects) \
   $(main_auxiliary_common_objects) \
+  authenticity.o \
   calendar_date.o \
   generate_passkey.o \
+  global_settings.o \
   md5.o \
-  secure_date.o \
+  miscellany.o \
+  path_utility.o \
   system_command.o \
 
 ihs_crc_comp$(EXEEXT): \

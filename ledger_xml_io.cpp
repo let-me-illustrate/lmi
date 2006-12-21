@@ -19,11 +19,12 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xml_io.cpp,v 1.63 2006-12-14 04:10:26 chicares Exp $
+// $Id: ledger_xml_io.cpp,v 1.64 2006-12-21 17:50:34 chicares Exp $
 
 #include "ledger.hpp"
 
 #include "alert.hpp"
+#include "authenticity.hpp"
 #include "calendar_date.hpp"
 #include "comma_punct.hpp"
 #include "configurable_settings.hpp"
@@ -32,7 +33,6 @@
 #include "ledger_invariant.hpp"
 #include "ledger_variant.hpp"
 #include "miscellany.hpp"
-#include "security.hpp"
 #include "value_cast.hpp"
 #include "version.hpp"
 #include "xml_lmi.hpp"
@@ -733,11 +733,10 @@ void Ledger::write(xml::element& x) const
 
     calendar_date prep_date;
 
-    // Skip security validation for non-interactive regression testing.
+    // Skip authentication for non-interactive regression testing.
     if(!global_settings::instance().regression_testing())
         {
-        // Skip security validation for the most privileged password.
-        validate_security(!global_settings::instance().ash_nazg());
+        authenticate_system();
         }
     else
         {

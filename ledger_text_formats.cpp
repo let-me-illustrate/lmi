@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_text_formats.cpp,v 1.25 2006-12-14 04:10:26 chicares Exp $
+// $Id: ledger_text_formats.cpp,v 1.26 2006-12-21 17:50:34 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -28,6 +28,7 @@
 
 #include "ledger_text_formats.hpp"
 
+#include "authenticity.hpp"
 #include "calendar_date.hpp"
 #include "comma_punct.hpp"
 #include "financial.hpp"
@@ -40,7 +41,6 @@
 #include "ledger_invariant.hpp"
 #include "ledger_variant.hpp"
 #include "miscellany.hpp"
-#include "security.hpp"
 #include "value_cast.hpp"
 
 #include <algorithm>
@@ -307,13 +307,13 @@ os << "\n\n" ;
     os << "UWClass\t\t"           << Invar.value_str("UWClass"        ) << '\n';
     os << "UWType\t\t"            << Invar.value_str("UWType"         ) << '\n';
 
-    // We surround the date in single quotes because one popular
+    // Skip authentication for non-interactive regression testing.
+    // Surround the date in single quotes because one popular
     // spreadsheet would otherwise interpret it as a date, which
     // is likely not to fit in a default-width cell.
     if(!global_settings::instance().regression_testing())
         {
-        // Skip security validation for the most privileged password.
-        validate_security(!global_settings::instance().ash_nazg());
+        authenticate_system();
         os << "DatePrepared\t\t'" << calendar_date().str() << "'\n";
         }
     else

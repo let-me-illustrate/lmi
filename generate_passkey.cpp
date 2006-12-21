@@ -19,16 +19,16 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: generate_passkey.cpp,v 1.5 2006-01-29 13:52:00 chicares Exp $
+// $Id: generate_passkey.cpp,v 1.6 2006-12-21 17:50:34 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
 #   pragma hdrstop
 #endif // __BORLANDC__
 
+#include "authenticity.hpp" // md5_hex_string()
 #include "main_common.hpp"
 #include "md5.hpp"
-#include "secure_date.hpp" // md5_hex_string()
 
 #include <cstdio>
 #include <cstdlib>
