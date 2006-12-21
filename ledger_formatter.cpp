@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_formatter.cpp,v 1.4 2006-12-14 03:57:35 chicares Exp $
+// $Id: ledger_formatter.cpp,v 1.5 2006-12-21 17:50:34 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -39,7 +39,6 @@
 #include "ledger_invariant.hpp"
 #include "ledger_variant.hpp"
 #include "miscellany.hpp"
-#include "security.hpp"
 #include "value_cast.hpp"
 #include "xml_lmi.hpp"
 
