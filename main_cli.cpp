@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_cli.cpp,v 1.24 2006-12-10 12:58:06 chicares Exp $
+// $Id: main_cli.cpp,v 1.25 2006-12-22 02:39:33 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -289,9 +289,9 @@ void process_command_line(int argc, char* argv[])
         ,1
         );
 
-    while(EOF != (c = getopt_long ()))
+    while(EOF != (c = getopt_long()))
         {
-        switch (c)
+        switch(c)
             {
             case 0:
                 {
@@ -299,9 +299,9 @@ void process_command_line(int argc, char* argv[])
                 std::printf("option %s", current_option);
                 if(getopt_long.optarg)
                     {
-                    std::printf (" with arg %s", getopt_long.optarg);
+                    std::printf(" with arg %s", getopt_long.optarg);
                     }
-                std::printf ("\n");
+                std::printf("\n");
                 }
                 break;
 
@@ -330,10 +330,10 @@ void process_command_line(int argc, char* argv[])
                 {
                 if(digit_optind != 0 && digit_optind != this_option_optind)
                     {
-                    std::printf ("digits occur in two different argv-elements.\n");
+                    std::printf("digits occur in two different argv-elements.\n");
                     }
                 digit_optind = this_option_optind;
-                std::printf ("option %c\n", c);
+                std::printf("option %c\n", c);
                 }
                 break;
 
@@ -345,7 +345,7 @@ void process_command_line(int argc, char* argv[])
 
             case 'b':
                 {
-                std::printf ("option b\n");
+                std::printf("option b\n");
                 }
                 break;
 
@@ -422,19 +422,19 @@ void process_command_line(int argc, char* argv[])
 
             default:
                 {
-                std::printf ("? getopt returned character code 0%o ?\n", c);
+                std::printf("? getopt returned character code 0%o ?\n", c);
                 }
             }
         }
 
     if((c = getopt_long.optind) < argc)
         {
-        std::printf ("non-option ARGV-elements: ");
-        while (c < argc)
+        std::printf("non-option ARGV-elements: ");
+        while(c < argc)
             {
-            std::printf ("%s ", argv[c++]);
+            std::printf("%s ", argv[c++]);
             }
-        std::printf ("\n");
+        std::printf("\n");
         }
 
     if(!license_accepted)
