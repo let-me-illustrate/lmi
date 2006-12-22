@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_formatter.cpp,v 1.5 2006-12-21 17:50:34 chicares Exp $
+// $Id: ledger_formatter.cpp,v 1.6 2006-12-22 02:39:33 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -82,7 +82,7 @@ xslt_lmi::Stylesheet const& LedgerFormatterFactory::GetStylesheet
     )
 {
     XmlStylesheets::const_iterator it = stylesheets_.find(filename);
-    if (it != stylesheets_.end())
+    if(it != stylesheets_.end())
         {
         XmlStylesheetPtr ptr = it->second;
         return *ptr.get();
@@ -132,7 +132,7 @@ LedgerFormatter::LedgerFormatter(LedgerFormatter const& rhs)
 //=============================================================================
 LedgerFormatter& LedgerFormatter::operator=(LedgerFormatter const& rhs)
 {
-    if (this != &rhs && ledger_values_ != rhs.ledger_values_)
+    if(this != &rhs && ledger_values_ != rhs.ledger_values_)
         {
         ledger_values_ = rhs.ledger_values_;
         }

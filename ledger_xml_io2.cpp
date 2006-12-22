@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xml_io2.cpp,v 1.15 2006-12-21 17:50:34 chicares Exp $
+// $Id: ledger_xml_io2.cpp,v 1.16 2006-12-22 02:39:33 chicares Exp $
 
 #include "ledger.hpp"
 
@@ -600,7 +600,7 @@ void double_formatter_t::add_columns_to_format
 bool double_formatter_t::has_format(value_id const& id) const
 {
     format_map_t::const_iterator it = format_map.find(id.name());
-    if (it == format_map.end())
+    if(it == format_map.end())
         {
 #ifdef SHOW_MISSING_FORMATS
         std::ofstream ofs("missing_formats", ios_out_app_binary());
@@ -615,7 +615,7 @@ double_formatter_t::format_t
 double_formatter_t::get_format(value_id const& id) const
 {
     format_map_t::const_iterator it = format_map.find(id.name());
-    if (it == format_map.end())
+    if(it == format_map.end())
         {
         fatal_error()
             << "Unknown column name '"
