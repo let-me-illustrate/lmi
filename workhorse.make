@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: workhorse.make,v 1.82 2006-12-09 04:56:37 chicares Exp $
+# $Id: workhorse.make,v 1.83 2006-12-23 17:49:24 chicares Exp $
 
 ################################################################################
 
@@ -917,7 +917,7 @@ cgi_tests: antediluvian_cgi$(EXEEXT)
 
 ################################################################################
 
-# Regression test.
+# System test.
 
 # Output is compared with $(DIFF), which reports all textual
 # discrepancies without regard to relevance; and also with
@@ -932,13 +932,13 @@ cgi_tests: antediluvian_cgi$(EXEEXT)
 
 test_result_suffixes     := test test0 debug
 
-regression_test_analysis := $(test_dir)/analysis-$(yyyymmddhhmm)
-regression_test_diffs    := $(test_dir)/diffs-$(yyyymmddhhmm)
-regression_test_md5sums  := $(test_dir)/md5sums-$(yyyymmddhhmm)
+system_test_analysis := $(test_dir)/analysis-$(yyyymmddhhmm)
+system_test_diffs    := $(test_dir)/diffs-$(yyyymmddhhmm)
+system_test_md5sums  := $(test_dir)/md5sums-$(yyyymmddhhmm)
 
-.PHONY: regression_test
-regression_test: install
-	@$(ECHO) Regression test:
+.PHONY: system_test
+system_test: install
+	@$(ECHO) System test:
 	@-cd $(test_dir); \
 	  $(foreach z, $(addprefix *., $(test_result_suffixes)), $(RM) --force $z;)
 	@cd $(test_dir); \
@@ -948,13 +948,13 @@ regression_test: install
 	    --test_path=$(test_dir); \
 	  $(MD5SUM) \
 	    $(addprefix *.,$(test_result_suffixes)) \
-	    >$(regression_test_md5sums); \
+	    >$(system_test_md5sums); \
 	  for z in *.test; \
 	    do \
 	      $(bin_dir)/ihs_crc_comp $$z $(touchstone_dir)/$$z \
 	      | $(SED) -e ';/Summary/!d' -e "s/^ /$$z/"; \
-	    done > $(regression_test_analysis);
-	@-< $(regression_test_analysis) $(SED) \
+	    done > $(system_test_analysis);
+	@-< $(system_test_analysis) $(SED) \
 	  -e ';/rel err.*e-01[5-9]/d' \
 	  -e ';/abs.*0\.00.*rel/d' \
 	  -e ';/abs diff: 0 /d'
@@ -963,35 +963,35 @@ regression_test: install
 	    --report-identical-files \
 	    $(test_dir) \
 	    $(touchstone_dir) \
-	    > $(regression_test_diffs) \
+	    > $(system_test_diffs) \
 	  || true
 	@$(ECHO) Summarizing test results
-	@-<$(regression_test_diffs) \
+	@-<$(system_test_diffs) \
 	  $(SED) \
 	    -e ';/^Only in/d' \
 	  | $(WC) -l \
 	  | $(SED) -e 's/^/  /' \
-	  | $(SED) -e 's/$$/ regression-test files compared/'
-	@-<$(regression_test_diffs) \
+	  | $(SED) -e 's/$$/ system-test files compared/'
+	@-<$(system_test_diffs) \
 	  $(SED) \
 	    -e ';/^Files.*are identical$$/!d' \
 	  | $(WC) -l \
 	  | $(SED) -e 's/^/  /' \
-	  | $(SED) -e 's/$$/ regression-test files match/'
-	@-<$(regression_test_diffs) \
+	  | $(SED) -e 's/$$/ system-test files match/'
+	@-<$(system_test_diffs) \
 	  $(SED) \
 	    -e ';/^Files.*are identical$$/d' \
 	    -e ';/^Only in /d' \
 	  | $(WC) -l \
 	  | $(SED) -e 's/^/  /' \
-	  | $(SED) -e 's/$$/ regression-test nonmatching files/'
-	@-<$(regression_test_diffs) \
+	  | $(SED) -e 's/$$/ system-test nonmatching files/'
+	@-<$(system_test_diffs) \
 	  $(SED) \
 	    -e ';/^Only in.*test\/touchstone/!d' \
 	  | $(WC) -l \
 	  | $(SED) -e 's/^/  /' \
-	  | $(SED) -e 's/$$/ regression-test missing files/'
-	@$(ECHO) ...regression test completed.
+	  | $(SED) -e 's/$$/ system-test missing files/'
+	@$(ECHO) ...system test completed.
 
 ################################################################################
 
