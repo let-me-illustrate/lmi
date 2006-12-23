@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: GNUmakefile,v 1.77 2006-12-10 12:56:22 chicares Exp $
+# $Id: GNUmakefile,v 1.78 2006-12-23 17:49:24 chicares Exp $
 
 ################################################################################
 
@@ -602,7 +602,7 @@ cvs_ready: source_clean
 # like once every twenty-four hours.
 
 # TODO ?? This is an evolving experiment. Possible enhancements include:
-#   - Add other tests, particularly regression tests.
+#   - Add other tests, particularly system tests.
 #       Consider using ../products/src if it exists.
 #       Also consider using cvs only, and using testdecks from cvs or ftp.
 #   - Test skeleton branch, too.

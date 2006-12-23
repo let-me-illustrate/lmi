@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.538 2006-12-22 02:39:33 chicares Exp $
+// $Id: ChangeLog,v 1.539 2006-12-23 17:49:24 chicares Exp $
 
 MAINTENANCE
 
@@ -9233,4 +9233,19 @@ Improve boost installation and documentation.
   ledger_xml_io2.cpp
   main_cli.cpp
 Don't routinely write a blank space before '('.
+
+20061223T1747Z <chicares@cox.net> [1240]
+
+  ledger_test.cpp
+  ledger_xml_io.cpp
+  ledger_xml_io2.cpp
+Avoid gratuitous testing discrepancies.
+
+20061223T1749Z <chicares@cox.net> [1240]
+
+  GNUmakefile
+  workhorse.make
+Rename system-test targets. See the IEEE Standard Computer Dictionary,
+cited here:
+  http://www.sei.cmu.edu/str/indexes/glossary/index_body.html
 
