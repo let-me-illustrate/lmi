@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_test.cpp,v 1.4 2006-12-14 01:54:15 chicares Exp $
+// $Id: ledger_test.cpp,v 1.5 2006-12-23 17:47:20 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -59,6 +59,7 @@ class LedgerTest
 LedgerTest::LedgerTest()
 {
     global_settings::instance().set_data_directory("/opt/lmi/data");
+    global_settings::instance().set_regression_testing(true);
 
     single_cell_document document("sample.ill");
     AccountValue av(document.input_data());
