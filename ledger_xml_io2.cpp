@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xml_io2.cpp,v 1.16 2006-12-22 02:39:33 chicares Exp $
+// $Id: ledger_xml_io2.cpp,v 1.17 2006-12-23 17:47:20 chicares Exp $
 
 #include "ledger.hpp"
 
@@ -942,6 +942,7 @@ void Ledger::write_excerpt
         ;
     scalars["NoLapse"] = &NoLapse;
 
+    std::string LmiVersion(LMI_VERSION);
     calendar_date prep_date;
 
     // Skip authentication for non-interactive regression testing.
@@ -951,10 +952,15 @@ void Ledger::write_excerpt
         }
     else
         {
-        // For regression tests, use EffDate as date prepared,
+        // For regression tests,
+        //   - use an invariant string as version
+        //   - use EffDate as date prepared
         // in order to avoid gratuitous failures.
+        LmiVersion = "Regression testing";
         prep_date.julian_day_number(static_cast<int>(ledger_invariant_->EffDateJdn));
         }
+
+    strings["LmiVersion"] = &LmiVersion;
 
     std::string PrepYear  = value_cast<std::string>(prep_date.year());
     std::string PrepMonth = month_name(prep_date.month());
@@ -996,9 +1002,6 @@ void Ledger::write_excerpt
         +   ledger_invariant_->InitTermSpecAmt
         ;
     scalars["InitTotalSA"] = &InitTotalSA;
-
-    std::string LmiVersion(LMI_VERSION);
-    strings["LmiVersion"] = &LmiVersion;
 
     // Maps to hold the numeric data.
 
