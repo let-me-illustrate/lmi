@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: timer.hpp,v 1.10 2006-01-29 13:52:00 chicares Exp $
+// $Id: timer.hpp,v 1.11 2006-12-30 19:23:34 chicares Exp $
 
 #ifndef timer_hpp
 #define timer_hpp
@@ -59,8 +59,6 @@
 #include <sstream>
 #include <string>
 
-template<typename F> std::string aliquot_timer(F, double = 1.0);
-
 /// Why another timer class?
 ///
 /// Boost provides a timer class, but they deliberately chose to use
@@ -80,7 +78,7 @@ template<typename F> std::string aliquot_timer(F, double = 1.0);
 class LMI_SO Timer
     :private boost::noncopyable
 {
-    template<typename F> friend std::string aliquot_timer(F, double);
+    template<typename F> friend class AliquotTimer;
 
   public:
     Timer();
@@ -105,11 +103,11 @@ class LMI_SO Timer
     elapsed_t   time_when_stopped_;
 };
 
-/// Design of function template aliquot_timer().
+/// Design of class template AliquotTimer.
 ///
-/// aliquot_timer() reports how long an operation takes, dynamically
-/// adjusting the number of iterations measured to balance accuracy
-/// with a desired limit on total time for the measurement.
+/// Time an operation, dynamically adjusting the number of iterations
+/// measured to balance accuracy with a desired limit on total time
+/// for the measurement.
 ///
 /// Execute the operation once and observe how long it took. Repeat
 /// the operation as many times as that observation indicates it can
@@ -129,21 +127,24 @@ class LMI_SO Timer
 /// taken just less than one quantum, and the specified interval
 /// should not be exceeded.
 ///
-/// Template parameter 'F' either is a nullary function or behaves
-/// like one; boost::bind() is useful for reducing the arity of the
-/// template argument (see unit test). Naturally, this is subject to
-/// the Forwarding Problem, but that's inherent in the language.
+/// Template parameter 'F' is the type of the first ctor parameter,
+/// which either is a nullary function or behaves like one. A facility
+/// such as boost::bind() is useful for reducing the arity of the
+/// argument (see unit test). Naturally, this is subject to the
+/// Forwarding Problem, but that's inherent in the language.
 ///
-/// Parameter 'seconds' is the desired limit on measurement time,
-/// in seconds. It is approximately respected iff the operation
-/// takes no longer than that limit. The default is one second, which
-/// is generally long enough to get a stable measurement.
+/// Ctor parameter 'max_seconds' is the desired limit on measurement
+/// time, in seconds. If that limit is exceeded by the initial
+/// calibration trial, then the operation is not run again. Otherwise,
+/// the operation is repeated for (0.1 * 'max_seconds', 'max_seconds']
+/// (more or less, to the extent that the initial calibration trial's
+/// speed was atypical).
 ///
-/// This function template is a friend of class Timer so that it can
+/// This class template is a friend of class Timer so that it can
 /// access Timer::frequency_, which should not have a public accessor
 /// because its type is platform dependent.
 ///
-/// Implementation of function template aliquot_timer().
+/// Implementation of class template AliquotTimer.
 ///
 /// Class Timer guarantees that its frequency_ member is nonzero, so
 /// it is safe to divide by that member.
@@ -152,26 +153,38 @@ class LMI_SO Timer
 /// around a defect observed with MinGW gcc: the defective ms C
 /// runtime library MinGW uses doesn't reliably return integer
 /// results for std::pow() with exact-integer arguments.
-///
-/// It might be nicer to make this a non-template nullary function
-/// and move its definition out of the header. The problem there is
-/// that the type of a boost::bind() expression is unspecified.
-///
-/// Function names should be verb phrases, but English seems to lack
-/// a one-word transitive verb for chronometry. Maybe someday this
-/// function will become a functor anyway.
 
 template<typename F>
-std::string aliquot_timer(F f, double seconds)
+class AliquotTimer
 {
-    Timer timer;
-    f();
-    timer.stop();
-    double elapsed = timer.elapsed_usec();
+  public:
+    AliquotTimer(F f, double max_seconds);
+    std::string operator()();
+
+  private:
+    F      f_;
+    double max_seconds_;
+    Timer  timer_;
+    double initial_trial_time_;
+};
+
+template<typename F>
+AliquotTimer<F>::AliquotTimer(F f, double max_seconds)
+    :f_          (f)
+    ,max_seconds_(max_seconds)
+{
+    f_();
+    timer_.stop();
+    initial_trial_time_ = timer_.elapsed_usec();
+}
+
+template<typename F>
+std::string AliquotTimer<F>::operator()()
+{
     double const v =
-        (0.0 != elapsed)
-        ? seconds / elapsed
-        : seconds * timer.frequency_
+        (0.0 != initial_trial_time_)
+        ? max_seconds_ / initial_trial_time_
+        : max_seconds_ * timer_.frequency_
         ;
 
     double const w = std::min(std::log10(v), static_cast<double>(ULONG_MAX));
@@ -180,22 +193,42 @@ std::string aliquot_timer(F f, double seconds)
     unsigned long int const z = static_cast<unsigned long int>(y);
     if(1 < z)
         {
-        timer.restart();
+        timer_.restart();
         for(unsigned long int j = 0; j < z; j++)
             {
-            f();
+            f_();
             }
-        timer.stop();
+        timer_.stop();
         }
     std::ostringstream oss;
     oss
         << std::scientific << std::setprecision(3)
-        << "[" << timer.elapsed_usec() / z << "] "
+        << "[" << timer_.elapsed_usec() / z << "] "
         << z
         << " iteration" << ((1 == z) ? "" : "s") << " took "
-        << timer.elapsed_msec_str()
+        << timer_.elapsed_msec_str()
         ;
     return oss.str();
+}
+
+/// Time an operation, using class template AliquotTimer.
+///
+/// Because it can deduce the function-parameter type, this function
+/// template is more convenient to use than the class template in
+/// terms of which it is implemented. This is particularly valuable
+/// when that type cannot readily be named--or is indeed unspecified,
+/// as when boost::bind() is used.
+///
+/// The maximum time defaults to one second, which is generally long
+/// enough to get a stable measurement.
+///
+/// Function names should be verb phrases, but English seems to lack
+/// a one-word transitive verb for chronometry.
+
+template<typename F>
+std::string aliquot_timer(F f, double max_seconds = 1.0)
+{
+    return AliquotTimer<F>(f, max_seconds)();
 }
 
 #endif // timer_hpp
