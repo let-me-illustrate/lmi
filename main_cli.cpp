@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_cli.cpp,v 1.25 2006-12-22 02:39:33 chicares Exp $
+// $Id: main_cli.cpp,v 1.26 2006-12-30 20:33:33 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -217,7 +217,7 @@ std::cout << "? " << runner.XXXComposite.GetLedgerInvariant().GetInforceLives().
 
     std::cout
         << "Test solve speed: "
-        << aliquot_timer(boost::bind(&IllusVal::Run, &IV, &IP), 5)
+        << TimeAnAliquot(boost::bind(&IllusVal::Run, &IV, &IP), 5)
         << '\n'
         ;
 }

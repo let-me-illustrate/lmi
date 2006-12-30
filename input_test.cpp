@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_test.cpp,v 1.22 2006-12-14 01:54:15 chicares Exp $
+// $Id: input_test.cpp,v 1.23 2006-12-30 20:33:33 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -127,12 +127,12 @@ void assay_speed()
 
     std::cout
         << "  Speed tests...\n"
-        << "  Overhead: " << aliquot_timer(mete_overhead              ) << '\n'
-        << "  Vector  : " << aliquot_timer(boost::bind(mete_vector, e)) << '\n'
-        << "  Read    : " << aliquot_timer(boost::bind(mete_read  , e)) << '\n'
-        << "  Write   : " << aliquot_timer(mete_write                 ) << '\n'
-        << "  'cns' io: " << aliquot_timer(mete_cns_io                ) << '\n'
-        << "  'ill' io: " << aliquot_timer(mete_ill_io                ) << '\n'
+        << "  Overhead: " << TimeAnAliquot(mete_overhead              ) << '\n'
+        << "  Vector  : " << TimeAnAliquot(boost::bind(mete_vector, e)) << '\n'
+        << "  Read    : " << TimeAnAliquot(boost::bind(mete_read  , e)) << '\n'
+        << "  Write   : " << TimeAnAliquot(mete_write                 ) << '\n'
+        << "  'cns' io: " << TimeAnAliquot(mete_cns_io                ) << '\n'
+        << "  'ill' io: " << TimeAnAliquot(mete_ill_io                ) << '\n'
         ;
 }
 
