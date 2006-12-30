@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: timer_test.cpp,v 1.9 2006-12-06 16:23:17 chicares Exp $
+// $Id: timer_test.cpp,v 1.10 2006-12-30 20:33:33 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -115,19 +115,19 @@ int test_main(int, char*[])
     // Still running--can't report interval until stopped.
     BOOST_TEST_THROW(timer.elapsed_usec(), std::logic_error, "");
 
-    std::cout << "  " << aliquot_timer(foo) << '\n';
+    std::cout << "  " << TimeAnAliquot(foo) << '\n';
 
     X x;
-    std::cout << "  " << aliquot_timer(boost::bind(goo, 10, x, x, &x)) << '\n';
+    std::cout << "  " << TimeAnAliquot(boost::bind(goo, 10, x, x, &x)) << '\n';
 
     // Test an operation that has to take longer than the hinted
     // time limit, in order to make sure it executes the operation
     // exactly once.
     //
-    // TODO ?? It would be better to make aliquot_timer a stateful
-    // functor, so that the elapsed time could be queried and tested.
+    // TODO ?? It would be better to use class AliquotTimer directly,
+    // so that the elapsed time could be queried and tested.
     //
-    std::cout << "  " << aliquot_timer(wait_half_a_second, 0.1) << '\n';
+    std::cout << "  " << TimeAnAliquot(wait_half_a_second, 0.1) << '\n';
 
     return EXIT_SUCCESS;
 }

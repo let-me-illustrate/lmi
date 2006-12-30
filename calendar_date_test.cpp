@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: calendar_date_test.cpp,v 1.13 2006-12-06 16:23:17 chicares Exp $
+// $Id: calendar_date_test.cpp,v 1.14 2006-12-30 20:33:33 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -683,13 +683,13 @@ namespace
 void CalendarDateTest::TestSpeed()
 {
     std::cout << "  Speed tests...\n"
-        << "  Aggregate    : " << aliquot_timer(mete             ) << '\n'
-        << "  Construct    : " << aliquot_timer(mete_construct   ) << '\n'
-        << "  Assign       : " << aliquot_timer(mete_assign      ) << '\n'
-        << "  Increment    : " << aliquot_timer(mete_increment   ) << '\n'
-        << "  Get y, m, d  : " << aliquot_timer(mete_get_y_m_d   ) << '\n'
-        << "  Format       : " << aliquot_timer(mete_format      ) << '\n'
-        << "  Calculate age: " << aliquot_timer(mete_attained_age) << '\n'
+        << "  Aggregate    : " << TimeAnAliquot(mete             ) << '\n'
+        << "  Construct    : " << TimeAnAliquot(mete_construct   ) << '\n'
+        << "  Assign       : " << TimeAnAliquot(mete_assign      ) << '\n'
+        << "  Increment    : " << TimeAnAliquot(mete_increment   ) << '\n'
+        << "  Get y, m, d  : " << TimeAnAliquot(mete_get_y_m_d   ) << '\n'
+        << "  Format       : " << TimeAnAliquot(mete_format      ) << '\n'
+        << "  Calculate age: " << TimeAnAliquot(mete_attained_age) << '\n'
         ;
 }
 
