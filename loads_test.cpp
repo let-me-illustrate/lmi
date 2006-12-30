@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: loads_test.cpp,v 1.7 2006-12-06 16:23:17 chicares Exp $
+// $Id: loads_test.cpp,v 1.8 2006-12-30 20:33:33 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -156,13 +156,13 @@ int test_main(int, char*[])
 
     std::cout
         << "  Allocate:  "
-        << aliquot_timer(boost::bind(&LoadsTest::Allocate , &t))
+        << TimeAnAliquot(boost::bind(&LoadsTest::Allocate , &t))
         << '\n'
         ;
 
     std::cout
         << "  Calculate: "
-        << aliquot_timer(boost::bind(&LoadsTest::Calculate, &t))
+        << TimeAnAliquot(boost::bind(&LoadsTest::Calculate, &t))
         << '\n'
         ;
 

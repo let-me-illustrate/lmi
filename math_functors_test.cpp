@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: math_functors_test.cpp,v 1.8 2006-12-06 16:23:17 chicares Exp $
+// $Id: math_functors_test.cpp,v 1.9 2006-12-30 20:33:33 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -189,8 +189,8 @@ void mete1()
 
 void assay_speed()
 {
-    std::cout << "  Speed test: pow  \n    " << aliquot_timer(mete0) << '\n';
-    std::cout << "  Speed test: expm1\n    " << aliquot_timer(mete1) << '\n';
+    std::cout << "  Speed test: pow  \n    " << TimeAnAliquot(mete0) << '\n';
+    std::cout << "  Speed test: expm1\n    " << TimeAnAliquot(mete1) << '\n';
 }
 
 int test_main(int, char*[])

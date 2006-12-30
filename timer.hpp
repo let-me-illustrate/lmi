@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: timer.hpp,v 1.11 2006-12-30 19:23:34 chicares Exp $
+// $Id: timer.hpp,v 1.12 2006-12-30 20:33:33 chicares Exp $
 
 #ifndef timer_hpp
 #define timer_hpp
@@ -221,12 +221,9 @@ std::string AliquotTimer<F>::operator()()
 ///
 /// The maximum time defaults to one second, which is generally long
 /// enough to get a stable measurement.
-///
-/// Function names should be verb phrases, but English seems to lack
-/// a one-word transitive verb for chronometry.
 
 template<typename F>
-std::string aliquot_timer(F f, double max_seconds = 1.0)
+std::string TimeAnAliquot(F f, double max_seconds = 1.0)
 {
     return AliquotTimer<F>(f, max_seconds)();
 }

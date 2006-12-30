@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: expression_template_0_test.cpp,v 1.6 2006-12-09 21:25:31 chicares Exp $
+// $Id: expression_template_0_test.cpp,v 1.7 2006-12-30 20:33:33 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -187,7 +187,7 @@ void run_one_test(std::string const& s, void(*f)())
         << "  Speed test: "
         << s
         << '\n'
-        << aliquot_timer(f, max_seconds)
+        << TimeAnAliquot(f, max_seconds)
         << '\n'
         ;
 }

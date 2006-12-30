@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: commutation_functions_test.cpp,v 1.10 2006-12-06 16:23:17 chicares Exp $
+// $Id: commutation_functions_test.cpp,v 1.11 2006-12-30 20:33:33 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -135,7 +135,7 @@ int test_main(int, char*[])
 
     std::cout
         << "  Speed test: generate UL commutation functions\n    "
-        << aliquot_timer
+        << TimeAnAliquot
             (boost::bind
                 (mete_ulcf
                 ,q
@@ -148,7 +148,7 @@ int test_main(int, char*[])
 
     std::cout
         << "  Speed test: calculate CVAT corridor factors\n    "
-        << aliquot_timer
+        << TimeAnAliquot
             (boost::bind
                 (mete_corridor
                 ,boost::ref(ulcf)

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: obstruct_slicing_test.cpp,v 1.7 2006-12-06 16:23:17 chicares Exp $
+// $Id: obstruct_slicing_test.cpp,v 1.8 2006-12-30 20:33:33 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -146,7 +146,7 @@ void test_cost_of_obstruction(std::string const& s)
     std::cout
         << "  Class " << s << " has size " << sizeof(T) << '\n'
         << "  Speed test: \n      "
-        << aliquot_timer(boost::bind(mete<T>, 0))
+        << TimeAnAliquot(boost::bind(mete<T>, 0))
         << '\n'
         ;
 }

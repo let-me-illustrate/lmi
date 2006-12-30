@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: actuarial_table_test.cpp,v 1.8 2006-12-06 16:23:17 chicares Exp $
+// $Id: actuarial_table_test.cpp,v 1.9 2006-12-30 20:33:33 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -83,7 +83,7 @@ void mete()
 
 void assay_speed()
 {
-    std::cout << "  Speed test: " << aliquot_timer(mete) << '\n';
+    std::cout << "  Speed test: " << TimeAnAliquot(mete) << '\n';
 }
 
 int test_main(int, char*[])
