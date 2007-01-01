@@ -1,6 +1,6 @@
 // Expression templates, investigation 0--unit test.
 //
-// Copyright (C) 2005, 2006 Gregory W. Chicares.
+// Copyright (C) 2005, 2006, 2007 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: expression_template_0_test.cpp,v 1.7 2006-12-30 20:33:33 chicares Exp $
+// $Id: expression_template_0_test.cpp,v 1.8 2007-01-01 23:50:24 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -96,7 +96,7 @@ void mete_c()
 void mete_stl_naive()
 {
     std::vector<double> tmp0;
-    tmp0.reserve(100);
+    tmp0.reserve(length);
     std::transform
         (sv1a.begin()
         ,sv1a.end()
@@ -148,7 +148,13 @@ void mete_stl_smart()
     // Writing 'static' here is an optimization, though of course it
     // is not consonant with thread safety.
     static std::vector<double> tmp0;
-    tmp0.reserve(100);
+    tmp0.reserve(length);
+    // TODO ?? This fails: the vector grows with each invocation.
+    BOOST_TEST_RELATION(tmp0.size(),<=,static_cast<unsigned int>(length));
+    if(static_cast<unsigned int>(length) < tmp0.size())
+        {
+        throw "Known problem demonstrated: see source.";
+        }
     std::transform
         (sv0b.begin()
         ,sv0b.end()
