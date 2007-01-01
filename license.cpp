@@ -1,6 +1,6 @@
 // The GPL and the notices it requires.
 //
-// Copyright (C) 2004, 2005, 2006 Gregory W. Chicares.
+// Copyright (C) 2004, 2005, 2006, 2007 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: license.cpp,v 1.5 2006-01-30 04:58:40 chicares Exp $
+// $Id: license.cpp,v 1.6 2007-01-01 23:46:22 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -59,7 +59,7 @@ namespace
         "'Let me illustrate...' creates life insurance illustrations.\n"
         "\n"
         "Copyright (C) 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005,\n"
-        "2006 Gregory W. Chicares.\n"
+        "2006, 2007 Gregory W. Chicares.\n"
         "\n"
         "This program is free software; you can redistribute it and/or\n"
         "modify it under the terms of the GNU General Public License\n"
