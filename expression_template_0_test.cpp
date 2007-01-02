@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: expression_template_0_test.cpp,v 1.9 2007-01-02 00:11:16 chicares Exp $
+// $Id: expression_template_0_test.cpp,v 1.10 2007-01-02 13:16:19 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -29,7 +29,9 @@
 #include "test_tools.hpp"
 #include "timer.hpp"
 
-#include <boost/bind.hpp>
+#if !defined __BORLANDC__
+#   include <boost/bind.hpp>
+#endif // !defined __BORLANDC__
 
 #include <functional>
 #include <iterator>
@@ -145,6 +147,7 @@ void mete_stl_naive()
 
 void mete_stl_smart()
 {
+#if !defined __BORLANDC__
     // Writing 'static' here is an optimization, though of course it
     // is not consonant with thread safety.
     static std::vector<double> tmp0(length);
@@ -170,6 +173,7 @@ void mete_stl_smart()
         ,sv2b.begin()
         ,std::plus<double>()
         );
+#endif // !defined __BORLANDC__
 }
 
 /// This implementation uses std::valarray.
@@ -229,9 +233,11 @@ int test_main(int, char*[])
     BOOST_TEST_EQUAL(sv2a[ 1], value01);
     BOOST_TEST_EQUAL(sv2a[99], value99);
 
+#if !defined __BORLANDC__
     mete_stl_smart();
     BOOST_TEST_EQUAL(sv2b[ 1], value01);
     BOOST_TEST_EQUAL(sv2b[99], value99);
+#endif // !defined __BORLANDC__
 
     mete_valarray();
     BOOST_TEST_EQUAL(va2 [ 1], value01);
