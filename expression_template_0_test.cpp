@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: expression_template_0_test.cpp,v 1.10 2007-01-02 13:16:19 chicares Exp $
+// $Id: expression_template_0_test.cpp,v 1.11 2007-01-02 13:57:17 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -33,8 +33,10 @@
 #   include <boost/bind.hpp>
 #endif // !defined __BORLANDC__
 
+#include <algorithm>
 #include <functional>
 #include <iterator>
+#include <string>
 #include <valarray>
 #include <vector>
 
@@ -93,9 +95,9 @@ void mete_c()
         }
 }
 
-/// This implementation uses STL in a naive way.
+/// This implementation uses plain STL.
 
-void mete_stl_naive()
+void mete_stl_plain()
 {
     std::vector<double> tmp0;
     tmp0.reserve(length);
@@ -121,7 +123,12 @@ void mete_stl_naive()
         );
 }
 
-/// This implementation uses STL in a smarter way.
+/// This implementation uses STL in a fancier way. A 'lambda' library
+/// handles some of the arithmetic, and a temporary vector is kept as
+/// a static local variable (which improves performance noticeably,
+/// but introduces new problems--thread safety not least of all).
+/// Compared to mete_stl_plain(), this method is somewhat faster and
+/// more compact, yet more abstruse.
 ///
 /// An expression-template numeric-array class performs two jobs:
 ///   it agglutinates expressions, deferring their evaluation; and
@@ -134,7 +141,7 @@ void mete_stl_naive()
 /// truncated Taylor series), but only for one or two operands: it
 /// is not possible to add four vectors (v0 + v1 + v2 + v3).
 ///
-/// Here, two of the std::transform steps in the 'naive' example
+/// Here, two of the std::transform steps in the 'plain' example
 /// are combined, avoiding superfluous loads and stores, but still
 /// it's impossible to write
 ///    v2 += v0 - 2.0 * v1;
@@ -145,11 +152,9 @@ void mete_stl_naive()
 /// Of course, n-ary analogs of std::transform could be written,
 /// but what's really wanted is a much more concise notation.
 
-void mete_stl_smart()
+void mete_stl_fancy()
 {
 #if !defined __BORLANDC__
-    // Writing 'static' here is an optimization, though of course it
-    // is not consonant with thread safety.
     static std::vector<double> tmp0(length);
     std::transform
         (sv0b.begin()
@@ -229,12 +234,12 @@ int test_main(int, char*[])
     BOOST_TEST_EQUAL(cv2 [ 1], value01);
     BOOST_TEST_EQUAL(cv2 [99], value99);
 
-    mete_stl_naive();
+    mete_stl_plain();
     BOOST_TEST_EQUAL(sv2a[ 1], value01);
     BOOST_TEST_EQUAL(sv2a[99], value99);
 
 #if !defined __BORLANDC__
-    mete_stl_smart();
+    mete_stl_fancy();
     BOOST_TEST_EQUAL(sv2b[ 1], value01);
     BOOST_TEST_EQUAL(sv2b[99], value99);
 #endif // !defined __BORLANDC__
@@ -244,8 +249,8 @@ int test_main(int, char*[])
     BOOST_TEST_EQUAL(va2 [99], value99);
 
     run_one_test("C"        , mete_c        );
-    run_one_test("STL naive", mete_stl_naive);
-    run_one_test("STL smart", mete_stl_smart);
+    run_one_test("STL plain", mete_stl_plain);
+    run_one_test("STL fancy", mete_stl_fancy);
     run_one_test("valarray" , mete_valarray );
 
     return 0;
