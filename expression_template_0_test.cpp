@@ -19,7 +19,24 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: expression_template_0_test.cpp,v 1.11 2007-01-02 13:57:17 chicares Exp $
+// $Id: expression_template_0_test.cpp,v 1.12 2007-01-02 16:57:15 chicares Exp $
+
+#if !defined __BORLANDC__
+#   define USE_UBLAS
+#endif // !defined __BORLANDC__
+
+#if defined USE_UBLAS
+// BOOST !! Startlingly enough, boost uBLAS depends on this standard
+// macro. If it's not defined, then expression templates aren't used,
+// which impairs performance significantly and removes an essential
+// reason for using this library. However, if it is defined, then it
+// must be defined consistently everywhere to avoid ODR problems; but
+// that suppresses assertions in other libraries, which it might be
+// desirable to leave in production code. It would have been easy to
+// accommodate programmers who never want to turn off assertions by
+// using a library-specific macro instead.
+#   define NDEBUG 1
+#endif // defined USE_UBLAS
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -32,6 +49,10 @@
 #if !defined __BORLANDC__
 #   include <boost/bind.hpp>
 #endif // !defined __BORLANDC__
+
+#if defined USE_UBLAS
+#   include <boost/numeric/ublas/vector.hpp>
+#endif // defined USE_UBLAS
 
 #include <algorithm>
 #include <functional>
@@ -49,6 +70,7 @@
 //   - STL only
 //   - STL and a scalar-expression library
 //   - std::valarray
+//   - boost uBLAS
 // and serves mainly to demonstrate the verbosity and limitations of
 // the STL approaches.
 
@@ -76,6 +98,13 @@ std::vector<double> sv2b;
 std::valarray<double> va0;
 std::valarray<double> va1;
 std::valarray<double> va2;
+
+// ub*: boost uBLAS.
+#if defined USE_UBLAS
+boost::numeric::ublas::vector<double> ub0;
+boost::numeric::ublas::vector<double> ub1;
+boost::numeric::ublas::vector<double> ub2;
+#endif // defined USE_UBLAS
 
 // These 'mete*' functions perform the same set of operations using
 // different implementations.
@@ -188,6 +217,15 @@ void mete_valarray()
     va2 += va0 - 2.0 * va1;
 }
 
+/// This implementation uses boost::numeric::ublas::vector.
+
+#if defined USE_UBLAS
+void mete_ublas()
+{
+    ub2 += ub0 - 2.0 * ub1;
+}
+#endif // defined USE_UBLAS
+
 void run_one_test(std::string const& s, void(*f)())
 {
     double const max_seconds = 10.0;
@@ -227,6 +265,16 @@ int test_main(int, char*[])
     va1 = std::valarray<double>(cv1, length);
     va2 = std::valarray<double>(cv2, length);
 
+#if defined USE_UBLAS
+    ub0.resize(length);
+    ub1.resize(length);
+    ub2.resize(length);
+
+    std::copy(cv0, cv0 + length, ub0.begin());
+    std::copy(cv1, cv1 + length, ub1.begin());
+    std::copy(cv2, cv2 + length, ub2.begin());
+#endif // defined USE_UBLAS
+
     double const value01 = 0.001 + 0.100 - 2.0 * 0.010;
     double const value99 = 99.0 * value01;
 
@@ -248,10 +296,19 @@ int test_main(int, char*[])
     BOOST_TEST_EQUAL(va2 [ 1], value01);
     BOOST_TEST_EQUAL(va2 [99], value99);
 
+#if defined USE_UBLAS
+    mete_ublas();
+    BOOST_TEST_EQUAL(ub2 [ 1], value01);
+    BOOST_TEST_EQUAL(ub2 [99], value99);
+#endif // defined USE_UBLAS
+
     run_one_test("C"        , mete_c        );
     run_one_test("STL plain", mete_stl_plain);
     run_one_test("STL fancy", mete_stl_fancy);
     run_one_test("valarray" , mete_valarray );
+#if defined USE_UBLAS
+    run_one_test("uBLAS"    , mete_ublas    );
+#endif // defined USE_UBLAS
 
     return 0;
 }
