@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: expression_template_0_test.cpp,v 1.8 2007-01-01 23:50:24 chicares Exp $
+// $Id: expression_template_0_test.cpp,v 1.9 2007-01-02 00:11:16 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -147,19 +147,12 @@ void mete_stl_smart()
 {
     // Writing 'static' here is an optimization, though of course it
     // is not consonant with thread safety.
-    static std::vector<double> tmp0;
-    tmp0.reserve(length);
-    // TODO ?? This fails: the vector grows with each invocation.
-    BOOST_TEST_RELATION(tmp0.size(),<=,static_cast<unsigned int>(length));
-    if(static_cast<unsigned int>(length) < tmp0.size())
-        {
-        throw "Known problem demonstrated: see source.";
-        }
+    static std::vector<double> tmp0(length);
     std::transform
         (sv0b.begin()
         ,sv0b.end()
         ,sv1b.begin()
-        ,std::back_inserter(tmp0)
+        ,tmp0.begin()
         ,boost::bind
             (std::minus<double>()
             ,_1
@@ -225,17 +218,24 @@ int test_main(int, char*[])
     va1 = std::valarray<double>(cv1, length);
     va2 = std::valarray<double>(cv2, length);
 
+    double const value01 = 0.001 + 0.100 - 2.0 * 0.010;
+    double const value99 = 99.0 * value01;
+
     mete_c();
-    BOOST_TEST_EQUAL(cv2 [1], 0.001 + 0.100 - 2.0 * 0.010);
+    BOOST_TEST_EQUAL(cv2 [ 1], value01);
+    BOOST_TEST_EQUAL(cv2 [99], value99);
 
     mete_stl_naive();
-    BOOST_TEST_EQUAL(sv2a[1], 0.001 + 0.100 - 2.0 * 0.010);
+    BOOST_TEST_EQUAL(sv2a[ 1], value01);
+    BOOST_TEST_EQUAL(sv2a[99], value99);
 
     mete_stl_smart();
-    BOOST_TEST_EQUAL(sv2b[1], 0.001 + 0.100 - 2.0 * 0.010);
+    BOOST_TEST_EQUAL(sv2b[ 1], value01);
+    BOOST_TEST_EQUAL(sv2b[99], value99);
 
     mete_valarray();
-    BOOST_TEST_EQUAL(va2 [1], 0.001 + 0.100 - 2.0 * 0.010);
+    BOOST_TEST_EQUAL(va2 [ 1], value01);
+    BOOST_TEST_EQUAL(va2 [99], value99);
 
     run_one_test("C"        , mete_c        );
     run_one_test("STL naive", mete_stl_naive);
