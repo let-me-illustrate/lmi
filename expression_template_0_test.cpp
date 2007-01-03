@@ -19,11 +19,15 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: expression_template_0_test.cpp,v 1.12 2007-01-02 16:57:15 chicares Exp $
+// $Id: expression_template_0_test.cpp,v 1.13 2007-01-03 01:03:27 chicares Exp $
 
-#if !defined __BORLANDC__
-#   define USE_UBLAS
-#endif // !defined __BORLANDC__
+#define USE_UBLAS
+// USE_PETE is not unconditionally defined here because PETE is not
+// part of our build environment at this time.
+#if defined __BORLANDC__
+#   undef USE_UBLAS
+#   undef USE_PETE
+#endif // defined __BORLANDC__
 
 #if defined USE_UBLAS
 // BOOST !! Startlingly enough, boost uBLAS depends on this standard
@@ -54,6 +58,14 @@
 #   include <boost/numeric/ublas/vector.hpp>
 #endif // defined USE_UBLAS
 
+#if defined USE_PETE
+// For now at least, install PETE where indicated, and compile with
+//   CPPFLAGS='-I /pete/pete-2.1.0/src -DPETE_MAKE_EMPTY_CONSTRUCTORS=0 -DUSE_PETE'
+// If PETE proves useful, then we can use the 'freepooma' version,
+// either as a library, or by importing the PETE sources.
+#   include </pete/pete-2.1.0/examples/Vector/Eval.h>
+#endif // defined USE_PETE
+
 #include <algorithm>
 #include <functional>
 #include <iterator>
@@ -71,6 +83,7 @@
 //   - STL and a scalar-expression library
 //   - std::valarray
 //   - boost uBLAS
+//   - PETE
 // and serves mainly to demonstrate the verbosity and limitations of
 // the STL approaches.
 
@@ -105,6 +118,13 @@ boost::numeric::ublas::vector<double> ub0;
 boost::numeric::ublas::vector<double> ub1;
 boost::numeric::ublas::vector<double> ub2;
 #endif // defined USE_UBLAS
+
+// ps*: PETE standard vectors.
+#if defined USE_PETE
+std::vector<double> pv0;
+std::vector<double> pv1;
+std::vector<double> pv2;
+#endif // defined USE_PETE
 
 // These 'mete*' functions perform the same set of operations using
 // different implementations.
@@ -226,6 +246,13 @@ void mete_ublas()
 }
 #endif // defined USE_UBLAS
 
+#if defined USE_PETE
+void mete_pete()
+{
+    pv2 += pv0 - 2.0 * pv1;
+}
+#endif // defined USE_PETE
+
 void run_one_test(std::string const& s, void(*f)())
 {
     double const max_seconds = 10.0;
@@ -275,6 +302,12 @@ int test_main(int, char*[])
     std::copy(cv2, cv2 + length, ub2.begin());
 #endif // defined USE_UBLAS
 
+#if defined USE_PETE
+    pv0 = std::vector<double>(cv0, cv0 + length);
+    pv1 = std::vector<double>(cv1, cv1 + length);
+    pv2 = std::vector<double>(cv2, cv2 + length);
+#endif // defined USE_PETE
+
     double const value01 = 0.001 + 0.100 - 2.0 * 0.010;
     double const value99 = 99.0 * value01;
 
@@ -302,6 +335,12 @@ int test_main(int, char*[])
     BOOST_TEST_EQUAL(ub2 [99], value99);
 #endif // defined USE_UBLAS
 
+#if defined USE_PETE
+    mete_pete();
+    BOOST_TEST_EQUAL(pv2[ 1], value01);
+    BOOST_TEST_EQUAL(pv2[99], value99);
+#endif // defined USE_PETE
+
     run_one_test("C"        , mete_c        );
     run_one_test("STL plain", mete_stl_plain);
     run_one_test("STL fancy", mete_stl_fancy);
@@ -309,6 +348,9 @@ int test_main(int, char*[])
 #if defined USE_UBLAS
     run_one_test("uBLAS"    , mete_ublas    );
 #endif // defined USE_UBLAS
+#if defined USE_PETE
+    run_one_test("PETE"     , mete_pete     );
+#endif // defined USE_PETE
 
     return 0;
 }
