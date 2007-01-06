@@ -1,6 +1,6 @@
 # Makefile: object lists.
 #
-# Copyright (C) 2005, 2006 Gregory W. Chicares.
+# Copyright (C) 2005, 2006, 2007 Gregory W. Chicares.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: objects.make,v 1.94 2006-12-21 17:50:34 chicares Exp $
+# $Id: objects.make,v 1.95 2007-01-06 16:20:15 chicares Exp $
 
 ################################################################################
 
@@ -712,6 +712,7 @@ value_cast_test$(EXEEXT): \
 
 vector_test$(EXEEXT): \
   $(common_test_objects) \
+  timer.o \
   vector_test.o \
 
 wx_new_test$(EXEEXT): \
