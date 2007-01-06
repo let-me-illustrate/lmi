@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.543 2007-01-03 01:03:27 chicares Exp $
+// $Id: ChangeLog,v 1.544 2007-01-06 16:20:16 chicares Exp $
 
 MAINTENANCE
 
@@ -9306,4 +9306,10 @@ Support boost uBLAS.
 
   expression_template_0_test.cpp
 Tentatively support PETE.
+
+20070106T1620Z <chicares@cox.net> [1240]
+
+  objects.make
+  vector_test.cpp
+Measure expression-template speed compared to std::valarray.
 

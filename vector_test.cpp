@@ -1,6 +1,6 @@
 // Expression templates for arithmetic.
 //
-// Copyright (C) 2002, 2004, 2005, 2006 Gregory W. Chicares.
+// Copyright (C) 2002, 2004, 2005, 2006, 2007 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: vector_test.cpp,v 1.5 2006-12-06 16:23:17 chicares Exp $
+// $Id: vector_test.cpp,v 1.6 2007-01-06 16:20:16 chicares Exp $
 
 // This file is of historical interest only. It shows various attempts
 // to reinvent work that others have done better.
@@ -38,6 +38,7 @@
 #include <iomanip>
 #include <iostream>
 #include <iterator>
+#include <valarray>
 
 // Expression templates
 //
@@ -176,8 +177,8 @@ class simple_array0
     simple_array0(int n, double d = 0.0)
         :length_(n)
         {
-        data_ = new double[n];
-        for(int j = 0; j < n; ++j) data_[j] = d;
+        data_ = new double[length_];
+        for(int j = 0; j < length_; ++j) data_[j] = d;
         }
 
     ~simple_array0() {delete[] data_;}
@@ -197,6 +198,14 @@ class simple_array0
 
     double*       begin()       {return           data_;}
     double*       end  ()       {return length_ + data_;}
+
+    void resize_for_testing(int new_size)
+        {
+        delete[] data_;
+        length_ = new_size;
+        data_ = new double[length_];
+        for(int j = 0; j < length_; ++j) data_[j] = j;
+        }
 
   private:
     double* data_;
@@ -261,10 +270,84 @@ void demo1()
 //
 // to class binary_expression.
 
+namespace
+{
+    // Global variables for timing tests. It would be in better taste
+    // to pass them as arguments, using boost::bind. However, that
+    // would rule out using some compilers (e.g., borland), and it's
+    // best to test this with as many different toolsets as possible.
+
+    int g_array_length = 1;
+
+    simple_array0 g_u(g_array_length);
+    simple_array0 g_v(g_array_length);
+    simple_array0 g_w(g_array_length);
+
+    std::valarray<double> g_va_u(g_array_length);
+    std::valarray<double> g_va_v(static_cast<size_t>(g_array_length));
+    std::valarray<double> g_va_w(static_cast<size_t>(g_array_length));
+} // Unnamed namespace.
+
+void mete_c()
+{
+    for(int i = 0; i < g_array_length; ++i)
+        {
+        g_w[i] = g_u[i] + g_v[i];
+        }
+}
+
+void mete_et()
+{
+    g_w = g_u + g_v;
+}
+
+void mete_va()
+{
+    g_va_w = g_va_u + g_va_v;
+}
+
+void time_one_array_length(int length)
+{
+    g_array_length = length;
+
+    g_u.resize_for_testing(g_array_length);
+    g_v.resize_for_testing(g_array_length);
+    g_w.resize_for_testing(g_array_length);
+
+    g_va_u.resize(g_array_length);
+    g_va_v.resize(g_array_length);
+    g_va_w.resize(g_array_length);
+    for(int j = 0; j < g_array_length; ++j)
+        {
+        g_va_u[j] = j;
+        g_va_v[j] = j;
+        g_va_w[j] = j;
+        }
+
+    int const n = -1 + g_array_length;
+    int const max_seconds = 10;
+    std::cout << "  Speed tests: array length " << g_array_length << std::endl;
+    std::cout << "  C:  " << TimeAnAliquot(mete_c , max_seconds)  << std::endl;
+    BOOST_TEST_EQUAL(g_w[n], 2.0 * n);
+    std::cout << "  ET: " << TimeAnAliquot(mete_et, max_seconds)  << std::endl;
+    BOOST_TEST_EQUAL(g_w[n], 2.0 * n);
+    std::cout << "  va: " << TimeAnAliquot(mete_va, max_seconds)  << std::endl;
+    BOOST_TEST_EQUAL(g_va_w[n], 2.0 * n);
+    std::cout << std::endl;
+}
+
 int test_main(int, char*[])
 {
     demo0();
     demo1();
+
+    time_one_array_length(1);
+    time_one_array_length(10);
+    time_one_array_length(100);
+    time_one_array_length(1000);
+    time_one_array_length(10000);
+    time_one_array_length(100000);
+
     return 0;
 }
 
