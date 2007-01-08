@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: expression_template_0_test.cpp,v 1.14 2007-01-08 07:03:14 chicares Exp $
+// $Id: expression_template_0_test.cpp,v 1.15 2007-01-08 07:41:41 chicares Exp $
 
 #define USE_UBLAS
 // USE_PETE is not unconditionally defined here because PETE is not
@@ -275,6 +275,76 @@ void run_one_test(std::string const& s, void(*f)())
         ;
 }
 
+// Review of 'ET !!' markers shows that lmi's needs are fairly
+// represented by these examples:
+//
+// new_v = v0 - v1;
+// new_v = s0 - v1;
+//
+// v0 += v1;
+// v0 = max(c0, v1);
+// v0 = mean(v1, v2);
+// v0 = (1 - v0) * v1;
+
+void mete_valarray_typical()
+{
+    std::valarray<double> va8 = va0 - va1;
+    std::valarray<double> va9 = 3.14 - va0;
+    va8 += va0;
+    va8 += va0 * va1;
+// This doesn't compile, and apparently std::valarray's only
+// comparable facility is its very-limited apply() member function.
+//    va0 = std::max(2.7, va8);
+//    va0 = std::max(va8, va9);
+    va9 = (1.0 - va8) * va9;
+}
+
+#if defined USE_UBLAS
+// This library seems to provide most of what we need as named
+// functions like prod(), not as the overloaded operators that
+// we'd prefer for clarity.
+void mete_ublas_typical()
+{
+    boost::numeric::ublas::vector<double> ub8 = ub0 - ub1;
+    boost::numeric::ublas::vector<double> ub9;
+    // "no match for 'operator-'":
+//    ub9 = 3.14 - ub0;
+    ub8 += ub0;
+
+    // "ambiguous overload for 'operator*' in 'ub0 * ub1'":
+//    ub8 += ub0 * ub1;
+
+// This doesn't compile:
+//    ub0 = std::max(2.7, ub8);
+//    ub0 = std::max(ub8, ub9);
+
+    // "error: no match for 'operator-' in '1.0e+0 - ub8'":
+//    ub9 = (1.0 - ub8) * ub9;
+}
+#endif // defined USE_UBLAS
+
+#if defined USE_PETE
+void mete_pete_typical()
+{
+// PETE doesn't support this:
+//    std::vector<double> pv8 = pv0 - pv1;
+// because it's impossible to intrude a copy-assignment operator into
+// the standard class template.
+    std::vector<double> pv8(pv0.size()); assign(pv8, pv0 - pv1);
+    std::vector<double> pv9(pv0.size()); assign(pv9, 3.14 - pv0);
+    pv8 += pv0;
+    pv8 += pv0 * pv1;
+
+// This doesn't compile:
+//    pv0 = std::max(2.7, pv8);
+
+// This compiles, but doesn't apply the functor to each element pair:
+//    pv0 = std::max(pv8, pv9);
+
+    assign(pv9, (1.0 - pv8) * pv9);
+}
+#endif // defined USE_PETE
+
 int test_main(int, char*[])
 {
     for(int j = 0; j < length; ++j)
@@ -360,6 +430,11 @@ int test_main(int, char*[])
 #endif // defined USE_UBLAS
 #if defined USE_PETE
     run_one_test("PETE"     , mete_pete     );
+#endif // defined USE_PETE
+
+    run_one_test("valarray typical", mete_valarray_typical);
+#if defined USE_PETE
+    run_one_test("PETE typical"    , mete_pete_typical    );
 #endif // defined USE_PETE
 
     return 0;
