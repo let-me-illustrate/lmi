@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: expression_template_0_test.cpp,v 1.15 2007-01-08 07:41:41 chicares Exp $
+// $Id: expression_template_0_test.cpp,v 1.16 2007-01-08 08:47:49 chicares Exp $
 
 #define USE_UBLAS
 // USE_PETE is not unconditionally defined here because PETE is not
@@ -47,6 +47,7 @@
 #   pragma hdrstop
 #endif // __BORLANDC__
 
+#include "materially_equal.hpp"
 #include "test_tools.hpp"
 #include "timer.hpp"
 
@@ -97,44 +98,51 @@
 // and serves mainly to demonstrate the verbosity and limitations of
 // the STL approaches.
 
-// These variables are global because passing them as arguments is
-// quite a chore, and an unnecessary one in this standalone module.
+namespace
+{
+    // Global variables for timing tests. It would be in better taste
+    // to pass them as arguments, using boost::bind. However, that
+    // would rule out using some compilers (e.g., borland), and it's
+    // best to test this with as many different toolsets as possible.
 
-int const length = 100;
+    int g_length = 1;
 
-// cv*: C vectors.
-double cv0[length];
-double cv1[length];
-double cv2[length];
+    int const max_length = 10000;
 
-// sv*: Standard vectors, first test.
-std::vector<double> sv0a;
-std::vector<double> sv1a;
-std::vector<double> sv2a;
+    // cv*: C vectors.
+    double cv0[max_length];
+    double cv1[max_length];
+    double cv2[max_length];
 
-// sv*: Standard vectors, second test.
-std::vector<double> sv0b;
-std::vector<double> sv1b;
-std::vector<double> sv2b;
+    // sv*: Standard vectors, first test.
+    std::vector<double> sv0a;
+    std::vector<double> sv1a;
+    std::vector<double> sv2a;
 
-// va*: Standard valarrays.
-std::valarray<double> va0;
-std::valarray<double> va1;
-std::valarray<double> va2;
+    // sv*: Standard vectors, second test.
+    std::vector<double> sv0b;
+    std::vector<double> sv1b;
+    std::vector<double> sv2b;
 
-// ub*: boost uBLAS.
-#if defined USE_UBLAS
-boost::numeric::ublas::vector<double> ub0;
-boost::numeric::ublas::vector<double> ub1;
-boost::numeric::ublas::vector<double> ub2;
-#endif // defined USE_UBLAS
+    // va*: Standard valarrays.
+    std::valarray<double> va0;
+    std::valarray<double> va1;
+    std::valarray<double> va2;
 
-// ps*: PETE standard vectors.
-#if defined USE_PETE
-std::vector<double> pv0;
-std::vector<double> pv1;
-std::vector<double> pv2;
-#endif // defined USE_PETE
+    // ub*: boost uBLAS.
+    #if defined USE_UBLAS
+    boost::numeric::ublas::vector<double> ub0;
+    boost::numeric::ublas::vector<double> ub1;
+    boost::numeric::ublas::vector<double> ub2;
+    #endif // defined USE_UBLAS
+
+    // ps*: PETE standard vectors.
+    #if defined USE_PETE
+    std::vector<double> pv0;
+    std::vector<double> pv1;
+    std::vector<double> pv2;
+    #endif // defined USE_PETE
+} // Unnamed namespace.
 
 // These 'mete*' functions perform the same set of operations using
 // different implementations.
@@ -142,13 +150,13 @@ std::vector<double> pv2;
 /// This implementation uses a straightforward technique typical of C.
 /// Its shortcoming is that it is all too easy to code it incorrectly,
 /// for instance
-///    for(int j = 1; i <= length; ++j)
+///    for(int j = 1; i <= g_length; ++j)
 ///        v2[j] += v0 - 2.0 * v1[0];
 /// and that many such errors can be very difficult to find.
 
 void mete_c()
 {
-    for(int j = 0; j < length; ++j)
+    for(int j = 0; j < g_length; ++j)
         {
         cv2[j] += cv0[j] - 2.0 * cv1[j];
         }
@@ -159,7 +167,7 @@ void mete_c()
 void mete_stl_plain()
 {
     std::vector<double> tmp0;
-    tmp0.reserve(length);
+    tmp0.reserve(g_length);
     std::transform
         (sv1a.begin()
         ,sv1a.end()
@@ -214,7 +222,7 @@ void mete_stl_plain()
 void mete_stl_fancy()
 {
 #if !defined __BORLANDC__
-    static std::vector<double> tmp0(length);
+    static std::vector<double> tmp0(max_length);
     std::transform
         (sv0b.begin()
         ,sv0b.end()
@@ -265,11 +273,11 @@ void mete_pete()
 
 void run_one_test(std::string const& s, void(*f)())
 {
-    double const max_seconds = 10.0;
+    double const max_seconds = 1.0;
     std::cout
-        << "  Speed test: "
+        << "  "
         << s
-        << '\n'
+        << ": "
         << TimeAnAliquot(f, max_seconds)
         << std::endl
         ;
@@ -345,97 +353,115 @@ void mete_pete_typical()
 }
 #endif // defined USE_PETE
 
-int test_main(int, char*[])
+void time_one_array_length(int length)
 {
-    for(int j = 0; j < length; ++j)
+    g_length = length;
+    std::cout << "  Speed tests: array length " << g_length << std::endl;
+
+    for(int j = 0; j < g_length; ++j)
         {
         cv0[j] = 0.100 * j;
         cv1[j] = 0.010 * j;
         cv2[j] = 0.001 * j;
         }
 
-    sv0a = std::vector<double>(cv0, cv0 + length);
-    sv1a = std::vector<double>(cv1, cv1 + length);
-    sv2a = std::vector<double>(cv2, cv2 + length);
+    sv0a = std::vector<double>(cv0, cv0 + g_length);
+    sv1a = std::vector<double>(cv1, cv1 + g_length);
+    sv2a = std::vector<double>(cv2, cv2 + g_length);
 
-    sv0b = std::vector<double>(cv0, cv0 + length);
-    sv1b = std::vector<double>(cv1, cv1 + length);
-    sv2b = std::vector<double>(cv2, cv2 + length);
+    sv0b = std::vector<double>(cv0, cv0 + g_length);
+    sv1b = std::vector<double>(cv1, cv1 + g_length);
+    sv2b = std::vector<double>(cv2, cv2 + g_length);
 
     // Don't try to assign to a default-constructed valarray without
     // resizing it first [26.3.2.2/1].
-    va0.resize(length);
-    va1.resize(length);
-    va2.resize(length);
+    va0.resize(g_length);
+    va1.resize(g_length);
+    va2.resize(g_length);
 
-    va0 = std::valarray<double>(cv0, length);
-    va1 = std::valarray<double>(cv1, length);
-    va2 = std::valarray<double>(cv2, length);
+    va0 = std::valarray<double>(cv0, g_length);
+    va1 = std::valarray<double>(cv1, g_length);
+    va2 = std::valarray<double>(cv2, g_length);
 
 #if defined USE_UBLAS
-    ub0.resize(length);
-    ub1.resize(length);
-    ub2.resize(length);
+    ub0.resize(g_length);
+    ub1.resize(g_length);
+    ub2.resize(g_length);
 
-    std::copy(cv0, cv0 + length, ub0.begin());
-    std::copy(cv1, cv1 + length, ub1.begin());
-    std::copy(cv2, cv2 + length, ub2.begin());
+    std::copy(cv0, cv0 + g_length, ub0.begin());
+    std::copy(cv1, cv1 + g_length, ub1.begin());
+    std::copy(cv2, cv2 + g_length, ub2.begin());
 #endif // defined USE_UBLAS
 
 #if defined USE_PETE
-    pv0 = std::vector<double>(cv0, cv0 + length);
-    pv1 = std::vector<double>(cv1, cv1 + length);
-    pv2 = std::vector<double>(cv2, cv2 + length);
+    pv0 = std::vector<double>(cv0, cv0 + g_length);
+    pv1 = std::vector<double>(cv1, cv1 + g_length);
+    pv2 = std::vector<double>(cv2, cv2 + g_length);
 #endif // defined USE_PETE
 
-    double const value01 = 0.001 + 0.100 - 2.0 * 0.010;
-    double const value99 = 99.0 * value01;
+    int const alpha = 1 < g_length ? 1 : 0;
+    int const omega = g_length - 1;
+    double const value_alpha = alpha * (0.001 + 0.100 - 2.0 * 0.010);
+    double const value_omega = omega * value_alpha;
 
     mete_c();
-    BOOST_TEST_EQUAL(cv2 [ 1], value01);
-    BOOST_TEST_EQUAL(cv2 [99], value99);
+    BOOST_TEST_EQUAL           (cv2 [alpha], value_alpha);
+    BOOST_TEST(materially_equal(cv2 [omega], value_omega));
 
     mete_stl_plain();
-    BOOST_TEST_EQUAL(sv2a[ 1], value01);
-    BOOST_TEST_EQUAL(sv2a[99], value99);
+    BOOST_TEST_EQUAL           (sv2a[alpha], value_alpha);
+    BOOST_TEST(materially_equal(sv2a[omega], value_omega));
 
 #if !defined __BORLANDC__
     mete_stl_fancy();
-    BOOST_TEST_EQUAL(sv2b[ 1], value01);
-    BOOST_TEST_EQUAL(sv2b[99], value99);
+    BOOST_TEST_EQUAL           (sv2b[alpha], value_alpha);
+    BOOST_TEST(materially_equal(sv2b[omega], value_omega));
 #endif // !defined __BORLANDC__
 
     mete_valarray();
-    BOOST_TEST_EQUAL(va2 [ 1], value01);
-    BOOST_TEST_EQUAL(va2 [99], value99);
+    BOOST_TEST_EQUAL           (va2 [alpha], value_alpha);
+    BOOST_TEST(materially_equal(va2 [omega], value_omega));
 
 #if defined USE_UBLAS
     mete_ublas();
-    BOOST_TEST_EQUAL(ub2 [ 1], value01);
-    BOOST_TEST_EQUAL(ub2 [99], value99);
+    BOOST_TEST_EQUAL           (ub2 [alpha], value_alpha);
+    BOOST_TEST(materially_equal(ub2 [omega], value_omega));
 #endif // defined USE_UBLAS
 
 #if defined USE_PETE
     mete_pete();
-    BOOST_TEST_EQUAL(pv2[ 1], value01);
-    BOOST_TEST_EQUAL(pv2[99], value99);
+    BOOST_TEST_EQUAL           (pv2[alpha], value_alpha);
+    BOOST_TEST(materially_equal(pv2[omega], value_omega));
 #endif // defined USE_PETE
 
-    run_one_test("C"        , mete_c        );
-    run_one_test("STL plain", mete_stl_plain);
-    run_one_test("STL fancy", mete_stl_fancy);
-    run_one_test("valarray" , mete_valarray );
+    run_one_test("C               ", mete_c        );
+    run_one_test("STL plain       ", mete_stl_plain);
+    run_one_test("STL fancy       ", mete_stl_fancy);
+    run_one_test("valarray        ", mete_valarray );
 #if defined USE_UBLAS
-    run_one_test("uBLAS"    , mete_ublas    );
+    run_one_test("uBLAS           ", mete_ublas    );
 #endif // defined USE_UBLAS
 #if defined USE_PETE
-    run_one_test("PETE"     , mete_pete     );
+    run_one_test("PETE            ", mete_pete     );
 #endif // defined USE_PETE
+
+    std::cout << std::endl;
 
     run_one_test("valarray typical", mete_valarray_typical);
 #if defined USE_PETE
-    run_one_test("PETE typical"    , mete_pete_typical    );
+    run_one_test("PETE typical    ", mete_pete_typical    );
 #endif // defined USE_PETE
+
+    std::cout << std::endl;
+}
+
+int test_main(int, char*[])
+{
+    time_one_array_length(1);
+    time_one_array_length(10);
+    time_one_array_length(100);
+    time_one_array_length(1000);
+    time_one_array_length(10000);
 
     return 0;
 }

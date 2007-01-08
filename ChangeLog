@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.544 2007-01-06 16:20:16 chicares Exp $
+// $Id: ChangeLog,v 1.545 2007-01-08 08:47:49 chicares Exp $
 
 MAINTENANCE
 
@@ -9312,4 +9312,19 @@ Tentatively support PETE.
   objects.make
   vector_test.cpp
 Measure expression-template speed compared to std::valarray.
+
+20070108T0703Z <chicares@cox.net> [1240]
+
+  expression_template_0_test.cpp
+Refine PETE support.
+
+20070108T0741Z <chicares@cox.net> [1240]
+
+  expression_template_0_test.cpp
+Explore expression-template needs typical for lmi.
+
+20070108T0847Z <chicares@cox.net> [1240]
+
+  expression_template_0_test.cpp
+Test run time for various array lengths.
 
