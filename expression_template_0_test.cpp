@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: expression_template_0_test.cpp,v 1.13 2007-01-03 01:03:27 chicares Exp $
+// $Id: expression_template_0_test.cpp,v 1.14 2007-01-08 07:03:14 chicares Exp $
 
 #define USE_UBLAS
 // USE_PETE is not unconditionally defined here because PETE is not
@@ -61,9 +61,19 @@
 #if defined USE_PETE
 // For now at least, install PETE where indicated, and compile with
 //   CPPFLAGS='-I /pete/pete-2.1.0/src -DPETE_MAKE_EMPTY_CONSTRUCTORS=0 -DUSE_PETE'
+// making obvious changes to fix diagnostics (explicitly prefixing
+// 'vector' with 'std::' a few hundred times, for the most part).
+//
 // If PETE proves useful, then we can use the 'freepooma' version,
-// either as a library, or by importing the PETE sources.
-#   include </pete/pete-2.1.0/examples/Vector/Eval.h>
+// either as a library, or by importing its PETE-only sources.
+//
+// Compared to this:
+//#   include </pete/pete-2.1.0/examples/Vector/Eval.h>
+// this simpler alternative:
+#   include </pete/pete-2.1.0/examples/Mixed/Eval.h>
+// apparently avoids a speed penalty of about 20-30% due only to
+// checking array-size conformability, and is thus fairer to compare
+// to libstdc++'s <valarray> without its 'DEBUG' facility.
 #endif // defined USE_PETE
 
 #include <algorithm>
@@ -261,7 +271,7 @@ void run_one_test(std::string const& s, void(*f)())
         << s
         << '\n'
         << TimeAnAliquot(f, max_seconds)
-        << '\n'
+        << std::endl
         ;
 }
 
