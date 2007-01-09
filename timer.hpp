@@ -1,6 +1,6 @@
 // Measure elapsed time to high resolution.
 //
-// Copyright (C) 1998, 2000, 2001, 2003, 2004, 2005, 2006 Gregory W. Chicares.
+// Copyright (C) 1998, 2000, 2001, 2003, 2004, 2005, 2006, 2007 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: timer.hpp,v 1.12 2006-12-30 20:33:33 chicares Exp $
+// $Id: timer.hpp,v 1.13 2007-01-09 15:53:25 chicares Exp $
 
 #ifndef timer_hpp
 #define timer_hpp
@@ -157,11 +157,15 @@ class LMI_SO Timer
 template<typename F>
 class AliquotTimer
 {
+    friend class TimerTest;
+
   public:
     AliquotTimer(F f, double max_seconds);
     std::string operator()();
 
   private:
+    static unsigned long int GreatestNonnegativePowerOfTen(double);
+
     F      f_;
     double max_seconds_;
     Timer  timer_;
@@ -186,11 +190,7 @@ std::string AliquotTimer<F>::operator()()
         ? max_seconds_ / initial_trial_time_
         : max_seconds_ * timer_.frequency_
         ;
-
-    double const w = std::min(std::log10(v), static_cast<double>(ULONG_MAX));
-    unsigned long int const x = static_cast<unsigned long int>(w);
-    double const volatile y = std::pow(10.0, static_cast<double>(x));
-    unsigned long int const z = static_cast<unsigned long int>(y);
+    unsigned long int const z = GreatestNonnegativePowerOfTen(v);
     if(1 < z)
         {
         timer_.restart();
@@ -209,6 +209,21 @@ std::string AliquotTimer<F>::operator()()
         << timer_.elapsed_msec_str()
         ;
     return oss.str();
+}
+
+/// Greatest nonnegative integer power of ten that is less than or
+/// equal to the argument, if such a power exists; else zero.
+///
+/// Motivation: to determine the number of times to repeat an
+/// operation in a timing loop.
+
+template<typename F>
+unsigned long int AliquotTimer<F>::GreatestNonnegativePowerOfTen(double d)
+{
+    double const w = std::min(std::log10(d), static_cast<double>(ULONG_MAX));
+    unsigned long int const x = static_cast<unsigned long int>(w);
+    double const volatile y = std::pow(10.0, static_cast<double>(x));
+    return static_cast<unsigned long int>(y);
 }
 
 /// Time an operation, using class template AliquotTimer.
