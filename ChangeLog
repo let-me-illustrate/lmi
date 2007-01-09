@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.545 2007-01-08 08:47:49 chicares Exp $
+// $Id: ChangeLog,v 1.546 2007-01-09 15:53:25 chicares Exp $
 
 MAINTENANCE
 
@@ -9327,4 +9327,10 @@ Explore expression-template needs typical for lmi.
 
   expression_template_0_test.cpp
 Test run time for various array lengths.
+
+20070109T1553Z <chicares@cox.net> [1240]
+
+  timer.hpp
+  timer_test.cpp
+Improve unit testing.
 

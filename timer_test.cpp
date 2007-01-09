@@ -1,6 +1,6 @@
 // Measure elapsed time to high resolution--unit test.
 //
-// Copyright (C) 2005, 2006 Gregory W. Chicares.
+// Copyright (C) 2005, 2006, 2007 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: timer_test.cpp,v 1.10 2006-12-30 20:33:33 chicares Exp $
+// $Id: timer_test.cpp,v 1.11 2007-01-09 15:53:25 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -67,7 +67,20 @@ void wait_half_a_second()
         }
 }
 
-int test_main(int, char*[])
+struct TimerTest
+{
+    static void TestGreatestNonnegativePowerOfTen();
+    static void Test();
+};
+
+void TimerTest::TestGreatestNonnegativePowerOfTen()
+{
+    BOOST_TEST_EQUAL( 1.0, AliquotTimer<int>::GreatestNonnegativePowerOfTen( 9.9));
+    BOOST_TEST_EQUAL(10.0, AliquotTimer<int>::GreatestNonnegativePowerOfTen(10.0));
+    BOOST_TEST_EQUAL(10.0, AliquotTimer<int>::GreatestNonnegativePowerOfTen(10.1));
+}
+
+void TimerTest::Test()
 {
     // Coarsely measure resolution of std::clock().
     std::clock_t first = std::clock();
@@ -128,7 +141,12 @@ int test_main(int, char*[])
     // so that the elapsed time could be queried and tested.
     //
     std::cout << "  " << TimeAnAliquot(wait_half_a_second, 0.1) << '\n';
+}
 
+int test_main(int, char*[])
+{
+    TimerTest::TestGreatestNonnegativePowerOfTen();
+    TimerTest::Test();
     return EXIT_SUCCESS;
 }
 
