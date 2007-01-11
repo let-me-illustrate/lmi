@@ -1,6 +1,6 @@
 // Measure elapsed time to high resolution.
 //
-// Copyright (C) 1998, 2000, 2001, 2002, 2003, 2005, 2006 Gregory W. Chicares.
+// Copyright (C) 1998, 2000, 2001, 2002, 2003, 2005, 2006, 2007 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: timer.cpp,v 1.8 2006-12-09 15:53:36 chicares Exp $
+// $Id: timer.cpp,v 1.9 2007-01-11 01:59:15 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -102,7 +102,7 @@ Timer& Timer::stop()
 std::string Timer::elapsed_msec_str() const
 {
     std::ostringstream oss;
-    oss << static_cast<int>(1000.0 * elapsed_usec());
+    oss << std::fixed << std::setprecision(0) << 1000.0 * elapsed_usec();
     oss << " milliseconds";
     return oss.str().c_str();
 }
