@@ -1,6 +1,6 @@
 // Time program execution.
 //
-// Copyright (C) 2001, 2005, 2006 Gregory W. Chicares.
+// Copyright (C) 2001, 2005, 2006, 2007 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: elapsed_time.cpp,v 1.5 2006-01-29 13:52:00 chicares Exp $
+// $Id: elapsed_time.cpp,v 1.6 2007-01-13 02:11:32 chicares Exp $
 
 #include "main_common.hpp"
 #include "system_command.hpp"
@@ -54,11 +54,7 @@ int try_main(int argc, char* argv[])
             << "\ncommand line: " << command_line << '\n'
             ;
         }
-    std::cout
-        << "Elapsed time: "
-        << static_cast<int>(1000.0 * timer.stop().elapsed_usec())
-        << " milliseconds\n"
-        ;
+    std::cout << "Elapsed time: " << timer.stop().elapsed_msec_str() << '\n';
     return rc;
 }
 

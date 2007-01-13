@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.546 2007-01-09 15:53:25 chicares Exp $
+// $Id: ChangeLog,v 1.547 2007-01-13 02:11:32 chicares Exp $
 
 MAINTENANCE
 
@@ -9333,4 +9333,16 @@ Test run time for various array lengths.
   timer.hpp
   timer_test.cpp
 Improve unit testing.
+
+20070111T0159Z <chicares@cox.net> [1240]
+
+  timer.cpp
+Correct a defect: see
+  http://lists.gnu.org/archive/html/lmi/2007-01/msg00010.html
+
+20070113T0211Z <chicares@cox.net> [1240]
+
+  elapsed_time.cpp
+Refactor to eliminate duplication of code that was identified as
+defective and corrected 20070111T0159Z.
 
