@@ -1,6 +1,6 @@
 // Decimal conversion between std::string and arithmetic types--unit test.
 //
-// Copyright (C) 2004, 2005, 2006 Gregory W. Chicares.
+// Copyright (C) 2004, 2005, 2006, 2007 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: numeric_io_test.cpp,v 1.13 2006-12-06 16:23:17 chicares Exp $
+// $Id: numeric_io_test.cpp,v 1.14 2007-01-13 16:40:15 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -133,6 +133,7 @@ int test_main(int, char*[])
 
     double volatile d;
 
+// TODO ?? Use TimeAnAliquot() instead.
     Timer timer;
     int iterations = 100000;
     for(int j = 0; j < iterations; ++j)
