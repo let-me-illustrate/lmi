@@ -1,6 +1,6 @@
 // Account value: monthiversary processing.
 //
-// Copyright (C) 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006 Gregory W. Chicares.
+// Copyright (C) 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007 Gregory W. Chicares.
 // Portions marked JLM Copyright (C) 2000 (BOLI), 2002 (MEC avoidance) Gregory W. Chicares and Joseph L. Murdzek.
 // Author is GWC except where specifically noted otherwise.
 //
@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avmly.cpp,v 1.56 2006-12-14 04:10:26 chicares Exp $
+// $Id: ihs_avmly.cpp,v 1.57 2007-01-13 16:40:15 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -981,6 +981,9 @@ void AccountValue::TxOptionChange()
 // Authors: GWC and JLM.
 void AccountValue::IncreaseSpecAmtToAvoidMec()
 {
+// TODO ?? Don't use a cast for implicit truncation: it risks
+// undefined behavior. Consider whether dividing here is better
+// than multiplying what this variable is compared to below.
     int contract_year_7702A = static_cast<int>
         ((1 + Irc7702A_->DebugGetTestDur()) / 12.0
         );
