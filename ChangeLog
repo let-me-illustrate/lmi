@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.547 2007-01-13 02:11:32 chicares Exp $
+// $Id: ChangeLog,v 1.548 2007-01-14 20:17:42 chicares Exp $
 
 MAINTENANCE
 
@@ -9345,4 +9345,41 @@ Correct a defect: see
   elapsed_time.cpp
 Refactor to eliminate duplication of code that was identified as
 defective and corrected 20070111T0159Z.
+
+20070113T0239Z <chicares@cox.net> [1240]
+
+  timer.cpp
+Simplify.
+
+20070113T1640Z <chicares@cox.net> [1242]
+
+  ihs_avmly.cpp
+  numeric_io_test.cpp
+Mark defects.
+
+20070114T1943Z <chicares@cox.net> [1243]
+
+  timer_test.cpp
+Make an identified problem readily reproducible.
+
+20070114T1944Z <chicares@cox.net> [1247]
+
+  timer.hpp
+Commit spike solutions as comments: see
+  [insert mailing-list reference when URL becomes available]
+
+20070114T2008Z <chicares@cox.net> [1247]
+
+  timer.hpp
+Improve 20070109T1553Z change: move comments along with code.
+
+20070114T2009Z <chicares@cox.net> [1248]
+
+  timer_test.cpp
+Improve 20070109T1553Z change: add failing tests.
+
+20070114T2017Z <chicares@cox.net> [1248]
+
+  timer_test.cpp
+Accommodate a compiler that can't handle boost::bind.
 
