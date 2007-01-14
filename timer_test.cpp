@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: timer_test.cpp,v 1.12 2007-01-14 19:43:47 chicares Exp $
+// $Id: timer_test.cpp,v 1.13 2007-01-14 20:09:07 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -32,6 +32,7 @@
 
 #include <boost/bind.hpp>
 
+#include <climits>
 #include <ctime>
 
 void foo()
@@ -75,11 +76,37 @@ struct TimerTest
 
 void TimerTest::TestGreatestNonnegativePowerOfTen()
 {
-    BOOST_TEST_EQUAL( 1.0, AliquotTimer<int>::GreatestNonnegativePowerOfTen( 9.9));
-    BOOST_TEST_EQUAL(10.0, AliquotTimer<int>::GreatestNonnegativePowerOfTen(10.0));
-    BOOST_TEST_EQUAL(10.0, AliquotTimer<int>::GreatestNonnegativePowerOfTen(10.1));
+    BOOST_TEST_EQUAL( 0.0  , AliquotTimer<int>::GreatestNonnegativePowerOfTen(-1.0e+37));
+    BOOST_TEST_EQUAL( 0.0  , AliquotTimer<int>::GreatestNonnegativePowerOfTen(-1.0    ));
+    BOOST_TEST_EQUAL( 0.0  , AliquotTimer<int>::GreatestNonnegativePowerOfTen(-1.0e-37));
+    BOOST_TEST_EQUAL( 0.0  , AliquotTimer<int>::GreatestNonnegativePowerOfTen(-0.0    ));
+    BOOST_TEST_EQUAL( 0.0  , AliquotTimer<int>::GreatestNonnegativePowerOfTen( 0.0    ));
+    BOOST_TEST_EQUAL( 0.0  , AliquotTimer<int>::GreatestNonnegativePowerOfTen( 1.0e-37));
+
+    BOOST_TEST_EQUAL( 1.0  , AliquotTimer<int>::GreatestNonnegativePowerOfTen( 1.0    ));
+
+    BOOST_TEST_EQUAL( 1.0  , AliquotTimer<int>::GreatestNonnegativePowerOfTen( 9.9    ));
+    BOOST_TEST_EQUAL(10.0  , AliquotTimer<int>::GreatestNonnegativePowerOfTen(10.0    ));
+    BOOST_TEST_EQUAL(10.0  , AliquotTimer<int>::GreatestNonnegativePowerOfTen(10.1    ));
+
+    BOOST_TEST_EQUAL( 1.0e2, AliquotTimer<int>::GreatestNonnegativePowerOfTen(1.0e2   ));
+    BOOST_TEST_EQUAL( 1.0e3, AliquotTimer<int>::GreatestNonnegativePowerOfTen(1.0e3   ));
+    BOOST_TEST_EQUAL( 1.0e4, AliquotTimer<int>::GreatestNonnegativePowerOfTen(1.0e4   ));
+    BOOST_TEST_EQUAL( 1.0e5, AliquotTimer<int>::GreatestNonnegativePowerOfTen(1.0e5   ));
+    BOOST_TEST_EQUAL( 1.0e6, AliquotTimer<int>::GreatestNonnegativePowerOfTen(1.0e6   ));
+    BOOST_TEST_EQUAL( 1.0e7, AliquotTimer<int>::GreatestNonnegativePowerOfTen(1.0e7   ));
+    BOOST_TEST_EQUAL( 1.0e8, AliquotTimer<int>::GreatestNonnegativePowerOfTen(1.0e8   ));
+    BOOST_TEST_EQUAL( 1.0e9, AliquotTimer<int>::GreatestNonnegativePowerOfTen(1.0e9   ));
+
+    BOOST_TEST_RELATION(0.1 * LONG_MAX,<=,AliquotTimer<int>::GreatestNonnegativePowerOfTen(LONG_MAX)            );
+    BOOST_TEST_RELATION(                  AliquotTimer<int>::GreatestNonnegativePowerOfTen(LONG_MAX),<=,LONG_MAX);
+
+    BOOST_TEST_RELATION(0.1 * LONG_MAX,<=,AliquotTimer<int>::GreatestNonnegativePowerOfTen( 1.0e+37)            );
+    BOOST_TEST_RELATION(                  AliquotTimer<int>::GreatestNonnegativePowerOfTen( 1.0e+37),<=,LONG_MAX);
 }
 
+// TODO ?? TestGreatestNonnegativePowerOfTen() has been factored out;
+// should this monolith be further subdivided?
 void TimerTest::Test()
 {
     // Coarsely measure resolution of std::clock().
