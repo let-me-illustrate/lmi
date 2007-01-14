@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: timer_test.cpp,v 1.11 2007-01-09 15:53:25 chicares Exp $
+// $Id: timer_test.cpp,v 1.12 2007-01-14 19:43:47 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -96,7 +96,7 @@ void TimerTest::Test()
             }
         }
 
-    // Use high-resolution time to measure an interval of about one
+    // Use high-resolution timer to measure an interval of about one
     // second.
     Timer timer;
     first = std::clock();
@@ -138,9 +138,13 @@ void TimerTest::Test()
     // exactly once.
     //
     // TODO ?? It would be better to use class AliquotTimer directly,
-    // so that the elapsed time could be queried and tested.
+    // so that the elapsed time (and perhaps also the number of
+    // iterations) could be queried and tested.
     //
     std::cout << "  " << TimeAnAliquot(wait_half_a_second, 0.1) << '\n';
+    // TODO ?? Why does the preceding line measure one iteration
+    // after the initial calibration trial?
+    std::cout << "  " << TimeAnAliquot(wait_half_a_second, 0.01) << '\n';
 }
 
 int test_main(int, char*[])
