@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: timer.hpp,v 1.14 2007-01-14 19:44:29 chicares Exp $
+// $Id: timer.hpp,v 1.15 2007-01-14 20:08:32 chicares Exp $
 
 #ifndef timer_hpp
 #define timer_hpp
@@ -148,11 +148,6 @@ class LMI_SO Timer
 ///
 /// Class Timer guarantees that its frequency_ member is nonzero, so
 /// it is safe to divide by that member.
-///
-/// An intermediate value is volatile-qualified in order to work
-/// around a defect observed with MinGW gcc: the defective ms C
-/// runtime library MinGW uses doesn't reliably return integer
-/// results for std::pow() with exact-integer arguments.
 
 template<typename F>
 class AliquotTimer
@@ -218,11 +213,16 @@ std::string AliquotTimer<F>::operator()()
     return oss.str();
 }
 
-/// Greatest nonnegative integer power of ten that is less than or
+/// Greatest nonnegative-integer power of ten that is less than or
 /// equal to the argument, if such a power exists; else zero.
 ///
 /// Motivation: to determine the number of times to repeat an
 /// operation in a timing loop.
+///
+/// An intermediate value is volatile-qualified in order to work
+/// around a defect observed with MinGW gcc: the defective ms C
+/// runtime library MinGW uses doesn't reliably return integer
+/// results for std::pow() with exact-integer arguments.
 
 template<typename F>
 unsigned long int AliquotTimer<F>::GreatestNonnegativePowerOfTen(double d)
