@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: timer_test.cpp,v 1.13 2007-01-14 20:09:07 chicares Exp $
+// $Id: timer_test.cpp,v 1.14 2007-01-14 20:17:42 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -30,7 +30,9 @@
 
 #include "test_tools.hpp"
 
-#include <boost/bind.hpp>
+#if !defined __BORLANDC__
+#   include <boost/bind.hpp>
+#endif // !defined __BORLANDC__
 
 #include <climits>
 #include <ctime>
@@ -157,8 +159,10 @@ void TimerTest::Test()
 
     std::cout << "  " << TimeAnAliquot(foo) << '\n';
 
+#if !defined __BORLANDC__
     X x;
     std::cout << "  " << TimeAnAliquot(boost::bind(goo, 10, x, x, &x)) << '\n';
+#endif // !defined __BORLANDC__
 
     // Test an operation that has to take longer than the hinted
     // time limit, in order to make sure it executes the operation
