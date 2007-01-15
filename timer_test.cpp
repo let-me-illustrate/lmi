@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: timer_test.cpp,v 1.14 2007-01-14 20:17:42 chicares Exp $
+// $Id: timer_test.cpp,v 1.15 2007-01-15 21:24:24 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -165,17 +165,14 @@ void TimerTest::Test()
 #endif // !defined __BORLANDC__
 
     // Test an operation that has to take longer than the hinted
-    // time limit, in order to make sure it executes the operation
-    // exactly once.
+    // time limit, in order to make sure it doesn't execute the
+    // operation after the initial calibration trial.
     //
     // TODO ?? It would be better to use class AliquotTimer directly,
     // so that the elapsed time (and perhaps also the number of
     // iterations) could be queried and tested.
     //
     std::cout << "  " << TimeAnAliquot(wait_half_a_second, 0.1) << '\n';
-    // TODO ?? Why does the preceding line measure one iteration
-    // after the initial calibration trial?
-    std::cout << "  " << TimeAnAliquot(wait_half_a_second, 0.01) << '\n';
 }
 
 int test_main(int, char*[])

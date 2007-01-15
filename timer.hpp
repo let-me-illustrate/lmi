@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: timer.hpp,v 1.15 2007-01-14 20:08:32 chicares Exp $
+// $Id: timer.hpp,v 1.16 2007-01-15 21:24:24 chicares Exp $
 
 #ifndef timer_hpp
 #define timer_hpp
@@ -51,9 +51,8 @@
 
 #include <boost/utility.hpp>
 
-#include <algorithm> // std::min()
-#include <climits>   // ULONG_MAX
-#include <cmath>     // std::log10(), std::pow()
+#include <climits> // LONG_MAX
+#include <cmath>
 #include <iomanip>
 #include <ios>
 #include <sstream>
@@ -159,7 +158,7 @@ class AliquotTimer
     std::string operator()();
 
   private:
-    static unsigned long int GreatestNonnegativePowerOfTen(double);
+    static long int GreatestNonnegativePowerOfTen(double);
 
     F      f_;
     double max_seconds_;
@@ -185,11 +184,11 @@ std::string AliquotTimer<F>::operator()()
         ? max_seconds_ / initial_trial_time_
         : max_seconds_ * timer_.frequency_
         ;
-    unsigned long int const z = GreatestNonnegativePowerOfTen(v);
+    long int const z = GreatestNonnegativePowerOfTen(v);
     if(1 < z)
         {
         timer_.restart();
-        for(unsigned long int j = 0; j < z; j++)
+        for(long int j = 0; j < z; j++)
             {
             f_();
             }
@@ -214,7 +213,8 @@ std::string AliquotTimer<F>::operator()()
 }
 
 /// Greatest nonnegative-integer power of ten that is less than or
-/// equal to the argument, if such a power exists; else zero.
+/// equal to the argument, if such a power exists--but never greater
+/// than LONG_MAX; else zero.
 ///
 /// Motivation: to determine the number of times to repeat an
 /// operation in a timing loop.
@@ -222,15 +222,18 @@ std::string AliquotTimer<F>::operator()()
 /// An intermediate value is volatile-qualified in order to work
 /// around a defect observed with MinGW gcc: the defective ms C
 /// runtime library MinGW uses doesn't reliably return integer
-/// results for std::pow() with exact-integer arguments.
+/// results for std::pow() with exact-integer arguments. (To see the
+/// problem, run the unit test with 'volatile' deleted here.)
 
 template<typename F>
-unsigned long int AliquotTimer<F>::GreatestNonnegativePowerOfTen(double d)
+long int AliquotTimer<F>::GreatestNonnegativePowerOfTen(double d)
 {
-    double const w = std::min(std::log10(d), static_cast<double>(ULONG_MAX));
-    unsigned long int const x = static_cast<unsigned long int>(w);
-    double const volatile y = std::pow(10.0, static_cast<double>(x));
-    return static_cast<unsigned long int>(y);
+    if(d <= 0.0)
+        {
+        return 0L;
+        }
+    double const volatile z = std::pow(10.0, std::floor(std::log10(d)));
+    return LONG_MAX < z ? LONG_MAX : static_cast<long int>(z);
 }
 
 /// Time an operation, using class template AliquotTimer.
