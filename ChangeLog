@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.548 2007-01-14 20:17:42 chicares Exp $
+// $Id: ChangeLog,v 1.549 2007-01-15 21:24:24 chicares Exp $
 
 MAINTENANCE
 
@@ -9382,4 +9382,10 @@ Improve 20070109T1553Z change: add failing tests.
 
   timer_test.cpp
 Accommodate a compiler that can't handle boost::bind.
+
+20070115T2124Z <chicares@cox.net> [1247]
+
+  timer.hpp
+  timer_test.cpp
+Fix some problems identified in unit testing.
 
