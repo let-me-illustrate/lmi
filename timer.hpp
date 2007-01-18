@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: timer.hpp,v 1.16 2007-01-15 21:24:24 chicares Exp $
+// $Id: timer.hpp,v 1.17 2007-01-18 09:33:31 chicares Exp $
 
 #ifndef timer_hpp
 #define timer_hpp
@@ -142,11 +142,6 @@ class LMI_SO Timer
 /// This class template is a friend of class Timer so that it can
 /// access Timer::frequency_, which should not have a public accessor
 /// because its type is platform dependent.
-///
-/// Implementation of class template AliquotTimer.
-///
-/// Class Timer guarantees that its frequency_ member is nonzero, so
-/// it is safe to divide by that member.
 
 template<typename F>
 class AliquotTimer
@@ -222,8 +217,14 @@ std::string AliquotTimer<F>::operator()()
 /// An intermediate value is volatile-qualified in order to work
 /// around a defect observed with MinGW gcc: the defective ms C
 /// runtime library MinGW uses doesn't reliably return integer
-/// results for std::pow() with exact-integer arguments. (To see the
-/// problem, run the unit test with 'volatile' deleted here.)
+/// results for std::pow() with exact-integer arguments. To see the
+/// problem, remove the 'volatile' qualifier and run the unit test.
+///
+/// The last line is not equivalent to
+///    return std::min(LONG_MAX, static_cast<long int>(z));
+/// , which would compare integral rather than double values; for
+/// proof, run the unit test with that line substituted (and the
+/// appropriate header included).
 
 template<typename F>
 long int AliquotTimer<F>::GreatestNonnegativePowerOfTen(double d)
