@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: timer.hpp,v 1.17 2007-01-18 09:33:31 chicares Exp $
+// $Id: timer.hpp,v 1.18 2007-01-18 10:17:37 chicares Exp $
 
 #ifndef timer_hpp
 #define timer_hpp
@@ -192,16 +192,10 @@ std::string AliquotTimer<F>::operator()()
     std::ostringstream oss;
     oss
         << std::scientific << std::setprecision(3)
-        << "[" << timer_.elapsed_usec() / z << "] "
-//// TODO ?? Spike solution:
-////        // TODO ?? Convoluted--refactor. Treat as a special case?
-////        << "[" << timer_.elapsed_usec() / (0 != z ? z : 1) << "] "
+        << "[" << timer_.elapsed_usec() / (0 != z ? z : 1) << "] "
         << z
-//// TODO ?? Spike solution:
-////        // TODO ?? Convoluted--refactor. Say it more clearly.
-////        << (0 != z ? "" : "th")
-////        << " iteration" << (z <= 1 ? "" : "s") << " took "
-        << " iteration" << ((1 == z) ? "" : "s") << " took "
+        << (0 != z ? "" : "th")
+        << " iteration" << (z <= 1 ? "" : "s") << " took "
         << timer_.elapsed_msec_str()
         ;
     return oss.str();
