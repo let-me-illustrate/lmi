@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: timer_test.cpp,v 1.15 2007-01-15 21:24:24 chicares Exp $
+// $Id: timer_test.cpp,v 1.16 2007-01-18 11:18:27 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -34,12 +34,16 @@
 #   include <boost/bind.hpp>
 #endif // !defined __BORLANDC__
 
+#include <cfloat>
 #include <climits>
 #include <ctime>
 
+inline void do_nothing()
+{}
+
 void foo()
 {
-    volatile double d;
+    double volatile d;
     for(unsigned int j = 0; j < 10000; ++j)
         {
         d = std::log10(1U + j * j);
@@ -78,6 +82,7 @@ struct TimerTest
 
 void TimerTest::TestGreatestNonnegativePowerOfTen()
 {
+    // Exponent 37: see C99 5.2.4.2.2/9 .
     BOOST_TEST_EQUAL( 0.0  , AliquotTimer<int>::GreatestNonnegativePowerOfTen(-1.0e+37));
     BOOST_TEST_EQUAL( 0.0  , AliquotTimer<int>::GreatestNonnegativePowerOfTen(-1.0    ));
     BOOST_TEST_EQUAL( 0.0  , AliquotTimer<int>::GreatestNonnegativePowerOfTen(-1.0e-37));
@@ -85,26 +90,29 @@ void TimerTest::TestGreatestNonnegativePowerOfTen()
     BOOST_TEST_EQUAL( 0.0  , AliquotTimer<int>::GreatestNonnegativePowerOfTen( 0.0    ));
     BOOST_TEST_EQUAL( 0.0  , AliquotTimer<int>::GreatestNonnegativePowerOfTen( 1.0e-37));
 
-    BOOST_TEST_EQUAL( 1.0  , AliquotTimer<int>::GreatestNonnegativePowerOfTen( 1.0    ));
+    BOOST_TEST_EQUAL( 1.0, AliquotTimer<int>::GreatestNonnegativePowerOfTen( 9.9));
+    BOOST_TEST_EQUAL(10.0, AliquotTimer<int>::GreatestNonnegativePowerOfTen(10.0));
+    BOOST_TEST_EQUAL(10.0, AliquotTimer<int>::GreatestNonnegativePowerOfTen(10.1));
 
-    BOOST_TEST_EQUAL( 1.0  , AliquotTimer<int>::GreatestNonnegativePowerOfTen( 9.9    ));
-    BOOST_TEST_EQUAL(10.0  , AliquotTimer<int>::GreatestNonnegativePowerOfTen(10.0    ));
-    BOOST_TEST_EQUAL(10.0  , AliquotTimer<int>::GreatestNonnegativePowerOfTen(10.1    ));
-
-    BOOST_TEST_EQUAL( 1.0e2, AliquotTimer<int>::GreatestNonnegativePowerOfTen(1.0e2   ));
-    BOOST_TEST_EQUAL( 1.0e3, AliquotTimer<int>::GreatestNonnegativePowerOfTen(1.0e3   ));
-    BOOST_TEST_EQUAL( 1.0e4, AliquotTimer<int>::GreatestNonnegativePowerOfTen(1.0e4   ));
-    BOOST_TEST_EQUAL( 1.0e5, AliquotTimer<int>::GreatestNonnegativePowerOfTen(1.0e5   ));
-    BOOST_TEST_EQUAL( 1.0e6, AliquotTimer<int>::GreatestNonnegativePowerOfTen(1.0e6   ));
-    BOOST_TEST_EQUAL( 1.0e7, AliquotTimer<int>::GreatestNonnegativePowerOfTen(1.0e7   ));
-    BOOST_TEST_EQUAL( 1.0e8, AliquotTimer<int>::GreatestNonnegativePowerOfTen(1.0e8   ));
-    BOOST_TEST_EQUAL( 1.0e9, AliquotTimer<int>::GreatestNonnegativePowerOfTen(1.0e9   ));
+    for(int i = 0; i <= DBL_MAX_10_EXP; ++i)
+        {
+        double d = std::pow(10.0, i);
+        if(LONG_MAX < d)
+            {
+            break;
+            }
+        BOOST_TEST_EQUAL(d, AliquotTimer<int>::GreatestNonnegativePowerOfTen(d));
+        }
 
     BOOST_TEST_RELATION(0.1 * LONG_MAX,<=,AliquotTimer<int>::GreatestNonnegativePowerOfTen(LONG_MAX)            );
     BOOST_TEST_RELATION(                  AliquotTimer<int>::GreatestNonnegativePowerOfTen(LONG_MAX),<=,LONG_MAX);
 
     BOOST_TEST_RELATION(0.1 * LONG_MAX,<=,AliquotTimer<int>::GreatestNonnegativePowerOfTen( 1.0e+37)            );
     BOOST_TEST_RELATION(                  AliquotTimer<int>::GreatestNonnegativePowerOfTen( 1.0e+37),<=,LONG_MAX);
+
+    double const volatile zero = 0.0;
+    double const infinity = 1.0 / zero;
+    BOOST_TEST_EQUAL(LONG_MAX, AliquotTimer<int>::GreatestNonnegativePowerOfTen(infinity));
 }
 
 // TODO ?? TestGreatestNonnegativePowerOfTen() has been factored out;
@@ -157,6 +165,8 @@ void TimerTest::Test()
     // Still running--can't report interval until stopped.
     BOOST_TEST_THROW(timer.elapsed_usec(), std::logic_error, "");
 
+    std::cout << "  " << TimeAnAliquot(do_nothing) << '\n';
+
     std::cout << "  " << TimeAnAliquot(foo) << '\n';
 
 #if !defined __BORLANDC__
@@ -172,7 +182,16 @@ void TimerTest::Test()
     // so that the elapsed time (and perhaps also the number of
     // iterations) could be queried and tested.
     //
-    std::cout << "  " << TimeAnAliquot(wait_half_a_second, 0.1) << '\n';
+    std::cout << "  " << TimeAnAliquot(wait_half_a_second,  0.1     ) << '\n';
+    std::cout << "  " << TimeAnAliquot(wait_half_a_second,  0.499999) << '\n';
+
+    // Test some other plausible...
+    std::cout << "  " << TimeAnAliquot(wait_half_a_second,  4.9     ) << '\n';
+    std::cout << "  " << TimeAnAliquot(wait_half_a_second,  5.0     ) << '\n';
+    // ...and implausible (hinted) limits.
+    std::cout << "  " << TimeAnAliquot(wait_half_a_second,  1.0e-100) << '\n';
+    std::cout << "  " << TimeAnAliquot(wait_half_a_second,  0.0     ) << '\n';
+    std::cout << "  " << TimeAnAliquot(wait_half_a_second, -1.0     ) << '\n';
 }
 
 int test_main(int, char*[])
