@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.549 2007-01-15 21:24:24 chicares Exp $
+// $Id: ChangeLog,v 1.550 2007-01-18 11:18:27 chicares Exp $
 
 MAINTENANCE
 
@@ -9388,4 +9388,20 @@ Accommodate a compiler that can't handle boost::bind.
   timer.hpp
   timer_test.cpp
 Fix some problems identified in unit testing.
+
+20070118T0933Z <chicares@cox.net> [1247]
+
+  timer.hpp
+Improve documentation.
+
+20070118T1017Z <chicares@cox.net> [1243]
+
+  timer.hpp
+Ratify spike solutions committed 20070114T1944Z: see
+  [insert mailing-list reference when URL becomes available]
+
+20070118T1118Z <chicares@cox.net> [1243]
+
+  timer_test.cpp
+Refactor and improve unit tests.
 
