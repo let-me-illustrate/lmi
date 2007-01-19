@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: timer.hpp,v 1.18 2007-01-18 10:17:37 chicares Exp $
+// $Id: timer.hpp,v 1.19 2007-01-19 16:35:13 chicares Exp $
 
 #ifndef timer_hpp
 #define timer_hpp
@@ -77,6 +77,7 @@
 class LMI_SO Timer
     :private boost::noncopyable
 {
+    friend class TimerTest;
     template<typename F> friend class AliquotTimer;
 
   public:

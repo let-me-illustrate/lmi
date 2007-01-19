@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: timer_test.cpp,v 1.16 2007-01-18 11:18:27 chicares Exp $
+// $Id: timer_test.cpp,v 1.17 2007-01-19 16:35:13 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -77,7 +77,9 @@ void wait_half_a_second()
 struct TimerTest
 {
     static void TestGreatestNonnegativePowerOfTen();
-    static void Test();
+    static void TestResolution();
+    static void TestExceptions();
+    static void TestAliquotTimer();
 };
 
 void TimerTest::TestGreatestNonnegativePowerOfTen()
@@ -115,9 +117,7 @@ void TimerTest::TestGreatestNonnegativePowerOfTen()
     BOOST_TEST_EQUAL(LONG_MAX, AliquotTimer<int>::GreatestNonnegativePowerOfTen(infinity));
 }
 
-// TODO ?? TestGreatestNonnegativePowerOfTen() has been factored out;
-// should this monolith be further subdivided?
-void TimerTest::Test()
+void TimerTest::TestResolution()
 {
     // Coarsely measure resolution of std::clock().
     std::clock_t first = std::clock();
@@ -153,18 +153,41 @@ void TimerTest::Test()
     // Test accuracy of high-resolution timer. Finer tests might be
     // devised, but this one catches gross errors.
     BOOST_TEST_RELATION(relative_error,<,2.0*clock_resolution);
+}
 
-    // Already stopped--can't stop again.
-    BOOST_TEST_THROW(timer.stop(), std::logic_error, "");
+void TimerTest::TestExceptions()
+{
+    Timer timer;
+
+    BOOST_TEST_THROW
+        (timer.start()
+        ,std::logic_error
+        ,"Timer::start() called, but timer was already running."
+        );
+
+    timer.stop();
+    BOOST_TEST_THROW
+        (timer.stop()
+        ,std::logic_error
+        ,"Timer::stop() called, but timer was not running."
+        );
 
     timer.restart();
+    BOOST_TEST_THROW
+        (timer.restart()
+        ,std::logic_error
+        ,"Timer::start() called, but timer was already running."
+        );
 
-    // Already running--can't restart again before stopping.
-    BOOST_TEST_THROW(timer.restart(), std::logic_error, "");
+    BOOST_TEST_THROW
+        (timer.elapsed_usec()
+        ,std::logic_error
+        ,"Timer::elapsed_usec() called, but timer is still running."
+        );
+}
 
-    // Still running--can't report interval until stopped.
-    BOOST_TEST_THROW(timer.elapsed_usec(), std::logic_error, "");
-
+void TimerTest::TestAliquotTimer()
+{
     std::cout << "  " << TimeAnAliquot(do_nothing) << '\n';
 
     std::cout << "  " << TimeAnAliquot(foo) << '\n';
@@ -197,7 +220,9 @@ void TimerTest::Test()
 int test_main(int, char*[])
 {
     TimerTest::TestGreatestNonnegativePowerOfTen();
-    TimerTest::Test();
+    TimerTest::TestResolution();
+    TimerTest::TestExceptions();
+    TimerTest::TestAliquotTimer();
     return EXIT_SUCCESS;
 }
 
