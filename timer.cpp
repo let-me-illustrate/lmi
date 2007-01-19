@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: timer.cpp,v 1.10 2007-01-13 02:39:26 chicares Exp $
+// $Id: timer.cpp,v 1.11 2007-01-19 16:59:18 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -27,9 +27,6 @@
 #endif // __BORLANDC__
 
 #include "timer.hpp"
-
-#include <sstream>
-#include <stdexcept>
 
 #ifdef LMI_MSW
     // TRICKY !! There being no standard way to ascertain whether
@@ -62,7 +59,7 @@ Timer::Timer()
     ,time_when_stopped_ (0)
 {
     frequency_ = calibrate();
-    if(0 == frequency_)
+    if(frequency_ <= 0)
         {
         throw std::runtime_error("High resolution timer not available.");
         }
