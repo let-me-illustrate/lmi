@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.550 2007-01-18 11:18:27 chicares Exp $
+// $Id: ChangeLog,v 1.551 2007-01-19 16:59:18 chicares Exp $
 
 MAINTENANCE
 
@@ -9404,4 +9404,17 @@ Ratify spike solutions committed 20070114T1944Z: see
 
   timer_test.cpp
 Refactor and improve unit tests.
+
+20070119T1635Z <chicares@cox.net> [1242]
+
+  timer.hpp
+  timer_test.cpp
+Refactor and improve unit tests.
+
+20070119T1659Z <chicares@cox.net> [1242]
+
+  timer.cpp
+  timer.hpp
+  timer_test.cpp
+Enforce ctor preconditions.
 

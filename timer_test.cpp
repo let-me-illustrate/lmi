@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: timer_test.cpp,v 1.17 2007-01-19 16:35:13 chicares Exp $
+// $Id: timer_test.cpp,v 1.18 2007-01-19 16:59:18 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -212,9 +212,9 @@ void TimerTest::TestAliquotTimer()
     std::cout << "  " << TimeAnAliquot(wait_half_a_second,  4.9     ) << '\n';
     std::cout << "  " << TimeAnAliquot(wait_half_a_second,  5.0     ) << '\n';
     // ...and implausible (hinted) limits.
-    std::cout << "  " << TimeAnAliquot(wait_half_a_second,  1.0e-100) << '\n';
-    std::cout << "  " << TimeAnAliquot(wait_half_a_second,  0.0     ) << '\n';
-    std::cout << "  " << TimeAnAliquot(wait_half_a_second, -1.0     ) << '\n';
+    BOOST_TEST_THROW(TimeAnAliquot(wait_half_a_second,  1.0e-100), std::invalid_argument, "");
+    BOOST_TEST_THROW(TimeAnAliquot(wait_half_a_second,  0.0     ), std::invalid_argument, "");
+    BOOST_TEST_THROW(TimeAnAliquot(wait_half_a_second, -1.0     ), std::invalid_argument, "");
 }
 
 int test_main(int, char*[])
