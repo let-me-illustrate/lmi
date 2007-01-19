@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: timer.hpp,v 1.19 2007-01-19 16:35:13 chicares Exp $
+// $Id: timer.hpp,v 1.20 2007-01-19 16:59:18 chicares Exp $
 
 #ifndef timer_hpp
 #define timer_hpp
@@ -56,6 +56,7 @@
 #include <iomanip>
 #include <ios>
 #include <sstream>
+#include <stdexcept>
 #include <string>
 
 /// Why another timer class?
@@ -167,6 +168,18 @@ AliquotTimer<F>::AliquotTimer(F f, double max_seconds)
     :f_          (f)
     ,max_seconds_(max_seconds)
 {
+    if(max_seconds_ * timer_.frequency_ < 1.0)
+        {
+        std::ostringstream oss;
+        oss
+            << "Timer interval "
+            << max_seconds_
+            << " is too short: it is less than the reciprocal of "
+            << timer_.frequency_
+            << ", the timer frequency."
+            ;
+        throw std::invalid_argument(oss.str());
+        }
     f_();
     timer_.stop();
     initial_trial_time_ = timer_.elapsed_usec();
