@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: timer_test.cpp,v 1.19 2007-01-20 06:34:29 chicares Exp $
+// $Id: timer_test.cpp,v 1.20 2007-01-20 16:25:40 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -60,27 +60,21 @@ void goo(int i, X, X const&, X*)
         }
 }
 
-void wait_ten_msec()
-{
-    std::clock_t first = std::clock();
-    for(;;)
-        {
-        std::clock_t last = std::clock();
-        double elapsed = double(last - first) / CLOCKS_PER_SEC;
-        if(0.01 <= elapsed)
-            {
-            break;
-            }
-        }
-}
-
 struct TimerTest
 {
+    static void WaitTenMsec();
     static void TestGreatestNonnegativePowerOfTen();
     static void TestResolution();
     static void TestExceptions();
     static void TestAliquotTimer();
 };
+
+void TimerTest::WaitTenMsec()
+{
+    Timer timer;
+    double limit = 0.01 * timer.frequency_;
+    for(;timer.inspect() - timer.time_when_started_ <= limit;) {}
+}
 
 void TimerTest::TestGreatestNonnegativePowerOfTen()
 {
@@ -205,16 +199,16 @@ void TimerTest::TestAliquotTimer()
     // so that the elapsed time (and perhaps also the number of
     // iterations) could be queried and tested.
     //
-    std::cout << "  " << TimeAnAliquot(wait_ten_msec,  0.002    ) << '\n';
-    std::cout << "  " << TimeAnAliquot(wait_ten_msec,  0.0099999) << '\n';
+    std::cout << "  " << TimeAnAliquot(WaitTenMsec,  0.002    ) << '\n';
+    std::cout << "  " << TimeAnAliquot(WaitTenMsec,  0.0099999) << '\n';
 
     // Test some other plausible...
-    std::cout << "  " << TimeAnAliquot(wait_ten_msec,  0.09     ) << '\n';
-    std::cout << "  " << TimeAnAliquot(wait_ten_msec,  0.1      ) << '\n';
+    std::cout << "  " << TimeAnAliquot(WaitTenMsec,  0.099    ) << '\n';
+    std::cout << "  " << TimeAnAliquot(WaitTenMsec,  0.101    ) << '\n';
     // ...and implausible (hinted) limits.
-    BOOST_TEST_THROW(TimeAnAliquot(wait_ten_msec,  1.0e-100), std::invalid_argument, "");
-    BOOST_TEST_THROW(TimeAnAliquot(wait_ten_msec,  0.0     ), std::invalid_argument, "");
-    BOOST_TEST_THROW(TimeAnAliquot(wait_ten_msec, -1.0     ), std::invalid_argument, "");
+    BOOST_TEST_THROW(TimeAnAliquot(WaitTenMsec,  1.0e-100), std::invalid_argument, "");
+    BOOST_TEST_THROW(TimeAnAliquot(WaitTenMsec,  0.0     ), std::invalid_argument, "");
+    BOOST_TEST_THROW(TimeAnAliquot(WaitTenMsec, -1.0     ), std::invalid_argument, "");
 }
 
 int test_main(int, char*[])
