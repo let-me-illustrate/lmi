@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: timer.hpp,v 1.20 2007-01-19 16:59:18 chicares Exp $
+// $Id: timer.hpp,v 1.21 2007-01-20 06:33:34 chicares Exp $
 
 #ifndef timer_hpp
 #define timer_hpp
@@ -157,10 +157,11 @@ class AliquotTimer
   private:
     static long int GreatestNonnegativePowerOfTen(double);
 
-    F      f_;
-    double max_seconds_;
-    Timer  timer_;
-    double initial_trial_time_;
+    F           f_;
+    double      max_seconds_;
+    Timer       timer_;
+    double      initial_trial_time_;
+    std::string str_;
 };
 
 template<typename F>
@@ -180,9 +181,18 @@ AliquotTimer<F>::AliquotTimer(F f, double max_seconds)
             ;
         throw std::invalid_argument(oss.str());
         }
+
     f_();
     timer_.stop();
     initial_trial_time_ = timer_.elapsed_usec();
+    std::ostringstream oss;
+    oss
+        << std::scientific << std::setprecision(3)
+        << "[" << timer_.elapsed_usec() << "]"
+        << " initial calibration took "
+        << timer_.elapsed_msec_str()
+        ;
+    str_ = oss.str();
 }
 
 template<typename F>
@@ -202,17 +212,17 @@ std::string AliquotTimer<F>::operator()()
             f_();
             }
         timer_.stop();
+        std::ostringstream oss;
+        oss
+            << std::scientific << std::setprecision(3)
+            << "[" << timer_.elapsed_usec() / z << "]"
+            << " " << z
+            << " iterations took "
+            << timer_.elapsed_msec_str()
+            ;
+        str_ = oss.str();
         }
-    std::ostringstream oss;
-    oss
-        << std::scientific << std::setprecision(3)
-        << "[" << timer_.elapsed_usec() / (0 != z ? z : 1) << "] "
-        << z
-        << (0 != z ? "" : "th")
-        << " iteration" << (z <= 1 ? "" : "s") << " took "
-        << timer_.elapsed_msec_str()
-        ;
-    return oss.str();
+    return str_;
 }
 
 /// Greatest nonnegative-integer power of ten that is less than or
