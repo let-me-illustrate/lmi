@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: timer.hpp,v 1.21 2007-01-20 06:33:34 chicares Exp $
+// $Id: timer.hpp,v 1.22 2007-01-20 16:26:25 chicares Exp $
 
 #ifndef timer_hpp
 #define timer_hpp
@@ -144,6 +144,8 @@ class LMI_SO Timer
 /// This class template is a friend of class Timer so that it can
 /// access Timer::frequency_, which should not have a public accessor
 /// because its type is platform dependent.
+///
+/// Implicitly-declared special member functions do the right thing.
 
 template<typename F>
 class AliquotTimer
@@ -159,7 +161,6 @@ class AliquotTimer
 
     F           f_;
     double      max_seconds_;
-    Timer       timer_;
     double      initial_trial_time_;
     std::string str_;
 };
@@ -169,28 +170,29 @@ AliquotTimer<F>::AliquotTimer(F f, double max_seconds)
     :f_          (f)
     ,max_seconds_(max_seconds)
 {
-    if(max_seconds_ * timer_.frequency_ < 1.0)
+    Timer timer;
+    if(max_seconds_ * timer.frequency_ < 1.0)
         {
         std::ostringstream oss;
         oss
             << "Timer interval "
             << max_seconds_
             << " is too short: it is less than the reciprocal of "
-            << timer_.frequency_
+            << timer.frequency_
             << ", the timer frequency."
             ;
         throw std::invalid_argument(oss.str());
         }
 
     f_();
-    timer_.stop();
-    initial_trial_time_ = timer_.elapsed_usec();
+    timer.stop();
+    initial_trial_time_ = timer.elapsed_usec();
     std::ostringstream oss;
     oss
         << std::scientific << std::setprecision(3)
-        << "[" << timer_.elapsed_usec() << "]"
+        << "[" << timer.elapsed_usec() << "]"
         << " initial calibration took "
-        << timer_.elapsed_msec_str()
+        << timer.elapsed_msec_str()
         ;
     str_ = oss.str();
 }
@@ -198,27 +200,27 @@ AliquotTimer<F>::AliquotTimer(F f, double max_seconds)
 template<typename F>
 std::string AliquotTimer<F>::operator()()
 {
+    Timer timer;
     double const v =
         (0.0 != initial_trial_time_)
         ? max_seconds_ / initial_trial_time_
-        : max_seconds_ * timer_.frequency_
+        : max_seconds_ * timer.frequency_
         ;
     long int const z = GreatestNonnegativePowerOfTen(v);
     if(1 < z)
         {
-        timer_.restart();
         for(long int j = 0; j < z; j++)
             {
             f_();
             }
-        timer_.stop();
+        timer.stop();
         std::ostringstream oss;
         oss
             << std::scientific << std::setprecision(3)
-            << "[" << timer_.elapsed_usec() / z << "]"
+            << "[" << timer.elapsed_usec() / z << "]"
             << " " << z
             << " iterations took "
-            << timer_.elapsed_msec_str()
+            << timer.elapsed_msec_str()
             ;
         str_ = oss.str();
         }
