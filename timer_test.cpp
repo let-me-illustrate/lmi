@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: timer_test.cpp,v 1.18 2007-01-19 16:59:18 chicares Exp $
+// $Id: timer_test.cpp,v 1.19 2007-01-20 06:34:29 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -44,7 +44,7 @@ inline void do_nothing()
 void foo()
 {
     double volatile d;
-    for(unsigned int j = 0; j < 10000; ++j)
+    for(unsigned int j = 0; j < 100; ++j)
         {
         d = std::log10(1U + j * j);
         }
@@ -60,14 +60,14 @@ void goo(int i, X, X const&, X*)
         }
 }
 
-void wait_half_a_second()
+void wait_ten_msec()
 {
     std::clock_t first = std::clock();
     for(;;)
         {
         std::clock_t last = std::clock();
         double elapsed = double(last - first) / CLOCKS_PER_SEC;
-        if(0.5 <= elapsed)
+        if(0.01 <= elapsed)
             {
             break;
             }
@@ -190,11 +190,11 @@ void TimerTest::TestAliquotTimer()
 {
     std::cout << "  " << TimeAnAliquot(do_nothing) << '\n';
 
-    std::cout << "  " << TimeAnAliquot(foo) << '\n';
+    std::cout << "  " << TimeAnAliquot(foo, 0.1) << '\n';
 
 #if !defined __BORLANDC__
     X x;
-    std::cout << "  " << TimeAnAliquot(boost::bind(goo, 10, x, x, &x)) << '\n';
+    std::cout << "  " << TimeAnAliquot(boost::bind(goo, 10, x, x, &x), 0.1) << '\n';
 #endif // !defined __BORLANDC__
 
     // Test an operation that has to take longer than the hinted
@@ -205,16 +205,16 @@ void TimerTest::TestAliquotTimer()
     // so that the elapsed time (and perhaps also the number of
     // iterations) could be queried and tested.
     //
-    std::cout << "  " << TimeAnAliquot(wait_half_a_second,  0.1     ) << '\n';
-    std::cout << "  " << TimeAnAliquot(wait_half_a_second,  0.499999) << '\n';
+    std::cout << "  " << TimeAnAliquot(wait_ten_msec,  0.002    ) << '\n';
+    std::cout << "  " << TimeAnAliquot(wait_ten_msec,  0.0099999) << '\n';
 
     // Test some other plausible...
-    std::cout << "  " << TimeAnAliquot(wait_half_a_second,  4.9     ) << '\n';
-    std::cout << "  " << TimeAnAliquot(wait_half_a_second,  5.0     ) << '\n';
+    std::cout << "  " << TimeAnAliquot(wait_ten_msec,  0.09     ) << '\n';
+    std::cout << "  " << TimeAnAliquot(wait_ten_msec,  0.1      ) << '\n';
     // ...and implausible (hinted) limits.
-    BOOST_TEST_THROW(TimeAnAliquot(wait_half_a_second,  1.0e-100), std::invalid_argument, "");
-    BOOST_TEST_THROW(TimeAnAliquot(wait_half_a_second,  0.0     ), std::invalid_argument, "");
-    BOOST_TEST_THROW(TimeAnAliquot(wait_half_a_second, -1.0     ), std::invalid_argument, "");
+    BOOST_TEST_THROW(TimeAnAliquot(wait_ten_msec,  1.0e-100), std::invalid_argument, "");
+    BOOST_TEST_THROW(TimeAnAliquot(wait_ten_msec,  0.0     ), std::invalid_argument, "");
+    BOOST_TEST_THROW(TimeAnAliquot(wait_ten_msec, -1.0     ), std::invalid_argument, "");
 }
 
 int test_main(int, char*[])
