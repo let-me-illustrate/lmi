@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: timer.hpp,v 1.22 2007-01-20 16:26:25 chicares Exp $
+// $Id: timer.hpp,v 1.23 2007-01-21 16:24:14 chicares Exp $
 
 #ifndef timer_hpp
 #define timer_hpp
@@ -55,6 +55,7 @@
 #include <cmath>
 #include <iomanip>
 #include <ios>
+#include <ostream>
 #include <sstream>
 #include <stdexcept>
 #include <string>
@@ -154,7 +155,10 @@ class AliquotTimer
 
   public:
     AliquotTimer(F f, double max_seconds);
-    std::string operator()();
+    AliquotTimer& operator()();
+
+    std::string const& str() const;
+    double unit_time() const;
 
   private:
     static long int GreatestNonnegativePowerOfTen(double);
@@ -162,6 +166,7 @@ class AliquotTimer
     F           f_;
     double      max_seconds_;
     double      initial_trial_time_;
+    double      unit_time_;
     std::string str_;
 };
 
@@ -187,10 +192,11 @@ AliquotTimer<F>::AliquotTimer(F f, double max_seconds)
     f_();
     timer.stop();
     initial_trial_time_ = timer.elapsed_usec();
+    unit_time_ = initial_trial_time_;
     std::ostringstream oss;
     oss
         << std::scientific << std::setprecision(3)
-        << "[" << timer.elapsed_usec() << "]"
+        << "[" << unit_time_ << "]"
         << " initial calibration took "
         << timer.elapsed_msec_str()
         ;
@@ -198,7 +204,7 @@ AliquotTimer<F>::AliquotTimer(F f, double max_seconds)
 }
 
 template<typename F>
-std::string AliquotTimer<F>::operator()()
+AliquotTimer<F>& AliquotTimer<F>::operator()()
 {
     Timer timer;
     double const v =
@@ -209,22 +215,35 @@ std::string AliquotTimer<F>::operator()()
     long int const z = GreatestNonnegativePowerOfTen(v);
     if(1 < z)
         {
-        for(long int j = 0; j < z; j++)
+        for(long int j = 0; j < z; ++j)
             {
             f_();
             }
         timer.stop();
+        unit_time_ = timer.elapsed_usec() / z;
         std::ostringstream oss;
         oss
             << std::scientific << std::setprecision(3)
-            << "[" << timer.elapsed_usec() / z << "]"
+            << "[" << unit_time_ << "]"
             << " " << z
             << " iterations took "
             << timer.elapsed_msec_str()
             ;
         str_ = oss.str();
         }
+    return *this;
+}
+
+template<typename F>
+std::string const& AliquotTimer<F>::str() const
+{
     return str_;
+}
+
+template<typename F>
+double AliquotTimer<F>::unit_time() const
+{
+    return unit_time_;
 }
 
 /// Greatest nonnegative-integer power of ten that is less than or
@@ -257,6 +276,12 @@ long int AliquotTimer<F>::GreatestNonnegativePowerOfTen(double d)
     return LONG_MAX < z ? LONG_MAX : static_cast<long int>(z);
 }
 
+template<typename F>
+std::ostream& operator<<(std::ostream& os, AliquotTimer<F> const& z)
+{
+    return os << z.str();
+}
+
 /// Time an operation, using class template AliquotTimer.
 ///
 /// Because it can deduce the function-parameter type, this function
@@ -269,7 +294,7 @@ long int AliquotTimer<F>::GreatestNonnegativePowerOfTen(double d)
 /// enough to get a stable measurement.
 
 template<typename F>
-std::string TimeAnAliquot(F f, double max_seconds = 1.0)
+AliquotTimer<F> TimeAnAliquot(F f, double max_seconds = 1.0)
 {
     return AliquotTimer<F>(f, max_seconds)();
 }
