@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.551 2007-01-19 16:59:18 chicares Exp $
+// $Id: ChangeLog,v 1.552 2007-01-21 16:25:33 chicares Exp $
 
 MAINTENANCE
 
@@ -9417,4 +9417,34 @@ Refactor and improve unit tests.
   timer.hpp
   timer_test.cpp
 Enforce ctor preconditions.
+
+20070120T0633Z <chicares@cox.net> [1242]
+
+  timer.hpp
+Simplify.
+
+20070120T0634Z <chicares@cox.net> [1242]
+
+  timer_test.cpp
+Make unit test run an order of magnitude faster.
+
+20070120T1625Z <chicares@cox.net> [1242]
+
+  timer_test.cpp
+Increase testing resolution.
+
+20070120T1626Z <chicares@cox.net> [1242]
+
+  timer.hpp
+Make implicitly-declared special member functions do the right thing.
+
+20070121T1624Z <chicares@cox.net> [1242]
+
+  timer.hpp
+Make aliquot-timer result available unformatted.
+
+20070121T1625Z <chicares@cox.net> [1242]
+
+  vector_test.cpp
+Improve analysis using unformatted aliquot-timer result.
 

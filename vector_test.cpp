@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: vector_test.cpp,v 1.6 2007-01-06 16:20:16 chicares Exp $
+// $Id: vector_test.cpp,v 1.7 2007-01-21 16:25:33 chicares Exp $
 
 // This file is of historical interest only. It shows various attempts
 // to reinvent work that others have done better.
@@ -36,8 +36,9 @@
 #include <algorithm>
 #include <functional>
 #include <iomanip>
+#include <ios>
 #include <iostream>
-#include <iterator>
+#include <stdexcept>
 #include <valarray>
 
 // Expression templates
@@ -325,15 +326,26 @@ void time_one_array_length(int length)
         }
 
     int const n = -1 + g_array_length;
-    int const max_seconds = 10;
-    std::cout << "  Speed tests: array length " << g_array_length << std::endl;
-    std::cout << "  C:  " << TimeAnAliquot(mete_c , max_seconds)  << std::endl;
-    BOOST_TEST_EQUAL(g_w[n], 2.0 * n);
-    std::cout << "  ET: " << TimeAnAliquot(mete_et, max_seconds)  << std::endl;
-    BOOST_TEST_EQUAL(g_w[n], 2.0 * n);
-    std::cout << "  va: " << TimeAnAliquot(mete_va, max_seconds)  << std::endl;
+    int const max_seconds = 1;
+    double const c  = TimeAnAliquot(mete_c , max_seconds).unit_time();
+    BOOST_TEST_EQUAL(g_w   [n], 2.0 * n);
+    double const et = TimeAnAliquot(mete_et, max_seconds).unit_time();
+    BOOST_TEST_EQUAL(g_w   [n], 2.0 * n);
+    double const va = TimeAnAliquot(mete_va, max_seconds).unit_time();
     BOOST_TEST_EQUAL(g_va_w[n], 2.0 * n);
-    std::cout << std::endl;
+    if(0.0 == c)
+        {
+        throw std::runtime_error("Elapsed time is unexpectedly zero.");
+        }
+    std::cout
+        << std::setw( 7) << g_array_length
+        << std::setw(15) << std::setprecision(3) << std::scientific << c
+        << std::setw(15) << std::setprecision(3) << std::scientific << et
+        << std::setw( 7) << std::setprecision(3) << std::fixed << et / c
+        << std::setw(15) << std::setprecision(3) << std::scientific << va
+        << std::setw( 7) << std::setprecision(3) << std::fixed << va / c
+        << std::endl
+        ;
 }
 
 int test_main(int, char*[])
@@ -341,8 +353,16 @@ int test_main(int, char*[])
     demo0();
     demo1();
 
+    std::cout
+        << "        Time (usec) for array0 = array1 + array2 by various methods"
+        << '\n'
+        << " length          C             et       et/C         va       va/c"
+        << '\n'
+        ;
     time_one_array_length(1);
     time_one_array_length(10);
+    time_one_array_length(20);
+    time_one_array_length(50);
     time_one_array_length(100);
     time_one_array_length(1000);
     time_one_array_length(10000);
