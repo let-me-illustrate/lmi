@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.552 2007-01-21 16:25:33 chicares Exp $
+// $Id: ChangeLog,v 1.553 2007-01-22 04:10:16 chicares Exp $
 
 MAINTENANCE
 
@@ -9447,4 +9447,25 @@ Make aliquot-timer result available unformatted.
 
   vector_test.cpp
 Improve analysis using unformatted aliquot-timer result.
+
+20070122T0407Z <chicares@cox.net> [1242]
+
+  timer.hpp
+Make a diagnostic more informative.
+
+20070122T0408Z <chicares@cox.net> [1242]
+
+  any_member.hpp
+  assert_lmi.hpp [new file]
+Refactor, creating a standalone lightweight assertion macro.
+
+20070122T0409Z <chicares@cox.net> [1242]
+
+  alert.hpp
+Improve concinnity.
+
+20070122T0410Z <chicares@cox.net> [1242]
+
+  vector_test.cpp
+Refactor.
 

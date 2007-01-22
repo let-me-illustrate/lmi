@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: vector_test.cpp,v 1.7 2007-01-21 16:25:33 chicares Exp $
+// $Id: vector_test.cpp,v 1.8 2007-01-22 04:10:16 chicares Exp $
 
 // This file is of historical interest only. It shows various attempts
 // to reinvent work that others have done better.
@@ -29,6 +29,7 @@
 #   pragma hdrstop
 #endif // __BORLANDC__
 
+#include "assert_lmi.hpp"
 #include "materially_equal.hpp"
 #include "test_tools.hpp"
 #include "timer.hpp"
@@ -38,7 +39,6 @@
 #include <iomanip>
 #include <ios>
 #include <iostream>
-#include <stdexcept>
 #include <valarray>
 
 // Expression templates
@@ -333,10 +333,7 @@ void time_one_array_length(int length)
     BOOST_TEST_EQUAL(g_w   [n], 2.0 * n);
     double const va = TimeAnAliquot(mete_va, max_seconds).unit_time();
     BOOST_TEST_EQUAL(g_va_w[n], 2.0 * n);
-    if(0.0 == c)
-        {
-        throw std::runtime_error("Elapsed time is unexpectedly zero.");
-        }
+    ASSERT_LMI(0.0 != c);
     std::cout
         << std::setw( 7) << g_array_length
         << std::setw(15) << std::setprecision(3) << std::scientific << c
