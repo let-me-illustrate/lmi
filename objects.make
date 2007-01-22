@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: objects.make,v 1.95 2007-01-06 16:20:15 chicares Exp $
+# $Id: objects.make,v 1.96 2007-01-22 23:17:30 wboutin Exp $
 
 ################################################################################
 
@@ -398,6 +398,7 @@ unit_test_targets := \
   alert_test$(EXEEXT) \
   any_member_test$(EXEEXT) \
   argv0_test$(EXEEXT) \
+  assert_lmi_test$(EXEEXT) \
   authenticity_test$(EXEEXT) \
   calendar_date_test$(EXEEXT) \
   callback_test$(EXEEXT) \
@@ -474,6 +475,10 @@ argv0_test$(EXEEXT): \
   $(boost_filesystem_objects) \
   $(common_test_objects) \
   argv0_test.o \
+
+assert_lmi_test$(EXEEXT): \
+  $(common_test_objects) \
+  assert_lmi_test.o \
 
 authenticity_test$(EXEEXT): \
   $(boost_filesystem_objects) \
