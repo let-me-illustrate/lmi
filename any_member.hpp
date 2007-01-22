@@ -1,6 +1,6 @@
 // Symbolic member names.
 //
-// Copyright (C) 2004, 2005, 2006 Gregory W. Chicares.
+// Copyright (C) 2004, 2005, 2006, 2007 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: any_member.hpp,v 1.15 2006-11-02 20:41:18 chicares Exp $
+// $Id: any_member.hpp,v 1.16 2007-01-22 04:08:29 chicares Exp $
 
 // This is a derived work based on boost::any, which bears the following
 // copyright and permissions notice:
@@ -59,6 +59,7 @@
 
 #include "any_entity.hpp"
 
+#include "assert_lmi.hpp"
 #include "obstruct_slicing.hpp"
 #include "rtti_lmi.hpp"
 #include "value_cast.hpp"
@@ -74,24 +75,9 @@
 
 #include <algorithm> // std::lower_bound(), std::swap()
 #include <map>
-#include <ostream>   // std::flush
 #include <sstream>
 #include <stdexcept>
 #include <vector>
-
-#define LMI_SIMPLE_ASSERT(condition)                        \
-    if(!(condition))                                        \
-        {                                                   \
-        std::ostringstream oss;                             \
-        oss                                                 \
-            << "Assertion '" << (#condition) << "' failed." \
-            << "\n[file "  << __FILE__                      \
-            << ", line " << __LINE__ << "]\n"               \
-            << std::flush                                   \
-            ;                                               \
-        throw std::runtime_error(oss.str());                \
-        }                                                   \
-    do {} while(0)
 
 // Definition of class placeholder.
 
@@ -167,11 +153,11 @@ holder<ClassType,ValueType>& holder<ClassType,ValueType>::assign
     (placeholder const& other
     )
 {
-    LMI_SIMPLE_ASSERT(other.type() == type());
+    ASSERT_LMI(other.type() == type());
     typedef holder<ClassType,ValueType> holder_type;
     holder_type const& z = static_cast<holder_type const&>(other);
-    LMI_SIMPLE_ASSERT(z.object_);
-    LMI_SIMPLE_ASSERT(object_);
+    ASSERT_LMI(z.object_);
+    ASSERT_LMI(object_);
     object_->*held_ = (z.object_)->*(z.held_);
     return *this;
 }
@@ -181,7 +167,7 @@ holder<ClassType,ValueType>& holder<ClassType,ValueType>::assign
     (std::string const& s
     )
 {
-    LMI_SIMPLE_ASSERT(object_);
+    ASSERT_LMI(object_);
     object_->*held_ = value_cast(s, object_->*held_);
     return *this;
 }
@@ -208,7 +194,7 @@ bool holder<ClassType,ValueType>::equals(placeholder const& other) const
 template<typename ClassType, typename ValueType>
 std::string holder<ClassType,ValueType>::str() const
 {
-    LMI_SIMPLE_ASSERT(object_);
+    ASSERT_LMI(object_);
     return value_cast<std::string>(object_->*held_);
 }
 
@@ -331,8 +317,8 @@ any_member<ClassType>& any_member<ClassType>::operator=
     // because it would swap the ClassType* object, bizarrely placing
     // a pointer to a member of one object into another object's
     // symbol table.
-    LMI_SIMPLE_ASSERT(other.content_);
-    LMI_SIMPLE_ASSERT(content_);
+    ASSERT_LMI(other.content_);
+    ASSERT_LMI(content_);
     content_->assign(*other.content_);
     return *this;
 }
@@ -362,7 +348,7 @@ bool any_member<ClassType>::operator!=
 template<typename ClassType>
 std::string any_member<ClassType>::str() const
 {
-    LMI_SIMPLE_ASSERT(content_);
+    ASSERT_LMI(content_);
     return content_->str();
 }
 
@@ -382,16 +368,16 @@ ExactMemberType* any_member<ClassType>::exact_cast()
         return 0;
         }
     typedef holder<ClassType,pmd_type> holder_type;
-    LMI_SIMPLE_ASSERT(content_);
+    ASSERT_LMI(content_);
     pmd_type pmd = static_cast<holder_type*>(content_)->held_;
-    LMI_SIMPLE_ASSERT(object_);
+    ASSERT_LMI(object_);
     return &(object_->*pmd);
 }
 
 template<typename ClassType>
 any_member<ClassType>& any_member<ClassType>::assign(std::string const& s)
 {
-    LMI_SIMPLE_ASSERT(content_);
+    ASSERT_LMI(content_);
     content_->assign(s);
     return *this;
 }
