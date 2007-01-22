@@ -1,6 +1,6 @@
 // Alert messages.
 //
-// Copyright (C) 2004, 2005, 2006 Gregory W. Chicares.
+// Copyright (C) 2004, 2005, 2006, 2007 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: alert.hpp,v 1.16 2006-11-02 18:12:39 chicares Exp $
+// $Id: alert.hpp,v 1.17 2007-01-22 04:09:14 chicares Exp $
 
 #ifndef alert_hpp
 #define alert_hpp
@@ -29,7 +29,7 @@
 #include "so_attributes.hpp"
 
 // Instead of <iosfwd>, include <ostream> to make std::flush available
-// to modules that use the LMI_ASSERT macro.
+// to modules that use the LMI_FLUSH macro.
 
 #include <exception>
 #include <ostream>
@@ -226,7 +226,7 @@ void LMI_SO test_arbitrary_exception();
 /// Write file name and line number to diagnostic stream, and flush.
 
 #define LMI_FLUSH                     \
-       "\n[file "  << __FILE__        \
+       "\n[file " << __FILE__         \
     << ", line " << __LINE__ << "]\n" \
     << std::flush
 
@@ -237,14 +237,14 @@ void LMI_SO test_arbitrary_exception();
 /// TODO ?? It is generally a bad idea to let users bypass assertions.
 /// Any apparent need to do this probably masks a logic error.
 
-#define LMI_ASSERT(condition)                              \
-    if(!(condition))                                       \
-        {                                                  \
-        hobsons_choice()                                   \
-            << "Assertion '" << (#condition) << "' failed" \
-            << LMI_FLUSH                                   \
-            ;                                              \
-        }                                                  \
+#define LMI_ASSERT(condition)                               \
+    if(!(condition))                                        \
+        {                                                   \
+        hobsons_choice()                                    \
+            << "Assertion '" << (#condition) << "' failed." \
+            << LMI_FLUSH                                    \
+            ;                                               \
+        }                                                   \
     do {} while(0)
 
 #endif // alert_hpp
