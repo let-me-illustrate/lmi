@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: timer.hpp,v 1.23 2007-01-21 16:24:14 chicares Exp $
+// $Id: timer.hpp,v 1.24 2007-01-22 04:07:36 chicares Exp $
 
 #ifndef timer_hpp
 #define timer_hpp
@@ -199,6 +199,9 @@ AliquotTimer<F>::AliquotTimer(F f, double max_seconds)
         << "[" << unit_time_ << "]"
         << " initial calibration took "
         << timer.elapsed_msec_str()
+        << ", but a limit of "
+        << std::fixed << std::setprecision(0) << 1000.0 * max_seconds_
+        << " milliseconds was desired"
         ;
     str_ = oss.str();
 }
@@ -225,8 +228,7 @@ AliquotTimer<F>& AliquotTimer<F>::operator()()
         oss
             << std::scientific << std::setprecision(3)
             << "[" << unit_time_ << "]"
-            << " " << z
-            << " iterations took "
+            << " " << z << " iterations took "
             << timer.elapsed_msec_str()
             ;
         str_ = oss.str();
