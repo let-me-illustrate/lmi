@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.553 2007-01-22 04:10:16 chicares Exp $
+// $Id: ChangeLog,v 1.554 2007-01-22 23:17:30 wboutin Exp $
 
 MAINTENANCE
 
@@ -9468,4 +9468,10 @@ Improve concinnity.
 
   vector_test.cpp
 Refactor.
+
+20070122T2317Z <wboutin@massmutual.com> [1242]
+
+  assert_lmi_test.cpp [new file]
+  objects.make
+Add unit tests.
 
