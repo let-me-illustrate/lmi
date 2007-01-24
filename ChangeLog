@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.554 2007-01-22 23:17:30 wboutin Exp $
+// $Id: ChangeLog,v 1.555 2007-01-24 00:53:20 chicares Exp $
 
 MAINTENANCE
 
@@ -9474,4 +9474,9 @@ Refactor.
   assert_lmi_test.cpp [new file]
   objects.make
 Add unit tests.
+
+20070124T0053Z <chicares@cox.net> [1242]
+
+  ledger_formatter.cpp
+Stop including an unused header.
 
