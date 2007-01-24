@@ -1,6 +1,6 @@
 // Ledger xml input and output.
 //
-// Copyright (C) 2004, 2005, 2006 Gregory W. Chicares.
+// Copyright (C) 2004, 2005, 2006, 2007 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xml_io2.cpp,v 1.17 2006-12-23 17:47:20 chicares Exp $
+// $Id: ledger_xml_io2.cpp,v 1.18 2007-01-24 03:41:36 chicares Exp $
 
 #include "ledger.hpp"
 
@@ -33,20 +33,21 @@
 #include "ledger_base.hpp"
 #include "ledger_invariant.hpp"
 #include "ledger_variant.hpp"
-#include "miscellany.hpp"
+#include "miscellany.hpp" // ios_out_trunc_binary()
 #include "value_cast.hpp"
 #include "version.hpp"
 #include "xml_lmi.hpp"
 
 #include <boost/filesystem/exception.hpp>
-#include <boost/filesystem/path.hpp>
 
 #include <algorithm>
 #include <fstream>
 #include <iomanip>
 #include <ios>
+#include <iterator>
 #include <locale>
 #include <map>
+#include <ostream>
 #include <set>
 #include <sstream>
 #include <utility>
@@ -623,6 +624,7 @@ double_formatter_t::get_format(value_id const& id) const
             << "' encountered."
             << LMI_FLUSH
             ;
+        // TODO ?? Unreachable:
         // use default format
         return format_t(2, unit_t(1., ""));
         }
@@ -672,6 +674,12 @@ string_vector_t double_formatter_t::format
     return sv;
 }
 
+// TODO ?? This largely duplicates function format() in 'ledger_xml_io.cpp'.
+//
+// TODO ?? We should investigate whether 'numeric_io_cast.hpp' could be
+// retooled to do the same job faster, using either 'ncnnnpnn.hpp' or
+// C99's 'thousands_sep' for thousands-separators.
+//
 std::string double_formatter_t::do_format(double d, format_t const& f) const
 {
     std::stringstream interpreter;
@@ -682,14 +690,35 @@ std::string double_formatter_t::do_format(double d, format_t const& f) const
     interpreter.precision(f.first);
     std::string s;
     unit_t const& units = f.second;
-    if(units.first != 1.) d *= units.first;
+    if(units.first != 1.)
+        {
+        d *= units.first;
+        }
     interpreter << d;
     interpreter >> s;
-    if(!units.second.empty()) s += units.second;
     if(!interpreter.eof())
         {
-        fatal_error() << "Format error" << LMI_FLUSH;
+        fatal_error() << "Formatting error." << LMI_FLUSH;
         }
+
+    if(!units.second.empty())
+        {
+        s += units.second;
+        }
+
+#if defined __GNUC__ && LMI_GCC_VERSION <= 40001
+    // COMPILER !! Work around a gcc defect fixed in gcc-4.0.1: see
+    //   http://gcc.gnu.org/bugzilla/show_bug.cgi?id=20914
+    static std::string const old_string("-,");
+    static std::string const new_string("-");
+    std::string::size_type position = s.find(old_string);
+    while(position != std::string::npos)
+        {
+        s.replace(position, old_string.length(), new_string);
+        position = s.find(old_string, 1 + position);
+        }
+#endif // gcc version less than 4.0.1 .
+
     return s;
 }
 
