@@ -1,6 +1,6 @@
 // Ledger formatter.
 //
-// Copyright (C) 2006 Gregory W. Chicares.
+// Copyright (C) 2006, 2007 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_formatter.cpp,v 1.6 2006-12-22 02:39:33 chicares Exp $
+// $Id: ledger_formatter.cpp,v 1.7 2007-01-24 00:53:20 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -44,7 +44,6 @@
 
 #include <boost/filesystem/exception.hpp>
 #include <boost/filesystem/path.hpp>
-#include <boost/scoped_array.hpp>
 
 #include <algorithm>
 #include <fstream>
