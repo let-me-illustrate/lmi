@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.555 2007-01-24 00:53:20 chicares Exp $
+// $Id: ChangeLog,v 1.556 2007-01-24 03:41:36 chicares Exp $
 
 MAINTENANCE
 
@@ -9479,4 +9479,16 @@ Add unit tests.
 
   ledger_formatter.cpp
 Stop including an unused header.
+
+20070124T0330Z <chicares@cox.net> [1242]
+
+  ledger_formatter.cpp
+  ledger_formatter.hpp
+Include only appropriate headers.
+
+20070124T0341Z <chicares@cox.net> [1245]
+
+  ledger_xml_io2.cpp
+Address defect #13856:
+  http://sv.nongnu.org/bugs/?13856
 
