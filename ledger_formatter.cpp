@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_formatter.cpp,v 1.7 2007-01-24 00:53:20 chicares Exp $
+// $Id: ledger_formatter.cpp,v 1.8 2007-01-24 03:30:24 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -28,32 +28,18 @@
 
 #include "ledger_formatter.hpp"
 
-#include "calendar_date.hpp"
-#include "comma_punct.hpp"
+#include "alert.hpp"
 #include "configurable_settings.hpp"
 #include "data_directory.hpp"
-#include "financial.hpp"
-#include "global_settings.hpp"
-#include "input_sequence.hpp"
 #include "ledger.hpp"
-#include "ledger_invariant.hpp"
-#include "ledger_variant.hpp"
-#include "miscellany.hpp"
-#include "value_cast.hpp"
+#include "miscellany.hpp" // ios_out_trunc_binary()
 #include "xml_lmi.hpp"
 
 #include <boost/filesystem/exception.hpp>
-#include <boost/filesystem/path.hpp>
 
-#include <algorithm>
+#include <exception>
 #include <fstream>
-#include <functional>
-#include <iomanip>
-#include <ios>
-#include <iterator>
-#include <locale>
-#include <sstream>
-#include <vector>
+#include <ostream>
 
 //=============================================================================
 LedgerFormatterFactory& LedgerFormatterFactory::Instance()
