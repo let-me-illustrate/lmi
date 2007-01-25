@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.557 2007-01-25 13:46:28 chicares Exp $
+// $Id: ChangeLog,v 1.558 2007-01-25 15:07:28 chicares Exp $
 
 MAINTENANCE
 
@@ -9499,4 +9499,11 @@ Revise aliquot-timer output. Only unit time is important, so show it
 two ways to facilitate comparisons. Total time is not important, so
 stop showing it, noting that this makes the power-of-ten quantization
 of iteration count unnecessary.
+
+20070125T1507Z <chicares@cox.net> [1245]
+
+  timer.hpp
+Rewrite aliquot timer's operator()(). Repeat the timed operation until
+the allotted time runs out--but never more than one hundred times,
+because further repetitions are wasteful and don't improve accuracy.
 
