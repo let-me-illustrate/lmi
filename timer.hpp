@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: timer.hpp,v 1.24 2007-01-22 04:07:36 chicares Exp $
+// $Id: timer.hpp,v 1.25 2007-01-25 13:46:28 chicares Exp $
 
 #ifndef timer_hpp
 #define timer_hpp
@@ -196,15 +196,16 @@ AliquotTimer<F>::AliquotTimer(F f, double max_seconds)
     std::ostringstream oss;
     oss
         << std::scientific << std::setprecision(3)
-        << "[" << unit_time_ << "]"
-        << " initial calibration took "
-        << timer.elapsed_msec_str()
-        << ", but a limit of "
-        << std::fixed << std::setprecision(0) << 1000.0 * max_seconds_
-        << " milliseconds was desired"
+        << unit_time_
+        << " s: first trial took longer than "
+        << max_seconds_
+        << " s desired limit"
         ;
     str_ = oss.str();
 }
+
+/// Hardcoded widths allow for 2^32 iterations and one second per
+/// iteration.
 
 template<typename F>
 AliquotTimer<F>& AliquotTimer<F>::operator()()
@@ -227,9 +228,13 @@ AliquotTimer<F>& AliquotTimer<F>::operator()()
         std::ostringstream oss;
         oss
             << std::scientific << std::setprecision(3)
-            << "[" << unit_time_ << "]"
-            << " " << z << " iterations took "
-            << timer.elapsed_msec_str()
+            << unit_time_
+            << " s = "
+            << std::fixed      << std::setprecision(0)
+            << std::setw(10) << 1.0e9 * unit_time_
+            << " ns, mean of "
+            << std::setw(10) << z
+            << " iterations"
             ;
         str_ = oss.str();
         }
