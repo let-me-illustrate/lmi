@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: timer.hpp,v 1.25 2007-01-25 13:46:28 chicares Exp $
+// $Id: timer.hpp,v 1.26 2007-01-25 15:07:28 chicares Exp $
 
 #ifndef timer_hpp
 #define timer_hpp
@@ -204,40 +204,41 @@ AliquotTimer<F>::AliquotTimer(F f, double max_seconds)
     str_ = oss.str();
 }
 
-/// Hardcoded widths allow for 2^32 iterations and one second per
+/// Hardcoded widths allow for 100 iterations and one second per
 /// iteration.
 
 template<typename F>
 AliquotTimer<F>& AliquotTimer<F>::operator()()
 {
-    Timer timer;
-    double const v =
-        (0.0 != initial_trial_time_)
-        ? max_seconds_ / initial_trial_time_
-        : max_seconds_ * timer.frequency_
-        ;
-    long int const z = GreatestNonnegativePowerOfTen(v);
-    if(1 < z)
+    if(max_seconds_ < initial_trial_time_)
         {
-        for(long int j = 0; j < z; ++j)
-            {
-            f_();
-            }
-        timer.stop();
-        unit_time_ = timer.elapsed_usec() / z;
-        std::ostringstream oss;
-        oss
-            << std::scientific << std::setprecision(3)
-            << unit_time_
-            << " s = "
-            << std::fixed      << std::setprecision(0)
-            << std::setw(10) << 1.0e9 * unit_time_
-            << " ns, mean of "
-            << std::setw(10) << z
-            << " iterations"
-            ;
-        str_ = oss.str();
+        return *this;
         }
+
+    Timer timer;
+    double const limit = max_seconds_ * timer.frequency_;
+    int j = 0;
+    do
+        {
+        f_();
+        ++j;
+        }
+    while(j < 100 && timer.inspect() < timer.time_when_started_ + limit);
+    timer.stop();
+    unit_time_ = timer.elapsed_usec() / j;
+    std::ostringstream oss;
+    oss
+        << std::scientific << std::setprecision(3)
+        << unit_time_
+        << " s = "
+        << std::fixed      << std::setprecision(0)
+        << std::setw(10) << 1.0e9 * unit_time_
+        << " ns, mean of "
+        << std::setw( 3) << j
+        << " iterations"
+        ;
+    str_ = oss.str();
+
     return *this;
 }
 
