@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.556 2007-01-24 03:41:36 chicares Exp $
+// $Id: ChangeLog,v 1.557 2007-01-25 13:46:28 chicares Exp $
 
 MAINTENANCE
 
@@ -9491,4 +9491,12 @@ Include only appropriate headers.
   ledger_xml_io2.cpp
 Address defect #13856:
   http://sv.nongnu.org/bugs/?13856
+
+20070125T1346Z <chicares@cox.net> [1245]
+
+  timer.hpp
+Revise aliquot-timer output. Only unit time is important, so show it
+two ways to facilitate comparisons. Total time is not important, so
+stop showing it, noting that this makes the power-of-ten quantization
+of iteration count unnecessary.
 
