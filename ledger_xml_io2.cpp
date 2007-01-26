@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xml_io2.cpp,v 1.18 2007-01-24 03:41:36 chicares Exp $
+// $Id: ledger_xml_io2.cpp,v 1.19 2007-01-26 03:11:16 chicares Exp $
 
 #include "ledger.hpp"
 
@@ -38,9 +38,8 @@
 #include "version.hpp"
 #include "xml_lmi.hpp"
 
-#include <boost/filesystem/exception.hpp>
-
 #include <algorithm>
+#include <exception>
 #include <fstream>
 #include <iomanip>
 #include <ios>
@@ -480,21 +479,21 @@ double_formatter_t::double_formatter_t()
     // Read formatting information from an external xml file.
     std::string format_path;
     try
-    {
+        {
         format_path = AddDataDir
             (configurable_settings::instance().xslt_format_xml_filename()
             );
-    }
-    catch(fs::filesystem_error const& e)
-    {
+        }
+    catch(std::exception const& e)
+        {
         fatal_error()
             << "Invalid xml file '"
             << configurable_settings::instance().xslt_format_xml_filename()
-            << "' specified. "
+            << "': "
             << e.what()
             << LMI_FLUSH
             ;
-    }
+        }
 
     try
         {
@@ -535,9 +534,10 @@ double_formatter_t::double_formatter_t()
                     << format_path
                     << "' contains more than one format definition for '"
                     << id.name()
+                    << "'"
 // TODO ?? CALCULATION_SUMMARY Consider adding this to xmlwrapp.
 #if 0
-                    << "' on line "
+                    << " on line "
                     << format_element.get_line()
 #endif // 0
                     << "."
@@ -563,13 +563,12 @@ double_formatter_t::double_formatter_t()
 
         if(format_map.empty())
             {
-            std::ostringstream oss;
-            oss
+            fatal_error()
                 << "Could not read any format definitions from '"
                 << format_path
                 << "'. File is empty or has invalid format."
+                << LMI_FLUSH
                 ;
-            throw std::runtime_error(oss.str());
             }
         }
     catch(std::exception const& e)
@@ -621,7 +620,7 @@ double_formatter_t::get_format(value_id const& id) const
         fatal_error()
             << "Unknown column name '"
             << id.name()
-            << "' encountered."
+            << "'."
             << LMI_FLUSH
             ;
         // TODO ?? Unreachable:
@@ -785,17 +784,15 @@ void Ledger::write_excerpt
                 value_id id = value_id::from_report_column_title(*it);
                 calculation_summary_columns.push_back(id);
                 }
-            catch(std::exception const& ex)
+            catch(std::exception const& e)
                 {
-                std::ostringstream oss;
-                oss
+                fatal_error()
                     << "Invalid column name '"
                     << *it
-                    << "' ("
-                    << ex.what()
-                    << ")"
+                    << "': "
+                    << e.what()
+                    << LMI_FLUSH
                     ;
-                throw std::runtime_error(oss.str());
                 }
             }
 
@@ -805,7 +802,7 @@ void Ledger::write_excerpt
         {
         warning()
             << "Cannot read calculation summary columns "
-            << "from 'configurable_settings.xml'. Error: "
+            << "from 'configurable_settings.xml': "
             << e.what()
             << LMI_FLUSH
             ;

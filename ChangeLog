@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.560 2007-01-26 02:09:36 chicares Exp $
+// $Id: ChangeLog,v 1.561 2007-01-26 03:11:16 chicares Exp $
 
 MAINTENANCE
 
@@ -9528,4 +9528,10 @@ Resolve a marked defect.
   timer.hpp
   timer_test.cpp
 Revise documentation.
+
+20070126T0311Z <chicares@cox.net> [1244]
+
+  ledger_formatter.cpp
+  ledger_xml_io2.cpp
+Harmonize error handling.
 
