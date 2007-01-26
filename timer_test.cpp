@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: timer_test.cpp,v 1.21 2007-01-26 01:39:15 chicares Exp $
+// $Id: timer_test.cpp,v 1.22 2007-01-26 01:55:30 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -156,21 +156,17 @@ void TimerTest::TestAliquotTimer()
     std::cout << "  " << TimeAnAliquot(boost::bind(goo, 10, x, x, &x), 0.1) << '\n';
 #endif // !defined __BORLANDC__
 
-    // Test an operation that has to take longer than the hinted
-    // time limit, in order to make sure it doesn't execute the
-    // operation after the initial calibration trial.
+    // Test an operation that has to take longer than the time limit,
+    // in order to make sure it follows the early-exit path.
     //
-    // TODO ?? It would be better to use class AliquotTimer directly,
-    // so that the elapsed time (and perhaps also the number of
-    // iterations) could be queried and tested.
-    //
-    std::cout << "  " << TimeAnAliquot(WaitTenMsec,  0.002    ) << '\n';
-    std::cout << "  " << TimeAnAliquot(WaitTenMsec,  0.0099999) << '\n';
+    std::string takes_too_long = TimeAnAliquot(WaitTenMsec, 0.0099999).str();
+    BOOST_TEST(std::string::npos != takes_too_long.find("took longer"));
+    std::cout << "  " << takes_too_long << '\n';
 
     // Test some other plausible...
-    std::cout << "  " << TimeAnAliquot(WaitTenMsec,  0.099    ) << '\n';
-    std::cout << "  " << TimeAnAliquot(WaitTenMsec,  0.101    ) << '\n';
-    // ...and implausible (hinted) limits.
+    std::cout << "  " << TimeAnAliquot(WaitTenMsec, 0.099) << '\n';
+    std::cout << "  " << TimeAnAliquot(WaitTenMsec, 0.101) << '\n';
+    // ...and implausible limits.
     BOOST_TEST_THROW(TimeAnAliquot(WaitTenMsec,  1.0e-100), std::invalid_argument, "");
     BOOST_TEST_THROW(TimeAnAliquot(WaitTenMsec,  0.0     ), std::invalid_argument, "");
     BOOST_TEST_THROW(TimeAnAliquot(WaitTenMsec, -1.0     ), std::invalid_argument, "");
