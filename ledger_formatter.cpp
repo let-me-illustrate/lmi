@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_formatter.cpp,v 1.8 2007-01-24 03:30:24 chicares Exp $
+// $Id: ledger_formatter.cpp,v 1.9 2007-01-26 03:11:16 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -34,8 +34,6 @@
 #include "ledger.hpp"
 #include "miscellany.hpp" // ios_out_trunc_binary()
 #include "xml_lmi.hpp"
-
-#include <boost/filesystem/exception.hpp>
 
 #include <exception>
 #include <fstream>
@@ -78,12 +76,12 @@ xslt_lmi::Stylesheet const& LedgerFormatterFactory::GetStylesheet
         {
         full_name = AddDataDir(filename);
         }
-    catch(fs::filesystem_error const& e)
+    catch(std::exception const& e)
         {
         fatal_error()
             << "Invalid file name '"
             << filename
-            << "'. "
+            << "': "
             << e.what()
             << LMI_FLUSH
             ;
@@ -139,7 +137,7 @@ xml_lmi::xml_document const& LedgerFormatter::GetXmlDoc
 {
     if(!ledger_values_)
         {
-        throw std::runtime_error("Can't generate xml for a NULL ledger.");
+        fatal_error() << "Can't generate xml for a NULL ledger." << LMI_FLUSH;
         }
 
     boost::shared_ptr<xml_lmi::xml_document> document
