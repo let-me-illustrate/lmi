@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: timer_test.cpp,v 1.22 2007-01-26 01:55:30 chicares Exp $
+// $Id: timer_test.cpp,v 1.23 2007-01-26 02:09:36 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -76,9 +76,14 @@ void TimerTest::WaitTenMsec()
     for(;timer.inspect() - timer.time_when_started_ <= limit;) {}
 }
 
+/// Roughly validate accuracy of high-resolution timer.
+///
+/// Time an interval of about one second with both std::clock() and
+/// the high-resolution timer, and make sure the relative error is
+/// within a reasonable range.
+
 void TimerTest::TestResolution()
 {
-    // Coarsely measure resolution of std::clock().
     std::clock_t first = std::clock();
     std::clock_t last;
     double clock_resolution;
@@ -92,8 +97,6 @@ void TimerTest::TestResolution()
             }
         }
 
-    // Use high-resolution timer to measure an interval of about one
-    // second.
     Timer timer;
     first = std::clock();
     double interval = 1.0;
@@ -109,8 +112,6 @@ void TimerTest::TestResolution()
     double observed = timer.stop().elapsed_usec();
     double relative_error = std::fabs(observed - interval) / interval;
 
-    // Test accuracy of high-resolution timer. Finer tests might be
-    // devised, but this one catches gross errors.
     BOOST_TEST_RELATION(relative_error,<,2.0*clock_resolution);
 }
 
@@ -156,17 +157,13 @@ void TimerTest::TestAliquotTimer()
     std::cout << "  " << TimeAnAliquot(boost::bind(goo, 10, x, x, &x), 0.1) << '\n';
 #endif // !defined __BORLANDC__
 
-    // Test an operation that has to take longer than the time limit,
-    // in order to make sure it follows the early-exit path.
-    //
     std::string takes_too_long = TimeAnAliquot(WaitTenMsec, 0.0099999).str();
     BOOST_TEST(std::string::npos != takes_too_long.find("took longer"));
     std::cout << "  " << takes_too_long << '\n';
 
-    // Test some other plausible...
     std::cout << "  " << TimeAnAliquot(WaitTenMsec, 0.099) << '\n';
     std::cout << "  " << TimeAnAliquot(WaitTenMsec, 0.101) << '\n';
-    // ...and implausible limits.
+
     BOOST_TEST_THROW(TimeAnAliquot(WaitTenMsec,  1.0e-100), std::invalid_argument, "");
     BOOST_TEST_THROW(TimeAnAliquot(WaitTenMsec,  0.0     ), std::invalid_argument, "");
     BOOST_TEST_THROW(TimeAnAliquot(WaitTenMsec, -1.0     ), std::invalid_argument, "");

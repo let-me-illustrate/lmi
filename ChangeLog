@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.559 2007-01-25 22:28:06 wboutin Exp $
+// $Id: ChangeLog,v 1.560 2007-01-26 02:09:36 chicares Exp $
 
 MAINTENANCE
 
@@ -9511,4 +9511,21 @@ because further repetitions are wasteful and don't improve accuracy.
 
   version.hpp
 Mark release candidate.
+
+20070126T0139Z <chicares@cox.net> [1245]
+
+  timer.hpp
+  timer_test.cpp
+Remove obsolete code.
+
+20070126T0155Z <chicares@cox.net> [1244]
+
+  timer_test.cpp
+Resolve a marked defect.
+
+20070126T0209Z <chicares@cox.net> [1244]
+
+  timer.hpp
+  timer_test.cpp
+Revise documentation.
 
