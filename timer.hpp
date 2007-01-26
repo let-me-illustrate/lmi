@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: timer.hpp,v 1.27 2007-01-26 01:39:15 chicares Exp $
+// $Id: timer.hpp,v 1.28 2007-01-26 02:09:36 chicares Exp $
 
 #ifndef timer_hpp
 #define timer_hpp
@@ -103,29 +103,31 @@ class LMI_SO Timer
     elapsed_t   time_when_stopped_;
 };
 
-/// Design of class template AliquotTimer.
+/// Time an operation over an actively-adjusted number of repetitions.
 ///
-/// Time an operation, dynamically adjusting the number of iterations
-/// measured to balance accuracy with a desired limit on total time
-/// for the measurement.
+/// Adjust the number of repetitions measured, balancing expenditure
+/// of time against accuracy. Motivation: it is often useful to time
+/// an operation in unit tests, but unit tests should run quickly even
+/// on slow machines or in high-overhead debugging modes.
 ///
-/// Execute the operation once and observe how long it took. Repeat
-/// the operation as many times as that observation indicates it can
-/// be repeated in the time interval specified, but rounding the
-/// number of iterations down to the next-lower power of ten so that
-/// the reported timing and iteration count can be divided at sight.
+/// Start by executing the operation once. If that takes longer than
+/// the limit specified, then record that single observation and exit.
+/// Rationale: if it is desired to spend up to one second testing an
+/// operation, but the operation takes ten seconds, then the desired
+/// limit has already been exceeded tenfold, and the value of one more
+/// observation does not justify doubling that harm.
 ///
-/// If the operation took longer than the specified interval in the
-/// initial calibration trial, then just report how long that took.
-/// Rationale: if it is desired to spend one second testing an
-/// operation, but the operation takes ten seconds, then it's not
-/// appropriate to spend another ten seconds for a single iteration.
+/// Otherwise, discard the first observation (which is often anomalous
+/// due, e.g., to cache effects); execute the operation repeatedly,
+/// until either all allotted time has been used or the repetition
+/// count reaches one hundred; and record the mean measured time.
 ///
-/// If the operation took no measurable amount of time, set the number
-/// of iterations to the number of timer quanta in the specified
-/// interval. Rationale: the initial calibration trial could have
-/// taken just less than one quantum, and the specified interval
-/// should not be exceeded.
+/// The rationale for stopping after one hundred repetitions is that
+/// continuing is unlikely to increase accuracy. Consider timing an
+/// operation that takes one nanosecond, with a (default) limit of
+/// one second: one billion repetions would seem excessive, and
+/// hardcoding a lower time limit creates exactly the sort of problems
+/// that this class's adaptive behavior is intended to avoid.
 ///
 /// Template parameter 'F' is the type of the first ctor parameter,
 /// which either is a nullary function or behaves like one. A facility
@@ -134,11 +136,7 @@ class LMI_SO Timer
 /// Forwarding Problem, but that's inherent in the language.
 ///
 /// Ctor parameter 'max_seconds' is the desired limit on measurement
-/// time, in seconds. If that limit is exceeded by the initial
-/// calibration trial, then the operation is not run again. Otherwise,
-/// the operation is repeated for (0.1 * 'max_seconds', 'max_seconds']
-/// (more or less, to the extent that the initial calibration trial's
-/// speed was atypical).
+/// time, in seconds.
 ///
 /// This class template is a friend of class Timer so that it can
 /// access Timer::frequency_, which should not have a public accessor
@@ -200,8 +198,8 @@ AliquotTimer<F>::AliquotTimer(F f, double max_seconds)
     str_ = oss.str();
 }
 
-/// Hardcoded widths allow for 100 iterations and one second per
-/// iteration.
+/// Hardcoded widths allow for one hundred iterations and one second
+/// per iteration.
 
 template<typename F>
 AliquotTimer<F>& AliquotTimer<F>::operator()()
