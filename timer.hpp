@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: timer.hpp,v 1.26 2007-01-25 15:07:28 chicares Exp $
+// $Id: timer.hpp,v 1.27 2007-01-26 01:39:15 chicares Exp $
 
 #ifndef timer_hpp
 #define timer_hpp
@@ -51,8 +51,6 @@
 
 #include <boost/utility.hpp>
 
-#include <climits> // LONG_MAX
-#include <cmath>
 #include <iomanip>
 #include <ios>
 #include <ostream>
@@ -161,8 +159,6 @@ class AliquotTimer
     double unit_time() const;
 
   private:
-    static long int GreatestNonnegativePowerOfTen(double);
-
     F           f_;
     double      max_seconds_;
     double      initial_trial_time_;
@@ -252,36 +248,6 @@ template<typename F>
 double AliquotTimer<F>::unit_time() const
 {
     return unit_time_;
-}
-
-/// Greatest nonnegative-integer power of ten that is less than or
-/// equal to the argument, if such a power exists--but never greater
-/// than LONG_MAX; else zero.
-///
-/// Motivation: to determine the number of times to repeat an
-/// operation in a timing loop.
-///
-/// An intermediate value is volatile-qualified in order to work
-/// around a defect observed with MinGW gcc: the defective ms C
-/// runtime library MinGW uses doesn't reliably return integer
-/// results for std::pow() with exact-integer arguments. To see the
-/// problem, remove the 'volatile' qualifier and run the unit test.
-///
-/// The last line is not equivalent to
-///    return std::min(LONG_MAX, static_cast<long int>(z));
-/// , which would compare integral rather than double values; for
-/// proof, run the unit test with that line substituted (and the
-/// appropriate header included).
-
-template<typename F>
-long int AliquotTimer<F>::GreatestNonnegativePowerOfTen(double d)
-{
-    if(d <= 0.0)
-        {
-        return 0L;
-        }
-    double const volatile z = std::pow(10.0, std::floor(std::log10(d)));
-    return LONG_MAX < z ? LONG_MAX : static_cast<long int>(z);
 }
 
 template<typename F>
