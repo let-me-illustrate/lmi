@@ -1,6 +1,6 @@
 # Top-level lmi makefile.
 #
-# Copyright (C) 2005, 2006 Gregory W. Chicares.
+# Copyright (C) 2005, 2006, 2007 Gregory W. Chicares.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: GNUmakefile,v 1.78 2006-12-23 17:49:24 chicares Exp $
+# $Id: GNUmakefile,v 1.79 2007-01-27 00:17:12 wboutin Exp $
 
 ################################################################################
 
@@ -576,10 +576,10 @@ check_concinnity: source_clean custom_tools
 	  && $(ECHO) "Is it time to 'make release_candidate'?" || true
 	@[ license.cpp -ot BOY ] \
 	  && $(ECHO) "Update copyright notices in 'license.cpp'." || true
-	@$(RM) --force CANDIDATE
-	@$(RM) --force TODAY
-	@$(RM) --force BOM
-	@$(RM) --force BOY
+#	@$(RM) --force CANDIDATE
+#	@$(RM) --force TODAY
+#	@$(RM) --force BOM
+#	@$(RM) --force BOY
 
 ################################################################################
 

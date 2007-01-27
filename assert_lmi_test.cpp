@@ -1,6 +1,6 @@
 // Exception-throwing macro for lightweight assertions--unit test.
 //
-// Copyright (C) 2006, 2007 Gregory W. Chicares.
+// Copyright (C) 2007 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: assert_lmi_test.cpp,v 1.1 2007-01-22 23:17:30 wboutin Exp $
+// $Id: assert_lmi_test.cpp,v 1.2 2007-01-27 00:17:12 wboutin Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -27,11 +27,11 @@
 #endif // __BORLANDC__
 
 #include "assert_lmi.hpp"
+
 #include "test_tools.hpp"
 
 int test_main(int, char*[])
 {
-
     ASSERT_LMI(true);
 
     BOOST_TEST_THROW
@@ -42,3 +42,4 @@ int test_main(int, char*[])
 
     return 0;
 }
+
