@@ -29,7 +29,7 @@
 # For subsequent GWC modifications, see 'ChangeLog'.
 #
 # GWC modifications
-#   Copyright (C) 2003, 2005, 2006 Gregory W. Chicares
+#   Copyright (C) 2003, 2005, 2006, 2007 Gregory W. Chicares
 # and released under the same terms as Graeme S. Roy's original.
 #
 # http://savannah.nongnu.org/projects/lmi
@@ -40,7 +40,7 @@
 # GNU Makefile to compile on msw with mingw gcc.
 
 
-# $Id: mpatrol-mingw-GNUmakefile,v 1.4 2006-01-29 15:23:52 chicares Exp $
+# $Id: mpatrol-mingw-GNUmakefile,v 1.5 2007-01-27 00:00:51 wboutin Exp $
 
 # Definitions
 

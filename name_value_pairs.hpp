@@ -1,6 +1,6 @@
 // Manage files of name-value pairs.
 //
-// Copyright (C) 2005, 2006 Gregory W. Chicares.
+// Copyright (C) 2005, 2006, 2007 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: name_value_pairs.hpp,v 1.5 2006-01-29 13:52:00 chicares Exp $
+// $Id: name_value_pairs.hpp,v 1.6 2007-01-27 00:00:51 wboutin Exp $
 
 #ifndef name_value_pairs_hpp
 #define name_value_pairs_hpp

@@ -17,7 +17,7 @@
 // contents when I revisited it later.]
 //
 // GWC modifications are
-//   Copyright (C) 2001, 2002, 2003, 2004, 2005, 2006 Gregory W. Chicares
+//   Copyright (C) 2001, 2002, 2003, 2004, 2005, 2006, 2007 Gregory W. Chicares
 // and released with the same licensing terms as the original, viz.:
 
 // This file is part of the GNU C++ Library.  This library is free
@@ -38,7 +38,7 @@
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
 // GWC added this RCS Id:
-// $Id: getopt.hpp,v 1.8 2006-01-29 15:12:07 chicares Exp $
+// $Id: getopt.hpp,v 1.9 2007-01-27 00:00:51 wboutin Exp $
 
 // This version of 'getopt' appears to the caller like standard Unix 'getopt'
 // but it behaves differently for the user, since it allows the user

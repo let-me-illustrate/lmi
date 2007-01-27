@@ -1,6 +1,6 @@
 // Extended enumeration type--unit test.
 //
-// Copyright (C) 2001, 2002, 2004, 2005, 2006 Gregory W. Chicares.
+// Copyright (C) 2001, 2002, 2004, 2005, 2006, 2007 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xenum_test.cpp,v 1.5 2006-12-06 16:23:17 chicares Exp $
+// $Id: xenum_test.cpp,v 1.6 2007-01-27 00:00:52 wboutin Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"

@@ -1,6 +1,6 @@
 // README.auto for "Let me illustrate...".
 //
-// Copyright (C) 2005, 2006 Vadim Zeitlin.
+// Copyright (C) 2005, 2006, 2007 Vadim Zeitlin.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: README.auto,v 1.4 2006-01-29 14:48:55 chicares Exp $
+// $Id: README.auto,v 1.5 2007-01-27 00:00:52 wboutin Exp $
 
                   README file for building LMI with autotools
                   ===========================================
@@ -126,4 +126,4 @@ maintainer-clean" (don't use the latter if you don't have autotools installed
 as you won't be able to regenerate the makefile after it).
 
 
-Version: $Id: README.auto,v 1.4 2006-01-29 14:48:55 chicares Exp $
+Version: $Id: README.auto,v 1.5 2007-01-27 00:00:52 wboutin Exp $

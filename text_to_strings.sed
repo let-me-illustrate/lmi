@@ -6,7 +6,7 @@
 #   #include "output_of_this_script"
 #   ;
 
-# Copyright (C) 2004, 2005, 2006 Gregory W. Chicares.
+# Copyright (C) 2004, 2005, 2006, 2007 Gregory W. Chicares.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 2 as
@@ -25,7 +25,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: text_to_strings.sed,v 1.2 2006-01-29 14:48:55 chicares Exp $
+# $Id: text_to_strings.sed,v 1.3 2007-01-27 00:00:52 wboutin Exp $
 
 # Escape all double-quote characters in the input. Add a C newline
 # representation at the end of each line and surround the line in

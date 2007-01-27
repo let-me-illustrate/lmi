@@ -1,6 +1,6 @@
 // Allocation functions to work around a wx, mpatrol, and msw problem.
 //
-// Copyright (C) 2004, 2005, 2006 Gregory W. Chicares.
+// Copyright (C) 2004, 2005, 2006, 2007 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: wx_new.hpp,v 1.7 2006-12-12 11:16:19 chicares Exp $
+// $Id: wx_new.hpp,v 1.8 2007-01-27 00:00:52 wboutin Exp $
 
 #ifndef wx_new_hpp
 #define wx_new_hpp

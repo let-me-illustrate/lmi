@@ -2,7 +2,7 @@
 
 # Conveniently save commonly-used options.
 
-# Copyright (C) 2006 Gregory W. Chicares.
+# Copyright (C) 2006, 2007 Gregory W. Chicares.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 2 as
@@ -21,7 +21,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: local_options.sh,v 1.1 2006-02-27 15:11:11 chicares Exp $
+# $Id: local_options.sh,v 1.2 2007-01-27 00:00:51 wboutin Exp $
 
 # This sample usage:
 #   ./local_options mingw_dir=/MinGW-20050120/ CFLAGS='-g -O0'

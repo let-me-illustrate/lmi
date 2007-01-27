@@ -1,6 +1,6 @@
 // MVC Controller.
 //
-// Copyright (C) 2003, 2004, 2005, 2006 Gregory W. Chicares.
+// Copyright (C) 2003, 2004, 2005, 2006, 2007 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mvc_controller.tpp,v 1.1 2006-07-07 11:22:08 chicares Exp $
+// $Id: mvc_controller.tpp,v 1.2 2007-01-27 00:00:51 wboutin Exp $
 
 #include "mvc_controller.hpp"
 
