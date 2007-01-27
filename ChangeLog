@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.562 2007-01-27 00:03:27 wboutin Exp $
+// $Id: ChangeLog,v 1.563 2007-01-27 00:17:12 wboutin Exp $
 
 MAINTENANCE
 
@@ -9555,6 +9555,7 @@ Harmonize error handling.
   any_member_test.cpp
   argv0.hpp
   argv0_test.cpp
+  assert_lmi_test.cpp
   authenticity.cpp
   authenticity.hpp
   authenticity_test.cpp
@@ -9651,6 +9652,7 @@ Harmonize error handling.
   global_settings.cpp
   global_settings.hpp
   global_settings_test.cpp
+  GNUmakefile
   group_values.cpp
   group_values.hpp
   handle_exceptions.hpp
@@ -9850,6 +9852,7 @@ Harmonize error handling.
   rounding_rules.hpp
   rtti_lmi.hpp
   rtti_lmi_test.cpp
+  sandbox_test.cpp
   setup.make
   sigfpe.cpp
   sigfpe.hpp
