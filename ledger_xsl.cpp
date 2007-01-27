@@ -1,6 +1,6 @@
 // Ledger xsl operations.
 //
-// Copyright (C) 2004, 2005, 2006 Gregory W. Chicares.
+// Copyright (C) 2004, 2005, 2006, 2007 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xsl.cpp,v 1.16 2006-12-14 03:57:35 chicares Exp $
+// $Id: ledger_xsl.cpp,v 1.17 2007-01-27 00:00:51 wboutin Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"

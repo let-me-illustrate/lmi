@@ -1,6 +1,6 @@
 // Handlers for exceptional situations.
 //
-// Copyright (C) 2005, 2006 Gregory W. Chicares.
+// Copyright (C) 2005, 2006, 2007 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: handle_exceptions.hpp,v 1.3 2006-11-02 18:13:47 chicares Exp $
+// $Id: handle_exceptions.hpp,v 1.4 2007-01-27 00:00:51 wboutin Exp $
 
 #ifndef handle_exceptions_hpp
 #define handle_exceptions_hpp

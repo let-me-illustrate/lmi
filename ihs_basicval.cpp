@@ -1,6 +1,6 @@
 // Basic values.
 //
-// Copyright (C) 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006 Gregory W. Chicares.
+// Copyright (C) 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007 Gregory W. Chicares.
 // Portions marked JLM Copyright (C) 2001 (modal target), 2002 (non-7702 corridor) Gregory W. Chicares and Joseph L. Murdzek.
 // Author is GWC except where specifically noted otherwise.
 //
@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_basicval.cpp,v 1.30 2006-03-18 02:42:25 chicares Exp $
+// $Id: ihs_basicval.cpp,v 1.31 2007-01-27 00:00:51 wboutin Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"

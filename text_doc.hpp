@@ -1,6 +1,6 @@
 // Document class for plain text.
 //
-// Copyright (C) 2002, 2003, 2004, 2005, 2006 Gregory W. Chicares.
+// Copyright (C) 2002, 2003, 2004, 2005, 2006, 2007 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: text_doc.hpp,v 1.5 2006-01-29 13:52:00 chicares Exp $
+// $Id: text_doc.hpp,v 1.6 2007-01-27 00:00:52 wboutin Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/doc.h (C) 1998 Julian Smart and Markus Holzem

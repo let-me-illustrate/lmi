@@ -1,6 +1,6 @@
 // Database entity type.
 //
-// Copyright (C) 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006 Gregory W. Chicares.
+// Copyright (C) 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_dbvalue.cpp,v 1.12 2006-11-02 18:15:24 chicares Exp $
+// $Id: ihs_dbvalue.cpp,v 1.13 2007-01-27 00:00:51 wboutin Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
