@@ -1,6 +1,6 @@
 // Interface to xmlwrapp: forward declarations.
 //
-// Copyright (C) 2006 Gregory W. Chicares.
+// Copyright (C) 2006, 2007 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xml_lmi_fwd.hpp,v 1.6 2006-12-13 01:01:38 chicares Exp $
+// $Id: xml_lmi_fwd.hpp,v 1.7 2007-01-27 00:00:52 wboutin Exp $
 
 #ifndef xml_lmi_fwd_hpp
 #define xml_lmi_fwd_hpp

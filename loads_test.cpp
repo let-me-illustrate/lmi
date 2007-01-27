@@ -1,6 +1,6 @@
 // Loads and expense charges--unit test.
 //
-// Copyright (C) 2005, 2006 Gregory W. Chicares.
+// Copyright (C) 2005, 2006, 2007 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: loads_test.cpp,v 1.8 2006-12-30 20:33:33 chicares Exp $
+// $Id: loads_test.cpp,v 1.9 2007-01-27 00:00:51 wboutin Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"

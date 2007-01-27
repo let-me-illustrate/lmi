@@ -1,6 +1,6 @@
 // Provide expm1() [C99 7.12.6.3] for toolsets that lack it.
 //
-// Copyright (C) 2006 Gregory W. Chicares.
+// Copyright (C) 2006, 2007 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: expm1.h,v 1.2 2006-09-02 22:32:03 chicares Exp $
+// $Id: expm1.h,v 1.3 2007-01-27 00:00:51 wboutin Exp $
 
 // The include guard has an 'lmi_' prefix to avoid conflict, because
 // 'expm1_h' is an obvious name that libraries might use.

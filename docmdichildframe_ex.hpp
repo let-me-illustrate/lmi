@@ -1,6 +1,6 @@
 // Customize implementation details of library class wxDocMDIChildFrame.
 //
-// Copyright (C) 2004, 2005, 2006 Gregory W. Chicares.
+// Copyright (C) 2004, 2005, 2006, 2007 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: docmdichildframe_ex.hpp,v 1.4 2006-03-09 01:58:18 chicares Exp $
+// $Id: docmdichildframe_ex.hpp,v 1.5 2007-01-27 00:00:51 wboutin Exp $
 
 // Enhance class wxDocMDIChildFrame to support MDI without requiring
 // the parent MDI frame window to display a 'Window' menu when it has

@@ -1,6 +1,6 @@
 // Extensions to C++ run-time type information.
 //
-// Copyright (C) 2006 Gregory W. Chicares.
+// Copyright (C) 2006, 2007 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: rtti_lmi.hpp,v 1.4 2006-07-09 15:57:30 chicares Exp $
+// $Id: rtti_lmi.hpp,v 1.5 2007-01-27 00:00:52 wboutin Exp $
 
 #ifndef rtti_lmi_hpp
 #define rtti_lmi_hpp

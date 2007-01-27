@@ -1,6 +1,6 @@
 // String input class for wx data-transfer framework.
 //
-// Copyright (C) 2004, 2005, 2006 Gregory W. Chicares.
+// Copyright (C) 2004, 2005, 2006, 2007 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: datum_string.hpp,v 1.5 2006-07-10 13:14:34 chicares Exp $
+// $Id: datum_string.hpp,v 1.6 2007-01-27 00:00:51 wboutin Exp $
 
 #ifndef datum_string_hpp
 #define datum_string_hpp

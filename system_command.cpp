@@ -1,6 +1,6 @@
 // Instruct the operating system to execute a command.
 //
-// Copyright (C) 2001, 2002, 2003, 2004, 2005, 2006 Gregory W. Chicares.
+// Copyright (C) 2001, 2002, 2003, 2004, 2005, 2006, 2007 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: system_command.cpp,v 1.7 2006-02-12 16:54:08 chicares Exp $
+// $Id: system_command.cpp,v 1.8 2007-01-27 00:00:52 wboutin Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"

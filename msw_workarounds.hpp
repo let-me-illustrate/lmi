@@ -1,6 +1,6 @@
 // Preload msw dlls to work around an operating-system defect.
 //
-// Copyright (C) 2006 Gregory W. Chicares.
+// Copyright (C) 2006, 2007 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: msw_workarounds.hpp,v 1.1 2006-02-13 18:59:07 chicares Exp $
+// $Id: msw_workarounds.hpp,v 1.2 2007-01-27 00:00:51 wboutin Exp $
 
 #ifndef msw_workarounds_hpp
 #define msw_workarounds_hpp

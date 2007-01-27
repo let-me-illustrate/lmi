@@ -1,6 +1,6 @@
 // Ordinary- and universal-life commutation functions.
 //
-// Copyright (C) 1998, 1999, 2000, 2001, 2005, 2006 Gregory W. Chicares.
+// Copyright (C) 1998, 1999, 2000, 2001, 2005, 2006, 2007 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_commfns.hpp,v 1.7 2006-12-06 02:19:17 chicares Exp $
+// $Id: ihs_commfns.hpp,v 1.8 2007-01-27 00:00:51 wboutin Exp $
 
 #ifndef commfns_hpp
 #define commfns_hpp

@@ -1,6 +1,6 @@
 // Validate assumptions about how the wxWindows library was built.
 //
-// Copyright (C) 2006 Gregory W. Chicares.
+// Copyright (C) 2006, 2007 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: wx_checks.hpp,v 1.1 2006-06-29 19:47:29 wboutin Exp $
+// $Id: wx_checks.hpp,v 1.2 2007-01-27 00:00:52 wboutin Exp $
 
 #ifndef wx_checks_hpp
 #define wx_checks_hpp

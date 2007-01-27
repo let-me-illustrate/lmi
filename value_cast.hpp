@@ -1,6 +1,6 @@
 // General conversion between types.
 //
-// Copyright (C) 2004, 2005, 2006 Gregory W. Chicares.
+// Copyright (C) 2004, 2005, 2006, 2007 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: value_cast.hpp,v 1.11 2006-03-05 20:20:12 chicares Exp $
+// $Id: value_cast.hpp,v 1.12 2007-01-27 00:00:52 wboutin Exp $
 
 #ifndef value_cast_hpp
 #define value_cast_hpp

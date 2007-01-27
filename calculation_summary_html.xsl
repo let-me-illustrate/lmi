@@ -2,7 +2,7 @@
 <!--
     Xsl template used to render illustration data into html.
 
-    Copyright (C) 2006 Gregory W. Chicares.
+    Copyright (C) 2006, 2007 Gregory W. Chicares.
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License version 2 as
@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: calculation_summary_html.xsl,v 1.4 2006-11-30 05:58:26 chicares Exp $
+    $Id: calculation_summary_html.xsl,v 1.5 2007-01-27 00:00:51 wboutin Exp $
 -->
 
 <xsl:stylesheet xmlns:lmi="http://savannah.nongnu.org/projects/lmi" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0" xsi:schemaLocation="http://savannah.nongnu.org/projects/lmi ledger.xsd">

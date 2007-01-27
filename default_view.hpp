@@ -1,6 +1,6 @@
 // Default MVC View for life-insurance illustrations.
 //
-// Copyright (C) 2006 Gregory W. Chicares.
+// Copyright (C) 2006, 2007 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: default_view.hpp,v 1.2 2006-11-11 01:32:24 chicares Exp $
+// $Id: default_view.hpp,v 1.3 2007-01-27 00:00:51 wboutin Exp $
 
 #ifndef default_view_hpp
 #define default_view_hpp

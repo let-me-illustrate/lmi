@@ -22,7 +22,7 @@
 /* 2003-02 GWC got this code from
      http://www.nondot.org/gcc/md5_8h-source.html
    and modified it as indicated below by initials 'GWC'. Modifications are
-     Copyright (C) 2003, 2005, 2006 Gregory W. Chicares
+     Copyright (C) 2003, 2005, 2006, 2007 Gregory W. Chicares
    and licensed under the same terms as the original, as given above.
    This is a derived work. Any defect in it should not reflect on
    Ulrich Drepper's reputation.
@@ -31,7 +31,7 @@
    email: <chicares@cox.net>
    snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-   $Id: md5.hpp,v 1.5 2006-08-12 17:16:36 chicares Exp $
+   $Id: md5.hpp,v 1.6 2007-01-27 00:00:51 wboutin Exp $
 
    GWC: File renamed md5.h --> md5.hpp so that grep whatever *.?pp
    can be used across the lmi project.

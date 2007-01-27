@@ -1,6 +1,6 @@
 // Extended enumeration type--sample for unit testing.
 //
-// Copyright (C) 2001, 2003, 2005, 2006 Gregory W. Chicares.
+// Copyright (C) 2001, 2003, 2005, 2006, 2007 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xenum_sample.hpp,v 1.3 2006-01-29 13:52:01 chicares Exp $
+// $Id: xenum_sample.hpp,v 1.4 2007-01-27 00:00:52 wboutin Exp $
 
 #ifndef xenum_sample_hpp
 #define xenum_sample_hpp
