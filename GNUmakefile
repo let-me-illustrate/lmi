@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: GNUmakefile,v 1.79 2007-01-27 00:17:12 wboutin Exp $
+# $Id: GNUmakefile,v 1.80 2007-01-28 01:03:19 chicares Exp $
 
 ################################################################################
 
@@ -576,10 +576,10 @@ check_concinnity: source_clean custom_tools
 	  && $(ECHO) "Is it time to 'make release_candidate'?" || true
 	@[ license.cpp -ot BOY ] \
 	  && $(ECHO) "Update copyright notices in 'license.cpp'." || true
-#	@$(RM) --force CANDIDATE
-#	@$(RM) --force TODAY
-#	@$(RM) --force BOM
-#	@$(RM) --force BOY
+	@$(RM) --force CANDIDATE
+	@$(RM) --force TODAY
+	@$(RM) --force BOM
+	@$(RM) --force BOY
 
 ################################################################################
 
