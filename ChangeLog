@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.563 2007-01-27 00:17:12 wboutin Exp $
+// $Id: ChangeLog,v 1.564 2007-01-28 01:03:23 chicares Exp $
 
 MAINTENANCE
 
@@ -49,8 +49,7 @@ as [defect-count] above.
 
 [3] Exact name of file changed, indented two spaces.
 
-[4] Write each file's name on a separate line. Write them in
-alphabetical order.
+[4] Write each file's name on a separate line, in ASCII sort order.
 
 [5] We aren't exactly following GNU standards here, but this one makes
 a lot of sense:
@@ -9537,6 +9536,11 @@ Harmonize error handling.
 
 20070127T0000Z <wboutin@massmutual.com> [1244]
 
+  GNUmakefile
+  INSTALL
+  Makefile.am
+  README
+  README.auto
   about_dialog.cpp
   about_dialog.hpp
   account_value.hpp
@@ -9652,7 +9656,6 @@ Harmonize error handling.
   global_settings.cpp
   global_settings.hpp
   global_settings_test.cpp
-  GNUmakefile
   group_values.cpp
   group_values.hpp
   handle_exceptions.hpp
@@ -9718,7 +9721,6 @@ Harmonize error handling.
   inputs.hpp
   inputstatus.cpp
   inputstatus.hpp
-  INSTALL
   interest_rates.cpp
   interest_rates.hpp
   irc7702a_test.cpp
@@ -9759,7 +9761,6 @@ Harmonize error handling.
   main_common_non_wx.cpp
   main_wx.cpp
   main_wx.hpp
-  Makefile.am
   map_lookup.hpp
   map_lookup_test.cpp
   materially_equal.hpp
@@ -9787,8 +9788,8 @@ Harmonize error handling.
   miscellany.hpp
   mortality_rates.cpp
   mortality_rates.hpp
-  mpatrol_patch_test.cpp
   mpatrol-mingw-GNUmakefile
+  mpatrol_patch_test.cpp
   msw_common.make
   msw_cygwin.make
   msw_generic.make
@@ -9844,8 +9845,6 @@ Harmonize error handling.
   progress_meter_wx.cpp
   quiet_nan.hpp
   quiet_nan_test.cpp
-  README
-  README.auto
   round_to.hpp
   round_to_test.cpp
   rounding_rules.cpp
@@ -9938,4 +9937,12 @@ Harmonize error handling.
   zero.hpp
   zero_test.cpp
 Update copyright notices.
+
+20070128T0103Z <chicares@cox.net> [1244]
+
+  ChangeLog
+Specify and use ASCII sort order for 'ChangeLog' entries.
+
+  GNUmakefile
+Undo an artifact of copyright-notice updating.
 
