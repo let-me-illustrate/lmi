@@ -1,0 +1,128 @@
+// Product data manager.
+//
+// Copyright (C) 2007 Gregory W. Chicares.
+//
+// This program is free software; you can redistribute it and/or modify
+// it under the terms of the GNU General Public License version 2 as
+// published by the Free Software Foundation.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program; if not, write to the Free Software Foundation,
+// Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
+//
+// http://savannah.nongnu.org/projects/lmi
+// email: <chicares@cox.net>
+// snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
+
+// $Id: policy_view.cpp,v 1.1.2.1 2007-02-11 21:52:42 etarassov Exp $
+
+#ifdef __BORLANDC__
+#   include "pchfile.hpp"
+#   pragma hdrstop
+#endif // __BORLANDC__
+
+#include "policy_view.hpp"
+
+#include "alert.hpp"
+#include "policy_document.hpp"
+
+#include <wx/panel.h>
+#include <wx/textctrl.h>
+#include <wx/window.h>
+#include <wx/xrc/xmlres.h>
+
+#include <sstream>
+
+IMPLEMENT_DYNAMIC_CLASS(PolicyView, ProductEditorView)
+
+PolicyView::PolicyView()
+    :ProductEditorView()
+    ,controls_()
+{
+}
+
+PolicyView::~PolicyView()
+{
+}
+
+wxWindow* PolicyView::CreateChildWindow()
+{
+    wxWindow* frame = GetFrame();
+    wxPanel* main_panel = wxXmlResource::Get()->LoadPanel
+        (frame
+        ,"policy_view_panel"
+        );
+    if(!main_panel)
+        fatal_error() << "Unable to load an xml resource" << LMI_FLUSH;
+
+    typedef PolicyDocument::values_type::const_iterator value_const_iterator;
+    for
+        (value_const_iterator cit = document().values().begin()
+        ,end = document().values().end()
+        ;cit != end
+        ;++cit
+        )
+        {
+        wxTextCtrl* text_ctrl = dynamic_cast<wxTextCtrl*>
+            (wxWindow::FindWindowById(XRCID(cit->first.c_str()), frame)
+            );
+        if(!text_ctrl)
+            fatal_error()
+                << "A required text control ["
+                << cit->first
+                << "] was not found"
+                << LMI_FLUSH
+                ;
+        controls_[cit->first] = text_ctrl;
+        }
+
+    return main_panel;
+}
+
+wxIcon PolicyView::Icon() const
+{
+    return IconFromXmlResource("policy_view_icon");
+}
+
+wxMenuBar* PolicyView::MenuBar() const
+{
+    return MenuBarFromXmlResource("policy_view_menu");
+}
+
+PolicyDocument& PolicyView::document() const
+{
+    return dynamic_cast<PolicyDocument&>(*GetDocument());
+}
+
+bool PolicyView::IsModified() const
+{
+    for
+        (controls_type::const_iterator it = controls().begin()
+        ,end = controls().end()
+        ;it != end
+        ;++it
+        )
+        {
+        if(it->second->IsModified())
+            return true;
+        }
+    return false;
+}
+
+void PolicyView::DiscardEdits()
+{
+    for
+        (controls_type::iterator it = controls().begin()
+        ,end = controls().end()
+        ;it != end
+        ;++it
+        )
+        {
+        it->second->DiscardEdits();
+        }
+}

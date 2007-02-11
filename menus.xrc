@@ -24,7 +24,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: menus.xrc,v 1.16 2007-01-27 00:00:51 wboutin Exp $
+    $Id: menus.xrc,v 1.16.2.1 2007-02-11 21:52:42 etarassov Exp $
 -->
 
 <!-- reusable menus -->
@@ -474,6 +474,278 @@ Not supported yet: need to split columns into multiple pages.
             <object class="wxMenuItem" name="test_lib_arbitrary_exception">
                 <label>Test _arbitrary exception</label>
             </object>
+        </object>
+    </object>
+    <object_ref name="window_menu" ref="window_menu_ref"/>
+    <object_ref name="wxID_HELP" ref="help_menu_ref"/>
+</object>
+
+<!-- tier-edit menu -->
+
+<object class="wxIcon" name="tier_view_icon">tier_view.xpm</object>
+
+<object class="wxMenuBar" name="tier_view_menu">
+<style>wxMB_DOCKABLE</style>
+    <object class="wxMenu" name="file_menu">
+        <label>_File</label>
+        <object class="wxMenuItem" name="wxID_NEW">
+            <label>_New</label>
+            <help>Create a new document</help>
+            <bitmap>new.xpm</bitmap>
+        </object>
+        <object class="wxMenuItem" name="wxID_OPEN">
+            <label>_Open...</label>
+            <bitmap>open.xpm</bitmap>
+            <help>Open an existing document</help>
+        </object>
+        <object class="wxMenuItem" name="wxID_CLOSE">
+            <label>_Close\tCtrl-X</label>
+            <bitmap>close.xpm</bitmap>
+            <help>Close this document</help>
+        </object>
+        <object class="separator"/>
+        <object class="wxMenuItem" name="wxID_SAVE">
+            <label>_Save</label>
+            <bitmap>save.xpm</bitmap>
+            <help>Save this document</help>
+        </object>
+        <object class="wxMenuItem" name="wxID_SAVEAS">
+            <label>Save _as...</label>
+            <bitmap>saveas.xpm</bitmap>
+            <help>Save this document under a new name</help>
+        </object>
+        <object class="separator"/>
+        <object class="wxMenuItem" name="edit_default_cell">
+            <label>_Default</label>
+            <bitmap>default_cell.xpm</bitmap>
+            <help>Edit default cell</help>
+        </object>
+        <object class="wxMenuItem" name="preferences">
+            <label>Pre_ferences\tCtrl-F</label>
+            <bitmap>preferences.xpm</bitmap>
+            <help>Manage preferences</help>
+        </object>
+        <object class="separator"/>
+        <object class="wxMenuItem" name="wxID_EXIT">
+            <label>E_xit</label>
+            <bitmap>exit.xpm</bitmap>
+            <help>Exit this program</help>
+        </object>
+    </object>
+    <object class="wxMenu" name="tier_edit">
+        <label>_Tier</label>
+        <object class="wxMenuItem" name="tier_alert_1">
+            <label>Test alert N_1</label>
+        </object>
+        <object class="wxMenuItem" name="tier_alert_2">
+            <label>Test alert N_2</label>
+        </object>
+        <object class="wxMenuItem" name="tier_alert_3">
+            <label>Test alert N_3</label>
+        </object>
+    </object>
+    <object_ref name="window_menu" ref="window_menu_ref"/>
+    <object_ref name="wxID_HELP" ref="help_menu_ref"/>
+</object>
+
+<!-- database-edit menu -->
+
+<object class="wxIcon" name="database_view_icon">database_view.xpm</object>
+
+<object class="wxMenuBar" name="database_view_menu">
+<style>wxMB_DOCKABLE</style>
+    <object class="wxMenu" name="file_menu">
+        <label>_File</label>
+        <object class="wxMenuItem" name="wxID_NEW">
+            <label>_New</label>
+            <help>Create a new document</help>
+            <bitmap>new.xpm</bitmap>
+        </object>
+        <object class="wxMenuItem" name="wxID_OPEN">
+            <label>_Open...</label>
+            <bitmap>open.xpm</bitmap>
+            <help>Open an existing document</help>
+        </object>
+        <object class="wxMenuItem" name="wxID_CLOSE">
+            <label>_Close\tCtrl-X</label>
+            <bitmap>close.xpm</bitmap>
+            <help>Close this document</help>
+        </object>
+        <object class="separator"/>
+        <object class="wxMenuItem" name="wxID_SAVE">
+            <label>_Save</label>
+            <bitmap>save.xpm</bitmap>
+            <help>Save this document</help>
+        </object>
+        <object class="wxMenuItem" name="wxID_SAVEAS">
+            <label>Save _as...</label>
+            <bitmap>saveas.xpm</bitmap>
+            <help>Save this document under a new name</help>
+        </object>
+        <object class="separator"/>
+        <object class="wxMenuItem" name="edit_default_cell">
+            <label>_Default</label>
+            <bitmap>default_cell.xpm</bitmap>
+            <help>Edit default cell</help>
+        </object>
+        <object class="wxMenuItem" name="preferences">
+            <label>Pre_ferences\tCtrl-F</label>
+            <bitmap>preferences.xpm</bitmap>
+            <help>Manage preferences</help>
+        </object>
+        <object class="separator"/>
+        <object class="wxMenuItem" name="wxID_EXIT">
+            <label>E_xit</label>
+            <bitmap>exit.xpm</bitmap>
+            <help>Exit this program</help>
+        </object>
+    </object>
+    <object class="wxMenu" name="database_edit">
+        <label>_Database</label>
+        <object class="wxMenuItem" name="database_alert_1">
+            <label>Test alert N_1</label>
+        </object>
+        <object class="wxMenuItem" name="database_alert_2">
+            <label>Test alert N_2</label>
+        </object>
+        <object class="wxMenuItem" name="database_alert_3">
+            <label>Test alert N_3</label>
+        </object>
+    </object>
+    <object_ref name="window_menu" ref="window_menu_ref"/>
+    <object_ref name="wxID_HELP" ref="help_menu_ref"/>
+</object>
+
+<!-- policy-edit menu -->
+
+<object class="wxIcon" name="policy_view_icon">policy_view.xpm</object>
+
+<object class="wxMenuBar" name="policy_view_menu">
+<style>wxMB_DOCKABLE</style>
+    <object class="wxMenu" name="file_menu">
+        <label>_File</label>
+        <object class="wxMenuItem" name="wxID_NEW">
+            <label>_New</label>
+            <help>Create a new document</help>
+            <bitmap>new.xpm</bitmap>
+        </object>
+        <object class="wxMenuItem" name="wxID_OPEN">
+            <label>_Open...</label>
+            <bitmap>open.xpm</bitmap>
+            <help>Open an existing document</help>
+        </object>
+        <object class="wxMenuItem" name="wxID_CLOSE">
+            <label>_Close\tCtrl-X</label>
+            <bitmap>close.xpm</bitmap>
+            <help>Close this document</help>
+        </object>
+        <object class="separator"/>
+        <object class="wxMenuItem" name="wxID_SAVE">
+            <label>_Save</label>
+            <bitmap>save.xpm</bitmap>
+            <help>Save this document</help>
+        </object>
+        <object class="wxMenuItem" name="wxID_SAVEAS">
+            <label>Save _as...</label>
+            <bitmap>saveas.xpm</bitmap>
+            <help>Save this document under a new name</help>
+        </object>
+        <object class="separator"/>
+        <object class="wxMenuItem" name="edit_default_cell">
+            <label>_Default</label>
+            <bitmap>default_cell.xpm</bitmap>
+            <help>Edit default cell</help>
+        </object>
+        <object class="wxMenuItem" name="preferences">
+            <label>Pre_ferences\tCtrl-F</label>
+            <bitmap>preferences.xpm</bitmap>
+            <help>Manage preferences</help>
+        </object>
+        <object class="separator"/>
+        <object class="wxMenuItem" name="wxID_EXIT">
+            <label>E_xit</label>
+            <bitmap>exit.xpm</bitmap>
+            <help>Exit this program</help>
+        </object>
+    </object>
+    <object class="wxMenu" name="database_edit">
+        <label>P_olicy</label>
+        <object class="wxMenuItem" name="policy_alert_1">
+            <label>Test alert N_1</label>
+        </object>
+        <object class="wxMenuItem" name="policy_alert_2">
+            <label>Test alert N_2</label>
+        </object>
+        <object class="wxMenuItem" name="policy_alert_3">
+            <label>Test alert N_3</label>
+        </object>
+    </object>
+    <object_ref name="window_menu" ref="window_menu_ref"/>
+    <object_ref name="wxID_HELP" ref="help_menu_ref"/>
+</object>
+
+<!-- rounding-edit menu -->
+
+<object class="wxIcon" name="rounding_view_icon">rounding_view.xpm</object>
+
+<object class="wxMenuBar" name="rounding_view_menu">
+<style>wxMB_DOCKABLE</style>
+    <object class="wxMenu" name="file_menu">
+        <label>_File</label>
+        <object class="wxMenuItem" name="wxID_NEW">
+            <label>_New</label>
+            <help>Create a new document</help>
+            <bitmap>new.xpm</bitmap>
+        </object>
+        <object class="wxMenuItem" name="wxID_OPEN">
+            <label>_Open...</label>
+            <bitmap>open.xpm</bitmap>
+            <help>Open an existing document</help>
+        </object>
+        <object class="wxMenuItem" name="wxID_CLOSE">
+            <label>_Close\tCtrl-X</label>
+            <bitmap>close.xpm</bitmap>
+            <help>Close this document</help>
+        </object>
+        <object class="separator"/>
+        <object class="wxMenuItem" name="wxID_SAVE">
+            <label>_Save</label>
+            <bitmap>save.xpm</bitmap>
+            <help>Save this document</help>
+        </object>
+        <object class="wxMenuItem" name="wxID_SAVEAS">
+            <label>Save _as...</label>
+            <bitmap>saveas.xpm</bitmap>
+            <help>Save this document under a new name</help>
+        </object>
+        <object class="separator"/>
+        <object class="wxMenuItem" name="edit_default_cell">
+            <label>_Default</label>
+            <bitmap>default_cell.xpm</bitmap>
+            <help>Edit default cell</help>
+        </object>
+        <object class="wxMenuItem" name="preferences">
+            <label>Pre_ferences\tCtrl-F</label>
+            <bitmap>preferences.xpm</bitmap>
+            <help>Manage preferences</help>
+        </object>
+        <object class="separator"/>
+        <object class="wxMenuItem" name="wxID_EXIT">
+            <label>E_xit</label>
+            <bitmap>exit.xpm</bitmap>
+            <help>Exit this program</help>
+        </object>
+    </object>
+    <object class="wxMenu" name="database_edit">
+        <label>_Rounding</label>
+        <object class="wxMenuItem" name="rounding_alert_1">
+            <label>Test alert N_1</label>
+        </object>
+        <object class="wxMenuItem" name="rounding_alert_2">
+            <label>Test alert N_2</label>
+        </object>
+        <object class="wxMenuItem" name="rounding_alert_3">
+            <label>Test alert N_3</label>
         </object>
     </object>
     <object_ref name="window_menu" ref="window_menu_ref"/>

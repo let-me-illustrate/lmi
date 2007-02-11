@@ -1,0 +1,565 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<resource xmlns="http://www.wxwindows.org/wxxrc" version="2.3.0.1">
+
+<!--
+    Let me illustrate...: wxWindows xml resources for policy editor.
+
+    Copyright (C) 2007 Gregory W. Chicares.
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License version 2 as
+    published by the Free Software Foundation.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software Foundation,
+    Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
+
+    http://savannah.nongnu.org/projects/lmi
+    email: <chicares@cox.net>
+    snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
+
+    $Id: policy_view.xrc,v 1.1.2.1 2007-02-11 21:52:42 etarassov Exp $
+-->
+
+<object class="wxPanel" name="policy_view_panel">
+    <object class="wxFlexGridSizer">
+        <cols>2</cols>
+        <growablerows>1</growablerows>
+
+        <object class="sizeritem">
+            <flag>wxALIGN_LEFT</flag>
+            <object class="wxStaticText">
+                <label>DatabaseFilename</label>
+            </object>
+        </object>
+        <object class="sizeritem">
+            <flag>wxALIGN_LEFT</flag>
+            <object class="wxTextCtrl" name="DatabaseFilename">
+                <size>-1,-1</size>
+            </object>
+        </object>
+
+
+        <object class="sizeritem">
+            <flag>wxALIGN_LEFT</flag>
+            <object class="wxStaticText">
+                <label>FundFilename</label>
+            </object>
+        </object>
+        <object class="sizeritem">
+            <flag>wxALIGN_LEFT</flag>
+            <object class="wxTextCtrl" name="FundFilename">
+                <size>-1,-1</size>
+            </object>
+        </object>
+
+
+        <object class="sizeritem">
+            <flag>wxALIGN_LEFT</flag>
+            <object class="wxStaticText">
+                <label>CorridorFilename</label>
+            </object>
+        </object>
+        <object class="sizeritem">
+            <flag>wxALIGN_LEFT</flag>
+            <object class="wxTextCtrl" name="CorridorFilename">
+                <size>-1,-1</size>
+            </object>
+        </object>
+
+
+        <object class="sizeritem">
+            <flag>wxALIGN_LEFT</flag>
+            <object class="wxStaticText">
+                <label>CurrCOIFilename</label>
+            </object>
+        </object>
+        <object class="sizeritem">
+            <flag>wxALIGN_LEFT</flag>
+            <object class="wxTextCtrl" name="CurrCOIFilename">
+                <size>-1,-1</size>
+            </object>
+        </object>
+
+
+        <object class="sizeritem">
+            <flag>wxALIGN_LEFT</flag>
+            <object class="wxStaticText">
+                <label>GuarCOIFilename</label>
+            </object>
+        </object>
+        <object class="sizeritem">
+            <flag>wxALIGN_LEFT</flag>
+            <object class="wxTextCtrl" name="GuarCOIFilename">
+                <size>-1,-1</size>
+            </object>
+        </object>
+
+
+        <object class="sizeritem">
+            <flag>wxALIGN_LEFT</flag>
+            <object class="wxStaticText">
+                <label>WPFilename</label>
+            </object>
+        </object>
+        <object class="sizeritem">
+            <flag>wxALIGN_LEFT</flag>
+            <object class="wxTextCtrl" name="WPFilename">
+                <size>-1,-1</size>
+            </object>
+        </object>
+
+
+        <object class="sizeritem">
+            <flag>wxALIGN_LEFT</flag>
+            <object class="wxStaticText">
+                <label>ADDFilename</label>
+            </object>
+        </object>
+        <object class="sizeritem">
+            <flag>wxALIGN_LEFT</flag>
+            <object class="wxTextCtrl" name="ADDFilename">
+                <size>-1,-1</size>
+            </object>
+        </object>
+
+
+        <object class="sizeritem">
+            <flag>wxALIGN_LEFT</flag>
+            <object class="wxStaticText">
+                <label>ChildRiderFilename</label>
+            </object>
+        </object>
+        <object class="sizeritem">
+            <flag>wxALIGN_LEFT</flag>
+            <object class="wxTextCtrl" name="ChildRiderFilename">
+                <size>-1,-1</size>
+            </object>
+        </object>
+
+
+        <object class="sizeritem">
+            <flag>wxALIGN_LEFT</flag>
+            <object class="wxStaticText">
+                <label>CurrSpouseRiderFilename</label>
+            </object>
+        </object>
+        <object class="sizeritem">
+            <flag>wxALIGN_LEFT</flag>
+            <object class="wxTextCtrl" name="CurrSpouseRiderFilename">
+                <size>-1,-1</size>
+            </object>
+        </object>
+
+
+        <object class="sizeritem">
+            <flag>wxALIGN_LEFT</flag>
+            <object class="wxStaticText">
+                <label>GuarSpouseRiderFilename</label>
+            </object>
+        </object>
+        <object class="sizeritem">
+            <flag>wxALIGN_LEFT</flag>
+            <object class="wxTextCtrl" name="GuarSpouseRiderFilename">
+                <size>-1,-1</size>
+            </object>
+        </object>
+
+
+        <object class="sizeritem">
+            <flag>wxALIGN_LEFT</flag>
+            <object class="wxStaticText">
+                <label>CurrTermFilename</label>
+            </object>
+        </object>
+        <object class="sizeritem">
+            <flag>wxALIGN_LEFT</flag>
+            <object class="wxTextCtrl" name="CurrTermFilename">
+                <size>-1,-1</size>
+            </object>
+        </object>
+
+
+        <object class="sizeritem">
+            <flag>wxALIGN_LEFT</flag>
+            <object class="wxStaticText">
+                <label>GuarTermFilename</label>
+            </object>
+        </object>
+        <object class="sizeritem">
+            <flag>wxALIGN_LEFT</flag>
+            <object class="wxTextCtrl" name="GuarTermFilename">
+                <size>-1,-1</size>
+            </object>
+        </object>
+
+
+        <object class="sizeritem">
+            <flag>wxALIGN_LEFT</flag>
+            <object class="wxStaticText">
+                <label>TableYFilename</label>
+            </object>
+        </object>
+        <object class="sizeritem">
+            <flag>wxALIGN_LEFT</flag>
+            <object class="wxTextCtrl" name="TableYFilename">
+                <size>-1,-1</size>
+            </object>
+        </object>
+
+
+        <object class="sizeritem">
+            <flag>wxALIGN_LEFT</flag>
+            <object class="wxStaticText">
+                <label>PremTaxFilename</label>
+            </object>
+        </object>
+        <object class="sizeritem">
+            <flag>wxALIGN_LEFT</flag>
+            <object class="wxTextCtrl" name="PremTaxFilename">
+                <size>-1,-1</size>
+            </object>
+        </object>
+
+
+        <object class="sizeritem">
+            <flag>wxALIGN_LEFT</flag>
+            <object class="wxStaticText">
+                <label>TAMRA7PayFilename</label>
+            </object>
+        </object>
+        <object class="sizeritem">
+            <flag>wxALIGN_LEFT</flag>
+            <object class="wxTextCtrl" name="TAMRA7PayFilename">
+                <size>-1,-1</size>
+            </object>
+        </object>
+
+
+        <object class="sizeritem">
+            <flag>wxALIGN_LEFT</flag>
+            <object class="wxStaticText">
+                <label>TgtPremFilename</label>
+            </object>
+        </object>
+        <object class="sizeritem">
+            <flag>wxALIGN_LEFT</flag>
+            <object class="wxTextCtrl" name="TgtPremFilename">
+                <size>-1,-1</size>
+            </object>
+        </object>
+
+
+        <object class="sizeritem">
+            <flag>wxALIGN_LEFT</flag>
+            <object class="wxStaticText">
+                <label>IRC7702Filename</label>
+            </object>
+        </object>
+        <object class="sizeritem">
+            <flag>wxALIGN_LEFT</flag>
+            <object class="wxTextCtrl" name="IRC7702Filename">
+                <size>-1,-1</size>
+            </object>
+        </object>
+
+
+        <object class="sizeritem">
+            <flag>wxALIGN_LEFT</flag>
+            <object class="wxStaticText">
+                <label>Gam83Filename</label>
+            </object>
+        </object>
+        <object class="sizeritem">
+            <flag>wxALIGN_LEFT</flag>
+            <object class="wxTextCtrl" name="Gam83Filename">
+                <size>-1,-1</size>
+            </object>
+        </object>
+
+
+        <object class="sizeritem">
+            <flag>wxALIGN_LEFT</flag>
+            <object class="wxStaticText">
+                <label>RoundingFilename</label>
+            </object>
+        </object>
+        <object class="sizeritem">
+            <flag>wxALIGN_LEFT</flag>
+            <object class="wxTextCtrl" name="RoundingFilename">
+                <size>-1,-1</size>
+            </object>
+        </object>
+
+
+        <object class="sizeritem">
+            <flag>wxALIGN_LEFT</flag>
+            <object class="wxStaticText">
+                <label>TierFilename</label>
+            </object>
+        </object>
+        <object class="sizeritem">
+            <flag>wxALIGN_LEFT</flag>
+            <object class="wxTextCtrl" name="TierFilename">
+                <size>-1,-1</size>
+            </object>
+        </object>
+
+
+        <object class="sizeritem">
+            <flag>wxALIGN_LEFT</flag>
+            <object class="wxStaticText">
+                <label>PolicyForm</label>
+            </object>
+        </object>
+        <object class="sizeritem">
+            <flag>wxALIGN_LEFT</flag>
+            <object class="wxTextCtrl" name="PolicyForm">
+                <size>-1,-1</size>
+            </object>
+        </object>
+
+
+        <object class="sizeritem">
+            <flag>wxALIGN_LEFT</flag>
+            <object class="wxStaticText">
+                <label>PolicyMktgName</label>
+            </object>
+        </object>
+        <object class="sizeritem">
+            <flag>wxALIGN_LEFT</flag>
+            <object class="wxTextCtrl" name="PolicyMktgName">
+                <size>-1,-1</size>
+            </object>
+        </object>
+
+
+        <object class="sizeritem">
+            <flag>wxALIGN_LEFT</flag>
+            <object class="wxStaticText">
+                <label>PolicyLegalName</label>
+            </object>
+        </object>
+        <object class="sizeritem">
+            <flag>wxALIGN_LEFT</flag>
+            <object class="wxTextCtrl" name="PolicyLegalName">
+                <size>-1,-1</size>
+            </object>
+        </object>
+
+
+        <object class="sizeritem">
+            <flag>wxALIGN_LEFT</flag>
+            <object class="wxStaticText">
+                <label>InsCoShortName</label>
+            </object>
+        </object>
+        <object class="sizeritem">
+            <flag>wxALIGN_LEFT</flag>
+            <object class="wxTextCtrl" name="InsCoShortName">
+                <size>-1,-1</size>
+            </object>
+        </object>
+
+
+        <object class="sizeritem">
+            <flag>wxALIGN_LEFT</flag>
+            <object class="wxStaticText">
+                <label>InsCoName</label>
+            </object>
+        </object>
+        <object class="sizeritem">
+            <flag>wxALIGN_LEFT</flag>
+            <object class="wxTextCtrl" name="InsCoName">
+                <size>-1,-1</size>
+            </object>
+        </object>
+
+
+        <object class="sizeritem">
+            <flag>wxALIGN_LEFT</flag>
+            <object class="wxStaticText">
+                <label>InsCoAddr</label>
+            </object>
+        </object>
+        <object class="sizeritem">
+            <flag>wxALIGN_LEFT</flag>
+            <object class="wxTextCtrl" name="InsCoAddr">
+                <size>-1,-1</size>
+            </object>
+        </object>
+
+
+        <object class="sizeritem">
+            <flag>wxALIGN_LEFT</flag>
+            <object class="wxStaticText">
+                <label>InsCoStreet</label>
+            </object>
+        </object>
+        <object class="sizeritem">
+            <flag>wxALIGN_LEFT</flag>
+            <object class="wxTextCtrl" name="InsCoStreet">
+                <size>-1,-1</size>
+            </object>
+        </object>
+
+
+        <object class="sizeritem">
+            <flag>wxALIGN_LEFT</flag>
+            <object class="wxStaticText">
+                <label>InsCoPhone</label>
+            </object>
+        </object>
+        <object class="sizeritem">
+            <flag>wxALIGN_LEFT</flag>
+            <object class="wxTextCtrl" name="InsCoPhone">
+                <size>-1,-1</size>
+            </object>
+        </object>
+
+
+        <object class="sizeritem">
+            <flag>wxALIGN_LEFT</flag>
+            <object class="wxStaticText">
+                <label>InsCoDomicile</label>
+            </object>
+        </object>
+        <object class="sizeritem">
+            <flag>wxALIGN_LEFT</flag>
+            <object class="wxTextCtrl" name="InsCoDomicile">
+                <size>-1,-1</size>
+            </object>
+        </object>
+
+
+        <object class="sizeritem">
+            <flag>wxALIGN_LEFT</flag>
+            <object class="wxStaticText">
+                <label>MainUnderwriter</label>
+            </object>
+        </object>
+        <object class="sizeritem">
+            <flag>wxALIGN_LEFT</flag>
+            <object class="wxTextCtrl" name="MainUnderwriter">
+                <size>-1,-1</size>
+            </object>
+        </object>
+
+
+        <object class="sizeritem">
+            <flag>wxALIGN_LEFT</flag>
+            <object class="wxStaticText">
+                <label>MainUnderwriterAddress</label>
+            </object>
+        </object>
+        <object class="sizeritem">
+            <flag>wxALIGN_LEFT</flag>
+            <object class="wxTextCtrl" name="MainUnderwriterAddress">
+                <size>-1,-1</size>
+            </object>
+        </object>
+
+
+        <object class="sizeritem">
+            <flag>wxALIGN_LEFT</flag>
+            <object class="wxStaticText">
+                <label>CoUnderwriter</label>
+            </object>
+        </object>
+        <object class="sizeritem">
+            <flag>wxALIGN_LEFT</flag>
+            <object class="wxTextCtrl" name="CoUnderwriter">
+                <size>-1,-1</size>
+            </object>
+        </object>
+
+
+        <object class="sizeritem">
+            <flag>wxALIGN_LEFT</flag>
+            <object class="wxStaticText">
+                <label>CoUnderwriterAddress</label>
+            </object>
+        </object>
+        <object class="sizeritem">
+            <flag>wxALIGN_LEFT</flag>
+            <object class="wxTextCtrl" name="CoUnderwriterAddress">
+                <size>-1,-1</size>
+            </object>
+        </object>
+
+        <object class="sizeritem">
+            <flag>wxALIGN_LEFT</flag>
+            <object class="wxStaticText">
+                <label>AvName</label>
+            </object>
+        </object>
+        <object class="sizeritem">
+            <flag>wxALIGN_LEFT</flag>
+            <object class="wxTextCtrl" name="AvName">
+                <size>-1,-1</size>
+            </object>
+        </object>
+
+        <object class="sizeritem">
+            <flag>wxALIGN_LEFT</flag>
+            <object class="wxStaticText">
+                <label>CsvName</label>
+            </object>
+        </object>
+        <object class="sizeritem">
+            <flag>wxALIGN_LEFT</flag>
+            <object class="wxTextCtrl" name="CsvName">
+                <size>-1,-1</size>
+            </object>
+        </object>
+
+        <object class="sizeritem">
+            <flag>wxALIGN_LEFT</flag>
+            <object class="wxStaticText">
+                <label>CsvHeaderName</label>
+            </object>
+        </object>
+        <object class="sizeritem">
+            <flag>wxALIGN_LEFT</flag>
+            <object class="wxTextCtrl" name="CsvHeaderName">
+                <size>-1,-1</size>
+            </object>
+        </object>
+
+        <object class="sizeritem">
+            <flag>wxALIGN_LEFT</flag>
+            <object class="wxStaticText">
+                <label>NoLapseProvisionName</label>
+            </object>
+        </object>
+        <object class="sizeritem">
+            <flag>wxALIGN_LEFT</flag>
+            <object class="wxTextCtrl" name="NoLapseProvisionName">
+                <size>-1,-1</size>
+            </object>
+        </object>
+
+        <object class="sizeritem">
+            <flag>wxALIGN_LEFT</flag>
+            <object class="wxStaticText">
+                <label>InterestDisclaimer</label>
+            </object>
+        </object>
+        <object class="sizeritem">
+            <flag>wxALIGN_LEFT</flag>
+            <object class="wxTextCtrl" name="InterestDisclaimer">
+                <size>-1,-1</size>
+            </object>
+        </object>
+
+    </object>
+</object>
+
+</resource>
+

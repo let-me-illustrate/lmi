@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.564.2.2 2007-02-11 21:40:12 etarassov Exp $
+// $Id: ChangeLog,v 1.564.2.3 2007-02-11 21:52:42 etarassov Exp $
 
 MAINTENANCE
 
@@ -9959,3 +9959,46 @@ Fix macro definition.
 
   ihs_proddata.hpp
 Change friend class name to PolicyDocument.
+
+20070211T2150Z <etarassov@tt-solutions.com> [1247]
+
+  database_document.cpp
+  database_document.hpp
+  database_view.cpp
+  database_view.hpp
+  database_view.xpm
+  database_view_editor.cpp
+  database_view_editor.hpp
+  main_wx.cpp
+  Makefile.am
+  menus.xrc
+  multidimgrid_any.cpp
+  multidimgrid_any.hpp
+  multidimgrid_safe.hpp
+  multidimgrid_safe.tpp
+  multidimgrid_tools.cpp
+  multidimgrid_tools.hpp
+  policy_document.cpp
+  policy_document.hpp
+  policy_view.cpp
+  policy_view.hpp
+  policy_view.xpm
+  policy_view.xrc
+  product_editor.cpp
+  product_editor.hpp
+  rounding_document.cpp
+  rounding_document.hpp
+  rounding_view.cpp
+  rounding_view.hpp
+  rounding_view.xpm
+  rounding_view.xrc
+  rounding_view_editor.cpp
+  rounding_view_editor.hpp
+  tier_document.cpp
+  tier_document.hpp
+  tier_view.cpp
+  tier_view.hpp
+  tier_view.xpm
+  tier_view_editor.cpp
+  tier_view_editor.hpp
+Product editor. Initial commit.

@@ -20,7 +20,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: Makefile.am,v 1.26 2007-01-27 00:00:51 wboutin Exp $
+# $Id: Makefile.am,v 1.26.2.1 2007-02-11 21:52:42 etarassov Exp $
 
 
 SUBDIRS = third_party
@@ -175,6 +175,9 @@ lmi_wx_SOURCES = \
     ce_product_name.cpp \
     census_document.cpp \
     census_view.cpp \
+    database_document.cpp \
+    database_view.cpp \
+    database_view_editor.cpp \
     datum_base.cpp \
     datum_boolean.cpp \
     datum_string.cpp \
@@ -192,13 +195,25 @@ lmi_wx_SOURCES = \
     mc_enum.cpp \
     mc_enum_types.cpp \
     msw_workarounds.cpp \
+    multidimgrid_any.cpp \
+    multidimgrid_tools.cpp \
     mvc_controller.cpp \
     mvc_view.cpp \
+    policy_document.cpp \
+    policy_view.cpp \
+    preferences_view.cpp \
     previewframe_ex.cpp \
+    product_editor.cpp \
     progress_meter_wx.cpp \
+    rounding_document.cpp \
+    rounding_view.cpp \
+    rounding_view_editor.cpp \
     single_choice_popup_menu.cpp \
     text_doc.cpp \
     text_view.cpp \
+    tier_document.cpp \
+    tier_view.cpp \
+    tier_view_editor.cpp \
     tn_range_types.cpp \
     transferor.cpp \
     view_ex.cpp \
@@ -277,10 +292,12 @@ liblmi_common_sources = \
     interest_rates.cpp \
     ledger.cpp \
     ledger_base.cpp \
+    ledger_formatter.cpp \
     ledger_invariant.cpp \
     ledger_text_formats.cpp \
     ledger_variant.cpp \
     ledger_xml_io.cpp \
+    ledger_xml_io2.cpp \
     ledger_xsl.cpp \
     ledgervalues.cpp \
     license.cpp \
@@ -290,6 +307,7 @@ liblmi_common_sources = \
     name_value_pairs.cpp \
     outlay.cpp \
     path_utility.cpp \
+    preferences_model.cpp \
     product_names.cpp \
     progress_meter.cpp \
     rounding_rules.cpp \
@@ -301,6 +319,7 @@ liblmi_common_sources = \
     timer.cpp \
     xenumtypes.cpp \
     xml_lmi.cpp \
+    xslt_lmi.cpp \
     xrange.cpp
 
 libmain_auxiliary_common_la_SOURCES = \
@@ -333,6 +352,7 @@ libantediluvian_la_LIBADD = \
 
 
 liblmi_la_SOURCES = \
+    authenticity.cpp \
     ihs_acctval.cpp \
     ihs_avdebug.cpp \
     ihs_avmly.cpp \
@@ -354,8 +374,6 @@ liblmi_la_SOURCES = \
     ihs_rnddata.cpp \
     md5.cpp \
     mvc_model.cpp \
-    secure_date.cpp \
-    security.cpp \
     stratified_algorithms.cpp \
     stratified_charges.cpp \
     $(liblmi_common_sources)
@@ -837,6 +855,9 @@ noinst_HEADERS = \
     custom_io_0.hpp \
     data_directory.hpp \
     database.hpp \
+    database_document.hpp \
+    database_view.hpp \
+    database_view_editor.hpp \
     datum_base.hpp \
     datum_boolean.hpp \
     datum_string.hpp \
@@ -905,6 +926,9 @@ noinst_HEADERS = \
     mc_enum_type_enums.hpp \
     mc_enum_types.hpp \
     msw_workarounds.hpp \
+    multidimgrid_any.hpp \
+    multidimgrid_safe.hpp \
+    multidimgrid_tools.hpp \
     mvc_controller.hpp \
     mvc_view.hpp \
     md5.hpp \
@@ -921,6 +945,7 @@ noinst_HEADERS = \
     pchfile.hpp \
     platform_dependent.hpp \
     previewframe_ex.hpp \
+    product_editor.hpp \
     product_names.hpp \
     progress_meter.hpp \
     quiet_nan.hpp \
@@ -941,6 +966,9 @@ noinst_HEADERS = \
     text_doc.hpp \
     text_view.hpp \
     timer.hpp \
+    tier_document.hpp \
+    tier_view.hpp \
+    tier_view_editor.hpp \
     tn_range.hpp \
     tn_range_fwd.hpp \
     tn_range_test_aux.hpp \
