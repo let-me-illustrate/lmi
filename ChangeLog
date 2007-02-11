@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.564.2.1 2007-02-11 21:38:06 etarassov Exp $
+// $Id: ChangeLog,v 1.564.2.2 2007-02-11 21:40:12 etarassov Exp $
 
 MAINTENANCE
 
@@ -9954,3 +9954,8 @@ Create new branch product-editor_branch.
 
   stratified_charges.xpp
 Fix macro definition.
+
+20070211T2139Z <etarassov@tt-solutions.com> [1244]
+
+  ihs_proddata.hpp
+Change friend class name to PolicyDocument.

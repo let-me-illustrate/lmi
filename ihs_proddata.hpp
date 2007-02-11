@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_proddata.hpp,v 1.6 2007-01-27 00:00:51 wboutin Exp $
+// $Id: ihs_proddata.hpp,v 1.6.2.1 2007-02-11 21:39:55 etarassov Exp $
 
 #ifndef proddata_hpp
 #define proddata_hpp
@@ -34,7 +34,7 @@
 
 class LMI_SO TProductData
 {
-    friend class PolicyDoc;
+    friend class PolicyDocument;
     friend class PolicyView;
 
   public:
