@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.564 2007-01-28 01:03:23 chicares Exp $
+// $Id: ChangeLog,v 1.564.2.1 2007-02-11 21:38:06 etarassov Exp $
 
 MAINTENANCE
 
@@ -9946,3 +9946,11 @@ Specify and use ASCII sort order for 'ChangeLog' entries.
   GNUmakefile
 Undo an artifact of copyright-notice updating.
 
+20070211T2006Z <etarassov@tt-solutions.com> [1244]
+
+Create new branch product-editor_branch.
+
+20070211T2137Z <etarassov@tt-solutions.com> [1244]
+
+  stratified_charges.xpp
+Fix macro definition.
