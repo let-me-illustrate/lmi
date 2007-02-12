@@ -1,6 +1,6 @@
 // ChangeLog for tools/*. See 'MAINTENANCE' after license.
 //
-// Copyright (C) 2005, 2006 Gregory W. Chicares.
+// Copyright (C) 2005, 2006, 2007 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -67,3 +67,7 @@ Establish tools/* directories.
 
 Add two patches to use with 'build_gnome_xml_libraries.make'.
 
+20070212T1705Z <wboutin@massmutual.com> [1]
+
+  mingw_install.make
+Update copyright notice.
