@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: objects.make,v 1.96 2007-01-22 23:17:30 wboutin Exp $
+# $Id: objects.make,v 1.96.2.1 2007-02-12 16:12:46 etarassov Exp $
 
 ################################################################################
 
@@ -287,6 +287,9 @@ lmi_wx_objects := \
   alert_wx.o \
   census_document.o \
   census_view.o \
+  database_document.o \
+  database_view.o \
+  database_view_editor.o \
   default_view.o \
   docmanager_ex.o \
   docmdichildframe_ex.o \
@@ -296,14 +299,25 @@ lmi_wx_objects := \
   main_common.o \
   main_wx.o \
   msw_workarounds.o \
+  multidimgrid_any.o \
+  multidimgrid_tools.o \
   mvc_controller.o \
   mvc_view.o \
+  policy_document.o \
+  policy_view.o \
+  policy_view_editor.o \
   preferences_view.o \
   previewframe_ex.o \
   progress_meter_wx.o \
+  rounding_document.o \
+  rounding_view.o \
+  rounding_view_editor.o \
   single_choice_popup_menu.o \
   text_doc.o \
   text_view.o \
+  tier_document.o \
+  tier_view.o \
+  tier_view_editor.o \
   transferor.o \
   view_ex.o \
   wx_checks.o \
