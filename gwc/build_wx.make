@@ -1,6 +1,6 @@
 # Build wx, in MSYS, using MinGW gcc, with options suitable for lmi.
 #
-# Copyright (C) 2006 Gregory W. Chicares.
+# Copyright (C) 2006, 2007 Gregory W. Chicares.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: build_wx.make,v 1.6 2006-12-07 16:31:26 chicares Exp $
+# $Id: build_wx.make,v 1.7 2007-02-12 17:04:27 wboutin Exp $
 
 # This makefile is designed to be run in MSYS: the native zsh port
 # we customarily use can't handle 'configure'. Care is taken to

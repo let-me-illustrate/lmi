@@ -1,7 +1,7 @@
 # Master automake makefile, run automake from the top directory
 # to generate Makefile from it (this # is also done by autogen.sh script)
 #
-# Copyright (C) 2005 Vadim Zeitlin.
+# Copyright (C) 2005, 2006, 2007 Vadim Zeitlin.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 2 as
@@ -20,7 +20,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: Makefile.am,v 1.1 2005-12-29 20:17:49 zeitlin Exp $
+# $Id: Makefile.am,v 1.2 2007-02-12 17:04:48 wboutin Exp $
 
 
 # Packages correspond to external libraries which we want to build inplace
