@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.564.2.3 2007-02-11 21:52:42 etarassov Exp $
+// $Id: ChangeLog,v 1.564.2.4 2007-02-12 07:47:46 etarassov Exp $
 
 MAINTENANCE
 
@@ -10002,3 +10002,8 @@ Change friend class name to PolicyDocument.
   tier_view_editor.cpp
   tier_view_editor.hpp
 Product editor. Initial commit.
+
+20070212T0747Z <etarassov@tt-solutions.com> [1247]
+
+  configure.ac
+Add 2.8 to wx versions list.

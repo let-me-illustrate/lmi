@@ -21,7 +21,7 @@ dnl snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
 dnl === Prologue ===
 
-AC_REVISION($Id: configure.ac,v 1.25 2007-01-27 00:00:51 wboutin Exp $)dnl
+AC_REVISION($Id: configure.ac,v 1.25.2.1 2007-02-12 07:47:46 etarassov Exp $)dnl
 
 AC_PREREQ(2.56)
 AC_INIT(LMI, 1.0.0, [chicares@cox.net])
@@ -77,7 +77,7 @@ AC_ARG_WITH(wx,
             lmi_wx_dir=$withval)
 AC_ARG_WITH(wx-version,
             [AC_HELP_STRING([--with-wx-ver=version],
-                            [wxWidgets version to search for (default 2.6, 2.7)])],
+                            [wxWidgets version to search for (default 2.6, 2.7, 2.8)])],
             lmi_wx_version=$withval)
 AC_ARG_WITH(wx-headers,
             [AC_HELP_STRING([--with-wx-headers=dir],
@@ -342,7 +342,7 @@ if test "x$wx" != "xyes"; then
 if test "x$lmi_wx_version" != "x"; then
     lmi_wx_version_guess="$lmi_wx_version"
 else
-    lmi_wx_version_guess="2.7 2.6 2.5"
+    lmi_wx_version_guess="2.8 2.7 2.6 2.5"
 fi
 
 lmi_wx_basename="msw-ansi"
