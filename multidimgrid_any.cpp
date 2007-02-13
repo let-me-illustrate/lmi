@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: multidimgrid_any.cpp,v 1.1.2.1 2007-02-11 21:52:42 etarassov Exp $
+// $Id: multidimgrid_any.cpp,v 1.1.2.2 2007-02-13 02:18:04 zeitlin Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -155,9 +155,13 @@ MultiDimGridGrid::~MultiDimGridGrid()
 
 wxSize MultiDimGridGrid::DoGetBestSize() const
 {
+    // unfortunately GetCol/RowLabelSize() and GetColumnWidth()/GetRowHeight()
+    // are not const in wx up to 2.8 so we need the const_cast here
+    MultiDimGridGrid * const self = const_cast<MultiDimGridGrid *>(this);
+
     // 100 is the default minimal size of a widget - taken from wx headers.
-    int width  = std::max(GetRowLabelSize() + GetColumnWidth(0), 100);
-    int height = std::max(GetColLabelSize() + GetRowHeight(0), 100);
+    int width  = std::max(self->GetRowLabelSize() + self->GetColumnWidth(0), 100);
+    int height = std::max(self->GetColLabelSize() + self->GetRowHeight(0), 100);
 
     // The following is from the wx header file for wxScrollWindow:
     // Round up to a multiple the scroll rate NOTE: this still doesn't get rid
