@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: objects.make,v 1.96.2.1 2007-02-12 16:12:46 etarassov Exp $
+# $Id: objects.make,v 1.96.2.2 2007-02-13 20:55:03 etarassov Exp $
 
 ################################################################################
 
@@ -305,9 +305,9 @@ lmi_wx_objects := \
   mvc_view.o \
   policy_document.o \
   policy_view.o \
-  policy_view_editor.o \
   preferences_view.o \
   previewframe_ex.o \
+  product_editor.o \
   progress_meter_wx.o \
   rounding_document.o \
   rounding_view.o \

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.564.2.5 2007-02-12 16:12:46 etarassov Exp $
+// $Id: ChangeLog,v 1.564.2.6 2007-02-13 20:55:03 etarassov Exp $
 
 MAINTENANCE
 
@@ -10012,3 +10012,8 @@ Add 2.8 to wx versions list.
 
   objects.make
 Add product editor files to makefiles. 
+
+20070213T2054Z <etarassov@tt-solutions.com> [1247]
+
+  objects.make
+Add missing file and remove inexistent one. 
