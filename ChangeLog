@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.564.2.8 2007-02-15 14:36:41 etarassov Exp $
+// $Id: ChangeLog,v 1.564.2.9 2007-02-15 14:38:35 etarassov Exp $
 
 MAINTENANCE
 
@@ -10029,3 +10029,8 @@ Use DBDictionary::InvalidateCache to clear a static class member.
 
   Changelog
 Remove blanks at end of line.
+
+20070215T1438Z <etarassov@tt-solutions.com> [1247]
+
+  rounding_view_editor.cpp
+Fix RoundingButtons::IsModified.

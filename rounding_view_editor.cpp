@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: rounding_view_editor.cpp,v 1.1.2.1 2007-02-11 21:52:42 etarassov Exp $
+// $Id: rounding_view_editor.cpp,v 1.1.2.2 2007-02-15 14:38:35 etarassov Exp $
 
 #include "rounding_view_editor.hpp"
 
@@ -152,7 +152,7 @@ RoundingButtons::~RoundingButtons()
 
 bool RoundingButtons::IsModified() const
 {
-    return GetValue() == original_rule_;
+    return !(GetValue() == original_rule_);
 }
 
 void RoundingButtons::Modify(bool modified)
