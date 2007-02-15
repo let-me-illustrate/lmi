@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.564.2.7 2007-02-15 14:27:59 etarassov Exp $
+// $Id: ChangeLog,v 1.564.2.8 2007-02-15 14:36:41 etarassov Exp $
 
 MAINTENANCE
 
@@ -10011,16 +10011,21 @@ Add 2.8 to wx versions list.
 20070212T1612Z <etarassov@tt-solutions.com> [1247]
 
   objects.make
-Add product editor files to makefiles. 
+Add product editor files to makefiles.
 
 20070213T2054Z <etarassov@tt-solutions.com> [1247]
 
   objects.make
-Add missing file and remove inexistent one. 
+Add missing file and remove inexistent one.
 
 20070215T1427Z <etarassov@tt-solutions.com> [1247]
 
   database_document.cpp
   ihs_dbdict.cpp
   ihs_dbdict.hpp
-Use DBDictionary::InvalidateCache to clear a static class member. 
+Use DBDictionary::InvalidateCache to clear a static class member.
+
+20070215T1436Z <etarassov@tt-solutions.com> [1247]
+
+  Changelog
+Remove blanks at end of line.
