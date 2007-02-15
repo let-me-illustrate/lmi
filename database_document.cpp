@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: database_document.cpp,v 1.1.2.1 2007-02-11 21:52:42 etarassov Exp $
+// $Id: database_document.cpp,v 1.1.2.2 2007-02-15 14:27:59 etarassov Exp $
 
 #include "database_document.hpp"
 
@@ -108,9 +108,8 @@ void DatabaseDocument::ReadDocument(wxString const& filename)
     dict_.swap(instance.GetDictionary());
     dict_map_swap_guard guard(dict_, instance.GetDictionary());
 
-    std::string const old_cached_filename = DBDictionary::CachedFilename;
+    DBDictionary::InvalidateCache();
     instance.Init(filename);
-    DBDictionary::CachedFilename = old_cached_filename;
 }
 
 void DatabaseDocument::WriteDocument(wxString const& filename)

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.564.2.6 2007-02-13 20:55:03 etarassov Exp $
+// $Id: ChangeLog,v 1.564.2.7 2007-02-15 14:27:59 etarassov Exp $
 
 MAINTENANCE
 
@@ -10017,3 +10017,10 @@ Add product editor files to makefiles.
 
   objects.make
 Add missing file and remove inexistent one. 
+
+20070215T1427Z <etarassov@tt-solutions.com> [1247]
+
+  database_document.cpp
+  ihs_dbdict.cpp
+  ihs_dbdict.hpp
+Use DBDictionary::InvalidateCache to clear a static class member. 
