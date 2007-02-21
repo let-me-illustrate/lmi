@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_wx.cpp,v 1.66 2007-02-21 10:25:03 chicares Exp $
+// $Id: main_wx.cpp,v 1.67 2007-02-21 10:37:18 chicares Exp $
 
 // Portions of this file are derived from wxWindows files
 //   samples/docvwmdi/docview.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -305,6 +305,16 @@ void Skeleton::InitDocManager()
         ,CLASSINFO(IllustrationDocument)
         ,CLASSINFO(IllustrationView)
         );
+
+    // When the new product editor is released, change this to
+//    if(!global_settings::instance().mellon())
+    // and delete this comment. Thus, for now, only developers can see
+    // the new features, but eventually privileged users will be able
+    // to use them.
+    if(!global_settings::instance().ash_nazg())
+        {
+        return;
+        }
 
     new(wx) wxDocTemplate
         (doc_manager_
