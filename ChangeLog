@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.565 2007-02-21 03:07:24 chicares Exp $
+// $Id: ChangeLog,v 1.566 2007-02-21 10:25:03 chicares Exp $
 
 MAINTENANCE
 
@@ -9995,4 +9995,10 @@ Undo an artifact of copyright-notice updating.
   tier_view_editor.cpp     [new file]
   tier_view_editor.hpp     [new file]
 Merge 'product-editor_branch'.
+
+ <chicares@cox.net> [1247]
+
+  main_wx.cpp
+Spell out 'Document' uniformly instead of abbreviating it sometimes,
+and regularize spacing between wxDocTemplate definitions.
 
