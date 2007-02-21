@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_wx.cpp,v 1.65 2007-02-21 03:07:24 chicares Exp $
+// $Id: main_wx.cpp,v 1.66 2007-02-21 10:25:03 chicares Exp $
 
 // Portions of this file are derived from wxWindows files
 //   samples/docvwmdi/docview.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -288,7 +288,7 @@ void Skeleton::InitDocManager()
         ,"*.cns"
         ,""
         ,"cns"
-        ,"Census Doc"
+        ,"Census Document"
         ,"Census View"
         ,CLASSINFO(CensusDocument)
         ,CLASSINFO(CensusView)
@@ -300,7 +300,7 @@ void Skeleton::InitDocManager()
         ,"*.ill"
         ,""
         ,"ill"
-        ,"Illustration Doc"
+        ,"Illustration Document"
         ,"Illustration View"
         ,CLASSINFO(IllustrationDocument)
         ,CLASSINFO(IllustrationView)
@@ -312,7 +312,7 @@ void Skeleton::InitDocManager()
         ,"*.tir"
         ,""
         ,"tir"
-        ,"Tier Doc"
+        ,"Tier Document"
         ,"Tier View"
         ,CLASSINFO(TierDocument)
         ,CLASSINFO(TierView)
@@ -324,7 +324,7 @@ void Skeleton::InitDocManager()
         ,"*.db4"
         ,""
         ,"db4"
-        ,"Database Doc"
+        ,"Database Document"
         ,"Database View"
         ,CLASSINFO(DatabaseDocument)
         ,CLASSINFO(DatabaseView)
@@ -341,6 +341,7 @@ void Skeleton::InitDocManager()
         ,CLASSINFO(PolicyDocument)
         ,CLASSINFO(PolicyView)
         );
+
     new(wx) wxDocTemplate
         (doc_manager_
         ,"Rounding"
@@ -353,7 +354,6 @@ void Skeleton::InitDocManager()
         ,CLASSINFO(RoundingView)
         );
 
-
     if(!global_settings::instance().ash_nazg())
         {
         return;
@@ -365,7 +365,7 @@ void Skeleton::InitDocManager()
         ,"*.txt"
         ,""
         ,"txt"
-        ,"Text Doc"
+        ,"Text Document"
         ,"Text View"
         ,CLASSINFO(TextEditDocument)
         ,CLASSINFO(TextEditView)
