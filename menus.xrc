@@ -24,7 +24,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: menus.xrc,v 1.18 2007-02-21 12:43:17 chicares Exp $
+    $Id: menus.xrc,v 1.19 2007-02-21 12:48:21 chicares Exp $
 -->
 
 <!-- reusable menus -->
@@ -480,74 +480,6 @@ Not supported yet: need to split columns into multiple pages.
     <object_ref name="wxID_HELP" ref="help_menu_ref"/>
 </object>
 
-<!-- tier-edit menu -->
-
-<object class="wxIcon" name="tier_view_icon">tier_view.xpm</object>
-
-<object class="wxMenuBar" name="tier_view_menu">
-<style>wxMB_DOCKABLE</style>
-    <object class="wxMenu" name="file_menu">
-        <label>_File</label>
-        <object class="wxMenuItem" name="wxID_NEW">
-            <label>_New</label>
-            <help>Create a new document</help>
-            <bitmap>new.xpm</bitmap>
-        </object>
-        <object class="wxMenuItem" name="wxID_OPEN">
-            <label>_Open...</label>
-            <bitmap>open.xpm</bitmap>
-            <help>Open an existing document</help>
-        </object>
-        <object class="wxMenuItem" name="wxID_CLOSE">
-            <label>_Close\tCtrl-X</label>
-            <bitmap>close.xpm</bitmap>
-            <help>Close this document</help>
-        </object>
-        <object class="separator"/>
-        <object class="wxMenuItem" name="wxID_SAVE">
-            <label>_Save</label>
-            <bitmap>save.xpm</bitmap>
-            <help>Save this document</help>
-        </object>
-        <object class="wxMenuItem" name="wxID_SAVEAS">
-            <label>Save _as...</label>
-            <bitmap>saveas.xpm</bitmap>
-            <help>Save this document under a new name</help>
-        </object>
-        <object class="separator"/>
-        <object class="wxMenuItem" name="edit_default_cell">
-            <label>_Default</label>
-            <bitmap>default_cell.xpm</bitmap>
-            <help>Edit default cell</help>
-        </object>
-        <object class="wxMenuItem" name="preferences">
-            <label>Pre_ferences\tCtrl-F</label>
-            <bitmap>preferences.xpm</bitmap>
-            <help>Manage preferences</help>
-        </object>
-        <object class="separator"/>
-        <object class="wxMenuItem" name="wxID_EXIT">
-            <label>E_xit</label>
-            <bitmap>exit.xpm</bitmap>
-            <help>Exit this program</help>
-        </object>
-    </object>
-    <object class="wxMenu" name="tier_edit">
-        <label>_Tier</label>
-        <object class="wxMenuItem" name="tier_alert_1">
-            <label>Test alert N_1</label>
-        </object>
-        <object class="wxMenuItem" name="tier_alert_2">
-            <label>Test alert N_2</label>
-        </object>
-        <object class="wxMenuItem" name="tier_alert_3">
-            <label>Test alert N_3</label>
-        </object>
-    </object>
-    <object_ref name="window_menu" ref="window_menu_ref"/>
-    <object_ref name="wxID_HELP" ref="help_menu_ref"/>
-</object>
-
 <!-- database-edit menu -->
 
 <object class="wxIcon" name="database_view_icon">database_view.xpm</object>
@@ -745,6 +677,74 @@ Not supported yet: need to split columns into multiple pages.
             <label>Test alert N_2</label>
         </object>
         <object class="wxMenuItem" name="rounding_alert_3">
+            <label>Test alert N_3</label>
+        </object>
+    </object>
+    <object_ref name="window_menu" ref="window_menu_ref"/>
+    <object_ref name="wxID_HELP" ref="help_menu_ref"/>
+</object>
+
+<!-- tier-edit menu -->
+
+<object class="wxIcon" name="tier_view_icon">tier_view.xpm</object>
+
+<object class="wxMenuBar" name="tier_view_menu">
+<style>wxMB_DOCKABLE</style>
+    <object class="wxMenu" name="file_menu">
+        <label>_File</label>
+        <object class="wxMenuItem" name="wxID_NEW">
+            <label>_New</label>
+            <help>Create a new document</help>
+            <bitmap>new.xpm</bitmap>
+        </object>
+        <object class="wxMenuItem" name="wxID_OPEN">
+            <label>_Open...</label>
+            <bitmap>open.xpm</bitmap>
+            <help>Open an existing document</help>
+        </object>
+        <object class="wxMenuItem" name="wxID_CLOSE">
+            <label>_Close\tCtrl-X</label>
+            <bitmap>close.xpm</bitmap>
+            <help>Close this document</help>
+        </object>
+        <object class="separator"/>
+        <object class="wxMenuItem" name="wxID_SAVE">
+            <label>_Save</label>
+            <bitmap>save.xpm</bitmap>
+            <help>Save this document</help>
+        </object>
+        <object class="wxMenuItem" name="wxID_SAVEAS">
+            <label>Save _as...</label>
+            <bitmap>saveas.xpm</bitmap>
+            <help>Save this document under a new name</help>
+        </object>
+        <object class="separator"/>
+        <object class="wxMenuItem" name="edit_default_cell">
+            <label>_Default</label>
+            <bitmap>default_cell.xpm</bitmap>
+            <help>Edit default cell</help>
+        </object>
+        <object class="wxMenuItem" name="preferences">
+            <label>Pre_ferences\tCtrl-F</label>
+            <bitmap>preferences.xpm</bitmap>
+            <help>Manage preferences</help>
+        </object>
+        <object class="separator"/>
+        <object class="wxMenuItem" name="wxID_EXIT">
+            <label>E_xit</label>
+            <bitmap>exit.xpm</bitmap>
+            <help>Exit this program</help>
+        </object>
+    </object>
+    <object class="wxMenu" name="tier_edit">
+        <label>_Tier</label>
+        <object class="wxMenuItem" name="tier_alert_1">
+            <label>Test alert N_1</label>
+        </object>
+        <object class="wxMenuItem" name="tier_alert_2">
+            <label>Test alert N_2</label>
+        </object>
+        <object class="wxMenuItem" name="tier_alert_3">
             <label>Test alert N_3</label>
         </object>
     </object>
