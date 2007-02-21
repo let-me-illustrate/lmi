@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.569 2007-02-21 12:36:22 chicares Exp $
+// $Id: ChangeLog,v 1.570 2007-02-21 12:48:21 chicares Exp $
 
 MAINTENANCE
 
@@ -10034,4 +10034,15 @@ Replace product-editor icons. The originals were silently ignored by
 wx (perhaps because they were too large?). These four icons are lame,
 and identical; eventually, all product files should be merged into a
 single file type anyway, and a better icon devised.
+
+20070221T1243Z <chicares@cox.net> [1247]
+
+  menus.xrc
+Fix obvious oversights.
+
+20070221T1248Z <chicares@cox.net> [1247]
+
+  menus.xrc
+Alphabetize product-editor menus, for concinnity with the change made
+20070221T1214Z.
 
