@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_dbdict.cpp,v 1.15 2007-01-27 00:00:51 wboutin Exp $
+// $Id: ihs_dbdict.cpp,v 1.16 2007-02-21 03:07:24 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -131,11 +131,16 @@ void DBDictionary::Init(std::string const& NewFilename)
 }
 
 //============================================================================
+void DBDictionary::InvalidateCache()
+{
+    CachedFilename = "";
+}
+
+//============================================================================
 // TODO ?? Does this function make the code clearer, or less clear?
 void DBDictionary::BadFile(std::string const& Filename, std::string const& why)
 {
-    // Invalidate cache.
-    CachedFilename = "";
+    InvalidateCache();
 
     std::string s = ", which is required for the product selected, ";
     s += why;
