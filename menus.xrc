@@ -24,7 +24,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: menus.xrc,v 1.17 2007-02-21 03:07:24 chicares Exp $
+    $Id: menus.xrc,v 1.18 2007-02-21 12:43:17 chicares Exp $
 -->
 
 <!-- reusable menus -->
@@ -668,7 +668,7 @@ Not supported yet: need to split columns into multiple pages.
             <help>Exit this program</help>
         </object>
     </object>
-    <object class="wxMenu" name="database_edit">
+    <object class="wxMenu" name="policy_edit">
         <label>P_olicy</label>
         <object class="wxMenuItem" name="policy_alert_1">
             <label>Test alert N_1</label>
@@ -736,7 +736,7 @@ Not supported yet: need to split columns into multiple pages.
             <help>Exit this program</help>
         </object>
     </object>
-    <object class="wxMenu" name="database_edit">
+    <object class="wxMenu" name="rounding_edit">
         <label>_Rounding</label>
         <object class="wxMenuItem" name="rounding_alert_1">
             <label>Test alert N_1</label>
