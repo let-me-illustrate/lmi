@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_wx.cpp,v 1.67 2007-02-21 10:37:18 chicares Exp $
+// $Id: main_wx.cpp,v 1.68 2007-02-21 11:15:21 chicares Exp $
 
 // Portions of this file are derived from wxWindows files
 //   samples/docvwmdi/docview.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -55,7 +55,7 @@
 #include "global_settings.hpp"
 #include "getopt.hpp"
 #include "handle_exceptions.hpp"
-#include "ihs_dbdict.hpp" // print_databases()
+#include "ihs_dbdict.hpp"           // print_databases()
 #include "illustration_document.hpp"
 #include "illustration_view.hpp"
 #include "license.hpp"
@@ -71,7 +71,7 @@
 #include "progress_meter.hpp"
 #include "rounding_document.hpp"
 #include "rounding_view.hpp"
-#include "rounding_view_editor.hpp"
+#include "rounding_view_editor.hpp" // RoundingButtonsXmlHandler
 #include "text_doc.hpp"
 #include "text_view.hpp"
 #include "tier_document.hpp"
@@ -83,7 +83,7 @@
 #include <wx/dataobj.h>
 #include <wx/docmdi.h>
 #include <wx/image.h>
-#include <wx/log.h> // wxSafeShowMessage()
+#include <wx/log.h>                 // wxSafeShowMessage()
 #include <wx/menu.h>
 #include <wx/msgdlg.h>
 #include <wx/textctrl.h>
