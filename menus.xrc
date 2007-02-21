@@ -24,90 +24,12 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: menus.xrc,v 1.19 2007-02-21 12:48:21 chicares Exp $
+    $Id: menus.xrc,v 1.20 2007-02-21 14:02:38 chicares Exp $
 -->
 
 <!-- reusable menus -->
 
-<object class="wxMenu" name="help_menu_ref">
-    <label>_Help</label>
-    <help>Help</help>
-    <object class="wxMenuItem" name="wxID_ABOUT">
-        <label>_About...</label>
-        <bitmap>about.xpm</bitmap>
-        <help>About this program</help>
-    </object>
-</object>
-
-<object class="wxMenu" name="window_menu_ref">
-    <label>_Window</label>
-    <!-- "Arrange icons", though available, is silly. -->
-    <object class="wxMenuItem" name="window_cascade">
-        <label>_Cascade</label>
-        <help>Cascade windows</help>
-    </object>
-    <object class="wxMenuItem" name="window_next">
-        <label>_Next</label>
-        <help>Go to next window</help>
-    </object>
-    <object class="wxMenuItem" name="window_previous">
-        <label>_Previous</label>
-        <help>Go to previous window</help>
-    </object>
-    <object class="wxMenuItem" name="window_tile_horizontally">
-        <label>Tile _horizontally</label>
-        <help>Tile windows horizontally</help>
-    </object>
-    <object class="wxMenuItem" name="window_tile_vertically">
-        <label>Tile _vertically</label>
-        <help>Tile windows vertically</help>
-    </object>
-</object>
-
-<!-- main menu -->
-
-<object class="wxMenuBar" name="main_menu">
-<style>wxMB_DOCKABLE</style>
-    <object class="wxMenu" name="file_menu">
-        <label>_File</label>
-        <object class="wxMenuItem" name="wxID_NEW">
-            <label>_New</label>
-            <help>Create a new document</help>
-            <bitmap>new.xpm</bitmap>
-        </object>
-        <object class="wxMenuItem" name="wxID_OPEN">
-            <label>_Open...</label>
-            <bitmap>open.xpm</bitmap>
-            <help>Open an existing document</help>
-        </object>
-        <object class="separator"/>
-        <object class="wxMenuItem" name="edit_default_cell">
-            <label>_Default</label>
-            <bitmap>default_cell.xpm</bitmap>
-            <help>Edit default cell</help>
-        </object>
-        <object class="wxMenuItem" name="preferences">
-            <label>Pre_ferences\tCtrl-F</label>
-            <bitmap>preferences.xpm</bitmap>
-            <help>Manage preferences</help>
-        </object>
-        <object class="separator"/>
-        <object class="wxMenuItem" name="wxID_EXIT">
-            <label>E_xit</label>
-            <bitmap>exit.xpm</bitmap>
-            <help>Exit this program</help>
-        </object>
-    </object>
-    <object_ref name="wxID_HELP" ref="help_menu_ref"/>
-</object>
-
-<!-- census menu -->
-
-<object class="wxIcon" name="census_view_icon">census_view.xpm</object>
-
-<object class="wxMenuBar" name="census_view_menu">
-<style>wxMB_DOCKABLE</style>
-    <object class="wxMenu" name="file_menu">
+    <object class="wxMenu" name="file_menu_with_print_ref">
         <label>_File</label>
         <object class="wxMenuItem" name="wxID_NEW">
             <label>_New</label>
@@ -176,6 +98,139 @@
             <help>Exit this program</help>
         </object>
     </object>
+
+    <object class="wxMenu" name="file_menu_without_print_ref">
+        <label>_File</label>
+        <object class="wxMenuItem" name="wxID_NEW">
+            <label>_New</label>
+            <help>Create a new document</help>
+            <bitmap>new.xpm</bitmap>
+        </object>
+        <object class="wxMenuItem" name="wxID_OPEN">
+            <label>_Open...</label>
+            <bitmap>open.xpm</bitmap>
+            <help>Open an existing document</help>
+        </object>
+        <object class="wxMenuItem" name="wxID_CLOSE">
+            <label>_Close\tCtrl-X</label>
+            <bitmap>close.xpm</bitmap>
+            <help>Close this document</help>
+        </object>
+        <object class="separator"/>
+        <object class="wxMenuItem" name="wxID_SAVE">
+            <label>_Save</label>
+            <bitmap>save.xpm</bitmap>
+            <help>Save this document</help>
+        </object>
+        <object class="wxMenuItem" name="wxID_SAVEAS">
+            <label>Save _as...</label>
+            <bitmap>saveas.xpm</bitmap>
+            <help>Save this document under a new name</help>
+        </object>
+        <object class="separator"/>
+        <object class="wxMenuItem" name="edit_default_cell">
+            <label>_Default</label>
+            <bitmap>default_cell.xpm</bitmap>
+            <help>Edit default cell</help>
+        </object>
+        <object class="wxMenuItem" name="preferences">
+            <label>Pre_ferences\tCtrl-F</label>
+            <bitmap>preferences.xpm</bitmap>
+            <help>Manage preferences</help>
+        </object>
+        <object class="separator"/>
+        <object class="wxMenuItem" name="wxID_EXIT">
+            <label>E_xit</label>
+            <bitmap>exit.xpm</bitmap>
+            <help>Exit this program</help>
+        </object>
+    </object>
+
+<object class="wxMenu" name="help_menu_ref">
+    <label>_Help</label>
+    <help>Help</help>
+    <object class="wxMenuItem" name="wxID_ABOUT">
+        <label>_About...</label>
+        <bitmap>about.xpm</bitmap>
+        <help>About this program</help>
+    </object>
+</object>
+
+<object class="wxMenu" name="window_menu_ref">
+    <label>_Window</label>
+    <!-- "Arrange icons", though available, is silly. -->
+    <object class="wxMenuItem" name="window_cascade">
+        <label>_Cascade</label>
+        <help>Cascade windows</help>
+    </object>
+    <object class="wxMenuItem" name="window_next">
+        <label>_Next</label>
+        <help>Go to next window</help>
+    </object>
+    <object class="wxMenuItem" name="window_previous">
+        <label>_Previous</label>
+        <help>Go to previous window</help>
+    </object>
+    <object class="wxMenuItem" name="window_tile_horizontally">
+        <label>Tile _horizontally</label>
+        <help>Tile windows horizontally</help>
+    </object>
+    <object class="wxMenuItem" name="window_tile_vertically">
+        <label>Tile _vertically</label>
+        <help>Tile windows vertically</help>
+    </object>
+</object>
+
+<!-- main menu -->
+
+<!--
+  The 'File' menu here is briefer than the one used elsewhere. For
+  example, it makes no sense to offer a 'Save' option when no child
+  window exists.
+-->
+
+<object class="wxMenuBar" name="main_menu">
+<style>wxMB_DOCKABLE</style>
+    <object class="wxMenu" name="file_menu">
+        <label>_File</label>
+        <object class="wxMenuItem" name="wxID_NEW">
+            <label>_New</label>
+            <help>Create a new document</help>
+            <bitmap>new.xpm</bitmap>
+        </object>
+        <object class="wxMenuItem" name="wxID_OPEN">
+            <label>_Open...</label>
+            <bitmap>open.xpm</bitmap>
+            <help>Open an existing document</help>
+        </object>
+        <object class="separator"/>
+        <object class="wxMenuItem" name="edit_default_cell">
+            <label>_Default</label>
+            <bitmap>default_cell.xpm</bitmap>
+            <help>Edit default cell</help>
+        </object>
+        <object class="wxMenuItem" name="preferences">
+            <label>Pre_ferences\tCtrl-F</label>
+            <bitmap>preferences.xpm</bitmap>
+            <help>Manage preferences</help>
+        </object>
+        <object class="separator"/>
+        <object class="wxMenuItem" name="wxID_EXIT">
+            <label>E_xit</label>
+            <bitmap>exit.xpm</bitmap>
+            <help>Exit this program</help>
+        </object>
+    </object>
+    <object_ref name="wxID_HELP" ref="help_menu_ref"/>
+</object>
+
+<!-- census menu -->
+
+<object class="wxIcon" name="census_view_icon">census_view.xpm</object>
+
+<object class="wxMenuBar" name="census_view_menu">
+<style>wxMB_DOCKABLE</style>
+    <object_ref name="file_menu" ref="file_menu_with_print_ref"/>
     <object class="wxMenu" name="census_menu">
         <label>_Census</label>
         <object class="wxMenuItem" name="edit_cell">
@@ -280,75 +335,7 @@ Not supported yet: need to split columns into multiple pages.
 
 <object class="wxMenuBar" name="illustration_view_menu">
 <style>wxMB_DOCKABLE</style>
-    <object class="wxMenu" name="file_menu">
-        <label>_File</label>
-        <object class="wxMenuItem" name="wxID_NEW">
-            <label>_New</label>
-            <help>Create a new document</help>
-            <bitmap>new.xpm</bitmap>
-        </object>
-        <object class="wxMenuItem" name="wxID_OPEN">
-            <label>_Open...</label>
-            <bitmap>open.xpm</bitmap>
-            <help>Open an existing document</help>
-        </object>
-        <object class="wxMenuItem" name="wxID_CLOSE">
-            <label>_Close\tCtrl-X</label>
-            <bitmap>close.xpm</bitmap>
-            <help>Close this document</help>
-        </object>
-        <object class="separator"/>
-        <object class="wxMenuItem" name="wxID_SAVE">
-            <label>_Save</label>
-            <bitmap>save.xpm</bitmap>
-            <help>Save this document</help>
-        </object>
-        <object class="wxMenuItem" name="wxID_SAVEAS">
-            <label>Save _as...</label>
-            <bitmap>saveas.xpm</bitmap>
-            <help>Save this document under a new name</help>
-        </object>
-        <object class="separator"/>
-        <object class="wxMenuItem" name="wxID_PRINT">
-            <label>_Print</label>
-            <bitmap>print.xpm</bitmap>
-            <help>Print this document</help>
-        </object>
-        <!-- WX !! Propose adding wxID_PAGE_SETUP to the library.
-             In msw, 'Page setup' has superseded 'Print setup'. But wx
-             provides a builtin ID only for the former and not for the
-             latter. Yet wxxrc knows only builtin IDs. Therefore, to
-             make the modern 'Page setup' available with wxxrc,
-             wxID_PRINT_SETUP is hijacked and used for 'page setup'.
-        -->
-        <object class="wxMenuItem" name="wxID_PRINT_SETUP">
-            <label>Page set_up</label>
-            <bitmap>print-options.xpm</bitmap>
-            <help>Choose printing options for this document</help>
-        </object>
-        <object class="wxMenuItem" name="wxID_PREVIEW">
-            <label>Print pre_view</label>
-            <bitmap>print-preview.xpm</bitmap>
-            <help>See what this document will look like when printed</help>
-        </object>
-        <object class="separator"/>
-        <object class="wxMenuItem" name="edit_default_cell">
-            <label>_Default</label>
-            <bitmap>default_cell.xpm</bitmap>
-            <help>Edit default cell</help>
-        </object>
-        <object class="wxMenuItem" name="preferences">
-            <label>Pre_ferences\tCtrl-F</label>
-            <bitmap>preferences.xpm</bitmap>
-            <help>Manage preferences</help>
-        </object>
-        <object class="separator"/>
-        <object class="wxMenuItem" name="wxID_EXIT">
-            <label>E_xit</label>
-            <bitmap>exit.xpm</bitmap>
-            <help>Exit this program</help>
-        </object>
-    </object>
+    <object_ref name="file_menu" ref="file_menu_with_print_ref"/>
     <object class="wxMenu" name="illustration">
         <label>_Illustration</label>
         <object class="wxMenuItem" name="edit_cell">
@@ -385,52 +372,7 @@ Not supported yet: need to split columns into multiple pages.
 
 <object class="wxMenuBar" name="text_view_menu">
 <style>wxMB_DOCKABLE</style>
-    <object class="wxMenu" name="file_menu">
-        <label>_File</label>
-        <object class="wxMenuItem" name="wxID_NEW">
-            <label>_New</label>
-            <help>Create a new document</help>
-            <bitmap>new.xpm</bitmap>
-        </object>
-        <object class="wxMenuItem" name="wxID_OPEN">
-            <label>_Open...</label>
-            <bitmap>open.xpm</bitmap>
-            <help>Open an existing document</help>
-        </object>
-        <object class="wxMenuItem" name="wxID_CLOSE">
-            <label>_Close\tCtrl-X</label>
-            <bitmap>close.xpm</bitmap>
-            <help>Close this document</help>
-        </object>
-        <object class="separator"/>
-        <object class="wxMenuItem" name="wxID_SAVE">
-            <label>_Save</label>
-            <bitmap>save.xpm</bitmap>
-            <help>Save this document</help>
-        </object>
-        <object class="wxMenuItem" name="wxID_SAVEAS">
-            <label>Save _as...</label>
-            <bitmap>saveas.xpm</bitmap>
-            <help>Save this document under a new name</help>
-        </object>
-        <object class="separator"/>
-        <object class="wxMenuItem" name="edit_default_cell">
-            <label>_Default</label>
-            <bitmap>default_cell.xpm</bitmap>
-            <help>Edit default cell</help>
-        </object>
-        <object class="wxMenuItem" name="preferences">
-            <label>Pre_ferences\tCtrl-F</label>
-            <bitmap>preferences.xpm</bitmap>
-            <help>Manage preferences</help>
-        </object>
-        <object class="separator"/>
-        <object class="wxMenuItem" name="wxID_EXIT">
-            <label>E_xit</label>
-            <bitmap>exit.xpm</bitmap>
-            <help>Exit this program</help>
-        </object>
-    </object>
+    <object_ref name="file_menu" ref="file_menu_without_print_ref"/>
     <object class="wxMenu" name="text_edit">
         <label>_Test</label>
         <object class="wxMenu">
@@ -486,52 +428,7 @@ Not supported yet: need to split columns into multiple pages.
 
 <object class="wxMenuBar" name="database_view_menu">
 <style>wxMB_DOCKABLE</style>
-    <object class="wxMenu" name="file_menu">
-        <label>_File</label>
-        <object class="wxMenuItem" name="wxID_NEW">
-            <label>_New</label>
-            <help>Create a new document</help>
-            <bitmap>new.xpm</bitmap>
-        </object>
-        <object class="wxMenuItem" name="wxID_OPEN">
-            <label>_Open...</label>
-            <bitmap>open.xpm</bitmap>
-            <help>Open an existing document</help>
-        </object>
-        <object class="wxMenuItem" name="wxID_CLOSE">
-            <label>_Close\tCtrl-X</label>
-            <bitmap>close.xpm</bitmap>
-            <help>Close this document</help>
-        </object>
-        <object class="separator"/>
-        <object class="wxMenuItem" name="wxID_SAVE">
-            <label>_Save</label>
-            <bitmap>save.xpm</bitmap>
-            <help>Save this document</help>
-        </object>
-        <object class="wxMenuItem" name="wxID_SAVEAS">
-            <label>Save _as...</label>
-            <bitmap>saveas.xpm</bitmap>
-            <help>Save this document under a new name</help>
-        </object>
-        <object class="separator"/>
-        <object class="wxMenuItem" name="edit_default_cell">
-            <label>_Default</label>
-            <bitmap>default_cell.xpm</bitmap>
-            <help>Edit default cell</help>
-        </object>
-        <object class="wxMenuItem" name="preferences">
-            <label>Pre_ferences\tCtrl-F</label>
-            <bitmap>preferences.xpm</bitmap>
-            <help>Manage preferences</help>
-        </object>
-        <object class="separator"/>
-        <object class="wxMenuItem" name="wxID_EXIT">
-            <label>E_xit</label>
-            <bitmap>exit.xpm</bitmap>
-            <help>Exit this program</help>
-        </object>
-    </object>
+    <object_ref name="file_menu" ref="file_menu_without_print_ref"/>
     <object class="wxMenu" name="database_edit">
         <label>_Database</label>
         <object class="wxMenuItem" name="database_alert_1">
@@ -554,52 +451,7 @@ Not supported yet: need to split columns into multiple pages.
 
 <object class="wxMenuBar" name="policy_view_menu">
 <style>wxMB_DOCKABLE</style>
-    <object class="wxMenu" name="file_menu">
-        <label>_File</label>
-        <object class="wxMenuItem" name="wxID_NEW">
-            <label>_New</label>
-            <help>Create a new document</help>
-            <bitmap>new.xpm</bitmap>
-        </object>
-        <object class="wxMenuItem" name="wxID_OPEN">
-            <label>_Open...</label>
-            <bitmap>open.xpm</bitmap>
-            <help>Open an existing document</help>
-        </object>
-        <object class="wxMenuItem" name="wxID_CLOSE">
-            <label>_Close\tCtrl-X</label>
-            <bitmap>close.xpm</bitmap>
-            <help>Close this document</help>
-        </object>
-        <object class="separator"/>
-        <object class="wxMenuItem" name="wxID_SAVE">
-            <label>_Save</label>
-            <bitmap>save.xpm</bitmap>
-            <help>Save this document</help>
-        </object>
-        <object class="wxMenuItem" name="wxID_SAVEAS">
-            <label>Save _as...</label>
-            <bitmap>saveas.xpm</bitmap>
-            <help>Save this document under a new name</help>
-        </object>
-        <object class="separator"/>
-        <object class="wxMenuItem" name="edit_default_cell">
-            <label>_Default</label>
-            <bitmap>default_cell.xpm</bitmap>
-            <help>Edit default cell</help>
-        </object>
-        <object class="wxMenuItem" name="preferences">
-            <label>Pre_ferences\tCtrl-F</label>
-            <bitmap>preferences.xpm</bitmap>
-            <help>Manage preferences</help>
-        </object>
-        <object class="separator"/>
-        <object class="wxMenuItem" name="wxID_EXIT">
-            <label>E_xit</label>
-            <bitmap>exit.xpm</bitmap>
-            <help>Exit this program</help>
-        </object>
-    </object>
+    <object_ref name="file_menu" ref="file_menu_without_print_ref"/>
     <object class="wxMenu" name="policy_edit">
         <label>P_olicy</label>
         <object class="wxMenuItem" name="policy_alert_1">
@@ -622,52 +474,7 @@ Not supported yet: need to split columns into multiple pages.
 
 <object class="wxMenuBar" name="rounding_view_menu">
 <style>wxMB_DOCKABLE</style>
-    <object class="wxMenu" name="file_menu">
-        <label>_File</label>
-        <object class="wxMenuItem" name="wxID_NEW">
-            <label>_New</label>
-            <help>Create a new document</help>
-            <bitmap>new.xpm</bitmap>
-        </object>
-        <object class="wxMenuItem" name="wxID_OPEN">
-            <label>_Open...</label>
-            <bitmap>open.xpm</bitmap>
-            <help>Open an existing document</help>
-        </object>
-        <object class="wxMenuItem" name="wxID_CLOSE">
-            <label>_Close\tCtrl-X</label>
-            <bitmap>close.xpm</bitmap>
-            <help>Close this document</help>
-        </object>
-        <object class="separator"/>
-        <object class="wxMenuItem" name="wxID_SAVE">
-            <label>_Save</label>
-            <bitmap>save.xpm</bitmap>
-            <help>Save this document</help>
-        </object>
-        <object class="wxMenuItem" name="wxID_SAVEAS">
-            <label>Save _as...</label>
-            <bitmap>saveas.xpm</bitmap>
-            <help>Save this document under a new name</help>
-        </object>
-        <object class="separator"/>
-        <object class="wxMenuItem" name="edit_default_cell">
-            <label>_Default</label>
-            <bitmap>default_cell.xpm</bitmap>
-            <help>Edit default cell</help>
-        </object>
-        <object class="wxMenuItem" name="preferences">
-            <label>Pre_ferences\tCtrl-F</label>
-            <bitmap>preferences.xpm</bitmap>
-            <help>Manage preferences</help>
-        </object>
-        <object class="separator"/>
-        <object class="wxMenuItem" name="wxID_EXIT">
-            <label>E_xit</label>
-            <bitmap>exit.xpm</bitmap>
-            <help>Exit this program</help>
-        </object>
-    </object>
+    <object_ref name="file_menu" ref="file_menu_without_print_ref"/>
     <object class="wxMenu" name="rounding_edit">
         <label>_Rounding</label>
         <object class="wxMenuItem" name="rounding_alert_1">
@@ -690,52 +497,7 @@ Not supported yet: need to split columns into multiple pages.
 
 <object class="wxMenuBar" name="tier_view_menu">
 <style>wxMB_DOCKABLE</style>
-    <object class="wxMenu" name="file_menu">
-        <label>_File</label>
-        <object class="wxMenuItem" name="wxID_NEW">
-            <label>_New</label>
-            <help>Create a new document</help>
-            <bitmap>new.xpm</bitmap>
-        </object>
-        <object class="wxMenuItem" name="wxID_OPEN">
-            <label>_Open...</label>
-            <bitmap>open.xpm</bitmap>
-            <help>Open an existing document</help>
-        </object>
-        <object class="wxMenuItem" name="wxID_CLOSE">
-            <label>_Close\tCtrl-X</label>
-            <bitmap>close.xpm</bitmap>
-            <help>Close this document</help>
-        </object>
-        <object class="separator"/>
-        <object class="wxMenuItem" name="wxID_SAVE">
-            <label>_Save</label>
-            <bitmap>save.xpm</bitmap>
-            <help>Save this document</help>
-        </object>
-        <object class="wxMenuItem" name="wxID_SAVEAS">
-            <label>Save _as...</label>
-            <bitmap>saveas.xpm</bitmap>
-            <help>Save this document under a new name</help>
-        </object>
-        <object class="separator"/>
-        <object class="wxMenuItem" name="edit_default_cell">
-            <label>_Default</label>
-            <bitmap>default_cell.xpm</bitmap>
-            <help>Edit default cell</help>
-        </object>
-        <object class="wxMenuItem" name="preferences">
-            <label>Pre_ferences\tCtrl-F</label>
-            <bitmap>preferences.xpm</bitmap>
-            <help>Manage preferences</help>
-        </object>
-        <object class="separator"/>
-        <object class="wxMenuItem" name="wxID_EXIT">
-            <label>E_xit</label>
-            <bitmap>exit.xpm</bitmap>
-            <help>Exit this program</help>
-        </object>
-    </object>
+    <object_ref name="file_menu" ref="file_menu_without_print_ref"/>
     <object class="wxMenu" name="tier_edit">
         <label>_Tier</label>
         <object class="wxMenuItem" name="tier_alert_1">
