@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.568 2007-02-21 12:14:26 chicares Exp $
+// $Id: ChangeLog,v 1.569 2007-02-21 12:36:22 chicares Exp $
 
 MAINTENANCE
 
@@ -10023,4 +10023,15 @@ Make wxDocTemplate accelerators unique.
 Alphabetize product-editor document templates. This is important
 because they're presented to end users in the order they occur in the
 source file, and it was surprising to list "Tier" first.
+
+20070221T1236Z <chicares@cox.net> [1247]
+
+  database_view.xpm
+  policy_view.xpm
+  rounding_view.xpm
+  tier_view.xpm
+Replace product-editor icons. The originals were silently ignored by
+wx (perhaps because they were too large?). These four icons are lame,
+and identical; eventually, all product files should be merged into a
+single file type anyway, and a better icon devised.
 
