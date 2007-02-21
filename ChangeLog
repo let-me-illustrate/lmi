@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.570 2007-02-21 12:48:21 chicares Exp $
+// $Id: ChangeLog,v 1.571 2007-02-21 14:08:47 chicares Exp $
 
 MAINTENANCE
 
@@ -10045,4 +10045,15 @@ Fix obvious oversights.
   menus.xrc
 Alphabetize product-editor menus, for concinnity with the change made
 20070221T1214Z.
+
+20070221T1402Z <chicares@cox.net> [1247]
+
+  menus.xrc
+Refactor, increasing clarity while reducing file size by one-third.
+
+20070221T1408Z <chicares@cox.net> [1247]
+
+  menus.xrc
+Rearrange menus to match document-template order, which, as of
+20070221T1214Z, are alphabetical within (eventual) privilege groups.
 
