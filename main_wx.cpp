@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_wx.cpp,v 1.64 2007-01-27 00:00:51 wboutin Exp $
+// $Id: main_wx.cpp,v 1.65 2007-02-21 03:07:24 chicares Exp $
 
 // Portions of this file are derived from wxWindows files
 //   samples/docvwmdi/docview.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -46,6 +46,8 @@
 #include "census_view.hpp"
 #include "configurable_settings.hpp"
 #include "data_directory.hpp"
+#include "database_document.hpp"
+#include "database_view.hpp"
 #include "default_view.hpp"
 #include "docmanager_ex.hpp"
 #include "docmdichildframe_ex.hpp"
@@ -62,11 +64,18 @@
 #include "msw_workarounds.hpp"
 #include "mvc_controller.hpp"
 #include "path_utility.hpp"
+#include "policy_document.hpp"
+#include "policy_view.hpp"
 #include "preferences_model.hpp"
 #include "preferences_view.hpp"
 #include "progress_meter.hpp"
+#include "rounding_document.hpp"
+#include "rounding_view.hpp"
+#include "rounding_view_editor.hpp"
 #include "text_doc.hpp"
 #include "text_view.hpp"
+#include "tier_document.hpp"
+#include "tier_view.hpp"
 #include "wx_new.hpp"
 
 #include <wx/clipbrd.h>
@@ -297,6 +306,54 @@ void Skeleton::InitDocManager()
         ,CLASSINFO(IllustrationView)
         );
 
+    new(wx) wxDocTemplate
+        (doc_manager_
+        ,"Tier"
+        ,"*.tir"
+        ,""
+        ,"tir"
+        ,"Tier Doc"
+        ,"Tier View"
+        ,CLASSINFO(TierDocument)
+        ,CLASSINFO(TierView)
+        );
+
+    new(wx) wxDocTemplate
+        (doc_manager_
+        ,"Database"
+        ,"*.db4"
+        ,""
+        ,"db4"
+        ,"Database Doc"
+        ,"Database View"
+        ,CLASSINFO(DatabaseDocument)
+        ,CLASSINFO(DatabaseView)
+        );
+
+    new(wx) wxDocTemplate
+        (doc_manager_
+        ,"Policy"
+        ,"*.pol"
+        ,""
+        ,"pol"
+        ,"Policy Document"
+        ,"Policy View"
+        ,CLASSINFO(PolicyDocument)
+        ,CLASSINFO(PolicyView)
+        );
+    new(wx) wxDocTemplate
+        (doc_manager_
+        ,"Rounding"
+        ,"*.rnd"
+        ,""
+        ,"rnd"
+        ,"Rounding Document"
+        ,"Rounding View"
+        ,CLASSINFO(RoundingDocument)
+        ,CLASSINFO(RoundingView)
+        );
+
+
     if(!global_settings::instance().ash_nazg())
         {
         return;
@@ -439,28 +496,44 @@ bool Skeleton::OnInit()
 
         authenticate_system();
 
-        wxXmlResource::Get()->InitAllHandlers();
+        wxXmlResource& xml_resources = *wxXmlResource::Get();
+
+        xml_resources.InitAllHandlers();
+
+        // TODO ?? Should not it be moved directly into rounding_view.hpp
+        // or rounding_view_editor.hpp?
+        xml_resources.AddHandler(new(wx) RoundingButtonsXmlHandler);
 
         DefaultView const v0;
-        if(!wxXmlResource::Get()->Load(AddDataDir(v0.ResourceFileName())))
+        if(!xml_resources.Load(AddDataDir(v0.ResourceFileName())))
             {
             fatal_error() << "Unable to load xml resources." << LMI_FLUSH;
             }
 
         PreferencesView const v1;
-        if(!wxXmlResource::Get()->Load(AddDataDir(v1.ResourceFileName())))
+        if(!xml_resources.Load(AddDataDir(v1.ResourceFileName())))
             {
             fatal_error() << "Unable to load xml resources." << LMI_FLUSH;
             }
 
-        if(!wxXmlResource::Get()->Load(AddDataDir("menus.xrc")))
+        if(!xml_resources.Load(AddDataDir("menus.xrc")))
             {
             fatal_error() << "Unable to load menubar." << LMI_FLUSH;
             }
 
-        if(!wxXmlResource::Get()->Load(AddDataDir("toolbar.xrc")))
+        if(!xml_resources.Load(AddDataDir("toolbar.xrc")))
             {
             fatal_error() << "Unable to load toolbar." << LMI_FLUSH;
+            }
+
+        if(!xml_resources.Load(AddDataDir(PolicyView::resource_file_name())))
+            {
+            fatal_error() << "Unable to load Policy resources." << LMI_FLUSH;
+            }
+
+        if(!xml_resources.Load(AddDataDir(RoundingView::resource_file_name())))
+            {
+            fatal_error() << "Unable to load Rounding resources." << LMI_FLUSH;
             }
 
         wxInitAllImageHandlers();

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_dbdict.hpp,v 1.8 2007-01-27 00:00:51 wboutin Exp $
+// $Id: ihs_dbdict.hpp,v 1.9 2007-02-21 03:07:24 chicares Exp $
 
 #ifndef ihs_dbdict_hpp
 #define ihs_dbdict_hpp
@@ -63,6 +63,8 @@ class LMI_SO DBDictionary
     void Add(TDBValue const& e);
     void BadFile(std::string const& Filename, std::string const& why);
     void InitDB();
+
+    static void InvalidateCache();
 
     static std::string CachedFilename;
     dict_map dictionary;
