@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.571 2007-02-21 14:08:47 chicares Exp $
+// $Id: ChangeLog,v 1.572 2007-02-21 23:38:33 chicares Exp $
 
 MAINTENANCE
 
@@ -10056,4 +10056,10 @@ Refactor, increasing clarity while reducing file size by one-third.
   menus.xrc
 Rearrange menus to match document-template order, which, as of
 20070221T1214Z, are alphabetical within (eventual) privilege groups.
+
+20070221T2338Z <chicares@cox.net> [1247]
+
+  single_choice_popup_menu.cpp
+Follow stylistic suggestions in Vadim's 2005-06-24T22:06 email
+(a personal communication, not on the mailing list).
 
