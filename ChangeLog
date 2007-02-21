@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.564 2007-01-28 01:03:23 chicares Exp $
+// $Id: ChangeLog,v 1.565 2007-02-21 03:07:24 chicares Exp $
 
 MAINTENANCE
 
@@ -49,7 +49,8 @@ as [defect-count] above.
 
 [3] Exact name of file changed, indented two spaces.
 
-[4] Write each file's name on a separate line, in ASCII sort order.
+[4] Write each file's name on a separate line, in ASCII sort order:
+the same order 'ls' uses, where 'Z' precedes 'a'.
 
 [5] We aren't exactly following GNU standards here, but this one makes
 a lot of sense:
@@ -9945,4 +9946,53 @@ Specify and use ASCII sort order for 'ChangeLog' entries.
 
   GNUmakefile
 Undo an artifact of copyright-notice updating.
+
+20070221T0307Z <chicares@cox.net> [1247]
+
+  Makefile.am
+  configure.ac
+  database_document.cpp    [new file]
+  database_document.hpp    [new file]
+  database_view.cpp        [new file]
+  database_view.hpp        [new file]
+  database_view.xpm        [new file]
+  database_view_editor.cpp [new file]
+  database_view_editor.hpp [new file]
+  ihs_dbdict.cpp
+  ihs_dbdict.hpp
+  ihs_proddata.hpp
+  main_wx.cpp
+  menus.xrc
+  multidimgrid_any.cpp     [new file]
+  multidimgrid_any.hpp     [new file]
+  multidimgrid_safe.hpp    [new file]
+  multidimgrid_safe.tpp    [new file]
+  multidimgrid_tools.cpp   [new file]
+  multidimgrid_tools.hpp   [new file]
+  objects.make
+  policy_document.cpp      [new file]
+  policy_document.hpp      [new file]
+  policy_view.cpp          [new file]
+  policy_view.hpp          [new file]
+  policy_view.xpm          [new file]
+  policy_view.xrc          [new file]
+  product_editor.cpp       [new file]
+  product_editor.hpp       [new file]
+  rounding_document.cpp    [new file]
+  rounding_document.hpp    [new file]
+  rounding_view.cpp        [new file]
+  rounding_view.hpp        [new file]
+  rounding_view.xpm        [new file]
+  rounding_view.xrc        [new file]
+  rounding_view_editor.cpp [new file]
+  rounding_view_editor.hpp [new file]
+  stratified_charges.xpp
+  tier_document.cpp        [new file]
+  tier_document.hpp        [new file]
+  tier_view.cpp            [new file]
+  tier_view.hpp            [new file]
+  tier_view.xpm            [new file]
+  tier_view_editor.cpp     [new file]
+  tier_view_editor.hpp     [new file]
+Merge 'product-editor_branch'.
 
