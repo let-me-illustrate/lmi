@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.567 2007-02-21 10:37:18 chicares Exp $
+// $Id: ChangeLog,v 1.568 2007-02-21 12:14:26 chicares Exp $
 
 MAINTENANCE
 
@@ -10006,4 +10006,21 @@ and regularize spacing between wxDocTemplate definitions.
 
   main_wx.cpp
 Hide product editor from end users until it's been tested.
+
+20070221T1115Z <chicares@cox.net> [1247]
+
+  main_wx.cpp
+Mark a header to facilitate its eventual deletion.
+
+20070221T1119Z <chicares@cox.net> [1247]
+
+  main_wx.cpp
+Make wxDocTemplate accelerators unique.
+
+20070221T1214Z <chicares@cox.net> [1247]
+
+  main_wx.cpp
+Alphabetize product-editor document templates. This is important
+because they're presented to end users in the order they occur in the
+source file, and it was surprising to list "Tier" first.
 
