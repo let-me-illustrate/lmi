@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: product_editor.cpp,v 1.2 2007-02-21 03:07:24 chicares Exp $
+// $Id: product_editor.cpp,v 1.3 2007-02-22 14:47:20 chicares Exp $
 
 #include "product_editor.hpp"
 
@@ -50,10 +50,10 @@ ProductEditorView& ProductEditorDocument::PredominantView() const
 bool ProductEditorDocument::IsModified() const
 {
     if(wxDocument::IsModified())
-        return true;
+        {return true;}
 
     if(GetViews().empty())
-        return false;
+        {return false;}
 
     return PredominantView().IsModified();
 }
@@ -62,7 +62,7 @@ void ProductEditorDocument::Modify(bool modified)
 {
     wxDocument::Modify(modified);
     if(!modified && !GetViews().empty())
-        PredominantView().DiscardEdits();
+        {PredominantView().DiscardEdits();}
 }
 
 bool ProductEditorDocument::OnOpenDocument(wxString const& filename)

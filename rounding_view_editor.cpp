@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: rounding_view_editor.cpp,v 1.2 2007-02-21 03:07:24 chicares Exp $
+// $Id: rounding_view_editor.cpp,v 1.3 2007-02-22 14:47:20 chicares Exp $
 
 #include "rounding_view_editor.hpp"
 
@@ -158,7 +158,7 @@ bool RoundingButtons::IsModified() const
 void RoundingButtons::Modify(bool modified)
 {
     if(!modified)
-        SetValue(original_rule_);
+        {SetValue(original_rule_);}
 }
 
 void RoundingButtons::DiscardEdits()
@@ -232,19 +232,11 @@ void RoundingButtons::FixStyle(rounding_style style)
 
 rounding_style RoundingButtons::GetStyle() const
 {
-    if(button_not_at_all_->GetValue())
-        return r_not_at_all;
-
-    if(button_to_nearest_->GetValue())
-        return r_to_nearest;
-
-    if(button_upward_->GetValue())
-        return r_upward;
-
-    if(button_downward_->GetValue())
-        return r_downward;
-
-    return r_indeterminate;
+         if(button_not_at_all_->GetValue()) {return r_not_at_all;}
+    else if(button_to_nearest_->GetValue()) {return r_to_nearest;}
+    else if(button_upward_->GetValue())     {return r_upward;}
+    else if(button_downward_->GetValue())   {return r_downward;}
+    else                                    {return r_indeterminate;}
 }
 
 

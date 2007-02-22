@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: tier_view_editor.hpp,v 1.2 2007-02-21 03:07:24 chicares Exp $
+// $Id: tier_view_editor.hpp,v 1.3 2007-02-22 14:47:20 chicares Exp $
 
 #ifndef tier_view_editor_hpp
 #define tier_view_editor_hpp
@@ -140,7 +140,7 @@ inline tier_entity_adapter::tier_entity_adapter
     ,values_(&values)
 {
     if(limits.size() != values.size())
-        fatal_error() << "invalid stratified_entity" << LMI_FLUSH;
+        {fatal_error() << "invalid stratified_entity" << LMI_FLUSH;}
 }
 
 inline std::vector<double>&       tier_entity_adapter::limits()

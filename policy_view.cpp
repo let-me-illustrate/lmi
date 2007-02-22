@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: policy_view.cpp,v 1.2 2007-02-21 03:07:24 chicares Exp $
+// $Id: policy_view.cpp,v 1.3 2007-02-22 14:47:20 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -58,7 +58,7 @@ wxWindow* PolicyView::CreateChildWindow()
         ,"policy_view_panel"
         );
     if(!main_panel)
-        fatal_error() << "Unable to load an xml resource" << LMI_FLUSH;
+        {fatal_error() << "Unable to load an xml resource" << LMI_FLUSH;}
 
     typedef PolicyDocument::values_type::const_iterator value_const_iterator;
     for
@@ -72,12 +72,14 @@ wxWindow* PolicyView::CreateChildWindow()
             (wxWindow::FindWindowById(XRCID(cit->first.c_str()), frame)
             );
         if(!text_ctrl)
+            {
             fatal_error()
                 << "A required text control ["
                 << cit->first
                 << "] was not found"
                 << LMI_FLUSH
                 ;
+            }
         controls_[cit->first] = text_ctrl;
         }
 
@@ -109,7 +111,7 @@ bool PolicyView::IsModified() const
         )
         {
         if(it->second->IsModified())
-            return true;
+            {return true;}
         }
     return false;
 }

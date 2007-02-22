@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: database_view_editor.cpp,v 1.2 2007-02-21 03:07:24 chicares Exp $
+// $Id: database_view_editor.cpp,v 1.3 2007-02-22 14:47:20 chicares Exp $
 
 #include "database_view_editor.hpp"
 
@@ -57,7 +57,9 @@ bool DatabaseTableAdapter::DoApplyAxisAdjustment
         DatabaseDurationAxis& duration_axis
             = static_cast<DatabaseDurationAxis&>(axis);
         if(duration_axis.GetMinValue() != 0)
+            {
             fatal_error() << "Duration has to start at 0" << LMI_FLUSH;
+            }
         if(duration_axis.GetMaxValue() < 0)
             {
             fatal_error()
@@ -65,6 +67,7 @@ bool DatabaseTableAdapter::DoApplyAxisAdjustment
                 << LMI_FLUSH
                 ;
             }
+
         // we are operating with [,) - exclusive upper bound, but
         // duration axis has [,] - inclusive upper bound, therefore +1
         int const max_bound = GetDurationMaxBound();
@@ -99,7 +102,7 @@ bool DatabaseTableAdapter::VariesByDimension(unsigned int n) const
     EnsureValidDimensionIndex(n);
 
     if(IsVoid())
-        return false;
+        {return false;}
 
     std::vector<int> const& axis_lengths = db_value_->GetAxisLengths();
     return n < axis_lengths.size() && axis_lengths[n] > 1;
@@ -109,7 +112,7 @@ bool DatabaseTableAdapter::ConfirmOperation(unsigned int item_count) const
 {
     // allow up to 1M elements
     if(item_count < 1000000)
-        return true;
+        {return true;}
 
     // ask user about having more than a million elements
     wxString message
@@ -128,7 +131,7 @@ void DatabaseTableAdapter::MakeVaryByDimension(unsigned int n, bool varies)
     EnsureValidDimensionIndex(n);
 
     if(IsVoid())
-        return;
+        {return;}
 
     std::vector<int> axis_lengths = db_value_->GetAxisLengths();
 
@@ -140,7 +143,7 @@ void DatabaseTableAdapter::MakeVaryByDimension(unsigned int n, bool varies)
 void DatabaseTableAdapter::SetDurationMaxBound(unsigned int n)
 {
     if(IsVoid())
-        return;
+        {return;}
 
     std::vector<int> axis_lengths = db_value_->GetAxisLengths();
 
@@ -175,7 +178,7 @@ void DatabaseTableAdapter::ReshapeTableData
 unsigned int DatabaseTableAdapter::GetDurationMaxBound() const
 {
     if(IsVoid())
-        return 1;
+        {return 1;}
 
     return db_value_->GetAxisLengths()[eda_duration];
 }
@@ -183,7 +186,8 @@ unsigned int DatabaseTableAdapter::GetDurationMaxBound() const
 bool DatabaseTableAdapter::CanChangeVariationWith(unsigned int n) const
 {
     if(IsVoid())
-        return false;
+        {return false;}
+
     return n < db_value_->GetAxisLengths().size();
 }
 
@@ -203,7 +207,7 @@ boost::any DatabaseTableAdapter::StringToValue(wxString const& value) const
 {
     double res;
     if(!value.ToDouble(&res))
-        res = 0;
+        {res = 0;}
     return boost::any(res);
 }
 
@@ -229,7 +233,7 @@ bool DatabaseTableAdapter::IsVoid() const
 boost::any DatabaseTableAdapter::DoGetValue(Coords const& coords) const
 {
     if(IsVoid())
-        return boost::any(static_cast<double>(0));
+        {return boost::any(static_cast<double>(0));}
 
     indexes_.clear();
     indexes_.resize(coords.size());
@@ -245,7 +249,7 @@ void DatabaseTableAdapter::DoSetValue
     )
 {
     if(IsVoid())
-        return;
+        {return;}
 
     indexes_.clear();
     indexes_.resize(coords.size());

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: database_view.cpp,v 1.2 2007-02-21 03:07:24 chicares Exp $
+// $Id: database_view.cpp,v 1.3 2007-02-22 14:47:20 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -135,24 +135,23 @@ void DatabaseView::UponTreeSelectionChange(wxTreeEvent& event)
     DatabaseTreeItemData* item_data = dynamic_cast<DatabaseTreeItemData*>
         (tree.GetItemData(event.GetItem())
         );
+    if(!item_data)
+        {return;}
 
-    if(item_data)
-        {
-        std::size_t index = item_data->GetId();
+    std::size_t index = item_data->GetId();
 
-        table_adapter_->SetTDBValue(document().GetTDBValue(index));
+    table_adapter_->SetTDBValue(document().GetTDBValue(index));
 
-        bool is_topic = tree.GetChildrenCount(event.GetItem());
+    bool is_topic = tree.GetChildrenCount(event.GetItem());
 
-        std::ostringstream oss;
-        if(is_topic)
-            oss << "[+] ";
-        oss << item_data->GetDescription();
-        SetLabel(oss.str());
+    std::ostringstream oss;
+    if(is_topic)
+        {oss << "[+] ";}
+    oss << item_data->GetDescription();
+    SetLabel(oss.str());
 
-        MultiDimGrid& grid = GetGridCtrl();
+    MultiDimGrid& grid = GetGridCtrl();
 
-        grid.Enable(!is_topic);
-        grid.RefreshTableFull();
-        }
+    grid.Enable(!is_topic);
+    grid.RefreshTableFull();
 }
