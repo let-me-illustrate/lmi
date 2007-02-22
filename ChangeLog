@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.572 2007-02-21 23:38:33 chicares Exp $
+// $Id: ChangeLog,v 1.573 2007-02-22 00:11:19 chicares Exp $
 
 MAINTENANCE
 
@@ -10062,4 +10062,9 @@ Rearrange menus to match document-template order, which, as of
   single_choice_popup_menu.cpp
 Follow stylistic suggestions in Vadim's 2005-06-24T22:06 email
 (a personal communication, not on the mailing list).
+
+20070222T0011Z <chicares@cox.net> [1247]
+
+  main_wx.cpp
+Remove platform-specific code.
 

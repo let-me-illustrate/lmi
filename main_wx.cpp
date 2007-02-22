@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_wx.cpp,v 1.70 2007-02-21 12:14:26 chicares Exp $
+// $Id: main_wx.cpp,v 1.71 2007-02-22 00:11:19 chicares Exp $
 
 // Portions of this file are derived from wxWindows files
 //   samples/docvwmdi/docview.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -843,23 +843,19 @@ void Skeleton::UponWindowPrevious(wxCommandEvent&)
 
 void Skeleton::UponWindowTileHorizontally(wxCommandEvent&)
 {
-    frame_->Tile();
+    frame_->Tile(wxHORIZONTAL);
 }
 
-// FSF !! Need this in the wx library for GNU/linux.
-// WX !! A note in src/msw/mdi.cpp suggests adding an orientation
-// argument to Tile(); until that's done, use this workaround.
-//
 void Skeleton::UponWindowTileVertically(wxCommandEvent&)
 {
-#ifdef LMI_MSW
-    ::SendMessage
-        ((HWND)frame_->GetClientWindow()->GetHWND()
-        ,WM_MDITILE
-        ,MDITILE_VERTICAL | MDITILE_SKIPDISABLED
-        ,0
-        );
-#endif // LMI_MSW
+#if wxCHECK_VERSION(2,6,0)
+    frame_->Tile(wxVERTICAL);
+#else  // !wxCHECK_VERSION(2,6,0)
+    warning()
+        << "Vertical tiling not supported in this old wx version."
+        << LMI_FLUSH
+        ;
+#endif // !wxCHECK_VERSION(2,6,0)
 }
 
 bool Skeleton::ProcessCommandLine(int argc, char* argv[])
