@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: transferor.cpp,v 1.11 2007-01-27 00:00:52 wboutin Exp $
+// $Id: transferor.cpp,v 1.12 2007-02-22 00:53:45 chicares Exp $
 
 // Acknowledgment
 
@@ -60,11 +60,6 @@
 #include <wx/stattext.h>
 #include <wx/textctrl.h>
 #include <wx/utils.h>
-
-// FSF !! Expunge this when wx is enhanced.
-#ifdef LMI_MSW
-#   include <wx/msw/wrapwin.h>
-#endif // LMI_MSW
 
 IMPLEMENT_CLASS(Transferor, wxValidator)
 
@@ -302,26 +297,14 @@ namespace
             }
         else
             {
-            // For dropdown comboboxes, transfer the selected string
-            // only when the drop-down list is closed. Otherwise,
-            // scrolling through the list selects the highlighted
-            // item immediately.
-            wxComboBox* p = dynamic_cast<wxComboBox*>(&control);
-            if(p)
-                {
-#ifdef LMI_MSW
-// FSF !! Need this in the wx library for GNU/linux.
-bool dropped = ::SendMessage((HWND)(p->GetHandle()), CB_GETDROPPEDSTATE, 0, 0);
-if(!dropped)
-#endif // LMI_MSW
-{
-                data = p->GetValue();
-}
-                }
-            else
-                {
-                data = control.GetStringSelection();
-                }
+#if !wxCHECK_VERSION(2,6,2)
+            // For dropdown comboboxes, scrolling through the list
+            // selects the highlighted item immediately, with wx
+            // versions prior to 2.6.2 . This error directive may be
+            // suppressed if living with that problem is acceptable.
+#   error Outdated library: wx-2.6.2 or greater is required.
+#endif // !wxCHECK_VERSION(2,6,2)
+            data = control.GetStringSelection();
             }
         return true;
     }
