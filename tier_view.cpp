@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: tier_view.cpp,v 1.2 2007-02-21 03:07:24 chicares Exp $
+// $Id: tier_view.cpp,v 1.3 2007-02-22 14:47:20 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -173,7 +173,7 @@ void TierView::UponTreeSelectionChange(wxTreeEvent& event)
 
         std::ostringstream oss;
         if(is_topic)
-            oss << "[+] ";
+            {oss << "[+] ";}
         oss << item_data->get_description();
         SetLabel(oss.str());
 

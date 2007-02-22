@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: tier_view_editor.cpp,v 1.2 2007-02-21 03:07:24 chicares Exp $
+// $Id: tier_view_editor.cpp,v 1.3 2007-02-22 14:47:20 chicares Exp $
 
 #include "tier_view_editor.hpp"
 
@@ -75,10 +75,10 @@ void tier_entity_adapter::set_bands_count(unsigned int n)
     ensure_not_void();
 
     if(n == 0)
-        fatal_error() << "There has to be at least one band" << LMI_FLUSH;
+        {fatal_error() << "There has to be at least one band" << LMI_FLUSH;}
 
     if(n == limits().size())
-        return;
+        {return;}
 
     static double const max_double = std::numeric_limits<double>::max();
 
@@ -91,17 +91,17 @@ void tier_entity_adapter::set_bands_count(unsigned int n)
     unsigned int const size = limits().size();
 
     if(n < size)
-    {
+        {
         limits().erase(limits().begin() + n - 1, limits().begin() + size - 1);
         values().erase(values().begin() + n - 1, values().begin() + size - 1);
-    }
+        }
     else
-    {
+        {
         double add_limit = (size >= 2) ? limits()[size - 2] : 0;
         double add_value = (size >= 2) ? values()[size - 2] : values()[size - 1];
         limits().insert(limits().begin() + size - 1, n - size, add_limit);
         values().insert(values().begin() + size - 1, n - size, add_value);
-    }
+        }
 
     if(limits().size() != values().size())
         {
@@ -119,9 +119,7 @@ void tier_entity_adapter::set_bands_count(unsigned int n)
 double_pair TierTableAdapter::GetValue(unsigned int band) const
 {
     if(entity_.is_void())
-        {
-        return double_pair(0,0);
-        }
+        {return double_pair(0,0);}
 
     return entity_.get_value(band);
 }
@@ -129,9 +127,7 @@ double_pair TierTableAdapter::GetValue(unsigned int band) const
 void TierTableAdapter::SetValue(unsigned int band, double_pair const& value)
 {
     if(entity_.is_void())
-        {
-        return;
-        }
+        {return;}
 
     entity_.set_value(band, value);
     SetModified();
@@ -168,7 +164,7 @@ bool TierTableAdapter::DoApplyAxisAdjustment
     unsigned int max_bound = GetBandsCount();
     updated = max_bound != (ba.GetMaxValue() + 1);
     if(updated)
-        SetBandsCount(ba.GetMaxValue() + 1);
+        {SetBandsCount(ba.GetMaxValue() + 1);}
     return updated;
 }
 
@@ -254,7 +250,9 @@ void TierEditorGrid::SetValue(int row, int col, wxString const& str)
 
     double as_double;
     if(!str.ToDouble(&as_double))
+        {
         as_double = 0;
+        }
     if(col == tgc_limit)
         {
         value.first = as_double;
@@ -277,7 +275,7 @@ wxString TierEditorGrid::GetColLabelValue(int col)
 {
     CheckRowAndCol(1, col);
     if(col == tgc_limit)
-        return "Limit";
+        {return "Limit";}
     return "Value";
 }
 

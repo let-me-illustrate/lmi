@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: multidimgrid_tools.hpp,v 1.2 2007-02-21 03:07:24 chicares Exp $
+// $Id: multidimgrid_tools.hpp,v 1.3 2007-02-22 14:47:20 chicares Exp $
 
 #ifndef multidimgrid_tools_hpp
 #define multidimgrid_tools_hpp
@@ -173,7 +173,7 @@ Integral AxisMaxBoundAdjuster<Integral>::GetMaxValue() const
 {
     int value = wxChoice::GetSelection();
     if(value == wxNOT_FOUND)
-        value = 0;
+        {value = 0;}
     Integral max_value = lower_bound_ + static_cast<unsigned int>(value);
     if(max_value < lower_bound_ || upper_bound_ < max_value)
         {
@@ -358,7 +358,7 @@ AdjustableMaxBoundAxis<Integral>::DoGetAdjustControl
 {
     // called only once
     if(lower_bound_ == upper_bound_)
-        return NULL;
+        {return NULL;}
     return new Adjuster(*this, grid, lower_bound_, upper_bound_);
 }
 
@@ -369,7 +369,7 @@ bool AdjustableMaxBoundAxis<Integral>::DoApplyAdjustment
     )
 {
     if(!adjuster_window)
-        return false;
+        {return false;}
 
     Integral new_max_value = adjuster_window->GetMaxValue();
     if(lower_bound_ > new_max_value || new_max_value > upper_bound_)
@@ -391,7 +391,7 @@ bool AdjustableMaxBoundAxis<Integral>::DoRefreshAdjustment
     )
 {
     if(!adjuster_window)
-        return false;
+        {return false;}
 
     Integral max_value = adjuster_window->GetMaxValue();
     bool updated = (GrandBaseClass::GetMaxValue() != max_value);
