@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.573 2007-02-22 00:11:19 chicares Exp $
+// $Id: ChangeLog,v 1.574 2007-02-22 00:53:45 chicares Exp $
 
 MAINTENANCE
 
@@ -10066,5 +10066,10 @@ Follow stylistic suggestions in Vadim's 2005-06-24T22:06 email
 20070222T0011Z <chicares@cox.net> [1247]
 
   main_wx.cpp
+Remove platform-specific code.
+
+20070222T0053Z <chicares@cox.net> [1247]
+
+  transferor.cpp
 Remove platform-specific code.
 
