@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: multidimgrid_any.cpp,v 1.2 2007-02-21 03:07:24 chicares Exp $
+// $Id: multidimgrid_any.cpp,v 1.3 2007-02-22 14:47:20 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -168,11 +168,11 @@ wxSize MultiDimGridGrid::DoGetBestSize() const
     // of the scrollbars, is there any magic incantaion for that?
     int xpu, ypu;
     GetScrollPixelsPerUnit(&xpu, &ypu);
-    if (xpu)
+    if(xpu)
         {
         width  += 1 + xpu - (width  % xpu);
         }
-    if (ypu)
+    if(ypu)
         {
         height += 1 + ypu - (height % ypu);
         }
@@ -319,10 +319,12 @@ bool MultiDimGrid::Create
         }
 
     if(atable->GetDimension() != axis_.size())
+        {
         fatal_error()
             << "Table size and number of axis do not match"
             << LMI_FLUSH
             ;
+        }
 
     // initializing fixed values with empty ones
     axis_fixed_values_.resize(dimension_);
@@ -420,12 +422,12 @@ void MultiDimGrid::FixAxisValue
 {
     int sel = GetAxisIndexByName(axisName);
     if(sel != wxNOT_FOUND)
-    {
+        {
         axis_fixed_values_[sel] = value;
         axis_fixed_coords_[sel] = value;
 
         RefreshTableData();
-    }
+        }
 }
 
 void MultiDimGrid::RefreshTableData()
@@ -452,13 +454,13 @@ bool MultiDimGrid::RefreshTableAxis()
         // the order is important, otherwise it could optimize off
         // the call to DoRefreshTableAxis
         if(DoRefreshTableAxis(i))
-            updated = true;
+            {updated = true;}
         }
 
     // TODO ?? this method should check for changes in the table
     // data structure (number of axis, types of axis), and refresh accordingly
     if(AutoselectGridAxis())
-        updated = true;
+        {updated = true;}
 
     return updated;
 }
@@ -506,7 +508,7 @@ std::pair<int,int> MultiDimGrid::SuggestGridAxisSelection() const
                     {
                     newFirst = static_cast<int>(i);
                     if(newSecond != wxNOT_FOUND)
-                        break;
+                        {break;}
                     }
                 }
             else if(newSecond == wxNOT_FOUND)
@@ -528,9 +530,9 @@ bool MultiDimGrid::DoRefreshTableAxis(unsigned int n)
     GridRefreshTableDataGuard guard(*this);
     bool updated = false;
     if(DoRefreshAxisVaries(n))
-        updated = true;
+        {updated = true;}
     if(DoRefreshAxisAdjustment(n))
-        updated = true;
+        {updated = true;}
     return updated;
 }
 
@@ -551,30 +553,24 @@ bool MultiDimGrid::DoRefreshAxisVaries(unsigned int axis_id)
             }
 
         if(canChange != box->Enable())
-            updated = true;
+            {updated = true;}
         box->Show(canChange || !varies);
     }
 
     wxWindow* win = axis_choice_wins_[axis_id];
     if(win)
-        {
-        win->Show(varies);
-        }
+        {win->Show(varies);}
 
     win = axis_adjust_wins_[axis_id];
     if(win)
-        {
-        win->Show(varies);
-        }
+        {win->Show(varies);}
 
     if(updated)
         {
         PopulateGridAxisSelection();
         DoSetGridAxisSelection();
         if(varies)
-            {
-            AutoselectGridAxis();
-            }
+            {AutoselectGridAxis();}
         }
 
     return updated;
@@ -583,50 +579,45 @@ bool MultiDimGrid::DoRefreshAxisVaries(unsigned int axis_id)
 bool MultiDimGrid::DoRefreshAxisAdjustment(unsigned int n)
 {
     if(!table_->VariesByDimension(n))
-        {
-        return false;
-        }
+        {return false;}
 
     MultiDimAxisAny& axis = *axis_[n];
     wxWindow* adjustWin = axis_adjust_wins_[n];
 
     bool updated = false;
     if(table_->RefreshAxisAdjustment(axis, n))
-        updated = true;
+        {updated = true;}
     if(axis.RefreshAdjustment(adjustWin, n))
-        updated = true;
+        {updated = true;}
 
     if(updated)
-    {
+        {
         if(axis_choice_wins_[n])
-            {
-            axis.UpdateChoiceControl(*axis_choice_wins_[n]);
-            }
+            {axis.UpdateChoiceControl(*axis_choice_wins_[n]);}
         RefreshTableData();
-    }
+        }
     return updated;
 }
 
 bool MultiDimGrid::DoApplyAxisAdjustment(unsigned int n)
 {
     if(!table_->VariesByDimension(n))
-        {
-        return false;
-        }
+        {return false;}
+
     MultiDimAxisAny& axis = *axis_[n];
     wxWindow* adjustWin = axis_adjust_wins_[n];
 
     bool updated = false;
 
     if(axis.ApplyAdjustment(adjustWin, n))
-        updated = true;
+        {updated = true;}
     if(table_->ApplyAxisAdjustment(axis, n))
-        updated = true;
+        {updated = true;}
 
     if(updated)
         {
         if(axis_choice_wins_[n])
-            axis.UpdateChoiceControl(*axis_choice_wins_[n]);
+            {axis.UpdateChoiceControl(*axis_choice_wins_[n]);}
         RefreshTableData();
         }
     return updated;
@@ -797,7 +788,7 @@ int MultiDimGrid::GetGridAxisSelection(int id)
     // wxNOT_FOUND - nothing is selected
     // 0 - first empty item (" ") is selected => same as no selection at all
     if(oldSel == wxNOT_FOUND || oldSel == 0)
-        return wxNOT_FOUND;
+        {return wxNOT_FOUND;}
 
     return reinterpret_cast<int>(choice->GetClientData(oldSel));
 }
@@ -805,7 +796,7 @@ int MultiDimGrid::GetGridAxisSelection(int id)
 void MultiDimGrid::DoSetGridAxisSelection(int axis_id, int selection)
 {
     if(selection == GetGridAxisSelection(axis_id))
-        return;
+        {return;}
 
     wxChoice* choice = (axis_id == ID_FIRST_AXIS_CHOICE)
         ? first_axis_choice_
@@ -917,14 +908,10 @@ void MultiDimGrid::PopulateGridAxisSelection(unsigned int id)
         }
 
     if(new_sel_index != wxNOT_FOUND)
-        {
-        choice->SetSelection(new_sel_index);
-        }
+        {choice->SetSelection(new_sel_index);}
 
     if(old_selection != GetGridAxisSelection(id))
-        {
-        DoOnSwitchSelectedAxis(id);
-        }
+        {DoOnSwitchSelectedAxis(id);}
 }
 
 int MultiDimGrid::GetAxisIndexByName(std::string const& axisName)
@@ -932,9 +919,7 @@ int MultiDimGrid::GetAxisIndexByName(std::string const& axisName)
     for (unsigned int i = 0; i < dimension_; ++i)
         {
         if(axis_[i]->GetName() == axisName)
-            {
-            return i;
-            }
+            {return i;}
         }
     return wxNOT_FOUND;
 }
@@ -942,28 +927,28 @@ int MultiDimGrid::GetAxisIndexByName(std::string const& axisName)
 MultiDimAxisAny const& MultiDimGrid::GetAxis(unsigned int n) const
 {
     if(n >= axis_.size())
-        fatal_error() << "invalid axis index" << LMI_FLUSH;
+        {fatal_error() << "invalid axis index" << LMI_FLUSH;}
     return *axis_[n];
 }
 
 MultiDimAxisAny& MultiDimGrid::GetAxis(unsigned int n)
 {
     if(n >= axis_.size())
-        fatal_error() << "invalid axis index" << LMI_FLUSH;
+        {fatal_error() << "invalid axis index" << LMI_FLUSH;}
     return *axis_[n];
 }
 
 int MultiDimGrid::GetNumberRows()
 {
     if(second_grid_axis_ == wxNOT_FOUND)
-        return 1;
+        {return 1;}
     return axis_[second_grid_axis_]->GetCardinality();
 }
 
 int MultiDimGrid::GetNumberCols()
 {
-    if (first_grid_axis_ == wxNOT_FOUND)
-        return 1;
+    if(first_grid_axis_ == wxNOT_FOUND)
+        {return 1;}
     return axis_[first_grid_axis_]->GetCardinality();
 }
 
@@ -982,7 +967,7 @@ void MultiDimGrid::PrepareFixedCoords(int row, int col)
     else
         {
         if(col != 0)
-            fatal_error() << "No first grid axis selected" << LMI_FLUSH;
+            {fatal_error() << "No first grid axis selected" << LMI_FLUSH;}
         }
 
     if(second_grid_axis_ != wxNOT_FOUND)
@@ -993,7 +978,7 @@ void MultiDimGrid::PrepareFixedCoords(int row, int col)
     else
         {
         if(row != 0)
-            fatal_error() << "No second grid axis selected" << LMI_FLUSH;
+            {fatal_error() << "No second grid axis selected" << LMI_FLUSH;}
         }
 }
 
@@ -1058,9 +1043,7 @@ void MultiDimGrid::OnAxisVariesToggle(wxCommandEvent& event)
         );
 
     if(it == axis_varies_checkboxes_.end())
-        {
-        fatal_error() << "Unidentified event caught" << LMI_FLUSH;
-        }
+        {fatal_error() << "Unidentified event caught" << LMI_FLUSH;}
 
     std::size_t index = it - axis_varies_checkboxes_.begin();
     bool varies = axis_varies_checkboxes_[index]->GetValue();
@@ -1104,9 +1087,7 @@ void MultiDimGrid::OnSwitchSelectedAxis(wxCommandEvent& event)
 {
     int id = event.GetId();
     if(id != ID_FIRST_AXIS_CHOICE && id != ID_SECOND_AXIS_CHOICE)
-        {
-        fatal_error() << "Event from unknown control received" << LMI_FLUSH;
-        }
+        {fatal_error() << "Event from unknown control received" << LMI_FLUSH;}
 
     DoOnSwitchSelectedAxis(static_cast<unsigned int>(id));
 }

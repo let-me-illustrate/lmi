@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: multidimgrid_tools.cpp,v 1.2 2007-02-21 03:07:24 chicares Exp $
+// $Id: multidimgrid_tools.cpp,v 1.3 2007-02-22 14:47:20 chicares Exp $
 
 #include "multidimgrid_tools.hpp"
 
@@ -93,9 +93,9 @@ wxSize AutoResizingTreeCtrl::DoGetBestSize() const
         wxSize min_size = wxTreeCtrl::DoGetBestSize();
 
         if(best_size.x == 0)
-            best_size.x = min_size.x;
+            {best_size.x = min_size.x;}
         if(best_size.y == 0)
-            best_size.y = min_size.y;
+            {best_size.y = min_size.y;}
         }
     best_size += GetSize() - GetClientSize();
 
@@ -127,7 +127,7 @@ void AutoResizingTreeCtrl::DoGetBestSizePrivate
         {
         bool originally_expanded = is_root || IsExpanded(node);
         if(!originally_expanded)
-            Expand(node);
+            {Expand(node);}
 
         wxTreeItemIdValue cookie;
         for
@@ -140,7 +140,7 @@ void AutoResizingTreeCtrl::DoGetBestSizePrivate
             }
 
         if(!originally_expanded)
-            Collapse(node);
+            {Collapse(node);}
         }
 }
 
