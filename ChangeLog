@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.575 2007-02-23 15:21:27 chicares Exp $
+// $Id: ChangeLog,v 1.576 2007-02-23 16:47:16 chicares Exp $
 
 MAINTENANCE
 
@@ -10154,4 +10154,21 @@ Remove consecutive empty lines.
   tier_view_editor.hpp
 Write diagnostic messages as complete sentences, beginning with a
 capital letter and ending with a period.
+
+20070223T1647Z <chicares@cox.net> [1248]
+
+  accountvalue.cpp
+  database_view_editor.cpp
+  ihs_avmly.cpp
+  ihs_avsolve.cpp
+  ihs_irc7702a.cpp
+  ledger_base.cpp
+  ledger_xml_io2.cpp
+  multidimgrid_any.cpp
+  multidimgrid_tools.hpp
+  round_to_test.cpp
+  rounding_view_editor.cpp
+  tier_view.cpp
+Break expressions after an assignment operator: lmi coding standard,
+section 3.7 .
 

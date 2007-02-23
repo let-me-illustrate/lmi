@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: database_view_editor.cpp,v 1.5 2007-02-23 15:21:27 chicares Exp $
+// $Id: database_view_editor.cpp,v 1.6 2007-02-23 16:47:17 chicares Exp $
 
 #include "database_view_editor.hpp"
 
@@ -54,8 +54,8 @@ bool DatabaseTableAdapter::DoApplyAxisAdjustment
     // Duration axis
     if(n == eda_duration)
         {
-        DatabaseDurationAxis& duration_axis
-            = static_cast<DatabaseDurationAxis&>(axis);
+        DatabaseDurationAxis& duration_axis =
+            static_cast<DatabaseDurationAxis&>(axis);
         if(duration_axis.GetMinValue() != 0)
             {
             fatal_error() << "Duration must start at 0." << LMI_FLUSH;
@@ -88,8 +88,8 @@ bool DatabaseTableAdapter::DoRefreshAxisAdjustment
     // Duration axis
     if(n == eda_duration)
         {
-        DatabaseDurationAxis& duration_axis
-            = static_cast<DatabaseDurationAxis&>(axis);
+        DatabaseDurationAxis& duration_axis =
+            static_cast<DatabaseDurationAxis&>(axis);
         int max_bound = GetDurationMaxBound();
         updated = max_bound != (duration_axis.GetMaxValue() + 1);
         duration_axis.SetMaxValue(GetDurationMaxBound() - 1);

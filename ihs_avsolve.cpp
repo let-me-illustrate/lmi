@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avsolve.cpp,v 1.10 2007-01-27 00:00:51 wboutin Exp $
+// $Id: ihs_avsolve.cpp,v 1.11 2007-02-23 16:47:17 chicares Exp $
 
 // All iterative illustration solves are performed in this file.
 // We use Brent's algorithm because it is guaranteed to converge
@@ -215,9 +215,8 @@ double AccountValue::SolveTest(double a_CandidateValue)
     if(0 < (EffectiveSolveTargetYear - 1))  // TODO ?? "-1" ?
         {
         // Stop at EffectiveSolveTargetYear
-        std::vector<double>::iterator excess_loan_end
-            = VariantValues().ExcessLoan.begin()
-            ;
+        std::vector<double>::iterator excess_loan_end =
+            VariantValues().ExcessLoan.begin();
         LMI_ASSERT
             (   static_cast<unsigned int>(EffectiveSolveTargetYear)
             <=  VariantValues().ExcessLoan.size()
@@ -226,7 +225,7 @@ double AccountValue::SolveTest(double a_CandidateValue)
         most_negative_loan_deficit = *std::min_element
             (VariantValues().ExcessLoan.begin()
             ,excess_loan_end
-        );
+            );
         }
 
     double worst_negative = std::min

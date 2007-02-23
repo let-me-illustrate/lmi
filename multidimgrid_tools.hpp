@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: multidimgrid_tools.hpp,v 1.4 2007-02-23 15:21:27 chicares Exp $
+// $Id: multidimgrid_tools.hpp,v 1.5 2007-02-23 16:47:17 chicares Exp $
 
 #ifndef multidimgrid_tools_hpp
 #define multidimgrid_tools_hpp
@@ -319,12 +319,18 @@ void AdjustableMaxBoundAxis<Integral>::SetBounds(Integral lower_bound, Integral 
 template<typename Integral>
 void AdjustableMaxBoundAxis<Integral>::UpdateChoiceControl(wxWindow& choice_control) const
 {
+// EVGENIY !! dynamic_cast followed by static_cast seems like an
+// unusual idiom to me. Is there a reason for it that I don't see?
+// Why not write it as
+//   MultiDimAxisAnyChoice& choice = dynamic_cast<MultiDimAxisAnyChoice&>(choice_control);
+// (which would implicitly throw std::bad_cast if the cast fails)
+// instead?
     if(NULL == dynamic_cast<MultiDimAxisAnyChoice*>(&choice_control))
         {
         fatal_error() << "Wrong choice-control type." << LMI_FLUSH;
         }
-    MultiDimAxisAnyChoice& choice
-        = static_cast<MultiDimAxisAnyChoice&>(choice_control);
+    MultiDimAxisAnyChoice& choice =
+        static_cast<MultiDimAxisAnyChoice&>(choice_control);
 
     Integral min_value = GrandBaseClass::GetMinValue();
     Integral max_value = GrandBaseClass::GetMaxValue();
