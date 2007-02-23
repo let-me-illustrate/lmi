@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: database_view_editor.cpp,v 1.4 2007-02-23 12:43:25 chicares Exp $
+// $Id: database_view_editor.cpp,v 1.5 2007-02-23 15:21:27 chicares Exp $
 
 #include "database_view_editor.hpp"
 
@@ -58,12 +58,12 @@ bool DatabaseTableAdapter::DoApplyAxisAdjustment
             = static_cast<DatabaseDurationAxis&>(axis);
         if(duration_axis.GetMinValue() != 0)
             {
-            fatal_error() << "Duration has to start at 0" << LMI_FLUSH;
+            fatal_error() << "Duration must start at 0." << LMI_FLUSH;
             }
         if(duration_axis.GetMaxValue() < 0)
             {
             fatal_error()
-                << "Duration has to have at least one value"
+                << "Duration must have at least one value."
                 << LMI_FLUSH
                 ;
             }
@@ -115,9 +115,9 @@ bool DatabaseTableAdapter::ConfirmOperation(unsigned int item_count) const
         {return true;}
 
     // ask user about having more than a million elements
-    wxString message
-        = "The resulting entity will have more than 1 million entries."
-          "Are you sure you want to continue?"
+    wxString message =
+        "The resulting entity will have more than one million elements."
+        " Continue anyway?"
         ;
     return wxYES == wxMessageBox
         (message

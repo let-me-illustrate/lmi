@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: multidimgrid_tools.hpp,v 1.3 2007-02-22 14:47:20 chicares Exp $
+// $Id: multidimgrid_tools.hpp,v 1.4 2007-02-23 15:21:27 chicares Exp $
 
 #ifndef multidimgrid_tools_hpp
 #define multidimgrid_tools_hpp
@@ -126,10 +126,13 @@ AxisMaxBoundAdjuster<Integral>::AxisMaxBoundAdjuster
             << lower_bound
             << ","
             << upper_bound
-            << "]"
+            << "]."
             << LMI_FLUSH;
         }
     std::ostringstream oss;
+// EVGENIY !! Why use 'LMI_FLUSH' here? A std::stringstream doesn't
+// normally need to be flushed, and I don't think you want to report
+// the file name and line number.
     oss
         << "Upper bound for '"
         << axis.GetName()
@@ -155,13 +158,13 @@ void AxisMaxBoundAdjuster<Integral>::SetMaxValue(Integral max_value)
     if(max_value < lower_bound_ || upper_bound_ < max_value)
         {
         fatal_error()
-            << "max_value is out of allowed value range ("
+            << "Maximum value ("
             << max_value
-            << ") ["
+            << ") is outside allowed range ["
             << lower_bound_
             << ", "
             << upper_bound_
-            << "]"
+            << "]."
             << LMI_FLUSH
             ;
         }
@@ -178,7 +181,13 @@ Integral AxisMaxBoundAdjuster<Integral>::GetMaxValue() const
     if(max_value < lower_bound_ || upper_bound_ < max_value)
         {
         fatal_error()
-            << "max_value is out of allowed value range"
+            << "Maximum value ("
+            << max_value
+            << ") is outside allowed range ["
+            << lower_bound_
+            << ", "
+            << upper_bound_
+            << "]."
             << LMI_FLUSH
             ;
         }
@@ -299,7 +308,7 @@ void AdjustableMaxBoundAxis<Integral>::SetBounds(Integral lower_bound, Integral 
     if(lower_bound < 0 || upper_bound < lower_bound)
         {
         fatal_error()
-            << "lower_bound/upper_bound values are invalid"
+            << "Bounds are invalid."
             << LMI_FLUSH;
             ;
         }
@@ -312,7 +321,7 @@ void AdjustableMaxBoundAxis<Integral>::UpdateChoiceControl(wxWindow& choice_cont
 {
     if(NULL == dynamic_cast<MultiDimAxisAnyChoice*>(&choice_control))
         {
-        fatal_error() << "Wrong choice Control type" << LMI_FLUSH;
+        fatal_error() << "Wrong choice-control type." << LMI_FLUSH;
         }
     MultiDimAxisAnyChoice& choice
         = static_cast<MultiDimAxisAnyChoice&>(choice_control);
@@ -375,7 +384,7 @@ bool AdjustableMaxBoundAxis<Integral>::DoApplyAdjustment
     if(lower_bound_ > new_max_value || new_max_value > upper_bound_)
         {
         fatal_error()
-            << "new_max_value is out of valid value range"
+            << "New maximum value is outside valid range."
             << LMI_FLUSH
             ;
         }

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: multidimgrid_any.cpp,v 1.4 2007-02-23 12:43:26 chicares Exp $
+// $Id: multidimgrid_any.cpp,v 1.5 2007-02-23 15:21:27 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -82,7 +82,7 @@ void MultiDimAxisAny::UpdateChoiceControl(wxWindow& choice_control) const
         = dynamic_cast<MultiDimAxisAnyChoice*>(&choice_control);
     if(!control)
         {
-        warning() << "Wrong choice Control type" << LMI_FLUSH;
+        warning() << "Wrong choice-control type." << LMI_FLUSH;
         return;
         }
     control->PopulateChoiceList();
@@ -320,7 +320,7 @@ bool MultiDimGrid::Create
     if(atable->GetDimension() != axis_.size())
         {
         fatal_error()
-            << "Table size and number of axis do not match"
+            << "Table size does not match number of axes."
             << LMI_FLUSH
             ;
         }
@@ -759,7 +759,7 @@ bool MultiDimGrid::SetGridAxisSelection(int firstAxis, int secondAxis)
 {
     if(firstAxis == secondAxis && firstAxis != wxNOT_FOUND)
         {
-        warning() << "Select different axes" << LMI_FLUSH;
+        warning() << "Select different axes." << LMI_FLUSH;
         return false;
         }
     bool update =  first_grid_axis_ != firstAxis
@@ -925,14 +925,14 @@ int MultiDimGrid::GetAxisIndexByName(std::string const& axisName)
 MultiDimAxisAny const& MultiDimGrid::GetAxis(unsigned int n) const
 {
     if(n >= axis_.size())
-        {fatal_error() << "invalid axis index" << LMI_FLUSH;}
+        {fatal_error() << "Invalid axis index." << LMI_FLUSH;}
     return *axis_[n];
 }
 
 MultiDimAxisAny& MultiDimGrid::GetAxis(unsigned int n)
 {
     if(n >= axis_.size())
-        {fatal_error() << "invalid axis index" << LMI_FLUSH;}
+        {fatal_error() << "Invalid axis index." << LMI_FLUSH;}
     return *axis_[n];
 }
 
@@ -965,7 +965,7 @@ void MultiDimGrid::PrepareFixedCoords(int row, int col)
     else
         {
         if(col != 0)
-            {fatal_error() << "No first grid axis selected" << LMI_FLUSH;}
+            {fatal_error() << "No first grid axis selected." << LMI_FLUSH;}
         }
 
     if(second_grid_axis_ != wxNOT_FOUND)
@@ -976,7 +976,7 @@ void MultiDimGrid::PrepareFixedCoords(int row, int col)
     else
         {
         if(row != 0)
-            {fatal_error() << "No second grid axis selected" << LMI_FLUSH;}
+            {fatal_error() << "No second grid axis selected." << LMI_FLUSH;}
         }
 }
 
@@ -1041,7 +1041,12 @@ void MultiDimGrid::OnAxisVariesToggle(wxCommandEvent& event)
         );
 
     if(it == axis_varies_checkboxes_.end())
-        {fatal_error() << "Unidentified event caught" << LMI_FLUSH;}
+        {
+        fatal_error()
+            << "Event received from unexpected control."
+            << LMI_FLUSH
+            ;
+        }
 
     std::size_t index = it - axis_varies_checkboxes_.begin();
     bool varies = axis_varies_checkboxes_[index]->GetValue();
@@ -1085,7 +1090,12 @@ void MultiDimGrid::OnSwitchSelectedAxis(wxCommandEvent& event)
 {
     int id = event.GetId();
     if(id != ID_FIRST_AXIS_CHOICE && id != ID_SECOND_AXIS_CHOICE)
-        {fatal_error() << "Event from unknown control received" << LMI_FLUSH;}
+        {
+        fatal_error()
+            << "Event received from unexpected control."
+            << LMI_FLUSH
+            ;
+        }
 
     DoOnSwitchSelectedAxis(static_cast<unsigned int>(id));
 }
@@ -1180,7 +1190,7 @@ void MultiDimAxisAnyChoice::SelectionChanged()
     if(sel < 0 || sel >= axis_.GetCardinality())
         {
         fatal_error()
-            << "The axis and its choice control are out of sync"
+            << "The axis is inconsistent with its choice control."
             << LMI_FLUSH;
         }
 
