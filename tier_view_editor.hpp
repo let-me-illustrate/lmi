@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: tier_view_editor.hpp,v 1.4 2007-02-23 12:43:26 chicares Exp $
+// $Id: tier_view_editor.hpp,v 1.5 2007-02-23 15:21:27 chicares Exp $
 
 #ifndef tier_view_editor_hpp
 #define tier_view_editor_hpp
@@ -136,7 +136,7 @@ inline tier_entity_adapter::tier_entity_adapter
     ,values_(&values)
 {
     if(limits.size() != values.size())
-        {fatal_error() << "invalid stratified_entity" << LMI_FLUSH;}
+        {fatal_error() << "Inconsistent vector lengths." << LMI_FLUSH;}
 }
 
 inline std::vector<double>&       tier_entity_adapter::limits()
@@ -190,9 +190,10 @@ inline TierBandAxis::TierBandAxis()
 template <>
 class MultiDimTableTypeTraits<double_pair>
 {
+// TODO ?? EVGENIY !! Is an actual implementation needed?
     void fail() const
     {
-        fatal_error() << "Dummy implementation is called" << LMI_FLUSH;
+        fatal_error() << "Dummy implementation called." << LMI_FLUSH;
     }
 
   public:

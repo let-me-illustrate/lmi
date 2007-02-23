@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: multidimgrid_safe.tpp,v 1.3 2007-02-23 12:43:26 chicares Exp $
+// $Id: multidimgrid_safe.tpp,v 1.4 2007-02-23 15:21:27 chicares Exp $
 
 #include "multidimgrid_safe.hpp"
 
@@ -140,13 +140,13 @@ void MultiDimIntegralAxis<Integral>::SetValues
     if(!(min_value <= max_value))
         {
         fatal_error()
-            << "minValue has to be less than or equal to maxValue"
+            << "Minimum value exceeds maximum value."
             << LMI_FLUSH
             ;
         }
     if(step < 1)
         {
-        fatal_error() << "step has to be at least 1" << LMI_FLUSH;
+        fatal_error() << "Step must be at least 1." << LMI_FLUSH;
         }
 
     min_ = min_value;
@@ -213,7 +213,7 @@ bool MultiDimAdjustableAxis<AdjustControl, BaseAxisType>::ApplyAdjustment
     if(adjustWin && !win)
         {
         fatal_error()
-            << "The axis adjustment control given has incorrect type"
+            << "The axis-adjustment control is of incorrect type."
             << LMI_FLUSH
             ;
         }
@@ -230,7 +230,7 @@ bool MultiDimAdjustableAxis<AdjustControl, BaseAxisType>::RefreshAdjustment
     if(adjustWin && !win)
         {
         fatal_error()
-            << "The axis adjustment control given has incorrect type"
+            << "The axis-adjustment control is of incorrect type."
             << LMI_FLUSH
             ;
         }
@@ -274,8 +274,8 @@ MultiDimTable##n<T, BOOST_PP_ENUM_PARAMS(n, V)>::DoGetAxisAny                 \
         BOOST_PP_REPEAT(n, MDTABLE_SWITCH_GETAXIS_, ~)                        \
         }                                                                     \
     /* will never happen anyway */                                            \
-    fatal_error() << "Invalid dimension" << LMI_FLUSH;                        \
-    return NULL;                                                                 \
+    fatal_error() << "Invalid dimension." << LMI_FLUSH;                       \
+    return NULL;                                                              \
 }                                                                             \
                                                                               \
 template <typename T, BOOST_PP_ENUM_PARAMS(n, typename V)>                    \
@@ -307,7 +307,7 @@ wxString MultiDimTable##n<T, BOOST_PP_ENUM_PARAMS(n, V)>::ValueToString       \
         }                                                                     \
     catch(boost::bad_any_cast const&)                                         \
         {                                                                     \
-        return "invalid boost::any value type";                               \
+        return "Invalid boost::any value type.";                              \
         }                                                                     \
 }                                                                             \
                                                                               \
