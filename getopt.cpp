@@ -38,7 +38,7 @@
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
 // GWC added this RCS Id:
-// $Id: getopt.cpp,v 1.8 2007-01-27 00:00:51 wboutin Exp $
+// $Id: getopt.cpp,v 1.9 2007-02-23 12:43:25 chicares Exp $
 
 // GWC conditionalized gcc-specific pragma.
 #ifdef __GNUC__
@@ -138,7 +138,6 @@ GetOpt::GetOpt (int argc, char** argv, char const* optstring)
     Initialize (noptstring);
 }
 
-
 GetOpt::GetOpt (int argc, char** argv, char const* optstring,
                 Option const* longopts, int* longind, int long_only)
  :list_option (0)
@@ -206,7 +205,6 @@ GetOpt::Initialize  (std::string const& a_optstring)
     ordering = PERMUTE;
 }
 
-
 void
 GetOpt::exchange (char** argv)
 {
@@ -235,7 +233,6 @@ GetOpt::exchange (char** argv)
   last_nonopt = optind;
 }
 
-
 int
 GetOpt::List_Value  (int i)
 {
@@ -253,7 +250,6 @@ GetOpt::List_Value  (int i)
     }
   return  x->val;
 }
-
 
 int
 GetOpt::List_No_Value  ()
@@ -273,7 +269,6 @@ GetOpt::List_No_Value  ()
   return  x->val;
 }
 
-
 void
 GetOpt::print_expanding  (char* v)
 {
@@ -288,7 +283,6 @@ GetOpt::print_expanding  (char* v)
       std::fprintf (stderr, "%c", x);
 }
 
-
 void
 GetOpt::print_invalid  ()
 {
@@ -296,7 +290,6 @@ GetOpt::print_invalid  ()
   print_expanding (optarg);
   std::fprintf (stderr, "'\n");
 }
-
 
 // Scan elements of ARGV (whose length is ARGC) for option characters
 // given in OPTSTRING.
@@ -826,7 +819,6 @@ TRY_TO_GET_A_VALUE:
   }
 }
 
-
 int
 GetOpt::next_arg (int &i)
 {
@@ -846,7 +838,6 @@ GetOpt::next_arg (int &i)
     return 0;
 }
 
-
 int
 GetOpt::next_arg (double &d)
 {
@@ -865,7 +856,6 @@ GetOpt::next_arg (double &d)
   else
     return 0;
 }
-
 
 int
 // GWC changed nonstandard to standard string class.
@@ -945,9 +935,6 @@ GetOpt::usage(int status)
     usage(EXIT_SUCCESS == status ? std::cout : std::cerr);
     std::exit(status);
 }
-
-
-
 
 #ifdef TEST_GetOpt
 

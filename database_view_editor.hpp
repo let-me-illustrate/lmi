@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: database_view_editor.hpp,v 1.2 2007-02-21 03:07:24 chicares Exp $
+// $Id: database_view_editor.hpp,v 1.3 2007-02-23 12:43:25 chicares Exp $
 
 #ifndef database_view_editor_hpp
 #define database_view_editor_hpp
@@ -73,7 +73,6 @@ inline std::string const& DatabaseTreeItemData::GetDescription() const
 {
     return description_;
 }
-
 
 /// Database Axis definitions
 /// -------------------------
@@ -194,7 +193,6 @@ class DatabaseTableAdapter
     TDBValue* GetTDBValue() const;
     void SetTDBValue(TDBValue* db_value);
 
-
     /// Return true if the object data is modified since the last save
     bool IsModified() const;
     void SetModified(bool modified = true);
@@ -268,7 +266,6 @@ class DatabaseTableAdapter
     /// temporary buffer needed by DoGetValue() and DoSetValue() methods
     mutable std::vector<int> indexes_;
 
-
     DECLARE_NO_COPY_CLASS(DatabaseTableAdapter)
 };
 
@@ -281,7 +278,6 @@ inline void DatabaseTableAdapter::SetTDBValue(TDBValue* db_value)
 {
     db_value_ = db_value;
 }
-
 
 inline bool DatabaseTableAdapter::IsModified() const
 {

@@ -21,7 +21,7 @@ dnl snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
 dnl === Prologue ===
 
-AC_REVISION($Id: configure.ac,v 1.26 2007-02-21 03:07:24 chicares Exp $)dnl
+AC_REVISION($Id: configure.ac,v 1.27 2007-02-23 12:43:25 chicares Exp $)dnl
 
 AC_PREREQ(2.56)
 AC_INIT(LMI, 1.0.0, [chicares@cox.net])
@@ -54,7 +54,6 @@ esac
 
 AM_CONDITIONAL(LMI_MSW, [test "$USE_WINDOWS" = 1])
 
-
 dnl === Command line options ===
 
 AC_ARG_WITH(boost-headers,
@@ -69,7 +68,6 @@ AC_ARG_WITH(boost-toolkit,
 AC_ARG_WITH(boost-filesystem-src,
             [AC_HELP_STRING([--with-boost-filesystem-src=dir], [Boost filesystem library sources directory (./libs/filesystem/src directory in the boost default package). That option is only usefull for the in-project boost::filesystem library compilation])],
             lmi_boost_filesystem_src=$withval)
-
 
 AC_ARG_WITH(wx,
             [AC_HELP_STRING([--with-wx=dir],
@@ -91,7 +89,6 @@ AC_ARG_WITH(wx-setup,
             [AC_HELP_STRING([--with-wx-setup=dir],
                             [wx/setup.h directory])],
             lmi_wx_setup_dir=$withval)
-
 
 AC_ARG_ENABLE(debug,
              [AC_HELP_STRING([--enable-debug],
@@ -257,7 +254,6 @@ AC_SEARCH_LIBS([fabsl], [m],
     [AC_DEFINE(HAVE_FABSL, [1], [Define this if you have fabsl function])]
 )
 
-
 dnl check for snprintf: note that when compiling under gcc using -std= flag the
 dnl standard headers do not declare snprintf() and this is why we don't use
 dnl the usual AC_CHECK_FUNCS but reproduce the same workaround as used in
@@ -301,10 +297,8 @@ dnl === Library checks ===
 dnl use C++ compiler as we're checking for C++ libraries/headers
 AC_LANG(C++)
 
-
 dnl --- curses.h
 AC_SEARCH_LIBS([getch], [ncurses], [], [], [])
-
 
 dnl === Configure libtool ===
 
@@ -507,7 +501,6 @@ AC_CHECK_HEADER([boost/type_traits.hpp],
     [],
     [AC_MSG_ERROR([Boost headers not found, $errmsg])]
 )
-
 
 if test "x$lmi_boost_toolkit" == "x"; then
     if test "x$USE_MINGW32" = "x1"; then

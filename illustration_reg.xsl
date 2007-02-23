@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: illustration_reg.xsl,v 1.5 2007-01-27 00:00:51 wboutin Exp $
+    $Id: illustration_reg.xsl,v 1.6 2007-02-23 12:43:25 chicares Exp $
 -->
 
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fo="http://www.w3.org/1999/XSL/Format">
@@ -2078,7 +2078,6 @@ No cover page for this style sheet
             <xsl:with-param name="title" select="concat($textbefore,$textafter)"/>
         </xsl:call-template>
     </xsl:template>
-
 
     <!-- Standard Footer -->
     <xsl:template name="standardfooter">

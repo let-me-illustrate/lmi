@@ -20,8 +20,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: Makefile.am,v 1.27 2007-02-21 03:07:24 chicares Exp $
-
+# $Id: Makefile.am,v 1.28 2007-02-23 12:43:25 chicares Exp $
 
 SUBDIRS = third_party
 
@@ -163,7 +162,6 @@ else
     AM_LDFLAGS=
 endif
 
-
 ##############################################################################
 # Targets definitions
 ##############################################################################
@@ -244,8 +242,6 @@ if LMI_MSW
     lmi_wx_SOURCES += lmi.rc
     lmi_wx_CXXFLAGS += -mwindows
 endif
-
-
 
 cli_sources = \
     alert_cli.cpp \
@@ -331,7 +327,6 @@ libmain_auxiliary_common_la_SOURCES = \
     sigfpe.cpp
 libmain_auxiliary_common_la_CXXFLAGS = $(AM_CXXFLAGS)
 
-
 libantediluvian_la_SOURCES = \
     accountvalue.cpp \
     antediluvian_stubs.cpp \
@@ -348,8 +343,6 @@ libantediluvian_la_CXXFLAGS = $(AM_CXXFLAGS) $(XMLWRAPP_FLAGS) $(LIBXSLT_CFLAGS)
 libantediluvian_la_LDFLAGS = -no-undefined $(AM_LDFLAGS)
 libantediluvian_la_LIBADD = \
     $(BOOST_LIBS)
-
-
 
 liblmi_la_SOURCES = \
     authenticity.cpp \
@@ -396,12 +389,9 @@ libcgi_la_SOURCES = \
 libcgi_la_CXXFLAGS = $(BOOST_INCLUDE_FLAGS) $(CGICC_INCLUDE_FLAGS) $(AM_CXXFLAGS)
 libcgi_la_LIBADD = $(CGICC_LIBS)
 
-
-
 libwx_new_la_SOURCES = wx_new.cpp
 libwx_new_la_LDFLAGS = -no-undefined $(AM_LDFLAGS)
 libwx_new_la_LIBADD = $(WX_LIBS)
-
 
 # auxiliary executables
 
@@ -461,10 +451,8 @@ product_files_LDADD = \
     $(BOOST_LIBS) \
     $(XMLWRAPP_LIBS)
 
-
 dummy.cpp:
 	touch $@
-
 
 # unit tests
 libtest_commons_la_SOURCES = \
@@ -585,7 +573,6 @@ test_input_seq_SOURCES =    \
 test_input_seq_CXXFLAGS = $(AM_CXXFLAGS)
 test_input_seq_LDADD =    \
   libtest_commons.la
-
 
 test_input_SOURCES =    \
   alert.cpp \
@@ -827,7 +814,6 @@ test_zero_SOURCES = \
 test_zero_CXXFLAGS = $(AM_CXXFLAGS)
 test_zero_LDADD = \
   libtest_commons.la
-
 
 # headers: we need to include them or they wouldn't appear in the distribution
 noinst_HEADERS = \

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_harmonization.cpp,v 1.43 2007-01-27 00:00:51 wboutin Exp $
+// $Id: input_harmonization.cpp,v 1.44 2007-02-23 12:43:26 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -616,7 +616,6 @@ false // Silly workaround for now.
     IndividualPaymentToAge     .enable(mce_to_age  == IndividualPaymentToAlternative);
     IndividualPaymentToDuration.enable(mce_to_year == IndividualPaymentToAlternative);
 
-
 //    InsuredPremiumTableNumber.enable(mce_pmt_table == IndividualPaymentStrategy); // TODO ?? Not yet implemented.
     InsuredPremiumTableFactor.enable(mce_pmt_table == IndividualPaymentStrategy);
 
@@ -849,7 +848,6 @@ false // Silly workaround for now.
     SpouseRider      .enable(database_->Query(DB_AllowSpouse));
     SpouseRiderAmount.enable("Yes" == SpouseRider);
     SpouseIssueAge   .enable("Yes" == SpouseRider);
-
 
     HoneymoonEndorsement .enable(database_->Query(DB_AllowHoneymoon));
     PostHoneymoonSpread  .enable("Yes" == HoneymoonEndorsement);

@@ -36,11 +36,9 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-
 # GNU Makefile to compile on msw with mingw gcc.
 
-
-# $Id: mpatrol-mingw-GNUmakefile,v 1.5 2007-01-27 00:00:51 wboutin Exp $
+# $Id: mpatrol-mingw-GNUmakefile,v 1.6 2007-02-23 12:43:26 chicares Exp $
 
 # Definitions
 
@@ -107,7 +105,6 @@ IMPLIB_MPALLOC  = lib$(MPALLOC)_dll.dll
 OBJECT_MPALLOC	= lib$(MPALLOC).o
 
 ARCHIVE_MPTOOLS	= lib$(MPTOOLS).a
-
 
 # Rules
 

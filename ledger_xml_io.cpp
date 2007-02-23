@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xml_io.cpp,v 1.66 2007-01-27 00:00:51 wboutin Exp $
+// $Id: ledger_xml_io.cpp,v 1.67 2007-02-23 12:43:26 chicares Exp $
 
 #include "ledger.hpp"
 
@@ -506,7 +506,6 @@ void Ledger::write(xml::element& x) const
     format_map["SupplementalReport"                ] = f1;
     format_map["UseExperienceRating"               ] = f1;
     format_map["UsePartialMort"                    ] = f1;
-
 
 // > Vector Formatting
 // >

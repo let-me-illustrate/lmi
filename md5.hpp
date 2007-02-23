@@ -31,7 +31,7 @@
    email: <chicares@cox.net>
    snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-   $Id: md5.hpp,v 1.6 2007-01-27 00:00:51 wboutin Exp $
+   $Id: md5.hpp,v 1.7 2007-02-23 12:43:26 chicares Exp $
 
    GWC: File renamed md5.h --> md5.hpp so that grep whatever *.?pp
    can be used across the lmi project.
@@ -167,7 +167,6 @@ extern void md5_process_bytes LMI_P ((const void *buffer, size_t len,
    aligned for a 32 bits value.  */
 extern void *md5_finish_ctx LMI_P ((struct md5_ctx *ctx, void *resbuf));
 
-
 /* Put result from CTX in first 16 bytes following RESBUF.  The result is
    always in little endian byte order, so that a byte-wise output yields
    to the wanted ASCII representation of the message digest.
@@ -175,7 +174,6 @@ extern void *md5_finish_ctx LMI_P ((struct md5_ctx *ctx, void *resbuf));
    IMPORTANT: On some systems it is required that RESBUF is correctly
    aligned for a 32 bits value.  */
 extern void *md5_read_ctx LMI_P ((const struct md5_ctx *ctx, void *resbuf));
-
 
 /* Compute MD5 message digest for bytes read from STREAM.  The
    resulting message digest number will be written into the 16 bytes

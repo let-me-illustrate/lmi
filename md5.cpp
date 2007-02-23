@@ -34,7 +34,7 @@
    email: <chicares@cox.net>
    snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-   $Id: md5.cpp,v 1.4 2007-01-27 00:00:51 wboutin Exp $
+   $Id: md5.cpp,v 1.5 2007-02-23 12:43:26 chicares Exp $
 
    GWC: File renamed md5.c --> md5.cpp .
    GWC: Put C rtl functions in namespace std.
@@ -86,11 +86,9 @@ function bcopy().
 # define SWAP(n) (n)
 #endif
 
-
 /* This array contains the bytes used to pad the buffer to the next
    64-byte boundary.  (RFC 1321, 3.1: Step 1)  */
 static const unsigned char fillbuf[64] = { 0x80, 0 /* , 0, 0, ...  */ };
-
 
 /* Initialize structure containing state of computation.
    (RFC 1321, 3.3: Step 3)  */
@@ -255,7 +253,6 @@ md5_buffer (char const* buffer, std::size_t len, void* resblock)
   return md5_finish_ctx (&ctx, resblock);
 }
 
-
 /* GWC: Conform to C89 and C++98.
 void
 md5_process_bytes (buffer, len, ctx)
@@ -304,7 +301,6 @@ md5_process_bytes (void const* buffer, std::size_t len, struct md5_ctx* ctx)
       ctx->buflen = len;
     }
 }
-
 
 /* These are the four functions used in the four steps of the MD5 algorithm
    and defined in the RFC 1321.  The first function is a little bit optimized

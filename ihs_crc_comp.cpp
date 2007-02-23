@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_crc_comp.cpp,v 1.8 2007-01-27 00:00:51 wboutin Exp $
+// $Id: ihs_crc_comp.cpp,v 1.9 2007-02-23 12:43:25 chicares Exp $
 
 // Sample command line to compile:
 // /gcc-2.95.2-1/bin/g++ -Iming29521 ihs_crc_comp.cpp
@@ -151,7 +151,6 @@ void show_error_context(std::string const& line1, std::string const& line2)
 {
     std::cerr << "line1: " << line1 << "\nline2: " << line2 << '\n';
 }
-
 
 //============================================================================
 line_type get_type(std::string const& line)

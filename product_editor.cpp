@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: product_editor.cpp,v 1.3 2007-02-22 14:47:20 chicares Exp $
+// $Id: product_editor.cpp,v 1.4 2007-02-23 12:43:26 chicares Exp $
 
 #include "product_editor.hpp"
 
@@ -91,7 +91,6 @@ ProductEditorView::ProductEditorView()
 ProductEditorView::~ProductEditorView()
 {
 }
-
 
 TreeGridViewBase::TreeGridViewBase()
     :ProductEditorView()
