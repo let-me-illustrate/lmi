@@ -1,4 +1,4 @@
-// Test files for consistency with various rules: for now, only "no CR".
+// Test files for consistency with various rules.
 //
 // Copyright (C) 2006, 2007 Gregory W. Chicares.
 //
@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: test_coding_rules.cpp,v 1.4 2007-01-27 00:00:52 wboutin Exp $
+// $Id: test_coding_rules.cpp,v 1.5 2007-02-23 12:39:46 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -61,7 +61,12 @@ int process_file(char const* filename)
 
     if(std::string::npos != s.find('\r'))
         {
-        std::cout << "File '" << filename << "' contains CR.\n";
+        std::cout << "File '" << filename << "' contains \\r.\n";
+        }
+
+    if(std::string::npos != s.find("\n\n\n"))
+        {
+        std::cout << "File '" << filename << "' contains \\n\\n\\n.\n";
         }
 
     if(!ifs)
