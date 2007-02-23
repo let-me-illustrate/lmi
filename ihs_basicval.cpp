@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_basicval.cpp,v 1.31 2007-01-27 00:00:51 wboutin Exp $
+// $Id: ihs_basicval.cpp,v 1.32 2007-02-23 12:43:25 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -1783,7 +1783,6 @@ std::vector<double> BasicValues::GetTable
             tpx_prev = tpx;
             }
 */
-
 
 ///*
         for(int j = 0; j < GetLength(); j++)

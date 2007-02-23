@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: multidimgrid_safe.hpp,v 1.2 2007-02-21 03:07:24 chicares Exp $
+// $Id: multidimgrid_safe.hpp,v 1.3 2007-02-23 12:43:26 chicares Exp $
 
 #ifndef multidimgrid_safe_hpp
 #define multidimgrid_safe_hpp
@@ -72,7 +72,6 @@
 /// You should not use untyped method versions (such as MultiDimAxis::GetValue(),
 /// MultiDimTableN::SetValue()) - use typed versions instead
 /// (MultiDimAxis::DoGetValue(), MultiDimTableN::DoSetValue()).
-
 
 /// Design notes for MultiDimAxis<E>
 ///
@@ -378,7 +377,6 @@ BOOST_PP_REPEAT_FROM_TO(1, MAX_MULTIDIMGRID_AXIS, MDTABLE_AXISVALUETYPE_FOR_, ~)
 #undef MDTABLE_DECLARE_FOR_
 #undef MDTABLE_TTRAITS_INTEGRAL
 
-
 /// Design notes for MultiDimAdjustableAxis<AdjustControl, BaseAxisType>
 ///
 /// Adjustable Axis base class.
@@ -445,7 +443,6 @@ class MultiDimAdjustableAxis
         ,unsigned int n
         ) = 0;
 };
-
 
 #endif // multidimgrid_safe_hpp
 

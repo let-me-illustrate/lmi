@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: tier_view_editor.cpp,v 1.3 2007-02-22 14:47:20 chicares Exp $
+// $Id: tier_view_editor.cpp,v 1.4 2007-02-23 12:43:26 chicares Exp $
 
 #include "tier_view_editor.hpp"
 
@@ -112,10 +112,6 @@ void tier_entity_adapter::set_bands_count(unsigned int n)
         }
 }
 
-
-
-
-
 double_pair TierTableAdapter::GetValue(unsigned int band) const
 {
     if(entity_.is_void())
@@ -186,7 +182,6 @@ MultiDimAxis<unsigned int>* TierTableAdapter::GetAxis0()
 {
     return new TierBandAxis();
 }
-
 
 // ---------------------------
 // TierEditorGrid implementation

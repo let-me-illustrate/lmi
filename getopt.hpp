@@ -38,7 +38,7 @@
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
 // GWC added this RCS Id:
-// $Id: getopt.hpp,v 1.9 2007-01-27 00:00:51 wboutin Exp $
+// $Id: getopt.hpp,v 1.10 2007-02-23 12:43:25 chicares Exp $
 
 // This version of 'getopt' appears to the caller like standard Unix 'getopt'
 // but it behaves differently for the user, since it allows the user
@@ -152,7 +152,6 @@ private:
 
     static char* nextchar;
 
-
     // Describe how to deal with options that follow non-option ARGV-elements.
 
     // UNSPECIFIED means the caller did not specify anything;
@@ -182,7 +181,6 @@ private:
     enum OrderingEnum { REQUIRE_ORDER, PERMUTE, RETURN_IN_ORDER };
     OrderingEnum ordering;
 
-
     // Handle permutation of arguments.
 
     // Describe the part of ARGV that contains non-options that have
@@ -191,7 +189,6 @@ private:
 
     static int first_nonopt;
     static int last_nonopt;
-
 
     // The last long option that has field 'has_arg' set to LIST_ARG.
     // In each iteration, the current argument is checked to see if it is
@@ -203,9 +200,7 @@ private:
 
     int list_option_first;
 
-
     void exchange (char** argv);
-
 
     // Internal methods
 
@@ -219,7 +214,6 @@ public:
 
     int optopt;
 
-
     // For communication from 'getopt' to the caller.
     // When 'getopt' finds an option that takes an argument,
     // the argument value is returned here.
@@ -227,7 +221,6 @@ public:
     // each non-option ARGV-element is returned here.
 
     char* optarg;
-
 
     // Index in ARGV of the next element to be scanned.
     // This is used for communication to and from the caller
@@ -242,7 +235,6 @@ public:
 
     int optind;
 
-
     // Used only for long options.
     // If current option has field 'valid' not NULL and current argument
     // is a valid value, 'optindvalue' indexes the valid value in field 'valid'.
@@ -250,7 +242,6 @@ public:
     // 'optindvalue' is set to EOF.
 
     int optindvalue;
-
 
     // Callers store false here to inhibit the error message
     // for unrecognized options.
@@ -263,7 +254,6 @@ public:
     Option const* nlongopts;
     int* nlongind;
     int nlong_only;
-
 
     // Scan elements of ARGV (whose length is ARGC) for option characters
     // given in OPTSTRING.
@@ -338,7 +328,6 @@ public:
     ~GetOpt(); // Added by GWC.
     int operator () (void);
 
-
     // first_char returns the first character of the argument.
 
     int first_char ();
@@ -361,7 +350,6 @@ public:
     // GWC changed nonstandard to standard string class.
 //    int next_arg (String &s);
     int next_arg (std::string &s);
-
 
     // Prints a message for an invalid argument.
 

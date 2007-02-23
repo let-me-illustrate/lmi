@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: database_view_editor.cpp,v 1.3 2007-02-22 14:47:20 chicares Exp $
+// $Id: database_view_editor.cpp,v 1.4 2007-02-23 12:43:25 chicares Exp $
 
 #include "database_view_editor.hpp"
 
@@ -173,7 +173,6 @@ void DatabaseTableAdapter::ReshapeTableData
         SetModified();
         }
 }
-
 
 unsigned int DatabaseTableAdapter::GetDurationMaxBound() const
 {

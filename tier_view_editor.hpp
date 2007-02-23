@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: tier_view_editor.hpp,v 1.3 2007-02-22 14:47:20 chicares Exp $
+// $Id: tier_view_editor.hpp,v 1.4 2007-02-23 12:43:26 chicares Exp $
 
 #ifndef tier_view_editor_hpp
 #define tier_view_editor_hpp
@@ -36,10 +36,7 @@
 
 #include <string>
 
-
 typedef std::pair<double, double> double_pair;
-
-
 
 /// Stores additional information in a wxTree node
 
@@ -74,7 +71,6 @@ inline std::string const& TierTreeItemData::get_description() const
 {
     return description_;
 }
-
 
 /// tier_entity_adapter
 
@@ -165,7 +161,6 @@ inline unsigned int tier_entity_adapter::get_bands_count() const
     return is_void() ? 0 : limits().size();
 }
 
-
 /// Axis representing number of bands in the stratified_entity
 
 class TierBandAxis
@@ -215,7 +210,6 @@ class MultiDimTableTypeTraits<double_pair>
         return "";
     }
 };
-
 
 /// Table that interfaces between stratified_entity and MultiDimGrid
 ///
@@ -335,8 +329,6 @@ inline void TierTableAdapter::SetModified(bool modified)
     modified_ = modified;
 }
 
-
-
 /// The only customized part of that grid is its ability to show pairs of doubles
 /// in two columns in the data grid. It changes default MultiDimGrid
 /// interface that it uses to retrieve grid strings from underlying table.
@@ -369,8 +361,6 @@ class TierEditorGrid
 
     void CheckRowAndCol(int row, int col) const;
 };
-
-
 
 #endif // tier_view_editor_hpp
 

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: rounding_view_editor.hpp,v 1.2 2007-02-21 03:07:24 chicares Exp $
+// $Id: rounding_view_editor.hpp,v 1.3 2007-02-23 12:43:26 chicares Exp $
 
 #ifndef rounding_view_editor_hpp
 #define rounding_view_editor_hpp
@@ -73,7 +73,6 @@ class RoundingButtons
     void             SetValue(round_to<double> const& value);
     round_to<double> GetValue() const;
 
-
   private:
     void SetNumber(int number);
     int  GetNumber() const;
@@ -111,7 +110,6 @@ class RoundingButtonsXmlHandler
 
     DECLARE_DYNAMIC_CLASS(RoundingButtonsXmlHandler)
 };
-
 
 #endif // rounding_view_editor_hpp
 

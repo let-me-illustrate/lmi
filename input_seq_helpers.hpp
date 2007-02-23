@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_seq_helpers.hpp,v 1.4 2007-01-27 00:00:51 wboutin Exp $
+// $Id: input_seq_helpers.hpp,v 1.5 2007-02-23 12:43:26 chicares Exp $
 
 #ifndef input_seq_helpers_hpp
 #define input_seq_helpers_hpp
@@ -103,7 +103,6 @@ namespace detail
             }
     }
 } // namespace detail
-
 
 // Input-sequence fields use their own keywords, which might differ from
 // xenum strings.

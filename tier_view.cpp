@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: tier_view.cpp,v 1.3 2007-02-22 14:47:20 chicares Exp $
+// $Id: tier_view.cpp,v 1.4 2007-02-23 12:43:26 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -199,5 +199,4 @@ void TierView::UponTreeSelectionChange(wxTreeEvent& event)
         grid.RefreshTableFull();
         }
 }
-
 

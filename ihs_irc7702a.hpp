@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_irc7702a.hpp,v 1.6 2007-01-27 00:00:51 wboutin Exp $
+// $Id: ihs_irc7702a.hpp,v 1.7 2007-02-23 12:43:25 chicares Exp $
 
 #ifndef irc7702a_hpp
 #define irc7702a_hpp
@@ -217,7 +217,6 @@ class Irc7702A
         (bool a_TriggeredByUnnecPrem
         );
     double  DetermineLowestBft() const; // update LowestBft dynamically
-
 
 // NOTE: table lookup really means supplied via arguments ?
 // TODO ?? Need to calculate if not table lookup.

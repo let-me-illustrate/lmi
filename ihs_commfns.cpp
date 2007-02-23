@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_commfns.cpp,v 1.10 2007-01-27 00:00:51 wboutin Exp $
+// $Id: ihs_commfns.cpp,v 1.11 2007-02-23 12:43:25 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -184,7 +184,6 @@ ULCommFns::ULCommFns
     std::reverse(km.begin(), km.end());
     std::partial_sum(km.begin(), km.end(), km.begin());
     std::reverse(km.begin(), km.end());
-
 
 /*
     m[-1 + Length] = c[-1 + Length];

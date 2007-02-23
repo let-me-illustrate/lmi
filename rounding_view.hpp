@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: rounding_view.hpp,v 1.2 2007-02-21 03:07:24 chicares Exp $
+// $Id: rounding_view.hpp,v 1.3 2007-02-23 12:43:26 chicares Exp $
 
 #ifndef rounding_view_hpp
 #define rounding_view_hpp
@@ -89,7 +89,6 @@ inline char const* RoundingView::resource_file_name()
 {
     return "rounding_view.xrc";
 }
-
 
 #endif // rounding_view_hpp
 

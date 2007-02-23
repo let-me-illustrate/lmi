@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: nasd.xsl,v 1.5 2007-01-27 00:00:51 wboutin Exp $
+    $Id: nasd.xsl,v 1.6 2007-02-23 12:43:26 chicares Exp $
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fo="http://www.w3.org/1999/XSL/Format">
     <xsl:output method="xml" encoding="UTF-8" indent="yes"/>
@@ -188,7 +188,6 @@ No cover page for this style sheet
                 <xsl:call-template name="supplemental-illustration-report"/>
             </fo:page-sequence>
 
-
             <!-- EXPLANATORY NOTES - begins here -->
             <fo:page-sequence master-reference="explanatory-notes">
                 <!-- Define the contents of the header. -->
@@ -333,7 +332,6 @@ No cover page for this style sheet
                             <fo:leader></fo:leader>
                         </fo:block>
                     </fo:block>
-
 
                     <!-- Forced New Page -->
                     <fo:block break-after="page"/>
@@ -1750,7 +1748,6 @@ No cover page for this style sheet
         </xsl:if>
     </xsl:template>
 
-
     <xsl:template name="list-fund-allocation">
         <xsl:param name="counter"/>
         <xsl:if test="illustration/data/newcolumn/column[@name='FundNames']/duration[$counter]/@column_value!=''">
@@ -1925,7 +1922,6 @@ No cover page for this style sheet
             </fo:table>
         </fo:block>
     </xsl:template>
-
 
 </xsl:stylesheet>
 
