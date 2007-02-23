@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.574 2007-02-22 00:53:45 chicares Exp $
+// $Id: ChangeLog,v 1.575 2007-02-23 15:21:27 chicares Exp $
 
 MAINTENANCE
 
@@ -10072,4 +10072,86 @@ Remove platform-specific code.
 
   transferor.cpp
 Remove platform-specific code.
+
+20070222T1447Z <chicares@cox.net> [1247]
+
+  database_document.cpp
+  database_view.cpp
+  database_view_editor.cpp
+  multidimgrid_any.cpp
+  multidimgrid_any.hpp
+  multidimgrid_tools.cpp
+  multidimgrid_tools.hpp
+  policy_view.cpp
+  product_editor.cpp
+  rounding_view.cpp
+  rounding_view_editor.cpp
+  tier_view.cpp
+  tier_view_editor.cpp
+  tier_view_editor.hpp
+Enclose all dependent clauses in braces.
+
+20070223T1239Z <chicares@cox.net> [1247]
+
+  test_coding_rules.cpp
+Forbid consecutive empty lines.
+
+20070223T1243Z <chicares@cox.net> [1247]
+
+  Makefile.am
+  README.auto
+  configure.ac
+  database_document.cpp
+  database_view_editor.cpp
+  database_view_editor.hpp
+  getopt.cpp
+  getopt.hpp
+  ihs_avmly.cpp
+  ihs_basicval.cpp
+  ihs_commfns.cpp
+  ihs_crc_comp.cpp
+  ihs_dbvalue.cpp
+  ihs_irc7702a.cpp
+  ihs_irc7702a.hpp
+  illustration_reg.xsl
+  individual_private_placement.xsl
+  input_harmonization.cpp
+  input_seq_helpers.hpp
+  ledger_xml_io.cpp
+  md5.cpp
+  md5.hpp
+  mpatrol-mingw-GNUmakefile
+  multidimgrid_any.cpp
+  multidimgrid_any.hpp
+  multidimgrid_safe.hpp
+  multidimgrid_safe.tpp
+  nasd.xsl
+  policy_view.hpp
+  policy_view.xrc
+  product_editor.cpp
+  rounding_document.cpp
+  rounding_view.hpp
+  rounding_view_editor.cpp
+  rounding_view_editor.hpp
+  stratified_algorithms_test.cpp
+  tier_document.hpp
+  tier_view.cpp
+  tier_view_editor.cpp
+  tier_view_editor.hpp
+Remove consecutive empty lines.
+
+20070223T1521Z <chicares@cox.net> [1248]
+
+  database_view_editor.cpp
+  multidimgrid_any.cpp
+  multidimgrid_any.hpp
+  multidimgrid_safe.tpp
+  multidimgrid_tools.hpp
+  policy_view.cpp
+  rounding_view.cpp
+  rounding_view_editor.cpp
+  tier_view_editor.cpp
+  tier_view_editor.hpp
+Write diagnostic messages as complete sentences, beginning with a
+capital letter and ending with a period.
 

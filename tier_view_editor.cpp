@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: tier_view_editor.cpp,v 1.4 2007-02-23 12:43:26 chicares Exp $
+// $Id: tier_view_editor.cpp,v 1.5 2007-02-23 15:21:27 chicares Exp $
 
 #include "tier_view_editor.hpp"
 
@@ -34,7 +34,7 @@ void tier_entity_adapter::ensure_not_void() const
     if(is_void())
         {
         fatal_error()
-            << "stratified_entity being used is void"
+            << "Stratified entity is void."
             << LMI_FLUSH
             ;
         }
@@ -44,7 +44,7 @@ void tier_entity_adapter::ensure_valid_band_number(unsigned int band) const
     if(band >= limits().size())
         {
         fatal_error()
-            << "Invalid band number"
+            << "Invalid band number."
             << LMI_FLUSH
             ;
         }
@@ -75,7 +75,7 @@ void tier_entity_adapter::set_bands_count(unsigned int n)
     ensure_not_void();
 
     if(n == 0)
-        {fatal_error() << "There has to be at least one band" << LMI_FLUSH;}
+        {fatal_error() << "There must be at least one band." << LMI_FLUSH;}
 
     if(n == limits().size())
         {return;}
@@ -106,7 +106,7 @@ void tier_entity_adapter::set_bands_count(unsigned int n)
     if(limits().size() != values().size())
         {
         fatal_error()
-            << "Incorect stratified_entity, vectors size does not match"
+            << "Inconsistent vector lengths."
             << LMI_FLUSH
             ;
         }
@@ -134,7 +134,7 @@ void TierTableAdapter::EnsureIndexIsZero(unsigned int n) const
     if(n != 0)
         {
         fatal_error()
-            << "TierTableAdapter could only have one axis"
+            << "TierTableAdapter must have only one axis."
             << LMI_FLUSH
             ;
         }
@@ -153,7 +153,7 @@ bool TierTableAdapter::DoApplyAxisAdjustment
     if(ba.GetMinValue() != 0 || ba.GetMaxValue() < 0)
         {
         fatal_error()
-            << "Bands axis adjuster has incorrect values"
+            << "Band-axis adjuster has invalid limits."
             << LMI_FLUSH
             ;
         }
@@ -222,7 +222,7 @@ void TierEditorGrid::CheckRowAndCol(int row, int col) const
     if(col != tgc_limit && col != tgc_value)
         {
         fatal_error()
-            << "Grid has only two columns: Limit and Value"
+            << "Grid has only two columns: Limit and Value."
             << LMI_FLUSH
             ;
         }

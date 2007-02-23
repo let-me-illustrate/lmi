@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: rounding_view_editor.cpp,v 1.4 2007-02-23 12:43:26 chicares Exp $
+// $Id: rounding_view_editor.cpp,v 1.5 2007-02-23 15:21:27 chicares Exp $
 
 #include "rounding_view_editor.hpp"
 
@@ -86,8 +86,8 @@ void RoundingButtons::Create
     button_to_nearest_ = new(wx) wxToggleButton(this, e_rbi_to_nearest, "x");
     button_upward_     = new(wx) wxToggleButton(this, e_rbi_upward,     "A");
     button_downward_   = new(wx) wxToggleButton(this, e_rbi_downward,   "V");
-    button_not_at_all_->SetToolTip("does nothing");
-    button_to_nearest_->SetToolTip("round to the nearest");
+    button_not_at_all_->SetToolTip("do not round at all");
+    button_to_nearest_->SetToolTip("round to nearest");
     button_upward_    ->SetToolTip("round upward");
     button_downward_  ->SetToolTip("round downward");
     spin_ = new(wx) wxSpinCtrl(this);
