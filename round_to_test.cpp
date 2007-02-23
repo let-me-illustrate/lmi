@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: round_to_test.cpp,v 1.13 2007-01-27 00:00:52 wboutin Exp $
+// $Id: round_to_test.cpp,v 1.14 2007-02-23 16:47:17 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -263,8 +263,8 @@ bool test_one_case
         //
         // TODO ?? Shouldn't one epsilon here be epsilon of
         // max-precision-real type?
-        tolerance
-             = (1.0 + std::numeric_limits<RealType>::epsilon())
+        tolerance =
+               (1.0 + std::numeric_limits<RealType>::epsilon())
              * (1.0 + std::numeric_limits<RealType>::epsilon())
 // TODO ??        * (1.0 + std::numeric_limits<max_prec_real>::epsilon())
              - 1.0

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_base.cpp,v 1.9 2007-01-27 00:00:51 wboutin Exp $
+// $Id: ledger_base.cpp,v 1.10 2007-02-23 16:47:17 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -303,8 +303,7 @@ LedgerBase& LedgerBase::PlusEq
         }
     LMI_ASSERT(a_Addend_svmi == a_Addend.ForborneVectors.end());
 
-    scalar_map::const_iterator a_Addend_ssmi
-        = a_Addend.ScalableScalars.begin();
+    scalar_map::const_iterator a_Addend_ssmi = a_Addend.ScalableScalars.begin();
     for
         (scalar_map::iterator ssmi = ScalableScalars.begin()
         ;ssmi != ScalableScalars.end()

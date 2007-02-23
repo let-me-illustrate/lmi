@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: multidimgrid_any.cpp,v 1.5 2007-02-23 15:21:27 chicares Exp $
+// $Id: multidimgrid_any.cpp,v 1.6 2007-02-23 16:47:17 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -78,8 +78,12 @@ wxWindow* MultiDimAxisAny::GetChoiceControl
 
 void MultiDimAxisAny::UpdateChoiceControl(wxWindow& choice_control) const
 {
-    MultiDimAxisAnyChoice* control
-        = dynamic_cast<MultiDimAxisAnyChoice*>(&choice_control);
+// EVGENIY !! Why not write this entire function body as
+//    dynamic_cast<MultiDimAxisAnyChoice&>(choice_control)->PopulateChoiceList();
+// instead? That would throw an exception instead of returning with a
+// mere warning; but why shouldn't this be a fatal error?
+    MultiDimAxisAnyChoice* control =
+        dynamic_cast<MultiDimAxisAnyChoice*>(&choice_control);
     if(!control)
         {
         warning() << "Wrong choice-control type." << LMI_FLUSH;
@@ -339,8 +343,8 @@ bool MultiDimGrid::Create
     // we only want the vertical scrollbar enabled
     SetScrollbars(0, 20, 0, 50);
 
-    wxStaticBoxSizer* sizer
-        = new(wx) wxStaticBoxSizer(wxHORIZONTAL, this, "Axis");
+    wxStaticBoxSizer* sizer =
+        new(wx) wxStaticBoxSizer(wxHORIZONTAL, this, "Axis");
 
     // wxGridBagSizer(vgap, hgap)
     axis_sizer_ = new(wx) wxGridBagSizer(MDGRID_SIZER_VGAP, MDGRID_SIZER_HGAP);
@@ -666,8 +670,8 @@ wxChoice* MultiDimGrid::CreateGridAxisSelection
 
     win->SetOwnForegroundColour(selected_color);
 
-    unsigned int row
-        = (id == ID_FIRST_AXIS_CHOICE)
+    unsigned int row =
+          (id == ID_FIRST_AXIS_CHOICE)
         ? MDGRID_AXIS_X_ROW
         : MDGRID_AXIS_Y_ROW
         ;
@@ -827,8 +831,8 @@ void MultiDimGrid::DoSetGridAxisSelection()
     axis_fixed_coords_ = axis_fixed_values_;
     for(unsigned int i = 0; i < dimension_; ++i)
         {
-        bool selected
-            =  (static_cast<int>(i) == first_grid_axis_)
+        bool selected =
+               (static_cast<int>(i) == first_grid_axis_)
             || (static_cast<int>(i) == second_grid_axis_)
             ;
 
@@ -959,8 +963,8 @@ void MultiDimGrid::PrepareFixedCoords(int row, int col)
 {
     if(first_grid_axis_ != wxNOT_FOUND)
         {
-        axis_fixed_coords_[first_grid_axis_]
-            = axis_[first_grid_axis_]->GetValue(col);
+        axis_fixed_coords_[first_grid_axis_] =
+            axis_[first_grid_axis_]->GetValue(col);
         }
     else
         {
@@ -1151,8 +1155,8 @@ MultiDimAxisAnyChoice::MultiDimAxisAnyChoice
 void MultiDimAxisAnyChoice::PopulateChoiceList()
 {
     int const selection = GetSelection();
-    std::string const selected_label
-        = selection != wxNOT_FOUND ? GetString(selection) : "";
+    std::string const selected_label =
+        selection != wxNOT_FOUND ? GetString(selection) : "";
 
     Clear();
 

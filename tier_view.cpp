@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: tier_view.cpp,v 1.4 2007-02-23 12:43:26 chicares Exp $
+// $Id: tier_view.cpp,v 1.5 2007-02-23 16:47:17 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -56,8 +56,8 @@ std::vector<tier_entity_info> const& get_tier_entity_infos()
 {
     static int const n = e_stratified_last;
 
-    static tier_entity_info const static_tier_entity_info_array[n]
-        = { LMI_TIERED_CHARGE_NAMES };
+    static tier_entity_info const static_tier_entity_info_array[n] =
+        { LMI_TIERED_CHARGE_NAMES };
 
     static std::vector<tier_entity_info> const static_tier_entity_infos
         (static_tier_entity_info_array + 0
@@ -177,8 +177,7 @@ void TierView::UponTreeSelectionChange(wxTreeEvent& event)
         oss << item_data->get_description();
         SetLabel(oss.str());
 
-        std::vector<tier_entity_info> const& entities
-            = get_tier_entity_infos();
+        std::vector<tier_entity_info> const& entities = get_tier_entity_infos();
 
         if(is_topic)
             {
@@ -186,8 +185,8 @@ void TierView::UponTreeSelectionChange(wxTreeEvent& event)
             }
         else
             {
-            stratified_entity& entity
-                = *document().get_stratified_entity(entities[index].index);
+            stratified_entity& entity =
+                *document().get_stratified_entity(entities[index].index);
             table_adapter_->SetTierEntity
                 (tier_entity_adapter(entity.limits_, entity.values_)
                 );

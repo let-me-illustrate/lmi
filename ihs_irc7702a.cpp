@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_irc7702a.cpp,v 1.10 2007-02-23 12:43:25 chicares Exp $
+// $Id: ihs_irc7702a.cpp,v 1.11 2007-02-23 16:47:17 chicares Exp $
 
 // TODO ?? Make this a server app. Consider where to store DB, SA history.
 
@@ -1176,14 +1176,10 @@ tries running an inforce case as of month 0, year 0.
 // update LowestBft dynamically
 double Irc7702A::DetermineLowestBft() const
 {
-    std::vector<double>::const_iterator last_bft_in_test_period
-        = std::min
-            (Bfts.end()
-            ,Bfts.begin() + std::min
-                (TestPeriodLen
-                ,TestPeriodDur
-                )
-            );
+    std::vector<double>::const_iterator last_bft_in_test_period = std::min
+        (Bfts.end()
+        ,Bfts.begin() + std::min(TestPeriodLen, TestPeriodDur)
+        );
     LowestBft = *std::min_element
         (Bfts.begin()
         ,last_bft_in_test_period

@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avmly.cpp,v 1.58 2007-02-23 12:43:25 chicares Exp $
+// $Id: ihs_avmly.cpp,v 1.59 2007-02-23 16:47:17 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -3158,8 +3158,8 @@ void AccountValue::TxTakeWD()
 // Calculate maximum permissible total loan (not increment).
 void AccountValue::SetMaxLoan()
 {
-    MaxLoan
-        = (AVGenAcct + AVSepAcct) * MaxLoanAVMult
+    MaxLoan =
+          (AVGenAcct + AVSepAcct) * MaxLoanAVMult
         + (AVRegLn + AVPrfLn)
         - anticipated_deduction(MaxLoanDed)
         - std::max(0.0, SurrChg())
