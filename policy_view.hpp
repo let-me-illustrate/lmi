@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: policy_view.hpp,v 1.2 2007-02-21 03:07:24 chicares Exp $
+// $Id: policy_view.hpp,v 1.3 2007-02-23 12:43:26 chicares Exp $
 
 #ifndef policy_view_hpp
 #define policy_view_hpp
@@ -86,7 +86,6 @@ inline char const* PolicyView::resource_file_name()
 {
     return "policy_view.xrc";
 }
-
 
 #endif // policy_view_hpp
 

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_irc7702a.cpp,v 1.9 2007-01-27 00:00:51 wboutin Exp $
+// $Id: ihs_irc7702a.cpp,v 1.10 2007-02-23 12:43:25 chicares Exp $
 
 // TODO ?? Make this a server app. Consider where to store DB, SA history.
 
@@ -1223,11 +1223,6 @@ double Irc7702A::SAIncreaseToAvoidMec(bool a_TriggeredByUnnecPrem)
 
     return new_bft;
 }
-
-
-
-
-
 
 #ifdef NOT_DEFINED
 

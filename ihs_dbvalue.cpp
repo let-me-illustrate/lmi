@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_dbvalue.cpp,v 1.13 2007-01-27 00:00:51 wboutin Exp $
+// $Id: ihs_dbvalue.cpp,v 1.14 2007-02-23 12:43:25 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -602,7 +602,6 @@ bool TDBValue::AreAllAxesOK() const
     return rc;
 }
 
-
 // potential inlines
 
 //============================================================================
@@ -635,7 +634,6 @@ std::vector<int> const& TDBValue::GetAxisLengths() const
 {
     return axis_lengths;
 }
-
 
 /*
 Implementation

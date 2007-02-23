@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: multidimgrid_any.hpp,v 1.3 2007-02-22 14:47:20 chicares Exp $
+// $Id: multidimgrid_any.hpp,v 1.4 2007-02-23 12:43:26 chicares Exp $
 
 #ifndef multidimgrid_any_hpp
 #define multidimgrid_any_hpp
@@ -46,7 +46,6 @@
 ///        during compile-time: this is more restrictive but is much safer so,
 ///        whenever possible, these FooN (where N = 0, 1, ...) classes should
 ///        be used.
-
 
 /// Adjustment windows in MultiDimGrid
 ///
@@ -76,7 +75,6 @@
 ///     MultiDimTableAny::RefreshAxisAdjustment()
 ///   - refresh adjustment window from the axis
 ///     MultiDimAxisAny::RefreshAdjustment()
-
 
 /// Axis choice windows in MultiDimGrid
 ///
@@ -277,7 +275,6 @@ inline std::string const& MultiDimAxisAny::GetName() const
 {
     return name_;
 }
-
 
 /// Design notes for MultiDimTableAny
 ///

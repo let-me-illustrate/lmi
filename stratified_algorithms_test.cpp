@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: stratified_algorithms_test.cpp,v 1.6 2007-01-27 00:00:52 wboutin Exp $
+// $Id: stratified_algorithms_test.cpp,v 1.7 2007-02-23 12:43:26 chicares Exp $
 
 // TODO ?? Add tests for tiered_product<>() and tiered_rate<>().
 
@@ -128,6 +128,8 @@ void progressively_reduce_test()
     int z; // Desired reduction in their sum.
     int r; // Result: portion of desired reduction that couldn't be applied.
 
+    // {negative, negative}
+
     a = -2; b = -3; z =  6;
     r = progressively_reduce(a, b, z);
     BOOST_TEST(-2 == a && -3 == b &&  6 == r);
@@ -168,6 +170,7 @@ void progressively_reduce_test()
     r = progressively_reduce(a, b, z);
     BOOST_TEST( 1 == a &&  0 == b &&  0 == r);
 
+    // {positive, positive}
 
     a =  2; b =  3; z =  0;
     r = progressively_reduce(a, b, z);
@@ -205,6 +208,8 @@ void progressively_reduce_test()
     r = progressively_reduce(a, b, z);
     BOOST_TEST( 0 == a &&  0 == b &&  1 == r);
 
+    // {negative, positive}
+
     a = -2; b =  3; z =  4;
     r = progressively_reduce(a, b, z);
     BOOST_TEST(-2 == a &&  0 == b &&  1 == r);
@@ -241,6 +246,7 @@ void progressively_reduce_test()
     r = progressively_reduce(a, b, z);
     BOOST_TEST( 1 == a &&  3 == b &&  0 == r);
 
+    // {positive, negative}
 
     a =  2; b = -3; z =  3;
     r = progressively_reduce(a, b, z);
@@ -278,6 +284,7 @@ void progressively_reduce_test()
     r = progressively_reduce(a, b, z);
     BOOST_TEST( 3 == a &&  0 == b &&  0 == r);
 
+    // {0, negative}
 
     a =  0; b = -3; z =  1;
     r = progressively_reduce(a, b, z);
@@ -303,6 +310,7 @@ void progressively_reduce_test()
     r = progressively_reduce(a, b, z);
     BOOST_TEST( 1 == a &&  0 == b &&  0 == r);
 
+    // {negative, 0}
 
     a = -2; b =  0; z =  1;
     r = progressively_reduce(a, b, z);
@@ -328,6 +336,7 @@ void progressively_reduce_test()
     r = progressively_reduce(a, b, z);
     BOOST_TEST( 1 == a &&  0 == b &&  0 == r);
 
+    // {0, 0}
 
     a =  0; b =  0; z = -1;
     r = progressively_reduce(a, b, z);
@@ -337,6 +346,7 @@ void progressively_reduce_test()
     r = progressively_reduce(a, b, z);
     BOOST_TEST( 0 == a &&  0 == b &&  1 == r);
 
+    // {signed 0, signed 0}
 
     a =  0; b =  0; z =  0;
     r = progressively_reduce(a, b, z);

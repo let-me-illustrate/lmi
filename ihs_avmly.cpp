@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avmly.cpp,v 1.57 2007-01-13 16:40:15 chicares Exp $
+// $Id: ihs_avmly.cpp,v 1.58 2007-02-23 12:43:25 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -1263,7 +1263,6 @@ void AccountValue::IncreaseSpecAmtToAvoidMec()
 //         MCAP/7pp + corr x 1035 x (1-Lptax-Ldac-Lexc) + corr x Term x tgtpp x (Ltgt-Lexc)
 // newDB = --------------------------------------------------------------------------------
 //                             1 + corr x tgtpp x (Ltgt-Lexc)
-
 
             min_benefit =
                     (

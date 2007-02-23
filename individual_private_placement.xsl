@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: individual_private_placement.xsl,v 1.5 2007-01-27 00:00:51 wboutin Exp $
+    $Id: individual_private_placement.xsl,v 1.6 2007-02-23 12:43:25 chicares Exp $
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fo="http://www.w3.org/1999/XSL/Format">
     <xsl:output method="xml" encoding="UTF-8" indent="yes"/>
@@ -298,7 +298,6 @@
             </fo:page-sequence>
 -->
 
-
             <!-- COMPLIANCE -->
             <!-- IRR Guaranteed Charges) Illustration -->
             <!-- Body page -->
@@ -372,7 +371,6 @@
                 <xsl:call-template name="irr-current-illustration-report"/>
             </fo:page-sequence>
 
-
             <!-- Current Values Illustration -->
             <!-- Body page -->
             <fo:page-sequence master-reference="current-illustration">
@@ -409,7 +407,6 @@
                 </fo:static-content>
                 <xsl:call-template name="current-illustration-report"/>
             </fo:page-sequence>
-
 
             <!-- FOOTNOTES - begins here -->
             <fo:page-sequence master-reference="footnotes">

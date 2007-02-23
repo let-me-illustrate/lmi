@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: README.auto,v 1.5 2007-01-27 00:00:52 wboutin Exp $
+// $Id: README.auto,v 1.6 2007-02-23 12:43:25 chicares Exp $
 
                   README file for building LMI with autotools
                   ===========================================
@@ -39,10 +39,8 @@ b) configure does run-time checks which allows to find 3rd party libraries
 c) makefiles are much simpler and we get install, dist and check targets
    for free
 
-
 Possible disadvantage is the need for additional tools but if you follow the
 instructions below it shouldn't be a problem.
-
 
 1. Installing the required libraries
 ------------------------------------
@@ -80,7 +78,6 @@ b) boost: static boost_filesystem library is available as a standard cygwin
         3.4/4.0 so if you use the latter you *must* build from source or you
         get mysterious run-time crashes.
 
-
 2. Build system setup
 ---------------------
 
@@ -102,7 +99,6 @@ alternative: ensure that "wx" environment variable exists and points to the
 (uninstalled) wx source tree which you want to use and set ACLOCAL_AMFLAGS
 environment variable to "-I $wx".
 
-
 3. Build
 --------
 
@@ -118,12 +114,10 @@ useful ones are:
     --enable-debug              to enable debugging (asserts...)
     --disable-shared            to build static libraries only (for deployment)
 
-
 Then type "make". If it succeeds, you can do "make install". Other useful
 targets are "make check", "make dist" or "make dist-bzip2" (and "make
 distcheck" to check that it works), "make uninstall", "make clean" and "make
 maintainer-clean" (don't use the latter if you don't have autotools installed
 as you won't be able to regenerate the makefile after it).
 
-
-Version: $Id: README.auto,v 1.5 2007-01-27 00:00:52 wboutin Exp $
+Version: $Id: README.auto,v 1.6 2007-02-23 12:43:25 chicares Exp $

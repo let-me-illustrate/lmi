@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: database_document.cpp,v 1.3 2007-02-22 14:47:20 chicares Exp $
+// $Id: database_document.cpp,v 1.4 2007-02-23 12:43:25 chicares Exp $
 
 #include "database_document.hpp"
 
@@ -71,7 +71,6 @@ inline dict_map_swap_guard::~dict_map_swap_guard()
 }
 
 } // unnamed namespace
-
 
 IMPLEMENT_DYNAMIC_CLASS(DatabaseDocument, ProductEditorDocument)
 

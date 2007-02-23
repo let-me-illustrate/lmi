@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: multidimgrid_safe.tpp,v 1.2 2007-02-21 03:07:24 chicares Exp $
+// $Id: multidimgrid_safe.tpp,v 1.3 2007-02-23 12:43:26 chicares Exp $
 
 #include "multidimgrid_safe.hpp"
 
@@ -89,7 +89,6 @@ std::vector<std::string> MultiDimEnumAxis<Enum>::MakeArray                    \
 BOOST_PP_REPEAT_FROM_TO(1, MAX_MULTIDIMGRID_MAKEARRAY, IMPL_MAKE_ARRAY_n, ~)
 
 #undef IMPL_MAKE_ARRAY_n
-
 
 /// MultiDimIntegralAxis<Integral>
 /// ------------------------------
@@ -246,15 +245,12 @@ MultiDimAdjustableAxis<AdjustControl, BaseAxisType>::MultiDimAdjustableAxis
 {
 }
 
-
-
 /// helper macro used to generate Set/GetValue pseudo-code above
 #define MDTABLE_PARAMS_(z, n, unused)                                         \
     BOOST_PP_COMMA_IF(n) boost::any_cast<V##n>(coords[n])                     \
 
 #define MDTABLE_SWITCH_GETAXIS_(z, n, unused)                                 \
     case n: return GetAxis##n();                                              \
-
 
 /// helper macro used to implement MultiDimTableN and MultiDimGridN classes for
 /// given N

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: tier_document.hpp,v 1.2 2007-02-21 03:07:24 chicares Exp $
+// $Id: tier_document.hpp,v 1.3 2007-02-23 12:43:26 chicares Exp $
 
 #ifndef tier_document_hpp
 #define tier_document_hpp
@@ -51,7 +51,6 @@ class TierDocument
 
     DECLARE_DYNAMIC_CLASS(TierDocument)
 };
-
 
 #endif // tier_document_hpp
 

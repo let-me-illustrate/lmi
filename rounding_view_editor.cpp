@@ -19,10 +19,9 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: rounding_view_editor.cpp,v 1.3 2007-02-22 14:47:20 chicares Exp $
+// $Id: rounding_view_editor.cpp,v 1.4 2007-02-23 12:43:26 chicares Exp $
 
 #include "rounding_view_editor.hpp"
-
 
 #include <wx/dcclient.h> // RoundingButtons::CalculateMinimumTextControlSize
 #include <wx/icon.h>
@@ -108,7 +107,6 @@ void RoundingButtons::Create
         = CalculateMinimumTextControlSize(spin_, 6);
     spin_size.SetHeight(spin_->GetSize().GetHeight());
     spin_->SetMinSize(spin_size);
-
 
     wxBoxSizer* sizer_ = new(wx) wxBoxSizer(wxHORIZONTAL);
     SetSizer(sizer_);
@@ -238,7 +236,6 @@ rounding_style RoundingButtons::GetStyle() const
     else if(button_downward_->GetValue())   {return r_downward;}
     else                                    {return r_indeterminate;}
 }
-
 
 IMPLEMENT_DYNAMIC_CLASS(RoundingButtonsXmlHandler, wxXmlResourceHandler)
 

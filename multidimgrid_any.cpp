@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: multidimgrid_any.cpp,v 1.3 2007-02-22 14:47:20 chicares Exp $
+// $Id: multidimgrid_any.cpp,v 1.4 2007-02-23 12:43:26 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -225,7 +225,6 @@ inline void GridRefreshTableDataGuard::Release()
     grid_ = NULL;
 }
 
-
 /// MultiDimGrid methods implementation
 /// -----------------------------------
 
@@ -335,7 +334,6 @@ bool MultiDimGrid::Create
     axis_choice_wins_.resize(dimension_);
     axis_adjust_wins_.resize(dimension_);
     axis_varies_checkboxes_.resize(dimension_);
-
 
     // WX !! without the following we don't get any scrollbars at all
     // we only want the vertical scrollbar enabled
