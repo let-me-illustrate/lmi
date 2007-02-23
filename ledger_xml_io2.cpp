@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xml_io2.cpp,v 1.19 2007-01-26 03:11:16 chicares Exp $
+// $Id: ledger_xml_io2.cpp,v 1.20 2007-02-23 16:47:17 chicares Exp $
 
 #include "ledger.hpp"
 
@@ -1041,8 +1041,8 @@ void Ledger::write_excerpt
     string_scalar_map_t string_scalars;
     string_vector_map_t string_vectors;
 
-    string_vectors[value_id::from_name("FundNames")]
-        = ledger_invariant_->FundNames;
+    string_vectors[value_id::from_name("FundNames")] =
+        ledger_invariant_->FundNames;
 
     // Map the data, formatting it as necessary.
 
@@ -1090,8 +1090,8 @@ void Ledger::write_excerpt
             ;++j
             )
             {
-            double_scalars[value_id::from_name_basis(j->first, i->first)]
-                = *j->second;
+            double_scalars[value_id::from_name_basis(j->first, i->first)] =
+                *j->second;
             }
         // TODO ?? 'strings' variable is not going to be referenced by the rest
         // of the code, why do we want to modify it here?
@@ -1109,17 +1109,17 @@ void Ledger::write_excerpt
             ;++j
             )
             {
-            double_vectors[value_id::from_name_basis(j->first, i->first)]
-                = *j->second;
+            double_vectors[value_id::from_name_basis(j->first, i->first)] =
+                *j->second;
             }
         }
 
-    string_vectors[value_id::from_name("EeMode")]
-        = enum_vector_to_string_vector( ledger_invariant_->EeMode );
-    string_vectors[value_id::from_name("ErMode")]
-        = enum_vector_to_string_vector( ledger_invariant_->ErMode );
-    string_vectors[value_id::from_name("DBOpt")]
-        = enum_vector_to_string_vector( ledger_invariant_->DBOpt  );
+    string_vectors[value_id::from_name("EeMode")] =
+        enum_vector_to_string_vector( ledger_invariant_->EeMode );
+    string_vectors[value_id::from_name("ErMode")] =
+        enum_vector_to_string_vector( ledger_invariant_->ErMode );
+    string_vectors[value_id::from_name("DBOpt")] =
+        enum_vector_to_string_vector( ledger_invariant_->DBOpt  );
 
 // TODO ?? Here I copied some stuff from the ledger class files: the
 // parts that speak of odd members that aren't in those class's
@@ -1215,8 +1215,7 @@ void Ledger::write_excerpt
 
             id.set_to_xml_element(dvector);
 
-            string_vector_t v
-                = formatter.format(id, j->second, xml_version);
+            string_vector_t v = formatter.format(id, j->second, xml_version);
 // TODO ?? InforceLives shows an extra value past the end; should it
 // be truncated here?
             for

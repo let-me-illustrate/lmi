@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: rounding_view_editor.cpp,v 1.5 2007-02-23 15:21:27 chicares Exp $
+// $Id: rounding_view_editor.cpp,v 1.6 2007-02-23 16:47:17 chicares Exp $
 
 #include "rounding_view_editor.hpp"
 
@@ -94,8 +94,7 @@ void RoundingButtons::Create
 
     // adjust widgets size to be as small as possible
     // 3 stands for the button label symbol itself plus two margins
-    wxSize button_size
-        = CalculateMinimumTextControlSize(button_not_at_all_, 3);
+    wxSize button_size = CalculateMinimumTextControlSize(button_not_at_all_, 3);
     button_size.SetHeight(button_not_at_all_->GetSize().GetHeight());
     button_not_at_all_->SetMinSize(button_size);
     button_to_nearest_->SetMinSize(button_size);
@@ -103,8 +102,7 @@ void RoundingButtons::Create
     button_downward_  ->SetMinSize(button_size);
 
     // 6 stands for the digit and its margins, plus the same for spin arrows
-    wxSize spin_size
-        = CalculateMinimumTextControlSize(spin_, 6);
+    wxSize spin_size = CalculateMinimumTextControlSize(spin_, 6);
     spin_size.SetHeight(spin_->GetSize().GetHeight());
     spin_->SetMinSize(spin_size);
 

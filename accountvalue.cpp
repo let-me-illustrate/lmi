@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: accountvalue.cpp,v 1.25 2007-01-27 00:00:51 wboutin Exp $
+// $Id: accountvalue.cpp,v 1.26 2007-02-23 16:47:16 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -911,8 +911,8 @@ void AccountValue::TxTakeWD()
     //   max WD on a loaned policy: cannot become overloaned until next
     //     modal premium date;
     //   max loan: cannot become overloaned until end of policy year.
-    double MaxWD
-        = AVUnloaned
+    double MaxWD =
+          AVUnloaned
         + (AVRegLn  + AVPrfLn)
         - (RegLnBal + PrfLnBal)
         - mlydedtonextmodalpmtdate;
@@ -990,8 +990,8 @@ void AccountValue::TxTakeLoan()
     // Impose maximum amount.
     // If maximum exceeded...limit it.
     // TODO ?? For solves, we may wish to ignore max.
-    MaxLoan
-        = AVUnloaned * 0.9    // TODO ?? Icky manifest constant.
+    MaxLoan =
+          AVUnloaned * 0.9    // TODO ?? Icky manifest constant.
         // - surrchg
         + (AVRegLn + AVPrfLn)
         - RegLnBal * (std::pow((1.0 + YearsRegLnIntDueRate), 12 - Month) - 1.0)
