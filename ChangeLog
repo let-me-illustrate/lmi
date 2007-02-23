@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.576 2007-02-23 16:47:16 chicares Exp $
+// $Id: ChangeLog,v 1.577 2007-02-23 18:20:48 wboutin Exp $
 
 MAINTENANCE
 
@@ -10171,4 +10171,9 @@ capital letter and ending with a period.
   tier_view.cpp
 Break expressions after an assignment operator: lmi coding standard,
 section 3.7 .
+
+20070223T1820Z <wboutin@massmutual.com> [1248]
+
+  version.hpp
+Mark release candidate.
 
