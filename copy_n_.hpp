@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: copy_n_.hpp,v 1.4 2007-01-27 00:00:51 wboutin Exp $
+// $Id: copy_n_.hpp,v 1.5 2007-02-25 02:12:29 chicares Exp $
 
 // Copyright (C) 1994
 // Hewlett-Packard Company
@@ -46,7 +46,7 @@
 // This implementation is a derived work based on code SGI released
 // with the above disclaimers.
 //
-// Gregory W. Chicares modified it trivially in 2001 and 2005.
+// Gregory W. Chicares modified it trivially in 2001 and later years.
 // Any defect in it should not reflect on SGI's or HP's reputation.
 
 #ifndef copy_n_hpp
@@ -61,7 +61,7 @@ namespace nonstd
     void copy_n_(InputIterator first, Size count, OutputIterator result)
     {
         Size j = count;
-        for(; j > 0; --j)
+        for(; 0 < j; --j)
             {
             *result = *first;
             ++first;

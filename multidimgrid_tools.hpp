@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: multidimgrid_tools.hpp,v 1.5 2007-02-23 16:47:17 chicares Exp $
+// $Id: multidimgrid_tools.hpp,v 1.6 2007-02-25 02:12:30 chicares Exp $
 
 #ifndef multidimgrid_tools_hpp
 #define multidimgrid_tools_hpp
@@ -119,7 +119,7 @@ AxisMaxBoundAdjuster<Integral>::AxisMaxBoundAdjuster
     ,lower_bound_(lower_bound)
     ,upper_bound_(upper_bound)
 {
-    if(lower_bound > upper_bound)
+    if(upper_bound < lower_bound)
         {
         fatal_error()
             << "Invalid bounds ["
@@ -339,11 +339,11 @@ void AdjustableMaxBoundAxis<Integral>::UpdateChoiceControl(wxWindow& choice_cont
     unsigned int common_count = std::min(choice.GetCount(), new_count);
 
     int selection = choice.GetSelection();
-    if(selection != wxNOT_FOUND && selection >= static_cast<int>(common_count))
+    if(selection != wxNOT_FOUND && static_cast<int>(common_count) <= selection)
         {
         selection = wxNOT_FOUND;
         }
-    while(choice.GetCount() > common_count)
+    while(common_count < choice.GetCount())
         {
         choice.Delete(choice.GetCount() - 1);
         }
@@ -387,7 +387,7 @@ bool AdjustableMaxBoundAxis<Integral>::DoApplyAdjustment
         {return false;}
 
     Integral new_max_value = adjuster_window->GetMaxValue();
-    if(lower_bound_ > new_max_value || new_max_value > upper_bound_)
+    if(!(lower_bound_ <= new_max_value && new_max_value <= upper_bound_))
         {
         fatal_error()
             << "New maximum value is outside valid range."

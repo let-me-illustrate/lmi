@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_invariant.cpp,v 1.28 2007-01-27 00:00:51 wboutin Exp $
+// $Id: ledger_invariant.cpp,v 1.29 2007-02-25 02:12:29 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -689,7 +689,7 @@ LedgerInvariant& LedgerInvariant::PlusEq(LedgerInvariant const& a_Addend)
 
     // ET !! This is of the form 'x = (lengthof x) take y'.
     // Make sure total (this) has enough years to add all years of a_Addend to.
-    LMI_ASSERT(Length >= a_Addend.Length);
+    LMI_ASSERT(a_Addend.Length <= Length);
     for(int j = 0; j < Max; j++)
         {
         if(0.0 == N[j])
