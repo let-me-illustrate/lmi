@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_x_type.hpp,v 1.3 2007-01-27 00:00:51 wboutin Exp $
+// $Id: ihs_x_type.hpp,v 1.4 2007-02-25 15:02:48 chicares Exp $
 
 #ifndef x_type_hpp
 #define x_type_hpp
@@ -32,7 +32,7 @@
 class x_product_rule_violated
     :public std::runtime_error
 {
-public:
+  public:
     x_product_rule_violated(std::string const& what_arg)
     :std::runtime_error("Product rule violated: " + what_arg)
     {}

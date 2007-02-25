@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xenum.hpp,v 1.5 2007-01-27 00:00:52 wboutin Exp $
+// $Id: xenum.hpp,v 1.6 2007-02-25 15:02:48 chicares Exp $
 
 #ifndef xenum_hpp
 #define xenum_hpp
@@ -59,7 +59,7 @@
 template<typename EnumType, int N>
 class xenum
 {
-public:
+  public:
     typedef EnumType enumeration_type;
 
     xenum();
@@ -91,7 +91,7 @@ public:
 
     static std::vector<std::string> const& all_strings();
 
-private:
+  private:
     void set_value(std::string const& s);
 
     EnumType representation;
@@ -103,7 +103,7 @@ private:
 template <typename EnumType>
 class xenum<EnumType, 0>
 {
-public:
+  public:
     virtual ~xenum() = 0;
 };
 

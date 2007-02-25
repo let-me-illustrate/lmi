@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: cpp_main.cpp,v 1.5 2007-01-27 00:00:51 wboutin Exp $
+// $Id: cpp_main.cpp,v 1.6 2007-02-25 15:02:48 chicares Exp $
 
 // This is a derived work based on Beman Dawes's boost test library
 // that bears the following copyright and license statement:
@@ -118,11 +118,11 @@ namespace lmi_test
   {
     class cpp_main_caller
     {
-      int argc;
-      char** argv;
-     public:
-      cpp_main_caller(int c, char** v) : argc(c), argv(v) {}
-      int operator()() {return cpp_main(argc, argv);}
+        int argc;
+        char** argv;
+      public:
+        cpp_main_caller(int c, char** v) : argc(c), argv(v) {}
+        int operator()() {return cpp_main(argc, argv);}
     };
   }
 } // Namespace lmi_test.

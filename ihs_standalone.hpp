@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_standalone.hpp,v 1.4 2007-01-27 00:00:51 wboutin Exp $
+// $Id: ihs_standalone.hpp,v 1.5 2007-02-25 15:02:48 chicares Exp $
 
 #ifndef standalone_hpp
 #define standalone_hpp
@@ -47,7 +47,7 @@ typedef x_enum<e_base<EProduct> > E_Product;
 
 class GPT_BasicValues
 {
-public:
+  public:
     GPT_BasicValues
         (E_Product const&   a_ProductName
         ,e_gender const&    a_Gender
@@ -96,7 +96,7 @@ public:
 
     Irc7702*            Irc7702_;
 
-private:
+  private:
     E_Product const&    ProductName;
     e_gender const&     Gender;
     e_class const&      UnderwritingClass;

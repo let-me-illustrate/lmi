@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.578 2007-02-25 02:12:30 chicares Exp $
+// $Id: ChangeLog,v 1.579 2007-02-25 15:02:48 chicares Exp $
 
 MAINTENANCE
 
@@ -10195,4 +10195,37 @@ Mark release candidate.
   tier_view_editor.cpp
 Write inequality comparisons in number-line order: lmi coding
 standard, section 16.6 .
+
+20070225T0249Z <chicares@cox.net> [1248]
+
+  GNUmakefile
+  test_coding_rules.cpp
+Refactor.
+
+20070225T1448Z <chicares@cox.net> [1248]
+
+  GNUmakefile
+Enforce indentation rule for access-specifiers: lmi coding standard,
+section 4.8 .
+
+20070225T1502Z <chicares@cox.net> [1250]
+
+  any_member_test.cpp
+  cpp_main.cpp
+  crc32.hpp
+  database_view_editor.hpp
+  dbindex.hpp
+  getopt.hpp
+  ihs_server7702.hpp
+  ihs_standalone.hpp
+  ihs_x_type.hpp
+  ledger_variant.hpp
+  multidimgrid_any.hpp
+  multidimgrid_safe.hpp
+  tier_view_editor.hpp
+  xenum.hpp
+  xrange.hpp
+  xrange_test.cpp
+Follow indentation rule for access-specifiers: lmi coding standard,
+section 4.8 .
 
