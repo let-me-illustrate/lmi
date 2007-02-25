@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: GNUmakefile,v 1.80 2007-01-28 01:03:19 chicares Exp $
+# $Id: GNUmakefile,v 1.81 2007-02-25 02:49:37 chicares Exp $
 
 ################################################################################
 
@@ -483,10 +483,6 @@ check_concinnity: source_clean custom_tools
 	@$(GREP) --files-without-match '\$$Id[:].* \$$' $(licensed_files)    || true
 	@$(ECHO) "  Files with malformed RCS Ids:"
 	@$(GREP) --files-with-match '$$Id[^$$]*$$' $(licensed_files)         || true
-	@$(ECHO) "  Files that contain non-empty blank lines:"
-	@$(GREP) --line-number '^ \+$$' $(licensed_files)                    || true
-	@$(ECHO) "  Files with blanks at end of line:"
-	@$(GREP) --line-number ' $$' $(licensed_files)                       || true
 	@$(ECHO) "  Files that improperly contain physical tabs:"
 	@$(GREP) -l '	' $(filter-out $(makefiles),$(licensed_files))       || true
 	@$(ECHO) "  Headers that should include \"config.hpp\" first but don't:"
