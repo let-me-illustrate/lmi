@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: product_editor.hpp,v 1.2 2007-02-21 03:07:24 chicares Exp $
+// $Id: product_editor.hpp,v 1.3 2007-02-25 19:28:18 chicares Exp $
 
 #ifndef profile_editor_hpp
 #define profile_editor_hpp
@@ -74,6 +74,7 @@ class ProductEditorView
     ,virtual private boost::noncopyable
 {
     friend class ProductEditorDocument;
+
   public:
     ProductEditorView();
     virtual ~ProductEditorView();

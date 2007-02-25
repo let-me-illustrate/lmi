@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.579 2007-02-25 15:02:48 chicares Exp $
+// $Id: ChangeLog,v 1.580 2007-02-25 19:28:18 chicares Exp $
 
 MAINTENANCE
 
@@ -10228,4 +10228,22 @@ section 4.8 .
   xrange_test.cpp
 Follow indentation rule for access-specifiers: lmi coding standard,
 section 4.8 .
+
+20070225T1647Z <chicares@cox.net> [1252]
+
+  ledger_base.hpp
+  multidimgrid_any.hpp
+Mark 'protected' issues.
+
+20070225T1928Z <chicares@cox.net> [1252]
+
+  comma_punct.hpp
+  ihs_dbvalue.hpp
+  ledger_formatter.hpp
+  multidimgrid_any.hpp
+  obstruct_slicing_test.cpp
+  product_editor.hpp
+  tier_view_editor.hpp
+Lay out class definitions in prescribed order: lmi coding standard,
+section 8.1 .
 
