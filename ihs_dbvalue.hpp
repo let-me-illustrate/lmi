@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_dbvalue.hpp,v 1.6 2007-01-27 00:00:51 wboutin Exp $
+// $Id: ihs_dbvalue.hpp,v 1.7 2007-02-25 19:28:18 chicares Exp $
 
 #ifndef ihs_dbvalue_hpp
 #define ihs_dbvalue_hpp
@@ -52,10 +52,10 @@ enum e_IdxType
 class LMI_SO TDBValue
     :private JRPS::JrPs_pstreamable
 {
-  public:
     friend std::istream& operator>>(std::istream&, TDBValue&);
     friend std::ostream& operator<<(std::ostream&, TDBValue const&);
 
+  public:
     // Separate enumerators here facilitate compile-time assertions
     // in the database GUI, q.v.--an array could not be indexed to
     // produce an arithmetic constant expression [5.19/3].
@@ -149,6 +149,10 @@ class LMI_SO TDBValue
     std::vector<std::string> extra_axes_names;
     std::vector<double>      extra_axes_values;
     std::vector<e_IdxType>   extra_axes_types;
+
+// The following sections don't follow the normal order for access
+// specifiers. Grouping them together here facilitates their
+// expunction as soon as we get rid of 'ihs_[f]pios.?pp'.
 
   public:
     static JRPS::JrPs_pstreamable* jrps_build();

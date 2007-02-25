@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: comma_punct.hpp,v 1.4 2007-01-27 00:00:51 wboutin Exp $
+// $Id: comma_punct.hpp,v 1.5 2007-02-25 19:28:18 chicares Exp $
 
 #ifndef comma_punct_hpp
 #define comma_punct_hpp
@@ -40,13 +40,14 @@
 class comma_punct
     :public std::numpunct<char>
 {
-  protected:
-    char do_thousands_sep()   const {return ',';}
-    std::string do_grouping() const {return "\003";}
   public:
     comma_punct()
         :std::numpunct<char>()
         {}
+
+  protected:
+    char do_thousands_sep()   const {return ',';}
+    std::string do_grouping() const {return "\003";}
 };
 
 #endif // comma_punct_hpp

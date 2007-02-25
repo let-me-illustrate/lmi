@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: obstruct_slicing_test.cpp,v 1.9 2007-01-27 00:00:51 wboutin Exp $
+// $Id: obstruct_slicing_test.cpp,v 1.10 2007-02-25 19:28:18 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -81,6 +81,7 @@ class C0;
 class C0_no_derive
 {
     friend class C0;
+
   private:
     C0_no_derive() {}
     C0_no_derive(C0_no_derive const&) {}

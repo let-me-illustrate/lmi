@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_formatter.hpp,v 1.4 2007-01-24 03:30:24 chicares Exp $
+// $Id: ledger_formatter.hpp,v 1.5 2007-02-25 19:28:18 chicares Exp $
 
 #ifndef ledger_formatter_hpp
 #define ledger_formatter_hpp
@@ -83,6 +83,8 @@ class LMI_SO LedgerFormatterFactory
 
 class LMI_SO LedgerFormatter
 {
+    friend class LedgerFormatterFactory;
+
   public:
     // default empty constructor does nothing
     LedgerFormatter();
@@ -111,8 +113,6 @@ class LMI_SO LedgerFormatter
     xslt_lmi::Stylesheet const& GetStylesheet
         (std::string const& filename
         ) const;
-
-    friend class LedgerFormatterFactory;
 
     // copy ctor, accessible to LedgerFormatterFactory only
     LedgerFormatter(Ledger const& ledger_values);
