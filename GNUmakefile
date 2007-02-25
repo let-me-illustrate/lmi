@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: GNUmakefile,v 1.81 2007-02-25 02:49:37 chicares Exp $
+# $Id: GNUmakefile,v 1.82 2007-02-25 14:48:15 chicares Exp $
 
 ################################################################################
 
@@ -501,6 +501,24 @@ check_concinnity: source_clean custom_tools
 	    '#include "config.hpp"' \
 	    $(c_source_files) $(cxx_source_files) \
 	  || true
+	@$(ECHO) "  C++ files with irregularly-indented access-specifiers:"
+	@# The lmi coding standard prescribes a two-space indent.
+	@# At least for now, one additional four-space indentation is
+	@# allowed for namespaces.
+	@# Comments are ignored.
+	@# Obsolete files '*pios*' are exempted as hopeless.
+	@for z in \
+	  $(filter-out $(wildcard *pios*),$(cxx_header_files) $(cxx_source_files));\
+	  do \
+	    $(SED) \
+	    -e'/private:\|protected:\|public:/!d' \
+	    -e'/^  private:$$\|^  protected:$$\|^  public:$$/d' \
+	    -e'/^      private:$$\|^      protected:$$\|^      public:$$/d' \
+	    -e'/^ *\/\//d' \
+	    -e'/\\$$/d' \
+	    -e "s/^.*$$/$$z/" $$z \
+	    ; \
+	  done;
 	@$(ECHO) "  Files that use reserved identifiers:"
 	@# The sed commands are sorted alphabetically by group:
 	@#   {standard, platform-specific, compiler-specific, regrettable}
