@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: multidimgrid_any.hpp,v 1.8 2007-02-25 16:47:22 chicares Exp $
+// $Id: multidimgrid_any.hpp,v 1.9 2007-02-25 19:28:18 chicares Exp $
 
 #ifndef multidimgrid_any_hpp
 #define multidimgrid_any_hpp
@@ -543,6 +543,8 @@ class MultiDimGrid
   ,protected wxGridTableBase
   ,private boost::noncopyable
 {
+    friend class GridRefreshTableDataGuard;
+
   public:
     /// Default constructor, use Create() to really create the control.
     MultiDimGrid();
@@ -734,7 +736,6 @@ class MultiDimGrid
     /// Color used to highlight Y axis selections
     wxColour selected_second_color_;
 
-    friend class GridRefreshTableDataGuard;
     /// Refresh counter
     unsigned int table_data_refresh_counter_;
 
@@ -808,11 +809,12 @@ class MultiDimAxisAnyChoice
   :public wxChoice
   ,private boost::noncopyable
 {
+    friend class MultiDimAxisAny;
+
   public:
     void SelectionChanged();
 
   protected:
-    friend class MultiDimAxisAny;
     MultiDimAxisAnyChoice(MultiDimAxisAny const& axis, MultiDimGrid& grid);
 
     void OnSelectionChange(wxCommandEvent& event);
