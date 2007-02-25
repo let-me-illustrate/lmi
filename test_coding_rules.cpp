@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: test_coding_rules.cpp,v 1.5 2007-02-23 12:39:46 chicares Exp $
+// $Id: test_coding_rules.cpp,v 1.6 2007-02-25 02:49:37 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -61,12 +61,17 @@ int process_file(char const* filename)
 
     if(std::string::npos != s.find('\r'))
         {
-        std::cout << "File '" << filename << "' contains \\r.\n";
+        std::cout << "File '" << filename << "' contains '\\r'.\n";
         }
 
     if(std::string::npos != s.find("\n\n\n"))
         {
-        std::cout << "File '" << filename << "' contains \\n\\n\\n.\n";
+        std::cout << "File '" << filename << "' contains '\\n\\n\\n'.\n";
+        }
+
+    if(std::string::npos != s.find(" \n"))
+        {
+        std::cout << "File '" << filename << "' contains ' \\n'.\n";
         }
 
     if(!ifs)
