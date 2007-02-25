@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: multidimgrid_any.hpp,v 1.7 2007-02-25 15:02:48 chicares Exp $
+// $Id: multidimgrid_any.hpp,v 1.8 2007-02-25 16:47:22 chicares Exp $
 
 #ifndef multidimgrid_any_hpp
 #define multidimgrid_any_hpp
@@ -536,6 +536,10 @@ inline void MultiDimTableAny::SetAnyValue
 
 class MultiDimGrid
   :public wxScrolledWindow
+// TODO ?? EVGENIY !! Protected inheritance seems unusual. See, e.g.:
+//   http://cpptips.hyperformix.com/cpptips/prot_inher2.txt
+// Is there a strong reason for using it here, that overcomes the
+// objections raised by Meyers and Sutter?
   ,protected wxGridTableBase
   ,private boost::noncopyable
 {

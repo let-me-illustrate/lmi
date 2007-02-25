@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_base.hpp,v 1.6 2007-01-27 00:00:51 wboutin Exp $
+// $Id: ledger_base.hpp,v 1.7 2007-02-25 16:47:22 chicares Exp $
 
 #ifndef ledger_base_hpp
 #define ledger_base_hpp
@@ -204,6 +204,8 @@ class LMI_SO LedgerBase
     virtual int     GetLength() const = 0;
     virtual void    UpdateCRC(CRC& crc) const;
     virtual void    Spew(std::ostream& os) const;
+
+    // TODO ?? A priori, protected data is a defect.
 
     // Pointers to std::vector<double> members are stored in these maps for
     // reasons discussed in the .cpp file.
