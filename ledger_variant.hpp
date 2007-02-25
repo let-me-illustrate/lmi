@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_variant.hpp,v 1.13 2007-01-27 00:00:51 wboutin Exp $
+// $Id: ledger_variant.hpp,v 1.14 2007-02-25 15:02:48 chicares Exp $
 
 #ifndef ledger_variant_hpp
 #define ledger_variant_hpp
@@ -43,7 +43,7 @@ class BasicValues;
 class LMI_SO LedgerVariant
     :public LedgerBase
 {
-public:
+  public:
     // A default ctor is required because this class is used as a
     // std::map's value_type.
     //
@@ -146,7 +146,7 @@ public:
     double          LapseMonth;
     double          LapseYear;
 
-private:
+  private:
     void Alloc(int len);
     void Copy(LedgerVariant const&);
     void Destroy();

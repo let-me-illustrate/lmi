@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: multidimgrid_any.hpp,v 1.6 2007-02-25 02:12:29 chicares Exp $
+// $Id: multidimgrid_any.hpp,v 1.7 2007-02-25 15:02:48 chicares Exp $
 
 #ifndef multidimgrid_any_hpp
 #define multidimgrid_any_hpp
@@ -571,7 +571,10 @@ class MultiDimGrid
     void SetXAxisColour(wxColour const& colour);
     void SetYAxisColour(wxColour const& colour);
 
-protected:
+  protected:
+// TODO ?? EVGENIY !! Section 8.2 of the boost coding standards says
+// "Protected data members are forbidden". Is there a really good
+// reason to violate that standard here?
     /// Shared pointer to an axis object
     typedef boost::shared_ptr<MultiDimAxisAny> AxisPtr;
     /// Container of (pointers to) axis objects.
@@ -692,7 +695,7 @@ protected:
     /// Returns the corresponding X axis column label
     virtual wxString GetColLabelValue(int col);
 
-private:
+  private:
     /// Various GUI components of the widget
 
     /// Data grid

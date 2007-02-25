@@ -38,7 +38,7 @@
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
 // GWC added this RCS Id:
-// $Id: getopt.hpp,v 1.10 2007-02-23 12:43:25 chicares Exp $
+// $Id: getopt.hpp,v 1.11 2007-02-25 15:02:48 chicares Exp $
 
 // This version of 'getopt' appears to the caller like standard Unix 'getopt'
 // but it behaves differently for the user, since it allows the user
@@ -141,8 +141,7 @@ struct Option
 // GWC added 'LMI_SO'.
 class LMI_SO GetOpt
 {
-
-private:
+  private:
     // The next char to be scanned in the option-element
     // in which the last option character we returned was found.
     // This allows us to pick up the scan where we left off.
@@ -209,7 +208,7 @@ private:
     int  List_No_Value  ();
     void print_expanding  (char* v);
 
-public:
+  public:
     // Set to an option character which was unrecognized.
 
     int optopt;

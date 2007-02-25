@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: crc32.hpp,v 1.6 2007-01-27 00:00:51 wboutin Exp $
+// $Id: crc32.hpp,v 1.7 2007-02-25 15:02:48 chicares Exp $
 
 #ifndef crc32_hpp
 #define crc32_hpp
@@ -34,7 +34,7 @@
 
 class LMI_SO CRC
 {
-public:
+  public:
     CRC();
 
     unsigned int value() const;
@@ -59,7 +59,7 @@ public:
 
     CRC& operator+=(std::string const&);
 
-private:
+  private:
     CRC& update
         (unsigned char const*  buf
         ,int                   len
