@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: multidimgrid_any.hpp,v 1.5 2007-02-23 15:21:27 chicares Exp $
+// $Id: multidimgrid_any.hpp,v 1.6 2007-02-25 02:12:29 chicares Exp $
 
 #ifndef multidimgrid_any_hpp
 #define multidimgrid_any_hpp
@@ -403,8 +403,7 @@ class MultiDimTableAny
 
 inline void MultiDimTableAny::EnsureValidDimensionIndex(unsigned int n) const
 {
-    if(n >= GetDimension())
-        {fatal_error() << "Incorrect dimension." << LMI_FLUSH;}
+    LMI_ASSERT(n < GetDimension());
 }
 
 inline MultiDimAxisAny* MultiDimTableAny::GetAxisAny(unsigned int n)
@@ -761,7 +760,7 @@ inline MultiDimGrid::MultiDimGrid
 inline unsigned int MultiDimGrid::DoGetAxisIndexByName(std::string const& name)
 {
     int n = GetAxisIndexByName(name);
-    if(n == wxNOT_FOUND || n >= static_cast<int>(dimension_))
+    if(n == wxNOT_FOUND || static_cast<int>(dimension_) <= n)
         {fatal_error() << "Unknown axis '" << name << "'." << LMI_FLUSH;}
     return static_cast<unsigned int>(n);
 }

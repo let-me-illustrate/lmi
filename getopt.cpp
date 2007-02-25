@@ -38,7 +38,7 @@
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
 // GWC added this RCS Id:
-// $Id: getopt.cpp,v 1.9 2007-02-23 12:43:25 chicares Exp $
+// $Id: getopt.cpp,v 1.10 2007-02-25 02:12:29 chicares Exp $
 
 // GWC conditionalized gcc-specific pragma.
 #ifdef __GNUC__
@@ -277,7 +277,7 @@ GetOpt::print_expanding  (char* v)
   for (;  (x = *v) != 0;  v++)
     if (x < 040)
       std::fprintf (stderr, "^%c", x + '@');
-    else if (x > 0177)
+    else if (0177 < x)
       std::fprintf (stderr, "\\%o", x);
     else
       std::fprintf (stderr, "%c", x);

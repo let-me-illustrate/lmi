@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avsolve.cpp,v 1.11 2007-02-23 16:47:17 chicares Exp $
+// $Id: ihs_avsolve.cpp,v 1.12 2007-02-25 02:12:29 chicares Exp $
 
 // All iterative illustration solves are performed in this file.
 // We use Brent's algorithm because it is guaranteed to converge
@@ -113,10 +113,7 @@ void AccountValue::SolveSetTargetValueAndDuration
 
     // TODO ?? This assertion seems odd because 0 is a valid input value on
     // the screen. Did it get changed to origin 1 in class InputParms?
-    LMI_ASSERT
-        (   EffectiveSolveTargetYear
-        >=  1
-        );
+    LMI_ASSERT(1 <= EffectiveSolveTargetYear);
 }
 
 //============================================================================

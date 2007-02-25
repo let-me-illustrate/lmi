@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: accountvalue.cpp,v 1.26 2007-02-23 16:47:16 chicares Exp $
+// $Id: accountvalue.cpp,v 1.27 2007-02-25 02:12:29 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -594,17 +594,17 @@ void AccountValue::TxSpecAmtChange()
 // Set payment according to selected strategy, in each non-solve year.
 void AccountValue::PerformPmtStrategy(double* a_Pmt)
 {
+    // Don't override premium during solve period.
     if
         (
             e_solve_ee_prem == Input_->SolveType.value()
-        &&  Year >= Input_->SolveBegYear.value()
+        &&  Input_->SolveBegYear.value() <= Year
         &&  Year < std::min
                 (Input_->SolveEndYear.value()
                 ,BasicValues::GetLength()
                 )
         )
-        // Don't override premium during solve period.
-        return;
+        {return;}
 
     switch(Input_->EePmtStrategy.value())
         {

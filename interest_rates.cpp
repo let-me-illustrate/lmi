@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: interest_rates.cpp,v 1.14 2007-01-27 00:00:51 wboutin Exp $
+// $Id: interest_rates.cpp,v 1.15 2007-02-25 02:12:29 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -1047,7 +1047,7 @@ void InterestRates::Initialize7702Rates()
 
             // TODO ?? Need loan rates for 7702 whenever loans are allowed.
             std::vector<double> gross_loan_rate = PublishedLoanRate_;
-            // TODO ?? Should at least assert that regular spread >= preferred.
+            // TODO ?? Should at least assert that preferred <= regular spread.
             std::vector<double> guar_loan_spread = RegLoanSpread_[e_guarbasis];
             std::vector<double> guar_loan_rate(Length);
             std::transform

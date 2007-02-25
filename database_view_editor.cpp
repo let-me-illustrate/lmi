@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: database_view_editor.cpp,v 1.6 2007-02-23 16:47:17 chicares Exp $
+// $Id: database_view_editor.cpp,v 1.7 2007-02-25 02:12:29 chicares Exp $
 
 #include "database_view_editor.hpp"
 
@@ -105,7 +105,7 @@ bool DatabaseTableAdapter::VariesByDimension(unsigned int n) const
         {return false;}
 
     std::vector<int> const& axis_lengths = db_value_->GetAxisLengths();
-    return n < axis_lengths.size() && axis_lengths[n] > 1;
+    return n < axis_lengths.size() && 1 < axis_lengths[n];
 }
 
 bool DatabaseTableAdapter::ConfirmOperation(unsigned int item_count) const

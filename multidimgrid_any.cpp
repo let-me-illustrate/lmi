@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: multidimgrid_any.cpp,v 1.6 2007-02-23 16:47:17 chicares Exp $
+// $Id: multidimgrid_any.cpp,v 1.7 2007-02-25 02:12:29 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -81,7 +81,7 @@ void MultiDimAxisAny::UpdateChoiceControl(wxWindow& choice_control) const
 // EVGENIY !! Why not write this entire function body as
 //    dynamic_cast<MultiDimAxisAnyChoice&>(choice_control)->PopulateChoiceList();
 // instead? That would throw an exception instead of returning with a
-// mere warning; but why shouldn't this be a fatal error?
+// mere warning; but shouldn't this be a fatal error?
     MultiDimAxisAnyChoice* control =
         dynamic_cast<MultiDimAxisAnyChoice*>(&choice_control);
     if(!control)
@@ -478,8 +478,8 @@ bool MultiDimGrid::RefreshTableFull()
 bool MultiDimGrid::AutoselectGridAxis()
 {
     bool updated = false;
-    first_axis_choice_->Show(dimension_ > 0);
-    second_axis_choice_->Show(dimension_ > 1);
+    first_axis_choice_ ->Show(0 < dimension_);
+    second_axis_choice_->Show(1 < dimension_);
 
     if(first_grid_axis_ == wxNOT_FOUND || second_grid_axis_ == wxNOT_FOUND)
         {
@@ -887,7 +887,7 @@ void MultiDimGrid::PopulateGridAxisSelection(unsigned int id)
     int new_sel_index = wxNOT_FOUND;
 
     // remove every item, except the empty one (the first " ")
-    for(int j = choice->GetCount() - 1; j >= 1; --j)
+    for(int j = choice->GetCount() - 1; 1 <= j; --j)
         {
         choice->Delete(j);
         }
@@ -926,18 +926,20 @@ int MultiDimGrid::GetAxisIndexByName(std::string const& axisName)
     return wxNOT_FOUND;
 }
 
+// EVGENIY !! Given that we check array bounds here, shouldn't all
+// occurrences of '*axis_[n]' be replaced by calls to this function?
+// Alternatively, we could just replace '/[n]/.at(n)/'. (Originally,
+// you had written an explicit test against the upper bound, but I've
+// replaced that here with std::vector::at() calls.)
+
 MultiDimAxisAny const& MultiDimGrid::GetAxis(unsigned int n) const
 {
-    if(n >= axis_.size())
-        {fatal_error() << "Invalid axis index." << LMI_FLUSH;}
-    return *axis_[n];
+    return *axis_.at(n);
 }
 
 MultiDimAxisAny& MultiDimGrid::GetAxis(unsigned int n)
 {
-    if(n >= axis_.size())
-        {fatal_error() << "Invalid axis index." << LMI_FLUSH;}
-    return *axis_[n];
+    return *axis_.at(n);
 }
 
 int MultiDimGrid::GetNumberRows()
@@ -1175,7 +1177,7 @@ void MultiDimAxisAnyChoice::PopulateChoiceList()
             }
         }
 
-    if(!selected && axis_count > 0)
+    if(!selected && 0 < axis_count)
         {
         SetSelection(0);
         GetGrid().FixAxisValue(axis_.GetName(), axis_.GetValue(0));
@@ -1189,9 +1191,8 @@ void MultiDimAxisAnyChoice::OnSelectionChange(wxCommandEvent&)
 
 void MultiDimAxisAnyChoice::SelectionChanged()
 {
-    unsigned int sel = GetSelection();
-
-    if(sel < 0 || sel >= axis_.GetCardinality())
+    unsigned int const sel = GetSelection();
+    if(!(0 <= sel && sel < axis_.GetCardinality()))
         {
         fatal_error()
             << "The axis is inconsistent with its choice control."
