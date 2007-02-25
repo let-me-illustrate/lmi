@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.577 2007-02-23 18:20:48 wboutin Exp $
+// $Id: ChangeLog,v 1.578 2007-02-25 02:12:30 chicares Exp $
 
 MAINTENANCE
 
@@ -10176,4 +10176,23 @@ section 3.7 .
 
   version.hpp
 Mark release candidate.
+
+20070225T0212Z <chicares@cox.net> [1248]
+
+  accountvalue.cpp
+  calculate.hpp
+  catch_exceptions.hpp
+  copy_n_.hpp
+  database_view_editor.cpp
+  getopt.cpp
+  ihs_avsolve.cpp
+  interest_rates.cpp
+  ledger_invariant.cpp
+  ledger_variant.cpp
+  multidimgrid_any.cpp
+  multidimgrid_any.hpp
+  multidimgrid_tools.hpp
+  tier_view_editor.cpp
+Write inequality comparisons in number-line order: lmi coding
+standard, section 16.6 .
 

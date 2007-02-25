@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_variant.cpp,v 1.17 2007-01-27 00:00:51 wboutin Exp $
+// $Id: ledger_variant.cpp,v 1.18 2007-02-25 02:12:29 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -288,7 +288,7 @@ LedgerVariant& LedgerVariant::PlusEq
     LedgerBase::PlusEq(a_Addend, a_Inforce);
 
     // Make sure total (this) has enough years to add all years of a_Addend to.
-    LMI_ASSERT(Length >= a_Addend.Length);
+    LMI_ASSERT(a_Addend.Length <= Length);
 
     // TODO ?? If interest rates vary across a census, this will be wrong.
     InitAnnGenAcctInt           = a_Addend.InitAnnGenAcctInt;

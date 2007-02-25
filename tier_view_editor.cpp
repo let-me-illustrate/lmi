@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: tier_view_editor.cpp,v 1.5 2007-02-23 15:21:27 chicares Exp $
+// $Id: tier_view_editor.cpp,v 1.6 2007-02-25 02:12:30 chicares Exp $
 
 #include "tier_view_editor.hpp"
 
@@ -31,23 +31,12 @@
 
 void tier_entity_adapter::ensure_not_void() const
 {
-    if(is_void())
-        {
-        fatal_error()
-            << "Stratified entity is void."
-            << LMI_FLUSH
-            ;
-        }
+    LMI_ASSERT(!is_void());
 }
+
 void tier_entity_adapter::ensure_valid_band_number(unsigned int band) const
 {
-    if(band >= limits().size())
-        {
-        fatal_error()
-            << "Invalid band number."
-            << LMI_FLUSH
-            ;
-        }
+    LMI_ASSERT(band < limits().size());
 }
 
 double_pair tier_entity_adapter::get_value(unsigned int band) const
@@ -97,8 +86,8 @@ void tier_entity_adapter::set_bands_count(unsigned int n)
         }
     else
         {
-        double add_limit = (size >= 2) ? limits()[size - 2] : 0;
-        double add_value = (size >= 2) ? values()[size - 2] : values()[size - 1];
+        double add_limit = 2 <= size ? limits()[size - 2] : 0;
+        double add_value = 2 <= size ? values()[size - 2] : values()[size - 1];
         limits().insert(limits().begin() + size - 1, n - size, add_limit);
         values().insert(values().begin() + size - 1, n - size, add_value);
         }

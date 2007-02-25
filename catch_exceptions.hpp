@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: catch_exceptions.hpp,v 1.4 2007-01-27 00:00:51 wboutin Exp $
+// $Id: catch_exceptions.hpp,v 1.5 2007-02-25 02:12:29 chicares Exp $
 
 // This is a derived work based on Beman Dawes's boost test library
 // that bears the following copyright and license statement:
@@ -121,7 +121,7 @@ namespace lmi_test
         catch(std::bad_alloc const& ex)
             {detail::report_exception( out, "std::bad_alloc:", ex.what());}
 
-#if !defined(__BORLANDC__) || __BORLANDC__ > 0x0551
+#if !defined(__BORLANDC__) || 0x0551 < __BORLANDC__
         catch(std::bad_cast const& ex)
             {detail::report_exception(out, "std::bad_cast:", ex.what());}
         catch(std::bad_typeid const& ex)
