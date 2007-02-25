@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: tier_view_editor.hpp,v 1.5 2007-02-23 15:21:27 chicares Exp $
+// $Id: tier_view_editor.hpp,v 1.6 2007-02-25 15:02:48 chicares Exp $
 
 #ifndef tier_view_editor_hpp
 #define tier_view_editor_hpp
@@ -106,7 +106,7 @@ class tier_entity_adapter
     std::vector<double> const& limits() const;
     std::vector<double> const& values() const;
 
-private:
+  private:
     void ensure_not_void() const;
     void ensure_valid_band_number(unsigned int band) const;
 

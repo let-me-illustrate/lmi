@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: multidimgrid_safe.hpp,v 1.3 2007-02-23 12:43:26 chicares Exp $
+// $Id: multidimgrid_safe.hpp,v 1.4 2007-02-25 15:02:48 chicares Exp $
 
 #ifndef multidimgrid_safe_hpp
 #define multidimgrid_safe_hpp
@@ -131,6 +131,7 @@ class MultiDimEnumAxis
     :public MultiDimAxis<Enum>
 {
     typedef MultiDimAxis<Enum> BaseClass;
+
   public:
     typedef typename BaseClass::ValueType ValueType;
     MultiDimEnumAxis
@@ -199,6 +200,9 @@ class MultiDimIntegralAxis
     /// Override MultiDimAxis::DoGetValue()
     virtual Integral DoGetValue(unsigned int n) const;
 
+// TODO ?? EVGENIY !! Section 8.2 of the boost coding standards says
+// "Protected data members are forbidden". Is there a really good
+// reason to violate that standard here?
   protected:
     Integral min_;
     Integral max_;
@@ -339,7 +343,8 @@ class MultiDimTable##n                                                        \
     virtual boost::any DoGetValue(Coords const& coords) const;                \
                                                                               \
     virtual void DoSetValue(Coords const& coords, boost::any const& value);   \
-private:                                                                      \
+                                                                              \
+  private:                                                                    \
     MultiDimTableTypeTraits<T> converter_;                                    \
     virtual wxString ValueToString(boost::any const& value) const;            \
     virtual boost::any StringToValue(wxString const& str) const;              \
@@ -404,6 +409,7 @@ class MultiDimAdjustableAxis
         (  boost::is_base_of<MultiDimAxisAny, BaseAxisType>::value
         || boost::is_same<MultiDimAxisAny, BaseAxisType>::value
         ));
+
   public:
     typedef AdjustControl AxisAdjustControl;
 

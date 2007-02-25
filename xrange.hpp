@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xrange.hpp,v 1.10 2007-01-27 00:00:52 wboutin Exp $
+// $Id: xrange.hpp,v 1.11 2007-02-25 15:02:48 chicares Exp $
 
 #ifndef xrange_hpp
 #define xrange_hpp
@@ -236,7 +236,7 @@ template<typename Essence, typename Substance>
 class xrange
     :boost::totally_ordered<xrange<Essence,Substance> >
 {
-public:
+  public:
     typedef std::pair<Substance,Substance> limits_type;
 
     xrange();
@@ -277,7 +277,7 @@ public:
     Substance value() const;
     std::string str() const;
 
-private:
+  private:
     void assign_iff_valid(Substance const& v);
     void assign_iff_valid(std::string const& s);
 

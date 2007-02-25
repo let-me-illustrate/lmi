@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_server7702.hpp,v 1.4 2007-01-27 00:00:51 wboutin Exp $
+// $Id: ihs_server7702.hpp,v 1.5 2007-02-25 15:02:48 chicares Exp $
 
 #ifndef server7702_hpp
 #define server7702_hpp
@@ -43,12 +43,12 @@ extern "C"
 
 class Server7702
 {
-public:
+  public:
     Server7702(Server7702Input& a_Input);
     void Process();
     Server7702Output const& GetOutput() const   {return Output;}
 
-private:
+  private:
     void VerifyPrecision() const;
     void PerformProcessing();
     void VerifyPlausibilityOfInput() const;
@@ -98,7 +98,7 @@ enum
 class server7702_precision_changed
     :public std::runtime_error
 {
-public:
+  public:
     server7702_precision_changed(std::string const& what_arg)
     :std::runtime_error("Internal precision changed: " + what_arg)
     {}
@@ -107,7 +107,7 @@ public:
 class server7702_implausible_input
     :public std::runtime_error
 {
-public:
+  public:
     server7702_implausible_input(std::string const& what_arg)
     :std::runtime_error("Implausible input: " + what_arg)
     {}
@@ -116,7 +116,7 @@ public:
 class server7702_inconsistent_input
     :public std::runtime_error
 {
-public:
+  public:
     server7702_inconsistent_input(std::string const& what_arg)
     :std::runtime_error("Inconsistent input: " + what_arg)
     {}
@@ -125,7 +125,7 @@ public:
 class server7702_adjustable_event_forbidden_at_issue
     :public std::runtime_error
 {
-public:
+  public:
     server7702_adjustable_event_forbidden_at_issue(std::string const& what_arg)
     :std::runtime_error("Adjustable event forbidden at issue: " + what_arg)
     {}
@@ -134,7 +134,7 @@ public:
 class server7702_guideline_negative
     :public std::runtime_error
 {
-public:
+  public:
     server7702_guideline_negative(std::string const& what_arg)
     :std::runtime_error("Guideline premium is negative: " + what_arg)
     {}
@@ -143,7 +143,7 @@ public:
 class server7702_misstatement_of_age_or_gender
     :public std::runtime_error
 {
-public:
+  public:
     server7702_misstatement_of_age_or_gender(std::string const& what_arg)
     :std::runtime_error("Misstatement of age or gender: " + what_arg)
     {}

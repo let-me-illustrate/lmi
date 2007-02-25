@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xrange_test.cpp,v 1.6 2007-01-27 00:00:52 wboutin Exp $
+// $Id: xrange_test.cpp,v 1.7 2007-02-25 15:02:48 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -106,7 +106,7 @@ typedef xrange<range_dbl_abs_val_le_1, double> r_dbl_abs_val_le_1;
 
 class Inputs
 {
-public:
+  public:
     Inputs()
         :pct_default (100)
         ,pct_0       (  0)

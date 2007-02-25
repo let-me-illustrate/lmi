@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: dbindex.hpp,v 1.3 2007-01-27 00:00:51 wboutin Exp $
+// $Id: dbindex.hpp,v 1.4 2007-02-25 15:02:48 chicares Exp $
 
 #ifndef dbindex_hpp
 #define dbindex_hpp
@@ -51,6 +51,7 @@ class TDBIndex
         );
 */
 
+// TODO ?? These data aren't very well encapsulated.
     double& Gender  () {return idx[0];}
     double& Class   () {return idx[1];}
     double& Smoker  () {return idx[2];}
@@ -60,12 +61,11 @@ class TDBIndex
 
     std::vector<double> const& GetIdx() const {return idx;}
 
-private:
+  private:
 // TODO ?? Erase these?
     TDBIndex(TDBIndex const&);
     TDBIndex& operator=(TDBIndex const&);
 
-private: // TODO ?? Not very well encapsulated.
     std::vector<double> idx;
 };
 

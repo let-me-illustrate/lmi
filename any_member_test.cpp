@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: any_member_test.cpp,v 1.18 2007-01-27 00:00:51 wboutin Exp $
+// $Id: any_member_test.cpp,v 1.19 2007-02-25 15:02:48 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -108,6 +108,8 @@ std::ostream& operator<<(std::ostream& os, X const& x) {return os << x.str() << 
 class S
     :public MemberSymbolTable<S>
 {
+    friend class any_member_test;
+
   public:
     S();
 
@@ -116,7 +118,7 @@ class S
 
     std::ostream& write(std::ostream&);
 
-  public: // Exposed for testing.
+  private:
     int i0;
     int i1;
     double d0;
