@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: multidimgrid_any.hpp,v 1.9 2007-02-25 19:28:18 chicares Exp $
+// $Id: multidimgrid_any.hpp,v 1.10 2007-02-27 00:03:30 chicares Exp $
 
 #ifndef multidimgrid_any_hpp
 #define multidimgrid_any_hpp
@@ -189,7 +189,7 @@ class GridRefreshTableDataGuard;
 /// This control is used by an axis when it allows the user to change its
 /// value range in some way during the runtime (imagine an integer axis
 /// with values in a range with variable upper bound).
-/// The default version of the method returns @c NULL indicating
+/// The default version of the method returns NULL indicating
 /// that the axis (and its value range) is immutable.
 /// See also ApplyAdjustment, RefreshAdjustment
 ///   - grid the grid control this axis is used with

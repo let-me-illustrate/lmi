@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: tier_view_editor.hpp,v 1.7 2007-02-25 19:28:18 chicares Exp $
+// $Id: tier_view_editor.hpp,v 1.8 2007-02-27 00:03:30 chicares Exp $
 
 #ifndef tier_view_editor_hpp
 #define tier_view_editor_hpp
@@ -98,7 +98,7 @@ class tier_entity_adapter
     /// Read the number of bands in the underlying stratified_entity object
     unsigned int get_bands_count() const;
 
-    /// @return true if we don't have no underlying object to manipulate
+    /// return true if we have no underlying object to manipulate
     bool is_void() const;
 
     std::vector<double>&       limits();
