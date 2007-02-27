@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: multidimgrid_safe.hpp,v 1.4 2007-02-25 15:02:48 chicares Exp $
+// $Id: multidimgrid_safe.hpp,v 1.5 2007-02-27 00:03:30 chicares Exp $
 
 #ifndef multidimgrid_safe_hpp
 #define multidimgrid_safe_hpp
@@ -91,7 +91,6 @@ class MultiDimAxis
     /// Type of values for this axis
     typedef E ValueType;
 
-    /// @param axis name
     MultiDimAxis(std::string const& name);
 
     virtual boost::any GetValue(unsigned int n) const;
