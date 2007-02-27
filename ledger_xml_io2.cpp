@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xml_io2.cpp,v 1.20 2007-02-23 16:47:17 chicares Exp $
+// $Id: ledger_xml_io2.cpp,v 1.21 2007-02-27 00:03:30 chicares Exp $
 
 #include "ledger.hpp"
 
@@ -508,7 +508,7 @@ double_formatter_t::double_formatter_t()
             {
             value_id id = value_id::from_xml_element(**it);
 
-            // a 'column' node has to have @name attribute
+            // a 'column' node has to have name attribute
             if(id.empty())
                 {
                 continue;
