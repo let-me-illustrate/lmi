@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.564.2.10 2007-02-15 14:42:18 etarassov Exp $
+// $Id: ChangeLog,v 1.564.2.11 2007-02-28 15:52:32 etarassov Exp $
 
 MAINTENANCE
 
@@ -10040,3 +10040,9 @@ Fix RoundingButtons::IsModified.
   rounding_view.hpp
   rounding_view_editor.hpp
 Add missing #include "config.hpp".
+
+20070228T1552Z <etarassov@tt-solutions.com> [1247]
+
+  multidimgrid_any.cpp
+Fix base class constructor call. Only use SetScrollbar workaround if
+wx is older than 2.8.0.

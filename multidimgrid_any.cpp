@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: multidimgrid_any.cpp,v 1.1.2.2 2007-02-13 02:18:04 zeitlin Exp $
+// $Id: multidimgrid_any.cpp,v 1.1.2.3 2007-02-28 15:52:32 etarassov Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -301,7 +301,7 @@ bool MultiDimGrid::Create
     )
 {
     // setting self as a wxPanel
-    wxPanel::Create(parent, id, pos, size, wxWANTS_CHARS | wxVSCROLL);
+    wxScrolledWindow::Create(parent, id, pos, size, wxWANTS_CHARS | wxVSCROLL);
 
     // setting internal variables
     table_ = atable;
@@ -335,9 +335,10 @@ bool MultiDimGrid::Create
     axis_varies_checkboxes_.resize(dimension_);
 
 
-    // WX !! without the following we don't get any scrollbars at all
-    // we only want the vertical scrollbar enabled
+#if !wxCHECK_VERSION(2,8,0)
+    // Workaround: this call was neccessary before wx-2.8.0
     SetScrollbars(0, 20, 0, 50);
+#endif // !wxCHECK_VERSION(2,8,0)
 
     wxStaticBoxSizer* sizer
         = new(wx) wxStaticBoxSizer(wxHORIZONTAL, this, "Axis");
