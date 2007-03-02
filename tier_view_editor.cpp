@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: tier_view_editor.cpp,v 1.1.2.1 2007-02-11 21:52:42 etarassov Exp $
+// $Id: tier_view_editor.cpp,v 1.1.2.2 2007-03-02 09:59:56 etarassov Exp $
 
 #include "tier_view_editor.hpp"
 
@@ -242,9 +242,7 @@ wxString TierEditorGrid::GetValue(int row, int col)
     CheckRowAndCol(row, col);
     double_pair value = GetDoublePairValue(static_cast<unsigned int>(row));
 
-    wxString str;
-    str << (col == tgc_limit ? value.first : value.second);
-    return str;
+    return value_cast<std::string>(col == tgc_limit ? value.first : value.second);
 }
 
 void TierEditorGrid::SetValue(int row, int col, wxString const& str)

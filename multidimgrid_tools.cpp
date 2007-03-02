@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: multidimgrid_tools.cpp,v 1.1.2.1 2007-02-11 21:52:42 etarassov Exp $
+// $Id: multidimgrid_tools.cpp,v 1.1.2.2 2007-03-02 09:59:57 etarassov Exp $
 
 #include "multidimgrid_tools.hpp"
 
@@ -29,7 +29,7 @@
 /// ---------------------------------------
 
 BEGIN_EVENT_TABLE(AxisMaxBoundAdjusterBase, wxChoice)
-    EVT_CHOICE(wxID_ANY, AxisMaxBoundAdjusterBase::OnChange)
+    EVT_CHOICE(wxID_ANY, AxisMaxBoundAdjusterBase::UponChange)
 END_EVENT_TABLE()
 
 AxisMaxBoundAdjusterBase::AxisMaxBoundAdjusterBase(MultiDimGrid& grid)
@@ -43,9 +43,9 @@ AxisMaxBoundAdjusterBase::AxisMaxBoundAdjusterBase(MultiDimGrid& grid)
 {
 }
 
-void AxisMaxBoundAdjusterBase::OnChange(wxCommandEvent&)
+void AxisMaxBoundAdjusterBase::UponChange(wxCommandEvent&)
 {
-    DoOnChange();
+    OnChange();
 }
 
 MultiDimGrid& AxisMaxBoundAdjusterBase::GetGrid()

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: multidimgrid_safe.hpp,v 1.1.2.1 2007-02-11 21:52:42 etarassov Exp $
+// $Id: multidimgrid_safe.hpp,v 1.1.2.2 2007-03-02 09:59:56 etarassov Exp $
 
 #ifndef multidimgrid_safe_hpp
 #define multidimgrid_safe_hpp
@@ -209,64 +209,6 @@ class MultiDimIntegralAxis
 typedef MultiDimIntegralAxis<int> MultiDimIntAxis;
 typedef MultiDimIntegralAxis<unsigned int> MultiDimUIntAxis;
 
-/// Design notes for MultiDimTableTypeTraits<ValueType>
-///
-/// Conversion helper for MultiDimTableN template classes.
-///
-/// Implements convertion between ValueType and wxString.
-/// To support a new data type in the MultiDimTable one should specialise
-/// this template for the desired type.
-/// See int template specialisation for an example.
-
-/// One could use boost::lexical to implement a generic conversion
-/// using lexical casts (lexical cast - cast that uses standard iostream
-/// facilities as a conversion black box).
-
-template <typename ValueType>
-class MultiDimTableTypeTraits
-{
-  public:
-    /// Convert value respresented by a string into ValueType.
-    ValueType FromString(wxString const& str) const;
-    /// Create a string representation of a value
-    wxString ToString(ValueType const& value) const;
-};
-
-/// Helper macro implementing MultiDimTableTypeTraits for a given integral type
-
-#define MDTABLE_TTRAITS_INTEGRAL(ValueType              \
-    ,FromMethod                                         \
-    ,FromType                                           \
-    ,ErrFromValue                                       \
-    )                                                   \
-template <>                                             \
-class MultiDimTableTypeTraits<ValueType>                \
-{                                                       \
-  public:                                               \
-    ValueType FromString(wxString const& str) const     \
-    {                                                   \
-        FromType value;                                 \
-        if(str.FromMethod(&value))                      \
-            {                                           \
-            return value;                               \
-            }                                           \
-        return ErrFromValue;                            \
-    }                                                   \
-    wxString ToString(ValueType value) const            \
-    {                                                   \
-        wxString res;                                   \
-        res << value;                                   \
-        return res;                                     \
-    }                                                   \
-}
-
-/// sepcialisations of the MultiDimTableTypeTraits for some common types
-MDTABLE_TTRAITS_INTEGRAL(int, ToLong, long, -1);
-MDTABLE_TTRAITS_INTEGRAL(unsigned int, ToULong, unsigned long, 0);
-MDTABLE_TTRAITS_INTEGRAL(long, ToLong, long, -1);
-MDTABLE_TTRAITS_INTEGRAL(unsigned long, ToULong, unsigned long, 0);
-MDTABLE_TTRAITS_INTEGRAL(double, ToDouble, double, -1);
-
 /// Design notes for MultiDimTableN<T, V1, ..., VN>
 ///
 /// Type-safe N-dimensional table.
@@ -297,13 +239,6 @@ MDTABLE_TTRAITS_INTEGRAL(double, ToDouble, double, -1);
 /// of public SetValue()
 ///
 /// converter_: internal instance of the converter object
-///
-/// ValueToString(value) and StringToValue(str):
-/// String vs ValueType convertion helpers.
-/// Delegates the convertion between type ValueType and wxString
-/// to template class MultiDimTableTypeTraits<ValueType>
-/// To support new type one should instantiate the MultiDimTableTypeTraits
-/// for the type and implement the converting methods.
 
 #define MDTABLE_DECLARE_GETAXIS_(z, n, unused)                                \
     virtual MultiDimAxis<V##n>* GetAxis##n() = 0;                             \
@@ -341,9 +276,8 @@ class MultiDimTable##n                                                        \
                                                                               \
     virtual void DoSetValue(Coords const& coords, boost::any const& value);   \
 private:                                                                      \
-    MultiDimTableTypeTraits<T> converter_;                                    \
-    virtual wxString ValueToString(boost::any const& value) const;            \
-    virtual boost::any StringToValue(wxString const& str) const;              \
+    virtual std::string ValueToString(boost::any const& value) const;         \
+    virtual boost::any StringToValue(std::string const& str) const;           \
 };
 
 /// real code declaring MultiDimGridN classes
@@ -376,7 +310,6 @@ BOOST_PP_REPEAT_FROM_TO(1, MAX_MULTIDIMGRID_AXIS, MDTABLE_AXISVALUETYPE_FOR_, ~)
 #undef MDTABLE_DECLARE_GETAXIS_FOR_
 #undef MDTABLE_AXISVALUETYPE_TYPEDEF_
 #undef MDTABLE_DECLARE_FOR_
-#undef MDTABLE_TTRAITS_INTEGRAL
 
 
 /// Design notes for MultiDimAdjustableAxis<AdjustControl, BaseAxisType>

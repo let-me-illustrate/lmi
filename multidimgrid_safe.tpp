@@ -19,11 +19,11 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: multidimgrid_safe.tpp,v 1.1.2.1 2007-02-11 21:52:42 etarassov Exp $
+// $Id: multidimgrid_safe.tpp,v 1.1.2.2 2007-03-02 09:59:56 etarassov Exp $
 
 #include "multidimgrid_safe.hpp"
 
-#include <boost/lexical_cast.hpp>
+#include "value_cast.hpp"
 
 /// MultiDimAxis<E>
 /// ---------------
@@ -164,32 +164,13 @@ unsigned int MultiDimIntegralAxis<Integral>::GetCardinality() const
 template<typename Integral>
 std::string MultiDimIntegralAxis<Integral>::GetLabel(unsigned int n) const
 {
-    return boost::lexical_cast<std::string>(min_ + n * step_);
+    return value_cast<std::string>(min_ + n * step_);
 }
 
 template<typename Integral>
 Integral MultiDimIntegralAxis<Integral>::DoGetValue(unsigned int n) const
 {
     return min_ + n * step_;
-}
-
-/// MultiDimTableTypeTraits<ValueType>
-/// ----------------------------------
-
-template <typename ValueType>
-ValueType MultiDimTableTypeTraits<ValueType>::FromString
-    (wxString const& str
-    ) const
-{
-    return str;
-}
-
-template <typename ValueType>
-wxString MultiDimTableTypeTraits<ValueType>::ToString
-    (ValueType const& value
-    ) const
-{
-    return value;
 }
 
 /// MultiDimAdjustableAxis<AdjustControl, BaseAxisType>
@@ -301,13 +282,13 @@ void MultiDimTable##n<T, BOOST_PP_ENUM_PARAMS(n, V)>::DoSetValue              \
 }                                                                             \
                                                                               \
 template <typename T, BOOST_PP_ENUM_PARAMS(n, typename V)>                    \
-wxString MultiDimTable##n<T, BOOST_PP_ENUM_PARAMS(n, V)>::ValueToString       \
+std::string MultiDimTable##n<T, BOOST_PP_ENUM_PARAMS(n, V)>::ValueToString    \
     (boost::any const& value                                                  \
     ) const                                                                   \
 {                                                                             \
     try                                                                       \
         {                                                                     \
-        return converter_.ToString(boost::any_cast<T>(value));                \
+        return value_cast<std::string>(boost::any_cast<T>(value));            \
         }                                                                     \
     catch(boost::bad_any_cast const&)                                         \
         {                                                                     \
@@ -318,10 +299,10 @@ wxString MultiDimTable##n<T, BOOST_PP_ENUM_PARAMS(n, V)>::ValueToString       \
 template <typename T, BOOST_PP_ENUM_PARAMS(n, typename V)>                    \
 boost::any                                                                    \
 MultiDimTable##n<T, BOOST_PP_ENUM_PARAMS(n, V)>::StringToValue                \
-    (wxString const& str                                                      \
+    (std::string const& str                                                   \
     ) const                                                                   \
 {                                                                             \
-    return boost::any(static_cast<T>(converter_.FromString(str)));            \
+    return boost::any(value_cast<T>(str));                       \
 }
 
 /// real code implementing MultiDimGridN classes

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: multidimgrid_tools.hpp,v 1.1.2.1 2007-02-11 21:52:42 etarassov Exp $
+// $Id: multidimgrid_tools.hpp,v 1.1.2.2 2007-03-02 09:59:56 etarassov Exp $
 
 #ifndef multidimgrid_tools_hpp
 #define multidimgrid_tools_hpp
@@ -27,8 +27,7 @@
 #include "config.hpp"
 
 #include "multidimgrid_safe.hpp"
-
-#include <boost/lexical_cast.hpp>
+#include "value_cast.hpp"
 
 #include <wx/choice.h>
 #include <wx/treectrl.h>
@@ -43,7 +42,7 @@
 /// the corresponding macros does not accept templates, only plain classes.
 ///
 /// This helper registers handler for wxChoice selection change events and
-/// defines virtual function DoOnChange() that serves as real handler.
+/// defines virtual function OnChange() that serves as real handler.
 
 class AxisMaxBoundAdjusterBase
   :public wxChoice
@@ -52,16 +51,16 @@ class AxisMaxBoundAdjusterBase
     AxisMaxBoundAdjusterBase(MultiDimGrid&);
 
   protected:
-    /// Function called by OnChange. applies adjustment value
-    virtual void DoOnChange() = 0;
+    /// Function called by UponChange. Applies adjustment value.
+    virtual void OnChange() = 0;
 
     /// Gets the parent and cast it to the MultiDimGrid type
     MultiDimGrid&       GetGrid();
     MultiDimGrid const& GetGrid() const;
 
   private:
-    /// Calls DoOnChange
-    void OnChange(wxCommandEvent&);
+    /// Calls OnChange
+    void UponChange(wxCommandEvent&);
 
     DECLARE_NO_COPY_CLASS(AxisMaxBoundAdjusterBase)
     DECLARE_EVENT_TABLE()
@@ -98,7 +97,7 @@ class AxisMaxBoundAdjuster
 
   private:
     /// Apply adjustment value
-    virtual void DoOnChange();
+    virtual void OnChange();
 
     MultiDimAxisAny& axis_;
     Integral lower_bound_;
@@ -139,12 +138,12 @@ AxisMaxBoundAdjuster<Integral>::AxisMaxBoundAdjuster
     SetToolTip(oss.str());
     for(Integral i = lower_bound_; i <= upper_bound_; ++i)
         {
-        wxChoice::Append(boost::lexical_cast<std::string>(i + 1));
+        wxChoice::Append(value_cast<std::string>(i + 1));
         }
 }
 
 template<typename Integral>
-void AxisMaxBoundAdjuster<Integral>::DoOnChange()
+void AxisMaxBoundAdjuster<Integral>::OnChange()
 {
     GetGrid().ApplyAxisAdjustment(axis_.GetName());
 }

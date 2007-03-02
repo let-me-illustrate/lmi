@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: multidimgrid_any.hpp,v 1.1.2.1 2007-02-11 21:52:42 etarassov Exp $
+// $Id: multidimgrid_any.hpp,v 1.1.2.2 2007-03-02 09:59:56 etarassov Exp $
 
 #ifndef multidimgrid_any_hpp
 #define multidimgrid_any_hpp
@@ -387,11 +387,11 @@ class MultiDimTableAny
 
     /// The method to be provided by the table to allow the conversion from
     /// the table values to the strings.
-    virtual wxString ValueToString(boost::any const& value) const = 0;
+    virtual std::string ValueToString(boost::any const& value) const = 0;
 
     /// The method to be provided by the table to allow the conversion from
     /// strings to the the table values.
-    virtual boost::any StringToValue(wxString const& value) const = 0;
+    virtual boost::any StringToValue(std::string const& value) const = 0;
 
   protected:
     virtual boost::any DoGetValue(Coords const& coords) const = 0;
@@ -675,31 +675,27 @@ protected:
     /// Note: once the wxGrid class support LabelAttributeProvider() we
     /// should add color hightliting of selected axis in here.
 
-    /// X axis cardinality
     virtual int GetNumberRows();
-
-    /// Y axis cardinality
     virtual int GetNumberCols();
-
-    /// Return always true for the data range given by axis
     virtual bool IsEmptyCell(int row, int col);
-
-    /// Gets value of the cell from the underlying data table
     virtual wxString GetValue(int row, int col);
-
-    /// Sets value of the cell into the underlying data table
     virtual void SetValue(int row, int col, wxString const& value);
-
-    /// Returns the corresponding Y axis row label
     virtual wxString GetRowLabelValue(int row);
-
-    /// Returns the corresponding X axis column label
     virtual wxString GetColLabelValue(int col);
 
 private:
+    /// Monitor axis selection changes
+    void UponSwitchSelectedAxis(wxCommandEvent& event);
+    /// Monitor axis variation checkboxes
+    void UponAxisVariesToggle(wxCommandEvent& event);
+
+    /// Actually handle the axis selection switch
+    void OnSwitchSelectedAxis(unsigned int axisId);
+
+
     /// Various GUI components of the widget
 
-    /// Data grid
+    /// Data grid widget
     wxGrid* grid_;
 
     /// Drop down menu for the X axis selection
@@ -734,14 +730,6 @@ private:
     friend class GridRefreshTableDataGuard;
     /// Refresh counter
     unsigned int table_data_refresh_counter_;
-
-    /// Monitor axis selection changes
-    void OnSwitchSelectedAxis(wxCommandEvent& event);
-    /// Actually handle the axis selection switch
-    void DoOnSwitchSelectedAxis(unsigned int axisId);
-
-    /// Monitor axis variation checkboxes
-    void OnAxisVariesToggle(wxCommandEvent& event);
 
     DECLARE_EVENT_TABLE()
 };
@@ -797,7 +785,7 @@ inline bool MultiDimGrid::RefreshAxisAdjustment(std::string const& name)
 ///
 /// GetGrid(): Return the grid object to be notified of any axis value changes
 ///
-/// OnSelectionChange(event): Selection change event handler
+/// UponSelectionChange(event): Selection change event handler
 ///
 /// PopulateChoiceList(): Fill the control with axis value labels
 
@@ -812,7 +800,7 @@ class MultiDimAxisAnyChoice
     friend class MultiDimAxisAny;
     MultiDimAxisAnyChoice(MultiDimAxisAny const& axis, MultiDimGrid& grid);
 
-    void OnSelectionChange(wxCommandEvent& event);
+    void UponSelectionChange(wxCommandEvent& event);
     void PopulateChoiceList();
 
   private:

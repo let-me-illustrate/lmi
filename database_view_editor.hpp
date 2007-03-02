@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: database_view_editor.hpp,v 1.1.2.1 2007-02-11 21:52:42 etarassov Exp $
+// $Id: database_view_editor.hpp,v 1.1.2.2 2007-03-02 09:59:56 etarassov Exp $
 
 #ifndef database_view_editor_hpp
 #define database_view_editor_hpp
@@ -214,8 +214,8 @@ class DatabaseTableAdapter
     virtual bool CanChangeVariationWith(unsigned int) const;
 
     /// Convert from and to double wrapped in boost::any object
-    virtual wxString ValueToString(boost::any const&) const;
-    virtual boost::any StringToValue(wxString const&) const;
+    virtual std::string ValueToString(boost::any const&) const;
+    virtual boost::any StringToValue(std::string const&) const;
 
     virtual MultiDimAxis<enum_gender>*   GetAxis0();
     virtual MultiDimAxis<enum_class>*    GetAxis1();
@@ -327,5 +327,5 @@ inline DatabaseEditorGrid::DatabaseEditorGrid
 {
 }
 
-#endif // tier_view_editor_hpp
+#endif // database_view_editor_hpp
 

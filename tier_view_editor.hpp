@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: tier_view_editor.hpp,v 1.1.2.1 2007-02-11 21:52:42 etarassov Exp $
+// $Id: tier_view_editor.hpp,v 1.1.2.2 2007-03-02 09:59:56 etarassov Exp $
 
 #ifndef tier_view_editor_hpp
 #define tier_view_editor_hpp
@@ -29,6 +29,7 @@
 #include "alert.hpp"
 #include "multidimgrid_safe.hpp"
 #include "multidimgrid_tools.hpp"
+#include "value_cast.hpp"
 
 #include <boost/shared_ptr.hpp>
 
@@ -185,37 +186,43 @@ inline TierBandAxis::TierBandAxis()
 {
 }
 
-/// Note.
+/// Note: MultiDimTable1<double_pair, unsigned int> requires a conversion
+/// between double_pair and std::string (via value_cast). Because of a twist
+/// in TierTableAdapter it will never going to be used though.
+/// Specify a dummy conversion and add an assertion to make sure it never gets
+/// called.
+/// Provide a value_cast specialisation for double_pair and std::string.
 ///
-/// MultiDimTable1<double_pair, unsigned int> requires a specification of
-/// MultiDimTableTypeTraits to be provided. In case of TierTableAdapter
-/// it will never going to be used, therefore specify a dummy implementation
-/// with assertion that its never get called.
+/// There are other options (and the corresponding disadvantages):
+/// * to specialize value_cast_chooser.
+///   Borland C implementation of value_cast does not use value_cast_chooser.
+/// * to specialize stream_cast.
+///   This specialisation could be accidentaly picked up by some other code.
+/// * operator<< and operator>> used in stream_cast default implementation.
+///   Same as previous.
+///
+/// Make sure that this value_cast specialisation is only present in
+/// tier_document.cpp and tier_view_editor.?pp files and does not affect
+/// the rest of the code.
 
-template <>
-class MultiDimTableTypeTraits<double_pair>
+template<>
+inline double_pair value_cast<double_pair, std::string>(std::string)
 {
-    void fail() const
-    {
-        fatal_error() << "Dummy implementation is called" << LMI_FLUSH;
-    }
-
-  public:
-    /// Convert value respresented by a string into ValueType.
-    double_pair FromString(wxString const&) const
-    {
-        fail();
-        return double_pair(0, 0);
-    }
-
-    /// Create a string representation of a value
-    wxString ToString(double_pair const&) const
-    {
-        fail();
-        return "";
-    }
-};
-
+    fatal_error()
+        << "Dummy converter from std::string to double_pair"
+        << LMI_FLUSH
+        ;
+    throw std::logic_error("Unreachable");
+}
+template<>
+inline std::string value_cast<std::string, double_pair>(double_pair)
+{
+    fatal_error()
+        << "Dummy converter from double_pair to std::string"
+        << LMI_FLUSH
+        ;
+    throw std::logic_error("Unreachable");
+}
 
 /// Table that interfaces between stratified_entity and MultiDimGrid
 ///

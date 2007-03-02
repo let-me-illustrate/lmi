@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: database_view_editor.cpp,v 1.1.2.1 2007-02-11 21:52:42 etarassov Exp $
+// $Id: database_view_editor.cpp,v 1.1.2.2 2007-03-02 09:59:57 etarassov Exp $
 
 #include "database_view_editor.hpp"
 
@@ -112,12 +112,13 @@ bool DatabaseTableAdapter::ConfirmOperation(unsigned int item_count) const
         return true;
 
     // ask user about having more than a million elements
-    wxString message
-        = "The resulting entity will have more than 1 million entries."
-          "Are you sure you want to continue?"
+    std::ostringstream oss;
+    oss
+        << "The resulting entity will have more than 1 million entries. "
+        << "Are you sure you want to continue?"
         ;
     return wxYES == wxMessageBox
-        (message
+        (oss.str()
         ,"Memory Consumption"
         ,wxYES_NO | wxICON_QUESTION
         );
@@ -187,24 +188,30 @@ bool DatabaseTableAdapter::CanChangeVariationWith(unsigned int n) const
     return n < db_value_->GetAxisLengths().size();
 }
 
-wxString DatabaseTableAdapter::ValueToString(boost::any const& value) const
+std::string DatabaseTableAdapter::ValueToString(boost::any const& value) const
 {
     try
         {
-        return wxString::Format("%f", boost::any_cast<double>(value));
+        return value_cast<std::string>(boost::any_cast<double>(value));
         }
-    catch(boost::bad_any_cast const&)
+    catch(boost::bad_any_cast const& e)
         {
-        return "#ERR";
+        warning() << "Conversion error: " << e.what() << LMI_FLUSH;
+        return std::string();
         }
 }
 
-boost::any DatabaseTableAdapter::StringToValue(wxString const& value) const
+boost::any DatabaseTableAdapter::StringToValue(std::string const& str) const
 {
-    double res;
-    if(!value.ToDouble(&res))
-        res = 0;
-    return boost::any(res);
+    try
+        {
+        return boost::any(value_cast<double, std::string>(str));
+        }
+    catch(boost::bad_any_cast const& e)
+        {
+        warning() << "Conversion error: " << e.what() << LMI_FLUSH;
+        return boost::any();
+        }
 }
 
 void DatabaseTableAdapter::ConvertValue

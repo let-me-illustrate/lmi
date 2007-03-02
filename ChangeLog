@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.564.2.12 2007-03-02 09:45:11 etarassov Exp $
+// $Id: ChangeLog,v 1.564.2.13 2007-03-02 09:59:56 etarassov Exp $
 
 MAINTENANCE
 
@@ -10051,3 +10051,18 @@ wx is older than 2.8.0.
 
   product_editor.hpp
 Fix the ifndef guard.
+
+20070302T0959Z <etarassov@tt-solutions.com> [1247]
+
+  database_view_editor.cpp
+  database_view_editor.hpp
+  multidimgrid_any.cpp
+  multidimgrid_any.hpp
+  multidimgrid_safe.hpp
+  multidimgrid_safe.tpp
+  multidimgrid_tools.cpp
+  multidimgrid_tools.hpp
+  tier_view_editor.cpp
+  tier_view_editor.hpp
+Use std::string instead of wxString wherever possible. Use value_cast
+for conversions.
