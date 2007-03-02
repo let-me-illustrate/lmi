@@ -19,10 +19,10 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: product_editor.hpp,v 1.1.2.1 2007-02-11 21:52:42 etarassov Exp $
+// $Id: product_editor.hpp,v 1.1.2.2 2007-03-02 09:45:11 etarassov Exp $
 
-#ifndef profile_editor_hpp
-#define profile_editor_hpp
+#ifndef product_editor_hpp
+#define product_editor_hpp
 
 #include "config.hpp"
 
@@ -122,5 +122,5 @@ inline MultiDimGrid& TreeGridViewBase::GetGridCtrl() const
     return *grid_;
 }
 
-#endif // profile_editor_hpp
+#endif // product_editor_hpp
 
