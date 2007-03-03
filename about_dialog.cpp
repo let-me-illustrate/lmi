@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: about_dialog.cpp,v 1.8 2007-01-27 00:00:51 wboutin Exp $
+// $Id: about_dialog.cpp,v 1.9 2007-03-03 19:44:17 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -35,7 +35,8 @@
 #include <wx/html/htmlwin.h>
 #include <wx/settings.h>
 #include <wx/sizer.h>
-#include <wx/string.h>
+
+#include <string>
 
 BEGIN_EVENT_TABLE(AboutDialog, wxDialog)
     EVT_BUTTON(wxID_ABOUT, AboutDialog::UponReadLicense)
@@ -45,10 +46,7 @@ AboutDialog::AboutDialog(wxWindow* parent)
     :wxDialog
         (parent
         ,-1
-        ,wxString
-            (   "About 'Let me illustrate...' version "
-            +   std::string(LMI_VERSION)
-            )
+        ,"About 'Let me illustrate...' version " + std::string(LMI_VERSION)
         )
 {
 }
@@ -115,7 +113,7 @@ int AboutDialog::ShowModal()
 
 void AboutDialog::UponReadLicense(wxCommandEvent&)
 {
-    wxDialog dialog(this, -1, wxString("GNU General Public License"));
+    wxDialog dialog(this, -1, std::string("GNU General Public License"));
     wxHtmlWindow* html_window = new wxHtmlWindow
         (&dialog
         ,-1

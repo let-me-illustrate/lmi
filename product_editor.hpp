@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: product_editor.hpp,v 1.3 2007-02-25 19:28:18 chicares Exp $
+// $Id: product_editor.hpp,v 1.4 2007-03-03 19:44:17 chicares Exp $
 
 #ifndef profile_editor_hpp
 #define profile_editor_hpp
@@ -31,6 +31,8 @@
 #include <boost/utility.hpp>
 
 #include <wx/docview.h>
+
+#include <string>
 
 // forward declaration
 class ProductEditorView;
@@ -54,8 +56,8 @@ class ProductEditorDocument
     virtual ~ProductEditorDocument();
 
   protected:
-    virtual void ReadDocument(wxString const& filename) = 0;
-    virtual void WriteDocument(wxString const& filename) = 0;
+    virtual void ReadDocument (std::string const& filename) = 0;
+    virtual void WriteDocument(std::string const& filename) = 0;
 
   private:
     ProductEditorView& PredominantView() const;
