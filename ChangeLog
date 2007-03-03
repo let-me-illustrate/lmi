@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.580 2007-02-25 19:28:18 chicares Exp $
+// $Id: ChangeLog,v 1.581 2007-03-03 17:47:40 chicares Exp $
 
 MAINTENANCE
 
@@ -10246,4 +10246,22 @@ Mark 'protected' issues.
   tier_view_editor.hpp
 Lay out class definitions in prescribed order: lmi coding standard,
 section 8.1 .
+
+20070227T0003Z <chicares@cox.net> [1252]
+
+  ledger_xml_io2.cpp
+  multidimgrid_any.hpp
+  multidimgrid_safe.hpp
+  tier_view_editor.hpp
+Remove doxygen markup. See:
+  http://lists.gnu.org/archive/html/lmi/2007-02/msg00029.html
+
+20070303T1747Z <chicares@cox.net> [1253]
+
+  census_view.cpp
+  illustration_view.cpp
+  view_ex.cpp
+  view_ex.hpp
+Prevent potential crash due to defective installation. See:
+  http://lists.gnu.org/archive/PASTE_LINK_WHEN_IT_BECOMES_AVAILABLE
 
