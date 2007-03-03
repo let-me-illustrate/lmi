@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.581 2007-03-03 17:47:40 chicares Exp $
+// $Id: ChangeLog,v 1.582 2007-03-03 19:44:17 chicares Exp $
 
 MAINTENANCE
 
@@ -10264,4 +10264,23 @@ Remove doxygen markup. See:
   view_ex.hpp
 Prevent potential crash due to defective installation. See:
   http://lists.gnu.org/archive/PASTE_LINK_WHEN_IT_BECOMES_AVAILABLE
+
+20070303T1942Z <chicares@cox.net> [1253]
+
+  view_ex.cpp
+Refactor.
+
+20070303T1944Z <chicares@cox.net> [1253]
+
+  about_dialog.cpp
+  database_document.cpp
+  database_document.hpp
+  policy_document.cpp
+  policy_document.hpp
+  product_editor.hpp
+  rounding_document.cpp
+  rounding_document.hpp
+  tier_document.cpp
+  tier_document.hpp
+Replace wxString with std::string.
 

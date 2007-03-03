@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: database_document.cpp,v 1.4 2007-02-23 12:43:25 chicares Exp $
+// $Id: database_document.cpp,v 1.5 2007-03-03 19:44:17 chicares Exp $
 
 #include "database_document.hpp"
 
@@ -100,7 +100,7 @@ TDBValue* DatabaseDocument::GetTDBValue(std::size_t index)
     return &dict_[index];
 }
 
-void DatabaseDocument::ReadDocument(wxString const& filename)
+void DatabaseDocument::ReadDocument(std::string const& filename)
 {
     DBDictionary& instance = DBDictionary::instance();
 
@@ -112,7 +112,7 @@ void DatabaseDocument::ReadDocument(wxString const& filename)
     instance.Init(filename);
 }
 
-void DatabaseDocument::WriteDocument(wxString const& filename)
+void DatabaseDocument::WriteDocument(std::string const& filename)
 {
     DBDictionary& instance = DBDictionary::instance();
 

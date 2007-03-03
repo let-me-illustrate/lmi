@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: policy_document.hpp,v 1.2 2007-02-21 03:07:24 chicares Exp $
+// $Id: policy_document.hpp,v 1.3 2007-03-03 19:44:17 chicares Exp $
 
 #ifndef policy_document_hpp
 #define policy_document_hpp
@@ -47,8 +47,8 @@ class PolicyDocument
 
   private:
     // ProductEditorDocument overrides.
-    virtual void ReadDocument(wxString const& filename);
-    virtual void WriteDocument(wxString const& filename);
+    virtual void ReadDocument (std::string const& filename);
+    virtual void WriteDocument(std::string const& filename);
 
     PolicyView& PredominantView() const;
 

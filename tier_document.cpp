@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: tier_document.cpp,v 1.2 2007-02-21 03:07:24 chicares Exp $
+// $Id: tier_document.cpp,v 1.3 2007-03-03 19:44:17 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -43,12 +43,12 @@ TierDocument::~TierDocument()
 {
 }
 
-void TierDocument::ReadDocument(wxString const& filename)
+void TierDocument::ReadDocument(std::string const& filename)
 {
     charges_.read(filename);
 }
 
-void TierDocument::WriteDocument(wxString const& filename)
+void TierDocument::WriteDocument(std::string const& filename)
 {
     charges_.write(filename);
 }

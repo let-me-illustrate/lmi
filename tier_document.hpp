@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: tier_document.hpp,v 1.3 2007-02-23 12:43:26 chicares Exp $
+// $Id: tier_document.hpp,v 1.4 2007-03-03 19:44:17 chicares Exp $
 
 #ifndef tier_document_hpp
 #define tier_document_hpp
@@ -44,8 +44,8 @@ class TierDocument
 
   private:
     // wxDocument overrides.
-    virtual void ReadDocument(wxString const& filename);
-    virtual void WriteDocument(wxString const& filename);
+    virtual void ReadDocument (std::string const& filename);
+    virtual void WriteDocument(std::string const& filename);
 
     stratified_charges charges_;
 
