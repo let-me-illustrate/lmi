@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: view_ex.hpp,v 1.7 2007-01-27 00:00:52 wboutin Exp $
+// $Id: view_ex.hpp,v 1.8 2007-03-03 17:47:40 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -44,9 +44,13 @@
 // functions SetIcon() and SetMenuBar() respectively. Because they are
 // expected to be loaded from xml resources, the functions could have
 // been made nonvirtual, with a string argument to distinguish view
-// types, and indeed protected functions are provided to encapsulate
-// that work in this class--with the same return types as the wxxrc
-// functions they call. The public functions are pure to allow
+// types, and indeed protected functions IconFromXmlResource() and
+// MenuBarFromXmlResource() are provided to encapsulate that work in
+// this class--with the same return types as the wxxrc functions they
+// call. Thus, notably, MenuBarFromXmlResource() returns a pointer,
+// but it never returns a null pointer, which would cause the program
+// to crash--instead, it returns a default object if no menubar can be
+// read from an xml resource. The public functions are pure to allow
 // implementation flexibility. For instance, an overrider may contain
 // a static variable to cache xml resources for better responsiveness,
 // or it may use a different approach altogether.
@@ -120,6 +124,8 @@ class ViewEx
 
     virtual wxWindow* CreateChildWindow() = 0;
 
+    // TODO ?? Consider making virtuals nonpublic and public functions
+    // nonvirtual.
     virtual wxIcon Icon() const = 0;
     virtual wxMenuBar* MenuBar() const = 0;
 

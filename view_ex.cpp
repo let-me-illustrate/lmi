@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: view_ex.cpp,v 1.10 2007-01-27 00:00:52 wboutin Exp $
+// $Id: view_ex.cpp,v 1.11 2007-03-03 17:47:40 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -49,10 +49,13 @@
 #include "docmanager_ex.hpp"
 #include "main_wx.hpp" // wxGetApp()
 #include "path_utility.hpp"
+#include "wx_new.hpp"
 
 #include <wx/dc.h>
 #include <wx/menu.h>
 #include <wx/xrc/xmlres.h>
+
+#include <cstdlib>     // std::exit(), EXIT_FAILURE
 
 IMPLEMENT_ABSTRACT_CLASS(ViewEx, wxView)
 
@@ -85,23 +88,30 @@ wxIcon ViewEx::IconFromXmlResource(char const* z) const
     wxIcon icon = wxXmlResource::Get()->LoadIcon(z);
     if(!icon.Ok())
         {
-        warning()
-            << "IconFromXmlResource(): invalid icon; using default."
-            << LMI_FLUSH
-            ;
+        warning() << "Invalid icon; using default." << LMI_FLUSH;
         }
     return icon;
 }
+
+/// If 'new(wx) wxMenuBar' fails, then the program would crash except
+/// for the explicit test below. Use std::exit() instead of wxExit()
+/// because wxExit() itself can lead to a crash.
 
 wxMenuBar* ViewEx::MenuBarFromXmlResource(char const* z) const
 {
     wxMenuBar* menubar = wxXmlResource::Get()->LoadMenuBar(z);
     if(!menubar)
         {
-        warning()
-            << "MenuBarFromXmlResource(): null menubar pointer."
-            << LMI_FLUSH
-            ;
+        warning() << "Invalid menubar; using default." << LMI_FLUSH;
+        menubar = new(wx) wxMenuBar;
+        if(!menubar)
+            {
+            safely_show_message
+                ("Terminating abnormally:"
+                " failed to construct default menubar."
+                );
+            std::exit(EXIT_FAILURE);
+            }
         }
     return menubar;
 }

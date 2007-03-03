@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustration_view.cpp,v 1.58 2007-01-27 00:00:51 wboutin Exp $
+// $Id: illustration_view.cpp,v 1.59 2007-03-03 17:47:40 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -184,15 +184,7 @@ wxIcon IllustrationView::Icon() const
 
 wxMenuBar* IllustrationView::MenuBar() const
 {
-    wxMenuBar* menu_bar = MenuBarFromXmlResource("illustration_view_menu");
-    if(!menu_bar)
-        {
-        fatal_error()
-            << "Unable to load 'illustration_view_menu'."
-            << LMI_FLUSH
-            ;
-        };
-    return menu_bar;
+    return MenuBarFromXmlResource("illustration_view_menu");
 }
 
 // This virtual function calls the base-class version explicitly.
