@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: census_view.cpp,v 1.49 2007-01-27 00:00:51 wboutin Exp $
+// $Id: census_view.cpp,v 1.50 2007-03-03 17:47:40 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -580,12 +580,7 @@ wxIcon CensusView::Icon() const
 
 wxMenuBar* CensusView::MenuBar() const
 {
-    wxMenuBar* menu_bar = MenuBarFromXmlResource("census_view_menu");
-    if(!menu_bar)
-        {
-        fatal_error() << "Unable to load menubar." << LMI_FLUSH;
-        };
-    return menu_bar;
+    return MenuBarFromXmlResource("census_view_menu");
 }
 
 ///* TODO expunge?
