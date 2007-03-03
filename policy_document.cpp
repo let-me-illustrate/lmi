@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: policy_document.cpp,v 1.2 2007-02-21 03:07:24 chicares Exp $
+// $Id: policy_document.cpp,v 1.3 2007-03-03 19:44:17 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -90,7 +90,7 @@ PolicyView& PolicyDocument::PredominantView() const
     return ::PredominantView<PolicyView>(*this);
 }
 
-void PolicyDocument::ReadDocument(wxString const& filename)
+void PolicyDocument::ReadDocument(std::string const& filename)
 {
     product_data_.Read(filename);
     if(!GetViews().empty())
@@ -108,7 +108,7 @@ void PolicyDocument::ReadDocument(wxString const& filename)
         }
 }
 
-void PolicyDocument::WriteDocument(wxString const& filename)
+void PolicyDocument::WriteDocument(std::string const& filename)
 {
     if(!GetViews().empty())
         {
