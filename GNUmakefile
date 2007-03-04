@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: GNUmakefile,v 1.82 2007-02-25 14:48:15 chicares Exp $
+# $Id: GNUmakefile,v 1.83 2007-03-04 15:31:32 chicares Exp $
 
 ################################################################################
 
@@ -313,11 +313,16 @@ date_last_made: $(filter-out $@,$(prerequisite_files))
 
 .PHONY: release_candidate
 release_candidate:
-	@$(ECHO) -e $(gpl_notices) '#define LMI_VERSION "$(yyyymmddhhmm)"' \
+	@$(ECHO) -e \
+	  $(gpl_notices) \
+	  '#ifndef version_hpp\n' \
+	  '#define version_hpp\n\n' \
+	  '#define LMI_VERSION "$(yyyymmddhhmm)"\n\n' \
+	  '#endif // version_hpp\n' \
 	  | $(SED) -e 's/^ *//' \
 	  | $(TR) --delete '\r' \
 	  > version.hpp
-	@$(ECHO) Version is $(yyyymmddhhmm) .
+	@$(ECHO) Version is "'$(yyyymmddhhmm)'".
 	@$(ECHO) "  Tag a release this way:"
 	@$(ECHO) "cvs commit -m\"Mark release candidate\" version.hpp ChangeLog"
 	@$(ECHO) "cvs rtag lmi-$(yyyymmddhhmm) lmi"
