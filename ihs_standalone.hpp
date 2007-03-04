@@ -19,10 +19,10 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_standalone.hpp,v 1.5 2007-02-25 15:02:48 chicares Exp $
+// $Id: ihs_standalone.hpp,v 1.6 2007-03-04 16:33:31 chicares Exp $
 
-#ifndef standalone_hpp
-#define standalone_hpp
+#ifndef ihs_standalone_hpp
+#define ihs_standalone_hpp
 
 #include "config.hpp"
 
@@ -119,5 +119,5 @@ class GPT_BasicValues
 #   include "basic_values.hpp"
 #endif // STANDALONE
 
-#endif // standalone_hpp
+#endif // ihs_standalone_hpp
 

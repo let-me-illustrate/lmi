@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xml_lmi_fwd.hpp,v 1.7 2007-01-27 00:00:52 wboutin Exp $
+// $Id: xml_lmi_fwd.hpp,v 1.8 2007-03-04 16:33:31 chicares Exp $
 
 #ifndef xml_lmi_fwd_hpp
 #define xml_lmi_fwd_hpp
@@ -55,5 +55,5 @@ namespace xml_lmi
 // but a nested class can't be forward declared.
 } // namespace xml_lmi
 
-#endif //xml_lmi_fwd_hpp
+#endif // xml_lmi_fwd_hpp
 

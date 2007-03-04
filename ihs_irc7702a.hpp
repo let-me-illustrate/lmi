@@ -19,10 +19,10 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_irc7702a.hpp,v 1.7 2007-02-23 12:43:25 chicares Exp $
+// $Id: ihs_irc7702a.hpp,v 1.8 2007-03-04 16:33:31 chicares Exp $
 
-#ifndef irc7702a_hpp
-#define irc7702a_hpp
+#ifndef ihs_irc7702a_hpp
+#define ihs_irc7702a_hpp
 
 #include "config.hpp"
 
@@ -295,5 +295,5 @@ class Irc7702A
 //  std::vector<double> const&  PolFee;
 };
 
-#endif
+#endif // ihs_irc7702a_hpp
 

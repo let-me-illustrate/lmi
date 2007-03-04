@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: dbindex.hpp,v 1.4 2007-02-25 15:02:48 chicares Exp $
+// $Id: dbindex.hpp,v 1.5 2007-03-04 16:33:31 chicares Exp $
 
 #ifndef dbindex_hpp
 #define dbindex_hpp
@@ -69,5 +69,5 @@ class TDBIndex
     std::vector<double> idx;
 };
 
-#endif
+#endif // dbindex_hpp
 

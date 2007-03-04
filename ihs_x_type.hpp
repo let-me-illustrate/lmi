@@ -19,10 +19,10 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_x_type.hpp,v 1.4 2007-02-25 15:02:48 chicares Exp $
+// $Id: ihs_x_type.hpp,v 1.5 2007-03-04 16:33:31 chicares Exp $
 
-#ifndef x_type_hpp
-#define x_type_hpp
+#ifndef ihs_x_type_hpp
+#define ihs_x_type_hpp
 
 #include "config.hpp"
 
@@ -38,5 +38,5 @@ class x_product_rule_violated
     {}
 };
 
-#endif // x_type_hpp
+#endif // ihs_x_type_hpp
 

@@ -19,10 +19,10 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_irc7702.hpp,v 1.9 2007-01-27 00:00:51 wboutin Exp $
+// $Id: ihs_irc7702.hpp,v 1.10 2007-03-04 16:33:31 chicares Exp $
 
-#ifndef irc7702_hpp
-#define irc7702_hpp
+#ifndef ihs_irc7702_hpp
+#define ihs_irc7702_hpp
 
 #include "config.hpp"
 
@@ -370,5 +370,5 @@ class Irc7702
 // it in RAM for a few seconds, while the admin system stores in on
 // disk for a large number of years.
 
-#endif  // irc7702_hpp
+#endif // ihs_irc7702_hpp
 

@@ -19,10 +19,10 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_server7702.hpp,v 1.5 2007-02-25 15:02:48 chicares Exp $
+// $Id: ihs_server7702.hpp,v 1.6 2007-03-04 16:33:31 chicares Exp $
 
-#ifndef server7702_hpp
-#define server7702_hpp
+#ifndef ihs_server7702_hpp
+#define ihs_server7702_hpp
 
 #include "config.hpp"
 
@@ -149,5 +149,5 @@ class server7702_misstatement_of_age_or_gender
     {}
 };
 
-#endif  // server7702_hpp
+#endif // ihs_server7702_hpp
 

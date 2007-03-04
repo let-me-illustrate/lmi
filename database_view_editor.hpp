@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: database_view_editor.hpp,v 1.4 2007-02-25 15:02:48 chicares Exp $
+// $Id: database_view_editor.hpp,v 1.5 2007-03-04 16:33:31 chicares Exp $
 
 #ifndef database_view_editor_hpp
 #define database_view_editor_hpp
@@ -318,5 +318,5 @@ inline DatabaseEditorGrid::DatabaseEditorGrid
 {
 }
 
-#endif // tier_view_editor_hpp
+#endif // database_view_editor_hpp
 
