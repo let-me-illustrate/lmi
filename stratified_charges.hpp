@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: stratified_charges.hpp,v 1.8 2007-01-27 00:00:52 wboutin Exp $
+// $Id: stratified_charges.hpp,v 1.9 2007-03-04 16:33:31 chicares Exp $
 
 #ifndef stratified_charges_hpp
 #define stratified_charges_hpp
@@ -163,5 +163,5 @@ class LMI_SO stratified_charges
     std::map<e_stratified, stratified_entity> dictionary;
 };
 
-#endif  // stratified_charges_hpp
+#endif // stratified_charges_hpp
 

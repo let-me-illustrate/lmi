@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: dbvalue.hpp,v 1.4 2007-01-27 00:00:51 wboutin Exp $
+// $Id: dbvalue.hpp,v 1.5 2007-03-04 16:33:31 chicares Exp $
 
 #ifndef dbvalue_hpp
 #define dbvalue_hpp
@@ -63,7 +63,7 @@ class TDBValue
     double* data;       // Data
 };
 
-#endif    // dbvalue_hpp
+#endif // dbvalue_hpp
 
 /*
 Database items should be allowed to vary across numerous axes, such as

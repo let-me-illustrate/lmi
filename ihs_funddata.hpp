@@ -19,10 +19,10 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_funddata.hpp,v 1.8 2007-01-27 00:00:51 wboutin Exp $
+// $Id: ihs_funddata.hpp,v 1.9 2007-03-04 16:33:31 chicares Exp $
 
-#ifndef funddata_hpp
-#define funddata_hpp
+#ifndef ihs_funddata_hpp
+#define ihs_funddata_hpp
 
 #include "config.hpp"
 
@@ -110,5 +110,5 @@ inline int FundData::GetNumberOfFunds() const
     return FundInfo_.size();
 }
 
-#endif // funddata_hpp
+#endif // ihs_funddata_hpp
 

@@ -19,13 +19,13 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: zero.hpp,v 1.5 2007-01-27 00:00:52 wboutin Exp $
+// $Id: zero.hpp,v 1.6 2007-03-04 16:33:31 chicares Exp $
 
 // R. P. Brent, _Algorithms for Minization without Derivatives_
 // ISBN 0-13-022335-2
 
-#ifndef lmi_zero_hpp
-#define lmi_zero_hpp
+#ifndef zero_hpp
+#define zero_hpp
 
 #include "config.hpp"
 
@@ -439,5 +439,5 @@ double brent_zero
         }
 }
 
-#endif // lmi_zero_hpp
+#endif // zero_hpp
 

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.582 2007-03-03 19:44:17 chicares Exp $
+// $Id: ChangeLog,v 1.583 2007-03-04 16:33:31 chicares Exp $
 
 MAINTENANCE
 
@@ -10283,4 +10283,51 @@ Refactor.
   tier_document.cpp
   tier_document.hpp
 Replace wxString with std::string.
+
+20070304T1528Z <chicares@cox.net> [1252]
+
+  copy_n_.hpp        [expunged]
+  is_sorted_.hpp     [expunged]
+  stl_extensions.hpp [new file]
+Consolidate files containing STL extensions.
+
+  ihs_acctval.cpp
+  inputs.cpp
+  stratified_algorithms.hpp
+Reflect consolidation of files containing STL extensions.
+
+20070304T1531Z <chicares@cox.net> [1252]
+
+  GNUmakefile
+  version.hpp
+Add include guards to 'version.hpp'.
+
+20070304T1633Z <chicares@cox.net> [1252]
+
+  test_coding_rules.cpp
+Enforce include-guard canonicalization.
+
+  custom_io_0.hpp
+  database_view_editor.hpp
+  dbindex.hpp
+  dbvalue.hpp
+  ihs_commfns.hpp
+  ihs_funddata.hpp
+  ihs_irc7702.hpp
+  ihs_irc7702a.hpp
+  ihs_proddata.hpp
+  ihs_rnddata.hpp
+  ihs_server7702.hpp
+  ihs_server7702io.hpp
+  ihs_standalone.hpp
+  ihs_x_type.hpp
+  math_functors.hpp
+  md5.hpp
+  product_editor.hpp
+  stratified_charges.hpp
+  xml_lmi.hpp
+  xml_lmi_fwd.hpp
+  xslt_lmi.hpp
+  zero.hpp
+Canonicalize include guards.
 
