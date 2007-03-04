@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustration_view.hpp,v 1.26 2007-01-27 00:00:51 wboutin Exp $
+// $Id: illustration_view.hpp,v 1.27 2007-03-04 23:17:24 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -99,7 +99,7 @@ class IllustrationView
     wxMenuBar* MenuBar() const;
 
     // ViewEx overrides.
-    bool OnCreate              (wxDocument*, long int);
+    virtual bool OnCreate(wxDocument*, long int);
 
     void UponCopyFull          (wxCommandEvent&);
     void UponCopySummary       (wxCommandEvent&);
