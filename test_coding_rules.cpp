@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: test_coding_rules.cpp,v 1.7 2007-03-04 16:33:27 chicares Exp $
+// $Id: test_coding_rules.cpp,v 1.8 2007-03-04 16:39:15 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -31,7 +31,6 @@
 #include "main_common.hpp"
 
 #include <boost/filesystem/convenience.hpp>
-//#include <boost/filesystem/exception.hpp>
 #include <boost/filesystem/fstream.hpp>
 #include <boost/filesystem/operations.hpp>
 #include <boost/filesystem/path.hpp>
@@ -43,14 +42,6 @@
 
 void check_include_guards(std::string const& filename, std::string const& s)
 {
-/*
-    std::string const cxx_header_extension(".hpp");
-    if
-        (   filename.rfind(cxx_header_extension)
-        !=  filename.size() - cxx_header_extension.size()
-        )
-        {return;}
-*/
     if(".hpp" != fs::extension(filename))
         {return;}
 
