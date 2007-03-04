@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: multidimgrid_any.hpp,v 1.10 2007-02-27 00:03:30 chicares Exp $
+// $Id: multidimgrid_any.hpp,v 1.11 2007-03-04 18:40:23 chicares Exp $
 
 #ifndef multidimgrid_any_hpp
 #define multidimgrid_any_hpp
@@ -680,25 +680,13 @@ class MultiDimGrid
     /// Note: once the wxGrid class support LabelAttributeProvider() we
     /// should add color hightliting of selected axis in here.
 
-    /// X axis cardinality
     virtual int GetNumberRows();
-
-    /// Y axis cardinality
     virtual int GetNumberCols();
-
-    /// Return always true for the data range given by axis
     virtual bool IsEmptyCell(int row, int col);
-
-    /// Gets value of the cell from the underlying data table
     virtual wxString GetValue(int row, int col);
-
-    /// Sets value of the cell into the underlying data table
     virtual void SetValue(int row, int col, wxString const& value);
-
-    /// Returns the corresponding Y axis row label
+// EVGENIY !! Would 'GetXXXLabel', without 'Value', be okay?
     virtual wxString GetRowLabelValue(int row);
-
-    /// Returns the corresponding X axis column label
     virtual wxString GetColLabelValue(int col);
 
   private:
