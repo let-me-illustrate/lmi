@@ -1,6 +1,6 @@
-// SGI's is_sorted() enhancement to STL.
+// SGI extensions to STL.
 //
-// Copyright (C) 2002, 2005, 2006, 2007 Gregory W. Chicares.
+// Copyright (C) 2001, 2002, 2005, 2006, 2007 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: is_sorted_.hpp,v 1.4 2007-01-27 00:00:51 wboutin Exp $
+// $Id: stl_extensions.hpp,v 1.1 2007-03-04 15:28:26 chicares Exp $
 
 // Copyright (C) 1994
 // Hewlett-Packard Company
@@ -32,7 +32,7 @@
 // representations about the suitability of this software for any
 // purpose.  It is provided "as is" without express or implied warranty.
 //
-// Copyright (C) 1996
+// Copyright (C) 1996-1998
 // Silicon Graphics Computer Systems, Inc.
 //
 // Permission to use, copy, modify, distribute and sell this software
@@ -46,67 +46,80 @@
 // This implementation is a derived work based on code SGI released
 // with the above disclaimers.
 //
-// Gregory W. Chicares modified it trivially in 2002 and 2005.
-// Any defect in it should not reflect on SGI's or HP's reputation.
+// Gregory W. Chicares modified it trivially in 2002 and 2005, and in
+// later years as indicated in 'ChangeLog'. Any defect in it should
+// not reflect on SGI's or HP's reputation.
 
-#ifndef is_sorted_hpp
-#define is_sorted_hpp
+#ifndef stl_extensions_hpp
+#define stl_extensions_hpp
 
 #include "config.hpp"
 
-// is_sorted, a predicate testing whether a range is sorted in
-// nondescending order.  This is an extension, not part of the C++
-// standard.
-
 namespace nonstd
 {
-    template<typename ForwardIterator>
-    bool is_sorted_
-        (ForwardIterator first
-        ,ForwardIterator last
-        )
-    {
-        if(first == last)
-            {
-            return true;
-            }
-
-        ForwardIterator next = first;
-        for(++next; next != last; first = next, ++next)
-            {
-            if(*next < *first)
-                {
-                return false;
-                }
-            }
-
-        return true;
-    }
-
-    template<typename ForwardIterator, typename StrictWeakOrdering>
-    bool is_sorted_
-        (ForwardIterator first
-        ,ForwardIterator last
-        ,StrictWeakOrdering comp
-        )
-    {
-        if(first == last)
-            {
-            return true;
-            }
-
-        ForwardIterator next = first;
-        for(++next; next != last; first = next, ++next)
-            {
-            if(comp(*next, *first))
-                {
-                return false;
-                }
-            }
-
-        return true;
-    }
+template<typename InputIterator, typename Size, typename OutputIterator>
+void copy_n(InputIterator first, Size count, OutputIterator result)
+{
+    Size j = count;
+    for(; 0 < j; --j)
+        {
+        *result = *first;
+        ++first;
+        ++result;
+        }
 }
 
-#endif // is_sorted_hpp
+/// is_sorted, a predicate testing whether a range is sorted in
+/// nondescending order.  This is an extension, not part of the C++
+/// standard.
+
+template<typename ForwardIterator>
+bool is_sorted
+    (ForwardIterator first
+    ,ForwardIterator last
+    )
+{
+    if(first == last)
+        {
+        return true;
+        }
+
+    ForwardIterator next = first;
+    for(++next; next != last; first = next, ++next)
+        {
+        if(*next < *first)
+            {
+            return false;
+            }
+        }
+
+    return true;
+}
+
+template<typename ForwardIterator, typename StrictWeakOrdering>
+bool is_sorted
+    (ForwardIterator first
+    ,ForwardIterator last
+    ,StrictWeakOrdering comp
+    )
+{
+    if(first == last)
+        {
+        return true;
+        }
+
+    ForwardIterator next = first;
+    for(++next; next != last; first = next, ++next)
+        {
+        if(comp(*next, *first))
+            {
+            return false;
+            }
+        }
+
+    return true;
+}
+} // Unnamed namespace.
+
+#endif // stl_extensions_hpp
 
