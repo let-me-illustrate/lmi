@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: inputs.cpp,v 1.16 2007-01-27 00:00:51 wboutin Exp $
+// $Id: inputs.cpp,v 1.17 2007-03-04 15:28:30 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -33,8 +33,8 @@
 #include "dbnames.hpp"
 #include "inputillus.hpp"
 #include "inputstatus.hpp"
-#include "is_sorted_.hpp"
 #include "product_names.hpp"
+#include "stl_extensions.hpp"
 
 #include <boost/bind.hpp>
 #include <boost/scoped_ptr.hpp>
@@ -868,7 +868,7 @@ bool InputParms::CheckAllowChangeToDBO2() const
         return true;
         }
     else if
-        (nonstd::is_sorted_
+        (nonstd::is_sorted
             (DBOpt.begin()
             ,DBOpt.end()
             ,boost::bind

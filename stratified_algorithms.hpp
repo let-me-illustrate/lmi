@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: stratified_algorithms.hpp,v 1.6 2007-01-27 00:00:52 wboutin Exp $
+// $Id: stratified_algorithms.hpp,v 1.7 2007-03-04 15:28:30 chicares Exp $
 
 #ifndef stratified_algorithms_hpp
 #define stratified_algorithms_hpp
@@ -27,7 +27,7 @@
 #include "config.hpp"
 
 #include "alert.hpp"
-#include "is_sorted_.hpp"
+#include "stl_extensions.hpp"
 
 #include <functional>
 #include <vector>
@@ -239,7 +239,7 @@ T banded_rate<T>::operator()
 {
     // TODO ?? It would be better to assert that limits are increasing.
     LMI_ASSERT
-        (nonstd::is_sorted_
+        (nonstd::is_sorted
             (cumulative_limits.begin()
             ,cumulative_limits.end()
             )

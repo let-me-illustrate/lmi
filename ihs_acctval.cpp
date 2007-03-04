@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_acctval.cpp,v 1.89 2007-01-27 00:00:51 wboutin Exp $
+// $Id: ihs_acctval.cpp,v 1.90 2007-03-04 15:28:30 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -30,7 +30,6 @@
 
 #include "alert.hpp"
 #include "calendar_date.hpp"
-#include "copy_n_.hpp"
 #include "database.hpp"
 #include "dbnames.hpp"
 #include "death_benefits.hpp"
@@ -49,6 +48,7 @@
 #include "miscellany.hpp"
 #include "mortality_rates.hpp"
 #include "outlay.hpp"
+#include "stl_extensions.hpp"
 #include "stratified_algorithms.hpp"
 #include "stratified_charges.hpp"
 #include "surrchg_rates.hpp"
@@ -520,13 +520,13 @@ void AccountValue::InitializeLife(e_run_basis const& a_Basis)
     else
         {
         // Premium history starts at contract year zero.
-        nonstd::copy_n_
+        nonstd::copy_n
             (Input_->VectorPremiumHistory.begin()
             ,length_7702a
             ,std::back_inserter(pmts_7702a)
             );
         // Specamt history starts at policy year zero.
-        nonstd::copy_n_
+        nonstd::copy_n
             (Input_->VectorSpecamtHistory.begin() + Input_->InforceContractYear.operator int const&()
             ,length_7702a
             ,std::back_inserter(bfts_7702a)
