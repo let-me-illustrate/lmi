@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: test_coding_rules.cpp,v 1.6 2007-02-25 02:49:37 chicares Exp $
+// $Id: test_coding_rules.cpp,v 1.7 2007-03-04 16:33:27 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -30,7 +30,8 @@
 #include "istream_to_string.hpp"
 #include "main_common.hpp"
 
-#include <boost/filesystem/exception.hpp>
+#include <boost/filesystem/convenience.hpp>
+//#include <boost/filesystem/exception.hpp>
 #include <boost/filesystem/fstream.hpp>
 #include <boost/filesystem/operations.hpp>
 #include <boost/filesystem/path.hpp>
@@ -40,7 +41,38 @@
 #include <ostream>
 #include <string>
 
-int process_file(char const* filename)
+void check_include_guards(std::string const& filename, std::string const& s)
+{
+/*
+    std::string const cxx_header_extension(".hpp");
+    if
+        (   filename.rfind(cxx_header_extension)
+        !=  filename.size() - cxx_header_extension.size()
+        )
+        {return;}
+*/
+    if(".hpp" != fs::extension(filename))
+        {return;}
+
+    std::string guard = filename;
+    std::string::size_type position = guard.find('.');
+    while(position != std::string::npos)
+        {
+        guard.replace(position, 1, std::string("_"));
+        position = guard.find('.', 1 + position);
+        }
+
+    if
+        (   std::string::npos == s.find("\n#ifndef "   + guard + "\n")
+        ||  std::string::npos == s.find("\n#define "   + guard + "\n")
+        ||  std::string::npos == s.find("\n#endif // " + guard + "\n")
+        )
+        {
+        std::cout << "Noncanonical header guards in '" << filename << "'.\n";
+        }
+}
+
+int process_file(std::string const& filename)
 {
     fs::path filepath(filename);
 
@@ -73,6 +105,8 @@ int process_file(char const* filename)
         {
         std::cout << "File '" << filename << "' contains ' \\n'.\n";
         }
+
+    check_include_guards(filename, s);
 
     if(!ifs)
         {
