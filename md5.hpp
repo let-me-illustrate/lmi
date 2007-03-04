@@ -31,7 +31,7 @@
    email: <chicares@cox.net>
    snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-   $Id: md5.hpp,v 1.7 2007-02-23 12:43:26 chicares Exp $
+   $Id: md5.hpp,v 1.8 2007-03-04 16:33:31 chicares Exp $
 
    GWC: File renamed md5.h --> md5.hpp so that grep whatever *.?pp
    can be used across the lmi project.
@@ -43,8 +43,8 @@
 For subsequent GWC modifications, see 'ChangeLog'.
 */
 
-#ifndef LMI_MD5_H
-#define LMI_MD5_H 1
+#ifndef md5_hpp
+#define md5_hpp
 
 #include "config.hpp"   // GWC: lmi compatibility header.
 
@@ -192,5 +192,5 @@ extern void *md5_buffer LMI_P ((const char *buffer, size_t len, void *resblock))
 /* GWC: Explicitly undefine prototype macro. */
 #undef LMI_P
 
-#endif /* LMI_MD5_H */
+#endif // md5_hpp
 

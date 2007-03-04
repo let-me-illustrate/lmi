@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xslt_lmi.hpp,v 1.2 2007-01-27 00:00:52 wboutin Exp $
+// $Id: xslt_lmi.hpp,v 1.3 2007-03-04 16:33:31 chicares Exp $
 
 #ifndef xslt_lmi_hpp
 #define xslt_lmi_hpp
@@ -85,5 +85,5 @@ namespace xslt_lmi
 
 } // namespace xslt_lmi
 
-#endif //xslt_lmi_hpp
+#endif // xslt_lmi_hpp
 

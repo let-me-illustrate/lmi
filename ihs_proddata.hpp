@@ -19,10 +19,10 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_proddata.hpp,v 1.7 2007-02-21 03:07:24 chicares Exp $
+// $Id: ihs_proddata.hpp,v 1.8 2007-03-04 16:33:31 chicares Exp $
 
-#ifndef proddata_hpp
-#define proddata_hpp
+#ifndef ihs_proddata_hpp
+#define ihs_proddata_hpp
 
 #include "config.hpp"
 
@@ -135,5 +135,5 @@ class LMI_SO TProductData
     std::string InterestDisclaimer;
 };
 
-#endif  // proddata_hpp
+#endif // ihs_proddata_hpp
 

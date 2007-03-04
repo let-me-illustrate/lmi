@@ -19,10 +19,10 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_server7702io.hpp,v 1.4 2007-01-27 00:00:51 wboutin Exp $
+// $Id: ihs_server7702io.hpp,v 1.5 2007-03-04 16:33:31 chicares Exp $
 
-#ifndef server7702io_hpp
-#define server7702io_hpp
+#ifndef ihs_server7702io_hpp
+#define ihs_server7702io_hpp
 
 #include "config.hpp"
 
@@ -131,5 +131,5 @@ struct Server7702Output
 std::istream& operator>> (std::istream& is, Server7702Output& z);
 std::ostream& operator<< (std::ostream& os, Server7702Output const& z);
 
-#endif  // server7702io_hpp
+#endif // ihs_server7702io_hpp
 

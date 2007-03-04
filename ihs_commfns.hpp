@@ -19,10 +19,10 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_commfns.hpp,v 1.8 2007-01-27 00:00:51 wboutin Exp $
+// $Id: ihs_commfns.hpp,v 1.9 2007-03-04 16:33:31 chicares Exp $
 
-#ifndef commfns_hpp
-#define commfns_hpp
+#ifndef ihs_commfns_hpp
+#define ihs_commfns_hpp
 
 #include "config.hpp"
 
@@ -162,5 +162,5 @@ class LMI_SO ULCommFns
     std::vector<double> km;
 };
 
-#endif
+#endif // ihs_commfns_hpp
 

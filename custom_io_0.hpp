@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: custom_io_0.hpp,v 1.6 2007-01-27 00:00:51 wboutin Exp $
+// $Id: custom_io_0.hpp,v 1.7 2007-03-04 16:33:31 chicares Exp $
 
 #ifndef custom_io_0_hpp
 #define custom_io_0_hpp
@@ -43,5 +43,5 @@ bool LMI_SO SetSpecialInput
     ,char const*      overridden_filename = 0
     );
 
-#endif  // custom_io_0_hpp
+#endif // custom_io_0_hpp
 

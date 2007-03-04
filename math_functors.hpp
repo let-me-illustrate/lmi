@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: math_functors.hpp,v 1.11 2007-01-27 00:00:51 wboutin Exp $
+// $Id: math_functors.hpp,v 1.12 2007-03-04 16:33:31 chicares Exp $
 
 #ifndef math_functors_hpp
 #define math_functors_hpp
@@ -271,5 +271,5 @@ struct coi_rate_from_q
         }
 };
 
-#endif  // math_functors_hpp
+#endif // math_functors_hpp
 

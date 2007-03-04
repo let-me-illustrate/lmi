@@ -19,10 +19,10 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_rnddata.hpp,v 1.4 2007-01-27 00:00:51 wboutin Exp $
+// $Id: ihs_rnddata.hpp,v 1.5 2007-03-04 16:33:31 chicares Exp $
 
-#ifndef rnddata_hpp
-#define rnddata_hpp
+#ifndef ihs_rnddata_hpp
+#define ihs_rnddata_hpp
 
 #include "config.hpp"
 
@@ -55,5 +55,5 @@ class LMI_SO StreamableRoundingRules
     void Write(std::string const& a_Filename);
 };
 
-#endif  // rnddata_hpp
+#endif // ihs_rnddata_hpp
 
