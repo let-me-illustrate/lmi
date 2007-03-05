@@ -19,11 +19,11 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: multidimgrid_safe.tpp,v 1.4 2007-02-23 15:21:27 chicares Exp $
+// $Id: multidimgrid_safe.tpp,v 1.5 2007-03-05 02:39:43 chicares Exp $
 
 #include "multidimgrid_safe.hpp"
 
-#include <boost/lexical_cast.hpp>
+#include "value_cast.hpp"
 
 /// MultiDimAxis<E>
 /// ---------------
@@ -163,7 +163,7 @@ unsigned int MultiDimIntegralAxis<Integral>::GetCardinality() const
 template<typename Integral>
 std::string MultiDimIntegralAxis<Integral>::GetLabel(unsigned int n) const
 {
-    return boost::lexical_cast<std::string>(min_ + n * step_);
+    return value_cast<std::string>(min_ + n * step_);
 }
 
 template<typename Integral>
