@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: multidimgrid_any.cpp,v 1.7 2007-02-25 02:12:29 chicares Exp $
+// $Id: multidimgrid_any.cpp,v 1.8 2007-03-05 00:16:38 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -239,9 +239,9 @@ enum {
 };
 
 BEGIN_EVENT_TABLE(MultiDimGrid, wxScrolledWindow)
-    EVT_CHOICE   (ID_FIRST_AXIS_CHOICE  ,MultiDimGrid::OnSwitchSelectedAxis)
-    EVT_CHOICE   (ID_SECOND_AXIS_CHOICE ,MultiDimGrid::OnSwitchSelectedAxis)
-    EVT_CHECKBOX (wxID_ANY              ,MultiDimGrid::OnAxisVariesToggle  )
+    EVT_CHOICE   (ID_FIRST_AXIS_CHOICE  ,MultiDimGrid::UponSwitchSelectedAxis)
+    EVT_CHOICE   (ID_SECOND_AXIS_CHOICE ,MultiDimGrid::UponSwitchSelectedAxis)
+    EVT_CHECKBOX (wxID_ANY              ,MultiDimGrid::UponAxisVariesToggle  )
 END_EVENT_TABLE()
 
 /// Some constants to describe various element positions
@@ -339,9 +339,11 @@ bool MultiDimGrid::Create
     axis_adjust_wins_.resize(dimension_);
     axis_varies_checkboxes_.resize(dimension_);
 
-    // WX !! without the following we don't get any scrollbars at all
+#if !wxCHECK_VERSION(2,8,0) // wx prior to version 2.8.0 .
+    // Without the following we don't get any scrollbars at all
     // we only want the vertical scrollbar enabled
     SetScrollbars(0, 20, 0, 50);
+#endif // !wxCHECK_VERSION(2,8,0)
 
     wxStaticBoxSizer* sizer =
         new(wx) wxStaticBoxSizer(wxHORIZONTAL, this, "Axis");
@@ -1037,7 +1039,7 @@ wxString MultiDimGrid::GetColLabelValue(int col)
     return "";
 }
 
-void MultiDimGrid::OnAxisVariesToggle(wxCommandEvent& event)
+void MultiDimGrid::UponAxisVariesToggle(wxCommandEvent& event)
 {
     // find the checkbox triggered the event
     CheckBoxes::iterator it = std::find
@@ -1092,7 +1094,7 @@ void MultiDimGrid::OnAxisVariesToggle(wxCommandEvent& event)
         }
 }
 
-void MultiDimGrid::OnSwitchSelectedAxis(wxCommandEvent& event)
+void MultiDimGrid::UponSwitchSelectedAxis(wxCommandEvent& event)
 {
     int id = event.GetId();
     if(id != ID_FIRST_AXIS_CHOICE && id != ID_SECOND_AXIS_CHOICE)
@@ -1135,7 +1137,7 @@ void MultiDimGrid::DoOnSwitchSelectedAxis(unsigned int axis_id)
 /// MultiDimAxisAnyChoice methods implementation
 /// --------------------------------------------
 BEGIN_EVENT_TABLE(MultiDimAxisAnyChoice, wxChoice)
-    EVT_CHOICE(wxID_ANY, MultiDimAxisAnyChoice::OnSelectionChange)
+    EVT_CHOICE(wxID_ANY, MultiDimAxisAnyChoice::UponSelectionChange)
 END_EVENT_TABLE()
 
 MultiDimAxisAnyChoice::MultiDimAxisAnyChoice
@@ -1184,7 +1186,7 @@ void MultiDimAxisAnyChoice::PopulateChoiceList()
         }
 }
 
-void MultiDimAxisAnyChoice::OnSelectionChange(wxCommandEvent&)
+void MultiDimAxisAnyChoice::UponSelectionChange(wxCommandEvent&)
 {
     SelectionChanged();
 }

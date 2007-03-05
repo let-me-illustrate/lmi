@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: multidimgrid_tools.hpp,v 1.6 2007-02-25 02:12:30 chicares Exp $
+// $Id: multidimgrid_tools.hpp,v 1.7 2007-03-05 00:16:38 chicares Exp $
 
 #ifndef multidimgrid_tools_hpp
 #define multidimgrid_tools_hpp
@@ -52,7 +52,7 @@ class AxisMaxBoundAdjusterBase
     AxisMaxBoundAdjusterBase(MultiDimGrid&);
 
   protected:
-    /// Function called by OnChange. applies adjustment value
+    /// Function called by UponChange. Applies adjustment value.
     virtual void DoOnChange() = 0;
 
     /// Gets the parent and cast it to the MultiDimGrid type
@@ -61,7 +61,7 @@ class AxisMaxBoundAdjusterBase
 
   private:
     /// Calls DoOnChange
-    void OnChange(wxCommandEvent&);
+    void UponChange(wxCommandEvent&);
 
     DECLARE_NO_COPY_CLASS(AxisMaxBoundAdjusterBase)
     DECLARE_EVENT_TABLE()
