@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: multidimgrid_tools.hpp,v 1.8 2007-03-05 02:39:43 chicares Exp $
+// $Id: multidimgrid_tools.hpp,v 1.9 2007-03-05 03:50:21 chicares Exp $
 
 #ifndef multidimgrid_tools_hpp
 #define multidimgrid_tools_hpp
@@ -42,7 +42,7 @@
 /// the corresponding macros does not accept templates, only plain classes.
 ///
 /// This helper registers handler for wxChoice selection change events and
-/// defines virtual function DoOnChange() that serves as real handler.
+/// defines virtual function DoUponChange() that serves as real handler.
 
 class AxisMaxBoundAdjusterBase
   :public wxChoice
@@ -51,15 +51,14 @@ class AxisMaxBoundAdjusterBase
     AxisMaxBoundAdjusterBase(MultiDimGrid&);
 
   protected:
-    /// Function called by UponChange. Applies adjustment value.
-    virtual void DoOnChange() = 0;
+    /// Apply adjustment value.
+    virtual void DoUponChange() = 0;
 
     /// Gets the parent and cast it to the MultiDimGrid type
     MultiDimGrid&       GetGrid();
     MultiDimGrid const& GetGrid() const;
 
   private:
-    /// Calls DoOnChange
     void UponChange(wxCommandEvent&);
 
     DECLARE_NO_COPY_CLASS(AxisMaxBoundAdjusterBase)
@@ -90,14 +89,17 @@ class AxisMaxBoundAdjuster
         ,Integral upper_bound
         );
 
+// EVGENIY !! Consider the comments for these two functions. Are the
+// functions' purposes obvious from their names? If not, then should
+// we choose more descriptive names? Either way, we could then remove
+// the comments.
     /// Currently chosen maximum axis value
     Integral GetMaxValue() const;
     /// Set the maximum axis value
     void SetMaxValue(Integral max_value);
 
   private:
-    /// Apply adjustment value
-    virtual void DoOnChange();
+    virtual void DoUponChange();
 
     MultiDimAxisAny& axis_;
     Integral lower_bound_;
@@ -146,7 +148,7 @@ AxisMaxBoundAdjuster<Integral>::AxisMaxBoundAdjuster
 }
 
 template<typename Integral>
-void AxisMaxBoundAdjuster<Integral>::DoOnChange()
+void AxisMaxBoundAdjuster<Integral>::DoUponChange()
 {
     GetGrid().ApplyAxisAdjustment(axis_.GetName());
 }
@@ -205,6 +207,16 @@ Integral AxisMaxBoundAdjuster<Integral>::GetMaxValue() const
 ///   - max_value   - current maximal axis value
 ///   - lower_bound - the lowest possible value for the maximal axis value
 ///   - upper_bound - the highest possible value for the maximal axis value
+///
+/// EVGENIY !! It appears that this is instantiated only with
+/// Integral types of 'int' and 'unsigned int'. Why is 'unsigned int'
+/// useful--can't it always be 'int', in which case we could write
+/// this class and, I think, its base classes as non-template classes?
+/// Here and elsewhere (many places in the product editor), I'd prefer
+/// that we generally avoid 'unsigned' in the interface as Lakos's
+/// book recommends [his arguments are summarized here:
+///   http://groups.google.com/group/comp.lang.c++.moderated/msg/849321a0199501e5
+/// ; see also lmi coding standard section 16.13].
 
 template<typename Integral>
 class AdjustableMaxBoundAxis

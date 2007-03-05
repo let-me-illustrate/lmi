@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.584 2007-03-05 00:16:38 chicares Exp $
+// $Id: ChangeLog,v 1.585 2007-03-05 03:50:21 chicares Exp $
 
 MAINTENANCE
 
@@ -10355,4 +10355,22 @@ Explicitly declare overrides as virtual.
   multidimgrid_tools.hpp
 Use 'Upon' prefix for event handlers not in wx, to distinguish them
 clearly from overridden wx 'On' virtuals. [Evgeniy's patch].
+
+20070305T0133Z <chicares@cox.net> [1253]
+
+  multidimgrid_safe.hpp
+  tier_view_editor.cpp
+Prefer value_cast to wxString::operator<<(). [Evgeniy's patch].
+
+20070305T0239Z <chicares@cox.net> [1253]
+
+  multidimgrid_safe.tpp
+  multidimgrid_tools.hpp
+Prefer value_cast to boost::lexical_cast. [Evgeniy's patch].
+
+20070305T0350Z <chicares@cox.net> [1253]
+
+  multidimgrid_tools.cpp
+  multidimgrid_tools.hpp
+Rename a member function.
 

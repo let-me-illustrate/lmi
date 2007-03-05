@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: multidimgrid_tools.cpp,v 1.4 2007-03-05 00:16:38 chicares Exp $
+// $Id: multidimgrid_tools.cpp,v 1.5 2007-03-05 03:50:21 chicares Exp $
 
 #include "multidimgrid_tools.hpp"
 
@@ -45,7 +45,7 @@ AxisMaxBoundAdjusterBase::AxisMaxBoundAdjusterBase(MultiDimGrid& grid)
 
 void AxisMaxBoundAdjusterBase::UponChange(wxCommandEvent&)
 {
-    DoOnChange();
+    DoUponChange();
 }
 
 MultiDimGrid& AxisMaxBoundAdjusterBase::GetGrid()
