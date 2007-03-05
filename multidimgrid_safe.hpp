@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: multidimgrid_safe.hpp,v 1.5 2007-02-27 00:03:30 chicares Exp $
+// $Id: multidimgrid_safe.hpp,v 1.6 2007-03-05 01:33:26 chicares Exp $
 
 #ifndef multidimgrid_safe_hpp
 #define multidimgrid_safe_hpp
@@ -262,7 +262,10 @@ class MultiDimTableTypeTraits<ValueType>                \
     }                                                   \
 }
 
-/// sepcialisations of the MultiDimTableTypeTraits for some common types
+// TODO ?? Prefer value_cast to wxString::operator<<() in ToString()
+// above, or eliminate ToString() entirely.
+
+/// Specializations of MultiDimTableTypeTraits for some common types.
 MDTABLE_TTRAITS_INTEGRAL(int, ToLong, long, -1);
 MDTABLE_TTRAITS_INTEGRAL(unsigned int, ToULong, unsigned long, 0);
 MDTABLE_TTRAITS_INTEGRAL(long, ToLong, long, -1);
