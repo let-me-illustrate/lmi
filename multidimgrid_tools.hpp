@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: multidimgrid_tools.hpp,v 1.7 2007-03-05 00:16:38 chicares Exp $
+// $Id: multidimgrid_tools.hpp,v 1.8 2007-03-05 02:39:43 chicares Exp $
 
 #ifndef multidimgrid_tools_hpp
 #define multidimgrid_tools_hpp
@@ -27,8 +27,7 @@
 #include "config.hpp"
 
 #include "multidimgrid_safe.hpp"
-
-#include <boost/lexical_cast.hpp>
+#include "value_cast.hpp"
 
 #include <wx/choice.h>
 #include <wx/treectrl.h>
@@ -142,7 +141,7 @@ AxisMaxBoundAdjuster<Integral>::AxisMaxBoundAdjuster
     SetToolTip(oss.str());
     for(Integral i = lower_bound_; i <= upper_bound_; ++i)
         {
-        wxChoice::Append(boost::lexical_cast<std::string>(i + 1));
+        wxChoice::Append(value_cast<std::string>(i + 1));
         }
 }
 
