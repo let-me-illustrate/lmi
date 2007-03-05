@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.583 2007-03-04 16:33:31 chicares Exp $
+// $Id: ChangeLog,v 1.584 2007-03-05 00:16:38 chicares Exp $
 
 MAINTENANCE
 
@@ -10330,4 +10330,29 @@ Enforce include-guard canonicalization.
   xslt_lmi.hpp
   zero.hpp
 Canonicalize include guards.
+
+20070304T1639Z <chicares@cox.net> [1252]
+
+  test_coding_rules.cpp
+Remove unneeded header.
+
+20070304T1840Z <chicares@cox.net> [1252]
+
+  multidimgrid_any.hpp
+Remove pleonastic comments [Evgeniy's patch].
+
+20070304T2317Z <chicares@cox.net> [1252]
+
+  illustration_view.hpp
+Explicitly declare overrides as virtual.
+
+20070305T0016Z <chicares@cox.net> [1252]
+
+  database_document.cpp
+  multidimgrid_any.cpp
+  multidimgrid_any.hpp
+  multidimgrid_tools.cpp
+  multidimgrid_tools.hpp
+Use 'Upon' prefix for event handlers not in wx, to distinguish them
+clearly from overridden wx 'On' virtuals. [Evgeniy's patch].
 
