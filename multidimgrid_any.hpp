@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: multidimgrid_any.hpp,v 1.11 2007-03-04 18:40:23 chicares Exp $
+// $Id: multidimgrid_any.hpp,v 1.12 2007-03-05 00:16:38 chicares Exp $
 
 #ifndef multidimgrid_any_hpp
 #define multidimgrid_any_hpp
@@ -727,13 +727,15 @@ class MultiDimGrid
     /// Refresh counter
     unsigned int table_data_refresh_counter_;
 
+// EVGENIY !! These three function declarations seem to have been
+// removed in the branch. Aren't they required?
     /// Monitor axis selection changes
-    void OnSwitchSelectedAxis(wxCommandEvent& event);
+    void UponSwitchSelectedAxis(wxCommandEvent& event);
     /// Actually handle the axis selection switch
     void DoOnSwitchSelectedAxis(unsigned int axisId);
 
     /// Monitor axis variation checkboxes
-    void OnAxisVariesToggle(wxCommandEvent& event);
+    void UponAxisVariesToggle(wxCommandEvent& event);
 
     DECLARE_EVENT_TABLE()
 };
@@ -789,7 +791,9 @@ inline bool MultiDimGrid::RefreshAxisAdjustment(std::string const& name)
 ///
 /// GetGrid(): Return the grid object to be notified of any axis value changes
 ///
-/// OnSelectionChange(event): Selection change event handler
+/// EVGENIY !! Is a comment useful here? Is there something nonobvious
+/// to say about what the function does or why?
+/// UponSelectionChange(event): Selection change event handler
 ///
 /// PopulateChoiceList(): Fill the control with axis value labels
 
@@ -805,7 +809,7 @@ class MultiDimAxisAnyChoice
   protected:
     MultiDimAxisAnyChoice(MultiDimAxisAny const& axis, MultiDimGrid& grid);
 
-    void OnSelectionChange(wxCommandEvent& event);
+    void UponSelectionChange(wxCommandEvent& event);
     void PopulateChoiceList();
 
   private:

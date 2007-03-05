@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: database_document.cpp,v 1.5 2007-03-03 19:44:17 chicares Exp $
+// $Id: database_document.cpp,v 1.6 2007-03-05 00:16:38 chicares Exp $
 
 #include "database_document.hpp"
 
@@ -44,6 +44,7 @@ namespace
 ///   - swapping data back into singleton
 /// To ensure that in case of an exception, singleton's internal state
 /// is restored a helper class dict_map_swap_guard is used.
+/// EVGENIY !! Do the functions mentioned on the following line exist?
 /// Used in DatabaseDocument::OnOpenDocument, DatabaseDocument::OnSaveDocument
 
 class dict_map_swap_guard
