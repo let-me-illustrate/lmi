@@ -19,11 +19,12 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: tier_view_editor.cpp,v 1.6 2007-02-25 02:12:30 chicares Exp $
+// $Id: tier_view_editor.cpp,v 1.7 2007-03-05 01:33:26 chicares Exp $
 
 #include "tier_view_editor.hpp"
 
 #include "multidimgrid_safe.tpp"
+#include "value_cast.hpp"
 
 #include <wx/treectrl.h>
 
@@ -206,6 +207,16 @@ int TierEditorGrid::GetNumberCols()
     return tgc_max;
 }
 
+// EVGENIY !! Isn't the 'row' parameter unused? It appears that
+// this function checks only the 'col', not 'row'. Is there any
+// constraint on 'row' that should be enforced here? It looks like
+// this function is called as a precondition test for most member
+// functions, but not for GetDoublePairValue(), which takes only a
+// 'row' argument; but if we add a test for 'row' here, then that
+// function should probably call this one, too. Wouldn't it be
+// better to find some other way to write this, as suggested under
+// GetValue() below?
+
 void TierEditorGrid::CheckRowAndCol(int row, int col) const
 {
     if(col != tgc_limit && col != tgc_value)
@@ -217,14 +228,27 @@ void TierEditorGrid::CheckRowAndCol(int row, int col) const
         }
 }
 
+// EVGENIY !! Consider the conditional operator in this function.
+// Here's how I read it:
+//
+//   switch(col)
+//     case tgc_limit: /* use value.first  */ ; break;
+//     case tgc_value: /* use value.second */ ; break;
+//     case tgc_max:   /* assume that this is impossible */ goto tgc_value;
+//     default:        /* assume that this is impossible */ goto tgc_value;
+//
+// And there are other places where the code assumes that only the
+// first two enumerator values are possible. That's in effect
+// asserted by CheckRowAndCol(), but I didn't perceive that at first.
+// Is there a way to write this more clearly? Should a UDT be used
+// instead of int? Should the base class test these arguments against
+// the maximum? Do any other ideas occur to you?
+
 wxString TierEditorGrid::GetValue(int row, int col)
 {
     CheckRowAndCol(row, col);
     double_pair value = GetDoublePairValue(static_cast<unsigned int>(row));
-
-    wxString str;
-    str << (col == tgc_limit ? value.first : value.second);
-    return str;
+    return value_cast<std::string>(col == tgc_limit ? value.first : value.second);
 }
 
 void TierEditorGrid::SetValue(int row, int col, wxString const& str)
