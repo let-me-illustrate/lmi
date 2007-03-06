@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: multidimgrid_any.hpp,v 1.12 2007-03-05 00:16:38 chicares Exp $
+// $Id: multidimgrid_any.hpp,v 1.13 2007-03-06 18:13:37 wboutin Exp $
 
 #ifndef multidimgrid_any_hpp
 #define multidimgrid_any_hpp
@@ -403,7 +403,7 @@ class MultiDimTableAny
 
 inline void MultiDimTableAny::EnsureValidDimensionIndex(unsigned int n) const
 {
-    LMI_ASSERT(n < GetDimension());
+    HOPEFULLY(n < GetDimension());
 }
 
 inline MultiDimAxisAny* MultiDimTableAny::GetAxisAny(unsigned int n)

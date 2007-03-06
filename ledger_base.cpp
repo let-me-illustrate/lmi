@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_base.cpp,v 1.10 2007-02-23 16:47:17 chicares Exp $
+// $Id: ledger_base.cpp,v 1.11 2007-03-06 18:13:37 wboutin Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -212,12 +212,12 @@ namespace
         std::vector<double>::iterator ix = x.begin();
         std::vector<double>::const_iterator iy = y.begin();
         std::vector<double>::const_iterator iz = z.begin();
-        LMI_ASSERT(y.size() <= x.size());
-        LMI_ASSERT(y.size() <= z.size());
+        HOPEFULLY(y.size() <= x.size());
+        HOPEFULLY(y.size() <= z.size());
         while(iy != y.end())
             {
-            LMI_ASSERT(ix != x.end());
-            LMI_ASSERT(iz != z.end());
+            HOPEFULLY(ix != x.end());
+            HOPEFULLY(iz != z.end());
             double mult = *iz++;
             if(0.0 == mult)
                 {
@@ -242,7 +242,7 @@ LedgerBase& LedgerBase::PlusEq
     ,std::vector<double> const& a_Inforce
     )
 {
-    LMI_ASSERT(0.0 != m_scaling_factor);
+    HOPEFULLY(0.0 != m_scaling_factor);
     if(m_scaling_factor != a_Addend.m_scaling_factor)
         {
         fatal_error() << "Cannot add differently scaled ledgers." << LMI_FLUSH;
@@ -264,7 +264,7 @@ LedgerBase& LedgerBase::PlusEq
             ,BegYearInforce
             );
         }
-    LMI_ASSERT(a_Addend_svmi == a_Addend.BegYearVectors.end());
+    HOPEFULLY(a_Addend_svmi == a_Addend.BegYearVectors.end());
 
     std::vector<double>::const_iterator eyi = a_Inforce.begin();
     eyi++;
@@ -282,7 +282,7 @@ LedgerBase& LedgerBase::PlusEq
             ,EndYearInforce
             );
         }
-    LMI_ASSERT(a_Addend_svmi == a_Addend.EndYearVectors.end());
+    HOPEFULLY(a_Addend_svmi == a_Addend.EndYearVectors.end());
 
     std::vector<double> const NumLivesIssued
         (a_Inforce.size()
@@ -301,7 +301,7 @@ LedgerBase& LedgerBase::PlusEq
             ,NumLivesIssued
             );
         }
-    LMI_ASSERT(a_Addend_svmi == a_Addend.ForborneVectors.end());
+    HOPEFULLY(a_Addend_svmi == a_Addend.ForborneVectors.end());
 
     scalar_map::const_iterator a_Addend_ssmi = a_Addend.ScalableScalars.begin();
     for
@@ -312,7 +312,7 @@ LedgerBase& LedgerBase::PlusEq
         {
         *(*ssmi).second += *(*a_Addend_ssmi).second * a_Inforce[0];
         }
-    LMI_ASSERT(a_Addend_ssmi == a_Addend.ScalableScalars.end());
+    HOPEFULLY(a_Addend_ssmi == a_Addend.ScalableScalars.end());
 
     return *this;
 }
@@ -356,8 +356,8 @@ double LedgerBase::DetermineScaleFactor() const
     d = 3.0 * std::floor(d / 3.0);
     d = std::pow(10.0, 6.0 - d);
 
-    LMI_ASSERT(1.0E-18 <= d);
-    LMI_ASSERT(d <= 1.0);
+    HOPEFULLY(1.0E-18 <= d);
+    HOPEFULLY(d <= 1.0);
 
     return d;
 }
@@ -378,7 +378,7 @@ namespace
         double power = -std::log10(a_ScalingFactor);
         // Assert absolute equality of two floating-point quantities, because
         // they must both have integral values.
-        LMI_ASSERT(power == std::floor(power));
+        HOPEFULLY(power == std::floor(power));
         int z = static_cast<int>(power);
 
         // US names are used; UK names are different.
@@ -440,8 +440,8 @@ namespace
 // that shows e.g. face amount should show the true face amount, unscaled.
 void LedgerBase::ApplyScaleFactor(double a_Mult)
 {
-    LMI_ASSERT(0.0 != a_Mult);
-    LMI_ASSERT(0.0 != m_scaling_factor);
+    HOPEFULLY(0.0 != a_Mult);
+    HOPEFULLY(0.0 != m_scaling_factor);
     if(1.0 != m_scaling_factor)
         {
         hobsons_choice() << "Cannot scale the same ledger twice." << LMI_FLUSH;

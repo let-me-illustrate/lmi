@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustration_view.cpp,v 1.59 2007-03-03 17:47:40 chicares Exp $
+// $Id: illustration_view.cpp,v 1.60 2007-03-06 18:13:37 wboutin Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -162,7 +162,7 @@ void IllustrationView::DisplaySelectedValuesAsHtml()
     // EVGENIY This assertion seems no longer to serve any purpose:
     // the object is no longer used here. Instead, shouldn't the
     // validity of ledger_formatter_ be asserted?
-    LMI_ASSERT(ledger_values_.get());
+    HOPEFULLY(ledger_values_.get());
 
     // TODO ?? CALCULATION_SUMMARY Resolve this issue.
     // EVGENIY Is a stream the best abstraction for LedgerFormatter?
@@ -355,7 +355,7 @@ void IllustrationView::CopyLedgerToClipboard(enum_copy_option option)
 
 void IllustrationView::Pdf(std::string const& action) const
 {
-    LMI_ASSERT(ledger_values_.get());
+    HOPEFULLY(ledger_values_.get());
 
     wxString z;
     document().GetPrintableName(z);
@@ -493,11 +493,11 @@ IllustrationView& MakeNewIllustrationDocAndView
     ,char const*   filename
     )
 {
-    LMI_ASSERT(0 != dm);
-    LMI_ASSERT(0 != filename);
+    HOPEFULLY(0 != dm);
+    HOPEFULLY(0 != filename);
 
     wxDocTemplate* dt = dm->FindTemplateForPath(filename);
-    LMI_ASSERT(0 != dt);
+    HOPEFULLY(0 != dt);
 
     wxDocument* new_document = dt->CreateDocument
         (filename
@@ -546,7 +546,7 @@ bool RunSpecialInputFileIfPresent(wxDocManager* dm)
                 }
             else
                 {
-                LMI_ASSERT(0 != dm);
+                HOPEFULLY(0 != dm);
                 std::string f
                     (configurable_settings::instance().custom_output_filename()
                     );
@@ -567,7 +567,7 @@ bool RunSpecialInputFileIfPresent(wxDocManager* dm)
                 Input x;
                 convert_from_ihs(input, x);
                 illview.Run(&x);
-                LMI_ASSERT(dynamic_cast<wxFrame*>(illview.GetFrame()));
+                HOPEFULLY(dynamic_cast<wxFrame*>(illview.GetFrame()));
                 dynamic_cast<wxFrame*>(illview.GetFrame())->Maximize();
                 }
             }

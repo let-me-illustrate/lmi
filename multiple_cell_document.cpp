@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: multiple_cell_document.cpp,v 1.19 2007-01-27 00:00:51 wboutin Exp $
+// $Id: multiple_cell_document.cpp,v 1.20 2007-03-06 18:13:38 wboutin Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -65,7 +65,7 @@ void multiple_cell_document::parse(xml::element const& root)
 // See note below--perhaps do something like this:
 //    int NumberOfCases;
 //    is >> NumberOfCases;
-//    LMI_ASSERT(1 == NumberOfCases);
+//    HOPEFULLY(1 == NumberOfCases);
 
     IllusInputParms temp;
 
@@ -77,7 +77,7 @@ void multiple_cell_document::parse(xml::element const& root)
 
     case_parms_.clear();
 
-    LMI_ASSERT(i != elements.end());
+    HOPEFULLY(i != elements.end());
     if("cell" != xml_lmi::get_name(**i))
         {
         fatal_error()
@@ -94,7 +94,7 @@ void multiple_cell_document::parse(xml::element const& root)
 
     // Number of classes.
     ++i;
-    LMI_ASSERT(i != elements.end());
+    HOPEFULLY(i != elements.end());
     if("NumberOfClasses" != xml_lmi::get_name(**i))
         {
         fatal_error()
@@ -107,7 +107,7 @@ void multiple_cell_document::parse(xml::element const& root)
             ;
         }
     std::string const n_classes = xml_lmi::get_content(**i);
-    LMI_ASSERT(!n_classes.empty());
+    HOPEFULLY(!n_classes.empty());
     unsigned int number_of_classes = value_cast<unsigned int>(n_classes);
 
     // Parameters for each class.
@@ -137,9 +137,9 @@ void multiple_cell_document::parse(xml::element const& root)
         }
 
     // Number of cells.
-    LMI_ASSERT(i != elements.end());
+    HOPEFULLY(i != elements.end());
     ++i;
-    LMI_ASSERT(i != elements.end());
+    HOPEFULLY(i != elements.end());
     if("NumberOfCells" != xml_lmi::get_name(**i))
         {
         fatal_error()
@@ -152,7 +152,7 @@ void multiple_cell_document::parse(xml::element const& root)
             ;
         }
     std::string const n_cells = xml_lmi::get_content(**i);
-    LMI_ASSERT(!n_cells.empty());
+    HOPEFULLY(!n_cells.empty());
     unsigned int number_of_cells = value_cast<unsigned int>(n_cells);
 
     // Parameters for each cell.
@@ -189,7 +189,7 @@ void multiple_cell_document::parse(xml::element const& root)
             ;
         }
 
-    LMI_ASSERT(i != elements.end());
+    HOPEFULLY(i != elements.end());
     ++i;
     if(i != elements.end())
         {

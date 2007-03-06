@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avdebug.cpp,v 1.25 2007-01-27 00:00:51 wboutin Exp $
+// $Id: ihs_avdebug.cpp,v 1.26 2007-03-06 18:13:37 wboutin Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -442,7 +442,7 @@ void AccountValue::DebugPrint()
     SetMonthlyDetail(eEOMCSVNet          ,csv_net                          );
     SetMonthlyDetail(eEOMCV7702          ,CashValueFor7702()               );
 
-    LMI_ASSERT(0 != Input_->NumIdenticalLives); // Make sure division is safe.
+    HOPEFULLY(0 != Input_->NumIdenticalLives); // Make sure division is safe.
     SetMonthlyDetail
         (eInforceFactor
         ,ItLapsed

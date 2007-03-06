@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: financial.hpp,v 1.5 2007-01-27 00:00:51 wboutin Exp $
+// $Id: financial.hpp,v 1.6 2007-03-06 18:13:37 wboutin Exp $
 
 #ifndef financial_hpp
 #define financial_hpp
@@ -236,9 +236,9 @@ void irr
     ,int decimals
     )
 {
-    LMI_ASSERT(lapse_duration <= pmts.size());
-    LMI_ASSERT(lapse_duration <= bfts.size());
-    LMI_ASSERT(lapse_duration <= total_duration);
+    HOPEFULLY(lapse_duration <= pmts.size());
+    HOPEFULLY(lapse_duration <= bfts.size());
+    HOPEFULLY(lapse_duration <= total_duration);
     results.clear();
     results.resize(total_duration, -1.0);
     irr

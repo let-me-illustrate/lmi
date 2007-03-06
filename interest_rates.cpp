@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: interest_rates.cpp,v 1.15 2007-02-25 02:12:29 chicares Exp $
+// $Id: interest_rates.cpp,v 1.16 2007-03-06 18:13:37 wboutin Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -334,12 +334,12 @@ void InterestRates::Initialize(BasicValues const& v)
         // TODO ?? At least for the antediluvian branch, the vector in
         // the input class has an inappropriate size. Truncating it
         // with std::transform() here is far too tricky.
-        LMI_ASSERT
+        HOPEFULLY
             (   ExtraSepAcctCharge_.size()
             ==  static_cast<unsigned int>(v.Database_->length())
             );
 // Not reliably true:
-//        LMI_ASSERT
+//        HOPEFULLY
 //            (   ExtraSepAcctCharge_.size()
 //            ==  v.Input_->VectorAddonCompOnAssets.size()
 //            );
@@ -423,19 +423,19 @@ void InterestRates::Initialize(BasicValues const& v)
             // The next line gets executed more than once with
             // identical semantics, but it's cheap, and writing it
             // to avoid that little problem would make it unclear.
-            LMI_ASSERT(z == GenAcctGrossRate_           [j]   .size());
-            LMI_ASSERT(z == GenAcctNetRate_          [i][j]   .size());
+            HOPEFULLY(z == GenAcctGrossRate_           [j]   .size());
+            HOPEFULLY(z == GenAcctNetRate_          [i][j]   .size());
             for(int k = e_sep_acct_full; k < n_sepacct_bases; k++)
                 {
-                LMI_ASSERT(z == SepAcctGrossRate_          [k].size());
-                LMI_ASSERT(z == SepAcctNetRate_      [i][j][k].size());
+                HOPEFULLY(z == SepAcctGrossRate_          [k].size());
+                HOPEFULLY(z == SepAcctNetRate_      [i][j][k].size());
                 }
-            LMI_ASSERT(z == RegLnCredRate_           [i][j]   .size());
-            LMI_ASSERT(z == RegLnDueRate_            [i][j]   .size());
-            LMI_ASSERT(z == PrfLnCredRate_           [i][j]   .size());
-            LMI_ASSERT(z == PrfLnDueRate_            [i][j]   .size());
-            LMI_ASSERT(z == HoneymoonValueRate_      [i][j]   .size());
-            LMI_ASSERT(z == PostHoneymoonGenAcctRate_[i][j]   .size());
+            HOPEFULLY(z == RegLnCredRate_           [i][j]   .size());
+            HOPEFULLY(z == RegLnDueRate_            [i][j]   .size());
+            HOPEFULLY(z == PrfLnCredRate_           [i][j]   .size());
+            HOPEFULLY(z == PrfLnDueRate_            [i][j]   .size());
+            HOPEFULLY(z == HoneymoonValueRate_      [i][j]   .size());
+            HOPEFULLY(z == PostHoneymoonGenAcctRate_[i][j]   .size());
             }
         }
 }
@@ -468,7 +468,7 @@ void InterestRates::InitializeGeneralAccountRates()
         }
     else
         {
-        LMI_ASSERT(e_netrate == GenAcctRateType_);
+        HOPEFULLY(e_netrate == GenAcctRateType_);
         }
 
     GenAcctGrossRate_[e_mdptbasis] = Zero_;
@@ -579,7 +579,7 @@ void InterestRates::InitializeSeparateAccountRates()
         }
     else
         {
-        LMI_ASSERT(e_grossrate == SepAcctRateType_);
+        HOPEFULLY(e_grossrate == SepAcctRateType_);
         }
 
     SepAcctGrossRate_[e_sep_acct_zero] = Zero_;
@@ -719,11 +719,11 @@ void InterestRates::InitializeLoanRates()
         // may for VLR--in which case these assertions will fire,
         // indicating that this code should be reviewed.
         //
-        LMI_ASSERT
+        HOPEFULLY
             (   RegLnDueRate_[e_annual_rate][e_guarbasis]
             ==  RegLnDueRate_[e_annual_rate][e_currbasis]
             );
-        LMI_ASSERT
+        HOPEFULLY
             (   RegLnDueRate_[e_monthly_rate][e_guarbasis]
             ==  RegLnDueRate_[e_monthly_rate][e_currbasis]
             );
@@ -750,7 +750,7 @@ void InterestRates::InitializeHoneymoonRates()
     // TODO ?? Someday, after we've implemented and tested the
     // alternative for the general account rate, we can aspire to
     // implement it for honeymoon rates too.
-    LMI_ASSERT(e_netrate == GenAcctRateType_);
+    HOPEFULLY(e_netrate == GenAcctRateType_);
 
     for(int j = e_currbasis; j < n_illreg_bases; j++)
         {
@@ -1011,7 +1011,7 @@ void InterestRates::Initialize7702Rates()
     // ET !! MlyGlpRate_ = max(0.04, annual_guar_rate);
     std::transform(annual_guar_rate.begin(), annual_guar_rate.end(), MlyGlpRate_.begin(), std::bind1st(greater_of<double>(), 0.04));
     // ET !! This ought to be implicit, at least in some 'safe' mode:
-    LMI_ASSERT(MlyGlpRate_.size() == SpreadFor7702_.size());
+    HOPEFULLY(MlyGlpRate_.size() == SpreadFor7702_.size());
     // ET !! MlyGlpRate_ = i_upper_12_over_12_from_i(MlyGlpRate_ - SpreadFor7702_);
     std::transform(MlyGlpRate_.begin(), MlyGlpRate_.end(), SpreadFor7702_.begin(), MlyGlpRate_.begin(), std::minus<double>());
     std::transform(MlyGlpRate_.begin(), MlyGlpRate_.end(), MlyGlpRate_.begin(), i_upper_12_over_12_from_i<double>());

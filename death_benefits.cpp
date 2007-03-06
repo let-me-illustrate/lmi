@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: death_benefits.cpp,v 1.4 2007-01-27 00:00:51 wboutin Exp $
+// $Id: death_benefits.cpp,v 1.5 2007-03-06 18:13:37 wboutin Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -40,8 +40,8 @@ death_benefits::death_benefits(BasicValues const& values)
 {
     // In the antediluvian branch, the vector in the input class
     // is padded to a greater length.
-    LMI_ASSERT(length_ <= static_cast<int>(values.Input_->DBOpt  .size()));
-    LMI_ASSERT(length_ <= static_cast<int>(values.Input_->SpecAmt.size()));
+    HOPEFULLY(length_ <= static_cast<int>(values.Input_->DBOpt  .size()));
+    HOPEFULLY(length_ <= static_cast<int>(values.Input_->SpecAmt.size()));
 
     // Can't use std::copy() because types differ, length issues aside.
     dbopt_  .resize(length_);

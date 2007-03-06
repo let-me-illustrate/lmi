@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: accountvalue.cpp,v 1.27 2007-02-25 02:12:29 chicares Exp $
+// $Id: accountvalue.cpp,v 1.28 2007-03-06 18:13:37 wboutin Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -155,7 +155,7 @@ double AccountValue::RunOneBasis(e_run_basis const& TheBasis)
         // TODO ?? Do something more flexible?
         // TODO ?? Isn't this unreachable?
         throw std::logic_error("This line had seemed to be unreachable.");
-        LMI_ASSERT(TheBasis == Input_->SolveBasis.value());
+        HOPEFULLY(TheBasis == Input_->SolveBasis.value());
         z = Solve();
         }
     else
@@ -845,7 +845,7 @@ void AccountValue::TxCreditInt()
         AVUnloaned += z;
         }
     // Loaned account value cannot be negative.
-    LMI_ASSERT(0.0 <= AVRegLn + AVPrfLn);
+    HOPEFULLY(0.0 <= AVRegLn + AVPrfLn);
 }
 
 //============================================================================

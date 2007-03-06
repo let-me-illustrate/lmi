@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: view_ex.tpp,v 1.6 2007-01-27 00:00:52 wboutin Exp $
+// $Id: view_ex.tpp,v 1.7 2007-03-06 18:13:38 wboutin Exp $
 
 #include "alert.hpp"
 #include "rtti_lmi.hpp"
@@ -71,7 +71,7 @@ ViewType& PredominantView(wxDocument const& document)
     for(wxList::const_iterator i = views.begin(); i != views.end(); ++i)
         {
         wxObject* p = *i;
-        LMI_ASSERT(0 != p);
+        HOPEFULLY(0 != p);
         if(p->IsKindOf(CLASSINFO(ViewType)))
             {
             view = dynamic_cast<ViewType*>(p);

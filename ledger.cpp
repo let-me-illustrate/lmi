@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger.cpp,v 1.15 2007-01-27 00:00:51 wboutin Exp $
+// $Id: ledger.cpp,v 1.16 2007-03-06 18:13:37 wboutin Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -254,12 +254,12 @@ Ledger& Ledger::PlusEq(Ledger const& a_Addend)
 
     ledger_invariant_->PlusEq(*a_Addend.ledger_invariant_);
 
-    LMI_ASSERT(GetIsComposite());
-    LMI_ASSERT(!a_Addend.GetIsComposite());
+    HOPEFULLY(GetIsComposite());
+    HOPEFULLY(!a_Addend.GetIsComposite());
 
     while(this_i != l_map_rep.end() || addend_i != lm_addend.end())
         {
-        LMI_ASSERT((*this_i).first == (*addend_i).first);
+        HOPEFULLY((*this_i).first == (*addend_i).first);
         (*this_i).second.PlusEq
             ((*addend_i).second
             ,a_Addend.ledger_invariant_->GetInforceLives()
@@ -275,7 +275,7 @@ Ledger& Ledger::PlusEq(Ledger const& a_Addend)
         ++this_i, ++addend_i;
         }
 
-    LMI_ASSERT(this_i == l_map_rep.end() && addend_i == lm_addend.end());
+    HOPEFULLY(this_i == l_map_rep.end() && addend_i == lm_addend.end());
 
     return *this;
 }

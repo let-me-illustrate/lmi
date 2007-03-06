@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mvc_model.cpp,v 1.6 2007-01-27 00:00:51 wboutin Exp $
+// $Id: mvc_model.cpp,v 1.7 2007-03-06 18:13:38 wboutin Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -47,10 +47,10 @@ void ComplainAboutAnyDiscrepancies
     warning() << description << '\n';
     MvcModel::StateType::const_iterator i = old_values.begin();
     MvcModel::StateType::const_iterator j = new_values.begin();
-    LMI_ASSERT(old_values.size() == new_values.size());
+    HOPEFULLY(old_values.size() == new_values.size());
     for(; i != old_values.end(); ++i, ++j)
         {
-        LMI_ASSERT(i->first == j->first);
+        HOPEFULLY(i->first == j->first);
         if(i->second != j->second)
             {
             warning()

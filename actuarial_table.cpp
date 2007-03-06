@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: actuarial_table.cpp,v 1.15 2007-01-27 00:00:51 wboutin Exp $
+// $Id: actuarial_table.cpp,v 1.16 2007-03-06 18:13:37 wboutin Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -80,11 +80,11 @@ namespace
     template<typename T>
     T read(std::istream& is, T& t, boost::int16_t nominal_length)
     {
-        LMI_ASSERT(sizeof(T) == nominal_length);
+        HOPEFULLY(sizeof(T) == nominal_length);
         char z[sizeof(T)];
         is.read(z, sizeof(T));
         t = *reinterpret_cast<T*>(z);
-        LMI_ASSERT(invalid != t);
+        HOPEFULLY(invalid != t);
         return t;
     }
 
@@ -104,11 +104,11 @@ namespace
             // One might suppose that the select period for tables
             // that are not select couldn't be nonzero, but the SOA
             // publishes tables that don't honor that invariant.
-//            LMI_ASSERT(0 == select_period); // Nope!
+//            HOPEFULLY(0 == select_period); // Nope!
             select_period = 0;
             }
 
-        LMI_ASSERT(min_age <= max_age);
+        HOPEFULLY(min_age <= max_age);
 
         // If 'max_select_age' is given as zero, then it's to be taken as
         // unlimited, so its value should be 'max_age'.
@@ -126,7 +126,7 @@ namespace
               ;
             }
         int deduced_length = number_of_values * sizeof(double);
-        LMI_ASSERT
+        HOPEFULLY
             (   soa_table_length_max < deduced_length
             ||  nominal_length == deduced_length
             );
@@ -212,7 +212,7 @@ namespace
                 ;
             }
           }
-        LMI_ASSERT(v.size() == static_cast<unsigned int>(length));
+        HOPEFULLY(v.size() == static_cast<unsigned int>(length));
         return v;
     }
 } // Unnamed namespace.
@@ -260,9 +260,9 @@ std::vector<double> actuarial_table
     // TODO ?? Assert endianness too? SOA tables are not portable;
     // probably they can easily be read only on x86 hardware.
 
-    LMI_ASSERT(8 == CHAR_BIT);
-    LMI_ASSERT(4 == sizeof(int));
-    LMI_ASSERT(2 == sizeof(short int));
+    HOPEFULLY(8 == CHAR_BIT);
+    HOPEFULLY(4 == sizeof(int));
+    HOPEFULLY(2 == sizeof(short int));
 
     // 27.4.3.2/2 requires that this be interpreted as invalid. The
     // variable 'invalid' is not used here, because its value might
@@ -272,7 +272,7 @@ std::vector<double> actuarial_table
     int const index_record_length(58);
     char index_record[index_record_length] = {0};
 
-    LMI_ASSERT(sizeof (boost::int32_t) <= sizeof(int));
+    HOPEFULLY(sizeof (boost::int32_t) <= sizeof(int));
     while(index_ifs)
         {
         int index_table_number = *reinterpret_cast<boost::int32_t*>(index_record);
@@ -356,7 +356,7 @@ std::vector<double> actuarial_table
     fs::ifstream data_ifs(data_path, ios_in_binary());
 
     data_ifs.seekg(table_offset, std::ios::beg);
-    LMI_ASSERT(table_offset == data_ifs.tellg());
+    HOPEFULLY(table_offset == data_ifs.tellg());
 
     boost::int32_t table_number   = invalid;
     unsigned char  table_type     = invalid;
@@ -382,7 +382,7 @@ std::vector<double> actuarial_table
             case 2: // 4-byte integer: table_number.
                 {
                 read(data_ifs, table_number, nominal_length);
-                LMI_ASSERT(table_number == a_table_number);
+                HOPEFULLY(table_number == a_table_number);
                 }
                 break;
             case 3: // unsigned char: table_type.
@@ -391,31 +391,31 @@ std::vector<double> actuarial_table
                 // SOA apparently permits upper or lower case.
                 read(data_ifs, table_type, nominal_length);
                 table_type = std::toupper(table_type);
-                LMI_ASSERT('A' == table_type || 'D' == table_type || 'S' == table_type);
+                HOPEFULLY('A' == table_type || 'D' == table_type || 'S' == table_type);
                 }
                 break;
             case 12: // 2-byte integer: min_age.
                 {
                 read(data_ifs, min_age, nominal_length);
-                LMI_ASSERT(0 <= min_age && min_age <= methuselah);
+                HOPEFULLY(0 <= min_age && min_age <= methuselah);
                 }
                 break;
             case 13: // 2-byte integer: max_age.
                 {
                 read(data_ifs, max_age, nominal_length);
-                LMI_ASSERT(0 <= max_age && max_age <= methuselah);
+                HOPEFULLY(0 <= max_age && max_age <= methuselah);
                 }
                 break;
             case 14: // 2-byte integer: select_period.
                 {
                 read(data_ifs, select_period, nominal_length);
-                LMI_ASSERT(0 <= select_period && select_period <= methuselah);
+                HOPEFULLY(0 <= select_period && select_period <= methuselah);
                 }
                 break;
             case 15: // 2-byte integer: max_select_age.
                 {
                 read(data_ifs, max_select_age, nominal_length);
-                LMI_ASSERT(0 <= max_select_age && max_select_age <= methuselah);
+                HOPEFULLY(0 <= max_select_age && max_select_age <= methuselah);
                 }
                 break;
             case 17: // 8-byte doubles: values.
@@ -446,8 +446,8 @@ std::vector<double> actuarial_table
 
     done:
 
-    LMI_ASSERT(min_age <= a_age && a_age <= max_age);
-    LMI_ASSERT(a_age + a_len <= max_age + 1);
+    HOPEFULLY(min_age <= a_age && a_age <= max_age);
+    HOPEFULLY(a_age + a_len <= max_age + 1);
 // TODO ?? Assert that there are enough values.
 
     return particular_values

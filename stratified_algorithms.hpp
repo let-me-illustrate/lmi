@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: stratified_algorithms.hpp,v 1.7 2007-03-04 15:28:30 chicares Exp $
+// $Id: stratified_algorithms.hpp,v 1.8 2007-03-06 18:13:38 wboutin Exp $
 
 #ifndef stratified_algorithms_hpp
 #define stratified_algorithms_hpp
@@ -145,7 +145,7 @@ T tiered_product<T>::operator()
     ,std::vector<T> const& rates
     ) const
 {
-    LMI_ASSERT(incremental_limits.size() == rates.size());
+    HOPEFULLY(incremental_limits.size() == rates.size());
     // We don't assert that 'incremental_limits' increase or that
     // 'rates' decrease.
     // TODO ?? Is this correct if they don't?
@@ -238,13 +238,13 @@ T banded_rate<T>::operator()
     ) const
 {
     // TODO ?? It would be better to assert that limits are increasing.
-    LMI_ASSERT
+    HOPEFULLY
         (nonstd::is_sorted
             (cumulative_limits.begin()
             ,cumulative_limits.end()
             )
         );
-    LMI_ASSERT(0 <= total_amount);
+    HOPEFULLY(0 <= total_amount);
 
     // Don't assert that 'rates' decrease: it might seem weird if
     // they don't, but there's no reason to forbid it.
@@ -306,7 +306,7 @@ void progressively_limit(T& a, T& b, T const& limit)
 {
     // Cache T(0) in case it's expensive to construct.
     T const zero = T(0);
-    LMI_ASSERT(zero <= limit);
+    HOPEFULLY(zero <= limit);
     if(a <= zero && b <= zero)
         {
         return;
@@ -456,7 +456,7 @@ T progressively_reduce(T& a, T& b, T const& delta)
         }
 
     // In a precise number system, we could now assert:
-    //   LMI_ASSERT(zero <= r);
+    //   HOPEFULLY(zero <= r);
     // But due to the imprecision of floating-point arithmetic, that
     // could easily fail. A value close to zero, but of random sign,
     // can arise from subtraction of two nearly-identical quantities.
@@ -481,7 +481,7 @@ T progressively_reduce(T& a, T& b, T const& delta)
     // At top: save original sum just for assertion.
     //   T const original_sum(a + b - r);
     // Just before exit:
-    //   LMI_ASSERT(materially_equal(original_sum, a + b - r));
+    //   HOPEFULLY(materially_equal(original_sum, a + b - r));
 
     return r;
 }

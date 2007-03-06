@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_irc7702.cpp,v 1.16 2007-01-27 00:00:51 wboutin Exp $
+// $Id: ihs_irc7702.cpp,v 1.17 2007-03-06 18:13:37 wboutin Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -180,8 +180,8 @@ Irc7702::Irc7702
     ,InforceCumGLP      (a_InforceCumGLP)
     ,InforceGSP         (a_InforceGSP)
 {
-    LMI_ASSERT(a_PresentSpecAmt <= a_PresentBftAmt);
-    LMI_ASSERT(a_PriorSpecAmt <= a_PriorBftAmt);
+    HOPEFULLY(a_PresentSpecAmt <= a_PresentBftAmt);
+    HOPEFULLY(a_PriorSpecAmt <= a_PriorBftAmt);
     // TODO ?? Instead put these in initializer-list and write assertions?
     if(0 == InforceDuration)
         {
@@ -203,8 +203,8 @@ Irc7702::Irc7702
         PriorBftAmt         = a_PriorBftAmt;
         PriorSpecAmt        = a_PriorSpecAmt;
         LeastBftAmtEver     = a_LeastBftAmtEver;
-        LMI_ASSERT(LeastBftAmtEver <= PriorBftAmt);
-        LMI_ASSERT(LeastBftAmtEver <= PresentBftAmt);
+        HOPEFULLY(LeastBftAmtEver <= PriorBftAmt);
+        HOPEFULLY(LeastBftAmtEver <= PresentBftAmt);
 // TODO ?? Think more about inforce.
         CumGLP              = InforceCumGLP;    // TODO ?? Don't need as member?
         GptLimit            = 0.0;  // TODO ??
@@ -239,7 +239,7 @@ void Irc7702::ProcessGptPmt
         {
         return;
         }
-    LMI_ASSERT(CumPmts <= GptLimit);
+    HOPEFULLY(CumPmts <= GptLimit);
     a_Pmt = std::min(a_Pmt ,round_max_premium(GptLimit - CumPmts));
     CumPmts += a_Pmt;
 }
@@ -280,14 +280,14 @@ void Irc7702::ProcessAdjustableEvent
     ,e_dbopt_7702 const& a_PriorDBOpt
     )
 {
-    LMI_ASSERT(a_PriorSpecAmt <= a_PriorBftAmt);
+    HOPEFULLY(a_PriorSpecAmt <= a_PriorBftAmt);
 // We do not assert this:
-//  LMI_ASSERT(materially_equal(PresentBftAmt, a_PriorBftAmt));
+//  HOPEFULLY(materially_equal(PresentBftAmt, a_PriorBftAmt));
 // because a_PriorBftAmt is now DB as of the beginning of the current day,
 // before any transactions are applied, which is not necessarily the same
 // as DB as of the last adjustment event.
-    LMI_ASSERT(materially_equal(PresentSpecAmt, a_PriorSpecAmt));
-    LMI_ASSERT(PresentDBOpt == a_PriorDBOpt);
+    HOPEFULLY(materially_equal(PresentSpecAmt, a_PriorSpecAmt));
+    HOPEFULLY(PresentDBOpt == a_PriorDBOpt);
     // Should be called only when something actually changed: either
     //   dbopt changed; or
     //   specamt changed, causing an actual change in bftamt.
@@ -303,7 +303,7 @@ void Irc7702::ProcessAdjustableEvent
             )
         ||  a_NewDBOpt != a_PriorDBOpt
         ;
-    LMI_ASSERT(adj_event);
+    HOPEFULLY(adj_event);
 
     // Post BftAmt, SpecAmt, DBOpt changes to local state.
     PriorBftAmt         = PresentBftAmt;
@@ -379,7 +379,7 @@ void Irc7702::Init()
 {
     Length = Qc.size();
     // TODO ?? Assumes that endowment age is always 100--should pass as arg instead.
-    LMI_ASSERT(Length == EndtAge - IssueAge);
+    HOPEFULLY(Length == EndtAge - IssueAge);
 
     // For now, always perform both GPT and CVAT calculations.
     // GLP might be wanted for some purpose in a CVAT product.
@@ -487,7 +487,7 @@ void Irc7702::InitCorridor()
 
     // GPT corridor
     std::vector<double>::const_iterator corr = CompleteGptCorridor().begin();
-    LMI_ASSERT
+    HOPEFULLY
         (   static_cast<unsigned int>(IssueAge)
         <=  CompleteGptCorridor().size()
         );
@@ -519,9 +519,9 @@ void Irc7702::InitPvVectors(EIOBasis const& a_EIOBasis)
 
     // ET !! std::vector<double> ann_chg_pol = AnnChgPol * drop(comm_fns.aD(), -1);
     std::vector<double> ann_chg_pol(Length);
-    LMI_ASSERT(u_length == ann_chg_pol.size());
-    LMI_ASSERT(u_length == AnnChgPol.size());
-    LMI_ASSERT(u_length <= comm_fns.aD().size());
+    HOPEFULLY(u_length == ann_chg_pol.size());
+    HOPEFULLY(u_length == AnnChgPol.size());
+    HOPEFULLY(u_length <= comm_fns.aD().size());
     std::transform
         (AnnChgPol.begin()
         ,AnnChgPol.end()
@@ -532,9 +532,9 @@ void Irc7702::InitPvVectors(EIOBasis const& a_EIOBasis)
 
     // ET !! std::vector<double> mly_chg_pol = MlyChgPol * drop(comm_fns.kD(), -1);
     std::vector<double> mly_chg_pol(Length);
-    LMI_ASSERT(u_length == mly_chg_pol.size());
-    LMI_ASSERT(u_length == MlyChgPol.size());
-    LMI_ASSERT(u_length <= comm_fns.kD().size());
+    HOPEFULLY(u_length == mly_chg_pol.size());
+    HOPEFULLY(u_length == MlyChgPol.size());
+    HOPEFULLY(u_length <= comm_fns.kD().size());
     std::transform
         (MlyChgPol.begin()
         ,MlyChgPol.end()
@@ -554,9 +554,9 @@ void Irc7702::InitPvVectors(EIOBasis const& a_EIOBasis)
     // ET !! PvChgPol[a_EIOBasis] = ann_chg_pol + mly_chg_pol;
     std::vector<double>& chg_pol = PvChgPol[a_EIOBasis];
     chg_pol.resize(Length);
-    LMI_ASSERT(u_length == chg_pol.size());
-    LMI_ASSERT(u_length == ann_chg_pol.size());
-    LMI_ASSERT(u_length <= mly_chg_pol.size());
+    HOPEFULLY(u_length == chg_pol.size());
+    HOPEFULLY(u_length == ann_chg_pol.size());
+    HOPEFULLY(u_length <= mly_chg_pol.size());
     std::transform
         (ann_chg_pol.begin()
         ,ann_chg_pol.end()
@@ -579,9 +579,9 @@ void Irc7702::InitPvVectors(EIOBasis const& a_EIOBasis)
     // ET !! PvChgSpecAmt[a_EIOBasis] = MlyChgSpecAmt * comm_fns.kD();
     std::vector<double>& chg_sa = PvChgSpecAmt[a_EIOBasis];
     chg_sa.resize(Length);
-    LMI_ASSERT(u_length == chg_sa.size());
-    LMI_ASSERT(u_length == MlyChgSpecAmt.size());
-    LMI_ASSERT(u_length == comm_fns.kD().size());
+    HOPEFULLY(u_length == chg_sa.size());
+    HOPEFULLY(u_length == MlyChgSpecAmt.size());
+    HOPEFULLY(u_length == comm_fns.kD().size());
     std::transform
         (MlyChgSpecAmt.begin()
         ,MlyChgSpecAmt.end()
@@ -597,9 +597,9 @@ void Irc7702::InitPvVectors(EIOBasis const& a_EIOBasis)
     // ET !! PvChgADD[a_EIOBasis] = MlyChgADD * comm_fns.kD();
     std::vector<double>& chg_add = PvChgADD[a_EIOBasis];
     chg_add.resize(Length);
-    LMI_ASSERT(u_length == chg_add.size());
-    LMI_ASSERT(u_length == MlyChgADD.size());
-    LMI_ASSERT(u_length == comm_fns.kD().size());
+    HOPEFULLY(u_length == chg_add.size());
+    HOPEFULLY(u_length == MlyChgADD.size());
+    HOPEFULLY(u_length == comm_fns.kD().size());
     std::transform
         (MlyChgADD.begin()
         ,MlyChgADD.end()
@@ -613,7 +613,7 @@ void Irc7702::InitPvVectors(EIOBasis const& a_EIOBasis)
 
     // APL: chg_mort gets rotate plus scan rotate kC
     std::vector<double>& chg_mort = PvChgMort[a_EIOBasis];
-    LMI_ASSERT(u_length <= comm_fns.kC().size());
+    HOPEFULLY(u_length <= comm_fns.kC().size());
     chg_mort = comm_fns.kC();
     chg_mort.resize(Length);
     std::reverse(chg_mort.begin(), chg_mort.end());
@@ -624,14 +624,14 @@ void Irc7702::InitPvVectors(EIOBasis const& a_EIOBasis)
 
     // ET !! PvNpfSglTgt[a_EIOBasis] = (1.0 - LoadTgt) * comm_fns.aD();
     std::vector<double>& npf_sgl_tgt = PvNpfSglTgt[a_EIOBasis];
-//  LMI_ASSERT(u_length == npf_sgl_tgt.size());
+//  HOPEFULLY(u_length == npf_sgl_tgt.size());
     npf_sgl_tgt = LoadTgt;
-    LMI_ASSERT(u_length == npf_sgl_tgt.size());
+    HOPEFULLY(u_length == npf_sgl_tgt.size());
     std::transform(npf_sgl_tgt.begin(), npf_sgl_tgt.end(), npf_sgl_tgt.begin()
         ,std::bind1st(std::minus<double>(), 1.0)
         );
-    LMI_ASSERT(u_length == npf_sgl_tgt.size());
-    LMI_ASSERT(u_length <= comm_fns.aD().size());
+    HOPEFULLY(u_length == npf_sgl_tgt.size());
+    HOPEFULLY(u_length <= comm_fns.aD().size());
     std::transform
         (npf_sgl_tgt.begin()
         ,npf_sgl_tgt.end()
@@ -640,9 +640,9 @@ void Irc7702::InitPvVectors(EIOBasis const& a_EIOBasis)
         ,std::multiplies<double>()
         );
     std::vector<double>& npf_lvl_tgt = PvNpfLvlTgt[a_EIOBasis];
-//  LMI_ASSERT(u_length == npf_lvl_tgt.size());
+//  HOPEFULLY(u_length == npf_lvl_tgt.size());
     npf_lvl_tgt = npf_sgl_tgt;
-    LMI_ASSERT(u_length == npf_lvl_tgt.size());
+    HOPEFULLY(u_length == npf_lvl_tgt.size());
     std::reverse(npf_lvl_tgt.begin(), npf_lvl_tgt.end());
     std::partial_sum(npf_lvl_tgt.begin(), npf_lvl_tgt.end(), npf_lvl_tgt.begin());
     std::reverse(npf_lvl_tgt.begin(), npf_lvl_tgt.end());
@@ -651,14 +651,14 @@ void Irc7702::InitPvVectors(EIOBasis const& a_EIOBasis)
 
     // ET !! PvNpfSglExc[a_EIOBasis] = (1.0 - LoadExc) * comm_fns.aD();
     std::vector<double>& npf_sgl_exc = PvNpfSglExc[a_EIOBasis];
-//  LMI_ASSERT(u_length == npf_sgl_exc.size());
+//  HOPEFULLY(u_length == npf_sgl_exc.size());
     npf_sgl_exc = LoadExc;
-    LMI_ASSERT(u_length == npf_sgl_exc.size());
+    HOPEFULLY(u_length == npf_sgl_exc.size());
     std::transform(npf_sgl_exc.begin(), npf_sgl_exc.end(), npf_sgl_exc.begin()
         ,std::bind1st(std::minus<double>(), 1.0)
         );
-    LMI_ASSERT(u_length == npf_sgl_tgt.size());
-    LMI_ASSERT(u_length <= comm_fns.aD().size());
+    HOPEFULLY(u_length == npf_sgl_tgt.size());
+    HOPEFULLY(u_length <= comm_fns.aD().size());
     std::transform
         (npf_sgl_exc.begin()
         ,npf_sgl_exc.end()
@@ -667,9 +667,9 @@ void Irc7702::InitPvVectors(EIOBasis const& a_EIOBasis)
         ,std::multiplies<double>()
         );
     std::vector<double>& npf_lvl_exc = PvNpfLvlExc[a_EIOBasis];
-//  LMI_ASSERT(u_length == npf_lvl_exc.size());
+//  HOPEFULLY(u_length == npf_lvl_exc.size());
     npf_lvl_exc = npf_sgl_exc;
-    LMI_ASSERT(u_length == npf_lvl_exc.size());
+    HOPEFULLY(u_length == npf_lvl_exc.size());
     std::reverse(npf_lvl_exc.begin(), npf_lvl_exc.end());
     std::partial_sum(npf_lvl_exc.begin(), npf_lvl_exc.end(), npf_lvl_exc.begin());
     std::reverse(npf_lvl_exc.begin(), npf_lvl_exc.end());
@@ -678,11 +678,11 @@ void Irc7702::InitPvVectors(EIOBasis const& a_EIOBasis)
 
     // ET !! PvLoadDiffSgl[a_EIOBasis] = npf_sgl_exc - npf_sgl_tgt;
     std::vector<double>& diff_sgl = PvLoadDiffSgl[a_EIOBasis];
-//  LMI_ASSERT(u_length == diff_sgl.size());
+//  HOPEFULLY(u_length == diff_sgl.size());
     diff_sgl.resize(Length);
-    LMI_ASSERT(u_length == diff_sgl.size());
-    LMI_ASSERT(u_length == npf_sgl_exc.size());
-    LMI_ASSERT(u_length == npf_sgl_tgt.size());
+    HOPEFULLY(u_length == diff_sgl.size());
+    HOPEFULLY(u_length == npf_sgl_exc.size());
+    HOPEFULLY(u_length == npf_sgl_tgt.size());
     std::transform
         (npf_sgl_exc.begin()
         ,npf_sgl_exc.end()
@@ -691,9 +691,9 @@ void Irc7702::InitPvVectors(EIOBasis const& a_EIOBasis)
         ,std::minus<double>()
         );
     std::vector<double>& diff_lvl = PvLoadDiffLvl[a_EIOBasis];
-//  LMI_ASSERT(u_length == diff_lvl.size());
+//  HOPEFULLY(u_length == diff_lvl.size());
     diff_lvl.resize(Length);
-    LMI_ASSERT(u_length == diff_lvl.size());
+    HOPEFULLY(u_length == diff_lvl.size());
     std::reverse(diff_lvl.begin(), diff_lvl.end());
     std::partial_sum(diff_lvl.begin(), diff_lvl.end(), diff_lvl.begin());
     std::reverse(diff_lvl.begin(), diff_lvl.end());
@@ -716,7 +716,7 @@ void Irc7702::Initialize7702
     ,e_dbopt_7702 const& a_DBOpt
     )
 {
-    LMI_ASSERT(a_SpecAmt <= a_BftAmt);
+    HOPEFULLY(a_SpecAmt <= a_BftAmt);
     PresentDBOpt        = a_DBOpt;
     PriorDBOpt          = PresentDBOpt;
     Initialize7702(a_SpecAmt);
@@ -853,7 +853,7 @@ double Irc7702::CalculateGLP
     ,e_dbopt_7702 const& a_DBOpt
     ) const
 {
-    LMI_ASSERT(a_SpecAmt <= a_BftAmt);
+    HOPEFULLY(a_SpecAmt <= a_BftAmt);
     return CalculatePremium
         (Get4PctBasis(a_DBOpt)
         ,a_Duration
@@ -873,7 +873,7 @@ double Irc7702::CalculateGSP
     ,double a_LeastBftAmtEver
     ) const
 {
-    LMI_ASSERT(a_SpecAmt <= a_BftAmt);
+    HOPEFULLY(a_SpecAmt <= a_BftAmt);
     return CalculatePremium
         (Opt1Int6Pct
         ,a_Duration
@@ -896,9 +896,9 @@ double Irc7702::CalculatePremium
     ,double          a_NetPmtFactorExc
     ) const
 {
-    LMI_ASSERT(a_SpecAmt <= a_BftAmt);
-    LMI_ASSERT(0.0 != a_NetPmtFactorTgt);
-    LMI_ASSERT(0.0 != a_NetPmtFactorExc);
+    HOPEFULLY(a_SpecAmt <= a_BftAmt);
+    HOPEFULLY(0.0 != a_NetPmtFactorTgt);
+    HOPEFULLY(0.0 != a_NetPmtFactorExc);
 
     // TODO ?? This implementation is correct only if TargetPremium
     // is fixed forever at issue; otherwise, we need either a
@@ -971,7 +971,7 @@ void Irc7702::InitSevenPayPrem()
             {
             denom -= CFFourPctMin->N()[7 + j];
             }
-        LMI_ASSERT(0.0 != denom);
+        HOPEFULLY(0.0 != denom);
         mep_rate[j] =
             (   CFFourPctMin->M()[j]
             /   denom
@@ -1081,9 +1081,9 @@ double Irc7702::CalculateSpecAmt
     ,double          a_NetPmtFactorExc
     ) const
 {
-    LMI_ASSERT(0.0 != a_Premium);
-    LMI_ASSERT(0.0 != a_NetPmtFactorTgt);
-    LMI_ASSERT(0.0 != a_NetPmtFactorExc);
+    HOPEFULLY(0.0 != a_Premium);
+    HOPEFULLY(0.0 != a_NetPmtFactorTgt);
+    HOPEFULLY(0.0 != a_NetPmtFactorExc);
 
     FindSpecAmt fsa
         (*this
