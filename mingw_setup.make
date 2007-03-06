@@ -1,11 +1,11 @@
 # MinGW installation.
 #
-# This is public domain. It's not 'Copyright 2006', but including that
+# This is public domain. It's not 'Copyright 2007', but including that
 # quoted string keeps our cvs style-conformity script from complaining.
 
 # http://savannah.nongnu.org/projects/lmi
 
-# $Id: mingw_setup.make,v 1.13 2006-02-02 21:08:39 wboutin Exp $
+# $Id: mingw_setup.make,v 1.14 2007-03-06 16:20:28 wboutin Exp $
 
 # REVIEW: Here, say exactly what this makefile does, and what its
 # prerequisites are; and write some excruciatingly clear instructions
