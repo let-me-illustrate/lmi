@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.585 2007-03-05 03:50:21 chicares Exp $
+// $Id: ChangeLog,v 1.586 2007-03-06 16:20:28 wboutin Exp $
 
 MAINTENANCE
 
@@ -10373,4 +10373,10 @@ Prefer value_cast to boost::lexical_cast. [Evgeniy's patch].
   multidimgrid_tools.cpp
   multidimgrid_tools.hpp
 Rename a member function.
+
+20070306T1620Z <wboutin@massmutual.com> [1253]
+
+  expm1.c
+  mingw_setup.make
+Cleanup 'check_concinnity' results.
 
