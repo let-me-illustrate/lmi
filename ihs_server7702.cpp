@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_server7702.cpp,v 1.11 2007-01-27 00:00:51 wboutin Exp $
+// $Id: ihs_server7702.cpp,v 1.12 2007-03-06 18:13:37 wboutin Exp $
 
 // Known defects:
 // grep for "NEED DECISION"
@@ -494,7 +494,7 @@ void Server7702::ProcessNewIssue()
     Output.GuidelineSinglePremium   = Output.GuidelineSinglePremiumPolicyA;
 // TODO ?? NEED DECISION Only if an adj event really occurred, as defined.
 // TODO ?? And throw something here.
-    LMI_ASSERT(false == Output.AdjustableEventOccurred);
+    HOPEFULLY(false == Output.AdjustableEventOccurred);
 }
 
 //============================================================================

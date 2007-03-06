@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: any_member.hpp,v 1.16 2007-01-22 04:08:29 chicares Exp $
+// $Id: any_member.hpp,v 1.17 2007-03-06 18:13:37 wboutin Exp $
 
 // This is a derived work based on boost::any, which bears the following
 // copyright and permissions notice:
@@ -153,11 +153,11 @@ holder<ClassType,ValueType>& holder<ClassType,ValueType>::assign
     (placeholder const& other
     )
 {
-    ASSERT_LMI(other.type() == type());
+    LMI_ASSERT(other.type() == type());
     typedef holder<ClassType,ValueType> holder_type;
     holder_type const& z = static_cast<holder_type const&>(other);
-    ASSERT_LMI(z.object_);
-    ASSERT_LMI(object_);
+    LMI_ASSERT(z.object_);
+    LMI_ASSERT(object_);
     object_->*held_ = (z.object_)->*(z.held_);
     return *this;
 }
@@ -167,7 +167,7 @@ holder<ClassType,ValueType>& holder<ClassType,ValueType>::assign
     (std::string const& s
     )
 {
-    ASSERT_LMI(object_);
+    LMI_ASSERT(object_);
     object_->*held_ = value_cast(s, object_->*held_);
     return *this;
 }
@@ -194,7 +194,7 @@ bool holder<ClassType,ValueType>::equals(placeholder const& other) const
 template<typename ClassType, typename ValueType>
 std::string holder<ClassType,ValueType>::str() const
 {
-    ASSERT_LMI(object_);
+    LMI_ASSERT(object_);
     return value_cast<std::string>(object_->*held_);
 }
 
@@ -317,8 +317,8 @@ any_member<ClassType>& any_member<ClassType>::operator=
     // because it would swap the ClassType* object, bizarrely placing
     // a pointer to a member of one object into another object's
     // symbol table.
-    ASSERT_LMI(other.content_);
-    ASSERT_LMI(content_);
+    LMI_ASSERT(other.content_);
+    LMI_ASSERT(content_);
     content_->assign(*other.content_);
     return *this;
 }
@@ -348,7 +348,7 @@ bool any_member<ClassType>::operator!=
 template<typename ClassType>
 std::string any_member<ClassType>::str() const
 {
-    ASSERT_LMI(content_);
+    LMI_ASSERT(content_);
     return content_->str();
 }
 
@@ -368,16 +368,16 @@ ExactMemberType* any_member<ClassType>::exact_cast()
         return 0;
         }
     typedef holder<ClassType,pmd_type> holder_type;
-    ASSERT_LMI(content_);
+    LMI_ASSERT(content_);
     pmd_type pmd = static_cast<holder_type*>(content_)->held_;
-    ASSERT_LMI(object_);
+    LMI_ASSERT(object_);
     return &(object_->*pmd);
 }
 
 template<typename ClassType>
 any_member<ClassType>& any_member<ClassType>::assign(std::string const& s)
 {
-    ASSERT_LMI(content_);
+    LMI_ASSERT(content_);
     content_->assign(s);
     return *this;
 }

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_mortal.cpp,v 1.22 2007-01-27 00:00:51 wboutin Exp $
+// $Id: ihs_mortal.cpp,v 1.23 2007-03-06 18:13:37 wboutin Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -181,9 +181,9 @@ void MortalityRates::initialize()
         MakeCoiRateSubstandard(MonthlyGuaranteedCoiRates_);
         }
 
-    LMI_ASSERT(0 == MonthlyMidpointCoiRatesBand0_.size());
-    LMI_ASSERT(0 == MonthlyMidpointCoiRatesBand1_.size());
-    LMI_ASSERT(0 == MonthlyMidpointCoiRatesBand2_.size());
+    HOPEFULLY(0 == MonthlyMidpointCoiRatesBand0_.size());
+    HOPEFULLY(0 == MonthlyMidpointCoiRatesBand1_.size());
+    HOPEFULLY(0 == MonthlyMidpointCoiRatesBand2_.size());
     for(int j = 0; j < Length_; j++)
         {
         // Here we take midpoint as average of monthly curr and guar.
@@ -365,7 +365,7 @@ void MortalityRates::SetOtherRates()
         MakeCoiRateSubstandard(MonthlyCurrentTermCoiRates_);
         MakeCoiRateSubstandard(MonthlyGuaranteedTermCoiRates_);
 
-        LMI_ASSERT(0 == MonthlyMidpointTermCoiRates_.size());
+        HOPEFULLY(0 == MonthlyMidpointTermCoiRates_.size());
         for(int j = 0; j < Length_; j++)
             {
             // Here we take midpoint as average of monthly curr and guar.
@@ -399,7 +399,7 @@ void MortalityRates::SetOtherRates()
     if(AllowSpouse_)
         {
         // Spouse rider can't be substandard--spouse not underwritten.
-        LMI_ASSERT(0 == MidpointSpouseRiderRates_.size());
+        HOPEFULLY(0 == MidpointSpouseRiderRates_.size());
         for(int j = 0; j < Length_; j++)
             {
             // Here we take midpoint as average of monthly curr and guar.
@@ -432,7 +432,7 @@ void MortalityRates::SetOtherRates()
     // TODO ?? Incorrect if GPT
     for(int j = 0; j < Length_; j++)
         {
-        LMI_ASSERT(0.0 < CvatCorridorFactors_[j]);
+        HOPEFULLY(0.0 < CvatCorridorFactors_[j]);
         CvatNspRates_.push_back(1.0 / CvatCorridorFactors_[j]);
         }
     CvatNspRates_.push_back(1.0);

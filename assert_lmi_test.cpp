@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: assert_lmi_test.cpp,v 1.2 2007-01-27 00:17:12 wboutin Exp $
+// $Id: assert_lmi_test.cpp,v 1.3 2007-03-06 18:13:37 wboutin Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -32,10 +32,10 @@
 
 int test_main(int, char*[])
 {
-    ASSERT_LMI(true);
+    LMI_ASSERT(true);
 
     BOOST_TEST_THROW
-        (ASSERT_LMI(false)
+        (LMI_ASSERT(false)
         ,std::runtime_error
         ,"Assertion 'false' failed."
         );

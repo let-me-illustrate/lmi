@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_test.cpp,v 1.6 2007-01-27 00:00:51 wboutin Exp $
+// $Id: ledger_test.cpp,v 1.7 2007-03-06 18:13:37 wboutin Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -65,7 +65,7 @@ LedgerTest::LedgerTest()
     AccountValue av(document.input_data());
     av.RunAV();
     // TODO ?? Should this be an invariant postcondition?
-    LMI_ASSERT(av.ledger_from_av().get());
+    HOPEFULLY(av.ledger_from_av().get());
     ledger_ = av.ledger_from_av();
 }
 
@@ -75,7 +75,7 @@ LedgerTest::LedgerTest()
 
 void LedgerTest::Test() const
 {
-    LMI_ASSERT(ledger_.get());
+    HOPEFULLY(ledger_.get());
     Ledger const& ledger = *ledger_.get();
 
     fs::path filepath0("sample.xml");

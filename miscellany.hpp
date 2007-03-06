@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: miscellany.hpp,v 1.8 2007-01-27 00:00:51 wboutin Exp $
+// $Id: miscellany.hpp,v 1.9 2007-03-06 18:13:37 wboutin Exp $
 
 #ifndef miscellany_hpp
 #define miscellany_hpp
@@ -52,7 +52,7 @@ bool each_equal(InputIterator first, InputIterator last, T const& t)
         }
 
     bool new_answer = std::distance(first, last) == std::count(first, last, t);
-    LMI_ASSERT(rc == new_answer);
+    HOPEFULLY(rc == new_answer);
 
     return std::distance(first, last) == std::count(first, last, t);
 }

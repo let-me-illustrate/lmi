@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avsolve.cpp,v 1.12 2007-02-25 02:12:29 chicares Exp $
+// $Id: ihs_avsolve.cpp,v 1.13 2007-03-06 18:13:37 wboutin Exp $
 
 // All iterative illustration solves are performed in this file.
 // We use Brent's algorithm because it is guaranteed to converge
@@ -113,7 +113,7 @@ void AccountValue::SolveSetTargetValueAndDuration
 
     // TODO ?? This assertion seems odd because 0 is a valid input value on
     // the screen. Did it get changed to origin 1 in class InputParms?
-    LMI_ASSERT(1 <= EffectiveSolveTargetYear);
+    HOPEFULLY(1 <= EffectiveSolveTargetYear);
 }
 
 //============================================================================
@@ -185,11 +185,11 @@ double AccountValue::SolveTest(double a_CandidateValue)
     if(no_lapse_dur < (EffectiveSolveTargetYear - 1))
         {
         std::vector<double>::const_iterator csv_begin = csv.begin();
-        LMI_ASSERT(static_cast<unsigned int>(no_lapse_dur) <= csv.size());
+        HOPEFULLY(static_cast<unsigned int>(no_lapse_dur) <= csv.size());
         std::advance(csv_begin, no_lapse_dur);
         // Stop at EffectiveSolveTargetYear
         std::vector<double>::const_iterator csv_end = csv.begin();
-        LMI_ASSERT
+        HOPEFULLY
             (   static_cast<unsigned int>(EffectiveSolveTargetYear - 1)
             <=  csv.size()
             );
@@ -197,7 +197,7 @@ double AccountValue::SolveTest(double a_CandidateValue)
 
         // Paranoid check that solvetgtyr is within no-lapse period.
         std::vector<double>::difference_type dist = csv_end - csv_begin;
-        LMI_ASSERT(0 < dist);
+        HOPEFULLY(0 < dist);
 
         most_negative_csv = *std::min_element
             (csv_begin
@@ -214,7 +214,7 @@ double AccountValue::SolveTest(double a_CandidateValue)
         // Stop at EffectiveSolveTargetYear
         std::vector<double>::iterator excess_loan_end =
             VariantValues().ExcessLoan.begin();
-        LMI_ASSERT
+        HOPEFULLY
             (   static_cast<unsigned int>(EffectiveSolveTargetYear)
             <=  VariantValues().ExcessLoan.size()
             );
@@ -277,7 +277,7 @@ void AccountValue::SolveSetWD(double a_CandidateValue)
 void AccountValue::SolveSetWDThenLoan(double a_CandidateValue)
 {
     Outlay_->set_withdrawals(a_CandidateValue, SolveBegYear, SolveEndYear);
-    LMI_ASSERT(e_yes == Input_->WDToBasisThenLoan);
+    HOPEFULLY(e_yes == Input_->WDToBasisThenLoan);
 }
 
 //============================================================================
@@ -345,9 +345,9 @@ double AccountValue::Solve
         ,a_SolveTgtYear
         );
 
-//  LMI_ASSERT(0 <= SolveBegYear);
-    LMI_ASSERT(SolveBegYear <= SolveEndYear);
-    LMI_ASSERT(SolveEndYear <= BasicValues::GetLength());
+//  HOPEFULLY(0 <= SolveBegYear);
+    HOPEFULLY(SolveBegYear <= SolveEndYear);
+    HOPEFULLY(SolveEndYear <= BasicValues::GetLength());
 
     // Defaults: may be overridden by some cases
     // We aren't interested in negative solve results

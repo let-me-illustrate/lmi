@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_dbvalue.cpp,v 1.14 2007-02-23 12:43:25 chicares Exp $
+// $Id: ihs_dbvalue.cpp,v 1.15 2007-03-06 18:13:37 wboutin Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -263,13 +263,13 @@ void TDBValue::ParanoidCheck() const
             ;
         }
 
-    LMI_ASSERT(getndata() == static_cast<int>(data_values.size()));
+    HOPEFULLY(getndata() == static_cast<int>(data_values.size()));
 }
 
 //============================================================================
 int TDBValue::getndata() const
 {
-    LMI_ASSERT(!axis_lengths.empty());
+    HOPEFULLY(!axis_lengths.empty());
 
     // Calculate number of elements required from lengths of axes.
     // Use a double for this purpose so that we can detect whether
@@ -314,14 +314,14 @@ int TDBValue::getndata() const
 //============================================================================
 double& TDBValue::operator[](std::vector<int> const& a_idx)
 {
-    LMI_ASSERT(e_number_of_axes == a_idx.size());
+    HOPEFULLY(e_number_of_axes == a_idx.size());
     int z = 0;
     // TODO ?? Can we use an STL algorithm instead?
     for(unsigned int j = 0; j < axis_lengths.size(); j++)
         {
         if(1 != axis_lengths[j])
             {
-            LMI_ASSERT(a_idx[j] < axis_lengths[j]);
+            HOPEFULLY(a_idx[j] < axis_lengths[j]);
             // TODO ?? Here gcc warns of assignment to unsigned int from double.
             z = z * axis_lengths[j] + a_idx[j];
             }
@@ -370,7 +370,7 @@ double const* TDBValue::operator[](TDBIndex const& a_idx) const
         {
         if(1 != axis_lengths[j])
             {
-            LMI_ASSERT(idx[j] < axis_lengths[j]);
+            HOPEFULLY(idx[j] < axis_lengths[j]);
             z = z * axis_lengths[j] + static_cast<int>(idx[j]);
             }
         }
@@ -470,7 +470,7 @@ void TDBValue::Reshape(std::vector<int> const& a_dims)
             i++;
             w++;
             }
-        LMI_ASSERT(0 == z);
+        HOPEFULLY(0 == z);
 
         // ET !! dst_idx = min(working_idx, dst_max_idx)
         // ET !! src_idx = min(working_idx, src_max_idx)
@@ -566,7 +566,7 @@ bool TDBValue::AreAllAxesOK() const
 {
     bool rc = true;
     std::vector<int> const& max_dims(maximum_dimensions());
-    LMI_ASSERT(axis_lengths.size() == max_dims.size());
+    HOPEFULLY(axis_lengths.size() == max_dims.size());
     std::vector<int>::const_iterator ai = axis_lengths.begin();
     std::vector<int>::const_iterator mi = max_dims.begin();
 
@@ -736,8 +736,8 @@ void* TDBValue::read(JRPS::JrPs_ipstream& is)
     is >> extra_axes_names;
     is >> data_values;
 
-    LMI_ASSERT(getndata() == static_cast<int>(data_values.size()));
-    LMI_ASSERT
+    HOPEFULLY(getndata() == static_cast<int>(data_values.size()));
+    HOPEFULLY
         (   0 < static_cast<int>(data_values.size())
         &&      static_cast<int>(data_values.size()) < MaxPossibleElements
         );
@@ -749,8 +749,8 @@ void TDBValue::write(JRPS::JrPs_opstream& os) const
 {
     os << StreamingVersion;
 
-    LMI_ASSERT(getndata() == static_cast<int>(data_values.size()));
-    LMI_ASSERT
+    HOPEFULLY(getndata() == static_cast<int>(data_values.size()));
+    HOPEFULLY
         (   0 < static_cast<int>(data_values.size())
         &&      static_cast<int>(data_values.size()) < MaxPossibleElements
         );

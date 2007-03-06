@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: calendar_date.cpp,v 1.14 2007-01-27 00:00:51 wboutin Exp $
+// $Id: calendar_date.cpp,v 1.15 2007-03-06 18:13:37 wboutin Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -438,7 +438,7 @@ int notional_age
         ?   some_neighboring_birthday
         :   add_years(some_neighboring_birthday,  1, false)
         ;
-    LMI_ASSERT(last_birthday <= as_of_date && as_of_date <= next_birthday);
+    HOPEFULLY(last_birthday <= as_of_date && as_of_date <= next_birthday);
 
     int days_since_last_birthday =
             as_of_date   .julian_day_number()
@@ -448,7 +448,7 @@ int notional_age
             next_birthday.julian_day_number()
         -   as_of_date   .julian_day_number()
         ;
-    LMI_ASSERT
+    HOPEFULLY
         (   0 <= days_since_last_birthday && days_since_last_birthday <= 366
         &&  0 <= days_until_next_birthday && days_until_next_birthday <= 366
         );
@@ -603,7 +603,7 @@ class birthdate_limit
             ,0
             ,*this
             );
-        LMI_ASSERT(root_not_bracketed != z.second);
+        HOPEFULLY(root_not_bracketed != z.second);
         int j = boost::numeric_cast<int>(z.first);
         j = std::min(j, as_of_date_.julian_day_number());
         j = std::max(j, a_priori_minimum_);

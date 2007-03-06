@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: loads.cpp,v 1.13 2007-01-27 00:00:51 wboutin Exp $
+// $Id: loads.cpp,v 1.14 2007-03-06 18:13:37 wboutin Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -53,7 +53,7 @@ Loads::Loads()
 Loads::Loads(BasicValues& V)
 {
     int length = V.GetLength();
-    LMI_ASSERT(length == V.Database_->length());
+    HOPEFULLY(length == V.Database_->length());
     load_details details
         (length
         ,V.Input_->AmortizePremLoad

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: custom_io_0.cpp,v 1.16 2007-01-27 00:00:51 wboutin Exp $
+// $Id: custom_io_0.cpp,v 1.17 2007-03-06 18:13:37 wboutin Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -124,7 +124,7 @@ std::string adjust_interest_rates
     // and the current declared rate is used. It is expected that
     // this will not be acceptable for long.
 
-    LMI_ASSERT(!declared_rate.empty());
+    HOPEFULLY(!declared_rate.empty());
     std::vector<double> general_account_rate(declared_rate);
 
     if(credited_rates_fit_customer_paradigm)
