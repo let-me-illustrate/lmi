@@ -1,4 +1,4 @@
-/* This is public domain. It's not 'Copyright 2006', but including that
+/* This is public domain. It's not 'Copyright 2007', but including that
  * quoted string keeps my style-conformity script from complaining.
  * Eventually this will become part of MinGW and cygwin, and will then
  * be removed from the lmi cvs. Find the original at:
@@ -41,7 +41,7 @@ double expm1(double x);
  * email: <chicares@cox.net>
  * snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
  *
- * $Id: expm1.c,v 1.4 2006-08-12 17:16:39 chicares Exp $
+ * $Id: expm1.c,v 1.5 2007-03-06 16:20:27 wboutin Exp $
  *
  * End local GWC modifications. */
 
