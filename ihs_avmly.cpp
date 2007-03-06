@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avmly.cpp,v 1.59 2007-02-23 16:47:17 chicares Exp $
+// $Id: ihs_avmly.cpp,v 1.60 2007-03-06 18:13:37 wboutin Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -139,7 +139,7 @@ void AccountValue::DoMonthDR()
 
     TxTestGPT();
     // TODO ?? Doesn't this mean dumpins and 1035s get ignored?
-    LMI_ASSERT(0.0 <= Dcv);
+    HOPEFULLY(0.0 <= Dcv);
     Irc7702A_->UpdateBft7702A
         (Dcv
         ,DBReflectingCorr + TermDB // DB7702A
@@ -237,7 +237,7 @@ void AccountValue::DoMonthDR()
         ,necessary_premium
         ,CashValueFor7702()
         );
-    LMI_ASSERT(0.0 <= Dcv);
+    HOPEFULLY(0.0 <= Dcv);
 
     UnnecessaryPremium = unnecessary_premium;
     TxRecognizePaymentFor7702A(unnecessary_premium, true);
@@ -276,9 +276,9 @@ void AccountValue::process_payment(double payment)
     // contracts. We deem net payments to have the same proportion
     // as gross payments, which we do have for ee and er separately.
 
-    LMI_ASSERT(0.0 <= GrossPmts[Month]);
-    LMI_ASSERT(0.0 <= EeGrossPmts[Month]);
-    LMI_ASSERT(0.0 <= ErGrossPmts[Month]);
+    HOPEFULLY(0.0 <= GrossPmts[Month]);
+    HOPEFULLY(0.0 <= EeGrossPmts[Month]);
+    HOPEFULLY(0.0 <= ErGrossPmts[Month]);
 
     double net_pmt = payment;
 
@@ -471,13 +471,13 @@ void AccountValue::DecrementAVProportionally(double decrement)
               + separate_account_nonnegative_assets
               )
             ;
-        LMI_ASSERT
+        HOPEFULLY
             (                         0.0 <= general_account_proportion
             && general_account_proportion <= 1.0
             );
         separate_account_proportion = 1.0 - general_account_proportion;
         }
-    LMI_ASSERT
+    HOPEFULLY
         (materially_equal
             (general_account_proportion + separate_account_proportion
             ,1.0
@@ -528,11 +528,11 @@ void AccountValue::TxExch1035()
         return;
         }
 
-    LMI_ASSERT(Year == InforceYear);
-    LMI_ASSERT(Month == InforceMonth);
-    LMI_ASSERT(0.0 == GrossPmts[Month]);
-    LMI_ASSERT(0.0 == EeGrossPmts[Month]);
-    LMI_ASSERT(0.0 == ErGrossPmts[Month]);
+    HOPEFULLY(Year == InforceYear);
+    HOPEFULLY(Month == InforceMonth);
+    HOPEFULLY(0.0 == GrossPmts[Month]);
+    HOPEFULLY(0.0 == EeGrossPmts[Month]);
+    HOPEFULLY(0.0 == ErGrossPmts[Month]);
 
     // Policy issue date is always a modal payment date.
     GrossPmts[Month] = External1035Amount + Internal1035Amount;
@@ -593,15 +593,15 @@ void AccountValue::TxExch1035()
 
     NetPmts[Month] = GrossPmts[Month] - actual_load;
 
-    LMI_ASSERT(0.0 == AVGenAcct);
-    LMI_ASSERT(0.0 == AVSepAcct);
+    HOPEFULLY(0.0 == AVGenAcct);
+    HOPEFULLY(0.0 == AVSepAcct);
     process_payment(NetPmts[Month]);
 
     DBReflectingCorr = 0.0;
     TxSetDeathBft();
     TxSetTermAmt();
     // TODO ?? Should 1035 exchanges be handled somewhere else?
-    LMI_ASSERT(0.0 == Dcv);
+    HOPEFULLY(0.0 == Dcv);
     Irc7702A_->Update1035Exch7702A
         (Dcv
         ,NetPmts[Month]
@@ -625,7 +625,7 @@ void AccountValue::TxExch1035()
         // Immediately after a 1035 exchange, DCV should be
         // the 1035 amount reduced by any premium-based loads,
         // but only for the current rate basis.
-        LMI_ASSERT(materially_equal(Dcv, NetPmts[Month]));
+        HOPEFULLY(materially_equal(Dcv, NetPmts[Month]));
 
         // The initial seven-pay premium shown on the illustration
         // must be its value immediately after any 1035 exchange,
@@ -636,7 +636,7 @@ void AccountValue::TxExch1035()
             );
         }
 
-    LMI_ASSERT
+    HOPEFULLY
         (materially_equal
             (GrossPmts[Month]
             ,EeGrossPmts[Month] + ErGrossPmts[Month]
@@ -661,8 +661,8 @@ double AccountValue::ActualMonthlyRate(double monthly_rate) const
 {
     if(daily_interest_accounting)
         {
-        LMI_ASSERT(   0 != days_in_policy_year);
-        LMI_ASSERT(-1.0 <= monthly_rate);
+        HOPEFULLY(   0 != days_in_policy_year);
+        HOPEFULLY(-1.0 <= monthly_rate);
         return -1.0 + std::pow
             (1.0 + monthly_rate
             ,12.0 * days_in_policy_month / days_in_policy_year
@@ -816,7 +816,7 @@ void AccountValue::ChangeSpecAmtBy(double delta)
 // adjustment to be nonpositive. Other approaches are possible.
 void AccountValue::ChangeSurrChgSpecAmtBy(double delta)
 {
-    LMI_ASSERT(delta <= 0.0);
+    HOPEFULLY(delta <= 0.0);
     SurrChgSpecAmt += delta;
     SurrChgSpecAmt = std::max(0.0, SurrChgSpecAmt);
     // TODO ?? 'SurrChgSpecAmt' isn't used yet.
@@ -1413,7 +1413,7 @@ void AccountValue::TxSpecAmtChange()
         return;
         }
 
-    LMI_ASSERT(0 < Year);
+    HOPEFULLY(0 < Year);
     double const old_specamt = DeathBfts_->specamt()[Year - 1];
 
     // Nothing to do if no increase or decrease requested.
@@ -1612,7 +1612,7 @@ void AccountValue::TxAscertainDesiredPayment()
 
     // Pay premium--current basis determines premium for all bases.
 
-    LMI_ASSERT(materially_equal(GrossPmts[Month], EeGrossPmts[Month] + ErGrossPmts[Month]));
+    HOPEFULLY(materially_equal(GrossPmts[Month], EeGrossPmts[Month] + ErGrossPmts[Month]));
 
 // TODO ?? Probably the condition (here and elsewhere) should be:
 //   Solving || (!Solving && e_run_curr_basis == RateBasis)
@@ -1654,8 +1654,8 @@ void AccountValue::TxAscertainDesiredPayment()
             }
         }
 
-    LMI_ASSERT(materially_equal(GrossPmts[Month], EeGrossPmts[Month] + ErGrossPmts[Month]));
-    LMI_ASSERT(GrossPmts[Month] < 1.0e100);
+    HOPEFULLY(materially_equal(GrossPmts[Month], EeGrossPmts[Month] + ErGrossPmts[Month]));
+    HOPEFULLY(GrossPmts[Month] < 1.0e100);
 
     // Guideline limits are imposed in this order:
     //   1035 exchanges
@@ -1692,7 +1692,7 @@ void AccountValue::TxAscertainDesiredPayment()
         EeGrossPmts[Month] += Dumpin;
         GrossPmts[Month] += Dumpin;
         }
-    LMI_ASSERT(materially_equal(GrossPmts[Month], EeGrossPmts[Month] + ErGrossPmts[Month]));
+    HOPEFULLY(materially_equal(GrossPmts[Month], EeGrossPmts[Month] + ErGrossPmts[Month]));
 }
 
 //============================================================================
@@ -1705,7 +1705,7 @@ void AccountValue::TxLimitPayment(double a_maxpmt)
     // we shouldn't.
 // TODO ?? Clean this up, and put GPT limit here, on prem net of WD.
 
-    LMI_ASSERT(materially_equal(GrossPmts[Month], EeGrossPmts[Month] + ErGrossPmts[Month]));
+    HOPEFULLY(materially_equal(GrossPmts[Month], EeGrossPmts[Month] + ErGrossPmts[Month]));
 
     if(e_reduce_prem == Input_->AvoidMec && !Irc7702A_->IsMecAlready())
         {
@@ -1729,7 +1729,7 @@ void AccountValue::TxLimitPayment(double a_maxpmt)
         GrossPmts[Month] = EeGrossPmts[Month] + ErGrossPmts[Month];
         }
 
-    LMI_ASSERT(materially_equal(GrossPmts[Month], EeGrossPmts[Month] + ErGrossPmts[Month]));
+    HOPEFULLY(materially_equal(GrossPmts[Month], EeGrossPmts[Month] + ErGrossPmts[Month]));
 
 // TODO ?? Probably the condition (here and elsewhere) should be:
 //   Solving || (!Solving && e_run_curr_basis == RateBasis)
@@ -1745,7 +1745,7 @@ void AccountValue::TxLimitPayment(double a_maxpmt)
         GrossPmts[Month] = EeGrossPmts[Month] + ErGrossPmts[Month];
         }
 
-    LMI_ASSERT
+    HOPEFULLY
         (materially_equal
             (GrossPmts[Month]
             ,EeGrossPmts[Month] + ErGrossPmts[Month]
@@ -1779,7 +1779,7 @@ void AccountValue::TxRecognizePaymentFor7702A
           + GetRefundableSalesLoad()
 //          + std::max(0.0, ExpRatReserve) // This would be added if it existed.
         );
-    LMI_ASSERT(0.0 <= Dcv);
+    HOPEFULLY(0.0 <= Dcv);
 
     // TODO ?? Not correct yet--need to test pmt less deductible WD; and
     // shouldn't we deduct the *gross* WD?
@@ -1803,10 +1803,10 @@ void AccountValue::TxAcceptPayment(double a_pmt)
         return;
         }
 
-    LMI_ASSERT(0.0 <= a_pmt);
+    HOPEFULLY(0.0 <= a_pmt);
     double actual_load = GetPremLoad(a_pmt, 0.0);
     double net_pmt = a_pmt - actual_load;
-    LMI_ASSERT(0.0 <= net_pmt);
+    HOPEFULLY(0.0 <= net_pmt);
     NetPmts[Month] += net_pmt;
 
     // If a payment on an ROP contract is treated as an adjustable event,
@@ -1818,7 +1818,7 @@ void AccountValue::TxAcceptPayment(double a_pmt)
     process_payment(net_pmt);
 
     Dcv += std::max(0.0, net_pmt);
-    LMI_ASSERT(0.0 <= Dcv);
+    HOPEFULLY(0.0 <= Dcv);
 
     if(HoneymoonActive)
         {
@@ -1871,7 +1871,7 @@ double AccountValue::GetPremLoad
         +   excess_portion * YearsSalesLoadExc
         ;
     CumulativeSalesLoad += sales_load;
-    LMI_ASSERT(0.0 <= sales_load);
+    HOPEFULLY(0.0 <= sales_load);
 
     // TODO ?? This variable and the variables it depends on probably
     // are no longer needed and should be expunged.
@@ -1896,8 +1896,8 @@ double AccountValue::GetPremLoad
         + prem_tax_load
         + dac_tax_load
         ;
-    LMI_ASSERT(0.0 <= sum_of_separate_loads);
-    LMI_ASSERT
+    HOPEFULLY(0.0 <= sum_of_separate_loads);
+    HOPEFULLY
         (   StratifiedCharges_->premium_tax_is_tiered(GetStateOfJurisdiction())
         ||  materially_equal(total_load, sum_of_separate_loads)
         );
@@ -2034,7 +2034,7 @@ void AccountValue::TxSetBOMAV()
         {
         if(!Input_->Status[0].HasTerm)
             {
-            LMI_ASSERT(0.0 == InvariantValues().TermSpecAmt[0]);
+            HOPEFULLY(0.0 == InvariantValues().TermSpecAmt[0]);
             }
         double z;
         if(0 == Year && 0 == Month)
@@ -2174,7 +2174,7 @@ void AccountValue::TxSetDeathBft(bool force_eoy_behavior)
 /*
     // Try moving this here...
     Irc7702A_->UpdateBft7702A(...);
-    LMI_ASSERT(0.0 <= Dcv);
+    HOPEFULLY(0.0 <= Dcv);
 */
 
     // SOMEDAY !! Accumulate average death benefit for profit testing here.
@@ -2194,8 +2194,8 @@ void AccountValue::TxSetTermAmt()
         }
 
     // TODO ?? Assumes that term rider lasts exactly as long as no-lapse guarantee.
-    LMI_ASSERT(BasicValues::NoLapseMinDur == Database_->Query(DB_NoLapseMinDur));
-    LMI_ASSERT(BasicValues::NoLapseMinAge == Database_->Query(DB_NoLapseMinAge));
+    HOPEFULLY(BasicValues::NoLapseMinDur == Database_->Query(DB_NoLapseMinDur));
+    HOPEFULLY(BasicValues::NoLapseMinAge == Database_->Query(DB_NoLapseMinAge));
 
     if
         (  (BasicValues::NoLapseMinDur <= Year)
@@ -2519,7 +2519,7 @@ void AccountValue::TxTakeSepAcctLoad()
 
         // TODO ?? This seems bogus. Reevaluate.
         double kludge_adjustment = 0.0;
-        LMI_ASSERT(0.0 <= banded_load);
+        HOPEFULLY(0.0 <= banded_load);
         if(0.0 != banded_load)
             {
             // TODO ?? This isn't really right. Instead, aggregate annual
@@ -2540,7 +2540,7 @@ void AccountValue::TxTakeSepAcctLoad()
                         ,AVSepAcct - 10000000.0
                         )
                 ;
-            LMI_ASSERT(0.0 <= kludge_adjustment);
+            HOPEFULLY(0.0 <= kludge_adjustment);
             }
         SepAcctLoad = YearsSepAcctLoadRate * AVSepAcct - kludge_adjustment;
         }
@@ -2706,7 +2706,7 @@ void AccountValue::TxCreditInt()
         GenAcctIntCred = 0.0;
         }
 
-    LMI_ASSERT(0.0 <= Dcv);
+    HOPEFULLY(0.0 <= Dcv);
     if(0.0 < Dcv)
         {
         Dcv *= 1.0 + YearsDcvIntRate;
@@ -2721,7 +2721,7 @@ void AccountValue::TxCreditInt()
         }
 
     // Loaned account value must not be negative.
-    LMI_ASSERT(0.0 <= AVRegLn + AVPrfLn);
+    HOPEFULLY(0.0 <= AVRegLn + AVPrfLn);
 
     YearsTotalNetIntCredited +=
             RegLnIntCred
@@ -3005,7 +3005,7 @@ void AccountValue::TxTakeWD()
 
     double av = TotalAccountValue();
     double csv = av - SurrChg_[Year];
-    LMI_ASSERT(0.0 <= SurrChg_[Year]);
+    HOPEFULLY(0.0 <= SurrChg_[Year]);
     if(csv <= 0.0)
         {
 // This seems wrong. If we're changing something that's invariant among
@@ -3029,9 +3029,9 @@ void AccountValue::TxTakeWD()
         // The free partial surrender amount is determined annually,
         // on anniversary and before the anniversary deduction but
         // after any loan has been capitalized.
-        LMI_ASSERT(AVRegLn == RegLnBal);
-        LMI_ASSERT(AVPrfLn == PrfLnBal);
-        LMI_ASSERT(av == AVGenAcct + AVSepAcct);
+        HOPEFULLY(AVRegLn == RegLnBal);
+        HOPEFULLY(AVPrfLn == PrfLnBal);
+        HOPEFULLY(av == AVGenAcct + AVSepAcct);
         double free_wd = FreeWDProportion[Year] * av;
         non_free_wd = std::max(0.0, GrossWD - free_wd);
         }
@@ -3243,7 +3243,7 @@ void AccountValue::TxTakeLoan()
         }
 
     // SOMEDAY !! Preferred loan calculations not yet implemented.
-    LMI_ASSERT(0.0 == AVPrfLn);
+    HOPEFULLY(0.0 == AVPrfLn);
 
     double max_loan_increment = MaxLoan - (AVRegLn + AVPrfLn);
 

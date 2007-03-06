@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: stratified_charges.cpp,v 1.7 2007-01-27 00:00:52 wboutin Exp $
+// $Id: stratified_charges.cpp,v 1.8 2007-03-06 18:13:38 wboutin Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -116,7 +116,7 @@ void stratified_entity::read(std::istream& is)
         is >> z;
         values_.push_back(z);
         }
-    LMI_ASSERT(vector_size == values_.size());
+    HOPEFULLY(vector_size == values_.size());
 
     limits_.clear();
     is >> vector_size;
@@ -126,17 +126,17 @@ void stratified_entity::read(std::istream& is)
         is >> z;
         limits_.push_back(z);
         }
-    LMI_ASSERT(vector_size == limits_.size());
+    HOPEFULLY(vector_size == limits_.size());
 
-    LMI_ASSERT(values_.size() == limits_.size());
-    LMI_ASSERT((.999 * DBL_MAX) < limits_.back());
+    HOPEFULLY(values_.size() == limits_.size());
+    HOPEFULLY((.999 * DBL_MAX) < limits_.back());
 }
 
 //============================================================================
 void stratified_entity::write(std::ostream& os) const
 {
-    LMI_ASSERT(values_.size() == limits_.size());
-    LMI_ASSERT((.999 * DBL_MAX) < limits_.back());
+    HOPEFULLY(values_.size() == limits_.size());
+    HOPEFULLY((.999 * DBL_MAX) < limits_.back());
 
     std::vector<double>::const_iterator i;
 
@@ -446,7 +446,7 @@ double stratified_charges::minimum_tiered_premium_tax_rate(e_state const& state)
     else
         {
         stratified_entity const& z = raw_entity(table);
-        LMI_ASSERT(!z.values().empty());
+        HOPEFULLY(!z.values().empty());
         return *std::min_element(z.values().begin(), z.values().end());
         }
 }

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: alert.hpp,v 1.17 2007-01-22 04:09:14 chicares Exp $
+// $Id: alert.hpp,v 1.18 2007-03-06 18:13:37 wboutin Exp $
 
 #ifndef alert_hpp
 #define alert_hpp
@@ -237,7 +237,7 @@ void LMI_SO test_arbitrary_exception();
 /// TODO ?? It is generally a bad idea to let users bypass assertions.
 /// Any apparent need to do this probably masks a logic error.
 
-#define LMI_ASSERT(condition)                               \
+#define HOPEFULLY(condition)                               \
     if(!(condition))                                        \
         {                                                   \
         hobsons_choice()                                    \

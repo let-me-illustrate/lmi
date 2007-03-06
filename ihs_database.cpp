@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_database.cpp,v 1.10 2007-01-27 00:00:51 wboutin Exp $
+// $Id: ihs_database.cpp,v 1.11 2007-03-06 18:13:37 wboutin Exp $
 
 // TODO ?? Should length_ be dynamically reset when IssueAge is?
 // TODO ?? Should State be dynamically reset?
@@ -208,8 +208,8 @@ void TDatabase::Query(std::vector<double>& dst, int k) const
         }
     else
         {
-        LMI_ASSERT(0 <= length_);       // TODO ?? KLUDGE
-        LMI_ASSERT(0 <= v.GetLength()); // TODO ?? KLUDGE
+        HOPEFULLY(0 <= length_);       // TODO ?? KLUDGE
+        HOPEFULLY(0 <= v.GetLength()); // TODO ?? KLUDGE
         int s = std::min(length_, v.GetLength());
 //      int t = std::max(0, length_ - v.GetLength());
         int t = std::max(0, length_ - s);

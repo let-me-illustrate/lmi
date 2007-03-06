@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.586 2007-03-06 16:20:28 wboutin Exp $
+// $Id: ChangeLog,v 1.587 2007-03-06 18:13:37 wboutin Exp $
 
 MAINTENANCE
 
@@ -10379,4 +10379,63 @@ Rename a member function.
   expm1.c
   mingw_setup.make
 Cleanup 'check_concinnity' results.
+
+20070306T1813Z <wboutin@massmutual.com> [1253]
+
+  accountvalue.cpp
+  actuarial_table.cpp
+  alert.hpp
+  any_member.hpp
+  assert_lmi.hpp
+  assert_lmi_test.cpp
+  authenticity.cpp
+  authenticity_test.cpp
+  basicvalues.cpp
+  calculate.hpp
+  calendar_date.cpp
+  census_view.cpp
+  custom_io_0.cpp
+  data_directory.cpp
+  death_benefits.cpp
+  financial.hpp
+  ihs_acctval.cpp
+  ihs_avdebug.cpp
+  ihs_avmly.cpp
+  ihs_avsolve.cpp
+  ihs_basicval.cpp
+  ihs_commfns.cpp
+  ihs_database.cpp
+  ihs_dbvalue.cpp
+  ihs_funddata.cpp
+  ihs_irc7702.cpp
+  ihs_irc7702a.cpp
+  ihs_mortal.cpp
+  ihs_proddata.cpp
+  ihs_server7702.cpp
+  illustration_view.cpp
+  input_harmonization.cpp
+  input_test.cpp
+  inputillus_sequences.cpp
+  interest_rates.cpp
+  ledger.cpp
+  ledger_base.cpp
+  ledger_invariant.cpp
+  ledger_test.cpp
+  ledger_variant.cpp
+  ledgervalues.cpp
+  loads.cpp
+  miscellany.hpp
+  multidimgrid_any.hpp
+  multiple_cell_document.cpp
+  mvc_controller.cpp
+  mvc_model.cpp
+  single_cell_document.cpp
+  stratified_algorithms.cpp
+  stratified_algorithms.hpp
+  stratified_charges.cpp
+  tier_view_editor.cpp
+  vector_test.cpp
+  view_ex.tpp
+  wx_utility.cpp
+Rename a macro.
 

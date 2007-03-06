@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: assert_lmi.hpp,v 1.1 2007-01-22 04:08:29 chicares Exp $
+// $Id: assert_lmi.hpp,v 1.2 2007-03-06 18:13:37 wboutin Exp $
 
 #ifndef assert_lmi_hpp
 #define assert_lmi_hpp
@@ -43,7 +43,7 @@
 ///
 /// For a more-elaborate runtime-error facility, see 'alert*.?pp'.
 
-#define ASSERT_LMI(condition)                               \
+#define LMI_ASSERT(condition)                               \
     if(!(condition))                                        \
         {                                                   \
         std::ostringstream oss;                             \

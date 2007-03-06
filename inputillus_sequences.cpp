@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: inputillus_sequences.cpp,v 1.12 2007-01-27 00:00:51 wboutin Exp $
+// $Id: inputillus_sequences.cpp,v 1.13 2007-03-06 18:13:37 wboutin Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -456,8 +456,8 @@ std::string IllusInputParms::realize_sequence_string_for_current_coi_grading()
         (VectorCurrentCoiGrading.begin()
         ,VectorCurrentCoiGrading.end()
         );
-    LMI_ASSERT(*test.first  == lowest );
-    LMI_ASSERT(*test.second == highest);
+    HOPEFULLY(*test.first  == lowest );
+    HOPEFULLY(*test.second == highest);
 
     // SOMEDAY !! If we add a production like
     //   numeric-value: numeric-literal %

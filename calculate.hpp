@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: calculate.hpp,v 1.19 2007-02-25 02:12:29 chicares Exp $
+// $Id: calculate.hpp,v 1.20 2007-03-06 18:13:37 wboutin Exp $
 
 #ifndef calculate_hpp
 #define calculate_hpp
@@ -185,7 +185,7 @@ struct RunCensusDeprecated
         is >> n_lives;
         // TODO ?? We don't like any limit, but anything larger is
         // likely to be a bug, so let's test this way for the time being.
-        LMI_ASSERT(n_lives < 10000);
+        HOPEFULLY(n_lives < 10000);
         lives.reserve(n_lives);
 
         for(int j = 0; j < n_lives; j++)
@@ -214,7 +214,7 @@ struct RunCensusDeprecated
 
         // TODO ?? Why copy?
         std::vector<IllusInputParms> lives(doc.cell_parms());
-        LMI_ASSERT(0 == lives.size());
+        HOPEFULLY(0 == lives.size());
 
         timer.restart();
 
