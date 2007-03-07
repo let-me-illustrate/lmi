@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: workhorse.make,v 1.84 2007-01-27 00:00:52 wboutin Exp $
+# $Id: workhorse.make,v 1.85 2007-03-07 17:47:39 chicares Exp $
 
 ################################################################################
 
@@ -389,6 +389,7 @@ gcc_common_warnings := \
   -Wpacked \
   -Wpointer-arith \
   -Wsign-compare \
+  -Wundef \
   -Wwrite-strings \
 
 # Some boost libraries treat 'long long' as part of the language,
@@ -422,7 +423,6 @@ gcc_common_extra_warnings := \
   -W \
   -Wcast-qual \
   -Wredundant-decls \
-  -Wundef \
 
 $(wx_dependent_objects):                gcc_common_extra_warnings :=
 $(wx_dependent_physical_closure_files): gcc_common_extra_warnings :=
