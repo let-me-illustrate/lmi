@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.587 2007-03-06 18:13:37 wboutin Exp $
+// $Id: ChangeLog,v 1.587.2.1 2007-03-07 09:43:18 etarassov Exp $
 
 MAINTENANCE
 
@@ -7351,7 +7351,7 @@ The problem needs to be understood generally before it can be solved.
   ledger_xml_io.cpp
 Clarify two columns' titles to conform to a compliance requirement.
 This is intended to conform to the interpretation under
-  "§21.2206(1)(I)-(M), (O), (Q)-(S) and (U)-(V) Supplemental - Other"
+  "ï¿½21.2206(1)(I)-(M), (O), (Q)-(S) and (U)-(V) Supplemental - Other"
 in the 1998-09-25 Texas Register, however counterintuitive its reading
 of "out-of-pocket" may be.
 
@@ -10439,3 +10439,11 @@ Cleanup 'check_concinnity' results.
   wx_utility.cpp
 Rename a macro.
 
+20070307T0943Z <etarassov@tt-solutions.com> [1253]
+
+  illustration_reg.xsl
+  individual_private_placement.xsl
+  nasd.xsl
+  xsl_fo_common.xsl     [new file]
+Refactor out 'dollar-units' template, supplemental report column names
+and 'supplemental-report-values' template.

@@ -21,23 +21,12 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: individual_private_placement.xsl,v 1.6 2007-02-23 12:43:25 chicares Exp $
+    $Id: individual_private_placement.xsl,v 1.6.2.1 2007-03-07 09:43:18 etarassov Exp $
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fo="http://www.w3.org/1999/XSL/Format">
+    <xsl:include href="xsl_fo_common.xsl" />
     <xsl:output method="xml" encoding="UTF-8" indent="yes"/>
     <xsl:variable name="counter" select="1"/>
-    <xsl:variable name="column1name" select="string(illustration/supplementalreport/columns[1]/name)"/>
-    <xsl:variable name="column2name" select="string(illustration/supplementalreport/columns[2]/name)"/>
-    <xsl:variable name="column3name" select="string(illustration/supplementalreport/columns[3]/name)"/>
-    <xsl:variable name="column4name" select="string(illustration/supplementalreport/columns[4]/name)"/>
-    <xsl:variable name="column5name" select="string(illustration/supplementalreport/columns[5]/name)"/>
-    <xsl:variable name="column6name" select="string(illustration/supplementalreport/columns[6]/name)"/>
-    <xsl:variable name="column7name" select="string(illustration/supplementalreport/columns[7]/name)"/>
-    <xsl:variable name="column8name" select="string(illustration/supplementalreport/columns[8]/name)"/>
-    <xsl:variable name="column9name" select="string(illustration/supplementalreport/columns[9]/name)"/>
-    <xsl:variable name="column10name" select="string(illustration/supplementalreport/columns[10]/name)"/>
-    <xsl:variable name="column11name" select="string(illustration/supplementalreport/columns[11]/name)"/>
-    <xsl:variable name="column12name" select="string(illustration/supplementalreport/columns[12]/name)"/>
     <xsl:variable name="lcletters">abcdefghijklmnopqrstuvwxyz</xsl:variable>
     <xsl:variable name="ucletters">ABCDEFGHIJKLMNOPQRSTUVWXYZ</xsl:variable>
     <xsl:variable name="numberswoc">0123456789</xsl:variable>
@@ -94,7 +83,7 @@
                 </fo:simple-page-master>
 
                 <!-- Define the Supplemental Illustration page. -->
-                <xsl:if test="illustration/scalar/SupplementalReport='1'">
+                <xsl:if test="$has_supplemental_report='1'">
                     <fo:simple-page-master master-name="supplemental-report" page-height="11in" page-width="8.5in" margin-top="0.25in" margin-bottom="0.25in" margin-left="0.25in" margin-right="0.25in">
                     <!-- Central part of page -->
                     <fo:region-body column-count="1" margin-top="2.60in" margin-bottom="1.5in"/>
@@ -669,7 +658,7 @@
                         </fo:block>
                     </fo:block>
                     <xsl:choose>
-                        <xsl:when test="illustration/scalar/SupplementalReport='1'">
+                        <xsl:when test="$has_supplemental_report='1'">
                         </xsl:when>
                         <xsl:otherwise>
                             <fo:block id="endofdoc"></fo:block>
@@ -680,7 +669,7 @@
 
             <!-- Supplemental Illustration -->
             <!-- Body page -->
-            <xsl:if test="illustration/scalar/SupplementalReport='1'">
+            <xsl:if test="$has_supplemental_report='1'">
                 <fo:page-sequence master-reference="supplemental-report">
                     <!-- Define the contents of the header. -->
                     <fo:static-content flow-name="xsl-region-before">
@@ -806,7 +795,7 @@
                                 </fo:table-body>
                             </fo:table>
                         </fo:block>
-                        <xsl:if test="illustration/scalar/SupplementalReport='1'">
+                        <xsl:if test="$has_supplemental_report='1'">
                             <fo:block id="endofdoc"></fo:block>
                         </xsl:if>
                     </fo:flow>
@@ -1099,20 +1088,6 @@
             </fo:list-item>
 
         </fo:list-block>
-    </xsl:template>
-
-    <!-- Print Dollar Units -->
-    <xsl:template name="dollar-units">
-        <xsl:choose>
-            <xsl:when test="illustration/scalar/ScaleUnit=''">
-                <xsl:text>(Values shown are in dollars)</xsl:text>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:text>(Values shown are in </xsl:text>
-                <xsl:value-of select="illustration/scalar/ScaleUnit"/>
-                <xsl:text>s of dollars)</xsl:text>
-            </xsl:otherwise>
-        </xsl:choose>
     </xsl:template>
 
     <!-- Create Define the IRR (Guaranteed Charges) Illustration Values -->
@@ -1682,86 +1657,6 @@
                 </fo:table>
             </fo:block>
         </fo:flow>
-    </xsl:template>
-
-    <!-- Create Supplemental Report Values -->
-    <xsl:template name="supplemental-report-values">
-        <xsl:param name="counter"/>
-        <xsl:if test="illustration/data/newcolumn/column[1]/duration[$counter]/@column_value!='0'">
-            <fo:table-row>
-                <fo:table-cell padding=".2pt">
-                    <fo:block text-align="right">
-                        <xsl:value-of select="illustration/data/newcolumn/column[@name=$column1name]/duration[$counter]/@column_value"/>
-                    </fo:block>
-                </fo:table-cell>
-                <fo:table-cell>
-                    <fo:block text-align="right">
-                        <xsl:value-of select="illustration/data/newcolumn/column[@name=$column2name]/duration[$counter]/@column_value"/>
-                    </fo:block>
-                </fo:table-cell>
-                <fo:table-cell>
-                    <fo:block text-align="right">
-                        <xsl:value-of select="illustration/data/newcolumn/column[@name=$column3name]/duration[$counter]/@column_value"/>
-                    </fo:block>
-                </fo:table-cell>
-                <fo:table-cell>
-                    <fo:block text-align="right">
-                        <xsl:value-of select="illustration/data/newcolumn/column[@name=$column4name]/duration[$counter]/@column_value"/>
-                    </fo:block>
-                </fo:table-cell>
-                <fo:table-cell>
-                    <fo:block text-align="right">
-                        <xsl:value-of select="illustration/data/newcolumn/column[@name=$column5name]/duration[$counter]/@column_value"/>
-                    </fo:block>
-                </fo:table-cell>
-                <fo:table-cell>
-                    <fo:block text-align="right">
-                        <xsl:value-of select="illustration/data/newcolumn/column[@name=$column6name]/duration[$counter]/@column_value"/>
-                    </fo:block>
-                </fo:table-cell>
-                <fo:table-cell>
-                    <fo:block text-align="right">
-                        <xsl:value-of select="illustration/data/newcolumn/column[@name=$column7name]/duration[$counter]/@column_value"/>
-                    </fo:block>
-                </fo:table-cell>
-                <fo:table-cell>
-                    <fo:block text-align="right">
-                        <xsl:value-of select="illustration/data/newcolumn/column[@name=$column8name]/duration[$counter]/@column_value"/>
-                    </fo:block>
-                </fo:table-cell>
-                <fo:table-cell>
-                    <fo:block text-align="right">
-                        <xsl:value-of select="illustration/data/newcolumn/column[@name=$column9name]/duration[$counter]/@column_value"/>
-                    </fo:block>
-                </fo:table-cell>
-                <fo:table-cell>
-                    <fo:block text-align="right">
-                        <xsl:value-of select="illustration/data/newcolumn/column[@name=$column10name]/duration[$counter]/@column_value"/>
-                    </fo:block>
-                </fo:table-cell>
-                <fo:table-cell>
-                    <fo:block text-align="right">
-                        <xsl:value-of select="illustration/data/newcolumn/column[@name=$column11name]/duration[$counter]/@column_value"/>
-                    </fo:block>
-                </fo:table-cell>
-                <fo:table-cell>
-                    <fo:block text-align="right">
-                        <xsl:value-of select="illustration/data/newcolumn/column[@name=$column12name]/duration[$counter]/@column_value"/>
-                    </fo:block>
-                </fo:table-cell>
-            </fo:table-row>
-            <!-- Blank Row Every 5th Year -->
-            <xsl:if test="$counter mod 5=0">
-                <fo:table-row>
-                    <fo:table-cell padding="4pt">
-                        <fo:block text-align="right"></fo:block>
-                    </fo:table-cell>
-                </fo:table-row>
-            </xsl:if>
-            <xsl:call-template name="supplemental-report-values">
-                <xsl:with-param name="counter" select="$counter + 1"/>
-            </xsl:call-template>
-        </xsl:if>
     </xsl:template>
 
     <!-- Standard Footer -->
