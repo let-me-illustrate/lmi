@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: xsl_fo_common.xsl,v 1.1.2.6 2007-03-07 18:13:00 etarassov Exp $
+    $Id: xsl_fo_common.xsl,v 1.1.2.7 2007-03-07 18:57:13 etarassov Exp $
 -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fo="http://www.w3.org/1999/XSL/Format" version="1.0">
     <!--
@@ -76,7 +76,7 @@
             <fo:block font-size="9.0pt" font-family="serif">
                 <fo:table table-layout="fixed" width="100%">
                     <xsl:for-each select="$supplemental_report/columns">
-                        <fo:table-column/>
+                        <fo:table-column column-width="proportional-column-width(1)"/>
                     </xsl:for-each>
                     <fo:table-header>
                         <fo:table-row>

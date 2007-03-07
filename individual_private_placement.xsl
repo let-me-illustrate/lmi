@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: individual_private_placement.xsl,v 1.6.2.5 2007-03-07 18:12:59 etarassov Exp $
+    $Id: individual_private_placement.xsl,v 1.6.2.6 2007-03-07 18:57:13 etarassov Exp $
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fo="http://www.w3.org/1999/XSL/Format">
     <xsl:include href="xsl_fo_common.xsl" />
@@ -1261,18 +1261,18 @@
         <fo:flow flow-name="xsl-region-body">
             <fo:block font-size="9.0pt" font-family="serif">
                 <fo:table table-layout="fixed" width="100%">
-                    <fo:table-column/>
-                    <fo:table-column/>
-                    <fo:table-column/>
-                    <fo:table-column/>
-                    <fo:table-column/>
-                    <fo:table-column/>
-                    <fo:table-column/>
-                    <fo:table-column/>
-                    <fo:table-column/>
-                    <fo:table-column/>
-                    <fo:table-column/>
-                    <fo:table-column/>
+                    <fo:table-column column-width="proportional-column-width(1)"/>
+                    <fo:table-column column-width="proportional-column-width(1)"/>
+                    <fo:table-column column-width="proportional-column-width(1)"/>
+                    <fo:table-column column-width="proportional-column-width(1)"/>
+                    <fo:table-column column-width="proportional-column-width(1)"/>
+                    <fo:table-column column-width="proportional-column-width(1)"/>
+                    <fo:table-column column-width="proportional-column-width(1)"/>
+                    <fo:table-column column-width="proportional-column-width(1)"/>
+                    <fo:table-column column-width="proportional-column-width(1)"/>
+                    <fo:table-column column-width="proportional-column-width(1)"/>
+                    <fo:table-column column-width="proportional-column-width(1)"/>
+                    <fo:table-column column-width="proportional-column-width(1)"/>
                     <fo:table-header>
                         <fo:table-row>
                             <fo:table-cell />
@@ -1370,18 +1370,18 @@
         <fo:flow flow-name="xsl-region-body">
             <fo:block font-size="9.0pt" font-family="serif">
                 <fo:table table-layout="fixed" width="100%">
-                    <fo:table-column/>
-                    <fo:table-column/>
-                    <fo:table-column/>
-                    <fo:table-column/>
-                    <fo:table-column/>
-                    <fo:table-column/>
-                    <fo:table-column/>
-                    <fo:table-column/>
-                    <fo:table-column/>
-                    <fo:table-column/>
-                    <fo:table-column/>
-                    <fo:table-column/>
+                    <fo:table-column column-width="proportional-column-width(1)"/>
+                    <fo:table-column column-width="proportional-column-width(1)"/>
+                    <fo:table-column column-width="proportional-column-width(1)"/>
+                    <fo:table-column column-width="proportional-column-width(1)"/>
+                    <fo:table-column column-width="proportional-column-width(1)"/>
+                    <fo:table-column column-width="proportional-column-width(1)"/>
+                    <fo:table-column column-width="proportional-column-width(1)"/>
+                    <fo:table-column column-width="proportional-column-width(1)"/>
+                    <fo:table-column column-width="proportional-column-width(1)"/>
+                    <fo:table-column column-width="proportional-column-width(1)"/>
+                    <fo:table-column column-width="proportional-column-width(1)"/>
+                    <fo:table-column column-width="proportional-column-width(1)"/>
                     <fo:table-header>
                         <fo:table-row>
                             <fo:table-cell />
@@ -1479,17 +1479,17 @@
         <fo:flow flow-name="xsl-region-body">
             <fo:block font-size="9.0pt" font-family="serif">
                 <fo:table table-layout="fixed" width="100%">
-                    <fo:table-column/>
-                    <fo:table-column/>
-                    <fo:table-column/>
-                    <fo:table-column/>
-                    <fo:table-column/>
-                    <fo:table-column/>
-                    <fo:table-column/>
-                    <fo:table-column/>
-                    <fo:table-column/>
-                    <fo:table-column/>
-                    <fo:table-column/>
+                    <fo:table-column column-width="proportional-column-width(1)"/>
+                    <fo:table-column column-width="proportional-column-width(1)"/>
+                    <fo:table-column column-width="proportional-column-width(1)"/>
+                    <fo:table-column column-width="proportional-column-width(1)"/>
+                    <fo:table-column column-width="proportional-column-width(1)"/>
+                    <fo:table-column column-width="proportional-column-width(1)"/>
+                    <fo:table-column column-width="proportional-column-width(1)"/>
+                    <fo:table-column column-width="proportional-column-width(1)"/>
+                    <fo:table-column column-width="proportional-column-width(1)"/>
+                    <fo:table-column column-width="proportional-column-width(1)"/>
+                    <fo:table-column column-width="proportional-column-width(1)"/>
                     <fo:table-header>
                         <fo:table-row>
                             <fo:table-cell />
@@ -1578,9 +1578,9 @@
         </fo:block>
         <fo:block padding-before="5pt" font-size="8.0pt" font-family="sans-serif">
             <fo:table table-layout="fixed" width="100%">
-                <fo:table-column/>
-                <fo:table-column/>
-                <fo:table-column/>
+                <fo:table-column column-width="proportional-column-width(1)"/>
+                <fo:table-column column-width="proportional-column-width(1)"/>
+                <fo:table-column column-width="proportional-column-width(1)"/>
                 <fo:table-body padding-before="2pt" border-top-style="solid" border-top-width="1pt" border-top-color="blue">
                     <fo:table-row>
                         <fo:table-cell>

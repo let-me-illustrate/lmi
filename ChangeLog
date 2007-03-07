@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.587.2.7 2007-03-07 18:53:24 etarassov Exp $
+// $Id: ChangeLog,v 1.587.2.8 2007-03-07 18:57:13 etarassov Exp $
 
 MAINTENANCE
 
@@ -10494,3 +10494,12 @@ Add 'is_composite' global variable. Fix 'has_supplemental_report'.
   nasd.xsl
 Refactor 'illustration-assumption-report' and
 'illustration-assumption-values'.
+
+20070307T1857Z <etarassov@tt-solutions.com> [1254]
+
+  illustration_reg.xsl
+  individual_private_placement.xsl
+  nasd.xsl
+  xsl_fo_common.xsl
+Properly invoke 'fo:table-column'. This fix removes 80% of warnings
+from FOP.
