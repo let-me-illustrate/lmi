@@ -21,9 +21,12 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: xsl_fo_common.xsl,v 1.1.2.2 2007-03-07 10:16:00 etarassov Exp $
+    $Id: xsl_fo_common.xsl,v 1.1.2.3 2007-03-07 10:34:50 etarassov Exp $
 -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fo="http://www.w3.org/1999/XSL/Format" version="1.0">
+    <xsl:variable name="ALL_LETTERS"> ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789&#xA0;</xsl:variable>
+    <xsl:variable name="ALL_LETTERS_NO_ENTITIES"> ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_</xsl:variable>
+
     <xsl:variable name="supplemental_report" select="/illustration/supplementalreport"/>
     <xsl:variable name="has_supplemental_report" select="string(/illustration/scalar/SupplementalReport)"/>
 
@@ -41,7 +44,7 @@
                             <xsl:for-each select="$supplemental_report/columns">
                                 <fo:table-cell border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue" padding="2pt">
                                     <fo:block text-align="right">
-                                        <xsl:value-of select="translate(./title,$noampletters,$allletters)"/>
+                                        <xsl:value-of select="translate(./title,$ALL_LETTERS_NO_ENTITIES,$ALL_LETTERS)"/>
                                     </fo:block>
                                 </fo:table-cell>
                             </xsl:for-each>

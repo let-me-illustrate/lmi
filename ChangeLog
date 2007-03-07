@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.587.2.2 2007-03-07 10:16:00 etarassov Exp $
+// $Id: ChangeLog,v 1.587.2.3 2007-03-07 10:34:49 etarassov Exp $
 
 MAINTENANCE
 
@@ -10454,4 +10454,13 @@ and 'supplemental-report-values' template.
   individual_private_placement.xsl
   nasd.xsl
   xsl_fo_common.xsl
-Refactor out supplemental report body. Use xsl:for-each where possible.
+Refactor out supplemental report body. Use xsl:for-each where
+possible.
+
+20070307T1034Z <etarassov@tt-solutions.com> [1253]
+
+  illustration_reg.xsl
+  individual_private_placement.xsl
+  nasd.xsl
+  xsl_fo_common.xsl
+Refactor out 'allletters' and 'noampletters' variables.

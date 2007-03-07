@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: individual_private_placement.xsl,v 1.6.2.2 2007-03-07 10:16:00 etarassov Exp $
+    $Id: individual_private_placement.xsl,v 1.6.2.3 2007-03-07 10:34:49 etarassov Exp $
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fo="http://www.w3.org/1999/XSL/Format">
     <xsl:include href="xsl_fo_common.xsl" />
@@ -31,8 +31,6 @@
     <xsl:variable name="ucletters">ABCDEFGHIJKLMNOPQRSTUVWXYZ</xsl:variable>
     <xsl:variable name="numberswoc">0123456789</xsl:variable>
     <xsl:variable name="numberswc">0123456789,</xsl:variable>
-    <xsl:variable name="allletters"> ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789&#xA0;</xsl:variable>
-    <xsl:variable name="noampletters"> ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_</xsl:variable>
     <xsl:template match="/">
         <fo:root>
             <fo:layout-master-set>
@@ -1202,7 +1200,7 @@
                     </fo:block>
                 </fo:table-cell>
 <!-- junk -->
-<xsl:value-of select="translate(illustration/supplementalreport/columns[1]/title,$noampletters,$allletters)"/>
+<xsl:value-of select="translate(illustration/supplementalreport/columns[1]/title,$ALL_LETTERS_NO_ENTITIES,$ALL_LETTERS)"/>
 
                 <fo:table-cell>
                     <fo:block text-align="right">
