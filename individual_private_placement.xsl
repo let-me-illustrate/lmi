@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: individual_private_placement.xsl,v 1.6.2.3 2007-03-07 10:34:49 etarassov Exp $
+    $Id: individual_private_placement.xsl,v 1.6.2.4 2007-03-07 12:07:46 etarassov Exp $
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fo="http://www.w3.org/1999/XSL/Format">
     <xsl:include href="xsl_fo_common.xsl" />
@@ -1199,8 +1199,6 @@
                         <xsl:value-of select="illustration/data/newcolumn/column[@name='Outlay']/duration[$counter]/@column_value"/>
                     </fo:block>
                 </fo:table-cell>
-<!-- junk -->
-<xsl:value-of select="translate(illustration/supplementalreport/columns[1]/title,$ALL_LETTERS_NO_ENTITIES,$ALL_LETTERS)"/>
 
                 <fo:table-cell>
                     <fo:block text-align="right">
@@ -1277,6 +1275,7 @@
                     <fo:table-column/>
                     <fo:table-header>
                         <fo:table-row>
+                            <fo:table-cell />
                         </fo:table-row>
                         <fo:table-row>
                             <fo:table-cell number-columns-spanned="3" padding="0pt"/>
@@ -1385,6 +1384,7 @@
                     <fo:table-column/>
                     <fo:table-header>
                         <fo:table-row>
+                            <fo:table-cell />
                         </fo:table-row>
                         <fo:table-row>
                             <fo:table-cell number-columns-spanned="3" padding="0pt"/>
@@ -1492,6 +1492,7 @@
                     <fo:table-column/>
                     <fo:table-header>
                         <fo:table-row>
+                            <fo:table-cell />
                         </fo:table-row>
                         <fo:table-row>
                             <fo:table-cell padding="2pt">

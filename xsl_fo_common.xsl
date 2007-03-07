@@ -21,14 +21,37 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: xsl_fo_common.xsl,v 1.1.2.3 2007-03-07 10:34:50 etarassov Exp $
+    $Id: xsl_fo_common.xsl,v 1.1.2.4 2007-03-07 12:07:46 etarassov Exp $
 -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fo="http://www.w3.org/1999/XSL/Format" version="1.0">
-    <xsl:variable name="ALL_LETTERS"> ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789&#xA0;</xsl:variable>
-    <xsl:variable name="ALL_LETTERS_NO_ENTITIES"> ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_</xsl:variable>
-
     <xsl:variable name="supplemental_report" select="/illustration/supplementalreport"/>
     <xsl:variable name="has_supplemental_report" select="string(/illustration/scalar/SupplementalReport)"/>
+
+    <xsl:template name="normalize_underscored_name">
+        <xsl:param name="text"/>
+        <xsl:choose>
+            <xsl:when test="starts-with($text, '_') or starts-with($text, ' ')">
+                <!-- chop off the leading junk character -->
+                <xsl:call-template name="normalize_underscored_name">
+                    <xsl:with-param name="text" select="substring($text, 2)"/>
+                </xsl:call-template>
+            </xsl:when>
+            <xsl:when test="contains($text, '_')">
+                <!-- cut the text into two parts and process it separately -->
+                <xsl:call-template name="normalize_underscored_name">
+                    <xsl:with-param name="text" select="substring-before($text, '_')"/>
+                </xsl:call-template>
+                <xsl:call-template name="normalize_underscored_name">
+                    <xsl:with-param name="text" select="substring-after($text, '_')"/>
+                </xsl:call-template>
+            </xsl:when>
+            <xsl:otherwise>
+                <fo:block>
+                    <xsl:value-of select="$text"/>
+                </fo:block>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:template>
 
     <!-- Create Supplemental Report Body -->
     <!-- Calls supplemental-report-values template to generate data part -->
@@ -42,10 +65,10 @@
                     <fo:table-header>
                         <fo:table-row>
                             <xsl:for-each select="$supplemental_report/columns">
-                                <fo:table-cell border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue" padding="2pt">
-                                    <fo:block text-align="right">
-                                        <xsl:value-of select="translate(./title,$ALL_LETTERS_NO_ENTITIES,$ALL_LETTERS)"/>
-                                    </fo:block>
+                                <fo:table-cell border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue" padding="2pt" display-align="after" text-align="right">
+                                    <xsl:call-template name="normalize_underscored_name">
+                                        <xsl:with-param name="text" select="./title"/>
+                                    </xsl:call-template>
                                 </fo:table-cell>
                             </xsl:for-each>
                         </fo:table-row>
