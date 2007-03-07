@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.587.2.4 2007-03-07 12:07:46 etarassov Exp $
+// $Id: ChangeLog,v 1.587.2.5 2007-03-07 15:32:34 etarassov Exp $
 
 MAINTENANCE
 
@@ -10470,3 +10470,13 @@ Refactor out 'allletters' and 'noampletters' variables.
   individual_private_placement.xsl
   xsl_fo_common.xsl
 Rewrite supplemental report column title formatting.
+
+20070307T1530Z <etarassov@tt-solutions.com> [1253]
+
+  xsl_fo_common.xsl
+Add global $illustration variable.
+
+20070307T1532Z <etarassov@tt-solutions.com> [1253]
+
+  nasd.xsl
+Refactor 'basic-illustration-report' and 'basic-illustration-values'.
