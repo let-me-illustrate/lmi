@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: individual_private_placement.xsl,v 1.6.2.4 2007-03-07 12:07:46 etarassov Exp $
+    $Id: individual_private_placement.xsl,v 1.6.2.5 2007-03-07 18:12:59 etarassov Exp $
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fo="http://www.w3.org/1999/XSL/Format">
     <xsl:include href="xsl_fo_common.xsl" />
@@ -81,7 +81,7 @@
                 </fo:simple-page-master>
 
                 <!-- Define the Supplemental Illustration page. -->
-                <xsl:if test="$has_supplemental_report='1'">
+                <xsl:if test="$has_supplemental_report">
                     <fo:simple-page-master master-name="supplemental-report" page-height="11in" page-width="8.5in" margin-top="0.25in" margin-bottom="0.25in" margin-left="0.25in" margin-right="0.25in">
                     <!-- Central part of page -->
                     <fo:region-body column-count="1" margin-top="2.60in" margin-bottom="1.5in"/>
@@ -656,7 +656,7 @@
                         </fo:block>
                     </fo:block>
                     <xsl:choose>
-                        <xsl:when test="$has_supplemental_report='1'">
+                        <xsl:when test="$has_supplemental_report">
                         </xsl:when>
                         <xsl:otherwise>
                             <fo:block id="endofdoc"></fo:block>
@@ -667,7 +667,7 @@
 
             <!-- Supplemental Illustration -->
             <!-- Body page -->
-            <xsl:if test="$has_supplemental_report='1'">
+            <xsl:if test="$has_supplemental_report">
                 <fo:page-sequence master-reference="supplemental-report">
                     <!-- Define the contents of the header. -->
                     <fo:static-content flow-name="xsl-region-before">

@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: illustration_reg.xsl,v 1.6.2.3 2007-03-07 10:34:50 etarassov Exp $
+    $Id: illustration_reg.xsl,v 1.6.2.4 2007-03-07 18:13:00 etarassov Exp $
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fo="http://www.w3.org/1999/XSL/Format">
     <xsl:include href="xsl_fo_common.xsl" />
@@ -89,7 +89,7 @@
                 </fo:simple-page-master>
 
                 <!-- Define the Supplemental Illustration page. -->
-                <xsl:if test="$has_supplemental_report='1'">
+                <xsl:if test="$has_supplemental_report">
                     <fo:simple-page-master master-name="supplemental-report" page-height="11in" page-width="8.5in" margin-top="0.25in" margin-bottom="0.25in" margin-left="0.25in" margin-right="0.25in">
                         <!-- Central part of page -->
                         <fo:region-body column-count="1" margin-top="3in" margin-bottom="1.2in"/>
@@ -929,7 +929,7 @@ No cover page for this style sheet
                          'Supplemental Report' need not exist in the XML document for
                          page numbering to work properly -->
                     <xsl:choose>
-                        <xsl:when test="$has_supplemental_report='1'">
+                        <xsl:when test="$has_supplemental_report">
                         </xsl:when>
                         <xsl:otherwise>
                             <fo:block id="endofdoc"></fo:block>
@@ -939,7 +939,7 @@ No cover page for this style sheet
             </fo:page-sequence>
             <!-- Supplemental Illustration -->
             <!-- Body page -->
-            <xsl:if test="$has_supplemental_report='1'">
+            <xsl:if test="$has_supplemental_report">
                 <fo:page-sequence master-reference="supplemental-report">
                     <!-- Define the contents of the header. -->
                     <fo:static-content flow-name="xsl-region-before">

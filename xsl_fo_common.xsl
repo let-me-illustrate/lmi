@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: xsl_fo_common.xsl,v 1.1.2.5 2007-03-07 15:30:10 etarassov Exp $
+    $Id: xsl_fo_common.xsl,v 1.1.2.6 2007-03-07 18:13:00 etarassov Exp $
 -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fo="http://www.w3.org/1999/XSL/Format" version="1.0">
     <!--
@@ -36,8 +36,12 @@
         Use the global variable '$illustration' to access the data.
     -->
     <xsl:variable name="illustration" select="/illustration"/>
+    <!--
+        Frequently used value. If true then the data is for a composite case.
+    -->
+    <xsl:variable name="is_composite" select="boolean(/illustration/scalar/Composite='1')"/>
     <xsl:variable name="supplemental_report" select="/illustration/supplementalreport"/>
-    <xsl:variable name="has_supplemental_report" select="string(/illustration/scalar/SupplementalReport)"/>
+    <xsl:variable name="has_supplemental_report" select="boolean(/illustration/scalar/SupplementalReport='1')"/>
 
     <xsl:template name="normalize_underscored_name">
         <xsl:param name="text"/>
@@ -98,7 +102,7 @@
                     </fo:table-body>
                 </fo:table>
             </fo:block>
-            <xsl:if test="$has_supplemental_report='1'">
+            <xsl:if test="$has_supplemental_report">
                 <fo:block id="endofdoc"/>
             </xsl:if>
         </fo:flow>

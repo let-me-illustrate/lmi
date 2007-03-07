@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.587.2.5 2007-03-07 15:32:34 etarassov Exp $
+// $Id: ChangeLog,v 1.587.2.6 2007-03-07 18:13:10 etarassov Exp $
 
 MAINTENANCE
 
@@ -10480,3 +10480,11 @@ Add global $illustration variable.
 
   nasd.xsl
 Refactor 'basic-illustration-report' and 'basic-illustration-values'.
+
+20070307T1812Z <etarassov@tt-solutions.com> [1253]
+
+  illustration_reg.xsl
+  individual_private_placement.xsl
+  nasd.xsl
+  xsl_fo_common.xsl
+Add 'is_composite' global variable. Fix 'has_supplemental_report'.
