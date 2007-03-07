@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.587.2.1 2007-03-07 09:43:18 etarassov Exp $
+// $Id: ChangeLog,v 1.587.2.2 2007-03-07 10:16:00 etarassov Exp $
 
 MAINTENANCE
 
@@ -10447,3 +10447,11 @@ Rename a macro.
   xsl_fo_common.xsl     [new file]
 Refactor out 'dollar-units' template, supplemental report column names
 and 'supplemental-report-values' template.
+
+20070307T1015Z <etarassov@tt-solutions.com> [1253]
+
+  illustration_reg.xsl
+  individual_private_placement.xsl
+  nasd.xsl
+  xsl_fo_common.xsl
+Refactor out supplemental report body. Use xsl:for-each where possible.

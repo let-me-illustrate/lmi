@@ -21,11 +21,50 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: xsl_fo_common.xsl,v 1.1.2.1 2007-03-07 09:43:18 etarassov Exp $
+    $Id: xsl_fo_common.xsl,v 1.1.2.2 2007-03-07 10:16:00 etarassov Exp $
 -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fo="http://www.w3.org/1999/XSL/Format" version="1.0">
     <xsl:variable name="supplemental_report" select="/illustration/supplementalreport"/>
     <xsl:variable name="has_supplemental_report" select="string(/illustration/scalar/SupplementalReport)"/>
+
+    <!-- Create Supplemental Report Body -->
+    <!-- Calls supplemental-report-values template to generate data part -->
+    <xsl:template name="supplemental-report-body">
+        <fo:flow flow-name="xsl-region-body">
+            <fo:block font-size="9.0pt" font-family="serif">
+                <fo:table table-layout="fixed" width="100%">
+                    <xsl:for-each select="$supplemental_report/columns">
+                        <fo:table-column/>
+                    </xsl:for-each>
+                    <fo:table-header>
+                        <fo:table-row>
+                            <xsl:for-each select="$supplemental_report/columns">
+                                <fo:table-cell border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue" padding="2pt">
+                                    <fo:block text-align="right">
+                                        <xsl:value-of select="translate(./title,$noampletters,$allletters)"/>
+                                    </fo:block>
+                                </fo:table-cell>
+                            </xsl:for-each>
+                        </fo:table-row>
+                        <fo:table-row>
+                            <fo:table-cell padding="2pt">
+                                <fo:block/>
+                            </fo:table-cell>
+                        </fo:table-row>
+                    </fo:table-header>
+                    <!-- Create Supplemental Report Values -->
+                    <fo:table-body>
+                        <xsl:call-template name="supplemental-report-values">
+                            <xsl:with-param name="counter" select="1"/>
+                        </xsl:call-template>
+                    </fo:table-body>
+                </fo:table>
+            </fo:block>
+            <xsl:if test="$has_supplemental_report='1'">
+                <fo:block id="endofdoc"/>
+            </xsl:if>
+        </fo:flow>
+    </xsl:template>
 
     <!-- Create Supplemental Report Values -->
     <xsl:template name="supplemental-report-values">
