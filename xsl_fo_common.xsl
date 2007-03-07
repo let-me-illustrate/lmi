@@ -21,9 +21,21 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: xsl_fo_common.xsl,v 1.1.2.4 2007-03-07 12:07:46 etarassov Exp $
+    $Id: xsl_fo_common.xsl,v 1.1.2.5 2007-03-07 15:30:10 etarassov Exp $
 -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fo="http://www.w3.org/1999/XSL/Format" version="1.0">
+    <!--
+        In some xsl:for-each loop we could iterate over a node set from some
+        other document (not the current document being transformed, for example
+        we could iterate over a list of columns from the separate format file
+        to generate a list of available columns).
+
+        In such a case inside the loop the root node '/' binds to the root node
+        of that external document and we cannot use '/illustration' no longer
+        to acces our current xml data.
+        Use the global variable '$illustration' to access the data.
+    -->
+    <xsl:variable name="illustration" select="/illustration"/>
     <xsl:variable name="supplemental_report" select="/illustration/supplementalreport"/>
     <xsl:variable name="has_supplemental_report" select="string(/illustration/scalar/SupplementalReport)"/>
 
