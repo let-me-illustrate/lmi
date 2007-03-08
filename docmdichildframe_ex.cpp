@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: docmdichildframe_ex.cpp,v 1.6 2007-01-27 00:00:51 wboutin Exp $
+// $Id: docmdichildframe_ex.cpp,v 1.7 2007-03-08 01:11:41 chicares Exp $
 
 #include "docmdichildframe_ex.hpp"
 
@@ -30,7 +30,6 @@
 IMPLEMENT_CLASS(DocMDIChildFrameEx, wxDocMDIChildFrame)
 
 BEGIN_EVENT_TABLE(DocMDIChildFrameEx, wxDocMDIChildFrame)
-    EVT_ACTIVATE(DocMDIChildFrameEx::UponActivate)
     EVT_MENU_HIGHLIGHT_ALL(DocMDIChildFrameEx::UponMenuHighlight)
 END_EVENT_TABLE()
 
@@ -76,15 +75,6 @@ wxStatusBar* DocMDIChildFrameEx::GetStatusBar() const
     return 0;
 }
 
-/// This function merely augments DocMDIChildFrameEx::OnActivate(),
-/// so it calls Skip() at the end.
-
-void DocMDIChildFrameEx::UponActivate(wxActivateEvent& event)
-{
-    SetMdiWindowMenu();
-    event.Skip();
-}
-
 /// This augments wxDocMDIChildFrame::OnMenuHighlight(), but isn't a
 /// complete replacement. It calls that base-class function explicitly
 /// because Skip() wouldn't work here.
@@ -107,47 +97,10 @@ void DocMDIChildFrameEx::UponMenuHighlight(wxMenuEvent& event)
         }
 }
 
-// FSF !! Expunge this when we deprecate support for older versions
-// than wx-2.5.4 .
-
-#if wxCHECK_VERSION(2,5,4) || !defined LMI_MSW
-void DocMDIChildFrameEx::SetMdiWindowMenu() const {}
-#else // wx-msw prior to version 2.5.4 .
-#   include <wx/msw/wrapwin.h>
-void DocMDIChildFrameEx::SetMdiWindowMenu() const
-{
-    wxMDIParentFrame* parent_frame = dynamic_cast<wxMDIParentFrame*>(GetParent());
-    if(!parent_frame)
-        {
-        throw std::runtime_error("MDI child frame has no parent.");
-        }
-
-    wxMDIClientWindow* client_window = parent_frame->GetClientWindow();
-    if(!client_window)
-        {
-        throw std::runtime_error("Child frame's parent has no client window.");
-        }
-    HWND client_handle = (HWND)client_window->GetHandle();
-
-    wxMenuBar* menu_bar = GetMenuBar();
-    if(!menu_bar)
-        {
-        throw std::runtime_error("Child frame has no menubar.");
-        return;
-        }
-
-    int window_menu_index = menu_bar->FindMenu("Window");
-    if(wxNOT_FOUND == window_menu_index)
-        {
-        throw std::runtime_error("No 'Window' menu found.");
-        return;
-        }
-
-    wxMenu* window_menu = menu_bar->GetMenu(window_menu_index);
-    HMENU window_menu_handle = (HMENU)window_menu->GetHMenu();
-
-    ::SendMessage(client_handle, WM_MDISETMENU, 0, (LPARAM)window_menu_handle);
-    ::DrawMenuBar(client_handle);
-}
-#endif // wx-msw prior to version 2.5.4 .
+#if !wxCHECK_VERSION(2,5,4)
+    // The MDI "Window" menu did not display correctly for wx
+    // versions prior to 2.5.4 . This error directive may be
+    // suppressed if living with that problem is acceptable.
+#   error Outdated library: wx-2.5.4 or greater is required.
+#endif // !wxCHECK_VERSION(2,5,4)
 

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_wx.cpp,v 1.71 2007-02-22 00:11:19 chicares Exp $
+// $Id: main_wx.cpp,v 1.72 2007-03-08 01:11:41 chicares Exp $
 
 // Portions of this file are derived from wxWindows files
 //   samples/docvwmdi/docview.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -261,7 +261,6 @@ wxMDIChildFrame* Skeleton::CreateChildFrame
         );
     child_frame->SetIcon(view->Icon());
     child_frame->SetMenuBar(view->MenuBar());
-    child_frame->SetMdiWindowMenu();
 
     // Style flag wxMAXIMIZE could have been used instead, but that
     // seems to work only with the msw platform.

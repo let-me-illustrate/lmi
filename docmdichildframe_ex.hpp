@@ -19,29 +19,12 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: docmdichildframe_ex.hpp,v 1.5 2007-01-27 00:00:51 wboutin Exp $
+// $Id: docmdichildframe_ex.hpp,v 1.6 2007-03-08 01:11:41 chicares Exp $
 
 // Enhance class wxDocMDIChildFrame to support MDI without requiring
 // the parent MDI frame window to display a 'Window' menu when it has
 // no MDI child, as recommended in msw platform documentation. This
 // implementation is rather specific to that platform.
-
-// SetMdiWindowMenu() designates the first child-frame menu named
-// 'Window' as the 'window menu', which msw automatically updates with
-// a list of open child windows. This menu might alternatively be
-// identified by the presence of menuitems such as 'Cascade', but that
-// would make this implementation even more platform specific, and
-// naming the menu anything other than 'Window' would be confusing.
-//
-// Because different child frames can have different menubars, each
-// child frame's 'Window' menu must become the system 'window menu'
-// upon activation. Member function UponActivate() accomplishes this.
-//
-// At least for msw, creation does not trigger 'activation': more
-// precisely, WM_MDICREATE does not send WM_MDIACTIVATE. The MDI menu
-// should therefore be set explicitly upon creation, after the child
-// frame acquires its menubar. Therefore, SetMdiWindowMenu() must be
-// public, because wx does not make Create() virtual.
 
 // The wx implementation of OnMenuHighlight() assumes that MDI child
 // frames have statusbars, but that practice is uncommon, at least for
@@ -109,11 +92,8 @@ class DocMDIChildFrameEx
     //
     virtual ~DocMDIChildFrameEx();
 
-    void SetMdiWindowMenu() const;
-
   private:
-    // WX !! Shouldn't OnActivate() and OnMenuHighlight() be virtual?
-    void UponActivate(wxActivateEvent&);
+    // WX !! Shouldn't OnMenuHighlight() be virtual?
     void UponMenuHighlight(wxMenuEvent&);
 
     // wxDocMDIChildFrame overrides.
