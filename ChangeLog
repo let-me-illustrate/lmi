@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.587.2.11 2007-03-08 00:38:59 etarassov Exp $
+// $Id: ChangeLog,v 1.587.2.12 2007-03-08 00:44:46 etarassov Exp $
 
 MAINTENANCE
 
@@ -10522,3 +10522,8 @@ Use '$is_composite'.
   nasd.xsl
 Refactor more 'basic-illustration-report' and
 'basic-illustration-values'.
+
+20070308T0044Z <etarassov@tt-solutions.com> [1254]
+
+  nasd.xsl
+Unificate some paddings for data tables.

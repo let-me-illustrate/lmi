@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: nasd.xsl,v 1.6.2.9 2007-03-08 00:38:59 etarassov Exp $
+    $Id: nasd.xsl,v 1.6.2.10 2007-03-08 00:44:46 etarassov Exp $
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fo="http://www.w3.org/1999/XSL/Format">
     <xsl:include href="xsl_fo_common.xsl" />
@@ -891,11 +891,8 @@ No cover page for this style sheet
         <xsl:if test="illustration/data/newcolumn/column[@name='PolicyYear']/duration[$counter]/@column_value!='0'">
             <fo:table-row>
                 <xsl:for-each select="$columns">
-                    <fo:table-cell padding=".6pt">
+                    <fo:table-cell padding-top="1.2pt">
                         <!-- Add some space if it the first row and some space after each 5th year -->
-                        <xsl:if test="$counter=1">
-                            <xsl:attribute name="padding-top">4pt</xsl:attribute>
-                        </xsl:if>
                         <xsl:if test="$counter mod 5=0">
                             <xsl:attribute name="padding-bottom">8pt</xsl:attribute>
                         </xsl:if>
@@ -927,11 +924,8 @@ No cover page for this style sheet
         <xsl:if test="/illustration/data/newcolumn/column[@name='PolicyYear']/duration[$counter]/@column_value!='0'">
             <fo:table-row>
                 <xsl:for-each select="$columns">
-                    <fo:table-cell padding=".6pt">
+                    <fo:table-cell padding="1.2pt">
                         <!-- Add some space if it the first row and some space after each 5th year -->
-                        <xsl:if test="$counter=1">
-                            <xsl:attribute name="padding-top">4pt</xsl:attribute>
-                        </xsl:if>
                         <xsl:if test="$counter mod 5=0">
                             <xsl:attribute name="padding-bottom">8pt</xsl:attribute>
                         </xsl:if>
@@ -960,11 +954,8 @@ No cover page for this style sheet
         <xsl:if test="/illustration/data/newcolumn/column[@name='PolicyYear']/duration[$counter]/@column_value!='0'">
             <fo:table-row>
                 <xsl:for-each select="$columns">
-                    <fo:table-cell padding=".6pt">
+                    <fo:table-cell padding-top="1.2pt">
                         <!-- Add some space if it the first row and some space after each 5th year -->
-                        <xsl:if test="$counter=1">
-                            <xsl:attribute name="padding-top">4pt</xsl:attribute>
-                        </xsl:if>
                         <xsl:if test="$counter mod 5=0">
                             <xsl:attribute name="padding-bottom">8pt</xsl:attribute>
                         </xsl:if>
