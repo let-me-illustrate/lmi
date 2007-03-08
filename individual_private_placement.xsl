@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: individual_private_placement.xsl,v 1.6.2.6 2007-03-07 18:57:13 etarassov Exp $
+    $Id: individual_private_placement.xsl,v 1.6.2.7 2007-03-08 00:26:38 etarassov Exp $
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fo="http://www.w3.org/1999/XSL/Format">
     <xsl:include href="xsl_fo_common.xsl" />
@@ -782,7 +782,7 @@
             <fo:list-item>
                 <fo:list-item-label end-indent="label-end()">
                     <xsl:choose>
-                        <xsl:when test="illustration/scalar/Composite='1'">
+                        <xsl:when test="$is_composite">
                             <fo:block text-align="left" font-size="9.0pt">
                                 <xsl:text>Composite of individuals</xsl:text>
                             </fo:block>
@@ -813,7 +813,7 @@
             <fo:list-item>
                 <fo:list-item-label end-indent="label-end()">
                     <xsl:choose>
-                        <xsl:when test="illustration/scalar/Composite='1'">
+                        <xsl:when test="$is_composite">
                             <fo:block text-align="left" font-size="9.0pt">
                                 <xsl:text>&#xA0; </xsl:text>
                             </fo:block>
@@ -834,7 +834,7 @@
                             </fo:list-item-label>
                             <fo:list-item-body start-indent="body-start()">
                                 <xsl:choose>
-                                    <xsl:when test="illustration/scalar/Composite='1'">
+                                    <xsl:when test="$is_composite">
                                         <fo:block text-align="left" color="white">
                                             <xsl:text>.</xsl:text>
                                         </fo:block>
@@ -863,7 +863,7 @@
             <fo:list-item>
                 <fo:list-item-label end-indent="label-end()">
                     <xsl:choose>
-                        <xsl:when test="illustration/scalar/Composite='1'">
+                        <xsl:when test="$is_composite">
                             <fo:block text-align="left" font-size="9.0pt">
                                 <xsl:text>&#xA0;</xsl:text>
                             </fo:block>
@@ -884,7 +884,7 @@
                             </fo:list-item-label>
                             <fo:list-item-body start-indent="body-start()">
                                 <xsl:choose>
-                                    <xsl:when test="illustration/scalar/Composite='1'">
+                                    <xsl:when test="$is_composite">
                                         <fo:block text-align="left" font-size="9.0pt">
                                             <xsl:text>&#xA0;</xsl:text>
                                         </fo:block>
@@ -920,7 +920,7 @@
                             </fo:list-item-label>
                             <fo:list-item-body start-indent="body-start()">
                                 <xsl:choose>
-                                    <xsl:when test="illustration/scalar/Composite='1'">
+                                    <xsl:when test="$is_composite">
                                         <fo:block text-align="left">
                                             <xsl:text>&#xA0;</xsl:text>
                                         </fo:block>
@@ -961,7 +961,7 @@
                             </fo:list-item-label>
                             <fo:list-item-body start-indent="body-start()">
                                 <xsl:choose>
-                                    <xsl:when test="illustration/scalar/Composite='1'">
+                                    <xsl:when test="$is_composite">
                                         <fo:block text-align="left">
                                             <xsl:text>&#xA0;</xsl:text>
                                         </fo:block>
@@ -1003,7 +1003,7 @@
                     </fo:block>
                 </fo:table-cell>
                 <xsl:choose>
-                    <xsl:when test="illustration/scalar/Composite='1'">
+                    <xsl:when test="$is_composite">
                         <fo:table-cell>
                             <fo:block text-align="right">&#xA0;</fo:block>
                         </fo:table-cell>
@@ -1092,7 +1092,7 @@
                     </fo:block>
                 </fo:table-cell>
                 <xsl:choose>
-                    <xsl:when test="illustration/scalar/Composite='1'">
+                    <xsl:when test="$is_composite">
                         <fo:table-cell>
                             <fo:block text-align="right">&#xA0;</fo:block>
                         </fo:table-cell>
@@ -1181,7 +1181,7 @@
                     </fo:block>
                 </fo:table-cell>
                 <xsl:choose>
-                    <xsl:when test="illustration/scalar/Composite='1'">
+                    <xsl:when test="$is_composite">
                         <fo:table-cell>
                             <fo:block text-align="right">&#xA0;</fo:block>
                         </fo:table-cell>
@@ -1303,7 +1303,7 @@
                                 <fo:block text-align="right"> &#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0; Year</fo:block>
                             </fo:table-cell>
                             <xsl:choose>
-                                <xsl:when test="illustration/scalar/Composite='1'">
+                                <xsl:when test="$is_composite">
                                     <fo:table-cell border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue" padding="0pt">
                                         <fo:block text-align="right"></fo:block>
                                     </fo:table-cell>
@@ -1412,7 +1412,7 @@
                                 <fo:block text-align="right"> &#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0; Year</fo:block>
                             </fo:table-cell>
                             <xsl:choose>
-                                <xsl:when test="illustration/scalar/Composite='1'">
+                                <xsl:when test="$is_composite">
                                     <fo:table-cell border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue" padding="0pt">
                                         <fo:block text-align="right"></fo:block>
                                     </fo:table-cell>
@@ -1504,7 +1504,7 @@
                                 <fo:block text-align="right"> &#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0; Year</fo:block>
                             </fo:table-cell>
                             <xsl:choose>
-                                <xsl:when test="illustration/scalar/Composite='1'">
+                                <xsl:when test="$is_composite">
                                     <fo:table-cell border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue" padding="0pt">
                                         <fo:block text-align="right"></fo:block>
                                     </fo:table-cell>

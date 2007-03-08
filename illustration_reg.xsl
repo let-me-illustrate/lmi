@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: illustration_reg.xsl,v 1.6.2.5 2007-03-07 18:57:13 etarassov Exp $
+    $Id: illustration_reg.xsl,v 1.6.2.6 2007-03-08 00:26:38 etarassov Exp $
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fo="http://www.w3.org/1999/XSL/Format">
     <xsl:include href="xsl_fo_common.xsl" />
@@ -419,7 +419,7 @@ No cover page for this style sheet
                         <fo:block>
                             <fo:leader></fo:leader>
                         </fo:block>
-                        <xsl:if test="illustration/scalar/Composite='1'">
+                        <xsl:if test="$is_composite">
                             <fo:block>
                                 <xsl:text>Please see the attached census, listing the face amounts, underwriting classes and issue ages for individual participants.</xsl:text>
                             </fo:block>
@@ -743,7 +743,7 @@ No cover page for this style sheet
                     <fo:block font-size="9.0pt" font-family="serif">
                         <fo:table table-layout="fixed" width="100%">
                             <fo:table-column column-width="proportional-column-width(1)"/>
-                            <xsl:if test="illustration/scalar/Composite!='1'">
+                            <xsl:if test="not($is_composite)">
                                 <fo:table-column column-width="proportional-column-width(1)"/>
                             </xsl:if>
                             <fo:table-column column-width="proportional-column-width(1)"/>
@@ -757,7 +757,7 @@ No cover page for this style sheet
                             <fo:table-header>
                                 <fo:table-row>
                                     <xsl:choose>
-                                        <xsl:when test="illustration/scalar/Composite!='1'">
+                                        <xsl:when test="not($is_composite)">
                                             <fo:table-cell number-columns-spanned="4" padding="0pt"></fo:table-cell>
                                         </xsl:when>
                                         <xsl:otherwise>
@@ -775,7 +775,7 @@ No cover page for this style sheet
                                     <fo:table-cell border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue" padding="2pt">
                                         <fo:block text-align="right">Policy &#xA0;&#xA0;&#xA0;&#xA0;&#xA0;Year</fo:block>
                                     </fo:table-cell>
-                                    <xsl:if test="illustration/scalar/Composite!='1'">
+                                    <xsl:if test="not($is_composite)">
                                         <fo:table-cell border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue" padding="2pt">
                                             <fo:block text-align="right">EOY
                                                 <fo:block></fo:block>Age</fo:block>
@@ -865,7 +865,7 @@ No cover page for this style sheet
                     <fo:block font-size="9.0pt" font-family="serif">
                         <fo:table table-layout="fixed" width="100%">
                             <fo:table-column column-width="proportional-column-width(1)"/>
-                            <xsl:if test="illustration/scalar/Composite!='1'">
+                            <xsl:if test="not($is_composite)">
                                 <fo:table-column column-width="proportional-column-width(1)"/>
                             </xsl:if>
                             <fo:table-column column-width="1.2in"/>
@@ -873,7 +873,7 @@ No cover page for this style sheet
                             <fo:table-column column-width="proportional-column-width(1)"/>
                             <fo:table-column column-width="proportional-column-width(1)"/>
                             <fo:table-column column-width="proportional-column-width(1)"/>
-                            <xsl:if test="illustration/scalar/Composite!='1'">
+                            <xsl:if test="not($is_composite)">
                                 <fo:table-column column-width="proportional-column-width(1)"/>
                             </xsl:if>
                             <fo:table-header>
@@ -882,7 +882,7 @@ No cover page for this style sheet
                                         <fo:block text-align="right">Policy
                                             <fo:block></fo:block>Year</fo:block>
                                     </fo:table-cell>
-                                    <xsl:if test="illustration/scalar/Composite!='1'">
+                                    <xsl:if test="not($is_composite)">
                                         <fo:table-cell border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue" padding="2pt">
                                             <fo:block text-align="right">EOY
                                                 <fo:block></fo:block>Age</fo:block>
@@ -903,7 +903,7 @@ No cover page for this style sheet
                                     <fo:table-cell border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue" padding="2pt">
                                         <fo:block text-align="right"></fo:block>
                                     </fo:table-cell>
-                                    <xsl:if test="illustration/scalar/Composite!='1'">
+                                    <xsl:if test="not($is_composite)">
                                         <fo:table-cell border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue" padding="2pt">
                                             <fo:block text-align="right">Annual Flat Extra per $1,000</fo:block>
                                         </fo:table-cell>
@@ -1109,7 +1109,7 @@ No cover page for this style sheet
             <fo:list-item>
                 <fo:list-item-label end-indent="label-end()">
                     <xsl:choose>
-                        <xsl:when test="illustration/scalar/Composite='1'">
+                        <xsl:when test="$is_composite">
                             <fo:block text-align="left" font-size="9.0pt">
                                 <xsl:text>&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;Composite Illustration</xsl:text>
                             </fo:block>
@@ -1150,7 +1150,7 @@ No cover page for this style sheet
             <fo:list-item>
                 <fo:list-item-label end-indent="label-end()">
                     <xsl:choose>
-                        <xsl:when test="illustration/scalar/Composite='1'">
+                        <xsl:when test="$is_composite">
                             <fo:block text-align="left" font-size="9.0pt" color="white">
                                 <xsl:text>.</xsl:text>
                             </fo:block>
@@ -1254,7 +1254,7 @@ No cover page for this style sheet
                             IF(AND(State="TX",UWType="Guaranteed issue"),"Substandard *",UWType))) -->
                             <fo:list-item-body start-indent="body-start()">
                                 <xsl:choose>
-                                    <xsl:when test="illustration/scalar/Composite='1'">
+                                    <xsl:when test="$is_composite">
                                         <fo:block text-align="left" color="white">
                                             <xsl:text>.</xsl:text>
                                         </fo:block>
@@ -1302,7 +1302,7 @@ No cover page for this style sheet
             <fo:list-item>
                 <fo:list-item-label end-indent="label-end()">
                     <xsl:choose>
-                        <xsl:when test="illustration/scalar/Composite='1'">
+                        <xsl:when test="$is_composite">
                             <fo:block text-align="left" color="white">
                                 <xsl:text>.</xsl:text>
                             </fo:block>
@@ -1323,7 +1323,7 @@ No cover page for this style sheet
                             </fo:list-item-label>
                             <fo:list-item-body start-indent="body-start()">
                                 <xsl:choose>
-                                    <xsl:when test="illustration/scalar/Composite='1'">
+                                    <xsl:when test="$is_composite">
                                         <fo:block text-align="left" color="white">
                                             <xsl:text>.</xsl:text>
                                         </fo:block>
@@ -1584,7 +1584,7 @@ No cover page for this style sheet
                             <xsl:with-param name="counter" select="5"/>
                             <xsl:with-param name="age70" select="0"/>
                         </xsl:call-template>
-                        <xsl:if test="illustration/scalar/Composite!='1'">
+                        <xsl:if test="not($is_composite)">
                             <xsl:if test="illustration/scalar/Age &lt; 70">
                                 <fo:table-row>
                                     <fo:table-cell padding="8pt">
@@ -1607,7 +1607,7 @@ No cover page for this style sheet
                 <fo:leader></fo:leader>
             </fo:block>
             <xsl:choose>
-                <xsl:when test="illustration/scalar/Composite!='1'">
+                <xsl:when test="not($is_composite)">
                     <xsl:if test="illustration/scalar/LapseYear_Guaranteed &lt; /illustration/scalar/MaxDuration">
                         <fo:block text-align="left" font-size="9.0pt">
                             <xsl:text>Additional premium will be required in year </xsl:text>
@@ -1745,7 +1745,7 @@ No cover page for this style sheet
                         <xsl:value-of select="illustration/data/newcolumn/column[@name='PolicyYear']/duration[$counter]/@column_value"/>
                     </fo:block>
                 </fo:table-cell>
-                <xsl:if test="illustration/scalar/Composite!='1'">
+                <xsl:if test="not($is_composite)">
                     <fo:table-cell>
                         <fo:block text-align="right">
                             <xsl:value-of select="illustration/data/newcolumn/column[@name='AttainedAge']/duration[$counter]/@column_value"/>
@@ -1816,7 +1816,7 @@ No cover page for this style sheet
                         <xsl:value-of select="illustration/data/newcolumn/column[@name='PolicyYear']/duration[$counter]/@column_value"/>
                     </fo:block>
                 </fo:table-cell>
-                <xsl:if test="illustration/scalar/Composite!='1'">
+                <xsl:if test="not($is_composite)">
                     <fo:table-cell>
                         <fo:block text-align="right">
                             <xsl:value-of select="illustration/data/newcolumn/column[@name='AttainedAge']/duration[$counter]/@column_value"/>
@@ -1846,7 +1846,7 @@ No cover page for this style sheet
                     <fo:block>
                     </fo:block>
                 </fo:table-cell>
-                <xsl:if test="illustration/scalar/Composite!='1'">
+                <xsl:if test="not($is_composite)">
                     <fo:table-cell>
                         <fo:block text-align="right">
                             <xsl:value-of select="illustration/data/newcolumn/column[@name='MonthlyFlatExtra']/duration[$counter]/@column_value"/>

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.587.2.9 2007-03-08 00:15:15 etarassov Exp $
+// $Id: ChangeLog,v 1.587.2.10 2007-03-08 00:26:38 etarassov Exp $
 
 MAINTENANCE
 
@@ -10510,3 +10510,9 @@ from FOP.
 Refactor 'supplemental-illustration-report' and
 'supplemental-illustration-values'.
 
+20070308T0026Z <etarassov@tt-solutions.com> [1254]
+
+  illustration_reg.xsl
+  individual_private_placement.xsl
+  nasd.xsl
+Use '$is_composite'.
