@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: xsl_fo_common.xsl,v 1.1.2.9 2007-03-08 01:52:35 etarassov Exp $
+    $Id: xsl_fo_common.xsl,v 1.1.2.10 2007-03-08 13:23:28 etarassov Exp $
 -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fo="http://www.w3.org/1999/XSL/Format" version="1.0">
     <!--
@@ -89,7 +89,7 @@
         <xsl:param name="columns"/>
         <fo:table-row text-align="right">
             <xsl:for-each select="$columns">
-                <fo:table-cell border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue" padding-bottom="2pt" display-align="after">
+                <fo:table-cell border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue" padding-top="4pt" padding-bottom="2pt" display-align="after">
                     <xsl:call-template name="normalize_underscored_name">
                         <xsl:with-param name="text" select="concat(./title, @title, ./text())"/>
                     </xsl:call-template>

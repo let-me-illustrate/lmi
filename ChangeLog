@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.587.2.15 2007-03-08 13:01:14 etarassov Exp $
+// $Id: ChangeLog,v 1.587.2.16 2007-03-08 13:23:28 etarassov Exp $
 
 MAINTENANCE
 
@@ -10545,3 +10545,10 @@ Extract data table generation code.
   individual_private_placement.xsl
 Refactor 'irr-guaranteed-illustration-report' and
 'irr-guaranteed-illustration-values'.
+
+20070308T1423Z <etarassov@tt-solutions.com> [1255]
+
+  individual_private_placement.xsl
+  xsl_fo_common.xsl
+Refactor 'irr-current-illustration-report' and
+'irr-current-illustration-values'.
