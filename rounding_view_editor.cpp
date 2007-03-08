@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: rounding_view_editor.cpp,v 1.6 2007-02-23 16:47:17 chicares Exp $
+// $Id: rounding_view_editor.cpp,v 1.7 2007-03-08 01:14:38 chicares Exp $
 
 #include "rounding_view_editor.hpp"
 
@@ -63,7 +63,7 @@ RoundingButtons::RoundingButtons
     ,const wxPoint& pos
     ,const wxSize& size
     ,long style
-    ,const wxString& name
+    ,const std::string& name
     )
     :wxPanel()
     ,original_rule_(0, r_not_at_all)
@@ -77,7 +77,7 @@ void RoundingButtons::Create
     ,const wxPoint& pos
     ,const wxSize& size
     ,long style
-    ,const wxString& name
+    ,const std::string& name
     )
 {
     wxPanel::Create(parent, id, pos, size, style, name);

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: tier_view_editor.hpp,v 1.8 2007-02-27 00:03:30 chicares Exp $
+// $Id: tier_view_editor.hpp,v 1.9 2007-03-08 01:14:38 chicares Exp $
 
 #ifndef tier_view_editor_hpp
 #define tier_view_editor_hpp
@@ -198,14 +198,14 @@ class MultiDimTableTypeTraits<double_pair>
 
   public:
     /// Convert value respresented by a string into ValueType.
-    double_pair FromString(wxString const&) const
+    double_pair FromString(std::string const&) const
     {
         fail();
         return double_pair(0, 0);
     }
 
     /// Create a string representation of a value
-    wxString ToString(double_pair const&) const
+    std::string ToString(double_pair const&) const
     {
         fail();
         return "";
@@ -350,15 +350,16 @@ class TierEditorGrid
   private:
     double_pair GetDoublePairValue(int row);
 
-    /// We need to show pairs of doubles, therefore we will override
-    /// MultiDimGrid to behave accordingly
-    /// Always show data in pairs (two columns in the grid)
-    virtual int      GetNumberRows();
+    /// Override class MultiDimGrid to show pairs of doubles as two
+    /// columns in the grid.
+
+    // MultiDimGrid overrides.
     virtual int      GetNumberCols();
+    virtual int      GetNumberRows();
     virtual wxString GetValue(int row, int col);
     virtual void     SetValue(int row, int col, wxString const& str);
-    virtual wxString GetRowLabelValue(int row);
     virtual wxString GetColLabelValue(int col);
+    virtual wxString GetRowLabelValue(int row);
 
     void CheckRowAndCol(int row, int col) const;
 };
