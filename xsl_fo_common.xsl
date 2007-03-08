@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: xsl_fo_common.xsl,v 1.1.2.11 2007-03-08 14:16:57 etarassov Exp $
+    $Id: xsl_fo_common.xsl,v 1.1.2.12 2007-03-08 17:23:14 etarassov Exp $
 -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fo="http://www.w3.org/1999/XSL/Format" version="1.0">
     <!--
@@ -50,6 +50,9 @@
     <xsl:variable name="NUMBERS_WITHOUT_COMMA">0123456789</xsl:variable>
     <xsl:variable name="NUMBERS_WITH_COMMA">0123456789,</xsl:variable>
     <xsl:variable name="NUMBERS_FORMATTING_STRING">###,###,###</xsl:variable>
+
+    <xsl:variable name="LOWER_CASE_LETTERS">abcdefghijklmnopqrstuvwxyz</xsl:variable>
+    <xsl:variable name="UPPER_CASE_LETTERS">ABCDEFGHIJKLMNOPQRSTUVWXYZ</xsl:variable>
 
     <xsl:template name="normalize_underscored_name">
         <xsl:param name="text"/>

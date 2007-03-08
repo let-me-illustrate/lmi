@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: illustration_reg.xsl,v 1.6.2.7 2007-03-08 17:21:41 etarassov Exp $
+    $Id: illustration_reg.xsl,v 1.6.2.8 2007-03-08 17:23:14 etarassov Exp $
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fo="http://www.w3.org/1999/XSL/Format">
     <xsl:include href="xsl_fo_common.xsl" />
@@ -225,7 +225,7 @@ No cover page for this style sheet
                             <xsl:if test="illustration/data/newcolumn/column[@name='ErMode']/duration[1]/@column_value='Annual'">
                                 <xsl:text>n </xsl:text>
                             </xsl:if>
-                            <xsl:value-of select="translate(illustration/data/newcolumn/column[@name='ErMode']/duration[1]/@column_value,$ucletters,$lcletters)"/>
+                            <xsl:value-of select="translate(illustration/data/newcolumn/column[@name='ErMode']/duration[1]/@column_value,$UPPER_CASE_LETTERS,$LOWER_CASE_LETTERS)"/>
                             <xsl:text> basis and received at the beginning of the contract year. </xsl:text>
                             <xsl:value-of select="illustration/scalar/AvName"/>
                             <xsl:text> Values, </xsl:text>
@@ -243,7 +243,7 @@ No cover page for this style sheet
                                 <xsl:text>n</xsl:text>
                             </xsl:if>
                             <xsl:text> </xsl:text>
-                            <xsl:value-of select="translate(illustration/data/newcolumn/column[@name='ErMode']/duration[1]/@column_value,$ucletters,$lcletters)"/>
+                            <xsl:value-of select="translate(illustration/data/newcolumn/column[@name='ErMode']/duration[1]/@column_value,$UPPER_CASE_LETTERS,$LOWER_CASE_LETTERS)"/>
                             <xsl:text> premium</xsl:text>
                             <xsl:choose>
                                 <xsl:when test="illustration/scalar/GuarPrem!='0'">

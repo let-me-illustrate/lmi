@@ -21,14 +21,12 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: individual_private_placement.xsl,v 1.6.2.10 2007-03-08 14:16:57 etarassov Exp $
+    $Id: individual_private_placement.xsl,v 1.6.2.11 2007-03-08 17:23:14 etarassov Exp $
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fo="http://www.w3.org/1999/XSL/Format">
     <xsl:include href="xsl_fo_common.xsl" />
     <xsl:output method="xml" encoding="UTF-8" indent="yes"/>
     <xsl:variable name="counter" select="1"/>
-    <xsl:variable name="lcletters">abcdefghijklmnopqrstuvwxyz</xsl:variable>
-    <xsl:variable name="ucletters">ABCDEFGHIJKLMNOPQRSTUVWXYZ</xsl:variable>
     <xsl:template match="/">
         <fo:root>
             <fo:layout-master-set>
@@ -491,7 +489,7 @@
                             <xsl:if test="illustration/data/newcolumn/column[@name='ErMode']/duration[1]/@column_value='Annual'">
                                 <xsl:text>n </xsl:text>
                             </xsl:if>
-                            <xsl:value-of select="translate(illustration/data/newcolumn/column[@name='ErMode']/duration[1]/@column_value,$ucletters,$lcletters)"/>
+                            <xsl:value-of select="translate(illustration/data/newcolumn/column[@name='ErMode']/duration[1]/@column_value,$UPPER_CASE_LETTERS,$LOWER_CASE_LETTERS)"/>
                             <xsl:text> basis and received at the beginning of the contract year. Age, account values, cash surrender values and death benefits are illustrated as of the end of the contract year.</xsl:text>
                         </fo:block>
                         <fo:block>
