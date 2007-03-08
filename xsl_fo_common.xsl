@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: xsl_fo_common.xsl,v 1.1.2.7 2007-03-07 18:57:13 etarassov Exp $
+    $Id: xsl_fo_common.xsl,v 1.1.2.8 2007-03-08 00:57:27 etarassov Exp $
 -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fo="http://www.w3.org/1999/XSL/Format" version="1.0">
     <!--
@@ -76,7 +76,14 @@
             <fo:block font-size="9.0pt" font-family="serif">
                 <fo:table table-layout="fixed" width="100%">
                     <xsl:for-each select="$supplemental_report/columns">
-                        <fo:table-column column-width="proportional-column-width(1)"/>
+                        <xsl:choose>
+                            <xsl:when test="string(./title)">
+                                <fo:table-column column-width="proportional-column-width(5)"/>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <fo:table-column column-width="proportional-column-width(1)"/>
+                            </xsl:otherwise>
+                        </xsl:choose>
                     </xsl:for-each>
                     <fo:table-header>
                         <fo:table-row>
@@ -97,6 +104,7 @@
                     <!-- Create Supplemental Report Values -->
                     <fo:table-body>
                         <xsl:call-template name="supplemental-report-values">
+                            <xsl:with-param name="columns" select="$supplemental_report/columns"/>
                             <xsl:with-param name="counter" select="1"/>
                         </xsl:call-template>
                     </fo:table-body>
@@ -110,27 +118,25 @@
 
     <!-- Create Supplemental Report Values -->
     <xsl:template name="supplemental-report-values">
+        <xsl:param name="columns"/>
         <xsl:param name="counter"/>
-        <xsl:if test="illustration/data/newcolumn/column[1]/duration[$counter]/@column_value!='0'">
+        <xsl:if test="$illustration/data/newcolumn/column[1]/duration[$counter]/@column_value!='0'">
             <fo:table-row>
-                <xsl:for-each select="$supplemental_report/columns">
+                <xsl:for-each select="$columns">
                     <xsl:variable name="column_name" select="string(./name)"/>
-                    <fo:table-cell padding=".2pt">
+                    <fo:table-cell padding-top="1.2pt">
+                        <!-- Add some space if it the first row and some space after each 5th year -->
+                        <xsl:if test="$counter mod 5=0">
+                            <xsl:attribute name="padding-bottom">8pt</xsl:attribute>
+                        </xsl:if>
                         <fo:block text-align="right">
-                            <xsl:value-of select="/illustration/data/newcolumn/column[@name=$column_name]/duration[$counter]/@column_value"/>
+                            <xsl:value-of select="$illustration/data/newcolumn/column[@name=$column_name]/duration[$counter]/@column_value"/>
                         </fo:block>
                     </fo:table-cell>
                 </xsl:for-each>
             </fo:table-row>
-            <!-- Blank Row Every 5th Year -->
-            <xsl:if test="$counter mod 5=0">
-                <fo:table-row>
-                    <fo:table-cell padding="4pt">
-                        <fo:block text-align="right"/>
-                    </fo:table-cell>
-                </fo:table-row>
-            </xsl:if>
             <xsl:call-template name="supplemental-report-values">
+                <xsl:with-param name="columns" select="$columns"/>
                 <xsl:with-param name="counter" select="$counter + 1"/>
             </xsl:call-template>
         </xsl:if>
