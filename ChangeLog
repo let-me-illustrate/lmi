@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.587.2.13 2007-03-08 00:57:27 etarassov Exp $
+// $Id: ChangeLog,v 1.587.2.14 2007-03-08 01:52:35 etarassov Exp $
 
 MAINTENANCE
 
@@ -10533,3 +10533,9 @@ Unificate some paddings for data tables.
   xsl_fo_common.xsl
 Refactor more 'supplemental-report-body' and
 'supplemental-report-values'.
+
+20070308T0152Z <etarassov@tt-solutions.com> [1255]
+
+  nasd.xsl
+  xsl_fo_common.xsl
+Extract data table generation code.

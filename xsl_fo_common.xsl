@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: xsl_fo_common.xsl,v 1.1.2.8 2007-03-08 00:57:27 etarassov Exp $
+    $Id: xsl_fo_common.xsl,v 1.1.2.9 2007-03-08 01:52:35 etarassov Exp $
 -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fo="http://www.w3.org/1999/XSL/Format" version="1.0">
     <!--
@@ -69,43 +69,99 @@
         </xsl:choose>
     </xsl:template>
 
-    <!-- Create Supplemental Report Body -->
-    <!-- Calls supplemental-report-values template to generate data part -->
+    <!-- Generic template that generates data table column definitions -->
+    <xsl:template name="data-table-columns">
+        <xsl:param name="columns"/>
+        <xsl:for-each select="$columns">
+            <xsl:choose>
+                <xsl:when test="@name or (name and (name/text()!='[none]')) or @scalar">
+                    <fo:table-column column-width="proportional-column-width(1)"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <fo:table-column column-width="proportional-column-width(.2)"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:for-each>
+    </xsl:template>
+
+    <!-- Generic template that generates table header row (just above the data cells) -->
+    <xsl:template name="data-table-headers">
+        <xsl:param name="columns"/>
+        <fo:table-row text-align="right">
+            <xsl:for-each select="$columns">
+                <fo:table-cell border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue" padding-bottom="2pt" display-align="after">
+                    <xsl:call-template name="normalize_underscored_name">
+                        <xsl:with-param name="text" select="concat(./title, @title, ./text())"/>
+                    </xsl:call-template>
+                </fo:table-cell>
+            </xsl:for-each>
+        </fo:table-row>
+        <!-- TODO ?? Force header margin using some other trick... -->
+        <fo:table-row>
+            <fo:table-cell padding="2pt">
+                <fo:block/>
+            </fo:table-cell>
+        </fo:table-row>
+    </xsl:template>
+
+    <!-- Generic template that generates the actual data in the table -->
+    <xsl:template name="data-table-data">
+        <xsl:param name="columns"/>
+        <xsl:param name="counter" select="1"/>
+        <xsl:param name="control_column_name" select="'PolicyYear'"/>
+        <xsl:if test="/illustration/data/newcolumn/column[@name=$control_column_name]/duration[$counter]/@column_value!='0'">
+            <fo:table-row text-align="right">
+                <xsl:for-each select="$columns">
+                    <fo:table-cell padding-top="1.2pt">
+                        <!-- Add some space if it the first row and some space after each 5th year -->
+                        <xsl:if test="$counter mod 5=0">
+                            <xsl:attribute name="padding-bottom">8pt</xsl:attribute>
+                        </xsl:if>
+                        <fo:block>
+                            <xsl:choose>
+                                <xsl:when test="@name or ./name">
+                                    <xsl:variable name="column_name" select="concat(@name, ./name)"/>
+                                    <xsl:value-of select="$illustration/data/newcolumn/column[@name=$column_name]/duration[$counter]/@column_value"/>
+                                </xsl:when>
+                                <xsl:when test="@scalar">
+                                    <xsl:variable name="scalar_name" select="@scalar"/>
+<!--
+    TODO ?? Temporary workaround. Retrieve the scalar value by its element name too.
+    Exactly as for columns of data.
+    Note that 'InitAnnLoanDueRate' is hardcoded!
+-->
+                                    <xsl:value-of select="$illustration/scalar/InitAnnLoanDueRate"/>
+                                </xsl:when>
+                            </xsl:choose>
+                        </fo:block>
+                    </fo:table-cell>
+                </xsl:for-each>
+            </fo:table-row>
+            <xsl:call-template name="data-table-data">
+                <xsl:with-param name="columns" select="$columns"/>
+                <xsl:with-param name="control_column_name" select="$control_column_name"/>
+                <xsl:with-param name="counter" select="$counter + 1"/>
+            </xsl:call-template>
+        </xsl:if>
+    </xsl:template>
+
+    <!-- Create Supplemental Report -->
     <xsl:template name="supplemental-report-body">
+        <xsl:variable name="columns" select="$supplemental_report/columns"/>
         <fo:flow flow-name="xsl-region-body">
             <fo:block font-size="9.0pt" font-family="serif">
                 <fo:table table-layout="fixed" width="100%">
-                    <xsl:for-each select="$supplemental_report/columns">
-                        <xsl:choose>
-                            <xsl:when test="string(./title)">
-                                <fo:table-column column-width="proportional-column-width(5)"/>
-                            </xsl:when>
-                            <xsl:otherwise>
-                                <fo:table-column column-width="proportional-column-width(1)"/>
-                            </xsl:otherwise>
-                        </xsl:choose>
-                    </xsl:for-each>
+                    <xsl:call-template name="data-table-columns">
+                        <xsl:with-param name="columns" select="$columns"/>
+                    </xsl:call-template>
                     <fo:table-header>
-                        <fo:table-row>
-                            <xsl:for-each select="$supplemental_report/columns">
-                                <fo:table-cell border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue" padding="2pt" display-align="after" text-align="right">
-                                    <xsl:call-template name="normalize_underscored_name">
-                                        <xsl:with-param name="text" select="./title"/>
-                                    </xsl:call-template>
-                                </fo:table-cell>
-                            </xsl:for-each>
-                        </fo:table-row>
-                        <fo:table-row>
-                            <fo:table-cell padding="2pt">
-                                <fo:block/>
-                            </fo:table-cell>
-                        </fo:table-row>
+                        <xsl:call-template name="data-table-headers">
+                            <xsl:with-param name="columns" select="$columns"/>
+                        </xsl:call-template>
                     </fo:table-header>
-                    <!-- Create Supplemental Report Values -->
                     <fo:table-body>
-                        <xsl:call-template name="supplemental-report-values">
-                            <xsl:with-param name="columns" select="$supplemental_report/columns"/>
-                            <xsl:with-param name="counter" select="1"/>
+                        <xsl:call-template name="data-table-data">
+                            <xsl:with-param name="columns" select="$columns"/>
                         </xsl:call-template>
                     </fo:table-body>
                 </fo:table>
@@ -114,32 +170,6 @@
                 <fo:block id="endofdoc"/>
             </xsl:if>
         </fo:flow>
-    </xsl:template>
-
-    <!-- Create Supplemental Report Values -->
-    <xsl:template name="supplemental-report-values">
-        <xsl:param name="columns"/>
-        <xsl:param name="counter"/>
-        <xsl:if test="$illustration/data/newcolumn/column[1]/duration[$counter]/@column_value!='0'">
-            <fo:table-row>
-                <xsl:for-each select="$columns">
-                    <xsl:variable name="column_name" select="string(./name)"/>
-                    <fo:table-cell padding-top="1.2pt">
-                        <!-- Add some space if it the first row and some space after each 5th year -->
-                        <xsl:if test="$counter mod 5=0">
-                            <xsl:attribute name="padding-bottom">8pt</xsl:attribute>
-                        </xsl:if>
-                        <fo:block text-align="right">
-                            <xsl:value-of select="$illustration/data/newcolumn/column[@name=$column_name]/duration[$counter]/@column_value"/>
-                        </fo:block>
-                    </fo:table-cell>
-                </xsl:for-each>
-            </fo:table-row>
-            <xsl:call-template name="supplemental-report-values">
-                <xsl:with-param name="columns" select="$columns"/>
-                <xsl:with-param name="counter" select="$counter + 1"/>
-            </xsl:call-template>
-        </xsl:if>
     </xsl:template>
 
     <!-- Print Dollar Units -->

@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: nasd.xsl,v 1.6.2.10 2007-03-08 00:44:46 etarassov Exp $
+    $Id: nasd.xsl,v 1.6.2.11 2007-03-08 01:52:35 etarassov Exp $
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fo="http://www.w3.org/1999/XSL/Format">
     <xsl:include href="xsl_fo_common.xsl" />
@@ -884,108 +884,6 @@ No cover page for this style sheet
             </fo:list-item>
         </fo:list-block>
     </xsl:template>
-    <!-- Create Basic Illustration Values -->
-    <xsl:template name="basic-illustration-values">
-        <xsl:param name="counter"/>
-        <xsl:param name="columns"/>
-        <xsl:if test="illustration/data/newcolumn/column[@name='PolicyYear']/duration[$counter]/@column_value!='0'">
-            <fo:table-row>
-                <xsl:for-each select="$columns">
-                    <fo:table-cell padding-top="1.2pt">
-                        <!-- Add some space if it the first row and some space after each 5th year -->
-                        <xsl:if test="$counter mod 5=0">
-                            <xsl:attribute name="padding-bottom">8pt</xsl:attribute>
-                        </xsl:if>
-                        <fo:block text-align="right">
-                            <xsl:choose>
-                                <xsl:when test="boolean(@name)">
-                                    <xsl:variable name="column_name" select="string(@name)"/>
-                                    <xsl:value-of select="$illustration/data/newcolumn/column[@name=$column_name]/duration[$counter]/@column_value"/>
-                                </xsl:when>
-                                <xsl:otherwise>
-                                    &#xA0;
-                                </xsl:otherwise>
-                            </xsl:choose>
-                        </fo:block>
-                    </fo:table-cell>
-                </xsl:for-each>
-            </fo:table-row>
-            <xsl:call-template name="basic-illustration-values">
-                <xsl:with-param name="counter" select="$counter + 1"/>
-                <xsl:with-param name="columns" select="$columns"/>
-            </xsl:call-template>
-        </xsl:if>
-    </xsl:template>
-
-    <!-- Create Supplemental Illustration Values -->
-    <xsl:template name="supplemental-illustration-values">
-        <xsl:param name="columns"/>
-        <xsl:param name="counter"/>
-        <xsl:if test="/illustration/data/newcolumn/column[@name='PolicyYear']/duration[$counter]/@column_value!='0'">
-            <fo:table-row>
-                <xsl:for-each select="$columns">
-                    <fo:table-cell padding="1.2pt">
-                        <!-- Add some space if it the first row and some space after each 5th year -->
-                        <xsl:if test="$counter mod 5=0">
-                            <xsl:attribute name="padding-bottom">8pt</xsl:attribute>
-                        </xsl:if>
-                        <fo:block text-align="right">
-                            <xsl:choose>
-                                <xsl:when test="@name">
-                                    <xsl:variable name="column_name" select="@name" />
-                                    <xsl:value-of select="$illustration/data/newcolumn/column[@name=$column_name]/duration[$counter]/@column_value"/>
-                                </xsl:when>
-                            </xsl:choose>
-                        </fo:block>
-                    </fo:table-cell>
-                </xsl:for-each>
-            </fo:table-row>
-            <xsl:call-template name="supplemental-illustration-values">
-                <xsl:with-param name="columns" select="$columns"/>
-                <xsl:with-param name="counter" select="$counter + 1"/>
-            </xsl:call-template>
-        </xsl:if>
-    </xsl:template>
-
-    <!-- Create Illustration Assumption Detail Values -->
-    <xsl:template name="illustration-assumption-values">
-        <xsl:param name="columns"/>
-        <xsl:param name="counter"/>
-        <xsl:if test="/illustration/data/newcolumn/column[@name='PolicyYear']/duration[$counter]/@column_value!='0'">
-            <fo:table-row>
-                <xsl:for-each select="$columns">
-                    <fo:table-cell padding-top="1.2pt">
-                        <!-- Add some space if it the first row and some space after each 5th year -->
-                        <xsl:if test="$counter mod 5=0">
-                            <xsl:attribute name="padding-bottom">8pt</xsl:attribute>
-                        </xsl:if>
-
-                        <fo:block text-align="right">
-                            <xsl:choose>
-                                <xsl:when test="@name">
-                                    <xsl:variable name="column_name" select="@name" />
-                                    <xsl:value-of select="$illustration/data/newcolumn/column[@name=$column_name]/duration[$counter]/@column_value"/>
-                                </xsl:when>
-                                <xsl:when test="@scalar">
-                                    <xsl:variable name="scalar_name" select="@scalar" />
-<!--
-    TODO ?? Temporary workaround. Retrieve the scalar value by its element name too.
-    Exactly as for columns of data.
-    Note that 'InitAnnLoanDueRate' is hardcoded.
--->
-                                    <xsl:value-of select="$illustration/scalar/InitAnnLoanDueRate"/>
-                                </xsl:when>
-                            </xsl:choose>
-                        </fo:block>
-                    </fo:table-cell>
-                </xsl:for-each>
-            </fo:table-row>
-            <xsl:call-template name="illustration-assumption-values">
-                <xsl:with-param name="columns" select="$columns"/>
-                <xsl:with-param name="counter" select="$counter + 1"/>
-            </xsl:call-template>
-        </xsl:if>
-    </xsl:template>
 
     <!-- Create Basic Illustration Report -->
     <xsl:template name="basic-illustration-report">
@@ -1023,91 +921,77 @@ No cover page for this style sheet
         <fo:flow flow-name="xsl-region-body">
             <fo:block font-size="9.0pt" font-family="serif">
                 <fo:table table-layout="fixed" width="100%">
-                    <xsl:for-each select="$columns">
-                        <fo:table-column column-width="proportional-column-width(1)"/>
-                    </xsl:for-each>
+                    <xsl:call-template name="data-table-columns">
+                        <xsl:with-param name="columns" select="$columns"/>
+                    </xsl:call-template>
                     <fo:table-header>
-                        <fo:table-row>
+                        <fo:table-row text-align="center">
                             <fo:table-cell number-columns-spanned="3" padding="0pt">
                                 <fo:block/>
                             </fo:table-cell>
                             <fo:table-cell number-columns-spanned="4" padding="0pt" border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue">
-                                <fo:block text-align="center">Using guaranteed charges</fo:block>
+                                <fo:block>Using guaranteed charges</fo:block>
                             </fo:table-cell>
                             <fo:table-cell number-columns-spanned="4" padding="0pt" border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue">
                                 <fo:block text-align="center">Using current charges</fo:block>
                             </fo:table-cell>
                         </fo:table-row>
-                        <fo:table-row>
-                            <fo:table-cell padding="2pt">
-                                <fo:block text-align="right"></fo:block>
-                            </fo:table-cell>
-                        </fo:table-row>
-                        <fo:table-row>
+                        <fo:table-row text-align="center">
                             <fo:table-cell number-columns-spanned="3" padding="0pt">
                                 <fo:block/>
                             </fo:table-cell>
-                            <fo:table-cell number-columns-spanned="2" padding="0pt">
-                                <fo:block text-align="right">Gross / Net</fo:block>
+                            <fo:table-cell number-columns-spanned="2" padding-top="4pt">
+                                <fo:block>Gross / Net</fo:block>
                             </fo:table-cell>
-                            <fo:table-cell number-columns-spanned="2" padding="0pt">
-                                <fo:block text-align="right">Gross / Net</fo:block>
+                            <fo:table-cell number-columns-spanned="2" padding-top="4pt">
+                                <fo:block>Gross / Net</fo:block>
                             </fo:table-cell>
-                            <fo:table-cell number-columns-spanned="2" padding="0pt">
-                                <fo:block text-align="right">Gross / Net</fo:block>
+                            <fo:table-cell number-columns-spanned="2" padding-top="4pt">
+                                <fo:block>Gross / Net</fo:block>
                             </fo:table-cell>
-                            <fo:table-cell number-columns-spanned="2" padding="0pt">
-                                <fo:block text-align="right">Gross / Net</fo:block>
+                            <fo:table-cell number-columns-spanned="2" padding-top="4pt">
+                                <fo:block>Gross / Net</fo:block>
                             </fo:table-cell>
                         </fo:table-row>
-                        <fo:table-row>
-                            <fo:table-cell number-columns-spanned="3" padding="0pt">
+                        <fo:table-row text-align="center">
+                            <fo:table-cell number-columns-spanned="3">
                                 <fo:block/>
                             </fo:table-cell>
-                            <fo:table-cell number-columns-spanned="2" padding="0pt">
-                                <fo:block text-align="right">
+                            <fo:table-cell number-columns-spanned="2">
+                                <fo:block>
                                     <xsl:value-of select="illustration/scalar/InitAnnSepAcctGrossInt_GuaranteedZero"/>
                                     <xsl:text> / </xsl:text>
                                     <xsl:value-of select="illustration/scalar/InitAnnSepAcctNetInt_GuaranteedZero"/>
                                 </fo:block>
                             </fo:table-cell>
-                            <fo:table-cell number-columns-spanned="2" padding="0pt">
-                                <fo:block text-align="right">
+                            <fo:table-cell number-columns-spanned="2">
+                                <fo:block>
                                     <xsl:value-of select="illustration/scalar/InitAnnSepAcctGrossInt_Guaranteed"/>
                                     <xsl:text> / </xsl:text>
                                     <xsl:value-of select="illustration/scalar/InitAnnSepAcctNetInt_Guaranteed"/>
                                 </fo:block>
                             </fo:table-cell>
-                            <fo:table-cell number-columns-spanned="2" padding="0pt">
-                                <fo:block text-align="right">
+                            <fo:table-cell number-columns-spanned="2">
+                                <fo:block>
                                     <xsl:value-of select="illustration/scalar/InitAnnSepAcctGrossInt_CurrentZero"/>
                                     <xsl:text> / </xsl:text>
                                     <xsl:value-of select="illustration/scalar/InitAnnSepAcctNetInt_CurrentZero"/>
                                 </fo:block>
                             </fo:table-cell>
-                            <fo:table-cell number-columns-spanned="2" padding="0pt">
-                                <fo:block text-align="right">
+                            <fo:table-cell number-columns-spanned="2">
+                                <fo:block>
                                     <xsl:value-of select="illustration/scalar/InitAnnSepAcctGrossInt_Current"/>
                                     <xsl:text> / </xsl:text>
                                     <xsl:value-of select="illustration/scalar/InitAnnSepAcctNetInt_Current"/>
                                 </fo:block>
                             </fo:table-cell>
                         </fo:table-row>
-                        <fo:table-row text-align="right">
-                            <xsl:for-each select="$columns">
-                                <fo:table-cell border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue" padding="0pt">
-                                    <xsl:call-template name="normalize_underscored_name">
-                                        <xsl:with-param name="text" select="string(.)" />
-                                    </xsl:call-template>
-                                </fo:table-cell>
-                            </xsl:for-each>
-                        </fo:table-row>
+                        <xsl:call-template name="data-table-headers">
+                            <xsl:with-param name="columns" select="$columns"/>
+                        </xsl:call-template>
                     </fo:table-header>
-
-                    <!-- Create Basic Illustration Values -->
                     <fo:table-body>
-                        <xsl:call-template name="basic-illustration-values">
-                            <xsl:with-param name="counter" select="1"/>
+                        <xsl:call-template name="data-table-data">
                             <xsl:with-param name="columns" select="$columns"/>
                         </xsl:call-template>
                     </fo:table-body>
@@ -1151,26 +1035,17 @@ No cover page for this style sheet
         <fo:flow flow-name="xsl-region-body">
             <fo:block font-size="9.0pt" font-family="serif">
                 <fo:table table-layout="fixed" width="100%">
-                    <xsl:for-each select="$columns">
-                        <fo:table-column column-width="proportional-column-width(1)"/>
-                    </xsl:for-each>
+                    <xsl:call-template name="data-table-columns">
+                        <xsl:with-param name="columns" select="$columns"/>
+                    </xsl:call-template>
                     <fo:table-header>
-                        <fo:table-row text-align="right">
-                            <xsl:for-each select="$columns">
-                                <fo:table-cell border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue" padding="0pt">
-                                    <xsl:call-template name="normalize_underscored_name">
-                                        <xsl:with-param name="text" select="string(.)" />
-                                    </xsl:call-template>
-                                </fo:table-cell>
-                            </xsl:for-each>
-                        </fo:table-row>
-                    </fo:table-header>
-
-                    <!-- Create Supplemental Illustration Values -->
-                    <fo:table-body>
-                        <xsl:call-template name="supplemental-illustration-values">
+                        <xsl:call-template name="data-table-headers">
                             <xsl:with-param name="columns" select="$columns"/>
-                            <xsl:with-param name="counter" select="1"/>
+                        </xsl:call-template>
+                    </fo:table-header>
+                    <fo:table-body>
+                        <xsl:call-template name="data-table-data">
+                            <xsl:with-param name="columns" select="$columns"/>
                         </xsl:call-template>
                     </fo:table-body>
                 </fo:table>
@@ -1214,27 +1089,17 @@ No cover page for this style sheet
         <fo:flow flow-name="xsl-region-body">
             <fo:block font-size="9pt" font-family="serif">
                 <fo:table table-layout="fixed" width="100%">
-                    <xsl:for-each select="$columns">
-                        <fo:table-column column-width="proportional-column-width(1)"/>
-                    </xsl:for-each>
+                    <xsl:call-template name="data-table-columns">
+                        <xsl:with-param name="columns" select="$columns"/>
+                    </xsl:call-template>
                     <fo:table-header>
-                        <fo:table-row>
-                            <xsl:for-each select="$columns">
-                                <fo:table-cell display-align="after" text-align="right" border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue" padding="0pt">
-                                    <fo:block>
-                                        <xsl:call-template name="normalize_underscored_name">
-                                            <xsl:with-param name="text" select="string(.)" />
-                                        </xsl:call-template>
-                                    </fo:block>
-                                </fo:table-cell>
-                            </xsl:for-each>
-                        </fo:table-row>
-                    </fo:table-header>
-                    <!-- Create Illustration Assumption Detail Values -->
-                    <fo:table-body>
-                        <xsl:call-template name="illustration-assumption-values">
+                        <xsl:call-template name="data-table-headers">
                             <xsl:with-param name="columns" select="$columns"/>
-                            <xsl:with-param name="counter" select="1"/>
+                        </xsl:call-template>
+                    </fo:table-header>
+                    <fo:table-body>
+                        <xsl:call-template name="data-table-data">
+                            <xsl:with-param name="columns" select="$columns"/>
                         </xsl:call-template>
                     </fo:table-body>
                 </fo:table>
@@ -1421,4 +1286,3 @@ No cover page for this style sheet
     </xsl:template>
 
 </xsl:stylesheet>
-
