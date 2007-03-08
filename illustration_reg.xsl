@@ -21,14 +21,12 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: illustration_reg.xsl,v 1.6.2.8 2007-03-08 17:23:14 etarassov Exp $
+    $Id: illustration_reg.xsl,v 1.6.2.9 2007-03-08 21:55:56 etarassov Exp $
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fo="http://www.w3.org/1999/XSL/Format">
     <xsl:include href="xsl_fo_common.xsl" />
     <xsl:output method="xml" encoding="UTF-8" indent="yes"/>
     <xsl:variable name="counter" select="1"/>
-    <xsl:variable name="lcletters">abcdefghijklmnopqrstuvwxyz</xsl:variable>
-    <xsl:variable name="ucletters">ABCDEFGHIJKLMNOPQRSTUVWXYZ</xsl:variable>
     <xsl:template match="/">
         <fo:root>
             <fo:layout-master-set>

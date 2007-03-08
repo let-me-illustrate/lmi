@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.587.2.19 2007-03-08 17:23:14 etarassov Exp $
+// $Id: ChangeLog,v 1.587.2.20 2007-03-08 21:55:55 etarassov Exp $
 
 MAINTENANCE
 
@@ -10571,3 +10571,8 @@ Refactor 'tabular-detail-report' and 'tabular-detail-values'.
   individual_private_placement.xsl
   xsl_fo_common.xsl
 Extract and rename 'lcletters' and 'ucletters'.
+
+20070308T2155Z <etarassov@tt-solutions.com> [1257]
+
+  illustration_reg.xsl
+Remove forgotten 'lcletters' and 'ucletters'.
