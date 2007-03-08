@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: illustration_reg.xsl,v 1.6.2.9 2007-03-08 21:55:56 etarassov Exp $
+    $Id: illustration_reg.xsl,v 1.6.2.10 2007-03-08 23:19:27 etarassov Exp $
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fo="http://www.w3.org/1999/XSL/Format">
     <xsl:include href="xsl_fo_common.xsl" />
@@ -777,81 +777,7 @@ No cover page for this style sheet
                         </xsl:call-template>
                     </fo:block>
                 </fo:static-content>
-                <fo:flow flow-name="xsl-region-body">
-                    <fo:block font-size="9.0pt" font-family="serif">
-                        <fo:table table-layout="fixed" width="100%">
-                            <fo:table-column column-width="proportional-column-width(1)"/>
-                            <xsl:if test="not($is_composite)">
-                                <fo:table-column column-width="proportional-column-width(1)"/>
-                            </xsl:if>
-                            <fo:table-column column-width="1.2in"/>
-                            <fo:table-column column-width="proportional-column-width(1)"/>
-                            <fo:table-column column-width="proportional-column-width(1)"/>
-                            <fo:table-column column-width="proportional-column-width(1)"/>
-                            <fo:table-column column-width="proportional-column-width(1)"/>
-                            <xsl:if test="not($is_composite)">
-                                <fo:table-column column-width="proportional-column-width(1)"/>
-                            </xsl:if>
-                            <fo:table-header>
-                                <fo:table-row>
-                                    <fo:table-cell border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue" padding="2pt">
-                                        <fo:block text-align="right">Policy
-                                            <fo:block></fo:block>Year</fo:block>
-                                    </fo:table-cell>
-                                    <xsl:if test="not($is_composite)">
-                                        <fo:table-cell border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue" padding="2pt">
-                                            <fo:block text-align="right">EOY
-                                                <fo:block></fo:block>Age</fo:block>
-                                        </fo:table-cell>
-                                    </xsl:if>
-                                    <fo:table-cell border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue" padding="2pt">
-                                        <fo:block text-align="right">Illustrated &#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;Crediting Rate</fo:block>
-                                    </fo:table-cell>
-                                    <fo:table-cell border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue" padding="2pt">
-                                        <fo:block text-align="right"></fo:block>
-                                    </fo:table-cell>
-                                    <fo:table-cell border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue" padding="2pt">
-                                        <fo:block space-before="3.5mm" text-align="right">Withdrawal</fo:block>
-                                    </fo:table-cell>
-                                    <fo:table-cell border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue" padding="2pt">
-                                        <fo:block space-before="3.5mm" text-align="right">Loan</fo:block>
-                                    </fo:table-cell>
-                                    <fo:table-cell border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue" padding="2pt">
-                                        <fo:block text-align="right"></fo:block>
-                                    </fo:table-cell>
-                                    <xsl:if test="not($is_composite)">
-                                        <fo:table-cell border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue" padding="2pt">
-                                            <fo:block text-align="right">Annual Flat Extra per $1,000</fo:block>
-                                        </fo:table-cell>
-                                    </xsl:if>
-                                </fo:table-row>
-                                <fo:table-row>
-                                    <fo:table-cell padding="2pt">
-                                        <fo:block>
-                                        </fo:block>
-                                    </fo:table-cell>
-                                </fo:table-row>
-                            </fo:table-header>
-                            <!-- Create Tabular Detail Values -->
-                            <fo:table-body>
-                                <xsl:call-template name="tabular-detail-report2-values">
-                                    <xsl:with-param name="counter" select="1"/>
-                                </xsl:call-template>
-                            </fo:table-body>
-                        </fo:table>
-                    </fo:block>
-                    <!-- endofdoc block id implemented as the "otherwise" condition in
-                         an xsl:choose instead of xsl:if !='1' so that the XML item
-                         'Supplemental Report' need not exist in the XML document for
-                         page numbering to work properly -->
-                    <xsl:choose>
-                        <xsl:when test="$has_supplemental_report">
-                        </xsl:when>
-                        <xsl:otherwise>
-                            <fo:block id="endofdoc"></fo:block>
-                        </xsl:otherwise>
-                    </xsl:choose>
-                </fo:flow>
+                <xsl:call-template name="tabular-detail-report2"/>
             </fo:page-sequence>
             <!-- Supplemental Illustration -->
             <!-- Body page -->
@@ -977,6 +903,46 @@ No cover page for this style sheet
                     </fo:table-body>
                 </fo:table>
             </fo:block>
+        </fo:flow>
+    </xsl:template>
+    <xsl:template name="tabular-detail-report2">
+        <xsl:variable name="tabular_detail2_columns_raw">
+            <column name="PolicyYear">Policy _ Year</column>
+            <column composite="0" name="AttainedAge">EOY _ Age</column>
+            <column name="AnnGAIntRate_Current">Illustrated _ Crediting Rate</column>
+            <column/>
+            <column name="NetWD">Withdrawal</column>
+            <column name="Loan">Loan</column>
+            <column/>
+            <column composite="0" name="MonthlyFlatExtra">Annual Flat Extra _ per $1,000</column>
+        </xsl:variable>
+        <xsl:variable name="columns_raw" select="document('')/xsl:stylesheet/xsl:template[@name='tabular-detail-report2']/xsl:variable[@name='tabular_detail2_columns_raw']/column"/>
+        <xsl:variable name="columns" select="$columns_raw[not(@composite)] | $columns_raw[boolean(@composite='1')=$is_composite]"/>
+        <fo:flow flow-name="xsl-region-body">
+            <fo:block font-size="9.0pt" font-family="serif">
+                <fo:table table-layout="fixed" width="100%">
+                    <xsl:call-template name="data-table-columns">
+                        <xsl:with-param name="columns" select="$columns"/>
+                    </xsl:call-template>
+                    <fo:table-header>
+                        <xsl:call-template name="data-table-headers">
+                            <xsl:with-param name="columns" select="$columns"/>
+                        </xsl:call-template>
+                    </fo:table-header>
+                    <fo:table-body>
+                        <xsl:call-template name="data-table-data">
+                            <xsl:with-param name="columns" select="$columns"/>
+                        </xsl:call-template>
+                    </fo:table-body>
+                </fo:table>
+            </fo:block>
+            <!-- endofdoc block id implemented as the "otherwise" condition in
+                 an xsl:choose instead of xsl:if !='1' so that the XML item
+                 'Supplemental Report' need not exist in the XML document for
+                 page numbering to work properly -->
+            <xsl:if test="not($has_supplemental_report)">
+                <fo:block id="endofdoc"/>
+            </xsl:if>
         </fo:flow>
     </xsl:template>
 
@@ -1697,68 +1663,6 @@ No cover page for this style sheet
             <fo:block text-align="left" font-size="9.0pt" text-decoration="overline">AGENT OR AUTHORIZED REPRESENTATIVE &#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;
                 <fo:inline text-decoration="no-overline">&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;</fo:inline>DATE &#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;</fo:block>
         </fo:flow>
-    </xsl:template>
-
-    <!-- Create Tabular Detail (report 2) Values -->
-    <xsl:template name="tabular-detail-report2-values">
-        <xsl:param name="counter"/>
-        <xsl:if test="illustration/data/newcolumn/column[@name='PolicyYear']/duration[$counter]/@column_value!='0'">
-            <fo:table-row>
-                <fo:table-cell padding=".2pt">
-                    <fo:block text-align="right">
-                        <xsl:value-of select="illustration/data/newcolumn/column[@name='PolicyYear']/duration[$counter]/@column_value"/>
-                    </fo:block>
-                </fo:table-cell>
-                <xsl:if test="not($is_composite)">
-                    <fo:table-cell>
-                        <fo:block text-align="right">
-                            <xsl:value-of select="illustration/data/newcolumn/column[@name='AttainedAge']/duration[$counter]/@column_value"/>
-                        </fo:block>
-                    </fo:table-cell>
-                </xsl:if>
-                <fo:table-cell>
-                    <fo:block text-align="right">
-                        <xsl:value-of select="illustration/data/newcolumn/column[@name='AnnGAIntRate_Current']/duration[$counter]/@column_value"/>
-                    </fo:block>
-                </fo:table-cell>
-                <fo:table-cell>
-                    <fo:block>
-                    </fo:block>
-                </fo:table-cell>
-                <fo:table-cell>
-                    <fo:block text-align="right">
-                        <xsl:value-of select="illustration/data/newcolumn/column[@name='NetWD']/duration[$counter]/@column_value"/>
-                    </fo:block>
-                </fo:table-cell>
-                <fo:table-cell>
-                    <fo:block text-align="right">
-                        <xsl:value-of select="illustration/data/newcolumn/column[@name='Loan']/duration[$counter]/@column_value"/>
-                    </fo:block>
-                </fo:table-cell>
-                <fo:table-cell>
-                    <fo:block>
-                    </fo:block>
-                </fo:table-cell>
-                <xsl:if test="not($is_composite)">
-                    <fo:table-cell>
-                        <fo:block text-align="right">
-                            <xsl:value-of select="illustration/data/newcolumn/column[@name='MonthlyFlatExtra']/duration[$counter]/@column_value"/>
-                        </fo:block>
-                    </fo:table-cell>
-                </xsl:if>
-            </fo:table-row>
-            <!-- Blank Row Every 5th Year -->
-            <xsl:if test="$counter mod 5=0">
-                <fo:table-row>
-                    <fo:table-cell padding="4pt">
-                        <fo:block text-align="right"></fo:block>
-                    </fo:table-cell>
-                </fo:table-row>
-            </xsl:if>
-            <xsl:call-template name="tabular-detail-report2-values">
-                <xsl:with-param name="counter" select="$counter + 1"/>
-            </xsl:call-template>
-        </xsl:if>
     </xsl:template>
 
     <xsl:template name="removeamps">
