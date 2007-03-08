@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: xsl_fo_common.xsl,v 1.1.2.10 2007-03-08 13:23:28 etarassov Exp $
+    $Id: xsl_fo_common.xsl,v 1.1.2.11 2007-03-08 14:16:57 etarassov Exp $
 -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fo="http://www.w3.org/1999/XSL/Format" version="1.0">
     <!--
@@ -42,6 +42,14 @@
     <xsl:variable name="is_composite" select="boolean(/illustration/scalar/Composite='1')"/>
     <xsl:variable name="supplemental_report" select="/illustration/supplementalreport"/>
     <xsl:variable name="has_supplemental_report" select="boolean(/illustration/scalar/SupplementalReport='1')"/>
+
+<!--
+    TODO ?? These constants are used for decoding the numbers from text.
+    Get rid of it once the arithmetics is moved to C++ code.
+-->
+    <xsl:variable name="NUMBERS_WITHOUT_COMMA">0123456789</xsl:variable>
+    <xsl:variable name="NUMBERS_WITH_COMMA">0123456789,</xsl:variable>
+    <xsl:variable name="NUMBERS_FORMATTING_STRING">###,###,###</xsl:variable>
 
     <xsl:template name="normalize_underscored_name">
         <xsl:param name="text"/>
@@ -121,7 +129,25 @@
                             <xsl:choose>
                                 <xsl:when test="@name or ./name">
                                     <xsl:variable name="column_name" select="concat(@name, ./name)"/>
-                                    <xsl:value-of select="$illustration/data/newcolumn/column[@name=$column_name]/duration[$counter]/@column_value"/>
+<!--
+    TODO ?? We have to take care of some special cases, like a row not being present
+    in xml data, but which should be calculated from some other data.
+    It will much better to move such a row calculations into C++ code.
+-->
+                                    <xsl:choose>
+                                        <xsl:when test="$column_name='Special_PremiumLoad'">
+                                            <xsl:value-of select="format-number(translate($illustration/data/newcolumn/column[@name='Outlay']/duration[$counter]/@column_value,$NUMBERS_WITH_COMMA,$NUMBERS_WITHOUT_COMMA)-translate($illustration/data/newcolumn/column[@name='NetPmt_Current']/duration[$counter]/@column_value,$NUMBERS_WITH_COMMA,$NUMBERS_WITHOUT_COMMA)+translate($illustration/data/newcolumn/column[@name='NetWD']/duration[$counter]/@column_value,$NUMBERS_WITH_COMMA,$NUMBERS_WITHOUT_COMMA)+translate($illustration/data/newcolumn/column[@name='Loan']/duration[$counter]/@column_value,$NUMBERS_WITH_COMMA,$NUMBERS_WITHOUT_COMMA),$NUMBERS_FORMATTING_STRING)"/>
+                                        </xsl:when>
+                                        <xsl:when test="$column_name='Special_AdminCharges'">
+                                            <xsl:value-of select="format-number(translate($illustration/data/newcolumn/column[@name='AnnPolFee_Current']/duration[$counter]/@column_value,$NUMBERS_WITH_COMMA,$NUMBERS_WITHOUT_COMMA)+translate($illustration/data/newcolumn/column[@name='SpecAmtLoad_Current']/duration[$counter]/@column_value,$NUMBERS_WITH_COMMA,$NUMBERS_WITHOUT_COMMA)+translate($illustration/data/newcolumn/column[@name='MlyPolFee_Current']/duration[$counter]/@column_value,$NUMBERS_WITH_COMMA,$NUMBERS_WITHOUT_COMMA),$NUMBERS_FORMATTING_STRING)"/>
+                                        </xsl:when>
+                                        <xsl:when test="$column_name='Special_AssetCharges'">
+                                            <xsl:value-of select="format-number(translate($illustration/data/newcolumn/column[@name='GrossIntCredited_Current']/duration[$counter]/@column_value,$NUMBERS_WITH_COMMA,$NUMBERS_WITHOUT_COMMA)-translate($illustration/data/newcolumn/column[@name='NetIntCredited_Current']/duration[$counter]/@column_value,$NUMBERS_WITH_COMMA,$NUMBERS_WITHOUT_COMMA)+translate($illustration/data/newcolumn/column[@name='AcctValLoadAMD_Current']/duration[$counter]/@column_value,$NUMBERS_WITH_COMMA,$NUMBERS_WITHOUT_COMMA)+translate($illustration/data/newcolumn/column[@name='AcctValLoadBOM_Current']/duration[$counter]/@column_value,$NUMBERS_WITH_COMMA,$NUMBERS_WITHOUT_COMMA),$NUMBERS_FORMATTING_STRING)"/>
+                                        </xsl:when>
+                                        <xsl:otherwise>
+                                            <xsl:value-of select="$illustration/data/newcolumn/column[@name=$column_name]/duration[$counter]/@column_value"/>
+                                        </xsl:otherwise>
+                                    </xsl:choose>
                                 </xsl:when>
                                 <xsl:when test="@scalar">
                                     <xsl:variable name="scalar_name" select="@scalar"/>
