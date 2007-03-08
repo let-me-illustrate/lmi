@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: multidimgrid_any.hpp,v 1.13 2007-03-06 18:13:37 wboutin Exp $
+// $Id: multidimgrid_any.hpp,v 1.14 2007-03-08 01:14:38 chicares Exp $
 
 #ifndef multidimgrid_any_hpp
 #define multidimgrid_any_hpp
@@ -100,8 +100,8 @@
 #include <wx/defs.h> // WXDLLEXPORT
 #include <wx/grid.h>
 #include <wx/choice.h>
-#include <wx/string.h>
 
+#include <string>
 #include <vector>
 
 // Some forward declarations to avoid unnecessary header inclusions
@@ -362,6 +362,9 @@ class MultiDimTableAny
     MultiDimTableAny() {}
     virtual ~MultiDimTableAny() {}
 
+    // EVGENIY !! Would it make sense to group virtuals (other than
+    // the dtor) together here, and separate from nonvirtuals?
+
     /// Return the number of dimensions in this table.
     virtual unsigned int GetDimension() const = 0;
 
@@ -384,11 +387,11 @@ class MultiDimTableAny
 
     /// The method to be provided by the table to allow the conversion from
     /// the table values to the strings.
-    virtual wxString ValueToString(boost::any const& value) const = 0;
+    virtual std::string ValueToString(boost::any const& value) const = 0;
 
     /// The method to be provided by the table to allow the conversion from
     /// strings to the the table values.
-    virtual boost::any StringToValue(wxString const& value) const = 0;
+    virtual boost::any StringToValue(std::string const& value) const = 0;
 
   protected:
     virtual boost::any DoGetValue(Coords const& coords) const = 0;
@@ -672,22 +675,20 @@ class MultiDimGrid
     bool DoApplyAxisAdjustment(unsigned int n);
     bool DoRefreshAxisAdjustment(unsigned int n);
 
-    /// wxGridTableBase part.
-    ///
     /// Implementation of wxGridTableBase interface. The widget serves as a data
     /// source for the wxGrid component.
     ///
     /// Note: once the wxGrid class support LabelAttributeProvider() we
-    /// should add color hightliting of selected axis in here.
+    /// should add color highlighting of selected axis in here.
 
-    virtual int GetNumberRows();
+    // wxGridTableBase overrides.
     virtual int GetNumberCols();
+    virtual int GetNumberRows();
     virtual bool IsEmptyCell(int row, int col);
     virtual wxString GetValue(int row, int col);
     virtual void SetValue(int row, int col, wxString const& value);
-// EVGENIY !! Would 'GetXXXLabel', without 'Value', be okay?
-    virtual wxString GetRowLabelValue(int row);
     virtual wxString GetColLabelValue(int col);
+    virtual wxString GetRowLabelValue(int row);
 
   private:
     /// Various GUI components of the widget

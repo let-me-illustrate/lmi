@@ -19,11 +19,12 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: database_view_editor.cpp,v 1.7 2007-02-25 02:12:29 chicares Exp $
+// $Id: database_view_editor.cpp,v 1.8 2007-03-08 01:14:38 chicares Exp $
 
 #include "database_view_editor.hpp"
 
 #include "multidimgrid_safe.tpp"
+#include "value_cast.hpp"
 
 #include <boost/preprocessor/cat.hpp>
 #include <boost/preprocessor/repetition/repeat_from_to.hpp>
@@ -33,6 +34,7 @@
 #include <wx/timer.h>
 #include <wx/utils.h>
 
+#include <exception>
 #include <numeric>
 
 DatabaseTableAdapter::DatabaseTableAdapter(TDBValue* db_value)
@@ -108,14 +110,15 @@ bool DatabaseTableAdapter::VariesByDimension(unsigned int n) const
     return n < axis_lengths.size() && 1 < axis_lengths[n];
 }
 
+/// Require confirmation if reshaping an entity would cause it to have
+/// extraordinarily many elements.
+
 bool DatabaseTableAdapter::ConfirmOperation(unsigned int item_count) const
 {
-    // allow up to 1M elements
     if(item_count < 1000000)
         {return true;}
 
-    // ask user about having more than a million elements
-    wxString message =
+    std::string const message =
         "The resulting entity will have more than one million elements."
         " Continue anyway?"
         ;
@@ -164,7 +167,6 @@ void DatabaseTableAdapter::ReshapeTableData
         ,std::multiplies<int>()
         );
 
-    // should potentially heavy operation be performed?
     if(!user_confirm || ConfirmOperation(count))
         {
         wxBusyCursor();
@@ -190,24 +192,31 @@ bool DatabaseTableAdapter::CanChangeVariationWith(unsigned int n) const
     return n < db_value_->GetAxisLengths().size();
 }
 
-wxString DatabaseTableAdapter::ValueToString(boost::any const& value) const
+std::string DatabaseTableAdapter::ValueToString(boost::any const& value) const
 {
     try
         {
-        return wxString::Format("%f", boost::any_cast<double>(value));
+        return value_cast<std::string>(boost::any_cast<double>(value));
         }
-    catch(boost::bad_any_cast const&)
+    catch(std::exception const&)
         {
+        // TODO ?? Would a different behavior be better here?
         return "#ERR";
         }
 }
 
-boost::any DatabaseTableAdapter::StringToValue(wxString const& value) const
+boost::any DatabaseTableAdapter::StringToValue(std::string const& value) const
 {
-    double res;
-    if(!value.ToDouble(&res))
-        {res = 0;}
-    return boost::any(res);
+    double z = 0.0;
+    try
+        {
+        z = value_cast<double>(value);
+        }
+    catch(std::exception const&)
+        {
+        // TODO ?? What should we do here?
+        }
+    return boost::any(z);
 }
 
 void DatabaseTableAdapter::ConvertValue

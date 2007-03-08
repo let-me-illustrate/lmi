@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: multidimgrid_any.cpp,v 1.8 2007-03-05 00:16:38 chicares Exp $
+// $Id: multidimgrid_any.cpp,v 1.9 2007-03-08 01:14:38 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -134,7 +134,7 @@ class MultiDimGridGrid
         ,wxPoint const& = wxDefaultPosition
         ,wxSize const& = wxDefaultSize
         ,long style = wxWANTS_CHARS
-        ,wxString const& name = wxPanelNameStr
+        ,std::string const& name = wxPanelNameStr
         );
     virtual ~MultiDimGridGrid();
 
@@ -147,7 +147,7 @@ inline MultiDimGridGrid::MultiDimGridGrid
     ,wxPoint const& pos
     ,wxSize const& size
     ,long style
-    ,wxString const& name
+    ,std::string const& name
     )
     :wxGrid(parent, id, pos, size, style, name)
 {

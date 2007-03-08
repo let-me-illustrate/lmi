@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: rounding_view_editor.hpp,v 1.3 2007-02-23 12:43:26 chicares Exp $
+// $Id: rounding_view_editor.hpp,v 1.4 2007-03-08 01:14:38 chicares Exp $
 
 #ifndef rounding_view_editor_hpp
 #define rounding_view_editor_hpp
@@ -37,6 +37,8 @@
 #include <wx/icon.h>
 #include <wx/xrc/xmlres.h>
 
+#include <string>
+
 class WXDLLEXPORT wxMenuBar;
 class WXDLLEXPORT wxSpinCtrl;
 class WXDLLEXPORT wxWindow;
@@ -53,7 +55,7 @@ class RoundingButtons
         ,const wxPoint& pos = wxDefaultPosition
         ,const wxSize& size = wxDefaultSize
         ,long style = 0
-        ,const wxString& name = wxPanelNameStr
+        ,const std::string& name = wxPanelNameStr
         );
     virtual ~RoundingButtons();
 
@@ -63,7 +65,7 @@ class RoundingButtons
         ,const wxPoint& pos = wxDefaultPosition
         ,const wxSize& size = wxDefaultSize
         ,long style = 0
-        ,const wxString& name = wxPanelNameStr
+        ,const std::string& name = wxPanelNameStr
         );
 
     bool IsModified() const;
