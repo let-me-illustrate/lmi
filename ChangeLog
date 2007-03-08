@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.587.2.8 2007-03-07 18:57:13 etarassov Exp $
+// $Id: ChangeLog,v 1.587.2.9 2007-03-08 00:15:15 etarassov Exp $
 
 MAINTENANCE
 
@@ -10503,3 +10503,10 @@ Refactor 'illustration-assumption-report' and
   xsl_fo_common.xsl
 Properly invoke 'fo:table-column'. This fix removes 80% of warnings
 from FOP.
+
+20070308T0015Z <etarassov@tt-solutions.com> [1254]
+
+  nasd.xsl
+Refactor 'supplemental-illustration-report' and
+'supplemental-illustration-values'.
+
