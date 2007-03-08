@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.587 2007-03-06 18:13:37 wboutin Exp $
+// $Id: ChangeLog,v 1.588 2007-03-08 01:14:38 chicares Exp $
 
 MAINTENANCE
 
@@ -10378,7 +10378,7 @@ Rename a member function.
 
   expm1.c
   mingw_setup.make
-Cleanup 'check_concinnity' results.
+Clean up 'check_concinnity' results.
 
 20070306T1813Z <wboutin@massmutual.com> [1253]
 
@@ -10438,4 +10438,29 @@ Cleanup 'check_concinnity' results.
   view_ex.tpp
   wx_utility.cpp
 Rename a macro.
+
+20070307T1747Z <chicares@cox.net> [1253]
+
+  workhorse.make
+Enable a warning that had had to be suppressed with older wx versions.
+
+20070308T0111Z <chicares@cox.net> [1253]
+
+  docmdichildframe_ex.cpp
+  docmdichildframe_ex.hpp
+  main_wx.cpp
+Expunge obsolete code.
+
+20070308T0114Z <chicares@cox.net> [1256]
+
+  database_view_editor.cpp
+  database_view_editor.hpp
+  multidimgrid_any.cpp
+  multidimgrid_any.hpp
+  multidimgrid_safe.hpp
+  multidimgrid_safe.tpp
+  rounding_view_editor.cpp
+  rounding_view_editor.hpp
+  tier_view_editor.hpp
+Replace wxString with std::string.
 

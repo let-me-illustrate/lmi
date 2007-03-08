@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: database_view_editor.hpp,v 1.5 2007-03-04 16:33:31 chicares Exp $
+// $Id: database_view_editor.hpp,v 1.6 2007-03-08 01:14:38 chicares Exp $
 
 #ifndef database_view_editor_hpp
 #define database_view_editor_hpp
@@ -196,20 +196,24 @@ class DatabaseTableAdapter
     unsigned int GetDurationMaxBound() const;
 
   private:
-    /// MultiDimTableAny virtuals
+// EVGENIY !! Does pure virtual MultiDimTableAny::DoGetAxisAny() need
+// to be implemented here?
+    /// MultiDimTableAny required implementation.
     virtual boost::any DoGetValue(Coords const&) const;
     virtual void DoSetValue(Coords const&, boost::any const&);
     virtual bool DoApplyAxisAdjustment(MultiDimAxisAny&, unsigned int);
     virtual bool DoRefreshAxisAdjustment(MultiDimAxisAny&, unsigned int);
 
+// EVGENIY !! Should this say 'MultiDimTableAny' instead of 'MultiDimTable'?
+    /// MultiDimTable overrides.
     virtual bool VariesByDimension(unsigned int) const;
     virtual void MakeVaryByDimension(unsigned int, bool);
     virtual bool CanChangeVariationWith(unsigned int) const;
+    virtual std::string ValueToString(boost::any const&) const;
+    virtual boost::any StringToValue(std::string const&) const;
 
-    /// Convert from and to double wrapped in boost::any object
-    virtual wxString ValueToString(boost::any const&) const;
-    virtual boost::any StringToValue(wxString const&) const;
-
+// EVGENIY !! I think these functions override a macro class; how
+// we document that depends on the patch you're working on.
     virtual MultiDimAxis<enum_gender>*   GetAxis0();
     virtual MultiDimAxis<enum_class>*    GetAxis1();
     virtual MultiDimAxis<enum_smoking>*  GetAxis2();

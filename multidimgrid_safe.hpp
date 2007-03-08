@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: multidimgrid_safe.hpp,v 1.6 2007-03-05 01:33:26 chicares Exp $
+// $Id: multidimgrid_safe.hpp,v 1.7 2007-03-08 01:14:38 chicares Exp $
 
 #ifndef multidimgrid_safe_hpp
 #define multidimgrid_safe_hpp
@@ -39,9 +39,6 @@
 #include <boost/preprocessor/punctuation/comma_if.hpp>
 #include <boost/static_assert.hpp>
 #include <boost/type_traits.hpp>
-
-#include <wx/string.h>
-#include <wx/window.h>
 
 /// This constant specifies the maximal number of arguments for the MakeArray
 /// method to accept.
@@ -215,7 +212,7 @@ typedef MultiDimIntegralAxis<unsigned int> MultiDimUIntAxis;
 ///
 /// Conversion helper for MultiDimTableN template classes.
 ///
-/// Implements convertion between ValueType and wxString.
+/// Implements conversion between ValueType and std::string.
 /// To support a new data type in the MultiDimTable one should specialise
 /// this template for the desired type.
 /// See int template specialisation for an example.
@@ -229,11 +226,12 @@ class MultiDimTableTypeTraits
 {
   public:
     /// Convert value respresented by a string into ValueType.
-    ValueType FromString(wxString const& str) const;
+    ValueType FromString(std::string const& str) const;
     /// Create a string representation of a value
-    wxString ToString(ValueType const& value) const;
+    std::string ToString(ValueType const& value) const;
 };
 
+#if 0 // TODO ?? Expunge.
 /// Helper macro implementing MultiDimTableTypeTraits for a given integral type
 
 #define MDTABLE_TTRAITS_INTEGRAL(ValueType              \
@@ -262,15 +260,13 @@ class MultiDimTableTypeTraits<ValueType>                \
     }                                                   \
 }
 
-// TODO ?? Prefer value_cast to wxString::operator<<() in ToString()
-// above, or eliminate ToString() entirely.
-
 /// Specializations of MultiDimTableTypeTraits for some common types.
 MDTABLE_TTRAITS_INTEGRAL(int, ToLong, long, -1);
 MDTABLE_TTRAITS_INTEGRAL(unsigned int, ToULong, unsigned long, 0);
 MDTABLE_TTRAITS_INTEGRAL(long, ToLong, long, -1);
 MDTABLE_TTRAITS_INTEGRAL(unsigned long, ToULong, unsigned long, 0);
 MDTABLE_TTRAITS_INTEGRAL(double, ToDouble, double, -1);
+#endif // 0
 
 /// Design notes for MultiDimTableN<T, V1, ..., VN>
 ///
@@ -305,7 +301,7 @@ MDTABLE_TTRAITS_INTEGRAL(double, ToDouble, double, -1);
 ///
 /// ValueToString(value) and StringToValue(str):
 /// String vs ValueType convertion helpers.
-/// Delegates the convertion between type ValueType and wxString
+/// Delegates the conversion between type ValueType and std::string
 /// to template class MultiDimTableTypeTraits<ValueType>
 /// To support new type one should instantiate the MultiDimTableTypeTraits
 /// for the type and implement the converting methods.
@@ -348,8 +344,8 @@ class MultiDimTable##n                                                        \
                                                                               \
   private:                                                                    \
     MultiDimTableTypeTraits<T> converter_;                                    \
-    virtual wxString ValueToString(boost::any const& value) const;            \
-    virtual boost::any StringToValue(wxString const& str) const;              \
+    virtual std::string ValueToString(boost::any const& value) const;         \
+    virtual boost::any StringToValue(std::string const& str) const;           \
 };
 
 /// real code declaring MultiDimGridN classes
