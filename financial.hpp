@@ -19,14 +19,14 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: financial.hpp,v 1.6 2007-03-06 18:13:37 wboutin Exp $
+// $Id: financial.hpp,v 1.7 2007-03-09 16:27:23 chicares Exp $
 
 #ifndef financial_hpp
 #define financial_hpp
 
 #include "config.hpp"
 
-#include "alert.hpp"
+#include "assert_lmi.hpp"
 #include "zero.hpp"
 
 // TODO ?? Things to reconsider later:
@@ -236,9 +236,9 @@ void irr
     ,int decimals
     )
 {
-    HOPEFULLY(lapse_duration <= pmts.size());
-    HOPEFULLY(lapse_duration <= bfts.size());
-    HOPEFULLY(lapse_duration <= total_duration);
+    LMI_ASSERT(lapse_duration <= pmts.size());
+    LMI_ASSERT(lapse_duration <= bfts.size());
+    LMI_ASSERT(lapse_duration <= total_duration);
     results.clear();
     results.resize(total_duration, -1.0);
     irr

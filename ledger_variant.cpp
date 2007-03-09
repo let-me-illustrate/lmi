@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_variant.cpp,v 1.19 2007-03-06 18:13:37 wboutin Exp $
+// $Id: ledger_variant.cpp,v 1.20 2007-03-09 16:27:23 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -28,7 +28,7 @@
 
 #include "ledger_variant.hpp"
 
-#include "alert.hpp"
+#include "assert_lmi.hpp"
 #include "basic_values.hpp"
 #include "database.hpp" // Used only for initial loan rate.
 #include "dbnames.hpp"  // Used only for initial loan rate.
@@ -288,7 +288,7 @@ LedgerVariant& LedgerVariant::PlusEq
     LedgerBase::PlusEq(a_Addend, a_Inforce);
 
     // Make sure total (this) has enough years to add all years of a_Addend to.
-    HOPEFULLY(a_Addend.Length <= Length);
+    LMI_ASSERT(a_Addend.Length <= Length);
 
     // TODO ?? If interest rates vary across a census, this will be wrong.
     InitAnnGenAcctInt           = a_Addend.InitAnnGenAcctInt;
@@ -309,8 +309,8 @@ LedgerVariant& LedgerVariant::PlusEq
         KFactor                   [j]  = a_Addend.KFactor                   [j];
         }
 
-    HOPEFULLY(a_Addend.ExpAndGABasis == ExpAndGABasis);
-    HOPEFULLY(a_Addend.SABasis       == SABasis);
+    LMI_ASSERT(a_Addend.ExpAndGABasis == ExpAndGABasis);
+    LMI_ASSERT(a_Addend.SABasis       == SABasis);
 
     if(LapseYear == a_Addend.LapseYear)
         {

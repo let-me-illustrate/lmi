@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: authenticity.cpp,v 1.3 2007-03-06 18:13:37 wboutin Exp $
+// $Id: authenticity.cpp,v 1.4 2007-03-09 16:27:23 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -29,6 +29,7 @@
 #include "authenticity.hpp"
 
 #include "alert.hpp"
+#include "assert_lmi.hpp"
 #include "calendar_date.hpp"
 #include "global_settings.hpp"
 #include "handle_exceptions.hpp"
@@ -287,7 +288,7 @@ std::string Authenticity::Assay
 
 std::string md5_hex_string(std::vector<unsigned char> const& vuc)
 {
-    HOPEFULLY(md5len == vuc.size());
+    LMI_ASSERT(md5len == vuc.size());
     std::stringstream oss;
     oss << std::hex;
     for(int j = 0; j < md5len; ++j)

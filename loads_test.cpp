@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: loads_test.cpp,v 1.9 2007-01-27 00:00:51 wboutin Exp $
+// $Id: loads_test.cpp,v 1.10 2007-03-09 16:27:23 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -29,7 +29,6 @@
 #include "loads.hpp"
 #include "loads_impl.hpp"
 
-#include "alert.hpp"
 #include "round_to.hpp"
 #include "test_tools.hpp"
 #include "timer.hpp"

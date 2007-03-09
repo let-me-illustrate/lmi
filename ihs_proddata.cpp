@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_proddata.cpp,v 1.13 2007-03-06 18:13:37 wboutin Exp $
+// $Id: ihs_proddata.cpp,v 1.14 2007-03-09 16:27:23 chicares Exp $
 
 // This class contains names of files containing a product's tables as well
 // as strings that are the same for all instances of that product.
@@ -39,6 +39,7 @@
 #include "ihs_proddata.hpp"
 
 #include "alert.hpp"
+#include "assert_lmi.hpp"
 #include "data_directory.hpp"
 #include "platform_dependent.hpp" // access()
 
@@ -68,7 +69,7 @@ TProductData::TProductData(std::string const& a_Filename)
 void TProductData::Init(std::string const& a_Filename)
 {
     fs::path path(a_Filename);
-    HOPEFULLY(a_Filename == path.leaf());
+    LMI_ASSERT(a_Filename == path.leaf());
     path = fs::change_extension(path, ".pol");
     Read(AddDataDir(path.string()));
 }

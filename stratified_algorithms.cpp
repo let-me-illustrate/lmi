@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: stratified_algorithms.cpp,v 1.6 2007-03-06 18:13:38 wboutin Exp $
+// $Id: stratified_algorithms.cpp,v 1.7 2007-03-09 16:27:23 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -28,7 +28,7 @@
 
 #include "stratified_algorithms.hpp"
 
-#include "alert.hpp"
+#include "assert_lmi.hpp"
 
 #include <algorithm>
 #include <cmath>
@@ -67,8 +67,8 @@ double TieredNetToGross
         return NetAmount;
         }
 
-    HOPEFULLY(LoadUpToBreakpoint   < 1.0);
-    HOPEFULLY(LoadBeyondBreakpoint < 1.0);
+    LMI_ASSERT(LoadUpToBreakpoint   < 1.0);
+    LMI_ASSERT(LoadBeyondBreakpoint < 1.0);
 
     double z = NetAmount / (1.0 - LoadUpToBreakpoint);
     if(Breakpoint < z && LoadUpToBreakpoint != LoadBeyondBreakpoint)
@@ -114,7 +114,7 @@ double TieredNetToGross
 
     double chi = (NetAmount - n) / NetAmount;
     // There is no particular reason for the magic number .000001
-    HOPEFULLY(std::fabs(chi) <= .000001);
+    LMI_ASSERT(std::fabs(chi) <= .000001);
 */
 
     return z;

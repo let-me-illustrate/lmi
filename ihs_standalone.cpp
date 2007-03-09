@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_standalone.cpp,v 1.9 2007-01-27 00:00:51 wboutin Exp $
+// $Id: ihs_standalone.cpp,v 1.10 2007-03-09 16:27:23 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -31,6 +31,7 @@
 #include "ihs_standalone.hpp"
 
 #include "actuarial_table.hpp"
+#include "alert.hpp"
 #include "data_directory.hpp"
 #include "database.hpp"
 #include "dbnames.hpp"

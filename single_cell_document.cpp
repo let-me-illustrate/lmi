@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: single_cell_document.cpp,v 1.15 2007-03-06 18:13:38 wboutin Exp $
+// $Id: single_cell_document.cpp,v 1.16 2007-03-09 16:27:23 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -28,7 +28,7 @@
 
 #include "single_cell_document.hpp"
 
-#include "alert.hpp"
+#include "assert_lmi.hpp"
 #include "inputillus.hpp"
 #include "xml_lmi.hpp"
 
@@ -70,7 +70,7 @@ std::string single_cell_document::xml_root_name() const
 void single_cell_document::parse(xml::element const& root)
 {
     xml_lmi::ElementContainer const elements(xml_lmi::child_elements(root));
-    HOPEFULLY(1 == elements.size());
+    LMI_ASSERT(1 == elements.size());
     *elements[0] >> *input_data_;
 }
 

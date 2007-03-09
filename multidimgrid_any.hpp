@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: multidimgrid_any.hpp,v 1.14 2007-03-08 01:14:38 chicares Exp $
+// $Id: multidimgrid_any.hpp,v 1.15 2007-03-09 16:27:23 chicares Exp $
 
 #ifndef multidimgrid_any_hpp
 #define multidimgrid_any_hpp
@@ -92,6 +92,7 @@
 #include "config.hpp"
 
 #include "alert.hpp"
+#include "assert_lmi.hpp"
 
 #include <boost/any.hpp>
 #include <boost/shared_ptr.hpp>
@@ -406,7 +407,7 @@ class MultiDimTableAny
 
 inline void MultiDimTableAny::EnsureValidDimensionIndex(unsigned int n) const
 {
-    HOPEFULLY(n < GetDimension());
+    LMI_ASSERT(n < GetDimension());
 }
 
 inline MultiDimAxisAny* MultiDimTableAny::GetAxisAny(unsigned int n)

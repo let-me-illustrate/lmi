@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_test.cpp,v 1.7 2007-03-06 18:13:37 wboutin Exp $
+// $Id: ledger_test.cpp,v 1.8 2007-03-09 16:27:23 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -31,7 +31,7 @@
 #include "ledger_formatter.hpp"
 
 #include "account_value.hpp"
-#include "alert.hpp"
+#include "assert_lmi.hpp"
 #include "global_settings.hpp"
 #include "inputillus.hpp"
 #include "miscellany.hpp" // files_are_identical()
@@ -64,8 +64,8 @@ LedgerTest::LedgerTest()
     single_cell_document document("sample.ill");
     AccountValue av(document.input_data());
     av.RunAV();
-    // TODO ?? Should this be an invariant postcondition?
-    HOPEFULLY(av.ledger_from_av().get());
+    // TODO ?? Should this postcondition be enforced in the tested class?
+    LMI_ASSERT(av.ledger_from_av().get());
     ledger_ = av.ledger_from_av();
 }
 
@@ -75,7 +75,7 @@ LedgerTest::LedgerTest()
 
 void LedgerTest::Test() const
 {
-    HOPEFULLY(ledger_.get());
+    LMI_ASSERT(ledger_.get());
     Ledger const& ledger = *ledger_.get();
 
     fs::path filepath0("sample.xml");

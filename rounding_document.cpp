@@ -19,11 +19,10 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: rounding_document.cpp,v 1.4 2007-03-03 19:44:17 chicares Exp $
+// $Id: rounding_document.cpp,v 1.5 2007-03-09 16:27:23 chicares Exp $
 
 #include "rounding_document.hpp"
 
-#include "alert.hpp"
 #include "rounding_rules.hpp"
 #include "rounding_view.hpp"
 #include "rounding_view_editor.hpp"
