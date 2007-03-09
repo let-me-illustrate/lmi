@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_commfns.cpp,v 1.12 2007-03-06 18:13:37 wboutin Exp $
+// $Id: ihs_commfns.cpp,v 1.13 2007-03-09 16:27:23 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -28,7 +28,7 @@
 
 #include "ihs_commfns.hpp"
 
-#include "alert.hpp"
+#include "assert_lmi.hpp"
 
 #include <algorithm>
 #include <cmath>     // std::pow()
@@ -47,7 +47,7 @@ OLCommFns::OLCommFns
     ,i(a_i)
 {
     Length = q.size();
-    HOPEFULLY(i.size() == q.size());
+    LMI_ASSERT(i.size() == q.size());
 
     c.assign(1 + Length, 1.0);
     d.assign(1 + Length, 1.0);
@@ -60,7 +60,7 @@ OLCommFns::OLCommFns
     d[0] = 1.0;
     for(int j = 0; j < Length; j++)
         {
-        HOPEFULLY(-1.0 != i[j]);
+        LMI_ASSERT(-1.0 != i[j]);
         v[j] = 1.0 / (1.0 + i[j]);
         p[j] = 1.0 - q[j];
         c[j] = d[j] * v[j] * q[j];
@@ -103,8 +103,8 @@ ULCommFns::ULCommFns
     ,ProcessMode (a_process_mode)
 {
     Length = qc.size();
-    HOPEFULLY(ic.size() == qc.size());
-    HOPEFULLY(ig.size() == qc.size());
+    LMI_ASSERT(ic.size() == qc.size());
+    LMI_ASSERT(ig.size() == qc.size());
 
 //  q.assign(1 + Length, 1.0);
 //  i.assign(1 + Length, 1.0);
@@ -135,7 +135,7 @@ ULCommFns::ULCommFns
         // Eckley equations (7) and (8)
         double f = qc[j] * (1.0 + ic[j]) / (1.0 + ig[j]);
 // TODO ?? What if it exceeds 1.0?
-//      HOPEFULLY(1.0 != f);
+//      LMI_ASSERT(1.0 != f);
         f = std::min(0.99999999, f);
         double g = 1.0 / (1.0 + f);
         // Eckley equation (11)
@@ -151,7 +151,7 @@ ULCommFns::ULCommFns
         double p = 1.0 - q;
         // TODO ?? Present value of $1 one month (?) hence
         double vp = v * p;
-        HOPEFULLY(1.0 != vp);
+        LMI_ASSERT(1.0 != vp);
         // TODO ?? Present value of $1 twelve (?) months (?) hence
         double vp12 = std::pow(vp, 12);
         // Reciprocal of Eckley's a'' upper 12 (eqs 28, 32)

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_funddata.cpp,v 1.7 2007-03-06 18:13:37 wboutin Exp $
+// $Id: ihs_funddata.cpp,v 1.8 2007-03-09 16:27:23 chicares Exp $
 
 // This class describes funds: their names and investment mgmt fees.
 // TODO ?? An extension other than .fnd would be preferable: msw uses
@@ -33,6 +33,7 @@
 #include "ihs_funddata.hpp"
 
 #include "alert.hpp"
+#include "assert_lmi.hpp"
 #include "data_directory.hpp"
 #include "platform_dependent.hpp" // access()
 
@@ -93,7 +94,7 @@ void FundData::Read(std::string const& a_Filename)
         }
     std::ifstream is(a_Filename.c_str());
 
-    HOPEFULLY(0 == FundInfo_.size());
+    LMI_ASSERT(0 == FundInfo_.size());
     for(;;)
         {
         if(EOF == is.peek())

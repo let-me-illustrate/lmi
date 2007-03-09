@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avmly.cpp,v 1.60 2007-03-06 18:13:37 wboutin Exp $
+// $Id: ihs_avmly.cpp,v 1.61 2007-03-09 16:27:23 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -31,6 +31,7 @@
 #include "account_value.hpp"
 
 #include "alert.hpp"
+#include "assert_lmi.hpp"
 #include "database.hpp"
 #include "dbnames.hpp"
 #include "death_benefits.hpp"
@@ -139,7 +140,7 @@ void AccountValue::DoMonthDR()
 
     TxTestGPT();
     // TODO ?? Doesn't this mean dumpins and 1035s get ignored?
-    HOPEFULLY(0.0 <= Dcv);
+    LMI_ASSERT(0.0 <= Dcv);
     Irc7702A_->UpdateBft7702A
         (Dcv
         ,DBReflectingCorr + TermDB // DB7702A
@@ -237,7 +238,7 @@ void AccountValue::DoMonthDR()
         ,necessary_premium
         ,CashValueFor7702()
         );
-    HOPEFULLY(0.0 <= Dcv);
+    LMI_ASSERT(0.0 <= Dcv);
 
     UnnecessaryPremium = unnecessary_premium;
     TxRecognizePaymentFor7702A(unnecessary_premium, true);
@@ -471,13 +472,13 @@ void AccountValue::DecrementAVProportionally(double decrement)
               + separate_account_nonnegative_assets
               )
             ;
-        HOPEFULLY
+        LMI_ASSERT
             (                         0.0 <= general_account_proportion
             && general_account_proportion <= 1.0
             );
         separate_account_proportion = 1.0 - general_account_proportion;
         }
-    HOPEFULLY
+    LMI_ASSERT
         (materially_equal
             (general_account_proportion + separate_account_proportion
             ,1.0
@@ -661,8 +662,8 @@ double AccountValue::ActualMonthlyRate(double monthly_rate) const
 {
     if(daily_interest_accounting)
         {
-        HOPEFULLY(   0 != days_in_policy_year);
-        HOPEFULLY(-1.0 <= monthly_rate);
+        LMI_ASSERT(   0 != days_in_policy_year);
+        LMI_ASSERT(-1.0 <= monthly_rate);
         return -1.0 + std::pow
             (1.0 + monthly_rate
             ,12.0 * days_in_policy_month / days_in_policy_year
@@ -1413,7 +1414,7 @@ void AccountValue::TxSpecAmtChange()
         return;
         }
 
-    HOPEFULLY(0 < Year);
+    LMI_ASSERT(0 < Year);
     double const old_specamt = DeathBfts_->specamt()[Year - 1];
 
     // Nothing to do if no increase or decrease requested.
@@ -1779,7 +1780,7 @@ void AccountValue::TxRecognizePaymentFor7702A
           + GetRefundableSalesLoad()
 //          + std::max(0.0, ExpRatReserve) // This would be added if it existed.
         );
-    HOPEFULLY(0.0 <= Dcv);
+    LMI_ASSERT(0.0 <= Dcv);
 
     // TODO ?? Not correct yet--need to test pmt less deductible WD; and
     // shouldn't we deduct the *gross* WD?
@@ -1818,7 +1819,7 @@ void AccountValue::TxAcceptPayment(double a_pmt)
     process_payment(net_pmt);
 
     Dcv += std::max(0.0, net_pmt);
-    HOPEFULLY(0.0 <= Dcv);
+    LMI_ASSERT(0.0 <= Dcv);
 
     if(HoneymoonActive)
         {
@@ -1897,7 +1898,7 @@ double AccountValue::GetPremLoad
         + dac_tax_load
         ;
     HOPEFULLY(0.0 <= sum_of_separate_loads);
-    HOPEFULLY
+    LMI_ASSERT
         (   StratifiedCharges_->premium_tax_is_tiered(GetStateOfJurisdiction())
         ||  materially_equal(total_load, sum_of_separate_loads)
         );
@@ -2174,7 +2175,7 @@ void AccountValue::TxSetDeathBft(bool force_eoy_behavior)
 /*
     // Try moving this here...
     Irc7702A_->UpdateBft7702A(...);
-    HOPEFULLY(0.0 <= Dcv);
+    LMI_ASSERT(0.0 <= Dcv);
 */
 
     // SOMEDAY !! Accumulate average death benefit for profit testing here.
@@ -2194,8 +2195,8 @@ void AccountValue::TxSetTermAmt()
         }
 
     // TODO ?? Assumes that term rider lasts exactly as long as no-lapse guarantee.
-    HOPEFULLY(BasicValues::NoLapseMinDur == Database_->Query(DB_NoLapseMinDur));
-    HOPEFULLY(BasicValues::NoLapseMinAge == Database_->Query(DB_NoLapseMinAge));
+    LMI_ASSERT(BasicValues::NoLapseMinDur == Database_->Query(DB_NoLapseMinDur));
+    LMI_ASSERT(BasicValues::NoLapseMinAge == Database_->Query(DB_NoLapseMinAge));
 
     if
         (  (BasicValues::NoLapseMinDur <= Year)
@@ -2519,7 +2520,7 @@ void AccountValue::TxTakeSepAcctLoad()
 
         // TODO ?? This seems bogus. Reevaluate.
         double kludge_adjustment = 0.0;
-        HOPEFULLY(0.0 <= banded_load);
+        LMI_ASSERT(0.0 <= banded_load);
         if(0.0 != banded_load)
             {
             // TODO ?? This isn't really right. Instead, aggregate annual
@@ -2540,7 +2541,7 @@ void AccountValue::TxTakeSepAcctLoad()
                         ,AVSepAcct - 10000000.0
                         )
                 ;
-            HOPEFULLY(0.0 <= kludge_adjustment);
+            LMI_ASSERT(0.0 <= kludge_adjustment);
             }
         SepAcctLoad = YearsSepAcctLoadRate * AVSepAcct - kludge_adjustment;
         }
@@ -2706,7 +2707,7 @@ void AccountValue::TxCreditInt()
         GenAcctIntCred = 0.0;
         }
 
-    HOPEFULLY(0.0 <= Dcv);
+    LMI_ASSERT(0.0 <= Dcv);
     if(0.0 < Dcv)
         {
         Dcv *= 1.0 + YearsDcvIntRate;
@@ -2721,7 +2722,7 @@ void AccountValue::TxCreditInt()
         }
 
     // Loaned account value must not be negative.
-    HOPEFULLY(0.0 <= AVRegLn + AVPrfLn);
+    LMI_ASSERT(0.0 <= AVRegLn && 0.0 <= AVPrfLn);
 
     YearsTotalNetIntCredited +=
             RegLnIntCred
@@ -3029,9 +3030,9 @@ void AccountValue::TxTakeWD()
         // The free partial surrender amount is determined annually,
         // on anniversary and before the anniversary deduction but
         // after any loan has been capitalized.
-        HOPEFULLY(AVRegLn == RegLnBal);
-        HOPEFULLY(AVPrfLn == PrfLnBal);
-        HOPEFULLY(av == AVGenAcct + AVSepAcct);
+        LMI_ASSERT(AVRegLn == RegLnBal);
+        LMI_ASSERT(AVPrfLn == PrfLnBal);
+        LMI_ASSERT(av == AVGenAcct + AVSepAcct);
         double free_wd = FreeWDProportion[Year] * av;
         non_free_wd = std::max(0.0, GrossWD - free_wd);
         }
@@ -3243,7 +3244,7 @@ void AccountValue::TxTakeLoan()
         }
 
     // SOMEDAY !! Preferred loan calculations not yet implemented.
-    HOPEFULLY(0.0 == AVPrfLn);
+    LMI_ASSERT(0.0 == AVPrfLn);
 
     double max_loan_increment = MaxLoan - (AVRegLn + AVPrfLn);
 

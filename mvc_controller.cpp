@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mvc_controller.cpp,v 1.13 2007-03-06 18:13:38 wboutin Exp $
+// $Id: mvc_controller.cpp,v 1.14 2007-03-09 16:27:23 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -31,6 +31,7 @@
 
 #include "alert.hpp"
 #include "any_entity.hpp"
+#include "assert_lmi.hpp"
 #include "calendar_date.hpp"
 #include "map_lookup.hpp"
 #include "mc_enum.hpp"
@@ -108,7 +109,7 @@ MvcController::MvcController
     // to use the dialog window, though, once that exists.
 
     last_focused_window_ = this;
-    HOPEFULLY(last_focused_window_);
+    LMI_ASSERT(last_focused_window_);
 
     // Bind each pair of identically-named Model and View entities.
     //
@@ -202,7 +203,7 @@ void MvcController::ConditionallyEnable()
     for(wxWindowList::const_iterator i = wl.begin(); i != wl.end(); ++i)
         {
         wxWindow* pw = *i;
-        HOPEFULLY(0 != pw);
+        LMI_ASSERT(0 != pw);
         Transferor* t = dynamic_cast<Transferor*>(pw->GetValidator());
         if(t)
             {
@@ -233,7 +234,7 @@ void MvcController::ConditionallyEnable()
     for(wvci i = lineage_.begin(); i != lineage_.end(); ++i)
         {
         wxWindow* pw = *i;
-        HOPEFULLY(0 != pw);
+        LMI_ASSERT(0 != pw);
         Transferor* t = dynamic_cast<Transferor*>(pw->GetValidator());
         if(t)
             {
@@ -307,7 +308,7 @@ void MvcController::ConditionallyEnableItems
             ;
         }
 
-    HOPEFULLY(datum);
+    LMI_ASSERT(datum);
 
     if(radiobox)
         {
@@ -441,11 +442,11 @@ void MvcController::Initialize()
     for(wvci i = lineage_.begin(); i != lineage_.end(); ++i)
         {
         wxWindow* pw = *i;
-        HOPEFULLY(0 != pw);
+        LMI_ASSERT(0 != pw);
         Transferor* t = dynamic_cast<Transferor*>(pw->GetValidator());
         if(t)
             {
-            HOPEFULLY(pw == &WindowFromXrcName<wxWindow>(t->name()));
+            LMI_ASSERT(pw == &WindowFromXrcName<wxWindow>(t->name()));
             ConditionallyEnableControl(t->name(), *pw);
             ConditionallyEnableItems  (t->name(), *pw);
             }
@@ -494,7 +495,7 @@ std::string MvcController::NameOfControlToDeferEvaluating() const
 
 void MvcController::RefocusLastFocusedWindow()
 {
-    HOPEFULLY(last_focused_window_ && last_focused_window_->IsEnabled());
+    LMI_ASSERT(last_focused_window_ && last_focused_window_->IsEnabled());
     last_focused_window_->SetFocus();
 }
 
@@ -652,7 +653,7 @@ void MvcController::UponChildFocus(wxChildFocusEvent& event)
         }
     else
         {
-        HOPEFULLY(!unit_test_refocus_event_pending_);
+        LMI_ASSERT(!unit_test_refocus_event_pending_);
         if(!unit_test_under_way_)
             {
             wxCommandEvent event0(wxEVT_REFOCUS_INVALID_CONTROL);
@@ -729,7 +730,7 @@ void MvcController::UponPageChanging(wxBookCtrlBaseEvent& event)
 
 void MvcController::UponRefocusInvalidControl(wxCommandEvent&)
 {
-    HOPEFULLY(unit_test_refocus_event_pending_);
+    LMI_ASSERT(unit_test_refocus_event_pending_);
     RefocusLastFocusedWindow();
     unit_test_refocus_event_pending_ = false;
 }

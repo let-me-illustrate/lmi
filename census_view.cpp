@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: census_view.cpp,v 1.51 2007-03-06 18:13:37 wboutin Exp $
+// $Id: census_view.cpp,v 1.52 2007-03-09 16:27:23 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -29,6 +29,7 @@
 #include "census_view.hpp"
 
 #include "alert.hpp"
+#include "assert_lmi.hpp"
 #include "census_document.hpp"
 #include "configurable_settings.hpp"
 #include "default_view.hpp"
@@ -975,7 +976,7 @@ void CensusView::UponDeleteCells(wxCommandEvent&)
         return;
         }
 
-    HOPEFULLY(n_sel_items < n_items);
+    LMI_ASSERT(n_sel_items < n_items);
 
     std::ostringstream oss;
     oss
@@ -1005,7 +1006,7 @@ void CensusView::UponDeleteCells(wxCommandEvent&)
 
     std::sort(erasures.begin(), erasures.end());
 
-    HOPEFULLY(cell_parms().size() == n_items);
+    LMI_ASSERT(cell_parms().size() == n_items);
 
     std::vector<Input> expurgated_cell_parms;
     expurgated_cell_parms.reserve
@@ -1019,7 +1020,7 @@ void CensusView::UponDeleteCells(wxCommandEvent&)
             expurgated_cell_parms.push_back(cell_parms()[j]);
             }
         }
-    HOPEFULLY(expurgated_cell_parms.size() == n_items - n_sel_items);
+    LMI_ASSERT(expurgated_cell_parms.size() == n_items - n_sel_items);
 
 //    cell_parms().swap(expurgated_cell_parms); // TODO ?? Would this be better?
     cell_parms() = expurgated_cell_parms;

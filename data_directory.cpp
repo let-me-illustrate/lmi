@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: data_directory.cpp,v 1.6 2007-03-06 18:13:37 wboutin Exp $
+// $Id: data_directory.cpp,v 1.7 2007-03-09 16:27:23 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -28,7 +28,7 @@
 
 #include "data_directory.hpp"
 
-#include "alert.hpp"
+#include "assert_lmi.hpp"
 #include "global_settings.hpp"
 
 #include <boost/filesystem/convenience.hpp>
@@ -38,7 +38,7 @@
 std::string AddDataDir(std::string const& a_filename)
 {
     fs::path path(a_filename);
-    HOPEFULLY(a_filename == path.leaf());
+    LMI_ASSERT(a_filename == path.leaf());
 
     path = global_settings::instance().data_directory() / path;
     return path.string();

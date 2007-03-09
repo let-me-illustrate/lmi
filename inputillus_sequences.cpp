@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: inputillus_sequences.cpp,v 1.13 2007-03-06 18:13:37 wboutin Exp $
+// $Id: inputillus_sequences.cpp,v 1.14 2007-03-09 16:27:23 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -29,6 +29,7 @@
 #include "inputillus.hpp"
 
 #include "alert.hpp"
+#include "assert_lmi.hpp"
 #include "database.hpp"
 #include "dbnames.hpp"
 #include "global_settings.hpp"
@@ -456,8 +457,8 @@ std::string IllusInputParms::realize_sequence_string_for_current_coi_grading()
         (VectorCurrentCoiGrading.begin()
         ,VectorCurrentCoiGrading.end()
         );
-    HOPEFULLY(*test.first  == lowest );
-    HOPEFULLY(*test.second == highest);
+    LMI_ASSERT(*test.first  == lowest );
+    LMI_ASSERT(*test.second == highest);
 
     // SOMEDAY !! If we add a production like
     //   numeric-value: numeric-literal %

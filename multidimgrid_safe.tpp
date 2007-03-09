@@ -19,10 +19,11 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: multidimgrid_safe.tpp,v 1.6 2007-03-08 01:14:38 chicares Exp $
+// $Id: multidimgrid_safe.tpp,v 1.7 2007-03-09 16:27:23 chicares Exp $
 
 #include "multidimgrid_safe.hpp"
 
+#include "alert.hpp"
 #include "value_cast.hpp"
 
 /// MultiDimAxis<E>

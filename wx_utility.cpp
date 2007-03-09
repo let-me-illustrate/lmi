@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: wx_utility.cpp,v 1.7 2007-03-06 18:13:38 wboutin Exp $
+// $Id: wx_utility.cpp,v 1.8 2007-03-09 16:27:23 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -29,6 +29,7 @@
 #include "wx_utility.hpp"
 
 #include "alert.hpp"
+#include "assert_lmi.hpp"
 #include "calendar_date.hpp"
 
 #include <wx/bookctrl.h>
@@ -51,10 +52,10 @@ namespace
 void AssertWxTimeIsMidnight(wxDateTime const& wx_date)
 {
     wxDateTime::Tm tm = wx_date.GetTm();
-    HOPEFULLY(0 == tm.hour);
-    HOPEFULLY(0 == tm.min);
-    HOPEFULLY(0 == tm.sec);
-    HOPEFULLY(0 == tm.msec);
+    LMI_ASSERT(0 == tm.hour);
+    LMI_ASSERT(0 == tm.min);
+    LMI_ASSERT(0 == tm.sec);
+    LMI_ASSERT(0 == tm.msec);
 }
 } // Unnamed namespace.
 
@@ -139,7 +140,7 @@ std::vector<std::string> EnumerateBookPageNames(wxBookCtrlBase const& book)
     for(std::size_t j = 0; j < book.GetPageCount(); ++j)
         {
         std::string name(book.GetPageText(j));
-        HOPEFULLY(z.end() == std::find(z.begin(), z.end(), name));
+        LMI_ASSERT(z.end() == std::find(z.begin(), z.end(), name));
         z.push_back(name);
         }
     return z;
@@ -160,7 +161,7 @@ void EnumerateLineage
     for(wxWindowList::const_iterator i = wl.begin(); i != wl.end(); ++i)
         {
         wxWindow* c = *i;
-        HOPEFULLY(0 != c);
+        LMI_ASSERT(0 != c);
         v.push_back(c);
         EnumerateLineage(c, v);
         }

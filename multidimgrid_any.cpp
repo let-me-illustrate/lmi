@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: multidimgrid_any.cpp,v 1.9 2007-03-08 01:14:38 chicares Exp $
+// $Id: multidimgrid_any.cpp,v 1.10 2007-03-09 16:27:23 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -28,6 +28,7 @@
 
 #include "multidimgrid_any.hpp"
 
+#include "alert.hpp"
 #include "wx_new.hpp"
 
 #include <wx/checkbox.h>

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avsolve.cpp,v 1.13 2007-03-06 18:13:37 wboutin Exp $
+// $Id: ihs_avsolve.cpp,v 1.14 2007-03-09 16:27:23 chicares Exp $
 
 // All iterative illustration solves are performed in this file.
 // We use Brent's algorithm because it is guaranteed to converge
@@ -36,6 +36,7 @@
 #include "account_value.hpp"
 
 #include "alert.hpp"
+#include "assert_lmi.hpp"
 #include "death_benefits.hpp"
 #include "inputs.hpp"
 #include "inputstatus.hpp"
@@ -185,11 +186,11 @@ double AccountValue::SolveTest(double a_CandidateValue)
     if(no_lapse_dur < (EffectiveSolveTargetYear - 1))
         {
         std::vector<double>::const_iterator csv_begin = csv.begin();
-        HOPEFULLY(static_cast<unsigned int>(no_lapse_dur) <= csv.size());
+        LMI_ASSERT(static_cast<unsigned int>(no_lapse_dur) <= csv.size());
         std::advance(csv_begin, no_lapse_dur);
         // Stop at EffectiveSolveTargetYear
         std::vector<double>::const_iterator csv_end = csv.begin();
-        HOPEFULLY
+        LMI_ASSERT
             (   static_cast<unsigned int>(EffectiveSolveTargetYear - 1)
             <=  csv.size()
             );
@@ -197,7 +198,7 @@ double AccountValue::SolveTest(double a_CandidateValue)
 
         // Paranoid check that solvetgtyr is within no-lapse period.
         std::vector<double>::difference_type dist = csv_end - csv_begin;
-        HOPEFULLY(0 < dist);
+        LMI_ASSERT(0 < dist);
 
         most_negative_csv = *std::min_element
             (csv_begin
@@ -214,7 +215,7 @@ double AccountValue::SolveTest(double a_CandidateValue)
         // Stop at EffectiveSolveTargetYear
         std::vector<double>::iterator excess_loan_end =
             VariantValues().ExcessLoan.begin();
-        HOPEFULLY
+        LMI_ASSERT
             (   static_cast<unsigned int>(EffectiveSolveTargetYear)
             <=  VariantValues().ExcessLoan.size()
             );
@@ -276,8 +277,8 @@ void AccountValue::SolveSetWD(double a_CandidateValue)
 //============================================================================
 void AccountValue::SolveSetWDThenLoan(double a_CandidateValue)
 {
+    LMI_ASSERT(e_yes == Input_->WDToBasisThenLoan);
     Outlay_->set_withdrawals(a_CandidateValue, SolveBegYear, SolveEndYear);
-    HOPEFULLY(e_yes == Input_->WDToBasisThenLoan);
 }
 
 //============================================================================
@@ -345,7 +346,7 @@ double AccountValue::Solve
         ,a_SolveTgtYear
         );
 
-//  HOPEFULLY(0 <= SolveBegYear);
+//  LMI_ASSERT(0 <= SolveBegYear);
     HOPEFULLY(SolveBegYear <= SolveEndYear);
     HOPEFULLY(SolveEndYear <= BasicValues::GetLength());
 
