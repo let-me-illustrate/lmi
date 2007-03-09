@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: alert.hpp,v 1.18 2007-03-06 18:13:37 wboutin Exp $
+// $Id: alert.hpp,v 1.19 2007-03-09 14:14:09 chicares Exp $
 
 #ifndef alert_hpp
 #define alert_hpp
@@ -39,34 +39,42 @@
 /// platform by writing to the std::ostreams these functions return.
 /// For instance, for a command-line interface, purely informational
 /// messages might be written to std::cout, and error messages to
-/// std::cerr, while for a gui, a messagebox might pop up when the
+/// std::cerr, while for a GUI, a messagebox might pop up when the
 /// stream is flushed. This interface is deliberately abstract; the
 /// concrete behaviors are implementation details.
 ///
-/// Here's how the various streams are intended to be used.
+/// Here's how the various streams are intended to be used. These
+/// descriptions are generic; the implementation for each interface
+/// shows specific choices made for 'lmi'.
 ///
-/// status: Routine notifications arising in normal processing, such as
-/// "file saved". They might be displayed unobtrusively in a gui, for
-/// instance on a statusbar; a command-line interface might not display
-/// them at all.
+/// status: Routine notifications arising in normal processing, such
+/// as "file saved". They might be displayed unobtrusively in a GUI,
+/// for instance on a statusbar; a command-line interface might not
+/// display them at all.
 ///
-/// warning: Significant runtime problems that should be brought to the
-/// user's attention: the program may work, but not in exactly the way
-/// the user wanted. A gui would probably use a messagebox here.
+/// warning: Significant runtime problems that should be brought to
+/// the user's attention: the program can continue, but not in exactly
+/// the way the user wanted, so resumption semantics are appropriate.
+/// All interfaces must display a message (e.g., a GUI would typically
+/// use a messagebox) but, unlike fatal_error, not routinely throw an
+/// exception (unless due to internal error).
 ///
 /// hobsons_choice: Serious runtime problems that users may be allowed
-/// to bypass, though at their own peril. The particular implementation
-/// provided happens to offer such an option only for a GUI interface;
-/// different implementation might not. For instance, a cgi-bin program
-/// used only by customers might treat all diagnostics as fatal, while
-/// a command-line interface used for regression testing might instead
-/// try to ignore runtime problems.
+/// to bypass, though at their own peril. The 'lmi' implementation
+/// happens to offer such an option only for a GUI interface; another
+/// implementation might do otherwise, and no requirement is imposed
+/// except that a message must be shown. A cgi-bin interface might
+/// implement termination semantics, while a command-line interface
+/// used only for regression testing might print a message and attempt
+/// to continue.
 ///
 /// fatal_error: Dire runtime problems that prevent the system from
-/// performing a requested action running in any reasonable manner.
-/// Generally, an exception would be thrown; a gui might catch it,
-/// terminate the action in an orderly way, and yet remain active,
-/// while a command-line program might terminate.
+/// performing a requested action in any reasonable manner, and that
+/// therefore call for resumption semantics. All interfaces must show
+/// a message and throw an exception when the stream is flushed. A GUI
+/// might catch that exception, terminate the action in an orderly
+/// way, and yet remain active, while a command-line program might
+/// simply exit.
 ///
 /// The motivation is to make code like
 ///   std::ostringstream oss;
@@ -87,6 +95,19 @@
 /// avoid warning() and especially hobsons_choice(). Already, option
 /// 'offer_hobsons_choice' in 'configurable_settings.?pp', if set as
 /// recommended, removes the user choice from hobsons_choice().
+///
+/// Sometimes gcc warns of a missing return statement after the stream
+/// returned by fatal_error() is flushed: an exception is obligatorily
+/// thrown, but it is difficult for a compiler to discern that. When
+/// (and only when) gcc issues such a warning, add exactly this line:
+///   throw "Unreachable--silences a compiler diagnostic.");
+/// to silence it. Rationale: a return statement would suffice, but
+/// would be misleading (the function cannot return after throwing),
+/// might be difficult to write (the function may return a reference),
+/// and could not be everywhere identical. The throw-expression above
+/// always works, is self documenting, and adds no header dependency.
+/// Writing it the same way everywhere requires no invention and
+/// increases global comprehensibility.
 ///
 /// Design decisions, and paths not taken.
 ///
@@ -109,7 +130,7 @@
 ///   single_ostream << "error" << some_variable << messagebox;
 /// illustrates the decision to express the destination conceptually
 /// rather than physically. A command-line program might very well pop
-/// up a gui message box, but such a feature seems unnecessary here.
+/// up a GUI message box, but such a feature seems unnecessary here.
 /// It seems better to offer a sufficient variety of streams, a bit
 /// broader than the standard output streams, and implement them for
 /// each interface or platform separately. The supplied implementation
@@ -123,10 +144,10 @@
 /// MC++D, 6.1], so cyclic initialization and destruction dependencies
 /// must be avoided.
 ///
-/// One could imagine using an optional trace file to log gui alert
+/// One could imagine using an optional trace file to log GUI alert
 /// messages. If desired, that could be an implementation detail of the
-/// gui implementation. It would not be useful in a command-line
-/// implementation, so it's not considered here. A gui might display
+/// GUI implementation. It would not be useful in a command-line
+/// implementation, so it's not considered here. A GUI might display
 /// an alert in a window with a distinct submessage in its caption, but
 /// there's no natural way to express that on a command-line.
 ///
@@ -230,14 +251,17 @@ void LMI_SO test_arbitrary_exception();
     << ", line " << __LINE__ << "]\n" \
     << std::flush
 
-/// Weak assertion that users are allowed to bypass.
+/// (Hopefully the name of this macro is self documenting.)
+///
+/// Weak assertion that users are allowed to bypass. Use LMI_ASSERT
+/// instead wherever possible.
 ///
 /// The last line eats a semicolon written after the macro invocation.
 ///
 /// TODO ?? It is generally a bad idea to let users bypass assertions.
 /// Any apparent need to do this probably masks a logic error.
 
-#define HOPEFULLY(condition)                               \
+#define HOPEFULLY(condition)                                \
     if(!(condition))                                        \
         {                                                   \
         hobsons_choice()                                    \
