@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_invariant.cpp,v 1.30 2007-03-06 18:13:37 wboutin Exp $
+// $Id: ledger_invariant.cpp,v 1.31 2007-03-09 16:27:23 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -29,6 +29,7 @@
 #include "ledger_invariant.hpp"
 
 #include "alert.hpp"
+#include "assert_lmi.hpp"
 #include "basic_values.hpp"
 #include "crc32.hpp"
 #include "database.hpp"
@@ -486,7 +487,7 @@ void LedgerInvariant::Init(BasicValues* b)
     std::vector<double> const& guar_m_and_e_rate = b->InterestRates_->MAndERate
         (e_basis(e_guarbasis)
         );
-    HOPEFULLY
+    LMI_ASSERT
         (each_equal
             (guar_m_and_e_rate.begin()
             ,guar_m_and_e_rate.end()
@@ -629,7 +630,7 @@ void LedgerInvariant::Init(BasicValues* b)
     // TODO ?? Output forms presuppose that the premium tax load is a
     // scalar unless it is tiered.
     StatePremTaxLoad        = b->Loads_->premium_tax_load()[0];
-    HOPEFULLY
+    LMI_ASSERT
         (PremiumTaxLoadIsTiered || each_equal
             (b->Loads_->premium_tax_load().begin()
             ,b->Loads_->premium_tax_load().end()
@@ -640,7 +641,7 @@ void LedgerInvariant::Init(BasicValues* b)
     // TODO ?? Output forms presuppose that the DAC tax load is scalar;
     // and it seems odd that the DAC-tax load would have much to do
     // with whether the premium-tax is tiered.
-    HOPEFULLY
+    LMI_ASSERT
         (PremiumTaxLoadIsTiered || each_equal
             (b->Loads_->dac_tax_load().begin()
             ,b->Loads_->dac_tax_load().end()
@@ -651,7 +652,7 @@ void LedgerInvariant::Init(BasicValues* b)
     // it seems that output forms assume that the DAC tax premium load
     // represents the entire DAC tax charge, so they're incorrect if
     // the DAC tax fund charge isn't zero.
-    HOPEFULLY(0.0 == b->Database_->Query(DB_DACTaxFundCharge));
+    LMI_ASSERT(0.0 == b->Database_->Query(DB_DACTaxFundCharge));
 
     InitAnnLoanDueRate      = b->InterestRates_->RegLnDueRate
         (e_basis(e_currbasis)
@@ -689,7 +690,7 @@ LedgerInvariant& LedgerInvariant::PlusEq(LedgerInvariant const& a_Addend)
 
     // ET !! This is of the form 'x = (lengthof x) take y'.
     // Make sure total (this) has enough years to add all years of a_Addend to.
-    HOPEFULLY(a_Addend.Length <= Length);
+    LMI_ASSERT(a_Addend.Length <= Length);
     for(int j = 0; j < Max; j++)
         {
         if(0.0 == N[j])

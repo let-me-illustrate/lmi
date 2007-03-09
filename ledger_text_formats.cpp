@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_text_formats.cpp,v 1.27 2007-01-27 00:00:51 wboutin Exp $
+// $Id: ledger_text_formats.cpp,v 1.28 2007-03-09 16:27:23 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -28,6 +28,7 @@
 
 #include "ledger_text_formats.hpp"
 
+#include "alert.hpp"
 #include "authenticity.hpp"
 #include "calendar_date.hpp"
 #include "comma_punct.hpp"

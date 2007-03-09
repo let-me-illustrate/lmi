@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_server7702.cpp,v 1.12 2007-03-06 18:13:37 wboutin Exp $
+// $Id: ihs_server7702.cpp,v 1.13 2007-03-09 16:27:23 chicares Exp $
 
 // Known defects:
 // grep for "NEED DECISION"
@@ -31,7 +31,7 @@
 
 #include "ihs_server7702.hpp"
 
-#include "alert.hpp"
+#include "assert_lmi.hpp"
 #include "basic_values.hpp"
 #include "calendar_date.hpp"
 #include "data_directory.hpp"
@@ -493,8 +493,7 @@ void Server7702::ProcessNewIssue()
     Output.GuidelineLevelPremium    = Output.GuidelineLevelPremiumPolicyA;
     Output.GuidelineSinglePremium   = Output.GuidelineSinglePremiumPolicyA;
 // TODO ?? NEED DECISION Only if an adj event really occurred, as defined.
-// TODO ?? And throw something here.
-    HOPEFULLY(false == Output.AdjustableEventOccurred);
+    LMI_ASSERT(false == Output.AdjustableEventOccurred);
 }
 
 //============================================================================

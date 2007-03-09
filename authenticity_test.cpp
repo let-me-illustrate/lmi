@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: authenticity_test.cpp,v 1.3 2007-03-06 18:13:37 wboutin Exp $
+// $Id: authenticity_test.cpp,v 1.4 2007-03-09 16:27:23 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -28,6 +28,7 @@
 
 #include "authenticity.hpp"
 
+#include "assert_lmi.hpp"
 #include "md5.hpp"
 #include "miscellany.hpp"
 #include "system_command.hpp"
@@ -48,7 +49,7 @@
 template<typename T, std::size_t n>
 std::string md5_str(T(&md5sum)[n])
 {
-    HOPEFULLY(n == md5len);
+    LMI_ASSERT(n == md5len);
     typedef std::vector<unsigned char> svuc;
     return md5_hex_string(svuc(md5sum, md5sum + md5len));
 }

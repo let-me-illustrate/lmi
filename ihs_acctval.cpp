@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_acctval.cpp,v 1.91 2007-03-06 18:13:37 wboutin Exp $
+// $Id: ihs_acctval.cpp,v 1.92 2007-03-09 16:27:23 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -29,6 +29,7 @@
 #include "account_value.hpp"
 
 #include "alert.hpp"
+#include "assert_lmi.hpp"
 #include "calendar_date.hpp"
 #include "database.hpp"
 #include "dbnames.hpp"
@@ -238,7 +239,7 @@ double AccountValue::RunOneBasis(e_run_basis const& a_Basis)
 // Apparently this should never be done because Solve() is called in
 //   RunAllApplicableBases() .
 // TODO ?? Do something more flexible.
-//      HOPEFULLY(a_Basis == Input_->SolveBasis);
+//      LMI_ASSERT(a_Basis == Input_->SolveBasis);
 //      z = Solve();
         }
     else

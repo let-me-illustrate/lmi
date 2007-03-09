@@ -19,10 +19,12 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: tier_view_editor.cpp,v 1.8 2007-03-06 18:13:38 wboutin Exp $
+// $Id: tier_view_editor.cpp,v 1.9 2007-03-09 16:27:23 chicares Exp $
 
 #include "tier_view_editor.hpp"
 
+#include "alert.hpp"
+#include "assert_lmi.hpp"
 #include "multidimgrid_safe.tpp"
 #include "value_cast.hpp"
 
@@ -32,12 +34,12 @@
 
 void tier_entity_adapter::ensure_not_void() const
 {
-    HOPEFULLY(!is_void());
+    LMI_ASSERT(!is_void());
 }
 
 void tier_entity_adapter::ensure_valid_band_number(unsigned int band) const
 {
-    HOPEFULLY(band < limits().size());
+    LMI_ASSERT(band < limits().size());
 }
 
 double_pair tier_entity_adapter::get_value(unsigned int band) const

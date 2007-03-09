@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: loads.cpp,v 1.14 2007-03-06 18:13:37 wboutin Exp $
+// $Id: loads.cpp,v 1.15 2007-03-09 16:27:23 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -30,6 +30,7 @@
 #include "loads_impl.hpp"
 
 #include "alert.hpp"
+#include "assert_lmi.hpp"
 #include "basic_values.hpp"
 #include "database.hpp"
 #include "dbnames.hpp"
@@ -53,7 +54,7 @@ Loads::Loads()
 Loads::Loads(BasicValues& V)
 {
     int length = V.GetLength();
-    HOPEFULLY(length == V.Database_->length());
+    LMI_ASSERT(length == V.Database_->length());
     load_details details
         (length
         ,V.Input_->AmortizePremLoad

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: text_doc.cpp,v 1.6 2007-01-27 00:00:52 wboutin Exp $
+// $Id: text_doc.cpp,v 1.7 2007-03-09 16:27:23 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/doc.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -38,7 +38,6 @@
 
 #include "view_ex.tpp"
 
-#include "alert.hpp"
 #include "text_view.hpp"
 
 #include <wx/textctrl.h>

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_harmonization.cpp,v 1.45 2007-03-06 18:13:37 wboutin Exp $
+// $Id: input_harmonization.cpp,v 1.46 2007-03-09 16:27:23 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -29,6 +29,7 @@
 #include "input.hpp"
 
 #include "alert.hpp"
+#include "assert_lmi.hpp"
 #include "database.hpp"
 #include "dbnames.hpp"
 #include "global_settings.hpp"
@@ -821,7 +822,7 @@ false // Silly workaround for now.
     TERM_USE_AMOUNT     ->EnableWindow(enable_term);
 
     bool term_use_amount = BF_CHECKED == TERM_USE_AMOUNT->GetCheck();
-    HOPEFULLY(term_use_amount || BF_CHECKED == TermRiderUseProportion->GetCheck());
+    LMI_ASSERT(term_use_amount || BF_CHECKED == TermRiderUseProportion->GetCheck());
     TERM_SPECAMT        ->EnableWindow(enable_term &&  term_use_amount);
     TotalSpecifiedAmount       ->EnableWindow(enable_term && !term_use_amount);
     TERM_PROPORTION     ->EnableWindow(enable_term && !term_use_amount);

@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_basicval.cpp,v 1.33 2007-03-06 18:13:37 wboutin Exp $
+// $Id: ihs_basicval.cpp,v 1.34 2007-03-09 16:27:23 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -32,6 +32,7 @@
 
 #include "actuarial_table.hpp"
 #include "alert.hpp"
+#include "assert_lmi.hpp"
 #include "data_directory.hpp"
 #include "database.hpp"
 #include "dbnames.hpp"
@@ -1045,17 +1046,17 @@ double BasicValues::GetModalTgtPrem
 // Changing
 //      if(0 == Mode)
 // to
-//      HOPEFULLY(0 == Mode);
+//      LMI_ASSERT(0 == Mode);
 // does not address this, and actually makes correct code incorrect (why?),
 // so the proposed replacement of if...else below with
-//      HOPEFULLY(0 == Mode);
+//      LMI_ASSERT(0 == Mode);
 //      modal_prem += POLICYFEE;
 // seems like something we shouldn't do.
 //
 // That is not to say that
-//      HOPEFULLY(0 == Mode);
+//      LMI_ASSERT(0 == Mode);
 // or even
-//      HOPEFULLY(e_annual == Mode);
+//      LMI_ASSERT(e_annual == Mode);
 // would be good: that would allow a non-annual mode to be entered, but
 // give a runtime error. Either non-annual modes are OK and should be
 // supported, or they are not OK. What harm is done by the change below?
@@ -1487,8 +1488,8 @@ std::vector<double> const& BasicValues::GetBandedCoiRates
         {
         double band_0_limit = Database_->Query(DB_CurrCOITable0Limit);
         double band_1_limit = Database_->Query(DB_CurrCOITable1Limit);
-        HOPEFULLY(0.0 <= band_0_limit);
-        HOPEFULLY(band_0_limit <= band_1_limit);
+        LMI_ASSERT(0.0 <= band_0_limit);
+        LMI_ASSERT(band_0_limit <= band_1_limit);
         if(band_0_limit <= specamt && specamt < band_1_limit)
             {
             return MortalityRates_->MonthlyCoiRatesBand1(rate_basis);
@@ -1514,7 +1515,7 @@ double BasicValues::GetAnnuityValueMlyDed
     ,e_mode const& Mode
     ) const
 {
-    HOPEFULLY(0.0 != Mode);
+    LMI_ASSERT(0.0 != Mode);
     double spread = 0.0;
     if(e_monthly != Mode)
         {
@@ -1905,7 +1906,7 @@ void BasicValues::CalculateNon7702CompliantCorridor() const
 
     double pivot_age = Database_->Query(DB_NonUSCorridorPivot);
 
-    HOPEFULLY( (pivot_age >= 0.0)
+    LMI_ASSERT( (pivot_age >= 0.0)
             &&(pivot_age < 95.0)
             );
 

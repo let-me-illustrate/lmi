@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_test.cpp,v 1.25 2007-03-06 18:13:37 wboutin Exp $
+// $Id: input_test.cpp,v 1.26 2007-03-09 16:27:23 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -31,6 +31,7 @@
 #include "multiple_cell_document.hpp"
 #include "single_cell_document.hpp"
 
+#include "assert_lmi.hpp"
 #include "miscellany.hpp" // files_are_identical()
 #include "test_tools.hpp"
 #include "timer.hpp"
@@ -122,7 +123,7 @@ void assay_speed()
     root << raw_data;
 
     xml::node::const_iterator i = root.begin();
-    HOPEFULLY(!i->is_text());
+    LMI_ASSERT(!i->is_text());
     xml::element const& e = *i;
 
     std::cout
@@ -180,7 +181,7 @@ int test_main(int, char*[])
     os0.close();
 
     xml::node::const_iterator i = xml_root0.begin();
-    HOPEFULLY(!i->is_text());
+    LMI_ASSERT(!i->is_text());
     xml::element const& xml_node = *i;
 
     xml_node >> replica;

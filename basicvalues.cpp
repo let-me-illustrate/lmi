@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: basicvalues.cpp,v 1.14 2007-03-06 18:13:37 wboutin Exp $
+// $Id: basicvalues.cpp,v 1.15 2007-03-09 16:27:23 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -29,6 +29,7 @@
 #include "basic_values.hpp"
 
 #include "alert.hpp"
+#include "assert_lmi.hpp"
 #include "database.hpp"
 #include "dbnames.hpp"
 #include "death_benefits.hpp"
@@ -82,7 +83,7 @@ void BasicValues::Init()
     Length = Input_->YearsToMaturity();
     IssueAge = S.IssueAge.value();
     RetAge = S.RetAge.value();
-    HOPEFULLY(IssueAge <= RetAge);
+    LMI_ASSERT(IssueAge <= RetAge);
 
     Database_.reset
         (new TDatabase

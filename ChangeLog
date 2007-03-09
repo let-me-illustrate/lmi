@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.588 2007-03-08 01:14:38 chicares Exp $
+// $Id: ChangeLog,v 1.589 2007-03-09 16:27:23 chicares Exp $
 
 MAINTENANCE
 
@@ -10263,7 +10263,7 @@ Remove doxygen markup. See:
   view_ex.cpp
   view_ex.hpp
 Prevent potential crash due to defective installation. See:
-  http://lists.gnu.org/archive/PASTE_LINK_WHEN_IT_BECOMES_AVAILABLE
+  http://lists.nongnu.org/archive/html/lmi/2007-03/msg00008.html
 
 20070303T1942Z <chicares@cox.net> [1253]
 
@@ -10463,4 +10463,73 @@ Expunge obsolete code.
   rounding_view_editor.hpp
   tier_view_editor.hpp
 Replace wxString with std::string.
+
+20070309T1414Z <chicares@cox.net> [1256]
+
+  alert.hpp
+Improve documentation. See:
+  http://lists.nongnu.org/archive/html/lmi/2007-03/msg00008.html
+
+20070309T1627Z <chicares@cox.net> [1254]
+
+  accountvalue.cpp
+  authenticity.cpp
+  authenticity_test.cpp
+  basicvalues.cpp
+  calculate.hpp
+  calendar_date.cpp
+  census_view.cpp
+  data_directory.cpp
+  database_view_editor.cpp
+  database_view_editor.hpp
+  dbdict.cpp
+  death_benefits.cpp
+  financial.hpp
+  ihs_acctval.cpp
+  ihs_avdebug.cpp
+  ihs_avmly.cpp
+  ihs_avsolve.cpp
+  ihs_basicval.cpp
+  ihs_commfns.cpp
+  ihs_database.cpp
+  ihs_dbvalue.cpp
+  ihs_funddata.cpp
+  ihs_mortal.cpp
+  ihs_proddata.cpp
+  ihs_server7702.cpp
+  ihs_standalone.cpp
+  illustration_view.cpp
+  input_harmonization.cpp
+  input_test.cpp
+  inputillus_sequences.cpp
+  interest_rates.cpp
+  ledger.cpp
+  ledger_base.cpp
+  ledger_invariant.cpp
+  ledger_test.cpp
+  ledger_text_formats.cpp
+  ledger_variant.cpp
+  ledgervalues.cpp
+  loads.cpp
+  loads_test.cpp
+  miscellany.hpp
+  multidimgrid_any.cpp
+  multidimgrid_any.hpp
+  multidimgrid_safe.tpp
+  multidimgrid_tools.hpp
+  multiple_cell_document.cpp
+  mvc_controller.cpp
+  mvc_model.cpp
+  policy_document.cpp
+  rounding_document.cpp
+  single_cell_document.cpp
+  stratified_algorithms.cpp
+  stratified_algorithms.hpp
+  stratified_charges.cpp
+  text_doc.cpp
+  tier_document.cpp
+  tier_view_editor.cpp
+  view_ex.tpp
+  wx_utility.cpp
+Revise assertions, preventing most from being overridden.
 
