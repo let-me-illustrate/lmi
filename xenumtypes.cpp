@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xenumtypes.cpp,v 1.18 2007-01-27 00:00:52 wboutin Exp $
+// $Id: xenumtypes.cpp,v 1.19 2007-03-10 02:47:09 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -31,7 +31,7 @@
 // 'guiding declarations', but I'm not a C++ prehistorian. This
 // workaround seems necessary only with the bc++5.02 IDE, but not
 // with the command-line compiler. It does not seem necessary with
-// gui builds in any case. Such is magic.
+// GUI builds in any case. Such is magic.
 class magic_stream;
 class magic_class;
 magic_stream& operator>> (magic_stream&, magic_class&);
