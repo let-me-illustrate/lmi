@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustration_document.hpp,v 1.7 2007-01-27 00:00:51 wboutin Exp $
+// $Id: illustration_document.hpp,v 1.8 2007-03-10 18:56:08 chicares Exp $
 
 // Because illustration windows have their own functions for loading
 // and saving files, override OnOpenDocument() and OnSaveDocument()
@@ -51,8 +51,8 @@
 
 enum {LMI_WX_CHILD_DOCUMENT = 8};
 
-class WXDLLEXPORT wxHtmlWindow;
 class IllustrationView;
+class WXDLLEXPORT wxHtmlWindow;
 
 class IllustrationDocument
     :public wxDocument

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: database.hpp,v 1.7 2007-01-27 00:00:51 wboutin Exp $
+// $Id: database.hpp,v 1.8 2007-03-10 18:56:08 chicares Exp $
 
 #ifndef database_hpp
 #define database_hpp
@@ -38,8 +38,8 @@
 
 // Database of product parameters
 
-class TDBValue;
 class InputParms;
+class TDBValue;
 
 class LMI_SO TDatabase
     :private boost::noncopyable

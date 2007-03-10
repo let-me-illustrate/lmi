@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: account_value.hpp,v 1.46 2007-01-27 00:00:51 wboutin Exp $
+// $Id: account_value.hpp,v 1.47 2007-03-10 18:56:08 chicares Exp $
 
 #ifndef account_value_hpp
 #define account_value_hpp
@@ -43,11 +43,11 @@
 //   regular loans
 //   preferred loans
 
+class DebugView;
 class InputParms;
 class Ledger;
 class LedgerInvariant;
 class LedgerVariant;
-class DebugView;
 
 class LMI_SO AccountValue
     :protected BasicValues

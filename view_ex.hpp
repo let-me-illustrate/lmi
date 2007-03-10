@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: view_ex.hpp,v 1.8 2007-03-03 17:47:40 chicares Exp $
+// $Id: view_ex.hpp,v 1.9 2007-03-10 18:56:08 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -88,6 +88,8 @@
 
 #include <string>
 
+class DocManagerEx;
+
 // TODO ?? Here and elsewhere, consider losing 'WXDLLEXPORT' on
 // forward declarations, depending on the disposition of
 //   http://gcc.gnu.org/bugzilla/show_bug.cgi?id=20345
@@ -95,8 +97,6 @@
 class WXDLLEXPORT wxDC;
 class WXDLLEXPORT wxIcon;
 class WXDLLEXPORT wxMenuBar;
-
-class DocManagerEx;
 
 // INELEGANT !! If both a base and a derived class derive nonvirtually
 // from boost::noncopyable

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: basic_values.hpp,v 1.17 2007-01-27 00:00:51 wboutin Exp $
+// $Id: basic_values.hpp,v 1.18 2007-03-10 18:56:08 chicares Exp $
 
 #ifndef basic_values_hpp
 #define basic_values_hpp
@@ -48,7 +48,6 @@
 // we could specify what collection of objects we want, and let the compiler
 // build the class for us.
 
-class death_benefits;
 class FundData;
 class InputParms;
 class InterestRates;
@@ -57,11 +56,12 @@ class Irc7702A;
 class Loads;
 class MortalityRates;
 class Outlay;
-class stratified_charges;
 class SurrChgRates;
 class TDatabase;
 class TProductData;
+class death_benefits;
 class rounding_rules;
+class stratified_charges;
 
 // See GetTable(). This idea may be poor, but we're OK as long as we
 // don't use MustBlend. Here's the problem. The MustBlend case uses
