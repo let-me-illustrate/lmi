@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xenumtypes.cpp,v 1.19 2007-03-10 02:47:09 chicares Exp $
+// $Id: xenumtypes.cpp,v 1.20 2007-03-10 19:01:17 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -32,8 +32,8 @@
 // workaround seems necessary only with the bc++5.02 IDE, but not
 // with the command-line compiler. It does not seem necessary with
 // GUI builds in any case. Such is magic.
-class magic_stream;
 class magic_class;
+class magic_stream;
 magic_stream& operator>> (magic_stream&, magic_class&);
 magic_stream& operator<< (magic_stream&, magic_class const&);
 #endif // BORLAND_502_IDE_BLACK_MAGIC
