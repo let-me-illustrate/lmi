@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: msw_generic.make,v 1.9 2007-01-27 00:00:51 wboutin Exp $
+# $Id: msw_generic.make,v 1.10 2007-03-10 18:23:55 chicares Exp $
 
 ################################################################################
 
@@ -86,6 +86,7 @@ DIFF    := $(gnu_utils_dir)/diff
 GREP    := $(gnu_utils_dir)/grep
 MD5SUM  := $(gnu_utils_dir)/md5sum
 PATCH   := $(gnu_utils_dir)/patch
+SORT    := $(gnu_utils_dir)/sort
 TOUCH   := $(gnu_utils_dir)/touch
 TR      := $(gnu_utils_dir)/tr
 WC      := $(gnu_utils_dir)/wc
