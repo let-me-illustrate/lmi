@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: msw_cygwin.make,v 1.8 2007-01-27 00:00:51 wboutin Exp $
+# $Id: msw_cygwin.make,v 1.9 2007-03-10 18:23:55 chicares Exp $
 
 ################################################################################
 
@@ -74,6 +74,7 @@ DIFF    := $(PATH_USR_BIN)diff
 GREP    := $(PATH_USR_BIN)grep
 MD5SUM  := $(PATH_USR_BIN)md5sum
 PATCH   := $(PATH_USR_BIN)patch
+SORT    := $(PATH_USR_BIN)sort
 TOUCH   := $(PATH_USR_BIN)touch
 TR      := $(PATH_USR_BIN)tr
 WC      := $(PATH_USR_BIN)wc
