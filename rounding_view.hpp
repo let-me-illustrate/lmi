@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: rounding_view.hpp,v 1.4 2007-03-10 02:53:10 chicares Exp $
+// $Id: rounding_view.hpp,v 1.5 2007-03-10 18:56:08 chicares Exp $
 
 #ifndef rounding_view_hpp
 #define rounding_view_hpp
@@ -36,12 +36,11 @@
 
 #include <map>
 
+class RoundingButtons;
+class RoundingDocument;
 class WXDLLEXPORT wxMenuBar;
 class WXDLLEXPORT wxSpinCtrl;
 class WXDLLEXPORT wxWindow;
-
-class RoundingButtons;
-class RoundingDocument;
 
 class RoundingView
     :public ProductEditorView

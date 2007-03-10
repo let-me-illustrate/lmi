@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: tier_view.hpp,v 1.3 2007-03-10 02:53:10 chicares Exp $
+// $Id: tier_view.hpp,v 1.4 2007-03-10 18:56:08 chicares Exp $
 
 #ifndef tier_view_hpp
 #define tier_view_hpp
@@ -34,14 +34,13 @@
 
 #include <wx/icon.h>
 
+class MultiDimGrid;
+class TierDocument;
+class TierTableAdapter;
 class WXDLLEXPORT wxMenuBar;
 class WXDLLEXPORT wxTreeCtrl;
 class WXDLLEXPORT wxTreeEvent;
 class WXDLLEXPORT wxWindow;
-
-class MultiDimGrid;
-class TierDocument;
-class TierTableAdapter;
 
 class TierView
     :public TreeGridViewBase
