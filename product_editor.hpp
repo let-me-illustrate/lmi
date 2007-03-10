@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: product_editor.hpp,v 1.5 2007-03-04 16:33:31 chicares Exp $
+// $Id: product_editor.hpp,v 1.6 2007-03-10 02:53:10 chicares Exp $
 
 #ifndef product_editor_hpp
 #define product_editor_hpp
@@ -34,7 +34,6 @@
 
 #include <string>
 
-// forward declaration
 class ProductEditorView;
 class MultiDimGrid;
 

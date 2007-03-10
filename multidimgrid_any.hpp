@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: multidimgrid_any.hpp,v 1.15 2007-03-09 16:27:23 chicares Exp $
+// $Id: multidimgrid_any.hpp,v 1.16 2007-03-10 02:53:10 chicares Exp $
 
 #ifndef multidimgrid_any_hpp
 #define multidimgrid_any_hpp
@@ -105,7 +105,6 @@
 #include <string>
 #include <vector>
 
-// Some forward declarations to avoid unnecessary header inclusions
 class WXDLLEXPORT wxBoxSizer;
 class WXDLLEXPORT wxGridBagSizer;
 

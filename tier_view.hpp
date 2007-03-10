@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: tier_view.hpp,v 1.2 2007-02-21 03:07:24 chicares Exp $
+// $Id: tier_view.hpp,v 1.3 2007-03-10 02:53:10 chicares Exp $
 
 #ifndef tier_view_hpp
 #define tier_view_hpp
@@ -39,7 +39,6 @@ class WXDLLEXPORT wxTreeCtrl;
 class WXDLLEXPORT wxTreeEvent;
 class WXDLLEXPORT wxWindow;
 
-// forward declaration
 class MultiDimGrid;
 class TierDocument;
 class TierTableAdapter;
