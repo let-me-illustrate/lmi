@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: wx_utility.hpp,v 1.6 2007-01-27 00:00:52 wboutin Exp $
+// $Id: wx_utility.hpp,v 1.7 2007-03-10 18:56:08 chicares Exp $
 
 #ifndef wx_utility_hpp
 #define wx_utility_hpp
@@ -38,11 +38,10 @@
 #include <vector>
 
 class LMI_SO calendar_date;
-class jdn_t;
-
 class WXDLLEXPORT wxBookCtrlBase;
 class WXDLLEXPORT wxDateTime;
 class WXDLLEXPORT wxWindow;
+class jdn_t;
 
 /// Function template c_cast() performs an explicit type conversion
 /// (C++98 5.4), which is inherently unsafe. Its sole virtue is that

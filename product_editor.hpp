@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: product_editor.hpp,v 1.6 2007-03-10 02:53:10 chicares Exp $
+// $Id: product_editor.hpp,v 1.7 2007-03-10 18:56:08 chicares Exp $
 
 #ifndef product_editor_hpp
 #define product_editor_hpp
@@ -34,9 +34,8 @@
 
 #include <string>
 
-class ProductEditorView;
 class MultiDimGrid;
-
+class ProductEditorView;
 class WXDLLEXPORT wxStaticText;
 class WXDLLEXPORT wxTreeCtrl;
 class WXDLLEXPORT wxWindow;
