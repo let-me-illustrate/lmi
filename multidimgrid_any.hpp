@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: multidimgrid_any.hpp,v 1.16 2007-03-10 02:53:10 chicares Exp $
+// $Id: multidimgrid_any.hpp,v 1.17 2007-03-10 12:54:06 chicares Exp $
 
 #ifndef multidimgrid_any_hpp
 #define multidimgrid_any_hpp
@@ -113,9 +113,6 @@ class MultiDimAxisAny;
 class MultiDimAxisAnyChoice;
 class MultiDimGrid;
 class MultiDimTableAny;
-
-// This helper class will be defined in the cpp file
-class GridRefreshTableDataGuard;
 
 /// Type-unsafe classes using boost::any as value type
 /// --------------------------------------------------
