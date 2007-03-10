@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: file_command_wx.cpp,v 1.4 2007-01-27 00:00:51 wboutin Exp $
+// $Id: file_command_wx.cpp,v 1.5 2007-03-10 02:47:09 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -40,7 +40,7 @@
 #include <wx/mimetype.h>
 #include <wx/utils.h> // wxExecute()
 
-// Implementing this function in a gui module means the wx facility
+// Implementing this function in a GUI module means the wx facility
 // can be used. Currently, no other interface needs to implement it.
 
 namespace

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: progress_meter.hpp,v 1.8 2007-01-27 00:00:52 wboutin Exp $
+// $Id: progress_meter.hpp,v 1.9 2007-03-10 02:47:09 chicares Exp $
 
 /// Design notes for class progress_meter.
 ///
@@ -102,8 +102,8 @@
 /// intention is to let a shared library use only this base class,
 /// while the application provides a derived-class implementation that
 /// is switchable at link time. Thus, a command-line-interface program
-/// might link 'progress_meter_cli.o', while gui programs would link an
-/// object compiled from some gui implementation. The artifice that
+/// might link 'progress_meter_cli.o', while GUI programs would link an
+/// object compiled from some GUI implementation. The artifice that
 /// accomplishes this in the present implementation is a callback
 /// function pointer. The support functions are nonmembers because of
 /// Meyer's reasoning in his well-known paper
