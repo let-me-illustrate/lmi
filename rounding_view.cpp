@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: rounding_view.cpp,v 1.4 2007-02-23 15:21:27 chicares Exp $
+// $Id: rounding_view.cpp,v 1.5 2007-03-11 13:40:21 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -27,10 +27,10 @@
 #endif // __BORLANDC__
 
 #include "rounding_view.hpp"
-#include "rounding_view_editor.hpp"
 
 #include "alert.hpp"
 #include "rounding_document.hpp"
+#include "rounding_view_editor.hpp"
 #include "wx_new.hpp"
 
 #include <wx/panel.h>
