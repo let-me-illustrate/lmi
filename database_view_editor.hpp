@@ -19,15 +19,16 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: database_view_editor.hpp,v 1.7 2007-03-09 16:27:23 chicares Exp $
+// $Id: database_view_editor.hpp,v 1.8 2007-03-11 21:36:10 chicares Exp $
 
 #ifndef database_view_editor_hpp
 #define database_view_editor_hpp
 
 #include "config.hpp"
 
-#include "ihs_dbvalue.hpp"
 #include "multidimgrid_safe.hpp"
+
+#include "ihs_dbvalue.hpp"
 #include "multidimgrid_tools.hpp"
 #include "xenumtypes.hpp"
 

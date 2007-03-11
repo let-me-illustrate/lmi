@@ -19,15 +19,16 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: tier_view_editor.hpp,v 1.9 2007-03-08 01:14:38 chicares Exp $
+// $Id: tier_view_editor.hpp,v 1.10 2007-03-11 21:36:10 chicares Exp $
 
 #ifndef tier_view_editor_hpp
 #define tier_view_editor_hpp
 
 #include "config.hpp"
 
-#include "alert.hpp"
 #include "multidimgrid_safe.hpp"
+
+#include "alert.hpp"
 #include "multidimgrid_tools.hpp"
 
 #include <boost/shared_ptr.hpp>

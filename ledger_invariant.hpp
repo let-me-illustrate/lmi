@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_invariant.hpp,v 1.12 2007-01-27 00:00:51 wboutin Exp $
+// $Id: ledger_invariant.hpp,v 1.13 2007-03-11 21:36:10 chicares Exp $
 
 #ifndef ledger_invariant_hpp
 #define ledger_invariant_hpp
@@ -27,6 +27,7 @@
 #include "config.hpp"
 
 #include "ledger_base.hpp"
+
 #include "so_attributes.hpp"
 #include "xenumtypes.hpp"
 
