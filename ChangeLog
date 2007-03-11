@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.589 2007-03-09 16:27:23 chicares Exp $
+// $Id: ChangeLog,v 1.590 2007-03-11 13:40:21 chicares Exp $
 
 MAINTENANCE
 
@@ -10532,4 +10532,62 @@ Improve documentation. See:
   view_ex.tpp
   wx_utility.cpp
 Revise assertions, preventing most from being overridden.
+
+20070310T0247Z <chicares@cox.net> [1254]
+
+  file_command_wx.cpp
+  progress_meter.hpp
+  xenumtypes.cpp
+Capitalize 'GUI' uniformly.
+
+20070310T0253Z <chicares@cox.net> [1254]
+
+  database_view.hpp
+  multidimgrid_any.hpp
+  product_editor.hpp
+  rounding_view.hpp
+  tier_view.hpp
+Don't comment a standard language feature.
+
+20070310T1254Z <chicares@cox.net> [1254]
+
+  multidimgrid_any.hpp
+Remove an unneeded forward declaration.
+
+20070310T1824Z <chicares@cox.net> [1254]
+
+  msw_cygwin.make
+  msw_generic.make
+  msw_msys.make
+  posix_fhs.make
+Make 'sort' available to makefiles.
+
+20070310T1856Z <chicares@cox.net> [1254]
+
+  account_value.hpp
+  basic_values.hpp
+  database.hpp
+  database_view.hpp
+  illustration_document.hpp
+  multidimgrid_any.hpp
+  policy_view.hpp
+  product_editor.hpp
+  rounding_view.hpp
+  rounding_view_editor.hpp
+  tier_view.hpp
+  view_ex.hpp
+  wx_utility.hpp
+Sort forward declarations in ASCII order.
+
+20070310T1901Z <chicares@cox.net> [1254]
+
+  xenumtypes.cpp
+Sort forward declarations in ASCII order.
+
+20070311T1340Z <chicares@cox.net> [1254]
+
+  rounding_view.cpp
+Lay out headers in prescribed order: lmi coding standard, section 1.5
+(this file doesn't implement any class that 'rounding_view_editor.hpp'
+declares).
 
