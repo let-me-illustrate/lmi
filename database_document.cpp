@@ -19,16 +19,16 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: database_document.cpp,v 1.6 2007-03-05 00:16:38 chicares Exp $
+// $Id: database_document.cpp,v 1.7 2007-03-11 22:16:09 chicares Exp $
 
 #include "database_document.hpp"
 
 #include "alert.hpp"
-#include "database_view.hpp"
-#include "database_view_editor.hpp"
-#include "ihs_dbvalue.hpp"
-#include "ihs_dbdict.hpp"
-#include "xenumtypes.hpp"
+
+// EVGENIY !! Doesn't it seem strange that this wx header appears
+// to be needed here? I don't see it included in similar files.
+// I tried omitting it, but wasn't able to figure out what the
+// diagnostics really meant.
 
 #include <wx/defs.h>
 

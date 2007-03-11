@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: policy_document.cpp,v 1.4 2007-03-09 16:27:23 chicares Exp $
+// $Id: policy_document.cpp,v 1.5 2007-03-11 22:16:09 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -30,6 +30,9 @@
 
 #include "policy_view.hpp"
 #include "view_ex.tpp"
+
+// EVGENIY !! Doesn't it seem strange that class wxTextCtrl,
+// a GUI class, is required in a document implementation?
 
 #include <wx/textctrl.h>
 
