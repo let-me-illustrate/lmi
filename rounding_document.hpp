@@ -19,15 +19,16 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: rounding_document.hpp,v 1.3 2007-03-03 19:44:17 chicares Exp $
+// $Id: rounding_document.hpp,v 1.4 2007-03-11 21:36:10 chicares Exp $
 
 #ifndef rounding_document_hpp
 #define rounding_document_hpp
 
 #include "config.hpp"
 
-#include "ihs_rnddata.hpp"
 #include "product_editor.hpp"
+
+#include "ihs_rnddata.hpp"
 
 #include <wx/string.h>
 
