@@ -19,15 +19,16 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: multidimgrid_tools.hpp,v 1.10 2007-03-09 16:27:23 chicares Exp $
+// $Id: multidimgrid_tools.hpp,v 1.11 2007-03-11 21:36:10 chicares Exp $
 
 #ifndef multidimgrid_tools_hpp
 #define multidimgrid_tools_hpp
 
 #include "config.hpp"
 
-#include "alert.hpp"
 #include "multidimgrid_safe.hpp"
+
+#include "alert.hpp"
 #include "value_cast.hpp"
 
 #include <wx/choice.h>
