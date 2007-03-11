@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.590 2007-03-11 13:40:21 chicares Exp $
+// $Id: ChangeLog,v 1.591 2007-03-11 22:16:09 chicares Exp $
 
 MAINTENANCE
 
@@ -10590,4 +10590,37 @@ Sort forward declarations in ASCII order.
 Lay out headers in prescribed order: lmi coding standard, section 1.5
 (this file doesn't implement any class that 'rounding_view_editor.hpp'
 declares).
+
+20070311T2136Z <chicares@cox.net> [1254]
+
+  database_document.hpp
+  database_view.hpp
+  database_view_editor.hpp
+  ledger_invariant.hpp
+  ledger_variant.hpp
+  multidimgrid_tools.hpp
+  policy_document.hpp
+  policy_view.hpp
+  rounding_document.hpp
+  rounding_view.hpp
+  tier_document.hpp
+  tier_view.hpp
+  tier_view_editor.hpp
+Include any local header for a public base class first, followed by a
+blank line. This guideline has been followed almost uniformly in the
+past, but hasn't (yet) been added to the lmi coding standard. It is a
+logical corollary of the rule cited above on 20070311T1340Z, and it
+directs the reader's attention immediately to the most important
+included header.
+
+20070311T2216Z <chicares@cox.net> [1254]
+
+  database_document.cpp
+  database_document.hpp
+  policy_document.cpp
+  rounding_document.cpp
+  rounding_document.hpp
+  tier_document.cpp
+  tier_document.hpp
+Remove unneeded headers.
 

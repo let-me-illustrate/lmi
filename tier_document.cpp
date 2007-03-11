@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: tier_document.cpp,v 1.4 2007-03-09 16:27:23 chicares Exp $
+// $Id: tier_document.cpp,v 1.5 2007-03-11 22:16:09 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -28,8 +28,12 @@
 
 #include "tier_document.hpp"
 
-#include "tier_view.hpp"
-#include "tier_view_editor.hpp"
+// EVGENIY !! Doesn't it seem strange that this wx header appears
+// to be needed here? I don't see it included in similar files.
+// I tried omitting it, but wasn't able to figure out what the
+// diagnostics really meant.
+
+#include <wx/defs.h>
 
 IMPLEMENT_DYNAMIC_CLASS(TierDocument, ProductEditorDocument)
 

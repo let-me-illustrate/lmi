@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: database_document.hpp,v 1.4 2007-03-11 21:36:10 chicares Exp $
+// $Id: database_document.hpp,v 1.5 2007-03-11 22:16:09 chicares Exp $
 
 #ifndef database_document_hpp
 #define database_document_hpp
@@ -30,11 +30,6 @@
 
 #include "ihs_dbvalue.hpp"
 #include "ihs_dbdict.hpp"
-#include "xenumtypes.hpp"
-
-#include <boost/utility.hpp>
-
-#include <wx/defs.h>
 
 class DatabaseDocument
     :public ProductEditorDocument
