@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.591.2.2 2007-03-16 11:11:49 etarassov Exp $
+// $Id: ChangeLog,v 1.591.2.3 2007-03-16 11:30:36 etarassov Exp $
 
 MAINTENANCE
 
@@ -10634,3 +10634,9 @@ Remove artificial "[+]" from item title.
 
   menus.xrc
 Remove dummy menu placeholders.
+
+20070316T1130Z <etarassov@tt-solutions.com> [1254]
+
+  database_document.cpp
+Rename dict_map_swap_guard into swap_workaround_for_singleton and
+simplify some code.
