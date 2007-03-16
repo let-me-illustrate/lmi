@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: tier_view.cpp,v 1.5 2007-02-23 16:47:17 chicares Exp $
+// $Id: tier_view.cpp,v 1.5.4.1 2007-03-16 10:46:29 etarassov Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -171,11 +171,7 @@ void TierView::UponTreeSelectionChange(wxTreeEvent& event)
 
         bool is_topic = tree.GetChildrenCount(event.GetItem());
 
-        std::ostringstream oss;
-        if(is_topic)
-            {oss << "[+] ";}
-        oss << item_data->get_description();
-        SetLabel(oss.str());
+        SetLabel(item_data->get_description());
 
         std::vector<tier_entity_info> const& entities = get_tier_entity_infos();
 

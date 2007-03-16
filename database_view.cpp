@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: database_view.cpp,v 1.3 2007-02-22 14:47:20 chicares Exp $
+// $Id: database_view.cpp,v 1.3.4.1 2007-03-16 10:46:29 etarassov Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -144,11 +144,7 @@ void DatabaseView::UponTreeSelectionChange(wxTreeEvent& event)
 
     bool is_topic = tree.GetChildrenCount(event.GetItem());
 
-    std::ostringstream oss;
-    if(is_topic)
-        {oss << "[+] ";}
-    oss << item_data->GetDescription();
-    SetLabel(oss.str());
+    SetLabel(item_data->GetDescription());
 
     MultiDimGrid& grid = GetGridCtrl();
 
