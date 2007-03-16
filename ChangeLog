@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.591.2.3 2007-03-16 11:30:36 etarassov Exp $
+// $Id: ChangeLog,v 1.591.2.4 2007-03-16 12:32:18 etarassov Exp $
 
 MAINTENANCE
 
@@ -10640,3 +10640,14 @@ Remove dummy menu placeholders.
   database_document.cpp
 Rename dict_map_swap_guard into swap_workaround_for_singleton and
 simplify some code.
+
+20070316T1230Z <etarassov@tt-solutions.com> [1254]
+
+  database_document.cpp
+Add missing swap_workaround_for_singleton instances name, otherwise it
+is optimized out by compiler.
+
+20070316T1232Z <etarassov@tt-solutions.com> [1254]
+
+  database_view.cpp
+Properly rewrite UponTreeSelectionChange. Fix possible crash.

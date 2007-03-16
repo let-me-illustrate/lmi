@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: database_view.cpp,v 1.3.4.1 2007-03-16 10:46:29 etarassov Exp $
+// $Id: database_view.cpp,v 1.3.4.2 2007-03-16 12:32:18 etarassov Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -135,19 +135,25 @@ void DatabaseView::UponTreeSelectionChange(wxTreeEvent& event)
     DatabaseTreeItemData* item_data = dynamic_cast<DatabaseTreeItemData*>
         (tree.GetItemData(event.GetItem())
         );
-    if(!item_data)
-        {return;}
 
-    std::size_t index = item_data->GetId();
+    bool const is_leaf = item_data && !tree.GetChildrenCount(event.GetItem());
 
-    table_adapter_->SetTDBValue(document().GetTDBValue(index));
+    std::string item_label;
+    if(item_data)
+        {
+        item_label = item_data->GetDescription();
+        }
+    SetLabel(item_label);
 
-    bool is_topic = tree.GetChildrenCount(event.GetItem());
-
-    SetLabel(item_data->GetDescription());
+    TDBValue* selected_tdbvalue = NULL;
+    if(is_leaf)
+        {
+        selected_tdbvalue = document().GetTDBValue(item_data->GetId());
+        }
+    table_adapter_->SetTDBValue(selected_tdbvalue);
 
     MultiDimGrid& grid = GetGridCtrl();
 
-    grid.Enable(!is_topic);
+    grid.Enable(is_leaf);
     grid.RefreshTableFull();
 }
