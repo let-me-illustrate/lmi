@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.591.2.7 2007-03-16 13:46:50 etarassov Exp $
+// $Id: ChangeLog,v 1.591.2.8 2007-03-16 13:58:41 etarassov Exp $
 
 MAINTENANCE
 
@@ -10672,3 +10672,9 @@ Use stratified_entity::limit_maximum instead of DBL_MAX.
   tier_view_editor.cpp
   tier_view_editor.hpp
 Add comments about the conversion twist. Reorder couple of methods.
+
+20070316T1358Z <etarassov@tt-solutions.com> [1254]
+
+  multidimgrid_safe.hpp
+  multidimgrid_safe.tpp
+Remove unused MakeArray function (and macros used to implement it).

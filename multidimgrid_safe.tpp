@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: multidimgrid_safe.tpp,v 1.7 2007-03-09 16:27:23 chicares Exp $
+// $Id: multidimgrid_safe.tpp,v 1.7.2.1 2007-03-16 13:58:41 etarassov Exp $
 
 #include "multidimgrid_safe.hpp"
 
@@ -73,23 +73,6 @@ Enum MultiDimEnumAxis<Enum>::DoGetValue
 {
     return static_cast<Enum>(n);
 }
-
-#define IMPL_MAKE_ARRAY_n(z, n, unused)                                       \
-template <typename Enum>                                                      \
-std::vector<std::string> MultiDimEnumAxis<Enum>::MakeArray                    \
-    (BOOST_PP_ENUM_PARAMS(n, std::string const& s)                            \
-    )                                                                         \
-{                                                                             \
-    std::string const strings[n] =                                            \
-        {                                                                     \
-        BOOST_PP_ENUM_PARAMS(n, s)                                            \
-        };                                                                    \
-    return std::vector<std::string>(strings, strings + n);                    \
-}
-
-BOOST_PP_REPEAT_FROM_TO(1, MAX_MULTIDIMGRID_MAKEARRAY, IMPL_MAKE_ARRAY_n, ~)
-
-#undef IMPL_MAKE_ARRAY_n
 
 /// MultiDimIntegralAxis<Integral>
 /// ------------------------------
