@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: database_document.cpp,v 1.7.2.1 2007-03-16 11:30:36 etarassov Exp $
+// $Id: database_document.cpp,v 1.7.2.2 2007-03-16 12:30:29 etarassov Exp $
 
 #include "database_document.hpp"
 
@@ -81,7 +81,7 @@ DatabaseDocument::DatabaseDocument()
     // Initialize database dictionary
     DBDictionary& instance = DBDictionary::instance();
 
-    swap_workaround_for_singleton(dict_, instance.GetDictionary());
+    swap_workaround_for_singleton workaround(dict_, instance.GetDictionary());
 
     instance.InitDB();
 }
@@ -102,7 +102,7 @@ void DatabaseDocument::ReadDocument(std::string const& filename)
 {
     DBDictionary& instance = DBDictionary::instance();
 
-    swap_workaround_for_singleton(dict_, instance.GetDictionary());
+    swap_workaround_for_singleton workaround(dict_, instance.GetDictionary());
 
     DBDictionary::InvalidateCache();
     instance.Init(filename);
@@ -112,7 +112,7 @@ void DatabaseDocument::WriteDocument(std::string const& filename)
 {
     DBDictionary& instance = DBDictionary::instance();
 
-    swap_workaround_for_singleton(dict_, instance.GetDictionary());
+    swap_workaround_for_singleton workaround(dict_, instance.GetDictionary());
 
     instance.WriteDB(filename);
 }
