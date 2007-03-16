@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: tier_view_editor.cpp,v 1.9.2.1 2007-03-16 13:07:43 etarassov Exp $
+// $Id: tier_view_editor.cpp,v 1.9.2.2 2007-03-16 13:46:50 etarassov Exp $
 
 #include "tier_view_editor.hpp"
 
@@ -30,8 +30,6 @@
 #include "value_cast.hpp"
 
 #include <wx/treectrl.h>
-
-#include <string>
 
 void tier_entity_adapter::ensure_not_void() const
 {

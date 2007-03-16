@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.591.2.6 2007-03-16 13:07:43 etarassov Exp $
+// $Id: ChangeLog,v 1.591.2.7 2007-03-16 13:46:50 etarassov Exp $
 
 MAINTENANCE
 
@@ -10666,3 +10666,9 @@ Properly rewrite UponTreeSelectionChange. Fix possible crash.
   stratified_charges.hpp
   tier_view_editor.cpp
 Use stratified_entity::limit_maximum instead of DBL_MAX.
+
+20070316T1346Z <etarassov@tt-solutions.com> [1254]
+
+  tier_view_editor.cpp
+  tier_view_editor.hpp
+Add comments about the conversion twist. Reorder couple of methods.
