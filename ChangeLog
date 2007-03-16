@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.591.2.5 2007-03-16 12:39:55 etarassov Exp $
+// $Id: ChangeLog,v 1.591.2.6 2007-03-16 13:07:43 etarassov Exp $
 
 MAINTENANCE
 
@@ -10658,3 +10658,11 @@ Properly rewrite UponTreeSelectionChange. Fix possible crash.
   tier_document.hpp
   tier_view.cpp
 Properly rewrite UponTreeSelectionChange. Fix possible crash.
+
+20070316T1307Z <etarassov@tt-solutions.com> [1254]
+
+  my_tier.cpp
+  stratified_charges.cpp
+  stratified_charges.hpp
+  tier_view_editor.cpp
+Use stratified_entity::limit_maximum instead of DBL_MAX.

@@ -19,13 +19,14 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: tier_view_editor.cpp,v 1.9 2007-03-09 16:27:23 chicares Exp $
+// $Id: tier_view_editor.cpp,v 1.9.2.1 2007-03-16 13:07:43 etarassov Exp $
 
 #include "tier_view_editor.hpp"
 
 #include "alert.hpp"
 #include "assert_lmi.hpp"
 #include "multidimgrid_safe.tpp"
+#include "stratified_charges.hpp"
 #include "value_cast.hpp"
 
 #include <wx/treectrl.h>
@@ -72,11 +73,9 @@ void tier_entity_adapter::set_bands_count(unsigned int n)
     if(n == limits().size())
         {return;}
 
-    static double const max_double = std::numeric_limits<double>::max();
-
     if(limits().empty())
         {
-        limits().push_back(max_double);
+        limits().push_back(stratified_entity::limit_maximum);
         values().push_back(0);
         }
 

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: my_tier.cpp,v 1.9 2007-01-27 00:00:51 wboutin Exp $
+// $Id: my_tier.cpp,v 1.9.6.1 2007-03-16 13:07:43 etarassov Exp $
 
 // This file is a template for embedding product-specific data. Doing
 // that creates a derived work covered by the GPL. But you may prefer
@@ -43,8 +43,6 @@
 
 #include "data_directory.hpp"
 
-#include <cfloat> // DBL_MAX
-
 //============================================================================
 void stratified_charges::write_proprietary_stratified_files()
 {
@@ -53,7 +51,7 @@ void stratified_charges::write_proprietary_stratified_files()
 
     // Example only.
     foo.raw_entity(e_curr_sepacct_load_tiered_by_assets   ).values_.push_back(0.0);
-    foo.raw_entity(e_curr_sepacct_load_tiered_by_assets   ).limits_.push_back(DBL_MAX);
+    foo.raw_entity(e_curr_sepacct_load_tiered_by_assets   ).limits_.push_back(stratified_entity::limit_maximum);
 
 // Not necessary for 'sample' product only, because it's built in.
 //    foo.write(AddDataDir("sample.tir"));

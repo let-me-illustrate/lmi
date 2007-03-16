@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: stratified_charges.hpp,v 1.9 2007-03-04 16:33:31 chicares Exp $
+// $Id: stratified_charges.hpp,v 1.9.4.1 2007-03-16 13:07:43 etarassov Exp $
 
 #ifndef stratified_charges_hpp
 #define stratified_charges_hpp
@@ -77,7 +77,11 @@ class LMI_SO stratified_entity
     void read(std::istream& is);
     void write(std::ostream& os) const;
 
+    static double limit_maximum;
+
   private:
+    static void ensure_limit_is_maximum(double limit);
+
     std::vector<double> const& limits() const;
     std::vector<double> const& values() const;
 

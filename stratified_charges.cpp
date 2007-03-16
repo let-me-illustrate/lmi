@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: stratified_charges.cpp,v 1.9 2007-03-09 16:27:23 chicares Exp $
+// $Id: stratified_charges.cpp,v 1.9.2.1 2007-03-16 13:07:43 etarassov Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -57,6 +57,18 @@
 // File representation should be xml.
 
 // Class stratified_entity implementation.
+
+double stratified_entity::limit_maximum = DBL_MAX;
+
+//============================================================================
+// Ensure the limit value is greater than (.999 * limit_maximum).
+// Use this function instead of a direct comparison because the default
+// precision of the stream >> and << operators for doubles hasn't been
+// changed, so exact equality will not obtain.
+void stratified_entity::ensure_limit_is_maximum(double limit)
+{
+    LMI_ASSERT((.999 * limit_maximum) < limit);
+}
 
 //============================================================================
 stratified_entity::stratified_entity()
@@ -98,10 +110,9 @@ std::vector<double> const& stratified_entity::values() const
 // replaced.
 //
 // When reading or writing the entities, assert that the last limit is
-// greater than (.999 * DBL_MAX): in effect, the highest representable
-// number. Don't assert equality with DBL_MAX because the default
-// precision of the stream >> and << operators for doubles hasn't been
-// changed, so exact equality will not obtain.
+// equal to limit_maximum: in effect, the highest representable
+// number. Don't assert equality directly, use ensure_limit_is_maximum
+// because of the precision errors.
 
 //============================================================================
 void stratified_entity::read(std::istream& is)
@@ -130,14 +141,16 @@ void stratified_entity::read(std::istream& is)
     LMI_ASSERT(vector_size == limits_.size());
 
     LMI_ASSERT(values_.size() == limits_.size());
-    LMI_ASSERT((.999 * DBL_MAX) < limits_.back());
+    if(!limits_.empty())
+        {ensure_limit_is_maximum(limits_.back());}
 }
 
 //============================================================================
 void stratified_entity::write(std::ostream& os) const
 {
     LMI_ASSERT(values_.size() == limits_.size());
-    LMI_ASSERT((.999 * DBL_MAX) < limits_.back());
+    if(!limits_.empty())
+        {ensure_limit_is_maximum(limits_.back());}
 
     std::vector<double>::const_iterator i;
 
@@ -543,22 +556,22 @@ void stratified_charges::write_stratified_files()
     stratified_charges foo;
 
     foo.raw_entity(e_curr_sepacct_load_banded_by_premium  ).values_.push_back(0.0);
-    foo.raw_entity(e_curr_sepacct_load_banded_by_premium  ).limits_.push_back(DBL_MAX);
+    foo.raw_entity(e_curr_sepacct_load_banded_by_premium  ).limits_.push_back(stratified_entity::limit_maximum);
     foo.raw_entity(e_guar_sepacct_load_banded_by_premium  ).values_.push_back(0.0);
-    foo.raw_entity(e_guar_sepacct_load_banded_by_premium  ).limits_.push_back(DBL_MAX);
+    foo.raw_entity(e_guar_sepacct_load_banded_by_premium  ).limits_.push_back(stratified_entity::limit_maximum);
 
     foo.raw_entity(e_curr_m_and_e_tiered_by_assets        ).values_.push_back(0.0);
-    foo.raw_entity(e_curr_m_and_e_tiered_by_assets        ).limits_.push_back(DBL_MAX);
+    foo.raw_entity(e_curr_m_and_e_tiered_by_assets        ).limits_.push_back(stratified_entity::limit_maximum);
     foo.raw_entity(e_guar_m_and_e_tiered_by_assets        ).values_.push_back(0.0);
-    foo.raw_entity(e_guar_m_and_e_tiered_by_assets        ).limits_.push_back(DBL_MAX);
+    foo.raw_entity(e_guar_m_and_e_tiered_by_assets        ).limits_.push_back(stratified_entity::limit_maximum);
     foo.raw_entity(e_asset_based_comp_tiered_by_assets    ).values_.push_back(0.0);
-    foo.raw_entity(e_asset_based_comp_tiered_by_assets    ).limits_.push_back(DBL_MAX);
+    foo.raw_entity(e_asset_based_comp_tiered_by_assets    ).limits_.push_back(stratified_entity::limit_maximum);
     foo.raw_entity(e_investment_mgmt_fee_tiered_by_assets ).values_.push_back(0.0);
-    foo.raw_entity(e_investment_mgmt_fee_tiered_by_assets ).limits_.push_back(DBL_MAX);
+    foo.raw_entity(e_investment_mgmt_fee_tiered_by_assets ).limits_.push_back(stratified_entity::limit_maximum);
     foo.raw_entity(e_curr_sepacct_load_tiered_by_assets   ).values_.push_back(0.0);
-    foo.raw_entity(e_curr_sepacct_load_tiered_by_assets   ).limits_.push_back(DBL_MAX);
+    foo.raw_entity(e_curr_sepacct_load_tiered_by_assets   ).limits_.push_back(stratified_entity::limit_maximum);
     foo.raw_entity(e_guar_sepacct_load_tiered_by_assets   ).values_.push_back(0.0);
-    foo.raw_entity(e_guar_sepacct_load_tiered_by_assets   ).limits_.push_back(DBL_MAX);
+    foo.raw_entity(e_guar_sepacct_load_tiered_by_assets   ).limits_.push_back(stratified_entity::limit_maximum);
 
     // For AK and SD, these are the actual rates as of 2003-09-09. Statutes:
     // AK 21.09.210(m)
@@ -567,16 +580,16 @@ void stratified_charges::write_stratified_files()
     foo.raw_entity(e_tiered_ak_premium_tax                ).values_.push_back (0.02700);
     foo.raw_entity(e_tiered_ak_premium_tax                ).values_.push_back (0.00100);
     foo.raw_entity(e_tiered_ak_premium_tax                ).limits_.push_back(100000.0);
-    foo.raw_entity(e_tiered_ak_premium_tax                ).limits_.push_back(DBL_MAX);
+    foo.raw_entity(e_tiered_ak_premium_tax                ).limits_.push_back(stratified_entity::limit_maximum);
 
     // DE: not yet implemented.
     foo.raw_entity(e_tiered_de_premium_tax                ).values_.push_back (0.0);
-    foo.raw_entity(e_tiered_de_premium_tax                ).limits_.push_back(DBL_MAX);
+    foo.raw_entity(e_tiered_de_premium_tax                ).limits_.push_back(stratified_entity::limit_maximum);
 
     foo.raw_entity(e_tiered_sd_premium_tax                ).values_.push_back (0.02500);
     foo.raw_entity(e_tiered_sd_premium_tax                ).values_.push_back (0.00080);
     foo.raw_entity(e_tiered_sd_premium_tax                ).limits_.push_back(100000.0);
-    foo.raw_entity(e_tiered_sd_premium_tax                ).limits_.push_back(DBL_MAX);
+    foo.raw_entity(e_tiered_sd_premium_tax                ).limits_.push_back(stratified_entity::limit_maximum);
 
     foo.write(AddDataDir("sample.tir"));
 }
