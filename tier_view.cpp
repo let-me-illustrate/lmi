@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: tier_view.cpp,v 1.5.4.1 2007-03-16 10:46:29 etarassov Exp $
+// $Id: tier_view.cpp,v 1.5.4.2 2007-03-16 12:39:55 etarassov Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -165,33 +165,33 @@ void TierView::UponTreeSelectionChange(wxTreeEvent& event)
         (tree.GetItemData(event.GetItem())
         );
 
+    std::string selected_label;
     if(item_data)
         {
+        selected_label = item_data->get_description();
+        } 
+    SetLabel(selected_label);
+
+    bool const is_leaf = item_data && !tree.GetChildrenCount(event.GetItem());
+
+    tier_entity_adapter adapter;
+
+    if(is_leaf)
+        {
+        std::vector<tier_entity_info> const& entities =
+            get_tier_entity_infos();
+
         std::size_t index = item_data->get_id();
 
-        bool is_topic = tree.GetChildrenCount(event.GetItem());
+        stratified_entity& entity =
+            document().get_stratified_entity(entities[index].index);
 
-        SetLabel(item_data->get_description());
-
-        std::vector<tier_entity_info> const& entities = get_tier_entity_infos();
-
-        if(is_topic)
-            {
-            table_adapter_->SetTierEntity(tier_entity_adapter());
-            }
-        else
-            {
-            stratified_entity& entity =
-                *document().get_stratified_entity(entities[index].index);
-            table_adapter_->SetTierEntity
-                (tier_entity_adapter(entity.limits_, entity.values_)
-                );
-            }
-
-        MultiDimGrid& grid = GetGridCtrl();
-
-        grid.Enable(!is_topic);
-        grid.RefreshTableFull();
+        adapter = tier_entity_adapter(entity.limits_, entity.values_);
         }
+    table_adapter_->SetTierEntity(adapter);
+
+    MultiDimGrid& grid = GetGridCtrl();
+    grid.Enable(is_leaf);
+    grid.RefreshTableFull();
 }
 

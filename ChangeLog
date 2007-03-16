@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.591.2.4 2007-03-16 12:32:18 etarassov Exp $
+// $Id: ChangeLog,v 1.591.2.5 2007-03-16 12:39:55 etarassov Exp $
 
 MAINTENANCE
 
@@ -10650,4 +10650,11 @@ is optimized out by compiler.
 20070316T1232Z <etarassov@tt-solutions.com> [1254]
 
   database_view.cpp
+Properly rewrite UponTreeSelectionChange. Fix possible crash.
+
+20070316T1239Z <etarassov@tt-solutions.com> [1254]
+
+  tier_document.cpp
+  tier_document.hpp
+  tier_view.cpp
 Properly rewrite UponTreeSelectionChange. Fix possible crash.
