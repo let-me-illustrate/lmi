@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.591.2.1 2007-03-16 10:46:29 etarassov Exp $
+// $Id: ChangeLog,v 1.591.2.2 2007-03-16 11:11:49 etarassov Exp $
 
 MAINTENANCE
 
@@ -10630,3 +10630,7 @@ Remove unneeded headers.
   tier_view.cpp
 Remove artificial "[+]" from item title.
 
+20070316T1111Z <etarassov@tt-solutions.com> [1254]
+
+  menus.xrc
+Remove dummy menu placeholders.

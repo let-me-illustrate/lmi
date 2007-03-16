@@ -24,7 +24,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: menus.xrc,v 1.21 2007-02-21 14:08:47 chicares Exp $
+    $Id: menus.xrc,v 1.21.4.1 2007-03-16 11:11:50 etarassov Exp $
 -->
 
 <!-- reusable menus -->
@@ -375,15 +375,6 @@ Not supported yet: need to split columns into multiple pages.
     <object_ref name="file_menu" ref="file_menu_without_print_ref"/>
     <object class="wxMenu" name="database_edit">
         <label>_Database</label>
-        <object class="wxMenuItem" name="database_alert_1">
-            <label>Test alert N_1</label>
-        </object>
-        <object class="wxMenuItem" name="database_alert_2">
-            <label>Test alert N_2</label>
-        </object>
-        <object class="wxMenuItem" name="database_alert_3">
-            <label>Test alert N_3</label>
-        </object>
     </object>
     <object_ref name="window_menu" ref="window_menu_ref"/>
     <object_ref name="wxID_HELP" ref="help_menu_ref"/>
@@ -398,15 +389,6 @@ Not supported yet: need to split columns into multiple pages.
     <object_ref name="file_menu" ref="file_menu_without_print_ref"/>
     <object class="wxMenu" name="policy_edit">
         <label>P_olicy</label>
-        <object class="wxMenuItem" name="policy_alert_1">
-            <label>Test alert N_1</label>
-        </object>
-        <object class="wxMenuItem" name="policy_alert_2">
-            <label>Test alert N_2</label>
-        </object>
-        <object class="wxMenuItem" name="policy_alert_3">
-            <label>Test alert N_3</label>
-        </object>
     </object>
     <object_ref name="window_menu" ref="window_menu_ref"/>
     <object_ref name="wxID_HELP" ref="help_menu_ref"/>
@@ -421,15 +403,6 @@ Not supported yet: need to split columns into multiple pages.
     <object_ref name="file_menu" ref="file_menu_without_print_ref"/>
     <object class="wxMenu" name="rounding_edit">
         <label>_Rounding</label>
-        <object class="wxMenuItem" name="rounding_alert_1">
-            <label>Test alert N_1</label>
-        </object>
-        <object class="wxMenuItem" name="rounding_alert_2">
-            <label>Test alert N_2</label>
-        </object>
-        <object class="wxMenuItem" name="rounding_alert_3">
-            <label>Test alert N_3</label>
-        </object>
     </object>
     <object_ref name="window_menu" ref="window_menu_ref"/>
     <object_ref name="wxID_HELP" ref="help_menu_ref"/>
@@ -444,15 +417,6 @@ Not supported yet: need to split columns into multiple pages.
     <object_ref name="file_menu" ref="file_menu_without_print_ref"/>
     <object class="wxMenu" name="tier_edit">
         <label>_Tier</label>
-        <object class="wxMenuItem" name="tier_alert_1">
-            <label>Test alert N_1</label>
-        </object>
-        <object class="wxMenuItem" name="tier_alert_2">
-            <label>Test alert N_2</label>
-        </object>
-        <object class="wxMenuItem" name="tier_alert_3">
-            <label>Test alert N_3</label>
-        </object>
     </object>
     <object_ref name="window_menu" ref="window_menu_ref"/>
     <object_ref name="wxID_HELP" ref="help_menu_ref"/>
