@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: multidimgrid_safe.tpp,v 1.7.2.2 2007-03-19 12:17:13 etarassov Exp $
+// $Id: multidimgrid_safe.tpp,v 1.7.2.3 2007-03-19 12:58:29 etarassov Exp $
 
 #include "multidimgrid_safe.hpp"
 
@@ -222,13 +222,13 @@ MultiDimAdjustableAxis<AdjustControl, BaseAxisType>::MultiDimAdjustableAxis
 
 // MultiDimTableN
 
-template <typename T, typename D, typename C>
-T MultiDimTableN<T, D, C>::GetValue(Coords const& coords) const
+template <typename T, typename Derived, typename C>
+T MultiDimTableN<T, Derived, C>::GetValue(Coords const& coords) const
 {
     return static_cast<Derived const&>(*this).DoGetValue(coords);
 }
-template <typename T, typename D, typename C>
-void MultiDimTableN<T, D, C>::SetValue(Coords const& coords, T const& t)
+template <typename T, typename Derived, typename C>
+void MultiDimTableN<T, Derived, C>::SetValue(Coords const& coords, T const& t)
 {
     return static_cast<Derived&>(*this).DoSetValue(coords, t);
 }
