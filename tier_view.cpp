@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: tier_view.cpp,v 1.5 2007-02-23 16:47:17 chicares Exp $
+// $Id: tier_view.cpp,v 1.6 2007-03-19 18:08:13 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -37,6 +37,7 @@
 #include "tier_view_editor.hpp"
 #include "wx_new.hpp"
 
+#include <wx/icon.h>
 #include <wx/window.h>
 
 #include <sstream>

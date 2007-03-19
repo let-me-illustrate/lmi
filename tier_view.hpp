@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: tier_view.hpp,v 1.6 2007-03-19 17:53:32 chicares Exp $
+// $Id: tier_view.hpp,v 1.7 2007-03-19 18:08:13 chicares Exp $
 
 #ifndef tier_view_hpp
 #define tier_view_hpp
@@ -32,8 +32,6 @@
 
 #include <boost/shared_ptr.hpp>
 #include <boost/utility.hpp>
-
-#include <wx/icon.h>
 
 class TierDocument;
 class TierTableAdapter;

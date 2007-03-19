@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.592 2007-03-19 17:53:32 chicares Exp $
+// $Id: ChangeLog,v 1.593 2007-03-19 18:08:13 chicares Exp $
 
 MAINTENANCE
 
@@ -10635,4 +10635,17 @@ Remove unneeded forward declarations. A forward declaration isn't
 needed in a header if the name it introduces isn't used in the header,
 or if it's used only in the declaration of an overridden virtual
 function. Cf. Lakos96, page 114.
+
+20070319T1808Z <chicares@cox.net> [1254]
+
+  database_view.cpp
+  database_view.hpp
+  policy_view.cpp
+  policy_view.hpp
+  rounding_view.cpp
+  rounding_view.hpp
+  tier_view.cpp
+  tier_view.hpp
+Include <wx/icon.h> in implementation and not in header, for all
+classes derived from class ViewEx.
 
