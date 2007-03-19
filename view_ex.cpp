@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: view_ex.cpp,v 1.12 2007-03-03 19:42:32 chicares Exp $
+// $Id: view_ex.cpp,v 1.13 2007-03-19 18:29:26 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -52,6 +52,7 @@
 #include "wx_new.hpp"
 
 #include <wx/dc.h>
+#include <wx/icon.h>
 #include <wx/menu.h>
 #include <wx/xrc/xmlres.h>
 
