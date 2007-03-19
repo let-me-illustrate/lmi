@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.591.2.13 2007-03-19 14:48:53 etarassov Exp $
+// $Id: ChangeLog,v 1.591.2.14 2007-03-19 17:34:31 etarassov Exp $
 
 MAINTENANCE
 
@@ -10711,4 +10711,10 @@ pure virtual DoGetDimension. Rename G/SetAnyValue into G/SetValuAny.
 20070319T1448Z <etarassov@tt-solutions.com> [1247]
 
   multidimgrid_any.hpp
-Fix protected members of MultiDimGrid to be private. 
+Fix protected members of MultiDimGrid to be private.
+
+20070319T1734Z <etarassov@tt-solutions.com> [1249]
+
+  multidimgrid_any.hpp
+Unroll previous commit 20070319T1448Z as incorrect.
+
