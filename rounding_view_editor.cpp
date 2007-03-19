@@ -19,12 +19,11 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: rounding_view_editor.cpp,v 1.7 2007-03-08 01:14:38 chicares Exp $
+// $Id: rounding_view_editor.cpp,v 1.8 2007-03-19 18:30:17 chicares Exp $
 
 #include "rounding_view_editor.hpp"
 
 #include <wx/dcclient.h> // RoundingButtons::CalculateMinimumTextControlSize
-#include <wx/icon.h>
 #include <wx/menu.h>
 #include <wx/sizer.h>
 #include <wx/spinctrl.h>
