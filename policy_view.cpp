@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: policy_view.cpp,v 1.4 2007-02-23 15:21:27 chicares Exp $
+// $Id: policy_view.cpp,v 1.5 2007-03-19 18:08:13 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -31,6 +31,7 @@
 #include "alert.hpp"
 #include "policy_document.hpp"
 
+#include <wx/icon.h>
 #include <wx/panel.h>
 #include <wx/textctrl.h>
 #include <wx/window.h>

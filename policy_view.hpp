@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: policy_view.hpp,v 1.6 2007-03-19 17:53:32 chicares Exp $
+// $Id: policy_view.hpp,v 1.7 2007-03-19 18:08:13 chicares Exp $
 
 #ifndef policy_view_hpp
 #define policy_view_hpp
@@ -31,8 +31,6 @@
 #include "obstruct_slicing.hpp"
 
 #include <boost/utility.hpp>
-
-#include <wx/icon.h>
 
 #include <map>
 #include <string>

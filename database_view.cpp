@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: database_view.cpp,v 1.3 2007-02-22 14:47:20 chicares Exp $
+// $Id: database_view.cpp,v 1.4 2007-03-19 18:08:13 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -37,6 +37,7 @@
 #include "multidimgrid_tools.hpp"
 #include "wx_new.hpp"
 
+#include <wx/icon.h>
 #include <wx/window.h>
 
 IMPLEMENT_DYNAMIC_CLASS(DatabaseView, TreeGridViewBase)
