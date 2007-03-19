@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: database_view.hpp,v 1.5 2007-03-11 21:36:10 chicares Exp $
+// $Id: database_view.hpp,v 1.6 2007-03-19 17:53:32 chicares Exp $
 
 #ifndef database_view_hpp
 #define database_view_hpp
@@ -37,11 +37,7 @@
 
 class DatabaseDocument;
 class DatabaseTableAdapter;
-class MultiDimGrid;
-class WXDLLEXPORT wxMenuBar;
-class WXDLLEXPORT wxTreeCtrl;
 class WXDLLEXPORT wxTreeEvent;
-class WXDLLEXPORT wxWindow;
 
 class DatabaseView
     :public TreeGridViewBase

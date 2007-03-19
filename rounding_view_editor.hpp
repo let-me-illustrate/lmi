@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: rounding_view_editor.hpp,v 1.5 2007-03-10 18:56:08 chicares Exp $
+// $Id: rounding_view_editor.hpp,v 1.6 2007-03-19 17:53:32 chicares Exp $
 
 #ifndef rounding_view_editor_hpp
 #define rounding_view_editor_hpp
@@ -39,7 +39,6 @@
 
 #include <string>
 
-class WXDLLEXPORT wxMenuBar;
 class WXDLLEXPORT wxSpinCtrl;
 class WXDLLEXPORT wxToggleButton;
 class WXDLLEXPORT wxWindow;
