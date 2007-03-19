@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.594 2007-03-19 18:30:17 chicares Exp $
+// $Id: ChangeLog,v 1.595 2007-03-19 20:52:17 chicares Exp $
 
 MAINTENANCE
 
@@ -10659,4 +10659,14 @@ Include <wx/icon.h> because it's used in the implementation.
   rounding_view_editor.cpp
   rounding_view_editor.hpp
 Don't include unused <wx/icon.h>.
+
+20070319T2052Z <chicares@cox.net> [1254]
+
+  rounding_view_editor.cpp
+  rounding_view_editor.hpp
+Include the right header for a base class. Here, "view_ex.hpp" was
+clearly not needed because class ViewEx is not used, but removing it
+prevented compilation because "view_ex.hpp" includes <wx/docview.h>,
+which apparently must bring in the declaration of class wxPanel
+(though it conceivably might not in a future wx version).
 

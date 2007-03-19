@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: rounding_view_editor.cpp,v 1.8 2007-03-19 18:30:17 chicares Exp $
+// $Id: rounding_view_editor.cpp,v 1.9 2007-03-19 20:52:17 chicares Exp $
 
 #include "rounding_view_editor.hpp"
 
@@ -27,7 +27,6 @@
 #include <wx/menu.h>
 #include <wx/sizer.h>
 #include <wx/spinctrl.h>
-#include <wx/panel.h>
 #include <wx/tglbtn.h>
 #include <wx/window.h>
 
