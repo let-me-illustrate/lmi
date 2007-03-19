@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: policy_view.hpp,v 1.5 2007-03-11 21:36:10 chicares Exp $
+// $Id: policy_view.hpp,v 1.6 2007-03-19 17:53:32 chicares Exp $
 
 #ifndef policy_view_hpp
 #define policy_view_hpp
@@ -39,7 +39,6 @@
 
 class PolicyDocument;
 class WXDLLEXPORT wxTextCtrl;
-class WXDLLEXPORT wxWindow;
 
 class PolicyView
     :public ProductEditorView
