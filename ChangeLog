@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.593 2007-03-19 18:08:13 chicares Exp $
+// $Id: ChangeLog,v 1.594 2007-03-19 18:30:17 chicares Exp $
 
 MAINTENANCE
 
@@ -10648,4 +10648,15 @@ function. Cf. Lakos96, page 114.
   tier_view.hpp
 Include <wx/icon.h> in implementation and not in header, for all
 classes derived from class ViewEx.
+
+20070319T1829Z <chicares@cox.net> [1254]
+
+  view_ex.cpp
+Include <wx/icon.h> because it's used in the implementation.
+
+20070319T1830Z <chicares@cox.net> [1254]
+
+  rounding_view_editor.cpp
+  rounding_view_editor.hpp
+Don't include unused <wx/icon.h>.
 
