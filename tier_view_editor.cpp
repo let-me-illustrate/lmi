@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: tier_view_editor.cpp,v 1.9.2.2 2007-03-16 13:46:50 etarassov Exp $
+// $Id: tier_view_editor.cpp,v 1.9.2.3 2007-03-19 12:17:13 etarassov Exp $
 
 #include "tier_view_editor.hpp"
 
@@ -101,19 +101,21 @@ void tier_entity_adapter::set_bands_count(unsigned int n)
         }
 }
 
-double_pair TierTableAdapter::GetValue(unsigned int band) const
+double_pair TierTableAdapter::DoGetValue(Coords const& coords) const
 {
     if(entity_.is_void())
         {return double_pair(0,0);}
 
+    unsigned int band = UnwrapAny<unsigned int>(coords[0]);
     return entity_.get_value(band);
 }
 
-void TierTableAdapter::SetValue(unsigned int band, double_pair const& value)
+void TierTableAdapter::DoSetValue(Coords const& coords, double_pair const& value)
 {
     if(entity_.is_void())
         {return;}
 
+    unsigned int band = UnwrapAny<unsigned int>(coords[0]);
     entity_.set_value(band, value);
     SetModified();
 }
@@ -167,9 +169,11 @@ bool TierTableAdapter::DoRefreshAxisAdjustment
     return updated;
 }
 
-MultiDimAxis<unsigned int>* TierTableAdapter::GetAxis0()
+MultiDimTableAny::AxesAny TierTableAdapter::DoGetAxesAny()
 {
-    return new TierBandAxis();
+    AxesAny axes(1);
+    axes[0] = AxisAny(new TierBandAxis());
+    return axes;
 }
 
 // ---------------------------

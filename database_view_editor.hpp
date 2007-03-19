@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: database_view_editor.hpp,v 1.8 2007-03-11 21:36:10 chicares Exp $
+// $Id: database_view_editor.hpp,v 1.8.2.1 2007-03-19 12:17:13 etarassov Exp $
 
 #ifndef database_view_editor_hpp
 #define database_view_editor_hpp
@@ -143,19 +143,6 @@ class DatabaseDurationAxis
     {}
 };
 
-/// Base type for the Database files editing control underlying data table
-typedef MultiDimTable7
-    <double
-    ,enum_gender
-    ,enum_class
-    ,enum_smoking
-    ,int
-    ,enum_uw_basis
-    ,enum_state
-    ,int
-    >
-DatabaseTableAdapterBase;
-
 /// Database dictionary adapter for TDBValue class
 ///
 /// One could mention Adaptor pattern.
@@ -166,7 +153,7 @@ DatabaseTableAdapterBase;
 /// boost::shared_ptr constructed with deallocator object that does nothing.
 
 class DatabaseTableAdapter
-  :public DatabaseTableAdapterBase
+  :public MultiDimTableN<double, DatabaseTableAdapter>
 {
     enum enum_database_axis
         {eda_gender = 0
@@ -195,59 +182,24 @@ class DatabaseTableAdapter
     void SetDurationMaxBound(unsigned int n);
     unsigned int GetDurationMaxBound() const;
 
+    // MultiDimGridN contract.
+    double DoGetValue(Coords const&) const;
+    void DoSetValue(Coords const&, double const&);
+
   private:
-// EVGENIY !! Does pure virtual MultiDimTableAny::DoGetAxisAny() need
-// to be implemented here?
     /// MultiDimTableAny required implementation.
-    virtual boost::any DoGetValue(Coords const&) const;
-    virtual void DoSetValue(Coords const&, boost::any const&);
+    virtual bool CanChangeVariationWith(unsigned int) const;
+    AxesAny DoGetAxesAny();
+    virtual unsigned int GetDimension() const;
+    virtual void MakeVaryByDimension(unsigned int, bool);
+    virtual bool VariesByDimension(unsigned int) const;
+
+    /// MultiDimTableAny overrides.
     virtual bool DoApplyAxisAdjustment(MultiDimAxisAny&, unsigned int);
     virtual bool DoRefreshAxisAdjustment(MultiDimAxisAny&, unsigned int);
 
-// EVGENIY !! Should this say 'MultiDimTableAny' instead of 'MultiDimTable'?
-    /// MultiDimTable overrides.
-    virtual bool VariesByDimension(unsigned int) const;
-    virtual void MakeVaryByDimension(unsigned int, bool);
-    virtual bool CanChangeVariationWith(unsigned int) const;
-    virtual std::string ValueToString(boost::any const&) const;
-    virtual boost::any StringToValue(std::string const&) const;
-
-// EVGENIY !! I think these functions override a macro class; how
-// we document that depends on the patch you're working on.
-    virtual MultiDimAxis<enum_gender>*   GetAxis0();
-    virtual MultiDimAxis<enum_class>*    GetAxis1();
-    virtual MultiDimAxis<enum_smoking>*  GetAxis2();
-    virtual MultiDimAxis<int>*           GetAxis3();
-    virtual MultiDimAxis<enum_uw_basis>* GetAxis4();
-    virtual MultiDimAxis<enum_state>*    GetAxis5();
-    virtual MultiDimAxis<int>*           GetAxis6();
-
-    // not used but has to be implemented
-    virtual double GetValue
-        (enum_gender
-        ,enum_class
-        ,enum_smoking
-        ,int
-        ,enum_uw_basis
-        ,enum_state
-        ,int
-        ) const;
-    virtual void SetValue
-        (enum_gender
-        ,enum_class
-        ,enum_smoking
-        ,int
-        ,enum_uw_basis
-        ,enum_state
-        ,int
-        ,double const&
-        );
-
     /// Helper, converts array of boost::any into array of ints
-    void ConvertValue
-        (Coords const&
-        ,std::vector<int>&
-        ) const;
+    static void ConvertValue(Coords const&, std::vector<int>&);
 
     bool IsVoid() const;
     bool ConfirmOperation(unsigned int itemCount) const;
