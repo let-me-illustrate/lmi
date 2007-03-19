@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: multidimgrid_any.hpp,v 1.18.2.2 2007-03-19 13:47:55 etarassov Exp $
+// $Id: multidimgrid_any.hpp,v 1.18.2.3 2007-03-19 14:48:53 etarassov Exp $
 
 #ifndef multidimgrid_any_hpp
 #define multidimgrid_any_hpp
@@ -508,11 +508,7 @@ inline void MultiDimTableAny::SetValueAny
 
 class MultiDimGrid
   :public wxScrolledWindow
-// TODO ?? EVGENIY !! Protected inheritance seems unusual. See, e.g.:
-//   http://cpptips.hyperformix.com/cpptips/prot_inher2.txt
-// Is there a strong reason for using it here, that overcomes the
-// objections raised by Meyers and Sutter?
-  ,protected wxGridTableBase
+  ,private wxGridTableBase
   ,private boost::noncopyable
 {
     friend class GridRefreshTableDataGuard;
@@ -549,10 +545,7 @@ class MultiDimGrid
     void SetXAxisColour(wxColour const& colour);
     void SetYAxisColour(wxColour const& colour);
 
-  protected:
-// TODO ?? EVGENIY !! Section 8.2 of the boost coding standards says
-// "Protected data members are forbidden". Is there a really good
-// reason to violate that standard here?
+  private:
     /// Shared pointer to an axis object
     typedef boost::shared_ptr<MultiDimAxisAny> AxisPtr;
     /// Container of (pointers to) axis objects.
@@ -659,7 +652,6 @@ class MultiDimGrid
     virtual wxString GetColLabelValue(int col);
     virtual wxString GetRowLabelValue(int row);
 
-  private:
     /// Various GUI components of the widget
 
     /// Data grid
@@ -680,9 +672,6 @@ class MultiDimGrid
 
     /// Array of axis adjust windows, could be null if an axis is "read-only"
     Windows axis_adjust_wins_;
-
-    /// See axis_varies_checkboxes_
-    typedef std::vector<wxCheckBox*> CheckBoxes;
 
     /// Array of data variation checkboxes
     /// controlling whether or not the data varies along the axis
