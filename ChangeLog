@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.591 2007-03-11 22:16:09 chicares Exp $
+// $Id: ChangeLog,v 1.592 2007-03-19 17:53:32 chicares Exp $
 
 MAINTENANCE
 
@@ -10623,4 +10623,16 @@ included header.
   tier_document.cpp
   tier_document.hpp
 Remove unneeded headers.
+
+20070319T1753Z <chicares@cox.net> [1254]
+
+  database_view.hpp
+  policy_view.hpp
+  rounding_view.hpp
+  rounding_view_editor.hpp
+  tier_view.hpp
+Remove unneeded forward declarations. A forward declaration isn't
+needed in a header if the name it introduces isn't used in the header,
+or if it's used only in the declaration of an overridden virtual
+function. Cf. Lakos96, page 114.
 
