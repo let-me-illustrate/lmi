@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: multidimgrid_tools.hpp,v 1.11 2007-03-11 21:36:10 chicares Exp $
+// $Id: multidimgrid_tools.hpp,v 1.11.2.1 2007-03-19 22:35:27 etarassov Exp $
 
 #ifndef multidimgrid_tools_hpp
 #define multidimgrid_tools_hpp
@@ -258,11 +258,11 @@ class AdjustableMaxBoundAxis
 
   private:
     /// Create the adjustment control
-    virtual Adjuster* DoGetAdjustControl(MultiDimGrid&, MultiDimTableAny&);
+    virtual Adjuster* DoCreateAdjustControl(MultiDimGrid&, MultiDimTableAny&);
     /// Applies user changes to this axis, reads adjustment window
-    virtual bool DoApplyAdjustment(Adjuster*, unsigned int n);
+    virtual bool DoApplyAdjustment(Adjuster&, unsigned int axis_id);
     /// Sync the corresponding adjustment control with itself
-    virtual bool DoRefreshAdjustment(Adjuster*, unsigned int n);
+    virtual bool DoRefreshAdjustment(Adjuster&, unsigned int axis_id);
 
     Integral lower_bound_;
     Integral upper_bound_;
@@ -379,7 +379,7 @@ void AdjustableMaxBoundAxis<Integral>::UpdateChoiceControl(wxWindow& choice_cont
 
 template<typename Integral>
 typename AdjustableMaxBoundAxis<Integral>::Adjuster*
-AdjustableMaxBoundAxis<Integral>::DoGetAdjustControl
+AdjustableMaxBoundAxis<Integral>::DoCreateAdjustControl
     (MultiDimGrid& grid
     ,MultiDimTableAny& table
     )
@@ -392,14 +392,11 @@ AdjustableMaxBoundAxis<Integral>::DoGetAdjustControl
 
 template<typename Integral>
 bool AdjustableMaxBoundAxis<Integral>::DoApplyAdjustment
-    (Adjuster* adjuster_window
-    ,unsigned int n
+    (Adjuster& adjust_window
+    ,unsigned int axis_id
     )
 {
-    if(!adjuster_window)
-        {return false;}
-
-    Integral new_max_value = adjuster_window->GetMaxValue();
+    Integral new_max_value = adjust_window.GetMaxValue();
     if(!(lower_bound_ <= new_max_value && new_max_value <= upper_bound_))
         {
         fatal_error()
@@ -414,17 +411,14 @@ bool AdjustableMaxBoundAxis<Integral>::DoApplyAdjustment
 
 template<typename Integral>
 bool AdjustableMaxBoundAxis<Integral>::DoRefreshAdjustment
-    (Adjuster* adjuster_window
-    ,unsigned int n
+    (Adjuster& adjust_window
+    ,unsigned int axis_id
     )
 {
-    if(!adjuster_window)
-        {return false;}
-
-    Integral max_value = adjuster_window->GetMaxValue();
+    Integral max_value = adjust_window.GetMaxValue();
     bool updated = (GrandBaseClass::GetMaxValue() != max_value);
 
-    adjuster_window->SetMaxValue(GrandBaseClass::GetMaxValue());
+    adjust_window.SetMaxValue(GrandBaseClass::GetMaxValue());
     return updated;
 }
 

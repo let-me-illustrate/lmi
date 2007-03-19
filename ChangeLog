@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.591.2.15 2007-03-19 18:13:50 etarassov Exp $
+// $Id: ChangeLog,v 1.591.2.16 2007-03-19 22:35:27 etarassov Exp $
 
 MAINTENANCE
 
@@ -10727,3 +10727,13 @@ Fix protected and private issues in MultiDimGrid, also reorder methods.
 Use an enum instead of int to differentiate between axes x and y.
 Note: these changes could have been done separately but it would take
 some additional time to do it properly.
+
+20070319T2234Z <etarassov@tt-solutions.com> [1247]
+
+  multidimgrid_any.cpp
+  multidimgrid_any.hpp
+  multidimgrid_safe.hpp
+  multidimgrid_safe.tpp
+  multidimgrid_tools.hpp
+Review MultiDimAxisAny. Rewrite comments. Use references instead of
+pointers where appropriate. Rename some method parameters.
