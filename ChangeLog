@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.591.2.14 2007-03-19 17:34:31 etarassov Exp $
+// $Id: ChangeLog,v 1.591.2.15 2007-03-19 18:13:50 etarassov Exp $
 
 MAINTENANCE
 
@@ -10718,3 +10718,12 @@ Fix protected members of MultiDimGrid to be private.
   multidimgrid_any.hpp
 Unroll previous commit 20070319T1448Z as incorrect.
 
+20070319T1812Z <etarassov@tt-solutions.com> [1247]
+
+  multidimgrid_any.cpp
+  multidimgrid_any.hpp
+  tier_view_editor.cpp
+Fix protected and private issues in MultiDimGrid, also reorder methods.
+Use an enum instead of int to differentiate between axes x and y.
+Note: these changes could have been done separately but it would take
+some additional time to do it properly.

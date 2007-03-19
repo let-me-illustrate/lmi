@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: multidimgrid_any.cpp,v 1.10.2.3 2007-03-19 14:17:28 etarassov Exp $
+// $Id: multidimgrid_any.cpp,v 1.10.2.4 2007-03-19 18:13:50 etarassov Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -233,16 +233,10 @@ inline void GridRefreshTableDataGuard::Release()
 /// MultiDimGrid methods implementation
 /// -----------------------------------
 
-// Two values to distinguish between X axis and Y axis
-enum {
-    ID_FIRST_AXIS_CHOICE = wxID_HIGHEST + 1,
-    ID_SECOND_AXIS_CHOICE
-};
-
 BEGIN_EVENT_TABLE(MultiDimGrid, wxScrolledWindow)
-    EVT_CHOICE   (ID_FIRST_AXIS_CHOICE  ,MultiDimGrid::UponSwitchSelectedAxis)
-    EVT_CHOICE   (ID_SECOND_AXIS_CHOICE ,MultiDimGrid::UponSwitchSelectedAxis)
-    EVT_CHECKBOX (wxID_ANY              ,MultiDimGrid::UponAxisVariesToggle  )
+    EVT_CHOICE   (MultiDimGrid::e_axis_x, MultiDimGrid::UponSwitchSelectedAxis)
+    EVT_CHOICE   (MultiDimGrid::e_axis_y, MultiDimGrid::UponSwitchSelectedAxis)
+    EVT_CHECKBOX (wxID_ANY                   , MultiDimGrid::UponAxisVariesToggle  )
 END_EVENT_TABLE()
 
 /// Some constants to describe various element positions
@@ -309,6 +303,10 @@ bool MultiDimGrid::Create
 
     // setting internal variables
     table_ = atable;
+    if(!table_)
+        {
+        fatal_error() << "Table can not be null" << LMI_FLUSH;
+        }
     dimension_ = table_->GetDimension();
 
     // pospone the table data refresh until we exit Create() function
@@ -362,7 +360,7 @@ bool MultiDimGrid::Create
     grid_->SetTable(this, false);
 
     // main sizer contains axis controls in the left part and the grid in the right
-    grid_sizer_ = new(wx) wxBoxSizer(wxHORIZONTAL);
+    wxBoxSizer* grid_sizer_ = new(wx) wxBoxSizer(wxHORIZONTAL);
     grid_sizer_->Add
         (sizer
         ,wxSizerFlags()
@@ -390,12 +388,12 @@ bool MultiDimGrid::Create
         }
 
     first_axis_choice_ = CreateGridAxisSelection
-        (ID_FIRST_AXIS_CHOICE
+        (e_axis_x
         ,"X axis"
         ,selected_first_color_
         );
     second_axis_choice_ = CreateGridAxisSelection
-        (ID_SECOND_AXIS_CHOICE
+        (e_axis_y
         ,"Y axis"
         ,selected_second_color_
         );
@@ -647,7 +645,7 @@ void MultiDimGrid::SetYAxisColour(wxColour const& colour)
 }
 
 wxChoice* MultiDimGrid::CreateGridAxisSelection
-    (int id
+    (enum_axis_x_or_y x_or_y
     ,std::string const& label
     ,wxColour const& selected_color
     )
@@ -658,7 +656,7 @@ wxChoice* MultiDimGrid::CreateGridAxisSelection
 
     wxChoice* win = new(wx) wxChoice
         (this
-        ,id
+        ,x_or_y
         ,wxDefaultPosition
         ,wxDefaultSize
         ,1
@@ -668,7 +666,7 @@ wxChoice* MultiDimGrid::CreateGridAxisSelection
     win->SetOwnForegroundColour(selected_color);
 
     unsigned int row =
-          (id == ID_FIRST_AXIS_CHOICE)
+          (x_or_y == e_axis_x)
         ? MDGRID_AXIS_X_ROW
         : MDGRID_AXIS_Y_ROW
         ;
@@ -772,9 +770,9 @@ bool MultiDimGrid::SetGridAxisSelection(int firstAxis, int secondAxis)
     return update;
 }
 
-int MultiDimGrid::GetGridAxisSelection(int id)
+int MultiDimGrid::GetGridAxisSelection(enum_axis_x_or_y x_or_y)
 {
-    wxChoice* choice = (id == ID_FIRST_AXIS_CHOICE)
+    wxChoice* choice = (x_or_y == e_axis_x)
         ? first_axis_choice_
         : second_axis_choice_
         ;
@@ -792,24 +790,24 @@ int MultiDimGrid::GetGridAxisSelection(int id)
     return reinterpret_cast<int>(choice->GetClientData(oldSel));
 }
 
-void MultiDimGrid::DoSetGridAxisSelection(int axis_id, int selection)
+void MultiDimGrid::DoSetGridAxisSelection(enum_axis_x_or_y x_or_y, int axis)
 {
-    if(selection == GetGridAxisSelection(axis_id))
+    if(axis == GetGridAxisSelection(x_or_y))
         {return;}
 
-    wxChoice* choice = (axis_id == ID_FIRST_AXIS_CHOICE)
+    wxChoice* choice = (x_or_y == e_axis_x)
         ? first_axis_choice_
         : second_axis_choice_
         ;
 
-    int old_selection = GetGridAxisSelection(axis_id);
+    int previous_axis = GetGridAxisSelection(x_or_y);
 
-    if(selection != old_selection)
+    if(axis != previous_axis)
         {
         for(unsigned int i = 1; i < choice->GetCount(); ++i)
             {
             int cdata = reinterpret_cast<int>(choice->GetClientData(i));
-            if(cdata == selection)
+            if(cdata == axis)
                 {
                 choice->SetSelection(i);
                 return;
@@ -822,8 +820,8 @@ void MultiDimGrid::DoSetGridAxisSelection(int axis_id, int selection)
 
 void MultiDimGrid::DoSetGridAxisSelection()
 {
-    DoSetGridAxisSelection(ID_FIRST_AXIS_CHOICE, first_grid_axis_);
-    DoSetGridAxisSelection(ID_SECOND_AXIS_CHOICE, second_grid_axis_);
+    DoSetGridAxisSelection(e_axis_x, first_grid_axis_);
+    DoSetGridAxisSelection(e_axis_y, second_grid_axis_);
 
     axis_fixed_coords_ = axis_fixed_values_;
     for(unsigned int i = 0; i < dimension_; ++i)
@@ -859,14 +857,14 @@ void MultiDimGrid::DoSetGridAxisSelection()
 
 void MultiDimGrid::PopulateGridAxisSelection()
 {
-    PopulateGridAxisSelection(ID_FIRST_AXIS_CHOICE);
-    PopulateGridAxisSelection(ID_SECOND_AXIS_CHOICE);
+    PopulateGridAxisSelection(e_axis_x);
+    PopulateGridAxisSelection(e_axis_y);
     Layout();
 }
 
-void MultiDimGrid::PopulateGridAxisSelection(unsigned int id)
+void MultiDimGrid::PopulateGridAxisSelection(enum_axis_x_or_y x_or_y)
 {
-    wxChoice* choice = (id == ID_FIRST_AXIS_CHOICE)
+    wxChoice* choice = (x_or_y == e_axis_x)
         ? first_axis_choice_
         : second_axis_choice_
         ;
@@ -878,7 +876,7 @@ void MultiDimGrid::PopulateGridAxisSelection(unsigned int id)
 
     wxWindowUpdateLocker update_locker(choice);
 
-    int old_selection = GetGridAxisSelection(id);
+    int old_selection = GetGridAxisSelection(x_or_y);
     // set selection to empty line so that it does not change
     choice->SetSelection(0);
     int new_sel_index = wxNOT_FOUND;
@@ -909,8 +907,8 @@ void MultiDimGrid::PopulateGridAxisSelection(unsigned int id)
     if(new_sel_index != wxNOT_FOUND)
         {choice->SetSelection(new_sel_index);}
 
-    if(old_selection != GetGridAxisSelection(id))
-        {DoOnSwitchSelectedAxis(id);}
+    if(old_selection != GetGridAxisSelection(x_or_y))
+        {DoOnSwitchSelectedAxis(x_or_y);}
 }
 
 int MultiDimGrid::GetAxisIndexByName(std::string const& axisName)
@@ -958,7 +956,7 @@ bool MultiDimGrid::IsEmptyCell(int row, int col)
     return false;
 }
 
-void MultiDimGrid::PrepareFixedCoords(int row, int col)
+MultiDimGrid::Coords& MultiDimGrid::PrepareFixedCoords(int row, int col)
 {
     if(first_grid_axis_ != wxNOT_FOUND)
         {
@@ -981,19 +979,21 @@ void MultiDimGrid::PrepareFixedCoords(int row, int col)
         if(row != 0)
             {fatal_error() << "No second grid axis selected." << LMI_FLUSH;}
         }
+    return axis_fixed_coords_;
 }
 
 wxString MultiDimGrid::GetValue(int row, int col)
 {
-    PrepareFixedCoords(row, col);
-    boost::any value = table_->GetValueAny(axis_fixed_coords_);
+    boost::any value = table_->GetValueAny(PrepareFixedCoords(row, col));
     return table_->ValueToString(value);
 }
 
 void MultiDimGrid::SetValue(int row, int col, wxString const& value)
 {
-    PrepareFixedCoords(row, col);
-    table_->SetValueAny(axis_fixed_coords_, table_->StringToValue(value));
+    table_->SetValueAny
+        (PrepareFixedCoords(row, col)
+        ,table_->StringToValue(value)
+        );
 }
 
 wxString MultiDimGrid::GetRowLabelValue(int row)
@@ -1092,7 +1092,7 @@ void MultiDimGrid::UponAxisVariesToggle(wxCommandEvent& event)
 void MultiDimGrid::UponSwitchSelectedAxis(wxCommandEvent& event)
 {
     int id = event.GetId();
-    if(id != ID_FIRST_AXIS_CHOICE && id != ID_SECOND_AXIS_CHOICE)
+    if(id != e_axis_x && id != e_axis_y)
         {
         fatal_error()
             << "Event received from unexpected control."
@@ -1100,14 +1100,14 @@ void MultiDimGrid::UponSwitchSelectedAxis(wxCommandEvent& event)
             ;
         }
 
-    DoOnSwitchSelectedAxis(static_cast<unsigned int>(id));
+    DoOnSwitchSelectedAxis(static_cast<enum_axis_x_or_y>(id));
 }
 
-void MultiDimGrid::DoOnSwitchSelectedAxis(unsigned int axis_id)
+void MultiDimGrid::DoOnSwitchSelectedAxis(enum_axis_x_or_y x_or_y)
 {
-    int new_selection = GetGridAxisSelection(axis_id);
+    int new_selection = GetGridAxisSelection(x_or_y);
 
-    if(axis_id == ID_FIRST_AXIS_CHOICE)
+    if(x_or_y == e_axis_x)
         {
         if(new_selection == second_grid_axis_ && new_selection != wxNOT_FOUND)
             {
@@ -1118,7 +1118,7 @@ void MultiDimGrid::DoOnSwitchSelectedAxis(unsigned int axis_id)
         }
     else
         {
-        // here we have axis_id == ID_SECOND_AXIS_CHOICE
+        // here we have x_or_y == e_axis_y
         if(new_selection == first_grid_axis_ && new_selection != wxNOT_FOUND)
             {
             // means with the Y axis we're hitting the X axis - so switch them
