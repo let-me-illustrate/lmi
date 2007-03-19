@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: tier_view.cpp,v 1.5.4.2 2007-03-16 12:39:55 etarassov Exp $
+// $Id: tier_view.cpp,v 1.5.4.3 2007-03-19 13:52:01 etarassov Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -169,7 +169,7 @@ void TierView::UponTreeSelectionChange(wxTreeEvent& event)
     if(item_data)
         {
         selected_label = item_data->get_description();
-        } 
+        }
     SetLabel(selected_label);
 
     bool const is_leaf = item_data && !tree.GetChildrenCount(event.GetItem());
