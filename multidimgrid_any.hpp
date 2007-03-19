@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: multidimgrid_any.hpp,v 1.18.2.1 2007-03-19 12:17:13 etarassov Exp $
+// $Id: multidimgrid_any.hpp,v 1.18.2.2 2007-03-19 13:47:55 etarassov Exp $
 
 #ifndef multidimgrid_any_hpp
 #define multidimgrid_any_hpp
@@ -274,79 +274,58 @@ inline std::string const& MultiDimAxisAny::GetName() const
 /// Design notes for MultiDimTableAny
 ///
 /// The table abstracts the data shown in and edited by the grid.
-///
 /// It is a bridge between the internal data representation in the application
 /// and the GUI control, allowing to clearly separate them.
-///
 /// It is an ABC which must be implemented to provide access to real data.
-///
 /// It also contains the information about the axis used to form its data
 /// domain range.
 ///
-/// If the structure of the table (i.e. the number and type of the axis) is
-/// known at compile-time you should use one of type-safe MultiDimTableN
-/// classes instead of this one.
+/// If type of the table values is known at compile-time you should use
+/// MultiDimTable class instead.
 ///
-/// GetAxesAny(): Return the axes objects for that table.
-/// Method is called only once by the MDGrid to retrieve the axis object
-/// representing nth dimension and holding value range for that dimension.
-/// This method simply redirects to polymorphic method DoGetAxesAny()
-///   - n index of the dimension represented by the axis
-///   - returns pointer to the axis
-/// See also MultiDimAxisAny, MultiDimAxis, MultiDimGrid, DoGetAxesAny
+/// See also MultiDimAxisAny, MultiDimGrid classes.
 ///
-/// ApplyAxisAdjustment(axis, n): Read from the axis object and apply
-/// any adjustment to the data table.
-/// Method is a part of the update chain that happen when user changes axis
-/// value range at runtime. This method is responsible for reading new value
-/// range from the axis object and applying it to the data table value domain.
+/// GetAxesAny() returns the axes objects for that table. It could be called
+/// multiple times - once for every MultiDimGrid using this table as its data
+/// source. N-th axis returned represents nth dimension and holds value range
+/// for that dimension. This method redirects to pure virtual DoGetAxesAny().
+///
+/// ApplyAxisAdjustment() reads from the axis object and apply
+/// any adjustment to the data table. Method is a part of the update chain
+/// that happen when user changes axis value range at runtime. This method
+/// is responsible for reading new value range from the axis object and
+/// applying it to the data table value domain. Parameters:
 ///   - axis the axis object containing axis value range adjustments
 ///   - n the index of the axis
 ///   - returns true if the update has taken place, false if everything
 ///     was up-to-date
-/// See also GetAxesAny, RefreshAxisAdjustment,
-/// MultiDimAxisAny::ApplyAdjustment, MultiDimGrid::ApplyAxisAdjustment
 ///
-/// RefreshAxisAdjustment(axis, n): Refresh the axis object to reflect
-/// the data table domain value range
-/// Method is a part of the adjustment refresh chain called by MultiDimGrid
-/// to synchronize the structures with the underlying data table updated
-/// in some way.
+/// RefreshAxisAdjustment() refreshes the axis object to reflect
+/// the data table domain value range. Method is a part of the adjustment
+/// refresh chain called by MultiDimGrid to synchronize the structures
+/// with the underlying data table updated in some way. Parameters:
 ///   - axis   the axis object that should be synced with the table
 ///   - n      the index of the axis
-///   - return true if the update has taken place, false if everything was up-to-date
-/// See also GetAxesAny, ApplyAxisAdjustment,
-/// MultiDimAxisAny::RefreshAdjustment, MultiDimGrid::RefreshAxisAdjustment
+///   - return true if the update has taken place, false if everything was
+///     up-to-date
 ///
-/// GetAnyValue(coords): General accessor for table value.
-/// Calls fatal_error() if the array cardinality is different from
-/// GetDimension() or boost::bad_any_cast exception if the array arguments
-/// have wrong types.
-/// Note that the coordinates vector contains all the dimensions values whether
-/// the table depends on them or not, but those values should be empty
-/// if the table does not depend on the dimension (they will be simply ignored
-/// by the function).
+/// GetValueAny() and SetValueAny() provide general access for table values.
+/// The coordinates vector contains all the dimension values whether the table
+/// depends (varies) on them or not. If the table does not depend
+/// on a dimension, then the corresponding coordinate value should be empty.
+/// Parameters:
 ///   - coords the vector of coordinates
-///   - return the value for these coordinates
+///   - value  the value to set (only for SetValueAny)
+///   - return the value for these coordinates (only for GetValueAny)
 ///
-/// SetAnyValue(coords, value): Modifier for the table values.
-/// See GetAnyValue for function description and additional notes.
-///   - coords the vector of coordinates
-///   - value  the value to set
-///   - return the value for these coordinates
+/// CanChangeVariationWith() returns true if the table variation on a dimension
+/// could be changed.
 ///
-/// DoGetValue(coords): Return the value for the given set of coordinates.
-///   - coords the vector of coordinates of size GetDimension()
-///   - return the value for these coordinates
+/// MakeVaryByDimension() make table data depend on the dimension. Be sure
+/// to call it only for a dimension for which CanChangeVariationWith() is true.
 ///
-/// DoSetValue(coords, value): Sets the value for the given coordinates.
-///   - coords the vector of coordinates of size GetDimension()
-///   - value  the value to be stored for these coordinates
-///
-/// DoGetAxesAny(): Returns the axes for the table
-/// Abstract method to implement in the deriving classes.
-///   - n      the axis number (0 <= n < GetDimension())
-///   - return MultiDimAxisAny object that represents nth axis
+/// VariesByDimension() returns true if the table depends on the specified
+/// dimension.
 
 class MultiDimTableAny
 {
@@ -359,41 +338,27 @@ class MultiDimTableAny
     MultiDimTableAny() {}
     virtual ~MultiDimTableAny() {}
 
-    // EVGENIY !! Would it make sense to group virtuals (other than
-    // the dtor) together here, and separate from nonvirtuals?
-
-    /// Return the number of dimensions in this table.
-    virtual unsigned int GetDimension() const = 0;
+    bool ApplyAxisAdjustment(MultiDimAxisAny&, unsigned int n);
+    bool RefreshAxisAdjustment(MultiDimAxisAny&, unsigned int n);
 
     AxesAny GetAxesAny();
+    unsigned int GetDimension() const;
 
-    bool ApplyAxisAdjustment(MultiDimAxisAny& axis, unsigned int n);
-    bool RefreshAxisAdjustment(MultiDimAxisAny& axis, unsigned int n);
+    boost::any GetValueAny(Coords const&) const;
+    void       SetValueAny(Coords const&, boost::any const&);
 
-    /// Return true if the data varies with that dimension
+    virtual bool CanChangeVariationWith(unsigned int n) const = 0;
+    virtual void MakeVaryByDimension(unsigned int n, bool varies) = 0;
     virtual bool VariesByDimension(unsigned int n) const = 0;
 
-    /// Enable/disable data variation with n-th dimension
-    virtual void MakeVaryByDimension(unsigned int n, bool varies) = 0;
-
-    /// Return true if variation with n-th axis could be changed
-    virtual bool CanChangeVariationWith(unsigned int n) const = 0;
-
-    boost::any GetAnyValue(Coords const& coords) const;
-    void SetAnyValue(Coords const& coords, boost::any const& value);
-
-    /// The method to be provided by the table to allow the conversion from
-    /// the table values to the strings.
+    virtual boost::any  StringToValue(std::string const& value) const = 0;
     virtual std::string ValueToString(boost::any const& value) const = 0;
 
-    /// The method to be provided by the table to allow the conversion from
-    /// strings to the the table values.
-    virtual boost::any StringToValue(std::string const& value) const = 0;
-
   protected:
-    virtual boost::any DoGetValueAny(Coords const&) const = 0;
-    virtual void DoSetValueAny(Coords const&, boost::any const&) = 0;
     virtual AxesAny DoGetAxesAny() = 0;
+    virtual unsigned int DoGetDimension() const = 0;
+    virtual boost::any DoGetValueAny(Coords const&) const = 0;
+    virtual void       DoSetValueAny(Coords const&, boost::any const&) = 0;
 
     virtual bool DoApplyAxisAdjustment(MultiDimAxisAny& axis, unsigned int n);
     virtual bool DoRefreshAxisAdjustment(MultiDimAxisAny& axis, unsigned int n);
@@ -410,6 +375,11 @@ inline MultiDimTableAny::AxesAny MultiDimTableAny::GetAxesAny()
 {
     return DoGetAxesAny();
 }
+inline unsigned int MultiDimTableAny::GetDimension() const
+{
+    return DoGetDimension();
+}
+
 inline bool MultiDimTableAny::ApplyAxisAdjustment
     (MultiDimAxisAny& axis
     ,unsigned int n
@@ -418,6 +388,7 @@ inline bool MultiDimTableAny::ApplyAxisAdjustment
     EnsureValidDimensionIndex(n);
     return DoApplyAxisAdjustment(axis, n);
 }
+
 inline bool MultiDimTableAny::RefreshAxisAdjustment
     (MultiDimAxisAny& axis
     ,unsigned int n
@@ -426,13 +397,15 @@ inline bool MultiDimTableAny::RefreshAxisAdjustment
     EnsureValidDimensionIndex(n);
     return DoRefreshAxisAdjustment(axis, n);
 }
-inline boost::any MultiDimTableAny::GetAnyValue(Coords const& coords) const
+
+inline boost::any MultiDimTableAny::GetValueAny(Coords const& coords) const
 {
     if(coords.size() != GetDimension())
         {fatal_error() << "Incorrect dimension." << LMI_FLUSH;}
     return DoGetValueAny(coords);
 }
-inline void MultiDimTableAny::SetAnyValue
+
+inline void MultiDimTableAny::SetValueAny
     (Coords const& coords
     ,boost::any const& value
     )

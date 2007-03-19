@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: tier_view_editor.cpp,v 1.9.2.3 2007-03-19 12:17:13 etarassov Exp $
+// $Id: tier_view_editor.cpp,v 1.9.2.4 2007-03-19 13:47:55 etarassov Exp $
 
 #include "tier_view_editor.hpp"
 
@@ -273,7 +273,7 @@ void TierEditorGrid::SetValue(int row, int col, wxString const& str)
         value.second = as_double;
         }
 
-    table_->SetAnyValue(axis_fixed_coords_, boost::any(value));
+    table_->SetAnyValue(axis_fixed_coords_, WrapAny<double_pair>(value)));
 }
 
 wxString TierEditorGrid::GetRowLabelValue(int row)
@@ -295,8 +295,6 @@ double_pair TierEditorGrid::GetDoublePairValue(int row)
     // hide first axis from the table
     PrepareFixedCoords(0, row);
 
-    boost::any value = table_->GetAnyValue(axis_fixed_coords_);
-
-    return boost::any_cast<double_pair>(value);
+    return UnwrapAny<double_pair>(table_->GetValueAny(axis_fixed_coords_));
 }
 

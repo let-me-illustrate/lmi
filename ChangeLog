@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.591.2.10 2007-03-19 12:58:29 etarassov Exp $
+// $Id: ChangeLog,v 1.591.2.11 2007-03-19 13:47:55 etarassov Exp $
 
 MAINTENANCE
 
@@ -10695,3 +10695,14 @@ Simplify MultiDimTable to only enforce type safe for table values.
 
   multidimgrid_safe.tpp
 Correct an error in previous commit 20070319T1216Z.
+
+20070319T1347Z <etarassov@tt-solutions.com> [1249]
+
+  database_view_editor.cpp
+  multidimgrid_any.cpp
+  multidimgrid_any.hpp
+  tier_view_editor.cpp
+  tier_view_editor.hpp
+Reformat comments. Reorder methods in MultiDimTableAny. Split
+pure virtual GetDimension into public non-virtual GetDimension and
+pure virtual DoGetDimension. Rename G/SetAnyValue into G/SetValuAny.

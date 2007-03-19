@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: database_view_editor.cpp,v 1.9.2.1 2007-03-19 12:17:13 etarassov Exp $
+// $Id: database_view_editor.cpp,v 1.9.2.2 2007-03-19 13:47:55 etarassov Exp $
 
 #include "database_view_editor.hpp"
 
@@ -209,7 +209,7 @@ void DatabaseTableAdapter::ConvertValue
     BOOST_STATIC_ASSERT( eda_max == 7 );
 }
 
-unsigned int DatabaseTableAdapter::GetDimension() const
+unsigned int DatabaseTableAdapter::DoGetDimension() const
 {
     return eda_max;
 }

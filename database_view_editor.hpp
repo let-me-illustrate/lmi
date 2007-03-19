@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: database_view_editor.hpp,v 1.8.2.1 2007-03-19 12:17:13 etarassov Exp $
+// $Id: database_view_editor.hpp,v 1.8.2.2 2007-03-19 13:48:28 etarassov Exp $
 
 #ifndef database_view_editor_hpp
 #define database_view_editor_hpp
@@ -189,8 +189,8 @@ class DatabaseTableAdapter
   private:
     /// MultiDimTableAny required implementation.
     virtual bool CanChangeVariationWith(unsigned int) const;
-    AxesAny DoGetAxesAny();
-    virtual unsigned int GetDimension() const;
+    virtual AxesAny DoGetAxesAny();
+    virtual unsigned int DoGetDimension() const;
     virtual void MakeVaryByDimension(unsigned int, bool);
     virtual bool VariesByDimension(unsigned int) const;
 

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: tier_view_editor.hpp,v 1.10.2.2 2007-03-19 12:17:13 etarassov Exp $
+// $Id: tier_view_editor.hpp,v 1.10.2.3 2007-03-19 13:47:55 etarassov Exp $
 
 #ifndef tier_view_editor_hpp
 #define tier_view_editor_hpp
@@ -253,7 +253,7 @@ class TierTableAdapter
     // MultiDimTableAny required implementation.
     virtual bool CanChangeVariationWith(unsigned int n) const;
     virtual AxesAny DoGetAxesAny();
-    virtual unsigned int GetDimension() const {return 1;}
+    virtual unsigned int DoGetDimension() const {return 1;}
     virtual void MakeVaryByDimension(unsigned int n, bool varies);
     virtual bool VariesByDimension(unsigned int n) const;
 

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: multidimgrid_any.cpp,v 1.10.2.1 2007-03-19 12:17:13 etarassov Exp $
+// $Id: multidimgrid_any.cpp,v 1.10.2.2 2007-03-19 13:47:55 etarassov Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -986,7 +986,7 @@ void MultiDimGrid::PrepareFixedCoords(int row, int col)
 wxString MultiDimGrid::GetValue(int row, int col)
 {
     PrepareFixedCoords(row, col);
-    boost::any value = table_->GetAnyValue(axis_fixed_coords_);
+    boost::any value = table_->GetValueAny(axis_fixed_coords_);
     return table_->ValueToString(value);
 }
 
