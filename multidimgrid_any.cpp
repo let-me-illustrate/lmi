@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: multidimgrid_any.cpp,v 1.10.2.6 2007-03-20 16:15:08 etarassov Exp $
+// $Id: multidimgrid_any.cpp,v 1.10.2.7 2007-03-20 16:19:31 etarassov Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -1273,7 +1273,8 @@ void MultiDimAxisAnyChoice::SelectionChanged()
         {
         fatal_error()
             << "The axis is inconsistent with its choice control."
-            << LMI_FLUSH;
+            << LMI_FLUSH
+            ;
         }
 
     GetGrid().FixAxisValue(axis_.GetName(), axis_.GetValue(sel));

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: multidimgrid_tools.hpp,v 1.11.2.2 2007-03-20 12:26:14 etarassov Exp $
+// $Id: multidimgrid_tools.hpp,v 1.11.2.3 2007-03-20 16:19:31 etarassov Exp $
 
 #ifndef multidimgrid_tools_hpp
 #define multidimgrid_tools_hpp
@@ -131,7 +131,8 @@ AxisMaxBoundAdjuster<Integral>::AxisMaxBoundAdjuster
             << ","
             << maximum_upper_bound
             << "]."
-            << LMI_FLUSH;
+            << LMI_FLUSH
+            ;
         }
     std::ostringstream oss;
     oss
@@ -319,7 +320,7 @@ void AdjustableMaxBoundAxis<Integral>::SetBounds(Integral lower_bound, Integral 
         {
         fatal_error()
             << "Bounds are invalid."
-            << LMI_FLUSH;
+            << LMI_FLUSH
             ;
         }
     lower_bound_ = lower_bound;

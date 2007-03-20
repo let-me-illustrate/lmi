@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.591.2.19 2007-03-20 16:15:08 etarassov Exp $
+// $Id: ChangeLog,v 1.591.2.20 2007-03-20 16:19:31 etarassov Exp $
 
 MAINTENANCE
 
@@ -10757,3 +10757,9 @@ Split TierEditorGrid::CheckRowAndCol into two more explicit methods.
   tier_view_editor.cpp
   tier_view_editor.hpp
 Fix input error handling. Get rid of wxGridTableBase interface methods.
+
+20070320T1618Z <etarassov@tt-solutions.com> [1247]
+
+  multidimgrid_any.cpp
+  multidimgrid_tools.hpp
+Add new line after 'LMI_FLUSH' and before ';' where needed.
