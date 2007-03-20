@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: tier_view.cpp,v 1.6 2007-03-19 18:08:13 chicares Exp $
+// $Id: tier_view.cpp,v 1.7 2007-03-20 22:46:45 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -28,16 +28,18 @@
 
 #include "tier_view.hpp"
 
-#include "multidimgrid_safe.tpp"
-
+// EVGENIY !! Are all three 'multidimgrid*' headers required here?
 #include "multidimgrid_any.hpp"
+#include "multidimgrid_safe.tpp"
 #include "multidimgrid_tools.hpp"
+#include "stratified_charges.hpp"
 #include "stratified_charges.xpp"
 #include "tier_document.hpp"
 #include "tier_view_editor.hpp"
 #include "wx_new.hpp"
 
 #include <wx/icon.h>
+#include <wx/treectrl.h>
 #include <wx/window.h>
 
 #include <sstream>
