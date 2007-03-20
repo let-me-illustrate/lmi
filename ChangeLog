@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.597 2007-03-20 03:27:33 chicares Exp $
+// $Id: ChangeLog,v 1.598 2007-03-20 03:51:22 chicares Exp $
 
 MAINTENANCE
 
@@ -10687,4 +10687,11 @@ Remove unneeded headers.
   rounding_view_editor.hpp
   tier_view_editor.hpp
 Add code-review comments.
+
+20070320T0351Z <chicares@cox.net> [1254]
+
+  database_view_editor.hpp
+  tier_view_editor.hpp
+Include any local header for a public base class first. Compare the
+20070311T2136Z change, and see the new review comment.
 
