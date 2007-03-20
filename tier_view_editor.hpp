@@ -19,17 +19,18 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: tier_view_editor.hpp,v 1.11 2007-03-20 03:27:33 chicares Exp $
+// $Id: tier_view_editor.hpp,v 1.12 2007-03-20 03:51:22 chicares Exp $
 
 #ifndef tier_view_editor_hpp
 #define tier_view_editor_hpp
 
 #include "config.hpp"
 
+// Both these headers define base classes that are derived from here.
 #include "multidimgrid_safe.hpp"
+#include "multidimgrid_tools.hpp"
 
 #include "alert.hpp"
-#include "multidimgrid_tools.hpp"
 
 #include <boost/shared_ptr.hpp>
 
