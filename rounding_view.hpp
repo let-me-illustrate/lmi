@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: rounding_view.hpp,v 1.8 2007-03-19 18:08:13 chicares Exp $
+// $Id: rounding_view.hpp,v 1.9 2007-03-20 02:34:21 chicares Exp $
 
 #ifndef rounding_view_hpp
 #define rounding_view_hpp
@@ -30,7 +30,6 @@
 
 #include "obstruct_slicing.hpp"
 
-#include <boost/shared_ptr.hpp>
 #include <boost/utility.hpp>
 
 #include <map>

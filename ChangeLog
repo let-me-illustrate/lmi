@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.595 2007-03-19 20:52:17 chicares Exp $
+// $Id: ChangeLog,v 1.596 2007-03-20 02:34:21 chicares Exp $
 
 MAINTENANCE
 
@@ -10669,4 +10669,14 @@ clearly not needed because class ViewEx is not used, but removing it
 prevented compilation because "view_ex.hpp" includes <wx/docview.h>,
 which apparently must bring in the declaration of class wxPanel
 (though it conceivably might not in a future wx version).
+
+20070320T0234Z <chicares@cox.net> [1254]
+
+  database_view_editor.cpp
+  policy_view.cpp
+  rounding_view.cpp
+  rounding_view.hpp
+  rounding_view_editor.cpp
+  rounding_view_editor.hpp
+Remove unneeded headers.
 

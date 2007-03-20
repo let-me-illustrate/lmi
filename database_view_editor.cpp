@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: database_view_editor.cpp,v 1.9 2007-03-09 16:27:23 chicares Exp $
+// $Id: database_view_editor.cpp,v 1.10 2007-03-20 02:34:21 chicares Exp $
 
 #include "database_view_editor.hpp"
 
@@ -31,12 +31,10 @@
 #include <boost/preprocessor/repetition/repeat_from_to.hpp>
 
 #include <wx/msgdlg.h>
-#include <wx/sizer.h>
-#include <wx/timer.h>
-#include <wx/utils.h>
+#include <wx/utils.h> // wxBusyCursor
 
 #include <exception>
-#include <numeric>
+#include <numeric>    // std::accumulate()
 
 DatabaseTableAdapter::DatabaseTableAdapter(TDBValue* db_value)
     :db_value_(db_value)
@@ -161,6 +159,8 @@ void DatabaseTableAdapter::ReshapeTableData
     ,bool user_confirm
     )
 {
+// EVGENIY !! Why use 'std::size_t' here? It can't actually prevent
+// std::accumulate() from overflowing MAX_INT, can it?
     std::size_t count = std::accumulate
         (axis_lengths.begin()
         ,axis_lengths.end()
@@ -170,6 +170,8 @@ void DatabaseTableAdapter::ReshapeTableData
 
     if(!user_confirm || ConfirmOperation(count))
         {
+// EVGENIY !! I don't actually see an hourglass cursor. Is this an
+// object-lifetime problem?
         wxBusyCursor();
 
         db_value_->Reshape(axis_lengths);
