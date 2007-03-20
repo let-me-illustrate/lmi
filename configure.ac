@@ -21,7 +21,7 @@ dnl snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
 dnl === Prologue ===
 
-AC_REVISION($Id: configure.ac,v 1.27 2007-02-23 12:43:25 chicares Exp $)dnl
+AC_REVISION($Id: configure.ac,v 1.28 2007-03-20 17:06:21 zeitlin Exp $)dnl
 
 AC_PREREQ(2.56)
 AC_INIT(LMI, 1.0.0, [chicares@cox.net])
@@ -294,9 +294,6 @@ AC_CHECK_FUNC(rint, AC_DEFINE(LMI_COMPILER_PROVIDES_RINT, [1], [Define this if y
 
 dnl === Library checks ===
 
-dnl use C++ compiler as we're checking for C++ libraries/headers
-AC_LANG(C++)
-
 dnl --- curses.h
 AC_SEARCH_LIBS([getch], [ncurses], [], [], [])
 
@@ -310,6 +307,10 @@ dnl Wx configuration part needs exactly that feature to understand
 dnl what library type build we're using.
 AC_DISABLE_STATIC   dnl don't waste time on static build by default
 AC_PROG_LIBTOOL
+
+dnl use C++ compiler as we're checking for C++ libraries/headers from now on
+dnl (we couldn't do it before as libtool tests must be done with C compiler)
+AC_LANG(C++)
 
 dnl --- wxWidgets ---
 
