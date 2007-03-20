@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.591.2.21 2007-03-20 16:53:23 etarassov Exp $
+// $Id: ChangeLog,v 1.591.2.22 2007-03-20 17:47:49 etarassov Exp $
 
 MAINTENANCE
 
@@ -10768,3 +10768,9 @@ Add new line after 'LMI_FLUSH' and before ';' where needed.
 
   multidimgrid_any.cpp
 Fix GridRefreshTableDataGuard to use a reference instead of a pointer.
+
+20070320T1747Z <etarassov@tt-solutions.com> [1247]
+
+  multidimgrid_any.cpp
+  multidimgrid_any.hpp
+Prefer references to pointers in MultiDimGridAny.

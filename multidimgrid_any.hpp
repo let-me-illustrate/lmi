@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: multidimgrid_any.hpp,v 1.18.2.7 2007-03-20 16:15:08 etarassov Exp $
+// $Id: multidimgrid_any.hpp,v 1.18.2.8 2007-03-20 17:47:49 etarassov Exp $
 
 #ifndef multidimgrid_any_hpp
 #define multidimgrid_any_hpp
@@ -502,6 +502,9 @@ class MultiDimGrid
     MultiDimTableAny& table() {return *table_;}
     MultiDimTableAny const& table() const {return *table_;}
 
+    wxGrid& grid() {return *grid_;}
+    wxGrid const& grid() const {return *grid_;}
+
   private:
     // wxGridTableBase overrides.
     virtual int GetNumberCols();
@@ -570,17 +573,17 @@ class MultiDimGrid
     mutable Coords axis_fixed_coords_;
 
     /// Creates axis selection controls for axis X and Y
-    wxChoice* CreateGridAxisSelection
+    wxChoice& CreateGridAxisSelection
         (enum_axis_x_or_y
         ,std::string const& label
         ,wxColour const& selectedColour
         );
     /// Places the axis label control into the widget
-    void SetAxisLabel(int axisId, wxWindow* newWin);
+    void SetAxisLabel(int axis_id, wxWindow&);
     /// Places the axis fixed value choice control into the widget
-    void SetAxisChoiceControl(int axisId, wxWindow* newWinm);
+    void SetAxisChoiceControl(int axis_id, wxWindow&);
     /// Places the axis value range selection control into the widget
-    void SetAxisAdjustControl(int axisId, wxWindow* newWin);
+    void SetAxisAdjustControl(int axis_id, wxWindow*);
     /// Places the data variation checkbox into the widget
     void SetAxisVariesControl(unsigned int axis_id);
 
@@ -634,7 +637,12 @@ class MultiDimGrid
     /// Actually handle the axis selection switch
     void DoOnSwitchSelectedAxis(enum_axis_x_or_y);
 
-    /// Implementation of wxGridTableBase interface. The widget serves as a data
+    /// accessor for first_axis_choice_ and second_axis_choice_
+    wxChoice& GetAxisChoiceControl(enum_axis_x_or_y);
+
+    bool IsFullyConstructed() const;
+
+    /// Implementation of wxGridTableBase interface. The widget serves as data
     /// source for the wxGrid component.
     ///
     /// Note: once the wxGrid class support LabelAttributeProvider() we
