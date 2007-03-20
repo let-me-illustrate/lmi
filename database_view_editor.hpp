@@ -19,17 +19,22 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: database_view_editor.hpp,v 1.8 2007-03-11 21:36:10 chicares Exp $
+// $Id: database_view_editor.hpp,v 1.9 2007-03-20 03:51:22 chicares Exp $
 
 #ifndef database_view_editor_hpp
 #define database_view_editor_hpp
 
 #include "config.hpp"
 
+// EVGENIY !! These two headers seem to declare base classes that are
+// required for various derived classes declared here. What's the
+// difference between these two headers--is there an easy way to know
+// when to include one versus the other? Do they both have standalone
+// uses, or must both always be included together?
 #include "multidimgrid_safe.hpp"
+#include "multidimgrid_tools.hpp"
 
 #include "ihs_dbvalue.hpp"
-#include "multidimgrid_tools.hpp"
 #include "xenumtypes.hpp"
 
 #include <boost/shared_ptr.hpp>
