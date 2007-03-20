@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: multidimgrid_any.cpp,v 1.10.2.7 2007-03-20 16:19:31 etarassov Exp $
+// $Id: multidimgrid_any.cpp,v 1.10.2.8 2007-03-20 16:53:23 etarassov Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -197,31 +197,22 @@ class GridRefreshTableDataGuard
     GridRefreshTableDataGuard(MultiDimGrid&);
     ~GridRefreshTableDataGuard();
 
-    void Release();
-
   private:
-    MultiDimGrid* grid_;
+    MultiDimGrid& grid_;
 };
 
 inline GridRefreshTableDataGuard::GridRefreshTableDataGuard(MultiDimGrid& grid)
-    :grid_(&grid)
+    :grid_(grid)
 {
-    ++grid_->table_data_refresh_counter_;
+    ++grid_.table_data_refresh_counter_;
 }
 
 inline GridRefreshTableDataGuard::~GridRefreshTableDataGuard()
 {
-    Release();
-}
-
-inline void GridRefreshTableDataGuard::Release()
-{
-    if(grid_ && !--grid_->table_data_refresh_counter_)
+    if(!--grid_.table_data_refresh_counter_)
         {
-        grid_->DoRefreshTableData();
+        grid_.DoRefreshTableData();
         }
-
-    grid_ = NULL;
 }
 
 /// MultiDimGrid methods implementation
