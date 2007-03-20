@@ -19,18 +19,13 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: tier_view_editor.cpp,v 1.9 2007-03-09 16:27:23 chicares Exp $
+// $Id: tier_view_editor.cpp,v 1.10 2007-03-20 22:47:12 chicares Exp $
 
 #include "tier_view_editor.hpp"
 
-#include "alert.hpp"
 #include "assert_lmi.hpp"
 #include "multidimgrid_safe.tpp"
 #include "value_cast.hpp"
-
-#include <wx/treectrl.h>
-
-#include <string>
 
 void tier_entity_adapter::ensure_not_void() const
 {
