@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.596 2007-03-20 02:34:21 chicares Exp $
+// $Id: ChangeLog,v 1.597 2007-03-20 03:27:33 chicares Exp $
 
 MAINTENANCE
 
@@ -10679,4 +10679,12 @@ which apparently must bring in the declaration of class wxPanel
   rounding_view_editor.cpp
   rounding_view_editor.hpp
 Remove unneeded headers.
+
+20070320T0327Z <chicares@cox.net> [1254]
+
+  database_view.cpp
+  multidimgrid_any.cpp
+  rounding_view_editor.hpp
+  tier_view_editor.hpp
+Add code-review comments.
 

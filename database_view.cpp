@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: database_view.cpp,v 1.4 2007-03-19 18:08:13 chicares Exp $
+// $Id: database_view.cpp,v 1.5 2007-03-20 03:27:33 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -55,6 +55,9 @@ DatabaseView::DatabaseView()
 DatabaseView::~DatabaseView()
 {
 }
+
+// EVGENIY !! Here and anywhere else 'wxWindow* panel' occurs,
+// does the name 'panel' suggest that the type should be wxPanel?
 
 wxTreeCtrl* DatabaseView::CreateTreeCtrl(wxWindow* panel)
 {

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: multidimgrid_any.cpp,v 1.10 2007-03-09 16:27:23 chicares Exp $
+// $Id: multidimgrid_any.cpp,v 1.11 2007-03-20 03:27:33 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -83,6 +83,12 @@ void MultiDimAxisAny::UpdateChoiceControl(wxWindow& choice_control) const
 //    dynamic_cast<MultiDimAxisAnyChoice&>(choice_control)->PopulateChoiceList();
 // instead? That would throw an exception instead of returning with a
 // mere warning; but shouldn't this be a fatal error?
+//
+// EVGENIY !! Alternatively, is it possible to tighten the compile-time
+// type checking by specifying a more specific argument type? I'm not
+// sure what type that might be, but perhaps it's wxChoice, wxControl,
+// or MultiDimAxisAnyChoice.
+//
     MultiDimAxisAnyChoice* control =
         dynamic_cast<MultiDimAxisAnyChoice*>(&choice_control);
     if(!control)
