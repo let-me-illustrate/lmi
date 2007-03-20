@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: tier_view_editor.hpp,v 1.10 2007-03-11 21:36:10 chicares Exp $
+// $Id: tier_view_editor.hpp,v 1.11 2007-03-20 03:27:33 chicares Exp $
 
 #ifndef tier_view_editor_hpp
 #define tier_view_editor_hpp
@@ -37,6 +37,8 @@
 
 #include <string>
 
+// EVGENIY !! Can we avoid writing typedefs at global scope, in order
+// to keep them out of the global namespace?
 typedef std::pair<double, double> double_pair;
 
 /// Stores additional information in a wxTree node
@@ -163,6 +165,11 @@ inline unsigned int tier_entity_adapter::get_bands_count() const
 }
 
 /// Axis representing number of bands in the stratified_entity
+///
+/// EVGENIY !! Is this an implementation detail that could be moved to
+/// the implementation file? If not, then would it make sense to move
+/// it into its own header? (Probably the same comment applies
+/// elsewhere.)
 
 class TierBandAxis
   :public AdjustableMaxBoundAxis<unsigned int>

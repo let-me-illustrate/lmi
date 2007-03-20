@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: rounding_view_editor.hpp,v 1.9 2007-03-20 02:34:21 chicares Exp $
+// $Id: rounding_view_editor.hpp,v 1.10 2007-03-20 03:27:33 chicares Exp $
 
 #ifndef rounding_view_editor_hpp
 #define rounding_view_editor_hpp
@@ -82,6 +82,11 @@ class RoundingButtons
         ,unsigned int n = 1
         );
 
+// EVGENIY !! Does this class need to be Copyable or Assignable?
+// If not, then could we make 'original_rule_' a reference member?
+// Then we could probably avoid including "round_to.hpp", and just
+// use a forward declaration instead. At any rate, I think we need
+// include only "round_to.hpp", not "rounding_rules.hpp".
     round_to<double> original_rule_;
     wxToggleButton* button_not_at_all_;
     wxToggleButton* button_to_nearest_;
