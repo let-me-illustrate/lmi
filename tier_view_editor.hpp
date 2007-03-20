@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: tier_view_editor.hpp,v 1.10.2.3 2007-03-19 13:47:55 etarassov Exp $
+// $Id: tier_view_editor.hpp,v 1.10.2.4 2007-03-20 13:05:58 etarassov Exp $
 
 #ifndef tier_view_editor_hpp
 #define tier_view_editor_hpp
@@ -358,7 +358,12 @@ class TierEditorGrid
     virtual ~TierEditorGrid();
 
   private:
-    double_pair GetDoublePairValue(int row);
+    enum enum_tier_grid_column
+        {e_column_limit = 0
+        ,e_column_value
+        ,e_column_max
+        };
+    double_pair GetDoublePairValue(unsigned int row);
 
     /// Override class MultiDimGrid to show pairs of doubles as two
     /// columns in the grid.
@@ -371,7 +376,8 @@ class TierEditorGrid
     virtual wxString GetColLabelValue(int col);
     virtual wxString GetRowLabelValue(int row);
 
-    void CheckRowAndCol(int row, int col) const;
+    unsigned int          GetBandNumber(int row) const;
+    enum_tier_grid_column GetColumn(int col) const;
 };
 
 #endif // tier_view_editor_hpp
