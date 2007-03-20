@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: rounding_view.cpp,v 1.6 2007-03-19 18:08:13 chicares Exp $
+// $Id: rounding_view.cpp,v 1.7 2007-03-20 02:34:21 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -30,18 +30,12 @@
 
 #include "alert.hpp"
 #include "rounding_document.hpp"
-#include "rounding_view_editor.hpp"
-#include "wx_new.hpp"
+#include "rounding_view_editor.hpp" // class RoundingButtons
 
 #include <wx/icon.h>
 #include <wx/panel.h>
-#include <wx/sizer.h>
-#include <wx/stattext.h>
-#include <wx/textctrl.h>
 #include <wx/window.h>
 #include <wx/xrc/xmlres.h>
-
-#include <sstream>
 
 IMPLEMENT_DYNAMIC_CLASS(RoundingView, ProductEditorView)
 
