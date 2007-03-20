@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: policy_view.cpp,v 1.5 2007-03-19 18:08:13 chicares Exp $
+// $Id: policy_view.cpp,v 1.6 2007-03-20 02:34:21 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -36,8 +36,6 @@
 #include <wx/textctrl.h>
 #include <wx/window.h>
 #include <wx/xrc/xmlres.h>
-
-#include <sstream>
 
 IMPLEMENT_DYNAMIC_CLASS(PolicyView, ProductEditorView)
 
