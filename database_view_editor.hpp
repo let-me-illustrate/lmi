@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: database_view_editor.hpp,v 1.9 2007-03-20 03:51:22 chicares Exp $
+// $Id: database_view_editor.hpp,v 1.10 2007-03-20 19:25:49 chicares Exp $
 
 #ifndef database_view_editor_hpp
 #define database_view_editor_hpp
@@ -33,6 +33,10 @@
 // uses, or must both always be included together?
 #include "multidimgrid_safe.hpp"
 #include "multidimgrid_tools.hpp"
+
+// EVGENIY !! I suspect that we can avoid including "ihs_dbvalue.hpp"
+// here by reworking or moving code for which a forward declaration
+// doesn't work today.
 
 #include "ihs_dbvalue.hpp"
 #include "xenumtypes.hpp"
