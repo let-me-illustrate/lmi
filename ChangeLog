@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.591.2.18 2007-03-20 13:05:58 etarassov Exp $
+// $Id: ChangeLog,v 1.591.2.19 2007-03-20 16:15:08 etarassov Exp $
 
 MAINTENANCE
 
@@ -10749,3 +10749,11 @@ to clarify its meaning. Add const modifiers to local variables.
   tier_view_editor.cpp
   tier_view_editor.hpp
 Split TierEditorGrid::CheckRowAndCol into two more explicit methods.
+
+20070320T1614Z <etarassov@tt-solutions.com> [1247]
+
+  multidimgrid_any.cpp
+  multidimgrid_any.hpp
+  tier_view_editor.cpp
+  tier_view_editor.hpp
+Fix input error handling. Get rid of wxGridTableBase interface methods.

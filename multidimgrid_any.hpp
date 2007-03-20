@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: multidimgrid_any.hpp,v 1.18.2.6 2007-03-19 22:35:27 etarassov Exp $
+// $Id: multidimgrid_any.hpp,v 1.18.2.7 2007-03-20 16:15:08 etarassov Exp $
 
 #ifndef multidimgrid_any_hpp
 #define multidimgrid_any_hpp
@@ -502,6 +502,7 @@ class MultiDimGrid
     MultiDimTableAny& table() {return *table_;}
     MultiDimTableAny const& table() const {return *table_;}
 
+  private:
     // wxGridTableBase overrides.
     virtual int GetNumberCols();
     virtual int GetNumberRows();
@@ -511,12 +512,26 @@ class MultiDimGrid
     virtual wxString GetColLabelValue(int col);
     virtual wxString GetRowLabelValue(int row);
 
+    unsigned int EnsureIndexIsPositive(int) const;
+
+  protected:
+    virtual std::string DoGetColLabelValue(unsigned int col) const;
+    virtual std::string DoGetRowLabelValue(unsigned int row) const;
+    virtual unsigned int DoGetNumberCols() const;
+    virtual unsigned int DoGetNumberRows() const;
+    virtual std::string DoGetValue(unsigned int row, unsigned int col) const;
+    virtual void DoSetValue
+        (unsigned int row
+        ,unsigned int col
+        ,std::string const&
+        );
+
     /// Array of boost::any values
     typedef MultiDimTableAny::Coords Coords;
 
     /// Helper function used by SetValue() and GetValue() functions
     /// to fill the private coordinates vector with correct values.
-    Coords& PrepareFixedCoords(int row, int col);
+    Coords& PrepareFixedCoords(unsigned int row, unsigned int col) const;
 
   private:
     // Two values to distinguish between X axis and Y axis
@@ -552,7 +567,7 @@ class MultiDimGrid
     /// to the underlying data table. Note that when displaying table the
     /// values for selected axis change as we walk through the grid cells
     /// to retrieve its values.
-    Coords axis_fixed_coords_;
+    mutable Coords axis_fixed_coords_;
 
     /// Creates axis selection controls for axis X and Y
     wxChoice* CreateGridAxisSelection

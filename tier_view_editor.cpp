@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: tier_view_editor.cpp,v 1.9.2.7 2007-03-20 13:05:58 etarassov Exp $
+// $Id: tier_view_editor.cpp,v 1.9.2.8 2007-03-20 16:15:08 etarassov Exp $
 
 #include "tier_view_editor.hpp"
 
@@ -194,26 +194,19 @@ TierEditorGrid::~TierEditorGrid()
 {
 }
 
-int TierEditorGrid::GetNumberRows()
+unsigned int TierEditorGrid::DoGetNumberRows() const
 {
-    return MultiDimGrid::GetNumberCols();
+    return MultiDimGrid::DoGetNumberCols();
 }
 
-int TierEditorGrid::GetNumberCols()
+unsigned int TierEditorGrid::DoGetNumberCols() const
 {
     return e_column_max;
 }
 
-unsigned int TierEditorGrid::GetBandNumber(int row) const
-{
-    if(row < 0)
-        {
-        fatal_error() << "Negative index for row index" << LMI_FLUSH;
-        }
-    return static_cast<unsigned int>(row);
-}
-
-TierEditorGrid::enum_tier_grid_column TierEditorGrid::GetColumn(int col) const
+TierEditorGrid::enum_tier_grid_column TierEditorGrid::EnsureValidColumn
+    (unsigned int col
+    ) const
 {
     if(col != e_column_limit && col != e_column_value)
         {
@@ -225,26 +218,27 @@ TierEditorGrid::enum_tier_grid_column TierEditorGrid::GetColumn(int col) const
     return static_cast<enum_tier_grid_column>(col);
 }
 
-wxString TierEditorGrid::GetValue(int row, int col)
+std::string TierEditorGrid::DoGetValue
+    (unsigned int row
+    ,unsigned int col
+    ) const
 {
-    double_pair const value = GetDoublePairValue(GetBandNumber(row));
-    double const dbl_value = (GetColumn(col) == e_column_limit)
+    double_pair const value = GetDoublePairValue(row);
+    double const dbl_value = (EnsureValidColumn(col) == e_column_limit)
         ? value.first
         : value.second;
-    return value_cast<std::string>(dbl_value);
+    return DoubleToString(dbl_value);
 }
 
-void TierEditorGrid::SetValue(int row, int col, wxString const& str)
+void TierEditorGrid::DoSetValue
+    (unsigned int row
+    ,unsigned int col
+    ,std::string const& text)
 {
-    unsigned int const band = GetBandNumber(row);
-    double_pair value = GetDoublePairValue(band);
+    double_pair value = GetDoublePairValue(row);
 
-    double as_double;
-    if(!str.ToDouble(&as_double))
-        {
-        as_double = 0;
-        }
-    if(GetColumn(col) == e_column_limit)
+    double const as_double = StringToDouble(text);
+    if(EnsureValidColumn(col) == e_column_limit)
         {
         value.first = as_double;
         }
@@ -254,26 +248,39 @@ void TierEditorGrid::SetValue(int row, int col, wxString const& str)
         }
 
     dynamic_cast<TierTableAdapter&>(table()).SetValue
-        (PrepareFixedCoords(0, band)
+        (PrepareFixedCoords(0, row)
         ,value);
 }
 
-wxString TierEditorGrid::GetRowLabelValue(int row)
+std::string TierEditorGrid::DoGetRowLabelValue(unsigned int row) const
 {
-    return MultiDimGrid::GetColLabelValue(GetBandNumber(row));
+    return MultiDimGrid::DoGetColLabelValue(row);
 }
 
-wxString TierEditorGrid::GetColLabelValue(int col)
+std::string TierEditorGrid::DoGetColLabelValue(unsigned int col) const
 {
-    if(GetColumn(col) == e_column_limit)
+    if(EnsureValidColumn(col) == e_column_limit)
         {return "Limit";}
     return "Value";
 }
 
-double_pair TierEditorGrid::GetDoublePairValue(unsigned int band)
+double_pair TierEditorGrid::GetDoublePairValue(unsigned int band) const
 {
     // hide first axis from the table
     Coords& coords = PrepareFixedCoords(0, band);
-    return dynamic_cast<TierTableAdapter&>(table()).GetValue(coords);
+    return dynamic_cast<TierTableAdapter const&>(table()).GetValue(coords);
 }
 
+std::string TierEditorGrid::DoubleToString(double value)
+{
+    if(.999 * stratified_entity::limit_maximum < value)
+        return "MAXIMUM";
+    return value_cast<std::string>(value);
+}
+
+double TierEditorGrid::StringToDouble(std::string const& text)
+{
+    if(0 == text.compare(0, 3, "MAX"))
+        return stratified_entity::limit_maximum;
+    return value_cast<double>(text);
+}

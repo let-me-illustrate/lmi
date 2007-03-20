@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: tier_view_editor.hpp,v 1.10.2.4 2007-03-20 13:05:58 etarassov Exp $
+// $Id: tier_view_editor.hpp,v 1.10.2.5 2007-03-20 16:15:08 etarassov Exp $
 
 #ifndef tier_view_editor_hpp
 #define tier_view_editor_hpp
@@ -363,21 +363,27 @@ class TierEditorGrid
         ,e_column_value
         ,e_column_max
         };
-    double_pair GetDoublePairValue(unsigned int row);
+    double_pair GetDoublePairValue(unsigned int row) const;
 
     /// Override class MultiDimGrid to show pairs of doubles as two
     /// columns in the grid.
 
     // MultiDimGrid overrides.
-    virtual int      GetNumberCols();
-    virtual int      GetNumberRows();
-    virtual wxString GetValue(int row, int col);
-    virtual void     SetValue(int row, int col, wxString const& str);
-    virtual wxString GetColLabelValue(int col);
-    virtual wxString GetRowLabelValue(int row);
+    virtual std::string DoGetColLabelValue(unsigned int col) const;
+    virtual std::string DoGetRowLabelValue(unsigned int row) const;
+    virtual unsigned int DoGetNumberCols() const;
+    virtual unsigned int DoGetNumberRows() const;
+    virtual std::string DoGetValue(unsigned int row, unsigned int col) const;
+    virtual void        DoSetValue
+        (unsigned int row
+        ,unsigned int col
+        ,std::string const&
+        );
 
-    unsigned int          GetBandNumber(int row) const;
-    enum_tier_grid_column GetColumn(int col) const;
+    enum_tier_grid_column EnsureValidColumn(unsigned int col) const;
+
+    static std::string DoubleToString(double);
+    static double StringToDouble(std::string const&);
 };
 
 #endif // tier_view_editor_hpp
