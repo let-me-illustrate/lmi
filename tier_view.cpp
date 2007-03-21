@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: tier_view.cpp,v 1.7 2007-03-20 22:46:45 chicares Exp $
+// $Id: tier_view.cpp,v 1.8 2007-03-21 01:44:18 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -41,8 +41,6 @@
 #include <wx/icon.h>
 #include <wx/treectrl.h>
 #include <wx/window.h>
-
-#include <sstream>
 
 namespace
 {
@@ -174,11 +172,7 @@ void TierView::UponTreeSelectionChange(wxTreeEvent& event)
 
         bool is_topic = tree.GetChildrenCount(event.GetItem());
 
-        std::ostringstream oss;
-        if(is_topic)
-            {oss << "[+] ";}
-        oss << item_data->get_description();
-        SetLabel(oss.str());
+        SetLabel(item_data->get_description());
 
         std::vector<tier_entity_info> const& entities = get_tier_entity_infos();
 
