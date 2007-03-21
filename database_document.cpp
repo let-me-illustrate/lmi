@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: database_document.cpp,v 1.7 2007-03-11 22:16:09 chicares Exp $
+// $Id: database_document.cpp,v 1.8 2007-03-21 01:46:19 chicares Exp $
 
 #include "database_document.hpp"
 
@@ -43,32 +43,31 @@ namespace
 ///   - performing operation
 ///   - swapping data back into singleton
 /// To ensure that in case of an exception, singleton's internal state
-/// is restored a helper class dict_map_swap_guard is used.
-/// EVGENIY !! Do the functions mentioned on the following line exist?
-/// Used in DatabaseDocument::OnOpenDocument, DatabaseDocument::OnSaveDocument
+/// is restored a helper class swap_workaround_for_singleton is used.
 
-class dict_map_swap_guard
+class swap_workaround_for_singleton
 {
   public:
-    dict_map_swap_guard(dict_map& m1, dict_map& m2);
-    ~dict_map_swap_guard();
+    swap_workaround_for_singleton(dict_map& m1, dict_map& m2);
+    ~swap_workaround_for_singleton();
 
   private:
     dict_map& m1_;
     dict_map& m2_;
 };
 
-inline dict_map_swap_guard::dict_map_swap_guard
+inline swap_workaround_for_singleton::swap_workaround_for_singleton
     (dict_map& m1
     ,dict_map& m2
     )
     :m1_(m1)
     ,m2_(m2)
 {
+    m1_.swap(m2_); // initially swap
 }
-inline dict_map_swap_guard::~dict_map_swap_guard()
+inline swap_workaround_for_singleton::~swap_workaround_for_singleton()
 {
-    m1_.swap(m2_);
+    m1_.swap(m2_); // swap back
 }
 
 } // unnamed namespace
@@ -82,9 +81,7 @@ DatabaseDocument::DatabaseDocument()
     // Initialize database dictionary
     DBDictionary& instance = DBDictionary::instance();
 
-    // double-swap workaround for the singleton
-    dict_.swap(instance.GetDictionary());
-    dict_map_swap_guard guard(dict_, instance.GetDictionary());
+    swap_workaround_for_singleton workaround(dict_, instance.GetDictionary());
 
     instance.InitDB();
 }
@@ -105,9 +102,7 @@ void DatabaseDocument::ReadDocument(std::string const& filename)
 {
     DBDictionary& instance = DBDictionary::instance();
 
-    // double-swap workaround for the singleton
-    dict_.swap(instance.GetDictionary());
-    dict_map_swap_guard guard(dict_, instance.GetDictionary());
+    swap_workaround_for_singleton workaround(dict_, instance.GetDictionary());
 
     DBDictionary::InvalidateCache();
     instance.Init(filename);
@@ -117,9 +112,7 @@ void DatabaseDocument::WriteDocument(std::string const& filename)
 {
     DBDictionary& instance = DBDictionary::instance();
 
-    // double-swap workaround for the singleton
-    dict_.swap(instance.GetDictionary());
-    dict_map_swap_guard guard(dict_, instance.GetDictionary());
+    swap_workaround_for_singleton workaround(dict_, instance.GetDictionary());
 
     instance.WriteDB(filename);
 }
