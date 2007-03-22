@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.591.2.22 2007-03-20 17:47:49 etarassov Exp $
+// $Id: ChangeLog,v 1.591.2.23 2007-03-22 17:44:41 etarassov Exp $
 
 MAINTENANCE
 
@@ -10774,3 +10774,23 @@ Fix GridRefreshTableDataGuard to use a reference instead of a pointer.
   multidimgrid_any.cpp
   multidimgrid_any.hpp
 Prefer references to pointers in MultiDimGridAny.
+
+20070322T1744Z <etarassov@tt-solutions.com> [1247]
+
+  rounding_view_downward.xpm            [new file]
+  rounding_view_downward_hover.xpm      [new file]
+  rounding_view_downward_selected.xpm   [new file]
+  rounding_view_editor.cpp
+  rounding_view_editor.hpp
+  rounding_view_not_at_all.xpm          [new file]
+  rounding_view_not_at_all_hover.xpm    [new file]
+  rounding_view_not_at_all_selected.xpm [new file]
+  rounding_view_to_nearest.xpm          [new file]
+  rounding_view_to_nearest_hover.xpm    [new file]
+  rounding_view_to_nearest_selected.xpm [new file]
+  rounding_view_upward.xpm              [new file]
+  rounding_view_upward_hover.xpm        [new file]
+  rounding_view_upward_selected.xpm     [new file]
+  rounding_view.xrc
+Use bitmaps on rounding buttons. Properly place widgets on rounding
+view panel.
