@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: database_view_editor.hpp,v 1.10 2007-03-20 19:25:49 chicares Exp $
+// $Id: database_view_editor.hpp,v 1.11 2007-03-24 15:37:24 chicares Exp $
 
 #ifndef database_view_editor_hpp
 #define database_view_editor_hpp
@@ -43,45 +43,7 @@
 
 #include <boost/shared_ptr.hpp>
 
-#include <wx/treectrl.h>
-
 #include <string>
-
-/// Stores additional information in a wxTree node
-
-class DatabaseTreeItemData
-  :public wxTreeItemData
-{
-  public:
-    DatabaseTreeItemData(std::size_t id, std::string const& description);
-
-    std::size_t GetId() const;
-    std::string const& GetDescription() const;
-
-  private:
-    std::size_t id_;
-    std::string description_;
-};
-
-inline DatabaseTreeItemData::DatabaseTreeItemData
-    (std::size_t id
-    ,std::string const& description
-    )
-    :wxTreeItemData()
-    ,id_(id)
-    ,description_(description)
-{
-}
-
-inline std::size_t DatabaseTreeItemData::DatabaseTreeItemData::GetId() const
-{
-    return id_;
-}
-
-inline std::string const& DatabaseTreeItemData::GetDescription() const
-{
-    return description_;
-}
 
 /// Database Axis definitions
 /// -------------------------
