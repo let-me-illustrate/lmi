@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: database_view.cpp,v 1.7 2007-03-21 01:44:18 chicares Exp $
+// $Id: database_view.cpp,v 1.8 2007-03-24 15:37:24 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -41,6 +41,47 @@
 #include <wx/window.h>
 
 #include <map>
+
+namespace
+{
+
+/// Stores additional information in a wxTree node
+
+class DatabaseTreeItemData
+  :public wxTreeItemData
+{
+  public:
+    DatabaseTreeItemData(std::size_t id, std::string const& description);
+
+    std::size_t GetId() const;
+    std::string const& GetDescription() const;
+
+  private:
+    std::size_t id_;
+    std::string description_;
+};
+
+inline DatabaseTreeItemData::DatabaseTreeItemData
+    (std::size_t id
+    ,std::string const& description
+    )
+    :wxTreeItemData()
+    ,id_(id)
+    ,description_(description)
+{
+}
+
+inline std::size_t DatabaseTreeItemData::DatabaseTreeItemData::GetId() const
+{
+    return id_;
+}
+
+inline std::string const& DatabaseTreeItemData::GetDescription() const
+{
+    return description_;
+}
+
+} // Unnamed namespace.
 
 IMPLEMENT_DYNAMIC_CLASS(DatabaseView, TreeGridViewBase)
 
