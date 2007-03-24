@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: database_view.cpp,v 1.8 2007-03-24 15:37:24 chicares Exp $
+// $Id: database_view.cpp,v 1.9 2007-03-24 20:41:27 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -45,7 +45,7 @@
 namespace
 {
 
-/// Stores additional information in a wxTree node
+/// Stores additional information in a wxTree node.
 
 class DatabaseTreeItemData
   :public wxTreeItemData
@@ -61,7 +61,7 @@ class DatabaseTreeItemData
     std::string description_;
 };
 
-inline DatabaseTreeItemData::DatabaseTreeItemData
+DatabaseTreeItemData::DatabaseTreeItemData
     (std::size_t id
     ,std::string const& description
     )
@@ -71,12 +71,12 @@ inline DatabaseTreeItemData::DatabaseTreeItemData
 {
 }
 
-inline std::size_t DatabaseTreeItemData::DatabaseTreeItemData::GetId() const
+std::size_t DatabaseTreeItemData::GetId() const
 {
     return id_;
 }
 
-inline std::string const& DatabaseTreeItemData::GetDescription() const
+std::string const& DatabaseTreeItemData::GetDescription() const
 {
     return description_;
 }
