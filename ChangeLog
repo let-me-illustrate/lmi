@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.599 2007-03-20 22:46:45 chicares Exp $
+// $Id: ChangeLog,v 1.600 2007-03-24 20:41:27 chicares Exp $
 
 MAINTENANCE
 
@@ -10695,6 +10695,12 @@ Add code-review comments.
 Include any local header for a public base class first. Compare the
 20070311T2136Z change, and see the new review comment.
 
+20070320T1706Z <zeitlin> [1254]
+
+  configure.ac
+Use C (not C++) compiler for libtool tests. Otherwise, some tests
+(e.g. dlfcn.h) don't work.
+
 20070320T1925Z <chicares@cox.net> [1254]
 
   database_view_editor.hpp
@@ -10706,4 +10712,38 @@ Add a code-review comment.
   tier_view.cpp
   tier_view_editor.cpp
 Include appropriate headers, in prescribed order.
+
+20070321T0144Z <chicares@cox.net> [1254]
+
+  database_view.cpp
+  tier_view.cpp
+Remove artificial "[+]" from item title.
+[Evgeniy's '20070316T1045Z_br_plus_br_remove.patch']
+
+20070321T0145Z <chicares@cox.net> [1255]
+
+  menus.xrc
+Remove dummy menu placeholders.
+[Evgeniy's '20070316T1111Z_remove_dummy_menu.patch']
+
+20070321T0146Z <chicares@cox.net> [1255]
+
+  database_document.cpp
+Rename dict_map_swap_guard into swap_workaround_for_singleton and
+simplify some code.
+[Evgeniy's '20070316T1130Z_rename_database_swap_workaround.patch']
+[Evgeniy's '20070316T1230Z_add_workaround_var_names.patch', too]
+
+20070324T1537Z <chicares@cox.net> [1255]
+
+  database_view.cpp
+  database_view_editor.hpp
+Move class DatabaseTreeItemData out of a header.
+
+20070324T2041Z <chicares@cox.net> [1255]
+
+  database_view.cpp
+Refactor. Remove 'inline' function-specifiers. Remove a duplicated
+class-key from an elaborated-type-specifier.
+[Part of Evgeniy's '20070316T1232Z_database_fix_crash.v03.patch']
 
