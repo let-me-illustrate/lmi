@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.600 2007-03-24 20:41:27 chicares Exp $
+// $Id: ChangeLog,v 1.601 2007-03-26 20:51:58 wboutin Exp $
 
 MAINTENANCE
 
@@ -10746,4 +10746,9 @@ Move class DatabaseTreeItemData out of a header.
 Refactor. Remove 'inline' function-specifiers. Remove a duplicated
 class-key from an elaborated-type-specifier.
 [Part of Evgeniy's '20070316T1232Z_database_fix_crash.v03.patch']
+
+20070326T2051Z <wboutin@massmutual.com> [1255]
+
+  xml_notebook_variable_annuity.xrc [new file]
+Add new input skin.
 
