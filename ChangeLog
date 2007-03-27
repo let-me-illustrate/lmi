@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.603 2007-03-27 00:13:51 chicares Exp $
+// $Id: ChangeLog,v 1.604 2007-03-27 02:36:31 chicares Exp $
 
 MAINTENANCE
 
@@ -10756,4 +10756,11 @@ Add new input skin.
 
   version.hpp
 Mark release candidate.
+
+20070327T0236Z <chicares@cox.net> [1255]
+
+  database_view_editor.hpp
+  mvc_controller.cpp
+  mvc_controller.tpp
+Fix gcc-4.x problems (VZ).
 
