@@ -19,11 +19,12 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mvc_controller.tpp,v 1.2 2007-01-27 00:00:51 wboutin Exp $
+// $Id: mvc_controller.tpp,v 1.3 2007-03-27 02:36:31 chicares Exp $
 
 #include "mvc_controller.hpp"
 
 #include "alert.hpp"
+#include "any_entity.hpp"
 #include "mvc_model.hpp"
 #include "rtti_lmi.hpp"
 

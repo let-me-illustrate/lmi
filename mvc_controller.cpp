@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mvc_controller.cpp,v 1.14 2007-03-09 16:27:23 chicares Exp $
+// $Id: mvc_controller.cpp,v 1.15 2007-03-27 02:36:31 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -30,7 +30,6 @@
 #include "mvc_controller.tpp"
 
 #include "alert.hpp"
-#include "any_entity.hpp"
 #include "assert_lmi.hpp"
 #include "calendar_date.hpp"
 #include "map_lookup.hpp"
