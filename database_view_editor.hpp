@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: database_view_editor.hpp,v 1.11 2007-03-24 15:37:24 chicares Exp $
+// $Id: database_view_editor.hpp,v 1.12 2007-03-27 02:36:31 chicares Exp $
 
 #ifndef database_view_editor_hpp
 #define database_view_editor_hpp
@@ -266,11 +266,15 @@ inline void DatabaseTableAdapter::SetModified(bool modified)
 class DatabaseEditorGrid
   :public MultiDimGrid
 {
+#if 0
+// EVGENIY--This fails with gcc-4.x because 'eda_max' is private.
+// Perhaps we should move it to some other place where it's valid.
     BOOST_STATIC_ASSERT
         (
            static_cast<int>(TDBValue::e_number_of_axes)
         == static_cast<int>(DatabaseTableAdapter::eda_max)
         );
+#endif // 0
 
   public:
     DatabaseEditorGrid
