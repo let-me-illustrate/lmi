@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.602 2007-03-26 20:54:35 wboutin Exp $
+// $Id: ChangeLog,v 1.603 2007-03-27 00:13:51 chicares Exp $
 
 MAINTENANCE
 
@@ -10744,7 +10744,7 @@ Move class DatabaseTreeItemData out of a header.
 
   database_view.cpp
 Refactor. Remove 'inline' function-specifiers. Remove a duplicated
-class-key from an elaborated-type-specifier.
+nested-name-specifier from a qualified-id.
 [Part of Evgeniy's '20070316T1232Z_database_fix_crash.v03.patch']
 
 20070326T2051Z <wboutin@massmutual.com> [1255]
@@ -10754,6 +10754,6 @@ Add new input skin.
 
 20070326T2054Z <wboutin@massmutual.com> [1255]
 
-  xml_notebook_variable_annuity.xrc [new file]
-Add new input skin.
+  version.hpp
+Mark release candidate.
 
