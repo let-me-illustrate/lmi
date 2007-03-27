@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: multidimgrid_any.hpp,v 1.18.2.8 2007-03-20 17:47:49 etarassov Exp $
+// $Id: multidimgrid_any.hpp,v 1.18.2.9 2007-03-27 09:11:52 etarassov Exp $
 
 #ifndef multidimgrid_any_hpp
 #define multidimgrid_any_hpp
@@ -504,6 +504,8 @@ class MultiDimGrid
 
     wxGrid& grid() {return *grid_;}
     wxGrid const& grid() const {return *grid_;}
+
+    using wxGridTableBase::SetAttrProvider;
 
   private:
     // wxGridTableBase overrides.

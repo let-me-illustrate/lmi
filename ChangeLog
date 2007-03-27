@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.591.2.23 2007-03-22 17:44:41 etarassov Exp $
+// $Id: ChangeLog,v 1.591.2.24 2007-03-27 09:11:52 etarassov Exp $
 
 MAINTENANCE
 
@@ -10794,3 +10794,10 @@ Prefer references to pointers in MultiDimGridAny.
   rounding_view.xrc
 Use bitmaps on rounding buttons. Properly place widgets on rounding
 view panel.
+
+20070327T1011Z <etarassov@tt-solutions.com> [1247]
+
+  multidimgrid_any.hpp
+  tier_view_editor.cpp
+  tier_view_editor.hpp
+Make last limit read-only in tier editor.
