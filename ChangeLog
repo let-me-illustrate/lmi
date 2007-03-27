@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.591.2.24 2007-03-27 09:11:52 etarassov Exp $
+// $Id: ChangeLog,v 1.591.2.25 2007-03-27 10:46:39 etarassov Exp $
 
 MAINTENANCE
 
@@ -10801,3 +10801,16 @@ view panel.
   tier_view_editor.cpp
   tier_view_editor.hpp
 Make last limit read-only in tier editor.
+
+20070327T1145Z <etarassov@tt-solutions.com> [1246]
+
+  census_document.cpp
+  census_document.hpp
+  illustration_document.cpp
+  illustration_document.hpp
+  product_editor.cpp
+  product_editor.hpp
+  text_doc.cpp
+  text_doc.hpp
+Override wxDocument::Do(Open|Save)Document instead of
+wxDocument::On(Open|Save)Document.

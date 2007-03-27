@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: census_document.cpp,v 1.8 2007-01-27 00:00:51 wboutin Exp $
+// $Id: census_document.cpp,v 1.8.6.1 2007-03-27 10:46:39 etarassov Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -94,19 +94,12 @@ bool CensusDocument::OnNewDocument()
     return true;
 }
 
-bool CensusDocument::OnOpenDocument(wxString const& filename)
+bool CensusDocument::DoOpenDocument(wxString const& filename)
 {
-    SetFilename(filename, true);
-    // WX !! This necessary function is undocumented. It must be
-    // called here; otherwise, wxView::OnSave() pops up an annoying
-    // 'Save As' dialog downstream when the file loaded here is saved.
-    SetDocumentSaved();
-//    Modify(false); // TODO ?? Is this merely pleonastic?
-    UpdateAllViews();
     return true;
 }
 
-bool CensusDocument::OnSaveDocument(wxString const& filename)
+bool CensusDocument::DoSaveDocument(wxString const& filename)
 {
     convert_to_ihs(doc_.case_parms_ , case_parms_ );
     convert_to_ihs(doc_.cell_parms_ , cell_parms_ );
@@ -115,7 +108,6 @@ bool CensusDocument::OnSaveDocument(wxString const& filename)
     std::ofstream ofs(filename.c_str());
     doc_.write(ofs);
 
-    Modify(false);
     status() << "Document saved." << std::flush;
     return true;
 }
