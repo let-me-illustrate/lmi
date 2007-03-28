@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.604 2007-03-27 02:36:31 chicares Exp $
+// $Id: ChangeLog,v 1.605 2007-03-28 02:52:27 chicares Exp $
 
 MAINTENANCE
 
@@ -10763,4 +10763,9 @@ Mark release candidate.
   mvc_controller.cpp
   mvc_controller.tpp
 Fix gcc-4.x problems (VZ).
+
+20070328T0252Z <chicares@cox.net> [1255]
+
+  database_view.cpp
+Refactor: change names of a class and its members.
 

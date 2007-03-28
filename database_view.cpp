@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: database_view.cpp,v 1.9 2007-03-24 20:41:27 chicares Exp $
+// $Id: database_view.cpp,v 1.10 2007-03-28 02:52:27 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -45,23 +45,82 @@
 namespace
 {
 
-/// Stores additional information in a wxTree node.
+/// Store information from struct db_names as wxTreeItemData.
+///
+/// EVGENIY !! Here are some changes we discussed on the mailing list:
+///
+///  - Rename 'id' to something like 'database_key' (and 'id_'
+///    similarly).
+///
+///  - Change the type of 'id_' to (enum) DatabaseNames.
+///
+/// However, shouldn't we rewrite this class completely instead?
+///
+/// Its purpose is to represent the information in struct db_names,
+/// while deriving from class wxTreeItemData. Yet it contains only two
+/// of that struct's four members--these:
+///    DatabaseNames       Idx;
+///    char const*         LongName;
+/// but not these:
+///    DatabaseNames       ParentIdx;
+///    char const*         ShortName;
+/// The fields not included are of course accessed by indexing a
+/// db_names object from the vector returned by this function:
+///   std::vector<db_names> const& LMI_SO GetDBNames();
+/// Even db_names::Idx is accessed that way, and I think our
+/// discussions have raised the issue of whether that member's value
+/// should be asserted to equal the value of the loop counter in
+/// DatabaseView::SetupControls(). But why index by a sequential
+/// loop counter instead of iterating across an available vector?
+/// The former could break if enumerators ever fail to follow the
+/// pattern 0, 1, 2, ... N-1; but iterating across a vector works
+/// robustly without relying on any such assumption. And why have a
+/// copy of 'LongName' here but not 'ShortName'?
+///
+/// I see two other designs to consider:
+///
+/// (1) This class holds only a DatabaseNames enum. That's enough to
+/// find the corresponding struct db_names in the vector returned by
+///   std::vector<db_names> const& LMI_SO GetDBNames();
+/// and we can then access that struct's members directly. And we
+/// don't have to know that description() here is 'LongName' there.
+/// Then the only thing we have to worry about is mapping between
+/// that enum and wxTreeItemData::GetId().
+///
+/// (2) This class holds a db_names struct. To make that work, I guess
+/// we'd have to rewrite that struct (I mean, char* members? in 2007?
+/// Is that required for static initialization to work?) so that its
+/// implicitly-defined member functions do the right thing, and hold a
+/// copy of it here as the itemdata. (I don't know whether that'd make
+/// populating the tree too slow.)
+///
+/// Or maybe even a third:
+///
+/// (3) Mixin programming:
+///
+///   class database_tree_item_data
+///       :public wxTreeItemData
+///       ,public db_names
+///   {}; // Is any implementation actually required?
+///
+/// Is (3) an abuse of inheritance? AFAICT it satisfies the LSP.
+/// I think it's either elegant or abhorrent; I'm not sure which.
 
-class DatabaseTreeItemData
+class database_tree_item_data
   :public wxTreeItemData
 {
   public:
-    DatabaseTreeItemData(std::size_t id, std::string const& description);
+    database_tree_item_data(std::size_t id, std::string const& description);
 
-    std::size_t GetId() const;
-    std::string const& GetDescription() const;
+    std::size_t id() const;
+    std::string const& description() const;
 
   private:
     std::size_t id_;
     std::string description_;
 };
 
-DatabaseTreeItemData::DatabaseTreeItemData
+database_tree_item_data::database_tree_item_data
     (std::size_t id
     ,std::string const& description
     )
@@ -71,12 +130,12 @@ DatabaseTreeItemData::DatabaseTreeItemData
 {
 }
 
-std::size_t DatabaseTreeItemData::GetId() const
+std::size_t database_tree_item_data::id() const
 {
     return id_;
 }
 
-std::string const& DatabaseTreeItemData::GetDescription() const
+std::string const& database_tree_item_data::description() const
 {
     return description_;
 }
@@ -141,7 +200,7 @@ void DatabaseView::SetupControls()
                 ,name.ShortName
                 ,-1
                 ,-1
-                ,new(wx) DatabaseTreeItemData(i, name.LongName)
+                ,new(wx) database_tree_item_data(i, name.LongName)
                 );
             name_to_id[name.Idx] = id;
             }
@@ -179,19 +238,19 @@ void DatabaseView::DiscardEdits()
 void DatabaseView::UponTreeSelectionChange(wxTreeEvent& event)
 {
     wxTreeCtrl& tree = GetTreeCtrl();
-    DatabaseTreeItemData* item_data = dynamic_cast<DatabaseTreeItemData*>
+    database_tree_item_data* item_data = dynamic_cast<database_tree_item_data*>
         (tree.GetItemData(event.GetItem())
         );
     if(!item_data)
         {return;}
 
-    std::size_t index = item_data->GetId();
+    std::size_t index = item_data->id();
 
     table_adapter_->SetTDBValue(document().GetTDBValue(index));
 
     bool is_topic = tree.GetChildrenCount(event.GetItem());
 
-    SetLabel(item_data->GetDescription());
+    SetLabel(item_data->description());
 
     MultiDimGrid& grid = GetGridCtrl();
 
