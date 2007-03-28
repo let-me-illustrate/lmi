@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: database_view.cpp,v 1.10 2007-03-28 02:52:27 chicares Exp $
+// $Id: database_view.cpp,v 1.11 2007-03-28 15:33:46 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -187,13 +187,20 @@ void DatabaseView::SetupControls()
     for(std::size_t i = 0; i < names.size(); ++i)
         {
         db_names const& name = names[i];
-        if(name.Idx == name.ParentIdx)
+        if(0 == i)
             {
-            wxTreeItemId id = tree.AddRoot("");
+            LMI_ASSERT(name.Idx == name.ParentIdx);
+            wxTreeItemId id = tree.AddRoot
+                (""
+                ,-1
+                ,-1
+                ,new(wx) database_tree_item_data(i, name.LongName)
+                );
             name_to_id[name.Idx] = id;
             }
         else
             {
+            LMI_ASSERT(name.Idx != name.ParentIdx);
             wxTreeItemId parent = name_to_id[name.ParentIdx];
             wxTreeItemId id = tree.AppendItem
                 (parent
