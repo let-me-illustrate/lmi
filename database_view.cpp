@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: database_view.cpp,v 1.11 2007-03-28 15:33:46 chicares Exp $
+// $Id: database_view.cpp,v 1.12 2007-03-29 02:53:38 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -174,6 +174,7 @@ wxTreeCtrl* DatabaseView::CreateTreeCtrl(wxWindow* panel)
 
 MultiDimGrid* DatabaseView::CreateGridCtrl(wxWindow* panel)
 {
+    LMI_ASSERT(table_adapter_);
     return new(wx) DatabaseEditorGrid(panel, table_adapter_);
 }
 
@@ -232,14 +233,27 @@ DatabaseDocument& DatabaseView::document() const
     return dynamic_cast<DatabaseDocument&>(*GetDocument());
 }
 
+DatabaseTableAdapter& DatabaseView::table_adapter()
+{
+    return const_cast<DatabaseTableAdapter&>
+        (const_cast<DatabaseView const*>(this)->table_adapter()
+        );
+}
+
+DatabaseTableAdapter const& DatabaseView::table_adapter() const
+{
+    LMI_ASSERT(table_adapter_);
+    return *table_adapter_;
+}
+
 bool DatabaseView::IsModified() const
 {
-    return table_adapter_->IsModified();
+    return table_adapter().IsModified();
 }
 
 void DatabaseView::DiscardEdits()
 {
-    table_adapter_->SetModified(false);
+    table_adapter().SetModified(false);
 }
 
 void DatabaseView::UponTreeSelectionChange(wxTreeEvent& event)
@@ -253,7 +267,7 @@ void DatabaseView::UponTreeSelectionChange(wxTreeEvent& event)
 
     std::size_t index = item_data->id();
 
-    table_adapter_->SetTDBValue(document().GetTDBValue(index));
+    table_adapter().SetTDBValue(document().GetTDBValue(index));
 
     bool is_topic = tree.GetChildrenCount(event.GetItem());
 

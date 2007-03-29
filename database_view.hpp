@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: database_view.hpp,v 1.7 2007-03-19 18:08:13 chicares Exp $
+// $Id: database_view.hpp,v 1.8 2007-03-29 02:53:38 chicares Exp $
 
 #ifndef database_view_hpp
 #define database_view_hpp
@@ -61,10 +61,12 @@ class DatabaseView
     virtual void SetupControls();
 
     DatabaseDocument& document() const;
+    DatabaseTableAdapter      & table_adapter()      ;
+    DatabaseTableAdapter const& table_adapter() const;
 
     void UponTreeSelectionChange(wxTreeEvent&);
 
-    boost::shared_ptr<DatabaseTableAdapter> table_adapter_;
+    boost::shared_ptr<DatabaseTableAdapter> const table_adapter_;
 
     DECLARE_DYNAMIC_CLASS(DatabaseView)
     DECLARE_EVENT_TABLE()
