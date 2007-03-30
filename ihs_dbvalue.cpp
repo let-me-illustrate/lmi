@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_dbvalue.cpp,v 1.17 2007-03-30 00:13:17 chicares Exp $
+// $Id: ihs_dbvalue.cpp,v 1.18 2007-03-30 10:09:47 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -147,12 +147,14 @@ bool TDBValue::Equivalent(TDBValue const& a, TDBValue const& b)
 //============================================================================
 bool TDBValue::VariesByState(TDBValue const& z)
 {
+    LMI_ASSERT(5 < z.axis_lengths.size());
     return 1 != z.axis_lengths[5];
 }
 
 //============================================================================
 TDBValue::TDBValue()
     :key(0)
+    ,axis_lengths(e_number_of_axes)
 {
 }
 
@@ -379,6 +381,7 @@ double const* TDBValue::operator[](TDBIndex const& a_idx) const
     std::vector<double>idx(a_idx.GetIdx());
 // TODO ?? FixupIndex(idx); // Doesn't work.
 
+    LMI_ASSERT(0 < axis_lengths.size());
     int z = 0;
     // TODO ?? Can we use an STL algorithm instead?
     for(unsigned int j = 0; j < axis_lengths.size() - 1; j++)
@@ -636,12 +639,14 @@ int TDBValue::GetNDims() const
 //============================================================================
 int TDBValue::GetLength() const
 {
+    LMI_ASSERT(0 < axis_lengths.size());
     return axis_lengths.back();
 }
 
 //============================================================================
 int TDBValue::GetLength(int a_axis) const
 {
+    LMI_ASSERT(0 <= a_axis && a_axis < static_cast<int>(axis_lengths.size()));
     return axis_lengths[a_axis];
 }
 
