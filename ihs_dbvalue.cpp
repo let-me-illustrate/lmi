@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_dbvalue.cpp,v 1.18 2007-03-30 10:09:47 chicares Exp $
+// $Id: ihs_dbvalue.cpp,v 1.19 2007-03-30 14:03:46 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -118,7 +118,7 @@ JRPS::JrPs_opstream& operator<< (JRPS::JrPs_opstream& ops, std::vector<T> const&
     return ops;
 }
 
-#endif
+#endif // stlstrm_hpp
 
 static int const ScalarDims[TDBValue::e_number_of_axes] = {1, 1, 1, 1, 1, 1, 1};
 static int const MaxPossibleElements = std::numeric_limits<int>::max();
@@ -710,6 +710,7 @@ std::ostream& operator<<(std::ostream& os, TDBValue const& z)
 
 TDBValue::TDBValue(JRPS::JrPs_pstreamableInit)
     :key(0)
+    ,axis_lengths(e_number_of_axes)
 {
 }
 
