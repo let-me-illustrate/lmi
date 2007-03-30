@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_dbvalue.cpp,v 1.16 2007-03-09 16:27:23 chicares Exp $
+// $Id: ihs_dbvalue.cpp,v 1.17 2007-03-30 00:13:17 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -316,6 +316,20 @@ int TDBValue::getndata() const
 double& TDBValue::operator[](std::vector<int> const& a_idx)
 {
     LMI_ASSERT(e_number_of_axes == a_idx.size());
+
+    if(e_number_of_axes != axis_lengths.size())
+        {
+        fatal_error()
+            << "Trying to index database with key "
+            << key
+            << ": "
+            << "e_number_of_axes is " << e_number_of_axes
+            << ", and axis_lengths.size() is " << axis_lengths.size()
+            << ", but those quantities must be equal."
+            << LMI_FLUSH
+            ;
+        }
+
     int z = 0;
     // TODO ?? Can we use an STL algorithm instead?
     for(unsigned int j = 0; j < axis_lengths.size(); j++)
