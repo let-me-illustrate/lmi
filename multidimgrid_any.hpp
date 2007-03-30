@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: multidimgrid_any.hpp,v 1.18.2.9 2007-03-27 09:11:52 etarassov Exp $
+// $Id: multidimgrid_any.hpp,v 1.18.2.10 2007-03-30 13:54:54 etarassov Exp $
 
 #ifndef multidimgrid_any_hpp
 #define multidimgrid_any_hpp
@@ -469,7 +469,7 @@ class MultiDimGrid
   public:
     /// Default constructor, use Create() to really create the control.
     MultiDimGrid();
-    virtual ~MultiDimGrid() {}
+    virtual ~MultiDimGrid();
 
     MultiDimGrid
         (wxWindow* parent
