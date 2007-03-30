@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.605 2007-03-28 02:52:27 chicares Exp $
+// $Id: ChangeLog,v 1.606 2007-03-30 10:09:47 chicares Exp $
 
 MAINTENANCE
 
@@ -10768,4 +10768,27 @@ Fix gcc-4.x problems (VZ).
 
   database_view.cpp
 Refactor: change names of a class and its members.
+
+20070328T1533Z <chicares@cox.net> [1255]
+
+  database_view.cpp
+Add itemdata to root.
+
+20070329T0253Z <chicares@cox.net> [1255]
+
+  database_view.cpp
+  database_view.hpp
+Guard pointer dereferencing.
+
+20070330T0013Z <chicares@cox.net> [1255]
+
+  ihs_dbvalue.cpp
+Attempt to pin down the cause of a segfault.
+
+20070330T1009Z <chicares@cox.net> [1255]
+
+  ihs_dbvalue.cpp
+Initialize a vector to the expected length in the default ctor, ruling
+out one potential cause of the diagnostics observed to stem from the
+20070330T0013Z change. Assert various preconditions.
 
