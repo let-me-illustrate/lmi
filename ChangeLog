@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.606 2007-03-30 10:09:47 chicares Exp $
+// $Id: ChangeLog,v 1.607 2007-03-30 14:03:46 chicares Exp $
 
 MAINTENANCE
 
@@ -10791,4 +10791,11 @@ Attempt to pin down the cause of a segfault.
 Initialize a vector to the expected length in the default ctor, ruling
 out one potential cause of the diagnostics observed to stem from the
 20070330T0013Z change. Assert various preconditions.
+
+20070330T1403Z <chicares@cox.net> [1255]
+
+  ihs_dbvalue.cpp
+Initialize a vector to the expected length in the streamable ctor,
+ruling out one more potential cause of the diagnostics observed to
+stem from the 20070330T0013Z change.
 
