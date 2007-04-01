@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_text_formats.cpp,v 1.28 2007-03-09 16:27:23 chicares Exp $
+// $Id: ledger_text_formats.cpp,v 1.29 2007-04-01 14:29:30 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -382,7 +382,7 @@ os << "\n\n" ;
 
     std::vector<std::vector<std::string> > sheaders;
 
-    unsigned int max_header_rows = 0;
+    std::vector<std::string>::size_type max_header_rows = 0U;
     for(unsigned int j = 0; j < lmi_array_size(cheaders); ++j)
         {
         std::istringstream iss(cheaders[j]);
