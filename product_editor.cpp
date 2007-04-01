@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: product_editor.cpp,v 1.4 2007-02-23 12:43:26 chicares Exp $
+// $Id: product_editor.cpp,v 1.5 2007-04-01 15:58:27 chicares Exp $
 
 #include "product_editor.hpp"
 
@@ -67,7 +67,7 @@ void ProductEditorDocument::Modify(bool modified)
 
 bool ProductEditorDocument::OnOpenDocument(wxString const& filename)
 {
-    ReadDocument(filename);
+    ReadDocument(std::string(filename));
 
     SetFilename(filename, true);
     Modify(false);
@@ -77,7 +77,7 @@ bool ProductEditorDocument::OnOpenDocument(wxString const& filename)
 
 bool ProductEditorDocument::OnSaveDocument(wxString const& filename)
 {
-    WriteDocument(filename);
+    WriteDocument(std::string(filename));
 
     Modify(false);
     return true;
