@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: dbnames.xpp,v 1.17 2007-01-27 00:00:51 wboutin Exp $
+// $Id: dbnames.xpp,v 1.18 2007-04-01 22:38:19 chicares Exp $
 
 #define DB_NAMES \
 {DB_FIRST,DB_FIRST,"dummy","dummy",}, \
@@ -228,7 +228,7 @@
 {DB_GDBVxMethod,DB_Topic_MiscAsspts,"GDBVxMethod","Guaranteed death benefit reserve method [not yet implemented]",}, \
 {DB_PrimaryHurdle,DB_Topic_MiscAsspts,"PrimaryHurdle","Hurdle rate [not yet implemented]",}, \
 {DB_SecondaryHurdle,DB_Topic_MiscAsspts,"SecondaryHurdle","Secondary hurdle rate (TSA XL, Part I, page 61) [not yet implemented]",}, \
-{DB_LedgerType,DB_Topic_Misc,"LedgerType","Ledger type: 0=illustration reg, 1=NASD, 2=prospectus illustration, 3=group private placement, 4=offshore private placement, 5=private placement subject to illustration reg, 6=individual private placement",}, \
+{DB_LedgerType,DB_Topic_Misc,"LedgerType","Ledger type: 0=illustration reg, 1=NASD, 2=prospectus illustration, 3=group private placement, 4=offshore private placement, 5=private placement subject to illustration reg, 6=individual private placement, 7=variable annuity",}, \
 {DB_Topic_ExpRating,DB_FIRST,"Experience rating","Experience rating",}, \
 {DB_AllowExpRating,DB_Topic_ExpRating,"AllowExpRating","Allow experience rating: 0=no, 1=yes",}, \
 {DB_Topic_Tables,DB_FIRST,"Tables","Miscellaneous tables stored externally in SOA standard format",}, \

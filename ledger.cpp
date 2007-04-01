@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger.cpp,v 1.17 2007-03-09 16:27:23 chicares Exp $
+// $Id: ledger.cpp,v 1.18 2007-04-01 22:38:19 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -118,6 +118,7 @@ void Ledger::SetRunBases(int a_Length)
         case e_group_private_placement:      // Deliberately fall through.
         case e_offshore_private_placement:   // Deliberately fall through.
         case e_individual_private_placement: // Deliberately fall through.
+        case e_variable_annuity:             // Deliberately fall through.
         case e_nasd:
             {
             l_map_rep[e_run_basis(e_run_curr_basis)]         = LedgerVariant(a_Length);

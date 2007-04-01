@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.609 2007-04-01 15:58:27 chicares Exp $
+// $Id: ChangeLog,v 1.610 2007-04-01 22:38:19 chicares Exp $
 
 MAINTENANCE
 
@@ -10809,11 +10809,22 @@ Permit amd64 macros.
   ihs_pios.hpp
   ledger_text_formats.cpp
   multidimgrid_any.cpp
-Support amd64 architecture.
+Support amd64 architecture (VZ).
 
 20070401T1558Z <chicares@cox.net> [1256]
 
   product_editor.cpp
   rounding_view_editor.cpp
-Don't require wxUSE_STL.
+Don't require wxUSE_STL (VZ).
+
+20070401T2238Z <chicares@cox.net> [1256]
+
+  dbnames.xpp
+  ledger.cpp
+  mc_enum_types.cpp
+  mc_enum_types.hpp
+  mc_enum_types.xpp
+  xenumtypes.cpp
+  xenumtypes.hpp
+Support variable annuity (RE).
 
