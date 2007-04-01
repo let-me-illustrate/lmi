@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: GNUmakefile,v 1.83 2007-03-04 15:31:32 chicares Exp $
+# $Id: GNUmakefile,v 1.84 2007-04-01 14:29:25 chicares Exp $
 
 ################################################################################
 
@@ -541,9 +541,13 @@ check_concinnity: source_clean custom_tools
 	    -e ';/__cplusplus/d' \
 	    -e ';/__WIN32__/d' \
 	    -e ';/__X__/d' \
+	    -e ';/__amd64/d' \
+	    -e ';/__amd64__/d' \
 	    -e ';/__arg[cv]/d' \
 	    -e ';/__i386/d' \
 	    -e ';/__unix__/d' \
+	    -e ';/__x86_64/d' \
+	    -e ';/__x86_64__/d' \
 	    -e ';/__BIG_ENDIAN/d' \
 	    -e ';/__BORLANDC__/d' \
 	    -e ';/__BYTE_ORDER/d' \
