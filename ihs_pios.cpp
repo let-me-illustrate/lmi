@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_pios.cpp,v 1.6 2007-01-27 00:00:51 wboutin Exp $
+// $Id: ihs_pios.cpp,v 1.7 2007-04-01 14:29:30 chicares Exp $
 
 // This is a derived work based on Joshua Rowe's
 //   "Really cool persistent object stream library"
@@ -563,7 +563,7 @@ JrPs_pstreamable::~JrPs_pstreamable()
 
 JrPs_pstreamreg *   pstreamreged    = 0;
 
-JrPs_pstreamreg::JrPs_pstreamreg(const char* aname, BUILDER abuilder, int adelta)
+JrPs_pstreamreg::JrPs_pstreamreg(const char* aname, BUILDER abuilder, std::size_t adelta)
     :name       (aname)
     ,next       (pstreamreged)  // TODO ??
     ,builder    (abuilder)

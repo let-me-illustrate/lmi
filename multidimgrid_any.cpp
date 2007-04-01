@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: multidimgrid_any.cpp,v 1.11 2007-03-20 03:27:33 chicares Exp $
+// $Id: multidimgrid_any.cpp,v 1.12 2007-04-01 14:29:30 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -820,7 +820,9 @@ void MultiDimGrid::DoSetGridAxisSelection(int axis_id, int selection)
         {
         for(unsigned int i = 1; i < choice->GetCount(); ++i)
             {
-            int cdata = reinterpret_cast<int>(choice->GetClientData(i));
+// TODO ?? Isn't this cast suspicious? Should boost::numeric_cast be
+// used to convert the wxUIntPtr to an int?
+            int cdata = reinterpret_cast<wxUIntPtr>(choice->GetClientData(i));
             if(cdata == selection)
                 {
                 choice->SetSelection(i);
@@ -1005,7 +1007,10 @@ wxString MultiDimGrid::GetValue(int row, int col)
 void MultiDimGrid::SetValue(int row, int col, wxString const& value)
 {
     PrepareFixedCoords(row, col);
-    table_->SetAnyValue(axis_fixed_coords_, table_->StringToValue(value));
+    table_->SetAnyValue
+        (axis_fixed_coords_
+        ,table_->StringToValue(std::string(value))
+        );
 }
 
 wxString MultiDimGrid::GetRowLabelValue(int row)
@@ -1167,7 +1172,10 @@ void MultiDimAxisAnyChoice::PopulateChoiceList()
 {
     int const selection = GetSelection();
     std::string const selected_label =
-        selection != wxNOT_FOUND ? GetString(selection) : "";
+        selection != wxNOT_FOUND
+        ? std::string(GetString(selection))
+        : std::string()
+        ;
 
     Clear();
 

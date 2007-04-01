@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.607 2007-03-30 14:03:46 chicares Exp $
+// $Id: ChangeLog,v 1.608 2007-04-01 14:29:30 chicares Exp $
 
 MAINTENANCE
 
@@ -10798,4 +10798,16 @@ out one potential cause of the diagnostics observed to stem from the
 Initialize a vector to the expected length in the streamable ctor,
 ruling out one more potential cause of the diagnostics observed to
 stem from the 20070330T0013Z change.
+
+20070401T1429Z <chicares@cox.net> [1256]
+
+  GNUmakefile
+Permit amd64 macros.
+
+  config.hpp
+  ihs_pios.cpp
+  ihs_pios.hpp
+  ledger_text_formats.cpp
+  multidimgrid_any.cpp
+Support amd64 architecture.
 
