@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mc_enum_types.xpp,v 1.13 2007-01-27 00:00:51 wboutin Exp $
+// $Id: mc_enum_types.xpp,v 1.14 2007-04-01 22:38:19 chicares Exp $
 
 #define yes_or_no_VALUES \
     {mce_yes \
@@ -154,6 +154,7 @@
     ,mce_group_private_placement \
     ,mce_offshore_private_placement \
     ,mce_individual_private_placement \
+    ,mce_variable_annuity \
     };
 #define ledger_type_NAMES \
     {"illustration_reg" \
@@ -161,6 +162,7 @@
     ,"group_private_placement" \
     ,"offshore_private_placement" \
     ,"individual_private_placement" \
+    ,"variable_annuity" \
     };
 
 #define uw_basis_VALUES \
