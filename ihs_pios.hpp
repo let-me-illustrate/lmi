@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_pios.hpp,v 1.9 2007-01-27 00:00:51 wboutin Exp $
+// $Id: ihs_pios.hpp,v 1.10 2007-04-01 14:29:30 chicares Exp $
 
 // This is a derived work based on Joshua Rowe's
 //   "Really cool persistent object stream library"
@@ -48,6 +48,8 @@
 #include "config.hpp"
 
 #include "so_attributes.hpp"
+
+#include <cstddef> // std::size_t
 
 //#ifndef __BORLANDC__
 #if 1
@@ -260,9 +262,9 @@ protected:
   const char*   name;
   JrPs_pstreamreg * next;
   BUILDER   builder;
-  int       delta;
+  std::size_t    delta;
 public:
-  JrPs_pstreamreg(const char* aname, BUILDER abuilder, int adelta);
+  JrPs_pstreamreg(const char* aname, BUILDER abuilder, std::size_t adelta);
   static JrPs_pstreamreg *  findclass(const char* aname);
 };
 
@@ -285,7 +287,7 @@ public:
 };
 
 #define JRPS_PSTREAM_DELTA(d) \
-(int((JOSHUA_ROWE_PERSISTENT_STREAMS::JrPs_pstreamable *)(d *)1) - 1)
+(std::size_t((JOSHUA_ROWE_PERSISTENT_STREAMS::JrPs_pstreamable *)(d *)1) - 1)
 
 }   // namespace JOSHUA_ROWE_PERSISTENT_STREAMS
 

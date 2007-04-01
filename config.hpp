@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: config.hpp,v 1.17 2007-01-27 00:00:51 wboutin Exp $
+// $Id: config.hpp,v 1.18 2007-04-01 14:29:30 chicares Exp $
 
 // Configuration header for compiler quirks. Include at the beginning of
 // every .hpp file (and nowhere else).
@@ -46,7 +46,7 @@ namespace fs = boost::filesystem;
 // defined in only one place can easily be modified. There seems to be
 // no direct way to detect POSIX, though, so I look for common macros
 // that regrettably use four characters that could be taken as naming
-// name a non-free operating system.
+// a non-free operating system.
 
 #if defined unix || defined __unix__ || defined __unix // Detected POSIX.
 #   define LMI_POSIX
@@ -58,17 +58,23 @@ namespace fs = boost::filesystem;
 
 #if defined _X86_ || defined _M_IX86 || defined i386 || defined __i386
 #   define LMI_X86
+#   if defined __x86_64 || defined __x86_64__ || defined __amd64 || defined __amd64__ || defined _M_X64
+#       define LMI_X86_64
+#   else  // Not amd64, so presumably x86-32.
+#       define LMI_X86_32
+#   endif // Not amd64, so presumably x86-32.
 #else  // Unknown hardware.
 #   error "Unknown hardware. Consider contributing support."
 #endif // Unknown hardware.
 
-// This header #includes standard headers in an unusual way, and must
-// be #included before any standard headers are seen.
+// 'platform_dependent.hpp' includes standard headers in an unusual
+// way, and must be included before any standard headers are seen.
+// Do that here to quarantine the weirdness.
 //
 #include "platform_dependent.hpp"
 
-// It is impossible to compile lmi with g++ prior to version 3, but
-// old versions of gcc are adequate for C translation units.
+// It is impossible to compile lmi with g++ prior to version 3, though
+// old versions of gcc would be adequate for C translation units.
 
 #if defined __GNUC__ && __GNUC__ < 3 && defined __cplusplus
 #   error Obsolete compiler not supported.
