@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.610.2.1 2007-04-02 10:21:42 etarassov Exp $
+// $Id: ChangeLog,v 1.610.2.2 2007-04-02 10:27:15 etarassov Exp $
 
 MAINTENANCE
 
@@ -10828,8 +10828,3 @@ Don't require wxUSE_STL (VZ).
   xenumtypes.hpp
 Support variable annuity (RE).
 
-20070402T1021Z <etarassov@tt-solutions.com> [1256]
-
-  multidimgrid_any.cpp
-  multidimgrid_any.hpp
-Set grid() table to NULL in MultiDimGrid destructor.
