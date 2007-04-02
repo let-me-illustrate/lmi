@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: multidimgrid_any.cpp,v 1.12.2.13 2007-04-02 15:29:51 etarassov Exp $
+// $Id: multidimgrid_any.cpp,v 1.12.2.14 2007-04-02 20:42:02 etarassov Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -971,12 +971,22 @@ MultiDimAxisAny& MultiDimGrid::GetAxis(unsigned int n)
 
 int MultiDimGrid::GetNumberRows()
 {
+    return DoGetNumberRows();
+}
+
+unsigned int MultiDimGrid::DoGetNumberRows() const
+{
     if(second_grid_axis_ == wxNOT_FOUND)
         {return 1;}
     return axis_[second_grid_axis_]->GetCardinality();
 }
 
 int MultiDimGrid::GetNumberCols()
+{
+    return DoGetNumberCols();
+}
+
+unsigned int MultiDimGrid::DoGetNumberCols() const
 {
     if(first_grid_axis_ == wxNOT_FOUND)
         {return 1;}
@@ -988,7 +998,7 @@ bool MultiDimGrid::IsEmptyCell(int row, int col)
     return false;
 }
 
-MultiDimGrid::Coords& MultiDimGrid::PrepareFixedCoords(int row, int col)
+MultiDimGrid::Coords& MultiDimGrid::PrepareFixedCoords(int row, int col) const
 {
     if(first_grid_axis_ != wxNOT_FOUND)
         {
@@ -1016,11 +1026,55 @@ MultiDimGrid::Coords& MultiDimGrid::PrepareFixedCoords(int row, int col)
 
 wxString MultiDimGrid::GetValue(int row, int col)
 {
+    try
+        {
+        return DoGetValue
+            (EnsureIndexIsPositive(row)
+            ,EnsureIndexIsPositive(col)
+            );
+        }
+    catch(std::exception const& e)
+        {
+        std::string title("Error getting value");
+
+        std::ostringstream oss;
+        oss << title << " : " << e.what();
+        wxMessageBox(oss.str(), title, wxOK | wxICON_ERROR, this);
+        return "error";
+        }
+}
+
+std::string MultiDimGrid::DoGetValue(unsigned int row, unsigned int col) const
+{
     boost::any value = table().GetValueAny(PrepareFixedCoords(row, col));
     return table().ValueToString(value);
 }
 
 void MultiDimGrid::SetValue(int row, int col, wxString const& value)
+{
+    try
+        {
+        DoSetValue
+            (EnsureIndexIsPositive(row)
+            ,EnsureIndexIsPositive(col)
+            ,std::string(value)
+            );
+        }
+    catch(std::exception const& e)
+        {
+        std::string title("Error setting value");
+
+        std::ostringstream oss;
+        oss << title << " : " << e.what();
+        wxMessageBox(oss.str(), title, wxOK | wxICON_ERROR, this);
+        }
+}
+
+void MultiDimGrid::DoSetValue
+    (unsigned int row
+    ,unsigned int col
+    ,std::string const& value
+    )
 {
     table().SetValueAny
         (PrepareFixedCoords(row, col)
@@ -1030,16 +1084,19 @@ void MultiDimGrid::SetValue(int row, int col, wxString const& value)
 
 wxString MultiDimGrid::GetRowLabelValue(int row)
 {
-    unsigned int const urow = static_cast<unsigned int>(row);
-    if
-        (  second_grid_axis_ != wxNOT_FOUND
-        && urow < axis_[second_grid_axis_]->GetCardinality()
-        )
-        {
-        return axis_[second_grid_axis_]->GetLabel(urow);
-        }
+    return DoGetRowLabelValue(EnsureIndexIsPositive(row));
+}
 
-    if(first_grid_axis_ != wxNOT_FOUND)
+std::string MultiDimGrid::DoGetRowLabelValue(unsigned int row) const
+{
+    if(second_grid_axis_ != wxNOT_FOUND)
+        {
+        if(row < axis_[second_grid_axis_]->GetCardinality())
+            {
+            return axis_[second_grid_axis_]->GetLabel(row);
+            }
+        }
+    else if(first_grid_axis_ != wxNOT_FOUND)
         {
         return axis_[first_grid_axis_]->GetName();
         }
@@ -1049,16 +1106,19 @@ wxString MultiDimGrid::GetRowLabelValue(int row)
 
 wxString MultiDimGrid::GetColLabelValue(int col)
 {
-    unsigned int const ucol = static_cast<unsigned int>(col);
-    if
-        (  first_grid_axis_ != wxNOT_FOUND
-        && ucol < axis_[first_grid_axis_]->GetCardinality()
-        )
-        {
-        return axis_[first_grid_axis_]->GetLabel(col);
-        }
+    return DoGetColLabelValue(EnsureIndexIsPositive(col));
+}
 
-    if(second_grid_axis_ != wxNOT_FOUND)
+std::string MultiDimGrid::DoGetColLabelValue(unsigned int col) const
+{
+    if(first_grid_axis_ != wxNOT_FOUND)
+        {
+        if(col < axis_[first_grid_axis_]->GetCardinality())
+            {
+            return axis_[first_grid_axis_]->GetLabel(col);
+            }
+        }
+    else if(second_grid_axis_ != wxNOT_FOUND)
         {
         return axis_[second_grid_axis_]->GetName();
         }
@@ -1158,6 +1218,19 @@ void MultiDimGrid::DoOnSwitchSelectedAxis(enum_axis_x_or_y x_or_y)
         second_grid_axis_ = new_selection;
         }
     DoSetGridAxisSelection();
+}
+
+unsigned int MultiDimGrid::EnsureIndexIsPositive(int row_or_col) const
+{
+    if(row_or_col < 0)
+        {
+        fatal_error()
+            << "Negative row or column index "
+            << row_or_col
+            << LMI_FLUSH
+            ;
+        }
+    return static_cast<unsigned int>(row_or_col);
 }
 
 /// MultiDimAxisAnyChoice methods implementation

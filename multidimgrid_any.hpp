@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: multidimgrid_any.hpp,v 1.18.4.12 2007-04-02 14:59:22 etarassov Exp $
+// $Id: multidimgrid_any.hpp,v 1.18.4.13 2007-04-02 20:42:02 etarassov Exp $
 
 #ifndef multidimgrid_any_hpp
 #define multidimgrid_any_hpp
@@ -510,6 +510,7 @@ class MultiDimGrid
     MultiDimTableAny& table() const;
     wxGrid& grid() const;
 
+  private:
     /// Implementation of wxGridTableBase interface. The widget serves as a data
     /// source for the wxGrid component.
     ///
@@ -525,12 +526,26 @@ class MultiDimGrid
     virtual wxString GetColLabelValue(int col);
     virtual wxString GetRowLabelValue(int row);
 
+    unsigned int EnsureIndexIsPositive(int) const;
+
+  protected:
+    virtual std::string DoGetColLabelValue(unsigned int col) const;
+    virtual std::string DoGetRowLabelValue(unsigned int row) const;
+    virtual unsigned int DoGetNumberCols() const;
+    virtual unsigned int DoGetNumberRows() const;
+    virtual std::string DoGetValue(unsigned int row, unsigned int col) const;
+    virtual void DoSetValue
+        (unsigned int row
+        ,unsigned int col
+        ,std::string const&
+        );
+
     /// Array of boost::any values
     typedef MultiDimTableAny::Coords Coords;
 
     /// Helper function used by SetValue() and GetValue() functions
     /// to fill the private coordinates vector with correct values.
-    Coords& PrepareFixedCoords(int row, int col);
+    Coords& PrepareFixedCoords(int row, int col) const;
 
   private:
     /// Shared pointer to an axis object
@@ -558,7 +573,7 @@ class MultiDimGrid
     /// to the underlying data table. Note that when displaying table the
     /// values for selected axis change as we walk through the grid cells
     /// to retrieve its values.
-    Coords axis_fixed_coords_;
+    mutable Coords axis_fixed_coords_;
 
     /// Creates axis selection controls for axis X and Y
     wxChoice* CreateGridAxisSelection
