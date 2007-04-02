@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: multidimgrid_safe.tpp,v 1.7.4.2 2007-04-02 11:40:45 etarassov Exp $
+// $Id: multidimgrid_safe.tpp,v 1.7.4.3 2007-04-02 14:59:22 etarassov Exp $
 
 #include "multidimgrid_safe.hpp"
 
@@ -174,46 +174,38 @@ T ValueCastConversion<T>::StringToValue(std::string const& text) const
 /// ---------------------------------------------------
 
 template<class AdjustControl, class BaseAxisType>
-wxWindow* MultiDimAdjustableAxis<AdjustControl, BaseAxisType>::GetAdjustControl
+wxWindow* MultiDimAdjustableAxis<AdjustControl, BaseAxisType>::CreateAdjustControl
     (MultiDimGrid& grid
     ,MultiDimTableAny& table
     )
 {
-    return DoGetAdjustControl(grid, table);
+    return DoCreateAdjustControl(grid, table);
 }
 
 template<class AdjustControl, class BaseAxisType>
 bool MultiDimAdjustableAxis<AdjustControl, BaseAxisType>::ApplyAdjustment
-    (wxWindow* adjustWin
-    ,unsigned int n
+    (wxWindow& adjust_window
+    ,unsigned int axis_id
     )
 {
-    AxisAdjustControl* win = dynamic_cast<AxisAdjustControl*>(adjustWin);
-    if(adjustWin && !win)
-        {
-        fatal_error()
-            << "The axis-adjustment control is of incorrect type."
-            << LMI_FLUSH
-            ;
-        }
-    return DoApplyAdjustment(win, n);
+    // temporarily use dynamic_cast<XXX &> until there is a helper function.
+    return DoApplyAdjustment
+        (dynamic_cast<AxisAdjustControl&>(adjust_window)
+        ,axis_id
+        );
 }
 
 template<class AdjustControl, class BaseAxisType>
 bool MultiDimAdjustableAxis<AdjustControl, BaseAxisType>::RefreshAdjustment
-    (wxWindow* adjustWin
-    ,unsigned int n
+    (wxWindow& adjust_window
+    ,unsigned int axis_id
     )
 {
-    AxisAdjustControl* win = dynamic_cast<AxisAdjustControl*>(adjustWin);
-    if(adjustWin && !win)
-        {
-        fatal_error()
-            << "The axis-adjustment control is of incorrect type."
-            << LMI_FLUSH
-            ;
-        }
-    return DoRefreshAdjustment(win, n);
+    // temporarily use dynamic_cast<XXX &> until there is a helper function.
+    return DoRefreshAdjustment
+        (dynamic_cast<AxisAdjustControl&>(adjust_window)
+        ,axis_id
+        );
 }
 
 template<class AdjustControl, class BaseAxisType>

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: multidimgrid_any.cpp,v 1.12.2.10 2007-04-02 14:40:06 etarassov Exp $
+// $Id: multidimgrid_any.cpp,v 1.12.2.11 2007-04-02 14:59:22 etarassov Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -45,7 +45,7 @@
 /// MultiDimAxisAny methods implementation
 /// --------------------------------------
 
-wxWindow* MultiDimAxisAny::GetAdjustControl
+wxWindow* MultiDimAxisAny::CreateAdjustControl
     (MultiDimGrid& grid
     ,MultiDimTableAny& table
     )
@@ -53,28 +53,22 @@ wxWindow* MultiDimAxisAny::GetAdjustControl
     return NULL;
 }
 
-bool MultiDimAxisAny::ApplyAdjustment
-    (wxWindow*
-    ,unsigned int
-    )
+bool MultiDimAxisAny::ApplyAdjustment(wxWindow&, unsigned int)
 {
     return false;
 }
 
-bool MultiDimAxisAny::RefreshAdjustment
-    (wxWindow*
-    ,unsigned int
-    )
+bool MultiDimAxisAny::RefreshAdjustment(wxWindow&, unsigned int)
 {
     return false;
 }
 
-wxWindow* MultiDimAxisAny::GetChoiceControl
+wxWindow& MultiDimAxisAny::CreateChoiceControl
     (MultiDimGrid& grid
     ,MultiDimTableAny& table
     )
 {
-    return new(wx) MultiDimAxisAnyChoice(*this, grid);
+    return *new(wx) MultiDimAxisAnyChoice(*this, grid);
 }
 
 void MultiDimAxisAny::UpdateChoiceControl(wxWindow& choice_control) const
@@ -404,10 +398,16 @@ bool MultiDimGrid::Create
     // create and add axis choice controls
     for(unsigned int i = 0; i < dimension_; ++i)
         {
-        SetAxisLabel(i, new(wx) wxStaticText(this, wxID_ANY, axis_[i]->GetName()));
-        SetAxisChoiceControl(i, axis_[i]->GetChoiceControl(*this, table()));
+        SetAxisLabel
+            (i
+            ,new(wx) wxStaticText(this, wxID_ANY, axis_[i]->GetName())
+            );
+        SetAxisChoiceControl
+            (i
+            ,&axis_[i]->CreateChoiceControl(*this, table())
+            );
         SetAxisVariesControl(i);
-        SetAxisAdjustControl(i, axis_[i]->GetAdjustControl(*this, table()));
+        SetAxisAdjustControl(i, axis_[i]->CreateAdjustControl(*this, table()));
         }
 
     first_axis_choice_ = CreateGridAxisSelection
@@ -614,18 +614,20 @@ bool MultiDimGrid::DoRefreshAxisAdjustment(unsigned int n)
         {return false;}
 
     MultiDimAxisAny& axis = *axis_[n];
-    wxWindow* adjustWin = axis_adjust_wins_[n];
 
     bool updated = false;
     if(table().RefreshAxisAdjustment(axis, n))
         {updated = true;}
-    if(axis.RefreshAdjustment(adjustWin, n))
+
+    wxWindow* const adjust_window = axis_adjust_wins_[n];
+    if(adjust_window && axis.RefreshAdjustment(*adjust_window, n))
         {updated = true;}
 
     if(updated)
         {
-        if(axis_choice_wins_[n])
-            {axis.UpdateChoiceControl(*axis_choice_wins_[n]);}
+        wxWindow* const choice_window = axis_choice_wins_[n];
+        if(choice_window)
+            {axis.UpdateChoiceControl(*choice_window);}
         RefreshTableData();
         }
     return updated;
@@ -636,20 +638,22 @@ bool MultiDimGrid::DoApplyAxisAdjustment(unsigned int n)
     if(!table().VariesByDimension(n))
         {return false;}
 
-    MultiDimAxisAny& axis = *axis_[n];
-    wxWindow* adjustWin = axis_adjust_wins_[n];
-
     bool updated = false;
 
-    if(axis.ApplyAdjustment(adjustWin, n))
+    MultiDimAxisAny& axis = *axis_[n];
+
+    wxWindow* const adjust_window = axis_adjust_wins_[n];
+    if(adjust_window && axis.ApplyAdjustment(*adjust_window, n))
         {updated = true;}
+
     if(table().ApplyAxisAdjustment(axis, n))
         {updated = true;}
 
     if(updated)
         {
-        if(axis_choice_wins_[n])
-            {axis.UpdateChoiceControl(*axis_choice_wins_[n]);}
+        wxWindow* const choice_window = axis_choice_wins_[n];
+        if(choice_window)
+            {axis.UpdateChoiceControl(*choice_window);}
         RefreshTableData();
         }
     return updated;

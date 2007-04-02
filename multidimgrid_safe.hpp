@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: multidimgrid_safe.hpp,v 1.7.4.2 2007-04-02 11:40:45 etarassov Exp $
+// $Id: multidimgrid_safe.hpp,v 1.7.4.3 2007-04-02 14:59:22 etarassov Exp $
 
 #ifndef multidimgrid_safe_hpp
 #define multidimgrid_safe_hpp
@@ -267,9 +267,9 @@ class MultiDimTableN
 ///   - AdjustControl type of the adjustment control you will use for the axis
 ///   - BaseAxisType base class to use for the axis
 ///
-/// GetAdjustControl(grid, table): Redirects to type-safe method
-/// DoGetAdjustControl().
-/// Do not override this method, override DoGetAdjustControl instead.
+/// CreateAdjustControl(grid, table): Redirects to type-safe method
+/// DoCreateAdjustControl().
+/// Do not override this method, override DoCreateAdjustControl instead.
 
 template<class AdjustControl, class BaseAxisType = MultiDimAxisAny>
 class MultiDimAdjustableAxis
@@ -280,44 +280,32 @@ class MultiDimAdjustableAxis
         || boost::is_same<MultiDimAxisAny, BaseAxisType>::value
         ));
 
-  public:
+  protected:
     typedef AdjustControl AxisAdjustControl;
 
-    virtual wxWindow* GetAdjustControl
-        (MultiDimGrid& grid
-        ,MultiDimTableAny& table
-        );
-    /// Redirects to the type-safe DoApplyAdjustment()
-    virtual bool ApplyAdjustment
-        (wxWindow* adjustWin
-        ,unsigned int n
-        );
-    /// Redirects to the type-safe DoRefreshAdjustment()
-    virtual bool RefreshAdjustment
-        (wxWindow* adjustWin
-        ,unsigned int n
-        );
-
-  protected:
     /// Default constructor.
     /// This ctor is protected because this class has to be derived from.
     MultiDimAdjustableAxis(std::string const& name);
 
-    /// Type-safe method to override in the derived user class.
-    virtual AxisAdjustControl* DoGetAdjustControl
+    /// Type-safe versions of the corresponding methods.
+    virtual AxisAdjustControl* DoCreateAdjustControl
         (MultiDimGrid& grid
         ,MultiDimTableAny& table
         ) = 0;
-    /// Type-safe method to override in the derived user class.
     virtual bool DoApplyAdjustment
-        (AxisAdjustControl* adjustWin
-        ,unsigned int n
+        (AxisAdjustControl&
+        ,unsigned int axis_id
         ) = 0;
-    /// Type-safe method to override in the derived user class.
     virtual bool DoRefreshAdjustment
-        (AxisAdjustControl* adjustWin
-        ,unsigned int n
+        (AxisAdjustControl&
+        ,unsigned int axis_id
         ) = 0;
+
+  private:
+    /// MultiDimAxisAny overrides.
+    virtual wxWindow* CreateAdjustControl(MultiDimGrid&, MultiDimTableAny&);
+    virtual bool ApplyAdjustment(wxWindow&, unsigned int axis_id);
+    virtual bool RefreshAdjustment(wxWindow&, unsigned int axis_id);
 };
 
 #endif // multidimgrid_safe_hpp

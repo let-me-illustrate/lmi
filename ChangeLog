@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.610.2.16 2007-04-02 14:40:06 etarassov Exp $
+// $Id: ChangeLog,v 1.610.2.17 2007-04-02 14:59:22 etarassov Exp $
 
 MAINTENANCE
 
@@ -10918,4 +10918,14 @@ Use accessors for MDGrid::table_ and MDGrid::grid_.
   tier_view_editor.cpp
 Use private inheritance instead of protected. Make protected data
 members private.
+
+20070402T1459Z <etarassov@tt-solutions.com> [1252]
+
+  multidimgrid_any.cpp
+  multidimgrid_any.hpp
+  multidimgrid_safe.hpp
+  multidimgrid_safe.tpp
+  multidimgrid_tools.hpp
+Review MultiDimAxisAny: rewrite comments; use references instead of
+pointers where appropriate; rename some method parameters.
 
