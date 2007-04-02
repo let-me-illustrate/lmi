@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: stratified_algorithms.hpp,v 1.9 2007-03-09 16:27:23 chicares Exp $
+// $Id: stratified_algorithms.hpp,v 1.10 2007-04-02 15:36:39 chicares Exp $
 
 #ifndef stratified_algorithms_hpp
 #define stratified_algorithms_hpp
@@ -45,11 +45,12 @@
 ///   rate   limit
 ///   0.05    1000    <-- first  bracket: [   0, 1000)
 ///   0.02    5000    <-- second bracket: [1000, 5000)
-///   0.01 infinity   <-- third  bracket: [5000, infinity]
+///   0.01 infinity   <-- third  bracket: [5000, infinity)
 ///
 /// Limits are constrained to be positive and nondecreasing. The first
 /// bracket extends from zero (implicitly) to the first limit. The last
-/// limit is implicitly infinite.
+/// limit must have no finite upper bound in the real number system; in
+/// computer floating point, it's specified as DBL_MAX.
 ///
 /// It is convenient to characterize brackets by their upper limits.
 /// Brackets may also be characterized in terms of incremental rather
