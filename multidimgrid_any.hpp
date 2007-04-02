@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: multidimgrid_any.hpp,v 1.18.4.2 2007-04-02 10:27:15 etarassov Exp $
+// $Id: multidimgrid_any.hpp,v 1.18.4.3 2007-04-02 11:40:45 etarassov Exp $
 
 #ifndef multidimgrid_any_hpp
 #define multidimgrid_any_hpp
@@ -287,13 +287,13 @@ inline std::string const& MultiDimAxisAny::GetName() const
 /// known at compile-time you should use one of type-safe MultiDimTableN
 /// classes instead of this one.
 ///
-/// GetAxisAny(n): Return the n-th axis object for that table.
+/// GetAxesAny(): Return the axes objects for that table.
 /// Method is called only once by the MDGrid to retrieve the axis object
 /// representing nth dimension and holding value range for that dimension.
-/// This method simply redirects to polymorphic method DoGetAxisAny()
+/// This method simply redirects to polymorphic method DoGetAxesAny()
 ///   - n index of the dimension represented by the axis
 ///   - returns pointer to the axis
-/// See also MultiDimAxisAny, MultiDimAxis, MultiDimGrid, DoGetAxisAny
+/// See also MultiDimAxisAny, MultiDimAxis, MultiDimGrid, DoGetAxesAny
 ///
 /// ApplyAxisAdjustment(axis, n): Read from the axis object and apply
 /// any adjustment to the data table.
@@ -304,7 +304,7 @@ inline std::string const& MultiDimAxisAny::GetName() const
 ///   - n the index of the axis
 ///   - returns true if the update has taken place, false if everything
 ///     was up-to-date
-/// See also GetAxisAny, RefreshAxisAdjustment,
+/// See also GetAxesAny, RefreshAxisAdjustment,
 /// MultiDimAxisAny::ApplyAdjustment, MultiDimGrid::ApplyAxisAdjustment
 ///
 /// RefreshAxisAdjustment(axis, n): Refresh the axis object to reflect
@@ -315,7 +315,7 @@ inline std::string const& MultiDimAxisAny::GetName() const
 ///   - axis   the axis object that should be synced with the table
 ///   - n      the index of the axis
 ///   - return true if the update has taken place, false if everything was up-to-date
-/// See also GetAxisAny, ApplyAxisAdjustment,
+/// See also GetAxesAny, ApplyAxisAdjustment,
 /// MultiDimAxisAny::RefreshAdjustment, MultiDimGrid::RefreshAxisAdjustment
 ///
 /// GetAnyValue(coords): General accessor for table value.
@@ -343,7 +343,7 @@ inline std::string const& MultiDimAxisAny::GetName() const
 ///   - coords the vector of coordinates of size GetDimension()
 ///   - value  the value to be stored for these coordinates
 ///
-/// DoGetAxisAny(n): Returns the n-th axis for the table
+/// DoGetAxesAny(): Returns the axes for the table
 /// Abstract method to implement in the deriving classes.
 ///   - n      the axis number (0 <= n < GetDimension())
 ///   - return MultiDimAxisAny object that represents nth axis
@@ -353,6 +353,8 @@ class MultiDimTableAny
   public:
     /// Coordinates for an element of the table
     typedef std::vector<boost::any> Coords;
+    typedef boost::shared_ptr<MultiDimAxisAny> AxisAny;
+    typedef std::vector<AxisAny>    AxesAny;
 
     MultiDimTableAny() {}
     virtual ~MultiDimTableAny() {}
@@ -363,7 +365,7 @@ class MultiDimTableAny
     /// Return the number of dimensions in this table.
     virtual unsigned int GetDimension() const = 0;
 
-    MultiDimAxisAny* GetAxisAny(unsigned int n);
+    AxesAny GetAxesAny();
 
     bool ApplyAxisAdjustment(MultiDimAxisAny& axis, unsigned int n);
     bool RefreshAxisAdjustment(MultiDimAxisAny& axis, unsigned int n);
@@ -389,9 +391,9 @@ class MultiDimTableAny
     virtual boost::any StringToValue(std::string const& value) const = 0;
 
   protected:
-    virtual boost::any DoGetValue(Coords const& coords) const = 0;
-    virtual void DoSetValue(Coords const& coords, boost::any const& value) = 0;
-    virtual MultiDimAxisAny* DoGetAxisAny(unsigned int n) = 0;
+    virtual boost::any DoGetValueAny(Coords const&) const = 0;
+    virtual void DoSetValueAny(Coords const&, boost::any const&) = 0;
+    virtual AxesAny DoGetAxesAny() = 0;
 
     virtual bool DoApplyAxisAdjustment(MultiDimAxisAny& axis, unsigned int n);
     virtual bool DoRefreshAxisAdjustment(MultiDimAxisAny& axis, unsigned int n);
@@ -404,10 +406,9 @@ inline void MultiDimTableAny::EnsureValidDimensionIndex(unsigned int n) const
     LMI_ASSERT(n < GetDimension());
 }
 
-inline MultiDimAxisAny* MultiDimTableAny::GetAxisAny(unsigned int n)
+inline MultiDimTableAny::AxesAny MultiDimTableAny::GetAxesAny()
 {
-    EnsureValidDimensionIndex(n);
-    return DoGetAxisAny(n);
+    return DoGetAxesAny();
 }
 inline bool MultiDimTableAny::ApplyAxisAdjustment
     (MultiDimAxisAny& axis
@@ -429,7 +430,7 @@ inline boost::any MultiDimTableAny::GetAnyValue(Coords const& coords) const
 {
     if(coords.size() != GetDimension())
         {fatal_error() << "Incorrect dimension." << LMI_FLUSH;}
-    return DoGetValue(coords);
+    return DoGetValueAny(coords);
 }
 inline void MultiDimTableAny::SetAnyValue
     (Coords const& coords
@@ -438,7 +439,7 @@ inline void MultiDimTableAny::SetAnyValue
 {
     if(coords.size() != GetDimension())
         {fatal_error() << "Incorrect dimension." << LMI_FLUSH;}
-    DoSetValue(coords, value);
+    DoSetValueAny(coords, value);
 }
 
 /// Design notes for MultiDimGrid

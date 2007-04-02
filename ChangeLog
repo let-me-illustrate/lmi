@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.610.2.4 2007-04-02 11:16:46 etarassov Exp $
+// $Id: ChangeLog,v 1.610.2.5 2007-04-02 11:40:45 etarassov Exp $
 
 MAINTENANCE
 
@@ -10838,3 +10838,15 @@ Add comments on the conversion twist. Reorder couple of methods.
   multidimgrid_safe.hpp
   multidimgrid_safe.tpp
 Remove unused MakeArray function (and macros used to implement it).
+
+20070402T1140Z <etarassov@tt-solutions.com> [1252]
+
+  database_view_editor.cpp
+  database_view_editor.hpp
+  multidimgrid_any.cpp
+  multidimgrid_any.hpp
+  multidimgrid_safe.hpp
+  multidimgrid_safe.tpp
+  tier_view_editor.cpp
+  tier_view_editor.hpp
+Simplify MultiDimTable to only enforce type safety for table values.

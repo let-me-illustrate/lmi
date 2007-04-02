@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: tier_view_editor.hpp,v 1.12.2.1 2007-04-02 11:09:40 etarassov Exp $
+// $Id: tier_view_editor.hpp,v 1.12.2.2 2007-04-02 11:40:45 etarassov Exp $
 
 #ifndef tier_view_editor_hpp
 #define tier_view_editor_hpp
@@ -210,28 +210,23 @@ inline TierBandAxis::TierBandAxis()
 /// Therefore specify a dummy conversion and add an extra-assertion to make
 /// sure it never gets called.
 
-template <>
-class MultiDimTableTypeTraits<double_pair>
+struct FakeConversion
 {
 // TODO ?? EVGENIY !! Is an actual implementation needed?
     void fail() const
     {
         fatal_error() << "Dummy implementation called." << LMI_FLUSH;
     }
-
   public:
-    /// Convert value respresented by a string into ValueType.
-    double_pair FromString(std::string const&) const
+    double_pair StringToValue(std::string const&) const
     {
         fail();
-        return double_pair(0, 0);
+        throw "Unreachable--silences a compiler diagnostic.";
     }
-
-    /// Create a string representation of a value
-    std::string ToString(double_pair const&) const
+    std::string ValueToString(double_pair const&) const
     {
         fail();
-        return "";
+        throw "Unreachable--silences a compiler diagnostic.";
     }
 };
 
@@ -241,11 +236,9 @@ class MultiDimTableTypeTraits<double_pair>
 /// bands.
 
 class TierTableAdapter
-  :public MultiDimTable1<double_pair, unsigned int>
+  :public MultiDimTableN<double_pair, TierTableAdapter, FakeConversion>
 {
     friend class TierEditorGrid;
-
-    typedef MultiDimTable1<double_pair, unsigned int> Base;
 
   public:
     TierTableAdapter(tier_entity_adapter entity = tier_entity_adapter());
@@ -262,17 +255,20 @@ class TierTableAdapter
     void SetBandsCount(unsigned int n);
     unsigned int GetBandsCount() const;
 
+    double_pair DoGetValue(Coords const&) const;
+    void        DoSetValue(Coords const&, double_pair const&);
+
   private:
-    // MultiDimTableAny method overrides
-    virtual bool VariesByDimension(unsigned int n) const;
+    // MultiDimTableAny required implementation.
     virtual bool CanChangeVariationWith(unsigned int n) const;
+    virtual unsigned int GetDimension() const {return 1;}
     virtual void MakeVaryByDimension(unsigned int n, bool varies);
-    virtual MultiDimAxis<unsigned int>* GetAxis0();
+    virtual AxesAny DoGetAxesAny();
+    virtual bool VariesByDimension(unsigned int n) const;
+
+    // MultiDimTableAny overrides.
     virtual bool DoApplyAxisAdjustment(MultiDimAxisAny&, unsigned int n);
     virtual bool DoRefreshAxisAdjustment(MultiDimAxisAny&, unsigned int n);
-
-    virtual double_pair GetValue(unsigned int band) const;
-    virtual void        SetValue(unsigned int band, double_pair const& value);
 
     void EnsureIndexIsZero(unsigned int) const;
 

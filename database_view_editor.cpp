@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: database_view_editor.cpp,v 1.10 2007-03-20 02:34:21 chicares Exp $
+// $Id: database_view_editor.cpp,v 1.10.2.1 2007-04-02 11:40:45 etarassov Exp $
 
 #include "database_view_editor.hpp"
 
@@ -40,6 +40,7 @@ DatabaseTableAdapter::DatabaseTableAdapter(TDBValue* db_value)
     :db_value_(db_value)
     ,modified_(false)
 {
+    indexes_.resize(eda_max);
 }
 
 DatabaseTableAdapter::~DatabaseTableAdapter()
@@ -195,45 +196,24 @@ bool DatabaseTableAdapter::CanChangeVariationWith(unsigned int n) const
     return n < db_value_->GetAxisLengths().size();
 }
 
-std::string DatabaseTableAdapter::ValueToString(boost::any const& value) const
-{
-    try
-        {
-        return value_cast<std::string>(boost::any_cast<double>(value));
-        }
-    catch(std::exception const&)
-        {
-        // TODO ?? Would a different behavior be better here?
-        return "#ERR";
-        }
-}
-
-boost::any DatabaseTableAdapter::StringToValue(std::string const& value) const
-{
-    double z = 0.0;
-    try
-        {
-        z = value_cast<double>(value);
-        }
-    catch(std::exception const&)
-        {
-        // TODO ?? What should we do here?
-        }
-    return boost::any(z);
-}
-
 void DatabaseTableAdapter::ConvertValue
     (Coords const& coords
     ,std::vector<int>& indexes
-    ) const
+    )
 {
-    #define CAST_BOOST_ANY_TO_INT_(z, n, unused) \
-    indexes[n] = boost::any_cast<BOOST_PP_CAT(AxisValueType,n)>(coords[n]);
+    indexes[0] = UnwrapAny<enum_gender>(  coords[0]);
+    indexes[1] = UnwrapAny<enum_class>(   coords[1]);
+    indexes[2] = UnwrapAny<enum_smoking>( coords[2]);
+    indexes[3] = UnwrapAny<int>(          coords[3]);
+    indexes[4] = UnwrapAny<enum_uw_basis>(coords[4]);
+    indexes[5] = UnwrapAny<enum_state>(   coords[5]);
+    indexes[6] = UnwrapAny<int>(          coords[6]);
+    BOOST_STATIC_ASSERT( eda_max == 7 );
+}
 
-    BOOST_STATIC_ASSERT(DatabaseTableAdapter::eda_max == 7);
-    BOOST_PP_REPEAT_FROM_TO(0, 7, CAST_BOOST_ANY_TO_INT_, ~)
-
-    #undef CAST_BOOST_ANY_TO_INT_
+unsigned int DatabaseTableAdapter::GetDimension() const
+{
+    return eda_max;
 }
 
 bool DatabaseTableAdapter::IsVoid() const
@@ -241,100 +221,42 @@ bool DatabaseTableAdapter::IsVoid() const
     return db_value_ == NULL;
 }
 
-boost::any DatabaseTableAdapter::DoGetValue(Coords const& coords) const
+double DatabaseTableAdapter::DoGetValue(Coords const& coords) const
 {
     if(IsVoid())
-        {return boost::any(static_cast<double>(0));}
+        {
+        return 0;
+        }
 
-    indexes_.clear();
-    indexes_.resize(coords.size());
     ConvertValue(coords, indexes_);
 
-    double val = db_value_->operator[](indexes_);
-    return boost::any(val);
+    return db_value_->operator[](indexes_);
 }
 
 void DatabaseTableAdapter::DoSetValue
     (Coords const& coords
-    ,boost::any const& value
+    ,double const& value
     )
 {
     if(IsVoid())
         {return;}
 
-    indexes_.clear();
-    indexes_.resize(coords.size());
     ConvertValue(coords, indexes_);
 
-    double double_value = boost::any_cast<double>(value);
-    db_value_->operator[](indexes_) = double_value;
+    db_value_->operator[](indexes_) = value;
     SetModified();
 }
 
-/// The two methods below are not used but still have to be implemented.
-/// The reason for that wierdness is the fact that we are showing
-/// pairs of doubles as two columns of doubles and not as a single column
-/// (which is the default implementation). Therefore we trick MDGrid and
-/// MDGridTable and interface them in such a way, that these two
-/// pure virtual methods are not used at all, hense an implementation still
-/// has to provided (in this case an empty one, since functions are not used).
-double DatabaseTableAdapter::GetValue
-    (enum_gender
-    ,enum_class
-    ,enum_smoking
-    ,int
-    ,enum_uw_basis
-    ,enum_state
-    ,int
-    ) const
+MultiDimTableAny::AxesAny DatabaseTableAdapter::DoGetAxesAny()
 {
-    return 0;
+    AxesAny axes(eda_max);
+    axes[0] = AxisAny(new DatabaseGenderAxis());
+    axes[1] = AxisAny(new DatabaseClassAxis());
+    axes[2] = AxisAny(new DatabaseSmokingAxis());
+    axes[3] = AxisAny(new DatabaseIssueAgeAxis());
+    axes[4] = AxisAny(new DatabaseUwBasisAxis());
+    axes[5] = AxisAny(new DatabaseStateAxis());
+    axes[6] = AxisAny(new DatabaseDurationAxis());
+    BOOST_STATIC_ASSERT( eda_max == 7 );
+    return axes;
 }
-void DatabaseTableAdapter::SetValue
-    (enum_gender
-    ,enum_class
-    ,enum_smoking
-    ,int
-    ,enum_uw_basis
-    ,enum_state
-    ,int
-    ,double const&
-    )
-{
-}
-
-MultiDimAxis<enum_gender>* DatabaseTableAdapter::GetAxis0()
-{
-    return new DatabaseGenderAxis();
-}
-
-MultiDimAxis<enum_class>* DatabaseTableAdapter::GetAxis1()
-{
-    return new DatabaseClassAxis();
-}
-
-MultiDimAxis<enum_smoking>* DatabaseTableAdapter::GetAxis2()
-{
-    return new DatabaseSmokingAxis();
-}
-
-MultiDimAxis<int>* DatabaseTableAdapter::GetAxis3()
-{
-    return new DatabaseIssueAgeAxis();
-}
-
-MultiDimAxis<enum_uw_basis>* DatabaseTableAdapter::GetAxis4()
-{
-    return new DatabaseUwBasisAxis();
-}
-
-MultiDimAxis<enum_state>* DatabaseTableAdapter::GetAxis5()
-{
-    return new DatabaseStateAxis();
-}
-
-MultiDimAxis<int>* DatabaseTableAdapter::GetAxis6()
-{
-    return new DatabaseDurationAxis();
-}
-

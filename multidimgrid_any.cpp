@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: multidimgrid_any.cpp,v 1.12.2.2 2007-04-02 10:27:15 etarassov Exp $
+// $Id: multidimgrid_any.cpp,v 1.12.2.3 2007-04-02 11:40:45 etarassov Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -321,14 +321,8 @@ bool MultiDimGrid::Create
     // being sure that we are ready for a refresh
     GridRefreshTableDataGuard guard(*this);
 
-    axis_.clear();
-    axis_.resize(dimension_);
-    for(unsigned int a = 0; a < dimension_; ++a)
-        {
-        axis_[a] = AxisPtr(table_->GetAxisAny(a));
-        }
-
-    if(atable->GetDimension() != axis_.size())
+    axis_ = table_->GetAxesAny();
+    if(dimension_ != axis_.size())
         {
         fatal_error()
             << "Table size does not match number of axes."
