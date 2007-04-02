@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: tier_view_editor.hpp,v 1.12 2007-03-20 03:51:22 chicares Exp $
+// $Id: tier_view_editor.hpp,v 1.12.2.1 2007-04-02 11:09:40 etarassov Exp $
 
 #ifndef tier_view_editor_hpp
 #define tier_view_editor_hpp
@@ -37,6 +37,23 @@
 #include <wx/treectrl.h>
 
 #include <string>
+
+/// Notes on TierEditorGrid and TierTableAdapter.
+///
+/// The data being manipulated is a set of pairs of doubles. Because of that
+/// from the point of view of TierTableAdapter the problem is one dimensional.
+/// But from the user's point of view it is two dimensional problem with the
+/// second dimension being restrained to the set [0, 1] - first and second
+/// component of every pair of doubles.
+///
+/// That's why TierTableAdapter manipulates a one dimensional set of values
+/// while TierEditorGrid presents it to the user as a two dimensional set
+/// of doubles. For that to work TierEditorGrid overrides default MultiDimGrid
+/// behaviour and translates two dimensions into one dimension x [0,1].
+/// As a consequence the default implementation of
+/// TierEditorGrid::ValueToString and TierEditorGrid::String2Value
+/// forces us to define conversions between double_pair and std::string.
+/// See below.
 
 // EVGENIY !! Can we avoid writing typedefs at global scope, in order
 // to keep them out of the global namespace?
@@ -92,17 +109,15 @@ class tier_entity_adapter
         ,std::vector<double>& values
         );
 
-    /// get data in pairs (corresponding to a band)
+    /// Access data in pairs (corresponding to a band).
     double_pair get_value(unsigned int band) const;
-    /// set data in a pair (corresponding to a band)
     void set_value(unsigned int band, double_pair const& value);
 
-    /// Change number of bands in the underlying stratified_entity object
-    void set_bands_count(unsigned int n);
-    /// Read the number of bands in the underlying stratified_entity object
+    /// Access the underlying stratified_entity object number of bands.
     unsigned int get_bands_count() const;
+    void set_bands_count(unsigned int n);
 
-    /// return true if we have no underlying object to manipulate
+    /// Return true if there is no underlying object to manipulate.
     bool is_void() const;
 
     std::vector<double>&       limits();
@@ -189,12 +204,11 @@ inline TierBandAxis::TierBandAxis()
 {
 }
 
-/// Note.
-///
-/// MultiDimTable1<double_pair, unsigned int> requires a specification of
-/// MultiDimTableTypeTraits to be provided. In case of TierTableAdapter
-/// it will never going to be used, therefore specify a dummy implementation
-/// with assertion that its never get called.
+/// Note: MultiDimTable<double_pair, unsigned int> requires a conversion
+/// between double_pair and std::string (via value_cast). Because of a twist
+/// in TierTableAdapter (see the general note above) it will never be used.
+/// Therefore specify a dummy conversion and add an extra-assertion to make
+/// sure it never gets called.
 
 template <>
 class MultiDimTableTypeTraits<double_pair>
