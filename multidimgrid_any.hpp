@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: multidimgrid_any.hpp,v 1.18.4.3 2007-04-02 11:40:45 etarassov Exp $
+// $Id: multidimgrid_any.hpp,v 1.18.4.4 2007-04-02 12:19:34 etarassov Exp $
 
 #ifndef multidimgrid_any_hpp
 #define multidimgrid_any_hpp
@@ -577,6 +577,12 @@ class MultiDimGrid
     void SetYAxisColour(wxColour const& colour);
 
   protected:
+    // Distinguish between X axis and Y axis.
+    enum enum_axis_x_or_y
+        {e_axis_x
+        ,e_axis_y
+        };
+
 // TODO ?? EVGENIY !! Section 8.2 of the boost coding standards says
 // "Protected data members are forbidden". Is there a really good
 // reason to violate that standard here?
@@ -616,7 +622,7 @@ class MultiDimGrid
     void PrepareFixedCoords(int row, int col);
     /// Creates axis selection controls for axis X and Y
     wxChoice* CreateGridAxisSelection
-        (int id
+        (enum_axis_x_or_y
         ,std::string const& label
         ,wxColour const& selectedColour
         );
@@ -631,20 +637,20 @@ class MultiDimGrid
 
     bool SetGridAxisSelection(int firstAxis, int secondAxis);
     /// Return the axis selected for the axisId selection (X or Y)
-    int GetGridAxisSelection(int axisId);
+    int GetGridAxisSelection(enum_axis_x_or_y);
     /// Selects axis changing corresponding wxChoice selections
     /// and refreshing the data grid, etc.
     void DoSetGridAxisSelection();
 
     /// Used by DoSetGridAxisSelection() to refresh the axis selection
     /// and to reposition various elements inside the widget if needed.
-    void DoSetGridAxisSelection(int axisId, int selection);
+    void DoSetGridAxisSelection(enum_axis_x_or_y, int selection);
 
     /// Populates the axis selection controls for axis X and Y
     void PopulateGridAxisSelection();
 
     /// Populates one axis selection controls for axis X or Y
-    void PopulateGridAxisSelection(unsigned int id);
+    void PopulateGridAxisSelection(enum_axis_x_or_y);
 
     int GetAxisIndexByName(std::string const& axisName);
     inline unsigned int DoGetAxisIndexByName(std::string const& axisName);
@@ -729,7 +735,7 @@ class MultiDimGrid
     /// Monitor axis selection changes
     void UponSwitchSelectedAxis(wxCommandEvent& event);
     /// Actually handle the axis selection switch
-    void DoOnSwitchSelectedAxis(unsigned int axisId);
+    void DoOnSwitchSelectedAxis(enum_axis_x_or_y);
 
     /// Monitor axis variation checkboxes
     void UponAxisVariesToggle(wxCommandEvent& event);

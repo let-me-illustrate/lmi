@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.610.2.6 2007-04-02 11:49:49 etarassov Exp $
+// $Id: ChangeLog,v 1.610.2.7 2007-04-02 12:19:34 etarassov Exp $
 
 MAINTENANCE
 
@@ -10856,3 +10856,9 @@ Simplify MultiDimTable to only enforce type safety for table values.
   config.hpp
   multidimgrid_any.cpp
 Fix for linux AMD64.
+
+20070402T1219Z <etarassov@tt-solutions.com> [1252]
+
+  multidimgrid_any.cpp
+  multidimgrid_any.hpp
+Use an enum instead of int to differentiate between axes x and y.
