@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustration_document.cpp,v 1.10 2007-01-27 00:00:51 wboutin Exp $
+// $Id: illustration_document.cpp,v 1.10.8.1 2007-04-02 22:58:58 etarassov Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -146,18 +146,12 @@ bool IllustrationDocument::OnNewDocument()
 // function would clear the 'modified' flag, which would be incorrect
 // here.
 //
-bool IllustrationDocument::OnOpenDocument(wxString const& filename)
+bool IllustrationDocument::DoOpenDocument(wxString const& filename)
 {
-    SetFilename(filename, true);
-    // WX !! This necessary function is undocumented. It must be
-    // called here; otherwise, wxView::OnSave() pops up an annoying
-    // 'Save As' dialog downstream when the file loaded here is saved.
-    SetDocumentSaved();
-    UpdateAllViews();
     return true;
 }
 
-bool IllustrationDocument::OnSaveDocument(wxString const& filename)
+bool IllustrationDocument::DoSaveDocument(wxString const& filename)
 {
     if(is_phony_)
         {
@@ -168,7 +162,6 @@ bool IllustrationDocument::OnSaveDocument(wxString const& filename)
     convert_to_ihs(*doc_.input_data_, input_);
     std::ofstream ofs(filename.c_str());
     doc_.write(ofs);
-    Modify(false);
     status() << "Document saved.";
     return true;
 }

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: product_editor.cpp,v 1.5 2007-04-01 15:58:27 chicares Exp $
+// $Id: product_editor.cpp,v 1.5.2.1 2007-04-02 22:58:58 etarassov Exp $
 
 #include "product_editor.hpp"
 
@@ -65,22 +65,44 @@ void ProductEditorDocument::Modify(bool modified)
         {PredominantView().DiscardEdits();}
 }
 
-bool ProductEditorDocument::OnOpenDocument(wxString const& filename)
+bool ProductEditorDocument::DoOpenDocument(wxString const& filename)
 {
-    ReadDocument(std::string(filename));
-
-    SetFilename(filename, true);
-    Modify(false);
-    UpdateAllViews();
-    return true;
+    try
+        {
+        ReadDocument(std::string(filename));
+        return true;
+        }
+    catch(std::exception const& e)
+        {
+        fatal_error()
+            << "While loading from '"
+            << filename.c_str()
+            << "'. Error: "
+            << e.what()
+            << LMI_FLUSH
+            ;
+        throw "Unreachable--silences a compiler diagnostic.";
+        }
 }
 
-bool ProductEditorDocument::OnSaveDocument(wxString const& filename)
+bool ProductEditorDocument::DoSaveDocument(wxString const& filename)
 {
-    WriteDocument(std::string(filename));
-
-    Modify(false);
-    return true;
+    try
+        {
+        WriteDocument(std::string(filename));
+        return true;
+        }
+    catch(std::exception const& e)
+        {
+        fatal_error()
+            << "While saving into '"
+            << filename.c_str()
+            << "'. Error: "
+            << e.what()
+            << LMI_FLUSH
+            ;
+        throw "Unreachable--silences a compiler diagnostic.";
+        }
 }
 
 ProductEditorView::ProductEditorView()

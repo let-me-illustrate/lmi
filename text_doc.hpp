@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: text_doc.hpp,v 1.6 2007-01-27 00:00:52 wboutin Exp $
+// $Id: text_doc.hpp,v 1.6.8.1 2007-04-02 22:58:58 etarassov Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/doc.h (C) 1998 Julian Smart and Markus Holzem
@@ -30,7 +30,7 @@
 // copyright notice above.
 
 // Because text windows have their own functions for loading and saving
-// files, override OnOpenDocument() and OnSaveDocument() instead of
+// files, override DoOpenDocument() and DoSaveDocument() instead of
 // LoadObject and SaveObject.
 
 #ifndef text_doc_hpp
@@ -53,8 +53,8 @@ class TextEditDocument
     // wxDocument overrides.
     virtual bool IsModified() const;
     virtual void Modify(bool);
-    virtual bool OnOpenDocument(wxString const& filename);
-    virtual bool OnSaveDocument(wxString const& filename);
+    virtual bool DoOpenDocument(wxString const& filename);
+    virtual bool DoSaveDocument(wxString const& filename);
 
     wxTextCtrl& PredominantViewWindow() const;
 

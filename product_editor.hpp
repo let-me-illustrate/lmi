@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: product_editor.hpp,v 1.7 2007-03-10 18:56:08 chicares Exp $
+// $Id: product_editor.hpp,v 1.7.4.1 2007-04-02 22:58:58 etarassov Exp $
 
 #ifndef product_editor_hpp
 #define product_editor_hpp
@@ -63,8 +63,8 @@ class ProductEditorDocument
     // wxDocument overrides.
     virtual bool IsModified() const;
     virtual void Modify(bool modified);
-    virtual bool OnOpenDocument(wxString const& filename);
-    virtual bool OnSaveDocument(wxString const& filename);
+    virtual bool DoOpenDocument(wxString const& filename);
+    virtual bool DoSaveDocument(wxString const& filename);
 };
 
 /// Common base for all product editor view classes.

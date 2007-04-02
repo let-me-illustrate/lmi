@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.610.2.24 2007-04-02 22:50:30 etarassov Exp $
+// $Id: ChangeLog,v 1.610.2.25 2007-04-02 22:58:58 etarassov Exp $
 
 MAINTENANCE
 
@@ -10973,4 +10973,17 @@ Use 'MAXIMUM' keyword to represent DBL_MAX value.
   tier_view_editor.cpp
   tier_view_editor.hpp
 Make last limit grid cell read-only.
+
+20070402T2258Z <etarassov@tt-solutions.com> [1252]
+
+  census_document.cpp
+  census_document.hpp
+  illustration_document.cpp
+  illustration_document.hpp
+  product_editor.cpp
+  product_editor.hpp
+  text_doc.cpp
+  text_doc.hpp
+Override wxDocument::Do(Open|Save)Document instead of
+wxDocument::On(Open|Save)Document.
 
