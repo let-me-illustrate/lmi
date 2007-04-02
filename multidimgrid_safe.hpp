@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: multidimgrid_safe.hpp,v 1.7 2007-03-08 01:14:38 chicares Exp $
+// $Id: multidimgrid_safe.hpp,v 1.7.4.1 2007-04-02 11:16:46 etarassov Exp $
 
 #ifndef multidimgrid_safe_hpp
 #define multidimgrid_safe_hpp
@@ -39,13 +39,6 @@
 #include <boost/preprocessor/punctuation/comma_if.hpp>
 #include <boost/static_assert.hpp>
 #include <boost/type_traits.hpp>
-
-/// This constant specifies the maximal number of arguments for the MakeArray
-/// method to accept.
-///
-/// Note that this doesn't affect at all the max number of elements in the
-/// array passed to MultiDimEnumAxis ctor which is unlimited.
-#define MAX_MULTIDIMGRID_MAKEARRAY 10
 
 /// This constant specifies the number of type safe MultiDimGridN classes
 /// declared in this header. It may be set in the compiler options to any
@@ -111,16 +104,6 @@ class MultiDimAxis
 /// possible values.
 ///   - name the name of the axis, for GetName() implementation
 ///   - values all possible values for this axis
-///
-/// MakeArray(s1, ..., sN): Helper for passing the values to constructor
-/// argument.
-/// This function takes N strings and returns an array with N elements.
-/// Note that in reality there is not a single function but a family of
-/// overloaded functions taking up to MAX_MULTIDIMGRID_MAKEARRAY
-/// parameters.
-///   - s1 the label for the first value
-///   - ...
-///   - sN the label for the last value
 
 template <typename Enum>
 class MultiDimEnumAxis
@@ -134,17 +117,6 @@ class MultiDimEnumAxis
         (std::string const& name
         ,std::vector<std::string> const& values
         );
-
-    #define MAKE_ARRAY_n(z, n, unused)                  \
-    static std::vector<std::string> MakeArray           \
-        (BOOST_PP_ENUM_PARAMS(n, std::string const& s)  \
-        );
-
-    /// c++ standard does not allow empty static arrays therefore we should
-    /// exclude MakeArray_0 case, starting from 1
-    BOOST_PP_REPEAT_FROM_TO(1, MAX_MULTIDIMGRID_MAKEARRAY, MAKE_ARRAY_n, ~)
-
-    #undef MAKE_ARRAY_n
 
     /// Base class virtuals
     virtual unsigned int GetCardinality() const;

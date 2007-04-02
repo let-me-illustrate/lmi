@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.610.2.3 2007-04-02 11:09:40 etarassov Exp $
+// $Id: ChangeLog,v 1.610.2.4 2007-04-02 11:16:46 etarassov Exp $
 
 MAINTENANCE
 
@@ -10833,3 +10833,8 @@ Support variable annuity (RE).
   tier_view_editor.hpp
 Add comments on the conversion twist. Reorder couple of methods.
 
+20070402T1116Z <etarassov@tt-solutions.com> [1256]
+
+  multidimgrid_safe.hpp
+  multidimgrid_safe.tpp
+Remove unused MakeArray function (and macros used to implement it).
