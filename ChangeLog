@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.610.2.17 2007-04-02 14:59:22 etarassov Exp $
+// $Id: ChangeLog,v 1.610.2.18 2007-04-02 15:08:35 etarassov Exp $
 
 MAINTENANCE
 
@@ -10928,4 +10928,10 @@ members private.
   multidimgrid_tools.hpp
 Review MultiDimAxisAny: rewrite comments; use references instead of
 pointers where appropriate; rename some method parameters.
+
+20070402T1508Z <etarassov@tt-solutions.com> [1252]
+
+  multidimgrid_tools.hpp
+Review AxisMaxBoundAdjuster: rewrite comments; rename some variables
+to clarify meaning; add const modifiers to local unmutable variables.
 
