@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: multidimgrid_any.cpp,v 1.12.2.8 2007-04-02 13:18:03 etarassov Exp $
+// $Id: multidimgrid_any.cpp,v 1.12.2.9 2007-04-02 13:51:55 etarassov Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -310,7 +310,7 @@ MultiDimGrid::~MultiDimGrid()
     // so that wxGridTableBase part is destroyed _after_ wxScrolledWindow base.
     // But it is not a good idea to depend on the base classes order,
     // especially when a change would lead to non-obvious crashes.
-    grid_->SetTable(NULL);
+    grid().SetTable(NULL);
 }
 
 bool MultiDimGrid::Create
@@ -330,13 +330,13 @@ bool MultiDimGrid::Create
         {
         fatal_error() << "Table can not be null" << LMI_FLUSH;
         }
-    dimension_ = table_->GetDimension();
+    dimension_ = table().GetDimension();
 
     // pospone the table data refresh until we exit Create() function
     // being sure that we are ready for a refresh
     GridRefreshTableDataGuard guard(*this);
 
-    axis_ = table_->GetAxesAny();
+    axis_ = table().GetAxesAny();
     if(dimension_ != axis_.size())
         {
         fatal_error()
@@ -380,10 +380,10 @@ bool MultiDimGrid::Create
 
     // Data table grid component
     grid_ = new(wx) MultiDimGridGrid(this, wxID_ANY, wxDefaultPosition);
-    grid_->SetTable(this, false);
+    grid().SetTable(this, false);
 
     // main sizer contains axis controls in the left part and the grid in the right
-    grid_sizer_ = new(wx) wxBoxSizer(wxHORIZONTAL);
+    wxBoxSizer* grid_sizer_ = new(wx) wxBoxSizer(wxHORIZONTAL);
     grid_sizer_->Add
         (sizer
         ,wxSizerFlags()
@@ -405,9 +405,9 @@ bool MultiDimGrid::Create
     for(unsigned int i = 0; i < dimension_; ++i)
         {
         SetAxisLabel(i, new(wx) wxStaticText(this, wxID_ANY, axis_[i]->GetName()));
-        SetAxisChoiceControl(i, axis_[i]->GetChoiceControl(*this, *table_));
+        SetAxisChoiceControl(i, axis_[i]->GetChoiceControl(*this, table()));
         SetAxisVariesControl(i);
-        SetAxisAdjustControl(i, axis_[i]->GetAdjustControl(*this, *table_));
+        SetAxisAdjustControl(i, axis_[i]->GetAdjustControl(*this, table()));
         }
 
     first_axis_choice_ = CreateGridAxisSelection
@@ -435,6 +435,18 @@ bool MultiDimGrid::Create
     return true;
 }
 
+MultiDimTableAny& MultiDimGrid::table() const
+{
+    LMI_ASSERT(table_);
+    return *table_;
+}
+
+wxGrid& MultiDimGrid::grid() const
+{
+    LMI_ASSERT(grid_);
+    return *grid_;
+}
+
 void MultiDimGrid::FixAxisValue
     (std::string const& axisName
     ,boost::any const& value
@@ -460,8 +472,8 @@ void MultiDimGrid::RefreshTableData()
 void MultiDimGrid::DoRefreshTableData()
 {
     wxWindowUpdateLocker update_locker(this);
-    grid_->SetTable(grid_->GetTable(), false);
-    grid_->ForceRefresh();
+    grid().SetTable(grid().GetTable(), false);
+    grid().ForceRefresh();
 }
 
 bool MultiDimGrid::RefreshTableAxis()
@@ -520,7 +532,7 @@ std::pair<int,int> MultiDimGrid::SuggestGridAxisSelection() const
     int newSecond = second_grid_axis_;
     for(unsigned int i = 0; i < dimension_; ++i)
         {
-        if(table_->VariesByDimension(i))
+        if(table().VariesByDimension(i))
             {
             if(newFirst == wxNOT_FOUND)
                 {
@@ -560,8 +572,8 @@ bool MultiDimGrid::DoRefreshAxisVaries(unsigned int axis_id)
 {
     bool updated = false;
 
-    bool varies = table_->VariesByDimension(axis_id);
-    bool canChange = table_->CanChangeVariationWith(axis_id);
+    bool varies = table().VariesByDimension(axis_id);
+    bool canChange = table().CanChangeVariationWith(axis_id);
 
     wxCheckBox* box = axis_varies_checkboxes_[axis_id];
     if(box)
@@ -598,14 +610,14 @@ bool MultiDimGrid::DoRefreshAxisVaries(unsigned int axis_id)
 
 bool MultiDimGrid::DoRefreshAxisAdjustment(unsigned int n)
 {
-    if(!table_->VariesByDimension(n))
+    if(!table().VariesByDimension(n))
         {return false;}
 
     MultiDimAxisAny& axis = *axis_[n];
     wxWindow* adjustWin = axis_adjust_wins_[n];
 
     bool updated = false;
-    if(table_->RefreshAxisAdjustment(axis, n))
+    if(table().RefreshAxisAdjustment(axis, n))
         {updated = true;}
     if(axis.RefreshAdjustment(adjustWin, n))
         {updated = true;}
@@ -621,7 +633,7 @@ bool MultiDimGrid::DoRefreshAxisAdjustment(unsigned int n)
 
 bool MultiDimGrid::DoApplyAxisAdjustment(unsigned int n)
 {
-    if(!table_->VariesByDimension(n))
+    if(!table().VariesByDimension(n))
         {return false;}
 
     MultiDimAxisAny& axis = *axis_[n];
@@ -631,7 +643,7 @@ bool MultiDimGrid::DoApplyAxisAdjustment(unsigned int n)
 
     if(axis.ApplyAdjustment(adjustWin, n))
         {updated = true;}
-    if(table_->ApplyAxisAdjustment(axis, n))
+    if(table().ApplyAxisAdjustment(axis, n))
         {updated = true;}
 
     if(updated)
@@ -649,7 +661,7 @@ void MultiDimGrid::SetXAxisColour(wxColour const& color)
     first_axis_choice_->SetForegroundColour(color);
     // WX !! In the future wx releases wxGrid might add support
     // for label coloring.
-    // grid_->SetColLabelColour(colour);
+    // grid().SetColLabelColour(colour);
 
     // Update select axis labels
     DoSetGridAxisSelection();
@@ -661,7 +673,7 @@ void MultiDimGrid::SetYAxisColour(wxColour const& colour)
     second_axis_choice_->SetForegroundColour(colour);
     // WX !! In the future wx releases wxGrid might add support
     // for label coloring.
-    // grid_->SetRowLabelColour(colour);
+    // grid().SetRowLabelColour(colour);
 
     // Update select axis labels
     DoSetGridAxisSelection();
@@ -874,7 +886,7 @@ void MultiDimGrid::DoSetGridAxisSelection()
         wxWindow* choiceWin = axis_choice_wins_[i];
         if(choiceWin)
             {
-            choiceWin->Enable(!selected && table_->VariesByDimension(i));
+            choiceWin->Enable(!selected && table().VariesByDimension(i));
             }
         }
     RefreshTableData();
@@ -916,7 +928,7 @@ void MultiDimGrid::PopulateGridAxisSelection(enum_axis_x_or_y x_or_y)
     std::size_t const size = axis_.size();
     for(unsigned int i = 0; i < size; ++i)
         {
-        if(table_->VariesByDimension(i))
+        if(table().VariesByDimension(i))
             {
             choice->Append
                 (axis_[i]->GetName()
@@ -1009,16 +1021,16 @@ void MultiDimGrid::PrepareFixedCoords(int row, int col)
 wxString MultiDimGrid::GetValue(int row, int col)
 {
     PrepareFixedCoords(row, col);
-    boost::any value = table_->GetValueAny(axis_fixed_coords_);
-    return table_->ValueToString(value);
+    boost::any value = table().GetValueAny(axis_fixed_coords_);
+    return table().ValueToString(value);
 }
 
 void MultiDimGrid::SetValue(int row, int col, wxString const& value)
 {
     PrepareFixedCoords(row, col);
-    table_->SetValueAny
+    table().SetValueAny
         (axis_fixed_coords_
-        ,table_->StringToValue(std::string(value))
+        ,table().StringToValue(std::string(value))
         );
 }
 
@@ -1079,7 +1091,7 @@ void MultiDimGrid::UponAxisVariesToggle(wxCommandEvent& event)
 
     std::size_t index = it - axis_varies_checkboxes_.begin();
     bool varies = axis_varies_checkboxes_[index]->GetValue();
-    if(varies != table_->VariesByDimension(index))
+    if(varies != table().VariesByDimension(index))
         {
         bool confirmed = true;
         if(!varies)
@@ -1102,14 +1114,14 @@ void MultiDimGrid::UponAxisVariesToggle(wxCommandEvent& event)
             }
         if(confirmed)
             {
-            table_->MakeVaryByDimension(index, varies);
+            table().MakeVaryByDimension(index, varies);
             DoRefreshAxisVaries(index);
             }
         else
             {
             // restore the varies checkbox value
             axis_varies_checkboxes_[index]->SetValue
-                (table_->VariesByDimension(index)
+                (table().VariesByDimension(index)
                 );
             }
         }

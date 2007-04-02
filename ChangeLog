@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.610.2.14 2007-04-02 13:18:03 etarassov Exp $
+// $Id: ChangeLog,v 1.610.2.15 2007-04-02 13:51:55 etarassov Exp $
 
 MAINTENANCE
 
@@ -10903,4 +10903,11 @@ Fix dtor defect: set grid_ table to NULL in MultiDimGrid destructor.
 
   multidimgrid_any.cpp
 Assert MDGrid table is not NULL.
+
+20070402T1351Z <etarassov@tt-solutions.com> [1252]
+
+  multidimgrid_any.cpp
+  multidimgrid_any.hpp
+  tier_view_editor.cpp
+Use accessors for MDGrid::table_ and MDGrid::grid_.
 

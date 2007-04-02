@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: multidimgrid_any.hpp,v 1.18.4.9 2007-04-02 13:05:58 etarassov Exp $
+// $Id: multidimgrid_any.hpp,v 1.18.4.10 2007-04-02 13:51:55 etarassov Exp $
 
 #ifndef multidimgrid_any_hpp
 #define multidimgrid_any_hpp
@@ -558,6 +558,9 @@ class MultiDimGrid
         ,e_axis_y
         };
 
+    MultiDimTableAny& table() const;
+    wxGrid& grid() const;
+
 // TODO ?? EVGENIY !! Section 8.2 of the boost coding standards says
 // "Protected data members are forbidden". Is there a really good
 // reason to violate that standard here?
@@ -573,8 +576,6 @@ class MultiDimGrid
     Axis axis_;
     /// Cache variable - number of dimensions
     unsigned int dimension_;
-    /// Top-level sizer of the widget
-    wxBoxSizer* grid_sizer_;
     /// Sizer containing axis selection controls (X and Y) and axis controls
     wxGridBagSizer* axis_sizer_;
     /// Array of boost::any values
