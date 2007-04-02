@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: multidimgrid_any.hpp,v 1.18.4.5 2007-04-02 12:32:00 etarassov Exp $
+// $Id: multidimgrid_any.hpp,v 1.18.4.6 2007-04-02 12:42:02 etarassov Exp $
 
 #ifndef multidimgrid_any_hpp
 #define multidimgrid_any_hpp
@@ -379,8 +379,8 @@ class MultiDimTableAny
     /// Return true if variation with n-th axis could be changed
     virtual bool CanChangeVariationWith(unsigned int n) const = 0;
 
-    boost::any GetAnyValue(Coords const& coords) const;
-    void SetAnyValue(Coords const& coords, boost::any const& value);
+    boost::any GetValueAny(Coords const& coords) const;
+    void SetValueAny(Coords const& coords, boost::any const& value);
 
     /// The method to be provided by the table to allow the conversion from
     /// the table values to the strings.
@@ -433,13 +433,13 @@ inline bool MultiDimTableAny::RefreshAxisAdjustment
     EnsureValidDimensionIndex(n);
     return DoRefreshAxisAdjustment(axis, n);
 }
-inline boost::any MultiDimTableAny::GetAnyValue(Coords const& coords) const
+inline boost::any MultiDimTableAny::GetValueAny(Coords const& coords) const
 {
     if(coords.size() != GetDimension())
         {fatal_error() << "Incorrect dimension." << LMI_FLUSH;}
     return DoGetValueAny(coords);
 }
-inline void MultiDimTableAny::SetAnyValue
+inline void MultiDimTableAny::SetValueAny
     (Coords const& coords
     ,boost::any const& value
     )

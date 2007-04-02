@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.610.2.8 2007-04-02 12:32:00 etarassov Exp $
+// $Id: ChangeLog,v 1.610.2.9 2007-04-02 12:42:02 etarassov Exp $
 
 MAINTENANCE
 
@@ -10870,3 +10870,10 @@ Use an enum instead of int to differentiate between axes x and y.
   multidimgrid_any.hpp
   tier_view_editor.hpp
 Split GetDimension into two methods: (Do|)GetDimension.
+
+20070402T1241Z <etarassov@tt-solutions.com> [1252]
+
+  multidimgrid_any.cpp
+  multidimgrid_any.hpp
+  tier_view_editor.cpp
+Rename (G|S)etAnyValue into (G|S)etValueAny for consistency.
