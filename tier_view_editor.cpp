@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: tier_view_editor.cpp,v 1.10.2.6 2007-04-02 15:16:42 etarassov Exp $
+// $Id: tier_view_editor.cpp,v 1.10.2.7 2007-04-02 15:27:51 etarassov Exp $
 
 #include "tier_view_editor.hpp"
 
@@ -200,7 +200,7 @@ int TierEditorGrid::GetNumberRows()
 
 int TierEditorGrid::GetNumberCols()
 {
-    return tgc_max;
+    return e_column_max;
 }
 
 unsigned int TierEditorGrid::GetBandNumber(int row) const
