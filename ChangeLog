@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.610.2.9 2007-04-02 12:42:02 etarassov Exp $
+// $Id: ChangeLog,v 1.610.2.10 2007-04-02 12:47:20 etarassov Exp $
 
 MAINTENANCE
 
@@ -10877,3 +10877,8 @@ Split GetDimension into two methods: (Do|)GetDimension.
   multidimgrid_any.hpp
   tier_view_editor.cpp
 Rename (G|S)etAnyValue into (G|S)etValueAny for consistency.
+
+20070402T1247Z <etarassov@tt-solutions.com> [1252]
+
+  tier_view_editor.cpp
+Use XXXValue instead of XXXValueAny.
