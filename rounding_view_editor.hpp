@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: rounding_view_editor.hpp,v 1.10 2007-03-20 03:27:33 chicares Exp $
+// $Id: rounding_view_editor.hpp,v 1.10.2.1 2007-04-02 23:20:05 etarassov Exp $
 
 #ifndef rounding_view_editor_hpp
 #define rounding_view_editor_hpp
@@ -33,8 +33,8 @@
 
 #include <string>
 
+class WXDLLEXPORT wxBitmapButton;
 class WXDLLEXPORT wxSpinCtrl;
-class WXDLLEXPORT wxToggleButton;
 class WXDLLEXPORT wxWindow;
 
 class RoundingButtons
@@ -75,6 +75,12 @@ class RoundingButtons
     rounding_style GetStyle() const;
     void           FixStyle(rounding_style style);
 
+    wxBitmapButton& button_not_at_all() const;
+    wxBitmapButton& button_to_nearest() const;
+    wxBitmapButton& button_upward() const;
+    wxBitmapButton& button_downward() const;
+    wxSpinCtrl& spin() const;
+
     void UponButtonClick(wxCommandEvent&);
 
     static wxSize CalculateMinimumTextControlSize
@@ -88,10 +94,12 @@ class RoundingButtons
 // use a forward declaration instead. At any rate, I think we need
 // include only "round_to.hpp", not "rounding_rules.hpp".
     round_to<double> original_rule_;
-    wxToggleButton* button_not_at_all_;
-    wxToggleButton* button_to_nearest_;
-    wxToggleButton* button_upward_;
-    wxToggleButton* button_downward_;
+
+    rounding_style style_;
+    wxBitmapButton* button_not_at_all_;
+    wxBitmapButton* button_to_nearest_;
+    wxBitmapButton* button_upward_;
+    wxBitmapButton* button_downward_;
 
     wxSpinCtrl* spin_;
 

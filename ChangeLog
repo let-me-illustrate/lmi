@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.610.2.25 2007-04-02 22:58:58 etarassov Exp $
+// $Id: ChangeLog,v 1.610.2.26 2007-04-02 23:20:04 etarassov Exp $
 
 MAINTENANCE
 
@@ -10986,4 +10986,24 @@ Make last limit grid cell read-only.
   text_doc.hpp
 Override wxDocument::Do(Open|Save)Document instead of
 wxDocument::On(Open|Save)Document.
+
+20070402T2319Z <etarassov@tt-solutions.com> [1252]
+
+  rounding_view_downward.xpm            [new file]
+  rounding_view_downward_hover.xpm      [new file]
+  rounding_view_downward_selected.xpm   [new file]
+  rounding_view_editor.cpp
+  rounding_view_editor.hpp
+  rounding_view_not_at_all.xpm          [new file]
+  rounding_view_not_at_all_hover.xpm    [new file]
+  rounding_view_not_at_all_selected.xpm [new file]
+  rounding_view_to_nearest.xpm          [new file]
+  rounding_view_to_nearest_hover.xpm    [new file]
+  rounding_view_to_nearest_selected.xpm [new file]
+  rounding_view_upward.xpm              [new file]
+  rounding_view_upward_hover.xpm        [new file]
+  rounding_view_upward_selected.xpm     [new file]
+  rounding_view.xrc
+Use bitmaps on rounding buttons. Properly place widgets on rounding
+view panel.
 
