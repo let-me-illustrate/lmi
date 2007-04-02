@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.610.2.20 2007-04-02 15:23:09 etarassov Exp $
+// $Id: ChangeLog,v 1.610.2.21 2007-04-02 15:29:51 etarassov Exp $
 
 MAINTENANCE
 
@@ -10946,4 +10946,9 @@ Split TierEditorGrid::CheckRowOrCol into two more explicit methods.
   multidimgrid_any.cpp
   multidimgrid_tools.hpp
 Add new line after 'LMI_FLUSH'.
+
+20070402T1529Z <etarassov@tt-solutions.com> [1252]
+
+  multidimgrid_any.cpp
+Fix GridRefreshTableDataGuard to use a reference instead of a pointer.
 
