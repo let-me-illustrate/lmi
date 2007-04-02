@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.610.2.11 2007-04-02 12:50:16 etarassov Exp $
+// $Id: ChangeLog,v 1.610.2.12 2007-04-02 12:58:29 etarassov Exp $
 
 MAINTENANCE
 
@@ -10887,3 +10887,8 @@ Use XXXValue instead of XXXValueAny.
 
   multidimgrid_any.hpp
 Reformat comments.
+
+20070402T1258Z <etarassov@tt-solutions.com> [1252]
+
+  multidimgrid_any.hpp
+Reorder methods in MultiDimTableAny.

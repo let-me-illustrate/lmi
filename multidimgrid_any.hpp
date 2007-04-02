@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: multidimgrid_any.hpp,v 1.18.4.7 2007-04-02 12:50:16 etarassov Exp $
+// $Id: multidimgrid_any.hpp,v 1.18.4.8 2007-04-02 12:58:29 etarassov Exp $
 
 #ifndef multidimgrid_any_hpp
 #define multidimgrid_any_hpp
@@ -338,42 +338,31 @@ class MultiDimTableAny
     MultiDimTableAny() {}
     virtual ~MultiDimTableAny() {}
 
-    // EVGENIY !! Would it make sense to group virtuals (other than
-    // the dtor) together here, and separate from nonvirtuals?
-
     /// Return the number of dimensions in this table.
     unsigned int GetDimension() const;
-
+    /// Create new set of table axes.
     AxesAny GetAxesAny();
 
     bool ApplyAxisAdjustment(MultiDimAxisAny& axis, unsigned int n);
     bool RefreshAxisAdjustment(MultiDimAxisAny& axis, unsigned int n);
 
-    /// Return true if the data varies with that dimension
+    /// Get/set if the data varies with (depend on) n-th axis.
+    virtual bool CanChangeVariationWith(unsigned int n) const = 0;
+    virtual void MakeVaryByDimension(unsigned int n, bool varies) = 0;
     virtual bool VariesByDimension(unsigned int n) const = 0;
 
-    /// Enable/disable data variation with n-th dimension
-    virtual void MakeVaryByDimension(unsigned int n, bool varies) = 0;
-
-    /// Return true if variation with n-th axis could be changed
-    virtual bool CanChangeVariationWith(unsigned int n) const = 0;
-
     boost::any GetValueAny(Coords const& coords) const;
-    void SetValueAny(Coords const& coords, boost::any const& value);
+    void       SetValueAny(Coords const& coords, boost::any const& value);
 
-    /// The method to be provided by the table to allow the conversion from
-    /// the table values to the strings.
+    /// Value conversion methods to be overriden in derived classes.
+    virtual boost::any StringToValue(std::string const& value) const = 0;
     virtual std::string ValueToString(boost::any const& value) const = 0;
 
-    /// The method to be provided by the table to allow the conversion from
-    /// strings to the the table values.
-    virtual boost::any StringToValue(std::string const& value) const = 0;
-
   protected:
-    virtual boost::any DoGetValueAny(Coords const&) const = 0;
-    virtual void DoSetValueAny(Coords const&, boost::any const&) = 0;
     virtual AxesAny DoGetAxesAny() = 0;
     virtual unsigned int DoGetDimension() const = 0;
+    virtual boost::any DoGetValueAny(Coords const&) const = 0;
+    virtual void       DoSetValueAny(Coords const&, boost::any const&) = 0;
 
     virtual bool DoApplyAxisAdjustment(MultiDimAxisAny& axis, unsigned int n);
     virtual bool DoRefreshAxisAdjustment(MultiDimAxisAny& axis, unsigned int n);
