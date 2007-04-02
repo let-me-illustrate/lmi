@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: multidimgrid_any.cpp,v 1.12.2.6 2007-04-02 12:42:02 etarassov Exp $
+// $Id: multidimgrid_any.cpp,v 1.12.2.7 2007-04-02 13:05:58 etarassov Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -294,6 +294,23 @@ void MultiDimGrid::Init()
 
     // intialize refresh counter
     table_data_refresh_counter_ = 0;
+}
+
+MultiDimGrid::~MultiDimGrid()
+{
+    // If we don't set grid() table to NULL, then a crash might occur.
+    // The reason is that MultiDimGrid has multiple base classes:
+    // wxGridTableBase and wxScrolledWindow
+    // By the time the wxScrolledWindow destructor is called
+    // the wxGridTableBase base of this object might already be destroyed
+    // which is really bad, because the grid() object still has a pointer
+    // to (wxGridTableBase*)this and it might call it, which would result in
+    // an undefined behavior.
+    // The alternative is to rearrange the order of base classes of MultiDimGrid
+    // so that wxGridTableBase part is destroyed _after_ wxScrolledWindow base.
+    // But it is not a good idea to depend on the base classes order,
+    // especially when a change would lead to non-obvious crashes.
+    grid_->SetTable(NULL);
 }
 
 bool MultiDimGrid::Create

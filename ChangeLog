@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.610.2.12 2007-04-02 12:58:29 etarassov Exp $
+// $Id: ChangeLog,v 1.610.2.13 2007-04-02 13:05:58 etarassov Exp $
 
 MAINTENANCE
 
@@ -10892,3 +10892,10 @@ Reformat comments.
 
   multidimgrid_any.hpp
 Reorder methods in MultiDimTableAny.
+
+20070402T1305Z <etarassov@tt-solutions.com> [1252]
+
+  multidimgrid_any.cpp
+  multidimgrid_any.hpp
+Fix dtor defect: set grid_ table to NULL in MultiDimGrid destructor.
+
