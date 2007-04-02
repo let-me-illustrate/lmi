@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.610.2.22 2007-04-02 20:42:02 etarassov Exp $
+// $Id: ChangeLog,v 1.610.2.23 2007-04-02 22:30:20 etarassov Exp $
 
 MAINTENANCE
 
@@ -10961,4 +10961,9 @@ Fix GridRefreshTableDataGuard to use a reference instead of a pointer.
 Review MultiDimGrid input errors handling: hide private wxGridTableBase
 interface methods and provide proper protected interface. Fix some
 method signatures.
+
+20070402T2230Z <etarassov@tt-solutions.com> [1252]
+
+  tier_view_editor.cpp
+Use 'MAXIMUM' keyword to represent DBL_MAX value.
 

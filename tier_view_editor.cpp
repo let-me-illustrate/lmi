@@ -19,13 +19,15 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: tier_view_editor.cpp,v 1.10.2.8 2007-04-02 20:42:02 etarassov Exp $
+// $Id: tier_view_editor.cpp,v 1.10.2.9 2007-04-02 22:30:20 etarassov Exp $
 
 #include "tier_view_editor.hpp"
 
 #include "assert_lmi.hpp"
 #include "multidimgrid_safe.tpp"
 #include "value_cast.hpp"
+
+#include <cfloat> // DBL_MAX
 
 void tier_entity_adapter::ensure_not_void() const
 {
@@ -275,11 +277,21 @@ double_pair TierEditorGrid::GetDoublePairValue(int band) const
 
 std::string TierEditorGrid::DoubleToString(double value)
 {
+    /// See stratified_entity::read and stratified_entity::write for a comment
+    /// on the magic (.999 * DBL_MAX < value) expression.
+    if(.999 * DBL_MAX < value)
+        {
+        return "MAXIMUM";
+        }
     return value_cast<std::string>(value);
 }
 
 double TierEditorGrid::StringToDouble(std::string const& text)
 {
+    if(0 == text.compare(0, 3, "MAX"))
+        {
+        return DBL_MAX;
+        }
     return value_cast<double>(text);
 }
 
