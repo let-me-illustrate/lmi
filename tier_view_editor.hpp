@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: tier_view_editor.hpp,v 1.12.2.5 2007-04-02 20:42:02 etarassov Exp $
+// $Id: tier_view_editor.hpp,v 1.12.2.6 2007-04-02 22:50:30 etarassov Exp $
 
 #ifndef tier_view_editor_hpp
 #define tier_view_editor_hpp
@@ -365,6 +365,8 @@ class TierEditorGrid
         ,wxSize const& size = wxDefaultSize
         );
     virtual ~TierEditorGrid();
+
+    bool IsReadOnlyCell(int row, int col) const;
 
   private:
     enum enum_tier_grid_column

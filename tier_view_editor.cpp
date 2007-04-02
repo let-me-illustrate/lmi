@@ -19,15 +19,66 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: tier_view_editor.cpp,v 1.10.2.9 2007-04-02 22:30:20 etarassov Exp $
+// $Id: tier_view_editor.cpp,v 1.10.2.10 2007-04-02 22:50:31 etarassov Exp $
 
 #include "tier_view_editor.hpp"
 
 #include "assert_lmi.hpp"
 #include "multidimgrid_safe.tpp"
 #include "value_cast.hpp"
+#include "wx_new.hpp"
 
 #include <cfloat> // DBL_MAX
+
+namespace
+{
+
+/// Cell 'read-only' attribute provider. Merely an adapter to query the grid
+/// about its cell attributes.
+/// It wraps up the grid object and redirect the calls to wxGridCellAttrProvider
+/// interface methods to TierCellAttrProvider methods. For the moment
+/// only the read-only state is used. 
+
+class TierCellAttrProvider
+    :public wxGridCellAttrProvider
+{
+  public:
+    TierCellAttrProvider(TierEditorGrid& grid) :grid_(grid) {}
+    virtual ~TierCellAttrProvider() {}
+
+  private:
+    virtual wxGridCellAttr* GetAttr
+        (int row
+        ,int col
+        ,wxGridCellAttr::wxAttrKind kind
+        ) const;
+
+    TierEditorGrid& grid_;
+};
+
+wxGridCellAttr* TierCellAttrProvider::GetAttr
+    (int row
+    ,int col
+    ,wxGridCellAttr::wxAttrKind kind
+    ) const
+{
+    // Skip requests for column/row attributes.
+    if(kind == wxGridCellAttr::Any)
+        {
+        // Return read-only for the last row of the second column.
+        // Simplify it by returning read-only for the rightmous-bottom cell.
+        if(grid_.IsReadOnlyCell(row, col))
+            {
+            // Ownership is transfered to the calling code. wx convention.
+            wxGridCellAttr* readonly_attr = new(wx) wxGridCellAttr;
+            readonly_attr->SetReadOnly();
+            return readonly_attr;
+            }
+        }
+    return wxGridCellAttrProvider::GetAttr(row, col, kind);
+}
+
+} // unnamed namespace
 
 void tier_entity_adapter::ensure_not_void() const
 {
@@ -189,6 +240,7 @@ TierEditorGrid::TierEditorGrid
     )
     :MultiDimGrid(parent, table, id, pos, size)
 {
+    SetAttrProvider(new(wx) TierCellAttrProvider(*this));
 }
 
 TierEditorGrid::~TierEditorGrid()
@@ -293,5 +345,14 @@ double TierEditorGrid::StringToDouble(std::string const& text)
         return DBL_MAX;
         }
     return value_cast<double>(text);
+}
+
+bool TierEditorGrid::IsReadOnlyCell(int row, int col) const
+{
+    // EVGENIY !! Ensure the band axis is always selected. Part of the product
+    // editor feedback to do list.
+    return row == static_cast<int>(DoGetNumberRows()) - 1
+        && col == e_column_limit
+        ;
 }
 

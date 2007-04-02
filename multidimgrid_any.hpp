@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: multidimgrid_any.hpp,v 1.18.4.13 2007-04-02 20:42:02 etarassov Exp $
+// $Id: multidimgrid_any.hpp,v 1.18.4.14 2007-04-02 22:50:30 etarassov Exp $
 
 #ifndef multidimgrid_any_hpp
 #define multidimgrid_any_hpp
@@ -509,6 +509,9 @@ class MultiDimGrid
 
     MultiDimTableAny& table() const;
     wxGrid& grid() const;
+
+    // Open following method(s) of wxGridTableBase interface to derived classes.
+    using wxGridTableBase::SetAttrProvider;
 
   private:
     /// Implementation of wxGridTableBase interface. The widget serves as a data
