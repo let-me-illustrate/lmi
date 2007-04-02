@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: multidimgrid_any.cpp,v 1.12.2.7 2007-04-02 13:05:58 etarassov Exp $
+// $Id: multidimgrid_any.cpp,v 1.12.2.8 2007-04-02 13:18:03 etarassov Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -326,6 +326,10 @@ bool MultiDimGrid::Create
 
     // setting internal variables
     table_ = atable;
+    if(!table_)
+        {
+        fatal_error() << "Table can not be null" << LMI_FLUSH;
+        }
     dimension_ = table_->GetDimension();
 
     // pospone the table data refresh until we exit Create() function
