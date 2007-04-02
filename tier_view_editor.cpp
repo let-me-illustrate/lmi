@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: tier_view_editor.cpp,v 1.10.2.5 2007-04-02 14:40:06 etarassov Exp $
+// $Id: tier_view_editor.cpp,v 1.10.2.6 2007-04-02 15:16:42 etarassov Exp $
 
 #include "tier_view_editor.hpp"
 
@@ -177,11 +177,6 @@ MultiDimTableAny::AxesAny TierTableAdapter::DoGetAxesAny()
 // ---------------------------
 // TierEditorGrid implementation
 // ---------------------------
-enum e_tier_grid_columns
-    {tgc_limit = 0
-    ,tgc_value
-    ,tgc_max
-    };
 
 TierEditorGrid::TierEditorGrid
     (wxWindow* parent
@@ -208,61 +203,49 @@ int TierEditorGrid::GetNumberCols()
     return tgc_max;
 }
 
-// EVGENIY !! Isn't the 'row' parameter unused? It appears that
-// this function checks only the 'col', not 'row'. Is there any
-// constraint on 'row' that should be enforced here? It looks like
-// this function is called as a precondition test for most member
-// functions, but not for GetDoublePairValue(), which takes only a
-// 'row' argument; but if we add a test for 'row' here, then that
-// function should probably call this one, too. Wouldn't it be
-// better to find some other way to write this, as suggested under
-// GetValue() below?
-
-void TierEditorGrid::CheckRowAndCol(int row, int col) const
+unsigned int TierEditorGrid::GetBandNumber(int row) const
 {
-    if(col != tgc_limit && col != tgc_value)
+    if(row < 0)
+        {
+        fatal_error() << "Negative index for row index" << LMI_FLUSH;
+        }
+    return static_cast<unsigned int>(row);
+}
+
+TierEditorGrid::enum_tier_grid_column TierEditorGrid::GetColumn(int col) const
+{
+    if(col != e_column_limit && col != e_column_value)
         {
         fatal_error()
             << "Grid has only two columns: Limit and Value."
             << LMI_FLUSH
             ;
         }
+    return static_cast<enum_tier_grid_column>(col);
 }
-
-// EVGENIY !! Consider the conditional operator in this function.
-// Here's how I read it:
-//
-//   switch(col)
-//     case tgc_limit: /* use value.first  */ ; break;
-//     case tgc_value: /* use value.second */ ; break;
-//     case tgc_max:   /* assume that this is impossible */ goto tgc_value;
-//     default:        /* assume that this is impossible */ goto tgc_value;
-//
-// And there are other places where the code assumes that only the
-// first two enumerator values are possible. That's in effect
-// asserted by CheckRowAndCol(), but I didn't perceive that at first.
-// Is there a way to write this more clearly? Should a UDT be used
-// instead of int? Should the base class test these arguments against
-// the maximum? Do any other ideas occur to you?
 
 wxString TierEditorGrid::GetValue(int row, int col)
 {
-    CheckRowAndCol(row, col);
-    double_pair value = GetDoublePairValue(static_cast<unsigned int>(row));
-    return value_cast<std::string>(col == tgc_limit ? value.first : value.second);
+    double_pair const value = GetDoublePairValue(GetBandNumber(row));
+    double const dbl_value =
+          GetColumn(col) == e_column_limit
+        ? value.first
+        : value.second
+        ;
+    return value_cast<std::string>(dbl_value);
 }
 
 void TierEditorGrid::SetValue(int row, int col, wxString const& str)
 {
-    CheckRowAndCol(row, col);
-    double_pair value = GetDoublePairValue(row);
+    unsigned int const band = GetBandNumber(row);
+    double_pair value = GetDoublePairValue(band);
 
     double as_double;
     if(!str.ToDouble(&as_double))
         {
         as_double = 0;
         }
-    if(col == tgc_limit)
+    if(GetColumn(col) == e_column_limit)
         {
         value.first = as_double;
         }
@@ -272,28 +255,26 @@ void TierEditorGrid::SetValue(int row, int col, wxString const& str)
         }
 
     dynamic_cast<TierTableAdapter&>(table()).SetValue
-        (PrepareFixedCoords(0, row)
+        (PrepareFixedCoords(0, band)
         ,value);
 }
 
 wxString TierEditorGrid::GetRowLabelValue(int row)
 {
-    CheckRowAndCol(row, 1);
-    return MultiDimGrid::GetColLabelValue(row);
+    return MultiDimGrid::GetColLabelValue(GetBandNumber(row));
 }
 
 wxString TierEditorGrid::GetColLabelValue(int col)
 {
-    CheckRowAndCol(1, col);
-    if(col == tgc_limit)
+    if(GetColumn(col) == e_column_limit)
         {return "Limit";}
     return "Value";
 }
 
-double_pair TierEditorGrid::GetDoublePairValue(int row)
+double_pair TierEditorGrid::GetDoublePairValue(int band)
 {
     return dynamic_cast<TierTableAdapter&>(table()).GetValue
-        (PrepareFixedCoords(0, row)
+        (PrepareFixedCoords(0, band)
         );
 }
 

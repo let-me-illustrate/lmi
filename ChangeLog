@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.610.2.18 2007-04-02 15:08:35 etarassov Exp $
+// $Id: ChangeLog,v 1.610.2.19 2007-04-02 15:16:42 etarassov Exp $
 
 MAINTENANCE
 
@@ -10934,4 +10934,10 @@ pointers where appropriate; rename some method parameters.
   multidimgrid_tools.hpp
 Review AxisMaxBoundAdjuster: rewrite comments; rename some variables
 to clarify meaning; add const modifiers to local unmutable variables.
+
+20070402T1516Z <etarassov@tt-solutions.com> [1252]
+
+  tier_view_editor.cpp
+  tier_view_editor.hpp
+Split TierEditorGrid::CheckRowOrCol into two more explicit methods.
 
