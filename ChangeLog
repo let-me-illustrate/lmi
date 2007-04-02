@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.610.2.10 2007-04-02 12:47:20 etarassov Exp $
+// $Id: ChangeLog,v 1.610.2.11 2007-04-02 12:50:16 etarassov Exp $
 
 MAINTENANCE
 
@@ -10882,3 +10882,8 @@ Rename (G|S)etAnyValue into (G|S)etValueAny for consistency.
 
   tier_view_editor.cpp
 Use XXXValue instead of XXXValueAny.
+
+20070402T1250Z <etarassov@tt-solutions.com> [1252]
+
+  multidimgrid_any.hpp
+Reformat comments.
