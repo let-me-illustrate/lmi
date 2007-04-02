@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: multidimgrid_any.hpp,v 1.18.4.10 2007-04-02 13:51:55 etarassov Exp $
+// $Id: multidimgrid_any.hpp,v 1.18.4.11 2007-04-02 14:40:06 etarassov Exp $
 
 #ifndef multidimgrid_any_hpp
 #define multidimgrid_any_hpp
@@ -510,11 +510,7 @@ inline void MultiDimTableAny::SetValueAny
 
 class MultiDimGrid
   :public wxScrolledWindow
-// TODO ?? EVGENIY !! Protected inheritance seems unusual. See, e.g.:
-//   http://cpptips.hyperformix.com/cpptips/prot_inher2.txt
-// Is there a strong reason for using it here, that overcomes the
-// objections raised by Meyers and Sutter?
-  ,protected wxGridTableBase
+  ,private wxGridTableBase
   ,private boost::noncopyable
 {
     friend class GridRefreshTableDataGuard;
@@ -561,9 +557,29 @@ class MultiDimGrid
     MultiDimTableAny& table() const;
     wxGrid& grid() const;
 
-// TODO ?? EVGENIY !! Section 8.2 of the boost coding standards says
-// "Protected data members are forbidden". Is there a really good
-// reason to violate that standard here?
+    /// Implementation of wxGridTableBase interface. The widget serves as a data
+    /// source for the wxGrid component.
+    ///
+    /// Note: once the wxGrid class support LabelAttributeProvider() we
+    /// should add color highlighting of selected axis in here.
+
+    // wxGridTableBase overrides.
+    virtual int GetNumberCols();
+    virtual int GetNumberRows();
+    virtual bool IsEmptyCell(int row, int col);
+    virtual wxString GetValue(int row, int col);
+    virtual void SetValue(int row, int col, wxString const& value);
+    virtual wxString GetColLabelValue(int col);
+    virtual wxString GetRowLabelValue(int row);
+
+    /// Array of boost::any values
+    typedef MultiDimTableAny::Coords Coords;
+
+    /// Helper function used by SetValue() and GetValue() functions
+    /// to fill the private coordinates vector with correct values.
+    Coords& PrepareFixedCoords(int row, int col);
+
+  private:
     /// Shared pointer to an axis object
     typedef boost::shared_ptr<MultiDimAxisAny> AxisPtr;
     /// Container of (pointers to) axis objects.
@@ -578,8 +594,6 @@ class MultiDimGrid
     unsigned int dimension_;
     /// Sizer containing axis selection controls (X and Y) and axis controls
     wxGridBagSizer* axis_sizer_;
-    /// Array of boost::any values
-    typedef MultiDimTableAny::Coords Coords;
     /// Index of the selected axis to be displayed as the X axis in the grid
     int first_grid_axis_;
     /// Index of the selected axis to be displayed as the Y axis in the grid
@@ -593,9 +607,6 @@ class MultiDimGrid
     /// to retrieve its values.
     Coords axis_fixed_coords_;
 
-    /// Helper function used by SetValue() and GetValue() functions
-    /// to fill the private coordinates vector with correct values.
-    void PrepareFixedCoords(int row, int col);
     /// Creates axis selection controls for axis X and Y
     wxChoice* CreateGridAxisSelection
         (enum_axis_x_or_y
@@ -653,33 +664,26 @@ class MultiDimGrid
     bool DoApplyAxisAdjustment(unsigned int n);
     bool DoRefreshAxisAdjustment(unsigned int n);
 
-    /// Implementation of wxGridTableBase interface. The widget serves as a data
-    /// source for the wxGrid component.
-    ///
-    /// Note: once the wxGrid class support LabelAttributeProvider() we
-    /// should add color highlighting of selected axis in here.
+    /// Event handlers.
+    void UponSwitchSelectedAxis(wxCommandEvent& event);
+    void UponAxisVariesToggle(wxCommandEvent& event);
 
-    // wxGridTableBase overrides.
-    virtual int GetNumberCols();
-    virtual int GetNumberRows();
-    virtual bool IsEmptyCell(int row, int col);
-    virtual wxString GetValue(int row, int col);
-    virtual void SetValue(int row, int col, wxString const& value);
-    virtual wxString GetColLabelValue(int col);
-    virtual wxString GetRowLabelValue(int row);
+    /// Actually handle the axis selection switch
+    void DoOnSwitchSelectedAxis(enum_axis_x_or_y);
 
-  private:
     /// Various GUI components of the widget
 
     /// Data grid
     wxGrid* grid_;
 
-    /// Drop down menu for the X axis selection
+    /// Drop down menu for the X and Y axes selection.
     wxChoice* first_axis_choice_;
-    /// Drop down menu for the Y axis selection
     wxChoice* second_axis_choice_;
 
-    typedef std::vector<wxWindow*> Windows;
+    /// We do not have to care about these window destruction, since it is
+    /// being taken care of by WX.
+    typedef std::vector<wxWindow*>   Windows;
+    typedef std::vector<wxCheckBox*> CheckBoxes;
 
     /// Array of axis labels
     Windows axis_labels_;
@@ -689,9 +693,6 @@ class MultiDimGrid
 
     /// Array of axis adjust windows, could be null if an axis is "read-only"
     Windows axis_adjust_wins_;
-
-    /// See axis_varies_checkboxes_
-    typedef std::vector<wxCheckBox*> CheckBoxes;
 
     /// Array of data variation checkboxes
     /// controlling whether or not the data varies along the axis
@@ -705,16 +706,6 @@ class MultiDimGrid
 
     /// Refresh counter
     unsigned int table_data_refresh_counter_;
-
-// EVGENIY !! These three function declarations seem to have been
-// removed in the branch. Aren't they required?
-    /// Monitor axis selection changes
-    void UponSwitchSelectedAxis(wxCommandEvent& event);
-    /// Actually handle the axis selection switch
-    void DoOnSwitchSelectedAxis(enum_axis_x_or_y);
-
-    /// Monitor axis variation checkboxes
-    void UponAxisVariesToggle(wxCommandEvent& event);
 
     DECLARE_EVENT_TABLE()
 };

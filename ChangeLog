@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.610.2.15 2007-04-02 13:51:55 etarassov Exp $
+// $Id: ChangeLog,v 1.610.2.16 2007-04-02 14:40:06 etarassov Exp $
 
 MAINTENANCE
 
@@ -10910,4 +10910,12 @@ Assert MDGrid table is not NULL.
   multidimgrid_any.hpp
   tier_view_editor.cpp
 Use accessors for MDGrid::table_ and MDGrid::grid_.
+
+20070402T1440Z <etarassov@tt-solutions.com> [1252]
+
+  multidimgrid_any.cpp
+  multidimgrid_any.hpp
+  tier_view_editor.cpp
+Use private inheritance instead of protected. Make protected data
+members private.
 

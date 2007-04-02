@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: multidimgrid_any.cpp,v 1.12.2.9 2007-04-02 13:51:55 etarassov Exp $
+// $Id: multidimgrid_any.cpp,v 1.12.2.10 2007-04-02 14:40:06 etarassov Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -993,7 +993,7 @@ bool MultiDimGrid::IsEmptyCell(int row, int col)
     return false;
 }
 
-void MultiDimGrid::PrepareFixedCoords(int row, int col)
+MultiDimGrid::Coords& MultiDimGrid::PrepareFixedCoords(int row, int col)
 {
     if(first_grid_axis_ != wxNOT_FOUND)
         {
@@ -1016,20 +1016,19 @@ void MultiDimGrid::PrepareFixedCoords(int row, int col)
         if(row != 0)
             {fatal_error() << "No second grid axis selected." << LMI_FLUSH;}
         }
+    return axis_fixed_coords_;
 }
 
 wxString MultiDimGrid::GetValue(int row, int col)
 {
-    PrepareFixedCoords(row, col);
-    boost::any value = table().GetValueAny(axis_fixed_coords_);
+    boost::any value = table().GetValueAny(PrepareFixedCoords(row, col));
     return table().ValueToString(value);
 }
 
 void MultiDimGrid::SetValue(int row, int col, wxString const& value)
 {
-    PrepareFixedCoords(row, col);
     table().SetValueAny
-        (axis_fixed_coords_
+        (PrepareFixedCoords(row, col)
         ,table().StringToValue(std::string(value))
         );
 }
