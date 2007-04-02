@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: multidimgrid_any.hpp,v 1.18.4.4 2007-04-02 12:19:34 etarassov Exp $
+// $Id: multidimgrid_any.hpp,v 1.18.4.5 2007-04-02 12:32:00 etarassov Exp $
 
 #ifndef multidimgrid_any_hpp
 #define multidimgrid_any_hpp
@@ -363,7 +363,7 @@ class MultiDimTableAny
     // the dtor) together here, and separate from nonvirtuals?
 
     /// Return the number of dimensions in this table.
-    virtual unsigned int GetDimension() const = 0;
+    unsigned int GetDimension() const;
 
     AxesAny GetAxesAny();
 
@@ -394,6 +394,7 @@ class MultiDimTableAny
     virtual boost::any DoGetValueAny(Coords const&) const = 0;
     virtual void DoSetValueAny(Coords const&, boost::any const&) = 0;
     virtual AxesAny DoGetAxesAny() = 0;
+    virtual unsigned int DoGetDimension() const = 0;
 
     virtual bool DoApplyAxisAdjustment(MultiDimAxisAny& axis, unsigned int n);
     virtual bool DoRefreshAxisAdjustment(MultiDimAxisAny& axis, unsigned int n);
@@ -410,6 +411,12 @@ inline MultiDimTableAny::AxesAny MultiDimTableAny::GetAxesAny()
 {
     return DoGetAxesAny();
 }
+
+inline unsigned int MultiDimTableAny::GetDimension() const
+{
+    return DoGetDimension();
+}
+
 inline bool MultiDimTableAny::ApplyAxisAdjustment
     (MultiDimAxisAny& axis
     ,unsigned int n

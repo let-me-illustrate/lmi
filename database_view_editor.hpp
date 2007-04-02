@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: database_view_editor.hpp,v 1.12.2.1 2007-04-02 11:40:45 etarassov Exp $
+// $Id: database_view_editor.hpp,v 1.12.2.2 2007-04-02 12:32:00 etarassov Exp $
 
 #ifndef database_view_editor_hpp
 #define database_view_editor_hpp
@@ -163,7 +163,7 @@ class DatabaseTableAdapter
     virtual void MakeVaryByDimension(unsigned int, bool);
     virtual bool CanChangeVariationWith(unsigned int) const;
     AxesAny DoGetAxesAny();
-    virtual unsigned int GetDimension() const;
+    virtual unsigned int DoGetDimension() const;
 
     /// MultiDimTableAny overrides.
     virtual bool DoApplyAxisAdjustment(MultiDimAxisAny&, unsigned int);
