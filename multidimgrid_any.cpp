@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: multidimgrid_any.cpp,v 1.12.2.3 2007-04-02 11:40:45 etarassov Exp $
+// $Id: multidimgrid_any.cpp,v 1.12.2.4 2007-04-02 11:49:49 etarassov Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -795,7 +795,7 @@ int MultiDimGrid::GetGridAxisSelection(int id)
     if(oldSel == wxNOT_FOUND || oldSel == 0)
         {return wxNOT_FOUND;}
 
-    return reinterpret_cast<int>(choice->GetClientData(oldSel));
+    return reinterpret_cast<wxUIntPtr>(choice->GetClientData(oldSel));
 }
 
 void MultiDimGrid::DoSetGridAxisSelection(int axis_id, int selection)

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.610.2.5 2007-04-02 11:40:45 etarassov Exp $
+// $Id: ChangeLog,v 1.610.2.6 2007-04-02 11:49:49 etarassov Exp $
 
 MAINTENANCE
 
@@ -10850,3 +10850,9 @@ Remove unused MakeArray function (and macros used to implement it).
   tier_view_editor.cpp
   tier_view_editor.hpp
 Simplify MultiDimTable to only enforce type safety for table values.
+
+20070402T1149Z <etarassov@tt-solutions.com> [1252]
+
+  config.hpp
+  multidimgrid_any.cpp
+Fix for linux AMD64.

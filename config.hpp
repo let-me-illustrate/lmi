@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: config.hpp,v 1.18 2007-04-01 14:29:30 chicares Exp $
+// $Id: config.hpp,v 1.18.2.1 2007-04-02 11:49:49 etarassov Exp $
 
 // Configuration header for compiler quirks. Include at the beginning of
 // every .hpp file (and nowhere else).
@@ -56,13 +56,13 @@ namespace fs = boost::filesystem;
 #   error "Unknown operating system. Consider contributing support."
 #endif // Unknown OS.
 
-#if defined _X86_ || defined _M_IX86 || defined i386 || defined __i386
+#if defined __x86_64 || defined __x86_64__ || defined __amd64 || defined __amd64__ || defined _M_X64
 #   define LMI_X86
-#   if defined __x86_64 || defined __x86_64__ || defined __amd64 || defined __amd64__ || defined _M_X64
-#       define LMI_X86_64
-#   else  // Not amd64, so presumably x86-32.
-#       define LMI_X86_32
-#   endif // Not amd64, so presumably x86-32.
+#   define LMI_X86_64
+#elif defined _X86_ || defined _M_IX86 || defined i386 || defined __i386
+// Not amd64, so presumably x86-32.
+#   define LMI_X86
+#   define LMI_X86_32
 #else  // Unknown hardware.
 #   error "Unknown hardware. Consider contributing support."
 #endif // Unknown hardware.
@@ -121,7 +121,7 @@ namespace fs = boost::filesystem;
 #   include "config.h"
 #else // Not using autoconf.
 
-// Redundant include guards are passé: with modern tools, the benefit
+// Redundant include guards are passï¿½: with modern tools, the benefit
 // is not worth the ugliness. The guards here, however, are intended
 // not to speed up compilation with antique tools that don't recognize
 // normal include guards, but rather to insulate compiler-specific
