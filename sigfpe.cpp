@@ -19,12 +19,17 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: sigfpe.cpp,v 1.5 2007-01-27 00:00:52 wboutin Exp $
+// $Id: sigfpe.cpp,v 1.6 2007-04-02 15:36:39 chicares Exp $
 
 // This is not portable because a signal handler isn't guaranteed to
 // work if it does anything other than set a volatile global or static
 // variable, without calling any standard library function other than
 // std::signal().
+//
+// This has several problems with gcc on msw. It might trap the first
+// SIGFPE only. The unit-testing code below apparently cannot be made
+// to work. This file is retained because it might be useful on other
+// platforms (on which it hasn't been tested).
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
