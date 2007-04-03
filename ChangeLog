@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.610 2007-04-01 22:38:19 chicares Exp $
+// $Id: ChangeLog,v 1.611 2007-04-03 09:40:32 chicares Exp $
 
 MAINTENANCE
 
@@ -10827,4 +10827,16 @@ Don't require wxUSE_STL (VZ).
   xenumtypes.cpp
   xenumtypes.hpp
 Support variable annuity (RE).
+
+20070402T1536Z <chicares@cox.net> [1256]
+
+  sigfpe.cpp
+  stratified_algorithms.hpp
+Improve documentation.
+
+20070403T0940Z <chicares@cox.net> [1256]
+
+  GNUmakefile
+Adapt to later versions of utilities: "sed-4.1.5" versus "sed-4.0.7",
+and "date (GNU coreutils) 6.7" versus "date (GNU sh-utils) 2.0".
 

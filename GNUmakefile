@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: GNUmakefile,v 1.84 2007-04-01 14:29:25 chicares Exp $
+# $Id: GNUmakefile,v 1.85 2007-04-03 09:40:32 chicares Exp $
 
 ################################################################################
 
@@ -462,7 +462,7 @@ check_concinnity: source_clean custom_tools
 	@-[ ! -f $(supplemental_test_makefile) ] \
 	  || $(MAKE) --no-print-directory --file=$(supplemental_test_makefile)
 	@$(TOUCH) --date=$(yyyy)0101 BOY
-	@$(TOUCH) --date=$(yyyymm)00 BOM
+	@$(TOUCH) --date=$(yyyymm)01 BOM
 	@$(TOUCH) --date=$(yyyymmdd) TODAY
 	@$(TOUCH) --date=$(yyyymm)22 CANDIDATE
 	@$(ECHO) "  Unexpected or oddly-named source files:"
@@ -494,11 +494,12 @@ check_concinnity: source_clean custom_tools
 	@for z in \
 	  $(filter-out config.hpp $(wildcard config_*.hpp),$(wildcard *.hpp)); \
 	  do \
-	    $(SED) \
-	    -e ';/^#include "config.hpp"/,$$d' \
-	    -e ';/#.*include/!d' \
-	    -e '0,1!d' \
-	    -e "s/^.*$$/$$z/" $$z \
+	    < $$z $(SED) \
+	      -e ';/#.*include/!d' \
+	    | $(SED) \
+	      -e '1!d' \
+	      -e ';/^#include "config.hpp"/d' \
+	      -e "s/^.*$$/$$z/" \
 	    ; \
 	  done;
 	@$(ECHO) "  Files that include \"config.hpp\" but shouldn't:"
