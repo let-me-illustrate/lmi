@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: multidimgrid_any.cpp,v 1.12.2.15 2007-04-03 00:14:04 etarassov Exp $
+// $Id: multidimgrid_any.cpp,v 1.12.2.16 2007-04-03 00:18:25 etarassov Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -474,6 +474,12 @@ void MultiDimGrid::DoRefreshTableData()
     wxWindowUpdateLocker update_locker(this);
     grid().SetTable(grid().GetTable(), false);
     grid().ForceRefresh();
+#   if wxCHECK_VERSION(2,9,0)
+    // Automatically adjust the with of the column of row labels.
+    grid().SetRowLabelSize(wxGRID_AUTOSIZE);
+    // Automatically adjust the height of the row of column labels.
+    grid().SetColLabelSize(wxGRID_AUTOSIZE);
+#   endif // wxCHECK_VERSION(2,9,0)
 }
 
 bool MultiDimGrid::RefreshTableAxis()
