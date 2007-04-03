@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: multidimgrid_any.cpp,v 1.12.2.14 2007-04-02 20:42:02 etarassov Exp $
+// $Id: multidimgrid_any.cpp,v 1.12.2.15 2007-04-03 00:14:04 etarassov Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -279,6 +279,10 @@ void MultiDimGrid::Init()
 
     // intialize refresh counter
     table_data_refresh_counter_ = 0;
+
+    // These pointers are used in IsFullyConstructed.
+    first_axis_choice_ = NULL;
+    second_axis_choice_ = NULL;
 }
 
 MultiDimGrid::~MultiDimGrid()
@@ -346,8 +350,8 @@ bool MultiDimGrid::Create
     SetScrollbars(0, 20, 0, 50);
 #endif // !wxCHECK_VERSION(2,8,0)
 
-    wxStaticBoxSizer* sizer =
-        new(wx) wxStaticBoxSizer(wxHORIZONTAL, this, "Axis");
+    wxStaticBoxSizer& sizer =
+        *new(wx) wxStaticBoxSizer(wxHORIZONTAL, this, "Axis");
 
     // wxGridBagSizer(vgap, hgap)
     axis_sizer_ = new(wx) wxGridBagSizer(MDGRID_SIZER_VGAP, MDGRID_SIZER_HGAP);
@@ -355,7 +359,7 @@ bool MultiDimGrid::Create
     // space between X and Y axis selection controls and axis controls
     axis_sizer_->SetEmptyCellSize(wxSize(MDGRID_SIZER_VGAP, MDGRID_SIZER_HGAP));
 
-    sizer->Add
+    sizer.Add
         (axis_sizer_
         ,wxSizerFlags()
             .Expand()
@@ -368,14 +372,14 @@ bool MultiDimGrid::Create
     grid().SetTable(this, false);
 
     // main sizer contains axis controls in the left part and the grid in the right
-    wxBoxSizer* grid_sizer_ = new(wx) wxBoxSizer(wxHORIZONTAL);
-    grid_sizer_->Add
-        (sizer
+    wxBoxSizer& grid_sizer_ = *new(wx) wxBoxSizer(wxHORIZONTAL);
+    grid_sizer_.Add
+        (&sizer
         ,wxSizerFlags()
             .Expand()
             .Border(wxLEFT | wxRIGHT, MDGRID_SIZER_HGAP)
         );
-    grid_sizer_->Add
+    grid_sizer_.Add
         (grid_
         ,wxSizerFlags()
             .Proportion(1)
@@ -384,29 +388,29 @@ bool MultiDimGrid::Create
             .Border(wxALL, 1)
         );
 
-    SetSizer(grid_sizer_);
+    SetSizer(&grid_sizer_);
 
     // create and add axis choice controls
     for(unsigned int i = 0; i < dimension_; ++i)
         {
         SetAxisLabel
             (i
-            ,new(wx) wxStaticText(this, wxID_ANY, axis_[i]->GetName())
+            ,*new(wx) wxStaticText(this, wxID_ANY, axis_[i]->GetName())
             );
         SetAxisChoiceControl
             (i
-            ,&axis_[i]->CreateChoiceControl(*this, table())
+            ,axis_[i]->CreateChoiceControl(*this, table())
             );
         SetAxisVariesControl(i);
         SetAxisAdjustControl(i, axis_[i]->CreateAdjustControl(*this, table()));
         }
 
-    first_axis_choice_ = CreateGridAxisSelection
+    first_axis_choice_ = &CreateGridAxisSelection
         (e_axis_x
         ,"X axis"
         ,selected_first_color_
         );
-    second_axis_choice_ = CreateGridAxisSelection
+    second_axis_choice_ = &CreateGridAxisSelection
         (e_axis_y
         ,"Y axis"
         ,selected_second_color_
@@ -424,6 +428,11 @@ bool MultiDimGrid::Create
     Layout();
 
     return true;
+}
+
+bool MultiDimGrid::IsFullyConstructed() const
+{
+    return first_axis_choice_ && second_axis_choice_;
 }
 
 MultiDimTableAny& MultiDimGrid::table() const
@@ -674,7 +683,7 @@ void MultiDimGrid::SetYAxisColour(wxColour const& colour)
     DoSetGridAxisSelection();
 }
 
-wxChoice* MultiDimGrid::CreateGridAxisSelection
+wxChoice& MultiDimGrid::CreateGridAxisSelection
     (enum_axis_x_or_y x_or_y
     ,std::string const& label
     ,wxColour const& selected_color
@@ -684,7 +693,7 @@ wxChoice* MultiDimGrid::CreateGridAxisSelection
     // therefore we don't pass the empty string ("") but a space instead (" ")
     wxString only_empty_choice = " ";
 
-    wxChoice* win = new(wx) wxChoice
+    wxChoice& window = *new(wx) wxChoice
         (this
         ,x_or_y
         ,wxDefaultPosition
@@ -693,7 +702,7 @@ wxChoice* MultiDimGrid::CreateGridAxisSelection
         ,&only_empty_choice
         );
 
-    win->SetOwnForegroundColour(selected_color);
+    window.SetOwnForegroundColour(selected_color);
 
     unsigned int row =
           (x_or_y == e_axis_x)
@@ -711,7 +720,7 @@ wxChoice* MultiDimGrid::CreateGridAxisSelection
         );
 
     axis_sizer_->Add
-        (win
+        (&window
         ,wxGBPosition(row, MDGRID_CHOICE_COL)
         ,wxGBSpan(1, MDGRID_CHOICE_HSPAN)
         ,wxSizerFlags()
@@ -720,14 +729,14 @@ wxChoice* MultiDimGrid::CreateGridAxisSelection
             .Expand()
             .GetFlags()
         );
-    return win;
+    return window;
 }
 
-void MultiDimGrid::SetAxisLabel(int axis_id, wxWindow* window)
+void MultiDimGrid::SetAxisLabel(int axis_id, wxWindow& window)
 {
-    axis_labels_[axis_id] = window;
+    axis_labels_[axis_id] = &window;
     axis_sizer_->Add
-        (window
+        (&window
         ,wxGBPosition(MDGridGetAxisLabelRow(axis_id), MDGRID_LABEL_COL)
         ,wxGBSpan(1, 1)
         ,wxSizerFlags()
@@ -737,11 +746,11 @@ void MultiDimGrid::SetAxisLabel(int axis_id, wxWindow* window)
         );
 }
 
-void MultiDimGrid::SetAxisChoiceControl(int axis_id, wxWindow* window)
+void MultiDimGrid::SetAxisChoiceControl(int axis_id, wxWindow& window)
 {
-    axis_choice_wins_[axis_id] = window;
+    axis_choice_wins_[axis_id] = &window;
     axis_sizer_->Add
-        (window
+        (&window
         ,wxGBPosition(MDGridGetAxisChoiceRow(axis_id), MDGRID_CHOICE_COL)
         ,wxGBSpan(1, 1)
         ,wxSizerFlags()
@@ -771,9 +780,9 @@ void MultiDimGrid::SetAxisAdjustControl(int axis_id, wxWindow* window)
 
 void MultiDimGrid::SetAxisVariesControl(unsigned int axis_id)
 {
-    wxCheckBox* win = new(wx) wxCheckBox(this, wxID_ANY, "");
+    wxCheckBox& window = *new(wx) wxCheckBox(this, wxID_ANY, "");
     axis_sizer_->Add
-        (win
+        (&window
         ,wxGBPosition(MDGridGetAxisVariesRow(axis_id), MDGRID_VARIES_COL)
         ,wxGBSpan(1, 1)
         ,wxSizerFlags()
@@ -781,7 +790,7 @@ void MultiDimGrid::SetAxisVariesControl(unsigned int axis_id)
             .Border(wxALL, 1)
             .GetFlags()
         );
-    axis_varies_checkboxes_[axis_id] = win;
+    axis_varies_checkboxes_[axis_id] = &window;
 }
 
 bool MultiDimGrid::SetGridAxisSelection(int firstAxis, int secondAxis)
@@ -800,24 +809,29 @@ bool MultiDimGrid::SetGridAxisSelection(int firstAxis, int secondAxis)
     return update;
 }
 
+wxChoice& MultiDimGrid::GetAxisChoiceControl(enum_axis_x_or_y x_or_y)
+{
+    return (x_or_y == e_axis_x)
+        ? *first_axis_choice_
+        : *second_axis_choice_
+        ;
+}
+
 int MultiDimGrid::GetGridAxisSelection(enum_axis_x_or_y x_or_y)
 {
-    wxChoice* choice = (x_or_y == e_axis_x)
-        ? first_axis_choice_
-        : second_axis_choice_
-        ;
-    if(!choice)
+    if(!IsFullyConstructed())
         {
-        // function is called when the control is not yet fully constructed
         return wxNOT_FOUND;
         }
-    int oldSel = choice->GetSelection();
+
+    wxChoice& choice = GetAxisChoiceControl(x_or_y);
+    int oldSel = choice.GetSelection();
     // wxNOT_FOUND - nothing is selected
     // 0 - first empty item (" ") is selected => same as no selection at all
     if(oldSel == wxNOT_FOUND || oldSel == 0)
         {return wxNOT_FOUND;}
 
-    return reinterpret_cast<wxUIntPtr>(choice->GetClientData(oldSel));
+    return reinterpret_cast<wxUIntPtr>(choice.GetClientData(oldSel));
 }
 
 void MultiDimGrid::DoSetGridAxisSelection(enum_axis_x_or_y x_or_y, int axis)
@@ -825,27 +839,24 @@ void MultiDimGrid::DoSetGridAxisSelection(enum_axis_x_or_y x_or_y, int axis)
     if(axis == GetGridAxisSelection(x_or_y))
         {return;}
 
-    wxChoice* choice = (x_or_y == e_axis_x)
-        ? first_axis_choice_
-        : second_axis_choice_
-        ;
+    wxChoice& choice = GetAxisChoiceControl(x_or_y);
 
     int previous_axis = GetGridAxisSelection(x_or_y);
 
     if(axis != previous_axis)
         {
-        for(unsigned int i = 1; i < choice->GetCount(); ++i)
+        for(unsigned int i = 1; i < choice.GetCount(); ++i)
             {
 // TODO ?? Isn't this cast suspicious? Should boost::numeric_cast be
 // used to convert the wxUIntPtr to an int?
-            int cdata = reinterpret_cast<wxUIntPtr>(choice->GetClientData(i));
+            int cdata = reinterpret_cast<wxUIntPtr>(choice.GetClientData(i));
             if(cdata == axis)
                 {
-                choice->SetSelection(i);
+                choice.SetSelection(i);
                 return;
                 }
             }
-        choice->SetSelection(0);
+        choice.SetSelection(0);
         RefreshTableData();
         }
 }
@@ -896,27 +907,21 @@ void MultiDimGrid::PopulateGridAxisSelection()
 
 void MultiDimGrid::PopulateGridAxisSelection(enum_axis_x_or_y x_or_y)
 {
-    wxChoice* choice = (x_or_y == e_axis_x)
-        ? first_axis_choice_
-        : second_axis_choice_
-        ;
-    if(!choice)
-        {
-        // we are still constructing the MultiDimGrid control
-        return;
-        }
+    if(!IsFullyConstructed())
+        {return;}
 
-    wxWindowUpdateLocker update_locker(choice);
+    wxChoice& choice = GetAxisChoiceControl(x_or_y);
+    wxWindowUpdateLocker update_locker(&choice);
 
     int old_selection = GetGridAxisSelection(x_or_y);
     // set selection to empty line so that it does not change
-    choice->SetSelection(0);
+    choice.SetSelection(0);
     int new_sel_index = wxNOT_FOUND;
 
     // remove every item, except the empty one (the first " ")
-    for(int j = choice->GetCount() - 1; 1 <= j; --j)
+    for(int j = choice.GetCount() - 1; 1 <= j; --j)
         {
-        choice->Delete(j);
+        choice.Delete(j);
         }
 
     // repopulate the drop-down list with axis names
@@ -925,19 +930,19 @@ void MultiDimGrid::PopulateGridAxisSelection(enum_axis_x_or_y x_or_y)
         {
         if(table().VariesByDimension(i))
             {
-            choice->Append
+            choice.Append
                 (axis_[i]->GetName()
                 ,reinterpret_cast<void*>(i)
                 );
             if(static_cast<int>(i) == old_selection)
                 {
-                new_sel_index = choice->GetCount() - 1;
+                new_sel_index = choice.GetCount() - 1;
                 }
             }
         }
 
     if(new_sel_index != wxNOT_FOUND)
-        {choice->SetSelection(new_sel_index);}
+        {choice.SetSelection(new_sel_index);}
 
     if(old_selection != GetGridAxisSelection(x_or_y))
         {DoOnSwitchSelectedAxis(x_or_y);}

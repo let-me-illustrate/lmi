@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.610.2.26 2007-04-02 23:20:04 etarassov Exp $
+// $Id: ChangeLog,v 1.610.2.27 2007-04-03 00:14:04 etarassov Exp $
 
 MAINTENANCE
 
@@ -11006,4 +11006,10 @@ wxDocument::On(Open|Save)Document.
   rounding_view.xrc
 Use bitmaps on rounding buttons. Properly place widgets on rounding
 view panel.
+
+20070403T0013Z <etarassov@tt-solutions.com> [1252]
+
+  multidimgrid_any.cpp
+  multidimgrid_any.hpp
+Prefer references to pointers in MultiDimGridAny.
 
