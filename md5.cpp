@@ -34,7 +34,7 @@
    email: <chicares@cox.net>
    snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-   $Id: md5.cpp,v 1.5 2007-02-23 12:43:26 chicares Exp $
+   $Id: md5.cpp,v 1.6 2007-04-03 10:00:57 chicares Exp $
 
    GWC: File renamed md5.c --> md5.cpp .
    GWC: Put C rtl functions in namespace std.
@@ -42,9 +42,10 @@
 For subsequent GWC modifications, see 'ChangeLog'.
 */
 
-#ifdef HAVE_CONFIG_H
-# include <config.h>
-#endif
+// Suppress this because we wouldn't have glibc's 'config.h'.
+//#ifdef HAVE_CONFIG_H
+//# include <config.h>
+//#endif
 
 #include <sys/types.h>
 
