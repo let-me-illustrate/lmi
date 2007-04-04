@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: tier_view_editor.hpp,v 1.12.2.6 2007-04-02 22:50:30 etarassov Exp $
+// $Id: tier_view_editor.hpp,v 1.12.2.7 2007-04-04 16:34:56 etarassov Exp $
 
 #ifndef tier_view_editor_hpp
 #define tier_view_editor_hpp
@@ -33,8 +33,6 @@
 #include "alert.hpp"
 
 #include <boost/shared_ptr.hpp>
-
-#include <wx/treectrl.h>
 
 #include <string>
 
@@ -58,40 +56,6 @@
 // EVGENIY !! Can we avoid writing typedefs at global scope, in order
 // to keep them out of the global namespace?
 typedef std::pair<double, double> double_pair;
-
-/// Stores additional information in a wxTree node
-
-class TierTreeItemData
-  :public wxTreeItemData
-{
-  public:
-    TierTreeItemData(std::size_t, std::string const&);
-
-    std::size_t get_id() const;
-    std::string const& get_description() const;
-
-  private:
-    std::size_t id_;
-    std::string description_;
-};
-
-inline TierTreeItemData::TierTreeItemData
-    (std::size_t id
-    ,std::string const& description
-    )
-    :wxTreeItemData()
-    ,id_(id)
-    ,description_(description)
-{
-}
-inline std::size_t TierTreeItemData::get_id() const
-{
-    return id_;
-}
-inline std::string const& TierTreeItemData::get_description() const
-{
-    return description_;
-}
 
 /// tier_entity_adapter
 

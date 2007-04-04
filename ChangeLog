@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.610.2.28 2007-04-03 00:18:25 etarassov Exp $
+// $Id: ChangeLog,v 1.610.2.29 2007-04-04 16:34:56 etarassov Exp $
 
 MAINTENANCE
 
@@ -11017,4 +11017,10 @@ Prefer references to pointers in MultiDimGridAny.
 
   multidimgrid_any.cpp
 Automatically adjust the with of the column of row labels in MDGrid.
+
+20070404T1634Z <etarassov@tt-solutions.com> [1252]
+
+  tier_view_editor.hpp
+  tier_view.cpp
+Move TierTreeItemData from header into the corresponding cpp unit.
 

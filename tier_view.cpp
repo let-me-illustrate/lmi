@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: tier_view.cpp,v 1.8 2007-03-21 01:44:18 chicares Exp $
+// $Id: tier_view.cpp,v 1.8.2.1 2007-04-04 16:34:56 etarassov Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -66,6 +66,40 @@ std::vector<tier_entity_info> const& get_tier_entity_infos()
         );
 
     return static_tier_entity_infos;
+}
+
+/// Stores additional information in a wxTree node
+
+class TierTreeItemData
+  :public wxTreeItemData
+{
+  public:
+    TierTreeItemData(std::size_t, std::string const&);
+
+    std::size_t get_id() const;
+    std::string const& get_description() const;
+
+  private:
+    std::size_t id_;
+    std::string description_;
+};
+
+inline TierTreeItemData::TierTreeItemData
+    (std::size_t id
+    ,std::string const& description
+    )
+    :wxTreeItemData()
+    ,id_(id)
+    ,description_(description)
+{
+}
+inline std::size_t TierTreeItemData::get_id() const
+{
+    return id_;
+}
+inline std::string const& TierTreeItemData::get_description() const
+{
+    return description_;
 }
 
 } // unnamed namespace
