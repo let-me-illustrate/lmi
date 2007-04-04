@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: database_view.cpp,v 1.12 2007-03-29 02:53:38 chicares Exp $
+// $Id: database_view.cpp,v 1.12.2.1 2007-04-04 17:23:24 etarassov Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -110,34 +110,35 @@ class database_tree_item_data
   :public wxTreeItemData
 {
   public:
-    database_tree_item_data(std::size_t id, std::string const& description);
+    database_tree_item_data(db_names const&);
+    virtual ~database_tree_item_data() {}
 
-    std::size_t id() const;
-    std::string const& description() const;
+    db_names const& db_name() const {return db_names_;}
+
+    std::pair<int,int> get_axes_selected() const;
+    void set_axes_selected(std::pair<int,int> const&);
 
   private:
-    std::size_t id_;
-    std::string description_;
+    db_names const& db_names_;
+    std::pair<int,int> axes_selected_;
 };
 
-database_tree_item_data::database_tree_item_data
-    (std::size_t id
-    ,std::string const& description
+database_tree_item_data::database_tree_item_data(db_names const& names)
+    :db_names_(names)
+    ,axes_selected_(wxNOT_FOUND, wxNOT_FOUND)
+{
+}
+
+std::pair<int,int> database_tree_item_data::get_axes_selected() const
+{
+    return axes_selected_;
+}
+
+void database_tree_item_data::set_axes_selected
+    (std::pair<int,int> const& axes_selected
     )
-    :wxTreeItemData()
-    ,id_(id)
-    ,description_(description)
 {
-}
-
-std::size_t database_tree_item_data::id() const
-{
-    return id_;
-}
-
-std::string const& database_tree_item_data::description() const
-{
-    return description_;
+    axes_selected_ = axes_selected;
 }
 
 } // Unnamed namespace.
@@ -195,7 +196,7 @@ void DatabaseView::SetupControls()
                 (""
                 ,-1
                 ,-1
-                ,new(wx) database_tree_item_data(i, name.LongName)
+                ,new(wx) database_tree_item_data(name)
                 );
             name_to_id[name.Idx] = id;
             }
@@ -208,7 +209,7 @@ void DatabaseView::SetupControls()
                 ,name.ShortName
                 ,-1
                 ,-1
-                ,new(wx) database_tree_item_data(i, name.LongName)
+                ,new(wx) database_tree_item_data(name)
                 );
             name_to_id[name.Idx] = id;
             }
@@ -259,22 +260,36 @@ void DatabaseView::DiscardEdits()
 void DatabaseView::UponTreeSelectionChange(wxTreeEvent& event)
 {
     wxTreeCtrl& tree = GetTreeCtrl();
+    MultiDimGrid& grid = GetGridCtrl();
+
+    // save the current selection
+    wxTreeItemId const old_item = event.GetOldItem();
+    if(old_item.IsOk())
+        {
+        database_tree_item_data* old_item_data =
+            dynamic_cast<database_tree_item_data*>(tree.GetItemData(old_item));
+        if(old_item_data)
+            {
+            old_item_data->set_axes_selected(grid.GetGridAxisSelection());
+            }
+        }
+
     database_tree_item_data* item_data = dynamic_cast<database_tree_item_data*>
         (tree.GetItemData(event.GetItem())
         );
     if(!item_data)
         {return;}
 
-    std::size_t index = item_data->id();
+    TDBValue* tdbvalue = document().GetTDBValue(item_data->db_name().Idx);
 
-    table_adapter().SetTDBValue(document().GetTDBValue(index));
+    table_adapter().SetTDBValue(tdbvalue);
 
     bool is_topic = tree.GetChildrenCount(event.GetItem());
 
-    SetLabel(item_data->description());
+    SetLabel(item_data->db_name().LongName);
 
-    MultiDimGrid& grid = GetGridCtrl();
-
-    grid.Enable(!is_topic);
+    grid.Show(!is_topic);
+    // restore axis selection if any
+    grid.SetGridAxisSelection(item_data->get_axes_selected());
     grid.RefreshTableFull();
 }

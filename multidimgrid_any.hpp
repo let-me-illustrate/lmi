@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: multidimgrid_any.hpp,v 1.18.4.15 2007-04-03 00:14:04 etarassov Exp $
+// $Id: multidimgrid_any.hpp,v 1.18.4.16 2007-04-04 17:23:24 etarassov Exp $
 
 #ifndef multidimgrid_any_hpp
 #define multidimgrid_any_hpp
@@ -499,6 +499,9 @@ class MultiDimGrid
     bool RefreshAxisAdjustment(std::string const& name);
     void SetXAxisColour(wxColour const& colour);
     void SetYAxisColour(wxColour const& colour);
+
+    bool SetGridAxisSelection(std::pair<int,int> const&);
+    std::pair<int,int> GetGridAxisSelection() const;
 
   protected:
     // Distinguish between X axis and Y axis.

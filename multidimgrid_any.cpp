@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: multidimgrid_any.cpp,v 1.12.2.16 2007-04-03 00:18:25 etarassov Exp $
+// $Id: multidimgrid_any.cpp,v 1.12.2.17 2007-04-04 17:23:24 etarassov Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -687,6 +687,18 @@ void MultiDimGrid::SetYAxisColour(wxColour const& colour)
 
     // Update select axis labels
     DoSetGridAxisSelection();
+}
+
+bool MultiDimGrid::SetGridAxisSelection
+    (std::pair<int,int> const& selection
+    )
+{
+    return SetGridAxisSelection(selection.first, selection.second);
+}
+
+std::pair<int,int> MultiDimGrid::GetGridAxisSelection() const
+{
+    return std::make_pair(first_grid_axis_, second_grid_axis_);
 }
 
 wxChoice& MultiDimGrid::CreateGridAxisSelection

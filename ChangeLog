@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.610.2.31 2007-04-04 17:20:38 etarassov Exp $
+// $Id: ChangeLog,v 1.610.2.32 2007-04-04 17:23:24 etarassov Exp $
 
 MAINTENANCE
 
@@ -11033,4 +11033,11 @@ Make MultiDimIntegralAxis protected data members private.
 
   tier_view.cpp
 Rewrite tier_tree_item_data class.
+
+20070404T1723Z <etarassov@tt-solutions.com> [1252]
+
+  database_view.cpp
+  multidimgrid_any.cpp
+  multidimgrid_any.hpp
+Save axes selection in DatabaseViewEditor.
 
