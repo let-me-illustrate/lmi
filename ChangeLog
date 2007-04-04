@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.610.2.29 2007-04-04 16:34:56 etarassov Exp $
+// $Id: ChangeLog,v 1.610.2.30 2007-04-04 17:01:55 etarassov Exp $
 
 MAINTENANCE
 
@@ -11023,4 +11023,9 @@ Automatically adjust the with of the column of row labels in MDGrid.
   tier_view_editor.hpp
   tier_view.cpp
 Move TierTreeItemData from header into the corresponding cpp unit.
+
+20070404T1701Z <etarassov@tt-solutions.com> [1252]
+
+  multidimgrid_safe.hpp
+Make MultiDimIntegralAxis protected data members private.
 

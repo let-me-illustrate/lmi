@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: multidimgrid_safe.hpp,v 1.7.4.3 2007-04-02 14:59:22 etarassov Exp $
+// $Id: multidimgrid_safe.hpp,v 1.7.4.4 2007-04-04 17:01:55 etarassov Exp $
 
 #ifndef multidimgrid_safe_hpp
 #define multidimgrid_safe_hpp
@@ -171,7 +171,7 @@ class MultiDimIntegralAxis
 // TODO ?? EVGENIY !! Section 8.2 of the boost coding standards says
 // "Protected data members are forbidden". Is there a really good
 // reason to violate that standard here?
-  protected:
+  private:
     Integral min_;
     Integral max_;
     Integral step_;
