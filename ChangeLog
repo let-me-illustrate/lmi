@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.610.2.30 2007-04-04 17:01:55 etarassov Exp $
+// $Id: ChangeLog,v 1.610.2.31 2007-04-04 17:20:38 etarassov Exp $
 
 MAINTENANCE
 
@@ -11028,4 +11028,9 @@ Move TierTreeItemData from header into the corresponding cpp unit.
 
   multidimgrid_safe.hpp
 Make MultiDimIntegralAxis protected data members private.
+
+20070404T1720Z <etarassov@tt-solutions.com> [1252]
+
+  tier_view.cpp
+Rewrite tier_tree_item_data class.
 

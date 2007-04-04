@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: tier_view.cpp,v 1.8.2.1 2007-04-04 16:34:56 etarassov Exp $
+// $Id: tier_view.cpp,v 1.8.2.2 2007-04-04 17:20:38 etarassov Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -70,36 +70,28 @@ std::vector<tier_entity_info> const& get_tier_entity_infos()
 
 /// Stores additional information in a wxTree node
 
-class TierTreeItemData
+class tier_tree_item_data
   :public wxTreeItemData
 {
   public:
-    TierTreeItemData(std::size_t, std::string const&);
+    tier_tree_item_data(tier_entity_info const&);
+    virtual ~tier_tree_item_data() {}
 
-    std::size_t get_id() const;
-    std::string const& get_description() const;
+    tier_entity_info const& entity_info() const;
 
   private:
-    std::size_t id_;
-    std::string description_;
+    tier_entity_info const& entity_info_;
 };
 
-inline TierTreeItemData::TierTreeItemData
-    (std::size_t id
-    ,std::string const& description
-    )
+tier_tree_item_data::tier_tree_item_data(tier_entity_info const& entity_info)
     :wxTreeItemData()
-    ,id_(id)
-    ,description_(description)
+    ,entity_info_(entity_info)
 {
 }
-inline std::size_t TierTreeItemData::get_id() const
+
+tier_entity_info const& tier_tree_item_data::entity_info() const
 {
-    return id_;
-}
-inline std::string const& TierTreeItemData::get_description() const
-{
-    return description_;
+    return entity_info_;
 }
 
 } // unnamed namespace
@@ -158,7 +150,7 @@ void TierView::SetupControls()
                 ,entity.short_name
                 ,-1
                 ,-1
-                ,new(wx) TierTreeItemData(i, entity.long_name)
+                ,new(wx) tier_tree_item_data(entity)
                 );
             index_to_id[entity.index] = id;
             }
@@ -196,19 +188,15 @@ TierDocument& TierView::document() const
 void TierView::UponTreeSelectionChange(wxTreeEvent& event)
 {
     wxTreeCtrl& tree = GetTreeCtrl();
-    TierTreeItemData* item_data = dynamic_cast<TierTreeItemData*>
+    tier_tree_item_data* item_data = dynamic_cast<tier_tree_item_data*>
         (tree.GetItemData(event.GetItem())
         );
 
     if(item_data)
         {
-        std::size_t index = item_data->get_id();
-
         bool is_topic = tree.GetChildrenCount(event.GetItem());
 
-        SetLabel(item_data->get_description());
-
-        std::vector<tier_entity_info> const& entities = get_tier_entity_infos();
+        SetLabel(item_data->entity_info().long_name);
 
         if(is_topic)
             {
@@ -216,8 +204,9 @@ void TierView::UponTreeSelectionChange(wxTreeEvent& event)
             }
         else
             {
-            stratified_entity& entity =
-                *document().get_stratified_entity(entities[index].index);
+            stratified_entity& entity = *document().get_stratified_entity
+                (item_data->entity_info().index
+                );
             table_adapter_->SetTierEntity
                 (tier_entity_adapter(entity.limits_, entity.values_)
                 );
