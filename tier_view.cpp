@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: tier_view.cpp,v 1.8.2.2 2007-04-04 17:20:38 etarassov Exp $
+// $Id: tier_view.cpp,v 1.8.2.3 2007-04-04 18:54:47 etarassov Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -204,7 +204,7 @@ void TierView::UponTreeSelectionChange(wxTreeEvent& event)
             }
         else
             {
-            stratified_entity& entity = *document().get_stratified_entity
+            stratified_entity& entity = document().get_stratified_entity
                 (item_data->entity_info().index
                 );
             table_adapter_->SetTierEntity

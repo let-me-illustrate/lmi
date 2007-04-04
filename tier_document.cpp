@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: tier_document.cpp,v 1.5 2007-03-11 22:16:09 chicares Exp $
+// $Id: tier_document.cpp,v 1.5.4.1 2007-04-04 18:54:47 etarassov Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -56,8 +56,8 @@ void TierDocument::WriteDocument(std::string const& filename)
     charges_.write(filename);
 }
 
-stratified_entity* TierDocument::get_stratified_entity(e_stratified index)
+stratified_entity& TierDocument::get_stratified_entity(e_stratified index)
 {
-    return &charges_.raw_entity(index);
+    return charges_.raw_entity(index);
 }
 

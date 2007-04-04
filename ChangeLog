@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.610.2.32 2007-04-04 17:23:24 etarassov Exp $
+// $Id: ChangeLog,v 1.610.2.33 2007-04-04 18:54:47 etarassov Exp $
 
 MAINTENANCE
 
@@ -11040,4 +11040,15 @@ Rewrite tier_tree_item_data class.
   multidimgrid_any.cpp
   multidimgrid_any.hpp
 Save axes selection in DatabaseViewEditor.
+
+20070404T1854Z <etarassov@tt-solutions.com> [1252]
+
+  database_document.cpp
+  database_document.hpp
+  database_view.cpp
+  tier_document.cpp
+  tier_document.hpp
+  tier_view.cpp
+Correct (Database|Tier)Document to return a reference instead of
+a pointer.
 

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: database_view.cpp,v 1.12.2.1 2007-04-04 17:23:24 etarassov Exp $
+// $Id: database_view.cpp,v 1.12.2.2 2007-04-04 18:54:47 etarassov Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -280,9 +280,9 @@ void DatabaseView::UponTreeSelectionChange(wxTreeEvent& event)
     if(!item_data)
         {return;}
 
-    TDBValue* tdbvalue = document().GetTDBValue(item_data->db_name().Idx);
-
-    table_adapter().SetTDBValue(tdbvalue);
+    table_adapter().SetTDBValue
+        (&document().GetTDBValue(item_data->db_name().Idx)
+        );
 
     bool is_topic = tree.GetChildrenCount(event.GetItem());
 
