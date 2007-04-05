@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: multidimgrid_any.cpp,v 1.13 2007-04-03 22:33:24 etarassov Exp $
+// $Id: multidimgrid_any.cpp,v 1.14 2007-04-05 12:00:35 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -117,6 +117,8 @@ bool MultiDimTableAny::DoRefreshAxisAdjustment
 {
     return false;
 }
+
+#include <iostream>
 
 namespace
 {
