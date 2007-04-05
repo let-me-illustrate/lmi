@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.611 2007-04-03 09:40:32 chicares Exp $
+// $Id: ChangeLog,v 1.612 2007-04-05 12:00:36 chicares Exp $
 
 MAINTENANCE
 
@@ -10839,4 +10839,14 @@ Improve documentation.
   GNUmakefile
 Adapt to later versions of utilities: "sed-4.1.5" versus "sed-4.0.7",
 and "date (GNU coreutils) 6.7" versus "date (GNU sh-utils) 2.0".
+
+20070403T1000Z <chicares@cox.net> [1256]
+
+  md5.cpp
+Don't hope to find glibc's 'config.h'.
+
+20070405T1200Z <chicares@cox.net> [1256]
+
+  multidimgrid_any.cpp
+Revert an accidentally-committed change.
 
