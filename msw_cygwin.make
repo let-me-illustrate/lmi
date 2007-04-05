@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: msw_cygwin.make,v 1.9 2007-03-10 18:23:55 chicares Exp $
+# $Id: msw_cygwin.make,v 1.10 2007-04-05 13:43:17 chicares Exp $
 
 ################################################################################
 
@@ -27,15 +27,27 @@ system_root := /cygdrive/c
 
 ################################################################################
 
-# Set normal system paths explicitly unless $(USE_STD_PATHS) is specified.
-# Reason: many problems reported on mailing lists are due to users mixing
-# MSYS and cygwin tools by setting $(PATH) incorrectly; but people who set
-# $(USE_STD_PATHS) are assumed to know what they're doing. These paths are
-# slash-terminated so that setting them to empty strings works, too.
+# Use cygwin as a quasi-cross-compiler for an i686-pc-mingw32 target.
+
+cross_compile_flags := -mno-cygwin
+
+################################################################################
+
+# These makefiles are designed to be independent of $PATH: they work
+# correctly even if $PATH is empty. That seems desirable as a general
+# principle; furthermore, many problems reported on mailing lists are
+# due to users inadvertently mixing cygwin and other tools by setting
+# $PATH incorrectly.
+#
+# To force $PATH to be respected instead, set $(USE_STD_PATHS) to a
+# nonempty string.
+#
+# These paths are slash-terminated so that setting them to empty
+# strings does the right thing.
 
 ifeq (,$(USE_STD_PATHS))
   PATH_BIN     := /bin/
-  PATH_GCC     := /usr/local/bin/
+  PATH_GCC     := /usr/bin/
   PATH_USR_BIN := /usr/bin/
 endif
 
