@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.587.2.21 2007-03-08 23:19:27 etarassov Exp $
+// $Id: ChangeLog,v 1.587.2.22 2007-04-06 10:46:49 etarassov Exp $
 
 MAINTENANCE
 
@@ -10581,3 +10581,11 @@ Remove forgotten 'lcletters' and 'ucletters'.
 
   illustration_reg.xsl
 Refactor 'tabular-detail-report2'.
+
+20070406T1046Z <etarassov@tt-solutions.com> [1257]
+
+  illustration_reg.xsl
+  individual_private_placement.xsl
+  nasd.xsl
+Fix the rest of errors in 'relaxed/less strict' FOP mode ('-r' option).
+

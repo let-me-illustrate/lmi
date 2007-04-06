@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: individual_private_placement.xsl,v 1.6.2.11 2007-03-08 17:23:14 etarassov Exp $
+    $Id: individual_private_placement.xsl,v 1.6.2.12 2007-04-06 10:46:49 etarassov Exp $
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fo="http://www.w3.org/1999/XSL/Format">
     <xsl:include href="xsl_fo_common.xsl" />
@@ -1168,11 +1168,11 @@
             </xsl:if>
         </fo:block>
         <fo:block padding-before="5pt" font-size="8.0pt" font-family="sans-serif">
-            <fo:table table-layout="fixed" width="100%">
+            <fo:table table-layout="fixed" width="100%" padding-before="2pt" border-top-style="solid" border-top-width="1pt" border-top-color="blue">
                 <fo:table-column column-width="proportional-column-width(1)"/>
                 <fo:table-column column-width="proportional-column-width(1)"/>
                 <fo:table-column column-width="proportional-column-width(1)"/>
-                <fo:table-body padding-before="2pt" border-top-style="solid" border-top-width="1pt" border-top-color="blue">
+                <fo:table-body>
                     <fo:table-row>
                         <fo:table-cell>
                             <fo:block text-align="left">
