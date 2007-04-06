@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: individual_private_placement.xsl,v 1.6.2.12 2007-04-06 10:46:49 etarassov Exp $
+    $Id: individual_private_placement.xsl,v 1.6.2.13 2007-04-06 11:08:39 etarassov Exp $
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fo="http://www.w3.org/1999/XSL/Format">
     <xsl:include href="xsl_fo_common.xsl" />
@@ -41,9 +41,9 @@
                     <!-- Central part of page -->
                     <fo:region-body column-count="1" margin-top="2.60in" margin-bottom="1.10in"/>
                     <!-- Header -->
-                    <fo:region-before border-after-style="solid" extent="3in"/>
+                    <fo:region-before extent="3in"/>
                     <!-- Footer -->
-                    <fo:region-after border-before-style="solid" extent="1.1in"/>
+                    <fo:region-after extent="1.1in"/>
                 </fo:simple-page-master>
 
                 <!-- Define the IRR (Current Charges) Illustration page -->
@@ -51,9 +51,9 @@
                     <!-- Central part of page -->
                     <fo:region-body column-count="1" margin-top="2.60in" margin-bottom="1.10in"/>
                     <!-- Header -->
-                    <fo:region-before border-after-style="solid" extent="3in"/>
+                    <fo:region-before extent="3in"/>
                     <!-- Footer -->
-                    <fo:region-after border-before-style="solid" extent="1.1in"/>
+                    <fo:region-after extent="1.1in"/>
                 </fo:simple-page-master>
 
                 <!-- Define the Current Values Illustration page -->
@@ -61,9 +61,9 @@
                     <!-- Central part of page -->
                     <fo:region-body column-count="1" margin-top="2.60in" margin-bottom="1.20in"/>
                     <!-- Header -->
-                    <fo:region-before border-after-style="solid" extent="3in"/>
+                    <fo:region-before extent="3in"/>
                     <!-- Footer -->
-                    <fo:region-after border-before-style="solid" extent="1.1in"/>
+                    <fo:region-after extent="1.1in"/>
                 </fo:simple-page-master>
 
                 <!-- Define the footnotes page. -->
@@ -71,9 +71,9 @@
                     <!-- Central part of page -->
                     <fo:region-body column-count="1" margin-top="2.25in" margin-bottom="1in"/>
                     <!-- Header -->
-                    <fo:region-before border-after-style="solid" extent="3in"/>
+                    <fo:region-before extent="3in"/>
                     <!-- Footer -->
-                    <fo:region-after border-before-style="solid" extent=".5in"/>
+                    <fo:region-after extent=".5in"/>
                 </fo:simple-page-master>
 
                 <!-- Define the Supplemental Illustration page. -->
@@ -82,9 +82,9 @@
                     <!-- Central part of page -->
                     <fo:region-body column-count="1" margin-top="2.60in" margin-bottom="1.5in"/>
                     <!-- Header -->
-                    <fo:region-before border-after-style="solid" extent="3in"/>
+                    <fo:region-before extent="3in"/>
                     <!-- Footer -->
-                    <fo:region-after border-before-style="solid" extent="1.1in"/>
+                    <fo:region-after extent="1.1in"/>
                     </fo:simple-page-master>
                 </xsl:if>
             </fo:layout-master-set>

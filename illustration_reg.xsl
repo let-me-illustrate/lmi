@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: illustration_reg.xsl,v 1.6.2.11 2007-04-06 10:46:49 etarassov Exp $
+    $Id: illustration_reg.xsl,v 1.6.2.12 2007-04-06 11:08:39 etarassov Exp $
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fo="http://www.w3.org/1999/XSL/Format">
     <xsl:include href="xsl_fo_common.xsl" />
@@ -41,9 +41,9 @@
                     <!-- Central part of page -->
                     <fo:region-body column-count="1" margin-top="0.5in" margin-bottom="1in"/>
                     <!-- Header -->
-                    <fo:region-before border-after-style="solid" extent="3in"/>
+                    <fo:region-before extent="3in"/>
                     <!-- Footer -->
-                    <fo:region-after border-before-style="solid" extent="0.40in"/>
+                    <fo:region-after extent="0.40in"/>
                 </fo:simple-page-master>
 
                 <!-- Define the narrative summary page. -->
@@ -51,9 +51,9 @@
                     <!-- Central part of page -->
                     <fo:region-body column-count="1" margin-top="0.15in" margin-bottom=".4in"/>
                     <!-- Header -->
-                    <fo:region-before border-after-style="solid" extent="2in"/>
+                    <fo:region-before extent="2in"/>
                     <!-- Footer -->
-                    <fo:region-after border-before-style="solid" extent="0.40in"/>
+                    <fo:region-after extent="0.40in"/>
                 </fo:simple-page-master>
 
                 <!-- Define the Numeric Summary page. -->
@@ -61,9 +61,9 @@
                     <!-- Central part of page -->
                     <fo:region-body column-count="1" margin-top="3in" margin-bottom=".47in"/>
                     <!-- Header -->
-                    <fo:region-before border-after-style="solid" extent="3in"/>
+                    <fo:region-before extent="3in"/>
                     <!-- Footer -->
-                    <fo:region-after border-before-style="solid" extent="0.47in"/>
+                    <fo:region-after extent="0.47in"/>
                 </fo:simple-page-master>
 
                 <!-- Define the Tabular Detail page. -->
@@ -71,9 +71,9 @@
                     <!-- Central part of page -->
                     <fo:region-body column-count="1" margin-top="3in" margin-bottom="1.15in"/>
                     <!-- Header -->
-                    <fo:region-before border-after-style="solid" extent="3in"/>
+                    <fo:region-before extent="3in"/>
                     <!-- Footer -->
-                    <fo:region-after border-before-style="solid" extent="1.15in"/>
+                    <fo:region-after extent="1.15in"/>
                 </fo:simple-page-master>
 
                 <!-- Define the Tabular Detail (Report 2) page. -->
@@ -81,9 +81,9 @@
                     <!-- Central part of page -->
                     <fo:region-body column-count="1" margin-top="3in" margin-bottom="1.25in"/>
                     <!-- Header -->
-                    <fo:region-before border-after-style="solid" extent="3in"/>
+                    <fo:region-before extent="3in"/>
                     <!-- Footer -->
-                    <fo:region-after border-before-style="solid" extent="1.15in"/>
+                    <fo:region-after extent="1.15in"/>
                 </fo:simple-page-master>
 
                 <!-- Define the Supplemental Illustration page. -->
@@ -92,9 +92,9 @@
                         <!-- Central part of page -->
                         <fo:region-body column-count="1" margin-top="3in" margin-bottom="1.2in"/>
                         <!-- Header -->
-                        <fo:region-before border-after-style="solid" extent="3in"/>
+                        <fo:region-before extent="3in"/>
                         <!-- Footer -->
-                        <fo:region-after border-before-style="solid" extent="1.15in"/>
+                        <fo:region-after extent="1.15in"/>
                     </fo:simple-page-master>
                 </xsl:if>
 
@@ -103,9 +103,9 @@
                     <!-- Central part of page -->
                     <fo:region-body column-count="1" margin-top="3in" margin-bottom="0.47in"/>
                     <!-- Header -->
-                    <fo:region-before border-after-style="solid" extent="3in"/>
+                    <fo:region-before extent="3in"/>
                     <!-- Footer -->
-                    <fo:region-after border-before-style="solid" extent=".47in"/>
+                    <fo:region-after extent=".47in"/>
                 </fo:simple-page-master>
             </fo:layout-master-set>
 

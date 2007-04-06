@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: nasd.xsl,v 1.6.2.13 2007-04-06 10:49:43 etarassov Exp $
+    $Id: nasd.xsl,v 1.6.2.14 2007-04-06 11:08:39 etarassov Exp $
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fo="http://www.w3.org/1999/XSL/Format">
     <xsl:include href="xsl_fo_common.xsl" />
@@ -41,9 +41,9 @@
                     <!-- Central part of page -->
                     <fo:region-body column-count="1" margin-top="2.25in" margin-bottom="1.30in"/>
                     <!-- Header -->
-                    <fo:region-before border-after-style="solid" extent="3in"/>
+                    <fo:region-before extent="3in"/>
                     <!-- Footer -->
-                    <fo:region-after border-before-style="solid" extent="0.9in"/>
+                    <fo:region-after extent="0.9in"/>
                 </fo:simple-page-master>
 
                 <!-- Define the explanatory notes page. -->
@@ -51,9 +51,9 @@
                     <!-- Central part of page -->
                     <fo:region-body column-count="2" margin-top="2.25in" margin-bottom="3.0in"/>
                     <!-- Header -->
-                    <fo:region-before border-after-style="solid" extent="3in"/>
+                    <fo:region-before extent="3in"/>
                     <!-- Footer -->
-                    <fo:region-after border-before-style="solid" extent="1.32in"/>
+                    <fo:region-after extent="1.32in"/>
                 </fo:simple-page-master>
 
                 <!-- Define the Basic Illustration page. -->
@@ -61,9 +61,9 @@
                     <!-- Central part of page -->
                     <fo:region-body column-count="1" margin-top="2.25in" margin-bottom="1.30in"/>
                     <!-- Header -->
-                    <fo:region-before border-after-style="solid" extent="3in"/>
+                    <fo:region-before extent="3in"/>
                     <!-- Footer -->
-                    <fo:region-after border-before-style="solid" extent=".9in"/>
+                    <fo:region-after extent=".9in"/>
                 </fo:simple-page-master>
 
                 <!-- Define the Supplimental Illustration page. -->
@@ -71,9 +71,9 @@
                     <!-- Central part of page -->
                     <fo:region-body column-count="1" margin-top="2.25in" margin-bottom="1.60in"/>
                     <!-- Header -->
-                    <fo:region-before border-after-style="solid" extent="3in"/>
+                    <fo:region-before extent="3in"/>
                     <!-- Footer -->
-                    <fo:region-after border-before-style="solid" extent=".9in"/>
+                    <fo:region-after extent=".9in"/>
                 </fo:simple-page-master>
 
                 <!-- Define the Illustration Assuption Detail page. -->
@@ -81,9 +81,9 @@
                     <!-- Central part of page -->
                     <fo:region-body column-count="1" margin-top="2.25in" margin-bottom="1.60in"/>
                     <!-- Header -->
-                    <fo:region-before border-after-style="solid" extent="3in"/>
+                    <fo:region-before extent="3in"/>
                     <!-- Footer -->
-                    <fo:region-after border-before-style="solid" extent=".9in"/>
+                    <fo:region-after extent=".9in"/>
                 </fo:simple-page-master>
 
                 <!-- Define the Supplemental Illustration page. -->
@@ -92,9 +92,9 @@
                         <!-- Central part of page -->
                         <fo:region-body column-count="1" margin-top="2.25in" margin-bottom="1.9in"/>
                         <!-- Header -->
-                        <fo:region-before border-after-style="solid" extent="3in"/>
+                        <fo:region-before extent="3in"/>
                         <!-- Footer -->
-                        <fo:region-after border-before-style="solid" extent=".95in"/>
+                        <fo:region-after extent=".95in"/>
                     </fo:simple-page-master>
                 </xsl:if>
             </fo:layout-master-set>
