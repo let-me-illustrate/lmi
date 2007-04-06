@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.587.2.22 2007-04-06 10:46:49 etarassov Exp $
+// $Id: ChangeLog,v 1.587.2.23 2007-04-06 10:51:17 etarassov Exp $
 
 MAINTENANCE
 
@@ -10588,4 +10588,9 @@ Refactor 'tabular-detail-report2'.
   individual_private_placement.xsl
   nasd.xsl
 Fix the rest of errors in 'relaxed/less strict' FOP mode ('-r' option).
+
+20070406T1051Z <etarassov@tt-solutions.com> [1257]
+
+  nasd.xsl
+Revert defective change commited in previous (20070406T1046Z) change.
 

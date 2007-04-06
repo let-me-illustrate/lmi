@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: nasd.xsl,v 1.6.2.12 2007-04-06 10:46:49 etarassov Exp $
+    $Id: nasd.xsl,v 1.6.2.13 2007-04-06 10:49:43 etarassov Exp $
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fo="http://www.w3.org/1999/XSL/Format">
     <xsl:include href="xsl_fo_common.xsl" />
@@ -53,7 +53,7 @@
                     <!-- Header -->
                     <fo:region-before border-after-style="solid" extent="3in"/>
                     <!-- Footer -->
-                    <fo:region-after border-before-style="solid" extent="1.32in" background-color="red"/>
+                    <fo:region-after border-before-style="solid" extent="1.32in"/>
                 </fo:simple-page-master>
 
                 <!-- Define the Basic Illustration page. -->
