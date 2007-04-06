@@ -21,10 +21,10 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: nasd.xsl,v 1.6.2.15 2007-04-06 11:33:32 etarassov Exp $
+    $Id: nasd.xsl,v 1.6.2.16 2007-04-06 15:16:06 etarassov Exp $
 -->
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fo="http://www.w3.org/1999/XSL/Format">
-    <xsl:include href="xsl_fo_common.xsl" />
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fo="http://www.w3.org/1999/XSL/Format" version="1.0">
+    <xsl:include href="xsl_fo_common.xsl"/>
     <xsl:output method="xml" encoding="UTF-8" indent="yes"/>
     <xsl:variable name="counter" select="1"/>
     <xsl:template match="/">
@@ -127,7 +127,7 @@ No cover page for this style sheet
                         <xsl:with-param name="reporttitle" select="'Basic Illustration'"/>
                     </xsl:call-template>
                     <fo:block>
-                        <fo:leader></fo:leader>
+                        <fo:leader/>
                     </fo:block>
                     <fo:block text-align="center" font-size="8pt">
                         <xsl:call-template name="dollar-units"/>
@@ -192,7 +192,7 @@ No cover page for this style sheet
                         <xsl:with-param name="reporttitle" select="'Explanatory Notes'"/>
                     </xsl:call-template>
                     <fo:block>
-                        <fo:leader></fo:leader>
+                        <fo:leader/>
                     </fo:block>
                 </fo:static-content>
 
@@ -215,13 +215,13 @@ No cover page for this style sheet
                             <xsl:text>. The policy provides lifetime insurance protection for as long as it remains in force. The policy is available at issue with at least two death benefit options: Option 1 (death benefit equal to the greater of (a) the selected face amount at death or (b) the minimum face amount at death); and Option 2 (death benefit equal to the greater of (a) the selected face amount plus account value at death or (b) the minimum face amount at death). If available under the policy, Option 3 is a death benefit option equal to the greatest of (a) the selected face amount at death plus the sum of premiums paid less withdrawals; or (b) selected face amount at death; or (c) minimum face amount at death.</xsl:text>
                         </fo:block>
                         <fo:block>
-                            <fo:leader></fo:leader>
+                            <fo:leader/>
                         </fo:block>
                         <fo:block>
                             <xsl:text>Account values may be used to pay contract charges. Contract charges are due during the life of the insured; depending on actual results, the premium payer may need to continue or resume premium outlays.</xsl:text>
                         </fo:block>
                         <fo:block>
-                            <fo:leader></fo:leader>
+                            <fo:leader/>
                         </fo:block>
                         <fo:block>
                             <xsl:text>The definition of life insurance elected for this contract is the </xsl:text>
@@ -238,7 +238,7 @@ No cover page for this style sheet
                             </xsl:choose>
                         </fo:block>
                         <fo:block>
-                            <fo:leader></fo:leader>
+                            <fo:leader/>
                         </fo:block>
                         <fo:block>
                             <xsl:value-of select="illustration/scalar/InsCoName"/>
@@ -246,13 +246,13 @@ No cover page for this style sheet
                             <xsl:text>(referred to in the contract as the Amount of Insurance that Requires a Charge).</xsl:text>
                         </fo:block>
                         <fo:block>
-                            <fo:leader></fo:leader>
+                            <fo:leader/>
                         </fo:block>
                         <fo:block>
                             <xsl:text>Payments are assumed to be paid as described in the 'Illustration Assumption Detail'. Account values, cash surrender values, and death benefits are illustrated as of the end of the year.</xsl:text>
                         </fo:block>
                         <fo:block>
-                            <fo:leader></fo:leader>
+                            <fo:leader/>
                         </fo:block>
                         <fo:block>
                             <xsl:text>PLEASE READ THE FOLLOWING IMPORTANT TAX DISCLOSURE</xsl:text>
@@ -286,13 +286,13 @@ No cover page for this style sheet
                             <xsl:text>If a contract is a MEC, any loans or withdrawals are taxed to the extent of any gain in the contract, and an additional 10% penalty tax will apply to the taxable portion of the loan or withdrawal. The 10% penalty tax applies if the contract owner is an individual under age 59 1/2 and does not meet any applicable exception, or if the contract is owned by a corporation or other entity.</xsl:text>
                         </fo:block>
                         <fo:block>
-                            <fo:leader></fo:leader>
+                            <fo:leader/>
                         </fo:block>
                         <fo:block>
                             <xsl:text>This contract has a guaranteed maximum cost of insurance (based on 1980 CSO mortality tables) and maximum administrative charges. The actual current charges are lower than these and are reflected in the values. However, these current charges are subject to change.</xsl:text>
                         </fo:block>
                         <fo:block>
-                            <fo:leader></fo:leader>
+                            <fo:leader/>
                         </fo:block>
                         <fo:block>
                             <xsl:text>This illustration assumes death of the insured at age </xsl:text>
@@ -300,19 +300,19 @@ No cover page for this style sheet
                             <xsl:text>.</xsl:text>
                         </fo:block>
                         <fo:block>
-                            <fo:leader></fo:leader>
+                            <fo:leader/>
                         </fo:block>
                         <fo:block>
                             <xsl:text>In the states of North Carolina and South Carolina, Guaranteed Issue Underwriting is referred to as "Limited Underwriting" and Simplified Issue Underwriting is referred to as "Simplified Underwriting".</xsl:text>
                         </fo:block>
                         <fo:block>
-                            <fo:leader></fo:leader>
+                            <fo:leader/>
                         </fo:block>
                         <fo:block>
                             <xsl:text>The loan interest rate may be fixed or adjustable as elected by the sponsor.</xsl:text>
                         </fo:block>
                         <fo:block>
-                            <fo:leader></fo:leader>
+                            <fo:leader/>
                         </fo:block>
                         <fo:block>
                             <xsl:text>This illustration must be preceded or accompanied by the current prospectuses for </xsl:text>
@@ -320,7 +320,7 @@ No cover page for this style sheet
                             <xsl:text> variable life insurance contract and its underlying investment choices. Before purchasing a variable life insurance contract, investors should carefully consider the investment objectives, risks, charges and expenses of the variable life insurance contract and its underlying investment choices. Please read the prospectuses carefully before investing or sending money.</xsl:text>
                         </fo:block>
                         <fo:block>
-                            <fo:leader></fo:leader>
+                            <fo:leader/>
                         </fo:block>
                     </fo:block>
 
@@ -335,7 +335,7 @@ No cover page for this style sheet
                                 <xsl:text> does not apply to the Term Rider's selected face amount.</xsl:text>
                             </fo:block>
                             <fo:block>
-                                <fo:leader></fo:leader>
+                                <fo:leader/>
                             </fo:block>
                         </xsl:if>
                         <xsl:if test="illustration/scalar/HasWP='1'">
@@ -345,7 +345,7 @@ No cover page for this style sheet
                                 <xsl:text> will waive certain monthly charges up to age 65, but not less than two years, while the insured remains totally disabled. An additional charge is associated with this rider, if elected. Please refer to your contract for specific provisions and a detailed schedule of charges.</xsl:text>
                             </fo:block>
                             <fo:block>
-                                <fo:leader></fo:leader>
+                                <fo:leader/>
                             </fo:block>
                         </xsl:if>
                         <fo:block>
@@ -355,7 +355,7 @@ No cover page for this style sheet
                             <xsl:text>No tax charge is made to the Separate Account. However, such a charge may be made in the future.</xsl:text>
                         </fo:block>
                         <fo:block>
-                            <fo:leader></fo:leader>
+                            <fo:leader/>
                         </fo:block>
                         <xsl:if test="illustration/scalar/UsePartialMort='1'">
                             <fo:block>
@@ -366,7 +366,7 @@ No cover page for this style sheet
                                 <xsl:text> table with all deaths at the end of the year.</xsl:text>
                             </fo:block>
                             <fo:block>
-                                <fo:leader></fo:leader>
+                                <fo:leader/>
                             </fo:block>
                         </xsl:if>
                         <xsl:choose>
@@ -387,7 +387,7 @@ No cover page for this style sheet
                                     <xsl:value-of select="illustration/scalar/MalePct"/>
                                     <xsl:text>.</xsl:text>
                                     <fo:block>
-                                        <fo:leader></fo:leader>
+                                        <fo:leader/>
                                     </fo:block>
                                 </fo:block>
                             </xsl:when>
@@ -409,7 +409,7 @@ No cover page for this style sheet
                                         </xsl:choose>
                                     </fo:block>
                                     <fo:block>
-                                        <fo:leader></fo:leader>
+                                        <fo:leader/>
                                     </fo:block>
                                 </xsl:if>
                             </xsl:otherwise>
@@ -420,7 +420,7 @@ No cover page for this style sheet
                             <xsl:text>.</xsl:text>
                         </fo:block>
                         <fo:block>
-                            <fo:leader></fo:leader>
+                            <fo:leader/>
                         </fo:block>
                     </fo:block>
                 </fo:flow>
@@ -439,7 +439,7 @@ No cover page for this style sheet
                         <xsl:with-param name="reporttitle" select="'Explanatory Notes'"/>
                     </xsl:call-template>
                     <fo:block>
-                        <fo:leader></fo:leader>
+                        <fo:leader/>
                     </fo:block>
                 </fo:static-content>
 
@@ -457,7 +457,7 @@ No cover page for this style sheet
                                 <xsl:text>SEPARATE ACCOUNT</xsl:text>
                             </fo:block>
                             <fo:block>
-                                <fo:leader></fo:leader>
+                                <fo:leader/>
                             </fo:block>
                             <fo:block>
                                 <xsl:text>This illustration shows how the death benefit and account value could vary over an extended period of time, assuming the funds experience </xsl:text>
@@ -468,7 +468,7 @@ No cover page for this style sheet
                                 <xsl:text>by fund. SEE PROSPECTUS.</xsl:text>
                             </fo:block>
                             <fo:block>
-                                <fo:leader></fo:leader>
+                                <fo:leader/>
                             </fo:block>
                             <xsl:if test="not($is_composite)">
                                 <fo:block>
@@ -499,7 +499,7 @@ No cover page for this style sheet
                                     </xsl:choose>
                                 </fo:block>
                                 <fo:block>
-                                    <fo:leader></fo:leader>
+                                    <fo:leader/>
                                 </fo:block>
                             </xsl:if>
                     </fo:block>
@@ -563,7 +563,7 @@ No cover page for this style sheet
 -->
                         <xsl:call-template name="standardheader"/>
                         <fo:block>
-                            <fo:leader></fo:leader>
+                            <fo:leader/>
                         </fo:block>
                         <fo:block text-align="center" font-size="10.0pt">
                             <xsl:value-of select="illustration/supplementalreport/title"/>
@@ -581,7 +581,7 @@ No cover page for this style sheet
                         </fo:block>
                     </fo:static-content>
                     <!-- Supplemental report body -->
-                    <xsl:call-template name="supplemental-report-body" />
+                    <xsl:call-template name="supplemental-report-body"/>
                 </fo:page-sequence>
             </xsl:if>
         </fo:root>
@@ -590,7 +590,7 @@ No cover page for this style sheet
         <xsl:param name="reporttitle"/>
         <fo:block text-align="center" font-size="9.0pt">
             <fo:block>
-                <fo:leader></fo:leader>
+                <fo:leader/>
             </fo:block>
             <fo:block>
                 <xsl:text>The purpose of this illustration is to show how the performance of the underlying separate account divisions could affect the contract</xsl:text>
@@ -599,13 +599,13 @@ No cover page for this style sheet
                 <xsl:text>account value and death benefit. This illustration is hypothetical and may not be used to project or predict investment results.</xsl:text>
             </fo:block>
             <fo:block>
-                <fo:leader></fo:leader>
+                <fo:leader/>
             </fo:block>
             <fo:block>
                 <xsl:value-of select="$reporttitle"/>
             </fo:block>
             <fo:block>
-                <fo:leader></fo:leader>
+                <fo:leader/>
             </fo:block>
         </fo:block>
         <xsl:variable name="header-width" select="33"/>
@@ -630,7 +630,7 @@ No cover page for this style sheet
                                 <xsl:choose>
                                     <xsl:when test="illustration/scalar/InsuredName='  '">
                                         <fo:block>
-                                            <xsl:text>&#xA0;</xsl:text>
+                                            <xsl:text> </xsl:text>
                                         </fo:block>
                                     </xsl:when>
                                     <xsl:otherwise>
@@ -638,7 +638,7 @@ No cover page for this style sheet
                                             <xsl:value-of select="illustration/scalar/InsuredName"/>
                                             <xsl:text>, </xsl:text>
                                             <xsl:value-of select="illustration/scalar/Gender"/>
-                                            <xsl:text>&#xA0;</xsl:text>
+                                            <xsl:text> </xsl:text>
                                             <xsl:value-of select="illustration/scalar/Smoker"/>
                                             <xsl:text> rates, Age </xsl:text>
                                             <xsl:value-of select="illustration/scalar/Age"/>
@@ -653,14 +653,14 @@ No cover page for this style sheet
                     <fo:list-block provisional-label-separation="0pt">
                         <fo:list-item>
                             <fo:list-item-label end-indent="label-end()">
-                                <fo:block text-align="center"></fo:block>
+                                <fo:block text-align="center"/>
                             </fo:list-item-label>
                             <fo:list-item-body start-indent="body-start()">
                                 <fo:block text-align="left">
                                     <xsl:choose>
                                         <xsl:when test="$is_composite">
                                             <fo:block>
-                                                <xsl:text>&#xA0;</xsl:text>
+                                                <xsl:text> </xsl:text>
                                             </fo:block>
                                         </xsl:when>
                                         <xsl:otherwise>
@@ -690,7 +690,7 @@ No cover page for this style sheet
                     <fo:list-block provisional-label-separation="0pt">
                         <fo:list-item>
                             <fo:list-item-label end-indent="label-end()">
-                                <fo:block text-align="center"></fo:block>
+                                <fo:block text-align="center"/>
                             </fo:list-item-label>
                             <fo:list-item-body start-indent="body-start()">
                                 <fo:block text-align="left">
@@ -710,8 +710,8 @@ No cover page for this style sheet
                 <fo:list-item-label end-indent="label-end()">
                     <xsl:choose>
                         <xsl:when test="$is_composite">
-                            <fo:block text-align="left" font-size="9.0pt">
-                                <xsl:text>&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;Composite Illustration</xsl:text>
+                            <fo:block text-align="left" font-size="9.0pt" margin-left="0.54in">
+                                <xsl:text>Composite Illustration</xsl:text>
                             </fo:block>
                         </xsl:when>
                         <xsl:otherwise>
@@ -726,7 +726,7 @@ No cover page for this style sheet
                     <fo:list-block provisional-label-separation="0pt">
                         <fo:list-item>
                             <fo:list-item-label end-indent="label-end()">
-                                <fo:block text-align="center"></fo:block>
+                                <fo:block text-align="center"/>
                             </fo:list-item-label>
                             <fo:list-item-body start-indent="body-start()">
                                 <xsl:choose>
@@ -738,7 +738,7 @@ No cover page for this style sheet
                                     </xsl:when>
                                     <xsl:otherwise>
                                         <fo:block text-align="left">
-                                            <xsl:text>&#xA0;</xsl:text>
+                                            <xsl:text> </xsl:text>
                                         </fo:block>
                                     </xsl:otherwise>
                                 </xsl:choose>
@@ -752,14 +752,14 @@ No cover page for this style sheet
                     <xsl:choose>
                         <xsl:when test="$is_composite">
                             <fo:block text-align="left" font-size="9.0pt">
-                                <xsl:text>&#xA0;</xsl:text>
+                                <xsl:text> </xsl:text>
                             </fo:block>
                         </xsl:when>
                         <xsl:otherwise>
                             <xsl:choose>
                                 <xsl:when test="$is_composite">
                                     <fo:block text-align="left">
-                                        <xsl:text>&#xA0;</xsl:text>
+                                        <xsl:text> </xsl:text>
                                     </fo:block>
                                 </xsl:when>
                                 <xsl:otherwise>
@@ -818,7 +818,7 @@ No cover page for this style sheet
                     <fo:list-block provisional-label-separation="0pt">
                         <fo:list-item>
                             <fo:list-item-label end-indent="label-end()">
-                                <fo:block text-align="center"></fo:block>
+                                <fo:block text-align="center"/>
                             </fo:list-item-label>
                             <fo:list-item-body start-indent="body-start()">
                                 <xsl:choose>
@@ -830,7 +830,7 @@ No cover page for this style sheet
                                     </xsl:when>
                                     <xsl:otherwise>
                                         <fo:block text-align="left">
-                                            <xsl:text>&#xA0;</xsl:text>
+                                            <xsl:text> </xsl:text>
                                         </fo:block>
                                     </xsl:otherwise>
                                 </xsl:choose>
@@ -845,20 +845,20 @@ No cover page for this style sheet
                         <xsl:if test="illustration/scalar/HasWP='1'">
                             <xsl:text>Waiver of Monthly Charges Rider elected.</xsl:text>
                         </xsl:if>
-                        <xsl:text>&#xA0;</xsl:text>
+                        <xsl:text> </xsl:text>
                     </fo:block>
                 </fo:list-item-label>
                 <fo:list-item-body start-indent="body-start()">
                     <fo:list-block provisional-label-separation="0pt">
                         <fo:list-item>
                             <fo:list-item-label end-indent="label-end()">
-                                <fo:block text-align="center"></fo:block>
+                                <fo:block text-align="center"/>
                             </fo:list-item-label>
                             <fo:list-item-body start-indent="body-start()">
                                 <xsl:choose>
                                     <xsl:when test="$is_composite">
                                         <fo:block text-align="left">
-                                            <xsl:text>&#xA0;</xsl:text>
+                                            <xsl:text> </xsl:text>
                                         </fo:block>
                                     </xsl:when>
                                     <xsl:otherwise>
@@ -871,7 +871,7 @@ No cover page for this style sheet
                                             </xsl:when>
                                             <xsl:otherwise>
                                                 <fo:block text-align="left">
-                                                    <xsl:text>&#xA0;</xsl:text>
+                                                    <xsl:text> </xsl:text>
                                                 </fo:block>
                                             </xsl:otherwise>
                                         </xsl:choose>
@@ -1059,16 +1059,16 @@ No cover page for this style sheet
         <xsl:variable name="illustration_assumption_columns_raw">
             <composite value="1">
                 <column name="PolicyYear">Policy _ Year</column>
-                <column />
-                <column />
-                <column />
+                <column/>
+                <column/>
+                <column/>
                 <column name="NetWD">Withdrawal</column>
-                <column />
+                <column/>
                 <column name="Loan">Loan</column>
-                <column />
-                <column />
-                <column />
-                <column />
+                <column/>
+                <column/>
+                <column/>
+                <column/>
             </composite>
             <composite value="0">
                 <column name="PolicyYear">Policy _ Year</column>
@@ -1105,7 +1105,7 @@ No cover page for this style sheet
                 </fo:table>
             </fo:block>
             <xsl:if test="not($has_supplemental_report)">
-                <fo:block id="endofdoc" />
+                <fo:block id="endofdoc"/>
             </xsl:if>
         </fo:flow>
     </xsl:template>
@@ -1135,7 +1135,7 @@ No cover page for this style sheet
                 <xsl:text>See the Explanatory Notes for important policy information. This illustration is not complete without all pages.</xsl:text>
             </fo:block>
             <fo:block>
-                <fo:leader></fo:leader>
+                <fo:leader/>
             </fo:block>
         </fo:block>
         <fo:block padding-before="5pt" font-size="8.0pt" font-family="sans-serif">
@@ -1152,7 +1152,7 @@ No cover page for this style sheet
                         </fo:table-cell>
                         <fo:table-cell>
                             <fo:block>
-                                <xsl:text>&#xA0;</xsl:text>
+                                <xsl:text> </xsl:text>
                             </fo:block>
                         </fo:table-cell>
                         <fo:table-cell>
@@ -1203,7 +1203,7 @@ No cover page for this style sheet
         <fo:block text-align="left" font-size="8.0pt" font-family="sans-serif">
             <fo:block span="all">
                 <fo:block>
-                    <fo:leader></fo:leader>
+                    <fo:leader/>
                 </fo:block>
                 <fo:block>
                     <xsl:text>The Principal Underwriter is </xsl:text>
@@ -1217,7 +1217,7 @@ No cover page for this style sheet
                 </fo:block>
             </fo:block>
             <fo:block>
-                <fo:leader></fo:leader>
+                <fo:leader/>
             </fo:block>
             <fo:block text-align="left">
                 <xsl:text>* This illustration is based on the assumed Gross Rate shown. The Net Rate is provided for information purposes only.</xsl:text>
@@ -1226,7 +1226,7 @@ No cover page for this style sheet
                 <xsl:text>See the Explanatory Notes for important policy information. This illustration is not complete without all pages.</xsl:text>
             </fo:block>
             <fo:block>
-                <fo:leader></fo:leader>
+                <fo:leader/>
             </fo:block>
         </fo:block>
         <fo:block padding-before="5pt" font-size="8.0pt" font-family="sans-serif">
@@ -1243,7 +1243,7 @@ No cover page for this style sheet
                         </fo:table-cell>
                         <fo:table-cell>
                             <fo:block>
-                                <xsl:text>&#xA0;</xsl:text>
+                                <xsl:text> </xsl:text>
                             </fo:block>
                         </fo:table-cell>
                         <fo:table-cell>

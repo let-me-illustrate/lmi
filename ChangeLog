@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.587.2.25 2007-04-06 11:33:32 etarassov Exp $
+// $Id: ChangeLog,v 1.587.2.26 2007-04-06 15:16:05 etarassov Exp $
 
 MAINTENANCE
 
@@ -10607,4 +10607,11 @@ Fix "xsl-region-before" errors in strict FOP mode.
   individual_private_placement.xsl
   nasd.xsl
 Fix the rest of the errors in strict FOP mode.
+
+20070406T1516Z <etarassov@tt-solutions.com> [1257]
+
+  illustration_reg.xsl
+  individual_private_placement.xsl
+  nasd.xsl
+Fix xsl-fo files to pass xmllint concinnity check.
 
