@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: illustration_reg.xsl,v 1.6.2.12 2007-04-06 11:08:39 etarassov Exp $
+    $Id: illustration_reg.xsl,v 1.6.2.13 2007-04-06 11:33:32 etarassov Exp $
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fo="http://www.w3.org/1999/XSL/Format">
     <xsl:include href="xsl_fo_common.xsl" />
@@ -126,11 +126,11 @@ No cover page for this style sheet
             <fo:page-sequence master-reference="narrative-summary">
                 <!-- Define the contents of the header. -->
                 <fo:static-content flow-name="xsl-region-before">
-<!--
                     <fo:block text-align="left">
+<!--
                         <fo:external-graphic width="121.1pt" height="24.8pt" src="company_logo.png"/>
-                    </fo:block>
 -->
+                    </fo:block>
                 </fo:static-content>
                 <!-- Define the contents of the footer. -->
                 <fo:static-content flow-name="xsl-region-after">
@@ -478,11 +478,11 @@ No cover page for this style sheet
             <fo:page-sequence master-reference="column-headings-and-key-terms">
                 <!-- Define the contents of the header. -->
                 <fo:static-content flow-name="xsl-region-before">
-<!--
                     <fo:block text-align="left">
+<!--
                         <fo:external-graphic width="121.1pt" height="24.8pt" src="company_logo.png"/>
-                    </fo:block>
 -->
+                    </fo:block>
                 </fo:static-content>
                 <!-- Define the contents of the footer. -->
                 <fo:static-content flow-name="xsl-region-after">
@@ -881,9 +881,13 @@ No cover page for this style sheet
                     </xsl:call-template>
                     <fo:table-header>
                         <fo:table-row>
-                            <fo:table-cell number-columns-spanned="3" padding="0pt"/>
+                            <fo:table-cell number-columns-spanned="3" padding="0pt">
+                                <fo:block/>
+                            </fo:table-cell>
                             <xsl:if test="not($is_composite)">
-                                <fo:table-cell padding="0pt"/>
+                                <fo:table-cell padding="0pt">
+                                    <fo:block/>
+                                </fo:table-cell>
                             </xsl:if>
                             <fo:table-cell number-columns-spanned="3" padding="0pt" border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue">
                                 <fo:block text-align="center">Guaranteed Values</fo:block>
@@ -1444,13 +1448,17 @@ No cover page for this style sheet
                     <fo:table-column column-width="proportional-column-width(1)"/>
                     <fo:table-header>
                         <fo:table-row>
-                            <fo:table-cell number-columns-spanned="6" padding="0pt"></fo:table-cell>
+                            <fo:table-cell number-columns-spanned="6" padding="0pt">
+                                <fo:block/>
+                            </fo:table-cell>
                             <fo:table-cell number-columns-spanned="6" padding="0pt" border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue">
                                 <fo:block text-align="center">Non-Guaranteed Values</fo:block>
                             </fo:table-cell>
                         </fo:table-row>
                         <fo:table-row>
-                            <fo:table-cell number-columns-spanned="3" padding="0pt"></fo:table-cell>
+                            <fo:table-cell number-columns-spanned="3" padding="0pt">
+                                <fo:block/>
+                            </fo:table-cell>
                             <fo:table-cell number-columns-spanned="3" padding-before="3pt" padding="3pt">
                                 <fo:block text-align="center">Guaranteed Values</fo:block>
                             </fo:table-cell>
@@ -1693,11 +1701,11 @@ No cover page for this style sheet
                 <fo:table-body>
                     <fo:table-row>
                         <fo:table-cell>
-                            <xsl:if test="illustration/scalar/VersionNumber!=''">
-                                <fo:block text-align="left">Version Number:
-                                    <xsl:value-of select="illustration/scalar/VersionNumber"/>
-                                </fo:block>
-                            </xsl:if>
+                            <fo:block text-align="left">
+                                <xsl:if test="illustration/scalar/VersionNumber!=''">
+                                    Version Number: <xsl:value-of select="illustration/scalar/VersionNumber"/>
+                                </xsl:if>
+                            </fo:block>
                         </fo:table-cell>
                         <fo:table-cell>
                             <xsl:choose>

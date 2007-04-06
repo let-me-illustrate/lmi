@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: individual_private_placement.xsl,v 1.6.2.13 2007-04-06 11:08:39 etarassov Exp $
+    $Id: individual_private_placement.xsl,v 1.6.2.14 2007-04-06 11:33:32 etarassov Exp $
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fo="http://www.w3.org/1999/XSL/Format">
     <xsl:include href="xsl_fo_common.xsl" />
@@ -1016,17 +1016,23 @@
                     </xsl:call-template>
                     <fo:table-header>
                         <fo:table-row>
-                            <fo:table-cell />
+                            <fo:table-cell>
+                                <fo:block/>
+                            </fo:table-cell>
                         </fo:table-row>
                         <fo:table-row>
-                            <fo:table-cell number-columns-spanned="3" padding="0pt"/>
+                            <fo:table-cell number-columns-spanned="3" padding="0pt">
+                                <fo:block/>
+                            </fo:table-cell>
                             <fo:table-cell number-columns-spanned="2" padding="0pt" border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue">
                                 <fo:block text-align="center">
                                     <xsl:value-of select="illustration/scalar/InitAnnSepAcctGrossInt_GuaranteedZero"/>
                                     <xsl:text> Gross / Net Rate</xsl:text>
                                 </fo:block>
                             </fo:table-cell>
-                            <fo:table-cell number-columns-spanned="3" padding="0pt"/>
+                            <fo:table-cell number-columns-spanned="3" padding="0pt">
+                                <fo:block/>
+                            </fo:table-cell>
                             <fo:table-cell number-columns-spanned="2" padding="0pt" border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue">
                                 <fo:block text-align="center">
                                 <xsl:value-of select="illustration/scalar/InitAnnSepAcctGrossInt_Guaranteed"/>
@@ -1081,17 +1087,23 @@
                     </xsl:call-template>
                     <fo:table-header>
                         <fo:table-row>
-                            <fo:table-cell />
+                            <fo:table-cell>
+                                <fo:block/>
+                            </fo:table-cell>
                         </fo:table-row>
                         <fo:table-row>
-                            <fo:table-cell number-columns-spanned="3" padding="0pt"/>
+                            <fo:table-cell number-columns-spanned="3" padding="0pt">
+                                <fo:block/>
+                            </fo:table-cell>
                             <fo:table-cell number-columns-spanned="2" padding="0pt" border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue">
                                 <fo:block text-align="center">
                                     <xsl:value-of select="illustration/scalar/InitAnnSepAcctGrossInt_CurrentZero"/>
                                     <xsl:text> Gross / Net Rate</xsl:text>
                                 </fo:block>
                             </fo:table-cell>
-                            <fo:table-cell number-columns-spanned="3" padding="0pt"/>
+                            <fo:table-cell number-columns-spanned="3" padding="0pt">
+                                <fo:block/>
+                            </fo:table-cell>
                             <fo:table-cell number-columns-spanned="2" padding="0pt" border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue">
                                 <fo:block text-align="center">
                                 <xsl:value-of select="illustration/scalar/InitAnnSepAcctGrossInt_Current"/>
@@ -1180,7 +1192,9 @@
                             </fo:block>
                         </fo:table-cell>
                         <fo:table-cell>
-                            <xsl:text>&#xA0;</xsl:text>
+                            <fo:block>
+                                <xsl:text>&#xA0;</xsl:text>
+                            </fo:block>
                         </fo:table-cell>
                         <fo:table-cell>
                             <fo:block text-align="right">
@@ -1195,11 +1209,11 @@
                             </fo:block>
                         </fo:table-cell>
                         <fo:table-cell>
-                            <xsl:if test="illustration/scalar/VersionNumber!=''">
-                                <fo:block text-align="center">Version Number:
-                                    <xsl:value-of select="illustration/scalar/VersionNumber"/>
-                                </fo:block>
-                            </xsl:if>
+                            <fo:block>
+                                <xsl:if test="illustration/scalar/VersionNumber!=''">
+                                    Version Number: <xsl:value-of select="illustration/scalar/VersionNumber"/>
+                                </xsl:if>
+                            </fo:block>
                         </fo:table-cell>
                         <fo:table-cell>
                             <xsl:choose>

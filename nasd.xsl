@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: nasd.xsl,v 1.6.2.14 2007-04-06 11:08:39 etarassov Exp $
+    $Id: nasd.xsl,v 1.6.2.15 2007-04-06 11:33:32 etarassov Exp $
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fo="http://www.w3.org/1999/XSL/Format">
     <xsl:include href="xsl_fo_common.xsl" />
@@ -1151,7 +1151,9 @@ No cover page for this style sheet
                             </fo:block>
                         </fo:table-cell>
                         <fo:table-cell>
-                            <xsl:text>&#xA0;</xsl:text>
+                            <fo:block>
+                                <xsl:text>&#xA0;</xsl:text>
+                            </fo:block>
                         </fo:table-cell>
                         <fo:table-cell>
                             <fo:block text-align="right">
@@ -1167,11 +1169,11 @@ No cover page for this style sheet
                             </fo:block>
                         </fo:table-cell>
                         <fo:table-cell>
-                            <xsl:if test="illustration/scalar/VersionNumber!=''">
-                                <fo:block text-align="center">Version Number:
-                                    <xsl:value-of select="illustration/scalar/VersionNumber"/>
-                                </fo:block>
-                            </xsl:if>
+                            <fo:block text-align="center">
+                                <xsl:if test="illustration/scalar/VersionNumber!=''">
+                                    Version Number: <xsl:value-of select="illustration/scalar/VersionNumber"/>
+                                </xsl:if>
+                            </fo:block>
                         </fo:table-cell>
                         <fo:table-cell>
                             <xsl:choose>
@@ -1240,7 +1242,9 @@ No cover page for this style sheet
                             </fo:block>
                         </fo:table-cell>
                         <fo:table-cell>
-                            <xsl:text>&#xA0;</xsl:text>
+                            <fo:block>
+                                <xsl:text>&#xA0;</xsl:text>
+                            </fo:block>
                         </fo:table-cell>
                         <fo:table-cell>
                             <fo:block text-align="right">
@@ -1256,11 +1260,11 @@ No cover page for this style sheet
                             </fo:block>
                         </fo:table-cell>
                         <fo:table-cell>
-                            <xsl:if test="illustration/scalar/VersionNumber!=''">
-                                <fo:block text-align="center">Version Number:
-                                    <xsl:value-of select="illustration/scalar/VersionNumber"/>
-                                </fo:block>
-                            </xsl:if>
+                            <fo:block text-align="center">
+                                <xsl:if test="illustration/scalar/VersionNumber!=''">
+                                    Version Number: <xsl:value-of select="illustration/scalar/VersionNumber"/>
+                                </xsl:if>
+                            </fo:block>
                         </fo:table-cell>
                         <fo:table-cell>
                             <xsl:choose>
