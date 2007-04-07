@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: workhorse.make,v 1.86 2007-04-05 13:43:17 chicares Exp $
+# $Id: workhorse.make,v 1.87 2007-04-07 14:20:44 chicares Exp $
 
 ################################################################################
 
@@ -874,7 +874,7 @@ mpatrol.log:
 # problem caused by MSYS.
 
 %$(EXEEXT)-run: mpatrol.log
-	@$(ECHO) "\nRunning $*:"
+	@$(ECHO) -e "\nRunning $*:"
 	@-./$* --accept
 	@[ -f mpatrol.log ] \
 	  && <mpatrol.log $(SED) \
