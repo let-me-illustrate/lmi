@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.612 2007-04-05 12:00:36 chicares Exp $
+// $Id: ChangeLog,v 1.613 2007-04-07 14:20:44 chicares Exp $
 
 MAINTENANCE
 
@@ -10849,4 +10849,17 @@ Don't hope to find glibc's 'config.h'.
 
   multidimgrid_any.cpp
 Revert an accidentally-committed change.
+
+20070405T1343Z <chicares@cox.net> [1256]
+
+  msw_cygwin.make
+  workhorse.make
+Improve cygwin support. Now at least 'make check_concinnity' works.
+
+20070407T1420Z <chicares@cox.net> [1256]
+
+  fenv_lmi_test.cpp
+  workhorse.make
+Improve cygwin support. Now all unit tests work, except those that
+require libxml2.
 

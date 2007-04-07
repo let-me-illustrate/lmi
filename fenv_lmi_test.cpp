@@ -19,19 +19,25 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: fenv_lmi_test.cpp,v 1.8 2007-01-27 00:00:51 wboutin Exp $
+// $Id: fenv_lmi_test.cpp,v 1.9 2007-04-07 14:20:44 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
 #   pragma hdrstop
 #endif // __BORLANDC__
 
-// Include this first, in order to get prototype for nonstandard
+// Include this first, in order to get the prototype for nonstandard
 // _control87() before any other header can include <float.h>.
-#ifdef __MINGW32__
+// CYGWIN !! For cygwin with '-mno-cygwin', that doesn't work quite
+// the same way as it does for MinGW:
+//   http://cygwin.com/ml/cygwin/2005-03/msg00752.html
+//   http://cygwin.com/ml/cygwin/2006-08/msg00521.html
+// but that deficiency is easily worked around below, and no lmi code
+// except this unit test uses that nonstandard function.
+#if defined __MINGW32__
 #   undef __STRICT_ANSI__
 #   include <float.h>
-#endif
+#endif // defined __MINGW32__
 
 #include "fenv_lmi.hpp"
 
@@ -126,7 +132,7 @@ int test_main(int, char*[])
     fenv_initialize();
     BOOST_TEST_EQUAL_BITS(0x037f, x87_control_word());
 
-#   ifdef __MINGW32__
+#   if defined __MINGW32__
     // Test the C99 method, as extended by MinGW.
     fesetenv(FE_PC53_ENV);
     BOOST_TEST_EQUAL_BITS(0x027f, x87_control_word());
@@ -136,14 +142,16 @@ int test_main(int, char*[])
 
     fesetenv(FE_DFL_ENV);
     BOOST_TEST_EQUAL_BITS(0x037f, x87_control_word());
+#   endif // defined __MINGW32__
 
+#   if defined _MCW_EM
     // Test the ms C rtl method.
     x87_control_word(0x0000);
     _control87(_MCW_EM,  _MCW_EM);
     _control87(_RC_NEAR, _MCW_RC);
     _control87(_PC_64,   _MCW_PC);
     BOOST_TEST_EQUAL_BITS(0x037f, x87_control_word());
-#   endif // __MINGW32__
+#   endif // defined _MCW_EM
 
     // Test precision and rounding control. These spotchecks are
     // complemented by the thorough generic tests below.
