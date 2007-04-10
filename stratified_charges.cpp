@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: stratified_charges.cpp,v 1.9 2007-03-09 16:27:23 chicares Exp $
+// $Id: stratified_charges.cpp,v 1.10 2007-04-10 01:07:31 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -236,7 +236,7 @@ void stratified_charges::initialize_dictionary()
 //============================================================================
 double stratified_charges::banded_sepacct_load
     (e_basis const& basis
-    ,double         // assets (unused for now)
+    ,double         assets
     ,double         premium
     )
 {
@@ -244,12 +244,12 @@ double stratified_charges::banded_sepacct_load
         {
         case e_currbasis:
             {
-            return banded_current_separate_account_load(premium);
+            return banded_curr_sepacct_load(assets, premium);
             }
             break;
         case e_guarbasis:
             {
-            return banded_guaranteed_separate_account_load(premium);
+            return banded_guar_sepacct_load(assets, premium);
             }
             break;
         case e_mdptbasis:
@@ -274,19 +274,19 @@ double stratified_charges::banded_sepacct_load
 double stratified_charges::tiered_sepacct_load
     (e_basis const& basis
     ,double         assets
-    ,double         // premium (unused for now)
+    ,double         premium
     )
 {
     switch(basis)
         {
         case e_currbasis:
             {
-            return tiered_current_separate_account_load(assets);
+            return tiered_curr_sepacct_load(assets, premium);
             }
             break;
         case e_guarbasis:
             {
-            return tiered_guaranteed_separate_account_load(assets);
+            return tiered_guar_sepacct_load(assets, premium);
             }
             break;
         case e_mdptbasis:
@@ -308,14 +308,14 @@ double stratified_charges::tiered_sepacct_load
 }
 
 //============================================================================
-double stratified_charges::banded_current_separate_account_load(double premium) const
+double stratified_charges::banded_curr_sepacct_load(double /* assets */, double premium) const
 {
     stratified_entity const& z = raw_entity(e_curr_sepacct_load_banded_by_premium);
     return banded_rate<double>() (premium, z.limits(), z.values());
 }
 
 //============================================================================
-double stratified_charges::banded_guaranteed_separate_account_load(double premium) const
+double stratified_charges::banded_guar_sepacct_load(double /* assets */, double premium) const
 {
     stratified_entity const& z = raw_entity(e_guar_sepacct_load_banded_by_premium);
     return banded_rate<double>() (premium, z.limits(), z.values());
@@ -350,14 +350,14 @@ double stratified_charges::tiered_investment_management_fee(double assets) const
 }
 
 //============================================================================
-double stratified_charges::tiered_current_separate_account_load(double assets) const
+double stratified_charges::tiered_curr_sepacct_load(double assets, double /* premium */) const
 {
     stratified_entity const& z = raw_entity(e_curr_sepacct_load_tiered_by_assets);
     return tiered_rate<double>() (assets, z.limits(), z.values());
 }
 
 //============================================================================
-double stratified_charges::tiered_guaranteed_separate_account_load(double assets) const
+double stratified_charges::tiered_guar_sepacct_load(double assets, double /* premium */) const
 {
     stratified_entity const& z = raw_entity(e_guar_sepacct_load_tiered_by_assets);
     return tiered_rate<double>() (assets, z.limits(), z.values());
