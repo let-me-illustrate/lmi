@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: stratified_charges.hpp,v 1.9 2007-03-04 16:33:31 chicares Exp $
+// $Id: stratified_charges.hpp,v 1.10 2007-04-10 01:07:31 chicares Exp $
 
 #ifndef stratified_charges_hpp
 #define stratified_charges_hpp
@@ -103,8 +103,7 @@ class LMI_SO stratified_charges
     // setting these to any nonzero value produces a runtime error in
     // the place where they ought to be used.
     //
-    // - tiered_guaranteed_separate_account_load: seems to be
-    // incorrectly implemented.
+    // - tiered_guar_sepacct_load: seems to be incorrectly implemented.
 
     // TODO ?? For the public interface, these functions seem preferable
     // to the lower-level functions they invoke. Consider rewriting the
@@ -154,11 +153,11 @@ class LMI_SO stratified_charges
     void read (std::string const& filename);
     void write(std::string const& filename) const;
 
-    double banded_current_separate_account_load    (double premium) const;
-    double banded_guaranteed_separate_account_load (double premium) const;
+    double banded_curr_sepacct_load(double assets, double premium) const;
+    double banded_guar_sepacct_load(double assets, double premium) const;
 
-    double tiered_current_separate_account_load    (double assets) const;
-    double tiered_guaranteed_separate_account_load (double assets) const;
+    double tiered_curr_sepacct_load(double assets, double premium) const;
+    double tiered_guar_sepacct_load(double assets, double premium) const;
 
     std::map<e_stratified, stratified_entity> dictionary;
 };
