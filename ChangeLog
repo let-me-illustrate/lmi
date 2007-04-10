@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.614 2007-04-10 01:49:35 chicares Exp $
+// $Id: ChangeLog,v 1.615 2007-04-10 11:20:43 wboutin Exp $
 
 MAINTENANCE
 
@@ -10873,4 +10873,9 @@ Refactor.
 
   stratified_charges.cpp
 Implement an asset-banded separate-account load, poorly.
+
+20070410T1120Z <wboutin@massmutual.com> [1258]
+
+  ihs_acctval.cpp
+Correct ledger value 'NetPmt' on non-current bases.
 
