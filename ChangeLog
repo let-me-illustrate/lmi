@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.613 2007-04-07 14:20:44 chicares Exp $
+// $Id: ChangeLog,v 1.614 2007-04-10 01:49:35 chicares Exp $
 
 MAINTENANCE
 
@@ -10862,4 +10862,15 @@ Improve cygwin support. Now at least 'make check_concinnity' works.
   workhorse.make
 Improve cygwin support. Now all unit tests work, except those that
 require libxml2.
+
+20070410T0107Z <chicares@cox.net> [1256]
+
+  stratified_charges.cpp
+  stratified_charges.hpp
+Refactor.
+
+20070410T0149Z <chicares@cox.net> [1258]
+
+  stratified_charges.cpp
+Implement an asset-banded separate-account load, poorly.
 
