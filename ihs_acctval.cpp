@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_acctval.cpp,v 1.92 2007-03-09 16:27:23 chicares Exp $
+// $Id: ihs_acctval.cpp,v 1.93 2007-04-10 11:20:43 wboutin Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -61,6 +61,7 @@
 #include <functional>
 #include <iterator>
 #include <limits>
+#include <numeric>
 #include <string>
 #include <utility>
 
@@ -1393,12 +1394,17 @@ void AccountValue::FinalizeYear()
             );
         }
 
+    VariantValues().NetPmt[Year] = std::accumulate
+        (NetPmts.begin()
+        ,NetPmts.end()
+        ,-YearsTotalGptForceout
+        );
+
     if(e_run_curr_basis == RateBasis)
         {
         InvariantValues().GrossPmt  [Year]  = 0.0;
         InvariantValues().EeGrossPmt[Year]  = 0.0;
         InvariantValues().ErGrossPmt[Year]  = 0.0;
-        VariantValues  ().NetPmt    [Year]  = 0.0;
 
         // TODO ?? This is a temporary workaround until we do it right.
         // Forceouts should be a distinct component, passed separately
@@ -1406,7 +1412,6 @@ void AccountValue::FinalizeYear()
         // and NAAR 'forceouts' the same way.
         InvariantValues().GrossPmt  [Year]  -= YearsTotalGptForceout;
         InvariantValues().EeGrossPmt[Year]  -= YearsTotalGptForceout;
-        VariantValues  ().NetPmt    [Year]  -= YearsTotalGptForceout;
 
         for(int j = 0; j < 12; ++j)
             {
@@ -1414,7 +1419,6 @@ void AccountValue::FinalizeYear()
             InvariantValues().GrossPmt  [Year]  += GrossPmts[j];
             InvariantValues().EeGrossPmt[Year]  += EeGrossPmts[j];
             InvariantValues().ErGrossPmt[Year]  += ErGrossPmts[j];
-            VariantValues  ().NetPmt    [Year]  += NetPmts[j];
             }
         if(0 == Year)
             {
