@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: stratified_charges.cpp,v 1.10 2007-04-10 01:07:31 chicares Exp $
+// $Id: stratified_charges.cpp,v 1.11 2007-04-10 01:49:35 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -308,17 +308,37 @@ double stratified_charges::tiered_sepacct_load
 }
 
 //============================================================================
-double stratified_charges::banded_curr_sepacct_load(double /* assets */, double premium) const
+double stratified_charges::banded_curr_sepacct_load
+    (double assets
+    ,double premium
+    ) const
 {
-    stratified_entity const& z = raw_entity(e_curr_sepacct_load_banded_by_premium);
-    return banded_rate<double>() (premium, z.limits(), z.values());
+    stratified_entity const& x = raw_entity(e_curr_sepacct_load_banded_by_premium);
+// TODO ?? DATABASE !! This is a goofy workaround until we can add a
+// new 'e_curr_sepacct_load_banded_by_assets' entity.
+    stratified_entity const& y = raw_entity(e_tiered_de_premium_tax);
+    return
+            banded_rate<double>() (premium, x.limits(), x.values())
+        +   banded_rate<double>() (assets , y.limits(), y.values())
+        ;
 }
 
 //============================================================================
-double stratified_charges::banded_guar_sepacct_load(double /* assets */, double premium) const
+double stratified_charges::banded_guar_sepacct_load
+    (double assets
+    ,double premium
+    ) const
 {
-    stratified_entity const& z = raw_entity(e_guar_sepacct_load_banded_by_premium);
-    return banded_rate<double>() (premium, z.limits(), z.values());
+    stratified_entity const& x = raw_entity(e_guar_sepacct_load_banded_by_premium);
+// TODO ?? DATABASE !! This is a goofy workaround until we can add a
+// new 'e_guar_sepacct_load_banded_by_assets' entity. Until then,
+// '* 1.25' provides an arbitrary but plausible margin of conservatism
+// '* 1.25' the current-basis value.
+    stratified_entity const& y = raw_entity(e_tiered_de_premium_tax);
+    return
+            banded_rate<double>() (premium, x.limits(), x.values())
+        +   banded_rate<double>() (assets , y.limits(), y.values()) * 1.25
+        ;
 }
 
 //============================================================================
