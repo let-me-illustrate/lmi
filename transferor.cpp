@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: transferor.cpp,v 1.12 2007-02-22 00:53:45 chicares Exp $
+// $Id: transferor.cpp,v 1.12.6.1 2007-04-11 09:54:31 etarassov Exp $
 
 // Acknowledgment
 
@@ -202,9 +202,9 @@ bool Transferor::PerformTransfer(transfer_direction td)
     return false; // Actually unreachable, but gcc doesn't discern that.
 }
 
-// TODO ?? Use TransferString() with class wxControlWithItems instead
+// TODO ?? Use TransferString() with class wxItemContainer instead
 // of its derived classes, now that wx has been changed to implement
-// wxControlWithItems::SetSelection().
+// wxItemContainer::SetSelection().
 
 namespace
 {

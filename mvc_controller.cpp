@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mvc_controller.cpp,v 1.15 2007-03-27 02:36:31 chicares Exp $
+// $Id: mvc_controller.cpp,v 1.15.2.1 2007-04-11 09:54:31 etarassov Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -264,7 +264,7 @@ void MvcController::ConditionallyEnableItems
 
     wxCheckBox*         checkbox = dynamic_cast<wxCheckBox        *>(&control);
     wxRadioBox*         radiobox = dynamic_cast<wxRadioBox        *>(&control);
-    wxControlWithItems* itembox  = dynamic_cast<wxControlWithItems*>(&control);
+    wxItemContainer*    itembox  = dynamic_cast<wxItemContainer   *>(&control);
     bool const control_is_enumerative = radiobox || itembox;
 
     // Type 'mce_yes_or_no' is enumerative, but is often used with
@@ -325,7 +325,7 @@ void MvcController::ConditionallyEnableItems
     else if(itembox)
         {
         // WX !! Freeze() doesn't seem to help much.
-        itembox->Freeze();
+        control.Freeze();
         itembox->Clear();
         // WX !! Append(wxArrayString const&) "may be much faster"
         // according to wx online help, but that seems untrue: its
@@ -338,7 +338,7 @@ void MvcController::ConditionallyEnableItems
                 }
             }
         itembox->SetStringSelection(datum->str(datum->ordinal()));
-        itembox->Thaw();
+        control.Thaw();
         }
     else
         {

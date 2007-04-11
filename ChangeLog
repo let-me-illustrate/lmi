@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.610.2.33 2007-04-04 18:54:47 etarassov Exp $
+// $Id: ChangeLog,v 1.610.2.34 2007-04-11 09:54:31 etarassov Exp $
 
 MAINTENANCE
 
@@ -11051,4 +11051,13 @@ Save axes selection in DatabaseViewEditor.
   tier_view.cpp
 Correct (Database|Tier)Document to return a reference instead of
 a pointer.
+
+20070411T0954Z <etarassov@tt-solutions.com> [1252]
+
+  input.hpp
+  mvc_controller.cpp
+  mvc_controller.hpp
+  transferor.hpp
+Use wxItemContainer instead of wxControlWithItems, because of the wx
+gtk implementation of wxComboBox not using wxControlWithItems.
 
