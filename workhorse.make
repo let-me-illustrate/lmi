@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: workhorse.make,v 1.87 2007-04-07 14:20:44 chicares Exp $
+# $Id: workhorse.make,v 1.88 2007-04-13 01:07:24 chicares Exp $
 
 ################################################################################
 
@@ -81,8 +81,18 @@ $(src_dir)/objects.make:: ;
 
 # Effective default target (described above under "Default target").
 
+# TODO ?? Some dllimport attributes in 'cgicc' headers elicit warnings
+# with cygwin's gcc-3.4.4-3. This must be addressed before cygwin can
+# become the primary environment; it also affects the 'cgi_tests'
+# target. And the conditional here isn't as clear as it ought to be:
+# the condition really means the build environment, not its makefile.
+
+ifneq (msw_cygwin.make,$(platform-makefile))
+  antediluvian_cgi_target := antediluvian_cgi$(EXEEXT)
+endif
+
 default_targets := \
-  antediluvian_cgi$(EXEEXT) \
+  $(antediluvian_cgi_target) \
   antediluvian_cli$(EXEEXT) \
   libantediluvian$(SHREXT) \
   liblmi$(SHREXT) \
@@ -157,6 +167,10 @@ else
   endif
   # ...combines options that we prefer to keep separate.
 
+  # TODO ?? The sed command 's| c:/| $(system_root)/|g' is only a
+  # temporary workaround that permits using an old MinGW build of
+  # wx with cygwin.
+
   wx_include_paths := \
     $(shell \
       $(ECHO) $(wx_config_cxxflags) \
@@ -164,6 +178,7 @@ else
         -e 's/^/ /' \
         -e 's/ -[^I][^ ]*//g' \
         -e 's/ -I/ -I /g' \
+        -e 's| c:/| $(system_root)/|g' \
     )
 
   wx_predefinitions := \
@@ -638,14 +653,19 @@ REQUIRED_LDFLAGS = \
   $(cross_compile_flags) \
 
 # The '--use-temp-file' windres option seems to be often helpful and
-# never harmful. The $(subst) workaround isn't needed with
+# never harmful. The $(subst) workaround for '-I' isn't needed with
 #   GNU windres 2.15.91 20040904
 # and later versions, but is needed with
 #   GNU windres 2.13.90 20030111
-# and earlier versions.
+# and earlier versions. The $(subst) workaround for '-mno-cygwin' is
+# needed as long as
+#  - that option is included in $(ALL_CPPFLAGS), as it apparently
+#      should be because it affects the preprocessor; and
+#  - $(ALL_CPPFLAGS) is passed to 'windres', which seems common; and
+#  - 'windres' doesn't gracefully ignore that option.
 
 REQUIRED_RCFLAGS = \
-  $(subst -I,--include-dir ,$(ALL_CPPFLAGS)) \
+  $(subst -mno-cygwin,,$(subst -I,--include-dir ,$(ALL_CPPFLAGS))) \
   --use-temp-file \
 
 # To create msw import libraries, use '-Wl,--out-implib,$@.a'. There
