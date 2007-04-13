@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: multidimgrid_any.cpp,v 1.12.2.17 2007-04-04 17:23:24 etarassov Exp $
+// $Id: multidimgrid_any.cpp,v 1.12.2.18 2007-04-13 06:54:54 etarassov Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -372,14 +372,14 @@ bool MultiDimGrid::Create
     grid().SetTable(this, false);
 
     // main sizer contains axis controls in the left part and the grid in the right
-    wxBoxSizer& grid_sizer_ = *new(wx) wxBoxSizer(wxHORIZONTAL);
-    grid_sizer_.Add
+    wxBoxSizer& grid_sizer = *new(wx) wxBoxSizer(wxHORIZONTAL);
+    grid_sizer.Add
         (&sizer
         ,wxSizerFlags()
             .Expand()
             .Border(wxLEFT | wxRIGHT, MDGRID_SIZER_HGAP)
         );
-    grid_sizer_.Add
+    grid_sizer.Add
         (grid_
         ,wxSizerFlags()
             .Proportion(1)
@@ -388,7 +388,7 @@ bool MultiDimGrid::Create
             .Border(wxALL, 1)
         );
 
-    SetSizer(&grid_sizer_);
+    SetSizer(&grid_sizer);
 
     // create and add axis choice controls
     for(unsigned int i = 0; i < dimension_; ++i)

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.610.2.34 2007-04-11 09:54:31 etarassov Exp $
+// $Id: ChangeLog,v 1.610.2.35 2007-04-13 06:54:54 etarassov Exp $
 
 MAINTENANCE
 
@@ -11060,4 +11060,9 @@ a pointer.
   transferor.hpp
 Use wxItemContainer instead of wxControlWithItems, because of the wx
 gtk implementation of wxComboBox not using wxControlWithItems.
+
+20070413T0654Z <etarassov@tt-solutions.com> [1252]
+
+  multidimgrid_any.cpp
+Fix local variable name.
 
