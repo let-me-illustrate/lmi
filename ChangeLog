@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.615 2007-04-10 11:20:43 wboutin Exp $
+// $Id: ChangeLog,v 1.616 2007-04-13 01:07:24 chicares Exp $
 
 MAINTENANCE
 
@@ -10878,4 +10878,13 @@ Implement an asset-banded separate-account load, poorly.
 
   ihs_acctval.cpp
 Correct ledger value 'NetPmt' on non-current bases.
+
+20070413T0107Z <chicares@cox.net> [1260]
+
+  workhorse.make
+Improve cygwin support. Now the production system builds, though cgicc
+targets do not. With '-mno-cygwin', the libxml2 and wx libraries used
+in production for msw suffice as long as their dlls are found--e.g.,
+if they are placed on $PATH, which also addresses the unit-testing
+limitation noted 20070407T1420Z.
 
