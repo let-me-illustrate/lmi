@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: census_view.cpp,v 1.52 2007-03-09 16:27:23 chicares Exp $
+// $Id: census_view.cpp,v 1.52.4.1 2007-04-13 11:34:17 etarassov Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -49,6 +49,7 @@
 #include <wx/listctrl.h>
 #include <wx/menu.h>
 #include <wx/msgdlg.h>
+#include <wx/wupdlock.h>
 #include <wx/xrc/xmlres.h>
 
 #include <sstream>
@@ -75,6 +76,17 @@ namespace
             }
         return r;
     }
+
+    // Protect CensusView frame from updates until this object is destroyed.
+    class census_view_update_locker
+        :public wxWindowUpdateLocker
+    {
+      public:
+        census_view_update_locker(CensusView const& census_view)
+            :wxWindowUpdateLocker(census_view.GetFrame())
+        {
+        }
+    };
 }
 
 IMPLEMENT_DYNAMIC_CLASS(CensusView, ViewEx)
@@ -329,15 +341,6 @@ int CensusView::edit_parameters
     return rc;
 }
 
-// TODO ?? Implement this optimization. Instead of simply calling
-// Freeze() and Thaw() on the list view, consider a class that
-// freezes when created on the stack and thaws when it goes out of
-// scope, to guard against exceptions.
-void CensusView::freeze(bool)
-{
-    return;
-}
-
 bool CensusView::is_invalid()
 {
     if(!all_changes_have_been_validated_)
@@ -462,14 +465,14 @@ void CensusView::update_class_names()
     std::copy(rebuilt_class_parms.begin(), rebuilt_class_parms.end(), iip);
 }
 
-// TODO ?? Lowercase this. Why does it freeze() a GUI that it doesn't touch?
+// TODO ?? Lowercase this. Why does it locks a GUI that it doesn't touch?
 void CensusView::ApplyChanges
     (Input const& new_parms
     ,Input const& old_parms
     ,bool         for_this_class_only
     )
 {
-    freeze(true);
+    census_view_update_locker no_updates(*this);
 
     // Case or class default parameters were edited and changed.
     // Compare the default parameters before and after editing;
@@ -539,7 +542,6 @@ void CensusView::ApplyChanges
         }
 
     composite_is_available_ = false;
-    freeze(false);
 }
 
 void CensusView::DisplayAllVaryingData()
@@ -697,28 +699,25 @@ void CensusView::UponEditCase(wxCommandEvent&)
 //
 void CensusView::UponExpandColWidths(wxCommandEvent&)
 {
-    freeze(true);
+    census_view_update_locker no_updates(*this);
     for(int j = 0; j < list_window_->GetColumnCount(); ++j)
         {
 // TODO ?? Pick one, and remove the other?
 //        list_window_->SetColumnWidth(j, wxLIST_AUTOSIZE);
         list_window_->SetColumnWidth(j, wxLIST_AUTOSIZE_USEHEADER);
         }
-
-    freeze(false);
 }
 
 // Shrink all nonfrozen columns to default width.
 void CensusView::UponShrinkColWidths(wxCommandEvent&)
 {
-    freeze(true);
+    census_view_update_locker no_updates(*this);
     for(int j = 0; j < list_window_->GetColumnCount(); ++j)
         {
         // WX !! Sad to hardcode '80', but that's the undocumented wx default.
         // TODO ?? If it's a default, then why must it be specified?
         list_window_->SetColumnWidth(j, 80);
         }
-    freeze(false);
 }
 
 // TODO ?? Right-click handlers: pick one approach, and remove failed experiments.
@@ -796,7 +795,7 @@ void CensusView::UponUpdateApplicable(wxUpdateUIEvent& e)
 //  if a new one comes into use, display it.
 void CensusView::Update()
 {
-    freeze(true);
+    census_view_update_locker no_updates(*this);
 
     list_window_->ClearAll();
 
@@ -806,13 +805,11 @@ void CensusView::Update()
 
     // All displayed data is valid when this function ends.
     all_changes_have_been_validated_ = true;
-
-    freeze(false);
 }
 
 void CensusView::UpdatePreservingSelection()
 {
-    freeze(true);
+    census_view_update_locker no_updates(*this);
 
     // Save active cell.
     int selection = selected_row();
@@ -833,8 +830,6 @@ void CensusView::UpdatePreservingSelection()
     list_window_->EnsureVisible(list_window_->GetItemCount());
     list_window_->EnsureVisible(top_row);
     list_window_->EnsureVisible(selection);
-
-    freeze(false);
 }
 
 void CensusView::UponPrintCell(wxCommandEvent&)
@@ -846,13 +841,11 @@ void CensusView::UponPrintCell(wxCommandEvent&)
         }
 
     int cell_number = selected_row();
-    freeze(true);
+    census_view_update_locker no_updates(*this);
     // TODO ?? Is it desirable to create a view here, or would it be
     // better to print invisibly? If the latter, then probably
     // ViewOneCell() could be simplified to return void.
     ViewOneCell(cell_number).Pdf("print");
-
-    freeze(false);
 }
 
 void CensusView::UponPrintCase(wxCommandEvent&)

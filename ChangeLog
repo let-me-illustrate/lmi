@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.610.2.35 2007-04-13 06:54:54 etarassov Exp $
+// $Id: ChangeLog,v 1.610.2.36 2007-04-13 11:34:17 etarassov Exp $
 
 MAINTENANCE
 
@@ -11065,4 +11065,11 @@ gtk implementation of wxComboBox not using wxControlWithItems.
 
   multidimgrid_any.cpp
 Fix local variable name.
+
+20070413T1134Z <etarassov@tt-solutions.com> [1252]
+
+  census_view.cpp
+  census_view.hpp
+  mvc_controller.cpp
+Use wxWindowUpdateLocker instead of Freeze/Thaw.
 

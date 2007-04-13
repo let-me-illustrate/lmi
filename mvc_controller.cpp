@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mvc_controller.cpp,v 1.15.2.1 2007-04-11 09:54:31 etarassov Exp $
+// $Id: mvc_controller.cpp,v 1.15.2.2 2007-04-13 11:34:17 etarassov Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -50,6 +50,7 @@
 #include <wx/radiobox.h>
 #include <wx/spinctrl.h>
 #include <wx/textctrl.h>
+#include <wx/wupdlock.h>
 #include <wx/xrc/xmlres.h>
 
 /// Custom event to trigger a call to SetFocus(). This action requires
@@ -324,8 +325,8 @@ void MvcController::ConditionallyEnableItems
         }
     else if(itembox)
         {
-        // WX !! Freeze() doesn't seem to help much.
-        control.Freeze();
+        // WX !! wxWindowUpdateLocker doesn't seem to help much.
+        wxWindowUpdateLocker no_updates_for(&control);
         itembox->Clear();
         // WX !! Append(wxArrayString const&) "may be much faster"
         // according to wx online help, but that seems untrue: its
@@ -338,7 +339,6 @@ void MvcController::ConditionallyEnableItems
                 }
             }
         itembox->SetStringSelection(datum->str(datum->ordinal()));
-        control.Thaw();
         }
     else
         {

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: census_view.hpp,v 1.18 2007-01-27 00:00:51 wboutin Exp $
+// $Id: census_view.hpp,v 1.18.8.1 2007-04-13 11:34:17 etarassov Exp $
 
 #ifndef census_view_hpp
 #define census_view_hpp
@@ -132,8 +132,6 @@ class CensusView
         (Input&             parameters
         ,std::string const& name
         );
-
-    void freeze(bool);
 
     void identify_varying_columns();
 
