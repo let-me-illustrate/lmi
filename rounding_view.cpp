@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: rounding_view.cpp,v 1.7 2007-03-20 02:34:21 chicares Exp $
+// $Id: rounding_view.cpp,v 1.8 2007-04-16 08:01:31 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -31,6 +31,7 @@
 #include "alert.hpp"
 #include "rounding_document.hpp"
 #include "rounding_view_editor.hpp" // class RoundingButtons
+#include "safely_dereference_as.hpp"
 
 #include <wx/icon.h>
 #include <wx/panel.h>
@@ -96,7 +97,7 @@ wxMenuBar* RoundingView::MenuBar() const
 
 RoundingDocument& RoundingView::document() const
 {
-    return dynamic_cast<RoundingDocument&>(*GetDocument());
+    return safely_dereference_as<RoundingDocument>(GetDocument());
 }
 
 bool RoundingView::IsModified() const

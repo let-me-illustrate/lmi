@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustration_view.cpp,v 1.61 2007-03-09 16:27:23 chicares Exp $
+// $Id: illustration_view.cpp,v 1.62 2007-04-16 08:01:31 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -52,6 +52,7 @@
 #include "ledger_text_formats.hpp"
 #include "ledger_xsl.hpp"
 #include "mvc_controller.hpp"
+#include "safely_dereference_as.hpp"
 #include "timer.hpp"
 #include "wx_new.hpp"
 
@@ -117,7 +118,7 @@ IllustrationView::~IllustrationView()
 
 IllustrationDocument& IllustrationView::document() const
 {
-    return dynamic_cast<IllustrationDocument&>(*GetDocument());
+    return safely_dereference_as<IllustrationDocument>(GetDocument());
 }
 
 wxWindow* IllustrationView::CreateChildWindow()
@@ -505,23 +506,13 @@ IllustrationView& MakeNewIllustrationDocAndView
         ,wxDOC_SILENT | LMI_WX_CHILD_DOCUMENT
         );
 
-    IllustrationDocument* illdoc = dynamic_cast<IllustrationDocument*>
-        (new_document
-        );
-    if(0 == illdoc)
-        {
-        fatal_error()
-            << "dynamic_cast<IllustrationDocument*> failed."
-            << LMI_FLUSH
-            ;
-        }
-
-    new_document->SetFilename(filename, true);
-
-    new_document->Modify(false);
-    new_document->SetDocumentSaved(true);
-
-    return illdoc->PredominantView();
+    IllustrationDocument& illdoc =
+        safely_dereference_as<IllustrationDocument>(new_document)
+        ;
+    illdoc.SetFilename(filename, true);
+    illdoc.Modify(false);
+    illdoc.SetDocumentSaved(true);
+    return illdoc.PredominantView();
 }
 
 // Must follow document-manager initialization.
@@ -568,8 +559,7 @@ bool RunSpecialInputFileIfPresent(wxDocManager* dm)
                 Input x;
                 convert_from_ihs(input, x);
                 illview.Run(&x);
-                LMI_ASSERT(dynamic_cast<wxFrame*>(illview.GetFrame()));
-                dynamic_cast<wxFrame*>(illview.GetFrame())->Maximize();
+                safely_dereference_as<wxFrame>(illview.GetFrame()).Maximize();
                 }
             }
         }

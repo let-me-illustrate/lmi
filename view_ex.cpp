@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: view_ex.cpp,v 1.13 2007-03-19 18:29:26 chicares Exp $
+// $Id: view_ex.cpp,v 1.14 2007-04-16 08:01:31 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -49,6 +49,7 @@
 #include "docmanager_ex.hpp"
 #include "main_wx.hpp" // wxGetApp()
 #include "path_utility.hpp"
+#include "safely_dereference_as.hpp"
 #include "wx_new.hpp"
 
 #include <wx/dc.h>
@@ -71,12 +72,12 @@ ViewEx::~ViewEx()
 
 DocManagerEx& ViewEx::DocManager() const
 {
-    return dynamic_cast<DocManagerEx&>(*GetDocumentManager());
+    return safely_dereference_as<DocManagerEx>(GetDocumentManager());
 }
 
 wxFrame& ViewEx::FrameWindow() const
 {
-    return dynamic_cast<wxFrame&>(*GetFrame());
+    return safely_dereference_as<wxFrame>(GetFrame());
 }
 
 // WX !! Elsewhere, the result of wxXmlResource::Get()->LoadX is

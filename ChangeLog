@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.616 2007-04-13 01:07:24 chicares Exp $
+// $Id: ChangeLog,v 1.617 2007-04-16 08:01:31 chicares Exp $
 
 MAINTENANCE
 
@@ -10887,4 +10887,24 @@ targets do not. With '-mno-cygwin', the libxml2 and wx libraries used
 in production for msw suffice as long as their dlls are found--e.g.,
 if they are placed on $PATH, which also addresses the unit-testing
 limitation noted 20070407T1420Z.
+
+20070416T0758Z <chicares@cox.net> [1260]
+
+  objects.make
+  safely_dereference_as.hpp      [new file]
+  safely_dereference_as_test.cpp [new file]
+Add a safe-dereference facility with unit tests.
+
+20070416T0801Z <chicares@cox.net> [1260]
+
+  census_view.cpp
+  database_view.cpp
+  illustration_view.cpp
+  multidimgrid_any.cpp
+  multidimgrid_tools.hpp
+  policy_view.cpp
+  rounding_view.cpp
+  tier_view.cpp
+  view_ex.cpp
+Use safe-dereference facility.
 

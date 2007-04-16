@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: census_view.cpp,v 1.52 2007-03-09 16:27:23 chicares Exp $
+// $Id: census_view.cpp,v 1.53 2007-04-16 08:01:31 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -40,6 +40,7 @@
 #include "ledger_text_formats.hpp"
 #include "miscellany.hpp" // is_ok_for_cctype()
 #include "mvc_controller.hpp"
+#include "safely_dereference_as.hpp"
 #include "wx_new.hpp"
 
 #include <wx/app.h>     // wxTheApp
@@ -270,7 +271,7 @@ wxWindow* CensusView::CreateChildWindow()
 
 CensusDocument& CensusView::document() const
 {
-    return dynamic_cast<CensusDocument&>(*GetDocument());
+    return safely_dereference_as<CensusDocument>(GetDocument());
 }
 
     // Display exactly those columns whose rows aren't all identical. For
