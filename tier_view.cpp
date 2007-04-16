@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: tier_view.cpp,v 1.8 2007-03-21 01:44:18 chicares Exp $
+// $Id: tier_view.cpp,v 1.9 2007-04-16 08:01:31 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -32,6 +32,7 @@
 #include "multidimgrid_any.hpp"
 #include "multidimgrid_safe.tpp"
 #include "multidimgrid_tools.hpp"
+#include "safely_dereference_as.hpp"
 #include "stratified_charges.hpp"
 #include "stratified_charges.xpp"
 #include "tier_document.hpp"
@@ -156,7 +157,7 @@ void TierView::DiscardEdits()
 
 TierDocument& TierView::document() const
 {
-    return dynamic_cast<TierDocument&>(*GetDocument());
+    return safely_dereference_as<TierDocument>(GetDocument());
 }
 
 void TierView::UponTreeSelectionChange(wxTreeEvent& event)

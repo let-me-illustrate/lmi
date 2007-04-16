@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: multidimgrid_tools.hpp,v 1.11 2007-03-11 21:36:10 chicares Exp $
+// $Id: multidimgrid_tools.hpp,v 1.12 2007-04-16 08:01:31 chicares Exp $
 
 #ifndef multidimgrid_tools_hpp
 #define multidimgrid_tools_hpp
@@ -29,6 +29,7 @@
 #include "multidimgrid_safe.hpp"
 
 #include "alert.hpp"
+#include "safely_dereference_as.hpp"
 #include "value_cast.hpp"
 
 #include <wx/choice.h>
@@ -332,18 +333,10 @@ void AdjustableMaxBoundAxis<Integral>::SetBounds(Integral lower_bound, Integral 
 template<typename Integral>
 void AdjustableMaxBoundAxis<Integral>::UpdateChoiceControl(wxWindow& choice_control) const
 {
-// EVGENIY !! dynamic_cast followed by static_cast seems like an
-// unusual idiom to me. Is there a reason for it that I don't see?
-// Why not write it as
-//   MultiDimAxisAnyChoice& choice = dynamic_cast<MultiDimAxisAnyChoice&>(choice_control);
-// (which would implicitly throw std::bad_cast if the cast fails)
-// instead?
-    if(NULL == dynamic_cast<MultiDimAxisAnyChoice*>(&choice_control))
-        {
-        fatal_error() << "Wrong choice-control type." << LMI_FLUSH;
-        }
+    // EVGENIY !! See comment on MultiDimAxisAny::UpdateChoiceControl().
     MultiDimAxisAnyChoice& choice =
-        static_cast<MultiDimAxisAnyChoice&>(choice_control);
+        safely_dereference_as<MultiDimAxisAnyChoice>(&choice_control)
+        ;
 
     Integral min_value = GrandBaseClass::GetMinValue();
     Integral max_value = GrandBaseClass::GetMaxValue();

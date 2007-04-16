@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: database_view.cpp,v 1.12 2007-03-29 02:53:38 chicares Exp $
+// $Id: database_view.cpp,v 1.13 2007-04-16 08:01:31 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -34,6 +34,7 @@
 #include "multidimgrid_any.hpp"
 #include "multidimgrid_safe.tpp"
 #include "multidimgrid_tools.hpp"
+#include "safely_dereference_as.hpp"
 #include "wx_new.hpp"
 
 #include <wx/icon.h>
@@ -230,7 +231,7 @@ wxMenuBar* DatabaseView::MenuBar() const
 
 DatabaseDocument& DatabaseView::document() const
 {
-    return dynamic_cast<DatabaseDocument&>(*GetDocument());
+    return safely_dereference_as<DatabaseDocument>(GetDocument());
 }
 
 DatabaseTableAdapter& DatabaseView::table_adapter()
