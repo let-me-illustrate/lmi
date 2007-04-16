@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: objects.make,v 1.97 2007-02-21 03:07:24 chicares Exp $
+# $Id: objects.make,v 1.98 2007-04-16 07:58:20 chicares Exp $
 
 ################################################################################
 
@@ -443,6 +443,7 @@ unit_test_targets := \
   quiet_nan_test$(EXEEXT) \
   round_to_test$(EXEEXT) \
   rtti_lmi_test$(EXEEXT) \
+  safely_dereference_as_test$(EXEEXT) \
   sandbox_test$(EXEEXT) \
   snprintf_test$(EXEEXT) \
   stratified_algorithms_test$(EXEEXT) \
@@ -690,6 +691,10 @@ round_to_test$(EXEEXT): \
 rtti_lmi_test$(EXEEXT): \
   $(common_test_objects) \
   rtti_lmi_test.o \
+
+safely_dereference_as_test$(EXEEXT): \
+  $(common_test_objects) \
+  safely_dereference_as_test.o \
 
 sandbox_test$(EXEEXT): \
   $(common_test_objects) \
