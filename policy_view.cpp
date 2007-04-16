@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: policy_view.cpp,v 1.6 2007-03-20 02:34:21 chicares Exp $
+// $Id: policy_view.cpp,v 1.7 2007-04-16 08:01:31 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -30,6 +30,7 @@
 
 #include "alert.hpp"
 #include "policy_document.hpp"
+#include "safely_dereference_as.hpp"
 
 #include <wx/icon.h>
 #include <wx/panel.h>
@@ -97,7 +98,7 @@ wxMenuBar* PolicyView::MenuBar() const
 
 PolicyDocument& PolicyView::document() const
 {
-    return dynamic_cast<PolicyDocument&>(*GetDocument());
+    return safely_dereference_as<PolicyDocument>(GetDocument());
 }
 
 bool PolicyView::IsModified() const

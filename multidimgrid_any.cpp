@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: multidimgrid_any.cpp,v 1.14 2007-04-05 12:00:35 chicares Exp $
+// $Id: multidimgrid_any.cpp,v 1.15 2007-04-16 08:01:31 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -29,6 +29,7 @@
 #include "multidimgrid_any.hpp"
 
 #include "alert.hpp"
+#include "safely_dereference_as.hpp"
 #include "wx_new.hpp"
 
 #include <wx/checkbox.h>
@@ -79,24 +80,19 @@ wxWindow* MultiDimAxisAny::GetChoiceControl
 
 void MultiDimAxisAny::UpdateChoiceControl(wxWindow& choice_control) const
 {
-// EVGENIY !! Why not write this entire function body as
-//    dynamic_cast<MultiDimAxisAnyChoice&>(choice_control)->PopulateChoiceList();
-// instead? That would throw an exception instead of returning with a
-// mere warning; but shouldn't this be a fatal error?
+// EVGENIY !! Doesn't this just give an illusion of safety?
+// The way this function is called, I think we
+//   - dereference a pointer, which might be null
+//   - then take its address here, and test whether that's null
+// but don't we already have undefined behavior before we get here if
+// the pointer was null?
 //
 // EVGENIY !! Alternatively, is it possible to tighten the compile-time
 // type checking by specifying a more specific argument type? I'm not
 // sure what type that might be, but perhaps it's wxChoice, wxControl,
 // or MultiDimAxisAnyChoice.
-//
-    MultiDimAxisAnyChoice* control =
-        dynamic_cast<MultiDimAxisAnyChoice*>(&choice_control);
-    if(!control)
-        {
-        warning() << "Wrong choice-control type." << LMI_FLUSH;
-        return;
-        }
-    control->PopulateChoiceList();
+
+    safely_dereference_as<MultiDimAxisAnyChoice>(&choice_control).PopulateChoiceList();
 }
 
 /// MultiDimTableAny methods implementation
