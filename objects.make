@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: objects.make,v 1.98 2007-04-16 07:58:20 chicares Exp $
+# $Id: objects.make,v 1.99 2007-04-17 12:56:19 chicares Exp $
 
 ################################################################################
 
@@ -439,6 +439,7 @@ unit_test_targets := \
   numeric_io_test$(EXEEXT) \
   obstruct_slicing_test$(EXEEXT) \
   path_utility_test$(EXEEXT) \
+  print_matrix_test$(EXEEXT) \
   progress_meter_test$(EXEEXT) \
   quiet_nan_test$(EXEEXT) \
   round_to_test$(EXEEXT) \
@@ -673,6 +674,10 @@ path_utility_test$(EXEEXT): \
   miscellany.o \
   path_utility.o \
   path_utility_test.o \
+
+print_matrix_test$(EXEEXT): \
+  $(common_test_objects) \
+  print_matrix_test.o \
 
 progress_meter_test$(EXEEXT): \
   $(common_test_objects) \
