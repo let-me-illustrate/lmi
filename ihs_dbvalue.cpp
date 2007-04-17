@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_dbvalue.cpp,v 1.19 2007-03-30 14:03:46 chicares Exp $
+// $Id: ihs_dbvalue.cpp,v 1.20 2007-04-17 12:58:24 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -32,6 +32,7 @@
 #include "assert_lmi.hpp"
 #include "dbnames.hpp"
 #include "math_functors.hpp" // greater_of(), lesser_of
+#include "print_matrix.hpp"
 #include "value_cast.hpp"
 
 #include <algorithm>
@@ -56,39 +57,6 @@ namespace JRPS = JOSHUA_ROWE_PERSISTENT_STREAMS;
 #include <iostream>
 #include <string>
 #include <vector>
-
-// TODO ?? use ostream_iterator and istream_iterator instead.
-
-// Extract a std::vector from an input stream
-template<class T>
-std::istream& operator>> (std::istream& is, std::vector<T>& x)
-{
-    x.erase(x.begin(), x.end());
-    typename std::vector<T>::size_type vector_size;
-    is >> vector_size;
-    x.reserve(vector_size);
-    typename std::vector<T>::value_type z;
-    for(typename std::vector<T>::size_type j = 0; j < vector_size; j++)
-        {
-        is >> z;
-        x.push_back(z);
-        }
-    assert(vector_size == x.size());
-    return is;
-}
-
-// Insert a std::vector into an output stream
-template<class T>
-std::ostream& operator<< (std::ostream& os, std::vector<T> const& x)
-{
-    os << x.size() << " ";
-    for(typename std::vector<T>::const_iterator i = x.begin(); i < x.end(); i++)
-        {
-        os << value_cast<std::string>(*i) << " ";
-        }
-    os << '\n';
-    return os;
-}
 
 template<class T>
 JRPS::JrPs_ipstream& operator>> (JRPS::JrPs_ipstream& ips, std::vector<T>& x)
@@ -518,6 +486,37 @@ void TDBValue::Reshape(std::vector<int> const& a_dims)
 }
 
 //============================================================================
+std::ostream& TDBValue::write(std::ostream& os) const
+{
+    os
+        << '"' << GetDBNames()[key].LongName << '"'
+        << '\n'
+        << "  name='" << GetDBNames()[key].ShortName << "'"
+        << " key=" << key
+        << '\n'
+        ;
+    if(1 == getndata())
+        {
+        os << "  scalar";
+        }
+    else
+        {
+        os << "  varies by:";
+        if(1 != axis_lengths[0]) os <<    " gender[" << axis_lengths[0] << ']';
+        if(1 != axis_lengths[1]) os <<  " uw_class[" << axis_lengths[1] << ']';
+        if(1 != axis_lengths[2]) os <<   " smoking[" << axis_lengths[2] << ']';
+        if(1 != axis_lengths[3]) os << " issue_age[" << axis_lengths[3] << ']';
+        if(1 != axis_lengths[4]) os <<  " uw_basis[" << axis_lengths[4] << ']';
+        if(1 != axis_lengths[5]) os <<     " state[" << axis_lengths[5] << ']';
+        if(1 != axis_lengths[6]) os <<  " duration[" << axis_lengths[6] << ']';
+        }
+    os << '\n';
+    print_matrix(os, data_values, axis_lengths);
+    os << '\n';
+    return os;
+}
+
+//============================================================================
 void TDBValue::FixupIndex(std::vector<double>& idx) const
 {
     std::vector<double>::iterator           i_idx = idx.begin();
@@ -688,22 +687,7 @@ std::istream& operator>>(std::istream& is, TDBValue&)
 //===========================================================================
 std::ostream& operator<<(std::ostream& os, TDBValue const& z)
 {
-    os
-        << "key " << z.key
-        << " name " << GetDBNames()[z.key].ShortName
-        << '\n'
-        ;
-    os << "axis lengths " << z.axis_lengths << '\n';
-    if(z.extra_axes_values.size())
-        {
-        os << "extra values " << z.extra_axes_values << '\n';
-        }
-    if(z.extra_axes_names.size())
-        {
-        os << "extra names " << z.extra_axes_names << '\n';
-        }
-    os << "values " << z.data_values << '\n';
-    return os;
+    return z.write(os);
 }
 
 // Streaming implementation
