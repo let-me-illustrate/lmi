@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_dbvalue.hpp,v 1.7 2007-02-25 19:28:18 chicares Exp $
+// $Id: ihs_dbvalue.hpp,v 1.8 2007-04-17 12:58:24 chicares Exp $
 
 #ifndef ihs_dbvalue_hpp
 #define ihs_dbvalue_hpp
@@ -108,6 +108,8 @@ class LMI_SO TDBValue
     double&       operator[](std::vector<int> const& a_idx);
 
     void Reshape(std::vector<int> const& a_dims);
+
+    std::ostream& write(std::ostream&) const;
 
     static std::vector<int> const& maximum_dimensions();
     static bool Equivalent(TDBValue const&, TDBValue const&);
