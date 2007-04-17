@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.617 2007-04-16 08:01:31 chicares Exp $
+// $Id: ChangeLog,v 1.618 2007-04-17 12:33:09 etarassov Exp $
 
 MAINTENANCE
 
@@ -7351,7 +7351,7 @@ The problem needs to be understood generally before it can be solved.
   ledger_xml_io.cpp
 Clarify two columns' titles to conform to a compliance requirement.
 This is intended to conform to the interpretation under
-  "§21.2206(1)(I)-(M), (O), (Q)-(S) and (U)-(V) Supplemental - Other"
+  "ï¿½21.2206(1)(I)-(M), (O), (Q)-(S) and (U)-(V) Supplemental - Other"
 in the 1998-09-25 Texas Register, however counterintuitive its reading
 of "out-of-pocket" may be.
 
@@ -10907,4 +10907,9 @@ Add a safe-dereference facility with unit tests.
   tier_view.cpp
   view_ex.cpp
 Use safe-dereference facility.
+
+20070417T1233Z <etarassov@tt-solutions.com> [1260]
+
+  Makefile.am
+Update Makefile.am to reflect the latest changes in the project.
 

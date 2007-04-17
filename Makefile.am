@@ -20,7 +20,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: Makefile.am,v 1.28 2007-02-23 12:43:25 chicares Exp $
+# $Id: Makefile.am,v 1.29 2007-04-17 12:33:09 etarassov Exp $
 
 SUBDIRS = third_party
 
@@ -36,7 +36,8 @@ bin_PROGRAMS =   \
     generate_passkey    \
     antediluvian_cli    \
     ihs_crc_comp    \
-    product_files
+    product_files \
+    test_coding_rules
 
 # other programs which may or not be built depending on configure arguments
 EXTRA_PROGRAMS = \
@@ -105,13 +106,15 @@ endif
 
 # tests
 TESTS = \
+    test_account_value \
     test_actuarial_table \
     test_alert \
     test_any_member \
     test_argv0 \
+    test_assert_lmi \
+    test_authenticity \
     test_calendar_date \
     test_callback \
-    test_coding_rules \
     test_commutation_functions \
     test_comma_punct \
     test_crc32 \
@@ -119,9 +122,13 @@ TESTS = \
     test_fenv_lmi \
     test_financial \
     test_global_settings \
+    test_handle_exceptions \
     test_input_seq \
     test_input \
     test_irc7702a \
+    test_ledger \
+    test_loads \
+    test_map_lookup \
     test_materially_equal \
     test_math_functors \
     test_mc_enum \
@@ -130,11 +137,13 @@ TESTS = \
     test_ncnnnpnn \
     test_numeric_io \
     test_obstruct_slicing \
-    test_passkey \
     test_path_utility \
     test_progress_meter \
     test_quiet_nan \
     test_round_to \
+    test_rtti_lmi \
+    test_safely_dereference_as \
+    test_sandbox \
     test_snprintf \
     test_stratified_algorithms \
     test_stream_cast \
@@ -143,9 +152,8 @@ TESTS = \
     test_tn_range \
     test_value_cast \
     test_vector \
-    test_lib_wx_new \
+    test_wx_new \
     test_xenum \
-    test_xml_resources \
     test_xrange \
     test_zero
 
@@ -170,15 +178,11 @@ endif
 lmi_wx_SOURCES = \
     about_dialog.cpp \
     alert_wx.cpp \
-    ce_product_name.cpp \
     census_document.cpp \
     census_view.cpp \
     database_document.cpp \
     database_view.cpp \
     database_view_editor.cpp \
-    datum_base.cpp \
-    datum_boolean.cpp \
-    datum_string.cpp \
     default_view.cpp \
     docmanager_ex.cpp \
     docmdichildframe_ex.cpp \
@@ -186,12 +190,8 @@ lmi_wx_SOURCES = \
     file_command_wx.cpp \
     illustration_document.cpp \
     illustration_view.cpp \
-    input.cpp \
-    input_harmonization.cpp \
     main_common.cpp \
     main_wx.cpp \
-    mc_enum.cpp \
-    mc_enum_types.cpp \
     msw_workarounds.cpp \
     multidimgrid_any.cpp \
     multidimgrid_tools.cpp \
@@ -212,7 +212,6 @@ lmi_wx_SOURCES = \
     tier_document.cpp \
     tier_view.cpp \
     tier_view_editor.cpp \
-    tn_range_types.cpp \
     transferor.cpp \
     view_ex.cpp \
     wx_checks.cpp \
@@ -278,8 +277,8 @@ liblmi_common_sources = \
     getopt.cpp \
     global_settings.cpp \
     group_values.cpp \
-    input_sequence.cpp \
     input_seq_helpers.cpp \
+    input_sequence.cpp \
     inputillus.cpp \
     inputillus_sequences.cpp \
     inputillus_xml_io.cpp \
@@ -303,7 +302,6 @@ liblmi_common_sources = \
     name_value_pairs.cpp \
     outlay.cpp \
     path_utility.cpp \
-    preferences_model.cpp \
     product_names.cpp \
     progress_meter.cpp \
     rounding_rules.cpp \
@@ -340,12 +338,17 @@ libantediluvian_la_SOURCES = \
     solve.cpp \
     $(liblmi_common_sources)
 libantediluvian_la_CXXFLAGS = $(AM_CXXFLAGS) $(XMLWRAPP_FLAGS) $(LIBXSLT_CFLAGS) $(LIBXML_CFLAGS)
+libantediluvian_la_CFLAGS = $(AM_CFLAGS)
 libantediluvian_la_LDFLAGS = -no-undefined $(AM_LDFLAGS)
 libantediluvian_la_LIBADD = \
     $(BOOST_LIBS)
 
 liblmi_la_SOURCES = \
     authenticity.cpp \
+    ce_product_name.cpp \
+    datum_base.cpp \
+    datum_boolean.cpp \
+    datum_string.cpp \
     ihs_acctval.cpp \
     ihs_avdebug.cpp \
     ihs_avmly.cpp \
@@ -365,12 +368,19 @@ liblmi_la_SOURCES = \
     ihs_pios.cpp \
     ihs_proddata.cpp \
     ihs_rnddata.cpp \
+    input.cpp \
+    input_harmonization.cpp \
+    mc_enum.cpp \
+    mc_enum_types.cpp \
     md5.cpp \
     mvc_model.cpp \
+    preferences_model.cpp \
     stratified_algorithms.cpp \
     stratified_charges.cpp \
+    tn_range_types.cpp \
     $(liblmi_common_sources)
 liblmi_la_CXXFLAGS = $(AM_CXXFLAGS) $(XMLWRAPP_FLAGS) $(LIBXSLT_CFLAGS) $(LIBXML_CFLAGS)
+liblmi_la_CFLAGS = $(AM_CFLAGS)
 liblmi_la_LDFLAGS = -no-undefined $(AM_LDFLAGS)
 liblmi_la_LIBADD = \
     $(XMLWRAPP_LIBS) \
@@ -396,10 +406,13 @@ libwx_new_la_LIBADD = $(WX_LIBS)
 # auxiliary executables
 
 generate_passkey_SOURCES = \
+    authenticity.cpp \
     calendar_date.cpp \
     generate_passkey.cpp \
+    global_settings.cpp \
     md5.cpp \
-    secure_date.cpp \
+    miscellany.cpp \
+    path_utility.cpp \
     system_command.cpp
 generate_passkey_CXXFLAGS = $(AM_CXXFLAGS)
 generate_passkey_LDADD = \
@@ -412,7 +425,9 @@ gpt_server_LDADD = \
     liblmi.la
 
 elapsed_time_SOURCES = \
-    elapsed_time.cpp system_command.cpp timer.cpp
+    elapsed_time.cpp \
+    system_command.cpp \
+    timer.cpp
 elapsed_time_CXXFLAGS = $(AM_CXXFLAGS)
 elapsed_time_LDADD = \
     libmain_auxiliary_common.la
@@ -451,6 +466,13 @@ product_files_LDADD = \
     $(BOOST_LIBS) \
     $(XMLWRAPP_LIBS)
 
+test_coding_rules_SOURCES = \
+  test_coding_rules.cpp
+test_coding_rules_CXXFLAGS = $(AM_CXXFLAGS) $(BOOST_INCLUDE_FLAGS)
+test_coding_rules_LDADD = \
+  libmain_auxiliary_common.la \
+  $(BOOST_LIBS)
+
 dummy.cpp:
 	touch $@
 
@@ -461,13 +483,18 @@ libtest_commons_la_SOURCES = \
     fenv_lmi.cpp \
     getopt.cpp \
     license.cpp \
-    expm1.c
+    timer.cpp
 libtest_commons_la_CFLAGS = $(AM_CFLAGS)
+
+test_account_value_SOURCES = \
+  account_value_test.cpp
+test_account_value_CXXFLAGS = $(AM_CXXFLAGS)
+test_account_value_LDADD = \
+  libtest_commons.la
 
 test_actuarial_table_SOURCES = \
   actuarial_table.cpp \
-  actuarial_table_test.cpp \
-  timer.cpp
+  actuarial_table_test.cpp
 test_actuarial_table_CXXFLAGS = $(AM_CXXFLAGS)
 test_actuarial_table_LDADD = \
   $(BOOST_LIBS) \
@@ -493,6 +520,26 @@ test_argv0_LDADD =    \
   $(BOOST_LIBS) \
   libtest_commons.la
 
+test_assert_lmi_SOURCES = \
+  assert_lmi_test.cpp
+test_assert_lmi_CXXFLAGS = $(AM_CXXFLAGS)
+test_assert_lmi_LDADD = \
+  libtest_commons.la
+
+test_authenticity_SOURCES = \
+  authenticity.cpp \
+  authenticity_test.cpp \
+  calendar_date.cpp \
+  global_settings.cpp \
+  md5.cpp \
+  miscellany.cpp \
+  path_utility.cpp \
+  system_command.cpp
+test_authenticity_CXXFLAGS = $(AM_CXXFLAGS)
+test_authenticity_LDADD = \
+  $(BOOST_LIBS) \
+  libtest_commons.la
+
 test_calendar_date_SOURCES =    \
   calendar_date.cpp \
   calendar_date_test.cpp
@@ -506,17 +553,9 @@ test_callback_CXXFLAGS = $(AM_CXXFLAGS)
 test_callback_LDADD = \
   libtest_commons.la
 
-test_coding_rules_SOURCES = \
-  test_coding_rules.cpp
-test_coding_rules_CXXFLAGS = $(BOOST_INCLUDE_FLAGS) $(AM_CXXFLAGS)
-test_coding_rules_LDADD = \
-  $(BOOST_LIBS) \
-  libmain_auxiliary_common.la
-
 test_commutation_functions_SOURCES =    \
   commutation_functions_test.cpp \
   ihs_commfns.cpp \
-  timer.cpp \
   xenumtypes.cpp
 test_commutation_functions_CXXFLAGS = $(AM_CXXFLAGS)
 test_commutation_functions_LDADD =    \
@@ -536,8 +575,7 @@ test_crc32_LDADD =    \
   libtest_commons.la
 
 test_expression_template_0_SOURCES =    \
-  expression_template_0_test.cpp \
-  timer.cpp
+  expression_template_0_test.cpp
 test_expression_template_0_CXXFLAGS = $(AM_CXXFLAGS)
 test_expression_template_0_LDADD =    \
   libtest_commons.la
@@ -551,8 +589,7 @@ test_fenv_lmi_LDADD = \
 
 test_financial_SOURCES =    \
   financial_test.cpp \
-  stratified_algorithms.cpp \
-  timer.cpp
+  stratified_algorithms.cpp
 test_financial_CXXFLAGS = $(AM_CXXFLAGS)
 test_financial_LDADD =    \
   libtest_commons.la
@@ -565,6 +602,12 @@ test_global_settings_SOURCES =  \
 test_global_settings_CXXFLAGS = $(AM_CXXFLAGS)
 test_global_settings_LDADD =  \
   $(BOOST_LIBS) \
+  libtest_commons.la
+
+test_handle_exceptions_SOURCES = \
+  handle_exceptions_test.cpp
+test_handle_exceptions_CXXFLAGS = $(AM_CXXFLAGS)
+test_handle_exceptions_LDADD = \
   libtest_commons.la
 
 test_input_seq_SOURCES =    \
@@ -621,6 +664,28 @@ test_irc7702a_CXXFLAGS = $(AM_CXXFLAGS)
 test_irc7702a_LDADD = \
   libtest_commons.la
 
+test_ledger_SOURCES = \
+  ledger_test.cpp
+test_ledger_CXXFLAGS = $(AM_CXXFLAGS) $(LIBXSLT_CFLAGS) $(LIBXML_CFLAGS)
+test_ledger_LDADD = \
+  liblmi.la \
+  libtest_commons.la
+
+test_loads_SOURCES = \
+  loads.cpp \
+  loads_test.cpp \
+  xenumtypes.cpp \
+  expm1.c
+test_loads_CXXFLAGS = $(AM_CXXFLAGS)
+test_loads_LDADD = \
+  libtest_commons.la
+
+test_map_lookup_SOURCES = \
+  map_lookup_test.cpp
+test_map_lookup_CXXFLAGS = $(AM_CXXFLAGS)
+test_map_lookup_LDADD = \
+  libtest_commons.la
+
 test_materially_equal_SOURCES = \
   materially_equal_test.cpp
 test_materially_equal_CXXFLAGS = $(AM_CXXFLAGS)
@@ -628,8 +693,7 @@ test_materially_equal_LDADD = \
   libtest_commons.la
 
 test_math_functors_SOURCES =    \
-  math_functors_test.cpp \
-  timer.cpp
+  math_functors_test.cpp
 test_math_functors_CXXFLAGS = $(AM_CXXFLAGS)
 test_math_functors_LDADD =    \
   libtest_commons.la
@@ -668,28 +732,15 @@ test_ncnnnpnn_LDADD = \
   libtest_commons.la
 
 test_numeric_io_SOURCES =   \
-  numeric_io_test.cpp \
-  timer.cpp
+  numeric_io_test.cpp
 test_numeric_io_CXXFLAGS = $(AM_CXXFLAGS)
 test_numeric_io_LDADD =   \
   libtest_commons.la
 
 test_obstruct_slicing_SOURCES = \
-  obstruct_slicing_test.cpp \
-  timer.cpp
+  obstruct_slicing_test.cpp
 test_obstruct_slicing_CXXFLAGS = $(AM_CXXFLAGS)
 test_obstruct_slicing_LDADD = \
-  libtest_commons.la
-
-test_passkey_SOURCES =  \
-  calendar_date.cpp \
-  md5.cpp \
-  passkey_test.cpp \
-  secure_date.cpp \
-  system_command.cpp
-test_passkey_CXXFLAGS = $(AM_CXXFLAGS)
-test_passkey_LDADD =  \
-  $(BOOST_LIBS) \
   libtest_commons.la
 
 test_path_utility_SOURCES = \
@@ -721,6 +772,24 @@ test_round_to_CXXFLAGS = $(AM_CXXFLAGS)
 test_round_to_LDADD = \
   libtest_commons.la
 
+test_rtti_lmi_SOURCES = \
+  rtti_lmi_test.cpp
+test_rtti_lmi_CXXFLAGS = $(AM_CXXFLAGS)
+test_rtti_lmi_LDADD = \
+  libtest_commons.la
+
+test_safely_dereference_as_SOURCES = \
+  safely_dereference_as_test.cpp
+test_safely_dereference_as_CXXFLAGS = $(AM_CXXFLAGS)
+test_safely_dereference_as_LDADD = \
+  libtest_commons.la
+
+test_sandbox_SOURCES = \
+  sandbox_test.cpp
+test_sandbox_CXXFLAGS = $(AM_CXXFLAGS)
+test_sandbox_LDADD = \
+  libtest_commons.la
+
 test_snprintf_SOURCES = \
   snprintf_test.cpp
 test_snprintf_CXXFLAGS = $(AM_CXXFLAGS)
@@ -747,7 +816,6 @@ test_test_tools_LDADD =   \
   libtest_commons.la
 
 test_timer_SOURCES =    \
-  timer.cpp \
   timer_test.cpp
 test_timer_CXXFLAGS = $(AM_CXXFLAGS)
 test_timer_LDADD =    \
@@ -755,6 +823,7 @@ test_timer_LDADD =    \
 
 test_tn_range_SOURCES = \
   datum_base.cpp \
+  facets.cpp \
   tn_range_test.cpp \
   tn_range_test_aux.cpp
 test_tn_range_CXXFLAGS = $(AM_CXXFLAGS)
@@ -774,10 +843,10 @@ test_vector_CXXFLAGS = $(AM_CXXFLAGS)
 test_vector_LDADD =   \
   libtest_commons.la
 
-test_lib_wx_new_SOURCES =   \
+test_wx_new_SOURCES = \
   wx_new_test.cpp
-test_lib_wx_new_CXXFLAGS = $(AM_CXXFLAGS)
-test_lib_wx_new_LDADD =   \
+test_wx_new_CXXFLAGS = $(AM_CXXFLAGS)
+test_wx_new_LDADD = \
   libtest_commons.la
 
 test_xenum_SOURCES =    \
@@ -785,19 +854,6 @@ test_xenum_SOURCES =    \
   xenum_test.cpp
 test_xenum_CXXFLAGS = $(AM_CXXFLAGS)
 test_xenum_LDADD =    \
-  libtest_commons.la
-
-test_xml_resources_SOURCES = \
-  alert.cpp \
-  alert_cli.cpp \
-  xml_resources_test.cpp
-test_xml_resources_CXXFLAGS = $(AM_CXXFLAGS) $(XMLWRAPP_FLAGS) $(LIBXSLT_CFLAGS) $(LIBXML_CFLAGS)
-test_xml_resources_LDADD = \
-  $(BOOST_LIBS) \
-  $(XMLWRAPP_LIBS) \
-  $(LIBXML_LIBS) \
-  $(LIBXSLT_LIBS) \
-  liblmi.la \
   libtest_commons.la
 
 test_xrange_SOURCES =   \
@@ -821,8 +877,11 @@ noinst_HEADERS = \
     account_value.hpp \
     actuarial_table.hpp \
     alert.hpp \
+    any_entity.hpp \
     any_member.hpp \
     argv0.hpp \
+    assert_lmi.hpp \
+    authenticity.hpp \
     basic_values.hpp \
     calculate.hpp \
     calendar_date.hpp \
@@ -834,9 +893,9 @@ noinst_HEADERS = \
     comma_punct.hpp \
     config.hpp \
     config_bc551.hpp \
+    config_como_mingw.hpp \
     config_ming323.hpp \
     configurable_settings.hpp \
-    copy_n_.hpp \
     crc32.hpp \
     custom_io_0.hpp \
     data_directory.hpp \
@@ -865,6 +924,7 @@ noinst_HEADERS = \
     getopt.hpp \
     global_settings.hpp \
     group_values.hpp \
+    handle_exceptions.hpp \
     ihs_commfns.hpp \
     ihs_dbdict.hpp \
     ihs_dbvalue.hpp \
@@ -888,10 +948,11 @@ noinst_HEADERS = \
     inputs.hpp \
     inputstatus.hpp \
     interest_rates.hpp \
-    is_sorted_.hpp \
     istream_to_string.hpp \
     ledger.hpp \
     ledger_base.hpp \
+    ledger_excerpt.hpp \
+    ledger_formatter.hpp \
     ledger_invariant.hpp \
     ledger_text_formats.hpp \
     ledger_variant.hpp \
@@ -902,6 +963,7 @@ noinst_HEADERS = \
     loads_impl.hpp \
     main_common.hpp \
     main_wx.hpp \
+    map_lookup.hpp \
     materially_equal.hpp \
     math_functors.hpp \
     max_stream_precision.hpp \
@@ -911,16 +973,17 @@ noinst_HEADERS = \
     mc_enum_test_aux_enums.hpp \
     mc_enum_type_enums.hpp \
     mc_enum_types.hpp \
+    md5.hpp \
+    miscellany.hpp \
+    mortality_rates.hpp \
     msw_workarounds.hpp \
     multidimgrid_any.hpp \
     multidimgrid_safe.hpp \
     multidimgrid_tools.hpp \
-    mvc_controller.hpp \
-    mvc_view.hpp \
-    md5.hpp \
-    miscellany.hpp \
-    mortality_rates.hpp \
     multiple_cell_document.hpp \
+    mvc_controller.hpp \
+    mvc_model.hpp \
+    mvc_view.hpp \
     name_value_pairs.hpp \
     ncnnnpnn.hpp \
     numeric_io_cast.hpp \
@@ -930,18 +993,27 @@ noinst_HEADERS = \
     path_utility.hpp \
     pchfile.hpp \
     platform_dependent.hpp \
+    policy_document.hpp \
+    policy_view.hpp \
+    preferences_model.hpp \
+    preferences_view.hpp \
     previewframe_ex.hpp \
     product_editor.hpp \
     product_names.hpp \
     progress_meter.hpp \
     quiet_nan.hpp \
     round_to.hpp \
+    rounding_document.hpp \
     rounding_rules.hpp \
-    secure_date.hpp \
-    security.hpp \
+    rounding_view_editor.hpp \
+    rounding_view.hpp \
+    rtti_lmi.hpp \
+    safely_dereference_as.hpp \
     sigfpe.hpp \
     single_cell_document.hpp \
     single_choice_popup_menu.hpp \
+    so_attributes.hpp \
+    stl_extensions.hpp \
     stratified_algorithms.hpp \
     stratified_charges.hpp \
     stream_cast.hpp \
@@ -951,10 +1023,10 @@ noinst_HEADERS = \
     test_tools.hpp \
     text_doc.hpp \
     text_view.hpp \
-    timer.hpp \
     tier_document.hpp \
     tier_view.hpp \
     tier_view_editor.hpp \
+    timer.hpp \
     tn_range.hpp \
     tn_range_fwd.hpp \
     tn_range_test_aux.hpp \
@@ -972,9 +1044,10 @@ noinst_HEADERS = \
     xenum_sample.hpp \
     xenumfwd.hpp \
     xenumtypes.hpp \
-    xml_notebook.hpp \
     xml_lmi.hpp \
+    xml_lmi_fwd.hpp \
     xrange.hpp \
     xrangefwd.hpp \
     xrangetypes.hpp \
+    xslt_lmi.hpp \
     zero.hpp
