@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.618 2007-04-17 12:33:09 etarassov Exp $
+// $Id: ChangeLog,v 1.619 2007-04-17 12:58:24 chicares Exp $
 
 MAINTENANCE
 
@@ -7351,7 +7351,7 @@ The problem needs to be understood generally before it can be solved.
   ledger_xml_io.cpp
 Clarify two columns' titles to conform to a compliance requirement.
 This is intended to conform to the interpretation under
-  "ï¿½21.2206(1)(I)-(M), (O), (Q)-(S) and (U)-(V) Supplemental - Other"
+  "§21.2206(1)(I)-(M), (O), (Q)-(S) and (U)-(V) Supplemental - Other"
 in the 1998-09-25 Texas Register, however counterintuitive its reading
 of "out-of-pocket" may be.
 
@@ -10912,4 +10912,17 @@ Use safe-dereference facility.
 
   Makefile.am
 Update Makefile.am to reflect the latest changes in the project.
+
+20070417T1256Z <chicares@cox.net> [1261]
+
+  objects.make
+  print_matrix.hpp      [new file]
+  print_matrix_test.cpp [new file]
+Add a matrix-printing facility with unit tests.
+
+20070417T1258Z <chicares@cox.net> [1260]
+
+  ihs_dbvalue.cpp
+  ihs_dbvalue.hpp
+Improve database printing.
 
