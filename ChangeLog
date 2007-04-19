@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.620 2007-04-19 11:29:47 etarassov Exp $
+// $Id: ChangeLog,v 1.621 2007-04-19 11:34:40 etarassov Exp $
 
 MAINTENANCE
 
@@ -10930,4 +10930,9 @@ Improve database printing.
 
   Makefile.am
 Update Makefile.am vis-a-vis 20070417T1256Z change.
+
+20070419T1134Z <etarassov@tt-solutions.com> [1260]
+
+  configure.ac
+Fix a typo (s/optimize_profiling/profiling_option/).
 

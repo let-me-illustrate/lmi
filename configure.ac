@@ -21,7 +21,7 @@ dnl snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
 dnl === Prologue ===
 
-AC_REVISION($Id: configure.ac,v 1.28 2007-03-20 17:06:21 zeitlin Exp $)dnl
+AC_REVISION($Id: configure.ac,v 1.29 2007-04-19 11:34:40 etarassov Exp $)dnl
 
 AC_PREREQ(2.56)
 AC_INIT(LMI, 1.0.0, [chicares@cox.net])
@@ -117,7 +117,7 @@ AC_ARG_ENABLE(profiling,
                 xyes) profiling_option=yes ;;
                  xno) profiling_option=no ;;
                    *) AC_MSG_ERROR(bad value ${enableval} for --enable-profiling) ;;
-             esac], [optimize_profiling=default])
+             esac], [profiling_option=default])
 
 AC_ARG_ENABLE(mpatrol,
              [AC_HELP_STRING([--with-mpatrol],
