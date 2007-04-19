@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.619 2007-04-17 12:58:24 chicares Exp $
+// $Id: ChangeLog,v 1.620 2007-04-19 11:29:47 etarassov Exp $
 
 MAINTENANCE
 
@@ -10925,4 +10925,9 @@ Add a matrix-printing facility with unit tests.
   ihs_dbvalue.cpp
   ihs_dbvalue.hpp
 Improve database printing.
+
+20070419T1129Z <etarassov@tt-solutions.com> [1260]
+
+  Makefile.am
+Update Makefile.am vis-a-vis 20070417T1256Z change.
 
