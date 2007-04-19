@@ -20,7 +20,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: Makefile.am,v 1.29 2007-04-17 12:33:09 etarassov Exp $
+# $Id: Makefile.am,v 1.30 2007-04-19 11:29:47 etarassov Exp $
 
 SUBDIRS = third_party
 
@@ -138,6 +138,7 @@ TESTS = \
     test_numeric_io \
     test_obstruct_slicing \
     test_path_utility \
+    test_print_matrix \
     test_progress_meter \
     test_quiet_nan \
     test_round_to \
@@ -750,6 +751,12 @@ test_path_utility_SOURCES = \
 test_path_utility_CXXFLAGS = $(AM_CXXFLAGS)
 test_path_utility_LDADD = \
   $(BOOST_LIBS) \
+  libtest_commons.la
+
+test_print_matrix_SOURCES = \
+  print_matrix_test.cpp
+test_print_matrix_CXXFLAGS = $(AM_CXXFLAGS)
+test_print_matrix_LDADD = \
   libtest_commons.la
 
 test_progress_meter_SOURCES =   \
