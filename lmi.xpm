@@ -1,5 +1,5 @@
 /* XPM */
-static char * lmi_xpm[] = {
+static char const* lmi_xpm[] = {
 "32 32 3 1",
 " 	c None",
 ".	c #000000",
