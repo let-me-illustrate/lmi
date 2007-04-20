@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: product_editor.cpp,v 1.5.2.1 2007-04-02 22:58:58 etarassov Exp $
+// $Id: product_editor.cpp,v 1.5.2.2 2007-04-20 16:45:27 etarassov Exp $
 
 #include "product_editor.hpp"
 
@@ -27,6 +27,7 @@
 #include "view_ex.tpp"
 #include "wx_new.hpp"
 
+#include <wx/msgdlg.h>
 #include <wx/panel.h>
 #include <wx/sizer.h>
 #include <wx/stattext.h>
@@ -74,14 +75,21 @@ bool ProductEditorDocument::DoOpenDocument(wxString const& filename)
         }
     catch(std::exception const& e)
         {
-        fatal_error()
-            << "While loading from '"
-            << filename.c_str()
-            << "'. Error: "
+        std::ostringstream oss;
+        oss
+            << "Error while loading document.\n"
+            << "Filename: "
+            << filename
+            << "\n"
+            << "Message: "
             << e.what()
-            << LMI_FLUSH
             ;
-        throw "Unreachable--silences a compiler diagnostic.";
+        wxMessageBox
+            (oss.str()
+            ,"Error loading document"
+            ,wxICON_ERROR | wxOK
+            );
+        return false;
         }
 }
 
@@ -94,14 +102,21 @@ bool ProductEditorDocument::DoSaveDocument(wxString const& filename)
         }
     catch(std::exception const& e)
         {
-        fatal_error()
-            << "While saving into '"
-            << filename.c_str()
-            << "'. Error: "
+        std::ostringstream oss;
+        oss
+            << "Error while saving document.\n"
+            << "Filename: "
+            << filename
+            << "\n"
+            << "Message: "
             << e.what()
-            << LMI_FLUSH
             ;
-        throw "Unreachable--silences a compiler diagnostic.";
+        wxMessageBox
+            (oss.str()
+            ,"Error saving document"
+            ,wxICON_ERROR | wxOK
+            );
+        return false;
         }
 }
 
