@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.621 2007-04-19 11:34:40 etarassov Exp $
+// $Id: ChangeLog,v 1.622 2007-04-20 23:43:25 chicares Exp $
 
 MAINTENANCE
 
@@ -10935,4 +10935,22 @@ Update Makefile.am vis-a-vis 20070417T1256Z change.
 
   configure.ac
 Fix a typo (s/optimize_profiling/profiling_option/).
+
+20070420T2341Z <chicares@cox.net> [1260]
+
+  safely_dereference_as.hpp
+  safely_dereference_as_test.cpp
+Guard type conversion with a static assertion. See:
+  http://lists.gnu.org/archive/html/lmi/2007-04/msg00011.html
+
+20070420T2343Z <chicares@cox.net> [1259]
+
+  ihs_avmly.cpp
+Frustra fit per plura quod potest fieri per pauciora. Conversion from
+annual to monthly
+  i --> (i upper 12) / 12 [i.e., (1+i)^(1/12)-1]
+is not distributive with respect to addition. It wasn't a baneful
+approximation, but neither was it necessary; thus, it was a defect.
+Removing it facilitates system testing and gives a more-accurate
+result aligned with the behavior of a sensible admin system.
 
