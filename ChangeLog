@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.610.2.38 2007-04-20 16:45:27 etarassov Exp $
+// $Id: ChangeLog,v 1.610.2.39 2007-04-20 18:34:30 etarassov Exp $
 
 MAINTENANCE
 
@@ -11082,3 +11082,10 @@ Add const modifier to the data declaration.
 
   product_editor.cpp
 Properly handle errors when loading/saving documents.
+
+20070420T1834Z <etarassov@tt-solutions.com> [1254]
+
+  stratified_charges.cpp
+  stratified_charges.hpp
+Add various data checks and use them.
+

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: stratified_charges.cpp,v 1.9 2007-03-09 16:27:23 chicares Exp $
+// $Id: stratified_charges.cpp,v 1.9.4.1 2007-04-20 18:34:30 etarassov Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -71,6 +71,25 @@ stratified_entity::stratified_entity
     :limits_(limits)
     ,values_(values)
 {
+    check_sizes();
+}
+
+//============================================================================
+stratified_entity::~stratified_entity()
+{
+}
+
+//============================================================================
+void stratified_entity::check_everything() const
+{
+	check_not_empty();
+    check_sizes();
+    check_limits();
+}
+
+//============================================================================
+void stratified_entity::check_sizes() const
+{
     if(limits_.size() != values_.size())
         {
         throw std::logic_error("Tiered values and limits of unequal length.");
@@ -78,8 +97,70 @@ stratified_entity::stratified_entity
 }
 
 //============================================================================
-stratified_entity::~stratified_entity()
+void stratified_entity::check_not_empty() const
 {
+    if(values_.empty())
+        {
+        throw std::logic_error("Empty values array.");
+        }
+}
+
+//============================================================================
+void stratified_entity::check_limits() const
+{
+    check_last_limit();
+    check_limits_positive();
+    check_limits_non_decreasing_order();
+}
+
+//============================================================================
+void stratified_entity::check_last_limit() const
+{
+    check_not_empty();
+    if(!(.999 * DBL_MAX < limits_.back()))
+        {
+        std::ostringstream oss;
+        oss
+            << "Invalid final band '"
+            << limits_.back()
+            << "' - it should not have any value."
+            ;
+        throw std::logic_error(oss.str());
+        }
+}
+
+//============================================================================
+void stratified_entity::check_limits_positive() const
+{
+    for
+        (std::vector<double>::const_iterator it = limits_.begin()
+        ;it != limits_.end()
+        ;++it
+        )
+        {
+        if(*it < 0.)
+            {
+            throw std::logic_error("All bands must be positive.");
+            }
+        }
+}
+
+//============================================================================
+void stratified_entity::check_limits_non_decreasing_order() const
+{
+    double previous = 0.;
+    for
+        (std::vector<double>::const_iterator it = limits_.begin()
+        ;it != limits_.end()
+        ;++it
+        )
+        {
+        if(*it < previous)
+            {
+            throw std::logic_error("Bands must be in non-decreasing order.");
+            }
+        previous = *it;
+        }
 }
 
 //============================================================================
@@ -129,15 +210,13 @@ void stratified_entity::read(std::istream& is)
         }
     LMI_ASSERT(vector_size == limits_.size());
 
-    LMI_ASSERT(values_.size() == limits_.size());
-    LMI_ASSERT((.999 * DBL_MAX) < limits_.back());
+    check_everything();
 }
 
 //============================================================================
 void stratified_entity::write(std::ostream& os) const
 {
-    LMI_ASSERT(values_.size() == limits_.size());
-    LMI_ASSERT((.999 * DBL_MAX) < limits_.back());
+    check_everything();
 
     std::vector<double>::const_iterator i;
 
@@ -447,7 +526,7 @@ double stratified_charges::minimum_tiered_premium_tax_rate(e_state const& state)
     else
         {
         stratified_entity const& z = raw_entity(table);
-        LMI_ASSERT(!z.values().empty());
+        z.check_not_empty();
         return *std::min_element(z.values().begin(), z.values().end());
         }
 }
@@ -466,24 +545,28 @@ void stratified_charges::read(std::string const& filename)
         }
     std::ifstream is(filename.c_str());
 
-    is >> raw_entity(e_curr_sepacct_load_banded_by_premium  );
-    is >> raw_entity(e_guar_sepacct_load_banded_by_premium  );
-    is >> raw_entity(e_curr_m_and_e_tiered_by_assets        );
-    is >> raw_entity(e_guar_m_and_e_tiered_by_assets        );
-    is >> raw_entity(e_asset_based_comp_tiered_by_assets    );
-    is >> raw_entity(e_investment_mgmt_fee_tiered_by_assets );
-    is >> raw_entity(e_curr_sepacct_load_tiered_by_assets   );
-    is >> raw_entity(e_guar_sepacct_load_tiered_by_assets   );
-    is >> raw_entity(e_tiered_ak_premium_tax                );
-    is >> raw_entity(e_tiered_de_premium_tax                );
-    is >> raw_entity(e_tiered_sd_premium_tax                );
-
-    if(!is.good())
+    try
         {
+        read_entity(is, e_curr_sepacct_load_banded_by_premium  );
+        read_entity(is, e_guar_sepacct_load_banded_by_premium  );
+        read_entity(is, e_curr_m_and_e_tiered_by_assets        );
+        read_entity(is, e_guar_m_and_e_tiered_by_assets        );
+        read_entity(is, e_asset_based_comp_tiered_by_assets    );
+        read_entity(is, e_investment_mgmt_fee_tiered_by_assets );
+        read_entity(is, e_curr_sepacct_load_tiered_by_assets   );
+        read_entity(is, e_guar_sepacct_load_tiered_by_assets   );
+        read_entity(is, e_tiered_ak_premium_tax                );
+        read_entity(is, e_tiered_de_premium_tax                );
+        read_entity(is, e_tiered_sd_premium_tax                );
+        }
+    catch(std::exception const& e)
+        {
+        std::ostringstream oss;
         fatal_error()
-            << "Unexpected end of stratified-data file '"
+            << "Error in '"
             << filename
-            << "'. Try reinstalling."
+            << "': "
+            << e.what()
             << LMI_FLUSH
             ;
         }
@@ -501,6 +584,37 @@ void stratified_charges::read(std::string const& filename)
 }
 
 //============================================================================
+void stratified_charges::read_entity(std::istream& is, e_stratified stratified)
+{
+    // TODO ?? Add human readable e_stratified entity names to error messages.
+    try
+        {
+        is >> raw_entity(stratified);
+        }
+    catch(std::exception const& e)
+        {
+        std::stringstream oss;
+        oss
+            << "Error reading '"
+            << stratified
+            << "' entity: "
+            << e.what()
+            ;
+        throw std::runtime_error(oss.str());
+        }
+    if(!is.good())
+        {
+        std::stringstream oss;
+        oss
+            << "Unexpected end of stratified-data while reading '"
+            << stratified
+            << "' entity."
+            ;
+        throw std::runtime_error(oss.str());
+        }
+}
+
+//============================================================================
 void stratified_charges::write(std::string const& filename) const
 {
     std::ofstream os(filename.c_str());
@@ -514,17 +628,31 @@ void stratified_charges::write(std::string const& filename) const
             ;
         }
 
-    os << raw_entity(e_curr_sepacct_load_banded_by_premium  );
-    os << raw_entity(e_guar_sepacct_load_banded_by_premium  );
-    os << raw_entity(e_curr_m_and_e_tiered_by_assets        );
-    os << raw_entity(e_guar_m_and_e_tiered_by_assets        );
-    os << raw_entity(e_asset_based_comp_tiered_by_assets    );
-    os << raw_entity(e_investment_mgmt_fee_tiered_by_assets );
-    os << raw_entity(e_curr_sepacct_load_tiered_by_assets   );
-    os << raw_entity(e_guar_sepacct_load_tiered_by_assets   );
-    os << raw_entity(e_tiered_ak_premium_tax                );
-    os << raw_entity(e_tiered_de_premium_tax                );
-    os << raw_entity(e_tiered_sd_premium_tax                );
+    try
+        {
+        write_entity(os, e_curr_sepacct_load_banded_by_premium  );
+        write_entity(os, e_guar_sepacct_load_banded_by_premium  );
+        write_entity(os, e_curr_m_and_e_tiered_by_assets        );
+        write_entity(os, e_guar_m_and_e_tiered_by_assets        );
+        write_entity(os, e_asset_based_comp_tiered_by_assets    );
+        write_entity(os, e_investment_mgmt_fee_tiered_by_assets );
+        write_entity(os, e_curr_sepacct_load_tiered_by_assets   );
+        write_entity(os, e_guar_sepacct_load_tiered_by_assets   );
+        write_entity(os, e_tiered_ak_premium_tax                );
+        write_entity(os, e_tiered_de_premium_tax                );
+        write_entity(os, e_tiered_sd_premium_tax                );
+        }
+    catch(std::exception const& e)
+        {
+        std::ostringstream oss;
+        fatal_error()
+            << "Error writing into '"
+            << filename
+            << "': "
+            << e.what()
+            << LMI_FLUSH
+            ;
+        }
 
     if(!os.good())
         {
@@ -534,6 +662,40 @@ void stratified_charges::write(std::string const& filename) const
             << "'."
             << LMI_FLUSH
             ;
+        }
+}
+
+//============================================================================
+void stratified_charges::write_entity
+    (std::ostream& os
+    ,e_stratified stratified
+    ) const
+{
+    // TODO ?? Add human readable e_stratified entity names to error messages.
+    try
+        {
+        os << raw_entity(stratified);
+        }
+    catch(std::exception const& e)
+        {
+        std::stringstream oss;
+        oss
+            << "Error writing '"
+            << stratified
+            << "' entity: "
+            << e.what()
+            ;
+        throw std::runtime_error(oss.str());
+        }
+    if(!os.good())
+        {
+        std::stringstream oss;
+        oss
+            << "invalid output when writing stratified-data for '"
+            << stratified
+            << "' entity."
+            ;
+        throw std::runtime_error(oss.str());
         }
 }
 

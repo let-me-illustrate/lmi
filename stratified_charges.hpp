@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: stratified_charges.hpp,v 1.9 2007-03-04 16:33:31 chicares Exp $
+// $Id: stratified_charges.hpp,v 1.9.6.1 2007-04-20 18:34:30 etarassov Exp $
 
 #ifndef stratified_charges_hpp
 #define stratified_charges_hpp
@@ -76,6 +76,15 @@ class LMI_SO stratified_entity
 
     void read(std::istream& is);
     void write(std::ostream& os) const;
+
+    // These methods throw std::logic_error if data is not valid.
+    void check_everything() const;
+    void check_last_limit() const;
+    void check_limits() const;
+    void check_limits_positive() const;
+    void check_limits_non_decreasing_order() const;
+    void check_not_empty() const;
+    void check_sizes() const;
 
   private:
     std::vector<double> const& limits() const;
@@ -153,6 +162,9 @@ class LMI_SO stratified_charges
 
     void read (std::string const& filename);
     void write(std::string const& filename) const;
+
+    void read_entity(std::istream&, e_stratified);
+    void write_entity(std::ostream&, e_stratified) const;
 
     double banded_current_separate_account_load    (double premium) const;
     double banded_guaranteed_separate_account_load (double premium) const;
