@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avmly.cpp,v 1.61 2007-03-09 16:27:23 chicares Exp $
+// $Id: ihs_avmly.cpp,v 1.62 2007-04-20 23:43:25 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -2490,21 +2490,11 @@ void AccountValue::TxTakeSepAcctLoad()
             );
         double stratified_load = banded_load + tiered_load;
 
-        // TODO ?? Loads should be combined on the annual basis used
-        // for specifying them, then their sum converted to monthly,
-        // in order to match the calculations that an admin system
-        // would be expected to do; then rounded (round_interest_rate).
-
-        stratified_load = i_upper_12_over_12_from_i<double>()(stratified_load);
-        round_interest_rate(stratified_load);
-
         double tiered_comp = 0.0;
 
         if(e_asset_charge_load == Database_->Query(DB_AssetChargeType))
             {
             tiered_comp = StratifiedCharges_->tiered_asset_based_compensation(AssetsPostBom);
-            tiered_comp = i_upper_12_over_12_from_i<double>()(tiered_comp);
-            // TODO ?? Probably this should be rounded.
             }
         if(0.0 != tiered_comp)
             {
@@ -2514,9 +2504,18 @@ void AccountValue::TxTakeSepAcctLoad()
                 ;
             }
 
+        // TODO ?? Consider changing Loads::separate_account_load() to
+        // return an annual rate, and converting it to monthly here in
+        // every case, instead of converting a monthly rate to annual,
+        // adding some adjustments, and converting the result back to
+        // monthly in this special case.
+
         YearsSepAcctLoadRate = Loads_->separate_account_load(ExpAndGABasis)[Year];
+        YearsSepAcctLoadRate = i_from_i_upper_12_over_12<double>()(YearsSepAcctLoadRate);
         YearsSepAcctLoadRate += stratified_load;
         YearsSepAcctLoadRate += tiered_comp;
+        YearsSepAcctLoadRate = i_upper_12_over_12_from_i<double>()(YearsSepAcctLoadRate);
+        round_interest_rate(YearsSepAcctLoadRate);
 
         // TODO ?? This seems bogus. Reevaluate.
         double kludge_adjustment = 0.0;
