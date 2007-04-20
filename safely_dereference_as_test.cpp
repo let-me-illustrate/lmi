@@ -1,4 +1,4 @@
-// Dereference a non-null pointer, optionally converting its type.
+// Dereference a non-null pointer, optionally downcasting it--unit test.
 //
 // Copyright (C) 2007 Gregory W. Chicares.
 //
@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: safely_dereference_as_test.cpp,v 1.1 2007-04-16 07:58:20 chicares Exp $
+// $Id: safely_dereference_as_test.cpp,v 1.2 2007-04-20 23:41:14 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -48,10 +48,12 @@ int test_main(int, char*[])
     B* p = &d;
     BOOST_TEST_EQUAL(&d, &safely_dereference_as<D>(p));
 
-    // These work, too.
-    BOOST_TEST_EQUAL( p, &safely_dereference_as<B>(&d));
+    // Type need not be changed.
     BOOST_TEST_EQUAL(&b, &safely_dereference_as<B>(&b));
     BOOST_TEST_EQUAL(&d, &safely_dereference_as<D>(&d));
+
+    // Upcasts are forbidden: this would be a compile-time error.
+//    BOOST_TEST_EQUAL( p, &safely_dereference_as<B>(&d));
 
     std::string diagnostic0;
 #if defined __GNUC__

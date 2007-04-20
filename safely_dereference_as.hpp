@@ -1,4 +1,4 @@
-// Dereference a non-null pointer, optionally converting its type.
+// Dereference a non-null pointer, optionally downcasting it.
 //
 // Copyright (C) 2007 Gregory W. Chicares.
 //
@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: safely_dereference_as.hpp,v 1.1 2007-04-16 07:58:20 chicares Exp $
+// $Id: safely_dereference_as.hpp,v 1.2 2007-04-20 23:41:14 chicares Exp $
 
 #ifndef safely_dereference_as_hpp
 #define safely_dereference_as_hpp
@@ -28,13 +28,20 @@
 
 #include "rtti_lmi.hpp"
 
+#if !defined __BORLANDC__
+#   include <boost/static_assert.hpp>
+#   include <boost/type_traits.hpp>
+#else  // Defined __BORLANDC__ .
+#   define BOOST_STATIC_ASSERT(deliberately_ignored) /##/
+#endif // Defined __BORLANDC__ .
+
 #include <sstream>
 #include <stdexcept>
 
-/// Dereference a non-null pointer, optionally converting its type.
+/// Dereference a non-null pointer, optionally downcasting it.
 ///
-/// Throws informative exceptions if the pointer is null, or if it
-/// cannot be converted to the desired type.
+/// Throws informative exceptions if the pointer is null, or if
+/// downcasting fails.
 ///
 /// Motivation: Some libraries provide accessors that return pointers,
 /// which may be null, to a base class, e.g.
@@ -54,15 +61,27 @@
 ///   asm("int $3"); // x86 specific.
 /// if the cause of one of those rare errors is not immediately clear.
 ///
+/// The static assertion might have been omitted. That would have
+/// permitted checked upcasts and crosscasts; however, those usages
+/// seemed likelier to arise from a mistake than from deliberate
+/// intention, and the static assertion brings real benefits. With
+/// that assertion, static_cast could almost be substituted for
+/// dynamic_cast, except that there is no generally-accepted way to
+/// assert the absence of virtual derivation as 5.2.9/5 requires.
+///
 /// Future directions: Enhancements to be made as needs arise include:
 ///   - Add const analogs.
-///   - Optimize special cases such as T==U if profiling indicates a
-///       worthwhile benefit.
-///   - Treat non-polymorphic cases.
+///   - Optimize for T==U if profiling indicates a worthwhile benefit.
 
 template<typename T, typename U>
 T& safely_dereference_as(U* u)
 {
+    // Double parentheses: don't parse comma as a macro parameter separator.
+    BOOST_STATIC_ASSERT
+        ((
+            boost::is_same            <U,T>::value
+        ||  boost::is_base_and_derived<U,T>::value
+        ));
     if(!u)
         {
         std::ostringstream oss;
