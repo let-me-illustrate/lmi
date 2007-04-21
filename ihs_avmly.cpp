@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avmly.cpp,v 1.62 2007-04-20 23:43:25 chicares Exp $
+// $Id: ihs_avmly.cpp,v 1.63 2007-04-21 08:30:18 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -2476,6 +2476,10 @@ void AccountValue::TxTestHoneymoonForExpiration()
 
 void AccountValue::TxTakeSepAcctLoad()
 {
+    if(!Input_->UsePartialMort && e_month_by_month != Input_->RunOrder)
+        {
+        LMI_ASSERT(materially_equal(AssetsPostBom, std::max(0.0, AVSepAcct)));
+        }
     if(SepAcctLoadIsDynamic)
         {
         double banded_load = StratifiedCharges_->banded_sepacct_load
