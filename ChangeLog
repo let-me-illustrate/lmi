@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.622 2007-04-20 23:43:25 chicares Exp $
+// $Id: ChangeLog,v 1.623 2007-04-23 15:51:26 wboutin Exp $
 
 MAINTENANCE
 
@@ -10953,4 +10953,9 @@ is not distributive with respect to addition. It wasn't a baneful
 approximation, but neither was it necessary; thus, it was a defect.
 Removing it facilitates system testing and gives a more-accurate
 result aligned with the behavior of a sensible admin system.
+
+20070423T1551Z <wboutin@massmutual.com> [1259]
+
+  xml_notebook_variable_annuity.xrc
+Add and rearrange controls.
 
