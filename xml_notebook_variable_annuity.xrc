@@ -24,7 +24,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: xml_notebook_variable_annuity.xrc,v 1.1 2007-03-26 20:51:58 wboutin Exp $
+    $Id: xml_notebook_variable_annuity.xrc,v 1.2 2007-04-23 15:51:26 wboutin Exp $
 
     This version is designed for private placement users; it omits input
     fields that seem irrelevant in that context, and reflects the
@@ -38,16 +38,112 @@
         <cols>1</cols>
         <rows>4</rows>
         <growablecols>0</growablecols>
+        <growablerows>0</growablerows>
         <object class="sizeritem">
             <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
             <border>4</border>
             <object class="wxFlexGridSizer">
-                <cols>2</cols>
+                <cols>3</cols>
                 <rows>0</rows>
-                <growablecols>1,2</growablecols>
+                <growablecols>0,1,2</growablecols>
                 <growablerows>0,1</growablerows>
                 <object class="sizeritem">
-                    <flag>wxGROW|wxALIGN_LEFT|wxALIGN_TOP|wxALL</flag>
+                    <flag>wxALIGN_LEFT|wxGROW|wxLEFT|wxTOP</flag>
+                    <border>4</border>
+                    <object class="wxFlexGridSizer">
+                        <cols>1</cols>
+                        <rows>0</rows>
+                        <growablerows>1</growablerows>
+                        <object class="sizeritem">
+                            <flag>wxALIGN_LEFT|wxALIGN_TOP|wxLEFT|wxRIGHT|wxTOP</flag>
+                            <border>4</border>
+                            <object class="wxStaticText">
+                                <label>Product</label>
+                            </object>
+                        </object>
+                        <object class="sizeritem">
+                            <flag>wxGROW|wxALL</flag>
+                            <border>4</border>
+                            <object class="wxListBox" name="ProductName">
+                                <size>-1,0</size>
+                                <style>wxLB_SINGLE</style>
+                            </object>
+                        </object>
+                    </object>
+                </object>
+                <object class="sizeritem">
+                    <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                    <border>4</border>
+                    <object class="wxFlexGridSizer">
+                        <cols>1</cols>
+                        <rows>0</rows>
+                        <object class="sizeritem">
+                            <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALIGN_TOP|wxALL</flag>
+                            <object class="wxFlexGridSizer">
+                                <cols>1</cols>
+                                <growablecols>0,1,2,3</growablecols>
+                                <growablerows>0</growablerows>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_RIGHT|wxTOP|wxBOTTOM</flag>
+                                    <border>4</border>
+                                    <object class="wxStaticBoxSizer">
+                                        <orient>wxVERTICAL</orient>
+                                        <label>Effective date</label>
+                                        <object class="sizeritem">
+                                            <flag>wxALIGN_LEFT|wxALL</flag>
+                                            <border>4</border>
+                                            <object class="wxFlexGridSizer">
+                                                <cols>0</cols>
+                                                <rows>1</rows>
+                                                <growablecols>1</growablecols>
+                                                <object class="sizeritem">
+                                                    <flag>wxALIGN_LEFT|wxALIGN_TOP|wxALL</flag>
+                                                    <border>4</border>
+                                                    <object class="wxDatePickerCtrl" name="EffectiveDate">
+                                                        <size>90,-1</size>
+                                                    </object>
+                                                </object>
+                                                <object class="sizeritem">
+                                                    <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                                                    <border>4</border>
+                                                    <object class="wxCheckBox" name="EffectiveDateToday">
+                                                        <label>Today</label>
+                                                        <checked>0</checked>
+                                                    </object>
+                                                </object>
+                                            </object>
+                                        </object>
+                                    </object>
+                                </object>
+                            </object>
+                        </object>
+                        <object class="sizeritem">
+                            <flag>wxGROW|wxALIGN_RIGHT</flag>
+                            <border>4</border>
+                            <object class="wxFlexGridSizer">
+                                <cols>0</cols>
+                                <rows>1</rows>
+                                <object class="sizeritem">
+                                    <flag>wxGROW|wxLEFT|wxTOP|wxBOTTOM</flag>
+                                    <border>4</border>
+                                    <object class="wxStaticText">
+                                        <label>State of jurisdiction</label>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxGROW|wxALIGN_RIGHT|wxLEFT|wxRIGHT</flag>
+                                    <border>4</border>
+                                    <object class="wxComboBox" name="StateOfJurisdiction">
+                                        <size>50,20</size>
+                                        <style>wxCB_READONLY</style>
+                                    </object>
+                                </object>
+                            </object>
+                        </object>
+                    </object>
+                </object>
+                <object class="sizeritem">
+                    <flag>wxALIGN_LEFT|wxALIGN_TOP|wxALL</flag>
                     <border>2</border>
                     <object class="wxStaticBoxSizer">
                         <orient>wxVERTICAL</orient>
@@ -98,77 +194,6 @@
                         </object>
                     </object>
                 </object>
-                <object class="sizeritem">
-                    <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
-                    <border>4</border>
-                    <object class="wxFlexGridSizer">
-                        <cols>1</cols>
-                        <rows>0</rows>
-                        <object class="sizeritem">
-                            <flag>wxGROW|wxALIGN_RIGHT</flag>
-                            <border>4</border>
-                            <object class="wxFlexGridSizer">
-                                <cols>0</cols>
-                                <rows>1</rows>
-                                <object class="sizeritem">
-                                    <flag>wxGROW|wxLEFT|wxTOP|wxBOTTOM</flag>
-                                    <border>4</border>
-                                    <object class="wxStaticText">
-                                        <label>State of jurisdiction</label>
-                                    </object>
-                                </object>
-                                <object class="sizeritem">
-                                    <flag>wxGROW|wxALIGN_RIGHT|wxLEFT|wxRIGHT</flag>
-                                    <border>4</border>
-                                    <object class="wxComboBox" name="StateOfJurisdiction">
-                                        <size>50,20</size>
-                                        <style>wxCB_READONLY</style>
-                                    </object>
-                                </object>
-                            </object>
-                        </object>
-                        <object class="sizeritem">
-                            <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALIGN_TOP|wxALL</flag>
-                            <object class="wxFlexGridSizer">
-                                <cols>1</cols>
-                                <growablecols>0,1,2,3</growablecols>
-                                <growablerows>0</growablerows>
-                                <object class="sizeritem">
-                                    <flag>wxALIGN_RIGHT|wxTOP|wxBOTTOM</flag>
-                                    <border>4</border>
-                                    <object class="wxStaticBoxSizer">
-                                        <orient>wxVERTICAL</orient>
-                                        <label>Effective date</label>
-                                        <object class="sizeritem">
-                                            <flag>wxALIGN_LEFT|wxALL</flag>
-                                            <border>4</border>
-                                            <object class="wxFlexGridSizer">
-                                                <cols>0</cols>
-                                                <rows>1</rows>
-                                                <growablecols>1</growablecols>
-                                                <object class="sizeritem">
-                                                    <flag>wxALIGN_LEFT|wxALIGN_TOP|wxALL</flag>
-                                                    <border>4</border>
-                                                    <object class="wxDatePickerCtrl" name="EffectiveDate">
-                                                        <size>90,-1</size>
-                                                    </object>
-                                                </object>
-                                                <object class="sizeritem">
-                                                    <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxALL</flag>
-                                                    <border>4</border>
-                                                    <object class="wxCheckBox" name="EffectiveDateToday">
-                                                        <label>Today</label>
-                                                        <checked>0</checked>
-                                                    </object>
-                                                </object>
-                                            </object>
-                                        </object>
-                                    </object>
-                                </object>
-                            </object>
-                        </object>
-                    </object>
-                </object>
             </object>
         </object>
         <object class="sizeritem">
@@ -177,6 +202,7 @@
             <object class="wxFlexGridSizer">
                 <cols>0</cols>
                 <rows>1</rows>
+                <growablecols>0,1</growablecols>
                 <object class="sizeritem">
                     <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT|wxTOP</flag>
                     <border>4</border>
@@ -429,7 +455,6 @@
     <object class="wxFlexGridSizer">
         <cols>1</cols>
         <growablecols>0</growablecols>
-        <growablerows>0,1</growablerows>
         <!-- owner -->
         <object class="sizeritem">
             <flag>wxGROW|wxALL</flag>
@@ -479,7 +504,7 @@
                                 <growablecols>0</growablecols>
                                 <object class="sizeritem">
                                     <flag>wxGROW</flag>
-                                    <object class="wxTextCtrl" name="CorporationName">
+                                    <object class="wxTextCtrl" name="InsuredName">
                                     </object>
                                 </object>
                                 <object class="sizeritem">
@@ -489,7 +514,7 @@
                                         <growablecols>0</growablecols>
                                         <object class="sizeritem">
                                             <flag>wxGROW</flag>
-                                            <object class="wxTextCtrl" name="CorporationAddress">
+                                            <object class="wxTextCtrl" name="Address">
                                             </object>
                                         </object>
                                         <object class="sizeritem">
@@ -501,7 +526,7 @@
                                         </object>
                                         <object class="sizeritem">
                                             <flag>wxGROW</flag>
-                                            <object class="wxTextCtrl" name="CorporationCity">
+                                            <object class="wxTextCtrl" name="City">
                                             </object>
                                         </object>
                                     </object>
@@ -513,7 +538,7 @@
                                         <growablecols>2</growablecols>
                                         <object class="sizeritem">
                                             <flag>wxGROW</flag>
-                                            <object class="wxComboBox" name="CorporationState">
+                                            <object class="wxComboBox" name="State">
                                                 <style>wxCB_DROPDOWN|wxCB_READONLY</style>
                                             </object>
                                         </object>
@@ -526,7 +551,7 @@
                                         </object>
                                         <object class="sizeritem">
                                             <flag>wxGROW</flag>
-                                            <object class="wxTextCtrl" name="CorporationZipCode">
+                                            <object class="wxTextCtrl" name="ZipCode">
                                             </object>
                                         </object>
                                     </object>
