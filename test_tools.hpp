@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: test_tools.hpp,v 1.10 2007-01-27 00:00:52 wboutin Exp $
+// $Id: test_tools.hpp,v 1.11 2007-04-24 09:27:21 chicares Exp $
 
 // This is a derived work based on Beman Dawes's boost test library
 // that bears the following copyright and license statement:
@@ -280,7 +280,7 @@ namespace lmi_test
 #if defined BOOST_INCLUDE_MAIN
 #   include "cpp_main.cpp"
 #   include "test_main.cpp"
-#endif // BOOST_INCLUDE_MAIN
+#endif // defined BOOST_INCLUDE_MAIN
 
 // Deprecated macros.
 //
