@@ -21,7 +21,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_avmly.cpp,v 1.63 2007-04-21 08:30:18 chicares Exp $
+// $Id: ihs_avmly.cpp,v 1.64 2007-04-24 19:23:29 wboutin Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -2482,20 +2482,26 @@ void AccountValue::TxTakeSepAcctLoad()
         }
     if(SepAcctLoadIsDynamic)
         {
-        double banded_load = StratifiedCharges_->banded_sepacct_load
+// TODO ?? DATABASE !! Here, the hardcoded number is of course a
+// defect: it should be in the product database. $10,000,000 is just
+// an arbitrary value for testing. The idea is that some such limit
+// applies to the banded load only, but not to any other separate-
+// account load. A different limit is used for a particular ledger
+// type to facilitate testing the new database entity that'll
+// eventually be added.
+        double special_limit = 10000000.0;
+        if(e_variable_annuity == BasicValues::GetLedgerType())
+            {
+            special_limit = 2500000.0;
+            }
+        double stratified_load = StratifiedCharges_->stratified_sepacct_load
             (ExpAndGABasis
             ,AssetsPostBom
             ,CumPmtsPostBom
+            ,special_limit
             );
-        double tiered_load = StratifiedCharges_->tiered_sepacct_load
-            (ExpAndGABasis
-            ,AssetsPostBom
-            ,CumPmtsPostBom
-            );
-        double stratified_load = banded_load + tiered_load;
 
         double tiered_comp = 0.0;
-
         if(e_asset_charge_load == Database_->Query(DB_AssetChargeType))
             {
             tiered_comp = StratifiedCharges_->tiered_asset_based_compensation(AssetsPostBom);
@@ -2520,39 +2526,9 @@ void AccountValue::TxTakeSepAcctLoad()
         YearsSepAcctLoadRate += tiered_comp;
         YearsSepAcctLoadRate = i_upper_12_over_12_from_i<double>()(YearsSepAcctLoadRate);
         round_interest_rate(YearsSepAcctLoadRate);
-
-        // TODO ?? This seems bogus. Reevaluate.
-        double kludge_adjustment = 0.0;
-        LMI_ASSERT(0.0 <= banded_load);
-        if(0.0 != banded_load)
-            {
-            // TODO ?? This isn't really right. Instead, aggregate annual
-            // rates, then convert their sum to monthly.
-            double z = i_upper_12_over_12_from_i<double>()(banded_load);
-            round_interest_rate(z);
-
-            // TODO ?? As an expedient that must be reconsidered,
-            // calculate and deduct the supposed error term.
-            kludge_adjustment =
-                    z
-                *   std::max
-                        (0.0
-// TODO ?? DATABASE !! Here, the hardcoded number is of course a defect:
-// it should be in the product database. $10,000,000 is just an arbitrary
-// number for testing. The idea is that some such limit applies to
-// the banded load only, but not to any other account-value load.
-                        ,AVSepAcct - 10000000.0
-                        )
-                ;
-            LMI_ASSERT(0.0 <= kludge_adjustment);
-            }
-        SepAcctLoad = YearsSepAcctLoadRate * AVSepAcct - kludge_adjustment;
-        }
-    else
-        {
-        SepAcctLoad = YearsSepAcctLoadRate * AVSepAcct;
         }
 
+    SepAcctLoad = YearsSepAcctLoadRate * AVSepAcct;
     process_deduction(SepAcctLoad);
     YearsTotalSepAcctLoad += SepAcctLoad;
     Dcv -= SepAcctLoad;
