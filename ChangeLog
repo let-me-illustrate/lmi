@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.625 2007-04-24 19:23:30 wboutin Exp $
+// $Id: ChangeLog,v 1.626 2007-04-24 19:27:39 wboutin Exp $
 
 MAINTENANCE
 
@@ -10980,4 +10980,9 @@ Improve filtering of regression-test output.
   stratified_charges.cpp
   stratified_charges.hpp
 Refactor, removing several defects and a kludge.
+
+20070424T1927Z <wboutin@massmutual.com> [1256]
+
+  version.hpp
+Mark release candidate.
 
