@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.623 2007-04-23 15:51:26 wboutin Exp $
+// $Id: ChangeLog,v 1.624 2007-04-24 13:19:38 chicares Exp $
 
 MAINTENANCE
 
@@ -10954,8 +10954,23 @@ approximation, but neither was it necessary; thus, it was a defect.
 Removing it facilitates system testing and gives a more-accurate
 result aligned with the behavior of a sensible admin system.
 
+20070421T0830Z <chicares@cox.net> [1259]
+
+  ihs_avmly.cpp
+Assert a precondition.
+
 20070423T1551Z <wboutin@massmutual.com> [1259]
 
   xml_notebook_variable_annuity.xrc
 Add and rearrange controls.
+
+20070424T0927Z <chicares@cox.net> [1259]
+
+  test_tools.hpp
+Comment #endif directives uniformly.
+
+20070424T0928Z <chicares@cox.net> [1259]
+
+  diagnostics.sed
+Improve filtering of regression-test output.
 
