@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: stratified_charges.hpp,v 1.10 2007-04-10 01:07:31 chicares Exp $
+// $Id: stratified_charges.hpp,v 1.11 2007-04-24 19:23:30 wboutin Exp $
 
 #ifndef stratified_charges_hpp
 #define stratified_charges_hpp
@@ -105,20 +105,17 @@ class LMI_SO stratified_charges
     //
     // - tiered_guar_sepacct_load: seems to be incorrectly implemented.
 
-    // TODO ?? For the public interface, these functions seem preferable
-    // to the lower-level functions they invoke. Consider rewriting the
-    // rest of the public interface.
-    //
-    double banded_sepacct_load
+    double stratified_sepacct_load
         (e_basis const& basis
         ,double         assets
         ,double         premium
+        ,double         special_limit
         );
-    double tiered_sepacct_load
-        (e_basis const& basis
-        ,double         assets
-        ,double         premium
-        );
+
+    // TODO ?? In the public interface, consider replacing these:
+    //   tiered_current_m_and_e()
+    //   tiered_guaranteed_m_and_e()
+    // with a single tiered_m_and_e(e_basis const& basis, double assets).
 
     double tiered_current_m_and_e                  (double assets) const;
     double tiered_guaranteed_m_and_e               (double assets) const;
@@ -153,8 +150,17 @@ class LMI_SO stratified_charges
     void read (std::string const& filename);
     void write(std::string const& filename) const;
 
-    double banded_curr_sepacct_load(double assets, double premium) const;
-    double banded_guar_sepacct_load(double assets, double premium) const;
+    double banded_curr_sepacct_load
+        (double assets
+        ,double premium
+        ,double special_limit
+        ) const;
+
+    double banded_guar_sepacct_load
+        (double assets
+        ,double premium
+        ,double special_limit
+        ) const;
 
     double tiered_curr_sepacct_load(double assets, double premium) const;
     double tiered_guar_sepacct_load(double assets, double premium) const;
