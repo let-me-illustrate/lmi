@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.627 2007-04-25 21:08:39 wboutin Exp $
+// $Id: ChangeLog,v 1.628 2007-04-25 21:12:40 wboutin Exp $
 
 MAINTENANCE
 
@@ -10990,4 +10990,9 @@ Mark release candidate.
 
   xml_notebook_variable_annuity.xrc
 Reformat.
+
+20070425T2112Z <wboutin@massmutual.com> [1256]
+
+  version.hpp
+Mark release candidate.
 
