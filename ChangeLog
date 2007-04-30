@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.628 2007-04-25 21:12:40 wboutin Exp $
+// $Id: ChangeLog,v 1.629 2007-04-30 14:24:17 chicares Exp $
 
 MAINTENANCE
 
@@ -10995,4 +10995,15 @@ Reformat.
 
   version.hpp
 Mark release candidate.
+
+20070430T1419Z <chicares@cox.net> [1256]
+
+  calculate.hpp
+  ledgervalues.cpp
+Correct obvious oversights.
+
+20070430T1424Z <chicares@cox.net> [1256]
+
+  ihs_acctval.cpp
+Replace a defective defect marker with a fective one.
 
