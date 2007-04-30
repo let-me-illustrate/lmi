@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.629 2007-04-30 14:24:17 chicares Exp $
+// $Id: ChangeLog,v 1.630 2007-04-30 16:26:36 chicares Exp $
 
 MAINTENANCE
 
@@ -11006,4 +11006,11 @@ Correct obvious oversights.
 
   ihs_acctval.cpp
 Replace a defective defect marker with a fective one.
+
+20070430T1626Z <chicares@cox.net> [1256]
+
+  sample.cns.touchstone [new file]
+  sample.ill.touchstone [new file]
+  workhorse.make
+Expand testing of command-line interface.
 

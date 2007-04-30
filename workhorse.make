@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: workhorse.make,v 1.88 2007-04-13 01:07:24 chicares Exp $
+# $Id: workhorse.make,v 1.89 2007-04-30 16:26:36 chicares Exp $
 
 ################################################################################
 
@@ -910,10 +910,26 @@ mpatrol.log:
 # results.
 
 .PHONY: cli_tests
-cli_tests: antediluvian_cli$(EXEEXT)
+cli_tests: antediluvian_cli$(EXEEXT) lmi_cli_shared$(EXEEXT)
 	@$(ECHO) Test command line interface:
 	@./antediluvian_cli$(EXEEXT) --accept --selftest > /dev/null
 	@./antediluvian_cli$(EXEEXT) --accept --selftest
+	@./lmi_cli_shared$(EXEEXT) \
+	  --accept --data_path=/opt/lmi/data --illfile=sample.ill \
+	  | $(DIFF) \
+	      --ignore-all-space \
+	      --ignore-matching-lines='Prepared on' \
+	      - $(src_dir)/sample.ill.touchstone \
+	  | $(WC)   -l \
+	  | $(SED)  -e 's/^/  /' -e 's/$$/ errors/'
+	@./lmi_cli_shared$(EXEEXT) \
+	  --accept --data_path=/opt/lmi/data --cnsfile=sample.cns \
+	  | $(DIFF) \
+	      --ignore-all-space \
+	      --ignore-matching-lines='Prepared on' \
+	      - $(src_dir)/sample.cns.touchstone \
+	  | $(WC)   -l \
+	  | $(SED)  -e 's/^/  /' -e 's/$$/ errors/'
 
 ################################################################################
 
@@ -933,7 +949,7 @@ cgi_tests: antediluvian_cgi$(EXEEXT)
 	  > cgi_touchstone
 	@./antediluvian_cgi$(EXEEXT) --enable_test <cgi.test.in \
 	  | $(SED)  -e ';/^[0-9. ]*$$/!d' -e ';/[0-9]/!d' \
-	  | $(DIFF) -w - cgi_touchstone \
+	  | $(DIFF) --ignore-all-space - cgi_touchstone \
 	  | $(WC)   -l \
 	  | $(SED)  -e 's/^/  /' -e 's/$$/ errors/'
 
