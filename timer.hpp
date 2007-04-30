@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: timer.hpp,v 1.28 2007-01-26 02:09:36 chicares Exp $
+// $Id: timer.hpp,v 1.29 2007-04-30 18:29:18 chicares Exp $
 
 #ifndef timer_hpp
 #define timer_hpp
@@ -87,8 +87,9 @@ class LMI_SO Timer
     Timer&      restart();
     Timer&      stop();
 
-    std::string elapsed_msec_str() const;
-    double      elapsed_usec() const;
+    static std::string elapsed_msec_str(double);
+    std::string        elapsed_msec_str() const;
+    double             elapsed_usec() const;
 
   private:
     elapsed_t   calibrate();
