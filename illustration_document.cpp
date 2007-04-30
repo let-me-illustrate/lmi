@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustration_document.cpp,v 1.10 2007-01-27 00:00:51 wboutin Exp $
+// $Id: illustration_document.cpp,v 1.11 2007-04-30 18:27:39 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -169,7 +169,7 @@ bool IllustrationDocument::OnSaveDocument(wxString const& filename)
     std::ofstream ofs(filename.c_str());
     doc_.write(ofs);
     Modify(false);
-    status() << "Document saved.";
+    status() << "Document saved." << std::flush;
     return true;
 }
 
