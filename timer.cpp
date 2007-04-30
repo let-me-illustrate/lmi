@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: timer.cpp,v 1.11 2007-01-19 16:59:18 chicares Exp $
+// $Id: timer.cpp,v 1.12 2007-04-30 18:29:18 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -96,12 +96,18 @@ Timer& Timer::stop()
 }
 
 //============================================================================
-std::string Timer::elapsed_msec_str() const
+std::string Timer::elapsed_msec_str(double z)
 {
     std::ostringstream oss;
-    oss << std::fixed << std::setprecision(0) << 1000.0 * elapsed_usec();
+    oss << std::fixed << std::setprecision(0) << 1000.0 * z;
     oss << " milliseconds";
     return oss.str();
+}
+
+//============================================================================
+std::string Timer::elapsed_msec_str() const
+{
+    return elapsed_msec_str(elapsed_usec());
 }
 
 //============================================================================

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_cli.cpp,v 1.27 2007-01-27 00:00:51 wboutin Exp $
+// $Id: main_cli.cpp,v 1.28 2007-04-30 18:29:18 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -497,18 +497,18 @@ void process_command_line(int argc, char* argv[])
             );
         std::cerr
             << "    Input:        "
-            << 1000.0 * run_functor.time_for_input
-            << " milliseconds\n"
+            << Timer::elapsed_msec_str(run_functor.time_for_input)
+            << '\n'
             ;
         std::cerr
             << "    Calculations: "
-            << 1000.0 * run_functor.time_for_calculations
-            << " milliseconds\n"
+            << Timer::elapsed_msec_str(run_functor.time_for_calculations)
+            << '\n'
             ;
         std::cerr
             << "    Output:       "
-            << 1000.0 * run_functor.time_for_output
-            << " milliseconds\n"
+            << Timer::elapsed_msec_str(run_functor.time_for_output)
+            << '\n'
             ;
         }
 

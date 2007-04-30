@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.630 2007-04-30 16:26:36 chicares Exp $
+// $Id: ChangeLog,v 1.631 2007-04-30 18:29:18 chicares Exp $
 
 MAINTENANCE
 
@@ -11013,4 +11013,19 @@ Replace a defective defect marker with a fective one.
   sample.ill.touchstone [new file]
   workhorse.make
 Expand testing of command-line interface.
+
+20070430T1827Z <chicares@cox.net> [1256]
+
+  illustration_document.cpp
+Regularize file-saved notification, aligning it with the parallel code
+in the census-document class.
+
+20070430T1829Z <chicares@cox.net> [1256]
+
+  illustration_view.cpp
+  main_cgi.cpp
+  main_cli.cpp
+  timer.cpp
+  timer.hpp
+Regularize elapsed-time reports.
 

@@ -31,7 +31,7 @@
 // other reasons evident in cvs or explained in 'ChangeLog'. Any
 // defect should not reflect on Stephen F. Booth's reputation.
 
-// $Id: main_cgi.cpp,v 1.20 2007-01-27 00:00:51 wboutin Exp $
+// $Id: main_cgi.cpp,v 1.21 2007-04-30 18:29:18 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -517,10 +517,9 @@ void ShowOutput(cgicc::Cgicc const& data)
     std::string census_data = GetValue(data, "Census");
 
     std::cout
-        << "      input:        "
-        << 1000.0 * timer.stop().elapsed_usec()
-        << " milliseconds\n"
-        << "<BR>"
+        << "      Input:        "
+        << Timer::elapsed_msec_str(timer.stop().elapsed_usec())
+        << "<BR>\n"
         ;
     if("" == census_data)
         {
@@ -546,14 +545,13 @@ void ShowIllusOutput(IllusInputParms const& a_input)
     std::cout << "<hr>\n\n";
     std::cout
         << "    Calculations: "
-        << 1000.0 * run_functor.time_for_calculations
-        << " milliseconds\n"
-        << "<br>"
+        << Timer::elapsed_msec_str(run_functor.time_for_calculations)
+        << "<BR>\n"
         ;
     std::cout
         << "    Output:       "
-        << 1000.0 * run_functor.time_for_output
-        << " milliseconds\n"
+        << Timer::elapsed_msec_str(run_functor.time_for_output)
+        << "<BR>\n"
         ;
 }
 
@@ -656,14 +654,13 @@ void ShowCensusOutput
     std::cout << "<hr>\n\n";
     std::cout
         << "    Calculations: "
-        << 1000.0 * run_functor.time_for_calculations
-        << " milliseconds\n"
-        << "<br>"
+        << Timer::elapsed_msec_str(run_functor.time_for_calculations)
+        << "<BR>\n"
         ;
     std::cout
         << "    Output:       "
-        << 1000.0 * run_functor.time_for_output
-        << " milliseconds\n"
+        << Timer::elapsed_msec_str(run_functor.time_for_output)
+        << "<BR>\n"
         ;
 
     // TODO ?? This is terribly inefficient: we already did all the
