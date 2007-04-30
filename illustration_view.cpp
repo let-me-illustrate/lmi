@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustration_view.cpp,v 1.62 2007-04-16 08:01:31 chicares Exp $
+// $Id: illustration_view.cpp,v 1.63 2007-04-30 18:29:18 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -437,7 +437,17 @@ void IllustrationView::Run(Input* overriding_input)
     av.SetDebugFilename(base_filename() + ".debug");
     av.RunAV();
 
-    status() << "Calculate: " << timer.stop().elapsed_msec_str();
+// EVGENIY !! Originally, we had this:
+//    status() << "Calculate: " << timer.stop().elapsed_msec_str();
+// and that used to work; but now the call to
+//   DisplaySelectedValuesAsHtml() seems to empty that stream,
+// apparently on the line above that calls this function:
+//   ledger_formatter_.FormatAsHtml
+// Do you have any idea why? I don't see why that should have any
+// such effect.
+
+    std::ostringstream oss;
+    oss << "Calculate: " << timer.stop().elapsed_msec_str();
     timer.restart();
 
 // TODO ?? CALCULATION_SUMMARY Consider restoring this line:
@@ -445,11 +455,9 @@ void IllustrationView::Run(Input* overriding_input)
 // in place of the following, which is discussed below:
     SetLedger(av.ledger_from_av());
 
-    status() << "; prepare: " << timer.stop().elapsed_msec_str();
-    timer.restart();
-
     DisplaySelectedValuesAsHtml();
 
+    status() << oss.str();
     status() << "; format: " << timer.stop().elapsed_msec_str();
     status() << std::flush;
 }
