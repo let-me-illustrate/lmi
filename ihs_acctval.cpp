@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_acctval.cpp,v 1.93 2007-04-10 11:20:43 wboutin Exp $
+// $Id: ihs_acctval.cpp,v 1.94 2007-04-30 14:24:17 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -1373,7 +1373,7 @@ void AccountValue::FinalizeYear()
     // it here, instead of invoking a costly transcendental function
     // that loses accuracy.
     //
-    // TODO ?? Monthly rates should be recorded too.
+    // TODO ?? The rates this code records are static, not dynamic.
     //
     if(MandEIsDynamic)
         {
