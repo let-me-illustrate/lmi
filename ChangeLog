@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.631 2007-04-30 18:29:18 chicares Exp $
+// $Id: ChangeLog,v 1.632 2007-05-01 14:00:46 chicares Exp $
 
 MAINTENANCE
 
@@ -11028,4 +11028,10 @@ in the census-document class.
   timer.cpp
   timer.hpp
 Regularize elapsed-time reports.
+
+20070501T1400Z <chicares@cox.net> [1256]
+
+  ledgervalues.cpp
+  ledgervalues.hpp
+Refactor, separating calculations from printing.
 

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledgervalues.hpp,v 1.13 2007-01-27 00:00:51 wboutin Exp $
+// $Id: ledgervalues.hpp,v 1.14 2007-05-01 14:00:46 chicares Exp $
 
 #ifndef ledgervalues_hpp
 #define ledgervalues_hpp
@@ -64,22 +64,39 @@ class LMI_SO IllusVal
     Ledger const& ledger() const {return *ledger_;}
 
   private:
-    void PrintHeader              (std::ostream& os) const;
-    void PrintFooter              (std::ostream& os) const;
-    void PrintNarrativeSummary    (std::ostream& os) const;
-    void PrintKeyTerms            (std::ostream& os) const;
-    void PrintNumericalSummary    (std::ostream& os) const;
-    void PrintRequiredSignatures  (std::ostream& os) const;
-    void PrintTabularDetailHeader (std::ostream& os) const;
-    void PrintTabularDetail       (std::ostream& os) const;
+    std::string filename_;
+    boost::shared_ptr<Ledger const> ledger_;
+};
+
+void LMI_SO PrintLedgerFlatText(Ledger const&, std::ostream&);
+
+class LMI_SO FlatTextLedgerPrinter
+    :private boost::noncopyable
+    ,virtual private obstruct_slicing<IllusVal>
+{
+  public:
+    FlatTextLedgerPrinter(Ledger const&, std::ostream&);
+    ~FlatTextLedgerPrinter();
+
+    void Print() const;
+
+  private:
+    void PrintHeader             () const;
+    void PrintFooter             () const;
+    void PrintNarrativeSummary   () const;
+    void PrintKeyTerms           () const;
+    void PrintNumericalSummary   () const;
+    void PrintRequiredSignatures () const;
+    void PrintTabularDetailHeader() const;
+    void PrintTabularDetail      () const;
 
     LedgerInvariant const& invar() const;
     LedgerVariant   const& curr_() const;
     LedgerVariant   const& guar_() const;
     LedgerVariant   const& mdpt_() const;
 
-    std::string filename_;
-    boost::shared_ptr<Ledger const> ledger_;
+    Ledger const& ledger_;
+    std::ostream& os_;
 };
 
 #endif // ledgervalues_hpp
