@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.632 2007-05-01 14:00:46 chicares Exp $
+// $Id: ChangeLog,v 1.633 2007-05-02 14:14:18 chicares Exp $
 
 MAINTENANCE
 
@@ -11034,4 +11034,17 @@ Regularize elapsed-time reports.
   ledgervalues.cpp
   ledgervalues.hpp
 Refactor, separating calculations from printing.
+
+20070502T1349Z <chicares@cox.net> [1256]
+
+  ledgervalues.hpp
+Correct an obvious defect.
+
+20070502T1414Z <chicares@cox.net> [1256]
+
+  ledger_text_formats.cpp
+  ledger_text_formats.hpp
+  ledgervalues.cpp
+  ledgervalues.hpp
+Move text-formatting code to the text-formatting translation unit.
 
