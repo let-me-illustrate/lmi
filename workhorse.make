@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: workhorse.make,v 1.89 2007-04-30 16:26:36 chicares Exp $
+# $Id: workhorse.make,v 1.90 2007-05-02 14:24:18 chicares Exp $
 
 ################################################################################
 
@@ -863,17 +863,21 @@ eraseme.pol:
 
 ################################################################################
 
-# Unit tests.
+# Test data.
 
-unit_test_data_files := \
+test_data := \
   sample.cns \
   sample.ill \
 
-$(unit_test_data_files):
+$(test_data):
 	@$(CP) --preserve --update $(addprefix $(src_dir)/,$@) .
 
+################################################################################
+
+# Unit tests.
+
 .PHONY: unit_tests
-unit_tests: $(unit_test_data_files) $(unit_test_targets) run_unit_tests
+unit_tests: $(test_data) $(unit_test_targets) run_unit_tests
 
 .PHONY: unit_tests_not_built
 unit_tests_not_built:
@@ -910,7 +914,7 @@ mpatrol.log:
 # results.
 
 .PHONY: cli_tests
-cli_tests: antediluvian_cli$(EXEEXT) lmi_cli_shared$(EXEEXT)
+cli_tests: $(test_data) antediluvian_cli$(EXEEXT) lmi_cli_shared$(EXEEXT)
 	@$(ECHO) Test command line interface:
 	@./antediluvian_cli$(EXEEXT) --accept --selftest > /dev/null
 	@./antediluvian_cli$(EXEEXT) --accept --selftest
@@ -941,7 +945,7 @@ cli_tests: antediluvian_cli$(EXEEXT) lmi_cli_shared$(EXEEXT)
 # problem caused by MSYS.
 
 .PHONY: cgi_tests
-cgi_tests: antediluvian_cgi$(EXEEXT)
+cgi_tests: $(test_data) antediluvian_cgi$(EXEEXT)
 	@$(ECHO) Test common gateway interface:
 	@./antediluvian_cgi$(EXEEXT) --write_content_string > /dev/null
 	@<$(src_dir)/expected.cgi.out \
