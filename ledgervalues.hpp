@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledgervalues.hpp,v 1.15 2007-05-02 13:49:14 chicares Exp $
+// $Id: ledgervalues.hpp,v 1.16 2007-05-02 14:14:18 chicares Exp $
 
 #ifndef ledgervalues_hpp
 #define ledgervalues_hpp
@@ -66,37 +66,6 @@ class LMI_SO IllusVal
   private:
     std::string filename_;
     boost::shared_ptr<Ledger const> ledger_;
-};
-
-void LMI_SO PrintLedgerFlatText(Ledger const&, std::ostream&);
-
-class LMI_SO FlatTextLedgerPrinter
-    :private boost::noncopyable
-    ,virtual private obstruct_slicing<FlatTextLedgerPrinter>
-{
-  public:
-    FlatTextLedgerPrinter(Ledger const&, std::ostream&);
-    ~FlatTextLedgerPrinter();
-
-    void Print() const;
-
-  private:
-    void PrintHeader             () const;
-    void PrintFooter             () const;
-    void PrintNarrativeSummary   () const;
-    void PrintKeyTerms           () const;
-    void PrintNumericalSummary   () const;
-    void PrintRequiredSignatures () const;
-    void PrintTabularDetailHeader() const;
-    void PrintTabularDetail      () const;
-
-    LedgerInvariant const& invar() const;
-    LedgerVariant   const& curr_() const;
-    LedgerVariant   const& guar_() const;
-    LedgerVariant   const& mdpt_() const;
-
-    Ledger const& ledger_;
-    std::ostream& os_;
 };
 
 #endif // ledgervalues_hpp

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_text_formats.hpp,v 1.6 2007-01-27 00:00:51 wboutin Exp $
+// $Id: ledger_text_formats.hpp,v 1.7 2007-05-02 14:14:18 chicares Exp $
 
 #ifndef ledger_text_formats_hpp
 #define ledger_text_formats_hpp
@@ -28,6 +28,7 @@
 
 #include "so_attributes.hpp"
 
+#include <iosfwd>
 #include <string>
 
 class Ledger;
@@ -40,6 +41,8 @@ void LMI_SO PrintFormTabDelimited
 std::string LMI_SO FormatSelectedValuesAsHtml
     (Ledger const& ledger_values
     );
+
+void LMI_SO PrintLedgerFlatText(Ledger const&, std::ostream&);
 
 #endif // ledger_text_formats_hpp
 
