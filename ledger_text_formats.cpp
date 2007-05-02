@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_text_formats.cpp,v 1.32 2007-05-02 14:59:45 chicares Exp $
+// $Id: ledger_text_formats.cpp,v 1.33 2007-05-02 15:12:18 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -29,6 +29,7 @@
 #include "ledger_text_formats.hpp"
 
 #include "alert.hpp"
+#include "assert_lmi.hpp"
 #include "authenticity.hpp"
 #include "calendar_date.hpp"
 #include "comma_punct.hpp"
@@ -591,9 +592,7 @@ FlatTextLedgerPrinter::~FlatTextLedgerPrinter()
 
 void FlatTextLedgerPrinter::Print() const
 {
-    // TODO ?? Check os state at entry and exit.
-    // TODO ?? Split into numbered pages.
-
+    // TODO ?? Split into numbered pages; add page number to footer.
     PrintHeader             ();
     PrintNarrativeSummary   ();
     PrintKeyTerms           ();
@@ -604,6 +603,7 @@ void FlatTextLedgerPrinter::Print() const
     PrintTabularDetailHeader();
     PrintTabularDetail      ();
     PrintFooter             ();
+    LMI_ASSERT(os_.good());
 }
 
 void FlatTextLedgerPrinter::PrintHeader() const
@@ -622,7 +622,6 @@ void FlatTextLedgerPrinter::PrintHeader() const
 
 void FlatTextLedgerPrinter::PrintFooter() const
 {
-// TODO ?? Add page numbers.
     os_ << "\f";
 }
 
