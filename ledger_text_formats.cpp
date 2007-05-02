@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_text_formats.cpp,v 1.30 2007-05-02 14:14:18 chicares Exp $
+// $Id: ledger_text_formats.cpp,v 1.31 2007-05-02 14:54:19 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -168,7 +168,6 @@ std::string FormatSelectedValuesAsHtml(Ledger const& ledger_values)
     return oss.str();
 }
 
-//==============================================================================
 void PrintFormTabDelimited
     (Ledger const& ledger_values
     ,std::string const& file_name
@@ -540,7 +539,6 @@ class FlatTextLedgerPrinter
     std::ostream& os_;
 };
 
-//============================================================================
 void PrintLedgerFlatText
     (Ledger const& ledger
     ,std::ostream& os
@@ -577,7 +575,6 @@ namespace
         }
 }
 
-//============================================================================
 FlatTextLedgerPrinter::FlatTextLedgerPrinter
     (Ledger const& ledger
     ,std::ostream& os
@@ -587,12 +584,10 @@ FlatTextLedgerPrinter::FlatTextLedgerPrinter
 {
 }
 
-//============================================================================
 FlatTextLedgerPrinter::~FlatTextLedgerPrinter()
 {
 }
 
-//============================================================================
 void FlatTextLedgerPrinter::Print() const
 {
     // TODO ?? Check os state at entry and exit.
@@ -610,7 +605,6 @@ void FlatTextLedgerPrinter::Print() const
     PrintFooter             ();
 }
 
-//============================================================================
 void FlatTextLedgerPrinter::PrintHeader() const
 {
     os_ << center("Life Insurance Basic Illustration") << endrow;
@@ -625,14 +619,12 @@ void FlatTextLedgerPrinter::PrintHeader() const
 // TODO ?? Add gender, smoker, and underwriting class.
 }
 
-//============================================================================
 void FlatTextLedgerPrinter::PrintFooter() const
 {
 // TODO ?? Add page numbers.
     os_ << "\f";
 }
 
-//============================================================================
 void FlatTextLedgerPrinter::PrintNarrativeSummary() const
 {
 //         "123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 "
@@ -661,7 +653,6 @@ void FlatTextLedgerPrinter::PrintNarrativeSummary() const
     os_ << endrow;
 }
 
-//============================================================================
 void FlatTextLedgerPrinter::PrintKeyTerms() const
 {
     os_ << center("Column headings and key terms") << endrow;
@@ -684,7 +675,6 @@ void FlatTextLedgerPrinter::PrintKeyTerms() const
     os_ << endrow;
 }
 
-//============================================================================
 void FlatTextLedgerPrinter::PrintNumericalSummary() const
 {
     os_ << center("Numerical summary") << endrow;
@@ -736,7 +726,6 @@ void FlatTextLedgerPrinter::PrintNumericalSummary() const
     os_ << endrow;
 }
 
-//============================================================================
 void FlatTextLedgerPrinter::PrintRequiredSignatures() const
 {
     os_ << center("Required signatures") << endrow;
@@ -760,7 +749,6 @@ void FlatTextLedgerPrinter::PrintRequiredSignatures() const
     os_ << "Producer or other authorized representative  Date" << endrow;
 }
 
-//============================================================================
 void FlatTextLedgerPrinter::PrintTabularDetailHeader() const
 {
     os_ << "Tabular detail" << endrow;
@@ -771,7 +759,6 @@ void FlatTextLedgerPrinter::PrintTabularDetailHeader() const
     os_ << endrow;
 }
 
-//============================================================================
 void FlatTextLedgerPrinter::PrintTabularDetail() const
 {
     for(int j = 0; j < ledger_.GetMaxLength(); ++j)
