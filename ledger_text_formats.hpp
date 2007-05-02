@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_text_formats.hpp,v 1.7 2007-05-02 14:14:18 chicares Exp $
+// $Id: ledger_text_formats.hpp,v 1.8 2007-05-02 14:54:19 chicares Exp $
 
 #ifndef ledger_text_formats_hpp
 #define ledger_text_formats_hpp
@@ -33,14 +33,9 @@
 
 class Ledger;
 
-void LMI_SO PrintFormTabDelimited
-    (Ledger const&      ledger_values
-    ,std::string const& file_name
-    );
+std::string LMI_SO FormatSelectedValuesAsHtml(Ledger const&);
 
-std::string LMI_SO FormatSelectedValuesAsHtml
-    (Ledger const& ledger_values
-    );
+void LMI_SO PrintFormTabDelimited(Ledger const&, std::string const& file_name);
 
 void LMI_SO PrintLedgerFlatText(Ledger const&, std::ostream&);
 
