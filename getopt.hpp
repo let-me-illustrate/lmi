@@ -5,7 +5,7 @@
 
 // (Modified by Douglas C. Schmidt for use with GNU G++ (Getopt).)
 // (Modified by Vinicius J. Latorre for use with long options.)
-// (Modified by Gregory W. Chicares in years stated below:
+// (Modified by Gregory W. Chicares in the years stated below:
 //   substantive changes marked inline with 'GWC'; trivial changes
 //   (formatting, style, standardization) not so marked, to reduce
 //   clutter.)
@@ -15,6 +15,9 @@
 // http://www.geocrawler.com/archives/3/364/1995/2/0/2053420/
 // [Both URLs should work, but the second seemed to lack the full
 // contents when I revisited it later.]
+//
+// This is a derived work. Any defect in it should not reflect on
+// the reputations of Douglas C. Schmidt or Vinicius J. Latorre.
 //
 // GWC modifications are
 //   Copyright (C) 2001, 2002, 2003, 2004, 2005, 2006, 2007 Gregory W. Chicares
@@ -38,7 +41,7 @@
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
 // GWC added this RCS Id:
-// $Id: getopt.hpp,v 1.11 2007-02-25 15:02:48 chicares Exp $
+// $Id: getopt.hpp,v 1.12 2007-05-03 14:36:20 chicares Exp $
 
 // This version of 'getopt' appears to the caller like standard Unix 'getopt'
 // but it behaves differently for the user, since it allows the user
@@ -54,12 +57,13 @@
 // GNU application programs can use a third alternative mode in which
 // they can distinguish the relative order of options and other arguments.
 
-// GWC conditionalized gcc-specific pragma.
 #ifndef getopt_hpp
-#   if defined __GNUC__
-#       pragma interface
-#   endif // defined __GNUC__
 #define getopt_hpp
+
+// GWC conditionalized gcc-specific pragma.
+#if defined __GNUC__
+#   pragma interface
+#endif // defined __GNUC__
 
 // GWC added this to conform to LMI standards.
 #include "config.hpp"
