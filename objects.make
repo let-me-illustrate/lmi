@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: objects.make,v 1.99 2007-04-17 12:56:19 chicares Exp $
+# $Id: objects.make,v 1.100 2007-05-03 16:33:17 chicares Exp $
 
 ################################################################################
 
@@ -422,6 +422,7 @@ unit_test_targets := \
   expression_template_0_test$(EXEEXT) \
   fenv_lmi_test$(EXEEXT) \
   financial_test$(EXEEXT) \
+  getopt_test$(EXEEXT) \
   global_settings_test$(EXEEXT) \
   handle_exceptions_test$(EXEEXT) \
   input_seq_test$(EXEEXT) \
@@ -549,6 +550,11 @@ financial_test$(EXEEXT): \
   financial_test.o \
   stratified_algorithms.o \
   timer.o \
+
+getopt_test$(EXEEXT): \
+  $(common_test_objects) \
+  getopt.o \
+  getopt_test.o \
 
 global_settings_test$(EXEEXT): \
   $(boost_filesystem_objects) \
