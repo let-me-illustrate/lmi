@@ -38,7 +38,7 @@
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
 // GWC added this RCS Id:
-// $Id: getopt.cpp,v 1.10 2007-02-25 02:12:29 chicares Exp $
+// $Id: getopt.cpp,v 1.11 2007-05-03 14:37:16 chicares Exp $
 
 // GWC conditionalized gcc-specific pragma.
 #ifdef __GNUC__
@@ -952,20 +952,20 @@ main (int argc, char** argv)
   static char const* vopt[] = {"optional", "alternative", 0};
   static Option long_options[] =
     {
-      {"add",     REQD_ARG,        0, 0, 0},
-      {"append",  NO_ARG,          0, 0, 0},
-      {"delete",  REQD_ARG,        0, 0, 0},
-      {"verbose", NO_ARG,          0, 0, 0},
-      {"create",  NO_ARG,          0, 0, 0},
-      {"file",    REQD_ARG,        0, 0, 0},
-      {"list",    LIST_ARG,        0, 0, 0},
-      {"opt",     OPT_ARG,         0, 0, 0},
-      {"alt",     ALT_ARG,         0, 0, 0},
-      {"vfile",   REQD_ARG,        0, 0, vfile},
-      {"vlist",   LIST_ARG,        0, 0, vlist},
-      {"vopt",    OPT_ARG,         0, 0, vopt},
-      {"valt",    ALT_ARG,         0, 0, vopt},
-      {0,         NO_ARG,          0, 0, 0}
+      {"add"     ,REQD_ARG ,0 ,  0 ,0     ,""},
+      {"append"  ,NO_ARG   ,0 ,  0 ,0     ,""},
+      {"delete"  ,REQD_ARG ,0 ,  0 ,0     ,""},
+      {"verbose" ,NO_ARG   ,0 ,  0 ,0     ,""},
+      {"create"  ,NO_ARG   ,0 ,  0 ,0     ,""},
+      {"file"    ,REQD_ARG ,0 ,  0 ,0     ,""},
+      {"list"    ,LIST_ARG ,0 ,  0 ,0     ,""},
+      {"opt"     ,OPT_ARG  ,0 ,  0 ,0     ,""},
+      {"alt"     ,ALT_ARG  ,0 ,  0 ,0     ,""},
+      {"vfile"   ,REQD_ARG ,0 ,  0 ,vfile ,""},
+      {"vlist"   ,LIST_ARG ,0 ,  0 ,vlist ,""},
+      {"vopt"    ,OPT_ARG  ,0 ,  0 ,vopt  ,""},
+      {"valt"    ,ALT_ARG  ,0 ,  0 ,vopt  ,""},
+      {0         ,NO_ARG   ,0 ,  0 ,0     ,""}
     };
   GetOpt  getopt_long (argc, argv, "abc:d:o::0123456789",
                        long_options, &option_index, 1);
