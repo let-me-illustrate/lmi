@@ -38,7 +38,7 @@
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
 // GWC added this RCS Id:
-// $Id: getopt.cpp,v 1.11 2007-05-03 14:37:16 chicares Exp $
+// $Id: getopt.cpp,v 1.12 2007-05-03 16:33:17 chicares Exp $
 
 // GWC conditionalized gcc-specific pragma.
 #ifdef __GNUC__
@@ -935,109 +935,4 @@ GetOpt::usage(int status)
     usage(EXIT_SUCCESS == status ? std::cout : std::cerr);
     std::exit(status);
 }
-
-#ifdef TEST_GetOpt
-
-#include <cstdio>
-
-int
-main (int argc, char** argv)
-{
-  int c;
-  int digit_optind = 0;
-  int this_option_optind = 1;
-  int option_index = 0;
-  static char const* vfile[] = {"file", "archive", 0};
-  static char const* vlist[] = {"one", "two", "three", 0};
-  static char const* vopt[] = {"optional", "alternative", 0};
-  static Option long_options[] =
-    {
-      {"add"     ,REQD_ARG ,0 ,  0 ,0     ,""},
-      {"append"  ,NO_ARG   ,0 ,  0 ,0     ,""},
-      {"delete"  ,REQD_ARG ,0 ,  0 ,0     ,""},
-      {"verbose" ,NO_ARG   ,0 ,  0 ,0     ,""},
-      {"create"  ,NO_ARG   ,0 ,  0 ,0     ,""},
-      {"file"    ,REQD_ARG ,0 ,  0 ,0     ,""},
-      {"list"    ,LIST_ARG ,0 ,  0 ,0     ,""},
-      {"opt"     ,OPT_ARG  ,0 ,  0 ,0     ,""},
-      {"alt"     ,ALT_ARG  ,0 ,  0 ,0     ,""},
-      {"vfile"   ,REQD_ARG ,0 ,  0 ,vfile ,""},
-      {"vlist"   ,LIST_ARG ,0 ,  0 ,vlist ,""},
-      {"vopt"    ,OPT_ARG  ,0 ,  0 ,vopt  ,""},
-      {"valt"    ,ALT_ARG  ,0 ,  0 ,vopt  ,""},
-      {0         ,NO_ARG   ,0 ,  0 ,0     ,""}
-    };
-  GetOpt  getopt_long (argc, argv, "abc:d:o::0123456789",
-                       long_options, &option_index, 1);
-
-  while ((c = getopt_long ()) != EOF)
-    {
-      switch (c)
-        {
-        case 0:
-          std::printf ("option %s", long_options[option_index].name);
-          if (getopt_long.optarg)
-            std::printf (" with arg %s", getopt_long.optarg);
-          std::printf ("\n");
-          break;
-
-        case '0':
-        case '1':
-        case '2':
-        case '3':
-        case '4':
-        case '5':
-        case '6':
-        case '7':
-        case '8':
-        case '9':
-          if (digit_optind != 0 && digit_optind != this_option_optind)
-            std::printf ("digits occur in two different argv-elements.\n");
-          digit_optind = this_option_optind;
-          std::printf ("option %c\n", c);
-          break;
-
-        case 'a':
-          std::printf ("option a\n");
-          break;
-
-        case 'b':
-          std::printf ("option b\n");
-          break;
-
-        case 'c':
-          std::printf ("option c with value '%s'\n", getopt_long.optarg);
-          break;
-
-        case 'd':
-          std::printf ("option d with value '%s'\n", getopt_long.optarg);
-          break;
-
-        case 'o':
-          std::printf ("option o");
-          if (getopt_long.optarg)
-            std::printf (" with value '%s'", getopt_long.optarg);
-          std::printf ("\n");
-          break;
-
-        case '?':
-          break;
-
-        default:
-          std::printf ("? getopt returned character code 0%o ?\n", c);
-        }
-    }
-
-  if ((c = getopt_long.optind) < argc)
-    {
-      std::printf ("non-option ARGV-elements: ");
-      while (c < argc)
-        std::printf ("%s ", argv[c++]);
-      std::printf ("\n");
-    }
-
-  std::exit (0);
-}
-
-#endif // TEST_GetOpt
 
