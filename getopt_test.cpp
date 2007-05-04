@@ -1,31 +1,55 @@
 // Get command-line options--unit test.
 //
-// Copyright (C) 2007 Gregory W. Chicares.
+// Copyright (C) 1987, 1989 Free Software Foundation, Inc.
 //
-// This program is free software; you can redistribute it and/or modify
-// it under the terms of the GNU General Public License version 2 as
-// published by the Free Software Foundation.
+// (Modified by Douglas C. Schmidt for use with GNU G++.)
+// (Modified by Vinicius J. Latorre for use with long options.)
+// (Modified by Gregory W. Chicares in the years stated below:
+//   substantive changes marked inline with 'GWC'; trivial changes
+//   (formatting, style, standardization) not so marked, to reduce
+//   clutter.)
 //
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
+// Get the original Latorre sources here:
+// http://groups.google.com/groups?selm=9502241613.AA06287%40moon.cpqd.br
+// http://www.geocrawler.com/archives/3/364/1995/2/0/2053420/
+// [Both URLs should work, but the second seemed to lack the full
+// contents when I revisited it later.]
 //
-// You should have received a copy of the GNU General Public License
-// along with this program; if not, write to the Free Software Foundation,
+// This is a derived work. Any defect in it should not reflect on
+// the reputations of Douglas C. Schmidt or Vinicius J. Latorre.
+//
+// GWC modifications are
+//   Copyright (C) 2001, 2002, 2003, 2004, 2005, 2006, 2007 Gregory W. Chicares
+// and released with the same licensing terms as the original, viz.:
+
+// This file is part of the GNU C++ Library.  This library is free
+// software; you can redistribute it and/or modify it under the terms of
+// the GNU Library General Public License as published by the Free
+// Software Foundation; either version 2 of the License, or (at your
+// option) any later version.  This library is distributed in the hope
+// that it will be useful, but WITHOUT ANY WARRANTY; without even the
+// implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+// PURPOSE.  See the GNU Library General Public License for more details.
+//
+// You should have received a copy of the GNU Library General Public License
+// along with this library; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
-//
+
 // http://savannah.nongnu.org/projects/lmi
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: getopt_test.cpp,v 1.2 2007-05-04 12:28:34 chicares Exp $
+// GWC added this RCS Id:
+// $Id: getopt_test.cpp,v 1.3 2007-05-04 19:31:12 chicares Exp $
 
+// GWC added this to conform to LMI standards.
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
 #   pragma hdrstop
 #endif // __BORLANDC__
 
+// GWC changed filename to conform to LMI standard: lowercase, .hpp .
+// #include <GetOpt.h>
 #include "getopt.hpp"
 
 #include "assert_lmi.hpp"
