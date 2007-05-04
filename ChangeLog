@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.634 2007-05-04 12:29:16 chicares Exp $
+// $Id: ChangeLog,v 1.635 2007-05-04 20:43:49 chicares Exp $
 
 MAINTENANCE
 
@@ -11095,4 +11095,17 @@ Improve unit test, revealing a latent defect.
 
   getopt.cpp
 Correct a severe defect made apparent by the unit test.
+
+20070504T1931Z <chicares@cox.net> [1254]
+
+  getopt.cpp
+  getopt.hpp
+  getopt_test.cpp
+Improve consistency of documentation.
+
+20070504T2043Z <chicares@cox.net> [1254]
+
+  getopt.cpp
+  getopt.hpp
+Remove obsolete pragmata.
 
