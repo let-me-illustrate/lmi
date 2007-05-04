@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: getopt_test.cpp,v 1.1 2007-05-03 16:33:17 chicares Exp $
+// $Id: getopt_test.cpp,v 1.2 2007-05-04 12:28:34 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -28,6 +28,8 @@
 
 #include "getopt.hpp"
 
+#include "assert_lmi.hpp"
+#include "miscellany.hpp" // lmi_array_size()
 #include "test_tools.hpp"
 
 struct getopt_test
@@ -37,6 +39,11 @@ struct getopt_test
 
 int getopt_test::test(int argc, char* argv[])
 {
+  // These preconditions are required by C++98 3.6.1/2 and also by
+  // C99 5.1.2.2.1; violating them could cause a crash.
+  LMI_ASSERT(0 <= argc);
+  LMI_ASSERT(0 == argv[argc]);
+
   int c;
   int digit_optind = 0;
   int this_option_optind = 1;
@@ -130,14 +137,23 @@ int getopt_test::test(int argc, char* argv[])
       std::printf ("\n");
     }
 
-  std::exit (0);
+  return EXIT_SUCCESS;
 }
+
+// A set of simulated command-line options might be written thus:
+//    char* test_argv[] = {"", "--verbose", "xyz", 0};
+// but then the strings would be const, yet C99 5.1.2.2.1/2 requires
+// that they be modifiable, and getopt assumes it can modify them.
 
 int test_main(int, char*[])
 {
-    int test_argc = 0;
-    char* test_argv[] = {NULL};
+    char arg0[] = {""};
+    char arg1[] = {"--verbose"};
+    char arg2[] = {"xyz"};
+    char* test_argv[] = {arg0, arg1, arg2, 0};
+    int test_argc = -1 + lmi_array_size(test_argv);
     getopt_test::test(test_argc, test_argv);
+
     return EXIT_SUCCESS;
 }
 
