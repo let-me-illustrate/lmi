@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.633 2007-05-02 14:14:18 chicares Exp $
+// $Id: ChangeLog,v 1.634 2007-05-04 12:29:16 chicares Exp $
 
 MAINTENANCE
 
@@ -6383,7 +6383,7 @@ Remove obsolete tests that the implementation deliberately rejects.
 Rewrite a conditional to increase maintainability.
 
   numeric_io_cast.hpp
-Rewrite a conditionals; improve documentation.
+Rewrite a conditional; improve documentation.
 
 20060301T1700Z <chicares@cox.net> [1206]
 
@@ -11047,4 +11047,52 @@ Correct an obvious defect.
   ledgervalues.cpp
   ledgervalues.hpp
 Move text-formatting code to the text-formatting translation unit.
+
+20070502T1424Z <chicares@cox.net> [1256]
+
+  workhorse.make
+Make test data available for all test targets.
+
+20070502T1454Z <chicares@cox.net> [1256]
+
+  ledger_text_formats.cpp
+  ledger_text_formats.hpp
+Reformat.
+
+20070502T1459Z <chicares@cox.net> [1256]
+
+  ledger_text_formats.cpp
+Include a required header.
+
+20070502T1512Z <chicares@cox.net> [1254]
+
+  ledger_text_formats.cpp
+Resolve a marked defect; remove a duplicative defect marker.
+
+20070503T1436Z <chicares@cox.net> [1254]
+
+  getopt.hpp
+Rewrite a conditional to increase clarity.
+
+20070503T1437Z <chicares@cox.net> [1254]
+
+  getopt.cpp
+Make embedded unit test compile (with '-DTEST_GetOpt').
+
+20070503T1633Z <chicares@cox.net> [1254]
+
+  getopt.cpp
+  getopt_test.cpp [new file]
+  objects.make
+Separate unit test into a standalone translation unit.
+
+20070504T1228Z <chicares@cox.net> [1254]
+
+  getopt_test.cpp
+Improve unit test, revealing a latent defect.
+
+20070504T1229Z <chicares@cox.net> [1254]
+
+  getopt.cpp
+Correct a severe defect made apparent by the unit test.
 
