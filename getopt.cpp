@@ -38,7 +38,7 @@
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
 // GWC added this RCS Id:
-// $Id: getopt.cpp,v 1.12 2007-05-03 16:33:17 chicares Exp $
+// $Id: getopt.cpp,v 1.13 2007-05-04 12:29:16 chicares Exp $
 
 // GWC conditionalized gcc-specific pragma.
 #ifdef __GNUC__
@@ -156,7 +156,7 @@ GetOpt::GetOpt (int argc, char** argv, char const* optstring,
         {
         if(!i->val)
             {
-            return;
+            continue;
             }
         // THIRD_PARTY !! It appears that 'val' really should be a char.
         noptstring += static_cast<char>(i->val);
