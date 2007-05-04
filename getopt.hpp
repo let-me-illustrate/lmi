@@ -40,7 +40,7 @@
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
 // GWC added this RCS Id:
-// $Id: getopt.hpp,v 1.13 2007-05-04 19:31:12 chicares Exp $
+// $Id: getopt.hpp,v 1.14 2007-05-04 20:43:49 chicares Exp $
 
 // This version of 'getopt' appears to the caller like standard Unix 'getopt'
 // but it behaves differently for the user, since it allows the user
@@ -59,10 +59,7 @@
 #ifndef getopt_hpp
 #define getopt_hpp
 
-// GWC conditionalized gcc-specific pragma.
-#if defined __GNUC__
-#   pragma interface
-#endif // defined __GNUC__
+// GWC removed obsolete '#pragma interface'.
 
 // GWC added this to conform to LMI standards.
 #include "config.hpp"

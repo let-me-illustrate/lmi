@@ -40,12 +40,9 @@
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
 // GWC added this RCS Id:
-// $Id: getopt.cpp,v 1.14 2007-05-04 19:31:12 chicares Exp $
+// $Id: getopt.cpp,v 1.15 2007-05-04 20:43:49 chicares Exp $
 
-// GWC conditionalized gcc-specific pragma.
-#if defined __GNUC__
-#   pragma implementation
-#endif // defined __GNUC__
+// GWC removed obsolete '#pragma implementation'.
 
 // GWC removed a dozen or two lines that served to make alloca() available
 // for various compilers.
