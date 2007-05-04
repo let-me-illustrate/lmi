@@ -1,11 +1,10 @@
-// This may look like C code, but it is really -*- C++ -*-
-
-// Getopt for GNU.
+// Get command-line options.
+//
 // Copyright (C) 1987, 1989 Free Software Foundation, Inc.
-
+//
 // (Modified by Douglas C. Schmidt for use with GNU G++.)
 // (Modified by Vinicius J. Latorre for use with long options.)
-// (Modified by Gregory W. Chicares in years stated below:
+// (Modified by Gregory W. Chicares in the years stated below:
 //   substantive changes marked inline with 'GWC'; trivial changes
 //   (formatting, style, standardization) not so marked, to reduce
 //   clutter.)
@@ -15,6 +14,9 @@
 // http://www.geocrawler.com/archives/3/364/1995/2/0/2053420/
 // [Both URLs should work, but the second seemed to lack the full
 // contents when I revisited it later.]
+//
+// This is a derived work. Any defect in it should not reflect on
+// the reputations of Douglas C. Schmidt or Vinicius J. Latorre.
 //
 // GWC modifications are
 //   Copyright (C) 2001, 2002, 2003, 2004, 2005, 2006, 2007 Gregory W. Chicares
@@ -38,12 +40,12 @@
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
 // GWC added this RCS Id:
-// $Id: getopt.cpp,v 1.13 2007-05-04 12:29:16 chicares Exp $
+// $Id: getopt.cpp,v 1.14 2007-05-04 19:31:12 chicares Exp $
 
 // GWC conditionalized gcc-specific pragma.
-#ifdef __GNUC__
+#if defined __GNUC__
 #   pragma implementation
-#endif // __GNUC__
+#endif // defined __GNUC__
 
 // GWC removed a dozen or two lines that served to make alloca() available
 // for various compilers.

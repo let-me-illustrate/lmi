@@ -1,8 +1,7 @@
-// This may look like C code, but it is really -*- C++ -*-
-
-// Getopt for GNU.
+// Get command-line options.
+//
 // Copyright (C) 1987, 1989, 1992 Free Software Foundation, Inc.
-
+//
 // (Modified by Douglas C. Schmidt for use with GNU G++ (Getopt).)
 // (Modified by Vinicius J. Latorre for use with long options.)
 // (Modified by Gregory W. Chicares in the years stated below:
@@ -41,7 +40,7 @@
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
 // GWC added this RCS Id:
-// $Id: getopt.hpp,v 1.12 2007-05-03 14:36:20 chicares Exp $
+// $Id: getopt.hpp,v 1.13 2007-05-04 19:31:12 chicares Exp $
 
 // This version of 'getopt' appears to the caller like standard Unix 'getopt'
 // but it behaves differently for the user, since it allows the user
