@@ -40,7 +40,7 @@
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
 // GWC added this RCS Id:
-// $Id: getopt_test.cpp,v 1.4 2007-05-07 22:49:27 chicares Exp $
+// $Id: getopt_test.cpp,v 1.5 2007-05-07 22:55:16 chicares Exp $
 
 // GWC added this to conform to LMI standards.
 #ifdef __BORLANDC__
@@ -197,6 +197,24 @@ int test_main(int, char*[])
     char arg0[] = {""};
     char arg1[] = {"--verbose"};
     char arg2[] = {"xyz"};
+    char* test_argv[] = {arg0, arg1, arg2, 0};
+    int test_argc = -1 + lmi_array_size(test_argv);
+    getopt_test::test(test_argc, test_argv);
+    }
+
+#if 0
+// TODO ?? The standard permits 'argc' to be zero.
+    {
+    char* test_argv[] = {0};
+    int test_argc = -1 + lmi_array_size(test_argv);
+    getopt_test::test(test_argc, test_argv);
+    }
+#endif // 0
+
+    {
+    char arg0[] = {""};
+    char arg1[] = {"-o"};
+    char arg2[] = {"-d1,2,3"};
     char* test_argv[] = {arg0, arg1, arg2, 0};
     int test_argc = -1 + lmi_array_size(test_argv);
     getopt_test::test(test_argc, test_argv);
