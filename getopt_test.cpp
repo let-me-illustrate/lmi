@@ -40,7 +40,7 @@
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
 // GWC added this RCS Id:
-// $Id: getopt_test.cpp,v 1.3 2007-05-04 19:31:12 chicares Exp $
+// $Id: getopt_test.cpp,v 1.4 2007-05-07 22:49:27 chicares Exp $
 
 // GWC added this to conform to LMI standards.
 #ifdef __BORLANDC__
@@ -63,105 +63,127 @@ struct getopt_test
 
 int getopt_test::test(int argc, char* argv[])
 {
-  // These preconditions are required by C++98 3.6.1/2 and also by
-  // C99 5.1.2.2.1; violating them could cause a crash.
-  LMI_ASSERT(0 <= argc);
-  LMI_ASSERT(0 == argv[argc]);
+    // These preconditions are required by C++98 3.6.1/2 and also by
+    // C99 5.1.2.2.1; violating them could cause a crash.
+    LMI_ASSERT(0 <= argc);
+    LMI_ASSERT(0 == argv[argc]);
 
-  int c;
-  int digit_optind = 0;
-  int this_option_optind = 1;
-  int option_index = 0;
-  static char const* vfile[] = {"file", "archive", 0};
-  static char const* vlist[] = {"one", "two", "three", 0};
-  static char const* vopt[] = {"optional", "alternative", 0};
-  static Option long_options[] =
-    {
-      {"add"     ,REQD_ARG ,0 ,  0 ,0     ,""},
-      {"append"  ,NO_ARG   ,0 ,  0 ,0     ,""},
-      {"delete"  ,REQD_ARG ,0 ,  0 ,0     ,""},
-      {"verbose" ,NO_ARG   ,0 ,  0 ,0     ,""},
-      {"create"  ,NO_ARG   ,0 ,  0 ,0     ,""},
-      {"file"    ,REQD_ARG ,0 ,  0 ,0     ,""},
-      {"list"    ,LIST_ARG ,0 ,  0 ,0     ,""},
-      {"opt"     ,OPT_ARG  ,0 ,  0 ,0     ,""},
-      {"alt"     ,ALT_ARG  ,0 ,  0 ,0     ,""},
-      {"vfile"   ,REQD_ARG ,0 ,  0 ,vfile ,""},
-      {"vlist"   ,LIST_ARG ,0 ,  0 ,vlist ,""},
-      {"vopt"    ,OPT_ARG  ,0 ,  0 ,vopt  ,""},
-      {"valt"    ,ALT_ARG  ,0 ,  0 ,vopt  ,""},
-      {0         ,NO_ARG   ,0 ,  0 ,0     ,""}
-    };
-  GetOpt  getopt_long (argc, argv, "abc:d:o::0123456789",
-                       long_options, &option_index, 1);
-
-  while ((c = getopt_long ()) != EOF)
-    {
-      switch (c)
+    static char const* vfile[] = {"file", "archive", 0};
+    static char const* vlist[] = {"one", "two", "three", 0};
+    static char const* vopt [] = {"optional", "alternative", 0};
+    static Option long_options[] =
         {
-        case 0:
-          std::printf ("option %s", long_options[option_index].name);
-          if (getopt_long.optarg)
-            std::printf (" with arg %s", getopt_long.optarg);
-          std::printf ("\n");
-          break;
+            {"add"     ,REQD_ARG ,0 ,  0 ,0     ,""},
+            {"append"  ,NO_ARG   ,0 ,  0 ,0     ,""},
+            {"delete"  ,REQD_ARG ,0 ,  0 ,0     ,""},
+            {"verbose" ,NO_ARG   ,0 ,  0 ,0     ,""},
+            {"create"  ,NO_ARG   ,0 ,  0 ,0     ,""},
+            {"file"    ,REQD_ARG ,0 ,  0 ,0     ,""},
+            {"list"    ,LIST_ARG ,0 ,  0 ,0     ,""},
+            {"opt"     ,OPT_ARG  ,0 ,  0 ,0     ,""},
+            {"alt"     ,ALT_ARG  ,0 ,  0 ,0     ,""},
+            {"vfile"   ,REQD_ARG ,0 ,  0 ,vfile ,""},
+            {"vlist"   ,LIST_ARG ,0 ,  0 ,vlist ,""},
+            {"vopt"    ,OPT_ARG  ,0 ,  0 ,vopt  ,""},
+            {"valt"    ,ALT_ARG  ,0 ,  0 ,vopt  ,""},
+            {0         ,NO_ARG   ,0 ,  0 ,0     ,""}
+        };
+    int option_index = 0;
+    GetOpt getopt_long
+        (argc
+        ,argv
+        ,"abc:d:o::0123456789"
+        ,long_options
+        ,&option_index
+        ,1
+        );
 
-        case '0':
-        case '1':
-        case '2':
-        case '3':
-        case '4':
-        case '5':
-        case '6':
-        case '7':
-        case '8':
-        case '9':
-          if (digit_optind != 0 && digit_optind != this_option_optind)
-            std::printf ("digits occur in two different argv-elements.\n");
-          digit_optind = this_option_optind;
-          std::printf ("option %c\n", c);
-          break;
+    int digit_optind = 0;
+    int this_option_optind = 1;
+    int c;
+    while(EOF != (c = getopt_long()))
+        {
+        switch(c)
+            {
+            case 0:
+                {
+                std::printf("option %s", long_options[option_index].name);
+                if(getopt_long.optarg)
+                    std::printf(" with arg %s", getopt_long.optarg);
+                std::printf("\n");
+                }
+                break;
 
-        case 'a':
-          std::printf ("option a\n");
-          break;
+            case '0':
+            case '1':
+            case '2':
+            case '3':
+            case '4':
+            case '5':
+            case '6':
+            case '7':
+            case '8':
+            case '9':
+                {
+                if(digit_optind != 0 && digit_optind != this_option_optind)
+                    std::printf("digits occur in two different argv-elements.\n");
+                digit_optind = this_option_optind;
+                std::printf("option %c\n", c);
+                }
+                break;
 
-        case 'b':
-          std::printf ("option b\n");
-          break;
+            case 'a':
+                {
+                std::printf("option a\n");
+                }
+                break;
 
-        case 'c':
-          std::printf ("option c with value '%s'\n", getopt_long.optarg);
-          break;
+            case 'b':
+                {
+                std::printf("option b\n");
+                }
+                break;
 
-        case 'd':
-          std::printf ("option d with value '%s'\n", getopt_long.optarg);
-          break;
+            case 'c':
+                {
+                std::printf("option c with value '%s'\n", getopt_long.optarg);
+                }
+                break;
 
-        case 'o':
-          std::printf ("option o");
-          if (getopt_long.optarg)
-            std::printf (" with value '%s'", getopt_long.optarg);
-          std::printf ("\n");
-          break;
+            case 'd':
+                {
+                std::printf("option d with value '%s'\n", getopt_long.optarg);
+                }
+                break;
 
-        case '?':
-          break;
+            case 'o':
+                {
+                std::printf("option o");
+                if(getopt_long.optarg)
+                    std::printf(" with value '%s'", getopt_long.optarg);
+                std::printf("\n");
+                }
+                break;
 
-        default:
-          std::printf ("? getopt returned character code 0%o ?\n", c);
+            case '?':
+                break;
+
+            default:
+                {
+                std::printf("? getopt returned character code 0%o ?\n", c);
+                }
+            }
         }
-    }
 
-  if ((c = getopt_long.optind) < argc)
-    {
-      std::printf ("non-option ARGV-elements: ");
-      while (c < argc)
-        std::printf ("%s ", argv[c++]);
-      std::printf ("\n");
-    }
+    if((c = getopt_long.optind) < argc)
+        {
+        std::printf("non-option ARGV-elements: ");
+        while(c < argc)
+            std::printf("%s ", argv[c++]);
+        std::printf("\n");
+        }
 
-  return EXIT_SUCCESS;
+    return EXIT_SUCCESS;
 }
 
 // A set of simulated command-line options might be written thus:
@@ -171,12 +193,14 @@ int getopt_test::test(int argc, char* argv[])
 
 int test_main(int, char*[])
 {
+    {
     char arg0[] = {""};
     char arg1[] = {"--verbose"};
     char arg2[] = {"xyz"};
     char* test_argv[] = {arg0, arg1, arg2, 0};
     int test_argc = -1 + lmi_array_size(test_argv);
     getopt_test::test(test_argc, test_argv);
+    }
 
     return EXIT_SUCCESS;
 }
