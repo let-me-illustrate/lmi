@@ -40,7 +40,7 @@
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
 // GWC added this RCS Id:
-// $Id: getopt_test.cpp,v 1.5 2007-05-07 22:55:16 chicares Exp $
+// $Id: getopt_test.cpp,v 1.6 2007-05-07 23:17:44 chicares Exp $
 
 // GWC added this to conform to LMI standards.
 #ifdef __BORLANDC__
@@ -56,17 +56,21 @@
 #include "miscellany.hpp" // lmi_array_size()
 #include "test_tools.hpp"
 
+#include <sstream>
+
 struct getopt_test
 {
-    static int test(int, char*[]);
+    static std::string test(int, char*[]);
 };
 
-int getopt_test::test(int argc, char* argv[])
+std::string getopt_test::test(int argc, char* argv[])
 {
     // These preconditions are required by C++98 3.6.1/2 and also by
     // C99 5.1.2.2.1; violating them could cause a crash.
     LMI_ASSERT(0 <= argc);
     LMI_ASSERT(0 == argv[argc]);
+
+    std::ostringstream oss;
 
     static char const* vfile[] = {"file", "archive", 0};
     static char const* vlist[] = {"one", "two", "three", 0};
@@ -107,10 +111,12 @@ int getopt_test::test(int argc, char* argv[])
             {
             case 0:
                 {
-                std::printf("option %s", long_options[option_index].name);
+                oss << "option " << long_options[option_index].name;
                 if(getopt_long.optarg)
-                    std::printf(" with arg %s", getopt_long.optarg);
-                std::printf("\n");
+                    {
+                    oss << " with arg " << getopt_long.optarg;
+                    }
+                oss << '\n';
                 }
                 break;
 
@@ -126,64 +132,73 @@ int getopt_test::test(int argc, char* argv[])
             case '9':
                 {
                 if(digit_optind != 0 && digit_optind != this_option_optind)
-                    std::printf("digits occur in two different argv-elements.\n");
+                    {
+                    oss << "digits occur in two different argv-elements.\n";
+                    }
                 digit_optind = this_option_optind;
-                std::printf("option %c\n", c);
+                oss << "option " << static_cast<char>(c) << "\n";
                 }
                 break;
 
             case 'a':
                 {
-                std::printf("option a\n");
+                oss << "option a\n";
                 }
                 break;
 
             case 'b':
                 {
-                std::printf("option b\n");
+                oss << "option b\n";
                 }
                 break;
 
             case 'c':
                 {
-                std::printf("option c with value '%s'\n", getopt_long.optarg);
+                oss << "option c with value '" << getopt_long.optarg << "'\n";
                 }
                 break;
 
             case 'd':
                 {
-                std::printf("option d with value '%s'\n", getopt_long.optarg);
+                oss << "option d with value '" << getopt_long.optarg << "'\n";
                 }
                 break;
 
             case 'o':
                 {
-                std::printf("option o");
+                oss << "option o";
                 if(getopt_long.optarg)
-                    std::printf(" with value '%s'", getopt_long.optarg);
-                std::printf("\n");
+                    {
+                    oss << " with value '" << getopt_long.optarg << "'";
+                    }
+                oss << '\n';
                 }
                 break;
 
             case '?':
+                {
+                ; // Do nothing.
+                }
                 break;
 
             default:
                 {
-                std::printf("? getopt returned character code 0%o ?\n", c);
+                oss << "? getopt returned character code " << c << " ?\n";
                 }
             }
         }
 
     if((c = getopt_long.optind) < argc)
         {
-        std::printf("non-option ARGV-elements: ");
+        oss << "non-option ARGV-elements: ";
         while(c < argc)
-            std::printf("%s ", argv[c++]);
-        std::printf("\n");
+            {
+            oss << argv[c++];
+            }
+        oss << '\n';
         }
 
-    return EXIT_SUCCESS;
+    return oss.str();
 }
 
 // A set of simulated command-line options might be written thus:
@@ -199,15 +214,17 @@ int test_main(int, char*[])
     char arg2[] = {"xyz"};
     char* test_argv[] = {arg0, arg1, arg2, 0};
     int test_argc = -1 + lmi_array_size(test_argv);
-    getopt_test::test(test_argc, test_argv);
+    std::string s = getopt_test::test(test_argc, test_argv);
+    BOOST_TEST_EQUAL(s, "option verbose\nnon-option ARGV-elements: xyz\n");
     }
 
 #if 0
-// TODO ?? The standard permits 'argc' to be zero.
+// TODO ?? The standard permits 'argc' to be zero. However, this segfaults.
     {
     char* test_argv[] = {0};
     int test_argc = -1 + lmi_array_size(test_argv);
-    getopt_test::test(test_argc, test_argv);
+    std::string s = getopt_test::test(test_argc, test_argv);
+    BOOST_TEST_EQUAL(s, "");
     }
 #endif // 0
 
@@ -217,7 +234,8 @@ int test_main(int, char*[])
     char arg2[] = {"-d1,2,3"};
     char* test_argv[] = {arg0, arg1, arg2, 0};
     int test_argc = -1 + lmi_array_size(test_argv);
-    getopt_test::test(test_argc, test_argv);
+    std::string s = getopt_test::test(test_argc, test_argv);
+    BOOST_TEST_EQUAL(s, "option o\noption d with value '1,2,3'\n");
     }
 
     return EXIT_SUCCESS;
