@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.636 2007-05-07 23:17:44 chicares Exp $
+// $Id: ChangeLog,v 1.637 2007-05-08 21:44:20 chicares Exp $
 
 MAINTENANCE
 
@@ -11123,4 +11123,19 @@ Add unit tests, noting a defect.
 
   getopt_test.cpp
 Validate unit-test results.
+
+20070508T1842Z <chicares@cox.net> [1255]
+
+  census_view.cpp
+  census_view.hpp
+  group_values.cpp
+  group_values.hpp
+  main_cli.cpp
+Extend and rename an enumeration.
+
+20070508T2144Z <chicares@cox.net> [1255]
+
+  group_values.cpp
+  group_values.hpp
+Extend emit_ledger() capabilities.
 
