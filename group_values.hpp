@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: group_values.hpp,v 1.13 2007-01-27 00:00:51 wboutin Exp $
+// $Id: group_values.hpp,v 1.14 2007-05-08 18:42:15 chicares Exp $
 
 #ifndef group_values_hpp
 #define group_values_hpp
@@ -42,11 +42,16 @@ class Ledger;
 /// Enumerators are binary powers so that more than one can be
 /// specified in a single int.
 
-enum e_emission_target
-    {emit_to_nowhere     = 0
-    ,emit_to_printer     = 1
-    ,emit_to_spew_file   = 2
-    ,emit_to_spreadsheet = 4
+enum enum_emission
+    {e_emit_nothing        =   0
+    ,e_emit_composite_only =   1 // Not yet implemented.
+    ,e_emit_timings        =   2 // Not yet implemented.
+    ,e_emit_pdf_file       =   4 // Not yet implemented.
+    ,e_emit_pdf_to_printer =   8
+    ,e_emit_test_data      =  16
+    ,e_emit_spreadsheet    =  32
+    ,e_emit_text_stream    =  64 // Not yet implemented.
+    ,e_emit_custom_0       = 128 // Not yet implemented.
     };
 
 /// Run all cells in a census.
@@ -56,7 +61,7 @@ enum e_emission_target
 ///
 /// Output is emitted to specified targets for all cells as well as
 /// the composite. When output is wanted only for the composite, use
-/// target 'emit_to_nowhere' and handle output explicitly for the
+/// target 'e_emit_nothing' and handle output explicitly for the
 /// composite, which is accessible through composite(). That usage
 /// normally arises when the target isn't known at the time the
 /// composite is generated, so adding an emit-composite-only flag here
@@ -74,7 +79,7 @@ class LMI_SO run_census
 
     bool operator()
         (fs::path const&                     file
-        ,e_emission_target                   emission_target
+        ,enum_emission                       emission
         ,std::vector<IllusInputParms> const& cells
         );
 

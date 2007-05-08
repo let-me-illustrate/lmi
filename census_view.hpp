@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: census_view.hpp,v 1.18 2007-01-27 00:00:51 wboutin Exp $
+// $Id: census_view.hpp,v 1.19 2007-05-08 18:42:15 chicares Exp $
 
 #ifndef census_view_hpp
 #define census_view_hpp
@@ -86,7 +86,7 @@ class CensusView
     void UponRunCaseToSpreadsheet (wxCommandEvent&);
     void UponUpdateApplicable     (wxUpdateUIEvent&);
 
-    bool DoAllCells  (e_emission_target emission_target = emit_to_nowhere);
+    bool DoAllCells(enum_emission);
 
     // Ascertain differences between old and new parameters and apply
     // each such difference to other cells...

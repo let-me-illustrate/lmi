@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_cli.cpp,v 1.28 2007-04-30 18:29:18 chicares Exp $
+// $Id: main_cli.cpp,v 1.29 2007-05-08 18:42:15 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -70,7 +70,7 @@ void RegressionTestOneCensusFile(fs::directory_iterator i)
     std::cout << "Regression testing: " << i->string() << std::endl;
     multiple_cell_document doc(i->string());
     run_census::assert_consistency(doc.case_parms()[0], doc.cell_parms()[0]);
-    run_census()(*i, emit_to_spew_file, doc.cell_parms());
+    run_census()(*i, e_emit_test_data, doc.cell_parms());
 }
 
 //============================================================================

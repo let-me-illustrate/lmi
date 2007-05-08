@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: group_values.cpp,v 1.56 2007-01-27 00:00:51 wboutin Exp $
+// $Id: group_values.cpp,v 1.57 2007-05-08 18:42:15 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -67,13 +67,13 @@ bool cell_should_be_ignored(IllusInputParms const& cell)
 }
 
 void emit_ledger
-    (fs::path const&   file
-    ,int               index
-    ,Ledger const&     ledger
-    ,e_emission_target emission_target
+    (fs::path const& file
+    ,int             index
+    ,Ledger const&   ledger
+    ,enum_emission   emission
     )
 {
-    if(emission_target & emit_to_printer)
+    if(emission & e_emit_pdf_to_printer)
         {
         std::string pdf_out_file = write_ledger_to_pdf
             (ledger
@@ -81,7 +81,7 @@ void emit_ledger
             );
         file_command()(pdf_out_file, "print");
         }
-    if(emission_target & emit_to_spew_file)
+    if(emission & e_emit_test_data)
         {
         fs::ofstream ofs
             (serialized_file_path(file, index, "test")
@@ -89,7 +89,7 @@ void emit_ledger
             );
         ledger.Spew(ofs);
         }
-    if(emission_target & emit_to_spreadsheet)
+    if(emission & e_emit_spreadsheet)
         {
         PrintFormTabDelimited
             (ledger
@@ -117,7 +117,7 @@ class run_census_in_series
 
     bool operator()
         (fs::path const&                     file
-        ,e_emission_target                   emission_target
+        ,enum_emission                       emission
         ,std::vector<IllusInputParms> const& cells
         ,Ledger&                             composite
         );
@@ -131,7 +131,7 @@ class run_census_in_parallel
 
     bool operator()
         (fs::path const&                     file
-        ,e_emission_target                   emission_target
+        ,enum_emission                       emission
         ,std::vector<IllusInputParms> const& cells
         ,Ledger&                             composite
         );
@@ -147,7 +147,7 @@ class run_census_in_parallel
 //============================================================================
 bool run_census_in_series::operator()
     (fs::path const&                     file
-    ,e_emission_target                   emission_target
+    ,enum_emission                       emission
     ,std::vector<IllusInputParms> const& cells
     ,Ledger&                             composite
     )
@@ -185,7 +185,7 @@ bool run_census_in_series::operator()
                 (file
                 ,j
                 ,*av.ledger_from_av()
-                ,emission_target
+                ,emission
                 );
             }
         catch(...)
@@ -203,7 +203,7 @@ bool run_census_in_series::operator()
         (file
         ,-1
         ,composite
-        ,emission_target
+        ,emission
         );
 
     status() << timer.stop().elapsed_msec_str() << std::flush;
@@ -280,7 +280,7 @@ bool run_census_in_series::operator()
 
 bool run_census_in_parallel::operator()
     (fs::path const&                     file
-    ,e_emission_target                   emission_target
+    ,enum_emission                       emission
     ,std::vector<IllusInputParms> const& cells
     ,Ledger&                             composite
     )
@@ -659,7 +659,7 @@ restart:
             (file
             ,j
             ,*(*i)->ledger_from_av()
-            ,emission_target
+            ,emission
             );
         }
 
@@ -667,7 +667,7 @@ restart:
         (file
         ,-1
         ,composite
-        ,emission_target
+        ,emission
         );
     return true;
 }
@@ -675,7 +675,7 @@ restart:
 //============================================================================
 bool run_census::operator()
     (fs::path const&                     file
-    ,e_emission_target                   emission_target
+    ,enum_emission                       emission
     ,std::vector<IllusInputParms> const& cells
     )
 {
@@ -692,12 +692,12 @@ bool run_census::operator()
         {
         case e_life_by_life:
             {
-            return run_census_in_series()(file, emission_target, cells, *composite_);
+            return run_census_in_series()(file, emission, cells, *composite_);
             }
             break;
         case e_month_by_month:
             {
-            return run_census_in_parallel()(file, emission_target, cells, *composite_);
+            return run_census_in_parallel()(file, emission, cells, *composite_);
             }
             break;
         default:
