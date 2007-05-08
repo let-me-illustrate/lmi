@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: census_view.cpp,v 1.53 2007-04-16 08:01:31 chicares Exp $
+// $Id: census_view.cpp,v 1.54 2007-05-08 18:42:15 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -858,7 +858,7 @@ void CensusView::UponPrintCell(wxCommandEvent&)
 
 void CensusView::UponPrintCase(wxCommandEvent&)
 {
-    DoAllCells(emit_to_printer);
+    DoAllCells(e_emit_pdf_to_printer);
 }
 
 void CensusView::UponRunCase(wxCommandEvent&)
@@ -898,7 +898,7 @@ void CensusView::ViewComposite()
     // Run all cells if necessary to (re)generate composite numbers.
     if(!composite_is_available_)
         {
-        if(!DoAllCells(emit_to_nowhere))
+        if(!DoAllCells(e_emit_nothing))
             {
             return;
             }
@@ -919,7 +919,7 @@ void CensusView::ViewComposite()
         }
 }
 
-bool CensusView::DoAllCells(e_emission_target emission_target)
+bool CensusView::DoAllCells(enum_emission emission)
 {
     run_census::assert_consistency(case_parms()[0], cell_parms()[0]);
 
@@ -937,7 +937,7 @@ bool CensusView::DoAllCells(e_emission_target emission_target)
         cells.push_back(cell);
         }
     run_census runner;
-    if(!runner(base_filename(), emission_target, cells))
+    if(!runner(base_filename(), emission, cells))
         {
         return false;
         }
@@ -1100,7 +1100,7 @@ void CensusView::UponRunCaseToSpreadsheet(wxCommandEvent&)
         +   configurable_settings::instance().spreadsheet_file_extension()
         ;
     std::remove(spreadsheet_filename.c_str());
-    DoAllCells(emit_to_spreadsheet);
+    DoAllCells(e_emit_spreadsheet);
 }
 
 // TODO ?? Add unit tests for this function.
