@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: group_values.cpp,v 1.57 2007-05-08 18:42:15 chicares Exp $
+// $Id: group_values.cpp,v 1.58 2007-05-08 21:44:20 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -54,6 +54,7 @@
 
 #include <algorithm> // std::max()
 #include <ios>
+#include <iostream>
 #include <iterator>  // std::back_inserter()
 
 namespace
@@ -96,6 +97,10 @@ void emit_ledger
             ,   file.string()
             +   configurable_settings::instance().spreadsheet_file_extension()
             );
+        }
+    if(emission & e_emit_text_stream)
+        {
+        PrintLedgerFlatText(ledger, std::cout);
         }
 }
 } // Unnamed namespace.

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: group_values.hpp,v 1.14 2007-05-08 18:42:15 chicares Exp $
+// $Id: group_values.hpp,v 1.15 2007-05-08 21:44:20 chicares Exp $
 
 #ifndef group_values_hpp
 #define group_values_hpp
@@ -50,7 +50,7 @@ enum enum_emission
     ,e_emit_pdf_to_printer =   8
     ,e_emit_test_data      =  16
     ,e_emit_spreadsheet    =  32
-    ,e_emit_text_stream    =  64 // Not yet implemented.
+    ,e_emit_text_stream    =  64
     ,e_emit_custom_0       = 128 // Not yet implemented.
     };
 
