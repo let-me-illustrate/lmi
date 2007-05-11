@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: progress_meter_test.cpp,v 1.5 2007-01-27 00:00:52 wboutin Exp $
+// $Id: progress_meter_test.cpp,v 1.6 2007-05-11 01:28:16 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -30,7 +30,12 @@
 
 #include "test_tools.hpp"
 
-int test_main(int, char*[])
+struct progress_meter_test
+{
+    static void test();
+};
+
+void progress_meter_test::test()
 {
     int const max_count = 3;
     boost::shared_ptr<progress_meter> meter(create_progress_meter(max_count));
@@ -42,7 +47,11 @@ int test_main(int, char*[])
         }
 
     BOOST_TEST_THROW(meter->reflect_progress(), std::logic_error, "");
+}
 
+int test_main(int, char*[])
+{
+    progress_meter_test::test();
     return EXIT_SUCCESS;
 }
 
