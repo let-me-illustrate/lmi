@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: progress_meter.hpp,v 1.10 2007-05-12 14:21:21 chicares Exp $
+// $Id: progress_meter.hpp,v 1.11 2007-05-12 18:30:34 chicares Exp $
 
 /// Design notes for class progress_meter.
 ///
@@ -50,6 +50,19 @@
 /// equals or exceeds its maximum; then increment the counter; then
 /// call show_progress_message() and return its return value, which is
 /// optionally return false to cancel the operation.
+///
+/// enum enum_display_mode: Specifies display mode. Any concrete
+/// implementation is free to disregard it and behave as though
+/// 'e_normal_display' had been specified.
+///   e_normal_display: This default is suitable for most purposes.
+///   e_quiet_display: This is merely a hint that the progress meter
+///     should display less information than normal. Of the concrete
+///     implementations provided, this affects only the command-line
+///     variant, for which it completely suppresses all progress-meter
+///     output.
+///   e_unit_test_mode: Shunts all progress-meter output to a stream
+///     specified by progress_meter_unit_test_stream(), to facilitate
+///     unit testing. Used only with the command-line interface.
 ///
 /// Protected interface--nonvirtual.
 ///
@@ -134,15 +147,29 @@
 
 #include <boost/shared_ptr.hpp>
 
+#include <iosfwd>
 #include <string>
+
+std::ostringstream& progress_meter_unit_test_stream();
 
 class LMI_SO progress_meter
 {
   public:
+    enum enum_display_mode
+        {e_normal_display
+        ,e_quiet_display
+        ,e_unit_test_mode
+        };
+
     bool reflect_progress();
 
   protected:
-    progress_meter(int max_count, std::string const& title);
+    progress_meter
+        (int                max_count
+        ,std::string const& title
+        ,enum_display_mode
+        );
+
     virtual ~progress_meter();
 
     int count() const;
@@ -152,19 +179,22 @@ class LMI_SO progress_meter
     virtual bool show_progress_message() const = 0;
 
   private:
-    int count_;
-    int max_count_;
-    std::string title_;
+    int               count_;
+    int               max_count_;
+    std::string       title_;
+    enum_display_mode display_mode_;
 };
 
 boost::shared_ptr<progress_meter> LMI_SO create_progress_meter
-    (int max_count
-    ,std::string const& title = ""
+    (int                               max_count
+    ,std::string const&                title = ""
+    ,progress_meter::enum_display_mode       = progress_meter::e_normal_display
     );
 
 typedef boost::shared_ptr<progress_meter> (*progress_meter_creator_type)
-    (int max_count
-    ,std::string const& title
+    (int                               max_count
+    ,std::string const&                title
+    ,progress_meter::enum_display_mode
     );
 
 bool LMI_SO set_progress_meter_creator(progress_meter_creator_type);

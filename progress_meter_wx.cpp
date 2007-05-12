@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: progress_meter_wx.cpp,v 1.7 2007-05-12 17:55:32 chicares Exp $
+// $Id: progress_meter_wx.cpp,v 1.8 2007-05-12 18:30:34 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -56,7 +56,12 @@ class concrete_progress_meter
         };
 
   public:
-    concrete_progress_meter(int max_count, std::string const& title);
+    concrete_progress_meter
+        (int                max_count
+        ,std::string const& title
+        ,enum_display_mode
+        );
+
     virtual ~concrete_progress_meter();
 
   private:
@@ -75,10 +80,11 @@ class concrete_progress_meter
 // better to change this in the library itself.
 
 concrete_progress_meter::concrete_progress_meter
-    (int max_count
-    ,std::string const& title
+    (int                               max_count
+    ,std::string const&                title
+    ,progress_meter::enum_display_mode display_mode
     )
-    :progress_meter(max_count, title)
+    :progress_meter(max_count, title, display_mode)
     ,progress_dialog_
         (title
         ,progress_message().c_str()
@@ -110,12 +116,13 @@ bool concrete_progress_meter::show_progress_message() const
 }
 
 boost::shared_ptr<progress_meter> concrete_progress_meter_creator
-    (int max_count
-    ,std::string const& title
+    (int                               max_count
+    ,std::string const&                title
+    ,progress_meter::enum_display_mode display_mode
     )
 {
     return boost::shared_ptr<progress_meter>
-        (new concrete_progress_meter(max_count, title)
+        (new concrete_progress_meter(max_count, title, display_mode)
         );
 }
 
