@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: progress_meter_wx.cpp,v 1.6 2007-01-27 00:00:52 wboutin Exp $
+// $Id: progress_meter_wx.cpp,v 1.7 2007-05-12 17:55:32 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -65,7 +65,7 @@ class concrete_progress_meter
     virtual bool show_progress_message() const;
 
     // Modified by show_progress_message() const.
-    mutable wxProgressDialog progress_dialog;
+    mutable wxProgressDialog progress_dialog_;
 };
 
 // TODO ?? CALCULATION_SUMMARY Resolve this issue.
@@ -79,7 +79,7 @@ concrete_progress_meter::concrete_progress_meter
     ,std::string const& title
     )
     :progress_meter(max_count, title)
-    ,progress_dialog
+    ,progress_dialog_
         (title
         ,progress_message().c_str()
         ,max_count
@@ -89,7 +89,7 @@ concrete_progress_meter::concrete_progress_meter
 {
     if(0 == max_count)
         {
-        progress_dialog.Update(0);
+        progress_dialog_.Update(0);
         }
 }
 
@@ -106,7 +106,7 @@ std::string concrete_progress_meter::progress_message() const
 
 bool concrete_progress_meter::show_progress_message() const
 {
-    return progress_dialog.Update(count(), progress_message().c_str());
+    return progress_dialog_.Update(count(), progress_message().c_str());
 }
 
 boost::shared_ptr<progress_meter> concrete_progress_meter_creator
