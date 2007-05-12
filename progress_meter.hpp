@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: progress_meter.hpp,v 1.11 2007-05-12 18:30:34 chicares Exp $
+// $Id: progress_meter.hpp,v 1.12 2007-05-12 18:44:17 chicares Exp $
 
 /// Design notes for class progress_meter.
 ///
@@ -146,6 +146,7 @@
 #include "so_attributes.hpp"
 
 #include <boost/shared_ptr.hpp>
+#include <boost/utility.hpp>
 
 #include <iosfwd>
 #include <string>
@@ -153,6 +154,7 @@
 std::ostringstream& progress_meter_unit_test_stream();
 
 class LMI_SO progress_meter
+    :private boost::noncopyable
 {
   public:
     enum enum_display_mode
