@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: progress_meter_cli.cpp,v 1.6 2007-01-27 00:00:52 wboutin Exp $
+// $Id: progress_meter_cli.cpp,v 1.7 2007-05-12 00:17:20 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -47,6 +47,8 @@ class concrete_progress_meter
     virtual ~concrete_progress_meter();
 
   private:
+    mutable std::ostream os_;
+
     // progress_meter overrides.
     virtual std::string progress_message() const;
     virtual bool show_progress_message() const;
@@ -57,15 +59,16 @@ concrete_progress_meter::concrete_progress_meter
     ,std::string const& title
     )
     :progress_meter(max_count, title)
+    ,os_           (std::cout.rdbuf())
 {
-    std::cout << title << std::flush;
+    os_ << title << std::flush;
 }
 
 concrete_progress_meter::~concrete_progress_meter()
 {
     try
         {
-        std::cout << std::endl;
+        os_ << std::endl;
         }
     catch(...) {}
 }
@@ -77,7 +80,7 @@ std::string concrete_progress_meter::progress_message() const
 
 bool concrete_progress_meter::show_progress_message() const
 {
-    std::cout << progress_message() << std::flush;
+    os_ << progress_message() << std::flush;
     return true;
 }
 
