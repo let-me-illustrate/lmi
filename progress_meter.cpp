@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: progress_meter.cpp,v 1.6 2007-05-12 18:30:34 chicares Exp $
+// $Id: progress_meter.cpp,v 1.7 2007-05-12 19:05:33 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -28,7 +28,14 @@
 
 #include "progress_meter.hpp"
 
+#include <sstream>
 #include <stdexcept>
+
+std::ostringstream& progress_meter_unit_test_stream()
+{
+    static std::ostringstream oss;
+    return oss;
+}
 
 progress_meter_creator_type progress_meter_creator = 0;
 

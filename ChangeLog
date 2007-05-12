@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.637 2007-05-08 21:44:20 chicares Exp $
+// $Id: ChangeLog,v 1.638 2007-05-12 19:05:33 chicares Exp $
 
 MAINTENANCE
 
@@ -11138,4 +11138,53 @@ Extend and rename an enumeration.
   group_values.cpp
   group_values.hpp
 Extend emit_ledger() capabilities.
+
+20070511T0128Z <chicares@cox.net> [1255]
+
+  progress_meter_test.cpp
+Refactor unit test.
+
+20070512T0017Z <chicares@cox.net> [1255]
+
+  progress_meter_cli.cpp
+Abstract the output stream buffer.
+
+20070512T0100Z <chicares@cox.net> [1255]
+
+  progress_meter_cli.cpp
+Provide a soon-to-be-needed stream buffer akin to /dev/null . This is
+derived from Dietmar Kühl's work: a class he posted to usenet has been
+renamed, made noncopyable, and given an explicit dtor.
+
+20070512T1421Z <chicares@cox.net> [1255]
+
+  progress_meter.hpp
+  progress_meter_cli.cpp
+Improve documentation.
+
+20070512T1755Z <chicares@cox.net> [1255]
+
+  progress_meter_wx.cpp
+Rename a data member to conform to style guidelines.
+
+20070512T1830Z <chicares@cox.net> [1255]
+
+  progress_meter.cpp
+  progress_meter.hpp
+  progress_meter_cgi.cpp
+  progress_meter_cli.cpp
+  progress_meter_wx.cpp
+Add a display-mode enumeration.
+
+20070512T1844Z <chicares@cox.net> [1255]
+
+  progress_meter.hpp
+Make class progress_meter noncopyable.
+
+20070512T1905Z <chicares@cox.net> [1255]
+
+  progress_meter.cpp
+  progress_meter_cli.cpp
+  progress_meter_test.cpp
+Implement display mode variations; improve unit test.
 
