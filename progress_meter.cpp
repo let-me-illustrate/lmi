@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: progress_meter.cpp,v 1.5 2007-01-27 00:00:52 wboutin Exp $
+// $Id: progress_meter.cpp,v 1.6 2007-05-12 18:30:34 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -33,8 +33,9 @@
 progress_meter_creator_type progress_meter_creator = 0;
 
 boost::shared_ptr<progress_meter> create_progress_meter
-    (int max_count
-    ,std::string const& title
+    (int                               max_count
+    ,std::string const&                title
+    ,progress_meter::enum_display_mode display_mode
     )
 {
     if(0 == progress_meter_creator)
@@ -45,7 +46,7 @@ boost::shared_ptr<progress_meter> create_progress_meter
             );
         }
 
-    return progress_meter_creator(max_count, title);
+    return progress_meter_creator(max_count, title, display_mode);
 }
 
 bool set_progress_meter_creator(progress_meter_creator_type f)
@@ -62,10 +63,15 @@ bool set_progress_meter_creator(progress_meter_creator_type f)
     return true;
 }
 
-progress_meter::progress_meter(int max_count, std::string const& title)
-    :count_     (0)
-    ,max_count_ (max_count)
-    ,title_     (title)
+progress_meter::progress_meter
+    (int                max_count
+    ,std::string const& title
+    ,enum_display_mode  display_mode
+    )
+    :count_        (0)
+    ,max_count_    (max_count)
+    ,title_        (title)
+    ,display_mode_ (display_mode)
 {
 }
 
