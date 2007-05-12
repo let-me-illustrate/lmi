@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: progress_meter_cli.cpp,v 1.7 2007-05-12 00:17:20 chicares Exp $
+// $Id: progress_meter_cli.cpp,v 1.8 2007-05-12 01:00:40 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -28,11 +28,48 @@
 
 #include "progress_meter.hpp"
 
+#include <boost/utility.hpp>
+
 #include <iostream>
 #include <ostream>
+#include <streambuf>
 
 namespace
 {
+/// Class dev_null_stream_buffer is intended for redirecting output as
+/// though to a null device. It is a derived work based on Dietmar
+/// Kühl's article
+///   http://groups.google.com/groups?selm=82mbke$l5c$1@nnrp1.deja.com
+/// which bears no copyright notice, as is usual in usenet.
+///
+/// GWC modified this class in 2007, and in any later year, as
+/// described in 'ChangeLog'; any defect in it should not reflect on
+/// Dietmar Kuehl's reputation.
+
+template<typename CharType, typename traits = std::char_traits<CharType> >
+class dev_null_stream_buffer
+    :public std::streambuf
+    ,private boost::noncopyable
+{
+  public:
+    dev_null_stream_buffer()
+        {
+        setp(buffer_, buffer_ + buffer_size_);
+        }
+    virtual ~dev_null_stream_buffer()
+        {}
+
+  private:
+    virtual int_type overflow(int_type c)
+        {
+        setp(buffer_, buffer_ + buffer_size_);
+        return traits_type::not_eof(c);
+        }
+
+    static int const buffer_size_ = 1024;
+    char buffer_[buffer_size_];
+};
+
 // Implicitly-declared special member functions do the right thing.
 
 // Virtuals are private because no one has any business accessing
