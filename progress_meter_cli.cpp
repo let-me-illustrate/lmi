@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: progress_meter_cli.cpp,v 1.10 2007-05-12 18:30:34 chicares Exp $
+// $Id: progress_meter_cli.cpp,v 1.11 2007-05-12 19:05:33 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -28,10 +28,13 @@
 
 #include "progress_meter.hpp"
 
+#include "alert.hpp"
+
 #include <boost/utility.hpp>
 
 #include <iostream>
 #include <ostream>
+#include <sstream>
 #include <streambuf>
 
 namespace
@@ -70,6 +73,40 @@ class dev_null_stream_buffer
     char buffer_[buffer_size_];
 };
 
+std::streambuf* select_streambuf(progress_meter::enum_display_mode display_mode)
+{
+    std::streambuf* z = 0;
+    switch(display_mode)
+        {
+        case progress_meter::e_normal_display:
+            {
+            z = std::cout.rdbuf();
+            }
+            break;
+        case progress_meter::e_quiet_display:
+            {
+            static dev_null_stream_buffer<char> no_output;
+            z = &no_output;
+            }
+            break;
+        case progress_meter::e_unit_test_mode:
+            {
+            z = progress_meter_unit_test_stream().rdbuf();
+            }
+            break;
+        default:
+            {
+            fatal_error()
+                << "Case "
+                << display_mode
+                << " not found."
+                << LMI_FLUSH
+                ;
+            }
+        }
+    return z;
+}
+
 // Implicitly-declared special member functions do the right thing.
 
 // Virtuals are private because no one has any business accessing
@@ -103,7 +140,7 @@ concrete_progress_meter::concrete_progress_meter
     ,progress_meter::enum_display_mode display_mode
     )
     :progress_meter(max_count, title, display_mode)
-    ,os_           (std::cout.rdbuf())
+    ,os_           (select_streambuf(display_mode))
 {
     os_ << title << std::flush;
 }
