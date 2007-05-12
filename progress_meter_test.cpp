@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: progress_meter_test.cpp,v 1.7 2007-05-12 19:05:33 chicares Exp $
+// $Id: progress_meter_test.cpp,v 1.8 2007-05-12 23:48:27 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -58,7 +58,11 @@ void progress_meter_test::test_normal_usage()
         // Of course, you could do more work here, too, if you like.
         }
     BOOST_TEST_EQUAL("Some title...", progress_meter_unit_test_stream().str());
-    BOOST_TEST_THROW(meter->reflect_progress(), std::logic_error, "");
+    BOOST_TEST_THROW
+        (meter->reflect_progress()
+        ,std::logic_error
+        ,"progress_meter: max_count_ exceeded."
+        );
 }
 
 void progress_meter_test::test_quiet_display_mode()
@@ -75,7 +79,11 @@ void progress_meter_test::test_quiet_display_mode()
         {
         BOOST_TEST(meter->reflect_progress());
         }
-    BOOST_TEST_THROW(meter->reflect_progress(), std::logic_error, "");
+    BOOST_TEST_THROW
+        (meter->reflect_progress()
+        ,std::logic_error
+        ,"progress_meter: max_count_ exceeded."
+        );
 }
 
 void progress_meter_test::test_empty_title_and_zero_max_count()
@@ -94,7 +102,11 @@ void progress_meter_test::test_empty_title_and_zero_max_count()
         BOOST_TEST(meter->reflect_progress());
         }
     BOOST_TEST(progress_meter_unit_test_stream().str().empty());
-    BOOST_TEST_THROW(meter->reflect_progress(), std::logic_error, "");
+    BOOST_TEST_THROW
+        (meter->reflect_progress()
+        ,std::logic_error
+        ,"progress_meter: max_count_ exceeded."
+        );
 }
 
 void progress_meter_test::test_invalid_display_mode()
