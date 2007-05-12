@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: progress_meter.hpp,v 1.9 2007-03-10 02:47:09 chicares Exp $
+// $Id: progress_meter.hpp,v 1.10 2007-05-12 14:21:21 chicares Exp $
 
 /// Design notes for class progress_meter.
 ///
@@ -115,6 +115,15 @@
 /// known whether all other toolsets provide an equivalent facility.
 /// This might be the best approach in any case: see
 ///   http://sourceforge.net/mailarchive/message.php?msg_id=11527978
+///
+/// Not all data members are actually accessed in any concrete derived
+/// class: max_count_ and title_ are not, but are provided anyway in
+/// case they someday become useful. It might seem desirable to omit
+/// the corresponding create_progress_meter() arguments and set these
+/// members through mutators in this base class after construction
+/// instead of in a derived class's ctor; however, that would not work
+/// in the wx case, because class wxProgressDialog, reasonably enough,
+/// makes no provision for changing them after construction.
 
 #ifndef progress_meter_hpp
 #define progress_meter_hpp
