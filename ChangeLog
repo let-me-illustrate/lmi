@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.638 2007-05-12 19:05:33 chicares Exp $
+// $Id: ChangeLog,v 1.639 2007-05-13 15:43:41 chicares Exp $
 
 MAINTENANCE
 
@@ -11187,4 +11187,33 @@ Make class progress_meter noncopyable.
   progress_meter_cli.cpp
   progress_meter_test.cpp
 Implement display mode variations; improve unit test.
+
+20070512T2348Z <chicares@cox.net> [1255]
+
+  progress_meter_test.cpp
+Improve unit test.
+
+20070513T1402Z <chicares@cox.net> [1255]
+
+  miscellany.hpp
+Add a function to set stream format flags to default.
+
+20070513T1403Z <chicares@cox.net> [1255]
+
+  ledger_text_formats.cpp
+Remedy a defect. Formerly, issue age was formatted as floating point
+for any cell after the first, in output that's available through the
+command-line interface only and not presently used in production.
+
+20070513T1416Z <chicares@cox.net> [1255]
+
+  ledger_text_formats.cpp
+Include appropriate headers.
+
+20070513T1543Z <chicares@cox.net> [1254]
+
+  ledger_text_formats.cpp
+  sample.cns.touchstone
+  sample.ill.touchstone
+Resolve a marked defect.
 
