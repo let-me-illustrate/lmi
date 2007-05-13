@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: workhorse.make,v 1.90 2007-05-02 14:24:18 chicares Exp $
+# $Id: workhorse.make,v 1.91 2007-05-13 17:15:32 chicares Exp $
 
 ################################################################################
 
@@ -897,6 +897,7 @@ mpatrol.log:
 # MSYS !! The initial ';' in the first $(SED) command works around a
 # problem caused by MSYS.
 
+.PHONY: %$(EXEEXT)-run
 %$(EXEEXT)-run: mpatrol.log
 	@$(ECHO) -e "\nRunning $*:"
 	@-./$* --accept
@@ -909,31 +910,34 @@ mpatrol.log:
 
 # Test command-line interface.
 
-# Run the test once, and throw away the results, just to get the
-# program into the disk cache. Then run it again and report the
-# results.
-
 .PHONY: cli_tests
-cli_tests: $(test_data) antediluvian_cli$(EXEEXT) lmi_cli_shared$(EXEEXT)
+cli_tests: cli_tests_init $(addprefix cli_test-,$(test_data)) cli_selftest
+
+.PHONY: cli_tests_init
+cli_tests_init:
 	@$(ECHO) Test command line interface:
+
+.PHONY: cli_test-%
+cli_test-%: $(test_data) lmi_cli_shared$(EXEEXT)
+	@$(ECHO) Test $*:
+	@./lmi_cli_shared$(EXEEXT) \
+	  --accept --data_path=/opt/lmi/data --$(subst .,,$(suffix $*))file=$* \
+	  >$*.touchstone
+	@<$*.touchstone \
+	  $(DIFF) \
+	      --ignore-all-space \
+	      --ignore-matching-lines='Prepared on' \
+	      - $(src_dir)/$*.touchstone \
+	  | $(WC)   -l \
+	  | $(SED)  -e 's/^/  /' -e 's/$$/ errors/'
+
+# Run the self test once, discarding the results, just to get the
+# program into the disk cache. Then run it again and report results.
+
+.PHONY: cli_selftest
+cli_selftest: $(test_data) antediluvian_cli$(EXEEXT)
 	@./antediluvian_cli$(EXEEXT) --accept --selftest > /dev/null
 	@./antediluvian_cli$(EXEEXT) --accept --selftest
-	@./lmi_cli_shared$(EXEEXT) \
-	  --accept --data_path=/opt/lmi/data --illfile=sample.ill \
-	  | $(DIFF) \
-	      --ignore-all-space \
-	      --ignore-matching-lines='Prepared on' \
-	      - $(src_dir)/sample.ill.touchstone \
-	  | $(WC)   -l \
-	  | $(SED)  -e 's/^/  /' -e 's/$$/ errors/'
-	@./lmi_cli_shared$(EXEEXT) \
-	  --accept --data_path=/opt/lmi/data --cnsfile=sample.cns \
-	  | $(DIFF) \
-	      --ignore-all-space \
-	      --ignore-matching-lines='Prepared on' \
-	      - $(src_dir)/sample.cns.touchstone \
-	  | $(WC)   -l \
-	  | $(SED)  -e 's/^/  /' -e 's/$$/ errors/'
 
 ################################################################################
 
