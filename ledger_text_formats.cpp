@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_text_formats.cpp,v 1.35 2007-05-13 14:16:44 chicares Exp $
+// $Id: ledger_text_formats.cpp,v 1.36 2007-05-13 15:43:41 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -620,10 +620,21 @@ void FlatTextLedgerPrinter::PrintHeader() const
     os_ << center(invar().ProducerName) << endrow;
     os_ << center(invar().ProducerStreet) << endrow;
     os_ << center(invar().ProducerCity) << endrow;
-    os_ << "Insured: " << invar().Insured1 << endrow;
-    os_ << "Issue age: " << value_cast<int>(invar().Age) << endrow;
-    os_ << invar().Gender << endrow;
-// TODO ?? Add gender, smoker, and underwriting class.
+    if(ledger_.GetIsComposite())
+        {
+        os_ << "Composite" << endrow;
+        }
+    else
+        {
+        os_ << "Insured: " << invar().Insured1 << endrow;
+        os_
+            << invar().Gender
+            << ' ' << invar().UWClass
+            << ' ' << invar().Smoker
+            << ", issue age " << value_cast<int>(invar().Age)
+            << endrow
+            ;
+        }
 }
 
 void FlatTextLedgerPrinter::PrintFooter() const
@@ -774,7 +785,15 @@ void FlatTextLedgerPrinter::PrintTabularDetail() const
         os_.precision(0);
 
         os_ << std::setw( 7) << (1 + j      )         ;
-        os_ << std::setw(12) << (1 + j + age)         ;
+
+        if(ledger_.GetIsComposite())
+            {
+            os_ << std::setw(12) << ' '               ;
+            }
+        else
+            {
+            os_ << std::setw(12) << (1 + j + age)     ;
+            }
 
         os_.precision(2);
 
