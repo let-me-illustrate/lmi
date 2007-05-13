@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.639 2007-05-13 15:43:41 chicares Exp $
+// $Id: ChangeLog,v 1.640 2007-05-13 17:15:32 chicares Exp $
 
 MAINTENANCE
 
@@ -11216,4 +11216,10 @@ Include appropriate headers.
   sample.cns.touchstone
   sample.ill.touchstone
 Resolve a marked defect.
+
+20070513T1715Z <chicares@cox.net> [1254]
+
+  workhorse.make
+Simplify and enhance command-line tests, factoring out duplication and
+preserving output files to facilitate error analysis.
 
