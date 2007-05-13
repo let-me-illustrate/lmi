@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_text_formats.cpp,v 1.33 2007-05-02 15:12:18 chicares Exp $
+// $Id: ledger_text_formats.cpp,v 1.34 2007-05-13 14:03:34 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -592,6 +592,8 @@ FlatTextLedgerPrinter::~FlatTextLedgerPrinter()
 
 void FlatTextLedgerPrinter::Print() const
 {
+    set_default_format_flags(os_);
+
     // TODO ?? Split into numbered pages; add page number to footer.
     PrintHeader             ();
     PrintNarrativeSummary   ();
@@ -603,6 +605,7 @@ void FlatTextLedgerPrinter::Print() const
     PrintTabularDetailHeader();
     PrintTabularDetail      ();
     PrintFooter             ();
+
     LMI_ASSERT(os_.good());
 }
 
@@ -615,7 +618,7 @@ void FlatTextLedgerPrinter::PrintHeader() const
     os_ << center(invar().ProducerStreet) << endrow;
     os_ << center(invar().ProducerCity) << endrow;
     os_ << "Insured: " << invar().Insured1 << endrow;
-    os_ << "Issue age: " << invar().Age << endrow;
+    os_ << "Issue age: " << value_cast<int>(invar().Age) << endrow;
     os_ << invar().Gender << endrow;
 // TODO ?? Add gender, smoker, and underwriting class.
 }
@@ -684,7 +687,7 @@ void FlatTextLedgerPrinter::PrintNumericalSummary() const
     os_ << "   Year      Outlay       Value       Value     Benefit       Value       Value     Benefit       Value       Value     Benefit" << endrow;
     os_ << endrow;
 
-    int summary_rows[] = {4, 9, 19, std::min(99, 69 - static_cast<int>(invar().Age))};
+    int summary_rows[] = {4, 9, 19, std::min(99, 69 - value_cast<int>(invar().Age))};
 
     for(int j = 0; j < static_cast<int>(sizeof summary_rows / sizeof(int)); ++j)
         {
@@ -761,18 +764,18 @@ void FlatTextLedgerPrinter::PrintTabularDetailHeader() const
 
 void FlatTextLedgerPrinter::PrintTabularDetail() const
 {
+    int age = value_cast<int>(invar().Age);
     for(int j = 0; j < ledger_.GetMaxLength(); ++j)
         {
         os_.setf(std::ios_base::fixed, std::ios_base::floatfield);
         os_.precision(0);
-        os_.width(7);
 
-        os_ << std::setw( 7) << (1 + j)               ;
-        os_ << std::setw(12) << (1 + j + invar().Age) ;
+        os_ << std::setw( 7) << (1 + j      )         ;
+        os_ << std::setw(12) << (1 + j + age)         ;
 
         os_.precision(2);
 
-        os_ << std::setw(12) << invar().GrossPmt[j]   ;
+        os_ << std::setw(12) << invar().GrossPmt   [j];
 
         os_ << std::setw(12) << guar_().AcctVal    [j];
         os_ << std::setw(12) << guar_().CSVNet     [j];
