@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: miscellany.hpp,v 1.10 2007-03-09 16:27:23 chicares Exp $
+// $Id: miscellany.hpp,v 1.11 2007-05-13 14:02:36 chicares Exp $
 
 #ifndef miscellany_hpp
 #define miscellany_hpp
@@ -85,6 +85,12 @@ inline std::ios_base::openmode ios_out_trunc_binary()
         | std::ios_base::trunc
         | std::ios_base::binary
         ;
+}
+
+// 27.4.4.1/3
+inline std::ios::fmtflags set_default_format_flags(std::ios_base& stream)
+{
+    return stream.setf(std::ios::skipws | std::ios::dec);
 }
 
 // Omitting colons yields a valid posix path.
