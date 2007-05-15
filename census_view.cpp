@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: census_view.cpp,v 1.54 2007-05-08 18:42:15 chicares Exp $
+// $Id: census_view.cpp,v 1.55 2007-05-15 22:25:17 etarassov Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -365,6 +365,12 @@ int CensusView::selected_column()
 int CensusView::selected_row()
 {
     int row = list_window_->GetFocusedItem();
+    // If there is no focused item, or if the focused item is not selected,
+    // then use any (the first) selected item.
+    if(row < 0 || !list_window_->IsSelected(row))
+        {
+        row = list_window_->GetFirstSelected();
+        }
     if(row < 0)
         {
         row = 0;

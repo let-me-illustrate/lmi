@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.640 2007-05-13 17:15:32 chicares Exp $
+// $Id: ChangeLog,v 1.641 2007-05-15 22:27:32 etarassov Exp $
 
 MAINTENANCE
 
@@ -11222,4 +11222,10 @@ Resolve a marked defect.
   workhorse.make
 Simplify and enhance command-line tests, factoring out duplication and
 preserving output files to facilitate error analysis.
+
+20070515T1125Z <etarassov@tt-solutions.com> [1254]
+
+  census_view.cpp
+In selected_row use GetFocusedItem() only if the item is selected,
+otherwise use any (the first) selected item.
 
