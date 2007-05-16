@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.642 2007-05-16 04:32:35 chicares Exp $
+// $Id: ChangeLog,v 1.643 2007-05-16 19:15:31 chicares Exp $
 
 MAINTENANCE
 
@@ -11242,4 +11242,10 @@ otherwise use any (the first) selected item.
 Lay foundation for illustration-generation consolidation: an eventual
 unique nexus between calculations and the commands that elicit them,
 providing a checkpoint for instrumentation.
+
+20070516T1915Z <chicares@cox.net> [1256]
+
+  census_view.cpp
+Refine the 20070515T1125Z change in light of testing. See:
+  http://sv.nongnu.org/bugs/?19858
 
