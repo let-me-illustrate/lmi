@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: objects.make,v 1.100 2007-05-03 16:33:17 chicares Exp $
+# $Id: objects.make,v 1.101 2007-05-16 04:32:35 chicares Exp $
 
 ################################################################################
 
@@ -178,6 +178,7 @@ common_common_objects := \
   getopt.o \
   global_settings.o \
   group_values.o \
+  illustrator.o \
   input_seq_helpers.o \
   input_sequence.o \
   inputillus.o \
