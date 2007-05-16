@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.641 2007-05-15 22:27:32 etarassov Exp $
+// $Id: ChangeLog,v 1.642 2007-05-16 04:32:35 chicares Exp $
 
 MAINTENANCE
 
@@ -11223,9 +11223,23 @@ Resolve a marked defect.
 Simplify and enhance command-line tests, factoring out duplication and
 preserving output files to facilitate error analysis.
 
+20070514T0101Z <chicares@cox.net> [1254]
+
+  group_values.hpp
+Extend an enumeration.
+
 20070515T1125Z <etarassov@tt-solutions.com> [1254]
 
   census_view.cpp
 In selected_row use GetFocusedItem() only if the item is selected,
 otherwise use any (the first) selected item.
+
+20070516T0432Z <chicares@cox.net> [1256]
+
+  illustrator.cpp [new file]
+  illustrator.hpp [new file]
+  objects.make
+Lay foundation for illustration-generation consolidation: an eventual
+unique nexus between calculations and the commands that elicit them,
+providing a checkpoint for instrumentation.
 
