@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: group_values.cpp,v 1.59 2007-05-20 15:06:20 chicares Exp $
+// $Id: group_values.cpp,v 1.60 2007-05-20 16:05:11 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -157,6 +157,7 @@ bool run_census_in_series::operator()
     ,Ledger&                             composite
     )
 {
+    bool completed_normally = true;
     Timer timer;
     boost::shared_ptr<progress_meter> meter
         (create_progress_meter
@@ -200,7 +201,8 @@ bool run_census_in_series::operator()
 
         if(!meter->reflect_progress())
             {
-            return false;
+            completed_normally = false;
+            goto done;
             }
         }
 
@@ -211,8 +213,9 @@ bool run_census_in_series::operator()
         ,emission
         );
 
+  done:
     status() << timer.stop().elapsed_msec_str() << std::flush;
-    return true;
+    return completed_normally;
 }
 
 //============================================================================
@@ -290,10 +293,13 @@ bool run_census_in_parallel::operator()
     ,Ledger&                             composite
     )
 {
+    bool completed_normally = true;
     Timer timer;
 
-    std::vector<boost::shared_ptr<AccountValue> > cell_values;
     std::vector<IllusInputParms>::const_iterator ip;
+    std::vector<boost::shared_ptr<AccountValue> > cell_values;
+    std::vector<boost::shared_ptr<AccountValue> >::iterator i;
+    std::vector<e_run_basis> const& RunBases = composite.GetRunBases();
     try
         {
         boost::shared_ptr<progress_meter> meter
@@ -348,7 +354,8 @@ bool run_census_in_parallel::operator()
 
             if(!meter->reflect_progress())
                 {
-                return false;
+                completed_normally = false;
+                goto done;
                 }
             }
         if(0 == cell_values.size())
@@ -365,9 +372,6 @@ bool run_census_in_parallel::operator()
         report_exception();
         }
 
-    std::vector<boost::shared_ptr<AccountValue> >::iterator i;
-
-    std::vector<e_run_basis> const& RunBases = composite.GetRunBases();
     for
         (std::vector<e_run_basis>::const_iterator run_basis = RunBases.begin()
         ;run_basis != RunBases.end()
@@ -634,7 +638,8 @@ bool run_census_in_parallel::operator()
 
             if(!meter->reflect_progress())
                 {
-                return false;
+                completed_normally = false;
+                goto done;
                 }
             } // End for year.
 
@@ -655,8 +660,7 @@ bool run_census_in_parallel::operator()
         composite.PlusEq(*(*i)->ledger_from_av());
         }
 
-    status() << timer.stop().elapsed_msec_str() << std::flush;
-
+    {
     int j = 0;
     for(i = cell_values.begin(); i != cell_values.end(); ++i, ++j)
         {
@@ -667,6 +671,7 @@ bool run_census_in_parallel::operator()
             ,emission
             );
         }
+    }
 
     emit_ledger
         (file
@@ -674,7 +679,10 @@ bool run_census_in_parallel::operator()
         ,composite
         ,emission
         );
-    return true;
+
+  done:
+    status() << timer.stop().elapsed_msec_str() << std::flush;
+    return completed_normally;
 }
 
 //============================================================================
@@ -684,6 +692,8 @@ bool run_census::operator()
     ,std::vector<IllusInputParms> const& cells
     )
 {
+    bool completed_normally = true;
+
     composite_.reset
         (new Ledger
             (cells[0].LedgerType()
@@ -697,12 +707,22 @@ bool run_census::operator()
         {
         case e_life_by_life:
             {
-            return run_census_in_series()(file, emission, cells, *composite_);
+            completed_normally = run_census_in_series()
+                (file
+                ,emission
+                ,cells
+                ,*composite_
+                );
             }
             break;
         case e_month_by_month:
             {
-            return run_census_in_parallel()(file, emission, cells, *composite_);
+            completed_normally = run_census_in_parallel()
+                (file
+                ,emission
+                ,cells
+                ,*composite_
+                );
             }
             break;
         default:
@@ -715,7 +735,8 @@ bool run_census::operator()
                 ;
             }
         }
-    return false;
+
+    return completed_normally;
 }
 
 //============================================================================
