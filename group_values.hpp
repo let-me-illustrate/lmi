@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: group_values.hpp,v 1.16 2007-05-14 01:01:19 chicares Exp $
+// $Id: group_values.hpp,v 1.17 2007-05-20 21:39:29 chicares Exp $
 
 #ifndef group_values_hpp
 #define group_values_hpp
@@ -40,13 +40,13 @@ class Ledger;
 /// Output target for census runs.
 ///
 /// Enumerators are binary powers so that more than one can be
-/// specified in a single int.
+/// specified in a single scalar entity.
 
 enum enum_emission
     {e_emit_nothing        =    0
-    ,e_emit_composite_only =    1 // Not yet implemented.
-    ,e_emit_quietly        =    2 // Not yet implemented.
-    ,e_emit_timings        =    4 // Not yet implemented.
+    ,e_emit_composite_only =    1
+    ,e_emit_quietly        =    2
+    ,e_emit_timings        =    4
     ,e_emit_pdf_file       =    8 // Not yet implemented.
     ,e_emit_pdf_to_printer =   16
     ,e_emit_test_data      =   32

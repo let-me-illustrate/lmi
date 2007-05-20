@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.644 2007-05-20 18:36:20 chicares Exp $
+// $Id: ChangeLog,v 1.645 2007-05-20 21:39:30 chicares Exp $
 
 MAINTENANCE
 
@@ -11275,4 +11275,15 @@ Measure output time.
   group_values.cpp
   illustrator.cpp
 Measure and conditionally display timings.
+
+20070520T2139Z <chicares@cox.net> [1256]
+
+  group_values.cpp
+  group_values.hpp
+  main_cli.cpp
+Render struct RunCensusDeprecated obsolete. Run 'make cli_tests' to
+confirm that the replacement is equivalent and faster: about fifty
+percent faster for input, and twenty-five percent faster overall, even
+though the replacement calls run_census::assert_consistency() and is
+therefore more robust.
 
