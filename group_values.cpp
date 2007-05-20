@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: group_values.cpp,v 1.62 2007-05-20 18:36:20 chicares Exp $
+// $Id: group_values.cpp,v 1.63 2007-05-20 21:39:29 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -67,6 +67,14 @@ bool cell_should_be_ignored(IllusInputParms const& cell)
         ;
 }
 
+progress_meter::enum_display_mode progress_meter_mode(enum_emission emission)
+{
+    return (emission & e_emit_quietly)
+        ? progress_meter::e_quiet_display
+        : progress_meter::e_normal_display
+        ;
+}
+
 double emit_ledger
     (fs::path const& file
     ,int             index
@@ -75,6 +83,11 @@ double emit_ledger
     )
 {
     Timer timer;
+    if((emission & e_emit_composite_only) && !ledger.GetIsComposite())
+        {
+        goto done;
+        }
+
     if(emission & e_emit_pdf_to_printer)
         {
         std::string pdf_out_file = write_ledger_to_pdf
@@ -104,6 +117,7 @@ double emit_ledger
         PrintLedgerFlatText(ledger, std::cout);
         }
 
+  done:
     return timer.stop().elapsed_usec();
 }
 } // Unnamed namespace.
@@ -167,6 +181,7 @@ bool run_census_in_series::operator()
         (create_progress_meter
             (cells.size()
             ,"Calculating all cells"
+            ,progress_meter_mode(emission)
             )
         );
 
@@ -326,6 +341,7 @@ bool run_census_in_parallel::operator()
             (create_progress_meter
                 (cells.size()
                 ,"Initializing all cells"
+                ,progress_meter_mode(emission)
                 )
             );
         int j = 0;
@@ -424,6 +440,7 @@ bool run_census_in_parallel::operator()
             (create_progress_meter
                 (MaxYr
                 ,run_basis->str().c_str()
+                ,progress_meter_mode(emission)
                 )
             );
 
