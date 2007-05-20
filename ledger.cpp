@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger.cpp,v 1.18 2007-04-01 22:38:19 chicares Exp $
+// $Id: ledger.cpp,v 1.19 2007-05-20 23:14:19 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -72,7 +72,7 @@
 // composite which stands in need of truncation?
 
 //============================================================================
-Ledger::Ledger() // Remove after expunging RunCensusDeprecated().
+Ledger::Ledger() // Remove after expunging struct RunCensus().
     :is_composite_         (true)
     ,composite_lapse_year_ (0.0)
     ,ledger_type_          (e_ill_reg)
