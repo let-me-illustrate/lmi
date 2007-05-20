@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: group_values.cpp,v 1.58 2007-05-08 21:44:20 chicares Exp $
+// $Id: group_values.cpp,v 1.59 2007-05-20 15:06:20 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -379,7 +379,7 @@ bool run_census_in_parallel::operator()
             {
             (*i)->GuessWhetherFirstYearPremiumExceedsRetaliationLimit();
             }
-restart:
+  restart:
         e_basis          expense_and_general_account_basis;
         e_sep_acct_basis separate_account_basis;
         set_separate_bases_from_run_basis

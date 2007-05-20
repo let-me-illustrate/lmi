@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: alert_cli.cpp,v 1.11 2007-01-27 00:00:51 wboutin Exp $
+// $Id: alert_cli.cpp,v 1.12 2007-05-20 15:06:20 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -47,7 +47,7 @@ namespace
     bool continue_anyway()
     {
         int c;
-    ask:
+  ask:
         c = getch();
         if('y' == c || 'Y' == c)
             {

@@ -40,7 +40,7 @@
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
 // GWC added this RCS Id:
-// $Id: getopt.cpp,v 1.15 2007-05-04 20:43:49 chicares Exp $
+// $Id: getopt.cpp,v 1.16 2007-05-20 15:06:20 chicares Exp $
 
 // GWC removed obsolete '#pragma implementation'.
 
@@ -362,7 +362,7 @@ GetOpt::operator () (void)
   // now we try to see if the next argument is a current option value
   // or is another option.
 
-TRY_TO_GET_A_VALUE:
+  try_to_get_a_value:
   if (list_option)
     {
       // If we have done all the ARGV-elements, stop the scan.
@@ -622,7 +622,7 @@ TRY_TO_GET_A_VALUE:
                   *nlongind = option_index;
                 list_option_first = 1;
                 list_option = pfound;
-                goto  TRY_TO_GET_A_VALUE;
+                goto try_to_get_a_value;
 
               case REQD_ARG:
                 if (optind < nargc)
