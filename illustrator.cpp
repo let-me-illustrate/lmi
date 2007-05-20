@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustrator.cpp,v 1.1 2007-05-16 04:32:35 chicares Exp $
+// $Id: illustrator.cpp,v 1.2 2007-05-20 18:36:20 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -35,6 +35,8 @@
 
 #include <boost/filesystem/convenience.hpp>
 
+#include <iostream>
+
 illustrator::illustrator(enum_emission emission)
     :emission_              (emission)
     ,usec_for_input_        (0.0)
@@ -49,8 +51,18 @@ bool illustrator::operator()(fs::path const& file_path)
     std::string const extension = fs::extension(file_path);
     if(".cns" == extension)
         {
+        Timer timer;
         multiple_cell_document doc(file_path.string());
         run_census::assert_consistency(doc.case_parms()[0], doc.cell_parms()[0]);
+        usec_for_input_ = timer.stop().elapsed_usec();
+        if(e_emit_timings & emission_)
+            {
+            std::cerr
+                << "    Input:        "
+                << Timer::elapsed_msec_str(usec_for_input_)
+                << '\n'
+                ;
+            }
         return_code = run_census()(file_path, emission_, doc.cell_parms());
         }
 // TODO ?? Implement these, too.
