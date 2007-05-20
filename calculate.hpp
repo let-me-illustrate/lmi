@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: calculate.hpp,v 1.22 2007-04-30 14:19:26 chicares Exp $
+// $Id: calculate.hpp,v 1.23 2007-05-20 23:00:38 chicares Exp $
 
 #ifndef calculate_hpp
 #define calculate_hpp
@@ -154,100 +154,6 @@ struct RunCensus
     double time_for_calculations;
     double time_for_output;
 };
-
-//============================================================================
-// TODO ?? Remove this.
-// TODO ?? expunge template<class Filename>
-struct RunCensusDeprecated
-// TODO ?? expunge    :public std::unary_function<Filename, void>
-    :public std::unary_function<void, void>
-{
-    RunCensusDeprecated(){}
-    void operator()(std::string const& a_filename)
-        {
-        Timer timer;
-        std::ifstream is(a_filename.c_str(), ios_in_binary());
-        if(!is)
-            {
-            throw std::runtime_error("Unable to open file " + a_filename);
-            }
-#if 0
-/* TODO ?? expunge
-        IllusInputParms archetype;
-        int n_lives;
-        std::vector<IllusInputParms> lives;
-        is >> archetype;
-        if(!is)
-            {
-            throw std::runtime_error("Unable to read file " + a_filename);
-            }
-
-        is >> n_lives;
-        // TODO ?? We don't like any limit, but anything larger is
-        // likely to be a bug, so let's test this way for the time being.
-        LMI_ASSERT(n_lives < 10000);
-        lives.reserve(n_lives);
-
-        for(int j = 0; j < n_lives; j++)
-            {
-            IllusInputParms life;
-            is >> life;
-            if(!is)
-                {
-                throw std::runtime_error("Unable to read file ");
-                }
-            lives.push_back(life);
-            }
-*/
-#endif
-        multiple_cell_document doc;
-        is >> doc;
-        if(!is)
-            {
-            throw std::runtime_error("Unable to read file " + a_filename);
-            }
-
-        std::cerr
-            << "File:             " << a_filename << '\n'
-            << "    Input:        " << timer.stop().elapsed_msec_str() << '\n'
-            ;
-
-        // TODO ?? Why copy?
-        std::vector<IllusInputParms> lives(doc.cell_parms());
-        LMI_ASSERT(0 != lives.size());
-
-        timer.restart();
-
-        Ledger XXXComposite;
-
-        for
-            (std::vector<IllusInputParms>::iterator lives_it = lives.begin()
-            ;lives_it != lives.end()
-            ;++lives_it
-            )
-            {
-            boost::scoped_ptr<IllusVal> IV(new IllusVal());
-            IV->Run(&*lives_it);
-            XXXComposite.PlusEq(IV->ledger());
-            }
-
-        std::cerr
-            << "    Calculations: " << timer.stop().elapsed_msec_str() << '\n'
-            ;
-
-        timer.restart();
-        IllusVal Composite(&XXXComposite);
-        Composite.Print(std::cout);
-        std::cerr
-            << "    Output:       " << timer.stop().elapsed_msec_str() << '\n'
-            ;
-        }
-};
-
-// COMPILER !! bc++5.5.1 doesn't like a template at the end of a file, so...
-#if defined __BORLANDC__ && 0x0550 <= __BORLANDC__
-extern int borland_workaround;
-#endif
 
 #endif // calculate_hpp
 
