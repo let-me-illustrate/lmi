@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: group_values.cpp,v 1.61 2007-05-20 16:19:32 chicares Exp $
+// $Id: group_values.cpp,v 1.62 2007-05-20 18:36:20 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -112,10 +112,9 @@ double emit_ledger
 // an unnamed namespace because that would make it difficult to
 // implement friendship.
 
-// TODO ?? Consider adding timing code to these functors, even perhaps
-// by adding it to class progress_meter. At present, timings are
-// reported for calculations and output combined; is it desirable to
-// separate those things?
+// TODO ?? Maintain timings as part of functor state, instead of
+// merely writing them to std::cerr (an odd practice anyway, intended
+// only to mimic obsolete code).
 
 class run_census_in_series
 {
@@ -161,6 +160,8 @@ bool run_census_in_series::operator()
     )
 {
     bool completed_normally = true;
+    double usec_for_calculations = 0.0;
+    double usec_for_output       = 0.0;
     Timer timer;
     boost::shared_ptr<progress_meter> meter
         (create_progress_meter
@@ -168,6 +169,7 @@ bool run_census_in_series::operator()
             ,"Calculating all cells"
             )
         );
+
     for(unsigned int j = 0; j < cells.size(); ++j)
         {
         try
@@ -190,7 +192,7 @@ bool run_census_in_series::operator()
                 );
             av.RunAV();
             composite.PlusEq(*av.ledger_from_av());
-            emit_ledger
+            usec_for_output += emit_ledger
                 (file
                 ,j
                 ,*av.ledger_from_av()
@@ -209,7 +211,7 @@ bool run_census_in_series::operator()
             }
         }
 
-    emit_ledger
+    usec_for_output += emit_ledger
         (file
         ,-1
         ,composite
@@ -217,7 +219,20 @@ bool run_census_in_series::operator()
         );
 
   done:
-    status() << timer.stop().elapsed_msec_str() << std::flush;
+    double total_usec = timer.stop().elapsed_usec();
+    status() << Timer::elapsed_msec_str(total_usec) << std::flush;
+    usec_for_calculations = total_usec - usec_for_output;
+    if(e_emit_timings & emission)
+        {
+        std::cerr
+            << "    Calculations: "
+            << Timer::elapsed_msec_str(usec_for_calculations)
+            << '\n'
+            << "    Output:       "
+            << Timer::elapsed_msec_str(usec_for_output)
+            << '\n'
+            ;
+        }
     return completed_normally;
 }
 
@@ -297,6 +312,8 @@ bool run_census_in_parallel::operator()
     )
 {
     bool completed_normally = true;
+    double usec_for_calculations = 0.0;
+    double usec_for_output       = 0.0;
     Timer timer;
 
     std::vector<IllusInputParms>::const_iterator ip;
@@ -667,7 +684,7 @@ bool run_census_in_parallel::operator()
     int j = 0;
     for(i = cell_values.begin(); i != cell_values.end(); ++i, ++j)
         {
-        emit_ledger
+        usec_for_output += emit_ledger
             (file
             ,j
             ,*(*i)->ledger_from_av()
@@ -676,7 +693,7 @@ bool run_census_in_parallel::operator()
         }
     }
 
-    emit_ledger
+    usec_for_output += emit_ledger
         (file
         ,-1
         ,composite
@@ -684,7 +701,20 @@ bool run_census_in_parallel::operator()
         );
 
   done:
-    status() << timer.stop().elapsed_msec_str() << std::flush;
+    double total_usec = timer.stop().elapsed_usec();
+    status() << Timer::elapsed_msec_str(total_usec) << std::flush;
+    usec_for_calculations = total_usec - usec_for_output;
+    if(e_emit_timings & emission)
+        {
+        std::cerr
+            << "    Calculations: "
+            << Timer::elapsed_msec_str(usec_for_calculations)
+            << '\n'
+            << "    Output:       "
+            << Timer::elapsed_msec_str(usec_for_output)
+            << '\n'
+            ;
+        }
     return completed_normally;
 }
 

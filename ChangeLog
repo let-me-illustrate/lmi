@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.643 2007-05-16 19:15:31 chicares Exp $
+// $Id: ChangeLog,v 1.644 2007-05-20 18:36:20 chicares Exp $
 
 MAINTENANCE
 
@@ -11248,4 +11248,31 @@ providing a checkpoint for instrumentation.
   census_view.cpp
 Refine the 20070515T1125Z change in light of testing. See:
   http://sv.nongnu.org/bugs/?19858
+
+20070520T1506Z <chicares@cox.net> [1256]
+
+  actuarial_table.cpp
+  alert_cli.cpp
+  getopt.cpp
+  group_values.cpp
+  ihs_acctval.cpp
+Regularize identifier labels and their indentation.
+
+20070520T1605Z <chicares@cox.net> [1256]
+
+  group_values.cpp
+Provide a single exit point in functions that should be timed. Code
+rearrangement reveals a latent defect, now corrected: the statusbar
+display formerly excluded output time in the parallel case.
+
+20070520T1619Z <chicares@cox.net> [1256]
+
+  group_values.cpp
+Measure output time.
+
+20070520T1836Z <chicares@cox.net> [1256]
+
+  group_values.cpp
+  illustrator.cpp
+Measure and conditionally display timings.
 
