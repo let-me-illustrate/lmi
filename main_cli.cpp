@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_cli.cpp,v 1.30 2007-05-20 21:39:29 chicares Exp $
+// $Id: main_cli.cpp,v 1.31 2007-05-20 23:00:38 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -517,7 +517,6 @@ void process_command_line(int argc, char* argv[])
 
     if(run_census)
         {
-#if 1
         static enum_emission const emission = enum_emission
             (   e_emit_text_stream
             |   e_emit_composite_only
@@ -529,14 +528,6 @@ void process_command_line(int argc, char* argv[])
             ,cns_names.end()
             ,illustrator(emission)
             );
-#else
-        std::for_each
-            (cns_names.begin()
-            ,cns_names.end()
-// TODO ?? expunge            ,RunCensusDeprecated<std::string>()
-            ,RunCensusDeprecated()
-            );
-#endif
         }
 }
 
