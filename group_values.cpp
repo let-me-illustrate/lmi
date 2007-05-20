@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: group_values.cpp,v 1.60 2007-05-20 16:05:11 chicares Exp $
+// $Id: group_values.cpp,v 1.61 2007-05-20 16:19:32 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -67,13 +67,14 @@ bool cell_should_be_ignored(IllusInputParms const& cell)
         ;
 }
 
-void emit_ledger
+double emit_ledger
     (fs::path const& file
     ,int             index
     ,Ledger const&   ledger
     ,enum_emission   emission
     )
 {
+    Timer timer;
     if(emission & e_emit_pdf_to_printer)
         {
         std::string pdf_out_file = write_ledger_to_pdf
@@ -102,6 +103,8 @@ void emit_ledger
         {
         PrintLedgerFlatText(ledger, std::cout);
         }
+
+    return timer.stop().elapsed_usec();
 }
 } // Unnamed namespace.
 
