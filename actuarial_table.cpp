@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: actuarial_table.cpp,v 1.16 2007-03-06 18:13:37 wboutin Exp $
+// $Id: actuarial_table.cpp,v 1.17 2007-05-20 15:06:20 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -444,7 +444,7 @@ std::vector<double> actuarial_table
           }
         }
 
-    done:
+  done:
 
     HOPEFULLY(min_age <= a_age && a_age <= max_age);
     HOPEFULLY(a_age + a_len <= max_age + 1);

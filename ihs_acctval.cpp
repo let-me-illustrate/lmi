@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ihs_acctval.cpp,v 1.94 2007-04-30 14:24:17 chicares Exp $
+// $Id: ihs_acctval.cpp,v 1.95 2007-05-20 15:06:20 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -331,7 +331,7 @@ double AccountValue::RunAllApplicableBases()
 double AccountValue::RunOneCell(e_run_basis const& a_Basis)
 {
     GuessWhetherFirstYearPremiumExceedsRetaliationLimit();
-restart:
+  restart:
     InitializeLife(a_Basis);
 
     for(int year = InforceYear; year < BasicValues::GetLength(); ++year)
