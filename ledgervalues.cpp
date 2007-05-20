@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledgervalues.cpp,v 1.21 2007-05-02 14:14:18 chicares Exp $
+// $Id: ledgervalues.cpp,v 1.22 2007-05-20 23:00:38 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -46,7 +46,7 @@ IllusVal::IllusVal(std::string const& filename)
 {
 }
 
-// TODO ?? Pointless: expunge at the same time as struct RunCensusDeprecated.
+// TODO ?? Pointless: expunge at the same time as struct RunCensus.
 //============================================================================
 IllusVal::IllusVal(Ledger* ledger, std::string const& filename)
     :filename_ (filename)
