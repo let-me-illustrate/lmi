@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_invariant.cpp,v 1.31 2007-03-09 16:27:23 chicares Exp $
+// $Id: ledger_invariant.cpp,v 1.32 2007-05-21 11:58:11 rericksberg Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -212,6 +212,7 @@ void LedgerInvariant::Alloc(int len)
     Strings         ["ProducerCity"         ] = &ProducerCity           ;
     Strings         ["CorpName"             ] = &CorpName               ;
     Strings         ["CertificateNumber"    ] = &CertificateNumber      ;
+    Strings         ["Franchise"            ] = &Franchise              ;
     Strings         ["PolicyNumber"         ] = &PolicyNumber           ;
     Strings         ["Insured1"             ] = &Insured1               ;
     Strings         ["Gender"               ] = &Gender                 ;
@@ -559,7 +560,8 @@ void LedgerInvariant::Init(BasicValues* b)
         ;
     CorpName                = Input_.SponsorFirstName;
 //  CertificateNumber       =
-//  PolicyNumber            =
+    Franchise               = Input_.Franchise;
+    PolicyNumber            = Input_.PolicyNumber;
 
     Insured1                = Input_.InsdFullName();
     Gender                  = Status.Gender.str();
@@ -746,6 +748,7 @@ LedgerInvariant& LedgerInvariant::PlusEq(LedgerInvariant const& a_Addend)
 
     // TODO ?? Probably we should assert that these don't vary by life.
     CorpName                    = a_Addend.CorpName;
+    Franchise                   = a_Addend.Franchise;
     ProducerName                = a_Addend.ProducerName;
     ProducerStreet              = a_Addend.ProducerStreet;
     ProducerCity                = a_Addend.ProducerCity;
