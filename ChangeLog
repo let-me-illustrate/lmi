@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.650 2007-05-21 16:28:45 chicares Exp $
+// $Id: ChangeLog,v 1.651 2007-05-21 18:17:09 wboutin Exp $
 
 MAINTENANCE
 
@@ -11340,4 +11340,10 @@ Remove a disused data member.
   dev_null_stream_buffer.hpp [new file]
   progress_meter_cli.cpp
 Refactor, making a useful class template generally available.
+
+20070521T1817Z <wboutin@massmutual.com> [1249]
+
+  xml_notebook_coli_boli.xrc
+  xml_notebook_private_placement.xrc
+Remove 'StateOfJurisdiction'.
 
