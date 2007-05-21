@@ -24,7 +24,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: xml_notebook_private_placement.xrc,v 1.11 2007-01-27 00:00:52 wboutin Exp $
+    $Id: xml_notebook_private_placement.xrc,v 1.12 2007-05-21 18:17:09 wboutin Exp $
 
     This version is designed for private placement users; it omits input
     fields that seem irrelevant in that context, and reflects the
@@ -584,6 +584,9 @@
                                 </object>
                             </object>
                         </object>
+<!--
+This doesn't actually do anything today, but it'll probably be
+useful in the future.
                         <object class="sizeritem">
                             <flag>wxGROW|wxALIGN_CENTER_VERTICAL</flag>
                             <border>4</border>
@@ -607,6 +610,7 @@
                                 </object>
                             </object>
                         </object>
+-->
                         <object class="sizeritem">
                             <flag>wxLEFT|wxRIGHT|wxTOP</flag>
                             <border>4</border>
