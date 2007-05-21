@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_invariant.hpp,v 1.13 2007-03-11 21:36:10 chicares Exp $
+// $Id: ledger_invariant.hpp,v 1.14 2007-05-21 11:58:11 rericksberg Exp $
 
 #ifndef ledger_invariant_hpp
 #define ledger_invariant_hpp
@@ -223,6 +223,7 @@ class LMI_SO LedgerInvariant
     std::string     ProducerCity;
     std::string     CorpName;
     std::string     CertificateNumber;
+    std::string     Franchise;
     std::string     PolicyNumber;
     std::string     Insured1;
     std::string     Gender;
