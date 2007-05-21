@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.646 2007-05-21 11:58:11 rericksberg Exp $
+// $Id: ChangeLog,v 1.647 2007-05-21 12:14:17 rericksberg Exp $
 
 MAINTENANCE
 
@@ -11292,4 +11292,13 @@ therefore more robust.
   ledger_invariant.cpp
   ledger_invariant.hpp
 Print group and individual contract numbers on output.
+
+20070521T1214Z <rericksberg@massmutual.com> [1249]
+
+  illustration_reg.xsl
+  individual_private_placement.xsl
+  nasd.xsl
+Source code revitalized. Removal of hardcoded company and product
+related strings. Extra years on census and lapse cases suppressed.
+Also includes group and individual contract numbers on output.
 
