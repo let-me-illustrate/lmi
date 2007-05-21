@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_invariant.cpp,v 1.32 2007-05-21 11:58:11 rericksberg Exp $
+// $Id: ledger_invariant.cpp,v 1.33 2007-05-21 16:27:33 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -211,7 +211,6 @@ void LedgerInvariant::Alloc(int len)
     Strings         ["ProducerStreet"       ] = &ProducerStreet         ;
     Strings         ["ProducerCity"         ] = &ProducerCity           ;
     Strings         ["CorpName"             ] = &CorpName               ;
-    Strings         ["CertificateNumber"    ] = &CertificateNumber      ;
     Strings         ["Franchise"            ] = &Franchise              ;
     Strings         ["PolicyNumber"         ] = &PolicyNumber           ;
     Strings         ["Insured1"             ] = &Insured1               ;
@@ -559,7 +558,7 @@ void LedgerInvariant::Init(BasicValues* b)
         +   Input_.AgentZipCode
         ;
     CorpName                = Input_.SponsorFirstName;
-//  CertificateNumber       =
+
     Franchise               = Input_.Franchise;
     PolicyNumber            = Input_.PolicyNumber;
 
