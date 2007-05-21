@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.645 2007-05-20 21:39:30 chicares Exp $
+// $Id: ChangeLog,v 1.646 2007-05-21 11:58:11 rericksberg Exp $
 
 MAINTENANCE
 
@@ -11286,4 +11286,10 @@ confirm that the replacement is equivalent and faster: about fifty
 percent faster for input, and twenty-five percent faster overall, even
 though the replacement calls run_census::assert_consistency() and is
 therefore more robust.
+
+20070521T1158Z <rericksberg@massmutual.com> [1249]
+
+  ledger_invariant.cpp
+  ledger_invariant.hpp
+Print group and individual contract numbers on output.
 
