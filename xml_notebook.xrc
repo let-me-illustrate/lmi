@@ -24,7 +24,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: xml_notebook.xrc,v 1.35 2007-01-27 00:00:52 wboutin Exp $
+    $Id: xml_notebook.xrc,v 1.36 2007-05-21 20:07:52 chicares Exp $
 
     This version is generic. It strives to present every input field
     the system offers, in a way that suits the main developer's tastes.
@@ -1158,12 +1158,26 @@ demonstrate a defect in the wx library. See
                                     <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
                                     <border>4</border>
                                     <object class="wxStaticText">
-                                        <label>Policy number</label>
+                                        <label>Contract number</label>
                                     </object>
                                 </object>
                                 <object class="sizeritem">
                                     <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
                                     <object class="wxTextCtrl" name="PolicyNumber">
+                                        <size>80,-1</size>
+                                        <value>0</value>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                                    <border>4</border>
+                                    <object class="wxStaticText">
+                                        <label>Master contract</label>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
+                                    <object class="wxTextCtrl" name="Franchise">
                                         <size>80,-1</size>
                                         <value>0</value>
                                     </object>

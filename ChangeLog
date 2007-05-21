@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.651 2007-05-21 18:17:09 wboutin Exp $
+// $Id: ChangeLog,v 1.652 2007-05-21 20:07:52 chicares Exp $
 
 MAINTENANCE
 
@@ -11346,4 +11346,14 @@ Refactor, making a useful class template generally available.
   xml_notebook_coli_boli.xrc
   xml_notebook_private_placement.xrc
 Remove 'StateOfJurisdiction'.
+
+20070521T1828Z <chicares@cox.net> [1249]
+
+  GNUmakefile
+Clarify that the xsl-fo files aren't clean in the 'xmllint' sense.
+
+20070521T2007Z <chicares@cox.net> [1249]
+
+  xml_notebook.xrc
+Add a master-contract input field.
 
