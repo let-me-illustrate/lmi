@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.647 2007-05-21 12:14:17 rericksberg Exp $
+// $Id: ChangeLog,v 1.648 2007-05-21 12:34:04 rericksberg Exp $
 
 MAINTENANCE
 
@@ -11301,4 +11301,14 @@ Print group and individual contract numbers on output.
 Source code revitalized. Removal of hardcoded company and product
 related strings. Extra years on census and lapse cases suppressed.
 Also includes group and individual contract numbers on output.
+
+20070521T1233Z <rericksberg@massmutual.com> [1249]
+
+  group_private_placement.xsl
+  offshore_private_placement.xsl
+  variable_annuity.xsl
+Initial add of xsl-fo files. Source code revitalized. Removal of
+hardcoded company and product related strings. Extra years on census
+and lapse cases suppressed. Also includes group and individual
+contract numbers on output.
 
