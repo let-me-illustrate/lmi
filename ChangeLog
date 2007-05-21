@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.649 2007-05-21 12:45:53 rericksberg Exp $
+// $Id: ChangeLog,v 1.650 2007-05-21 16:28:45 chicares Exp $
 
 MAINTENANCE
 
@@ -11287,6 +11287,18 @@ percent faster for input, and twenty-five percent faster overall, even
 though the replacement calls run_census::assert_consistency() and is
 therefore more robust.
 
+20070520T2300Z <chicares@cox.net> [1249]
+
+  calculate.hpp
+  ledgervalues.cpp
+  main_cli.cpp
+Expunge struct RunCensusDeprecated, removing seven marked defects.
+
+20070520T2314Z <chicares@cox.net> [1249]
+
+  ledger.cpp
+Expunge struct RunCensusDeprecated, removing seven marked defects.
+
 20070521T1158Z <rericksberg@massmutual.com> [1249]
 
   ledger_invariant.cpp
@@ -11316,4 +11328,16 @@ contract numbers on output.
 
   GNUmakefile
 Add new xsl-fo filenames to xsl_fo_files.
+
+20070521T1627Z <chicares@cox.net> [1249]
+
+  ledger_invariant.cpp
+  ledger_invariant.hpp
+Remove a disused data member.
+
+20070521T1628Z <chicares@cox.net> [1249]
+
+  dev_null_stream_buffer.hpp [new file]
+  progress_meter_cli.cpp
+Refactor, making a useful class template generally available.
 
