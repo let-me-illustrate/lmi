@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.648 2007-05-21 12:34:04 rericksberg Exp $
+// $Id: ChangeLog,v 1.649 2007-05-21 12:45:53 rericksberg Exp $
 
 MAINTENANCE
 
@@ -11311,4 +11311,9 @@ Initial add of xsl-fo files. Source code revitalized. Removal of
 hardcoded company and product related strings. Extra years on census
 and lapse cases suppressed. Also includes group and individual
 contract numbers on output.
+
+20070521T1245Z <rericksberg@massmutual.com> [1249]
+
+  GNUmakefile
+Add new xsl-fo filenames to xsl_fo_files.
 
