@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: GNUmakefile,v 1.85 2007-04-03 09:40:32 chicares Exp $
+# $Id: GNUmakefile,v 1.86 2007-05-21 12:45:53 rericksberg Exp $
 
 ################################################################################
 
@@ -246,6 +246,9 @@ xsl_fo_files := \
   illustration_reg.xsl \
   individual_private_placement.xsl \
   nasd.xsl \
+  group_private_placement.xsl \
+  offshore_private_placement.xsl \
+  variable_annuity.xsl \
 
 # TODO ?? Clean up these files: they fail 'make check_concinnity'.
 # The only concern 'xmllint' seems to have with '.cns' and '.ill'
