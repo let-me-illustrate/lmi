@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_cli.cpp,v 1.32 2007-05-22 02:00:23 chicares Exp $
+// $Id: main_cli.cpp,v 1.33 2007-05-22 02:11:48 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -30,6 +30,7 @@
 #include "argv0.hpp"
 #include "calculate.hpp"
 #include "custom_io_0.hpp"
+#include "dev_null_stream_buffer.hpp"
 #include "getopt.hpp"
 #include "global_settings.hpp"
 #include "group_values.hpp"
@@ -190,13 +191,13 @@ void SelfTest()
             ;
         }
 
-// TODO ?? Temporarily suppress this test pending investigation of
-// a recently-exposed problem.
+// TODO ?? Temporarily suppress this test pending investigation.
 #if 0
     multiple_cell_document census;
     std::vector<IllusInputParms> input_vector = census.cell_parms();
     input_vector.push_back(input_vector.front());
-    std::ostream dev_null_os(0);
+    static dev_null_stream_buffer<char> no_output;
+    std::ostream dev_null_os(&no_output);
     RunCensus runner(dev_null_os);
     runner(input_vector);
 
