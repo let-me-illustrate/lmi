@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_text_formats.cpp,v 1.36 2007-05-13 15:43:41 chicares Exp $
+// $Id: ledger_text_formats.cpp,v 1.37 2007-05-22 00:59:24 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -674,7 +674,7 @@ void FlatTextLedgerPrinter::PrintKeyTerms() const
 {
     os_ << center("Column headings and key terms") << endrow;
     os_ << endrow;
-    os_ << "Premium Outlay is the amount assumed to be paid." << endrow;
+    os_ << "Premium Outlay is the amount assumed to be paid out of pocket, net of any loan or withdrawal." << endrow;
     os_ << endrow;
     os_ << "Deductions are expense charges and mortality charges." << endrow;
     os_ << endrow;
@@ -721,7 +721,7 @@ void FlatTextLedgerPrinter::PrintNumericalSummary() const
 
         os_.precision(2);
 
-        os_ << std::setw(12) << invar().GrossPmt   [row];
+        os_ << std::setw(12) << invar().Outlay     [row];
 
         os_ << std::setw(12) << guar_().AcctVal    [row];
         os_ << std::setw(12) << guar_().CSVNet     [row];
@@ -797,7 +797,7 @@ void FlatTextLedgerPrinter::PrintTabularDetail() const
 
         os_.precision(2);
 
-        os_ << std::setw(12) << invar().GrossPmt   [j];
+        os_ << std::setw(12) << invar().Outlay     [j];
 
         os_ << std::setw(12) << guar_().AcctVal    [j];
         os_ << std::setw(12) << guar_().CSVNet     [j];

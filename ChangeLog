@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.652 2007-05-21 20:07:52 chicares Exp $
+// $Id: ChangeLog,v 1.653 2007-05-22 00:59:24 chicares Exp $
 
 MAINTENANCE
 
@@ -11356,4 +11356,13 @@ Clarify that the xsl-fo files aren't clean in the 'xmllint' sense.
 
   xml_notebook.xrc
 Add a master-contract input field.
+
+20070522T0059Z <chicares@cox.net> [1249]
+
+  accountvalue.cpp
+  expected.cgi.out
+  ledger_text_formats.cpp
+  sample.cns.touchstone
+  sample.ill.touchstone
+Refine flat-text output.
 
