@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.654 2007-05-22 02:31:40 chicares Exp $
+// $Id: ChangeLog,v 1.655 2007-05-22 12:18:30 rericksberg Exp $
 
 MAINTENANCE
 
@@ -11385,3 +11385,12 @@ would be displayed, and that masks the real problem.
   illustrator.hpp
 Revise usage of the 'explicit' function-specifier.
 
+20070522T1218Z <rericksberg@massmutual.com> [1249]
+
+  group_private_placement.xsl
+  illustration_reg.xsl
+  individual_private_placement.xsl
+  nasd.xsl
+  offshore_private_placement.xsl
+  variable_annuity.xsl
+Improve header labels.

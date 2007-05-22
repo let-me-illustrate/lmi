@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: variable_annuity.xsl,v 1.1 2007-05-21 13:06:38 rericksberg Exp $
+    $Id: variable_annuity.xsl,v 1.2 2007-05-22 12:18:30 rericksberg Exp $
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:fo="http://www.w3.org/1999/XSL/Format">
@@ -1026,7 +1026,7 @@
                 <xsl:otherwise>
                   <xsl:if test="illustration/scalar/Franchise!=''">
                     <fo:block text-align="left">
-                      <xsl:text>Contract#: </xsl:text>
+                      <xsl:text>Master contract: </xsl:text>
                       <xsl:call-template name="limit-string" >
                         <xsl:with-param name="pass-string" select="illustration/scalar/Franchise"/>
                         <xsl:with-param name="length" select="50"/>
@@ -1078,15 +1078,15 @@
               <fo:table-row>
                 <fo:table-cell>
                   <fo:block text-align="left">
-                    <xsl:text>Contract#: </xsl:text>
+                    <xsl:text>Master contract: </xsl:text>
                     <xsl:call-template name="limit-string" >
                       <xsl:with-param name="pass-string" select="illustration/scalar/Franchise"/>
-                      <xsl:with-param name="length" select="20"/>
+                      <xsl:with-param name="length" select="15"/>
                     </xsl:call-template>
-                    <xsl:text>&#xA0;&#xA0;&#xA0;Policy#: </xsl:text>
+                    <xsl:text>&#xA0;&#xA0;&#xA0;Contract number: </xsl:text>
                     <xsl:call-template name="limit-string" >
                       <xsl:with-param name="pass-string" select="illustration/scalar/PolicyNumber"/>
-                      <xsl:with-param name="length" select="20"/>
+                      <xsl:with-param name="length" select="15"/>
                     </xsl:call-template>
                   </fo:block>
                 </fo:table-cell>
@@ -1096,7 +1096,7 @@
               <fo:table-row>
                 <fo:table-cell>
                   <fo:block text-align="left">
-                    <xsl:text>Contract#: </xsl:text>
+                    <xsl:text>Master contract: </xsl:text>
                     <xsl:call-template name="limit-string" >
                       <xsl:with-param name="pass-string" select="illustration/scalar/Franchise"/>
                       <xsl:with-param name="length" select="50"/>
@@ -1109,7 +1109,7 @@
               <fo:table-row>
                 <fo:table-cell>
                   <fo:block text-align="left">
-                    <xsl:text>Policy#: </xsl:text>
+                    <xsl:text>Contract number: </xsl:text>
                     <xsl:call-template name="limit-string" >
                       <xsl:with-param name="pass-string" select="illustration/scalar/PolicyNumber"/>
                       <xsl:with-param name="length" select="50"/>
