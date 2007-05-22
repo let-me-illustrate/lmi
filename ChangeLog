@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.653 2007-05-22 00:59:24 chicares Exp $
+// $Id: ChangeLog,v 1.654 2007-05-22 02:31:40 chicares Exp $
 
 MAINTENANCE
 
@@ -11365,4 +11365,23 @@ Add a master-contract input field.
   sample.cns.touchstone
   sample.ill.touchstone
 Refine flat-text output.
+
+20070522T0200Z <chicares@cox.net> [1249]
+
+  main_cli.cpp
+Add headers that will be needed after the demise of 'calculate.hpp'.
+
+20070522T0211Z <chicares@cox.net> [1249]
+
+  main_cli.cpp
+Somewhat improve a failing test. Without this change, only
+  "Assertion 'os_.good()' failed."
+would be displayed, and that masks the real problem.
+
+20070522T0231Z <chicares@cox.net> [1249]
+
+  group_values.cpp
+  group_values.hpp
+  illustrator.hpp
+Revise usage of the 'explicit' function-specifier.
 

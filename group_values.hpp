@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: group_values.hpp,v 1.17 2007-05-20 21:39:29 chicares Exp $
+// $Id: group_values.hpp,v 1.18 2007-05-22 02:31:40 chicares Exp $
 
 #ifndef group_values_hpp
 #define group_values_hpp
@@ -75,7 +75,7 @@ enum enum_emission
 class LMI_SO run_census
 {
   public:
-    explicit run_census()
+    run_census()
         {}
 
     bool operator()
