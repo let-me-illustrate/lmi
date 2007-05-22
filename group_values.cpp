@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: group_values.cpp,v 1.63 2007-05-20 21:39:29 chicares Exp $
+// $Id: group_values.cpp,v 1.64 2007-05-22 02:31:40 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -133,7 +133,7 @@ double emit_ledger
 class run_census_in_series
 {
   public:
-    explicit run_census_in_series()
+    run_census_in_series()
         {}
 
     bool operator()
@@ -147,7 +147,7 @@ class run_census_in_series
 class run_census_in_parallel
 {
   public:
-    explicit run_census_in_parallel()
+    run_census_in_parallel()
         {}
 
     bool operator()

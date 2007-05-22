@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustrator.hpp,v 1.1 2007-05-16 04:32:35 chicares Exp $
+// $Id: illustrator.hpp,v 1.2 2007-05-22 02:31:40 chicares Exp $
 
 #ifndef illustrator_hpp
 #define illustrator_hpp
@@ -42,7 +42,7 @@ class LMI_SO illustrator
     :public std::unary_function<fs::path const&, bool>
 {
   public:
-    illustrator(enum_emission);
+    explicit illustrator(enum_emission);
     bool operator()(fs::path const&);
 
   private:
