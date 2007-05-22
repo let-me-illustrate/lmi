@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: accountvalue.cpp,v 1.29 2007-03-09 16:27:23 chicares Exp $
+// $Id: accountvalue.cpp,v 1.30 2007-05-22 00:59:24 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -349,6 +349,11 @@ void AccountValue::DoYear
 
     // TODO ?? Change one of these names, which differ only in the terminal 's'.
     InvariantValues().GrossPmt[Year] += std::accumulate(GrossPmts.begin(), GrossPmts.end(), 0.0);
+    InvariantValues().Outlay[Year] =
+            InvariantValues().GrossPmt   [Year]
+        -   InvariantValues().NetWD      [Year]
+        -   InvariantValues().NewCashLoan[Year]
+        ;
 
     if(Debugging)
         {
