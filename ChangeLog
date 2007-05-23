@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.655 2007-05-22 12:18:30 rericksberg Exp $
+// $Id: ChangeLog,v 1.656 2007-05-23 12:31:23 chicares Exp $
 
 MAINTENANCE
 
@@ -11394,3 +11394,17 @@ Revise usage of the 'explicit' function-specifier.
   offshore_private_placement.xsl
   variable_annuity.xsl
 Improve header labels.
+
+20070523T1229Z <chicares@cox.net> [1249]
+
+  authenticity_test.cpp
+Work around a boost issue.
+
+20070523T1231Z <chicares@cox.net> [1249]
+
+  group_values.cpp
+  group_values.hpp
+  illustrator.cpp
+  illustrator.hpp
+Regularize ctors and dtors.
+

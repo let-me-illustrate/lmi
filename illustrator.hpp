@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustrator.hpp,v 1.2 2007-05-22 02:31:40 chicares Exp $
+// $Id: illustrator.hpp,v 1.3 2007-05-23 12:31:23 chicares Exp $
 
 #ifndef illustrator_hpp
 #define illustrator_hpp
@@ -27,6 +27,7 @@
 #include "config.hpp"
 
 #include "group_values.hpp" // enum_emission
+#include "obstruct_slicing.hpp"
 #include "so_attributes.hpp"
 
 #include <boost/filesystem/path.hpp>
@@ -40,9 +41,12 @@
 
 class LMI_SO illustrator
     :public std::unary_function<fs::path const&, bool>
+    ,virtual private obstruct_slicing<illustrator>
 {
   public:
     explicit illustrator(enum_emission);
+    ~illustrator();
+
     bool operator()(fs::path const&);
 
   private:
