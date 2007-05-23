@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: offshore_private_placement.xsl,v 1.3.2.3 2007-05-23 21:39:08 etarassov Exp $
+    $Id: offshore_private_placement.xsl,v 1.3.2.4 2007-05-23 22:08:50 etarassov Exp $
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:fo="http://www.w3.org/1999/XSL/Format">
@@ -116,7 +116,7 @@
         </xsl:if>
 
         <!-- Define the Supplemental Report page. -->
-        <xsl:if test="illustration/scalar/SupplementalReport='1'">
+        <xsl:if test="$has_supplemental_report">
           <fo:simple-page-master master-name="supplemental-report" page-height="11in" page-width="8.5in" margin-top="0.25in" margin-bottom="0.25in" margin-left="0.25in" margin-right="0.25in">
             <!-- Central part of page -->
             <fo:region-body column-count="1" margin-top="2.80in" margin-bottom="1.10in"/>
@@ -773,7 +773,7 @@
 
       <!-- Supplemental Report -->
       <!-- Body page -->
-      <xsl:if test="illustration/scalar/SupplementalReport='1'">
+      <xsl:if test="$has_supplemental_report">
         <fo:page-sequence master-reference="supplemental-report">
 
           <!-- Define the contents of the header. -->
@@ -903,7 +903,7 @@
                 </xsl:choose>
               </fo:table>
             </fo:block>
-            <xsl:if test="illustration/scalar/SupplementalReport='1'">
+            <xsl:if test="$has_supplemental_report">
               <fo:block id="endofdoc"></fo:block>
             </xsl:if>
           </fo:flow>
@@ -2067,7 +2067,7 @@
         </fo:table>
       </fo:block>
       <xsl:choose>
-        <xsl:when test="illustration/scalar/SupplementalReport='1'">
+        <xsl:when test="$has_supplemental_report">
         </xsl:when>
         <xsl:otherwise>
           <fo:block id="endofdoc"></fo:block>

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.657.2.4 2007-05-23 21:39:08 etarassov Exp $
+// $Id: ChangeLog,v 1.657.2.5 2007-05-23 22:08:50 etarassov Exp $
 
 MAINTENANCE
 
@@ -11459,4 +11459,15 @@ Extract common dollar-units template.
   offshore_private_placement.xsl
   variable_annuity.xsl
 Extract common supplemental-report-values template.
+
+20070523T2208Z <etarassov@tt-solutions.com> [1249]
+
+  group_private_placement.xsl
+  illustration_reg.xsl
+  illustrations_common.xsl
+  individual_private_placement.xsl
+  nasd.xsl
+  offshore_private_placement.xsl
+  variable_annuity.xsl
+Declare global has_supplemental_report variable and use it everywhere.
 
