@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.656 2007-05-23 12:31:23 chicares Exp $
+// $Id: ChangeLog,v 1.657 2007-05-23 13:46:29 rericksberg Exp $
 
 MAINTENANCE
 
@@ -11408,3 +11408,13 @@ Work around a boost issue.
   illustrator.hpp
 Regularize ctors and dtors.
 
+20070523T1346Z <rericksberg@massmutual.com> [1249]
+
+  group_private_placement.xsl
+  illustration_reg.xsl
+  individual_private_placement.xsl
+  nasd.xsl
+  offshore_private_placement.xsl
+  variable_annuity.xsl
+Prevent large Master contract and Contract number values
+in the header from wrapping to the next line.
