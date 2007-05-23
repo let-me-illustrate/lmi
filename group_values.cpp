@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: group_values.cpp,v 1.64 2007-05-22 02:31:40 chicares Exp $
+// $Id: group_values.cpp,v 1.65 2007-05-23 12:31:22 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -133,9 +133,6 @@ double emit_ledger
 class run_census_in_series
 {
   public:
-    run_census_in_series()
-        {}
-
     bool operator()
         (fs::path const&                     file
         ,enum_emission                       emission
@@ -147,9 +144,6 @@ class run_census_in_series
 class run_census_in_parallel
 {
   public:
-    run_census_in_parallel()
-        {}
-
     bool operator()
         (fs::path const&                     file
         ,enum_emission                       emission
@@ -165,7 +159,6 @@ class run_census_in_parallel
 // which, for now at least, are handled much more gracefully. Yet perhaps
 // they should be moved into run_census.
 
-//============================================================================
 bool run_census_in_series::operator()
     (fs::path const&                     file
     ,enum_emission                       emission
@@ -250,8 +243,6 @@ bool run_census_in_series::operator()
         }
     return completed_normally;
 }
-
-//============================================================================
 
 /// Illustrations with group experience rating
 ///
@@ -735,7 +726,14 @@ bool run_census_in_parallel::operator()
     return completed_normally;
 }
 
-//============================================================================
+run_census::run_census()
+{
+}
+
+run_census::~run_census()
+{
+}
+
 bool run_census::operator()
     (fs::path const&                     file
     ,enum_emission                       emission
@@ -789,13 +787,11 @@ bool run_census::operator()
     return completed_normally;
 }
 
-//============================================================================
 boost::shared_ptr<Ledger const> run_census::composite()
 {
     return composite_;
 }
 
-//============================================================================
 // The run order depends on the first cell's parameters and ignores
 // any conflicting input for any individual cell. It might be cleaner
 // to offer this field (and certain others) only at the case level.
