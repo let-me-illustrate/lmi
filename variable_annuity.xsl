@@ -21,10 +21,11 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: variable_annuity.xsl,v 1.3 2007-05-23 13:46:29 rericksberg Exp $
+    $Id: variable_annuity.xsl,v 1.3.2.1 2007-05-23 16:07:02 etarassov Exp $
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:fo="http://www.w3.org/1999/XSL/Format">
+  <xsl:include href="illustrations_common.xsl" />
   <xsl:output method="xml" encoding="UTF-8" indent="yes" />
   <xsl:variable name="counter" select="1"/>
   <xsl:variable name="column1name" select="string(illustration/supplementalreport/columns[1]/name)"/>
@@ -44,10 +45,6 @@
   <xsl:variable name="numberswoc">0123456789</xsl:variable>
   <xsl:variable name="numberswc">0123456789,</xsl:variable>
   <xsl:variable name="max-years">100</xsl:variable>
-  <xsl:variable name="max-lapse-year-text">
-    <xsl:call-template name="get-max-lapse-year"/>
-  </xsl:variable>
-  <xsl:variable name="max-lapse-year" select="number($max-lapse-year-text)"/>
 
   <xsl:template match="/">
     <fo:root>
@@ -1690,49 +1687,6 @@
       </xsl:when>
       <xsl:otherwise>
         <xsl:value-of select="number($max-years)"/>
-      </xsl:otherwise>
-    </xsl:choose>
-  </xsl:template>
-
-  <!--
-  This may appear to be a clumsy way to get the max value but there is no clean way
-  to do this with the available XSL functionality and the values being distinct
-  entities. The way it is done in Calculation Summary and all examples to be found
-  have the values grouped in a common node within the XML. Simplified example:
-  <values>
-    <value>55</value>
-    <value>45</value>
-    <value>50</value>
-    <value>40</value>
-  </values>
-  -->
-
-  <xsl:template name="get-max-lapse-year">
-    <xsl:call-template name="max-comparison">
-      <xsl:with-param name="value1" select="illustration/scalar/LapseYear_Current"/>
-      <xsl:with-param name="value2">
-        <xsl:call-template name="max-comparison">
-          <xsl:with-param name="value1" select="illustration/scalar/LapseYear_Guaranteed"/>
-          <xsl:with-param name="value2">
-            <xsl:call-template name="max-comparison">
-              <xsl:with-param name="value1" select="illustration/scalar/LapseYear_CurrentZero"/>
-              <xsl:with-param name="value2" select="illustration/scalar/LapseYear_GuaranteedZero"/>
-            </xsl:call-template>
-          </xsl:with-param>
-        </xsl:call-template>
-      </xsl:with-param>
-    </xsl:call-template>
-  </xsl:template>
-
-  <xsl:template name="max-comparison">
-    <xsl:param name="value1"/>
-    <xsl:param name="value2"/>
-    <xsl:choose>
-      <xsl:when test="$value1 &lt; $value2">
-        <xsl:value-of select="$value2"/>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:value-of select="$value1"/>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
