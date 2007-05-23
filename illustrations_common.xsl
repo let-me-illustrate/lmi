@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: illustrations_common.xsl,v 1.1.2.2 2007-05-23 20:55:04 etarassov Exp $
+    $Id: illustrations_common.xsl,v 1.1.2.3 2007-05-23 21:07:18 etarassov Exp $
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:fo="http://www.w3.org/1999/XSL/Format">
@@ -75,4 +75,30 @@
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
+
+  <!--
+    Print Dollar Units
+    This template is common to all the illustration xsl templates.
+    Originally it has appeared in files with minor differencies such as:
+      * explicitly specified text alignment, font size or not specified;
+      * paranteses added around the text or omitted;
+      * an extra space added just before the text.
+  -->
+  <xsl:template name="dollar-units">
+    <xsl:choose>
+      <xsl:when test="/illustration/scalar/ScaleUnit=''">
+        <fo:block text-align="center" font-size="9pt">
+          <xsl:text>(Values shown are in dollars)</xsl:text>
+        </fo:block>
+      </xsl:when>
+      <xsl:otherwise>
+        <fo:block text-align="center" font-size="9pt">
+          <xsl:text>(Values shown are in </xsl:text>
+          <xsl:value-of select="/illustration/scalar/ScaleUnit"/>
+          <xsl:text>s of dollars)</xsl:text>
+        </fo:block>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+
 </xsl:stylesheet>
