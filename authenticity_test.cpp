@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: authenticity_test.cpp,v 1.4 2007-03-09 16:27:23 chicares Exp $
+// $Id: authenticity_test.cpp,v 1.5 2007-05-23 12:29:45 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -266,6 +266,13 @@ void PasskeyTest::CheckNominal(char const* file, int line) const
 /// a multiple-root system. This is perforce platform specific; msw is
 /// used because it happens to be common. This test assumes that an
 /// 'E:' drive exists and is not the "current" drive.
+///
+/// BOOST !! This test traps an exception that boost-1.33.1 can throw
+/// if exists("E:/") returns true but ::GetFileAttributesA() fails.
+/// That's supposed to be impossible because the is_directory()
+/// documentation says:
+///   "Throws: if !exists(ph)"
+/// but it can be reproduced by placing an unformatted disk in "E:".
 
 void PasskeyTest::TestFromAfar() const
 {
@@ -285,7 +292,22 @@ void PasskeyTest::TestFromAfar() const
     CheckNominal(__FILE__, __LINE__);
 
     fs::path const remote_dir_1(fs::complete(fs::path("E:/", fs::native)));
-    BOOST_TEST(fs::exists(remote_dir_1) && fs::is_directory(remote_dir_1));
+    BOOST_TEST(fs::exists(remote_dir_1));
+    try
+        {
+        BOOST_TEST(fs::is_directory(remote_dir_1));
+        }
+    catch(std::exception const& e)
+        {
+        std::string s(e.what());
+        if(std::string::npos != s.find("boost::filesystem::is_directory"))
+            {
+            BOOST_TEST(false);
+            goto done;
+            }
+        throw;
+        }
+
     BOOST_TEST_EQUAL(0, chdir(remote_dir_1.string().c_str()));
     BOOST_TEST_EQUAL(remote_dir_1.string(), fs::current_path().string());
     Authenticity::ResetCache();
@@ -295,6 +317,7 @@ void PasskeyTest::TestFromAfar() const
     BOOST_TEST_EQUAL(Pwd_.string(), fs::current_path().string());
 #endif // defined LMI_MSW
 
+  done:
     CheckNominal(__FILE__, __LINE__);
 }
 
