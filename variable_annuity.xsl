@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: variable_annuity.xsl,v 1.2 2007-05-22 12:18:30 rericksberg Exp $
+    $Id: variable_annuity.xsl,v 1.3 2007-05-23 13:46:29 rericksberg Exp $
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:fo="http://www.w3.org/1999/XSL/Format">
@@ -1029,7 +1029,7 @@
                       <xsl:text>Master contract: </xsl:text>
                       <xsl:call-template name="limit-string" >
                         <xsl:with-param name="pass-string" select="illustration/scalar/Franchise"/>
-                        <xsl:with-param name="length" select="50"/>
+                        <xsl:with-param name="length" select="30"/>
                       </xsl:call-template>
                     </fo:block>
                   </xsl:if>
@@ -1099,7 +1099,7 @@
                     <xsl:text>Master contract: </xsl:text>
                     <xsl:call-template name="limit-string" >
                       <xsl:with-param name="pass-string" select="illustration/scalar/Franchise"/>
-                      <xsl:with-param name="length" select="50"/>
+                      <xsl:with-param name="length" select="30"/>
                     </xsl:call-template>
                   </fo:block>
                 </fo:table-cell>
@@ -1112,7 +1112,7 @@
                     <xsl:text>Contract number: </xsl:text>
                     <xsl:call-template name="limit-string" >
                       <xsl:with-param name="pass-string" select="illustration/scalar/PolicyNumber"/>
-                      <xsl:with-param name="length" select="50"/>
+                      <xsl:with-param name="length" select="30"/>
                     </xsl:call-template>
                   </fo:block>
                 </fo:table-cell>
