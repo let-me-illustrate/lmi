@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: illustrations_common.xsl,v 1.1.2.3 2007-05-23 21:07:18 etarassov Exp $
+    $Id: illustrations_common.xsl,v 1.1.2.4 2007-05-23 21:39:09 etarassov Exp $
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:fo="http://www.w3.org/1999/XSL/Format">
@@ -29,6 +29,7 @@
     <xsl:call-template name="get-max-lapse-year"/>
   </xsl:variable>
   <xsl:variable name="max-lapse-year" select="number($max-lapse-year-text)"/>
+  <xsl:variable name="supplemental_report" select="/illustration/supplementalreport"/>
 
   <!--
   This may appear to be a clumsy way to get the max value but there is no clean way
@@ -99,6 +100,36 @@
         </fo:block>
       </xsl:otherwise>
     </xsl:choose>
+  </xsl:template>
+
+  <!-- Create Supplemental Report Values -->
+  <xsl:template name="supplemental-report-values">
+    <xsl:param name="counter"/>
+    <xsl:param name="inforceyear"/>
+    <xsl:if test="$counter &lt;= $max-lapse-year">
+      <fo:table-row>
+        <xsl:for-each select="$supplemental_report/columns">
+          <xsl:variable name="column_name" select="string(./name)"/>
+          <fo:table-cell padding=".2pt">
+            <fo:block text-align="right">
+              <xsl:value-of select="/illustration/data/newcolumn/column[@name=$column_name]/duration[$counter]/@column_value"/>
+            </fo:block>
+          </fo:table-cell>
+        </xsl:for-each>
+      </fo:table-row>
+      <!-- Blank Row Every 5th Year -->
+      <xsl:if test="($counter + $inforceyear) mod 5=0">
+        <fo:table-row>
+          <fo:table-cell padding="4pt">
+            <fo:block text-align="right" />
+          </fo:table-cell>
+        </fo:table-row>
+      </xsl:if>
+      <xsl:call-template name="supplemental-report-values">
+        <xsl:with-param name="counter" select="$counter + 1"/>
+        <xsl:with-param name="inforceyear" select="$inforceyear"/>
+      </xsl:call-template>
+    </xsl:if>
   </xsl:template>
 
 </xsl:stylesheet>
