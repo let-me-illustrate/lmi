@@ -19,13 +19,14 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: group_values.hpp,v 1.18 2007-05-22 02:31:40 chicares Exp $
+// $Id: group_values.hpp,v 1.19 2007-05-23 12:31:22 chicares Exp $
 
 #ifndef group_values_hpp
 #define group_values_hpp
 
 #include "config.hpp"
 
+#include "obstruct_slicing.hpp"
 #include "so_attributes.hpp"
 
 #include <boost/filesystem/path.hpp>
@@ -71,12 +72,15 @@ enum enum_emission
 /// assert_consistency() throws if an inconsistency is detected
 /// between a cell and its corresponding case default.
 /// TODO ?? Instead, this should be enforced when data is entered.
+///
+/// Implicitly-declared special member functions do the right thing.
 
 class LMI_SO run_census
+    :virtual private obstruct_slicing<run_census>
 {
   public:
-    run_census()
-        {}
+    run_census();
+    ~run_census();
 
     bool operator()
         (fs::path const&                     file

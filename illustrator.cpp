@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustrator.cpp,v 1.2 2007-05-20 18:36:20 chicares Exp $
+// $Id: illustrator.cpp,v 1.3 2007-05-23 12:31:23 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -42,6 +42,10 @@ illustrator::illustrator(enum_emission emission)
     ,usec_for_input_        (0.0)
     ,usec_for_calculations_ (0.0)
     ,usec_for_output_       (0.0)
+{
+}
+
+illustrator::~illustrator()
 {
 }
 
