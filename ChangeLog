@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.657.2.6 2007-05-23 22:35:10 etarassov Exp $
+// $Id: ChangeLog,v 1.657.2.7 2007-05-23 22:59:37 etarassov Exp $
 
 MAINTENANCE
 
@@ -11482,4 +11482,9 @@ Declare global has_supplemental_report variable and use it everywhere.
   variable_annuity.xsl
 Extract supplemental report generation into a new
 supplemental-report-body template.
+
+20070523T2259Z <etarassov@tt-solutions.com> [1249]
+
+  illustrations_common.xsl
+Use loops in supplemental-report-body template.
 
