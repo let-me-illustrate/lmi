@@ -21,25 +21,13 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: offshore_private_placement.xsl,v 1.3.2.5 2007-05-23 22:35:09 etarassov Exp $
+    $Id: offshore_private_placement.xsl,v 1.3.2.6 2007-05-24 09:01:59 etarassov Exp $
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:fo="http://www.w3.org/1999/XSL/Format">
   <xsl:include href="illustrations_common.xsl" />
   <xsl:output method="xml" encoding="UTF-8" indent="yes"/>
   <xsl:variable name="counter" select="1"/>
-  <xsl:variable name="column1name" select="string(illustration/supplementalreport/columns[1]/name)"/>
-  <xsl:variable name="column2name" select="string(illustration/supplementalreport/columns[2]/name)"/>
-  <xsl:variable name="column3name" select="string(illustration/supplementalreport/columns[3]/name)"/>
-  <xsl:variable name="column4name" select="string(illustration/supplementalreport/columns[4]/name)"/>
-  <xsl:variable name="column5name" select="string(illustration/supplementalreport/columns[5]/name)"/>
-  <xsl:variable name="column6name" select="string(illustration/supplementalreport/columns[6]/name)"/>
-  <xsl:variable name="column7name" select="string(illustration/supplementalreport/columns[7]/name)"/>
-  <xsl:variable name="column8name" select="string(illustration/supplementalreport/columns[8]/name)"/>
-  <xsl:variable name="column9name" select="string(illustration/supplementalreport/columns[9]/name)"/>
-  <xsl:variable name="column10name" select="string(illustration/supplementalreport/columns[10]/name)"/>
-  <xsl:variable name="column11name" select="string(illustration/supplementalreport/columns[11]/name)"/>
-  <xsl:variable name="column12name" select="string(illustration/supplementalreport/columns[12]/name)"/>
   <xsl:variable name="allletters"> ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789&#xA0;</xsl:variable>
   <xsl:variable name="noampletters"> ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_</xsl:variable>
 
