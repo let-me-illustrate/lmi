@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: fenv_lmi.cpp,v 1.21 2007-05-24 15:40:38 chicares Exp $
+// $Id: fenv_lmi.cpp,v 1.22 2007-05-24 18:36:25 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -206,14 +206,41 @@ std::string fenv_explain_invalid_control_word()
 
 /// Test floating-point control word; if invalid, reset and complain.
 ///
+/// Grant an indulgence if specified by the argument. Motivation: on
+/// the msw platform, some dlls rudely change the control word to
+/// 0x027f, the default value used for ms applications. That's the
+/// control word most often reported by users, and it isn't as
+/// disastrous as some others would be (e.g., borland-built dlls
+/// would change exception masks, potentially causing application
+/// crashes), though extensive testing has demonstrated that it could
+/// still cause numerical results of this program to vary unacceptably
+/// from one run to the next. Close investigation has shown that the
+/// control word is changed during GUI activity--e.g., when a dll for
+/// a particular control is loaded, bringing in a cascade of third-
+/// party dlls that have installed system-wide hooks--and that can be
+/// indulged as long as critical calculations are guarded without any
+/// indulgence.
+///
 /// Postcondition: control word is valid.
 ///
 /// Use safely_show_message() instead of any less-robust alternative
 /// because this function is intended to be safe to call in unusual
 /// circumstances, e.g., just before the program closes.
 
-bool fenv_validate()
+bool fenv_validate(enum_fenv_indulgence indulgence)
 {
+    if
+        (   e_fenv_indulge_0x027f == indulgence
+#if defined LMI_X86
+        &&  e_fenv_indulge_0x027f == x87_control_word()
+#else  // Unknown compiler or platform.
+#   error Unknown compiler or platform.
+#endif // Unknown compiler or platform.
+        )
+        {
+        fenv_initialize();
+        }
+
     bool okay = fenv_is_valid();
 
     if(!okay)
