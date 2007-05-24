@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: fenv_lmi.cpp,v 1.20 2007-05-24 02:43:33 chicares Exp $
+// $Id: fenv_lmi.cpp,v 1.21 2007-05-24 15:40:38 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -204,7 +204,9 @@ std::string fenv_explain_invalid_control_word()
 }
 } // Unnamed namespace.
 
-/// Test floating-point control word; complain and reset if invalid.
+/// Test floating-point control word; if invalid, reset and complain.
+///
+/// Postcondition: control word is valid.
 ///
 /// Use safely_show_message() instead of any less-robust alternative
 /// because this function is intended to be safe to call in unusual
