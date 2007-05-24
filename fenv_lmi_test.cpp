@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: fenv_lmi_test.cpp,v 1.9 2007-04-07 14:20:44 chicares Exp $
+// $Id: fenv_lmi_test.cpp,v 1.10 2007-05-24 15:41:52 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -224,15 +224,16 @@ int test_main(int, char*[])
     BOOST_TEST(fenv_validate());
 
     std::cout
-        << "Expect an (induced) warning now, but no test failure.\n"
+        << "Expect induced warnings exactly as predicted below,"
+        << " but no test failure.\n"
         << std::endl
+        ;
+
+    std::cout << "[Expect a '7f' warning now...\n" << std::endl
         ;
     fenv_precision(fe_fltprec);
     fenv_validate();
-    std::cout
-        << "[End of induced warning]."
-        << std::endl
-        ;
+    std::cout << "...end of induced warning]." << std::endl;
     BOOST_TEST(fenv_validate());
 
     return 0;
