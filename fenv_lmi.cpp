@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: fenv_lmi.cpp,v 1.19 2007-01-27 00:00:51 wboutin Exp $
+// $Id: fenv_lmi.cpp,v 1.20 2007-05-24 02:43:33 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -28,10 +28,11 @@
 
 #include "fenv_lmi.hpp"
 
-#include "alert.hpp"
+#include "alert.hpp" // safely_show_message()
 
 #include <iomanip>
 #include <sstream>
+#include <string>
 
 /// Manage the floating-point environment, generally using compiler-
 /// and platform-specific techniques.
@@ -180,34 +181,46 @@ bool fenv_is_valid()
 #endif // Unknown compiler or platform.
 }
 
+namespace
+{
+std::string fenv_explain_invalid_control_word()
+{
+    std::ostringstream oss;
+    oss
+        << "The floating-point control word was unexpectedly '"
+#if defined LMI_X86
+        << std::hex << x87_control_word()
+#else  // Unknown compiler or platform.
+#   error Unknown compiler or platform.
+#endif // Unknown compiler or platform.
+        << "'."
+        << "\nProbably some other program changed this crucial setting."
+        << "\nIt has been reset correctly. Rerun any illustration that"
+        << "\nwas being run when this message appeared, because it may"
+        << "\nbe incorrect."
+        << "\n"
+        ;
+    return oss.str();
+}
+} // Unnamed namespace.
+
+/// Test floating-point control word; complain and reset if invalid.
+///
+/// Use safely_show_message() instead of any less-robust alternative
+/// because this function is intended to be safe to call in unusual
+/// circumstances, e.g., just before the program closes.
+
 bool fenv_validate()
 {
     bool okay = fenv_is_valid();
 
     if(!okay)
         {
-        // Prefer this approach to fatal_error() because this function
-        // is intended to be called just before the program closes, at
-        // which time it may be unsafe to show messages by ordinary
-        // means.
-        std::ostringstream oss;
-        oss
-            << "The floating-point control word was unexpectedly '"
-#if defined LMI_X86
-            << std::hex << x87_control_word()
-#else  // Unknown compiler or platform.
-#   error Unknown compiler or platform.
-#endif // Unknown compiler or platform.
-            << "'."
-            << "\nProbably some other program changed this crucial setting."
-            << "\nIt has been reset correctly. Rerun any illustration that"
-            << "\nwas being run when this message appeared, because it may"
-            << "\nbe incorrect."
-            << "\n"
-            ;
+        std::string s(fenv_explain_invalid_control_word());
         fenv_initialize();
-        safely_show_message(oss.str().c_str());
+        safely_show_message(s.c_str());
         }
+
     return okay;
 }
 
