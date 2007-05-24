@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: objects.make,v 1.101 2007-05-16 04:32:35 chicares Exp $
+# $Id: objects.make,v 1.102 2007-05-24 19:41:31 chicares Exp $
 
 ################################################################################
 
@@ -173,6 +173,7 @@ common_common_objects := \
   death_benefits.o \
   expm1.o \
   facets.o \
+  fenv_guard.o \
   fenv_lmi.o \
   file_command.o \
   getopt.o \
@@ -544,6 +545,7 @@ expression_template_0_test$(EXEEXT): \
 
 fenv_lmi_test$(EXEEXT): \
   $(common_test_objects) \
+  fenv_guard.o \
   fenv_lmi_test.o \
 
 financial_test$(EXEEXT): \

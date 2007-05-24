@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.659 2007-05-24 18:36:25 chicares Exp $
+// $Id: ChangeLog,v 1.660 2007-05-24 19:41:31 chicares Exp $
 
 MAINTENANCE
 
@@ -11445,4 +11445,12 @@ Clarify test output.
   fenv_lmi.hpp
   fenv_lmi_test.cpp
 Conditionally inhibit warning if control word is not egregious.
+
+20070524T1941Z <chicares@cox.net> [1249]
+
+  fenv_guard.cpp [new file]
+  fenv_guard.hpp [new file]
+  fenv_lmi_test.cpp
+  objects.make
+Add and test a floating-point guard class.
 
