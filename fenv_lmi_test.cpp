@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: fenv_lmi_test.cpp,v 1.11 2007-05-24 18:36:25 chicares Exp $
+// $Id: fenv_lmi_test.cpp,v 1.12 2007-05-24 19:41:31 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -39,6 +39,7 @@
 #   include <float.h>
 #endif // defined __MINGW32__
 
+#include "fenv_guard.hpp"
 #include "fenv_lmi.hpp"
 
 #include "test_tools.hpp"
@@ -243,6 +244,20 @@ int test_main(int, char*[])
     std::cout << "\n[Expect an induced '7f' warning...\n" << std::endl;
     fenv_precision(fe_fltprec);
     BOOST_TEST(!fenv_validate(e_fenv_indulge_0x027f));
+    std::cout << "...end of induced warning]." << std::endl;
+    BOOST_TEST(fenv_validate());
+
+    fenv_precision(fe_fltprec);
+    {
+    fenv_guard fg;
+    }
+    BOOST_TEST(fenv_validate());
+
+    std::cout << "\n[Expect an induced '27f' warning...\n" << std::endl;
+    {
+    fenv_guard fg;
+    fenv_precision(fe_dblprec);
+    }
     std::cout << "...end of induced warning]." << std::endl;
     BOOST_TEST(fenv_validate());
 
