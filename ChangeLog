@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.657.2.9 2007-05-24 09:17:47 etarassov Exp $
+// $Id: ChangeLog,v 1.657.2.10 2007-05-24 09:44:26 etarassov Exp $
 
 MAINTENANCE
 
@@ -11509,4 +11509,9 @@ Remove now unused columnXXXname variables.
   variable_annuity.xsl
 Extract 'allletters' and 'noampletters'. Remove unneeded characters.
 Rename into SPECIAL_LETTERS and SPECIAL_LETTERS_ESCAPED.
+
+20070524T0944Z <etarassov@tt-solutions.com> [1249]
+
+  illustrations_common.xsl
+Add 'illustration' global variable.
 
