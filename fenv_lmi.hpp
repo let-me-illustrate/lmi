@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: fenv_lmi.hpp,v 1.13 2007-01-27 00:00:51 wboutin Exp $
+// $Id: fenv_lmi.hpp,v 1.14 2007-05-24 18:36:25 chicares Exp $
 
 #ifndef fenv_lmi_hpp
 #define fenv_lmi_hpp
@@ -89,6 +89,11 @@
 
 namespace floating_point_environment {} // doxygen workaround.
 
+enum enum_fenv_indulgence
+    {e_fenv_indulge_nothing = 0
+    ,e_fenv_indulge_0x027f  = 0x027f
+    };
+
 void LMI_SO fenv_initialize();
 
 e_ieee754_precision LMI_SO fenv_precision();
@@ -98,7 +103,7 @@ e_ieee754_rounding LMI_SO fenv_rounding();
 void               LMI_SO fenv_rounding(e_ieee754_rounding);
 
 bool LMI_SO fenv_is_valid();
-bool LMI_SO fenv_validate();
+bool LMI_SO fenv_validate(enum_fenv_indulgence = e_fenv_indulge_nothing);
 
 #endif // fenv_lmi_hpp
 

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.658 2007-05-23 15:57:05 rericksberg Exp $
+// $Id: ChangeLog,v 1.659 2007-05-24 18:36:25 chicares Exp $
 
 MAINTENANCE
 
@@ -11423,4 +11423,26 @@ in the header from wrapping to the next line.
 
   individual_private_placement.xsl
 Correct the header font.
+
+20070524T0243Z <chicares@cox.net> [1249]
+
+  fenv_lmi.cpp
+Refactor.
+
+20070524T1540Z <chicares@cox.net> [1249]
+
+  fenv_lmi.cpp
+Improve documentation.
+
+20070524T1541Z <chicares@cox.net> [1249]
+
+  fenv_lmi_test.cpp
+Clarify test output.
+
+20070524T1836Z <chicares@cox.net> [1249]
+
+  fenv_lmi.cpp
+  fenv_lmi.hpp
+  fenv_lmi_test.cpp
+Conditionally inhibit warning if control word is not egregious.
 
