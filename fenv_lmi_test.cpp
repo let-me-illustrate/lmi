@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: fenv_lmi_test.cpp,v 1.10 2007-05-24 15:41:52 chicares Exp $
+// $Id: fenv_lmi_test.cpp,v 1.11 2007-05-24 18:36:25 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -220,19 +220,29 @@ int test_main(int, char*[])
     BOOST_TEST_EQUAL( 2, rint( 2.5));
 #endif // defined LMI_COMPILER_PROVIDES_RINT
 
-    fenv_initialize();
-    BOOST_TEST(fenv_validate());
-
     std::cout
         << "Expect induced warnings exactly as predicted below,"
-        << " but no test failure.\n"
+        << " but no test failure."
         << std::endl
         ;
 
-    std::cout << "[Expect a '7f' warning now...\n" << std::endl
-        ;
+    fenv_initialize();
+    BOOST_TEST(fenv_validate());
+
+    fenv_initialize();
+    fenv_precision(fe_dblprec);
+    BOOST_TEST(fenv_validate(e_fenv_indulge_0x027f));
+    BOOST_TEST(fenv_validate());
+
+    std::cout << "\n[Expect an induced '7f' warning...\n" << std::endl;
     fenv_precision(fe_fltprec);
-    fenv_validate();
+    BOOST_TEST(!fenv_validate());
+    std::cout << "...end of induced warning]." << std::endl;
+    BOOST_TEST(fenv_validate());
+
+    std::cout << "\n[Expect an induced '7f' warning...\n" << std::endl;
+    fenv_precision(fe_fltprec);
+    BOOST_TEST(!fenv_validate(e_fenv_indulge_0x027f));
     std::cout << "...end of induced warning]." << std::endl;
     BOOST_TEST(fenv_validate());
 
