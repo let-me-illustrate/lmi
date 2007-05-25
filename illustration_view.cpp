@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustration_view.cpp,v 1.63 2007-04-30 18:29:18 chicares Exp $
+// $Id: illustration_view.cpp,v 1.64 2007-05-25 02:31:18 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -44,6 +44,7 @@
 #include "configurable_settings.hpp"
 #include "custom_io_0.hpp"
 #include "default_view.hpp"
+#include "fenv_guard.hpp"
 #include "file_command.hpp"
 #include "handle_exceptions.hpp"
 #include "illustration_document.hpp"
@@ -433,9 +434,15 @@ void IllustrationView::Run(Input* overriding_input)
     IllusInputParms ihs_input;
     convert_to_ihs(ihs_input, document().input_);
 
+    boost::shared_ptr<Ledger const> resulting_ledger;
+    { // Begin fenv_guard scope.
+    fenv_guard fg;
     AccountValue av(ihs_input);
     av.SetDebugFilename(base_filename() + ".debug");
     av.RunAV();
+    resulting_ledger = av.ledger_from_av();
+    } // End fenv_guard scope.
+    LMI_ASSERT(resulting_ledger.get());
 
 // EVGENIY !! Originally, we had this:
 //    status() << "Calculate: " << timer.stop().elapsed_msec_str();
@@ -451,9 +458,9 @@ void IllustrationView::Run(Input* overriding_input)
     timer.restart();
 
 // TODO ?? CALCULATION_SUMMARY Consider restoring this line:
-//    ledger_values_ = av.ledger_from_av();
+//    ledger_values_ = resulting_ledger;
 // in place of the following, which is discussed below:
-    SetLedger(av.ledger_from_av());
+    SetLedger(resulting_ledger);
 
     DisplaySelectedValuesAsHtml();
 
@@ -537,9 +544,17 @@ bool RunSpecialInputFileIfPresent(wxDocManager* dm)
             {
             IllusInputParms input(false);
             bool close_when_done = SetSpecialInput(input);
+
+            boost::shared_ptr<Ledger const> resulting_ledger;
+            { // Begin fenv_guard scope.
+            fenv_guard fg;
             AccountValue av(input);
             av.RunAV();
-            PrintFormSpecial(*av.ledger_from_av());
+            resulting_ledger = av.ledger_from_av();
+            } // End fenv_guard scope.
+            LMI_ASSERT(resulting_ledger.get());
+
+            PrintFormSpecial(*resulting_ledger);
             if(close_when_done)
                 {
                 return true;

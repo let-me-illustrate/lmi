@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_test.cpp,v 1.8 2007-03-09 16:27:23 chicares Exp $
+// $Id: ledger_test.cpp,v 1.9 2007-05-25 02:31:18 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -32,6 +32,7 @@
 
 #include "account_value.hpp"
 #include "assert_lmi.hpp"
+#include "fenv_guard.hpp"
 #include "global_settings.hpp"
 #include "inputillus.hpp"
 #include "miscellany.hpp" // files_are_identical()
@@ -62,11 +63,15 @@ LedgerTest::LedgerTest()
     global_settings::instance().set_regression_testing(true);
 
     single_cell_document document("sample.ill");
+
+    { // Begin fenv_guard scope.
+    fenv_guard fg;
     AccountValue av(document.input_data());
     av.RunAV();
     // TODO ?? Should this postcondition be enforced in the tested class?
     LMI_ASSERT(av.ledger_from_av().get());
     ledger_ = av.ledger_from_av();
+    } // End fenv_guard scope.
 }
 
 /// This test compares the files it creates to touchstones that, for
