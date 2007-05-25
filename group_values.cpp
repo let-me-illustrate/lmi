@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: group_values.cpp,v 1.65 2007-05-23 12:31:22 chicares Exp $
+// $Id: group_values.cpp,v 1.66 2007-05-25 02:31:18 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -33,6 +33,7 @@
 #include "configurable_settings.hpp"
 #include "database.hpp"
 #include "dbnames.hpp"
+#include "fenv_guard.hpp"
 #include "file_command.hpp"
 #include "global_settings.hpp"
 #include "handle_exceptions.hpp"
@@ -194,16 +195,23 @@ bool run_census_in_series::operator()
             IV.Run(cells[j]);
             composite.PlusEq(IV.ledger());
 */
+            boost::shared_ptr<Ledger const> resulting_ledger;
+            { // Begin fenv_guard scope.
+            fenv_guard fg;
             AccountValue av(cells[j]);
             av.SetDebugFilename
                 (serialized_file_path(file, j, "debug").string()
                 );
             av.RunAV();
-            composite.PlusEq(*av.ledger_from_av());
+            resulting_ledger = av.ledger_from_av();
+            composite.PlusEq(*resulting_ledger);
+            } // End fenv_guard scope.
+            LMI_ASSERT(resulting_ledger.get());
+
             usec_for_output += emit_ledger
                 (file
                 ,j
-                ,*av.ledger_from_av()
+                ,*resulting_ledger
                 ,emission
                 );
             }
@@ -346,6 +354,8 @@ bool run_census_in_parallel::operator()
                 continue;
                 }
 
+            { // Begin fenv_guard scope.
+            fenv_guard fg;
             boost::shared_ptr<AccountValue> av(new AccountValue(*ip));
             av->SetDebugFilename
                 (serialized_file_path(file, j, "debug").string()
@@ -358,6 +368,7 @@ bool run_census_in_parallel::operator()
                 av->Debugging = true;
                 av->DebugPrintInit();
                 }
+            } // End fenv_guard scope.
 
             if
                 (   first_cell_inforce_year  != value_cast<int>((*ip)["InforceYear"].str())
@@ -406,6 +417,8 @@ bool run_census_in_parallel::operator()
         )
     try
         {
+        { // Begin fenv_guard scope.
+        fenv_guard fg;
         for(i = cell_values.begin(); i != cell_values.end(); ++i)
             {
             (*i)->GuessWhetherFirstYearPremiumExceedsRetaliationLimit();
@@ -676,6 +689,7 @@ bool run_census_in_parallel::operator()
             (*i)->FinalizeLife(*run_basis);
             }
 
+        } // End fenv_guard scope.
         } // End for...try.
     catch(...)
         {
@@ -684,6 +698,7 @@ bool run_census_in_parallel::operator()
 
     for(i = cell_values.begin(); i != cell_values.end(); ++i)
         {
+        fenv_guard fg;
         (*i)->FinalizeLifeAllBases();
         composite.PlusEq(*(*i)->ledger_from_av());
         }
