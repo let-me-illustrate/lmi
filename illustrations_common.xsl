@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: illustrations_common.xsl,v 1.1.2.10 2007-05-25 00:39:59 etarassov Exp $
+    $Id: illustrations_common.xsl,v 1.1.2.11 2007-05-25 08:29:57 etarassov Exp $
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:fo="http://www.w3.org/1999/XSL/Format">
@@ -42,7 +42,12 @@
   </xsl:variable>
   <xsl:variable name="max-lapse-year" select="number($max-lapse-year-text)"/>
   <xsl:variable name="supplemental_report" select="$illustration/supplementalreport"/>
-  <xsl:variable name="has_supplemental_report" select="$illustration/scalar/SupplementalReport='1'"/>
+  <xsl:variable name="has_supplemental_report" select="boolean($illustration/scalar/SupplementalReport='1')"/>
+
+  <!--
+  Frequently used value. For a composite case the variable is_composite is true.
+  -->
+  <xsl:variable name="is_composite" select="boolean($illustration/scalar/Composite='1')"/>
 
   <!--
   The two strings below define how the special symbols in are escaped
