@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.657.2.13 2007-05-25 08:29:56 etarassov Exp $
+// $Id: ChangeLog,v 1.657.2.14 2007-05-25 10:37:04 etarassov Exp $
 
 MAINTENANCE
 
@@ -11544,4 +11544,10 @@ is used modulo 5).
   offshore_private_placement.xsl
   variable_annuity.xsl
 Extract a global variable 'is_composite'.
+
+20070525T1036Z <etarassov@tt-solutions.com> [1249]
+
+  nasd.xsl
+Use list of column names to generate 'illustration-assumption-values'
+data table. Also include column titles, but do not use it yet.
 
