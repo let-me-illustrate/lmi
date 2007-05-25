@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.660 2007-05-24 19:41:31 chicares Exp $
+// $Id: ChangeLog,v 1.661 2007-05-25 02:32:40 chicares Exp $
 
 MAINTENANCE
 
@@ -11453,4 +11453,19 @@ Conditionally inhibit warning if control word is not egregious.
   fenv_lmi_test.cpp
   objects.make
 Add and test a floating-point guard class.
+
+20070525T0231Z <chicares@cox.net> [1249]
+
+  group_values.cpp
+  illustration_view.cpp
+  ledger_test.cpp
+  ledgervalues.cpp
+Guard account-value calculations.
+
+20070525T0232Z <chicares@cox.net> [1249]
+
+  fenv_guard.cpp
+  fenv_guard.hpp
+  fenv_lmi_test.cpp
+Add a readable instance counter.
 

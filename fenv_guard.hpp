@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: fenv_guard.hpp,v 1.1 2007-05-24 19:41:31 chicares Exp $
+// $Id: fenv_guard.hpp,v 1.2 2007-05-25 02:32:40 chicares Exp $
 
 #ifndef fenv_guard_hpp
 #define fenv_guard_hpp
@@ -49,6 +49,11 @@ class LMI_SO fenv_guard
   public:
     fenv_guard();
     ~fenv_guard();
+
+    static int instance_count();
+
+  private:
+    static int instance_count_;
 };
 
 #endif // fenv_guard_hpp

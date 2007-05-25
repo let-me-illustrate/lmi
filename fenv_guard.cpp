@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: fenv_guard.cpp,v 1.1 2007-05-24 19:41:31 chicares Exp $
+// $Id: fenv_guard.cpp,v 1.2 2007-05-25 02:32:40 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -32,6 +32,7 @@
 
 fenv_guard::fenv_guard()
 {
+    instance_count_++;
     fenv_initialize();
 }
 
@@ -39,10 +40,18 @@ fenv_guard::~fenv_guard()
 {
     try
         {
+        instance_count_--;
         fenv_validate(e_fenv_indulge_nothing);
         }
     catch(...)
         {
         }
 }
+
+int fenv_guard::instance_count()
+{
+    return instance_count_;
+}
+
+int fenv_guard::instance_count_ = 0;
 
