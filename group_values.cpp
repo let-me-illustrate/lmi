@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: group_values.cpp,v 1.66 2007-05-25 02:31:18 chicares Exp $
+// $Id: group_values.cpp,v 1.67 2007-05-25 04:57:20 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -30,6 +30,7 @@
 
 #include "account_value.hpp"
 #include "alert.hpp"
+#include "assert_lmi.hpp"
 #include "configurable_settings.hpp"
 #include "database.hpp"
 #include "dbnames.hpp"
@@ -417,6 +418,14 @@ bool run_census_in_parallel::operator()
         )
     try
         {
+        // It seems somewhat anomalous to create and update a GUI
+        // progress meter inside this critical calculation section,
+        // because it is not entirely inconceivable that doing so
+        // might affect the floating-point control word. However,
+        // rogue msw dlls that improperly alter the control word
+        // seem to do so when they are initially loaded, and any
+        // such dll would already have been loaded to support the
+        // progress meter used earlier in this function.
         { // Begin fenv_guard scope.
         fenv_guard fg;
         for(i = cell_values.begin(); i != cell_values.end(); ++i)
