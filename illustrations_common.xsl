@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: illustrations_common.xsl,v 1.1.2.9 2007-05-24 09:44:26 etarassov Exp $
+    $Id: illustrations_common.xsl,v 1.1.2.10 2007-05-25 00:39:59 etarassov Exp $
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:fo="http://www.w3.org/1999/XSL/Format">
@@ -150,25 +150,13 @@
             </fo:table-row>
           </fo:table-header>
           <!-- Create Supplemental Report Values -->
-          <xsl:choose>
-            <!-- make inforce illustration start in the inforce year -->
-            <xsl:when test="$illustration/scalar/InforceYear!=0">
-              <fo:table-body>
-                <xsl:call-template name="supplemental-report-values">
-                  <xsl:with-param name="counter" select="$illustration/scalar/InforceYear + 1"/>
-                  <xsl:with-param name="inforceyear" select="5 - $illustration/scalar/InforceYear"/>
-                </xsl:call-template>
-              </fo:table-body>
-            </xsl:when>
-            <xsl:otherwise>
-              <fo:table-body>
-                <xsl:call-template name="supplemental-report-values">
-                  <xsl:with-param name="counter" select="1"/>
-                  <xsl:with-param name="inforceyear" select="0"/>
-                </xsl:call-template>
-              </fo:table-body>
-            </xsl:otherwise>
-          </xsl:choose>
+          <!-- make inforce illustration start in the inforce year -->
+          <fo:table-body>
+            <xsl:call-template name="supplemental-report-values">
+              <xsl:with-param name="counter" select="$illustration/scalar/InforceYear + 1"/>
+              <xsl:with-param name="inforceyear" select="0 - $illustration/scalar/InforceYear"/>
+            </xsl:call-template>
+          </fo:table-body>
         </fo:table>
       </fo:block>
       <xsl:if test="$has_supplemental_report">

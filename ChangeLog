@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.657.2.11 2007-05-24 23:58:10 etarassov Exp $
+// $Id: ChangeLog,v 1.657.2.12 2007-05-25 00:39:59 etarassov Exp $
 
 MAINTENANCE
 
@@ -11521,4 +11521,16 @@ Add 'illustration' global variable.
 Use list of column names to generate 'basic-illustration' table data
 values. Also include column names - prepare for the moment when we
 start to (partially) generate header of the report. 
+
+20070525T0039Z <etarassov@tt-solutions.com> [1249]
+
+  group_private_placement.xsl
+  illustration_reg.xsl
+  illustrations_common.xsl
+  individual_private_placement.xsl
+  nasd.xsl
+  offshore_private_placement.xsl
+  variable_annuity.xsl
+Remove code duplication (use the fact that $inforceyear parameter value
+is used modulo 5).
 
