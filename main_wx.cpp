@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_wx.cpp,v 1.72 2007-03-08 01:11:41 chicares Exp $
+// $Id: main_wx.cpp,v 1.73 2007-05-25 04:58:20 chicares Exp $
 
 // Portions of this file are derived from wxWindows files
 //   samples/docvwmdi/docview.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -51,6 +51,7 @@
 #include "default_view.hpp"
 #include "docmanager_ex.hpp"
 #include "docmdichildframe_ex.hpp"
+#include "fenv_guard.hpp"
 #include "fenv_lmi.hpp"
 #include "global_settings.hpp"
 #include "getopt.hpp"
@@ -758,9 +759,29 @@ void Skeleton::UponPreferences(wxCommandEvent&)
         }
 }
 
+/// Periodically test the floating-point control word when no critical
+/// calculation is being performed. If some rogue dll has changed it
+/// to the undesirable but nonegregious value 0x027f, then reset it,
+/// displaying a message on the statusbar; if it has been changed to
+/// any other value, which could interfere with the orderly operation
+/// of the program or even cause a crash, then reset it and pop up a
+/// message box.
+///
+/// If an fenv_guard object exists, do nothing: in that case, some
+/// critical calculation is being performed, so resetting the control
+/// word would prevent the fenv_guard object from detecting a change
+/// when any value but 0x037f is unacceptable.
+
 void Skeleton::UponTimer(wxTimerEvent&)
 {
-    fenv_validate();
+    if(0 == fenv_guard::instance_count())
+        {
+        if(!fenv_is_valid())
+            {
+            status() << "Floating-point control word reset." << std::flush;
+            }
+        fenv_validate(e_fenv_indulge_0x027f);
+        }
 }
 
 // WX !! The wx exception-handling code doesn't seem to permit

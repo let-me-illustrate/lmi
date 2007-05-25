@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.661 2007-05-25 02:32:40 chicares Exp $
+// $Id: ChangeLog,v 1.662 2007-05-25 04:58:20 chicares Exp $
 
 MAINTENANCE
 
@@ -11468,4 +11468,14 @@ Guard account-value calculations.
   fenv_guard.hpp
   fenv_lmi_test.cpp
 Add a readable instance counter.
+
+20070525T0457Z <chicares@cox.net> [1249]
+
+  group_values.cpp
+Include a required header; improve documentation.
+
+20070525T0458Z <chicares@cox.net> [1249]
+
+  main_wx.cpp
+Make a warning conditionally less obtrusive.
 
