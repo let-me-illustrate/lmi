@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.662 2007-05-25 04:58:20 chicares Exp $
+// $Id: ChangeLog,v 1.663 2007-05-25 14:40:20 wboutin Exp $
 
 MAINTENANCE
 
@@ -11478,4 +11478,9 @@ Include a required header; improve documentation.
 
   main_wx.cpp
 Make a warning conditionally less obtrusive.
+
+20070525T1440Z <wboutin@massmutual.com> [1249]
+
+  version.hpp
+Mark release candidate.
 
