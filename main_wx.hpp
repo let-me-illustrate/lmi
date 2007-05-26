@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_wx.hpp,v 1.15 2007-01-27 00:00:51 wboutin Exp $
+// $Id: main_wx.hpp,v 1.16 2007-05-26 21:00:24 chicares Exp $
 
 // Portions of this file are derived from wxWindows files
 //   samples/docvwmdi/docview.h (C) 1998 Julian Smart and Markus Holzem
@@ -70,22 +70,39 @@ class Skeleton
     void InitMenuBar();
     void InitToolBar();
 
-    void UponAbout                  (wxCommandEvent&);
-    void UponDropFiles              (wxDropFilesEvent&);
-    void UponEditDefaultCell        (wxCommandEvent&);
-    void UponMenuOpen               (wxMenuEvent&);
-    void UponPaste                  (wxClipboardTextEvent& event);
-    void UponPreferences            (wxCommandEvent&);
-    void UponTimer                  (wxTimerEvent&);
-    void UponUpdateInapplicable     (wxUpdateUIEvent&);
-    void UponUpdateFileSave         (wxUpdateUIEvent&);
-    void UponUpdateUI               (wxUpdateUIEvent&);
-    void UponUpdateHelp             (wxUpdateUIEvent&);
-    void UponWindowCascade          (wxCommandEvent&);
-    void UponWindowNext             (wxCommandEvent&);
-    void UponWindowPrevious         (wxCommandEvent&);
-    void UponWindowTileHorizontally (wxCommandEvent&);
-    void UponWindowTileVertically   (wxCommandEvent&);
+    void UponAbout                     (wxCommandEvent&);
+    void UponDropFiles                 (wxDropFilesEvent&);
+    void UponEditDefaultCell           (wxCommandEvent&);
+    void UponMenuOpen                  (wxMenuEvent&);
+    void UponPaste                     (wxClipboardTextEvent&);
+    void UponPreferences               (wxCommandEvent&);
+
+    // Test alerts from application.
+    void UponTestAppStatus             (wxCommandEvent&);
+    void UponTestAppWarning            (wxCommandEvent&);
+    void UponTestAppHobsons            (wxCommandEvent&);
+    void UponTestAppFatal              (wxCommandEvent&);
+    void UponTestAppStandardException  (wxCommandEvent&);
+    void UponTestAppArbitraryException (wxCommandEvent&);
+
+    // Test alerts from shared library.
+    void UponTestLibStatus             (wxCommandEvent&);
+    void UponTestLibWarning            (wxCommandEvent&);
+    void UponTestLibHobsons            (wxCommandEvent&);
+    void UponTestLibFatal              (wxCommandEvent&);
+    void UponTestLibStandardException  (wxCommandEvent&);
+    void UponTestLibArbitraryException (wxCommandEvent&);
+
+    void UponTimer                     (wxTimerEvent&);
+    void UponUpdateInapplicable        (wxUpdateUIEvent&);
+    void UponUpdateFileSave            (wxUpdateUIEvent&);
+    void UponUpdateUI                  (wxUpdateUIEvent&);
+    void UponUpdateHelp                (wxUpdateUIEvent&);
+    void UponWindowCascade             (wxCommandEvent&);
+    void UponWindowNext                (wxCommandEvent&);
+    void UponWindowPrevious            (wxCommandEvent&);
+    void UponWindowTileHorizontally    (wxCommandEvent&);
+    void UponWindowTileVertically      (wxCommandEvent&);
 
     // wxApp overrides.
     virtual bool OnExceptionInMainLoop();

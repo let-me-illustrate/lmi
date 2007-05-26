@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_wx.cpp,v 1.73 2007-05-25 04:58:20 chicares Exp $
+// $Id: main_wx.cpp,v 1.74 2007-05-26 21:00:24 chicares Exp $
 
 // Portions of this file are derived from wxWindows files
 //   samples/docvwmdi/docview.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -91,6 +91,7 @@
 #include <wx/toolbar.h>
 #include <wx/xrc/xmlres.h>
 
+#include <stdexcept>
 #include <string>
 
 #if !defined LMI_MSW
@@ -112,26 +113,38 @@ IMPLEMENT_WX_THEME_SUPPORT
 // the EVT_MENU_OPEN handler.
 //
 BEGIN_EVENT_TABLE(Skeleton, wxApp)
- EVT_DROP_FILES(                             Skeleton::UponDropFiles             )
- EVT_MENU(wxID_ABOUT                        ,Skeleton::UponAbout                 )
- EVT_MENU(XRCID("edit_default_cell"        ),Skeleton::UponEditDefaultCell       )
- EVT_MENU(XRCID("preferences"              ),Skeleton::UponPreferences           )
- EVT_MENU(XRCID("window_cascade"           ),Skeleton::UponWindowCascade         )
- EVT_MENU(XRCID("window_next"              ),Skeleton::UponWindowNext            )
- EVT_MENU(XRCID("window_previous"          ),Skeleton::UponWindowPrevious        )
- EVT_MENU(XRCID("window_tile_horizontally" ),Skeleton::UponWindowTileHorizontally)
- EVT_MENU(XRCID("window_tile_vertically"   ),Skeleton::UponWindowTileVertically  )
- EVT_MENU_OPEN(                              Skeleton::UponMenuOpen              )
- EVT_TIMER(wxID_ANY                         ,Skeleton::UponTimer                 )
+    EVT_DROP_FILES(                                  Skeleton::UponDropFiles                 )
+    EVT_MENU(wxID_ABOUT                             ,Skeleton::UponAbout                     )
+    EVT_MENU(XRCID("edit_default_cell"             ),Skeleton::UponEditDefaultCell           )
+    EVT_MENU(XRCID("preferences"                   ),Skeleton::UponPreferences               )
+    EVT_MENU(XRCID("test_app_status_alert"         ),Skeleton::UponTestAppStatus             )
+    EVT_MENU(XRCID("test_app_warning_alert"        ),Skeleton::UponTestAppWarning            )
+    EVT_MENU(XRCID("test_app_hobsons_choice_alert" ),Skeleton::UponTestAppHobsons            )
+    EVT_MENU(XRCID("test_app_fatal_error_alert"    ),Skeleton::UponTestAppFatal              )
+    EVT_MENU(XRCID("test_app_standard_exception"   ),Skeleton::UponTestAppStandardException  )
+    EVT_MENU(XRCID("test_app_arbitrary_exception"  ),Skeleton::UponTestAppArbitraryException )
+    EVT_MENU(XRCID("test_lib_status_alert"         ),Skeleton::UponTestLibStatus             )
+    EVT_MENU(XRCID("test_lib_warning_alert"        ),Skeleton::UponTestLibWarning            )
+    EVT_MENU(XRCID("test_lib_hobsons_choice_alert" ),Skeleton::UponTestLibHobsons            )
+    EVT_MENU(XRCID("test_lib_fatal_error_alert"    ),Skeleton::UponTestLibFatal              )
+    EVT_MENU(XRCID("test_lib_standard_exception"   ),Skeleton::UponTestLibStandardException  )
+    EVT_MENU(XRCID("test_lib_arbitrary_exception"  ),Skeleton::UponTestLibArbitraryException )
+    EVT_MENU(XRCID("window_cascade"                ),Skeleton::UponWindowCascade             )
+    EVT_MENU(XRCID("window_next"                   ),Skeleton::UponWindowNext                )
+    EVT_MENU(XRCID("window_previous"               ),Skeleton::UponWindowPrevious            )
+    EVT_MENU(XRCID("window_tile_horizontally"      ),Skeleton::UponWindowTileHorizontally    )
+    EVT_MENU(XRCID("window_tile_vertically"        ),Skeleton::UponWindowTileVertically      )
+    EVT_MENU_OPEN(                                   Skeleton::UponMenuOpen                  )
+    EVT_TIMER(wxID_ANY                              ,Skeleton::UponTimer                     )
 // TODO ?? expunge
-// EVT_UPDATE_UI(wxID_ANY                     ,Skeleton::UponUpdateUI              )
- EVT_UPDATE_UI(wxID_SAVE                    ,Skeleton::UponUpdateFileSave        )
- EVT_UPDATE_UI(wxID_HELP                    ,Skeleton::UponUpdateHelp            )
+//  EVT_UPDATE_UI(wxID_ANY                          ,Skeleton::UponUpdateUI                  )
+    EVT_UPDATE_UI(wxID_SAVE                         ,Skeleton::UponUpdateFileSave            )
+    EVT_UPDATE_UI(wxID_HELP                         ,Skeleton::UponUpdateHelp                )
 // TODO ?? expunge
 // Enabling this line prevents the menuitem from performing its required
 // action, whether or not the EVT_UPDATE_UI(wxID_SAVE...) handler is also
 // present.
-// EVT_UPDATE_UI(XRCID("wxID_SAVE"           ),Skeleton::UponUpdateFileSave        )
+//  EVT_UPDATE_UI(XRCID("wxID_SAVE"                ),Skeleton::UponUpdateFileSave            )
 
 // TODO ?? There has to be a better way.
 /*
@@ -757,6 +770,66 @@ void Skeleton::UponPreferences(wxCommandEvent&)
         configurable_settings::instance().save();
         UpdateViews();
         }
+}
+
+void Skeleton::UponTestAppStatus(wxCommandEvent&)
+{
+    status()         << "Test status()"         << LMI_FLUSH;
+}
+
+void Skeleton::UponTestAppWarning(wxCommandEvent&)
+{
+    warning()        << "Test warning()"        << LMI_FLUSH;
+}
+
+void Skeleton::UponTestAppHobsons(wxCommandEvent&)
+{
+    hobsons_choice() << "Test hobsons_choice()" << LMI_FLUSH;
+}
+
+void Skeleton::UponTestAppFatal(wxCommandEvent&)
+{
+    fatal_error()    << "Test fatal_error()"    << LMI_FLUSH;
+}
+
+void Skeleton::UponTestAppStandardException(wxCommandEvent&)
+{
+    throw std::runtime_error("Test a standard exception.");
+}
+
+void Skeleton::UponTestAppArbitraryException(wxCommandEvent&)
+{
+    throw "Test an arbitrary exception.";
+}
+
+void Skeleton::UponTestLibStatus(wxCommandEvent&)
+{
+    test_status();
+}
+
+void Skeleton::UponTestLibWarning(wxCommandEvent&)
+{
+    test_warning();
+}
+
+void Skeleton::UponTestLibHobsons(wxCommandEvent&)
+{
+    test_hobsons_choice();
+}
+
+void Skeleton::UponTestLibFatal(wxCommandEvent&)
+{
+    test_fatal_error();
+}
+
+void Skeleton::UponTestLibStandardException(wxCommandEvent&)
+{
+    test_standard_exception();
+}
+
+void Skeleton::UponTestLibArbitraryException(wxCommandEvent&)
+{
+    test_arbitrary_exception();
 }
 
 /// Periodically test the floating-point control word when no critical
