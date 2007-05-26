@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.664 2007-05-26 19:46:47 chicares Exp $
+// $Id: ChangeLog,v 1.665 2007-05-26 21:00:24 chicares Exp $
 
 MAINTENANCE
 
@@ -11494,4 +11494,12 @@ Move tests into a separate menu. With this minimal initial change, a
 
   menus.xrc
 Rearrange and reformat.
+
+20070526T2100Z <chicares@cox.net> [1249]
+
+  main_wx.cpp
+  main_wx.hpp
+  text_view.cpp
+  text_view.hpp
+Move tests so that they work regardless of active MDI child.
 

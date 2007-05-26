@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: text_view.hpp,v 1.10 2007-01-27 00:00:52 wboutin Exp $
+// $Id: text_view.hpp,v 1.11 2007-05-26 21:00:24 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.h (C) 1998 Julian Smart and Markus Holzem
@@ -49,9 +49,8 @@ class WXDLLEXPORT wxTextCtrl;
 /// or perilous" features. There's no intention to make lmi a general-
 /// purpose text editor.
 ///
-/// It's left in cvs, though, because it's a convenient place to test
-/// to test purely experimental features such as UponTest*(). It might
-/// be a valuable model for some other feature someday.
+/// It's left in cvs, though, because it might be a valuable model for
+/// some other feature someday.
 
 class TextEditView
     :public ViewEx
@@ -70,26 +69,9 @@ class TextEditView
     virtual wxIcon Icon() const;
     virtual wxMenuBar* MenuBar() const;
 
-    // Test alerts from application.
-    void UponTestAppStatus             (wxCommandEvent&);
-    void UponTestAppWarning            (wxCommandEvent&);
-    void UponTestAppHobsons            (wxCommandEvent&);
-    void UponTestAppFatal              (wxCommandEvent&);
-    void UponTestAppStandardException  (wxCommandEvent&);
-    void UponTestAppArbitraryException (wxCommandEvent&);
-
-    // Test alerts from shared library.
-    void UponTestLibStatus             (wxCommandEvent&);
-    void UponTestLibWarning            (wxCommandEvent&);
-    void UponTestLibHobsons            (wxCommandEvent&);
-    void UponTestLibFatal              (wxCommandEvent&);
-    void UponTestLibStandardException  (wxCommandEvent&);
-    void UponTestLibArbitraryException (wxCommandEvent&);
-
     wxTextCtrl* text_window_;
 
     DECLARE_DYNAMIC_CLASS(TextEditView)
-    DECLARE_EVENT_TABLE()
 };
 
 #endif // text_view_hpp
