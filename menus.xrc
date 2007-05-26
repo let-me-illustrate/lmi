@@ -24,7 +24,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: menus.xrc,v 1.22 2007-03-21 01:45:14 chicares Exp $
+    $Id: menus.xrc,v 1.23 2007-05-26 19:41:19 chicares Exp $
 -->
 
 <!-- reusable menus -->
@@ -221,6 +221,7 @@
             <help>Exit this program</help>
         </object>
     </object>
+    <object_ref name="test_menu" ref="test_menu_ref"/>
     <object_ref name="wxID_HELP" ref="help_menu_ref"/>
 </object>
 
@@ -325,6 +326,7 @@ Not supported yet: need to split columns into multiple pages.
             <help>Display all columns with the same fixed width</help>
         </object>
     </object>
+    <object_ref name="test_menu" ref="test_menu_ref"/>
     <object_ref name="window_menu" ref="window_menu_ref"/>
     <object_ref name="wxID_HELP" ref="help_menu_ref"/>
 </object>
@@ -362,6 +364,7 @@ Not supported yet: need to split columns into multiple pages.
             <help>Print calculation summary</help>
         </object>
     </object>
+    <object_ref name="test_menu" ref="test_menu_ref"/>
     <object_ref name="window_menu" ref="window_menu_ref"/>
     <object_ref name="wxID_HELP" ref="help_menu_ref"/>
 </object>
@@ -377,6 +380,7 @@ Not supported yet: need to split columns into multiple pages.
     <object class="wxMenu" name="database_edit">
         <label>_Database</label>
     </object>
+    <object_ref name="test_menu" ref="test_menu_ref"/>
     <object_ref name="window_menu" ref="window_menu_ref"/>
     <object_ref name="wxID_HELP" ref="help_menu_ref"/>
 </object>
@@ -391,6 +395,7 @@ Not supported yet: need to split columns into multiple pages.
     <object class="wxMenu" name="policy_edit">
         <label>P_olicy</label>
     </object>
+    <object_ref name="test_menu" ref="test_menu_ref"/>
     <object_ref name="window_menu" ref="window_menu_ref"/>
     <object_ref name="wxID_HELP" ref="help_menu_ref"/>
 </object>
@@ -405,6 +410,7 @@ Not supported yet: need to split columns into multiple pages.
     <object class="wxMenu" name="rounding_edit">
         <label>_Rounding</label>
     </object>
+    <object_ref name="test_menu" ref="test_menu_ref"/>
     <object_ref name="window_menu" ref="window_menu_ref"/>
     <object_ref name="wxID_HELP" ref="help_menu_ref"/>
 </object>
@@ -419,6 +425,7 @@ Not supported yet: need to split columns into multiple pages.
     <object class="wxMenu" name="tier_edit">
         <label>_Tier</label>
     </object>
+    <object_ref name="test_menu" ref="test_menu_ref"/>
     <object_ref name="window_menu" ref="window_menu_ref"/>
     <object_ref name="wxID_HELP" ref="help_menu_ref"/>
 </object>
@@ -431,6 +438,16 @@ Not supported yet: need to split columns into multiple pages.
 <style>wxMB_DOCKABLE</style>
     <object_ref name="file_menu" ref="file_menu_without_print_ref"/>
     <object class="wxMenu" name="text_edit">
+        <label>Te_xt</label>
+    </object>
+    <object_ref name="test_menu" ref="test_menu_ref"/>
+    <object_ref name="window_menu" ref="window_menu_ref"/>
+    <object_ref name="wxID_HELP" ref="help_menu_ref"/>
+</object>
+
+<!-- test menu -->
+
+    <object class="wxMenu" name="test_menu_ref">
         <label>_Test</label>
         <object class="wxMenu">
             <label>Test alerts from _application</label>
@@ -475,9 +492,6 @@ Not supported yet: need to split columns into multiple pages.
             </object>
         </object>
     </object>
-    <object_ref name="window_menu" ref="window_menu_ref"/>
-    <object_ref name="wxID_HELP" ref="help_menu_ref"/>
-</object>
 
 </resource>
 
