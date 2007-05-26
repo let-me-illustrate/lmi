@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.663 2007-05-25 14:40:20 wboutin Exp $
+// $Id: ChangeLog,v 1.664 2007-05-26 19:46:47 chicares Exp $
 
 MAINTENANCE
 
@@ -11483,4 +11483,15 @@ Make a warning conditionally less obtrusive.
 
   version.hpp
 Mark release candidate.
+
+20070526T1941Z <chicares@cox.net> [1249]
+
+  menus.xrc
+Move tests into a separate menu. With this minimal initial change, a
+"Test" menu appears iff the "Text" menu is shown.
+
+20070526T1946Z <chicares@cox.net> [1249]
+
+  menus.xrc
+Rearrange and reformat.
 
