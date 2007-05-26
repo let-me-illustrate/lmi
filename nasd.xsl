@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: nasd.xsl,v 1.9.2.11 2007-05-25 10:37:05 etarassov Exp $
+    $Id: nasd.xsl,v 1.9.2.12 2007-05-26 00:21:46 etarassov Exp $
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:fo="http://www.w3.org/1999/XSL/Format">
@@ -1125,9 +1125,6 @@
                   <xsl:variable name="column_name" select="string(@name)"/>
                   <xsl:value-of select="$illustration/data/newcolumn/column[@name=$column_name]/duration[$counter]/@column_value"/>
                 </xsl:when>
-                <xsl:otherwise>
-                  &#xA0;
-                </xsl:otherwise>
               </xsl:choose>
             </fo:block>
           </fo:table-cell>
@@ -1292,22 +1289,21 @@
       The 'composite' attribute (if present) indicates that the column
       is only to be included when the report type is (not) a composite.
       -->
-      <column name="PolicyYear">Policy &#xA0;Year</column>
-      <column composite="1" name="GrossPmt">Premium &#xA0;Outlay</column>
-      <column composite="1" name=""></column>
-      <column composite="0" name="AttainedAge">End of &#xA0;&#xA0;&#xA0;&#xA0;Year Age</column>
-      <column composite="0" name="GrossPmt">Premium &#xA0;Outlay</column>
-      <column name="CSVNet_GuaranteedZero">Cash Surr Value</column>
-      <column name="EOYDeathBft_GuaranteedZero">Death &#xA0;&#xA0;Benefit</column>
-      <column name=""/>
+      <column name="PolicyYear">Policy _Year</column>
+      <column composite="0" name="AttainedAge">End of _Year Age</column>
+      <column name="GrossPmt">Premium _Outlay</column>
+      <column composite="1"/>
+      <column name="CSVNet_GuaranteedZero">Cash Surr _Value</column>
+      <column name="EOYDeathBft_GuaranteedZero">Death _Benefit</column>
+      <column/>
       <column name="CSVNet_Guaranteed">Cash Surr Value</column>
-      <column name="EOYDeathBft_Guaranteed">Death &#xA0;&#xA0;Benefit</column>
-      <column name=""/>
+      <column name="EOYDeathBft_Guaranteed">Death _Benefit</column>
+      <column/>
       <column name="CSVNet_CurrentZero">Cash Surr Value</column>
-      <column name="EOYDeathBft_CurrentZero">Death &#xA0;&#xA0;Benefit</column>
-      <column name=""/>
+      <column name="EOYDeathBft_CurrentZero">Death _Benefit</column>
+      <column/>
       <column name="CSVNet_Current">Cash Surr Value</column>
-      <column name="EOYDeathBft_Current">Death &#xA0;&#xA0;Benefit</column>
+      <column name="EOYDeathBft_Current">Death _Benefit</column>
     </xsl:variable>
     <xsl:variable name="basic_illustration_columns" select="document('')/xsl:stylesheet/xsl:template[@name='basic-illustration-report']/xsl:variable[@name='basic_illustration_columns_raw']/column" />
     <!--
@@ -1320,15 +1316,14 @@
     <fo:flow flow-name="xsl-region-body">
       <fo:block font-size="9.0pt" font-family="serif">
         <fo:table table-layout="fixed" width="100%">
-          <xsl:for-each select="$columns">
-              <fo:table-column>
-                <xsl:if test="@name=''">
-                  <xsl:attribute name="column-width">2mm</xsl:attribute>
-                </xsl:if>
-              </fo:table-column>
-          </xsl:for-each>
+
+          <!-- Column list of the table header -->
+          <xsl:call-template name="generate-table-columns">
+            <xsl:with-param name="columns" select="$columns"/>
+          </xsl:call-template>
 
           <fo:table-header>
+            <!-- Custom part (the biggest) of the table header -->
             <fo:table-row>
               <fo:table-cell number-columns-spanned="3" padding="0pt"/>
               <fo:table-cell number-columns-spanned="5" padding="0pt" border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue">
@@ -1408,130 +1403,13 @@
                 </fo:block>
               </fo:table-cell>
             </fo:table-row>
-            <fo:table-row>
-              <fo:table-cell padding="2pt">
-                <fo:block text-align="right"></fo:block>
-              </fo:table-cell>
-            </fo:table-row>
-            <fo:table-row>
-              <fo:table-cell>
-                <fo:block text-align="right">Policy</fo:block>
-              </fo:table-cell>
-              <xsl:choose>
-                <xsl:when test="$is_composite">
-                  <fo:table-cell>
-                    <fo:block text-align="right">Premium</fo:block>
-                  </fo:table-cell>
-                  <fo:table-cell>
-                    <fo:block text-align="right"></fo:block>
-                  </fo:table-cell>
-                </xsl:when>
-                <xsl:otherwise>
-                  <fo:table-cell>
-                    <fo:block text-align="right">End of</fo:block>
-                  </fo:table-cell>
-                  <fo:table-cell>
-                    <fo:block text-align="right">Premium</fo:block>
-                  </fo:table-cell>
-                </xsl:otherwise>
-              </xsl:choose>
-              <fo:table-cell>
-                <fo:block text-align="right">Cash Surr</fo:block>
-              </fo:table-cell>
-              <fo:table-cell>
-                <fo:block text-align="right">Death</fo:block>
-              </fo:table-cell>
-              <fo:table-cell>
-                <fo:block text-align="right"></fo:block>
-              </fo:table-cell>
-              <fo:table-cell>
-                <fo:block text-align="right">Cash Surr</fo:block>
-              </fo:table-cell>
-              <fo:table-cell>
-                <fo:block text-align="right">Death</fo:block>
-              </fo:table-cell>
-              <fo:table-cell>
-                <fo:block text-align="right"></fo:block>
-              </fo:table-cell>
-              <fo:table-cell>
-                <fo:block text-align="right">Cash Surr</fo:block>
-              </fo:table-cell>
-              <fo:table-cell>
-                <fo:block text-align="right">Death</fo:block>
-              </fo:table-cell>
-              <fo:table-cell>
-                <fo:block text-align="right"></fo:block>
-              </fo:table-cell>
-              <fo:table-cell>
-                <fo:block text-align="right">Cash Surr</fo:block>
-              </fo:table-cell>
-              <fo:table-cell>
-                <fo:block text-align="right">Death</fo:block>
-              </fo:table-cell>
-            </fo:table-row>
-            <fo:table-row>
-              <fo:table-cell border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue" padding="0pt">
-                <fo:block text-align="right">Year</fo:block>
-              </fo:table-cell>
-              <xsl:choose>
-                <xsl:when test="$is_composite">
-                  <fo:table-cell border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue" padding="0pt">
-                    <fo:block text-align="right">Outlay</fo:block>
-                  </fo:table-cell>
-                  <fo:table-cell border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue" padding="0pt">
-                    <fo:block text-align="right"></fo:block>
-                  </fo:table-cell>
-                </xsl:when>
-                <xsl:otherwise>
-                  <fo:table-cell border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue" padding="0pt">
-                    <fo:block text-align="right">Year Age</fo:block>
-                  </fo:table-cell>
-                  <fo:table-cell border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue" padding="0pt">
-                    <fo:block text-align="right">Outlay</fo:block>
-                  </fo:table-cell>
-                </xsl:otherwise>
-              </xsl:choose>
-              <fo:table-cell border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue" padding="0pt">
-                <fo:block text-align="right">Value</fo:block>
-              </fo:table-cell>
-              <fo:table-cell border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue" padding="0pt">
-                <fo:block text-align="right">Benefit</fo:block>
-              </fo:table-cell>
-              <fo:table-cell border-bottom-style="none" border-bottom-width="1pt" border-bottom-color="blue" padding="0pt">
-                <fo:block text-align="right"></fo:block>
-              </fo:table-cell>
-              <fo:table-cell border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue" padding="0pt">
-                <fo:block text-align="right">Value</fo:block>
-              </fo:table-cell>
-              <fo:table-cell border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue" padding="0pt">
-                <fo:block text-align="right">Benefit</fo:block>
-              </fo:table-cell>
-              <fo:table-cell border-bottom-style="none" border-bottom-width="1pt" border-bottom-color="blue" padding="0pt">
-                <fo:block text-align="right"></fo:block>
-              </fo:table-cell>
-              <fo:table-cell border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue" padding="0pt">
-                <fo:block text-align="right">Value</fo:block>
-              </fo:table-cell>
-              <fo:table-cell border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue" padding="0pt">
-                <fo:block text-align="right">Benefit</fo:block>
-              </fo:table-cell>
-              <fo:table-cell border-bottom-style="none" border-bottom-width="1pt" border-bottom-color="blue" padding="0pt">
-                <fo:block text-align="right"></fo:block>
-              </fo:table-cell>
-              <fo:table-cell border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue" padding="0pt">
-                <fo:block text-align="right">Value</fo:block>
-              </fo:table-cell>
-              <fo:table-cell border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue" padding="0pt">
-                <fo:block text-align="right">Benefit</fo:block>
-              </fo:table-cell>
-            </fo:table-row>
-            <fo:table-row>
-              <fo:table-cell padding="2pt">
-                <fo:block>
-                </fo:block>
-              </fo:table-cell>
-            </fo:table-row>
+
+            <!-- Generic part of the table header -->
+            <xsl:call-template name="generate-table-headers">
+              <xsl:with-param name="columns" select="$columns"/>
+            </xsl:call-template>
           </fo:table-header>
+
           <!-- Create Basic Illustration Values -->
           <fo:table-body>
             <xsl:call-template name="basic-illustration-values">

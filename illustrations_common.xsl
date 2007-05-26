@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: illustrations_common.xsl,v 1.1.2.11 2007-05-25 08:29:57 etarassov Exp $
+    $Id: illustrations_common.xsl,v 1.1.2.12 2007-05-26 00:21:46 etarassov Exp $
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:fo="http://www.w3.org/1999/XSL/Format">
@@ -198,6 +198,301 @@
         <xsl:with-param name="inforceyear" select="$inforceyear"/>
       </xsl:call-template>
     </xsl:if>
+  </xsl:template>
+
+  <!--
+  Generate table columns list.
+  If a column has no name attribute (or an empty one) treat it as a separator.
+  -->
+  <xsl:template name="generate-table-columns">
+    <xsl:param name="columns"/>
+    <xsl:for-each select="$columns">
+      <fo:table-column>
+        <xsl:if test="not(@name) or (@name='')">
+          <xsl:attribute name="column-width">2mm</xsl:attribute>
+        </xsl:if>
+      </fo:table-column>
+    </xsl:for-each>
+  </xsl:template>
+
+  <!--
+  Determine the minimum number of rows needed to correctly show column headers.
+  Every column can spawn over multiple rows. This template return the maximum
+  number of rows.
+  -->
+  <xsl:template name="get-max-header-rows">
+    <xsl:param name="columns"/>
+    <xsl:param name="column"/>
+    <xsl:param name="row"/>
+    <xsl:choose>
+      <xsl:when test="($row = 1) and ($column = count($columns))">1</xsl:when>
+      <xsl:otherwise>
+        <xsl:variable name="text">
+          <xsl:call-template name="get-text-nth-line">
+            <xsl:with-param name="text" select="$columns[$column]"/>
+            <xsl:with-param name="n" select="$row"/>
+          </xsl:call-template>
+        </xsl:variable>
+        <xsl:variable name="this_result">
+          <xsl:if test="$text=''">0</xsl:if>
+          <xsl:if test="$text!=''"><xsl:value-of select="$row"/></xsl:if>
+        </xsl:variable>
+        <xsl:variable name="recursive_result">
+          <xsl:choose>
+            <xsl:when test="($column != count($columns))">
+              <xsl:call-template name="get-max-header-rows">
+                <xsl:with-param name="columns" select="$columns"/>
+                <xsl:with-param name="column" select="($column + 1)"/>
+                <xsl:with-param name="row" select="$row"/>
+              </xsl:call-template>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:call-template name="get-max-header-rows">
+                <xsl:with-param name="columns" select="$columns"/>
+                <xsl:with-param name="column" select="1"/>
+                <xsl:with-param name="row" select="($row - 1)"/>
+              </xsl:call-template>
+            </xsl:otherwise>
+          </xsl:choose>
+        </xsl:variable>
+
+        <xsl:call-template name="max-comparison">
+          <xsl:with-param name="value1" select="number(normalize-space($this_result))"/>
+          <xsl:with-param name="value2" select="number(normalize-space($recursive_result))"/>
+        </xsl:call-template>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+
+  <!--
+  A generic template that generates a data-table header rows.
+  Simlpy calls 'generate-table-header-row' with initial values.
+  Additionally adds a blank header row separating the header cells from
+  value cells.
+  -->
+  <xsl:template name="generate-table-headers">
+    <xsl:param name="columns"/>
+    <xsl:variable name="max-rows">
+      <xsl:call-template name="get-max-header-rows">
+        <xsl:with-param name="columns" select="$columns"/>
+        <xsl:with-param name="column" select="1"/>
+        <xsl:with-param name="row" select="10"/>
+      </xsl:call-template>
+    </xsl:variable>
+    <xsl:call-template name="generate-table-header-row">
+      <xsl:with-param name="columns" select="$columns"/>
+      <xsl:with-param name="row" select="1"/>
+      <xsl:with-param name="max-rows" select="number(normalize-space($max-rows))"/>
+    </xsl:call-template>
+    <!--
+    TODO ?? This monstrosity adds an extra space between table headers
+    and table data.
+    -->
+    <fo:table-row>
+      <fo:table-cell padding="2pt">
+        <fo:block/>
+      </fo:table-cell>
+    </fo:table-row>
+  </xsl:template>
+
+  <!--
+  Output data table header row and recursivly call itself until all rows
+  are produces.
+  Table header rows are printed using 'generate-table-header-cell' which
+  does merging of the header-cells when the adjucent cells have the same text.
+  See 'generate-table-header-cell' description for an explanation.
+  -->
+  <xsl:template name="generate-table-header-row">
+    <xsl:param name="columns"/>
+    <xsl:param name="row"/>
+    <xsl:param name="max-rows"/>
+    <fo:table-row>
+      <xsl:call-template name="generate-table-header-cell">
+        <xsl:with-param name="columns" select="$columns"/>
+        <xsl:with-param name="row" select="$row"/>
+        <xsl:with-param name="cell" select="1"/>
+      </xsl:call-template>
+    </fo:table-row>
+    <xsl:if test="$row &lt; $max-rows">
+      <xsl:call-template name="generate-table-header-row">
+        <xsl:with-param name="columns" select="$columns"/>
+        <xsl:with-param name="row" select="$row + 1"/>
+        <xsl:with-param name="max-rows" select="$max-rows"/>
+      </xsl:call-template>
+    </xsl:if>
+  </xsl:template>
+
+  <!--
+  Output cell text (and recursivly continue).
+  The main complexity comes from rendering the common header cell prefix
+  spawned over multiple columns. Example:
+    <column>Policy |Year</column>
+    <column>Benefit|Guaranteed</column>
+    <column>Benefit|Current</column>
+  will be rendered like so (ASCII graphics):
+    /===============================\
+    | Policy |       Benefit        |
+    |========+======================|
+    |   Year | Guaranteed | Current |
+    |========+============+=========|
+    |          [table data]         |
+  Note how the common header cell 'Benefit' is spawned over two columns.
+  -->
+  <xsl:template name="generate-table-header-cell">
+    <xsl:param name="columns"/>
+    <xsl:param name="row"/>
+    <xsl:param name="cell"/>
+    <xsl:param name="spans" select="1"/>
+    <xsl:variable name="cell_text">
+      <xsl:call-template name="get-text-nth-line">
+        <xsl:with-param name="text" select="string($columns[$cell])"/>
+        <xsl:with-param name="n" select="$row"/>
+      </xsl:call-template>
+    </xsl:variable>
+    <xsl:variable name="next_cell_text">
+      <xsl:if test="$cell &lt; count($columns)">
+        <xsl:call-template name="get-text-nth-line">
+          <xsl:with-param name="text" select="string($columns[$cell + 1])"/>
+          <xsl:with-param name="n" select="$row"/>
+        </xsl:call-template>
+      </xsl:if>
+    </xsl:variable>
+    <xsl:if test="($cell_text != $next_cell_text) or ($cell = count($columns))">
+      <fo:table-cell display-align="after" padding-top="4pt" padding-bottom="2pt" border-bottom-style="solid" border-bottom-color="blue">
+        <xsl:if test="$spans != 1">
+          <xsl:attribute name="number-columns-spanned">
+            <xsl:value-of select="$spans"/>
+          </xsl:attribute>
+        </xsl:if>
+          <xsl:attribute name="text-align">
+            <xsl:if test="$spans = 1">right</xsl:if>
+            <xsl:if test="$spans != 1">center</xsl:if>
+          </xsl:attribute>
+        <xsl:choose>
+          <xsl:when test="$cell_text != ''">
+            <xsl:attribute name="border-bottom-width">1pt</xsl:attribute>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:attribute name="border-bottom-width">0pt</xsl:attribute>
+          </xsl:otherwise>
+        </xsl:choose>
+        <xsl:call-template name="text-word-wrap">
+          <xsl:with-param name="text" select="$cell_text"/>
+        </xsl:call-template>
+      </fo:table-cell>
+    </xsl:if>
+    <xsl:if test="$cell &lt; count($columns)">
+      <xsl:choose>
+        <xsl:when test="$cell_text = $next_cell_text">
+          <xsl:call-template name="generate-table-header-cell">
+            <xsl:with-param name="columns" select="$columns"/>
+            <xsl:with-param name="row" select="$row"/>
+            <xsl:with-param name="cell" select="$cell + 1"/>
+            <xsl:with-param name="spans" select="$spans + 1"/>
+          </xsl:call-template>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:call-template name="generate-table-header-cell">
+            <xsl:with-param name="columns" select="$columns"/>
+            <xsl:with-param name="row" select="$row"/>
+            <xsl:with-param name="cell" select="$cell + 1"/>
+          </xsl:call-template>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:if>
+  </xsl:template>
+
+  <!--
+  A single character indicates that a column title has to be spawned over
+  multiple cells in the table header. Example:
+    <column>Policy |Year</column>
+    <column>Benefit|Current</column>
+  will be rendered like so (ASCII graphics):
+    /==================\
+    | Policy | Benefit |
+    |========+=========|
+    |   Year | Current |
+    |========+=========|
+    |   [table data]   |
+  -->
+  <xsl:variable name="CELL_WRAPPER" select="'|'"/>
+
+  <xsl:template name="get-text-nth-line">
+    <!-- The text to split into lines -->
+    <xsl:param name="text"/>
+    <!-- Index (starting from 1) of the line to return -->
+    <xsl:param name="n"/>
+    <xsl:choose>
+      <xsl:when test="starts-with($text, ' ')">
+        <!-- chop off the leading junk character -->
+        <xsl:call-template name="get-text-nth-line">
+          <xsl:with-param name="text" select="substring($text, 2)"/>
+          <xsl:with-param name="n" select="$n"/>
+        </xsl:call-template>
+      </xsl:when>
+      <xsl:when test="($n = 1) and contains($text, $CELL_WRAPPER)">
+        <xsl:value-of select="normalize-space(substring-before($text, $CELL_WRAPPER))"/>
+	  </xsl:when>
+      <xsl:when test="($n = 1)"><!-- and not(contains($text, $CELL_WRAPPER)) -->
+        <xsl:value-of select="normalize-space($text)"/>
+      </xsl:when>
+      <xsl:when test="contains($text, $CELL_WRAPPER)"><!-- and ($n != 1) -->
+        <xsl:call-template name="get-text-nth-line">
+          <xsl:with-param name="text" select="substring-after($text, $CELL_WRAPPER)"/>
+          <xsl:with-param name="n" select="($n - 1)"/>
+        </xsl:call-template>
+      </xsl:when>
+      <xsl:otherwise><!-- ($n != 1) and not(contains($text, $CELL_WRAPPER)) -->
+        <!-- The text does not have nth line. Return nothing -->
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+
+  <!--
+  A single character that indicates that a column title has to be splitted
+  in this place into two separate lines.
+  For example if a column has title 'Policy _Year', then the output file
+  will contain:
+    <fo:block>Policy</fo:block>
+    <fo:block>Year</fo:block>
+  Which will result in two separate lines.
+  Note: TEXT_LINE_WRAPPER must be exactly one symbol.
+  -->
+  <xsl:variable name="TEXT_LINE_WRAPPER" select="'_'"/>
+  <!--
+  Prepare the column title for a table-header cell - split it into lines using
+  the special symbol $TEXT_LINE_WRAPPER (underscore by default), and wrap-up
+  each line into <fo:block> so that FOP does not change word wrapping.
+  This way we control the way the column titles are shown.
+  -->
+  <xsl:template name="text-word-wrap">
+    <!-- The text to split into lines -->
+    <xsl:param name="text"/>
+    <!-- Do we treat the leading $TEXT_LINE_WRAPPERs as junk? -->
+    <xsl:param name="is_dirty" select="boolean(0)"/>
+    <xsl:choose>
+      <xsl:when test="starts-with($text, ' ') or ($is_dirty and starts-with($text, $TEXT_LINE_WRAPPER))">
+        <!-- chop off the leading junk character -->
+        <xsl:call-template name="text-word-wrap">
+          <xsl:with-param name="text" select="substring($text, 2)"/>
+          <xsl:with-param name="is_dirty" select="boolean($is_dirty) and starts-with($text, $TEXT_LINE_WRAPPER)"/>
+        </xsl:call-template>
+      </xsl:when>
+      <xsl:when test="contains($text, $TEXT_LINE_WRAPPER)">
+        <xsl:call-template name="text-word-wrap">
+          <xsl:with-param name="text" select="substring-before($text, $TEXT_LINE_WRAPPER)"/>
+          <xsl:with-param name="is_dirty" select="boolean(1)"/>
+        </xsl:call-template>
+        <xsl:call-template name="text-word-wrap">
+          <xsl:with-param name="text" select="substring-after($text, $TEXT_LINE_WRAPPER)"/>
+          <xsl:with-param name="is_dirty" select="boolean(1)"/>
+        </xsl:call-template>
+      </xsl:when>
+      <xsl:otherwise><!-- not(contains($text, $TEXT_LINE_WRAPPER)) -->
+        <!-- Finally wrap the line in the <fo:block> tags -->
+        <fo:block><xsl:value-of select="normalize-space($text)"/></fo:block>
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:template>
 
 </xsl:stylesheet>

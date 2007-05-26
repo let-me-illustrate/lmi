@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.657.2.14 2007-05-25 10:37:04 etarassov Exp $
+// $Id: ChangeLog,v 1.657.2.15 2007-05-26 00:21:46 etarassov Exp $
 
 MAINTENANCE
 
@@ -11550,4 +11550,11 @@ Extract a global variable 'is_composite'.
   nasd.xsl
 Use list of column names to generate 'illustration-assumption-values'
 data table. Also include column titles, but do not use it yet.
+
+20070526T0021Z <etarassov@tt-solutions.com> [1250]
+
+  illustrations_common.xsl
+  nasd.xsl
+Write generic templates for data-table generation. In column titles
+use '|' as cell separator and '_' as line separator.
 
