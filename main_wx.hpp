@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_wx.hpp,v 1.16 2007-05-26 21:00:24 chicares Exp $
+// $Id: main_wx.hpp,v 1.17 2007-05-27 02:59:20 chicares Exp $
 
 // Portions of this file are derived from wxWindows files
 //   samples/docvwmdi/docview.h (C) 1998 Julian Smart and Markus Holzem
@@ -51,6 +51,7 @@ class WXDLLEXPORT wxConfigBase;
 class WXDLLEXPORT wxDocMDIParentFrame;
 class WXDLLEXPORT wxDocument;
 class WXDLLEXPORT wxMDIChildFrame;
+class WXDLLEXPORT wxMenuBar;
 
 class Skeleton
     :public wxApp
@@ -65,6 +66,8 @@ class Skeleton
     wxMDIChildFrame* CreateChildFrame(wxDocument*, ViewEx*);
 
   private:
+    wxMenuBar* AdjustMenus(wxMenuBar*);
+
     void InitDocManager();
     void InitIcon();
     void InitMenuBar();
