@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.665 2007-05-26 21:00:24 chicares Exp $
+// $Id: ChangeLog,v 1.666 2007-05-27 16:28:25 chicares Exp $
 
 MAINTENANCE
 
@@ -11502,4 +11502,34 @@ Rearrange and reformat.
   text_view.cpp
   text_view.hpp
 Move tests so that they work regardless of active MDI child.
+
+20070527T0259Z <chicares@cox.net> [1249]
+
+  main_wx.cpp
+  main_wx.hpp
+Conditionally display "Test" menu.
+
+20070527T1417Z <chicares@cox.net> [1248]
+
+  menus.xrc
+Remove stray comment markers.
+
+20070527T1513Z <chicares@cox.net> [1247]
+
+  menus.xrc
+Comment out empty menus, but don't expunge them. See:
+  http://lists.nongnu.org/archive/html/lmi/2007-03/msg00068.html
+
+20070527T1530Z <chicares@cox.net> [1247]
+
+  menus.xrc
+Consistently name each menu specific to a view class, following the
+existing paradigm for the census class:
+  "census_view_menu": menubar to use when census is active MDI child
+  "census_menu": menu used on that menubar, suitable as a popup menu
+
+20070527T1628Z <chicares@cox.net> [1244]
+
+  menus.xrc
+Either explain or expunge commented-out menuitems.
 
