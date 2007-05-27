@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_wx.cpp,v 1.74 2007-05-26 21:00:24 chicares Exp $
+// $Id: main_wx.cpp,v 1.75 2007-05-27 02:59:20 chicares Exp $
 
 // Portions of this file are derived from wxWindows files
 //   samples/docvwmdi/docview.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -41,6 +41,7 @@
 #include "about_dialog.hpp"
 #include "alert.hpp"
 #include "argv0.hpp"
+#include "assert_lmi.hpp"
 #include "authenticity.hpp"
 #include "census_document.hpp"
 #include "census_view.hpp"
@@ -91,6 +92,7 @@
 #include <wx/toolbar.h>
 #include <wx/xrc/xmlres.h>
 
+#include <iterator>
 #include <stdexcept>
 #include <string>
 
@@ -274,7 +276,7 @@ wxMDIChildFrame* Skeleton::CreateChildFrame
         ,frame_
         );
     child_frame->SetIcon(view->Icon());
-    child_frame->SetMenuBar(view->MenuBar());
+    child_frame->SetMenuBar(AdjustMenus(view->MenuBar()));
 
     // Style flag wxMAXIMIZE could have been used instead, but that
     // seems to work only with the msw platform.
@@ -284,6 +286,41 @@ wxMDIChildFrame* Skeleton::CreateChildFrame
         }
 
     return child_frame;
+}
+
+/// Adjust menus read from wxxrc resources.
+///
+/// Whatever can be done in wxxrc generally should be done there. Use
+/// this function to add finishing touches. Prefer to call it before
+/// wxFrame::SetMenuBar(), to avoid flicker.
+///
+/// The "Test" menu should not be exposed to end users. All of lmi's
+/// wxxrc resources include it; this function removes it whenever it's
+/// not wanted. Alternatively, it could be coded as a separate wxxrc
+/// resource and conditionally inserted here, but that would be less
+/// flexible: e.g., menu order couldn't be controlled completely in
+/// the wxxrc file.
+
+wxMenuBar* Skeleton::AdjustMenus(wxMenuBar* argument)
+{
+    LMI_ASSERT(argument);
+    wxMenuBar& menu_bar = *argument;
+
+    if(!global_settings::instance().ash_nazg())
+        {
+        int test_menu_index = menu_bar.FindMenu("Test");
+        if(wxNOT_FOUND == test_menu_index)
+            {
+            warning() << "No 'Test' menu found.";
+            }
+        else
+            {
+            delete menu_bar.Remove(test_menu_index);
+            }
+        }
+
+    LMI_ASSERT(argument);
+    return argument;
 }
 
 void Skeleton::InitDocManager()
@@ -424,7 +461,7 @@ void Skeleton::InitMenuBar()
         {
         doc_manager_->AssociateFileHistoryWithFileMenu(menu_bar);
         }
-    frame_->SetMenuBar(menu_bar);
+    frame_->SetMenuBar(AdjustMenus(menu_bar));
 }
 
 // WX !! It seems odd that LoadMenuBar has two signatures, the simpler
