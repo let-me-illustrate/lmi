@@ -24,7 +24,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: menus.xrc,v 1.24 2007-05-26 19:46:47 chicares Exp $
+    $Id: menus.xrc,v 1.25 2007-05-27 14:17:22 chicares Exp $
 -->
 
 <!-- reusable menus -->
@@ -325,13 +325,13 @@
             <bitmap>print-class.xpm</bitmap>
             <help>Run and print all cells in selected cell's class</help>
         </object>
---> TODO ?? Either implement this, or expunge it.
+-->
         <object class="wxMenuItem" name="print_case">
             <label>Run and print all cells\tCtrl-Shift-P</label>
             <bitmap>print-case.xpm</bitmap>
             <help>Run and print all cells</help>
         </object>
-<!-- TODO ?? TODO ?? Either implement this, or expunge it.
+<!-- TODO ?? Either implement this, or expunge it.
 Not supported yet: need to split columns into multiple pages.
         <object class="wxMenuItem" name="wxID_PRINT">
             <label>Print census input</label>
