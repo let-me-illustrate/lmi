@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.657.2.32 2007-05-28 16:54:36 etarassov Exp $
+// $Id: ChangeLog,v 1.657.2.33 2007-05-28 16:56:09 etarassov Exp $
 
 MAINTENANCE
 
@@ -11651,4 +11651,9 @@ Rewrite 'irr-current-illustration-(report|values)'.
 
   ChangeLog
 Fix log entries.
+
+20070525T1656Z <etarassov@tt-solutions.com> [1250]
+
+  illustrations_common.xsl
+Add mandatory attribute 'column-width' to <fo:table-column>.
 

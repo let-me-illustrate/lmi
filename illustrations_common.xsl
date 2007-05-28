@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: illustrations_common.xsl,v 1.1.2.17 2007-05-28 12:31:16 etarassov Exp $
+    $Id: illustrations_common.xsl,v 1.1.2.18 2007-05-28 16:56:09 etarassov Exp $
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:fo="http://www.w3.org/1999/XSL/Format">
@@ -211,6 +211,14 @@
         <xsl:if test="not(@name) and not(@scalar)">
           <xsl:attribute name="column-width">2mm</xsl:attribute>
         </xsl:if>
+        <xsl:choose>
+          <xsl:when test="not(@name) and not(@scalar)">
+            <xsl:attribute name="column-width">proportional-column-width(33)</xsl:attribute>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:attribute name="column-width">proportional-column-width(100)</xsl:attribute>
+          </xsl:otherwise>
+        </xsl:choose>
       </fo:table-column>
     </xsl:for-each>
   </xsl:template>
