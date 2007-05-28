@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: nasd.xsl,v 1.9.2.17 2007-05-28 11:10:43 etarassov Exp $
+    $Id: nasd.xsl,v 1.9.2.18 2007-05-28 11:26:45 etarassov Exp $
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:fo="http://www.w3.org/1999/XSL/Format">
@@ -834,7 +834,7 @@
                     <xsl:choose>
                       <xsl:when test="illustration/scalar/Insured1='  '">
                         <fo:block>
-                          <xsl:text>&#xA0;</xsl:text>
+                          <xsl:text> </xsl:text>
                         </fo:block>
                       </xsl:when>
                       <xsl:otherwise>
@@ -845,7 +845,7 @@
                           </xsl:call-template>
                           <xsl:text>, </xsl:text>
                           <xsl:value-of select="illustration/scalar/Gender"/>
-                          <xsl:text>&#xA0;</xsl:text>
+                          <xsl:text> </xsl:text>
                           <xsl:value-of select="illustration/scalar/Smoker"/>
                           <xsl:text> rates, Age </xsl:text>
                           <xsl:value-of select="illustration/scalar/Age"/>
@@ -926,7 +926,7 @@
                   </xsl:when>
                   <xsl:otherwise>
                     <fo:block text-align="left">
-                      <xsl:text>&#xA0;</xsl:text>
+                      <xsl:text> </xsl:text>
                     </fo:block>
                   </xsl:otherwise>
                 </xsl:choose>
@@ -946,7 +946,7 @@
               <xsl:choose>
                 <xsl:when test="$is_composite">
                   <fo:block text-align="left">
-                    <xsl:text>&#xA0;</xsl:text>
+                    <xsl:text> </xsl:text>
                   </fo:block>
                 </xsl:when>
                 <xsl:otherwise>
@@ -1012,7 +1012,7 @@
                 </xsl:when>
                 <xsl:otherwise>
                   <fo:block text-align="left">
-                    <xsl:text>&#xA0;</xsl:text>
+                    <xsl:text> </xsl:text>
                   </fo:block>
                 </xsl:otherwise>
               </xsl:choose>
@@ -1024,7 +1024,7 @@
                 <xsl:if test="illustration/scalar/HasWP='1'">
                   <xsl:text>Waiver of Monthly Charges Rider elected.</xsl:text>
                 </xsl:if>
-                <xsl:text>&#xA0;</xsl:text>
+                <xsl:text> </xsl:text>
               </fo:block>
             </fo:table-cell>
             <fo:table-cell number-columns-spanned="1" padding="0pt"/>
@@ -1032,7 +1032,7 @@
               <xsl:choose>
                 <xsl:when test="$is_composite">
                   <fo:block text-align="left">
-                    <xsl:text>&#xA0;</xsl:text>
+                    <xsl:text> </xsl:text>
                   </fo:block>
                 </xsl:when>
                 <xsl:otherwise>
@@ -1045,7 +1045,7 @@
                     </xsl:when>
                     <xsl:otherwise>
                       <fo:block text-align="left">
-                        <xsl:text>&#xA0;</xsl:text>
+                        <xsl:text> </xsl:text>
                       </fo:block>
                     </xsl:otherwise>
                   </xsl:choose>
@@ -1076,7 +1076,7 @@
                           <xsl:with-param name="passString" select="illustration/scalar/Franchise"/>
                           <xsl:with-param name="length" select="15"/>
                         </xsl:call-template>
-                        <xsl:text>&#xA0;&#xA0;&#xA0;Contract number: </xsl:text>
+                        <xsl:text>   Contract number: </xsl:text>
                         <xsl:call-template name="limitstring" >
                           <xsl:with-param name="passString" select="illustration/scalar/PolicyNumber"/>
                           <xsl:with-param name="length" select="15"/>
@@ -1204,7 +1204,7 @@
                 <fo:block text-align="center">
                 <xsl:text>Return (</xsl:text>
                 <xsl:value-of select="illustration/scalar/InitAnnSepAcctNetInt_GuaranteedZero"/>
-                <xsl:text>&#xA0;net)</xsl:text>
+                <xsl:text> net)</xsl:text>
                 </fo:block>
               </fo:table-cell>
               <fo:table-cell number-columns-spanned="1" padding="0pt"/>
@@ -1212,7 +1212,7 @@
                 <fo:block text-align="center">
                   <xsl:text>Return (</xsl:text>
                   <xsl:value-of select="illustration/scalar/InitAnnSepAcctNetInt_Guaranteed"/>
-                  <xsl:text>&#xA0;net)</xsl:text>
+                  <xsl:text> net)</xsl:text>
                 </fo:block>
               </fo:table-cell>
               <fo:table-cell number-columns-spanned="1" padding="0pt"/>
@@ -1220,7 +1220,7 @@
                 <fo:block text-align="center">
                   <xsl:text>Return (</xsl:text>
                   <xsl:value-of select="illustration/scalar/InitAnnSepAcctNetInt_CurrentZero"/>
-                  <xsl:text>&#xA0;net)</xsl:text>
+                  <xsl:text> net)</xsl:text>
                 </fo:block>
               </fo:table-cell>
               <fo:table-cell number-columns-spanned="1" padding="0pt"/>
@@ -1228,7 +1228,7 @@
                 <fo:block text-align="center">
                   <xsl:text>Return (</xsl:text>
                   <xsl:value-of select="illustration/scalar/InitAnnSepAcctNetInt_Current"/>
-                  <xsl:text>&#xA0;net)</xsl:text>
+                  <xsl:text> net)</xsl:text>
                 </fo:block>
               </fo:table-cell>
             </fo:table-row>
@@ -1391,7 +1391,7 @@
               <fo:block text-align="center">
                 <xsl:text>Date Prepared: </xsl:text>
                 <xsl:value-of select="illustration/scalar/PrepMonth"/>
-                  <xsl:text>&#xA0;</xsl:text>
+                  <xsl:text> </xsl:text>
                 <xsl:value-of select="illustration/scalar/PrepDay"/>
                   <xsl:text>, </xsl:text>
                 <xsl:value-of select="illustration/scalar/PrepYear"/>
@@ -1481,9 +1481,9 @@
               <fo:block text-align="center">
                 <xsl:text>Date Prepared: </xsl:text>
                 <xsl:value-of select="illustration/scalar/PrepMonth"/>
-                  <xsl:text>&#xA0;</xsl:text>
+                <xsl:text> </xsl:text>
                 <xsl:value-of select="illustration/scalar/PrepDay"/>
-                  <xsl:text>, </xsl:text>
+                <xsl:text>, </xsl:text>
                 <xsl:value-of select="illustration/scalar/PrepYear"/>
               </fo:block>
             </fo:table-cell>

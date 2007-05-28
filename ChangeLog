@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.657.2.24 2007-05-28 11:10:42 etarassov Exp $
+// $Id: ChangeLog,v 1.657.2.25 2007-05-28 11:26:45 etarassov Exp $
 
 MAINTENANCE
 
@@ -11605,4 +11605,9 @@ Add generic 'generate-table-values' template.
 
   nasd.xsl
 Use 'generate-table-values' template.
+
+20070528T1126Z <etarassov@tt-solutions.com> [1250]
+
+  nasd.xsl
+Remove bogus usage of &#xA0;.
 
