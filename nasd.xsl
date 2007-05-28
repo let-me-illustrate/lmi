@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: nasd.xsl,v 1.9.2.12 2007-05-26 00:21:46 etarassov Exp $
+    $Id: nasd.xsl,v 1.9.2.13 2007-05-28 10:01:39 etarassov Exp $
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:fo="http://www.w3.org/1999/XSL/Format">
@@ -1148,90 +1148,34 @@
   </xsl:template>
 
   <xsl:template name="supplemental-illustration-values">
+    <xsl:param name="columns"/>
     <xsl:param name="counter"/>
     <xsl:param name="inforceyear"/>
     <xsl:if test="$counter &lt;= $max-lapse-year">
       <fo:table-row>
-        <fo:table-cell padding=".6pt">
-          <fo:block text-align="right">
-            <xsl:value-of select="illustration/data/newcolumn/column[@name='PolicyYear']/duration[$counter]/@column_value"/>
-          </fo:block>
-        </fo:table-cell>
-        <xsl:choose>
-          <xsl:when test="$is_composite">
-            <fo:table-cell>
-              <fo:block text-align="right">
-                <xsl:value-of select="illustration/data/newcolumn/column[@name='GrossPmt']/duration[$counter]/@column_value"/>
-              </fo:block>
-            </fo:table-cell>
-            <fo:table-cell>
-              <fo:block text-align="right">&#xA0;</fo:block>
-            </fo:table-cell>
-          </xsl:when>
-          <xsl:otherwise>
-            <fo:table-cell>
-              <fo:block text-align="right">
-                <xsl:value-of select="illustration/data/newcolumn/column[@name='AttainedAge']/duration[$counter]/@column_value"/>
-              </fo:block>
-            </fo:table-cell>
-            <fo:table-cell>
-              <fo:block text-align="right">
-                <xsl:value-of select="illustration/data/newcolumn/column[@name='GrossPmt']/duration[$counter]/@column_value"/>
-              </fo:block>
-            </fo:table-cell>
-          </xsl:otherwise>
-        </xsl:choose>
-        <fo:table-cell>
-          <fo:block text-align="right">
-            <xsl:value-of select="illustration/data/newcolumn/column[@name='PolicyFee_Current']/duration[$counter]/@column_value"/>
-          </fo:block>
-        </fo:table-cell>
-        <fo:table-cell>
-          <fo:block text-align="right">
-            <xsl:value-of select="illustration/data/newcolumn/column[@name='PremTaxLoad_Current']/duration[$counter]/@column_value"/>
-          </fo:block>
-        </fo:table-cell>
-        <fo:table-cell>
-          <fo:block text-align="right">
-            <xsl:value-of select="illustration/data/newcolumn/column[@name='DacTaxLoad_Current']/duration[$counter]/@column_value"/>
-          </fo:block>
-        </fo:table-cell>
-        <fo:table-cell>
-          <fo:block text-align="right">
-            <xsl:value-of select="illustration/data/newcolumn/column[@name='NetPmt_Current']/duration[$counter]/@column_value"/>
-          </fo:block>
-        </fo:table-cell>
-        <fo:table-cell>
-          <fo:block text-align="right">
-            <xsl:value-of select="illustration/data/newcolumn/column[@name='COICharge_Current']/duration[$counter]/@column_value"/>
-          </fo:block>
-        </fo:table-cell>
-        <fo:table-cell>
-          <fo:block text-align="right">
-            <xsl:value-of select="illustration/data/newcolumn/column[@name='AcctVal_Current']/duration[$counter]/@column_value"/>
-          </fo:block>
-        </fo:table-cell>
-        <fo:table-cell>
-          <fo:block text-align="right">
-            <xsl:value-of select="illustration/data/newcolumn/column[@name='CSVNet_Current']/duration[$counter]/@column_value"/>
-          </fo:block>
-        </fo:table-cell>
-        <fo:table-cell>
-          <fo:block text-align="right">
-            <xsl:value-of select="illustration/data/newcolumn/column[@name='EOYDeathBft_Current']/duration[$counter]/@column_value"/>
-          </fo:block>
-        </fo:table-cell>
-      </fo:table-row>
-      <!-- Display Only Summary Years -->
-      <!-- Blank Row Every 5th Year -->
-      <xsl:if test="($counter + $inforceyear) mod 5=0">
-        <fo:table-row>
-          <fo:table-cell padding="4pt">
-            <fo:block text-align="right"></fo:block>
+        <xsl:for-each select="$columns">
+          <fo:table-cell>
+            <xsl:if test="position()=1">
+              <xsl:attribute name="padding">.6pt</xsl:attribute>
+            </xsl:if>
+            <!-- Display Only Summary Years -->
+            <!-- Blank Row Every 5th Year -->
+            <xsl:if test="($counter + $inforceyear) mod 5 = 0">
+              <xsl:attribute name="padding-bottom">8pt</xsl:attribute>
+            </xsl:if>
+            <fo:block text-align="right">
+              <xsl:choose>
+                <xsl:when test="@name">
+                  <xsl:variable name="column_name" select="@name"/>
+                  <xsl:value-of select="$illustration/data/newcolumn/column[@name=$column_name]/duration[$counter]/@column_value"/>
+                </xsl:when>
+              </xsl:choose>
+            </fo:block>
           </fo:table-cell>
-        </fo:table-row>
-      </xsl:if>
+        </xsl:for-each>
+      </fo:table-row>
       <xsl:call-template name="supplemental-illustration-values">
+        <xsl:with-param name="columns" select="$columns"/>
         <xsl:with-param name="counter" select="$counter + 1"/>
         <xsl:with-param name="inforceyear" select="$inforceyear"/>
       </xsl:call-template>
@@ -1310,7 +1254,7 @@
     Select columns without @composite attribute or with @composite attribute
     following the global $is_composite.
     -->
-    <xsl:variable name="columns" select="$basic_illustration_columns[boolean(@composite) and boolean(boolean(@composite='1')=$is_composite)] | $basic_illustration_columns[not(@composite)]" />
+    <xsl:variable name="columns" select="$basic_illustration_columns[not(@composite) or boolean(boolean(@composite='1')=$is_composite)]" />
 
     <!-- The main contents of the body page -->
     <fo:flow flow-name="xsl-region-body">
@@ -1424,127 +1368,40 @@
   </xsl:template>
 
   <xsl:template name="supplemental-illustration-report">
+    <xsl:variable name="supplemental_illustration_columns_raw">
+      <column name="PolicyYear">Policy _Year</column>
+      <column composite="0" name="AttainedAge">End of _Year Age</column>
+      <column name="Outlay">Premium _Outlay</column>
+      <column composite="1"/>
+      <column name="PolFee_Current">Admin _Charge</column>
+      <column name="PremTaxLoad_Current">Premium _Tax Load</column>
+      <column name="DacTaxLoad_Current">DAC _Tax Load</column>
+      <column name="NetPmt_Current">Net _Premium</column>
+      <column name="COICharge_Current">Mortality _Charge</column>
+      <column name="AcctVal_Current">Account _Value</column>
+      <column name="CSVNet_Current">Cash Surr _Value</column>
+      <column name="EOYDeathBft_Current">Death _Benefit</column>
+    </xsl:variable>
+    <xsl:variable name="supplemental_illustration_columns" select="document('')/xsl:stylesheet/xsl:template[@name='supplemental-illustration-report']/xsl:variable[@name='supplemental_illustration_columns_raw']/column" />
+    <xsl:variable name="columns" select="$supplemental_illustration_columns[not(@composite) or boolean(boolean(@composite='1')=$is_composite)]" />
+
     <!-- The main contents of the body page -->
     <fo:flow flow-name="xsl-region-body">
       <fo:block font-size="9.0pt" font-family="serif">
         <fo:table table-layout="fixed" width="100%">
-          <fo:table-column/>
-          <fo:table-column/>
-          <fo:table-column/>
-          <fo:table-column/>
-          <fo:table-column/>
-          <fo:table-column/>
-          <fo:table-column/>
-          <fo:table-column/>
-          <fo:table-column/>
-          <fo:table-column/>
-          <fo:table-column/>
+          <xsl:for-each select="$columns">
+            <fo:table-column/>
+          </xsl:for-each>
           <fo:table-header>
-            <fo:table-row>
-              <fo:table-cell>
-                <fo:block text-align="right">Policy</fo:block>
-              </fo:table-cell>
-              <xsl:choose>
-                <xsl:when test="$is_composite">
-                  <fo:table-cell>
-                    <fo:block text-align="right">Premium</fo:block>
-                  </fo:table-cell>
-                  <fo:table-cell>
-                    <fo:block text-align="right"></fo:block>
-                  </fo:table-cell>
-                </xsl:when>
-                <xsl:otherwise>
-                  <fo:table-cell>
-                    <fo:block text-align="right">End of</fo:block>
-                  </fo:table-cell>
-                  <fo:table-cell>
-                    <fo:block text-align="right">Premium</fo:block>
-                  </fo:table-cell>
-                </xsl:otherwise>
-              </xsl:choose>
-              <fo:table-cell>
-                <fo:block text-align="right">Admin</fo:block>
-              </fo:table-cell>
-              <fo:table-cell>
-                <fo:block text-align="right">Premium</fo:block>
-              </fo:table-cell>
-              <fo:table-cell>
-                <fo:block text-align="right">DAC</fo:block>
-              </fo:table-cell>
-              <fo:table-cell>
-                <fo:block text-align="right">Net</fo:block>
-              </fo:table-cell>
-              <fo:table-cell>
-                <fo:block text-align="right">Mortality</fo:block>
-              </fo:table-cell>
-              <fo:table-cell>
-                <fo:block text-align="right">Account</fo:block>
-              </fo:table-cell>
-              <fo:table-cell>
-                <fo:block text-align="right">Cash Surr</fo:block>
-              </fo:table-cell>
-              <fo:table-cell>
-                <fo:block text-align="right">Death</fo:block>
-              </fo:table-cell>
-            </fo:table-row>
-            <fo:table-row>
-              <fo:table-cell border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue" padding="0pt">
-                <fo:block text-align="right">Year</fo:block>
-              </fo:table-cell>
-              <xsl:choose>
-                <xsl:when test="$is_composite">
-                  <fo:table-cell border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue" padding="0pt">
-                    <fo:block text-align="right">Outlay</fo:block>
-                  </fo:table-cell>
-                  <fo:table-cell border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue" padding="0pt">
-                    <fo:block text-align="right"></fo:block>
-                  </fo:table-cell>
-                </xsl:when>
-                <xsl:otherwise>
-                  <fo:table-cell border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue" padding="0pt">
-                    <fo:block text-align="right">Year Age</fo:block>
-                  </fo:table-cell>
-                  <fo:table-cell border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue" padding="0pt">
-                    <fo:block text-align="right">Outlay</fo:block>
-                  </fo:table-cell>
-                </xsl:otherwise>
-              </xsl:choose>
-              <fo:table-cell border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue" padding="0pt">
-                <fo:block text-align="right">Charge</fo:block>
-              </fo:table-cell>
-              <fo:table-cell border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue" padding="0pt">
-                <fo:block text-align="right">Tax Load</fo:block>
-              </fo:table-cell>
-              <fo:table-cell border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue" padding="0pt">
-                <fo:block text-align="right">Tax Load</fo:block>
-              </fo:table-cell>
-              <fo:table-cell border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue" padding="0pt">
-                <fo:block text-align="right">Premium</fo:block>
-              </fo:table-cell>
-              <fo:table-cell border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue" padding="0pt">
-                <fo:block text-align="right">Charge</fo:block>
-              </fo:table-cell>
-              <fo:table-cell border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue" padding="0pt">
-                <fo:block text-align="right">Value</fo:block>
-              </fo:table-cell>
-              <fo:table-cell border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue" padding="0pt">
-                <fo:block text-align="right">Value</fo:block>
-              </fo:table-cell>
-              <fo:table-cell border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue" padding="0pt">
-                <fo:block text-align="right">Benefit</fo:block>
-              </fo:table-cell>
-            </fo:table-row>
-            <fo:table-row>
-              <fo:table-cell padding="2pt">
-                <fo:block>
-                </fo:block>
-              </fo:table-cell>
-            </fo:table-row>
+            <xsl:call-template name="generate-table-headers">
+              <xsl:with-param name="columns" select="$columns"/>
+            </xsl:call-template>
           </fo:table-header>
           <!-- Create Supplemental Illustration Values -->
           <!-- make inforce illustration start in the inforce year -->
           <fo:table-body>
             <xsl:call-template name="supplemental-illustration-values">
+              <xsl:with-param name="columns" select="$columns"/>
               <xsl:with-param name="counter" select="illustration/scalar/InforceYear + 1"/>
               <xsl:with-param name="inforceyear" select="0 - illustration/scalar/InforceYear"/>
             </xsl:call-template>
@@ -1583,7 +1440,7 @@
     Select columns without @composite attribute or with @composite attribute
     equal to the global $is_composite.
     -->
-    <xsl:variable name="columns" select="$illustration_assumption_columns[not(@composite) or (boolean(@composite) and (boolean(@composite='1')=$is_composite))]" />
+    <xsl:variable name="columns" select="$illustration_assumption_columns[not(@composite) or (boolean(@composite='1')=$is_composite)]" />
 
     <!-- The main contents of the body page -->
     <fo:flow flow-name="xsl-region-body">
