@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: nasd.xsl,v 1.9.2.14 2007-05-28 10:07:42 etarassov Exp $
+    $Id: nasd.xsl,v 1.9.2.15 2007-05-28 10:09:10 etarassov Exp $
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:fo="http://www.w3.org/1999/XSL/Format">
@@ -1390,7 +1390,7 @@
       <fo:block font-size="9.0pt" font-family="serif">
         <fo:table table-layout="fixed" width="100%">
           <xsl:call-template name="generate-table-columns">
-            <xsl:with-param name="columns" select="$columns">
+            <xsl:with-param name="columns" select="$columns"/>
           </xsl:call-template>
           <fo:table-header>
             <xsl:call-template name="generate-table-headers">
@@ -1447,7 +1447,7 @@
       <fo:block font-size="9.0pt" font-family="serif">
         <fo:table table-layout="fixed" width="100%">
           <xsl:call-template name="generate-table-columns">
-            <xsl:with-param name="columns" select="$columns">
+            <xsl:with-param name="columns" select="$columns"/>
           </xsl:call-template>
           <fo:table-header>
             <fo:table-row>
