@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_wx.cpp,v 1.75 2007-05-27 02:59:20 chicares Exp $
+// $Id: main_wx.cpp,v 1.76 2007-05-28 02:01:36 chicares Exp $
 
 // Portions of this file are derived from wxWindows files
 //   samples/docvwmdi/docview.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -90,6 +90,7 @@
 #include <wx/msgdlg.h>
 #include <wx/textctrl.h>
 #include <wx/toolbar.h>
+#include <wx/utils.h>               // wxMilliSleep(), wxSafeYield()
 #include <wx/xrc/xmlres.h>
 
 #include <iterator>
@@ -115,38 +116,39 @@ IMPLEMENT_WX_THEME_SUPPORT
 // the EVT_MENU_OPEN handler.
 //
 BEGIN_EVENT_TABLE(Skeleton, wxApp)
-    EVT_DROP_FILES(                                  Skeleton::UponDropFiles                 )
-    EVT_MENU(wxID_ABOUT                             ,Skeleton::UponAbout                     )
-    EVT_MENU(XRCID("edit_default_cell"             ),Skeleton::UponEditDefaultCell           )
-    EVT_MENU(XRCID("preferences"                   ),Skeleton::UponPreferences               )
-    EVT_MENU(XRCID("test_app_status_alert"         ),Skeleton::UponTestAppStatus             )
-    EVT_MENU(XRCID("test_app_warning_alert"        ),Skeleton::UponTestAppWarning            )
-    EVT_MENU(XRCID("test_app_hobsons_choice_alert" ),Skeleton::UponTestAppHobsons            )
-    EVT_MENU(XRCID("test_app_fatal_error_alert"    ),Skeleton::UponTestAppFatal              )
-    EVT_MENU(XRCID("test_app_standard_exception"   ),Skeleton::UponTestAppStandardException  )
-    EVT_MENU(XRCID("test_app_arbitrary_exception"  ),Skeleton::UponTestAppArbitraryException )
-    EVT_MENU(XRCID("test_lib_status_alert"         ),Skeleton::UponTestLibStatus             )
-    EVT_MENU(XRCID("test_lib_warning_alert"        ),Skeleton::UponTestLibWarning            )
-    EVT_MENU(XRCID("test_lib_hobsons_choice_alert" ),Skeleton::UponTestLibHobsons            )
-    EVT_MENU(XRCID("test_lib_fatal_error_alert"    ),Skeleton::UponTestLibFatal              )
-    EVT_MENU(XRCID("test_lib_standard_exception"   ),Skeleton::UponTestLibStandardException  )
-    EVT_MENU(XRCID("test_lib_arbitrary_exception"  ),Skeleton::UponTestLibArbitraryException )
-    EVT_MENU(XRCID("window_cascade"                ),Skeleton::UponWindowCascade             )
-    EVT_MENU(XRCID("window_next"                   ),Skeleton::UponWindowNext                )
-    EVT_MENU(XRCID("window_previous"               ),Skeleton::UponWindowPrevious            )
-    EVT_MENU(XRCID("window_tile_horizontally"      ),Skeleton::UponWindowTileHorizontally    )
-    EVT_MENU(XRCID("window_tile_vertically"        ),Skeleton::UponWindowTileVertically      )
-    EVT_MENU_OPEN(                                   Skeleton::UponMenuOpen                  )
-    EVT_TIMER(wxID_ANY                              ,Skeleton::UponTimer                     )
+    EVT_DROP_FILES(                                    Skeleton::UponDropFiles                    )
+    EVT_MENU(wxID_ABOUT                               ,Skeleton::UponAbout                        )
+    EVT_MENU(XRCID("edit_default_cell"               ),Skeleton::UponEditDefaultCell              )
+    EVT_MENU(XRCID("preferences"                     ),Skeleton::UponPreferences                  )
+    EVT_MENU(XRCID("test_app_status_alert"           ),Skeleton::UponTestAppStatus                )
+    EVT_MENU(XRCID("test_app_warning_alert"          ),Skeleton::UponTestAppWarning               )
+    EVT_MENU(XRCID("test_app_hobsons_choice_alert"   ),Skeleton::UponTestAppHobsons               )
+    EVT_MENU(XRCID("test_app_fatal_error_alert"      ),Skeleton::UponTestAppFatal                 )
+    EVT_MENU(XRCID("test_app_standard_exception"     ),Skeleton::UponTestAppStandardException     )
+    EVT_MENU(XRCID("test_app_arbitrary_exception"    ),Skeleton::UponTestAppArbitraryException    )
+    EVT_MENU(XRCID("test_lib_status_alert"           ),Skeleton::UponTestLibStatus                )
+    EVT_MENU(XRCID("test_lib_warning_alert"          ),Skeleton::UponTestLibWarning               )
+    EVT_MENU(XRCID("test_lib_hobsons_choice_alert"   ),Skeleton::UponTestLibHobsons               )
+    EVT_MENU(XRCID("test_lib_fatal_error_alert"      ),Skeleton::UponTestLibFatal                 )
+    EVT_MENU(XRCID("test_lib_standard_exception"     ),Skeleton::UponTestLibStandardException     )
+    EVT_MENU(XRCID("test_lib_arbitrary_exception"    ),Skeleton::UponTestLibArbitraryException    )
+    EVT_MENU(XRCID("test_floating_point_environment" ),Skeleton::UponTestFloatingPointEnvironment )
+    EVT_MENU(XRCID("window_cascade"                  ),Skeleton::UponWindowCascade                )
+    EVT_MENU(XRCID("window_next"                     ),Skeleton::UponWindowNext                   )
+    EVT_MENU(XRCID("window_previous"                 ),Skeleton::UponWindowPrevious               )
+    EVT_MENU(XRCID("window_tile_horizontally"        ),Skeleton::UponWindowTileHorizontally       )
+    EVT_MENU(XRCID("window_tile_vertically"          ),Skeleton::UponWindowTileVertically         )
+    EVT_MENU_OPEN(                                     Skeleton::UponMenuOpen                     )
+    EVT_TIMER(wxID_ANY                                ,Skeleton::UponTimer                        )
 // TODO ?? expunge
-//  EVT_UPDATE_UI(wxID_ANY                          ,Skeleton::UponUpdateUI                  )
-    EVT_UPDATE_UI(wxID_SAVE                         ,Skeleton::UponUpdateFileSave            )
-    EVT_UPDATE_UI(wxID_HELP                         ,Skeleton::UponUpdateHelp                )
+//  EVT_UPDATE_UI(wxID_ANY                            ,Skeleton::UponUpdateUI                     )
+    EVT_UPDATE_UI(wxID_SAVE                           ,Skeleton::UponUpdateFileSave               )
+    EVT_UPDATE_UI(wxID_HELP                           ,Skeleton::UponUpdateHelp                   )
 // TODO ?? expunge
 // Enabling this line prevents the menuitem from performing its required
 // action, whether or not the EVT_UPDATE_UI(wxID_SAVE...) handler is also
 // present.
-//  EVT_UPDATE_UI(XRCID("wxID_SAVE"                ),Skeleton::UponUpdateFileSave            )
+//  EVT_UPDATE_UI(XRCID("wxID_SAVE"                  ),Skeleton::UponUpdateFileSave               )
 
 // TODO ?? There has to be a better way.
 /*
@@ -811,22 +813,22 @@ void Skeleton::UponPreferences(wxCommandEvent&)
 
 void Skeleton::UponTestAppStatus(wxCommandEvent&)
 {
-    status()         << "Test status()"         << LMI_FLUSH;
+    status()         << "Test status() ."         << LMI_FLUSH;
 }
 
 void Skeleton::UponTestAppWarning(wxCommandEvent&)
 {
-    warning()        << "Test warning()"        << LMI_FLUSH;
+    warning()        << "Test warning() ."        << LMI_FLUSH;
 }
 
 void Skeleton::UponTestAppHobsons(wxCommandEvent&)
 {
-    hobsons_choice() << "Test hobsons_choice()" << LMI_FLUSH;
+    hobsons_choice() << "Test hobsons_choice() ." << LMI_FLUSH;
 }
 
 void Skeleton::UponTestAppFatal(wxCommandEvent&)
 {
-    fatal_error()    << "Test fatal_error()"    << LMI_FLUSH;
+    fatal_error()    << "Test fatal_error() ."    << LMI_FLUSH;
 }
 
 void Skeleton::UponTestAppStandardException(wxCommandEvent&)
@@ -869,6 +871,63 @@ void Skeleton::UponTestLibArbitraryException(wxCommandEvent&)
     test_arbitrary_exception();
 }
 
+void Skeleton::UponTestFloatingPointEnvironment(wxCommandEvent&)
+{
+    status() << "Begin test of floating-point environment." << std::flush;
+
+    warning()
+        << "Expect 'Resetting floating-point control word.' on statusbar."
+        << std::flush
+        ;
+    x87_control_word(0x027f);
+    wxMilliSleep(500); wxSafeYield();
+    LMI_ASSERT(fenv_is_valid());
+
+    warning() << "Expect statusbar to be cleared." << std::flush;
+    status() << "" << std::flush;
+    wxMilliSleep(500); wxSafeYield();
+
+    warning()
+        << "Expect a messagebox complaining about '0x007f',"
+        << " and 'Resetting floating-point control word.' on statusbar."
+        << std::flush
+        ;
+    x87_control_word(0x007f);
+    wxMilliSleep(500); wxSafeYield();
+
+    warning() << "Expect statusbar to be cleared." << std::flush;
+    status() << "" << std::flush;
+    wxMilliSleep(500); wxSafeYield();
+
+    {
+    fenv_guard fg;
+    warning()
+        << "Test '0x027f' as if in guarded calculations."
+        << " Expect a messagebox complaining about that."
+        << std::flush
+        ;
+    x87_control_word(0x027f);
+    wxMilliSleep(500); wxSafeYield();
+    LMI_ASSERT(!fenv_is_valid());
+    }
+    LMI_ASSERT(fenv_is_valid());
+
+    {
+    fenv_guard fg;
+    warning()
+        << "Test '0x007f' as if in guarded calculations."
+        << " Expect a messagebox complaining about that."
+        << std::flush
+        ;
+    x87_control_word(0x007f);
+    wxMilliSleep(500); wxSafeYield();
+    LMI_ASSERT(!fenv_is_valid());
+    }
+    LMI_ASSERT(fenv_is_valid());
+
+    status() << "End test of floating-point environment." << std::flush;
+}
+
 /// Periodically test the floating-point control word when no critical
 /// calculation is being performed. If some rogue dll has changed it
 /// to the undesirable but nonegregious value 0x027f, then reset it,
@@ -888,7 +947,7 @@ void Skeleton::UponTimer(wxTimerEvent&)
         {
         if(!fenv_is_valid())
             {
-            status() << "Floating-point control word reset." << std::flush;
+            status() << "Resetting floating-point control word. " << std::flush;
             }
         fenv_validate(e_fenv_indulge_0x027f);
         }

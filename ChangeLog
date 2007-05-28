@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.666 2007-05-27 16:28:25 chicares Exp $
+// $Id: ChangeLog,v 1.667 2007-05-28 02:01:36 chicares Exp $
 
 MAINTENANCE
 
@@ -11532,4 +11532,17 @@ existing paradigm for the census class:
 
   menus.xrc
 Either explain or expunge commented-out menuitems.
+
+20070528T0200Z <chicares@cox.net> [1244]
+
+  fenv_lmi.cpp
+  fenv_lmi_test.cpp
+Format control word as a hexadecimal-literal.
+
+20070528T0201Z <chicares@cox.net> [1244]
+
+  main_wx.cpp
+  main_wx.hpp
+  menus.xrc
+Test protection of floating-point environment in GUI.
 
