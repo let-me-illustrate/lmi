@@ -24,7 +24,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: menus.xrc,v 1.28 2007-05-27 16:28:25 chicares Exp $
+    $Id: menus.xrc,v 1.29 2007-05-28 02:01:36 chicares Exp $
 -->
 
 <!-- reusable menus -->
@@ -189,6 +189,9 @@
         <object class="wxMenuItem" name="test_lib_arbitrary_exception">
             <label>Test _arbitrary exception</label>
         </object>
+    </object>
+    <object class="wxMenuItem" name="test_floating_point_environment">
+        <label>Test _floating point environment</label>
     </object>
 </object>
 
