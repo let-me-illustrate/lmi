@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.667 2007-05-28 02:01:36 chicares Exp $
+// $Id: ChangeLog,v 1.668 2007-05-28 22:36:25 chicares Exp $
 
 MAINTENANCE
 
@@ -11545,4 +11545,16 @@ Format control word as a hexadecimal-literal.
   main_wx.hpp
   menus.xrc
 Test protection of floating-point environment in GUI.
+
+20070528T2111Z <chicares@cox.net> [1245]
+
+  main_cli.cpp
+Add a command-line option specifying what output to emit.
+
+20070528T2236Z <chicares@cox.net> [1246]
+
+  main_wx.cpp
+  main_wx.hpp
+  menus.xrc
+Add a GUI test that demonstrates a defect.
 
