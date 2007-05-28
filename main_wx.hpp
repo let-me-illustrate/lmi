@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_wx.hpp,v 1.18 2007-05-28 02:01:36 chicares Exp $
+// $Id: main_wx.hpp,v 1.19 2007-05-28 22:36:25 chicares Exp $
 
 // Portions of this file are derived from wxWindows files
 //   samples/docvwmdi/docview.h (C) 1998 Julian Smart and Markus Holzem
@@ -98,6 +98,7 @@ class Skeleton
 
     // Miscellaneous tests.
     void UponTestFloatingPointEnvironment (wxCommandEvent&);
+    void UponTestSafeMessage              (wxCommandEvent&);
 
     void UponTimer                        (wxTimerEvent&);
     void UponUpdateInapplicable           (wxUpdateUIEvent&);
