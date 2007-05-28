@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: nasd.xsl,v 1.9.2.16 2007-05-28 10:49:28 etarassov Exp $
+    $Id: nasd.xsl,v 1.9.2.17 2007-05-28 11:10:43 etarassov Exp $
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:fo="http://www.w3.org/1999/XSL/Format">
@@ -1111,121 +1111,6 @@
     </fo:block>
   </xsl:template>
 
-  <xsl:template name="basic-illustration-values">
-    <xsl:param name="counter"/>
-    <xsl:param name="inforceyear"/>
-    <xsl:param name="columns"/>
-    <xsl:if test="$counter &lt;= $max-lapse-year">
-      <fo:table-row>
-        <xsl:for-each select="$columns">
-          <fo:table-cell padding=".6pt">
-            <fo:block text-align="right">
-              <xsl:choose>
-                <xsl:when test="boolean(@name)">
-                  <xsl:variable name="column_name" select="string(@name)"/>
-                  <xsl:value-of select="$illustration/data/newcolumn/column[@name=$column_name]/duration[$counter]/@column_value"/>
-                </xsl:when>
-              </xsl:choose>
-            </fo:block>
-          </fo:table-cell>
-        </xsl:for-each>
-      </fo:table-row>
-      <!-- Display Only Summary Years -->
-      <!-- Blank Row Every 5th Year -->
-      <xsl:if test="($counter + $inforceyear) mod 5=0">
-        <fo:table-row>
-          <fo:table-cell padding="4pt">
-            <fo:block text-align="right"></fo:block>
-          </fo:table-cell>
-        </fo:table-row>
-      </xsl:if>
-      <xsl:call-template name="basic-illustration-values">
-        <xsl:with-param name="counter" select="$counter + 1"/>
-        <xsl:with-param name="inforceyear" select="$inforceyear"/>
-        <xsl:with-param name="columns" select="$columns"/>
-      </xsl:call-template>
-    </xsl:if>
-  </xsl:template>
-
-  <xsl:template name="supplemental-illustration-values">
-    <xsl:param name="columns"/>
-    <xsl:param name="counter"/>
-    <xsl:param name="inforceyear"/>
-    <xsl:if test="$counter &lt;= $max-lapse-year">
-      <fo:table-row>
-        <xsl:for-each select="$columns">
-          <fo:table-cell>
-            <xsl:if test="position()=1">
-              <xsl:attribute name="padding">.6pt</xsl:attribute>
-            </xsl:if>
-            <!-- Display Only Summary Years -->
-            <!-- Blank Row Every 5th Year -->
-            <xsl:if test="($counter + $inforceyear) mod 5 = 0">
-              <xsl:attribute name="padding-bottom">8pt</xsl:attribute>
-            </xsl:if>
-            <fo:block text-align="right">
-              <xsl:choose>
-                <xsl:when test="@name">
-                  <xsl:variable name="column_name" select="@name"/>
-                  <xsl:value-of select="$illustration/data/newcolumn/column[@name=$column_name]/duration[$counter]/@column_value"/>
-                </xsl:when>
-              </xsl:choose>
-            </fo:block>
-          </fo:table-cell>
-        </xsl:for-each>
-      </fo:table-row>
-      <xsl:call-template name="supplemental-illustration-values">
-        <xsl:with-param name="columns" select="$columns"/>
-        <xsl:with-param name="counter" select="$counter + 1"/>
-        <xsl:with-param name="inforceyear" select="$inforceyear"/>
-      </xsl:call-template>
-    </xsl:if>
-  </xsl:template>
-
-  <xsl:template name="illustration-assumption-values">
-    <xsl:param name="counter"/>
-    <xsl:param name="inforceyear"/>
-    <xsl:param name="columns"/>
-    <xsl:if test="$counter &lt;= $max-lapse-year">
-      <fo:table-row>
-        <xsl:for-each select="$columns">
-          <fo:table-cell>
-            <!-- Add some space if it the first row and some space after each 5th year -->
-            <xsl:if test="position()=1">
-              <xsl:attribute name="padding">.6pt</xsl:attribute>
-            </xsl:if>
-            <fo:block text-align="right">
-              <xsl:choose>
-                <xsl:when test="@name">
-                  <xsl:variable name="column_name" select="@name" />
-                  <xsl:value-of select="$illustration/data/newcolumn/column[@name=$column_name]/duration[$counter]/@column_value"/>
-                </xsl:when>
-                <xsl:when test="@scalar">
-                  <xsl:variable name="scalar_name" select="@scalar" />
-                  <xsl:value-of select="$illustration/scalar/*[name(.)=$scalar_name]"/>
-                </xsl:when>
-              </xsl:choose>
-            </fo:block>
-          </fo:table-cell>
-        </xsl:for-each>
-      </fo:table-row>
-      <!-- Display Only Summary Years -->
-      <!-- Blank Row Every 5th Year -->
-      <xsl:if test="($counter + $inforceyear) mod 5=0">
-        <fo:table-row>
-          <fo:table-cell padding="4pt">
-            <fo:block text-align="right"></fo:block>
-          </fo:table-cell>
-        </fo:table-row>
-      </xsl:if>
-      <xsl:call-template name="illustration-assumption-values">
-        <xsl:with-param name="counter" select="$counter + 1"/>
-        <xsl:with-param name="inforceyear" select="$inforceyear"/>
-        <xsl:with-param name="columns" select="$columns"/>
-      </xsl:call-template>
-    </xsl:if>
-  </xsl:template>
-
   <xsl:template name="basic-illustration-report">
     <!-- columns for generate basic-illustration-report -->
     <xsl:variable name="basic_illustration_columns_raw">
@@ -1356,10 +1241,11 @@
 
           <!-- Create Basic Illustration Values -->
           <fo:table-body>
-            <xsl:call-template name="basic-illustration-values">
-              <xsl:with-param name="counter" select="illustration/scalar/InforceYear + 1"/>
-              <xsl:with-param name="inforceyear" select="0 - illustration/scalar/InforceYear"/>
+            <xsl:call-template name="generate-table-values">
               <xsl:with-param name="columns" select="$columns"/>
+              <xsl:with-param name="counter" select="$illustration/scalar/InforceYear + 1"/>
+              <xsl:with-param name="max-counter" select="$max-lapse-year"/>
+              <xsl:with-param name="inforceyear" select="0 - $illustration/scalar/InforceYear"/>
             </xsl:call-template>
           </fo:table-body>
         </fo:table>
@@ -1400,10 +1286,11 @@
           <!-- Create Supplemental Illustration Values -->
           <!-- make inforce illustration start in the inforce year -->
           <fo:table-body>
-            <xsl:call-template name="supplemental-illustration-values">
+            <xsl:call-template name="generate-table-values">
               <xsl:with-param name="columns" select="$columns"/>
-              <xsl:with-param name="counter" select="illustration/scalar/InforceYear + 1"/>
-              <xsl:with-param name="inforceyear" select="0 - illustration/scalar/InforceYear"/>
+              <xsl:with-param name="counter" select="$illustration/scalar/InforceYear + 1"/>
+              <xsl:with-param name="max-counter" select="$max-lapse-year"/>
+              <xsl:with-param name="inforceyear" select="0 - $illustration/scalar/InforceYear"/>
             </xsl:call-template>
           </fo:table-body>
         </fo:table>
@@ -1448,10 +1335,11 @@
           </fo:table-header>
           <!-- Create Illustration Assumption Detail Values -->
           <fo:table-body>
-            <xsl:call-template name="illustration-assumption-values">
-              <xsl:with-param name="counter" select="$illustration/scalar/InforceYear + 1"/>
-              <xsl:with-param name="inforceyear" select="0 - $illustration/scalar/InforceYear"/>
+            <xsl:call-template name="generate-table-values">
               <xsl:with-param name="columns" select="$columns"/>
+              <xsl:with-param name="counter" select="$illustration/scalar/InforceYear + 1"/>
+              <xsl:with-param name="max-counter" select="$max-lapse-year"/>
+              <xsl:with-param name="inforceyear" select="0 - $illustration/scalar/InforceYear"/>
             </xsl:call-template>
           </fo:table-body>
         </fo:table>
