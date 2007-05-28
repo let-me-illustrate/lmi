@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.657.2.29 2007-05-28 15:00:00 etarassov Exp $
+// $Id: ChangeLog,v 1.657.2.30 2007-05-28 16:35:17 etarassov Exp $
 
 MAINTENANCE
 
@@ -11611,7 +11611,7 @@ Use 'generate-table-values' template.
   nasd.xsl
 Remove bogus usage of &#xA0;.
 
-20070525T1231Z <etarassov@tt-solutions.com> [1249]
+20070525T1231Z <etarassov@tt-solutions.com> [1250]
 
   group_private_placement.xsl
   illustration_reg.xsl
@@ -11622,18 +11622,23 @@ Remove bogus usage of &#xA0;.
   variable_annuity.xsl
 Extract a global template 'limitstring'.
 
-20070525T1329Z <etarassov@tt-solutions.com> [1249]
+20070525T1329Z <etarassov@tt-solutions.com> [1250]
 
   nasd.xsl
 Normalize comments in '*-report' templates.
 
-20070525T1333Z <etarassov@tt-solutions.com> [1249]
+20070525T1333Z <etarassov@tt-solutions.com> [1250]
 
   group_private_placement.xsl
 Rewrite '*-report' templates using common generic templates.
 
-20070525T1500Z <etarassov@tt-solutions.com> [1249]
+20070525T1500Z <etarassov@tt-solutions.com> [1250]
 
   offshore_private_placement.xsl
 Rewrite '*-report' templates using common generic templates.
+
+20070525T1635Z <etarassov@tt-solutions.com> [1250]
+
+  offshore_private_placement.xsl
+Rewrite 'irr-guaranteed-illustration-(report|values)'.
 
