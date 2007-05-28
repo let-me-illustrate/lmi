@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: illustrations_common.xsl,v 1.1.2.14 2007-05-28 10:30:14 etarassov Exp $
+    $Id: illustrations_common.xsl,v 1.1.2.15 2007-05-28 10:43:48 etarassov Exp $
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:fo="http://www.w3.org/1999/XSL/Format">
@@ -312,6 +312,7 @@
         <xsl:call-template name="generate-table-header-cell">
           <xsl:with-param name="columns" select="$columns"/>
           <xsl:with-param name="row" select="$row"/>
+          <xsl:with-param name="last_row" select="boolean($row = $max-rows)"/>
           <xsl:with-param name="cell" select="1"/>
         </xsl:call-template>
       </fo:table-row>
@@ -344,6 +345,7 @@
   <xsl:template name="generate-table-header-cell">
     <xsl:param name="columns"/>
     <xsl:param name="row"/>
+    <xsl:param name="last_row"/>
     <xsl:param name="cell"/>
     <xsl:param name="spans" select="1"/>
     <xsl:variable name="cell_text">
@@ -372,7 +374,7 @@
             <xsl:if test="$spans != 1">center</xsl:if>
           </xsl:attribute>
         <xsl:choose>
-          <xsl:when test="$cell_text != ''">
+          <xsl:when test="$last_row or (($spans &gt; 1) and ($cell_text != ''))">
             <xsl:attribute name="border-bottom-width">1pt</xsl:attribute>
           </xsl:when>
           <xsl:otherwise>
@@ -390,6 +392,7 @@
           <xsl:call-template name="generate-table-header-cell">
             <xsl:with-param name="columns" select="$columns"/>
             <xsl:with-param name="row" select="$row"/>
+            <xsl:with-param name="last_row" select="$last_row"/>
             <xsl:with-param name="cell" select="$cell + 1"/>
             <xsl:with-param name="spans" select="$spans + 1"/>
           </xsl:call-template>
@@ -398,6 +401,7 @@
           <xsl:call-template name="generate-table-header-cell">
             <xsl:with-param name="columns" select="$columns"/>
             <xsl:with-param name="row" select="$row"/>
+            <xsl:with-param name="last_row" select="$last_row"/>
             <xsl:with-param name="cell" select="$cell + 1"/>
           </xsl:call-template>
         </xsl:otherwise>
