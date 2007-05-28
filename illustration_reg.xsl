@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: illustration_reg.xsl,v 1.9.2.9 2007-05-25 08:29:56 etarassov Exp $
+    $Id: illustration_reg.xsl,v 1.9.2.10 2007-05-28 12:31:14 etarassov Exp $
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:fo="http://www.w3.org/1999/XSL/Format">
@@ -2435,20 +2435,6 @@
         </fo:table-body>
       </fo:table>
     </fo:block>
-  </xsl:template>
-
-  <xsl:template name="limitstring">
-    <xsl:param name="passString"/>
-    <xsl:param name="length"/>
-    <xsl:choose>
-      <xsl:when test="string-length($passString) &gt; $length">
-        <xsl:value-of select="substring($passString,1, $length)"/>
-        <xsl:text>...</xsl:text>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:value-of select="$passString"/>
-      </xsl:otherwise>
-    </xsl:choose>
   </xsl:template>
 
   <xsl:template name="ultimate_interest_rate">

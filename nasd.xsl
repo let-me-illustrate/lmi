@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: nasd.xsl,v 1.9.2.18 2007-05-28 11:26:45 etarassov Exp $
+    $Id: nasd.xsl,v 1.9.2.19 2007-05-28 12:31:16 etarassov Exp $
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:fo="http://www.w3.org/1999/XSL/Format">
@@ -1528,20 +1528,6 @@
         </fo:table-body>
       </fo:table>
     </fo:block>
-  </xsl:template>
-
-  <xsl:template name="limitstring">
-    <xsl:param name="passString"/>
-    <xsl:param name="length"/>
-    <xsl:choose>
-      <xsl:when test="string-length($passString) &gt; $length">
-        <xsl:value-of select="substring($passString,1, $length)"/>
-        <xsl:text>...</xsl:text>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:value-of select="$passString"/>
-      </xsl:otherwise>
-    </xsl:choose>
   </xsl:template>
 
 </xsl:stylesheet>

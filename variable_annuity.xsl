@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: variable_annuity.xsl,v 1.3.2.9 2007-05-25 08:29:57 etarassov Exp $
+    $Id: variable_annuity.xsl,v 1.3.2.10 2007-05-28 12:31:16 etarassov Exp $
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:fo="http://www.w3.org/1999/XSL/Format">
@@ -776,14 +776,14 @@
               <xsl:choose>
                 <xsl:when test="not($is_composite)">
                   <!-- Properly adjust for long user input strings limit output to 140 characters for appox. 2 lines -->
-                  <xsl:call-template name="limit-string" >
-                    <xsl:with-param name="pass-string" select="illustration/scalar/Insured1"/>
+                  <xsl:call-template name="limitstring" >
+                    <xsl:with-param name="passString" select="illustration/scalar/Insured1"/>
                     <xsl:with-param name="length" select="140"/>
                   </xsl:call-template>
                 </xsl:when>
                 <xsl:otherwise>
-                  <xsl:call-template name="limit-string" >
-                    <xsl:with-param name="pass-string" select="illustration/scalar/CorpName"/>
+                  <xsl:call-template name="limitstring" >
+                    <xsl:with-param name="passString" select="illustration/scalar/CorpName"/>
                     <xsl:with-param name="length" select="140"/>
                   </xsl:call-template>
                 </xsl:otherwise>
@@ -841,8 +841,8 @@
                   <xsl:if test="illustration/scalar/Franchise!=''">
                     <fo:block text-align="left">
                       <xsl:text>Master contract: </xsl:text>
-                      <xsl:call-template name="limit-string" >
-                        <xsl:with-param name="pass-string" select="illustration/scalar/Franchise"/>
+                      <xsl:call-template name="limitstring" >
+                        <xsl:with-param name="passString" select="illustration/scalar/Franchise"/>
                         <xsl:with-param name="length" select="30"/>
                       </xsl:call-template>
                     </fo:block>
@@ -893,13 +893,13 @@
                 <fo:table-cell>
                   <fo:block text-align="left">
                     <xsl:text>Master contract: </xsl:text>
-                    <xsl:call-template name="limit-string" >
-                      <xsl:with-param name="pass-string" select="illustration/scalar/Franchise"/>
+                    <xsl:call-template name="limitstring" >
+                      <xsl:with-param name="passString" select="illustration/scalar/Franchise"/>
                       <xsl:with-param name="length" select="15"/>
                     </xsl:call-template>
                     <xsl:text>&#xA0;&#xA0;&#xA0;Contract number: </xsl:text>
-                    <xsl:call-template name="limit-string" >
-                      <xsl:with-param name="pass-string" select="illustration/scalar/PolicyNumber"/>
+                    <xsl:call-template name="limitstring" >
+                      <xsl:with-param name="passString" select="illustration/scalar/PolicyNumber"/>
                       <xsl:with-param name="length" select="15"/>
                     </xsl:call-template>
                   </fo:block>
@@ -911,8 +911,8 @@
                 <fo:table-cell>
                   <fo:block text-align="left">
                     <xsl:text>Master contract: </xsl:text>
-                    <xsl:call-template name="limit-string" >
-                      <xsl:with-param name="pass-string" select="illustration/scalar/Franchise"/>
+                    <xsl:call-template name="limitstring" >
+                      <xsl:with-param name="passString" select="illustration/scalar/Franchise"/>
                       <xsl:with-param name="length" select="30"/>
                     </xsl:call-template>
                   </fo:block>
@@ -924,8 +924,8 @@
                 <fo:table-cell>
                   <fo:block text-align="left">
                     <xsl:text>Contract number: </xsl:text>
-                    <xsl:call-template name="limit-string" >
-                      <xsl:with-param name="pass-string" select="illustration/scalar/PolicyNumber"/>
+                    <xsl:call-template name="limitstring" >
+                      <xsl:with-param name="passString" select="illustration/scalar/PolicyNumber"/>
                       <xsl:with-param name="length" select="30"/>
                     </xsl:call-template>
                   </fo:block>
@@ -1372,20 +1372,6 @@
         </fo:table-body>
       </fo:table>
     </fo:block>
-  </xsl:template>
-
-  <xsl:template name="limit-string">
-    <xsl:param name="pass-string"/>
-    <xsl:param name="length"/>
-    <xsl:choose>
-      <xsl:when test="string-length($pass-string) &gt; $length">
-        <xsl:value-of select="substring($pass-string,1, $length)"/>
-        <xsl:text>...</xsl:text>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:value-of select="$pass-string"/>
-      </xsl:otherwise>
-    </xsl:choose>
   </xsl:template>
 
   <xsl:template name="get-basis-lapse-year">

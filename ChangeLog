@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.657.2.25 2007-05-28 11:26:45 etarassov Exp $
+// $Id: ChangeLog,v 1.657.2.26 2007-05-28 12:31:15 etarassov Exp $
 
 MAINTENANCE
 
@@ -11610,4 +11610,15 @@ Use 'generate-table-values' template.
 
   nasd.xsl
 Remove bogus usage of &#xA0;.
+
+20070525T1231Z <etarassov@tt-solutions.com> [1249]
+
+  group_private_placement.xsl
+  illustration_reg.xsl
+  illustrations_common.xsl
+  individual_private_placement.xsl
+  nasd.xsl
+  offshore_private_placement.xsl
+  variable_annuity.xsl
+Extract a global template 'limitstring'.
 
