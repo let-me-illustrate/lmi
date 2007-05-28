@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: individual_private_placement.xsl,v 1.9.2.11 2007-05-28 16:35:17 etarassov Exp $
+    $Id: individual_private_placement.xsl,v 1.9.2.12 2007-05-28 16:53:17 etarassov Exp $
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:fo="http://www.w3.org/1999/XSL/Format">
@@ -828,96 +828,6 @@
     </fo:table>
   </xsl:template>
 
-  <xsl:template name="irr-current-illustration-values">
-    <xsl:param name="counter"/>
-    <xsl:param name="inforceyear"/>
-    <xsl:if test="$counter &lt;= $max-lapse-year">
-      <fo:table-row>
-        <fo:table-cell padding=".6pt">
-          <fo:block text-align="right">
-            <xsl:value-of select="illustration/data/newcolumn/column[@name='PolicyYear']/duration[$counter]/@column_value"/>
-          </fo:block>
-        </fo:table-cell>
-        <xsl:choose>
-          <xsl:when test="$is_composite">
-            <fo:table-cell>
-              <fo:block text-align="right">&#xA0;</fo:block>
-            </fo:table-cell>
-          </xsl:when>
-          <xsl:otherwise>
-            <fo:table-cell>
-              <fo:block text-align="right">
-                <xsl:value-of select="illustration/data/newcolumn/column[@name='AttainedAge']/duration[$counter]/@column_value"/>
-              </fo:block>
-            </fo:table-cell>
-          </xsl:otherwise>
-        </xsl:choose>
-        <fo:table-cell>
-          <fo:block text-align="right">
-            <xsl:value-of select="illustration/data/newcolumn/column[@name='GrossPmt']/duration[$counter]/@column_value"/>
-          </fo:block>
-        </fo:table-cell>
-        <fo:table-cell>
-          <fo:block text-align="right">
-            <xsl:value-of select="illustration/data/newcolumn/column[@name='CSVNet_CurrentZero']/duration[$counter]/@column_value"/>
-          </fo:block>
-        </fo:table-cell>
-        <fo:table-cell>
-          <fo:block text-align="right">
-            <xsl:value-of select="illustration/data/newcolumn/column[@name='EOYDeathBft_CurrentZero']/duration[$counter]/@column_value"/>
-          </fo:block>
-        </fo:table-cell>
-        <fo:table-cell>
-          <fo:block text-align="right">
-            <xsl:value-of select="illustration/data/newcolumn/column[@name='IrrCsv_CurrentZero']/duration[$counter]/@column_value"/>
-          </fo:block>
-        </fo:table-cell>
-        <fo:table-cell>
-          <fo:block text-align="right">
-            <xsl:value-of select="illustration/data/newcolumn/column[@name='IrrDb_CurrentZero']/duration[$counter]/@column_value"/>
-          </fo:block>
-        </fo:table-cell>
-        <fo:table-cell>
-          <fo:block text-align="right">
-            <fo:block text-align="right">&#xA0;</fo:block>
-          </fo:block>
-        </fo:table-cell>
-        <fo:table-cell>
-          <fo:block text-align="right">
-            <xsl:value-of select="illustration/data/newcolumn/column[@name='CSVNet_Current']/duration[$counter]/@column_value"/>
-          </fo:block>
-        </fo:table-cell>
-        <fo:table-cell>
-          <fo:block text-align="right">
-            <xsl:value-of select="illustration/data/newcolumn/column[@name='EOYDeathBft_Current']/duration[$counter]/@column_value"/>
-          </fo:block>
-        </fo:table-cell>
-        <fo:table-cell>
-          <fo:block text-align="right">
-            <xsl:value-of select="illustration/data/newcolumn/column[@name='IrrCsv_Current']/duration[$counter]/@column_value"/>
-          </fo:block>
-        </fo:table-cell>
-        <fo:table-cell>
-          <fo:block text-align="right">
-            <xsl:value-of select="illustration/data/newcolumn/column[@name='IrrDb_Current']/duration[$counter]/@column_value"/>
-          </fo:block>
-        </fo:table-cell>
-      </fo:table-row>
-      <!-- Blank Row Every 5th Year -->
-      <xsl:if test="($counter + $inforceyear) mod 5=0">
-        <fo:table-row>
-          <fo:table-cell padding="4pt">
-            <fo:block text-align="right"></fo:block>
-          </fo:table-cell>
-        </fo:table-row>
-      </xsl:if>
-      <xsl:call-template name="irr-current-illustration-values">
-        <xsl:with-param name="counter" select="$counter + 1"/>
-        <xsl:with-param name="inforceyear" select="$inforceyear"/>
-      </xsl:call-template>
-    </xsl:if>
-  </xsl:template>
-
   <xsl:template name="current-illustration-values">
     <xsl:param name="counter"/>
     <xsl:param name="inforceyear"/>
@@ -1006,12 +916,14 @@
   <xsl:template name="irr-guaranteed-illustration-report">
     <xsl:variable name="irr_guaranteed_illustration_columns_raw">
       <column name="PolicyYear">Policy _Year</column>
+      <column composite="1"/>
       <column composite="0" name="AttainedAge">End of _Year Age</column>
       <column name="GrossPmt">Premium _Outlay</column>
       <column name="CSVNet_GuaranteedZero">Cash _Surr Value</column>
       <column name="EOYDeathBft_GuaranteedZero">Death _Benefit</column>
       <column name="IrrCsv_GuaranteedZero">IRR on _Surr Value</column>
       <column name="IrrDb_GuaranteedZero">IRR on _Death Bft</column>
+      <column/>
       <column name="CSVNet_Guaranteed">Cash _Surr Value</column>
       <column name="EOYDeathBft_Guaranteed">Death _Benefit</column>
       <column name="IrrCsv_Guaranteed">IRR on _Surr Value</column>
@@ -1067,23 +979,34 @@
   </xsl:template>
 
   <xsl:template name="irr-current-illustration-report">
+    <xsl:variable name="irr_current_illustration_columns_raw">
+      <column name="PolicyYear">Policy _Year</column>
+      <column composite="1"/>
+      <column composite="0" name="AttainedAge">End of _Year Age</column>
+      <column name="GrossPmt">Premium _Outlay</column>
+      <column name="CSVNet_CurrentZero">Cash _Surr Value</column>
+      <column name="EOYDeathBft_CurrentZero">Death _ Benefit</column>
+      <column name="IrrCsv_CurrentZero">IRR on _Surr Value</column>
+      <column name="IrrDb_CurrentZero">IRR on _Death Bft</column>
+      <column/>
+      <column name="CSVNet_Current">Cash _Surr Value</column>
+      <column name="EOYDeathBft_Current">Death _Benefit</column>
+      <column name="IrrCsv_Current">IRR on _Surr Value</column>
+      <column name="IrrDb_Current">IRR on _Death Bft</column>
+    </xsl:variable>
+    <xsl:variable name="columns_raw" select="document('')/xsl:stylesheet/xsl:template[@name='irr-current-illustration-report']/xsl:variable[@name='irr_current_illustration_columns_raw']/column"/>
+    <xsl:variable name="columns" select="$columns_raw[not(@composite)] | $columns_raw[boolean(@composite='1')=$is_composite]"/>
+
     <!-- The main contents of the body page -->
     <fo:flow flow-name="xsl-region-body">
       <fo:block font-size="9.0pt" font-family="serif">
         <fo:table table-layout="fixed" width="100%">
-          <fo:table-column/>
-          <fo:table-column/>
-          <fo:table-column/>
-          <fo:table-column/>
-          <fo:table-column/>
-          <fo:table-column/>
-          <fo:table-column/>
-          <fo:table-column/>
-          <fo:table-column/>
-          <fo:table-column/>
-          <fo:table-column/>
-          <fo:table-column/>
+          <xsl:call-template name="generate-table-columns">
+            <xsl:with-param name="columns" select="$columns"/>
+          </xsl:call-template>
+
           <fo:table-header>
+            <!-- Custom part of the table header -->
             <fo:table-row>
               <fo:table-cell number-columns-spanned="3" padding="0pt"/>
               <fo:table-cell number-columns-spanned="2" padding="0pt" border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue">
@@ -1100,121 +1023,19 @@
                 </fo:block>
               </fo:table-cell>
             </fo:table-row>
-            <fo:table-row>
-              <fo:table-cell padding="2pt">
-                <fo:block text-align="right"></fo:block>
-              </fo:table-cell>
-            </fo:table-row>
-            <fo:table-row>
-              <fo:table-cell>
-                <fo:block text-align="right">Policy</fo:block>
-              </fo:table-cell>
-              <xsl:choose>
-                <xsl:when test="$is_composite">
-                  <fo:table-cell>
-                    <fo:block text-align="right"></fo:block>
-                  </fo:table-cell>
-                </xsl:when>
-                <xsl:otherwise>
-                  <fo:table-cell>
-                    <fo:block text-align="right">End of</fo:block>
-                  </fo:table-cell>
-                </xsl:otherwise>
-              </xsl:choose>
-              <fo:table-cell>
-                <fo:block text-align="right">Premium</fo:block>
-              </fo:table-cell>
-              <fo:table-cell>
-                <fo:block text-align="right">Cash</fo:block>
-              </fo:table-cell>
-              <fo:table-cell>
-                <fo:block text-align="right">Death</fo:block>
-              </fo:table-cell>
-              <fo:table-cell>
-                <fo:block text-align="right">IRR on</fo:block>
-              </fo:table-cell>
-              <fo:table-cell>
-                <fo:block text-align="right">IRR on</fo:block>
-              </fo:table-cell>
-              <fo:table-cell>
-                <fo:block text-align="right"></fo:block>
-              </fo:table-cell>
-              <fo:table-cell>
-                <fo:block text-align="right">Cash</fo:block>
-              </fo:table-cell>
-              <fo:table-cell>
-                <fo:block text-align="right">Death</fo:block>
-              </fo:table-cell>
-              <fo:table-cell>
-                <fo:block text-align="right">IRR on</fo:block>
-              </fo:table-cell>
-              <fo:table-cell>
-                <fo:block text-align="right">IRR on</fo:block>
-              </fo:table-cell>
-            </fo:table-row>
 
-            <fo:table-row>
-              <fo:table-cell border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue" padding="0pt">
-                <fo:block text-align="right">Year</fo:block>
-              </fo:table-cell>
-              <xsl:choose>
-                <xsl:when test="$is_composite">
-                  <fo:table-cell border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue" padding="0pt">
-                    <fo:block text-align="right"></fo:block>
-                  </fo:table-cell>
-                </xsl:when>
-                <xsl:otherwise>
-                  <fo:table-cell border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue" padding="0pt">
-                    <fo:block text-align="right">Year Age</fo:block>
-                  </fo:table-cell>
-                </xsl:otherwise>
-              </xsl:choose>
-              <fo:table-cell border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue" padding="0pt">
-                <fo:block text-align="right">Outlay</fo:block>
-              </fo:table-cell>
-              <fo:table-cell border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue" padding="0pt">
-                <fo:block text-align="right">Surr Value</fo:block>
-              </fo:table-cell>
-              <fo:table-cell border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue" padding="0pt">
-                <fo:block text-align="right">Benefit</fo:block>
-              </fo:table-cell>
-              <fo:table-cell border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue" padding="0pt">
-                <fo:block text-align="right">Surr Value</fo:block>
-              </fo:table-cell>
-              <fo:table-cell border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue" padding="0pt">
-                <fo:block text-align="right">Death Bft</fo:block>
-              </fo:table-cell>
-              <fo:table-cell border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue" padding="0pt">
-                <fo:block text-align="right"></fo:block>
-              </fo:table-cell>
-              <fo:table-cell border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue" padding="0pt">
-                <fo:block text-align="right">Surr Value</fo:block>
-              </fo:table-cell>
-              <fo:table-cell border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue" padding="0pt">
-                <fo:block text-align="right">Benefit</fo:block>
-              </fo:table-cell>
-              <fo:table-cell border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue" padding="0pt">
-                <fo:block text-align="right">Surr Value</fo:block>
-              </fo:table-cell>
-              <fo:table-cell border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue" padding="0pt">
-                <fo:block text-align="right">Death Bft</fo:block>
-              </fo:table-cell>
-            </fo:table-row>
-
-            <fo:table-row>
-              <fo:table-cell padding="2pt">
-                <fo:block>
-                </fo:block>
-              </fo:table-cell>
-            </fo:table-row>
+            <!-- Generic part of the table header -->
+            <xsl:call-template name="generate-table-headers">
+              <xsl:with-param name="columns" select="$columns"/>
+            </xsl:call-template>
           </fo:table-header>
 
-          <!-- Create Define the IRR (Guaranteed Charges) Values -->
-          <!-- make inforce illustration start in the inforce year -->
           <fo:table-body>
-            <xsl:call-template name="irr-current-illustration-values">
-              <xsl:with-param name="counter" select="illustration/scalar/InforceYear + 1"/>
-              <xsl:with-param name="inforceyear" select="0 - illustration/scalar/InforceYear"/>
+            <xsl:call-template name="generate-table-values">
+              <xsl:with-param name="columns" select="$columns"/>
+              <xsl:with-param name="counter" select="$illustration/scalar/InforceYear + 1"/>
+              <xsl:with-param name="max-counter" select="$max-lapse-year"/>
+              <xsl:with-param name="inforceyear" select="0 - $illustration/scalar/InforceYear"/>
             </xsl:call-template>
           </fo:table-body>
         </fo:table>
