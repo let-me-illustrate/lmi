@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: illustrations_common.xsl,v 1.1.2.15 2007-05-28 10:43:48 etarassov Exp $
+    $Id: illustrations_common.xsl,v 1.1.2.16 2007-05-28 11:08:57 etarassov Exp $
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:fo="http://www.w3.org/1999/XSL/Format">
@@ -500,6 +500,43 @@
         <fo:block><xsl:value-of select="normalize-space($text)"/></fo:block>
       </xsl:otherwise>
     </xsl:choose>
+  </xsl:template>
+
+  <xsl:template name="generate-table-values">
+    <xsl:param name="columns"/>
+    <xsl:param name="counter"/>
+    <xsl:param name="max-counter"/>
+    <xsl:param name="inforceyear"/>
+    <xsl:if test="$counter &lt;= $max-counter">
+      <fo:table-row>
+        <xsl:for-each select="$columns">
+          <fo:table-cell padding=".6pt">
+            <!-- Add some space if it the first row and some space after each 5th year -->
+            <xsl:if test="($counter + $inforceyear) mod 5 = 0">
+              <xsl:attribute name="padding-bottom">8pt</xsl:attribute>
+            </xsl:if>
+            <fo:block text-align="right">
+              <xsl:choose>
+                <xsl:when test="@name">
+                  <xsl:variable name="column_name" select="@name" />
+                  <xsl:value-of select="$illustration/data/newcolumn/column[@name=$column_name]/duration[$counter]/@column_value"/>
+                </xsl:when>
+                <xsl:when test="@scalar">
+                  <xsl:variable name="scalar_name" select="@scalar" />
+                  <xsl:value-of select="$illustration/scalar/*[name(.)=$scalar_name]"/>
+                </xsl:when>
+              </xsl:choose>
+            </fo:block>
+          </fo:table-cell>
+        </xsl:for-each>
+      </fo:table-row>
+      <xsl:call-template name="generate-table-values">
+        <xsl:with-param name="columns" select="$columns"/>
+        <xsl:with-param name="counter" select="$counter + 1"/>
+        <xsl:with-param name="max-counter" select="$max-counter"/>
+        <xsl:with-param name="inforceyear" select="$inforceyear"/>
+      </xsl:call-template>
+    </xsl:if>
   </xsl:template>
 
 </xsl:stylesheet>

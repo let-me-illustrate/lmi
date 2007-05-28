@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.657.2.22 2007-05-28 10:49:27 etarassov Exp $
+// $Id: ChangeLog,v 1.657.2.23 2007-05-28 11:08:55 etarassov Exp $
 
 MAINTENANCE
 
@@ -11595,4 +11595,9 @@ multiple columns.
   nasd.xsl
 Rewrite 'illustration-assumption-report' table headers using generic
 template 'generate-table-headers'.
+
+20070528T1108Z <etarassov@tt-solutions.com> [1250]
+
+  illustrations_common.xsl
+Add generic 'generate-table-values' template.
 
