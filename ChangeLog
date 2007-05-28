@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.657.2.19 2007-05-28 10:09:09 etarassov Exp $
+// $Id: ChangeLog,v 1.657.2.20 2007-05-28 10:30:13 etarassov Exp $
 
 MAINTENANCE
 
@@ -11578,4 +11578,9 @@ Use the generic 'generate-table-columns' where appropriate.
 
   nasd.xsl
 Fix a typo.
+
+20070528T1030Z <etarassov@tt-solutions.com> [1250]
+
+  illustrations_common.xsl
+Adjust table header columns generation to account for scalar columns.
 
