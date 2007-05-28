@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.657.2.15 2007-05-26 00:21:46 etarassov Exp $
+// $Id: ChangeLog,v 1.657.2.16 2007-05-28 09:54:54 etarassov Exp $
 
 MAINTENANCE
 
@@ -11557,4 +11557,9 @@ data table. Also include column titles, but do not use it yet.
   nasd.xsl
 Write generic templates for data-table generation. In column titles
 use '|' as cell separator and '_' as line separator.
+
+20070528T0954Z <etarassov@tt-solutions.com> [1250]
+
+  illustrations_common.xsl
+Fix infinite recursion when list of columns is empty.
 
