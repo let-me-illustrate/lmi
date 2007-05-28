@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_cli.cpp,v 1.33 2007-05-22 02:11:48 chicares Exp $
+// $Id: main_cli.cpp,v 1.34 2007-05-28 21:11:41 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -260,6 +260,7 @@ void process_command_line(int argc, char* argv[])
         {"accept"    ,NO_ARG   ,0 ,'a' ,0 ,"accept license (-l to display)"},
         {"selftest"  ,NO_ARG   ,0 ,'s' ,0 ,"perform self test and exit"},
         {"profile"   ,NO_ARG   ,0 ,'o' ,0 ,"set up for profiling and exit"},
+        {"emit"      ,LIST_ARG ,0 ,'e' ,0 ,"choose what output to emit"},
         {"illfile"   ,REQD_ARG ,0 ,'i' ,0 ,"run illustration"},
         {"cnsfile"   ,REQD_ARG ,0 ,'c' ,0 ,"run census"},
         {"data_path" ,REQD_ARG ,0 ,'d' ,0 ,"path to data files"},
@@ -285,13 +286,15 @@ void process_command_line(int argc, char* argv[])
     bool run_illustration    = false;
     bool run_census          = false;
 
+    enum_emission emission(e_emit_nothing);
+
     std::vector<std::string> ill_names;
     std::vector<std::string> cns_names;
 
     GetOpt getopt_long
         (argc
         ,argv
-        ,"ac:hi:ls"
+        ,""
         ,long_options
         ,&option_index
         ,1
@@ -394,6 +397,34 @@ void process_command_line(int argc, char* argv[])
             case 'o':
                 {
                 run_profile = true;
+                }
+                break;
+
+            case 'e':
+                {
+                // TODO ?? Accept and validate string suboptions.
+                int e = e_emit_nothing;
+                std::string const s(getopt_long.optarg);
+                std::cout
+                    << "For now, this option has no actual effect; it simply"
+                    << " prints 'optarg', which is '"
+                    << s
+                    << "', and displays the arithmetic value of the resulting"
+                    << " enumerative type."
+                    << std::endl
+                    ;
+                std::istringstream iss(s);
+                for(;EOF != iss.peek();)
+                    {
+                    std::string token;
+                    std::getline(iss, token, ',');
+                    if(!token.empty())
+                        {
+                        e |= value_cast<int>(token);
+                        }
+                    }
+                emission = enum_emission(e);
+                std::cout << "  emit: " << emission << std::endl;
                 }
                 break;
 
