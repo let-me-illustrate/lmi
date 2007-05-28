@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.657.2.31 2007-05-28 16:53:17 etarassov Exp $
+// $Id: ChangeLog,v 1.657.2.32 2007-05-28 16:54:36 etarassov Exp $
 
 MAINTENANCE
 
@@ -11639,11 +11639,16 @@ Rewrite '*-report' templates using common generic templates.
 
 20070525T1635Z <etarassov@tt-solutions.com> [1250]
 
-  offshore_private_placement.xsl
+  individual_private_placement.xsl
 Rewrite 'irr-guaranteed-illustration-(report|values)'.
 
 20070525T1653Z <etarassov@tt-solutions.com> [1250]
 
-  offshore_private_placement.xsl
+  individual_private_placement.xsl
 Rewrite 'irr-current-illustration-(report|values)'.
+
+20070525T1654Z <etarassov@tt-solutions.com> [1250]
+
+  ChangeLog
+Fix log entries.
 
