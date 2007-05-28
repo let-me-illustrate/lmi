@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: fenv_lmi_test.cpp,v 1.13 2007-05-25 02:32:40 chicares Exp $
+// $Id: fenv_lmi_test.cpp,v 1.14 2007-05-28 02:00:33 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -235,13 +235,13 @@ int test_main(int, char*[])
     BOOST_TEST(fenv_validate(e_fenv_indulge_0x027f));
     BOOST_TEST(fenv_validate());
 
-    std::cout << "\n[Expect an induced '7f' warning...\n" << std::endl;
+    std::cout << "\n[Expect an induced '0x007f' warning...\n" << std::endl;
     fenv_precision(fe_fltprec);
     BOOST_TEST(!fenv_validate());
     std::cout << "...end of induced warning]." << std::endl;
     BOOST_TEST(fenv_validate());
 
-    std::cout << "\n[Expect an induced '7f' warning...\n" << std::endl;
+    std::cout << "\n[Expect an induced '0x007f' warning...\n" << std::endl;
     fenv_precision(fe_fltprec);
     BOOST_TEST(!fenv_validate(e_fenv_indulge_0x027f));
     std::cout << "...end of induced warning]." << std::endl;
@@ -257,7 +257,7 @@ int test_main(int, char*[])
     BOOST_TEST(0 == fenv_guard::instance_count());
     BOOST_TEST(fenv_validate());
 
-    std::cout << "\n[Expect an induced '27f' warning...\n" << std::endl;
+    std::cout << "\n[Expect an induced '0x027f' warning...\n" << std::endl;
     {
     fenv_guard fg;
     BOOST_TEST(1 == fenv_guard::instance_count());

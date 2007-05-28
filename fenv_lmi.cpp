@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: fenv_lmi.cpp,v 1.22 2007-05-24 18:36:25 chicares Exp $
+// $Id: fenv_lmi.cpp,v 1.23 2007-05-28 02:00:33 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -31,7 +31,9 @@
 #include "alert.hpp" // safely_show_message()
 
 #include <iomanip>
+#include <ios>
 #include <sstream>
+#include <stdexcept>
 #include <string>
 
 /// Manage the floating-point environment, generally using compiler-
@@ -188,8 +190,9 @@ std::string fenv_explain_invalid_control_word()
     std::ostringstream oss;
     oss
         << "The floating-point control word was unexpectedly '"
+        << std::hex << std::internal << std::showbase << std::setfill('0')
 #if defined LMI_X86
-        << std::hex << x87_control_word()
+        << std::setw(6) << x87_control_word()
 #else  // Unknown compiler or platform.
 #   error Unknown compiler or platform.
 #endif // Unknown compiler or platform.
