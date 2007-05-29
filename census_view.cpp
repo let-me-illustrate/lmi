@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: census_view.cpp,v 1.57 2007-05-29 01:33:17 chicares Exp $
+// $Id: census_view.cpp,v 1.58 2007-05-29 01:45:45 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -90,10 +90,10 @@ BEGIN_EVENT_TABLE(CensusView, ViewEx)
     EVT_MENU(XRCID("edit_cell"             ),CensusView::UponEditCell )
     EVT_MENU(XRCID("edit_class"            ),CensusView::UponEditClass)
     EVT_MENU(XRCID("print_cell"            ),CensusView::UponPrintCell)
-//    EVT_MENU(XRCID("print_class"           ),CensusView::UponPrintClass) // TODO ?? expunge?
+//    EVT_MENU(XRCID("print_class"           ),CensusView::UponPrintClass) // SOMEDAY !! This may be useful for large cases.
     EVT_MENU(XRCID("print_case"            ),CensusView::UponPrintCase)
     EVT_MENU(XRCID("run_cell"              ),CensusView::UponRunCell)
-//    EVT_MENU(XRCID("run_class"             ),CensusView::UponRunClass) // TODO ?? expunge?
+//    EVT_MENU(XRCID("run_class"             ),CensusView::UponRunClass)   // SOMEDAY !! This may be useful for large cases.
     EVT_MENU(XRCID("run_case"              ),CensusView::UponRunCase)
     EVT_MENU(XRCID("paste_census"          ),CensusView::UponPasteCensus)
     EVT_MENU(XRCID("add_cell"              ),CensusView::UponAddCell)
@@ -257,12 +257,6 @@ wxWindow* CensusView::CreateChildWindow()
     // Show headers.
     Update();
     document().Modify(false);
-
-    // TODO ?? Is this relevant?
-    // Looks like the default is wider than we'd like (hardcoded number
-    // in the following function). Do this or else "shrink" on a new
-    // census will widen the columns.
-////    CensusView::UponColumnWidthFixed();
 
     status() << std::flush;
 
@@ -694,7 +688,6 @@ void CensusView::UponEditCase(wxCommandEvent&)
 // items with images initially even if we specify dummy image id"
 //
 // TODO ?? Offer both ways of autosizing.
-// TODO ?? 'shrink' and 'expand' don't do what they sound like.
 //
 void CensusView::UponColumnWidthVarying(wxCommandEvent&)
 {
