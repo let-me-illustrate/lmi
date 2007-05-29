@@ -24,7 +24,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: menus.xrc,v 1.30 2007-05-28 22:36:25 chicares Exp $
+    $Id: menus.xrc,v 1.31 2007-05-29 01:33:17 chicares Exp $
 -->
 
 <!-- reusable menus -->
@@ -359,15 +359,13 @@
             <help>Delete selected cell(s)</help>
         </object>
         <object class="separator"/>
-<!-- TODO ?? Change the 'name' too. -->
-        <object class="wxMenuItem" name="expand_columns">
-            <label>_Vary column width\tCtrl-V</label>
+        <object class="wxMenuItem" name="column_width_varying">
+            <label>_Varying column width\tCtrl-V</label>
             <bitmap>varying-width.xpm</bitmap>
-            <help>Vary each column's width to show all contents</help>
+            <help>Vary each column's width to show its entire contents</help>
         </object>
-<!-- TODO ?? Change the 'name' too. -->
-        <object class="wxMenuItem" name="shrink_columns">
-            <label>_Use fixed column width\tCtrl-U</label>
+        <object class="wxMenuItem" name="column_width_fixed">
+            <label>Fixed col_umn width\tCtrl-U</label>
             <bitmap>fixed-width.xpm</bitmap>
             <help>Display all columns with the same fixed width</help>
         </object>

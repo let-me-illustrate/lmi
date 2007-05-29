@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: census_view.cpp,v 1.56 2007-05-16 19:15:31 chicares Exp $
+// $Id: census_view.cpp,v 1.57 2007-05-29 01:33:17 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -98,26 +98,26 @@ BEGIN_EVENT_TABLE(CensusView, ViewEx)
     EVT_MENU(XRCID("paste_census"          ),CensusView::UponPasteCensus)
     EVT_MENU(XRCID("add_cell"              ),CensusView::UponAddCell)
     EVT_MENU(XRCID("delete_cells"          ),CensusView::UponDeleteCells)
-    EVT_MENU(XRCID("expand_columns"        ),CensusView::UponExpandColWidths)
-    EVT_MENU(XRCID("shrink_columns"        ),CensusView::UponShrinkColWidths)
+    EVT_MENU(XRCID("column_width_varying"  ),CensusView::UponColumnWidthVarying)
+    EVT_MENU(XRCID("column_width_fixed"    ),CensusView::UponColumnWidthFixed)
     EVT_MENU(XRCID("print_spreadsheet"     ),CensusView::UponRunCaseToSpreadsheet)
 
 // TODO ?? There has to be a better way than this.
-    EVT_UPDATE_UI(XRCID("edit_cell"        ),CensusView::UponUpdateApplicable)
-    EVT_UPDATE_UI(XRCID("edit_class"       ),CensusView::UponUpdateApplicable)
-    EVT_UPDATE_UI(XRCID("edit_case"        ),CensusView::UponUpdateApplicable)
-    EVT_UPDATE_UI(XRCID("run_cell"         ),CensusView::UponUpdateApplicable)
-    EVT_UPDATE_UI(XRCID("run_class"        ),CensusView::UponUpdateApplicable)
-    EVT_UPDATE_UI(XRCID("run_case"         ),CensusView::UponUpdateApplicable)
-    EVT_UPDATE_UI(XRCID("print_cell"       ),CensusView::UponUpdateApplicable)
-    EVT_UPDATE_UI(XRCID("print_class"      ),CensusView::UponUpdateApplicable)
-    EVT_UPDATE_UI(XRCID("print_case"       ),CensusView::UponUpdateApplicable)
-    EVT_UPDATE_UI(XRCID("print_spreadsheet"),CensusView::UponUpdateApplicable)
-    EVT_UPDATE_UI(XRCID("paste_census"     ),CensusView::UponUpdateApplicable)
-    EVT_UPDATE_UI(XRCID("add_cell"         ),CensusView::UponUpdateApplicable)
-    EVT_UPDATE_UI(XRCID("delete_cells"     ),CensusView::UponUpdateApplicable)
-    EVT_UPDATE_UI(XRCID("expand_columns"   ),CensusView::UponUpdateApplicable)
-    EVT_UPDATE_UI(XRCID("shrink_columns"   ),CensusView::UponUpdateApplicable)
+    EVT_UPDATE_UI(XRCID("edit_cell"            ),CensusView::UponUpdateApplicable)
+    EVT_UPDATE_UI(XRCID("edit_class"           ),CensusView::UponUpdateApplicable)
+    EVT_UPDATE_UI(XRCID("edit_case"            ),CensusView::UponUpdateApplicable)
+    EVT_UPDATE_UI(XRCID("run_cell"             ),CensusView::UponUpdateApplicable)
+    EVT_UPDATE_UI(XRCID("run_class"            ),CensusView::UponUpdateApplicable)
+    EVT_UPDATE_UI(XRCID("run_case"             ),CensusView::UponUpdateApplicable)
+    EVT_UPDATE_UI(XRCID("print_cell"           ),CensusView::UponUpdateApplicable)
+    EVT_UPDATE_UI(XRCID("print_class"          ),CensusView::UponUpdateApplicable)
+    EVT_UPDATE_UI(XRCID("print_case"           ),CensusView::UponUpdateApplicable)
+    EVT_UPDATE_UI(XRCID("print_spreadsheet"    ),CensusView::UponUpdateApplicable)
+    EVT_UPDATE_UI(XRCID("paste_census"         ),CensusView::UponUpdateApplicable)
+    EVT_UPDATE_UI(XRCID("add_cell"             ),CensusView::UponUpdateApplicable)
+    EVT_UPDATE_UI(XRCID("delete_cells"         ),CensusView::UponUpdateApplicable)
+    EVT_UPDATE_UI(XRCID("column_width_varying" ),CensusView::UponUpdateApplicable)
+    EVT_UPDATE_UI(XRCID("column_width_fixed"   ),CensusView::UponUpdateApplicable)
 // TODO ?? Not label-edit.
 //    EVT_LIST_BEGIN_LABEL_EDIT(ID_LISTWINDOW,CensusView::UponBeginLabelEdit)
 // Don't do this either--it's triggered by spacebar.
@@ -262,7 +262,7 @@ wxWindow* CensusView::CreateChildWindow()
     // Looks like the default is wider than we'd like (hardcoded number
     // in the following function). Do this or else "shrink" on a new
     // census will widen the columns.
-////    CensusView::UponShrinkColWidths();
+////    CensusView::UponColumnWidthFixed();
 
     status() << std::flush;
 
@@ -696,7 +696,7 @@ void CensusView::UponEditCase(wxCommandEvent&)
 // TODO ?? Offer both ways of autosizing.
 // TODO ?? 'shrink' and 'expand' don't do what they sound like.
 //
-void CensusView::UponExpandColWidths(wxCommandEvent&)
+void CensusView::UponColumnWidthVarying(wxCommandEvent&)
 {
     freeze(true);
     for(int j = 0; j < list_window_->GetColumnCount(); ++j)
@@ -710,7 +710,7 @@ void CensusView::UponExpandColWidths(wxCommandEvent&)
 }
 
 // Shrink all nonfrozen columns to default width.
-void CensusView::UponShrinkColWidths(wxCommandEvent&)
+void CensusView::UponColumnWidthFixed(wxCommandEvent&)
 {
     freeze(true);
     for(int j = 0; j < list_window_->GetColumnCount(); ++j)
