@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.657.2.34 2007-05-29 13:44:51 etarassov Exp $
+// $Id: ChangeLog,v 1.657.2.35 2007-05-29 13:46:39 etarassov Exp $
 
 MAINTENANCE
 
@@ -11661,4 +11661,10 @@ Add mandatory attribute 'column-width' to <fo:table-column>.
 
   ChangeLog
 Fix timestamps in log records.
+
+20070529T1346Z <etarassov@tt-solutions.com> [1250]
+
+  illustrations_common.xsl
+Add support for 'special' columns (calculated using other column
+values).
 
