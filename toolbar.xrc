@@ -24,7 +24,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: toolbar.xrc,v 1.9 2007-01-27 00:17:12 wboutin Exp $
+    $Id: toolbar.xrc,v 1.10 2007-05-29 01:33:17 chicares Exp $
 -->
 
 <object class="wxToolBar" name="toolbar">
@@ -134,13 +134,13 @@
         <longhelp>Delete selected cell(s)</longhelp>
     </object>
     <object class="separator"/>
-    <object class="tool" name="expand_columns">
-        <tooltip>Vary column width</tooltip>
+    <object class="tool" name="column_width_varying">
+        <tooltip>Varying column width</tooltip>
         <bitmap>varying-width.xpm</bitmap>
-        <longhelp>Vary each column's width to show all contents</longhelp>
+        <longhelp>Vary each column's width to show its entire contents</longhelp>
     </object>
-    <object class="tool" name="shrink_columns">
-        <tooltip>_Use fixed column width</tooltip>
+    <object class="tool" name="column_width_fixed">
+        <tooltip>Fixed column width</tooltip>
         <bitmap>fixed-width.xpm</bitmap>
         <longhelp>Display all columns with the same fixed width</longhelp>
     </object>

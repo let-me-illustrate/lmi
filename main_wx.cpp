@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_wx.cpp,v 1.77 2007-05-28 22:36:25 chicares Exp $
+// $Id: main_wx.cpp,v 1.78 2007-05-29 01:33:17 chicares Exp $
 
 // Portions of this file are derived from wxWindows files
 //   samples/docvwmdi/docview.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -153,21 +153,21 @@ BEGIN_EVENT_TABLE(Skeleton, wxApp)
 
 // TODO ?? There has to be a better way.
 /*
-    EVT_UPDATE_UI(XRCID("edit_cell"        ),Skeleton::UponUpdateInapplicable)
-    EVT_UPDATE_UI(XRCID("edit_class"       ),Skeleton::UponUpdateInapplicable)
-    EVT_UPDATE_UI(XRCID("edit_case"        ),Skeleton::UponUpdateInapplicable)
-    EVT_UPDATE_UI(XRCID("run_cell"         ),Skeleton::UponUpdateInapplicable)
-    EVT_UPDATE_UI(XRCID("run_class"        ),Skeleton::UponUpdateInapplicable)
-    EVT_UPDATE_UI(XRCID("run_case"         ),Skeleton::UponUpdateInapplicable)
-    EVT_UPDATE_UI(XRCID("print_cell"       ),Skeleton::UponUpdateInapplicable)
-    EVT_UPDATE_UI(XRCID("print_class"      ),Skeleton::UponUpdateInapplicable)
-    EVT_UPDATE_UI(XRCID("print_case"       ),Skeleton::UponUpdateInapplicable)
-    EVT_UPDATE_UI(XRCID("print_spreadsheet"),Skeleton::UponUpdateInapplicable)
-    EVT_UPDATE_UI(XRCID("paste_census"     ),Skeleton::UponUpdateInapplicable)
-    EVT_UPDATE_UI(XRCID("add_cell"         ),Skeleton::UponUpdateInapplicable)
-    EVT_UPDATE_UI(XRCID("delete_cells"     ),Skeleton::UponUpdateInapplicable)
-    EVT_UPDATE_UI(XRCID("expand_columns"   ),Skeleton::UponUpdateInapplicable)
-    EVT_UPDATE_UI(XRCID("shrink_columns"   ),Skeleton::UponUpdateInapplicable)
+    EVT_UPDATE_UI(XRCID("edit_cell"            ),Skeleton::UponUpdateInapplicable)
+    EVT_UPDATE_UI(XRCID("edit_class"           ),Skeleton::UponUpdateInapplicable)
+    EVT_UPDATE_UI(XRCID("edit_case"            ),Skeleton::UponUpdateInapplicable)
+    EVT_UPDATE_UI(XRCID("run_cell"             ),Skeleton::UponUpdateInapplicable)
+    EVT_UPDATE_UI(XRCID("run_class"            ),Skeleton::UponUpdateInapplicable)
+    EVT_UPDATE_UI(XRCID("run_case"             ),Skeleton::UponUpdateInapplicable)
+    EVT_UPDATE_UI(XRCID("print_cell"           ),Skeleton::UponUpdateInapplicable)
+    EVT_UPDATE_UI(XRCID("print_class"          ),Skeleton::UponUpdateInapplicable)
+    EVT_UPDATE_UI(XRCID("print_case"           ),Skeleton::UponUpdateInapplicable)
+    EVT_UPDATE_UI(XRCID("print_spreadsheet"    ),Skeleton::UponUpdateInapplicable)
+    EVT_UPDATE_UI(XRCID("paste_census"         ),Skeleton::UponUpdateInapplicable)
+    EVT_UPDATE_UI(XRCID("add_cell"             ),Skeleton::UponUpdateInapplicable)
+    EVT_UPDATE_UI(XRCID("delete_cells"         ),Skeleton::UponUpdateInapplicable)
+    EVT_UPDATE_UI(XRCID("column_width_varying" ),Skeleton::UponUpdateInapplicable)
+    EVT_UPDATE_UI(XRCID("column_width_fixed"   ),Skeleton::UponUpdateInapplicable)
 */
 END_EVENT_TABLE()
 

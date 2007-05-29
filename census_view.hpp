@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: census_view.hpp,v 1.19 2007-05-08 18:42:15 chicares Exp $
+// $Id: census_view.hpp,v 1.20 2007-05-29 01:33:17 chicares Exp $
 
 #ifndef census_view_hpp
 #define census_view_hpp
@@ -67,24 +67,24 @@ class CensusView
     virtual wxIcon Icon() const;
     virtual wxMenuBar* MenuBar() const;
 
-    void UponAddCell              (wxCommandEvent&);
-    void UponBeginLabelEdit       (wxListEvent&); // TODO ?? Expunge.
-    void UponDeleteCells          (wxCommandEvent&);
-    void UponEditCell             (wxCommandEvent&);
-    void UponEditClass            (wxCommandEvent&);
-    void UponEditCase             (wxCommandEvent&);
-    void UponExpandColWidths      (wxCommandEvent&);
-    void UponShrinkColWidths      (wxCommandEvent&);
-    void UponPasteCensus          (wxCommandEvent&);
-    void UponRightClick0          (wxCommandEvent&);
-    void UponRightClick1          (wxMouseEvent&);
-    void UponRightClick2          (wxContextMenuEvent&);
-    void UponPrintCell            (wxCommandEvent&);
-    void UponPrintCase            (wxCommandEvent&);
-    void UponRunCell              (wxCommandEvent&);
-    void UponRunCase              (wxCommandEvent&);
-    void UponRunCaseToSpreadsheet (wxCommandEvent&);
-    void UponUpdateApplicable     (wxUpdateUIEvent&);
+    void UponAddCell                (wxCommandEvent&);
+    void UponBeginLabelEdit         (wxListEvent&); // TODO ?? Expunge.
+    void UponDeleteCells            (wxCommandEvent&);
+    void UponEditCell               (wxCommandEvent&);
+    void UponEditClass              (wxCommandEvent&);
+    void UponEditCase               (wxCommandEvent&);
+    void UponColumnWidthVarying     (wxCommandEvent&);
+    void UponColumnWidthFixed       (wxCommandEvent&);
+    void UponPasteCensus            (wxCommandEvent&);
+    void UponRightClick0            (wxCommandEvent&);
+    void UponRightClick1            (wxMouseEvent&);
+    void UponRightClick2            (wxContextMenuEvent&);
+    void UponPrintCell              (wxCommandEvent&);
+    void UponPrintCase              (wxCommandEvent&);
+    void UponRunCell                (wxCommandEvent&);
+    void UponRunCase                (wxCommandEvent&);
+    void UponRunCaseToSpreadsheet   (wxCommandEvent&);
+    void UponUpdateApplicable       (wxUpdateUIEvent&);
 
     bool DoAllCells(enum_emission);
 
