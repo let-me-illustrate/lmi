@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: illustrations_common.xsl,v 1.1.2.19 2007-05-29 13:46:40 etarassov Exp $
+    $Id: illustrations_common.xsl,v 1.1.2.20 2007-05-29 13:54:12 etarassov Exp $
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:fo="http://www.w3.org/1999/XSL/Format">
@@ -211,7 +211,6 @@
       <fo:table-column>
         <xsl:choose>
           <xsl:when test="$empty_column">
-            <xsl:attribute name="column-width">2mm</xsl:attribute>
             <xsl:attribute name="column-width">proportional-column-width(33)</xsl:attribute>
           </xsl:when>
           <xsl:otherwise>
