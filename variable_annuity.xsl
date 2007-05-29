@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: variable_annuity.xsl,v 1.3.2.10 2007-05-28 12:31:16 etarassov Exp $
+    $Id: variable_annuity.xsl,v 1.3.2.11 2007-05-29 13:51:04 etarassov Exp $
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:fo="http://www.w3.org/1999/XSL/Format">
@@ -160,31 +160,10 @@
           <xsl:variable name="basis-lapse-year" select="number($basis-lapse-year-text)"/>
 
           <!-- Illustration Values -->
-          <fo:table table-layout="fixed" width="100%"
-            font-size="9.0pt" font-family="serif" font-weight="normal">
-            <fo:table-column/>
-            <fo:table-column/>
-            <fo:table-column/>
-            <fo:table-column/>
-            <fo:table-column/>
-            <fo:table-column/>
-            <fo:table-column/>
-            <fo:table-column/>
-            <!-- Column Headings -->
-            <xsl:call-template name="column-headings"/>
-            <!-- Column Values -->
-            <!-- make inforce illustration start in the inforce year -->
-            <fo:table-body padding-before="5.0pt" border-top-style="solid"
-              border-top-width="1pt" border-top-color="blue">
-              <xsl:call-template name="column-values">
-                <xsl:with-param name="counter" select="illustration/scalar/InforceYear + 1"/>
-                <xsl:with-param name="inforceyear" select="0 - illustration/scalar/InforceYear"/>
-                <xsl:with-param name="basis-lapse-year" select="$basis-lapse-year"/>
-                <xsl:with-param name="basis" select="'Current'"/>
-              </xsl:call-template>
-            </fo:table-body>
-          </fo:table>
-
+          <xsl:call-template name="illustration-table">
+            <xsl:with-param name="basis" select="'Current'"/>
+            <xsl:with-param name="basis-lapse-year" select="$basis-lapse-year"/>
+          </xsl:call-template>
         </fo:flow>
 
       </fo:page-sequence>
@@ -221,31 +200,10 @@
           <xsl:variable name="basis-lapse-year" select="number($basis-lapse-year-text)"/>
 
           <!-- Illustration Values -->
-          <fo:table table-layout="fixed" width="100%"
-            font-size="9.0pt" font-family="serif" font-weight="normal">
-            <fo:table-column/>
-            <fo:table-column/>
-            <fo:table-column/>
-            <fo:table-column/>
-            <fo:table-column/>
-            <fo:table-column/>
-            <fo:table-column/>
-            <fo:table-column/>
-            <!-- Column Headings -->
-            <xsl:call-template name="column-headings"/>
-            <!-- Column Values -->
-            <!-- make inforce illustration start in the inforce year -->
-            <fo:table-body padding-before="5.0pt" border-top-style="solid"
-              border-top-width="1pt" border-top-color="blue">
-              <xsl:call-template name="column-values">
-                <xsl:with-param name="counter" select="illustration/scalar/InforceYear + 1"/>
-                <xsl:with-param name="inforceyear" select="0 - illustration/scalar/InforceYear"/>
-                <xsl:with-param name="basis-lapse-year" select="$basis-lapse-year"/>
-                <xsl:with-param name="basis" select="'CurrentZero'"/>
-              </xsl:call-template>
-            </fo:table-body>
-          </fo:table>
-
+          <xsl:call-template name="illustration-table">
+            <xsl:with-param name="basis" select="'CurrentZero'"/>
+            <xsl:with-param name="basis-lapse-year" select="$basis-lapse-year"/>
+          </xsl:call-template>
         </fo:flow>
 
       </fo:page-sequence>
@@ -282,31 +240,10 @@
           <xsl:variable name="basis-lapse-year" select="number($basis-lapse-year-text)"/>
 
           <!-- Illustration Values -->
-          <fo:table table-layout="fixed" width="100%"
-            font-size="9.0pt" font-family="serif" font-weight="normal">
-            <fo:table-column/>
-            <fo:table-column/>
-            <fo:table-column/>
-            <fo:table-column/>
-            <fo:table-column/>
-            <fo:table-column/>
-            <fo:table-column/>
-            <fo:table-column/>
-            <!-- Column Headings -->
-            <xsl:call-template name="column-headings"/>
-            <!-- Column Values -->
-            <!-- make inforce illustration start in the inforce year -->
-            <fo:table-body padding-before="5.0pt" border-top-style="solid"
-              border-top-width="1pt" border-top-color="blue">
-              <xsl:call-template name="column-values">
-                <xsl:with-param name="counter" select="illustration/scalar/InforceYear + 1"/>
-                <xsl:with-param name="inforceyear" select="0 - illustration/scalar/InforceYear"/>
-                <xsl:with-param name="basis-lapse-year" select="$basis-lapse-year"/>
-                <xsl:with-param name="basis" select="'Guaranteed'"/>
-              </xsl:call-template>
-            </fo:table-body>
-          </fo:table>
-
+          <xsl:call-template name="illustration-table">
+            <xsl:with-param name="basis" select="'Guaranteed'"/>
+            <xsl:with-param name="basis-lapse-year" select="$basis-lapse-year"/>
+          </xsl:call-template>
         </fo:flow>
 
       </fo:page-sequence>
@@ -343,31 +280,10 @@
           <xsl:variable name="basis-lapse-year" select="number($basis-lapse-year-text)"/>
 
           <!-- Illustration Values -->
-          <fo:table table-layout="fixed" width="100%"
-            font-size="9.0pt" font-family="serif" font-weight="normal">
-            <fo:table-column/>
-            <fo:table-column/>
-            <fo:table-column/>
-            <fo:table-column/>
-            <fo:table-column/>
-            <fo:table-column/>
-            <fo:table-column/>
-            <fo:table-column/>
-            <!-- Column Headings -->
-            <xsl:call-template name="column-headings"/>
-            <!-- Column Values -->
-            <!-- make inforce illustration start in the inforce year -->
-            <fo:table-body padding-before="5.0pt" border-top-style="solid"
-              border-top-width="1pt" border-top-color="blue">
-              <xsl:call-template name="column-values">
-                <xsl:with-param name="counter" select="illustration/scalar/InforceYear + 1"/>
-                <xsl:with-param name="inforceyear" select="0 - illustration/scalar/InforceYear"/>
-                <xsl:with-param name="basis-lapse-year" select="$basis-lapse-year"/>
-                <xsl:with-param name="basis" select="'GuaranteedZero'"/>
-              </xsl:call-template>
-            </fo:table-body>
-          </fo:table>
-
+          <xsl:call-template name="illustration-table">
+            <xsl:with-param name="basis" select="'GuaranteedZero'"/>
+            <xsl:with-param name="basis-lapse-year" select="$basis-lapse-year"/>
+          </xsl:call-template>
         </fo:flow>
 
       </fo:page-sequence>
@@ -955,322 +871,83 @@
     </fo:block>
   </xsl:template>
 
-  <xsl:template name="column-headings">
-    <fo:table-header padding-after="5.0pt">
-      <fo:table-row>
-        <fo:table-cell>
-          <fo:block text-align="right">
-            <xsl:text></xsl:text>
-          </fo:block>
-        </fo:table-cell>
-        <fo:table-cell>
-          <fo:block text-align="right">
-            <xsl:text></xsl:text>
-          </fo:block>
-        </fo:table-cell>
-        <fo:table-cell>
-          <fo:block text-align="right">
-            <xsl:text></xsl:text>
-          </fo:block>
-        </fo:table-cell>
-        <fo:table-cell>
-          <fo:block text-align="right">
-            <xsl:text></xsl:text>
-          </fo:block>
-        </fo:table-cell>
-        <fo:table-cell>
-          <fo:block text-align="right">
-            <xsl:text></xsl:text>
-          </fo:block>
-        </fo:table-cell>
-        <fo:table-cell>
-          <fo:block text-align="right">
-            <xsl:text></xsl:text>
-          </fo:block>
-        </fo:table-cell>
-        <fo:table-cell>
-          <fo:block text-align="right">
-            <xsl:text>End of</xsl:text>
-          </fo:block>
-        </fo:table-cell>
-        <fo:table-cell>
-          <fo:block text-align="right">
-            <xsl:text></xsl:text>
-          </fo:block>
-        </fo:table-cell>
-      </fo:table-row>
-      <fo:table-row>
-        <fo:table-cell>
-          <fo:block text-align="right">
-            <xsl:text></xsl:text>
-          </fo:block>
-        </fo:table-cell>
-        <fo:table-cell>
-          <fo:block text-align="right">
-            <xsl:text></xsl:text>
-          </fo:block>
-        </fo:table-cell>
-        <fo:table-cell>
-          <fo:block text-align="right">
-            <xsl:text>Purchase</xsl:text>
-          </fo:block>
-        </fo:table-cell>
-        <fo:table-cell>
-          <fo:block text-align="right">
-            <xsl:text></xsl:text>
-          </fo:block>
-        </fo:table-cell>
-        <fo:table-cell>
-          <fo:block text-align="right">
-            <xsl:text></xsl:text>
-          </fo:block>
-        </fo:table-cell>
-        <fo:table-cell>
-          <fo:block text-align="right">
-            <xsl:text></xsl:text>
-          </fo:block>
-        </fo:table-cell>
-        <fo:table-cell>
-          <fo:block text-align="right">
-            <xsl:text>Year</xsl:text>
-          </fo:block>
-        </fo:table-cell>
-        <fo:table-cell>
-          <fo:block text-align="right">
-            <xsl:text>Cumulative</xsl:text>
-          </fo:block>
-        </fo:table-cell>
-      </fo:table-row>
-      <fo:table-row>
-        <fo:table-cell>
-          <fo:block text-align="right">
-            <xsl:text></xsl:text>
-          </fo:block>
-        </fo:table-cell>
-        <fo:table-cell>
-          <fo:block text-align="right">
-            <xsl:text>Purchase</xsl:text>
-          </fo:block>
-        </fo:table-cell>
-        <fo:table-cell>
-          <fo:block text-align="right">
-            <xsl:text>Payment</xsl:text>
-          </fo:block>
-        </fo:table-cell>
-        <fo:table-cell>
-          <fo:block text-align="right">
-            <xsl:text></xsl:text>
-          </fo:block>
-        </fo:table-cell>
-        <fo:table-cell>
-          <fo:block text-align="right">
-            <xsl:text>Asset</xsl:text>
-          </fo:block>
-        </fo:table-cell>
-        <fo:table-cell>
-          <fo:block text-align="right">
-            <xsl:text>Investment</xsl:text>
-          </fo:block>
-        </fo:table-cell>
-        <fo:table-cell>
-          <fo:block text-align="right">
-            <xsl:text>Contract</xsl:text>
-          </fo:block>
-        </fo:table-cell>
-        <fo:table-cell>
-          <fo:block text-align="right">
-            <xsl:text>Contract</xsl:text>
-          </fo:block>
-        </fo:table-cell>
-      </fo:table-row>
-      <fo:table-row>
-        <fo:table-cell>
-          <fo:block text-align="right">
-            <xsl:text>Year</xsl:text>
-          </fo:block>
-        </fo:table-cell>
-        <fo:table-cell>
-          <fo:block text-align="right">
-            <xsl:text>Payment</xsl:text>
-          </fo:block>
-        </fo:table-cell>
-        <fo:table-cell>
-          <fo:block text-align="right">
-            <xsl:text>Charges</xsl:text>
-          </fo:block>
-        </fo:table-cell>
-        <fo:table-cell>
-          <fo:block text-align="right">
-            <xsl:text>Withdrawal(s)</xsl:text>
-          </fo:block>
-        </fo:table-cell>
-        <fo:table-cell>
-          <fo:block text-align="right">
-            <xsl:text>Charges</xsl:text>
-          </fo:block>
-        </fo:table-cell>
-        <fo:table-cell>
-          <fo:block text-align="right">
-            <xsl:text>Experience</xsl:text>
-          </fo:block>
-        </fo:table-cell>
-        <fo:table-cell>
-          <fo:block text-align="right">
-            <xsl:text>Value</xsl:text>
-          </fo:block>
-        </fo:table-cell>
-        <fo:table-cell>
-          <fo:block text-align="right">
-            <xsl:text>Value IRR</xsl:text>
-          </fo:block>
-        </fo:table-cell>
-      </fo:table-row>
-    </fo:table-header>
+  <xsl:template name="illustration-table">
+    <xsl:param name="basis"/>
+    <xsl:param name="basis-lapse-year"/>
+    <fo:table table-layout="fixed" width="100%"
+      font-size="9.0pt" font-family="serif" font-weight="normal">
+      <xsl:variable name="column-values-columns">
+        <column name="PolicyYear">_ _ Year</column>
+        <column name="GrossPmt">_Purchase _Payment</column>
+        <column special="SpecialPmt">Purchase _Payment _Charges</column>
+        <column name="NetWD">_ _Withdrawal(s)</column>
+        <column special="SpecialIntCredited">_Asset _Charges</column>
+        <column special="SpecialGrossIntCredited">_Investment _Experience</column>
+        <column special="SpecialAcctVal">_End of Year _Contract Value</column>
+        <column special="SpecialIrrCsv">Cumulative _Contract Value _IRR</column>
+      </xsl:variable>
+      <xsl:variable name="columns" select="document('')//xsl:variable[@name='column-values-columns']/column" />
+
+      <xsl:call-template name="generate-table-columns">
+        <xsl:with-param name="columns" select="$columns"/>
+      </xsl:call-template>
+
+      <fo:table-header>
+        <xsl:call-template name="generate-table-headers">
+          <xsl:with-param name="columns" select="$columns"/>
+        </xsl:call-template>
+      </fo:table-header>
+
+      <fo:table-body>
+        <xsl:call-template name="generate-table-values">
+          <xsl:with-param name="columns" select="$columns"/>
+          <xsl:with-param name="counter" select="$illustration/scalar/InforceYear + 1"/>
+          <xsl:with-param name="max-counter" select="$basis-lapse-year"/>
+          <xsl:with-param name="inforceyear" select="0 - $illustration/scalar/InforceYear"/>
+          <xsl:with-param name="special-param" select="$basis"/>
+        </xsl:call-template>
+      </fo:table-body>
+    </fo:table>
   </xsl:template>
 
-  <xsl:template name="column-values">
+  <xsl:template name="get-special-column-value">
+    <xsl:param name="special"/>
+    <xsl:param name="column"/>
     <xsl:param name="counter"/>
-    <xsl:param name="inforceyear"/>
-    <xsl:param name="basis-lapse-year"/>
-    <xsl:param name="basis"/>
-    <xsl:if test="$counter &lt;= $basis-lapse-year">
-      <fo:table-row>
-        <fo:table-cell padding="0.2pt">
-          <fo:block text-align="right">
-            <xsl:value-of select="illustration/data/newcolumn/column[@name='PolicyYear']/duration[$counter]/@column_value"/>
-          </fo:block>
-        </fo:table-cell>
-        <fo:table-cell>
-          <fo:block text-align="right">
-            <xsl:value-of select="illustration/data/newcolumn/column[@name='GrossPmt']/duration[$counter]/@column_value"/>
-          </fo:block>
-        </fo:table-cell>
-        <fo:table-cell>
-          <fo:block text-align="right">
-            <xsl:choose>
-              <xsl:when test="$basis='Current'">
-                <xsl:value-of select="format-number(translate(illustration/data/newcolumn/column[@name='GrossPmt']/duration[$counter]/@column_value,$numberswc,$numberswoc)-translate(illustration/data/newcolumn/column[@name='NetPmt_Current']/duration[$counter]/@column_value,$numberswc,$numberswoc),'###,###,###')"/>
-              </xsl:when>
-              <xsl:when test="$basis='CurrentZero'">
-                <xsl:value-of select="format-number(translate(illustration/data/newcolumn/column[@name='GrossPmt']/duration[$counter]/@column_value,$numberswc,$numberswoc)-translate(illustration/data/newcolumn/column[@name='NetPmt_CurrentZero']/duration[$counter]/@column_value,$numberswc,$numberswoc),'###,###,###')"/>
-              </xsl:when>
-              <xsl:when test="$basis='Guaranteed'">
-                <xsl:value-of select="format-number(translate(illustration/data/newcolumn/column[@name='GrossPmt']/duration[$counter]/@column_value,$numberswc,$numberswoc)-translate(illustration/data/newcolumn/column[@name='NetPmt_Guaranteed']/duration[$counter]/@column_value,$numberswc,$numberswoc),'###,###,###')"/>
-              </xsl:when>
-              <xsl:when test="$basis='GuaranteedZero'">
-                <xsl:value-of select="format-number(translate(illustration/data/newcolumn/column[@name='GrossPmt']/duration[$counter]/@column_value,$numberswc,$numberswoc)-translate(illustration/data/newcolumn/column[@name='NetPmt_GuaranteedZero']/duration[$counter]/@column_value,$numberswc,$numberswoc),'###,###,###')"/>
-              </xsl:when>
-              <xsl:otherwise>
-                <xsl:text></xsl:text>
-              </xsl:otherwise>
-            </xsl:choose>
-          </fo:block>
-        </fo:table-cell>
-        <fo:table-cell>
-          <fo:block text-align="right">
-            <xsl:value-of select="illustration/data/newcolumn/column[@name='NetWD']/duration[$counter]/@column_value"/>
-          </fo:block>
-        </fo:table-cell>
-        <fo:table-cell>
-          <fo:block text-align="right">
-            <xsl:choose>
-              <xsl:when test="$basis='Current'">
-                <xsl:value-of select="format-number(translate(illustration/data/newcolumn/column[@name='GrossIntCredited_Current']/duration[$counter]/@column_value,$numberswc,$numberswoc)-translate(illustration/data/newcolumn/column[@name='NetIntCredited_Current']/duration[$counter]/@column_value,$numberswc,$numberswoc)+translate(illustration/data/newcolumn/column[@name='SepAcctLoad_Current']/duration[$counter]/@column_value,$numberswc,$numberswoc),'###,###,###')"/>
-              </xsl:when>
-              <xsl:when test="$basis='CurrentZero'">
-                <xsl:value-of select="format-number(translate(illustration/data/newcolumn/column[@name='GrossIntCredited_CurrentZero']/duration[$counter]/@column_value,$numberswc,$numberswoc)-translate(illustration/data/newcolumn/column[@name='NetIntCredited_CurrentZero']/duration[$counter]/@column_value,$numberswc,$numberswoc)+translate(illustration/data/newcolumn/column[@name='SepAcctLoad_CurrentZero']/duration[$counter]/@column_value,$numberswc,$numberswoc),'###,###,###')"/>
-              </xsl:when>
-              <xsl:when test="$basis='Guaranteed'">
-                <xsl:value-of select="format-number(translate(illustration/data/newcolumn/column[@name='GrossIntCredited_Guaranteed']/duration[$counter]/@column_value,$numberswc,$numberswoc)-translate(illustration/data/newcolumn/column[@name='NetIntCredited_Guaranteed']/duration[$counter]/@column_value,$numberswc,$numberswoc)+translate(illustration/data/newcolumn/column[@name='SepAcctLoad_Guaranteed']/duration[$counter]/@column_value,$numberswc,$numberswoc),'###,###,###')"/>
-              </xsl:when>
-              <xsl:when test="$basis='GuaranteedZero'">
-                <xsl:value-of select="format-number(translate(illustration/data/newcolumn/column[@name='GrossIntCredited_GuaranteedZero']/duration[$counter]/@column_value,$numberswc,$numberswoc)-translate(illustration/data/newcolumn/column[@name='NetIntCredited_GuaranteedZero']/duration[$counter]/@column_value,$numberswc,$numberswoc)+translate(illustration/data/newcolumn/column[@name='SepAcctLoad_GuaranteedZero']/duration[$counter]/@column_value,$numberswc,$numberswoc),'###,###,###')"/>
-              </xsl:when>
-              <xsl:otherwise>
-                <xsl:text></xsl:text>
-              </xsl:otherwise>
-            </xsl:choose>
-          </fo:block>
-        </fo:table-cell>
-        <fo:table-cell>
-          <fo:block text-align="right">
-            <xsl:choose>
-              <xsl:when test="$basis='Current'">
-                <xsl:value-of select="illustration/data/newcolumn/column[@name='GrossIntCredited_Current']/duration[$counter]/@column_value"/>
-              </xsl:when>
-              <xsl:when test="$basis='CurrentZero'">
-                <xsl:value-of select="illustration/data/newcolumn/column[@name='GrossIntCredited_CurrentZero']/duration[$counter]/@column_value"/>
-              </xsl:when>
-              <xsl:when test="$basis='Guaranteed'">
-                <xsl:value-of select="illustration/data/newcolumn/column[@name='GrossIntCredited_Guaranteed']/duration[$counter]/@column_value"/>
-              </xsl:when>
-              <xsl:when test="$basis='GuaranteedZero'">
-                <xsl:value-of select="illustration/data/newcolumn/column[@name='GrossIntCredited_GuaranteedZero']/duration[$counter]/@column_value"/>
-              </xsl:when>
-              <xsl:otherwise>
-                <xsl:text></xsl:text>
-              </xsl:otherwise>
-            </xsl:choose>
-          </fo:block>
-        </fo:table-cell>
-        <fo:table-cell>
-          <fo:block text-align="right">
-            <xsl:choose>
-              <xsl:when test="$basis='Current'">
-                <xsl:value-of select="illustration/data/newcolumn/column[@name='AcctVal_Current']/duration[$counter]/@column_value"/>
-              </xsl:when>
-              <xsl:when test="$basis='CurrentZero'">
-                <xsl:value-of select="illustration/data/newcolumn/column[@name='AcctVal_CurrentZero']/duration[$counter]/@column_value"/>
-              </xsl:when>
-              <xsl:when test="$basis='Guaranteed'">
-                <xsl:value-of select="illustration/data/newcolumn/column[@name='AcctVal_Guaranteed']/duration[$counter]/@column_value"/>
-              </xsl:when>
-              <xsl:when test="$basis='GuaranteedZero'">
-                <xsl:value-of select="illustration/data/newcolumn/column[@name='AcctVal_GuaranteedZero']/duration[$counter]/@column_value"/>
-              </xsl:when>
-              <xsl:otherwise>
-                <xsl:text></xsl:text>
-              </xsl:otherwise>
-            </xsl:choose>
-          </fo:block>
-        </fo:table-cell>
-        <fo:table-cell>
-          <fo:block text-align="right">
-            <xsl:choose>
-              <xsl:when test="$basis='Current'">
-                <xsl:value-of select="illustration/data/newcolumn/column[@name='IrrCsv_Current']/duration[$counter]/@column_value"/>
-              </xsl:when>
-              <xsl:when test="$basis='CurrentZero'">
-                <xsl:value-of select="illustration/data/newcolumn/column[@name='IrrCsv_CurrentZero']/duration[$counter]/@column_value"/>
-              </xsl:when>
-              <xsl:when test="$basis='Guaranteed'">
-                <xsl:value-of select="illustration/data/newcolumn/column[@name='IrrCsv_Guaranteed']/duration[$counter]/@column_value"/>
-              </xsl:when>
-              <xsl:when test="$basis='GuaranteedZero'">
-                <xsl:value-of select="illustration/data/newcolumn/column[@name='IrrCsv_GuaranteedZero']/duration[$counter]/@column_value"/>
-              </xsl:when>
-              <xsl:otherwise>
-                <xsl:text></xsl:text>
-              </xsl:otherwise>
-            </xsl:choose>
-          </fo:block>
-        </fo:table-cell>
-      </fo:table-row>
-      <!-- Blank Row Every 5th Year -->
-      <xsl:if test="($counter + $inforceyear) mod 5=0">
-        <fo:table-row>
-          <fo:table-cell padding="4pt">
-            <fo:block text-align="right"></fo:block>
-          </fo:table-cell>
-        </fo:table-row>
-      </xsl:if>
-      <xsl:call-template name="column-values">
-        <xsl:with-param name="counter" select="$counter + 1"/>
-        <xsl:with-param name="inforceyear" select="$inforceyear"/>
-        <xsl:with-param name="basis-lapse-year" select="$basis-lapse-year"/>
-        <xsl:with-param name="basis" select="$basis"/>
-      </xsl:call-template>
-    </xsl:if>
+    <xsl:param name="special-param"/>
+    <xsl:variable name="basis" select="$special-param"/>
+    <xsl:variable name="name_suffix" select="concat('_', $basis)"/>
+    <xsl:choose>
+      <xsl:when test="$special='SpecialPmt'">
+        <xsl:value-of select="
+          format-number
+            (translate($illustration/data/newcolumn/column[@name='GrossPmt']/duration[$counter]/@column_value,$numberswc,$numberswoc)
+            -translate($illustration/data/newcolumn/column[@name=concat('NetPmt', $name_suffix)]/duration[$counter]/@column_value,$numberswc,$numberswoc)
+            ,'###,###,###'
+            )"/>
+      </xsl:when>
+      <xsl:when test="$special='SpecialIntCredited'">
+        <xsl:value-of select="
+          format-number
+            (translate($illustration/data/newcolumn/column[@name=concat('GrossIntCredited', $name_suffix)]/duration[$counter]/@column_value,$numberswc,$numberswoc)
+            -translate($illustration/data/newcolumn/column[@name=concat('NetIntCredited', $name_suffix)]/duration[$counter]/@column_value,$numberswc,$numberswoc)
+            +translate($illustration/data/newcolumn/column[@name=concat('SepAcctLoad', $name_suffix)]/duration[$counter]/@column_value,$numberswc,$numberswoc)
+            ,'###,###,###'
+            )"/>
+      </xsl:when>
+      <xsl:when test="$special='SpecialGrossIntCredited'">
+        <xsl:value-of select="$illustration/data/newcolumn/column[@name=concat('GrossIntCredited', $name_suffix)]/duration[$counter]/@column_value"/>
+      </xsl:when>
+      <xsl:when test="$special='SpecialAcctVal'">
+        <xsl:value-of select="$illustration/data/newcolumn/column[@name=concat('AcctVal', $name_suffix)]/duration[$counter]/@column_value"/>
+      </xsl:when>
+      <xsl:when test="$special='SpecialIrrCsv'">
+        <xsl:value-of select="$illustration/data/newcolumn/column[@name=concat('IrrCsv', $name_suffix)]/duration[$counter]/@column_value"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:call-template name="ERROR_Unknown_Special_Column_Name_Specified"/>
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:template>
 
   <xsl:template name="preliminary-footer">
@@ -1377,20 +1054,14 @@
   <xsl:template name="get-basis-lapse-year">
     <xsl:param name="basis"/>
     <xsl:choose>
-      <xsl:when test="$basis='Current'">
-        <xsl:value-of select="illustration/scalar/LapseYear_Current"/>
-      </xsl:when>
-      <xsl:when test="$basis='CurrentZero'">
-        <xsl:value-of select="illustration/scalar/LapseYear_CurrentZero"/>
-      </xsl:when>
-      <xsl:when test="$basis='Guaranteed'">
-        <xsl:value-of select="illustration/scalar/LapseYear_Guaranteed"/>
-      </xsl:when>
-      <xsl:when test="$basis='GuaranteedZero'">
-        <xsl:value-of select="illustration/scalar/LapseYear_GuaranteedZero"/>
+      <xsl:when test="$basis='Current'
+                   or $basis='CurrentZero'
+                   or $basis='Guaranteed'
+                   or $basis='GuaranteedZero'">
+        <xsl:value-of select="illustration/scalar/*[name()=concat('LapseYear_', $basis)]/text()"/>
       </xsl:when>
       <xsl:otherwise>
-        <xsl:value-of select="number($max-years)"/>
+        <xsl:call-template name="ERROR_Unknown_basis_value"/>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>

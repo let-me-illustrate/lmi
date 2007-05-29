@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.657.2.35 2007-05-29 13:46:39 etarassov Exp $
+// $Id: ChangeLog,v 1.657.2.36 2007-05-29 13:51:03 etarassov Exp $
 
 MAINTENANCE
 
@@ -11667,4 +11667,9 @@ Fix timestamps in log records.
   illustrations_common.xsl
 Add support for 'special' columns (calculated using other column
 values).
+
+20070529T1351Z <etarassov@tt-solutions.com> [1250]
+
+  variable_annuity.xsl
+Rewrite data tables generation code using generic templates.
 
