@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.657.2.33 2007-05-28 16:56:09 etarassov Exp $
+// $Id: ChangeLog,v 1.657.2.34 2007-05-29 13:44:51 etarassov Exp $
 
 MAINTENANCE
 
@@ -11611,7 +11611,7 @@ Use 'generate-table-values' template.
   nasd.xsl
 Remove bogus usage of &#xA0;.
 
-20070525T1231Z <etarassov@tt-solutions.com> [1250]
+20070528T1231Z <etarassov@tt-solutions.com> [1250]
 
   group_private_placement.xsl
   illustration_reg.xsl
@@ -11622,38 +11622,43 @@ Remove bogus usage of &#xA0;.
   variable_annuity.xsl
 Extract a global template 'limitstring'.
 
-20070525T1329Z <etarassov@tt-solutions.com> [1250]
+20070528T1329Z <etarassov@tt-solutions.com> [1250]
 
   nasd.xsl
 Normalize comments in '*-report' templates.
 
-20070525T1333Z <etarassov@tt-solutions.com> [1250]
+20070528T1333Z <etarassov@tt-solutions.com> [1250]
 
   group_private_placement.xsl
 Rewrite '*-report' templates using common generic templates.
 
-20070525T1500Z <etarassov@tt-solutions.com> [1250]
+20070528T1500Z <etarassov@tt-solutions.com> [1250]
 
   offshore_private_placement.xsl
 Rewrite '*-report' templates using common generic templates.
 
-20070525T1635Z <etarassov@tt-solutions.com> [1250]
+20070528T1635Z <etarassov@tt-solutions.com> [1250]
 
   individual_private_placement.xsl
 Rewrite 'irr-guaranteed-illustration-(report|values)'.
 
-20070525T1653Z <etarassov@tt-solutions.com> [1250]
+20070528T1653Z <etarassov@tt-solutions.com> [1250]
 
   individual_private_placement.xsl
 Rewrite 'irr-current-illustration-(report|values)'.
 
-20070525T1654Z <etarassov@tt-solutions.com> [1250]
+20070528T1654Z <etarassov@tt-solutions.com> [1250]
 
   ChangeLog
 Fix log entries.
 
-20070525T1656Z <etarassov@tt-solutions.com> [1250]
+20070528T1656Z <etarassov@tt-solutions.com> [1250]
 
   illustrations_common.xsl
 Add mandatory attribute 'column-width' to <fo:table-column>.
+
+20070529T1344Z <etarassov@tt-solutions.com> [1250]
+
+  ChangeLog
+Fix timestamps in log records.
 
