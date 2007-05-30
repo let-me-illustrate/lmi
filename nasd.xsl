@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: nasd.xsl,v 1.16 2007-05-30 15:30:31 etarassov Exp $
+    $Id: nasd.xsl,v 1.17 2007-05-30 15:51:30 etarassov Exp $
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:fo="http://www.w3.org/1999/XSL/Format">
@@ -1114,86 +1114,24 @@
   <xsl:template name="basic-illustration-values">
     <xsl:param name="counter"/>
     <xsl:param name="inforceyear"/>
+    <xsl:param name="columns"/>
     <xsl:if test="$counter &lt;= $max-lapse-year">
       <fo:table-row>
-        <fo:table-cell padding=".6pt">
-          <fo:block text-align="right">
-            <xsl:value-of select="illustration/data/newcolumn/column[@name='PolicyYear']/duration[$counter]/@column_value"/>
-          </fo:block>
-        </fo:table-cell>
-        <xsl:choose>
-          <xsl:when test="illustration/scalar/Composite='1'">
-            <fo:table-cell>
-              <fo:block text-align="right">
-                <xsl:value-of select="illustration/data/newcolumn/column[@name='GrossPmt']/duration[$counter]/@column_value"/>
-              </fo:block>
-            </fo:table-cell>
-            <fo:table-cell>
-              <fo:block text-align="right">&#xA0;</fo:block>
-            </fo:table-cell>
-          </xsl:when>
-          <xsl:otherwise>
-            <fo:table-cell>
-              <fo:block text-align="right">
-                <xsl:value-of select="illustration/data/newcolumn/column[@name='AttainedAge']/duration[$counter]/@column_value"/>
-              </fo:block>
-            </fo:table-cell>
-            <fo:table-cell>
-              <fo:block text-align="right">
-                <xsl:value-of select="illustration/data/newcolumn/column[@name='GrossPmt']/duration[$counter]/@column_value"/>
-              </fo:block>
-            </fo:table-cell>
-          </xsl:otherwise>
-        </xsl:choose>
-        <fo:table-cell>
-          <fo:block text-align="right">
-            <xsl:value-of select="illustration/data/newcolumn/column[@name='CSVNet_GuaranteedZero']/duration[$counter]/@column_value"/>
-          </fo:block>
-        </fo:table-cell>
-        <fo:table-cell>
-          <fo:block text-align="right">
-            <xsl:value-of select="illustration/data/newcolumn/column[@name='EOYDeathBft_GuaranteedZero']/duration[$counter]/@column_value"/>
-          </fo:block>
-        </fo:table-cell>
-        <fo:table-cell>
-          <fo:block text-align="right">&#xA0;</fo:block>
-        </fo:table-cell>
-        <fo:table-cell>
-          <fo:block text-align="right">
-            <xsl:value-of select="illustration/data/newcolumn/column[@name='CSVNet_Guaranteed']/duration[$counter]/@column_value"/>
-          </fo:block>
-        </fo:table-cell>
-        <fo:table-cell>
-          <fo:block text-align="right">
-            <xsl:value-of select="illustration/data/newcolumn/column[@name='EOYDeathBft_Guaranteed']/duration[$counter]/@column_value"/>
-          </fo:block>
-        </fo:table-cell>
-        <fo:table-cell>
-          <fo:block text-align="right">&#xA0;</fo:block>
-        </fo:table-cell>
-        <fo:table-cell>
-          <fo:block text-align="right">
-            <xsl:value-of select="illustration/data/newcolumn/column[@name='CSVNet_CurrentZero']/duration[$counter]/@column_value"/>
-          </fo:block>
-        </fo:table-cell>
-        <fo:table-cell>
-          <fo:block text-align="right">
-            <xsl:value-of select="illustration/data/newcolumn/column[@name='EOYDeathBft_CurrentZero']/duration[$counter]/@column_value"/>
-          </fo:block>
-        </fo:table-cell>
-        <fo:table-cell>
-          <fo:block text-align="right">&#xA0;</fo:block>
-        </fo:table-cell>
-        <fo:table-cell>
-          <fo:block text-align="right">
-            <xsl:value-of select="illustration/data/newcolumn/column[@name='CSVNet_Current']/duration[$counter]/@column_value"/>
-          </fo:block>
-        </fo:table-cell>
-        <fo:table-cell>
-          <fo:block text-align="right">
-            <xsl:value-of select="illustration/data/newcolumn/column[@name='EOYDeathBft_Current']/duration[$counter]/@column_value"/>
-          </fo:block>
-        </fo:table-cell>
+        <xsl:for-each select="$columns">
+          <fo:table-cell padding=".6pt">
+            <fo:block text-align="right">
+              <xsl:choose>
+                <xsl:when test="boolean(@name)">
+                  <xsl:variable name="column_name" select="string(@name)"/>
+                  <xsl:value-of select="$illustration/data/newcolumn/column[@name=$column_name]/duration[$counter]/@column_value"/>
+                </xsl:when>
+                <xsl:otherwise>
+                  &#xA0;
+                </xsl:otherwise>
+              </xsl:choose>
+            </fo:block>
+          </fo:table-cell>
+        </xsl:for-each>
       </fo:table-row>
       <!-- Display Only Summary Years -->
       <!-- Blank Row Every 5th Year -->
@@ -1207,6 +1145,7 @@
       <xsl:call-template name="basic-illustration-values">
         <xsl:with-param name="counter" select="$counter + 1"/>
         <xsl:with-param name="inforceyear" select="$inforceyear"/>
+        <xsl:with-param name="columns" select="$columns"/>
       </xsl:call-template>
     </xsl:if>
   </xsl:template>
@@ -1407,24 +1346,45 @@
   </xsl:template>
 
   <xsl:template name="basic-illustration-report">
+    <!-- columns for generate basic-illustration-report -->
+    <xsl:variable name="basic_illustration_columns_raw">
+      <!--
+      The 'composite' attribute (if present) indicates that the column
+      is only to be included when the report type is (not) a composite.
+      -->
+      <column name="PolicyYear">Policy &#xA0;Year</column>
+      <column composite="1" name="GrossPmt">Premium &#xA0;Outlay</column>
+      <column composite="1" name=""></column>
+      <column composite="0" name="AttainedAge">End of &#xA0;&#xA0;&#xA0;&#xA0;Year Age</column>
+      <column composite="0" name="GrossPmt">Premium &#xA0;Outlay</column>
+      <column name="CSVNet_GuaranteedZero">Cash Surr Value</column>
+      <column name="EOYDeathBft_GuaranteedZero">Death &#xA0;&#xA0;Benefit</column>
+      <column name=""/>
+      <column name="CSVNet_Guaranteed">Cash Surr Value</column>
+      <column name="EOYDeathBft_Guaranteed">Death &#xA0;&#xA0;Benefit</column>
+      <column name=""/>
+      <column name="CSVNet_CurrentZero">Cash Surr Value</column>
+      <column name="EOYDeathBft_CurrentZero">Death &#xA0;&#xA0;Benefit</column>
+      <column name=""/>
+      <column name="CSVNet_Current">Cash Surr Value</column>
+      <column name="EOYDeathBft_Current">Death &#xA0;&#xA0;Benefit</column>
+    </xsl:variable>
+    <xsl:variable name="basic_illustration_columns" select="document('')/xsl:stylesheet/xsl:template[@name='basic-illustration-report']/xsl:variable[@name='basic_illustration_columns_raw']/column" />
+    <!-- Select columns without @composite attribute or with @composite attribute equal to /illustration/scalar/Composite -->
+    <xsl:variable name="columns" select="$basic_illustration_columns[boolean(@composite) and boolean(boolean(@composite='1')=boolean(/illustration/scalar/Composite='1'))] | $basic_illustration_columns[not(@composite)]" />
+
     <!-- The main contents of the body page -->
     <fo:flow flow-name="xsl-region-body">
       <fo:block font-size="9.0pt" font-family="serif">
         <fo:table table-layout="fixed" width="100%">
-          <fo:table-column/>
-          <fo:table-column/>
-          <fo:table-column/>
-          <fo:table-column/>
-          <fo:table-column/>
-          <fo:table-column  column-width="2mm"/>
-          <fo:table-column/>
-          <fo:table-column/>
-          <fo:table-column  column-width="2mm"/>
-          <fo:table-column/>
-          <fo:table-column/>
-          <fo:table-column  column-width="2mm"/>
-          <fo:table-column/>
-          <fo:table-column/>
+          <xsl:for-each select="$columns">
+              <fo:table-column>
+                <xsl:if test="@name=''">
+                  <xsl:attribute name="column-width">2mm</xsl:attribute>
+                </xsl:if>
+              </fo:table-column>
+          </xsl:for-each>
+
           <fo:table-header>
             <fo:table-row>
               <fo:table-cell number-columns-spanned="3" padding="0pt"/>
@@ -1636,6 +1596,7 @@
                 <xsl:call-template name="basic-illustration-values">
                   <xsl:with-param name="counter" select="illustration/scalar/InforceYear + 1"/>
                   <xsl:with-param name="inforceyear" select="5 - illustration/scalar/InforceYear"/>
+                  <xsl:with-param name="columns" select="$columns"/>
                 </xsl:call-template>
               </fo:table-body>
             </xsl:when>
@@ -1644,6 +1605,7 @@
                 <xsl:call-template name="basic-illustration-values">
                   <xsl:with-param name="counter" select="1"/>
                   <xsl:with-param name="inforceyear" select="0"/>
+                  <xsl:with-param name="columns" select="$columns"/>
                 </xsl:call-template>
               </fo:table-body>
             </xsl:otherwise>
