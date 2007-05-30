@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: nasd.xsl,v 1.17 2007-05-30 15:51:30 etarassov Exp $
+    $Id: nasd.xsl,v 1.18 2007-05-30 16:02:29 etarassov Exp $
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:fo="http://www.w3.org/1999/XSL/Format">
@@ -1590,26 +1590,13 @@
             </fo:table-row>
           </fo:table-header>
           <!-- Create Basic Illustration Values -->
-          <xsl:choose>
-            <xsl:when test="illustration/scalar/InforceYear!=0">
-              <fo:table-body>
-                <xsl:call-template name="basic-illustration-values">
-                  <xsl:with-param name="counter" select="illustration/scalar/InforceYear + 1"/>
-                  <xsl:with-param name="inforceyear" select="5 - illustration/scalar/InforceYear"/>
-                  <xsl:with-param name="columns" select="$columns"/>
-                </xsl:call-template>
-              </fo:table-body>
-            </xsl:when>
-            <xsl:otherwise>
-              <fo:table-body>
-                <xsl:call-template name="basic-illustration-values">
-                  <xsl:with-param name="counter" select="1"/>
-                  <xsl:with-param name="inforceyear" select="0"/>
-                  <xsl:with-param name="columns" select="$columns"/>
-                </xsl:call-template>
-              </fo:table-body>
-            </xsl:otherwise>
-          </xsl:choose>
+          <fo:table-body>
+            <xsl:call-template name="basic-illustration-values">
+              <xsl:with-param name="counter" select="illustration/scalar/InforceYear + 1"/>
+              <xsl:with-param name="inforceyear" select="0 - illustration/scalar/InforceYear"/>
+              <xsl:with-param name="columns" select="$columns"/>
+            </xsl:call-template>
+          </fo:table-body>
         </fo:table>
       </fo:block>
     </fo:flow>
@@ -1734,25 +1721,13 @@
             </fo:table-row>
           </fo:table-header>
           <!-- Create Supplemental Illustration Values -->
-          <xsl:choose>
-            <!-- make inforce illustration start in the inforce year -->
-            <xsl:when test="illustration/scalar/InforceYear!=0">
-              <fo:table-body>
-                <xsl:call-template name="supplemental-illustration-values">
-                  <xsl:with-param name="counter" select="illustration/scalar/InforceYear + 1"/>
-                  <xsl:with-param name="inforceyear" select="5 - illustration/scalar/InforceYear"/>
-                </xsl:call-template>
-              </fo:table-body>
-            </xsl:when>
-            <xsl:otherwise>
-              <fo:table-body>
-                <xsl:call-template name="supplemental-illustration-values">
-                  <xsl:with-param name="counter" select="1"/>
-                  <xsl:with-param name="inforceyear" select="0"/>
-                </xsl:call-template>
-              </fo:table-body>
-            </xsl:otherwise>
-                </xsl:choose>
+          <!-- make inforce illustration start in the inforce year -->
+          <fo:table-body>
+            <xsl:call-template name="supplemental-illustration-values">
+              <xsl:with-param name="counter" select="illustration/scalar/InforceYear + 1"/>
+              <xsl:with-param name="inforceyear" select="0 - illustration/scalar/InforceYear"/>
+            </xsl:call-template>
+          </fo:table-body>
         </fo:table>
       </fo:block>
     </fo:flow>
@@ -1873,24 +1848,12 @@
             </fo:table-row>
           </fo:table-header>
           <!-- Create Illustration Assumption Detail Values -->
-          <xsl:choose>
-            <xsl:when test="illustration/scalar/InforceYear!=0">
-              <fo:table-body>
-                <xsl:call-template name="illustration-assumption-values">
-                  <xsl:with-param name="counter" select="illustration/scalar/InforceYear + 1"/>
-                  <xsl:with-param name="inforceyear" select="5 - illustration/scalar/InforceYear"/>
-                </xsl:call-template>
-              </fo:table-body>
-            </xsl:when>
-            <xsl:otherwise>
-              <fo:table-body>
-                <xsl:call-template name="illustration-assumption-values">
-                  <xsl:with-param name="counter" select="1"/>
-                  <xsl:with-param name="inforceyear" select="0"/>
-                </xsl:call-template>
-              </fo:table-body>
-            </xsl:otherwise>
-          </xsl:choose>
+          <fo:table-body>
+            <xsl:call-template name="illustration-assumption-values">
+              <xsl:with-param name="counter" select="illustration/scalar/InforceYear + 1"/>
+              <xsl:with-param name="inforceyear" select="0 - illustration/scalar/InforceYear"/>
+            </xsl:call-template>
+          </fo:table-body>
         </fo:table>
       </fo:block>
       <xsl:choose>
