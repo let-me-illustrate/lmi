@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: variable_annuity.xsl,v 1.10 2007-05-30 15:30:31 etarassov Exp $
+    $Id: variable_annuity.xsl,v 1.11 2007-05-30 16:02:29 etarassov Exp $
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:fo="http://www.w3.org/1999/XSL/Format">
@@ -173,31 +173,16 @@
             <!-- Column Headings -->
             <xsl:call-template name="column-headings"/>
             <!-- Column Values -->
-            <xsl:choose>
-              <!-- make inforce illustration start in the inforce year -->
-              <xsl:when test="illustration/scalar/InforceYear!=0">
-                <fo:table-body padding-before="5.0pt" border-top-style="solid"
-                  border-top-width="1pt" border-top-color="blue">
-                  <xsl:call-template name="column-values">
-                    <xsl:with-param name="counter" select="illustration/scalar/InforceYear + 1"/>
-                    <xsl:with-param name="inforceyear" select="5 - illustration/scalar/InforceYear"/>
-                    <xsl:with-param name="basis-lapse-year" select="$basis-lapse-year"/>
-                    <xsl:with-param name="basis" select="'Current'"/>
-                  </xsl:call-template>
-                </fo:table-body>
-              </xsl:when>
-              <xsl:otherwise>
-                <fo:table-body padding-before="5.0pt" border-top-style="solid"
-                  border-top-width="1pt" border-top-color="blue">
-                  <xsl:call-template name="column-values">
-                    <xsl:with-param name="counter" select="1"/>
-                    <xsl:with-param name="inforceyear" select="0"/>
-                    <xsl:with-param name="basis-lapse-year" select="$basis-lapse-year"/>
-                    <xsl:with-param name="basis" select="'Current'"/>
-                  </xsl:call-template>
-                </fo:table-body>
-              </xsl:otherwise>
-            </xsl:choose>
+            <!-- make inforce illustration start in the inforce year -->
+            <fo:table-body padding-before="5.0pt" border-top-style="solid"
+              border-top-width="1pt" border-top-color="blue">
+              <xsl:call-template name="column-values">
+                <xsl:with-param name="counter" select="illustration/scalar/InforceYear + 1"/>
+                <xsl:with-param name="inforceyear" select="0 - illustration/scalar/InforceYear"/>
+                <xsl:with-param name="basis-lapse-year" select="$basis-lapse-year"/>
+                <xsl:with-param name="basis" select="'Current'"/>
+              </xsl:call-template>
+            </fo:table-body>
           </fo:table>
 
         </fo:flow>
@@ -249,31 +234,16 @@
             <!-- Column Headings -->
             <xsl:call-template name="column-headings"/>
             <!-- Column Values -->
-            <xsl:choose>
-              <!-- make inforce illustration start in the inforce year -->
-              <xsl:when test="illustration/scalar/InforceYear!=0">
-                <fo:table-body padding-before="5.0pt" border-top-style="solid"
-                  border-top-width="1pt" border-top-color="blue">
-                  <xsl:call-template name="column-values">
-                    <xsl:with-param name="counter" select="illustration/scalar/InforceYear + 1"/>
-                    <xsl:with-param name="inforceyear" select="5 - illustration/scalar/InforceYear"/>
-                    <xsl:with-param name="basis-lapse-year" select="$basis-lapse-year"/>
-                    <xsl:with-param name="basis" select="'CurrentZero'"/>
-                  </xsl:call-template>
-                </fo:table-body>
-              </xsl:when>
-              <xsl:otherwise>
-                <fo:table-body padding-before="5.0pt" border-top-style="solid"
-                  border-top-width="1pt" border-top-color="blue">
-                  <xsl:call-template name="column-values">
-                    <xsl:with-param name="counter" select="1"/>
-                    <xsl:with-param name="inforceyear" select="0"/>
-                    <xsl:with-param name="basis-lapse-year" select="$basis-lapse-year"/>
-                    <xsl:with-param name="basis" select="'CurrentZero'"/>
-                  </xsl:call-template>
-                </fo:table-body>
-              </xsl:otherwise>
-            </xsl:choose>
+            <!-- make inforce illustration start in the inforce year -->
+            <fo:table-body padding-before="5.0pt" border-top-style="solid"
+              border-top-width="1pt" border-top-color="blue">
+              <xsl:call-template name="column-values">
+                <xsl:with-param name="counter" select="illustration/scalar/InforceYear + 1"/>
+                <xsl:with-param name="inforceyear" select="0 - illustration/scalar/InforceYear"/>
+                <xsl:with-param name="basis-lapse-year" select="$basis-lapse-year"/>
+                <xsl:with-param name="basis" select="'CurrentZero'"/>
+              </xsl:call-template>
+            </fo:table-body>
           </fo:table>
 
         </fo:flow>
@@ -325,31 +295,16 @@
             <!-- Column Headings -->
             <xsl:call-template name="column-headings"/>
             <!-- Column Values -->
-            <xsl:choose>
-              <!-- make inforce illustration start in the inforce year -->
-              <xsl:when test="illustration/scalar/InforceYear!=0">
-                <fo:table-body padding-before="5.0pt" border-top-style="solid"
-                  border-top-width="1pt" border-top-color="blue">
-                  <xsl:call-template name="column-values">
-                    <xsl:with-param name="counter" select="illustration/scalar/InforceYear + 1"/>
-                    <xsl:with-param name="inforceyear" select="5 - illustration/scalar/InforceYear"/>
-                    <xsl:with-param name="basis-lapse-year" select="$basis-lapse-year"/>
-                    <xsl:with-param name="basis" select="'Guaranteed'"/>
-                  </xsl:call-template>
-                </fo:table-body>
-              </xsl:when>
-              <xsl:otherwise>
-                <fo:table-body padding-before="5.0pt" border-top-style="solid"
-                  border-top-width="1pt" border-top-color="blue">
-                  <xsl:call-template name="column-values">
-                    <xsl:with-param name="counter" select="1"/>
-                    <xsl:with-param name="inforceyear" select="0"/>
-                    <xsl:with-param name="basis-lapse-year" select="$basis-lapse-year"/>
-                    <xsl:with-param name="basis" select="'Guaranteed'"/>
-                  </xsl:call-template>
-                </fo:table-body>
-              </xsl:otherwise>
-            </xsl:choose>
+            <!-- make inforce illustration start in the inforce year -->
+            <fo:table-body padding-before="5.0pt" border-top-style="solid"
+              border-top-width="1pt" border-top-color="blue">
+              <xsl:call-template name="column-values">
+                <xsl:with-param name="counter" select="illustration/scalar/InforceYear + 1"/>
+                <xsl:with-param name="inforceyear" select="0 - illustration/scalar/InforceYear"/>
+                <xsl:with-param name="basis-lapse-year" select="$basis-lapse-year"/>
+                <xsl:with-param name="basis" select="'Guaranteed'"/>
+              </xsl:call-template>
+            </fo:table-body>
           </fo:table>
 
         </fo:flow>
@@ -401,31 +356,16 @@
             <!-- Column Headings -->
             <xsl:call-template name="column-headings"/>
             <!-- Column Values -->
-            <xsl:choose>
-              <!-- make inforce illustration start in the inforce year -->
-              <xsl:when test="illustration/scalar/InforceYear!=0">
-                <fo:table-body padding-before="5.0pt" border-top-style="solid"
-                  border-top-width="1pt" border-top-color="blue">
-                  <xsl:call-template name="column-values">
-                    <xsl:with-param name="counter" select="illustration/scalar/InforceYear + 1"/>
-                    <xsl:with-param name="inforceyear" select="5 - illustration/scalar/InforceYear"/>
-                    <xsl:with-param name="basis-lapse-year" select="$basis-lapse-year"/>
-                    <xsl:with-param name="basis" select="'GuaranteedZero'"/>
-                  </xsl:call-template>
-                </fo:table-body>
-              </xsl:when>
-              <xsl:otherwise>
-                <fo:table-body padding-before="5.0pt" border-top-style="solid"
-                  border-top-width="1pt" border-top-color="blue">
-                  <xsl:call-template name="column-values">
-                    <xsl:with-param name="counter" select="1"/>
-                    <xsl:with-param name="inforceyear" select="0"/>
-                    <xsl:with-param name="basis-lapse-year" select="$basis-lapse-year"/>
-                    <xsl:with-param name="basis" select="'GuaranteedZero'"/>
-                  </xsl:call-template>
-                </fo:table-body>
-              </xsl:otherwise>
-            </xsl:choose>
+            <!-- make inforce illustration start in the inforce year -->
+            <fo:table-body padding-before="5.0pt" border-top-style="solid"
+              border-top-width="1pt" border-top-color="blue">
+              <xsl:call-template name="column-values">
+                <xsl:with-param name="counter" select="illustration/scalar/InforceYear + 1"/>
+                <xsl:with-param name="inforceyear" select="0 - illustration/scalar/InforceYear"/>
+                <xsl:with-param name="basis-lapse-year" select="$basis-lapse-year"/>
+                <xsl:with-param name="basis" select="'GuaranteedZero'"/>
+              </xsl:call-template>
+            </fo:table-body>
           </fo:table>
 
         </fo:flow>

@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: illustration_reg.xsl,v 1.16 2007-05-30 15:30:31 etarassov Exp $
+    $Id: illustration_reg.xsl,v 1.17 2007-05-30 16:02:29 etarassov Exp $
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:fo="http://www.w3.org/1999/XSL/Format">
@@ -1009,25 +1009,13 @@
                 </fo:table-row>
               </fo:table-header>
               <!-- Create Tabular Detail Values -->
-              <xsl:choose>
-                <!-- make inforce illustration start in the inforce year -->
-                <xsl:when test="illustration/scalar/InforceYear!=0">
-                  <fo:table-body>
-                    <xsl:call-template name="tabular-detail-values">
-                      <xsl:with-param name="counter" select="illustration/scalar/InforceYear + 1"/>
-                      <xsl:with-param name="inforceyear" select="5 - illustration/scalar/InforceYear"/>
-                    </xsl:call-template>
-                  </fo:table-body>
-                </xsl:when>
-                <xsl:otherwise>
-                  <fo:table-body>
-                    <xsl:call-template name="tabular-detail-values">
-                      <xsl:with-param name="counter" select="1"/>
-                      <xsl:with-param name="inforceyear" select="0"/>
-                    </xsl:call-template>
-                  </fo:table-body>
-                </xsl:otherwise>
-                    </xsl:choose>
+              <!-- make inforce illustration start in the inforce year -->
+              <fo:table-body>
+                <xsl:call-template name="tabular-detail-values">
+                  <xsl:with-param name="counter" select="illustration/scalar/InforceYear + 1"/>
+                  <xsl:with-param name="inforceyear" select="0 - illustration/scalar/InforceYear"/>
+                </xsl:call-template>
+              </fo:table-body>
             </fo:table>
           </fo:block>
         </fo:flow>
@@ -1144,25 +1132,13 @@
                 </fo:table-row>
               </fo:table-header>
               <!-- Create Tabular Detail Values -->
-              <xsl:choose>
-                <!-- make inforce illustration start in the inforce year -->
-                <xsl:when test="illustration/scalar/InforceYear!=0">
-                  <fo:table-body>
-                    <xsl:call-template name="tabular-detail-report2-values">
-                      <xsl:with-param name="counter" select="illustration/scalar/InforceYear + 1"/>
-                      <xsl:with-param name="inforceyear" select="5 - illustration/scalar/InforceYear"/>
-                    </xsl:call-template>
-                  </fo:table-body>
-                </xsl:when>
-                <xsl:otherwise>
-                  <fo:table-body>
-                    <xsl:call-template name="tabular-detail-report2-values">
-                      <xsl:with-param name="counter" select="1"/>
-                      <xsl:with-param name="inforceyear" select="0"/>
-                    </xsl:call-template>
-                  </fo:table-body>
-                </xsl:otherwise>
-                    </xsl:choose>
+              <!-- make inforce illustration start in the inforce year -->
+              <fo:table-body>
+                <xsl:call-template name="tabular-detail-report2-values">
+                  <xsl:with-param name="counter" select="illustration/scalar/InforceYear + 1"/>
+                  <xsl:with-param name="inforceyear" select="0 - illustration/scalar/InforceYear"/>
+                </xsl:call-template>
+              </fo:table-body>
             </fo:table>
           </fo:block>
           <!-- endofdoc block id implemented as the "otherwise" condition in
