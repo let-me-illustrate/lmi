@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.700 2007-05-30 18:00:13 etarassov Exp $
+// $Id: ChangeLog,v 1.701 2007-05-30 18:01:28 etarassov Exp $
 
 MAINTENANCE
 
@@ -11810,4 +11810,9 @@ Rewrite 'irr-guaranteed-illustration-(report|values)'.
 
   offshore_private_placement.xsl
 Rewrite 'irr-current-illustration-(report|values)'.
+
+20070530T1802Z <etarassov@tt-solutions.com> [1238]
+
+  fo_common.xsl
+Add mandatory attribute 'column-width' to <fo:table-column>.
 
