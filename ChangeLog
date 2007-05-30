@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.670 2007-05-30 01:47:32 chicares Exp $
+// $Id: ChangeLog,v 1.671 2007-05-30 13:44:30 etarassov Exp $
 
 MAINTENANCE
 
@@ -7351,7 +7351,7 @@ The problem needs to be understood generally before it can be solved.
   ledger_xml_io.cpp
 Clarify two columns' titles to conform to a compliance requirement.
 This is intended to conform to the interpretation under
-  "§21.2206(1)(I)-(M), (O), (Q)-(S) and (U)-(V) Supplemental - Other"
+  "ï¿½21.2206(1)(I)-(M), (O), (Q)-(S) and (U)-(V) Supplemental - Other"
 in the 1998-09-25 Texas Register, however counterintuitive its reading
 of "out-of-pocket" may be.
 
@@ -11153,7 +11153,7 @@ Abstract the output stream buffer.
 
   progress_meter_cli.cpp
 Provide a soon-to-be-needed stream buffer akin to /dev/null . This is
-derived from Dietmar Kühl's work: a class he posted to usenet has been
+derived from Dietmar Kï¿½hl's work: a class he posted to usenet has been
 renamed, made noncopyable, and given an explicit dtor.
 
 20070512T1421Z <chicares@cox.net> [1255]
@@ -11586,4 +11586,17 @@ Rearrange event tables in menu-resource order.
   mc_enum_types.hpp
 Resolve gratuitous differences from skeleton trunk. Illustrative
 examples need not reside in a separate file.
+
+20070530T1344Z <etarassov@tt-solutions.com> [1237]
+
+  fo_common.xsl                    [new file]
+  group_private_placement.xsl
+  illustration_reg.xsl
+  individual_private_placement.xsl
+  nasd.xsl
+  offshore_private_placement.xsl
+  variable_annuity.xsl
+Extract max-lapse-year and get-max-lapse-year template into
+a separate file fo_common.xsl. This new file will hold
+other common constructions for illustration xsl files.
 
