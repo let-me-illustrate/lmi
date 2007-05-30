@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: variable_annuity.xsl,v 1.11 2007-05-30 16:02:29 etarassov Exp $
+    $Id: variable_annuity.xsl,v 1.12 2007-05-30 16:07:46 etarassov Exp $
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:fo="http://www.w3.org/1999/XSL/Format">
@@ -774,7 +774,7 @@
             <fo:block text-align="left">
               <xsl:text>Prepared For: </xsl:text>
               <xsl:choose>
-                <xsl:when test="illustration/scalar/Composite!='1'">
+                <xsl:when test="not($is_composite)">
                   <!-- Properly adjust for long user input strings limit output to 140 characters for appox. 2 lines -->
                   <xsl:call-template name="limit-string" >
                     <xsl:with-param name="pass-string" select="illustration/scalar/Insured1"/>
@@ -833,7 +833,7 @@
           <fo:table-cell>
             <fo:block text-align="left">
               <xsl:choose>
-                <xsl:when test="illustration/scalar/Composite!='1'">
+                <xsl:when test="not($is_composite)">
                   <xsl:text>Annuitant Age at Issue: </xsl:text>
                   <xsl:value-of select="illustration/scalar/Age"/>
                 </xsl:when>
@@ -886,7 +886,7 @@
             </fo:block>
           </fo:table-cell>
         </fo:table-row>
-        <xsl:if test="illustration/scalar/Composite!='1'">
+        <xsl:if test="not($is_composite)">
           <xsl:choose>
             <xsl:when test="illustration/scalar/Franchise!='' and illustration/scalar/PolicyNumber!=''">
               <fo:table-row>

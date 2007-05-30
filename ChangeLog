@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.682 2007-05-30 16:02:29 etarassov Exp $
+// $Id: ChangeLog,v 1.683 2007-05-30 16:07:46 etarassov Exp $
 
 MAINTENANCE
 
@@ -11702,4 +11702,15 @@ start to (partially) generate header of the report.
   variable_annuity.xsl
 Remove code duplication (use the fact that 'inforceyear' parameter
 value is used only modulo 5).
+
+20070530T1607Z <etarassov@tt-solutions.com> [1237]
+
+  fo_common.xsl
+  group_private_placement.xsl
+  illustration_reg.xsl
+  individual_private_placement.xsl
+  nasd.xsl
+  offshore_private_placement.xsl
+  variable_annuity.xsl
+Extract a global variable 'is_composite'.
 
