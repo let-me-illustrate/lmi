@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: nasd.xsl,v 1.22 2007-05-30 16:38:17 etarassov Exp $
+    $Id: nasd.xsl,v 1.23 2007-05-30 16:44:57 etarassov Exp $
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:fo="http://www.w3.org/1999/XSL/Format">
@@ -1389,9 +1389,9 @@
     <fo:flow flow-name="xsl-region-body">
       <fo:block font-size="9.0pt" font-family="serif">
         <fo:table table-layout="fixed" width="100%">
-          <xsl:for-each select="$columns">
-            <fo:table-column/>
-          </xsl:for-each>
+          <xsl:call-template name="generate-table-columns">
+            <xsl:with-param name="columns" select="$columns"/>
+          </xsl:call-template>
           <fo:table-header>
             <xsl:call-template name="generate-table-headers">
               <xsl:with-param name="columns" select="$columns"/>
@@ -1446,9 +1446,9 @@
     <fo:flow flow-name="xsl-region-body">
       <fo:block font-size="9.0pt" font-family="serif">
         <fo:table table-layout="fixed" width="100%">
-          <xsl:for-each select="$columns">
-            <fo:table-column/>
-          </xsl:for-each>
+          <xsl:call-template name="generate-table-columns">
+            <xsl:with-param name="columns" select="$columns"/>
+          </xsl:call-template>
           <fo:table-header>
             <fo:table-row>
               <fo:table-cell number-columns-spanned="7" padding="0pt">

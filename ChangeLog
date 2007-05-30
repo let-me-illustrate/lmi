@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.687 2007-05-30 16:38:17 etarassov Exp $
+// $Id: ChangeLog,v 1.688 2007-05-30 16:44:56 etarassov Exp $
 
 MAINTENANCE
 
@@ -11738,4 +11738,8 @@ Fix an infinite recursion when list of columns is empty.
 Rewrite 'supplemental-illustration-(report|values)' using generic
 templates.
 
+20070530T1644Z <etarassov@tt-solutions.com> [1238]
+
+  nasd.xsl
+Use the generic 'generate-table-columns' where appropriate.
 
