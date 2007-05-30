@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.671 2007-05-30 13:44:30 etarassov Exp $
+// $Id: ChangeLog,v 1.672 2007-05-30 13:53:31 etarassov Exp $
 
 MAINTENANCE
 
@@ -11599,4 +11599,10 @@ examples need not reside in a separate file.
 Extract max-lapse-year and get-max-lapse-year template into
 a separate file fo_common.xsl. This new file will hold
 other common constructions for illustration xsl files.
+
+20070530T1353Z <etarassov@tt-solutions.com> [1237]
+
+  fo_common.xsl
+Slightly reformat get-max-lapse-year. Use absolute path in the global
+scope template.
 
