@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: individual_private_placement.xsl,v 1.12 2007-05-30 13:58:17 etarassov Exp $
+    $Id: individual_private_placement.xsl,v 1.13 2007-05-30 14:29:26 etarassov Exp $
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:fo="http://www.w3.org/1999/XSL/Format">
@@ -1701,87 +1701,6 @@
         </fo:table>
       </fo:block>
     </fo:flow>
-  </xsl:template>
-
-  <xsl:template name="supplemental-report-values">
-    <xsl:param name="counter"/>
-    <xsl:param name="inforceyear"/>
-    <xsl:if test="$counter &lt;= $max-lapse-year">
-      <fo:table-row>
-        <fo:table-cell padding=".2pt">
-          <fo:block text-align="right">
-            <xsl:value-of select="illustration/data/newcolumn/column[@name=$column1name]/duration[$counter]/@column_value"/>
-          </fo:block>
-        </fo:table-cell>
-        <fo:table-cell>
-          <fo:block text-align="right">
-            <xsl:value-of select="illustration/data/newcolumn/column[@name=$column2name]/duration[$counter]/@column_value"/>
-          </fo:block>
-        </fo:table-cell>
-        <fo:table-cell>
-          <fo:block text-align="right">
-            <xsl:value-of select="illustration/data/newcolumn/column[@name=$column3name]/duration[$counter]/@column_value"/>
-          </fo:block>
-        </fo:table-cell>
-        <fo:table-cell>
-          <fo:block text-align="right">
-            <xsl:value-of select="illustration/data/newcolumn/column[@name=$column4name]/duration[$counter]/@column_value"/>
-          </fo:block>
-        </fo:table-cell>
-        <fo:table-cell>
-          <fo:block text-align="right">
-            <xsl:value-of select="illustration/data/newcolumn/column[@name=$column5name]/duration[$counter]/@column_value"/>
-          </fo:block>
-        </fo:table-cell>
-        <fo:table-cell>
-          <fo:block text-align="right">
-            <xsl:value-of select="illustration/data/newcolumn/column[@name=$column6name]/duration[$counter]/@column_value"/>
-          </fo:block>
-        </fo:table-cell>
-        <fo:table-cell>
-          <fo:block text-align="right">
-            <xsl:value-of select="illustration/data/newcolumn/column[@name=$column7name]/duration[$counter]/@column_value"/>
-          </fo:block>
-        </fo:table-cell>
-        <fo:table-cell>
-          <fo:block text-align="right">
-            <xsl:value-of select="illustration/data/newcolumn/column[@name=$column8name]/duration[$counter]/@column_value"/>
-          </fo:block>
-        </fo:table-cell>
-        <fo:table-cell>
-          <fo:block text-align="right">
-            <xsl:value-of select="illustration/data/newcolumn/column[@name=$column9name]/duration[$counter]/@column_value"/>
-          </fo:block>
-        </fo:table-cell>
-        <fo:table-cell>
-          <fo:block text-align="right">
-            <xsl:value-of select="illustration/data/newcolumn/column[@name=$column10name]/duration[$counter]/@column_value"/>
-          </fo:block>
-        </fo:table-cell>
-        <fo:table-cell>
-          <fo:block text-align="right">
-            <xsl:value-of select="illustration/data/newcolumn/column[@name=$column11name]/duration[$counter]/@column_value"/>
-          </fo:block>
-        </fo:table-cell>
-        <fo:table-cell>
-          <fo:block text-align="right">
-            <xsl:value-of select="illustration/data/newcolumn/column[@name=$column12name]/duration[$counter]/@column_value"/>
-          </fo:block>
-        </fo:table-cell>
-      </fo:table-row>
-      <!-- Blank Row Every 5th Year -->
-      <xsl:if test="($counter + $inforceyear) mod 5=0">
-        <fo:table-row>
-          <fo:table-cell padding="4pt">
-            <fo:block text-align="right"></fo:block>
-          </fo:table-cell>
-        </fo:table-row>
-      </xsl:if>
-      <xsl:call-template name="supplemental-report-values">
-        <xsl:with-param name="counter" select="$counter + 1"/>
-        <xsl:with-param name="inforceyear" select="$inforceyear"/>
-      </xsl:call-template>
-    </xsl:if>
   </xsl:template>
 
   <xsl:template name="standardfooter">
