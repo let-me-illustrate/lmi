@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: fo_common.xsl,v 1.16 2007-05-30 17:04:43 etarassov Exp $
+    $Id: fo_common.xsl,v 1.17 2007-05-30 17:28:42 etarassov Exp $
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:fo="http://www.w3.org/1999/XSL/Format">
@@ -539,4 +539,21 @@
     </xsl:if>
   </xsl:template>
 
+  <xsl:variable name="TEXT_ELLIPSIS" select="'...'"/>
+  <!--
+  Truncate string $passString if its length is more than $length.
+  -->
+  <xsl:template name="limitstring">
+    <xsl:param name="passString"/>
+    <xsl:param name="length"/>
+    <xsl:choose>
+      <xsl:when test="string-length($passString) &lt;= $length">
+        <xsl:value-of select="$passString"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="substring($passString, 1, $length - string-length($TEXT_ELLIPSIS))"/>
+        <xsl:value-of select="$TEXT_ELLIPSIS"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
 </xsl:stylesheet>
