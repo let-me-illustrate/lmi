@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: census_view.cpp,v 1.58 2007-05-29 01:45:45 chicares Exp $
+// $Id: census_view.cpp,v 1.59 2007-05-30 01:46:19 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -86,21 +86,21 @@ BEGIN_EVENT_TABLE(CensusView, ViewEx)
 // TODO ?? No effect--dunno why; but prolly wanted for gtk:
 //    EVT_RIGHT_UP(                            CensusView::UponRightClick1)
     EVT_CONTEXT_MENU(                        CensusView::UponRightClick2)
-    EVT_MENU(XRCID("edit_case"             ),CensusView::UponEditCase )
     EVT_MENU(XRCID("edit_cell"             ),CensusView::UponEditCell )
     EVT_MENU(XRCID("edit_class"            ),CensusView::UponEditClass)
-    EVT_MENU(XRCID("print_cell"            ),CensusView::UponPrintCell)
-//    EVT_MENU(XRCID("print_class"           ),CensusView::UponPrintClass) // SOMEDAY !! This may be useful for large cases.
-    EVT_MENU(XRCID("print_case"            ),CensusView::UponPrintCase)
+    EVT_MENU(XRCID("edit_case"             ),CensusView::UponEditCase )
     EVT_MENU(XRCID("run_cell"              ),CensusView::UponRunCell)
 //    EVT_MENU(XRCID("run_class"             ),CensusView::UponRunClass)   // SOMEDAY !! This may be useful for large cases.
     EVT_MENU(XRCID("run_case"              ),CensusView::UponRunCase)
+    EVT_MENU(XRCID("print_cell"            ),CensusView::UponPrintCell)
+//    EVT_MENU(XRCID("print_class"           ),CensusView::UponPrintClass) // SOMEDAY !! This may be useful for large cases.
+    EVT_MENU(XRCID("print_case"            ),CensusView::UponPrintCase)
+    EVT_MENU(XRCID("print_spreadsheet"     ),CensusView::UponRunCaseToSpreadsheet)
     EVT_MENU(XRCID("paste_census"          ),CensusView::UponPasteCensus)
     EVT_MENU(XRCID("add_cell"              ),CensusView::UponAddCell)
     EVT_MENU(XRCID("delete_cells"          ),CensusView::UponDeleteCells)
     EVT_MENU(XRCID("column_width_varying"  ),CensusView::UponColumnWidthVarying)
     EVT_MENU(XRCID("column_width_fixed"    ),CensusView::UponColumnWidthFixed)
-    EVT_MENU(XRCID("print_spreadsheet"     ),CensusView::UponRunCaseToSpreadsheet)
 
 // TODO ?? There has to be a better way than this.
     EVT_UPDATE_UI(XRCID("edit_cell"            ),CensusView::UponUpdateApplicable)

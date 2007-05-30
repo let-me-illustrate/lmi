@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustration_view.cpp,v 1.65 2007-05-29 01:33:17 chicares Exp $
+// $Id: illustration_view.cpp,v 1.66 2007-05-30 01:46:19 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -72,11 +72,11 @@
 IMPLEMENT_DYNAMIC_CLASS(IllustrationView, ViewEx)
 
 BEGIN_EVENT_TABLE(IllustrationView, ViewEx)
-    EVT_MENU(wxID_COPY                      ,IllustrationView::UponCopyFull)
-    EVT_MENU(wxID_PREVIEW                   ,IllustrationView::UponPreviewPdf)
     EVT_MENU(wxID_PRINT                     ,IllustrationView::UponPrintPdf  )
-    EVT_MENU(XRCID("copy_summary"          ),IllustrationView::UponCopySummary)
+    EVT_MENU(wxID_PREVIEW                   ,IllustrationView::UponPreviewPdf)
     EVT_MENU(XRCID("edit_cell"             ),IllustrationView::UponProperties)
+    EVT_MENU(XRCID("copy_summary"          ),IllustrationView::UponCopySummary)
+    EVT_MENU(wxID_COPY                      ,IllustrationView::UponCopyFull)
     EVT_MENU(XRCID("preview_summary"       ),IllustrationView::UponPreviewSummary)
     EVT_MENU(XRCID("print_summary"         ),IllustrationView::UponPrintSummary)
     EVT_MENU_OPEN(                           IllustrationView::UponMenuOpen  )
@@ -86,19 +86,19 @@ BEGIN_EVENT_TABLE(IllustrationView, ViewEx)
     EVT_UPDATE_UI(XRCID("edit_cell"        ),IllustrationView::UponUpdateProperties)
 
 // There has to be a better way to inhibit these inapplicable ids.
-    EVT_UPDATE_UI(XRCID("add_cell"             ),IllustrationView::UponUpdateInapplicable)
-    EVT_UPDATE_UI(XRCID("delete_cells"         ),IllustrationView::UponUpdateInapplicable)
-    EVT_UPDATE_UI(XRCID("edit_case"            ),IllustrationView::UponUpdateInapplicable)
     EVT_UPDATE_UI(XRCID("edit_class"           ),IllustrationView::UponUpdateInapplicable)
-    EVT_UPDATE_UI(XRCID("column_width_varying" ),IllustrationView::UponUpdateInapplicable)
-    EVT_UPDATE_UI(XRCID("run_case"             ),IllustrationView::UponUpdateInapplicable)
+    EVT_UPDATE_UI(XRCID("edit_case"            ),IllustrationView::UponUpdateInapplicable)
     EVT_UPDATE_UI(XRCID("run_cell"             ),IllustrationView::UponUpdateInapplicable)
     EVT_UPDATE_UI(XRCID("run_class"            ),IllustrationView::UponUpdateInapplicable)
-    EVT_UPDATE_UI(XRCID("paste_census"         ),IllustrationView::UponUpdateInapplicable)
-    EVT_UPDATE_UI(XRCID("print_case"           ),IllustrationView::UponUpdateInapplicable)
+    EVT_UPDATE_UI(XRCID("run_case"             ),IllustrationView::UponUpdateInapplicable)
     EVT_UPDATE_UI(XRCID("print_cell"           ),IllustrationView::UponUpdateInapplicable)
     EVT_UPDATE_UI(XRCID("print_class"          ),IllustrationView::UponUpdateInapplicable)
+    EVT_UPDATE_UI(XRCID("print_case"           ),IllustrationView::UponUpdateInapplicable)
     EVT_UPDATE_UI(XRCID("print_spreadsheet"    ),IllustrationView::UponUpdateInapplicable)
+    EVT_UPDATE_UI(XRCID("paste_census"         ),IllustrationView::UponUpdateInapplicable)
+    EVT_UPDATE_UI(XRCID("add_cell"             ),IllustrationView::UponUpdateInapplicable)
+    EVT_UPDATE_UI(XRCID("delete_cells"         ),IllustrationView::UponUpdateInapplicable)
+    EVT_UPDATE_UI(XRCID("column_width_varying" ),IllustrationView::UponUpdateInapplicable)
     EVT_UPDATE_UI(XRCID("column_width_fixed"   ),IllustrationView::UponUpdateInapplicable)
 END_EVENT_TABLE()
 
