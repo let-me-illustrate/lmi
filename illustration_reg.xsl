@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: illustration_reg.xsl,v 1.12 2007-05-30 14:29:26 etarassov Exp $
+    $Id: illustration_reg.xsl,v 1.13 2007-05-30 14:33:29 etarassov Exp $
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:fo="http://www.w3.org/1999/XSL/Format">
@@ -115,7 +115,7 @@
         </fo:simple-page-master>
 
         <!-- Define the Supplemental Report page. -->
-        <xsl:if test="illustration/scalar/SupplementalReport='1'">
+        <xsl:if test="$has_supplemental_report">
           <fo:simple-page-master master-name="supplemental-report" page-height="11in" page-width="8.5in" margin-top="0.25in" margin-bottom="0.25in" margin-left="0.25in" margin-right="0.25in">
             <!-- Central part of page -->
             <fo:region-body column-count="1" margin-top="3.0in" margin-bottom="1.25in"/>
@@ -1184,7 +1184,7 @@
              'Supplemental Report' need not exist in the XML document for
              page numbering to work properly -->
           <xsl:choose>
-            <xsl:when test="illustration/scalar/SupplementalReport='1'">
+            <xsl:when test="$has_supplemental_report">
             </xsl:when>
             <xsl:otherwise>
               <fo:block id="endofdoc"></fo:block>
@@ -1195,7 +1195,7 @@
 
       <!-- Supplemental Report -->
       <!-- Body page -->
-      <xsl:if test="illustration/scalar/SupplementalReport='1'">
+      <xsl:if test="$has_supplemental_report">
         <fo:page-sequence master-reference="supplemental-report">
 
           <!-- Define the contents of the header. -->
@@ -1335,7 +1335,7 @@
                       </xsl:choose>
               </fo:table>
             </fo:block>
-            <xsl:if test="illustration/scalar/SupplementalReport='1'">
+            <xsl:if test="$has_supplemental_report">
               <fo:block id="endofdoc"></fo:block>
             </xsl:if>
 
