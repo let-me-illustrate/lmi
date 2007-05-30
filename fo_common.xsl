@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: fo_common.xsl,v 1.12 2007-05-30 16:19:57 etarassov Exp $
+    $Id: fo_common.xsl,v 1.13 2007-05-30 16:28:40 etarassov Exp $
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:fo="http://www.w3.org/1999/XSL/Format">
@@ -225,6 +225,7 @@
     <xsl:param name="column"/>
     <xsl:param name="row"/>
     <xsl:choose>
+      <xsl:when test="count($columns) = 0">0</xsl:when>
       <xsl:when test="($row = 1) and ($column = count($columns))">1</xsl:when>
       <xsl:otherwise>
         <xsl:variable name="text">
@@ -306,19 +307,21 @@
     <xsl:param name="columns"/>
     <xsl:param name="row"/>
     <xsl:param name="max-rows"/>
-    <fo:table-row>
-      <xsl:call-template name="generate-table-header-cell">
-        <xsl:with-param name="columns" select="$columns"/>
-        <xsl:with-param name="row" select="$row"/>
-        <xsl:with-param name="cell" select="1"/>
-      </xsl:call-template>
-    </fo:table-row>
-    <xsl:if test="$row &lt; $max-rows">
-      <xsl:call-template name="generate-table-header-row">
-        <xsl:with-param name="columns" select="$columns"/>
-        <xsl:with-param name="row" select="$row + 1"/>
-        <xsl:with-param name="max-rows" select="$max-rows"/>
-      </xsl:call-template>
+    <xsl:if test="count($columns) &gt; 0">
+      <fo:table-row>
+        <xsl:call-template name="generate-table-header-cell">
+          <xsl:with-param name="columns" select="$columns"/>
+          <xsl:with-param name="row" select="$row"/>
+          <xsl:with-param name="cell" select="1"/>
+        </xsl:call-template>
+      </fo:table-row>
+      <xsl:if test="$row &lt; $max-rows">
+        <xsl:call-template name="generate-table-header-row">
+          <xsl:with-param name="columns" select="$columns"/>
+          <xsl:with-param name="row" select="$row + 1"/>
+          <xsl:with-param name="max-rows" select="$max-rows"/>
+        </xsl:call-template>
+      </xsl:if>
     </xsl:if>
   </xsl:template>
 
