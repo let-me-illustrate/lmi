@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: fo_common.xsl,v 1.1 2007-05-30 13:44:30 etarassov Exp $
+    $Id: fo_common.xsl,v 1.2 2007-05-30 13:53:32 etarassov Exp $
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:fo="http://www.w3.org/1999/XSL/Format">
@@ -48,16 +48,16 @@
 
   <xsl:template name="get-max-lapse-year">
     <xsl:call-template name="max-comparison">
-      <xsl:with-param name="value1" select="illustration/scalar/LapseYear_Current"/>
+      <xsl:with-param name="value1">
+        <xsl:call-template name="max-comparison">
+          <xsl:with-param name="value1" select="/illustration/scalar/LapseYear_Current"/>
+          <xsl:with-param name="value2" select="/illustration/scalar/LapseYear_Guaranteed"/>
+        </xsl:call-template>
+      </xsl:with-param>
       <xsl:with-param name="value2">
         <xsl:call-template name="max-comparison">
-          <xsl:with-param name="value1" select="illustration/scalar/LapseYear_Guaranteed"/>
-          <xsl:with-param name="value2">
-            <xsl:call-template name="max-comparison">
-              <xsl:with-param name="value1" select="illustration/scalar/LapseYear_CurrentZero"/>
-              <xsl:with-param name="value2" select="illustration/scalar/LapseYear_GuaranteedZero"/>
-            </xsl:call-template>
-          </xsl:with-param>
+          <xsl:with-param name="value1" select="/illustration/scalar/LapseYear_CurrentZero"/>
+          <xsl:with-param name="value2" select="/illustration/scalar/LapseYear_GuaranteedZero"/>
         </xsl:call-template>
       </xsl:with-param>
     </xsl:call-template>
