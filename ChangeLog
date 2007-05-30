@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.697 2007-05-30 17:43:38 etarassov Exp $
+// $Id: ChangeLog,v 1.698 2007-05-30 17:45:07 etarassov Exp $
 
 MAINTENANCE
 
@@ -11794,5 +11794,10 @@ Normalize comments in '*-report' templates.
 20070530T1743Z <etarassov@tt-solutions.com> [1238]
 
   group_private_placement.xsl
+Rewrite '*-report' templates using common generic templates.
+
+20070530T1745Z <etarassov@tt-solutions.com> [1238]
+
+  offshore_private_placement.xsl
 Rewrite '*-report' templates using common generic templates.
 
