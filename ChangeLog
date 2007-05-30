@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.680 2007-05-30 15:49:17 etarassov Exp $
+// $Id: ChangeLog,v 1.681 2007-05-30 15:51:29 etarassov Exp $
 
 MAINTENANCE
 
@@ -11683,4 +11683,11 @@ Rename into 'SPECIAL_LETTERS' and 'SPECIAL_LETTERS_ESCAPED'.
 
   fo_common.xsl
 Add 'illustration' global variable.
+
+20070530T1551Z <etarassov@tt-solutions.com> [1237]
+
+  nasd.xsl
+Use list of column names to generate 'basic-illustration' table data
+values. Also include column names - prepare for the moment when we
+start to (partially) generate header of the report.
 
