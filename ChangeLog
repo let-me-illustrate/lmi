@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.676 2007-05-30 14:36:26 etarassov Exp $
+// $Id: ChangeLog,v 1.677 2007-05-30 14:38:35 etarassov Exp $
 
 MAINTENANCE
 
@@ -11651,4 +11651,9 @@ where appropriate.
   variable_annuity.xsl
 Extract supplemental report generation into a new
 'supplemental-report-body' template.
+
+20070530T1438Z <etarassov@tt-solutions.com> [1237]
+
+  fo_common.xsl
+Use loops in 'supplemental-report-body' template.
 
