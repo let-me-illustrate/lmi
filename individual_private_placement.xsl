@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: individual_private_placement.xsl,v 1.11 2007-05-30 13:44:30 etarassov Exp $
+    $Id: individual_private_placement.xsl,v 1.12 2007-05-30 13:58:17 etarassov Exp $
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:fo="http://www.w3.org/1999/XSL/Format">
@@ -949,19 +949,6 @@
         </fo:table-row>
       </fo:table-body>
     </fo:table>
-  </xsl:template>
-
-  <xsl:template name="dollar-units">
-    <xsl:choose>
-      <xsl:when test="illustration/scalar/ScaleUnit=''">
-        <xsl:text>(Values shown are in dollars)</xsl:text>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:text>(Values shown are in </xsl:text>
-        <xsl:value-of select="illustration/scalar/ScaleUnit"/>
-        <xsl:text>s of dollars)</xsl:text>
-      </xsl:otherwise>
-    </xsl:choose>
   </xsl:template>
 
   <xsl:template name="irr-guaranteed-illustration-values">
