@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mc_enum_types.cpp,v 1.13 2007-04-01 22:38:19 chicares Exp $
+// $Id: mc_enum_types.cpp,v 1.14 2007-05-30 01:47:32 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -36,14 +36,20 @@
 // calculated bounds are checked at compile time.
 
 // These lines would engender diagnostics
-//   extern enum_option const option_enums[] = {option_A, option_B};
+//   extern enum_option const option_enums[] = {mce_option_A, mce_option_B};
 //   extern char const*const option_strings[] = {"A", "B", "C", "X"};
 // at compile time when the template is explicitly instantiated.
 
-// TODO ?? Move this one to a 'test' file.
-
-extern enum_option const option_enums[] = {option_A, option_B, option_C};
-extern char const*const option_strings[] = {"A", "B", "C"};
+extern enum_option const option_enums[] =
+    {mce_option_A
+    ,mce_option_B
+    ,mce_option_C
+    };
+extern char const*const option_strings[] =
+    {"A"
+    ,"B"
+    ,"C"
+    };
 template class mc_enum<enum_option, 3, option_enums, option_strings>;
 
 #include "mc_enum_types.xpp"
