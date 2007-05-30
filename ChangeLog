@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.677 2007-05-30 14:38:35 etarassov Exp $
+// $Id: ChangeLog,v 1.678 2007-05-30 15:23:08 etarassov Exp $
 
 MAINTENANCE
 
@@ -11656,4 +11656,14 @@ Extract supplemental report generation into a new
 
   fo_common.xsl
 Use loops in 'supplemental-report-body' template.
+
+20070530T1523Z <etarassov@tt-solutions.com> [1237]
+
+  group_private_placement.xsl
+  illustration_reg.xsl
+  individual_private_placement.xsl
+  nasd.xsl
+  offshore_private_placement.xsl
+  variable_annuity.xsl
+Remove now unused 'columnXXXname' variables.
 
