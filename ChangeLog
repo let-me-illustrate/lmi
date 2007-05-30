@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.686 2007-05-30 16:28:39 etarassov Exp $
+// $Id: ChangeLog,v 1.687 2007-05-30 16:38:17 etarassov Exp $
 
 MAINTENANCE
 
@@ -11731,4 +11731,11 @@ use '|' as cell separator and '_' as line separator.
 
   fo_common.xsl
 Fix an infinite recursion when list of columns is empty.
+
+20070530T1638Z <etarassov@tt-solutions.com> [1238]
+
+  nasd.xsl
+Rewrite 'supplemental-illustration-(report|values)' using generic
+templates.
+
 
