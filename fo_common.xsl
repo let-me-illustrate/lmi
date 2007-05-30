@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: fo_common.xsl,v 1.6 2007-05-30 14:36:26 etarassov Exp $
+    $Id: fo_common.xsl,v 1.7 2007-05-30 14:38:35 etarassov Exp $
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:fo="http://www.w3.org/1999/XSL/Format">
@@ -107,80 +107,18 @@
     <fo:flow flow-name="xsl-region-body">
       <fo:block font-size="9.0pt" font-family="serif">
         <fo:table table-layout="fixed" width="100%">
-          <fo:table-column/>
-          <fo:table-column/>
-          <fo:table-column/>
-          <fo:table-column/>
-          <fo:table-column/>
-          <fo:table-column/>
-          <fo:table-column/>
-          <fo:table-column/>
-          <fo:table-column/>
-          <fo:table-column/>
-          <fo:table-column/>
-          <fo:table-column/>
+          <xsl:for-each select="$supplemental_report/columns">
+            <fo:table-column/>
+          </xsl:for-each>
           <fo:table-header>
             <fo:table-row>
-              <fo:table-cell border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue" padding="2pt">
-                <fo:block text-align="right">
-                  <xsl:value-of select="translate(illustration/supplementalreport/columns[1]/title,$noampletters,$allletters)"/>
-                </fo:block>
-              </fo:table-cell>
-              <fo:table-cell border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue" padding="2pt">
-                <fo:block text-align="right">
-                  <xsl:value-of select="translate(illustration/supplementalreport/columns[2]/title,$noampletters,$allletters)"/>
-                </fo:block>
-              </fo:table-cell>
-              <fo:table-cell border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue" padding="2pt">
-                <fo:block text-align="right">
-                  <xsl:value-of select="translate(illustration/supplementalreport/columns[3]/title,$noampletters,$allletters)"/>
-                </fo:block>
-              </fo:table-cell>
-              <fo:table-cell border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue" padding="2pt">
-                <fo:block text-align="right">
-                  <xsl:value-of select="translate(illustration/supplementalreport/columns[4]/title,$noampletters,$allletters)"/>
-                </fo:block>
-              </fo:table-cell>
-              <fo:table-cell border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue" padding="2pt">
-                <fo:block text-align="right">
-                  <xsl:value-of select="translate(illustration/supplementalreport/columns[5]/title,$noampletters,$allletters)"/>
-                </fo:block>
-              </fo:table-cell>
-              <fo:table-cell border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue" padding="2pt">
-                <fo:block text-align="right">
-                  <xsl:value-of select="translate(illustration/supplementalreport/columns[6]/title,$noampletters,$allletters)"/>
-                </fo:block>
-              </fo:table-cell>
-              <fo:table-cell border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue" padding="2pt">
-                <fo:block text-align="right">
-                  <xsl:value-of select="translate(illustration/supplementalreport/columns[7]/title,$noampletters,$allletters)"/>
-                </fo:block>
-              </fo:table-cell>
-              <fo:table-cell border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue" padding="2pt">
-                <fo:block text-align="right">
-                  <xsl:value-of select="translate(illustration/supplementalreport/columns[8]/title,$noampletters,$allletters)"/>
-                </fo:block>
-              </fo:table-cell>
-              <fo:table-cell border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue" padding="2pt">
-                <fo:block text-align="right">
-                  <xsl:value-of select="translate(illustration/supplementalreport/columns[9]/title,$noampletters,$allletters)"/>
-                </fo:block>
-              </fo:table-cell>
-              <fo:table-cell border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue" padding="2pt">
-                <fo:block text-align="right">
-                  <xsl:value-of select="translate(illustration/supplementalreport/columns[10]/title,$noampletters,$allletters)"/>
-                </fo:block>
-              </fo:table-cell>
-              <fo:table-cell border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue" padding="2pt">
-                <fo:block text-align="right">
-                  <xsl:value-of select="translate(illustration/supplementalreport/columns[11]/title,$noampletters,$allletters)"/>
-                </fo:block>
-              </fo:table-cell>
-              <fo:table-cell border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue" padding="2pt">
-                <fo:block text-align="right">
-                  <xsl:value-of select="translate(illustration/supplementalreport/columns[12]/title,$noampletters,$allletters)"/>
-                </fo:block>
-              </fo:table-cell>
+              <xsl:for-each select="$supplemental_report/columns">
+                <fo:table-cell border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue" padding="2pt">
+                  <fo:block text-align="right">
+                    <xsl:value-of select="translate(./title,$noampletters,$allletters)"/>
+                  </fo:block>
+                </fo:table-cell>
+              </xsl:for-each>
             </fo:table-row>
             <fo:table-row>
               <fo:table-cell padding="2pt">
@@ -191,11 +129,11 @@
           <!-- Create Supplemental Report Values -->
           <xsl:choose>
             <!-- make inforce illustration start in the inforce year -->
-            <xsl:when test="illustration/scalar/InforceYear!=0">
+            <xsl:when test="/illustration/scalar/InforceYear!=0">
               <fo:table-body>
                 <xsl:call-template name="supplemental-report-values">
-                  <xsl:with-param name="counter" select="illustration/scalar/InforceYear + 1"/>
-                  <xsl:with-param name="inforceyear" select="5 - illustration/scalar/InforceYear"/>
+                  <xsl:with-param name="counter" select="/illustration/scalar/InforceYear + 1"/>
+                  <xsl:with-param name="inforceyear" select="5 - /illustration/scalar/InforceYear"/>
                 </xsl:call-template>
               </fo:table-body>
             </xsl:when>
