@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: offshore_private_placement.xsl,v 1.11 2007-05-30 16:02:29 etarassov Exp $
+    $Id: offshore_private_placement.xsl,v 1.12 2007-05-30 16:07:46 etarassov Exp $
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:fo="http://www.w3.org/1999/XSL/Format">
@@ -90,7 +90,7 @@
         </fo:simple-page-master>
 
         <!-- Define the Illustration Assumption Detail page. -->
-        <xsl:if test="illustration/scalar/Composite!='1'">
+        <xsl:if test="not($is_composite)">
           <fo:simple-page-master master-name="illustration-assumption" page-height="11in" page-width="8.5in" margin-top="0.25in" margin-bottom="0.25in" margin-left="0.25in" margin-right="0.25in">
             <!-- Central part of page -->
             <fo:region-body column-count="1" margin-top="2.80in" margin-bottom="1.00in"/>
@@ -168,7 +168,7 @@
             <fo:block><fo:leader></fo:leader></fo:block>
             <fo:block margin-left="0.15in" margin-right="0.15in">
               <xsl:choose>
-                <xsl:when test="illustration/scalar/Composite!='1'">
+                <xsl:when test="not($is_composite)">
                   <!-- Properly adjust for long user input strings limit output to 140 characters for appox. 2 lines -->
                   <xsl:call-template name="limitstring" >
                     <xsl:with-param name="passString" select="illustration/scalar/Insured1"/>
@@ -350,7 +350,7 @@
             </fo:block>
             <fo:block><fo:leader></fo:leader></fo:block>
             <fo:block><fo:leader></fo:leader></fo:block>
-            <xsl:if test="illustration/scalar/Composite!='1'">
+            <xsl:if test="not($is_composite)">
               <fo:block font-weight="bold">
                 <xsl:text>End of Year Age</xsl:text>
               </fo:block>
@@ -700,7 +700,7 @@
             </fo:block>
             <fo:block><fo:leader></fo:leader></fo:block>
             <fo:block>
-              <xsl:if test="illustration/scalar/Composite!='1'">
+              <xsl:if test="not($is_composite)">
                 <fo:block>
                   <xsl:text>This illustration is based on total Separate Account fund expenses of </xsl:text>
                   <xsl:value-of select="illustration/data/newcolumn/column[@name='TotalIMF']/duration[1]/@column_value"/>
@@ -725,7 +725,7 @@
       </fo:page-sequence>
 
       <!-- Illustration Assumption Detail -->
-      <xsl:if test="illustration/scalar/Composite!='1'">
+      <xsl:if test="not($is_composite)">
 
         <!-- Body page -->
         <fo:page-sequence master-reference="illustration-assumption">
@@ -820,7 +820,7 @@
             <fo:table-cell>
               <fo:block text-align="left">
                 <xsl:choose>
-                  <xsl:when test="illustration/scalar/Composite='1'">
+                  <xsl:when test="$is_composite">
                     <fo:block>
                       <xsl:call-template name="limitstring" >
                         <xsl:with-param name="passString" select="illustration/scalar/CorpName"/>
@@ -870,7 +870,7 @@
           <fo:table-row>
             <fo:table-cell>
               <xsl:choose>
-                <xsl:when test="illustration/scalar/Composite='1'">
+                <xsl:when test="$is_composite">
                   <fo:block>
                     <xsl:text>Composite</xsl:text>
                   </fo:block>
@@ -898,7 +898,7 @@
           <fo:table-row>
             <fo:table-cell>
               <xsl:choose>
-                <xsl:when test="illustration/scalar/Composite='1'">
+                <xsl:when test="$is_composite">
                   <fo:block text-align="left">
                     <xsl:text>Contract:  </xsl:text>
                     <xsl:value-of select="illustration/scalar/PolicyMktgName"/>
@@ -934,7 +934,7 @@
           <fo:table-row>
             <fo:table-cell>
               <xsl:choose>
-                <xsl:when test="illustration/scalar/Composite='1'">
+                <xsl:when test="$is_composite">
                   <fo:block text-align="left">
                     <xsl:text>Initial Premium: </xsl:text>
                     <xsl:value-of select="illustration/scalar/InitPrem"/>
@@ -942,7 +942,7 @@
                 </xsl:when>
                 <xsl:otherwise>
                   <xsl:choose>
-                    <xsl:when test="illustration/scalar/Composite='1'">
+                    <xsl:when test="$is_composite">
                       <fo:block text-align="left">
                         <xsl:text>&#xA0;</xsl:text>
                       </fo:block>
@@ -1028,7 +1028,7 @@
             <fo:table-cell number-columns-spanned="1" padding="0pt"/>
             <fo:table-cell>
               <xsl:choose>
-                <xsl:when test="illustration/scalar/Composite='1'">
+                <xsl:when test="$is_composite">
                   <fo:block text-align="left">
                     <xsl:text>&#xA0;</xsl:text>
                   </fo:block>
@@ -1054,7 +1054,7 @@
           <fo:table-row>
             <fo:table-cell>
               <xsl:choose>
-                <xsl:when test="illustration/scalar/Composite='1'">
+                <xsl:when test="$is_composite">
                   <xsl:if test="illustration/scalar/Franchise!=''">
                     <fo:block text-align="left">
                       <xsl:text>Master contract: </xsl:text>
@@ -1123,7 +1123,7 @@
           </fo:block>
         </fo:table-cell>
         <xsl:choose>
-          <xsl:when test="illustration/scalar/Composite='1'">
+          <xsl:when test="$is_composite">
             <fo:table-cell>
               <fo:block text-align="right">
                 <xsl:value-of select="illustration/data/newcolumn/column[@name='GrossPmt']/duration[$counter]/@column_value"/>
@@ -1226,7 +1226,7 @@
           </fo:block>
         </fo:table-cell>
         <xsl:choose>
-          <xsl:when test="illustration/scalar/Composite='1'">
+          <xsl:when test="$is_composite">
             <fo:table-cell>
               <fo:block text-align="right">
                 <xsl:value-of select="illustration/data/newcolumn/column[@name='GrossPmt']/duration[$counter]/@column_value"/>
@@ -1320,7 +1320,7 @@
           </fo:block>
         </fo:table-cell>
         <xsl:choose>
-          <xsl:when test="illustration/scalar/Composite='1'">
+          <xsl:when test="$is_composite">
             <fo:table-cell>
               <fo:block text-align="right">&#xA0;</fo:block>
             </fo:table-cell>
@@ -1525,7 +1525,7 @@
                 <fo:block text-align="right">Policy</fo:block>
               </fo:table-cell>
               <xsl:choose>
-                <xsl:when test="illustration/scalar/Composite='1'">
+                <xsl:when test="$is_composite">
                   <fo:table-cell>
                     <fo:block text-align="right">Premium</fo:block>
                   </fo:table-cell>
@@ -1581,7 +1581,7 @@
                 <fo:block text-align="right">Year</fo:block>
               </fo:table-cell>
               <xsl:choose>
-                <xsl:when test="illustration/scalar/Composite='1'">
+                <xsl:when test="$is_composite">
                   <fo:table-cell border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue" padding="0pt">
                     <fo:block text-align="right">Outlay</fo:block>
                   </fo:table-cell>
@@ -1675,7 +1675,7 @@
                 <fo:block text-align="right">Policy</fo:block>
               </fo:table-cell>
               <xsl:choose>
-                <xsl:when test="illustration/scalar/Composite='1'">
+                <xsl:when test="$is_composite">
                   <fo:table-cell>
                     <fo:block text-align="right">Premium</fo:block>
                   </fo:table-cell>
@@ -1722,7 +1722,7 @@
                 <fo:block text-align="right">Year</fo:block>
               </fo:table-cell>
               <xsl:choose>
-                <xsl:when test="illustration/scalar/Composite='1'">
+                <xsl:when test="$is_composite">
                   <fo:table-cell border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue" padding="0pt">
                     <fo:block text-align="right">Outlay</fo:block>
                   </fo:table-cell>
@@ -1805,7 +1805,7 @@
               <fo:table-cell number-columns-spanned="7" padding="0pt">
                 <fo:block text-align="center">&#xA0;</fo:block>
               </fo:table-cell>
-              <xsl:if test="illustration/scalar/Composite!='1'">
+              <xsl:if test="not($is_composite)">
                 <fo:table-cell>
                   <fo:block text-align="right">Assumed</fo:block>
                 </fo:table-cell>
@@ -1816,7 +1816,7 @@
                 <fo:block text-align="right">Policy</fo:block>
               </fo:table-cell>
               <xsl:choose>
-                <xsl:when test="illustration/scalar/Composite='1'">
+                <xsl:when test="$is_composite">
                   <fo:table-cell>
                     <fo:block text-align="right">&#xA0;</fo:block>
                   </fo:table-cell>
@@ -1852,7 +1852,7 @@
                 <fo:block text-align="right">Year</fo:block>
               </fo:table-cell>
               <xsl:choose>
-                <xsl:when test="illustration/scalar/Composite='1'">
+                <xsl:when test="$is_composite">
                   <fo:table-cell number-columns-spanned="3" border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue" padding="0pt"/>
                   <fo:table-cell border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue" padding="0pt">
                     <fo:block text-align="right">Withdrawal</fo:block>
