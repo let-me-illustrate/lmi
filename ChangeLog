@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.690 2007-05-30 16:57:38 etarassov Exp $
+// $Id: ChangeLog,v 1.691 2007-05-30 16:59:56 etarassov Exp $
 
 MAINTENANCE
 
@@ -11753,4 +11753,10 @@ Adjust table header columns generation to account for scalar columns.
   fo_common.xsl
 In table headers underline only the last row or a cell that spans over
 multiple columns. 
+
+20070530T1659Z <etarassov@tt-solutions.com> [1238]
+
+  nasd.xsl
+Rewrite 'illustration-assumption-report' table headers using generic
+template 'generate-table-headers'.
 
