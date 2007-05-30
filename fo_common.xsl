@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: fo_common.xsl,v 1.4 2007-05-30 14:29:26 etarassov Exp $
+    $Id: fo_common.xsl,v 1.5 2007-05-30 14:33:29 etarassov Exp $
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:fo="http://www.w3.org/1999/XSL/Format">
@@ -30,6 +30,7 @@
   </xsl:variable>
   <xsl:variable name="max-lapse-year" select="number($max-lapse-year-text)"/>
   <xsl:variable name="supplemental_report" select="/illustration/supplementalreport"/>
+  <xsl:variable name="has_supplemental_report" select="/illustration/scalar/SupplementalReport='1'"/>
 
   <!--
   This may appear to be a clumsy way to get the max value but there is no clean way
