@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.702 2007-05-30 18:14:46 etarassov Exp $
+// $Id: ChangeLog,v 1.703 2007-05-30 18:20:20 etarassov Exp $
 
 MAINTENANCE
 
@@ -11821,4 +11821,9 @@ Add mandatory attribute 'column-width' to <fo:table-column>.
   fo_common.xsl
 Add support for 'special' columns (calculated using other column
 values).
+
+20070530T1820Z <etarassov@tt-solutions.com> [1238]
+
+  variable_annuity.xsl
+Rewrite data tables generation code using generic templates.
 
