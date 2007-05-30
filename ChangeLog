@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.678 2007-05-30 15:23:08 etarassov Exp $
+// $Id: ChangeLog,v 1.679 2007-05-30 15:30:31 etarassov Exp $
 
 MAINTENANCE
 
@@ -11666,4 +11666,16 @@ Use loops in 'supplemental-report-body' template.
   offshore_private_placement.xsl
   variable_annuity.xsl
 Remove now unused 'columnXXXname' variables.
+
+20070530T1530Z <etarassov@tt-solutions.com> [1237]
+
+  fo_common.xsl
+  group_private_placement.xsl
+  illustration_reg.xsl
+  individual_private_placement.xsl
+  nasd.xsl
+  offshore_private_placement.xsl
+  variable_annuity.xsl
+Extract 'allletters' and 'noampletters'. Remove unneeded characters.
+Rename into 'SPECIAL_LETTERS' and 'SPECIAL_LETTERS_ESCAPED'.
 

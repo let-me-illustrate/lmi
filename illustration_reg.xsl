@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: illustration_reg.xsl,v 1.15 2007-05-30 15:23:08 etarassov Exp $
+    $Id: illustration_reg.xsl,v 1.16 2007-05-30 15:30:31 etarassov Exp $
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:fo="http://www.w3.org/1999/XSL/Format">
@@ -31,8 +31,6 @@
   <xsl:variable name="inforceyear" select="illustration/scalar/InforceYear"/>
   <xsl:variable name="lcletters">abcdefghijklmnopqrstuvwxyz</xsl:variable>
   <xsl:variable name="ucletters">ABCDEFGHIJKLMNOPQRSTUVWXYZ</xsl:variable>
-  <xsl:variable name="allletters">ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789&#xA0;</xsl:variable>
-  <xsl:variable name="noampletters">ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_</xsl:variable>
   <xsl:variable name="ModifiedSinglePremium">
     <xsl:call-template name="set_modified_single_premium"/>
   </xsl:variable>

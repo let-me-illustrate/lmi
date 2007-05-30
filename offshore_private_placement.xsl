@@ -21,15 +21,13 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: offshore_private_placement.xsl,v 1.9 2007-05-30 15:23:07 etarassov Exp $
+    $Id: offshore_private_placement.xsl,v 1.10 2007-05-30 15:30:31 etarassov Exp $
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:fo="http://www.w3.org/1999/XSL/Format">
   <xsl:include href="fo_common.xsl" />
   <xsl:output method="xml" encoding="UTF-8" indent="yes"/>
   <xsl:variable name="counter" select="1"/>
-  <xsl:variable name="allletters"> ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789&#xA0;</xsl:variable>
-  <xsl:variable name="noampletters"> ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_</xsl:variable>
 
   <xsl:template match="/">
     <fo:root>
