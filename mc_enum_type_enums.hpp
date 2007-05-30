@@ -19,16 +19,18 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mc_enum_type_enums.hpp,v 1.6 2007-01-27 00:00:51 wboutin Exp $
+// $Id: mc_enum_type_enums.hpp,v 1.7 2007-05-30 01:47:32 chicares Exp $
 
 #ifndef mc_enum_type_enums_hpp
 #define mc_enum_type_enums_hpp
 
 #include "config.hpp"
 
-// TODO ?? Move this one to a 'test' file.
-
-enum enum_option {option_A, option_B, option_C};
+enum enum_option
+    {mce_option_A
+    ,mce_option_B
+    ,mce_option_C
+    };
 
 #include "mc_enum_types.xpp"
 

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.669 2007-05-29 01:45:46 chicares Exp $
+// $Id: ChangeLog,v 1.670 2007-05-30 01:47:32 chicares Exp $
 
 MAINTENANCE
 
@@ -11572,4 +11572,18 @@ Rectify names.
 
   census_view.cpp
 Resolve some marked defects.
+
+20070530T0146Z <chicares@cox.net> [1240]
+
+  census_view.cpp
+  illustration_view.cpp
+Rearrange event tables in menu-resource order.
+
+20070530T0147Z <chicares@cox.net> [1237]
+
+  mc_enum_type_enums.hpp
+  mc_enum_types.cpp
+  mc_enum_types.hpp
+Resolve gratuitous differences from skeleton trunk. Illustrative
+examples need not reside in a separate file.
 
