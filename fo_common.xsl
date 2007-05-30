@@ -21,16 +21,28 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: fo_common.xsl,v 1.8 2007-05-30 15:30:32 etarassov Exp $
+    $Id: fo_common.xsl,v 1.9 2007-05-30 15:49:18 etarassov Exp $
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:fo="http://www.w3.org/1999/XSL/Format">
+  <!--
+  In some xsl:for-each loop we could iterate over a node set from some
+  other document (not the current document being transformed, for example
+  we could iterate over a list of columns from the separate format file
+  to generate a list of available columns).
+
+  In such a case inside the loop the root node '/' binds to the root node
+  of that external document and we cannot use '/illustration' no longer
+  to acces our current xml data.
+  Use the global variable '$illustration' to access the data.
+  -->
+  <xsl:variable name="illustration" select="/illustration"/>
   <xsl:variable name="max-lapse-year-text">
     <xsl:call-template name="get-max-lapse-year"/>
   </xsl:variable>
   <xsl:variable name="max-lapse-year" select="number($max-lapse-year-text)"/>
-  <xsl:variable name="supplemental_report" select="/illustration/supplementalreport"/>
-  <xsl:variable name="has_supplemental_report" select="/illustration/scalar/SupplementalReport='1'"/>
+  <xsl:variable name="supplemental_report" select="$illustration/supplementalreport"/>
+  <xsl:variable name="has_supplemental_report" select="$illustration/scalar/SupplementalReport='1'"/>
 
   <!--
   The two strings below define how the special symbols in are escaped
@@ -63,14 +75,14 @@
     <xsl:call-template name="max-comparison">
       <xsl:with-param name="value1">
         <xsl:call-template name="max-comparison">
-          <xsl:with-param name="value1" select="/illustration/scalar/LapseYear_Current"/>
-          <xsl:with-param name="value2" select="/illustration/scalar/LapseYear_Guaranteed"/>
+          <xsl:with-param name="value1" select="$illustration/scalar/LapseYear_Current"/>
+          <xsl:with-param name="value2" select="$illustration/scalar/LapseYear_Guaranteed"/>
         </xsl:call-template>
       </xsl:with-param>
       <xsl:with-param name="value2">
         <xsl:call-template name="max-comparison">
-          <xsl:with-param name="value1" select="/illustration/scalar/LapseYear_CurrentZero"/>
-          <xsl:with-param name="value2" select="/illustration/scalar/LapseYear_GuaranteedZero"/>
+          <xsl:with-param name="value1" select="$illustration/scalar/LapseYear_CurrentZero"/>
+          <xsl:with-param name="value2" select="$illustration/scalar/LapseYear_GuaranteedZero"/>
         </xsl:call-template>
       </xsl:with-param>
     </xsl:call-template>
@@ -99,7 +111,7 @@
   -->
   <xsl:template name="dollar-units">
     <xsl:choose>
-      <xsl:when test="/illustration/scalar/ScaleUnit=''">
+      <xsl:when test="$illustration/scalar/ScaleUnit=''">
         <fo:block text-align="center" font-size="9pt">
           <xsl:text>(Values shown are in dollars)</xsl:text>
         </fo:block>
@@ -107,7 +119,7 @@
       <xsl:otherwise>
         <fo:block text-align="center" font-size="9pt">
           <xsl:text>(Values shown are in </xsl:text>
-          <xsl:value-of select="/illustration/scalar/ScaleUnit"/>
+          <xsl:value-of select="$illustration/scalar/ScaleUnit"/>
           <xsl:text>s of dollars)</xsl:text>
         </fo:block>
       </xsl:otherwise>
@@ -140,11 +152,11 @@
           <!-- Create Supplemental Report Values -->
           <xsl:choose>
             <!-- make inforce illustration start in the inforce year -->
-            <xsl:when test="/illustration/scalar/InforceYear!=0">
+            <xsl:when test="$illustration/scalar/InforceYear!=0">
               <fo:table-body>
                 <xsl:call-template name="supplemental-report-values">
-                  <xsl:with-param name="counter" select="/illustration/scalar/InforceYear + 1"/>
-                  <xsl:with-param name="inforceyear" select="5 - /illustration/scalar/InforceYear"/>
+                  <xsl:with-param name="counter" select="$illustration/scalar/InforceYear + 1"/>
+                  <xsl:with-param name="inforceyear" select="5 - $illustration/scalar/InforceYear"/>
                 </xsl:call-template>
               </fo:table-body>
             </xsl:when>
@@ -175,7 +187,7 @@
           <xsl:variable name="column_name" select="string(./name)"/>
           <fo:table-cell padding=".2pt">
             <fo:block text-align="right">
-              <xsl:value-of select="/illustration/data/newcolumn/column[@name=$column_name]/duration[$counter]/@column_value"/>
+              <xsl:value-of select="$illustration/data/newcolumn/column[@name=$column_name]/duration[$counter]/@column_value"/>
             </fo:block>
           </fo:table-cell>
         </xsl:for-each>
