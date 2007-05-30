@@ -21,25 +21,13 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: individual_private_placement.xsl,v 1.15 2007-05-30 14:36:26 etarassov Exp $
+    $Id: individual_private_placement.xsl,v 1.16 2007-05-30 15:23:08 etarassov Exp $
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:fo="http://www.w3.org/1999/XSL/Format">
   <xsl:include href="fo_common.xsl" />
   <xsl:output method="xml" encoding="UTF-8" indent="yes"/>
   <xsl:variable name="counter" select="1"/>
-  <xsl:variable name="column1name" select="string(illustration/supplementalreport/columns[1]/name)"/>
-  <xsl:variable name="column2name" select="string(illustration/supplementalreport/columns[2]/name)"/>
-  <xsl:variable name="column3name" select="string(illustration/supplementalreport/columns[3]/name)"/>
-  <xsl:variable name="column4name" select="string(illustration/supplementalreport/columns[4]/name)"/>
-  <xsl:variable name="column5name" select="string(illustration/supplementalreport/columns[5]/name)"/>
-  <xsl:variable name="column6name" select="string(illustration/supplementalreport/columns[6]/name)"/>
-  <xsl:variable name="column7name" select="string(illustration/supplementalreport/columns[7]/name)"/>
-  <xsl:variable name="column8name" select="string(illustration/supplementalreport/columns[8]/name)"/>
-  <xsl:variable name="column9name" select="string(illustration/supplementalreport/columns[9]/name)"/>
-  <xsl:variable name="column10name" select="string(illustration/supplementalreport/columns[10]/name)"/>
-  <xsl:variable name="column11name" select="string(illustration/supplementalreport/columns[11]/name)"/>
-  <xsl:variable name="column12name" select="string(illustration/supplementalreport/columns[12]/name)"/>
   <xsl:variable name="lcletters">abcdefghijklmnopqrstuvwxyz</xsl:variable>
   <xsl:variable name="ucletters">ABCDEFGHIJKLMNOPQRSTUVWXYZ</xsl:variable>
   <xsl:variable name="numberswoc">0123456789</xsl:variable>
