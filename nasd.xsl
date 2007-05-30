@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: nasd.xsl,v 1.27 2007-05-30 17:28:42 etarassov Exp $
+    $Id: nasd.xsl,v 1.28 2007-05-30 17:32:45 etarassov Exp $
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:fo="http://www.w3.org/1999/XSL/Format">
@@ -1135,18 +1135,12 @@
       <column name="EOYDeathBft_Current">Death _Benefit</column>
     </xsl:variable>
     <xsl:variable name="basic_illustration_columns" select="document('')/xsl:stylesheet/xsl:template[@name='basic-illustration-report']/xsl:variable[@name='basic_illustration_columns_raw']/column" />
-    <!--
-    Select columns without @composite attribute or with @composite attribute
-    following the global $is_composite.
-    -->
     <xsl:variable name="columns" select="$basic_illustration_columns[not(@composite) or boolean(boolean(@composite='1')=$is_composite)]" />
 
     <!-- The main contents of the body page -->
     <fo:flow flow-name="xsl-region-body">
       <fo:block font-size="9.0pt" font-family="serif">
         <fo:table table-layout="fixed" width="100%">
-
-          <!-- Column list of the table header -->
           <xsl:call-template name="generate-table-columns">
             <xsl:with-param name="columns" select="$columns"/>
           </xsl:call-template>
@@ -1239,7 +1233,6 @@
             </xsl:call-template>
           </fo:table-header>
 
-          <!-- Create Basic Illustration Values -->
           <fo:table-body>
             <xsl:call-template name="generate-table-values">
               <xsl:with-param name="columns" select="$columns"/>
@@ -1278,13 +1271,13 @@
           <xsl:call-template name="generate-table-columns">
             <xsl:with-param name="columns" select="$columns"/>
           </xsl:call-template>
+
           <fo:table-header>
             <xsl:call-template name="generate-table-headers">
               <xsl:with-param name="columns" select="$columns"/>
             </xsl:call-template>
           </fo:table-header>
-          <!-- Create Supplemental Illustration Values -->
-          <!-- make inforce illustration start in the inforce year -->
+
           <fo:table-body>
             <xsl:call-template name="generate-table-values">
               <xsl:with-param name="columns" select="$columns"/>
@@ -1328,12 +1321,13 @@
           <xsl:call-template name="generate-table-columns">
             <xsl:with-param name="columns" select="$columns"/>
           </xsl:call-template>
+
           <fo:table-header>
             <xsl:call-template name="generate-table-headers">
               <xsl:with-param name="columns" select="$columns"/>
             </xsl:call-template>
           </fo:table-header>
-          <!-- Create Illustration Assumption Detail Values -->
+
           <fo:table-body>
             <xsl:call-template name="generate-table-values">
               <xsl:with-param name="columns" select="$columns"/>
