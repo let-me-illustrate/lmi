@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: variable_annuity.xsl,v 1.4 2007-05-30 13:44:30 etarassov Exp $
+    $Id: variable_annuity.xsl,v 1.5 2007-05-30 13:58:17 etarassov Exp $
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:fo="http://www.w3.org/1999/XSL/Format">
@@ -1136,24 +1136,6 @@
       border-top-style="solid" border-top-width="1pt" border-top-color="black" padding-after="2.5pt">
       <fo:block><xsl:text></xsl:text></fo:block>
     </fo:block>
-  </xsl:template>
-
-  <xsl:template name="dollar-units">
-    <fo:block><fo:leader></fo:leader></fo:block>
-    <xsl:choose>
-      <xsl:when test="illustration/scalar/ScaleUnit=''">
-        <fo:block text-align="center" font-size="9.0pt">
-          <xsl:text>Values shown are in dollars</xsl:text>
-        </fo:block>
-      </xsl:when>
-      <xsl:otherwise>
-        <fo:block text-align="center" font-size="9.0pt">
-          <xsl:text>Values shown are in </xsl:text>
-          <xsl:value-of select="illustration/scalar/ScaleUnit"/>
-          <xsl:text>s of dollars</xsl:text>
-        </fo:block>
-      </xsl:otherwise>
-    </xsl:choose>
   </xsl:template>
 
   <xsl:template name="column-headings">

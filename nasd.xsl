@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: nasd.xsl,v 1.10 2007-05-30 13:44:30 etarassov Exp $
+    $Id: nasd.xsl,v 1.11 2007-05-30 13:58:17 etarassov Exp $
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:fo="http://www.w3.org/1999/XSL/Format">
@@ -1232,23 +1232,6 @@
         </fo:table-body>
       </fo:table>
     </fo:block>
-  </xsl:template>
-
-  <xsl:template name="dollar-units">
-    <xsl:choose>
-      <xsl:when test="illustration/scalar/ScaleUnit=''">
-        <fo:block text-align="center" font-size="9.0pt">
-          <xsl:text>Values shown are in dollars</xsl:text>
-        </fo:block>
-      </xsl:when>
-      <xsl:otherwise>
-        <fo:block text-align="center" font-size="9.0pt">
-          <xsl:text>Values shown are in </xsl:text>
-          <xsl:value-of select="illustration/scalar/ScaleUnit"/>
-          <xsl:text>s of dollars</xsl:text>
-        </fo:block>
-      </xsl:otherwise>
-    </xsl:choose>
   </xsl:template>
 
   <xsl:template name="basic-illustration-values">

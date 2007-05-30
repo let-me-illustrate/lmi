@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.672 2007-05-30 13:53:31 etarassov Exp $
+// $Id: ChangeLog,v 1.673 2007-05-30 13:58:17 etarassov Exp $
 
 MAINTENANCE
 
@@ -11605,4 +11605,15 @@ other common constructions for illustration xsl files.
   fo_common.xsl
 Slightly reformat get-max-lapse-year. Use absolute path in the global
 scope template.
+
+20070530T1358Z <etarassov@tt-solutions.com> [1237]
+
+  fo_common.xsl
+  group_private_placement.xsl
+  illustration_reg.xsl
+  individual_private_placement.xsl
+  nasd.xsl
+  offshore_private_placement.xsl
+  variable_annuity.xsl
+Extract common 'dollar-units' template.
 
