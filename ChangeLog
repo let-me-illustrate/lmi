@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.698 2007-05-30 17:45:07 etarassov Exp $
+// $Id: ChangeLog,v 1.699 2007-05-30 17:53:41 etarassov Exp $
 
 MAINTENANCE
 
@@ -11800,4 +11800,9 @@ Rewrite '*-report' templates using common generic templates.
 
   offshore_private_placement.xsl
 Rewrite '*-report' templates using common generic templates.
+
+20070530T1753Z <etarassov@tt-solutions.com> [1238]
+
+  individual_private_placement.xsl
+Rewrite 'irr-guaranteed-illustration-(report|values)'.
 
