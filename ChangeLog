@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.703 2007-05-30 18:20:20 etarassov Exp $
+// $Id: ChangeLog,v 1.704 2007-05-31 23:28:23 chicares Exp $
 
 MAINTENANCE
 
@@ -7351,7 +7351,7 @@ The problem needs to be understood generally before it can be solved.
   ledger_xml_io.cpp
 Clarify two columns' titles to conform to a compliance requirement.
 This is intended to conform to the interpretation under
-  "ï¿½21.2206(1)(I)-(M), (O), (Q)-(S) and (U)-(V) Supplemental - Other"
+  "§21.2206(1)(I)-(M), (O), (Q)-(S) and (U)-(V) Supplemental - Other"
 in the 1998-09-25 Texas Register, however counterintuitive its reading
 of "out-of-pocket" may be.
 
@@ -11153,7 +11153,7 @@ Abstract the output stream buffer.
 
   progress_meter_cli.cpp
 Provide a soon-to-be-needed stream buffer akin to /dev/null . This is
-derived from Dietmar Kï¿½hl's work: a class he posted to usenet has been
+derived from Dietmar Kühl's work: a class he posted to usenet has been
 renamed, made noncopyable, and given an explicit dtor.
 
 20070512T1421Z <chicares@cox.net> [1255]
@@ -11751,8 +11751,8 @@ Adjust table header columns generation to account for scalar columns.
 20070530T1657Z <etarassov@tt-solutions.com> [1238]
 
   fo_common.xsl
-In table headers underline only the last row or a cell that spans over
-multiple columns. 
+In table headers underline only the last row of a cell that spans over
+multiple columns.
 
 20070530T1659Z <etarassov@tt-solutions.com> [1238]
 
@@ -11826,4 +11826,9 @@ values).
 
   variable_annuity.xsl
 Rewrite data tables generation code using generic templates.
+
+20070531T2328Z <chicares@cox.net> [1238]
+
+  fo_common.xsl
+Replace a physical tab with four blanks.
 
