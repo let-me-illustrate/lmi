@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: GNUmakefile,v 1.87 2007-05-21 18:28:19 chicares Exp $
+# $Id: GNUmakefile,v 1.88 2007-05-31 23:32:43 chicares Exp $
 
 ################################################################################
 
@@ -249,10 +249,11 @@ scripts := $(wildcard *.sed *.sh)
 # to have that problem as well as other problems.
 
 unclean_xsl_fo_files := \
+  fo_common.xsl \
+  group_private_placement.xsl \
   illustration_reg.xsl \
   individual_private_placement.xsl \
   nasd.xsl \
-  group_private_placement.xsl \
   offshore_private_placement.xsl \
   variable_annuity.xsl \
 
