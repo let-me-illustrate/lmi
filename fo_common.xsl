@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: fo_common.xsl,v 1.19 2007-05-30 18:14:46 etarassov Exp $
+    $Id: fo_common.xsl,v 1.20 2007-05-31 23:28:22 chicares Exp $
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:fo="http://www.w3.org/1999/XSL/Format">
@@ -445,7 +445,7 @@
       </xsl:when>
       <xsl:when test="($n = 1) and contains($text, $CELL_WRAPPER)">
         <xsl:value-of select="normalize-space(substring-before($text, $CELL_WRAPPER))"/>
-	  </xsl:when>
+      </xsl:when>
       <xsl:when test="($n = 1)"><!-- and not(contains($text, $CELL_WRAPPER)) -->
         <xsl:value-of select="normalize-space($text)"/>
       </xsl:when>
