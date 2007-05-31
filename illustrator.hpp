@@ -19,14 +19,14 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustrator.hpp,v 1.3 2007-05-23 12:31:23 chicares Exp $
+// $Id: illustrator.hpp,v 1.4 2007-05-31 23:49:39 chicares Exp $
 
 #ifndef illustrator_hpp
 #define illustrator_hpp
 
 #include "config.hpp"
 
-#include "group_values.hpp" // enum_emission
+#include "group_values.hpp" // mcenum_emission
 #include "obstruct_slicing.hpp"
 #include "so_attributes.hpp"
 
@@ -44,13 +44,13 @@ class LMI_SO illustrator
     ,virtual private obstruct_slicing<illustrator>
 {
   public:
-    explicit illustrator(enum_emission);
+    explicit illustrator(mcenum_emission);
     ~illustrator();
 
     bool operator()(fs::path const&);
 
   private:
-    enum_emission emission_;
+    mcenum_emission emission_;
     double usec_for_input_;
     double usec_for_calculations_;
     double usec_for_output_;

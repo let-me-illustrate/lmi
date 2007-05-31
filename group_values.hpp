@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: group_values.hpp,v 1.19 2007-05-23 12:31:22 chicares Exp $
+// $Id: group_values.hpp,v 1.20 2007-05-31 23:49:39 chicares Exp $
 
 #ifndef group_values_hpp
 #define group_values_hpp
@@ -43,17 +43,17 @@ class Ledger;
 /// Enumerators are binary powers so that more than one can be
 /// specified in a single scalar entity.
 
-enum enum_emission
-    {e_emit_nothing        =    0
-    ,e_emit_composite_only =    1
-    ,e_emit_quietly        =    2
-    ,e_emit_timings        =    4
-    ,e_emit_pdf_file       =    8 // Not yet implemented.
-    ,e_emit_pdf_to_printer =   16
-    ,e_emit_test_data      =   32
-    ,e_emit_spreadsheet    =   64
-    ,e_emit_text_stream    =  128
-    ,e_emit_custom_0       =  256 // Not yet implemented.
+enum mcenum_emission
+    {mce_emit_nothing        =    0
+    ,mce_emit_composite_only =    1
+    ,mce_emit_quietly        =    2
+    ,mce_emit_timings        =    4
+    ,mce_emit_pdf_file       =    8 // Not yet implemented.
+    ,mce_emit_pdf_to_printer =   16
+    ,mce_emit_test_data      =   32
+    ,mce_emit_spreadsheet    =   64
+    ,mce_emit_text_stream    =  128
+    ,mce_emit_custom_0       =  256 // Not yet implemented.
     };
 
 /// Run all cells in a census.
@@ -63,7 +63,7 @@ enum enum_emission
 ///
 /// Output is emitted to specified targets for all cells as well as
 /// the composite. When output is wanted only for the composite, use
-/// target 'e_emit_nothing' and handle output explicitly for the
+/// target 'mce_emit_nothing' and handle output explicitly for the
 /// composite, which is accessible through composite(). That usage
 /// normally arises when the target isn't known at the time the
 /// composite is generated, so adding an emit-composite-only flag here
@@ -84,7 +84,7 @@ class LMI_SO run_census
 
     bool operator()
         (fs::path const&                     file
-        ,enum_emission                       emission
+        ,mcenum_emission                     emission
         ,std::vector<IllusInputParms> const& cells
         );
 
