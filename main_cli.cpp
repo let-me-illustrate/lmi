@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_cli.cpp,v 1.34 2007-05-28 21:11:41 chicares Exp $
+// $Id: main_cli.cpp,v 1.35 2007-05-31 23:49:39 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -76,7 +76,7 @@ void RegressionTestOneCensusFile(fs::directory_iterator i)
     std::cout << "Regression testing: " << i->string() << std::endl;
     multiple_cell_document doc(i->string());
     run_census::assert_consistency(doc.case_parms()[0], doc.cell_parms()[0]);
-    run_census()(*i, e_emit_test_data, doc.cell_parms());
+    run_census()(*i, mce_emit_test_data, doc.cell_parms());
 }
 
 //============================================================================
@@ -286,7 +286,7 @@ void process_command_line(int argc, char* argv[])
     bool run_illustration    = false;
     bool run_census          = false;
 
-    enum_emission emission(e_emit_nothing);
+    mcenum_emission emission(mce_emit_nothing);
 
     std::vector<std::string> ill_names;
     std::vector<std::string> cns_names;
@@ -403,7 +403,7 @@ void process_command_line(int argc, char* argv[])
             case 'e':
                 {
                 // TODO ?? Accept and validate string suboptions.
-                int e = e_emit_nothing;
+                int e = mce_emit_nothing;
                 std::string const s(getopt_long.optarg);
                 std::cout
                     << "For now, this option has no actual effect; it simply"
@@ -423,7 +423,7 @@ void process_command_line(int argc, char* argv[])
                         e |= value_cast<int>(token);
                         }
                     }
-                emission = enum_emission(e);
+                emission = mcenum_emission(e);
                 std::cout << "  emit: " << emission << std::endl;
                 }
                 break;
@@ -553,11 +553,11 @@ void process_command_line(int argc, char* argv[])
 
     if(run_census)
         {
-        static enum_emission const emission = enum_emission
-            (   e_emit_text_stream
-            |   e_emit_composite_only
-            |   e_emit_quietly
-            |   e_emit_timings
+        static mcenum_emission const emission = mcenum_emission
+            (   mce_emit_text_stream
+            |   mce_emit_composite_only
+            |   mce_emit_quietly
+            |   mce_emit_timings
             );
         std::for_each
             (cns_names.begin()

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.704 2007-05-31 23:28:23 chicares Exp $
+// $Id: ChangeLog,v 1.705 2007-05-31 23:49:39 chicares Exp $
 
 MAINTENANCE
 
@@ -11831,4 +11831,26 @@ Rewrite data tables generation code using generic templates.
 
   fo_common.xsl
 Replace a physical tab with four blanks.
+
+20070531T2332Z <chicares@cox.net> [1238]
+
+  GNUmakefile
+Temporarily override a desirable check.
+
+20070531T2337Z <chicares@cox.net> [1238]
+
+  objects.make
+Add newer UDTs to antediluvian libraries, in order to use one such
+type in common code soon.
+
+20070531T2349Z <chicares@cox.net> [1238]
+
+  census_view.cpp
+  census_view.hpp
+  group_values.cpp
+  group_values.hpp
+  illustrator.cpp
+  illustrator.hpp
+  main_cli.cpp
+Rectify names.
 
