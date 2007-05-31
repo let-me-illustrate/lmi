@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: group_values.cpp,v 1.67 2007-05-25 04:57:20 chicares Exp $
+// $Id: group_values.cpp,v 1.68 2007-05-31 23:49:39 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -69,9 +69,9 @@ bool cell_should_be_ignored(IllusInputParms const& cell)
         ;
 }
 
-progress_meter::enum_display_mode progress_meter_mode(enum_emission emission)
+progress_meter::enum_display_mode progress_meter_mode(mcenum_emission emission)
 {
-    return (emission & e_emit_quietly)
+    return (emission & mce_emit_quietly)
         ? progress_meter::e_quiet_display
         : progress_meter::e_normal_display
         ;
@@ -81,16 +81,16 @@ double emit_ledger
     (fs::path const& file
     ,int             index
     ,Ledger const&   ledger
-    ,enum_emission   emission
+    ,mcenum_emission emission
     )
 {
     Timer timer;
-    if((emission & e_emit_composite_only) && !ledger.GetIsComposite())
+    if((emission & mce_emit_composite_only) && !ledger.GetIsComposite())
         {
         goto done;
         }
 
-    if(emission & e_emit_pdf_to_printer)
+    if(emission & mce_emit_pdf_to_printer)
         {
         std::string pdf_out_file = write_ledger_to_pdf
             (ledger
@@ -98,7 +98,7 @@ double emit_ledger
             );
         file_command()(pdf_out_file, "print");
         }
-    if(emission & e_emit_test_data)
+    if(emission & mce_emit_test_data)
         {
         fs::ofstream ofs
             (serialized_file_path(file, index, "test")
@@ -106,7 +106,7 @@ double emit_ledger
             );
         ledger.Spew(ofs);
         }
-    if(emission & e_emit_spreadsheet)
+    if(emission & mce_emit_spreadsheet)
         {
         PrintFormTabDelimited
             (ledger
@@ -114,7 +114,7 @@ double emit_ledger
             +   configurable_settings::instance().spreadsheet_file_extension()
             );
         }
-    if(emission & e_emit_text_stream)
+    if(emission & mce_emit_text_stream)
         {
         PrintLedgerFlatText(ledger, std::cout);
         }
@@ -137,7 +137,7 @@ class run_census_in_series
   public:
     bool operator()
         (fs::path const&                     file
-        ,enum_emission                       emission
+        ,mcenum_emission                     emission
         ,std::vector<IllusInputParms> const& cells
         ,Ledger&                             composite
         );
@@ -148,7 +148,7 @@ class run_census_in_parallel
   public:
     bool operator()
         (fs::path const&                     file
-        ,enum_emission                       emission
+        ,mcenum_emission                     emission
         ,std::vector<IllusInputParms> const& cells
         ,Ledger&                             composite
         );
@@ -163,7 +163,7 @@ class run_census_in_parallel
 
 bool run_census_in_series::operator()
     (fs::path const&                     file
-    ,enum_emission                       emission
+    ,mcenum_emission                     emission
     ,std::vector<IllusInputParms> const& cells
     ,Ledger&                             composite
     )
@@ -239,7 +239,7 @@ bool run_census_in_series::operator()
     double total_usec = timer.stop().elapsed_usec();
     status() << Timer::elapsed_msec_str(total_usec) << std::flush;
     usec_for_calculations = total_usec - usec_for_output;
-    if(e_emit_timings & emission)
+    if(mce_emit_timings & emission)
         {
         std::cerr
             << "    Calculations: "
@@ -321,7 +321,7 @@ bool run_census_in_series::operator()
 
 bool run_census_in_parallel::operator()
     (fs::path const&                     file
-    ,enum_emission                       emission
+    ,mcenum_emission                     emission
     ,std::vector<IllusInputParms> const& cells
     ,Ledger&                             composite
     )
@@ -736,7 +736,7 @@ bool run_census_in_parallel::operator()
     double total_usec = timer.stop().elapsed_usec();
     status() << Timer::elapsed_msec_str(total_usec) << std::flush;
     usec_for_calculations = total_usec - usec_for_output;
-    if(e_emit_timings & emission)
+    if(mce_emit_timings & emission)
         {
         std::cerr
             << "    Calculations: "
@@ -760,7 +760,7 @@ run_census::~run_census()
 
 bool run_census::operator()
     (fs::path const&                     file
-    ,enum_emission                       emission
+    ,mcenum_emission                     emission
     ,std::vector<IllusInputParms> const& cells
     )
 {

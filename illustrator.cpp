@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustrator.cpp,v 1.3 2007-05-23 12:31:23 chicares Exp $
+// $Id: illustrator.cpp,v 1.4 2007-05-31 23:49:39 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -37,7 +37,7 @@
 
 #include <iostream>
 
-illustrator::illustrator(enum_emission emission)
+illustrator::illustrator(mcenum_emission emission)
     :emission_              (emission)
     ,usec_for_input_        (0.0)
     ,usec_for_calculations_ (0.0)
@@ -59,7 +59,7 @@ bool illustrator::operator()(fs::path const& file_path)
         multiple_cell_document doc(file_path.string());
         run_census::assert_consistency(doc.case_parms()[0], doc.cell_parms()[0]);
         usec_for_input_ = timer.stop().elapsed_usec();
-        if(e_emit_timings & emission_)
+        if(mce_emit_timings & emission_)
             {
             std::cerr
                 << "    Input:        "
