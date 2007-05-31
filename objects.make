@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: objects.make,v 1.102 2007-05-24 19:41:31 chicares Exp $
+# $Id: objects.make,v 1.103 2007-05-31 23:37:28 chicares Exp $
 
 ################################################################################
 
@@ -165,10 +165,14 @@ common_common_objects := \
   actuarial_table.o \
   alert.o \
   calendar_date.o \
+  ce_product_name.o \
   configurable_settings.o \
   crc32.o \
   custom_io_0.o \
   data_directory.o \
+  datum_base.o \
+  datum_boolean.o \
+  datum_string.o \
   dbnames.o \
   death_benefits.o \
   expm1.o \
@@ -200,6 +204,8 @@ common_common_objects := \
   ledgervalues.o \
   license.o \
   loads.o \
+  mc_enum.o \
+  mc_enum_types.o \
   miscellany.o \
   multiple_cell_document.o \
   name_value_pairs.o \
@@ -214,6 +220,7 @@ common_common_objects := \
   surrchg_rates.o \
   system_command.o \
   timer.o \
+  tn_range_types.o \
   xenumtypes.o \
   xml_lmi.o \
   xslt_lmi.o \
@@ -249,10 +256,6 @@ antediluvian_common_objects := \
 lmi_common_objects := \
   $(common_common_objects) \
   authenticity.o \
-  ce_product_name.o \
-  datum_base.o \
-  datum_boolean.o \
-  datum_string.o \
   ihs_acctval.o \
   ihs_avdebug.o \
   ihs_avmly.o \
@@ -274,14 +277,11 @@ lmi_common_objects := \
   ihs_rnddata.o \
   input.o \
   input_harmonization.o \
-  mc_enum.o \
-  mc_enum_types.o \
   md5.o \
   mvc_model.o \
   preferences_model.o \
   stratified_algorithms.o \
   stratified_charges.o \
-  tn_range_types.o \
 
 lmi_wx_objects := \
   $(duplicated_objects) \
