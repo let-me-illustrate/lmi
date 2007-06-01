@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustrator.cpp,v 1.4 2007-05-31 23:49:39 chicares Exp $
+// $Id: illustrator.cpp,v 1.5 2007-06-01 01:24:18 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -29,6 +29,7 @@
 #include "illustrator.hpp"
 
 #include "alert.hpp"
+#include "group_values.hpp"
 #include "multiple_cell_document.hpp"
 #include "single_cell_document.hpp"
 #include "timer.hpp"

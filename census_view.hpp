@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: census_view.hpp,v 1.21 2007-05-31 23:49:39 chicares Exp $
+// $Id: census_view.hpp,v 1.22 2007-06-01 01:24:17 chicares Exp $
 
 #ifndef census_view_hpp
 #define census_view_hpp
@@ -28,9 +28,9 @@
 
 #include "view_ex.hpp"
 
-#include "group_values.hpp"
 #include "input.hpp"
 #include "ledger.hpp"
+#include "mc_enum_type_enums.hpp" // enum mcenum_emission
 #include "obstruct_slicing.hpp"
 
 #include <boost/shared_ptr.hpp>

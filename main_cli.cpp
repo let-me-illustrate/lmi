@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_cli.cpp,v 1.35 2007-05-31 23:49:39 chicares Exp $
+// $Id: main_cli.cpp,v 1.36 2007-06-01 01:24:18 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -43,6 +43,7 @@
 #include "ledgervalues.hpp"
 #include "license.hpp"
 #include "main_common.hpp"
+#include "mc_enum_type_enums.hpp" // enum mcenum_emission
 #include "miscellany.hpp"
 #include "multiple_cell_document.hpp"
 #include "path_utility.hpp"
