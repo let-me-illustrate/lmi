@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: variable_annuity.xsl,v 1.14 2007-05-30 18:20:20 etarassov Exp $
+    $Id: variable_annuity.xsl,v 1.15 2007-06-01 12:43:01 rericksberg Exp $
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:fo="http://www.w3.org/1999/XSL/Format">
@@ -40,7 +40,7 @@
         <fo:simple-page-master master-name="hypothetical-illustration-current" page-height="11in" page-width="8.5in"
           margin-top="0.25in" margin-bottom="0.25in" margin-left="0.25in" margin-right="0.25in">
           <!-- Central part of page -->
-          <fo:region-body column-count="1" margin-top="2.60in" margin-bottom="1.55in"/>
+          <fo:region-body column-count="1" margin-top="2.80in" margin-bottom="1.80in"/>
           <!-- Header -->
           <fo:region-before border-after-style="solid" extent="3.0in"/>
           <!-- Footer -->
@@ -51,7 +51,7 @@
         <fo:simple-page-master master-name="hypothetical-illustration-current-zero" page-height="11in" page-width="8.5in"
           margin-top="0.25in" margin-bottom="0.25in" margin-left="0.25in" margin-right="0.25in">
           <!-- Central part of page -->
-          <fo:region-body column-count="1" margin-top="2.60in" margin-bottom="1.55in"/>
+          <fo:region-body column-count="1" margin-top="2.80in" margin-bottom="1.80in"/>
           <!-- Header -->
           <fo:region-before border-after-style="solid" extent="3.0in"/>
           <!-- Footer -->
@@ -62,7 +62,7 @@
         <fo:simple-page-master master-name="hypothetical-illustration-guaranteed" page-height="11in" page-width="8.5in"
           margin-top="0.25in" margin-bottom="0.25in" margin-left="0.25in" margin-right="0.25in">
           <!-- Central part of page -->
-          <fo:region-body column-count="1" margin-top="2.60in" margin-bottom="1.55in"/>
+          <fo:region-body column-count="1" margin-top="2.80in" margin-bottom="1.80in"/>
           <!-- Header -->
           <fo:region-before border-after-style="solid" extent="3.0in"/>
           <!-- Footer -->
@@ -73,7 +73,7 @@
         <fo:simple-page-master master-name="hypothetical-illustration-guaranteed-zero" page-height="11in" page-width="8.5in"
           margin-top="0.25in" margin-bottom="0.25in" margin-left="0.25in" margin-right="0.25in">
           <!-- Central part of page -->
-          <fo:region-body column-count="1" margin-top="2.60in" margin-bottom="1.55in"/>
+          <fo:region-body column-count="1" margin-top="2.80in" margin-bottom="1.80in"/>
           <!-- Header -->
           <fo:region-before border-after-style="solid" extent="3.0in"/>
           <!-- Footer -->
@@ -138,6 +138,7 @@
             <xsl:with-param name="basis" select="'Current'"/>
           </xsl:call-template>
           <xsl:call-template name="titles"/>
+          <fo:block><fo:leader></fo:leader></fo:block>
           <xsl:call-template name="dollar-units"/>
         </fo:static-content>
 
@@ -178,6 +179,7 @@
             <xsl:with-param name="basis" select="'CurrentZero'"/>
           </xsl:call-template>
           <xsl:call-template name="titles"/>
+          <fo:block><fo:leader></fo:leader></fo:block>
           <xsl:call-template name="dollar-units"/>
         </fo:static-content>
 
@@ -218,6 +220,7 @@
             <xsl:with-param name="basis" select="'Guaranteed'"/>
           </xsl:call-template>
           <xsl:call-template name="titles"/>
+          <fo:block><fo:leader></fo:leader></fo:block>
           <xsl:call-template name="dollar-units"/>
         </fo:static-content>
 
@@ -258,6 +261,7 @@
             <xsl:with-param name="basis" select="'GuaranteedZero'"/>
           </xsl:call-template>
           <xsl:call-template name="titles"/>
+          <fo:block><fo:leader></fo:leader></fo:block>
           <xsl:call-template name="dollar-units"/>
         </fo:static-content>
 
@@ -590,6 +594,7 @@
               border-top-style="solid" border-top-width="1pt" border-top-color="black" padding-after="2.5pt">
               <fo:block><xsl:text></xsl:text></fo:block>
             </fo:block>
+            <fo:block><fo:leader></fo:leader></fo:block>
             <xsl:call-template name="dollar-units"/>
           </fo:static-content>
 
