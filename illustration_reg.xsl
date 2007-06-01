@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: illustration_reg.xsl,v 1.19 2007-05-30 17:28:42 etarassov Exp $
+    $Id: illustration_reg.xsl,v 1.20 2007-06-01 16:50:48 rericksberg Exp $
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:fo="http://www.w3.org/1999/XSL/Format">
@@ -104,7 +104,7 @@
         <xsl:if test="$has_supplemental_report">
           <fo:simple-page-master master-name="supplemental-report" page-height="11in" page-width="8.5in" margin-top="0.25in" margin-bottom="0.25in" margin-left="0.25in" margin-right="0.25in">
             <!-- Central part of page -->
-            <fo:region-body column-count="1" margin-top="3.0in" margin-bottom="1.25in"/>
+            <fo:region-body column-count="1" margin-top="2.90in" margin-bottom="1.25in"/>
             <!-- Header -->
             <fo:region-before border-after-style="solid" extent="3.0in"/>
             <!-- Footer -->
