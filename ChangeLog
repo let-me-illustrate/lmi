@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.708 2007-06-01 12:43:02 rericksberg Exp $
+// $Id: ChangeLog,v 1.709 2007-06-01 16:50:48 rericksberg Exp $
 
 MAINTENANCE
 
@@ -11875,5 +11875,10 @@ Use the correct XML element on output.
 20070601T1242Z <rericksberg@massmutual.com> [1250]
 
   variable_annuity.xsl
+Improve readability.
+
+20070601T1650Z <rericksberg@massmutual.com> [1250]
+
+  illustration_reg.xsl
 Improve readability.
 
