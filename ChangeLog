@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.705 2007-05-31 23:49:39 chicares Exp $
+// $Id: ChangeLog,v 1.706 2007-06-01 01:24:18 chicares Exp $
 
 MAINTENANCE
 
@@ -11853,4 +11853,17 @@ type in common code soon.
   illustrator.hpp
   main_cli.cpp
 Rectify names.
+
+20070601T0124Z <chicares@cox.net> [1238]
+
+  census_view.cpp
+  census_view.hpp
+  group_values.hpp
+  illustrator.cpp
+  illustrator.hpp
+  main_cli.cpp
+  mc_enum_type_enums.hpp
+  mc_enum_types.cpp
+  mc_enum_types.hpp
+Move a type's definition.
 

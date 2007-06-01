@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mc_enum_types.hpp,v 1.14 2007-05-30 01:47:32 chicares Exp $
+// $Id: mc_enum_types.hpp,v 1.15 2007-06-01 01:24:18 chicares Exp $
 
 #ifndef mc_enum_types_hpp
 #define mc_enum_types_hpp
@@ -29,9 +29,16 @@
 #include "mc_enum_fwd.hpp"        // Template class forward declaration.
 #include "mc_enum_type_enums.hpp" // Plain enumerators.
 
+// Here write illustrative examples and anything that doesn't follow
+// the macro paradigm, such as enumerators with nonsuccessive values.
+
 extern enum_option const option_enums[3];
 extern char const*const option_strings[3];
 typedef mc_enum<enum_option, 3, option_enums, option_strings> e_option;
+
+extern mcenum_emission const emission_enums[10];
+extern char const*const emission_strings[10];
+typedef mc_enum<mcenum_emission, 10, emission_enums, emission_strings> e_emission;
 
 #include "mc_enum_types.xpp"
 
