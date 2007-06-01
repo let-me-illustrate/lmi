@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: nasd.xsl,v 1.28 2007-05-30 17:32:45 etarassov Exp $
+    $Id: nasd.xsl,v 1.29 2007-06-01 11:42:21 rericksberg Exp $
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:fo="http://www.w3.org/1999/XSL/Format">
@@ -1250,7 +1250,7 @@
     <xsl:variable name="supplemental_illustration_columns_raw">
       <column name="PolicyYear">Policy _Year</column>
       <column composite="0" name="AttainedAge">End of _Year Age</column>
-      <column name="Outlay">Premium _Outlay</column>
+      <column name="GrossPmt">Premium _Outlay</column>
       <column composite="1"/>
       <column name="PolicyFee_Current">Admin _Charge</column>
       <column name="PremTaxLoad_Current">Premium _Tax Load</column>

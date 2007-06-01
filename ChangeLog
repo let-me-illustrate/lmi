@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.706 2007-06-01 01:24:18 chicares Exp $
+// $Id: ChangeLog,v 1.707 2007-06-01 11:42:21 rericksberg Exp $
 
 MAINTENANCE
 
@@ -11866,4 +11866,9 @@ Rectify names.
   mc_enum_types.cpp
   mc_enum_types.hpp
 Move a type's definition.
+
+20070601T1142Z <rericksberg@massmutual.com> [1250]
+
+  nasd.xsl
+Use the correct XML element on output.
 
