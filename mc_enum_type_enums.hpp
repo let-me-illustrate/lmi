@@ -19,17 +19,38 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mc_enum_type_enums.hpp,v 1.7 2007-05-30 01:47:32 chicares Exp $
+// $Id: mc_enum_type_enums.hpp,v 1.8 2007-06-01 01:24:18 chicares Exp $
 
 #ifndef mc_enum_type_enums_hpp
 #define mc_enum_type_enums_hpp
 
 #include "config.hpp"
 
+// Here write illustrative examples and anything that doesn't follow
+// the macro paradigm, such as enumerators with nonsuccessive values.
+
 enum enum_option
     {mce_option_A
     ,mce_option_B
     ,mce_option_C
+    };
+
+/// Output target for illustration generation.
+///
+/// Enumerators are binary powers so that more than one can be
+/// specified in a single scalar entity.
+
+enum mcenum_emission
+    {mce_emit_nothing        =    0
+    ,mce_emit_composite_only =    1
+    ,mce_emit_quietly        =    2
+    ,mce_emit_timings        =    4
+    ,mce_emit_pdf_file       =    8 // Not yet fully implemented.
+    ,mce_emit_pdf_to_printer =   16
+    ,mce_emit_test_data      =   32
+    ,mce_emit_spreadsheet    =   64
+    ,mce_emit_text_stream    =  128
+    ,mce_emit_custom_0       =  256 // Not yet implemented.
     };
 
 #include "mc_enum_types.xpp"

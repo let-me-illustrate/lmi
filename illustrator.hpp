@@ -19,14 +19,14 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustrator.hpp,v 1.4 2007-05-31 23:49:39 chicares Exp $
+// $Id: illustrator.hpp,v 1.5 2007-06-01 01:24:18 chicares Exp $
 
 #ifndef illustrator_hpp
 #define illustrator_hpp
 
 #include "config.hpp"
 
-#include "group_values.hpp" // mcenum_emission
+#include "mc_enum_type_enums.hpp" // enum mcenum_emission
 #include "obstruct_slicing.hpp"
 #include "so_attributes.hpp"
 

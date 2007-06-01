@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mc_enum_types.cpp,v 1.14 2007-05-30 01:47:32 chicares Exp $
+// $Id: mc_enum_types.cpp,v 1.15 2007-06-01 01:24:18 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -28,6 +28,9 @@
 
 #include "mc_enum.tpp"            // Template class implementation.
 #include "mc_enum_type_enums.hpp" // Plain enums.
+
+// Here write illustrative examples and anything that doesn't follow
+// the macro paradigm, such as enumerators with nonsuccessive values.
 
 // Don't do this:
 //   #include "mc_enum_types.hpp"
@@ -51,6 +54,32 @@ extern char const*const option_strings[] =
     ,"C"
     };
 template class mc_enum<enum_option, 3, option_enums, option_strings>;
+
+extern mcenum_emission const emission_enums[] =
+    {mce_emit_nothing
+    ,mce_emit_composite_only
+    ,mce_emit_quietly
+    ,mce_emit_timings
+    ,mce_emit_pdf_file
+    ,mce_emit_pdf_to_printer
+    ,mce_emit_test_data
+    ,mce_emit_spreadsheet
+    ,mce_emit_text_stream
+    ,mce_emit_custom_0
+    };
+extern char const*const emission_strings[] =
+    {"emit_nothing"
+    ,"emit_composite_only"
+    ,"emit_quietly"
+    ,"emit_timings"
+    ,"emit_pdf_file"
+    ,"emit_pdf_to_printer"
+    ,"emit_test_data"
+    ,"emit_spreadsheet"
+    ,"emit_text_stream"
+    ,"emit_custom_0"
+    };
+template class mc_enum<mcenum_emission, 10, emission_enums, emission_strings>;
 
 #include "mc_enum_types.xpp"
 
