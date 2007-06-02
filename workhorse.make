@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: workhorse.make,v 1.91 2007-05-13 17:15:32 chicares Exp $
+# $Id: workhorse.make,v 1.92 2007-06-02 18:25:24 chicares Exp $
 
 ################################################################################
 
@@ -921,7 +921,10 @@ cli_tests_init:
 cli_test-%: $(test_data) lmi_cli_shared$(EXEEXT)
 	@$(ECHO) Test $*:
 	@./lmi_cli_shared$(EXEEXT) \
-	  --accept --data_path=/opt/lmi/data --$(subst .,,$(suffix $*))file=$* \
+	  --accept \
+	  --data_path=/opt/lmi/data \
+	  --emit=emit_text_stream,emit_composite_only,emit_quietly,emit_timings \
+	  --$(subst .,,$(suffix $*))file=$* \
 	  >$*.touchstone
 	@<$*.touchstone \
 	  $(DIFF) \
