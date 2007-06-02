@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.709 2007-06-01 16:50:48 rericksberg Exp $
+// $Id: ChangeLog,v 1.710 2007-06-02 04:06:29 chicares Exp $
 
 MAINTENANCE
 
@@ -11867,18 +11867,23 @@ Rectify names.
   mc_enum_types.hpp
 Move a type's definition.
 
-20070601T1142Z <rericksberg@massmutual.com> [1250]
+20070601T1142Z <rericksberg@massmutual.com> [1238]
 
   nasd.xsl
 Use the correct XML element on output.
 
-20070601T1242Z <rericksberg@massmutual.com> [1250]
+20070601T1243Z <rericksberg@massmutual.com> [1238]
 
   variable_annuity.xsl
 Improve readability.
 
-20070601T1650Z <rericksberg@massmutual.com> [1250]
+20070601T1650Z <rericksberg@massmutual.com> [1238]
 
   illustration_reg.xsl
 Improve readability.
+
+20070602T0406Z <chicares@cox.net> [1238]
+
+  [ChangeLog only]
+Fix incorrect defect counts.
 
