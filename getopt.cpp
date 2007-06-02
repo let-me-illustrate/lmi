@@ -40,7 +40,7 @@
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
 // GWC added this RCS Id:
-// $Id: getopt.cpp,v 1.16 2007-05-20 15:06:20 chicares Exp $
+// $Id: getopt.cpp,v 1.17 2007-06-02 18:03:48 chicares Exp $
 
 // GWC removed obsolete '#pragma implementation'.
 
@@ -932,6 +932,5 @@ void
 GetOpt::usage(int status)
 {
     usage(EXIT_SUCCESS == status ? std::cout : std::cerr);
-    std::exit(status);
 }
 
