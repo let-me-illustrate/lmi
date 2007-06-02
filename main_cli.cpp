@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_cli.cpp,v 1.37 2007-06-02 18:04:45 chicares Exp $
+// $Id: main_cli.cpp,v 1.38 2007-06-02 18:25:24 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -581,16 +581,10 @@ void process_command_line(int argc, char* argv[])
 
     if(run_census)
         {
-        static mcenum_emission const emission = mcenum_emission
-            (   mce_emit_text_stream
-            |   mce_emit_composite_only
-            |   mce_emit_quietly
-            |   mce_emit_timings
-            );
         std::for_each
             (cns_names.begin()
             ,cns_names.end()
-            ,illustrator(emission)
+            ,illustrator(emission.value())
             );
         }
 }
