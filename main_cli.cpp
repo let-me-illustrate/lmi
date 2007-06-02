@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_cli.cpp,v 1.36 2007-06-01 01:24:18 chicares Exp $
+// $Id: main_cli.cpp,v 1.37 2007-06-02 18:04:45 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -28,6 +28,7 @@
 
 #include "alert.hpp"
 #include "argv0.hpp"
+#include "assert_lmi.hpp"
 #include "calculate.hpp"
 #include "custom_io_0.hpp"
 #include "dev_null_stream_buffer.hpp"
@@ -43,7 +44,8 @@
 #include "ledgervalues.hpp"
 #include "license.hpp"
 #include "main_common.hpp"
-#include "mc_enum_type_enums.hpp" // enum mcenum_emission
+#include "mc_enum.hpp"
+#include "mc_enum_types.hpp"
 #include "miscellany.hpp"
 #include "multiple_cell_document.hpp"
 #include "path_utility.hpp"
@@ -58,11 +60,13 @@
 
 #include <algorithm>
 #include <cmath>
+#include <cstddef> // NULL, std::size_t
 #include <cstdio>  // std::printf()
 #include <ios>
 #include <iostream>
 #include <iterator>
 #include <ostream>
+#include <stdexcept>
 #include <string>
 #include <vector>
 
@@ -261,7 +265,7 @@ void process_command_line(int argc, char* argv[])
         {"accept"    ,NO_ARG   ,0 ,'a' ,0 ,"accept license (-l to display)"},
         {"selftest"  ,NO_ARG   ,0 ,'s' ,0 ,"perform self test and exit"},
         {"profile"   ,NO_ARG   ,0 ,'o' ,0 ,"set up for profiling and exit"},
-        {"emit"      ,LIST_ARG ,0 ,'e' ,0 ,"choose what output to emit"},
+        {"emit"      ,REQD_ARG ,0 ,'e' ,0 ,"choose what output to emit"},
         {"illfile"   ,REQD_ARG ,0 ,'i' ,0 ,"run illustration"},
         {"cnsfile"   ,REQD_ARG ,0 ,'c' ,0 ,"run census"},
         {"data_path" ,REQD_ARG ,0 ,'d' ,0 ,"path to data files"},
@@ -287,7 +291,11 @@ void process_command_line(int argc, char* argv[])
     bool run_illustration    = false;
     bool run_census          = false;
 
-    mcenum_emission emission(mce_emit_nothing);
+    e_emission emission(mce_emit_nothing);
+    // Suppress enumerators for options not fully implemented.
+    emission.allow(emission.ordinal("emit_pdf_file"      ), false);
+    emission.allow(emission.ordinal("emit_pdf_to_printer"), false);
+    emission.allow(emission.ordinal("emit_custom_0"      ), false);
 
     std::vector<std::string> ill_names;
     std::vector<std::string> cns_names;
@@ -403,17 +411,10 @@ void process_command_line(int argc, char* argv[])
 
             case 'e':
                 {
-                // TODO ?? Accept and validate string suboptions.
-                int e = mce_emit_nothing;
+                int emission_suboptions = mce_emit_nothing;
+
+                LMI_ASSERT(NULL != getopt_long.optarg);
                 std::string const s(getopt_long.optarg);
-                std::cout
-                    << "For now, this option has no actual effect; it simply"
-                    << " prints 'optarg', which is '"
-                    << s
-                    << "', and displays the arithmetic value of the resulting"
-                    << " enumerative type."
-                    << std::endl
-                    ;
                 std::istringstream iss(s);
                 for(;EOF != iss.peek();)
                     {
@@ -421,11 +422,27 @@ void process_command_line(int argc, char* argv[])
                     std::getline(iss, token, ',');
                     if(!token.empty())
                         {
-                        e |= value_cast<int>(token);
+                        try
+                            {
+                            e_emission z(token);
+                            if(!emission.is_allowed(emission.ordinal(token)))
+                                {
+                                throw std::runtime_error(token);
+                                }
+                            emission_suboptions |= z.value();
+                            }
+                        catch(std::runtime_error const&)
+                            {
+                            std::cerr
+                                << argv[0]
+                                << ": unrecognized '--emit' suboption "
+                                << "'" << token << "'"
+                                << std::endl
+                                ;
+                            }
                         }
                     }
-                emission = mcenum_emission(e);
-                std::cout << "  emit: " << emission << std::endl;
+                emission = mcenum_emission(emission_suboptions);
                 }
                 break;
 
@@ -491,6 +508,16 @@ void process_command_line(int argc, char* argv[])
     if(show_help)
         {
         getopt_long.usage();
+
+        std::cout << "Suboptions for '--emit':\n";
+        for(std::size_t j = 0; j < emission.cardinality(); ++j)
+            {
+            if(emission.is_allowed(j))
+                {
+                std::cout << "  " << emission.str(j) << '\n';
+                }
+            }
+
         return;
         }
 
