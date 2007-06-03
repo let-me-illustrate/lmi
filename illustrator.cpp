@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustrator.cpp,v 1.6 2007-06-03 02:27:42 chicares Exp $
+// $Id: illustrator.cpp,v 1.7 2007-06-03 23:49:36 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -70,6 +70,7 @@ bool illustrator::operator()(fs::path const& file_path)
                 << '\n'
                 ;
             }
+        // TODO ?? Set usec_for_calculations_ and usec_for_output_ here.
         return_code = run_census()(file_path, emission_, doc.cell_parms());
         }
 // TODO ?? Implement these, too.
@@ -96,5 +97,20 @@ bool illustrator::operator()(fs::path const& file_path)
         }
 
     return return_code;
+}
+
+double illustrator::usec_for_input() const
+{
+    return usec_for_input_;
+}
+
+double illustrator::usec_for_calculations() const
+{
+    return usec_for_calculations_;
+}
+
+double illustrator::usec_for_output() const
+{
+    return usec_for_output_;
 }
 
