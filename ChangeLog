@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.714 2007-06-03 14:51:34 chicares Exp $
+// $Id: ChangeLog,v 1.715 2007-06-03 15:35:37 chicares Exp $
 
 MAINTENANCE
 
@@ -11940,4 +11940,15 @@ assigned a stack object's address to a smart pointer.
   ledger.cpp
   ledger.hpp
 Remove unneeded code that was used only by struct RunCensus.
+
+20070603T1535Z <chicares@cox.net> [1235]
+
+  ledgervalues.cpp
+Reactivate testing scaffold for the problem exposed 20070603T0431Z.
+See:
+  http://cvs.sv.gnu.org/viewvc/lmi/lmi/main.cpp?r1=1.6&r2=1.7
+  revision 1.7, Sun Apr 10 21:49:58 2005 UTC
+  http://cvs.sv.gnu.org/viewvc/lmi/lmi/ledgervalues.cpp?r1=1.5&r2=1.6
+  revision 1.6, Sun Apr 10 21:49:58 2005 UTC
+for a demonstration of the relationship.
 

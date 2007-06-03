@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledgervalues.cpp,v 1.25 2007-06-03 14:32:30 chicares Exp $
+// $Id: ledgervalues.cpp,v 1.26 2007-06-03 15:35:37 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -52,6 +52,8 @@ IllusVal::~IllusVal()
 {
 }
 
+#include "ledger_invariant.hpp" // Temporary.
+
 //============================================================================
 double IllusVal::Run(InputParms const* IP)
 {
@@ -71,15 +73,13 @@ double IllusVal::Run(InputParms const* IP)
     ledger_ = boost::shared_ptr<Ledger>(new Ledger(*av.ledger_from_av()));
 
 // TODO ?? Temporary code for trying to track down a problem.
-#if 0
-//LMI_ASSERT(*av.ledger_from_av().GetLedgerMap() == ledger_->GetLedgerMap());
-//LMI_ASSERT(*av.ledger_from_av().GetLedgerInvariant() == ledger_->GetLedgerInvariant());
-LMI_ASSERT(*av.ledger_from_av().GetLedgerInvariant().GetInforceLives() == ledger_->GetLedgerInvariant().GetInforceLives());
+//LMI_ASSERT(av.ledger_from_av()->GetLedgerMap() == ledger_->GetLedgerMap());
+//LMI_ASSERT(av.ledger_from_av()->GetLedgerInvariant() == ledger_->GetLedgerInvariant());
+LMI_ASSERT(av.ledger_from_av()->GetLedgerInvariant().GetInforceLives() == ledger_->GetLedgerInvariant().GetInforceLives());
 
-LMI_ASSERT(*av.ledger_from_av().GetLedgerType() == ledger_->GetLedgerType());
-LMI_ASSERT(*av.ledger_from_av().GetRunBases() == ledger_->GetRunBases());
-LMI_ASSERT(*av.ledger_from_av().GetIsComposite() == ledger_->GetIsComposite());
-#endif // 0
+LMI_ASSERT(av.ledger_from_av()->GetLedgerType() == ledger_->GetLedgerType());
+LMI_ASSERT(av.ledger_from_av()->GetRunBases() == ledger_->GetRunBases());
+LMI_ASSERT(av.ledger_from_av()->GetIsComposite() == ledger_->GetIsComposite());
 
     return z;
 }
