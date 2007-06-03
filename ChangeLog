@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.715 2007-06-03 15:35:37 chicares Exp $
+// $Id: ChangeLog,v 1.716 2007-06-03 15:47:47 chicares Exp $
 
 MAINTENANCE
 
@@ -11951,4 +11951,10 @@ See:
   http://cvs.sv.gnu.org/viewvc/lmi/lmi/ledgervalues.cpp?r1=1.5&r2=1.6
   revision 1.6, Sun Apr 10 21:49:58 2005 UTC
 for a demonstration of the relationship.
+
+20070603T1547Z <chicares@cox.net> [1234]
+
+  ledgervalues.cpp
+Remove testing scaffold reactivated 20070603T1535Z, because it no
+longer indicates any problem in any unit or system test.
 
