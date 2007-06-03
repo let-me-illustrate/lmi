@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_cli.cpp,v 1.38 2007-06-02 18:25:24 chicares Exp $
+// $Id: main_cli.cpp,v 1.39 2007-06-03 04:31:38 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -196,8 +196,11 @@ void SelfTest()
             ;
         }
 
-// TODO ?? Temporarily suppress this test pending investigation.
-#if 0
+// TODO ?? This test segfaults:
+//   /opt/lmi/bin/lmi_cli_shared -a -d /opt/lmi/data --selftest
+// It serves only to test function object RunCensus, which is slated
+// for removal, but cannot be removed until the segfault is tracked
+// down and, if not due to a defect in RunCensus, fixed.
     multiple_cell_document census;
     std::vector<IllusInputParms> input_vector = census.cell_parms();
     input_vector.push_back(input_vector.front());
@@ -226,7 +229,7 @@ std::cout << "? " << runner.XXXComposite.GetLedgerInvariant().GetInforceLives().
             << LMI_FLUSH
             ;
         }
-#endif // 0
+// End of test that segfaults.
 
     std::cout
         << "Test solve speed: "
