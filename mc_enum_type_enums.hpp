@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: mc_enum_type_enums.hpp,v 1.8 2007-06-01 01:24:18 chicares Exp $
+// $Id: mc_enum_type_enums.hpp,v 1.9 2007-06-03 02:29:20 chicares Exp $
 
 #ifndef mc_enum_type_enums_hpp
 #define mc_enum_type_enums_hpp
@@ -46,7 +46,7 @@ enum mcenum_emission
     ,mce_emit_quietly        =    2
     ,mce_emit_timings        =    4
     ,mce_emit_pdf_file       =    8 // Not yet fully implemented.
-    ,mce_emit_pdf_to_printer =   16
+    ,mce_emit_pdf_to_printer =   16 // Not yet fully implemented.
     ,mce_emit_test_data      =   32
     ,mce_emit_spreadsheet    =   64
     ,mce_emit_text_stream    =  128
