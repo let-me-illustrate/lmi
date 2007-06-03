@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustrator.cpp,v 1.5 2007-06-01 01:24:18 chicares Exp $
+// $Id: illustrator.cpp,v 1.6 2007-06-03 02:27:42 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -35,8 +35,10 @@
 #include "timer.hpp"
 
 #include <boost/filesystem/convenience.hpp>
+#include <boost/filesystem/path.hpp>
 
 #include <iostream>
+#include <string>
 
 illustrator::illustrator(mcenum_emission emission)
     :emission_              (emission)
@@ -92,6 +94,7 @@ bool illustrator::operator()(fs::path const& file_path)
             << LMI_FLUSH
             ;
         }
+
     return return_code;
 }
 
