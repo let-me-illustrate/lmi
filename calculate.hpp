@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: calculate.hpp,v 1.23 2007-05-20 23:00:38 chicares Exp $
+// $Id: calculate.hpp,v 1.24 2007-06-03 14:32:30 chicares Exp $
 
 #ifndef calculate_hpp
 #define calculate_hpp
@@ -31,6 +31,7 @@
 #include "inputs.hpp"
 #include "ledger.hpp"
 #include "ledger_invariant.hpp"
+#include "ledger_text_formats.hpp" // PrintLedgerFlatText()
 #include "ledger_variant.hpp"
 #include "ledgervalues.hpp"
 #include "miscellany.hpp"
@@ -137,13 +138,10 @@ struct RunCensus
 //            Composite.operator+=(IV->ledger());
             XXXComposite.PlusEq(IV->ledger());
             }
-
         time_for_calculations += timer.stop().elapsed_usec();
 
         timer.restart();
-        IllusVal Composite(&XXXComposite);
-        Composite.Print(OutputDest);
-
+        PrintLedgerFlatText(XXXComposite, OutputDest);
         time_for_output       += timer.stop().elapsed_usec();
         }
 

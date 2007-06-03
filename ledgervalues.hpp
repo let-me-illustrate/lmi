@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledgervalues.hpp,v 1.16 2007-05-02 14:14:18 chicares Exp $
+// $Id: ledgervalues.hpp,v 1.17 2007-06-03 14:32:30 chicares Exp $
 
 #ifndef ledgervalues_hpp
 #define ledgervalues_hpp
@@ -55,7 +55,6 @@ class LMI_SO IllusVal
 {
   public:
     explicit IllusVal(std::string const& filename = "anonymous");
-    explicit IllusVal(Ledger*, std::string const& filename = "anonymous");
     ~IllusVal();
 
     double Run(InputParms const* ip);
