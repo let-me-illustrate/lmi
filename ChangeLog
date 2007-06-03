@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.716 2007-06-03 15:47:47 chicares Exp $
+// $Id: ChangeLog,v 1.717 2007-06-03 16:44:34 chicares Exp $
 
 MAINTENANCE
 
@@ -11957,4 +11957,11 @@ for a demonstration of the relationship.
   ledgervalues.cpp
 Remove testing scaffold reactivated 20070603T1535Z, because it no
 longer indicates any problem in any unit or system test.
+
+20070603T1644Z <chicares@cox.net> [1234]
+
+  main_cli.cpp
+Demonstrate equivalence of struct RunCensus and class illustrator,
+for census processing in series; struct RunCensus never could handle
+processing cells in parallel, of course, but class illustrator can.
 
