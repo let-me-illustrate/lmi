@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.712 2007-06-03 02:29:21 chicares Exp $
+// $Id: ChangeLog,v 1.713 2007-06-03 04:34:43 chicares Exp $
 
 MAINTENANCE
 
@@ -11913,4 +11913,16 @@ Include appropriate headers.
 
   mc_enum_type_enums.hpp
 Improve documentation.
+
+20070603T0431Z <chicares@cox.net> [1237]
+
+  main_cli.cpp
+Reactivate a test that exposes a segfault.
+
+20070603T0434Z <chicares@cox.net> [1237]
+
+  ledgervalues.cpp
+Avert the segfault exposed 20070603T0431Z. A stack object had been
+deleted by a smart-pointer dtor. This risible workaround is of course
+only temporary.
 
