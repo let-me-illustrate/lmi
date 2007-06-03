@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: calculate.hpp,v 1.24 2007-06-03 14:32:30 chicares Exp $
+// $Id: calculate.hpp,v 1.25 2007-06-03 14:51:34 chicares Exp $
 
 #ifndef calculate_hpp
 #define calculate_hpp
@@ -113,7 +113,7 @@ struct RunCensus
     explicit RunCensus(std::ostream& aOutputDest)
         :OutputDest           (aOutputDest)
 // TODO ?? Hardcoded ledger type must be changed later, but is it?
-        ,XXXComposite         ()
+        ,XXXComposite         (e_ledger_type(e_ill_reg), 100, true)
         ,time_for_calculations(0.0)
         ,time_for_output      (0.0)
         {}
