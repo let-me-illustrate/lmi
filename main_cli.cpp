@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_cli.cpp,v 1.39 2007-06-03 04:31:38 chicares Exp $
+// $Id: main_cli.cpp,v 1.40 2007-06-03 16:44:34 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -204,9 +204,10 @@ void SelfTest()
     multiple_cell_document census;
     std::vector<IllusInputParms> input_vector = census.cell_parms();
     input_vector.push_back(input_vector.front());
-    static dev_null_stream_buffer<char> no_output;
-    std::ostream dev_null_os(&no_output);
-    RunCensus runner(dev_null_os);
+//    static dev_null_stream_buffer<char> no_output;
+//    std::ostream dev_null_os(&no_output);
+//    RunCensus runner(dev_null_os);
+    RunCensus runner(std::cout);
     runner(input_vector);
 
 std::cout << "? " << runner.XXXComposite.GetCurrFull().AcctVal.front() << std::endl;
@@ -229,6 +230,26 @@ std::cout << "? " << runner.XXXComposite.GetLedgerInvariant().GetInforceLives().
             << LMI_FLUSH
             ;
         }
+std::cerr << "RunCensus output: " << runner.time_for_output << std::endl;
+std::cerr << "RunCensus calculations: " << runner.time_for_calculations << std::endl;
+
+// By running this test with the command line given above, one can confirm
+// that the output below matches the output above. This demonstrates that
+// struct RunCensus may be replaced by class illustrator.
+    {
+    std::ofstream ofs("eraseme.cns");
+    std::vector<IllusInputParms>& cells = const_cast<std::vector<IllusInputParms>&>(census.cell_parms());
+    cells = input_vector;
+    census.write(ofs);
+    }
+    mcenum_emission const y = mcenum_emission
+        (   mce_emit_text_stream
+        |   mce_emit_composite_only
+        |   mce_emit_quietly
+        |   mce_emit_timings
+        );
+    illustrator z(y);
+    z("eraseme.cns");
 // End of test that segfaults.
 
     std::cout
