@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledgervalues.cpp,v 1.23 2007-05-25 02:31:18 chicares Exp $
+// $Id: ledgervalues.cpp,v 1.24 2007-06-03 04:34:43 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -51,7 +51,7 @@ IllusVal::IllusVal(std::string const& filename)
 //============================================================================
 IllusVal::IllusVal(Ledger* ledger, std::string const& filename)
     :filename_ (filename)
-    ,ledger_   (ledger)
+    ,ledger_   (new Ledger(*ledger))
 {
 }
 
