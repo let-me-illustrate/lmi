@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.711 2007-06-02 18:25:24 chicares Exp $
+// $Id: ChangeLog,v 1.712 2007-06-03 02:29:21 chicares Exp $
 
 MAINTENANCE
 
@@ -11903,4 +11903,14 @@ Accept and validate string suboptions for '--emit'.
   main_cli.cpp
   workhorse.make
 Use '--emit' string suboptions in cli test.
+
+20070603T0227Z <chicares@cox.net> [1237]
+
+  illustrator.cpp
+Include appropriate headers.
+
+20070603T0229Z <chicares@cox.net> [1237]
+
+  mc_enum_type_enums.hpp
+Improve documentation.
 
