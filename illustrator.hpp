@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustrator.hpp,v 1.5 2007-06-01 01:24:18 chicares Exp $
+// $Id: illustrator.hpp,v 1.6 2007-06-03 23:49:36 chicares Exp $
 
 #ifndef illustrator_hpp
 #define illustrator_hpp
@@ -48,6 +48,10 @@ class LMI_SO illustrator
     ~illustrator();
 
     bool operator()(fs::path const&);
+
+    double usec_for_input() const;
+    double usec_for_calculations() const;
+    double usec_for_output() const;
 
   private:
     mcenum_emission emission_;
