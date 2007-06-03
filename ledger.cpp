@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger.cpp,v 1.19 2007-05-20 23:14:19 chicares Exp $
+// $Id: ledger.cpp,v 1.20 2007-06-03 14:51:34 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -70,17 +70,6 @@
 // be a separate function, which could then be applied even for the
 // composite output used for regression testing. Is it only the
 // composite which stands in need of truncation?
-
-//============================================================================
-Ledger::Ledger() // Remove after expunging struct RunCensus().
-    :is_composite_         (true)
-    ,composite_lapse_year_ (0.0)
-    ,ledger_type_          (e_ill_reg)
-    ,ledger_map_           (new ledger_map_holder)
-    ,ledger_invariant_     (new LedgerInvariant)
-{
-    SetRunBases(100);
-}
 
 //============================================================================
 Ledger::Ledger
