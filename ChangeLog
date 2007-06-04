@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.720 2007-06-04 12:18:29 etarassov Exp $
+// $Id: ChangeLog,v 1.721 2007-06-04 14:25:24 chicares Exp $
 
 MAINTENANCE
 
@@ -11996,10 +11996,29 @@ Remove a functor that no longer serves any purpose.
 20070604T1215Z <etarassov@tt-solutions.com> [1232]
 
   illustration_reg.xsl
-Refactor illustration_reg.xsl table generation using generic templates.
+Refactor illustration_reg.xsl table generation using generic
+templates.
 
 20070604T1218Z <etarassov@tt-solutions.com> [1232]
 
   group_private_placement.xsl
 Slightly simplify header code.
+
+20070604T1423Z <chicares@cox.net> [1232]
+
+  antediluvian_stubs.cpp
+  authenticity.cpp
+  authenticity.hpp
+Provide release timestamp; incidentally distinguish antediluvian fork.
+
+20070604T1424Z <chicares@cox.net> [1232]
+
+  main_cli.cpp
+Omit misleading portion of self-test output for antediluvian fork. Now
+'make cli_tests' runs cleanly.
+
+20070604T1425Z <chicares@cox.net> [1232]
+
+  workhorse.make
+Run self test for production version as well as for antediluvian fork.
 
