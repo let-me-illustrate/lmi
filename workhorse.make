@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: workhorse.make,v 1.92 2007-06-02 18:25:24 chicares Exp $
+# $Id: workhorse.make,v 1.93 2007-06-04 14:25:24 chicares Exp $
 
 ################################################################################
 
@@ -922,7 +922,7 @@ cli_test-%: $(test_data) lmi_cli_shared$(EXEEXT)
 	@$(ECHO) Test $*:
 	@./lmi_cli_shared$(EXEEXT) \
 	  --accept \
-	  --data_path=/opt/lmi/data \
+	  --data_path=$(data_dir) \
 	  --emit=emit_text_stream,emit_composite_only,emit_quietly,emit_timings \
 	  --$(subst .,,$(suffix $*))file=$* \
 	  >$*.touchstone
@@ -937,10 +937,14 @@ cli_test-%: $(test_data) lmi_cli_shared$(EXEEXT)
 # Run the self test once, discarding the results, just to get the
 # program into the disk cache. Then run it again and report results.
 
+self_test_options := --accept --data_path=$(data_dir) --selftest
+
 .PHONY: cli_selftest
-cli_selftest: $(test_data) antediluvian_cli$(EXEEXT)
-	@./antediluvian_cli$(EXEEXT) --accept --selftest > /dev/null
-	@./antediluvian_cli$(EXEEXT) --accept --selftest
+cli_selftest: antediluvian_cli$(EXEEXT) lmi_cli_shared$(EXEEXT)
+	@./antediluvian_cli$(EXEEXT) $(self_test_options) > /dev/null
+	@./antediluvian_cli$(EXEEXT) $(self_test_options)
+	@./lmi_cli_shared$(EXEEXT) $(self_test_options) > /dev/null
+	@./lmi_cli_shared$(EXEEXT) $(self_test_options)
 
 ################################################################################
 
