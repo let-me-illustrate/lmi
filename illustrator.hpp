@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustrator.hpp,v 1.6 2007-06-03 23:49:36 chicares Exp $
+// $Id: illustrator.hpp,v 1.7 2007-06-04 00:39:25 chicares Exp $
 
 #ifndef illustrator_hpp
 #define illustrator_hpp
@@ -59,6 +59,12 @@ class LMI_SO illustrator
     double usec_for_calculations_;
     double usec_for_output_;
 };
+
+// TODO ?? For now, illustrator::operator() requires a file, so
+// create one for data that should be handled in RAM. This kludge
+// permits removing some other code that's even worse.
+
+template<typename T> void temporary_file_kludge(T const&);
 
 #endif // illustrator_hpp
 
