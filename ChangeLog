@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.717 2007-06-03 16:44:34 chicares Exp $
+// $Id: ChangeLog,v 1.718 2007-06-04 01:57:30 chicares Exp $
 
 MAINTENANCE
 
@@ -11964,4 +11964,32 @@ longer indicates any problem in any unit or system test.
 Demonstrate equivalence of struct RunCensus and class illustrator,
 for census processing in series; struct RunCensus never could handle
 processing cells in parallel, of course, but class illustrator can.
+
+20070603T2349Z <chicares@cox.net> [1235]
+
+  illustrator.cpp
+  illustrator.hpp
+Partially support timings.
+
+20070604T0039Z <chicares@cox.net> [1236]
+
+  illustrator.cpp
+  illustrator.hpp
+  main_cli.cpp
+Refactor an expedient.
+
+20070604T0059Z <chicares@cox.net> [1236]
+
+  main_cgi.cpp
+Refactor, using the expedient introduced 20070604T0039Z.
+
+20070604T0155Z <chicares@cox.net> [1235]
+
+  main_cli.cpp
+Remove a test that no longer serves any purpose.
+
+20070604T0157Z <chicares@cox.net> [1232]
+
+  calculate.hpp
+Remove a functor that no longer serves any purpose.
 
