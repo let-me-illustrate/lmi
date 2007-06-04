@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_cli.cpp,v 1.42 2007-06-04 01:55:40 chicares Exp $
+// $Id: main_cli.cpp,v 1.43 2007-06-04 14:24:25 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -29,6 +29,7 @@
 #include "alert.hpp"
 #include "argv0.hpp"
 #include "assert_lmi.hpp"
+#include "authenticity.hpp" // timestamp_of_production_release()
 #include "calculate.hpp"
 #include "custom_io_0.hpp"
 #include "getopt.hpp"
@@ -132,9 +133,16 @@ void RegressionTest()
         }
 }
 
-//============================================================================
+/// Spot check and time some insurance calculations.
+///
+/// The antediluvian fork's calculated results don't match the
+/// production system's, so no assertions are made about them; but the
+/// speed difference is interesting.
+
 void SelfTest()
 {
+    bool const antediluvian = timestamp_of_production_release().empty();
+
     IllusVal IV;
     IllusInputParms IP;
     IP["Gender"           ] = "Male";
@@ -153,7 +161,7 @@ void SelfTest()
     expected_value = 6305652.52;
     IV.Run(&IP);
     observed_value = IV.ledger().GetCurrFull().AcctVal.back();
-    if(.005 < std::fabs(expected_value - observed_value))
+    if(!antediluvian && .005 < std::fabs(expected_value - observed_value))
         {
         warning()
             << "Value should be "
@@ -168,7 +176,7 @@ void SelfTest()
     IP["SolveType"] = "SolveSpecAmt";
     expected_value = 1884064;
     observed_value = IV.Run(&IP);
-    if(.005 < std::fabs(expected_value - observed_value))
+    if(!antediluvian && .005 < std::fabs(expected_value - observed_value))
         {
         warning()
             << "Value should be "
@@ -183,7 +191,7 @@ void SelfTest()
     IP["SolveType"] = "SolveEePrem";
     expected_value = 10673.51;
     observed_value = IV.Run(&IP);
-    if(.005 < std::fabs(expected_value - observed_value))
+    if(!antediluvian && .005 < std::fabs(expected_value - observed_value))
         {
         warning()
             << "Value should be "
