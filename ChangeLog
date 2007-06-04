@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.719 2007-06-04 12:15:36 etarassov Exp $
+// $Id: ChangeLog,v 1.720 2007-06-04 12:18:29 etarassov Exp $
 
 MAINTENANCE
 
@@ -11997,4 +11997,9 @@ Remove a functor that no longer serves any purpose.
 
   illustration_reg.xsl
 Refactor illustration_reg.xsl table generation using generic templates.
+
+20070604T1218Z <etarassov@tt-solutions.com> [1232]
+
+  group_private_placement.xsl
+Slightly simplify header code.
 
