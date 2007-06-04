@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.721 2007-06-04 14:25:24 chicares Exp $
+// $Id: ChangeLog,v 1.722 2007-06-04 16:55:29 chicares Exp $
 
 MAINTENANCE
 
@@ -12021,4 +12021,9 @@ Omit misleading portion of self-test output for antediluvian fork. Now
 
   workhorse.make
 Run self test for production version as well as for antediluvian fork.
+
+20070604T1655Z <chicares@cox.net> [1232]
+
+  fo_common.xsl
+Remove some superfluous spaces.
 

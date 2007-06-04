@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: fo_common.xsl,v 1.20 2007-05-31 23:28:22 chicares Exp $
+    $Id: fo_common.xsl,v 1.21 2007-06-04 16:55:29 chicares Exp $
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:fo="http://www.w3.org/1999/XSL/Format">
@@ -189,7 +189,7 @@
       <xsl:if test="($counter + $inforceyear) mod 5=0">
         <fo:table-row>
           <fo:table-cell padding="4pt">
-            <fo:block text-align="right" />
+            <fo:block text-align="right"/>
           </fo:table-cell>
         </fo:table-row>
       </xsl:if>
@@ -525,11 +525,11 @@
             <fo:block text-align="right">
               <xsl:choose>
                 <xsl:when test="@name">
-                  <xsl:variable name="column_name" select="@name" />
+                  <xsl:variable name="column_name" select="@name"/>
                   <xsl:value-of select="$illustration/data/newcolumn/column[@name=$column_name]/duration[$counter]/@column_value"/>
                 </xsl:when>
                 <xsl:when test="@scalar">
-                  <xsl:variable name="scalar_name" select="@scalar" />
+                  <xsl:variable name="scalar_name" select="@scalar"/>
                   <xsl:value-of select="$illustration/scalar/*[name(.)=$scalar_name]"/>
                 </xsl:when>
                 <xsl:when test="@special">
