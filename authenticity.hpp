@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: authenticity.hpp,v 1.2 2007-01-27 00:00:51 wboutin Exp $
+// $Id: authenticity.hpp,v 1.3 2007-06-04 14:23:21 chicares Exp $
 
 #ifndef authenticity_hpp
 #define authenticity_hpp
@@ -42,8 +42,6 @@
 BOOST_STATIC_ASSERT(8 == CHAR_BIT || 16 == CHAR_BIT);
 // so md5 output is 128 bits == 16 8-bit bytes or 8 16-bit bytes:
 enum {md5len = 128 / CHAR_BIT};
-
-void LMI_SO authenticate_system();
 
 /// Permit running the system iff data files and date are valid.
 ///
@@ -75,6 +73,13 @@ class Authenticity
     mutable calendar_date CachedDate_;
 };
 
+/// Authenticate production system and its crucial data files.
+///
+/// Terminate the program immediately if authentication fails. But
+/// skip authentication altogether for the most-privileged password.
+
+void LMI_SO authenticate_system();
+
 /// Hex representation of an md5 sum as a string.
 
 std::string md5_hex_string(std::vector<unsigned char> const&);
@@ -82,6 +87,13 @@ std::string md5_hex_string(std::vector<unsigned char> const&);
 /// Name of file containing md5sums of secured files.
 
 inline char const* md5sum_file() {return "validated.md5";}
+
+/// Timestamp of production release.
+///
+/// Deliberately return an empty string for the antediluvian fork,
+/// providing a means to distinguish it from production.
+
+std::string const& LMI_SO timestamp_of_production_release();
 
 #endif // authenticity_hpp
 

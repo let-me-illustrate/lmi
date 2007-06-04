@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: authenticity.cpp,v 1.4 2007-03-09 16:27:23 chicares Exp $
+// $Id: authenticity.cpp,v 1.5 2007-06-04 14:23:20 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -36,6 +36,7 @@
 #include "md5.hpp"
 #include "platform_dependent.hpp" // chdir()
 #include "system_command.hpp"
+#include "version.hpp"
 
 #include <boost/filesystem/fstream.hpp>
 #include <boost/filesystem/operations.hpp>
@@ -54,29 +55,6 @@
 namespace
 {
     int const chars_per_formatted_hex_byte = CHAR_BIT / 4;
-}
-
-/// Skip authentication for the most privileged password.
-
-void authenticate_system()
-{
-    if(global_settings::instance().ash_nazg())
-        {
-        return;
-        }
-
-    std::string const diagnostic_message = Authenticity::Assay
-        (calendar_date()
-        ,global_settings::instance().data_directory()
-        );
-    if
-        (  "validated" != diagnostic_message
-        && "cached"    != diagnostic_message
-        )
-        {
-        safely_show_message(diagnostic_message.c_str());
-        std::exit(EXIT_FAILURE);
-        }
 }
 
 /// Initialize cached date to JDN zero, which is peremptorily invalid.
@@ -286,6 +264,27 @@ std::string Authenticity::Assay
     return "validated";
 }
 
+void authenticate_system()
+{
+    if(global_settings::instance().ash_nazg())
+        {
+        return;
+        }
+
+    std::string const diagnostic_message = Authenticity::Assay
+        (calendar_date()
+        ,global_settings::instance().data_directory()
+        );
+    if
+        (  "validated" != diagnostic_message
+        && "cached"    != diagnostic_message
+        )
+        {
+        safely_show_message(diagnostic_message.c_str());
+        std::exit(EXIT_FAILURE);
+        }
+}
+
 std::string md5_hex_string(std::vector<unsigned char> const& vuc)
 {
     LMI_ASSERT(md5len == vuc.size());
@@ -300,5 +299,11 @@ std::string md5_hex_string(std::vector<unsigned char> const& vuc)
             ;
         }
     return oss.str();
+}
+
+std::string const& timestamp_of_production_release()
+{
+    static std::string const s(LMI_VERSION);
+    return s;
 }
 
