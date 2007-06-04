@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustrator.cpp,v 1.7 2007-06-03 23:49:36 chicares Exp $
+// $Id: illustrator.cpp,v 1.8 2007-06-04 00:39:25 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -112,5 +112,17 @@ double illustrator::usec_for_calculations() const
 double illustrator::usec_for_output() const
 {
     return usec_for_output_;
+}
+
+#include <fstream> // Needed only for this temporary kludge.
+
+template<> void temporary_file_kludge(std::vector<IllusInputParms> const& other)
+{
+    multiple_cell_document document;
+    typedef std::vector<IllusInputParms> T;
+    std::vector<IllusInputParms>& cells = const_cast<T&>(document.cell_parms());
+    cells = other;
+    std::ofstream ofs("eraseme.cns");
+    document.write(ofs);
 }
 
