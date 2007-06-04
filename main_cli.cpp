@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_cli.cpp,v 1.41 2007-06-04 00:39:25 chicares Exp $
+// $Id: main_cli.cpp,v 1.42 2007-06-04 01:55:40 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -31,7 +31,6 @@
 #include "assert_lmi.hpp"
 #include "calculate.hpp"
 #include "custom_io_0.hpp"
-#include "dev_null_stream_buffer.hpp"
 #include "getopt.hpp"
 #include "global_settings.hpp"
 #include "group_values.hpp"
@@ -195,65 +194,6 @@ void SelfTest()
             << LMI_FLUSH
             ;
         }
-
-// TODO ?? This test segfaults:
-//   /opt/lmi/bin/lmi_cli_shared -a -d /opt/lmi/data --selftest
-// It serves only to test function object RunCensus, which is slated
-// for removal, but cannot be removed until the segfault is tracked
-// down and, if not due to a defect in RunCensus, fixed.
-    multiple_cell_document census;
-    std::vector<IllusInputParms> input_vector = census.cell_parms();
-    input_vector.push_back(input_vector.front());
-//    static dev_null_stream_buffer<char> no_output;
-//    std::ostream dev_null_os(&no_output);
-//    RunCensus runner(dev_null_os);
-    RunCensus runner(std::cout);
-    runner(input_vector);
-
-std::cout << "? " << runner.XXXComposite.GetCurrFull().AcctVal.front() << std::endl;
-std::cout << "? " << runner.XXXComposite.GetCurrFull().AcctVal.back() << std::endl;
-
-std::cout << "? " << runner.XXXComposite.GetCurrFull().AcctVal[54] << std::endl;
-std::cout << "? " << runner.XXXComposite.GetLedgerInvariant().GetInforceLives().front() << std::endl;
-std::cout << "? " << runner.XXXComposite.GetLedgerInvariant().GetInforceLives().size() << std::endl;
-
-    observed_value = runner.XXXComposite.GetLedgerInvariant().GrossPmt[0];
-    expected_value = 12819.32;
-    if(.005 < std::fabs(expected_value - observed_value))
-        {
-        warning()
-            << "Value should be "
-            << value_cast<std::string>(expected_value)
-            << ", but is "
-            << value_cast<std::string>(observed_value)
-            << " .\n"
-            << LMI_FLUSH
-            ;
-        }
-std::cerr << "RunCensus output: " << runner.time_for_output << std::endl;
-std::cerr << "RunCensus calculations: " << runner.time_for_calculations << std::endl;
-
-// By running this test with the command line given above, one can confirm
-// that the output below matches the output above. This demonstrates that
-// struct RunCensus may be replaced by class illustrator.
-/*
-    {
-    std::ofstream ofs("eraseme.cns");
-    std::vector<IllusInputParms>& cells = const_cast<std::vector<IllusInputParms>&>(census.cell_parms());
-    cells = input_vector;
-    census.write(ofs);
-    }
-*/
-    temporary_file_kludge(input_vector);
-    mcenum_emission const y = mcenum_emission
-        (   mce_emit_text_stream
-        |   mce_emit_composite_only
-        |   mce_emit_quietly
-        |   mce_emit_timings
-        );
-    illustrator z(y);
-    z("eraseme.cns");
-// End of test that segfaults.
 
     std::cout
         << "Test solve speed: "
