@@ -31,7 +31,7 @@
 // other reasons evident in cvs or explained in 'ChangeLog'. Any
 // defect should not reflect on Stephen F. Booth's reputation.
 
-// $Id: main_cgi.cpp,v 1.21 2007-04-30 18:29:18 chicares Exp $
+// $Id: main_cgi.cpp,v 1.22 2007-06-04 00:59:24 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -41,9 +41,11 @@
 #include "alert.hpp"
 #include "argv0.hpp"
 #include "calculate.hpp"
+#include "illustrator.hpp"
 #include "inputillus.hpp"
 #include "inputs.hpp"
 #include "main_common.hpp"
+#include "mc_enum_type_enums.hpp" // mcenum_emission
 #include "miscellany.hpp"
 #include "path_utility.hpp"
 #include "platform_dependent.hpp" // putenv() [GWC]
@@ -645,21 +647,27 @@ void ShowCensusOutput
     std::cout << "Composite illustration:<BR>";
 
     // Calculate and print results.
-    // TODO ?? Do we want a RunTimedFunctor() function to
-    // avoid repeating the timing displays?
-    RunCensus run_functor(std::cout);
+    // TODO ?? Would it be better not to show timings?
+    static mcenum_emission const emission = mcenum_emission
+        (   mce_emit_text_stream
+        |   mce_emit_composite_only
+        |   mce_emit_quietly
+        |   mce_emit_timings
+        );
+    illustrator run_functor(emission);
     std::cout << "<pre><small>";
-    run_functor(lives);
+    temporary_file_kludge(lives);
+    run_functor("eraseme.cns");
     std::cout << "</small></pre>";
     std::cout << "<hr>\n\n";
     std::cout
         << "    Calculations: "
-        << Timer::elapsed_msec_str(run_functor.time_for_calculations)
+        << Timer::elapsed_msec_str(run_functor.usec_for_calculations())
         << "<BR>\n"
         ;
     std::cout
         << "    Output:       "
-        << Timer::elapsed_msec_str(run_functor.time_for_output)
+        << Timer::elapsed_msec_str(run_functor.usec_for_output())
         << "<BR>\n"
         ;
 
