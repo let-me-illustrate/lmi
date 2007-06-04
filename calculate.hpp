@@ -19,38 +19,24 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: calculate.hpp,v 1.25 2007-06-03 14:51:34 chicares Exp $
+// $Id: calculate.hpp,v 1.26 2007-06-04 01:57:30 chicares Exp $
 
 #ifndef calculate_hpp
 #define calculate_hpp
 
 #include "config.hpp"
 
-#include "assert_lmi.hpp"
 #include "inputillus.hpp"
-#include "inputs.hpp"
-#include "ledger.hpp"
-#include "ledger_invariant.hpp"
-#include "ledger_text_formats.hpp" // PrintLedgerFlatText()
-#include "ledger_variant.hpp"
 #include "ledgervalues.hpp"
 #include "miscellany.hpp"
-#include "multiple_cell_document.hpp"
 #include "single_cell_document.hpp"
 #include "timer.hpp"
 
-// TODO ?? Apparently the original reason for using smart pointers
-// was to minimize stack usage in a 16-bit environment; clearly that
-// doesn't matter anymore.
-#include <boost/scoped_ptr.hpp>
-
 #include <fstream>
 #include <functional>
-#include <ios>
-#include <iostream>
+#include <ostream>
 #include <stdexcept>
 #include <string>
-#include <vector>
 
 struct RunIllustration
     :public std::unary_function<IllusInputParms, void>
@@ -105,52 +91,6 @@ struct RunIllustrationFromFile
         RunIllustration::operator()(input);
         }
     double time_for_input;
-};
-
-struct RunCensus
-    :public std::unary_function<std::vector<IllusInputParms>, void>
-{
-    explicit RunCensus(std::ostream& aOutputDest)
-        :OutputDest           (aOutputDest)
-// TODO ?? Hardcoded ledger type must be changed later, but is it?
-        ,XXXComposite         (e_ledger_type(e_ill_reg), 100, true)
-        ,time_for_calculations(0.0)
-        ,time_for_output      (0.0)
-        {}
-
-    void operator()(std::vector<IllusInputParms> a_input)
-        {
-        if(a_input.empty())
-            {
-            return;
-            }
-
-        Timer timer;
-        for
-            (std::vector<IllusInputParms>::iterator lives_it = a_input.begin()
-            ;lives_it != a_input.end()
-            ;++lives_it
-            )
-            {
-            boost::scoped_ptr<IllusVal> IV(new IllusVal());
-            IV->Run(&*lives_it);
-// TODO ?? Pick one:
-//            Composite.operator+=(IV->ledger());
-            XXXComposite.PlusEq(IV->ledger());
-            }
-        time_for_calculations += timer.stop().elapsed_usec();
-
-        timer.restart();
-        PrintLedgerFlatText(XXXComposite, OutputDest);
-        time_for_output       += timer.stop().elapsed_usec();
-        }
-
-    std::ostream& OutputDest;
-
-    Ledger XXXComposite;
-
-    double time_for_calculations;
-    double time_for_output;
 };
 
 #endif // calculate_hpp
