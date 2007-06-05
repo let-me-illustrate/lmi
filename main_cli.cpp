@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_cli.cpp,v 1.43 2007-06-04 14:24:25 chicares Exp $
+// $Id: main_cli.cpp,v 1.44 2007-06-05 15:41:49 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -222,10 +222,7 @@ void Profile()
 //============================================================================
 void process_command_line(int argc, char* argv[])
 {
-    int c;
-    int digit_optind = 0;
-    int this_option_optind = 1;
-    int option_index = 0;
+    // TRICKY !! Some long options are aliased to unlikely octal values.
 //    static char const* vfile[] = {"file", "archive", 0};
 //    static char const* vlist[] = {"one", "two", "three", 0};
 //    static char const* vopt[] = {"optional", "alternative", 0};
@@ -256,6 +253,7 @@ void process_command_line(int argc, char* argv[])
 //        {"valt"    ,ALT_ARG,  0,   0, vopt , "alternative"},
         {0         ,NO_ARG,   0,   0, 0    , ""}
       };
+
     bool license_accepted    = false;
     bool show_license        = false;
     bool show_help           = false;
@@ -275,15 +273,19 @@ void process_command_line(int argc, char* argv[])
     std::vector<std::string> ill_names;
     std::vector<std::string> cns_names;
 
+    int digit_optind = 0;
+    int this_option_optind = 1;
+    int option_index = 0;
     GetOpt getopt_long
         (argc
         ,argv
         ,""
         ,long_options
         ,&option_index
-        ,1
+        ,true
         );
 
+    int c;
     while(EOF != (c = getopt_long()))
         {
         switch(c)
@@ -454,19 +456,19 @@ void process_command_line(int argc, char* argv[])
 
             default:
                 {
-                std::printf("? getopt returned character code 0%o ?\n", c);
+                std::cerr << "Unrecognized option character '" << c << "'.\n";
                 }
             }
         }
 
     if((c = getopt_long.optind) < argc)
         {
-        std::printf("non-option ARGV-elements: ");
+        std::cerr << "Unrecognized parameters:\n";
         while(c < argc)
             {
-            std::printf("%s ", argv[c++]);
+            std::cerr << "  '" << argv[c++] << "'\n";
             }
-        std::printf("\n");
+        std::cerr << std::endl;
         }
 
     if(!license_accepted)
