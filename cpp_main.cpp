@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: cpp_main.cpp,v 1.6 2007-02-25 15:02:48 chicares Exp $
+// $Id: cpp_main.cpp,v 1.7 2007-06-05 15:41:49 chicares Exp $
 
 // This is a derived work based on Beman Dawes's boost test library
 // that bears the following copyright and license statement:
@@ -134,8 +134,7 @@ int main(int argc, char* argv[])
     // sentence.
     std::free(0);
 
-    // Long options are meta-options not directly supported by the target
-    // compiler. TRICKY !! They are aliased to unlikely octal values.
+    // TRICKY !! Some long options are aliased to unlikely octal values.
     static struct Option long_options[] =
       {
         {"help",         NO_ARG,   0, 001, 0, "display this help and exit"},
@@ -148,7 +147,6 @@ int main(int argc, char* argv[])
     bool show_license     = false;
     bool show_help        = false;
 
-    int c;
     int option_index = 0;
     GetOpt getopt_long
         (argc
@@ -158,7 +156,8 @@ int main(int argc, char* argv[])
         ,&option_index
         ,true
         );
-    getopt_long.opterr = false;
+
+    int c;
     while(EOF != (c = getopt_long()))
         {
         switch(c)
@@ -183,19 +182,31 @@ int main(int argc, char* argv[])
 
             case '?':
                 {
-                std::cerr << "Unrecognized option ";
+                std::cerr << "Unrecognized option '";
                 int offset = getopt_long.optind - 1;
                 if(0 < offset)
                     {
                     std::cerr << getopt_long.nargv[offset];
                     }
-                std::cerr << '\n';
+                std::cerr << "'.\n";
                 }
                 break;
 
             default:
-                std::cerr << "getopt returned character code 0" << c << '\n';
+                {
+                std::cerr << "Unrecognized option character '" << c << "'.\n";
+                }
             }
+        }
+
+    if((c = getopt_long.optind) < argc)
+        {
+        std::cerr << "Unrecognized parameters:\n";
+        while(c < argc)
+            {
+            std::cerr << "  '" << argv[c++] << "'\n";
+            }
+        std::cerr << std::endl;
         }
 
     if(!license_accepted)

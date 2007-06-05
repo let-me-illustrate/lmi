@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_wx.cpp,v 1.78 2007-05-29 01:33:17 chicares Exp $
+// $Id: main_wx.cpp,v 1.79 2007-06-05 15:41:49 chicares Exp $
 
 // Portions of this file are derived from wxWindows files
 //   samples/docvwmdi/docview.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -1089,7 +1089,7 @@ bool Skeleton::ProcessCommandLine(int argc, char* argv[])
         ,&option_index
         ,true
         );
-    getopt_long.opterr = false;
+
     int c;
     while(EOF != (c = getopt_long()))
         {
@@ -1148,8 +1148,25 @@ bool Skeleton::ProcessCommandLine(int argc, char* argv[])
                 break;
 
             default:
-                warning() << "Unrecognized option '" << c << "'." << std::flush;
+                {
+                warning()
+                    << "Unrecognized option character '"
+                    << c
+                    << "'."
+                    << std::flush
+                    ;
+                }
             }
+        }
+
+    if((c = getopt_long.optind) < argc)
+        {
+        warning() << "Unrecognized parameters:\n";
+        while(c < argc)
+            {
+            warning() << "  '" << argv[c++] << "'\n";
+            }
+        warning() << std::flush;
         }
 
     if(show_help)
