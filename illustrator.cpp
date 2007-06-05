@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustrator.cpp,v 1.8 2007-06-04 00:39:25 chicares Exp $
+// $Id: illustrator.cpp,v 1.9 2007-06-05 17:28:27 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -29,13 +29,16 @@
 #include "illustrator.hpp"
 
 #include "alert.hpp"
+#include "custom_io_0.hpp" // SetSpecialInput()
+#include "emit_ledger.hpp"
 #include "group_values.hpp"
+#include "inputillus.hpp"
+#include "ledgervalues.hpp"
 #include "multiple_cell_document.hpp"
 #include "single_cell_document.hpp"
 #include "timer.hpp"
 
 #include <boost/filesystem/convenience.hpp>
-#include <boost/filesystem/path.hpp>
 
 #include <iostream>
 #include <string>
@@ -73,17 +76,26 @@ bool illustrator::operator()(fs::path const& file_path)
         // TODO ?? Set usec_for_calculations_ and usec_for_output_ here.
         return_code = run_census()(file_path, emission_, doc.cell_parms());
         }
-// TODO ?? Implement these, too.
 #if 0
     else if(".ill" == extension)
         {
-// Eventual replacement for RegressionTestOneCensusFile().
-        }
-    else if(".ini" == extension)
-        {
-// Eventual replacement for RegressionTestOneIniFile().
+// TODO ?? Implement this too.
         }
 #endif // 0
+    else if(".ini" == extension)
+        {
+        Timer timer;
+        IllusInputParms input(false);
+        SetSpecialInput(input, file_path.string().c_str());
+        usec_for_input_ = timer.stop().elapsed_usec();
+        timer.restart();
+        IllusVal z;
+        z.Run(&input);
+        usec_for_calculations_ = timer.stop().elapsed_usec();
+// Support this better after refactoring to deal with the file argument.
+        fs::path const out_file = fs::change_extension(file_path, ".test0");
+        usec_for_output_ = emit_ledger(out_file, 0, z.ledger(), emission_);
+        }
     else
         {
         warning()
