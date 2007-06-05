@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.734 2007-06-05 17:28:28 chicares Exp $
+// $Id: ChangeLog,v 1.735 2007-06-05 23:40:41 etarassov Exp $
 
 MAINTENANCE
 
@@ -12095,4 +12095,11 @@ Clean up illustration_reg.xsl to pass check_concinnity test.
 
   illustrator.cpp
 Implement another input type.
+
+20070605T2329Z <etarassov@tt-solutions.com> [1232]
+
+  illustration_reg.xsl
+  nasd.xsl
+  offshore_private_placement.xsl
+Clean up xsl files to resolve fop-0.20.5 issues.
 
