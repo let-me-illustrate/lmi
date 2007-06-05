@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: variable_annuity.xsl,v 1.17 2007-06-05 12:31:49 etarassov Exp $
+    $Id: variable_annuity.xsl,v 1.18 2007-06-05 16:02:29 etarassov Exp $
 -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fo="http://www.w3.org/1999/XSL/Format" version="1.0">
   <xsl:include href="fo_common.xsl"/>
@@ -285,7 +285,7 @@
 
         <fo:static-content flow-name="xsl-region-before">
           <xsl:call-template name="standard-header"/>
-          <fo:block font-size="11.0pt" text-align="center" font-family="sans-serif" font-weight="bold">
+          <fo:block font-size="11.0pt" text-align="center" font-family="sans-serif" font-weight="bold" margin-top=".8em">
             <xsl:text>Explanation and Footnotes</xsl:text>
           </fo:block>
         </fo:static-content>
@@ -301,41 +301,53 @@
             <xsl:text>The Illustration</xsl:text>
           </fo:block>
           <fo:block font-size="9.0pt" text-align="left" font-family="sans-serif" font-weight="normal">
-            <xsl:text>The purpose of this illustration is to show how hypothetical rates of return will</xsl:text>
-            <xsl:text> affect Contract Value. These hypothetical returns do not reflect past performance</xsl:text>
-            <xsl:text> and are not predictive of future results. Actual results could be less than or</xsl:text>
-            <xsl:text> greater than the hypothetical rates and in all likelihood will vary from year to</xsl:text>
-            <xsl:text> year. The maximum rate illustrated must be reasonable considering market conditions</xsl:text>
-            <xsl:text> and the available investment choices.</xsl:text>
+            <xsl:text>
+              The purpose of this illustration is to show how hypothetical rates of return will
+              affect Contract Value. These hypothetical returns do not reflect past performance
+              and are not predictive of future results. Actual results could be less than or
+              greater than the hypothetical rates and in all likelihood will vary from year to
+              year. The maximum rate illustrated must be reasonable considering market conditions
+              and the available investment choices.
+            </xsl:text>
           </fo:block>
           <fo:block font-size="9.0pt" text-align="left" font-family="sans-serif" font-weight="normal" margin-top="1em">
-            <xsl:text>The hypothetical Net Rate of Return is the rate of return net of investment</xsl:text>
-            <xsl:text> management, custody and other expenses charged by the investment manager of the</xsl:text>
-            <xsl:text> underlying fund(s).</xsl:text>
+            <xsl:text>
+              The hypothetical Net Rate of Return is the rate of return net of investment
+              management, custody and other expenses charged by the investment manager of the
+              underlying fund(s).
+            </xsl:text>
           </fo:block>
           <fo:block font-size="9.0pt" text-align="left" font-family="sans-serif" font-weight="normal" margin-top="1em">
-            <xsl:text>This illustration does not reflect tax and accounting consequences and is not</xsl:text>
-            <xsl:text> intended as tax advice nor may be relied on for purposes of avoiding any federal</xsl:text>
-            <xsl:text> tax penalties. Consult professional tax advisors for tax advice.</xsl:text>
+            <xsl:text>
+              This illustration does not reflect tax and accounting consequences and is not
+              intended as tax advice nor may be relied on for purposes of avoiding any federal
+              tax penalties. Consult professional tax advisors for tax advice.
+            </xsl:text>
           </fo:block>
           <fo:block font-size="9.0pt" text-align="left" font-family="sans-serif" font-weight="normal" margin-top="1em">
-            <xsl:text>This illustration is not a Contact or an offer or solicitation to enter into a</xsl:text>
-            <xsl:text> Contract. Offers are made only through the Confidential Private Placement</xsl:text>
-            <xsl:text> Memorandum for </xsl:text>
+            <xsl:text>
+              This illustration is not a Contact or an offer or solicitation to enter into a
+              Contract. Offers are made only through the Confidential Private Placement
+              Memorandum for
+            </xsl:text>
             <xsl:value-of select="illustration/scalar/PolicyMktgName"/>
             <fo:inline vertical-align="super" font-size="7.5pt">SM</fo:inline>
             <xsl:text>.</xsl:text>
           </fo:block>
           <fo:block font-size="9.0pt" text-align="left" font-family="sans-serif" font-weight="normal" margin-top="1em">
-            <xsl:text>This material must be preceded or accompanied by the current Confidential Private</xsl:text>
-            <xsl:text> Placement Memorandum for </xsl:text>
+            <xsl:text>
+              This material must be preceded or accompanied by the current Confidential Private
+              Placement Memorandum for 
+            </xsl:text>
             <xsl:value-of select="illustration/scalar/PolicyMktgName"/>
             <fo:inline vertical-align="super" font-size="7.5pt">SM</fo:inline>
-            <xsl:text> and the current prospectuses and private placement memoranda for its underlying</xsl:text>
-            <xsl:text> underlying investment choices. Investors should carefully consider the investment</xsl:text>
-            <xsl:text> objectives, risks, charges and expenses of the variable annuity Contract and its</xsl:text>
-            <xsl:text> underlying investment choices. Please read the prospectuses and private placement</xsl:text>
-            <xsl:text> memoranda carefully before investing or sending money.</xsl:text>
+            <xsl:text>
+              and the current prospectuses and private placement memoranda for its underlying
+              underlying investment choices. Investors should carefully consider the investment
+              objectives, risks, charges and expenses of the variable annuity Contract and its
+              underlying investment choices. Please read the prospectuses and private placement
+              memoranda carefully before investing or sending money.
+            </xsl:text>
           </fo:block>
           <fo:block font-size="9.0pt" text-align="left" font-family="sans-serif" font-weight="normal" margin-top="1em">
             <xsl:value-of select="illustration/scalar/InsCoShortName"/>
@@ -363,34 +375,44 @@
           </fo:block>
           <fo:block font-size="9.0pt" text-align="left" font-family="sans-serif" font-weight="normal" margin-top="1em">
             <fo:inline font-weight="bold">Contract Requirements: </fo:inline>
-            <xsl:text> This Contract is only available to persons who are deemed accredited investors</xsl:text>
-            <xsl:text> and qualified purchasers under applicable federal securities laws. The minimum</xsl:text>
-            <xsl:text> initial premium is $500,000. You must be able to bear the risk of loss of your</xsl:text>
-            <xsl:text> entire investment in the Contract. You will be required to represent to </xsl:text>
+            <xsl:text>
+              This Contract is only available to persons who are deemed accredited investors
+              and qualified purchasers under applicable federal securities laws. The minimum
+              initial premium is $500,000. You must be able to bear the risk of loss of your
+              entire investment in the Contract. You will be required to represent to
+            </xsl:text>
             <xsl:value-of select="illustration/scalar/InsCoShortName"/>
-            <xsl:text> that you are familiar with and understand the fundamental risks and financial</xsl:text>
-            <xsl:text> hazards of investing in the Contract.</xsl:text>
+            <xsl:text>
+              that you are familiar with and understand the fundamental risks and financial
+              hazards of investing in the Contract.
+            </xsl:text>
           </fo:block>
           <fo:block font-size="9.0pt" text-align="left" font-family="sans-serif" font-weight="normal" margin-top="1em">
             <fo:inline font-weight="bold">Purchase Payment Charges: </fo:inline>
-            <xsl:text> The sum of the Purchase Payment Distribution Charges, if any, and any Purchase</xsl:text>
-            <xsl:text> Payment Expense Charges including state premium tax, if applicable.</xsl:text>
+            <xsl:text>
+              The sum of the Purchase Payment Distribution Charges, if any, and any Purchase
+              Payment Expense Charges including state premium tax, if applicable.
+            </xsl:text>
           </fo:block>
           <fo:block font-size="9.0pt" text-align="left" font-family="sans-serif" font-weight="normal" margin-top="1em">
             <fo:inline font-weight="bold">Monthly Charges: </fo:inline>
-            <xsl:text> Monthly Charges will be deducted from the Contract Value. The Company may assess</xsl:text>
-            <xsl:text> Monthly Charges of three (3) types:  Mortality and Expense Risk Charges, Asset</xsl:text>
-            <xsl:text> Based Distribution Charges and Administrative Charges. The Monthly Charges will</xsl:text>
-            <xsl:text> be taken from the Money Market Sub-Account.</xsl:text>
+            <xsl:text>
+              Monthly Charges will be deducted from the Contract Value. The Company may assess
+              Monthly Charges of three (3) types:  Mortality and Expense Risk Charges, Asset
+              Based Distribution Charges and Administrative Charges. The Monthly Charges will
+              be taken from the Money Market Sub-Account.
+            </xsl:text>
           </fo:block>
           <fo:block font-size="9.0pt" text-align="left" font-family="sans-serif" font-weight="normal" margin-top="1em">
-            <xsl:text>Due to the limitations on withdrawals from investment options offered under the</xsl:text>
-            <xsl:text> Contract, we reserve the right to (i) allocate a portion of each purchase</xsl:text>
-            <xsl:text> payment to the Money Market Sub-Account and (ii) transfer Contract Value to</xsl:text>
-            <xsl:text> the Money Market Sub-Account from time to time to ensure that monthly charges</xsl:text>
-            <xsl:text> can be deducted from the Money Market Sub-Account when due. The illustrated</xsl:text>
-            <xsl:text> values do not reflect any amounts that may be allocated to meet the minimum</xsl:text>
-            <xsl:text> money market requirement.</xsl:text>
+            <xsl:text>
+              Due to the limitations on withdrawals from investment options offered under the
+              Contract, we reserve the right to (i) allocate a portion of each purchase
+              payment to the Money Market Sub-Account and (ii) transfer Contract Value to
+              the Money Market Sub-Account from time to time to ensure that monthly charges
+              can be deducted from the Money Market Sub-Account when due. The illustrated
+              values do not reflect any amounts that may be allocated to meet the minimum
+              money market requirement.
+            </xsl:text>
           </fo:block>
         </fo:flow>
 
@@ -416,16 +438,20 @@
         <fo:flow flow-name="xsl-region-body">
           <fo:block font-size="9.0pt" text-align="left" font-family="sans-serif" font-weight="normal">
             <fo:inline font-weight="bold">Mortality and Expense Charge ("M&amp;E"): </fo:inline>
-            <xsl:text> The current charge as described in the Table of Charges of the Confidential</xsl:text>
-            <xsl:text> Private Placement Memorandum for </xsl:text>
+            <xsl:text>
+              The current charge as described in the Table of Charges of the Confidential
+              Private Placement Memorandum for
+            </xsl:text>
             <xsl:value-of select="illustration/scalar/PolicyMktgName"/>
             <fo:inline vertical-align="super" font-size="7.5pt">SM</fo:inline>
             <xsl:text>.</xsl:text>
           </fo:block>
           <fo:block font-size="9.0pt" text-align="left" font-family="sans-serif" font-weight="normal" margin-top="1em">
             <fo:inline font-weight="bold">Administrative Charge: </fo:inline>
-            <xsl:text> The current charge is equal on an annual basis to .20% of the Contract Value,</xsl:text>
-            <xsl:text> if on any monthly calculation date, the Contract Value is less than $1,000,000.</xsl:text>
+            <xsl:text>
+              The current charge is equal on an annual basis to .20% of the Contract Value,
+              if on any monthly calculation date, the Contract Value is less than $1,000,000.
+            </xsl:text>
           </fo:block>
           <fo:block font-size="9.0pt" text-align="left" font-family="sans-serif" font-weight="normal" margin-top="1em">
             <fo:inline font-weight="bold">Asset Based Distribution Charge: </fo:inline>
@@ -433,29 +459,35 @@
           </fo:block>
           <fo:block font-size="9.0pt" text-align="left" font-family="sans-serif" font-weight="normal" margin-top="1em">
             <fo:inline font-weight="bold">Withdrawals: </fo:inline>
-            <xsl:text> Early withdrawals may result in tax consequences on the amount being withdrawn</xsl:text>
-            <xsl:text> and, in some cases, an early withdrawal penalty tax. As a result, you may receive</xsl:text>
-            <xsl:text> less than the original amount invested. Any withdrawals are taxed to the extent of</xsl:text>
-            <xsl:text> any gain in the contract and an additional 10% penalty tax will apply to the</xsl:text>
-            <xsl:text> taxable portion of the withdrawal.</xsl:text>
+            <xsl:text>
+              Early withdrawals may result in tax consequences on the amount being withdrawn
+              and, in some cases, an early withdrawal penalty tax. As a result, you may receive
+              less than the original amount invested. Any withdrawals are taxed to the extent of
+              any gain in the contract and an additional 10% penalty tax will apply to the
+              taxable portion of the withdrawal.
+            </xsl:text>
           </fo:block>
           <fo:block font-size="9.0pt" text-align="left" font-family="sans-serif" font-weight="normal" margin-top="1em">
             <fo:inline font-weight="bold">Illiquid Sub-Accounts: </fo:inline>
-            <xsl:text> We have also made available under the Contract the ability to allocate purchase</xsl:text>
-            <xsl:text> payments and Contract Value to sub-accounts that will provide for investment in</xsl:text>
-            <xsl:text> certain alternative investments including hedge funds. Because of the liquidity</xsl:text>
-            <xsl:text> restrictions imposed by these alternative investment funds, these sub-accounts</xsl:text>
-            <xsl:text> are referred to in the Contract and in the private placement memorandum as illiquid</xsl:text>
-            <xsl:text> sub-accounts. Contract owners must understand, and be willing to bear, the risks</xsl:text>
-            <xsl:text> associated with such investments. If Contract Value is allocated to illiquid</xsl:text>
-            <xsl:text> sub-accounts, the Owner will not be able to transfer Contract Value or effect</xsl:text>
-            <xsl:text> a withdrawal or surrender of the Contract until specified dates. Refer to the</xsl:text>
-            <xsl:text> Confidential Private Placement Memorandum for details.</xsl:text>
+            <xsl:text>
+              We have also made available under the Contract the ability to allocate purchase
+              payments and Contract Value to sub-accounts that will provide for investment in
+              certain alternative investments including hedge funds. Because of the liquidity
+              restrictions imposed by these alternative investment funds, these sub-accounts
+              are referred to in the Contract and in the private placement memorandum as illiquid
+              sub-accounts. Contract owners must understand, and be willing to bear, the risks
+              associated with such investments. If Contract Value is allocated to illiquid
+              sub-accounts, the Owner will not be able to transfer Contract Value or effect
+              a withdrawal or surrender of the Contract until specified dates. Refer to the
+              Confidential Private Placement Memorandum for details.
+            </xsl:text>
           </fo:block>
           <fo:block font-size="9.0pt" text-align="left" font-family="sans-serif" font-weight="bold" margin-top="1em">
-            <xsl:text>Note:  Please refer to the Contract for complete explanation of benefits, rights</xsl:text>
-            <xsl:text> and obligations. In the event of a conflict between the illustration and the</xsl:text>
-            <xsl:text> Contract, the terms of the Contract will control.</xsl:text>
+            <xsl:text>
+              Note:  Please refer to the Contract for complete explanation of benefits, rights
+              and obligations. In the event of a conflict between the illustration and the
+              Contract, the terms of the Contract will control.
+            </xsl:text>
           </fo:block>
           <fo:block font-size="10.0pt" text-align="left" font-family="sans-serif" font-weight="bold" margin-top="2em" text-decoration="underline">
             <xsl:text>Column Definitions</xsl:text>
@@ -466,23 +498,31 @@
           </fo:block>
           <fo:block font-size="9.0pt" text-align="left" font-family="sans-serif" font-weight="normal" margin-top="1em">
             <fo:inline font-weight="bold">Purchase Payment: </fo:inline>
-            <xsl:text> A payment made by or on behalf of a Contract Owner during the Accumulation</xsl:text>
-            <xsl:text> Period of the Contract.</xsl:text>
+            <xsl:text>
+              A payment made by or on behalf of a Contract Owner during the Accumulation
+              Period of the Contract.
+            </xsl:text>
           </fo:block>
           <fo:block font-size="9.0pt" text-align="left" font-family="sans-serif" font-weight="normal" margin-top="1em">
             <fo:inline font-weight="bold">Purchase Payment Charges: </fo:inline>
-            <xsl:text> The sum of the Purchase Payment Distribution Charge and applicable state premium</xsl:text>
-            <xsl:text> tax charged on an upfront basis, if any.</xsl:text>
+            <xsl:text>
+              The sum of the Purchase Payment Distribution Charge and applicable state premium
+              tax charged on an upfront basis, if any.
+            </xsl:text>
           </fo:block>
           <fo:block font-size="9.0pt" text-align="left" font-family="sans-serif" font-weight="normal" margin-top="1em">
             <fo:inline font-weight="bold">Withdrawal(s): </fo:inline>
-            <xsl:text> The net dollar amount redeemed from the Contract. Withdrawals are reflected</xsl:text>
-            <xsl:text> at the beginning of each year.</xsl:text>
+            <xsl:text>
+              The net dollar amount redeemed from the Contract. Withdrawals are reflected
+              at the beginning of each year.
+            </xsl:text>
           </fo:block>
           <fo:block font-size="9.0pt" text-align="left" font-family="sans-serif" font-weight="normal" margin-top="1em">
             <fo:inline font-weight="bold">Asset Charges: </fo:inline>
-            <xsl:text> The annual M&amp;E charges, asset based distribution charges and administrative</xsl:text>
-            <xsl:text> charges deducted from Contract Value.</xsl:text>
+            <xsl:text>
+              The annual M&amp;E charges, asset based distribution charges and administrative
+              charges deducted from Contract Value.
+            </xsl:text>
           </fo:block>
         </fo:flow>
 
@@ -508,29 +548,31 @@
         <fo:flow flow-name="xsl-region-body">
           <fo:block font-size="9.0pt" text-align="left" font-family="sans-serif" font-weight="normal">
             <fo:inline font-weight="bold">Investment Experience: </fo:inline>
-            <xsl:text> The annual investment income credited to the Contract sub-accounts using</xsl:text>
-            <xsl:text> the hypothetical Net Rate of Return.</xsl:text>
+            <xsl:text>
+              The annual investment income credited to the Contract sub-accounts using
+              the hypothetical Net Rate of Return.
+            </xsl:text>
           </fo:block>
           <fo:block font-size="9.0pt" text-align="left" font-family="sans-serif" font-weight="normal" margin-top="1em">
             <fo:inline font-weight="bold">End of Year Contract Value: </fo:inline>
-            <xsl:text> The value of the Contract sub-account(s) after applying any Purchase Payments</xsl:text>
-            <xsl:text> (less Purchase Payment Charges), deducting any Withdrawals and crediting annual</xsl:text>
-            <xsl:text> hypothetical Investment Experience.</xsl:text>
+            <xsl:text>
+              The value of the Contract sub-account(s) after applying any Purchase Payments
+              (less Purchase Payment Charges), deducting any Withdrawals and crediting annual
+              hypothetical Investment Experience.
+            </xsl:text>
           </fo:block>
           <fo:block font-size="9.0pt" text-align="left" font-family="sans-serif" font-weight="normal" margin-top="1em">
             <fo:inline font-weight="bold">Cumulative Contract Value IRR: </fo:inline>
-            <xsl:text> The Contract Value Internal Rate of Return ("IRR") is an interest rate at which</xsl:text>
-            <xsl:text> the Net Purchase Payment demonstrated would have to be invested outside the</xsl:text>
-            <xsl:text> Contract to generate the Contract Value. The IRR is illustrative only and does</xsl:text>
-            <xsl:text> not predict future results.</xsl:text>
+            <xsl:text>
+              The Contract Value Internal Rate of Return ("IRR") is an interest rate at which
+              the Net Purchase Payment demonstrated would have to be invested outside the
+              Contract to generate the Contract Value. The IRR is illustrative only and does
+              not predict future results.
+            </xsl:text>
           </fo:block>
-          <xsl:choose>
-            <xsl:when test="$has_supplemental_report">
-            </xsl:when>
-            <xsl:otherwise>
-              <fo:block id="endofdoc"/>
-            </xsl:otherwise>
-          </xsl:choose>
+          <xsl:if test="not($has_supplemental_report)">
+            <fo:block id="endofdoc"/>
+          </xsl:if>
         </fo:flow>
 
       </fo:page-sequence>
@@ -568,7 +610,7 @@
   </xsl:template>
 
   <xsl:template name="standard-header">
-    <fo:table table-layout="fixed" width="100%" padding-after="2.5pt" font="bold 13.0pt sans-serif">
+    <fo:table table-layout="fixed" width="100%" padding-after="2.5pt" font-weight="bold" font-size="13.0pt" font-family="sans-serif">
       <fo:table-column column-width="50mm"/>
       <fo:table-column column-width="90mm"/>
       <fo:table-column column-width="50mm"/>
@@ -601,7 +643,7 @@
 
   <xsl:template name="scalar-header">
     <xsl:param name="basis"/>
-    <fo:table table-layout="fixed" width="100%" padding-after="2.5pt" font="normal 9.5pt sans-serif" border-bottom="1pt solid black">
+    <fo:table table-layout="fixed" width="100%" padding-after="2.5pt" font-weight="normal" font-size="9.5pt" font-family="sans-serif" border-bottom="1pt solid black">
       <fo:table-column column-width="125mm"/>
       <fo:table-column column-width="10mm"/>
       <fo:table-column column-width="45mm"/>
@@ -611,7 +653,7 @@
           <fo:table-cell>
             <fo:block text-align="left">
               <xsl:text>Date Prepared: </xsl:text>
-              <fo:inline word-wrap="nowrap">
+              <fo:inline white-space="nowrap">
                 <xsl:value-of select="illustration/scalar/PrepMonth"/>
                 <xsl:value-of select="illustration/scalar/PrepDay"/>
               </fo:inline>
@@ -636,21 +678,20 @@
           <fo:table-cell>
             <fo:block text-align="left">
               <xsl:text>Prepared For: </xsl:text>
-              <xsl:choose>
-                <xsl:when test="not($is_composite)">
-                  <!-- Properly adjust for long user input strings limit output to 140 characters for appox. 2 lines -->
-                  <xsl:call-template name="limitstring">
-                    <xsl:with-param name="passString" select="illustration/scalar/Insured1"/>
-                    <xsl:with-param name="length" select="140"/>
-                  </xsl:call-template>
-                </xsl:when>
-                <xsl:otherwise>
-                  <xsl:call-template name="limitstring">
-                    <xsl:with-param name="passString" select="illustration/scalar/CorpName"/>
-                    <xsl:with-param name="length" select="140"/>
-                  </xsl:call-template>
-                </xsl:otherwise>
-              </xsl:choose>
+              <!-- Properly adjust for long user input strings limit output to 140 characters for appox. 2 lines -->
+              <xsl:call-template name="limitstring">
+                <xsl:with-param name="length" select="140"/>
+                <xsl:with-param name="passString">
+                  <xsl:choose>
+                    <xsl:when test="not($is_composite)">
+                      <xsl:value-of select="illustration/scalar/Insured1"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <xsl:value-of select="illustration/scalar/CorpName"/>
+                    </xsl:otherwise>
+                  </xsl:choose>
+                </xsl:with-param>
+              </xsl:call-template>
             </fo:block>
           </fo:table-cell>
           <fo:table-cell>
@@ -659,21 +700,9 @@
           <fo:table-cell>
             <fo:block text-align="left">
               <xsl:choose>
-                <xsl:when test="$basis='Current'">
+                <xsl:when test="($basis='Current') or ($basis='CurrentZero') or ($basis='Guaranteed') or ($basis='GuaranteedZero')">
                   <xsl:text>Net Rate of Return: </xsl:text>
-                  <xsl:value-of select="illustration/scalar/InitAnnSepAcctNetInt_Current"/>
-                </xsl:when>
-                <xsl:when test="$basis='CurrentZero'">
-                  <xsl:text>Net Rate of Return: </xsl:text>
-                  <xsl:value-of select="illustration/scalar/InitAnnSepAcctNetInt_CurrentZero"/>
-                </xsl:when>
-                <xsl:when test="$basis='Guaranteed'">
-                  <xsl:text>Net Rate of Return: </xsl:text>
-                  <xsl:value-of select="illustration/scalar/InitAnnSepAcctNetInt_Guaranteed"/>
-                </xsl:when>
-                <xsl:when test="$basis='GuaranteedZero'">
-                  <xsl:text>Net Rate of Return: </xsl:text>
-                  <xsl:value-of select="illustration/scalar/InitAnnSepAcctNetInt_GuaranteedZero"/>
+                  <xsl:value-of select="illustration/scalar/*[name()=concat('InitAnnSepAcctNetInt_', $basis)]"/>
                 </xsl:when>
                 <xsl:when test="$basis='NoBasis'"/>
               </xsl:choose>
@@ -711,16 +740,10 @@
           <fo:table-cell>
             <fo:block text-align="left">
               <xsl:choose>
-                <xsl:when test="$basis='Current'">
+                <xsl:when test="($basis='Current') or ($basis='CurrentZero')">
                   <xsl:text>Current Charges</xsl:text>
                 </xsl:when>
-                <xsl:when test="$basis='CurrentZero'">
-                  <xsl:text>Current Charges</xsl:text>
-                </xsl:when>
-                <xsl:when test="$basis='Guaranteed'">
-                  <xsl:text>Guaranteed Charges</xsl:text>
-                </xsl:when>
-                <xsl:when test="$basis='GuaranteedZero'">
+                <xsl:when test="($basis='Guaranteed') or ($basis='GuaranteedZero')">
                   <xsl:text>Guaranteed Charges</xsl:text>
                 </xsl:when>
                 <xsl:when test="$basis='NoBasis'"/>
@@ -784,7 +807,7 @@
   </xsl:template>
 
   <xsl:template name="titles">
-    <fo:block font-size="13.0pt" text-align="center" font-family="sans-serif" font-weight="bold">
+    <fo:block font-size="13.0pt" text-align="center" font-family="sans-serif" font-weight="bold" margin-top=".5em">
       <xsl:text>HYPOTHETICAL ILLUSTRATION</xsl:text>
     </fo:block>
     <fo:block font-size="11.0pt" text-align="center" font-family="sans-serif" font-weight="bold" border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="black" padding-after="2.5pt">
@@ -795,15 +818,15 @@
   <xsl:template name="illustration-table">
     <xsl:param name="basis"/>
     <xsl:param name="basis-lapse-year"/>
-    <fo:table table-layout="fixed" width="100%" font-size="normal 9.0pt serif">
+    <fo:table table-layout="fixed" width="100%" font-weight="normal" font-size="9.0pt" font-family="serif">
       <xsl:variable name="column-values-columns">
-        <column name="PolicyYear">_ _ Year</column>
-        <column name="GrossPmt">_Purchase _Payment</column>
+        <column name="PolicyYear">Year</column>
+        <column name="GrossPmt">Purchase _Payment</column>
         <column special="SpecialPmt">Purchase _Payment _Charges</column>
-        <column name="NetWD">_ _Withdrawal(s)</column>
-        <column special="SpecialIntCredited">_Asset _Charges</column>
-        <column special="SpecialGrossIntCredited">_Investment _Experience</column>
-        <column special="SpecialAcctVal">_End of Year _Contract Value</column>
+        <column name="NetWD">Withdrawal(s)</column>
+        <column special="SpecialIntCredited">Asset _Charges</column>
+        <column special="SpecialGrossIntCredited">Investment _Experience</column>
+        <column special="SpecialAcctVal">End of Year _Contract Value</column>
         <column special="SpecialIrrCsv">Cumulative _Contract Value _IRR</column>
       </xsl:variable>
       <xsl:variable name="columns" select="document('')//xsl:variable[@name='column-values-columns']/column"/>
@@ -866,96 +889,75 @@
 
   <xsl:template name="preliminary-footer">
     <xsl:param name="basis"/>
-    <xsl:choose>
-      <xsl:when test="$basis='Current'">
-        <fo:block font-size="8.5pt" text-align="left" font-family="sans-serif" font-weight="normal">
-          <xsl:text>Contract values are net of Current contract charges which are not guaranteed.</xsl:text>
-          <xsl:text> See the Explanation and Footnotes for important Contract information.</xsl:text>
-        </fo:block>
-      </xsl:when>
-      <xsl:when test="$basis='CurrentZero'">
-        <fo:block font-size="8.5pt" text-align="left" font-family="sans-serif" font-weight="normal">
-          <xsl:text>Contract values are net of Current contract charges which are not guaranteed.</xsl:text>
-          <xsl:text> See the Explanation and Footnotes for important Contract information.</xsl:text>
-        </fo:block>
-      </xsl:when>
-      <xsl:when test="$basis='Guaranteed'">
-        <fo:block font-size="8.5pt" text-align="left" font-family="sans-serif" font-weight="normal">
-          <xsl:text>Contract values are net of Guaranteed contract charges.</xsl:text>
-          <xsl:text> See the Explanation and Footnotes for important Contract information.</xsl:text>
-        </fo:block>
-      </xsl:when>
-      <xsl:when test="$basis='GuaranteedZero'">
-        <fo:block font-size="8.5pt" text-align="left" font-family="sans-serif" font-weight="normal">
-          <xsl:text>Contract values are net of Guaranteed contract charges.</xsl:text>
-          <xsl:text> See the Explanation and Footnotes for important Contract information.</xsl:text>
-        </fo:block>
-      </xsl:when>
-      <xsl:otherwise>
-        <fo:block/>
-      </xsl:otherwise>
-    </xsl:choose>
+    <fo:block font-size="8.5pt" text-align="left" font-family="sans-serif" font-weight="normal">
+      <xsl:choose>
+        <xsl:when test="($basis='Current') or ($basis='CurrentZero')">
+          <xsl:text>
+            Contract values are net of Current contract charges which are not guaranteed.
+            See the Explanation and Footnotes for important Contract information.
+          </xsl:text>
+        </xsl:when>
+        <xsl:when test="($basis='Guaranteed') or ($basis='GuaranteedZero')">
+          <xsl:text>
+            Contract values are net of Guaranteed contract charges.
+            See the Explanation and Footnotes for important Contract information.
+          </xsl:text>
+        </xsl:when>
+      </xsl:choose>
+    </fo:block>
   </xsl:template>
 
   <xsl:template name="standard-footer">
     <xsl:param name="displaypagenumber"/>
-    <fo:block padding-before="5pt" font-size="9.0pt" font-family="sans-serif" border-top="1pt solid blue">
-      <fo:block font-size="8.5pt" text-align="left" font-family="sans-serif" font-weight="normal" margin-top="1em">
-        <xsl:text>Principal Underwriter: </xsl:text>
-        <xsl:value-of select="illustration/scalar/MainUnderwriter"/>
-        <xsl:text>, </xsl:text>
-        <xsl:value-of select="illustration/scalar/MainUnderwriterAddress"/>
-        <xsl:text>. </xsl:text>
-        <xsl:value-of select="illustration/scalar/MainUnderwriter"/>
-        <xsl:text> is a wholly owned subsidiary of </xsl:text>
-        <xsl:value-of select="illustration/scalar/InsCoName"/>
-        <xsl:text>.</xsl:text>
-      </fo:block>
-      <fo:table table-layout="fixed" width="100%" margin-top="1em">
-        <fo:table-column/>
-        <fo:table-column/>
-        <fo:table-column/>
-        <fo:table-body padding-before="2pt">
-          <fo:table-row>
-            <fo:table-cell>
-              <fo:block text-align="left">
-                <xsl:text>Date Prepared: </xsl:text>
-                <fo:inline word-wrap="nowrap">
-                  <xsl:value-of select="illustration/scalar/PrepMonth"/>
-                  <xsl:value-of select="illustration/scalar/PrepDay"/>
-                </fo:inline>
-                <xsl:text>, </xsl:text>
-                <xsl:value-of select="illustration/scalar/PrepYear"/>
-              </fo:block>
-            </fo:table-cell>
-            <fo:table-cell>
-              <xsl:choose>
-                <xsl:when test="$displaypagenumber=1">
-                  <fo:block text-align="center">
-                    <xsl:text>Page: </xsl:text>
-                    <fo:page-number/>
-                    <xsl:text> of </xsl:text>
-                    <fo:page-number-citation ref-id="endofdoc"/>
-                  </fo:block>
-                </xsl:when>
-                <xsl:otherwise>
-                  <fo:block/>
-                </xsl:otherwise>
-              </xsl:choose>
-            </fo:table-cell>
-            <fo:table-cell>
-              <fo:block text-align="right">
-                <xsl:if test="illustration/scalar/LmiVersion!=''">
-                  <fo:block text-align="right">System Version:
-                    <xsl:value-of select="illustration/scalar/LmiVersion"/>
-                  </fo:block>
-                </xsl:if>
-              </fo:block>
-            </fo:table-cell>
-          </fo:table-row>
-        </fo:table-body>
-      </fo:table>
+    <fo:block font-size="8.5pt" text-align="left" font-family="sans-serif" font-weight="normal" margin-top="2em" padding-before="5pt" border-top="1pt solid blue">
+      <xsl:text>Principal Underwriter: </xsl:text>
+      <xsl:value-of select="illustration/scalar/MainUnderwriter"/>
+      <xsl:text>, </xsl:text>
+      <xsl:value-of select="illustration/scalar/MainUnderwriterAddress"/>
+      <xsl:text>. </xsl:text>
+      <xsl:value-of select="illustration/scalar/MainUnderwriter"/>
+      <xsl:text> is a wholly owned subsidiary of </xsl:text>
+      <xsl:value-of select="illustration/scalar/InsCoName"/>
+      <xsl:text>.</xsl:text>
     </fo:block>
+    <fo:table table-layout="fixed" width="100%" margin-top="1em" font-size="9.0pt" font-family="sans-serif">
+      <fo:table-column/>
+      <fo:table-column/>
+      <fo:table-column/>
+      <fo:table-body padding-before="2pt">
+        <fo:table-row>
+          <fo:table-cell>
+            <fo:block text-align="left">
+              <xsl:text>Date Prepared: </xsl:text>
+              <fo:inline white-space="nowrap">
+                <xsl:value-of select="illustration/scalar/PrepMonth"/>
+                <xsl:value-of select="illustration/scalar/PrepDay"/>
+              </fo:inline>
+              <xsl:text>, </xsl:text>
+              <xsl:value-of select="illustration/scalar/PrepYear"/>
+            </fo:block>
+          </fo:table-cell>
+          <fo:table-cell>
+            <fo:block text-align="center">
+              <xsl:if test="$displaypagenumber=1">
+                <xsl:text>Page: </xsl:text>
+                <fo:page-number/>
+                <xsl:text> of </xsl:text>
+                <fo:page-number-citation ref-id="endofdoc"/>
+              </xsl:if>
+            </fo:block>
+          </fo:table-cell>
+          <fo:table-cell>
+            <fo:block text-align="right">
+              <xsl:if test="illustration/scalar/LmiVersion!=''">
+                System Version:
+                <xsl:value-of select="illustration/scalar/LmiVersion"/>
+              </xsl:if>
+            </fo:block>
+          </fo:table-cell>
+        </fo:table-row>
+      </fo:table-body>
+    </fo:table>
   </xsl:template>
 
   <xsl:template name="get-basis-lapse-year">
