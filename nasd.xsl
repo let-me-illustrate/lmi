@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: nasd.xsl,v 1.31 2007-06-05 12:31:49 etarassov Exp $
+    $Id: nasd.xsl,v 1.32 2007-06-05 23:29:23 etarassov Exp $
 -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fo="http://www.w3.org/1999/XSL/Format" version="1.0">
   <xsl:include href="fo_common.xsl"/>
@@ -116,7 +116,7 @@
       <!-- The data to be diplayed in the pages, cover page first -->
       <fo:page-sequence master-reference="cover" force-page-count="no-force">
         <fo:flow flow-name="xsl-region-body">
-          <fo:block border="thick solid blue" font-size="14.0pt" text-align="center" font-family="sans-serif">
+          <fo:block border="2pt solid blue" font-size="14.0pt" text-align="center" font-family="sans-serif">
             <fo:block font-size="20.0pt" font-weight="bold" margin-top="5em">
               <xsl:value-of select="illustration/scalar/PolicyMktgName"/>
             </fo:block>
@@ -135,7 +135,7 @@
             <fo:block text-align="center" font-weight="bold" margin-top="10em">
                 Prepared for:
             </fo:block>
-            <fo:block margin-left="0.15in" margin-right="0.15in" margint-top="1em">
+            <fo:block margin-left="0.15in" margin-right="0.15in" margin-top="1em">
               <xsl:choose>
                 <xsl:when test="not($is_composite)">
                   <!-- Properly adjust for long user input strings limit output to 140 characters for appox. 2 lines -->
@@ -290,8 +290,8 @@
             <fo:block>
               <xsl:text>The number of years the policy is assumed to have been in force.</xsl:text>
             </fo:block>
-            <xsl:if test="not($is_composite)" margin-top="2em">
-              <fo:block font-weight="bold">
+            <xsl:if test="not($is_composite)">
+              <fo:block font-weight="bold" margin-top="2em">
                 <xsl:text>End of Year Age</xsl:text>
               </fo:block>
               <fo:block margin-bottom="1em">
