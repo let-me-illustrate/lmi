@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.726 2007-06-05 15:41:49 chicares Exp $
+// $Id: ChangeLog,v 1.727 2007-06-05 15:51:56 chicares Exp $
 
 MAINTENANCE
 
@@ -12054,10 +12054,15 @@ test.
   objects.make
 Refactor: separation of concerns.
 
- <chicares@cox.net> [1232]
+20070605T1541Z <chicares@cox.net> [1232]
 
   cpp_main.cpp
   main_cli.cpp
   main_wx.cpp
 Improve diagnosis of problems with command-line arguments.
+
+20070605T1551Z <chicares@cox.net> [1232]
+
+  emit_ledger.cpp
+Implement another output type.
 
