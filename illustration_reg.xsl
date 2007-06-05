@@ -21,11 +21,11 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: illustration_reg.xsl,v 1.21 2007-06-04 12:15:37 etarassov Exp $
+    $Id: illustration_reg.xsl,v 1.22 2007-06-05 00:31:27 etarassov Exp $
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:fo="http://www.w3.org/1999/XSL/Format">
-  <xsl:include href="fo_common.xsl" />
+  <xsl:include href="fo_common.xsl"/>
   <xsl:output method="xml" encoding="UTF-8" indent="yes"/>
   <xsl:variable name="counter" select="1"/>
   <xsl:variable name="inforceyear" select="illustration/scalar/InforceYear"/>
@@ -46,7 +46,7 @@
       <fo:layout-master-set>
 
         <!-- Define the cover page. -->
-        <fo:simple-page-master master-name="cover" page-height="11in" page-width="8.5in" margin-top="0.1in" margin-bottom="0in" margin-left="0.35in" margin-right="0.35in" >
+        <fo:simple-page-master master-name="cover" page-height="11in" page-width="8.5in" margin-top="0.1in" margin-bottom="0in" margin-left="0.35in" margin-right="0.35in">
           <fo:region-body margin-top="0.25in" margin-bottom="0.10in"/>
         </fo:simple-page-master>
 
@@ -178,7 +178,7 @@
               <xsl:choose>
                 <xsl:when test="not($is_composite)">
                   <!-- Properly adjust for long user input strings limit output to 140 characters for appox. 2 lines -->
-                  <xsl:call-template name="limitstring" >
+                  <xsl:call-template name="limitstring">
                     <xsl:with-param name="passString" select="illustration/scalar/Insured1"/>
                     <xsl:with-param name="length" select="140"/>
                   </xsl:call-template>
@@ -187,7 +187,7 @@
                   </xsl:if>
                 </xsl:when>
                 <xsl:otherwise>
-                  <xsl:call-template name="limitstring" >
+                  <xsl:call-template name="limitstring">
                     <xsl:with-param name="passString" select="illustration/scalar/CorpName"/>
                     <xsl:with-param name="length" select="140"/>
                   </xsl:call-template>
@@ -205,18 +205,18 @@
               Presented by:
             </fo:block>
             <fo:block><fo:leader></fo:leader></fo:block>
-            <fo:block text-align="center" >
+            <fo:block text-align="center">
               <xsl:value-of select="illustration/scalar/ProducerName"/>
             </fo:block>
-            <fo:block text-align="center" >
+            <fo:block text-align="center">
               <xsl:value-of select="illustration/scalar/ProducerStreet"/>
             </fo:block>
-            <fo:block text-align="center" >
+            <fo:block text-align="center">
               <xsl:value-of select="illustration/scalar/ProducerCity"/>
             </fo:block>
             <fo:block><fo:leader></fo:leader></fo:block>
             <fo:block><fo:leader></fo:leader></fo:block>
-            <fo:block text-align="center" >
+            <fo:block text-align="center">
               <xsl:value-of select="illustration/scalar/PrepMonth"/>
               <xsl:text> </xsl:text>
               <xsl:value-of select="illustration/scalar/PrepDay"/>
@@ -892,7 +892,7 @@
             <column name="CSVNet_Current">      Non-Guaranteed Values| Cash Surr _Value</column>
             <column name="EOYDeathBft_Current"> Non-Guaranteed Values| Death _Benefit  </column>
           </xsl:variable>
-          <xsl:variable name="tabular-detail-report-columns-raw" select="document('')//xsl:variable[@name='tabular-detail-report-columns']/column" />
+          <xsl:variable name="tabular-detail-report-columns-raw" select="document('')//xsl:variable[@name='tabular-detail-report-columns']/column"/>
           <xsl:variable name="columns" select="$tabular-detail-report-columns-raw[not(@composite) or boolean(boolean(@composite='1')=$is_composite)]"/>
 
           <fo:block font-size="9.0pt" font-family="serif">
@@ -1031,7 +1031,7 @@
           </fo:static-content>
 
           <!-- Supplemental report body -->
-          <xsl:call-template name="supplemental-report-body" />
+          <xsl:call-template name="supplemental-report-body"/>
         </fo:page-sequence>
       </xsl:if>
 
@@ -1146,7 +1146,7 @@
             <fo:table-cell>
               <fo:block text-align="left">
                 <xsl:text>&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;Group Name: </xsl:text>
-                <xsl:call-template name="limitstring" >
+                <xsl:call-template name="limitstring">
                   <xsl:with-param name="passString" select="illustration/scalar/CorpName"/>
                   <xsl:with-param name="length" select="50"/>
                 </xsl:call-template>
@@ -1180,7 +1180,7 @@
                 <xsl:otherwise>
                   <fo:block text-align="left">
                     <xsl:text>&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;Insured: </xsl:text>
-                    <xsl:call-template name="limitstring" >
+                    <xsl:call-template name="limitstring">
                       <xsl:with-param name="passString" select="illustration/scalar/Insured1"/>
                       <xsl:with-param name="length" select="50"/>
                     </xsl:call-template>
@@ -1367,7 +1367,7 @@
                     <xsl:when test="illustration/scalar/Franchise!=''">
                       <fo:block text-align="left">
                         <xsl:text>Master contract: </xsl:text>
-                        <xsl:call-template name="limitstring" >
+                        <xsl:call-template name="limitstring">
                           <xsl:with-param name="passString" select="illustration/scalar/Franchise"/>
                           <xsl:with-param name="length" select="30"/>
                         </xsl:call-template>
@@ -1416,12 +1416,12 @@
                   <xsl:when test="illustration/scalar/Franchise!='' and illustration/scalar/PolicyNumber!=''">
                     <fo:block text-align="left">
                       <xsl:text>Master contract: </xsl:text>
-                      <xsl:call-template name="limitstring" >
+                      <xsl:call-template name="limitstring">
                         <xsl:with-param name="passString" select="illustration/scalar/Franchise"/>
                         <xsl:with-param name="length" select="15"/>
                       </xsl:call-template>
                       <xsl:text>&#xA0;&#xA0;&#xA0;Contract number: </xsl:text>
-                      <xsl:call-template name="limitstring" >
+                      <xsl:call-template name="limitstring">
                         <xsl:with-param name="passString" select="illustration/scalar/PolicyNumber"/>
                         <xsl:with-param name="length" select="15"/>
                       </xsl:call-template>
@@ -1430,7 +1430,7 @@
                   <xsl:when test="illustration/scalar/Franchise!=''">
                     <fo:block text-align="left">
                       <xsl:text>Master contract: </xsl:text>
-                      <xsl:call-template name="limitstring" >
+                      <xsl:call-template name="limitstring">
                         <xsl:with-param name="passString" select="illustration/scalar/Franchise"/>
                         <xsl:with-param name="length" select="30"/>
                       </xsl:call-template>
@@ -1439,7 +1439,7 @@
                   <xsl:when test="illustration/scalar/PolicyNumber!=''">
                     <fo:block text-align="left">
                       <xsl:text>Contract number: </xsl:text>
-                      <xsl:call-template name="limitstring" >
+                      <xsl:call-template name="limitstring">
                         <xsl:with-param name="passString" select="illustration/scalar/PolicyNumber"/>
                         <xsl:with-param name="length" select="30"/>
                       </xsl:call-template>
@@ -1658,7 +1658,7 @@
       <column name="CSVNet_Current">      Non-Guaranteed Values| Current Values|Cash Surr _Value</column>
       <column name="EOYDeathBft_Current"> Non-Guaranteed Values| Current Values|Death _Benefit  </column>
     </xsl:variable>
-    <xsl:variable name="columns" select="document('')//xsl:variable[@name='numeric-summary-report-columns']/column" />
+    <xsl:variable name="columns" select="document('')//xsl:variable[@name='numeric-summary-report-columns']/column"/>
 
     <!-- The main contents of the body page -->
     <fo:flow flow-name="xsl-region-body">

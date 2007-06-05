@@ -21,10 +21,9 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: fo_common.xsl,v 1.21 2007-06-04 16:55:29 chicares Exp $
+    $Id: fo_common.xsl,v 1.22 2007-06-05 00:31:27 etarassov Exp $
 -->
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-  xmlns:fo="http://www.w3.org/1999/XSL/Format">
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fo="http://www.w3.org/1999/XSL/Format" version="1.0">
   <!--
   In some xsl:for-each loop we could iterate over a node set from some
   other document (not the current document being transformed, for example
@@ -48,17 +47,6 @@
   Frequently used value. For a composite case the variable is_composite is true.
   -->
   <xsl:variable name="is_composite" select="boolean($illustration/scalar/Composite='1')"/>
-
-  <!--
-  The two strings below define how the special symbols in are escaped
-  when the title text is written into the report.
-  Currently only '_' (the underscore character) is translated - into a hard-space.
-  For example a text '____Right_Aligned' would be translated into
-  '&#xA0;&#xA0;&#xA0;&#xA0;Right&#xA0;Aligned' which will result in the text
-  being padded to the right even if the text is aligned to the left.
-  -->
-  <xsl:variable name="SPECIAL_LETTERS">_</xsl:variable>
-  <xsl:variable name="SPECIAL_LETTERS_ESCAPED">&#xA0;</xsl:variable>
 
   <!--
   This may appear to be a clumsy way to get the max value but there is no clean way
@@ -115,20 +103,18 @@
       * an extra space added just before the text.
   -->
   <xsl:template name="dollar-units">
-    <xsl:choose>
-      <xsl:when test="$illustration/scalar/ScaleUnit=''">
-        <fo:block text-align="center" font-size="9pt">
+    <fo:block text-align="center" font-size="9pt" margin-top="1em">
+      <xsl:choose>
+        <xsl:when test="$illustration/scalar/ScaleUnit=''">
           <xsl:text>(Values shown are in dollars)</xsl:text>
-        </fo:block>
-      </xsl:when>
-      <xsl:otherwise>
-        <fo:block text-align="center" font-size="9pt">
+        </xsl:when>
+        <xsl:otherwise>
           <xsl:text>(Values shown are in </xsl:text>
           <xsl:value-of select="$illustration/scalar/ScaleUnit"/>
           <xsl:text>s of dollars)</xsl:text>
-        </fo:block>
-      </xsl:otherwise>
-    </xsl:choose>
+        </xsl:otherwise>
+      </xsl:choose>
+    </fo:block>
   </xsl:template>
 
   <xsl:template name="supplemental-report-body">
@@ -136,14 +122,16 @@
       <fo:block font-size="9.0pt" font-family="serif">
         <fo:table table-layout="fixed" width="100%">
           <xsl:for-each select="$supplemental_report/columns">
-            <fo:table-column/>
+            <fo:table-column column-width="proportional-column-width(100)"/>
           </xsl:for-each>
           <fo:table-header>
             <fo:table-row>
               <xsl:for-each select="$supplemental_report/columns">
-                <fo:table-cell border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue" padding="2pt">
+                <fo:table-cell display-align="after" border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue" padding="2pt">
                   <fo:block text-align="right">
-                    <xsl:value-of select="translate(./title,$SPECIAL_LETTERS,$SPECIAL_LETTERS_ESCAPED)"/>
+                    <xsl:call-template name="text-word-wrap">
+                      <xsl:with-param name="text" select="./title"/>
+                    </xsl:call-template>
                   </fo:block>
                 </fo:table-cell>
               </xsl:for-each>
