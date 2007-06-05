@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.724 2007-06-05 12:31:49 etarassov Exp $
+// $Id: ChangeLog,v 1.725 2007-06-05 12:47:47 chicares Exp $
 
 MAINTENANCE
 
@@ -12045,4 +12045,12 @@ check_concinnity test. Also correct minor issues in other xsl files.
   variable_annuity.xsl
 Clean up nasd.xsl and variable_annuity.xsl to pass check_concinnity
 test.
+
+20070605T1247Z <chicares@cox.net> [1232]
+
+  emit_ledger.cpp [new file]
+  emit_ledger.hpp [new file]
+  group_values.cpp
+  objects.make
+Refactor: separation of concerns.
 

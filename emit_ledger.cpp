@@ -1,0 +1,90 @@
+// Emit a ledger in various guises.
+//
+// Copyright (C) 2005, 2006, 2007 Gregory W. Chicares.
+//
+// This program is free software; you can redistribute it and/or modify
+// it under the terms of the GNU General Public License version 2 as
+// published by the Free Software Foundation.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program; if not, write to the Free Software Foundation,
+// Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
+//
+// http://savannah.nongnu.org/projects/lmi
+// email: <chicares@cox.net>
+// snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
+
+// $Id: emit_ledger.cpp,v 1.1 2007-06-05 12:47:47 chicares Exp $
+
+#ifdef __BORLANDC__
+#   include "pchfile.hpp"
+#   pragma hdrstop
+#endif // __BORLANDC__
+
+#include "emit_ledger.hpp"
+
+#include "configurable_settings.hpp"
+#include "file_command.hpp"
+#include "ledger.hpp"
+#include "ledger_text_formats.hpp"
+#include "ledger_xsl.hpp"
+#include "miscellany.hpp" // ios_out_trunc_binary()
+#include "path_utility.hpp"
+#include "timer.hpp"
+
+#include <boost/filesystem/fstream.hpp>
+
+#include <iostream>
+#include <string>
+
+double emit_ledger
+    (fs::path const& file
+    ,int             index
+    ,Ledger const&   ledger
+    ,mcenum_emission emission
+    )
+{
+    Timer timer;
+    if((emission & mce_emit_composite_only) && !ledger.GetIsComposite())
+        {
+        goto done;
+        }
+
+    if(emission & mce_emit_pdf_to_printer)
+        {
+        std::string pdf_out_file = write_ledger_to_pdf
+            (ledger
+            ,serialized_file_path(file, index, "ill").string()
+            );
+        file_command()(pdf_out_file, "print");
+        }
+    if(emission & mce_emit_test_data)
+        {
+        fs::ofstream ofs
+            (serialized_file_path(file, index, "test")
+            ,ios_out_trunc_binary()
+            );
+        ledger.Spew(ofs);
+        }
+    if(emission & mce_emit_spreadsheet)
+        {
+        PrintFormTabDelimited
+            (ledger
+            ,   file.string()
+            +   configurable_settings::instance().spreadsheet_file_extension()
+            );
+        }
+    if(emission & mce_emit_text_stream)
+        {
+        PrintLedgerFlatText(ledger, std::cout);
+        }
+
+  done:
+    return timer.stop().elapsed_usec();
+}
+

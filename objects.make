@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: objects.make,v 1.103 2007-05-31 23:37:28 chicares Exp $
+# $Id: objects.make,v 1.104 2007-06-05 12:47:47 chicares Exp $
 
 ################################################################################
 
@@ -175,6 +175,7 @@ common_common_objects := \
   datum_string.o \
   dbnames.o \
   death_benefits.o \
+  emit_ledger.o \
   expm1.o \
   facets.o \
   fenv_guard.o \
