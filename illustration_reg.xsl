@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: illustration_reg.xsl,v 1.23 2007-06-05 16:33:03 etarassov Exp $
+    $Id: illustration_reg.xsl,v 1.24 2007-06-05 23:29:23 etarassov Exp $
 -->
 <!DOCTYPE stylesheet [
 <!ENTITY nbsp "&#xA0;">
@@ -129,7 +129,7 @@
       <!-- The data to be diplayed in the pages, cover page first -->
       <fo:page-sequence master-reference="cover" force-page-count="no-force">
         <fo:flow flow-name="xsl-region-body">
-          <fo:block border="thick solid blue" font-size="14.0pt" text-align="center" font-family="sans-serif">
+          <fo:block border="2pt solid blue" font-size="14.0pt" text-align="center" font-family="sans-serif">
             <fo:block font-size="20.0pt" font-weight="bold" margin-top="5em">
               <xsl:value-of select="illustration/scalar/PolicyMktgName"/>
             </fo:block>
