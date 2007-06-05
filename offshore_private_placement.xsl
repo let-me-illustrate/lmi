@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: offshore_private_placement.xsl,v 1.16 2007-06-05 15:53:14 etarassov Exp $
+    $Id: offshore_private_placement.xsl,v 1.17 2007-06-05 23:29:23 etarassov Exp $
 -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fo="http://www.w3.org/1999/XSL/Format" version="1.0">
   <xsl:include href="fo_common.xsl"/>
@@ -118,7 +118,7 @@
 
       <fo:page-sequence master-reference="cover" force-page-count="no-force">
         <fo:flow flow-name="xsl-region-body">
-          <fo:block border="thick solid blue" font-size="14.0pt" text-align="center" font-family="sans-serif">
+          <fo:block border="2pt solid blue" font-size="14.0pt" text-align="center" font-family="sans-serif">
             <fo:block font-size="20.0pt" font-weight="bold" margin-top="4em">
               <xsl:value-of select="illustration/scalar/PolicyMktgName"/>
             </fo:block>
