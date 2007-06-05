@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: fo_common.xsl,v 1.22 2007-06-05 00:31:27 etarassov Exp $
+    $Id: fo_common.xsl,v 1.23 2007-06-05 15:58:26 etarassov Exp $
 -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fo="http://www.w3.org/1999/XSL/Format" version="1.0">
   <!--
@@ -41,6 +41,8 @@
   </xsl:variable>
   <xsl:variable name="max-lapse-year" select="number($max-lapse-year-text)"/>
   <xsl:variable name="supplemental_report" select="$illustration/supplementalreport"/>
+  <xsl:variable name="NO_SUPPLEMENTAL_COLUMN" select="'[None]'"/>
+  <xsl:variable name="supplemental_report_columns" select="$supplemental_report/columns[string(name)!=$NO_SUPPLEMENTAL_COLUMN]"/>
   <xsl:variable name="has_supplemental_report" select="boolean($illustration/scalar/SupplementalReport='1')"/>
 
   <!--
@@ -118,44 +120,46 @@
   </xsl:template>
 
   <xsl:template name="supplemental-report-body">
-    <fo:flow flow-name="xsl-region-body">
-      <fo:block font-size="9.0pt" font-family="serif">
-        <fo:table table-layout="fixed" width="100%">
-          <xsl:for-each select="$supplemental_report/columns">
-            <fo:table-column column-width="proportional-column-width(100)"/>
-          </xsl:for-each>
-          <fo:table-header>
-            <fo:table-row>
-              <xsl:for-each select="$supplemental_report/columns">
-                <fo:table-cell display-align="after" border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue" padding="2pt">
-                  <fo:block text-align="right">
-                    <xsl:call-template name="text-word-wrap">
-                      <xsl:with-param name="text" select="./title"/>
-                    </xsl:call-template>
-                  </fo:block>
+    <xsl:if test="count($supplemental_report_columns) &gt; 0">
+      <fo:flow flow-name="xsl-region-body">
+        <fo:block font-size="9.0pt" font-family="serif">
+          <fo:table table-layout="fixed" width="100%">
+            <xsl:for-each select="$supplemental_report_columns">
+              <fo:table-column column-width="proportional-column-width(100)"/>
+            </xsl:for-each>
+            <fo:table-header>
+              <fo:table-row>
+                <xsl:for-each select="$supplemental_report_columns">
+                  <fo:table-cell display-align="after" border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue" padding="2pt">
+                    <fo:block text-align="right">
+                      <xsl:call-template name="text-word-wrap">
+                        <xsl:with-param name="text" select="./title"/>
+                      </xsl:call-template>
+                    </fo:block>
+                  </fo:table-cell>
+                </xsl:for-each>
+              </fo:table-row>
+              <fo:table-row>
+                <fo:table-cell padding="2pt">
+                  <fo:block/>
                 </fo:table-cell>
-              </xsl:for-each>
-            </fo:table-row>
-            <fo:table-row>
-              <fo:table-cell padding="2pt">
-                <fo:block/>
-              </fo:table-cell>
-            </fo:table-row>
-          </fo:table-header>
-          <!-- Create Supplemental Report Values -->
-          <!-- make inforce illustration start in the inforce year -->
-          <fo:table-body>
-            <xsl:call-template name="supplemental-report-values">
-              <xsl:with-param name="counter" select="$illustration/scalar/InforceYear + 1"/>
-              <xsl:with-param name="inforceyear" select="0 - $illustration/scalar/InforceYear"/>
-            </xsl:call-template>
-          </fo:table-body>
-        </fo:table>
-      </fo:block>
-      <xsl:if test="$has_supplemental_report">
-        <fo:block id="endofdoc"/>
-      </xsl:if>
-    </fo:flow>
+              </fo:table-row>
+            </fo:table-header>
+            <!-- Create Supplemental Report Values -->
+            <!-- make inforce illustration start in the inforce year -->
+            <fo:table-body>
+              <xsl:call-template name="supplemental-report-values">
+                <xsl:with-param name="counter" select="$illustration/scalar/InforceYear + 1"/>
+                <xsl:with-param name="inforceyear" select="0 - $illustration/scalar/InforceYear"/>
+              </xsl:call-template>
+            </fo:table-body>
+          </fo:table>
+        </fo:block>
+        <xsl:if test="$has_supplemental_report">
+          <fo:block id="endofdoc"/>
+        </xsl:if>
+      </fo:flow>
+    </xsl:if>
   </xsl:template>
 
   <!-- Create Supplemental Report Values -->
@@ -164,7 +168,7 @@
     <xsl:param name="inforceyear"/>
     <xsl:if test="$counter &lt;= $max-lapse-year">
       <fo:table-row>
-        <xsl:for-each select="$supplemental_report/columns">
+        <xsl:for-each select="$supplemental_report_columns">
           <xsl:variable name="column_name" select="string(./name)"/>
           <fo:table-cell padding=".2pt">
             <fo:block text-align="right">
