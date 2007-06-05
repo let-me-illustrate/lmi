@@ -21,10 +21,9 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: variable_annuity.xsl,v 1.16 2007-06-05 00:31:27 etarassov Exp $
+    $Id: variable_annuity.xsl,v 1.17 2007-06-05 12:31:49 etarassov Exp $
 -->
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-  xmlns:fo="http://www.w3.org/1999/XSL/Format">
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fo="http://www.w3.org/1999/XSL/Format" version="1.0">
   <xsl:include href="fo_common.xsl"/>
   <xsl:output method="xml" encoding="UTF-8" indent="yes"/>
   <xsl:variable name="counter" select="1"/>
@@ -37,8 +36,7 @@
       <fo:layout-master-set>
 
         <!-- Define the Hypothetical Illustration Current page. -->
-        <fo:simple-page-master master-name="hypothetical-illustration-current" page-height="11in" page-width="8.5in"
-          margin-top="0.25in" margin-bottom="0.25in" margin-left="0.25in" margin-right="0.25in">
+        <fo:simple-page-master master-name="hypothetical-illustration-current" page-height="11in" page-width="8.5in" margin="0.25in">
           <!-- Central part of page -->
           <fo:region-body column-count="1" margin-top="2.80in" margin-bottom="1.80in"/>
           <!-- Header -->
@@ -48,8 +46,7 @@
         </fo:simple-page-master>
 
         <!-- Define the Hypothetical Illustration CurrentZero page. -->
-        <fo:simple-page-master master-name="hypothetical-illustration-current-zero" page-height="11in" page-width="8.5in"
-          margin-top="0.25in" margin-bottom="0.25in" margin-left="0.25in" margin-right="0.25in">
+        <fo:simple-page-master master-name="hypothetical-illustration-current-zero" page-height="11in" page-width="8.5in" margin="0.25in">
           <!-- Central part of page -->
           <fo:region-body column-count="1" margin-top="2.80in" margin-bottom="1.80in"/>
           <!-- Header -->
@@ -59,8 +56,7 @@
         </fo:simple-page-master>
 
         <!-- Define the Hypothetical Illustration Guaranteed page. -->
-        <fo:simple-page-master master-name="hypothetical-illustration-guaranteed" page-height="11in" page-width="8.5in"
-          margin-top="0.25in" margin-bottom="0.25in" margin-left="0.25in" margin-right="0.25in">
+        <fo:simple-page-master master-name="hypothetical-illustration-guaranteed" page-height="11in" page-width="8.5in" margin="0.25in">
           <!-- Central part of page -->
           <fo:region-body column-count="1" margin-top="2.80in" margin-bottom="1.80in"/>
           <!-- Header -->
@@ -70,8 +66,7 @@
         </fo:simple-page-master>
 
         <!-- Define the Hypothetical Illustration GuaranteedZero page. -->
-        <fo:simple-page-master master-name="hypothetical-illustration-guaranteed-zero" page-height="11in" page-width="8.5in"
-          margin-top="0.25in" margin-bottom="0.25in" margin-left="0.25in" margin-right="0.25in">
+        <fo:simple-page-master master-name="hypothetical-illustration-guaranteed-zero" page-height="11in" page-width="8.5in" margin="0.25in">
           <!-- Central part of page -->
           <fo:region-body column-count="1" margin-top="2.80in" margin-bottom="1.80in"/>
           <!-- Header -->
@@ -81,8 +76,7 @@
         </fo:simple-page-master>
 
         <!-- Define the Explanation and Footnotes page 1. -->
-        <fo:simple-page-master master-name="explanation-and-footnotes-1" page-height="11in" page-width="8.5in"
-          margin-top="0.25in" margin-bottom="0.25in" margin-left="0.25in" margin-right="0.25in">
+        <fo:simple-page-master master-name="explanation-and-footnotes-1" page-height="11in" page-width="8.5in" margin="0.25in">
           <!-- Central part of page -->
           <fo:region-body column-count="1" margin-top="1.5in" margin-bottom="1.0in"/>
           <!-- Header -->
@@ -92,8 +86,7 @@
         </fo:simple-page-master>
 
         <!-- Define the Explanation and Footnotes page 2. -->
-        <fo:simple-page-master master-name="explanation-and-footnotes-2" page-height="11in" page-width="8.5in"
-          margin-top="0.25in" margin-bottom="0.25in" margin-left="0.25in" margin-right="0.25in">
+        <fo:simple-page-master master-name="explanation-and-footnotes-2" page-height="11in" page-width="8.5in" margin="0.25in">
           <!-- Central part of page -->
           <fo:region-body column-count="1" margin-top="1.5in" margin-bottom="1.0in"/>
           <!-- Header -->
@@ -103,8 +96,7 @@
         </fo:simple-page-master>
 
         <!-- Define the Explanation and Footnotes page 3. -->
-        <fo:simple-page-master master-name="explanation-and-footnotes-3" page-height="11in" page-width="8.5in"
-          margin-top="0.25in" margin-bottom="0.25in" margin-left="0.25in" margin-right="0.25in">
+        <fo:simple-page-master master-name="explanation-and-footnotes-3" page-height="11in" page-width="8.5in" margin="0.25in">
           <!-- Central part of page -->
           <fo:region-body column-count="1" margin-top="1.5in" margin-bottom="1.0in"/>
           <!-- Header -->
@@ -115,8 +107,7 @@
 
         <!-- Define the Supplemental Report page. -->
         <xsl:if test="$has_supplemental_report">
-          <fo:simple-page-master master-name="supplemental-report" page-height="11in" page-width="8.5in"
-            margin-top="0.25in" margin-bottom="0.25in" margin-left="0.25in" margin-right="0.25in">
+          <fo:simple-page-master master-name="supplemental-report" page-height="11in" page-width="8.5in" margin="0.25in">
             <!-- Central part of page -->
             <fo:region-body column-count="1" margin-top="2.5in" margin-bottom="1.55in"/>
             <!-- Header -->
@@ -306,8 +297,7 @@
         </fo:static-content>
 
         <fo:flow flow-name="xsl-region-body">
-          <fo:block font-size="10.0pt" text-align="left" font-family="sans-serif" font-weight="bold"
-            text-decoration="underline">
+          <fo:block font-size="10.0pt" text-align="left" font-family="sans-serif" font-weight="bold" text-decoration="underline">
             <xsl:text>The Illustration</xsl:text>
           </fo:block>
           <fo:block font-size="9.0pt" text-align="left" font-family="sans-serif" font-weight="normal">
@@ -318,20 +308,17 @@
             <xsl:text> year. The maximum rate illustrated must be reasonable considering market conditions</xsl:text>
             <xsl:text> and the available investment choices.</xsl:text>
           </fo:block>
-          <fo:block><fo:leader></fo:leader></fo:block>
-          <fo:block font-size="9.0pt" text-align="left" font-family="sans-serif" font-weight="normal">
+          <fo:block font-size="9.0pt" text-align="left" font-family="sans-serif" font-weight="normal" margin-top="1em">
             <xsl:text>The hypothetical Net Rate of Return is the rate of return net of investment</xsl:text>
             <xsl:text> management, custody and other expenses charged by the investment manager of the</xsl:text>
             <xsl:text> underlying fund(s).</xsl:text>
           </fo:block>
-          <fo:block><fo:leader></fo:leader></fo:block>
-          <fo:block font-size="9.0pt" text-align="left" font-family="sans-serif" font-weight="normal">
+          <fo:block font-size="9.0pt" text-align="left" font-family="sans-serif" font-weight="normal" margin-top="1em">
             <xsl:text>This illustration does not reflect tax and accounting consequences and is not</xsl:text>
             <xsl:text> intended as tax advice nor may be relied on for purposes of avoiding any federal</xsl:text>
             <xsl:text> tax penalties. Consult professional tax advisors for tax advice.</xsl:text>
           </fo:block>
-          <fo:block><fo:leader></fo:leader></fo:block>
-          <fo:block font-size="9.0pt" text-align="left" font-family="sans-serif" font-weight="normal">
+          <fo:block font-size="9.0pt" text-align="left" font-family="sans-serif" font-weight="normal" margin-top="1em">
             <xsl:text>This illustration is not a Contact or an offer or solicitation to enter into a</xsl:text>
             <xsl:text> Contract. Offers are made only through the Confidential Private Placement</xsl:text>
             <xsl:text> Memorandum for </xsl:text>
@@ -339,8 +326,7 @@
             <fo:inline vertical-align="super" font-size="7.5pt">SM</fo:inline>
             <xsl:text>.</xsl:text>
           </fo:block>
-          <fo:block><fo:leader></fo:leader></fo:block>
-          <fo:block font-size="9.0pt" text-align="left" font-family="sans-serif" font-weight="normal">
+          <fo:block font-size="9.0pt" text-align="left" font-family="sans-serif" font-weight="normal" margin-top="1em">
             <xsl:text>This material must be preceded or accompanied by the current Confidential Private</xsl:text>
             <xsl:text> Placement Memorandum for </xsl:text>
             <xsl:value-of select="illustration/scalar/PolicyMktgName"/>
@@ -351,8 +337,7 @@
             <xsl:text> underlying investment choices. Please read the prospectuses and private placement</xsl:text>
             <xsl:text> memoranda carefully before investing or sending money.</xsl:text>
           </fo:block>
-          <fo:block><fo:leader></fo:leader></fo:block>
-          <fo:block font-size="9.0pt" text-align="left" font-family="sans-serif" font-weight="normal">
+          <fo:block font-size="9.0pt" text-align="left" font-family="sans-serif" font-weight="normal" margin-top="1em">
             <xsl:value-of select="illustration/scalar/InsCoShortName"/>
             <xsl:text> Financial Group is a marketing designation for </xsl:text>
             <xsl:value-of select="illustration/scalar/InsCoName"/>
@@ -360,10 +345,7 @@
             <xsl:value-of select="illustration/scalar/InsCoShortName"/>
             <xsl:text>) and its subsidiaries.</xsl:text>
           </fo:block>
-          <fo:block><fo:leader></fo:leader></fo:block>
-          <fo:block><fo:leader></fo:leader></fo:block>
-          <fo:block font-size="10.0pt" text-align="left" font-family="sans-serif" font-weight="bold"
-            text-decoration="underline">
+          <fo:block font-size="10.0pt" text-align="left" font-family="sans-serif" font-weight="bold" margin-top="2em" text-decoration="underline">
             <xsl:text>The Contract</xsl:text>
           </fo:block>
           <fo:block font-size="9.0pt" text-align="left" font-family="sans-serif" font-weight="normal">
@@ -379,8 +361,7 @@
             <xsl:value-of select="illustration/scalar/InsCoStreet"/>
             <xsl:text>.</xsl:text>
           </fo:block>
-          <fo:block><fo:leader></fo:leader></fo:block>
-          <fo:block font-size="9.0pt" text-align="left" font-family="sans-serif" font-weight="normal">
+          <fo:block font-size="9.0pt" text-align="left" font-family="sans-serif" font-weight="normal" margin-top="1em">
             <fo:inline font-weight="bold">Contract Requirements: </fo:inline>
             <xsl:text> This Contract is only available to persons who are deemed accredited investors</xsl:text>
             <xsl:text> and qualified purchasers under applicable federal securities laws. The minimum</xsl:text>
@@ -390,22 +371,19 @@
             <xsl:text> that you are familiar with and understand the fundamental risks and financial</xsl:text>
             <xsl:text> hazards of investing in the Contract.</xsl:text>
           </fo:block>
-          <fo:block><fo:leader></fo:leader></fo:block>
-          <fo:block font-size="9.0pt" text-align="left" font-family="sans-serif" font-weight="normal">
+          <fo:block font-size="9.0pt" text-align="left" font-family="sans-serif" font-weight="normal" margin-top="1em">
             <fo:inline font-weight="bold">Purchase Payment Charges: </fo:inline>
             <xsl:text> The sum of the Purchase Payment Distribution Charges, if any, and any Purchase</xsl:text>
             <xsl:text> Payment Expense Charges including state premium tax, if applicable.</xsl:text>
           </fo:block>
-          <fo:block><fo:leader></fo:leader></fo:block>
-          <fo:block font-size="9.0pt" text-align="left" font-family="sans-serif" font-weight="normal">
+          <fo:block font-size="9.0pt" text-align="left" font-family="sans-serif" font-weight="normal" margin-top="1em">
             <fo:inline font-weight="bold">Monthly Charges: </fo:inline>
             <xsl:text> Monthly Charges will be deducted from the Contract Value. The Company may assess</xsl:text>
             <xsl:text> Monthly Charges of three (3) types:  Mortality and Expense Risk Charges, Asset</xsl:text>
             <xsl:text> Based Distribution Charges and Administrative Charges. The Monthly Charges will</xsl:text>
             <xsl:text> be taken from the Money Market Sub-Account.</xsl:text>
           </fo:block>
-          <fo:block><fo:leader></fo:leader></fo:block>
-          <fo:block font-size="9.0pt" text-align="left" font-family="sans-serif" font-weight="normal">
+          <fo:block font-size="9.0pt" text-align="left" font-family="sans-serif" font-weight="normal" margin-top="1em">
             <xsl:text>Due to the limitations on withdrawals from investment options offered under the</xsl:text>
             <xsl:text> Contract, we reserve the right to (i) allocate a portion of each purchase</xsl:text>
             <xsl:text> payment to the Money Market Sub-Account and (ii) transfer Contract Value to</xsl:text>
@@ -444,19 +422,16 @@
             <fo:inline vertical-align="super" font-size="7.5pt">SM</fo:inline>
             <xsl:text>.</xsl:text>
           </fo:block>
-          <fo:block><fo:leader></fo:leader></fo:block>
-          <fo:block font-size="9.0pt" text-align="left" font-family="sans-serif" font-weight="normal">
+          <fo:block font-size="9.0pt" text-align="left" font-family="sans-serif" font-weight="normal" margin-top="1em">
             <fo:inline font-weight="bold">Administrative Charge: </fo:inline>
             <xsl:text> The current charge is equal on an annual basis to .20% of the Contract Value,</xsl:text>
             <xsl:text> if on any monthly calculation date, the Contract Value is less than $1,000,000.</xsl:text>
           </fo:block>
-          <fo:block><fo:leader></fo:leader></fo:block>
-          <fo:block font-size="9.0pt" text-align="left" font-family="sans-serif" font-weight="normal">
+          <fo:block font-size="9.0pt" text-align="left" font-family="sans-serif" font-weight="normal" margin-top="1em">
             <fo:inline font-weight="bold">Asset Based Distribution Charge: </fo:inline>
             <xsl:text> The current charge is equal to annual negotiated asset based compensation, if any.</xsl:text>
           </fo:block>
-          <fo:block><fo:leader></fo:leader></fo:block>
-          <fo:block font-size="9.0pt" text-align="left" font-family="sans-serif" font-weight="normal">
+          <fo:block font-size="9.0pt" text-align="left" font-family="sans-serif" font-weight="normal" margin-top="1em">
             <fo:inline font-weight="bold">Withdrawals: </fo:inline>
             <xsl:text> Early withdrawals may result in tax consequences on the amount being withdrawn</xsl:text>
             <xsl:text> and, in some cases, an early withdrawal penalty tax. As a result, you may receive</xsl:text>
@@ -464,8 +439,7 @@
             <xsl:text> any gain in the contract and an additional 10% penalty tax will apply to the</xsl:text>
             <xsl:text> taxable portion of the withdrawal.</xsl:text>
           </fo:block>
-          <fo:block><fo:leader></fo:leader></fo:block>
-          <fo:block font-size="9.0pt" text-align="left" font-family="sans-serif" font-weight="normal">
+          <fo:block font-size="9.0pt" text-align="left" font-family="sans-serif" font-weight="normal" margin-top="1em">
             <fo:inline font-weight="bold">Illiquid Sub-Accounts: </fo:inline>
             <xsl:text> We have also made available under the Contract the ability to allocate purchase</xsl:text>
             <xsl:text> payments and Contract Value to sub-accounts that will provide for investment in</xsl:text>
@@ -478,43 +452,34 @@
             <xsl:text> a withdrawal or surrender of the Contract until specified dates. Refer to the</xsl:text>
             <xsl:text> Confidential Private Placement Memorandum for details.</xsl:text>
           </fo:block>
-          <fo:block><fo:leader></fo:leader></fo:block>
-          <fo:block font-size="9.0pt" text-align="left" font-family="sans-serif" font-weight="bold">
+          <fo:block font-size="9.0pt" text-align="left" font-family="sans-serif" font-weight="bold" margin-top="1em">
             <xsl:text>Note:  Please refer to the Contract for complete explanation of benefits, rights</xsl:text>
             <xsl:text> and obligations. In the event of a conflict between the illustration and the</xsl:text>
             <xsl:text> Contract, the terms of the Contract will control.</xsl:text>
           </fo:block>
-          <fo:block><fo:leader></fo:leader></fo:block>
-          <fo:block><fo:leader></fo:leader></fo:block>
-          <fo:block font-size="10.0pt" text-align="left" font-family="sans-serif" font-weight="bold"
-            text-decoration="underline">
+          <fo:block font-size="10.0pt" text-align="left" font-family="sans-serif" font-weight="bold" margin-top="2em" text-decoration="underline">
             <xsl:text>Column Definitions</xsl:text>
           </fo:block>
-          <fo:block><fo:leader></fo:leader></fo:block>
-          <fo:block font-size="9.0pt" text-align="left" font-family="sans-serif" font-weight="normal">
+          <fo:block font-size="9.0pt" text-align="left" font-family="sans-serif" font-weight="normal" margin-top="1em">
             <fo:inline font-weight="bold">Year: </fo:inline>
             <xsl:text> The annual period beginning on the hypothetical Contract issue date.</xsl:text>
           </fo:block>
-          <fo:block><fo:leader></fo:leader></fo:block>
-          <fo:block font-size="9.0pt" text-align="left" font-family="sans-serif" font-weight="normal">
+          <fo:block font-size="9.0pt" text-align="left" font-family="sans-serif" font-weight="normal" margin-top="1em">
             <fo:inline font-weight="bold">Purchase Payment: </fo:inline>
             <xsl:text> A payment made by or on behalf of a Contract Owner during the Accumulation</xsl:text>
             <xsl:text> Period of the Contract.</xsl:text>
           </fo:block>
-          <fo:block><fo:leader></fo:leader></fo:block>
-          <fo:block font-size="9.0pt" text-align="left" font-family="sans-serif" font-weight="normal">
+          <fo:block font-size="9.0pt" text-align="left" font-family="sans-serif" font-weight="normal" margin-top="1em">
             <fo:inline font-weight="bold">Purchase Payment Charges: </fo:inline>
             <xsl:text> The sum of the Purchase Payment Distribution Charge and applicable state premium</xsl:text>
             <xsl:text> tax charged on an upfront basis, if any.</xsl:text>
           </fo:block>
-          <fo:block><fo:leader></fo:leader></fo:block>
-          <fo:block font-size="9.0pt" text-align="left" font-family="sans-serif" font-weight="normal">
+          <fo:block font-size="9.0pt" text-align="left" font-family="sans-serif" font-weight="normal" margin-top="1em">
             <fo:inline font-weight="bold">Withdrawal(s): </fo:inline>
             <xsl:text> The net dollar amount redeemed from the Contract. Withdrawals are reflected</xsl:text>
             <xsl:text> at the beginning of each year.</xsl:text>
           </fo:block>
-          <fo:block><fo:leader></fo:leader></fo:block>
-          <fo:block font-size="9.0pt" text-align="left" font-family="sans-serif" font-weight="normal">
+          <fo:block font-size="9.0pt" text-align="left" font-family="sans-serif" font-weight="normal" margin-top="1em">
             <fo:inline font-weight="bold">Asset Charges: </fo:inline>
             <xsl:text> The annual M&amp;E charges, asset based distribution charges and administrative</xsl:text>
             <xsl:text> charges deducted from Contract Value.</xsl:text>
@@ -546,15 +511,13 @@
             <xsl:text> The annual investment income credited to the Contract sub-accounts using</xsl:text>
             <xsl:text> the hypothetical Net Rate of Return.</xsl:text>
           </fo:block>
-          <fo:block><fo:leader></fo:leader></fo:block>
-          <fo:block font-size="9.0pt" text-align="left" font-family="sans-serif" font-weight="normal">
+          <fo:block font-size="9.0pt" text-align="left" font-family="sans-serif" font-weight="normal" margin-top="1em">
             <fo:inline font-weight="bold">End of Year Contract Value: </fo:inline>
             <xsl:text> The value of the Contract sub-account(s) after applying any Purchase Payments</xsl:text>
             <xsl:text> (less Purchase Payment Charges), deducting any Withdrawals and crediting annual</xsl:text>
             <xsl:text> hypothetical Investment Experience.</xsl:text>
           </fo:block>
-          <fo:block><fo:leader></fo:leader></fo:block>
-          <fo:block font-size="9.0pt" text-align="left" font-family="sans-serif" font-weight="normal">
+          <fo:block font-size="9.0pt" text-align="left" font-family="sans-serif" font-weight="normal" margin-top="1em">
             <fo:inline font-weight="bold">Cumulative Contract Value IRR: </fo:inline>
             <xsl:text> The Contract Value Internal Rate of Return ("IRR") is an interest rate at which</xsl:text>
             <xsl:text> the Net Purchase Payment demonstrated would have to be invested outside the</xsl:text>
@@ -605,8 +568,7 @@
   </xsl:template>
 
   <xsl:template name="standard-header">
-    <fo:table table-layout="fixed" width="100%" padding-after="2.5pt"
-      font-size="13.0pt" font-family="sans-serif" font-weight="bold">
+    <fo:table table-layout="fixed" width="100%" padding-after="2.5pt" font="bold 13.0pt sans-serif">
       <fo:table-column column-width="50mm"/>
       <fo:table-column column-width="90mm"/>
       <fo:table-column column-width="50mm"/>
@@ -623,15 +585,12 @@
             </fo:block>
           </fo:table-cell>
           <fo:table-cell>
-            <fo:block text-align="center">
-              <xsl:text></xsl:text>
-            </fo:block>
+            <fo:block/>
           </fo:table-cell>
         </fo:table-row>
       </fo:table-body>
     </fo:table>
-    <fo:block><fo:leader></fo:leader></fo:block>
-    <fo:block font-size="14.0pt" text-align="center" font-family="sans-serif" font-weight="bold">
+    <fo:block font-size="14.0pt" text-align="center" font-family="sans-serif" font-weight="bold" margin-top="1em">
       <xsl:value-of select="illustration/scalar/PolicyMktgName"/>
       <fo:inline vertical-align="super" font-size="7.0pt">SM</fo:inline>
     </fo:block>
@@ -642,7 +601,7 @@
 
   <xsl:template name="scalar-header">
     <xsl:param name="basis"/>
-    <fo:table table-layout="fixed" width="100%" padding-after="2.5pt" font-size="9.5pt" font-family="sans-serif" font-weight="normal" border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="black">
+    <fo:table table-layout="fixed" width="100%" padding-after="2.5pt" font="normal 9.5pt sans-serif" border-bottom="1pt solid black">
       <fo:table-column column-width="125mm"/>
       <fo:table-column column-width="10mm"/>
       <fo:table-column column-width="45mm"/>
@@ -652,17 +611,16 @@
           <fo:table-cell>
             <fo:block text-align="left">
               <xsl:text>Date Prepared: </xsl:text>
-              <xsl:value-of select="illustration/scalar/PrepMonth"/>
-              <xsl:text>&#xA0;</xsl:text>
-              <xsl:value-of select="illustration/scalar/PrepDay"/>
+              <fo:inline word-wrap="nowrap">
+                <xsl:value-of select="illustration/scalar/PrepMonth"/>
+                <xsl:value-of select="illustration/scalar/PrepDay"/>
+              </fo:inline>
               <xsl:text>, </xsl:text>
               <xsl:value-of select="illustration/scalar/PrepYear"/>
             </fo:block>
           </fo:table-cell>
           <fo:table-cell>
-            <fo:block text-align="left">
-              <xsl:text></xsl:text>
-            </fo:block>
+            <fo:block/>
           </fo:table-cell>
           <fo:table-cell>
             <fo:block text-align="left">
@@ -671,9 +629,7 @@
             </fo:block>
           </fo:table-cell>
           <fo:table-cell>
-            <fo:block text-align="left">
-              <xsl:text></xsl:text>
-            </fo:block>
+            <fo:block/>
           </fo:table-cell>
         </fo:table-row>
         <fo:table-row>
@@ -698,9 +654,7 @@
             </fo:block>
           </fo:table-cell>
           <fo:table-cell>
-            <fo:block text-align="left">
-              <xsl:text></xsl:text>
-            </fo:block>
+            <fo:block/>
           </fo:table-cell>
           <fo:table-cell>
             <fo:block text-align="left">
@@ -721,19 +675,12 @@
                   <xsl:text>Net Rate of Return: </xsl:text>
                   <xsl:value-of select="illustration/scalar/InitAnnSepAcctNetInt_GuaranteedZero"/>
                 </xsl:when>
-                <xsl:when test="$basis='NoBasis'">
-                  <xsl:text></xsl:text>
-                </xsl:when>
-               <xsl:otherwise>
-                  <xsl:text></xsl:text>
-               </xsl:otherwise>
+                <xsl:when test="$basis='NoBasis'"/>
               </xsl:choose>
             </fo:block>
           </fo:table-cell>
           <fo:table-cell>
-            <fo:block text-align="left">
-              <xsl:text></xsl:text>
-            </fo:block>
+            <fo:block/>
           </fo:table-cell>
         </fo:table-row>
         <fo:table-row>
@@ -759,9 +706,7 @@
             </fo:block>
           </fo:table-cell>
           <fo:table-cell>
-            <fo:block text-align="left">
-              <xsl:text></xsl:text>
-            </fo:block>
+            <fo:block/>
           </fo:table-cell>
           <fo:table-cell>
             <fo:block text-align="left">
@@ -778,19 +723,12 @@
                 <xsl:when test="$basis='GuaranteedZero'">
                   <xsl:text>Guaranteed Charges</xsl:text>
                 </xsl:when>
-                <xsl:when test="$basis='NoBasis'">
-                  <xsl:text></xsl:text>
-                </xsl:when>
-                <xsl:otherwise>
-                  <xsl:text></xsl:text>
-                </xsl:otherwise>
+                <xsl:when test="$basis='NoBasis'"/>
               </xsl:choose>
             </fo:block>
           </fo:table-cell>
           <fo:table-cell>
-            <fo:block text-align="left">
-              <xsl:text></xsl:text>
-            </fo:block>
+            <fo:block/>
           </fo:table-cell>
         </fo:table-row>
         <xsl:if test="not($is_composite)">
@@ -804,7 +742,7 @@
                       <xsl:with-param name="passString" select="illustration/scalar/Franchise"/>
                       <xsl:with-param name="length" select="15"/>
                     </xsl:call-template>
-                    <xsl:text>&#xA0;&#xA0;&#xA0;Contract number: </xsl:text>
+                    <xsl:text padding-left="2em">Contract number: </xsl:text>
                     <xsl:call-template name="limitstring">
                       <xsl:with-param name="passString" select="illustration/scalar/PolicyNumber"/>
                       <xsl:with-param name="length" select="15"/>
@@ -857,8 +795,7 @@
   <xsl:template name="illustration-table">
     <xsl:param name="basis"/>
     <xsl:param name="basis-lapse-year"/>
-    <fo:table table-layout="fixed" width="100%"
-      font-size="9.0pt" font-family="serif" font-weight="normal">
+    <fo:table table-layout="fixed" width="100%" font-size="normal 9.0pt serif">
       <xsl:variable name="column-values-columns">
         <column name="PolicyYear">_ _ Year</column>
         <column name="GrossPmt">_Purchase _Payment</column>
@@ -902,21 +839,15 @@
     <xsl:variable name="name_suffix" select="concat('_', $basis)"/>
     <xsl:choose>
       <xsl:when test="$special='SpecialPmt'">
-        <xsl:value-of select="
-          format-number
-            (translate($illustration/data/newcolumn/column[@name='GrossPmt']/duration[$counter]/@column_value,$numberswc,$numberswoc)
-            -translate($illustration/data/newcolumn/column[@name=concat('NetPmt', $name_suffix)]/duration[$counter]/@column_value,$numberswc,$numberswoc)
-            ,'###,###,###'
-            )"/>
+        <xsl:variable name="GrossPmt" select="$illustration/data/newcolumn/column[@name='GrossPmt']/duration[$counter]/@column_value"/>
+        <xsl:variable name="NetPmt" select="$illustration/data/newcolumn/column[@name=concat('NetPmt', $name_suffix)]/duration[$counter]/@column_value"/>
+        <xsl:value-of select="format-number(translate($GrossPmt,$numberswc,$numberswoc) - translate($NetPmt,$numberswc,$numberswoc), '###,###,###')"/>
       </xsl:when>
       <xsl:when test="$special='SpecialIntCredited'">
-        <xsl:value-of select="
-          format-number
-            (translate($illustration/data/newcolumn/column[@name=concat('GrossIntCredited', $name_suffix)]/duration[$counter]/@column_value,$numberswc,$numberswoc)
-            -translate($illustration/data/newcolumn/column[@name=concat('NetIntCredited', $name_suffix)]/duration[$counter]/@column_value,$numberswc,$numberswoc)
-            +translate($illustration/data/newcolumn/column[@name=concat('SepAcctLoad', $name_suffix)]/duration[$counter]/@column_value,$numberswc,$numberswoc)
-            ,'###,###,###'
-            )"/>
+        <xsl:variable name="GrossIntCredited" select="$illustration/data/newcolumn/column[@name=concat('GrossIntCredited', $name_suffix)]/duration[$counter]/@column_value"/>
+        <xsl:variable name="NetIntCredited" select="$illustration/data/newcolumn/column[@name=concat('NetIntCredited', $name_suffix)]/duration[$counter]/@column_value"/>
+        <xsl:variable name="SepAcctLoad" select="$illustration/data/newcolumn/column[@name=concat('SepAcctLoad', $name_suffix)]/duration[$counter]/@column_value"/>
+        <xsl:value-of select="format-number(translate($GrossIntCredited,$numberswc,$numberswoc) - translate($NetIntCredited,$numberswc,$numberswoc) + translate($SepAcctLoad,$numberswc,$numberswoc), '###,###,###')"/>
       </xsl:when>
       <xsl:when test="$special='SpecialGrossIntCredited'">
         <xsl:value-of select="$illustration/data/newcolumn/column[@name=concat('GrossIntCredited', $name_suffix)]/duration[$counter]/@column_value"/>
@@ -961,20 +892,15 @@
         </fo:block>
       </xsl:when>
       <xsl:otherwise>
-        <fo:block font-size="8.0pt" text-align="left" font-family="sans-serif" font-weight="normal">
-          <xsl:text></xsl:text>
-        </fo:block>
+        <fo:block/>
       </xsl:otherwise>
     </xsl:choose>
-    <fo:block><fo:leader></fo:leader></fo:block>
   </xsl:template>
 
   <xsl:template name="standard-footer">
     <xsl:param name="displaypagenumber"/>
-    <fo:block padding-before="5pt" font-size="9.0pt" font-family="sans-serif"
-      border-top-style="solid" border-top-width="1pt" border-top-color="blue">
-      <fo:block><fo:leader></fo:leader></fo:block>
-      <fo:block font-size="8.5pt" text-align="left" font-family="sans-serif" font-weight="normal">
+    <fo:block padding-before="5pt" font-size="9.0pt" font-family="sans-serif" border-top="1pt solid blue">
+      <fo:block font-size="8.5pt" text-align="left" font-family="sans-serif" font-weight="normal" margin-top="1em">
         <xsl:text>Principal Underwriter: </xsl:text>
         <xsl:value-of select="illustration/scalar/MainUnderwriter"/>
         <xsl:text>, </xsl:text>
@@ -985,8 +911,7 @@
         <xsl:value-of select="illustration/scalar/InsCoName"/>
         <xsl:text>.</xsl:text>
       </fo:block>
-      <fo:block><fo:leader></fo:leader></fo:block>
-      <fo:table table-layout="fixed" width="100%">
+      <fo:table table-layout="fixed" width="100%" margin-top="1em">
         <fo:table-column/>
         <fo:table-column/>
         <fo:table-column/>
@@ -995,9 +920,10 @@
             <fo:table-cell>
               <fo:block text-align="left">
                 <xsl:text>Date Prepared: </xsl:text>
-                <xsl:value-of select="illustration/scalar/PrepMonth"/>
-                <xsl:text>&#xA0;</xsl:text>
-                <xsl:value-of select="illustration/scalar/PrepDay"/>
+                <fo:inline word-wrap="nowrap">
+                  <xsl:value-of select="illustration/scalar/PrepMonth"/>
+                  <xsl:value-of select="illustration/scalar/PrepDay"/>
+                </fo:inline>
                 <xsl:text>, </xsl:text>
                 <xsl:value-of select="illustration/scalar/PrepYear"/>
               </fo:block>
@@ -1013,9 +939,7 @@
                   </fo:block>
                 </xsl:when>
                 <xsl:otherwise>
-                  <fo:block text-align="right">
-                    <xsl:text></xsl:text>
-                  </fo:block>
+                  <fo:block/>
                 </xsl:otherwise>
               </xsl:choose>
             </fo:table-cell>
@@ -1037,10 +961,7 @@
   <xsl:template name="get-basis-lapse-year">
     <xsl:param name="basis"/>
     <xsl:choose>
-      <xsl:when test="$basis='Current'
-                   or $basis='CurrentZero'
-                   or $basis='Guaranteed'
-                   or $basis='GuaranteedZero'">
+      <xsl:when test="$basis='Current' or $basis='CurrentZero' or $basis='Guaranteed' or $basis='GuaranteedZero'">
         <xsl:value-of select="illustration/scalar/*[name()=concat('LapseYear_', $basis)]/text()"/>
       </xsl:when>
       <xsl:otherwise>
