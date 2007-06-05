@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: offshore_private_placement.xsl,v 1.15 2007-06-05 00:31:27 etarassov Exp $
+    $Id: offshore_private_placement.xsl,v 1.16 2007-06-05 15:53:14 etarassov Exp $
 -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fo="http://www.w3.org/1999/XSL/Format" version="1.0">
   <xsl:include href="fo_common.xsl"/>
@@ -730,7 +730,7 @@
                             <xsl:with-param name="length" select="30"/>
                           </xsl:call-template>
                           <xsl:text>, </xsl:text>
-                          <fo:inline word-wrap="nowrap">
+                          <fo:inline white-space="nowrap">
                             <xsl:value-of select="illustration/scalar/Gender"/>
                             <xsl:value-of select="illustration/scalar/Smoker"/>
                           </fo:inline>
@@ -1268,7 +1268,7 @@
             <fo:table-cell>
               <fo:block text-align="center">
                 <xsl:text>Date Prepared: </xsl:text>
-                <fo:inline word-wrap="nowrap">
+                <fo:inline white-space="nowrap">
                   <xsl:value-of select="illustration/scalar/PrepMonth"/>
                   <xsl:value-of select="illustration/scalar/PrepDay"/>
                 </fo:inline>
@@ -1356,7 +1356,7 @@
             <fo:table-cell>
               <fo:block text-align="center">
                 <xsl:text>Date Prepared: </xsl:text>
-                <fo:inline word-wrap="nowrap">
+                <fo:inline white-space="nowrap">
                   <xsl:value-of select="illustration/scalar/PrepMonth"/>
                   <xsl:value-of select="illustration/scalar/PrepDay"/>
                 </fo:inline>
