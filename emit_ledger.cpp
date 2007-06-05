@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: emit_ledger.cpp,v 1.1 2007-06-05 12:47:47 chicares Exp $
+// $Id: emit_ledger.cpp,v 1.2 2007-06-05 15:51:56 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -29,11 +29,12 @@
 #include "emit_ledger.hpp"
 
 #include "configurable_settings.hpp"
+#include "custom_io_0.hpp"         // PrintFormSpecial()
 #include "file_command.hpp"
 #include "ledger.hpp"
 #include "ledger_text_formats.hpp"
 #include "ledger_xsl.hpp"
-#include "miscellany.hpp" // ios_out_trunc_binary()
+#include "miscellany.hpp"          // ios_out_trunc_binary()
 #include "path_utility.hpp"
 #include "timer.hpp"
 
@@ -41,6 +42,14 @@
 
 #include <iostream>
 #include <string>
+
+/// Emit a ledger in various guises.
+///
+/// The commands for mce_emit_pdf_file and mce_emit_pdf_to_printer are
+/// spelled out separately and in full, though one uses a copy of the
+/// other. Reason: in the future, they may be implemented differently,
+/// and mce_emit_pdf_to_printer may write directly to the printer
+/// without creating any file.
 
 double emit_ledger
     (fs::path const& file
@@ -55,6 +64,13 @@ double emit_ledger
         goto done;
         }
 
+    if(emission & mce_emit_pdf_file)
+        {
+        std::string pdf_out_file = write_ledger_to_pdf
+            (ledger
+            ,serialized_file_path(file, index, "ill").string()
+            );
+        }
     if(emission & mce_emit_pdf_to_printer)
         {
         std::string pdf_out_file = write_ledger_to_pdf
@@ -82,6 +98,11 @@ double emit_ledger
     if(emission & mce_emit_text_stream)
         {
         PrintLedgerFlatText(ledger, std::cout);
+        }
+    if(emission & mce_emit_custom_0)
+        {
+// Support this after refactoring to deal with the second argument.
+//        PrintFormSpecial(ledger, file.string().c_str());
         }
 
   done:
