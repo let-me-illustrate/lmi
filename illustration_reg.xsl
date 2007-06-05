@@ -21,10 +21,12 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: illustration_reg.xsl,v 1.22 2007-06-05 00:31:27 etarassov Exp $
+    $Id: illustration_reg.xsl,v 1.23 2007-06-05 16:33:03 etarassov Exp $
 -->
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-  xmlns:fo="http://www.w3.org/1999/XSL/Format">
+<!DOCTYPE stylesheet [
+<!ENTITY nbsp "&#xA0;">
+]>
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fo="http://www.w3.org/1999/XSL/Format" version="1.0">
   <xsl:include href="fo_common.xsl"/>
   <xsl:output method="xml" encoding="UTF-8" indent="yes"/>
   <xsl:variable name="counter" select="1"/>
@@ -127,27 +129,8 @@
       <!-- The data to be diplayed in the pages, cover page first -->
       <fo:page-sequence master-reference="cover" force-page-count="no-force">
         <fo:flow flow-name="xsl-region-body">
-          <fo:block border-top-color="blue"
-            border-top-style="solid"
-            border-top-width="thick"
-            border-bottom-color="blue"
-            border-bottom-style="solid"
-            border-bottom-width="thick"
-            border-left-color="blue"
-            border-left-width="thick"
-            border-left-style="solid"
-            border-right-color="blue"
-            border-right-width="thick"
-            border-right-style="solid"
-            font-size="14.0pt"
-            text-align="center"
-            font-family="sans-serif">
-            <fo:block><fo:leader></fo:leader></fo:block>
-            <fo:block><fo:leader></fo:leader></fo:block>
-            <fo:block><fo:leader></fo:leader></fo:block>
-            <fo:block><fo:leader></fo:leader></fo:block>
-            <fo:block><fo:leader></fo:leader></fo:block>
-            <fo:block font-size="20.0pt" font-weight="bold">
+          <fo:block border="thick solid blue" font-size="14.0pt" text-align="center" font-family="sans-serif">
+            <fo:block font-size="20.0pt" font-weight="bold" margin-top="5em">
               <xsl:value-of select="illustration/scalar/PolicyMktgName"/>
             </fo:block>
             <xsl:choose>
@@ -162,19 +145,10 @@
                 </fo:block>
               </xsl:otherwise>
             </xsl:choose>
-            <fo:block><fo:leader></fo:leader></fo:block>
-            <fo:block><fo:leader></fo:leader></fo:block>
-            <fo:block><fo:leader></fo:leader></fo:block>
-            <fo:block><fo:leader></fo:leader></fo:block>
-            <fo:block><fo:leader></fo:leader></fo:block>
-            <fo:block><fo:leader></fo:leader></fo:block>
-            <fo:block><fo:leader></fo:leader></fo:block>
-            <fo:block><fo:leader></fo:leader></fo:block>
-            <fo:block text-align="center" font-weight="bold">
+            <fo:block text-align="center" font-weight="bold" margin-top="8em">
               Prepared for:
             </fo:block>
-            <fo:block><fo:leader></fo:leader></fo:block>
-            <fo:block margin-left="0.15in" margin-right="0.15in">
+            <fo:block margin-left="0.15in" margin-right="0.15in" margin-top="1em">
               <xsl:choose>
                 <xsl:when test="not($is_composite)">
                   <!-- Properly adjust for long user input strings limit output to 140 characters for appox. 2 lines -->
@@ -183,7 +157,7 @@
                     <xsl:with-param name="length" select="140"/>
                   </xsl:call-template>
                   <xsl:if test="string-length(illustration/scalar/Insured1) &lt; 70">
-                    <fo:block><fo:leader></fo:leader></fo:block>
+                    <fo:block padding=".7em"/>
                   </xsl:if>
                 </xsl:when>
                 <xsl:otherwise>
@@ -192,20 +166,15 @@
                     <xsl:with-param name="length" select="140"/>
                   </xsl:call-template>
                   <xsl:if test="string-length(illustration/scalar/CorpName) &lt; 70">
-                    <fo:block><fo:leader></fo:leader></fo:block>
+                    <fo:block padding=".7em"/>
                   </xsl:if>
                 </xsl:otherwise>
               </xsl:choose>
             </fo:block>
-            <fo:block><fo:leader></fo:leader></fo:block>
-            <fo:block><fo:leader></fo:leader></fo:block>
-            <fo:block><fo:leader></fo:leader></fo:block>
-            <fo:block><fo:leader></fo:leader></fo:block>
-            <fo:block text-align="center" font-weight="bold">
+            <fo:block text-align="center" font-weight="bold" margin-top="5em">
               Presented by:
             </fo:block>
-            <fo:block><fo:leader></fo:leader></fo:block>
-            <fo:block text-align="center">
+            <fo:block text-align="center" margin-top="1em">
               <xsl:value-of select="illustration/scalar/ProducerName"/>
             </fo:block>
             <fo:block text-align="center">
@@ -214,41 +183,28 @@
             <fo:block text-align="center">
               <xsl:value-of select="illustration/scalar/ProducerCity"/>
             </fo:block>
-            <fo:block><fo:leader></fo:leader></fo:block>
-            <fo:block><fo:leader></fo:leader></fo:block>
-            <fo:block text-align="center">
+            <fo:block text-align="center" margin-top="2em">
               <xsl:value-of select="illustration/scalar/PrepMonth"/>
               <xsl:text> </xsl:text>
               <xsl:value-of select="illustration/scalar/PrepDay"/>
               <xsl:text>, </xsl:text>
               <xsl:value-of select="illustration/scalar/PrepYear"/>
             </fo:block>
-            <fo:block><fo:leader></fo:leader></fo:block>
-            <fo:block><fo:leader></fo:leader></fo:block>
-            <fo:block><fo:leader></fo:leader></fo:block>
-            <fo:block><fo:leader></fo:leader></fo:block>
-            <fo:block><fo:leader></fo:leader></fo:block>
-            <fo:block><fo:leader></fo:leader></fo:block>
-            <fo:block><fo:leader></fo:leader></fo:block>
-            <fo:block><fo:leader></fo:leader></fo:block>
-            <fo:block><fo:leader></fo:leader></fo:block>
-            <fo:block>
+            <fo:block margin-top="10em">
               <fo:external-graphic width="121.1pt" height="24.8pt" src="company_logo.png"/>
             </fo:block>
-            <fo:block><fo:leader></fo:leader></fo:block>
-            <fo:block>
+            <fo:block margin-top="1em">
               <xsl:value-of select="illustration/scalar/InsCoName"/>
             </fo:block>
-            <fo:block>
+            <fo:block margin-bottom="1em">
                <xsl:value-of select="illustration/scalar/InsCoAddr"/>
             </fo:block>
-            <fo:block><fo:leader></fo:leader></fo:block>
           </fo:block>
         </fo:flow>
       </fo:page-sequence>
 
       <!-- NARRATIVE SUMMARY - begins here -->
-      <fo:page-sequence master-reference="narrative-summary"  initial-page-number="1">
+      <fo:page-sequence master-reference="narrative-summary" initial-page-number="1">
 
         <!-- Define the contents of the header. -->
         <fo:static-content flow-name="xsl-region-before">
@@ -267,91 +223,81 @@
         <!-- Narrative Summary Body  -->
         <fo:flow flow-name="xsl-region-body">
           <xsl:call-template name="standardheader"/>
-          <fo:block><fo:leader></fo:leader></fo:block>
-          <fo:block><fo:leader></fo:leader></fo:block>
-          <fo:block text-align="center" font-size="10pt">
+          <fo:block text-align="center" font-size="10pt" margin-top="1em">
             <xsl:text>NARRATIVE SUMMARY</xsl:text>
           </fo:block>
-          <fo:block><fo:leader></fo:leader></fo:block>
-          <fo:block text-align="left" font-size="9pt" font-family="sans-serif">
-              <!-- Single Premium Logic -->
-              <xsl:choose>
-                <xsl:when test="$SinglePremium!='1'">
-                  <fo:block>
-                    <xsl:value-of select="illustration/scalar/PolicyMktgName"/>
-                    <xsl:text> is a</xsl:text>
-                    <!-- Group Experience Rating Logic -->
-                    <xsl:if test="$GroupExperienceRating='1'">
-                      <xsl:text> group</xsl:text>
-                    </xsl:if>
-                    <xsl:text> flexible premium adjustable life insurance contract. </xsl:text>
-                    <!-- Group Experience Rating Logic -->
-                    <xsl:if test="$GroupExperienceRating='1'">
-                      <xsl:text> It is a no-load policy and is intended for large case sales. It is primarily marketed to financial institutions to fund certain corporate liabilities. </xsl:text>
-                    </xsl:if>
-                    <xsl:text> It features accumulating account values, adjustable benefits, and flexible premiums.</xsl:text>
-                  </fo:block>
-                  <fo:block><fo:leader></fo:leader></fo:block>
-                </xsl:when>
-                <xsl:otherwise>
-                  <xsl:choose>
-                    <xsl:when test="$ModifiedSinglePremium='1'">
-                      <fo:block>
-                        <xsl:value-of select="illustration/scalar/PolicyMktgName"/>
-                        <xsl:text> is a modified single premium adjustable life insurance contract. </xsl:text>
-                        <xsl:text> It features accumulating account values, adjustable benefits, and single premium.</xsl:text>
-                      </fo:block>
-                      <fo:block><fo:leader></fo:leader></fo:block>
-                    </xsl:when>
-                    <xsl:otherwise>
-                      <fo:block>
-                        <xsl:value-of select="illustration/scalar/PolicyMktgName"/>
-                        <xsl:text> is a single premium adjustable life insurance contract. </xsl:text>
-                        <xsl:text> It features accumulating account values, adjustable benefits, and single premium.</xsl:text>
-                      </fo:block>
-                      <fo:block><fo:leader></fo:leader></fo:block>
-                    </xsl:otherwise>
-                  </xsl:choose>
-                </xsl:otherwise>
-              </xsl:choose>
-            <fo:block>
+          <fo:block text-align="left" font-size="9pt" font-family="sans-serif" margin-top="1em">
+            <!-- Single Premium Logic -->
+            <xsl:choose>
+              <xsl:when test="$SinglePremium!='1'">
+                <fo:block>
+                  <xsl:value-of select="illustration/scalar/PolicyMktgName"/>
+                  <xsl:text> is a</xsl:text>
+                  <!-- Group Experience Rating Logic -->
+                  <xsl:if test="$GroupExperienceRating='1'">
+                    <xsl:text> group</xsl:text>
+                  </xsl:if>
+                  <xsl:text> flexible premium adjustable life insurance contract. </xsl:text>
+                  <!-- Group Experience Rating Logic -->
+                  <xsl:if test="$GroupExperienceRating='1'">
+                    <xsl:text> It is a no-load policy and is intended for large case sales. It is primarily marketed to financial institutions to fund certain corporate liabilities. </xsl:text>
+                  </xsl:if>
+                  <xsl:text> It features accumulating account values, adjustable benefits, and flexible premiums.</xsl:text>
+                </fo:block>
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:choose>
+                  <xsl:when test="$ModifiedSinglePremium='1'">
+                    <fo:block margin-top="1em">
+                      <xsl:value-of select="illustration/scalar/PolicyMktgName"/>
+                      <xsl:text> is a modified single premium adjustable life insurance contract. </xsl:text>
+                      <xsl:text> It features accumulating account values, adjustable benefits, and single premium.</xsl:text>
+                    </fo:block>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <fo:block margin-top="1em">
+                      <xsl:value-of select="illustration/scalar/PolicyMktgName"/>
+                      <xsl:text> is a single premium adjustable life insurance contract. </xsl:text>
+                      <xsl:text> It features accumulating account values, adjustable benefits, and single premium.</xsl:text>
+                    </fo:block>
+                  </xsl:otherwise>
+                </xsl:choose>
+              </xsl:otherwise>
+            </xsl:choose>
+            <fo:block margin-top="1em">
               <xsl:text>Coverage may be available on a Guaranteed Standard Issue basis. All proposals are based on case characteristics and must be approved by the </xsl:text>
               <xsl:value-of select="illustration/scalar/InsCoShortName"/>
               <xsl:text> Home Office. For details regarding underwriting and coverage limitations refer to your offer letter or contact your </xsl:text>
               <xsl:value-of select="illustration/scalar/InsCoShortName"/>
               <xsl:text> representative.</xsl:text>
             </fo:block>
-            <fo:block><fo:leader></fo:leader></fo:block>
-            <fo:block>
+            <fo:block margin-top="1em">
               <xsl:text>This is an illustration only. An illustration is not intended to predict actual performance. Interest rates </xsl:text>
               <xsl:if test="illustration/scalar/Participating='1'">
                 <xsl:text>, dividends,</xsl:text>
               </xsl:if>
               <xsl:text> and values set forth in the illustration are not guaranteed.</xsl:text>
             </fo:block>
-            <fo:block><fo:leader></fo:leader></fo:block>
             <!-- Group Experience Rating Logic -->
             <xsl:choose>
               <xsl:when test="illustration/scalar/StatePostalAbbrev!='TX'">
-                <fo:block>
+                <fo:block margin-top="1em">
                   <xsl:text>This illustration assumes that the currently illustrated non-guaranteed elements will continue unchanged for all years shown. This is not likely to occur and actual results may be more or less favorable than shown. The non-guaranteed benefits and values are not guaranteed and are based on assumptions such as interest credited and current monthly charges, which are subject to change by </xsl:text>
                   <xsl:value-of select="illustration/scalar/InsCoName"/>
                   <xsl:text>.</xsl:text>
                 </fo:block>
               </xsl:when>
               <xsl:otherwise>
-                <fo:block>
+                <fo:block margin-top="1em">
                   <xsl:text>This illustration is based on both non-guaranteed and guaranteed assumptions. Non-guaranteed assumptions include interest rates and monthly charges.  This illustration assumes that the currently illustrated non-guaranteed elements will continue unchanged for all years shown. This is not likely to occur and actual results may be more or less favorable than shown. Factors that may affect future policy performance include the company's expectations for future mortality, investments, persistency, profits and expenses.</xsl:text>
                 </fo:block>
               </xsl:otherwise>
             </xsl:choose>
-            <fo:block><fo:leader></fo:leader></fo:block>
-            <fo:block>
+            <fo:block margin-top="1em">
               <xsl:value-of select="illustration/scalar/AvName"/>
               <xsl:text> Values may be used to pay monthly charges. Monthly charges are due during the life of the insured, and depending on actual results, the premium payor may need to continue or resume premium outlays.</xsl:text>
-              <fo:block><fo:leader></fo:leader></fo:block>
             </fo:block>
-            <fo:block>
+            <fo:block margin-top="1em">
               <!-- Single Premium Logic -->
               <xsl:choose>
                 <xsl:when test="$SinglePremium!='1'">
@@ -371,10 +317,9 @@
               <xsl:value-of select="illustration/scalar/CsvName"/>
               <xsl:text> Values, and death benefits are illustrated as of the end of the contract year.  The method we use to allocate overhead expenses is the fully allocated expense method.</xsl:text>
             </fo:block>
-            <fo:block><fo:leader></fo:leader></fo:block>
             <!-- Single Premium Logic -->
             <xsl:if test="$SinglePremium!='1'">
-              <fo:block>
+              <fo:block margin-top="1em">
                 <xsl:text>In order to guarantee coverage to age </xsl:text>
                 <xsl:value-of select="illustration/scalar/EndtAge"/>
                 <xsl:text>, a</xsl:text>
@@ -399,16 +344,14 @@
                   <xsl:text>  This premium may be in excess of the maximum premium allowable in order to qualify this policy as life insurance.</xsl:text>
                 </xsl:if>
               </fo:block>
-              <fo:block><fo:leader></fo:leader></fo:block>
             </xsl:if>
-            <fo:block>
+            <fo:block margin-top="1em">
               <xsl:text>Loaned amounts of the </xsl:text>
               <xsl:value-of select="illustration/scalar/AvName"/>
               <xsl:text> Value will be credited a rate equal to the loan interest rate less a spread, guaranteed not to exceed 3.00%.</xsl:text>
             </fo:block>
-            <fo:block><fo:leader></fo:leader></fo:block>
             <xsl:if test="illustration/scalar/HasTerm='1'">
-              <fo:block>
+              <fo:block margin-top="1em">
                 <xsl:text>The term rider provides the option to purchase monthly term insurance on the life of the insured. The term rider selected face amount supplements the selected face amount of the contract. If the term rider is attached, the policy to which it is attached may have a lower annual cutoff premium and, as a result, the lower overall sales loads paid may be lower than a contract having the same total face amount, but with no term rider. </xsl:text>
                 <xsl:if test="illustration/scalar/NoLapse='1'">
                   <xsl:text> Also, the lapse protection feature of the contract's </xsl:text>
@@ -416,21 +359,18 @@
                   <xsl:text> does not apply to the term rider's selected face amount.</xsl:text>
                 </xsl:if>
               </fo:block>
-              <fo:block><fo:leader></fo:leader></fo:block>
             </xsl:if>
             <xsl:if test="illustration/scalar/HasWP='1'">
-              <fo:block>
+              <fo:block margin-top="1em">
                 <xsl:text>The Waiver of Monthly Charges Rider provides for waiver of monthly charges in the event of the disability of the insured that begins before attained age 65 and continues for at least 6 months, as described in the rider. An additional charge is associated with this rider. Please refer to your contract for specific provisions and a detailed schedule of charges.</xsl:text>
               </fo:block>
-              <fo:block><fo:leader></fo:leader></fo:block>
             </xsl:if>
             <xsl:if test="illustration/scalar/HasADD='1'">
-              <fo:block>
+              <fo:block margin-top="1em">
                 <xsl:text>The Accidental Death benefit provides an additional benefit if death is due to accident. An additional charge is associated with this rider. Please refer to your contract for specific provisions and a detailed schedule of charges.</xsl:text>
               </fo:block>
-              <fo:block><fo:leader></fo:leader></fo:block>
             </xsl:if>
-            <fo:block>
+            <fo:block margin-top="1em">
               <xsl:text>The definition of life insurance for this contract is the </xsl:text>
               <xsl:choose>
                 <xsl:when test="illustration/scalar/DefnLifeIns='GPT'">
@@ -444,8 +384,7 @@
                 </xsl:otherwise>
               </xsl:choose>
             </fo:block>
-            <fo:block><fo:leader></fo:leader></fo:block>
-          </fo:block>>
+          </fo:block>
 
           <!-- Force Second Page -->
           <fo:block break-after="page"/>
@@ -453,10 +392,8 @@
             <xsl:text>NARRATIVE SUMMARY (Continued)</xsl:text>
           </fo:block>
           <fo:block text-align="left" font-size="9pt" font-family="sans-serif">
-            <fo:block><fo:leader></fo:leader></fo:block>
-            <fo:block><fo:leader></fo:leader></fo:block>
             <xsl:if test="illustration/scalar/SalesLoadRefund!='0%'">
-              <fo:block>
+              <fo:block margin-top="2em">
                 <xsl:text>Sales Load Refund: We will refund a portion of the sales load to you, as part of your </xsl:text>
                 <xsl:value-of select="illustration/scalar/CsvName"/>
                 <xsl:text> Value, if you surrender your contract within the first two policy years. In policy year 1, we will refund </xsl:text>
@@ -465,10 +402,9 @@
                 <xsl:value-of select="illustration/scalar/SalesLoadRefundRate1"/>
                 <xsl:text> of the first contract year sales load collected.</xsl:text>
               </fo:block>
-              <fo:block><fo:leader></fo:leader></fo:block>
             </xsl:if>
             <xsl:if test="illustration/scalar/NoLapse='1'">
-              <fo:block>
+              <fo:block margin-top="1em">
                 <xsl:value-of select="illustration/scalar/NoLapseProvisionName"/>
                 <xsl:text>: The contract will remain in force after the first premium has been paid, even if there is insufficient </xsl:text>
                 <xsl:value-of select="illustration/scalar/AvName"/>
@@ -476,116 +412,97 @@
                 <xsl:value-of select="illustration/scalar/AvName"/>
                 <xsl:text> Value.</xsl:text>
               </fo:block>
-              <fo:block><fo:leader></fo:leader></fo:block>
             </xsl:if>
 
-            <fo:block>
+            <fo:block margin-top="1em">
               <xsl:text>This contract has a guaranteed maximum cost of insurance (based on 1980 CSO mortality tables) and maximum administrative charges. The actual current charges are lower than these and are reflected in the values. However, these current charges are subject to change.</xsl:text>
             </fo:block>
-            <fo:block><fo:leader></fo:leader></fo:block>
-            <fo:block>
+            <fo:block margin-top="1em">
               <xsl:text>This illustration assumes death of the insured at age </xsl:text>
               <xsl:value-of select="illustration/scalar/EndtAge"/>
               <xsl:text>.</xsl:text>
             </fo:block>
-            <fo:block><fo:leader></fo:leader></fo:block>
-            <fo:block>
+            <fo:block margin-top="1em">
               <xsl:text>The loan interest rate is fixed at </xsl:text>
               <xsl:value-of select="illustration/scalar/InitAnnLoanDueRate"/>
               <xsl:text> per year.</xsl:text>
             </fo:block>
-            <fo:block><fo:leader></fo:leader></fo:block>
-            <fo:block>
+            <fo:block margin-top="1em">
               <xsl:text>The state of issue is </xsl:text>
               <xsl:value-of select="illustration/scalar/StatePostalAbbrev"/>
               <xsl:text>.</xsl:text>
             </fo:block>
-            <fo:block><fo:leader></fo:leader></fo:block>
             <xsl:if test="$is_composite">
-              <fo:block>
+              <fo:block margin-top="1em">
                 <xsl:text>Please see the attached census, listing the face amounts, underwriting classes and issue ages for individual participants.</xsl:text>
               </fo:block>
-              <fo:block><fo:leader></fo:leader></fo:block>
             </xsl:if>
             <xsl:if test="illustration/scalar/StatePostalAbbrev='NC' or illustration/scalar/StatePostalAbbrev='SC'">
-              <fo:block>
+              <fo:block margin-top="1em">
                 <xsl:text>In the states of North Carolina and South Carolina, Guaranteed Issue Underwriting is referred to as "Limited Underwriting" and Simplified Issue Underwriting is referred to as "Simplified Underwriting".</xsl:text>
               </fo:block>
-              <fo:block><fo:leader></fo:leader></fo:block>
             </xsl:if>
             <xsl:if test="illustration/scalar/StatePostalAbbrev='TX'">
               <xsl:if test="illustration/scalar/UWType='Guaranteed issue'">
-                <fo:block>
+                <fo:block margin-top="1em">
                   <xsl:text>* This policy is classified as substandard guaranteed issue per the requirements of the Texas Insurance Department.</xsl:text>
                 </fo:block>
-                <fo:block><fo:leader></fo:leader></fo:block>
               </xsl:if>
             </xsl:if>
             <!-- Group Experience Rating Logic -->
             <xsl:if test="$GroupExperienceRating='1'">
-              <fo:block>
+              <fo:block margin-top="1em">
                 <xsl:text>We may assess a Market Value Adjustment upon a surrender of the certificate when the surrender proceeds are intended to be applied to an insurance policy issued by an insurer unaffilliated with MML Bay State with an intent to qualify the exchange as a tax free exchange under IRC section 1035.</xsl:text>
               </fo:block>
-              <fo:block><fo:leader></fo:leader></fo:block>
               <xsl:if test="illustration/scalar/UseExperienceRating!='1'">
-                <fo:block>
+                <fo:block margin-top="1em">
                   <xsl:text>This illustration does not reflect experience rating.</xsl:text>
                 </fo:block>
-                <fo:block><fo:leader></fo:leader></fo:block>
               </xsl:if>
-              <fo:block>
+              <fo:block margin-top="1em">
                 <xsl:text>The guaranteed values reflect the maximum charges permitted by the contract, which may include an Experience Rating Risk Charge.</xsl:text>
               </fo:block>
-              <fo:block><fo:leader></fo:leader></fo:block>
-              <fo:block>
+              <fo:block margin-top="1em">
                 <xsl:text>No Experience Rating Risk Charge or a distribution of an Experience Rating Reserve Credit is reflected in the current, non-guaranteed values. Actual charges and credits will be based on the actual experience of the group.</xsl:text>
               </fo:block>
-              <fo:block><fo:leader></fo:leader></fo:block>
             </xsl:if>
             <xsl:if test="illustration/scalar/Has1035ExchCharge='1'">
               <!-- Single Premium Logic -->
               <xsl:choose>
                 <xsl:when test="$SinglePremium!='1'">
                   <xsl:if test="illustration/scalar/Has1035ExchCharge='1'">
-                    <fo:block>
+                    <fo:block margin-top="1em">
                       <xsl:text>Upon surrender of this policy, where the surrender proceeds are intended to be applied to an insurance policy or certificate issued in conjunction with an intent to qualify the exchange as a tax free exchange under Section 1035 of the Internal Revenue Code, we may assess an Exchange Charge. The Exchange Charge is the greater of the Market Value Adjustment Charge and the Percentage of Premium Charge. In the states of Florida or Indiana, the Exchange charge (referred to as Assignment Charge in Florida) will be the Percentage of Premium Charge only. The Exchange Charge will potentially reduce the surrender proceeds, but will never increase the surrender proceeds. Please refer to your contract for details.</xsl:text>
                     </fo:block>
-                    <fo:block><fo:leader></fo:leader></fo:block>
                   </xsl:if>
-                  <fo:block><fo:leader></fo:leader></fo:block>
                 </xsl:when>
                 <xsl:otherwise>
-                  <fo:block>
+                  <fo:block margin-top="1em">
                     <xsl:text>Upon surrender of this policy, where the surrender proceeds are intended to be applied to an insurance policy or certificate issued in conjunction with an intent to qualify the exchange as a tax free exchange under Section 1035 of the Internal Revenue Code, we may assess an Exchange Charge. The Exchange Charge will potentially reduce the surrender proceeds, but will never increase the surrender proceeds. Please refer to your contract for details.</xsl:text>
                   </fo:block>
-                  <fo:block><fo:leader></fo:leader></fo:block>
                 </xsl:otherwise>
               </xsl:choose>
             </xsl:if>
             <xsl:if test="illustration/scalar/HasSpouseRider='1'">
-              <fo:block>
+              <fo:block margin-top="1em">
                 <xsl:text>The $</xsl:text>
                 <xsl:value-of select="illustration/scalar/SpouseRiderAmount"/>
                 <xsl:text> Spouse rider provides term life insurance on the spouse (issue age </xsl:text>
                 <xsl:value-of select="illustration/scalar/SpouseIssueAge"/>
                 <xsl:text>) for a limited duration, for an extra charge.  Please refer to your contract for specific provisions and a detailed schedule of charges.</xsl:text>
               </fo:block>
-              <fo:block><fo:leader></fo:leader></fo:block>
             </xsl:if>
             <xsl:if test="illustration/scalar/HasChildRider='1'">
-              <fo:block>
+              <fo:block margin-top="1em">
                 <xsl:text>The $</xsl:text>
                 <xsl:value-of select="illustration/scalar/ChildRiderAmount"/>
                 <xsl:text> Child rider provides term life insurance on the insured's children for a limited duration, for an extra charge.  Please refer to your contract for specific provisions and a detailed schedule of charges.</xsl:text>
               </fo:block>
-              <fo:block><fo:leader></fo:leader></fo:block>
             </xsl:if>
-            <fo:block><fo:leader></fo:leader></fo:block>
-            <fo:block font-weight="bold" text-align="center">
+            <fo:block font-weight="bold" text-align="center" margin-top="1em">
               <xsl:text>IMPORTANT TAX DISCLOSURE</xsl:text>
             </fo:block>
-            <fo:block><fo:leader></fo:leader></fo:block>
-            <fo:block>
+            <fo:block margin-top="1em">
               <!-- Single Premium Logic -->
               <xsl:choose>
                 <xsl:when test="$SinglePremium!='1'">
@@ -617,42 +534,36 @@
                 </xsl:otherwise>
               </xsl:choose>
             </fo:block>
-            <fo:block><fo:leader></fo:leader></fo:block>
             <!-- Single Premium Logic -->
             <xsl:if test="$SinglePremium!='1'">
               <xsl:if test="illustration/scalar/IsInforce!='1'">
-                <fo:block>
+                <fo:block margin-top="1em">
                   <xsl:text>The initial 7-pay premium limit is $</xsl:text>
                   <xsl:value-of select="illustration/scalar/InitSevenPayPrem"/>
                   <xsl:text>. </xsl:text>
                 </fo:block>
-                <fo:block><fo:leader></fo:leader></fo:block>
               </xsl:if>
             </xsl:if>
-            <fo:block font-weight="bold">
+            <fo:block font-weight="bold" margin-top="1em">
               <xsl:text>The information contained in this illustration is not written or intended as tax or legal advice, and may not be relied upon for purposes of avoiding any federal tax penalties. Neither </xsl:text>
                   <xsl:value-of select="illustration/scalar/InsCoShortName"/>
               <xsl:text> nor any of its employees or representatives are authorized to give tax or legal advice.  For more information pertaining to the tax consequences of purchasing or owning this policy, consult with your own independent tax or legal counsel.</xsl:text>
             </fo:block>
-            <fo:block><fo:leader></fo:leader></fo:block>
-            <fo:block><fo:leader></fo:leader></fo:block>
             <xsl:choose>
               <xsl:when test="illustration/scalar/IsInforce!='1'">
                 <xsl:if test="string-length(illustration/scalar/InsCoPhone) &gt; 14">
-                  <fo:block>
+                  <fo:block margin-top="2em">
                     <xsl:text>Compliance tracking number: </xsl:text>
                     <xsl:value-of select="substring(illustration/scalar/InsCoPhone, 1, 15)"/>
                   </fo:block>
-                  <fo:block><fo:leader></fo:leader></fo:block>
                 </xsl:if>
               </xsl:when>
               <xsl:otherwise>
                 <xsl:if test="string-length(illustration/scalar/InsCoPhone) &gt; 16">
-                  <fo:block>
+                  <fo:block margin-top="2em">
                     <xsl:text>Compliance Tracking Number: </xsl:text>
                     <xsl:value-of select="substring(illustration/scalar/InsCoPhone, 16)"/>
                   </fo:block>
-                  <fo:block><fo:leader></fo:leader></fo:block>
                 </xsl:if>
               </xsl:otherwise>
             </xsl:choose>
@@ -679,12 +590,10 @@
 
         <!-- Column Headings and Key Terms Body  -->
         <fo:flow flow-name="xsl-region-body">
-          <fo:block><fo:leader></fo:leader></fo:block>
-          <fo:block text-align="center" font-size="10.0pt">
+          <fo:block text-align="center" font-size="10.0pt" margin-top="1em">
             <xsl:text>Column Headings and Key Terms Used in This Illustration</xsl:text>
           </fo:block>
-          <fo:block><fo:leader></fo:leader></fo:block>
-          <fo:block text-align="left" font-size="9pt" font-family="sans-serif">
+          <fo:block text-align="left" font-size="9pt" font-family="sans-serif" margin-top="1em">
             <fo:block font-weight="bold">
               <xsl:value-of select="illustration/scalar/AvName"/>
               <!-- Single Premium Logic -->
@@ -697,8 +606,7 @@
                 </xsl:otherwise>
               </xsl:choose>
             </fo:block>
-            <fo:block><fo:leader></fo:leader></fo:block>
-            <fo:block>
+            <fo:block margin-top="1em">
               <fo:inline font-weight="bold">
                 <xsl:value-of select="illustration/scalar/CsvName"/>
                  Value:
@@ -709,16 +617,13 @@
               <xsl:value-of select="illustration/scalar/CsvName"/>
               <xsl:text> Value does not reflect an Exchange Charge, which may be assessed under the policy where surrender proceeds are intended to be applied to an insurance policy or certificate issued with an intent to qualify the exchange as a tax free exchange under Section 1035 of the Internal Revenue Code.</xsl:text>
             </fo:block>
-            <fo:block><fo:leader></fo:leader></fo:block>
-            <fo:block>
+            <fo:block margin-top="1em">
               <fo:inline font-weight="bold">Current Values:</fo:inline>  Values assuming current interest crediting rates and current monthly charges. These values are not guaranteed and are based on the assumption that premium is paid as illustrated.
             </fo:block>
-            <fo:block><fo:leader></fo:leader></fo:block>
-            <fo:block>
+            <fo:block margin-top="1em">
               <fo:inline font-weight="bold">Death Benefit:</fo:inline>  The amount of benefit provided by the Death Benefit Option in effect on the date of death, prior to adjustments for policy debt and monthly charges payable to the date of death.
             </fo:block>
-            <fo:block><fo:leader></fo:leader></fo:block>
-            <fo:block>
+            <fo:block margin-top="1em">
               <fo:inline font-weight="bold">Death Benefit Option 1:</fo:inline>  Option in which the death benefit is equal to the selected face amount of the contract on the date of death of the insured, or if greater the
               <xsl:value-of select="illustration/scalar/AvName"/>
               <xsl:text> Value </xsl:text>
@@ -727,10 +632,9 @@
               </xsl:if>
               <xsl:text>on the insured's date of death multiplied by the minimum face amount percentage for the insured's attained age at death (minimum face amount). Please refer to the contract for a detailed schedule of death benefit factors.</xsl:text>
             </fo:block>
-            <fo:block><fo:leader></fo:leader></fo:block>
             <!-- Group Experience Rating Logic -->
             <xsl:if test="$GroupExperienceRating!='1'">
-              <fo:block>
+              <fo:block margin-top="1em">
                 <fo:inline font-weight="bold">Death Benefit Option 2:</fo:inline>  Option in which the death benefit is equal to the selected face amount of the contract plus the
                 <xsl:value-of select="illustration/scalar/AvName"/>
                 <xsl:text> Value on the date of death of the insured, or if greater, the </xsl:text>
@@ -741,74 +645,60 @@
                 </xsl:if>
                 <xsl:text>on the insured's date of death multiplied by the death benefit factor for the insured's attained age at death (minimum face amount). Please refer to the contract for a detailed schedule of death benefit factors.</xsl:text>
               </fo:block>
-              <fo:block><fo:leader></fo:leader></fo:block>
             </xsl:if>
             <!-- Group Experience Rating Logic -->
             <xsl:if test="$GroupExperienceRating='1'">
-              <fo:block>
+              <fo:block margin-top="1em">
                 <fo:inline font-weight="bold">Experience Rating Risk Charge:</fo:inline>  Applies only to certain experience rated groups. This charge is based on the cost of insurance charges assessed during the certificate year. It may be assessed against the account value once per certificate anniversary date and upon surrender of the group policy.
               </fo:block>
-              <fo:block><fo:leader></fo:leader></fo:block>
             </xsl:if>
             <!-- Group Experience Rating Logic -->
             <xsl:if test="$GroupExperienceRating!='1'">
-              <fo:block>
+              <fo:block margin-top="1em">
                 <fo:inline font-weight="bold">Exchange Charge:</fo:inline>  Where surrender proceeds are intended to be applied to an insurance policy or certificate issued with an intent to qualify the exchange as a tax free exchange under Section 1035 of the Internal Revenue Code, there is a potential reduction in surrender proceeds.  Please see the contract endorsement for a detailed description of the Exchange Charge.
               </fo:block>
-              <fo:block><fo:leader></fo:leader></fo:block>
             </xsl:if>
-            <fo:block>
-              <fo:block>
-                <fo:inline font-weight="bold">Flexible Premiums:</fo:inline>  Premiums that may be increased, reduced, or not paid, if the account value is sufficient to cover the monthly charges.
-              </fo:block>
-              <fo:block><fo:leader></fo:leader></fo:block>
+            <fo:block margin-top="1em">
+              <fo:inline font-weight="bold">Flexible Premiums:</fo:inline>  Premiums that may be increased, reduced, or not paid, if the account value is sufficient to cover the monthly charges.
             </fo:block>
-            <fo:block>
+            <fo:block margin-top="1em">
               <fo:inline font-weight="bold">Guaranteed Values:</fo:inline>  Values assuming the guaranteed crediting rate and the guaranteed maximum monthly charges. These values are based on the assumption that premium is paid as illustrated.
             </fo:block>
-            <fo:block><fo:leader></fo:leader></fo:block>
             <xsl:if test="illustration/scalar/IsInforce!='1'">
-              <fo:block>
+              <fo:block margin-top="1em">
                 <fo:inline font-weight="bold">Initial Illustrated Crediting Rate:</fo:inline>  The current interest rate illustrated for the first policy year.  This rate is not guaranteed and is subject to change by
                 <xsl:value-of select="illustration/scalar/InsCoName"/>.
               </fo:block>
-              <fo:block><fo:leader></fo:leader></fo:block>
             </xsl:if>
-            <fo:block>
+            <fo:block margin-top="1em">
               <fo:inline font-weight="bold">MEC:</fo:inline>  Modified Endowment Contract - this classification is given to a contract in violation of TAMRA (Technical and Miscellaneous Revenues Act), which limits the amount of premium that can be paid into a life insurance contract. To the extent of gain in the contract, loans, distributions and withdrawals from a MEC are subject to income tax and may also trigger a tax penalty.
             </fo:block>
-            <fo:block><fo:leader></fo:leader></fo:block>
-            <fo:block>
+            <fo:block margin-top="1em">
               <fo:inline font-weight="bold">Midpoint Values:</fo:inline>  Values assuming interest rates that are the average of the illustrated current crediting rates and the guaranteed minimum interest rate, and monthly charges that are the average of the current monthly charges and the guaranteed monthly charges. These values are not guaranteed and are based on the assumption that premium is paid as illustrated.
             </fo:block>
-            <fo:block><fo:leader></fo:leader></fo:block>
             <!-- Single Premium Logic -->
             <xsl:if test="$ModifiedSinglePremium='1'">
-              <fo:block>
+              <fo:block margin-top="1em">
                 <fo:inline font-weight="bold">Modified Single Premium:</fo:inline> After the single premium is paid, additional payment under this policy will only be accepted for repayment of policy debt, payment required to keep the policy from lapsing, or payment required to reinstate the policy.
               </fo:block>
-              <fo:block><fo:leader></fo:leader></fo:block>
             </xsl:if>
-            <fo:block>
+            <fo:block margin-top="1em">
               <fo:inline font-weight="bold">Monthly Charges:</fo:inline> The monthly charges for the following month which include: cost of insurance, plus face amount charges (if applicable), plus the administrative charge shown on the contract schedule page.
             </fo:block>
-            <fo:block><fo:leader></fo:leader></fo:block>
-            <fo:block>
+            <fo:block margin-top="1em">
               <fo:inline font-weight="bold">Premium Outlay:</fo:inline>  The amount of premium assumed to be paid by the contract owner or other premium payor.
             </fo:block>
-            <fo:block><fo:leader></fo:leader></fo:block>
             <!-- Single Premium Logic -->
             <xsl:if test="$SinglePremium='1' and $ModifiedSinglePremium!='1'">
-              <fo:block>
+              <fo:block margin-top="1em">
                 <fo:inline font-weight="bold">Single Premium:</fo:inline> After the single premium is paid, additional payment under this policy will only be accepted for repayment of policy debt, payment required to keep the policy from lapsing, or payment required to reinstate the policy.
               </fo:block>
-              <fo:block><fo:leader></fo:leader></fo:block>
             </xsl:if>
             <!-- Single Premium Logic -->
             <xsl:if test="$SinglePremium='1'">
-              <fo:block>
+              <fo:block margin-top="1em">
                 <fo:inline font-weight="bold">Ultimate Illustrated Crediting Rate:</fo:inline>
-                <xsl:text>  The current interest rate illustrated for policy years 6 and later.  The illustrated crediting rates for policy years 2 through 5 are based on a blend of the Initial and Ultimate Illustrated Crediting Rates.  These rates are not guaranteed and are subject to change by </xsl:text>
+                <xsl:text> The current interest rate illustrated for policy years 6 and later.  The illustrated crediting rates for policy years 2 through 5 are based on a blend of the Initial and Ultimate Illustrated Crediting Rates.  These rates are not guaranteed and are subject to change by </xsl:text>
                 <xsl:value-of select="illustration/scalar/InsCoName"/>
                 <xsl:text>.</xsl:text>
               </fo:block>
@@ -1070,7 +960,7 @@
   </xsl:template>
 
   <xsl:template name="standardheader">
-    <fo:block text-align="center" font-size="9.0pt">
+    <fo:block text-align="center" font-size="9.0pt" margin-bottom="1em">
       <xsl:choose>
         <xsl:when test="illustration/scalar/IsInforce!='1'">
           <fo:block>
@@ -1102,7 +992,6 @@
           <xsl:value-of select="illustration/scalar/ProducerCity"/>
         </fo:block>
       </xsl:if>
-      <fo:block><fo:leader></fo:leader></fo:block>
     </fo:block>
     <xsl:variable name="header-width" select="33"/>
     <xsl:variable name="header-field-width">
@@ -1112,7 +1001,7 @@
     <fo:block padding-before="5pt" font-size="9.0pt" font-family="sans-serif">
       <fo:table table-layout="fixed" width="100%">
         <fo:table-column column-width="125mm"/>
-        <fo:table-column  column-width="2mm"/>
+        <fo:table-column column-width="2mm"/>
         <fo:table-column/>
         <fo:table-body padding-before="2pt">
           <fo:table-row>
@@ -1145,7 +1034,7 @@
           <fo:table-row>
             <fo:table-cell>
               <fo:block text-align="left">
-                <xsl:text>&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;Group Name: </xsl:text>
+                <xsl:text>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Group Name: </xsl:text>
                 <xsl:call-template name="limitstring">
                   <xsl:with-param name="passString" select="illustration/scalar/CorpName"/>
                   <xsl:with-param name="length" select="50"/>
@@ -1163,7 +1052,7 @@
                 </xsl:when>
                 <xsl:otherwise>
                   <fo:block text-align="left">
-                    <xsl:text>&#xA0;</xsl:text>
+                    <xsl:text>&nbsp;</xsl:text>
                   </fo:block>
                 </xsl:otherwise>
               </xsl:choose>
@@ -1174,12 +1063,12 @@
               <xsl:choose>
                 <xsl:when test="$is_composite">
                   <fo:block text-align="left">
-                    <xsl:text>&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;Composite Illustration</xsl:text>
+                    <xsl:text>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Composite Illustration</xsl:text>
                   </fo:block>
                 </xsl:when>
                 <xsl:otherwise>
                   <fo:block text-align="left">
-                    <xsl:text>&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;Insured: </xsl:text>
+                    <xsl:text>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Insured: </xsl:text>
                     <xsl:call-template name="limitstring">
                       <xsl:with-param name="passString" select="illustration/scalar/Insured1"/>
                       <xsl:with-param name="length" select="50"/>
@@ -1199,7 +1088,7 @@
                 </xsl:when>
                 <xsl:otherwise>
                   <fo:block text-align="left">
-                    <xsl:text>&#xA0;</xsl:text>
+                    <xsl:text>&nbsp;</xsl:text>
                   </fo:block>
                 </xsl:otherwise>
               </xsl:choose>
@@ -1210,12 +1099,12 @@
               <xsl:choose>
                 <xsl:when test="$is_composite">
                   <fo:block text-align="left">
-                    <xsl:text>&#xA0;</xsl:text>
+                    <xsl:text>&nbsp;</xsl:text>
                   </fo:block>
                 </xsl:when>
                 <xsl:otherwise>
                   <fo:block text-align="left">
-                    <xsl:text>&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;Age: </xsl:text>
+                    <xsl:text>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Age: </xsl:text>
                     <xsl:value-of select="illustration/scalar/Age"/>
                   </fo:block>
                 </xsl:otherwise>
@@ -1282,7 +1171,7 @@
               <!-- Single Premium Logic -->
               <xsl:choose>
                 <xsl:when test="$SinglePremium!='1' or illustration/scalar/InforceYear &gt; 4">
-                  <xsl:text>&#xA0;</xsl:text>
+                  <xsl:text>&nbsp;</xsl:text>
                 </xsl:when>
                 <xsl:otherwise>
                   <fo:block text-align="left">
@@ -1313,13 +1202,13 @@
             </fo:table-cell>
             <fo:table-cell number-columns-spanned="1" padding="0pt"/>
             <fo:table-cell>
-              <!-- Update with "FriendlyUWType"  - Get From Greg -->
+              <!-- Update with "FriendlyUWType" - Get From Greg -->
               <!-- "&IF(UWType="Medical","Fully underwritten",
               IF(AND(State="TX",UWType="Guaranteed issue"),"Substandard *",UWType))) -->
               <xsl:choose>
                 <xsl:when test="$is_composite">
                   <fo:block text-align="left">
-                    <xsl:text>&#xA0;</xsl:text>
+                    <xsl:text>&nbsp;</xsl:text>
                   </fo:block>
                 </xsl:when>
                 <xsl:otherwise>
@@ -1375,7 +1264,7 @@
                     </xsl:when>
                     <xsl:otherwise>
                       <fo:block text-align="left">
-                        <xsl:text>&#xA0;</xsl:text>
+                        <xsl:text>&nbsp;</xsl:text>
                       </fo:block>
                     </xsl:otherwise>
                   </xsl:choose>
@@ -1393,7 +1282,7 @@
               <xsl:choose>
                 <xsl:when test="$is_composite">
                   <fo:block text-align="left">
-                    <xsl:text>&#xA0;</xsl:text>
+                    <xsl:text>&nbsp;</xsl:text>
                   </fo:block>
                 </xsl:when>
                 <xsl:otherwise>
@@ -1420,7 +1309,7 @@
                         <xsl:with-param name="passString" select="illustration/scalar/Franchise"/>
                         <xsl:with-param name="length" select="15"/>
                       </xsl:call-template>
-                      <xsl:text>&#xA0;&#xA0;&#xA0;Contract number: </xsl:text>
+                      <xsl:text>&nbsp;&nbsp;&nbsp;Contract number: </xsl:text>
                       <xsl:call-template name="limitstring">
                         <xsl:with-param name="passString" select="illustration/scalar/PolicyNumber"/>
                         <xsl:with-param name="length" select="15"/>
@@ -1447,7 +1336,7 @@
                   </xsl:when>
                   <xsl:otherwise>
                     <fo:block text-align="left">
-                      <xsl:text>&#xA0;</xsl:text>
+                      <xsl:text>&nbsp;</xsl:text>
                     </fo:block>
                   </xsl:otherwise>
                 </xsl:choose>
@@ -1456,7 +1345,7 @@
               <fo:table-cell>
                 <xsl:if test="illustration/scalar/UWClass='Rated'">
                   <fo:block text-align="left">
-                    <xsl:text>&#xA0;&#xA0;&#xA0;Table Rating: </xsl:text>
+                    <xsl:text>&nbsp;&nbsp;&nbsp;Table Rating: </xsl:text>
                     <xsl:value-of select="illustration/scalar/SubstandardTable"/>
                   </fo:block>
                 </xsl:if>
@@ -1714,7 +1603,7 @@
               <xsl:if test="illustration/scalar/Age &lt; 70">
                 <fo:table-row>
                   <fo:table-cell padding="8pt">
-                    <fo:block text-align="right"></fo:block>
+                    <fo:block/>
                   </fo:table-cell>
                 </fo:table-row>
                 <xsl:call-template name="numeric-summary-values">
@@ -1727,59 +1616,50 @@
           </fo:table-body>
         </fo:table>
       </fo:block>
-      <fo:block><fo:leader></fo:leader></fo:block>
-      <fo:block><fo:leader></fo:leader></fo:block>
       <xsl:choose>
-        <xsl:when test="not($is_composite)">
-          <xsl:if test="illustration/scalar/LapseYear_Guaranteed &lt; /illustration/scalar/MaxDuration">
-            <fo:block text-align="left" font-size="9.0pt">
-              <xsl:text>Additional premium will be required in year </xsl:text>
-              <xsl:value-of select="illustration/scalar/LapseYear_Guaranteed+1"/>
-              <xsl:text> or contract will lapse based on guaranteed monthly charges and interest rate.</xsl:text>
-            </fo:block>
-            <xsl:if test="illustration/scalar/LapseYear_Midpoint &lt; /illustration/scalar/MaxDuration">
-              <fo:block text-align="left" font-size="9.0pt">
-                <xsl:text>Additional premium will be required in year </xsl:text>
-                <xsl:value-of select="illustration/scalar/LapseYear_Midpoint+1"/>
-                <xsl:text> or contract will lapse based on midpoint monthly charges and interest rate.</xsl:text>
-              </fo:block>
-            </xsl:if>
-            <xsl:if test="illustration/scalar/LapseYear_Current &lt; /illustration/scalar/MaxDuration">
-              <fo:block text-align="left" font-size="9.0pt">
-                <xsl:text>Additional premium will be required in year </xsl:text>
-                <xsl:value-of select="illustration/scalar/LapseYear_Current+1"/>
-                <xsl:text> or contract will lapse based on current monthly charges and interest rate.</xsl:text>
-              </fo:block>
-            </xsl:if>
-          </xsl:if>
-        </xsl:when>
-        <xsl:otherwise>
-          <fo:block text-align="left" font-size="9.0pt">
+        <xsl:when test="$is_composite">
+          <fo:block text-align="left" font-size="9.0pt" margin-top="2em">
             <xsl:text>The year of policy lapse on a guaranteed, midpoint and current basis is not depicted in the above table of values for this composite illustration because it is not applicable on a case basis.</xsl:text>
           </fo:block>
-        </xsl:otherwise>
+        </xsl:when>
+        <xsl:when test="illustration/scalar/LapseYear_Guaranteed &lt; /illustration/scalar/MaxDuration">
+          <fo:block text-align="left" font-size="9.0pt" margin-top="2em">
+            <xsl:text>Additional premium will be required in year </xsl:text>
+            <xsl:value-of select="illustration/scalar/LapseYear_Guaranteed+1"/>
+            <xsl:text> or contract will lapse based on guaranteed monthly charges and interest rate.</xsl:text>
+          </fo:block>
+          <xsl:if test="illustration/scalar/LapseYear_Midpoint &lt; /illustration/scalar/MaxDuration">
+            <fo:block text-align="left" font-size="9.0pt" margin-top="2em">
+              <xsl:text>Additional premium will be required in year </xsl:text>
+              <xsl:value-of select="illustration/scalar/LapseYear_Midpoint+1"/>
+              <xsl:text> or contract will lapse based on midpoint monthly charges and interest rate.</xsl:text>
+            </fo:block>
+          </xsl:if>
+          <xsl:if test="illustration/scalar/LapseYear_Current &lt; /illustration/scalar/MaxDuration">
+            <fo:block text-align="left" font-size="9.0pt" margin-top="2em">
+              <xsl:text>Additional premium will be required in year </xsl:text>
+              <xsl:value-of select="illustration/scalar/LapseYear_Current+1"/>
+              <xsl:text> or contract will lapse based on current monthly charges and interest rate.</xsl:text>
+            </fo:block>
+          </xsl:if>
+        </xsl:when>
       </xsl:choose>
-      <fo:block><fo:leader></fo:leader></fo:block>
       <xsl:if test="illustration/scalar/IsMec='1'">
-        <fo:block text-align="left" font-size="9.0pt">
+        <fo:block text-align="left" font-size="9.0pt" margin-top="1em">
           <xsl:text>IMPORTANT TAX DISCLOSURE: This is a Modified Endowment Contract. Please refer to the Narrative Summary for additional information.</xsl:text>
         </fo:block>
       </xsl:if>
-      <fo:block><fo:leader></fo:leader></fo:block>
-      <fo:block><fo:leader></fo:leader></fo:block>
-      <fo:block text-align="center" font-size="9.0pt">
+      <fo:block text-align="center" font-size="9.0pt" margin-top="2em">
         <xsl:text>Certification Statements</xsl:text>
       </fo:block>
-      <fo:block><fo:leader></fo:leader></fo:block>
-      <fo:block text-align="left" font-size="9.0pt">
+      <fo:block text-align="left" font-size="9.0pt" margin-top="1em">
         <xsl:text>CONTRACT OWNER / APPLICANT</xsl:text>
       </fo:block>
       <xsl:if test="illustration/scalar/InterestDisclaimer!=''">
-        <fo:block text-align="left" font-size="9.0pt">
+        <fo:block text-align="left" font-size="9.0pt" margin-bottom="1em">
           <xsl:text>I understand that at the present time higher current interest rates are credited for policies with case premiums in the amount of </xsl:text>
           <xsl:value-of select="illustration/scalar/InterestDisclaimer"/>
         </fo:block>
-        <fo:block><fo:leader></fo:leader></fo:block>
       </xsl:if>
       <xsl:choose>
         <xsl:when test="illustration/scalar/StatePostalAbbrev='IL'">
@@ -1802,13 +1682,11 @@
           </xsl:choose>
         </xsl:otherwise>
       </xsl:choose>
-      <fo:block><fo:leader></fo:leader></fo:block>
-      <fo:block><fo:leader></fo:leader></fo:block>
-      <fo:block text-align="left" font-size="9.0pt" text-decoration="overline">CONTRACT OWNER OR APPLICANT SIGNATURE &#xA0;&#xA0;&#xA0;
-        <fo:inline text-decoration="no-overline">&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;</fo:inline>DATE &#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;</fo:block>
-      <fo:block><fo:leader></fo:leader></fo:block>
-      <fo:block><fo:leader></fo:leader></fo:block>
-      <fo:block text-align="left" font-size="9.0pt">
+      <fo:block text-align="left" font-size="9.0pt" text-decoration="overline" margin-top="2em">
+        CONTRACT OWNER OR APPLICANT SIGNATURE &nbsp;&nbsp;&nbsp;
+        <fo:inline text-decoration="no-overline">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</fo:inline>DATE &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      </fo:block>
+      <fo:block text-align="left" font-size="9.0pt" margin-top="2em">
         <xsl:text>AGENT / AUTHORIZED REPRESENTATIVE</xsl:text>
       </fo:block>
       <xsl:choose>
@@ -1832,10 +1710,10 @@
           </xsl:choose>
         </xsl:otherwise>
       </xsl:choose>
-      <fo:block><fo:leader></fo:leader></fo:block>
-      <fo:block><fo:leader></fo:leader></fo:block>
-      <fo:block text-align="left" font-size="9.0pt" text-decoration="overline">AGENT OR AUTHORIZED REPRESENTATIVE &#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;
-        <fo:inline text-decoration="no-overline">&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;</fo:inline>DATE &#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;</fo:block>
+      <fo:block text-align="left" font-size="9.0pt" text-decoration="overline" margin-top="2em">
+        AGENT OR AUTHORIZED REPRESENTATIVE &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <fo:inline text-decoration="no-overline">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</fo:inline>DATE &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      </fo:block>
     </fo:flow>
   </xsl:template>
 
@@ -1870,7 +1748,7 @@
               <fo:block text-align="left">
                 <xsl:text>Date Prepared: </xsl:text>
                 <xsl:value-of select="illustration/scalar/PrepMonth"/>
-                  <xsl:text>&#xA0;</xsl:text>
+                  <xsl:text>&nbsp;</xsl:text>
                 <xsl:value-of select="illustration/scalar/PrepDay"/>
                   <xsl:text>, </xsl:text>
                 <xsl:value-of select="illustration/scalar/PrepYear"/>
