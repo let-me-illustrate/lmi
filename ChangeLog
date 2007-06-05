@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.727 2007-06-05 15:51:56 chicares Exp $
+// $Id: ChangeLog,v 1.728 2007-06-05 15:53:13 etarassov Exp $
 
 MAINTENANCE
 
@@ -12065,4 +12065,9 @@ Improve diagnosis of problems with command-line arguments.
 
   emit_ledger.cpp
 Implement another output type.
+
+20070605T1553Z <etarassov@tt-solutions.com> [1232]
+
+  offshore_private_placement.xsl
+Fix error from previous patch: s/word-wrap/white-space/.
 
