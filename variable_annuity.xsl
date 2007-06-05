@@ -21,12 +21,12 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: variable_annuity.xsl,v 1.15 2007-06-01 12:43:01 rericksberg Exp $
+    $Id: variable_annuity.xsl,v 1.16 2007-06-05 00:31:27 etarassov Exp $
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:fo="http://www.w3.org/1999/XSL/Format">
-  <xsl:include href="fo_common.xsl" />
-  <xsl:output method="xml" encoding="UTF-8" indent="yes" />
+  <xsl:include href="fo_common.xsl"/>
+  <xsl:output method="xml" encoding="UTF-8" indent="yes"/>
   <xsl:variable name="counter" select="1"/>
   <xsl:variable name="numberswoc">0123456789</xsl:variable>
   <xsl:variable name="numberswc">0123456789,</xsl:variable>
@@ -138,7 +138,6 @@
             <xsl:with-param name="basis" select="'Current'"/>
           </xsl:call-template>
           <xsl:call-template name="titles"/>
-          <fo:block><fo:leader></fo:leader></fo:block>
           <xsl:call-template name="dollar-units"/>
         </fo:static-content>
 
@@ -179,7 +178,6 @@
             <xsl:with-param name="basis" select="'CurrentZero'"/>
           </xsl:call-template>
           <xsl:call-template name="titles"/>
-          <fo:block><fo:leader></fo:leader></fo:block>
           <xsl:call-template name="dollar-units"/>
         </fo:static-content>
 
@@ -220,7 +218,6 @@
             <xsl:with-param name="basis" select="'Guaranteed'"/>
           </xsl:call-template>
           <xsl:call-template name="titles"/>
-          <fo:block><fo:leader></fo:leader></fo:block>
           <xsl:call-template name="dollar-units"/>
         </fo:static-content>
 
@@ -261,7 +258,6 @@
             <xsl:with-param name="basis" select="'GuaranteedZero'"/>
           </xsl:call-template>
           <xsl:call-template name="titles"/>
-          <fo:block><fo:leader></fo:leader></fo:block>
           <xsl:call-template name="dollar-units"/>
         </fo:static-content>
 
@@ -569,7 +565,7 @@
             <xsl:when test="$has_supplemental_report">
             </xsl:when>
             <xsl:otherwise>
-              <fo:block id="endofdoc"></fo:block>
+              <fo:block id="endofdoc"/>
             </xsl:otherwise>
           </xsl:choose>
         </fo:flow>
@@ -587,14 +583,9 @@
             <xsl:call-template name="scalar-header">
               <xsl:with-param name="basis" select="NoBasis"/>
             </xsl:call-template>
-            <fo:block font-size="13.0pt" text-align="center" font-family="sans-serif" font-weight="bold">
+            <fo:block font-size="13.0pt" text-align="center" font-family="sans-serif" font-weight="bold" border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="black" padding-after="2.5pt" margin-bottom="1em">
               <xsl:text>SUPPLEMENTAL REPORT</xsl:text>
             </fo:block>
-            <fo:block font-size="10.0pt" text-align="center" font-family="sans-serif" font-weight="normal"
-              border-top-style="solid" border-top-width="1pt" border-top-color="black" padding-after="2.5pt">
-              <fo:block><xsl:text></xsl:text></fo:block>
-            </fo:block>
-            <fo:block><fo:leader></fo:leader></fo:block>
             <xsl:call-template name="dollar-units"/>
           </fo:static-content>
 
@@ -606,7 +597,7 @@
           </fo:static-content>
 
           <!-- Supplemental report body -->
-          <xsl:call-template name="supplemental-report-body" />
+          <xsl:call-template name="supplemental-report-body"/>
         </fo:page-sequence>
       </xsl:if>
 
@@ -644,19 +635,14 @@
       <xsl:value-of select="illustration/scalar/PolicyMktgName"/>
       <fo:inline vertical-align="super" font-size="7.0pt">SM</fo:inline>
     </fo:block>
-    <fo:block font-size="11.0pt" text-align="center" font-family="sans-serif" font-weight="normal">
+    <fo:block font-size="11.0pt" text-align="center" font-family="sans-serif" font-weight="normal" border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="black" padding-after="8.0pt">
       <xsl:value-of select="illustration/scalar/PolicyLegalName"/>
-    </fo:block>
-    <fo:block font-size="11.0pt" text-align="center" font-family="sans-serif" font-weight="normal"
-      border-top-style="solid" border-top-width="1pt" border-top-color="black" padding-after="8.0pt">
-      <fo:block><xsl:text></xsl:text></fo:block>
     </fo:block>
   </xsl:template>
 
   <xsl:template name="scalar-header">
     <xsl:param name="basis"/>
-    <fo:table table-layout="fixed" width="100%" padding-after="2.5pt"
-      font-size="9.5pt" font-family="sans-serif" font-weight="normal">
+    <fo:table table-layout="fixed" width="100%" padding-after="2.5pt" font-size="9.5pt" font-family="sans-serif" font-weight="normal" border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="black">
       <fo:table-column column-width="125mm"/>
       <fo:table-column column-width="10mm"/>
       <fo:table-column column-width="45mm"/>
@@ -697,13 +683,13 @@
               <xsl:choose>
                 <xsl:when test="not($is_composite)">
                   <!-- Properly adjust for long user input strings limit output to 140 characters for appox. 2 lines -->
-                  <xsl:call-template name="limitstring" >
+                  <xsl:call-template name="limitstring">
                     <xsl:with-param name="passString" select="illustration/scalar/Insured1"/>
                     <xsl:with-param name="length" select="140"/>
                   </xsl:call-template>
                 </xsl:when>
                 <xsl:otherwise>
-                  <xsl:call-template name="limitstring" >
+                  <xsl:call-template name="limitstring">
                     <xsl:with-param name="passString" select="illustration/scalar/CorpName"/>
                     <xsl:with-param name="length" select="140"/>
                   </xsl:call-template>
@@ -762,7 +748,7 @@
                   <xsl:if test="illustration/scalar/Franchise!=''">
                     <fo:block text-align="left">
                       <xsl:text>Master contract: </xsl:text>
-                      <xsl:call-template name="limitstring" >
+                      <xsl:call-template name="limitstring">
                         <xsl:with-param name="passString" select="illustration/scalar/Franchise"/>
                         <xsl:with-param name="length" select="30"/>
                       </xsl:call-template>
@@ -814,12 +800,12 @@
                 <fo:table-cell>
                   <fo:block text-align="left">
                     <xsl:text>Master contract: </xsl:text>
-                    <xsl:call-template name="limitstring" >
+                    <xsl:call-template name="limitstring">
                       <xsl:with-param name="passString" select="illustration/scalar/Franchise"/>
                       <xsl:with-param name="length" select="15"/>
                     </xsl:call-template>
                     <xsl:text>&#xA0;&#xA0;&#xA0;Contract number: </xsl:text>
-                    <xsl:call-template name="limitstring" >
+                    <xsl:call-template name="limitstring">
                       <xsl:with-param name="passString" select="illustration/scalar/PolicyNumber"/>
                       <xsl:with-param name="length" select="15"/>
                     </xsl:call-template>
@@ -832,7 +818,7 @@
                 <fo:table-cell>
                   <fo:block text-align="left">
                     <xsl:text>Master contract: </xsl:text>
-                    <xsl:call-template name="limitstring" >
+                    <xsl:call-template name="limitstring">
                       <xsl:with-param name="passString" select="illustration/scalar/Franchise"/>
                       <xsl:with-param name="length" select="30"/>
                     </xsl:call-template>
@@ -845,7 +831,7 @@
                 <fo:table-cell>
                   <fo:block text-align="left">
                     <xsl:text>Contract number: </xsl:text>
-                    <xsl:call-template name="limitstring" >
+                    <xsl:call-template name="limitstring">
                       <xsl:with-param name="passString" select="illustration/scalar/PolicyNumber"/>
                       <xsl:with-param name="length" select="30"/>
                     </xsl:call-template>
@@ -857,22 +843,14 @@
         </xsl:if>
       </fo:table-body>
     </fo:table>
-    <fo:block font-size="10.0pt" text-align="center" font-family="sans-serif" font-weight="normal"
-      border-top-style="solid" border-top-width="1pt" border-top-color="black" padding-after="2.5pt">
-      <fo:block><xsl:text></xsl:text></fo:block>
-    </fo:block>
   </xsl:template>
 
   <xsl:template name="titles">
     <fo:block font-size="13.0pt" text-align="center" font-family="sans-serif" font-weight="bold">
       <xsl:text>HYPOTHETICAL ILLUSTRATION</xsl:text>
     </fo:block>
-    <fo:block font-size="11.0pt" text-align="center" font-family="sans-serif" font-weight="bold">
+    <fo:block font-size="11.0pt" text-align="center" font-family="sans-serif" font-weight="bold" border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="black" padding-after="2.5pt">
       <xsl:text>Accumulation Phase</xsl:text>
-    </fo:block>
-    <fo:block font-size="10.0pt" text-align="center" font-family="sans-serif" font-weight="normal"
-      border-top-style="solid" border-top-width="1pt" border-top-color="black" padding-after="2.5pt">
-      <fo:block><xsl:text></xsl:text></fo:block>
     </fo:block>
   </xsl:template>
 
@@ -891,7 +869,7 @@
         <column special="SpecialAcctVal">_End of Year _Contract Value</column>
         <column special="SpecialIrrCsv">Cumulative _Contract Value _IRR</column>
       </xsl:variable>
-      <xsl:variable name="columns" select="document('')//xsl:variable[@name='column-values-columns']/column" />
+      <xsl:variable name="columns" select="document('')//xsl:variable[@name='column-values-columns']/column"/>
 
       <xsl:call-template name="generate-table-columns">
         <xsl:with-param name="columns" select="$columns"/>

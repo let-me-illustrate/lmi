@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.722 2007-06-04 16:55:29 chicares Exp $
+// $Id: ChangeLog,v 1.723 2007-06-05 00:31:26 etarassov Exp $
 
 MAINTENANCE
 
@@ -12026,4 +12026,16 @@ Run self test for production version as well as for antediluvian fork.
 
   fo_common.xsl
 Remove some superfluous spaces.
+
+20070605T0031Z <etarassov@tt-solutions.com> [1232]
+
+  fo_common.xsl
+  group_private_placement.xsl
+  illustration_reg.xsl
+  individual_private_placement.xsl
+  nasd.xsl
+  offshore_private_placement.xsl
+  variable_annuity.xsl
+Clean up fo_common.xsl and offshore_private_placement.xsl to pass
+check_concinnity test. Also correct minor issues in other xsl files.
 
