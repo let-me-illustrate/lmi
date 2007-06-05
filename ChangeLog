@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.731 2007-06-05 16:02:50 etarassov Exp $
+// $Id: ChangeLog,v 1.732 2007-06-05 16:29:38 etarassov Exp $
 
 MAINTENANCE
 
@@ -12080,4 +12080,9 @@ Filter out empty supplemental report columns.
 
   variable_annuity.xsl
 Slightly clean up variable_annuity.xsl.
+
+20070605T1629Z <etarassov@tt-solutions.com> [1232]
+
+  variable_annuity.xsl
+Remove a trailing space.
 

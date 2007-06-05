@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: variable_annuity.xsl,v 1.18 2007-06-05 16:02:29 etarassov Exp $
+    $Id: variable_annuity.xsl,v 1.19 2007-06-05 16:29:07 etarassov Exp $
 -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fo="http://www.w3.org/1999/XSL/Format" version="1.0">
   <xsl:include href="fo_common.xsl"/>
@@ -337,7 +337,7 @@
           <fo:block font-size="9.0pt" text-align="left" font-family="sans-serif" font-weight="normal" margin-top="1em">
             <xsl:text>
               This material must be preceded or accompanied by the current Confidential Private
-              Placement Memorandum for 
+              Placement Memorandum for
             </xsl:text>
             <xsl:value-of select="illustration/scalar/PolicyMktgName"/>
             <fo:inline vertical-align="super" font-size="7.5pt">SM</fo:inline>
