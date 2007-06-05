@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.728 2007-06-05 15:53:13 etarassov Exp $
+// $Id: ChangeLog,v 1.729 2007-06-05 15:58:26 etarassov Exp $
 
 MAINTENANCE
 
@@ -12070,4 +12070,9 @@ Implement another output type.
 
   offshore_private_placement.xsl
 Fix error from previous patch: s/word-wrap/white-space/.
+
+20070605T1558Z <etarassov@tt-solutions.com> [1232]
+
+  fo_common.xsl
+Filter out empty supplemental report columns.
 
