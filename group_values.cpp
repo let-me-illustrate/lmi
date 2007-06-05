@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: group_values.cpp,v 1.68 2007-05-31 23:49:39 chicares Exp $
+// $Id: group_values.cpp,v 1.69 2007-06-05 12:47:47 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -31,33 +31,22 @@
 #include "account_value.hpp"
 #include "alert.hpp"
 #include "assert_lmi.hpp"
-#include "configurable_settings.hpp"
-#include "database.hpp"
-#include "dbnames.hpp"
+#include "emit_ledger.hpp"
 #include "fenv_guard.hpp"
-#include "file_command.hpp"
-#include "global_settings.hpp"
 #include "handle_exceptions.hpp"
 #include "input.hpp"
 #include "inputillus.hpp"
 #include "ledger.hpp"
-#include "ledger_text_formats.hpp"
-#include "ledger_xsl.hpp"
 #include "materially_equal.hpp"
-#include "miscellany.hpp"
 #include "path_utility.hpp"
 #include "progress_meter.hpp"
 #include "timer.hpp"
 #include "value_cast.hpp"
 
-#include <boost/filesystem/fstream.hpp>
-#include <boost/filesystem/operations.hpp>
-#include <boost/shared_ptr.hpp>
-
 #include <algorithm> // std::max()
-#include <ios>
 #include <iostream>
 #include <iterator>  // std::back_inserter()
+#include <string>
 
 namespace
 {
@@ -75,52 +64,6 @@ progress_meter::enum_display_mode progress_meter_mode(mcenum_emission emission)
         ? progress_meter::e_quiet_display
         : progress_meter::e_normal_display
         ;
-}
-
-double emit_ledger
-    (fs::path const& file
-    ,int             index
-    ,Ledger const&   ledger
-    ,mcenum_emission emission
-    )
-{
-    Timer timer;
-    if((emission & mce_emit_composite_only) && !ledger.GetIsComposite())
-        {
-        goto done;
-        }
-
-    if(emission & mce_emit_pdf_to_printer)
-        {
-        std::string pdf_out_file = write_ledger_to_pdf
-            (ledger
-            ,serialized_file_path(file, index, "ill").string()
-            );
-        file_command()(pdf_out_file, "print");
-        }
-    if(emission & mce_emit_test_data)
-        {
-        fs::ofstream ofs
-            (serialized_file_path(file, index, "test")
-            ,ios_out_trunc_binary()
-            );
-        ledger.Spew(ofs);
-        }
-    if(emission & mce_emit_spreadsheet)
-        {
-        PrintFormTabDelimited
-            (ledger
-            ,   file.string()
-            +   configurable_settings::instance().spreadsheet_file_extension()
-            );
-        }
-    if(emission & mce_emit_text_stream)
-        {
-        PrintLedgerFlatText(ledger, std::cout);
-        }
-
-  done:
-    return timer.stop().elapsed_usec();
 }
 } // Unnamed namespace.
 
