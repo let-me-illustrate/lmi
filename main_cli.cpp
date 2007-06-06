@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_cli.cpp,v 1.46 2007-06-06 02:15:34 chicares Exp $
+// $Id: main_cli.cpp,v 1.47 2007-06-06 02:53:36 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -31,15 +31,12 @@
 #include "assert_lmi.hpp"
 #include "authenticity.hpp" // timestamp_of_production_release()
 #include "calculate.hpp"
-#include "custom_io_0.hpp"
 #include "getopt.hpp"
 #include "global_settings.hpp"
-#include "group_values.hpp"
 #include "handle_exceptions.hpp"
 #include "illustrator.hpp"
 #include "inputillus.hpp"
 #include "ledger.hpp"
-#include "ledger_text_formats.hpp"
 #include "ledger_variant.hpp"
 #include "ledgervalues.hpp"
 #include "license.hpp"
@@ -47,7 +44,6 @@
 #include "mc_enum.hpp"
 #include "mc_enum_types.hpp"
 #include "miscellany.hpp"
-#include "multiple_cell_document.hpp"
 #include "path_utility.hpp"
 #include "so_attributes.hpp"
 #include "timer.hpp"
@@ -76,27 +72,6 @@
 void LMI_SO print_databases();
 
 //============================================================================
-void RegressionTestOneCensusFile(fs::directory_iterator i)
-{
-    std::cout << "Regression testing: " << i->string() << std::endl;
-    multiple_cell_document doc(i->string());
-    run_census::assert_consistency(doc.case_parms()[0], doc.cell_parms()[0]);
-    run_census()(*i, mce_emit_test_data, doc.cell_parms());
-}
-
-//============================================================================
-void RegressionTestOneIniFile(fs::directory_iterator i)
-{
-    std::cout << "Regression testing: " << i->string() << std::endl;
-    IllusVal IV;
-    IllusInputParms IP(false);
-    custom_io_0_read(IP, i->string());
-    IV.Run(&IP);
-    fs::path out_file = fs::change_extension(*i, ".test0");
-    custom_io_0_write(IV.ledger(), out_file.string());
-}
-
-//============================================================================
 void RegressionTest()
 {
     global_settings::instance().set_regression_testing(true);
@@ -113,11 +88,13 @@ void RegressionTest()
                 }
             else if(".cns" == fs::extension(*i))
                 {
-                RegressionTestOneCensusFile(i);
+                std::cout << "Regression testing: " << i->string() << std::endl;
+                (illustrator(mce_emit_test_data))(*i);
                 }
             else if(".ini" == fs::extension(*i))
                 {
-                RegressionTestOneIniFile(i);
+                std::cout << "Regression testing: " << i->string() << std::endl;
+                (illustrator(mce_emit_custom_0))(*i);
                 }
             else
                 {
