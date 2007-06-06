@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: fo_common.xsl,v 1.23 2007-06-05 15:58:26 etarassov Exp $
+    $Id: fo_common.xsl,v 1.24 2007-06-06 13:38:31 etarassov Exp $
 -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fo="http://www.w3.org/1999/XSL/Format" version="1.0">
   <!--
@@ -105,7 +105,7 @@
       * an extra space added just before the text.
   -->
   <xsl:template name="dollar-units">
-    <fo:block text-align="center" font-size="9pt" margin-top="1em">
+    <fo:block text-align="center" font-size="9pt" padding-top="1em">
       <xsl:choose>
         <xsl:when test="$illustration/scalar/ScaleUnit=''">
           <xsl:text>(Values shown are in dollars)</xsl:text>
