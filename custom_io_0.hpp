@@ -1,4 +1,4 @@
-// A custom interface.
+// Custom interface number zero.
 //
 // Copyright (C) 2001, 2002, 2003, 2004, 2005, 2006, 2007 Gregory W. Chicares.
 //
@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: custom_io_0.hpp,v 1.8 2007-06-06 00:39:23 chicares Exp $
+// $Id: custom_io_0.hpp,v 1.9 2007-06-06 02:15:34 chicares Exp $
 
 #ifndef custom_io_0_hpp
 #define custom_io_0_hpp
@@ -28,20 +28,25 @@
 
 #include "so_attributes.hpp"
 
+#include <string>
+
 class IllusInputParms;
 class Ledger;
 
 bool LMI_SO custom_io_0_file_exists();
 
-void LMI_SO custom_io_0_write
-    (Ledger const& ledger_values
-    ,char const*   overridden_filename = 0
-    );
+// These two functions take std::string arguments that either contain
+// filenames or are blank. If they're blank, as they normally are,
+// then the actual filenames are read from configurable settings. For
+// system testing, actual filenames are supplied.
+//
+// Usually it would be preferable to pass actual filenames in every
+// case. However, the general facility for emitting output assumes
+// that input and output files share a common stem; in this custom
+// situation, that need not be the case.
 
-bool LMI_SO custom_io_0_read
-    (IllusInputParms& ip
-    ,char const*      overridden_filename = 0
-    );
+bool LMI_SO custom_io_0_read(IllusInputParms&, std::string const& filename);
+void LMI_SO custom_io_0_write(Ledger const&  , std::string const& filename);
 
 #endif // custom_io_0_hpp
 

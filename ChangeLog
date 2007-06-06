@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.736 2007-06-06 00:39:23 chicares Exp $
+// $Id: ChangeLog,v 1.737 2007-06-06 02:15:34 chicares Exp $
 
 MAINTENANCE
 
@@ -12114,4 +12114,14 @@ Clean up xsl files to resolve fop-0.20.5 issues.
   main_cli.cpp
   main_wx.cpp
 Rectify names.
+
+20070606T0215Z <chicares@cox.net> [1231]
+
+  custom_io_0.cpp
+  custom_io_0.hpp
+  emit_ledger.cpp
+  illustration_view.cpp
+  illustrator.cpp
+  main_cli.cpp
+Improve custom interface number zero.
 
