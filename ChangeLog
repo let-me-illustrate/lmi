@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.739 2007-06-06 10:21:45 etarassov Exp $
+// $Id: ChangeLog,v 1.740 2007-06-06 11:16:04 etarassov Exp $
 
 MAINTENANCE
 
@@ -12135,7 +12135,7 @@ Improve documentation.
   main_cli.cpp
 Refactor.
 
-20070606T1021Z <etarassov@tt-solutions.com> [1232]
+20070606T1021Z <etarassov@tt-solutions.com> [1231]
 
   group_private_placement.xsl
 Clean up group_private_placement.xsl to pass check_concinnity test.
