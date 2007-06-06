@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: offshore_private_placement.xsl,v 1.18 2007-06-06 13:38:31 etarassov Exp $
+    $Id: offshore_private_placement.xsl,v 1.19 2007-06-06 14:03:23 etarassov Exp $
 -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fo="http://www.w3.org/1999/XSL/Format" version="1.0">
   <xsl:include href="fo_common.xsl"/>
@@ -704,7 +704,7 @@
       <fo:table table-layout="fixed" width="100%">
         <fo:table-column column-width="125mm"/>
         <fo:table-column column-width="2mm"/>
-        <fo:table-column/>
+        <fo:table-column column-width="proportional-column-width(1)"/>
         <fo:table-body padding-before="2pt">
           <fo:table-row>
             <fo:table-cell>
@@ -1255,9 +1255,9 @@
     </fo:block>
     <fo:block padding-before="5pt" font-size="8.5pt" font-family="sans-serif">
       <fo:table table-layout="fixed" width="100%">
-        <fo:table-column/>
-        <fo:table-column/>
-        <fo:table-column/>
+        <fo:table-column column-width="proportional-column-width(1)"/>
+        <fo:table-column column-width="proportional-column-width(1)"/>
+        <fo:table-column column-width="proportional-column-width(1)"/>
         <fo:table-body padding-before="2pt" border-top-style="solid" border-top-width="1pt" border-top-color="blue">
           <fo:table-row>
             <fo:table-cell>
@@ -1343,9 +1343,9 @@
     </fo:block>
     <fo:block padding-before="5pt" font-size="8.0pt" font-family="sans-serif">
       <fo:table table-layout="fixed" width="100%">
-        <fo:table-column/>
-        <fo:table-column/>
-        <fo:table-column/>
+        <fo:table-column column-width="proportional-column-width(1)"/>
+        <fo:table-column column-width="proportional-column-width(1)"/>
+        <fo:table-column column-width="proportional-column-width(1)"/>
         <fo:table-body padding-before="2pt" border-top-style="solid" border-top-width="1pt" border-top-color="blue">
           <fo:table-row>
             <fo:table-cell>
