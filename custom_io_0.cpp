@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: custom_io_0.cpp,v 1.17 2007-03-06 18:13:37 wboutin Exp $
+// $Id: custom_io_0.cpp,v 1.18 2007-06-06 00:39:23 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -53,7 +53,7 @@
 // TODO ?? Eventually rename all this stuff. Explain that this file is
 // 'custom_io_0.cpp' because there'll be other customizations.
 
-bool DoesSpecialInputFileExist()
+bool custom_io_0_file_exists()
 {
     return 0 == access
         (configurable_settings::instance().custom_input_filename().c_str()
@@ -206,7 +206,7 @@ void test_adjust_interest_rates()
 /// convenient to let it be overridden; copying each test file in turn
 /// to the filename normally expected would seem less tasteful.
 
-bool SetSpecialInput(IllusInputParms& ip, char const* overridden_filename)
+bool custom_io_0_read(IllusInputParms& ip, char const* overridden_filename)
 {
     // Set global flag to liberalize input restrictions slightly.
     global_settings::instance().set_custom_io_0(true);
@@ -504,7 +504,7 @@ bool SetSpecialInput(IllusInputParms& ip, char const* overridden_filename)
 ///   "surrender cost" is account value minus cash surrender value; if
 ///      there is any refund in the early years, this value can be negative
 
-void PrintFormSpecial
+void custom_io_0_write
     (Ledger const& ledger_values
     ,char const*   overridden_filename
     )

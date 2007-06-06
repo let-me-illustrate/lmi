@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_cli.cpp,v 1.44 2007-06-05 15:41:49 chicares Exp $
+// $Id: main_cli.cpp,v 1.45 2007-06-06 00:39:23 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -90,10 +90,10 @@ void RegressionTestOneIniFile(fs::directory_iterator i)
     std::cout << "Regression testing: " << i->string() << std::endl;
     IllusVal IV;
     IllusInputParms IP(false);
-    SetSpecialInput(IP, i->string().c_str());
+    custom_io_0_read(IP, i->string().c_str());
     IV.Run(&IP);
     fs::path out_file = fs::change_extension(*i, ".test0");
-    PrintFormSpecial(IV.ledger(), out_file.string().c_str());
+    custom_io_0_write(IV.ledger(), out_file.string().c_str());
 }
 
 //============================================================================

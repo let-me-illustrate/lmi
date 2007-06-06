@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.735 2007-06-05 23:40:41 etarassov Exp $
+// $Id: ChangeLog,v 1.736 2007-06-06 00:39:23 chicares Exp $
 
 MAINTENANCE
 
@@ -12102,4 +12102,16 @@ Implement another input type.
   nasd.xsl
   offshore_private_placement.xsl
 Clean up xsl files to resolve fop-0.20.5 issues.
+
+20070606T0039Z <chicares@cox.net> [1232]
+
+  custom_io_0.cpp
+  custom_io_0.hpp
+  emit_ledger.cpp
+  illustration_view.cpp
+  illustration_view.hpp
+  illustrator.cpp
+  main_cli.cpp
+  main_wx.cpp
+Rectify names.
 
