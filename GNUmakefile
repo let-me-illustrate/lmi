@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: GNUmakefile,v 1.89 2007-06-05 00:31:27 etarassov Exp $
+# $Id: GNUmakefile,v 1.90 2007-06-06 19:04:29 chicares Exp $
 
 ################################################################################
 
@@ -242,25 +242,7 @@ makefiles := \
 
 scripts := $(wildcard *.sed *.sh)
 
-# TODO ?? Clean up these files: they fail 'make check_concinnity'.
-# The only concern 'xmllint' seems to have with '.cns' and '.ill'
-# files is that they spell out opening and closing tags even when
-# they might be compressed (<empty/>, e.g.). The xsl-fo files seem
-# to have that problem as well as other problems.
-
-unclean_xsl_fo_files := \
-  group_private_placement.xsl \
-  illustration_reg.xsl \
-  individual_private_placement.xsl \
-  nasd.xsl \
-  variable_annuity.xsl \
-
-unclean_xml_files := \
-  $(unclean_xsl_fo_files) \
-  $(wildcard *.cns *.ill) \
-
 xml_files := $(wildcard *.cns *.ill *.xml *.xrc *.xsd *.xsl)
-xml_files := $(filter-out $(unclean_xml_files),$(xml_files))
 
 xpm_files := $(wildcard *.xpm)
 
@@ -446,7 +428,6 @@ expected_source_files := \
   $(c_source_files) \
   $(cxx_header_files) \
   $(cxx_source_files) \
-  $(unclean_xml_files) \
   $(xml_files) \
   $(wildcard *.ac *.rc) \
 
