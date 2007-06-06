@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: variable_annuity.xsl,v 1.21 2007-06-06 14:03:23 etarassov Exp $
+    $Id: variable_annuity.xsl,v 1.22 2007-06-06 14:23:29 etarassov Exp $
 -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fo="http://www.w3.org/1999/XSL/Format" version="1.0">
   <xsl:include href="fo_common.xsl"/>
@@ -614,7 +614,7 @@
       <fo:table-column column-width="50mm"/>
       <fo:table-column column-width="90mm"/>
       <fo:table-column column-width="50mm"/>
-      <fo:table-body padding-before="2pt">
+      <fo:table-body>
         <fo:table-row>
           <fo:table-cell>
             <fo:block text-align="left">
@@ -648,7 +648,7 @@
       <fo:table-column column-width="10mm"/>
       <fo:table-column column-width="45mm"/>
       <fo:table-column column-width="10mm"/>
-      <fo:table-body padding-before="2pt">
+      <fo:table-body>
         <fo:table-row>
           <fo:table-cell>
             <fo:block text-align="left">
@@ -924,7 +924,7 @@
       <fo:table-column column-width="proportional-column-width(1)"/>
       <fo:table-column column-width="proportional-column-width(1)"/>
       <fo:table-column column-width="proportional-column-width(1)"/>
-      <fo:table-body padding-before="2pt">
+      <fo:table-body>
         <fo:table-row>
           <fo:table-cell>
             <fo:block text-align="left">
