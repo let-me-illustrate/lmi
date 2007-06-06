@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: variable_annuity.xsl,v 1.19 2007-06-05 16:29:07 etarassov Exp $
+    $Id: variable_annuity.xsl,v 1.20 2007-06-06 13:38:31 etarassov Exp $
 -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fo="http://www.w3.org/1999/XSL/Format" version="1.0">
   <xsl:include href="fo_common.xsl"/>
@@ -40,9 +40,9 @@
           <!-- Central part of page -->
           <fo:region-body column-count="1" margin-top="2.80in" margin-bottom="1.80in"/>
           <!-- Header -->
-          <fo:region-before border-after-style="solid" extent="3.0in"/>
+          <fo:region-before extent="3.0in"/>
           <!-- Footer -->
-          <fo:region-after border-before-style="solid" extent="1.3in"/>
+          <fo:region-after extent="1.3in"/>
         </fo:simple-page-master>
 
         <!-- Define the Hypothetical Illustration CurrentZero page. -->
@@ -50,9 +50,9 @@
           <!-- Central part of page -->
           <fo:region-body column-count="1" margin-top="2.80in" margin-bottom="1.80in"/>
           <!-- Header -->
-          <fo:region-before border-after-style="solid" extent="3.0in"/>
+          <fo:region-before extent="3.0in"/>
           <!-- Footer -->
-          <fo:region-after border-before-style="solid" extent="1.3in"/>
+          <fo:region-after extent="1.3in"/>
         </fo:simple-page-master>
 
         <!-- Define the Hypothetical Illustration Guaranteed page. -->
@@ -60,9 +60,9 @@
           <!-- Central part of page -->
           <fo:region-body column-count="1" margin-top="2.80in" margin-bottom="1.80in"/>
           <!-- Header -->
-          <fo:region-before border-after-style="solid" extent="3.0in"/>
+          <fo:region-before extent="3.0in"/>
           <!-- Footer -->
-          <fo:region-after border-before-style="solid" extent="1.3in"/>
+          <fo:region-after extent="1.3in"/>
         </fo:simple-page-master>
 
         <!-- Define the Hypothetical Illustration GuaranteedZero page. -->
@@ -70,9 +70,9 @@
           <!-- Central part of page -->
           <fo:region-body column-count="1" margin-top="2.80in" margin-bottom="1.80in"/>
           <!-- Header -->
-          <fo:region-before border-after-style="solid" extent="3.0in"/>
+          <fo:region-before extent="3.0in"/>
           <!-- Footer -->
-          <fo:region-after border-before-style="solid" extent="1.3in"/>
+          <fo:region-after extent="1.3in"/>
         </fo:simple-page-master>
 
         <!-- Define the Explanation and Footnotes page 1. -->
@@ -80,9 +80,9 @@
           <!-- Central part of page -->
           <fo:region-body column-count="1" margin-top="1.5in" margin-bottom="1.0in"/>
           <!-- Header -->
-          <fo:region-before border-after-style="solid" extent="3.0in"/>
+          <fo:region-before extent="3.0in"/>
           <!-- Footer -->
-          <fo:region-after border-before-style="solid" extent="1.0in"/>
+          <fo:region-after extent="1.0in"/>
         </fo:simple-page-master>
 
         <!-- Define the Explanation and Footnotes page 2. -->
@@ -90,9 +90,9 @@
           <!-- Central part of page -->
           <fo:region-body column-count="1" margin-top="1.5in" margin-bottom="1.0in"/>
           <!-- Header -->
-          <fo:region-before border-after-style="solid" extent="3.0in"/>
+          <fo:region-before extent="3.0in"/>
           <!-- Footer -->
-          <fo:region-after border-before-style="solid" extent="1.0in"/>
+          <fo:region-after extent="1.0in"/>
         </fo:simple-page-master>
 
         <!-- Define the Explanation and Footnotes page 3. -->
@@ -100,9 +100,9 @@
           <!-- Central part of page -->
           <fo:region-body column-count="1" margin-top="1.5in" margin-bottom="1.0in"/>
           <!-- Header -->
-          <fo:region-before border-after-style="solid" extent="3.0in"/>
+          <fo:region-before extent="3.0in"/>
           <!-- Footer -->
-          <fo:region-after border-before-style="solid" extent="1.0in"/>
+          <fo:region-after extent="1.0in"/>
         </fo:simple-page-master>
 
         <!-- Define the Supplemental Report page. -->
@@ -111,9 +111,9 @@
             <!-- Central part of page -->
             <fo:region-body column-count="1" margin-top="2.5in" margin-bottom="1.55in"/>
             <!-- Header -->
-            <fo:region-before border-after-style="solid" extent="3in"/>
+            <fo:region-before extent="3in"/>
             <!-- Footer -->
-            <fo:region-after border-before-style="solid" extent="1in"/>
+            <fo:region-after extent="1in"/>
           </fo:simple-page-master>
         </xsl:if>
 
@@ -310,21 +310,21 @@
               and the available investment choices.
             </xsl:text>
           </fo:block>
-          <fo:block font-size="9.0pt" text-align="left" font-family="sans-serif" font-weight="normal" margin-top="1em">
+          <fo:block font-size="9.0pt" text-align="left" font-family="sans-serif" font-weight="normal" padding-top="1em">
             <xsl:text>
               The hypothetical Net Rate of Return is the rate of return net of investment
               management, custody and other expenses charged by the investment manager of the
               underlying fund(s).
             </xsl:text>
           </fo:block>
-          <fo:block font-size="9.0pt" text-align="left" font-family="sans-serif" font-weight="normal" margin-top="1em">
+          <fo:block font-size="9.0pt" text-align="left" font-family="sans-serif" font-weight="normal" padding-top="1em">
             <xsl:text>
               This illustration does not reflect tax and accounting consequences and is not
               intended as tax advice nor may be relied on for purposes of avoiding any federal
               tax penalties. Consult professional tax advisors for tax advice.
             </xsl:text>
           </fo:block>
-          <fo:block font-size="9.0pt" text-align="left" font-family="sans-serif" font-weight="normal" margin-top="1em">
+          <fo:block font-size="9.0pt" text-align="left" font-family="sans-serif" font-weight="normal" padding-top="1em">
             <xsl:text>
               This illustration is not a Contact or an offer or solicitation to enter into a
               Contract. Offers are made only through the Confidential Private Placement
@@ -334,7 +334,7 @@
             <fo:inline vertical-align="super" font-size="7.5pt">SM</fo:inline>
             <xsl:text>.</xsl:text>
           </fo:block>
-          <fo:block font-size="9.0pt" text-align="left" font-family="sans-serif" font-weight="normal" margin-top="1em">
+          <fo:block font-size="9.0pt" text-align="left" font-family="sans-serif" font-weight="normal" padding-top="1em">
             <xsl:text>
               This material must be preceded or accompanied by the current Confidential Private
               Placement Memorandum for
@@ -349,7 +349,7 @@
               memoranda carefully before investing or sending money.
             </xsl:text>
           </fo:block>
-          <fo:block font-size="9.0pt" text-align="left" font-family="sans-serif" font-weight="normal" margin-top="1em">
+          <fo:block font-size="9.0pt" text-align="left" font-family="sans-serif" font-weight="normal" padding-top="1em">
             <xsl:value-of select="illustration/scalar/InsCoShortName"/>
             <xsl:text> Financial Group is a marketing designation for </xsl:text>
             <xsl:value-of select="illustration/scalar/InsCoName"/>
@@ -357,7 +357,7 @@
             <xsl:value-of select="illustration/scalar/InsCoShortName"/>
             <xsl:text>) and its subsidiaries.</xsl:text>
           </fo:block>
-          <fo:block font-size="10.0pt" text-align="left" font-family="sans-serif" font-weight="bold" margin-top="2em" text-decoration="underline">
+          <fo:block font-size="10.0pt" text-align="left" font-family="sans-serif" font-weight="bold" padding-top="2em" text-decoration="underline">
             <xsl:text>The Contract</xsl:text>
           </fo:block>
           <fo:block font-size="9.0pt" text-align="left" font-family="sans-serif" font-weight="normal">
@@ -373,7 +373,7 @@
             <xsl:value-of select="illustration/scalar/InsCoStreet"/>
             <xsl:text>.</xsl:text>
           </fo:block>
-          <fo:block font-size="9.0pt" text-align="left" font-family="sans-serif" font-weight="normal" margin-top="1em">
+          <fo:block font-size="9.0pt" text-align="left" font-family="sans-serif" font-weight="normal" padding-top="1em">
             <fo:inline font-weight="bold">Contract Requirements: </fo:inline>
             <xsl:text>
               This Contract is only available to persons who are deemed accredited investors
@@ -387,14 +387,14 @@
               hazards of investing in the Contract.
             </xsl:text>
           </fo:block>
-          <fo:block font-size="9.0pt" text-align="left" font-family="sans-serif" font-weight="normal" margin-top="1em">
+          <fo:block font-size="9.0pt" text-align="left" font-family="sans-serif" font-weight="normal" padding-top="1em">
             <fo:inline font-weight="bold">Purchase Payment Charges: </fo:inline>
             <xsl:text>
               The sum of the Purchase Payment Distribution Charges, if any, and any Purchase
               Payment Expense Charges including state premium tax, if applicable.
             </xsl:text>
           </fo:block>
-          <fo:block font-size="9.0pt" text-align="left" font-family="sans-serif" font-weight="normal" margin-top="1em">
+          <fo:block font-size="9.0pt" text-align="left" font-family="sans-serif" font-weight="normal" padding-top="1em">
             <fo:inline font-weight="bold">Monthly Charges: </fo:inline>
             <xsl:text>
               Monthly Charges will be deducted from the Contract Value. The Company may assess
@@ -403,7 +403,7 @@
               be taken from the Money Market Sub-Account.
             </xsl:text>
           </fo:block>
-          <fo:block font-size="9.0pt" text-align="left" font-family="sans-serif" font-weight="normal" margin-top="1em">
+          <fo:block font-size="9.0pt" text-align="left" font-family="sans-serif" font-weight="normal" padding-top="1em">
             <xsl:text>
               Due to the limitations on withdrawals from investment options offered under the
               Contract, we reserve the right to (i) allocate a portion of each purchase
@@ -446,18 +446,18 @@
             <fo:inline vertical-align="super" font-size="7.5pt">SM</fo:inline>
             <xsl:text>.</xsl:text>
           </fo:block>
-          <fo:block font-size="9.0pt" text-align="left" font-family="sans-serif" font-weight="normal" margin-top="1em">
+          <fo:block font-size="9.0pt" text-align="left" font-family="sans-serif" font-weight="normal" padding-top="1em">
             <fo:inline font-weight="bold">Administrative Charge: </fo:inline>
             <xsl:text>
               The current charge is equal on an annual basis to .20% of the Contract Value,
               if on any monthly calculation date, the Contract Value is less than $1,000,000.
             </xsl:text>
           </fo:block>
-          <fo:block font-size="9.0pt" text-align="left" font-family="sans-serif" font-weight="normal" margin-top="1em">
+          <fo:block font-size="9.0pt" text-align="left" font-family="sans-serif" font-weight="normal" padding-top="1em">
             <fo:inline font-weight="bold">Asset Based Distribution Charge: </fo:inline>
             <xsl:text> The current charge is equal to annual negotiated asset based compensation, if any.</xsl:text>
           </fo:block>
-          <fo:block font-size="9.0pt" text-align="left" font-family="sans-serif" font-weight="normal" margin-top="1em">
+          <fo:block font-size="9.0pt" text-align="left" font-family="sans-serif" font-weight="normal" padding-top="1em">
             <fo:inline font-weight="bold">Withdrawals: </fo:inline>
             <xsl:text>
               Early withdrawals may result in tax consequences on the amount being withdrawn
@@ -467,7 +467,7 @@
               taxable portion of the withdrawal.
             </xsl:text>
           </fo:block>
-          <fo:block font-size="9.0pt" text-align="left" font-family="sans-serif" font-weight="normal" margin-top="1em">
+          <fo:block font-size="9.0pt" text-align="left" font-family="sans-serif" font-weight="normal" padding-top="1em">
             <fo:inline font-weight="bold">Illiquid Sub-Accounts: </fo:inline>
             <xsl:text>
               We have also made available under the Contract the ability to allocate purchase
@@ -482,42 +482,42 @@
               Confidential Private Placement Memorandum for details.
             </xsl:text>
           </fo:block>
-          <fo:block font-size="9.0pt" text-align="left" font-family="sans-serif" font-weight="bold" margin-top="1em">
+          <fo:block font-size="9.0pt" text-align="left" font-family="sans-serif" font-weight="bold" padding-top="1em">
             <xsl:text>
               Note:  Please refer to the Contract for complete explanation of benefits, rights
               and obligations. In the event of a conflict between the illustration and the
               Contract, the terms of the Contract will control.
             </xsl:text>
           </fo:block>
-          <fo:block font-size="10.0pt" text-align="left" font-family="sans-serif" font-weight="bold" margin-top="2em" text-decoration="underline">
+          <fo:block font-size="10.0pt" text-align="left" font-family="sans-serif" font-weight="bold" padding-top="2em" text-decoration="underline">
             <xsl:text>Column Definitions</xsl:text>
           </fo:block>
-          <fo:block font-size="9.0pt" text-align="left" font-family="sans-serif" font-weight="normal" margin-top="1em">
+          <fo:block font-size="9.0pt" text-align="left" font-family="sans-serif" font-weight="normal" padding-top="1em">
             <fo:inline font-weight="bold">Year: </fo:inline>
             <xsl:text> The annual period beginning on the hypothetical Contract issue date.</xsl:text>
           </fo:block>
-          <fo:block font-size="9.0pt" text-align="left" font-family="sans-serif" font-weight="normal" margin-top="1em">
+          <fo:block font-size="9.0pt" text-align="left" font-family="sans-serif" font-weight="normal" padding-top="1em">
             <fo:inline font-weight="bold">Purchase Payment: </fo:inline>
             <xsl:text>
               A payment made by or on behalf of a Contract Owner during the Accumulation
               Period of the Contract.
             </xsl:text>
           </fo:block>
-          <fo:block font-size="9.0pt" text-align="left" font-family="sans-serif" font-weight="normal" margin-top="1em">
+          <fo:block font-size="9.0pt" text-align="left" font-family="sans-serif" font-weight="normal" padding-top="1em">
             <fo:inline font-weight="bold">Purchase Payment Charges: </fo:inline>
             <xsl:text>
               The sum of the Purchase Payment Distribution Charge and applicable state premium
               tax charged on an upfront basis, if any.
             </xsl:text>
           </fo:block>
-          <fo:block font-size="9.0pt" text-align="left" font-family="sans-serif" font-weight="normal" margin-top="1em">
+          <fo:block font-size="9.0pt" text-align="left" font-family="sans-serif" font-weight="normal" padding-top="1em">
             <fo:inline font-weight="bold">Withdrawal(s): </fo:inline>
             <xsl:text>
               The net dollar amount redeemed from the Contract. Withdrawals are reflected
               at the beginning of each year.
             </xsl:text>
           </fo:block>
-          <fo:block font-size="9.0pt" text-align="left" font-family="sans-serif" font-weight="normal" margin-top="1em">
+          <fo:block font-size="9.0pt" text-align="left" font-family="sans-serif" font-weight="normal" padding-top="1em">
             <fo:inline font-weight="bold">Asset Charges: </fo:inline>
             <xsl:text>
               The annual M&amp;E charges, asset based distribution charges and administrative
@@ -553,7 +553,7 @@
               the hypothetical Net Rate of Return.
             </xsl:text>
           </fo:block>
-          <fo:block font-size="9.0pt" text-align="left" font-family="sans-serif" font-weight="normal" margin-top="1em">
+          <fo:block font-size="9.0pt" text-align="left" font-family="sans-serif" font-weight="normal" padding-top="1em">
             <fo:inline font-weight="bold">End of Year Contract Value: </fo:inline>
             <xsl:text>
               The value of the Contract sub-account(s) after applying any Purchase Payments
@@ -561,7 +561,7 @@
               hypothetical Investment Experience.
             </xsl:text>
           </fo:block>
-          <fo:block font-size="9.0pt" text-align="left" font-family="sans-serif" font-weight="normal" margin-top="1em">
+          <fo:block font-size="9.0pt" text-align="left" font-family="sans-serif" font-weight="normal" padding-top="1em">
             <fo:inline font-weight="bold">Cumulative Contract Value IRR: </fo:inline>
             <xsl:text>
               The Contract Value Internal Rate of Return ("IRR") is an interest rate at which
@@ -588,7 +588,7 @@
             <xsl:call-template name="scalar-header">
               <xsl:with-param name="basis" select="NoBasis"/>
             </xsl:call-template>
-            <fo:block font-size="13.0pt" text-align="center" font-family="sans-serif" font-weight="bold" border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="black" padding-after="2.5pt" margin-bottom="1em">
+            <fo:block font-size="13.0pt" text-align="center" font-family="sans-serif" font-weight="bold" border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="black" padding-after="2.5pt" padding-bottom="1em">
               <xsl:text>SUPPLEMENTAL REPORT</xsl:text>
             </fo:block>
             <xsl:call-template name="dollar-units"/>
@@ -632,7 +632,7 @@
         </fo:table-row>
       </fo:table-body>
     </fo:table>
-    <fo:block font-size="14.0pt" text-align="center" font-family="sans-serif" font-weight="bold" margin-top="1em">
+    <fo:block font-size="14.0pt" text-align="center" font-family="sans-serif" font-weight="bold" padding-top="1em">
       <xsl:value-of select="illustration/scalar/PolicyMktgName"/>
       <fo:inline vertical-align="super" font-size="7.0pt">SM</fo:inline>
     </fo:block>
@@ -909,7 +909,7 @@
 
   <xsl:template name="standard-footer">
     <xsl:param name="displaypagenumber"/>
-    <fo:block font-size="8.5pt" text-align="left" font-family="sans-serif" font-weight="normal" margin-top="2em" padding-before="5pt" border-top="1pt solid blue">
+    <fo:block font-size="8.5pt" text-align="left" font-family="sans-serif" font-weight="normal" padding-top="2em" padding-before="5pt" border-top="1pt solid blue">
       <xsl:text>Principal Underwriter: </xsl:text>
       <xsl:value-of select="illustration/scalar/MainUnderwriter"/>
       <xsl:text>, </xsl:text>
@@ -920,7 +920,7 @@
       <xsl:value-of select="illustration/scalar/InsCoName"/>
       <xsl:text>.</xsl:text>
     </fo:block>
-    <fo:table table-layout="fixed" width="100%" margin-top="1em" font-size="9.0pt" font-family="sans-serif">
+    <fo:table table-layout="fixed" width="100%" padding-top="1em" font-size="9.0pt" font-family="sans-serif">
       <fo:table-column/>
       <fo:table-column/>
       <fo:table-column/>
