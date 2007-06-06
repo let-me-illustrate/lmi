@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.747 2007-06-06 16:38:29 etarassov Exp $
+// $Id: ChangeLog,v 1.748 2007-06-06 18:09:17 chicares Exp $
 
 MAINTENANCE
 
@@ -12195,4 +12195,11 @@ Replace 'margin-top' with 'padding-top' for FOP-0.20.5.
   nasd.xsl
   offshore_private_placement.xsl
 Fix the rest of FOP-0.93 warnings/errors.
+
+20070606T1809Z <chicares@cox.net> [1231]
+
+  sample.cns
+  sample.cns.touchstone
+Specify GeneralAccountRate explicitly. See:
+  http://sv.nongnu.org/support/?105822
 
