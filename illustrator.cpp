@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustrator.cpp,v 1.10 2007-06-06 00:39:23 chicares Exp $
+// $Id: illustrator.cpp,v 1.11 2007-06-06 02:15:34 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -29,7 +29,7 @@
 #include "illustrator.hpp"
 
 #include "alert.hpp"
-#include "custom_io_0.hpp" // custom_io_0_read()
+#include "custom_io_0.hpp"
 #include "emit_ledger.hpp"
 #include "group_values.hpp"
 #include "inputillus.hpp"
@@ -86,14 +86,17 @@ bool illustrator::operator()(fs::path const& file_path)
         {
         Timer timer;
         IllusInputParms input(false);
-        custom_io_0_read(input, file_path.string().c_str());
+        custom_io_0_read(input, file_path.string());
         usec_for_input_ = timer.stop().elapsed_usec();
         timer.restart();
         IllusVal z;
         z.Run(&input);
         usec_for_calculations_ = timer.stop().elapsed_usec();
-// Support this better after refactoring to deal with the file argument.
-        fs::path const out_file = fs::change_extension(file_path, ".test0");
+        fs::path out_file = file_path;
+        if(!file_path.string().empty())
+            {
+            out_file = fs::change_extension(file_path, ".test0");
+            }
         usec_for_output_ = emit_ledger(out_file, 0, z.ledger(), emission_);
         }
     else

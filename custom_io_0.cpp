@@ -1,4 +1,4 @@
-// A custom interface.
+// Custom interface number zero.
 //
 // Copyright (C) 2001, 2002, 2003, 2004, 2005, 2006, 2007 Gregory W. Chicares.
 //
@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: custom_io_0.cpp,v 1.18 2007-06-06 00:39:23 chicares Exp $
+// $Id: custom_io_0.cpp,v 1.19 2007-06-06 02:15:34 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -47,11 +47,7 @@
 #include <map>
 #include <fstream>
 #include <stdexcept>
-#include <string>
 #include <vector>
-
-// TODO ?? Eventually rename all this stuff. Explain that this file is
-// 'custom_io_0.cpp' because there'll be other customizations.
 
 bool custom_io_0_file_exists()
 {
@@ -199,33 +195,28 @@ void test_adjust_interest_rates()
 
 } // Unnamed namespace.
 
-/// Set custom input from a particular file.
-///
-/// Normally, the filename is a constant string governed by the
-/// configurable_settings singleton. For regression testing, it's
-/// convenient to let it be overridden; copying each test file in turn
-/// to the filename normally expected would seem less tasteful.
+/// Read custom input for a particular customer.
 
-bool custom_io_0_read(IllusInputParms& ip, char const* overridden_filename)
+bool custom_io_0_read(IllusInputParms& ip, std::string const& filename)
 {
     // Set global flag to liberalize input restrictions slightly.
     global_settings::instance().set_custom_io_0(true);
-    std::string filename =
-        overridden_filename
-        ? overridden_filename
+    std::string actual_filename =
+        !filename.empty()
+        ? filename
         : configurable_settings::instance().custom_input_filename()
         ;
-    if(0 != access(filename.c_str(), F_OK))
+    if(0 != access(actual_filename.c_str(), F_OK))
         {
         fatal_error()
             << "File '"
-            << filename
+            << actual_filename
             << "' is required but could not be found."
             << LMI_FLUSH
             ;
         }
 
-    name_value_pairs n_v_pairs(filename);
+    name_value_pairs n_v_pairs(actual_filename);
 
     // The list is not complete; other items may be required eventually.
     ip.InforceYear              = static_cast<int>(n_v_pairs.numeric_value("InforceYear"));
@@ -491,7 +482,8 @@ bool custom_io_0_read(IllusInputParms& ip, char const* overridden_filename)
     return "Y" == n_v_pairs.string_value("AutoClose");
 }
 
-/// Print special output for a particular customer.
+/// Write custom output for a particular customer.
+///
 /// Assumptions:
 ///   values are all as of EOY
 ///   "interest earned" is net interest credited, net of any spread
@@ -504,25 +496,27 @@ bool custom_io_0_read(IllusInputParms& ip, char const* overridden_filename)
 ///   "surrender cost" is account value minus cash surrender value; if
 ///      there is any refund in the early years, this value can be negative
 
-void custom_io_0_write
-    (Ledger const& ledger_values
-    ,char const*   overridden_filename
-    )
+void custom_io_0_write(Ledger const& ledger_values, std::string const& filename)
 {
-    std::string filename =
-        overridden_filename
-        ? overridden_filename
+    std::string actual_filename =
+        !filename.empty()
+        ? filename
         : configurable_settings::instance().custom_output_filename()
         ;
     // Don't specify 'binary' here: the file is to be read by another
     // program that probably expects platform-specific behavior.
     std::ofstream os
-        (filename.c_str()
+        (actual_filename.c_str()
         ,std::ios_base::out | std::ios_base::trunc
         );
     if(!os.good())
         {
-        fatal_error() << "Error initializing output file." << LMI_FLUSH;
+        fatal_error()
+            << "File '"
+            << actual_filename
+            << "' could not be opened for writing."
+            << LMI_FLUSH
+            ;
         }
 
     LedgerInvariant const& Invar = ledger_values.GetLedgerInvariant();
