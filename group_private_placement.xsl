@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: group_private_placement.xsl,v 1.20 2007-06-06 14:23:29 etarassov Exp $
+    $Id: group_private_placement.xsl,v 1.21 2007-06-06 16:38:30 etarassov Exp $
 -->
 <!DOCTYPE stylesheet [
 <!ENTITY nbsp "&#xA0;">
@@ -741,7 +741,7 @@
                 </xsl:choose>
               </fo:block>
             </fo:table-cell>
-            <fo:table-cell number-columns-spanned="1" padding="0pt"/>
+            <fo:table-cell><fo:block/></fo:table-cell>
             <fo:table-cell>
               <fo:block text-align="left">
                 <xsl:text>Assumed Gross Rate: </xsl:text>
@@ -819,11 +819,13 @@
           <fo:table-header>
             <!-- Custom part (the biggest) of the table header -->
             <fo:table-row>
-              <fo:table-cell number-columns-spanned="3" padding="0pt"/>
+              <fo:table-cell number-columns-spanned="3">
+                <fo:block/>
+              </fo:table-cell>
               <fo:table-cell number-columns-spanned="5" padding="0pt" border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue">
                 <fo:block text-align="center">Using guaranteed charges</fo:block>
               </fo:table-cell>
-              <fo:table-cell number-columns-spanned="1" padding="0pt"/>
+              <fo:table-cell><fo:block/></fo:table-cell>
               <fo:table-cell number-columns-spanned="5" padding="0pt" border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue">
                 <fo:block text-align="center">Using current charges</fo:block>
               </fo:table-cell>
@@ -834,28 +836,30 @@
               </fo:table-cell>
             </fo:table-row>
             <fo:table-row>
-              <fo:table-cell number-columns-spanned="3" padding="0pt"/>
+              <fo:table-cell number-columns-spanned="3">
+                <fo:block/>
+              </fo:table-cell>
               <fo:table-cell number-columns-spanned="2" padding="0pt">
                 <fo:block text-align="center">
                   <xsl:value-of select="illustration/scalar/InitAnnSepAcctGrossInt_GuaranteedZero"/>
                   Hypothetical Gross
                 </fo:block>
               </fo:table-cell>
-              <fo:table-cell number-columns-spanned="1" padding="0pt"/>
+              <fo:table-cell><fo:block/></fo:table-cell>
               <fo:table-cell number-columns-spanned="2" padding="0pt">
                 <fo:block text-align="center">
                   <xsl:value-of select="illustration/scalar/InitAnnSepAcctGrossInt_Guaranteed"/>
                   Hypothetical Gross
                 </fo:block>
               </fo:table-cell>
-              <fo:table-cell number-columns-spanned="1" padding="0pt"/>
+              <fo:table-cell><fo:block/></fo:table-cell>
               <fo:table-cell number-columns-spanned="2" padding="0pt">
                 <fo:block text-align="center">
                   <xsl:value-of select="illustration/scalar/InitAnnSepAcctGrossInt_CurrentZero"/>
                   Hypothetical Gross
                 </fo:block>
               </fo:table-cell>
-              <fo:table-cell number-columns-spanned="1" padding="0pt"/>
+              <fo:table-cell><fo:block/></fo:table-cell>
               <fo:table-cell number-columns-spanned="2" padding="0pt">
                 <fo:block text-align="center">
                   <xsl:value-of select="illustration/scalar/InitAnnSepAcctGrossInt_Current"/>
@@ -864,7 +868,9 @@
               </fo:table-cell>
             </fo:table-row>
             <fo:table-row>
-              <fo:table-cell number-columns-spanned="3" padding="0pt"/>
+              <fo:table-cell number-columns-spanned="3">
+                <fo:block/>
+              </fo:table-cell>
               <fo:table-cell number-columns-spanned="2" padding="0pt" border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue">
                 <fo:block text-align="center">
                   <xsl:text>Return (</xsl:text>
@@ -872,7 +878,7 @@
                   <xsl:text>&nbsp;net)</xsl:text>
                 </fo:block>
               </fo:table-cell>
-              <fo:table-cell number-columns-spanned="1" padding="0pt"/>
+              <fo:table-cell><fo:block/></fo:table-cell>
               <fo:table-cell number-columns-spanned="2" padding="0pt" border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue">
                 <fo:block text-align="center">
                   <xsl:text>Return (</xsl:text>
@@ -880,7 +886,7 @@
                   <xsl:text>&nbsp;net)</xsl:text>
                 </fo:block>
               </fo:table-cell>
-              <fo:table-cell number-columns-spanned="1" padding="0pt"/>
+              <fo:table-cell><fo:block/></fo:table-cell>
               <fo:table-cell number-columns-spanned="2" padding="0pt" border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue">
                 <fo:block text-align="center">
                   <xsl:text>Return (</xsl:text>
@@ -888,7 +894,7 @@
                   <xsl:text>&nbsp;net)</xsl:text>
                 </fo:block>
               </fo:table-cell>
-              <fo:table-cell number-columns-spanned="1" padding="0pt"/>
+              <fo:table-cell><fo:block/></fo:table-cell>
               <fo:table-cell number-columns-spanned="2" padding="0pt" border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue">
                 <fo:block text-align="center">
                   <xsl:text>Return (</xsl:text>
@@ -1031,12 +1037,12 @@
         <xsl:text>See the Narrative Summary for important policy information. This illustration is not complete without all pages.</xsl:text>
       </fo:block>
     </fo:block>
-    <fo:block padding-before="5pt" font-size="8.5pt" font-family="sans-serif" padding-top="1em">
+    <fo:block padding-before="5pt" font-size="8.5pt" font-family="sans-serif" padding-top="1em" border-top-style="solid" border-top-width="1pt" border-top-color="blue">
       <fo:table table-layout="fixed" width="100%">
         <fo:table-column column-width="proportional-column-width(1)"/>
         <fo:table-column column-width="proportional-column-width(1)"/>
         <fo:table-column column-width="proportional-column-width(1)"/>
-        <fo:table-body padding-before="2pt" border-top-style="solid" border-top-width="1pt" border-top-color="blue">
+        <fo:table-body>
           <fo:table-row>
             <fo:table-cell>
               <fo:block text-align="left">
@@ -1119,11 +1125,11 @@
       </fo:block>
     </fo:block>
     <fo:block padding-before="5pt" font-size="8.0pt" font-family="sans-serif" padding-top="1em">
-      <fo:table table-layout="fixed" width="100%">
+      <fo:table table-layout="fixed" width="100%" border-top-style="solid" border-top-width="1pt" border-top-color="blue">
         <fo:table-column column-width="proportional-column-width(1)"/>
         <fo:table-column column-width="proportional-column-width(1)"/>
         <fo:table-column column-width="proportional-column-width(1)"/>
-        <fo:table-body padding-before="2pt" border-top-style="solid" border-top-width="1pt" border-top-color="blue">
+        <fo:table-body>
           <fo:table-row>
             <fo:table-cell>
               <fo:block text-align="left">
