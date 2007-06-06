@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: offshore_private_placement.xsl,v 1.20 2007-06-06 14:23:29 etarassov Exp $
+    $Id: offshore_private_placement.xsl,v 1.21 2007-06-06 16:38:30 etarassov Exp $
 -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fo="http://www.w3.org/1999/XSL/Format" version="1.0">
   <xsl:include href="fo_common.xsl"/>
@@ -743,7 +743,7 @@
                 </xsl:choose>
               </fo:block>
             </fo:table-cell>
-            <fo:table-cell number-columns-spanned="1" padding="0pt"/>
+            <fo:table-cell><fo:block/></fo:table-cell>
             <fo:table-cell>
               <fo:block text-align="left">
                 <fo:block>
@@ -772,7 +772,7 @@
                 </xsl:otherwise>
               </xsl:choose>
             </fo:table-cell>
-            <fo:table-cell number-columns-spanned="1" padding="0pt"/>
+            <fo:table-cell><fo:block/></fo:table-cell>
             <fo:table-cell>
               <fo:block text-align="left">
                 <xsl:text>Initial </xsl:text>
@@ -801,7 +801,7 @@
                 </xsl:otherwise>
               </xsl:choose>
             </fo:table-cell>
-            <fo:table-cell number-columns-spanned="1" padding="0pt"/>
+            <fo:table-cell><fo:block/></fo:table-cell>
             <fo:table-cell>
               <fo:block text-align="left">
                 <xsl:choose>
@@ -884,19 +884,14 @@
                 </xsl:otherwise>
               </xsl:choose>
             </fo:table-cell>
-            <fo:table-cell number-columns-spanned="1" padding="0pt"/>
+            <fo:table-cell><fo:block/></fo:table-cell>
             <fo:table-cell>
-              <xsl:choose>
-                <xsl:when test="illustration/scalar/HasTerm!='0'">
-                  <fo:block text-align="left">
-                    <xsl:text>Initial Term Face Amount: $</xsl:text>
-                    <xsl:value-of select="illustration/scalar/InitTermSpecAmt"/>
-                  </fo:block>
-                </xsl:when>
-                <xsl:otherwise>
-                  <fo:block/>
-                </xsl:otherwise>
-              </xsl:choose>
+              <fo:block text-align="left">
+                <xsl:if test="illustration/scalar/HasTerm!='0'">
+                  <xsl:text>Initial Term Face Amount: $</xsl:text>
+                  <xsl:value-of select="illustration/scalar/InitTermSpecAmt"/>
+                </xsl:if>
+              </fo:block>
             </fo:table-cell>
           </fo:table-row>
           <fo:table-row>
@@ -907,7 +902,7 @@
                 </xsl:if>
               </fo:block>
             </fo:table-cell>
-            <fo:table-cell number-columns-spanned="1" padding="0pt"/>
+            <fo:table-cell><fo:block/></fo:table-cell>
             <fo:table-cell>
               <xsl:choose>
                 <xsl:when test="$is_composite">
@@ -931,22 +926,20 @@
           </fo:table-row>
           <fo:table-row>
             <fo:table-cell>
-              <xsl:choose>
-                <xsl:when test="$is_composite">
-                  <xsl:if test="illustration/scalar/Franchise!=''">
-                    <fo:block text-align="left">
+              <fo:block text-align="left">
+                <xsl:choose>
+                  <xsl:when test="$is_composite">
+                    <xsl:if test="illustration/scalar/Franchise!=''">
                       <xsl:text>Master contract: </xsl:text>
                       <xsl:call-template name="limitstring">
                         <xsl:with-param name="passString" select="illustration/scalar/Franchise"/>
                         <xsl:with-param name="length" select="30"/>
                       </xsl:call-template>
-                    </fo:block>
-                  </xsl:if>
-                </xsl:when>
-                <xsl:otherwise>
-                  <xsl:choose>
-                    <xsl:when test="illustration/scalar/Franchise!='' and illustration/scalar/PolicyNumber!=''">
-                      <fo:block text-align="left">
+                    </xsl:if>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <xsl:choose>
+                      <xsl:when test="illustration/scalar/Franchise!='' and illustration/scalar/PolicyNumber!=''">
                         <xsl:text>Master contract: </xsl:text>
                         <xsl:call-template name="limitstring">
                           <xsl:with-param name="passString" select="illustration/scalar/Franchise"/>
@@ -957,29 +950,25 @@
                           <xsl:with-param name="passString" select="illustration/scalar/PolicyNumber"/>
                           <xsl:with-param name="length" select="15"/>
                         </xsl:call-template>
-                      </fo:block>
-                    </xsl:when>
-                    <xsl:when test="illustration/scalar/Franchise!=''">
-                      <fo:block text-align="left">
+                      </xsl:when>
+                      <xsl:when test="illustration/scalar/Franchise!=''">
                         <xsl:text>Master contract: </xsl:text>
                         <xsl:call-template name="limitstring">
                           <xsl:with-param name="passString" select="illustration/scalar/Franchise"/>
                           <xsl:with-param name="length" select="30"/>
                         </xsl:call-template>
-                      </fo:block>
-                    </xsl:when>
-                    <xsl:when test="illustration/scalar/PolicyNumber!=''">
-                      <fo:block text-align="left">
+                      </xsl:when>
+                      <xsl:when test="illustration/scalar/PolicyNumber!=''">
                         <xsl:text>Contract number: </xsl:text>
                         <xsl:call-template name="limitstring">
                           <xsl:with-param name="passString" select="illustration/scalar/PolicyNumber"/>
                           <xsl:with-param name="length" select="30"/>
                         </xsl:call-template>
-                      </fo:block>
-                    </xsl:when>
-                  </xsl:choose>
-                </xsl:otherwise>
-              </xsl:choose>
+                      </xsl:when>
+                    </xsl:choose>
+                  </xsl:otherwise>
+                </xsl:choose>
+              </fo:block>
             </fo:table-cell>
           </fo:table-row>
         </fo:table-body>
@@ -1027,11 +1016,13 @@
           <fo:table-header>
             <!-- Custom part (the biggest) of the table header -->
             <fo:table-row>
-              <fo:table-cell number-columns-spanned="3" padding="0pt"/>
+              <fo:table-cell number-columns-spanned="3">
+                <fo:block/>
+              </fo:table-cell>
               <fo:table-cell number-columns-spanned="5" padding="0pt" border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue">
                 <fo:block text-align="center">Using guaranteed charges</fo:block>
               </fo:table-cell>
-              <fo:table-cell number-columns-spanned="1" padding="0pt"/>
+              <fo:table-cell><fo:block/></fo:table-cell>
               <fo:table-cell number-columns-spanned="5" padding="0pt" border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue">
                 <fo:block text-align="center">Using current charges</fo:block>
               </fo:table-cell>
@@ -1042,28 +1033,30 @@
               </fo:table-cell>
             </fo:table-row>
             <fo:table-row>
-              <fo:table-cell number-columns-spanned="3" padding="0pt"/>
+              <fo:table-cell number-columns-spanned="3">
+                <fo:block/>
+              </fo:table-cell>
               <fo:table-cell number-columns-spanned="2" padding="0pt">
                 <fo:block text-align="center">
                 <xsl:value-of select="illustration/scalar/InitAnnSepAcctGrossInt_GuaranteedZero"/>
                 Hypothetical Gross
                 </fo:block>
               </fo:table-cell>
-              <fo:table-cell number-columns-spanned="1" padding="0pt"/>
+              <fo:table-cell><fo:block/></fo:table-cell>
               <fo:table-cell number-columns-spanned="2" padding="0pt">
                 <fo:block text-align="center">
                 <xsl:value-of select="illustration/scalar/InitAnnSepAcctGrossInt_Guaranteed"/>
                 Hypothetical Gross
                 </fo:block>
               </fo:table-cell>
-              <fo:table-cell number-columns-spanned="1" padding="0pt"/>
+              <fo:table-cell><fo:block/></fo:table-cell>
               <fo:table-cell number-columns-spanned="2" padding="0pt">
                 <fo:block text-align="center">
                 <xsl:value-of select="illustration/scalar/InitAnnSepAcctGrossInt_CurrentZero"/>
                 Hypothetical Gross
                 </fo:block>
               </fo:table-cell>
-              <fo:table-cell number-columns-spanned="1" padding="0pt"/>
+              <fo:table-cell><fo:block/></fo:table-cell>
               <fo:table-cell number-columns-spanned="2" padding="0pt">
                 <fo:block text-align="center">
                 <xsl:value-of select="illustration/scalar/InitAnnSepAcctGrossInt_Current"/>
@@ -1072,7 +1065,9 @@
               </fo:table-cell>
             </fo:table-row>
             <fo:table-row>
-              <fo:table-cell number-columns-spanned="3" padding="0pt"/>
+              <fo:table-cell number-columns-spanned="3">
+                <fo:block/>
+              </fo:table-cell>
               <fo:table-cell number-columns-spanned="2" padding="0pt" border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue">
                 <fo:block text-align="center">
                 <xsl:text>Return (</xsl:text>
@@ -1080,7 +1075,7 @@
                 <xsl:text> net)</xsl:text>
                 </fo:block>
               </fo:table-cell>
-              <fo:table-cell number-columns-spanned="1" padding="0pt"/>
+              <fo:table-cell><fo:block/></fo:table-cell>
               <fo:table-cell number-columns-spanned="2" padding="0pt" border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue">
                 <fo:block text-align="center">
                   <xsl:text>Return (</xsl:text>
@@ -1088,7 +1083,7 @@
                   <xsl:text> net)</xsl:text>
                 </fo:block>
               </fo:table-cell>
-              <fo:table-cell number-columns-spanned="1" padding="0pt"/>
+              <fo:table-cell><fo:block/></fo:table-cell>
               <fo:table-cell number-columns-spanned="2" padding="0pt" border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue">
                 <fo:block text-align="center">
                   <xsl:text>Return (</xsl:text>
@@ -1096,7 +1091,7 @@
                   <xsl:text> net)</xsl:text>
                 </fo:block>
               </fo:table-cell>
-              <fo:table-cell number-columns-spanned="1" padding="0pt"/>
+              <fo:table-cell><fo:block/></fo:table-cell>
               <fo:table-cell number-columns-spanned="2" padding="0pt" border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue">
                 <fo:block text-align="center">
                   <xsl:text>Return (</xsl:text>
@@ -1254,11 +1249,11 @@
       </fo:block>
     </fo:block>
     <fo:block padding-before="5pt" font-size="8.5pt" font-family="sans-serif">
-      <fo:table table-layout="fixed" width="100%">
+      <fo:table table-layout="fixed" width="100%" border-top-style="solid" border-top-width="1pt" border-top-color="blue">
         <fo:table-column column-width="proportional-column-width(1)"/>
         <fo:table-column column-width="proportional-column-width(1)"/>
         <fo:table-column column-width="proportional-column-width(1)"/>
-        <fo:table-body padding-before="2pt" border-top-style="solid" border-top-width="1pt" border-top-color="blue">
+        <fo:table-body>
           <fo:table-row>
             <fo:table-cell>
               <fo:block text-align="left">
@@ -1342,11 +1337,11 @@
       </fo:block>
     </fo:block>
     <fo:block padding-before="5pt" font-size="8.0pt" font-family="sans-serif">
-      <fo:table table-layout="fixed" width="100%">
+      <fo:table table-layout="fixed" width="100%" border-top-style="solid" border-top-width="1pt" border-top-color="blue">
         <fo:table-column column-width="proportional-column-width(1)"/>
         <fo:table-column column-width="proportional-column-width(1)"/>
         <fo:table-column column-width="proportional-column-width(1)"/>
-        <fo:table-body padding-before="2pt" border-top-style="solid" border-top-width="1pt" border-top-color="blue">
+        <fo:table-body>
           <fo:table-row>
             <fo:table-cell>
               <fo:block text-align="left">
