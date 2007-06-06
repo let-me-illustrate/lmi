@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustration_view.cpp,v 1.66 2007-05-30 01:46:19 chicares Exp $
+// $Id: illustration_view.cpp,v 1.67 2007-06-06 00:39:23 chicares Exp $
 
 // This is a derived work based on wxWindows file
 //   samples/docvwmdi/view.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -532,7 +532,7 @@ IllustrationView& MakeNewIllustrationDocAndView
 
 // Must follow document-manager initialization.
 // Return value: prevent displaying GUI.
-bool RunSpecialInputFileIfPresent(wxDocManager* dm)
+bool custom_io_0_run_if_file_exists(wxDocManager* dm)
 {
 // TODO ?? It's silly to write try...catch here, but the customer that
 // needs this is a thousand miles away, and wx still seems not to
@@ -540,10 +540,10 @@ bool RunSpecialInputFileIfPresent(wxDocManager* dm)
 // unobservable without this extra work.
     try
         {
-        if(DoesSpecialInputFileExist())
+        if(custom_io_0_file_exists())
             {
             IllusInputParms input(false);
-            bool close_when_done = SetSpecialInput(input);
+            bool close_when_done = custom_io_0_read(input);
 
             boost::shared_ptr<Ledger const> resulting_ledger;
             { // Begin fenv_guard scope.
@@ -554,7 +554,7 @@ bool RunSpecialInputFileIfPresent(wxDocManager* dm)
             } // End fenv_guard scope.
             LMI_ASSERT(resulting_ledger.get());
 
-            PrintFormSpecial(*resulting_ledger);
+            custom_io_0_write(*resulting_ledger);
             if(close_when_done)
                 {
                 return true;

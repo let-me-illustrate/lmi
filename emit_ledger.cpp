@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: emit_ledger.cpp,v 1.2 2007-06-05 15:51:56 chicares Exp $
+// $Id: emit_ledger.cpp,v 1.3 2007-06-06 00:39:23 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -29,7 +29,7 @@
 #include "emit_ledger.hpp"
 
 #include "configurable_settings.hpp"
-#include "custom_io_0.hpp"         // PrintFormSpecial()
+#include "custom_io_0.hpp"         // custom_io_0_write()
 #include "file_command.hpp"
 #include "ledger.hpp"
 #include "ledger_text_formats.hpp"
@@ -102,7 +102,7 @@ double emit_ledger
     if(emission & mce_emit_custom_0)
         {
 // Support this after refactoring to deal with the second argument.
-//        PrintFormSpecial(ledger, file.string().c_str());
+//        custom_io_0_write(ledger, file.string().c_str());
         }
 
   done:

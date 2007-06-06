@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: custom_io_0.hpp,v 1.7 2007-03-04 16:33:31 chicares Exp $
+// $Id: custom_io_0.hpp,v 1.8 2007-06-06 00:39:23 chicares Exp $
 
 #ifndef custom_io_0_hpp
 #define custom_io_0_hpp
@@ -31,14 +31,14 @@
 class IllusInputParms;
 class Ledger;
 
-bool LMI_SO DoesSpecialInputFileExist();
+bool LMI_SO custom_io_0_file_exists();
 
-void LMI_SO PrintFormSpecial
+void LMI_SO custom_io_0_write
     (Ledger const& ledger_values
     ,char const*   overridden_filename = 0
     );
 
-bool LMI_SO SetSpecialInput
+bool LMI_SO custom_io_0_read
     (IllusInputParms& ip
     ,char const*      overridden_filename = 0
     );

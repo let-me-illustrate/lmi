@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: illustrator.cpp,v 1.9 2007-06-05 17:28:27 chicares Exp $
+// $Id: illustrator.cpp,v 1.10 2007-06-06 00:39:23 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -29,7 +29,7 @@
 #include "illustrator.hpp"
 
 #include "alert.hpp"
-#include "custom_io_0.hpp" // SetSpecialInput()
+#include "custom_io_0.hpp" // custom_io_0_read()
 #include "emit_ledger.hpp"
 #include "group_values.hpp"
 #include "inputillus.hpp"
@@ -86,7 +86,7 @@ bool illustrator::operator()(fs::path const& file_path)
         {
         Timer timer;
         IllusInputParms input(false);
-        SetSpecialInput(input, file_path.string().c_str());
+        custom_io_0_read(input, file_path.string().c_str());
         usec_for_input_ = timer.stop().elapsed_usec();
         timer.restart();
         IllusVal z;

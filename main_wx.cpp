@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_wx.cpp,v 1.79 2007-06-05 15:41:49 chicares Exp $
+// $Id: main_wx.cpp,v 1.80 2007-06-06 00:39:23 chicares Exp $
 
 // Portions of this file are derived from wxWindows files
 //   samples/docvwmdi/docview.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -633,7 +633,7 @@ bool Skeleton::OnInit()
         frame_->Centre(wxBOTH);
         frame_->Maximize(true);
 
-        if(RunSpecialInputFileIfPresent(doc_manager_))
+        if(custom_io_0_run_if_file_exists(doc_manager_))
             {
             return false;
             }
