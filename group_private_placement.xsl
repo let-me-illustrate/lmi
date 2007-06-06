@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: group_private_placement.xsl,v 1.19 2007-06-06 14:03:23 etarassov Exp $
+    $Id: group_private_placement.xsl,v 1.20 2007-06-06 14:23:29 etarassov Exp $
 -->
 <!DOCTYPE stylesheet [
 <!ENTITY nbsp "&#xA0;">
@@ -607,7 +607,7 @@
         <fo:table-column column-width="125mm"/>
         <fo:table-column column-width="2mm"/>
         <fo:table-column column-width="proportional-column-width(1)"/>
-        <fo:table-body padding-before="2pt">
+        <fo:table-body>
           <fo:table-row>
             <fo:table-cell>
               <fo:block text-align="left">
