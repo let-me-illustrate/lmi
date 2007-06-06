@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: variable_annuity.xsl,v 1.22 2007-06-06 14:23:29 etarassov Exp $
+    $Id: variable_annuity.xsl,v 1.23 2007-06-06 14:40:27 etarassov Exp $
 -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fo="http://www.w3.org/1999/XSL/Format" version="1.0">
   <xsl:include href="fo_common.xsl"/>
@@ -285,7 +285,7 @@
 
         <fo:static-content flow-name="xsl-region-before">
           <xsl:call-template name="standard-header"/>
-          <fo:block font-size="11.0pt" text-align="center" font-family="sans-serif" font-weight="bold" margin-top=".8em">
+          <fo:block font-size="11.0pt" text-align="center" font-family="sans-serif" font-weight="bold" padding-top=".8em">
             <xsl:text>Explanation and Footnotes</xsl:text>
           </fo:block>
         </fo:static-content>
@@ -807,7 +807,7 @@
   </xsl:template>
 
   <xsl:template name="titles">
-    <fo:block font-size="13.0pt" text-align="center" font-family="sans-serif" font-weight="bold" margin-top=".5em">
+    <fo:block font-size="13.0pt" text-align="center" font-family="sans-serif" font-weight="bold" padding-top=".5em">
       <xsl:text>HYPOTHETICAL ILLUSTRATION</xsl:text>
     </fo:block>
     <fo:block font-size="11.0pt" text-align="center" font-family="sans-serif" font-weight="bold" border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="black" padding-after="2.5pt">
