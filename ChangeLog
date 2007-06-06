@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.743 2007-06-06 14:03:23 etarassov Exp $
+// $Id: ChangeLog,v 1.744 2007-06-06 14:23:28 etarassov Exp $
 
 MAINTENANCE
 
@@ -12166,4 +12166,14 @@ Fix FOP warnings related to 'margin-*' and 'fo:region-*'.
   offshore_private_placement.xsl
   variable_annuity.xsl
 Add mandatory 'column-width' attribute to 'fo:table-column' instances.
+
+20070606T1423Z <etarassov@tt-solutions.com> [1231]
+
+  group_private_placement.xsl
+  illustration_reg.xsl
+  individual_private_placement.xsl
+  nasd.xsl
+  offshore_private_placement.xsl
+  variable_annuity.xsl
+Remove 'padding'-related properties from fo:table-body (xsl-fo 6.7.8).
 

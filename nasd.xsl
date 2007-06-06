@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: nasd.xsl,v 1.34 2007-06-06 14:03:23 etarassov Exp $
+    $Id: nasd.xsl,v 1.35 2007-06-06 14:23:29 etarassov Exp $
 -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fo="http://www.w3.org/1999/XSL/Format" version="1.0">
   <xsl:include href="fo_common.xsl"/>
@@ -707,7 +707,7 @@
         <fo:table-column column-width="125mm"/>
         <fo:table-column column-width="2mm"/>
         <fo:table-column column-width="proportional-column-width(1)"/>
-        <fo:table-body padding-before="2pt">
+        <fo:table-body>
           <fo:table-row>
             <fo:table-cell>
               <fo:block text-align="left">
