@@ -21,10 +21,12 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: individual_private_placement.xsl,v 1.23 2007-06-05 00:31:27 etarassov Exp $
+    $Id: individual_private_placement.xsl,v 1.24 2007-06-06 11:18:59 etarassov Exp $
 -->
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-  xmlns:fo="http://www.w3.org/1999/XSL/Format">
+<!DOCTYPE stylesheet [
+<!ENTITY nbsp "&#xA0;">
+]>
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fo="http://www.w3.org/1999/XSL/Format" version="1.0">
   <xsl:include href="fo_common.xsl"/>
   <xsl:output method="xml" encoding="UTF-8" indent="yes"/>
   <xsl:variable name="counter" select="1"/>
@@ -99,7 +101,7 @@
 
       <!-- IRR (Guaranteed Charges) Illustration -->
       <!-- Body page -->
-      <fo:page-sequence master-reference="irr-guaranteed-illustration"  initial-page-number="1">
+      <fo:page-sequence master-reference="irr-guaranteed-illustration" initial-page-number="1">
 
         <!-- Define the contents of the header. -->
         <fo:static-content flow-name="xsl-region-before">
@@ -107,8 +109,7 @@
             <xsl:with-param name="displaycontractlanguage" select="1"/>
             <xsl:with-param name="displaydisclaimer" select="1"/>
           </xsl:call-template>
-          <fo:block><fo:leader></fo:leader></fo:block>
-          <fo:block text-align="center" font-size="9.0pt" font-family="serif">
+          <fo:block text-align="center" font-size="9.0pt" font-family="serif" margin-top="1em">
             <xsl:text>End of Year Contract Values using Guaranteed Charges </xsl:text>
             <xsl:call-template name="dollar-units"/>
           </fo:block>
@@ -139,8 +140,7 @@
             <xsl:with-param name="displaycontractlanguage" select="1"/>
             <xsl:with-param name="displaydisclaimer" select="1"/>
           </xsl:call-template>
-          <fo:block><fo:leader></fo:leader></fo:block>
-          <fo:block text-align="center" font-size="9.0pt" font-family="serif">
+          <fo:block text-align="center" font-size="9.0pt" font-family="serif" margin-top="1em">
             <xsl:text>End of Year Contract Values using Current Charges </xsl:text>
             <xsl:call-template name="dollar-units"/>
           </fo:block>
@@ -171,8 +171,7 @@
             <xsl:with-param name="displaycontractlanguage" select="1"/>
             <xsl:with-param name="displaydisclaimer" select="1"/>
           </xsl:call-template>
-          <fo:block><fo:leader></fo:leader></fo:block>
-          <fo:block text-align="center" font-size="9.0pt" font-family="serif">
+          <fo:block text-align="center" font-size="9.0pt" font-family="serif" margin-top="1em">
             <xsl:text>End of Year Contract Values using Current Charges </xsl:text>
             <xsl:call-template name="dollar-units"/>
           </fo:block>
@@ -202,12 +201,9 @@
             <xsl:with-param name="displaycontractlanguage" select="0"/>
             <xsl:with-param name="displaydisclaimer" select="0"/>
           </xsl:call-template>
-          <fo:block><fo:leader></fo:leader></fo:block>
-          <fo:block><fo:leader></fo:leader></fo:block>
-          <fo:block text-align="center" font-size="10.0pt" font-family="serif">
+          <fo:block text-align="center" font-size="10.0pt" font-family="serif" margin-top="2em" margin-bottom="1em">
             <xsl:text>Footnotes</xsl:text>
           </fo:block>
-          <fo:block><fo:leader></fo:leader></fo:block>
         </fo:static-content>
 
         <!-- Define the contents of the footer. -->
@@ -227,16 +223,13 @@
               <xsl:value-of select="illustration/scalar/InsCoShortName"/>
               <xsl:text> that you satisfy these Contract requirements.</xsl:text>
             </fo:block>
-            <fo:block><fo:leader></fo:leader></fo:block>
-            <fo:block>
+            <fo:block margin-top="1em">
               <xsl:text>The information provided is an illustration only and is not intended to predict actual performance.</xsl:text>
             </fo:block>
-            <fo:block><fo:leader></fo:leader></fo:block>
-            <fo:block>
+            <fo:block margin-top="1em">
               <xsl:text>Interest rates and values set forth in the illustration are not guaranteed. This illustration assumes that the currently illustrated elements will continue unchanged for all years shown. This is not likely to occur and actual results may be more or less favorable than shown. Benefits and values are not guaranteed and are based on assumptions such as investment income and current monthly charges. Current charges are subject to change.</xsl:text>
             </fo:block>
-            <fo:block><fo:leader></fo:leader></fo:block>
-            <fo:block>
+            <fo:block margin-top="1em">
               <xsl:text>These illustrations assume a gross rate of return of 0% and </xsl:text>
               <xsl:value-of select="illustration/scalar/InitAnnSepAcctGrossInt_Current"/>
               <xsl:text>, respectively, on the account value in the separate account. For purposes of this </xsl:text>
@@ -249,23 +242,19 @@
               <xsl:text>the impact of such fees on contract performance. No tax charge is currently applied to the investment returns of the separate account. A charge could </xsl:text>
               <xsl:text>be made in the future.</xsl:text>
             </fo:block>
-            <fo:block><fo:leader></fo:leader></fo:block>
-            <fo:block>
+            <fo:block margin-top="1em">
               <xsl:text>Asset charges in the illustration include the contract’s mortality and expense (asset charges), separate account administrative charges (including in </xsl:text>
               <xsl:text>certain cases investment management expenses), and, where applicable, asset-based compensation and/or amortized premium loads.</xsl:text>
             </fo:block>
-            <fo:block><fo:leader></fo:leader></fo:block>
-            <fo:block>
+            <fo:block margin-top="1em">
               <xsl:text>Account values may be used to pay monthly charges. Monthly charges are due during the life of the insured, and depending on actual results, the </xsl:text>
               <xsl:text>premium payer may need to continue or resume premium outlays. If account values are allocated to certain separate account divisions, on each </xsl:text>
               <xsl:text>Contract Anniversary Date there must be at least 18 months of current monthly charges maintained in the money market division to pay contract charges.</xsl:text>
             </fo:block>
-            <fo:block><fo:leader></fo:leader></fo:block>
-            <fo:block>
+            <fo:block margin-top="1em">
               <xsl:text>The premium outlay column includes premium payments, reduced by withdrawals and loan disbursements, if any.</xsl:text>
             </fo:block>
-            <fo:block><fo:leader></fo:leader></fo:block>
-            <fo:block>
+            <fo:block margin-top="1em">
               <xsl:text>Premiums are assumed to be paid on a</xsl:text>
               <xsl:if test="illustration/data/newcolumn/column[@name='ErMode']/duration[1]/@column_value='Annual'">
                 <xsl:text>n </xsl:text>
@@ -273,8 +262,7 @@
               <xsl:value-of select="translate(illustration/data/newcolumn/column[@name='ErMode']/duration[1]/@column_value,$ucletters,$lcletters)"/>
               <xsl:text> basis and received at the beginning of the contract year. Age, account values, cash surrender values and death benefits are illustrated as of the end of the contract year.</xsl:text>
             </fo:block>
-            <fo:block><fo:leader></fo:leader></fo:block>
-            <fo:block>
+            <fo:block margin-top="1em">
               <xsl:text>PLEASE READ THE FOLLOWING IMPORTANT MAXIMUM NET AMOUNT AT RISK DISCLOSURE</xsl:text>
             </fo:block>
             <fo:block>
@@ -283,12 +271,10 @@
               <xsl:value-of select="illustration/scalar/InsCoShortName"/>
               <xsl:text> also has the right to automatically withdraw from the divisions of the separate account, and distribute to the Contract holder, excess amounts that cause the net amount at risk to exceed the maximum net amount at risk under the Contract.</xsl:text>
             </fo:block>
-            <fo:block><fo:leader></fo:leader></fo:block>
-            <fo:block>
+            <fo:block margin-top="1em">
               <xsl:text>If extensive loans or withdrawals are made, additional premium payments may be necessary to avoid lapse of the Contract. Periods of poor performance </xsl:text>
               <xsl:text>in the underlying investment portfolios may also contribute to the potential need for additional premium payments.</xsl:text>
             </fo:block>
-            <fo:block><fo:leader></fo:leader></fo:block>
             <fo:block>
               <xsl:text>Certain investment divisions have restrictions on the ability to access account values allocated to those divisions. If account values are allocated to such </xsl:text>
               <xsl:text>divisions, the Owner will not be able to transfer account values or effect a loan, withdrawal or surrender of the Contract until specified dates. In addition, </xsl:text>
@@ -303,8 +289,7 @@
               <xsl:text>In the states of Alaska or South Dakota, there may be a surrender charge in connection with premium tax liability that would generally be limited to 6 years. </xsl:text>
               <xsl:text>This surrender charge is not reflected in the illustrated values. Nevertheless, surrender charges under the Contract are limited by applicable non-forfeiture laws and regulations.</xsl:text>
             </fo:block>
-            <fo:block><fo:leader></fo:leader></fo:block>
-            <fo:block font-weight="bold">
+            <fo:block font-weight="bold" margin-top="1em">
               <xsl:text>PLEASE READ THE FOLLOWING IMPORTANT TAX DISCLOSURE</xsl:text>
             </fo:block>
             <fo:block>
@@ -321,8 +306,7 @@
                 </xsl:otherwise>
               </xsl:choose>
             </fo:block>
-            <fo:block><fo:leader></fo:leader></fo:block>
-            <fo:block>
+            <fo:block margin-top="1em">
               <xsl:text>The initial 7-pay premium limit is $</xsl:text>
               <xsl:value-of select="illustration/scalar/InitSevenPayPrem"/>
               <xsl:text>. As illustrated, this contract </xsl:text>
@@ -347,50 +331,42 @@
                 </xsl:otherwise>
               </xsl:choose>
             </fo:block>
-            <fo:block><fo:leader></fo:leader></fo:block>
-            <fo:block>
+            <fo:block margin-top="1em">
               <xsl:text>If a contract is a MEC, any distributions are taxed to the extent of any gain in the contract, and an additional 10% penalty tax will apply to the taxable portion of the distribution. The 10% penalty tax applies if the contract owner is an individual under age 59 1/2 and does not meet any applicable exception, or if the contract is owned by a corporation or other entity.</xsl:text>
             </fo:block>
-            <fo:block><fo:leader></fo:leader></fo:block>
-            <fo:block font-weight="bold">
+            <fo:block font-weight="bold" margin-top="1em">
               <xsl:text>This illustration is not written or intended as tax or legal advice and may not be relied on for purposes of avoiding any federal tax penalties.  For more information pertaining to the tax consequences of purchasing or owning this policy, consult with your own independent tax or legal counsel.</xsl:text>
             </fo:block>
-            <fo:block><fo:leader></fo:leader></fo:block>
-            <fo:block>
+            <fo:block margin-top="1em">
               <xsl:text>The state of issue is </xsl:text>
               <xsl:value-of select="illustration/scalar/StatePostalAbbrev"/>
               <xsl:text>.</xsl:text>
             </fo:block>
-            <fo:block><fo:leader></fo:leader></fo:block>
             <xsl:choose>
               <xsl:when test="illustration/scalar/IsInforce!='1'">
                 <xsl:if test="string-length(illustration/scalar/InsCoPhone) &gt; 14">
-                  <fo:block>
+                  <fo:block margin-top="1em">
                     <xsl:text>Compliance tracking number: </xsl:text>
                     <xsl:value-of select="substring(illustration/scalar/InsCoPhone, 1, 15)"/>
                   </fo:block>
-                  <fo:block><fo:leader></fo:leader></fo:block>
                 </xsl:if>
               </xsl:when>
               <xsl:otherwise>
                 <xsl:if test="string-length(illustration/scalar/InsCoPhone) &gt; 16">
-                  <fo:block>
+                  <fo:block margin-top="1em">
                     <xsl:text>Compliance Tracking Number: </xsl:text>
                     <xsl:value-of select="substring(illustration/scalar/InsCoPhone, 16)"/>
                   </fo:block>
-                  <fo:block><fo:leader></fo:leader></fo:block>
                 </xsl:if>
               </xsl:otherwise>
             </xsl:choose>
-            <fo:block>
+            <fo:block margin-top="1em">
               <xsl:text>Please refer to the Contract for a complete explanation of benefits, rights and obligations. In the event of a conflict between the illustration and the Contract, the terms of the Contract will control.</xsl:text>
             </fo:block>
-            <fo:block><fo:leader></fo:leader></fo:block>
-            <fo:block>
+            <fo:block margin-top="1em">
               <xsl:text>Internal Rate of Return ("IRR") is an interest rate at which the Premium Outlay illustrated would have to be invested outside the Contract to generate the Cash Surrender Value or Death Benefit. The IRR is illustrative only and does not reflect past or future results.</xsl:text>
             </fo:block>
-            <fo:block><fo:leader></fo:leader></fo:block>
-            <fo:block>
+            <fo:block margin-top="1em">
               <xsl:text>Placement Agent:  </xsl:text>
               <xsl:value-of select="illustration/scalar/MainUnderwriter"/>
               <xsl:text>, </xsl:text>
@@ -401,18 +377,15 @@
               <xsl:value-of select="illustration/scalar/InsCoName"/>
               <xsl:text>.</xsl:text>
             </fo:block>
-            <fo:block><fo:leader></fo:leader></fo:block>
-            <fo:block>
+            <fo:block margin-top="1em">
               <xsl:text>This illustration reflects a fixed policy loan interest rate of </xsl:text>
               <xsl:value-of select="illustration/scalar/InitAnnLoanDueRate"/>
               <xsl:text>.</xsl:text>
             </fo:block>
-            <fo:block><fo:leader></fo:leader></fo:block>
-            <fo:block>
+            <fo:block margin-top="1em">
               <xsl:text>In general, policy loan interest is not deductible. If the policy is owned by a business, deductibility is extremely limited. Please see your tax counsel for advice.</xsl:text>
             </fo:block>
-            <fo:block><fo:leader></fo:leader></fo:block>
-            <fo:block>
+            <fo:block margin-top="1em">
               <xsl:text>Taking a policy loan could have adverse tax consequences. If your aggregate policy loans substantially exceed your cost basis, you may incur a significant </xsl:text>
               <xsl:text>income tax liability if the policy terminates before the insured's death. You may have to make substantial payments to cover policy charges and policy loan </xsl:text>
               <xsl:text>interest to prevent termination of the policy and to avoid the potential income tax liability. Some of the indications that such a situation may arise include: </xsl:text>
@@ -423,8 +396,7 @@
               <xsl:text>from terminating by monitoring and reviewing all aspects of your policy on a regular basis with your tax advisor, your financial representative, and/or any </xsl:text>
               <xsl:text>other financial advisor you might have.</xsl:text>
             </fo:block>
-            <fo:block><fo:leader></fo:leader></fo:block>
-            <fo:block>
+            <fo:block margin-top="1em">
               <xsl:text>This illustration must be preceded or accompanied by the current confidential private placement memorandum for </xsl:text>
               <xsl:value-of select="illustration/scalar/PolicyMktgName"/>
               <xsl:text> variable life insurance contract and the current prospectuses and private placement memorandums for its underlying investment choices.  Before purchasing </xsl:text>
@@ -453,8 +425,7 @@
               <xsl:with-param name="displaycontractlanguage" select="1"/>
               <xsl:with-param name="displaydisclaimer" select="1"/>
             </xsl:call-template>
-            <fo:block><fo:leader></fo:leader></fo:block>
-            <fo:block text-align="center" font-size="9.0pt" font-family="serif">
+            <fo:block text-align="center" font-size="9.0pt" font-family="serif" margin-top="1em">
               <xsl:value-of select="illustration/supplementalreport/title"/>
               <xsl:text> </xsl:text>
               <xsl:call-template name="dollar-units"/>
@@ -483,39 +454,36 @@
     <xsl:param name="displaycontractlanguage"/>
     <xsl:param name="displaydisclaimer"/>
     <fo:block text-align="center" font-size="9.0pt">
-      <fo:block><fo:leader></fo:leader></fo:block>
       <xsl:choose>
         <xsl:when test="$displaycontractlanguage=1">
           <xsl:choose>
             <xsl:when test="illustration/scalar/IsInforce!='1'">
-              <fo:block>
+              <fo:block margin-top="1em">
                 <xsl:text>Illustration for Flexible Premium Variable Adjustable Life Insurance Contract.</xsl:text>
               </fo:block>
             </xsl:when>
             <xsl:otherwise>
-              <fo:block>
+              <fo:block margin-top="1em">
                 <xsl:text>In Force Illustration for Flexible Premium Variable Adjustable Life Insurance Contract.</xsl:text>
               </fo:block>
             </xsl:otherwise>
           </xsl:choose>
         </xsl:when>
         <xsl:otherwise>
-          <fo:block><fo:leader></fo:leader></fo:block>
+          <fo:block/>
         </xsl:otherwise>
       </xsl:choose>
       <xsl:choose>
         <xsl:when test="$displaydisclaimer=1">
-          <fo:block>
+          <fo:block margin-top="1em">
             <xsl:text>The purpose of the Illustration is to show how the performance of the underlying separate account divisions could affect the Contract's cash values and death benefits. This Illustration is hypothetical and may not be used to project or predict investment results.</xsl:text>
           </fo:block>
           <fo:block>
             <xsl:text>This Illustration must be accompanied or preceded by a Confidential Private Placement Memorandum offering the Contract.</xsl:text>
           </fo:block>
-          <fo:block><fo:leader></fo:leader></fo:block>
-          <fo:block><fo:leader></fo:leader></fo:block>
         </xsl:when>
         <xsl:otherwise>
-          <fo:block><fo:leader></fo:leader></fo:block>
+          <fo:block/>
         </xsl:otherwise>
       </xsl:choose>
     </fo:block>
@@ -524,7 +492,7 @@
       <xsl:value-of select="$header-width * 0.44"/>
       <xsl:text>pc</xsl:text>
     </xsl:variable>
-    <fo:list-block font-size="9pt" provisional-label-separation="-100pt">
+    <fo:list-block font-size="9pt" provisional-label-separation="-100pt" margin-top="2em">
       <xsl:attribute name="provisional-distance-between-starts">
         <xsl:value-of select="$header-field-width"/>
       </xsl:attribute>
@@ -543,7 +511,7 @@
           <fo:list-block provisional-label-separation="0pt">
             <fo:list-item>
               <fo:list-item-label end-indent="label-end()">
-                <fo:block text-align="center"></fo:block>
+                <fo:block/>
               </fo:list-item-label>
               <fo:list-item-body start-indent="body-start()">
                 <fo:block text-align="left">
@@ -578,11 +546,11 @@
           <fo:list-block provisional-label-separation="0pt">
             <fo:list-item>
               <fo:list-item-label end-indent="label-end()">
-                <fo:block text-align="center"></fo:block>
+                <fo:block/>
               </fo:list-item-label>
               <fo:list-item-body start-indent="body-start()">
                 <fo:block text-align="left">
-                  <xsl:text>&#xA0; </xsl:text>
+                  <xsl:text>&nbsp;</xsl:text>
                 </fo:block>
               </fo:list-item-body>
             </fo:list-item>
@@ -594,7 +562,7 @@
           <xsl:choose>
             <xsl:when test="$is_composite">
               <fo:block text-align="left" font-size="9.0pt">
-                <xsl:text>&#xA0; </xsl:text>
+                <xsl:text>&nbsp;</xsl:text>
               </fo:block>
             </xsl:when>
             <xsl:otherwise>
@@ -609,7 +577,7 @@
           <fo:list-block provisional-label-separation="0pt">
             <fo:list-item>
               <fo:list-item-label end-indent="label-end()">
-                <fo:block text-align="center"></fo:block>
+                <fo:block/>
               </fo:list-item-label>
               <fo:list-item-body start-indent="body-start()">
                 <xsl:choose>
@@ -644,7 +612,7 @@
           <xsl:choose>
             <xsl:when test="$is_composite">
               <fo:block text-align="left" font-size="9.0pt">
-                <xsl:text>&#xA0;</xsl:text>
+                <xsl:text>&nbsp;</xsl:text>
               </fo:block>
             </xsl:when>
             <xsl:otherwise>
@@ -659,13 +627,13 @@
           <fo:list-block provisional-label-separation="0pt">
             <fo:list-item>
               <fo:list-item-label end-indent="label-end()">
-                <fo:block text-align="center"></fo:block>
+                <fo:block/>
               </fo:list-item-label>
               <fo:list-item-body start-indent="body-start()">
                 <xsl:choose>
                   <xsl:when test="$is_composite">
                     <fo:block text-align="left" font-size="9.0pt">
-                      <xsl:text>&#xA0;</xsl:text>
+                      <xsl:text>&nbsp;</xsl:text>
                     </fo:block>
                   </xsl:when>
                   <xsl:otherwise>
@@ -695,26 +663,26 @@
           <fo:list-block provisional-label-separation="0pt">
             <fo:list-item>
               <fo:list-item-label end-indent="label-end()">
-                <fo:block text-align="center"></fo:block>
+                <fo:block/>
               </fo:list-item-label>
               <fo:list-item-body start-indent="body-start()">
                 <xsl:choose>
                   <xsl:when test="$is_composite">
                     <fo:block text-align="left">
-                      <xsl:text>&#xA0;</xsl:text>
+                      <xsl:text>&nbsp;</xsl:text>
                     </fo:block>
                   </xsl:when>
                   <xsl:otherwise>
                     <xsl:choose>
                       <xsl:when test="illustration/scalar/UWClass='Rated'">
-                        <fo:block text-align="left">
-                          <xsl:text>&#xA0;&#xA0;&#xA0;Table Rating: </xsl:text>
+                        <fo:block text-align="left" padding-left="3em">
+                          <xsl:text>Table Rating: </xsl:text>
                           <xsl:value-of select="illustration/scalar/SubstandardTable"/>
                         </fo:block>
                       </xsl:when>
                       <xsl:otherwise>
                         <fo:block text-align="left">
-                          <xsl:text>&#xA0;</xsl:text>
+                          <xsl:text>&nbsp;</xsl:text>
                         </fo:block>
                       </xsl:otherwise>
                     </xsl:choose>
@@ -736,27 +704,27 @@
           <fo:list-block provisional-label-separation="0pt">
             <fo:list-item>
               <fo:list-item-label end-indent="label-end()">
-                <fo:block text-align="center"></fo:block>
+                <fo:block/>
               </fo:list-item-label>
               <fo:list-item-body start-indent="body-start()">
                 <xsl:choose>
                   <xsl:when test="$is_composite">
                     <fo:block text-align="left">
-                      <xsl:text>&#xA0;</xsl:text>
+                      <xsl:text>&nbsp;</xsl:text>
                     </fo:block>
                   </xsl:when>
                   <xsl:otherwise>
                     <xsl:choose>
                       <xsl:when test="illustration/scalar/UWClass='Rated'">
-                        <fo:block text-align="left">
-                          <xsl:text>&#xA0;&#xA0;&#xA0;Initial Annual Flat Extra: </xsl:text>
+                        <fo:block text-align="left" padding-left="3em">
+                          <xsl:text>Initial Annual Flat Extra: </xsl:text>
                           <xsl:value-of select="illustration/data/newcolumn/column[@name='MonthlyFlatExtra']/duration[1]/@column_value"/>
                           <xsl:text> per 1,000</xsl:text>
                         </fo:block>
                       </xsl:when>
                       <xsl:otherwise>
                         <fo:block text-align="left">
-                          <xsl:text>&#xA0;</xsl:text>
+                          <xsl:text>&nbsp;</xsl:text>
                         </fo:block>
                       </xsl:otherwise>
                     </xsl:choose>
@@ -794,7 +762,7 @@
                         <xsl:with-param name="passString" select="illustration/scalar/Franchise"/>
                         <xsl:with-param name="length" select="15"/>
                       </xsl:call-template>
-                      <xsl:text>&#xA0;&#xA0;&#xA0;Contract number: </xsl:text>
+                      <xsl:text>&nbsp;&nbsp;&nbsp;Contract number: </xsl:text>
                       <xsl:call-template name="limitstring">
                         <xsl:with-param name="passString" select="illustration/scalar/PolicyNumber"/>
                         <xsl:with-param name="length" select="15"/>
@@ -841,7 +809,7 @@
         <xsl:choose>
           <xsl:when test="$is_composite">
             <fo:table-cell>
-              <fo:block text-align="right">&#xA0;</fo:block>
+              <fo:block/>
             </fo:table-cell>
           </xsl:when>
           <xsl:otherwise>
@@ -902,7 +870,7 @@
       <xsl:if test="($counter + $inforceyear) mod 5=0">
         <fo:table-row>
           <fo:table-cell padding="4pt">
-            <fo:block text-align="right"></fo:block>
+            <fo:block padding=".7em"/>
           </fo:table-cell>
         </fo:table-row>
       </xsl:if>
@@ -1062,7 +1030,7 @@
           <fo:table-header>
             <fo:table-row>
               <fo:table-cell padding="2pt">
-                <fo:block text-align="right"></fo:block>
+                <fo:block/>
               </fo:table-cell>
             </fo:table-row>
             <fo:table-row>
@@ -1072,7 +1040,7 @@
               <xsl:choose>
                 <xsl:when test="$is_composite">
                   <fo:table-cell>
-                    <fo:block text-align="right"></fo:block>
+                    <fo:block/>
                   </fo:table-cell>
                 </xsl:when>
                 <xsl:otherwise>
@@ -1117,7 +1085,7 @@
               <xsl:choose>
                 <xsl:when test="$is_composite">
                   <fo:table-cell border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue" padding="0pt">
-                    <fo:block text-align="right"></fo:block>
+                    <fo:block/>
                   </fo:table-cell>
                 </xsl:when>
                 <xsl:otherwise>
@@ -1184,10 +1152,9 @@
         <fo:block text-align="left">
           <xsl:text>This Illustration is not a contract, or an offer or solicitation to enter into a contract. Illustrated values are based on the investment earnings assumptions shown above and are not guaranteed. Values based on current charges reflect applicable fees and charges which are subject to change. There are no guaranteed values under this contract. The impact of tax requirements is not reflected in these values. Consult your tax advisor.</xsl:text>
         </fo:block>
-        <fo:block><fo:leader></fo:leader></fo:block>
       </xsl:if>
     </fo:block>
-    <fo:block padding-before="5pt" font-size="8.0pt" font-family="sans-serif">
+    <fo:block padding-before="5pt" font-size="8.0pt" font-family="sans-serif" margin-top="1em">
       <fo:table table-layout="fixed" width="100%">
         <fo:table-column/>
         <fo:table-column/>
@@ -1200,7 +1167,7 @@
               </fo:block>
             </fo:table-cell>
             <fo:table-cell>
-              <xsl:text>&#xA0;</xsl:text>
+              <fo:block/>
             </fo:table-cell>
             <fo:table-cell>
               <fo:block text-align="right">
@@ -1219,7 +1186,7 @@
               </fo:block>
             </fo:table-cell>
             <fo:table-cell>
-              <xsl:text>&#xA0;</xsl:text>
+              <fo:block/>
             </fo:table-cell>
             <fo:table-cell>
               <xsl:choose>
