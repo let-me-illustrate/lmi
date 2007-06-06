@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.737 2007-06-06 02:15:34 chicares Exp $
+// $Id: ChangeLog,v 1.738 2007-06-06 02:53:36 chicares Exp $
 
 MAINTENANCE
 
@@ -12124,4 +12124,14 @@ Rectify names.
   illustrator.cpp
   main_cli.cpp
 Improve custom interface number zero.
+
+20070606T0252Z <chicares@cox.net> [1231]
+
+  mc_enum_type_enums.hpp
+Improve documentation.
+
+20070606T0253Z <chicares@cox.net> [1231]
+
+  main_cli.cpp
+Refactor.
 
