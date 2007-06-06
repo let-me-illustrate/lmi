@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.748 2007-06-06 18:09:17 chicares Exp $
+// $Id: ChangeLog,v 1.749 2007-06-06 19:04:30 chicares Exp $
 
 MAINTENANCE
 
@@ -12202,4 +12202,11 @@ Fix the rest of FOP-0.93 warnings/errors.
   sample.cns.touchstone
 Specify GeneralAccountRate explicitly. See:
   http://sv.nongnu.org/support/?105822
+
+20070606T1904Z <chicares@cox.net> [1230]
+
+  GNUmakefile
+  sample.cns
+  sample.ill
+Exempt no xml file from the 'xmllint' test.
 
