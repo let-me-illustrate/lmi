@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: illustration_reg.xsl,v 1.27 2007-06-06 14:23:28 etarassov Exp $
+    $Id: illustration_reg.xsl,v 1.28 2007-06-06 16:38:30 etarassov Exp $
 -->
 <!DOCTYPE stylesheet [
 <!ENTITY nbsp "&#xA0;">
@@ -1010,7 +1010,7 @@
                 <xsl:text>Prepared for:</xsl:text>
               </fo:block>
             </fo:table-cell>
-            <fo:table-cell number-columns-spanned="1" padding="0pt"/>
+            <fo:table-cell><fo:block/></fo:table-cell>
             <fo:table-cell>
               <fo:block text-align="left">
                 <xsl:text>Initial </xsl:text>
@@ -1041,7 +1041,7 @@
                 </xsl:call-template>
               </fo:block>
             </fo:table-cell>
-            <fo:table-cell number-columns-spanned="1" padding="0pt"/>
+            <fo:table-cell><fo:block/></fo:table-cell>
             <fo:table-cell>
               <xsl:choose>
                 <xsl:when test="illustration/scalar/HasTerm!='0'">
@@ -1077,7 +1077,7 @@
                 </xsl:otherwise>
               </xsl:choose>
             </fo:table-cell>
-            <fo:table-cell number-columns-spanned="1" padding="0pt"/>
+            <fo:table-cell><fo:block/></fo:table-cell>
             <fo:table-cell>
               <xsl:choose>
                 <xsl:when test="illustration/scalar/HasTerm!='0'">
@@ -1110,7 +1110,7 @@
                 </xsl:otherwise>
               </xsl:choose>
             </fo:table-cell>
-            <fo:table-cell number-columns-spanned="1" padding="0pt"/>
+            <fo:table-cell><fo:block/></fo:table-cell>
             <fo:table-cell>
               <fo:block text-align="left">
                 <xsl:text>Guaranteed Crediting Rate: </xsl:text>
@@ -1128,7 +1128,7 @@
                 <xsl:text>)</xsl:text>
               </fo:block>
             </fo:table-cell>
-            <fo:table-cell number-columns-spanned="1" padding="0pt"/>
+            <fo:table-cell><fo:block/></fo:table-cell>
             <xsl:choose>
               <xsl:when test="illustration/scalar/InforceYear!=0">
                 <fo:table-cell>
@@ -1166,20 +1166,15 @@
                 </xsl:otherwise>
               </xsl:choose>
             </fo:table-cell>
-            <fo:table-cell number-columns-spanned="1" padding="0pt"/>
+            <fo:table-cell><fo:block/></fo:table-cell>
             <fo:table-cell>
-              <!-- Single Premium Logic -->
-              <xsl:choose>
-                <xsl:when test="$SinglePremium!='1' or illustration/scalar/InforceYear &gt; 4">
-                  <xsl:text>&nbsp;</xsl:text>
-                </xsl:when>
-                <xsl:otherwise>
-                  <fo:block text-align="left">
-                    <xsl:text>Ultimate Illustrated Crediting Rate: </xsl:text>
-                      <xsl:value-of select="illustration/data/newcolumn/column[@name='AnnGAIntRate_Current']/duration[6]/@column_value"/>
-                  </fo:block>
-                </xsl:otherwise>
-              </xsl:choose>
+              <fo:block text-align="left">
+                <!-- Single Premium Logic -->
+                <xsl:if test="$SinglePremium='1' and illustration/scalar/InforceYear &lt;= 4">
+                  <xsl:text>Ultimate Illustrated Crediting Rate: </xsl:text>
+                    <xsl:value-of select="illustration/data/newcolumn/column[@name='AnnGAIntRate_Current']/duration[6]/@column_value"/>
+                </xsl:if>
+              </fo:block>
             </fo:table-cell>
           </fo:table-row>
           <fo:table-row>
@@ -1200,7 +1195,7 @@
                 </xsl:otherwise>
               </xsl:choose>
             </fo:table-cell>
-            <fo:table-cell number-columns-spanned="1" padding="0pt"/>
+            <fo:table-cell><fo:block/></fo:table-cell>
             <fo:table-cell>
               <!-- Update with "FriendlyUWType" - Get From Greg -->
               <!-- "&IF(UWType="Medical","Fully underwritten",
@@ -1277,7 +1272,7 @@
                 </xsl:otherwise>
               </xsl:choose>
             </fo:table-cell>
-            <fo:table-cell number-columns-spanned="1" padding="0pt"/>
+            <fo:table-cell><fo:block/></fo:table-cell>
             <fo:table-cell>
               <xsl:choose>
                 <xsl:when test="$is_composite">
@@ -1341,14 +1336,14 @@
                   </xsl:otherwise>
                 </xsl:choose>
               </fo:table-cell>
-              <fo:table-cell number-columns-spanned="1" padding="0pt"/>
+              <fo:table-cell><fo:block/></fo:table-cell>
               <fo:table-cell>
-                <xsl:if test="illustration/scalar/UWClass='Rated'">
-                  <fo:block text-align="left">
+                <fo:block text-align="left">
+                  <xsl:if test="illustration/scalar/UWClass='Rated'">
                     <xsl:text>&nbsp;&nbsp;&nbsp;Table Rating: </xsl:text>
                     <xsl:value-of select="illustration/scalar/SubstandardTable"/>
-                  </fo:block>
-                </xsl:if>
+                  </xsl:if>
+                </fo:block>
               </fo:table-cell>
             </fo:table-row>
           </xsl:if>
@@ -1738,11 +1733,11 @@
   <xsl:template name="standardfooter">
     <xsl:param name="displaypagenumber"/>
     <fo:block padding-before="5pt" font-size="8.0pt" font-family="sans-serif">
-      <fo:table table-layout="fixed" width="100%">
+      <fo:table table-layout="fixed" width="100%" border-top-style="solid" border-top-width="1pt" border-top-color="blue">
         <fo:table-column column-width="proportional-column-width(1)"/>
         <fo:table-column column-width="proportional-column-width(1)"/>
         <fo:table-column column-width="proportional-column-width(1)"/>
-        <fo:table-body padding-before="2pt" border-top-style="solid" border-top-width="1pt" border-top-color="blue">
+        <fo:table-body>
           <fo:table-row>
             <fo:table-cell>
               <fo:block text-align="left">
