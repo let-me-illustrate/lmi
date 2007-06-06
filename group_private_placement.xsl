@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: group_private_placement.xsl,v 1.18 2007-06-06 13:38:32 etarassov Exp $
+    $Id: group_private_placement.xsl,v 1.19 2007-06-06 14:03:23 etarassov Exp $
 -->
 <!DOCTYPE stylesheet [
 <!ENTITY nbsp "&#xA0;">
@@ -606,7 +606,7 @@
       <fo:table table-layout="fixed" width="100%">
         <fo:table-column column-width="125mm"/>
         <fo:table-column column-width="2mm"/>
-        <fo:table-column/>
+        <fo:table-column column-width="proportional-column-width(1)"/>
         <fo:table-body padding-before="2pt">
           <fo:table-row>
             <fo:table-cell>
@@ -1033,9 +1033,9 @@
     </fo:block>
     <fo:block padding-before="5pt" font-size="8.5pt" font-family="sans-serif" padding-top="1em">
       <fo:table table-layout="fixed" width="100%">
-        <fo:table-column/>
-        <fo:table-column/>
-        <fo:table-column/>
+        <fo:table-column column-width="proportional-column-width(1)"/>
+        <fo:table-column column-width="proportional-column-width(1)"/>
+        <fo:table-column column-width="proportional-column-width(1)"/>
         <fo:table-body padding-before="2pt" border-top-style="solid" border-top-width="1pt" border-top-color="blue">
           <fo:table-row>
             <fo:table-cell>
@@ -1120,9 +1120,9 @@
     </fo:block>
     <fo:block padding-before="5pt" font-size="8.0pt" font-family="sans-serif" padding-top="1em">
       <fo:table table-layout="fixed" width="100%">
-        <fo:table-column/>
-        <fo:table-column/>
-        <fo:table-column/>
+        <fo:table-column column-width="proportional-column-width(1)"/>
+        <fo:table-column column-width="proportional-column-width(1)"/>
+        <fo:table-column column-width="proportional-column-width(1)"/>
         <fo:table-body padding-before="2pt" border-top-style="solid" border-top-width="1pt" border-top-color="blue">
           <fo:table-row>
             <fo:table-cell>

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.742 2007-06-06 13:38:31 etarassov Exp $
+// $Id: ChangeLog,v 1.743 2007-06-06 14:03:23 etarassov Exp $
 
 MAINTENANCE
 
@@ -12156,4 +12156,14 @@ test.
   offshore_private_placement.xsl
   variable_annuity.xsl
 Fix FOP warnings related to 'margin-*' and 'fo:region-*'.
+
+20070606T1403Z <etarassov@tt-solutions.com> [1231]
+
+  group_private_placement.xsl
+  illustration_reg.xsl
+  individual_private_placement.xsl
+  nasd.xsl
+  offshore_private_placement.xsl
+  variable_annuity.xsl
+Add mandatory 'column-width' attribute to 'fo:table-column' instances.
 
