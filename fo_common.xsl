@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: fo_common.xsl,v 1.24 2007-06-06 13:38:31 etarassov Exp $
+    $Id: fo_common.xsl,v 1.25 2007-06-06 14:25:26 etarassov Exp $
 -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fo="http://www.w3.org/1999/XSL/Format" version="1.0">
   <!--
@@ -506,6 +506,7 @@
     <xsl:param name="max-counter"/>
     <xsl:param name="inforceyear"/>
     <xsl:param name="special-param" select="NaN"/>
+    <xsl:param name="add-dummy-row-if-empty" select="boolean(1)"/>
     <xsl:if test="$counter &lt;= $max-counter">
       <fo:table-row>
         <xsl:for-each select="$columns">
@@ -544,6 +545,18 @@
         <xsl:with-param name="inforceyear" select="$inforceyear"/>
         <xsl:with-param name="special-param" select="$special-param"/>
       </xsl:call-template>
+    </xsl:if>
+    <!--
+    If there is no data then FOP would complain about it since specification
+    does not allow empty <fo:table-body/> tag.
+    As a workaround add an empty row.
+    -->
+    <xsl:if test="not($max-counter) and $add-dummy-row-if-empty">
+      <fo:table-row>
+        <fo:table-cell>
+          <fo:block/>
+        </fo:table-cell>
+      </fo:table-row>
     </xsl:if>
   </xsl:template>
 
