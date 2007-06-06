@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.745 2007-06-06 14:25:25 etarassov Exp $
+// $Id: ChangeLog,v 1.746 2007-06-06 14:40:27 etarassov Exp $
 
 MAINTENANCE
 
@@ -12181,4 +12181,9 @@ Remove 'padding'-related properties from fo:table-body (xsl-fo 6.7.8).
 
   fo_common.xsl
 Add a dummy table-row when no data is in the table (xsl-fo 6.7.8).
+
+20070606T1440Z <etarassov@tt-solutions.com> [1231]
+
+  variable_annuity.xsl
+Replace 'margin-top' with 'padding-top' for FOP-0.20.5.
 
