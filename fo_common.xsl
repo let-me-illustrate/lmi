@@ -21,8 +21,11 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: fo_common.xsl,v 1.25 2007-06-06 14:25:26 etarassov Exp $
+    $Id: fo_common.xsl,v 1.26 2007-06-07 13:28:55 etarassov Exp $
 -->
+<!DOCTYPE stylesheet [
+<!ENTITY nl "&#xA0;">
+]>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fo="http://www.w3.org/1999/XSL/Format" version="1.0">
   <!--
   In some xsl:for-each loop we could iterate over a node set from some

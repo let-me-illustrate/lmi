@@ -21,10 +21,10 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: group_private_placement.xsl,v 1.21 2007-06-06 16:38:30 etarassov Exp $
+    $Id: group_private_placement.xsl,v 1.22 2007-06-07 13:28:55 etarassov Exp $
 -->
 <!DOCTYPE stylesheet [
-<!ENTITY nbsp "&#xA0;">
+<!ENTITY nl "&#xA0;">
 ]>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fo="http://www.w3.org/1999/XSL/Format" version="1.0">
   <xsl:include href="fo_common.xsl"/>
@@ -626,7 +626,7 @@
                     </xsl:call-template>
                     <xsl:text>, </xsl:text>
                     <xsl:value-of select="illustration/scalar/Gender"/>
-                    <xsl:text>&nbsp;</xsl:text>
+                    <xsl:text>&nl;</xsl:text>
                     <xsl:value-of select="illustration/scalar/Smoker"/>
                     <xsl:text> rates, Age </xsl:text>
                     <xsl:value-of select="illustration/scalar/Age"/>
@@ -718,7 +718,7 @@
                       <xsl:with-param name="passString" select="illustration/scalar/Franchise"/>
                       <xsl:with-param name="length" select="15"/>
                     </xsl:call-template>
-                    <xsl:text>&nbsp;&nbsp;&nbsp;Contract number: </xsl:text>
+                    <xsl:text>&nl;&nl;&nl;Contract number: </xsl:text>
                     <xsl:call-template name="limitstring">
                       <xsl:with-param name="passString" select="illustration/scalar/PolicyNumber"/>
                       <xsl:with-param name="length" select="15"/>
@@ -875,7 +875,7 @@
                 <fo:block text-align="center">
                   <xsl:text>Return (</xsl:text>
                   <xsl:value-of select="illustration/scalar/InitAnnSepAcctNetInt_GuaranteedZero"/>
-                  <xsl:text>&nbsp;net)</xsl:text>
+                  <xsl:text>&nl;net)</xsl:text>
                 </fo:block>
               </fo:table-cell>
               <fo:table-cell><fo:block/></fo:table-cell>
@@ -883,7 +883,7 @@
                 <fo:block text-align="center">
                   <xsl:text>Return (</xsl:text>
                   <xsl:value-of select="illustration/scalar/InitAnnSepAcctNetInt_Guaranteed"/>
-                  <xsl:text>&nbsp;net)</xsl:text>
+                  <xsl:text>&nl;net)</xsl:text>
                 </fo:block>
               </fo:table-cell>
               <fo:table-cell><fo:block/></fo:table-cell>
@@ -891,7 +891,7 @@
                 <fo:block text-align="center">
                   <xsl:text>Return (</xsl:text>
                   <xsl:value-of select="illustration/scalar/InitAnnSepAcctNetInt_CurrentZero"/>
-                  <xsl:text>&nbsp;net)</xsl:text>
+                  <xsl:text>&nl;net)</xsl:text>
                 </fo:block>
               </fo:table-cell>
               <fo:table-cell><fo:block/></fo:table-cell>
@@ -899,7 +899,7 @@
                 <fo:block text-align="center">
                   <xsl:text>Return (</xsl:text>
                   <xsl:value-of select="illustration/scalar/InitAnnSepAcctNetInt_Current"/>
-                  <xsl:text>&nbsp;net)</xsl:text>
+                  <xsl:text>&nl;net)</xsl:text>
                 </fo:block>
               </fo:table-cell>
             </fo:table-row>
@@ -1053,7 +1053,7 @@
               <fo:block text-align="center">
                 <xsl:text>Date Prepared: </xsl:text>
                 <xsl:value-of select="illustration/scalar/PrepMonth"/>
-                <xsl:text>&nbsp;</xsl:text>
+                <xsl:text>&nl;</xsl:text>
                 <xsl:value-of select="illustration/scalar/PrepDay"/>
                 <xsl:text>, </xsl:text>
                 <xsl:value-of select="illustration/scalar/PrepYear"/>
