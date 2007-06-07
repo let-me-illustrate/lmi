@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.749 2007-06-06 19:04:30 chicares Exp $
+// $Id: ChangeLog,v 1.750 2007-06-07 12:53:43 etarassov Exp $
 
 MAINTENANCE
 
@@ -12209,4 +12209,9 @@ Specify GeneralAccountRate explicitly. See:
   sample.cns
   sample.ill
 Exempt no xml file from the 'xmllint' test.
+
+20070607T1453Z <etarassov@tt-solutions.com> [1230]
+
+  nasd.xsl
+Remove bogus text.
 
