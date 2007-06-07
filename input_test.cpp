@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: input_test.cpp,v 1.26 2007-03-09 16:27:23 chicares Exp $
+// $Id: input_test.cpp,v 1.27 2007-06-07 17:49:19 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -45,6 +45,10 @@
 #include <cstdio> // std::remove()
 #include <fstream>
 #include <ios>
+#if !defined LMI_USING_XML_SAVE_OPTION
+#   include <sstream>
+#endif // !defined LMI_USING_XML_SAVE_OPTION
+#include <string>
 
 template<typename DocumentClass>
 void test_document_io
@@ -57,7 +61,34 @@ void test_document_io
 {
     DocumentClass document(original_filename);
     std::ofstream ofs(replica_filename.c_str(), ios_out_trunc_binary());
+#if defined LMI_USING_XML_SAVE_OPTION
     document.write(ofs);
+#else  // !defined LMI_USING_XML_SAVE_OPTION
+// SOMEDAY !! XMLWRAPP !! Update 'xmlwrapp' to write empty elements as such:
+//   http://mail.gnome.org/archives/xml/2007-May/msg00007.html
+//   http://mail.gnome.org/archives/xml/2006-July/msg00048.html
+
+    std::ostringstream oss0;
+    document.write(oss0);
+    std::string const s(oss0.str());
+
+    std::istringstream iss(s);
+    std::ostringstream oss1;
+    for(;EOF != iss.peek();)
+        {
+        std::string line;
+        std::getline(iss, line);
+        std::string::size_type z = line.find("><");
+        if(std::string::npos != z)
+            {
+            line.erase(z);
+            line += "/>";
+            }
+        oss1 << line << '\n';
+        }
+
+    ofs << oss1.str();
+#endif // !defined LMI_USING_XML_SAVE_OPTION
     if(test_speed_only)
         {
         return;

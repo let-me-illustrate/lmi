@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.752 2007-06-07 14:21:30 etarassov Exp $
+// $Id: ChangeLog,v 1.753 2007-06-07 17:49:19 chicares Exp $
 
 MAINTENANCE
 
@@ -12234,4 +12234,9 @@ Uniformly replace &#xA; and &nbsp; with &nl;.
   nasd.xsl
   offshore_private_placement.xsl
 Remove code duplication (into 'date-prepared' template).
+
+20070607T1749Z <chicares@cox.net> [1230]
+
+  input_test.cpp
+Work around an 'xmlwrapp' limitation.
 
