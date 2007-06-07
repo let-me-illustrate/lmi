@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: emit_ledger.cpp,v 1.4 2007-06-06 02:15:34 chicares Exp $
+// $Id: emit_ledger.cpp,v 1.5 2007-06-07 18:44:22 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -52,8 +52,8 @@
 /// without creating any file.
 
 double emit_ledger
-    (fs::path const& file
-    ,int             index
+    (fs::path const& filepath
+    ,int             serial_index
     ,Ledger const&   ledger
     ,mcenum_emission emission
     )
@@ -66,23 +66,23 @@ double emit_ledger
 
     if(emission & mce_emit_pdf_file)
         {
-        std::string pdf_out_file = write_ledger_to_pdf
+        write_ledger_to_pdf
             (ledger
-            ,serialized_file_path(file, index, "ill").string()
+            ,serialized_file_path(filepath, serial_index, "ill").string()
             );
         }
     if(emission & mce_emit_pdf_to_printer)
         {
         std::string pdf_out_file = write_ledger_to_pdf
             (ledger
-            ,serialized_file_path(file, index, "ill").string()
+            ,serialized_file_path(filepath, serial_index, "ill").string()
             );
         file_command()(pdf_out_file, "print");
         }
     if(emission & mce_emit_test_data)
         {
         fs::ofstream ofs
-            (serialized_file_path(file, index, "test")
+            (serialized_file_path(filepath, serial_index, "test")
             ,ios_out_trunc_binary()
             );
         ledger.Spew(ofs);
@@ -91,7 +91,7 @@ double emit_ledger
         {
         PrintFormTabDelimited
             (ledger
-            ,   file.string()
+            ,   filepath.string()
             +   configurable_settings::instance().spreadsheet_file_extension()
             );
         }
@@ -101,7 +101,7 @@ double emit_ledger
         }
     if(emission & mce_emit_custom_0)
         {
-        custom_io_0_write(ledger, file.string());
+        custom_io_0_write(ledger, filepath.string());
         }
 
   done:
