@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xsl.cpp,v 1.17 2007-01-27 00:00:51 wboutin Exp $
+// $Id: ledger_xsl.cpp,v 1.18 2007-06-07 19:05:47 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -41,7 +41,6 @@
 
 #include <boost/filesystem/fstream.hpp>
 #include <boost/filesystem/operations.hpp>
-#include <boost/filesystem/path.hpp>
 
 #include <ios>
 #include <sstream>
@@ -69,10 +68,7 @@ fs::path xsl_filepath(Ledger const& ledger)
 }
 } // Unnamed namespace.
 
-std::string write_ledger_to_pdf
-    (Ledger const&      ledger
-    ,std::string const& filename
-    )
+std::string write_ledger_as_pdf(Ledger const& ledger, fs::path const& filepath)
 {
     fs::path print_dir(configurable_settings::instance().print_directory());
 
@@ -96,13 +92,13 @@ std::string write_ledger_to_pdf
     // filenames must be transformed is that apache fop is java, and
     // java is "portable".
     //
-    std::string real_filename
-        (fs::portable_name(filename)
-        ?   filename
-        :   "output"
+    fs::path real_filepath
+        (fs::portable_name(filepath.string())
+        ?   filepath
+        :   fs::path("output")
         );
 
-    fs::path xml_out_file = unique_filepath(print_dir / real_filename, ".xml");
+    fs::path xml_out_file = unique_filepath(print_dir / real_filepath, ".xml");
 
     fs::ofstream ofs(xml_out_file, ios_out_trunc_binary());
     // Scale a copy of the 'ledger' argument. The original must not be
@@ -123,14 +119,14 @@ std::string write_ledger_to_pdf
 
     fs::path xsl_file = xsl_filepath(ledger);
 
-    fs::path pdf_out_file = unique_filepath(print_dir / real_filename, ".pdf");
+    fs::path pdf_out_file = unique_filepath(print_dir / real_filepath, ".pdf");
 
     std::ostringstream oss;
 #if defined LMI_USE_NEW_REPORTS
     oss
         << configurable_settings::instance().xsl_fo_command()
         << " -fo "  << '"' << xml_out_file.string() << '"'
-        << " -pdf " << '"' << pdf_out_file.string()    << '"'
+        << " -pdf " << '"' << pdf_out_file.string() << '"'
         ;
 #else  // !defined LMI_USE_NEW_REPORTS
     oss

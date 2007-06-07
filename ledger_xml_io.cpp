@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xml_io.cpp,v 1.67 2007-02-23 12:43:26 chicares Exp $
+// $Id: ledger_xml_io.cpp,v 1.68 2007-06-07 19:05:47 chicares Exp $
 
 #include "ledger.hpp"
 
@@ -1071,7 +1071,7 @@ std::string Ledger::xml_root_name() const
 #endif // !defined LMI_USE_NEW_REPORTS
 
 // TODO ?? Can this function be removed when LMI_USE_NEW_REPORTS is
-// defined? It seems to be used only by write_ledger_to_pdf(), and
+// defined? It seems to be used only by write_ledger_as_pdf(), and
 // there only if LMI_USE_NEW_REPORTS is not defined.
 
 void Ledger::write(std::ostream& os) const
