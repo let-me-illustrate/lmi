@@ -21,8 +21,11 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: offshore_private_placement.xsl,v 1.21 2007-06-06 16:38:30 etarassov Exp $
+    $Id: offshore_private_placement.xsl,v 1.22 2007-06-07 13:28:55 etarassov Exp $
 -->
+<!DOCTYPE stylesheet [
+<!ENTITY nl "&#xA0;">
+]>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fo="http://www.w3.org/1999/XSL/Format" version="1.0">
   <xsl:include href="fo_common.xsl"/>
   <xsl:output method="xml" encoding="UTF-8" indent="yes"/>
@@ -945,7 +948,7 @@
                           <xsl:with-param name="passString" select="illustration/scalar/Franchise"/>
                           <xsl:with-param name="length" select="15"/>
                         </xsl:call-template>
-                        <xsl:text padding-left="2em">Contract number: </xsl:text>
+                        <xsl:text>&nl;&nl;&nl;Contract number: </xsl:text>
                         <xsl:call-template name="limitstring">
                           <xsl:with-param name="passString" select="illustration/scalar/PolicyNumber"/>
                           <xsl:with-param name="length" select="15"/>

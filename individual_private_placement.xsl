@@ -21,10 +21,10 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: individual_private_placement.xsl,v 1.28 2007-06-06 16:38:30 etarassov Exp $
+    $Id: individual_private_placement.xsl,v 1.29 2007-06-07 13:28:55 etarassov Exp $
 -->
 <!DOCTYPE stylesheet [
-<!ENTITY nbsp "&#xA0;">
+<!ENTITY nl "&#xA0;">
 ]>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fo="http://www.w3.org/1999/XSL/Format" version="1.0">
   <xsl:include href="fo_common.xsl"/>
@@ -550,7 +550,7 @@
               </fo:list-item-label>
               <fo:list-item-body start-indent="body-start()">
                 <fo:block text-align="left">
-                  <xsl:text>&nbsp;</xsl:text>
+                  <xsl:text>&nl;</xsl:text>
                 </fo:block>
               </fo:list-item-body>
             </fo:list-item>
@@ -562,7 +562,7 @@
           <xsl:choose>
             <xsl:when test="$is_composite">
               <fo:block text-align="left" font-size="9.0pt">
-                <xsl:text>&nbsp;</xsl:text>
+                <xsl:text>&nl;</xsl:text>
               </fo:block>
             </xsl:when>
             <xsl:otherwise>
@@ -612,7 +612,7 @@
           <xsl:choose>
             <xsl:when test="$is_composite">
               <fo:block text-align="left" font-size="9.0pt">
-                <xsl:text>&nbsp;</xsl:text>
+                <xsl:text>&nl;</xsl:text>
               </fo:block>
             </xsl:when>
             <xsl:otherwise>
@@ -633,7 +633,7 @@
                 <xsl:choose>
                   <xsl:when test="$is_composite">
                     <fo:block text-align="left" font-size="9.0pt">
-                      <xsl:text>&nbsp;</xsl:text>
+                      <xsl:text>&nl;</xsl:text>
                     </fo:block>
                   </xsl:when>
                   <xsl:otherwise>
@@ -669,7 +669,7 @@
                 <xsl:choose>
                   <xsl:when test="$is_composite">
                     <fo:block text-align="left">
-                      <xsl:text>&nbsp;</xsl:text>
+                      <xsl:text>&nl;</xsl:text>
                     </fo:block>
                   </xsl:when>
                   <xsl:otherwise>
@@ -682,7 +682,7 @@
                       </xsl:when>
                       <xsl:otherwise>
                         <fo:block text-align="left">
-                          <xsl:text>&nbsp;</xsl:text>
+                          <xsl:text>&nl;</xsl:text>
                         </fo:block>
                       </xsl:otherwise>
                     </xsl:choose>
@@ -710,7 +710,7 @@
                 <xsl:choose>
                   <xsl:when test="$is_composite">
                     <fo:block text-align="left">
-                      <xsl:text>&nbsp;</xsl:text>
+                      <xsl:text>&nl;</xsl:text>
                     </fo:block>
                   </xsl:when>
                   <xsl:otherwise>
@@ -724,7 +724,7 @@
                       </xsl:when>
                       <xsl:otherwise>
                         <fo:block text-align="left">
-                          <xsl:text>&nbsp;</xsl:text>
+                          <xsl:text>&nl;</xsl:text>
                         </fo:block>
                       </xsl:otherwise>
                     </xsl:choose>
@@ -760,7 +760,7 @@
                         <xsl:with-param name="passString" select="illustration/scalar/Franchise"/>
                         <xsl:with-param name="length" select="15"/>
                       </xsl:call-template>
-                      <xsl:text>&nbsp;&nbsp;&nbsp;Contract number: </xsl:text>
+                      <xsl:text>&nl;&nl;&nl;Contract number: </xsl:text>
                       <xsl:call-template name="limitstring">
                         <xsl:with-param name="passString" select="illustration/scalar/PolicyNumber"/>
                         <xsl:with-param name="length" select="15"/>
