@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.753 2007-06-07 17:49:19 chicares Exp $
+// $Id: ChangeLog,v 1.754 2007-06-07 19:26:37 chicares Exp $
 
 MAINTENANCE
 
@@ -12239,4 +12239,27 @@ Remove code duplication (into 'date-prepared' template).
 
   input_test.cpp
 Work around an 'xmlwrapp' limitation.
+
+20070607T1844Z <chicares@cox.net> [1230]
+
+  emit_ledger.cpp
+  emit_ledger.hpp
+Use clearer 'actual arguments' [1.3.1].
+
+20070607T1905Z <chicares@cox.net> [1230]
+
+  emit_ledger.cpp
+  illustration_view.cpp
+  ledger_xml_io.cpp
+  ledger_xsl.cpp
+  ledger_xsl.hpp
+Change a function's name and signature.
+
+20070607T1926Z <chicares@cox.net> [1230]
+
+  emit_ledger.cpp
+  ledger_xsl.cpp
+  ledger_xsl.hpp
+  main_cli.cpp
+Experimentally write some intermediate xml files.
 

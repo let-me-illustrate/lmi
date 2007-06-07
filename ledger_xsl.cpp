@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xsl.cpp,v 1.18 2007-06-07 19:05:47 chicares Exp $
+// $Id: ledger_xsl.cpp,v 1.19 2007-06-07 19:26:36 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -154,5 +154,42 @@ std::string write_ledger_as_pdf(Ledger const& ledger, fs::path const& filepath)
             ;
         }
     return pdf_out_file.string();
+}
+
+// EVGENIY !! EXPERIMENTAL section begins.
+//
+// If we're going to do a lot of things like this, then we should
+// consider scaling the ledger only once--perhaps in 'emit_ledger.cpp'
+// if we can make that the only place that uses a scaled ledger.
+//
+// Anyway, what I see here is that
+//  - write_ledger_as_xml() does the right thing, but
+//  - write_ledger_as_fo_xml() doesn't create the same output that
+//      xsltproc does: maybe it doesn't have the full xml dataset?
+
+#include "ledger_formatter.hpp"
+
+void write_ledger_as_xml(Ledger const& ledger, fs::path const& filepath)
+{
+    fs::path out_file(filepath.string() + ".xml");
+    fs::ofstream ofs(out_file, ios_out_trunc_binary());
+
+    Ledger scaled_ledger(ledger);
+    scaled_ledger.AutoScale();
+
+    scaled_ledger.write(ofs);
+}
+
+void write_ledger_as_fo_xml(Ledger const& ledger, fs::path const& filepath)
+{
+    fs::path out_file(filepath.string() + ".fo.xml");
+    fs::ofstream ofs(out_file, ios_out_trunc_binary());
+
+    Ledger scaled_ledger(ledger);
+    scaled_ledger.AutoScale();
+
+    LedgerFormatterFactory& factory = LedgerFormatterFactory::Instance();
+    LedgerFormatter formatter(factory.CreateFormatter(scaled_ledger));
+    formatter.FormatAsXslFo(ofs);
 }
 
