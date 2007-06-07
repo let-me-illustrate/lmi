@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_cli.cpp,v 1.47 2007-06-06 02:53:36 chicares Exp $
+// $Id: main_cli.cpp,v 1.48 2007-06-07 19:26:36 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -246,6 +246,10 @@ void process_command_line(int argc, char* argv[])
     emission.allow(emission.ordinal("emit_pdf_file"      ), false);
     emission.allow(emission.ordinal("emit_pdf_to_printer"), false);
     emission.allow(emission.ordinal("emit_custom_0"      ), false);
+
+// EVGENIY !! EXPERIMENTAL Enable "emit_pdf_file" for testing.
+// For now, it writes some intermediate files, but no pdf.
+    emission.allow(emission.ordinal("emit_pdf_file"      ), true);
 
     std::vector<std::string> ill_names;
     std::vector<std::string> cns_names;

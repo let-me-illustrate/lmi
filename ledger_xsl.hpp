@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xsl.hpp,v 1.6 2007-06-07 19:05:47 chicares Exp $
+// $Id: ledger_xsl.hpp,v 1.7 2007-06-07 19:26:36 chicares Exp $
 
 #ifndef ledger_xsl_hpp
 #define ledger_xsl_hpp
@@ -35,6 +35,16 @@
 class Ledger;
 
 std::string LMI_SO write_ledger_as_pdf(Ledger const&, fs::path const&);
+
+// EVGENIY !! EXPERIMENTAL section begins.
+//
+// If we keep either or both of these functions, we should consider
+// making their signatures similar to that of the function above.
+// Ideally, we'd make 'emit_ledger.cpp' the only place that uses them,
+// and not export any of these from a shared library.
+
+void               write_ledger_as_xml    (Ledger const&, fs::path const&);
+void               write_ledger_as_fo_xml (Ledger const&, fs::path const&);
 
 #endif // ledger_xsl_hpp
 

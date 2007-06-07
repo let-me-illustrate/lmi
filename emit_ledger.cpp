@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: emit_ledger.cpp,v 1.6 2007-06-07 19:05:47 chicares Exp $
+// $Id: emit_ledger.cpp,v 1.7 2007-06-07 19:26:36 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -42,6 +42,9 @@
 
 #include <iostream>
 #include <string>
+
+// EVGENIY !! EXPERIMENTAL.
+void experiment(fs::path const&, int, Ledger const&);
 
 /// Emit a ledger in various guises.
 ///
@@ -66,10 +69,15 @@ double emit_ledger
 
     if(emission & mce_emit_pdf_file)
         {
+// EVGENIY !! EXPERIMENTAL.
+        experiment(filepath, serial_index, ledger);
+// May not yet work from command line.
+#if 0
         write_ledger_as_pdf
             (ledger
             ,serialized_file_path(filepath, serial_index, "ill").string()
             );
+#endif // 0
         }
     if(emission & mce_emit_pdf_to_printer)
         {
@@ -106,5 +114,62 @@ double emit_ledger
 
   done:
     return timer.stop().elapsed_usec();
+}
+
+// EVGENIY !! EXPERIMENTAL.
+//
+// For now, "emit_pdf_file" writes some intermediate files, but no pdf.
+// As experimentally implemented here, it needs these extra headers:
+
+#include "global_settings.hpp"
+#include "system_command.hpp"
+#include <boost/filesystem/convenience.hpp>
+#include <sstream>
+
+void experiment
+    (fs::path const& filepath
+    ,int             serial_index
+    ,Ledger const&   ledger
+    )
+{
+    std::string exemplar = filepath.leaf() + serialize_extension(serial_index, "change_this");
+std::cout << "Processing file stem " << fs::basename(exemplar) << '\n';
+Timer timer0;
+    write_ledger_as_xml(ledger, fs::basename(exemplar));
+std::cout
+    << "...wrote '"
+    << fs::change_extension(exemplar, ".xml").string()
+    << "'.\n"
+    << "  time: " << timer0.stop().elapsed_msec_str()
+    << std::endl
+    ;
+timer0.restart();
+    write_ledger_as_fo_xml(ledger, fs::basename(exemplar));
+std::cout
+    << "...wrote '"
+    << fs::change_extension(exemplar, ".fo.xml").string()
+    << "'.\n"
+    << "  time: " << timer0.stop().elapsed_msec_str()
+    << std::endl
+    ;
+timer0.restart();
+    std::string xsl_name = ledger.GetLedgerType().str() + ".xsl";
+    fs::path xsl_file(global_settings::instance().data_directory() / xsl_name);
+    std::ostringstream oss;
+    oss
+        << "xsltproc"
+        << " -o " << fs::change_extension(exemplar, ".xsltproc.xml").string()
+        << " "    << xsl_file.string()
+        << " "    << fs::change_extension(exemplar, ".xml").string()
+        ;
+std::cout << "...executing command:\n    " << oss.str() << '\n';
+    system_command(oss.str());
+std::cout
+    << "...wrote '"
+    << fs::change_extension(exemplar, ".xsltproc.xml").string()
+    << "'.\n"
+    << "  time: " << timer0.stop().elapsed_msec_str()
+    << std::endl
+    ;
 }
 
