@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.751 2007-06-07 13:28:55 etarassov Exp $
+// $Id: ChangeLog,v 1.752 2007-06-07 14:21:30 etarassov Exp $
 
 MAINTENANCE
 
@@ -12224,4 +12224,14 @@ Remove bogus text.
   nasd.xsl
   offshore_private_placement.xsl
 Uniformly replace &#xA; and &nbsp; with &nl;.
+
+20070607T1421Z <etarassov@tt-solutions.com> [1230]
+
+  fo_common.xsl
+  group_private_placement.xsl
+  illustration_reg.xsl
+  individual_private_placement.xsl
+  nasd.xsl
+  offshore_private_placement.xsl
+Remove code duplication (into 'date-prepared' template).
 
