@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: individual_private_placement.xsl,v 1.29 2007-06-07 13:28:55 etarassov Exp $
+    $Id: individual_private_placement.xsl,v 1.30 2007-06-07 14:21:30 etarassov Exp $
 -->
 <!DOCTYPE stylesheet [
 <!ENTITY nl "&#xA0;">
@@ -500,11 +500,7 @@
         <fo:list-item-label end-indent="label-end()">
           <fo:block text-align="left">
             <xsl:text>Date Prepared: </xsl:text>
-            <xsl:value-of select="illustration/scalar/PrepMonth"/>
-            <xsl:text> </xsl:text>
-            <xsl:value-of select="illustration/scalar/PrepDay"/>
-            <xsl:text>, </xsl:text>
-            <xsl:value-of select="illustration/scalar/PrepYear"/>
+            <xsl:call-template name="date-prepared"/>
           </fo:block>
         </fo:list-item-label>
         <fo:list-item-body start-indent="body-start()">
