@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: illustration_reg.xsl,v 1.29 2007-06-07 13:28:55 etarassov Exp $
+    $Id: illustration_reg.xsl,v 1.30 2007-06-07 14:21:30 etarassov Exp $
 -->
 <!DOCTYPE stylesheet [
 <!ENTITY nl "&#xA0;">
@@ -184,11 +184,7 @@
               <xsl:value-of select="illustration/scalar/ProducerCity"/>
             </fo:block>
             <fo:block text-align="center" padding-top="2em">
-              <xsl:value-of select="illustration/scalar/PrepMonth"/>
-              <xsl:text> </xsl:text>
-              <xsl:value-of select="illustration/scalar/PrepDay"/>
-              <xsl:text>, </xsl:text>
-              <xsl:value-of select="illustration/scalar/PrepYear"/>
+              <xsl:call-template name="date-prepared"/>
             </fo:block>
             <fo:block padding-top="10em">
               <fo:external-graphic width="121.1pt" height="24.8pt" src="company_logo.png"/>
@@ -1023,11 +1019,7 @@
               <!-- Remove date prepared....now exists in footer
               <fo:block text-align="left">
                 <xsl:text>Date Prepared: </xsl:text>
-                <xsl:value-of select="illustration/scalar/PrepMonth"/>
-                <xsl:text> </xsl:text>
-                <xsl:value-of select="illustration/scalar/PrepDay"/>
-                <xsl:text>, </xsl:text>
-                <xsl:value-of select="illustration/scalar/PrepYear"/>
+                <xsl:call-template name="date-prepared"/>
               </fo:block> -->
             </fo:table-cell>
           </fo:table-row>
@@ -1679,11 +1671,7 @@
             <fo:table-cell>
               <fo:block text-align="left">
                 <xsl:text>Date Prepared: </xsl:text>
-                <xsl:value-of select="illustration/scalar/PrepMonth"/>
-                  <xsl:text>&nl;</xsl:text>
-                <xsl:value-of select="illustration/scalar/PrepDay"/>
-                  <xsl:text>, </xsl:text>
-                <xsl:value-of select="illustration/scalar/PrepYear"/>
+                <xsl:call-template name="date-prepared"/>
               </fo:block>
             </fo:table-cell>
             <fo:table-cell>
