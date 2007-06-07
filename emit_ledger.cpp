@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: emit_ledger.cpp,v 1.5 2007-06-07 18:44:22 chicares Exp $
+// $Id: emit_ledger.cpp,v 1.6 2007-06-07 19:05:47 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -66,14 +66,14 @@ double emit_ledger
 
     if(emission & mce_emit_pdf_file)
         {
-        write_ledger_to_pdf
+        write_ledger_as_pdf
             (ledger
             ,serialized_file_path(filepath, serial_index, "ill").string()
             );
         }
     if(emission & mce_emit_pdf_to_printer)
         {
-        std::string pdf_out_file = write_ledger_to_pdf
+        std::string pdf_out_file = write_ledger_as_pdf
             (ledger
             ,serialized_file_path(filepath, serial_index, "ill").string()
             );
