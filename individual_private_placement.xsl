@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: individual_private_placement.xsl,v 1.30 2007-06-07 14:21:30 etarassov Exp $
+    $Id: individual_private_placement.xsl,v 1.31 2007-06-08 14:17:08 etarassov Exp $
 -->
 <!DOCTYPE stylesheet [
 <!ENTITY nl "&#xA0;">
@@ -81,7 +81,7 @@
           <!-- Header -->
           <fo:region-before extent="3in"/>
           <!-- Footer -->
-          <fo:region-after extent=".5in"/>
+          <fo:region-after extent=".6in"/>
         </fo:simple-page-master>
 
         <!-- Define the Supplemental Illustration page. -->
@@ -116,15 +116,7 @@
         </fo:static-content>
 
         <!-- Define the contents of the footer. -->
-        <fo:static-content flow-name="xsl-region-after">
-          <fo:block font-size="8.0pt" font-family="sans-serif" padding-after="2.0pt" space-before="4.0pt" text-align="left">
-            <xsl:text> </xsl:text>
-          </fo:block>
-          <xsl:call-template name="standardfooter">
-            <xsl:with-param name="displaypagenumber" select="1"/>
-            <xsl:with-param name="displaydisclaimer" select="1"/>
-          </xsl:call-template>
-        </fo:static-content>
+        <xsl:call-template name="standardfooter"/>
 
         <xsl:call-template name="irr-guaranteed-illustration-report"/>
 
@@ -147,15 +139,7 @@
         </fo:static-content>
 
         <!-- Define the contents of the footer. -->
-        <fo:static-content flow-name="xsl-region-after">
-          <fo:block font-size="8.0pt" font-family="sans-serif" padding-after="2.0pt" space-before="4.0pt" text-align="left">
-            <xsl:text> </xsl:text>
-          </fo:block>
-          <xsl:call-template name="standardfooter">
-            <xsl:with-param name="displaypagenumber" select="1"/>
-            <xsl:with-param name="displaydisclaimer" select="1"/>
-          </xsl:call-template>
-        </fo:static-content>
+        <xsl:call-template name="standardfooter"/>
 
         <xsl:call-template name="irr-current-illustration-report"/>
 
@@ -178,15 +162,7 @@
         </fo:static-content>
 
         <!-- Define the contents of the footer. -->
-        <fo:static-content flow-name="xsl-region-after">
-          <fo:block font-size="8.0pt" font-family="sans-serif" padding-after="2.0pt" space-before="4.0pt" text-align="left">
-            <xsl:text> </xsl:text>
-          </fo:block>
-          <xsl:call-template name="standardfooter">
-            <xsl:with-param name="displaypagenumber" select="1"/>
-            <xsl:with-param name="displaydisclaimer" select="1"/>
-          </xsl:call-template>
-        </fo:static-content>
+        <xsl:call-template name="standardfooter"/>
 
         <xsl:call-template name="current-illustration-report"/>
 
@@ -207,12 +183,9 @@
         </fo:static-content>
 
         <!-- Define the contents of the footer. -->
-        <fo:static-content flow-name="xsl-region-after">
-          <xsl:call-template name="standardfooter">
-            <xsl:with-param name="displaypagenumber" select="1"/>
-            <xsl:with-param name="displaydisclaimer" select="0"/>
-          </xsl:call-template>
-        </fo:static-content>
+        <xsl:call-template name="standardfooter">
+          <xsl:with-param name="omit-disclaimer" select="1"/>
+        </xsl:call-template>
 
         <!-- FOOTNOTES Body  -->
         <fo:flow flow-name="xsl-region-body">
@@ -433,15 +406,7 @@
           </fo:static-content>
 
           <!-- Define the contents of the footer. -->
-          <fo:static-content flow-name="xsl-region-after">
-            <fo:block font-size="8.0pt" font-family="sans-serif" padding-after="2.0pt" space-before="4.0pt" text-align="left">
-              <xsl:text> </xsl:text>
-            </fo:block>
-            <xsl:call-template name="standardfooter">
-              <xsl:with-param name="displaypagenumber" select="1"/>
-              <xsl:with-param name="displaydisclaimer" select="1"/>
-            </xsl:call-template>
-          </fo:static-content>
+          <xsl:call-template name="standardfooter"/>
 
           <!-- Supplemental report body -->
           <xsl:call-template name="supplemental-report-body"/>
@@ -1143,70 +1108,43 @@
   </xsl:template>
 
   <xsl:template name="standardfooter">
-    <xsl:param name="displaypagenumber"/>
-    <xsl:param name="displaydisclaimer"/>
-    <fo:block text-align="left" font-size="8.0pt" font-family="sans-serif">
-      <xsl:if test="$displaydisclaimer=1">
-        <fo:block text-align="left">
-          <xsl:text>This Illustration is not a contract, or an offer or solicitation to enter into a contract. Illustrated values are based on the investment earnings assumptions shown above and are not guaranteed. Values based on current charges reflect applicable fees and charges which are subject to change. There are no guaranteed values under this contract. The impact of tax requirements is not reflected in these values. Consult your tax advisor.</xsl:text>
+    <xsl:param name="omit-pagenumber" select="boolean(0)"/>
+    <xsl:param name="omit-disclaimer" select="boolean(0)"/>
+    <xsl:call-template name="generic-footer">
+      <xsl:with-param name="top-block">
+        <xsl:if test="not($omit-disclaimer)">
+          This Illustration is not a contract, or an offer or solicitation
+          to enter into a contract. Illustrated values are based on
+          the investment earnings assumptions shown above and are
+          not guaranteed. Values based on current charges reflect applicable
+          fees and charges which are subject to change. There are no guaranteed
+          values under this contract. The impact of tax requirements
+          is not reflected in these values. Consult your tax advisor.
+        </xsl:if>
+      </xsl:with-param>
+      <xsl:with-param name="left-block">
+        <fo:block><xsl:value-of select="$illustration/scalar/InsCoName"/></fo:block>
+        <fo:block><xsl:value-of select="$illustration/scalar/InsCoAddr"/></fo:block>
+      </xsl:with-param>
+      <xsl:with-param name="right-block">
+        <xsl:if test="$illustration/scalar/LmiVersion!=''">
+          <fo:block>
+            System Version:
+            <xsl:value-of select="$illustration/scalar/LmiVersion"/>
+          </fo:block>
+        </xsl:if>
+        <fo:block>
+          <xsl:choose>
+            <xsl:when test="not($omit-pagenumber)">
+              <xsl:call-template name="page-of"/>
+            </xsl:when>
+            <xsl:otherwise>
+              Attachment
+            </xsl:otherwise>
+          </xsl:choose>
         </fo:block>
-      </xsl:if>
-    </fo:block>
-    <fo:block padding-before="5pt" font-size="8.0pt" font-family="sans-serif" padding-top="1em">
-      <fo:table table-layout="fixed" width="100%" border-top-style="solid" border-top-width="1pt" border-top-color="blue">
-        <fo:table-column column-width="proportional-column-width(1)"/>
-        <fo:table-column column-width="proportional-column-width(1)"/>
-        <fo:table-column column-width="proportional-column-width(1)"/>
-        <fo:table-body>
-          <fo:table-row>
-            <fo:table-cell>
-              <fo:block text-align="left">
-                <xsl:value-of select="illustration/scalar/InsCoName"/>
-              </fo:block>
-            </fo:table-cell>
-            <fo:table-cell>
-              <fo:block/>
-            </fo:table-cell>
-            <fo:table-cell>
-              <fo:block text-align="right">
-                <xsl:if test="illustration/scalar/LmiVersion!=''">
-                  <fo:block text-align="right">System Version:
-                    <xsl:value-of select="illustration/scalar/LmiVersion"/>
-                  </fo:block>
-                </xsl:if>
-              </fo:block>
-            </fo:table-cell>
-          </fo:table-row>
-          <fo:table-row>
-            <fo:table-cell>
-              <fo:block text-align="left">
-                <xsl:value-of select="illustration/scalar/InsCoAddr"/>
-              </fo:block>
-            </fo:table-cell>
-            <fo:table-cell>
-              <fo:block/>
-            </fo:table-cell>
-            <fo:table-cell>
-              <xsl:choose>
-                <xsl:when test="$displaypagenumber=1">
-                  <fo:block text-align="right">
-                    <xsl:text>Page </xsl:text>
-                    <fo:page-number/>
-                    <xsl:text> of </xsl:text>
-                    <fo:page-number-citation ref-id="endofdoc"/>
-                  </fo:block>
-                </xsl:when>
-                <xsl:otherwise>
-                  <fo:block text-align="right">
-                    <xsl:text>Attachment</xsl:text>
-                  </fo:block>
-                </xsl:otherwise>
-              </xsl:choose>
-            </fo:table-cell>
-          </fo:table-row>
-        </fo:table-body>
-      </fo:table>
-    </fo:block>
+      </xsl:with-param>
+    </xsl:call-template>
   </xsl:template>
 
 </xsl:stylesheet>
