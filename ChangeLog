@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.755 2007-06-08 00:40:40 etarassov Exp $
+// $Id: ChangeLog,v 1.756 2007-06-08 14:17:08 etarassov Exp $
 
 MAINTENANCE
 
@@ -12271,4 +12271,14 @@ Experimentally write some intermediate xml files.
   nasd.xsl
   offshore_private_placement.xsl
 Extract 'cover' page code into 'generic-cover' template.
+
+20070608T1416Z <etarassov@tt-solutions.com> [1230]
+
+  fo_common.xsl
+  group_private_placement.xsl
+  illustration_reg.xsl
+  individual_private_placement.xsl
+  nasd.xsl
+  offshore_private_placement.xsl
+Generalize 'standardfooter' template.
 

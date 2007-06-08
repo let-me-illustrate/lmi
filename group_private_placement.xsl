@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: group_private_placement.xsl,v 1.24 2007-06-08 00:40:41 etarassov Exp $
+    $Id: group_private_placement.xsl,v 1.25 2007-06-08 14:17:10 etarassov Exp $
 -->
 <!DOCTYPE stylesheet [
 <!ENTITY nl "&#xA0;">
@@ -142,14 +142,7 @@
         </fo:static-content>
 
         <!-- Define the contents of the footer. -->
-        <fo:static-content flow-name="xsl-region-after">
-          <fo:block font-size="8.0pt" font-family="sans-serif" padding-after="2.0pt" space-before="4.0pt" text-align="left">
-            <xsl:text> </xsl:text>
-          </fo:block>
-          <xsl:call-template name="standardfooter">
-            <xsl:with-param name="displaypagenumber" select="1"/>
-          </xsl:call-template>
-        </fo:static-content>
+        <xsl:call-template name="standardfooter"/>
 
         <xsl:call-template name="basic-illustration-report"/>
 
@@ -168,11 +161,7 @@
         </fo:static-content>
 
         <!-- Define the contents of the footer. -->
-        <fo:static-content flow-name="xsl-region-after">
-          <xsl:call-template name="standardfooter">
-            <xsl:with-param name="displaypagenumber" select="1"/>
-          </xsl:call-template>
-        </fo:static-content>
+        <xsl:call-template name="standardfooter"/>
 
         <!-- Column Definitions Summary Body  -->
         <fo:flow flow-name="xsl-region-body">
@@ -230,11 +219,7 @@
         </fo:static-content>
 
         <!-- Define the contents of the footer. -->
-        <fo:static-content flow-name="xsl-region-after">
-          <xsl:call-template name="standardfooter">
-            <xsl:with-param name="displaypagenumber" select="1"/>
-          </xsl:call-template>
-        </fo:static-content>
+        <xsl:call-template name="standardfooter"/>
 
         <!-- narrative summary Summary Body  -->
         <fo:flow flow-name="xsl-region-body">
@@ -497,13 +482,7 @@
           </fo:static-content>
 
           <!-- Define the contents of the footer. -->
-          <fo:static-content flow-name="xsl-region-after">
-            <fo:block>
-              <xsl:call-template name="standardfooter">
-                <xsl:with-param name="displaypagenumber" select="1"/>
-              </xsl:call-template>
-            </fo:block>
-          </fo:static-content>
+          <xsl:call-template name="standardfooter"/>
 
           <!-- Supplemental report body -->
           <xsl:call-template name="supplemental-report-body"/>
@@ -953,154 +932,51 @@
   </xsl:template>
 
   <xsl:template name="standardfooter">
-    <xsl:param name="displaypagenumber"/>
-    <fo:block text-align="left" font-size="8.5pt" font-family="sans-serif">
-      <fo:block text-align="left">
-        <xsl:text>* This illustration is based on the assumed Gross Rate shown. The Net Rate is provided for information purposes only.</xsl:text>
-      </fo:block>
-      <fo:block text-align="left">
-        <xsl:text>See the Narrative Summary for important policy information. This illustration is not complete without all pages.</xsl:text>
-      </fo:block>
-    </fo:block>
-    <fo:block padding-before="5pt" font-size="8.5pt" font-family="sans-serif" padding-top="1em" border-top-style="solid" border-top-width="1pt" border-top-color="blue">
-      <fo:table table-layout="fixed" width="100%">
-        <fo:table-column column-width="proportional-column-width(1)"/>
-        <fo:table-column column-width="proportional-column-width(1)"/>
-        <fo:table-column column-width="proportional-column-width(1)"/>
-        <fo:table-body>
-          <fo:table-row>
-            <fo:table-cell>
-              <fo:block text-align="left">
-                <xsl:value-of select="illustration/scalar/InsCoName"/>
-              </fo:block>
-            </fo:table-cell>
-            <fo:table-cell>
-              <fo:block text-align="center">
-                <xsl:text>Date Prepared: </xsl:text>
-                <xsl:call-template name="date-prepared"/>
-              </fo:block>
-            </fo:table-cell>
-            <fo:table-cell>
-              <fo:block text-align="right">
-                <xsl:text>Policy Form: </xsl:text>
-                <xsl:value-of select="illustration/scalar/PolicyForm"/>
-              </fo:block>
-            </fo:table-cell>
-          </fo:table-row>
-          <fo:table-row>
-            <fo:table-cell>
-              <fo:block text-align="left">
-                <xsl:value-of select="illustration/scalar/InsCoAddr"/>
-              </fo:block>
-            </fo:table-cell>
-            <fo:table-cell>
-              <xsl:if test="illustration/scalar/LmiVersion!=''">
-                <fo:block text-align="center">System Version:
-                  <xsl:value-of select="illustration/scalar/LmiVersion"/>
-                </fo:block>
-              </xsl:if>
-            </fo:table-cell>
-            <fo:table-cell>
-              <xsl:choose>
-                <xsl:when test="$displaypagenumber=1">
-                  <fo:block text-align="right">
-                    <xsl:text>Page </xsl:text>
-                    <fo:page-number/>
-                    <xsl:text> of </xsl:text>
-                    <fo:page-number-citation ref-id="endofdoc"/>
-                  </fo:block>
-                </xsl:when>
-                <xsl:otherwise>
-                  <fo:block text-align="right">
-                    <xsl:text>Attachment</xsl:text>
-                  </fo:block>
-                </xsl:otherwise>
-              </xsl:choose>
-            </fo:table-cell>
-          </fo:table-row>
-        </fo:table-body>
-      </fo:table>
-    </fo:block>
-  </xsl:template>
-
-  <xsl:template name="footer-with-underwriter">
-    <xsl:param name="displaypagenumber"/>
-    <fo:block text-align="left" font-size="8.5pt" font-family="sans-serif">
-      <fo:block span="all">
-        <fo:block padding-top="1em">
-          <xsl:text>The Principal Underwriter is </xsl:text>
-          <xsl:value-of select="illustration/scalar/MainUnderwriter"/>
-          <xsl:text>, a wholly owned subsidiary of </xsl:text>
-          <xsl:value-of select="illustration/scalar/InsCoShortName"/>
-          <xsl:text> and is located at </xsl:text>
+    <xsl:param name="omit-pagenumber" select="boolean(0)"/>
+    <xsl:call-template name="generic-footer">
+      <xsl:with-param name="top-block">
+        <fo:block>
+          * This illustration is based on the assumed Gross Rate shown.
+          The Net Rate is provided for information purposes only.
         </fo:block>
         <fo:block>
-          <xsl:value-of select="illustration/scalar/MainUnderwriterAddress"/>
+          See the Narrative Summary for important policy information.
+          This illustration is not complete without all pages.
         </fo:block>
-      </fo:block>
-      <fo:block text-align="left" padding-top="1em">
-        <xsl:text>* This illustration is based on the assumed Gross Rate shown. The Net Rate is provided for information purposes only.</xsl:text>
-      </fo:block>
-      <fo:block text-align="left">
-        <xsl:text>See the Narrative Summary for important policy information. This illustration is not complete without all pages.</xsl:text>
-      </fo:block>
-    </fo:block>
-    <fo:block padding-before="5pt" font-size="8.0pt" font-family="sans-serif" padding-top="1em">
-      <fo:table table-layout="fixed" width="100%" border-top-style="solid" border-top-width="1pt" border-top-color="blue">
-        <fo:table-column column-width="proportional-column-width(1)"/>
-        <fo:table-column column-width="proportional-column-width(1)"/>
-        <fo:table-column column-width="proportional-column-width(1)"/>
-        <fo:table-body>
-          <fo:table-row>
-            <fo:table-cell>
-              <fo:block text-align="left">
-                <xsl:value-of select="illustration/scalar/InsCoName"/>
-              </fo:block>
-            </fo:table-cell>
-            <fo:table-cell>
-              <fo:block/>
-            </fo:table-cell>
-            <fo:table-cell>
-              <fo:block text-align="right">
-                <xsl:text>Policy Form: </xsl:text>
-                <xsl:value-of select="illustration/scalar/PolicyForm"/>
-              </fo:block>
-            </fo:table-cell>
-          </fo:table-row>
-          <fo:table-row>
-            <fo:table-cell>
-              <fo:block text-align="left">
-                <xsl:value-of select="illustration/scalar/InsCoAddr"/>
-              </fo:block>
-            </fo:table-cell>
-            <fo:table-cell>
-              <xsl:if test="illustration/scalar/VersionNumber!=''">
-                <fo:block text-align="center">Version Number:
-                   <xsl:value-of select="illustration/scalar/VersionNumber"/>
-                </fo:block>
-              </xsl:if>
-            </fo:table-cell>
-            <fo:table-cell>
-              <xsl:choose>
-                <xsl:when test="$displaypagenumber=1">
-                  <fo:block text-align="right">
-                    <xsl:text>Page </xsl:text>
-                    <fo:page-number/>
-                    <xsl:text> of </xsl:text>
-                    <fo:page-number-citation ref-id="endofdoc"/>
-                  </fo:block>
-                </xsl:when>
-                <xsl:otherwise>
-                  <fo:block text-align="right">
-                    <xsl:text>Attachment</xsl:text>
-                  </fo:block>
-                </xsl:otherwise>
-              </xsl:choose>
-            </fo:table-cell>
-          </fo:table-row>
-        </fo:table-body>
-      </fo:table>
-    </fo:block>
+      </xsl:with-param>
+      <xsl:with-param name="left-block">
+        <fo:block><xsl:value-of select="$illustration/scalar/InsCoName"/></fo:block>
+        <fo:block><xsl:value-of select="$illustration/scalar/InsCoAddr"/></fo:block>
+      </xsl:with-param>
+      <xsl:with-param name="center-block">
+        <fo:block>
+          Date Prepared:
+          <xsl:call-template name="date-prepared"/>
+        </fo:block>
+        <xsl:if test="$illustration/scalar/LmiVersion!=''">
+          <fo:block>
+            System Version:
+            <xsl:value-of select="$illustration/scalar/LmiVersion"/>
+          </fo:block>
+        </xsl:if>
+      </xsl:with-param>
+      <xsl:with-param name="right-block">
+        <fo:block>
+          Policy Form:
+          <xsl:value-of select="$illustration/scalar/PolicyForm"/>
+        </fo:block>
+        <fo:block>
+          <xsl:choose>
+            <xsl:when test="not($omit-pagenumber)">
+              <xsl:call-template name="page-of"/>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:text>Attachment</xsl:text>
+            </xsl:otherwise>
+          </xsl:choose>
+        </fo:block>
+      </xsl:with-param>
+    </xsl:call-template>
   </xsl:template>
 
 </xsl:stylesheet>
