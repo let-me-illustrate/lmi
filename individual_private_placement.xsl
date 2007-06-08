@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: individual_private_placement.xsl,v 1.31 2007-06-08 14:17:08 etarassov Exp $
+    $Id: individual_private_placement.xsl,v 1.32 2007-06-08 16:29:20 etarassov Exp $
 -->
 <!DOCTYPE stylesheet [
 <!ENTITY nl "&#xA0;">
@@ -98,6 +98,169 @@
       </fo:layout-master-set>
 
       <!-- The data to be diplayed in the pages, cover page first -->
+      <!-- Disabled for now
+        <fo:page-sequence master-reference="cover" initial-page-number="200">
+          <fo:flow flow-name="xsl-region-body">
+            <fo:block text-align="left" font-size="9pt" font-family="sans-serif">
+              <fo:block>
+                <xsl:value-of select="$illustration/scalar/PolicyMktgName"/>
+              </fo:block>
+              <fo:block>
+                <xsl:value-of select="$illustration/scalar/PolicyLegalName"/>
+                <xsl:text> Cover Sheet</xsl:text>
+              </fo:block>
+              <fo:block padding-top="1em">
+                <xsl:text>The purpose of the attached illustration is to show how the performance of the underlying separate account divisions could affect the proposed </xsl:text>
+                <xsl:text>contract's cash values and death benefits. The illustration is hypothetical and may not be used to project or predict investment results. The illustration </xsl:text>
+                <xsl:text>"must be accompanied or preceded by a Confidential Private Placement Memorandum offering the Contract.</xsl:text>
+              </fo:block>
+              <fo:block padding-top="1em">
+                <xsl:text>Placement agent: </xsl:text>
+                <xsl:value-of select="$illustration/scalar/MainUnderwriter"/>
+              </fo:block>
+              <xsl:if test="$illustration/scalar/ScaleUnit!=''">
+                <fo:block padding-top="1em">
+                  <xsl:text>Values per </xsl:text>
+                  <xsl:value-of select="$illustration/scalar/ScaleUnit"/>
+                  <xsl:text> US dollars.</xsl:text>
+                </fo:block>
+              </xsl:if>
+              <fo:block text-align="center" padding-top="1em">
+                <xsl:text>THIS ILLUSTRATION COVER SHEET IS FOR REGISTERED REPRESENTATIVE USE ONLY. NOT FOR USE WITH CLIENTS.</xsl:text>
+              </fo:block>
+              <fo:block padding-top="1em">
+                <xsl:text>Date prepared: </xsl:text>
+                <xsl:value-of select="$illustration/scalar/PrepYear"/>
+                <xsl:text>-</xsl:text>
+                <xsl:value-of select="$illustration/scalar/PrepMonth"/>
+                <xsl:text>-</xsl:text>
+                <xsl:value-of select="$illustration/scalar/PrepDay"/>
+              </fo:block>
+              <fo:block>
+                <xsl:text>Producer: </xsl:text>
+                <xsl:value-of select="$illustration/scalar/ProducerName"/>
+              </fo:block>
+              <fo:block>
+                <xsl:text>Client: </xsl:text>
+                <xsl:value-of select="$illustration/scalar/Insured1"/>
+              </fo:block>
+              <fo:block>
+                <xsl:text>Gender: </xsl:text>
+                <xsl:value-of select="$illustration/scalar/Gender"/>
+              </fo:block>
+              <fo:block>
+                <xsl:text>Issue age: </xsl:text>
+                <xsl:value-of select="$illustration/scalar/Age"/>
+              </fo:block>
+              <fo:block>
+                <xsl:text>State of jurisdiction: </xsl:text>
+                <xsl:value-of select="$illustration/scalar/GetStatePostalAbbrev"/>
+              </fo:block>
+              <fo:block>
+                <xsl:text>Country: </xsl:text>
+                <xsl:value-of select="$illustration/scalar/CountryIso3166Abbrev"/>
+              </fo:block>
+              <fo:block>
+                <xsl:text>Non-US corridor factor: </xsl:text>
+                <xsl:value-of select="$illustration/scalar/CorridorFactorSequence"/>
+              </fo:block>
+              <fo:block>
+                <xsl:text>Rate class: </xsl:text>
+                <xsl:value-of select="$illustration/scalar/UWClass"/>
+              </fo:block>
+              <fo:block>
+                <xsl:text>7702 test: </xsl:text>
+                <xsl:value-of select="$illustration/scalar/DefnLifeIns"/>
+              </fo:block>
+              <fo:block>
+                <xsl:text>MEC: </xsl:text>
+                <xsl:choose>
+                  <xsl:when test="$illustration/scalar/IsMec='1'">
+                    <xsl:text>Yes</xsl:text>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <xsl:text>No</xsl:text>
+                  </xsl:otherwise>
+                </xsl:choose>
+              </fo:block>
+              <fo:block>
+                <xsl:text>Assumed gross rate: </xsl:text>
+                <xsl:value-of select="$illustration/scalar/InitAnnSepAcctGrossInt_Current"/>
+              </fo:block>
+              <fo:block>
+                <xsl:text>New cash loan: </xsl:text>
+                <xsl:value-of select="$illustration/scalar/LoanSequence"/>
+              </fo:block>
+              <fo:block>
+                <xsl:text>Withdrawal: </xsl:text>
+                <xsl:value-of select="$illustration/scalar/NetWDSequence"/>
+              </fo:block>
+              <fo:block>
+                <xsl:text>Comments:      </xsl:text>
+                <xsl:value-of select="$illustration/scalar/Comments"/>
+              </fo:block>
+              <fo:block padding-top="1em">
+                <xsl:text>&nl;&nl;&nl;&nl;&nl;&nl;&nl;&nl;Premiums and death benefits</xsl:text>
+              </fo:block>
+              <fo:block padding-top="1em">
+                <xsl:text>Premium: </xsl:text>
+                <xsl:value-of select="$illustration/scalar/GrossPmtSequence"/>
+              </fo:block>
+              <fo:block>
+                <xsl:text>Dumpin: </xsl:text>
+                <xsl:value-of select="$illustration/scalar/DumpinScaled"/>
+              </fo:block>
+              <fo:block>
+                <xsl:text>Internal 1035 exchange: </xsl:text>
+                <xsl:value-of select="$illustration/scalar/Internal1035AmountScaled"/>
+              </fo:block>
+              <fo:block>
+                <xsl:text>External 1035 exchange: </xsl:text>
+                <xsl:value-of select="$illustration/scalar/External1035AmountScaled"/>
+              </fo:block>
+              <fo:block>
+                <xsl:text>Specified amount: </xsl:text>
+                <xsl:value-of select="$illustration/scalar/SpecAmtSequence"/>
+              </fo:block>
+              <fo:block>
+                <xsl:text>Death benefit option: </xsl:text>
+                <xsl:value-of select="$illustration/scalar/DBOptSquence"/>
+              </fo:block>
+              <fo:block padding-top="1em">
+                <xsl:text>&nl;&nl;&nl;&nl;&nl;&nl;&nl;&nl;Current fees and charges</xsl:text>
+              </fo:block>
+              <fo:block padding-top="1em">
+                <xsl:text>State premium tax load: </xsl:text>
+                <xsl:value-of select="$illustration/scalar/StatePremTaxLoad"/>
+              </fo:block>
+              <fo:block>
+                <xsl:text>DAC tax premium load: </xsl:text>
+                <xsl:value-of select="$illustration/scalar/DacTaxPremLoadRate"/>
+              </fo:block>
+              <fo:block>
+                <xsl:text>Asset-based compensation: </xsl:text>
+                <xsl:value-of select="$illustration/scalar/AddonCompOnAssetsSquence"/>
+              </fo:block>
+              <fo:block>
+                <xsl:text>Premium-based compensation: </xsl:text>
+                <xsl:value-of select="$illustration/scalar/AddonCompOnPremiumSequence"/>
+              </fo:block>
+              <fo:block>
+                <xsl:text>Add-on custodial fee: </xsl:text>
+                <xsl:value-of select="$illustration/scalar/AddonMonthlyFeeSquence"/>
+              </fo:block>
+              <fo:block>
+                <xsl:text>Country COI multiplier: </xsl:text>
+                <xsl:value-of select="$illustration/scalar/CountryCOIMultiplier"/>
+              </fo:block>
+              <fo:block>
+                <xsl:text>Separate account load: </xsl:text>
+                <xsl:value-of select="$illustration/scalar/TieredSepAcctLoadBands"/>
+              </fo:block>
+            </fo:block>
+          </fo:flow>
+        </fo:page-sequence>
+      -->
 
       <!-- IRR (Guaranteed Charges) Illustration -->
       <!-- Body page -->
