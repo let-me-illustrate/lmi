@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.754 2007-06-07 19:26:37 chicares Exp $
+// $Id: ChangeLog,v 1.755 2007-06-08 00:40:40 etarassov Exp $
 
 MAINTENANCE
 
@@ -12262,4 +12262,13 @@ Change a function's name and signature.
   ledger_xsl.hpp
   main_cli.cpp
 Experimentally write some intermediate xml files.
+
+20070608T0040Z <etarassov@tt-solutions.com> [1230]
+
+  fo_common.xsl
+  group_private_placement.xsl
+  illustration_reg.xsl
+  nasd.xsl
+  offshore_private_placement.xsl
+Extract 'cover' page code into 'generic-cover' template.
 
