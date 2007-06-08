@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: illustration_reg.xsl,v 1.31 2007-06-08 00:40:41 etarassov Exp $
+    $Id: illustration_reg.xsl,v 1.32 2007-06-08 14:17:09 etarassov Exp $
 -->
 <!DOCTYPE stylesheet [
 <!ENTITY nl "&#xA0;">
@@ -59,7 +59,7 @@
           <!-- Header -->
           <fo:region-before extent="3in"/>
           <!-- Footer -->
-          <fo:region-after extent=".45in"/>
+          <fo:region-after extent=".5in"/>
         </fo:simple-page-master>
 
         <!-- Define the column headings and key terms page. -->
@@ -140,11 +140,7 @@
         </fo:static-content>
 
         <!-- Define the contents of the footer. -->
-        <fo:static-content flow-name="xsl-region-after">
-          <xsl:call-template name="standardfooter">
-            <xsl:with-param name="displaypagenumber" select="1"/>
-          </xsl:call-template>
-        </fo:static-content>
+        <xsl:call-template name="standardfooter"/>
 
         <!-- Narrative Summary Body  -->
         <fo:flow flow-name="xsl-region-body">
@@ -508,11 +504,7 @@
         </fo:static-content>
 
         <!-- Define the contents of the footer. -->
-        <fo:static-content flow-name="xsl-region-after">
-          <xsl:call-template name="standardfooter">
-            <xsl:with-param name="displaypagenumber" select="1"/>
-          </xsl:call-template>
-        </fo:static-content>
+        <xsl:call-template name="standardfooter"/>
 
         <!-- Column Headings and Key Terms Body  -->
         <fo:flow flow-name="xsl-region-body">
@@ -650,14 +642,8 @@
           </fo:static-content>
 
           <!-- Define the contents of the footer. -->
-          <fo:static-content flow-name="xsl-region-after">
-            <fo:block font-size="8.0pt" font-family="sans-serif" padding-after="2.0pt" space-before="4.0pt" text-align="left">
-              <xsl:text> </xsl:text>
-            </fo:block>
-            <xsl:call-template name="standardfooter">
-              <xsl:with-param name="displaypagenumber" select="1"/>
-            </xsl:call-template>
-          </fo:static-content>
+          <xsl:call-template name="standardfooter"/>
+
           <xsl:call-template name="numeric-summary-report"/>
         </fo:page-sequence>
       </xsl:if>
@@ -679,22 +665,15 @@
         </fo:static-content>
 
         <!-- Define the contents of the footer. -->
-        <fo:static-content flow-name="xsl-region-after">
-          <fo:block font-size="8.0pt" font-family="sans-serif" padding-after="2.0pt" space-before="4.0pt" text-align="left">
-            <xsl:text>
-              The Non-Guaranteed Values depicted above reflect interest rates described in the Tabular Detail, and current monthly charges. These values
-              are not guaranteed and depend upon company experience. Column headings indicate whether benefits and values are guaranteed or not guaranteed. This
-              illustration assumes that non-guaranteed elements will continue unchanged for all years shown. This is not likely to occur and actual results may be
-              more or less favorable than shown. Non-guaranteed elements are subject to change by the insurer. Factors that may affect future policy performance
-              include the company's expectations for future mortality, investments, persistency, profits and expenses.
-            </xsl:text>
-          </fo:block>
-          <fo:block>
-            <xsl:call-template name="standardfooter">
-              <xsl:with-param name="displaypagenumber" select="1"/>
-            </xsl:call-template>
-          </fo:block>
-        </fo:static-content>
+        <xsl:call-template name="standardfooter">
+          <xsl:with-param name="disclaimer">
+            The Non-Guaranteed Values depicted above reflect interest rates described in the Tabular Detail, and current monthly charges. These values
+            are not guaranteed and depend upon company experience. Column headings indicate whether benefits and values are guaranteed or not guaranteed. This
+            illustration assumes that non-guaranteed elements will continue unchanged for all years shown. This is not likely to occur and actual results may be
+            more or less favorable than shown. Non-guaranteed elements are subject to change by the insurer. Factors that may affect future policy performance
+            include the company's expectations for future mortality, investments, persistency, profits and expenses.
+          </xsl:with-param>
+        </xsl:call-template>
 
         <fo:flow flow-name="xsl-region-body">
           <xsl:variable name="tabular-detail-report-columns">
@@ -752,22 +731,15 @@
         </fo:static-content>
 
         <!-- Define the contents of the footer. -->
-        <fo:static-content flow-name="xsl-region-after">
-          <fo:block font-size="8.0pt" font-family="sans-serif" padding-after="2.0pt" space-before="4.0pt" text-align="left">
-            <xsl:text>
-              The Non-Guaranteed Values depicted above reflect interest rates described in the Tabular Detail, and current monthly charges. These values
-              are not guaranteed and depend upon company experience. Column headings indicate whether benefits and values are guaranteed or not guaranteed. This
-              illustration assumes that non-guaranteed elements will continue unchanged for all years shown. This is not likely to occur and actual results may be
-              more or less favorable than shown. Non-guaranteed elements are subject to change by the insurer. Factors that may affect future policy performance
-              include the company's expectations for future mortality, investments, persistency, profits and expenses.
-            </xsl:text>
-          </fo:block>
-          <fo:block>
-            <xsl:call-template name="standardfooter">
-              <xsl:with-param name="displaypagenumber" select="1"/>
-            </xsl:call-template>
-          </fo:block>
-        </fo:static-content>
+        <xsl:call-template name="standardfooter">
+          <xsl:with-param name="disclaimer">
+            The Non-Guaranteed Values depicted above reflect interest rates described in the Tabular Detail, and current monthly charges. These values
+            are not guaranteed and depend upon company experience. Column headings indicate whether benefits and values are guaranteed or not guaranteed. This
+            illustration assumes that non-guaranteed elements will continue unchanged for all years shown. This is not likely to occur and actual results may be
+            more or less favorable than shown. Non-guaranteed elements are subject to change by the insurer. Factors that may affect future policy performance
+            include the company's expectations for future mortality, investments, persistency, profits and expenses.
+          </xsl:with-param>
+        </xsl:call-template>
 
         <fo:flow flow-name="xsl-region-body">
           <xsl:variable name="tabular-detail-report2-columns">
@@ -829,22 +801,15 @@
           </fo:static-content>
 
           <!-- Define the contents of the footer. -->
-          <fo:static-content flow-name="xsl-region-after">
-            <fo:block font-size="8.0pt" font-family="sans-serif" padding-after="2.0pt" space-before="4.0pt" text-align="left">
-              <xsl:text>
-                The Non-Guaranteed Values depicted above reflect an interest rate scale described in the Tabular Detail, and current scale monthly charges. These values
-                are not guaranteed and depend upon company experience. Column headings indicate whether benefits and values are guaranteed or not guaranteed. This
-                illustration assumes that non-guaranteed elements will continue unchanged for all years shown. This is not likely to occur and actual results may be
-                more or less favorable than shown. Non-guaranteed elements are subject to change by the insurer. Factors that may affect future policy performance
-                include the company's expectations for future mortality, investments, persistency, profits and expenses.
-              </xsl:text>
-            </fo:block>
-            <fo:block>
-              <xsl:call-template name="standardfooter">
-                <xsl:with-param name="displaypagenumber" select="1"/>
-              </xsl:call-template>
-            </fo:block>
-          </fo:static-content>
+          <xsl:call-template name="standardfooter">
+            <xsl:with-param name="disclaimer">
+              The Non-Guaranteed Values depicted above reflect an interest rate scale described in the Tabular Detail, and current scale monthly charges. These values
+              are not guaranteed and depend upon company experience. Column headings indicate whether benefits and values are guaranteed or not guaranteed. This
+              illustration assumes that non-guaranteed elements will continue unchanged for all years shown. This is not likely to occur and actual results may be
+              more or less favorable than shown. Non-guaranteed elements are subject to change by the insurer. Factors that may affect future policy performance
+              include the company's expectations for future mortality, investments, persistency, profits and expenses.
+            </xsl:with-param>
+          </xsl:call-template>
 
           <!-- Supplemental report body -->
           <xsl:call-template name="supplemental-report-body"/>
@@ -869,14 +834,9 @@
           </fo:static-content>
 
           <!-- Define the contents of the footer. -->
-          <fo:static-content flow-name="xsl-region-after">
-            <fo:block font-size="8.0pt" font-family="sans-serif" padding-after="2.0pt" space-before="4.0pt" text-align="left">
-              <xsl:text> </xsl:text>
-            </fo:block>
-            <xsl:call-template name="standardfooter">
-              <xsl:with-param name="displaypagenumber" select="0"/>
-            </xsl:call-template>
-          </fo:static-content>
+          <xsl:call-template name="standardfooter">
+            <xsl:with-param name="omit-pagenumber" select="1"/>
+          </xsl:call-template>
 
           <xsl:call-template name="numeric-summary-report"/>
 
@@ -1590,56 +1550,37 @@
   </xsl:template>
 
   <xsl:template name="standardfooter">
-    <xsl:param name="displaypagenumber"/>
-    <fo:block padding-before="5pt" font-size="8.0pt" font-family="sans-serif">
-      <fo:table table-layout="fixed" width="100%" border-top-style="solid" border-top-width="1pt" border-top-color="blue">
-        <fo:table-column column-width="proportional-column-width(1)"/>
-        <fo:table-column column-width="proportional-column-width(1)"/>
-        <fo:table-column column-width="proportional-column-width(1)"/>
-        <fo:table-body>
-          <fo:table-row>
-            <fo:table-cell>
-              <fo:block text-align="left">
-                <xsl:text>Date Prepared: </xsl:text>
-                <xsl:call-template name="date-prepared"/>
-              </fo:block>
-            </fo:table-cell>
-            <fo:table-cell>
-              <xsl:choose>
-                <xsl:when test="$displaypagenumber=1">
-                  <fo:block text-align="center">
-                    <xsl:text>Page </xsl:text>
-                    <fo:page-number/>
-                    <xsl:text> of </xsl:text>
-                    <fo:page-number-citation ref-id="endofdoc"/>
-                  </fo:block>
-                </xsl:when>
-                <xsl:otherwise>
-                  <fo:block text-align="center">
-                    <xsl:text>Attachment</xsl:text>
-                  </fo:block>
-                </xsl:otherwise>
-              </xsl:choose>
-            </fo:table-cell>
-            <fo:table-cell>
-              <fo:block text-align="right">
-                <xsl:value-of select="illustration/scalar/InsCoName"/>
-              </fo:block>
-            </fo:table-cell>
-          </fo:table-row>
-          <fo:table-row>
-            <fo:table-cell>
-                <!-- Version Number -->
-              <xsl:if test="illustration/scalar/LmiVersion!=''">
-                <fo:block text-align="left">System Version:
-                  <xsl:value-of select="illustration/scalar/LmiVersion"/>
-                </fo:block>
-              </xsl:if>
-            </fo:table-cell>
-          </fo:table-row>
-        </fo:table-body>
-      </fo:table>
-    </fo:block>
+    <xsl:param name="omit-pagenumber" select="boolean(0)"/>
+    <xsl:param name="disclaimer" select="string('')"/>
+    <xsl:call-template name="generic-footer">
+      <xsl:with-param name="top-block" select="$disclaimer"/>
+      <xsl:with-param name="left-block">
+        <fo:block>
+          Date Prepared:
+          <xsl:call-template name="date-prepared"/>
+        </fo:block>
+        <!-- Version Number -->
+        <xsl:if test="$illustration/scalar/LmiVersion!=''">
+          <fo:block>
+            System Version:
+            <xsl:value-of select="$illustration/scalar/LmiVersion"/>
+          </fo:block>
+        </xsl:if>
+      </xsl:with-param>
+      <xsl:with-param name="center-block">
+        <xsl:choose>
+          <xsl:when test="$omit-pagenumber">
+            Attachment
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:call-template name="page-of"/>
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:with-param>
+      <xsl:with-param name="right-block">
+        <xsl:value-of select="$illustration/scalar/InsCoName"/>
+      </xsl:with-param>
+    </xsl:call-template>
   </xsl:template>
 
   <xsl:template name="ultimate_interest_rate">

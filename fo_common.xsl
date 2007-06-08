@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: fo_common.xsl,v 1.28 2007-06-08 00:40:41 etarassov Exp $
+    $Id: fo_common.xsl,v 1.29 2007-06-08 14:17:09 etarassov Exp $
 -->
 <!DOCTYPE stylesheet [
 <!ENTITY nl "&#xA0;">
@@ -662,6 +662,58 @@
         </fo:block>
       </fo:flow>
     </fo:page-sequence>
+  </xsl:template>
+
+  <xsl:template name="generic-footer">
+    <xsl:param name="top-block" select="''"/>
+    <xsl:param name="subtop-block" select="''"/>
+    <xsl:param name="left-block" select="''"/>
+    <xsl:param name="center-block" select="''"/>
+    <xsl:param name="right-block" select="''"/>
+    <fo:static-content flow-name="xsl-region-after">
+      <fo:block font-size="8.0pt" font-family="sans-serif" text-align="left">
+        <xsl:if test="$top-block">
+          <fo:block padding=".5em 0">
+            <xsl:copy-of select="$top-block"/>
+          </fo:block>
+        </xsl:if>
+        <fo:block padding-top=".5em" border-top-style="solid" border-top-width="1pt" border-top-color="blue">
+          <xsl:if test="$subtop-block">
+            <fo:block padding=".5em 0">
+              <xsl:copy-of select="$subtop-block"/>
+            </fo:block>
+          </xsl:if>
+          <fo:table table-layout="fixed" width="100%">
+            <fo:table-column column-width="proportional-column-width(1)"/>
+            <fo:table-column column-width="proportional-column-width(1)"/>
+            <fo:table-column column-width="proportional-column-width(1)"/>
+            <fo:table-body>
+              <fo:table-row>
+                <fo:table-cell>
+                  <fo:block text-align="left">
+                    <xsl:copy-of select="$left-block"/>
+                  </fo:block>
+                </fo:table-cell>
+                <fo:table-cell>
+                  <fo:block text-align="center">
+                    <xsl:copy-of select="$center-block"/>
+                  </fo:block>
+                </fo:table-cell>
+                <fo:table-cell>
+                  <fo:block text-align="right">
+                    <xsl:copy-of select="$right-block"/>
+                  </fo:block>
+                </fo:table-cell>
+              </fo:table-row>
+            </fo:table-body>
+          </fo:table>
+        </fo:block>
+      </fo:block>
+    </fo:static-content>
+  </xsl:template>
+
+  <xsl:template name="page-of">
+    Page <fo:page-number/> of <fo:page-number-citation ref-id="endofdoc"/>
   </xsl:template>
 
 </xsl:stylesheet>
