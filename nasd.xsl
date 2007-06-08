@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: nasd.xsl,v 1.39 2007-06-07 14:21:30 etarassov Exp $
+    $Id: nasd.xsl,v 1.40 2007-06-08 00:40:41 etarassov Exp $
 -->
 <!DOCTYPE stylesheet [
 <!ENTITY nl "&#xA0;">
@@ -117,77 +117,7 @@
       </fo:layout-master-set>
 
       <!-- The data to be diplayed in the pages, cover page first -->
-      <fo:page-sequence master-reference="cover" force-page-count="no-force">
-        <fo:flow flow-name="xsl-region-body">
-          <fo:block border="2pt solid blue" font-size="14.0pt" text-align="center" font-family="sans-serif">
-            <fo:block font-size="20.0pt" font-weight="bold" padding-top="5em">
-              <xsl:value-of select="illustration/scalar/PolicyMktgName"/>
-            </fo:block>
-            <xsl:choose>
-              <xsl:when test="illustration/scalar/IsInforce!='1'">
-                <fo:block font-size="20.0pt" font-weight="bold">
-                  <xsl:text>Life Insurance Illustration</xsl:text>
-                </fo:block>
-              </xsl:when>
-              <xsl:otherwise>
-                <fo:block font-size="20.0pt" font-weight="bold">
-                    <xsl:text>In Force Life Insurance Illustration</xsl:text>
-                </fo:block>
-              </xsl:otherwise>
-            </xsl:choose>
-            <fo:block text-align="center" font-weight="bold" padding-top="10em">
-                Prepared for:
-            </fo:block>
-            <fo:block margin-left="0.15in" margin-right="0.15in" padding-top="1em">
-              <xsl:choose>
-                <xsl:when test="not($is_composite)">
-                  <!-- Properly adjust for long user input strings limit output to 140 characters for appox. 2 lines -->
-                  <xsl:call-template name="limitstring">
-                    <xsl:with-param name="passString" select="illustration/scalar/Insured1"/>
-                    <xsl:with-param name="length" select="140"/>
-                  </xsl:call-template>
-                  <xsl:if test="string-length(illustration/scalar/Insured1) &lt; 70">
-                    <fo:block padding=".7em"/>
-                  </xsl:if>
-                </xsl:when>
-                <xsl:otherwise>
-                  <xsl:call-template name="limitstring">
-                    <xsl:with-param name="passString" select="illustration/scalar/CorpName"/>
-                    <xsl:with-param name="length" select="140"/>
-                  </xsl:call-template>
-                  <xsl:if test="string-length(illustration/scalar/CorpName) &lt; 70">
-                    <fo:block padding=".7em"/>
-                  </xsl:if>
-                </xsl:otherwise>
-              </xsl:choose>
-            </fo:block>
-            <fo:block text-align="center" font-weight="bold" padding-top="3em">
-                Presented by:
-            </fo:block>
-            <fo:block text-align="center" padding-top="1em">
-              <xsl:value-of select="illustration/scalar/ProducerName"/>
-            </fo:block>
-            <fo:block text-align="center">
-              <xsl:value-of select="illustration/scalar/ProducerStreet"/>
-            </fo:block>
-            <fo:block text-align="center">
-              <xsl:value-of select="illustration/scalar/ProducerCity"/>
-            </fo:block>
-            <fo:block text-align="center" padding-top="2em">
-              <xsl:call-template name="date-prepared"/>
-            </fo:block>
-            <fo:block padding-top="10em">
-              <fo:external-graphic width="121.1pt" height="24.8pt" src="company_logo.png"/>
-            </fo:block>
-            <fo:block margin-top="1.5em">
-              <xsl:value-of select="illustration/scalar/InsCoName"/>
-            </fo:block>
-            <fo:block padding-bottom="2em">
-              <xsl:value-of select="illustration/scalar/InsCoAddr"/>
-            </fo:block>
-          </fo:block>
-        </fo:flow>
-      </fo:page-sequence>
+      <xsl:call-template name="generic-cover"/>
 
       <!-- Basic Illustration -->
       <!-- Body page -->
