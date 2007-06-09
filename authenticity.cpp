@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: authenticity.cpp,v 1.5 2007-06-04 14:23:20 chicares Exp $
+// $Id: authenticity.cpp,v 1.6 2007-06-09 21:10:32 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -280,7 +280,7 @@ void authenticate_system()
         && "cached"    != diagnostic_message
         )
         {
-        safely_show_message(diagnostic_message.c_str());
+        safely_show_message(diagnostic_message);
         std::exit(EXIT_FAILURE);
         }
 }

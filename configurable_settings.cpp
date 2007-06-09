@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: configurable_settings.cpp,v 1.35 2007-01-27 00:00:51 wboutin Exp $
+// $Id: configurable_settings.cpp,v 1.36 2007-06-09 21:10:32 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -215,7 +215,7 @@ void configurable_settings::load()
             << oss.str()
             << "not recognized."
             ;
-        safely_show_message(oss2.str().c_str());
+        safely_show_message(oss2.str());
         }
 }
 

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: msw_workarounds.cpp,v 1.5 2007-01-27 00:00:51 wboutin Exp $
+// $Id: msw_workarounds.cpp,v 1.6 2007-06-09 21:10:32 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -94,7 +94,7 @@ void MswDllPreloader::PreloadOneDll(std::string const& dll_name)
         {
         std::ostringstream oss;
         oss << "Failed to preload '" << dll_name << "'.";
-        safely_show_message(oss.str().c_str());
+        safely_show_message(oss.str());
         }
     else
         {
@@ -109,7 +109,7 @@ void MswDllPreloader::PreloadOneDll(std::string const& dll_name)
                 << " You can safely remove it from 'libraries_to_preload'"
                 << " in 'configurable_settings.xml'."
                 ;
-            safely_show_message(oss.str().c_str());
+            safely_show_message(oss.str());
             }
         }
 #endif // LMI_MSW defined.
@@ -122,7 +122,7 @@ void MswDllPreloader::UnloadOneDll(std::string const& dll_name)
         {
         std::ostringstream oss;
         oss << "Failed to unload '" << dll_name << "'.";
-        safely_show_message(oss.str().c_str());
+        safely_show_message(oss.str());
         }
 #endif // LMI_MSW defined.
 }
