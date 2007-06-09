@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: alert.hpp,v 1.19 2007-03-09 14:14:09 chicares Exp $
+// $Id: alert.hpp,v 1.20 2007-06-09 21:10:32 chicares Exp $
 
 #ifndef alert_hpp
 #define alert_hpp
@@ -164,6 +164,7 @@ std::ostream& LMI_SO hobsons_choice();
 std::ostream& LMI_SO fatal_error();
 
 void LMI_SO safely_show_message(char const*);
+void LMI_SO safely_show_message(std::string const&);
 
 // Implement these functions for each platform. Any might throw an
 // exception, which normally would be caught by the standard library
