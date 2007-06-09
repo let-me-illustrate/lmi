@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xsl.cpp,v 1.19 2007-06-07 19:26:36 chicares Exp $
+// $Id: ledger_xsl.cpp,v 1.20 2007-06-09 01:24:26 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -68,7 +68,9 @@ fs::path xsl_filepath(Ledger const& ledger)
 }
 } // Unnamed namespace.
 
-std::string write_ledger_as_pdf(Ledger const& ledger, fs::path const& filepath)
+void experiment0(fs::path const&, fs::path const&, fs::path const&, fs::path const&); // EVGENIY !! EXPERIMENTAL
+
+std::string write_ledger_as_pdf(Ledger const& ledger, fs::path const& filepath, bool experimental)
 {
     fs::path print_dir(configurable_settings::instance().print_directory());
 
@@ -121,6 +123,11 @@ std::string write_ledger_as_pdf(Ledger const& ledger, fs::path const& filepath)
 
     fs::path pdf_out_file = unique_filepath(print_dir / real_filepath, ".pdf");
 
+    if(experimental)
+        {
+        experiment0(filepath, xsl_file, xml_out_file, pdf_out_file);
+        }
+
     std::ostringstream oss;
 #if defined LMI_USE_NEW_REPORTS
     oss
@@ -168,6 +175,12 @@ std::string write_ledger_as_pdf(Ledger const& ledger, fs::path const& filepath)
 //      xsltproc does: maybe it doesn't have the full xml dataset?
 
 #include "ledger_formatter.hpp"
+#include "timer.hpp"
+
+#include <boost/filesystem/convenience.hpp>
+
+#include <iostream>
+#include <ostream>
 
 void write_ledger_as_xml(Ledger const& ledger, fs::path const& filepath)
 {
@@ -191,5 +204,190 @@ void write_ledger_as_fo_xml(Ledger const& ledger, fs::path const& filepath)
     LedgerFormatterFactory& factory = LedgerFormatterFactory::Instance();
     LedgerFormatter formatter(factory.CreateFormatter(scaled_ledger));
     formatter.FormatAsXslFo(ofs);
+}
+
+// EVGENIY !! Here's my testcase:
+//
+// C:/var/opt/lmi/spool[0]$/opt/lmi/bin/lmi_cli_shared --accept --data_path=/opt/lmi/data --cnsfile=sample.cns --emit=emit_pdf_file,emit_quietly,emit_timings,emit_composite_only 2>&1 |less
+//
+// I've copied 'sample.cns' from cvs to that directory, in order to
+// avoid problems with 'xalan'.
+//
+// I get four different pdf files as follows:
+//   xml -->                       (fop) --> pdf
+//   xml --> (xalan)    --> fo --> (fop) --> pdf
+//   xml --> (libxslt)  --> fo --> (fop) --> pdf ***
+//   xml --> (xsltproc) --> fo --> (fop) --> pdf
+// and the one marked "***" looks wrong, while the others seem to
+// differ only in minor details, like slightly different alignment
+// of the logo on the first page.
+
+void experiment0
+    (fs::path const& original_filepath
+    ,fs::path const& xsl_file
+    ,fs::path const& xml_out_file
+    ,fs::path const& pdf_out_file
+    )
+{
+    // Use apache tools to produce intermediate xsl-fo output.
+    //
+    // EVGENIY !! This is strange: apache 'xalan' fails unless I
+    // patch the stylesheet, e.g., as follows:
+    //   - <xsl:include href="fo_common.xsl"/>
+    //   + <xsl:include href="file:/opt/lmi/data/fo_common.xsl"/>
+    // which is of course a horribly fragile technique. Are they
+    // correct that this is really necessary? It seems very odd that
+    // apache 'xalan' seems to need such a change, but apache 'fop'
+    // does not--in fact, if I make that change, 'fop' warns about it.
+    {
+    Timer timer;
+    fs::path const fo_out_file = fs::change_extension(pdf_out_file, ".xalan.fo");
+    std::string command = configurable_settings::instance().xsl_fo_command();
+    // Assume that string is like this: "CMD /c /fop-0.20.5/fop".
+    std::string::size_type z = command.rfind("fop");
+    LMI_ASSERT(std::string::npos != z);
+    command.replace(z, 3, "xalan");
+    std::ostringstream oss;
+    // Here's another weird apache 'xalan' thing: its '-in' and '-out'
+    // don't seem to like full paths.
+    oss
+        << command
+        << " -xsl "  << '"' << xsl_file.string()           << '"'
+        << " -in  "  << '"' << xml_out_file.leaf()         << '"'
+        << " -out "  << '"' << fo_out_file.leaf()          << '"'
+        ;
+    std::cout << "Executing command:\n" << "  " << oss.str() << std::endl;
+    if(system_command(oss.str()))
+        {
+        warning() << "*** Command failed.\n" << LMI_FLUSH;
+        }
+    else
+        {
+        std::cout
+            << "...wrote '" << fo_out_file.string() << "'.\n"
+            << "  time: " << timer.stop().elapsed_msec_str()
+            << std::endl
+            ;
+        }
+    }
+
+    // apache "area tree" output.
+    {
+    Timer timer;
+    fs::path const at_out_file = fs::change_extension(pdf_out_file, ".at");
+    std::ostringstream oss;
+    oss
+        << configurable_settings::instance().xsl_fo_command()
+        << " -xsl "  << '"' << xsl_file.string()           << '"'
+        << " -xml "  << '"' << xml_out_file.string()       << '"'
+        << " -at "   << '"' << at_out_file.string()        << '"'
+        ;
+    std::cout << "Executing command:\n" << "  " << oss.str() << std::endl;
+    if(system_command(oss.str()))
+        {
+        warning() << "*** Command failed.\n" << LMI_FLUSH;
+        }
+    else
+        {
+        std::cout
+            << "...wrote '" << at_out_file.string() << "'.\n"
+            << "  time: " << timer.stop().elapsed_msec_str()
+            << std::endl
+            ;
+        }
+    }
+
+    // apache 'fop' call to produce pdf output: same as production,
+    // except that here the time is measured.
+    {
+    Timer timer;
+    fs::path pdf_out_file0 = unique_filepath(pdf_out_file, ".pdf0");
+    std::ostringstream oss;
+    oss
+        << configurable_settings::instance().xsl_fo_command()
+        << " -xsl "  << '"' << xsl_file.string()           << '"'
+        << " -xml "  << '"' << xml_out_file.string()       << '"'
+        << " "       << '"' << pdf_out_file0.string()      << '"'
+        ;
+    std::cout << "Executing command:\n" << "  " << oss.str() << std::endl;
+    if(system_command(oss.str()))
+        {
+        warning() << "*** Command failed.\n" << LMI_FLUSH;
+        }
+    else
+        {
+        std::cout
+            << "...wrote '" << pdf_out_file0.string() << "' as usual.\n"
+            << "  time: " << timer.stop().elapsed_msec_str()
+            << std::endl
+            ;
+        }
+    }
+
+    // apache 'fop' call to produce pdf output: differs from the
+    // preceding call--this one uses already-transformed fo output
+    // from apache 'xalan'.
+    {
+    Timer timer;
+    fs::path const fo_out_file = fs::change_extension(pdf_out_file, ".xalan.fo");
+    fs::path pdf_out_file1 = unique_filepath(pdf_out_file, ".pdf1");
+    std::ostringstream oss;
+    oss
+        << configurable_settings::instance().xsl_fo_command()
+        << " -fo "   << '"' << fo_out_file.string()        << '"'
+        << " "       << '"' << pdf_out_file1.string()      << '"'
+        ;
+    std::cout << "Executing command:\n" << "  " << oss.str() << std::endl;
+    if(system_command(oss.str()))
+        {
+        warning() << "*** Command failed.\n" << LMI_FLUSH;
+        }
+    else
+        {
+        std::cout
+            << "...wrote '" << pdf_out_file1.string() << "' using pre-tranformed fo output from 'xalan'.\n"
+            << "  time: " << timer.stop().elapsed_msec_str()
+            << std::endl
+            ;
+        }
+    }
+
+    // apache 'fop' call to produce pdf output: differs from the
+    // preceding call--this one uses already-transformed fo output
+    // from 'libxslt'.
+    //
+    // EVGENIY !! You might have to find the file and adjust its
+    // name--it comes from a different set of functions that use
+    // different filenames, and I haven't had time to work that
+    // out yet. But what's really interesting is that this
+    // procedure produces a different and apparently incorrect pdf.
+    // However, replace the ".fo.xml" file here with output of
+    // 'xsltproc', e.g.
+    //   /var/opt/lmi/spool[0]$xsltproc -o sample.000000000.fo.xml /lmi/src/lmi/illustration_reg.xsl sample.cns.000000000.xml
+    // and the pdf file will be almost identical to the others.
+    {
+    Timer timer;
+    fs::path const fo_out_file = fs::change_extension(original_filepath, ".fo.xml");
+    fs::path pdf_out_file2 = unique_filepath(pdf_out_file, ".pdf2");
+    std::ostringstream oss;
+    oss
+        << configurable_settings::instance().xsl_fo_command()
+        << " -fo "   << '"' << fo_out_file.string()        << '"'
+        << " "       << '"' << pdf_out_file2.string()      << '"'
+        ;
+    std::cout << "Executing command:\n" << "  " << oss.str() << std::endl;
+    if(system_command(oss.str()))
+        {
+        warning() << "*** Command failed.\n" << LMI_FLUSH;
+        }
+    else
+        {
+        std::cout
+            << "...wrote '" << pdf_out_file2.string() << "' using pre-tranformed fo output from 'libxslt'.\n"
+            << "  time: " << timer.stop().elapsed_msec_str()
+            << std::endl
+            ;
+        }
+    }
 }
 

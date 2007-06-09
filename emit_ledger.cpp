@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: emit_ledger.cpp,v 1.7 2007-06-07 19:26:36 chicares Exp $
+// $Id: emit_ledger.cpp,v 1.8 2007-06-09 01:24:25 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -71,16 +71,19 @@ double emit_ledger
         {
 // EVGENIY !! EXPERIMENTAL.
         experiment(filepath, serial_index, ledger);
-// May not yet work from command line.
-#if 0
+// Has nondefault behavior due to experimental argument; except for
+// that, this might already work from the command line (untested).
         write_ledger_as_pdf
             (ledger
             ,serialized_file_path(filepath, serial_index, "ill").string()
+            ,true // EVGENIY !! EXPERIMENTAL
             );
-#endif // 0
         }
     if(emission & mce_emit_pdf_to_printer)
         {
+// EVGENIY !! EXPERIMENTAL.
+// Does not yet work from command line interface: file_command() unimplemented.
+// Should we pass '-print' to 'fop' instead of using wxTheMimeTypesManager?
         std::string pdf_out_file = write_ledger_as_pdf
             (ledger
             ,serialized_file_path(filepath, serial_index, "ill").string()
