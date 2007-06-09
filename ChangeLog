@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.758 2007-06-08 16:29:19 etarassov Exp $
+// $Id: ChangeLog,v 1.759 2007-06-09 01:24:26 chicares Exp $
 
 MAINTENANCE
 
@@ -12286,4 +12286,11 @@ Generalize 'standardfooter' template.
 
   individual_private_placement.xsl
 Restore 'cover' page (still commented out).
+
+20070609T0124Z <chicares@cox.net> [1230]
+
+  emit_ledger.cpp
+  ledger_xsl.cpp
+  ledger_xsl.hpp
+Experimentally write some more intermediate xml files.
 
