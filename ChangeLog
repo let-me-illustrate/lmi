@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.759 2007-06-09 01:24:26 chicares Exp $
+// $Id: ChangeLog,v 1.760 2007-06-09 21:10:32 chicares Exp $
 
 MAINTENANCE
 
@@ -12293,4 +12293,14 @@ Restore 'cover' page (still commented out).
   ledger_xsl.cpp
   ledger_xsl.hpp
 Experimentally write some more intermediate xml files.
+
+20070609T2110Z <chicares@cox.net> [1230]
+
+  alert.cpp
+  alert.hpp
+  authenticity.cpp
+  configurable_settings.cpp
+  fenv_lmi.cpp
+  msw_workarounds.cpp
+Provide and use a convenience overload of safely_show_message().
 

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: alert.cpp,v 1.16 2007-01-27 00:00:51 wboutin Exp $
+// $Id: alert.cpp,v 1.17 2007-06-09 21:10:32 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -220,6 +220,11 @@ void safely_show_message(char const* message)
             );
         }
     safe_message_alert_function(message);
+}
+
+void safely_show_message(std::string const& message)
+{
+    safely_show_message(message.c_str());
 }
 
 std::string const& hobsons_prompt()

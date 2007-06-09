@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: fenv_lmi.cpp,v 1.23 2007-05-28 02:00:33 chicares Exp $
+// $Id: fenv_lmi.cpp,v 1.24 2007-06-09 21:10:32 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -250,7 +250,7 @@ bool fenv_validate(enum_fenv_indulgence indulgence)
         {
         std::string s(fenv_explain_invalid_control_word());
         fenv_initialize();
-        safely_show_message(s.c_str());
+        safely_show_message(s);
         }
 
     return okay;
