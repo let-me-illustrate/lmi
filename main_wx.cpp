@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_wx.cpp,v 1.80 2007-06-06 00:39:23 chicares Exp $
+// $Id: main_wx.cpp,v 1.81 2007-06-10 16:36:16 chicares Exp $
 
 // Portions of this file are derived from wxWindows files
 //   samples/docvwmdi/docview.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -74,6 +74,7 @@
 #include "rounding_document.hpp"
 #include "rounding_view.hpp"
 #include "rounding_view_editor.hpp" // RoundingButtonsXmlHandler
+#include "system_command.hpp"
 #include "text_doc.hpp"
 #include "text_view.hpp"
 #include "tier_document.hpp"
@@ -89,6 +90,7 @@
 #include <wx/menu.h>
 #include <wx/msgdlg.h>
 #include <wx/textctrl.h>
+#include <wx/textdlg.h>             // wxGetTextFromUser()
 #include <wx/toolbar.h>
 #include <wx/utils.h>               // wxMilliSleep(), wxSafeYield()
 #include <wx/xrc/xmlres.h>
@@ -134,6 +136,7 @@ BEGIN_EVENT_TABLE(Skeleton, wxApp)
     EVT_MENU(XRCID("test_lib_arbitrary_exception"    ),Skeleton::UponTestLibArbitraryException    )
     EVT_MENU(XRCID("test_floating_point_environment" ),Skeleton::UponTestFloatingPointEnvironment )
     EVT_MENU(XRCID("test_safe_message"               ),Skeleton::UponTestSafeMessage              )
+    EVT_MENU(XRCID("test_system_command"             ),Skeleton::UponTestSystemCommand            )
     EVT_MENU(XRCID("window_cascade"                  ),Skeleton::UponWindowCascade                )
     EVT_MENU(XRCID("window_next"                     ),Skeleton::UponWindowNext                   )
     EVT_MENU(XRCID("window_previous"                 ),Skeleton::UponWindowPrevious               )
@@ -941,6 +944,20 @@ void Skeleton::UponTestSafeMessage(wxCommandEvent&)
     x87_control_word(0x007f);
     wxMilliSleep(500);
     wxSafeYield();
+}
+
+void Skeleton::UponTestSystemCommand(wxCommandEvent&)
+{
+    int rc = system_command
+        (
+        wxGetTextFromUser
+            ("Type a command."
+            ,"Test system_command()"
+            ,""
+            ,wxTheApp->GetTopWindow()
+            )
+        );
+    warning() << "Return code: " << rc << "." << std::flush;
 }
 
 /// Periodically test the floating-point control word when no critical
