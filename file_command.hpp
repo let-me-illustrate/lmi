@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: file_command.hpp,v 1.6 2007-01-27 00:00:51 wboutin Exp $
+// $Id: file_command.hpp,v 1.7 2007-06-10 16:30:45 chicares Exp $
 
 #ifndef file_command_hpp
 #define file_command_hpp
@@ -33,6 +33,10 @@
 
 #include <string>
 
+typedef void (*file_command_fp_type)(std::string const&, std::string const&);
+
+bool LMI_SO file_command_initialize(file_command_fp_type);
+
 /// Execute a named command for a file, choosing the appropriate
 /// action based on the file's mime type (for gnome or kde) or its
 /// "association" for msw. The commands currently supported are
@@ -45,10 +49,6 @@
 /// applications or print them. The wx behavior could easily be
 /// extended to other interfaces by linking only the non-GUI part of
 /// wx, if that ever becomes necessary.
-
-typedef void (*file_command_fp_type)(std::string const&, std::string const&);
-
-bool LMI_SO file_command_initialize(file_command_fp_type);
 
 struct LMI_SO file_command
     :private boost::noncopyable
