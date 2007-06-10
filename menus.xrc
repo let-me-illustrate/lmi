@@ -24,7 +24,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: menus.xrc,v 1.31 2007-05-29 01:33:17 chicares Exp $
+    $Id: menus.xrc,v 1.32 2007-06-10 16:36:16 chicares Exp $
 -->
 
 <!-- reusable menus -->
@@ -195,6 +195,9 @@
     </object>
     <object class="wxMenuItem" name="test_safe_message">
         <label>Test safe _message</label>
+    </object>
+    <object class="wxMenuItem" name="test_system_command">
+        <label>Test s_ystem command</label>
     </object>
 </object>
 
