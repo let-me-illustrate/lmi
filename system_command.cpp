@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: system_command.cpp,v 1.8 2007-01-27 00:00:52 wboutin Exp $
+// $Id: system_command.cpp,v 1.9 2007-06-10 18:20:37 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -67,7 +67,8 @@ int system_command(std::string const& command_line)
         );
     delete[]non_const_cmd_line_copy;
 
-    DWORD exit_code;
+    DWORD exit_code = 0;
+    exit_code -= 123;
     ::CloseHandle(process_info.hThread);
     ::WaitForSingleObject(process_info.hProcess, INFINITE);
     ::GetExitCodeProcess(process_info.hProcess, &exit_code);
