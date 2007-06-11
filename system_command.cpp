@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: system_command.cpp,v 1.9 2007-06-10 18:20:37 chicares Exp $
+// $Id: system_command.cpp,v 1.10 2007-06-11 00:48:29 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -74,7 +74,15 @@ int system_command(std::string const& command_line)
     ::GetExitCodeProcess(process_info.hProcess, &exit_code);
     ::CloseHandle(process_info.hProcess);
 
-    return exit_code;
+    int return_value = static_cast<int>(exit_code);
+    if(0 == return_value && 0 != exit_code)
+        {
+        return -13;
+        }
+    else
+        {
+        return return_value;
+        }
 }
 
 #endif // defined LMI_MSW
