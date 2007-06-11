@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: illustration_reg.xsl,v 1.33 2007-06-11 13:18:42 etarassov Exp $
+    $Id: illustration_reg.xsl,v 1.34 2007-06-11 13:37:42 etarassov Exp $
 -->
 <!DOCTYPE stylesheet [
 <!ENTITY nbsp "&#xA0;">
@@ -1579,8 +1579,8 @@
       </xsl:with-param>
       <xsl:with-param name="right-block">
         <!--
-        The '/text()' suffix in the XPath expression is a workaround
-        for Apache-FOP 0.20.3 bug that somehow treats <xsl:value-of/> as
+        APACHE !! The '/text()' suffix in the XPath expression is a workaround
+        for Apache-FOP 0.20.5 bug that somehow treats <xsl:value-of/> as
         <xsl:copy-of/> if it is encountered inside a <xsl:with-param/> as
         a single child. Therefore we explicitly convert the expression into
         a string.
