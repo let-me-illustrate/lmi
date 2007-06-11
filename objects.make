@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: objects.make,v 1.105 2007-06-11 00:45:31 chicares Exp $
+# $Id: objects.make,v 1.106 2007-06-11 22:11:06 chicares Exp $
 
 ################################################################################
 
@@ -424,6 +424,7 @@ unit_test_targets := \
   crc32_test$(EXEEXT) \
   expression_template_0_test$(EXEEXT) \
   fenv_lmi_test$(EXEEXT) \
+  file_command_test$(EXEEXT) \
   financial_test$(EXEEXT) \
   getopt_test$(EXEEXT) \
   global_settings_test$(EXEEXT) \
@@ -549,6 +550,12 @@ fenv_lmi_test$(EXEEXT): \
   $(common_test_objects) \
   fenv_guard.o \
   fenv_lmi_test.o \
+
+file_command_test$(EXEEXT): \
+  $(common_test_objects) \
+  file_command.o \
+  file_command_cli.o \
+  file_command_test.o \
 
 financial_test$(EXEEXT): \
   $(common_test_objects) \
