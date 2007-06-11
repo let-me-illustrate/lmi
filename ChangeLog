@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.763 2007-06-11 13:34:42 etarassov Exp $
+// $Id: ChangeLog,v 1.764 2007-06-11 13:37:42 etarassov Exp $
 
 MAINTENANCE
 
@@ -12349,4 +12349,9 @@ Correct the invalid change 20070607T1328Z: replace &nl; with &nbsp;.
 
   illustration_reg.xsl
 Unroll an unconnected change from previous commit.
+
+20070611T1337Z <etarassov@tt-solutions.com> [1230]
+
+  illustration_reg.xsl
+Add a workaround for Apache-FOP-0.20.5 bug.
 
