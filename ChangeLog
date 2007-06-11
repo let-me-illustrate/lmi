@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.764 2007-06-11 13:37:42 etarassov Exp $
+// $Id: ChangeLog,v 1.765 2007-06-11 18:17:27 chicares Exp $
 
 MAINTENANCE
 
@@ -12354,4 +12354,14 @@ Unroll an unconnected change from previous commit.
 
   illustration_reg.xsl
 Add a workaround for Apache-FOP-0.20.5 bug.
+
+20070611T1613Z <etarassov@tt-solutions.com> [1230]
+
+  config.hpp
+Revert erroneous change to config.hpp.
+
+20070611T1817Z <chicares@cox.net> [1230]
+
+  GNUmakefile
+Revert erroneous change to GNUmakefile.
 
