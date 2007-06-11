@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.760 2007-06-09 21:10:32 chicares Exp $
+// $Id: ChangeLog,v 1.761 2007-06-11 00:48:29 chicares Exp $
 
 MAINTENANCE
 
@@ -12303,4 +12303,35 @@ Experimentally write some more intermediate xml files.
   fenv_lmi.cpp
   msw_workarounds.cpp
 Provide and use a convenience overload of safely_show_message().
+
+20070610T1630Z <chicares@cox.net> [1230]
+
+  file_command.hpp
+Keep "///" documentation with the function it describes, so that a
+documentation generator can work properly.
+
+20070610T1636Z <chicares@cox.net> [1230]
+
+  main_wx.cpp
+  main_wx.hpp
+  menus.xrc
+Add a GUI test that demonstrates a defect: a command that runs but
+fails returns a nonzero status, yet a zero status is returned by
+a command that cannot be run as well as by a command that succeeds.
+
+20070610T1820Z <chicares@cox.net> [1230]
+
+  system_command.cpp
+Fix the proximate cause of the defect demonstrated 20070610T1636Z.
+
+20070611T0045Z <chicares@cox.net> [1230]
+
+  objects.make
+  system_command_test.cpp [new file]
+Add a unit test that validates the 20070610T1820Z change.
+
+20070611T0048Z <chicares@cox.net> [1230]
+
+  system_command.cpp
+Prevent infelicitous truncation from changing sense of return value.
 
