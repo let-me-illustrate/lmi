@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.765 2007-06-11 18:17:27 chicares Exp $
+// $Id: ChangeLog,v 1.766 2007-06-11 20:42:20 chicares Exp $
 
 MAINTENANCE
 
@@ -12364,4 +12364,10 @@ Revert erroneous change to config.hpp.
 
   GNUmakefile
 Revert erroneous change to GNUmakefile.
+
+20070611T2042Z <chicares@cox.net> [1230]
+
+  GNUmakefile
+Reformat a comment, to confirm the 20070611T1817Z reversion, which
+elicited a cvs error message.
 

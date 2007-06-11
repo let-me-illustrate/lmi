@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: GNUmakefile,v 1.92 2007-06-11 18:17:27 chicares Exp $
+# $Id: GNUmakefile,v 1.93 2007-06-11 20:42:20 chicares Exp $
 
 ################################################################################
 
@@ -58,9 +58,9 @@ $(MAKECMDGOALS):
 # Directives and such.
 
 # The GNU make manual says:
-#   "This is almost always what you want make to do,
-#   but it is not historical practice; so for
-#   compatibility, you must explicitly request it."
+#   "This is almost always what you want make to do, but it is not
+#   historical practice; so for compatibility, you must explicitly
+#   request it."
 
 .DELETE_ON_ERROR:
 
