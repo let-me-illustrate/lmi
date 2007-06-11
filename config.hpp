@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: config.hpp,v 1.19 2007-06-11 13:34:43 etarassov Exp $
+// $Id: config.hpp,v 1.20 2007-06-11 16:13:29 etarassov Exp $
 
 // Configuration header for compiler quirks. Include at the beginning of
 // every .hpp file (and nowhere else).
@@ -56,7 +56,7 @@ namespace fs = boost::filesystem;
 #   error "Unknown operating system. Consider contributing support."
 #endif // Unknown OS.
 
-#if defined _X86_ || defined _M_IX86 || defined i386 || defined __i386 || __x86_64__
+#if defined _X86_ || defined _M_IX86 || defined i386 || defined __i386
 #   define LMI_X86
 #   if defined __x86_64 || defined __x86_64__ || defined __amd64 || defined __amd64__ || defined _M_X64
 #       define LMI_X86_64
