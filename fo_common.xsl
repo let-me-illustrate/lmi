@@ -21,10 +21,10 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: fo_common.xsl,v 1.29 2007-06-08 14:17:09 etarassov Exp $
+    $Id: fo_common.xsl,v 1.30 2007-06-11 13:18:42 etarassov Exp $
 -->
 <!DOCTYPE stylesheet [
-<!ENTITY nl "&#xA0;">
+<!ENTITY nbsp "&#xA0;">
 ]>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fo="http://www.w3.org/1999/XSL/Format" version="1.0">
   <!--
@@ -124,7 +124,7 @@
 
   <xsl:template name="date-prepared">
     <xsl:value-of select="$illustration/scalar/PrepMonth"/>
-    <xsl:text>&nl;</xsl:text>
+    <xsl:text>&nbsp;</xsl:text>
     <xsl:value-of select="$illustration/scalar/PrepDay"/>
     <xsl:text>, </xsl:text>
     <xsl:value-of select="$illustration/scalar/PrepYear"/>

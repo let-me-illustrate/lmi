@@ -21,10 +21,10 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: nasd.xsl,v 1.41 2007-06-08 14:17:10 etarassov Exp $
+    $Id: nasd.xsl,v 1.42 2007-06-11 13:18:43 etarassov Exp $
 -->
 <!DOCTYPE stylesheet [
-<!ENTITY nl "&#xA0;">
+<!ENTITY nbsp "&#xA0;">
 ]>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fo="http://www.w3.org/1999/XSL/Format" version="1.0">
   <xsl:include href="fo_common.xsl"/>
@@ -589,11 +589,6 @@
         <xsl:value-of select="$reporttitle"/>
       </fo:block>
     </fo:block>
-    <xsl:variable name="header-width" select="33"/>
-    <xsl:variable name="header-field-width">
-      <xsl:value-of select="$header-width * 0.44"/>
-      <xsl:text>pc</xsl:text>
-    </xsl:variable>
     <fo:block padding-before="0pt" font-size="10.0pt" font-family="sans-serif">
       <fo:table table-layout="fixed" width="100%">
         <fo:table-column column-width="125mm"/>
@@ -1200,6 +1195,8 @@
       </xsl:with-param>
     </xsl:call-template>
   </xsl:template>
+
+  <xsl:template name="get-special-column-value"/>
 
 </xsl:stylesheet>
 
