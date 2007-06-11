@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.762 2007-06-11 13:18:42 etarassov Exp $
+// $Id: ChangeLog,v 1.763 2007-06-11 13:34:42 etarassov Exp $
 
 MAINTENANCE
 
@@ -12344,4 +12344,9 @@ Prevent infelicitous truncation from changing sense of return value.
   nasd.xsl
   offshore_private_placement.xsl
 Correct the invalid change 20070607T1328Z: replace &nl; with &nbsp;.
+
+20070611T1334Z <etarassov@tt-solutions.com> [1230]
+
+  illustration_reg.xsl
+Unroll an unconnected change from previous commit.
 
