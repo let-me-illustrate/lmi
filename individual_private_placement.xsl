@@ -21,10 +21,10 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: individual_private_placement.xsl,v 1.32 2007-06-08 16:29:20 etarassov Exp $
+    $Id: individual_private_placement.xsl,v 1.33 2007-06-11 13:18:42 etarassov Exp $
 -->
 <!DOCTYPE stylesheet [
-<!ENTITY nl "&#xA0;">
+<!ENTITY nbsp "&#xA0;">
 ]>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fo="http://www.w3.org/1999/XSL/Format" version="1.0">
   <xsl:include href="fo_common.xsl"/>
@@ -200,7 +200,7 @@
                 <xsl:value-of select="$illustration/scalar/Comments"/>
               </fo:block>
               <fo:block padding-top="1em">
-                <xsl:text>&nl;&nl;&nl;&nl;&nl;&nl;&nl;&nl;Premiums and death benefits</xsl:text>
+                <xsl:text>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Premiums and death benefits</xsl:text>
               </fo:block>
               <fo:block padding-top="1em">
                 <xsl:text>Premium: </xsl:text>
@@ -227,7 +227,7 @@
                 <xsl:value-of select="$illustration/scalar/DBOptSquence"/>
               </fo:block>
               <fo:block padding-top="1em">
-                <xsl:text>&nl;&nl;&nl;&nl;&nl;&nl;&nl;&nl;Current fees and charges</xsl:text>
+                <xsl:text>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Current fees and charges</xsl:text>
               </fo:block>
               <fo:block padding-top="1em">
                 <xsl:text>State premium tax load: </xsl:text>
@@ -674,7 +674,7 @@
               </fo:list-item-label>
               <fo:list-item-body start-indent="body-start()">
                 <fo:block text-align="left">
-                  <xsl:text>&nl;</xsl:text>
+                  <xsl:text>&nbsp;</xsl:text>
                 </fo:block>
               </fo:list-item-body>
             </fo:list-item>
@@ -686,7 +686,7 @@
           <xsl:choose>
             <xsl:when test="$is_composite">
               <fo:block text-align="left" font-size="9.0pt">
-                <xsl:text>&nl;</xsl:text>
+                <xsl:text>&nbsp;</xsl:text>
               </fo:block>
             </xsl:when>
             <xsl:otherwise>
@@ -736,7 +736,7 @@
           <xsl:choose>
             <xsl:when test="$is_composite">
               <fo:block text-align="left" font-size="9.0pt">
-                <xsl:text>&nl;</xsl:text>
+                <xsl:text>&nbsp;</xsl:text>
               </fo:block>
             </xsl:when>
             <xsl:otherwise>
@@ -757,7 +757,7 @@
                 <xsl:choose>
                   <xsl:when test="$is_composite">
                     <fo:block text-align="left" font-size="9.0pt">
-                      <xsl:text>&nl;</xsl:text>
+                      <xsl:text>&nbsp;</xsl:text>
                     </fo:block>
                   </xsl:when>
                   <xsl:otherwise>
@@ -793,7 +793,7 @@
                 <xsl:choose>
                   <xsl:when test="$is_composite">
                     <fo:block text-align="left">
-                      <xsl:text>&nl;</xsl:text>
+                      <xsl:text>&nbsp;</xsl:text>
                     </fo:block>
                   </xsl:when>
                   <xsl:otherwise>
@@ -806,7 +806,7 @@
                       </xsl:when>
                       <xsl:otherwise>
                         <fo:block text-align="left">
-                          <xsl:text>&nl;</xsl:text>
+                          <xsl:text>&nbsp;</xsl:text>
                         </fo:block>
                       </xsl:otherwise>
                     </xsl:choose>
@@ -834,7 +834,7 @@
                 <xsl:choose>
                   <xsl:when test="$is_composite">
                     <fo:block text-align="left">
-                      <xsl:text>&nl;</xsl:text>
+                      <xsl:text>&nbsp;</xsl:text>
                     </fo:block>
                   </xsl:when>
                   <xsl:otherwise>
@@ -848,7 +848,7 @@
                       </xsl:when>
                       <xsl:otherwise>
                         <fo:block text-align="left">
-                          <xsl:text>&nl;</xsl:text>
+                          <xsl:text>&nbsp;</xsl:text>
                         </fo:block>
                       </xsl:otherwise>
                     </xsl:choose>
@@ -884,7 +884,7 @@
                         <xsl:with-param name="passString" select="illustration/scalar/Franchise"/>
                         <xsl:with-param name="length" select="15"/>
                       </xsl:call-template>
-                      <xsl:text>&nl;&nl;&nl;Contract number: </xsl:text>
+                      <xsl:text>&nbsp;&nbsp;&nbsp;Contract number: </xsl:text>
                       <xsl:call-template name="limitstring">
                         <xsl:with-param name="passString" select="illustration/scalar/PolicyNumber"/>
                         <xsl:with-param name="length" select="15"/>

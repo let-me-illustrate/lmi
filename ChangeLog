@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.761 2007-06-11 00:48:29 chicares Exp $
+// $Id: ChangeLog,v 1.762 2007-06-11 13:18:42 etarassov Exp $
 
 MAINTENANCE
 
@@ -12334,4 +12334,14 @@ Add a unit test that validates the 20070610T1820Z change.
 
   system_command.cpp
 Prevent infelicitous truncation from changing sense of return value.
+
+20070611T1318Z <etarassov@tt-solutions.com> [1230]
+
+  fo_common.xsl
+  group_private_placement.xsl
+  illustration_reg.xsl
+  individual_private_placement.xsl
+  nasd.xsl
+  offshore_private_placement.xsl
+Correct the invalid change 20070607T1328Z: replace &nl; with &nbsp;.
 

@@ -21,10 +21,10 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: illustration_reg.xsl,v 1.32 2007-06-08 14:17:09 etarassov Exp $
+    $Id: illustration_reg.xsl,v 1.33 2007-06-11 13:18:42 etarassov Exp $
 -->
 <!DOCTYPE stylesheet [
-<!ENTITY nl "&#xA0;">
+<!ENTITY nbsp "&#xA0;">
 ]>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fo="http://www.w3.org/1999/XSL/Format" version="1.0">
   <xsl:include href="fo_common.xsl"/>
@@ -916,7 +916,7 @@
           <fo:table-row>
             <fo:table-cell>
               <fo:block text-align="left">
-                <xsl:text>&nl;&nl;&nl;&nl;&nl;&nl;&nl;&nl;Group Name: </xsl:text>
+                <xsl:text>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Group Name: </xsl:text>
                 <xsl:call-template name="limitstring">
                   <xsl:with-param name="passString" select="illustration/scalar/CorpName"/>
                   <xsl:with-param name="length" select="50"/>
@@ -938,12 +938,12 @@
               <xsl:choose>
                 <xsl:when test="$is_composite">
                   <fo:block text-align="left">
-                    <xsl:text>&nl;&nl;&nl;&nl;&nl;&nl;&nl;&nl;Composite Illustration</xsl:text>
+                    <xsl:text>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Composite Illustration</xsl:text>
                   </fo:block>
                 </xsl:when>
                 <xsl:otherwise>
                   <fo:block text-align="left">
-                    <xsl:text>&nl;&nl;&nl;&nl;&nl;&nl;&nl;&nl;Insured: </xsl:text>
+                    <xsl:text>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Insured: </xsl:text>
                     <xsl:call-template name="limitstring">
                       <xsl:with-param name="passString" select="illustration/scalar/Insured1"/>
                       <xsl:with-param name="length" select="50"/>
@@ -966,7 +966,7 @@
             <fo:table-cell>
               <fo:block text-align="left">
                 <xsl:if test="not($is_composite)">
-                  <xsl:text>&nl;&nl;&nl;&nl;&nl;&nl;&nl;&nl;Age: </xsl:text>
+                  <xsl:text>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Age: </xsl:text>
                   <xsl:value-of select="illustration/scalar/Age"/>
                 </xsl:if>
               </fo:block>
@@ -1132,7 +1132,7 @@
                         <xsl:with-param name="passString" select="illustration/scalar/Franchise"/>
                         <xsl:with-param name="length" select="15"/>
                       </xsl:call-template>
-                      <xsl:text>&nl;&nl;&nl;Contract number: </xsl:text>
+                      <xsl:text>&nbsp;&nbsp;&nbsp;Contract number: </xsl:text>
                       <xsl:call-template name="limitstring">
                         <xsl:with-param name="passString" select="illustration/scalar/PolicyNumber"/>
                         <xsl:with-param name="length" select="15"/>
@@ -1159,7 +1159,7 @@
               <fo:table-cell>
                 <fo:block text-align="left">
                   <xsl:if test="illustration/scalar/UWClass='Rated'">
-                    <xsl:text>&nl;&nl;&nl;Table Rating: </xsl:text>
+                    <xsl:text>&nbsp;&nbsp;&nbsp;Table Rating: </xsl:text>
                     <xsl:value-of select="illustration/scalar/SubstandardTable"/>
                   </xsl:if>
                 </fo:block>
@@ -1497,8 +1497,8 @@
         </xsl:otherwise>
       </xsl:choose>
       <fo:block text-align="left" font-size="9.0pt" text-decoration="overline" padding-top="2em">
-        CONTRACT OWNER OR APPLICANT SIGNATURE &nl;&nl;&nl;
-        <fo:inline text-decoration="no-overline">&nl;&nl;&nl;&nl;&nl;&nl;&nl;&nl;&nl;&nl;&nl;&nl;&nl;&nl;&nl;&nl;&nl;&nl;&nl;&nl;&nl;&nl;&nl;&nl;&nl;&nl;&nl;</fo:inline>DATE &nl;&nl;&nl;&nl;&nl;&nl;&nl;&nl;&nl;&nl;&nl;&nl;&nl;&nl;
+        CONTRACT OWNER OR APPLICANT SIGNATURE &nbsp;&nbsp;&nbsp;
+        <fo:inline text-decoration="no-overline">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</fo:inline>DATE &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
       </fo:block>
       <fo:block text-align="left" font-size="9.0pt" padding-top="2em">
         <xsl:text>AGENT / AUTHORIZED REPRESENTATIVE</xsl:text>
@@ -1525,8 +1525,8 @@
         </xsl:otherwise>
       </xsl:choose>
       <fo:block text-align="left" font-size="9.0pt" text-decoration="overline" padding-top="2em">
-        AGENT OR AUTHORIZED REPRESENTATIVE &nl;&nl;&nl;&nl;&nl;&nl;&nl;&nl;&nl;&nl;&nl;
-        <fo:inline text-decoration="no-overline">&nl;&nl;&nl;&nl;&nl;&nl;&nl;&nl;&nl;&nl;&nl;&nl;&nl;&nl;&nl;&nl;&nl;&nl;&nl;&nl;&nl;&nl;&nl;&nl;&nl;&nl;&nl;</fo:inline>DATE &nl;&nl;&nl;&nl;&nl;&nl;&nl;&nl;&nl;&nl;&nl;&nl;&nl;&nl;
+        AGENT OR AUTHORIZED REPRESENTATIVE &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <fo:inline text-decoration="no-overline">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</fo:inline>DATE &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
       </fo:block>
     </fo:flow>
   </xsl:template>
@@ -1578,7 +1578,14 @@
         </xsl:choose>
       </xsl:with-param>
       <xsl:with-param name="right-block">
-        <xsl:value-of select="$illustration/scalar/InsCoName"/>
+        <!--
+        The '/text()' suffix in the XPath expression is a workaround
+        for Apache-FOP 0.20.3 bug that somehow treats <xsl:value-of/> as
+        <xsl:copy-of/> if it is encountered inside a <xsl:with-param/> as
+        a single child. Therefore we explicitly convert the expression into
+        a string.
+        -->
+        <xsl:value-of select="$illustration/scalar/InsCoName/text()"/>
       </xsl:with-param>
     </xsl:call-template>
   </xsl:template>
