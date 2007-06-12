@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: system_command.hpp,v 1.8 2007-01-27 00:00:52 wboutin Exp $
+// $Id: system_command.hpp,v 1.9 2007-06-12 21:41:38 chicares Exp $
 
 #ifndef system_command_hpp
 #define system_command_hpp
@@ -29,6 +29,10 @@
 #include "so_attributes.hpp"
 
 #include <string>
+
+typedef int (*system_command_fp_type)(std::string const&);
+
+bool LMI_SO system_command_initialize(system_command_fp_type);
 
 /// This is a cover function for std::system(). On posix platforms, it
 /// simply forwards its argument to std::system(). On msw, however, it

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.769 2007-06-12 16:48:27 chicares Exp $
+// $Id: ChangeLog,v 1.770 2007-06-12 21:41:39 chicares Exp $
 
 MAINTENANCE
 
@@ -12408,4 +12408,13 @@ of its semantics.
   file_command.cpp
   file_command.hpp
 Move an '#include' directive to increase encapsulation.
+
+20070612T2141Z <chicares@cox.net> [1230]
+
+  objects.make
+  system_command.cpp
+  system_command.hpp
+  system_command_non_wx.cpp [new file]
+  system_command_wx.cpp     [new file]
+Refactor, permitting implementation to vary by user interface.
 
