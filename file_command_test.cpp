@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: file_command_test.cpp,v 1.1 2007-06-11 22:11:06 chicares Exp $
+// $Id: file_command_test.cpp,v 1.2 2007-06-12 16:09:37 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -32,11 +32,6 @@
 
 int test_main(int, char*[])
 {
-    // This should throw a std::runtime_error saying it's not
-    // yet implemented. At the moment, though, it throws a
-    // std::logic_error, which indicates a problem.
-    file_command()("", "");
-
     BOOST_TEST_THROW
         (file_command()("", "")
         ,std::runtime_error
