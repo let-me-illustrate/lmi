@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: fo_common.xsl,v 1.30 2007-06-11 13:18:42 etarassov Exp $
+    $Id: fo_common.xsl,v 1.31 2007-06-12 08:28:51 etarassov Exp $
 -->
 <!DOCTYPE stylesheet [
 <!ENTITY nbsp "&#xA0;">
@@ -715,5 +715,7 @@
   <xsl:template name="page-of">
     Page <fo:page-number/> of <fo:page-number-citation ref-id="endofdoc"/>
   </xsl:template>
+
+  <xsl:template name="get-special-column-value"/>
 
 </xsl:stylesheet>
