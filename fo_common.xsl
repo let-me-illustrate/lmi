@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: fo_common.xsl,v 1.31 2007-06-12 08:28:51 etarassov Exp $
+    $Id: fo_common.xsl,v 1.32 2007-06-12 22:35:15 etarassov Exp $
 -->
 <!DOCTYPE stylesheet [
 <!ENTITY nbsp "&#xA0;">
@@ -39,19 +39,47 @@
   Use the global variable '$illustration' to access the data.
   -->
   <xsl:variable name="illustration" select="/illustration"/>
+
+  <!--
+  Prepare to use new format of XML input files:
+  The $scalars variable below should become
+  "/illustration/string_scalar | /illustration/double_scalar"
+  -->
+  <xsl:variable name="scalars" select="/illustration/scalar"/>
+
+  <!--
+  Prepare to use new format of XML input files:
+  The $vectors variable below should become
+  "/illustration/string_vector | /illustration/double_vector"
+  -->
+  <xsl:variable name="vectors" select="/illustration/data/newcolumn/column"/>
+
   <xsl:variable name="max-lapse-year-text">
     <xsl:call-template name="get-max-lapse-year"/>
   </xsl:variable>
   <xsl:variable name="max-lapse-year" select="number($max-lapse-year-text)"/>
+
+  <!--
+  Prepare to use new format of XML input files:
+  The $supplemental_report variable below should become
+  "/illustration/supplementalreport"
+  -->
   <xsl:variable name="supplemental_report" select="$illustration/supplementalreport"/>
   <xsl:variable name="NO_SUPPLEMENTAL_COLUMN" select="'[None]'"/>
+
+  <!--
+  Prepare to use new format of XML input files:
+  The $supplemental_report_columns variable below should become
+  "$supplemental_report/column"
+  -->
   <xsl:variable name="supplemental_report_columns" select="$supplemental_report/columns[string(name)!=$NO_SUPPLEMENTAL_COLUMN]"/>
-  <xsl:variable name="has_supplemental_report" select="boolean($illustration/scalar/SupplementalReport='1')"/>
+
+  <xsl:variable name="has_supplemental_report" select="boolean($scalars/SupplementalReport='1')"/>
 
   <!--
   Frequently used value. For a composite case the variable is_composite is true.
   -->
-  <xsl:variable name="is_composite" select="boolean($illustration/scalar/Composite='1')"/>
+  <xsl:variable name="is_composite" select="boolean($scalars/Composite='1')"/>
 
   <!--
   This may appear to be a clumsy way to get the max value but there is no clean way
@@ -73,14 +101,14 @@
     <xsl:call-template name="max-comparison">
       <xsl:with-param name="value1">
         <xsl:call-template name="max-comparison">
-          <xsl:with-param name="value1" select="$illustration/scalar/LapseYear_Current"/>
-          <xsl:with-param name="value2" select="$illustration/scalar/LapseYear_Guaranteed"/>
+          <xsl:with-param name="value1" select="$scalars/LapseYear_Current"/>
+          <xsl:with-param name="value2" select="$scalars/LapseYear_Guaranteed"/>
         </xsl:call-template>
       </xsl:with-param>
       <xsl:with-param name="value2">
         <xsl:call-template name="max-comparison">
-          <xsl:with-param name="value1" select="$illustration/scalar/LapseYear_CurrentZero"/>
-          <xsl:with-param name="value2" select="$illustration/scalar/LapseYear_GuaranteedZero"/>
+          <xsl:with-param name="value1" select="$scalars/LapseYear_CurrentZero"/>
+          <xsl:with-param name="value2" select="$scalars/LapseYear_GuaranteedZero"/>
         </xsl:call-template>
       </xsl:with-param>
     </xsl:call-template>
@@ -110,12 +138,12 @@
   <xsl:template name="dollar-units">
     <fo:block text-align="center" font-size="9pt" padding-top="1em">
       <xsl:choose>
-        <xsl:when test="$illustration/scalar/ScaleUnit=''">
+        <xsl:when test="$scalars/ScaleUnit=''">
           <xsl:text>(Values shown are in dollars)</xsl:text>
         </xsl:when>
         <xsl:otherwise>
           <xsl:text>(Values shown are in </xsl:text>
-          <xsl:value-of select="$illustration/scalar/ScaleUnit"/>
+          <xsl:value-of select="$scalars/ScaleUnit"/>
           <xsl:text>s of dollars)</xsl:text>
         </xsl:otherwise>
       </xsl:choose>
@@ -123,11 +151,11 @@
   </xsl:template>
 
   <xsl:template name="date-prepared">
-    <xsl:value-of select="$illustration/scalar/PrepMonth"/>
+    <xsl:value-of select="$scalars/PrepMonth"/>
     <xsl:text>&nbsp;</xsl:text>
-    <xsl:value-of select="$illustration/scalar/PrepDay"/>
+    <xsl:value-of select="$scalars/PrepDay"/>
     <xsl:text>, </xsl:text>
-    <xsl:value-of select="$illustration/scalar/PrepYear"/>
+    <xsl:value-of select="$scalars/PrepYear"/>
   </xsl:template>
 
   <xsl:template name="supplemental-report-body">
@@ -160,8 +188,8 @@
             <!-- make inforce illustration start in the inforce year -->
             <fo:table-body>
               <xsl:call-template name="supplemental-report-values">
-                <xsl:with-param name="counter" select="$illustration/scalar/InforceYear + 1"/>
-                <xsl:with-param name="inforceyear" select="0 - $illustration/scalar/InforceYear"/>
+                <xsl:with-param name="counter" select="$scalars/InforceYear + 1"/>
+                <xsl:with-param name="inforceyear" select="0 - $scalars/InforceYear"/>
               </xsl:call-template>
             </fo:table-body>
           </fo:table>
@@ -183,7 +211,7 @@
           <xsl:variable name="column_name" select="string(./name)"/>
           <fo:table-cell padding=".2pt">
             <fo:block text-align="right">
-              <xsl:value-of select="$illustration/data/newcolumn/column[@name=$column_name]/duration[$counter]/@column_value"/>
+              <xsl:value-of select="$vectors[@name=$column_name]/duration[$counter]/@column_value"/>
             </fo:block>
           </fo:table-cell>
         </xsl:for-each>
@@ -530,11 +558,11 @@
               <xsl:choose>
                 <xsl:when test="@name">
                   <xsl:variable name="column_name" select="@name"/>
-                  <xsl:value-of select="$illustration/data/newcolumn/column[@name=$column_name]/duration[$counter]/@column_value"/>
+                  <xsl:value-of select="$vectors[@name=$column_name]/duration[$counter]/@column_value"/>
                 </xsl:when>
                 <xsl:when test="@scalar">
                   <xsl:variable name="scalar_name" select="@scalar"/>
-                  <xsl:value-of select="$illustration/scalar/*[name(.)=$scalar_name]"/>
+                  <xsl:value-of select="$scalars/*[name(.)=$scalar_name]"/>
                 </xsl:when>
                 <xsl:when test="@special">
                   <xsl:call-template name="get-special-column-value">
@@ -596,11 +624,11 @@
         <fo:block border="2pt solid blue" font-size="14.0pt" text-align="center" font-family="sans-serif">
 
           <fo:block font-size="20.0pt" font-weight="bold" padding-top="5em">
-            <xsl:value-of select="$illustration/scalar/PolicyMktgName"/>
+            <xsl:value-of select="$scalars/PolicyMktgName"/>
           </fo:block>
           <fo:block font-size="20.0pt" font-weight="bold">
             <xsl:choose>
-              <xsl:when test="$illustration/scalar/IsInforce!='1'">
+              <xsl:when test="$scalars/IsInforce!='1'">
                 Life Insurance Illustration
               </xsl:when>
               <xsl:otherwise>
@@ -616,10 +644,10 @@
             <xsl:variable name="prepared-for">
               <xsl:choose>
                 <xsl:when test="not($is_composite)">
-                  <xsl:value-of select="$illustration/scalar/Insured1"/>
+                  <xsl:value-of select="$scalars/Insured1"/>
                 </xsl:when>
                 <xsl:otherwise>
-                  <xsl:value-of select="$illustration/scalar/CorpName"/>
+                  <xsl:value-of select="$scalars/CorpName"/>
                 </xsl:otherwise>
               </xsl:choose>
             </xsl:variable>
@@ -637,13 +665,13 @@
             Presented by:
           </fo:block>
           <fo:block text-align="center" padding-top="1em">
-            <xsl:value-of select="$illustration/scalar/ProducerName"/>
+            <xsl:value-of select="$scalars/ProducerName"/>
           </fo:block>
           <fo:block text-align="center">
-            <xsl:value-of select="$illustration/scalar/ProducerStreet"/>
+            <xsl:value-of select="$scalars/ProducerStreet"/>
           </fo:block>
           <fo:block text-align="center">
-            <xsl:value-of select="$illustration/scalar/ProducerCity"/>
+            <xsl:value-of select="$scalars/ProducerCity"/>
           </fo:block>
 
           <fo:block text-align="center" padding-top="2em">
@@ -654,10 +682,10 @@
             <fo:external-graphic width="121.1pt" height="24.8pt" src="company_logo.png"/>
           </fo:block>
           <fo:block margin-top="1.5em">
-            <xsl:value-of select="$illustration/scalar/InsCoName"/>
+            <xsl:value-of select="$scalars/InsCoName"/>
           </fo:block>
           <fo:block padding-bottom="3em">
-            <xsl:value-of select="$illustration/scalar/InsCoAddr"/>
+            <xsl:value-of select="$scalars/InsCoAddr"/>
           </fo:block>
         </fo:block>
       </fo:flow>
