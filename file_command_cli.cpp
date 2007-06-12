@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: file_command_cli.cpp,v 1.4 2007-01-27 00:00:51 wboutin Exp $
+// $Id: file_command_cli.cpp,v 1.5 2007-06-12 16:02:43 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -37,9 +37,8 @@ void concrete_file_command
     ,std::string const&
     )
 {
-    warning()
-        << "Class 'file_command' not implemented for "
-        << "command-line interface."
+    fatal_error()
+        << "Class 'file_command' not implemented for command-line interface."
         << LMI_FLUSH
         ;
 }
