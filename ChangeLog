@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.766 2007-06-11 20:42:20 chicares Exp $
+// $Id: ChangeLog,v 1.767 2007-06-12 08:28:51 etarassov Exp $
 
 MAINTENANCE
 
@@ -12370,4 +12370,14 @@ Revert erroneous change to GNUmakefile.
   GNUmakefile
 Reformat a comment, to confirm the 20070611T1817Z reversion, which
 elicited a cvs error message.
+
+20070612T0828Z <etarassov@tt-solutions.com> [1230]
+
+  fo_common.xsl
+  group_private_placement.xsl
+  illustration_reg.xsl
+  individual_private_placement.xsl
+  nasd.xsl
+  offshore_private_placement.xsl
+Use 'xsl:import' instead of 'xsl:include'.
 
