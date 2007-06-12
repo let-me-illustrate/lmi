@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: callback.hpp,v 1.7 2007-01-27 00:00:51 wboutin Exp $
+// $Id: callback.hpp,v 1.8 2007-06-12 16:09:37 chicares Exp $
 
 #ifndef callback_hpp
 #define callback_hpp
@@ -64,16 +64,14 @@
 ///
 /// Public interface.
 ///
-/// ctor: Initializes the function pointer to null.
-///
-/// dtor: Does nothing.
-///
 /// operator(): Returns a const copy of the function pointer, throwing
 /// an exception if it is null.
 ///
 /// initialize(): Sets the function pointer. Throws an exception if it
 /// was not null. Throws an exception if an attempt is made to set it
 /// to null (see rationale).
+///
+/// Implicitly-declared special member functions do the right thing.
 ///
 /// Design alternatives considered; rationale for design choices.
 ///
@@ -116,24 +114,12 @@ class LMI_SO callback
     BOOST_STATIC_ASSERT(boost::is_function<f_type>::value);
 
   public:
-    callback();
-    ~callback();
-
     FunctionPointer operator()() const;
     void initialize(FunctionPointer concrete_pointer);
 
   private:
-    FunctionPointer function_pointer_;
+    static FunctionPointer function_pointer_;
 };
-
-template<typename FunctionPointer>
-callback<FunctionPointer>::callback()
-    :function_pointer_(0)
-{}
-
-template<typename FunctionPointer>
-callback<FunctionPointer>::~callback()
-{}
 
 template<typename FunctionPointer>
 FunctionPointer callback<FunctionPointer>::operator()() const

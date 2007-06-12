@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.767 2007-06-12 08:28:51 etarassov Exp $
+// $Id: ChangeLog,v 1.768 2007-06-12 16:09:37 chicares Exp $
 
 MAINTENANCE
 
@@ -12371,6 +12371,12 @@ Revert erroneous change to GNUmakefile.
 Reformat a comment, to confirm the 20070611T1817Z reversion, which
 elicited a cvs error message.
 
+20070611T2211Z <chicares@cox.net> [1230]
+
+  file_command_test.cpp
+  objects.make
+Add a unit test, exposing a latent problem.
+
 20070612T0828Z <etarassov@tt-solutions.com> [1230]
 
   fo_common.xsl
@@ -12380,4 +12386,20 @@ elicited a cvs error message.
   nasd.xsl
   offshore_private_placement.xsl
 Use 'xsl:import' instead of 'xsl:include'.
+
+20070612T1602Z <chicares@cox.net> [1230]
+
+  file_command_cgi.cpp
+  file_command_cli.cpp
+Increase severity of a diagnostic.
+
+20070612T1609Z <chicares@cox.net> [1230]
+
+  callback.hpp
+  callback_test.cpp
+  file_command.cpp
+  file_command_test.cpp
+Prevent the problem exposed 20070611T2211Z by replacing a nonstatic
+with a static member. It should always have been static anyway because
+of its semantics.
 
