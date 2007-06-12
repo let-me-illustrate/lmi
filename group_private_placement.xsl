@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: group_private_placement.xsl,v 1.27 2007-06-12 08:28:51 etarassov Exp $
+    $Id: group_private_placement.xsl,v 1.28 2007-06-12 22:35:15 etarassov Exp $
 -->
 <!DOCTYPE stylesheet [
 <!ENTITY nbsp "&#xA0;">
@@ -127,7 +127,7 @@
           <fo:external-graphic width="121.1pt" height="24.8pt" src="company_logo.png"/>
         </fo:block>
         <xsl:choose>
-          <xsl:when test="illustration/scalar/IsInforce!='1'">
+          <xsl:when test="$scalars/IsInforce!='1'">
             <xsl:call-template name="standardheader">
               <xsl:with-param name="reporttitle" select="'Basic Illustration'"/>
             </xsl:call-template>
@@ -225,16 +225,16 @@
         <fo:flow flow-name="xsl-region-body">
           <fo:block text-align="left" font-size="10pt" font-family="sans-serif">
             <fo:block>
-              <xsl:value-of select="illustration/scalar/PolicyMktgName"/>
+              <xsl:value-of select="$scalars/PolicyMktgName"/>
               <xsl:text> is a </xsl:text>
-              <xsl:value-of select="illustration/scalar/PolicyLegalName"/>
+              <xsl:value-of select="$scalars/PolicyLegalName"/>
               <xsl:text> issued by </xsl:text>
-              <xsl:value-of select="illustration/scalar/InsCoName"/>
+              <xsl:value-of select="$scalars/InsCoName"/>
               <xsl:text>. The policy provides lifetime insurance protection for as long as it remains in force. The policy is available at issue with at least two death benefit options: Option 1 (death benefit equal to the greater of (a) the selected face amount in effect on the date of death or (b) the minimum face amount in effect on the date of death); and Option 2 (death benefit equal to the greater of (a) the selected face amount in effect on the date of death plus account value on that date or (b) the minimum face amount in effect on the date of death).  A policy with the stable value endorsement requires Death Benefit Option 1.</xsl:text>
             </fo:block>
           <fo:block padding-top="1em">
             <xsl:text>This illustration assumes Initial Death Benefit Option </xsl:text>
-            <xsl:value-of select="illustration/scalar/DBOptInitInteger+1"/>
+            <xsl:value-of select="$scalars/DBOptInitInteger+1"/>
             <xsl:text>.</xsl:text>
           </fo:block>
           <fo:block padding-top="1em">
@@ -246,11 +246,11 @@
           <fo:block padding-top="1em">
             <xsl:text>The definition of life insurance elected for this contract is the </xsl:text>
             <xsl:choose>
-              <xsl:when test="illustration/scalar/DefnLifeIns='GPT'">
+              <xsl:when test="$scalars/DefnLifeIns='GPT'">
                 <xsl:text>guideline premium test. The guideline single premium is $</xsl:text>
-                <xsl:value-of select="illustration/scalar/InitGSP"/>
+                <xsl:value-of select="$scalars/InitGSP"/>
                 <xsl:text> and the guideline level premium is $</xsl:text>
-                <xsl:value-of select="illustration/scalar/InitGLP"/>
+                <xsl:value-of select="$scalars/InitGLP"/>
               </xsl:when>
               <xsl:otherwise>
                 <xsl:text>cash value accumulation test.</xsl:text>
@@ -258,7 +258,7 @@
             </xsl:choose>
           </fo:block>
           <fo:block padding-top="1em">
-            <xsl:value-of select="illustration/scalar/InsCoName"/>
+            <xsl:value-of select="$scalars/InsCoName"/>
             <xsl:text> has the right to promptly return any amount of premium paid if it will increase the net amount at risk </xsl:text>
             <xsl:text>(referred to in the contract as the Amount of Insurance that Requires a Charge).</xsl:text>
           </fo:block>
@@ -270,10 +270,10 @@
           </fo:block>
           <fo:block>
             <xsl:text>The initial 7-pay premium limit is $</xsl:text>
-            <xsl:value-of select="illustration/scalar/InitSevenPayPrem"/>
+            <xsl:value-of select="$scalars/InitSevenPayPrem"/>
             <xsl:text>. As illustrated, this contract </xsl:text>
             <xsl:choose>
-              <xsl:when test="illustration/scalar/IsMec='1'">
+              <xsl:when test="$scalars/IsMec='1'">
                 <xsl:text>fails </xsl:text>
               </xsl:when>
               <xsl:otherwise>
@@ -282,12 +282,12 @@
             </xsl:choose>
             <xsl:text>the seven-pay test defined in Section 7702A of the Internal Revenue Code and therefore </xsl:text>
             <xsl:choose>
-              <xsl:when test="illustration/scalar/IsMec='1'">
+              <xsl:when test="$scalars/IsMec='1'">
                 <xsl:choose>
-                  <xsl:when test="illustration/scalar/MecYear!='0'">
+                  <xsl:when test="$scalars/MecYear!='0'">
                     <xsl:text>becomes a Modified Endowment Contract (MEC) </xsl:text>
                     <xsl:text>in policy year </xsl:text>
-                    <xsl:value-of select="illustration/scalar/MecYear+1"/>
+                    <xsl:value-of select="$scalars/MecYear+1"/>
                     <xsl:text>.  As a MEC, any loans or withdrawals are taxed to the extent of any gain in the contract, and an additional 10% penalty tax will apply to the taxable portion of the loan or withdrawal.</xsl:text>
                   </xsl:when>
                   <xsl:otherwise>
@@ -313,7 +313,7 @@
             </fo:block>
             <fo:block padding-top="1em" padding-bottom="1em">
               <xsl:choose>
-                <xsl:when test="illustration/scalar/UseExperienceRating='1'">
+                <xsl:when test="$scalars/UseExperienceRating='1'">
                   <xsl:text>The illustration assumes mortality experience rating.  To the extent that other clients participate in the pool your results will be affected by the experience of the entire pool.</xsl:text>
                 </xsl:when>
                 <xsl:otherwise>
@@ -327,47 +327,47 @@
 
             <fo:block font-style="italic">
               <xsl:text>This illustration may only be used when preceded or accompanied by the offering memorandum for </xsl:text>
-              <xsl:value-of select="illustration/scalar/PolicyLegalName"/>
+              <xsl:value-of select="$scalars/PolicyLegalName"/>
               <xsl:text> (</xsl:text>
-              <xsl:value-of select="illustration/scalar/PolicyMktgName"/>
+              <xsl:value-of select="$scalars/PolicyMktgName"/>
               <xsl:text>)</xsl:text>
               <xsl:text> insurance contract and its underlying investment choices. For a complete listing of the underlying investment choices, please refer to the offering memorandum.  Before purchasing a variable life insurance contract, investors should carefully consider the investment objectives, risks, charges and expenses of the variable life insurance contract and its underlying investment choices. Please read the offering memorandum carefully before investing or sending money.</xsl:text>
             </fo:block>
           </fo:block>
 
           <fo:block text-align="left" font-size="10pt" font-family="sans-serif" padding-top="1em">
-            <xsl:if test="illustration/scalar/HasTerm='1'">
+            <xsl:if test="$scalars/HasTerm='1'">
               <fo:block>
                 <xsl:text>A Term Rider is available for attachment to this policy. The Term Rider provides the option to purchase monthly term insurance on the life of the insured. </xsl:text>
                 <xsl:text>The term rider selected face amount supplements the selected face amount of the contract. If the Term Rider is attached, the policy to which it is attached may have a lower annual cutoff premium and, as a result, the lower overall sales loads paid may be lower than a contract having the same total face amount, but with no Term Rider. Also, the lapse protection feature of the contract's</xsl:text>
-                <xsl:value-of select="illustration/scalar/NoLapseProvisionName"/>
+                <xsl:value-of select="$scalars/NoLapseProvisionName"/>
                 <xsl:text> does not apply to the Term Rider's selected face amount.</xsl:text>
               </fo:block>
             </xsl:if>
-            <xsl:if test="illustration/scalar/HasWP='1'">
+            <xsl:if test="$scalars/HasWP='1'">
               <fo:block padding-top="1em">
                 <xsl:text>A Waiver of Monthly Charges rider is available for attachment to this policy for insureds with ages 20-64. The Waiver of Monthly Charges Rider provides that in the event of the disability of the insured that begins before attained age 65 and continues for at least 6 months, </xsl:text>
-                <xsl:value-of select="illustration/scalar/InsCoShortName"/>
+                <xsl:value-of select="$scalars/InsCoShortName"/>
                 <xsl:text> will waive certain monthly charges up to age 65, but not less than two years, while the insured remains totally disabled. An additional charge is associated with this rider, if elected. Please refer to your contract for specific provisions and a detailed schedule of charges.</xsl:text>
               </fo:block>
             </xsl:if>
-            <xsl:if test="illustration/scalar/UsePartialMort='1'">
+            <xsl:if test="$scalars/UsePartialMort='1'">
               <fo:block padding-top="1em">
                 <xsl:text>This illustration reflects an initial mortality assumption of </xsl:text>
-                <xsl:value-of select="illustration/data/newcolumn/column[@name='PartMortTableMult']/duration[1]/@column_value"/>
+                <xsl:value-of select="$vectors[@name='PartMortTableMult']/duration[1]/@column_value"/>
                 <xsl:text> of the </xsl:text>
-                <xsl:value-of select="illustration/scalar/PartMortTableName"/>
+                <xsl:value-of select="$scalars/PartMortTableName"/>
                 <xsl:text> table with all deaths at the end of the year.</xsl:text>
               </fo:block>
             </xsl:if>
             <xsl:choose>
-              <xsl:when test="illustration/scalar/GenderBlended='1'">
+              <xsl:when test="$scalars/GenderBlended='1'">
                 <fo:block padding-top="1em">
                   <xsl:text>Custom blending of cost of insurance charges is based on the plan's assumed distribution of initial selected face amount by gender and tobacco use.  This illustration assumes that the distribution remains constant in future years. Custom blending is available only on plans of 100 or more lives. Custom blend assumptions: </xsl:text>
                   <xsl:choose>
-                    <xsl:when test="illustration/scalar/SmokerBlended='1'">
+                    <xsl:when test="$scalars/SmokerBlended='1'">
                       <xsl:text>tobacco = </xsl:text>
-                      <xsl:value-of select="illustration/scalar/SmokerPct"/>
+                      <xsl:value-of select="$scalars/SmokerPct"/>
                       <xsl:text>; </xsl:text>
                     </xsl:when>
                     <xsl:otherwise>
@@ -375,21 +375,21 @@
                     </xsl:otherwise>
                   </xsl:choose>
                   <xsl:text> male = </xsl:text>
-                  <xsl:value-of select="illustration/scalar/MalePct"/>
+                  <xsl:value-of select="$scalars/MalePct"/>
                   <xsl:text>.</xsl:text>
                 </fo:block>
               </xsl:when>
               <xsl:otherwise>
-                <xsl:if test="illustration/scalar/SmokerBlended='1'">
+                <xsl:if test="$scalars/SmokerBlended='1'">
                   <fo:block padding-top="1em">
                     <xsl:text>Custom blending of cost of insurance charges is based on the plan's assumed distribution of initial selected face amount by gender and tobacco use.  This illustration assumes that the distribution remains constant in future years. Custom blending is available only on plans of 100 or more lives. Custom blend assumptions: </xsl:text>
                     <xsl:text>tobacco = </xsl:text>
-                    <xsl:value-of select="illustration/scalar/SmokerPct"/>
+                    <xsl:value-of select="$scalars/SmokerPct"/>
                     <xsl:text>; </xsl:text>
                     <xsl:choose>
-                      <xsl:when test="illustration/scalar/GenderBlended='1'">
+                      <xsl:when test="$scalars/GenderBlended='1'">
                         <xsl:text> male = </xsl:text>
-                        <xsl:value-of select="illustration/scalar/MalePct"/>
+                        <xsl:value-of select="$scalars/MalePct"/>
                       </xsl:when>
                       <xsl:otherwise>
                         <xsl:text> no blending by gender.</xsl:text>
@@ -401,23 +401,23 @@
             </xsl:choose>
             <fo:block padding-top="1em">
               <xsl:text>The state of issue is </xsl:text>
-              <xsl:value-of select="illustration/scalar/StatePostalAbbrev"/>
+              <xsl:value-of select="$scalars/StatePostalAbbrev"/>
               <xsl:text>.</xsl:text>
             </fo:block>
             <xsl:choose>
-              <xsl:when test="illustration/scalar/IsInforce!='1'">
-                <xsl:if test="string-length(illustration/scalar/InsCoPhone) &gt; 14">
+              <xsl:when test="$scalars/IsInforce!='1'">
+                <xsl:if test="string-length($scalars/InsCoPhone) &gt; 14">
                   <fo:block padding-top="1em">
                     <xsl:text>Compliance tracking number: </xsl:text>
-                    <xsl:value-of select="substring(illustration/scalar/InsCoPhone, 1, 15)"/>
+                    <xsl:value-of select="substring($scalars/InsCoPhone, 1, 15)"/>
                   </fo:block>
                 </xsl:if>
               </xsl:when>
               <xsl:otherwise>
-                <xsl:if test="string-length(illustration/scalar/InsCoPhone) &gt; 16">
+                <xsl:if test="string-length($scalars/InsCoPhone) &gt; 16">
                   <fo:block padding-top="1em">
                     <xsl:text>Compliance Tracking Number: </xsl:text>
-                    <xsl:value-of select="substring(illustration/scalar/InsCoPhone, 16)"/>
+                    <xsl:value-of select="substring($scalars/InsCoPhone, 16)"/>
                   </fo:block>
                 </xsl:if>
               </xsl:otherwise>
@@ -436,7 +436,7 @@
             </fo:block>
             <fo:block padding-top="1em">
               <xsl:text>This illustration is based on total Separate Account fund expenses of </xsl:text>
-              <xsl:value-of select="illustration/data/newcolumn/column[@name='TotalIMF']/duration[1]/@column_value"/>
+              <xsl:value-of select="$vectors[@name='TotalIMF']/duration[1]/@column_value"/>
               <xsl:text>.</xsl:text>
             </fo:block>
             <fo:block font-size="10.5pt" font-weight="bold" padding-top="1em">
@@ -444,15 +444,15 @@
             </fo:block>
             <fo:block padding-top="1em">
               <xsl:text>Placement Agent: </xsl:text>
-              <xsl:value-of select="illustration/scalar/MainUnderwriter"/>
+              <xsl:value-of select="$scalars/MainUnderwriter"/>
               <xsl:text> (a registered broker-dealer)</xsl:text>
             </fo:block>
             <fo:block>
-              <xsl:value-of select="illustration/scalar/MainUnderwriterAddress"/>
+              <xsl:value-of select="$scalars/MainUnderwriterAddress"/>
             </fo:block>
             <fo:block padding-top="1em">
               <xsl:text>Wholly owned subsidiary of </xsl:text>
-              <xsl:value-of select="illustration/scalar/InsCoName"/>
+              <xsl:value-of select="$scalars/InsCoName"/>
             </fo:block>
           </fo:block>
           <xsl:choose>
@@ -518,22 +518,22 @@
                 <xsl:choose>
                   <xsl:when test="$is_composite">
                     <xsl:call-template name="limitstring">
-                      <xsl:with-param name="passString" select="illustration/scalar/CorpName"/>
+                      <xsl:with-param name="passString" select="$scalars/CorpName"/>
                       <xsl:with-param name="length" select="60"/>
                     </xsl:call-template>
                   </xsl:when>
-                  <xsl:when test="illustration/scalar/Insured1='  '"/>
+                  <xsl:when test="$scalars/Insured1='  '"/>
                   <xsl:otherwise>
                     <xsl:call-template name="limitstring">
-                      <xsl:with-param name="passString" select="illustration/scalar/Insured1"/>
+                      <xsl:with-param name="passString" select="$scalars/Insured1"/>
                       <xsl:with-param name="length" select="30"/>
                     </xsl:call-template>
                     <xsl:text>, </xsl:text>
-                    <xsl:value-of select="illustration/scalar/Gender"/>
+                    <xsl:value-of select="$scalars/Gender"/>
                     <xsl:text>&nbsp;</xsl:text>
-                    <xsl:value-of select="illustration/scalar/Smoker"/>
+                    <xsl:value-of select="$scalars/Smoker"/>
                     <xsl:text> rates, Age </xsl:text>
-                    <xsl:value-of select="illustration/scalar/Age"/>
+                    <xsl:value-of select="$scalars/Age"/>
                   </xsl:otherwise>
                 </xsl:choose>
               </fo:block>
@@ -544,7 +544,7 @@
                   </xsl:when>
                   <xsl:otherwise>
                     <xsl:text>Contract: </xsl:text>
-                    <xsl:value-of select="illustration/scalar/PolicyMktgName"/>
+                    <xsl:value-of select="$scalars/PolicyMktgName"/>
                   </xsl:otherwise>
                 </xsl:choose>
               </fo:block>
@@ -552,11 +552,11 @@
                 <xsl:choose>
                   <xsl:when test="$is_composite">
                     <xsl:text>Contract: </xsl:text>
-                    <xsl:value-of select="illustration/scalar/PolicyMktgName"/>
+                    <xsl:value-of select="$scalars/PolicyMktgName"/>
                   </xsl:when>
                   <xsl:otherwise>
                     <xsl:text>Initial Premium: $</xsl:text>
-                    <xsl:value-of select="illustration/scalar/InitPrem"/>
+                    <xsl:value-of select="$scalars/InitPrem"/>
                   </xsl:otherwise>
                 </xsl:choose>
               </fo:block>
@@ -564,81 +564,81 @@
                 <xsl:choose>
                   <xsl:when test="$is_composite">
                     <xsl:text>Initial Premium: $</xsl:text>
-                    <xsl:value-of select="illustration/scalar/InitPrem"/>
+                    <xsl:value-of select="$scalars/InitPrem"/>
                   </xsl:when>
-                  <xsl:when test="illustration/scalar/UWType='Medical'">
+                  <xsl:when test="$scalars/UWType='Medical'">
                     <xsl:text>Fully underwritten</xsl:text>
                     <xsl:text>, </xsl:text>
-                    <xsl:value-of select="illustration/scalar/UWClass"/>
+                    <xsl:value-of select="$scalars/UWClass"/>
                     <xsl:text>, Initial Death Benefit Option: </xsl:text>
-                    <xsl:value-of select="illustration/scalar/DBOptInitInteger+1"/>
+                    <xsl:value-of select="$scalars/DBOptInitInteger+1"/>
                   </xsl:when>
-                  <xsl:when test="illustration/scalar/StatePostalAbbrev='TX'">
+                  <xsl:when test="$scalars/StatePostalAbbrev='TX'">
                     <xsl:choose>
-                      <xsl:when test="illustration/scalar/UWType='Guaranteed issue'">
+                      <xsl:when test="$scalars/UWType='Guaranteed issue'">
                         <xsl:text>Substandard *</xsl:text>
                         <xsl:text>, </xsl:text>
-                        <xsl:value-of select="illustration/scalar/UWClass"/>
+                        <xsl:value-of select="$scalars/UWClass"/>
                         <xsl:text>, Initial Death Benefit Option: </xsl:text>
-                        <xsl:value-of select="illustration/scalar/DBOptInitInteger+1"/>
+                        <xsl:value-of select="$scalars/DBOptInitInteger+1"/>
                       </xsl:when>
                       <xsl:otherwise>
-                        <xsl:value-of select="illustration/scalar/UWType"/>
+                        <xsl:value-of select="$scalars/UWType"/>
                         <xsl:text>, </xsl:text>
-                        <xsl:value-of select="illustration/scalar/UWClass"/>
+                        <xsl:value-of select="$scalars/UWClass"/>
                         <xsl:text>, Initial Death Benefit Option: </xsl:text>
-                        <xsl:value-of select="illustration/scalar/DBOptInitInteger+1"/>
+                        <xsl:value-of select="$scalars/DBOptInitInteger+1"/>
                       </xsl:otherwise>
                     </xsl:choose>
                   </xsl:when>
                   <xsl:otherwise>
-                    <xsl:value-of select="illustration/scalar/UWType"/>
+                    <xsl:value-of select="$scalars/UWType"/>
                     <xsl:text>, </xsl:text>
-                    <xsl:value-of select="illustration/scalar/UWClass"/>
+                    <xsl:value-of select="$scalars/UWClass"/>
                     <xsl:text>, Initial Death Benefit Option: </xsl:text>
-                    <xsl:value-of select="illustration/scalar/DBOptInitInteger+1"/>
+                    <xsl:value-of select="$scalars/DBOptInitInteger+1"/>
                   </xsl:otherwise>
                 </xsl:choose>
               </fo:block>
               <fo:block text-align="left">
-                <xsl:if test="illustration/scalar/HasWP='1'">
+                <xsl:if test="$scalars/HasWP='1'">
                   <xsl:text>Waiver of Monthly Charges Rider elected.</xsl:text>
                 </xsl:if>
               </fo:block>
               <fo:block text-align="left">
                 <xsl:choose>
                   <xsl:when test="$is_composite">
-                    <xsl:if test="illustration/scalar/Franchise!=''">
+                    <xsl:if test="$scalars/Franchise!=''">
                       <xsl:text>Master contract: </xsl:text>
                       <xsl:call-template name="limitstring">
-                        <xsl:with-param name="passString" select="illustration/scalar/Franchise"/>
+                        <xsl:with-param name="passString" select="$scalars/Franchise"/>
                         <xsl:with-param name="length" select="30"/>
                       </xsl:call-template>
                     </xsl:if>
                   </xsl:when>
-                  <xsl:when test="illustration/scalar/Franchise!='' and illustration/scalar/PolicyNumber!=''">
+                  <xsl:when test="$scalars/Franchise!='' and $scalars/PolicyNumber!=''">
                     <xsl:text>Master contract: </xsl:text>
                     <xsl:call-template name="limitstring">
-                      <xsl:with-param name="passString" select="illustration/scalar/Franchise"/>
+                      <xsl:with-param name="passString" select="$scalars/Franchise"/>
                       <xsl:with-param name="length" select="15"/>
                     </xsl:call-template>
                     <xsl:text>&nbsp;&nbsp;&nbsp;Contract number: </xsl:text>
                     <xsl:call-template name="limitstring">
-                      <xsl:with-param name="passString" select="illustration/scalar/PolicyNumber"/>
+                      <xsl:with-param name="passString" select="$scalars/PolicyNumber"/>
                       <xsl:with-param name="length" select="15"/>
                     </xsl:call-template>
                   </xsl:when>
-                  <xsl:when test="illustration/scalar/Franchise!=''">
+                  <xsl:when test="$scalars/Franchise!=''">
                     <xsl:text>Master contract: </xsl:text>
                     <xsl:call-template name="limitstring">
-                      <xsl:with-param name="passString" select="illustration/scalar/Franchise"/>
+                      <xsl:with-param name="passString" select="$scalars/Franchise"/>
                       <xsl:with-param name="length" select="30"/>
                     </xsl:call-template>
                   </xsl:when>
-                  <xsl:when test="illustration/scalar/PolicyNumber!=''">
+                  <xsl:when test="$scalars/PolicyNumber!=''">
                     <xsl:text>Contract number: </xsl:text>
                     <xsl:call-template name="limitstring">
-                      <xsl:with-param name="passString" select="illustration/scalar/PolicyNumber"/>
+                      <xsl:with-param name="passString" select="$scalars/PolicyNumber"/>
                       <xsl:with-param name="length" select="30"/>
                     </xsl:call-template>
                   </xsl:when>
@@ -649,39 +649,39 @@
             <fo:table-cell>
               <fo:block text-align="left">
                 <xsl:text>Assumed Gross Rate: </xsl:text>
-                <xsl:value-of select="illustration/scalar/InitAnnSepAcctGrossInt_Current"/>
+                <xsl:value-of select="$scalars/InitAnnSepAcctGrossInt_Current"/>
                 <xsl:text> (</xsl:text>
-                <xsl:value-of select="illustration/scalar/InitAnnSepAcctNetInt_Current"/>
+                <xsl:value-of select="$scalars/InitAnnSepAcctNetInt_Current"/>
                 <xsl:text> Net)*</xsl:text>
               </fo:block>
               <fo:block text-align="left">
                 <xsl:text>Initial </xsl:text>
-                <xsl:if test="illustration/scalar/HasTerm!='0'">
+                <xsl:if test="$scalars/HasTerm!='0'">
                   <xsl:text> Total</xsl:text>
                 </xsl:if>
                 <xsl:text> Face Amount: $</xsl:text>
-                <xsl:value-of select="illustration/scalar/InitTotalSA"/>
+                <xsl:value-of select="$scalars/InitTotalSA"/>
               </fo:block>
               <fo:block text-align="left">
                 <xsl:choose>
-                  <xsl:when test="illustration/scalar/HasTerm!='0'">
+                  <xsl:when test="$scalars/HasTerm!='0'">
                     <xsl:text>Initial Base Face Amount: $</xsl:text>
-                    <xsl:value-of select="illustration/scalar/InitBaseSpecAmt"/>
+                    <xsl:value-of select="$scalars/InitBaseSpecAmt"/>
                   </xsl:when>
                 </xsl:choose>
               </fo:block>
               <fo:block text-align="left">
                 <xsl:choose>
-                  <xsl:when test="illustration/scalar/HasTerm!='0'">
+                  <xsl:when test="$scalars/HasTerm!='0'">
                     <xsl:text>Initial Term Face Amount: $</xsl:text>
-                    <xsl:value-of select="illustration/scalar/InitTermSpecAmt"/>
+                    <xsl:value-of select="$scalars/InitTermSpecAmt"/>
                   </xsl:when>
                 </xsl:choose>
               </fo:block>
               <fo:block text-align="left">
-                <xsl:if test="not($is_composite) and (illustration/scalar/UWClass='Rated')">
+                <xsl:if test="not($is_composite) and ($scalars/UWClass='Rated')">
                   <xsl:text>Table Rating: </xsl:text>
-                  <xsl:value-of select="illustration/scalar/SubstandardTable"/>
+                  <xsl:value-of select="$scalars/SubstandardTable"/>
                 </xsl:if>
               </fo:block>
             </fo:table-cell>
@@ -745,28 +745,28 @@
               </fo:table-cell>
               <fo:table-cell number-columns-spanned="2" padding="0pt">
                 <fo:block text-align="center">
-                  <xsl:value-of select="illustration/scalar/InitAnnSepAcctGrossInt_GuaranteedZero"/>
+                  <xsl:value-of select="$scalars/InitAnnSepAcctGrossInt_GuaranteedZero"/>
                   Hypothetical Gross
                 </fo:block>
               </fo:table-cell>
               <fo:table-cell><fo:block/></fo:table-cell>
               <fo:table-cell number-columns-spanned="2" padding="0pt">
                 <fo:block text-align="center">
-                  <xsl:value-of select="illustration/scalar/InitAnnSepAcctGrossInt_Guaranteed"/>
+                  <xsl:value-of select="$scalars/InitAnnSepAcctGrossInt_Guaranteed"/>
                   Hypothetical Gross
                 </fo:block>
               </fo:table-cell>
               <fo:table-cell><fo:block/></fo:table-cell>
               <fo:table-cell number-columns-spanned="2" padding="0pt">
                 <fo:block text-align="center">
-                  <xsl:value-of select="illustration/scalar/InitAnnSepAcctGrossInt_CurrentZero"/>
+                  <xsl:value-of select="$scalars/InitAnnSepAcctGrossInt_CurrentZero"/>
                   Hypothetical Gross
                 </fo:block>
               </fo:table-cell>
               <fo:table-cell><fo:block/></fo:table-cell>
               <fo:table-cell number-columns-spanned="2" padding="0pt">
                 <fo:block text-align="center">
-                  <xsl:value-of select="illustration/scalar/InitAnnSepAcctGrossInt_Current"/>
+                  <xsl:value-of select="$scalars/InitAnnSepAcctGrossInt_Current"/>
                   Hypothetical Gross
                 </fo:block>
               </fo:table-cell>
@@ -778,7 +778,7 @@
               <fo:table-cell number-columns-spanned="2" padding="0pt" border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue">
                 <fo:block text-align="center">
                   <xsl:text>Return (</xsl:text>
-                  <xsl:value-of select="illustration/scalar/InitAnnSepAcctNetInt_GuaranteedZero"/>
+                  <xsl:value-of select="$scalars/InitAnnSepAcctNetInt_GuaranteedZero"/>
                   <xsl:text>&nbsp;net)</xsl:text>
                 </fo:block>
               </fo:table-cell>
@@ -786,7 +786,7 @@
               <fo:table-cell number-columns-spanned="2" padding="0pt" border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue">
                 <fo:block text-align="center">
                   <xsl:text>Return (</xsl:text>
-                  <xsl:value-of select="illustration/scalar/InitAnnSepAcctNetInt_Guaranteed"/>
+                  <xsl:value-of select="$scalars/InitAnnSepAcctNetInt_Guaranteed"/>
                   <xsl:text>&nbsp;net)</xsl:text>
                 </fo:block>
               </fo:table-cell>
@@ -794,7 +794,7 @@
               <fo:table-cell number-columns-spanned="2" padding="0pt" border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue">
                 <fo:block text-align="center">
                   <xsl:text>Return (</xsl:text>
-                  <xsl:value-of select="illustration/scalar/InitAnnSepAcctNetInt_CurrentZero"/>
+                  <xsl:value-of select="$scalars/InitAnnSepAcctNetInt_CurrentZero"/>
                   <xsl:text>&nbsp;net)</xsl:text>
                 </fo:block>
               </fo:table-cell>
@@ -802,7 +802,7 @@
               <fo:table-cell number-columns-spanned="2" padding="0pt" border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue">
                 <fo:block text-align="center">
                   <xsl:text>Return (</xsl:text>
-                  <xsl:value-of select="illustration/scalar/InitAnnSepAcctNetInt_Current"/>
+                  <xsl:value-of select="$scalars/InitAnnSepAcctNetInt_Current"/>
                   <xsl:text>&nbsp;net)</xsl:text>
                 </fo:block>
               </fo:table-cell>
@@ -817,9 +817,9 @@
           <fo:table-body>
             <xsl:call-template name="generate-table-values">
               <xsl:with-param name="columns" select="$columns"/>
-              <xsl:with-param name="counter" select="$illustration/scalar/InforceYear + 1"/>
+              <xsl:with-param name="counter" select="$scalars/InforceYear + 1"/>
               <xsl:with-param name="max-counter" select="$max-lapse-year"/>
-              <xsl:with-param name="inforceyear" select="0 - $illustration/scalar/InforceYear"/>
+              <xsl:with-param name="inforceyear" select="0 - $scalars/InforceYear"/>
             </xsl:call-template>
           </fo:table-body>
         </fo:table>
@@ -861,9 +861,9 @@
           <fo:table-body>
             <xsl:call-template name="generate-table-values">
               <xsl:with-param name="columns" select="$columns"/>
-              <xsl:with-param name="counter" select="$illustration/scalar/InforceYear + 1"/>
+              <xsl:with-param name="counter" select="$scalars/InforceYear + 1"/>
               <xsl:with-param name="max-counter" select="$max-lapse-year"/>
-              <xsl:with-param name="inforceyear" select="0 - $illustration/scalar/InforceYear"/>
+              <xsl:with-param name="inforceyear" select="0 - $scalars/InforceYear"/>
             </xsl:call-template>
           </fo:table-body>
         </fo:table>
@@ -904,9 +904,9 @@
           <fo:table-body>
             <xsl:call-template name="generate-table-values">
               <xsl:with-param name="columns" select="$columns"/>
-              <xsl:with-param name="counter" select="$illustration/scalar/InforceYear + 1"/>
+              <xsl:with-param name="counter" select="$scalars/InforceYear + 1"/>
               <xsl:with-param name="max-counter" select="$max-lapse-year"/>
-              <xsl:with-param name="inforceyear" select="0 - $illustration/scalar/InforceYear"/>
+              <xsl:with-param name="inforceyear" select="0 - $scalars/InforceYear"/>
             </xsl:call-template>
           </fo:table-body>
         </fo:table>
@@ -919,11 +919,11 @@
 
   <xsl:template name="list-fund-allocation">
     <xsl:param name="counter"/>
-    <xsl:if test="illustration/data/newcolumn/column[@name='FundNames']/duration[$counter]/@column_value!=''">
+    <xsl:if test="$vectors[@name='FundNames']/duration[$counter]/@column_value!=''">
       <fo:block>
-        <xsl:value-of select="illustration/data/newcolumn/column[@name='FundAllocations']/duration[$counter]/@column_value"/>
+        <xsl:value-of select="$vectors[@name='FundAllocations']/duration[$counter]/@column_value"/>
           <xsl:text> </xsl:text>
-          <xsl:value-of select="illustration/data/newcolumn/column[@name='FundNames']/duration[$counter]/@column_value"/>
+          <xsl:value-of select="$vectors[@name='FundNames']/duration[$counter]/@column_value"/>
       </fo:block>
       <xsl:call-template name="list-fund-allocation">
         <xsl:with-param name="counter" select="$counter + 1"/>
@@ -945,25 +945,25 @@
         </fo:block>
       </xsl:with-param>
       <xsl:with-param name="left-block">
-        <fo:block><xsl:value-of select="$illustration/scalar/InsCoName"/></fo:block>
-        <fo:block><xsl:value-of select="$illustration/scalar/InsCoAddr"/></fo:block>
+        <fo:block><xsl:value-of select="$scalars/InsCoName"/></fo:block>
+        <fo:block><xsl:value-of select="$scalars/InsCoAddr"/></fo:block>
       </xsl:with-param>
       <xsl:with-param name="center-block">
         <fo:block>
           Date Prepared:
           <xsl:call-template name="date-prepared"/>
         </fo:block>
-        <xsl:if test="$illustration/scalar/LmiVersion!=''">
+        <xsl:if test="$scalars/LmiVersion!=''">
           <fo:block>
             System Version:
-            <xsl:value-of select="$illustration/scalar/LmiVersion"/>
+            <xsl:value-of select="$scalars/LmiVersion"/>
           </fo:block>
         </xsl:if>
       </xsl:with-param>
       <xsl:with-param name="right-block">
         <fo:block>
           Policy Form:
-          <xsl:value-of select="$illustration/scalar/PolicyForm"/>
+          <xsl:value-of select="$scalars/PolicyForm"/>
         </fo:block>
         <fo:block>
           <xsl:choose>
