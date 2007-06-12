@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.768 2007-06-12 16:09:37 chicares Exp $
+// $Id: ChangeLog,v 1.769 2007-06-12 16:48:27 chicares Exp $
 
 MAINTENANCE
 
@@ -12373,7 +12373,7 @@ elicited a cvs error message.
 
 20070611T2211Z <chicares@cox.net> [1230]
 
-  file_command_test.cpp
+  file_command_test.cpp [new file]
   objects.make
 Add a unit test, exposing a latent problem.
 
@@ -12402,4 +12402,10 @@ Increase severity of a diagnostic.
 Prevent the problem exposed 20070611T2211Z by replacing a nonstatic
 with a static member. It should always have been static anyway because
 of its semantics.
+
+20070612T1648Z <chicares@cox.net> [1230]
+
+  file_command.cpp
+  file_command.hpp
+Move an '#include' directive to increase encapsulation.
 
