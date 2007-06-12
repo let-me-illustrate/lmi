@@ -19,7 +19,7 @@
 # email: <chicares@cox.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# $Id: objects.make,v 1.106 2007-06-11 22:11:06 chicares Exp $
+# $Id: objects.make,v 1.107 2007-06-12 21:41:37 chicares Exp $
 
 ################################################################################
 
@@ -145,6 +145,7 @@ cgi_objects := \
   main_common.o \
   main_common_non_wx.o \
   progress_meter_cgi.o \
+  system_command_non_wx.o \
 
 cli_objects := \
   $(duplicated_objects) \
@@ -154,6 +155,7 @@ cli_objects := \
   main_common.o \
   main_common_non_wx.o \
   progress_meter_cli.o \
+  system_command_non_wx.o \
 
 ################################################################################
 
@@ -316,6 +318,7 @@ lmi_wx_objects := \
   rounding_view.o \
   rounding_view_editor.o \
   single_choice_popup_menu.o \
+  system_command_wx.o \
   text_doc.o \
   text_view.o \
   tier_document.o \
@@ -513,6 +516,7 @@ authenticity_test$(EXEEXT): \
   miscellany.o \
   path_utility.o \
   system_command.o \
+  system_command_non_wx.o \
 
 calendar_date_test$(EXEEXT): \
   $(common_test_objects) \
@@ -739,6 +743,7 @@ stream_cast_test$(EXEEXT): \
 system_command_test$(EXEEXT): \
   $(common_test_objects) \
   system_command.o \
+  system_command_non_wx.o \
   system_command_test.o \
 
 test_tools_test$(EXEEXT): \
@@ -795,6 +800,7 @@ elapsed_time$(EXEEXT): \
   $(main_auxiliary_common_objects) \
   elapsed_time.o \
   system_command.o \
+  system_command_non_wx.o \
   timer.o \
 
 generate_passkey$(EXEEXT): \
@@ -808,6 +814,7 @@ generate_passkey$(EXEEXT): \
   miscellany.o \
   path_utility.o \
   system_command.o \
+  system_command_non_wx.o \
 
 ihs_crc_comp$(EXEEXT): \
   $(main_auxiliary_common_objects) \
