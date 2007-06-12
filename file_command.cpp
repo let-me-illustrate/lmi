@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: file_command.cpp,v 1.5 2007-01-27 00:00:51 wboutin Exp $
+// $Id: file_command.cpp,v 1.6 2007-06-12 16:09:37 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -32,6 +32,9 @@ namespace
 {
     callback<file_command_fp_type> file_command_callback;
 }
+
+typedef file_command_fp_type FunctionPointer;
+template<> FunctionPointer callback<FunctionPointer>::function_pointer_ = 0;
 
 bool file_command_initialize(file_command_fp_type f)
 {

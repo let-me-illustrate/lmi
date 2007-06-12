@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: callback_test.cpp,v 1.4 2007-01-27 00:00:51 wboutin Exp $
+// $Id: callback_test.cpp,v 1.5 2007-06-12 16:09:37 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -63,6 +63,9 @@ namespace shared_library
             }
     };
 }
+
+typedef shared_library::adder_fp_type FunctionPointer;
+template<> FunctionPointer callback<FunctionPointer>::function_pointer_ = 0;
 
 namespace application
 {
