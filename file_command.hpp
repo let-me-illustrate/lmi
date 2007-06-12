@@ -19,14 +19,13 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: file_command.hpp,v 1.7 2007-06-10 16:30:45 chicares Exp $
+// $Id: file_command.hpp,v 1.8 2007-06-12 16:48:27 chicares Exp $
 
 #ifndef file_command_hpp
 #define file_command_hpp
 
 #include "config.hpp"
 
-#include "callback.hpp"
 #include "so_attributes.hpp"
 
 #include <boost/utility.hpp>

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: file_command.cpp,v 1.6 2007-06-12 16:09:37 chicares Exp $
+// $Id: file_command.cpp,v 1.7 2007-06-12 16:48:27 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -27,6 +27,8 @@
 #endif // __BORLANDC__
 
 #include "file_command.hpp"
+
+#include "callback.hpp"
 
 namespace
 {
