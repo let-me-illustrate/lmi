@@ -21,13 +21,13 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: variable_annuity.xsl,v 1.24 2007-06-13 16:58:49 rericksberg Exp $
+    $Id: variable_annuity.xsl,v 1.25 2007-06-13 17:14:40 etarassov Exp $
 -->
 <!DOCTYPE stylesheet [
 <!ENTITY nl "&#xA0;">
 ]>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fo="http://www.w3.org/1999/XSL/Format" version="1.0">
-  <xsl:include href="fo_common.xsl"/>
+  <xsl:import href="fo_common.xsl"/>
   <xsl:output method="xml" encoding="UTF-8" indent="yes"/>
   <xsl:variable name="counter" select="1"/>
   <xsl:variable name="numberswoc">0123456789</xsl:variable>
