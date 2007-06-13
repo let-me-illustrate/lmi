@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: system_command.hpp,v 1.9 2007-06-12 21:41:38 chicares Exp $
+// $Id: system_command.hpp,v 1.10 2007-06-13 00:03:25 chicares Exp $
 
 #ifndef system_command_hpp
 #define system_command_hpp
@@ -34,9 +34,13 @@ typedef int (*system_command_fp_type)(std::string const&);
 
 bool LMI_SO system_command_initialize(system_command_fp_type);
 
-/// This is a cover function for std::system(). On posix platforms, it
-/// simply forwards its argument to std::system(). On msw, however, it
-/// must work around a serious problem.
+/// Cover function for std::system().
+///
+/// For the wx interface, it's implemented in terms of wxExecute().
+///
+/// Otherwise, on posix platforms, it simply forwards its argument to
+/// std::system(). On msw, however, it must work around a serious
+/// problem.
 ///
 /// The standard function often is implemented on msw to invoke
 ///   $ComSpec /c command

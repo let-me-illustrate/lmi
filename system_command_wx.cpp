@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: system_command_wx.cpp,v 1.1 2007-06-12 21:41:38 chicares Exp $
+// $Id: system_command_wx.cpp,v 1.2 2007-06-13 00:03:25 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -28,6 +28,86 @@
 
 #include "system_command.hpp"
 
-// For the nonce, use the same implementation as other interfaces.
-#include "system_command_non_wx.cpp"
+#include <wx/app.h> // wxTheApp
+#include <wx/msgdlg.h>
+#include <wx/utils.h>
+
+#include <cstddef>  // std::size_t
+#include <sstream>
+
+namespace
+{
+void assemble_console_lines
+    (std::ostringstream&  oss
+    ,wxArrayString const& lines
+    ,std::string const&   category
+    )
+{
+    if(lines.IsEmpty())
+        {
+        return;
+        }
+
+    oss << category << '\n';
+    for(std::size_t j = 0; j < lines.GetCount(); ++j)
+        {
+        oss << lines[j] << '\n';
+        }
+}
+
+/// Execute a system command using wxExecute().
+///
+/// If wxExecute() returns -1L, then exit immediately: the command
+/// could not be run, and wxExecute() itself pops up a messagebox
+/// explaining why.
+///
+/// If wxExecute() returns 0L, then exit immediately: the command
+/// succeeded.
+///
+/// Otherwise, show what would have appeared on stdout and stderr if
+/// the command had been run in an interactive shell, along with the
+/// exit code and the command itself.
+///
+/// In all cases, return wxExecute()'s exit code, truncated to 'int',
+/// provided that truncation does not change its boolean sense; else
+/// return -13.
+
+int concrete_system_command(std::string const& command_line)
+{
+    wxArrayString output;
+    wxArrayString errors;
+    long int exit_code = wxExecute(command_line, output, errors);
+    if(-1L != exit_code && 0L != exit_code)
+        {
+        std::ostringstream oss;
+        assemble_console_lines(oss, output, "Output:");
+        assemble_console_lines(oss, errors, "Errors:");
+        oss
+            << "Exit code "
+            << exit_code
+            << " from command '"
+            << command_line
+            << "'."
+            ;
+        wxMessageBox
+            (oss.str()
+            ,"Problem executing command"
+            ,wxICON_ERROR
+            ,wxTheApp->GetTopWindow()
+            );
+        }
+
+    int return_value = static_cast<int>(exit_code);
+    if(0 == return_value && 0 != exit_code)
+        {
+        return -13;
+        }
+    else
+        {
+        return return_value;
+        }
+}
+
+volatile bool ensure_setup = system_command_initialize(concrete_system_command);
+} // Unnamed namespace.
 
