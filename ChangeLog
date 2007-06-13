@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.773 2007-06-13 16:58:49 rericksberg Exp $
+// $Id: ChangeLog,v 1.774 2007-06-13 17:14:40 etarassov Exp $
 
 MAINTENANCE
 
@@ -12440,4 +12440,9 @@ Execute commands with wxExecute() for the wx interface.
 
   variable_annuity.xsl
 Version submitted for compliance approval.
+
+20070613T1714Z <etarassov@tt-solutions.com> [1230]
+
+  variable_annuity.xsl
+Use import xsl:instead of xsl:include.
 
