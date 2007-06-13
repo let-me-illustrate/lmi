@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.776 2007-06-13 17:25:19 etarassov Exp $
+// $Id: ChangeLog,v 1.777 2007-06-13 21:50:30 wboutin Exp $
 
 MAINTENANCE
 
@@ -12439,7 +12439,7 @@ Execute commands with wxExecute() for the wx interface.
 20070613T1658Z <rericksberg@massmutual.com> [1230]
 
   variable_annuity.xsl
-Version submitted for compliance approval.
+Reformat.
 
 20070613T1714Z <etarassov@tt-solutions.com> [1230]
 
@@ -12456,4 +12456,9 @@ Use 'date-prepared' template.
   variable_annuity.xsl
 Use global variables $scalars and $vectors instead of
 /illustration/scalar and /illustration/data/newcolumn/column.
+
+20070613T2150Z <wboutin@massmutual.com> [1230]
+
+  variable_annuity.xsl
+Abstract a footnote.
 

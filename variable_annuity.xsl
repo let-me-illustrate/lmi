@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: variable_annuity.xsl,v 1.27 2007-06-13 17:25:19 etarassov Exp $
+    $Id: variable_annuity.xsl,v 1.28 2007-06-13 21:50:30 wboutin Exp $
 -->
 <!DOCTYPE stylesheet [
 <!ENTITY nbsp "&#xA0;">
@@ -525,12 +525,7 @@
           </fo:block>
           <fo:block font-size="9.0pt" text-align="left" font-family="sans-serif" font-weight="normal" padding-top="1em">
             <fo:inline font-weight="bold">Administrative Charge: </fo:inline>
-            <xsl:text>
-              The current charge is equal on an annual basis to .20% of the Contract Value,
-              if on any monthly calculation date, the Contract Value is less than $1,000,000.
-              The guaranteed maximum charge is equal on an annual basis to .25% of the Contract
-              Value, if on any monthly calculation date, the Contract Value is less than $1,000,000.
-            </xsl:text>
+            <xsl:value-of select="$scalars/InterestDisclaimer"/>
           </fo:block>
           <fo:block font-size="9.0pt" text-align="left" font-family="sans-serif" font-weight="normal" padding-top="1em">
             <fo:inline font-weight="bold">Asset Based Distribution Charge: </fo:inline>
