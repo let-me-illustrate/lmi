@@ -21,10 +21,10 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: variable_annuity.xsl,v 1.25 2007-06-13 17:14:40 etarassov Exp $
+    $Id: variable_annuity.xsl,v 1.26 2007-06-13 17:21:28 etarassov Exp $
 -->
 <!DOCTYPE stylesheet [
-<!ENTITY nl "&#xA0;">
+<!ENTITY nbsp "&#xA0;">
 ]>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fo="http://www.w3.org/1999/XSL/Format" version="1.0">
   <xsl:import href="fo_common.xsl"/>
@@ -181,13 +181,7 @@
           </fo:block>
           <fo:block font-size="11.0pt" text-align="center" font-family="sans-serif" font-weight="bold" padding-after="225.0pt">
             <xsl:text>Date Prepared: </xsl:text>
-            <fo:inline white-space="nowrap">
-              <xsl:value-of select="illustration/scalar/PrepMonth"/>
-              <xsl:text> </xsl:text>
-              <xsl:value-of select="illustration/scalar/PrepDay"/>
-            </fo:inline>
-            <xsl:text>, </xsl:text>
-            <xsl:value-of select="illustration/scalar/PrepYear"/>
+            <xsl:call-template name="date-prepared"/>
           </fo:block>
           <fo:block font-size="9.0pt" text-align="left" font-family="sans-serif" font-weight="normal" padding-after="10.0pt">
             <xsl:text>
@@ -964,7 +958,7 @@
                       <xsl:with-param name="passString" select="illustration/scalar/Franchise"/>
                       <xsl:with-param name="length" select="15"/>
                     </xsl:call-template>
-                    <xsl:text>&nl;&nl;&nl;Contract number: </xsl:text>
+                    <xsl:text>&nbsp;&nbsp;&nbsp;Contract number: </xsl:text>
                     <xsl:call-template name="limitstring">
                       <xsl:with-param name="passString" select="illustration/scalar/PolicyNumber"/>
                       <xsl:with-param name="length" select="15"/>
@@ -1130,13 +1124,7 @@
           <fo:table-cell>
             <fo:block text-align="left">
               <xsl:text>Date Prepared: </xsl:text>
-              <fo:inline white-space="nowrap">
-                <xsl:value-of select="illustration/scalar/PrepMonth"/>
-                <xsl:text> </xsl:text>
-                <xsl:value-of select="illustration/scalar/PrepDay"/>
-              </fo:inline>
-              <xsl:text>, </xsl:text>
-              <xsl:value-of select="illustration/scalar/PrepYear"/>
+              <xsl:call-template name="date-prepared"/>
             </fo:block>
           </fo:table-cell>
           <fo:table-cell>

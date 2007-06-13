@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.774 2007-06-13 17:14:40 etarassov Exp $
+// $Id: ChangeLog,v 1.775 2007-06-13 17:21:27 etarassov Exp $
 
 MAINTENANCE
 
@@ -12445,4 +12445,9 @@ Version submitted for compliance approval.
 
   variable_annuity.xsl
 Use import xsl:instead of xsl:include.
+
+20070613T1721Z <etarassov@tt-solutions.com> [1230]
+
+  variable_annuity.xsl
+Use 'date-prepared' template.
 
