@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: main_wx.cpp,v 1.81 2007-06-10 16:36:16 chicares Exp $
+// $Id: main_wx.cpp,v 1.82 2007-06-13 00:03:24 chicares Exp $
 
 // Portions of this file are derived from wxWindows files
 //   samples/docvwmdi/docview.cpp (C) 1998 Julian Smart and Markus Holzem
@@ -948,7 +948,7 @@ void Skeleton::UponTestSafeMessage(wxCommandEvent&)
 
 void Skeleton::UponTestSystemCommand(wxCommandEvent&)
 {
-    int rc = system_command
+    system_command
         (
         wxGetTextFromUser
             ("Type a command."
@@ -957,7 +957,6 @@ void Skeleton::UponTestSystemCommand(wxCommandEvent&)
             ,wxTheApp->GetTopWindow()
             )
         );
-    warning() << "Return code: " << rc << "." << std::flush;
 }
 
 /// Periodically test the floating-point control word when no critical

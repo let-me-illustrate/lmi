@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.771 2007-06-12 22:35:15 etarassov Exp $
+// $Id: ChangeLog,v 1.772 2007-06-13 00:03:25 chicares Exp $
 
 MAINTENANCE
 
@@ -12428,4 +12428,11 @@ Refactor, permitting implementation to vary by user interface.
   offshore_private_placement.xsl
 Use global variables $scalars and $vectors instead of
 /illustration/scalar and /illustration/data/newcolumn/column.
+
+20070613T0003Z <chicares@cox.net> [1230]
+
+  main_wx.cpp
+  system_command.hpp
+  system_command_wx.cpp
+Execute commands with wxExecute() for the wx interface.
 
