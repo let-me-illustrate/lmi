@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: system_command_wx.cpp,v 1.3 2007-06-14 11:50:34 chicares Exp $
+// $Id: system_command_wx.cpp,v 1.4 2007-06-14 18:09:36 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -84,6 +84,8 @@ int concrete_system_command(std::string const& command_line)
     wxArrayString output;
     wxArrayString errors;
     long int exit_code = wxExecute(command_line, output, errors);
+    status() << timer.stop().elapsed_msec_str() << std::flush;
+
     if(-1L != exit_code && 0L != exit_code)
         {
         std::ostringstream oss;
@@ -103,8 +105,6 @@ int concrete_system_command(std::string const& command_line)
             ,wxTheApp->GetTopWindow()
             );
         }
-
-    status() << timer.stop().elapsed_msec_str() << std::flush;
 
     int return_value = static_cast<int>(exit_code);
     if(0 == return_value && 0 != exit_code)
