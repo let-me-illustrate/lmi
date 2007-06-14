@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.780 2007-06-14 16:15:37 etarassov Exp $
+// $Id: ChangeLog,v 1.781 2007-06-14 18:10:23 chicares Exp $
 
 MAINTENANCE
 
@@ -12484,4 +12484,14 @@ Add timer, busy cursor, and statusbar notifications.
   xslt_lmi.hpp
 On the fly reduce ledger XML data in the new format into the old
 format, as a result revive Formatter::RenderAsXslFo.
+
+20070614T1809Z <chicares@cox.net> [1231]
+
+  system_command_wx.cpp
+Stop timer before displaying any error in messagebox.
+
+20070614T1810Z <chicares@cox.net> [1231]
+
+  ledger_xsl.cpp
+Generate pdf files more efficiently.
 
