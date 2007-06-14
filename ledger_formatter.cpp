@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_formatter.cpp,v 1.9 2007-01-26 03:11:16 chicares Exp $
+// $Id: ledger_formatter.cpp,v 1.10 2007-06-14 16:15:07 etarassov Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -38,6 +38,17 @@
 #include <exception>
 #include <fstream>
 #include <ostream>
+
+namespace
+{
+// This abomination rips-off the const-protection coat from xml_document
+// and accesses its internal document member in a non-const way.
+xml_lmi::Document& get_non_const_document(xml_lmi::xml_document const& xml_doc)
+{
+    return const_cast<xml_lmi::Document&>(xml_doc.document());
+}
+
+} // unnamed namespace
 
 //=============================================================================
 LedgerFormatterFactory& LedgerFormatterFactory::Instance()
@@ -235,14 +246,32 @@ void LedgerFormatter::FormatAsTabDelimited(std::ostream& os) const
 //=============================================================================
 void LedgerFormatter::FormatAsXslFo(std::ostream& os) const
 {
+    // This function is controversial because it uses different data formats
+    // that are not supposed to work together.
+    //
+    // XML input data in the new format is converted back into the old format
+    // via "xml2to1.xsl" template to match the needs of the templates
+    // that generate xsl-fo output.
     try
         {
+        xml_lmi::xml_document const& input_v2 = GetXmlDoc(e_xml_full);
+        xml_lmi::xml_document        input_v1("dummy");
+
+        // First transformation reduces the new XML input format to the old one.
+        xslt_lmi::Stylesheet const& converter = GetStylesheet("xml2to1.xsl");
+
+        converter.transform
+            (input_v2.document()
+            ,get_non_const_document(input_v1)
+            );
+
+        // Second transformation produces xsl-fo output from the old format XML.
         xslt_lmi::Stylesheet const& stylesheet = GetStylesheet
             (ledger_values_->GetLedgerType().str() + ".xsl"
             );
 
         stylesheet.transform
-            (GetXmlDoc(e_xml_full).document()
+            (input_v1.document()
             ,os
             ,xslt_lmi::Stylesheet::e_output_xml
             );
@@ -251,6 +280,27 @@ void LedgerFormatter::FormatAsXslFo(std::ostream& os) const
         {
         warning()
             << "Error formatting ledger values as xsl-fo: '"
+            << e.what()
+            << "'."
+            << LMI_FLUSH
+            ;
+        }
+}
+
+//=============================================================================
+void LedgerFormatter::FormatAsXml
+    (std::ostream& os
+    ,enum_xml_version xml_version
+    ) const
+{
+    try
+        {
+        os << GetXmlDoc(xml_version);
+        }
+    catch(std::exception const& e)
+        {
+        warning()
+            << "Error generating xml for ledger: '"
             << e.what()
             << "'."
             << LMI_FLUSH

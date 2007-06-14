@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: emit_ledger.cpp,v 1.8 2007-06-09 01:24:25 chicares Exp $
+// $Id: emit_ledger.cpp,v 1.9 2007-06-14 16:15:06 etarassov Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -142,6 +142,15 @@ Timer timer0;
 std::cout
     << "...wrote '"
     << fs::change_extension(exemplar, ".xml").string()
+    << "'.\n"
+    << "  time: " << timer0.stop().elapsed_msec_str()
+    << std::endl
+    ;
+timer0.restart();
+    write_ledger_as_xml2(ledger, fs::basename(exemplar));
+std::cout
+    << "...wrote '"
+    << fs::change_extension(exemplar, ".v2.xml").string()
     << "'.\n"
     << "  time: " << timer0.stop().elapsed_msec_str()
     << std::endl
