@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.779 2007-06-14 16:15:06 etarassov Exp $
+// $Id: ChangeLog,v 1.780 2007-06-14 16:15:37 etarassov Exp $
 
 MAINTENANCE
 
@@ -12472,7 +12472,7 @@ Add timer, busy cursor, and statusbar notifications.
   system_command_wx.cpp
 Add timer, busy cursor, and statusbar notifications.
 
-20070614T1614Z <etarassov@tt-solutions.com> [1231]
+20070614T1615Z <etarassov@tt-solutions.com> [1231]
 
   emit_ledger.cpp
   ledger_formatter.cpp
