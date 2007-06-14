@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xsl.cpp,v 1.21 2007-06-14 16:15:07 etarassov Exp $
+// $Id: ledger_xsl.cpp,v 1.22 2007-06-14 18:10:23 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -32,9 +32,7 @@
 #include "configurable_settings.hpp"
 #include "global_settings.hpp"
 #include "ledger.hpp"
-#if defined LMI_USE_NEW_REPORTS
-#   include "ledger_formatter.hpp"
-#endif // defined LMI_USE_NEW_REPORTS
+#include "ledger_formatter.hpp"
 #include "miscellany.hpp"
 #include "path_utility.hpp"
 #include "system_command.hpp"
@@ -44,6 +42,11 @@
 
 #include <ios>
 #include <sstream>
+
+// Define this macro here, after including all the headers that it
+// could potentially affect.
+
+#define LMI_USE_NEW_REPORTS
 
 namespace
 {
@@ -100,7 +103,8 @@ std::string write_ledger_as_pdf(Ledger const& ledger, fs::path const& filepath, 
         :   fs::path("output")
         );
 
-    fs::path xml_out_file = unique_filepath(print_dir / real_filepath, ".xml");
+    // EXPERIMENTAL This variable should be renamed, e.g., to 'xml_fo_file'.
+    fs::path xml_out_file = unique_filepath(print_dir / real_filepath, ".fo.xml");
 
     fs::ofstream ofs(xml_out_file, ios_out_trunc_binary());
     // Scale a copy of the 'ledger' argument. The original must not be
@@ -174,7 +178,6 @@ std::string write_ledger_as_pdf(Ledger const& ledger, fs::path const& filepath, 
 //  - write_ledger_as_fo_xml() doesn't create the same output that
 //      xsltproc does: maybe it doesn't have the full xml dataset?
 
-#include "ledger_formatter.hpp"
 #include "timer.hpp"
 
 #include <boost/filesystem/convenience.hpp>
