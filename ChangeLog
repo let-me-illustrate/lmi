@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.777 2007-06-13 21:50:30 wboutin Exp $
+// $Id: ChangeLog,v 1.778 2007-06-14 11:50:47 chicares Exp $
 
 MAINTENANCE
 
@@ -12461,4 +12461,9 @@ Use global variables $scalars and $vectors instead of
 
   variable_annuity.xsl
 Abstract a footnote.
+
+20070614T1150Z <chicares@cox.net> [1230]
+
+  system_command_wx.cpp
+Add timer, busy cursor, and statusbar notifications.
 

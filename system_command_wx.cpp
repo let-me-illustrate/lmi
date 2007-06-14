@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: system_command_wx.cpp,v 1.2 2007-06-13 00:03:25 chicares Exp $
+// $Id: system_command_wx.cpp,v 1.3 2007-06-14 11:50:34 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -27,6 +27,9 @@
 #endif // __BORLANDC__
 
 #include "system_command.hpp"
+
+#include "alert.hpp"
+#include "timer.hpp"
 
 #include <wx/app.h> // wxTheApp
 #include <wx/msgdlg.h>
@@ -74,6 +77,10 @@ void assemble_console_lines
 
 int concrete_system_command(std::string const& command_line)
 {
+    Timer timer;
+    wxBusyCursor wait;
+    status() << "Running..." << std::flush;
+
     wxArrayString output;
     wxArrayString errors;
     long int exit_code = wxExecute(command_line, output, errors);
@@ -96,6 +103,8 @@ int concrete_system_command(std::string const& command_line)
             ,wxTheApp->GetTopWindow()
             );
         }
+
+    status() << timer.stop().elapsed_msec_str() << std::flush;
 
     int return_value = static_cast<int>(exit_code);
     if(0 == return_value && 0 != exit_code)
