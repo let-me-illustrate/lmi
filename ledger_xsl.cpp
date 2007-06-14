@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xsl.cpp,v 1.20 2007-06-09 01:24:26 chicares Exp $
+// $Id: ledger_xsl.cpp,v 1.21 2007-06-14 16:15:07 etarassov Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -191,6 +191,19 @@ void write_ledger_as_xml(Ledger const& ledger, fs::path const& filepath)
     scaled_ledger.AutoScale();
 
     scaled_ledger.write(ofs);
+}
+
+void write_ledger_as_xml2(Ledger const& ledger, fs::path const& filepath)
+{
+    fs::path input_file(filepath.string() + ".v2.xml");
+    fs::ofstream ifs(input_file, ios_out_trunc_binary());
+
+    Ledger scaled_ledger(ledger);
+    scaled_ledger.AutoScale();
+
+    LedgerFormatterFactory& factory = LedgerFormatterFactory::Instance();
+    LedgerFormatter formatter(factory.CreateFormatter(scaled_ledger));
+    formatter.FormatAsXml(ifs, e_xml_full);
 }
 
 void write_ledger_as_fo_xml(Ledger const& ledger, fs::path const& filepath)

@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_formatter.hpp,v 1.5 2007-02-25 19:28:18 chicares Exp $
+// $Id: ledger_formatter.hpp,v 1.6 2007-06-14 16:15:07 etarassov Exp $
 
 #ifndef ledger_formatter_hpp
 #define ledger_formatter_hpp
@@ -96,6 +96,7 @@ class LMI_SO LedgerFormatter
     void FormatAsLightTSV      (std::ostream&) const;
     void FormatAsTabDelimited  (std::ostream&) const;
     void FormatAsXslFo         (std::ostream&) const;
+    void FormatAsXml           (std::ostream&, enum_xml_version) const;
 
     Ledger const* GetLedger() const { return ledger_values_; }
 

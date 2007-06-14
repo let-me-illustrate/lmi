@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ledger_xsl.hpp,v 1.8 2007-06-09 01:24:26 chicares Exp $
+// $Id: ledger_xsl.hpp,v 1.9 2007-06-14 16:15:08 etarassov Exp $
 
 #ifndef ledger_xsl_hpp
 #define ledger_xsl_hpp
@@ -44,6 +44,7 @@ std::string LMI_SO write_ledger_as_pdf(Ledger const&, fs::path const&, bool expe
 // and not export any of these from a shared library.
 
 void               write_ledger_as_xml    (Ledger const&, fs::path const&);
+void               write_ledger_as_xml2   (Ledger const&, fs::path const&);
 void               write_ledger_as_fo_xml (Ledger const&, fs::path const&);
 
 #endif // ledger_xsl_hpp
