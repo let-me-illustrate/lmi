@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.778 2007-06-14 11:50:47 chicares Exp $
+// $Id: ChangeLog,v 1.779 2007-06-14 16:15:06 etarassov Exp $
 
 MAINTENANCE
 
@@ -12466,4 +12466,22 @@ Abstract a footnote.
 
   system_command_wx.cpp
 Add timer, busy cursor, and statusbar notifications.
+
+20070614T1150Z <chicares@cox.net> [1230]
+
+  system_command_wx.cpp
+Add timer, busy cursor, and statusbar notifications.
+
+20070614T1614Z <etarassov@tt-solutions.com> [1231]
+
+  emit_ledger.cpp
+  ledger_formatter.cpp
+  ledger_formatter.hpp
+  ledger_xsl.cpp
+  ledger_xsl.hpp
+  xml2to1.xsl          [new file]
+  xslt_lmi.cpp
+  xslt_lmi.hpp
+On the fly reduce ledger XML data in the new format into the old
+format, as a result revive Formatter::RenderAsXslFo.
 

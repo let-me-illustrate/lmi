@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: xslt_lmi.hpp,v 1.3 2007-03-04 16:33:31 chicares Exp $
+// $Id: xslt_lmi.hpp,v 1.4 2007-06-14 16:15:08 etarassov Exp $
 
 #ifndef xslt_lmi_hpp
 #define xslt_lmi_hpp
@@ -73,6 +73,17 @@ namespace xslt_lmi
             (Document const&
             ,std::ostream&
             ,enum_output_type
+            ,std::map<std::string,std::string> const& parameters
+            ) const;
+
+        void transform
+            (Document const& source
+            ,Document& destination
+            ) const;
+
+        void transform
+            (Document const& source
+            ,Document& destination
             ,std::map<std::string,std::string> const& parameters
             ) const;
 
