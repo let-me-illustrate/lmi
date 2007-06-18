@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: individual_private_placement.xsl,v 1.36 2007-06-18 13:40:13 etarassov Exp $
+    $Id: individual_private_placement.xsl,v 1.37 2007-06-18 13:47:59 etarassov Exp $
 -->
 <!DOCTYPE stylesheet [
 <!ENTITY nbsp "&#xA0;">
@@ -606,7 +606,7 @@
           <fo:block padding-top="1em">
             <xsl:text>The purpose of the Illustration is to show how the performance of the underlying separate account divisions could affect the Contract's cash values and death benefits. This Illustration is hypothetical and may not be used to project or predict investment results.</xsl:text>
           </fo:block>
-          <fo:block>
+          <fo:block padding-top=".5em" padding-bottom="1em">
             <xsl:text>This Illustration must be accompanied or preceded by a Confidential Private Placement Memorandum offering the Contract.</xsl:text>
           </fo:block>
         </xsl:when>
