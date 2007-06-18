@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.781.2.10 2007-06-18 13:51:53 etarassov Exp $
+// $Id: ChangeLog,v 1.781.2.11 2007-06-18 13:53:30 etarassov Exp $
 
 MAINTENANCE
 
@@ -12553,4 +12553,9 @@ Adjust logo spacing.
 
   fo_common.xsl
 Prevent row group splitting.
+
+20070618T1353Z <etarassov@tt-solutions.com> [1231]
+
+  nasd.xsl
+Remove 'get-special-column-value' empty template.
 
