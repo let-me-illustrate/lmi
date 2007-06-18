@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: offshore_private_placement.xsl,v 1.28 2007-06-12 22:35:16 etarassov Exp $
+    $Id: offshore_private_placement.xsl,v 1.29 2007-06-18 13:50:03 etarassov Exp $
 -->
 <!DOCTYPE stylesheet [
 <!ENTITY nbsp "&#xA0;">
@@ -127,7 +127,7 @@
         <!-- Define the contents of the header. -->
         <fo:static-content flow-name="xsl-region-before">
           <fo:block text-align="left">
-            <fo:external-graphic width="121.1pt" height="24.8pt" src="company_logo.png"/>
+            <xsl:call-template name="company-logo"/>
           </fo:block>
           <xsl:choose>
             <xsl:when test="$scalars/IsInforce!='1'">
@@ -158,7 +158,7 @@
         <!-- Define the contents of the header. -->
         <fo:static-content flow-name="xsl-region-before">
           <fo:block text-align="left">
-            <fo:external-graphic width="121.1pt" height="24.8pt" src="company_logo.png"/>
+            <xsl:call-template name="company-logo"/>
           </fo:block>
           <xsl:call-template name="standardheader">
             <xsl:with-param name="reporttitle" select="'Supplemental Illustration'"/>
@@ -182,7 +182,7 @@
         <!-- Define the contents of the header. -->
         <fo:static-content flow-name="xsl-region-before">
           <fo:block text-align="left">
-            <fo:external-graphic width="121.1pt" height="24.8pt" src="company_logo.png"/>
+            <xsl:call-template name="company-logo"/>
           </fo:block>
           <xsl:call-template name="standardheader"/>
         </fo:static-content>
@@ -244,7 +244,7 @@
         <!-- Define the contents of the header. -->
         <fo:static-content flow-name="xsl-region-before">
           <fo:block text-align="left">
-            <fo:external-graphic width="121.1pt" height="24.8pt" src="company_logo.png"/>
+            <xsl:call-template name="company-logo"/>
           </fo:block>
           <xsl:call-template name="standardheader"/>
         </fo:static-content>
@@ -365,7 +365,7 @@
         <!-- Define the contents of the header. -->
         <fo:static-content flow-name="xsl-region-before">
           <fo:block text-align="left">
-            <fo:external-graphic width="121.1pt" height="24.8pt" src="company_logo.png"/>
+            <xsl:call-template name="company-logo"/>
           </fo:block>
           <xsl:call-template name="standardheader"/>
         </fo:static-content>
@@ -531,7 +531,7 @@
           <!-- Define the contents of the header. -->
           <fo:static-content flow-name="xsl-region-before">
             <fo:block text-align="left">
-              <fo:external-graphic width="121.1pt" height="24.8pt" src="company_logo.png"/>
+              <xsl:call-template name="company-logo"/>
             </fo:block>
             <xsl:call-template name="standardheader">
               <xsl:with-param name="reporttitle" select="'Illustration Assumption Detail'"/>
@@ -555,7 +555,7 @@
           <!-- Define the contents of the header. -->
           <fo:static-content flow-name="xsl-region-before">
             <fo:block text-align="left">
-              <fo:external-graphic width="121.1pt" height="24.8pt" src="company_logo.png"/>
+              <xsl:call-template name="company-logo"/>
             </fo:block>
             <xsl:call-template name="standardheader">
               <xsl:with-param name="reporttitle" select="'Supplemental Report'"/>
