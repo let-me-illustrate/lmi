@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: system_command_wx.cpp,v 1.4 2007-06-14 18:09:36 chicares Exp $
+// $Id: system_command_wx.cpp,v 1.5 2007-06-18 11:22:22 chicares Exp $
 
 #ifdef __BORLANDC__
 #   include "pchfile.hpp"
@@ -89,15 +89,15 @@ int concrete_system_command(std::string const& command_line)
     if(-1L != exit_code && 0L != exit_code)
         {
         std::ostringstream oss;
-        assemble_console_lines(oss, output, "Output:");
-        assemble_console_lines(oss, errors, "Errors:");
         oss
             << "Exit code "
             << exit_code
             << " from command '"
             << command_line
-            << "'."
+            << "'.\n"
             ;
+        assemble_console_lines(oss, output, "Output:");
+        assemble_console_lines(oss, errors, "Errors:");
         wxMessageBox
             (oss.str()
             ,"Problem executing command"
