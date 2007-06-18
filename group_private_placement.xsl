@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: group_private_placement.xsl,v 1.30 2007-06-18 17:59:58 etarassov Exp $
+    $Id: group_private_placement.xsl,v 1.31 2007-06-18 18:15:34 etarassov Exp $
 -->
 <!DOCTYPE stylesheet [
 <!ENTITY nbsp "&#xA0;">
@@ -126,18 +126,18 @@
         <fo:block text-align="left">
           <xsl:call-template name="company-logo"/>
         </fo:block>
-        <xsl:choose>
-          <xsl:when test="$scalars/IsInforce!='1'">
-            <xsl:call-template name="standardheader">
-              <xsl:with-param name="reporttitle" select="'Basic Illustration'"/>
-            </xsl:call-template>
-          </xsl:when>
-          <xsl:otherwise>
-            <xsl:call-template name="standardheader">
-              <xsl:with-param name="reporttitle" select="'In Force Basic Illustration'"/>
-            </xsl:call-template>
-          </xsl:otherwise>
-        </xsl:choose>
+        <xsl:call-template name="standardheader">
+          <xsl:with-param name="reporttitle">
+            <xsl:choose>
+              <xsl:when test="$scalars/IsInforce!='1'">
+                Basic Illustration
+              </xsl:when>
+              <xsl:otherwise>
+                In Force Basic Illustration
+              </xsl:otherwise>
+            </xsl:choose>
+          </xsl:with-param>
+        </xsl:call-template>
         <xsl:call-template name="dollar-units"/>
         </fo:static-content>
 
