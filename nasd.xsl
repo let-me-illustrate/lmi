@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: nasd.xsl,v 1.47 2007-06-18 13:53:29 etarassov Exp $
+    $Id: nasd.xsl,v 1.48 2007-06-18 16:10:58 etarassov Exp $
 -->
 <!DOCTYPE stylesheet [
 <!ENTITY nbsp "&#xA0;">
@@ -222,47 +222,63 @@
 
         <!-- Column Definitions Summary Body  -->
         <fo:flow flow-name="xsl-region-body">
-          <fo:block text-align="left" font-size="10pt" font-family="sans-serif">
-            <fo:block font-weight="bold" text-align="center" padding-top="1em">
+          <fo:block padding-top="1em" padding-bottom="5em" text-align="left" font-size="10pt" font-family="sans-serif">
+            <fo:block font-weight="bold" text-align="center" padding-bottom="2em">
               Column Definitions
             </fo:block>
-            <fo:block font-weight="bold" padding-top="3em">
-              <xsl:text>Policy Year</xsl:text>
+
+            <fo:block font-weight="bold" padding-top="2em">
+              Policy Year
             </fo:block>
             <fo:block>
-              <xsl:text>The number of years the policy is assumed to have been in force.</xsl:text>
+              The number of years the policy is assumed to have been in force.
             </fo:block>
+
             <xsl:if test="not($is_composite)">
               <fo:block font-weight="bold" padding-top="2em">
-                <xsl:text>End of Year Age</xsl:text>
+                End of Year Age
               </fo:block>
-              <fo:block padding-bottom="1em">
-                <xsl:text>The issue age of the insured plus the number of completed policy years since the policy date.</xsl:text>
+              <fo:block>
+                The issue age of the insured plus the number of completed policy
+                years since the policy date.
               </fo:block>
             </xsl:if>
-            <fo:block font-weight="bold">
-              <xsl:text>Premium Outlay</xsl:text>
+
+            <fo:block font-weight="bold" padding-top="2em">
+              Premium Outlay
             </fo:block>
             <fo:block>
-              <xsl:text>The total amount the premium payor plans to pay each year, assuming that each payment is made at the beginning of the premium paying period.</xsl:text>
+              The total amount the premium payor plans to pay each year,
+              assuming that each payment is made at the beginning
+              of the premium paying period.
             </fo:block>
+
             <fo:block font-weight="bold" padding-top="2em">
-              <xsl:text>Net Premium</xsl:text>
+              Net Premium
             </fo:block>
             <fo:block>
-              <xsl:text>The Net Premium is the Premium Outlay less any premium loads.</xsl:text>
+              The Net Premium is the Premium Outlay less any premium loads.
             </fo:block>
+
             <fo:block font-weight="bold" padding-top="2em">
-              <xsl:text>Cash Surrender Value</xsl:text>
+              Cash Surrender Value
             </fo:block>
             <fo:block>
-              <xsl:text>The Cash Surrender Value is the amount payable to a policy owner upon surrender of the policy.  It is equal to the Account Value less any surrender charges, if applicable, and less any policy debt and any unpaid monthly charges.</xsl:text>
+              The Cash Surrender Value is the amount payable to a policy owner
+              upon surrender of the policy. It is equal to the Account Value
+              less any surrender charges, if applicable, and less any policy
+              debt and any unpaid monthly charges.
             </fo:block>
+
             <fo:block font-weight="bold" padding-top="2em">
-              <xsl:text>Death Benefit</xsl:text>
+              Death Benefit
             </fo:block>
-            <fo:block padding-bottom="5em">
-              <xsl:text>The Death Benefit is the net amount paid to a beneficiary following receipt of due proof of death.  The Death Benefit is equal to the benefit provided by the death benefit option in effect on the date of death less any policy debt and any unpaid monthly charges.</xsl:text>
+            <fo:block>
+              The Death Benefit is the net amount paid to a beneficiary
+              following receipt of due proof of death. The Death Benefit
+              is equal to the benefit provided by the death benefit option
+              in effect on the date of death less any policy debt and
+              any unpaid monthly charges.
             </fo:block>
           </fo:block>
         </fo:flow>
