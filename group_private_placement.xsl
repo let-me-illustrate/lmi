@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: group_private_placement.xsl,v 1.35 2007-06-18 20:19:30 etarassov Exp $
+    $Id: group_private_placement.xsl,v 1.36 2007-06-18 20:22:15 etarassov Exp $
 -->
 <!DOCTYPE stylesheet [
 <!ENTITY nbsp "&#xA0;">
@@ -813,33 +813,33 @@
               </fo:table-cell>
               <fo:table-cell number-columns-spanned="2" padding="0pt" border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue">
                 <fo:block text-align="center">
-                  <xsl:text>Return (</xsl:text>
+                  Return (
                   <xsl:value-of select="$scalars/InitAnnSepAcctNetInt_GuaranteedZero"/>
-                  <xsl:text>&nbsp;net)</xsl:text>
+                  net)
                 </fo:block>
               </fo:table-cell>
               <fo:table-cell><fo:block/></fo:table-cell>
               <fo:table-cell number-columns-spanned="2" padding="0pt" border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue">
                 <fo:block text-align="center">
-                  <xsl:text>Return (</xsl:text>
+                  Return (
                   <xsl:value-of select="$scalars/InitAnnSepAcctNetInt_Guaranteed"/>
-                  <xsl:text>&nbsp;net)</xsl:text>
+                  net)
                 </fo:block>
               </fo:table-cell>
               <fo:table-cell><fo:block/></fo:table-cell>
               <fo:table-cell number-columns-spanned="2" padding="0pt" border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue">
                 <fo:block text-align="center">
-                  <xsl:text>Return (</xsl:text>
+                  Return (
                   <xsl:value-of select="$scalars/InitAnnSepAcctNetInt_CurrentZero"/>
-                  <xsl:text>&nbsp;net)</xsl:text>
+                  net)
                 </fo:block>
               </fo:table-cell>
               <fo:table-cell><fo:block/></fo:table-cell>
               <fo:table-cell number-columns-spanned="2" padding="0pt" border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue">
                 <fo:block text-align="center">
-                  <xsl:text>Return (</xsl:text>
+                  Return (
                   <xsl:value-of select="$scalars/InitAnnSepAcctNetInt_Current"/>
-                  <xsl:text>&nbsp;net)</xsl:text>
+                  net)
                 </fo:block>
               </fo:table-cell>
             </fo:table-row>
@@ -958,8 +958,7 @@
     <xsl:if test="$vectors[@name='FundNames']/duration[$counter]/@column_value!=''">
       <fo:block>
         <xsl:value-of select="$vectors[@name='FundAllocations']/duration[$counter]/@column_value"/>
-          <xsl:text> </xsl:text>
-          <xsl:value-of select="$vectors[@name='FundNames']/duration[$counter]/@column_value"/>
+        <xsl:value-of select="$vectors[@name='FundNames']/duration[$counter]/@column_value"/>
       </fo:block>
       <xsl:call-template name="list-fund-allocation">
         <xsl:with-param name="counter" select="$counter + 1"/>
@@ -1007,7 +1006,7 @@
               <xsl:call-template name="page-of"/>
             </xsl:when>
             <xsl:otherwise>
-              <xsl:text>Attachment</xsl:text>
+              Attachment
             </xsl:otherwise>
           </xsl:choose>
         </fo:block>
