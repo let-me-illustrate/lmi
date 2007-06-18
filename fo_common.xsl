@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: fo_common.xsl,v 1.34 2007-06-18 13:36:22 etarassov Exp $
+    $Id: fo_common.xsl,v 1.35 2007-06-18 13:50:05 etarassov Exp $
 -->
 <!DOCTYPE stylesheet [
 <!ENTITY nbsp "&#xA0;">
@@ -617,6 +617,10 @@
     </xsl:choose>
   </xsl:template>
 
+  <xsl:template name="company-logo">
+    <fo:external-graphic width="121.1pt" height="24.8pt" src="company_logo.png"/>
+  </xsl:template>
+
   <!-- The cover page -->
   <xsl:template name="generic-cover">
     <fo:page-sequence master-reference="cover" force-page-count="no-force">
@@ -678,10 +682,10 @@
             <xsl:call-template name="date-prepared"/>
           </fo:block>
 
-          <fo:block padding-top="10em">
-            <fo:external-graphic width="121.1pt" height="24.8pt" src="company_logo.png"/>
+          <fo:block padding-top="9em">
+            <xsl:call-template name="company-logo"/>
           </fo:block>
-          <fo:block margin-top="1.5em">
+          <fo:block padding-top="1em">
             <xsl:value-of select="$scalars/InsCoName"/>
           </fo:block>
           <fo:block padding-bottom="3em">

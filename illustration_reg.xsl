@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: illustration_reg.xsl,v 1.39 2007-06-18 13:46:35 etarassov Exp $
+    $Id: illustration_reg.xsl,v 1.40 2007-06-18 13:50:05 etarassov Exp $
 -->
 <!DOCTYPE stylesheet [
 <!ENTITY nbsp "&#xA0;">
@@ -135,7 +135,7 @@
         <!-- Define the contents of the header. -->
         <fo:static-content flow-name="xsl-region-before">
           <fo:block text-align="left">
-            <fo:external-graphic width="121.1pt" height="24.8pt" src="company_logo.png"/>
+            <xsl:call-template name="company-logo"/>
           </fo:block>
         </fo:static-content>
 
@@ -499,7 +499,7 @@
         <!-- Define the contents of the header. -->
         <fo:static-content flow-name="xsl-region-before">
           <fo:block text-align="left">
-            <fo:external-graphic width="121.1pt" height="24.8pt" src="company_logo.png"/>
+            <xsl:call-template name="company-logo"/>
           </fo:block>
         </fo:static-content>
 
@@ -632,7 +632,7 @@
           <!-- Define the contents of the header. -->
           <fo:static-content flow-name="xsl-region-before">
             <fo:block text-align="left">
-              <fo:external-graphic width="121.1pt" height="24.8pt" src="company_logo.png"/>
+              <xsl:call-template name="company-logo"/>
             </fo:block>
             <xsl:call-template name="standardheader"/>
             <fo:block text-align="center" font-size="10.0pt" space-before="5.0pt">
@@ -655,7 +655,7 @@
         <!-- Define the contents of the header. -->
         <fo:static-content flow-name="xsl-region-before">
           <fo:block text-align="left">
-            <fo:external-graphic width="121.1pt" height="24.8pt" src="company_logo.png"/>
+            <xsl:call-template name="company-logo"/>
           </fo:block>
           <xsl:call-template name="standardheader"/>
           <fo:block text-align="center" font-size="10.0pt" space-before="5.0pt">
@@ -721,7 +721,7 @@
         <!-- Define the contents of the header. -->
         <fo:static-content flow-name="xsl-region-before">
           <fo:block text-align="left">
-            <fo:external-graphic width="121.1pt" height="24.8pt" src="company_logo.png"/>
+            <xsl:call-template name="company-logo"/>
           </fo:block>
           <xsl:call-template name="standardheader"/>
           <fo:block text-align="center" font-size="10.0pt" space-before="5.0pt">
@@ -791,7 +791,7 @@
           <!-- Define the contents of the header. -->
           <fo:static-content flow-name="xsl-region-before">
             <fo:block text-align="left">
-              <fo:external-graphic width="121.1pt" height="24.8pt" src="company_logo.png"/>
+              <xsl:call-template name="company-logo"/>
             </fo:block>
             <xsl:call-template name="standardheader"/>
             <fo:block text-align="center" font-size="10.0pt" space-before="3.0pt">
@@ -824,7 +824,7 @@
           <!-- Define the contents of the header. -->
           <fo:static-content flow-name="xsl-region-before">
             <fo:block text-align="left">
-              <fo:external-graphic width="121.1pt" height="24.8pt" src="company_logo.png"/>
+              <xsl:call-template name="company-logo"/>
             </fo:block>
             <xsl:call-template name="standardheader"/>
             <fo:block text-align="center" font-size="10.0pt">
