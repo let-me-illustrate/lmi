@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: individual_private_placement.xsl,v 1.38 2007-06-18 17:59:58 etarassov Exp $
+    $Id: individual_private_placement.xsl,v 1.39 2007-06-18 21:20:03 etarassov Exp $
 -->
 <!DOCTYPE stylesheet [
 <!ENTITY nbsp "&#xA0;">
@@ -106,155 +106,149 @@
                 <xsl:value-of select="$scalars/PolicyMktgName"/>
               </fo:block>
               <fo:block>
-                <xsl:value-of select="$scalars/PolicyLegalName"/>
-                <xsl:text> Cover Sheet</xsl:text>
+                <xsl:value-of select="$scalars/PolicyLegalName"/> Cover Sheet
               </fo:block>
               <fo:block padding-top="1em">
-                <xsl:text>The purpose of the attached illustration is to show how the performance of the underlying separate account divisions could affect the proposed </xsl:text>
-                <xsl:text>contract's cash values and death benefits. The illustration is hypothetical and may not be used to project or predict investment results. The illustration </xsl:text>
-                <xsl:text>"must be accompanied or preceded by a Confidential Private Placement Memorandum offering the Contract.</xsl:text>
+                The purpose of the attached illustration is to show
+                how the performance of the underlying separate account divisions
+                could affect the proposed contract's cash values
+                and death benefits. The illustration is hypothetical
+                and may not be used to project or predict investment results.
+                The illustration must be accompanied or preceded
+                by a Confidential Private Placement Memorandum
+                offering the Contract.
               </fo:block>
               <fo:block padding-top="1em">
-                <xsl:text>Placement agent: </xsl:text>
+                Placement agent:
                 <xsl:value-of select="$scalars/MainUnderwriter"/>
               </fo:block>
               <xsl:if test="$scalars/ScaleUnit!=''">
                 <fo:block padding-top="1em">
-                  <xsl:text>Values per </xsl:text>
-                  <xsl:value-of select="$scalars/ScaleUnit"/>
-                  <xsl:text> US dollars.</xsl:text>
+                  Values per
+                  <xsl:value-of select="$scalars/ScaleUnit"/> US dollars.
                 </fo:block>
               </xsl:if>
               <fo:block text-align="center" padding-top="1em">
-                <xsl:text>THIS ILLUSTRATION COVER SHEET IS FOR REGISTERED REPRESENTATIVE USE ONLY. NOT FOR USE WITH CLIENTS.</xsl:text>
+                THIS ILLUSTRATION COVER SHEET IS
+                FOR REGISTERED REPRESENTATIVE USE ONLY.
+                NOT FOR USE WITH CLIENTS.
               </fo:block>
               <fo:block padding-top="1em">
                 <xsl:text>Date prepared: </xsl:text>
-                <xsl:value-of select="$scalars/PrepYear"/>
-                <xsl:text>-</xsl:text>
-                <xsl:value-of select="$scalars/PrepMonth"/>
-                <xsl:text>-</xsl:text>
-                <xsl:value-of select="$scalars/PrepDay"/>
+                <!- Comment: The original date format was 'Y-M-D' ->
+                <xsl:call-template name="date-prepared"/>
               </fo:block>
               <fo:block>
-                <xsl:text>Producer: </xsl:text>
-                <xsl:value-of select="$scalars/ProducerName"/>
+                Producer: <xsl:value-of select="$scalars/ProducerName"/>
               </fo:block>
               <fo:block>
-                <xsl:text>Client: </xsl:text>
-                <xsl:value-of select="$scalars/Insured1"/>
+                Client: <xsl:value-of select="$scalars/Insured1"/>
               </fo:block>
               <fo:block>
-                <xsl:text>Gender: </xsl:text>
-                <xsl:value-of select="$scalars/Gender"/>
+                Gender: <xsl:value-of select="$scalars/Gender"/>
               </fo:block>
               <fo:block>
-                <xsl:text>Issue age: </xsl:text>
-                <xsl:value-of select="$scalars/Age"/>
+                Issue age: <xsl:value-of select="$scalars/Age"/>
               </fo:block>
               <fo:block>
-                <xsl:text>State of jurisdiction: </xsl:text>
+                State of jurisdiction:
                 <xsl:value-of select="$scalars/GetStatePostalAbbrev"/>
               </fo:block>
               <fo:block>
-                <xsl:text>Country: </xsl:text>
-                <xsl:value-of select="$scalars/CountryIso3166Abbrev"/>
+                Country: <xsl:value-of select="$scalars/CountryIso3166Abbrev"/>
               </fo:block>
               <fo:block>
-                <xsl:text>Non-US corridor factor: </xsl:text>
+                Non-US corridor factor:
                 <xsl:value-of select="$scalars/CorridorFactorSequence"/>
               </fo:block>
               <fo:block>
-                <xsl:text>Rate class: </xsl:text>
-                <xsl:value-of select="$scalars/UWClass"/>
+                Rate class: <xsl:value-of select="$scalars/UWClass"/>
               </fo:block>
               <fo:block>
-                <xsl:text>7702 test: </xsl:text>
-                <xsl:value-of select="$scalars/DefnLifeIns"/>
+                7702 test: <xsl:value-of select="$scalars/DefnLifeIns"/>
               </fo:block>
               <fo:block>
-                <xsl:text>MEC: </xsl:text>
+                MEC:
                 <xsl:choose>
                   <xsl:when test="$scalars/IsMec='1'">
-                    <xsl:text>Yes</xsl:text>
+                    Yes
                   </xsl:when>
                   <xsl:otherwise>
-                    <xsl:text>No</xsl:text>
+                    No
                   </xsl:otherwise>
                 </xsl:choose>
               </fo:block>
               <fo:block>
-                <xsl:text>Assumed gross rate: </xsl:text>
+                Assumed gross rate:
                 <xsl:value-of select="$scalars/InitAnnSepAcctGrossInt_Current"/>
               </fo:block>
               <fo:block>
-                <xsl:text>New cash loan: </xsl:text>
+                New cash loan:
                 <xsl:value-of select="$scalars/LoanSequence"/>
               </fo:block>
               <fo:block>
-                <xsl:text>Withdrawal: </xsl:text>
+                Withdrawal:
                 <xsl:value-of select="$scalars/NetWDSequence"/>
               </fo:block>
               <fo:block>
-                <xsl:text>Comments:      </xsl:text>
-                <xsl:value-of select="$scalars/Comments"/>
+                Comments: <xsl:value-of select="$scalars/Comments"/>
               </fo:block>
               <fo:block padding-top="1em">
-                <xsl:text>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Premiums and death benefits</xsl:text>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                Premiums and death benefits
               </fo:block>
               <fo:block padding-top="1em">
-                <xsl:text>Premium: </xsl:text>
-                <xsl:value-of select="$scalars/GrossPmtSequence"/>
+                Premium: <xsl:value-of select="$scalars/GrossPmtSequence"/>
               </fo:block>
               <fo:block>
-                <xsl:text>Dumpin: </xsl:text>
-                <xsl:value-of select="$scalars/DumpinScaled"/>
+                Dumpin: <xsl:value-of select="$scalars/DumpinScaled"/>
               </fo:block>
               <fo:block>
-                <xsl:text>Internal 1035 exchange: </xsl:text>
+                Internal 1035 exchange:
                 <xsl:value-of select="$scalars/Internal1035AmountScaled"/>
               </fo:block>
               <fo:block>
-                <xsl:text>External 1035 exchange: </xsl:text>
+                External 1035 exchange:
                 <xsl:value-of select="$scalars/External1035AmountScaled"/>
               </fo:block>
               <fo:block>
-                <xsl:text>Specified amount: </xsl:text>
+                Specified amount:
                 <xsl:value-of select="$scalars/SpecAmtSequence"/>
               </fo:block>
               <fo:block>
-                <xsl:text>Death benefit option: </xsl:text>
+                Death benefit option:
                 <xsl:value-of select="$scalars/DBOptSquence"/>
               </fo:block>
               <fo:block padding-top="1em">
-                <xsl:text>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Current fees and charges</xsl:text>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                Current fees and charges
               </fo:block>
               <fo:block padding-top="1em">
-                <xsl:text>State premium tax load: </xsl:text>
+                State premium tax load:
                 <xsl:value-of select="$scalars/StatePremTaxLoad"/>
               </fo:block>
               <fo:block>
-                <xsl:text>DAC tax premium load: </xsl:text>
+                DAC tax premium load:
                 <xsl:value-of select="$scalars/DacTaxPremLoadRate"/>
               </fo:block>
               <fo:block>
-                <xsl:text>Asset-based compensation: </xsl:text>
+                Asset-based compensation:
                 <xsl:value-of select="$scalars/AddonCompOnAssetsSquence"/>
               </fo:block>
               <fo:block>
-                <xsl:text>Premium-based compensation: </xsl:text>
+                Premium-based compensation:
                 <xsl:value-of select="$scalars/AddonCompOnPremiumSequence"/>
               </fo:block>
               <fo:block>
-                <xsl:text>Add-on custodial fee: </xsl:text>
+                Add-on custodial fee:
                 <xsl:value-of select="$scalars/AddonMonthlyFeeSquence"/>
               </fo:block>
               <fo:block>
-                <xsl:text>Country COI multiplier: </xsl:text>
+                Country COI multiplier:
                 <xsl:value-of select="$scalars/CountryCOIMultiplier"/>
               </fo:block>
               <fo:block>
-                <xsl:text>Separate account load: </xsl:text>
+                Separate account load:
                 <xsl:value-of select="$scalars/TieredSepAcctLoadBands"/>
               </fo:block>
             </fo:block>
