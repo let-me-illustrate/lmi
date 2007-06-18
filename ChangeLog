@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.781.2.13 2007-06-18 16:14:28 etarassov Exp $
+// $Id: ChangeLog,v 1.781.2.14 2007-06-18 16:47:00 etarassov Exp $
 
 MAINTENANCE
 
@@ -12564,8 +12564,8 @@ Remove 'get-special-column-value' empty template.
   nasd.xsl
 Reformat 'column-definitions'.
 
-20070618T1614Z <etarassov@tt-solutions.com> [1231]
+20070618T1646Z <etarassov@tt-solutions.com> [1231]
 
   nasd.xsl
-Slightly reformat a block of code.
+Reformat text.
 
