@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: illustration_reg.xsl,v 1.38 2007-06-18 13:44:42 etarassov Exp $
+    $Id: illustration_reg.xsl,v 1.39 2007-06-18 13:46:35 etarassov Exp $
 -->
 <!DOCTYPE stylesheet [
 <!ENTITY nbsp "&#xA0;">
@@ -85,7 +85,7 @@
         <!-- Define the Tabular Detail page. -->
         <fo:simple-page-master master-name="tabular-detail" page-height="11in" page-width="8.5in" margin-top="0.25in" margin-bottom="0.25in" margin-left="0.25in" margin-right="0.25in">
           <!-- Central part of page -->
-          <fo:region-body column-count="1" margin-top="3.1in" margin-bottom="1.20in"/>
+          <fo:region-body column-count="1" margin-top="3.1in" margin-bottom="1.3in"/>
           <!-- Header -->
           <fo:region-before extent="3.1in"/>
           <!-- Footer -->
@@ -95,7 +95,7 @@
         <!-- Define the Tabular Detail (Report 2) page. -->
         <fo:simple-page-master master-name="tabular-detail-report2" page-height="11in" page-width="8.5in" margin-top="0.25in" margin-bottom="0.25in" margin-left="0.25in" margin-right="0.25in">
           <!-- Central part of page -->
-          <fo:region-body column-count="1" margin-top="3.2in" margin-bottom="1.25in"/>
+          <fo:region-body column-count="1" margin-top="3.2in" margin-bottom="1.35in"/>
           <!-- Header -->
           <fo:region-before extent="3.1in"/>
           <!-- Footer -->
@@ -106,7 +106,7 @@
         <xsl:if test="$has_supplemental_report">
           <fo:simple-page-master master-name="supplemental-report" page-height="11in" page-width="8.5in" margin-top="0.25in" margin-bottom="0.25in" margin-left="0.25in" margin-right="0.25in">
             <!-- Central part of page -->
-            <fo:region-body column-count="1" margin-top="2.90in" margin-bottom="1.25in"/>
+            <fo:region-body column-count="1" margin-top="3.0in" margin-bottom="1.25in"/>
             <!-- Header -->
             <fo:region-before extent="3.0in"/>
             <!-- Footer -->
