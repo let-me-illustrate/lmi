@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.781.2.1 2007-06-18 13:29:24 etarassov Exp $
+// $Id: ChangeLog,v 1.781.2.2 2007-06-18 13:33:49 etarassov Exp $
 
 MAINTENANCE
 
@@ -12503,4 +12503,9 @@ Create a branch branch-20070618T1322Z-xsl-fo.
 
   fo_common.xsl
 Remove parentheses in '(Values shown are in XXX)'.
+
+20070618T1333Z <etarassov@tt-solutions.com> [1231]
+
+  fo_common.xsl
+Center 'Net Crediting Rate' cell over two cells it spans over.
 
