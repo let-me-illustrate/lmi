@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: offshore_private_placement.xsl,v 1.29 2007-06-18 13:50:03 etarassov Exp $
+    $Id: offshore_private_placement.xsl,v 1.30 2007-06-18 17:59:58 etarassov Exp $
 -->
 <!DOCTYPE stylesheet [
 <!ENTITY nbsp "&#xA0;">
@@ -892,7 +892,7 @@
       <column name="CSVNet_Current">Cash Surr Value</column>
       <column name="EOYDeathBft_Current">Death _Benefit</column>
     </xsl:variable>
-    <xsl:variable name="basic_illustration_columns" select="document('')/xsl:stylesheet/xsl:template[@name='basic-illustration-report']/xsl:variable[@name='basic_illustration_columns_raw']/column"/>
+    <xsl:variable name="basic_illustration_columns" select="document('')//xsl:variable[@name='basic_illustration_columns_raw']/column"/>
     <xsl:variable name="columns" select="$basic_illustration_columns[not(@composite) or boolean(boolean(@composite='1')=$is_composite)]"/>
 
     <!-- The main contents of the body page -->
@@ -1028,7 +1028,7 @@
       <column name="CSVNet_Current">Cash Surr _Value</column>
       <column name="EOYDeathBft_Current">Death _Benefit</column>
     </xsl:variable>
-    <xsl:variable name="supplemental_illustration_columns" select="document('')/xsl:stylesheet/xsl:template[@name='supplemental-illustration-report']/xsl:variable[@name='supplemental_illustration_columns_raw']/column"/>
+    <xsl:variable name="supplemental_illustration_columns" select="document('')//xsl:variable[@name='supplemental_illustration_columns_raw']/column"/>
     <xsl:variable name="columns" select="$supplemental_illustration_columns[not(@composite) or boolean(boolean(@composite='1')=$is_composite)]"/>
 
     <!-- The main contents of the body page -->
@@ -1081,7 +1081,7 @@
       <column composite="0" scalar="InitAnnLoanDueRate">|Assumed _Loan Interest</column>
       <column composite="0" name="MonthlyFlatExtra">|Flat Extra _Per 1,000</column>
     </xsl:variable>
-    <xsl:variable name="illustration_assumption_columns" select="document('')/xsl:stylesheet/xsl:template[@name='illustration-assumption-report']/xsl:variable[@name='illustration_assumption_columns_raw']/column"/>
+    <xsl:variable name="illustration_assumption_columns" select="document('')//xsl:variable[@name='illustration_assumption_columns_raw']/column"/>
     <xsl:variable name="columns" select="$illustration_assumption_columns[not(@composite) or (boolean(@composite='1')=$is_composite)]"/>
 
     <!-- The main contents of the body page -->
