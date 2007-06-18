@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: group_private_placement.xsl,v 1.34 2007-06-18 20:15:17 etarassov Exp $
+    $Id: group_private_placement.xsl,v 1.35 2007-06-18 20:19:30 etarassov Exp $
 -->
 <!DOCTYPE stylesheet [
 <!ENTITY nbsp "&#xA0;">
@@ -635,7 +635,8 @@
                 Contract: <xsl:value-of select="$scalars/PolicyMktgName"/>
               </fo:block>
               <fo:block text-align="left">
-                <xsl:text>Initial Premium: $</xsl:text>
+                Initial Premium:
+                $<xsl:value-of select="$scalars/InitPrem"/>
               </fo:block>
               <xsl:if test="not($is_composite)">
                 <fo:block text-align="left">
