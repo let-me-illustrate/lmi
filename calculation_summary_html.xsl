@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: calculation_summary_html.xsl,v 1.5 2007-01-27 00:00:51 wboutin Exp $
+    $Id: calculation_summary_html.xsl,v 1.5.14.1 2007-06-18 17:59:59 etarassov Exp $
 -->
 
 <xsl:stylesheet xmlns:lmi="http://savannah.nongnu.org/projects/lmi" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0" xsi:schemaLocation="http://savannah.nongnu.org/projects/lmi ledger.xsd">
@@ -58,7 +58,7 @@
     <column name="EOYDeathBft" basis="run_curr_basis"/>
 -->
 </xsl:variable>
-<xsl:variable name="basic_columns" select="document('')/xsl:stylesheet/xsl:variable[@name='basic_columns_xml']/column"/>
+<xsl:variable name="basic_columns" select="document('')//xsl:variable[@name='basic_columns_xml']/column"/>
 
 <!-- Basic columns and columns from supplemental report -->
 <xsl:variable name="all_columns" select="$basic_columns | $calculation_summary_columns"/>
