@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: fo_common.xsl,v 1.32 2007-06-12 22:35:15 etarassov Exp $
+    $Id: fo_common.xsl,v 1.33 2007-06-18 13:29:25 etarassov Exp $
 -->
 <!DOCTYPE stylesheet [
 <!ENTITY nbsp "&#xA0;">
@@ -137,14 +137,14 @@
   -->
   <xsl:template name="dollar-units">
     <fo:block text-align="center" font-size="9pt" padding-top="1em">
+      <xsl:text>Values shown are in </xsl:text>
       <xsl:choose>
         <xsl:when test="$scalars/ScaleUnit=''">
-          <xsl:text>(Values shown are in dollars)</xsl:text>
+          <xsl:text>dollars</xsl:text>
         </xsl:when>
         <xsl:otherwise>
-          <xsl:text>(Values shown are in </xsl:text>
           <xsl:value-of select="$scalars/ScaleUnit"/>
-          <xsl:text>s of dollars)</xsl:text>
+          <xsl:text>s of dollars</xsl:text>
         </xsl:otherwise>
       </xsl:choose>
     </fo:block>
