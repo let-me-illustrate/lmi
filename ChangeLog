@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.781 2007-06-14 18:10:23 chicares Exp $
+// $Id: ChangeLog,v 1.782 2007-06-18 11:22:22 chicares Exp $
 
 MAINTENANCE
 
@@ -12494,4 +12494,10 @@ Stop timer before displaying any error in messagebox.
 
   ledger_xsl.cpp
 Generate pdf files more efficiently.
+
+20070618T1122Z <chicares@cox.net> [1231]
+
+  system_command_wx.cpp
+Improve arrangement of output. See:
+  http://lists.nongnu.org/archive/html/lmi/2007-06/msg00010.html
 
