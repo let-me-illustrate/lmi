@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.781 2007-06-14 18:10:23 chicares Exp $
+// $Id: ChangeLog,v 1.781.2.1 2007-06-18 13:29:24 etarassov Exp $
 
 MAINTENANCE
 
@@ -12494,4 +12494,13 @@ Stop timer before displaying any error in messagebox.
 
   ledger_xsl.cpp
 Generate pdf files more efficiently.
+
+20070618T1323Z <etarassov@tt-solutions.com> [1231]
+
+Create a branch branch-20070618T1322Z-xsl-fo.
+
+20070618T1329Z <etarassov@tt-solutions.com> [1231]
+
+  fo_common.xsl
+Remove parentheses in '(Values shown are in XXX)'.
 
