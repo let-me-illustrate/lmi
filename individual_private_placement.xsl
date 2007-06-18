@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: individual_private_placement.xsl,v 1.37 2007-06-18 13:47:59 etarassov Exp $
+    $Id: individual_private_placement.xsl,v 1.38 2007-06-18 17:59:58 etarassov Exp $
 -->
 <!DOCTYPE stylesheet [
 <!ENTITY nbsp "&#xA0;">
@@ -930,7 +930,7 @@
       <column name="IrrCsv_Guaranteed">IRR on _Surr Value</column>
       <column name="IrrDb_Guaranteed">IRR on _Death Bft</column>
     </xsl:variable>
-    <xsl:variable name="columns_raw" select="document('')/xsl:stylesheet/xsl:template[@name='irr-guaranteed-illustration-report']/xsl:variable[@name='irr_guaranteed_illustration_columns_raw']/column"/>
+    <xsl:variable name="columns_raw" select="document('')//xsl:variable[@name='irr_guaranteed_illustration_columns_raw']/column"/>
     <xsl:variable name="columns" select="$columns_raw[not(@composite)] | $columns_raw[boolean(@composite='1')=$is_composite]"/>
 
     <!-- The main contents of the body page -->
@@ -999,7 +999,7 @@
       <column name="IrrCsv_Current">IRR on _Surr Value</column>
       <column name="IrrDb_Current">IRR on _Death Bft</column>
     </xsl:variable>
-    <xsl:variable name="columns_raw" select="document('')/xsl:stylesheet/xsl:template[@name='irr-current-illustration-report']/xsl:variable[@name='irr_current_illustration_columns_raw']/column"/>
+    <xsl:variable name="columns_raw" select="document('')//xsl:variable[@name='irr_current_illustration_columns_raw']/column"/>
     <xsl:variable name="columns" select="$columns_raw[not(@composite)] | $columns_raw[boolean(@composite='1')=$is_composite]"/>
 
     <!-- The main contents of the body page -->
