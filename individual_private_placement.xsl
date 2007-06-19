@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: individual_private_placement.xsl,v 1.40 2007-06-18 22:04:03 etarassov Exp $
+    $Id: individual_private_placement.xsl,v 1.41 2007-06-19 16:18:25 etarassov Exp $
 -->
 <!DOCTYPE stylesheet [
 <!ENTITY nbsp "&#xA0;">
@@ -662,336 +662,151 @@
     <xsl:param name="displaycontractlanguage"/>
     <xsl:param name="displaydisclaimer"/>
     <fo:block text-align="center" font-size="9.0pt">
-      <xsl:choose>
-        <xsl:when test="$displaycontractlanguage=1">
+      <xsl:if test="$displaycontractlanguage=1">
+        <fo:block padding-top="1em">
           <xsl:choose>
             <xsl:when test="$scalars/IsInforce!='1'">
-              <fo:block padding-top="1em">
-                <xsl:text>Illustration for Flexible Premium Variable Adjustable Life Insurance Contract.</xsl:text>
-              </fo:block>
+              Illustration for Flexible Premium Variable Adjustable
+              Life Insurance Contract.
             </xsl:when>
             <xsl:otherwise>
-              <fo:block padding-top="1em">
-                <xsl:text>In Force Illustration for Flexible Premium Variable Adjustable Life Insurance Contract.</xsl:text>
-              </fo:block>
+              In Force Illustration for Flexible Premium Variable Adjustable
+              Life Insurance Contract.
             </xsl:otherwise>
           </xsl:choose>
-        </xsl:when>
-        <xsl:otherwise>
-          <fo:block/>
-        </xsl:otherwise>
-      </xsl:choose>
-      <xsl:choose>
-        <xsl:when test="$displaydisclaimer=1">
-          <fo:block padding-top="1em">
-            <xsl:text>The purpose of the Illustration is to show how the performance of the underlying separate account divisions could affect the Contract's cash values and death benefits. This Illustration is hypothetical and may not be used to project or predict investment results.</xsl:text>
-          </fo:block>
-          <fo:block padding-top=".5em" padding-bottom="1em">
-            <xsl:text>This Illustration must be accompanied or preceded by a Confidential Private Placement Memorandum offering the Contract.</xsl:text>
-          </fo:block>
-        </xsl:when>
-        <xsl:otherwise>
-          <fo:block/>
-        </xsl:otherwise>
-      </xsl:choose>
+        </fo:block>
+      </xsl:if>
+      <xsl:if test="$displaydisclaimer=1">
+        <fo:block padding-top="1em">
+          The purpose of the Illustration is to show how the performance
+          of the underlying separate account divisions could affect
+          the Contract's cash values and death benefits. This Illustration
+          is hypothetical and may not be used to project
+          or predict investment results.
+        </fo:block>
+        <fo:block padding-top=".5em" padding-bottom="1em">
+          This Illustration must be accompanied or preceded
+          by a Confidential Private Placement Memorandum
+          offering the Contract.
+        </fo:block>
+      </xsl:if>
     </fo:block>
-    <xsl:variable name="header-width" select="33"/>
-    <xsl:variable name="header-field-width">
-      <xsl:value-of select="$header-width * 0.44"/>
-      <xsl:text>pc</xsl:text>
-    </xsl:variable>
-    <fo:list-block font-size="9pt" provisional-label-separation="-100pt" padding-top="2em">
-      <xsl:attribute name="provisional-distance-between-starts">
-        <xsl:value-of select="$header-field-width"/>
-      </xsl:attribute>
-      <fo:list-item>
-        <fo:list-item-label end-indent="label-end()">
-          <fo:block text-align="left">
-            <xsl:text>Date Prepared: </xsl:text>
-            <xsl:call-template name="date-prepared"/>
-          </fo:block>
-        </fo:list-item-label>
-        <fo:list-item-body start-indent="body-start()">
-          <fo:list-block provisional-label-separation="0pt">
-            <fo:list-item>
-              <fo:list-item-label end-indent="label-end()">
-                <fo:block/>
-              </fo:list-item-label>
-              <fo:list-item-body start-indent="body-start()">
-                <fo:block text-align="left">
-                  <xsl:text>Contract:  </xsl:text>
-                  <xsl:value-of select="$scalars/PolicyMktgName"/>
-                </fo:block>
-              </fo:list-item-body>
-            </fo:list-item>
-          </fo:list-block>
-        </fo:list-item-body>
-      </fo:list-item>
-      <fo:list-item>
-        <fo:list-item-label end-indent="label-end()">
-          <xsl:choose>
-            <xsl:when test="$is_composite">
-              <fo:block text-align="left" font-size="9.0pt">
-                <xsl:text>Composite of individuals</xsl:text>
-              </fo:block>
-            </xsl:when>
-            <xsl:otherwise>
-              <fo:block text-align="left" font-size="9.0pt">
-                <xsl:text>Prepared for: </xsl:text>
-                <xsl:call-template name="limitstring">
-                  <xsl:with-param name="passString" select="$scalars/Insured1"/>
-                  <xsl:with-param name="length" select="30"/>
-                </xsl:call-template>
-              </fo:block>
-            </xsl:otherwise>
-          </xsl:choose>
-        </fo:list-item-label>
-        <fo:list-item-body start-indent="body-start()">
-          <fo:list-block provisional-label-separation="0pt">
-            <fo:list-item>
-              <fo:list-item-label end-indent="label-end()">
-                <fo:block/>
-              </fo:list-item-label>
-              <fo:list-item-body start-indent="body-start()">
-                <fo:block text-align="left">
-                  <xsl:text>&nbsp;</xsl:text>
-                </fo:block>
-              </fo:list-item-body>
-            </fo:list-item>
-          </fo:list-block>
-        </fo:list-item-body>
-      </fo:list-item>
-      <fo:list-item>
-        <fo:list-item-label end-indent="label-end()">
-          <xsl:choose>
-            <xsl:when test="$is_composite">
-              <fo:block text-align="left" font-size="9.0pt">
-                <xsl:text>&nbsp;</xsl:text>
-              </fo:block>
-            </xsl:when>
-            <xsl:otherwise>
-              <fo:block text-align="left" font-size="9.0pt">
-                <xsl:text>Gender: </xsl:text>
-                <xsl:value-of select="$scalars/Gender"/>
-              </fo:block>
-            </xsl:otherwise>
-          </xsl:choose>
-        </fo:list-item-label>
-        <fo:list-item-body start-indent="body-start()">
-          <fo:list-block provisional-label-separation="0pt">
-            <fo:list-item>
-              <fo:list-item-label end-indent="label-end()">
-                <fo:block/>
-              </fo:list-item-label>
-              <fo:list-item-body start-indent="body-start()">
-                <xsl:choose>
-                  <xsl:when test="$is_composite">
-                    <fo:block text-align="left" color="white">
-                      <xsl:text>.</xsl:text>
-                    </fo:block>
-                  </xsl:when>
-                  <xsl:otherwise>
-                    <xsl:choose>
-                      <xsl:when test="$scalars/UWType='Medical'">
-                        <fo:block text-align="left">
-                          <xsl:text>Underwriting Type: Fully underwritten</xsl:text>
-                        </fo:block>
-                      </xsl:when>
-                      <xsl:otherwise>
-                        <fo:block text-align="left">
-                          <xsl:text>Underwriting Type: </xsl:text>
-                          <xsl:value-of select="$scalars/UWType"/>
-                        </fo:block>
-                      </xsl:otherwise>
-                    </xsl:choose>
-                  </xsl:otherwise>
-                </xsl:choose>
-              </fo:list-item-body>
-            </fo:list-item>
-          </fo:list-block>
-        </fo:list-item-body>
-      </fo:list-item>
-      <fo:list-item>
-        <fo:list-item-label end-indent="label-end()">
-          <xsl:choose>
-            <xsl:when test="$is_composite">
-              <fo:block text-align="left" font-size="9.0pt">
-                <xsl:text>&nbsp;</xsl:text>
-              </fo:block>
-            </xsl:when>
-            <xsl:otherwise>
-              <fo:block text-align="left">
-                <xsl:text>Age: </xsl:text>
-                <xsl:value-of select="$scalars/Age"/>
-              </fo:block>
-            </xsl:otherwise>
-          </xsl:choose>
-        </fo:list-item-label>
-        <fo:list-item-body start-indent="body-start()">
-          <fo:list-block provisional-label-separation="0pt">
-            <fo:list-item>
-              <fo:list-item-label end-indent="label-end()">
-                <fo:block/>
-              </fo:list-item-label>
-              <fo:list-item-body start-indent="body-start()">
-                <xsl:choose>
-                  <xsl:when test="$is_composite">
-                    <fo:block text-align="left" font-size="9.0pt">
-                      <xsl:text>&nbsp;</xsl:text>
-                    </fo:block>
-                  </xsl:when>
-                  <xsl:otherwise>
-                    <fo:block text-align="left">
-                      <xsl:text>Rate Classification: </xsl:text>
-                      <xsl:value-of select="$scalars/Gender"/>
-                      <xsl:text>, </xsl:text>
-                      <xsl:value-of select="$scalars/Smoker"/>
-                      <xsl:text>, </xsl:text>
-                      <xsl:value-of select="$scalars/UWClass"/>
-                    </fo:block>
-                  </xsl:otherwise>
-                </xsl:choose>
-              </fo:list-item-body>
-            </fo:list-item>
-          </fo:list-block>
-        </fo:list-item-body>
-      </fo:list-item>
-      <fo:list-item>
-        <fo:list-item-label end-indent="label-end()">
-          <fo:block text-align="left">
-            <xsl:text>Selected Face Amount: $</xsl:text>
-            <xsl:value-of select="$scalars/InitTotalSA"/>
-          </fo:block>
-        </fo:list-item-label>
-        <fo:list-item-body start-indent="body-start()">
-          <fo:list-block provisional-label-separation="0pt">
-            <fo:list-item>
-              <fo:list-item-label end-indent="label-end()">
-                <fo:block/>
-              </fo:list-item-label>
-              <fo:list-item-body start-indent="body-start()">
-                <xsl:choose>
-                  <xsl:when test="$is_composite">
-                    <fo:block text-align="left">
-                      <xsl:text>&nbsp;</xsl:text>
-                    </fo:block>
-                  </xsl:when>
-                  <xsl:otherwise>
-                    <xsl:choose>
-                      <xsl:when test="$scalars/UWClass='Rated'">
-                        <fo:block text-align="left" padding-left="3em">
-                          <xsl:text>Table Rating: </xsl:text>
-                          <xsl:value-of select="$scalars/SubstandardTable"/>
-                        </fo:block>
-                      </xsl:when>
-                      <xsl:otherwise>
-                        <fo:block text-align="left">
-                          <xsl:text>&nbsp;</xsl:text>
-                        </fo:block>
-                      </xsl:otherwise>
-                    </xsl:choose>
-                  </xsl:otherwise>
-                </xsl:choose>
-              </fo:list-item-body>
-            </fo:list-item>
-          </fo:list-block>
-        </fo:list-item-body>
-      </fo:list-item>
-      <fo:list-item>
-        <fo:list-item-label end-indent="label-end()">
-          <fo:block text-align="left">
-            <xsl:text>Initial Death Benefit Option: </xsl:text>
-            <xsl:value-of select="$scalars/DBOptInitInteger+1"/>
-          </fo:block>
-        </fo:list-item-label>
-        <fo:list-item-body start-indent="body-start()">
-          <fo:list-block provisional-label-separation="0pt">
-            <fo:list-item>
-              <fo:list-item-label end-indent="label-end()">
-                <fo:block/>
-              </fo:list-item-label>
-              <fo:list-item-body start-indent="body-start()">
-                <xsl:choose>
-                  <xsl:when test="$is_composite">
-                    <fo:block text-align="left">
-                      <xsl:text>&nbsp;</xsl:text>
-                    </fo:block>
-                  </xsl:when>
-                  <xsl:otherwise>
-                    <xsl:choose>
-                      <xsl:when test="$scalars/UWClass='Rated'">
-                        <fo:block text-align="left" padding-left="3em">
-                          <xsl:text>Initial Annual Flat Extra: </xsl:text>
-                          <xsl:value-of select="$vectors[@name='MonthlyFlatExtra']/duration[1]/@column_value"/>
-                          <xsl:text> per 1,000</xsl:text>
-                        </fo:block>
-                      </xsl:when>
-                      <xsl:otherwise>
-                        <fo:block text-align="left">
-                          <xsl:text>&nbsp;</xsl:text>
-                        </fo:block>
-                      </xsl:otherwise>
-                    </xsl:choose>
-                  </xsl:otherwise>
-                </xsl:choose>
-              </fo:list-item-body>
-            </fo:list-item>
-          </fo:list-block>
-        </fo:list-item-body>
-      </fo:list-item>
-    </fo:list-block>
+
     <fo:table table-layout="fixed" width="100%">
+      <fo:table-column column-width="125mm"/>
       <fo:table-column column-width="proportional-column-width(1)"/>
       <fo:table-body>
         <fo:table-row>
-          <fo:table-cell>
-            <fo:block text-align="left" font-size="9.0pt" font-family="sans-serif">
-              <xsl:choose>
-                <xsl:when test="$is_composite">
-                  <xsl:if test="$scalars/Franchise!=''">
-                    <xsl:text>Master contract: </xsl:text>
+          <fo:table-cell padding-right="2mm">
+            <fo:block text-align="left" font-size="9.0pt">
+              <fo:block>
+                Date Prepared: <xsl:call-template name="date-prepared"/>
+              </fo:block>
+              <fo:block>
+                <xsl:choose>
+                  <xsl:when test="$is_composite">
+                    Composite of individuals
+                  </xsl:when>
+                  <xsl:otherwise>
+                    Prepared for:
                     <xsl:call-template name="limitstring">
-                      <xsl:with-param name="passString" select="$scalars/Franchise"/>
+                      <xsl:with-param name="passString" select="$scalars/Insured1"/>
                       <xsl:with-param name="length" select="30"/>
                     </xsl:call-template>
-                  </xsl:if>
-                </xsl:when>
-                <xsl:otherwise>
+                  </xsl:otherwise>
+                </xsl:choose>
+              </fo:block>
+              <xsl:if test="not($is_composite)">
+                <fo:block>
+                  Gender: <xsl:value-of select="$scalars/Gender"/>
+                </fo:block>
+              </xsl:if>
+              <xsl:if test="not($is_composite)">
+                <fo:block>
+                  Age: <xsl:value-of select="$scalars/Age"/>
+                </fo:block>
+              </xsl:if>
+              <fo:block>
+                Selected Face Amount:
+                $<xsl:value-of select="$scalars/InitTotalSA"/>
+              </fo:block>
+              <fo:block>
+                Initial Death Benefit Option:
+                <xsl:value-of select="$scalars/DBOptInitInteger+1"/>
+              </fo:block>
+            </fo:block>
+          </fo:table-cell>
+
+          <fo:table-cell>
+            <fo:block text-align="left" font-size="9.0pt">
+              <fo:block>
+                Contract: <xsl:value-of select="$scalars/PolicyMktgName"/>
+              </fo:block>
+              <fo:block/>
+              <xsl:if test="not($is_composite)">
+                <fo:block>
+                  Underwriting Type:
                   <xsl:choose>
-                    <xsl:when test="$scalars/Franchise!='' and $scalars/PolicyNumber!=''">
-                      <xsl:text>Master contract: </xsl:text>
-                      <xsl:call-template name="limitstring">
-                        <xsl:with-param name="passString" select="$scalars/Franchise"/>
-                        <xsl:with-param name="length" select="15"/>
-                      </xsl:call-template>
-                      <xsl:text>&nbsp;&nbsp;&nbsp;Contract number: </xsl:text>
-                      <xsl:call-template name="limitstring">
-                        <xsl:with-param name="passString" select="$scalars/PolicyNumber"/>
-                        <xsl:with-param name="length" select="15"/>
-                      </xsl:call-template>
+                    <xsl:when test="$scalars/UWType='Medical'">
+                      Fully underwritten
                     </xsl:when>
-                    <xsl:when test="$scalars/Franchise!=''">
-                      <xsl:text>Master contract: </xsl:text>
-                      <xsl:call-template name="limitstring">
-                        <xsl:with-param name="passString" select="$scalars/Franchise"/>
-                        <xsl:with-param name="length" select="30"/>
-                      </xsl:call-template>
-                    </xsl:when>
-                    <xsl:when test="$scalars/PolicyNumber!=''">
-                      <xsl:text>Contract number: </xsl:text>
-                      <xsl:call-template name="limitstring">
-                        <xsl:with-param name="passString" select="$scalars/PolicyNumber"/>
-                        <xsl:with-param name="length" select="30"/>
-                      </xsl:call-template>
-                    </xsl:when>
+                    <xsl:otherwise>
+                      <xsl:value-of select="$scalars/UWType"/>
+                    </xsl:otherwise>
                   </xsl:choose>
-                </xsl:otherwise>
-              </xsl:choose>
+                </fo:block>
+                <fo:block>
+                  Rate Classification: <xsl:value-of select="$scalars/Gender"/>,
+                  <xsl:value-of select="$scalars/Smoker"/>,
+                  <xsl:value-of select="$scalars/UWClass"/>
+                </fo:block>
+                <xsl:if test="$scalars/UWClass='Rated'">
+                  <fo:block padding-left="3em">
+                    <fo:block>
+                      Table Rating: 
+                      <xsl:value-of select="$scalars/SubstandardTable"/>
+                    </fo:block>
+                    <fo:block>
+                      Initial Annual Flat Extra:
+                      <xsl:value-of select="$vectors[@name='MonthlyFlatExtra']/duration[1]/@column_value"/>
+                      per 1,000
+                    </fo:block>
+                  </fo:block>
+                </xsl:if>
+              </xsl:if>
             </fo:block>
           </fo:table-cell>
         </fo:table-row>
       </fo:table-body>
     </fo:table>
+
+    <!--
+    This monstrosity truncates 'Franchise' and 'PolicyNumber' to:
+    * 30 characters if both are present;
+    * 15 characters if only one is present.
+    -->
+    <xsl:variable name="has_franchise" select="number($scalars/Franchise!='')"/>
+    <xsl:variable name="has_polnumber" select="number($scalars/PolicyNumber!='' and not($is_composite))"/>
+    <xsl:variable name="contracts" select="$has_franchise + $has_polnumber"/>
+    <xsl:if test="$contracts">
+      <xsl:variable name="number_length" select="floor(30 div $contracts)"/>
+      <fo:block text-align="left" font-size="9.0pt" font-family="sans-serif">
+        <xsl:if test="$has_franchise">
+          Master contract:
+          <xsl:call-template name="limitstring">
+            <xsl:with-param name="passString" select="$scalars/Franchise"/>
+            <xsl:with-param name="length" select="$number_length"/>
+          </xsl:call-template>
+        </xsl:if>
+        <xsl:if test="$has_polnumber">
+          Contract number:
+          <xsl:call-template name="limitstring">
+            <xsl:with-param name="passString" select="$scalars/PolicyNumber"/>
+            <xsl:with-param name="length" select="$number_length"/>
+          </xsl:call-template>
+        </xsl:if>
+      </fo:block>
+    </xsl:if>
   </xsl:template>
 
   <xsl:template name="irr-guaranteed-illustration-report">
