@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: individual_private_placement.xsl,v 1.41 2007-06-19 16:18:25 etarassov Exp $
+    $Id: individual_private_placement.xsl,v 1.42 2007-06-19 16:23:52 etarassov Exp $
 -->
 <!DOCTYPE stylesheet [
 <!ENTITY nbsp "&#xA0;">
@@ -134,7 +134,7 @@
                 NOT FOR USE WITH CLIENTS.
               </fo:block>
               <fo:block padding-top="1em">
-                <xsl:text>Date prepared: </xsl:text>
+                Date prepared:
                 <!- Comment: The original date format was 'Y-M-D' ->
                 <xsl:call-template name="date-prepared"/>
               </fo:block>
@@ -267,7 +267,7 @@
             <xsl:with-param name="displaydisclaimer" select="1"/>
           </xsl:call-template>
           <fo:block text-align="center" font-size="9.0pt" font-family="serif" padding-top="1em">
-            <xsl:text>End of Year Contract Values using Guaranteed Charges </xsl:text>
+            End of Year Contract Values using Guaranteed Charges
             <xsl:call-template name="dollar-units"/>
           </fo:block>
         </fo:static-content>
@@ -290,7 +290,7 @@
             <xsl:with-param name="displaydisclaimer" select="1"/>
           </xsl:call-template>
           <fo:block text-align="center" font-size="9.0pt" font-family="serif" padding-top="1em">
-            <xsl:text>End of Year Contract Values using Current Charges </xsl:text>
+            End of Year Contract Values using Current Charges
             <xsl:call-template name="dollar-units"/>
           </fo:block>
         </fo:static-content>
@@ -313,7 +313,7 @@
             <xsl:with-param name="displaydisclaimer" select="1"/>
           </xsl:call-template>
           <fo:block text-align="center" font-size="9.0pt" font-family="serif" padding-top="1em">
-            <xsl:text>End of Year Contract Values using Current Charges </xsl:text>
+            End of Year Contract Values using Current Charges
             <xsl:call-template name="dollar-units"/>
           </fo:block>
         </fo:static-content>
@@ -335,7 +335,7 @@
             <xsl:with-param name="displaydisclaimer" select="0"/>
           </xsl:call-template>
           <fo:block text-align="center" font-size="10.0pt" font-family="serif" padding-top="2em" padding-bottom="1em">
-            <xsl:text>Footnotes</xsl:text>
+            Footnotes
           </fo:block>
         </fo:static-content>
 
@@ -643,7 +643,6 @@
             </xsl:call-template>
             <fo:block text-align="center" font-size="9.0pt" font-family="serif" padding-top="1em">
               <xsl:value-of select="illustration/supplementalreport/title"/>
-              <xsl:text> </xsl:text>
               <xsl:call-template name="dollar-units"/>
             </fo:block>
           </fo:static-content>
@@ -763,7 +762,7 @@
                 <xsl:if test="$scalars/UWClass='Rated'">
                   <fo:block padding-left="3em">
                     <fo:block>
-                      Table Rating: 
+                      Table Rating:
                       <xsl:value-of select="$scalars/SubstandardTable"/>
                     </fo:block>
                     <fo:block>
@@ -844,8 +843,8 @@
               </fo:table-cell>
               <fo:table-cell number-columns-spanned="2" padding="0pt" border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue">
                 <fo:block text-align="center">
-                    <xsl:value-of select="$scalars/InitAnnSepAcctGrossInt_GuaranteedZero"/>
-                  <xsl:text> Gross / Net Rate</xsl:text>
+                  <xsl:value-of select="$scalars/InitAnnSepAcctGrossInt_GuaranteedZero"/>
+                  Gross / Net Rate
                 </fo:block>
               </fo:table-cell>
               <fo:table-cell number-columns-spanned="3">
@@ -854,7 +853,7 @@
               <fo:table-cell number-columns-spanned="2" padding="0pt" border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue">
                 <fo:block text-align="center">
                   <xsl:value-of select="$scalars/InitAnnSepAcctGrossInt_Guaranteed"/>
-                  <xsl:text> Gross / Net Rate</xsl:text>
+                  Gross / Net Rate
                 </fo:block>
               </fo:table-cell>
             </fo:table-row>
@@ -913,8 +912,8 @@
               </fo:table-cell>
               <fo:table-cell number-columns-spanned="2" padding="0pt" border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue">
                 <fo:block text-align="center">
-                    <xsl:value-of select="$scalars/InitAnnSepAcctGrossInt_CurrentZero"/>
-                  <xsl:text> Gross / Net Rate</xsl:text>
+                  <xsl:value-of select="$scalars/InitAnnSepAcctGrossInt_CurrentZero"/>
+                  Gross / Net Rate
                 </fo:block>
               </fo:table-cell>
               <fo:table-cell number-columns-spanned="3">
@@ -923,7 +922,7 @@
               <fo:table-cell number-columns-spanned="2" padding="0pt" border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue">
                 <fo:block text-align="center">
                   <xsl:value-of select="$scalars/InitAnnSepAcctGrossInt_Current"/>
-                  <xsl:text> Gross / Net Rate</xsl:text>
+                  Gross / Net Rate
                 </fo:block>
               </fo:table-cell>
             </fo:table-row>
