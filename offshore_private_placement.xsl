@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: offshore_private_placement.xsl,v 1.35 2007-06-19 23:40:13 etarassov Exp $
+    $Id: offshore_private_placement.xsl,v 1.36 2007-06-19 23:46:39 etarassov Exp $
 -->
 <!DOCTYPE stylesheet [
 <!ENTITY nbsp "&#xA0;">
@@ -164,7 +164,7 @@
             <xsl:with-param name="reporttitle" select="'Supplemental Illustration'"/>
           </xsl:call-template>
           <fo:block text-align="center" font-size="9pt" font-family="sans-serif" margin-top="1.6em">
-            <xsl:text>Using Current charges</xsl:text>
+            Using Current charges
           </fo:block>
           <xsl:call-template name="dollar-units"/>
         </fo:static-content>
@@ -855,11 +855,11 @@
               <fo:table-cell number-columns-spanned="3">
                 <fo:block/>
               </fo:table-cell>
-              <fo:table-cell number-columns-spanned="5" padding="0pt" border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue">
+              <fo:table-cell number-columns-spanned="5" border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue">
                 <fo:block text-align="center">Using guaranteed charges</fo:block>
               </fo:table-cell>
               <fo:table-cell><fo:block/></fo:table-cell>
-              <fo:table-cell number-columns-spanned="5" padding="0pt" border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue">
+              <fo:table-cell number-columns-spanned="5" border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue">
                 <fo:block text-align="center">Using current charges</fo:block>
               </fo:table-cell>
             </fo:table-row>
@@ -872,31 +872,31 @@
               <fo:table-cell number-columns-spanned="3">
                 <fo:block/>
               </fo:table-cell>
-              <fo:table-cell number-columns-spanned="2" padding="0pt">
+              <fo:table-cell number-columns-spanned="2">
                 <fo:block text-align="center">
-                <xsl:value-of select="$scalars/InitAnnSepAcctGrossInt_GuaranteedZero"/>
-                Hypothetical Gross
+                  <xsl:value-of select="$scalars/InitAnnSepAcctGrossInt_GuaranteedZero"/>
+                  Hypothetical Gross
                 </fo:block>
               </fo:table-cell>
               <fo:table-cell><fo:block/></fo:table-cell>
-              <fo:table-cell number-columns-spanned="2" padding="0pt">
+              <fo:table-cell number-columns-spanned="2">
                 <fo:block text-align="center">
-                <xsl:value-of select="$scalars/InitAnnSepAcctGrossInt_Guaranteed"/>
-                Hypothetical Gross
+                  <xsl:value-of select="$scalars/InitAnnSepAcctGrossInt_Guaranteed"/>
+                  Hypothetical Gross
                 </fo:block>
               </fo:table-cell>
               <fo:table-cell><fo:block/></fo:table-cell>
-              <fo:table-cell number-columns-spanned="2" padding="0pt">
+              <fo:table-cell number-columns-spanned="2">
                 <fo:block text-align="center">
-                <xsl:value-of select="$scalars/InitAnnSepAcctGrossInt_CurrentZero"/>
-                Hypothetical Gross
+                  <xsl:value-of select="$scalars/InitAnnSepAcctGrossInt_CurrentZero"/>
+                  Hypothetical Gross
                 </fo:block>
               </fo:table-cell>
               <fo:table-cell><fo:block/></fo:table-cell>
-              <fo:table-cell number-columns-spanned="2" padding="0pt">
+              <fo:table-cell number-columns-spanned="2">
                 <fo:block text-align="center">
-                <xsl:value-of select="$scalars/InitAnnSepAcctGrossInt_Current"/>
-                Hypothetical Gross
+                  <xsl:value-of select="$scalars/InitAnnSepAcctGrossInt_Current"/>
+                  Hypothetical Gross
                 </fo:block>
               </fo:table-cell>
             </fo:table-row>
@@ -904,35 +904,35 @@
               <fo:table-cell number-columns-spanned="3">
                 <fo:block/>
               </fo:table-cell>
-              <fo:table-cell number-columns-spanned="2" padding="0pt" border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue">
+              <fo:table-cell number-columns-spanned="2" border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue">
                 <fo:block text-align="center">
-                <xsl:text>Return (</xsl:text>
-                <xsl:value-of select="$scalars/InitAnnSepAcctNetInt_GuaranteedZero"/>
-                <xsl:text> net)</xsl:text>
+                  Return (
+                  <xsl:value-of select="$scalars/InitAnnSepAcctNetInt_GuaranteedZero"/>
+                  net)
                 </fo:block>
               </fo:table-cell>
               <fo:table-cell><fo:block/></fo:table-cell>
-              <fo:table-cell number-columns-spanned="2" padding="0pt" border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue">
+              <fo:table-cell number-columns-spanned="2" border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue">
                 <fo:block text-align="center">
-                  <xsl:text>Return (</xsl:text>
+                  Return (
                   <xsl:value-of select="$scalars/InitAnnSepAcctNetInt_Guaranteed"/>
-                  <xsl:text> net)</xsl:text>
+                  net)
                 </fo:block>
               </fo:table-cell>
               <fo:table-cell><fo:block/></fo:table-cell>
-              <fo:table-cell number-columns-spanned="2" padding="0pt" border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue">
+              <fo:table-cell number-columns-spanned="2" border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue">
                 <fo:block text-align="center">
-                  <xsl:text>Return (</xsl:text>
+                  Return (
                   <xsl:value-of select="$scalars/InitAnnSepAcctNetInt_CurrentZero"/>
-                  <xsl:text> net)</xsl:text>
+                  net)
                 </fo:block>
               </fo:table-cell>
               <fo:table-cell><fo:block/></fo:table-cell>
-              <fo:table-cell number-columns-spanned="2" padding="0pt" border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue">
+              <fo:table-cell number-columns-spanned="2" border-bottom-style="solid" border-bottom-width="1pt" border-bottom-color="blue">
                 <fo:block text-align="center">
-                  <xsl:text>Return (</xsl:text>
+                  Return (
                   <xsl:value-of select="$scalars/InitAnnSepAcctNetInt_Current"/>
-                  <xsl:text> net)</xsl:text>
+                  net)
                 </fo:block>
               </fo:table-cell>
             </fo:table-row>
@@ -1065,7 +1065,6 @@
     <xsl:if test="$vectors[@name='FundNames']/duration[$counter]/@column_value!=''">
       <fo:block>
         <xsl:value-of select="$vectors[@name='FundAllocations']/duration[$counter]/@column_value"/>
-        <xsl:text> </xsl:text>
         <xsl:value-of select="$vectors[@name='FundNames']/duration[$counter]/@column_value"/>
       </fo:block>
       <xsl:call-template name="list-fund-allocation">
@@ -1081,12 +1080,13 @@
       <xsl:with-param name="top-block">
         <xsl:if test="$include-underwriter">
           <fo:block padding-bottom="1em">
-            The Principal Underwriter is
-            <xsl:value-of select="$scalars/MainUnderwriter"/>
-            , a wholly owned subsidiary of
-            <xsl:value-of select="$scalars/InsCoName"/>
-            and is located at
-            <fo:block><xsl:value-of select="$scalars/MainUnderwriterAddress"/></fo:block>
+            The Principal Underwriter
+            is <xsl:value-of select="$scalars/MainUnderwriter"/>,
+            a wholly owned subsidiary
+            of <xsl:value-of select="$scalars/InsCoName"/> and is located at
+            <fo:block>
+              <xsl:value-of select="$scalars/MainUnderwriterAddress"/>
+            </fo:block>
           </fo:block>
         </xsl:if>
         <fo:block>
