@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: fo_common.xsl,v 1.38 2007-06-20 13:08:45 etarassov Exp $
+    $Id: fo_common.xsl,v 1.39 2007-06-20 13:43:39 etarassov Exp $
 -->
 <!DOCTYPE stylesheet [
 <!ENTITY nbsp "&#xA0;">
@@ -611,7 +611,7 @@
         <xsl:value-of select="$passString"/>
       </xsl:when>
       <xsl:otherwise>
-        <xsl:value-of select="substring($passString, 1, $length - string-length($TEXT_ELLIPSIS))"/>
+        <xsl:value-of select="substring($passString, 1, $length)"/>
         <xsl:value-of select="$TEXT_ELLIPSIS"/>
       </xsl:otherwise>
     </xsl:choose>
