@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.791 2007-06-20 14:03:44 etarassov Exp $
+// $Id: ChangeLog,v 1.792 2007-06-20 19:57:42 wboutin Exp $
 
 MAINTENANCE
 
@@ -12467,11 +12467,6 @@ Abstract a footnote.
   system_command_wx.cpp
 Add timer, busy cursor, and statusbar notifications.
 
-20070614T1150Z <chicares@cox.net> [1230]
-
-  system_command_wx.cpp
-Add timer, busy cursor, and statusbar notifications.
-
 20070614T1615Z <etarassov@tt-solutions.com> [1231]
 
   emit_ledger.cpp
@@ -12559,3 +12554,8 @@ Adjust spacing.
   fo_common.xsl
 Prevent splitting the groups of 5 rows across multiple pages.
 
+20070620T1957Z <wboutin@massmutual.com> [1231]
+
+  xml_notebook_coli_boli.xrc
+Remove misleading format.
+ 
