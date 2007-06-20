@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.787 2007-06-20 13:45:31 etarassov Exp $
+// $Id: ChangeLog,v 1.788 2007-06-20 13:47:54 etarassov Exp $
 
 MAINTENANCE
 
@@ -12532,4 +12532,9 @@ Fix the string-truncating template 'limitstring'.
 
   illustration_reg.xsl
 Remove some extra space.
+
+20070620T1347Z <etarassov@tt-solutions.com> [1231]
+
+  individual_private_placement.xsl
+Refactor the 'current-illustration-report'.
 
