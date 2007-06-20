@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: variable_annuity.xsl,v 1.35 2007-06-20 12:08:48 etarassov Exp $
+    $Id: variable_annuity.xsl,v 1.36 2007-06-20 14:00:51 etarassov Exp $
 -->
 <!DOCTYPE stylesheet [
 <!ENTITY nbsp "&#xA0;">
@@ -836,7 +836,7 @@
         <fo:table-row>
           <fo:table-cell>
             <fo:block text-align="left">
-              <fo:external-graphic width="121.1pt" height="24.8pt" src="company_logo.png"/>
+              <xsl:call-template name="company-logo"/>
             </fo:block>
           </fo:table-cell>
           <fo:table-cell>

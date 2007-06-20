@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.789 2007-06-20 13:55:50 etarassov Exp $
+// $Id: ChangeLog,v 1.790 2007-06-20 14:00:49 etarassov Exp $
 
 MAINTENANCE
 
@@ -12542,4 +12542,15 @@ Refactor the 'current-illustration-report'.
 
   illustration_reg.xsl
 Change 'tabular-detail-report2' table width.
+
+20070620T1400Z <etarassov@tt-solutions.com> [1231]
+
+  fo_common.xsl
+  group_private_placement.xsl
+  illustration_reg.xsl
+  individual_private_placement.xsl
+  nasd.xsl
+  offshore_private_placement.xsl
+  variable_annuity.xsl
+Adjust spacing.
 
