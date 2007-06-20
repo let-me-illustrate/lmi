@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: illustration_reg.xsl,v 1.40 2007-06-18 13:50:05 etarassov Exp $
+    $Id: illustration_reg.xsl,v 1.41 2007-06-20 11:59:22 etarassov Exp $
 -->
 <!DOCTYPE stylesheet [
 <!ENTITY nbsp "&#xA0;">
@@ -85,7 +85,7 @@
         <!-- Define the Tabular Detail page. -->
         <fo:simple-page-master master-name="tabular-detail" page-height="11in" page-width="8.5in" margin-top="0.25in" margin-bottom="0.25in" margin-left="0.25in" margin-right="0.25in">
           <!-- Central part of page -->
-          <fo:region-body column-count="1" margin-top="3.1in" margin-bottom="1.3in"/>
+          <fo:region-body column-count="1" margin-top="3.1in" margin-bottom="1.20in"/>
           <!-- Header -->
           <fo:region-before extent="3.1in"/>
           <!-- Footer -->
@@ -95,7 +95,7 @@
         <!-- Define the Tabular Detail (Report 2) page. -->
         <fo:simple-page-master master-name="tabular-detail-report2" page-height="11in" page-width="8.5in" margin-top="0.25in" margin-bottom="0.25in" margin-left="0.25in" margin-right="0.25in">
           <!-- Central part of page -->
-          <fo:region-body column-count="1" margin-top="3.2in" margin-bottom="1.35in"/>
+          <fo:region-body column-count="1" margin-top="3.2in" margin-bottom="1.25in"/>
           <!-- Header -->
           <fo:region-before extent="3.1in"/>
           <!-- Footer -->
@@ -106,7 +106,7 @@
         <xsl:if test="$has_supplemental_report">
           <fo:simple-page-master master-name="supplemental-report" page-height="11in" page-width="8.5in" margin-top="0.25in" margin-bottom="0.25in" margin-left="0.25in" margin-right="0.25in">
             <!-- Central part of page -->
-            <fo:region-body column-count="1" margin-top="3.0in" margin-bottom="1.25in"/>
+            <fo:region-body column-count="1" margin-top="2.90in" margin-bottom="1.25in"/>
             <!-- Header -->
             <fo:region-before extent="3.0in"/>
             <!-- Footer -->
@@ -135,7 +135,7 @@
         <!-- Define the contents of the header. -->
         <fo:static-content flow-name="xsl-region-before">
           <fo:block text-align="left">
-            <xsl:call-template name="company-logo"/>
+            <fo:external-graphic width="121.1pt" height="24.8pt" src="company_logo.png"/>
           </fo:block>
         </fo:static-content>
 
@@ -499,7 +499,7 @@
         <!-- Define the contents of the header. -->
         <fo:static-content flow-name="xsl-region-before">
           <fo:block text-align="left">
-            <xsl:call-template name="company-logo"/>
+            <fo:external-graphic width="121.1pt" height="24.8pt" src="company_logo.png"/>
           </fo:block>
         </fo:static-content>
 
@@ -632,7 +632,7 @@
           <!-- Define the contents of the header. -->
           <fo:static-content flow-name="xsl-region-before">
             <fo:block text-align="left">
-              <xsl:call-template name="company-logo"/>
+              <fo:external-graphic width="121.1pt" height="24.8pt" src="company_logo.png"/>
             </fo:block>
             <xsl:call-template name="standardheader"/>
             <fo:block text-align="center" font-size="10.0pt" space-before="5.0pt">
@@ -655,7 +655,7 @@
         <!-- Define the contents of the header. -->
         <fo:static-content flow-name="xsl-region-before">
           <fo:block text-align="left">
-            <xsl:call-template name="company-logo"/>
+            <fo:external-graphic width="121.1pt" height="24.8pt" src="company_logo.png"/>
           </fo:block>
           <xsl:call-template name="standardheader"/>
           <fo:block text-align="center" font-size="10.0pt" space-before="5.0pt">
@@ -721,7 +721,7 @@
         <!-- Define the contents of the header. -->
         <fo:static-content flow-name="xsl-region-before">
           <fo:block text-align="left">
-            <xsl:call-template name="company-logo"/>
+            <fo:external-graphic width="121.1pt" height="24.8pt" src="company_logo.png"/>
           </fo:block>
           <xsl:call-template name="standardheader"/>
           <fo:block text-align="center" font-size="10.0pt" space-before="5.0pt">
@@ -752,7 +752,7 @@
           <xsl:variable name="columns" select="$tabular-detail-report2-columns-raw[not(@composite) or boolean(boolean(@composite='1')=$is_composite)]"/>
 
           <fo:block font-size="9.0pt" font-family="serif">
-            <fo:table table-layout="fixed" width="{8*count($columns)}em">
+            <fo:table table-layout="fixed" width="33em">
               <xsl:call-template name="generate-table-columns">
                 <xsl:with-param name="columns" select="$columns"/>
               </xsl:call-template>
@@ -791,7 +791,7 @@
           <!-- Define the contents of the header. -->
           <fo:static-content flow-name="xsl-region-before">
             <fo:block text-align="left">
-              <xsl:call-template name="company-logo"/>
+              <fo:external-graphic width="121.1pt" height="24.8pt" src="company_logo.png"/>
             </fo:block>
             <xsl:call-template name="standardheader"/>
             <fo:block text-align="center" font-size="10.0pt" space-before="3.0pt">
@@ -824,7 +824,7 @@
           <!-- Define the contents of the header. -->
           <fo:static-content flow-name="xsl-region-before">
             <fo:block text-align="left">
-              <xsl:call-template name="company-logo"/>
+              <fo:external-graphic width="121.1pt" height="24.8pt" src="company_logo.png"/>
             </fo:block>
             <xsl:call-template name="standardheader"/>
             <fo:block text-align="center" font-size="10.0pt">
@@ -1443,14 +1443,14 @@
             <xsl:text> or contract will lapse based on guaranteed monthly charges and interest rate.</xsl:text>
           </fo:block>
           <xsl:if test="$scalars/LapseYear_Midpoint &lt; $scalars/MaxDuration">
-            <fo:block text-align="left" font-size="9.0pt">
+            <fo:block text-align="left" font-size="9.0pt" padding-top="2em">
               <xsl:text>Additional premium will be required in year </xsl:text>
               <xsl:value-of select="$scalars/LapseYear_Midpoint+1"/>
               <xsl:text> or contract will lapse based on midpoint monthly charges and interest rate.</xsl:text>
             </fo:block>
           </xsl:if>
           <xsl:if test="$scalars/LapseYear_Current &lt; $scalars/MaxDuration">
-            <fo:block text-align="left" font-size="9.0pt">
+            <fo:block text-align="left" font-size="9.0pt" padding-top="2em">
               <xsl:text>Additional premium will be required in year </xsl:text>
               <xsl:value-of select="$scalars/LapseYear_Current+1"/>
               <xsl:text> or contract will lapse based on current monthly charges and interest rate.</xsl:text>

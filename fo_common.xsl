@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: fo_common.xsl,v 1.36 2007-06-18 13:51:54 etarassov Exp $
+    $Id: fo_common.xsl,v 1.37 2007-06-20 12:11:51 etarassov Exp $
 -->
 <!DOCTYPE stylesheet [
 <!ENTITY nbsp "&#xA0;">
@@ -137,14 +137,14 @@
   -->
   <xsl:template name="dollar-units">
     <fo:block text-align="center" font-size="9pt" padding-top="1em">
-      <xsl:text>Values shown are in </xsl:text>
       <xsl:choose>
         <xsl:when test="$scalars/ScaleUnit=''">
-          <xsl:text>dollars</xsl:text>
+          <xsl:text>(Values shown are in dollars)</xsl:text>
         </xsl:when>
         <xsl:otherwise>
+          <xsl:text>(Values shown are in </xsl:text>
           <xsl:value-of select="$scalars/ScaleUnit"/>
-          <xsl:text>s of dollars</xsl:text>
+          <xsl:text>s of dollars)</xsl:text>
         </xsl:otherwise>
       </xsl:choose>
     </fo:block>
@@ -250,7 +250,6 @@
         </xsl:choose>
       </fo:table-column>
     </xsl:for-each>
-    <fo:table-column column-width="proportional-column-width(1)"/>
   </xsl:template>
 
   <!--
@@ -577,17 +576,6 @@
             </fo:block>
           </fo:table-cell>
         </xsl:for-each>
-        <!--
-        Feature requested: ensure that a group of 5 rows is never splitted
-        accross multiple pages.
-        Add a special cell, that spans 5 rows. Since FOP avoids breaking cells,
-        this cell remains on one page, so will the group of 5 rows.
-        -->
-        <xsl:if test="($counter + $inforceyear) mod 5 = 1">
-          <fo:table-cell number-rows-spanned="5">
-            <fo:block/>
-          </fo:table-cell>
-        </xsl:if>
       </fo:table-row>
       <xsl:call-template name="generate-table-values">
         <xsl:with-param name="columns" select="$columns"/>
@@ -623,14 +611,10 @@
         <xsl:value-of select="$passString"/>
       </xsl:when>
       <xsl:otherwise>
-        <xsl:value-of select="substring($passString, 1, $length)"/>
+        <xsl:value-of select="substring($passString, 1, $length - string-length($TEXT_ELLIPSIS))"/>
         <xsl:value-of select="$TEXT_ELLIPSIS"/>
       </xsl:otherwise>
     </xsl:choose>
-  </xsl:template>
-
-  <xsl:template name="company-logo">
-    <fo:external-graphic width="121.1pt" height="24.8pt" src="company_logo.png"/>
   </xsl:template>
 
   <!-- The cover page -->
@@ -694,10 +678,10 @@
             <xsl:call-template name="date-prepared"/>
           </fo:block>
 
-          <fo:block padding-top="9em">
-            <xsl:call-template name="company-logo"/>
+          <fo:block padding-top="10em">
+            <fo:external-graphic width="121.1pt" height="24.8pt" src="company_logo.png"/>
           </fo:block>
-          <fo:block padding-top="1em">
+          <fo:block margin-top="1.5em">
             <xsl:value-of select="$scalars/InsCoName"/>
           </fo:block>
           <fo:block padding-bottom="3em">
