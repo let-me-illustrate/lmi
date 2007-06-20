@@ -19,7 +19,7 @@
 // email: <chicares@cox.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// $Id: ChangeLog,v 1.782 2007-06-18 11:22:22 chicares Exp $
+// $Id: ChangeLog,v 1.783 2007-06-20 13:03:04 etarassov Exp $
 
 MAINTENANCE
 
@@ -12500,4 +12500,16 @@ Generate pdf files more efficiently.
   system_command_wx.cpp
 Improve arrangement of output. See:
   http://lists.nongnu.org/archive/html/lmi/2007-06/msg00010.html
+
+20070620T1215Z <chicares@cox.net> [1231]
+
+  fo_common.xsl
+  group_private_placement.xsl
+  illustration_reg.xsl
+  individual_private_placement.xsl
+  nasd.xsl
+  offshore_private_placement.xsl
+  variable_annuity.xsl
+Unroll all the changes from 20070618T1323Z to 20070620T1215Z
+committed to HEAD instead of the branch branch-20070618T1322Z-xsl-fo.
 
