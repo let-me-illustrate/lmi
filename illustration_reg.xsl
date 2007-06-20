@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: illustration_reg.xsl,v 1.41 2007-06-20 11:59:22 etarassov Exp $
+    $Id: illustration_reg.xsl,v 1.42 2007-06-20 13:45:31 etarassov Exp $
 -->
 <!DOCTYPE stylesheet [
 <!ENTITY nbsp "&#xA0;">
@@ -1443,14 +1443,14 @@
             <xsl:text> or contract will lapse based on guaranteed monthly charges and interest rate.</xsl:text>
           </fo:block>
           <xsl:if test="$scalars/LapseYear_Midpoint &lt; $scalars/MaxDuration">
-            <fo:block text-align="left" font-size="9.0pt" padding-top="2em">
+            <fo:block text-align="left" font-size="9.0pt">
               <xsl:text>Additional premium will be required in year </xsl:text>
               <xsl:value-of select="$scalars/LapseYear_Midpoint+1"/>
               <xsl:text> or contract will lapse based on midpoint monthly charges and interest rate.</xsl:text>
             </fo:block>
           </xsl:if>
           <xsl:if test="$scalars/LapseYear_Current &lt; $scalars/MaxDuration">
-            <fo:block text-align="left" font-size="9.0pt" padding-top="2em">
+            <fo:block text-align="left" font-size="9.0pt">
               <xsl:text>Additional premium will be required in year </xsl:text>
               <xsl:value-of select="$scalars/LapseYear_Current+1"/>
               <xsl:text> or contract will lapse based on current monthly charges and interest rate.</xsl:text>
