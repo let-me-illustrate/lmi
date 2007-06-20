@@ -21,7 +21,7 @@
     email: <chicares@cox.net>
     snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-    $Id: nasd.xsl,v 1.54 2007-06-20 11:54:50 etarassov Exp $
+    $Id: nasd.xsl,v 1.55 2007-06-20 13:40:17 etarassov Exp $
 -->
 <!DOCTYPE stylesheet [
 <!ENTITY nbsp "&#xA0;">
@@ -30,6 +30,37 @@
   <xsl:import href="fo_common.xsl"/>
   <xsl:output method="xml" encoding="UTF-8" indent="yes"/>
   <xsl:variable name="counter" select="1"/>
+
+  <!--
+  Attribute set used in 'illustration-assumption-report' template:
+  Define a table header cell with top/bottom padding, right-bottom aligned,
+  with bottom blue border.
+  -->
+  <xsl:attribute-set name="cell-single">
+    <xsl:attribute name="display-align">after</xsl:attribute>
+    <xsl:attribute name="padding-top">4pt</xsl:attribute>
+    <xsl:attribute name="padding-bottom">2pt</xsl:attribute>
+    <xsl:attribute name="border-bottom-style">solid</xsl:attribute>
+    <xsl:attribute name="border-bottom-color">blue</xsl:attribute>
+    <xsl:attribute name="text-align">right</xsl:attribute>
+    <xsl:attribute name="border-bottom-width">1pt</xsl:attribute>
+  </xsl:attribute-set>
+  <!--
+  Attribute set used in 'illustration-assumption-report' template:
+  Define a table header cell that spans 2 rows. Based on 'cell-single'.
+  -->
+  <xsl:attribute-set use-attribute-sets="cell-single" name="cell-span-2rows">
+    <xsl:attribute name="number-rows-spanned">2</xsl:attribute>
+  </xsl:attribute-set>
+  <!--
+  Attribute set used in 'illustration-assumption-report' template:
+  Define a table header cell that spans 2 columns, and has no bottom border.
+  Based on 'cell-single'.
+  -->
+  <xsl:attribute-set use-attribute-sets="cell-single" name="cell-span-2cols">
+    <xsl:attribute name="number-columns-spanned">2</xsl:attribute>
+    <xsl:attribute name="border-bottom-width">0pt</xsl:attribute>
+  </xsl:attribute-set>
 
   <xsl:template match="/">
     <fo:root>
@@ -1099,10 +1130,87 @@
             <xsl:with-param name="columns" select="$columns"/>
           </xsl:call-template>
 
+          <!--
+          Do not use 'generic-table-header' template. Instead customize
+          table headers.
+          The special feature requested: the cell 'Net Crediting Rate' to be
+          nicely centered over two cells.
+          -->
           <fo:table-header>
-            <xsl:call-template name="generate-table-headers">
-              <xsl:with-param name="columns" select="$columns"/>
-            </xsl:call-template>
+            <xsl:choose>
+              <xsl:when test="$is_composite">
+                <fo:table-row>
+                  <xsl:element name="fo:table-cell" use-attribute-sets="cell-single">
+                    <fo:block>Policy</fo:block>
+                    <fo:block>Year</fo:block>
+                  </xsl:element>
+                  <xsl:element name="fo:table-cell" use-attribute-sets="cell-single">
+                    <fo:block/>
+                  </xsl:element>
+                  <xsl:element name="fo:table-cell" use-attribute-sets="cell-single">
+                    <fo:block>Withdrawal</fo:block>
+                  </xsl:element>
+                  <xsl:element name="fo:table-cell" use-attribute-sets="cell-single">
+                    <fo:block/>
+                  </xsl:element>
+                  <xsl:element name="fo:table-cell" use-attribute-sets="cell-single">
+                    <fo:block>Loan</fo:block>
+                  </xsl:element>
+                  <xsl:element name="fo:table-cell" use-attribute-sets="cell-single">
+                    <fo:block/>
+                  </xsl:element>
+                </fo:table-row>
+              </xsl:when>
+              <xsl:otherwise>
+                <fo:table-row>
+                  <xsl:element name="fo:table-cell" use-attribute-sets="cell-span-2rows">
+                    <fo:block>Policy</fo:block>
+                    <fo:block>Year</fo:block>
+                  </xsl:element>
+                  <xsl:element name="fo:table-cell" use-attribute-sets="cell-span-2rows">
+                    <fo:block>End of</fo:block>
+                    <fo:block>Year Age</fo:block>
+                  </xsl:element>
+                  <xsl:element name="fo:table-cell" use-attribute-sets="cell-span-2cols">
+                    <!-- this padding ensures the cell content is nicely centered -->
+                    <xsl:attribute name="padding-right">1.4em</xsl:attribute>
+                    <fo:block>Net Crediting Rate</fo:block>
+                  </xsl:element>
+                  <xsl:element name="fo:table-cell" use-attribute-sets="cell-span-2rows">
+                    <fo:block>M&amp;E</fo:block>
+                  </xsl:element>
+                  <xsl:element name="fo:table-cell" use-attribute-sets="cell-span-2rows">
+                    <fo:block>Indiv</fo:block>
+                    <fo:block>Pmt Mode</fo:block>
+                  </xsl:element>
+                  <xsl:element name="fo:table-cell" use-attribute-sets="cell-span-2rows">
+                    <fo:block>Corp</fo:block>
+                    <fo:block>Pmt Mode</fo:block>
+                  </xsl:element>
+                  <xsl:element name="fo:table-cell" use-attribute-sets="cell-span-2rows">
+                    <fo:block>Assumed</fo:block>
+                    <fo:block>Loan Interest</fo:block>
+                  </xsl:element>
+                  <xsl:element name="fo:table-cell" use-attribute-sets="cell-span-2rows">
+                    <fo:block>Flat Extra</fo:block>
+                    <fo:block>Per 1,000</fo:block>
+                  </xsl:element>
+                </fo:table-row>
+                <fo:table-row>
+                  <xsl:element name="fo:table-cell" use-attribute-sets="cell-single">
+                    <fo:block>Sep Acct</fo:block>
+                  </xsl:element>
+                  <xsl:element name="fo:table-cell" use-attribute-sets="cell-single">
+                    <fo:block>Gen Acct</fo:block>
+                  </xsl:element>
+                </fo:table-row>
+              </xsl:otherwise>
+            </xsl:choose>
+            <fo:table-row>
+              <fo:table-cell padding="2pt">
+                <fo:block/>
+              </fo:table-cell>
+            </fo:table-row>
           </fo:table-header>
 
           <fo:table-body>
